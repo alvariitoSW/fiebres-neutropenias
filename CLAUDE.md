@@ -55,6 +55,12 @@ js/
     navigation.js                createViewSwitcher(): muestra una vista de
                                   un grupo y oculta el resto (menú principal,
                                   submenú de Citopenias, submenú de Trasplante)
+    lightbox.js                  Click en cualquier imagen dentro de
+                                  .article-figure para ampliarla a pantalla
+                                  completa. Se inicializa una sola vez desde
+                                  main.js; no hace falta tocarlo al añadir
+                                  imágenes nuevas en otros módulos, basta con
+                                  envolver la <img> en un div.article-figure
   data/                       Objetos de datos puros (tablas de dosis,
                                tratamientos por foco, etc.), sin DOM.
   modules/
