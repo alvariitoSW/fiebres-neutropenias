@@ -3,20 +3,31 @@ import { focoTxData } from '../../data/foco-data.js';
 function calcTxEmpirico() {
     let inestable = document.getElementById('tx-inestable').checked;
     let mdr = document.getElementById('tx-mdr').checked;
+    let cr = document.getElementById('tx-cr').checked;
     let sarm = document.getElementById('tx-sarm').checked;
-    
+
     let box = document.getElementById('tx-recomendacion');
     let html = '';
 
     if (inestable) {
-        html += `<strong style="color: var(--accent-red);">🚨 Paciente inestable — terapia inmediata:</strong><br>Betalactámico antipseudomónico + cobertura BGN-MDR (aminoglucósido o colistina) + cobertura SARM (daptomicina o vancomicina).`;
+        html += `<strong style="color: var(--accent-red);">🚨 Paciente crítico</strong> <span class="grade-badge red">A-IIu</span><br>Carbapenem ± inhibidor de betalactamasa, o betalactámico antipseudomónico + aminoglucósido en combinación (mantenerla hasta descartar bacteriemia).`;
+        if (cr) html += ` Colonización/infección previa por BGN resistente a carbapenems: consulta la <strong>Matriz de Combate MDR</strong> (T. Dirigido) para elegir fármaco dirigido por tipo de resistencia.`;
+    } else if (cr) {
+        html += `<strong style="color: var(--accent-blue);">Colonización/infección previa por BGN resistente a carbapenems (sin inestabilidad):</strong><br>Consulta la <strong>Matriz de Combate MDR</strong> (T. Dirigido) — el fármaco depende del tipo de carbapenemasa (KPC/OXA-48/MBL), P. aeruginosa XDR, A. baumannii o S. maltophilia.`;
     } else if (mdr) {
-        html += `<strong style="color: var(--accent-blue);">▼ Vía de Desescalada</strong> (riesgo BGN-MDR / BLEE):<br>Imipenem o meropenem en monoterapia, o betalactámico antipseudomónico + aminoglucósido. Evitar cefalosporinas o pip-tazo solas.`;
+        html += `<strong style="color: var(--accent-blue);">▼ Riesgo alto</strong> (BLEE u otros BGN resistentes a 1ª línea, sensibles a carbapenems) <span class="grade-badge">A-IIu</span><br>Carbapenem en monoterapia.`;
     } else {
-        html += `<strong style="color: var(--accent-blue);">▲ Vía de Escalada</strong> (presentación no complicada, sin MDR):<br>Piperacilina-tazobactam, Cefepime o Ceftazidima en monoterapia, dosis mínima eficaz (ampliar si falla).`;
+        html += `<strong style="color: var(--accent-green);">▲ Riesgo bajo</strong> (baja prevalencia local, sin colonización/infección previa por BGN resistentes, estable) <span class="grade-badge">A-I</span><br>Monoterapia ahorradora de carbapenems: Piperacilina-tazobactam, Cefepime, Ceftazidima o Cefoperazona-sulbactam.`;
     }
 
-    if (sarm && !inestable) html += `<br><br><strong style="color: var(--accent-green);">Colonización SARM confirmada:</strong> añadir daptomicina (nunca si sospecha respiratoria) o vancomicina.`;
+    if (sarm) {
+        if (inestable) {
+            html += `<br><br><strong style="color: var(--accent-green);">Colonización SARM + inestabilidad/neumonía:</strong> <span class="grade-badge">A-IIt</span> añadir daptomicina (nunca si sospecha respiratoria) o vancomicina.`;
+        } else {
+            html += `<br><br><strong style="color: var(--accent-green);">Colonización SARM, estable:</strong> <span class="grade-badge">B-IIrt</span> considerar añadir daptomicina o vancomicina.`;
+        }
+    }
+    html += `<br><br><span style="font-size: 0.75rem; color: var(--text-muted);">Añadir cobertura anti-Gram+ también si hay sospecha de infección de catéter o piel/partes blandas (B-III), o sepsis/shock/neumonía independientemente de la colonización (C-III). Si se usa ceftazidima ± avibactam o cefiderocol (poca actividad Gram+) con mucositis grave, considerar cobertura antiestreptocócica (C-III). Fuera de estos casos, no añadir cobertura anti-Gram+ de rutina (D-IIru), y la fiebre persistente aislada, con paciente estable, no es motivo para escalar antibióticos.</span>`;
     box.innerHTML = html;
 }
 
@@ -33,7 +44,7 @@ function calcSuspensionEmpirica() {
     let count = Array.from(checks).filter(c => c.checked).length;
     let box = document.getElementById('susp-resultado-empirico');
     if (count === 3) {
-        box.innerHTML = '✅ Se puede suspender el ABT empírico';
+        box.innerHTML = '✅ Se puede suspender el ABT empírico, independientemente del recuento de neutrófilos';
         box.style.color = 'var(--accent-green)';
     } else {
         box.innerHTML = `⏳ Mantener tratamiento — cumple ${count}/3 criterios`;
@@ -81,7 +92,7 @@ function updateAntifungico() {
 }
 
 export function init() {
-    ['tx-inestable', 'tx-mdr', 'tx-sarm'].forEach(id => {
+    ['tx-inestable', 'tx-mdr', 'tx-cr', 'tx-sarm'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.addEventListener('change', calcTxEmpirico);
     });

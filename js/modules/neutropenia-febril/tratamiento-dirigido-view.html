@@ -130,7 +130,7 @@
                     <div class="micro-prof-body">
                         <strong>Tipo:</strong> Bacilo Gram- no fermentador.<br>
                         <strong>Mecanismos:</strong> Bombas de eflujo, pérdida de porinas, MBLs.<br>
-                        <strong>Terapia de Elección:</strong> Pip-Tazo, Cefepime. En XDR/PDR: Ceftolozano-Tazobactam o Cefiderocol.<br>
+                        <strong>Terapia de Elección:</strong> Pip-Tazo, Cefepime. Difícil de tratar (ECIL-10): Ceftolozano-Tazobactam (9g/día), Ceftazidima-Avibactam, Imipenem-Relebactam o Cefiderocol.<br>
                         <strong>Peculiaridad:</strong> Nunca aminoglucósido en monoterapia. Priorizar dosis altas en infusión extendida.
                     </div>
                 </div>
@@ -142,8 +142,8 @@
                     <div class="micro-prof-body">
                         <strong>Tipo:</strong> Bacilos Gram- fermentadores.<br>
                         <strong>Mecanismo:</strong> Producción de Carbapenemasas que hidrolizan casi todos los betalactámicos.<br>
-                        <strong>Terapia de Elección:</strong> Ceftazidima-Avibactam. Alternativa: Terapia combinada ≥2 activos.<br>
-                        <strong>Peculiaridad:</strong> Si CMI Meropenem &lt;16 mg/L, incluir Meropenem optimizado (2g/8h infusión 3h) en la combinación.
+                        <strong>Terapia de Elección (ECIL-10):</strong> Ceftazidima-Avibactam (KPC/OXA-48); + Aztreonam si es metalo-betalactamasa (NDM/VIM/IMP).<br>
+                        <strong>Peculiaridad:</strong> El avibactam NO inhibe metalo-betalactamasas — el aztreonam es obligatorio en ese caso.
                     </div>
                 </div>
                 <!-- Acinetobacter -->
@@ -154,8 +154,8 @@
                     <div class="micro-prof-body">
                         <strong>Tipo:</strong> Bacilo Gram- no fermentador.<br>
                         <strong>Mecanismo:</strong> Múltiples (OXA, bombas, porinas).<br>
-                        <strong>Terapia de Elección:</strong> Sulbactam (dosis altas) > Colistina o Tigeciclina.<br>
-                        <strong>Peculiaridad:</strong> Nunca usar tigeciclina sola en bacteriemias.
+                        <strong>Terapia de Elección (ECIL-10):</strong> Sulbactam-durlobactam + imipenem (preferido); si no disponible, sulbactam dosis altas (≥9g/día) + colistina.<br>
+                        <strong>Peculiaridad:</strong> Terapia combinada de entrada en inmunocomprometidos. Nunca tigeciclina sola en bacteriemias.
                     </div>
                 </div>
                 <!-- Stenotrophomonas -->
@@ -166,8 +166,8 @@
                     <div class="micro-prof-body">
                         <strong>Tipo:</strong> Bacilo Gram- no fermentador.<br>
                         <strong>Mecanismo:</strong> Resistencia INTRÍNSECA a Carbapenems (L1/L2 MBLs).<br>
-                        <strong>Terapia de Elección:</strong> Co-trimoxazol.<br>
-                        <strong>Peculiaridad:</strong> Se asume toxicidad hematológica del fármaco por la letalidad de la infección si no se trata adecuadamente.
+                        <strong>Terapia de Elección (ECIL-10):</strong> Cotrimoxazol EN COMBINACIÓN con levofloxacino, tetraciclina en dosis altas o cefiderocol (no monoterapia).<br>
+                        <strong>Peculiaridad:</strong> Mortalidad &gt;50%; se asume toxicidad hematológica del cotrimoxazol por la letalidad de no tratar adecuadamente.
                     </div>
                 </div>
             </div>
@@ -207,9 +207,21 @@
             </select>
         </div>
 
+        <div id="mdr-mod-carbapenemasa" style="display:none; margin-bottom: 12px;">
+            <div class="form-group">
+                <label>Tipo de carbapenemasa (ECIL-10)</label>
+                <select id="mdr-carbapenemasa-tipo">
+                    <option value="desconocida">Desconocida / pendiente</option>
+                    <option value="kpc">KPC (Ambler clase A)</option>
+                    <option value="oxa48">OXA-48-like (Ambler clase D)</option>
+                    <option value="mbl">MBL: NDM, VIM, IMP (Ambler clase B)</option>
+                </select>
+            </div>
+        </div>
+
         <div id="mdr-modifiers" style="display: none; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px; margin-bottom: 15px;">
             <div style="font-size: 0.75rem; color: var(--accent-purple); font-weight: bold; margin-bottom: 8px; text-transform: uppercase;">Condiciones del Paciente:</div>
-            
+
             <div id="mdr-mod-sepsis" style="display:none;">
                 <label class="checkbox-label"><input type="checkbox" id="mdr-is-sepsis"> Paciente con Sepsis / Shock Séptico</label>
             </div>
@@ -217,10 +229,10 @@
                 <label class="checkbox-label"><input type="checkbox" id="mdr-high-inoculum"> Infección de Alto Inóculo + CMI ≥4 mg/L</label>
             </div>
             <div id="mdr-mod-cre" style="display:none;">
-                <label class="checkbox-label"><input type="checkbox" id="mdr-cmi-mero"> CMI de Meropenem < 16 mg/L</label>
+                <label class="checkbox-label"><input type="checkbox" id="mdr-cmi-mero"> Crítico, foco no controlado, o CMI cerca del punto de corte (considerar terapia combinada)</label>
             </div>
             <div id="mdr-mod-borderline" style="display:none;">
-                <label class="checkbox-label"><input type="checkbox" id="mdr-borderline"> Sensibilidad "Límite" en Antibiograma</label>
+                <label class="checkbox-label"><input type="checkbox" id="mdr-borderline"> Crítico, foco no controlado, o CMI cerca del punto de corte (añadir 2º agente activo)</label>
             </div>
         </div>
 
@@ -279,6 +291,17 @@
                 <div class="info-content" id="pkpd-contra">...</div>
             </div>
         </div>
+    </div>
+
+    <div class="card" style="border-top: 1px solid var(--accent-green);">
+        <h3 style="color: var(--accent-green);">Fuentes</h3>
+        <p style="font-size: 0.8rem; line-height: 1.5;">
+            La Matriz de Combate MDR (panel 3) incorpora las recomendaciones de terapia dirigida
+            frente a bacterias Gram-negativas resistentes de la 10ª Conferencia Europea sobre
+            Infecciones en Leucemia (ECIL-10, 2025), que complementan a la guía española de BGN-MDR
+            (SEIMC) usada como base del resto de la app.
+        </p>
+        <a class="pkpd-btn" style="display:block; text-align:center; text-decoration:none;" href="https://doi.org/10.1016/S1473-3099(25)00619-X" target="_blank" rel="noopener">🔗 Averbuch D, et al. Lancet Infect Dis 2026;26:e232-47 (ECIL-10)</a>
     </div>
 
     <button class="back-btn btn-volver-dirigido">← VOLVER</button>

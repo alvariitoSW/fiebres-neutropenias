@@ -67,9 +67,11 @@ function calcSuspension() {
 function updateMDRUI() {
     let bug = document.getElementById('mdr-bug-select').value;
     let mods = document.getElementById('mdr-modifiers');
-    
+    let carbapenemasaBox = document.getElementById('mdr-mod-carbapenemasa');
+
     ['sepsis', 'inoculum', 'cre', 'borderline'].forEach(m => document.getElementById(`mdr-mod-${m}`).style.display = 'none');
-    
+    carbapenemasaBox.style.display = 'none';
+
     if (bug === 'none') { mods.style.display = 'none'; }
     else { mods.style.display = 'block'; }
 
@@ -77,6 +79,7 @@ function updateMDRUI() {
         document.getElementById('mdr-mod-sepsis').style.display = 'block';
         document.getElementById('mdr-mod-inoculum').style.display = 'block';
     } else if (bug === 'cre') {
+        carbapenemasaBox.style.display = 'block';
         document.getElementById('mdr-mod-cre').style.display = 'block';
     } else if (bug === 'pseudomonas' || bug === 'acineto') {
         document.getElementById('mdr-mod-borderline').style.display = 'block';
@@ -94,6 +97,7 @@ function calcMDR() {
     let inoculum = document.getElementById('mdr-high-inoculum').checked;
     let cmiMero = document.getElementById('mdr-cmi-mero').checked;
     let borderline = document.getElementById('mdr-borderline').checked;
+    let carbapenemasa = document.getElementById('mdr-carbapenemasa-tipo').value;
 
     if (bug === 'none') {
         title.innerText = "Esperando datos..."; text.innerText = "Selecciona un microorganismo."; return;
@@ -113,27 +117,37 @@ function calcMDR() {
         else { text.innerHTML = base + `<strong style="color:var(--accent-green);">Cefepime o Fluoroquinolonas</strong> (No son sustrato de AmpC). Pip-Tazo es opción válida si hay sensibilidad in vitro (Grado B-II).`; }
     }
     else if (bug === 'cre') {
-        title.style.color = 'var(--accent-red)'; title.innerText = "CRE (KPC / OXA-48)";
-        let rec = `<strong style="color:var(--accent-red);">Terapia combinada obligatoria</strong> (≥2 fármacos activos).<br>`;
-        if (cmiMero) rec += `✅ <strong style="color:var(--accent-green);">Incluir Meropenem optimizado</strong> (2g/8h en 3h).<br>`;
-        else rec += `❌ Meropenem EXCLUIDO (CMI ≥16).<br>`;
-        rec += `Considerar Ceftazidima-Avibactam si no es metalo-betalactamasa.`;
+        title.style.color = 'var(--accent-red)';
+        let rec = '';
+        if (carbapenemasa === 'kpc') {
+            title.innerText = "CPE: KPC (Ambler clase A)";
+            rec = `<strong style="color:var(--accent-green);">1ª línea: Ceftazidima-avibactam</strong> <span class="grade-badge">A-IIu</span>.<br>Alternativas: Meropenem-vaborbactam <span class="grade-badge">B-IIu</span>, Imipenem-cilastatina-relebactam <span class="grade-badge">C-IIt</span>, Cefiderocol <span class="grade-badge red">C-IIt</span>.`;
+        } else if (carbapenemasa === 'oxa48') {
+            title.innerText = "CPE: OXA-48-like (Ambler clase D)";
+            rec = `<strong style="color:var(--accent-green);">1ª línea: Ceftazidima-avibactam</strong> <span class="grade-badge">A-IIu</span>.<br>Alternativa: Cefiderocol <span class="grade-badge red">C-IIt</span>.`;
+        } else if (carbapenemasa === 'mbl') {
+            title.innerText = "CPE: MBL — NDM/VIM/IMP (Ambler clase B)";
+            rec = `<strong style="color:var(--accent-red);">Ceftazidima-avibactam + AZTREONAM</strong> <span class="grade-badge">A-IIu</span> — el avibactam NO inhibe metalo-betalactamasas, el aztreonam es obligatorio.<br>Alternativa: Cefiderocol <span class="grade-badge">B-IIt</span>.`;
+        } else {
+            title.innerText = "CRE — carbapenemasa desconocida";
+            rec = `Cubrir empíricamente <strong style="color:var(--accent-yellow);">Ceftazidima-avibactam + aztreonam</strong> (cubre KPC/OXA-48/MBL a la vez) o Cefiderocol, hasta identificar el tipo de carbapenemasa y ajustar.`;
+        }
+        if (cmiMero) rec += `<br><br>⚠️ Crítico / foco no controlado / CMI cerca del punto de corte: <strong style="color:var(--accent-yellow);">considerar añadir un no-betalactámico activo</strong> (típicamente aminoglucósido) <span class="grade-badge">C-III</span> — la combinación de rutina con un no-betalactámico no está recomendada fuera de estos escenarios.`;
         text.innerHTML = rec;
     }
     else if (bug === 'pseudomonas') {
-        title.style.color = 'var(--accent-purple)'; title.innerText = "P. aeruginosa XDR";
-        let rec = `❌ NUNCA Aminoglucósidos en monoterapia.<br>`;
-        if (borderline) rec += `⚠️ Sensibilidad límite: <strong style="color:var(--accent-yellow);">Combinar 2 agentes optimizados</strong>. Considerar rescate con Ceftolozano-Tazobactam o Ceftazidima-Avibactam.`;
-        else rec += `✅ <strong style="color:var(--accent-green);">Monoterapia optimizada</strong> (Priorizar Betalactámicos > Colistina).`;
+        title.style.color = 'var(--accent-purple)'; title.innerText = "P. aeruginosa difícil de tratar (XDR/CRPA)";
+        let rec = `❌ NUNCA Aminoglucósidos en monoterapia.<br><strong style="color:var(--accent-green);">Opciones (monoterapia):</strong> Ceftolozano-tazobactam (dosis alta, 9g/día) <span class="grade-badge">A-IIur</span>, Ceftazidima-avibactam <span class="grade-badge">A-IIu</span>, Imipenem-cilastatina-relebactam <span class="grade-badge">B-IIt</span>, Cefiderocol <span class="grade-badge red">B-IIur</span>.`;
+        if (borderline) rec += `<br><br>⚠️ Crítico, foco no controlado o CMI cerca del punto de corte: <strong style="color:var(--accent-yellow);">añadir un no-betalactámico activo</strong> (aminoglucósido, fluoroquinolona o fosfomicina) al fármaco elegido.`;
         text.innerHTML = rec;
     }
     else if (bug === 'acineto') {
-        title.style.color = 'var(--accent-purple)'; title.innerText = "A. baumannii XDR";
-        text.innerHTML = `❌ NUNCA Tigeciclina en monoterapia para bacteriemia.<br>✅ <strong style="color:var(--accent-green);">Monoterapia optimizada</strong>. Prioridad: Betalactámicos activos &gt; <strong style="color:var(--accent-yellow);">Sulbactam</strong> (dosis altas) &gt; Colistina.`;
+        title.style.color = 'var(--accent-purple)'; title.innerText = "A. baumannii resistente a carbapenems (CRAB)";
+        text.innerHTML = `<strong style="color:var(--accent-green);">Preferido: Sulbactam-durlobactam + imipenem dosis alta</strong> <span class="grade-badge">A-IIt</span> (durlobactam no está aprobado por la EMA en Europa).<br>Si no disponible: <strong style="color:var(--accent-yellow);">Sulbactam altas dosis (≥9g/día) + colistina</strong> (preferido) o cefiderocol/tigeciclina/minociclina/fosfomicina <span class="grade-badge">B-IIt</span>.<br>Terapia combinada recomendada de entrada en pacientes inmunocomprometidos con CRAB, hasta conocer el antibiograma.`;
     }
     else if (bug === 'steno') {
         title.style.color = 'var(--accent-blue)'; title.innerText = "S. maltophilia";
-        text.innerHTML = `✅ <strong style="color:var(--accent-green);">Co-trimoxazol</strong> (Trimetoprim 15mg/kg/día).<br><span style="color:var(--text-muted);">Asumir riesgo de mielotoxicidad por alta letalidad de la infección.</span>`;
+        text.innerHTML = `<strong style="color:var(--accent-green);">Cotrimoxazol (TMP 8-12mg/kg/día) EN COMBINACIÓN</strong> <span class="grade-badge">B-IIu</span> con levofloxacino (si sensible, sobre todo si neumonía), tetraciclina en dosis altas (minociclina/tigeciclina) o cefiderocol — no monoterapia, dada la mortalidad &gt;50%.<br>Si cotrimoxazol no es viable: combinación de 2 de los anteriores, o triple terapia con ceftazidima-avibactam + aztreonam + levofloxacino/tetraciclina.<br>Desescalar a monoterapia tras respuesta clínica favorable y sensibilidad confirmada.`;
     }
 }
 
@@ -148,6 +162,7 @@ export function init() {
     });
 
     document.getElementById('mdr-bug-select').addEventListener('change', updateMDRUI);
+    document.getElementById('mdr-carbapenemasa-tipo').addEventListener('change', calcMDR);
     ['mdr-is-sepsis', 'mdr-high-inoculum', 'mdr-cmi-mero', 'mdr-borderline'].forEach(id => {
         document.getElementById(id).addEventListener('change', calcMDR);
     });

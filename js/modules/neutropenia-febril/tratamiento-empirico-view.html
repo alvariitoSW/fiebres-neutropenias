@@ -1,14 +1,16 @@
     <button class="back-btn btn-volver-tratamiento">← VOLVER</button>
     <div class="diag-header">
         <h2 style="color: var(--accent-yellow); text-shadow: none;">Tratamiento Empírico</h2>
-        <p>Consenso SEIMC-SEHH 2020</p>
+        <p>Consenso SEIMC-SEHH 2020 + ECIL-10 (2025)</p>
     </div>
 
     <!-- 1. SIN FOCO CLÍNICO -->
     <div class="card" style="border-top: 1px solid var(--accent-blue);">
         <h3 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">1. Sin Foco Clínico Evidente</h3>
-        <label class="checkbox-label" style="margin-bottom: 8px;"><input type="checkbox" id="tx-inestable"> Inestabilidad hemodinámica / shock séptico</label>
-        <label class="checkbox-label" style="margin-bottom: 8px;"><input type="checkbox" id="tx-mdr"> Riesgo BGN-MDR o alta prevalencia BLEE local</label>
+        <p class="subtitle">Estratificación ECIL-10: riesgo bajo vs. riesgo alto</p>
+        <label class="checkbox-label" style="margin-bottom: 8px;"><input type="checkbox" id="tx-inestable"> Paciente crítico: inestabilidad hemodinámica, sepsis, shock séptico o neumonía</label>
+        <label class="checkbox-label" style="margin-bottom: 8px;"><input type="checkbox" id="tx-mdr"> Alta prevalencia local, colonización o infección previa por BGN resistentes a primera línea (BLEE u otros) pero sensibles a carbapenems</label>
+        <label class="checkbox-label" style="margin-bottom: 8px;"><input type="checkbox" id="tx-cr"> Colonización o infección previa por BGN resistente a CARBAPENEMS</label>
         <label class="checkbox-label" style="margin-bottom: 8px;"><input type="checkbox" id="tx-sarm"> Colonización previa por SARM</label>
         <div class="result-box" style="text-align: left;">
             <div id="tx-recomendacion" style="font-size: 0.85rem; line-height: 1.5;"></div>
@@ -40,14 +42,19 @@
     <!-- 3. DURACIÓN Y SUSPENSIÓN EMPÍRICA -->
     <div class="card" style="border-top: 1px solid var(--accent-purple);">
         <h3 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">3. ¿Cuándo Parar? (Sin foco)</h3>
-        <p class="subtitle">Suspensión sin documentación clínica ni microbiológica</p>
+        <p class="subtitle">Fiebre de origen desconocido — criterios ECIL-10 (2025)</p>
         <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px 0;">🧮 Marca los criterios que cumple</p>
-        <label class="checkbox-label" style="margin-bottom: 8px;"><input type="checkbox" class="tx-suspension-check" id="susp-72h-emp"> ≥72h afebril</label>
-        <label class="checkbox-label" style="margin-bottom: 8px;"><input type="checkbox" class="tx-suspension-check" id="susp-estable-emp"> Estable hemodinámicamente</label>
-        <label class="checkbox-label" style="margin-bottom: 8px;"><input type="checkbox" class="tx-suspension-check" id="susp-asintomatico-emp"> Asintomático desde el inicio</label>
+        <label class="checkbox-label" style="margin-bottom: 8px;"><input type="checkbox" class="tx-suspension-check" id="susp-48h-emp"> Afebril ≥48h</label>
+        <label class="checkbox-label" style="margin-bottom: 8px;"><input type="checkbox" class="tx-suspension-check" id="susp-estable-emp"> Estable hemodinámicamente desde el inicio</label>
+        <label class="checkbox-label" style="margin-bottom: 8px;"><input type="checkbox" class="tx-suspension-check" id="susp-72h-tto-emp"> ≥72h acumuladas de tratamiento antibiótico</label>
         <div class="result-box">
             <div id="susp-resultado-empirico" style="font-size: 0.9rem; font-weight: bold;">⏳ ESPERANDO DATOS...</div>
         </div>
+        <p style="font-size: 0.7rem; color: var(--text-muted); margin: 8px 0 0 0; line-height: 1.4;">
+            Riesgo alto: TPH alogénico o LMA con neutropenia esperada &gt;10 días (Grado B-I).
+            Riesgo intermedio: TPH autólogo u otros (p. ej. linfoma) con neutropenia profunda
+            esperada 7-10 días (Grado A-I). La suspensión no exige recuperación de neutrófilos.
+        </p>
     </div>
 
     <!-- 4. VÍA ORAL -->
@@ -94,6 +101,17 @@
         <div class="result-box">
             <div id="antifungico-resultado" style="font-size: 0.85rem; line-height: 1.5; text-align: left;"></div>
         </div>
+    </div>
+
+    <div class="card" style="border-top: 1px solid var(--accent-green);">
+        <h3 style="color: var(--accent-green);">Fuentes</h3>
+        <p style="font-size: 0.8rem; line-height: 1.5;">
+            Las secciones 1 y 3 se han actualizado con las recomendaciones de la
+            10ª Conferencia Europea sobre Infecciones en Leucemia (ECIL-10, 2025) sobre terapia
+            antibiótica empírica y dirigida en neutropenia febril, que complementan y actualizan al
+            consenso SEIMC-SEHH 2020 en la estratificación de riesgo y los criterios de suspensión.
+        </p>
+        <a class="pkpd-btn" style="display:block; text-align:center; text-decoration:none;" href="https://doi.org/10.1016/S1473-3099(25)00619-X" target="_blank" rel="noopener">🔗 Averbuch D, et al. Lancet Infect Dis 2026;26:e232-47 (ECIL-10)</a>
     </div>
 
     <button class="back-btn btn-volver-tratamiento">← VOLVER</button>
