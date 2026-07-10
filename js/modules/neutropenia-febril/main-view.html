@@ -1,0 +1,121 @@
+
+    <!-- BLOQUE 1: TRIAJE INICIAL -->
+    <div class="card" style="border-top: 1px solid var(--accent-red);">
+        <h3 style="color: var(--accent-red); text-shadow: var(--glow-red);">1. TRIAJE INICIAL (< 60 min)</h3>
+        <p class="subtitle">Identificación de Red Flags</p>
+        <label class="checkbox-label" style="margin-top:10px;">
+            <input type="checkbox" id="triage-sepsis" class="triage-input">
+            <strong>Sepsis Grave / Shock Séptico</strong>
+        </label>
+        <label class="checkbox-label">
+            <input type="checkbox" id="triage-lma" class="triage-input">
+            <strong>Inducción de LMA o acondicionamiento pre-TPH</strong>
+        </label>
+
+        <div class="result-box" id="triage-result-box" style="margin-top: 15px; background: rgba(0,240,255,0.05); border-color: var(--accent-blue);">
+            <div id="triage-eval-text" style="color: var(--accent-blue); font-size: 1rem; font-weight: bold; text-shadow: var(--glow-blue);">Sin Criterios de Alto Riesgo Directo</div>
+            <div class="management-text" id="triage-management" style="display:block;">
+                <strong style="color: var(--accent-blue);">Siguiente paso:</strong><br>
+                Evaluar riesgo de complicaciones con Índice MASCC.
+            </div>
+        </div>
+    </div>
+
+    <!-- BLOQUE 2: ÍNDICE MASCC -->
+    <div class="card">
+        <h3 style="color: var(--accent-yellow);">2. ÍNDICE MASCC</h3>
+        <p class="subtitle">Estratificación de riesgo. (No usar si hay Red Flags)</p>
+        
+        <div class="form-group">
+            <label>Carga clínica de la enfermedad</label>
+            <select id="mascc-carga" class="mascc-input">
+                <option value="5">Sin síntomas o leves (5 pts)</option>
+                <option value="3">Síntomas moderados (3 pts)</option>
+                <option value="0">Síntomas graves (0 pts)</option>
+            </select>
+        </div>
+        <label class="checkbox-label"><input type="checkbox" id="mascc-hipotension" class="mascc-input" checked> Sin hipotensión (PAS > 90) (5 pts)</label>
+        <label class="checkbox-label"><input type="checkbox" id="mascc-epoc" class="mascc-input" checked> Sin historia de EPOC (4 pts)</label>
+        <label class="checkbox-label"><input type="checkbox" id="mascc-tumor" class="mascc-input" checked> Tumor sólido o neo hematológica sin infección fúngica previa (4 pts)</label>
+        <label class="checkbox-label"><input type="checkbox" id="mascc-deshidratacion" class="mascc-input" checked> Sin deshidratación (fluidos IV) (3 pts)</label>
+        <label class="checkbox-label"><input type="checkbox" id="mascc-ambulatorio" class="mascc-input" checked> Paciente ambulatorio al inicio de la fiebre (3 pts)</label>
+        <label class="checkbox-label"><input type="checkbox" id="mascc-edad" class="mascc-input" checked> Edad < 60 años (2 pts)</label>
+
+        <div class="result-box">
+            <div class="result-score" id="mascc-score-display" style="color: var(--accent-green); text-shadow: var(--glow-green);">26 / 26</div>
+            <div id="mascc-eval-text" style="color: var(--accent-green); font-size: 0.9rem;">Bajo Riesgo</div>
+            <div class="management-text" id="mascc-management" style="display:block;"></div>
+        </div>
+    </div>
+
+    <!-- BLOQUE 3: EVOLUCIÓN Y SUSPENSIÓN (ORIGINAL RESTAURADO) -->
+    <div class="card">
+        <h3 style="color: var(--accent-blue);">3. EVOLUCIÓN Y SUSPENSIÓN</h3>
+        <p class="subtitle">Control del tratamiento antibiótico</p>
+        
+        <div class="warning-box">
+            <strong style="color: var(--accent-yellow);">¡ATENCIÓN! Curva de Defervescencia:</strong><br>
+            El tiempo medio hasta la defervescencia en NF hematológica puede llegar a <strong>5 días</strong>. El ajuste se guía por clínica y microbiología, NO solo por la fiebre.
+        </div>
+
+        <div class="management-text" style="margin-top: 0; border-top: none; padding-top: 0; display:block;">
+            <strong style="color: var(--accent-blue);">REGLA DE ORO:</strong>
+            <ul>
+                <li><strong>NO exigir recuperación de neutrófilos</strong> para suspender el tratamiento si hay resolución clínica.</li>
+            </ul>
+            <strong style="color: var(--accent-green);">Desescalada Segura (Nodo 1):</strong>
+            <ul>
+                <li>Pasar a monoterapia con betalactámico de espectro estrecho si hay aislamiento documentado.</li>
+                <li><em>Excepción:</em> Vía MDR/XDR (ej. P. aeruginosa XDR) mantener combinación.</li>
+            </ul>
+            <strong style="color: var(--accent-red);">Criterios de Suspensión (Nodo 2):</strong>
+            <ul>
+                <li><strong>Inf. Microbiológicamente documentada:</strong> ≥72h afebril + resolución clínica.</li>
+                <li><strong>Inf. Clínicamente documentada:</strong> ≥4 días afebril + mínimo 7 días de tratamiento + resolución clínica.</li>
+                <li><em>Nota:</em> Si sigue neutropénico al suspender, observar 24-48h y valorar profilaxis antibacteriana.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- BLOQUE 4: MANEJO DEL CATÉTER (ORIGINAL RESTAURADO) -->
+    <div class="card">
+        <h3 style="color: var(--accent-blue);">4. MANEJO DEL CATÉTER (CVC)</h3>
+        <p class="subtitle">Decisión sobre reservorios y vías centrales</p>
+        
+        <div class="management-text" style="margin-top: 0; border-top: none; padding-top: 0; display:block;">
+            <strong style="color: var(--accent-yellow);">Diagnóstico Confirmatorio:</strong>
+            <ul>
+                <li>Extraer hemocultivos de todas las luces + vena periférica.</li>
+                <li>Confirmación: Diferencial de positivización ≥2h o cultivo de punta >15 UFC/mL.</li>
+            </ul>
+            
+            <strong style="color: var(--accent-red);">RETIRADA OBLIGATORIA SI:</strong>
+            <ul>
+                <li><strong>Clínica:</strong> Sepsis grave/shock, signos locales (supuración/tunelitis), bacteriemia persistente (48-72h), endocarditis/embolismo.</li>
+                <li><strong>Microorganismos:</strong> Hongos (<em>Candida spp.</em>), <em>S. aureus</em>, Enterococos, Bacilos Gram Negativos (<em>P. aeruginosa</em>), Micobacterias, <em>Bacillus spp.</em>, <em>Micrococcus spp.</em>, <em>Propionibacterium spp.</em></li>
+            </ul>
+
+            <strong style="color: var(--accent-green);">CONSERVAR SÓLO SI:</strong>
+            <ul>
+                <li>Infección no complicada por gérmenes menos virulentos + mal acceso venoso periférico.</li>
+                <li><strong>Acción obligatoria:</strong> Añadir Sellado Antibiótico al tratamiento sistémico.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- BOTONES DE NAVEGACIÓN -->
+    <button class="accordion-btn nav-btn" id="btn-diagnostico" style="border-left: 4px solid var(--accent-blue);">
+        <span><span class="gral-icon" style="color: var(--accent-blue); text-shadow: var(--glow-blue);">🔬</span>5. DIAGNÓSTICO</span>
+        <span style="font-size: 0.8rem; color: var(--accent-blue);">[ VER → ]</span>
+    </button>
+
+    <button class="accordion-btn nav-btn" id="btn-tratamiento" style="border-left: 4px solid var(--accent-yellow);">
+        <span><span class="gral-icon" style="color: var(--accent-yellow); text-shadow: none;">💊</span>6. TRATAMIENTO EMPÍRICO</span>
+        <span style="font-size: 0.8rem; color: var(--accent-yellow);">[ VER → ]</span>
+    </button>
+
+    <button class="accordion-btn nav-btn" id="btn-dirigido" style="border-left: 4px solid var(--accent-purple);">
+        <span><span class="gral-icon" style="color: var(--accent-purple); text-shadow: var(--glow-purple);">🦠</span>7. T. DIRIGIDO Y PK/PD</span>
+        <span style="font-size: 0.8rem; color: var(--accent-purple);">[ VER → ]</span>
+    </button>
+

@@ -1,0 +1,284 @@
+    <button class="back-btn btn-volver-dirigido">← VOLVER</button>
+    <div class="diag-header">
+        <h2 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">T. Dirigido y PK/PD</h2>
+        <p>Manejo Táctico de Resistencias en UCI</p>
+    </div>
+
+    <!-- PANEL 1: RETIRADA DE CATÉTER INTERACTIVA -->
+    <div class="card" style="border-top: 1px solid var(--accent-blue);">
+        <h3 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">1. Calculadora de Catéter (CVC)</h3>
+        <p class="subtitle">Decisión de Retirada vs Conservación</p>
+        
+        <div class="chip-grid" style="margin-bottom: 10px;">
+            <div style="font-size: 0.75rem; color: var(--accent-red); font-weight: bold; grid-column: 1 / -1;">CLÍNICA Y MICROBIOLOGÍA:</div>
+            <label class="checkbox-label"><input type="checkbox" class="cvc-risk"> Sepsis / Shock</label>
+            <label class="checkbox-label"><input type="checkbox" class="cvc-risk"> Signos locales</label>
+            <label class="checkbox-label"><input type="checkbox" class="cvc-risk"> Bacteriemia >48h</label>
+            <label class="checkbox-label"><input type="checkbox" class="cvc-risk"> Endocarditis/Embol.</label>
+            <label class="checkbox-label"><input type="checkbox" class="cvc-risk"> <i>S. aureus / Candida</i></label>
+            <label class="checkbox-label"><input type="checkbox" class="cvc-risk"> BGN (<i>P. aeruginosa</i>)</label>
+            <label class="checkbox-label"><input type="checkbox" class="cvc-risk"> Enterococos / Micob.</label>
+            <label class="checkbox-label"><input type="checkbox" class="cvc-risk"> <i>Bacillus/Micrococcus</i></label>
+        </div>
+        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 15px 0;">
+        <label class="checkbox-label"><input type="checkbox" id="cvc-poor-access"> Mal acceso venoso periférico</label>
+
+        <div class="result-box" id="cvc-result-box">
+            <div id="cvc-result-text" style="font-weight: bold; font-size: 1rem;">Selecciona criterios...</div>
+            <div id="cvc-result-sub" style="font-size: 0.8rem; margin-top: 6px; color: var(--text-muted);"></div>
+        </div>
+    </div>
+
+    <!-- PANEL 2: RELOJ DE SUSPENSIÓN Y PERFILES -->
+    <div class="card" style="border-top: 1px solid var(--accent-green);">
+        <h3 style="color: var(--accent-green); text-shadow: var(--glow-green);">2. Reloj de Seguridad y Patógenos</h3>
+        <p class="subtitle">Cuándo suspender y a qué te enfrentas</p>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="tab-clinica">Clínica</div>
+            <div class="tab" data-tab="tab-micro">Microbiológica</div>
+            <div class="tab" data-tab="tab-perfiles">Perfiles Patógenos</div>
+        </div>
+
+        <div id="tab-clinica" class="tab-content active">
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px;">Infección documentada sin aislamiento de microorganismo.</p>
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Días consecutivos AFEBRIL</label>
+                <input type="number" class="susp-inputs" id="susp-afebrile-days-clin" min="0" step="1" value="0">
+            </div>
+        </div>
+        
+        <div id="tab-micro" class="tab-content">
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px;">Aislamiento documentado. Requiere mínimo 7 días de tratamiento base.</p>
+            <div class="form-group">
+                <label>Días Totales de Tratamiento Antibiótico</label>
+                <input type="number" class="susp-inputs" id="susp-abt-days-micro" min="0" step="1" value="0">
+            </div>
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Días consecutivos AFEBRIL</label>
+                <input type="number" class="susp-inputs" id="susp-afebrile-days-micro" min="0" step="1" value="0">
+            </div>
+        </div>
+
+        <div id="tab-perfiles" class="tab-content">
+            <div class="micro-profiles">
+                <!-- S. aureus -->
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🦠 Staphylococcus aureus</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <strong>Tipo:</strong> Coco Gram+ en racimos.<br>
+                        <strong>Mecanismo (SARM):</strong> Alteración PBP2a (gen mecA).<br>
+                        <strong>Terapia de Elección:</strong> Cloxacilina/Cefazolina (SASM) / Vancomicina o Daptomicina (SARM).<br>
+                        <strong>Peculiaridad:</strong> Retirar SIEMPRE catéter. Tratamiento prolongado (mín. 14d post hemocultivo negativo). ETT/ETE y fondo de ojo obligatorios.
+                    </div>
+                </div>
+                <!-- Candida -->
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🍄 Candida spp.</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <strong>Tipo:</strong> Levadura fúngica.<br>
+                        <strong>Mecanismo:</strong> <em>C. krusei</em> y <em>C. glabrata</em> con resistencia intrínseca o adquirida a Fluconazol.<br>
+                        <strong>Terapia de Elección:</strong> Equinocandina empírica.<br>
+                        <strong>Peculiaridad:</strong> Retirar SIEMPRE catéter. Fondo de ojo obligatorio para descartar endoftalmitis.
+                    </div>
+                </div>
+                <!-- Aspergillus -->
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🍄 Aspergillus spp.</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <strong>Tipo:</strong> Hongo filamentoso (Moho).<br>
+                        <strong>Mecanismo:</strong> Angioinvasión (infarto tisular). Signo del halo en TC.<br>
+                        <strong>Terapia de Elección:</strong> Voriconazol o Isavuconazol. (Amfotericina B L. si empírico).<br>
+                        <strong>Peculiaridad:</strong> <em>A. terreus</em> es intrínsecamente resistente a Amfotericina B.
+                    </div>
+                </div>
+                <!-- Mucorales -->
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🍄 Mucorales (Zygomycetes)</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <strong>Tipo:</strong> Hongo filamentoso (Rhizopus, Mucor).<br>
+                        <strong>Mecanismo:</strong> Necrosis tisular fulminante (rinocerebral, pulmonar). Resistencia natural a Voriconazol y Equinocandinas.<br>
+                        <strong>Terapia de Elección:</strong> Amfotericina B Liposomal a dosis altas (5-10 mg/kg) + Cirugía de desbridamiento.<br>
+                        <strong>Peculiaridad:</strong> Sospechar si paciente usaba profilaxis con Voriconazol y presenta necrosis.
+                    </div>
+                </div>
+                <!-- Fusarium -->
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🍄 Fusarium spp.</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <strong>Tipo:</strong> Hongo filamentoso.<br>
+                        <strong>Mecanismo:</strong> Alta capacidad de diseminación con lesiones cutáneas nodulares.<br>
+                        <strong>Terapia de Elección:</strong> Amfotericina B Liposomal o Voriconazol.<br>
+                        <strong>Peculiaridad:</strong> A diferencia del Aspergillus, el Fusarium SÍ positiviza frecuentemente los hemocultivos.
+                    </div>
+                </div>
+                <!-- Pseudomonas -->
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🦠 Pseudomonas aeruginosa</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <strong>Tipo:</strong> Bacilo Gram- no fermentador.<br>
+                        <strong>Mecanismos:</strong> Bombas de eflujo, pérdida de porinas, MBLs.<br>
+                        <strong>Terapia de Elección:</strong> Pip-Tazo, Cefepime. En XDR/PDR: Ceftolozano-Tazobactam o Cefiderocol.<br>
+                        <strong>Peculiaridad:</strong> Nunca aminoglucósido en monoterapia. Priorizar dosis altas en infusión extendida.
+                    </div>
+                </div>
+                <!-- Enterobacterias CRE -->
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🦠 Enterobacterias CRE (KPC/OXA-48)</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <strong>Tipo:</strong> Bacilos Gram- fermentadores.<br>
+                        <strong>Mecanismo:</strong> Producción de Carbapenemasas que hidrolizan casi todos los betalactámicos.<br>
+                        <strong>Terapia de Elección:</strong> Ceftazidima-Avibactam. Alternativa: Terapia combinada ≥2 activos.<br>
+                        <strong>Peculiaridad:</strong> Si CMI Meropenem &lt;16 mg/L, incluir Meropenem optimizado (2g/8h infusión 3h) en la combinación.
+                    </div>
+                </div>
+                <!-- Acinetobacter -->
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🦠 Acinetobacter baumannii XDR</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <strong>Tipo:</strong> Bacilo Gram- no fermentador.<br>
+                        <strong>Mecanismo:</strong> Múltiples (OXA, bombas, porinas).<br>
+                        <strong>Terapia de Elección:</strong> Sulbactam (dosis altas) > Colistina o Tigeciclina.<br>
+                        <strong>Peculiaridad:</strong> Nunca usar tigeciclina sola en bacteriemias.
+                    </div>
+                </div>
+                <!-- Stenotrophomonas -->
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🦠 Stenotrophomonas maltophilia</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <strong>Tipo:</strong> Bacilo Gram- no fermentador.<br>
+                        <strong>Mecanismo:</strong> Resistencia INTRÍNSECA a Carbapenems (L1/L2 MBLs).<br>
+                        <strong>Terapia de Elección:</strong> Co-trimoxazol.<br>
+                        <strong>Peculiaridad:</strong> Se asume toxicidad hematológica del fármaco por la letalidad de la infección si no se trata adecuadamente.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Esta sección de resultados solo se muestra en las pestañas clínicas y micro -->
+        <div id="suspension-result-area">
+            <label class="checkbox-label" style="margin-top: 10px;">
+                <input type="checkbox" class="susp-inputs" id="susp-neutro-persists"> ¿Persiste neutropenia profunda al suspender?
+            </label>
+            <div class="result-box">
+                <div id="susp-final-result" style="font-size: 1rem; font-weight: bold;">⏳ ESPERANDO DATOS...</div>
+                <div id="susp-final-sub" style="font-size: 0.8rem; margin-top: 6px;">Introduce los días para evaluar.</div>
+            </div>
+            <div class="warning-box" style="margin-top: 15px; border-left-color: var(--accent-yellow);">
+                <strong style="color: var(--accent-yellow);">Regla de Oro:</strong> NO exigir recuperación de neutrófilos para suspender si hay resolución clínica.
+            </div>
+        </div>
+
+    </div>
+
+    <!-- PANEL 3: MATRIZ DE COMBATE MDR -->
+    <div class="card" style="border-top: 1px solid var(--accent-purple);">
+        <h3 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">3. Matriz de Combate MDR</h3>
+        <p class="subtitle">Generador de Terapia de Rescate</p>
+
+        <div class="form-group">
+            <label>Microorganismo (Enemigo)</label>
+            <select id="mdr-bug-select">
+                <option value="none">-- Selecciona --</option>
+                <option value="blee">Enterobacteria BLEE</option>
+                <option value="ampc">Enterobacteria AmpC (Grupo ESCPM)</option>
+                <option value="cre">CRE (KPC / OXA-48)</option>
+                <option value="pseudomonas">P. aeruginosa XDR/PDR</option>
+                <option value="acineto">A. baumannii XDR</option>
+                <option value="steno">Stenotrophomonas maltophilia</option>
+            </select>
+        </div>
+
+        <div id="mdr-modifiers" style="display: none; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px; margin-bottom: 15px;">
+            <div style="font-size: 0.75rem; color: var(--accent-purple); font-weight: bold; margin-bottom: 8px; text-transform: uppercase;">Condiciones del Paciente:</div>
+            
+            <div id="mdr-mod-sepsis" style="display:none;">
+                <label class="checkbox-label"><input type="checkbox" id="mdr-is-sepsis"> Paciente con Sepsis / Shock Séptico</label>
+            </div>
+            <div id="mdr-mod-inoculum" style="display:none;">
+                <label class="checkbox-label"><input type="checkbox" id="mdr-high-inoculum"> Infección de Alto Inóculo + CMI ≥4 mg/L</label>
+            </div>
+            <div id="mdr-mod-cre" style="display:none;">
+                <label class="checkbox-label"><input type="checkbox" id="mdr-cmi-mero"> CMI de Meropenem < 16 mg/L</label>
+            </div>
+            <div id="mdr-mod-borderline" style="display:none;">
+                <label class="checkbox-label"><input type="checkbox" id="mdr-borderline"> Sensibilidad "Límite" en Antibiograma</label>
+            </div>
+        </div>
+
+        <div class="result-box" style="text-align: left; min-height: 80px;">
+            <div id="mdr-result-title" style="font-weight: bold; font-size: 1rem; color: var(--accent-purple); margin-bottom: 8px;">Esperando datos...</div>
+            <div id="mdr-result-text" style="font-size: 0.85rem; line-height: 1.5;">Selecciona un microorganismo para generar la pauta.</div>
+        </div>
+    </div>
+
+    <!-- PANEL 4: CALCULADORA TÁCTICA PK/PD (CON FILTRADO RENAL) -->
+    <div class="card" style="border-top: 1px solid var(--accent-blue);">
+        <h3 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">4. Calculadora PK/PD (Ajuste Renal)</h3>
+        <p class="subtitle">Dosificación avanzada de UCI y Hematología</p>
+        
+        <div class="form-group">
+            <label>Filtrado Glomerular / Estado Renal</label>
+            <select id="pkpd-renal">
+                <option value="normal">> 50 ml/min (Normal)</option>
+                <option value="mild">30 - 50 ml/min</option>
+                <option value="mod">10 - 30 ml/min</option>
+                <option value="sev">< 10 ml/min</option>
+                <option value="crrt">TCRR (Hemofiltro)</option>
+            </select>
+        </div>
+
+        <label class="checkbox-label" style="background: rgba(255,51,102,0.1); border: 1px solid var(--accent-red); padding: 10px; border-radius: 4px; margin-bottom: 10px;">
+            <input type="checkbox" id="pkpd-severe-toggle">
+            <strong style="color: var(--accent-red);">Infección Grave / CMI Límite</strong>
+        </label>
+
+        <div class="pkpd-grid">
+            <button class="pkpd-btn" data-drug="piptazo">Pip-Tazo</button>
+            <button class="pkpd-btn" data-drug="mero">Meropenem</button>
+            <button class="pkpd-btn" data-drug="cefepime">Cefepime</button>
+            <button class="pkpd-btn" data-drug="colistina">Colistina</button>
+            <button class="pkpd-btn" data-drug="tige">Tigeciclina</button>
+            <button class="pkpd-btn" data-drug="amoxi">Amoxi-Clav</button>
+            <button class="pkpd-btn" data-drug="sulbactam">Sulbactam</button>
+            <!-- Antifúngicos -->
+            <button class="pkpd-btn fungal" data-drug="amfob">Amfo. B Liposomal</button>
+            <button class="pkpd-btn fungal" data-drug="caspo">Caspofungina</button>
+            <button class="pkpd-btn fungal" data-drug="vori">Voriconazol</button>
+        </div>
+
+        <div class="result-box" style="margin-top: 10px; background: rgba(0,0,0,0.8); border-color: var(--accent-blue);">
+            <div id="pkpd-result-dose" style="font-size: 1.1rem; font-weight: bold; color: var(--accent-blue); text-shadow: var(--glow-blue);">Selecciona Fármaco</div>
+        </div>
+
+        <div id="pkpd-info-panel" class="pkpd-info-box">
+            <div class="info-section">
+                <div class="info-title" style="color: var(--accent-yellow);">⚠️ Interacciones Clave</div>
+                <div class="info-content" id="pkpd-inter">...</div>
+            </div>
+            <div class="info-section">
+                <div class="info-title" style="color: var(--accent-red);">🚫 Contraindicaciones / Precaución</div>
+                <div class="info-content" id="pkpd-contra">...</div>
+            </div>
+        </div>
+    </div>
+
+    <button class="back-btn btn-volver-dirigido">← VOLVER</button>

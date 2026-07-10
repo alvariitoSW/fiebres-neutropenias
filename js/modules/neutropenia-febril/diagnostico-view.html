@@ -1,0 +1,116 @@
+    <button class="back-btn btn-volver-diagnostico">← VOLVER</button>
+    <div class="diag-header">
+        <h2>Arquitectura Diagnóstica NF</h2>
+        <p>Consenso SEIMC-SEHH 2020</p>
+    </div>
+
+    <!-- A. MICROBIOLOGÍA -->
+    <div class="card" style="border-top: 1px solid var(--accent-red);">
+        <h3 style="color: var(--accent-red); text-shadow: var(--glow-red);">A. Microbiología</h3>
+        <div class="warning-box" style="border-left-color: var(--accent-red); background: rgba(255,51,102,0.08);">
+            <strong style="color: var(--accent-red);">Regla de oro (Hemocultivos):</strong><br>
+            2-3 sets en todo paciente con NF, de todos los accesos venosos (CVC) + venopunción periférica.
+        </div>
+
+        <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 16px 0 6px 0;">Diferencial de tiempo hasta positivización</p>
+        <div class="vs-diagram">
+            <div class="vs-box">💉<br>Vía CVC</div>
+            <div class="vs-vs">≥2h</div>
+            <div class="vs-box">🩸<br>Periférica</div>
+        </div>
+
+        <div class="form-group">
+            <label>Horas hasta positivización — CVC</label>
+            <input type="number" id="micro-cvc-time" class="micro-input" min="0" step="0.5" placeholder="Ej. 10.5 (Dejar vacío si no hay)">
+        </div>
+        <div class="form-group">
+            <label>Horas hasta positivización — Periférica</label>
+            <input type="number" id="micro-periph-time" class="micro-input" min="0" step="0.5" placeholder="Ej. 14 (Dejar vacío si no hay)">
+        </div>
+        <div class="result-box">
+            <div class="result-score" id="micro-diff-display" style="color: var(--accent-green); font-size: 1.4rem;">-- h</div>
+            <div id="micro-diff-eval" style="font-size: 0.9rem;">Introduce ambos tiempos</div>
+        </div>
+
+        <div class="form-group" style="margin-top: 14px;">
+            <label>Técnicas Rápidas - Selecciona sospecha</label>
+            <select id="foco-select">
+                <option value="itu">Sospecha de ITU</option>
+                <option value="resp">Clínica respiratoria (ambulatorio)</option>
+                <option value="gripe">Epidemia estacional de gripe</option>
+                <option value="sangre">Confirmación tras positivización</option>
+                <option value="diarrea">Diarrea</option>
+            </select>
+        </div>
+        <div class="result-box" style="text-align: left;">
+            <div id="foco-tecnica" style="font-weight: bold; color: var(--accent-blue); text-align: center; font-size: 1rem;">—</div>
+            <div id="foco-tiempo" style="font-size: 0.8rem; color: var(--text-muted); text-align: center; margin: 4px 0 10px 0;">—</div>
+            <div id="foco-nota" style="font-size: 0.78rem; line-height: 1.4;"></div>
+        </div>
+    </div>
+
+    <!-- B. CRIBADO FÚNGICO -->
+    <div class="card" style="border-top: 1px solid var(--accent-green);">
+        <h3 style="color: var(--accent-green); text-shadow: var(--glow-green);">B. Cribado Fúngico</h3>
+        <label class="checkbox-label" style="margin: 4px 0 14px 0;">
+            <input type="checkbox" id="gm-profilaxis-toggle">
+            ¿Paciente en profilaxis antifúngica frente a filamentosos?
+        </label>
+
+        <div class="flow-branch active" id="branch-sin">
+            <div class="flow-branch-title" style="color: var(--accent-blue);">Sin profilaxis (alto riesgo)</div>
+            <div class="flow-node" style="width: 100%; margin-bottom: 6px;">GM sérico 2x/semana</div>
+            <div class="flow-arrow" style="margin: 2px 0;">↓</div>
+            <div class="flow-node" style="width: 100%;">TC de tórax (Positivo si GM >0.5x2 o ≥0.7x1)</div>
+        </div>
+
+        <div class="flow-branch" id="branch-con">
+            <div class="flow-branch-title" style="color: var(--accent-yellow);">Con profilaxis</div>
+            <div class="flow-node" style="width: 100%;">Fiebre >7 días sin causa → TC tórax directo<br>(⚠️ Técnicas séricas dan falsos +)</div>
+        </div>
+        
+        <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 4px 0;">Interpretador de Galactomanano</p>
+        <div class="form-group">
+            <label>Tipo de muestra</label>
+            <select id="gm-sample-type">
+                <option value="serum1">Sérico — 1 determinación (ECIL)</option>
+                <option value="serum2">Sérico — 2 determinaciones</option>
+                <option value="bal">BAL</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Valor de Galactomanano (índice)</label>
+            <input type="number" id="gm-value" min="0" step="0.01" value="0">
+        </div>
+        <div class="result-box">
+            <div class="result-score" id="gm-result-display" style="color: var(--accent-green); font-size: 1.3rem;">—</div>
+            <div id="gm-result-text" style="font-size: 0.85rem;">Selecciona muestra e introduce el valor</div>
+        </div>
+    </div>
+
+    <!-- C. BIOMARCADORES -->
+    <div class="card" style="border-top: 1px solid var(--accent-purple);">
+        <h3 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">C. Biomarcadores</h3>
+        <p class="subtitle">Cinética comparativa (escala 0-40h)</p>
+
+        <div class="kinetic-row">
+            <div class="kinetic-label"><strong>PCT</strong><span>Pico ~8h</span></div>
+            <div class="kinetic-track"><div class="kinetic-fill" style="width: 20%;"></div></div>
+        </div>
+        <div class="kinetic-row">
+            <div class="kinetic-label"><strong>PCR</strong><span>Pico ~36h</span></div>
+            <div class="kinetic-track"><div class="kinetic-fill" style="width: 90%;"></div></div>
+        </div>
+
+        <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 4px 0;">Interpretador de PCR</p>
+        <div class="form-group">
+            <label>Valor de PCR (mg/dL)</label>
+            <input type="number" id="pcr-value" min="0" step="0.1" value="0">
+        </div>
+        <div class="result-box">
+            <div class="result-score" id="pcr-result-display" style="color: var(--accent-green); font-size: 1.3rem;">-- mg/dL</div>
+            <div id="pcr-result-text" style="font-size: 0.85rem;">Introduce el valor</div>
+        </div>
+    </div>
+
+    <button class="back-btn btn-volver-diagnostico">← VOLVER</button>

@@ -1,0 +1,56 @@
+* { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+
+body {
+    background-color: var(--bg-main);
+    background-image: 
+        linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: var(--text-main);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 480px;
+    padding-bottom: 40px;
+}
+
+.header { text-align: center; margin-bottom: 30px; }
+.header h1 { 
+    color: var(--accent-blue); 
+    font-size: 1.8rem; 
+    margin: 0 0 8px 0; 
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: var(--glow-blue);
+}
+.header p { color: var(--text-muted); font-size: 0.85rem; margin: 0; text-transform: uppercase; letter-spacing: 1px;}
+
+.accordion-btn {
+    width: 100%;
+    background: linear-gradient(90deg, rgba(17,24,39,0.9) 0%, rgba(31,41,55,0.9) 100%);
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--accent-blue);
+    color: var(--text-main);
+    padding: 16px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    backdrop-filter: blur(5px);
+    transition: all 0.2s;
+}
+.accordion-btn:hover { box-shadow: var(--glow-blue); }
+
+.accordion-content { display: none; padding: 8px 0 16px 0; }
+.accordion-content.active { display: block; animation: fadeIn 0.3s ease; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }

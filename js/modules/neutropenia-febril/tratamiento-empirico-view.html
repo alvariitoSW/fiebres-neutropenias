@@ -1,0 +1,91 @@
+    <button class="back-btn btn-volver-tratamiento">← VOLVER</button>
+    <div class="diag-header">
+        <h2 style="color: var(--accent-yellow); text-shadow: none;">Tratamiento Empírico</h2>
+        <p>Consenso SEIMC-SEHH 2020</p>
+    </div>
+
+    <!-- 1. SIN FOCO CLÍNICO -->
+    <div class="card" style="border-top: 1px solid var(--accent-blue);">
+        <h3 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">1. Sin Foco Clínico Evidente</h3>
+        <label class="checkbox-label" style="margin-bottom: 8px;"><input type="checkbox" id="tx-inestable"> Inestabilidad hemodinámica / shock séptico</label>
+        <label class="checkbox-label" style="margin-bottom: 8px;"><input type="checkbox" id="tx-mdr"> Riesgo BGN-MDR o alta prevalencia BLEE local</label>
+        <label class="checkbox-label" style="margin-bottom: 8px;"><input type="checkbox" id="tx-sarm"> Colonización previa por SARM</label>
+        <div class="result-box" style="text-align: left;">
+            <div id="tx-recomendacion" style="font-size: 0.85rem; line-height: 1.5;"></div>
+        </div>
+    </div>
+
+    <!-- 2. SEGÚN FOCO CLÍNICO -->
+    <div class="card" style="border-top: 1px solid var(--accent-green);">
+        <h3 style="color: var(--accent-green); text-shadow: var(--glow-green);">2. Según Foco Clínico</h3>
+        <div class="form-group">
+            <select id="foco-tx-select">
+                <option value="mucositis-leve">🦷 Mucositis leve</option>
+                <option value="mucositis-grave">🦷 Mucositis moderada-grave</option>
+                <option value="enterocolitis">🧫 Enterocolitis neutropénica</option>
+                <option value="perianal">🍑 Infección perianal</option>
+                <option value="piel">🩹 Piel y partes blandas</option>
+                <option value="cateter">💉 Catéter intravascular</option>
+                <option value="neumonia">🫁 Neumonía</option>
+                <option value="itu">🚽 Infección urinaria</option>
+                <option value="meningitis">🧠 Meningitis / Meningoencefalitis</option>
+            </select>
+        </div>
+        <div class="result-box" style="text-align: left;">
+            <div id="foco-tx-tratamiento" style="font-weight: bold; color: var(--accent-green); text-align: center; font-size: 0.95rem;">—</div>
+            <div id="foco-tx-comentario" style="font-size: 0.8rem; margin-top: 8px; line-height: 1.4;"></div>
+        </div>
+    </div>
+
+    <!-- 3. DURACIÓN Y SUSPENSIÓN EMPÍRICA -->
+    <div class="card" style="border-top: 1px solid var(--accent-purple);">
+        <h3 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">3. ¿Cuándo Parar? (Sin foco)</h3>
+        <p class="subtitle">Suspensión sin documentación clínica ni microbiológica</p>
+        <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px 0;">🧮 Marca los criterios que cumple</p>
+        <label class="checkbox-label" style="margin-bottom: 8px;"><input type="checkbox" class="tx-suspension-check" id="susp-72h-emp"> ≥72h afebril</label>
+        <label class="checkbox-label" style="margin-bottom: 8px;"><input type="checkbox" class="tx-suspension-check" id="susp-estable-emp"> Estable hemodinámicamente</label>
+        <label class="checkbox-label" style="margin-bottom: 8px;"><input type="checkbox" class="tx-suspension-check" id="susp-asintomatico-emp"> Asintomático desde el inicio</label>
+        <div class="result-box">
+            <div id="susp-resultado-empirico" style="font-size: 0.9rem; font-weight: bold;">⏳ ESPERANDO DATOS...</div>
+        </div>
+    </div>
+
+    <!-- 4. VÍA ORAL -->
+    <div class="card" style="border-top: 1px solid var(--accent-blue);">
+        <h3 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">4. Vía Oral y Ambulatoria</h3>
+        <p class="subtitle">Solo bajo riesgo (MASCC) + entorno social garantizado</p>
+        <label class="checkbox-label" style="margin-bottom: 6px;"><input type="checkbox" class="tx-oral-exclusion"> TPH alogénico, LMA o QT intensiva</label>
+        <label class="checkbox-label" style="margin-bottom: 6px;"><input type="checkbox" class="tx-oral-exclusion"> Disfunción orgánica, comorbilidad o ingreso en UCI</label>
+        <label class="checkbox-label" style="margin-bottom: 6px;"><input type="checkbox" class="tx-oral-exclusion"> Celulitis significativa o infección de catéter</label>
+        <label class="checkbox-label" style="margin-bottom: 6px;"><input type="checkbox" class="tx-oral-exclusion"> Profilaxis con quinolona o infección previa por MDR</label>
+        <div class="result-box" style="text-align: left;">
+            <div id="oral-resultado" style="font-size: 0.9rem; font-weight: bold; text-align: center;"></div>
+            <div id="oral-regimen" style="font-size: 0.8rem; margin-top: 8px; line-height: 1.4;"></div>
+        </div>
+    </div>
+
+    <!-- 5. ANTIFÚNGICO EMPÍRICO -->
+    <div class="card" style="border-top: 1px solid var(--accent-purple);">
+        <h3 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">5. Antifúngico Empírico</h3>
+        <div class="stat-compare">
+            <div class="stat-box">
+                <div class="stat-num" style="color: var(--accent-red);">30-50%</div>
+                <div class="stat-label">pacientes tratados (clásico)</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-num" style="color: var(--accent-green);">~10%</div>
+                <div class="stat-label">incidencia real IFI alto riesgo</div>
+            </div>
+        </div>
+        <label class="checkbox-label" style="margin-bottom: 8px;"><input type="checkbox" id="tx-profilaxis-previa"> Paciente con profilaxis previa a filamentosos</label>
+        <div class="form-group">
+            <label>Días de fiebre sin causa con ABT amplio espectro</label>
+            <input type="number" id="tx-dias-fiebre" min="0" step="1" value="0">
+        </div>
+        <label class="checkbox-label" style="margin-bottom: 8px;"><input type="checkbox" id="tx-inestable-fungico"> Inestabilidad hemodinámica</label>
+        <div class="result-box">
+            <div id="antifungico-resultado" style="font-size: 0.85rem; line-height: 1.5; text-align: left;"></div>
+        </div>
+    </div>
+
+    <button class="back-btn btn-volver-tratamiento">← VOLVER</button>
