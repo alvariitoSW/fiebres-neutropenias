@@ -23,14 +23,88 @@
 
     <div class="card" id="panel-reconocimiento-tabs">
         <div class="tabs">
-            <div class="tab active" data-tab="rt-contexto">Contexto</div>
+            <div class="tab active" data-tab="rt-epidemiologia">Epidemiología</div>
+            <div class="tab" data-tab="rt-contexto">Contexto FRA</div>
             <div class="tab" data-tab="rt-direct">DIRECT</div>
             <div class="tab" data-tab="rt-diagnostico">Diagnóstico</div>
+            <div class="tab" data-tab="rt-sindromes">Síndromes</div>
             <div class="tab" data-tab="rt-manejo">Manejo</div>
+            <div class="tab" data-tab="rt-decisiones">Decisiones</div>
+        </div>
+
+        <!-- ===== TAB 0: EPIDEMIOLOGÍA ===== -->
+        <div id="rt-epidemiologia" class="tab-content active">
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                Las neoplasias hematológicas son el <strong>7% de los cánceres nuevos</strong> a
+                nivel global, con incidencia creciente. El riesgo de necesitar UCI en el primer año
+                tras el diagnóstico varía mucho según la enfermedad de base.
+            </p>
+            <table class="data-table">
+                <tr><th>Enfermedad</th><th>Incid. acum. 1 año</th><th>Tiempo medio a UCI</th></tr>
+                <tr><td>LMA</td><td>22.5%</td><td>27 d</td></tr>
+                <tr><td>LNH agresivo</td><td>17.7%</td><td>28 d</td></tr>
+                <tr><td>LLA</td><td>17.5%</td><td>24 d</td></tr>
+                <tr><td>Síndrome mielodisplásico</td><td>16.0%</td><td>59 d</td></tr>
+                <tr><td>Mieloma múltiple</td><td>15.0%</td><td>45 d</td></tr>
+                <tr><td>Neoplasia mieloproliferativa</td><td>12.6%</td><td>22 d</td></tr>
+                <tr><td>Linfoma de Hodgkin</td><td>9.7%</td><td>63 d</td></tr>
+                <tr><td>LLC</td><td>8.0%</td><td>35 d</td></tr>
+            </table>
+            <p style="font-size: 0.7rem; color: var(--text-muted); margin: 4px 0 16px;">Ferreyro et al. Intensive Care Med 2021;47(10):1104-1114.</p>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px 0;">Motivos de ingreso en UCI</p>
+            <div class="stat-compare">
+                <div class="stat-box"><div class="stat-num" style="color: var(--accent-red);">62.5%</div><div class="stat-label">fracaso respiratorio agudo</div></div>
+                <div class="stat-box"><div class="stat-num" style="color: var(--accent-yellow);">42%</div><div class="stat-label">shock</div></div>
+                <div class="stat-box"><div class="stat-num" style="color: var(--accent-blue);">30%</div><div class="stat-label">fracaso renal agudo</div></div>
+            </div>
+            <p style="font-size: 0.8rem; line-height: 1.5; margin-top: 10px;">
+                Diagnóstico principal al ingreso: neumonía (36%), shock séptico (26%), fracaso renal
+                agudo (20%), eventos cardiacos (14%), infiltración de la neoplasia (13%), tiflitis/
+                colitis (10%), síndrome de lisis tumoral (9.5%), sangrado grave (5%).
+                <span style="color: var(--text-muted);">Azoulay et al. J Clin Oncol. 2013;31(22):2810-8.</span>
+            </p>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 4px 0;">Patrones según la enfermedad de base</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🩸 LMA</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        La de mayor riesgo de ingreso en UCI. En hiperleucocitosis con fallo de
+                        órganos, la citorreducción con <strong>hidroxiurea antes de la inducción</strong>
+                        reduce la mortalidad precoz. Añadir <strong>dexametasona</strong> durante la
+                        inducción puede reducir la necesidad de ventilación mecánica.
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🩸 Linfoma</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        El <strong>síndrome de lisis tumoral</strong> puede aparecer hasta en 1/3 de los
+                        pacientes de alto riesgo (linfoma B y Burkitt). Las masas mediastínicas
+                        voluminosas pueden comprimir corazón, pulmones, grandes vasos o el sistema
+                        nervioso — diagnóstico rápido (TC/biopsia) y reducción tumoral urgente con QT.
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🩸 Mieloma múltiple</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        El <strong>fracaso renal agudo</strong> es el motivo de ingreso más frecuente
+                        (a diferencia del resto de neoplasias hematológicas). La supervivencia y
+                        recuperación funcional tras UCI son <strong>favorables</strong>, potencialmente
+                        mejores que en otras neoplasias hematológicas.
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- ===== TAB 1: CONTEXTO ===== -->
-        <div id="rt-contexto" class="tab-content active">
+        <div id="rt-contexto" class="tab-content">
             <p style="font-size: 0.85rem; line-height: 1.5;">
                 El fracaso respiratorio agudo (FRA) es la causa más frecuente de ingreso en UCI en
                 pacientes con neoplasias hematológicas, sobre todo en <strong>LMA, síndrome
@@ -164,6 +238,144 @@
             <label class="checkbox-label"><input type="checkbox"> Si la LBA es imprescindible en hipoxemia grave, la intubación precoz para poder realizarla es una opción aceptable, no una demora innecesaria.</label>
             <label class="checkbox-label"><input type="checkbox"> El balance riesgo-beneficio de cada procedimiento debe consensuarse; valora todas las alternativas, incluidas las innovadoras.</label>
             <label class="checkbox-label"><input type="checkbox"> Una buena estrategia diagnóstica (combinar varias pruebas eficientes) rinde más que una sola prueba, por buena que sea.</label>
+
+            <div class="warning-box" style="margin-top: 16px;">
+                <strong style="color: var(--accent-yellow);">⚠️ El tiempo hasta el antibiótico importa</strong><br>
+                En pacientes neutropénicos, cada hora de retraso en iniciar el antibiótico tras
+                detectar disfunción de órganos multiplica por 10 la mortalidad ajustada. Esto sigue
+                siendo válido aunque el cuadro simule sepsis por otra causa (p. ej. CRS tras CAR-T).
+            </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 4px 0;">Qué infección esperar según el defecto inmune</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🦠 Neutropenia corta (&lt;7 días)</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Riesgo predominantemente <strong>bacteriano</strong>.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🦠 Neutropenia prolongada</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Típica tras inducción de LMA. Predispone a <strong>hongos filamentosos invasivos</strong> (Aspergillus, Mucorales).</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🦠 Inmunidad humoral (déficit de células B)</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Asplenia, hipogammaglobulinemia (mieloma, sobre todo tras anticuerpos biespecíficos). Riesgo de <strong>bacterias encapsuladas</strong> (S. pneumoniae).</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🦠 Déficit de células T</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Neoplasias linfoides, fludarabina. Riesgo de <strong>Pneumocystis jirovecii</strong> (hasta 12% de ingresos en UCI, mortalidad hasta 50%), Cryptococcus, CMV, VHS.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🦠 Disfunción de monocitos/macrófagos</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Tricoleucemia. Riesgo de patógenos <strong>intracelulares</strong> (micobacterias, Legionella).</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🦠 Ibrutinib (inhibidor BTK)</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Riesgo aumentado de <strong>aspergilosis cerebral</strong>, sobre todo si se combina con corticoides.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== TAB 3B: SÍNDROMES Y TOXICIDADES ===== -->
+        <div id="rt-sindromes" class="tab-content">
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                Además de los infiltrados pulmonares leucémicos (pestaña "Contexto FRA"), estos son
+                los síndromes y toxicidades que con más frecuencia llevan a UCI a un paciente
+                hematológico.
+            </p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🔥 Síndrome hemofagocítico (SHF/HLH)</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        Diagnóstico difícil en el paciente crítico (sin gold standard fiable, muchos
+                        factores de confusión) y con poco margen de tiempo antes de que las citopenias
+                        y el fallo de órganos lo impidan. <strong>Etoposida</strong> sigue siendo el
+                        estándar en casos graves. Ruxolitinib (anti-JAK1/2) es prometedor pero con
+                        evidencia en humanos aún escasa.
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🩸 Síndrome de hiperviscosidad</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        Típico de macroglobulinemia de Waldenström (IgM). Tríada clásica: sangrado
+                        mucoso, alteraciones visuales y clínica neurológica.
+                        <strong>NO transfundir hematíes</strong> (aumenta el riesgo de hemorragia
+                        cerebral). Con afectación neurológica grave: plasmaféresis urgente con
+                        albúmina (3 sesiones suelen bastar en IgM, por ser predominantemente
+                        intravascular).
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🧬 EICH agudo (aGVHD) en UCI</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        ~25% de los receptores de TPH alogénico ingresan en UCI. Supervivencia actual
+                        &gt;75%. El EICH agudo, sobre todo si es <strong>corticorresistente</strong>,
+                        es un factor pronóstico crítico (afectación tisular directa, más
+                        inmunosupresión, toxicidad del tratamiento, desnutrición). Un ingreso previo
+                        en UCI ya no empeora la supervivencia a largo plazo por sí solo.
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🧫 CRS e ICANS (CAR-T)</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        Reconocimiento precoz, descartar infección (el mayor reto es distinguir CRS de
+                        sepsis), inicio rápido de tratamiento dirigido:
+                        <strong>tocilizumab</strong> para CRS, <strong>corticoides</strong> para ICANS
+                        (anakinra si no hay respuesta). Vigilancia estrecha de marcadores
+                        inflamatorios, función de órganos y estado neurológico.
+                        <span style="color: var(--text-muted);">Desarrollo completo pendiente en Trasplante → CAR-T.</span>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>❤️ Toxicidad cardiaca</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <strong>CAR-T/biespecíficos:</strong> arritmias asociadas al CRS; mejoran con el
+                        CRS, no ensombrecen el pronóstico.<br>
+                        <strong>Inhibidores de checkpoint (ICI):</strong> miocarditis rara pero grave;
+                        mortalidad hasta 80% si hay síndrome neuromuscular asociado. Tratamiento
+                        urgente con corticoides a dosis altas aunque el paciente esté asintomático —
+                        no esperar a la biopsia (gold standard) para tratar si hay sospecha clínica
+                        alta.<br>
+                        <strong>Terapias dirigidas (ITK/anticuerpos):</strong> QTc largo, fibrilación
+                        auricular, HTA, HTP, miocardiopatía — habitualmente reversibles al suspender.
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🩹 Coagulopatía y refractariedad plaquetaria</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        La CID no es la única coagulopatía posible (también fibrinólisis primaria,
+                        microangiopatía trombótica, déficit de antitrombina III...). La
+                        <strong>refractariedad plaquetaria</strong> suele deberse a consumo periférico
+                        por infección grave (no a aloinmunización) y afecta a ~1/3 de los pacientes —
+                        tratar la causa, no perseguir un umbral fijo con transfusiones repetidas. El
+                        ácido tranexámico profiláctico no ha demostrado reducir el sangrado en ensayos
+                        recientes.
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- ===== TAB 4: MANEJO Y PRONÓSTICO ===== -->
@@ -197,6 +409,41 @@
                 <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">
                     La neutropenia, por sí sola, ya <strong>no</strong> es un argumento para negar el
                     ingreso en UCI ni para retrasarlo.
+                </p>
+            </div>
+
+            <div class="card" style="border-top: 1px solid var(--accent-purple); margin-bottom: 12px;">
+                <h3 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">SDRA en el paciente hematológico</h3>
+                <p style="font-size: 0.85rem; line-height: 1.5;">
+                    ~80% de los inmunodeprimidos intubados cumplen criterios de SDRA. Más frecuencia
+                    de causa fúngica, infiltración por la enfermedad, o etiología no filiada — estas
+                    últimas con <strong>mayor mortalidad</strong>. Ventilación protectora igual que en
+                    cualquier SDRA: volumen tidal bajo, PEEP ajustada, presión meseta y driving
+                    pressure limitadas, y <strong>decúbito prono</strong> si PaO2/FiO2 &lt;100-150. La
+                    mortalidad del SDRA es mayor en estos pacientes que en el SDRA sin cáncer.
+                </p>
+            </div>
+
+            <div class="card" style="border-top: 1px solid var(--accent-red); margin-bottom: 12px;">
+                <h3 style="color: var(--accent-red); text-shadow: var(--glow-red);">Shock séptico</h3>
+                <p style="font-size: 0.85rem; line-height: 1.5;">
+                    Sigue las guías estándar de sepsis (resucitación precoz, control del foco,
+                    antibioterapia adecuada). Se asocia a mejor supervivencia: albúmina sérica alta
+                    (no la administración de albúmina), uso de aminoglucósidos, G-CSF. Se asocia a
+                    peor supervivencia: fracaso respiratorio asociado, mayor gravedad, lactato
+                    elevado — <strong>la neutropenia por sí sola NO</strong> empeora el pronóstico.
+                </p>
+            </div>
+
+            <div class="card" style="border-top: 1px solid var(--accent-blue); margin-bottom: 12px;">
+                <h3 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">Umbrales transfusionales</h3>
+                <p style="font-size: 0.85rem; line-height: 1.5;">
+                    <strong>Hematíes:</strong> estrategia restrictiva (Hb 7 g/dL) razonable, aunque sin
+                    ensayos específicos en el paciente hematológico crítico.<br>
+                    <strong>Plaquetas:</strong> transfusión profiláctica con &lt;10x10⁹/L. En UCI, con
+                    factores de riesgo añadidos (infección activa, sepsis, mucositis grave, caída
+                    rápida), es razonable subir el umbral a <strong>10-20x10⁹/L</strong>. Umbral más
+                    alto también en leucemia promielocítica aguda.
                 </p>
             </div>
 
@@ -239,14 +486,67 @@
                 </div>
             </div>
         </div>
+
+        <!-- ===== TAB 5: DECISIONES ===== -->
+        <div id="rt-decisiones" class="tab-content">
+            <div class="card" style="border-top: 1px solid var(--accent-blue); margin-bottom: 12px;">
+                <h3 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">¿Cuándo ingresar en UCI?</h3>
+                <p style="font-size: 0.85rem; line-height: 1.5;">
+                    La decisión no debe basarse solo en la puntuación de gravedad ni en la edad.
+                    Priorizar: número/gravedad de la disfunción de órganos, estado funcional y carga
+                    de comorbilidad global, y sobre todo si el paciente <strong>es candidato a
+                    tratamiento antineoplásico</strong> — esto pesa más que las características
+                    concretas de la neoplasia. El ingreso tardío se asocia a mayor mortalidad.
+                </p>
+            </div>
+
+            <div class="card" style="border-top: 1px solid var(--accent-purple); margin-bottom: 12px;">
+                <h3 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">Ensayos de tiempo limitado (TLT)</h3>
+                <p style="font-size: 0.85rem; line-height: 1.5;">
+                    Cuando hay dudas sobre la reversibilidad del cuadro: acuerdo multidisciplinar
+                    (intensivista + hematólogo) sobre qué soporte vital se va a aplicar, durante
+                    cuánto tiempo, y qué criterios de respuesta se van a usar para decidir al
+                    finalizar el plazo. Se comparte con el paciente y/o su familia, y se reevalúa en
+                    reuniones periódicas. La duración óptima depende de la fragilidad del paciente y
+                    la causa del fallo de órganos — se individualiza.
+                </p>
+            </div>
+
+            <div class="warning-box" style="margin-bottom: 12px;">
+                <strong style="color: var(--accent-yellow);">Objetivos de cuidado</strong><br>
+                Los supervivientes de UCI tienen una calidad de vida comparable a la de los pacientes
+                hematológicos que nunca ingresaron. Pregunta no solo "¿qué esperas?" sino qué
+                objetivos concretos y alcanzables son importantes para el paciente — esto ayuda a
+                alinear el nivel de cuidado con sus valores.
+            </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 4px 0;">Motivos de ingreso en UCI, revisitados</p>
+            <p style="font-size: 0.8rem; line-height: 1.5; color: var(--text-muted);">
+                Con la cronificación de las neoplasias hematológicas, los ingresos en UCI ya no se
+                explican solo por sepsis o FRA: también por complicaciones específicas de la
+                enfermedad, toxicidad de terapias dirigidas (ICI, CAR-T), efectos tardíos del EICH
+                crónico, y descompensación de comorbilidades no hematológicas de base.
+            </p>
+        </div>
     </div>
 
     <div class="card">
-        <h3>Fuente</h3>
+        <h3>Fuentes</h3>
         <p style="font-size: 0.85rem; line-height: 1.5;">
             Azoulay E, Maertens J, Lemiale V. <em>How I manage acute respiratory failure in patients
             with hematological malignancies.</em> Blood. 2024;143(11):971-982.
             doi:10.1182/blood.2023021414
         </p>
         <a class="pkpd-btn" style="display:block; text-align:center; text-decoration:none;" href="docs/azoulay-2024-fracaso-respiratorio-agudo.pdf" target="_blank" rel="noopener">📄 Abrir el artículo completo (PDF)</a>
+
+        <p style="font-size: 0.85rem; line-height: 1.5; margin-top: 16px;">
+            Azoulay E, Zafrani L, Nates J, et al. <em>Advances in the critical care management for
+            patients with hematological malignancies.</em> Blood Reviews. 2025;74:101306.
+            doi:10.1016/j.blre.2025.101306
+        </p>
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px;">
+            Artículo de acceso restringido (suscripción). No se aloja copia en la app; el enlace
+            lleva a la página oficial de la editorial.
+        </p>
+        <a class="pkpd-btn" style="display:block; text-align:center; text-decoration:none;" href="https://doi.org/10.1016/j.blre.2025.101306" target="_blank" rel="noopener">🔗 Ver en la editorial (DOI)</a>
     </div>

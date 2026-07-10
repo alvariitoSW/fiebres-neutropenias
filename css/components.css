@@ -164,8 +164,9 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 .stat-label { font-size: 0.68rem; color: var(--text-muted); }
 
 /* ESTILOS: Pestañas y PK/PD */
-.tabs { display: flex; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-.tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; font-size: 0.8rem; color: var(--text-muted); border-bottom: 2px solid transparent; transition: all 0.2s; user-select: none;}
+.tabs { display: flex; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab { flex: 0 0 auto; text-align: center; padding: 10px 14px; cursor: pointer; font-size: 0.8rem; color: var(--text-muted); border-bottom: 2px solid transparent; transition: all 0.2s; user-select: none; white-space: nowrap; }
 .tab.active { color: var(--accent-blue); border-bottom-color: var(--accent-blue); font-weight: bold; }
 .tab-content { display: none; }
 .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
