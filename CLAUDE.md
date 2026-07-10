@@ -68,7 +68,8 @@ que sea puramente informativa.
 
 ## Carpeta `docs/`
 
-`docs/seimc-sehh-2020-neutropenia-febril.pdf` es el PDF completo (104 págs.)
+`docs/seimc-sehh-2020-neutropenia-febril.pdf` es el PDF completo (148 págs.,
+incluida la bibliografía completa de 346 referencias)
 del documento de consenso SEIMC-SEHH del que sale todo el contenido clínico
 de "Neutropenias Febriles". La sección "Fuentes y Evidencia" enlaza a
 páginas concretas de este PDF con fragmentos `#page=N` (N = página impresa
