@@ -36,6 +36,14 @@
         <div id="hemato-tratamiento-view" style="display: none;" data-include="js/modules/neutropenia-febril/tratamiento-empirico-view.html"></div>
         <div id="hemato-dirigido-view" style="display: none;" data-include="js/modules/neutropenia-febril/tratamiento-dirigido-view.html"></div>
     </div>
+
+    <!-- SECCIÓN: FUENTES Y EVIDENCIA -->
+    <button class="accordion-btn" data-target="fuentes" style="border-left: 4px solid var(--accent-purple);">
+        <span><span class="gral-icon" style="color: var(--accent-purple); text-shadow: var(--glow-purple);">📚</span>FUENTES Y EVIDENCIA</span>
+        <span id="fuentes-status" style="font-size: 0.8rem; color: var(--accent-purple);">[ ABRIR ]</span>
+    </button>
+
+    <div id="fuentes" class="accordion-content" data-include="js/modules/fuentes/fuentes.html"></div>
 </div>
 
 <script type="module" src="js/main.js"></script>

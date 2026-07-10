@@ -107,9 +107,10 @@ function calcMDR() {
     } 
     else if (bug === 'ampc') {
         title.style.color = 'var(--accent-yellow)'; title.innerText = "Grupo ESCPM (AmpC)";
-        let base = `⚠️ <span style="color:var(--accent-red);">Riesgo de Derrepresión:</span> Cuidado con cefalosporinas de 3ª/BLBLI.<br><br>`;
+        let base = `⚠️ <span style="color:var(--accent-red);">Riesgo de Derrepresión:</span> Cuidado con cefalosporinas de 3ª.<br><br>`;
         if (sepsis) { text.innerHTML = base + `<strong style="color:var(--accent-red);">Carbapenems</strong> al estar el paciente inestable.`; }
-        else { text.innerHTML = base + `<strong style="color:var(--accent-green);">Cefepime o Fluoroquinolonas</strong> (No son sustrato de AmpC).`; }
+        else if (inoculum) { text.innerHTML = base + `Evitar Pip-Tazo (Efecto inóculo, CMI ≥4). Usar <strong style="color:var(--accent-yellow);">Carbapenems</strong>.`; }
+        else { text.innerHTML = base + `<strong style="color:var(--accent-green);">Cefepime o Fluoroquinolonas</strong> (No son sustrato de AmpC). Pip-Tazo es opción válida si hay sensibilidad in vitro (Grado B-II).`; }
     }
     else if (bug === 'cre') {
         title.style.color = 'var(--accent-red)'; title.innerText = "CRE (KPC / OXA-48)";
@@ -122,13 +123,13 @@ function calcMDR() {
     else if (bug === 'pseudomonas') {
         title.style.color = 'var(--accent-purple)'; title.innerText = "P. aeruginosa XDR";
         let rec = `❌ NUNCA Aminoglucósidos en monoterapia.<br>`;
-        if (borderline) rec += `⚠️ Sensibilidad límite: <strong style="color:var(--accent-yellow);">Combinar 2 agentes optimizados</strong>. Considerar rescate con Ceftolozano-Tazobactam.`;
+        if (borderline) rec += `⚠️ Sensibilidad límite: <strong style="color:var(--accent-yellow);">Combinar 2 agentes optimizados</strong>. Considerar rescate con Ceftolozano-Tazobactam o Ceftazidima-Avibactam.`;
         else rec += `✅ <strong style="color:var(--accent-green);">Monoterapia optimizada</strong> (Priorizar Betalactámicos > Colistina).`;
         text.innerHTML = rec;
     }
     else if (bug === 'acineto') {
         title.style.color = 'var(--accent-purple)'; title.innerText = "A. baumannii XDR";
-        text.innerHTML = `❌ NUNCA Tigeciclina en monoterapia para bacteriemia.<br>✅ <strong style="color:var(--accent-green);">Monoterapia optimizada</strong>. Priorizar <strong style="color:var(--accent-yellow);">Sulbactam</strong> (dosis altas) > Colistina.`;
+        text.innerHTML = `❌ NUNCA Tigeciclina en monoterapia para bacteriemia.<br>✅ <strong style="color:var(--accent-green);">Monoterapia optimizada</strong>. Prioridad: Betalactámicos activos &gt; <strong style="color:var(--accent-yellow);">Sulbactam</strong> (dosis altas) &gt; Colistina.`;
     }
     else if (bug === 'steno') {
         title.style.color = 'var(--accent-blue)'; title.innerText = "S. maltophilia";

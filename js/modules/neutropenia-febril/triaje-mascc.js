@@ -1,11 +1,12 @@
 function calcTriage() {
     let isSepsis = document.getElementById('triage-sepsis').checked;
     let isLMA = document.getElementById('triage-lma').checked;
+    let idsaChecks = Array.from(document.querySelectorAll('.idsa-check')).filter(c => c.checked);
     let box = document.getElementById('triage-result-box');
     let text = document.getElementById('triage-eval-text');
     let m = document.getElementById('triage-management');
 
-    if (isSepsis || isLMA) {
+    if (isSepsis || isLMA || idsaChecks.length > 0) {
         box.style.borderColor = 'var(--accent-red)'; box.style.background = 'rgba(255, 51, 102, 0.1)';
         text.innerText = 'ALTO RIESGO AUTOMÁTICO (Ingreso + IV)'; text.style.color = 'var(--accent-red)';
         m.innerHTML = `<strong style="color: var(--accent-red);">Manejo Crítico:</strong><br>
@@ -13,6 +14,7 @@ function calcTriage() {
                 <li><strong>Ingreso hospitalario inmediato + ABT IV.</strong></li>
                 ${isSepsis ? '<li><strong>Sepsis/Shock:</strong> Valorar ingreso directo en UCI. Retirada de CVC recomendada.</li>' : ''}
                 ${isLMA ? '<li><strong>Fase Crítica:</strong> Riesgo máximo por inducción/acondicionamiento.</li>' : ''}
+                ${idsaChecks.length > 0 ? `<li><strong>Comorbilidad de alto riesgo (IDSA):</strong> ${idsaChecks.map(c => c.parentElement.textContent.trim()).join(', ')}.</li>` : ''}
                 <li><em>El Índice MASCC queda invalidado.</em></li>
             </ul>`;
     } else {
@@ -25,7 +27,9 @@ function calcTriage() {
 }
 
 function calcMASCC() {
-    let highRisk = document.getElementById('triage-sepsis').checked || document.getElementById('triage-lma').checked;
+    let highRisk = document.getElementById('triage-sepsis').checked
+        || document.getElementById('triage-lma').checked
+        || document.querySelectorAll('.idsa-check:checked').length > 0;
     let score = parseInt(document.getElementById('mascc-carga').value);
     if (document.getElementById('mascc-hipotension').checked) score += 5;
     if (document.getElementById('mascc-epoc').checked) score += 4;

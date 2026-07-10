@@ -52,10 +52,31 @@ js/
                                    cálculo + export function init()
 ```
 
-Hoy hay dos categorías: `modules/generales/` (qSOFA, SRIS, SOFA, Glasgow) y
+Hoy hay tres categorías: `modules/generales/` (qSOFA, SRIS, SOFA, Glasgow),
 `modules/neutropenia-febril/` (triaje+MASCC, diagnóstico, tratamiento
 empírico, tratamiento dirigido/PK-PD), esta última con 4 sub-vistas
-navegables (`navigation.js` controla el show/hide entre ellas).
+navegables (`navigation.js` controla el show/hide entre ellas), y
+`modules/fuentes/` (bibliografía y evidencia).
+
+`modules/fuentes/` es una categoría **solo de contenido**: no tiene lógica de
+cálculo, así que solo lleva `fuentes.html` (sin `.js` ni `index.js`). El botón
+de acordeón "FUENTES Y EVIDENCIA" y su contenedor viven directamente en
+`index.html`; no hace falta registrar nada en `main.js` porque
+`core/accordion.js` detecta cualquier `.accordion-btn[data-target]` que
+exista en el DOM. Este es el patrón a seguir para cualquier categoría nueva
+que sea puramente informativa.
+
+## Carpeta `docs/`
+
+`docs/seimc-sehh-2020-neutropenia-febril.pdf` es el PDF completo (104 págs.)
+del documento de consenso SEIMC-SEHH del que sale todo el contenido clínico
+de "Neutropenias Febriles". La sección "Fuentes y Evidencia" enlaza a
+páginas concretas de este PDF con fragmentos `#page=N` (N = página impresa
+del documento − 2, porque las 2 primeras páginas —portada e índice— no
+forman parte del PDF). Si en el futuro se añade contenido basado en otro
+documento, súbelo también a `docs/` y enlázalo de la misma forma: es
+preferible a enlazar a una URL externa, porque no depende de que esa URL
+siga viva ni de tener acceso a internet para comprobarla.
 
 ## Convención de un módulo de calculadora
 
