@@ -43,7 +43,15 @@ js/
   core/                       Infraestructura genérica reutilizable
     include.js                 Carga fragmentos HTML vía fetch()
     accordion.js                Abrir/cerrar bloques .accordion-btn
-    tabs.js                     Comportamiento genérico de pestañas
+    tabs.js                     Comportamiento genérico de pestañas — IMPORTANTE:
+                                  como todos los partials se cargan a la vez (aunque
+                                  estén ocultos), si hay más de un grupo de pestañas
+                                  en la app hay que llamar a initTabs(contenedor, cb)
+                                  con un contenedor específico (nunca document), y
+                                  cualquier document.querySelector('.tab.active') que
+                                  uses dentro del módulo debe ir acotado igual
+                                  (ej. '#mi-panel .tab.active'). Si no, los grupos de
+                                  pestañas de distintos módulos interfieren entre sí.
     navigation.js                createViewSwitcher(): muestra una vista de
                                   un grupo y oculta el resto (menú principal,
                                   submenú de Citopenias, submenú de Trasplante)

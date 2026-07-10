@@ -23,7 +23,7 @@ function calcCVC() {
 }
 
 function calcSuspension() {
-    let activeTabBtn = document.querySelector('.tab.active');
+    let activeTabBtn = document.querySelector('#panel-suspension-perfiles .tab.active');
     if (!activeTabBtn) return;
     let tabID = activeTabBtn.getAttribute('data-tab');
     
@@ -141,7 +141,7 @@ export function init() {
     document.querySelectorAll('.cvc-risk').forEach(e => e.addEventListener('change', calcCVC));
     document.getElementById('cvc-poor-access').addEventListener('change', calcCVC);
 
-    initTabs(document, calcSuspension);
+    initTabs(document.getElementById('panel-suspension-perfiles'), calcSuspension);
     document.querySelectorAll('.susp-inputs').forEach(input => {
         input.addEventListener('input', calcSuspension);
         input.addEventListener('change', calcSuspension);

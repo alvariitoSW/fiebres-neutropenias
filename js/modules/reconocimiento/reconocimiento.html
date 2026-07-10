@@ -1,13 +1,252 @@
     <button class="back-btn btn-volver-home">← VOLVER</button>
     <div class="diag-header">
         <h2 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">Reconocimiento Temprano del Paciente Hematológico</h2>
-        <p>Contenido en preparación</p>
+        <p>Fracaso respiratorio agudo (FRA): primer motivo de ingreso en UCI</p>
     </div>
 
     <div class="card" style="border-top: 1px solid var(--accent-blue);">
-        <h3 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">🚧 Próximamente</h3>
-        <p style="font-size: 0.85rem; line-height: 1.5; color: var(--text-muted);">
-            Esta sección todavía no tiene contenido clínico. Se irá completando en próximas
-            actualizaciones.
+        <div class="stat-compare">
+            <div class="stat-box">
+                <div class="stat-num" style="color: var(--accent-red);">60-80%</div>
+                <div class="stat-label">de los ingresos en UCI son por FRA</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-num" style="color: var(--accent-red);">35%</div>
+                <div class="stat-label">mortalidad del FRA hematológico</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-num" style="color: var(--accent-green);">88-95%</div>
+                <div class="stat-label">SpO2 objetivo (evitar hiperoxia)</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" id="panel-reconocimiento-tabs">
+        <div class="tabs">
+            <div class="tab active" data-tab="rt-contexto">Contexto</div>
+            <div class="tab" data-tab="rt-direct">DIRECT</div>
+            <div class="tab" data-tab="rt-diagnostico">Diagnóstico</div>
+            <div class="tab" data-tab="rt-manejo">Manejo</div>
+        </div>
+
+        <!-- ===== TAB 1: CONTEXTO ===== -->
+        <div id="rt-contexto" class="tab-content active">
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                El fracaso respiratorio agudo (FRA) es la causa más frecuente de ingreso en UCI en
+                pacientes con neoplasias hematológicas, sobre todo en <strong>LMA, síndrome
+                mielodisplásico y TPH alogénico</strong>. La neutropenia prolongada y la infiltración
+                pulmonar por células malignas también aumentan el riesgo. Identificar la causa a
+                tiempo cambia el pronóstico: la ausencia de diagnóstico se asocia a mayor mortalidad.
+            </p>
+
+            <div class="article-figure">
+                <img src="js/modules/reconocimiento/img/figura1-eventos-respiratorios.jpg" alt="Proporción de pacientes que desarrollan eventos respiratorios según el tipo de neoplasia hematológica" loading="lazy">
+                <div class="article-figure-caption">Figura 1. Proporción de pacientes que desarrollan eventos respiratorios según el tipo de neoplasia hematológica. LMA es la de mayor riesgo (50-82% según las series).</div>
+            </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 4px 0;">3 patrones específicos de infiltrado en LMA</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🫁 Leucostasis pulmonar</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <strong>Contexto:</strong> LMA hiperleucocitaria.<br>
+                        <strong>Mecanismo:</strong> lesión endotelial por invasión microvascular e
+                        hiperviscosidad celular, microtrombos leucocitarios, robo de oxígeno.<br>
+                        <strong>Manejo:</strong> citorreducción (hidroxiurea) para reducir la carga
+                        tumoral; los esteroides pueden mejorar el pronóstico a corto plazo (evidencia
+                        limitada, solo estudios retrospectivos).
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🫁 Infiltración leucémica</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <strong>Contexto:</strong> sobre todo en LMA monoblástica.<br>
+                        <strong>Mecanismo:</strong> agregación de blastos en la luz vascular; puede
+                        producir FRA <strong>sin</strong> hiperleucocitosis. No hay relación entre la
+                        cifra de leucocitos y la incidencia de infiltración parenquimatosa.<br>
+                        <strong>Patrón:</strong> sigue las vías linfáticas (peribroncovascular, septos
+                        interlobulares, intersticio pleural).
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🫁 Neumopatía por lisis</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <strong>Contexto:</strong> aparece inmediata o precozmente tras iniciar la
+                        quimioterapia (a diferencia de las dos anteriores).<br>
+                        <strong>Mecanismo:</strong> daño alveolar difuso con células blásticas en
+                        degeneración en el intersticio y en exudados alveolares organizándose.<br>
+                        <strong>Clave clínica:</strong> el momento de aparición (justo tras QT) es el
+                        dato que más ayuda a distinguirla de las otras dos.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== TAB 2: DIRECT ===== -->
+        <div id="rt-direct" class="tab-content">
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                El <strong>enfoque DIRECT</strong> es la herramienta de cabecera para estimar la
+                probabilidad pre-test de cada causa de FRA y decidir qué pruebas diagnósticas pedir,
+                minimizando el uso de broncoscopia con lavado broncoalveolar (que puede empeorar la
+                hipoxemia).
+            </p>
+
+            <div class="article-figure">
+                <img src="js/modules/reconocimiento/img/figura2-enfoque-direct.jpg" alt="Componentes del enfoque DIRECT" loading="lazy">
+                <div class="article-figure-caption">Figura 2. Componentes del enfoque DIRECT.</div>
+            </div>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span><strong style="color: var(--accent-red);">D</strong> · Delay (demora)</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Tiempo transcurrido desde el diagnóstico del cáncer, la terapia celular, el inicio de antibióticos y la profilaxis recibida.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span><strong style="color: var(--accent-red);">I</strong> · Patrón de inmunodeficiencia</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Qué línea celular está más afectada (neutrófilo, monocito, célula B, célula T, macrófago, célula dendrítica) — orienta qué patógenos son más probables.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span><strong style="color: var(--accent-red);">R</strong> · Radiología (Rx tórax)</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">La Rx de tórax tiene baja sensibilidad y especificidad, pero es la única prueba de imagen que se puede hacer a pie de cama en el paciente más hipoxémico que no tolera un TC.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span><strong style="color: var(--accent-red);">E</strong> · Experiencia compartida</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">La valoración diaria conjunta y la discusión entre intensivistas y hematólogos se asocia a mejor supervivencia. Compartir el conocimiento sobre tratamientos y toxicidades nuevas mejora la calidad asistencial.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span><strong style="color: var(--accent-red);">C</strong> · Clínica</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Caracterizar el tipo e intensidad de la afectación pulmonar. Los hallazgos extrapulmonares (sinusitis, lesiones cutáneas, adenopatías, focalidad neurológica) son más fáciles de explorar y tienen alto rendimiento diagnóstico.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span><strong style="color: var(--accent-red);">T</strong> · TC de alta resolución</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Identifica los patrones más relevantes: vidrio deslustrado, consolidaciones mal definidas, nódulos y su topografía (centrolobulillar, peribroncovascular, subpleural), opacidades lineales, derrame pleural o cavitación.</div>
+                </div>
+            </div>
+
+            <div class="article-figure" style="margin-top:18px;">
+                <img src="js/modules/reconocimiento/img/figura3-casos-lma.jpg" alt="Ejemplos de aplicación del enfoque DIRECT en 5 pacientes con LMA de nuevo diagnóstico" loading="lazy">
+                <div class="article-figure-caption">Figura 3. 5 casos reales de LMA de nuevo diagnóstico con FRA, aplicando el enfoque DIRECT: infección bacteriana, leucostasis pulmonar, infiltración leucémica, neumopatía por lisis, e infección con hemorragia alveolar.</div>
+            </div>
+        </div>
+
+        <!-- ===== TAB 3: DIAGNÓSTICO ===== -->
+        <div id="rt-diagnostico" class="tab-content">
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                10 principios para maximizar el rendimiento de las pruebas no invasivas y reservar la
+                broncoscopia-LBA solo para cuando aporte algo que ninguna otra prueba pueda dar. Marca
+                los que ya tengas presentes para este paciente.
+            </p>
+            <label class="checkbox-label"><input type="checkbox"> No hagas todas las pruebas a todos los pacientes: usa la probabilidad pre-test (DIRECT) para elegir pruebas de alta sensibilidad o de alto valor predictivo negativo.</label>
+            <label class="checkbox-label"><input type="checkbox"> Todo paciente necesita un estudio diagnóstico, aunque sea una sola prueba cuando el diagnóstico es obvio (ecocardiograma, drenaje pleural, esputo).</label>
+            <label class="checkbox-label"><input type="checkbox"> Evita el sesgo de confirmación: no te conformes con una probabilidad pre-test alta, documenta el diagnóstico y considera todo diagnóstico diferencial posible.</label>
+            <label class="checkbox-label"><input type="checkbox"> En el FRA hipoxémico, prioriza las pruebas no invasivas. Si el diagnóstico se puede hacer sin ellas, no hagas broncoscopia-LBA.</label>
+            <label class="checkbox-label"><input type="checkbox"> Una PCR positiva no es sinónimo de diagnóstico: puede detectar cantidades mínimas de ADN viral de un comensal o colonizador, no necesariamente el causante.</label>
+            <label class="checkbox-label"><input type="checkbox"> Una prueba negativa también aporta: con baja probabilidad pre-test, un alto valor predictivo negativo permite retirar tratamiento y reducir toxicidad y coste.</label>
+            <label class="checkbox-label"><input type="checkbox"> La mejor prueba es la que explora el compartimento pulmonar más afectado: el vidrio deslustrado en el TC es indicación de LBA, salvo inestabilidad o hipoxemia grave.</label>
+            <label class="checkbox-label"><input type="checkbox"> Si la LBA es imprescindible en hipoxemia grave, la intubación precoz para poder realizarla es una opción aceptable, no una demora innecesaria.</label>
+            <label class="checkbox-label"><input type="checkbox"> El balance riesgo-beneficio de cada procedimiento debe consensuarse; valora todas las alternativas, incluidas las innovadoras.</label>
+            <label class="checkbox-label"><input type="checkbox"> Una buena estrategia diagnóstica (combinar varias pruebas eficientes) rinde más que una sola prueba, por buena que sea.</label>
+        </div>
+
+        <!-- ===== TAB 4: MANEJO Y PRONÓSTICO ===== -->
+        <div id="rt-manejo" class="tab-content">
+            <div class="card" style="border-top: 1px solid var(--accent-green); margin-bottom: 12px;">
+                <h3 style="color: var(--accent-green); text-shadow: var(--glow-green);">Oxigenoterapia</h3>
+                <p style="font-size: 0.85rem; line-height: 1.5;">
+                    Objetivo: SpO2 <strong>88-95%</strong>. Evita la hiperoxia (SpO2 &gt;95% no aporta
+                    beneficio y puede ser perjudicial). Si el O2 convencional no basta, usa
+                    <strong>gafas nasales de alto flujo (GNAF)</strong> antes que VNI.
+                </p>
+            </div>
+
+            <div class="warning-box" style="margin-bottom: 12px;">
+                <strong style="color: var(--accent-yellow);">⚠️ La VNI NO está recomendada en el FRA hipoxémico</strong><br>
+                A diferencia de otros contextos de UCI, un ensayo aleatorizado en 374 pacientes
+                inmunodeprimidos con FRA no mostró reducción de intubación ni de mortalidad con VNI
+                frente a oxigenoterapia convencional. Sí está indicada en edema pulmonar cardiogénico
+                o hipercapnia.
+            </div>
+
+            <div class="card" style="border-top: 1px solid var(--accent-red); margin-bottom: 12px;">
+                <h3 style="color: var(--accent-red); text-shadow: var(--glow-red);">Ingreso en UCI e intubación</h3>
+                <p style="font-size: 0.85rem; line-height: 1.5;">
+                    Esperar <strong>&gt;1 hora</strong> por una cama de UCI se asocia de forma
+                    independiente a mayor mortalidad y estancia. Si se necesita &gt;6 L/min de O2, el
+                    riesgo de intubación es del 40% y el de mortalidad del 30% — no demores el
+                    ingreso. Si la intubación es necesaria, la <strong>demora</strong> (no la
+                    intubación en sí) es lo que empeora el pronóstico.
+                </p>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">
+                    La neutropenia, por sí sola, ya <strong>no</strong> es un argumento para negar el
+                    ingreso en UCI ni para retrasarlo.
+                </p>
+            </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 4px 0;">Factores asociados a mayor mortalidad</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>👤 Características generales</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Edad · estado funcional (performance status) · fragilidad · enfermedad pulmonar estructural (EPOC, neumopatía intersticial crónica) · índice de comorbilidad de Charlson.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🩸 Historia de la neoplasia</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Enfermedad no controlada o refractaria · EICH (GVHD) no controlado tras TPH alogénico.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🏥 Momento del ingreso en UCI</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Tiempo entre ingreso hospitalario e ingreso en UCI · ingreso en UCI de bajo volumen de casos hemato-oncológicos · escalas de gravedad (no deben guiar la decisión individual, pero predicen) · hipoxemia grave (PaO2/FiO2 &lt;100).</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>📈 Eventos durante el ingreso</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Disfunción de órganos no respiratorios · fracaso de la VNI · intubación tardía · driving pressure elevada (en SDRA) · plaquetas bajas (en ECMO) · aspergilosis invasiva, sobre todo sin voriconazol · etiología del FRA no filiada · estancia prolongada en UCI.</div>
+                </div>
+            </div>
+
+            <div class="result-box" style="margin-top: 16px; text-align: left; background: rgba(0,255,204,0.05); border-color: var(--accent-green);">
+                <div style="color: var(--accent-green); font-weight: bold; margin-bottom: 6px;">✅ Mensaje clave</div>
+                <div style="font-size: 0.85rem; color: var(--text-main);">
+                    La supervivencia de los pacientes hematológicos críticos ha mejorado mucho en las
+                    últimas dos décadas. Los supervivientes de UCI alcanzan tasas de remisión completa
+                    y supervivencia a largo plazo comparables a las de quienes nunca ingresaron. El
+                    objetivo de la UCI es ser un <strong>puente hacia el tratamiento curativo</strong>,
+                    no un punto final.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Fuente</h3>
+        <p style="font-size: 0.85rem; line-height: 1.5;">
+            Azoulay E, Maertens J, Lemiale V. <em>How I manage acute respiratory failure in patients
+            with hematological malignancies.</em> Blood. 2024;143(11):971-982.
+            doi:10.1182/blood.2023021414
         </p>
+        <a class="pkpd-btn" style="display:block; text-align:center; text-decoration:none;" href="docs/azoulay-2024-fracaso-respiratorio-agudo.pdf" target="_blank" rel="noopener">📄 Abrir el artículo completo (PDF)</a>
     </div>

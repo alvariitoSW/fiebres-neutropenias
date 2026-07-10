@@ -7,6 +7,7 @@ import { initAccordions } from './core/accordion.js';
 import * as home from './modules/home/index.js';
 import * as generales from './modules/generales/index.js';
 import * as neutropeniaFebril from './modules/neutropenia-febril/index.js';
+import * as reconocimiento from './modules/reconocimiento/index.js';
 
 async function start() {
     await includeAll();
@@ -14,6 +15,7 @@ async function start() {
     home.init();
     generales.init();
     neutropeniaFebril.init();
+    reconocimiento.init();
 }
 
 start();
