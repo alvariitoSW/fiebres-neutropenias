@@ -11,39 +11,83 @@
 <body>
 
 <div class="app-container">
-    <div class="header">
-        <h1>HUD Clínico UCI</h1>
-        <p>Estratificación de Riesgo // R1</p>
+    <div class="header-row">
+        <div class="header">
+            <h1>HUD Clínico UCI</h1>
+            <p>Estratificación de Riesgo // R1</p>
+        </div>
+        <button class="accordion-btn nav-btn corner-btn" id="btn-escalas-generales">⚡ Escalas</button>
     </div>
 
-    <!-- SECCIÓN: ESCALAS GENERALES -->
-    <button class="accordion-btn" data-target="generales">
-        <span><span class="gral-icon">⚡</span>ESCALAS GENERALES</span>
-        <span id="generales-status" style="font-size: 0.8rem; color: var(--accent-blue);">[ ABRIR ]</span>
-    </button>
+    <!-- ========================================== -->
+    <!-- MENÚ PRINCIPAL                              -->
+    <!-- ========================================== -->
+    <div id="home-view">
+        <button class="accordion-btn nav-btn" id="btn-citopenias" style="border-left: 4px solid var(--accent-red);">
+            <span><span class="hemato-icon">🩸</span>1. MANEJO CITOPENIAS</span>
+            <span style="font-size: 0.8rem; color: var(--accent-red);">[ VER → ]</span>
+        </button>
 
-    <div id="generales" class="accordion-content" data-include="js/modules/generales/generales.html"></div>
+        <button class="accordion-btn nav-btn" id="btn-reconocimiento" style="border-left: 4px solid var(--accent-blue);">
+            <span><span class="gral-icon" style="color: var(--accent-blue); text-shadow: var(--glow-blue);">🔎</span>2. RECONOCIMIENTO TEMPRANO DEL PACIENTE HEMATOLÓGICO</span>
+            <span style="font-size: 0.8rem; color: var(--accent-blue);">[ VER → ]</span>
+        </button>
 
-    <!-- SECCIÓN: NEUTROPENIAS FEBRILES -->
-    <button class="accordion-btn" data-target="hemato" style="border-left: 4px solid var(--accent-red);">
-        <span><span class="hemato-icon">🩸</span>NEUTROPENIAS FEBRILES</span>
-        <span id="hemato-status" style="font-size: 0.8rem; color: var(--accent-red);">[ ABRIR ]</span>
-    </button>
+        <button class="accordion-btn nav-btn" id="btn-sindromes" style="border-left: 4px solid var(--accent-yellow);">
+            <span><span class="gral-icon" style="color: var(--accent-yellow); text-shadow: none;">🚨</span>3. SÍNDROMES HEMATOLÓGICOS URGENTES</span>
+            <span style="font-size: 0.8rem; color: var(--accent-yellow);">[ VER → ]</span>
+        </button>
 
-    <div id="hemato" class="accordion-content">
-        <div id="hemato-main-view" data-include="js/modules/neutropenia-febril/main-view.html"></div>
-        <div id="hemato-diagnostico-view" style="display: none;" data-include="js/modules/neutropenia-febril/diagnostico-view.html"></div>
-        <div id="hemato-tratamiento-view" style="display: none;" data-include="js/modules/neutropenia-febril/tratamiento-empirico-view.html"></div>
-        <div id="hemato-dirigido-view" style="display: none;" data-include="js/modules/neutropenia-febril/tratamiento-dirigido-view.html"></div>
+        <button class="accordion-btn nav-btn" id="btn-trasplante" style="border-left: 4px solid var(--accent-purple);">
+            <span><span class="gral-icon" style="color: var(--accent-purple); text-shadow: var(--glow-purple);">🧬</span>4. TRASPLANTE DE PROGENITORES HEMATOPOYÉTICOS</span>
+            <span style="font-size: 0.8rem; color: var(--accent-purple);">[ VER → ]</span>
+        </button>
+
+        <!-- SECCIÓN: FUENTES Y EVIDENCIA -->
+        <button class="accordion-btn" data-target="fuentes" style="border-left: 4px solid var(--accent-green); margin-top: 20px;">
+            <span><span class="gral-icon" style="color: var(--accent-green); text-shadow: var(--glow-green);">📚</span>FUENTES Y EVIDENCIA</span>
+            <span id="fuentes-status" style="font-size: 0.8rem; color: var(--accent-green);">[ ABRIR ]</span>
+        </button>
+        <div id="fuentes" class="accordion-content" data-include="js/modules/fuentes/fuentes.html"></div>
     </div>
 
-    <!-- SECCIÓN: FUENTES Y EVIDENCIA -->
-    <button class="accordion-btn" data-target="fuentes" style="border-left: 4px solid var(--accent-purple);">
-        <span><span class="gral-icon" style="color: var(--accent-purple); text-shadow: var(--glow-purple);">📚</span>FUENTES Y EVIDENCIA</span>
-        <span id="fuentes-status" style="font-size: 0.8rem; color: var(--accent-purple);">[ ABRIR ]</span>
-    </button>
+    <!-- ========================================== -->
+    <!-- VISTA: ESCALAS GENERALES                    -->
+    <!-- ========================================== -->
+    <div id="escalas-generales-view" style="display: none;" data-include="js/modules/generales/generales.html"></div>
 
-    <div id="fuentes" class="accordion-content" data-include="js/modules/fuentes/fuentes.html"></div>
+    <!-- ========================================== -->
+    <!-- VISTA: MANEJO CITOPENIAS                    -->
+    <!-- ========================================== -->
+    <div id="citopenias-view" style="display: none;">
+        <div id="citopenias-menu-view" data-include="js/modules/citopenias/citopenias-menu.html"></div>
+
+        <div id="neutropenia-febril-container" style="display: none;">
+            <div id="hemato-main-view" data-include="js/modules/neutropenia-febril/main-view.html"></div>
+            <div id="hemato-diagnostico-view" style="display: none;" data-include="js/modules/neutropenia-febril/diagnostico-view.html"></div>
+            <div id="hemato-tratamiento-view" style="display: none;" data-include="js/modules/neutropenia-febril/tratamiento-empirico-view.html"></div>
+            <div id="hemato-dirigido-view" style="display: none;" data-include="js/modules/neutropenia-febril/tratamiento-dirigido-view.html"></div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- VISTA: RECONOCIMIENTO TEMPRANO              -->
+    <!-- ========================================== -->
+    <div id="reconocimiento-view" style="display: none;" data-include="js/modules/reconocimiento/reconocimiento.html"></div>
+
+    <!-- ========================================== -->
+    <!-- VISTA: SÍNDROMES HEMATOLÓGICOS URGENTES     -->
+    <!-- ========================================== -->
+    <div id="sindromes-view" style="display: none;" data-include="js/modules/sindromes-urgentes/sindromes.html"></div>
+
+    <!-- ========================================== -->
+    <!-- VISTA: TRASPLANTE DE PROGENITORES           -->
+    <!-- ========================================== -->
+    <div id="trasplante-view" style="display: none;">
+        <div id="trasplante-menu-view" data-include="js/modules/trasplante/trasplante-menu.html"></div>
+        <div id="tph-intro-view" style="display: none;" data-include="js/modules/trasplante/introduccion.html"></div>
+        <div id="tph-cart-view" style="display: none;" data-include="js/modules/trasplante/car-t.html"></div>
+    </div>
 </div>
 
 <script type="module" src="js/main.js"></script>

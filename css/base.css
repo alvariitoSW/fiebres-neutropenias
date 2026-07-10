@@ -20,15 +20,19 @@ body {
 }
 
 .header { text-align: center; margin-bottom: 30px; }
-.header h1 { 
-    color: var(--accent-blue); 
-    font-size: 1.8rem; 
-    margin: 0 0 8px 0; 
+.header h1 {
+    color: var(--accent-blue);
+    font-size: 1.8rem;
+    margin: 0 0 8px 0;
     text-transform: uppercase;
     letter-spacing: 2px;
     text-shadow: var(--glow-blue);
 }
 .header p { color: var(--text-muted); font-size: 0.85rem; margin: 0; text-transform: uppercase; letter-spacing: 1px;}
+
+.header-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.header-row .header { flex: 1; margin-bottom: 0; min-width: 0; }
+.accordion-btn.corner-btn { flex-shrink: 0; align-self: flex-start; width: auto; padding: 6px 10px; font-size: 0.65rem; margin-bottom: 0; white-space: nowrap; }
 
 .accordion-btn {
     width: 100%;
@@ -41,6 +45,8 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 10px;
+    text-align: left;
     cursor: pointer;
     font-weight: 600;
     letter-spacing: 1px;
@@ -49,6 +55,7 @@ body {
     transition: all 0.2s;
 }
 .accordion-btn:hover { box-shadow: var(--glow-blue); }
+.accordion-btn > span:last-child { white-space: nowrap; flex-shrink: 0; }
 
 .accordion-content { display: none; padding: 8px 0 16px 0; }
 .accordion-content.active { display: block; animation: fadeIn 0.3s ease; }

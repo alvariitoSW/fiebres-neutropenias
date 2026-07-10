@@ -1,8 +1,10 @@
 # HUD Clínico UCI — guía para trabajar en este repo
 
-App web de estratificación de riesgo clínico (escalas generales de UCI +
-manejo de neutropenia febril hemato-oncológica). Es una herramienta de
-apoyo para médicos, pensada para consultarse a pie de cama en el móvil.
+App web de estratificación de riesgo clínico y apoyo a la decisión en
+hematología/UCI (manejo de citopenias, reconocimiento temprano del paciente
+hematológico, síndromes urgentes, trasplante de progenitores, más un acceso
+directo a escalas generales de UCI). Es una herramienta de apoyo para
+médicos, pensada para consultarse a pie de cama en el móvil.
 
 ## Decisiones de arquitectura (ya tomadas, no las reabras sin preguntar)
 
@@ -42,9 +44,14 @@ js/
     include.js                 Carga fragmentos HTML vía fetch()
     accordion.js                Abrir/cerrar bloques .accordion-btn
     tabs.js                     Comportamiento genérico de pestañas
+    navigation.js                createViewSwitcher(): muestra una vista de
+                                  un grupo y oculta el resto (menú principal,
+                                  submenú de Citopenias, submenú de Trasplante)
   data/                       Objetos de datos puros (tablas de dosis,
                                tratamientos por foco, etc.), sin DOM.
   modules/
+    home/                       Orquesta la navegación jerárquica (ver abajo).
+                                 No tiene calculadoras propias.
     <categoria>/               Una carpeta por categoría clínica
       index.js                   Importa y arranca los módulos de la carpeta
       <calculadora>.html          Marcado de esa calculadora/tarjeta
@@ -52,19 +59,52 @@ js/
                                    cálculo + export function init()
 ```
 
-Hoy hay tres categorías: `modules/generales/` (qSOFA, SRIS, SOFA, Glasgow),
-`modules/neutropenia-febril/` (triaje+MASCC, diagnóstico, tratamiento
-empírico, tratamiento dirigido/PK-PD), esta última con 4 sub-vistas
-navegables (`navigation.js` controla el show/hide entre ellas), y
-`modules/fuentes/` (bibliografía y evidencia).
+## Navegación: menú principal → categoría → submenú
 
-`modules/fuentes/` es una categoría **solo de contenido**: no tiene lógica de
-cálculo, así que solo lleva `fuentes.html` (sin `.js` ni `index.js`). El botón
-de acordeón "FUENTES Y EVIDENCIA" y su contenedor viven directamente en
-`index.html`; no hace falta registrar nada en `main.js` porque
-`core/accordion.js` detecta cualquier `.accordion-btn[data-target]` que
-exista en el DOM. Este es el patrón a seguir para cualquier categoría nueva
-que sea puramente informativa.
+La app abre en una pantalla de **menú principal** (`#home-view`, definido
+directamente en `index.html`) con 4 botones grandes:
+
+1. **Manejo Citopenias** (`modules/citopenias/`) — submenú "elige la
+   citopenia"; hoy solo tiene una opción, **Neutropenia Febril**
+   (`modules/neutropenia-febril/`, sin cambios internos: sus 4 sub-vistas
+   propias — triaje/MASCC, diagnóstico, tratamiento empírico, tratamiento
+   dirigido — se siguen navegando con su propio `navigation.js`, ahora
+   anidado dentro del submenú de Citopenias). Para añadir otra citopenia,
+   sigue el mismo patrón: nueva carpeta en `modules/`, botón nuevo en
+   `citopenias-menu.html`, y una entrada más en el switcher `citopeniasLevel`
+   de `modules/home/index.js`.
+2. **Reconocimiento Temprano del Paciente Hematológico**
+   (`modules/reconocimiento/`) — de momento solo un aviso "Próximamente".
+3. **Síndromes Hematológicos Urgentes** (`modules/sindromes-urgentes/`) —
+   CID, PTT y Síndrome de Lisis Tumoral, de momento solo avisos
+   "Próximamente".
+4. **Trasplante de Progenitores Hematopoyéticos** (`modules/trasplante/`) —
+   submenú con dos sub-vistas: Introducción y CAR-T y complicaciones que
+   llevan a UCI (CRS, ICANS). Ambas de momento solo tienen un aviso
+   "Próximamente".
+
+**Escalas Generales** (`modules/generales/`, qSOFA/SRIS/SOFA/Glasgow) ya NO
+es una de las 4 categorías del menú: es un botón pequeño y fijo arriba a la
+derecha de la cabecera (`#btn-escalas-generales`), fuera del flujo del menú
+principal, porque se consulta con mucha frecuencia y de forma independiente
+del resto.
+
+Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
+`createViewSwitcher()` independientes (nivel principal, submenú de
+Citopenias, submenú de Trasplante) y conecta los botones. Los botones
+"← VOLVER" usan una clase específica según a qué nivel deben volver:
+`.btn-volver-home`, `.btn-volver-citopenias-menu`,
+`.btn-volver-trasplante-menu`. Las calculadoras en sí (Escalas Generales,
+Neutropenia Febril) no saben nada de este nivel superior — siguen
+inicializándose igual que siempre, solo cambia qué contenedor está visible.
+
+`modules/fuentes/` sigue siendo la excepción: es una categoría **solo de
+contenido**, sin `.js`, montada como acordeón (no como vista de pantalla
+completa) directamente debajo del menú principal en `index.html`. El botón
+de acordeón "FUENTES Y EVIDENCIA" lo detecta automáticamente
+`core/accordion.js` sin necesidad de registrarlo en ningún sitio. Este es el
+patrón a seguir para cualquier categoría nueva que sea puramente
+informativa y no necesite entrar en el menú principal de 4 opciones.
 
 ## Carpeta `docs/`
 
