@@ -37,7 +37,6 @@
         <div class="tabs">
             <div class="tab active" data-tab="tab-clinica">Clínica</div>
             <div class="tab" data-tab="tab-micro">Microbiológica</div>
-            <div class="tab" data-tab="tab-perfiles">Perfiles Patógenos</div>
         </div>
 
         <div id="tab-clinica" class="tab-content active">
@@ -57,119 +56,6 @@
             <div class="form-group" style="margin-top: 15px;">
                 <label>Días consecutivos AFEBRIL</label>
                 <input type="number" class="susp-inputs" id="susp-afebrile-days-micro" min="0" step="1" value="0">
-            </div>
-        </div>
-
-        <div id="tab-perfiles" class="tab-content">
-            <div class="micro-profiles">
-                <!-- S. aureus -->
-                <div class="micro-prof-item">
-                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
-                        <span>🦠 Staphylococcus aureus</span> <span>+</span>
-                    </div>
-                    <div class="micro-prof-body">
-                        <strong>Tipo:</strong> Coco Gram+ en racimos.<br>
-                        <strong>Mecanismo (SARM):</strong> Alteración PBP2a (gen mecA).<br>
-                        <strong>Terapia de Elección:</strong> Cloxacilina/Cefazolina (SASM) / Vancomicina o Daptomicina (SARM).<br>
-                        <strong>Peculiaridad:</strong> Retirar SIEMPRE catéter. Tratamiento prolongado (mín. 14d post hemocultivo negativo). ETT/ETE y fondo de ojo obligatorios.
-                    </div>
-                </div>
-                <!-- Candida -->
-                <div class="micro-prof-item">
-                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
-                        <span>🍄 Candida spp.</span> <span>+</span>
-                    </div>
-                    <div class="micro-prof-body">
-                        <strong>Tipo:</strong> Levadura fúngica.<br>
-                        <strong>Mecanismo:</strong> <em>C. krusei</em> y <em>C. glabrata</em> con resistencia intrínseca o adquirida a Fluconazol.<br>
-                        <strong>Terapia de Elección:</strong> Equinocandina empírica.<br>
-                        <strong>Peculiaridad:</strong> Retirar SIEMPRE catéter. Fondo de ojo obligatorio para descartar endoftalmitis.
-                    </div>
-                </div>
-                <!-- Aspergillus -->
-                <div class="micro-prof-item">
-                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
-                        <span>🍄 Aspergillus spp.</span> <span>+</span>
-                    </div>
-                    <div class="micro-prof-body">
-                        <strong>Tipo:</strong> Hongo filamentoso (Moho).<br>
-                        <strong>Mecanismo:</strong> Angioinvasión (infarto tisular). Signo del halo en TC.<br>
-                        <strong>Terapia de Elección:</strong> Voriconazol o Isavuconazol. (Amfotericina B L. si empírico).<br>
-                        <strong>Peculiaridad:</strong> <em>A. terreus</em> es intrínsecamente resistente a Amfotericina B.
-                    </div>
-                </div>
-                <!-- Mucorales -->
-                <div class="micro-prof-item">
-                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
-                        <span>🍄 Mucorales (Zygomycetes)</span> <span>+</span>
-                    </div>
-                    <div class="micro-prof-body">
-                        <strong>Tipo:</strong> Hongo filamentoso (Rhizopus, Mucor).<br>
-                        <strong>Mecanismo:</strong> Necrosis tisular fulminante (rinocerebral, pulmonar). Resistencia natural a Voriconazol y Equinocandinas.<br>
-                        <strong>Terapia de Elección:</strong> Amfotericina B Liposomal a dosis altas (5-10 mg/kg) + Cirugía de desbridamiento.<br>
-                        <strong>Peculiaridad:</strong> Sospechar si paciente usaba profilaxis con Voriconazol y presenta necrosis.
-                    </div>
-                </div>
-                <!-- Fusarium -->
-                <div class="micro-prof-item">
-                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
-                        <span>🍄 Fusarium spp.</span> <span>+</span>
-                    </div>
-                    <div class="micro-prof-body">
-                        <strong>Tipo:</strong> Hongo filamentoso.<br>
-                        <strong>Mecanismo:</strong> Alta capacidad de diseminación con lesiones cutáneas nodulares.<br>
-                        <strong>Terapia de Elección:</strong> Amfotericina B Liposomal o Voriconazol.<br>
-                        <strong>Peculiaridad:</strong> A diferencia del Aspergillus, el Fusarium SÍ positiviza frecuentemente los hemocultivos.
-                    </div>
-                </div>
-                <!-- Pseudomonas -->
-                <div class="micro-prof-item">
-                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
-                        <span>🦠 Pseudomonas aeruginosa</span> <span>+</span>
-                    </div>
-                    <div class="micro-prof-body">
-                        <strong>Tipo:</strong> Bacilo Gram- no fermentador.<br>
-                        <strong>Mecanismos:</strong> Bombas de eflujo, pérdida de porinas, MBLs.<br>
-                        <strong>Terapia de Elección:</strong> Pip-Tazo, Cefepime. Difícil de tratar (ECIL-10): Ceftolozano-Tazobactam (9g/día), Ceftazidima-Avibactam, Imipenem-Relebactam o Cefiderocol.<br>
-                        <strong>Peculiaridad:</strong> Nunca aminoglucósido en monoterapia. Priorizar dosis altas en infusión extendida.
-                    </div>
-                </div>
-                <!-- Enterobacterias CRE -->
-                <div class="micro-prof-item">
-                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
-                        <span>🦠 Enterobacterias CRE (KPC/OXA-48)</span> <span>+</span>
-                    </div>
-                    <div class="micro-prof-body">
-                        <strong>Tipo:</strong> Bacilos Gram- fermentadores.<br>
-                        <strong>Mecanismo:</strong> Producción de Carbapenemasas que hidrolizan casi todos los betalactámicos.<br>
-                        <strong>Terapia de Elección (ECIL-10):</strong> Ceftazidima-Avibactam (KPC/OXA-48); + Aztreonam si es metalo-betalactamasa (NDM/VIM/IMP).<br>
-                        <strong>Peculiaridad:</strong> El avibactam NO inhibe metalo-betalactamasas — el aztreonam es obligatorio en ese caso.
-                    </div>
-                </div>
-                <!-- Acinetobacter -->
-                <div class="micro-prof-item">
-                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
-                        <span>🦠 Acinetobacter baumannii XDR</span> <span>+</span>
-                    </div>
-                    <div class="micro-prof-body">
-                        <strong>Tipo:</strong> Bacilo Gram- no fermentador.<br>
-                        <strong>Mecanismo:</strong> Múltiples (OXA, bombas, porinas).<br>
-                        <strong>Terapia de Elección (ECIL-10):</strong> Sulbactam-durlobactam + imipenem (preferido); si no disponible, sulbactam dosis altas (≥9g/día) + colistina.<br>
-                        <strong>Peculiaridad:</strong> Terapia combinada de entrada en inmunocomprometidos. Nunca tigeciclina sola en bacteriemias.
-                    </div>
-                </div>
-                <!-- Stenotrophomonas -->
-                <div class="micro-prof-item">
-                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
-                        <span>🦠 Stenotrophomonas maltophilia</span> <span>+</span>
-                    </div>
-                    <div class="micro-prof-body">
-                        <strong>Tipo:</strong> Bacilo Gram- no fermentador.<br>
-                        <strong>Mecanismo:</strong> Resistencia INTRÍNSECA a Carbapenems (L1/L2 MBLs).<br>
-                        <strong>Terapia de Elección (ECIL-10):</strong> Cotrimoxazol EN COMBINACIÓN con levofloxacino, tetraciclina en dosis altas o cefiderocol (no monoterapia).<br>
-                        <strong>Peculiaridad:</strong> Mortalidad &gt;50%; se asume toxicidad hematológica del cotrimoxazol por la letalidad de no tratar adecuadamente.
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -193,6 +79,8 @@
     <div class="card" style="border-top: 1px solid var(--accent-purple);">
         <h3 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">3. Matriz de Combate MDR</h3>
         <p class="subtitle">Generador de Terapia de Rescate</p>
+
+        <button class="btn-volver-sub" id="btn-jump-microorganismos" style="margin-bottom: 16px;">🧫 Ver fichas completas de cada microorganismo →</button>
 
         <div class="form-group">
             <label>Microorganismo (Enemigo)</label>

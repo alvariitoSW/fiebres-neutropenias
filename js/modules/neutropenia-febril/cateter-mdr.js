@@ -26,13 +26,7 @@ function calcSuspension() {
     let activeTabBtn = document.querySelector('#panel-suspension-perfiles .tab.active');
     if (!activeTabBtn) return;
     let tabID = activeTabBtn.getAttribute('data-tab');
-    
-    if (tabID === 'tab-perfiles') {
-        document.getElementById('suspension-result-area').style.display = 'none';
-        return;
-    } else {
-        document.getElementById('suspension-result-area').style.display = 'block';
-    }
+    document.getElementById('suspension-result-area').style.display = 'block';
 
     let isClinica = (tabID === 'tab-clinica');
 

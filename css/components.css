@@ -133,8 +133,38 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 .nav-btn { justify-content: space-between; }
 .nav-btn:hover { box-shadow: var(--glow-blue); }
 
-.back-btn { width: 100%; background: rgba(30, 24, 17, 0.9); border: 1px solid var(--border-color); color: var(--accent-blue); padding: 12px; border-radius: 2px; cursor: pointer; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 16px; font-size: 0.85rem; text-align: center; transition: all 0.2s; }
-.back-btn:hover { box-shadow: var(--glow-blue); }
+.back-btn, .btn-volver-sub { width: 100%; background: rgba(30, 24, 17, 0.9); border: 1px solid var(--border-color); color: var(--accent-blue); padding: 12px; border-radius: 2px; cursor: pointer; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 16px; font-size: 0.85rem; text-align: center; transition: all 0.2s; }
+.back-btn:hover, .btn-volver-sub:hover { box-shadow: var(--glow-blue); }
+
+.micro-tabs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.micro-tab-btn {
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    gap: 4px; background: rgba(30, 24, 17, 0.9); border: 1px solid var(--border-color);
+    border-radius: 2px; padding: 14px 8px; cursor: pointer; transition: all 0.2s; color: var(--text-main);
+}
+.micro-tab-btn:hover { box-shadow: var(--glow-red); border-color: var(--accent-red); }
+.micro-tab-emoji { font-size: 1.6rem; }
+.micro-tab-name { font-size: 0.8rem; font-weight: 600; line-height: 1.25; }
+.micro-tab-tag { font-size: 0.65rem; color: var(--accent-red); text-transform: uppercase; letter-spacing: 0.5px; }
+
+.micro-img-placeholder {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+    border: 1px dashed var(--border-color); border-radius: 2px; padding: 24px 10px; margin-top: 12px;
+    color: var(--text-muted); font-size: 2rem;
+}
+.micro-img-placeholder span { font-size: 0.72rem; }
+
+.micro-svg { width: 100%; height: auto; margin-top: 12px; background: rgba(0,0,0,0.25); border-radius: 2px; padding: 6px 0; }
+.micro-svg-label, .micro-svg text { font-size: 8px; fill: var(--text-muted); }
+
+.micro-drug-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+.micro-drug-heading { font-size: 0.75rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.micro-drug-heading.si { color: var(--accent-green); }
+.micro-drug-heading.no { color: var(--accent-red); }
+.micro-drug-list { list-style: none; margin: 0; padding: 0; font-size: 0.78rem; line-height: 1.4; }
+.micro-drug-list li { padding: 4px 0 4px 14px; border-left: 2px solid transparent; margin-bottom: 4px; }
+.micro-drug-list.si li { border-left-color: var(--accent-green); }
+.micro-drug-list.no li { border-left-color: var(--accent-red); }
 
 .diag-header { text-align: center; margin-bottom: 20px; }
 .diag-header h2 { color: var(--accent-blue); font-size: 1.2rem; margin: 0 0 6px 0; text-transform: uppercase; letter-spacing: 1.5px; text-shadow: var(--glow-blue); }
