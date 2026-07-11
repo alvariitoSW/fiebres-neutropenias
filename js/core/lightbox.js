@@ -14,11 +14,11 @@ export function initLightbox() {
 
     overlay.addEventListener('click', close);
 
-    document.querySelectorAll('.article-figure img').forEach(img => {
-        img.addEventListener('click', () => {
-            overlayImg.src = img.src;
-            overlayImg.alt = img.alt;
-            overlay.classList.add('active');
-        });
+    document.addEventListener('click', e => {
+        const img = e.target.closest('.article-figure img');
+        if (!img) return;
+        overlayImg.src = img.src;
+        overlayImg.alt = img.alt;
+        overlay.classList.add('active');
     });
 }

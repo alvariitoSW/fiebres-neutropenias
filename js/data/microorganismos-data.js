@@ -62,13 +62,17 @@ function imgPlaceholder(texto) {
     return `<div class="micro-img-placeholder">🖼️<span>${texto}</span></div>`;
 }
 
+function imgFigura(src, alt, caption) {
+    return `<div class="article-figure"><img src="${src}" alt="${alt}" loading="lazy"></div><p class="article-figure-caption">${caption}</p>`;
+}
+
 export const microorganismosData = {
     saureus: {
         nombre: 'Staphylococcus aureus',
         emoji: '🦠',
         categoria: 'Bacteria Gram+',
         tag: 'SARM',
-        imagen: imgPlaceholder('Foto de tinción de Gram / colonia — pendiente'),
+        imagen: imgFigura('js/modules/neutropenia-febril/img/saureus-embolismos-septicos.jpg', 'TC de tórax con émbolos sépticos pulmonares múltiples (flechas) en bacteriemia por S. aureus', 'TC de tórax: nódulos pulmonares por embolismo séptico secundario a endocarditis por S. aureus. Fuente: caso clínico, Revista Sanitaria de Investigación.'),
         epidemiologia: 'Coloniza la nasofaringe hasta en un 30% de la población general. La bacteriemia por <em>S. aureus</em> es poco frecuente en neutropenia (0-3% de las bacteriemias), pero cuando ocurre, la tasa de resistencia a meticilina (SARM) varía mucho por país — en el sur de Europa (España incluida) suele superar el 20%.',
         mecanismo: 'El gen <em>mecA</em> (o <em>mecC</em>) codifica una proteína fijadora de penicilina alterada, la <strong>PBP2a</strong>, con muy baja afinidad por todos los betalactámicos (incluidos cefalosporinas y carbapenems). El resto de la maquinaria de síntesis de pared celular sigue funcionando con normalidad, por lo que la bacteria sobrevive sin problema en presencia del fármaco.',
         mecanismoSvg: SVG_DIANA,
@@ -84,7 +88,7 @@ export const microorganismosData = {
         emoji: '🍄',
         categoria: 'Levadura',
         tag: 'Resistencia a azoles',
-        imagen: imgPlaceholder('Foto de endoftalmitis / hemocultivo — pendiente'),
+        imagen: imgFigura('js/modules/neutropenia-febril/img/candida-endoftalmitis.jpg', 'Fondo de ojo con focos múltiples de coriorretinitis por Candida albicans', 'Fondo de ojo: focos múltiples de coriorretinitis por Candida albicans, con lesión coriorretiniana blanco-algodonosa (flecha).'),
         epidemiologia: '<em>C. albicans</em> sigue siendo la especie más frecuente, pero la incidencia de especies no-<em>albicans</em> (<em>C. glabrata</em>, <em>C. krusei</em>, <em>C. parapsilosis</em>) va en aumento, especialmente en pacientes con profilaxis previa con azoles.',
         mecanismo: 'Sobreexpresión de bombas de eflujo (genes <em>CDR1/CDR2</em>, <em>MDR1</em>) y mutaciones en <em>ERG11</em> (la enzima diana de los azoles, lanosterol 14-α-desmetilasa) reducen la afinidad del fármaco. <em>C. krusei</em> tiene resistencia intrínseca a fluconazol; <em>C. glabrata</em> la adquiere con facilidad tras exposición previa a azoles.',
         mecanismoSvg: SVG_DIANA,
@@ -100,7 +104,7 @@ export const microorganismosData = {
         emoji: '🍄',
         categoria: 'Hongo filamentoso',
         tag: 'Resistencia a azoles (ambiental)',
-        imagen: imgPlaceholder('TC con signo del halo — pendiente'),
+        imagen: imgFigura('js/modules/neutropenia-febril/img/aspergillus-signo-halo.jpg', 'TC de tórax con signo del halo: nódulo pulmonar rodeado de vidrio deslustrado', 'TC de tórax: signo del halo — nódulo sólido rodeado de un anillo de vidrio deslustrado. Shroff GS, et al. Clin Case Rep. 2014;2(5):225 (Fig. 1). CC BY-NC-ND 4.0.'),
         epidemiologia: 'Principal causa de aspergilosis pulmonar invasiva en neutropenia prolongada y tras TPH alogénico. Preocupa la resistencia a azoles adquirida en el ambiente (uso agrícola de fungicidas triazólicos), que ya se detecta en aislados clínicos en varios países europeos.',
         mecanismo: 'Mutaciones en el gen <em>cyp51A</em> alteran la diana de los azoles (la misma enzima que en Candida, lanosterol 14-α-desmetilasa), reduciendo la afinidad del fármaco por la enzima fúngica.',
         mecanismoSvg: SVG_DIANA,
@@ -132,7 +136,7 @@ export const microorganismosData = {
         emoji: '🍄',
         categoria: 'Hongo filamentoso',
         tag: 'Resistencia intrínseca a equinocandinas',
-        imagen: imgPlaceholder('Lesiones cutáneas nodulares diseminadas — pendiente'),
+        imagen: imgFigura('js/modules/neutropenia-febril/img/fusarium-nodulo-cutaneo.jpg', 'Lesión nodular axilar por fusariosis diseminada', 'Lesión nodular cutánea axilar en fusariosis diseminada. Ecthyma Gangrenosum-like Lesions in a Febrile Neutropenic Patient with Simultaneous Pseudomonas Sepsis and Disseminated Fusariosis, Turk J Haematol (Fig. 2). Acceso abierto CC BY.'),
         epidemiologia: 'Hialohifomicosis en neutropenia profunda y prolongada. A diferencia de Aspergillus, positiviza los hemocultivos con relativa frecuencia, lo que facilita el diagnóstico.',
         mecanismo: 'La diana de las equinocandinas (el complejo enzimático FKS, 1,3-β-D-glucano sintasa) es intrínsecamente poco sensible al fármaco en este género, por lo que las equinocandinas no son eficaces incluso a dosis altas.',
         mecanismoSvg: SVG_DIANA,
@@ -148,7 +152,7 @@ export const microorganismosData = {
         emoji: '🦠',
         categoria: 'Bacilo Gram- no fermentador',
         tag: 'XDR / difícil de tratar (CRPA)',
-        imagen: imgPlaceholder('Ectima gangrenoso — pendiente'),
+        imagen: imgFigura('js/modules/neutropenia-febril/img/pseudomonas-ectima-gangrenoso.jpg', 'Ectima gangrenoso: evolución de mácula eritematosa a úlcera necrótica con escara negra', 'Ectima gangrenoso — evolución típica: mácula eritematosa (A) → bulla hemorrágica (B) → úlcera con escara negra central (C). Vaiman M, et al. Ecthyma gangrenosum: a report of eight cases. An Bras Dermatol. CC BY-NC.'),
         epidemiologia: 'Causa grave de bacteriemia y neumonía en neutropenia, con mortalidad elevada especialmente en shock séptico. La prevalencia de cepas multirresistentes (20-37% XDR según ECIL-10) varía mucho por centro y país.',
         mecanismo: 'Combina varios mecanismos: bombas de eflujo (MexAB-OprM y similares), pérdida/mutación de la porina OprD (puerta de entrada de carbapenems) y producción de betalactamasas (incluidas MBL en algunas cepas).',
         mecanismoSvg: SVG_EFLUJO,
