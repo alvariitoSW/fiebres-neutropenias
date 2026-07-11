@@ -105,29 +105,29 @@ function calcMDR() {
 
     if (bug === 'blee') {
         title.style.color = 'var(--accent-blue)'; title.innerText = "Enterobacteria BLEE";
-        if (sepsis) { text.innerHTML = `<strong style="color:var(--accent-red);">Carbapenems</strong> (Grado C-I). El paciente está inestable.`; }
-        else if (inoculum) { text.innerHTML = `Evitar Pip-Tazo (Efecto inóculo). Usar <strong style="color:var(--accent-yellow);">Carbapenems</strong>.`; }
-        else { text.innerHTML = `<strong style="color:var(--accent-green);">BLBLI (Pip-Tazo / Amoxi-Clav)</strong> (Grado B-II). Opciones seguras en paciente estable.`; }
-    } 
+        if (sepsis) { text.innerHTML = `<strong style="color:var(--accent-red);">Carbapenems</strong> <span class="grade-badge red">C-I</span>. El paciente está inestable.`; }
+        else if (inoculum) { text.innerHTML = `Evitar Pip-Tazo <span class="grade-badge">B-II</span> (efecto inóculo, CMI ≥4). Usar <strong style="color:var(--accent-yellow);">Carbapenems</strong>.`; }
+        else { text.innerHTML = `<strong style="color:var(--accent-green);">BLBLI (Pip-Tazo / Amoxi-Clav)</strong> <span class="grade-badge">B-II</span>. Opciones seguras en paciente estable, con sensibilidad in vitro confirmada.`; }
+    }
     else if (bug === 'ampc') {
         title.style.color = 'var(--accent-yellow)'; title.innerText = "Grupo ESCPM (AmpC)";
         let base = `⚠️ <span style="color:var(--accent-red);">Riesgo de Derrepresión:</span> Cuidado con cefalosporinas de 3ª.<br><br>`;
-        if (sepsis) { text.innerHTML = base + `<strong style="color:var(--accent-red);">Carbapenems</strong> al estar el paciente inestable.`; }
-        else if (inoculum) { text.innerHTML = base + `Evitar Pip-Tazo (Efecto inóculo, CMI ≥4). Usar <strong style="color:var(--accent-yellow);">Carbapenems</strong>.`; }
-        else { text.innerHTML = base + `<strong style="color:var(--accent-green);">Cefepime o Fluoroquinolonas</strong> (No son sustrato de AmpC). Pip-Tazo es opción válida si hay sensibilidad in vitro (Grado B-II).`; }
+        if (sepsis) { text.innerHTML = base + `<strong style="color:var(--accent-red);">Carbapenems</strong> <span class="grade-badge red">C-I</span> al estar el paciente inestable, o sin otras opciones disponibles.`; }
+        else if (inoculum) { text.innerHTML = base + `Evitar Pip-Tazo <span class="grade-badge">B-III</span> (efecto inóculo, CMI ≥4). Usar <strong style="color:var(--accent-yellow);">Carbapenems</strong>.`; }
+        else { text.innerHTML = base + `<strong style="color:var(--accent-green);">Cefepime o Fluoroquinolonas</strong> <span class="grade-badge">B-II</span> (no son sustrato de AmpC). Pip-Tazo es opción válida si hay sensibilidad in vitro <span class="grade-badge">B-II</span>.`; }
     }
     else if (bug === 'cre') {
         title.style.color = 'var(--accent-red)';
         let rec = '';
         if (carbapenemasa === 'kpc') {
             title.innerText = "CPE: KPC (Ambler clase A)";
-            rec = `<strong style="color:var(--accent-green);">1ª línea: Ceftazidima-avibactam</strong> <span class="grade-badge">A-IIu</span>.<br>Alternativas: Meropenem-vaborbactam <span class="grade-badge">B-IIu</span>, Imipenem-cilastatina-relebactam <span class="grade-badge">C-IIt</span>, Cefiderocol <span class="grade-badge red">C-IIt</span>.`;
+            rec = `<strong style="color:var(--accent-green);">1ª línea: Ceftazidima-avibactam</strong> <span class="grade-badge">A-IItu</span>.<br>Alternativas: Meropenem-vaborbactam <span class="grade-badge">B-IItu</span>, Imipenem-cilastatina-relebactam <span class="grade-badge">C-IIt</span>, Cefiderocol <span class="grade-badge red">C-IIt</span>.`;
         } else if (carbapenemasa === 'oxa48') {
             title.innerText = "CPE: OXA-48-like (Ambler clase D)";
-            rec = `<strong style="color:var(--accent-green);">1ª línea: Ceftazidima-avibactam</strong> <span class="grade-badge">A-IIu</span>.<br>Alternativa: Cefiderocol <span class="grade-badge red">C-IIt</span>.`;
+            rec = `<strong style="color:var(--accent-green);">1ª línea: Ceftazidima-avibactam</strong> <span class="grade-badge">A-IItu</span>.<br>Alternativa: Cefiderocol <span class="grade-badge red">C-IIt</span>.`;
         } else if (carbapenemasa === 'mbl') {
             title.innerText = "CPE: MBL — NDM/VIM/IMP (Ambler clase B)";
-            rec = `<strong style="color:var(--accent-red);">Ceftazidima-avibactam + AZTREONAM</strong> <span class="grade-badge">A-IIu</span> — el avibactam NO inhibe metalo-betalactamasas, el aztreonam es obligatorio.<br>Alternativa: Cefiderocol <span class="grade-badge">B-IIt</span>.`;
+            rec = `<strong style="color:var(--accent-red);">Ceftazidima-avibactam + AZTREONAM</strong> <span class="grade-badge">A-IItu</span> — el avibactam NO inhibe metalo-betalactamasas, el aztreonam es obligatorio.<br>Alternativa: Cefiderocol <span class="grade-badge">B-IIt</span>.`;
         } else {
             title.innerText = "CRE — carbapenemasa desconocida";
             rec = `Cubrir empíricamente <strong style="color:var(--accent-yellow);">Ceftazidima-avibactam + aztreonam</strong> (cubre KPC/OXA-48/MBL a la vez) o Cefiderocol, hasta identificar el tipo de carbapenemasa y ajustar.`;
@@ -137,7 +137,7 @@ function calcMDR() {
     }
     else if (bug === 'pseudomonas') {
         title.style.color = 'var(--accent-purple)'; title.innerText = "P. aeruginosa difícil de tratar (XDR/CRPA)";
-        let rec = `❌ NUNCA Aminoglucósidos en monoterapia.<br><strong style="color:var(--accent-green);">Opciones (monoterapia):</strong> Ceftolozano-tazobactam (dosis alta, 9g/día) <span class="grade-badge">A-IIur</span>, Ceftazidima-avibactam <span class="grade-badge">A-IIu</span>, Imipenem-cilastatina-relebactam <span class="grade-badge">B-IIt</span>, Cefiderocol <span class="grade-badge red">B-IIur</span>.`;
+        let rec = `❌ NUNCA Aminoglucósidos en monoterapia.<br><strong style="color:var(--accent-green);">Opciones (monoterapia):</strong> Ceftolozano-tazobactam (dosis alta, 9g/día) <span class="grade-badge">A-IItur</span>, Ceftazidima-avibactam <span class="grade-badge">A-IItu</span>, Imipenem-cilastatina-relebactam <span class="grade-badge">B-IIt</span>, Cefiderocol <span class="grade-badge red">B-IItur</span>.`;
         if (borderline) rec += `<br><br>⚠️ Crítico, foco no controlado o CMI cerca del punto de corte: <strong style="color:var(--accent-yellow);">añadir un no-betalactámico activo</strong> (aminoglucósido, fluoroquinolona o fosfomicina) al fármaco elegido.`;
         text.innerHTML = rec;
     }
@@ -147,7 +147,7 @@ function calcMDR() {
     }
     else if (bug === 'steno') {
         title.style.color = 'var(--accent-blue)'; title.innerText = "S. maltophilia";
-        text.innerHTML = `<strong style="color:var(--accent-green);">Cotrimoxazol (TMP 8-12mg/kg/día) EN COMBINACIÓN</strong> <span class="grade-badge">B-IIu</span> con levofloxacino (si sensible, sobre todo si neumonía), tetraciclina en dosis altas (minociclina/tigeciclina) o cefiderocol — no monoterapia, dada la mortalidad &gt;50%.<br>Si cotrimoxazol no es viable: combinación de 2 de los anteriores, o triple terapia con ceftazidima-avibactam + aztreonam + levofloxacino/tetraciclina.<br>Desescalar a monoterapia tras respuesta clínica favorable y sensibilidad confirmada.`;
+        text.innerHTML = `<strong style="color:var(--accent-green);">Cotrimoxazol (TMP 8-12mg/kg/día) EN COMBINACIÓN</strong> <span class="grade-badge">B-IItu</span> con levofloxacino (si sensible, sobre todo si neumonía), tetraciclina en dosis altas (minociclina/tigeciclina) o cefiderocol — no monoterapia, dada la mortalidad &gt;50%.<br>Si cotrimoxazol no es viable: combinación de 2 de los anteriores, o triple terapia con ceftazidima-avibactam + aztreonam + levofloxacino/tetraciclina.<br>Desescalar a monoterapia tras respuesta clínica favorable y sensibilidad confirmada.`;
     }
 }
 
