@@ -81,7 +81,7 @@ function updateMDRUI() {
     } else if (bug === 'cre') {
         carbapenemasaBox.style.display = 'block';
         document.getElementById('mdr-mod-cre').style.display = 'block';
-    } else if (bug === 'pseudomonas' || bug === 'acineto') {
+    } else if (bug === 'pseudomonas') {
         document.getElementById('mdr-mod-borderline').style.display = 'block';
     }
 

@@ -51,7 +51,7 @@ export const pkpdData = {
     'sulbactam': {
         doses: {
             normal: { 'normal': '1g / 6h', 'mild': '1g / 8h', 'mod': '1g / 12h', 'sev': '1g / 24h', 'crrt': '1g / 12h' },
-            severe: { 'normal': '2g / 6h (Acineto XDR)', 'mild': '1g / 6h', 'mod': '1g / 8h', 'sev': '1g / 12h', 'crrt': '1g / 8h' }
+            severe: { 'normal': '3g / 8h (CRAB, ≥9g/día)', 'mild': '2g / 6h', 'mod': '1g / 6h', 'sev': '1g / 12h', 'crrt': '1g / 8h' }
         },
         inter: "Mismas que aminopenicilinas. Probenecid prolonga su semivida.",
         contra: "Alergia documentada a betalactámicos."
