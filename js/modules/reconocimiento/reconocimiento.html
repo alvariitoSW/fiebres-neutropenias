@@ -29,7 +29,9 @@
             <div class="tab" data-tab="rt-diagnostico">Diagnóstico</div>
             <div class="tab" data-tab="rt-sindromes">Síndromes</div>
             <div class="tab" data-tab="rt-manejo">Manejo</div>
+            <div class="tab" data-tab="rt-terapias">Terapias Dirigidas</div>
             <div class="tab" data-tab="rt-decisiones">Decisiones</div>
+            <div class="tab" data-tab="rt-finvida">Fin de Vida</div>
         </div>
 
         <!-- ===== TAB 0: EPIDEMIOLOGÍA ===== -->
@@ -94,10 +96,23 @@
                         <span>🩸 Mieloma múltiple</span> <span>+</span>
                     </div>
                     <div class="micro-prof-body">
-                        El <strong>fracaso renal agudo</strong> es el motivo de ingreso más frecuente
+                        ~1 de cada 5 neoplasias hematológicas de nuevo diagnóstico. El
+                        <strong>fracaso renal agudo</strong> es el motivo de ingreso más frecuente
                         (a diferencia del resto de neoplasias hematológicas). La supervivencia y
                         recuperación funcional tras UCI son <strong>favorables</strong>, potencialmente
-                        mejores que en otras neoplasias hematológicas.
+                        mejores que en otras neoplasias hematológicas.<br><br>
+                        El arsenal terapéutico actual (inmunomoduladores, quimioterapia, trasplante
+                        autólogo, anticuerpos monoclonales y biespecíficos, inhibidores de proteasoma/
+                        BCL-2/XPO1, células CAR-T) se asocia a supervivencia a largo plazo, pero
+                        también a más líneas de tratamiento y pacientes de mayor edad con más
+                        comorbilidad no hematológica. Retos específicos en UCI: fracaso renal agudo,
+                        infecciones (por déficit de inmunoglobulinas o efecto secundario del
+                        tratamiento) y eventos tromboembólicos. Según el riesgo individual, valorar
+                        <strong>inmunoglobulinas</strong>, profilaxis anti-infecciosa específica, o
+                        <strong>anticoagulación</strong> (sobre todo con inmunomoduladores). CRS e
+                        ICANS por biespecíficos/CAR-T y otras neurotoxicidades tardías son cada vez
+                        más relevantes en este grupo.
+                        <span style="color: var(--text-muted); font-size:0.75rem;">(Azoulay et al., Blood Reviews 2025)</span>
                     </div>
                 </div>
             </div>
@@ -285,6 +300,49 @@
                     <div class="micro-prof-body">Riesgo aumentado de <strong>aspergilosis cerebral</strong>, sobre todo si se combina con corticoides.</div>
                 </div>
             </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Antibioterapia empírica en UCI (Azoulay et al., Blood Reviews 2025)</p>
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                Primera elección: <strong>betalactámico con actividad antipseudomónica</strong>. Si
+                sepsis o shock séptico, añadir cobertura anti-SARM (glucopéptido, daptomicina o
+                linezolid). El uso rutinario de aminoglucósido en combinación sigue siendo práctica
+                habitual en muchos centros, aunque su beneficio y tolerabilidad se debaten. Reevaluar
+                y desescalar rápido según clínica y microbiología: la cobertura anti-SARM puede
+                pasarse a segunda línea o suspenderse al 3<sup>er</sup> día sin evidencia de SARM o
+                estreptococo betahemolítico; los aminoglucósidos se suspenden tras documentación
+                microbiológica o, en su ausencia, también al 3<sup>er</sup> día. Sin disfunción de
+                órganos ni infección documentada, valorar suspender el antibiótico tras 3 días de
+                apirexia mantenida — aunque esto no está bien probado específicamente en el paciente
+                crítico, donde suele mantenerse mientras dure la neutropenia.
+            </p>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 4px 0;">Infecciones oportunistas a vigilar</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🦠 CMV (citomegalovirus)</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">La <strong>neumonitis por CMV</strong> es la afectación de órgano diana por CMV más frecuente en el paciente hematológico crítico, con mortalidad alta. El letermovir como profilaxis en receptores seropositivos de TPH ha reducido mucho la reactivación, pero esta sigue siendo frecuente en UCI.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🦠 VHS (aciclovir profiláctico)</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">La profilaxis con aciclovir frente a virus herpes simple ha reducido de forma sustancial la reactivación viral, aunque esta sigue presentándose en UCI y puede producir enfermedad grave de órgano.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🦠 VHH-6 (herpesvirus humano 6)</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Sin profilaxis establecida. Es la <strong>primera causa de encefalitis</strong> en receptores de TPH alogénico y puede progresar a afectación multiorgánica.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🦠 Toxoplasma y micobacterias</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Toxoplasmosis y micobacterias (tuberculosas y no tuberculosas) son menos frecuentes pero plantean retos diagnósticos y terapéuticos adicionales por sus interacciones farmacológicas y la necesidad de tratamientos prolongados y complejos.</div>
+                </div>
+            </div>
         </div>
 
         <!-- ===== TAB 3B: SÍNDROMES Y TOXICIDADES ===== -->
@@ -350,15 +408,27 @@
                         <span>❤️ Toxicidad cardiaca</span> <span>+</span>
                     </div>
                     <div class="micro-prof-body">
-                        <strong>CAR-T/biespecíficos:</strong> arritmias asociadas al CRS; mejoran con el
-                        CRS, no ensombrecen el pronóstico.<br>
-                        <strong>Inhibidores de checkpoint (ICI):</strong> miocarditis rara pero grave;
-                        mortalidad hasta 80% si hay síndrome neuromuscular asociado. Tratamiento
-                        urgente con corticoides a dosis altas aunque el paciente esté asintomático —
-                        no esperar a la biopsia (gold standard) para tratar si hay sospecha clínica
-                        alta.<br>
+                        <strong>CAR-T/biespecíficos:</strong> arritmias y miocardiopatía asociadas al
+                        CRS (toxicidad "on-target off-tumor" descrita); mejoran con el CRS, no
+                        ensombrecen el pronóstico.<br>
+                        <strong>Inhibidores de checkpoint (ICI):</strong> miocarditis, pericarditis y
+                        arritmias. Grado I-II: síntomas mínimos o solo elevación de marcadores
+                        cardiacos (puede resolver si se trata precozmente). Grado III-IV: mal
+                        pronóstico, sobre todo si el tratamiento se retrasa; mortalidad hasta 80% si
+                        hay síndrome neuromuscular asociado. Un ecocardiograma normal NO descarta
+                        muerte súbita en la miocarditis. Tratamiento urgente con corticoides a dosis
+                        altas aunque el paciente esté asintomático — no esperar a la biopsia (gold
+                        standard) para tratar si hay sospecha clínica alta. En casos refractarios a
+                        esteroides: IVIG, micofenolato o infliximab. Los ICI pueden reintroducirse en
+                        miocarditis grado 1 bajo vigilancia estrecha.<br>
                         <strong>Terapias dirigidas (ITK/anticuerpos):</strong> QTc largo, fibrilación
-                        auricular, HTA, HTP, miocardiopatía — habitualmente reversibles al suspender.
+                        auricular, HTA, HTP, miocardiopatía — habitualmente reversibles al suspender
+                        el fármaco.<br>
+                        <strong>Inhibidores de menina</strong> (bloquean la interacción de menina con
+                        KMT2A/NPM1): hasta 20% desarrollan derrame pericárdico como parte de un
+                        síndrome de diferenciación; si este mejora, la toxicidad cardiaca suele
+                        resolver, y muchos pacientes pueden continuar el fármaco pese a la toxicidad.
+                        <br><span style="color: var(--text-muted); font-size:0.75rem;">(Tabla 3, Azoulay et al., Blood Reviews 2025)</span>
                     </div>
                 </div>
                 <div class="micro-prof-item">
@@ -367,12 +437,20 @@
                     </div>
                     <div class="micro-prof-body">
                         La CID no es la única coagulopatía posible (también fibrinólisis primaria,
-                        microangiopatía trombótica, déficit de antitrombina III...). La
-                        <strong>refractariedad plaquetaria</strong> suele deberse a consumo periférico
-                        por infección grave (no a aloinmunización) y afecta a ~1/3 de los pacientes —
-                        tratar la causa, no perseguir un umbral fijo con transfusiones repetidas. El
-                        ácido tranexámico profiláctico no ha demostrado reducir el sangrado en ensayos
-                        recientes.
+                        microangiopatía trombótica, déficit de antitrombina III...); puede ser
+                        consecuencia directa del cáncer activo o desencadenarse por infecciones y
+                        tratamientos (<strong>L-asparaginasa, inhibidores de proteasoma, inhibidores
+                        de tirosina cinasa, heparina, células CAR-T</strong>, entre otros). Prevención
+                        y tratamiento dependen del tipo, gravedad y mecanismo presumido.<br><br>
+                        La <strong>refractariedad plaquetaria</strong> suele deberse a consumo
+                        periférico por infección grave (no a aloinmunización) y afecta a ~1/3 de los
+                        pacientes — tratar la causa, no perseguir un umbral fijo con transfusiones
+                        repetidas. Valorar con cuidado la localización y gravedad del sangrado; en
+                        sangrado local considerar medidas locales como el <strong>taponamiento
+                        faríngeo</strong>. Las <strong>transfusiones fraccionadas de plaquetas</strong>
+                        son otra estrategia a considerar en la refractariedad. El ácido tranexámico
+                        profiláctico no ha demostrado reducir el sangrado en ensayos recientes.
+                        <span style="color: var(--text-muted); font-size:0.75rem;"> (Azoulay et al., Blood Reviews 2025)</span>
                     </div>
                 </div>
             </div>
@@ -439,11 +517,19 @@
                 <h3 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">Umbrales transfusionales</h3>
                 <p style="font-size: 0.85rem; line-height: 1.5;">
                     <strong>Hematíes:</strong> estrategia restrictiva (Hb 7 g/dL) razonable, aunque sin
-                    ensayos específicos en el paciente hematológico crítico.<br>
-                    <strong>Plaquetas:</strong> transfusión profiláctica con &lt;10x10⁹/L. En UCI, con
-                    factores de riesgo añadidos (infección activa, sepsis, mucositis grave, caída
-                    rápida), es razonable subir el umbral a <strong>10-20x10⁹/L</strong>. Umbral más
-                    alto también en leucemia promielocítica aguda.
+                    ensayos específicos en el paciente hematológico crítico — un ECA con 300 pacientes
+                    de TPH (fuera de UCI) no encontró diferencias de resultados clínicos entre
+                    estrategia restrictiva y liberal, con menos transfusiones en la restrictiva. Las
+                    guías de Surviving Sepsis recomiendan restrictiva, aunque estudios recientes en
+                    pacientes oncológicos críticos (sin incluir neoplasias hematológicas) sugieren
+                    posible mayor beneficio con estrategia más liberal.<br>
+                    <strong>Plaquetas:</strong> transfusión profiláctica con &lt;10x10⁹/L (guías ASCO
+                    y British Society for Haematology). Subir el umbral por encima de 10x10⁹/L no ha
+                    demostrado reducir el sangrado fuera de UCI. En UCI, con factores de riesgo
+                    añadidos (infección activa, sepsis, mucositis grave, caída rápida), es razonable
+                    subir el umbral a <strong>10-20x10⁹/L</strong>. Umbral más alto también en
+                    leucemia promielocítica aguda.
+                    <span style="color: var(--text-muted); font-size:0.75rem;"> (Azoulay et al., Blood Reviews 2025)</span>
                 </p>
             </div>
 
@@ -484,6 +570,40 @@
                     objetivo de la UCI es ser un <strong>puente hacia el tratamiento curativo</strong>,
                     no un punto final.
                 </div>
+            </div>
+        </div>
+
+        <!-- ===== TAB 4B: TERAPIAS DIRIGIDAS ===== -->
+        <div id="rt-terapias" class="tab-content">
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                Más de 40 fármacos dirigidos están hoy aprobados. Su indicación puede depender de
+                una diana molecular concreta (a veces independiente del tipo de tumor), lo que exige
+                a veces <strong>biopsiar al paciente crítico</strong> (con trombocitopenia, coagulopatía
+                o ventilación invasiva) para obtener la información molecular necesaria. Los comités
+                moleculares virtuales permiten hoy consulta remota sin trasladar al paciente. Cada
+                clase tiene toxicidades "de clase" propias (fibrilación auricular con ibrutinib, QT
+                largo con midostaurina, lisis tumoral con venetoclax, autoinmunidad con inhibidores
+                de checkpoint, además de CRS/ICANS/ICAHT con CAR-T y biespecíficos), pero todas
+                comparten el riesgo de <strong>inmunodeficiencia secundaria</strong>.
+                <span style="color: var(--text-muted); font-size:0.75rem;">(Azoulay et al., Blood Reviews 2025)</span>
+            </p>
+
+            <div class="card" style="border-top: 1px solid var(--accent-blue); margin-top: 14px;">
+                <h3 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">Riesgo infeccioso por clase de fármaco</h3>
+                <p class="subtitle">Tabla 4 — selecciona una clase de terapia dirigida</p>
+                <div class="form-group">
+                    <select id="rt-terapia-select">
+                        <option value="cd20">Anti-CD20 (Rituximab)</option>
+                        <option value="bcl2">Inhibidor BCL-2 (Venetoclax)</option>
+                        <option value="bcrabl">Inhibidor BCR-ABL (Imatinib, Ponatinib)</option>
+                        <option value="biespecifico">Anticuerpo biespecífico (Blinatumomab)</option>
+                        <option value="btk">Inhibidor BTK (Ibrutinib)</option>
+                        <option value="cart">Células CAR-T (Axicabtagén ciloleucel)</option>
+                        <option value="ici">Inhibidor de checkpoint (Pembrolizumab)</option>
+                        <option value="jakstat">Inhibidor JAK-STAT (Ruxolitinib)</option>
+                    </select>
+                </div>
+                <div class="result-box" id="rt-terapia-resultado" style="text-align: left; font-size: 0.85rem; line-height: 1.5;"></div>
             </div>
         </div>
 
@@ -528,6 +648,42 @@
                 crónico, y descompensación de comorbilidades no hematológicas de base.
             </p>
         </div>
+
+        <!-- ===== TAB 6: FIN DE VIDA Y SÍNTOMAS ===== -->
+        <div id="rt-finvida" class="tab-content">
+            <div class="card" style="border-top: 1px solid var(--accent-purple);">
+                <h3 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">Objetivos de cuidado realistas</h3>
+                <p style="font-size: 0.85rem; line-height: 1.5;">
+                    Paciente, familia y equipo suelen desear una atención alineada con los valores del
+                    paciente, pero no siempre se comunica lo necesario para lograrlo. La conversación
+                    sobre la esperanza es más productiva cuando no se limita a "¿qué esperas?" (que
+                    puede no ser alcanzable), sino que ayuda a construir objetivos concretos y
+                    realistas que también importan al paciente. Entender quién es la persona y qué es
+                    lo más importante para ella es la base de una comunicación centrada en la persona
+                    que maximiza el uso apropiado de cuidados intensivos y minimiza el sufrimiento del
+                    paciente, sus allegados y el equipo.
+                    <span style="color: var(--text-muted); font-size:0.75rem;">(Azoulay et al., Blood Reviews 2025)</span>
+                </p>
+            </div>
+
+            <div class="card" style="border-top: 1px solid var(--accent-blue); margin-top: 12px;">
+                <h3 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">Evaluación sistemática de síntomas</h3>
+                <p style="font-size: 0.85rem; line-height: 1.5;">
+                    El paciente crítico hematológico sufre con frecuencia dolor, sed, ansiedad,
+                    cansancio y disnea — por la propia enfermedad o por los tratamientos y
+                    procedimientos de UCI. La evaluación <strong>sistemática</strong> (no solo
+                    reactiva) precede y condiciona un manejo eficaz, y las intervenciones dirigidas a
+                    síntomas concretos reducen las tasas de estrés postraumático en supervivientes.
+                </p>
+                <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 10px 0 6px 0;">Marca los síntomas presentes</p>
+                <label class="checkbox-label"><input type="checkbox" class="rt-sintoma-check"> Dolor</label>
+                <label class="checkbox-label"><input type="checkbox" class="rt-sintoma-check"> Disnea</label>
+                <label class="checkbox-label"><input type="checkbox" class="rt-sintoma-check"> Sed</label>
+                <label class="checkbox-label"><input type="checkbox" class="rt-sintoma-check"> Ansiedad</label>
+                <label class="checkbox-label"><input type="checkbox" class="rt-sintoma-check"> Cansancio / astenia</label>
+                <div class="result-box" id="rt-sintomas-resultado" style="margin-top: 10px; font-size: 0.85rem; line-height: 1.5;"></div>
+            </div>
+        </div>
     </div>
 
     <div class="card">
@@ -545,8 +701,11 @@
             doi:10.1016/j.blre.2025.101306
         </p>
         <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px;">
-            Artículo de acceso restringido (suscripción). No se aloja copia en la app; el enlace
-            lleva a la página oficial de la editorial.
+            Fuente principal de: perfil de Mieloma múltiple, pestañas "Terapias Dirigidas" y
+            "Fin de Vida", antibioterapia empírica en UCI, infecciones oportunistas, coagulopatía/
+            refractariedad plaquetaria, toxicidad cardiaca y umbrales transfusionales. Artículo de
+            acceso restringido (suscripción); no se aloja copia en la app, el enlace lleva a la
+            página oficial de la editorial.
         </p>
         <a class="pkpd-btn" style="display:block; text-align:center; text-decoration:none;" href="https://doi.org/10.1016/j.blre.2025.101306" target="_blank" rel="noopener">🔗 Ver en la editorial (DOI)</a>
     </div>
