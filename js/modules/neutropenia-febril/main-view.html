@@ -62,6 +62,31 @@
         </div>
     </div>
 
+    <!-- BLOQUE 2B: ÍNDICE CISNE -->
+    <div class="card">
+        <h3 style="color: var(--accent-yellow);">2b. ÍNDICE CISNE</h3>
+        <p class="subtitle">Estratificación de riesgo. (No usar si hay Red Flags)</p>
+        <div class="warning-box" style="margin-bottom: 12px;">
+            Desarrollado y validado en <strong>tumores sólidos ambulatorios</strong> con quimioterapia de
+            intensidad leve/moderada, ECOG 0-2. La guía SEIMC-SEHH señala que tiene
+            <strong>aplicación limitada en pacientes hematológicos</strong>: úsalo como apoyo adicional,
+            nunca como sustituto del MASCC ni del juicio clínico en este contexto.
+        </div>
+
+        <label class="checkbox-label"><input type="checkbox" id="cisne-ecog" class="cisne-input"> ECOG ≥2 (2 pts)</label>
+        <label class="checkbox-label"><input type="checkbox" id="cisne-hipergluc" class="cisne-input"> Hiperglucemia de estrés, independiente de diabetes previa (2 pts)</label>
+        <label class="checkbox-label"><input type="checkbox" id="cisne-epoc" class="cisne-input"> EPOC (1 pt)</label>
+        <label class="checkbox-label"><input type="checkbox" id="cisne-cardio" class="cisne-input"> Enfermedad cardiovascular crónica (1 pt)</label>
+        <label class="checkbox-label"><input type="checkbox" id="cisne-mucositis" class="cisne-input"> Mucositis NCI grado ≥2 (1 pt)</label>
+        <label class="checkbox-label"><input type="checkbox" id="cisne-monocitos" class="cisne-input"> Monocitos &lt;200/mm³ (1 pt)</label>
+
+        <div class="result-box">
+            <div class="result-score" id="cisne-score-display" style="color: var(--accent-green); text-shadow: var(--glow-green);">0 / 8</div>
+            <div id="cisne-eval-text" style="color: var(--accent-green); font-size: 0.9rem;">Bajo Riesgo</div>
+            <div class="management-text" id="cisne-management" style="display:block;"></div>
+        </div>
+    </div>
+
     <!-- BLOQUE 3: EVOLUCIÓN Y SUSPENSIÓN (ORIGINAL RESTAURADO) -->
     <div class="card">
         <h3 style="color: var(--accent-blue);">3. EVOLUCIÓN Y SUSPENSIÓN</h3>
