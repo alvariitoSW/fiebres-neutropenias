@@ -10,7 +10,7 @@ export const pkpdData = {
     },
     'mero': {
         doses: {
-            normal: { 'normal': '1g / 8h', 'mild': '1g / 12h', 'mod': '500mg / 12h', 'sev': '500mg / 24h', 'crrt': '1g / 12h' },
+            normal: { 'normal': '1g / 8h', 'mild': '1g / 8h', 'mod': '1g / 12h', 'sev': '1g / 24h', 'crrt': '1g / 12h' },
             severe: { 'normal': '2g / 8h (Inf. 3h)', 'mild': '1g / 8h (Inf. 3h)', 'mod': '1g / 12h (Inf. 3h)', 'sev': '500mg / 12h (Inf. 3h)', 'crrt': '1g / 8h (Inf. 3h)' }
         },
         inter: "Ácido Valproico (cae el nivel de valproico a rangos subterapéuticos), Probenecid.",
@@ -26,8 +26,8 @@ export const pkpdData = {
     },
     'colistina': {
         doses: {
-            normal: { 'normal': 'Carga 9MU → Mant. 3MU/8h', 'mild': 'Carga 9MU → Mant. 2.5MU/12h', 'mod': 'Carga 9MU → Mant. 2.5MU/24h', 'sev': 'Carga 9MU → Mant. 1.5MU/24h', 'crrt': 'Carga 9MU → Mant. 2MU/12h' },
-            severe: { 'normal': 'Carga 9MU → Mant. 3MU/8h (Dosis Máx)', 'mild': 'Carga 9MU → Mant. 3MU/12h', 'mod': 'Carga 9MU → Mant. 3MU/24h', 'sev': 'Carga 9MU → Mant. 1.5MU/12h', 'crrt': 'Carga 9MU → Mant. 2MU/12h' }
+            normal: { 'normal': 'Carga 9MU → Mant. 3MU/8h', 'mild': 'Carga 9MU → Mant. 6MU/24h', 'mod': 'Carga 9MU → Mant. 4.5-5.5MU/24h', 'sev': 'Carga 9MU → Mant. 3MU/24h', 'crrt': 'Carga 9MU → Mant. 2MU/12h' },
+            severe: { 'normal': 'Carga 9MU → Mant. 3MU/8h (Dosis Máx)', 'mild': 'Carga 9MU → Mant. 3MU/12h', 'mod': 'Carga 9MU → Mant. 2.75MU/12h', 'sev': 'Carga 9MU → Mant. 1.5MU/12h', 'crrt': 'Carga 9MU → Mant. 2MU/12h' }
         },
         inter: "Nefrotóxicos concurrentes (AINEs, Aminoglucósidos). Prolonga el efecto de Bloqueantes Neuromusculares (Rocuronio).",
         contra: "Miastenia Gravis (produce bloqueo neuromuscular). Vigilar estrechamente en fracaso renal progresivo."

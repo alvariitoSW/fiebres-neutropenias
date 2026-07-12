@@ -42,10 +42,10 @@ function calcSuspension() {
 
     if (isClinica) {
         canStop = (afebrile >= 3);
-        reason = `Requiere ≥3 días afebril. (Actual: ${afebrile})`;
+        reason = `Requiere ≥3 días (72h) afebril. (Actual: ${afebrile})`;
     } else {
-        canStop = (afebrile >= 4 && abt >= 7);
-        reason = `Requiere ≥4 días afebril y ≥7 de ABT. (Actual: ${afebrile}d afeb., ${abt}d ABT)`;
+        canStop = (afebrile >= 3 && abt >= 7);
+        reason = `Requiere ≥3 días (72h) afebril y ≥7 de ABT. (Actual: ${afebrile}d afeb., ${abt}d ABT)`;
     }
 
     if (canStop) {
