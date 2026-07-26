@@ -11,6 +11,7 @@
             <div class="tab" data-tab="tph-planta">Ingreso y Planta</div>
             <div class="tab" data-tab="tph-injerto">Fallo de Injerto</div>
             <div class="tab" data-tab="tph-productos">Productos TC</div>
+            <div class="tab" data-tab="tph-soporte">Soporte Clínico</div>
             <div class="tab" data-tab="tph-alta">Criterios de Alta</div>
         </div>
 
@@ -340,7 +341,316 @@
             </div>
         </div>
 
-        <!-- ===== TAB 5: CRITERIOS DE ALTA ===== -->
+        <!-- ===== TAB 5B: SOPORTE CLÍNICO ===== -->
+        <div id="tph-soporte" class="tab-content">
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                Resumen del soporte clínico habitual durante el TPH: profilaxis antiinfecciosa,
+                mucositis, dolor, náuseas y vómitos, nutrición, soporte transfusional, factores de
+                crecimiento e infusión de progenitores hematopoyéticos.
+            </p>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 16px 0 6px 0;">Profilaxis antiinfecciosa</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🦠 Profilaxis bacteriana</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        La medida preventiva más eficaz sigue siendo la higiene de manos con
+                        solución alcohólica antes y después del contacto con el paciente. El
+                        entorno protegido con filtros HEPA no ha demostrado reducir las infecciones
+                        bacterianas (muy pocas se transmiten por vía aérea), pero sí es útil frente
+                        a la aspergilosis durante el ingreso; se recomienda en el TPH alogénico
+                        salvo en la modalidad domiciliaria, y no es necesario en el autólogo ni en
+                        el CAR-T (pueden ingresar en habitación doble). Se realizan cultivos de
+                        vigilancia de bacterias multirresistentes (frotis nasal y rectal) a todos
+                        los candidatos a TPH.<br><br>
+                        Solo el 30-35% de los episodios febriles del paciente neutropénico se
+                        documentan microbiológicamente. La profilaxis antibiótica oral se reserva
+                        para pacientes de alto riesgo (neutropenia profunda &lt;100/µL y prolongada
+                        &gt;7 días, o TPH domiciliario), basada en descontaminación digestiva con
+                        quinolonas: ciprofloxacino 500 mg/12h desde el día -1 en el alogénico,
+                        levofloxacino 500 mg/24h desde el +1 en el autólogo domiciliario de
+                        mieloma, o piperacilina-tazobactam 4 g/8h en el domiciliario de LNH (día
+                        0/+1) y en el alogénico domiciliario (día -1). No se usa en el autólogo
+                        ingresado ni en el CAR-T salvo casos seleccionados; se mantiene hasta la
+                        resolución de la neutropenia o el inicio de antibioterapia empírica si
+                        aparece neutropenia febril. En alergia a quinolonas o en menores de 16 años,
+                        alternativa con cefalosporina oral.
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🍄 Profilaxis fúngica</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        El riesgo de infección fúngica invasora depende de la epidemiología local
+                        del centro y del riesgo individual (IFI previa, EICH, corticoides, edad
+                        &gt;60 años). En el autólogo (bajo riesgo) no se recomienda profilaxis
+                        sistemática salvo casos individualizados, manteniendo nistatina oral en
+                        todos.<br><br>
+                        En el alogénico, fase pre-injerto: fluconazol 100 mg/24h desde el día +5
+                        hasta el +100 (cubre cándida, no filamentosos ni C. glabrata/krusei); en
+                        alto riesgo de hongos filamentosos, micafungina (también de elección si hay
+                        hepatotoxicidad o hiperbilirrubinemia). Fase post-injerto: si el paciente
+                        recibe corticoides por EICH agudo o crónico u otro inmunosupresor,
+                        profilaxis con alta actividad frente a Aspergillus — posaconazol 300 mg/24h
+                        (reducir un 75% la dosis concomitante de ciclosporina/tacrolimus/sirolimus)
+                        o isavuconazol 200 mg/24h si hay toxicidad o EICR hepático.<br><br>
+                        Diagnóstico precoz: 2 determinaciones semanales de galactomanano hasta el
+                        alta y luego 1/semana hasta el día +180 (ajustable según riesgo).
+                        Habitación con filtros HEPA y presión positiva mientras los neutrófilos
+                        estén &lt;500/µL.
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🦠 Profilaxis vírica</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <strong>HSV/VZV:</strong> aciclovir 800 mg/12-24h vo (o 250 mg/m²/12h iv) o
+                        valaciclovir 500 mg/12h, desde el inicio del acondicionamiento hasta 30
+                        días post-TPH (autólogo) o al menos hasta el +30 (alogénico, prolongar con
+                        EICH, corticoides o reactivaciones previas frecuentes). En IgG+ para VZV:
+                        valaciclovir 500 mg 1-2 veces/día durante al menos 1 año post-TPH. Tras
+                        exposición a varicela/zóster en receptores seronegativos, EICH crónico o
+                        TPH reciente (&lt;2 años): inmunoglobulina anti-VZ en los primeros 10 días
+                        tras la exposición. Vacunación a partir de los 6 meses.<br><br>
+                        <strong>CMV:</strong> letermovir 480 mg/24h en TPH haploidéntico, 9/10 y
+                        casos seleccionados D+/R+, durante los primeros 100 días (prolongable a
+                        +200 según riesgo, asociar en EICR con corticoides). Monitorización semanal
+                        de carga viral por PCR, mínimo 6 meses en el alogénico (prolongar con EICH
+                        crónico e inmunosupresión, o CD4 &lt;100/µL) y hasta el día +100 en CAR-T;
+                        no indicada en autólogo. Tratamiento anticipado ante PCR positiva:
+                        valganciclovir 900 mg/12h 2 semanas y luego 900 mg/24h ≥7 días tras
+                        negativización; foscarnet 90 mg/kg/12h si resistencia, injerto reciente o
+                        injerto pobre; maribavir 400 mg/12h en toxicidad o resistencia
+                        previas.<br><br>
+                        <strong>Virus respiratorios:</strong> la vacunación antigripal es la
+                        principal prevención (paciente y convivientes/personal a los 6 meses
+                        post-TPH); no se recomienda profilaxis farmacológica sistemática. Tras
+                        exposición a gripe: oseltamivir 75 mg/24h vo 7 días (profilaxis) o 75
+                        mg/12h 10-15 días (tratamiento), iniciado en las primeras 48h.<br><br>
+                        <strong>Hepatitis B:</strong> cribado obligatorio (HBsAg, HBsAc, HBcAc).
+                        HBsAg+ o carga viral positiva: lamivudina 100 mg/día desde el inicio del
+                        tratamiento citorreductor, mantenida 6 meses post-TPH (autólogo) o 6 meses
+                        tras suspender la inmunosupresión (alogénico). HBcAc+/HBsAg-/HBsAc-:
+                        entecavir 0,5 mg/24h (o tenofovir) si hay carga viral, o vacunación +
+                        lamivudina profiláctica si no la hay.<br><br>
+                        <strong>Hepatitis C:</strong> RNA-VHC positivo se asocia a mayor riesgo de
+                        EVOH/SOS y peor evolución post-TPH; evitar donante RNA-VHC+ salvo que pueda
+                        tratarse ≥6 meses antes de la recogida de progenitores. Tratar al receptor
+                        con los antivirales de acción directa actuales, evitando interferón y
+                        ribavirina por su toxicidad hematológica.
+                    </div>
+                </div>
+            </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Mucositis</p>
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                Afecta hasta al 70% de los pacientes con TPH y es una de las toxicidades más
+                debilitantes del procedimiento. Factores de riesgo: ICT, melfalán, etopósido, mala
+                higiene bucodental y susceptibilidad individual. Prevención (guía MASCC): higiene
+                con cepillo muy suave o hisopo tras las comidas y antes de acostarse, colutorios con
+                clorhexidina sin alcohol o bicarbonato + agua con sal, profilaxis de candidiasis con
+                nistatina 100.000 UI/ml 3 veces al día, vaselina labial. Crioterapia con hielo
+                triturado en acondicionamiento con melfalán 140-200 mg/m² (15 min antes, durante la
+                hora de infusión y 15 min después — nivel II-A ASCO/ESMO). Evaluación diaria de la
+                boca por médico y enfermería, graduando según la clasificación de la OMS.
+            </p>
+            <div class="form-group" style="margin-top: 10px;">
+                <label>Grado de mucositis (OMS)</label>
+                <select id="tph-mucositis-select">
+                    <option value="0">Grado 0</option>
+                    <option value="1">Grado 1</option>
+                    <option value="2">Grado 2</option>
+                    <option value="3">Grado 3</option>
+                    <option value="4">Grado 4</option>
+                </select>
+            </div>
+            <div class="result-box" style="text-align: left;">
+                <div id="tph-mucositis-criterio" style="font-size: 0.85rem;"></div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 8px;">Manejo</div>
+                <div id="tph-mucositis-tratamiento" style="font-size: 0.85rem; margin-top: 4px;"></div>
+            </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Manejo del dolor</p>
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                Escala numérica 0-10 (leve 1-3, moderado 4-6, grave 7-10) y escalera de la OMS de 3
+                escalones: AINE/paracetamol → opioides menores (tramadol) → opioides mayores
+                (morfina, fentanilo). Preferibles las pautas con rescates fijos frente a la demanda
+                del paciente; la retirada de opioides siempre debe ser escalonada (10-20%/día).
+            </p>
+            <div class="form-group" style="margin-top: 10px;">
+                <label>Etiología del dolor</label>
+                <select id="tph-dolor-select">
+                    <option value="mucositis">Mucositis</option>
+                    <option value="cistitisHemorragica">Cistitis hemorrágica</option>
+                    <option value="evohSos">EVOH / síndrome de obstrucción sinusoidal</option>
+                    <option value="eichIntestinal">EICH intestinal</option>
+                </select>
+            </div>
+            <div class="result-box" style="text-align: left;">
+                <div id="tph-dolor-texto" style="font-size: 0.85rem;"></div>
+            </div>
+            <div class="micro-profiles" style="margin-top: 12px;">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>💊 Fármacos y dosis de referencia</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <strong>AINE:</strong> más eficaces que el paracetamol pero nefrotóxicos,
+                        antiagregantes y con efecto techo — no combinar dos AINE entre sí. Ibuprofeno
+                        400-600 mg/4-8h vo (máx. 2,4 g/día); dexketoprofeno 12,5 mg/4-6h vo (máx. 75
+                        mg/día); metamizol 500-2000 mg/6-8h (útil en dolor visceral, riesgo de
+                        citopenias severas).<br><br>
+                        <strong>Paracetamol:</strong> 500-1000 mg/4-6h vo o 1g/6h iv (máx. 4 g/día);
+                        hepatotóxico a dosis altas pero sin toxicidad renal ni plaquetaria.<br><br>
+                        <strong>Tricíclicos/anticonvulsivantes</strong> (dolor neuropático):
+                        amitriptilina 25 mg/día (10 mg/día en &gt;65 años), gabapentina 300 mg/8h vo,
+                        pregabalina 75 mg/12h — varios de ellos son mielotóxicos.<br><br>
+                        <strong>Opioides:</strong> tramadol 50 mg/6-8h vo/iv; fentanilo en parche
+                        (metabolitos inactivos, de elección en insuficiencia renal, tarda 16-24h en
+                        alcanzar niveles estables); morfina 0,5-1 mg/h iv en perfusión continua,
+                        aumentando un 50% hasta rango terapéutico. Vigilar náuseas, estreñimiento y
+                        sedación como efectos secundarios más frecuentes.
+                    </div>
+                </div>
+            </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Otros pilares del soporte</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🤢 Náuseas y vómitos</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        Se distinguen dos periodos: agudo (primeras 24h, mediado por serotonina,
+                        pico a las 4-6h — responde a setrones) y tardío/demorado (desde 24h tras
+                        finalizar la quimioterapia, pico a los 2-3 días, mediado por sustancia P —
+                        responde a corticoides, aprepitant, setrones y olanzapina, y es peor
+                        controlado que el agudo).<br><br>
+                        Profilaxis estándar durante el acondicionamiento: setrón (granisetrón 2-3
+                        mg/día u ondansetrón 16-20 mg/día), iniciado 20 min antes de la quimioterapia
+                        y mantenido 2-3 días tras finalizar; puede asociarse una benzodiacepina
+                        (alprazolam o lorazepam). En regímenes de alto poder emetizante
+                        (ciclofosfamida, BCNU, melfalán, ICT): añadir aprepitant (125 mg el día 1, 80
+                        mg los días 2-3) + dexametasona 4-8 mg/día. Si persisten: cambiar de familia
+                        de setrón, asociar metoclopramida 10 mg/8-12h u olanzapina 10 mg vo 3 días —
+                        y descartar siempre otras causas (infección, EICH, fármacos).
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🍽️ Soporte nutricional</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        Valoración pre-TPH con 3 preguntas básicas (¿ha disminuido la ingesta en la
+                        última semana?, ¿IMC &lt;20,5?, ¿está el paciente gravemente enfermo?) más
+                        parámetros antropométricos y analíticos; si hay datos de desnutrición,
+                        consulta a Endocrinología antes del ingreso. La pérdida de peso es el mejor
+                        marcador de desnutrición: &gt;2% en 1 semana, &gt;5% en 1 mes, &gt;7,5% en 3
+                        meses, &gt;10% en 6 meses.<br><br>
+                        <strong>Oral:</strong> de elección siempre que el tubo digestivo sea
+                        funcionante y la dieta se tolere; adaptar la textura y composición a los
+                        síntomas (mucositis: alimentos fríos/templados, fraccionados, textura
+                        blanda; náuseas: restringir lactosa, residuos y lípidos; diarrea: restringir
+                        lactosa, lípidos y gluten, dieta astringente). <strong>Enteral:</strong> más
+                        fisiológica, pero no se recomienda de forma rutinaria en el TPH.
+                        <strong>Parenteral:</strong> indicada en mucositis grado 3-4, íleo o vómitos
+                        incoercibles, o cuando no se cubre el 60-70% de los requerimientos en 3 días
+                        (cálculo calórico mediante Harris-Benedict × factor de estrés 1,3-1,5).<br><br>
+                        Seguimiento: peso diario, balance hídrico y glucemia capilar durante el
+                        ingreso; analítica básica cada 72h. Reintroducción de la dieta oral siempre
+                        gradual y según tolerancia tras un ayuno prolongado o nutrición parenteral.
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🩸 Soporte transfusional</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        Objetivos principales: evitar la transmisión de CMV, la aloinmunización HLA
+                        y la EICH asociada a la transfusión.<br><br>
+                        <strong>Leucorreducción</strong> (&lt;1-5×10⁶ leucocitos): reduce el riesgo
+                        de transmisión de CMV, junto con — o en vez de — usar componentes de
+                        donantes CMV-negativos (sin consenso internacional sobre cuál usar ni hasta
+                        cuándo). <strong>Irradiación</strong> (25-50 Gy) de hematíes y plaquetas:
+                        inactiva los linfocitos del donante para prevenir la EICH asociada a
+                        transfusión (mortalidad &gt;90% si ocurre); los filtros desleucocitadores NO
+                        son eficaces para esto. Duración habitual: en el alogénico, desde el inicio
+                        del acondicionamiento hasta 6 meses o la reconstitución inmune; en el
+                        autólogo, desde 2 semanas antes de la recogida de progenitores hasta 3 meses
+                        post-TPH.<br><br>
+                        <strong>Hematíes:</strong> transfusión restrictiva, umbral Hb 7-8 g/dL (8-9
+                        g/dL con comorbilidad relevante) con estabilidad hemodinámica. Ojo con la
+                        sobrecarga férrica por transfusiones crónicas repetidas.<br><br>
+                        <strong>Plaquetas:</strong> profilaxis si recuento ≤10×10⁹/L asintomático;
+                        mantener &gt;20×10⁹/L si hay sangrado activo, fiebre, infección activa o alto
+                        riesgo hemorrágico (mucositis, cistitis hemorrágica, EICH agudo). Preferir
+                        compatibilidad ABO/Rh; en refractariedad de causa inmune (descartar antes
+                        causas no inmunes), usar plaquetas de aféresis HLA-compatibles.<br><br>
+                        <strong>Incompatibilidad ABO</strong> (hasta el 40% de los alo-TPH): mayor,
+                        menor o bidireccional. No afecta al injerto de neutrófilos ni se relaciona
+                        con el rechazo, la EICH ni la supervivencia global — pero exige selección
+                        cuidadosa del grupo de los componentes a transfundir hasta confirmar
+                        quimerismo completo y Coombs directo negativo.
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🌱 Factores de crecimiento (G-CSF)</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <strong>Autólogo</strong> (mieloma, LMA salvo excepciones): G-CSF 5 mcg/kg/
+                        24h desde el día +7, hasta neutrófilos &gt;1.000/µL durante 3 días
+                        consecutivos o &gt;5.000/µL en un solo día. <strong>Alogénico
+                        haploidéntico:</strong> mismo esquema desde el día +5. En el resto de
+                        alo-TPH, solo en caso de sepsis grave. También indicado, de forma
+                        individualizada, en el fallo o injerto pobre.<br><br>
+                        Vigilar durante su uso la aparición de complicaciones de origen endotelial
+                        (p. ej. síndrome del implante), que obligan a la retirada rápida del
+                        fármaco.
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>💉 Infusión de progenitores hematopoyéticos (no CAR-T)</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        Antes de la infusión, el paciente se presenta en el comité de terapia
+                        celular confirmando la fecha, la dosis de CD34 (autólogo) o la idoneidad del
+                        donante y el retipaje (alogénico).<br><br>
+                        <strong>Premedicación</strong> 15-20 min antes de la infusión:
+                        dexclorfeniramina 5 mg iv en todos los productos; en productos
+                        criopreservados añadir hidrocortisona 75 mg iv (doble dosis si &gt;100 kg);
+                        antieméticos si hay antecedentes de náuseas/úlcera péptica o en
+                        amiloidosis.<br><br>
+                        <strong>Identificación del receptor</strong> por doble verificación (técnico
+                        + enfermería) mediante pulsera identificativa y etiquetado del producto. El
+                        producto debe infundirse en ≤30 minutos desde su descongelación, con
+                        constantes (TA, FC, SatO2) cada 10 minutos durante la infusión.<br><br>
+                        <strong>Vía:</strong> catéter venoso central (PICC o similar), salvo en
+                        amiloidosis, donde se prefiere vía periférica. Velocidad rápida (~15
+                        ml/min) para minimizar la formación de agregados; usar filtro de
+                        macroagregados (170-200 µm), nunca filtro desleucocitador.<br><br>
+                        <strong>Efectos adversos por el DMSO:</strong> alteración transitoria del
+                        gusto (sabor a ajo) casi universal; reacción anafiláctica rara (corticoides,
+                        antihistamínicos y broncodilatador si hay broncoespasmo, valorar UCI);
+                        reacciones vagales por descarga de histamina (más frecuentes: hipotensión,
+                        rubefacción, disnea — ceden en minutos). Efectos no relacionados con el
+                        DMSO: lisis de hematíes incompatibles (hiperhidratación), sobrecarga de
+                        volumen, elevación transitoria de transaminasas.<br><br>
+                        <strong>Incompatibilidad ABO mayor</strong> en progenitores de médula ósea:
+                        se procesa el producto para dejar el hematocrito ≤5%.
+                        <strong>Incompatibilidad ABO menor:</strong> se reduce el volumen de plasma
+                        a infundir a &lt;50 ml.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== TAB 6: CRITERIOS DE ALTA ===== -->
         <div id="tph-alta" class="tab-content">
             <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px 0;">🧮 Marca los criterios que cumple</p>
             <label class="checkbox-label"><input type="checkbox" class="tph-alta-check"> Inmunosupresión en rango (TPH alogénico)</label>
@@ -385,6 +695,10 @@
             Estándares JACIE, 8ª edición · Recomendaciones y requerimientos mínimos de
             compatibilidad en la búsqueda de donantes no emparentados (ONT, agosto 2025) ·
             10ª Conferencia Europea sobre Infecciones en Leucemia (ECIL-10, 2025) — recomendaciones
-            finales sobre infección por Clostridioides difficile en neoplasias hematológicas.
+            finales sobre infección por Clostridioides difficile en neoplasias hematológicas ·
+            Consenso español de tratamiento antifúngico · Guía de práctica clínica actualizada para
+            la prevención y el tratamiento de la mucositis (Cancer 2007;109(5)) · Manejo de la
+            mucositis oral y gastrointestinal — recomendaciones clínicas de la ESMO (Ann Oncol
+            2009;20 Suppl 4) · MASCC (Multinational Association of Supportive Care in Cancer).
         </p>
     </div>

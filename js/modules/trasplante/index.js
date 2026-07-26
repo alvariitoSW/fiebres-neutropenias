@@ -10,7 +10,9 @@ import {
     regimenesAcondicionamientoData,
     soporteComunAcondicionamiento,
     irradiacionCorporalTotalData,
-    clostridioidesData
+    clostridioidesData,
+    mucositisGradosData,
+    dolorEtiologiaData
 } from '../../data/trasplante-data.js';
 import { init as initCarT } from './car-t.js';
 
@@ -84,6 +86,21 @@ function renderClostridioides() {
     document.getElementById('tph-cdiff-aislamiento').innerHTML = clostridioidesData.aislamiento;
 }
 
+function calcMucositis() {
+    const select = document.getElementById('tph-mucositis-select');
+    const data = mucositisGradosData[select.value];
+    if (!data) return;
+    document.getElementById('tph-mucositis-criterio').innerHTML = data.criterio;
+    document.getElementById('tph-mucositis-tratamiento').innerHTML = data.tratamiento;
+}
+
+function calcDolor() {
+    const select = document.getElementById('tph-dolor-select');
+    const texto = dolorEtiologiaData[select.value];
+    if (!texto) return;
+    document.getElementById('tph-dolor-texto').innerHTML = texto;
+}
+
 function calcAlta() {
     const checks = document.querySelectorAll('.tph-alta-check');
     const count = Array.from(checks).filter(c => c.checked).length;
@@ -115,6 +132,12 @@ export function init() {
 
     document.querySelectorAll('.tph-alta-check').forEach(c => c.addEventListener('change', calcAlta));
     calcAlta();
+
+    document.getElementById('tph-mucositis-select').addEventListener('change', calcMucositis);
+    calcMucositis();
+
+    document.getElementById('tph-dolor-select').addEventListener('change', calcDolor);
+    calcDolor();
 
     initCarT();
 }

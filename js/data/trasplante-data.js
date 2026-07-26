@@ -122,6 +122,36 @@ export const irradiacionCorporalTotalData = {
     antiemesis: 'Granisetrón IV 3 mg/12h + dexametasona 4 mg/12h + aprepitant (120 mg el día 1, 80 mg los días 2 y 3), puesto al menos 20 minutos antes de cada sesión; el paciente debe acudir en ayunas.'
 };
 
+export const mucositisGradosData = {
+    0: {
+        criterio: 'Sin afectación de la mucosa.',
+        tratamiento: 'Mantener las medidas preventivas: higiene bucodental tras las comidas, colutorios con clorhexidina sin alcohol y profilaxis de candidiasis con nistatina oral.'
+    },
+    1: {
+        criterio: 'Dolor y eritema, sin úlceras.',
+        tratamiento: 'Analgesia según la escalera de la OMS (paracetamol/AINE), manteniendo la dieta y la higiene bucodental habituales.'
+    },
+    2: {
+        criterio: 'Eritema y úlceras, con tolerancia a alimentos sólidos.',
+        tratamiento: 'Adaptar la textura de la dieta (blanda) y añadir analgesia con opioides menores (tramadol) si el dolor es moderado.'
+    },
+    3: {
+        criterio: 'Úlceras que solo permiten dieta líquida.',
+        tratamiento: 'Sueroterapia y soporte nutricional si la ingesta es insuficiente. Analgesia con opioides potentes: cloruro mórfico en perfusión continua o parches de fentanilo.'
+    },
+    4: {
+        criterio: 'Odinofagia intensa que impide cualquier dieta oral.',
+        tratamiento: 'Nutrición parenteral y analgesia opioide en perfusión continua. Recoger muestras orales de las lesiones si se sospecha sobreinfección fúngica o vírica, y confirmar que la profilaxis herpética (aciclovir) está activa.'
+    }
+};
+
+export const dolorEtiologiaData = {
+    mucositis: 'Suele iniciarse a los 2-7 días de finalizar el acondicionamiento y dura de media 10-14 días — más del 90% de los pacientes requieren opioides. Dolor leve-moderado: tramadol 50-100 mg/6-8h (también útil en dolor neuropático; espaciar a cada 12h en insuficiencia renal o hepática moderada). Dolor grave: cloruro mórfico 0,5-1 mg/h en perfusión continua, o parches de fentanilo (dosis mínima 12-25 mcg/h; de elección en insuficiencia renal, pero de inicio lento, por lo que no sirve para el dolor agudo). No combinar un opioide débil con uno potente, ni dos potentes entre sí.',
+    cistitisHemorragica: 'Dolor de tipo espasmódico: butilescopolamina 20 mg/8h, o si no está disponible, oxibutinina oral. Si no se controla, escalar a opioides como en la mucositis. Descartar siempre coágulos que estén provocando obstrucción y, en consecuencia, los espasmos.',
+    evohSos: 'Dolor por distensión de la cápsula hepática: paracetamol (contraindicado si insuficiencia hepática) y opioides menores. Evitar AINE por el riesgo de insuficiencia renal asociado a la EVOH/SOS. Los opioides mayores rara vez son necesarios.',
+    eichIntestinal: 'Dolor cólico complejo de difícil control; los opioides enlentecen el peristaltismo y pueden favorecer el íleo paralítico, pero suelen ser necesarios: cloruro mórfico en perfusión continua + butilescopolamina 20 mg/8h para las exacerbaciones cólicas, asociando octreótido 0,05-0,1 mg/12h sc para reducir la secreción intestinal.'
+};
+
 export const clostridioidesData = {
     factoresRiesgo: 'Tratamiento antibiótico mantenido, hospitalización prolongada, edad avanzada, disminución de la secreción gástrica (IBP/anti-H2), quimioterapia, neutropenia y TPH.',
     diagnostico: 'Indicado en heces diarreicas (≥3 deposiciones blandas en 24h), sobre todo con factores de riesgo presentes. Detección de GDH y, si es positiva, confirmación de cepa toxigénica (inmunocromatografía y/o detección de genes de toxinas). No se recomienda repetir pruebas tras el tratamiento para confirmar curación — la colonización puede persistir pese a la evolución favorable.',
