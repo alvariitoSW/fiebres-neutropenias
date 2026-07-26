@@ -31,6 +31,28 @@
 
             <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Criterios de exclusión</p>
             <ul id="cart-exclusion-lista" style="font-size: 0.85rem; line-height: 1.6; margin: 0 0 0 18px; padding: 0;"></ul>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Criterios de selección específicos por enfermedad</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🔬 Linfoma B difuso de célula grande (LBDCG)</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Enfermedad resistente o en recaída dentro de los 12 meses posteriores a haber completado al menos dos líneas de tratamiento sistémico previas, incluyendo inmunoquimioterapia (también LBDCG y linfoma B primario mediastínico refractarios o en recaída tras dos o más líneas, sin el requisito de los 12 meses).</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🔬 Linfoma folicular</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Diagnóstico histológico confirmado, refractario o en recaída tras 3 o más líneas de tratamiento sistémico. Alternativamente, progresión de la enfermedad dentro de los 24 meses desde el inicio del primer tratamiento con anticuerpo anti-CD20 y un agente alquilante (criterio POD24).</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🔬 Linfoma de células del manto (LCM)</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Diagnóstico histológico confirmado, refractario o en recaída tras 2 o más líneas de tratamiento sistémico, incluido un inhibidor de la tirosina-quinasa de Bruton (BTKi).</div>
+                </div>
+            </div>
         </div>
 
         <!-- ===== TAB 2: INFUSIÓN ===== -->
@@ -56,10 +78,14 @@
 
             <div class="warning-box" style="margin-top: 14px;">
                 <strong style="color: var(--accent-yellow);">Antes de infundir</strong><br>
-                Confirmar disponibilidad de tocilizumab y equipo de emergencias. Verificar
-                identidad del receptor (pulsera + etiquetado del producto) por dos personas
-                cualificadas. El producto debe infundirse en ≤30 minutos desde su descongelación,
-                preferiblemente por CVC, con monitorización de TA/FC/SatO2 cada 10 minutos.
+                Confirmar disponibilidad de tocilizumab y equipo de emergencias — en el caso
+                excepcional de desabastecimiento del fármaco, el SLC se trataría con corticoides
+                ± anakinra. Verificar identidad del receptor (pulsera + etiquetado del producto)
+                por dos personas cualificadas. EKG previo a la infusión y constantes basales
+                (TA/FC/Tª/diuresis/PVC). El producto debe infundirse en ≤30 minutos desde su
+                descongelación, preferiblemente por CVC, con monitorización de TA/FC/SatO2 cada
+                10 minutos; agitar suavemente la bolsa durante la infusión para prevenir
+                agregados, y lavar la vía con suero fisiológico 0,9% al finalizar.
             </div>
 
             <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 4px 0;">Efectos adversos de la infusión</p>
@@ -86,9 +112,10 @@
 
             <p style="font-size: 0.8rem; line-height: 1.5; margin-top: 14px;">
                 Tras la infusión, monitorización estrecha diaria durante los primeros 7-10 días
-                para detectar SLC, eventos neurológicos u otras toxicidades. Se recomienda que el
-                paciente permanezca cerca del centro (menos de 1 hora) al menos durante las 4
-                semanas siguientes a la infusión.
+                para detectar SLC, eventos neurológicos u otras toxicidades: constantes cada 6h y
+                analítica diaria con hemograma, bioquímica completa con ferritina y coagulación
+                completa. Se recomienda que el paciente permanezca cerca del centro (menos de 1
+                hora) al menos durante las 4 semanas siguientes a la infusión.
             </p>
         </div>
 
@@ -135,6 +162,14 @@
                 Encephalopathy), que debe evaluarse a diario (mínimo 3 veces/día) desde la
                 infusión hasta el alta.
             </p>
+            <div class="warning-box" style="margin-top: 10px;">
+                <strong style="color: var(--accent-yellow);">Antes de la infusión</strong><br>
+                Valoración neurológica basal obligatoria en todos los pacientes; EMG basal si hay
+                síntomas compatibles, y RMN previa al CAR-T según el producto o el riesgo
+                individual. Valorar iniciar levetiracetam 500 mg/12h vo desde el día +1 como
+                profilaxis anticomicial en pacientes de alto riesgo (hematotoxicidad, infiltración
+                del SNC o patología neurológica previa).
+            </div>
             <div class="form-group" style="margin-top: 10px;">
                 <label>Grado de ICANS (criterios ASTCT)</label>
                 <select id="cart-icans-select">

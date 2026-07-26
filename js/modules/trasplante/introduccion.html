@@ -63,6 +63,19 @@
                         banco de sangre de progenitores al mes (hemograma y bioquímica básica).
                     </div>
                 </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>👪 Estudio familiar ampliado y donantes menores</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        Si no hay donante familiar ideal ni aceptable y el paciente tiene un
+                        haplotipo de alta frecuencia poblacional (&gt;1%), puede ampliarse el
+                        estudio HLA a familiares de 2º grado (rama paterna o materna) portadores
+                        del haplotipo menos frecuente, antes de iniciar la búsqueda internacional.
+                        Los donantes familiares menores de edad solo se seleccionan si no existe
+                        un adulto compatible disponible y apto.
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -84,6 +97,49 @@
 
             <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Tratamiento de soporte común</p>
             <div class="micro-profiles" id="tph-soporte-lista"></div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Toxicidad específica y profilaxis por fármaco</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>💊 Perfil de toxicidad de los principales fármacos</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <strong>Busulfán:</strong> toxicidad principalmente hepática (SOS/EVOH) e
+                        hiperpigmentación; proconvulsivante — requiere anticonvulsivante asociado
+                        (clonazepam 0,5 mg vo cada 8h si &lt;70 kg, o 0,5-0,5-1 mg si &gt;70 kg,
+                        iniciando 24h antes del busulfán y manteniendo 24h después). Ajustar a peso
+                        ideal si IMC &gt;35; separar 48h de la infusión de progenitores.<br><br>
+                        <strong>Melfalán:</strong> toxicidad cardiaca y renal; infundir en 60
+                        minutos; requiere crioterapia desde antes del inicio hasta 20 minutos tras
+                        finalizar.<br><br>
+                        <strong>Ciclofosfamida:</strong> produce acroleína (responsable de la
+                        cistitis hemorrágica); toxicidad cardiaca, renal y de secreción inadecuada
+                        de ADH (SIADH) — requiere MESNA e hiperhidratación.<br><br>
+                        <strong>Tiotepa:</strong> toxicidad cutánea, hepática y neurológica; ciertos
+                        metabolitos tóxicos se eliminan por el sudor, por lo que requiere limpieza
+                        cutánea al menos 2 veces al día.<br><br>
+                        <strong>BCNU (carmustina):</strong> atraviesa la barrera hematoencefálica;
+                        toxicidad hepática y pulmonar (aguda y crónica); administrar en 1-2 horas
+                        con premedicación para evitar hipotensión, enrojecimiento y agitación.<br><br>
+                        <strong>Fludarabina:</strong> toxicidad tipo neuropatía; requiere ajuste
+                        según función renal.<br><br>
+                        <strong>Citarabina:</strong> toxicidad ocular (conjuntivitis), en SNC,
+                        cutánea y pulmonar; si se combina con fludarabina, administrarla antes que
+                        esta; requiere profilaxis de la conjuntivitis con colirio de corticoide.
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🌡️ Profilaxis del síndrome del injerto (auto-TPH)</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        En autólogo de mieloma múltiple y BEAM, prednisona según pauta descendente:
+                        30 mg/día (días +5 a +7), 15 mg/día (días +8 a +10), 10 mg/día (días +11 a
+                        +13) y 5 mg/día (días +15 a +16).
+                    </div>
+                </div>
+            </div>
 
             <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Irradiación corporal total (ICT)</p>
             <div class="micro-profiles">
@@ -169,7 +225,9 @@
                         mucositis, dolor, diarrea/estreñimiento — con soporte nutricional y
                         transfusional según protocolo. Aislamiento cuando el recuento baja de 500
                         neutrófilos/mm³. Se insiste en la movilidad y el ejercicio físico en la
-                        habitación, y en la higiene de mucosas oral y rectal.
+                        habitación, y en la higiene de mucosas oral y rectal. Analítica: además del
+                        hemograma diario y la bioquímica de control, se añade un <strong>control
+                        de coagulación semanal</strong>.
                     </div>
                 </div>
                 <div class="micro-prof-item">
@@ -291,6 +349,7 @@
                     <option value="alo-quimerismo-mixto-lt">Alo-TPH — quimerismo mixto (↑ linfocitos T receptor)</option>
                     <option value="alo-quimerismo-mixto-cd34">Alo-TPH — quimerismo mixto en CD34</option>
                     <option value="alo-reconstitucion-autologa">Alo-TPH — reconstitución autóloga establecida</option>
+                    <option value="alo-aplasia-medular">Alo-TPH por aplasia medular — quimerismo mixto ascendente</option>
                 </select>
             </div>
             <div class="result-box" style="text-align: left;">
@@ -342,7 +401,8 @@
                         con <strong>cefepime 2g/8h</strong> como alternativa, mínimo 5 días. Si se
                         sospecha contaminación de la muestra, el tratamiento queda a criterio
                         clínico. En cualquier caso, ajustar según el antibiograma, sobre todo si
-                        el paciente presenta fiebre.
+                        el paciente presenta fiebre. Se pueden realizar hemocultivos de control
+                        antes de suspender la pauta antibiótica si se considera necesario.
                     </div>
                 </div>
                 <div class="micro-prof-item">
@@ -416,7 +476,9 @@
                         recibe corticoides por EICH agudo o crónico u otro inmunosupresor,
                         profilaxis con alta actividad frente a Aspergillus — posaconazol 300 mg/24h
                         (reducir un 75% la dosis concomitante de ciclosporina/tacrolimus/sirolimus)
-                        o isavuconazol 200 mg/24h si hay toxicidad o EICR hepático.<br><br>
+                        o isavuconazol 200 mg/24h si hay toxicidad o EICR hepático (fuera de
+                        indicación de ficha técnica en profilaxis, y con mayor incidencia de
+                        infecciones de brecha por Candida).<br><br>
                         Diagnóstico precoz: 2 determinaciones semanales de galactomanano hasta el
                         alta y luego 1/semana hasta el día +180 (ajustable según riesgo).
                         Habitación con filtros HEPA y presión positiva mientras los neutrófilos
@@ -435,7 +497,8 @@
                         valaciclovir 500 mg 1-2 veces/día durante al menos 1 año post-TPH. Tras
                         exposición a varicela/zóster en receptores seronegativos, EICH crónico o
                         TPH reciente (&lt;2 años): inmunoglobulina anti-VZ en los primeros 10 días
-                        tras la exposición. Vacunación a partir de los 6 meses.<br><br>
+                        tras la exposición (0,2-1 ml/kg iv, o 625 U im, o Ig iv 300-500 mg/kg).
+                        Vacunación a partir de los 6 meses.<br><br>
                         <strong>CMV:</strong> letermovir 480 mg/24h en TPH haploidéntico, 9/10 y
                         casos seleccionados D+/R+, durante los primeros 100 días (prolongable a
                         +200 según riesgo, asociar en EICR con corticoides). Monitorización semanal
@@ -521,14 +584,18 @@
                     <div class="micro-prof-body">
                         <strong>AINE:</strong> más eficaces que el paracetamol pero nefrotóxicos,
                         antiagregantes y con efecto techo — no combinar dos AINE entre sí. Ibuprofeno
-                        400-600 mg/4-8h vo (máx. 2,4 g/día); dexketoprofeno 12,5 mg/4-6h vo (máx. 75
-                        mg/día); metamizol 500-2000 mg/6-8h (útil en dolor visceral, riesgo de
-                        citopenias severas).<br><br>
+                        400-600 mg/4-8h vo (máx. 2,4 g/día); naproxeno 250 mg/6-8h vo; dexketoprofeno
+                        12,5 mg/4-6h vo (máx. 75 mg/día); ketorolaco 10 mg/4-6h vo (máx. 40 mg/día) o
+                        10-30 mg/4-6h iv (máx. 90 mg/día, no superar 2 días); metamizol 500-2000
+                        mg/6-8h (útil en dolor visceral, riesgo de citopenias severas).<br><br>
                         <strong>Paracetamol:</strong> 500-1000 mg/4-6h vo o 1g/6h iv (máx. 4 g/día);
                         hepatotóxico a dosis altas pero sin toxicidad renal ni plaquetaria.<br><br>
                         <strong>Tricíclicos/anticonvulsivantes</strong> (dolor neuropático):
-                        amitriptilina 25 mg/día (10 mg/día en &gt;65 años), gabapentina 300 mg/8h vo,
-                        pregabalina 75 mg/12h — varios de ellos son mielotóxicos.<br><br>
+                        amitriptilina 25 mg/día (10 mg/día en &gt;65 años) o clomipramina (menos
+                        sedación y efectos anticolinérgicos, misma dosis que amitriptilina),
+                        gabapentina 300 mg/8h vo (máx. 2.400 mg/día), pregabalina 75 mg/12h (máx.
+                        300 mg/12h), clonazepam 0,5 mg/8h (máx. 2 mg/8h) — varios de ellos son
+                        mielotóxicos, sobre todo carbamacepina y fenitoína.<br><br>
                         <strong>Opioides:</strong> tramadol 50 mg/6-8h vo/iv; fentanilo en parche
                         (metabolitos inactivos, de elección en insuficiencia renal, tarda 16-24h en
                         alcanzar niveles estables); morfina 0,5-1 mg/h iv en perfusión continua,
@@ -578,11 +645,17 @@
                         lactosa, lípidos y gluten, dieta astringente). <strong>Enteral:</strong> más
                         fisiológica, pero no se recomienda de forma rutinaria en el TPH.
                         <strong>Parenteral:</strong> indicada en mucositis grado 3-4, íleo o vómitos
-                        incoercibles, o cuando no se cubre el 60-70% de los requerimientos en 3 días
-                        (cálculo calórico mediante Harris-Benedict × factor de estrés 1,3-1,5).<br><br>
+                        incoercibles, o cuando no se cubre el 60-70% de los requerimientos en 3 días.
+                        Cálculo calórico mediante la ecuación de Harris-Benedict multiplicada por un
+                        factor de estrés de 1,3-1,5: varones = 66 + 13,7×peso(kg) + 5×altura(cm) −
+                        6,8×edad(años); mujeres = 655 + 9,6×peso(kg) + 1,7×altura(cm) − 4,7×edad
+                        (años). Reparto de macronutrientes: hidratos de carbono 50-60%, proteínas
+                        15-20%, lípidos 30-35%.<br><br>
                         Seguimiento: peso diario, balance hídrico y glucemia capilar durante el
-                        ingreso; analítica básica cada 72h. Reintroducción de la dieta oral siempre
-                        gradual y según tolerancia tras un ayuno prolongado o nutrición parenteral.
+                        ingreso; analítica mínima cada 72h (urea, creatinina, iones incluidos calcio
+                        y magnesio, transaminasas, bilirrubina, proteínas totales y lípidos, más
+                        albúmina según protocolo). Reintroducción de la dieta oral siempre gradual y
+                        según tolerancia tras un ayuno prolongado o nutrición parenteral.
                     </div>
                 </div>
                 <div class="micro-prof-item">
@@ -603,18 +676,32 @@
                         autólogo, desde 2 semanas antes de la recogida de progenitores hasta 3 meses
                         post-TPH.<br><br>
                         <strong>Hematíes:</strong> transfusión restrictiva, umbral Hb 7-8 g/dL (8-9
-                        g/dL con comorbilidad relevante) con estabilidad hemodinámica. Ojo con la
-                        sobrecarga férrica por transfusiones crónicas repetidas.<br><br>
-                        <strong>Plaquetas:</strong> profilaxis si recuento ≤10×10⁹/L asintomático;
-                        mantener &gt;20×10⁹/L si hay sangrado activo, fiebre, infección activa o alto
-                        riesgo hemorrágico (mucositis, cistitis hemorrágica, EICH agudo). Preferir
-                        compatibilidad ABO/Rh; en refractariedad de causa inmune (descartar antes
-                        causas no inmunes), usar plaquetas de aféresis HLA-compatibles.<br><br>
-                        <strong>Incompatibilidad ABO</strong> (hasta el 40% de los alo-TPH): mayor,
-                        menor o bidireccional. No afecta al injerto de neutrófilos ni se relaciona
-                        con el rechazo, la EICH ni la supervivencia global — pero exige selección
-                        cuidadosa del grupo de los componentes a transfundir hasta confirmar
-                        quimerismo completo y Coombs directo negativo.
+                        g/dL con comorbilidad relevante) con estabilidad hemodinámica. En el adulto,
+                        1 concentrado de hematíes sube la Hb ~1 g/dL. Ojo con la sobrecarga férrica
+                        por transfusiones crónicas repetidas.<br><br>
+                        <strong>Plaquetas:</strong> pueden proceder de donante único (aféresis) o de
+                        varios donantes, igualmente eficaces salvo en aloinmunizados con Ac anti-HLA
+                        o anti-HPA (mejor aféresis HLA-compatible). Dosis habitual 2,5-3×10¹¹ en
+                        200-300 ml. Profilaxis si recuento ≤10×10⁹/L asintomático; mantener
+                        &gt;20×10⁹/L si hay sangrado activo, fiebre, infección activa o alto riesgo
+                        hemorrágico (mucositis, cistitis hemorrágica, EICH agudo). Preferir
+                        compatibilidad ABO/Rh (la incompatibilidad ABO puede reducir el incremento
+                        del recuento un 10-30%); en refractariedad de causa inmune (descartar antes
+                        causas no inmunes), usar plaquetas de aféresis HLA-compatibles. Eficacia:
+                        cese del sangrado y recuento corregido (ICR) a los 10-60 min = (recuento
+                        pre − recuento post) × superficie corporal (m²) / (plaquetas transfundidas
+                        ×10¹¹); se considera adecuado un ICR &gt;7,5.<br><br>
+                        <strong>Plasma fresco congelado:</strong> volumen 200-340 ml; dosis 10-15
+                        ml/kg, sube un 20% los factores de coagulación. Indicado tras el TPH, como
+                        líquido de reposición en el recambio plasmático de la PTT, en hemorragia por
+                        hepatopatía y en la CID.<br><br>
+                        <strong>Incompatibilidad ABO</strong> (hasta el 40% de los alo-TPH): mayor
+                        (títulos &gt;1:32 de anti-A/B en el receptor — reducir el volumen de
+                        hematíes a infundir a &lt;20 ml), menor (títulos &gt;1:256 en el donante —
+                        reducir el plasma a infundir) o bidireccional. No afecta al injerto de
+                        neutrófilos ni se relaciona con el rechazo, la EICH ni la supervivencia
+                        global — pero exige selección cuidadosa del grupo de los componentes a
+                        transfundir hasta confirmar quimerismo completo y Coombs directo negativo.
                     </div>
                 </div>
                 <div class="micro-prof-item">
@@ -687,9 +774,13 @@
                 limpieza del catéter central si el paciente es portador. Programar en hospital de
                 día el tratamiento con pentamidina en el TPH alogénico (y valorarlo en autólogos
                 seleccionados). El paciente y la familia reciben información de la programación de
-                las sucesivas consultas y protocolos analíticos, y se recalcan los signos de
-                alarma del libro de trasplante. Valoración psicológica y/o de trabajo social si
-                se precisa.
+                las sucesivas consultas y protocolos analíticos — valorar añadir pruebas cruzadas
+                en los pacientes que vayan a precisar soporte transfusional — y se recalcan los
+                signos de alarma del libro de trasplante. Si el paciente precisa medicación
+                hospitalaria, contactar con el Servicio de Farmacia para asegurar que la lleve
+                hasta la siguiente cita. Valoración psicológica y/o de trabajo social si se
+                precisa (incluida la gestión de alojamiento extrahospitalario para pacientes o
+                familiares de otras islas).
             </p>
             <div class="warning-box" style="margin-top: 12px;">
                 <strong style="color: var(--accent-yellow);">Recomendaciones específicas según patología y riesgo</strong><br>
@@ -697,7 +788,9 @@
                 la inmunosupresión (habitualmente en torno al día +45) y definir ya al alta qué
                 pacientes son candidatos a infusión de linfocitos del donante (ILD). En TPH
                 alogénico por leucemia aguda o SMD, confirmar la fecha del aspirado/biopsia de
-                médula ósea de control en torno al día +30.
+                médula ósea de control en torno al día +30. En pacientes procedentes de fuera de
+                Gran Canaria, el informe de alta debe indicar que el paciente y su cuidador deben
+                permanecer en la isla al menos 100 días post-TPH.
             </div>
         </div>
     </div>

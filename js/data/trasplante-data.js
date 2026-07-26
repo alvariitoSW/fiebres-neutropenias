@@ -6,7 +6,7 @@ export const falloInjertoData = {
     primario: {
         titulo: 'Fracaso primario de injerto',
         definicion: 'Falta de recuperación en el día +28 post-TPH: neutrófilos &lt;0.5x10⁹/L, plaquetas &lt;20x10⁹/L y hemoglobina &lt;80 g/L. En acondicionamiento de intensidad reducida (RIC), confirmar con quimerismo.',
-        incidencia: '&lt;1% en auto-TPH (sobre todo con sangre periférica). &lt;5% en alo-TPH mieloablativo 10/10. 10-30% en alo-TPH con depleción de linfocitos T. 5-20% en TPH con acondicionamiento RIC. 10-20% en TPH haploidéntico.'
+        incidencia: '&lt;1% en auto-TPH (sobre todo con sangre periférica). &lt;5% en alo-TPH mieloablativo 10/10. 10% en TPH con disparidades HLA. 10-30% en alo-TPH con depleción de linfocitos T. 5-20% en TPH con acondicionamiento RIC. 10-20% en TPH haploidéntico.'
     },
     secundario: {
         titulo: 'Fracaso secundario de injerto',
@@ -60,6 +60,10 @@ export const manejoFalloInjertoData = {
     'alo-reconstitucion-autologa': {
         titulo: 'Alo-TPH — reconstitución autóloga establecida',
         manejo: 'Planificar un segundo TPH según las características del paciente y su enfermedad de base, siempre con acondicionamiento (preferible de intensidad reducida). El donante haploidéntico puede ofrecer la ventaja de un acceso más rápido (descartando antes anticuerpos anti-HLA). Valorar añadir irradiación corporal total para mejorar el injerto. Edad avanzada, mal estado general y afectación importante de algún órgano se asocian a peor supervivencia global. Si se sospecha daño del estroma medular, el tratamiento con células mesenquimales es una alternativa, hoy por hoy de uso compasivo.'
+    },
+    'alo-aplasia-medular': {
+        titulo: 'Alo-TPH por aplasia medular — quimerismo mixto ascendente',
+        manejo: 'Aproximación diferente a la de las hemopatías malignas: ante un quimerismo mixto ascendente, en la mayoría de los casos se aumenta la inmunosupresión, pudiendo valorarse también infusión de linfocitos del donante (ILD) o eltrombopag. Lo habitual es permanecer con un quimerismo mixto estable — el descenso de la inmunosupresión se inicia a partir de los 6-9 meses, para retirarla en 1-1,5 años (protocolo GETH de aplasia medular, 2019).'
     }
 };
 
