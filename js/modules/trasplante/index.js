@@ -15,6 +15,7 @@ import {
     dolorEtiologiaData
 } from '../../data/trasplante-data.js';
 import { init as initCarT } from './car-t.js';
+import { init as initComplicaciones } from './complicaciones.js';
 
 function calcDonante() {
     const select = document.getElementById('tph-donante-select');
@@ -140,4 +141,5 @@ export function init() {
     calcDolor();
 
     initCarT();
+    initComplicaciones();
 }

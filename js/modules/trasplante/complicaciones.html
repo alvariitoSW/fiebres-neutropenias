@@ -1,0 +1,400 @@
+    <button class="back-btn btn-volver-trasplante-menu">← VOLVER</button>
+    <div class="diag-header">
+        <h2 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">Complicaciones post-TPH</h2>
+        <p>Infecciosas y no infecciosas — reconocimiento y manejo precoz</p>
+    </div>
+
+    <div class="card" id="panel-tph-comp-tabs">
+        <div class="tabs">
+            <div class="tab active" data-tab="comp-neutropenia">Neutropenia Febril</div>
+            <div class="tab" data-tab="comp-cateter">Infección Catéter</div>
+            <div class="tab" data-tab="comp-hongos">Infecciones Fúngicas</div>
+            <div class="tab" data-tab="comp-viricas">Infecciones Víricas</div>
+            <div class="tab" data-tab="comp-eich">EICH Agudo</div>
+            <div class="tab" data-tab="comp-noinfecciosas">Complicaciones No Infecciosas</div>
+        </div>
+
+        <!-- ===== TAB 1: NEUTROPENIA FEBRIL TPH ===== -->
+        <div id="comp-neutropenia" class="tab-content active">
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                La fiebre en fase de neutropenia afecta a la mayoría de los pacientes en TPH. En
+                ausencia de neutrófilos, los signos y síntomas de infección pueden faltar —
+                habitualmente la fiebre es el único síntoma — obligando al diagnóstico diferencial
+                con otras causas de fiebre en este periodo: infecciones víricas o fúngicas,
+                reacciones a fármacos o infusionales (haploidéntico), reacciones transfusionales,
+                síndrome del injerto o síndrome de liberación de citocinas.
+            </p>
+            <div class="micro-profiles" style="margin-top: 12px;">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🌡️ Definición de fiebre y de riesgo</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <strong>Fiebre:</strong> Tª &gt;38,3°C, o &gt;38°C mantenida durante 1h (descontar
+                        3°C si la medición es en oído).<br><br>
+                        <strong>Riesgo alto</strong> (ingreso + antibioterapia iv de amplio espectro) si
+                        se cumple cualquiera de: neutropenia intensa y prolongada (&lt;100/µL &gt;7 días),
+                        comorbilidad (hipotensión, neumonía, síntomas neurológicos o abdominales,
+                        afectación renal o hepática), o escala MASCC &lt;21. El TPH alogénico se
+                        considera de alto riesgo de forma estándar; el autólogo debe cumplir estos
+                        criterios para valorarse como tal.<br><br>
+                        <strong>Riesgo de bacteria multirresistente:</strong> según cultivos de
+                        vigilancia al ingreso (frotis nasal y rectal, también en domiciliario),
+                        epidemiología del centro e infecciones previas en los últimos 3-6 meses.
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🔬 Pruebas diagnósticas y biomarcadores</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        Exploración física completa (orofaringe, piel, región perianal, punto de
+                        inserción del catéter). Siempre 1 set de hemocultivos de sangre periférica y
+                        de cada luz del catéter (20 ml/botella). Muestras de cualquier foco
+                        sospechoso; Rx de tórax si hay síntomas respiratorios; urocultivo si clínica
+                        urinaria; PCR de virus faríngeo en época de gripe; investigar Clostridium
+                        difficile si hay diarrea.<br><br>
+                        La procalcitonina no está recomendada como guía del tratamiento antibiótico
+                        ni de su duración (aunque está más elevada en la bacteriemia). Los niveles de
+                        PCR &gt;20-30 mg/dl se asocian a mayor mortalidad.
+                    </div>
+                </div>
+            </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Tratamiento antibiótico empírico</p>
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                <strong>Escalada</strong> (cefepime): clínica no complicada, sin colonización previa
+                (6 meses) ni infección por multirresistentes, en centros con baja incidencia de
+                resistencias. <strong>Desescalada</strong> (piperacilina-tazobactam o meropenem,
+                ajustando a las colonizaciones conocidas): en el resto de situaciones. En paciente
+                grave hemodinámicamente inestable, iniciar rápido con meropenem + vancomicina. No se
+                recomienda cobertura anti-grampositivo resistente a betalactámicos de rutina (salvo
+                inestabilidad hemodinámica), ni vancomicina empírica pese a fiebre &gt;3 días.
+            </p>
+            <div class="form-group" style="margin-top: 10px;">
+                <label>Foco de infección sospechado</label>
+                <select id="comp-foco-select">
+                    <option value="orofaringea">Orofaríngeo / mucositis / esofagitis</option>
+                    <option value="colitis">Colitis neutropénica</option>
+                    <option value="perianal">Infección perianal</option>
+                    <option value="piel">Piel y tejidos blandos</option>
+                    <option value="paranasal">Infección paranasal</option>
+                    <option value="neumonia">Neumonía</option>
+                    <option value="itu">Infección del tracto urinario</option>
+                    <option value="snc">Infección del SNC</option>
+                    <option value="cvc">Infección de catéter venoso central</option>
+                </select>
+            </div>
+            <div class="result-box" style="text-align: left;">
+                <div id="comp-foco-texto" style="font-size: 0.85rem;"></div>
+            </div>
+
+            <div class="form-group" style="margin-top: 14px;">
+                <label>Germen multirresistente aislado</label>
+                <select id="comp-germen-select">
+                    <option value="blee">Productor de BLEE</option>
+                    <option value="ampc">Productor de AmpC</option>
+                    <option value="kpcOxa">Productor de KPC u OXA</option>
+                    <option value="xdr">Resistencia extensa a fármacos (XDR/PDR)</option>
+                </select>
+            </div>
+            <div class="result-box" style="text-align: left;">
+                <div id="comp-germen-texto" style="font-size: 0.85rem;"></div>
+            </div>
+
+            <div class="warning-box" style="margin-top: 14px;">
+                <strong style="color: var(--accent-yellow);">Duración del tratamiento</strong><br>
+                Infección clínicamente documentada: hasta resolución completa de síntomas y mínimo
+                72h afebril. Infección microbiológicamente documentada: mínimo 7 días y al menos 4
+                días afebril. Si la neutropenia persiste tras suspender el antibiótico, vigilar 24-48h
+                y restaurar la profilaxis. Fiebre persistente 2-4 días: nueva búsqueda de foco: si hay
+                estabilidad clínica, no modificar la antibioterapia empírica.
+            </div>
+        </div>
+
+        <!-- ===== TAB 2: INFECCIÓN DE CATÉTER ===== -->
+        <div id="comp-cateter" class="tab-content">
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                El catéter venoso central es imprescindible en el TPH (quimioterapia, progenitores,
+                soporte, nutrición parenteral, extracciones), pero es también un riesgo de
+                complicaciones — si no es necesario, es mejor retirarlo. En este servicio se usan
+                catéteres de larga duración tipo PICC (1 luz para CAR-T, 2 luces para auto y alo-TPH).
+            </p>
+            <div class="micro-profiles" style="margin-top: 12px;">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>📋 Tipos de infección y microorganismos</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <strong>Colonización:</strong> &lt;15 UFC (semicuantitativo) o &lt;100 UFC
+                        (cuantitativo) del segmento distal, túnel o proximal. <strong>Flebitis:</strong>
+                        eritema, induración, calor o dolor en la vena, o supuración.
+                        <strong>Infección del punto de inserción/trayecto subcutáneo/bolsa
+                        subcutánea:</strong> eritema, induración, dolor, supuración o necrosis en la
+                        localización correspondiente. <strong>Bacteriemia/fungemia relacionada con el
+                        líquido de infusión:</strong> mismo microorganismo en el líquido y en
+                        hemocultivo periférico, sin otro foco. <strong>Bacteriemia/fungemia relacionada
+                        con el catéter:</strong> hemocultivo periférico positivo sin otro foco +
+                        colonización del catéter por el mismo microorganismo (criterios cuantitativos
+                        o de tiempo diferencial a la positividad ≥2h).<br><br>
+                        Microorganismos más frecuentes: estafilococo coagulasa negativo (30-60%), S.
+                        aureus (15-20%), bacilos gramnegativos (15-30%), Candida spp (5-20%).
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🧼 Medidas preventivas</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        Educación del personal en colocación y mantenimiento, vigilancia de la zona de
+                        inserción, máxima asepsia, lavado de manos antes y después de manipular el
+                        catéter o el apósito. Limpieza cutánea con clorhexidina acuosa al 2%, alcohol
+                        70% o iodopovidona 10%; gasas estériles + apósito o apósito transparente
+                        semipermeable. Reemplazar equipos y alargaderas cada 72h; nutrición parenteral
+                        en &lt;24h por luz exclusiva. Aplicar antiséptico en conexiones y puertos antes
+                        de cada manipulación.
+                    </div>
+                </div>
+            </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Actuación ante un episodio febril</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Extracción de cultivos de sangre periférica y de cada luz del catéter. Iniciar
+                empíricamente cefepime + vancomicina o daptomicina (linezolid no recomendado);
+                escalar o desescalar según antibiograma y cultivos de vigilancia de multirresistentes
+                previos.
+            </p>
+            <div class="warning-box" style="margin-top: 10px;">
+                <strong style="color: var(--accent-yellow);">Indicaciones de retirada del catéter</strong><br>
+                Infección documentada con signos locales · sepsis grave o shock · infección por
+                Candida spp, S. aureus, Pseudomona o micobacterias · bacteriemia persistente en
+                hemocultivo de control a las 48-72h de iniciada la antibioterapia · recaída del mismo
+                microorganismo tras un tratamiento reciente completado · fiebre persistente sin foco ·
+                metástasis sépticas (embolismo pulmonar, endocarditis, retinitis).
+            </div>
+            <p style="font-size: 0.85rem; line-height: 1.6; margin-top: 10px;">
+                <strong>Situaciones especiales</strong> — fiebre persistente pese a retirada del
+                catéter con hemocultivos positivos: investigar endocarditis o foco metastásico; si es
+                Candida o S. aureus, valorar ecocardiograma transesofágico. <strong>Duración del
+                tratamiento</strong> desde el último hemocultivo positivo: 7 días para estafilococo
+                coagulasa negativo o bacilos gramnegativos; 14 días (2 semanas) para S. aureus o
+                Candida.
+            </p>
+        </div>
+
+        <!-- ===== TAB 3: INFECCIONES FÚNGICAS (TRATAMIENTO) ===== -->
+        <div id="comp-hongos" class="tab-content">
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                Incidencia variable de infección fúngica invasora (IFI): 1% en auto-TPH, 7-12% en
+                alo-TPH. Candida albicans y Aspergillus fumigatus siguen siendo los agentes más
+                frecuentes, aunque han aumentado los hongos emergentes (Trichosporon, Fusarium,
+                Scedosporium, mucorales), más difíciles de diagnosticar y tratar y con mayor
+                mortalidad.
+            </p>
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 16px 0 6px 0;">Criterios diagnósticos EORTC/MSG</p>
+            <div class="form-group">
+                <select id="comp-eortc-select">
+                    <option value="probada">IFI probada</option>
+                    <option value="probable">IFI probable</option>
+                    <option value="posible">IFI posible</option>
+                </select>
+            </div>
+            <div class="result-box" style="text-align: left;">
+                <div id="comp-eortc-texto" style="font-size: 0.85rem;"></div>
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px; line-height: 1.5;">
+                Criterios del huésped: neutropenia &lt;500/µL &gt;10 días, receptor de alo-TPH,
+                corticoides ≥0,3 mg/kg/día &gt;3 semanas, o inmunosupresores anti-linfocitos T en los
+                3 meses previos. Antígeno galactomanano positivo &gt;0,8 (o dos veces &gt;0,5) pierde
+                mucho valor por falsos negativos si el paciente ya recibe azoles.
+            </p>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Tratamiento</p>
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                <strong>Empírico</strong> (IFI probable, aún sin documentación microbiológica):
+                anfotericina B liposomal 3 mg/kg/día, tanto si la profilaxis previa era con
+                fluconazol (incluida alta sospecha de mucorales) como con triazoles.
+            </p>
+            <div class="form-group" style="margin-top: 10px;">
+                <label>Patógeno identificado (tratamiento dirigido)</label>
+                <select id="comp-hongo-select">
+                    <option value="aspergillusFumigatus">Aspergillus fumigatus</option>
+                    <option value="aspergillusTerreusFlavus">Aspergillus terreus / flavus</option>
+                    <option value="candida">Candida spp.</option>
+                    <option value="mucorales">Mucorales (zigomicosis)</option>
+                    <option value="fusariumScedosporium">Fusarium / Scedosporium</option>
+                    <option value="trichosporon">Trichosporon</option>
+                </select>
+            </div>
+            <div class="result-box" style="text-align: left;">
+                <div id="comp-hongo-texto" style="font-size: 0.85rem;"></div>
+            </div>
+            <div class="warning-box" style="margin-top: 12px;">
+                Vigilar la hepatotoxicidad de triazoles y equinocandinas (no la anidulafungina), con
+                ajuste de dosis. Monitorizar niveles de voriconazol; evitarlo si el filtrado
+                glomerular es &lt;30 ml/min. Vigilar la función renal con anfotericina B liposomal.
+            </div>
+        </div>
+
+        <!-- ===== TAB 4: INFECCIONES VÍRICAS ===== -->
+        <div id="comp-viricas" class="tab-content">
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                El citomegalovirus (CMV) es una de las infecciones oportunistas más representativas
+                del TPH; la mejora en la prevención ha hecho que la forma clínica más frecuente sea
+                hoy la afectación gastrointestinal (≥70%), alta (esofagitis) o baja (colitis). Otros
+                virus de la familia herpes y los virus respiratorios también complican con frecuencia
+                la evolución, sobre todo en el alo-TPH.
+            </p>
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 16px 0 6px 0;">Citomegalovirus (CMV)</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>📋 Definiciones y factores de riesgo</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <strong>Infección:</strong> aislamiento del virus o detección de proteínas
+                        virales/DNA/mRNA en cualquier líquido o tejido. <strong>Reactivación:</strong>
+                        misma cepa que la infección original, entre el implante y el día +100 (se
+                        detectan reactivaciones más tardías con las medidas profilácticas actuales).
+                        <strong>Enfermedad:</strong> infección/reactivación con traducción clínica por
+                        respuesta inmune celular insuficiente. La viremia con síntomas NO basta para
+                        diagnosticar enfermedad — se exige documentación tisular (biopsia/histología)
+                        según la localización (GI, neumonitis, hepatitis, SNC, retinitis).<br><br>
+                        Factores de riesgo: edad &gt;20 años, receptor CMV+ (o R-/D+), TPH de DNE,
+                        diferencias HLA, depleción linfoide, EICH, pobre reconstitución inmune
+                        CD4/CD8, corticoides &gt;1 mg/kg/día.
+                    </div>
+                </div>
+            </div>
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 16px 0 6px 0;">Tratamiento según escenario</p>
+            <div class="form-group">
+                <select id="comp-cmv-select">
+                    <option value="anticipada">Terapia anticipada (PCR positiva, sin enfermedad)</option>
+                    <option value="enfermedad">Enfermedad establecida por CMV</option>
+                    <option value="resistenteRefractario">CMV resistente o refractario</option>
+                </select>
+            </div>
+            <div class="result-box" style="text-align: left;">
+                <div id="comp-cmv-texto" style="font-size: 0.85rem;"></div>
+            </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Otras infecciones víricas</p>
+            <div class="micro-profiles" id="comp-otras-viricas-lista"></div>
+        </div>
+
+        <!-- ===== TAB 5: EICH AGUDO ===== -->
+        <div id="comp-eich" class="tab-content">
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                Complicación frecuente (incidencia 10-60% según factores de riesgo), con la piel, el
+                tracto gastrointestinal y el hígado como principales órganos diana. Su diagnóstico es
+                fundamentalmente clínico y a menudo de exclusión — CMV, adenovirus, rotavirus,
+                norovirus, Cryptosporidium, micobacterias y C. difficile pueden simular una EICR
+                intestinal. Se recomienda el uso de los criterios MAGIC para gradar la afectación de
+                cada órgano semanalmente, con evaluación de respuesta en los días +3, +5 y +7 tras
+                iniciar corticoides.
+            </p>
+            <div class="micro-profiles" style="margin-top: 10px;">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>⚠️ Factores de riesgo y manifestaciones</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        Factores de riesgo: diferencias HLA o DNE, mujer donante con embarazos o
+                        transfusiones previas, mayor edad de donante y receptor, donante mujer →
+                        receptor varón, acondicionamiento mieloablativo, progenitores de sangre
+                        periférica, ausencia de depleción de linfocitos T, serología CMV
+                        receptor-/donante+.<br><br>
+                        <strong>Piel:</strong> rash maculopapuloso entre la 2ª y 5ª semana, inicio en
+                        cuello/orejas/hombros/palmas/plantas; la necrosis epidérmica con bullas es la
+                        forma más grave. <strong>Hígado:</strong> ictericia con bilirrubina conjugada y
+                        fosfatasa alcalina elevadas. <strong>Intestino:</strong> la más grave y difícil
+                        de tratar — anorexia, náuseas, vómitos, diarrea verdosa con mucosidad, dolor
+                        cólico, y en casos graves hemorragia e íleo; biopsia obligatoria para el
+                        diagnóstico definitivo (mejor rendimiento en biopsia gástrica, mínimo 5 tomas).
+                    </div>
+                </div>
+            </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 18px 0 6px 0;">Tratamiento de primera línea según gravedad</p>
+            <div class="form-group">
+                <select id="comp-eich-grado-select">
+                    <option value="grado1">Grado I (solo cutáneo, &lt;50% superficie, sin bullas)</option>
+                    <option value="grado2leve">Grado II — cutáneo aislado o GI alto exclusivamente</option>
+                    <option value="grado2a4">Grado II-IV (mayor afectación)</option>
+                </select>
+            </div>
+            <div class="result-box" style="text-align: left;">
+                <div id="comp-eich-grado-texto" style="font-size: 0.85rem;"></div>
+            </div>
+
+            <div class="warning-box" style="margin-top: 12px;">
+                <strong style="color: var(--accent-yellow);">Corticorrefractariedad, corticodependencia y corticointolerancia</strong><br>
+                <strong>Refractaria:</strong> progresión tras 3-5 días con prednisona ≥2 mg/kg/día, o
+                ausencia de respuesta parcial a los 7 días, o ausencia de respuesta completa/muy buena
+                parcial tras &gt;14 días. <strong>Dependencia:</strong> incapacidad de bajar de 2
+                mg/kg/día tras un tratamiento inicial exitoso, o reactivación durante el descenso.
+                <strong>Intolerancia:</strong> contraindicación por comorbilidad (diabetes no
+                controlada, miopatía o osteoporosis esteroidea grave).
+            </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 18px 0 6px 0;">Tratamiento de segunda línea (EICR agudo refractario)</p>
+            <div class="micro-profiles" id="comp-eich-segunda-lista"></div>
+
+            <div class="warning-box" style="margin-top: 12px;">
+                <strong style="color: var(--accent-yellow);">Soporte durante el tratamiento</strong><br>
+                Afectación cutánea grado III-IV: manejo similar al gran quemado, con equipo
+                multidisciplinar. Afectación GI: valoración nutricional, considerando nutrición
+                parenteral si la diarrea supera 500 ml/día (reintroducción oral gradual al bajar de
+                ese umbral), con octreótido u otro antidiarreico y analgesia. Profilaxis
+                antiinfecciosa: cotrimoxazol o pentamidina para P. jirovecii, aciclovir, posaconazol
+                300 mg/día si corticoides &gt;10 mg/día (isavuconazol 200 mg/día si hay afectación
+                hepática), quinolonas en la fase aguda, y monitorización de CMV semanal (y de VEB si
+                hay tratamiento de segunda línea).
+            </div>
+        </div>
+
+        <!-- ===== TAB 6: COMPLICACIONES NO INFECCIOSAS ===== -->
+        <div id="comp-noinfecciosas" class="tab-content">
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                Complicaciones precoces (antes del día +100) con frecuencia originadas en un daño
+                endotelial sistémico, que se superponen entre sí en signos y síntomas, dificultando el
+                diagnóstico diferencial. El pulmón no es el único órgano afecto y, sin tratamiento
+                precoz, pueden evolucionar rápidamente a fallo multiorgánico.
+            </p>
+            <div class="micro-profiles" id="comp-noinfecciosas-lista" style="margin-top: 12px;"></div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Cistitis hemorrágica según etiología</p>
+            <div class="form-group">
+                <select id="comp-cistitis-select">
+                    <option value="toxica">Tóxica (ciclofosfamida, otros citostáticos, ICT)</option>
+                    <option value="bkVirus">Vírica — poliomavirus BK</option>
+                    <option value="adenovirus">Vírica — adenovirus</option>
+                </select>
+            </div>
+            <div class="result-box" style="text-align: left;">
+                <div id="comp-cistitis-texto" style="font-size: 0.85rem;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="border-top: 1px solid var(--accent-green);">
+        <h3 style="color: var(--accent-green);">Fuentes</h3>
+        <p style="font-size: 0.85rem; line-height: 1.5;">
+            Contenido basado en los protocolos internos (PNT) del Servicio de Hematología y
+            Hemoterapia — Unidad de Trasplante Hematopoyético (UTH), adaptados a la voz de esta
+            app sin reproducir el documento original.
+        </p>
+        <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+            Bibliografía citada por esos protocolos: Manual de Trasplante Hematopoyético (Enric
+            Carreras), 6ª edición, 2022 · The EBMT Handbook, edición revisada 2024 · 10ª Conferencia
+            Europea sobre Infecciones en Leucemia (ECIL-10, 2024/2025) — CMV, antifúngicos y otras
+            infecciones oportunistas · Guía de práctica clínica integral de la Enfermedad Injerto
+            contra Receptor 2021 (GETH) · Puyuelo A. SOS/VOD After Allo-HSCT: The Impact of New
+            Diagnostic Criteria, Ultrasound and Elastography Findings (EBMT 2023) · Mohty M, et al.
+            Bone Marrow Transplant 2023 · Schoettler ML, et al. Am J Hematol 2025;100(11):2040-2051
+            (narsoplimab en TA-TMA) · Schoettler ML, et al. Transplant Cell Ther 2025;31(9):610-623
+            (criterios de respuesta TA-TMA) · Hematopoietic stem cell transplant-associated
+            thrombotic microangiopathy: current paradigm and novel therapies. Bone Marrow
+            Transplantation 2018;53:129-137.
+        </p>
+    </div>

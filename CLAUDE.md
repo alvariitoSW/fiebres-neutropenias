@@ -97,19 +97,29 @@ directamente en `index.html`) con 4 botones grandes:
    CID, PTT y Síndrome de Lisis Tumoral, de momento solo avisos
    "Próximamente".
 4. **Trasplante de Progenitores Hematopoyéticos** (`modules/trasplante/`) —
-   submenú con dos sub-vistas, ambas con contenido real:
+   submenú con tres sub-vistas, todas con contenido real:
    **Introducción** (selección de donante, acondicionamiento — clasificación
    por intensidad, tabla diagnóstico→régimen, soporte común, ICT —, ingreso y
    controles en planta con Clostridioides difficile y traslado a UMI,
    fallo/rechazo de injerto con selector interactivo, manejo de productos de
-   terapia celular con incidencias microbiológicas, criterios de alta — ver
-   `js/modules/trasplante/index.js` y `js/data/trasplante-data.js`) y
+   terapia celular con incidencias microbiológicas, soporte clínico —
+   profilaxis antiinfecciosa, mucositis, dolor, náuseas, nutrición,
+   transfusión, G-CSF, infusión de progenitores —, criterios de alta — ver
+   `js/modules/trasplante/index.js` y `js/data/trasplante-data.js`),
    **CAR-T y complicaciones que llevan a UCI** (indicaciones/criterios de
    selección por producto, infusión y linfodepleción, selector interactivo
    de grado de SLC/CRS y de ICANS con tratamiento, otras complicaciones
    precoces — ver `js/modules/trasplante/car-t.js` y
-   `js/data/car-t-data.js`). El contenido viene de protocolos internos (PNT)
-   del Servicio de Hematología y
+   `js/data/car-t-data.js`) y **Complicaciones post-TPH** (neutropenia
+   febril específica del TPH con selector por foco y por germen
+   multirresistente, infección de catéter, tratamiento antifúngico dirigido,
+   infecciones víricas incluido CMV, EICH agudo con selector de grado, y
+   complicaciones no infecciosas — EVOH/SOS, síndrome del injerto, síndrome
+   de fuga capilar, hemorragia alveolar difusa, síndrome de neumonía
+   idiopática, microangiopatía trombótica, diarrea y cistitis hemorrágica —
+   ver `js/modules/trasplante/complicaciones.js` y
+   `js/data/complicaciones-tph-data.js`). El contenido viene de protocolos
+   internos (PNT) del Servicio de Hematología y
    Hemoterapia — nunca reproduzcas esos documentos originales ni los nombres
    del personal que figuran en ellos; extrae solo el contenido clínico y
    reescríbelo con la voz propia de la app, citando de forma genérica

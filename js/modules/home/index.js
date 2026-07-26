@@ -31,9 +31,11 @@ export function init() {
         menu: document.getElementById('trasplante-menu-view'),
         intro: document.getElementById('tph-intro-view'),
         cart: document.getElementById('tph-cart-view'),
+        complicaciones: document.getElementById('tph-complicaciones-view'),
     });
     document.getElementById('btn-tph-intro').addEventListener('click', () => trasplanteLevel.show('intro'));
     document.getElementById('btn-tph-cart').addEventListener('click', () => trasplanteLevel.show('cart'));
+    document.getElementById('btn-tph-complicaciones').addEventListener('click', () => trasplanteLevel.show('complicaciones'));
     document.querySelectorAll('.btn-volver-trasplante-menu').forEach(b => b.addEventListener('click', () => trasplanteLevel.show('menu')));
 
     topLevel.show('home');
