@@ -1,13 +1,317 @@
     <button class="back-btn btn-volver-trasplante-menu">← VOLVER</button>
     <div class="diag-header">
         <h2 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">Introducción al TPH</h2>
-        <p>Contenido en preparación</p>
+        <p>Selección de donante, ingreso, complicaciones precoces y alta</p>
     </div>
 
-    <div class="card" style="border-top: 1px solid var(--accent-purple);">
-        <h3 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">🚧 Próximamente</h3>
-        <p style="font-size: 0.85rem; line-height: 1.5; color: var(--text-muted);">
-            Esta sección todavía no tiene contenido clínico. Se irá completando en próximas
-            actualizaciones.
+    <div class="card" id="panel-tph-tabs">
+        <div class="tabs">
+            <div class="tab active" data-tab="tph-donante">Selección Donante</div>
+            <div class="tab" data-tab="tph-planta">Ingreso y Planta</div>
+            <div class="tab" data-tab="tph-injerto">Fallo de Injerto</div>
+            <div class="tab" data-tab="tph-productos">Productos TC</div>
+            <div class="tab" data-tab="tph-alta">Criterios de Alta</div>
+        </div>
+
+        <!-- ===== TAB 1: SELECCIÓN DE DONANTE ===== -->
+        <div id="tph-donante" class="tab-content active">
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                El objetivo del estudio de histocompatibilidad es minimizar el riesgo de
+                complicaciones post-TPH derivadas del mismatch HLA donante-receptor: fallo de
+                injerto, rechazo, EICH aguda y crónica, y mayor mortalidad. El donante elegido
+                depende también de la urgencia clínica del trasplante.
+            </p>
+            <div class="form-group" style="margin-top: 14px;">
+                <label>Tipo de donante</label>
+                <select id="tph-donante-select">
+                    <option value="hermanoIdeal">Hermano HLA idéntico (10/10)</option>
+                    <option value="hermanoAceptable">Donante familiar aceptable (9/10)</option>
+                    <option value="dne">Donante no emparentado (DNE, REDMO)</option>
+                    <option value="haploidentico">Donante haploidéntico</option>
+                </select>
+            </div>
+            <div class="result-box" style="text-align: left;">
+                <div id="tph-donante-titulo" style="font-weight: bold; color: var(--accent-purple); text-align: center; font-size: 1rem;">—</div>
+                <div id="tph-donante-definicion" style="font-size: 0.85rem; margin: 8px 0;"></div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 8px;">Jerarquía de criterios</div>
+                <div id="tph-donante-jerarquia" style="font-size: 0.85rem; margin-top: 4px;"></div>
+            </div>
+            <div class="warning-box" style="margin-top: 14px;">
+                <strong style="color: var(--accent-yellow);">Retipaje obligatorio</strong><br>
+                Antes de iniciar la movilización del donante o el acondicionamiento del paciente
+                (lo que suceda antes), es obligado confirmar el tipaje HLA sobre una segunda
+                muestra del receptor y del donante.
+            </div>
+        </div>
+
+        <!-- ===== TAB 2: INGRESO Y PLANTA ===== -->
+        <div id="tph-planta" class="tab-content">
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                Resumen del recorrido asistencial desde el ingreso hasta el alta. Para el detalle
+                completo de cada fase, consulta los protocolos específicos del servicio.
+            </p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🏥 Pre-ingreso e ingreso</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        Siempre que sea posible, el estudio pre-TPH se realiza de forma
+                        ambulatoria. Al ingreso: valoración médica completa (diagnóstico y
+                        situación de la enfermedad, tratamiento actualizado, antecedentes,
+                        exploración física con ECOG/peso/talla/superficie corporal). En todo
+                        ingreso para TPH alogénico se realizan cultivos de vigilancia de
+                        bacterias multirresistentes (frotis nasal y rectal) y cultivo de todas
+                        las luces del catéter.
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>💊 Acondicionamiento</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        Comprobación de checklist del paciente y firma de consentimientos. En
+                        alogénico: confirmar día 0, donante apto y retipaje realizado. En
+                        autólogo: confirmar dosis de progenitores preservada, día 0 y número de
+                        días de infusión. Controles analíticos habituales durante el
+                        acondicionamiento:
+                        <ul style="margin: 8px 0 0 18px; padding: 0;">
+                            <li><strong>Hemograma:</strong> diario cuando baje de 500 neutrófilos y/o 25.000 plaquetas, hasta el injerto.</li>
+                            <li><strong>Bioquímica completa:</strong> mínimo 2 veces por semana, más un control de orina semanal.</li>
+                            <li><strong>PCR CMV</strong> (solo alogénico): mínimo 1 vez por semana.</li>
+                            <li><strong>Antígeno galactomanano</strong> (alogénico y autólogos de LMA): mínimo 1 vez por semana.</li>
+                            <li><strong>Niveles de inmunosupresores:</strong> mínimo 2 veces por semana.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>💉 Día 0 (infusión de progenitores)</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        Analítica completa por la mañana (incluye CMV y antígeno galactomanano).
+                        Confirmación con la unidad de CPH de la hora de infusión. Revisión del
+                        catéter central. Premedicación 20 minutos antes según el producto a
+                        infundir. Monitorización durante la infusión y registro de constantes y
+                        reacciones adversas.
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🩸 Fase de aplasia</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        Vigilancia médica y de enfermería de las complicaciones precoces:
+                        procesos febriles, datos sugestivos de enfermedad veno-oclusiva hepática,
+                        mucositis, dolor, diarrea/estreñimiento — con soporte nutricional y
+                        transfusional según protocolo. Aislamiento cuando el recuento baja de 500
+                        neutrófilos/mm³. Se insiste en la movilidad y el ejercicio físico en la
+                        habitación, y en la higiene de mucosas oral y rectal.
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🌱 Fase de injerto (día 0 a +28 aprox.)</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        Valoración clínica de los signos de injerto y de sus posibles
+                        complicaciones, como el síndrome del implante o el EICR agudo. Es muy
+                        importante confirmar que los niveles de inmunosupresión estén en rango
+                        terapéutico. Se mantiene la analítica de protocolo semanal (PCR CMV,
+                        antígeno galactomanano, niveles de inmunosupresión) hasta el alta.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== TAB 3: FALLO DE INJERTO ===== -->
+        <div id="tph-injerto" class="tab-content">
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                La aparición de fallo de injerto, injerto pobre o rechazo en el post-TPH inmediato
+                es un evento relativamente frecuente que exige considerar de forma rápida y
+                sistemática las distintas causas posibles.
+            </p>
+            <div class="form-group" style="margin-top: 10px;">
+                <label>Entidad</label>
+                <select id="tph-injerto-select">
+                    <option value="primario">Fracaso primario de injerto</option>
+                    <option value="secundario">Fracaso secundario de injerto</option>
+                    <option value="pobre">Injerto pobre</option>
+                    <option value="rechazo">Rechazo del injerto</option>
+                </select>
+            </div>
+            <div class="result-box" style="text-align: left;">
+                <div id="tph-injerto-titulo" style="font-weight: bold; color: var(--accent-red); text-align: center; font-size: 1rem;">—</div>
+                <div id="tph-injerto-definicion" style="font-size: 0.85rem; margin: 8px 0;"></div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 8px;">Incidencia</div>
+                <div id="tph-injerto-incidencia" style="font-size: 0.85rem; margin-top: 4px;"></div>
+            </div>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin: 12px 0 4px 0;">
+                <strong>Recuerda:</strong> el injerto se define como la consecución y mantenimiento
+                durante 3 días consecutivos de neutrófilos &gt;0.5x10⁹/L, plaquetas &gt;20x10⁹/L y
+                hemoglobina &gt;80 g/L libre de transfusión. En TPH haploidéntico y en
+                acondicionamientos de intensidad reducida, se recomienda confirmar el origen
+                alogénico mediante quimerismo.
+            </p>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 4px 0;">Causas más frecuentes</p>
+            <ul id="tph-causas-lista" style="font-size: 0.85rem; line-height: 1.6; margin: 0 0 0 18px; padding: 0;"></ul>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 4px 0;">Factores de riesgo</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🧬 Relacionados con los progenitores</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Cantidad de CD34 infundida (causa modificable). Fuente: mayor riesgo con sangre de cordón umbilical &gt; médula ósea &gt; sangre periférica. Esplenomegalia (secuestro de progenitores). Depleción de linfocitos T y selección de CD34.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🩹 Relacionados con el nicho medular</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Fibrosis medular, infiltración y sobrecarga férrica.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🩸 Relacionados con la enfermedad</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Enfermedad activa y refractaria, con más de 1 año desde el diagnóstico.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🛡️ Inmunológicos</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Diferencias HLA. Anticuerpos anti-HLA frente al donante (HLA-DSA) — valorar desensibilización. Incompatibilidad ABO mayor: más riesgo de aplasia de serie roja.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>⚙️ Relacionados con la técnica</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Acondicionamiento de intensidad reducida (controlar quimerismo en linfocitos T; si &lt;25-50% valorar intervención por alto riesgo de fallo de injerto). Inmunosupresión deficiente. EICR. Fármacos o virus mielotóxicos.</div>
+                </div>
+            </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Manejo clínico según contexto</p>
+            <div class="form-group">
+                <select id="tph-manejo-select">
+                    <option value="auto">Auto-TPH</option>
+                    <option value="alo-quimerismo-completo">Alo-TPH — quimerismo completo del donante</option>
+                    <option value="alo-quimerismo-mixto-lt">Alo-TPH — quimerismo mixto (↑ linfocitos T receptor)</option>
+                    <option value="alo-quimerismo-mixto-cd34">Alo-TPH — quimerismo mixto en CD34</option>
+                    <option value="alo-reconstitucion-autologa">Alo-TPH — reconstitución autóloga establecida</option>
+                </select>
+            </div>
+            <div class="result-box" style="text-align: left;">
+                <div id="tph-manejo-titulo" style="font-weight: bold; color: var(--accent-green); text-align: center; font-size: 0.95rem;">—</div>
+                <div id="tph-manejo-texto" style="font-size: 0.85rem; margin-top: 8px;"></div>
+            </div>
+        </div>
+
+        <!-- ===== TAB 4: PRODUCTOS DE TERAPIA CELULAR ===== -->
+        <div id="tph-productos" class="tab-content">
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                A todos los productos de terapia celular postmanipulación se les realiza un
+                cultivo microbiológico aerobio, anaerobio y de gérmenes de crecimiento lento (7
+                días); los resultados se emiten a los 7 días. Las células CAR-T quedan excluidas,
+                ya que su control lo realiza la industria farmacéutica responsable.
+            </p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>❄️ Productos criopreservados</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        Los resultados del cultivo deben conocerse antes de iniciar el
+                        acondicionamiento del receptor. Si el resultado es positivo, se debe
+                        notificar en la historia clínica e informar al paciente; la aceptación o
+                        no del producto para la infusión es una decisión clínica del médico
+                        responsable.
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🧊 Productos en fresco</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        Los resultados salen a los 5-7 días tras la infusión. Misma actitud
+                        médica que en los criopreservados; si se sospecha contaminación, es
+                        recomendable extraer hemocultivos al paciente antes de iniciar
+                        antibioterapia.
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>💊 Actitud según el germen aislado</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        Predominan los grampositivos (estafilococos): <strong>teicoplanina 400
+                        mg/24h</strong> (con dosis de carga), mínimo 5 días. Si son bacilos
+                        gramnegativos: <strong>quinolona</strong> (ciprofloxacino/levofloxacino),
+                        con <strong>cefepime 2g/8h</strong> como alternativa, mínimo 5 días. Si se
+                        sospecha contaminación de la muestra, el tratamiento queda a criterio
+                        clínico. En cualquier caso, ajustar según el antibiograma, sobre todo si
+                        el paciente presenta fiebre.
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>⚠️ Productos con riesgo biológico o en cuarentena</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        Producto en cuarentena: aún se desconocen los resultados de los
+                        marcadores infecciosos. Producto con riesgo biológico: positividad para
+                        algún marcador infeccioso, con riesgo de enfermedad transmisible. Si se
+                        infunde un producto en estas condiciones, es obligado informar al
+                        paciente, reflejarlo en la historia clínica/consentimiento informado, y
+                        firmar la liberación excepcional del producto.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== TAB 5: CRITERIOS DE ALTA ===== -->
+        <div id="tph-alta" class="tab-content">
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px 0;">🧮 Marca los criterios que cumple</p>
+            <label class="checkbox-label"><input type="checkbox" class="tph-alta-check"> Inmunosupresión en rango (TPH alogénico)</label>
+            <label class="checkbox-label"><input type="checkbox" class="tph-alta-check"> Ingesta hídrica adecuada, mínimo 2 litros al día</label>
+            <label class="checkbox-label"><input type="checkbox" class="tph-alta-check"> Adecuada tolerancia e ingesta oral, sin vómitos, diarrea ni náuseas</label>
+            <div class="result-box" style="margin-top: 10px;">
+                <div id="tph-alta-resultado" style="font-size: 0.9rem; font-weight: bold;">⏳ ESPERANDO DATOS...</div>
+            </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 4px 0;">Al alta</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Informe de alta y receta electrónica explicando el tratamiento (es recomendable
+                dar medicación para las siguientes 24h hasta que se active la receta). Cita para
+                limpieza del catéter central si el paciente es portador. Programar en hospital de
+                día el tratamiento con pentamidina en el TPH alogénico (y valorarlo en autólogos
+                seleccionados). El paciente y la familia reciben información de la programación de
+                las sucesivas consultas y protocolos analíticos, y se recalcan los signos de
+                alarma del libro de trasplante. Valoración psicológica y/o de trabajo social si
+                se precisa.
+            </p>
+            <div class="warning-box" style="margin-top: 12px;">
+                <strong style="color: var(--accent-yellow);">Recomendaciones específicas según patología y riesgo</strong><br>
+                En LMA/SMD: definir el riesgo del paciente para decidir la velocidad de bajada de
+                la inmunosupresión (habitualmente en torno al día +45) y definir ya al alta qué
+                pacientes son candidatos a infusión de linfocitos del donante (ILD). En TPH
+                alogénico por leucemia aguda o SMD, confirmar la fecha del aspirado/biopsia de
+                médula ósea de control en torno al día +30.
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="border-top: 1px solid var(--accent-green);">
+        <h3 style="color: var(--accent-green);">Fuentes</h3>
+        <p style="font-size: 0.85rem; line-height: 1.5;">
+            Contenido basado en los protocolos internos (PNT) del Servicio de Hematología y
+            Hemoterapia — Unidad de Trasplante Hematopoyético (UTH), adaptados a la voz de esta
+            app sin reproducir el documento original.
+        </p>
+        <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+            Bibliografía citada por esos protocolos: Manual de Trasplante Hematopoyético
+            (Enric Carreras), 6ª edición, 2022 · The EBMT Handbook, edición revisada 2024 ·
+            Estándares JACIE, 8ª edición · Recomendaciones y requerimientos mínimos de
+            compatibilidad en la búsqueda de donantes no emparentados (ONT, agosto 2025).
         </p>
     </div>

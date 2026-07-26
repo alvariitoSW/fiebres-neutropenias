@@ -88,14 +88,32 @@ directamente en `index.html`) con 4 botones grandes:
    `citopenias-menu.html`, y una entrada más en el switcher `citopeniasLevel`
    de `modules/home/index.js`.
 2. **Reconocimiento Temprano del Paciente Hematológico**
-   (`modules/reconocimiento/`) — de momento solo un aviso "Próximamente".
+   (`modules/reconocimiento/`) — fracaso respiratorio agudo en el paciente
+   hematológico crítico: epidemiología, contexto/causas, enfoque DIRECT,
+   diagnóstico, síndromes y toxicidades, manejo/pronóstico, terapias
+   dirigidas, decisiones de ingreso y fin de vida. Basado en Azoulay et al.
+   (Blood 2024 y Blood Reviews 2025, ver `js/modules/reconocimiento/`).
 3. **Síndromes Hematológicos Urgentes** (`modules/sindromes-urgentes/`) —
    CID, PTT y Síndrome de Lisis Tumoral, de momento solo avisos
    "Próximamente".
 4. **Trasplante de Progenitores Hematopoyéticos** (`modules/trasplante/`) —
-   submenú con dos sub-vistas: Introducción y CAR-T y complicaciones que
-   llevan a UCI (CRS, ICANS). Ambas de momento solo tienen un aviso
-   "Próximamente".
+   submenú con dos sub-vistas: **Introducción** (`modules/trasplante/`, ya
+   con contenido real: selección de donante, ingreso y controles en planta,
+   fallo/rechazo de injerto con selector interactivo, manejo de productos de
+   terapia celular con incidencias microbiológicas, criterios de alta — ver
+   `js/modules/trasplante/index.js` y `js/data/trasplante-data.js`) y
+   **CAR-T y complicaciones que llevan a UCI** (CRS, ICANS), esta última
+   todavía con solo un aviso "Próximamente". El contenido de Introducción
+   viene de protocolos internos (PNT) del Servicio de Hematología y
+   Hemoterapia — nunca reproduzcas esos documentos originales ni los nombres
+   del personal que figuran en ellos; extrae solo el contenido clínico y
+   reescríbelo con la voz propia de la app, citando de forma genérica
+   ("protocolo del Servicio...") más la bibliografía que citen (Manual de
+   Trasplante Hematopoyético, EBMT Handbook, Estándares JACIE, etc.). Si
+   llegan más protocolos de este mismo lote, sigue este mismo criterio de
+   filtrado: descarta los puramente administrativos (orden de archivo,
+   digitalización, gestor de datos, contingencia informática) e incorpora
+   solo los que aporten valor clínico real.
 
 **Escalas Generales** (`modules/generales/`, qSOFA/SRIS/SOFA/Glasgow) ya NO
 es una de las 4 categorías del menú: es un botón pequeño y fijo arriba a la
