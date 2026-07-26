@@ -5,8 +5,14 @@ import {
     falloInjertoData,
     causasFalloInjerto,
     manejoFalloInjertoData,
-    criteriosDonanteData
+    criteriosDonanteData,
+    intensidadAcondicionamientoData,
+    regimenesAcondicionamientoData,
+    soporteComunAcondicionamiento,
+    irradiacionCorporalTotalData,
+    clostridioidesData
 } from '../../data/trasplante-data.js';
+import { init as initCarT } from './car-t.js';
 
 function calcDonante() {
     const select = document.getElementById('tph-donante-select');
@@ -39,6 +45,45 @@ function renderCausas() {
     lista.innerHTML = causasFalloInjerto.map(c => `<li>${c}</li>`).join('');
 }
 
+function renderAcondicionamiento() {
+    document.getElementById('tph-intensidad-lista').innerHTML = intensidadAcondicionamientoData.map(i => `
+        <div class="micro-prof-item">
+            <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                <span>⚗️ ${i.nivel}</span> <span>+</span>
+            </div>
+            <div class="micro-prof-body">${i.descripcion}</div>
+        </div>
+    `).join('');
+
+    const tabla = document.getElementById('tph-regimenes-tabla');
+    regimenesAcondicionamientoData.forEach(r => {
+        tabla.innerHTML += `<tr><td>${r.diagnostico}</td><td>${r.regimen}</td><td>${r.tipo}</td></tr>`;
+    });
+
+    document.getElementById('tph-soporte-lista').innerHTML = soporteComunAcondicionamiento.map(s => `
+        <div class="micro-prof-item">
+            <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                <span>${s.titulo}</span> <span>+</span>
+            </div>
+            <div class="micro-prof-body">${s.texto}</div>
+        </div>
+    `).join('');
+
+    document.getElementById('tph-ict-indicacion').innerHTML = irradiacionCorporalTotalData.indicacion;
+    document.getElementById('tph-ict-dosis').innerHTML = irradiacionCorporalTotalData.dosis;
+    document.getElementById('tph-ict-antiemesis').innerHTML = irradiacionCorporalTotalData.antiemesis;
+}
+
+function renderClostridioides() {
+    document.getElementById('tph-cdiff-factores').innerHTML = clostridioidesData.factoresRiesgo;
+    document.getElementById('tph-cdiff-diagnostico').innerHTML = clostridioidesData.diagnostico;
+    document.getElementById('tph-cdiff-leve').innerHTML = clostridioidesData.tratamiento.leveMod;
+    document.getElementById('tph-cdiff-grave').innerHTML = clostridioidesData.tratamiento.grave;
+    document.getElementById('tph-cdiff-complicada').innerHTML = clostridioidesData.tratamiento.complicada;
+    document.getElementById('tph-cdiff-recidiva').innerHTML = clostridioidesData.tratamiento.primeraRecidiva;
+    document.getElementById('tph-cdiff-aislamiento').innerHTML = clostridioidesData.aislamiento;
+}
+
 function calcAlta() {
     const checks = document.querySelectorAll('.tph-alta-check');
     const count = Array.from(checks).filter(c => c.checked).length;
@@ -58,6 +103,9 @@ export function init() {
     document.getElementById('tph-donante-select').addEventListener('change', calcDonante);
     calcDonante();
 
+    renderAcondicionamiento();
+    renderClostridioides();
+
     document.getElementById('tph-injerto-select').addEventListener('change', calcInjerto);
     calcInjerto();
     renderCausas();
@@ -67,4 +115,6 @@ export function init() {
 
     document.querySelectorAll('.tph-alta-check').forEach(c => c.addEventListener('change', calcAlta));
     calcAlta();
+
+    initCarT();
 }

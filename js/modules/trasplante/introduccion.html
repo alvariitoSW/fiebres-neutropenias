@@ -7,6 +7,7 @@
     <div class="card" id="panel-tph-tabs">
         <div class="tabs">
             <div class="tab active" data-tab="tph-donante">Selección Donante</div>
+            <div class="tab" data-tab="tph-acondicionamiento">Acondicionamiento</div>
             <div class="tab" data-tab="tph-planta">Ingreso y Planta</div>
             <div class="tab" data-tab="tph-injerto">Fallo de Injerto</div>
             <div class="tab" data-tab="tph-productos">Productos TC</div>
@@ -41,6 +42,47 @@
                 Antes de iniciar la movilización del donante o el acondicionamiento del paciente
                 (lo que suceda antes), es obligado confirmar el tipaje HLA sobre una segunda
                 muestra del receptor y del donante.
+            </div>
+        </div>
+
+        <!-- ===== TAB 1B: ACONDICIONAMIENTO ===== -->
+        <div id="tph-acondicionamiento" class="tab-content">
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                El acondicionamiento combina quimioterapia (y a veces radioterapia) administrada
+                antes de la infusión de progenitores. Objetivo: eliminar la enfermedad residual
+                (único objetivo en el autólogo) y generar inmunosupresión suficiente para que las
+                células del donante no sean rechazadas (alogénico).
+            </p>
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 16px 0 6px 0;">Clasificación según intensidad</p>
+            <div class="micro-profiles" id="tph-intensidad-lista"></div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Regímenes según diagnóstico</p>
+            <table class="data-table" id="tph-regimenes-tabla">
+                <tr><th>Diagnóstico</th><th>Régimen</th><th>Tipo de TPH</th></tr>
+            </table>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Tratamiento de soporte común</p>
+            <div class="micro-profiles" id="tph-soporte-lista"></div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Irradiación corporal total (ICT)</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>☢️ Indicación, dosis y antiemesis</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <strong>Indicación:</strong> <span id="tph-ict-indicacion"></span><br><br>
+                        <strong>Dosis:</strong> <span id="tph-ict-dosis"></span><br><br>
+                        <strong>Antiemesis:</strong> <span id="tph-ict-antiemesis"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning-box" style="margin-top: 14px;">
+                Los esquemas y dosis exactas de cada protocolo de acondicionamiento (día a día)
+                deben confirmarse siempre contra el protocolo completo del servicio antes de
+                prescribir — aquí se resume la elección del régimen y el soporte común, no la
+                pauta completa fármaco por fármaco.
             </div>
         </div>
 
@@ -119,6 +161,35 @@
                         importante confirmar que los niveles de inmunosupresión estén en rango
                         terapéutico. Se mantiene la analítica de protocolo semanal (PCR CMV,
                         antígeno galactomanano, niveles de inmunosupresión) hasta el alta.
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🚨 Traslado a UMI</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        Las causas más frecuentes de traslado a UCI de un paciente trasplantado
+                        son la insuficiencia respiratoria, el shock séptico y el síndrome de
+                        obstrucción sinusoidal/enfermedad veno-oclusiva hepática. La evaluación
+                        precoz por el intensivista y el traslado rápido buscan evitar la
+                        intubación orotraqueal, que ensombrece el pronóstico — sin olvidar
+                        respetar la autonomía del paciente y su familia, idealmente ya conocida
+                        antes del TPH.
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🦠 Clostridioides difficile</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <strong>Factores de riesgo:</strong> <span id="tph-cdiff-factores"></span><br><br>
+                        <strong>Diagnóstico:</strong> <span id="tph-cdiff-diagnostico"></span><br><br>
+                        <strong>Tratamiento leve-moderado:</strong> <span id="tph-cdiff-leve"></span><br><br>
+                        <strong>Tratamiento grave:</strong> <span id="tph-cdiff-grave"></span><br><br>
+                        <strong>Infección complicada</strong> (muy grave/fulminante — shock, megacolon, íleo): <span id="tph-cdiff-complicada"></span><br><br>
+                        <strong>Primera recidiva:</strong> <span id="tph-cdiff-recidiva"></span><br><br>
+                        <strong>Aislamiento:</strong> <span id="tph-cdiff-aislamiento"></span>
+                        <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 8px;">Recomendaciones ECIL-10 (2025) para infección por C. difficile en neoplasias hematológicas.</div>
                     </div>
                 </div>
             </div>
@@ -312,6 +383,8 @@
             Bibliografía citada por esos protocolos: Manual de Trasplante Hematopoyético
             (Enric Carreras), 6ª edición, 2022 · The EBMT Handbook, edición revisada 2024 ·
             Estándares JACIE, 8ª edición · Recomendaciones y requerimientos mínimos de
-            compatibilidad en la búsqueda de donantes no emparentados (ONT, agosto 2025).
+            compatibilidad en la búsqueda de donantes no emparentados (ONT, agosto 2025) ·
+            10ª Conferencia Europea sobre Infecciones en Leucemia (ECIL-10, 2025) — recomendaciones
+            finales sobre infección por Clostridioides difficile en neoplasias hematológicas.
         </p>
     </div>

@@ -1,13 +1,212 @@
     <button class="back-btn btn-volver-trasplante-menu">← VOLVER</button>
     <div class="diag-header">
         <h2 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">CAR-T y Complicaciones que Llevan a UCI</h2>
-        <p>Síndrome de liberación de citoquinas (CRS) · Neurotoxicidad (ICANS)</p>
+        <p>Indicaciones, infusión, síndrome de liberación de citoquinas (SLC/CRS) y neurotoxicidad (ICANS)</p>
     </div>
 
-    <div class="card" style="border-top: 1px solid var(--accent-purple);">
-        <h3 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">🚧 Próximamente</h3>
-        <p style="font-size: 0.85rem; line-height: 1.5; color: var(--text-muted);">
-            Esta sección todavía no tiene contenido clínico. Se irá completando en próximas
-            actualizaciones.
+    <div class="card" id="panel-cart-tabs">
+        <div class="tabs">
+            <div class="tab active" data-tab="cart-indicaciones">Indicaciones</div>
+            <div class="tab" data-tab="cart-infusion">Infusión</div>
+            <div class="tab" data-tab="cart-slc">SLC / CRS</div>
+            <div class="tab" data-tab="cart-icans">Neurotoxicidad</div>
+            <div class="tab" data-tab="cart-otras">Otras Complicaciones</div>
+        </div>
+
+        <!-- ===== TAB 1: INDICACIONES ===== -->
+        <div id="cart-indicaciones" class="tab-content active">
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                Las células CAR-T son linfocitos T del propio paciente (autólogos, o de donante en
+                los alogénicos) modificados genéticamente in vitro para expresar un receptor de
+                antígeno quimérico que les da especificidad frente a las células malignas. La
+                modificación genética la realiza el fabricante con un vector viral (retrovirus,
+                lentivirus u otros) que porta el gen del receptor quimérico.
+            </p>
+            <div class="micro-profiles">
+                <div id="cart-productos-lista"></div>
+            </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Criterios de inclusión más frecuentes (linfomas)</p>
+            <ul id="cart-inclusion-lista" style="font-size: 0.85rem; line-height: 1.6; margin: 0 0 0 18px; padding: 0;"></ul>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Criterios de exclusión</p>
+            <ul id="cart-exclusion-lista" style="font-size: 0.85rem; line-height: 1.6; margin: 0 0 0 18px; padding: 0;"></ul>
+        </div>
+
+        <!-- ===== TAB 2: INFUSIÓN ===== -->
+        <div id="cart-infusion" class="tab-content">
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                Previo a la infusión, el paciente debe presentarse en el comité de terapia celular
+                confirmando la fecha y la llegada del producto. La quimioterapia de
+                linfodepleción se administra en los días previos, y la infusión de las células
+                CAR-T se realiza entre 2 y 7 días después de finalizar dicho régimen.
+            </p>
+            <table class="data-table">
+                <tr><th>Producto</th><th>Régimen de linfodepleción</th><th>Días</th></tr>
+                <tr><td>Yescarta (axi-cel)</td><td>Ciclofosfamida 500 mg/m² + Fludarabina 30 mg/m²</td><td>-5, -4, -3</td></tr>
+                <tr><td>Carvykti (cilta-cel)</td><td>Ciclofosfamida 300 mg/m² + Fludarabina 30 mg/m²</td><td>-5, -4, -3</td></tr>
+                <tr><td>Tecartus (brexu-cel)</td><td>Ciclofosfamida 900 mg/m² + Fludarabina 25 mg/m²</td><td>Flu -4,-3,-2; Cy -2</td></tr>
+                <tr><td>Abecma (ide-cel)</td><td>Ciclofosfamida 900 mg/m² + Fludarabina 30 mg/m²</td><td>-5, -4, -3</td></tr>
+            </table>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px;">
+                Premedicación habitual: paracetamol 1000 mg + dexclorfeniramina 5 mg. No se
+                recomienda el uso profiláctico de corticoides sistémicos en las 72h previas al
+                inicio de la linfodepleción.
+            </p>
+
+            <div class="warning-box" style="margin-top: 14px;">
+                <strong style="color: var(--accent-yellow);">Antes de infundir</strong><br>
+                Confirmar disponibilidad de tocilizumab y equipo de emergencias. Verificar
+                identidad del receptor (pulsera + etiquetado del producto) por dos personas
+                cualificadas. El producto debe infundirse en ≤30 minutos desde su descongelación,
+                preferiblemente por CVC, con monitorización de TA/FC/SatO2 cada 10 minutos.
+            </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 4px 0;">Efectos adversos de la infusión</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>😋 Trastornos del gusto (DMSO)</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">La mayoría de los pacientes nota sabor a ajo durante o tras la infusión; es un efecto directo del crioprotector (DMSO), generalmente bien tolerado.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>⚠️ Reacción anafiláctica (rara)</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Tratar con hidrocortisona 100-200 mg y dexclorfeniramina 5 mg; si hay broncoespasmo, añadir salbutamol nebulizado (0.5-1.5 cc en 3 cc SF) y oxigenoterapia si es necesario. Valorar ingreso en UCI.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🩹 Reacción vagal por histamina (la más frecuente)</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Hipotensión severa, enrojecimiento cutáneo, disnea con algo de broncoespasmo y posible dolor abdominal. Mismo tratamiento que la reacción anafiláctica; suele ceder en pocos minutos.</div>
+                </div>
+            </div>
+
+            <p style="font-size: 0.8rem; line-height: 1.5; margin-top: 14px;">
+                Tras la infusión, monitorización estrecha diaria durante los primeros 7-10 días
+                para detectar SLC, eventos neurológicos u otras toxicidades. Se recomienda que el
+                paciente permanezca cerca del centro (menos de 1 hora) al menos durante las 4
+                semanas siguientes a la infusión.
+            </p>
+        </div>
+
+        <!-- ===== TAB 3: SLC / CRS ===== -->
+        <div id="cart-slc" class="tab-content">
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                El síndrome de liberación de citoquinas (SLC) es una reacción inflamatoria
+                secundaria a la inmunoterapia. La mediana de inicio es a los 2-3 días de la
+                infusión (típicamente en la primera semana), con una duración mediana de 7-8
+                días. Clínica: fiebre (signo más frecuente), hipotensión, hipoxemia, toxicidad de
+                órgano (renal, hepática), y otros (exantema, artromialgias, náuseas, cefalea,
+                taquicardia/arritmias, elevación de dímero D, hipofibrinogenemia, sangrado).
+            </p>
+            <div class="form-group" style="margin-top: 10px;">
+                <label>Grado de SLC (criterios ASTCT)</label>
+                <select id="cart-slc-select">
+                    <option value="1">Grado 1</option>
+                    <option value="2">Grado 2</option>
+                    <option value="3">Grado 3</option>
+                    <option value="4">Grado 4</option>
+                    <option value="refractario">SLC refractario</option>
+                </select>
+            </div>
+            <div class="result-box" style="text-align: left;">
+                <div id="cart-slc-titulo" style="font-weight: bold; color: var(--accent-red); text-align: center; font-size: 1rem;">—</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 8px;">Criterio</div>
+                <div id="cart-slc-criterio" style="font-size: 0.85rem; margin-top: 4px;"></div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 10px;">Tratamiento</div>
+                <div id="cart-slc-tratamiento" style="font-size: 0.85rem; margin-top: 4px;"></div>
+            </div>
+        </div>
+
+        <!-- ===== TAB 4: NEUROTOXICIDAD / ICANS ===== -->
+        <div id="cart-icans" class="tab-content">
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                El síndrome de neurotoxicidad asociado a células efectoras inmunes (ICANS) tiene
+                una incidencia del 20-70% según el producto y la población. Manifestaciones
+                precoces: afasia (síntoma más característico, sobre todo para la nominación),
+                temblor, disgrafia, inatención, letargia leve. Manifestaciones graves: crisis
+                comiciales, debilidad focal, incontinencia, afasia global, edema cerebral. La
+                cefalea aislada NO se considera criterio de ICANS. Inicio típico a los 4-7 días de
+                la infusión; puede ser bifásico (2ª fase a partir del día 5, en ~10% de los
+                pacientes). La gradación se basa en el score ICE (Immune Effector Cell-Associated
+                Encephalopathy), que debe evaluarse a diario (mínimo 3 veces/día) desde la
+                infusión hasta el alta.
+            </p>
+            <div class="form-group" style="margin-top: 10px;">
+                <label>Grado de ICANS (criterios ASTCT)</label>
+                <select id="cart-icans-select">
+                    <option value="1">Grado 1</option>
+                    <option value="2">Grado 2</option>
+                    <option value="3">Grado 3</option>
+                    <option value="4">Grado 4</option>
+                    <option value="refractario">ICANS refractario</option>
+                </select>
+            </div>
+            <div class="result-box" style="text-align: left;">
+                <div id="cart-icans-titulo" style="font-weight: bold; color: var(--accent-red); text-align: center; font-size: 1rem;">—</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 8px;">Criterio</div>
+                <div id="cart-icans-criterio" style="font-size: 0.85rem; margin-top: 4px;"></div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 10px;">Tratamiento</div>
+                <div id="cart-icans-tratamiento" style="font-size: 0.85rem; margin-top: 4px;"></div>
+            </div>
+            <div class="warning-box" style="margin-top: 14px;">
+                <strong style="color: var(--accent-yellow);">Ante focalidad neurológica</strong><br>
+                TC craneal urgente en todo paciente con focalidad, obligado si ICANS grado ≥2.
+                Descartar siempre otras causas (sangrado intracraneal por coagulopatía,
+                infección). Punción lumbar solo si fiebre persistente pese a tratamiento anti-SLC
+                o sospecha de infección del SNC.
+            </div>
+        </div>
+
+        <!-- ===== TAB 5: OTRAS COMPLICACIONES ===== -->
+        <div id="cart-otras" class="tab-content">
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                Además del SLC y el ICANS, los pacientes tratados con CAR-T pueden presentar otras
+                complicaciones precoces (desde la infusión hasta los primeros 28 días),
+                relacionadas principalmente con la rápida expansión de las células CAR-T.
+            </p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>⚡ Síndrome de lisis tumoral</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Secundario a la rápida destrucción de células tumorales tras la infusión. Obliga a un control estricto de la función renal y los iones, e instauración de tratamiento preventivo en pacientes de alto riesgo.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🔥 Síndrome de activación macrofágica</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Sospechar en pacientes que han desarrollado SLC y que además presentan ferritina &gt;10.000 ng/mL con daño orgánico en 2 o más órganos.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🦠 Infecciones</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">Los pacientes tratados con CAR-T se consideran de alto riesgo de infección a todos los efectos: uso de profilaxis (reservada sobre todo para neutropenias intensas y prolongadas) y manejo del tratamiento antibiótico empírico de la fiebre igual que en el paciente neutropénico de alto riesgo.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="border-top: 1px solid var(--accent-green);">
+        <h3 style="color: var(--accent-green);">Fuentes</h3>
+        <p style="font-size: 0.85rem; line-height: 1.5;">
+            Contenido basado en los protocolos internos (PNT) del Servicio de Hematología y
+            Hemoterapia — Unidad de Trasplante Hematopoyético (UTH), adaptados a la voz de esta
+            app sin reproducir el documento original.
+        </p>
+        <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+            Bibliografía citada por esos protocolos: ficha técnica de cada producto ·
+            Estándares JACIE 8ª edición · Manual de Trasplante Hematopoyético (Enric Carreras),
+            6ª edición 2022 · The EBMT Handbook 2024 · Lee DW, et al. ASTCT Consensus Grading for
+            CRS and Neurologic Toxicity. Biol Blood Marrow Transplant. 2019;25(4):625-638 ·
+            Gazeau N, et al. Anakinra for Refractory CRS or ICANS after CAR-T. Transplant Cell
+            Ther. 2023;29(7):430-437 · Jain MD, et al. How I Treat Refractory CRS and ICANS.
+            Blood. 2023;141(20):2430-2442 · Santomasso BD, et al. How I Treat Unique and
+            Difficult-to-Manage Cases of CAR-T-Associated Neurotoxicity. Blood.
+            2023;141(20):2443-2451.
         </p>
     </div>

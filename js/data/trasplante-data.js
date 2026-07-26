@@ -85,3 +85,51 @@ export const criteriosDonanteData = {
         jerarquia: 'Por este orden: <strong>HLA</strong> (elegir donante con antígeno ausente para el que el receptor tiene anticuerpos, si es posible — se prefiere un DNE 9/10 frente a un haploidéntico con antígenos frente a los que el receptor tiene DSA) → edad (más joven) → serología CMV idéntica (evitar donante seronegativo/receptor seropositivo) → alorreactividad KIR (haplotipo del donante BB o AB preferible) → grupo sanguíneo. Sin orden establecido: sexo, embarazos previos, peso, transfusiones — igual que en el hermano idéntico.'
     }
 };
+
+export const intensidadAcondicionamientoData = [
+    { nivel: 'Mieloablativo (AMA)', descripcion: 'Produce citopenias intensas que no pueden recuperarse sin soporte de progenitores hematopoyéticos.' },
+    { nivel: 'Intensidad reducida (AIR)', descripcion: 'Intermedio entre mieloablativo y no mieloablativo. Incluye: ICT &lt;5 Gy en dosis única (u 8 Gy fraccionada), busulfán &lt;9 mg/kg oral (o dosis equivalente IV), melfalán &lt;140 mg/m², tiotepa &lt;10 mg/kg.' },
+    { nivel: 'No mieloablativo (ANM)', descripcion: 'Produce citopenias moderadas, recuperables sin soporte de progenitores.' }
+];
+
+export const regimenesAcondicionamientoData = [
+    { diagnostico: 'LMA / SMD', regimen: 'BU-FLU (2, 3 o 4 días de busulfán) o Treosulfán-FLU', tipo: 'Alogénico' },
+    { diagnostico: 'LLA / patología linfoide', regimen: 'ICT-FLU, BU-FLU (2, 3 o 4 días) o Treosulfán-FLU', tipo: 'Alogénico' },
+    { diagnostico: 'Mieloide y linfoide (con enfermedad)', regimen: 'BU-FLU (2, 3 o 4 días) o Treosulfán-FLU', tipo: 'Alogénico haploidéntico' },
+    { diagnostico: 'Linfoma de Hodgkin', regimen: 'BU-FLU o Treosulfán-FLU', tipo: 'Alogénico haploidéntico' },
+    { diagnostico: 'Mieloide y linfoide', regimen: 'TBF (treosulfán-busulfán-fludarabina)', tipo: 'Alogénico de intensidad reducida' },
+    { diagnostico: 'Mieloide y linfoide (rescate)', regimen: 'FLU-MEL', tipo: 'Alogénico de rescate' },
+    { diagnostico: 'Aplasia medular', regimen: 'Protocolo GETH', tipo: 'Alogénico haploidéntico' },
+    { diagnostico: 'LMA', regimen: 'BEA', tipo: 'Autólogo' },
+    { diagnostico: 'Linfomas', regimen: 'BEAM', tipo: 'Autólogo' },
+    { diagnostico: 'Linfoma no Hodgkin con afectación de SNC', regimen: 'BCNU-TT (BRAM)', tipo: 'Autólogo' },
+    { diagnostico: 'Mieloma múltiple', regimen: 'Melfalán 200 (infusión IV directa en 5 min desde 2022)', tipo: 'Autólogo' }
+];
+
+export const soporteComunAcondicionamiento = [
+    { titulo: '💧 Hidratación y diuresis alcalina', texto: 'Sueroterapia 2-3 L/m²/24h en perfusión continua desde la noche previa al inicio de la quimioterapia hasta 24h tras finalizarla. Bicarbonato si hay carga tumoral elevada y no hay riesgo de sobrecarga. Alopurinol si hay carga tumoral elevada o leucocitosis.' },
+    { titulo: '🤢 Antieméticos y protección gástrica', texto: 'En alogénico: granisetrón IV + lorazepam + aprepitant (los días de ciclofosfamida e ICT) + dexametasona. En autólogo: granisetrón y aprepitant con melfalán/BCNU, seguido de ondansetrón oral. Protección gástrica con pantoprazol; ácido ursodesoxicólico como protección de EVOH en alogénico.' },
+    { titulo: '🦠 Profilaxis antiinfecciosa', texto: 'Fluconazol desde el día +5 (no en autólogo salvo LMA; alternativa anidulafungina si toxicidad por azoles o alto riesgo). Aciclovir oral desde el inicio. Ciprofloxacino desde el día -1 en alogénico (levofloxacino en autólogo ambulatorio desde el +1).' },
+    { titulo: '🧬 Profilaxis de EICH', texto: 'Con ciclofosfamida post-TPH: ciclofosfamida a dosis altas días +3 y +4, seguida de tacrolimus (o ciclosporina/sirolimus) desde el +5 y micofenolato de mofetilo hasta el +28. Sin ciclofosfamida post-TPH: ciclosporina desde el día -1 + metotrexato en días fijos post-infusión.' },
+    { titulo: '🩸 Profilaxis de cistitis hemorrágica', texto: 'MESNA al 100% de la dosis de ciclofosfamida, iniciando 20 minutos antes y manteniendo 24h después, junto con hiperhidratación y furosemida tras la ciclofosfamida.' },
+    { titulo: '🦠 Profilaxis de CMV', texto: 'Letermovir en receptores IgG+ sometidos a TPH haploidéntico, 9/10, con corticoides o con injerto pobre y quimera completa.' },
+    { titulo: '🧠 Profilaxis de recidiva en SNC', texto: 'Triple terapia intratecal durante el acondicionamiento en LLA, LMC en fase acelerada, linfomas con criterios de riesgo y LMA de riesgo.' }
+];
+
+export const irradiacionCorporalTotalData = {
+    indicacion: 'Se usa sobre todo en el acondicionamiento de leucemias linfoblásticas agudas, o en enfermedad sistémica de alto riesgo de recaída que tolere un régimen mieloablativo (linfomas, LMA), habitualmente en pacientes menores de 40 años. Se asocia principalmente a fludarabina o ciclofosfamida.',
+    dosis: '12 Gy totales, en fracciones de 2 Gy, 2 veces al día, durante 3 días consecutivos (mínimo 6h entre sesiones).',
+    antiemesis: 'Granisetrón IV 3 mg/12h + dexametasona 4 mg/12h + aprepitant (120 mg el día 1, 80 mg los días 2 y 3), puesto al menos 20 minutos antes de cada sesión; el paciente debe acudir en ayunas.'
+};
+
+export const clostridioidesData = {
+    factoresRiesgo: 'Tratamiento antibiótico mantenido, hospitalización prolongada, edad avanzada, disminución de la secreción gástrica (IBP/anti-H2), quimioterapia, neutropenia y TPH.',
+    diagnostico: 'Indicado en heces diarreicas (≥3 deposiciones blandas en 24h), sobre todo con factores de riesgo presentes. Detección de GDH y, si es positiva, confirmación de cepa toxigénica (inmunocromatografía y/o detección de genes de toxinas). No se recomienda repetir pruebas tras el tratamiento para confirmar curación — la colonización puede persistir pese a la evolución favorable.',
+    tratamiento: {
+        leveMod: 'Fidaxomicina 200 mg/12h oral 10 días, o vancomicina 125 mg/6h oral 10 días. Las recidivas son menos frecuentes con fidaxomicina, sobre todo en pacientes inmunodeprimidos.',
+        grave: 'Igual que leve-moderada (fidaxomicina o vancomicina). Si alto riesgo de recidiva (edad &gt;65 años, antibioterapia mantenida, inmunosupresión, colitis previa en los últimos 6 meses): añadir bezlotoxumab 10 mg/kg en 1h.',
+        complicada: 'Vancomicina 500 mg/6h oral (o fidaxomicina 200 mg/12h) + bezlotoxumab 10 mg/kg. Considerar añadir metronidazol 500 mg/8h IV. Si íleo o megacolon, considerar vancomicina en enemas. Si persiste la gravedad a las 48-72h, valorar cirugía general y trasplante de microbiota fecal.',
+        primeraRecidiva: 'Si el episodio inicial se trató con vancomicina: fidaxomicina 200 mg/12h 5 días, seguida de 200 mg a días alternos 20 días. Si se trató con fidaxomicina: vancomicina 125 mg/6h o fidaxomicina 200 mg/12h 10 días + bezlotoxumab. Sin fidaxomicina ni bezlotoxumab disponibles: vancomicina en pauta decreciente (125 mg/6h 10d → 125 mg/12h 7d → 125 mg/24h 7d → 125 mg cada 3-4 días 2-8 semanas).'
+    },
+    aislamiento: 'Habitación individual sin compartir baño. Bata y guantes para todo contacto, retirados al salir. Lavado de manos con agua y jabón. Limpieza diaria con desinfectante clorado. Retirar el aislamiento cuando el paciente lleve 48h sin diarrea (máximo 2 deposiciones/día, de consistencia normal o blandas pero formadas).'
+};
