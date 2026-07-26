@@ -113,6 +113,33 @@ export const icansGradosData = {
     }
 };
 
+export const iceScoreItems = [
+    { label: 'Orientación — año', grupo: 'Orientación temporoespacial (año, mes, ciudad, hospital)' },
+    { label: 'Orientación — mes', grupo: 'Orientación temporoespacial (año, mes, ciudad, hospital)' },
+    { label: 'Orientación — ciudad', grupo: 'Orientación temporoespacial (año, mes, ciudad, hospital)' },
+    { label: 'Orientación — hospital', grupo: 'Orientación temporoespacial (año, mes, ciudad, hospital)' },
+    { label: 'Nominación — objeto 1 de 3', grupo: 'Reconocimiento de objetos ("nominación", 3 objetos distintos)' },
+    { label: 'Nominación — objeto 2 de 3', grupo: 'Reconocimiento de objetos ("nominación", 3 objetos distintos)' },
+    { label: 'Nominación — objeto 3 de 3', grupo: 'Reconocimiento de objetos ("nominación", 3 objetos distintos)' },
+    { label: 'Obedece órdenes sencillas y complejas', grupo: 'Obediencia (cerrar los ojos/sacar la lengua; mano derecha en pie izquierdo)' },
+    { label: 'Escribe una frase sencilla (sin dictado)', grupo: 'Escritura' },
+    { label: 'Cuenta hacia atrás de 10 en 10 desde 100', grupo: 'Atención' }
+];
+
+export const slcGradingMatrixData = [
+    { signo: 'Temperatura', g1: 'Fiebre ≥38°C', g2: 'Fiebre ≥38°C', g3: 'Fiebre ≥38°C', g4: 'Fiebre ≥38°C' },
+    { signo: 'TA sistólica &lt;90 mmHg', g1: 'No', g2: 'Sí — responde a fluidos, no requiere vasopresores', g3: 'Sí — requiere vasopresores', g4: 'Sí — compromete la vida' },
+    { signo: 'Necesidad de O₂ (SatO₂ &lt;90%)', g1: 'No', g2: 'Sí — FiO₂ &lt;40% (bajo flujo)', g3: 'Sí — FiO₂ &gt;40% (alto flujo)', g4: 'Sí — CPAP, BiPAP o ventilación mecánica' }
+];
+
+export const icansGradingMatrixData = [
+    { signo: 'Puntuación ICE', g1: '7-9', g2: '3-6', g3: '0-2', g4: '0' },
+    { signo: 'Nivel de conciencia', g1: 'Despierto espontáneamente', g2: 'Despierto tras estímulo auditivo', g3: 'Despierto solo al estímulo táctil', g4: 'Inconsciente — estímulos táctiles repetidos' },
+    { signo: 'Crisis comicial', g1: 'N/A', g2: 'N/A', g3: 'Focal o generalizada que se resuelve rápido, o no convulsiva que resuelve sin intervención', g4: 'Prolongada (&gt;5 min) o repetida sin recuperación entre crisis' },
+    { signo: 'Debilidad muscular', g1: 'N/A', g2: 'N/A', g3: 'N/A', g4: 'Focal pronunciada (hemiparesia o paraparesia)' },
+    { signo: 'Signos de HIC / edema cerebral', g1: '—', g2: '—', g3: 'Edema focal en neuroimagen', g4: 'Postura de descerebración/decorticación, parálisis del VI par, papiledema, tríada de Cushing o edema cerebral difuso en la neuroimagen' }
+];
+
 export const otrasComplicacionesCarT = {
     lisisTumoral: 'Secundario a la rápida destrucción de células tumorales tras la infusión. Obliga a un control estricto de la función renal y los iones, e instauración de tratamiento preventivo en pacientes de alto riesgo.',
     sindromeActivacionMacrofagica: 'Sospechar en pacientes que han desarrollado SLC y que además presentan ferritina &gt;10.000 ng/mL con daño orgánico en 2 o más órganos.',

@@ -129,7 +129,19 @@
                 órgano (renal, hepática), y otros (exantema, artromialgias, náuseas, cefalea,
                 taquicardia/arritmias, elevación de dímero D, hipofibrinogenemia, sangrado).
             </p>
-            <div class="form-group" style="margin-top: 10px;">
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 16px 0 6px 0;">Tabla de gradación (todos los grados)</p>
+            <div style="overflow-x: auto;">
+                <table class="data-table" id="cart-slc-matriz-tabla">
+                    <tr><th>Signo</th><th>Grado 1</th><th>Grado 2</th><th>Grado 3</th><th>Grado 4</th></tr>
+                </table>
+            </div>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin: 6px 0 0 0;">
+                El daño orgánico progresivo asociado al SLC no controlado sigue habitualmente esta
+                secuencia: cardiaco → respiratorio → renal → hepático.
+            </p>
+
+            <div class="form-group" style="margin-top: 14px;">
                 <label>Grado de SLC (criterios ASTCT)</label>
                 <select id="cart-slc-select">
                     <option value="1">Grado 1</option>
@@ -162,7 +174,18 @@
                 Encephalopathy), que debe evaluarse a diario (mínimo 3 veces/día) desde la
                 infusión hasta el alta.
             </p>
-            <div class="warning-box" style="margin-top: 10px;">
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 16px 0 4px 0;">Calculadora de la puntuación ICE</p>
+            <p style="font-size: 0.8rem; line-height: 1.5;">
+                Marca cada ítem que el paciente supera correctamente. Evaluar 3 veces al día, o ante
+                cualquier cambio clínico.
+            </p>
+            <div id="cart-ice-lista"></div>
+            <div class="result-box" style="margin-top: 10px;">
+                <div id="cart-ice-resultado" style="font-size: 0.9rem; font-weight: bold;"></div>
+            </div>
+
+            <div class="warning-box" style="margin-top: 14px;">
                 <strong style="color: var(--accent-yellow);">Antes de la infusión</strong><br>
                 Valoración neurológica basal obligatoria en todos los pacientes; EMG basal si hay
                 síntomas compatibles, y RMN previa al CAR-T según el producto o el riesgo
@@ -170,7 +193,15 @@
                 profilaxis anticomicial en pacientes de alto riesgo (hematotoxicidad, infiltración
                 del SNC o patología neurológica previa).
             </div>
-            <div class="form-group" style="margin-top: 10px;">
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 16px 0 6px 0;">Tabla de gradación (todos los grados)</p>
+            <div style="overflow-x: auto;">
+                <table class="data-table" id="cart-icans-matriz-tabla">
+                    <tr><th>Signo</th><th>Grado 1</th><th>Grado 2</th><th>Grado 3</th><th>Grado 4</th></tr>
+                </table>
+            </div>
+
+            <div class="form-group" style="margin-top: 14px;">
                 <label>Grado de ICANS (criterios ASTCT)</label>
                 <select id="cart-icans-select">
                     <option value="1">Grado 1</option>
