@@ -46,7 +46,8 @@ export const criteriosSeleccionCarT = {
         'Enfermedades graves no controladas: insuficiencia cardiaca avanzada, insuficiencia hepática o renal grave, trastornos pulmonares severos.',
         'Enfermedades neurológicas autoinmunes activas (p. ej. síndrome de Guillain-Barré, esclerosis lateral amiotrófica).',
         'Tratamiento previo con un CAR-T.',
-        'Enfermedad del injerto contra el receptor (EICR) activa.'
+        'Enfermedad del injerto contra el receptor (EICR) activa.',
+        'Contraindicaciones específicas según la ficha técnica de cada producto y el protocolo clínico (p. ej. intolerancia a los componentes del tratamiento, alergias graves o participación en otros ensayos clínicos en conflicto).'
     ]
 };
 
@@ -113,7 +114,7 @@ export const icansMonitorizacionData = {
 };
 
 export const icansRefractarioData = {
-    criterio: 'Persiste o progresa tras 24-48h de corticoides a dosis plenas.',
+    criterio: 'Persiste o progresa tras 24-48h de corticoides a dosis plenas (dexametasona o metilprednisolona).',
     tratamiento: 'Ante sospecha de neuroinflamación mediada por IL-1: anakinra IV a dosis altas (8-12 mg/kg/24h, continua o cada 6h, máximo 400 mg/6h) durante 3-5 días. Si no hay respuesta en 48-72h, descartar causas alternativas de encefalopatía (infecciosa, metabólica, farmacológica) y valorar dasatinib 50 mg/12h durante 7 días. En ICANS grado 4 refractario o progresivo: terapia intratecal con hidrocortisona 20 mg (confirmando antes presencia de CAR-T en LCR); si no mejora en 3-7 días, repetir o valorar triple terapia intratecal (metotrexato 12 mg + citarabina 30 mg + hidrocortisona 20 mg). La literatura (Santomasso BD, et al. Blood 2023) recomienda evitar el tocilizumab en el ICANS aislado sin SLC concomitante — no revierte los síntomas neurológicos y podría empeorar la neurotoxicidad — y describe siltuximab como adyuvante junto a corticoides a dosis altas y anakinra en casos graves o refractarios.'
 };
 
