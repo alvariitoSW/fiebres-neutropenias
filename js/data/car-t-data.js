@@ -57,61 +57,68 @@ export const linfodeplecionData = {
     abecma: { producto: 'Abecma (ide-cel)', regimen: 'Ciclofosfamida 900 mg/m² + Fludarabina 30 mg/m²', dias: 'Días -5, -4, -3' }
 };
 
-export const slcGradosData = {
+// Tabla de monitorización y tratamiento de primera/segunda línea del SLC,
+// tal y como se usa a pie de cama (formulario I/AC-30 del servicio).
+export const slcMonitorizacionData = {
     1: {
-        titulo: 'SLC grado 1',
-        criterio: 'Fiebre ≥38°C sin hipotensión ni hipoxia.',
-        tratamiento: 'Descartar origen infeccioso (hemocultivos) e iniciar antibioterapia empírica o dirigida según colonización. Medidas antitérmicas. Retirar hipotensores y furosemida; mantener sueroterapia.<br><br><strong>Si alto riesgo de SLC grave</strong> (SLC precoz &lt;24h, fiebre persistente/refractaria, clínica general marcada, alta carga tumoral): administrar tocilizumab 24-48h tras el debut del SLC. Si se necesita una 2ª dosis de tocilizumab, asociar dexametasona 10 mg en dosis única.'
+        signos: { temperatura: 'Fiebre ≥38°C', tas: 'No hipotensión', o2: 'No requiere oxígeno suplementario' },
+        primeraLinea: 'Paracetamol. Antibioterapia si hay neutropenia.',
+        segundaLinea: 'Tocilizumab 8 mg/kg iv si la fiebre persiste &gt;3 días.'
     },
     2: {
-        titulo: 'SLC grado 2',
-        criterio: 'Fiebre con hipotensión que no requiere vasopresores, y/o hipoxia que requiere oxígeno de bajo flujo (≤6 L/min).',
-        tratamiento: 'Tocilizumab IV 8 mg/kg. Si no responde a las 12h (persiste grado 2), administrar 2ª dosis de tocilizumab e iniciar de forma concomitante dexametasona 10 mg IV/6h durante 1-3 días.'
+        signos: { temperatura: 'Fiebre ≥38°C', tas: 'Hipotensión que responde a fluidos, sin necesidad de vasopresores', o2: 'Necesita oxígeno de bajo flujo (máximo 6 L/min)' },
+        primeraLinea: 'Monitorización continua. Sueroterapia (máximo 2 L). Oxígeno hasta 6 L/min. Tocilizumab 8 mg/kg iv.',
+        segundaLinea: 'Valorar UCI. Repetir tocilizumab. Dexametasona 10 mg iv/6h.'
     },
     3: {
-        titulo: 'SLC grado 3',
-        criterio: 'Hipotensión que requiere 1 vasopresor (± vasopresina), y/o hipoxia que requiere oxígeno de alto flujo (≥6 L/min).',
-        tratamiento: '<strong>Traslado a UCI.</strong> Tocilizumab + dexametasona 10 mg IV/6h durante 1-3 días de forma concomitante. Si persiste grado 3 a las 12h, 2ª dosis de tocilizumab y escalar dexametasona a 20 mg/6h durante 1-3 días. Si progresa a grado 4 pese a tocilizumab + dexametasona en las primeras 12h: metilprednisolona en pulsos descendentes (1000 mg/24h x3d → 250 mg/12h x3d → 125 mg/12h x3d → 60 mg/12h x3d).'
+        signos: { temperatura: 'Fiebre ≥38°C', tas: 'Hipotensión que requiere 1 vasopresor', o2: 'Necesita oxígeno de alto flujo (FiO₂ &gt;40%)' },
+        primeraLinea: 'Ingreso en UCI. Vasopresores. Tocilizumab 8 mg/kg iv cada 8h.',
+        segundaLinea: 'Metilprednisolona 2 mg/kg/día. Dexametasona 20 mg/6h.'
     },
     4: {
-        titulo: 'SLC grado 4',
-        criterio: 'Hipotensión que requiere múltiples vasopresores, y/o hipoxia que requiere ventilación con presión positiva.',
-        tratamiento: '<strong>Traslado a UCI.</strong> Tocilizumab + dexametasona 20 mg IV/6h durante 3 días, con tapering posterior en 1 semana. Si no hay mejoría en menos de 12h: 2ª dosis de tocilizumab y pulsos de metilprednisolona según la pauta descrita en grado 3.'
-    },
-    refractario: {
-        titulo: 'SLC refractario',
-        criterio: 'Persiste o progresa tras 24-48h de tratamiento con corticoides a dosis plenas (dexametasona o metilprednisolona).',
-        tratamiento: 'Anakinra IV a dosis altas: 8-12 mg/kg cada 24h, en perfusión continua o repartida cada 6h (máximo 400 mg/6h). Mantener 3-5 días y suspender de forma progresiva al lograr mejoría sostenida o estabilización clínica.'
+        signos: { temperatura: 'Fiebre ≥38°C', tas: 'Hipotensión que requiere múltiples vasopresores', o2: 'Necesita ventilación con presión positiva (CPAP, BiPAP o VM)' },
+        primeraLinea: 'Siltuximab 11 mg/kg, dosis única. Metilprednisolona en pulsos: 1 g/día (3 días) → 250 mg/12h (2 días) → 125 mg/12h (2 días) → 60 mg/12h (2 días).',
+        segundaLinea: 'No especificada en el formulario del servicio — valorar escalada según respuesta clínica y comité de terapia celular.'
     }
 };
 
-export const icansGradosData = {
+export const slcRefractarioData = {
+    criterio: 'Persiste o progresa tras 24-48h de tratamiento con corticoides a dosis plenas (dexametasona o metilprednisolona).',
+    tratamiento: 'Anakinra IV a dosis altas: 8-12 mg/kg cada 24h, en perfusión continua o repartida cada 6h (máximo 400 mg/6h). Mantener 3-5 días y suspender de forma progresiva al lograr mejoría sostenida o estabilización clínica.'
+};
+
+// Tabla de monitorización y tratamiento de primera/segunda línea del ICANS,
+// tal y como se usa a pie de cama (formulario I/AC-29 del servicio).
+export const icansMonitorizacionData = {
     1: {
-        titulo: 'ICANS grado 1',
-        criterio: 'Puntuación ICE 7-9. Nivel de conciencia: despierto espontáneamente.',
-        tratamiento: 'Valoración por Neurología. Descartar otro origen (infeccioso, cerebrovascular, edema). Suspender medicación que reduzca el nivel de conciencia. Valorar dexametasona 10 mg en dosis única. Si no lo tenía ya, iniciar anticonvulsivante: levetiracetam 500 mg/12h oral o IV.'
+        signos: { ice: '7-9', conciencia: 'Despierto espontáneamente', crisis: 'N/A', debilidad: 'N/A', hic: '—' },
+        primeraLinea: 'Monitorización. Evitar medicación oral sedante. EEG diario. RMN. Punción lumbar.',
+        segundaLinea: 'Tocilizumab si coincide con SLC.'
     },
     2: {
-        titulo: 'ICANS grado 2',
-        criterio: 'Puntuación ICE 3-6. Nivel de conciencia: despierto tras estímulo auditivo.',
-        tratamiento: 'Valoración por Neurología; valorar UCI y proponer traslado si ICE &lt;6. Levetiracetam 500 mg/12h oral o IV si no lo tenía. Iniciar corticoides (dexametasona 10 mg/6h IV) hasta resolución a grado 1. TC craneal y EEG, repetir cada 48h salvo mejoría. Si refractariedad o deterioro, tratar como grado 3.'
+        signos: { ice: '3-6', conciencia: 'Despierto tras estímulo auditivo', crisis: 'N/A', debilidad: 'N/A', hic: '—' },
+        primeraLinea: 'Dexametasona 10 mg/6h. Tocilizumab 8 mg/kg iv si coincide con SLC.',
+        segundaLinea: 'Valorar UCI.'
     },
     3: {
-        titulo: 'ICANS grado 3',
-        criterio: 'Puntuación ICE 0-2 (o despierto solo a estímulos táctiles), o actividad comicial focal/generalizada que se resuelve rápido.',
-        tratamiento: '<strong>Traslado a UCI.</strong> Mismas medidas que en grado 2. Escalar a dexametasona 20 mg/6h IV hasta resolución a grado 1. Si refractariedad o deterioro, tratar como grado 4.'
+        signos: { ice: '0-2', conciencia: 'Despierto solo al estímulo táctil', crisis: 'Focal o generalizada que se resuelve rápidamente, o no convulsiva detectable en el EEG que se resuelve sin intervención', debilidad: 'N/A', hic: 'Edema focal en prueba de neuroimagen' },
+        primeraLinea: 'UCI. Dexametasona 10 mg/6h. Reevaluación con neuroimagen.',
+        segundaLinea: 'Tocilizumab 8 mg/kg iv/8h. Metilprednisolona 2 mg/kg/día.'
     },
     4: {
-        titulo: 'ICANS grado 4',
-        criterio: 'Puntuación ICE 0 (no despierta), estatus/crisis prolongada, déficit motor focal, o edema cerebral.',
-        tratamiento: '<strong>Traslado a UCI.</strong> Metilprednisolona en pulsos descendentes (1000 mg/24h x3d → 250 mg/12h x3d → 125 mg/12h x3d → 60 mg/12h x3d). Tratamiento del edema cerebral o crisis comiciales si existieran. Si no hay respuesta, tratar como ICANS refractario.'
-    },
-    refractario: {
-        titulo: 'ICANS refractario',
-        criterio: 'Persiste o progresa tras 24-48h de corticoides a dosis plenas.',
-        tratamiento: 'Ante sospecha de neuroinflamación mediada por IL-1: anakinra IV a dosis altas (8-12 mg/kg/24h, continua o cada 6h, máximo 400 mg/6h) durante 3-5 días. Si no hay respuesta en 48-72h, descartar causas alternativas de encefalopatía (infecciosa, metabólica, farmacológica) y valorar dasatinib 50 mg/12h durante 7 días. En ICANS grado 4 refractario o progresivo: terapia intratecal con hidrocortisona 20 mg (confirmando antes presencia de CAR-T en LCR); si no mejora en 3-7 días, repetir o valorar triple terapia intratecal (metotrexato 12 mg + citarabina 30 mg + hidrocortisona 20 mg).'
+        signos: { ice: '0', conciencia: 'Inconsciente — estímulos táctiles repetidos', crisis: 'Prolongada (&gt;5 min), o repetidas (clínicas y/o en EEG) sin recuperación de la normalidad entre ellas', debilidad: 'Focal pronunciada (hemiparesia o paraparesia)', hic: 'Postura de descerebración o decorticación, parálisis del VI par, papiledema, tríada de Cushing o edema cerebral difuso en la neuroimagen' },
+        primeraLinea: 'Tocilizumab 8 mg/kg iv/8h. Metilprednisolona en pulsos: 1 g/día (3 días) → 250 mg/12h (2 días) → 125 mg/12h (2 días) → 60 mg/12h (2 días). Reevaluación con neuroimagen.',
+        segundaLinea: 'Dexametasona 20 mg/6h.'
     }
 };
+
+export const icansRefractarioData = {
+    criterio: 'Persiste o progresa tras 24-48h de corticoides a dosis plenas.',
+    tratamiento: 'Ante sospecha de neuroinflamación mediada por IL-1: anakinra IV a dosis altas (8-12 mg/kg/24h, continua o cada 6h, máximo 400 mg/6h) durante 3-5 días. Si no hay respuesta en 48-72h, descartar causas alternativas de encefalopatía (infecciosa, metabólica, farmacológica) y valorar dasatinib 50 mg/12h durante 7 días. En ICANS grado 4 refractario o progresivo: terapia intratecal con hidrocortisona 20 mg (confirmando antes presencia de CAR-T en LCR); si no mejora en 3-7 días, repetir o valorar triple terapia intratecal (metotrexato 12 mg + citarabina 30 mg + hidrocortisona 20 mg).'
+};
+
+// Señales de alarma para reevaluar antes de la valoración programada (3 veces/día).
+export const icansAlertasRevaluacion = ['Desorientación', 'Alteración del lenguaje', 'Alteración de la escritura', 'Convulsiones'];
 
 export const iceScoreItems = [
     { label: 'Orientación — año', grupo: 'Orientación temporoespacial (año, mes, ciudad, hospital)' },
@@ -124,20 +131,6 @@ export const iceScoreItems = [
     { label: 'Obedece órdenes sencillas y complejas', grupo: 'Obediencia (cerrar los ojos/sacar la lengua; mano derecha en pie izquierdo)' },
     { label: 'Escribe una frase sencilla (sin dictado)', grupo: 'Escritura' },
     { label: 'Cuenta hacia atrás de 10 en 10 desde 100', grupo: 'Atención' }
-];
-
-export const slcGradingMatrixData = [
-    { signo: 'Temperatura', g1: 'Fiebre ≥38°C', g2: 'Fiebre ≥38°C', g3: 'Fiebre ≥38°C', g4: 'Fiebre ≥38°C' },
-    { signo: 'TA sistólica &lt;90 mmHg', g1: 'No', g2: 'Sí — responde a fluidos, no requiere vasopresores', g3: 'Sí — requiere vasopresores', g4: 'Sí — compromete la vida' },
-    { signo: 'Necesidad de O₂ (SatO₂ &lt;90%)', g1: 'No', g2: 'Sí — FiO₂ &lt;40% (bajo flujo)', g3: 'Sí — FiO₂ &gt;40% (alto flujo)', g4: 'Sí — CPAP, BiPAP o ventilación mecánica' }
-];
-
-export const icansGradingMatrixData = [
-    { signo: 'Puntuación ICE', g1: '7-9', g2: '3-6', g3: '0-2', g4: '0' },
-    { signo: 'Nivel de conciencia', g1: 'Despierto espontáneamente', g2: 'Despierto tras estímulo auditivo', g3: 'Despierto solo al estímulo táctil', g4: 'Inconsciente — estímulos táctiles repetidos' },
-    { signo: 'Crisis comicial', g1: 'N/A', g2: 'N/A', g3: 'Focal o generalizada que se resuelve rápido, o no convulsiva que resuelve sin intervención', g4: 'Prolongada (&gt;5 min) o repetida sin recuperación entre crisis' },
-    { signo: 'Debilidad muscular', g1: 'N/A', g2: 'N/A', g3: 'N/A', g4: 'Focal pronunciada (hemiparesia o paraparesia)' },
-    { signo: 'Signos de HIC / edema cerebral', g1: '—', g2: '—', g3: 'Edema focal en neuroimagen', g4: 'Postura de descerebración/decorticación, parálisis del VI par, papiledema, tríada de Cushing o edema cerebral difuso en la neuroimagen' }
 ];
 
 export const otrasComplicacionesCarT = {

@@ -1,15 +1,19 @@
 // Módulo "CAR-T y complicaciones que llevan a UCI": indicaciones, infusión,
-// selector de grado de SLC/CRS y selector de grado de neurotoxicidad (ICANS).
+// matriz interactiva de grados de SLC/CRS y de neurotoxicidad (ICANS) con
+// calculadora de puntuación ICE.
 import { initTabs } from '../../core/tabs.js';
 import {
     productosCarT,
     criteriosSeleccionCarT,
-    slcGradosData,
-    icansGradosData,
-    iceScoreItems,
-    slcGradingMatrixData,
-    icansGradingMatrixData
+    slcMonitorizacionData,
+    slcRefractarioData,
+    icansMonitorizacionData,
+    icansRefractarioData,
+    icansAlertasRevaluacion,
+    iceScoreItems
 } from '../../data/car-t-data.js';
+
+const GRADOS = [1, 2, 3, 4];
 
 function renderProductos() {
     const cont = document.getElementById('cart-productos-lista');
@@ -30,46 +34,40 @@ function renderCriterios() {
         criteriosSeleccionCarT.exclusion.map(c => `<li>${c}</li>`).join('');
 }
 
-function renderMatrizTabla(elementId, matrizData) {
-    const tabla = document.getElementById(elementId);
-    matrizData.forEach(fila => {
-        tabla.innerHTML += `<tr><td>${fila.signo}</td><td>${fila.g1}</td><td>${fila.g2}</td><td>${fila.g3}</td><td>${fila.g4}</td></tr>`;
+// Construye la matriz grado 1-4: cabecera clicable (resalta columna) + filas
+// de signos/criterios + filas de tratamiento de primera y segunda línea.
+function renderGradeMatrix(tableId, data, filas) {
+    const tabla = document.getElementById(tableId);
+    const head = tabla.querySelector('thead tr');
+    head.innerHTML = '<th></th>' + GRADOS.map(g =>
+        `<th class="grade-matrix-head g${g}" data-grado="${g}">Grado ${g}</th>`
+    ).join('');
+
+    const body = tabla.querySelector('tbody');
+    const filasSignos = filas.map(f => `
+        <tr><th>${f.label}</th>${GRADOS.map(g => `<td data-grado="${g}">${data[g].signos[f.key]}</td>`).join('')}</tr>
+    `).join('');
+    const filaPrimera = `
+        <tr class="grade-matrix-tto"><th>1ª línea</th>${GRADOS.map(g => `<td data-grado="${g}">${data[g].primeraLinea}</td>`).join('')}</tr>
+    `;
+    const filaSegunda = `
+        <tr class="grade-matrix-tto"><th>2ª línea</th>${GRADOS.map(g => `<td data-grado="${g}">${data[g].segundaLinea}</td>`).join('')}</tr>
+    `;
+    body.innerHTML = filasSignos + filaPrimera + filaSegunda;
+
+    tabla.querySelectorAll('.grade-matrix-head').forEach(th => {
+        th.addEventListener('click', () => highlightGrade(tableId, th.dataset.grado));
     });
 }
 
-function calcIce() {
-    const checks = document.querySelectorAll('.cart-ice-check');
-    const puntuacion = Array.from(checks).filter(c => c.checked).length;
-    const box = document.getElementById('cart-ice-resultado');
-    let interpretacion;
-    if (puntuacion === 10) {
-        interpretacion = 'Sin alteración cognitiva — no cumple criterios de ICANS por puntuación (grado 0).';
-    } else if (puntuacion >= 7) {
-        interpretacion = 'Compatible con ICANS grado 1 (ICE 7-9), si el paciente está despierto espontáneamente.';
-    } else if (puntuacion >= 3) {
-        interpretacion = 'Compatible con ICANS grado 2 (ICE 3-6), si el paciente despierta tras estímulo auditivo.';
-    } else {
-        interpretacion = 'ICE 0-2: compatible con ICANS grado 3 si el paciente despierta solo a estímulo táctil, o grado 4 si no despierta ni a estímulos táctiles repetidos — la puntuación por sí sola no distingue grado 3 de grado 4, lo hace el nivel de conciencia.';
-    }
-    box.innerHTML = `Puntuación ICE: <strong>${puntuacion}/10</strong><br>${interpretacion}`;
-}
-
-function calcSlc() {
-    const select = document.getElementById('cart-slc-select');
-    const data = slcGradosData[select.value];
-    if (!data) return;
-    document.getElementById('cart-slc-titulo').innerText = data.titulo;
-    document.getElementById('cart-slc-criterio').innerHTML = data.criterio;
-    document.getElementById('cart-slc-tratamiento').innerHTML = data.tratamiento;
-}
-
-function calcIcans() {
-    const select = document.getElementById('cart-icans-select');
-    const data = icansGradosData[select.value];
-    if (!data) return;
-    document.getElementById('cart-icans-titulo').innerText = data.titulo;
-    document.getElementById('cart-icans-criterio').innerHTML = data.criterio;
-    document.getElementById('cart-icans-tratamiento').innerHTML = data.tratamiento;
+function highlightGrade(tableId, grado) {
+    const tabla = document.getElementById(tableId);
+    tabla.classList.remove('hl-1', 'hl-2', 'hl-3', 'hl-4');
+    tabla.querySelectorAll('.grade-matrix-head').forEach(h => h.classList.remove('selected'));
+    if (!grado) return;
+    tabla.classList.add('hl-' + grado);
+    const th = tabla.querySelector(`.grade-matrix-head[data-grado="${grado}"]`);
+    if (th) th.classList.add('selected');
 }
 
 function renderIceChecklist() {
@@ -83,18 +81,51 @@ function renderIceChecklist() {
     }).join('');
 }
 
+function calcIce() {
+    const checks = document.querySelectorAll('.cart-ice-check');
+    const puntuacion = Array.from(checks).filter(c => c.checked).length;
+    const box = document.getElementById('cart-ice-resultado');
+    let interpretacion;
+    let gradoSugerido = null;
+    if (puntuacion === 10) {
+        interpretacion = 'Sin alteración cognitiva — no cumple criterios de ICANS por puntuación (grado 0).';
+    } else if (puntuacion >= 7) {
+        interpretacion = 'Compatible con ICANS grado 1, si el paciente está despierto espontáneamente.';
+        gradoSugerido = 1;
+    } else if (puntuacion >= 3) {
+        interpretacion = 'Compatible con ICANS grado 2, si el paciente despierta tras estímulo auditivo.';
+        gradoSugerido = 2;
+    } else {
+        interpretacion = 'ICE 0-2: compatible con grado 3 si el paciente despierta solo a estímulo táctil, o grado 4 si no despierta ni a estímulos táctiles repetidos — la puntuación por sí sola no distingue grado 3 de grado 4, lo hace el nivel de conciencia. Selecciona la columna correspondiente en la tabla.';
+    }
+    box.innerHTML = `Puntuación ICE: <strong>${puntuacion}/10</strong><br>${interpretacion}`;
+    highlightGrade('cart-icans-matriz', gradoSugerido);
+}
+
 export function init() {
     initTabs(document.getElementById('panel-cart-tabs'));
     renderProductos();
     renderCriterios();
 
-    document.getElementById('cart-slc-select').addEventListener('change', calcSlc);
-    calcSlc();
-    renderMatrizTabla('cart-slc-matriz-tabla', slcGradingMatrixData);
+    renderGradeMatrix('cart-slc-matriz', slcMonitorizacionData, [
+        { label: 'Temperatura', key: 'temperatura' },
+        { label: 'TA sistólica', key: 'tas' },
+        { label: 'Necesidad de O₂', key: 'o2' }
+    ]);
+    document.getElementById('cart-slc-refractario-criterio').innerHTML = slcRefractarioData.criterio;
+    document.getElementById('cart-slc-refractario-tratamiento').innerHTML = slcRefractarioData.tratamiento;
 
-    document.getElementById('cart-icans-select').addEventListener('change', calcIcans);
-    calcIcans();
-    renderMatrizTabla('cart-icans-matriz-tabla', icansGradingMatrixData);
+    renderGradeMatrix('cart-icans-matriz', icansMonitorizacionData, [
+        { label: 'Puntuación ICE', key: 'ice' },
+        { label: 'Nivel de conciencia', key: 'conciencia' },
+        { label: 'Crisis comicial', key: 'crisis' },
+        { label: 'Debilidad muscular', key: 'debilidad' },
+        { label: 'HIC / edema cerebral', key: 'hic' }
+    ]);
+    document.getElementById('cart-icans-refractario-criterio').innerHTML = icansRefractarioData.criterio;
+    document.getElementById('cart-icans-refractario-tratamiento').innerHTML = icansRefractarioData.tratamiento;
+    document.getElementById('cart-icans-alertas-lista').innerHTML =
+        icansAlertasRevaluacion.map(a => `<li>${a}</li>`).join('');
 
     renderIceChecklist();
     document.querySelectorAll('.cart-ice-check').forEach(c => c.addEventListener('change', calcIce));

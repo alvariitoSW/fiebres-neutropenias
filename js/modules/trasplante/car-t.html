@@ -130,33 +130,23 @@
                 taquicardia/arritmias, elevación de dímero D, hipofibrinogenemia, sangrado).
             </p>
 
-            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 16px 0 6px 0;">Tabla de gradación (todos los grados)</p>
-            <div style="overflow-x: auto;">
-                <table class="data-table" id="cart-slc-matriz-tabla">
-                    <tr><th>Signo</th><th>Grado 1</th><th>Grado 2</th><th>Grado 3</th><th>Grado 4</th></tr>
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 16px 0 6px 0;">Gradación y tratamiento (formulario I/AC-30)</p>
+            <div class="grade-matrix-wrap">
+                <table class="grade-matrix" id="cart-slc-matriz">
+                    <thead><tr></tr></thead>
+                    <tbody></tbody>
                 </table>
             </div>
+            <p class="grade-matrix-hint">👆 Toca un grado para resaltar su columna</p>
             <p style="font-size: 0.75rem; color: var(--text-muted); margin: 6px 0 0 0;">
                 El daño orgánico progresivo asociado al SLC no controlado sigue habitualmente esta
                 secuencia: cardiaco → respiratorio → renal → hepático.
             </p>
 
-            <div class="form-group" style="margin-top: 14px;">
-                <label>Grado de SLC (criterios ASTCT)</label>
-                <select id="cart-slc-select">
-                    <option value="1">Grado 1</option>
-                    <option value="2">Grado 2</option>
-                    <option value="3">Grado 3</option>
-                    <option value="4">Grado 4</option>
-                    <option value="refractario">SLC refractario</option>
-                </select>
-            </div>
-            <div class="result-box" style="text-align: left;">
-                <div id="cart-slc-titulo" style="font-weight: bold; color: var(--accent-red); text-align: center; font-size: 1rem;">—</div>
-                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 8px;">Criterio</div>
-                <div id="cart-slc-criterio" style="font-size: 0.85rem; margin-top: 4px;"></div>
-                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 10px;">Tratamiento</div>
-                <div id="cart-slc-tratamiento" style="font-size: 0.85rem; margin-top: 4px;"></div>
+            <div class="warning-box" style="margin-top: 14px;">
+                <strong style="color: var(--accent-yellow);">SLC refractario</strong><br>
+                <span id="cart-slc-refractario-criterio"></span><br><br>
+                <span id="cart-slc-refractario-tratamiento"></span>
             </div>
         </div>
 
@@ -184,6 +174,10 @@
             <div class="result-box" style="margin-top: 10px;">
                 <div id="cart-ice-resultado" style="font-size: 0.9rem; font-weight: bold;"></div>
             </div>
+            <div class="warning-box" style="margin-top: 10px;">
+                <strong style="color: var(--accent-yellow);">Reevaluar antes de lo programado si aparece</strong><br>
+                <ul id="cart-icans-alertas-lista" style="margin: 4px 0 0 18px; padding: 0;"></ul>
+            </div>
 
             <div class="warning-box" style="margin-top: 14px;">
                 <strong style="color: var(--accent-yellow);">Antes de la infusión</strong><br>
@@ -194,29 +188,19 @@
                 del SNC o patología neurológica previa).
             </div>
 
-            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 16px 0 6px 0;">Tabla de gradación (todos los grados)</p>
-            <div style="overflow-x: auto;">
-                <table class="data-table" id="cart-icans-matriz-tabla">
-                    <tr><th>Signo</th><th>Grado 1</th><th>Grado 2</th><th>Grado 3</th><th>Grado 4</th></tr>
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 16px 0 6px 0;">Gradación y tratamiento (formulario I/AC-29)</p>
+            <div class="grade-matrix-wrap">
+                <table class="grade-matrix" id="cart-icans-matriz">
+                    <thead><tr></tr></thead>
+                    <tbody></tbody>
                 </table>
             </div>
+            <p class="grade-matrix-hint">👆 Toca un grado para resaltar su columna — se resalta solo al marcar la puntuación ICE</p>
 
-            <div class="form-group" style="margin-top: 14px;">
-                <label>Grado de ICANS (criterios ASTCT)</label>
-                <select id="cart-icans-select">
-                    <option value="1">Grado 1</option>
-                    <option value="2">Grado 2</option>
-                    <option value="3">Grado 3</option>
-                    <option value="4">Grado 4</option>
-                    <option value="refractario">ICANS refractario</option>
-                </select>
-            </div>
-            <div class="result-box" style="text-align: left;">
-                <div id="cart-icans-titulo" style="font-weight: bold; color: var(--accent-red); text-align: center; font-size: 1rem;">—</div>
-                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 8px;">Criterio</div>
-                <div id="cart-icans-criterio" style="font-size: 0.85rem; margin-top: 4px;"></div>
-                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 10px;">Tratamiento</div>
-                <div id="cart-icans-tratamiento" style="font-size: 0.85rem; margin-top: 4px;"></div>
+            <div class="warning-box" style="margin-top: 14px;">
+                <strong style="color: var(--accent-yellow);">ICANS refractario</strong><br>
+                <span id="cart-icans-refractario-criterio"></span><br><br>
+                <span id="cart-icans-refractario-tratamiento"></span>
             </div>
             <div class="warning-box" style="margin-top: 14px;">
                 <strong style="color: var(--accent-yellow);">Ante focalidad neurológica</strong><br>
