@@ -58,7 +58,7 @@ export const linfodeplecionData = {
 };
 
 // Tabla de monitorización y tratamiento de primera/segunda línea del SLC,
-// tal y como se usa a pie de cama (formulario I/AC-30 del servicio).
+// tal y como se usa a pie de cama (hoja de monitorización del servicio).
 export const slcMonitorizacionData = {
     1: {
         signos: { temperatura: 'Fiebre ≥38°C', tas: 'No hipotensión', o2: 'No requiere oxígeno suplementario' },
@@ -88,7 +88,7 @@ export const slcRefractarioData = {
 };
 
 // Tabla de monitorización y tratamiento de primera/segunda línea del ICANS,
-// tal y como se usa a pie de cama (formulario I/AC-29 del servicio).
+// tal y como se usa a pie de cama (hoja de monitorización del servicio).
 export const icansMonitorizacionData = {
     1: {
         signos: { ice: '7-9', conciencia: 'Despierto espontáneamente', crisis: 'N/A', debilidad: 'N/A', hic: '—' },
@@ -133,8 +133,3 @@ export const iceScoreItems = [
     { label: 'Cuenta hacia atrás de 10 en 10 desde 100', grupo: 'Atención' }
 ];
 
-export const otrasComplicacionesCarT = {
-    lisisTumoral: 'Secundario a la rápida destrucción de células tumorales tras la infusión. Obliga a un control estricto de la función renal y los iones, e instauración de tratamiento preventivo en pacientes de alto riesgo.',
-    sindromeActivacionMacrofagica: 'Sospechar en pacientes que han desarrollado SLC y que además presentan ferritina &gt;10.000 ng/mL con daño orgánico en 2 o más órganos.',
-    infecciones: 'Los pacientes tratados con CAR-T se consideran de alto riesgo de infección a todos los efectos (uso de profilaxis, reservada sobre todo para neutropenias intensas y prolongadas, y manejo del tratamiento empírico de la fiebre).'
-};

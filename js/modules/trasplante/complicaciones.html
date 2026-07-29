@@ -221,6 +221,30 @@
                 3 meses previos. Antígeno galactomanano positivo &gt;0,8 (o dos veces &gt;0,5) pierde
                 mucho valor por falsos negativos si el paciente ya recibe azoles.
             </p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🔬 Criterios clínicos y micológicos (detalle)</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <strong>Criterios clínicos</strong> (enfermedad fúngica del tracto
+                        respiratorio inferior): 1 de 3 signos en TC torácico — lesión densa bien
+                        definida con o sin signo del halo, signo de la media luna ("air crescent") o
+                        cavitación. <strong>Traqueobronquitis:</strong> ulceración, nódulos,
+                        pseudomembranas, placas o escaras en la broncoscopia. <strong>Sinusitis:</strong>
+                        imagen sugestiva + 1 de: dolor agudo localizado, úlcera nasal con escara
+                        negruzca, o invasión ósea (incluida la órbita). <strong>SNC:</strong> lesiones
+                        focales en imagen o refuerzo meníngeo en RMN/TC. <strong>Candidiasis
+                        diseminada:</strong> tras un episodio de candidemia en las 2 semanas previas,
+                        pequeños abscesos "en ojo de buey" en hígado/bazo o exudados retinianos.<br><br>
+                        <strong>Criterios micológicos:</strong> tests directos (citología, examen
+                        microscópico, cultivo de hongos filamentosos en esputo/LBA/cepillado
+                        bronquial/aspirado sinusal) o tests indirectos (antígeno galactomanano en
+                        aspergilosis; β-D-glucano en el resto de IFI excepto criptococosis y
+                        zigomicosis; PCR panfúngica).
+                    </div>
+                </div>
+            </div>
 
             <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Tratamiento</p>
             <p style="font-size: 0.85rem; line-height: 1.5;">
@@ -242,6 +266,25 @@
             <div class="result-box" style="text-align: left;">
                 <div id="comp-hongo-texto" style="font-size: 0.85rem;"></div>
             </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 16px 0 6px 0;">Patrón de sensibilidad de Candida spp.</p>
+            <div style="overflow-x: auto;">
+                <table class="data-table">
+                    <tr><th>Especie</th><th>AnB</th><th>Equinocandinas</th><th>Fluconazol</th><th>Voriconazol/Posaconazol</th></tr>
+                    <tr><td>C. albicans</td><td>S</td><td>S</td><td>S¹</td><td>S</td></tr>
+                    <tr><td>C. glabrata</td><td>S</td><td>S²</td><td>S-dd/R³</td><td>S-dd/R</td></tr>
+                    <tr><td>C. krusei</td><td>S</td><td>S</td><td>R</td><td>S-dd/R</td></tr>
+                    <tr><td>C. parapsilosis</td><td>S</td><td>S/R⁴</td><td>S</td><td>S</td></tr>
+                    <tr><td>C. tropicalis</td><td>S</td><td>S</td><td>S</td><td>S</td></tr>
+                </table>
+            </div>
+            <p style="font-size: 0.7rem; color: var(--text-muted); margin: 4px 0 0 0;">
+                S: sensible; R: resistente; S-dd: sensibilidad dosis-dependiente. ¹Resistencia de
+                C. albicans a fluconazol en el 5%. ²Resistencias emergentes de algunas C. glabrata
+                a equinocandinas. ³Resistencia cruzada a azoles en &gt;10% de C. glabrata.
+                ⁴CMI alta y actividad pobre frente a biofilms.
+            </p>
+
             <div class="warning-box" style="margin-top: 12px;">
                 Vigilar la hepatotoxicidad de triazoles y equinocandinas (no la anidulafungina), con
                 ajuste de dosis. Monitorizar niveles de voriconazol; evitarlo si el filtrado
@@ -309,6 +352,21 @@
             <div class="micro-profiles" style="margin-top: 10px;">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🗂️ Clasificación según el momento de presentación</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <strong>EICRa clásica:</strong> signos/síntomas característicos de EICRa que
+                        aparecen dentro de los 100 días post-TPH, sin datos de EICRc.
+                        <strong>EICRa persistente, recurrente o de inicio tardío:</strong> signos de
+                        EICRa que aparecen después del día +100, sin datos de EICRc.
+                        <strong>EICRc clásica:</strong> presentes las características distintivas de
+                        la EICRc, sin datos de EICRa, independientemente del tiempo post-TPH.
+                        <strong>Síndrome de solapamiento:</strong> coexisten características de EICRa
+                        y EICRc, independientemente del tiempo post-TPH.
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
                         <span>⚠️ Factores de riesgo y manifestaciones</span> <span>+</span>
                     </div>
                     <div class="micro-prof-body">
@@ -324,6 +382,31 @@
                         de tratar — anorexia, náuseas, vómitos, diarrea verdosa con mucosidad, dolor
                         cólico, y en casos graves hemorragia e íleo; biopsia obligatoria para el
                         diagnóstico definitivo (mejor rendimiento en biopsia gástrica, mínimo 5 tomas).
+                        <strong>Otros órganos diana</strong> (mucho menos frecuentes, no se usan para
+                        establecer el diagnóstico): sistema hematopoyético (citopenias, atrofia
+                        tímica, hipogammaglobulinemia IgA), ojos (fotofobia, conjuntivitis
+                        hemorrágica, lagoftalmos), riñón (nefritis o síndrome nefrótico) y pulmón
+                        (neumonitis intersticial).
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>📊 Criterios de respuesta al tratamiento</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <strong>Respuesta completa (RC):</strong> resolución completa de todos los
+                        signos y síntomas en todos los órganos evaluables (score MAGIC 0 en todos).
+                        <strong>Respuesta parcial (RP):</strong> mejoría de 1 grado MAGIC en uno o más
+                        órganos afectos, sin progresión en otros. <strong>Muy buena respuesta parcial
+                        (MBRP):</strong> RP que además cumple: piel con rash residual &lt;25% de
+                        superficie sin bullas, bilirrubina &lt;2 mg/dl o &lt;25% del valor pre-tto., y
+                        tubo digestivo con buena tolerancia oral, heces predominantemente formes, sin
+                        sangrado ni dolor. <strong>Respuesta global (RG):</strong> incluye RC + RP +
+                        MBRP. <strong>Enfermedad estable (EE):</strong> sin mejoría ni empeoramiento
+                        en ningún órgano. <strong>Respuesta mixta (RM):</strong> mejoría ≥1 grado en
+                        un órgano con progresión en otro, o aparición de un órgano nuevo afecto.
+                        <strong>Enfermedad progresiva (EP):</strong> empeoramiento ≥1 grado en uno o
+                        más órganos sin mejoría en ninguno.
                     </div>
                 </div>
             </div>
@@ -345,7 +428,9 @@
                 <strong>Refractaria:</strong> progresión tras 3-5 días con prednisona ≥2 mg/kg/día, o
                 ausencia de respuesta parcial a los 7 días, o ausencia de respuesta completa/muy buena
                 parcial tras &gt;14 días. <strong>Dependencia:</strong> incapacidad de bajar de 2
-                mg/kg/día tras un tratamiento inicial exitoso, o reactivación durante el descenso.
+                mg/kg/día tras un tratamiento inicial exitoso, o reactivación durante el descenso
+                (en ensayos clínicos se usa una definición más estricta: incapacidad de bajar de
+                0,5 mg/kg/día de metilprednisolona durante un mínimo de 7 días).
                 <strong>Intolerancia:</strong> contraindicación por comorbilidad (diabetes no
                 controlada, miopatía o osteoporosis esteroidea grave).
             </div>
@@ -356,7 +441,8 @@
             <div class="warning-box" style="margin-top: 12px;">
                 <strong style="color: var(--accent-yellow);">Soporte durante el tratamiento</strong><br>
                 Afectación cutánea grado III-IV: manejo similar al gran quemado, con equipo
-                multidisciplinar. Afectación GI: valoración nutricional, considerando nutrición
+                multidisciplinar. Fisioterapia para reducir la atrofia muscular secundaria a la
+                corticoterapia prolongada. Afectación GI: valoración nutricional, considerando nutrición
                 parenteral si la diarrea supera 500 ml/día (reintroducción oral gradual al bajar de
                 ese umbral), con octreótido u otro antidiarreico y analgesia. Profilaxis
                 antiinfecciosa: cotrimoxazol o pentamidina para P. jirovecii, aciclovir, posaconazol
@@ -408,6 +494,9 @@
             (narsoplimab en TA-TMA) · Schoettler ML, et al. Transplant Cell Ther 2025;31(9):610-623
             (criterios de respuesta TA-TMA) · Hematopoietic stem cell transplant-associated
             thrombotic microangiopathy: current paradigm and novel therapies. Bone Marrow
-            Transplantation 2018;53:129-137.
+            Transplantation 2018;53:129-137 · Incidence, Risk Factors for and Outcomes of
+            Transplant-Associated Thrombotic Microangiopathy. British Journal of Haematology
+            2020;189:1171-1181 · ECIL-6 (2017): Guideline for antifungal therapy in leukemia and
+            HSCT patients.
         </p>
     </div>

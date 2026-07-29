@@ -73,7 +73,9 @@
             <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px;">
                 Premedicación habitual: paracetamol 1000 mg + dexclorfeniramina 5 mg. No se
                 recomienda el uso profiláctico de corticoides sistémicos en las 72h previas al
-                inicio de la linfodepleción.
+                inicio de la linfodepleción. La infusión debe retrasarse (mínimo 7 días) si el
+                paciente presenta una reacción adversa grave no resuelta a la linfodepleción,
+                infección activa o EICH agudo no controlado.
             </p>
 
             <div class="warning-box" style="margin-top: 14px;">
@@ -81,11 +83,15 @@
                 Confirmar disponibilidad de tocilizumab y equipo de emergencias — en el caso
                 excepcional de desabastecimiento del fármaco, el SLC se trataría con corticoides
                 ± anakinra. Verificar identidad del receptor (pulsera + etiquetado del producto)
-                por dos personas cualificadas. EKG previo a la infusión y constantes basales
-                (TA/FC/Tª/diuresis/PVC). El producto debe infundirse en ≤30 minutos desde su
-                descongelación, preferiblemente por CVC, con monitorización de TA/FC/SatO2 cada
-                10 minutos; agitar suavemente la bolsa durante la infusión para prevenir
-                agregados, y lavar la vía con suero fisiológico 0,9% al finalizar.
+                por dos personas cualificadas — en Abecma, la cadena de identidad exige además
+                comprobar las 4 etiquetas del producto (caja de envío, bolsa de infusión,
+                casete y jeringa) frente a los datos del paciente. EKG previo a la infusión y
+                constantes basales (TA/FC/Tª/diuresis/PVC). El producto debe infundirse en ≤30
+                minutos desde su descongelación, preferiblemente por CVC, con monitorización de
+                TA/FC/SatO2 cada 10 minutos; agitar suavemente la bolsa durante la infusión para
+                prevenir agregados, y lavar la vía con suero fisiológico 0,9% al finalizar.
+                Estabilidad tras la descongelación: Yescarta hasta 3h a temperatura ambiente;
+                Abecma solo 1h — no debe volver a congelarse ninguno de los dos productos.
             </div>
 
             <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 4px 0;">Efectos adversos de la infusión</p>
@@ -130,7 +136,7 @@
                 taquicardia/arritmias, elevación de dímero D, hipofibrinogenemia, sangrado).
             </p>
 
-            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 16px 0 6px 0;">Gradación y tratamiento (formulario I/AC-30)</p>
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 16px 0 6px 0;">Gradación y tratamiento (hoja de monitorización del servicio)</p>
             <div class="grade-matrix-wrap">
                 <table class="grade-matrix" id="cart-slc-matriz">
                     <thead><tr></tr></thead>
@@ -185,10 +191,12 @@
                 síntomas compatibles, y RMN previa al CAR-T según el producto o el riesgo
                 individual. Valorar iniciar levetiracetam 500 mg/12h vo desde el día +1 como
                 profilaxis anticomicial en pacientes de alto riesgo (hematotoxicidad, infiltración
-                del SNC o patología neurológica previa).
+                del SNC o patología neurológica previa). En casos seleccionados puede usarse
+                dexametasona 10 mg/24h como profilaxis los días 0, 1 y 2. Analítica previa con
+                PCR y ferritina; monitorizar PCR, ferritina e IL-6 al menos 2 veces por semana.
             </div>
 
-            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 16px 0 6px 0;">Gradación y tratamiento (formulario I/AC-29)</p>
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 16px 0 6px 0;">Gradación y tratamiento (hoja de monitorización del servicio)</p>
             <div class="grade-matrix-wrap">
                 <table class="grade-matrix" id="cart-icans-matriz">
                     <thead><tr></tr></thead>
@@ -233,6 +241,12 @@
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>🫀 Complicaciones cardiacas y respiratorias</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">También pueden aparecer en el periodo post-infusión (primeros 28 días), en el contexto de la rápida expansión de las células CAR-T — vigilar especialmente si coexisten con SLC.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
                         <span>🦠 Infecciones</span> <span>+</span>
                     </div>
                     <div class="micro-prof-body">Los pacientes tratados con CAR-T se consideran de alto riesgo de infección a todos los efectos: uso de profilaxis (reservada sobre todo para neutropenias intensas y prolongadas) y manejo del tratamiento antibiótico empírico de la fiebre igual que en el paciente neutropénico de alto riesgo.</div>
@@ -250,13 +264,19 @@
         </p>
         <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
             Bibliografía citada por esos protocolos: ficha técnica de cada producto ·
-            Estándares JACIE 8ª edición · Manual de Trasplante Hematopoyético (Enric Carreras),
+            Recomendaciones del Ministerio de Sanidad para el uso y manejo de la terapia CAR-T ·
+            Estándares JACIE, 7ª y 8ª edición · Manual EBMT/JACIE de acreditación en terapia
+            celular (Haematologica 2018;105(2):297-316) · Guía de manejo de toxicidad CAR-T de MD
+            Anderson Cancer Center · Manual de Trasplante Hematopoyético (Enric Carreras),
             6ª edición 2022 · The EBMT Handbook 2024 · Lee DW, et al. ASTCT Consensus Grading for
             CRS and Neurologic Toxicity. Biol Blood Marrow Transplant. 2019;25(4):625-638 ·
             Gazeau N, et al. Anakinra for Refractory CRS or ICANS after CAR-T. Transplant Cell
-            Ther. 2023;29(7):430-437 · Jain MD, et al. How I Treat Refractory CRS and ICANS.
-            Blood. 2023;141(20):2430-2442 · Santomasso BD, et al. How I Treat Unique and
+            Ther. 2023;29(7):430-437 · Zhou X, et al. Tocilizumab in B-ALL CAR-T. Front Immunol.
+            2025 · Jain MD, et al. How I Treat Refractory CRS and ICANS. Blood.
+            2023;141(20):2430-2442 · Santomasso BD, et al. How I Treat Unique and
             Difficult-to-Manage Cases of CAR-T-Associated Neurotoxicity. Blood.
-            2023;141(20):2443-2451.
+            2023;141(20):2443-2451 · Hernani R, et al. EEG en neurotoxicidad CAR-T. Clin
+            Neurophysiol. 2024 · Freyer CW, Porter DL. Cytokine release syndrome and
+            neurotoxicity following CAR-T therapies. J Allergy Clin Immunol. 2020.
         </p>
     </div>

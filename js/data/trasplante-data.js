@@ -117,7 +117,8 @@ export const soporteComunAcondicionamiento = [
     { titulo: '🧬 Profilaxis de EICH', texto: 'Con ciclofosfamida post-TPH: ciclofosfamida a dosis altas días +3 y +4, seguida de tacrolimus (o ciclosporina/sirolimus) desde el +5 y micofenolato de mofetilo hasta el +28. Sin ciclofosfamida post-TPH: ciclosporina desde el día -1 + metotrexato en días fijos post-infusión.' },
     { titulo: '🩸 Profilaxis de cistitis hemorrágica', texto: 'MESNA al 100% de la dosis de ciclofosfamida, iniciando 20 minutos antes y manteniendo 24h después, junto con hiperhidratación y furosemida tras la ciclofosfamida.' },
     { titulo: '🦠 Profilaxis de CMV', texto: 'Letermovir en receptores IgG+ sometidos a TPH haploidéntico, 9/10, con corticoides o con injerto pobre y quimera completa.' },
-    { titulo: '🧠 Profilaxis de recidiva en SNC', texto: 'Triple terapia intratecal durante el acondicionamiento en LLA, LMC en fase acelerada, linfomas con criterios de riesgo y LMA de riesgo.' }
+    { titulo: '🧠 Profilaxis de recidiva en SNC', texto: 'Triple terapia intratecal durante el acondicionamiento en LLA, LMC en fase acelerada, linfomas con criterios de riesgo y LMA de riesgo.' },
+    { titulo: '💊 Profilaxis de sangrado', texto: 'Fitomenadiona (vitamina K) 10 mg iv, 1 ampolla semanal, solo en alogénico.' }
 ];
 
 export const irradiacionCorporalTotalData = {
