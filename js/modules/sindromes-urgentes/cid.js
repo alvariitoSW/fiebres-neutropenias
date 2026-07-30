@@ -6,7 +6,10 @@ import {
     cidSicItems,
     cidTerminologia,
     cidEtiologias,
-    cidTratamientoFenotipo
+    cidTratamientoFenotipo,
+    cidCausas,
+    cidAlgoritmoPasos,
+    cidHallazgosLaboratorio
 } from '../../data/sindromes-urgentes-data.js';
 
 function buscarPuntos(valor, tramos) {
@@ -134,10 +137,46 @@ function renderTratamientoFenotipo() {
     `;
 }
 
+function renderCausas() {
+    const cont = document.getElementById('cid-causas-lista');
+    if (!cont) return;
+    cont.innerHTML = cidCausas.map(c => `
+        <li><strong>${c.categoria}</strong>${c.items.length ? ': ' + c.items.join(', ') : ''}</li>
+    `).join('');
+}
+
+function renderAlgoritmo() {
+    const cont = document.getElementById('cid-algoritmo-lista');
+    if (!cont) return;
+    cont.innerHTML = cidAlgoritmoPasos.map(p => `
+        <div class="mini-timeline-node">
+            <div class="dot"></div>
+            <div class="mt-time">Paso ${p.paso}</div>
+            <div class="mt-label"><strong>${p.titulo}</strong><br>${p.detalle}</div>
+        </div>
+    `).join('');
+}
+
+function renderLaboratorio() {
+    const cont = document.getElementById('cid-laboratorio-lista');
+    if (!cont) return;
+    cont.innerHTML = cidHallazgosLaboratorio.map(h => `
+        <div class="micro-prof-item">
+            <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                <span>${h.titulo}</span> <span>+</span>
+            </div>
+            <div class="micro-prof-body">${h.texto}</div>
+        </div>
+    `).join('');
+}
+
 export function init() {
     renderTerminologia();
     renderEtiologias();
     renderTratamientoFenotipo();
+    renderCausas();
+    renderAlgoritmo();
+    renderLaboratorio();
 
     document.querySelectorAll('.cid-overt-input').forEach(el => el.addEventListener('input', calcOvertDic));
     document.getElementById('cid-overt-dimero').addEventListener('change', calcOvertDic);

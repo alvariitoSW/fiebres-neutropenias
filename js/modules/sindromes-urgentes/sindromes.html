@@ -42,7 +42,31 @@
                 </ul>
             </div>
 
-            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Progresión desde CID en fase precoz (por etiología)</p>
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Fisiopatología</p>
+            <p style="font-size: 0.8rem; line-height: 1.5;">
+                Un trastorno subyacente activa de forma sistémica la coagulación. A partir de ahí,
+                dos procesos ocurren en paralelo y se retroalimentan: por un lado, el depósito
+                difuso de fibrina conduce a microtrombosis y fallo orgánico; por otro, el consumo
+                de plaquetas y factores de coagulación conduce a trombocitopenia, déficit de
+                factores y hemorragia. Ambas ramas coexisten en un mismo paciente en proporción
+                variable, lo que explica el espectro trombótico-hemorrágico descrito arriba.
+            </p>
+            <div class="compare-row" style="align-items: stretch;">
+                <div class="compare-box blue" style="text-align: center;">
+                    <strong style="color: var(--accent-blue);">↓ Depósito difuso de fibrina</strong><br>
+                    ↓<br>Microtrombosis<br>↓<br><strong>Fallo orgánico</strong>
+                </div>
+                <div class="compare-box red" style="text-align: center;">
+                    <strong style="color: var(--accent-red);">↓ Consumo de plaquetas y factores</strong><br>
+                    ↓<br>Trombocitopenia y déficit de factores<br>↓<br><strong>Hemorragia</strong>
+                </div>
+            </div>
+            <p style="font-size: 0.7rem; color: var(--text-muted); text-align: center; margin-top: 2px;">Ambas ramas parten de la misma activación sistémica de la coagulación tras el trastorno subyacente.</p>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Trastornos subyacentes asociados a CID</p>
+            <ul id="cid-causas-lista" style="font-size: 0.82rem; line-height: 1.8; margin: 0 0 0 18px;"></ul>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Progresión desde CID en fase precoz (por etiología)</p>
             <p style="font-size: 0.8rem; line-height: 1.5;">
                 El proceso fisiopatológico inicial difiere según la enfermedad de base, aunque
                 todas las etiologías pueden converger en CID franca si no se controla la causa.
@@ -57,6 +81,17 @@
 
             <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Terminología relacionada con la CID</p>
             <div class="micro-profiles" id="cid-terminologia-lista"></div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Algoritmo diagnóstico ISTH</p>
+            <p style="font-size: 0.8rem; line-height: 1.5;">
+                El diagnóstico de CID no depende de una única prueba: exige valorar el cuadro
+                clínico completo junto con pruebas de laboratorio, en un paciente con un trastorno
+                de base conocido. El uso de la puntuación ISTH sigue 5 pasos:
+            </p>
+            <div class="mini-timeline" id="cid-algoritmo-lista" style="margin-top: 18px;"></div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Hallazgos de laboratorio: utilidad y limitaciones</p>
+            <div class="micro-profiles" id="cid-laboratorio-lista"></div>
 
             <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Tabla de puntuación (ISTH 2025)</p>
             <div class="grade-matrix-wrap">
@@ -178,6 +213,106 @@
             </p>
             <div id="cid-tto-fenotipo" style="margin-top: 10px;"></div>
 
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Tratamiento — recomendaciones detalladas (BCSH 2009)</p>
+            <p style="font-size: 0.7rem; color: var(--text-muted); line-height: 1.4;">
+                Grados de recomendación: A = respaldado por ≥1 ensayo clínico aleatorizado dentro
+                de un cuerpo de evidencia consistente · B = estudios bien diseñados sin
+                aleatorización · C = opinión de comités de expertos, sin estudios de calidad
+                directamente aplicables. Niveles de evidencia Ia-IV según el diseño del estudio
+                (de metaanálisis de ECA a opinión de expertos).
+            </p>
+
+            <div class="warning-box" style="margin-top: 10px;">
+                <strong style="color: var(--accent-yellow);">Enfermedad de base</strong>
+                <span class="grade-badge">Grado C, Nivel IV</span><br>
+                La piedra angular del tratamiento de la CID es el tratamiento específico y
+                enérgico del trastorno subyacente (p. ej. antibioterapia y/o drenaje quirúrgico en
+                la sepsis). En muchos casos la CID se resuelve espontáneamente al controlar la
+                causa; en otros es necesario tratamiento de soporte específico dirigido a la
+                coagulopatía.
+            </div>
+
+            <p style="font-size: 0.8rem; line-height: 1.6; margin-top: 14px;">
+                <strong style="color: var(--accent-blue);">Plasma y plaquetas.</strong>
+                La transfusión de plaquetas o de componentes plasmáticos no debe basarse
+                primariamente en los resultados de laboratorio y debe reservarse en general para
+                pacientes con hemorragia activa <span class="grade-badge">Grado C, Nivel IV</span>.
+                En pacientes con CID y hemorragia, o con alto riesgo de sangrado (posoperatorio o
+                antes de un procedimiento invasivo) y un recuento de plaquetas &lt;50×10⁹/L, debe
+                considerarse la transfusión de plaquetas <span class="grade-badge">Grado C, Nivel IV</span>
+                (dosis inicial habitual: 1 dosis de adulto, &gt;240×10⁹). En pacientes sin
+                hemorragia, la transfusión profiláctica de plaquetas no está indicada salvo alto
+                riesgo percibido de sangrado <span class="grade-badge">Grado C, Nivel IV</span>. En
+                pacientes con hemorragia y TP/TTPa prolongados, el plasma fresco congelado (PFC)
+                puede ser útil, sin que deba instaurarse solo por las pruebas de laboratorio
+                <span class="grade-badge">Grado C, Nivel IV</span>. No hay evidencia de que la
+                infusión de plasma estimule la activación de la coagulación en curso. Si la
+                infusión de PFC no es posible por sobrecarga de volumen, se pueden usar
+                concentrados de factores (p. ej. complejo protrombínico), reconociendo que solo
+                corrigen parcialmente el defecto porque contienen solo factores seleccionados,
+                mientras que en la CID el déficit es global. La hipofibrinogenemia grave
+                (&lt;1 g/L) que persiste pese a la reposición con PFC puede tratarse con
+                concentrado de fibrinógeno o crioprecipitado
+                <span class="grade-badge">Grado C, Nivel IV</span> (una dosis de 3 g de fibrinógeno
+                eleva el fibrinógeno plasmático en torno a 1 g/L; equivale aproximadamente a 4
+                unidades de PFC o 2 pools de crioprecipitado de 10 donantes). El uso de factor VIIa
+                recombinante se ha descrito con éxito en casos aislados de hemorragia grave, pero
+                su eficacia y seguridad en la CID no están establecidas y debe usarse con cautela.
+            </p>
+
+            <p style="font-size: 0.8rem; line-height: 1.6; margin-top: 14px;">
+                <strong style="color: var(--accent-blue);">Anticoagulantes.</strong>
+                En pacientes críticos sin hemorragia con CID, se recomienda profilaxis de
+                tromboembolismo venoso con dosis profilácticas de heparina no fraccionada (HNF) o
+                heparina de bajo peso molecular <span class="grade-badge">Grado A, Nivel Ib</span>.
+                En los casos de CID donde predomina la trombosis (tromboembolismo arterial o
+                venoso, púrpura fulminans grave con isquemia acral o infarto cutáneo vascular),
+                deben considerarse dosis terapéuticas de heparina; en estos pacientes, si además se
+                percibe un riesgo elevado de sangrado, puede ser preferible la HNF en infusión
+                continua por su vida media corta y reversibilidad (dosis ajustada por peso, p. ej.
+                10 μg/kg/h, sin intención de prolongar el TTPa a 1,5-2,5 veces el control); la
+                monitorización del TTPa puede ser complicada en estos casos y es importante la
+                observación clínica de signos de sangrado.
+            </p>
+
+            <p style="font-size: 0.8rem; line-height: 1.6; margin-top: 14px;">
+                <strong style="color: var(--accent-blue);">Concentrados de factores anticoagulantes.</strong>
+                El concentrado de antitrombina ha mostrado mejoría de parámetros analíticos en
+                varios ensayos, pero ningún ensayo aleatorizado a gran escala ha demostrado
+                reducción significativa de la mortalidad; en ausencia de evidencia prospectiva que
+                confirme un beneficio clínico, el concentrado de antitrombina no puede
+                recomendarse actualmente en pacientes con CID que no reciben heparina
+                <span class="grade-badge red">Grado A, Nivel Ib</span>.
+            </p>
+            <div class="warning-box" style="margin-top: 10px;">
+                <strong style="color: var(--accent-yellow);">Nota histórica — proteína C activada recombinante</strong><br>
+                La guía original de 2009 recomendaba considerar drotrecogina alfa (proteína C
+                activada recombinante, comercializada como Xigris®) en sepsis grave con CID, tras
+                el ensayo PROWESS (Bernard et al. 2001). Sin embargo, el ensayo posterior
+                PROWESS-SHOCK no confirmó beneficio en supervivencia, y el fabricante retiró el
+                fármaco del mercado mundial en 2011 a petición de las autoridades reguladoras. Se
+                incluye esta recomendación aquí solo como contexto histórico: la proteína C
+                activada recombinante ya <strong>no está disponible ni forma parte de la práctica
+                clínica actual</strong>.
+            </div>
+
+            <p style="font-size: 0.8rem; line-height: 1.6; margin-top: 14px;">
+                <strong style="color: var(--accent-blue);">Antifibrinolíticos.</strong>
+                En general, los pacientes con CID no deben tratarse con agentes antifibrinolíticos
+                <span class="grade-badge red">Grado C, Nivel IV</span>, ya que el depósito de fibrina
+                es una característica central de la CID y la inhibición del sistema fibrinolítico
+                resulta contraproducente. La excepción son los raros casos en que predomina un
+                estado hiperfibrinolítico primario o secundario — como la coagulopatía de la
+                leucemia promielocítica aguda (LMA-M3) o algunos casos de CID asociada a
+                neoplasias (p. ej. carcinoma de próstata) — en los que los pacientes con hemorragia
+                grave pueden tratarse con análogos de la lisina como el ácido tranexámico (p. ej.
+                1 g/8 h) <span class="grade-badge">Grado C, Nivel IV</span>. En la LMA-M3, dado que
+                el tratamiento diferenciador con ácido all-trans-retinoico (ATRA) puede aumentar
+                por sí mismo el riesgo trombótico, se han documentado casos de trombosis grave con
+                el uso combinado de ATRA y ácido tranexámico, por lo que este último tiene un papel
+                muy restringido en esta entidad.
+            </p>
+
             <div class="card" style="border-top: 1px solid var(--accent-green); margin-top: 18px;">
                 <h3 style="color: var(--accent-green);">Fuentes</h3>
                 <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
@@ -186,6 +321,11 @@
                     disseminated intravascular coagulation in 2025: communication from the ISTH
                     SSC Subcommittee on Disseminated Intravascular Coagulation. J Thromb Haemost.
                     2025;23(7):2356-2362.
+                </p>
+                <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+                    Levi M, Toh CH, Thachil J, Watson HG. Guidelines for the diagnosis and
+                    management of disseminated intravascular coagulation. British Committee for
+                    Standards in Haematology. Br J Haematol. 2009;145(1):24-33.
                 </p>
             </div>
         </div>

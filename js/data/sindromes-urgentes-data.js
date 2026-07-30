@@ -1,8 +1,12 @@
 // Datos puros para el módulo "Síndromes Hematológicos Urgentes".
-// Fuente CID: Iba T, Levy JH, Maier CL, et al. Updated definition and scoring
-// of disseminated intravascular coagulation in 2025: communication from the
-// ISTH SSC Subcommittee on Disseminated Intravascular Coagulation.
-// J Thromb Haemost. 2025;23:2356-2362.
+// Fuentes CID:
+// - Iba T, Levy JH, Maier CL, et al. Updated definition and scoring of
+//   disseminated intravascular coagulation in 2025: communication from the
+//   ISTH SSC Subcommittee on Disseminated Intravascular Coagulation.
+//   J Thromb Haemost. 2025;23:2356-2362.
+// - Levi M, Toh CH, Thachil J, Watson HG. Guidelines for the diagnosis and
+//   management of disseminated intravascular coagulation. Br J Haematol.
+//   2009;145(1):24-33 (British Committee for Standards in Haematology, BCSH).
 
 // Tabla 1 del artículo: puntuación de cada ítem, idéntica para Overt DIC 2021
 // y Overt DIC 2025 salvo el corte de dímero-D (cualitativo en 2021,
@@ -100,3 +104,54 @@ export const cidTratamientoFenotipo = {
     },
     nota: 'El tratamiento de la enfermedad de base es esencial y obligatorio en ambos fenotipos. La anticoagulación (heparina, antitrombina, trombomodulina) se dirige a la CID trombótica; el ácido tranexámico se reserva para la CID hemorrágica. En ambos fenotipos, la reposición con plasma fresco congelado, fibrinógeno y plaquetas se recomienda en la fase tardía descompensada.',
 };
+
+// Tabla I de la guía BCSH 2009: trastornos subyacentes asociados a CID.
+export const cidCausas = [
+    { categoria: 'Sepsis e infección grave', items: [] },
+    { categoria: 'Traumatismo', items: [] },
+    { categoria: 'Destrucción de órganos', items: ['Pancreatitis'] },
+    { categoria: 'Neoplasia', items: ['Tumores sólidos', 'Leucemia'] },
+    { categoria: 'Obstétricas', items: ['Embolia de líquido amniótico', 'Abruptio placentae', 'Preeclampsia'] },
+    { categoria: 'Anomalías vasculares', items: ['Hemangiomas de gran tamaño', 'Aneurisma vascular'] },
+    { categoria: 'Fallo hepático grave', items: [] },
+    { categoria: 'Agresiones tóxicas e inmunológicas', items: ['Mordeduras de serpiente', 'Drogas recreativas', 'Incompatibilidad transfusional ABO', 'Rechazo de trasplante'] },
+];
+
+// Los 5 pasos del algoritmo diagnóstico ISTH (Taylor et al. 2001), recogido
+// en la guía BCSH 2009.
+export const cidAlgoritmoPasos = [
+    { paso: '1', titulo: 'Evaluación de riesgo', detalle: '¿Tiene el paciente un trastorno subyacente conocido asociado a CID franca? Si no, no usar este algoritmo.' },
+    { paso: '2', titulo: 'Pruebas globales', detalle: 'Solicitar TP, recuento de plaquetas, fibrinógeno y un marcador relacionado con la fibrina (dímero-D o PDF).' },
+    { paso: '3', titulo: 'Puntuar resultados', detalle: 'Asignar puntos a cada ítem según la tabla de puntuación.' },
+    { paso: '4', titulo: 'Calcular la puntuación', detalle: 'Sumar los puntos de los 4 ítems.' },
+    { paso: '5', titulo: 'Interpretar', detalle: '≥5: compatible con CID franca (repetir puntuación a diario). <5: sugestivo de CID no franca (repetir en 1-2 días).' },
+];
+
+// Hallazgos de laboratorio (guía BCSH 2009): utilidad y limitaciones de cada
+// prueba en el diagnóstico de CID.
+export const cidHallazgosLaboratorio = [
+    {
+        titulo: 'Recuento plaquetario',
+        texto: 'Una reducción o tendencia descendente en determinaciones sucesivas es un signo sensible (aunque poco específico) de CID: la trombocitopenia está presente hasta en el 98% de los casos, con cifras &lt;50×10⁹/L en el 50%. Una determinación aislada es poco útil, ya que el recuento inicial puede estar dentro del rango "normal" (150-400×10⁹/L); un descenso continuo, incluso dentro de rango normal, puede indicar generación activa de trombina. La trombocitopenia tampoco es específica de CID, ya que muchas enfermedades de base (leucemia aguda, sepsis) también la producen.',
+    },
+    {
+        titulo: 'PDF y dímero-D',
+        texto: 'Los productos de degradación de la fibrina (PDF) y el dímero-D reflejan la actividad fibrinolítica, pero los PDF no discriminan entre degradación de fibrina reticulada y de fibrinógeno, lo que limita su especificidad. El dímero-D es más específico pero tampoco es un test aislado válido: otras situaciones (traumatismo, cirugía reciente, tromboembolismo venoso) también lo elevan. No existe un punto de corte estandarizado y universalmente aceptado para definir un aumento "moderado" o "fuerte", por lo que su interpretación depende del criterio clínico, el ensayo usado y el contexto.',
+    },
+    {
+        titulo: 'TP y TTPa',
+        texto: 'Están prolongados en un 50-60% de los casos de CID en algún momento de la evolución, sobre todo por consumo de factores de coagulación (aunque la disfunción hepática, el déficit de vitamina K o las pérdidas hemáticas masivas también contribuyen). <strong>Dato clínicamente relevante: en casi la mitad de los pacientes con CID, el TP y el TTPa son normales o incluso más cortos de lo normal</strong>, por la presencia de factores activados circulantes (trombina, Xa) que aceleran la formación del coágulo — un TP/TTPa normal NO excluye CID y obliga a repetir la determinación. Debe monitorizarse el TP (en segundos), no el INR: el INR solo está validado para el control de la anticoagulación oral.',
+    },
+    {
+        titulo: 'Fibrinógeno',
+        texto: 'A pesar de ser una prueba muy solicitada, el fibrinógeno es poco útil en la mayoría de los casos: al ser un reactante de fase aguda, sus niveles pueden mantenerse en rango normal durante un tiempo prolongado pese al consumo activo. En una serie, la sensibilidad de un fibrinógeno bajo para el diagnóstico de CID fue solo del 28%, y la hipofibrinogenemia se detectó únicamente en los casos muy graves (fibrinógeno normal hasta en el 57% de los pacientes con CID). Las determinaciones seriadas son más útiles que un valor aislado. Se recomienda el método de Clauss para su medición.',
+    },
+    {
+        titulo: 'Frotis de sangre periférica',
+        texto: 'Los hematíes fragmentados (esquistocitos), aunque descritos en la CID, rara vez superan el 10% del total de hematíes. En casos de CID crónica con dímero-D elevado pero pruebas de coagulación básicas normales, la presencia de esquistocitos puede aportar evidencia confirmatoria adicional. Cuando aparecen en número elevado, deben plantearse otros diagnósticos de microangiopatía trombótica, como la PTT.',
+    },
+    {
+        titulo: 'Perfiles hemostáticos globales',
+        texto: 'La tromboelastografía (TEG) se ha usado para vincular alteraciones diagnósticas con disfunción hemostática, pero su sensibilidad/especificidad diagnóstica para CID no está bien establecida (la evidencia disponible se refiere más a la predicción de sangrado en cirugía cardiovascular). Un perfil de transmitancia óptica atípico en el TTPa (la llamada "onda bifásica") se ha asociado a CID de forma independiente de la prolongación de los tiempos de coagulación: en un estudio de 1187 ingresos consecutivos en UCI, el valor predictivo positivo aumentaba con el grado de anomalía de la onda, que con frecuencia precedía a la alteración de los parámetros convencionales — aunque su uso está limitado a analizadores óptico-fotométricos específicos.',
+    },
+];

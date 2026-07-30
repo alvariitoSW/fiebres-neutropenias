@@ -97,17 +97,28 @@ directamente en `index.html`) con 4 botones grandes:
    una sola vista con 3 pestañas (CID / PTT / Síndrome de Lisis Tumoral, ver
    `js/modules/sindromes-urgentes/index.js`, que usa `core/tabs.js` igual que
    la pestaña de Introducción al TPH). **CID** tiene contenido real: definición
-   actualizada 2025, fenotipo trombótico vs. hemorrágico, esquema de
-   progresión por etiología (barras `.phenotype-bar` en
-   `js/modules/sindromes-urgentes/cid.js`), terminología relacionada
-   (acordeón), tabla de puntuación ISTH 2025 (Overt DIC 2021/2025 y SIC) y dos
-   calculadoras interactivas (Overt DIC 2025 y SIC) con datos en
-   `js/data/sindromes-urgentes-data.js`, más tratamiento por fenotipo. Fuente:
-   Iba T, et al. J Thromb Haemost. 2025;23(7):2356-2362 (comunicación ISTH
-   SSC). **PTT** y **Síndrome de Lisis Tumoral** siguen de momento en aviso
-   "Próximamente", pendientes de la bibliografía que se vaya aportando — para
-   completarlos sigue el mismo patrón que CID (contenido teórico propio,
-   calculadora(s) interactiva(s) si la escala lo permite, apartado de
+   actualizada 2025, fenotipo trombótico vs. hemorrágico, diagrama de
+   fisiopatología (depósito de fibrina/microtrombosis/fallo orgánico vs.
+   consumo de plaquetas-factores/hemorragia), trastornos subyacentes
+   asociados, esquema de progresión por etiología (barras `.phenotype-bar`),
+   algoritmo diagnóstico ISTH en 5 pasos (`.mini-timeline`), hallazgos de
+   laboratorio con su utilidad/limitaciones (acordeón), terminología
+   relacionada (acordeón), tabla de puntuación ISTH 2025 (Overt DIC 2021/2025
+   y SIC) y dos calculadoras interactivas (Overt DIC 2025 y SIC) — todo en
+   `js/modules/sindromes-urgentes/cid.js` con datos en
+   `js/data/sindromes-urgentes-data.js` —, más tratamiento por fenotipo y
+   recomendaciones de tratamiento detalladas con grados de evidencia
+   (`.grade-badge`), incluyendo una nota histórica explícita de que la
+   proteína C activada recombinante (Xigris®) fue retirada del mercado en
+   2011 tras el ensayo PROWESS-SHOCK y ya no forma parte de la práctica
+   clínica actual — no reproducir esa recomendación como vigente si se
+   amplía este apartado en el futuro. Fuentes: Iba T, et al. J Thromb
+   Haemost. 2025;23(7):2356-2362 (comunicación ISTH SSC) y Levi M, Toh CH,
+   Thachil J, Watson HG. Br J Haematol. 2009;145(1):24-33 (guía BCSH). **PTT**
+   y **Síndrome de Lisis Tumoral** siguen de momento en aviso "Próximamente",
+   pendientes de la bibliografía que se vaya aportando — para completarlos
+   sigue el mismo patrón que CID (contenido teórico propio, calculadora(s)
+   interactiva(s) si la escala lo permite, apartado de
    Fuentes).
 4. **Trasplante de Progenitores Hematopoyéticos** (`modules/trasplante/`) —
    submenú con tres sub-vistas, todas con contenido real:
