@@ -416,7 +416,7 @@
                 crioprecipitado-pobre o plasma tratado con solvente-detergente, con un volumen de
                 reposición de 1,0-1,5 veces el volumen plasmático del paciente (40-60 mL/kg) cada
                 24 h, hasta la normalización del recuento de plaquetas y de la LDH.
-            </p>
+            </div>
             <p style="font-size: 0.8rem; line-height: 1.6;">
                 <strong style="color: var(--accent-blue);">Corticoides.</strong> Dosis altas desde
                 el inicio (prednisona 1 mg/kg/día oral, o metilprednisolona 125 mg IV 2-4 veces al
@@ -616,9 +616,238 @@
 
         <!-- ===== TAB 3: SÍNDROME DE LISIS TUMORAL ===== -->
         <div id="sind-slt" class="tab-content">
-            <div class="card" style="border-top: 1px solid var(--accent-yellow);">
-                <h3 style="color: var(--accent-yellow);">🚧 Síndrome de Lisis Tumoral</h3>
-                <p style="font-size: 0.85rem; line-height: 1.5; color: var(--text-muted);">Próximamente.</p>
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                El Síndrome de Lisis Tumoral (SLT) es una complicación potencialmente mortal en la
+                que la destrucción masiva de células malignas libera contenido intracelular y
+                electrolitos al torrente sanguíneo, sobrepasando los mecanismos fisiológicos
+                normales de aclaramiento. Puede ocurrir de forma espontánea en neoplasias con tasa
+                proliferativa alta (p. ej. linfoma de Burkitt), pero es más frecuente tras el
+                inicio del tratamiento antineoplásico.
+            </p>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Criterios diagnósticos de Cairo-Bishop</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">
+                Alteraciones presentes desde 3 días antes hasta 7 días después de iniciar el
+                tratamiento. El SLT clínico exige, además del SLT de laboratorio, al menos un
+                criterio clínico.
+            </p>
+            <p style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; margin-top: 10px;">Criterios de laboratorio (≥2 de 4)</p>
+            <div id="slt-lab-lista"></div>
+            <p style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; margin-top: 10px;">Criterios clínicos (≥1, requiere SLT de laboratorio)</p>
+            <div id="slt-clinical-lista"></div>
+            <div class="result-box" id="slt-cairobishop-resultado" style="text-align: left;"></div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Estratificación de riesgo</p>
+            <p style="font-size: 0.8rem; line-height: 1.6;">
+                La evaluación de riesgo debe realizarse en cada paciente antes de iniciar una nueva
+                línea de tratamiento, personalizada según:
+            </p>
+            <ol style="font-size: 0.8rem; line-height: 1.7; margin: 0 0 10px 18px;">
+                <li>Histología de la enfermedad</li>
+                <li>Evaluación de la carga tumoral</li>
+                <li>Factores del paciente (disfunción renal o afectación renal, fragilidad, capacidad de cumplir estrategias profilácticas como la ingesta oral de líquidos)</li>
+                <li>SLT espontáneo de laboratorio o clínico preexistente</li>
+                <li>Agentes terapéuticos específicos de mayor riesgo en ciertas enfermedades (p. ej. venetoclax en LLC, terapia CAR-T)</li>
+            </ol>
+            <div class="warning-box">
+                <strong style="color: var(--accent-yellow);">La vigilancia es continua</strong><br>
+                El riesgo global puede "escalar" por factores del paciente (hiperuricemia,
+                hiperfosfatemia o hiperpotasemia preexistentes, disfunción renal) incluso en
+                enfermedades de bajo riesgo por criterios puramente histológicos. El SLT puede
+                desarrollarse posteriormente incluso en pacientes inicialmente considerados de
+                bajo riesgo, por lo que la vigilancia debe mantenerse en todos los pacientes.
+            </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Selector — riesgo por enfermedad y tratamiento</p>
+            <div class="form-group">
+                <label>Enfermedad / situación</label>
+                <select id="slt-riesgo-select"></select>
+            </div>
+            <div class="result-box" id="slt-riesgo-resultado"></div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Fisiopatología: catabolismo de purinas</p>
+            <div id="slt-purinas-svg"></div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Profilaxis</p>
+            <p style="font-size: 0.8rem; line-height: 1.6;">
+                Las estrategias para reducir el riesgo de SLT incluyen hidratación, fármacos
+                uricosúricos, debulking de la enfermedad, educación del paciente, evitar fármacos
+                nefrotóxicos y monitorización. El momento de estas medidas es importante: la mejor
+                reducción del riesgo se consigue si se instauran antes del tratamiento definitivo,
+                especialmente en cánceres con alto riesgo de SLT espontáneo.
+            </p>
+            <p style="font-size: 0.8rem; line-height: 1.6;">
+                <strong style="color: var(--accent-blue);">Hidratación.</strong> Objetivo de 2-3
+                L/día de líquidos (niños: 2,5-3 L/m²/día), comenzando el día antes del tratamiento.
+                Hidratación IV si es necesario para alcanzar estos objetivos, sobre todo en riesgo
+                alto. Los diuréticos de asa pueden considerarse en riesgo de sobrecarga de
+                volumen (promueven la excreción de potasio con menos interacciones que otros
+                diuréticos). Debe evitarse la suplementación de potasio y fósforo. Precaución en
+                leucemia con recuento elevado y hemoglobina baja, ya que la hiperhidratación puede
+                producir hemodilución y empeorar la anemia. <strong>No hay evidencia de que la
+                alcalinización de la orina reduzca el riesgo de SLT</strong>: aunque aumenta la
+                solubilidad del ácido úrico, no aumenta la de la xantina ni la hipoxantina, y
+                disminuye la solubilidad del calcio y el fósforo, favoreciendo la formación de
+                cristales de fosfato cálcico y la disfunción renal.
+            </p>
+            <p style="font-size: 0.8rem; line-height: 1.6;">
+                <strong style="color: var(--accent-blue);">Debulking de la enfermedad.</strong> El
+                pretratamiento con corticoides (u otra terapia alternativa como obinutuzumab o
+                ibrutinib) antes de iniciar venetoclax en la LLC reduce sustancialmente la tasa de
+                SLT. En la LLA pediátrica, el tratamiento preliminar (prephase) con esteroides
+                durante al menos 7 días se ha asociado a una reducción del 88% en el riesgo de SLT
+                frente a no administrarlo. En la LMA no se ha demostrado beneficio del debulking,
+                posiblemente por el diferente riesgo basal de SLT entre ambos tipos de leucemia. La
+                leucaféresis para reducir el riesgo de SLT en la leucocitosis, pese a tener una
+                justificación teórica, no ha demostrado beneficio en los análisis retrospectivos y
+                <strong>no se recomienda</strong> con este objetivo por falta de evidencia.
+            </p>
+            <p style="font-size: 0.8rem; line-height: 1.6;">
+                <strong style="color: var(--accent-blue);">Educación del paciente.</strong> Debe
+                informarse sobre el riesgo de SLT y los síntomas relevantes antes de iniciar el
+                tratamiento, la importancia de una buena ingesta oral de líquidos, y la necesidad
+                de buscar atención médica si nota una reducción del volumen de orina. Debe
+                explicarse también la importancia de cumplir el régimen profiláctico y el
+                calendario de controles ambulatorios, que en ocasiones exige permanecer cerca del
+                centro tratante.
+            </p>
+            <p style="font-size: 0.8rem; line-height: 1.6;">
+                <strong style="color: var(--accent-blue);">Evitar fármacos nefrotóxicos.</strong>
+                Revisar la medicación habitual del paciente para retirar fármacos que puedan
+                potenciar alteraciones electrolíticas (p. ej. amilorida y otros diuréticos
+                ahorradores de potasio), afectar la vasculatura renal (AINE, IECA/ARA-II) o ser
+                nefrotóxicos por otros mecanismos (inhibidores del SGLT2, metformina).
+            </p>
+            <p style="font-size: 0.8rem; line-height: 1.6;">
+                <strong style="color: var(--accent-blue);">Monitorización.</strong> Análisis con
+                función renal, electrolitos (potasio, calcio, fósforo) y ácido úrico/urato antes
+                del tratamiento y al menos dos veces al día en riesgo alto, hasta 4 veces al día en
+                riesgo muy alto. Los pacientes de riesgo alto ingresados deben tener un control
+                estricto del balance de fluidos, asegurando una diuresis adecuada.
+            </p>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Fármacos uricosúricos</p>
+            <div class="grade-matrix-wrap">
+                <table class="grade-matrix">
+                    <thead><tr><th>Fármaco</th><th>Indicación</th><th>Dosis adulto</th><th>Dosis pediátrica</th><th>Información adicional</th></tr></thead>
+                    <tbody id="slt-farmacos-tabla"></tbody>
+                </table>
+            </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Recomendaciones de profilaxis y monitorización</p>
+            <ul style="font-size: 0.8rem; line-height: 1.8; margin: 0 0 0 18px;">
+                <li>Todo paciente que inicia una nueva línea de tratamiento debe tener una evaluación de riesgo de SLT personalizada, considerando enfermedad, paciente y tratamiento <span class="grade-badge">2B</span>.</li>
+                <li>La vigilancia continua del SLT es necesaria en todos los pacientes, ya que puede desarrollarse posteriormente incluso en quienes inicialmente se consideraron de bajo riesgo <span class="grade-badge">2C</span>.</li>
+                <li>Se debe animar a beber 2-3 L de líquido (niños: 2-3 L/m²/día) el día antes, el día de, y el día después de iniciar una nueva línea de tratamiento; si hay riesgo alto o incapacidad para esa ingesta, considerar fluidoterapia IV <span class="grade-badge">2C</span>.</li>
+                <li>Riesgo bajo: considerar alopurinol los primeros 7 días del primer ciclo <span class="grade-badge">2C</span>.</li>
+                <li>Riesgo alto: considerar hidratación IV y rasburicasa profiláctica (3 mg puede ser suficiente, valorar repetir según analítica); monitorizar al menos dos veces al día, hasta 3-4 veces según la situación clínica <span class="grade-badge">2C</span>.</li>
+                <li>Riesgo intermedio: la hidratación oral con alopurinol puede ser suficiente, pero debe valorarse caso a caso, ya que algunos pacientes pueden requerir una estrategia de riesgo alto <span class="grade-badge">2C</span>.</li>
+                <li>Los uricosúricos profilácticos deben prescribirse y administrarse antes del tratamiento de la neoplasia <span class="grade-badge">2C</span>.</li>
+                <li>Las estrategias de debulking (p. ej. corticoides prephase en el LBDCG) pueden ayudar a reducir el riesgo <span class="grade-badge">2C</span>.</li>
+                <li>Debe asegurarse una comunicación clara con los equipos de guardia fuera de horario sobre pacientes con SLT o riesgo de SLT, especialmente en áreas menos familiarizadas con su manejo <span class="grade-badge">2C</span>.</li>
+            </ul>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Tratamiento del SLT establecido</p>
+            <p style="font-size: 0.8rem; line-height: 1.6;">
+                Requiere un abordaje multidisciplinar (hematología, nefrología, cuidados
+                intensivos) y manejo hospitalario, idealmente con un equipo con experiencia en las
+                complicaciones de la enfermedad hematológica y su tratamiento.
+            </p>
+            <p style="font-size: 0.8rem; line-height: 1.6;">
+                <strong style="color: var(--accent-blue);">Hidratación.</strong> Adultos: 3 L/m²/día
+                de inicio, ajustando para mantener una diuresis de 100 mL/m²/h. Niños: hasta
+                4 L/m²/día según función renal, clínica y estado de volumen.
+            </p>
+            <p style="font-size: 0.8rem; line-height: 1.6;">
+                <strong style="color: var(--accent-blue);">Alteraciones electrolíticas.</strong>
+                Hiperpotasemia: salbutamol nebulizado, insulina + glucosa IV, o resinas de
+                intercambio catiónico orales (patirómero, ciclosilicato de sodio y zirconio,
+                resincalcio). No añadir potasio a los fluidos IV; precaución con cristaloides
+                balanceados (Hartmann, Plasma-Lyte), que también contienen potasio. Hipocalcemia:
+                tratar si es sintomática (arritmia, convulsiones, tetania). Hiperfosfatemia:
+                hidratación IV inicial; los quelantes de fósforo pueden ayudar, aunque su
+                contribución es limitada. Si la hiperfosfatemia o la hiperpotasemia son
+                refractarias al tratamiento médico, debe considerarse la terapia de reemplazo
+                renal (TRR), con monitorización cardiaca continua.
+            </p>
+            <p style="font-size: 0.8rem; line-height: 1.6;">
+                <strong style="color: var(--accent-blue);">Hiperuricemia.</strong> Rasburicasa
+                0,2 mg/kg/día, que puede continuarse hasta 7 días (3-5 días suele ser suficiente),
+                con la duración determinada por la respuesta clínica y los niveles de ácido úrico.
+                El alopurinol debe suspenderse al iniciar rasburicasa y puede reanudarse 24 h
+                después de la última dosis. En pacientes muy graves con presentación aguda, puede
+                valorarse administrar rasburicasa sin esperar el resultado de G6PDH — decisión del
+                consultor responsable, tras una valoración exhaustiva del riesgo-beneficio
+                individual.
+            </p>
+            <p style="font-size: 0.8rem; line-height: 1.6;">
+                <strong style="color: var(--accent-blue);">Monitorización clínica y analítica.</strong>
+                Potasio, ácido úrico, fósforo, calcio y creatinina cada 6-12 h; puede requerirse
+                monitorización electrolítica dirigida más frecuente en alteraciones potencialmente
+                mortales (p. ej. potasio en hiperpotasemia grave). Reevaluación clínica regular del
+                balance de fluidos y la diuresis para guiar el tratamiento.
+            </p>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Indicaciones de terapia de reemplazo renal (TRR)</p>
+            <p style="font-size: 0.8rem; line-height: 1.6;">
+                Las indicaciones son las mismas que para otras causas de fracaso renal agudo, e
+                incluyen hiperpotasemia, sobrecarga de volumen y acidosis metabólica grave
+                refractarias al tratamiento médico. Sin embargo, el umbral para iniciar TRR debe
+                ser más bajo que en otras patologías, porque la destrucción tumoral es continua y
+                el ascenso de los electrolitos séricos puede ser rápido e impredecible. Ante FRA
+                y/o reducción significativa de la diuresis, junto con hiperuricemia,
+                hiperfosfatemia o hipocalcemia refractarias, debe discutirse precozmente con
+                nefrología o cuidados intensivos la consideración oportuna de TRR. No hay evidencia
+                que oriente la elección entre TRR intermitente o continua; la TRR continua en UCI
+                debe considerarse en pacientes críticos o con inestabilidad hemodinámica.
+            </p>
+            <div id="slt-algoritmo-svg"></div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Recomendaciones de tratamiento</p>
+            <ul style="font-size: 0.8rem; line-height: 1.8; margin: 0 0 0 18px;">
+                <li>Hidratación IV vigorosa desde el inicio: 3 L/m²/día en adultos (hasta 4 L/m²/día en niños), con objetivo de diuresis de 100 mL/m²/h en adultos <span class="grade-badge">1B</span>.</li>
+                <li>Tratar las alteraciones electrolíticas según protocolos locales; considerar TRR si son refractarias, con un umbral más bajo que en otras patologías <span class="grade-badge">1B</span>.</li>
+                <li>SLT establecido (de laboratorio o clínico): rasburicasa 0,2 mg/kg/día hasta 7 días (3-5 días suele ser suficiente), con la duración exacta guiada por la respuesta clínica <span class="grade-badge">1B</span>.</li>
+                <li>Suspender el alopurinol al iniciar rasburicasa; puede reanudarse 24 h después de la última dosis <span class="grade-badge">2C</span>.</li>
+                <li>En pacientes muy graves con presentación aguda, valorar administrar rasburicasa sin esperar el resultado de G6PDH <span class="grade-badge">2C</span>.</li>
+                <li>Medir potasio, ácido úrico, fósforo, calcio y creatinina cada 6-12 h; puede requerirse monitorización electrolítica dirigida más frecuente <span class="grade-badge">2C</span>.</li>
+                <li>Reevaluación clínica regular del balance de fluidos y la diuresis para guiar el tratamiento <span class="grade-badge">2C</span>.</li>
+            </ul>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Seguridad del paciente: disponibilidad de fármacos</p>
+            <div class="warning-box">
+                <strong style="color: var(--accent-yellow);">El retraso en la administración de rasburicasa causa daño real</strong><br>
+                Un análisis de incidentes notificados al sistema sanitario británico entre 2016 y
+                2020 identificó 64 incidentes relacionados con la administración retrasada u
+                omitida de medicación para el SLT, 16 de ellos asociados a daño para el paciente.
+                Las causas principales fueron la falta de conocimiento del personal sobre el manejo
+                del SLT y la falta de disponibilidad de la medicación crítica a nivel de planta y
+                de farmacia.
+            </div>
+            <ul style="font-size: 0.8rem; line-height: 1.8; margin: 10px 0 0 18px;">
+                <li>El alopurinol debe estar disponible en todos los servicios hospitalarios donde pueda ser necesario <span class="grade-badge">1B</span>.</li>
+                <li>La rasburicasa (requiere refrigeración) debe estar disponible en cualquier servicio que trate habitualmente a pacientes que puedan requerir dosis profilácticas o de tratamiento <span class="grade-badge">1B</span>.</li>
+                <li>La rasburicasa debe estar disponible para su administración al paciente dentro de la primera hora tras la prescripción <span class="grade-badge">1B</span>.</li>
+                <li>Debe considerarse su disponibilidad en neveras de suministro de urgencia, con ambas concentraciones (1,5 y 7,5 mg/mL) accesibles <span class="grade-badge">1B</span>.</li>
+                <li>Todo el personal sanitario de la organización debe tener conocimiento y acceso a la información para obtener rasburicasa de forma oportuna <span class="grade-badge">1B</span>.</li>
+                <li>Debe haber claridad en las políticas y guías clínicas locales sobre las indicaciones y la dosificación de la rasburicasa <span class="grade-badge">1B</span>.</li>
+                <li>Se requiere formación periódica para todo el personal implicado en el cuidado de pacientes con SLT o riesgo de SLT <span class="grade-badge">1C</span>.</li>
+                <li>Idealmente, los pacientes de alto riesgo deben estar bajo el cuidado de un hematólogo con experiencia en el uso de rasburicasa y el manejo del SLT, en plantas especializadas <span class="grade-badge">2C</span>.</li>
+            </ul>
+
+            <div class="card" style="border-top: 1px solid var(--accent-green); margin-top: 18px;">
+                <h3 style="color: var(--accent-green);">Fuentes</h3>
+                <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+                    Chan YLT, El-Sharkawi D, Shah P, Chanouzas D, O'Connor D, Marks SD, Jones G, on
+                    behalf of the BSH Committee. British Society for Haematology updated
+                    guidelines for the diagnosis and management of tumour lysis syndrome in adults
+                    and children with haematological malignancies: A focus on patient safety. Br J
+                    Haematol. 2025;207(4):1248-1258.
+                </p>
+                <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+                    Criterios diagnósticos: Cairo MS, Bishop M. Tumour lysis syndrome: new
+                    therapeutic strategies and classification. Br J Haematol. 2004;127:3-11.
+                </p>
             </div>
         </div>
     </div>

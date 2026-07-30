@@ -139,11 +139,29 @@ directamente en `index.html`) con 4 botones grandes:
    thrombotic thrombocytopenic purpura. J Thromb Haemost.
    2025;23(10):3711-3732; French score de Coppo P, et al. PLOS One.
    2010;5:e10208; PLASMIC score de Bendapudi PK, et al. Lancet Haematol.
-   2017;4:e157-64. **Síndrome de Lisis Tumoral** sigue de momento en aviso
-   "Próximamente", pendiente de la bibliografía que se vaya aportando — para
-   completarlo sigue el mismo patrón que CID/PTT (contenido teórico propio,
-   calculadora(s) interactiva(s) si la escala lo permite, apartado de
-   Fuentes).
+   2017;4:e157-64. **Síndrome de Lisis Tumoral** también tiene contenido
+   real: calculadora de los criterios diagnósticos de Cairo-Bishop (SLT de
+   laboratorio ≥2 de 4 criterios; SLT clínico = SLT de laboratorio + ≥1
+   criterio clínico), selector interactivo de riesgo por enfermedad/estadio/
+   tratamiento (17 combinaciones aplanadas de la Tabla 2 del artículo),
+   diagrama SVG del catabolismo de purinas con los sitios de acción de
+   alopurinol/febuxostat (xantina oxidasa) y rasburicasa (urato oxidasa),
+   tabla de fármacos uricosúricos, profilaxis (hidratación, debulking de la
+   enfermedad, educación del paciente, evitar nefrotóxicos, monitorización),
+   tratamiento del SLT establecido (hidratación, alteraciones electrolíticas,
+   hiperuricemia, indicaciones de TRR) con flujograma SVG del algoritmo de
+   manejo, y consideraciones de seguridad del paciente sobre la
+   disponibilidad de rasburicasa (con nota sobre el análisis de incidentes
+   del NHSE que motivó esta actualización de la guía) — todo en
+   `js/modules/sindromes-urgentes/slt.js` con datos en
+   `js/data/slt-data.js`. Fuente: Chan YLT, El-Sharkawi D, Shah P, Chanouzas
+   D, O'Connor D, Marks SD, Jones G, on behalf of the BSH Committee. British
+   Society for Haematology updated guidelines for the diagnosis and
+   management of tumour lysis syndrome in adults and children with
+   haematological malignancies: A focus on patient safety. Br J Haematol.
+   2025;207(4):1248-1258; criterios diagnósticos de Cairo MS, Bishop M. Br J
+   Haematol. 2004;127:3-11. Con esto, las 3 pestañas de Síndromes Urgentes
+   tienen contenido real completo.
 4. **Trasplante de Progenitores Hematopoyéticos** (`modules/trasplante/`) —
    submenú con tres sub-vistas, todas con contenido real:
    **Introducción** (selección de donante, acondicionamiento — clasificación
