@@ -220,7 +220,9 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 .kinetic-label { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 5px; }
 .kinetic-label strong { color: var(--accent-purple); }
 .kinetic-track { position: relative; height: 8px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: visible; }
-.kinetic-fill { position: absolute; top: 0; left: 0; height: 100%; border-radius: 2px; background: var(--accent-purple); box-shadow: var(--glow-purple); }
+.kinetic-fill { position: absolute; top: 0; left: 0; height: 100%; border-radius: 2px; background: var(--accent-purple); box-shadow: var(--glow-purple); transition: width 0.2s, background 0.2s; }
+.kinetic-marker { position: absolute; top: -3px; width: 2px; height: 14px; background: var(--accent-yellow); }
+.kinetic-marker-label { position: absolute; top: -16px; transform: translateX(-50%); font-size: 0.62rem; color: var(--accent-yellow); white-space: nowrap; }
 
 .compare-row { display: flex; gap: 8px; margin: 10px 0; }
 .compare-box { flex: 1; border-radius: 2px; padding: 10px; font-size: 0.78rem; line-height: 1.4; }

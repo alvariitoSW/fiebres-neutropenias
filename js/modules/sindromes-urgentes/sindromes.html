@@ -41,6 +41,7 @@
                         leucemia promielocítica aguda.</li>
                 </ul>
             </div>
+            <div id="cid-fenotipos-svg"></div>
 
             <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Fisiopatología</p>
             <p style="font-size: 0.8rem; line-height: 1.5;">
@@ -88,7 +89,7 @@
                 clínico completo junto con pruebas de laboratorio, en un paciente con un trastorno
                 de base conocido. El uso de la puntuación ISTH sigue 5 pasos:
             </p>
-            <div class="mini-timeline" id="cid-algoritmo-lista" style="margin-top: 18px;"></div>
+            <div id="cid-algoritmo-lista" style="margin-top: 10px;"></div>
 
             <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Hallazgos de laboratorio: utilidad y limitaciones</p>
             <div class="micro-profiles" id="cid-laboratorio-lista"></div>
@@ -168,6 +169,14 @@
                 <label>Fibrinógeno (mg/dL)</label>
                 <input type="number" id="cid-overt-fibrinogeno" class="cid-overt-input" min="0" step="1" placeholder="Ej. 90">
             </div>
+            <div class="kinetic-row" style="margin-top: 12px;">
+                <div class="kinetic-label"><span>Puntuación (máx. 8)</span><strong id="cid-overt-gauge-num">—</strong></div>
+                <div class="kinetic-track">
+                    <div class="kinetic-fill" id="cid-overt-gauge-fill" style="width: 0%;"></div>
+                    <div class="kinetic-marker" style="left: 62.5%;"></div>
+                    <div class="kinetic-marker-label" style="left: 62.5%;">≥5</div>
+                </div>
+            </div>
             <div class="result-box" id="cid-overt-resultado"></div>
 
             <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Calculadora — SIC (Sepsis-Induced Coagulopathy)</p>
@@ -202,6 +211,14 @@
                 <select id="cid-sic-sofa-renal" class="cid-sic-sofa">
                     <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
                 </select>
+            </div>
+            <div class="kinetic-row" style="margin-top: 12px;">
+                <div class="kinetic-label"><span>Puntuación (máx. 6)</span><strong id="cid-sic-gauge-num">—</strong></div>
+                <div class="kinetic-track">
+                    <div class="kinetic-fill" id="cid-sic-gauge-fill" style="width: 0%;"></div>
+                    <div class="kinetic-marker" style="left: 66.7%;"></div>
+                    <div class="kinetic-marker-label" style="left: 66.7%;">≥4</div>
+                </div>
             </div>
             <div class="result-box" id="cid-sic-resultado"></div>
 

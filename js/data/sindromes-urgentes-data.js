@@ -105,6 +105,103 @@ export const cidTratamientoFenotipo = {
     nota: 'El tratamiento de la enfermedad de base es esencial y obligatorio en ambos fenotipos. La anticoagulación (heparina, antitrombina, trombomodulina) se dirige a la CID trombótica; el ácido tranexámico se reserva para la CID hemorrágica. En ambos fenotipos, la reposición con plasma fresco congelado, fibrinógeno y plaquetas se recomienda en la fase tardía descompensada.',
 };
 
+// Diagrama SVG original: fenotipos a nivel del vaso (microtrombosis vs.
+// hemorragia), complementario al texto ya existente sobre los dos fenotipos.
+export const cidSvgFenotipos = `
+<svg viewBox="0 0 300 185" class="micro-svg" xmlns="http://www.w3.org/2000/svg">
+  <text x="75" y="14" text-anchor="middle" class="micro-svg-label" style="fill:var(--accent-blue);font-weight:bold;font-size:9px;">CID TROMBÓTICA</text>
+  <line x1="15" y1="55" x2="135" y2="55" style="stroke:var(--text-muted)" stroke-width="2"/>
+  <line x1="15" y1="105" x2="135" y2="105" style="stroke:var(--text-muted)" stroke-width="2"/>
+  <circle cx="28" cy="70" r="5" style="fill:var(--accent-red);opacity:0.55"/>
+  <circle cx="28" cy="90" r="5" style="fill:var(--accent-red);opacity:0.55"/>
+  <circle cx="44" cy="80" r="5" style="fill:var(--accent-red);opacity:0.55"/>
+  <g>
+    <circle cx="100" cy="65" r="6" style="fill:var(--accent-blue)"/>
+    <circle cx="112" cy="62" r="6" style="fill:var(--accent-blue)"/>
+    <circle cx="122" cy="72" r="6" style="fill:var(--accent-blue)"/>
+    <circle cx="100" cy="86" r="6" style="fill:var(--accent-blue)"/>
+    <circle cx="113" cy="93" r="6" style="fill:var(--accent-blue)"/>
+    <circle cx="123" cy="84" r="6" style="fill:var(--accent-blue)"/>
+    <circle cx="108" cy="76" r="6" style="fill:var(--accent-blue)"/>
+    <circle cx="106" cy="78" r="3" style="fill:var(--accent-yellow)"/>
+    <circle cx="119" cy="78" r="3" style="fill:var(--accent-yellow)"/>
+  </g>
+  <rect x="125" y="55" width="10" height="50" style="fill:rgba(184,92,62,0.18)"/>
+  <text x="75" y="140" text-anchor="middle" class="micro-svg-label">Trombo de fibrina y plaquetas</text>
+  <text x="75" y="160" text-anchor="middle" class="micro-svg-label" style="fill:var(--accent-blue);font-weight:bold;">Isquemia → fallo orgánico</text>
+
+  <line x1="150" y1="20" x2="150" y2="170" style="stroke:rgba(255,255,255,0.08)" stroke-width="1"/>
+
+  <text x="225" y="14" text-anchor="middle" class="micro-svg-label" style="fill:var(--accent-red);font-weight:bold;font-size:9px;">CID HEMORRÁGICA</text>
+  <line x1="165" y1="55" x2="207" y2="55" style="stroke:var(--text-muted)" stroke-width="2"/>
+  <line x1="233" y1="55" x2="285" y2="55" style="stroke:var(--text-muted)" stroke-width="2"/>
+  <line x1="165" y1="105" x2="285" y2="105" style="stroke:var(--text-muted)" stroke-width="2"/>
+  <path d="M207 55 L215 40 L221 55" style="fill:none;stroke:var(--accent-red)" stroke-width="1.8"/>
+  <path d="M221 55 L227 40 L233 55" style="fill:none;stroke:var(--accent-red)" stroke-width="1.8"/>
+  <ellipse cx="220" cy="34" rx="26" ry="9" style="fill:rgba(184,92,62,0.22)"/>
+  <circle cx="208" cy="32" r="3.5" style="fill:var(--accent-red)"/>
+  <circle cx="221" cy="27" r="3.5" style="fill:var(--accent-red)"/>
+  <circle cx="233" cy="33" r="3.5" style="fill:var(--accent-red)"/>
+  <circle cx="188" cy="75" r="5" style="fill:var(--accent-red);opacity:0.3"/>
+  <circle cx="258" cy="88" r="5" style="fill:var(--accent-red);opacity:0.3"/>
+  <text x="225" y="140" text-anchor="middle" class="micro-svg-label">Rotura de la barrera hemostática</text>
+  <text x="225" y="160" text-anchor="middle" class="micro-svg-label" style="fill:var(--accent-red);font-weight:bold;">Consumo de factores → hemorragia</text>
+</svg>`;
+
+// Diagrama SVG original: algoritmo diagnóstico ISTH como flujograma con
+// rombos de decisión (Taylor et al. 2001 / BCSH 2009).
+export const cidSvgAlgoritmo = `
+<svg viewBox="0 0 300 335" class="micro-svg" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="algArrow" markerWidth="7" markerHeight="7" refX="5" refY="2.5" orient="auto">
+      <path d="M0,0 L5,2.5 L0,5 Z" style="fill:var(--text-muted)"/>
+    </marker>
+  </defs>
+
+  <rect x="55" y="8" width="190" height="32" rx="4" style="fill:rgba(212,175,55,0.08);stroke:var(--accent-blue)" stroke-width="1.5"/>
+  <text x="150" y="21" text-anchor="middle" class="micro-svg-label">Trastorno subyacente conocido</text>
+  <text x="150" y="33" text-anchor="middle" class="micro-svg-label">asociado a CID</text>
+  <line x1="150" y1="40" x2="150" y2="58" style="stroke:var(--text-muted)" stroke-width="1.5" marker-end="url(#algArrow)"/>
+
+  <polygon points="150,60 200,90 150,120 100,90" style="fill:rgba(207,154,62,0.10);stroke:var(--accent-yellow)" stroke-width="1.5"/>
+  <text x="150" y="86" text-anchor="middle" class="micro-svg-label">¿Trastorno</text>
+  <text x="150" y="96" text-anchor="middle" class="micro-svg-label">confirmado?</text>
+
+  <line x1="200" y1="90" x2="222" y2="90" style="stroke:var(--text-muted)" stroke-width="1.5" marker-end="url(#algArrow)"/>
+  <text x="212" y="83" text-anchor="middle" class="micro-svg-label" style="fill:var(--accent-red);">No</text>
+  <rect x="222" y="74" width="72" height="32" rx="4" style="fill:rgba(184,92,62,0.10);stroke:var(--accent-red)" stroke-width="1.5"/>
+  <text x="258" y="88" text-anchor="middle" class="micro-svg-label">No usar</text>
+  <text x="258" y="99" text-anchor="middle" class="micro-svg-label">el algoritmo</text>
+
+  <line x1="150" y1="120" x2="150" y2="138" style="stroke:var(--text-muted)" stroke-width="1.5" marker-end="url(#algArrow)"/>
+  <text x="160" y="133" class="micro-svg-label" style="fill:var(--accent-green);">Sí</text>
+
+  <rect x="40" y="140" width="220" height="34" rx="4" style="fill:rgba(0,0,0,0.2);stroke:var(--text-muted)" stroke-width="1.5"/>
+  <text x="150" y="154" text-anchor="middle" class="micro-svg-label">Solicitar TP, plaquetas, fibrinógeno</text>
+  <text x="150" y="166" text-anchor="middle" class="micro-svg-label">y marcador de fibrina (dímero-D/PDF)</text>
+  <line x1="150" y1="174" x2="150" y2="192" style="stroke:var(--text-muted)" stroke-width="1.5" marker-end="url(#algArrow)"/>
+
+  <rect x="75" y="194" width="150" height="28" rx="4" style="fill:rgba(0,0,0,0.2);stroke:var(--text-muted)" stroke-width="1.5"/>
+  <text x="150" y="212" text-anchor="middle" class="micro-svg-label">Puntuar y sumar (0-8)</text>
+  <line x1="150" y1="222" x2="150" y2="240" style="stroke:var(--text-muted)" stroke-width="1.5" marker-end="url(#algArrow)"/>
+
+  <polygon points="150,242 205,272 150,302 95,272" style="fill:rgba(207,154,62,0.10);stroke:var(--accent-yellow)" stroke-width="1.5"/>
+  <text x="150" y="268" text-anchor="middle" class="micro-svg-label">¿Puntuación</text>
+  <text x="150" y="278" text-anchor="middle" class="micro-svg-label">≥5?</text>
+
+  <line x1="95" y1="272" x2="70" y2="272" style="stroke:var(--text-muted)" stroke-width="1.5" marker-end="url(#algArrow)"/>
+  <text x="82" y="265" text-anchor="middle" class="micro-svg-label" style="fill:var(--accent-green);">No</text>
+  <rect x="4" y="257" width="70" height="34" rx="4" style="fill:rgba(144,160,106,0.10);stroke:var(--accent-green)" stroke-width="1.5"/>
+  <text x="39" y="270" text-anchor="middle" class="micro-svg-label">CID no franca</text>
+  <text x="39" y="281" text-anchor="middle" class="micro-svg-label">(repetir en 1-2 d)</text>
+
+  <line x1="205" y1="272" x2="230" y2="272" style="stroke:var(--text-muted)" stroke-width="1.5" marker-end="url(#algArrow)"/>
+  <text x="219" y="265" text-anchor="middle" class="micro-svg-label" style="fill:var(--accent-red);">Sí</text>
+  <rect x="230" y="257" width="66" height="34" rx="4" style="fill:rgba(184,92,62,0.12);stroke:var(--accent-red)" stroke-width="1.5"/>
+  <text x="263" y="270" text-anchor="middle" class="micro-svg-label">CID franca</text>
+  <text x="263" y="281" text-anchor="middle" class="micro-svg-label">(repetir a diario)</text>
+</svg>`;
+
 // Tabla I de la guía BCSH 2009: trastornos subyacentes asociados a CID.
 export const cidCausas = [
     { categoria: 'Sepsis e infección grave', items: [] },
