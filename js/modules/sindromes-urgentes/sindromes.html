@@ -1,20 +1,208 @@
     <button class="back-btn btn-volver-home">← VOLVER</button>
     <div class="diag-header">
         <h2 style="color: var(--accent-yellow); text-shadow: none;">Síndromes Hematológicos Urgentes</h2>
-        <p>Contenido en preparación</p>
+        <p>CID, PTT y Síndrome de Lisis Tumoral</p>
     </div>
 
-    <div class="card" style="border-top: 1px solid var(--accent-yellow);">
-        <h3 style="color: var(--accent-yellow);">🚧 Coagulación Intravascular Diseminada (CID)</h3>
-        <p style="font-size: 0.85rem; line-height: 1.5; color: var(--text-muted);">Próximamente.</p>
-    </div>
+    <div class="card" id="panel-sindromes-tabs">
+        <div class="tabs">
+            <div class="tab active" data-tab="sind-cid">CID</div>
+            <div class="tab" data-tab="sind-ptt">PTT</div>
+            <div class="tab" data-tab="sind-slt">S. Lisis Tumoral</div>
+        </div>
 
-    <div class="card" style="border-top: 1px solid var(--accent-yellow);">
-        <h3 style="color: var(--accent-yellow);">🚧 Púrpura Trombótica Trombocitopénica (PTT)</h3>
-        <p style="font-size: 0.85rem; line-height: 1.5; color: var(--text-muted);">Próximamente.</p>
-    </div>
+        <!-- ===== TAB 1: CID ===== -->
+        <div id="sind-cid" class="tab-content active">
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                La Coagulación Intravascular Diseminada (CID) es un trastorno intravascular
+                adquirido y potencialmente mortal, caracterizado por activación sistémica de la
+                coagulación, fibrinólisis desregulada y lesión endotelial, que da lugar a
+                microtrombosis. Se origina a partir de múltiples etiologías (sepsis, traumatismo,
+                cáncer, complicaciones obstétricas, golpe de calor) y progresa desde una fase
+                precoz, potencialmente asintomática y detectable solo por laboratorio, hasta una
+                fase avanzada ("CID franca") con hemorragia y/o disfunción orgánica. La definición
+                y los criterios diagnósticos fueron actualizados en 2025 por el Subcomité de CID
+                de la ISTH, sustituyendo a la comunicación original de 2001.
+            </p>
 
-    <div class="card" style="border-top: 1px solid var(--accent-yellow);">
-        <h3 style="color: var(--accent-yellow);">🚧 Síndrome de Lisis Tumoral</h3>
-        <p style="font-size: 0.85rem; line-height: 1.5; color: var(--text-muted);">Próximamente.</p>
+            <div class="warning-box" style="margin-top: 14px;">
+                <strong style="color: var(--accent-yellow);">Dos fenotipos, no una sola CID</strong><br>
+                La CID trombótica y la CID hemorrágica coexisten con frecuencia pero representan
+                extremos de un mismo espectro fisiopatológico, definido por el balance entre
+                trombosis y sangrado:
+                <ul style="margin: 8px 0 0 18px;">
+                    <li><strong>CID trombótica:</strong> microtrombosis generalizada con isquemia y
+                        fallo orgánico (renal, hepático, distrés respiratorio). Dímero-D elevado,
+                        descenso leve-moderado de plaquetas y factores.</li>
+                    <li><strong>CID hemorrágica:</strong> sangrado en múltiples localizaciones
+                        (mucosas, puntos de punción). Trombocitopenia marcada, descenso
+                        significativo de factores (fibrinógeno), TP prolongado y PDF muy elevados.
+                        Es más frecuente en traumatismo grave, complicaciones obstétricas y
+                        leucemia promielocítica aguda.</li>
+                </ul>
+            </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Progresión desde CID en fase precoz (por etiología)</p>
+            <p style="font-size: 0.8rem; line-height: 1.5;">
+                El proceso fisiopatológico inicial difiere según la enfermedad de base, aunque
+                todas las etiologías pueden converger en CID franca si no se controla la causa.
+                El balance trombótico/hemorrágico predominante orienta el enfoque terapéutico
+                precoz:
+            </p>
+            <div id="cid-etiologias-lista" style="margin-top: 10px;"></div>
+            <div class="phenotype-legend">
+                <span class="leg-tromb">Fenotipo trombótico</span>
+                <span class="leg-hemo">Fenotipo hemorrágico</span>
+            </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Terminología relacionada con la CID</p>
+            <div class="micro-profiles" id="cid-terminologia-lista"></div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Tabla de puntuación (ISTH 2025)</p>
+            <div class="grade-matrix-wrap">
+                <table class="grade-matrix">
+                    <thead>
+                        <tr><th>Ítem</th><th class="grade-matrix-head g2">Overt DIC 2021</th><th class="grade-matrix-head g3">Overt DIC 2025</th><th class="grade-matrix-head g1">SIC</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Recuento plaquetario (×10⁹/L)</td>
+                            <td>2 pts: &lt;50<br>1 pt: ≥50, &lt;100</td>
+                            <td>2 pts: &lt;50<br>1 pt: ≥50, &lt;100</td>
+                            <td>2 pts: &lt;100<br>1 pt: ≥100, &lt;150</td>
+                        </tr>
+                        <tr>
+                            <td>Dímero-D</td>
+                            <td>3 pts: aumento fuerte (o PDF)<br>2 pts: aumento moderado (o PDF)</td>
+                            <td>3 pts: &gt;×7 límite superior normal<br>2 pts: &gt;×3 límite superior normal</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>TP (prolongación vs. INR)</td>
+                            <td>2 pts: ≥6 s de prolongación<br>1 pt: ≥3 s, &lt;6 s</td>
+                            <td>2 pts: ≥6 s de prolongación<br>1 pt: ≥3 s, &lt;6 s</td>
+                            <td>2 pts: INR &gt;1,4<br>1 pt: INR &gt;1,2, ≤1,4</td>
+                        </tr>
+                        <tr>
+                            <td>Fibrinógeno (mg/dL)</td>
+                            <td>1 pt: &lt;100</td>
+                            <td>1 pt: &lt;100</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>SOFA (resp. + cardiovasc. + hepático + renal)</td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td>2 pts: suma ≥2<br>1 pt: suma =1</td>
+                        </tr>
+                        <tr class="grade-matrix-tto">
+                            <th>Corte diagnóstico</th>
+                            <th>≥5</th>
+                            <th>≥5</th>
+                            <th>≥4*</th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="grade-matrix-hint">*Para SIC, además del total ≥4, la suma de puntos de plaquetas + INR debe ser &gt;2.</p>
+            <p style="font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; margin-top: 6px;">
+                Ojo con la fila de TP: en Overt DIC 2021/2025 el corte se define por
+                <strong>segundos de prolongación del TP sobre el control</strong>, mientras que en
+                SIC se usa directamente el <strong>valor de INR</strong>. Son magnitudes distintas
+                aunque el artículo original las agrupe bajo la misma fila "PT-INR".
+            </p>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Calculadora — Overt DIC 2025</p>
+            <div class="form-group">
+                <label>Recuento plaquetario (×10⁹/L)</label>
+                <input type="number" id="cid-overt-plaquetas" class="cid-overt-input" min="0" step="1" placeholder="Ej. 45">
+            </div>
+            <div class="form-group">
+                <label>Dímero-D</label>
+                <select id="cid-overt-dimero">
+                    <option value="normal">Normal o aumento leve (≤×3 LSN)</option>
+                    <option value="moderado">Aumento moderado (&gt;×3 LSN)</option>
+                    <option value="fuerte">Aumento fuerte (&gt;×7 LSN)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Prolongación del TP respecto al control (segundos)</label>
+                <input type="number" id="cid-overt-pt" class="cid-overt-input" min="0" step="0.5" placeholder="Ej. 4">
+            </div>
+            <div class="form-group">
+                <label>Fibrinógeno (mg/dL)</label>
+                <input type="number" id="cid-overt-fibrinogeno" class="cid-overt-input" min="0" step="1" placeholder="Ej. 90">
+            </div>
+            <div class="result-box" id="cid-overt-resultado"></div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Calculadora — SIC (Sepsis-Induced Coagulopathy)</p>
+            <div class="form-group">
+                <label>Recuento plaquetario (×10⁹/L)</label>
+                <input type="number" id="cid-sic-plaquetas" class="cid-sic-input" min="0" step="1" placeholder="Ej. 120">
+            </div>
+            <div class="form-group">
+                <label>INR</label>
+                <input type="number" id="cid-sic-inr" class="cid-sic-input" min="0" step="0.1" placeholder="Ej. 1,3">
+            </div>
+            <div class="form-group">
+                <label>SOFA respiratorio (0-4)</label>
+                <select id="cid-sic-sofa-resp" class="cid-sic-sofa">
+                    <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>SOFA cardiovascular (0-4)</label>
+                <select id="cid-sic-sofa-cv" class="cid-sic-sofa">
+                    <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>SOFA hepático (0-4)</label>
+                <select id="cid-sic-sofa-hep" class="cid-sic-sofa">
+                    <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>SOFA renal (0-4)</label>
+                <select id="cid-sic-sofa-renal" class="cid-sic-sofa">
+                    <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
+                </select>
+            </div>
+            <div class="result-box" id="cid-sic-resultado"></div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Tratamiento por fenotipo</p>
+            <p style="font-size: 0.8rem; line-height: 1.5;">
+                El tratamiento de la enfermedad de base es siempre esencial y obligatorio,
+                independientemente del fenotipo. Sobre esa base, el tratamiento dirigido se
+                orienta según predomine el componente trombótico o el hemorrágico:
+            </p>
+            <div id="cid-tto-fenotipo" style="margin-top: 10px;"></div>
+
+            <div class="card" style="border-top: 1px solid var(--accent-green); margin-top: 18px;">
+                <h3 style="color: var(--accent-green);">Fuentes</h3>
+                <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+                    Iba T, Levy JH, Maier CL, Helms J, Umemura Y, Moore H, Othman M, Thachil J,
+                    Connors JM, Levi M, Scarlatescu E. Updated definition and scoring of
+                    disseminated intravascular coagulation in 2025: communication from the ISTH
+                    SSC Subcommittee on Disseminated Intravascular Coagulation. J Thromb Haemost.
+                    2025;23(7):2356-2362.
+                </p>
+            </div>
+        </div>
+
+        <!-- ===== TAB 2: PTT ===== -->
+        <div id="sind-ptt" class="tab-content">
+            <div class="card" style="border-top: 1px solid var(--accent-yellow);">
+                <h3 style="color: var(--accent-yellow);">🚧 Púrpura Trombótica Trombocitopénica (PTT)</h3>
+                <p style="font-size: 0.85rem; line-height: 1.5; color: var(--text-muted);">Próximamente.</p>
+            </div>
+        </div>
+
+        <!-- ===== TAB 3: SÍNDROME DE LISIS TUMORAL ===== -->
+        <div id="sind-slt" class="tab-content">
+            <div class="card" style="border-top: 1px solid var(--accent-yellow);">
+                <h3 style="color: var(--accent-yellow);">🚧 Síndrome de Lisis Tumoral</h3>
+                <p style="font-size: 0.85rem; line-height: 1.5; color: var(--text-muted);">Próximamente.</p>
+            </div>
+        </div>
     </div>

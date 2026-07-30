@@ -9,6 +9,7 @@ import * as home from './modules/home/index.js';
 import * as generales from './modules/generales/index.js';
 import * as neutropeniaFebril from './modules/neutropenia-febril/index.js';
 import * as reconocimiento from './modules/reconocimiento/index.js';
+import * as sindromesUrgentes from './modules/sindromes-urgentes/index.js';
 import * as trasplante from './modules/trasplante/index.js';
 
 async function start() {
@@ -19,6 +20,7 @@ async function start() {
     generales.init();
     neutropeniaFebril.init();
     reconocimiento.init();
+    sindromesUrgentes.init();
     trasplante.init();
 }
 

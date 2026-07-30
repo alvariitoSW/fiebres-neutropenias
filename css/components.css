@@ -226,6 +226,18 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 .compare-box { flex: 1; border-radius: 2px; padding: 10px; font-size: 0.78rem; line-height: 1.4; }
 .compare-box.blue { background: rgba(212, 175, 55, 0.06); border: 1px solid var(--accent-blue); }
 .compare-box.yellow { background: rgba(207, 154, 62, 0.08); border: 1px solid var(--accent-yellow); }
+.compare-box.red { background: rgba(184, 92, 62, 0.08); border: 1px solid var(--accent-red); }
+
+.phenotype-row { margin-bottom: 14px; }
+.phenotype-label { display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 5px; }
+.phenotype-label strong { color: var(--text-main); }
+.phenotype-bar { display: flex; height: 10px; border-radius: 2px; overflow: hidden; background: rgba(255,255,255,0.06); }
+.phenotype-bar-tromb { background: var(--accent-blue); box-shadow: var(--glow-blue); }
+.phenotype-bar-hemo { background: var(--accent-red); box-shadow: var(--glow-red); }
+.phenotype-legend { display: flex; gap: 14px; justify-content: center; font-size: 0.68rem; color: var(--text-muted); margin: 10px 0 4px 0; }
+.phenotype-legend span::before { content: ''; display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+.phenotype-legend .leg-tromb::before { background: var(--accent-blue); }
+.phenotype-legend .leg-hemo::before { background: var(--accent-red); }
 
 .chip-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 10px 0; }
 

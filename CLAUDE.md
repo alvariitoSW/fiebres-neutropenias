@@ -94,8 +94,21 @@ directamente en `index.html`) con 4 botones grandes:
    dirigidas, decisiones de ingreso y fin de vida. Basado en Azoulay et al.
    (Blood 2024 y Blood Reviews 2025, ver `js/modules/reconocimiento/`).
 3. **Síndromes Hematológicos Urgentes** (`modules/sindromes-urgentes/`) —
-   CID, PTT y Síndrome de Lisis Tumoral, de momento solo avisos
-   "Próximamente".
+   una sola vista con 3 pestañas (CID / PTT / Síndrome de Lisis Tumoral, ver
+   `js/modules/sindromes-urgentes/index.js`, que usa `core/tabs.js` igual que
+   la pestaña de Introducción al TPH). **CID** tiene contenido real: definición
+   actualizada 2025, fenotipo trombótico vs. hemorrágico, esquema de
+   progresión por etiología (barras `.phenotype-bar` en
+   `js/modules/sindromes-urgentes/cid.js`), terminología relacionada
+   (acordeón), tabla de puntuación ISTH 2025 (Overt DIC 2021/2025 y SIC) y dos
+   calculadoras interactivas (Overt DIC 2025 y SIC) con datos en
+   `js/data/sindromes-urgentes-data.js`, más tratamiento por fenotipo. Fuente:
+   Iba T, et al. J Thromb Haemost. 2025;23(7):2356-2362 (comunicación ISTH
+   SSC). **PTT** y **Síndrome de Lisis Tumoral** siguen de momento en aviso
+   "Próximamente", pendientes de la bibliografía que se vaya aportando — para
+   completarlos sigue el mismo patrón que CID (contenido teórico propio,
+   calculadora(s) interactiva(s) si la escala lo permite, apartado de
+   Fuentes).
 4. **Trasplante de Progenitores Hematopoyéticos** (`modules/trasplante/`) —
    submenú con tres sub-vistas, todas con contenido real:
    **Introducción** (selección de donante, acondicionamiento — clasificación
