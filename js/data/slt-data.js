@@ -54,7 +54,7 @@ export const sltFarmacosData = [
     {
         farmaco: 'Alopurinol',
         indicacion: 'SLT de riesgo bajo-intermedio',
-        dosisAdulto: '300 mg/24h VO',
+        dosisAdulto: '300 mg/24h VO, iniciado ≥12h antes del tratamiento definitivo (existe formulación IV, poco disponible)',
         dosisPediatrica: '100 mg/m² /8h',
         info: 'Reacción cutánea (vigilar). Reducir dosis en insuficiencia renal. Interacciona con diuréticos.',
     },
@@ -69,7 +69,7 @@ export const sltFarmacosData = [
         farmaco: 'Rasburicasa',
         indicacion: 'SLT de riesgo alto, o intermedio si no puede recibir alopurinol/febuxostat',
         dosisAdulto: '0,2 mg/kg/24h (dosis con ficha técnica); una dosis fija única (3 mg) puede ser suficiente para profilaxis',
-        dosisPediatrica: '0,2 mg/kg/24h',
+        dosisPediatrica: '0,2 mg/kg/24h hasta 5 días para profilaxis en riesgo alto',
         info: 'Falsea el ácido úrico ex vivo (mantener la muestra en hielo). Evitar en déficit de G6PDH: riesgo de anemia hemolítica y metahemoglobinemia.',
     },
 ];

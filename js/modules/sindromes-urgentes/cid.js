@@ -6,6 +6,7 @@ import {
     cidSicItems,
     cidTerminologia,
     cidEtiologias,
+    cidPredominioAnchos,
     cidTratamientoFenotipo,
     cidCausas,
     cidHallazgosLaboratorio,
@@ -120,15 +121,18 @@ function renderTerminologia() {
 function renderEtiologias() {
     const cont = document.getElementById('cid-etiologias-lista');
     if (!cont) return;
-    cont.innerHTML = cidEtiologias.map(e => `
+    cont.innerHTML = cidEtiologias.map(e => {
+        const anchos = cidPredominioAnchos[e.predominio];
+        return `
         <div class="phenotype-row">
             <div class="phenotype-label"><strong>${e.sigla} — ${e.nombre}</strong></div>
             <div class="phenotype-bar">
-                <div class="phenotype-bar-tromb" style="width: ${e.trombotico}%;"></div>
-                <div class="phenotype-bar-hemo" style="width: ${e.hemorragico}%;"></div>
+                <div class="phenotype-bar-tromb" style="width: ${anchos.trombotico}%;"></div>
+                <div class="phenotype-bar-hemo" style="width: ${anchos.hemorragico}%;"></div>
             </div>
         </div>
-    `).join('');
+    `;
+    }).join('');
 }
 
 function renderTratamientoFenotipo() {

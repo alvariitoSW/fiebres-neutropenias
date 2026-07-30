@@ -80,14 +80,26 @@ export const cidTerminologia = [
 
 // Recreación esquemática de la Figura 1: progresión desde CID en fase precoz
 // (etiología-dependiente) hasta CID franca, con el balance predominante entre
-// fenotipo trombótico y hemorrágico según la causa de base.
+// fenotipo trombótico y hemorrágico según la causa de base. La Figura 1
+// original es un degradado de color puramente cualitativo, sin cifras; aquí
+// se traduce a 3 categorías genéricas (no son datos medidos del artículo,
+// solo una lectura aproximada del predominio visual de cada cuña de la
+// figura) para poder representarlo como barra.
 export const cidEtiologias = [
-    { sigla: 'SIC', nombre: 'Sepsis', trombotico: 70, hemorragico: 30 },
-    { sigla: 'HIC', nombre: 'Golpe de calor (heatstroke)', trombotico: 55, hemorragico: 45 },
-    { sigla: 'OIC', nombre: 'Complicaciones obstétricas', trombotico: 35, hemorragico: 65 },
-    { sigla: 'TIC', nombre: 'Traumatismo', trombotico: 40, hemorragico: 60 },
-    { sigla: 'CIC', nombre: 'Cáncer', trombotico: 60, hemorragico: 40 },
+    { sigla: 'SIC', nombre: 'Sepsis', predominio: 'tromb' },
+    { sigla: 'HIC', nombre: 'Golpe de calor (heatstroke)', predominio: 'mixto' },
+    { sigla: 'OIC', nombre: 'Complicaciones obstétricas', predominio: 'hemo' },
+    { sigla: 'TIC', nombre: 'Traumatismo', predominio: 'hemo' },
+    { sigla: 'CIC', nombre: 'Cáncer', predominio: 'tromb' },
 ];
+
+// Anchos genéricos (no específicos de cada etiología) para las 3 categorías
+// cualitativas de cidEtiologias.
+export const cidPredominioAnchos = {
+    tromb: { trombotico: 72, hemorragico: 28 },
+    mixto: { trombotico: 50, hemorragico: 50 },
+    hemo: { trombotico: 28, hemorragico: 72 },
+};
 
 // Recreación esquemática de la Figura 2: tratamiento por fenotipo, con
 // intervenciones propias de fase precoz vs. fase tardía en cada uno.

@@ -84,6 +84,7 @@ export const pttEmbarazoData = [
     'Una actividad de ADAMTS-13 normal al inicio del embarazo se asocia a menor riesgo de recaída inmediata; una actividad baja (&lt;10 UI/dL) se asocia a mayor riesgo.',
     'En algunas instituciones, mujeres con actividad de ADAMTS-13 disminuida antes o al inicio del embarazo reciben rituximab profiláctico para normalizar la actividad antes de la concepción; tras rituximab se recomienda esperar 6-12 meses antes de buscar embarazo.',
     'Seguimiento estrecho por hematología y medicina materno-fetal durante todo el embarazo, con hemograma mensual y actividad de ADAMTS-13 cada 2-3 meses al menos (más frecuente si la actividad desciende).',
+    'Si la actividad de ADAMTS-13 desciende de forma significativa durante el embarazo (habitualmente &lt;30 UI/dL o 30% de la normalidad), incluso sin signos o síntomas clínicos, suele considerarse TPE y corticoides (o azatioprina).',
     'Profilaxis con infusión de plasma (10-15 mL/kg semanal o cada 2 semanas, o TPE) según antecedente de PTTc o PTTi; frecuencia aumentada a semanal o dos veces por semana desde el 2º-3er trimestre.',
     'Inducción del parto a las 36-37 semanas de gestación; el parto vaginal es el método preferido si no hay otras indicaciones obstétricas para cesárea.',
     'No se recomienda ácido acetilsalicílico de forma sistemática (evidencia indirecta de otras poblaciones). Se recomienda HBPM a dosis profilácticas si hay antecedente de trombosis venosa. Anticoncepción no hormonal o solo con gestágenos preferible a la que contiene estrógenos.',
