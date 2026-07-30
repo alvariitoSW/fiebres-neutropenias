@@ -349,9 +349,268 @@
 
         <!-- ===== TAB 2: PTT ===== -->
         <div id="sind-ptt" class="tab-content">
-            <div class="card" style="border-top: 1px solid var(--accent-yellow);">
-                <h3 style="color: var(--accent-yellow);">🚧 Púrpura Trombótica Trombocitopénica (PTT)</h3>
-                <p style="font-size: 0.85rem; line-height: 1.5; color: var(--text-muted);">Próximamente.</p>
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                La Púrpura Trombótica Trombocitopénica (PTT) es un trastorno raro y potencialmente
+                mortal causado por un déficit grave de actividad de ADAMTS-13 (&lt;10 UI/dL, o
+                &lt;10% de la normalidad), la metaloproteasa que fragmenta el factor von Willebrand
+                ultra-largo (FvW-UL). Sin esta escisión, el FvW-UL se acumula sobre la superficie
+                endotelial y en la sangre circulante, desencadenando adhesión y agregación
+                plaquetaria excesivas y formación de microtrombos por todo el organismo, con daño
+                orgánico isquémico y anemia hemolítica microangiopática por fragmentación mecánica
+                de los hematíes.
+            </p>
+            <div id="ptt-tipos-lista" style="margin-top: 10px;"></div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Fisiopatología</p>
+            <div id="ptt-fisiopatologia-svg"></div>
+
+            <div class="warning-box" style="margin-top: 14px;">
+                <strong style="color: var(--accent-yellow);">El "péntada de Raynaud" es la excepción, no la regla</strong><br>
+                Trombocitopenia grave (habitualmente &lt;30×10⁹/L) y anemia hemolítica
+                microangiopática (Hb/Hto bajos, LDH elevada, esquistocitos en el frotis) son los
+                hallazgos centrales. La péntada clásica (trombocitopenia + anemia hemolítica +
+                fiebre + alteración neurológica + afectación renal) solo está presente en el 40%
+                de los pacientes: exigirla para sospechar PTT retrasa el diagnóstico. La
+                trombocitopenia y la anemia hemolítica microangiopática sin otra explicación deben
+                por sí solas hacer sospechar PTT.
+            </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Evaluación inicial</p>
+            <p style="font-size: 0.8rem; line-height: 1.6;">
+                Hemograma completo con revisión cuidadosa del frotis de sangre periférica en busca
+                de esquistocitos, LDH, creatinina y pruebas de coagulación (TP/TTPa/fibrinógeno,
+                que se esperan relativamente normales en la PTT salvo enfermedad muy grave o CID
+                concomitante). El test de Coombs directo se espera negativo en la PTT (puede ser
+                positivo en la anemia hemolítica autoinmune). Deben determinarse sistemáticamente
+                troponina I y ECG, y debe considerarse TC/RM craneal si hay síntomas o signos
+                neurológicos sugestivos de afectación cerebral. Debe extraerse una muestra para
+                actividad de ADAMTS-13 y anticuerpos/inhibidores <strong>antes</strong> de iniciar
+                el recambio plasmático (TPE), aunque el resultado tarde en llegar.
+            </p>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Calculadora — French score</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">3 criterios · Coppo P, et al. PLOS One. 2010;5:e10208.</p>
+            <div id="ptt-french-lista"></div>
+            <div class="result-box" id="ptt-french-resultado"></div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Calculadora — PLASMIC score</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">7 criterios · Bendapudi PK, et al. Lancet Haematol. 2017;4:e157-64.</p>
+            <div id="ptt-plasmic-lista"></div>
+            <div class="result-box" id="ptt-plasmic-resultado"></div>
+            <p style="font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; margin-top: 6px;">
+                Ambos scores estiman la probabilidad de un déficit grave de ADAMTS-13 mientras se
+                espera el resultado de laboratorio; no sustituyen la determinación de la actividad
+                de ADAMTS-13 ni deben retrasar el inicio del tratamiento urgente si la sospecha
+                clínica es alta.
+            </p>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Algoritmo diagnóstico-terapéutico urgente</p>
+            <div id="ptt-algoritmo-svg"></div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Manejo agudo</p>
+            <div class="warning-box" style="margin-top: 4px;">
+                <strong style="color: var(--accent-yellow);">Recambio plasmático (TPE) urgente</strong><br>
+                Si el índice de sospecha es alto, iniciar TPE y corticoides de forma emergente;
+                trasladar cuanto antes a un centro con capacidad de TPE, idealmente supervisado por
+                un clínico con experiencia en PTT. TPE diario con plasma fresco congelado,
+                crioprecipitado-pobre o plasma tratado con solvente-detergente, con un volumen de
+                reposición de 1,0-1,5 veces el volumen plasmático del paciente (40-60 mL/kg) cada
+                24 h, hasta la normalización del recuento de plaquetas y de la LDH.
+            </p>
+            <p style="font-size: 0.8rem; line-height: 1.6;">
+                <strong style="color: var(--accent-blue);">Corticoides.</strong> Dosis altas desde
+                el inicio (prednisona 1 mg/kg/día oral, o metilprednisolona 125 mg IV 2-4 veces al
+                día). Si el recuento de plaquetas no aumenta en 3-4 días, debe usarse una dosis
+                mayor. Se mantienen hasta la recuperación plaquetaria y la suspensión del TPE, y se
+                retiran de forma progresiva a lo largo de 3 semanas una vez conseguida la
+                recuperación sostenida (p. ej. a partir del día 5-7); el descenso puede
+                enlentecerse según el recuento de plaquetas, la actividad de ADAMTS-13 y los
+                síntomas neurológicos.
+            </p>
+            <p style="font-size: 0.8rem; line-height: 1.6;">
+                <strong style="color: var(--accent-blue);">Monitorización.</strong> Por la gravedad
+                e inestabilidad del cuadro, se recomienda ingreso con capacidad de monitorización
+                continua neurológica, cardiaca y de saturación de oxígeno: el riesgo de coma,
+                ictus isquémico, IAM, insuficiencia cardiaca congestiva, arritmias, isquemia
+                mesentérica, pancreatitis y fracaso renal agudo es alto y estas complicaciones
+                exigen detección e intervención precoces; el TPE puede además producir reacciones
+                anafilácticas raras que se manejan mejor en un entorno de críticos. Se recomienda
+                determinar troponina al ingreso y de forma seriada, con ECG y ecocardiograma según
+                la clínica: una troponina &gt;0,25 μg/L se asocia a mayor afectación cardiaca y
+                cerebral, ictus y mortalidad, aunque la mayoría de los pacientes con troponina
+                elevada permanecen asintomáticos.
+            </p>
+            <p style="font-size: 0.8rem; line-height: 1.6;">
+                <strong style="color: var(--accent-blue);">Acceso venoso central.</strong> El tipo
+                de acceso depende de la modalidad de TPE: la aféresis centrífuga permite catéteres
+                más finos y flexibles (de menor flujo), mientras que la filtración por membrana
+                requiere catéteres más gruesos y rígidos, de mayor flujo (tipo diálisis). Para
+                minimizar el riesgo de sangrado se recomienda colocación por un clínico con
+                experiencia, guiada por ecografía, y preferir el acceso yugular interno o femoral
+                sobre el subclavio; revisar la necesidad de mantener las vías una vez que las
+                plaquetas se recuperan y el paciente está estable.
+            </p>
+            <p style="font-size: 0.8rem; line-height: 1.6;">
+                <strong style="color: var(--accent-blue);">Transfusión de plaquetas.</strong>
+                Se evitan por norma general y se consideran innecesarias en la mayoría de los
+                casos de PTT: existen casos descritos de asociación entre transfusión plaquetaria y
+                trombosis arterial, deterioro clínico y mayor tasa de recaída (aunque la relación
+                causal no está clara). Se reservan para hemorragia grave o antes de procedimientos
+                invasivos con alto riesgo de sangrado, valorando el riesgo hemorrágico individual.
+            </p>
+            <p style="font-size: 0.8rem; line-height: 1.6;">
+                <strong style="color: var(--accent-blue);">Profilaxis de tromboembolismo venoso.</strong>
+                Profilaxis no farmacológica (deambulación, medias de compresión, dispositivos de
+                compresión neumática intermitente) mientras las plaquetas estén &lt;50×10⁹/L;
+                profilaxis farmacológica (HBPM a dosis profilácticas) una vez recuperadas
+                &gt;50×10⁹/L. En la PTTi con plaquetas recuperadas y riesgo trombótico añadido
+                (antecedente de TVP recurrente, cáncer, cirugía reciente), debe considerarse
+                anticoagulación profiláctica <span class="grade-badge">Actualizado 2025 — GPS 19</span>.
+                Para eventos trombóticos mayores (ictus, IAM), se recomienda un equipo
+                multidisciplinar (hematología, neurología, cardiología).
+            </p>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Caplacizumab</p>
+            <p style="font-size: 0.8rem; line-height: 1.6;">
+                Se sugiere el uso de caplacizumab añadido a corticoides+TPE en todo evento agudo de
+                PTTi (primer episodio o recaída) <span class="grade-badge">Recomendación 5 — condicional, certeza moderada</span>.
+                Su mecanismo (inhibir la interacción FvW-plaqueta y bloquear la formación de
+                nuevos trombos) actúa de inmediato pero no disuelve los microtrombos ya formados,
+                por lo que debe iniciarse lo antes posible (idealmente dentro de los 3 primeros
+                días); su inicio tardío o su uso como rescate en PTTi refractaria puede ser menos
+                eficaz, porque la microtrombosis y la lesión isquémica de órganos ya se habrán
+                producido. La "triple terapia" (caplacizumab + TPE + inmunosupresión) se asocia a
+                mortalidad &lt;5%, normalización más rápida de las plaquetas, menos exacerbaciones
+                y recaídas, y estancias más cortas en UCI y planta, con menos sesiones de TPE y
+                menor volumen de plasma. La "doble terapia" (caplacizumab + inmunosupresión sin
+                TPE) muestra en datos limitados una eficacia y seguridad similares a la triple
+                terapia.
+            </p>
+            <div class="warning-box">
+                <strong style="color: var(--accent-yellow);">Riesgo hemorrágico</strong><br>
+                El principal efecto adverso del caplacizumab es el aumento del riesgo de
+                sangrado, coherente con su mecanismo de acción (interrumpe la interacción
+                FvW-plaqueta): la mayoría son hemorragias leves-moderadas (epistaxis, sangrado
+                gingival, sangrado gastrointestinal), pero puede producirse hemorragia grave,
+                incluida hemorragia intracraneal. El caplacizumab puede estar contraindicado en
+                pacientes con riesgo de, o que presenten, ictus hemorrágico.
+            </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Rituximab</p>
+            <p style="font-size: 0.8rem; line-height: 1.6;">
+                Se sugiere añadir rituximab a corticoides+TPE en el primer episodio agudo de PTTi y
+                en la recaída <span class="grade-badge">Recomendaciones 2 y 4 — condicionales, certeza muy baja</span>.
+                En pacientes con PTTi en remisión pero con actividad de ADAMTS-13
+                persistentemente baja y sin síntomas, se sugiere rituximab profiláctico frente a
+                no usarlo <span class="grade-badge">Recomendación 6 — condicional, certeza muy baja</span>,
+                ya que una actividad de ADAMTS-13 persistentemente baja se ha asociado a mayor
+                riesgo de recaída.
+            </p>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">PTT congénita (PTTc) en remisión: reemplazo de ADAMTS-13</p>
+            <p style="font-size: 0.8rem; line-height: 1.6;">
+                La aprobación en 2024 de ADAMTS-13 recombinante (por la FDA, la Comisión Europea y
+                el Ministerio de Sanidad, Trabajo y Bienestar de Japón) para la profilaxis de la
+                PTTc ha cambiado el manejo de estos pacientes: puede administrarse en cualquier
+                centro sin el equipamiento, los recursos de infusión ni la experiencia que exige el
+                plasma o el TPE. En el ensayo pivotal de fase 3 (cruzado), los pacientes que
+                recibieron ADAMTS-13 recombinante mostraron una tendencia a menor incidencia de
+                manifestaciones relacionadas con la PTT (trombocitopenia, LDH elevada, síntomas
+                neurológicos, dolor abdominal) que con el estándar de cuidado (infusión de plasma),
+                con niveles de actividad de ADAMTS-13 más altos y sostenidos por encima del 10%, y
+                menos efectos adversos (incluidos neurológicos) que con el plasma.
+            </p>
+            <div id="ptt-arbol-cttp-svg"></div>
+            <p style="font-size: 0.8rem; line-height: 1.6; margin-top: 8px;">
+                El seguimiento de la actividad de ADAMTS-13 en remisión se recomienda mensual
+                durante los 3 primeros meses, cada 3 meses durante el primer año, y cada 6-12 meses
+                si se mantiene estable; con mayor frecuencia si los niveles empiezan a descender.
+                Una actividad estable y cercana al límite inferior de la normalidad es
+                tranquilizadora; una actividad persistentemente baja (&lt;10 UI/dL o &lt;10%) puede
+                suponer riesgo de recaída, prevenible con rituximab.
+            </p>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">PTT refractaria: opciones con evidencia escasa</p>
+            <div class="grade-matrix-wrap">
+                <table class="grade-matrix">
+                    <thead><tr><th>Fármaco</th><th>Pauta</th></tr></thead>
+                    <tbody id="ptt-refractaria-tabla"></tbody>
+                </table>
+            </div>
+            <p style="font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; margin-top: 6px;">
+                La inmunoglobulina IV generalmente <strong>no</strong> se usa en la PTT: su
+                eficacia es desconocida y sus reacciones adversas pueden simular manifestaciones
+                trombóticas, neurológicas y renales de la propia PTT. El eculizumab (anti-C5) se
+                reserva para casos muy seleccionados, sin respuesta a otras opciones.
+            </p>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Desencadenantes de recaída y complicaciones a largo plazo</p>
+            <div class="compare-row">
+                <div class="compare-box blue">
+                    <strong style="color: var(--accent-blue);">Desencadenantes de recaída</strong>
+                    <ul id="ptt-desencadenantes-lista" style="margin: 6px 0 0 16px;"></ul>
+                </div>
+                <div class="compare-box yellow">
+                    <strong style="color: var(--accent-yellow);">Complicaciones a largo plazo</strong>
+                    <ul id="ptt-complicaciones-lista" style="margin: 6px 0 0 16px;"></ul>
+                </div>
+            </div>
+            <p style="font-size: 0.78rem; line-height: 1.5;">
+                Se debe aconsejar a los pacientes sobre estos desencadenantes y animarles a buscar
+                atención médica ante cualquier síntoma de alarma. El seguimiento tras un episodio
+                agudo debería incluir de forma rutinaria la monitorización de estas complicaciones
+                a largo plazo.
+            </p>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>Embarazo</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <ul id="ptt-embarazo-lista" style="margin: 0 0 0 16px;"></ul>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
+                        <span>Pacientes que rechazan hemoderivados</span> <span>+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        Los pacientes que rechazan hemoderivados (p. ej. testigos de Jehová)
+                        generalmente no aceptarán el TPE con reposición de plasma. Deben explorarse
+                        los valores y preferencias del paciente, ya que la albúmina y otras
+                        fracciones proteicas purificadas son en ocasiones aceptables: el TPE con
+                        albúmina como líquido de reposición puede al menos ayudar a eliminar
+                        autoanticuerpos anti-ADAMTS-13 y otros mediadores inflamatorios nocivos.
+                        Puede valorarse empíricamente corticoides, rituximab y caplacizumab, así
+                        como eritropoyetina y ácido fólico para promover la eritropoyesis. Si el
+                        paciente acepta derivados plasmáticos, pueden valorarse concentrados de
+                        factor VIII con suficiente contenido de ADAMTS-13 en lugar de plasma.
+                    </div>
+                </div>
+            </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 6px 0;">Resumen de recomendaciones (actualización ISTH 2025)</p>
+            <div id="ptt-recomendaciones-lista"></div>
+
+            <div class="card" style="border-top: 1px solid var(--accent-green); margin-top: 18px;">
+                <h3 style="color: var(--accent-green);">Fuentes</h3>
+                <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+                    Zheng XL, Al-Housni Z, Cataland SR, Coppo P, Geldziler B, Germini F, Iorio A,
+                    Keepanasseril A, Masias C, Matsumoto M, McCrae KR, McIntyre J, Mustafa RA,
+                    Peyvandi F, Russell L, Tarawneh R, Vesely SK, on behalf of the International
+                    Society on Thrombosis and Haemostasis. 2025 focused update of the 2020 ISTH
+                    guidelines for management of thrombotic thrombocytopenic purpura. J Thromb
+                    Haemost. 2025;23(10):3711-3732.
+                </p>
+                <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+                    Puntuaciones citadas por esa guía: Coppo P, Schwarzinger M, Buffet M, et al.
+                    Predictive features of severe acquired ADAMTS13 deficiency in idiopathic
+                    thrombotic microangiopathies: the French TMA reference center experience. PLOS
+                    One. 2010;5:e10208 · Bendapudi PK, Hurwitz S, Fry A, et al. Derivation and
+                    external validation of the PLASMIC score for rapid assessment of adults with
+                    thrombotic microangiopathies: a cohort study. Lancet Haematol. 2017;4:e157-64.
+                </p>
             </div>
         </div>
 

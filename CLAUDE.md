@@ -101,10 +101,14 @@ directamente en `index.html`) con 4 botones grandes:
    fisiopatología (depósito de fibrina/microtrombosis/fallo orgánico vs.
    consumo de plaquetas-factores/hemorragia), trastornos subyacentes
    asociados, esquema de progresión por etiología (barras `.phenotype-bar`),
-   algoritmo diagnóstico ISTH en 5 pasos (`.mini-timeline`), hallazgos de
+   diagramas SVG originales (`.micro-svg`, mismo patrón que
+   `microorganismos-data.js`) para los fenotipos a nivel del vaso
+   (microtrombosis vs. rotura de la barrera hemostática) y para el algoritmo
+   diagnóstico ISTH como flujograma con rombos de decisión, hallazgos de
    laboratorio con su utilidad/limitaciones (acordeón), terminología
    relacionada (acordeón), tabla de puntuación ISTH 2025 (Overt DIC 2021/2025
-   y SIC) y dos calculadoras interactivas (Overt DIC 2025 y SIC) — todo en
+   y SIC) y dos calculadoras interactivas (Overt DIC 2025 y SIC, con gauge
+   visual de puntuación y marca del corte diagnóstico) — todo en
    `js/modules/sindromes-urgentes/cid.js` con datos en
    `js/data/sindromes-urgentes-data.js` —, más tratamiento por fenotipo y
    recomendaciones de tratamiento detalladas con grados de evidencia
@@ -114,11 +118,31 @@ directamente en `index.html`) con 4 botones grandes:
    clínica actual — no reproducir esa recomendación como vigente si se
    amplía este apartado en el futuro. Fuentes: Iba T, et al. J Thromb
    Haemost. 2025;23(7):2356-2362 (comunicación ISTH SSC) y Levi M, Toh CH,
-   Thachil J, Watson HG. Br J Haematol. 2009;145(1):24-33 (guía BCSH). **PTT**
-   y **Síndrome de Lisis Tumoral** siguen de momento en aviso "Próximamente",
-   pendientes de la bibliografía que se vaya aportando — para completarlos
-   sigue el mismo patrón que CID (contenido teórico propio, calculadora(s)
-   interactiva(s) si la escala lo permite, apartado de
+   Thachil J, Watson HG. Br J Haematol. 2009;145(1):24-33 (guía BCSH).
+   **PTT** también tiene contenido real: comparación PTTi (autoinmune) vs.
+   PTTc (congénita/Upshaw-Schulman), diagrama SVG de fisiopatología a nivel
+   del microvaso (microtrombo de FvW-plaquetas + esquistocitos), aviso sobre
+   la péntada de Raynaud (presente solo en el 40% de los casos — no
+   exigirla para sospechar PTT), calculadoras interactivas French score y
+   PLASMIC score, flujograma SVG del algoritmo diagnóstico-terapéutico
+   urgente, manejo agudo (TPE, corticoides, monitorización, acceso venoso,
+   transfusión de plaquetas, profilaxis de TVP), caplacizumab (con aviso de
+   riesgo hemorrágico) y rituximab, reemplazo con ADAMTS-13 recombinante
+   para la PTTc en remisión con árbol de decisión SVG (recreación de la
+   Figura del artículo), tabla de PTT refractaria, desencadenantes de
+   recaída y complicaciones a largo plazo, acordeones de embarazo y de
+   pacientes que rechazan hemoderivados, y tabla resumen de las 12
+   recomendaciones GRADE de la guía — todo en
+   `js/modules/sindromes-urgentes/ptt.js` con datos en
+   `js/data/ptt-data.js`. Fuente: Zheng XL, et al., on behalf of the ISTH.
+   2025 focused update of the 2020 ISTH guidelines for management of
+   thrombotic thrombocytopenic purpura. J Thromb Haemost.
+   2025;23(10):3711-3732; French score de Coppo P, et al. PLOS One.
+   2010;5:e10208; PLASMIC score de Bendapudi PK, et al. Lancet Haematol.
+   2017;4:e157-64. **Síndrome de Lisis Tumoral** sigue de momento en aviso
+   "Próximamente", pendiente de la bibliografía que se vaya aportando — para
+   completarlo sigue el mismo patrón que CID/PTT (contenido teórico propio,
+   calculadora(s) interactiva(s) si la escala lo permite, apartado de
    Fuentes).
 4. **Trasplante de Progenitores Hematopoyéticos** (`modules/trasplante/`) —
    submenú con tres sub-vistas, todas con contenido real:
