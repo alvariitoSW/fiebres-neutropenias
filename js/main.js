@@ -11,6 +11,7 @@ import * as neutropeniaFebril from './modules/neutropenia-febril/index.js';
 import * as reconocimiento from './modules/reconocimiento/index.js';
 import * as sindromesUrgentes from './modules/sindromes-urgentes/index.js';
 import * as trasplante from './modules/trasplante/index.js';
+import * as nefrologia from './modules/nefrologia/index.js';
 
 async function start() {
     await includeAll();
@@ -22,6 +23,7 @@ async function start() {
     reconocimiento.init();
     sindromesUrgentes.init();
     trasplante.init();
+    nefrologia.init();
 }
 
 start();

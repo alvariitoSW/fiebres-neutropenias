@@ -20,9 +20,30 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- MENÚ PRINCIPAL                              -->
+    <!-- MENÚ DE ESPECIALIDADES (nivel raíz)         -->
     <!-- ========================================== -->
-    <div id="home-view">
+    <div id="especialidades-view">
+        <div class="diag-header">
+            <h2 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">Especialidades</h2>
+            <p>Selecciona un área clínica</p>
+        </div>
+
+        <button class="accordion-btn nav-btn" id="btn-hematologia" style="border-left: 4px solid var(--accent-red);">
+            <span><span class="hemato-icon">🩸</span>HEMATOLOGÍA</span>
+            <span style="font-size: 0.8rem; color: var(--accent-red);">[ VER → ]</span>
+        </button>
+
+        <button class="accordion-btn nav-btn" id="btn-nefrologia" style="border-left: 4px solid var(--accent-green);">
+            <span><span class="gral-icon" style="color: var(--accent-green); text-shadow: var(--glow-green);">🫘</span>NEFROLOGÍA</span>
+            <span style="font-size: 0.8rem; color: var(--accent-green);">[ VER → ]</span>
+        </button>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MENÚ PRINCIPAL — HEMATOLOGÍA                -->
+    <!-- ========================================== -->
+    <div id="home-view" style="display: none;">
+        <button class="back-btn btn-volver-especialidades">← VOLVER</button>
         <button class="accordion-btn nav-btn" id="btn-citopenias" style="border-left: 4px solid var(--accent-red);">
             <span><span class="hemato-icon">🩸</span>1. MANEJO CITOPENIAS</span>
             <span style="font-size: 0.8rem; color: var(--accent-red);">[ VER → ]</span>
@@ -90,6 +111,11 @@
         <div id="tph-cart-view" style="display: none;" data-include="js/modules/trasplante/car-t.html"></div>
         <div id="tph-complicaciones-view" style="display: none;" data-include="js/modules/trasplante/complicaciones.html"></div>
     </div>
+
+    <!-- ========================================== -->
+    <!-- VISTA: NEFROLOGÍA                           -->
+    <!-- ========================================== -->
+    <div id="nefrologia-view" style="display: none;" data-include="js/modules/nefrologia/nefrologia.html"></div>
 </div>
 
 <script type="module" src="js/main.js"></script>

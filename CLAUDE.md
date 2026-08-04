@@ -1,10 +1,14 @@
 # HUD Clínico UCI — guía para trabajar en este repo
 
-App web de estratificación de riesgo clínico y apoyo a la decisión en
-hematología/UCI (manejo de citopenias, reconocimiento temprano del paciente
-hematológico, síndromes urgentes, trasplante de progenitores, más un acceso
-directo a escalas generales de UCI). Es una herramienta de apoyo para
-médicos, pensada para consultarse a pie de cama en el móvil.
+App web de estratificación de riesgo clínico y apoyo a la decisión en UCI,
+organizada por especialidad. Hoy tiene contenido completo de **Hematología**
+(manejo de citopenias, reconocimiento temprano del paciente hematológico,
+síndromes urgentes, trasplante de progenitores, más un acceso directo a
+escalas generales de UCI) y un espacio reservado para **Nefrología**
+(en preparación). Está pensada para ir creciendo con más especialidades
+(cardiología, radiología, etc.) según se vaya aportando contenido. Es una
+herramienta de apoyo para médicos, pensada para consultarse a pie de cama
+en el móvil.
 
 ## Decisiones de arquitectura (ya tomadas, no las reabras sin preguntar)
 
@@ -53,8 +57,10 @@ js/
                                   (ej. '#mi-panel .tab.active'). Si no, los grupos de
                                   pestañas de distintos módulos interfieren entre sí.
     navigation.js                createViewSwitcher(): muestra una vista de
-                                  un grupo y oculta el resto (menú principal,
-                                  submenú de Citopenias, submenú de Trasplante)
+                                  un grupo y oculta el resto (menú de
+                                  especialidades, menú principal de
+                                  Hematología, submenú de Citopenias,
+                                  submenú de Trasplante)
     lightbox.js                  Click en cualquier imagen dentro de
                                   .article-figure para ampliarla a pantalla
                                   completa. Se inicializa una sola vez desde
@@ -73,10 +79,21 @@ js/
                                    cálculo + export function init()
 ```
 
-## Navegación: menú principal → categoría → submenú
+## Navegación: especialidad → menú principal → categoría → submenú
 
-La app abre en una pantalla de **menú principal** (`#home-view`, definido
-directamente en `index.html`) con 4 botones grandes:
+La app abre en una pantalla de **menú de especialidades** (`#especialidades-view`,
+definida directamente en `index.html`) con un botón grande por especialidad:
+hoy **Hematología** y **Nefrología**. Es el nuevo nivel raíz de la
+navegación; para añadir una especialidad nueva (p. ej. Cardiología,
+Radiología) sigue el mismo patrón que Nefrología (ver más abajo) y añade su
+botón aquí.
+
+### Hematología
+
+Al pulsar "Hematología" se entra en el que hasta ahora era el **menú
+principal** (`#home-view`, definido directamente en `index.html`, con un
+botón "← VOLVER" que usa la clase `.btn-volver-especialidades` para
+regresar al menú de especialidades) con 4 botones grandes:
 
 1. **Manejo Citopenias** (`modules/citopenias/`) — submenú "elige la
    citopenia"; hoy solo tiene una opción, **Neutropenia Febril**
@@ -200,20 +217,38 @@ directamente en `index.html`) con 4 botones grandes:
 es una de las 4 categorías del menú: es un botón pequeño y fijo arriba a la
 derecha de la cabecera (`#btn-escalas-generales`), fuera del flujo del menú
 principal, porque se consulta con mucha frecuencia y de forma independiente
-del resto.
+del resto. Es accesible desde cualquier pantalla (está fuera de los
+contenedores de vista en `index.html`) y su "← VOLVER" regresa al menú
+principal de Hematología (`.btn-volver-home`); si en el futuro se usa
+también desde Nefrología u otra especialidad, revisa si conviene que
+regrese en su lugar al menú de especialidades.
+
+### Nefrología
+
+`#nefrologia-view` (`modules/nefrologia/`) es hoy un placeholder — "🚧
+Próximamente" — a la espera de contenido. Su botón "← VOLVER" usa
+`.btn-volver-especialidades` (regresa directamente al menú de
+especialidades, no tiene menú principal propio todavía). Cuando se empiece
+a rellenar, sigue el mismo patrón que Hematología: si tiene una única
+categoría de entrada, puede ir directa a su contenido; si acumula varias
+categorías, considera darle su propio menú principal con submenú, calcado
+del de Hematología (`#home-view` → categorías → subcategorías).
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
-`createViewSwitcher()` independientes (nivel principal, submenú de
-Citopenias, submenú de Trasplante) y conecta los botones. Los botones
-"← VOLVER" usan una clase específica según a qué nivel deben volver:
-`.btn-volver-home`, `.btn-volver-citopenias-menu`,
-`.btn-volver-trasplante-menu`. Las calculadoras en sí (Escalas Generales,
-Neutropenia Febril) no saben nada de este nivel superior — siguen
-inicializándose igual que siempre, solo cambia qué contenedor está visible.
+`createViewSwitcher()` independientes (nivel principal — que ahora incluye
+también `especialidades` y `nefrologia` como vistas más del mismo switcher
+raíz —, submenú de Citopenias, submenú de Trasplante) y conecta los
+botones. Los botones "← VOLVER" usan una clase específica según a qué nivel
+deben volver: `.btn-volver-especialidades`, `.btn-volver-home`,
+`.btn-volver-citopenias-menu`, `.btn-volver-trasplante-menu`. Las
+calculadoras en sí (Escalas Generales, Neutropenia Febril) no saben nada de
+estos niveles superiores — siguen inicializándose igual que siempre, solo
+cambia qué contenedor está visible.
 
 `modules/fuentes/` sigue siendo la excepción: es una categoría **solo de
 contenido**, sin `.js`, montada como acordeón (no como vista de pantalla
-completa) directamente debajo del menú principal en `index.html`. El botón
+completa) directamente debajo del menú principal de Hematología en
+`index.html`. El botón
 de acordeón "FUENTES Y EVIDENCIA" lo detecta automáticamente
 `core/accordion.js` sin necesidad de registrarlo en ningún sitio. Este es el
 patrón a seguir para cualquier categoría nueva que sea puramente
