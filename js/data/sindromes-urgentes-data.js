@@ -58,22 +58,22 @@ export const cidSicItems = {
 export const cidTerminologia = [
     {
         termino: 'CID franca (Overt DIC)',
-        definicion: 'Forma grave y clínicamente evidente de alteración hemostática, caracterizada por activación generalizada de la coagulación y fibrinólisis desregulada, manifestada por fallo orgánico y/o tendencia hemorrágica. Los mecanismos reguladores están sobrepasados, con consumo de factores de coagulación y plaquetas, hemorragia y/o disfunción orgánica.',
+        definicion: 'Forma <strong>grave y clínicamente evidente</strong> de alteración hemostática, caracterizada por activación generalizada de la coagulación y fibrinólisis desregulada, manifestada por fallo orgánico y/o tendencia hemorrágica. Los mecanismos reguladores están <strong>sobrepasados</strong>, con consumo de factores de coagulación y plaquetas, hemorragia y/o disfunción orgánica.',
         sinonimos: null,
     },
     {
         termino: 'CID en fase precoz (Early-phase DIC)',
-        definicion: 'Fase inicial de la CID, que puede progresar a CID franca si no se trata. El estado de coagulación activada se detecta mediante biomarcadores de laboratorio, pero los hallazgos clínicos mayores (hemorragia, complicaciones trombóticas o disfunción orgánica) todavía no son evidentes porque los mecanismos compensadores se mantienen. El tratamiento anticoagulante puede ser eficaz en esta fase, aunque no está aún probado de forma definitiva.',
+        definicion: 'Fase inicial de la CID, que puede <strong>progresar a CID franca</strong> si no se trata. El estado de coagulación activada se detecta mediante <strong>biomarcadores de laboratorio</strong>, pero los hallazgos clínicos mayores (hemorragia, complicaciones trombóticas o disfunción orgánica) todavía no son evidentes porque los mecanismos compensadores se mantienen. El <strong>tratamiento anticoagulante</strong> puede ser eficaz en esta fase, aunque no está aún probado de forma definitiva.',
         sinonimos: 'CID no franca (nonovert), CID subclínica, CID compensada.',
     },
     {
         termino: 'Pre-CID',
-        definicion: 'Fase más precoz de alteración de la coagulación. El paciente puede tener factores de riesgo para CID y las pruebas de laboratorio pueden mostrar alteraciones muy sutiles, pero la CID todavía no se ha desarrollado.',
+        definicion: 'Fase <strong>más precoz</strong> de alteración de la coagulación. El paciente puede tener factores de riesgo para CID y las pruebas de laboratorio pueden mostrar alteraciones muy sutiles, pero la CID <strong>todavía no se ha desarrollado</strong>.',
         sinonimos: null,
     },
     {
         termino: 'Coagulopatía',
-        definicion: 'Término general para una alteración leve a moderada en uno o más elementos de la coagulación. El fenotipo puede ser hemorrágico, trombótico o mixto. También se usa en términos específicos como SIC (sepsis-induced coagulopathy) o TIC (trauma-induced coagulopathy); en esos contextos "coagulopatía" equivale a CID en fase precoz.',
+        definicion: 'Término general para una alteración <strong>leve a moderada</strong> en uno o más elementos de la coagulación. El fenotipo puede ser hemorrágico, trombótico o mixto. También se usa en términos específicos como <strong>SIC</strong> (sepsis-induced coagulopathy) o <strong>TIC</strong> (trauma-induced coagulopathy); en esos contextos "coagulopatía" equivale a CID en fase precoz.',
         sinonimos: null,
     },
 ];
@@ -241,26 +241,26 @@ export const cidAlgoritmoPasos = [
 export const cidHallazgosLaboratorio = [
     {
         titulo: 'Recuento plaquetario',
-        texto: 'Una reducción o tendencia descendente en determinaciones sucesivas es un signo sensible (aunque poco específico) de CID: la trombocitopenia está presente hasta en el 98% de los casos, con cifras &lt;50×10⁹/L en el 50%. Una determinación aislada es poco útil, ya que el recuento inicial puede estar dentro del rango "normal" (150-400×10⁹/L); un descenso continuo, incluso dentro de rango normal, puede indicar generación activa de trombina. La trombocitopenia tampoco es específica de CID, ya que muchas enfermedades de base (leucemia aguda, sepsis) también la producen.',
+        texto: 'Una reducción o tendencia descendente en determinaciones sucesivas es un signo <strong>sensible (aunque poco específico)</strong> de CID: la trombocitopenia está presente hasta en el <strong>98%</strong> de los casos, con cifras &lt;50×10⁹/L en el 50%. Una determinación aislada es poco útil, ya que el recuento inicial puede estar dentro del rango "normal" (150-400×10⁹/L); un descenso continuo, incluso dentro de rango normal, puede indicar generación activa de trombina. La trombocitopenia tampoco es específica de CID, ya que muchas enfermedades de base (leucemia aguda, sepsis) también la producen.',
     },
     {
         titulo: 'PDF y dímero-D',
-        texto: 'Los productos de degradación de la fibrina (PDF) y el dímero-D reflejan la actividad fibrinolítica, pero los PDF no discriminan entre degradación de fibrina reticulada y de fibrinógeno, lo que limita su especificidad. El dímero-D es más específico pero tampoco es un test aislado válido: otras situaciones (traumatismo, cirugía reciente, tromboembolismo venoso) también lo elevan. No existe un punto de corte estandarizado y universalmente aceptado para definir un aumento "moderado" o "fuerte", por lo que su interpretación depende del criterio clínico, el ensayo usado y el contexto.',
+        texto: 'Los productos de degradación de la fibrina (PDF) y el dímero-D reflejan la actividad fibrinolítica, pero los PDF <strong>no discriminan</strong> entre degradación de fibrina reticulada y de fibrinógeno, lo que limita su especificidad. El dímero-D es <strong>más específico</strong> pero tampoco es un test aislado válido: otras situaciones (traumatismo, cirugía reciente, tromboembolismo venoso) también lo elevan. <strong>No existe un punto de corte estandarizado</strong> y universalmente aceptado para definir un aumento "moderado" o "fuerte", por lo que su interpretación depende del criterio clínico, el ensayo usado y el contexto.',
     },
     {
         titulo: 'TP y TTPa',
-        texto: 'Están prolongados en un 50-60% de los casos de CID en algún momento de la evolución, sobre todo por consumo de factores de coagulación (aunque la disfunción hepática, el déficit de vitamina K o las pérdidas hemáticas masivas también contribuyen). <strong>Dato clínicamente relevante: en casi la mitad de los pacientes con CID, el TP y el TTPa son normales o incluso más cortos de lo normal</strong>, por la presencia de factores activados circulantes (trombina, Xa) que aceleran la formación del coágulo — un TP/TTPa normal NO excluye CID y obliga a repetir la determinación. Debe monitorizarse el TP (en segundos), no el INR: el INR solo está validado para el control de la anticoagulación oral.',
+        texto: 'Están prolongados en un 50-60% de los casos de CID en algún momento de la evolución, sobre todo por consumo de factores de coagulación (aunque la disfunción hepática, el déficit de vitamina K o las pérdidas hemáticas masivas también contribuyen). <strong>Dato clínicamente relevante: en casi la mitad de los pacientes con CID, el TP y el TTPa son normales o incluso más cortos de lo normal</strong>, por la presencia de factores activados circulantes (trombina, Xa) que aceleran la formación del coágulo — un TP/TTPa normal NO excluye CID y obliga a repetir la determinación. Debe monitorizarse el <strong>TP (en segundos), no el INR</strong>: el INR solo está validado para el control de la anticoagulación oral.',
     },
     {
         titulo: 'Fibrinógeno',
-        texto: 'A pesar de ser una prueba muy solicitada, el fibrinógeno es poco útil en la mayoría de los casos: al ser un reactante de fase aguda, sus niveles pueden mantenerse en rango normal durante un tiempo prolongado pese al consumo activo. En una serie, la sensibilidad de un fibrinógeno bajo para el diagnóstico de CID fue solo del 28%, y la hipofibrinogenemia se detectó únicamente en los casos muy graves (fibrinógeno normal hasta en el 57% de los pacientes con CID). Las determinaciones seriadas son más útiles que un valor aislado. Se recomienda el método de Clauss para su medición.',
+        texto: 'A pesar de ser una prueba muy solicitada, el fibrinógeno es <strong>poco útil</strong> en la mayoría de los casos: al ser un reactante de fase aguda, sus niveles pueden mantenerse en rango normal durante un tiempo prolongado pese al consumo activo. En una serie, la sensibilidad de un fibrinógeno bajo para el diagnóstico de CID fue solo del <strong>28%</strong>, y la hipofibrinogenemia se detectó únicamente en los casos muy graves (fibrinógeno normal hasta en el 57% de los pacientes con CID). Las determinaciones seriadas son más útiles que un valor aislado. Se recomienda el <strong>método de Clauss</strong> para su medición.',
     },
     {
         titulo: 'Frotis de sangre periférica',
-        texto: 'Los hematíes fragmentados (esquistocitos), aunque descritos en la CID, rara vez superan el 10% del total de hematíes. En casos de CID crónica con dímero-D elevado pero pruebas de coagulación básicas normales, la presencia de esquistocitos puede aportar evidencia confirmatoria adicional. Cuando aparecen en número elevado, deben plantearse otros diagnósticos de microangiopatía trombótica, como la PTT.',
+        texto: 'Los hematíes fragmentados (<strong>esquistocitos</strong>), aunque descritos en la CID, rara vez superan el 10% del total de hematíes. En casos de CID crónica con dímero-D elevado pero pruebas de coagulación básicas normales, la presencia de esquistocitos puede aportar evidencia confirmatoria adicional. Cuando aparecen en número elevado, deben plantearse otros diagnósticos de <strong>microangiopatía trombótica, como la PTT</strong>.',
     },
     {
         titulo: 'Perfiles hemostáticos globales',
-        texto: 'La tromboelastografía (TEG) se ha usado para vincular alteraciones diagnósticas con disfunción hemostática, pero su sensibilidad/especificidad diagnóstica para CID no está bien establecida (la evidencia disponible se refiere más a la predicción de sangrado en cirugía cardiovascular). Un perfil de transmitancia óptica atípico en el TTPa (la llamada "onda bifásica") se ha asociado a CID de forma independiente de la prolongación de los tiempos de coagulación: en un estudio de 1187 ingresos consecutivos en UCI, el valor predictivo positivo aumentaba con el grado de anomalía de la onda, que con frecuencia precedía a la alteración de los parámetros convencionales — aunque su uso está limitado a analizadores óptico-fotométricos específicos.',
+        texto: 'La <strong>tromboelastografía (TEG)</strong> se ha usado para vincular alteraciones diagnósticas con disfunción hemostática, pero su sensibilidad/especificidad diagnóstica para CID <strong>no está bien establecida</strong> (la evidencia disponible se refiere más a la predicción de sangrado en cirugía cardiovascular). Un perfil de transmitancia óptica atípico en el TTPa (la llamada "<strong>onda bifásica</strong>") se ha asociado a CID de forma independiente de la prolongación de los tiempos de coagulación: en un estudio de 1187 ingresos consecutivos en UCI, el valor predictivo positivo aumentaba con el grado de anomalía de la onda, que con frecuencia precedía a la alteración de los parámetros convencionales — aunque su uso está limitado a analizadores óptico-fotométricos específicos.',
     },
 ];

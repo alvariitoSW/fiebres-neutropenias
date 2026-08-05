@@ -91,9 +91,9 @@ export const criteriosDonanteData = {
 };
 
 export const intensidadAcondicionamientoData = [
-    { nivel: 'Mieloablativo (AMA)', descripcion: 'Produce citopenias intensas que no pueden recuperarse sin soporte de progenitores hematopoyéticos.' },
-    { nivel: 'Intensidad reducida (AIR)', descripcion: 'Intermedio entre mieloablativo y no mieloablativo. Incluye: ICT &lt;5 Gy en dosis única (u 8 Gy fraccionada), busulfán &lt;9 mg/kg oral (o dosis equivalente IV), melfalán &lt;140 mg/m², tiotepa &lt;10 mg/kg.' },
-    { nivel: 'No mieloablativo (ANM)', descripcion: 'Produce citopenias moderadas, recuperables sin soporte de progenitores.' }
+    { nivel: 'Mieloablativo (AMA)', descripcion: 'Produce citopenias intensas que <strong>no pueden recuperarse sin soporte de progenitores hematopoyéticos</strong>.' },
+    { nivel: 'Intensidad reducida (AIR)', descripcion: 'Intermedio entre mieloablativo y no mieloablativo. Incluye: <strong>ICT &lt;5 Gy</strong> en dosis única (u 8 Gy fraccionada), <strong>busulfán &lt;9 mg/kg</strong> oral (o dosis equivalente IV), <strong>melfalán &lt;140 mg/m²</strong>, <strong>tiotepa &lt;10 mg/kg</strong>.' },
+    { nivel: 'No mieloablativo (ANM)', descripcion: 'Produce citopenias moderadas, <strong>recuperables sin soporte de progenitores</strong>.' }
 ];
 
 export const regimenesAcondicionamientoData = [
@@ -111,14 +111,14 @@ export const regimenesAcondicionamientoData = [
 ];
 
 export const soporteComunAcondicionamiento = [
-    { titulo: '💧 Hidratación y diuresis alcalina', texto: 'Sueroterapia 2-3 L/m²/24h en perfusión continua desde la noche previa al inicio de la quimioterapia hasta 24h tras finalizarla. Bicarbonato si hay carga tumoral elevada y no hay riesgo de sobrecarga. Alopurinol si hay carga tumoral elevada o leucocitosis.' },
-    { titulo: '🤢 Antieméticos y protección gástrica', texto: 'En alogénico: granisetrón IV + lorazepam + aprepitant (los días de ciclofosfamida e ICT) + dexametasona. En autólogo: granisetrón y aprepitant con melfalán/BCNU, seguido de ondansetrón oral. Protección gástrica con pantoprazol; ácido ursodesoxicólico como protección de EVOH en alogénico.' },
-    { titulo: '🦠 Profilaxis antiinfecciosa', texto: 'Fluconazol desde el día +5 (no en autólogo salvo LMA; alternativa anidulafungina si toxicidad por azoles o alto riesgo). Aciclovir oral desde el inicio. Ciprofloxacino desde el día -1 en alogénico (levofloxacino en autólogo ambulatorio desde el +1).' },
+    { titulo: '💧 Hidratación y diuresis alcalina', texto: '<strong>Sueroterapia 2-3 L/m²/24h</strong> en perfusión continua desde la noche previa al inicio de la quimioterapia hasta 24h tras finalizarla. Bicarbonato si hay carga tumoral elevada y no hay riesgo de sobrecarga. Alopurinol si hay carga tumoral elevada o leucocitosis.' },
+    { titulo: '🤢 Antieméticos y protección gástrica', texto: 'En alogénico: granisetrón IV + lorazepam + aprepitant (los días de ciclofosfamida e ICT) + dexametasona. En autólogo: granisetrón y aprepitant con melfalán/BCNU, seguido de ondansetrón oral. Protección gástrica con <strong>pantoprazol</strong>; <strong>ácido ursodesoxicólico</strong> como protección de EVOH en alogénico.' },
+    { titulo: '🦠 Profilaxis antiinfecciosa', texto: '<strong>Fluconazol</strong> desde el día +5 (no en autólogo salvo LMA; alternativa anidulafungina si toxicidad por azoles o alto riesgo). <strong>Aciclovir</strong> oral desde el inicio. <strong>Ciprofloxacino</strong> desde el día -1 en alogénico (levofloxacino en autólogo ambulatorio desde el +1).' },
     { titulo: '🧬 Profilaxis de EICH', texto: 'Con ciclofosfamida post-TPH: ciclofosfamida a dosis altas días +3 y +4, seguida de tacrolimus (o ciclosporina/sirolimus) desde el +5 y micofenolato de mofetilo hasta el +28. Sin ciclofosfamida post-TPH: ciclosporina desde el día -1 + metotrexato en días fijos post-infusión.' },
-    { titulo: '🩸 Profilaxis de cistitis hemorrágica', texto: 'MESNA al 100% de la dosis de ciclofosfamida, iniciando 20 minutos antes y manteniendo 24h después, junto con hiperhidratación y furosemida tras la ciclofosfamida.' },
-    { titulo: '🦠 Profilaxis de CMV', texto: 'Letermovir en receptores IgG+ sometidos a TPH haploidéntico, 9/10, con corticoides o con injerto pobre y quimera completa.' },
-    { titulo: '🧠 Profilaxis de recidiva en SNC', texto: 'Triple terapia intratecal durante el acondicionamiento en LLA, LMC en fase acelerada, linfomas con criterios de riesgo y LMA de riesgo.' },
-    { titulo: '💊 Profilaxis de sangrado', texto: 'Fitomenadiona (vitamina K) 10 mg iv, 1 ampolla semanal, solo en alogénico.' }
+    { titulo: '🩸 Profilaxis de cistitis hemorrágica', texto: '<strong>MESNA al 100%</strong> de la dosis de ciclofosfamida, iniciando 20 minutos antes y manteniendo 24h después, junto con hiperhidratación y furosemida tras la ciclofosfamida.' },
+    { titulo: '🦠 Profilaxis de CMV', texto: '<strong>Letermovir</strong> en receptores IgG+ sometidos a TPH haploidéntico, 9/10, con corticoides o con injerto pobre y quimera completa.' },
+    { titulo: '🧠 Profilaxis de recidiva en SNC', texto: '<strong>Triple terapia intratecal</strong> durante el acondicionamiento en LLA, LMC en fase acelerada, linfomas con criterios de riesgo y LMA de riesgo.' },
+    { titulo: '💊 Profilaxis de sangrado', texto: '<strong>Fitomenadiona (vitamina K)</strong> 10 mg iv, 1 ampolla semanal, solo en alogénico.' }
 ];
 
 export const irradiacionCorporalTotalData = {

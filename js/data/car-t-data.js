@@ -6,27 +6,27 @@
 export const productosCarT = [
     {
         nombre: 'Kymriah® (tisagenlecleucel)',
-        indicacion: 'Leucemia linfoblástica aguda (LLA) de células B refractaria, en recaída postrasplante o en segunda o posterior recaída, en pacientes pediátricos y adultos jóvenes hasta 25 años. Linfoma B difuso de célula grande (LBDCG) en recaída o refractario tras dos o más líneas de tratamiento sistémico en adultos.'
+        indicacion: 'Leucemia linfoblástica aguda (LLA) de células B refractaria, en recaída postrasplante o en segunda o posterior recaída, en <strong>pacientes pediátricos y adultos jóvenes hasta 25 años</strong>. Linfoma B difuso de célula grande (LBDCG) en recaída o refractario tras <strong>dos o más líneas</strong> de tratamiento sistémico en adultos.'
     },
     {
         nombre: 'Yescarta® (axicabtagén ciloleucel)',
-        indicacion: 'LBDCG y linfoma B de alto grado refractarios o en recaída en los 12 meses tras completar inmunoquimioterapia de primera línea. LBDCG y linfoma B primario mediastínico refractarios o en recaída tras 2 o más líneas. Linfoma folicular refractario o en recaída tras 3 o más líneas.'
+        indicacion: 'LBDCG y linfoma B de alto grado refractarios o en recaída en los <strong>12 meses</strong> tras completar inmunoquimioterapia de primera línea. LBDCG y linfoma B primario mediastínico refractarios o en recaída tras <strong>2 o más líneas</strong>. Linfoma folicular refractario o en recaída tras <strong>3 o más líneas</strong>.'
     },
     {
         nombre: 'Abecma® (idecabtagén vicleucel)',
-        indicacion: 'Mieloma múltiple en recaída y refractario tras al menos 3 tratamientos previos (incluidos un inmunomodulador, un inhibidor de proteasoma y un anticuerpo anti-CD38), con progresión al último tratamiento.'
+        indicacion: 'Mieloma múltiple en recaída y refractario tras <strong>al menos 3 tratamientos previos</strong> (incluidos un inmunomodulador, un inhibidor de proteasoma y un anticuerpo anti-CD38), con progresión al último tratamiento.'
     },
     {
         nombre: 'Tecartus® (brexucabtagén autoleucel)',
-        indicacion: 'Linfoma de células del manto refractario o en recaída tras 2 o más líneas, incluido un inhibidor de BTK. LLA de células B precursoras en adultos ≥26 años, refractaria o en recaída.'
+        indicacion: 'Linfoma de células del manto refractario o en recaída tras <strong>2 o más líneas</strong>, incluido un inhibidor de BTK. LLA de células B precursoras en adultos <strong>≥26 años</strong>, refractaria o en recaída.'
     },
     {
         nombre: 'Carvykti® (ciltacabtagén autoleucel)',
-        indicacion: 'Mieloma múltiple refractario recaído tras al menos 1 tratamiento previo (incluidos un inmunomodulador y un inhibidor de proteasoma), con progresión al último tratamiento y refractariedad a lenalidomida.'
+        indicacion: 'Mieloma múltiple refractario recaído tras <strong>al menos 1 tratamiento previo</strong> (incluidos un inmunomodulador y un inhibidor de proteasoma), con progresión al último tratamiento y <strong>refractariedad a lenalidomida</strong>.'
     },
     {
         nombre: 'ARI-0001 (CAR-T académico)',
-        indicacion: 'Desarrollado en el Hospital Clínic de Barcelona, autorizado en España. LLA de células B en pacientes mayores de 25 años, en recaída o refractariedad a tratamientos convencionales, sin CAR-T previo.'
+        indicacion: 'Desarrollado en el <strong>Hospital Clínic de Barcelona</strong>, autorizado en España. LLA de células B en pacientes mayores de 25 años, en recaída o refractariedad a tratamientos convencionales, <strong>sin CAR-T previo</strong>.'
     }
 ];
 
