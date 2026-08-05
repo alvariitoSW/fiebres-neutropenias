@@ -1,13 +1,307 @@
     <button class="back-btn btn-volver-nefro-kidney">← VOLVER</button>
     <div class="diag-header">
         <h2 style="color: var(--accent-green); text-shadow: var(--glow-green);">Fisiopatología renal</h2>
-        <p>Toca una parte de la nefrona</p>
+        <p>Repasa la fisiología renal y explora la nefrona interactiva</p>
     </div>
 
     <button class="accordion-btn nav-btn" id="btn-nefro-repasar" style="border-left: 4px solid var(--accent-yellow);">
         <span>🎯 Repasar (preguntas de repaso)</span>
         <span style="font-size: 0.8rem; color: var(--accent-yellow);">[ EMPEZAR → ]</span>
     </button>
+
+    <p class="section-label">Repaso de fisiología renal</p>
+    <div class="corkboard" id="fisio-corkboard">
+        <div class="field-card" data-tab="fisio-anatomia">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 1</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><path d="M50,8 C30,8 18,20 18,30 C18,42 30,48 46,46 C60,44 66,34 62,24 C59,16 58,14 60,10" fill="none" stroke="var(--accent-green)" stroke-width="2"/><path d="M40,18 q6,-4 4,4 q-2,6 6,6 q6,0 2,8" fill="none" stroke="var(--accent-yellow)" stroke-width="1.6"/></svg>
+                    <div class="field-name">Anatomía funcional</div>
+                    <div class="field-hook">¿Cuántas nefronas hay en cada riñón — y por qué perder algunas no suele pasar factura?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">800.000-1.000.000 por riñón. No se regeneran, pero el resto compensa con cambios adaptativos.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="fisio-filtracion">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 2</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><circle cx="30" cy="28" r="14" fill="none" stroke="var(--accent-blue)" stroke-width="2"/><line x1="46" y1="14" x2="46" y2="42" stroke="var(--accent-red)" stroke-width="2"/><circle cx="58" cy="20" r="2" fill="var(--accent-yellow)"/><circle cx="64" cy="28" r="2" fill="var(--accent-yellow)"/><circle cx="58" cy="36" r="2" fill="var(--accent-yellow)"/></svg>
+                    <div class="field-name">Filtración glomerular</div>
+                    <div class="field-hook">¿Por qué la filtración glomerular no gasta energía?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Es un proceso pasivo: la presión hidrostática de la sangre empuja el líquido a través de la membrana de filtración, sin bombas ni ATP.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="fisio-regulacion">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 3</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><path d="M18,40 A22,22 0 0,1 62,40" fill="none" stroke="var(--accent-purple)" stroke-width="2"/><line x1="40" y1="40" x2="54" y2="22" stroke="var(--accent-purple)" stroke-width="2"/><circle cx="40" cy="40" r="3" fill="var(--accent-purple)"/></svg>
+                    <div class="field-name">Regulación del filtrado</div>
+                    <div class="field-hook">¿Entre qué presión arterial media mantiene el riñón la TFG casi constante, sin ayuda hormonal ni nerviosa?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Entre 80 y 180 mmHg — autorregulación miogénica + retroalimentación túbulo-glomerular. Incluye un simulador.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="fisio-tubular">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 4</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><line x1="14" y1="28" x2="66" y2="28" stroke="var(--accent-yellow)" stroke-width="3" stroke-linecap="round"/><path d="M50,20 l8,8 l-8,8" fill="none" stroke="var(--accent-green)" stroke-width="2"/><path d="M30,20 l-8,8 l8,8" fill="none" stroke="var(--accent-red)" stroke-width="2"/></svg>
+                    <div class="field-name">Reabsorción y secreción</div>
+                    <div class="field-hook">De 180 litros de plasma filtrados al día, ¿cuántos acaban siendo orina?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Menos de 1,5 litros — se reabsorbe más del 99% del agua filtrada.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="fisio-hormonal">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 5</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><circle cx="26" cy="20" r="6" fill="none" stroke="var(--accent-blue)" stroke-width="2"/><circle cx="50" cy="18" r="5" fill="none" stroke="var(--accent-blue)" stroke-width="2"/><circle cx="40" cy="36" r="7" fill="none" stroke="var(--accent-blue)" stroke-width="2"/><line x1="30" y1="24" x2="36" y2="31" stroke="var(--accent-blue)" stroke-width="1.6"/><line x1="47" y1="22" x2="43" y2="31" stroke="var(--accent-blue)" stroke-width="1.6"/></svg>
+                    <div class="field-name">Regulación hormonal del túbulo</div>
+                    <div class="field-hook">¿Qué hormona hace que el túbulo colector deje de ser impermeable al agua?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">La ADH (vasopresina): inserta acuaporinas en la membrana apical de las células principales.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="fisio-endocrino">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 6</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><ellipse cx="40" cy="28" rx="14" ry="10" fill="none" stroke="var(--accent-red)" stroke-width="2"/><line x1="40" y1="8" x2="40" y2="14" stroke="var(--accent-red)" stroke-width="1.6"/><line x1="20" y1="16" x2="25" y2="20" stroke="var(--accent-red)" stroke-width="1.6"/><line x1="60" y1="16" x2="55" y2="20" stroke="var(--accent-red)" stroke-width="1.6"/><line x1="20" y1="40" x2="25" y2="36" stroke="var(--accent-red)" stroke-width="1.6"/><line x1="60" y1="40" x2="55" y2="36" stroke="var(--accent-red)" stroke-width="1.6"/></svg>
+                    <div class="field-name">Función endocrina del riñón</div>
+                    <div class="field-hook">¿Qué porcentaje de la eritropoyetina del cuerpo se produce en el riñón?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">~90%, en los fibroblastos intersticiales de la corteza renal, activada por HIF ante la hipoxia.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="tap-hint">Toca una ficha para voltearla, y de nuevo para abrir el tema completo</p>
+
+    <div class="card" id="panel-fisio-tabs" style="display:none;">
+        <div id="fisio-anatomia" class="tab-content">
+            <h3 style="color: var(--accent-green);">Anatomía funcional de la nefrona</h3>
+            <div class="article-figure">
+                <img src="js/modules/nefrologia/img/fisio-anatomia-renal.jpg" alt="Anatomía renal: corteza, médula (pirámides), papila, cálices, pelvis renal, vasos y uréter" loading="lazy">
+                <div class="article-figure-caption">Figura 1. Corte sagital del riñón: la médula se organiza en 8-10 pirámides cuya base nace en la corteza y cuya papila se proyecta en la pelvis renal.</div>
+            </div>
+            <dl class="kv-row"><dt>Tamaño</dt><dd>~11 × 7 × 3 cm, ~150 g cada riñón (el izquierdo suele ser algo mayor).</dd></dl>
+            <dl class="kv-row"><dt>Ubicación</dt><dd>Retroperitoneal, a ambos lados de la columna. El hilio (cara medial) da paso a arteria y vena renal, linfáticos, inervación y uréter.</dd></dl>
+            <dl class="kv-row"><dt>Nº de nefronas</dt><dd>800.000-1.000.000 por riñón — unidad funcional mínima capaz de formar orina por sí sola.</dd></dl>
+            <div class="article-figure">
+                <img src="js/modules/nefrologia/img/fisio-nefrona-unidad-funcional.jpg" alt="Nefrona: glomérulo, cápsula de Bowman, túbulo proximal, asa de Henle, túbulo contorneado distal, aparato yuxtaglomerular y tubo colector" loading="lazy">
+                <div class="article-figure-caption">Figura 2. La nefrona: glomérulo + cápsula de Bowman → túbulo proximal → asa de Henle (médula) → túbulo distal → tubo colector, con el aparato yuxtaglomerular (mácula densa) en el ángulo de vuelta a la corteza.</div>
+            </div>
+            <table class="data-table">
+                <thead><tr><th>Función renal</th><th>Cómo la ejerce</th></tr></thead>
+                <tbody>
+                    <tr><td>Eliminación por la orina</td><td>Desechos metabólicos, sustancias extrañas, fármacos.</td></tr>
+                    <tr><td>Regulación del medio interno</td><td>Volemia, iones (Na⁺, K⁺, Ca²⁺, Cl⁻, fosfato), pH sanguíneo, osmolaridad.</td></tr>
+                    <tr><td>Hormonas y enzimas</td><td>Renina (SRAA, tensión arterial); calcitriol (vitamina D activa); eritropoyetina (eritropoyesis).</td></tr>
+                    <tr><td>Gluconeogénesis</td><td>A partir de glutamina, sobre todo en ayuno/acidosis.</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">👉 Más abajo tienes la nefrona interactiva — toca cada segmento para ver sus canales/transportadores en detalle, incluida la diferencia entre nefrona cortical y yuxtamedular.</p>
+        </div>
+
+        <div id="fisio-filtracion" class="tab-content">
+            <h3 style="color: var(--accent-blue);">Filtración glomerular</h3>
+            <div class="article-figure">
+                <img src="js/modules/nefrologia/img/fisio-glomerulo.jpg" alt="El glomérulo renal: arteriola aferente y eferente, capilares glomerulares, cápsula de Bowman, podocitos, célula endotelial, membrana basal glomerular, mácula densa" loading="lazy">
+                <div class="article-figure-caption">Figura 3. La barrera de filtración: endotelio fenestrado → membrana basal → podocitos con sus "pies" interdigitados.</div>
+            </div>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔬 Endotelio fenestrado</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Poros de 50-100 nm que dejan pasar agua y solutos pequeños pero no células.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔬 Membrana basal</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Colágeno IV/V + heparán sulfato: carga electronegativa que repele proteínas pequeñas y otros elementos cargados negativamente.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔬 Podocitos</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">"Pies" interdigitados que abrazan los capilares y forman diafragmas de ranura — soportan la presión hidrostática y dejan pasar solo moléculas pequeñas.</div>
+                </div>
+            </div>
+            <div class="article-figure">
+                <img src="js/modules/nefrologia/img/fisio-presiones-filtracion.jpg" alt="Presiones que participan en el filtrado glomerular: presión hidrostática glomerular 55 mmHg, presión hidrostática capsular 15 mmHg, presión oncótica capilar 30 mmHg, presión neta de filtración 10 mmHg" loading="lazy">
+                <div class="article-figure-caption">Figura 5. Balance de presiones en el capilar glomerular.</div>
+            </div>
+            <ul class="term-chips">
+                <li>PH glomerular ≈ 55 mmHg (a favor)</li>
+                <li>PH capsular ≈ 15 mmHg (en contra)</li>
+                <li>P. oncótica ≈ 30 mmHg (en contra)</li>
+                <li>Presión neta ≈ 10 mmHg</li>
+            </ul>
+            <dl class="kv-row"><dt>TFG normal</dt><dd>~125 mL/min en hombres, ~105 mL/min en mujeres — el plasma completo se filtra más de 60 veces al día.</dd></dl>
+            <dl class="kv-row"><dt>Dintel de filtración</dt><dd>Pasan moléculas &lt;3-4,5 nm (agua, glucosa, aminoácidos, desechos nitrogenados); proteínas y elementos con carga quedan retenidos.</dd></dl>
+        </div>
+
+        <div id="fisio-regulacion" class="tab-content">
+            <h3 style="color: var(--accent-purple);">Regulación del filtrado glomerular</h3>
+            <table class="data-table">
+                <thead><tr><th></th><th>Control intrínseco</th><th>Control extrínseco</th></tr></thead>
+                <tbody>
+                    <tr><td>Objetivo</td><td>Mantener el FG estable ante cambios moderados de presión</td><td>Mantener la presión sistémica que impulsa la filtración</td></tr>
+                    <tr><td>Mecanismos</td><td>Miogénico + retroalimentación túbulo-glomerular</td><td>SRAA + reflejo barorreceptor (simpático)</td></tr>
+                    <tr><td>Rango</td><td>PA media 80-180 mmHg</td><td>Fuera de ese rango</td></tr>
+                </tbody>
+            </table>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚙️ Mecanismo miogénico</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Canales de Na⁺/Ca²⁺ sensibles al estiramiento en la pared de la arteriola aferente: ↑presión → se contrae (↓luz); ↓presión → se dilata.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚙️ Retroalimentación túbulo-glomerular</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La mácula densa detecta ↑Na⁺/Cl⁻ en el túbulo distal y libera adenosina/ATP/tromboxano → vasoconstricción de la arteriola aferente → ↓FG.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚙️ Sistema renina-angiotensina-aldosterona</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Entra en juego cuando cae la presión sistémica de forma importante — refuerza al control intrínseco por varias vías (simpático, mácula densa).</div>
+                </div>
+            </div>
+
+            <div class="tfg-simulador">
+                <h4 style="color: var(--accent-yellow);">🧪 Simulador: autorregulación de la TFG</h4>
+                <p class="subtitle">Mueve la presión arterial media y observa la respuesta renal (modelo simplificado, con fines didácticos — no es una calculadora clínica)</p>
+                <div class="tfg-slider-row">
+                    <label for="tfg-pam">Presión arterial media (PAM)</label>
+                    <input type="range" id="tfg-pam" min="40" max="220" value="100" step="1">
+                    <span id="tfg-pam-valor">100 mmHg</span>
+                </div>
+                <div class="tfg-vasos">
+                    <div class="tfg-vaso-item">
+                        <span class="tfg-vaso-label">Diámetro arteriola aferente</span>
+                        <div class="tfg-vaso-track"><div class="tfg-vaso-fill" id="tfg-aferente"></div></div>
+                    </div>
+                    <div class="tfg-vaso-item">
+                        <span class="tfg-vaso-label">Diámetro arteriola eferente</span>
+                        <div class="tfg-vaso-track"><div class="tfg-vaso-fill" id="tfg-eferente"></div></div>
+                    </div>
+                </div>
+                <div class="tfg-resultados">
+                    <div class="tfg-resultado-item"><span class="tfg-resultado-label">P. hidrostática glomerular</span><span class="tfg-resultado-valor" id="tfg-phg">55 mmHg</span></div>
+                    <div class="tfg-resultado-item"><span class="tfg-resultado-label">Tasa de filtración (TFG)</span><span class="tfg-resultado-valor" id="tfg-valor">125 mL/min</span></div>
+                </div>
+                <div class="tfg-estado tfg-estado-ok" id="tfg-estado"></div>
+            </div>
+        </div>
+
+        <div id="fisio-tubular" class="tab-content">
+            <h3 style="color: var(--accent-yellow);">Reabsorción y secreción tubular</h3>
+            <div class="article-figure">
+                <img src="js/modules/nefrologia/img/fisio-formacion-orina.jpg" alt="Formación de la orina: filtración en el glomérulo renal, reabsorción y secreción en los túbulos renales, excreción urinaria. Filtración menos reabsorción más secreción es igual a excreción" loading="lazy">
+                <div class="article-figure-caption">Figura 4. La ecuación maestra: Filtración − Reabsorción + Secreción = Excreción.</div>
+            </div>
+            <table class="data-table">
+                <thead><tr><th>Sustancia</th><th>Filtrada/día</th><th>Reabsorbida</th><th>Excretada/día</th></tr></thead>
+                <tbody>
+                    <tr><td>Agua</td><td>180 L</td><td>99%</td><td>1,8 L</td></tr>
+                    <tr><td>Sodio</td><td>630 g</td><td>99,5%</td><td>3,2 g</td></tr>
+                    <tr><td>Glucosa</td><td>180 g</td><td>100%</td><td>0 g</td></tr>
+                    <tr><td>Urea</td><td>54 g</td><td>44%</td><td>30 g</td></tr>
+                </tbody>
+            </table>
+            <dl class="kv-row"><dt>Vía transcelular</dt><dd>Transportadores activos (primarios: Na⁺/K⁺-ATPasa; secundarios: cotransporte/contratransporte con Na⁺) y transporte facilitado — todos saturables.</dd></dl>
+            <dl class="kv-row"><dt>Vía paracelular</dt><dd>Agua y solutos por arrastre de solvente, siguiendo el gradiente osmótico generado por el transporte activo de Na⁺.</dd></dl>
+            <dl class="kv-row"><dt>Transporte máximo (ejemplo: glucosa)</dt><dd>90% se reabsorbe por SGLT2 (túbulo proximal inicial) y 10% por SGLT1 (segmento recto). Tm ≈ 320 mg/min; por encima de un umbral plasmático ~180 mg/dL, el sistema se satura y aparece glucosuria — el mecanismo que bloquean los inhibidores de SGLT2.</dd></dl>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">👉 El detalle canal por canal de cada segmento (NKCC2, NCC, ENaC, acuaporinas...) está en la nefrona interactiva, más abajo.</p>
+        </div>
+
+        <div id="fisio-hormonal" class="tab-content">
+            <h3 style="color: var(--accent-blue);">Regulación hormonal del túbulo distal y colector</h3>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💧 ADH (vasopresina)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Estímulo</dt><dd>↑Osmolaridad plasmática o ↓volumen circulante, detectados por osmorreceptores/mecanorreceptores.</dd></dl>
+                        <dl class="kv-row"><dt>Efecto</dt><dd>Inserta acuaporinas en la membrana apical de las células principales del colector → reabsorción de agua; también ↑reabsorción de urea (clave para el gradiente medular).</dd></dl>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧂 Aldosterona</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Estímulo</dt><dd>Angiotensina II o ↑K⁺ plasmático directamente.</dd></dl>
+                        <dl class="kv-row"><dt>Efecto</dt><dd>Activa la Na⁺/K⁺-ATPasa y canales de Na⁺ (ENaC) en distal/colector → reabsorbe hasta el 5% del Na⁺ filtrado, con salida de K⁺.</dd></dl>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🫀 Péptido natriurético atrial (PNA)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Estímulo</dt><dd>Distensión de la pared auricular (sobrecarga de volumen).</dd></dl>
+                        <dl class="kv-row"><dt>Efecto</dt><dd>Natriurético y diurético: inhibe la reabsorción de Na⁺ en el colector, inhibe aldosterona y ADH, y dilata la arteriola aferente aumentando la TFG.</dd></dl>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🦴 Hormona paratiroidea (PTH)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Aumenta la reabsorción de Ca²⁺ en el túbulo contorneado distal, además de estimular la formación de calcitriol en el túbulo proximal.</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="fisio-endocrino" class="tab-content">
+            <h3 style="color: var(--accent-red);">Función endocrina del riñón</h3>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩸 Eritropoyetina (EPO)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">~90% se produce en fibroblastos intersticiales de la corteza renal. Ante hipoxia, se estabiliza el factor HIF (sobre todo HIF-2), que activa la transcripción del gen de la EPO → estimula la eritropoyesis en médula ósea.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚡ Renina y SRAA</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Producida por las células granulares de la arteriola aferente ante ↓presión arterial, ↓Na⁺/Cl⁻ en mácula densa o ↑catecolaminas. Cataliza angiotensinógeno → angiotensina I → (ECA) → angiotensina II, que vasoconstriñe, estimula aldosterona y ADH, y favorece la reabsorción de Na⁺ y agua.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>☀️ Calcitriol</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">El túbulo proximal expresa la 1-α-hidroxilasa que activa la vitamina D (25(OH)D₃ → calcitriol). El calcitriol aumenta la calcemia promoviendo la reabsorción intestinal y renal de Ca²⁺ y reduce el fósforo.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Otros mediadores vasoactivos</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>PNB / PNC</dt><dd>Familia del PNA; el PNC parece inhibir la fibrosis renal asociada a la edad.</dd></dl>
+                        <dl class="kv-row"><dt>Endotelinas</dt><dd>Vasoconstrictoras; poca actividad en fisiología normal, pero contribuyen a la vasoconstricción y al daño podocitario en la enfermedad renal.</dd></dl>
+                        <dl class="kv-row"><dt>Prostaglandinas (PGE₂, PGI₂)</dt><dd>Vasodilatadoras; mantienen la perfusión renal y regulan el transporte de Na⁺/Cl⁻ en el asa de Henle — la base de por qué los AINE pueden precipitar fracaso renal.</dd></dl>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🍬 Metabolismo (glucosa e insulina)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">El riñón hace gluconeogénesis (más activa en acidosis, relevante en cetoacidosis diabética) y degrada la insulina filtrada/reabsorbida — por eso los requerimientos de insulina bajan en la insuficiencia renal.</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="nefrona-frame">
         <div class="nefrona-photo-wrap article-figure" id="nefrona-photo-wrap">

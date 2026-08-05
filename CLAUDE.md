@@ -349,6 +349,34 @@ por encima que sí diera cabida a todos.
   enlaces**: esa clase está acoplada a la lógica de `pkpd.js` (dispara una
   excepción en cualquier enlace sin `data-drug`, aunque no impide la
   navegación) — usa `.biblio-link` en su lugar.
+- **Contenido real de "Fisiopatología renal"**: fuente Carracedo J, Ramírez R.
+  "Fisiología Renal". Nefrología al día (SEN), actualizado 5/10/2020 (PDF de
+  27 págs. con 5 figuras). Igual que con los PNT de Trasplante, **no
+  reproduzcas el texto del artículo literalmente** — el propio usuario pidió
+  explícitamente una versión esquematizada/resumida que sirva de repaso,
+  nunca un volcado completo. Al principio de `nefro-menu.html`, antes de la
+  nefrona interactiva, hay un segundo cuaderno de campo
+  (`#fisio-corkboard`/`#panel-fisio-tabs`, inicializado por
+  `js/modules/nefrologia/fisiologia.js` vía el mismo `core/corkboard.js` —
+  no una reimplementación) con 6 fichas: Anatomía funcional, Filtración
+  glomerular, Regulación del filtrado, Reabsorción y secreción, Regulación
+  hormonal del túbulo, Función endocrina del riñón. Cada panel usa
+  `.kv-row`/`.term-chips`/`.micro-prof-item`/`.data-table` para esquematizar
+  (nunca prosa corrida) y las figuras reales del PDF extraídas con
+  `pdfimages` (`js/modules/nefrologia/img/fisio-*.jpg`) vía `.article-figure`
+  — las 3 tablas del PDF (funciones renales, control FG, balance de
+  filtrado/reabsorción) se recrearon como `.data-table` nativas en vez de
+  incrustarlas como imagen, para que queden legibles en modo oscuro y
+  responsive. El panel "Regulación del filtrado" incluye un
+  **simulador de autorregulación de la TFG** (`.tfg-simulador`): un slider
+  de presión arterial media que recalcula en vivo la presión hidrostática
+  glomerular, la TFG y el diámetro relativo de las arteriolas aferente/
+  eferente con un modelo deliberadamente simplificado (constante entre
+  80-180 mmHg, cae por debajo, sube poco por encima — fiel a lo que dice la
+  fuente, pero sin pretender ser una calculadora clínica real; el propio
+  texto de la UI lo aclara). Los paneles de "Anatomía funcional" y
+  "Reabsorción y secreción" enlazan explícitamente a la nefrona interactiva
+  de más abajo para el detalle canal-por-canal, en vez de duplicarlo.
 - **`nefro-menu.html`** (nivel 1, la nefrona) usa una **fotografía/ilustración anatómica real**
   (`js/modules/nefrologia/img/nefrona-anatomia.jpg`, corte de tejido renal
   con las dos nefronas — cortical de asa corta y yuxtamedular de asa larga

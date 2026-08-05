@@ -7,6 +7,7 @@
 import { createViewSwitcher } from '../../core/navigation.js';
 import { initNefrona } from './nefrona.js';
 import { initRinon } from './rinon.js';
+import { init as initFisiologia } from './fisiologia.js';
 import { initQuiz } from '../quiz/quiz.js';
 import { preguntasNefrologia } from '../../data/nefrologia-preguntas.js';
 
@@ -52,6 +53,7 @@ export function init() {
         onRoute: (key) => rutasRinon[key]?.(),
     });
 
+    initFisiologia();
     initQuiz({ triggerId: 'btn-nefro-repasar', banco: preguntasNefrologia });
 
     nefroLevel.show('kidney');

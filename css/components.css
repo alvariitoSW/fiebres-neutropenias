@@ -569,6 +569,30 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 }
 
 /* ===================================================== */
+/* SIMULADOR TFG — autorregulación del filtrado glomerular  */
+/* (js/modules/nefrologia/fisiologia.js). Modelo simplificado */
+/* con fines didácticos, no una calculadora clínica.         */
+/* ===================================================== */
+.tfg-simulador { margin-top: 6px; }
+.tfg-slider-row { margin: 14px 0 18px; }
+.tfg-slider-row label { display: block; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.tfg-slider-row input[type="range"] { width: 100%; accent-color: var(--accent-yellow); }
+.tfg-slider-row span { display: block; text-align: center; font-size: 1rem; font-weight: bold; color: var(--accent-yellow); margin-top: 4px; }
+.tfg-vasos { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.tfg-vaso-item { display: flex; flex-direction: column; gap: 4px; }
+.tfg-vaso-label { font-size: 0.72rem; color: var(--text-muted); }
+.tfg-vaso-track { width: 100%; height: 14px; border-radius: 7px; background: rgba(0,0,0,0.35); border: 1px solid var(--border-color); overflow: hidden; }
+.tfg-vaso-fill { height: 100%; background: linear-gradient(90deg, var(--accent-red), var(--accent-yellow)); border-radius: 7px; transition: width 0.25s ease; }
+.tfg-resultados { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.tfg-resultado-item { background: rgba(0,0,0,0.25); border-radius: 4px; padding: 8px 10px; text-align: center; }
+.tfg-resultado-label { display: block; font-size: 0.62rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 3px; }
+.tfg-resultado-valor { display: block; font-size: 1.05rem; font-weight: bold; color: var(--text-main); }
+.tfg-estado { padding: 10px 12px; border-radius: 4px; font-size: 0.78rem; line-height: 1.5; border-left: 3px solid; transition: background 0.2s ease, border-color 0.2s ease; }
+.tfg-estado-ok { background: rgba(144,160,106,0.12); border-color: var(--accent-green); color: var(--text-main); }
+.tfg-estado-warn { background: rgba(207,154,62,0.14); border-color: var(--accent-yellow); color: var(--text-main); }
+.tfg-estado-danger { background: rgba(184,92,62,0.16); border-color: var(--accent-red); color: var(--text-main); }
+
+/* ===================================================== */
 /* QUIZ DE REPASO — motor genérico de preguntas de 4       */
 /* opciones (js/modules/quiz/). Única excepción de         */
 /* persistencia del proyecto: ver nota en CLAUDE.md.        */
