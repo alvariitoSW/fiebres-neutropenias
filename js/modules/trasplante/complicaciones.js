@@ -1,7 +1,7 @@
 // Módulo "Complicaciones post-TPH": neutropenia febril, infección de
 // catéter, tratamiento antifúngico, infecciones víricas, EICH agudo y
 // complicaciones no infecciosas (endoteliales, digestivas, urológicas).
-import { initTabs } from '../../core/tabs.js';
+import { initCorkboard } from '../../core/corkboard.js';
 import {
     focoInfeccionData,
     germenMultiRData,
@@ -62,7 +62,7 @@ function calcCistitis() {
 }
 
 export function init() {
-    initTabs(document.getElementById('panel-tph-comp-tabs'));
+    initCorkboard('comp-corkboard', 'panel-tph-comp-tabs');
 
     document.getElementById('comp-foco-select').addEventListener('change', calcFoco);
     calcFoco();

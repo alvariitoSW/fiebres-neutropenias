@@ -4,15 +4,74 @@
         <p>CID, PTT y Síndrome de Lisis Tumoral</p>
     </div>
 
-    <div class="card" id="panel-sindromes-tabs">
-        <div class="tabs">
-            <div class="tab active" data-tab="sind-cid">CID</div>
-            <div class="tab" data-tab="sind-ptt">PTT</div>
-            <div class="tab" data-tab="sind-slt">S. Lisis Tumoral</div>
-        </div>
+    <p class="section-label">Elige un tema</p>
+    <div class="corkboard" id="sindromes-corkboard">
 
+        <div class="field-card" data-tab="sind-cid"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha I</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-yellow)" stroke-width="1.6">
+                    <path d="M14,10 L14,46 M66,10 L66,46" stroke-opacity="0.55"/>
+                    <path d="M14,10 Q40,4 66,10" stroke-opacity="0.55"/><path d="M14,46 Q40,52 66,46" stroke-opacity="0.55"/>
+                    <path d="M22,20 L28,26 L22,30 L30,34" stroke-width="1.4"/><circle cx="25" cy="22" r="1.6" fill="var(--accent-yellow)" stroke="none"/>
+                    <circle cx="52" cy="18" r="1.6" fill="var(--accent-yellow)" stroke="none"/><circle cx="58" cy="26" r="1.6" fill="var(--accent-yellow)" stroke="none"/><circle cx="50" cy="32" r="1.6" fill="var(--accent-yellow)" stroke="none"/>
+                </svg>
+                <div class="field-name">CID</div>
+                <div class="field-hook">"un mismo vaso, dos fenotipos... ¿trombótico o hemorrágico?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Depende de la etiología de base: sepsis y cáncer predominan trombóticos; complicaciones obstétricas y traumatismo, hemorrágicos.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="sind-ptt"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha II</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-blue)" stroke-width="1.6">
+                    <path d="M10,28 Q40,14 70,28" stroke-opacity="0.5"/>
+                    <circle cx="34" cy="24" r="4.5"/><circle cx="40" cy="21" r="4"/><circle cx="38" cy="28" r="3.6"/>
+                    <path d="M14,40 L18,44 M16,40 L14,44" stroke-width="1.3"/>
+                    <path d="M56,42 L60,38 M58,44 L62,40" stroke-width="1.3"/>
+                    <path d="M24,46 L27,42 M25,46 L28,43" stroke-width="1.3"/>
+                </svg>
+                <div class="field-name">PTT</div>
+                <div class="field-hook">"antes del resultado de ADAMTS-13... ¿con qué te guías?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Las escalas French score y PLASMIC score estiman la probabilidad y permiten iniciar TPE sin esperar la determinación.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="sind-slt"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha III</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-red)" stroke-width="1.6">
+                    <circle cx="34" cy="28" r="13" stroke-opacity="0.7"/>
+                    <path d="M45,20 L54,14 M48,28 L58,28 M45,36 L54,42" stroke-width="1.4"/>
+                    <rect x="55" y="10" width="4" height="4" transform="rotate(45 57 12)"/>
+                    <rect x="60" y="26" width="4" height="4" transform="rotate(45 62 28)"/>
+                    <rect x="55" y="39" width="4" height="4" transform="rotate(45 57 41)"/>
+                </svg>
+                <div class="field-name">S. Lisis<br>Tumoral</div>
+                <div class="field-hook">"¿cuántos criterios de laboratorio hacen falta para el diagnóstico?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">≥2 de 4 (ácido úrico, potasio, fósforo, calcio) para SLT de laboratorio; el SLT clínico exige además ≥1 criterio clínico.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+    </div>
+    <p class="tap-hint">☝ toca una ficha para ver la pista, y de nuevo para abrir el tema completo</p>
+
+    <div class="card" id="panel-sindromes-tabs" style="display:none;">
         <!-- ===== TAB 1: CID ===== -->
-        <div id="sind-cid" class="tab-content active">
+        <div id="sind-cid" class="tab-content">
             <p style="font-size: 0.85rem; line-height: 1.5;">
                 La Coagulación Intravascular Diseminada (CID) es un trastorno intravascular
                 adquirido y potencialmente mortal, caracterizado por activación sistémica de la

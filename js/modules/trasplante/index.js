@@ -1,6 +1,6 @@
 // Módulo "Introducción al TPH": selección de donante, ingreso/planta,
 // fallo de injerto, productos de terapia celular y criterios de alta.
-import { initTabs } from '../../core/tabs.js';
+import { initCorkboard } from '../../core/corkboard.js';
 import {
     falloInjertoData,
     causasFalloInjerto,
@@ -116,7 +116,7 @@ function calcAlta() {
 }
 
 export function init() {
-    initTabs(document.getElementById('panel-tph-tabs'));
+    initCorkboard('tph-corkboard', 'panel-tph-tabs');
 
     document.getElementById('tph-donante-select').addEventListener('change', calcDonante);
     calcDonante();

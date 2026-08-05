@@ -1,7 +1,7 @@
 // Módulo "CAR-T y complicaciones que llevan a UCI": indicaciones, infusión,
 // matriz interactiva de grados de SLC/CRS y de neurotoxicidad (ICANS) con
 // calculadora de puntuación ICE.
-import { initTabs } from '../../core/tabs.js';
+import { initCorkboard } from '../../core/corkboard.js';
 import {
     productosCarT,
     criteriosSeleccionCarT,
@@ -103,7 +103,7 @@ function calcIce() {
 }
 
 export function init() {
-    initTabs(document.getElementById('panel-cart-tabs'));
+    initCorkboard('cart-corkboard', 'panel-cart-tabs');
     renderProductos();
     renderCriterios();
 

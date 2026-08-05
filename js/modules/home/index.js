@@ -3,6 +3,7 @@
 // Citopenias y submenú de Trasplante. La lógica de cada calculadora vive
 // en su propio módulo; aquí solo se decide qué vista se ve en cada momento.
 import { createViewSwitcher } from '../../core/navigation.js';
+import { openCorkboardTopic } from '../../core/corkboard.js';
 import { initAtlas } from './atlas.js';
 
 export function init() {
@@ -47,16 +48,12 @@ export function init() {
     document.getElementById('btn-tph-complicaciones').addEventListener('click', () => trasplanteLevel.show('complicaciones'));
     document.querySelectorAll('.btn-volver-trasplante-menu').forEach(b => b.addEventListener('click', () => trasplanteLevel.show('menu')));
 
-    function activarPestanaSindromes(tab) {
-        document.querySelector(`#panel-sindromes-tabs .tab[data-tab="${tab}"]`)?.click();
-    }
-
     const rutasAtlas = {
         'citopenias-neutropenia': () => { topLevel.show('citopenias'); citopeniasLevel.show('neutropeniaFebril'); },
         reconocimiento: () => topLevel.show('reconocimiento'),
-        'sindromes-cid': () => { topLevel.show('sindromes'); activarPestanaSindromes('sind-cid'); },
-        'sindromes-ptt': () => { topLevel.show('sindromes'); activarPestanaSindromes('sind-ptt'); },
-        'sindromes-slt': () => { topLevel.show('sindromes'); activarPestanaSindromes('sind-slt'); },
+        'sindromes-cid': () => { topLevel.show('sindromes'); openCorkboardTopic('panel-sindromes-tabs', 'sind-cid'); },
+        'sindromes-ptt': () => { topLevel.show('sindromes'); openCorkboardTopic('panel-sindromes-tabs', 'sind-ptt'); },
+        'sindromes-slt': () => { topLevel.show('sindromes'); openCorkboardTopic('panel-sindromes-tabs', 'sind-slt'); },
         'trasplante-intro': () => { topLevel.show('trasplante'); trasplanteLevel.show('intro'); },
         'trasplante-cart': () => { topLevel.show('trasplante'); trasplanteLevel.show('cart'); },
         'trasplante-complicaciones': () => { topLevel.show('trasplante'); trasplanteLevel.show('complicaciones'); },
