@@ -1,0 +1,85 @@
+    <button class="back-btn btn-volver-especialidades">← VOLVER</button>
+    <div class="diag-header">
+        <h2 style="color: var(--accent-green); text-shadow: var(--glow-green);">Nefrología</h2>
+        <p>Toca una zona del riñón para explorar cada objetivo de la rotación</p>
+    </div>
+
+    <div class="rinon-frame">
+        <div class="rinon-stage" id="rinon-stage">
+            <svg class="rinon-landscape" viewBox="0 0 320 420" aria-hidden="true">
+                <path class="rinon-silueta" d="M160,25
+                    C 100,25 35,90 35,205
+                    C 35,320 100,385 160,385
+                    C 212,385 252,345 235,298
+                    C 220,258 168,235 168,205
+                    C 168,175 220,152 235,112
+                    C 252,65 212,25 160,25 Z" />
+
+                <path class="rinon-piramide" d="M205,132 L233,113 L168,193 Z" />
+                <path class="rinon-piramide" d="M205,278 L233,297 L168,217 Z" />
+
+                <path class="rinon-pelvis" d="M168,193 L168,217 L148,205 Z" />
+                <path class="rinon-ureter" d="M148,205 C 133,230 138,290 158,330 C 178,365 168,395 173,420" />
+
+                <path class="rinon-vaso rinon-arteria" d="M280,192 L172,192" />
+                <path class="rinon-vaso rinon-vena" d="M280,218 L172,218" />
+            </svg>
+
+            <button class="region-btn" data-route="fisiopatologia" style="left:22%; top:43%;">
+                <div class="region-orb" style="--orb-color:var(--accent-blue); --orb-glow:rgba(212,175,55,0.5);">
+                    <svg viewBox="0 0 40 40"><path d="M20,8 C28,20 30,26 30,29 A10,10 0 1,1 10,29 C10,26 12,20 20,8 Z" fill="none" stroke="#fff" stroke-opacity="0.8" stroke-width="2"/></svg>
+                </div>
+                <span class="region-label">Fisiopatología<br>renal</span>
+                <span class="region-visited"></span>
+            </button>
+
+            <button class="region-btn" data-route="hta" style="left:82%; top:48%;">
+                <div class="region-orb" style="--orb-color:var(--accent-red); --orb-glow:rgba(184,92,62,0.5);">
+                    <svg viewBox="0 0 40 40"><path d="M8,27 A12,12 0 0,1 32,27" fill="none" stroke="#fff" stroke-opacity="0.7" stroke-width="2"/><line x1="20" y1="27" x2="27" y2="16" stroke="#fff" stroke-width="2"/><circle cx="20" cy="27" r="2" fill="#fff"/></svg>
+                </div>
+                <span class="region-label">Manejo<br>de la HTA</span>
+                <span class="region-visited"></span>
+            </button>
+
+            <button class="region-btn" data-route="erc" style="left:31%; top:81%;">
+                <div class="region-orb" style="--orb-color:var(--accent-yellow); --orb-glow:rgba(207,154,62,0.5);">
+                    <svg viewBox="0 0 40 40"><path d="M8,14 L16,14 L16,20 L24,20 L24,26 L31,26" fill="none" stroke="#fff" stroke-opacity="0.8" stroke-width="2"/><path d="M27,22 L31,26 L27,30" fill="none" stroke="#fff" stroke-opacity="0.8" stroke-width="2"/></svg>
+                </div>
+                <span class="region-label">ERC — dx y<br>definición</span>
+                <span class="region-visited"></span>
+            </button>
+
+            <button class="region-btn node-sm" data-route="fra" style="left:68%; top:28%;">
+                <div class="region-orb" style="--orb-color:var(--accent-purple); --orb-glow:rgba(156,84,118,0.5);">
+                    <svg viewBox="0 0 40 40"><path d="M22,6 L12,22 L19,22 L15,34 L28,16 L20,16 Z" fill="#fff" fill-opacity="0.85"/></svg>
+                </div>
+                <span class="region-label">FRA — dx y<br>definición</span>
+                <span class="region-visited"></span>
+            </button>
+
+            <button class="region-btn node-sm" data-route="nefrotoxicidad" style="left:68%; top:69%;">
+                <div class="region-orb" style="--orb-color:var(--accent-purple); --orb-glow:rgba(156,84,118,0.5);">
+                    <svg viewBox="0 0 40 40"><path d="M10,20 A10,10 0 0,1 20,10 L30,10 A10,10 0 0,1 30,20 L20,20 A10,10 0 0,0 10,20 M10,20 A10,10 0 0,0 20,30 L20,20" fill="none" stroke="#fff" stroke-opacity="0.8" stroke-width="1.6"/><line x1="14" y1="14" x2="26" y2="26" stroke="#fff" stroke-opacity="0.8" stroke-width="1.6"/></svg>
+                </div>
+                <span class="region-label">Nefrotoxicidad<br>de fármacos</span>
+                <span class="region-visited"></span>
+            </button>
+
+            <button class="region-btn node-sm" data-route="tratamiento" style="left:52%; top:49%;">
+                <div class="region-orb" style="--orb-color:var(--accent-green); --orb-glow:rgba(144,160,106,0.5);">
+                    <svg viewBox="0 0 40 40"><line x1="20" y1="9" x2="20" y2="31" stroke="#fff" stroke-width="4" stroke-linecap="round"/><line x1="9" y1="20" x2="31" y2="20" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg>
+                </div>
+                <span class="region-label">Tratamiento<br>IRA/IRC</span>
+                <span class="region-visited"></span>
+            </button>
+
+            <button class="region-btn" data-route="trr" style="left:58%; top:95%;">
+                <div class="region-orb" style="--orb-color:var(--accent-blue); --orb-glow:rgba(212,175,55,0.5);">
+                    <svg viewBox="0 0 40 40"><path d="M10,10 L30,10 L21,20 L21,31 L16,31 L16,20 Z" fill="none" stroke="#fff" stroke-opacity="0.8" stroke-width="2" stroke-linejoin="round"/></svg>
+                </div>
+                <span class="region-label">Terapias de<br>reemplazo renal</span>
+                <span class="region-visited"></span>
+            </button>
+        </div>
+        <p class="atlas-hint">Corteza · pirámides · pelvis renal · uréter</p>
+    </div>

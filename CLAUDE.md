@@ -306,15 +306,50 @@ regrese en su lugar al menú de especialidades.
 
 ### Nefrología
 
-`#nefrologia-view` (`modules/nefrologia/`) usa como menú principal un
-**diagrama interactivo de la nefrona**, en vez de un Atlas abstracto tipo
-Hematología: la propia ilustración hace de mapa de navegación y de
-herramienta de estudio a la vez, decisión tomada desde el principio para no
-tener que rehacer la parte visual más adelante según se vaya añadiendo
-contenido (mismo problema que costó resolver en Hematología al pasar de
-pestañas de texto al cuaderno de campo).
+`#nefrologia-view` (`modules/nefrologia/`) tiene **dos niveles visuales
+propios**, ninguno calcado del Atlas Hematológico: un **mapa del riñón**
+(nivel 0, nuevo) del que cuelgan los 7 objetivos de rotación de la
+bibliografía SEN "Nefrología al día", y la **nefrona interactiva** (nivel
+1, ver más abajo) como zoom de uno de esos objetivos. La razón de dos
+niveles distintos en vez de uno: los 7 objetivos no son todos localizables
+en un tramo de la nefrona (p. ej. "Manejo de la HTA" o "Terapias de
+reemplazo renal" no son un segmento tubular), así que hacía falta un nivel
+por encima que sí diera cabida a todos.
 
-- **`nefro-menu.html`** usa una **fotografía/ilustración anatómica real**
+- **`rinon-menu.html` + `rinon.js`** — nivel 0. Un `<svg class="rinon-landscape">`
+  dibujado a mano (silueta de riñón en corte: corteza, dos pirámides
+  medulares, pelvis renal, uréter, pedículo vascular arteria/vena — mismo
+  espíritu tinta que el resto de iconografía de la app, **a diferencia
+  deliberada de la nefrona**, que usa foto real por petición explícita del
+  usuario) sirve de fondo decorativo a 7 `.region-btn` (clase **reutilizada
+  tal cual del Atlas Hematológico** — `.region-btn`/`.region-orb`/`.region-label`/
+  `.region-visited`/`.node-sm` ya eran genéricas, sin acoplar a Hematología,
+  así que no se duplican) posicionados por `%` sobre zonas del dibujo. A
+  diferencia del Atlas (mapa general + pantallas de zona), aquí es **un solo
+  nivel**: cada nodo va directo a su destino. `rinon.js` (`initRinon({ onRoute })`)
+  no conoce el contenido real, delega en `onRoute(key)` igual que `atlas.js`
+  y `nefrona.js`. Uno de los 7 nodos (`fisiopatologia`) no abre una vista
+  nueva: hace zoom a la nefrona ya construida — los otros 6 abren vistas de
+  categoría propias (`hta.html`, `erc.html`, `fra.html`,
+  `nefrotoxicidad.html`, `tratamiento-ira-irc.html`, `trr.html`).
+- **Patrón de bibliografía sin contenido propio todavía**: no hay texto
+  clínico fuente para los 6 objetivos nuevos (solo la lista de enlaces de
+  `bibliografianefrologiaaldia.md`, sin el contenido de los artículos) — al
+  contrario que Hematología, donde siempre hubo un PDF/PNT completo que
+  extraer. Por disciplina de no fabricar contenido clínico sin fuente, cada
+  una de esas 6 vistas es: cabecera + tarjeta "🚧 en preparación" + tarjeta
+  **"📚 Bibliografía"** con los enlaces reales de ese bloque como
+  `<ul class="biblio-list">` de `<a class="biblio-link" target="_blank"
+  rel="noopener">` (con `<span class="biblio-nota">` para las aclaraciones
+  del documento fuente, p. ej. cuando un artículo no tiene URL individual
+  confirmada y se enlaza al navegador temático general en su lugar). El
+  bloque 1 ("Fisiopatología renal") no es una vista nueva — su bibliografía
+  se añadió como una tarjeta más al final de `nefro-menu.html`, porque esa
+  vista ya trata la fisiología tubular. **No uses `.pkpd-btn` para estos
+  enlaces**: esa clase está acoplada a la lógica de `pkpd.js` (dispara una
+  excepción en cualquier enlace sin `data-drug`, aunque no impide la
+  navegación) — usa `.biblio-link` en su lugar.
+- **`nefro-menu.html`** (nivel 1, la nefrona) usa una **fotografía/ilustración anatómica real**
   (`js/modules/nefrologia/img/nefrona-anatomia.jpg`, corte de tejido renal
   con las dos nefronas — cortical de asa corta y yuxtamedular de asa larga
   — que llegó como referencia del usuario) en vez de un dibujo hecho a mano:
@@ -362,20 +397,35 @@ pestañas de texto al cuaderno de campo).
   `nefrologia/index.js`, nunca el SVG) y `modosInteractivos` (qué
   segmento(s)/canal(es) resalta cada diurético o patología, con su
   explicación).
-- **`js/modules/nefrologia/index.js`** es el orquestador, calcado de
-  `trasplante/index.js`: crea un switcher de nivel medio (`nefroLevel`, vía
-  `core/navigation.js`) entre el menú-nefrona y cada vista de categoría
-  real (ej. `nefro-diureticos-asa-view`), inicializa `nefrona.js`, e
-  importa/llama los `init()` de cada categoría. Las vistas de categoría
-  usan `.btn-volver-nefro-menu` para el botón "← VOLVER" (mismo patrón que
-  `.btn-volver-trasplante-menu`). Si una categoría acumula varios subtemas,
-  usa `core/corkboard.js` dentro de ella — el patrón cuaderno de campo no
-  cambia, solo cambia cómo se llega a la categoría desde fuera.
-- Para añadir contenido nuevo: 1) añade el canal/categoría en
-  `nefrona-data.js`, 2) crea el partial `<categoria>.html` de esa categoría
-  con su `.btn-volver-nefro-menu`, 3) inclúyelo en `index.html` dentro de
-  `#nefrologia-view` con `data-include`, 4) regístralo en el switcher
-  `nefroLevel` y en `categoriaDisponible` de `nefrologia/index.js`.
+- **`js/modules/nefrologia/index.js`** es el orquestador de los 3 niveles
+  (mapa del riñón / nefrona / categoría): un único `nefroLevel`
+  (`core/navigation.js`) con una entrada por vista (`kidney`, `nefrona`,
+  `diureticosAsa`, `hta`, `erc`, `fra`, `nefrotoxicidad`, `tratamiento`,
+  `trr`), inicializa `rinon.js` y `nefrona.js`, e importa/llama los
+  `init()` de cada categoría. Dos clases de botón "← VOLVER" según el
+  nivel: `.btn-volver-nefro-kidney` (nefrona y las 6 categorías nuevas →
+  vuelven al mapa del riñón) y `.btn-volver-nefro-menu` (solo
+  `diureticos-asa.html`, anidada dentro de la nefrona → vuelve a la
+  nefrona, no al mapa). Si una categoría acumula varios subtemas, usa
+  `core/corkboard.js` dentro de ella — el patrón cuaderno de campo no
+  cambia, solo cómo se llega a la categoría desde fuera. `init()` devuelve
+  `{ volverAlMapa }`, que `main.js` pasa a `home.onNefrologiaListo(...)`
+  para que el botón "NEFROLOGÍA" del menú de especialidades deje siempre
+  el mapa del riñón como pantalla de entrada (mismo comportamiento que
+  `goHome()` ya da al Atlas de Hematología) — `nefrologia.init()` se llama
+  después que `home.init()` en `main.js`, así que se inyecta con un setter
+  perezoso en vez de como parámetro directo.
+- Para añadir una categoría nueva con contenido real: 1) crea el partial
+  `<categoria>.html` con `.btn-volver-nefro-kidney` (sustituye a la tarjeta
+  "🚧 en preparación" + bibliografía ya existente, sin borrar la
+  bibliografía), 2) regístralo en `index.html` dentro de `#nefrologia-view`
+  con `data-include`, 3) añádelo al switcher `nefroLevel` y al mapa
+  `rutasRinon` de `nefrologia/index.js` (la clave `data-route` del nodo del
+  mapa del riñón ya existe, solo cambia a qué apunta). Para añadir
+  contenido a la nefrona (canal/categoría anatómica), sigue igual que
+  antes: 1) añádelo en `nefrona-data.js`, 2) crea el partial con
+  `.btn-volver-nefro-menu`, 3) regístralo en `index.html` y en
+  `categoriaDisponible` de `nefrologia/index.js`.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

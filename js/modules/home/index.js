@@ -6,6 +6,16 @@ import { createViewSwitcher } from '../../core/navigation.js';
 import { openCorkboardTopic } from '../../core/corkboard.js';
 import { initAtlas } from './atlas.js';
 
+// Referencia a la API que devuelve nefrologia.init() (ver
+// modules/nefrologia/index.js). nefrologia.init() se llama después de
+// home.init() en main.js, así que se inyecta aquí perezosamente en vez de
+// recibirla como parámetro — el listener de #btn-nefrologia la lee en el
+// momento del click, no en el momento de registrarse.
+let nefrologiaApi = null;
+export function onNefrologiaListo(api) {
+    nefrologiaApi = api;
+}
+
 export function init() {
     const topLevel = createViewSwitcher({
         especialidades: document.getElementById('especialidades-view'),
@@ -24,7 +34,10 @@ export function init() {
     }
 
     document.getElementById('btn-hematologia').addEventListener('click', goHome);
-    document.getElementById('btn-nefrologia').addEventListener('click', () => topLevel.show('nefrologia'));
+    document.getElementById('btn-nefrologia').addEventListener('click', () => {
+        topLevel.show('nefrologia');
+        nefrologiaApi?.volverAlMapa();
+    });
     document.querySelectorAll('.btn-volver-especialidades').forEach(b => b.addEventListener('click', () => topLevel.show('especialidades')));
 
     document.getElementById('btn-escalas-generales').addEventListener('click', () => topLevel.show('escalas'));

@@ -23,7 +23,8 @@ async function start() {
     reconocimiento.init();
     sindromesUrgentes.init();
     trasplante.init();
-    nefrologia.init();
+    const nefrologiaApi = nefrologia.init();
+    home.onNefrologiaListo(nefrologiaApi);
 }
 
 start();

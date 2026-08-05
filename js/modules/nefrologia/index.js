@@ -1,9 +1,12 @@
-// Módulo "Nefrología": la nefrona interactiva es el menú principal (ver
-// nefrona.js). Este archivo solo orquesta el switcher de nivel medio
-// (menú nefrona ↔ vistas de categoría clínica) y resuelve qué categoría
-// abrir cuando se toca un segmento con contenido ya disponible.
+// Módulo "Nefrología". Nivel 0: mapa del riñón (rinon.js), con 7 nodos por
+// objetivo de rotación. Uno de ellos ("Fisiopatología renal") hace zoom a
+// la nefrona interactiva ya construida (nefrona.js); el resto abre vistas
+// de categoría propias (placeholder + bibliografía hasta que tengan
+// contenido clínico). Este archivo solo orquesta el switcher de nivel
+// medio y resuelve qué vista abrir desde cada nodo/segmento.
 import { createViewSwitcher } from '../../core/navigation.js';
 import { initNefrona } from './nefrona.js';
+import { initRinon } from './rinon.js';
 import { initQuiz } from '../quiz/quiz.js';
 import { preguntasNefrologia } from '../../data/nefrologia-preguntas.js';
 
@@ -14,12 +17,19 @@ function mostrarEnPreparacion() {
 
 export function init() {
     const nefroLevel = createViewSwitcher({
-        menu: document.getElementById('nefro-menu-view'),
+        kidney: document.getElementById('nefro-kidney-view'),
+        nefrona: document.getElementById('nefro-menu-view'),
         diureticosAsa: document.getElementById('nefro-diureticos-asa-view'),
+        hta: document.getElementById('nefro-hta-view'),
+        erc: document.getElementById('nefro-erc-view'),
+        fra: document.getElementById('nefro-fra-view'),
+        nefrotoxicidad: document.getElementById('nefro-nefrotoxicidad-view'),
+        tratamiento: document.getElementById('nefro-tratamiento-view'),
+        trr: document.getElementById('nefro-trr-view'),
     });
 
-    document.querySelectorAll('.btn-volver-nefro-menu').forEach(b =>
-        b.addEventListener('click', () => { nefroLevel.show('menu'); nefrona.reset(); }));
+    document.querySelectorAll('.btn-volver-nefro-kidney').forEach(b =>
+        b.addEventListener('click', () => { nefroLevel.show('kidney'); nefrona.reset(); }));
 
     const categoriaDisponible = {
         'diureticos-asa': () => nefroLevel.show('diureticosAsa'),
@@ -29,7 +39,31 @@ export function init() {
         onCategoria: (key) => categoriaDisponible[key]?.() ?? mostrarEnPreparacion(),
     });
 
+    const rutasRinon = {
+        fisiopatologia: () => nefroLevel.show('nefrona'),
+        hta: () => nefroLevel.show('hta'),
+        erc: () => nefroLevel.show('erc'),
+        fra: () => nefroLevel.show('fra'),
+        nefrotoxicidad: () => nefroLevel.show('nefrotoxicidad'),
+        tratamiento: () => nefroLevel.show('tratamiento'),
+        trr: () => nefroLevel.show('trr'),
+    };
+    const rinon = initRinon({
+        onRoute: (key) => rutasRinon[key]?.(),
+    });
+
     initQuiz({ triggerId: 'btn-nefro-repasar', banco: preguntasNefrologia });
 
-    nefroLevel.show('menu');
+    nefroLevel.show('kidney');
+
+    // Deja Nefrología lista para volver a mostrar siempre el mapa del riñón
+    // al reentrar desde Especialidades — mismo comportamiento que goHome()
+    // ya da al Atlas de Hematología. Lo usa home/index.js.
+    return {
+        volverAlMapa: () => {
+            nefroLevel.show('kidney');
+            rinon.reset();
+            nefrona.reset();
+        },
+    };
 }
