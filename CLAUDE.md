@@ -314,16 +314,30 @@ rehacer la parte visual más adelante según se vaya añadiendo contenido
 (mismo problema que costó resolver en Hematología al pasar de pestañas de
 texto al cuaderno de campo).
 
-- **`nefro-menu.html`** contiene el `<svg class="nefrona-diagram">`: un
-  `<g data-segmento="...">` por tramo anatómico (`glomerulo`,
-  `tubulo-proximal`, `asa-descendente`, `asa-ascendente`, `tubulo-distal`,
+- **`nefro-menu.html`** contiene el `<svg class="nefrona-diagram">`, dibujado
+  dentro de una cuña de tejido renal decorativa (`.kidney-context`: corteza +
+  médula + línea de la unión corticomedular, para que las nefronas se lean
+  en su contexto anatómico real y no como líneas abstractas) con **las dos
+  nefronas dibujadas por separado y en paralelo**, no una genérica: la
+  **cortical** (~85%, asa corta que apenas entra en la médula externa) a la
+  izquierda y la **yuxtamedular** (~15%, asa larga que llega hasta la
+  papila, responsable del gradiente que permite concentrar mucho la orina) a
+  la derecha, compartiendo un único conducto colector central. Cada tramo
+  anatómico es un `<g data-segmento="...">` (`glomerulo`, `tubulo-proximal`,
+  `asa-descendente`, `asa-ascendente-delgada` — segmento de transporte
+  pasivo presente casi solo en el asa larga yuxtamedular, `asa-ascendente-gruesa`
+  — la del NKCC2, diana de los diuréticos de asa, `tubulo-distal`,
   `colector`), dibujado a mano con primitivas simples (círculos, paths
-  cortos), mismo espíritu tinta que `.field-illust`/`.micro-svg`. Cada
-  `<g>` lleva un `path`/`circle` invisible adicional (clase `.hit-area`,
-  trazo ancho y transparente) para que el área táctil sea más grande que el
-  trazo visible — importante para uso a pie de cama en móvil. Debajo del
-  SVG hay un panel de detalle (`#nefro-panel-segmento`) y un selector de
-  "modo interactivo" (`#nefro-modo-select`) con diuréticos/patologías.
+  cortos), mismo espíritu tinta que `.field-illust`/`.micro-svg`. La misma
+  clave `data-segmento` se repite en las dos nefronas (ambas tienen
+  glomérulo, túbulo proximal, etc.) — `nefrona.js` ya resuelve esto sin
+  cambios, porque resalta y usa TODOS los elementos que coincidan con la
+  clave tocada, no solo el primero. Cada `<g>` lleva un `path`/`circle`
+  invisible adicional (clase `.hit-area`, trazo ancho y transparente) para
+  que el área táctil sea más grande que el trazo visible — importante para
+  uso a pie de cama en móvil. Debajo del SVG hay un panel de detalle
+  (`#nefro-panel-segmento`) y un selector de "modo interactivo"
+  (`#nefro-modo-select`) con diuréticos/patologías.
 - **`nefrona.js`** (`initNefrona({ onCategoria })`) es un componente
   **bespoke nuevo, no una generalización de `atlas.js`**: su interacción es
   distinta (pinta canales/transportadores Y tiene un modo por

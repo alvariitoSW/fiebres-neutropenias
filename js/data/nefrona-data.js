@@ -10,6 +10,7 @@ export const segmentosNefrona = {
         nombre: 'Glomérulo (cápsula de Bowman)',
         canales: [
             { nombre: 'Barrera de filtración', funcion: 'Endotelio fenestrado + membrana basal + podocitos: filtra agua y solutos pequeños, retiene células y proteínas grandes.', diana: '—' },
+            { nombre: '2 tipos de nefrona según su posición', funcion: 'Nefronas corticales (~85%): glomérulo en la corteza externa, asa de Henle corta que apenas entra en la médula. Nefronas yuxtamedulares (~15%): glomérulo junto a la unión corticomedular, asa de Henle larga que llega hasta la papila — son las responsables de generar el gradiente que permite concentrar mucho la orina.', diana: '—' },
         ],
         categorias: [],
     },
@@ -23,16 +24,23 @@ export const segmentosNefrona = {
         categorias: [],
     },
     'asa-descendente': {
-        nombre: 'Asa de Henle — rama descendente fina',
+        nombre: 'Asa de Henle — rama descendente delgada',
         canales: [
-            { nombre: 'Acuaporina-1', funcion: 'Muy permeable al agua; concentra la orina en su trayecto hacia la médula.', diana: '—' },
+            { nombre: 'Acuaporina-1', funcion: 'Muy permeable al agua; concentra la orina en su trayecto hacia la médula. Es mucho más larga en las nefronas yuxtamedulares (llega hasta la papila) que en las corticales (apenas entra en la médula externa) — de esa diferencia depende la capacidad máxima de concentración de la orina.', diana: '—' },
         ],
         categorias: [],
     },
-    'asa-ascendente': {
+    'asa-ascendente-delgada': {
+        nombre: 'Asa de Henle — rama ascendente delgada (segmento fino)',
+        canales: [
+            { nombre: 'Transporte pasivo paracelular', funcion: 'Reabsorbe Na⁺, Cl⁻, Ca²⁺ y Mg²⁺ de forma pasiva (sin bomba activa), a favor del gradiente generado por la médula hipertónica.', diana: 'No es diana de diuréticos — al ser transporte pasivo, no hay ningún canal que bloquear farmacológicamente.' },
+        ],
+        categorias: [],
+    },
+    'asa-ascendente-gruesa': {
         nombre: 'Asa de Henle — rama ascendente gruesa',
         canales: [
-            { nombre: 'NKCC2', funcion: 'Cotransporte Na⁺/K⁺/2Cl⁻; impermeable al agua, genera el gradiente medular.', diana: 'Diuréticos de asa (furosemida, torasemida, bumetanida)' },
+            { nombre: 'NKCC2', funcion: 'Cotransporte activo Na⁺/K⁺/2Cl⁻; impermeable al agua, genera el gradiente medular hipertónico.', diana: 'Diuréticos de asa (furosemida, torasemida, bumetanida)' },
         ],
         categorias: ['diureticos-asa'],
     },
@@ -58,7 +66,7 @@ export const modosInteractivos = {
     furosemida: {
         tipo: 'diuretico',
         etiqueta: 'Furosemida (diurético de asa)',
-        segmentos: ['asa-ascendente'],
+        segmentos: ['asa-ascendente-gruesa'],
         canales: ['NKCC2'],
         explicacion: 'Inhibe el cotransportador NKCC2 en la rama ascendente gruesa del asa de Henle, bloqueando la reabsorción de Na⁺/K⁺/2Cl⁻. Es el diurético más potente porque actúa sobre el segmento que genera el gradiente osmótico medular necesario para concentrar la orina.',
     },

@@ -517,6 +517,12 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
     stroke: var(--accent-yellow) !important;
     filter: drop-shadow(0 0 8px var(--accent-yellow));
 }
+.kidney-context { pointer-events: none; }
+.kidney-wedge-fill { fill: var(--accent-yellow); fill-opacity: 0.035; }
+.kidney-wedge-outline { fill: none; stroke: var(--border-color); stroke-width: 1; }
+.kidney-boundary { fill: none; stroke: var(--border-color); stroke-width: 1; stroke-dasharray: 3,3; opacity: 0.6; }
+.nefrona-label { font-size: 6px; fill: var(--text-muted); letter-spacing: 1.5px; }
+.nefrona-tipo-label { font-size: 6.5px; fill: var(--text-muted); font-style: italic; }
 
 /* ===================================================== */
 /* QUIZ DE REPASO — motor genérico de preguntas de 4       */
