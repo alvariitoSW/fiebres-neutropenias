@@ -14,6 +14,12 @@ en el móvil.
 
 - **Sin backend, sin login, sin base de datos.** Es una calculadora estática:
   el usuario abre la página, rellena campos, ve un resultado. Nada se guarda.
+  **Única excepción, deliberada y acotada:** el quiz de repaso
+  (`js/modules/quiz/`, ver "Sistema de estudio tipo Anki" más abajo) sí usa
+  `localStorage` para recordar aciertos/fallos por pregunta en el
+  dispositivo del usuario. No añadas `localStorage` (ni ningún otro tipo de
+  persistencia) a ningún otro módulo sin que sea, igual que este, una
+  decisión explícita — el resto de la app sigue sin guardar nada.
 - **Sin build tool.** No hay npm/Vite/webpack. Todo es HTML/CSS/JS que el
   navegador ejecuta tal cual. Se despliega copiando el repo a GitHub Pages,
   sirviendo `index.html` desde la raíz.
@@ -300,14 +306,54 @@ regrese en su lugar al menú de especialidades.
 
 ### Nefrología
 
-`#nefrologia-view` (`modules/nefrologia/`) es hoy un placeholder — "🚧
-Próximamente" — a la espera de contenido. Su botón "← VOLVER" usa
-`.btn-volver-especialidades` (regresa directamente al menú de
-especialidades, no tiene menú principal propio todavía). Cuando se empiece
-a rellenar, sigue el mismo patrón que Hematología: si tiene una única
-categoría de entrada, puede ir directa a su contenido; si acumula varias
-categorías, considera darle su propio menú principal con submenú, calcado
-del de Hematología (`#home-view` → categorías → subcategorías).
+`#nefrologia-view` (`modules/nefrologia/`) usa como menú principal un
+**diagrama interactivo de la nefrona**, en vez de un Atlas abstracto tipo
+Hematología: el propio SVG hace de mapa de navegación y de herramienta de
+estudio a la vez, decisión tomada desde el principio para no tener que
+rehacer la parte visual más adelante según se vaya añadiendo contenido
+(mismo problema que costó resolver en Hematología al pasar de pestañas de
+texto al cuaderno de campo).
+
+- **`nefro-menu.html`** contiene el `<svg class="nefrona-diagram">`: un
+  `<g data-segmento="...">` por tramo anatómico (`glomerulo`,
+  `tubulo-proximal`, `asa-descendente`, `asa-ascendente`, `tubulo-distal`,
+  `colector`), dibujado a mano con primitivas simples (círculos, paths
+  cortos), mismo espíritu tinta que `.field-illust`/`.micro-svg`. Cada
+  `<g>` lleva un `path`/`circle` invisible adicional (clase `.hit-area`,
+  trazo ancho y transparente) para que el área táctil sea más grande que el
+  trazo visible — importante para uso a pie de cama en móvil. Debajo del
+  SVG hay un panel de detalle (`#nefro-panel-segmento`) y un selector de
+  "modo interactivo" (`#nefro-modo-select`) con diuréticos/patologías.
+- **`nefrona.js`** (`initNefrona({ onCategoria })`) es un componente
+  **bespoke nuevo, no una generalización de `atlas.js`**: su interacción es
+  distinta (pinta canales/transportadores Y tiene un modo por
+  fármaco/patología que el Atlas no necesita). Al tocar un segmento, pinta
+  sus canales (reutilizando el patrón `.micro-prof-item`/`.kv-row` ya
+  existente) y renderiza un botón por cada categoría de contenido clínico
+  de ese segmento; si el segmento aún no tiene categorías, muestra
+  "🚧 en preparación" sin navegar a ningún sitio roto. Nunca conoce el
+  contenido real — delega en `onCategoria(key)`, igual que `atlas.js`
+  delega en `onRoute(key)`.
+- **`js/data/nefrona-data.js`** son los datos puros: `segmentosNefrona`
+  (canales por segmento + qué categorías de contenido cuelgan de él —
+  añadir/mover una categoría es solo tocar este objeto y el switcher de
+  `nefrologia/index.js`, nunca el SVG) y `modosInteractivos` (qué
+  segmento(s)/canal(es) resalta cada diurético o patología, con su
+  explicación).
+- **`js/modules/nefrologia/index.js`** es el orquestador, calcado de
+  `trasplante/index.js`: crea un switcher de nivel medio (`nefroLevel`, vía
+  `core/navigation.js`) entre el menú-nefrona y cada vista de categoría
+  real (ej. `nefro-diureticos-asa-view`), inicializa `nefrona.js`, e
+  importa/llama los `init()` de cada categoría. Las vistas de categoría
+  usan `.btn-volver-nefro-menu` para el botón "← VOLVER" (mismo patrón que
+  `.btn-volver-trasplante-menu`). Si una categoría acumula varios subtemas,
+  usa `core/corkboard.js` dentro de ella — el patrón cuaderno de campo no
+  cambia, solo cambia cómo se llega a la categoría desde fuera.
+- Para añadir contenido nuevo: 1) añade el canal/categoría en
+  `nefrona-data.js`, 2) crea el partial `<categoria>.html` de esa categoría
+  con su `.btn-volver-nefro-menu`, 3) inclúyelo en `index.html` dentro de
+  `#nefrologia-view` con `data-include`, 4) regístralo en el switcher
+  `nefroLevel` y en `categoriaDisponible` de `nefrologia/index.js`.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

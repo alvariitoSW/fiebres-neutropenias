@@ -487,3 +487,78 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 .back-cta:hover { color: #362a1a; }
 
 .tap-hint { text-align: center; font-size: 0.62rem; color: var(--text-muted); margin: -8px 0 18px; letter-spacing: 0.5px; }
+
+/* ===================================================== */
+/* NEFRONA INTERACTIVA — menú principal de Nefrología.    */
+/* El SVG hace de mapa de navegación (tocar un segmento    */
+/* abre sus categorías de contenido) y de herramienta de   */
+/* estudio (canales/transportadores + modo interactivo     */
+/* por diurético/patología). Ver nefro-menu.html/nefrona.js*/
+/* ===================================================== */
+.nefrona-frame {
+    max-width: 280px; margin: 0 auto 16px;
+    border: 1px solid var(--border-color); border-radius: 8px;
+    background: #0f0d09; padding: 10px 6px 4px;
+}
+.nefrona-diagram { width: 100%; height: auto; display: block; }
+.nefrona-diagram [data-segmento] { cursor: pointer; }
+.nefrona-diagram [data-segmento] path:not(.hit-area),
+.nefrona-diagram [data-segmento] circle:not(.hit-area) {
+    transition: filter 0.2s ease, stroke-width 0.2s ease;
+}
+.nefrona-diagram [data-segmento]:hover path:not(.hit-area),
+.nefrona-diagram [data-segmento]:hover circle:not(.hit-area),
+.nefrona-diagram [data-segmento].segmento-activo path:not(.hit-area),
+.nefrona-diagram [data-segmento].segmento-activo circle:not(.hit-area) {
+    filter: drop-shadow(0 0 6px var(--accent-green));
+}
+.nefrona-diagram [data-segmento].canal-resaltado path:not(.hit-area),
+.nefrona-diagram [data-segmento].canal-resaltado circle:not(.hit-area) {
+    stroke: var(--accent-yellow) !important;
+    filter: drop-shadow(0 0 8px var(--accent-yellow));
+}
+
+/* ===================================================== */
+/* QUIZ DE REPASO — motor genérico de preguntas de 4       */
+/* opciones (js/modules/quiz/). Única excepción de         */
+/* persistencia del proyecto: ver nota en CLAUDE.md.        */
+/* ===================================================== */
+.quiz-modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+    z-index: 1000; align-items: center; justify-content: center; padding: 18px;
+}
+.quiz-modal-overlay.active { display: flex; animation: fadeIn 0.2s ease; }
+.quiz-modal {
+    position: relative; width: 100%; max-width: 380px;
+    background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px;
+    padding: 20px 16px 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+}
+.quiz-modal-close {
+    position: absolute; top: 10px; right: 10px; width: 28px; height: 28px;
+    background: rgba(0,0,0,0.4); border: 1px solid var(--border-color); border-radius: 50%;
+    color: var(--text-main); font-size: 0.8rem; cursor: pointer; display: flex;
+    align-items: center; justify-content: center; padding: 0;
+}
+.quiz-progreso { font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+.quiz-enunciado { font-size: 0.95rem; font-weight: bold; margin-bottom: 14px; line-height: 1.4; }
+.quiz-opciones { display: flex; flex-direction: column; gap: 8px; }
+.quiz-opcion {
+    text-align: left; font-family: inherit; font-size: 0.82rem; color: var(--text-main);
+    background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); border-radius: 4px;
+    padding: 10px 12px; cursor: pointer;
+}
+.quiz-opcion:hover:not(:disabled) { border-color: var(--accent-blue); }
+.quiz-opcion:disabled { cursor: default; }
+.quiz-opcion.correcta { border-color: var(--accent-green); background: rgba(144,160,106,0.18); color: var(--accent-green); }
+.quiz-opcion.incorrecta { border-color: var(--accent-red); background: rgba(184,92,62,0.18); color: var(--accent-red); }
+.quiz-explicacion {
+    margin-top: 14px; padding: 10px 12px; font-size: 0.78rem; line-height: 1.5;
+    background: rgba(0,0,0,0.25); border-left: 3px solid var(--accent-yellow); border-radius: 2px;
+}
+.quiz-siguiente {
+    display: block; width: 100%; margin-top: 14px; text-align: center;
+    font-family: inherit; font-size: 0.85rem; font-weight: bold; cursor: pointer;
+    background: rgba(207,154,62,0.15); border: 1px solid var(--accent-yellow);
+    color: var(--accent-yellow); border-radius: 4px; padding: 10px;
+}
+.quiz-siguiente:hover { background: rgba(207,154,62,0.28); }

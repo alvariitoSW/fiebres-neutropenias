@@ -1,0 +1,77 @@
+    <button class="back-btn btn-volver-especialidades">← VOLVER</button>
+    <div class="diag-header">
+        <h2 style="color: var(--accent-green); text-shadow: var(--glow-green);">Nefrología</h2>
+        <p>Toca una parte de la nefrona</p>
+    </div>
+
+    <button class="accordion-btn nav-btn" id="btn-nefro-repasar" style="border-left: 4px solid var(--accent-yellow);">
+        <span>🎯 Repasar (preguntas de repaso)</span>
+        <span style="font-size: 0.8rem; color: var(--accent-yellow);">[ EMPEZAR → ]</span>
+    </button>
+
+    <div class="nefrona-frame">
+        <svg class="nefrona-diagram" viewBox="0 0 200 320" role="img" aria-label="Diagrama interactivo de la nefrona">
+            <g data-segmento="glomerulo">
+                <circle class="hit-area" cx="100" cy="36" r="28" fill="transparent" />
+                <circle cx="100" cy="36" r="18" fill="none" stroke="var(--accent-blue)" stroke-width="3" />
+                <path d="M89,32 q5,-9 10,0 q5,-9 10,0 q5,-9 10,0" fill="none" stroke="var(--accent-blue)" stroke-width="1.6" />
+            </g>
+
+            <g data-segmento="tubulo-proximal">
+                <path class="hit-area" d="M118,36 c10,-8 20,-4 20,6 c0,10 -10,10 -14,18 c-4,8 6,12 16,10" fill="none" stroke="transparent" stroke-width="18" stroke-linecap="round" />
+                <path d="M118,36 c10,-8 20,-4 20,6 c0,10 -10,10 -14,18 c-4,8 6,12 16,10" fill="none" stroke="var(--accent-yellow)" stroke-width="3" stroke-linecap="round" />
+            </g>
+            <path class="nefrona-connector" d="M140,70 q-20,14 -32,26" fill="none" stroke="var(--border-color)" stroke-width="2" />
+
+            <g data-segmento="asa-descendente">
+                <path class="hit-area" d="M108,96 q-4,50 2,96" fill="none" stroke="transparent" stroke-width="16" />
+                <path d="M108,96 q-4,50 2,96" fill="none" stroke="var(--accent-green)" stroke-width="2" stroke-linecap="round" />
+            </g>
+            <path class="nefrona-connector" d="M110,192 q6,10 16,10" fill="none" stroke="var(--border-color)" stroke-width="2" />
+
+            <g data-segmento="asa-ascendente">
+                <path class="hit-area" d="M126,202 q6,-56 10,-92 q2,-14 12,-20" fill="none" stroke="transparent" stroke-width="18" />
+                <path d="M126,202 q6,-56 10,-92 q2,-14 12,-20" fill="none" stroke="var(--accent-red)" stroke-width="5" stroke-linecap="round" />
+            </g>
+            <path class="nefrona-connector" d="M148,90 q4,-8 12,-12" fill="none" stroke="var(--border-color)" stroke-width="2" />
+
+            <g data-segmento="tubulo-distal">
+                <path class="hit-area" d="M160,78 c10,-6 18,2 14,12 c-4,10 -14,8 -16,18 c-2,10 8,14 18,10" fill="none" stroke="transparent" stroke-width="18" stroke-linecap="round" />
+                <path d="M160,78 c10,-6 18,2 14,12 c-4,10 -14,8 -16,18 c-2,10 8,14 18,10" fill="none" stroke="var(--accent-purple)" stroke-width="3" stroke-linecap="round" />
+            </g>
+            <path class="nefrona-connector" d="M176,118 q-16,8 -26,14" fill="none" stroke="var(--border-color)" stroke-width="2" />
+
+            <g data-segmento="colector">
+                <path class="hit-area" d="M150,132 L150,290" fill="none" stroke="transparent" stroke-width="18" />
+                <path d="M150,132 L150,290" fill="none" stroke="var(--accent-blue)" stroke-width="4" stroke-linecap="round" />
+                <path d="M150,290 q-10,10 -14,20 M150,290 q10,10 14,20" fill="none" stroke="var(--accent-blue)" stroke-width="2" stroke-linecap="round" />
+            </g>
+        </svg>
+        <p class="atlas-hint">Toca glomérulo, túbulos, asa de Henle o colector</p>
+    </div>
+
+    <div class="card" id="nefro-panel-segmento" style="display: none;">
+        <h3 id="nefro-segmento-titulo" style="color: var(--accent-green);"></h3>
+        <div id="nefro-segmento-canales" class="micro-profiles"></div>
+        <div id="nefro-segmento-categorias" style="margin-top: 10px;"></div>
+    </div>
+
+    <div class="card">
+        <h3 style="color: var(--accent-yellow);">🔬 Modo interactivo</h3>
+        <p style="font-size: 0.8rem; color: var(--text-muted);">Elige un diurético o una patología para ver qué parte de la nefrona afecta.</p>
+        <div class="form-group">
+            <select id="nefro-modo-select">
+                <option value="">— Selecciona —</option>
+                <optgroup label="Diuréticos">
+                    <option value="furosemida">Furosemida (diurético de asa)</option>
+                    <option value="tiazida">Tiazida</option>
+                    <option value="espironolactona">Espironolactona</option>
+                </optgroup>
+                <optgroup label="Patologías">
+                    <option value="siadh">SIADH</option>
+                    <option value="diabetes-insipida">Diabetes insípida</option>
+                </optgroup>
+            </select>
+        </div>
+        <div id="nefro-modo-explicacion" class="result-box" style="display: none;"></div>
+    </div>
