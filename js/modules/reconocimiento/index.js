@@ -1,9 +1,38 @@
 // Módulo "Reconocimiento Temprano": contenido de referencia sobre fracaso
 // respiratorio agudo y manejo crítico general del paciente hematológico
-// (Azoulay et al. 2024 y 2025). Interactividad: pestañas, selector de
+// (Azoulay et al. 2024 y 2025). Interactividad: cuaderno de campo (fichas
+// que se voltean tipo flashcard y abren el tema completo), selector de
 // terapias dirigidas y checklist de síntomas.
-import { initTabs } from '../../core/tabs.js';
 import { terapiasDirigidasData } from '../../data/terapias-dirigidas-data.js';
+
+// Primer toque: voltea la ficha para dar la pista de repaso. Si ya estaba
+// volteada (o se toca el CTA "Ver contenido completo"), abre el tema real
+// — el mismo tab-content de siempre, íntegro, sin resumir.
+function initCuaderno() {
+    const board = document.getElementById('rt-corkboard');
+    const panel = document.getElementById('panel-reconocimiento-tabs');
+    if (!board || !panel) return;
+
+    function openTopic(id) {
+        panel.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        const target = document.getElementById(id);
+        if (target) {
+            panel.style.display = 'block';
+            target.classList.add('active');
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    board.querySelectorAll('.field-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+            if (e.target.closest('.back-cta')) {
+                openTopic(card.dataset.tab);
+                return;
+            }
+            card.classList.toggle('flipped');
+        });
+    });
+}
 
 function calcTerapiaDirigida() {
     const select = document.getElementById('rt-terapia-select');
@@ -34,7 +63,7 @@ function calcSintomas() {
 }
 
 export function init() {
-    initTabs(document.getElementById('panel-reconocimiento-tabs'));
+    initCuaderno();
 
     const select = document.getElementById('rt-terapia-select');
     if (select) {

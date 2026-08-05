@@ -386,3 +386,75 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
     text-align: center; font-size: 0.65rem; color: var(--text-muted);
     text-transform: uppercase; letter-spacing: 1px; margin: 10px 0 0;
 }
+
+/* ===================================================== */
+/* CUADERNO DE CAMPO — tablero de fichas ilustradas que   */
+/* sustituye una barra de pestañas de texto. Cada ficha   */
+/* se voltea (flip) para dar una pista de repaso antes de */
+/* abrir el tema completo (mismo contenido de siempre,    */
+/* solo cambia la portada). Ver reconocimiento.html.      */
+/* ===================================================== */
+.section-label {
+    font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase;
+    letter-spacing: 2px; margin: 4px 0 12px; display: flex; align-items: center; gap: 8px;
+}
+.section-label::after { content: ''; flex: 1; height: 1px; background: var(--border-color); }
+
+.corkboard { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 14px; margin-bottom: 22px; padding: 6px 4px 16px; }
+
+.field-card {
+    position: relative; height: 236px; perspective: 1000px;
+    transform: rotate(var(--tilt, -1deg));
+    transition: transform 0.6s cubic-bezier(.3,.7,.2,1);
+    cursor: pointer;
+}
+.corkboard .field-card:nth-child(4n+1) { --tilt: -1.6deg; --tape: var(--accent-blue); }
+.corkboard .field-card:nth-child(4n+2) { --tilt: 1.1deg; --tape: var(--accent-red); }
+.corkboard .field-card:nth-child(4n+3) { --tilt: 0.8deg; --tape: var(--accent-green); }
+.corkboard .field-card:nth-child(4n)   { --tilt: -1.3deg; --tape: var(--accent-purple); }
+.field-card-inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(.3,.7,.2,1); }
+.field-card.flipped .field-card-inner { transform: rotateY(180deg); }
+.field-card:active .field-card-inner { transform: scale(0.97); }
+.field-card.flipped:active .field-card-inner { transform: rotateY(180deg) scale(0.97); }
+
+.card-face {
+    position: absolute; inset: 0; backface-visibility: hidden;
+    background: linear-gradient(165deg, #e9dcbc, #d7c599);
+    border-radius: 2px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.25) inset;
+    padding: 16px 11px 12px;
+    display: flex; flex-direction: column; align-items: center;
+    color: #362a1a;
+}
+.card-face.back { transform: rotateY(180deg); justify-content: center; text-align: center; padding: 18px 15px; }
+.card-face::after {
+    content: ''; position: absolute; bottom: 0; right: 0; width: 16px; height: 16px;
+    background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.18) 50%);
+    border-radius: 0 0 2px 0;
+}
+
+.washi {
+    position: absolute; top: -9px; left: 50%; transform: translateX(-50%) rotate(-3deg);
+    width: 48px; height: 17px; background: color-mix(in srgb, var(--tape, var(--accent-blue)) 55%, transparent);
+    border: 1px solid rgba(255,255,255,0.25);
+}
+
+.plate-label {
+    font-family: 'Courier New', ui-monospace, monospace; font-size: 0.52rem; letter-spacing: 1.5px;
+    color: #5c4c34; text-transform: uppercase; margin-bottom: 6px; align-self: flex-start;
+}
+.field-illust { width: 88px; height: 64px; margin: 4px 0 9px; }
+.field-name { font-weight: bold; font-size: 0.86rem; text-align: center; line-height: 1.2; margin-bottom: 7px; }
+.field-hook {
+    font-family: 'Courier New', ui-monospace, monospace; font-size: 0.64rem; font-style: italic;
+    color: #5c4c34; text-align: center; line-height: 1.45; transform: rotate(-0.6deg); padding: 0 2px;
+}
+
+.back-hook { font-size: 0.78rem; line-height: 1.55; color: #362a1a; margin-bottom: 10px; }
+.back-cta {
+    font-family: 'Courier New', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px;
+    color: #5c4c34; border-top: 1px dashed rgba(54,42,26,0.35); padding-top: 8px; margin-top: auto;
+}
+.back-cta:hover { color: #362a1a; }
+
+.tap-hint { text-align: center; font-size: 0.62rem; color: var(--text-muted); margin: -8px 0 18px; letter-spacing: 0.5px; }

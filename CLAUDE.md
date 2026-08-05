@@ -145,7 +145,34 @@ El Atlas sustituyó estos 4 botones grandes:
    hematológico crítico: epidemiología, contexto/causas, enfoque DIRECT,
    diagnóstico, síndromes y toxicidades, manejo/pronóstico, terapias
    dirigidas, decisiones de ingreso y fin de vida. Basado en Azoulay et al.
-   (Blood 2024 y Blood Reviews 2025, ver `js/modules/reconocimiento/`).
+   (Blood 2024 y Blood Reviews 2025, ver `js/modules/reconocimiento/`). Sus
+   9 subtemas ya no se navegan con una barra de pestañas de texto: es el
+   **Cuaderno de Campo**, un tablero de fichas ilustradas
+   (`#rt-corkboard`, lógica en `initCuaderno()` dentro de
+   `js/modules/reconocimiento/index.js`) pensado como piloto de un
+   tratamiento visual más "de estudio" para el contenido de teoría, en el
+   mismo espíritu que el Atlas Hematológico pero un nivel más abajo (dentro
+   de UN tema, no entre categorías). Cada `.field-card` (parchment, ligero
+   giro aleatorio tipo ficha clavada en un corcho, ilustración de tinta en
+   SVG propia del tema) lleva `data-tab="rt-xxx"` apuntando al mismo
+   `id` de `.tab-content` de siempre — el contenido clínico íntegro de cada
+   subtema no se ha tocado ni resumido, solo cambió la portada para
+   llegar a él. Interacción en dos toques: el primer toque voltea la
+   ficha (`.flipped`, flip 3D con `.field-card-inner`) y muestra una
+   pregunta de repaso con su respuesta corta (pensada como gancho de
+   recall activo, no como resumen del tema); el segundo toque, sobre
+   el botón `.back-cta` de la cara trasera, llama a `openTopic(id)`, que
+   quita `.active` de todos los `.tab-content` del panel, se lo pone al
+   elegido y hace `scrollIntoView`. El panel `#panel-reconocimiento-tabs`
+   arranca con `display:none` inline (para no dejar una caja vacía entre
+   el tablero y "Fuentes" antes de elegir tema) y `openTopic()` lo revela
+   al abrir el primer tema. Este módulo ya NO usa `core/tabs.js` (tenía un
+   `initTabs()` genérico antes; la interacción de dos toques no encaja en
+   ese patrón de un solo clic, así que `reconocimiento/index.js` tiene su
+   propia función `initCuaderno()`) — el resto de módulos con pestañas
+   simples (Síndromes Urgentes, Introducción TPH) siguen usando
+   `core/tabs.js` sin cambios. Si este piloto convence, es el patrón a
+   replicar en otras categorías con mucho contenido de teoría.
 3. **Síndromes Hematológicos Urgentes** (`modules/sindromes-urgentes/`) —
    una sola vista con 3 pestañas (CID / PTT / Síndrome de Lisis Tumoral, ver
    `js/modules/sindromes-urgentes/index.js`, que usa `core/tabs.js` igual que

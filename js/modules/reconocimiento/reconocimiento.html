@@ -21,21 +21,208 @@
         </div>
     </div>
 
-    <div class="card" id="panel-reconocimiento-tabs">
-        <div class="tabs">
-            <div class="tab active" data-tab="rt-epidemiologia">Epidemiología</div>
-            <div class="tab" data-tab="rt-contexto">Contexto FRA</div>
-            <div class="tab" data-tab="rt-direct">DIRECT</div>
-            <div class="tab" data-tab="rt-diagnostico">Diagnóstico</div>
-            <div class="tab" data-tab="rt-sindromes">Síndromes</div>
-            <div class="tab" data-tab="rt-manejo">Manejo</div>
-            <div class="tab" data-tab="rt-terapias">Terapias Dirigidas</div>
-            <div class="tab" data-tab="rt-decisiones">Decisiones</div>
-            <div class="tab" data-tab="rt-finvida">Fin de Vida</div>
-        </div>
+    <p class="section-label">Elige un tema</p>
+    <div class="corkboard" id="rt-corkboard">
 
+        <div class="field-card" data-tab="rt-epidemiologia"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha I</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-blue)" stroke-width="1.6">
+                    <line x1="8" y1="46" x2="72" y2="46" stroke-opacity="0.5"/>
+                    <polyline points="12,40 26,30 40,32 54,18 68,10" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="12" cy="40" r="2.4" fill="var(--accent-blue)" stroke="none"/>
+                    <circle cx="26" cy="30" r="3" fill="var(--accent-blue)" stroke="none" opacity="0.85"/>
+                    <circle cx="40" cy="32" r="2.4" fill="var(--accent-blue)" stroke="none" opacity="0.7"/>
+                    <circle cx="54" cy="18" r="3.4" fill="var(--accent-blue)" stroke="none" opacity="0.9"/>
+                    <circle cx="68" cy="10" r="2.6" fill="var(--accent-blue)" stroke="none"/>
+                    <line x1="9" y1="14" x2="9" y2="20" stroke-width="1.2"/><line x1="12" y1="14" x2="12" y2="20" stroke-width="1.2"/>
+                    <line x1="15" y1="14" x2="15" y2="20" stroke-width="1.2"/><line x1="8" y1="20" x2="17" y2="12" stroke-width="1.2"/>
+                </svg>
+                <div class="field-name">Epidemiología</div>
+                <div class="field-hook">"¿a la UCI se llega antes en LMA o en SMD?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">LMA: 27 días de media. SMD: 59 días — más del doble. La LMA hiperleucocitaria es la que más rápido descompensa.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="rt-contexto"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha II</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-purple)" stroke-width="1.6">
+                    <ellipse cx="30" cy="30" rx="14" ry="18"/>
+                    <ellipse cx="50" cy="30" rx="14" ry="18"/>
+                    <line x1="40" y1="12" x2="40" y2="26" stroke-width="1.3"/>
+                    <circle cx="26" cy="24" r="1.8" fill="var(--accent-purple)" stroke="none"/>
+                    <path d="M45,20 L49,24 M49,20 L45,24" stroke-width="1.3"/>
+                    <circle cx="55" cy="36" r="1.6" fill="var(--accent-purple)" stroke="none"/>
+                    <path d="M32,38 L36,42 M36,38 L32,42" stroke-width="1.3"/>
+                    <circle cx="63" cy="44" r="7" stroke-width="1.3" opacity="0.65"/><line x1="68" y1="49" x2="73" y2="53" stroke-width="1.6" opacity="0.65"/>
+                </svg>
+                <div class="field-name">Contexto FRA</div>
+                <div class="field-hook">"vidrio deslustrado en el TC... ¿qué 3 causas ya manejas?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook"><em>Pneumocystis jirovecii</em>, neumonía viral, y patógenos intracelulares — el vidrio deslustrado casi nunca es solo una de las tres a simple vista.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="rt-direct"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha III</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-red)" stroke-width="1.6">
+                    <rect x="24" y="16" width="24" height="26" rx="3"/>
+                    <ellipse cx="31" cy="27" rx="5" ry="8" opacity="0.7"/><ellipse cx="41" cy="27" rx="5" ry="8" opacity="0.7"/>
+                    <circle cx="56" cy="20" r="9" stroke-width="1.8"/><line x1="62.5" y1="26.5" x2="70" y2="34" stroke-width="2.4" stroke-linecap="round"/>
+                    <path d="M12,48 Q40,54 68,48" stroke-width="1.2" opacity="0.6"/>
+                    <circle cx="14" cy="47" r="1.6" fill="var(--accent-red)" stroke="none"/><circle cx="27" cy="51" r="1.6" fill="var(--accent-red)" stroke="none"/>
+                    <circle cx="40" cy="53" r="1.6" fill="var(--accent-red)" stroke="none"/><circle cx="53" cy="51" r="1.6" fill="var(--accent-red)" stroke="none"/>
+                    <circle cx="66" cy="47" r="1.6" fill="var(--accent-red)" stroke="none"/><circle cx="4" cy="42" r="1.6" fill="var(--accent-red)" stroke="none"/>
+                </svg>
+                <div class="field-name">DIRECT</div>
+                <div class="field-hook">"¿recuerdas las 6 letras sin mirar?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Delay · Inmunodeficiencia · Radiología · Experiencia compartida · Clínica · TC de alta resolución.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="rt-diagnostico"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha IV</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-blue)" stroke-width="1.6">
+                    <rect x="14" y="10" width="10" height="30" rx="4"/>
+                    <line x1="14" y1="22" x2="24" y2="22" stroke-width="1.2"/>
+                    <circle cx="17" cy="30" r="1.6" fill="var(--accent-blue)" stroke="none" opacity="0.7"/><circle cx="21" cy="34" r="1.2" fill="var(--accent-blue)" stroke="none" opacity="0.5"/>
+                    <path d="M40,12 Q37,12 37,16 L37,40 Q37,44 40,44 L58,44 Q61,44 61,40 L61,16 Q61,12 58,12 Z"/>
+                    <line x1="42" y1="20" x2="56" y2="20" stroke-width="1.2"/>
+                    <path d="M41,27 L44,30 L49,24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="42" y1="36" x2="56" y2="36" stroke-width="1.2" opacity="0.5"/>
+                </svg>
+                <div class="field-name">Diagnóstico</div>
+                <div class="field-hook">"una PCR viral positiva... ¿es ya el diagnóstico?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">No siempre: puede detectar ADN mínimo de un comensal o colonizador, no necesariamente el causante del cuadro.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="rt-sindromes"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha V</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-yellow)" stroke-width="1.6">
+                    <circle cx="26" cy="26" r="13" opacity="0.75"/>
+                    <circle cx="44" cy="20" r="9" opacity="0.6"/>
+                    <circle cx="46" cy="36" r="10" opacity="0.5"/>
+                    <polyline points="8,42 18,42 22,34 26,48 30,38 34,42 72,42" stroke-width="1.4" stroke-linejoin="round"/>
+                </svg>
+                <div class="field-name">Síndromes</div>
+                <div class="field-hook">"coagulopatía + fiebre + hipotensión: ¿qué descartas primero?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">CID franca — pide plaquetas, fibrinógeno, dímero-D y tiempos de coagulación antes de asumir sepsis sin más.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="rt-manejo"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha VI</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-green)" stroke-width="1.6">
+                    <path d="M22,30 Q22,42 32,44 Q42,42 42,30 L42,20 Q32,14 22,20 Z"/>
+                    <path d="M18,18 Q22,10 27,18" stroke-width="1.2" opacity="0.6"/>
+                    <path d="M27,15 Q31,6 35,15" stroke-width="1.2" opacity="0.6"/>
+                    <rect x="54" y="10" width="14" height="18" rx="2"/>
+                    <line x1="61" y1="28" x2="61" y2="38" stroke-width="1.3"/>
+                    <circle cx="61" cy="42" r="3" fill="var(--accent-green)" stroke="none" opacity="0.8"/>
+                </svg>
+                <div class="field-name">Manejo</div>
+                <div class="field-hook">"SpO2 objetivo 88-95%... ¿por qué NO apuntar más alto?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">La hiperoxia también tiene coste — el objetivo evita tanto la hipoxemia como el daño por exceso de oxígeno.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="rt-terapias"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha VII</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-purple)" stroke-width="1.6">
+                    <rect x="32" y="8" width="16" height="10" rx="1"/>
+                    <path d="M35,18 L35,34 Q35,40 40,40 Q45,40 45,34 L45,18"/>
+                    <line x1="36" y1="24" x2="44" y2="24" stroke-width="1"/>
+                    <circle cx="40" cy="40" r="14" stroke-width="1.4" opacity="0.7"/>
+                    <circle cx="40" cy="40" r="7" stroke-width="1.4" opacity="0.85"/>
+                    <line x1="40" y1="30" x2="40" y2="50" stroke-width="1" opacity="0.5"/><line x1="30" y1="40" x2="50" y2="40" stroke-width="1" opacity="0.5"/>
+                </svg>
+                <div class="field-name">Terapias Dirigidas</div>
+                <div class="field-hook">"¿qué déficit inmune deja un anti-CD20 como rituximab?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Aplasia B (limitada y a largo plazo) + neutropenia precoz y tardía — vigila infecciones bacterianas y víricas.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="rt-decisiones"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha VIII</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-yellow)" stroke-width="1.6">
+                    <line x1="40" y1="8" x2="40" y2="44" stroke-width="1.4"/>
+                    <line x1="18" y1="18" x2="62" y2="18" stroke-width="1.4"/>
+                    <path d="M12,18 Q18,30 24,18" stroke-width="1.3"/>
+                    <path d="M56,18 Q62,30 68,18" stroke-width="1.3"/>
+                    <path d="M28,44 L52,44 L48,50 L32,50 Z"/>
+                </svg>
+                <div class="field-name">Decisiones</div>
+                <div class="field-hook">"un TLT no tiene plazo fijo... ¿qué SÍ se acuerda de antemano?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Qué soporte vital se aplica, durante cuánto tiempo, y con qué criterios de respuesta se decide al finalizar — pactado con el paciente/familia.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="rt-finvida"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha IX</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="#8a7a5c" stroke-width="1.5">
+                    <path d="M40,6 Q52,20 48,38 Q46,46 40,48 Q34,46 32,38 Q28,20 40,6 Z" opacity="0.75"/>
+                    <line x1="40" y1="10" x2="40" y2="46" stroke-width="1"/>
+                    <line x1="40" y1="16" x2="34" y2="20" stroke-width="0.9" opacity="0.7"/><line x1="40" y1="22" x2="33" y2="27" stroke-width="0.9" opacity="0.7"/>
+                    <line x1="40" y1="28" x2="34" y2="34" stroke-width="0.9" opacity="0.7"/>
+                    <line x1="40" y1="16" x2="46" y2="20" stroke-width="0.9" opacity="0.7"/><line x1="40" y1="22" x2="47" y2="27" stroke-width="0.9" opacity="0.7"/>
+                    <path d="M10,50 Q40,42 70,50" stroke-width="1" opacity="0.5"/>
+                </svg>
+                <div class="field-name">Fin de Vida</div>
+                <div class="field-hook">"evaluación sistemática, no solo puntual... ¿por qué importa?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Es lo que reduce el estrés postraumático en supervivientes de UCI — no basta con tratar el síntoma que más llama la atención.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+    </div>
+    <p class="tap-hint">☝ toca una ficha para ver la pista, y de nuevo para abrir el tema completo</p>
+
+    <div class="card" id="panel-reconocimiento-tabs" style="display:none;">
         <!-- ===== TAB 0: EPIDEMIOLOGÍA ===== -->
-        <div id="rt-epidemiologia" class="tab-content active">
+        <div id="rt-epidemiologia" class="tab-content">
             <p style="font-size: 0.85rem; line-height: 1.5;">
                 Las neoplasias hematológicas son el <strong>7% de los cánceres nuevos</strong> a
                 nivel global, con incidencia creciente. El riesgo de necesitar UCI en el primer año
