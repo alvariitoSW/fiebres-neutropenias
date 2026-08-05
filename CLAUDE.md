@@ -90,10 +90,46 @@ botón aquí.
 
 ### Hematología
 
-Al pulsar "Hematología" se entra en el que hasta ahora era el **menú
-principal** (`#home-view`, definido directamente en `index.html`, con un
-botón "← VOLVER" que usa la clase `.btn-volver-especialidades` para
-regresar al menú de especialidades) con 4 botones grandes:
+Al pulsar "Hematología" se entra en `#home-view` (definido directamente en
+`index.html`, con un botón "← VOLVER" que usa la clase
+`.btn-volver-especialidades` para regresar al menú de especialidades). El
+menú principal de Hematología ya no es una lista de botones apilados: es el
+**Atlas Hematológico**, un mapa interactivo de 2 niveles (`#atlas-stage`,
+lógica en `js/modules/home/atlas.js`) pensado para navegar de forma más
+visual que un scroll infinito, sin cambiar ni una línea del contenido
+clínico real al que da acceso.
+
+- **Nivel general** (`#atlas-screen-overview`): un `<svg class="landscape">`
+  puramente decorativo (gradientes/blobs de brillo + un trazado
+  `.vessel-line` que conecta los nodos) de fondo, con 4 `.region-btn`
+  posicionados encima (vía `left`/`top` en `%` + `transform:
+  translate(-50%,-50%)`, sin JS de animación): Manejo Citopenias,
+  Reconocimiento Temprano, Síndromes Urgentes y Trasplante TPH. Cada nodo
+  con `data-zone="..."` lleva a una pantalla de zona; el único nodo que no
+  tiene zona intermedia (Reconocimiento) lleva `data-route="reconocimiento"`
+  directamente.
+- **Pantallas de zona** (`#atlas-screen-citopenias`, `#atlas-screen-sindromes`,
+  `#atlas-screen-trasplante`): nodos más pequeños (`.node-sm`) con los
+  subtemas reales de esa categoría, cada uno con `data-route="clave"`; un
+  `.back-chip[data-back="atlas-screen-overview"]` vuelve al mapa general.
+- Las claves `data-route` se resuelven en el objeto `rutasAtlas` de
+  `js/modules/home/index.js`, que llama a los switchers/tabs reales ya
+  existentes (`topLevel.show(...)`, `citopeniasLevel.show(...)`,
+  `trasplanteLevel.show(...)`, o un click simulado sobre la pestaña
+  correspondiente de Síndromes Urgentes) — el Atlas es solo una forma nueva
+  de LLEGAR al contenido, nunca lo duplica ni lo reescribe.
+- `atlas.js` marca cada nodo visitado (`.visited`, clase con un puntito) en
+  un `Set` en memoria, sin persistencia (nada se guarda, según la
+  arquitectura del proyecto) — pensado como semilla de un futuro modo de
+  repaso activo, aún no implementado.
+- Al volver a Hematología desde cualquier vista (`goHome()` en
+  `home/index.js`) el Atlas se resetea siempre al mapa general
+  (`atlas.reset()`), para que las 4 regiones estén siempre a un toque tras
+  salir de cualquier contenido.
+- Fuera del `<div class="stage">` del Atlas, sigue habiendo un botón
+  `.compass` (⚡) fijo que abre Escalas Generales, igual que antes.
+
+El Atlas sustituyó estos 4 botones grandes:
 
 1. **Manejo Citopenias** (`modules/citopenias/`) — submenú "elige la
    citopenia"; hoy solo tiene una opción, **Neutropenia Febril**
@@ -237,13 +273,14 @@ del de Hematología (`#home-view` → categorías → subcategorías).
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
 también `especialidades` y `nefrologia` como vistas más del mismo switcher
-raíz —, submenú de Citopenias, submenú de Trasplante) y conecta los
-botones. Los botones "← VOLVER" usan una clase específica según a qué nivel
-deben volver: `.btn-volver-especialidades`, `.btn-volver-home`,
+raíz —, submenú de Citopenias, submenú de Trasplante), inicializa el Atlas
+(`initAtlas()` de `modules/home/atlas.js`) y conecta los botones. Los
+botones "← VOLVER" usan una clase específica según a qué nivel deben
+volver: `.btn-volver-especialidades`, `.btn-volver-home`,
 `.btn-volver-citopenias-menu`, `.btn-volver-trasplante-menu`. Las
 calculadoras en sí (Escalas Generales, Neutropenia Febril) no saben nada de
-estos niveles superiores — siguen inicializándose igual que siempre, solo
-cambia qué contenedor está visible.
+estos niveles superiores ni del Atlas — siguen inicializándose igual que
+siempre, solo cambia qué contenedor está visible.
 
 `modules/fuentes/` sigue siendo la excepción: es una categoría **solo de
 contenido**, sin `.js`, montada como acordeón (no como vista de pantalla

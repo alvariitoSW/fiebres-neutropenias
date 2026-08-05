@@ -286,3 +286,103 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 .micro-prof-body { display: none; padding: 10px; font-size: 0.75rem; color: var(--text-muted); background: rgba(0,0,0,0.2); line-height: 1.5; }
 .micro-prof-body.active { display: block; }
 .micro-prof-body ul { margin: 6px 0 0 0; padding-left: 18px; }
+
+/* ===================================================== */
+/* ATLAS HEMATOLÓGICO — mapa interactivo de navegación    */
+/* Sustituye los 4 botones apilados del menú principal de */
+/* Hematología. Los nodos navegan a las vistas reales ya  */
+/* existentes (citopenias/reconocimiento/sindromes/        */
+/* trasplante) sin duplicar ni modificar su contenido.     */
+/* ===================================================== */
+.atlas-frame {
+    position: relative;
+    max-width: 420px;
+    margin: 0 auto;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.55), inset 0 0 60px rgba(0,0,0,0.5);
+    background: #0f0d09;
+}
+.atlas-frame .stage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 400 / 620;
+    overflow: hidden;
+}
+.atlas-frame .landscape { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.atlas-frame .vessel-line {
+    fill: none; stroke: url(#vesselGrad); stroke-width: 5; stroke-linecap: round;
+    filter: drop-shadow(0 0 6px rgba(212,175,55,0.25));
+}
+.atlas-frame .glow-blob { opacity: 0.55; filter: blur(2px); }
+
+.atlas-screen {
+    position: absolute; inset: 0;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.45s ease, transform 0.45s cubic-bezier(.2,.8,.3,1);
+    transform: scale(0.94);
+}
+.atlas-screen.active { opacity: 1; pointer-events: auto; transform: scale(1); }
+
+.region-btn {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    background: none; border: none; cursor: pointer; padding: 6px;
+    font-family: inherit; color: var(--text-main);
+}
+.region-orb {
+    width: 58px; height: 58px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.16), transparent 60%),
+                var(--orb-color, var(--accent-blue));
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.15) inset, 0 6px 18px rgba(0,0,0,0.5), 0 0 24px var(--orb-glow, rgba(212,175,55,0.35));
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.region-btn:hover .region-orb, .region-btn:focus-visible .region-orb { transform: scale(1.08); }
+.region-btn:active .region-orb { transform: scale(0.96); }
+.region-orb svg { width: 30px; height: 30px; }
+.region-label {
+    font-size: 0.68rem; font-weight: bold; text-shadow: 0 2px 6px rgba(0,0,0,0.9);
+    text-align: center; max-width: 90px; letter-spacing: 0.2px;
+}
+.region-visited {
+    position: absolute; top: -2px; right: -2px;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--accent-green); border: 2px solid #0f0d09;
+    display: none;
+}
+.region-btn.visited .region-visited { display: block; }
+.node-sm .region-orb { width: 46px; height: 46px; }
+.node-sm .region-orb svg { width: 24px; height: 24px; }
+
+.level-head {
+    position: absolute; top: 0; left: 0; right: 0;
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 12px;
+    background: linear-gradient(rgba(15,13,9,0.85), transparent);
+    z-index: 5;
+}
+.back-chip {
+    font-size: 0.68rem; color: var(--text-main); background: rgba(0,0,0,0.4);
+    border: 1px solid var(--border-color); border-radius: 20px; padding: 4px 10px;
+    cursor: pointer; font-family: inherit;
+}
+.back-chip:hover { border-color: var(--accent-blue); }
+.crumb { font-size: 0.68rem; color: var(--text-muted); letter-spacing: 0.5px; }
+.crumb strong { color: var(--accent-yellow); }
+
+.compass {
+    position: absolute; top: 10px; right: 10px; z-index: 6;
+    width: 30px; height: 30px; border-radius: 50%;
+    background: rgba(0,0,0,0.45); border: 1px solid var(--border-color); color: var(--accent-yellow);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem; cursor: pointer; font-family: inherit; padding: 0;
+}
+.compass:hover { border-color: var(--accent-blue); }
+
+.atlas-hint {
+    text-align: center; font-size: 0.65rem; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 1px; margin: 10px 0 0;
+}

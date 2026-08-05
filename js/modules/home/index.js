@@ -1,8 +1,9 @@
 // Orquesta la navegación jerárquica de la app: menú de especialidades,
-// menú principal de Hematología, submenú de Citopenias y submenú de
-// Trasplante. La lógica de cada calculadora vive en su propio módulo; aquí
-// solo se decide qué vista se ve en cada momento.
+// Atlas Hematológico (menú principal de Hematología), submenú de
+// Citopenias y submenú de Trasplante. La lógica de cada calculadora vive
+// en su propio módulo; aquí solo se decide qué vista se ve en cada momento.
 import { createViewSwitcher } from '../../core/navigation.js';
+import { initAtlas } from './atlas.js';
 
 export function init() {
     const topLevel = createViewSwitcher({
@@ -16,16 +17,17 @@ export function init() {
         nefrologia: document.getElementById('nefrologia-view'),
     });
 
-    document.getElementById('btn-hematologia').addEventListener('click', () => topLevel.show('home'));
+    function goHome() {
+        topLevel.show('home');
+        atlas.reset();
+    }
+
+    document.getElementById('btn-hematologia').addEventListener('click', goHome);
     document.getElementById('btn-nefrologia').addEventListener('click', () => topLevel.show('nefrologia'));
     document.querySelectorAll('.btn-volver-especialidades').forEach(b => b.addEventListener('click', () => topLevel.show('especialidades')));
 
     document.getElementById('btn-escalas-generales').addEventListener('click', () => topLevel.show('escalas'));
-    document.getElementById('btn-citopenias').addEventListener('click', () => topLevel.show('citopenias'));
-    document.getElementById('btn-reconocimiento').addEventListener('click', () => topLevel.show('reconocimiento'));
-    document.getElementById('btn-sindromes').addEventListener('click', () => topLevel.show('sindromes'));
-    document.getElementById('btn-trasplante').addEventListener('click', () => topLevel.show('trasplante'));
-    document.querySelectorAll('.btn-volver-home').forEach(b => b.addEventListener('click', () => topLevel.show('home')));
+    document.querySelectorAll('.btn-volver-home').forEach(b => b.addEventListener('click', goHome));
 
     const citopeniasLevel = createViewSwitcher({
         menu: document.getElementById('citopenias-menu-view'),
@@ -44,6 +46,25 @@ export function init() {
     document.getElementById('btn-tph-cart').addEventListener('click', () => trasplanteLevel.show('cart'));
     document.getElementById('btn-tph-complicaciones').addEventListener('click', () => trasplanteLevel.show('complicaciones'));
     document.querySelectorAll('.btn-volver-trasplante-menu').forEach(b => b.addEventListener('click', () => trasplanteLevel.show('menu')));
+
+    function activarPestanaSindromes(tab) {
+        document.querySelector(`#panel-sindromes-tabs .tab[data-tab="${tab}"]`)?.click();
+    }
+
+    const rutasAtlas = {
+        'citopenias-neutropenia': () => { topLevel.show('citopenias'); citopeniasLevel.show('neutropeniaFebril'); },
+        reconocimiento: () => topLevel.show('reconocimiento'),
+        'sindromes-cid': () => { topLevel.show('sindromes'); activarPestanaSindromes('sind-cid'); },
+        'sindromes-ptt': () => { topLevel.show('sindromes'); activarPestanaSindromes('sind-ptt'); },
+        'sindromes-slt': () => { topLevel.show('sindromes'); activarPestanaSindromes('sind-slt'); },
+        'trasplante-intro': () => { topLevel.show('trasplante'); trasplanteLevel.show('intro'); },
+        'trasplante-cart': () => { topLevel.show('trasplante'); trasplanteLevel.show('cart'); },
+        'trasplante-complicaciones': () => { topLevel.show('trasplante'); trasplanteLevel.show('complicaciones'); },
+    };
+    const atlas = initAtlas({
+        onRoute: (key) => rutasAtlas[key]?.(),
+        onCompass: () => topLevel.show('escalas'),
+    });
 
     topLevel.show('especialidades');
     citopeniasLevel.show('menu');
