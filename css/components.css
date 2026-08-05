@@ -489,40 +489,44 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 .tap-hint { text-align: center; font-size: 0.62rem; color: var(--text-muted); margin: -8px 0 18px; letter-spacing: 0.5px; }
 
 /* ===================================================== */
-/* NEFRONA INTERACTIVA — menú principal de Nefrología.    */
-/* El SVG hace de mapa de navegación (tocar un segmento    */
-/* abre sus categorías de contenido) y de herramienta de   */
-/* estudio (canales/transportadores + modo interactivo     */
-/* por diurético/patología). Ver nefro-menu.html/nefrona.js*/
+/* NEFRONA INTERACTIVA — menú principal de Nefrología.     */
+/* Ilustración anatómica real (nefrona-anatomia.jpg) con    */
+/* botones invisibles ("hotspots") superpuestos por         */
+/* posición porcentual: tocar uno abre sus categorías de    */
+/* contenido y muestra sus canales/transportadores; el modo */
+/* interactivo resalta hotspots según diurético/patología.  */
+/* Ver nefro-menu.html/nefrona.js.                          */
 /* ===================================================== */
 .nefrona-frame {
-    max-width: 280px; margin: 0 auto 16px;
+    max-width: 340px; margin: 0 auto 10px;
     border: 1px solid var(--border-color); border-radius: 8px;
-    background: #0f0d09; padding: 10px 6px 4px;
+    background: #0f0d09; padding: 8px 8px 4px;
 }
-.nefrona-diagram { width: 100%; height: auto; display: block; }
-.nefrona-diagram [data-segmento] { cursor: pointer; }
-.nefrona-diagram [data-segmento] path:not(.hit-area),
-.nefrona-diagram [data-segmento] circle:not(.hit-area) {
-    transition: filter 0.2s ease, stroke-width 0.2s ease;
+.nefrona-photo-wrap { position: relative; line-height: 0; border-radius: 4px; overflow: hidden; }
+.nefrona-photo { width: 100%; height: auto; display: block; }
+.nefrona-hotspot {
+    position: absolute; transform: translate(-50%, -50%);
+    width: 30px; height: 30px; padding: 0; margin: 0;
+    background: none; border: none; cursor: pointer;
 }
-.nefrona-diagram [data-segmento]:hover path:not(.hit-area),
-.nefrona-diagram [data-segmento]:hover circle:not(.hit-area),
-.nefrona-diagram [data-segmento].segmento-activo path:not(.hit-area),
-.nefrona-diagram [data-segmento].segmento-activo circle:not(.hit-area) {
-    filter: drop-shadow(0 0 6px var(--accent-green));
+.nefrona-hotspot-dot {
+    display: block; width: 100%; height: 100%; border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,175,55,0.22), transparent 70%);
+    border: 1.5px solid rgba(212,175,55,0.55);
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.35);
+    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
-.nefrona-diagram [data-segmento].canal-resaltado path:not(.hit-area),
-.nefrona-diagram [data-segmento].canal-resaltado circle:not(.hit-area) {
-    stroke: var(--accent-yellow) !important;
-    filter: drop-shadow(0 0 8px var(--accent-yellow));
+.nefrona-hotspot:hover .nefrona-hotspot-dot { transform: scale(1.12); border-color: var(--accent-blue); }
+.nefrona-hotspot.segmento-activo .nefrona-hotspot-dot {
+    background: radial-gradient(circle, rgba(144,160,106,0.5), transparent 70%);
+    border-color: var(--accent-green);
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.35), 0 0 10px var(--accent-green);
 }
-.kidney-context { pointer-events: none; }
-.kidney-wedge-fill { fill: var(--accent-yellow); fill-opacity: 0.035; }
-.kidney-wedge-outline { fill: none; stroke: var(--border-color); stroke-width: 1; }
-.kidney-boundary { fill: none; stroke: var(--border-color); stroke-width: 1; stroke-dasharray: 3,3; opacity: 0.6; }
-.nefrona-label { font-size: 6px; fill: var(--text-muted); letter-spacing: 1.5px; }
-.nefrona-tipo-label { font-size: 6.5px; fill: var(--text-muted); font-style: italic; }
+.nefrona-hotspot.canal-resaltado .nefrona-hotspot-dot {
+    background: radial-gradient(circle, rgba(207,154,62,0.55), transparent 70%);
+    border-color: var(--accent-yellow);
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.35), 0 0 10px var(--accent-yellow);
+}
 
 /* ===================================================== */
 /* QUIZ DE REPASO — motor genérico de preguntas de 4       */

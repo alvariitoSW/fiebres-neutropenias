@@ -10,102 +10,28 @@
     </button>
 
     <div class="nefrona-frame">
-        <svg class="nefrona-diagram" viewBox="0 0 240 380" role="img" aria-label="Diagrama interactivo de la nefrona, con nefrona cortical y yuxtamedular">
-            <!-- Contexto anatómico: cuña de tejido renal (corteza + médula), puramente
-                 decorativo, para que las dos nefronas se lean dentro del riñón real y
-                 no como líneas abstractas flotando en el vacío. -->
-            <g class="kidney-context" aria-hidden="true">
-                <path class="kidney-wedge-fill" d="M15,20 Q60,2 100,20 Q140,2 180,20 Q212,8 232,24 L198,298 Q192,334 133,354 Q76,334 68,298 Z" />
-                <path class="kidney-wedge-outline" d="M15,20 Q60,2 100,20 Q140,2 180,20 Q212,8 232,24 L198,298 Q192,334 133,354 Q76,334 68,298 Z" />
-                <path class="kidney-boundary" d="M30,102 Q80,120 133,104 Q184,120 218,102" />
-                <text class="nefrona-label" x="10" y="60" transform="rotate(-90 10 60)">CORTEZA</text>
-                <text class="nefrona-label" x="10" y="235" transform="rotate(-90 10 235)">MÉDULA</text>
-            </g>
+        <div class="nefrona-photo-wrap article-figure" id="nefrona-photo-wrap">
+            <img class="nefrona-photo" src="js/modules/nefrologia/img/nefrona-anatomia.jpg" alt="Corte de tejido renal mostrando una nefrona cortical (izquierda) y una nefrona yuxtamedular (derecha)">
 
-            <!-- ===== Nefrona cortical (~85%): asa corta, apenas entra en médula ===== -->
-            <text class="nefrona-tipo-label tipo-cortical" x="26" y="14">Nefrona cortical</text>
+            <!-- Nefrona cortical (izquierda de la imagen): asa corta -->
+            <button class="nefrona-hotspot" data-segmento="glomerulo" style="left:56%; top:19%;"><span class="nefrona-hotspot-dot"></span></button>
+            <button class="nefrona-hotspot" data-segmento="tubulo-proximal" style="left:51%; top:26%;"><span class="nefrona-hotspot-dot"></span></button>
+            <button class="nefrona-hotspot" data-segmento="asa-descendente" style="left:47%; top:40%;"><span class="nefrona-hotspot-dot"></span></button>
+            <button class="nefrona-hotspot" data-segmento="asa-ascendente-gruesa" style="left:49%; top:52%;"><span class="nefrona-hotspot-dot"></span></button>
+            <button class="nefrona-hotspot" data-segmento="tubulo-distal" style="left:45%; top:21%;"><span class="nefrona-hotspot-dot"></span></button>
 
-            <g data-segmento="glomerulo">
-                <circle class="hit-area" cx="60" cy="46" r="20" fill="transparent" />
-                <line x1="45" y1="53" x2="35" y2="59" stroke="var(--accent-red)" stroke-width="1.4" opacity="0.65" />
-                <line x1="48" y1="39" x2="38" y2="31" stroke="var(--accent-red)" stroke-width="1.4" opacity="0.45" />
-                <circle cx="60" cy="46" r="12" fill="none" stroke="var(--accent-blue)" stroke-width="2.6" />
-                <path d="M52,43 q4,-7 8,0 q4,-7 8,0" fill="none" stroke="var(--accent-blue)" stroke-width="1.2" />
-                <path d="M53,50 q4,6 8,0 q4,6 8,0" fill="none" stroke="var(--accent-blue)" stroke-width="1.2" />
-            </g>
+            <!-- Nefrona yuxtamedular (derecha de la imagen): asa larga hasta la papila -->
+            <button class="nefrona-hotspot" data-segmento="glomerulo" style="left:76%; top:20%;"><span class="nefrona-hotspot-dot"></span></button>
+            <button class="nefrona-hotspot" data-segmento="tubulo-proximal" style="left:80%; top:31%;"><span class="nefrona-hotspot-dot"></span></button>
+            <button class="nefrona-hotspot" data-segmento="tubulo-distal" style="left:77%; top:23%;"><span class="nefrona-hotspot-dot"></span></button>
+            <button class="nefrona-hotspot" data-segmento="asa-descendente" style="left:72%; top:47%;"><span class="nefrona-hotspot-dot"></span></button>
+            <button class="nefrona-hotspot" data-segmento="asa-ascendente-gruesa" style="left:69%; top:57%;"><span class="nefrona-hotspot-dot"></span></button>
+            <button class="nefrona-hotspot" data-segmento="asa-ascendente-delgada" style="left:64%; top:76%;"><span class="nefrona-hotspot-dot"></span></button>
 
-            <g data-segmento="tubulo-proximal">
-                <path class="hit-area" d="M73,46 q9,-5 7,5 q-2,7 7,7 q7,0 5,8 q-2,6 7,6" fill="none" stroke="transparent" stroke-width="13" stroke-linecap="round" />
-                <path d="M73,46 q9,-5 7,5 q-2,7 7,7 q7,0 5,8 q-2,6 7,6" fill="none" stroke="var(--accent-yellow)" stroke-width="2.4" stroke-linecap="round" />
-            </g>
-            <path class="nefrona-connector" d="M99,72 q-18,10 -29,26" fill="none" stroke="var(--border-color)" stroke-width="1.6" />
-
-            <g data-segmento="asa-descendente">
-                <path class="hit-area" d="M68,104 q2,22 6,40" fill="none" stroke="transparent" stroke-width="12" />
-                <path d="M68,104 q2,22 6,40" fill="none" stroke="var(--accent-green)" stroke-width="2" stroke-linecap="round" />
-            </g>
-            <path class="nefrona-connector" d="M74,144 q4,6 10,6" fill="none" stroke="var(--border-color)" stroke-width="1.6" />
-
-            <g data-segmento="asa-ascendente-gruesa">
-                <path class="hit-area" d="M84,150 q6,-24 10,-40 q2,-8 8,-12" fill="none" stroke="transparent" stroke-width="14" />
-                <path d="M84,150 q6,-24 10,-40 q2,-8 8,-12" fill="none" stroke="var(--accent-red)" stroke-width="4.5" stroke-linecap="round" />
-            </g>
-            <path class="nefrona-connector" d="M102,98 q2,-5 7,-7" fill="none" stroke="var(--border-color)" stroke-width="1.6" />
-
-            <g data-segmento="tubulo-distal">
-                <path class="hit-area" d="M109,91 q8,-5 6,5 q-2,7 -8,6 q-7,1 -5,8" fill="none" stroke="transparent" stroke-width="13" stroke-linecap="round" />
-                <path d="M109,91 q8,-5 6,5 q-2,7 -8,6 q-7,1 -5,8" fill="none" stroke="var(--accent-purple)" stroke-width="2.4" stroke-linecap="round" />
-            </g>
-            <path class="nefrona-connector" d="M102,110 q10,10 22,22" fill="none" stroke="var(--border-color)" stroke-width="1.6" />
-
-            <!-- ===== Nefrona yuxtamedular (~15%): asa larga hasta la papila ===== -->
-            <text class="nefrona-tipo-label tipo-yuxtamedular" x="146" y="28">Nefrona yuxtamedular</text>
-
-            <g data-segmento="glomerulo">
-                <circle class="hit-area" cx="180" cy="92" r="20" fill="transparent" />
-                <line x1="165" y1="99" x2="155" y2="105" stroke="var(--accent-red)" stroke-width="1.4" opacity="0.65" />
-                <line x1="168" y1="85" x2="158" y2="77" stroke="var(--accent-red)" stroke-width="1.4" opacity="0.45" />
-                <circle cx="180" cy="92" r="12" fill="none" stroke="var(--accent-blue)" stroke-width="2.6" />
-                <path d="M172,89 q4,-7 8,0 q4,-7 8,0" fill="none" stroke="var(--accent-blue)" stroke-width="1.2" />
-                <path d="M173,96 q4,6 8,0 q4,6 8,0" fill="none" stroke="var(--accent-blue)" stroke-width="1.2" />
-            </g>
-
-            <g data-segmento="tubulo-proximal">
-                <path class="hit-area" d="M193,92 q-9,-5 -7,5 q2,7 -7,7 q-7,0 -5,8 q2,6 -7,6" fill="none" stroke="transparent" stroke-width="13" stroke-linecap="round" />
-                <path d="M193,92 q-9,-5 -7,5 q2,7 -7,7 q-7,0 -5,8 q2,6 -7,6" fill="none" stroke="var(--accent-yellow)" stroke-width="2.4" stroke-linecap="round" />
-            </g>
-            <path class="nefrona-connector" d="M167,118 q9,-8 13,-18" fill="none" stroke="var(--border-color)" stroke-width="1.6" />
-
-            <g data-segmento="asa-descendente">
-                <path class="hit-area" d="M170,110 q-16,58 -24,116 q-6,44 4,80" fill="none" stroke="transparent" stroke-width="12" />
-                <path d="M170,110 q-16,58 -24,116 q-6,44 4,80" fill="none" stroke="var(--accent-green)" stroke-width="2" stroke-linecap="round" />
-            </g>
-            <path class="nefrona-connector" d="M150,306 q5,8 13,8" fill="none" stroke="var(--border-color)" stroke-width="1.6" />
-
-            <g data-segmento="asa-ascendente-delgada">
-                <path class="hit-area" d="M163,314 q5,-38 9,-76" fill="none" stroke="transparent" stroke-width="12" />
-                <path d="M163,314 q5,-38 9,-76" fill="none" stroke="var(--accent-red)" stroke-width="2" stroke-linecap="round" />
-            </g>
-
-            <g data-segmento="asa-ascendente-gruesa">
-                <path class="hit-area" d="M172,238 q6,-48 10,-68 q3,-14 12,-20" fill="none" stroke="transparent" stroke-width="14" />
-                <path d="M172,238 q6,-48 10,-68 q3,-14 12,-20" fill="none" stroke="var(--accent-red)" stroke-width="4.5" stroke-linecap="round" />
-            </g>
-            <path class="nefrona-connector" d="M194,144 q2,-5 7,-7" fill="none" stroke="var(--border-color)" stroke-width="1.6" />
-
-            <g data-segmento="tubulo-distal">
-                <path class="hit-area" d="M201,137 q8,-5 6,5 q-2,7 -8,6 q-7,1 -5,8" fill="none" stroke="transparent" stroke-width="13" stroke-linecap="round" />
-                <path d="M201,137 q8,-5 6,5 q-2,7 -8,6 q-7,1 -5,8" fill="none" stroke="var(--accent-purple)" stroke-width="2.4" stroke-linecap="round" />
-            </g>
-            <path class="nefrona-connector" d="M194,156 q-14,4 -28,12" fill="none" stroke="var(--border-color)" stroke-width="1.6" />
-
-            <!-- ===== Conducto colector (compartido por ambas nefronas) ===== -->
-            <g data-segmento="colector">
-                <path class="hit-area" d="M133,150 q5,90 3,180" fill="none" stroke="transparent" stroke-width="16" />
-                <path d="M133,150 q5,90 3,180" fill="none" stroke="var(--accent-blue)" stroke-width="4" stroke-linecap="round" />
-                <path d="M136,330 q-8,10 -12,18 M136,330 q8,10 12,18" fill="none" stroke="var(--accent-blue)" stroke-width="2" stroke-linecap="round" />
-            </g>
-        </svg>
+            <!-- Conducto colector: compartido por ambas nefronas, tronco central -->
+            <button class="nefrona-hotspot" data-segmento="colector" style="left:55%; top:82%;"><span class="nefrona-hotspot-dot"></span></button>
+        </div>
+        <p class="article-figure-caption">Corte de tejido renal: corteza (glomérulos, túbulos contorneados) y médula (asas de Henle, conducto colector), con una nefrona cortical de asa corta y una yuxtamedular de asa larga hasta la papila.</p>
         <p class="atlas-hint">Toca glomérulo, túbulos, asa de Henle o colector</p>
     </div>
 

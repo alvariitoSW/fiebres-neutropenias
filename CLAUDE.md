@@ -308,36 +308,44 @@ regrese en su lugar al menú de especialidades.
 
 `#nefrologia-view` (`modules/nefrologia/`) usa como menú principal un
 **diagrama interactivo de la nefrona**, en vez de un Atlas abstracto tipo
-Hematología: el propio SVG hace de mapa de navegación y de herramienta de
-estudio a la vez, decisión tomada desde el principio para no tener que
-rehacer la parte visual más adelante según se vaya añadiendo contenido
-(mismo problema que costó resolver en Hematología al pasar de pestañas de
-texto al cuaderno de campo).
+Hematología: la propia ilustración hace de mapa de navegación y de
+herramienta de estudio a la vez, decisión tomada desde el principio para no
+tener que rehacer la parte visual más adelante según se vaya añadiendo
+contenido (mismo problema que costó resolver en Hematología al pasar de
+pestañas de texto al cuaderno de campo).
 
-- **`nefro-menu.html`** contiene el `<svg class="nefrona-diagram">`, dibujado
-  dentro de una cuña de tejido renal decorativa (`.kidney-context`: corteza +
-  médula + línea de la unión corticomedular, para que las nefronas se lean
-  en su contexto anatómico real y no como líneas abstractas) con **las dos
-  nefronas dibujadas por separado y en paralelo**, no una genérica: la
-  **cortical** (~85%, asa corta que apenas entra en la médula externa) a la
-  izquierda y la **yuxtamedular** (~15%, asa larga que llega hasta la
-  papila, responsable del gradiente que permite concentrar mucho la orina) a
-  la derecha, compartiendo un único conducto colector central. Cada tramo
-  anatómico es un `<g data-segmento="...">` (`glomerulo`, `tubulo-proximal`,
+- **`nefro-menu.html`** usa una **fotografía/ilustración anatómica real**
+  (`js/modules/nefrologia/img/nefrona-anatomia.jpg`, corte de tejido renal
+  con las dos nefronas — cortical de asa corta y yuxtamedular de asa larga
+  — que llegó como referencia del usuario) en vez de un dibujo hecho a mano:
+  un primer intento con SVG dibujado a mano quedó demasiado abstracto/poco
+  realista, así que se sustituyó por la imagen real. La interactividad se
+  consigue con **botones "hotspot" invisibles superpuestos por posición
+  porcentual** (`<button class="nefrona-hotspot" data-segmento="..."
+  style="left:X%; top:Y%;">`, mismo patrón de posicionamiento por `%` que
+  `.region-btn` del Atlas) dentro de un contenedor
+  `.nefrona-photo-wrap.article-figure` con `position:relative` — cada
+  hotspot se coloca a ojo sobre la zona correspondiente de la foto
+  (verificado visualmente con capturas de Playwright, ajustando el `%`
+  hasta que el punto cae sobre la estructura real) y no dibuja nada él
+  mismo, es solo una zona táctil con un aro de color encima
+  (`.nefrona-hotspot-dot`). Al llevar la clase `article-figure`, la imagen
+  hereda gratis el comportamiento de "toca para ampliar a pantalla
+  completa" de `core/lightbox.js` en cualquier zona sin hotspot encima —
+  útil porque la foto trae su propio texto pequeño en inglés que conviene
+  poder ampliar. Las claves `data-segmento` (`glomerulo`, `tubulo-proximal`,
   `asa-descendente`, `asa-ascendente-delgada` — segmento de transporte
   pasivo presente casi solo en el asa larga yuxtamedular, `asa-ascendente-gruesa`
   — la del NKCC2, diana de los diuréticos de asa, `tubulo-distal`,
-  `colector`), dibujado a mano con primitivas simples (círculos, paths
-  cortos), mismo espíritu tinta que `.field-illust`/`.micro-svg`. La misma
-  clave `data-segmento` se repite en las dos nefronas (ambas tienen
-  glomérulo, túbulo proximal, etc.) — `nefrona.js` ya resuelve esto sin
-  cambios, porque resalta y usa TODOS los elementos que coincidan con la
-  clave tocada, no solo el primero. Cada `<g>` lleva un `path`/`circle`
-  invisible adicional (clase `.hit-area`, trazo ancho y transparente) para
-  que el área táctil sea más grande que el trazo visible — importante para
-  uso a pie de cama en móvil. Debajo del SVG hay un panel de detalle
-  (`#nefro-panel-segmento`) y un selector de "modo interactivo"
-  (`#nefro-modo-select`) con diuréticos/patologías.
+  `colector`) se repiten una vez por cada nefrona (cortical a la izquierda
+  de la foto, yuxtamedular a la derecha) — `nefrona.js` ya resuelve esto sin
+  cambios, porque resalta y usa TODOS los hotspots que coincidan con la
+  clave tocada, no solo el primero. Debajo de la foto hay un panel de
+  detalle (`#nefro-panel-segmento`) y un selector de "modo interactivo"
+  (`#nefro-modo-select`) con diuréticos/patologías. Si se necesita más
+  contenido anatómico interactivo en el futuro (otro corte, otra vista),
+  repite este mismo patrón — foto real + hotspots por `%` — en vez de volver
+  a dibujar SVG a mano.
 - **`nefrona.js`** (`initNefrona({ onCategoria })`) es un componente
   **bespoke nuevo, no una generalización de `atlas.js`**: su interacción es
   distinta (pinta canales/transportadores Y tiene un modo por

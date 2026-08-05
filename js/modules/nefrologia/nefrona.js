@@ -1,10 +1,12 @@
-// Diagrama interactivo de la nefrona: menú principal de Nefrología. Un
-// mismo SVG hace de mapa de navegación (tocar un segmento lleva a sus
-// categorías de contenido) y de herramienta de estudio (muestra los
-// canales/transportadores de esa zona, y un modo interactivo resalta
-// segmentos según el diurético o la patología elegidos). No conoce el
-// contenido clínico real de cada categoría — delega en onCategoria(key),
-// igual que atlas.js delega en onRoute(key).
+// Diagrama interactivo de la nefrona: menú principal de Nefrología. Una
+// ilustración anatómica real (js/modules/nefrologia/img/nefrona-anatomia.jpg)
+// con botones invisibles ("hotspots") superpuestos por posición porcentual
+// hace de mapa de navegación (tocar un segmento lleva a sus categorías de
+// contenido) y de herramienta de estudio (muestra los canales/transportadores
+// de esa zona, y un modo interactivo resalta segmentos según el diurético o
+// la patología elegidos). No conoce el contenido clínico real de cada
+// categoría — delega en onCategoria(key), igual que atlas.js delega en
+// onRoute(key).
 import { segmentosNefrona, modosInteractivos } from '../../data/nefrona-data.js';
 
 function renderCanales(cont, canales) {
@@ -22,9 +24,9 @@ function renderCanales(cont, canales) {
 }
 
 export function initNefrona({ onCategoria }) {
-    const svg = document.querySelector('.nefrona-diagram');
+    const stage = document.getElementById('nefrona-photo-wrap');
     const panel = document.getElementById('nefro-panel-segmento');
-    if (!svg || !panel) return { reset: () => {} };
+    if (!stage || !panel) return { reset: () => {} };
 
     const titulo = document.getElementById('nefro-segmento-titulo');
     const canalesCont = document.getElementById('nefro-segmento-canales');
@@ -36,8 +38,8 @@ export function initNefrona({ onCategoria }) {
         const data = segmentosNefrona[key];
         if (!data) return;
 
-        svg.querySelectorAll('[data-segmento]').forEach(g => g.classList.remove('segmento-activo'));
-        svg.querySelectorAll(`[data-segmento="${key}"]`).forEach(g => g.classList.add('segmento-activo'));
+        stage.querySelectorAll('[data-segmento]').forEach(g => g.classList.remove('segmento-activo'));
+        stage.querySelectorAll(`[data-segmento="${key}"]`).forEach(g => g.classList.add('segmento-activo'));
 
         panel.style.display = 'block';
         titulo.textContent = data.nombre;
@@ -55,7 +57,7 @@ export function initNefrona({ onCategoria }) {
         }
     }
 
-    svg.addEventListener('click', (e) => {
+    stage.addEventListener('click', (e) => {
         const g = e.target.closest('[data-segmento]');
         if (g) seleccionarSegmento(g.dataset.segmento);
     });
@@ -66,7 +68,7 @@ export function initNefrona({ onCategoria }) {
     });
 
     function limpiarResaltadoModo() {
-        svg.querySelectorAll('.canal-resaltado').forEach(g => g.classList.remove('canal-resaltado'));
+        stage.querySelectorAll('.canal-resaltado').forEach(g => g.classList.remove('canal-resaltado'));
     }
 
     modoSelect.addEventListener('change', () => {
@@ -77,7 +79,7 @@ export function initNefrona({ onCategoria }) {
             return;
         }
         modo.segmentos.forEach(key =>
-            svg.querySelectorAll(`[data-segmento="${key}"]`).forEach(g => g.classList.add('canal-resaltado')));
+            stage.querySelectorAll(`[data-segmento="${key}"]`).forEach(g => g.classList.add('canal-resaltado')));
         modoExplicacion.style.display = 'block';
         modoExplicacion.innerHTML = `
             <strong>${modo.etiqueta}</strong>
@@ -91,7 +93,7 @@ export function initNefrona({ onCategoria }) {
         // volver al menú de Nefrología desde una categoría, para que el
         // diagrama arranque siempre neutro.
         reset: () => {
-            svg.querySelectorAll('[data-segmento]').forEach(g => g.classList.remove('segmento-activo'));
+            stage.querySelectorAll('[data-segmento]').forEach(g => g.classList.remove('segmento-activo'));
             limpiarResaltadoModo();
             panel.style.display = 'none';
             modoSelect.value = '';
