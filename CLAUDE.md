@@ -354,6 +354,23 @@ y abrir `http://localhost:8000/`. Abrir el archivo directamente con
 servirse por http. El despliegue real es GitHub Pages, que ya sirve por
 https sin que haya que hacer nada extra.
 
+### Cache-busting de CSS/JS
+
+Los `<link rel="stylesheet">` y el `<script type="module" src="js/main.js">`
+de `index.html` llevan un parámetro `?v=YYYYMMDD` (fecha de hoy). Existe
+porque GitHub Pages/los navegadores móviles cachean agresivamente
+`css/*.css` y `js/main.js` por su URL exacta: si solo cambia el contenido
+del archivo pero no su URL, un usuario que ya visitó la app antes puede
+seguir viendo el CSS/JS viejo aunque `index.html` sí se recargue (esto
+pasó de verdad: tras desplegar el Atlas Hematológico, la maquetación se
+veía completamente rota — vista sin estilos, todas las pantallas
+apiladas — en un móvil que tenía cacheado el `components.css` anterior).
+**Si tu cambio toca cualquier archivo `.css` o `js/main.js`, actualiza esa
+fecha a la de hoy antes de hacer commit**, para forzar a que se descargue
+de nuevo. Los demás módulos `.js` (importados vía ES modules desde
+`main.js`) no llevan este parámetro — si en el futuro se detecta el mismo
+problema con un módulo concreto, aplica el mismo patrón a su import.
+
 ## Idioma
 
 Todo el contenido clínico y los comentarios de código están en español,
