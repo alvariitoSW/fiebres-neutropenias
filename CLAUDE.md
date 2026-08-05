@@ -331,6 +331,48 @@ documento, súbelo también a `docs/` y enlázalo de la misma forma: es
 preferible a enlazar a una URL externa, porque no depende de que esa URL
 siga viva ni de tener acceso a internet para comprobarla.
 
+## Apartados desplegables: `.micro-prof-item`
+
+El componente `.micro-profiles` / `.micro-prof-item` (definido en
+`css/components.css`) es el acordeón que se usa en toda la app para listas
+de perfiles/causas/pruebas dentro de una pestaña (ej. "3 patrones
+específicos de infiltrado en LMA", "Factores asociados a mayor
+mortalidad"). Se usa en `reconocimiento.html`, `sindromes.html`/`cid.js`,
+y en `trasplante/*.html`/`*.js` (algunos módulos generan estos bloques por
+JS con template strings, no solo HTML estático — si tocas este componente,
+busca `micro-prof-item` en **todo** `js/`, no solo en los `.html`).
+
+Cada item sigue este patrón:
+
+```html
+<div class="micro-prof-item">
+    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
+        <span>🫁 Título</span> <span class="toggle-icon">+</span>
+    </div>
+    <div class="micro-prof-body">...</div>
+</div>
+```
+
+El borde izquierdo de cada item y el color de sus `<strong>` internos usan
+`--item-color`, que rota automáticamente entre los 4 colores de acento
+según la posición del item dentro de `.micro-profiles` (vía `:nth-child`)
+— no hace falta asignarlo a mano. Dentro de `.micro-prof-body`, en vez de
+un párrafo corrido, usa el patrón que mejor encaje con el contenido real
+(nunca resumas ni quites contenido, solo reestructúralo):
+
+- **Campos con etiqueta** (Contexto/Mecanismo/Manejo, Patrón/Diagnóstico,
+  etc.): un `<dl class="kv-row">` por campo, con `<dt>` la etiqueta y
+  `<dd>` el texto — se pinta como fila apilada con la etiqueta en
+  mayúsculas del color del item, en vez de "Etiqueta: texto" corrido.
+- **Listas de términos sueltos** (antes unidas con "·" en un párrafo): un
+  `<ul class="term-chips">` con un `<li>` por término — se pintan como
+  píldoras en vez de texto corrido.
+- **Prosa narrativa real** (perfiles de enfermedad, viñetas clínicas): se
+  deja como párrafo normal, pero con `<strong>` en los 2-4 términos/cifras
+  realmente clave de cada frase — el color ya lo pone la regla
+  `.micro-prof-body strong { color: var(--item-color) }`, no hace falta
+  poner `style="color:..."` a mano.
+
 ## Convención de un módulo de calculadora
 
 Cada archivo `<calculadora>.js` sigue siempre esta forma:
@@ -396,7 +438,11 @@ apiladas — en un móvil que tenía cacheado el `components.css` anterior).
 fecha a la de hoy antes de hacer commit**, para forzar a que se descargue
 de nuevo. Los demás módulos `.js` (importados vía ES modules desde
 `main.js`) no llevan este parámetro — si en el futuro se detecta el mismo
-problema con un módulo concreto, aplica el mismo patrón a su import.
+problema con un módulo concreto, aplica el mismo patrón a su import. Si
+haces **más de un despliegue el mismo día** que toque CSS/`main.js`, la
+fecha sola no basta (ya está "hoy" desde el primer despliegue): añade un
+sufijo, p. ej. `?v=20260805-2`, para que el segundo despliegue también
+fuerce la descarga.
 
 ## Idioma
 

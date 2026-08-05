@@ -278,14 +278,43 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 .info-title { font-size: 0.75rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
 .info-content { font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; }
 
-.micro-profiles { margin-top: 15px; border-radius: 2px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; }
-.micro-prof-item { border-bottom: 1px solid rgba(255,255,255,0.1); }
-.micro-prof-item:last-child { border-bottom: none; }
-.micro-prof-head { background: rgba(0,0,0,0.4); padding: 10px; font-size: 0.85rem; font-weight: bold; color: var(--accent-blue); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+.micro-profiles { margin-top: 15px; display: flex; flex-direction: column; gap: 7px; }
+.micro-prof-item {
+    border: 1px solid rgba(255,255,255,0.1); border-left: 3px solid var(--item-color, var(--accent-blue));
+    border-radius: 3px; overflow: hidden; background: rgba(0,0,0,0.15);
+}
+.micro-profiles .micro-prof-item:nth-child(4n+1) { --item-color: var(--accent-blue); }
+.micro-profiles .micro-prof-item:nth-child(4n+2) { --item-color: var(--accent-red); }
+.micro-profiles .micro-prof-item:nth-child(4n+3) { --item-color: var(--accent-green); }
+.micro-profiles .micro-prof-item:nth-child(4n)   { --item-color: var(--accent-purple); }
+
+.micro-prof-head { background: rgba(0,0,0,0.4); padding: 10px 12px; font-size: 0.85rem; font-weight: bold; color: var(--text-main); cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 .micro-prof-head:hover { background: rgba(212, 175, 55, 0.06); }
-.micro-prof-body { display: none; padding: 10px; font-size: 0.75rem; color: var(--text-muted); background: rgba(0,0,0,0.2); line-height: 1.5; }
-.micro-prof-body.active { display: block; }
+.micro-prof-head .toggle-icon { color: var(--item-color, var(--accent-blue)); font-size: 0.95rem; flex-shrink: 0; transition: transform 0.2s ease; display: inline-block; }
+.micro-prof-head.open .toggle-icon { transform: rotate(45deg); }
+
+.micro-prof-body { display: none; padding: 12px; font-size: 0.78rem; color: var(--text-muted); background: rgba(0,0,0,0.2); line-height: 1.6; }
+.micro-prof-body.active { display: block; animation: fadeIn 0.25s ease; }
 .micro-prof-body ul { margin: 6px 0 0 0; padding-left: 18px; }
+.micro-prof-body strong { color: var(--item-color, var(--accent-blue)); font-weight: bold; }
+
+/* Filas etiqueta/valor dentro de una ficha (Contexto/Mecanismo/Manejo...),
+   apiladas en vez de correr todas seguidas en el mismo párrafo. */
+.kv-row { margin: 0 0 10px; }
+.kv-row:last-child { margin-bottom: 0; }
+.kv-row dt {
+    font-size: 0.62rem; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;
+    color: var(--item-color, var(--accent-blue)); margin: 0 0 2px;
+}
+.kv-row dd { margin: 0; color: var(--text-main); }
+
+/* Lista de términos sueltos (antes separados por "·" en un párrafo) como
+   píldoras individuales, más fáciles de escanear de un vistazo. */
+.term-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.term-chips li {
+    font-size: 0.72rem; color: var(--text-main); background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 3px 10px;
+}
 
 /* ===================================================== */
 /* ATLAS HEMATOLÓGICO — mapa interactivo de navegación    */

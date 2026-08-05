@@ -107,8 +107,8 @@ function renderTerminologia() {
     if (!cont) return;
     cont.innerHTML = cidTerminologia.map(t => `
         <div class="micro-prof-item">
-            <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
-                <span>${t.termino}</span> <span>+</span>
+            <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
+                <span>${t.termino}</span> <span class="toggle-icon">+</span>
             </div>
             <div class="micro-prof-body">
                 ${t.definicion}
@@ -186,8 +186,8 @@ function renderLaboratorio() {
     if (!cont) return;
     cont.innerHTML = cidHallazgosLaboratorio.map(h => `
         <div class="micro-prof-item">
-            <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
-                <span>${h.titulo}</span> <span>+</span>
+            <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
+                <span>${h.titulo}</span> <span class="toggle-icon">+</span>
             </div>
             <div class="micro-prof-body">${h.texto}</div>
         </div>

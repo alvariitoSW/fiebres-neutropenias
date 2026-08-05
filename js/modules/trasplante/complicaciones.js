@@ -18,8 +18,8 @@ import {
 function renderAccordionList(elementId, items) {
     document.getElementById(elementId).innerHTML = items.map(i => `
         <div class="micro-prof-item">
-            <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
-                <span>${i.titulo}</span> <span>+</span>
+            <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
+                <span>${i.titulo}</span> <span class="toggle-icon">+</span>
             </div>
             <div class="micro-prof-body">${i.texto}</div>
         </div>

@@ -19,8 +19,8 @@ function renderProductos() {
     const cont = document.getElementById('cart-productos-lista');
     cont.innerHTML = productosCarT.map(p => `
         <div class="micro-prof-item">
-            <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
-                <span>💊 ${p.nombre}</span> <span>+</span>
+            <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
+                <span>💊 ${p.nombre}</span> <span class="toggle-icon">+</span>
             </div>
             <div class="micro-prof-body">${p.indicacion}</div>
         </div>

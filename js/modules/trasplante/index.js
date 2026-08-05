@@ -51,8 +51,8 @@ function renderCausas() {
 function renderAcondicionamiento() {
     document.getElementById('tph-intensidad-lista').innerHTML = intensidadAcondicionamientoData.map(i => `
         <div class="micro-prof-item">
-            <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
-                <span>⚗️ ${i.nivel}</span> <span>+</span>
+            <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
+                <span>⚗️ ${i.nivel}</span> <span class="toggle-icon">+</span>
             </div>
             <div class="micro-prof-body">${i.descripcion}</div>
         </div>
@@ -65,8 +65,8 @@ function renderAcondicionamiento() {
 
     document.getElementById('tph-soporte-lista').innerHTML = soporteComunAcondicionamiento.map(s => `
         <div class="micro-prof-item">
-            <div class="micro-prof-head" onclick="this.nextElementSibling.classList.toggle('active')">
-                <span>${s.titulo}</span> <span>+</span>
+            <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
+                <span>${s.titulo}</span> <span class="toggle-icon">+</span>
             </div>
             <div class="micro-prof-body">${s.texto}</div>
         </div>
