@@ -123,6 +123,8 @@
                 <img src="js/modules/nefrologia/img/fisio-nefrona-unidad-funcional.jpg" alt="Nefrona: glomérulo, cápsula de Bowman, túbulo proximal, asa de Henle, túbulo contorneado distal, aparato yuxtaglomerular y tubo colector" loading="lazy">
                 <div class="article-figure-caption">Figura 2. La nefrona: glomérulo + cápsula de Bowman → túbulo proximal → asa de Henle (médula) → túbulo distal → tubo colector, con el aparato yuxtaglomerular (mácula densa) en el ángulo de vuelta a la corteza.</div>
             </div>
+            <dl class="kv-row"><dt>Recorrido del filtrado</dt><dd>Cápsula de Bowman → túbulo contorneado proximal → asa de Henle (rama descendente delgada → ascendente delgada → ascendente gruesa) → túbulo contorneado distal → túbulo conector → conducto colector cortical → conducto colector medular → pelvis renal.</dd></dl>
+            <dl class="kv-row"><dt>Vascularización: dos lechos capilares en serie</dt><dd>Arteria renal → arterias interlobulares → arciformes → interlobulillares → arteriolas aferentes → <strong>capilares glomerulares</strong> (filtran) → arteriola eferente → <strong>capilares peritubulares</strong> (reabsorben) → venas → vena renal. Las arteriolas aferente y eferente regulan la resistencia y, con ella, la presión hidrostática en ambos lechos.</dd></dl>
             <table class="data-table">
                 <thead><tr><th>Función renal</th><th>Cómo la ejerce</th></tr></thead>
                 <tbody>
@@ -167,6 +169,9 @@
             </ul>
             <dl class="kv-row"><dt>TFG normal</dt><dd>~125 mL/min en hombres, ~105 mL/min en mujeres — el plasma completo se filtra más de 60 veces al día.</dd></dl>
             <dl class="kv-row"><dt>Dintel de filtración</dt><dd>Pasan moléculas &lt;3-4,5 nm (agua, glucosa, aminoácidos, desechos nitrogenados); proteínas y elementos con carga quedan retenidos.</dd></dl>
+            <dl class="kv-row"><dt>¿De qué depende la TFG?</dt><dd>De 3 factores: 1) la presión de filtración neta; 2) la superficie/extensión de la membrana de filtración; 3) su permeabilidad. En condiciones fisiológicas, la membrana apenas cambia de extensión o permeabilidad, así que en la práctica la TFG la regula casi por completo la presión neta.</dd></dl>
+            <dl class="kv-row"><dt>Cómo se mide en la práctica</dt><dd>Aclaramiento de un marcador que se filtra libremente y no se reabsorbe ni secreta (inulina, el patrón oro). En clínica se usa la creatinina, que sí se secreta algo (10-15%) — un margen que compensa la sobrevaloración del método colorimétrico habitual.</dd></dl>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">👉 Los podocitos no son solo estructurales: mantienen baja actividad mitótica pero sintetizan activamente colágeno IV, fibronectina, laminina y heparán sulfato, contribuyendo a la carga electronegativa de la barrera.</p>
         </div>
 
         <div id="fisio-regulacion" class="tab-content">
@@ -238,7 +243,47 @@
             <dl class="kv-row"><dt>Vía transcelular</dt><dd>Transportadores activos (primarios: Na⁺/K⁺-ATPasa; secundarios: cotransporte/contratransporte con Na⁺) y transporte facilitado — todos saturables.</dd></dl>
             <dl class="kv-row"><dt>Vía paracelular</dt><dd>Agua y solutos por arrastre de solvente, siguiendo el gradiente osmótico generado por el transporte activo de Na⁺.</dd></dl>
             <dl class="kv-row"><dt>Transporte máximo (ejemplo: glucosa)</dt><dd>90% se reabsorbe por SGLT2 (túbulo proximal inicial) y 10% por SGLT1 (segmento recto). Tm ≈ 320 mg/min; por encima de un umbral plasmático ~180 mg/dL, el sistema se satura y aparece glucosuria — el mecanismo que bloquean los inhibidores de SGLT2.</dd></dl>
-            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">👉 El detalle canal por canal de cada segmento (NKCC2, NCC, ENaC, acuaporinas...) está en la nefrona interactiva, más abajo.</p>
+
+            <p class="section-label" style="margin-top:16px;">Mecanismo de transporte, segmento a segmento</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🟡 Túbulo proximal</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Motor</dt><dd>Bombas Na⁺/K⁺ basolaterales; arrastran por cotransporte glucosa, aminoácidos, fosfato y sulfato hasta su transporte máximo (Tm) — superado el umbral, el exceso se excreta.</dd></dl>
+                        <dl class="kv-row"><dt>NHE3 (antitransporte Na⁺/H⁺)</dt><dd>Secreta H⁺ y recupera el bicarbonato filtrado. Regulado hormonalmente: se inhibe con PTH y glucagón, se activa con angiotensina II, alfa-catecolaminas o endotelina.</dd></dl>
+                        <dl class="kv-row"><dt>Cloro y agua</dt><dd>En la parte final, el Cl⁻ (ya concentrado) pasa junto al Na⁺ como ClNa por las uniones intercelulares; el agua se reabsorbe en condiciones de isotonicidad (70% del agua filtrada).</dd></dl>
+                        <dl class="kv-row"><dt>Secreción</dt><dd>Todos los ácidos y bases orgánicas, toxinas y fármacos, más el excedente de productos que circulan en plasma.</dd></dl>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🟢 Asa de Henle — rama descendente delgada</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Alta permeabilidad al agua (vía acuaporinas) y nula reabsorción de ClNa; impermeable a la urea. El agua sale por gradiente osmótico hacia el intersticio medular.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔵 Asa de Henle — rama ascendente delgada</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Impermeable al agua; el ClNa sale por gradiente químico y la urea entra también por gradiente químico — el mecanismo pasivo que ayuda a concentrar el intersticio medular.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔴 Asa de Henle — rama ascendente gruesa</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Impermeable al agua. Bombas basolaterales de Na⁺/K⁺ muy activas + cotransportador luminal Na⁺/K⁺/2Cl⁻ (NKCC2) que regula la ADH — diana de los diuréticos de asa. El líquido tubular sale aún más hipotónico.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🟣 Túbulo contorneado distal</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Cotransportador apical Na⁺/Cl⁻ + intercambiador basolateral 2Na⁺/Ca²⁺ (la reabsorción de Na⁺ implica secreción de Ca²⁺). Aquí está la mácula densa: analiza el Na⁺ tubular y, si aumenta, sus células liberan renina.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚪ Túbulo conector y conducto colector</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Todo regulado hormonalmente: canales de Na⁺ activados por aldosterona; canales de K⁺ activados por aldosterona e inhibidos por el H⁺ luminal; células intercalares tipo A con intercambiadores Na⁺/H⁺ y Cl⁻/HCO₃⁻; y acuaporinas bajo control de la ADH.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Secreción de sustancias</p>
+            <ul class="term-chips">
+                <li>H⁺</li><li>K⁺</li><li>NH₄⁺ (amonio)</li><li>Creatinina</li>
+                <li>Ácidos/bases orgánicas</li><li>Fármacos unidos a proteínas</li><li>CO₃H⁻ (de la reabsorción)</li>
+            </ul>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Lo no reabsorbido no siempre basta: sustancias unidas a proteínas transportadoras (no se filtran) y productos intermedios de la propia reabsorción deben secretarse activamente desde los capilares peritubulares a la luz tubular para poder excretarse.</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">👉 Qué fármaco bloquea cada canal (diuréticos de asa, tiazidas, ahorradores de K⁺...) está en la nefrona interactiva, más abajo.</p>
         </div>
 
         <div id="fisio-hormonal" class="tab-content">
@@ -277,7 +322,12 @@
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩸 Eritropoyetina (EPO)</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">~90% se produce en fibroblastos intersticiales de la corteza renal. Ante hipoxia, se estabiliza el factor HIF (sobre todo HIF-2), que activa la transcripción del gen de la EPO → estimula la eritropoyesis en médula ósea.</div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Origen</dt><dd>~90% se produce en fibroblastos intersticiales de la corteza renal (el resto, en el hígado).</dd></dl>
+                        <dl class="kv-row"><dt>Estructura</dt><dd>Glicoproteína de 30,4 kDa, 165 aminoácidos; concentración plasmática basal 6-32 UI/mL.</dd></dl>
+                        <dl class="kv-row"><dt>Regulación</dt><dd>Ante hipoxia se estabiliza el factor HIF (sobre todo HIF-2), que activa la transcripción del gen de la EPO; en normoxia, GATA-2 y NF-κB inhiben esa expresión.</dd></dl>
+                        <dl class="kv-row"><dt>Trombopoyetina (TPO)</dt><dd>El túbulo contorneado proximal también produce TPO (aunque el hígado es la fuente principal) — relevante porque en la ERC terminal su descenso puede afectar la actividad plaquetaria.</dd></dl>
+                    </div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚡ Renina y SRAA</span> <span class="toggle-icon">+</span></div>
@@ -290,14 +340,19 @@
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Otros mediadores vasoactivos</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
-                        <dl class="kv-row"><dt>PNB / PNC</dt><dd>Familia del PNA; el PNC parece inhibir la fibrosis renal asociada a la edad.</dd></dl>
-                        <dl class="kv-row"><dt>Endotelinas</dt><dd>Vasoconstrictoras; poca actividad en fisiología normal, pero contribuyen a la vasoconstricción y al daño podocitario en la enfermedad renal.</dd></dl>
-                        <dl class="kv-row"><dt>Prostaglandinas (PGE₂, PGI₂)</dt><dd>Vasodilatadoras; mantienen la perfusión renal y regulan el transporte de Na⁺/Cl⁻ en el asa de Henle — la base de por qué los AINE pueden precipitar fracaso renal.</dd></dl>
+                        <dl class="kv-row"><dt>Péptido natriurético tipo B (PNB)</dt><dd>A dosis fisiológicas induce natriuresis y diuresis sin cambiar el flujo renal ni la TFG; a dosis superiores, aumenta ambos.</dd></dl>
+                        <dl class="kv-row"><dt>Péptido natriurético tipo C (PNC)</dt><dd>Presente en el riñón; inhibe el proceso de fibrosis renal asociado a la edad — posible diana futura de biomarcadores/terapias.</dd></dl>
+                        <dl class="kv-row"><dt>Endotelinas</dt><dd>Péptidos de 21 aminoácidos producidos por células endoteliales, mesangiales y del túbulo (estimuladas por angiotensina II, bradicinina, epinefrina). Poca actividad en fisiología normal, pero contribuyen a vasoconstricción de arteriolas glomerulares y daño podocitario en la enfermedad renal.</dd></dl>
+                        <dl class="kv-row"><dt>Prostaglandinas (PGE₂, PGI₂)</dt><dd>Sintetizadas a partir del ácido araquidónico por la COX-1/COX-2. Vasodilatadoras; mantienen la perfusión renal y regulan el transporte de Na⁺/Cl⁻ en el asa de Henle (PGE₂) y el filtrado glomerular/secreción de renina (PGI₂) — la base de por qué los AINE pueden precipitar fracaso renal.</dd></dl>
                     </div>
                 </div>
                 <div class="micro-prof-item">
-                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🍬 Metabolismo (glucosa e insulina)</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">El riñón hace gluconeogénesis (más activa en acidosis, relevante en cetoacidosis diabética) y degrada la insulina filtrada/reabsorbida — por eso los requerimientos de insulina bajan en la insuficiencia renal.</div>
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🍬 Otras funciones metabólicas</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Gluconeogénesis</dt><dd>La médula renal genera glucosa a partir de lactato, glicerol o aminoácidos vía glucosa-6-fosfatasa; se activa en ayuno y, a diferencia del hígado, aumenta en acidosis — relevante en la cetoacidosis diabética.</dd></dl>
+                        <dl class="kv-row"><dt>Insulina</dt><dd>El riñón regula sus niveles plasmáticos mediante reabsorción tubular proximal (99%) y filtración glomerular; tras reabsorberse se degrada en los endosomas. En insuficiencia renal esta degradación cae, por lo que bajan los requerimientos de insulina exógena.</dd></dl>
+                        <dl class="kv-row"><dt>Gastrina</dt><dd>Sufre metabolismo renal — en el fracaso renal se observa un incremento significativo de sus niveles, lo que se ha vinculado a mayor riesgo de enfermedad péptica.</dd></dl>
+                    </div>
                 </div>
             </div>
         </div>
