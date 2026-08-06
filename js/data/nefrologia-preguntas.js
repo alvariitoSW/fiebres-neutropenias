@@ -1,9 +1,27 @@
 // Banco de preguntas de repaso (quiz tipo Anki) de Nefrología. Cada
-// pregunta: id estable (clave de localStorage), tema (misma clave que las
-// categorías de nefrona-data.js, para poder filtrar por tema más adelante
-// sin migrar el banco), enunciado, 4 opciones, índice de la correcta y
-// explicación breve. Primer lote: solo diuréticos de asa (única categoría
-// real por ahora) — se amplía según se añadan más categorías.
+// pregunta: id estable (clave de localStorage), tema (mismo `data-tab` que
+// la ficha del cuaderno de campo de la que sale la pregunta), enunciado, 4
+// opciones, índice de la correcta y explicación breve.
+//
+// `temasNefrologia` es la lista de temas con etiqueta legible que consume
+// el selector de tema del quiz (initQuiz({ temas })) — "más adelante se
+// filtra por tema" ya no es una nota aspiracional, es este array.
+export const temasNefrologia = [
+    { key: 'diureticos-asa', etiqueta: 'Diuréticos de asa' },
+    { key: 'fisio-anatomia', etiqueta: 'Anatomía funcional' },
+    { key: 'fisio-filtracion', etiqueta: 'Filtración glomerular' },
+    { key: 'fisio-regulacion', etiqueta: 'Regulación del filtrado' },
+    { key: 'fisio-tubular', etiqueta: 'Reabsorción y secreción' },
+    { key: 'fisio-hormonal', etiqueta: 'Regulación hormonal del túbulo' },
+    { key: 'fisio-endocrino', etiqueta: 'Función endocrina del riñón' },
+    { key: 'fisio-agua-regulacion', etiqueta: 'Regulación del agua corporal' },
+    { key: 'fisio-hiponatremia', etiqueta: 'Hiponatremia' },
+    { key: 'fisio-hipernatremia', etiqueta: 'Hipernatremia' },
+    { key: 'fisio-potasio-regulacion', etiqueta: 'Regulación del potasio corporal' },
+    { key: 'fisio-hipopotasemia', etiqueta: 'Hipopotasemia' },
+    { key: 'fisio-hiperpotasemia', etiqueta: 'Hiperpotasemia' },
+];
+
 export const preguntasNefrologia = [
     {
         id: 'nefro-q001',

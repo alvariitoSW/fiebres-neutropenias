@@ -324,8 +324,15 @@ por encima que sí diera cabida a todos.
   usuario) sirve de fondo decorativo a 7 `.region-btn` (clase **reutilizada
   tal cual del Atlas Hematológico** — `.region-btn`/`.region-orb`/`.region-label`/
   `.region-visited`/`.node-sm` ya eran genéricas, sin acoplar a Hematología,
-  así que no se duplican) posicionados por `%` sobre zonas del dibujo. A
-  diferencia del Atlas (mapa general + pantallas de zona), aquí es **un solo
+  así que no se duplican) posicionados por `%` sobre zonas del dibujo. La
+  silueta es un único `<path>` con dos curvas bézier grandes por lado (una
+  convexa por el borde externo, otra que se mete hacia dentro hasta un
+  punto de inflexión hacia el centro — el hilio) — si en el futuro no se
+  lee como riñón reconocible, ese es el `<path>` a retocar, coordenada a
+  coordenada y verificando con capturas de Playwright (mismo método que ya
+  se usó para llegar a la forma actual), no las posiciones `%` de los
+  nodos, que son independientes de la silueta. A diferencia del Atlas
+  (mapa general + pantallas de zona), aquí es **un solo
   nivel**: cada nodo va directo a su destino. `rinon.js` (`initRinon({ onRoute })`)
   no conoce el contenido real, delega en `onRoute(key)` igual que `atlas.js`
   y `nefrona.js`. Uno de los 7 nodos (`fisiopatologia`) no abre una vista
@@ -433,7 +440,18 @@ por encima que sí diera cabida a todos.
   genérico para no repetir el patrón select→result-box 5 veces). Se
   añadieron 48 preguntas nuevas al quiz (`nefro-q050`-`q098`, `tema` =
   la misma clave que el `data-tab` de cada ficha), llevando el banco de
-  Nefrología a 98 preguntas.
+  Nefrología a 98 preguntas repartidas en 13 temas.
+- **Selector de tema en el quiz** (`js/modules/quiz/quiz.js`): con el banco
+  de Nefrología ya en 98 preguntas, `initQuiz()` ganó un tercer parámetro
+  opcional `temas` (array `{ key, etiqueta }` — en Nefrología,
+  `temasNefrologia`, exportado junto a `preguntasNefrologia` en
+  `nefrologia-preguntas.js`, con una entrada por `data-tab`). Si se pasa,
+  al abrir el quiz aparece antes una pantalla "¿Qué quieres repasar?" con
+  un botón por tema (+ "Todos los temas") y el nº de preguntas de cada uno,
+  que filtra el banco por `pregunta.tema` antes de barajar. **Degradación
+  elegante**: sin `temas`, `initQuiz()` se comporta exactamente igual que
+  antes (arranca directo, sin pantalla intermedia) — así que no hace falta
+  tocar ningún otro módulo que ya llame a `initQuiz()` sin ese parámetro.
 - **`nefro-menu.html`** (nivel 1, la nefrona) usa una **fotografía/ilustración anatómica real**
   (`js/modules/nefrologia/img/nefrona-anatomia.jpg`, corte de tejido renal
   con las dos nefronas — cortical de asa corta y yuxtamedular de asa larga
@@ -476,12 +494,51 @@ por encima que sí diera cabida a todos.
   "🚧 en preparación" sin navegar a ningún sitio roto. Nunca conoce el
   contenido real — delega en `onCategoria(key)`, igual que `atlas.js`
   delega en `onRoute(key)`.
+  - **Mini-diagrama de flujo de iones por canal**: cada canal de
+    `segmentosNefrona` puede llevar un array `flujo` (`{ ion, direccion }`,
+    `direccion` = `'reabsorcion'` o `'secrecion'`); `svgFlujo()` en
+    `nefrona.js` genera a partir de ahí un SVG inline de 3 columnas (LUZ /
+    CÉLULA / SANGRE) con una flecha por ion — verde hacia la sangre
+    (reabsorción), roja hacia la luz (secreción) — que se inyecta dentro del
+    `.micro-prof-body` de ese canal. No es una ilustración fija por canal:
+    es un generador genérico a partir de datos, así que añadir flujo a un
+    canal nuevo es solo añadir el array en `nefrona-data.js`, nunca tocar
+    SVG a mano. La leyenda de colores vive una sola vez, como texto fijo
+    encima de `#nefro-segmento-canales` en `nefro-menu.html` (no se repite
+    por canal). Este patrón nació aquí pero es genérico — si otro módulo
+    necesita "canal + iones que mueve", se puede reutilizar `svgFlujo()` tal
+    cual.
+  - **Enlace a la ficha completa desde el modo interactivo**: las entradas
+    de `modosInteractivos` de tipo patología pueden llevar un `link: {
+    panelId, tabId, etiqueta }`; si existe, `nefrona.js` pinta un botón bajo
+    la explicación breve que llama a `openCorkboardTopic(panelId, tabId)`
+    (la misma función que usa el Atlas para enlazar a Síndromes Urgentes) —
+    así "SIADH"/"Diabetes insípida"/"Hipopotasemia"/"Hiperpotasemia" en el
+    selector ya no se quedan en 2 líneas de texto, sino que llevan directo a
+    la ficha completa de Hiponatremia/Hipernatremia/Hipopotasemia/
+    Hiperpotasemia del cuaderno de campo de más abajo, en la misma página.
+    Los diuréticos no llevan `link` (ya tienen su propio flujo vía
+    `categorias`/`onCategoria` cuando aplica).
 - **`js/data/nefrona-data.js`** son los datos puros: `segmentosNefrona`
-  (canales por segmento + qué categorías de contenido cuelgan de él —
-  añadir/mover una categoría es solo tocar este objeto y el switcher de
-  `nefrologia/index.js`, nunca el SVG) y `modosInteractivos` (qué
-  segmento(s)/canal(es) resalta cada diurético o patología, con su
-  explicación).
+  (canales por segmento — cada canal con `nombre`/`funcion`/`diana` y,
+  opcionalmente, `flujo` — + qué categorías de contenido cuelgan de ese
+  segmento — añadir/mover una categoría es solo tocar este objeto y el
+  switcher de `nefrologia/index.js`, nunca el SVG) y `modosInteractivos`
+  (qué segmento(s)/canal(es) resalta cada diurético o patología, con su
+  explicación y, en las patologías, el `link` de arriba).
+- **Marca de "ya visto" en los cuadernos de campo**: `core/corkboard.js`
+  añade la clase `.visited` a cualquier `.field-card` cuyo tema se haya
+  abierto — tanto si se abre volteando la ficha como si se llega desde
+  fuera vía `openCorkboardTopic` (p. ej. el enlace del modo interactivo de
+  arriba, o el Atlas enlazando a Síndromes Urgentes). El check ✓ verde en
+  la esquina lo pinta un único `::before` en CSS
+  (`.field-card.visited .card-face.front::before`), sin tocar el HTML de
+  ninguna ficha — por eso el comportamiento apareció gratis en **todos**
+  los cuadernos de campo de la app (Reconocimiento, Síndromes Urgentes,
+  Trasplante, Fisiopatología renal), no solo en Nefrología. Es solo
+  memoria de sesión (sin `localStorage`, coherente con el resto de la
+  app), igual que las marcas `.visited` del Atlas Hematológico y del mapa
+  del riñón.
 - **`js/modules/nefrologia/index.js`** es el orquestador de los 3 niveles
   (mapa del riñón / nefrona / categoría): un único `nefroLevel`
   (`core/navigation.js`) con una entrada por vista (`kidney`, `nefrona`,

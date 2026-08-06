@@ -19,6 +19,12 @@ export function openCorkboardTopic(panelId, tabId) {
         target.classList.add('active');
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+    // Marca la(s) ficha(s) que llevan a este tema como "ya visto" (checkmark
+    // verde, ver .field-card.visited en components.css) — funciona tanto si
+    // se abre volteando la ficha como si se llega desde fuera (p. ej. el
+    // Atlas enlazando directo a un tema). Los data-tab son únicos en toda la
+    // app, así que no hace falta saber a qué tablero pertenece la ficha.
+    document.querySelectorAll(`.field-card[data-tab="${tabId}"]`).forEach(c => c.classList.add('visited'));
 }
 
 export function initCorkboard(boardId, panelId) {

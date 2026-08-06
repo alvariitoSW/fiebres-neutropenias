@@ -486,6 +486,18 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 }
 .back-cta:hover { color: #362a1a; }
 
+/* Marca de "ya visto" — puesta por core/corkboard.js en cualquier ficha
+   cuyo tema se haya abierto (aunque sea desde fuera, vía openCorkboardTopic).
+   Genérica: se aplica igual en todos los cuadernos de campo de la app sin
+   tocar su HTML, mismo espíritu que .region-visited del Atlas. */
+.field-card.visited .card-face.front::before {
+    content: '✓'; position: absolute; top: 6px; right: 6px; z-index: 2;
+    width: 15px; height: 15px; border-radius: 50%;
+    background: var(--accent-green); color: #1c2417;
+    font-size: 0.58rem; font-weight: bold; line-height: 15px; text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+
 .tap-hint { text-align: center; font-size: 0.62rem; color: var(--text-muted); margin: -8px 0 18px; letter-spacing: 0.5px; }
 
 /* ===================================================== */
@@ -507,7 +519,7 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 }
 .rinon-stage { position: relative; width: 100%; aspect-ratio: 320 / 420; overflow: hidden; }
 .rinon-landscape { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.rinon-silueta { fill: rgba(144,160,106,0.09); stroke: var(--accent-green); stroke-width: 2.5; stroke-opacity: 0.8; }
+.rinon-silueta { fill: rgba(144,160,106,0.16); stroke: var(--accent-green); stroke-width: 2.5; stroke-opacity: 0.85; }
 .rinon-piramide { fill: rgba(207,154,62,0.28); stroke: var(--accent-yellow); stroke-width: 1.4; stroke-opacity: 0.7; }
 .rinon-pelvis { fill: rgba(212,175,55,0.12); stroke: var(--accent-blue); stroke-width: 1.4; stroke-opacity: 0.55; }
 .rinon-ureter { fill: none; stroke: var(--accent-blue); stroke-width: 4; stroke-opacity: 0.7; stroke-linecap: round; }
@@ -567,6 +579,11 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
     border-color: var(--accent-yellow);
     box-shadow: 0 0 0 2px rgba(0,0,0,0.35), 0 0 10px var(--accent-yellow);
 }
+
+/* Mini-diagrama de flujo de iones (luz↔célula↔sangre) dentro de cada canal
+   de la nefrona interactiva (nefrona.js, función svgFlujo). Verde =
+   reabsorción, rojo = secreción — ver leyenda en #nefro-panel-segmento. */
+.canal-flujo-svg { width: 100%; max-width: 260px; display: block; margin: 8px auto 2px; }
 
 /* ===================================================== */
 /* SIMULADOR TFG — autorregulación del filtrado glomerular  */
@@ -640,3 +657,8 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
     color: var(--accent-yellow); border-radius: 4px; padding: 10px;
 }
 .quiz-siguiente:hover { background: rgba(207,154,62,0.28); }
+
+/* Pantalla previa de selección de tema (solo si initQuiz recibe `temas`).
+   Mismos botones .quiz-opcion reutilizados, sin CSS nuevo por botón. */
+.quiz-temas-titulo { font-size: 0.95rem; font-weight: bold; margin-bottom: 14px; }
+.quiz-temas-lista { display: flex; flex-direction: column; gap: 8px; max-height: 60vh; overflow-y: auto; }

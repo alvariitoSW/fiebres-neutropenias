@@ -3,11 +3,52 @@
 // con botones invisibles ("hotspots") superpuestos por posición porcentual
 // hace de mapa de navegación (tocar un segmento lleva a sus categorías de
 // contenido) y de herramienta de estudio (muestra los canales/transportadores
-// de esa zona, y un modo interactivo resalta segmentos según el diurético o
-// la patología elegidos). No conoce el contenido clínico real de cada
-// categoría — delega en onCategoria(key), igual que atlas.js delega en
-// onRoute(key).
+// de esa zona, con un mini-diagrama de flechas de reabsorción/secreción por
+// ion, y un modo interactivo resalta segmentos según el diurético o la
+// patología elegidos — las patologías pueden enlazar a la ficha completa del
+// cuaderno de campo de Fisiopatología renal). No conoce el contenido clínico
+// real de cada categoría — delega en onCategoria(key), igual que atlas.js
+// delega en onRoute(key).
 import { segmentosNefrona, modosInteractivos } from '../../data/nefrona-data.js';
+import { openCorkboardTopic } from '../../core/corkboard.js';
+
+let flujoSvgSeq = 0;
+
+// Mini-diagrama luz tubular ↔ célula ↔ sangre: una fila por ion, con una
+// flecha verde (reabsorción, hacia la sangre) o roja (secreción, hacia la
+// luz). Puramente esquemático — no representa proporciones reales.
+function svgFlujo(flujo) {
+    if (!flujo || flujo.length === 0) return '';
+    const seq = flujoSvgSeq++;
+    const rowH = 22;
+    const h = 26 + flujo.length * rowH;
+
+    const defs = [];
+    const filas = flujo.map((f, i) => {
+        const y = 30 + i * rowH;
+        const reabsorcion = f.direccion === 'reabsorcion';
+        const color = reabsorcion ? 'var(--accent-green)' : 'var(--accent-red)';
+        const [x1, x2] = reabsorcion ? [58, 142] : [142, 58];
+        const markerId = `canal-flujo-arrow-${seq}-${i}`;
+        defs.push(`<marker id="${markerId}" markerWidth="7" markerHeight="7" refX="5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="${color}"/></marker>`);
+        return `
+            <text x="100" y="${y - 7}" font-size="9" fill="${color}" text-anchor="middle" font-weight="bold">${f.ion}</text>
+            <line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${color}" stroke-width="2" marker-end="url(#${markerId})"/>
+        `;
+    }).join('');
+
+    return `
+        <svg class="canal-flujo-svg" viewBox="0 0 200 ${h}" preserveAspectRatio="xMidYMin meet">
+            <defs>${defs.join('')}</defs>
+            <line x1="58" y1="14" x2="58" y2="${h - 6}" stroke="var(--border-color)" stroke-width="1.5" stroke-dasharray="3,2"/>
+            <line x1="142" y1="14" x2="142" y2="${h - 6}" stroke="var(--border-color)" stroke-width="1.5" stroke-dasharray="3,2"/>
+            <text x="29" y="12" font-size="7.5" fill="var(--text-muted)" text-anchor="middle" letter-spacing="0.5">LUZ</text>
+            <text x="100" y="12" font-size="7.5" fill="var(--text-muted)" text-anchor="middle" letter-spacing="0.5">CÉLULA</text>
+            <text x="171" y="12" font-size="7.5" fill="var(--text-muted)" text-anchor="middle" letter-spacing="0.5">SANGRE</text>
+            ${filas}
+        </svg>
+    `;
+}
 
 function renderCanales(cont, canales) {
     cont.innerHTML = canales.map(c => `
@@ -18,6 +59,7 @@ function renderCanales(cont, canales) {
             <div class="micro-prof-body">
                 <dl class="kv-row"><dt>Función</dt><dd>${c.funcion}</dd></dl>
                 <dl class="kv-row"><dt>Diana farmacológica</dt><dd>${c.diana}</dd></dl>
+                ${svgFlujo(c.flujo)}
             </div>
         </div>
     `).join('');
@@ -85,7 +127,12 @@ export function initNefrona({ onCategoria }) {
             <strong>${modo.etiqueta}</strong>
             <p>${modo.explicacion}</p>
             <p style="color: var(--text-muted); font-size: 0.75rem;">Canal(es) implicado(s): ${modo.canales.join(', ')}</p>
+            ${modo.link ? `<button class="quiz-siguiente nefro-modo-link" style="width:auto; display:inline-block; margin-top:8px; padding:6px 12px; font-size:0.75rem;">${modo.link.etiqueta}</button>` : ''}
         `;
+        const linkBtn = modoExplicacion.querySelector('.nefro-modo-link');
+        if (linkBtn && modo.link) {
+            linkBtn.addEventListener('click', () => openCorkboardTopic(modo.link.panelId, modo.link.tabId));
+        }
     });
 
     return {

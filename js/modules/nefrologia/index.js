@@ -9,7 +9,7 @@ import { initNefrona } from './nefrona.js';
 import { initRinon } from './rinon.js';
 import { init as initFisiologia } from './fisiologia.js';
 import { initQuiz } from '../quiz/quiz.js';
-import { preguntasNefrologia } from '../../data/nefrologia-preguntas.js';
+import { preguntasNefrologia, temasNefrologia } from '../../data/nefrologia-preguntas.js';
 
 function mostrarEnPreparacion() {
     const cont = document.getElementById('nefro-segmento-categorias');
@@ -54,7 +54,7 @@ export function init() {
     });
 
     initFisiologia();
-    initQuiz({ triggerId: 'btn-nefro-repasar', banco: preguntasNefrologia });
+    initQuiz({ triggerId: 'btn-nefro-repasar', banco: preguntasNefrologia, temas: temasNefrologia });
 
     nefroLevel.show('kidney');
 
