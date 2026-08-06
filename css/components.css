@@ -571,9 +571,13 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 /* ===================================================== */
 /* SIMULADOR TFG — autorregulación del filtrado glomerular  */
 /* (js/modules/nefrologia/fisiologia.js). Modelo simplificado */
-/* con fines didácticos, no una calculadora clínica.         */
+/* con fines didácticos, no una calculadora clínica. Las      */
+/* clases .tfg-slider-row/.tfg-vasos/.tfg-resultados/.tfg-    */
+/* estado son genéricas (slider + barra + resultado + estado) */
+/* y las reutiliza tal cual el simulador de osmorregulación   */
+/* (.agua-simulador, misma fisiologia.js) sin duplicar CSS.   */
 /* ===================================================== */
-.tfg-simulador { margin-top: 6px; }
+.tfg-simulador, .agua-simulador { margin-top: 6px; }
 .tfg-slider-row { margin: 14px 0 18px; }
 .tfg-slider-row label { display: block; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
 .tfg-slider-row input[type="range"] { width: 100%; accent-color: var(--accent-yellow); }

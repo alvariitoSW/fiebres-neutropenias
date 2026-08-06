@@ -377,6 +377,63 @@ por encima que sí diera cabida a todos.
   texto de la UI lo aclara). Los paneles de "Anatomía funcional" y
   "Reabsorción y secreción" enlazan explícitamente a la nefrona interactiva
   de más abajo para el detalle canal-por-canal, en vez de duplicarlo.
+- **Contenido real de "Homeostasis del agua y del potasio"**: mismo
+  `#fisio-corkboard`, 6 fichas más (Ficha 7-12, mismo componente
+  `core/corkboard.js`, ningún cambio de patrón): Regulación del agua
+  corporal, Hiponatremia, Hipernatremia, Regulación del potasio corporal,
+  Hipopotasemia, Hiperpotasemia. Fuentes: Martín Navarro JA, Albalate Ramón
+  M, Alcázar Arroyo R, de Sequera Ortíz P. "Trastornos del Agua.
+  Disnatremias". Nefrología al día (SEN), actualizado 4/8/2025 (PDF de 41
+  págs., 10 figuras/12 tablas); de Sequera Ortíz P, Alcázar Arroyo R,
+  Albalate Ramón M. "Trastornos del potasio. Hipopotasemia e
+  hiperpotasemia". Nefrología al día (SEN), actualizado 14/6/2024 (PDF de
+  37 págs., 11 figuras/10 tablas). Mismo criterio que el resto del bloque:
+  nunca un volcado literal del PDF, pero tampoco resumir por debajo del
+  nivel de detalle real de la fuente (números, fármacos, mecanismos paso a
+  paso) — esto se corrigió explícitamente una vez ya en este mismo bloque
+  ("Fisiopatología renal" se amplió tras quedar demasiado resumida en un
+  primer pase) y el usuario lo remarcó con más fuerza aún para agua/potasio
+  ("un resumen como si fueran unos apuntes para estudiar para un examen
+  médico"). Las **11 figuras** del PDF de agua y las **11 figuras** del de
+  potasio se extrajeron con `pdfimages -all` (mismo método que
+  `fisio-*.jpg`) y se insertaron todas como `.article-figure`
+  (`js/modules/nefrologia/img/agua-fig1..10-*.jpg` y `k-fig1..11-*.jpg`);
+  las tablas de ambos PDF (12 de agua, 10 de potasio) se recrearon como
+  `.data-table` nativas, igual que en fisiología renal — nunca se
+  incrustan como imagen las tablas, solo los diagramas/algoritmos/figuras
+  reales. Cada bloque (agua, potasio) tiene un **simulador de mecanismo**
+  (mismo patrón que `.tfg-simulador`, mismas clases CSS reutilizadas
+  — `.agua-simulador` es solo un alias de margen, ver comentario en
+  `components.css`) y **varios selectores de diferencial de patologías**
+  (patrón `<select>` + `.result-box`, calcado del "Modo interactivo" ya
+  usado en la nefrona — nunca reinventado):
+  - **Regulación del agua corporal**: simulador de osmorregulación
+    (`#agua-osm`, slider de osmolalidad plasmática 270-310 mOsm/kg que
+    recalcula ADH/osmolalidad urinaria/diuresis estimada, con el umbral de
+    la sed marcado en 292-295 mOsm/kg) + selector de hiponatremia por
+    estado de la volemia (`#agua-volemia-select`).
+  - **Hipernatremia**: selector de diagnóstico diferencial de la
+    poliuria/polidipsia (`#agua-di-select`: DIC/DIN/polidipsia 1ª, con los
+    datos reales del test de deprivación hídrica y de la copeptina).
+  - **Regulación del potasio corporal**: selector de factores de la
+    distribución transcelular (`#k-factor-select`: insulina, catecolaminas,
+    alcalosis/acidosis, aldosterona, hiperosmolalidad — mecanismo +
+    dirección del movimiento de K⁺; no es un simulador numérico porque
+    cuantificar el desplazamiento de un solo factor no sería clínicamente
+    fiel a la fuente).
+  - **Hipopotasemia**: selector de síndromes hipopotasémicos por pérdidas
+    en orina (`#k-sindrome-select`: Bartter/Gitelman/Liddle/diuréticos/
+    regaliz, recreando la Tabla 3 del PDF de forma interactiva).
+  - **Hiperpotasemia**: selector de mecanismo (`#k-hiper-select`:
+    pseudohiperpotasemia/aporte excesivo/↓eliminación renal/redistribución).
+  Los datos de estos 5 selectores (no el simulador de osmorregulación, que
+  es puro cálculo) viven en `js/data/agua-potasio-data.js` — datos puros,
+  sin DOM, siguiendo la convención de `js/data/`; toda la lógica de
+  wiring está en `fisiologia.js` (`wireSelectExplicacion()`, un helper
+  genérico para no repetir el patrón select→result-box 5 veces). Se
+  añadieron 48 preguntas nuevas al quiz (`nefro-q050`-`q098`, `tema` =
+  la misma clave que el `data-tab` de cada ficha), llevando el banco de
+  Nefrología a 98 preguntas.
 - **`nefro-menu.html`** (nivel 1, la nefrona) usa una **fotografía/ilustración anatómica real**
   (`js/modules/nefrologia/img/nefrona-anatomia.jpg`, corte de tejido renal
   con las dos nefronas — cortical de asa corta y yuxtamedular de asa larga
