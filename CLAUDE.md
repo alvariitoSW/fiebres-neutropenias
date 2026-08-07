@@ -452,6 +452,62 @@ por encima que sí diera cabida a todos.
   elegante**: sin `temas`, `initQuiz()` se comporta exactamente igual que
   antes (arranca directo, sin pantalla intermedia) — así que no hace falta
   tocar ningún otro módulo que ya llame a `initQuiz()` sin ese parámetro.
+- **Contenido real de "Ácido-base" y "Calcio, Fósforo y Magnesio"**: 6 fichas
+  más (Ficha 13-18) en el mismo `#fisio-corkboard`, completando el bloque de
+  fisiología/electrolitos: Ácido-base (acidosis), Ácido-base (alcalosis),
+  Hipocalcemia, Hipercalcemia, Fósforo (hipo e hiperfosfatemia), Magnesio
+  (hipo e hipermagnesemia). Fuentes: "Alteraciones del Metabolismo Ácido
+  Base", Nefrología al día (SEN), 35 págs., 5 figuras/14 tablas; Rodelo-Haad
+  C, Albalate Ramón M, de Sequera Ortíz P, Rodríguez Portillo M.
+  "Trastornos del Calcio, Fósforo y Magnesio". Nefrología al día (SEN),
+  actualizado 1/10/2025, 57 págs., 9 figuras/15 tablas. Mismo patrón que el
+  resto del bloque: las 14 figuras reales (diagramas/algoritmos, nunca
+  tablas) se extrajeron con `pdfimages -all` e insertaron como
+  `.article-figure` (`js/modules/nefrologia/img/ab-fig1..5-*.jpg` y
+  `cafomg-fig1..9-*.png`); las 29 tablas se recrearon como `.data-table`
+  nativas. El ácido-base se dividió en 2 fichas (acidosis / alcalosis,
+  siguiendo la propia estructura del artículo) en vez de una sola, igual
+  que se hizo antes con hipo/hipernatremia e hipo/hiperpotasemia.
+  - **Ácido-base (acidosis)**: hiato aniónico, tampón bicarbonato,
+    compensación esperada por trastorno (Tabla 2 del artículo, reutilizada
+    también por el clasificador interactivo de más abajo), acidosis
+    metabólica con hiato elevado (cetoacidosis, incluida la euglucémica por
+    iSGLT2; acidosis láctica tipo A/B; intoxicación por alcoholes; acidosis
+    piroglutámica por paracetamol) y con hiato normal/hiperclorémica
+    (pérdidas GI, acidosis tubular renal I/II/IV), tratamiento con
+    bicarbonato (ventajas/inconvenientes), acidosis respiratoria.
+  - **Ácido-base (alcalosis)**: clasificación por génesis y por respuesta al
+    cloro, Bartter/Gitelman, iones en orina por causa, tratamiento,
+    alcalosis respiratoria, y **trastornos mixtos** (tabla de las 6
+    combinaciones posibles con sus causas típicas).
+  - **🧪 Clasificador interactivo de gasometrías** (`#ab-ph`/`#ab-pco2`/
+    `#ab-hco3`, `calcAcidoBaseClasificador()` en `fisiologia.js`): 3 campos
+    numéricos (pH, pCO₂, HCO₃⁻) que, al cambiar, determinan el trastorno
+    primario por la dirección del pH y comprueban si la respuesta
+    secundaria del otro parámetro encaja con las fórmulas de compensación
+    de la Tabla 2 — si no encaja, señala qué trastorno mixto sobreañadido es
+    compatible (mismo espíritu didáctico que `.tfg-simulador`, reutilizando
+    sus clases `.tfg-estado-ok/warn/danger`, pero con inputs numéricos en
+    vez de un slider porque aquí hay 3 variables independientes, no 1).
+  - **Hipocalcemia/Hipercalcemia**: las 3 hormonas calciotropas (PTH, CTR,
+    calcitonina) y el eje FGF23-Klotho: etiología por PTH baja/alta
+    (hipocalcemia) o mediada/no mediada por PTH (hipercalcemia), clínica
+    (Chvostek/Trousseau, cambios ECG del QT), algoritmos diagnósticos y
+    tratamiento (compuestos de calcio IV/orales, bifosfonatos).
+  - **Fósforo**: homeostasis intestino-hueso-riñón, hipofosfatemia (con el
+    síndrome de realimentación como causa destacada) e hiperfosfatemia
+    (dominada por la ERC), ambas con su algoritmo diagnóstico por RTP
+    (reabsorción tubular de fósforo).
+  - **Magnesio**: homeostasis, hipomagnesemia (con su vínculo característico
+    a hipopotasemia/hipocalcemia refractarias) e hipermagnesemia (casi
+    exclusiva de la enfermedad renal).
+  - **5 selectores de diferencial** más (mismo patrón
+    `wireSelectExplicacion` de siempre): alcalosis metabólica hipopotasémica
+    por iones en orina, hipocalcemia por PTH, hipercalcemia por
+    mecanismo, mecanismo de alteración del fósforo, mecanismo de
+    hipomagnesemia. Datos en `js/data/acidobase-cafomg-data.js`.
+  - Se añadieron 30 preguntas nuevas al quiz (`nefro-q099`-`q128`),
+    llevando el banco de Nefrología a 128 preguntas repartidas en 19 temas.
 - **`nefro-menu.html`** (nivel 1, la nefrona) usa una **fotografía/ilustración anatómica real**
   (`js/modules/nefrologia/img/nefrona-anatomia.jpg`, corte de tejido renal
   con las dos nefronas — cortical de asa corta y yuxtamedular de asa larga
