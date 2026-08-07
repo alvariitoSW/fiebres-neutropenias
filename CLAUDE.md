@@ -555,6 +555,41 @@ por encima que sí diera cabida a todos.
     fórmula y el punto de corte (&gt;20 mOsm/l) ya estaban en el
     micro-prof-item "Intoxicación por alcoholes" desde la redacción
     original de esa ficha.
+  - **Segunda auditoría, enfocada solo en huecos de contenido** (no
+    herramientas): se releyeron íntegras las 5 fuentes originales
+    (Fisiología Renal, Trastornos del Agua, Trastornos del Potasio —
+    Ácido-Base y Ca-P-Mg ya se habían releído en la auditoría anterior) para
+    localizar conceptos reales de la fuente ausentes en la app, y se
+    añadieron todos los encontrados:
+    - `fisio-tubular`: reabsorción de proteínas filtradas (~30 g/día,
+      PM&lt;70.000) por endocitosis en el borde en cepillo del túbulo
+      proximal — base fisiológica de por qué la proteinuria tubular nunca
+      es tan masiva como la glomerular.
+    - `fisio-hiponatremia`: predisposición genética a la hiponatremia por
+      tiazidas (gen SLCOA1/transportador de PGE2); biomarcador HPRWSP para
+      diferenciar síndrome pierde sal de SIADH; perla práctica sobre la
+      sobreestimación del Na⁺ venoso periférico tras una convulsión (hasta
+      10 mEq/l); iSGLT2 (empagliflozina) como terapia emergente del SIADH;
+      albúmina IV y octreotide en la hiponatremia del cirrótico.
+    - `fisio-hipernatremia`: dos micro-prof-items nuevos, **DI adípsica**
+      (defecto aislado de los receptores de la sed, típica en ancianos sin
+      lesión hipotalámica demostrable) y **DI gestacional** ampliada con su
+      mecanismo (vasopresinasa placentaria) — el dato numérico ya existía
+      como term-chip, se amplió a ficha completa.
+    - `fisio-hipopotasemia`: **tabla nativa completa** de fármacos
+      inductores (3 columnas: desplazamiento intracelular / eliminación
+      renal / pérdidas GI — mucho más exhaustiva que el micro-prof-item
+      resumen que ya existía, que se mantiene como entrada rápida) +
+      micro-prof-item nuevo sobre **inhibidores de puntos de control
+      inmunológico** (hipopotasemia por ATR inmunomediada), relevante dado
+      el perfil oncológico de la app.
+    - `fisio-hiperpotasemia`: 4º micro-prof-item de "Situaciones
+      especiales", **Hipertensión arterial** (datos de prevalencia e
+      hiperaldosteronismo 1º) — antes solo había IC/ERC-diálisis/DM;
+      **finerenona** añadida a la lista de fármacos que inhiben la
+      secreción tubular de K⁺; datos específicos de **diálisis peritoneal**
+      (incidencia de hipo/hiperK, distinta de hemodiálisis) añadidos al
+      micro-prof-item de enfermedad renal/diálisis.
 - **`nefro-menu.html`** (nivel 1, la nefrona) usa una **fotografía/ilustración anatómica real**
   (`js/modules/nefrologia/img/nefrona-anatomia.jpg`, corte de tejido renal
   con las dos nefronas — cortical de asa corta y yuxtamedular de asa larga
