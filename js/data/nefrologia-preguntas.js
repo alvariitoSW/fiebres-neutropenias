@@ -1492,4 +1492,169 @@ export const preguntasNefrologia = [
         correcta: 0,
         explicacion: 'ΔHCO₃⁻ = 36−24 = 12; ΔpCO₂ esperada ≈ 0,7×12 = 8,4, es decir una pCO₂ esperada ≈48 mmHg. La pCO₂ real (47) encaja con ese rango — compensación respiratoria adecuada para una alcalosis metabólica simple.',
     },
+
+    // ---- Equilibrado de distribución: temas con menos preguntas ----
+    {
+        id: 'nefro-q139',
+        tema: 'fisio-hipocalcemia',
+        enunciado: '¿Qué fórmula se usa para corregir el calcio total medido por la albúmina?',
+        opciones: [
+            'Ca corregido = Ca medido + 0,8 × (4 − albúmina)',
+            'Ca corregido = Ca medido − 0,8 × (4 − albúmina)',
+            'Ca corregido = Ca medido × albúmina / 4',
+            'Ca corregido = Ca medido / (4 − albúmina)',
+        ],
+        correcta: 0,
+        explicacion: 'Cada descenso de 1 g/dl de albúmina por debajo de 4 g/dl reduce el calcio total medido en ~0,8 mg/dl sin reflejar un cambio real del calcio iónico — de ahí la fórmula Ca corregido = Ca medido + 0,8 × (4 − albúmina).',
+    },
+    {
+        id: 'nefro-q140',
+        tema: 'fisio-hipocalcemia',
+        enunciado: '¿Qué cambio electrocardiográfico es característico de la hipocalcemia?',
+        opciones: ['Acortamiento del QT', 'Alargamiento del QT', 'Ondas T picudas', 'Onda U prominente'],
+        correcta: 1,
+        explicacion: 'El QT (y el segmento ST) es inversamente proporcional a la calcemia: se alarga en la hipocalcemia y se acorta en la hipercalcemia. Puede haber hipocalcemia grave sin cambios electrocardiográficos.',
+    },
+    {
+        id: 'nefro-q141',
+        tema: 'fisio-hipocalcemia',
+        enunciado: '¿Por qué nunca se debe administrar gluconato cálcico junto con bicarbonato en la misma vía?',
+        opciones: ['Porque el bicarbonato inactiva el calcio', 'Porque precipitan entre sí', 'Porque juntos producen hiperpotasemia', 'No hay ningún problema en mezclarlos'],
+        correcta: 1,
+        explicacion: 'El gluconato cálcico IV nunca debe diluirse ni administrarse junto con bicarbonato — ambos precipitan, formando carbonato cálcico insoluble que puede obstruir la vía.',
+    },
+
+    {
+        id: 'nefro-q142',
+        tema: 'fisio-hipercalcemia',
+        enunciado: '¿Qué cambio electrocardiográfico es característico de la hipercalcemia?',
+        opciones: ['Alargamiento del QT', 'Acortamiento del QT', 'Onda U prominente', 'Ensanchamiento del QRS'],
+        correcta: 1,
+        explicacion: 'A diferencia de la hipocalcemia, la hipercalcemia acorta el QT (y el segmento ST) — cambios de onda T inespecíficos y menos frecuentes también pueden aparecer.',
+    },
+    {
+        id: 'nefro-q143',
+        tema: 'fisio-hipercalcemia',
+        enunciado: '¿Cuál es la primera medida general en el tratamiento de la hipercalcemia, antes de cualquier fármaco específico?',
+        opciones: ['Bifosfonatos IV', 'Hidratación con suero salino 0,9%', 'Calcitonina', 'Hemodiálisis'],
+        correcta: 1,
+        explicacion: 'Tras suspender los fármacos causantes, la hidratación con suero salino 0,9% (200-500 ml/h según situación cardiovascular/renal) es la primera medida general, seguida de furosemida si es necesaria una diuresis forzada.',
+    },
+    {
+        id: 'nefro-q144',
+        tema: 'fisio-hipercalcemia',
+        enunciado: '¿Qué fármaco de uso psiquiátrico frecuente puede causar hipercalcemia mediada por PTH?',
+        opciones: ['El litio', 'El haloperidol', 'La sertralina', 'El diazepam'],
+        correcta: 0,
+        explicacion: 'El litio puede causar hipercalcemia, y a diferencia de la mayoría de fármacos de la lista (que actúan por mecanismos no mediados por PTH), la hipercalcemia por litio suele estar mediada por la PTH.',
+    },
+
+    {
+        id: 'nefro-q145',
+        tema: 'fisio-anatomia',
+        enunciado: '¿Por qué se dice que la circulación renal tiene dos lechos capilares en serie?',
+        opciones: [
+            'Porque la sangre pasa dos veces por el mismo glomérulo',
+            'Porque los capilares glomerulares (que filtran) están seguidos de los capilares peritubulares (que reabsorben), separados por la arteriola eferente',
+            'Porque cada nefrona tiene dos glomérulos',
+            'Porque hay un lecho capilar cortical y otro medular independientes',
+        ],
+        correcta: 1,
+        explicacion: 'Los capilares glomerulares, donde se filtra, coalescen en la arteriola eferente, que da lugar a los capilares peritubulares, donde se reabsorbe — dos lechos capilares dispuestos en serie y separados por una arteriola que regula la resistencia de ambos.',
+    },
+    {
+        id: 'nefro-q146',
+        tema: 'fisio-anatomia',
+        enunciado: '¿Cuál es el orden correcto del recorrido vascular arterial hasta el glomérulo?',
+        opciones: [
+            'Arteria renal → interlobulares → arciformes → interlobulillares → arteriolas aferentes → capilares glomerulares',
+            'Arteria renal → arteriolas aferentes → interlobulares → capilares glomerulares',
+            'Arteria renal → arciformes → interlobulares → capilares glomerulares directamente',
+            'Arteria renal → capilares peritubulares → arteriolas aferentes → capilares glomerulares',
+        ],
+        correcta: 0,
+        explicacion: 'La arteria renal se ramifica progresivamente: arterias interlobulares → arciformes → interlobulillares → arteriolas aferentes, que terminan en los capilares glomerulares donde comienza la filtración.',
+    },
+
+    {
+        id: 'nefro-q147',
+        tema: 'fisio-hormonal',
+        enunciado: 'Además de dilatar la arteriola aferente, ¿qué otros dos efectos tiene el péptido natriurético atrial (PNA) sobre la nefrona?',
+        opciones: [
+            'Contrae la arteriola eferente y relaja las células mesangiales, aumentando aún más la TFG',
+            'Contrae la arteriola eferente y contrae las células mesangiales',
+            'Dilata también la arteriola eferente, sin efecto sobre el mesangio',
+            'No tiene ningún efecto adicional sobre la nefrona',
+        ],
+        correcta: 0,
+        explicacion: 'El PNA dilata la arteria aferente, contrae la arteria eferente y relaja las células mesangiales — los tres efectos aumentan la superficie y el gradiente de presión disponibles para la filtración, incrementando la TFG.',
+    },
+    {
+        id: 'nefro-q148',
+        tema: 'fisio-hormonal',
+        enunciado: '¿Qué dos tipos de estímulo desencadenan la liberación de ADH?',
+        opciones: [
+            'Solo estímulos osmóticos',
+            'Osmótico (↑osmolaridad plasmática, vía osmorreceptores) y no osmótico (↓volumen circulante, vía mecanorreceptores)',
+            'Solo cambios en la concentración de potasio',
+            'Solo estímulos dependientes de la aldosterona',
+        ],
+        correcta: 1,
+        explicacion: 'La ADH se libera tanto ante un aumento de la osmolaridad plasmática (detectado por osmorreceptores) como ante una disminución del volumen circulante (detectada por mecanorreceptores) — dos vías de estímulo independientes que confluyen en la misma hormona.',
+    },
+
+    {
+        id: 'nefro-q149',
+        tema: 'fisio-filtracion',
+        enunciado: 'Además de su función estructural en la barrera de filtración, ¿qué papel activo tienen los podocitos?',
+        opciones: [
+            'Son metabólicamente inactivos, solo actúan como una malla pasiva',
+            'Sintetizan activamente colágeno IV, fibronectina, laminina y heparán sulfato, contribuyendo a la carga electronegativa de la barrera',
+            'Producen eritropoyetina',
+            'Secretan renina ante la hipotensión',
+        ],
+        correcta: 1,
+        explicacion: 'Pese a su baja actividad mitótica, los podocitos sintetizan y liberan activamente colágeno IV, fibronectina, laminina y heparán sulfato, contribuyendo de forma importante a la carga electronegativa de la membrana basal.',
+    },
+
+    {
+        id: 'nefro-q150',
+        tema: 'fisio-regulacion',
+        enunciado: '¿Cuál es la diferencia de objetivo entre el control intrínseco y el control extrínseco de la TFG?',
+        opciones: [
+            'El intrínseco mantiene el FG estable directamente ante cambios moderados de presión; el extrínseco lo mantiene indirectamente regulando la presión sistémica que impulsa la filtración',
+            'Ambos regulan la TFG exactamente por el mismo mecanismo',
+            'El intrínseco solo actúa en la enfermedad renal crónica',
+            'El extrínseco actúa siempre antes que el intrínseco',
+        ],
+        correcta: 0,
+        explicacion: 'El control intrínseco (miogénico + retroalimentación túbulo-glomerular) regula directamente el FG ante cambios moderados de presión arterial; el control extrínseco (SRAA + reflejo barorreceptor) lo hace indirectamente, manteniendo la presión sanguínea sistémica que impulsa la filtración.',
+    },
+
+    {
+        id: 'nefro-q151',
+        tema: 'fisio-tubular',
+        enunciado: '¿Qué mecanismo permite recuperar en el túbulo proximal los ~30 g/día de proteínas de bajo peso molecular (&lt;70.000) que atraviesan el glomérulo?',
+        opciones: ['Difusión simple a través de la membrana', 'Endocitosis en el borde en cepillo de la cara apical', 'Cotransporte con sodio, igual que la glucosa', 'No se recuperan, se excretan todas en la orina'],
+        correcta: 1,
+        explicacion: 'Estas proteínas filtradas, junto con pequeñas hormonas peptídicas, se recuperan casi por completo mediante un proceso de endocitosis en el borde en cepillo de la cara apical del túbulo proximal — la base de por qué la proteinuria tubular nunca es tan masiva como la glomerular.',
+    },
+
+    {
+        id: 'nefro-q152',
+        tema: 'fisio-acidobase-acidosis',
+        enunciado: 'Según la fórmula de compensación esperada, ¿cuánto debe descender la pCO₂ por cada 1 mEq/l de descenso del HCO₃⁻ en una acidosis metabólica simple?',
+        opciones: ['0,1-0,3 mmHg', '0,85-1,2 mmHg', '2-3 mmHg', '5-6 mmHg'],
+        correcta: 1,
+        explicacion: 'Por cada descenso de 1 mEq/l de HCO₃⁻ (desde 25), la pCO₂ debe descender 0,85-1,2 mmHg (desde 40) para considerarse una compensación respiratoria adecuada de una acidosis metabólica simple.',
+    },
+
+    {
+        id: 'nefro-q153',
+        tema: 'fisio-acidobase-alcalosis',
+        enunciado: '¿Qué mortalidad se ha descrito en la alcalosis metabólica extrema (pH &gt;7,65)?',
+        opciones: ['Prácticamente nula', 'Alrededor del 20%', 'Alrededor del 50%', 'Hasta el 80%'],
+        correcta: 3,
+        explicacion: 'Pese a estar infravalorada clínicamente frente a la acidosis, la alcalosis metabólica en sus valores extremos se asocia a una mortalidad de hasta el 80% con pH >7,65.',
+    },
 ];

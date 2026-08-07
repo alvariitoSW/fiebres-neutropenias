@@ -590,6 +590,21 @@ por encima que sí diera cabida a todos.
       secreción tubular de K⁺; datos específicos de **diálisis peritoneal**
       (incidencia de hipo/hiperK, distinta de hemodiálisis) añadidos al
       micro-prof-item de enfermedad renal/diálisis.
+  - **Equilibrado de la distribución del quiz**: tras la ronda anterior el
+    banco quedó con huecos de reparto (Hipocalcemia/Hipercalcemia en 5,
+    Anatomía/Regulación hormonal en 6, Filtración/Regulación del
+    filtrado/Reabsorción y ácido-base en 7, frente a 8-9 del resto). Se
+    añadieron 15 preguntas nuevas (`nefro-q139`-`q153`) repartidas
+    exactamente para nivelar cada tema por debajo de 8 hasta 8 preguntas
+    (+3 Hipocalcemia, +3 Hipercalcemia, +2 Anatomía, +2 Regulación
+    hormonal, +1 cada uno de Filtración/Regulación del filtrado/
+    Reabsorción y secreción/Ácido-base acidosis/Ácido-base alcalosis),
+    dejando el banco de Nefrología en **153 preguntas** con los 19 temas a
+    8 preguntas cada uno salvo Hiponatremia (9, el tema con más contenido
+    real). Ninguna pregunta nueva introduce contenido no verificado
+    contra la ficha correspondiente — varias refuerzan explícitamente
+    herramientas ya existentes (p. ej. `nefro-q139` pregunta por la
+    fórmula exacta de la calculadora de calcio corregido).
 - **`nefro-menu.html`** (nivel 1, la nefrona) usa una **fotografía/ilustración anatómica real**
   (`js/modules/nefrologia/img/nefrona-anatomia.jpg`, corte de tejido renal
   con las dos nefronas — cortical de asa corta y yuxtamedular de asa larga
