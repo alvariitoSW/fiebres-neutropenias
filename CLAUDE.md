@@ -508,6 +508,53 @@ por encima que sí diera cabida a todos.
     hipomagnesemia. Datos en `js/data/acidobase-cafomg-data.js`.
   - Se añadieron 30 preguntas nuevas al quiz (`nefro-q099`-`q128`),
     llevando el banco de Nefrología a 128 preguntas repartidas en 19 temas.
+  - **Auditoría de contenido y ampliaciones posteriores**: tras completar las
+    18 fichas anteriores, se hizo una auditoría explícita del bloque de
+    fisiología (huecos de contenido, calidad, feedback de puntos
+    débiles/fuertes, evaluación del quiz) y se implementaron sus 4 primeras
+    recomendaciones, en este orden:
+    1. **Calculadora de calcio corregido por albúmina** (ficha
+       `fisio-hipocalcemia`, justo debajo de la fórmula que ya citaba el
+       texto): dos campos (Ca total, albúmina) → Ca corregido = Ca medido +
+       0,8×(4−albúmina), con interpretación normal/hipo/hipercalcemia
+       reutilizando `.tfg-estado-ok/warn/danger`. `calcCalcioCorregido()` en
+       `fisiologia.js`.
+    2. **10 preguntas nuevas de quiz** (`nefro-q129`-`q138`) para corregir el
+       desequilibrio de distribución detectado en la auditoría (Magnesio
+       tenía solo 3 preguntas frente a 6-9 del resto de temas): +5 Magnesio,
+       +3 Fósforo, +2 Ácido-base — estas dos últimas son **viñetas de
+       gasometría completa** (pH/pCO₂/HCO₃⁻ de un caso clínico a
+       clasificar aplicando las fórmulas de compensación de la Tabla 2), un
+       formato que antes no existía en el banco pese a que el propio
+       clasificador interactivo de más abajo enseña exactamente esa
+       habilidad. El banco de Nefrología queda en 138 preguntas.
+    3. **Δ-gap / Δ-ratio en el clasificador ácido-base** (`fisio-acidobase-acidosis`,
+       inputs `#ab-na`/`#ab-cl`, opcionales — el clasificador ya funciona
+       sin ellos): si se rellenan, calcula el hiato aniónico y, si está
+       elevado, el Δ-ratio = (HA−12)/(24−HCO₃⁻) para detectar un trastorno
+       metabólico adicional escondido dentro de una acidosis con hiato
+       elevado (acidosis hiperclorémica sobreañadida si Δ-ratio &lt;0,4;
+       "pura" si 0,4-2; alcalosis metabólica sobreañadida si &gt;2) — un
+       hueco real que la comparación pCO₂/HCO₃⁻ original no cubría, porque
+       esa solo detecta problemas respiratorios sobreañadidos, no otro
+       trastorno metabólico.
+    4. **Calculadora de corrección de sodio (fórmula de Adrogué-Madias)**
+       (ficha `fisio-hiponatremia`, tras la tabla de guías de tratamiento):
+       mismo patrón visual que el simulador de TFG/osmorregulación
+       (`.agua-simulador`), con peso/sexo/Na⁺ actual/tipo de suero (salino
+       0,9%/3%/0,45%, Ringer lactato, glucosado 5% — este último pensado
+       para el escenario de sobrecorrección) → ΔNa esperado por litro
+       infundido y ml necesarios para mover 1 mEq/l, con aviso explícito de
+       que es una estimación teórica inicial y no sustituye la
+       monitorización frecuente que ya pedía el texto de la ficha.
+       `calcCorreccionSodio()` en `fisiologia.js`. Es, de las 4
+       implementadas, la de mayor esfuerzo pero también la de mayor valor
+       clínico real a pie de cama según la propia auditoría.
+    El 5º punto de la auditoría (verificar si faltaba el hiato osmolar en la
+    ficha de acidosis) se revisó y **no hizo falta ningún cambio**: la
+    fórmula y el punto de corte (&gt;20 mOsm/l) ya estaban en el
+    micro-prof-item "Intoxicación por alcoholes" desde la redacción
+    original de esa ficha.
 - **`nefro-menu.html`** (nivel 1, la nefrona) usa una **fotografía/ilustración anatómica real**
   (`js/modules/nefrologia/img/nefrona-anatomia.jpg`, corte de tejido renal
   con las dos nefronas — cortical de asa corta y yuxtamedular de asa larga

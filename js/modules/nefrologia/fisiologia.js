@@ -114,6 +114,8 @@ function calcAcidoBaseClasificador() {
     const phEl = document.getElementById('ab-ph');
     const pco2El = document.getElementById('ab-pco2');
     const hco3El = document.getElementById('ab-hco3');
+    const naEl = document.getElementById('ab-na');
+    const clEl = document.getElementById('ab-cl');
     const box = document.getElementById('ab-clasificador-resultado');
     if (!phEl || !pco2El || !hco3El || !box) return;
 
@@ -195,7 +197,100 @@ function calcAcidoBaseClasificador() {
         }
     }
 
+    // Δ-gap / Δ-ratio opcional: si se aportan Na+ y Cl-, calcula el hiato
+    // aniónico y comprueba si un trastorno metabólico adicional se esconde
+    // dentro de una acidosis con hiato elevado (p. ej. una alcalosis
+    // metabólica o una acidosis normoclorémica sobreañadidas) — método
+    // Δ-ratio = (HA − 12) / (24 − HCO3-), complementario a la comparación
+    // pCO2/HCO3 de arriba, que por sí sola no detecta este tipo de mixto.
+    if (naEl && clEl && naEl.value && clEl.value && hco3 < 24) {
+        const na = Number(naEl.value), cl = Number(clEl.value);
+        const hiatoAnionico = na - (cl + hco3);
+        if (hiatoAnionico > 12) {
+            const deltaRatio = (hiatoAnionico - 12) / (24 - hco3);
+            if (deltaRatio < 0.4) {
+                mensaje += ` Hiato aniónico ${hiatoAnionico.toFixed(0)} mEq/l (Δ-ratio ${deltaRatio.toFixed(2)}): el HCO₃⁻ ha bajado más de lo que explica el hiato elevado — sugiere una acidosis hiperclorémica (hiato normal) sobreañadida.`;
+            } else if (deltaRatio <= 2) {
+                mensaje += ` Hiato aniónico ${hiatoAnionico.toFixed(0)} mEq/l (Δ-ratio ${deltaRatio.toFixed(2)}): compatible con una acidosis metabólica con hiato elevado "pura", sin otro trastorno metabólico añadido.`;
+            } else {
+                mensaje += ` Hiato aniónico ${hiatoAnionico.toFixed(0)} mEq/l (Δ-ratio ${deltaRatio.toFixed(2)}): el HCO₃⁻ ha bajado menos de lo esperado para ese hiato — sugiere una alcalosis metabólica sobreañadida (o una acidosis respiratoria crónica compensada previa).`;
+            }
+        }
+    }
+
     box.style.display = 'block';
+    box.className = `tfg-estado tfg-estado-${estado}`;
+    box.textContent = mensaje;
+}
+
+// Corrección de calcio total por albúmina — fórmula más usada en la
+// práctica (Ca corregido = Ca medido + 0,8 × (4 − albúmina)); el propio
+// texto de la ficha advierte que el Ca iónico medido directamente es más
+// fiable cuando está disponible.
+function calcCalcioCorregido() {
+    const totalEl = document.getElementById('ca-corr-total');
+    const albEl = document.getElementById('ca-corr-albumina');
+    const box = document.getElementById('ca-corr-resultado');
+    if (!totalEl || !albEl || !box) return;
+
+    const total = Number(totalEl.value);
+    const albumina = Number(albEl.value);
+    if (!total || !albumina) return;
+
+    const corregido = total + 0.8 * (4 - albumina);
+    let estado, interpretacion;
+    if (corregido < 8.5) {
+        estado = 'danger';
+        interpretacion = 'hipocalcemia';
+    } else if (corregido > 10.5) {
+        estado = 'warn';
+        interpretacion = 'hipercalcemia';
+    } else {
+        estado = 'ok';
+        interpretacion = 'rango normal';
+    }
+
+    box.style.display = 'block';
+    box.className = `tfg-estado tfg-estado-${estado}`;
+    box.textContent = `Ca corregido: ${corregido.toFixed(2)} mg/dl — ${interpretacion} (normal 8,5-10,5 mg/dl).`;
+}
+
+// Efecto estimado de 1 litro de suero sobre la natremia (fórmula de
+// Adrogué-Madias: ΔNa por litro = (Na infundido + K infundido − Na sérico)
+// / (agua corporal total + 1)). Estimación teórica de la respuesta a corto
+// plazo — no sustituye la monitorización frecuente del Na+ real que exige
+// el propio protocolo de tratamiento de la ficha.
+function calcCorreccionSodio() {
+    const pesoEl = document.getElementById('correc-peso');
+    const sexoEl = document.getElementById('correc-sexo');
+    const naEl = document.getElementById('correc-na-actual');
+    const sueroEl = document.getElementById('correc-suero');
+    const box = document.getElementById('correc-resultado');
+    if (!pesoEl || !sexoEl || !naEl || !sueroEl || !box) return;
+
+    const peso = Number(pesoEl.value);
+    const coef = Number(sexoEl.value);
+    const naActual = Number(naEl.value);
+    const opt = sueroEl.selectedOptions[0];
+    const naInfusado = Number(opt.value);
+    const kInfusado = Number(opt.dataset.k);
+    if (!peso || !naActual) return;
+
+    const act = coef * peso;
+    const deltaNaPorLitro = (naInfusado + kInfusado - naActual) / (act + 1);
+
+    let estado = 'ok';
+    if (Math.abs(deltaNaPorLitro) > 8) estado = 'danger';
+    else if (Math.abs(deltaNaPorLitro) > 4) estado = 'warn';
+
+    const signo = deltaNaPorLitro >= 0 ? 'sube' : 'baja';
+    let mensaje = `Cada litro de este suero ${signo} el Na⁺ plasmático ≈${Math.abs(deltaNaPorLitro).toFixed(1)} mEq/l (agua corporal total estimada: ${act.toFixed(0)} l).`;
+    if (deltaNaPorLitro !== 0) {
+        const mlPor1mEq = Math.round(1000 / Math.abs(deltaNaPorLitro));
+        mensaje += ` Para cambiar 1 mEq/l se necesitarían ≈${mlPor1mEq} ml.`;
+    }
+    mensaje += ' Estimación teórica inicial (no predice la diuresis acuosa posterior ni la evolución de la causa subyacente) — usar solo como guía y controlar el Na⁺ real cada 2-4h.';
+
     box.className = `tfg-estado tfg-estado-${estado}`;
     box.textContent = mensaje;
 }
@@ -265,10 +360,26 @@ export function init() {
         <p style="color: var(--text-muted); font-size: 0.75rem;">${item.detalle}</p>
     `);
 
-    ['ab-ph', 'ab-pco2', 'ab-hco3'].forEach(id => {
+    ['ab-ph', 'ab-pco2', 'ab-hco3', 'ab-na', 'ab-cl'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.addEventListener('input', calcAcidoBaseClasificador);
     });
+
+    ['ca-corr-total', 'ca-corr-albumina'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', calcCalcioCorregido);
+    });
+    calcCalcioCorregido();
+
+    ['correc-peso', 'correc-na-actual'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', calcCorreccionSodio);
+    });
+    ['correc-sexo', 'correc-suero'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('change', calcCorreccionSodio);
+    });
+    calcCorreccionSodio();
 
     wireSelectExplicacion('ab-alcalosis-select', 'ab-alcalosis-explicacion', alcalosisMetabolicaPorCloro, (item) => `
         <strong>${item.etiqueta}</strong>

@@ -768,6 +768,38 @@
                 <li>Hiponatremia aguda: la corrección puede llegar hasta la normalización</li>
                 <li>Monitorizar Na⁺ e iones en orina cada 2-4h en fase activa</li>
             </ul>
+
+            <div class="agua-simulador">
+                <h4 style="color: var(--accent-yellow);">🧮 Calculadora: efecto estimado de 1 litro de suero (Adrogué-Madias)</h4>
+                <p class="subtitle">Estimación teórica de cuánto cambia el Na⁺ plasmático por litro infundido — no sustituye la monitorización frecuente que exige el protocolo de arriba.</p>
+                <div class="form-group">
+                    <label for="correc-peso">Peso (kg)</label>
+                    <input type="number" id="correc-peso" step="1" min="30" max="200" value="70">
+                </div>
+                <div class="form-group">
+                    <label for="correc-sexo">Sexo</label>
+                    <select id="correc-sexo">
+                        <option value="0.6">Hombre (agua corporal total = 0,6 × peso)</option>
+                        <option value="0.5">Mujer (agua corporal total = 0,5 × peso)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="correc-na-actual">Na⁺ sérico actual (mEq/l)</label>
+                    <input type="number" id="correc-na-actual" step="1" min="100" max="160" value="120">
+                </div>
+                <div class="form-group">
+                    <label for="correc-suero">Suero a infundir</label>
+                    <select id="correc-suero">
+                        <option value="154" data-k="0">Salino 0,9% (154 mEq/l Na⁺)</option>
+                        <option value="513" data-k="0">Salino 3% (513 mEq/l Na⁺)</option>
+                        <option value="77" data-k="0">Salino 0,45% (77 mEq/l Na⁺)</option>
+                        <option value="130" data-k="4">Ringer lactato (130 mEq/l Na⁺ + 4 mEq/l K⁺)</option>
+                        <option value="0" data-k="0">Glucosado 5% (0 mEq/l Na⁺ — para sobrecorrección)</option>
+                    </select>
+                </div>
+                <div id="correc-resultado" class="tfg-estado tfg-estado-ok"></div>
+            </div>
+
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚠️ Riesgo de sobrecorrección</span> <span class="toggle-icon">+</span></div>
@@ -1314,6 +1346,15 @@
                 <label for="ab-hco3">HCO₃⁻ (mEq/l)</label>
                 <input type="number" id="ab-hco3" step="0.5" min="3" max="50" value="24">
             </div>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px;">Opcional — si además hay una acidosis con hiato aniónico elevado, introduce Na⁺ y Cl⁻ para comprobar el Δ-gap y detectar un trastorno metabólico mixto escondido:</p>
+            <div class="form-group">
+                <label for="ab-na">Na⁺ (mEq/l)</label>
+                <input type="number" id="ab-na" step="1" min="100" max="170" placeholder="p. ej. 140">
+            </div>
+            <div class="form-group">
+                <label for="ab-cl">Cl⁻ (mEq/l)</label>
+                <input type="number" id="ab-cl" step="1" min="70" max="130" placeholder="p. ej. 100">
+            </div>
             <div id="ab-clasificador-resultado" class="result-box" style="display: none;"></div>
         </div>
 
@@ -1428,6 +1469,18 @@
             </div>
             <dl class="kv-row"><dt>Calcio corporal</dt><dd>1,4 kg en un adulto, 99% en el hueso. Calcemia normal 8,9-10,3 mg/dl; el 40% unido a proteínas (albúmina, principalmente — cada ↓1 g/dl de albúmina ⇒ ↓0,8 mg/dl de Ca total), 6% unido a fosfato/citrato/bicarbonato, 54% Ca iónico (normal 4,6-5,1 mg/dl). La evidencia reciente sugiere que el Ca <strong>no ajustado</strong> puede ser más fiable que el corregido por albúmina en la mayoría de escenarios; si es posible, medir el Ca iónico directamente.</dd></dl>
             <dl class="kv-row"><dt>Efecto del pH sobre el Ca iónico</dt><dd>↓pH de 0,1 → ↑Ca iónico ~0,1 mEq/l (los H⁺ desplazan el Ca de la albúmina); la alcalosis lo disminuye. Corrección: Ca iónico = Ca medido × [1 − 0,53 × (7,40 − pH medido)].</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">🧮 Calculadora de calcio corregido por albúmina</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Ca corregido = Ca medido + 0,8 × (4 − albúmina). Cribado rápido; si es posible, mide el calcio iónico directamente (más fiable, ver nota de arriba).</p>
+            <div class="form-group">
+                <label for="ca-corr-total">Calcio total medido (mg/dl)</label>
+                <input type="number" id="ca-corr-total" step="0.1" min="4" max="16" value="8.0">
+            </div>
+            <div class="form-group">
+                <label for="ca-corr-albumina">Albúmina (g/dl)</label>
+                <input type="number" id="ca-corr-albumina" step="0.1" min="1" max="5.5" value="2.5">
+            </div>
+            <div id="ca-corr-resultado" class="result-box" style="display: none;"></div>
 
             <p class="section-label" style="margin-top:16px;">Definición y etiología</p>
             <dl class="kv-row"><dt>Definición</dt><dd>Ca total &lt;8,5 mg/dl (2,1 mmol/l) o Ca iónico &lt;4,6 mg/dl (1,15 mmol/l), tras confirmar cifras normales de albúmina.</dd></dl>

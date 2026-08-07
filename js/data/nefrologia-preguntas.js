@@ -1376,4 +1376,120 @@ export const preguntasNefrologia = [
         correcta: 0,
         explicacion: 'La hipermagnesemia es poco frecuente fuera de la enfermedad renal, porque el riñón sano tiene una gran capacidad de excretar el exceso de magnesio filtrado.',
     },
+
+    // ---- Magnesio (ampliación) ----
+    {
+        id: 'nefro-q129',
+        tema: 'fisio-magnesio',
+        enunciado: '¿Qué cambios electrocardiográficos son característicos de la hipomagnesemia?',
+        opciones: [
+            'Acortamiento del QT exclusivamente',
+            'Alargamiento del QT, ensanchamiento del QRS y onda T picuda con aplanamiento posterior',
+            'Ondas de Osborn',
+            'Ausencia completa de cambios en el ECG',
+        ],
+        correcta: 1,
+        explicacion: 'La hipomagnesemia produce alargamiento del QT, ensanchamiento del QRS, T picuda con aplanamiento posterior y descenso del ST, con riesgo de arritmias ventriculares.',
+    },
+    {
+        id: 'nefro-q130',
+        tema: 'fisio-magnesio',
+        enunciado: 'En la progresión clínica de la hipermagnesemia grave, ¿qué signo neuromuscular precede a la depresión respiratoria y la parada cardíaca?',
+        opciones: ['La hiperreflexia', 'La hiporreflexia (abolición de los reflejos osteotendinosos)', 'El signo de Chvostek', 'El signo de Trousseau'],
+        correcta: 1,
+        explicacion: 'La clínica progresa de náuseas y debilidad a hiporreflexia, hipotensión y bradicardia, antes de la depresión respiratoria y la parada cardíaca en las formas graves — la abolición de reflejos es un signo de alarma clásico (el mismo que se vigila en la sueroterapia con sulfato de magnesio en la eclampsia).',
+    },
+    {
+        id: 'nefro-q131',
+        tema: 'fisio-magnesio',
+        enunciado: '¿Cuál es el tratamiento de elección de una hipermagnesemia grave en un paciente con enfermedad renal?',
+        opciones: ['Furosemida en monoterapia', 'Hemodiálisis', 'Sulfato de magnesio IV a dosis bajas', 'Restricción de líquidos exclusivamente'],
+        correcta: 1,
+        explicacion: 'Si hay enfermedad renal o la hipermagnesemia es grave, el tratamiento de elección es la hemodiálisis; la expansión de volumen + furosemida solo es adecuada en casos leves con función renal normal.',
+    },
+    {
+        id: 'nefro-q132',
+        tema: 'fisio-magnesio',
+        enunciado: '¿Qué mecanismo común comparten el síndrome del hueso hambriento y el síndrome de realimentación como causas de hipomagnesemia?',
+        opciones: [
+            'Ambos son pérdidas gastrointestinales',
+            'Ambos son pérdidas renales inducidas por diuréticos',
+            'Ambos producen hipomagnesemia por redistribución del magnesio hacia el hueso o el espacio intracelular',
+            'Ninguno de los dos afecta al magnesio',
+        ],
+        correcta: 2,
+        explicacion: 'En ambos casos el magnesio sérico cae por redistribución: hacia el hueso en el síndrome del hueso hambriento (tras paratiroidectomía) y hacia el espacio intracelular en el síndrome de realimentación.',
+    },
+    {
+        id: 'nefro-q133',
+        tema: 'fisio-magnesio',
+        enunciado: '¿Cuántos mEq de magnesio contiene una ampolla de sulfato de magnesio IV al 15% (10 ml), la presentación usada en la hipomagnesemia grave?',
+        opciones: ['4 mEq (50 mg)', '12 mEq (150 mg)', '24 mEq (300 mg)', '50 mEq (600 mg)'],
+        correcta: 1,
+        explicacion: 'Una ampolla de sulfato de magnesio al 15% (10 ml) aporta 12 mEq (150 mg) de magnesio elemento — la equivalencia es 1 mmol = 2 mEq = 24 mg.',
+    },
+
+    // ---- Fósforo (ampliación) ----
+    {
+        id: 'nefro-q134',
+        tema: 'fisio-fosforo',
+        enunciado: 'En un paciente con hipofosfatemia grave y debilidad muscular progresiva, ¿qué complicación respiratoria debe vigilarse?',
+        opciones: [
+            'Fallo respiratorio por debilidad de la musculatura respiratoria',
+            'Hipertrofia de la musculatura respiratoria',
+            'No existe relación entre fósforo y función muscular',
+            'Solo afecta al músculo cardíaco, nunca al respiratorio',
+        ],
+        correcta: 0,
+        explicacion: 'La hipofosfatemia grave puede causar debilidad muscular progresiva hasta el fallo respiratorio por afectación de la musculatura respiratoria, además de rabdomiólisis — una de sus complicaciones más temidas.',
+    },
+    {
+        id: 'nefro-q135',
+        tema: 'fisio-fosforo',
+        enunciado: '¿Qué sal de fósforo IV elegirías para un paciente con hipofosfatemia grave que además tiene hiperpotasemia?',
+        opciones: ['Fosfato dipotásico 1M', 'Fosfato monosódico 1M', 'Cualquiera, son intercambiables sin ajuste', 'El fósforo IV está contraindicado siempre en hiperpotasemia'],
+        correcta: 1,
+        explicacion: 'La sal se elige según la potasemia del paciente: fosfato monosódico si hay riesgo de hiperpotasemia (evita añadir K⁺), fosfato dipotásico si el paciente está normo o hipopotasémico.',
+    },
+    {
+        id: 'nefro-q136',
+        tema: 'fisio-fosforo',
+        enunciado: 'En el algoritmo diagnóstico de la hipofosfatemia, una reabsorción tubular de fósforo (RTP) >90% indica...',
+        opciones: [
+            'Pérdida renal de fósforo como causa principal',
+            'Ausencia de pérdida renal — la causa está en la absorción intestinal o en un desplazamiento hacia el espacio intracelular',
+            'Hiperparatiroidismo secundario obligado',
+            'Insuficiencia renal aguda',
+        ],
+        correcta: 1,
+        explicacion: 'Una RTP >90% descarta la pérdida renal como causa, orientando hacia una disminución de la absorción intestinal o un desplazamiento intracelular (p. ej. síndrome de realimentación); una RTP <90% obliga a seguir estudiando la vía renal.',
+    },
+
+    // ---- Ácido-base: viñetas de gasometría ----
+    {
+        id: 'nefro-q137',
+        tema: 'fisio-acidobase-acidosis',
+        enunciado: 'Gasometría en un paciente reanimado tras una parada cardiorrespiratoria: pH 7,18, pCO₂ 45 mmHg, HCO₃⁻ 16 mEq/l. Con la fórmula de Winters (pCO₂ esperada = 1,5×HCO₃⁻ + 8 ± 2), ¿qué sugiere la pCO₂ real de 45?',
+        opciones: [
+            'Una acidosis metabólica simple, bien compensada',
+            'Una acidosis metabólica con una acidosis respiratoria sobreañadida (trastorno mixto)',
+            'Una acidosis metabólica con una alcalosis respiratoria sobreañadida',
+            'Una alcalosis respiratoria pura',
+        ],
+        correcta: 1,
+        explicacion: 'La pCO₂ esperada según Winters sería 1,5×16+8=32 (±2, es decir 30-34); la pCO₂ real (45) está muy por encima — la compensación respiratoria es insuficiente, lo que indica una acidosis respiratoria sobreañadida (coherente con la hipoventilación tras una PCR).',
+    },
+    {
+        id: 'nefro-q138',
+        tema: 'fisio-acidobase-alcalosis',
+        enunciado: 'Gasometría en un paciente con vómitos de una semana de evolución: pH 7,50, pCO₂ 47 mmHg, HCO₃⁻ 36 mEq/l. Con la fórmula de compensación esperada (ΔpCO₂ ≈ 0,7 × ΔHCO₃⁻), ¿qué conclusión es correcta?',
+        opciones: [
+            'Alcalosis metabólica simple, con compensación respiratoria adecuada',
+            'Trastorno mixto con una acidosis respiratoria sobreañadida',
+            'Trastorno mixto con una alcalosis respiratoria sobreañadida',
+            'Acidosis respiratoria pura',
+        ],
+        correcta: 0,
+        explicacion: 'ΔHCO₃⁻ = 36−24 = 12; ΔpCO₂ esperada ≈ 0,7×12 = 8,4, es decir una pCO₂ esperada ≈48 mmHg. La pCO₂ real (47) encaja con ese rango — compensación respiratoria adecuada para una alcalosis metabólica simple.',
+    },
 ];
