@@ -605,6 +605,21 @@ por encima que sí diera cabida a todos.
     contra la ficha correspondiente — varias refuerzan explícitamente
     herramientas ya existentes (p. ej. `nefro-q139` pregunta por la
     fórmula exacta de la calculadora de calcio corregido).
+  - **Ampliación a 25 preguntas en los "últimos temas"**: a petición
+    explícita del usuario ("añade más preguntas... sobre todo los últimos
+    temas, tienes que llegar al menos a 25"), se llevaron los 6 temas de
+    Ácido-base y Ca-P-Mg (Ácido-base acidosis/alcalosis, Hipocalcemia,
+    Hipercalcemia, Fósforo, Magnesio — las fichas más recientes del
+    bloque) de 8 a **25 preguntas cada uno** (`nefro-q154`-`q255`, 102
+    preguntas nuevas). El resto de temas de fisiología queda en 8 (9
+    Hiponatremia) — no se tocaron porque el encargo señalaba
+    explícitamente "los últimos temas". Cada pregunta nueva se verificó
+    contra el contenido exacto de la ficha/fuente correspondiente
+    (Alteraciones del Metabolismo Ácido Base y Trastornos del Calcio,
+    Fósforo y Magnesio, ambas releídas íntegras en auditorías anteriores
+    de esta sesión) para no introducir hechos no citados ni duplicar
+    preguntas ya existentes. El banco de Nefrología queda en **255
+    preguntas**.
 - **`nefro-menu.html`** (nivel 1, la nefrona) usa una **fotografía/ilustración anatómica real**
   (`js/modules/nefrologia/img/nefrona-anatomia.jpg`, corte de tejido renal
   con las dos nefronas — cortical de asa corta y yuxtamedular de asa larga
