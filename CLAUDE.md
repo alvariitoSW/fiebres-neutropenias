@@ -784,6 +784,72 @@ por encima que sí diera cabida a todos.
     literales (válido en un string JS, y es lo que `textContent` necesita)
     — nunca escribas `&lt;`/`&gt;` dentro de `js/data/*-preguntas.js`,
     solo dentro de los `.html` de las fichas.
+  - **Ampliación de Ficha 5 (HTA resistente) y Ficha 6 (HTA secundaria:
+    causas renales) con los artículos monográficos dedicados**: las dos
+    primeras fichas de `hta.html` se construyeron originalmente solo con
+    el resumen que trae `HTA_2_.pdf`/`HTA_SECUNDARIA.pdf` (el artículo
+    general de HTA secundaria). Se releyeron después dos PDF adjuntos
+    nuevos —Segura J, Gorostidi M. Hipertensión arterial resistente.
+    Nefrología al día (SEN), actualizado 6/10/2021; y Oliveras A.
+    Hipertensión arterial renovascular. Nefrología al día (SEN),
+    actualizado 5/10/2021— cada uno un capítulo monográfico mucho más
+    detallado sobre ese mismo tema, y se usaron para ampliar
+    sustancialmente (no reescribir desde cero) esas dos fichas concretas,
+    dejando intactas las fichas 1-4 y 7-8. Un tercer PDF adjunto en la
+    misma tanda (`HTA_SECUNDARIA.pdf`) resultó ser el mismo artículo que
+    `HTA_2_.pdf` ya incorporado (mismos autores, mismo ID NC-014, mismo
+    contenido) — se comprobó explícitamente antes de dar la tarea por
+    completada, para no reescribir contenido ya presente.
+    - **Ficha 5 (`hta-resistente`)**: definición clásica vs. ampliada
+      (AHA, ≥4 fármacos) vs. HTA refractaria (≥5 fármacos); tabla de
+      prevalencia por fuente (NHANES, Kaiser Permanente, Registro Español
+      de MAPA, ERC); Tabla 1 de factores demográficos/fisiopatológicos/
+      comorbilidades; pronóstico (+47% riesgo CV a ~4 años); cuaderno de
+      6 `micro-prof-item` para el enfoque diagnóstico de la
+      pseudorresistencia (cumplimiento terapéutico, bata blanca —con la
+      cifra real del Registro Español, 62,5%/37,5%—, técnica de medida,
+      pseudohipertensión/maniobra de Osler, inercia clínica, SAHS
+      70-90%); proceso diagnóstico en 7 pasos (antes Figura 1 del PDF,
+      recreado como secuencia `kv-row` numerada en vez de flujograma
+      SVG, más simple y suficiente para un flujo lineal de 7 pasos sin
+      ramas de decisión); tabla de recomendaciones de optimización
+      farmacológica (Tabla 3, 10 ítems); esquema de tratamiento
+      escalonado con el detalle real de FG/fármaco (hidroclorotiazida
+      inefectiva con FG&lt;45, clortalidona hasta FG 30) y el resultado
+      del ensayo PATHWAY-2; terapias invasivas (denervación simpática
+      renal —con el resultado real y controvertido de SYMPLICITY
+      HTN-3—, estimulación de barorreceptores carotídeos, fístulas AV).
+    - **Ficha 6 (`hta-secundaria-renal`), sección renovascular**:
+      reenmarcada como "enfermedad renal vascular (ERV)"; Tabla 1 de
+      causas completa (frecuentes/infrecuentes/situaciones especiales,
+      incluye vasculitis sistémicas y fístula AV renal, ausentes del
+      resumen anterior); epidemiología detallada por territorio vascular;
+      fisiopatología con el modelo de Goldblatt (2K1C), el hallazgo del
+      ratón knockout AT1A, y las dos fases renina-dependiente/
+      volumen-dependiente (antes no distinguidas); Tabla 2 de 11
+      situaciones de sospecha (antes una lista más corta); diagnóstico
+      ampliado con el índice de resistencia (IR) Doppler y su
+      interpretación (IR&gt;80 = revascularización contraindicada),
+      BOLD-RM, angiografía por sustracción digital con "signo de cuerda"
+      e hiperemia con papaverina/dopamina, y tabla de criterios de
+      gravedad hemodinámica; tratamiento ampliado con tasas reales de
+      éxito/reestenosis de la ATP, tabla de predictores de buena
+      respuesta, y tabla completa de criterios SCAI/AHA-ACC de uso
+      apropiado de la angioplastia (7 contextos clínicos). **Primeras
+      imágenes reales extraídas para el bloque de HTA** (a diferencia de
+      la Ficha 1-4/7-8 originales, donde se decidió no extraer ninguna
+      por ser solo tablas/flujogramas tabulables): 3 angiografías reales
+      del PDF de renovascular (`js/modules/nefrologia/img/renovasc-fig1-
+      displasia.jpg`, `renovasc-fig2-aterosclerotica.jpg`,
+      `renovasc-fig3-stent.jpg`, extraídas con `pdfimages -all -j`),
+      como `.article-figure` — buenas candidatas porque son fotografías
+      angiográficas genuinas, no tablas ni flujogramas reconstruibles.
+    - Se añadieron 24 preguntas nuevas al quiz de HTA (`hta-q065`-`q088`,
+      12 por ficha), llevando ambos temas de 8 a 20 preguntas cada uno —
+      el resto de temas de HTA (Ficha 1-4, 7-8) se mantuvo en 8, igual
+      que el criterio ya usado en Nefrología de ampliar el banco solo en
+      los temas que reciben una ampliación de contenido real. El banco
+      combinado de Nefrología+HTA queda en 343 preguntas (255+88).
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
