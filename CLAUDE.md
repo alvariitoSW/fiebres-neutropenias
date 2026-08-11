@@ -736,6 +736,54 @@ por encima que sí diera cabida a todos.
   antes: 1) añádelo en `nefrona-data.js`, 2) crea el partial con
   `.btn-volver-nefro-menu`, 3) regístralo en `index.html` y en
   `categoriaDisponible` de `nefrologia/index.js`.
+- **`hta.html`** (objetivo de rotación 2) fue la primera de las 6
+  categorías del mapa del riñón en pasar de placeholder a contenido real,
+  siguiendo el patrón anterior al pie de la letra: releída la bibliografía
+  completa aportada por el usuario (Gorostidi M et al. Hipertensión
+  Arterial Esencial, Nefrología al día, 37 págs.; Santamaría Olmo R,
+  Gorostidi M. Hipertensión arterial secundaria, Nefrología al día, 19
+  págs.), se sustituyó la tarjeta "🚧 en preparación" por un cuaderno de
+  campo (`#hta-corkboard`/`#panel-hta-tabs`, `js/modules/nefrologia/hta.js`
+  vía el mismo `core/corkboard.js` de siempre) con 8 fichas: Definición y
+  diagnóstico, Evaluación del hipertenso, Objetivos y estilo de vida,
+  Tratamiento farmacológico, HTA resistente, HTA secundaria de causa
+  renal, HTA secundaria de causa endocrinológica, y SAHS/coartación/
+  fármacos/causas genéticas. Todas las tablas originales (clasificación de
+  PA, MAPA/AMPA, estratificación de riesgo CV, fármacos y dosis,
+  estrategias de tratamiento por comorbilidad, causas de HTA secundaria,
+  fármacos que inducen HTA, causas monogénicas) se recrearon como
+  `.data-table` nativas — ninguna de las figuras del PDF era una
+  ilustración anatómica o un diagrama complejo (eran tablas con borde o
+  flujogramas de tratamiento fácilmente tabulables por escalón), así que
+  no se extrajo ninguna imagen esta vez, a diferencia de los bloques de
+  fisiología. La bibliografía original de `hta.html` se mantuvo intacta al
+  final, sin tocarla.
+  - **Quiz de HTA integrado en el mismo motor, sin duplicarlo**: el modal
+    del quiz (`#quiz-modal-overlay` y sus elementos internos en
+    `quiz.html`) es un único partial compartido por toda la app — llamar a
+    `initQuiz()` dos veces con triggers distintos duplicaría los listeners
+    sobre los mismos botones del modal (`#quiz-opciones`, `#quiz-siguiente`)
+    y rompería el quiz ya existente de Nefrología. En vez de eso,
+    `initQuiz()` (en `js/modules/quiz/quiz.js`) ahora acepta `triggerId`
+    como string **o array de strings** — cada botón de la lista abre el
+    mismo banco combinado — y `nefrologia/index.js` hace una única llamada
+    con `triggerId: ['btn-nefro-repasar', 'btn-hta-repasar']` y
+    `banco`/`temas` como el spread de `preguntasNefrologia`+`preguntasHTA`
+    y `temasNefrologia`+`temasHTA` (`js/data/hta-preguntas.js`, mismo
+    formato que `nefrologia-preguntas.js`). Si en el futuro se añade
+    contenido real a otra categoría del mapa del riñón con su propio
+    "🎯 Repasar", sigue este mismo patrón: nunca una segunda llamada a
+    `initQuiz()`, siempre un `triggerId` más en el array de la única
+    llamada existente.
+  - **Bug preexistente corregido de paso**: `quiz.js` pinta el enunciado y
+    las opciones con `textContent`, que no decodifica entidades HTML — 21
+    preguntas de Nefrología que usaban `&lt;`/`&gt;` en vez de `<`/`>`
+    literales (porque así se escriben correctamente dentro del HTML de las
+    fichas) se mostraban con la entidad sin decodificar en el quiz. Se
+    corrigieron esas 21 preguntas en `nefrologia-preguntas.js` a `<`/`>`
+    literales (válido en un string JS, y es lo que `textContent` necesita)
+    — nunca escribas `&lt;`/`&gt;` dentro de `js/data/*-preguntas.js`,
+    solo dentro de los `.html` de las fichas.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

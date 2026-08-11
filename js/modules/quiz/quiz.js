@@ -5,6 +5,13 @@
 // una pantalla de selección de tema ("Todos los temas" + uno por cada
 // entrada) que filtra el banco por su campo `tema` — opcional y con
 // degradación elegante: sin `temas`, el quiz arranca directo como siempre.
+// El modal (#quiz-modal-overlay y sus elementos internos) es un único
+// partial compartido por toda la app — por eso solo debe existir UNA
+// llamada activa a initQuiz por página, con el banco/temas ya combinados
+// si varios módulos (p. ej. Nefrología + HTA) quieren aportar preguntas.
+// `triggerId` acepta un string o un array de strings: cada botón listado
+// abre el mismo banco combinado, para que cada módulo pueda tener su
+// propio botón "🎯 Repasar" sin duplicar el motor del quiz.
 //
 // Única excepción de persistencia del proyecto: guarda aciertos/fallos por
 // pregunta en localStorage (solo ese dispositivo, sin cuentas ni
@@ -36,9 +43,11 @@ function barajar(array) {
 }
 
 export function initQuiz({ triggerId, banco, temas }) {
-    const trigger = document.getElementById(triggerId);
+    const triggers = (Array.isArray(triggerId) ? triggerId : [triggerId])
+        .map(id => document.getElementById(id))
+        .filter(Boolean);
     const overlay = document.getElementById('quiz-modal-overlay');
-    if (!trigger || !overlay) return;
+    if (triggers.length === 0 || !overlay) return;
 
     const temasEl = document.getElementById('quiz-temas');
     const temasListaEl = document.getElementById('quiz-temas-lista');
@@ -122,7 +131,7 @@ export function initQuiz({ triggerId, banco, temas }) {
         else overlay.classList.remove('active');
     });
 
-    trigger.addEventListener('click', () => {
+    triggers.forEach(trigger => trigger.addEventListener('click', () => {
         overlay.classList.add('active');
         if (temas && temas.length > 0) {
             mostrarPantallaQuiz(false);
@@ -130,7 +139,7 @@ export function initQuiz({ triggerId, banco, temas }) {
         } else {
             empezar(banco);
         }
-    });
+    }));
 
     closeBtn.addEventListener('click', () => overlay.classList.remove('active'));
     overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('active'); });

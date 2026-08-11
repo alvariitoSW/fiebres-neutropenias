@@ -4,14 +4,718 @@
         <p>Objetivo de rotación 2 · Nefrología al día (SEN)</p>
     </div>
 
-    <div class="card">
-        <h3 style="color: var(--accent-red);">🚧 En preparación</h3>
-        <p style="font-size: 0.85rem; line-height: 1.5; color: var(--text-muted);">
-            El contenido clínico de este apartado (HTA esencial, secundaria, renovascular,
-            resistente, hiperaldosteronismo, feocromocitoma y crisis hipertensivas) se irá
-            añadiendo a partir de la bibliografía citada abajo. Mientras tanto, los enlaces ya son
-            reales y navegables.
-        </p>
+    <button class="accordion-btn nav-btn" id="btn-hta-repasar" style="border-left: 4px solid var(--accent-yellow);">
+        <span>🎯 Repasar (preguntas de repaso)</span>
+        <span style="font-size: 0.8rem; color: var(--accent-yellow);">[ EMPEZAR → ]</span>
+    </button>
+
+    <p class="section-label">Repaso de hipertensión arterial</p>
+    <div class="corkboard" id="hta-corkboard">
+        <div class="field-card" data-tab="hta-definicion">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 1</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><rect x="18" y="20" width="44" height="16" rx="3" fill="none" stroke="var(--accent-red)" stroke-width="2"/><line x1="24" y1="28" x2="56" y2="28" stroke="var(--accent-yellow)" stroke-width="2"/><circle cx="24" cy="28" r="3" fill="var(--accent-red)"/></svg>
+                    <div class="field-name">Definición y diagnóstico</div>
+                    <div class="field-hook">¿A partir de qué cifra de PA en consulta se define la HTA según la guía europea ESC/ESH 2018?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">≥140/90 mmHg de forma mantenida (la guía americana ACC/AHA 2017 usa un umbral más bajo, ≥130/80 mmHg).</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="hta-evaluacion">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 2</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><rect x="26" y="10" width="28" height="36" rx="2" fill="none" stroke="var(--accent-blue)" stroke-width="2"/><line x1="31" y1="18" x2="49" y2="18" stroke="var(--accent-yellow)" stroke-width="1.6"/><line x1="31" y1="25" x2="49" y2="25" stroke="var(--accent-yellow)" stroke-width="1.6"/><line x1="31" y1="32" x2="42" y2="32" stroke="var(--accent-yellow)" stroke-width="1.6"/></svg>
+                    <div class="field-name">Evaluación del hipertenso</div>
+                    <div class="field-hook">¿Cuáles son los dos objetivos básicos de la evaluación protocolizada de todo paciente hipertenso?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Estratificar el riesgo cardiovascular y detectar posibles situaciones de HTA secundaria.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="hta-tratamiento-general">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 3</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><path d="M20,44 L36,20 L46,32 L60,12" fill="none" stroke="var(--accent-green)" stroke-width="2"/><circle cx="60" cy="12" r="3" fill="var(--accent-yellow)"/></svg>
+                    <div class="field-name">Objetivos y estilo de vida</div>
+                    <div class="field-hook">¿Cuál es el objetivo general de PA en consulta recomendado para la mayoría de los pacientes hipertensos?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">&lt;130/80 mmHg — con objetivos algo menos estrictos en pacientes de edad avanzada o con mala tolerancia.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="hta-tratamiento-farmaco">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 4</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><rect x="16" y="24" width="12" height="16" rx="2" fill="none" stroke="var(--accent-purple)" stroke-width="2"/><rect x="34" y="18" width="12" height="22" rx="2" fill="none" stroke="var(--accent-purple)" stroke-width="2"/><rect x="52" y="12" width="12" height="28" rx="2" fill="none" stroke="var(--accent-purple)" stroke-width="2"/></svg>
+                    <div class="field-name">Tratamiento farmacológico</div>
+                    <div class="field-hook">¿Cuáles son los 5 grupos de fármacos de primera línea para el tratamiento de la HTA?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">IECA, ARA II, betabloqueantes, calcioantagonistas y diuréticos (tiazídicos o similares).</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="hta-resistente">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 5</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><circle cx="40" cy="28" r="18" fill="none" stroke="var(--accent-red)" stroke-width="2"/><path d="M32,28 h16 M40,20 v16" stroke="var(--accent-red)" stroke-width="2"/></svg>
+                    <div class="field-name">HTA resistente</div>
+                    <div class="field-hook">¿Cuántos fármacos, y de qué tipo, definen la HTA resistente si no consiguen controlar la PA?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">3 fármacos sinérgicos a dosis óptimas, incluyendo un diurético.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="hta-secundaria-renal">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 6</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><path d="M40,10 C40,10 24,30 24,38 a16,16 0 0,0 32,0 C56,30 40,10 40,10 Z" fill="none" stroke="var(--accent-blue)" stroke-width="2"/><line x1="40" y1="38" x2="40" y2="48" stroke="var(--accent-yellow)" stroke-width="2"/></svg>
+                    <div class="field-name">HTA secundaria: causas renales</div>
+                    <div class="field-hook">¿Cuáles son las dos grandes causas de HTA secundaria de origen renal?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">La enfermedad renal parenquimatosa y las enfermedades vasculares de las arterias renales (renovascular).</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="hta-secundaria-endocrina">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 7</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><ellipse cx="30" cy="24" rx="8" ry="6" fill="none" stroke="var(--accent-yellow)" stroke-width="2"/><ellipse cx="50" cy="24" rx="8" ry="6" fill="none" stroke="var(--accent-yellow)" stroke-width="2"/><line x1="40" y1="30" x2="40" y2="42" stroke="var(--accent-yellow)" stroke-width="1.6"/></svg>
+                    <div class="field-name">HTA secundaria: causas endocrinológicas</div>
+                    <div class="field-hook">¿Cuál es la causa más frecuente de HTA secundaria de origen endocrinológico?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">El hiperaldosteronismo primario (HAP) — infradiagnosticado, presente hasta en el 20% de la HTA resistente.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="hta-secundaria-otras">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 8</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><path d="M20,30 q10,-14 20,0 q10,-14 20,0 q10,-14 20,0" fill="none" stroke="var(--accent-green)" stroke-width="2"/><circle cx="40" cy="42" r="3" fill="var(--accent-yellow)"/></svg>
+                    <div class="field-name">SAHS, coartación, fármacos y causas genéticas</div>
+                    <div class="field-hook">¿Cuál es, hoy en día, una de las causas más frecuentes de HTA secundaria y de HTA resistente?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">El síndrome de apnea-hipopnea del sueño (SAHS).</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="tap-hint">Toca una ficha para voltearla, y de nuevo para abrir el tema completo</p>
+
+    <div class="card" id="panel-hta-tabs" style="display:none;">
+        <div id="hta-definicion" class="tab-content">
+            <h3 style="color: var(--accent-red);">Definición y diagnóstico de la HTA</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Gorostidi M, Santamaría Olmo R, Oliveras A, Segura J. Hipertensión Arterial Esencial. Nefrología al día (SEN), actualizado 16/5/2022.</p>
+            <dl class="kv-row"><dt>Definición</dt><dd>PA elevada de forma mantenida. La relación entre la PA y el riesgo cardiovascular (RCV) y renal es continua y lineal a partir de cifras &gt;115/75 mmHg, pero por razones prácticas de diagnóstico y decisión terapéutica se fijan umbrales arbitrarios.</dd></dl>
+            <dl class="kv-row"><dt>Epidemiología en España</dt><dd>Prevalencia 33,3-42,6% en adultos (47,5% en Atención Primaria). Grado de conocimiento ~60%, control global solo ~25%.</dd></dl>
+            <ul class="term-chips">
+                <li>ESC/ESH 2018 (Europa): HTA ≥140/90 mmHg</li>
+                <li>ACC/AHA 2017 (EEUU): HTA ≥130/80 mmHg</li>
+            </ul>
+
+            <table class="data-table">
+                <thead><tr><th colspan="3">Clasificación de la PA clínica (en consulta) — guía europea ESC/ESH</th></tr></thead>
+                <tbody>
+                    <tr><td>PA óptima</td><td>&lt;120 mmHg</td><td>y &lt;80 mmHg</td></tr>
+                    <tr><td>PA normal</td><td>120-129 mmHg</td><td>y 80-84 mmHg</td></tr>
+                    <tr><td>PA normal-alta</td><td>130-139 mmHg</td><td>o 85-89 mmHg</td></tr>
+                    <tr><td>HTA grado 1</td><td>140-159 mmHg</td><td>o 90-99 mmHg</td></tr>
+                    <tr><td>HTA grado 2</td><td>160-179 mmHg</td><td>o 100-109 mmHg</td></tr>
+                    <tr><td>HTA grado 3</td><td>≥180 mmHg</td><td>o ≥110 mmHg</td></tr>
+                    <tr><td>HTA sistólica aislada</td><td>≥140 mmHg</td><td>y &lt;90 mmHg</td></tr>
+                </tbody>
+            </table>
+            <table class="data-table">
+                <thead><tr><th colspan="3">Clasificación según la guía americana ACC/AHA</th></tr></thead>
+                <tbody>
+                    <tr><td>PA normal</td><td>&lt;120 mmHg</td><td>y &lt;80 mmHg</td></tr>
+                    <tr><td>PA elevada</td><td>120-129 mmHg</td><td>y &lt;80 mmHg</td></tr>
+                    <tr><td>HTA estadio 1</td><td>130-139 mmHg</td><td>o 80-89 mmHg</td></tr>
+                    <tr><td>HTA estadio 2</td><td>≥140 mmHg</td><td>o ≥90 mmHg</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">La clasificación se basa en la media de ≥2 lecturas en ≥2 ocasiones. Si la PAS y la PAD caen en categorías distintas, se clasifica en la más alta.</p>
+
+            <p class="section-label" style="margin-top:16px;">Diagnóstico con PA ambulatoria (MAPA/AMPA)</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">La PA clínica ofrece información de un solo momento y tiene numerosos sesgos — tanto la guía americana como la europea recomiendan confirmar el diagnóstico con PA ambulatoria.</p>
+            <table class="data-table">
+                <thead><tr><th>Categoría</th><th>PAS</th><th></th><th>PAD</th></tr></thead>
+                <tbody>
+                    <tr><td>PA clínica (consulta)</td><td>≥140 mmHg</td><td>o</td><td>≥90 mmHg</td></tr>
+                    <tr><td>MAPA — media diurna</td><td>≥135 mmHg</td><td>o</td><td>≥85 mmHg</td></tr>
+                    <tr><td>MAPA — media nocturna</td><td>≥120 mmHg</td><td>o</td><td>≥70 mmHg</td></tr>
+                    <tr><td>MAPA — media 24h</td><td>≥130 mmHg</td><td>o</td><td>≥80 mmHg</td></tr>
+                    <tr><td>AMPA (automedida domiciliaria)</td><td>≥135 mmHg</td><td>o</td><td>≥85 mmHg</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">🔀 Fenotipos de HTA según PA clínica y PA ambulatoria</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Su correcto diagnóstico es crucial: la HTA de bata blanca puede llevar a pruebas y tratamiento innecesarios; la HTA enmascarada deja al paciente infratratado. Ambos fenotipos pueden estar presentes hasta en 1 de cada 3 pacientes.</p>
+            <table class="data-table">
+                <thead><tr><th></th><th>PA consulta &lt;140/90</th><th>PA consulta ≥140/90</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>PA ambulatoria &lt;130/80</strong></td><td>Normotensión</td><td>HTA de bata blanca</td></tr>
+                    <tr><td><strong>PA ambulatoria ≥130/80</strong></td><td>HTA enmascarada</td><td>HTA sostenida (verdadera)</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">En pacientes ya tratados, los mismos 4 cuadrantes se llaman: controlada, no controlada de bata blanca, no controlada enmascarada, y no controlada.</p>
+
+            <p class="section-label" style="margin-top:16px;">Medida correcta de la PA en consulta</p>
+            <ul class="term-chips">
+                <li>Paciente sentado y relajado 5 min antes</li>
+                <li>3 medidas separadas 1-2 min (media de las 2 últimas)</li>
+                <li>Manguito estándar 12-13×35 cm, ajustar talla al brazo</li>
+                <li>Brazo apoyado a la altura del corazón</li>
+                <li>Medir en ambos brazos en la 1ª visita</li>
+                <li>Medir en bipedestación (1-3 min) para detectar hipotensión ortostática</li>
+                <li>Registrar frecuencia cardíaca y palpar el pulso (descartar arritmias)</li>
+            </ul>
+
+            <p class="section-label" style="margin-top:16px;">Algoritmo de detección y diagnóstico</p>
+            <dl class="kv-row"><dt>PA óptima (&lt;120/80)</dt><dd>Control al menos cada 5 años.</dd></dl>
+            <dl class="kv-row"><dt>PA normal (120-129/80-84)</dt><dd>Control al menos cada 3 años.</dd></dl>
+            <dl class="kv-row"><dt>PA normal-alta (130-139/85-89)</dt><dd>Control al menos anual; valorar HTA enmascarada con MAPA o AMPA.</dd></dl>
+            <dl class="kv-row"><dt>HTA (≥140/90)</dt><dd>Confirmar repitiendo la PA en consulta o con MAPA/AMPA antes de establecer el diagnóstico definitivo.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Causas de HTA</p>
+            <dl class="kv-row"><dt>HTA esencial (primaria)</dt><dd>~90% de los casos. Trastorno heterogéneo de base poligénica (hasta 120 loci identificados, que en conjunto explican solo una mínima parte de la herencia). Factores adquiridos/ambientales: sobrepeso-obesidad, sedentarismo, dieta rica en sal y pobre en potasio, ingesta excesiva de alcohol.</dd></dl>
+            <dl class="kv-row"><dt>HTA secundaria</dt><dd>~10% de los casos, a una causa en principio corregible. Causas frecuentes: enfermedad renal parenquimatosa, enfermedad renovascular, hiperaldosteronismo primario, SAHS, fármacos/drogas. Causas infrecuentes: feocromocitoma, Cushing, hiper/hipotiroidismo, hiperparatiroidismo, coartación de aorta, disfunción suprarrenal.</dd></dl>
+            <dl class="kv-row"><dt>Formas monogénicas</dt><dd>Muy infrecuentes: una única mutación condiciona la HTA (p. ej. síndrome de Liddle o el aldosteronismo corregible con glucocorticoides) — ver ficha 8.</dd></dl>
+        </div>
+
+        <div id="hta-evaluacion" class="tab-content">
+            <h3 style="color: var(--accent-blue);">Evaluación del paciente con HTA</h3>
+            <dl class="kv-row"><dt>Objetivos</dt><dd>Estratificar el riesgo cardiovascular (RCV) del paciente hipertenso y detectar posibles situaciones de HTA secundaria. El protocolo inicial incluye historia clínica dirigida, exploración física básica y exploraciones complementarias generales; en casos seleccionados se añaden exploraciones avanzadas.</dd></dl>
+
+            <table class="data-table">
+                <thead><tr><th colspan="2">Historia personal y familiar — factores de riesgo</th></tr></thead>
+                <tbody>
+                    <tr><td colspan="2">Historia familiar/personal de HTA, enfermedad CV o renal; factores de riesgo CV asociados; tabaco; dieta y consumo de sal; alcohol; sedentarismo/ejercicio; disfunción eréctil; ronquidos/apnea del sueño; HTA previa en el embarazo/preeclampsia</td></tr>
+                </tbody>
+            </table>
+            <table class="data-table">
+                <thead><tr><th colspan="2">Historia de lesión subclínica de órgano diana / enfermedad establecida</th></tr></thead>
+                <tbody>
+                    <tr><td>Cerebro y ojos</td><td>Cefalea, vértigo, síncope, alteraciones visuales, ictus, revascularización carotídea, deterioro cognitivo, demencia</td></tr>
+                    <tr><td>Corazón</td><td>Dolor torácico, disnea, edemas, infarto, revascularización coronaria, síncope, palpitaciones, arritmias (sobre todo FA), insuficiencia cardíaca</td></tr>
+                    <tr><td>Riñón</td><td>Sed, poliuria, nicturia, hematuria, infecciones urinarias</td></tr>
+                    <tr><td>Arterias periféricas</td><td>Frialdad de extremidades, claudicación intermitente, dolor en reposo, revascularización periférica</td></tr>
+                </tbody>
+            </table>
+            <table class="data-table">
+                <thead><tr><th colspan="2">Historia de posible HTA secundaria</th></tr></thead>
+                <tbody>
+                    <tr><td colspan="2">HTA grado 2-3 de inicio precoz (&lt;40 años), desarrollo brusco o empeoramiento en mayores; historia de ERC o enfermedad urológica; fármacos o drogas (AINE, corticoides, anticonceptivos, vasoconstrictores nasales, quimioterapia, cocaína); sudoración/cefalea/ansiedad/palpitaciones sugestivas de feocromocitoma; hipopotasemia espontánea o inducida por diuréticos; síntomas tiroideos o de hiperparatiroidismo; apnea del sueño</td></tr>
+                </tbody>
+            </table>
+
+            <table class="data-table">
+                <thead><tr><th colspan="2">Exploración física básica</th></tr></thead>
+                <tbody>
+                    <tr><td>Datos antropométricos</td><td>Peso, talla, IMC, perímetro de cintura</td></tr>
+                    <tr><td>Lesión de órgano diana</td><td>Examen neurológico/cognitivo, fondo de ojo (HTA grado 2-3), exploración cardíaca y carotídea, palpación de arterias periféricas, PA en ambos brazos</td></tr>
+                    <tr><td>Sospecha de HTA secundaria</td><td>Manchas café con leche/neurofibromatosis (feocromocitoma), soplos torácicos/abdominales (coartación, enf. renovascular), masas abdominales (poliquistosis), asimetría de PA/pulsos brazo-pierna (coartación), signos tiroideos, de Cushing o de acromegalia</td></tr>
+                </tbody>
+            </table>
+            <table class="data-table">
+                <thead><tr><th colspan="2">Pruebas rutinarias de laboratorio</th></tr></thead>
+                <tbody>
+                    <tr><td colspan="2">Hemograma · Glucemia basal y HbA1c · Creatinina sérica y FGe · Urato sérico · Sodio y potasio séricos · Perfil lipídico completo · TSH · Análisis de orina (sistemático, sedimento, cociente albúmina/creatinina) · ECG de 12 derivaciones</td></tr>
+                </tbody>
+            </table>
+            <table class="data-table">
+                <thead><tr><th>Exploraciones complementarias avanzadas</th><th>Indicación</th></tr></thead>
+                <tbody>
+                    <tr><td>Ecocardiograma</td><td>Cuando la información conlleve decisiones terapéuticas</td></tr>
+                    <tr><td>Ecografía carotídea</td><td>Enfermedad cerebrovascular o arterial periférica</td></tr>
+                    <tr><td>Ecografía/Doppler abdominal</td><td>Tamaño y estructura renal, sospecha renovascular (asimetría renal) o adrenal</td></tr>
+                    <tr><td>Índice tobillo-brazo</td><td>Enfermedad arterial periférica</td></tr>
+                    <tr><td>Velocidad de onda de pulso</td><td>Rigidez aórtica, aterosclerosis subyacente</td></tr>
+                    <tr><td>Pruebas de función cognitiva / imagen cerebral</td><td>Sospecha de deterioro cognitivo o de enfermedad cerebrovascular</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">🚩 Situaciones clínicas de sospecha de HTA secundaria</p>
+            <ul class="term-chips">
+                <li>Inicio antes de la pubertad</li>
+                <li>Inicio &lt;30 años sin obesidad ni antecedentes familiares</li>
+                <li>Inicio &gt;60 años</li>
+                <li>Crisis hipertensivas con PA previa normal o bien controlada</li>
+                <li>HTA resistente (tras descartar bata blanca e incumplimiento)</li>
+                <li>HTA acelerada o maligna (retinopatía grado III-IV de Keith-Wagener)</li>
+                <li>Síntomas/signos de enfermedad subyacente</li>
+                <li>Fármacos capaces de inducir HTA</li>
+            </ul>
+            <table class="data-table">
+                <thead><tr><th>Causa</th><th>Datos clínicos de sospecha</th></tr></thead>
+                <tbody>
+                    <tr><td>Enfermedad renal parenquimatosa</td><td>↑Excreción urinaria de albúmina/proteínas, alteraciones del sedimento, descenso del FGe</td></tr>
+                    <tr><td>HTA renovascular — displasia fibromuscular</td><td>Mujeres jóvenes sin otros factores de riesgo, o con soplo abdominal</td></tr>
+                    <tr><td>HTA renovascular aterosclerótica</td><td>HTA de novo/empeoramiento con aterosclerosis a otros niveles, asimetría renal &gt;1,5 cm, soplo abdominal, deterioro agudo de función renal (creatinina &gt;30%) tras iniciar IECA/ARA-II, crisis con edema agudo de pulmón no justificado</td></tr>
+                    <tr><td>Hiperaldosteronismo primario</td><td>Hipopotasemia no explicada por pérdida urinaria de potasio</td></tr>
+                    <tr><td>Síndrome de Cushing</td><td>Ganancia de peso, obesidad central, cara de luna llena, joroba de búfalo, hirsutismo, debilidad, hiperglucemia, estrías purpúreas</td></tr>
+                    <tr><td>Feocromocitoma</td><td>Crisis hipertensivas con cefalea, palpitaciones y sudoración</td></tr>
+                    <tr><td>Hiper/hipotiroidismo</td><td>Síntomas correspondientes, alteración de la TSH</td></tr>
+                    <tr><td>Hiperparatiroidismo</td><td>Hipercalcemia, PTH intacta elevada</td></tr>
+                    <tr><td>Acromegalia</td><td>Fenotipo correspondiente</td></tr>
+                    <tr><td>SAHS</td><td>Obesidad, ronquido, pausas de apnea, somnolencia diurna, fatigabilidad, confusión matutina</td></tr>
+                    <tr><td>Coartación de aorta</td><td>HTA en miembros superiores con PA normal/baja en inferiores, soplo interescapular</td></tr>
+                    <tr><td>Fármacos</td><td>Relación cronológica entre el fármaco y el desarrollo o empeoramiento de la HTA</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Estratificación del riesgo cardiovascular</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🇺🇸 ASCVD (guía americana)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Fórmula basada en las cohortes de Framingham, ARIC y CARDIA. Calcula el riesgo de evento cardiovascular mortal o no mortal a 10 años, según edad, sexo, raza, PAS/PAD, colesterol total/HDL/LDL, diabetes, tabaquismo y tratamiento actual. Categorías: bajo (&lt;5%), límite (5-7,4%), intermedio (7,5-19,9%), alto (≥20%). Se usa un umbral del 10% para indicar tratamiento farmacológico en HTA estadio 1.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🇪🇺 SCORE (guía europea)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Estima el riesgo de <strong>muerte</strong> cardiovascular a 10 años, usando solo edad, sexo, tabaquismo, PAS y colesterol. Ventajas: desarrollado en población europea, con adaptaciones regionales (España = riesgo bajo), fácil de aplicar. Inconveniente: solo estima mortalidad, no eventos no mortales (la propia guía indica que el riesgo de eventos no mortales podría ser el de mortalidad ×3 en varones y ×4 en mujeres). Categorías: bajo (&lt;1%), moderado (1-5%), alto (5-10%), muy alto (≥10%).</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🫀 HMOD (antes "TOD")</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">El término "lesión de órgano diana" (target organ damage, TOD) se ha sustituido por HMOD (hypertension-mediated organ damage). Incluye sobre todo hipertrofia ventricular izquierda, enfermedad renal crónica y datos de rigidez arterial.</div>
+                </div>
+            </div>
+
+            <table class="data-table">
+                <thead><tr><th colspan="2">Factores que influyen en el riesgo cardiovascular</th></tr></thead>
+                <tbody>
+                    <tr><td>Factores de riesgo demográficos/clínicos/laboratorio</td><td>Sexo masculino, edad (&gt;55 varón, &gt;65 mujer), tabaquismo, colesterol total y HDL, ácido úrico, diabetes, sobrepeso-obesidad, historia familiar de ECV precoz o de HTA de inicio precoz, menopausia precoz, sedentarismo, FC en reposo &gt;80 lpm</td></tr>
+                    <tr><td>Lesión subclínica de órgano diana</td><td>Rigidez arterial (presión de pulso ≥60 mmHg, VOP carótido-femoral &gt;10 m/s); hipertrofia VI en ECG o ecocardiograma; microalbuminuria (30-300 mg/24h) o cociente albúmina/creatinina 30-300 mg/g; ERC moderada (FGe 30-59) o grave (FGe &lt;30); índice tobillo-brazo &lt;0,9; retinopatía avanzada</td></tr>
+                    <tr><td>Enfermedad CV o renal establecida</td><td>Enfermedad cerebrovascular (ictus, hemorragia, AIT); enfermedad coronaria; placas ateromatosas en pruebas de imagen; insuficiencia cardíaca; enfermedad arterial periférica; fibrilación auricular</td></tr>
+                </tbody>
+            </table>
+
+            <table class="data-table">
+                <thead><tr><th>Categoría de riesgo</th><th>Sujetos incluidos</th></tr></thead>
+                <tbody>
+                    <tr><td>Riesgo muy alto</td><td>Enfermedad CV clínica o inequívoca en pruebas de imagen; diabetes con daño orgánico o factor de riesgo mayor; ERC grave (FGe &lt;30); SCORE a 10 años ≥10%</td></tr>
+                    <tr><td>Riesgo alto</td><td>Elevación grave de un factor aislado (colesterol &gt;310, hipercolesterolemia familiar, HTA grado 3); diabetes sin daño orgánico; hipertrofia VI; ERC moderada (FGe 30-59); SCORE 5-10%</td></tr>
+                    <tr><td>Riesgo moderado</td><td>SCORE 1-5%; HTA grado 2; la mayoría de sujetos de edad media</td></tr>
+                    <tr><td>Riesgo bajo</td><td>SCORE &lt;1%</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">La tabla completa de estratificación (Figura 3 de la fuente) combina el grado de PA con el nº de factores de riesgo/HMOD/enfermedad establecida en 3 estadios de enfermedad hipertensiva (no complicada, asintomática, sintomática), resultando en una matriz de riesgo bajo a muy alto.</p>
+        </div>
+
+        <div id="hta-tratamiento-general" class="tab-content">
+            <h3 style="color: var(--accent-green);">Objetivos y tratamiento no farmacológico</h3>
+            <dl class="kv-row"><dt>Evidencia del tratamiento</dt><dd>Metaanálisis con cientos de miles de pacientes: reducir 10 mmHg la PAS o 5 mmHg la PAD conlleva ≈10-15% menos mortalidad, 20% menos complicaciones CV mayores, 35% menos ictus, 40% menos insuficiencia cardíaca y 20% menos eventos coronarios — de forma consistente en cualquier grado de HTA, RCV, edad, sexo, raza o comorbilidad.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Inicio del tratamiento antihipertensivo</p>
+            <table class="data-table">
+                <thead><tr><th>Situación</th><th>ACC/AHA</th><th>ESC/ESH</th></tr></thead>
+                <tbody>
+                    <tr><td>PAS 130-139 o PAD 80-89</td><td>No farmacológico; farmacológico si ECV establecida o riesgo ASCVD &gt;10%</td><td>No farmacológico; considerar farmacológico si PA persiste elevada tras 3-6 meses (particularmente en cardiopatía isquémica)</td></tr>
+                    <tr><td>PAS 140-159/PAD 90-99, riesgo bajo</td><td>No farmacológico + farmacológico</td><td>No farmacológico; considerar farmacológico si persiste tras 3-6 meses</td></tr>
+                    <tr><td>PAS 140-159/PAD 90-99, riesgo mod./alto</td><td>No farmacológico + farmacológico</td><td>No farmacológico + farmacológico</td></tr>
+                    <tr><td>PAS ≥160 o PAD ≥100</td><td>No farmacológico + farmacológico</td><td>No farmacológico + farmacológico</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Objetivos de control</p>
+            <dl class="kv-row"><dt>ACC/AHA</dt><dd>PA &lt;130/80 mmHg para todos los hipertensos — "mandatorio" en riesgo alto, "razonable" en riesgo menor.</dd></dl>
+            <dl class="kv-row"><dt>ESC/ESH</dt><dd>Recomendaciones más individualizadas por edad: reducir inicialmente por debajo de 140/90, y si se tolera bien, bajar a &lt;130/80.</dd></dl>
+            <table class="data-table">
+                <thead><tr><th>Grupo de edad</th><th>Objetivo PAS (HTA, +diabetes, +ictus)</th><th>+ERC</th><th>+CI</th><th>Objetivo PAD</th></tr></thead>
+                <tbody>
+                    <tr><td>18-65 años</td><td>&lt;130 (no &lt;120)</td><td>&lt;140 a 130 si se tolera</td><td>&lt;130 (no &lt;120)</td><td>70-79</td></tr>
+                    <tr><td>65-79 años</td><td>130-139 si se tolera</td><td>130-139</td><td>130-139</td><td>70-79</td></tr>
+                    <tr><td>≥80 años</td><td>130-139 si se tolera</td><td>130-139</td><td>130-139</td><td>70-79</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 El objetivo &lt;140/80 recomendado para la ERC puede ser insuficiente; las próximas guías KDIGO probablemente recomienden &lt;130/80 o más estricto para un amplio espectro de pacientes con ERC.</p>
+
+            <p class="section-label" style="margin-top:16px;">Tratamiento no farmacológico (cambios en el estilo de vida)</p>
+            <table class="data-table">
+                <thead><tr><th colspan="2">Recomendaciones</th></tr></thead>
+                <tbody>
+                    <tr><td>Sal</td><td>Restricción a &lt;5 g/día</td></tr>
+                    <tr><td>Peso</td><td>Evitar sobrepeso-obesidad, IMC objetivo 20-25 kg/m²</td></tr>
+                    <tr><td>Ejercicio</td><td>≥30 min de ejercicio aeróbico, 5-7 días/semana (≥150 min/semana)</td></tr>
+                    <tr><td>Dieta</td><td>Alimentos vegetales, fruta fresca, frutos secos, pescado, ácidos grasos insaturados (aceite de oliva), lácteos bajos en grasa, bajo consumo de carnes rojas, evitar sal y ultraprocesados</td></tr>
+                    <tr><td>Tabaco</td><td>No fumar</td></tr>
+                    <tr><td>Alcohol</td><td>&lt;14 unidades/semana en varones, &lt;8 en mujeres (1 unidad = 250 cc cerveza, 125 cc vino, o 30 cc de bebida de mayor graduación); evitar consumo rápido e intensivo</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Las modificaciones del estilo de vida son también medidas de prevención cardiovascular y de enfermedad en general, no solo tratamiento antihipertensivo — deben indicarse de forma sistemática en todo paciente con HTA, esté o no en tratamiento farmacológico.</p>
+        </div>
+
+        <div id="hta-tratamiento-farmaco" class="tab-content">
+            <h3 style="color: var(--accent-purple);">Tratamiento farmacológico</h3>
+            <dl class="kv-row"><dt>5 grupos de primera línea (ESC/ESH)</dt><dd>1) IECA, 2) ARA II, 3) betabloqueantes (BB), 4) calcioantagonistas (CA), 5) diuréticos (tiazídicos y similares como clortalidona o indapamida). Su eficacia para reducir la PA y la morbimortalidad está demostrada en múltiples ensayos clínicos.</dd></dl>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">El beneficio del tratamiento se basa sobre todo en la reducción de la PA en sí misma — la mayoría de los hipertensos necesita una combinación de fármacos para lograr el control, no importa tanto cuál sea "el primero".</p>
+
+            <table class="data-table">
+                <thead><tr><th>Grupo</th><th>Indicaciones especiales</th><th>Contraindicaciones</th><th>Precauciones</th></tr></thead>
+                <tbody>
+                    <tr><td>IECA / ARA II</td><td>1ª línea en HTA; insuficiencia cardíaca; post-IAM; ERC con albuminuria/proteinuria; diabetes</td><td>Embarazo; estenosis bilateral de arterias renales; hiperpotasemia &gt;5,5 mEq/l; antecedente de angioedema (IECA); asociación IECA+ARA II</td><td>Monitorizar función renal y potasio tras el inicio en pacientes con ERC</td></tr>
+                    <tr><td>Antialdosterónicos</td><td>Insuficiencia cardíaca; 4º fármaco en HTA resistente</td><td>Hiperpotasemia &gt;5,5 mEq/l</td><td>Monitorizar función renal y potasio tras el inicio en ERC; embarazo</td></tr>
+                    <tr><td>Diuréticos</td><td>1ª línea; diurético de asa si insuficiencia cardíaca sintomática o FGe &lt;30</td><td>Gota</td><td>Evitar dosis altas y asociación con betabloqueantes en síndrome metabólico/hiperglucemia; embarazo</td></tr>
+                    <tr><td>CA dihidropiridínicos</td><td>1ª línea</td><td>Taquiarritmias; edemas en miembros inferiores graves previos</td><td>Insuficiencia cardíaca con FE reducida (puede usarse amlodipino si es necesario)</td></tr>
+                    <tr><td>CA no dihidropiridínicos</td><td>1ª línea</td><td>Bloqueos auriculares/auriculoventriculares; insuficiencia cardíaca con FE reducida; bradicardia; asociación con betabloqueantes</td><td>Estreñimiento; interacciones (inhibidores del citocromo CYP3A4)</td></tr>
+                    <tr><td>Betabloqueantes</td><td>1ª línea en guías europeas; cardiopatía isquémica; insuficiencia cardíaca</td><td>Asma; bloqueos auriculares/AV; asociación con CA no dihidropiridínicos</td><td>Síndrome metabólico/hiperglucemia; deportistas; embarazo; evitar suspensión brusca</td></tr>
+                    <tr><td>Alfabloqueantes</td><td>No considerados de 1ª elección; hipertrofia prostática</td><td>Hipotensión ortostática</td><td>Evitar formulaciones de liberación no prolongada; edad avanzada; embarazo</td></tr>
+                    <tr><td>Fármacos de acción central</td><td>No considerados de 1ª elección</td><td>Alteraciones neurológicas</td><td>Efectos adversos neurológicos; evitar suspensión brusca (clonidina)</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Fármacos comercializados en España (vía oral)</p>
+            <table class="data-table">
+                <thead><tr><th>Grupo</th><th>Fármacos representativos</th><th>Rango de dosis, mg/día</th></tr></thead>
+                <tbody>
+                    <tr><td>Diuréticos tiazídicos</td><td>Clortalidona, hidroclorotiazida, indapamida, xipamida</td><td>1,25-50, según fármaco</td></tr>
+                    <tr><td>Diuréticos de asa</td><td>Furosemida, torasemida</td><td>6-240, según fármaco</td></tr>
+                    <tr><td>Diuréticos distales</td><td>Amiloride, espironolactona, eplerenona, triamtereno</td><td>2,5-100, según fármaco</td></tr>
+                    <tr><td>Betabloqueantes</td><td>Atenolol, bisoprolol, carvedilol, labetalol, nebivolol</td><td>2,5-480, según fármaco</td></tr>
+                    <tr><td>Calcioantagonistas dihidropiridínicos</td><td>Amlodipino, barnidipino, felodipino, lercanidipino, nicardipino, nifedipino</td><td>2,5-120, según fármaco</td></tr>
+                    <tr><td>Calcioantagonistas no dihidropiridínicos</td><td>Diltiazem, verapamil</td><td>120-480</td></tr>
+                    <tr><td>IECA</td><td>Enalapril, captopril, lisinopril, ramipril, quinapril, fosinopril</td><td>2,5-150, según fármaco</td></tr>
+                    <tr><td>ARA II</td><td>Losartán, valsartán, candesartán, irbesartán, olmesartán, telmisartán</td><td>8-1200, según fármaco</td></tr>
+                    <tr><td>IDR (inhibidor directo de la renina)</td><td>Aliskiren</td><td>150-300</td></tr>
+                    <tr><td>Alfabloqueantes</td><td>Doxazosina, prazosina, terazosina</td><td>1-20, según fármaco</td></tr>
+                    <tr><td>Acción central</td><td>Alfametildopa, clonidina, moxonidina</td><td>0,3-3000, según fármaco</td></tr>
+                    <tr><td>Vasodilatadores arteriales directos</td><td>Hidralazina, minoxidil</td><td>2,5-200, según fármaco</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Los fármacos con dosis altas de espironolactona/amiloride se comercializan en asociaciones a dosis fijas con otros diuréticos; el delapril está comercializado en asociación fija con manidipino.</p>
+
+            <p class="section-label" style="margin-top:16px;">Estrategia básica para la HTA no complicada</p>
+            <table class="data-table">
+                <thead><tr><th>Escalón</th><th>Combinación</th><th>Nota</th></tr></thead>
+                <tbody>
+                    <tr><td>Inicio</td><td>IECA o ARA II + CA o diurético</td><td>Considerar monoterapia solo en HTA grado 1 de riesgo bajo (PAS &lt;150), en &gt;80 años, o en pacientes frágiles</td></tr>
+                    <tr><td>2º escalón</td><td>IECA o ARA II + CA + diurético</td><td>Combinación triple</td></tr>
+                    <tr><td>3er escalón — HTA resistente</td><td>Combinación triple + espironolactona (25-50 mg/día) u otro diurético o alfabloqueante/BB</td><td>Considerar derivación a unidad especializada</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Válida también para la mayoría de pacientes con lesión subclínica de órgano diana, diabetes, enfermedad cerebrovascular y enfermedad arterial periférica. Considerar betabloqueantes en cualquier escalón si hay indicación específica (IC, cardiopatía isquémica, FA, o embarazo actual/planeado).</p>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>❤️ HTA + cardiopatía isquémica</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Inicio</dt><dd>IECA o ARA II + BB o CA, o CA + diurético, o BB + diurético (combinación doble)</dd></dl>
+                        <dl class="kv-row"><dt>2º escalón</dt><dd>Combinación triple con los anteriores</dd></dl>
+                        <dl class="kv-row"><dt>3er escalón — resistente</dt><dd>Añadir espironolactona (25-50 mg/día) u otro diurético o alfabloqueante/BB</dd></dl>
+                        <dl class="kv-row"><dt>Nota</dt><dd>En España no hay combinaciones dobles de IECA/ARA II con BB ni de CA con diurético; evitar BB+diurético si hay riesgo de desarrollar diabetes.</dd></dl>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩺 HTA + enfermedad renal crónica</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Inicio</dt><dd>IECA o ARA II + CA, o IECA/ARA II + diurético (de asa si FGe &lt;30) — combinación doble</dd></dl>
+                        <dl class="kv-row"><dt>2º escalón</dt><dd>IECA o ARA II + CA + diurético — combinación triple</dd></dl>
+                        <dl class="kv-row"><dt>3er escalón — resistente</dt><dd>Añadir espironolactona (25-50 mg/día, con precaución especial de hiperpotasemia si FGe &lt;45 o K⁺ ≥4,5) u otro diurético/alfabloqueante/BB</dd></dl>
+                        <dl class="kv-row"><dt>👉 Precaución</dt><dd>Puede observarse ↑creatinina y ↓FGe al iniciar IECA o ARA II — si el aumento de creatinina es &gt;30%, valorar la posibilidad de una enfermedad renovascular subyacente.</dd></dl>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💧 HTA + insuficiencia cardíaca con FE reducida</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Inicio</dt><dd>IECA o ARA II (valorar ARNI sacubitrilo/valsartán) + diurético (tiazídico o de asa) + BB</dd></dl>
+                        <dl class="kv-row"><dt>2º escalón</dt><dd>Añadir un antagonista de los receptores mineralocorticoides (MRA)</dd></dl>
+                        <dl class="kv-row"><dt>👉 Evitar</dt><dd>No usar calcioantagonistas no dihidropiridínicos (verapamil o diltiazem) en la insuficiencia cardíaca con FE reducida.</dd></dl>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💓 HTA + fibrilación auricular</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Inicio</dt><dd>IECA o ARA II + BB o CA no dihidropiridínico, o BB + CA</dd></dl>
+                        <dl class="kv-row"><dt>2º escalón</dt><dd>IECA o ARA II + BB + CA o diurético, o BB + CA + diurético</dd></dl>
+                        <dl class="kv-row"><dt>Anticoagulación</dt><dd>Según indicaciones del score CHA₂DS₂-VASc, salvo contraindicación</dd></dl>
+                        <dl class="kv-row"><dt>👉 Evitar</dt><dd>No se recomienda combinar BB con CA no dihidropiridínicos (verapamil/diltiazem) por su potencial efecto bradicardizante.</dd></dl>
+                    </div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Tratamiento combinado como estrategia inicial</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">El inicio con una combinación de 2 fármacos es más eficaz para el control (incluso a dosis menores que en monoterapia, al implicar distintos mecanismos fisiopatológicos), y es seguro y bien tolerado.</p>
+            <table class="data-table">
+                <thead><tr><th>Estrategia</th><th>Acción</th><th>Fundamento</th></tr></thead>
+                <tbody>
+                    <tr><td>Planificar el control en 2-3 meses</td><td>No retrasar el inicio farmacológico; solo no farmacológico en HTA grado 1 de riesgo bajo</td><td>Evitar inercia clínica; prevenir lesión subclínica que dificulte el control futuro</td></tr>
+                    <tr><td>Inicio de tratamiento combinado</td><td>Monoterapia solo en HTA grado 1 de riesgo bajo con PA basal cercana al objetivo; cambio precoz de monoterapia a combinado; combinado de inicio para la mayoría</td><td>La combinación es más eficaz que ↑dosis de un solo fármaco; favorece el control</td></tr>
+                    <tr><td>Cambio precoz a combinación triple</td><td>Si es necesario</td><td>25-30% de los hipertensos necesita una combinación triple</td></tr>
+                    <tr><td>Reforzar cumplimiento</td><td>Del estilo de vida y del tratamiento farmacológico en cada visita</td><td>—</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 La estrategia de combinación en un solo comprimido (tanto con 2 como con 3 fármacos) favorece el cumplimiento y el control de la HTA.</p>
+        </div>
+
+        <div id="hta-resistente" class="tab-content">
+            <h3 style="color: var(--accent-red);">Hipertensión arterial resistente</h3>
+            <dl class="kv-row"><dt>Definición</dt><dd>HTA que no se controla con una pauta de 3 fármacos sinérgicos a dosis óptimas, incluyendo un diurético. El esquema habitual es un IECA o ARA II + un calcioantagonista + un diurético.</dd></dl>
+            <dl class="kv-row"><dt>HTA refractaria</dt><dd>Se reserva para cuando la HTA no se controla ni con una pauta de 5 fármacos antihipertensivos.</dd></dl>
+            <ul class="term-chips">
+                <li>Umbral europeo: ≥140/90 mmHg</li>
+                <li>Umbral americano: ≥130/80 mmHg</li>
+                <li>Prevalencia estimada: ~15%</li>
+            </ul>
+
+            <p class="section-label" style="margin-top:16px;">Enfoque diagnóstico</p>
+            <table class="data-table">
+                <thead><tr><th colspan="2">Descartar pseudo-resistencia por fenómeno de bata blanca</th></tr></thead>
+                <tbody>
+                    <tr><td colspan="2">Evaluar PA ambulatoria con MAPA o AMPA — hasta 1 de cada 3 casos puede ser pseudo-resistente por bata blanca</td></tr>
+                </tbody>
+            </table>
+            <table class="data-table">
+                <thead><tr><th colspan="2">Descartar pseudo-resistencia por falta de adherencia terapéutica</th></tr></thead>
+                <tbody>
+                    <tr><td colspan="2">Evaluar cumplimiento del tratamiento no farmacológico (sobre todo restricción de sodio, sobrepeso, alcohol) y del farmacológico</td></tr>
+                </tbody>
+            </table>
+            <table class="data-table">
+                <thead><tr><th colspan="2">Considerar otras causas de pseudo-resistencia</th></tr></thead>
+                <tbody>
+                    <tr><td colspan="2">Mala técnica de medida de la PA en consulta; pseudo-hipertensión del anciano por calcificación de la arteria braquial; toma de fármacos o sustancias presoras</td></tr>
+                </tbody>
+            </table>
+            <table class="data-table">
+                <thead><tr><th colspan="2">Considerar causas de HTA secundaria (una vez descartada la pseudo-resistencia)</th></tr></thead>
+                <tbody>
+                    <tr><td colspan="2">Reevaluar posibles causas secundarias; SAHS; toma de fármacos o sustancias presoras</td></tr>
+                </tbody>
+            </table>
+            <table class="data-table">
+                <thead><tr><th colspan="2">HTA esencial con daño vascular avanzado</th></tr></thead>
+                <tbody>
+                    <tr><td colspan="2">Daño vascular avanzado, particularmente a nivel renal o de grandes arterias</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">1 de cada 3 pacientes con HTA resistente, y 1 de cada 4 con HTA refractaria, puede tener en realidad una PA ambulatoria adecuadamente controlada (falsa resistencia).</p>
+
+            <p class="section-label" style="margin-top:16px;">Causas de HTA secundaria más frecuentes en el paciente resistente</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Una vez descartada la pseudo-resistencia, las causas de HTA secundaria más frecuentemente encontradas son: la enfermedad renal parenquimatosa, la enfermedad renovascular, el hiperaldosteronismo primario, el síndrome de apnea-hipopnea del sueño y la HTA inducida por fármacos o drogas. Ver fichas 6-8 para el desarrollo completo de cada causa.</p>
+        </div>
+
+        <div id="hta-secundaria-renal" class="tab-content">
+            <h3 style="color: var(--accent-blue);">HTA secundaria: causas renales</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Santamaría Olomo R, Gorostidi M. Hipertensión arterial secundaria. Nefrología al día (SEN), actualizado 23/3/2024.</p>
+            <dl class="kv-row"><dt>Definición</dt><dd>La HTA secundaria se detecta en el 5-10% de los hipertensos; la prevalencia varía según la edad y el contexto clínico. A diferencia de la definición clásica (causa corregible), con frecuencia tratar la causa no normaliza la PA, por la alta prevalencia de HTA esencial subyacente o el daño vascular ya establecido.</dd></dl>
+
+            <table class="data-table">
+                <thead><tr><th>Grupo de edad</th><th>Prevalencia</th><th>Causas más frecuentes</th></tr></thead>
+                <tbody>
+                    <tr><td>Niños (&lt;12 años)</td><td>70-85%</td><td>Enf. renal parenquimatosa, coartación de aorta, enfermedades monogénicas</td></tr>
+                    <tr><td>Adolescentes (12-18 años)</td><td>10-15%</td><td>Enf. renal parenquimatosa, coartación de aorta, enfermedades monogénicas</td></tr>
+                    <tr><td>Adultos jóvenes (19-40 años)</td><td>5-10%</td><td>Enf. renal parenquimatosa, displasia fibromuscular, monogénicas no diagnosticadas antes</td></tr>
+                    <tr><td>Adultos (41-65 años)</td><td>5-15%</td><td>Hiperaldosteronismo primario, SAHS, enf. renal parenquimatosa, renovascular aterosclerótica, Cushing, feocromocitoma</td></tr>
+                    <tr><td>Mayores (&gt;65 años)</td><td>5-10%</td><td>Renovascular aterosclerótica, enf. renal parenquimatosa, enfermedad tiroidea</td></tr>
+                </tbody>
+            </table>
+
+            <table class="data-table">
+                <thead><tr><th colspan="2">Principales causas de HTA secundaria</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Más frecuentes</strong></td><td>De origen renal: enfermedad renal parenquimatosa, HTA renovascular. De origen endocrinológico: hiperaldosteronismo primario. HTA inducida por fármacos/tóxicos. SAHS</td></tr>
+                    <tr><td><strong>Menos frecuentes</strong></td><td>De origen endocrinológico: feocromocitoma, Cushing, otras alteraciones adrenales, hiper/hipotiroidismo, hiperparatiroidismo, acromegalia. Miscelánea: coartación de aorta, causas monogénicas</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Enfermedad renal parenquimatosa</p>
+            <dl class="kv-row"><dt>Frecuencia</dt><dd>La HTA es un hallazgo casi constante en la enfermedad renal parenquimatosa, aguda o crónica.</dd></dl>
+            <dl class="kv-row"><dt>Mecanismo en la enfermedad aguda</dt><dd>En procesos con compromiso glomerular/vascular (glomerulonefritis agudas, vasculitis, crisis renal esclerodérmica), el desarrollo de HTA se relaciona con la sobrecarga de volumen y la activación del SRAA.</dd></dl>
+            <dl class="kv-row"><dt>Mecanismo en la enfermedad crónica</dt><dd>La elevación de la PA se relaciona con activación del SRAA, sobrecarga de volumen, activación simpática, y complicaciones asociadas a la uremia como el hiperparatiroidismo secundario, la disfunción endotelial y el uso de estimulantes de la eritropoyesis.</dd></dl>
+            <dl class="kv-row"><dt>Diagnóstico y tratamiento</dt><dd>Indicadores de función renal, cuantificación de proteinuria, sedimento, autoinmunidad, proteinograma, técnicas de imagen y biopsia renal. Tratamiento específico de la enfermedad de base + fármacos antihipertensivos bloqueantes del SRAA y diuréticos.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Enfermedad renovascular aterosclerótica</p>
+            <dl class="kv-row"><dt>Frecuencia</dt><dd>Causa frecuente de HTA secundaria. La estenosis de la arteria renal suele deberse a aterosclerosis (pacientes mayores) o displasia fibromuscular (pacientes jóvenes). &lt;1% en HTA general, hasta 35% en HTA grave con otras manifestaciones de aterosclerosis.</dd></dl>
+            <dl class="kv-row"><dt>Mecanismo</dt><dd>La estenosis reduce la perfusión renal → el aparato yuxtaglomerular aumenta la secreción de renina → ↑angiotensina y aldosterona → HTA por vasoconstricción y retención de sodio.</dd></dl>
+            <dl class="kv-row"><dt>Sospecha clínica</dt><dd>Pacientes &gt;50 años con factores de riesgo vascular (tabaquismo, dislipemia, DM) o manifestaciones de enfermedad vascular a otros niveles, que presentan cambios rápidos de PA, HTA acelerada, deterioro agudo de la función renal tras iniciar bloqueantes del SRAA, o crisis con edema agudo de pulmón no justificado. Puede haber asimetría de pulsos periféricos y soplos carotídeos/abdominales.</dd></dl>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔬 Diagnóstico</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Ecografía Doppler renal</dt><dd>Prueba inicial. Velocidad pico sistólica: S 85%, E 92%; se considera elevada si &gt;180 cm/s.</dd></dl>
+                        <dl class="kv-row"><dt>AngioTC</dt><dd>Identifica número de vasos, distribución, variantes y estenosis. S/E 90-100%. Limitada por nefrotoxicidad del contraste (angio-CO₂ como alternativa en alto riesgo).</dd></dl>
+                        <dl class="kv-row"><dt>AngioRM con gadolinio</dt><dd>Diagnóstico adecuado, puede sobreestimar la gravedad. Limitada por fibrosis sistémica asociada al gadolinio, implantes metálicos/marcapasos y claustrofobia.</dd></dl>
+                        <dl class="kv-row"><dt>Gammagrafía renal</dt><dd>Determina la función relativa de cada riñón, sin información anatómica de los vasos.</dd></dl>
+                        <dl class="kv-row"><dt>Arteriografía</dt><dd>Técnica de referencia. Permite medir el gradiente de presión de la lesión: &gt;20 mmHg o ratio distal/proximal &lt;0,9 indican estenosis significativa. Se reserva para casos en que se plantea revascularización con angioplastia en el mismo acto.</dd></dl>
+                        <dl class="kv-row"><dt>Repercusión hemodinámica</dt><dd>Generalmente relevante si la estenosis es &gt;50%; suele causar HTA renovascular si es &gt;70%.</dd></dl>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Tratamiento</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Médico (control de factores de riesgo con estatinas, antiagregación, control glucémico, cese tabáquico, bloqueo del SRAA con monitorización de función renal) vs. intervencionista (angioplastia transluminal percutánea con stent, o cirugía). Los estudios STAR, ASTRAL y CORAL no mostraron beneficio significativo del tratamiento intervencionista sobre el control de la PA, la función renal o la mortalidad — por ello, en pacientes asintomáticos o bien controlados con tratamiento médico, <strong>no se aconseja la revascularización invasiva</strong>. La angioplastia con stent se reserva para estenosis &gt;70% con relación causal demostrada con la HTA, y en HTA resistente.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Enfermedad renovascular por displasia fibromuscular</p>
+            <dl class="kv-row"><dt>Perfil típico</dt><dd>Se sospecha en pacientes &lt;30 años, habitualmente mujeres, con HTA de difícil control y asimetría del tamaño renal — la rápida detección es relevante porque el tratamiento puede tener intención curativa.</dd></dl>
+            <dl class="kv-row"><dt>Diagnóstico</dt><dd>Orientación inicial con ecografía Doppler, angioTC o angioRM; confirmación con arteriografía. Suele revelar estenosis "arrosariadas" (proliferación de tejido fibroso en la media arterial). Si se detecta fibrodisplasia renal, se recomienda explorar otros territorios vasculares por su asociación con lesiones a otros niveles.</dd></dl>
+            <dl class="kv-row"><dt>Tratamiento</dt><dd>La arteriografía permite angioplastia (con o sin stent), con alta probabilidad de éxito. El tratamiento quirúrgico es ocasional, cuando hay grandes aneurismas.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Resumen de causas, pistas diagnósticas y tratamiento</p>
+            <table class="data-table">
+                <thead><tr><th>Causa</th><th>Pistas diagnósticas</th><th>Pruebas complementarias</th><th>Tratamiento</th></tr></thead>
+                <tbody>
+                    <tr><td>Enfermedad renal parenquimatosa</td><td>Hematuria, proteinuria, hallazgos asociados a ERC</td><td>Filtrado glomerular, sedimento de orina, cociente urinario albúmina/creatinina, ecografía renal, biopsia renal</td><td>Tratamiento médico de la enfermedad primaria; antihipertensivo basado en bloqueantes del SRAA</td></tr>
+                    <tr><td>Enfermedad renovascular aterosclerótica</td><td>Pacientes mayores, aterosclerosis en otros territorios, HTA de novo/acelerada, deterioro agudo de función renal con IECA/ARA-II, hipopotasemia</td><td>Ecografía Doppler de arterias renales, angioTC, angioRM, arteriografía</td><td>Angioplastia percutánea o cirugía de derivación en casos seleccionados; tratamiento médico como primera opción</td></tr>
+                    <tr><td>Displasia fibromuscular</td><td>Mujeres jóvenes, soplo abdominal</td><td>Ecografía Doppler, angioTC, angioRM, arteriografía</td><td>Angioplastia (con o sin stent); cirugía ocasional</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="hta-secundaria-endocrina" class="tab-content">
+            <h3 style="color: var(--accent-yellow);">HTA secundaria: causas endocrinológicas</h3>
+            <dl class="kv-row"><dt>Contexto</dt><dd>La HTA puede ser la primera expresión detectada de múltiples enfermedades endocrinológicas. La causa más frecuente de HTA secundaria de origen endocrinológico es el hiperaldosteronismo primario (HAP); las menos frecuentes son el feocromocitoma, el síndrome de Cushing, otras enfermedades suprarrenales, el hiper/hipotiroidismo, el hiperparatiroidismo y la acromegalia.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Hiperaldosteronismo primario (HAP, síndrome de Conn)</p>
+            <dl class="kv-row"><dt>Qué es</dt><dd>Grupo de alteraciones de la glándula suprarrenal con exceso de aldosterona de forma autónoma (no suprimible), que produce HTA, retención de sodio y pérdida urinaria de potasio, con o sin hipopotasemia.</dd></dl>
+            <dl class="kv-row"><dt>Infradiagnóstico</dt><dd>Los estudios más antiguos (cribado solo en pacientes con la tríada clásica HTA-hipopotasemia-alcalosis) sugerían una prevalencia &lt;1%. Estudios recientes con cribado extendido a hipertensos en general (PAPY, PATO) indican prevalencias de 11,2% y 5,9%. Es una de las causas más frecuentes de HTA resistente, con prevalencias descritas de hasta el <strong>20%</strong> en este grupo.</dd></dl>
+            <ul class="term-chips">
+                <li>Hiperplasia suprarrenal bilateral (subtipo más frecuente)</li>
+                <li>Adenoma productor de aldosterona (subtipo más frecuente)</li>
+                <li>Hiperaldosteronismos familiares tipos I a IV</li>
+                <li>Hiperplasia suprarrenal unilateral</li>
+                <li>Carcinoma adrenocortical productor de aldosterona / tumores ectópicos (muy infrecuentes)</li>
+            </ul>
+            <dl class="kv-row"><dt>Clínica</dt><dd>El signo más común y precoz es la HTA grado 2-3 (PA &gt;160/100). La hipopotasemia se consideraba clásicamente frecuente, pero hoy se sabe que solo aparece en el <strong>30-40%</strong> de los casos (probablemente por diagnóstico más precoz). Cuando existe, puede dar polidipsia, nicturia, debilidad muscular episódica, disnea por debilidad respiratoria, arritmias, estreñimiento, espasmos o parálisis. El exceso de aldosterona también produce hipervolemia, daño vascular, activación del estrés oxidativo/inflamación, remodelado y fibrosis vascular/miocárdica, e incrementa el riesgo de eventos vasculares de forma independiente a la HTA.</dd></dl>
+            <dl class="kv-row"><dt>Cuándo descartarlo</dt><dd>HTA resistente; HTA con hipopotasemia espontánea o inducida por diuréticos; pacientes jóvenes (&lt;40 años) con HTA grado 2-3; hallazgo incidental de un nódulo adrenal; HTA con historia familiar de HTA temprana o ictus en &lt;40 años; familiares de primer grado de un paciente con HAP.</dd></dl>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧪 Cribado y confirmación</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Determinación de aldosterona y renina (o actividad de renina plasmática) y sus cocientes, en condiciones estandarizadas — tras suspender ≥4 semanas los fármacos con efecto significativo en el SRAA (IECA, ARA II, diuréticos, antialdosterónicos, betabloqueantes) y tras normalizar el potasio. Ante un cociente indicativo, se confirma con un test de infusión de solución salina, sobrecarga oral de sal, supresión con fludrocortisona o supresión con captopril, encaminados a demostrar la autonomía de la aldosterona.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩻 Localización del subtipo</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Tras un test confirmatorio positivo: TC abdominal dirigida a las glándulas suprarrenales, para evaluar el subtipo, descartar un carcinoma adrenal, y valorar opciones de tratamiento quirúrgico. La toma selectiva de muestras de sangre de venas suprarrenales puede ayudar a confirmar la lateralización de la producción de aldosterona.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Tratamiento</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Enfermedad unilateral: adrenalectomía (habitualmente laparoscópica) — curativa en ~30% de los pacientes, mejora significativa en el control farmacológico en 30-50%, sin beneficio clínico en 30-40%. Factores de fracaso quirúrgico: edad avanzada, HTA de larga duración, mayor número de fármacos previos, lesión de órgano diana. Enfermedad bilateral: antagonista de los receptores mineralocorticoides — la espironolactona es el fármaco más usado (inicio 25 mg/día, mantenimiento habitual 100 mg/día); el amiloride puede usarse para bloquear la reabsorción de sodio inducida por mineralocorticoides.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Feocromocitoma y paraganglioma</p>
+            <dl class="kv-row"><dt>Qué son</dt><dd>Tumores neuroendocrinos derivados de células cromafines que producen catecolaminas. Se localizan en la médula adrenal (80-85%) o en los ganglios simpáticos paravertebrales (15-20%, paragangliomas). Fenotipos bioquímicos: adrenérgicos (habitualmente en médula adrenal, producen adrenalina y noradrenalina) y no adrenérgicos (médula adrenal o extraadrenales, producen solo noradrenalina). Se asocian a alta morbimortalidad vascular, pueden tener componente familiar y potencial de malignización.</dd></dl>
+            <dl class="kv-row"><dt>Clínica</dt><dd>Desde asintomático hasta compromiso vital. Tríada clásica: cefalea, sudoración y palpitaciones en las crisis (crisis adrenérgicas), de minutos a una hora de duración — ampliada en ocasiones a "the five P's" (Paroxysmal hypertension, Palpitation, Perspiration, Pallor, Pounding headache). Las crisis pueden desencadenarse por estímulos físicos/químicos: micción, anestesia, fármacos (betabloqueantes, antidepresivos tricíclicos, glucocorticoides). Puede ser difícil de sospechar si no hay síntomas clásicos.</dd></dl>
+            <dl class="kv-row"><dt>Diagnóstico</dt><dd>Metanefrinas en plasma u orina de 24h. Localización con TC o RM abdominal. Gammagrafía con ¹²³I-MIBG si hay enfermedad metastásica no detectada por otras técnicas, o cuando se planea radioterapia con ¹³¹I-MIBG.</dd></dl>
+            <dl class="kv-row"><dt>Tratamiento</dt><dd>Extirpación quirúrgica (permite el control de la PA). Manejo preoperatorio específico desde ≥1 semana antes: bloqueantes alfa-adrenérgicos y reposición de sodio y agua, para prevenir la inestabilidad hemodinámica operatoria y la hipotensión grave tras extirpar el tumor (por la contracción de volumen inducida por las catecolaminas).</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Síndrome de Cushing</p>
+            <dl class="kv-row"><dt>Qué es</dt><dd>Hipercortisolismo patológico por secreción autónoma adrenal de cortisol, o por exceso de producción de ACTH.</dd></dl>
+            <dl class="kv-row"><dt>Clínica</dt><dd>Fenotipo característico: cara de luna llena, obesidad central, atrofia de piel, estrías violáceas, hematomas, alteraciones del metabolismo hidrocarbonado (remedando un síndrome metabólico grave). Riesgo elevado de morbimortalidad cardiovascular.</dd></dl>
+            <dl class="kv-row"><dt>Diagnóstico</dt><dd>Cortisol en sangre, orina de 24h y saliva. Test de Nugent para confirmar la secreción autónoma de cortisol. TC suprarrenal.</dd></dl>
+            <dl class="kv-row"><dt>Tratamiento</dt><dd>Depende de la causa del exceso de cortisol — el tratamiento de la enfermedad primaria permite el control de la PA.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Hipertiroidismo e hipotiroidismo</p>
+            <dl class="kv-row"><dt>Prevalencia</dt><dd>1-5% como causa de HTA secundaria, con formas de presentación distintas: el hipertiroidismo suele producir HTA sistólica aislada; el hipotiroidismo, HTA diastólica aislada.</dd></dl>
+            <dl class="kv-row"><dt>Hipertiroidismo</dt><dd>Más común en mujeres de 20-40 años. Fatiga, sudoración, pérdida de peso, hiperactividad, ansiedad, irritabilidad, insomnio, pérdida de concentración, temblor, palpitaciones, disnea. En la exploración: exoftalmos, aumento del tamaño tiroideo.</dd></dl>
+            <dl class="kv-row"><dt>Hipotiroidismo</dt><dd>Astenia, aumento de peso, dolores musculares, depresión, bradicardia, estreñimiento, irregularidades menstruales. En la exploración: piel seca y fría, edema facial/manos, caída del cabello.</dd></dl>
+            <dl class="kv-row"><dt>Diagnóstico y tratamiento</dt><dd>La enfermedad tiroidea altera la contractilidad miocárdica, el consumo de O₂ miocárdico, el gasto cardíaco y la resistencia vascular periférica — cambios reversibles al tratar la alteración subyacente. La TSH debe formar parte de las exploraciones complementarias básicas de todo hipertenso. El hipertiroidismo se trata con antitiroideos, ¹³¹I radiactivo o cirugía; el hipotiroidismo, con hormona tiroidea.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Hiperparatiroidismo primario</p>
+            <dl class="kv-row"><dt>Qué es</dt><dd>Exceso de producción de PTH por una glándula paratiroidea, mayoritariamente por adenomas esporádicos; existen formas hereditarias ligadas a mutaciones en genes supresores de tumores o a activación de proto-oncogenes.</dd></dl>
+            <dl class="kv-row"><dt>Clínica</dt><dd>La mayoría se detecta de forma incidental tras hallar hipercalcemia. En fases avanzadas: astenia, pérdida de peso/apetito, náuseas, vómitos, poliuria, polidipsia, litiasis reno-ureteral, dolores osteoarticulares o deformidades esqueléticas.</dd></dl>
+            <dl class="kv-row"><dt>Diagnóstico</dt><dd>PTH, calcio, fósforo y vitamina D séricos — hipercalcemia con hipofosfatemia, hiperfosfaturia y PTH elevada sugieren el diagnóstico. Localización: ecografía de las glándulas paratiroides y gammagrafía con sestamibi-Tc99m.</dd></dl>
+            <dl class="kv-row"><dt>Tratamiento</dt><dd>Quirúrgico en la mayoría de las situaciones.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Acromegalia</p>
+            <dl class="kv-row"><dt>Qué es</dt><dd>Consecuencia de un exceso de hormona del crecimiento, habitualmente por un adenoma hipofisario.</dd></dl>
+            <dl class="kv-row"><dt>Clínica</dt><dd>Fenotipo característico: manos y pies grandes, cambios graduales de la forma del rostro con facciones más "toscas" (mandíbula y frente protuberantes, nariz agrandada, labios más gruesos, más espacio entre los dientes).</dd></dl>
+            <dl class="kv-row"><dt>Diagnóstico</dt><dd>Factor de crecimiento insulínico tipo I (IGF-I) y sobrecarga de glucosa con niveles de hormona del crecimiento. RM de hipófisis para localizar el adenoma.</dd></dl>
+        </div>
+
+        <div id="hta-secundaria-otras" class="tab-content">
+            <h3 style="color: var(--accent-green);">SAHS, coartación, fármacos y causas genéticas</h3>
+
+            <p class="section-label">Síndrome de apnea-hipopnea del sueño (SAHS)</p>
+            <dl class="kv-row"><dt>Relevancia</dt><dd>Se reconoce hoy como una de las causas más frecuentes de HTA secundaria y de HTA resistente, y un determinante clave del riesgo cardiovascular y renal.</dd></dl>
+            <dl class="kv-row"><dt>Qué es</dt><dd>Pausas de apnea durante el sueño causadas por el colapso parcial o total de la vía respiratoria alta.</dd></dl>
+            <dl class="kv-row"><dt>Mecanismo</dt><dd>Aumento de la PA diurna y nocturna por ↑actividad simpática, hipoxia, y activación del SRAA.</dd></dl>
+            <dl class="kv-row"><dt>Clínica</dt><dd>Ronquidos, episodios de apnea durante el sueño, nicturia, somnolencia diurna, cefaleas matutinas, fatigabilidad aumentada, irritabilidad, episodios de confusión diurna.</dd></dl>
+            <dl class="kv-row"><dt>Exploración</dt><dd>Sobrepeso-obesidad, cuello corto, macroglosia u otras alteraciones de la vía respiratoria alta que favorecen el colapso durante el sueño.</dd></dl>
+            <dl class="kv-row"><dt>Diagnóstico</dt><dd>Cuestionarios de cribado (escala de Epworth, cuestionario de Berlín) ante la sospecha clínica; evaluación otorrinolaringológica para problemas anatómicos subsidiarios de tratamiento específico; confirmación con estudios polisomnográficos.</dd></dl>
+            <dl class="kv-row"><dt>Tratamiento</dt><dd>Abordaje integral: modificaciones del estilo de vida, tratamiento farmacológico de la HTA y del resto de factores de riesgo cardiovascular asociados, y dispositivos de presión continua positiva en la vía respiratoria (CPAP) durante el sueño.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Coartación de aorta</p>
+            <dl class="kv-row"><dt>Qué es</dt><dd>Enfermedad cardíaca congénita, habitualmente diagnosticada en niños y adolescentes, por estrechamiento de la arteria aorta.</dd></dl>
+            <dl class="kv-row"><dt>Fisiopatología</dt><dd>↑PA en miembros superiores y ↓flujo a través de la aorta estrechada, con asimetrías de PA. Produce cambios estructurales en el corazón y los vasos (hipertrofia cardíaca, fibrosis intersticial) — el diagnóstico y tratamiento precoces son necesarios para evitar el desarrollo de una cardiopatía dilatada.</dd></dl>
+            <dl class="kv-row"><dt>Clínica</dt><dd>Soplo interescapular; pueden presentar muescas en las costillas en la radiografía de tórax (por circulación colateral).</dd></dl>
+            <dl class="kv-row"><dt>Diagnóstico y tratamiento</dt><dd>Confirmación con ecocardiografía y angioTC torácico-abdominal. Tratamiento fundamentalmente quirúrgico, con angioplastia o cirugía convencional.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Fármacos y tóxicos</p>
+            <dl class="kv-row"><dt>Relevancia</dt><dd>Causa frecuente y fácilmente corregible de HTA secundaria. Con frecuencia estos fármacos desenmascaran una HTA esencial no conocida, dificultan su control, u ocasionan HTA resistente. El tratamiento consiste en suspender el fármaco o minimizar la dosis.</dd></dl>
+            <table class="data-table">
+                <thead><tr><th>Grupo farmacológico</th><th>Fármacos</th></tr></thead>
+                <tbody>
+                    <tr><td>Descongestionantes nasales</td><td>Fenilefrina</td></tr>
+                    <tr><td>Drogas estimulantes</td><td>Anfetaminas, cocaína, drogas de "diseño"</td></tr>
+                    <tr><td>Alcohol</td><td>Bebidas alcohólicas</td></tr>
+                    <tr><td>Tratamientos oncológicos</td><td>Axitinib, bevacizumab, ponatinib, pazopanib, regorafenib, sorafenib, sunitinib (otros anti-VEGF), otros inhibidores de los checkpoint inmunológicos</td></tr>
+                    <tr><td>AINEs</td><td>Todos los AINE pueden inducir HTA</td></tr>
+                    <tr><td>Inhibidores de la COX-2</td><td>Rofecoxib, celecoxib, etoricoxib</td></tr>
+                    <tr><td>Corticoides</td><td>Glucocorticoides, mineralocorticoides y esteroides anabolizantes</td></tr>
+                    <tr><td>Anticonceptivos orales</td><td>Estrógenos y progestágenos, particularmente a dosis altas</td></tr>
+                    <tr><td>Inmunosupresores anticalcineurínicos</td><td>Ciclosporina, tacrolimus</td></tr>
+                    <tr><td>Estimulantes de la eritropoyesis</td><td>Eritropoyetina</td></tr>
+                    <tr><td>Agentes alquilantes</td><td>Ciclofosfamida, clorambucil, procarbazina, bendamustina, busulfán, mecloretamina, melfalán</td></tr>
+                    <tr><td>Antidepresivos y ansiolíticos</td><td>Antidepresivos tricíclicos, buspirona, fluoxetina, venlafaxina</td></tr>
+                    <tr><td>Inhibidores de la monoaminooxidasa (IMAO)</td><td>Isocarboxazida, nialamida, fenelzina, tranilcipromina, iproniazida, iproclozida, fenilalanina, neonatálico, moclobemida, toloxatona</td></tr>
+                    <tr><td>Antirretrovirales</td><td>Lopinavir, ritonavir, atazanavir, entre otros</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Otros agentes externos relacionados con HTA secundaria: alcohol, cocaína, plomo y regaliz. La ingesta crónica excesiva de regaliz imita al hiperaldosteronismo, por estimulación del receptor mineralocorticoide e inhibición del metabolismo del cortisol (inhibición de la 11β-hidroxiesteroide deshidrogenasa tipo 2).</p>
+
+            <p class="section-label" style="margin-top:16px;">HTA de base genética (causas monogénicas, muy infrecuentes)</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Suelen presentarse en edades tempranas de la vida, con patogenia relacionada con un aumento de la absorción tubular de sodio y, por tanto, con supresión de la renina plasmática. El diagnóstico se orienta por antecedentes familiares de HTA y se confirma con el perfil bioquímico y el estudio genético.</p>
+            <table class="data-table">
+                <thead><tr><th>Causa</th><th>Fenotipo</th><th>Mecanismo y efectos</th></tr></thead>
+                <tbody>
+                    <tr><td>Síndrome de Liddle</td><td>Hipopotasemia, alcalosis metabólica, ARP/CRP bajas, CAP baja</td><td>↑Actividad del canal de sodio tubular (ENaC); responde a amiloride</td></tr>
+                    <tr><td>Exceso aparente de mineralocorticoides</td><td>Hipopotasemia, alcalosis metabólica, ARP/CRP bajas, CAP baja</td><td>Descenso de la 11β-deshidrogenasa isoenzima 2</td></tr>
+                    <tr><td>Síndrome de Gordon</td><td>Hiperpotasemia, acidosis metabólica, ARP/CRP bajas, CAP baja</td><td>↑Actividad del cotransportador de sodio-cloro</td></tr>
+                    <tr><td>Síndrome de Geller</td><td>HTA exacerbada en el embarazo, ARP/CRP bajas, CAP baja</td><td>Efecto agonista de la progesterona en el receptor mineralocorticoide</td></tr>
+                    <tr><td>HTA remediable por glucocorticoides</td><td>Hipopotasemia, alcalosis metabólica, ARP/CRP bajas, CAP elevada</td><td>Gen quimérico CYP11β1 a CYP11β2; responde a tratamiento con glucocorticoides</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">ARP, actividad de renina plasmática; CRP, concentración de renina plasmática; CAP, concentración de aldosterona plasmática.</p>
+        </div>
     </div>
 
     <div class="card">

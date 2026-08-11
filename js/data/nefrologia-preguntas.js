@@ -1634,7 +1634,7 @@ export const preguntasNefrologia = [
     {
         id: 'nefro-q151',
         tema: 'fisio-tubular',
-        enunciado: '¿Qué mecanismo permite recuperar en el túbulo proximal los ~30 g/día de proteínas de bajo peso molecular (&lt;70.000) que atraviesan el glomérulo?',
+        enunciado: '¿Qué mecanismo permite recuperar en el túbulo proximal los ~30 g/día de proteínas de bajo peso molecular (<70.000) que atraviesan el glomérulo?',
         opciones: ['Difusión simple a través de la membrana', 'Endocitosis en el borde en cepillo de la cara apical', 'Cotransporte con sodio, igual que la glucosa', 'No se recuperan, se excretan todas en la orina'],
         correcta: 1,
         explicacion: 'Estas proteínas filtradas, junto con pequeñas hormonas peptídicas, se recuperan casi por completo mediante un proceso de endocitosis en el borde en cepillo de la cara apical del túbulo proximal — la base de por qué la proteinuria tubular nunca es tan masiva como la glomerular.',
@@ -1652,7 +1652,7 @@ export const preguntasNefrologia = [
     {
         id: 'nefro-q153',
         tema: 'fisio-acidobase-alcalosis',
-        enunciado: '¿Qué mortalidad se ha descrito en la alcalosis metabólica extrema (pH &gt;7,65)?',
+        enunciado: '¿Qué mortalidad se ha descrito en la alcalosis metabólica extrema (pH >7,65)?',
         opciones: ['Prácticamente nula', 'Alrededor del 20%', 'Alrededor del 50%', 'Hasta el 80%'],
         correcta: 3,
         explicacion: 'Pese a estar infravalorada clínicamente frente a la acidosis, la alcalosis metabólica en sus valores extremos se asocia a una mortalidad de hasta el 80% con pH >7,65.',
@@ -1723,7 +1723,7 @@ export const preguntasNefrologia = [
         enunciado: '¿Qué diferencia bioquímica clave distingue la ATR proximal (tipo II) de la ATR distal (tipo I)?',
         opciones: [
             'La ATR proximal cursa con hiperpotasemia y la distal con hipopotasemia',
-            'El pH urinario mínimo alcanzable: &lt;5,5 en la proximal (mecanismo de acidificación distal intacto) frente a &gt;5,5 en la distal',
+            'El pH urinario mínimo alcanzable: <5,5 en la proximal (mecanismo de acidificación distal intacto) frente a >5,5 en la distal',
             'No hay ninguna diferencia relevante entre ambas',
             'La ATR proximal solo aparece en niños',
         ],
@@ -1794,9 +1794,9 @@ export const preguntasNefrologia = [
         id: 'nefro-q164',
         tema: 'fisio-acidobase-acidosis',
         enunciado: 'En una acidosis metabólica con hiato aniónico normal, ¿a partir de qué pH se plantea el uso de bicarbonato?',
-        opciones: ['pH &lt;7,20', 'pH &lt;7,38', 'Nunca se usa en el hiato aniónico normal', 'Solo si el pH es superior a 7,35'],
+        opciones: ['pH <7,20', 'pH <7,38', 'Nunca se usa en el hiato aniónico normal', 'Solo si el pH es superior a 7,35'],
         correcta: 0,
-        explicacion: 'En la acidosis con hiato aniónico normal el umbral es menos restrictivo que en la de hiato elevado: se plantea el bicarbonato sódico si el pH es &lt;7,20, con el objetivo de subirlo hasta esa cifra.',
+        explicacion: 'En la acidosis con hiato aniónico normal el umbral es menos restrictivo que en la de hiato elevado: se plantea el bicarbonato sódico si el pH es <7,20, con el objetivo de subirlo hasta esa cifra.',
     },
     {
         id: 'nefro-q165',
@@ -1809,7 +1809,7 @@ export const preguntasNefrologia = [
             'Sirve para calcular el hiato aniónico',
         ],
         correcta: 0,
-        explicacion: 'Un gradiente A-a elevado (&gt;20 en mayores de 30 años) sugiere enfermedad pulmonar intrínseca como causa de la acidosis respiratoria; un gradiente normal orienta hacia una causa central o de la musculatura respiratoria.',
+        explicacion: 'Un gradiente A-a elevado (>20 en mayores de 30 años) sugiere enfermedad pulmonar intrínseca como causa de la acidosis respiratoria; un gradiente normal orienta hacia una causa central o de la musculatura respiratoria.',
     },
     {
         id: 'nefro-q166',
@@ -1905,7 +1905,7 @@ export const preguntasNefrologia = [
             'La cirrosis hepática',
         ],
         correcta: 0,
-        explicacion: 'Con HTA y resistencia al cloro (Clo &gt;40 mEq/l): hiperaldosteronismo primario, síndrome de Cushing, síndrome de Liddle, ingesta de regaliz e HTA renovascular.',
+        explicacion: 'Con HTA y resistencia al cloro (Clo >40 mEq/l): hiperaldosteronismo primario, síndrome de Cushing, síndrome de Liddle, ingesta de regaliz e HTA renovascular.',
     },
     {
         id: 'nefro-q174',
@@ -1936,7 +1936,7 @@ export const preguntasNefrologia = [
     {
         id: 'nefro-q176',
         tema: 'fisio-acidobase-alcalosis',
-        enunciado: '¿Qué manifestación de laboratorio puede aparecer en una alcalemia grave (HCO₃⁻ &gt;40)?',
+        enunciado: '¿Qué manifestación de laboratorio puede aparecer en una alcalemia grave (HCO₃⁻ >40)?',
         opciones: [
             'Una elevación moderada del hiato aniónico, con lactato elevado en ~50% de los casos',
             'Un descenso del hiato aniónico siempre',
@@ -1944,7 +1944,7 @@ export const preguntasNefrologia = [
             'Ninguna alteración de laboratorio adicional',
         ],
         correcta: 0,
-        explicacion: 'En la alcalemia grave (HCO₃⁻ &gt;40) suele haber una elevación moderada del hiato aniónico, con lactato elevado en aproximadamente el 50% de los casos.',
+        explicacion: 'En la alcalemia grave (HCO₃⁻ >40) suele haber una elevación moderada del hiato aniónico, con lactato elevado en aproximadamente el 50% de los casos.',
     },
     {
         id: 'nefro-q177',
@@ -1962,7 +1962,7 @@ export const preguntasNefrologia = [
     {
         id: 'nefro-q178',
         tema: 'fisio-acidobase-alcalosis',
-        enunciado: '¿Qué tratamiento se plantea en la alcalosis metabólica extrema (pH &gt;7,6 y/o pCO₂ &gt;60), un escenario raro en la práctica?',
+        enunciado: '¿Qué tratamiento se plantea en la alcalosis metabólica extrema (pH >7,6 y/o pCO₂ >60), un escenario raro en la práctica?',
         opciones: [
             'HCl por catéter central o NH₄Cl, o hemodiálisis con bajo bicarbonato en el baño si hay insuficiencia renal grave',
             'Suero salino 0,9% a dosis muy altas exclusivamente',
@@ -2113,13 +2113,13 @@ export const preguntasNefrologia = [
         tema: 'fisio-hipocalcemia',
         enunciado: '¿Cuál es la definición bioquímica de hipocalcemia?',
         opciones: [
-            'Ca total &lt;8,5 mg/dl (2,1 mmol/l) o Ca iónico &lt;4,6 mg/dl (1,15 mmol/l), tras confirmar albúmina normal',
-            'Ca total &lt;10 mg/dl siempre',
+            'Ca total <8,5 mg/dl (2,1 mmol/l) o Ca iónico <4,6 mg/dl (1,15 mmol/l), tras confirmar albúmina normal',
+            'Ca total <10 mg/dl siempre',
             'Solo se define por el calcio iónico, nunca por el total',
-            'Ca total &lt;6 mg/dl exclusivamente',
+            'Ca total <6 mg/dl exclusivamente',
         ],
         correcta: 0,
-        explicacion: 'La hipocalcemia se define como Ca total &lt;8,5 mg/dl (2,1 mmol/l) o Ca iónico &lt;4,6 mg/dl (1,15 mmol/l), siempre tras confirmar que la albúmina es normal (o corrigiendo por ella).',
+        explicacion: 'La hipocalcemia se define como Ca total <8,5 mg/dl (2,1 mmol/l) o Ca iónico <4,6 mg/dl (1,15 mmol/l), siempre tras confirmar que la albúmina es normal (o corrigiendo por ella).',
     },
     {
         id: 'nefro-q193',
@@ -2244,13 +2244,13 @@ export const preguntasNefrologia = [
         tema: 'fisio-hipercalcemia',
         enunciado: '¿Cuál es la definición bioquímica de hipercalcemia y su frecuencia aproximada en población hospitalizada?',
         opciones: [
-            'Ca total &gt;10,5 mg/dl (2,6 mmol/l) o Ca iónico &gt;5,6 mg/dl; 0,6-3,6% de los pacientes hospitalizados',
-            'Ca total &gt;15 mg/dl exclusivamente',
-            'Es un trastorno excepcional, con una frecuencia &lt;0,001%',
+            'Ca total >10,5 mg/dl (2,6 mmol/l) o Ca iónico >5,6 mg/dl; 0,6-3,6% de los pacientes hospitalizados',
+            'Ca total >15 mg/dl exclusivamente',
+            'Es un trastorno excepcional, con una frecuencia <0,001%',
             'Se define únicamente por el calcio iónico',
         ],
         correcta: 0,
-        explicacion: 'Hipercalcemia: Ca total &gt;10,5 mg/dl (2,6 mmol/l) o Ca iónico &gt;5,6 mg/dl (1,30 mmol/l). Es relativamente frecuente: 0,05-0,6% en población general, 0,6-3,6% en hospitalizados.',
+        explicacion: 'Hipercalcemia: Ca total >10,5 mg/dl (2,6 mmol/l) o Ca iónico >5,6 mg/dl (1,30 mmol/l). Es relativamente frecuente: 0,05-0,6% en población general, 0,6-3,6% en hospitalizados.',
     },
     {
         id: 'nefro-q206',
@@ -2388,9 +2388,9 @@ export const preguntasNefrologia = [
         id: 'nefro-q220',
         tema: 'fisio-hipercalcemia',
         enunciado: 'En el diagnóstico de la hipercalcemia, ¿qué sugiere un calcio urinario disminuido junto con PTH normal o elevada?',
-        opciones: ['Hipercalcemia-hipocalciuria familiar (excreción fraccional de calcio &lt;0,01)', 'Un hiperparatiroidismo primario típico', 'Una hipercalcemia tumoral', 'Una intoxicación por vitamina D'],
+        opciones: ['Hipercalcemia-hipocalciuria familiar (excreción fraccional de calcio <0,01)', 'Un hiperparatiroidismo primario típico', 'Una hipercalcemia tumoral', 'Una intoxicación por vitamina D'],
         correcta: 0,
-        explicacion: 'Un calcio urinario disminuido (excreción fraccional &lt;0,01) con PTH normal o levemente elevada es característico de la hipercalcemia-hipocalciuria familiar, a diferencia del hiperparatiroidismo (donde el calcio urinario suele estar aumentado).',
+        explicacion: 'Un calcio urinario disminuido (excreción fraccional <0,01) con PTH normal o levemente elevada es característico de la hipercalcemia-hipocalciuria familiar, a diferencia del hiperparatiroidismo (donde el calcio urinario suele estar aumentado).',
     },
     {
         id: 'nefro-q221',
@@ -2406,7 +2406,7 @@ export const preguntasNefrologia = [
         id: 'nefro-q222',
         tema: 'fisio-fosforo',
         enunciado: '¿Cómo se distribuye el fósforo corporal total?',
-        opciones: ['~85% en hueso, ~14% intracelular, &lt;1% en el espacio extracelular', '100% en el espacio extracelular', '50% en hueso y 50% intracelular', 'Todo el fósforo corporal es plasmático'],
+        opciones: ['~85% en hueso, ~14% intracelular, <1% en el espacio extracelular', '100% en el espacio extracelular', '50% en hueso y 50% intracelular', 'Todo el fósforo corporal es plasmático'],
         correcta: 0,
         explicacion: 'El fósforo corporal se distribuye ~85% en el hueso, ~14% intracelular, y menos del 1% en el espacio extracelular — la fosforemia sérica normal es de 2,5-4,5 mg/dl.',
     },

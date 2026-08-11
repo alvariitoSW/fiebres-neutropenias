@@ -8,8 +8,10 @@ import { createViewSwitcher } from '../../core/navigation.js';
 import { initNefrona } from './nefrona.js';
 import { initRinon } from './rinon.js';
 import { init as initFisiologia } from './fisiologia.js';
+import { init as initHta } from './hta.js';
 import { initQuiz } from '../quiz/quiz.js';
 import { preguntasNefrologia, temasNefrologia } from '../../data/nefrologia-preguntas.js';
+import { preguntasHTA, temasHTA } from '../../data/hta-preguntas.js';
 
 function mostrarEnPreparacion() {
     const cont = document.getElementById('nefro-segmento-categorias');
@@ -54,7 +56,12 @@ export function init() {
     });
 
     initFisiologia();
-    initQuiz({ triggerId: 'btn-nefro-repasar', banco: preguntasNefrologia, temas: temasNefrologia });
+    initHta();
+    initQuiz({
+        triggerId: ['btn-nefro-repasar', 'btn-hta-repasar'],
+        banco: [...preguntasNefrologia, ...preguntasHTA],
+        temas: [...temasNefrologia, ...temasHTA],
+    });
 
     nefroLevel.show('kidney');
 
