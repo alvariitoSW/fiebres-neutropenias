@@ -850,6 +850,146 @@ por encima que sí diera cabida a todos.
       que el criterio ya usado en Nefrología de ampliar el banco solo en
       los temas que reciben una ampliación de contenido real. El banco
       combinado de Nefrología+HTA queda en 343 preguntas (255+88).
+  - **`erc.html`** (objetivo de rotación 3) fue la 2ª de las 6 categorías
+    del mapa del riñón en pasar de placeholder a contenido real, con la
+    fuente de mayor volumen usada hasta ahora en todo el proyecto: la
+    **KDIGO 2024 Clinical Practice Guideline for the Evaluation and
+    Management of Chronic Kidney Disease** (*Kidney International*
+    (2024) 105 (Suppl 4S): S117-S314, ~198 páginas repartidas en 2 PDF de
+    ~99 páginas cada uno). Se leyó el documento completo (portada,
+    resumen íntegro de recomendaciones y *practice points* S149-168, y
+    los 5 capítulos clínicos S169-269 — el capítulo 6, "Research
+    recommendations", y el apéndice de métodos/PICOS que le sigue, se
+    revisaron para confirmar que no contienen contenido de manejo
+    clínico y se descartaron a propósito, igual que se descartó
+    reproducir tablas puramente estadísticas/forest-plots de
+    metaanálisis). Sustituida la tarjeta "🚧 en preparación" por un
+    cuaderno de campo (`#erc-corkboard`/`#panel-erc-tabs`,
+    `js/modules/nefrologia/erc.js` vía el mismo `core/corkboard.js` de
+    siempre) con **11 fichas**, más del doble que cualquier otro cuaderno
+    de campo de la app hasta ahora — proporcional al volumen real de la
+    fuente (6 capítulos KDIGO con contenido far más extenso que
+    cualquier PDF anterior de Nefrología al día):
+    1. **Definición, categorías y causas** (`erc-definicion`): criterio
+       de persistencia ≥3 meses, tabla de categorías G (G1-G5, con G3a/
+       G3b) y A (A1-A3), nomenclatura CGA, el "mapa de calor" de riesgo
+       verde→amarillo→naranja→rojo (descrito en texto, no reproducido
+       como imagen), epidemiología (prevalencia mundial ~10%, mayor
+       riesgo de muerte CV que de progresión a fallo renal), y 5 causas
+       de ERC en `micro-prof-item` (diabetes, vascular/HTA,
+       glomerulonefritis, quísticas/hereditarias, uropatía obstructiva).
+       Incluye la primera calculadora de esta ficha (ver más abajo).
+    2. **Evaluación diagnóstica: FGe y albuminuria** (`erc-evaluacion`):
+       pruebas iniciales, ecuación CKD-EPI de creatinina 2021 (sin raza)
+       como recomendación de primera línea, cuándo usar cistatina C
+       (eGFRcys/eGFRcr-cys), medida directa (mGFR), determinantes no
+       relacionados con el FG que alteran creatinina/cistatina C (tabla),
+       medida de albuminuria (ACR puntual preferido sobre 24h, POCT,
+       cuándo repetir), biopsia renal, monitorización.
+    3. **Evaluación del riesgo y monitorización** (`erc-riesgo`): Kidney
+       Failure Risk Equation (KFRE) de 4 y 8 variables — **sin
+       calculadora numérica propia** (decisión deliberada: los
+       coeficientes exactos de la ecuación de regresión no se
+       recrearon, para no arriesgar un cálculo mal implementado en una
+       herramienta de predicción de fallo renal; se enlaza en su lugar a
+       kidneyfailurerisk.com), umbrales de derivación por riesgo
+       (>3-5%/5 años, >40%/2 años), tabla completa de frecuencia de
+       monitorización FGe/ACR por categoría G×A, herramientas de riesgo
+       CV validadas en ERC (parche SCORE, PREVENT).
+    4. **Estilo de vida y nutrición** (`erc-estilo-vida`): ejercicio,
+       peso, tabaco, ingesta proteica por contexto (tabla), restricción
+       de sodio (&lt;2 g/día), patrón dietético de base vegetal, potasio
+       dietético (remite a la Ficha 7 para el detalle), alcohol.
+    5. **Control de la PA y bloqueo del SRAA** (`erc-pa-raas`): objetivo
+       &lt;120 mmHg sistólica con medida estandarizada (y por qué esa
+       distinción importa, ligada a SPRINT), excepciones, por qué no
+       combinar IECA+ARA-II, tabla de monitorización tras iniciar/
+       intensificar el bloqueo del SRAA, cuándo NO discontinuar pese a
+       progresión o inicio de diálisis.
+    6. **Nefroprotección: SGLT2i, ns-MRA y GLP-1 RA** (`erc-nefroproteccion`):
+       los 3 pilares farmacológicos "nuevos" desde 2020 — iSGLT2 desde
+       FGe ≥20 con o sin diabetes (cambio de mayor impacto de esta
+       actualización), mecanismo antiproteinúrico vía arteriola aferente,
+       finerenona (ns-MRA) y su diferencia frente a espironolactona/
+       eplerenona, GLP-1 RA (ensayo FLOW), tabla resumen de las 4 clases
+       con nefroprotección demostrada.
+    7. **Acidosis metabólica e hiperpotasemia** (`erc-acidosis-k`): umbral
+       de suplementación con álcalis (HCO₃⁻ &lt;18), relación en U entre
+       potasio y mortalidad, mecanismos de hiperpotasemia (tabla),
+       **tabla completa de fármacos asociados a hiperpotasemia**
+       (mecanismo + ejemplos, incluida finerenona y la excepción de los
+       iSGLT2), conducta clínica por gravedad, agentes captadores de
+       potasio (resinas/patirómero/SZC) en `micro-prof-item`, manejo
+       escalonado 3 líneas, y la tabla de tasas de absorción de potasio
+       por tipo de alimento (vegetal fresco 50-60% vs. procesado ~90%)
+       — mismo mensaje ya presente en Ficha de Hipopotasemia de
+       Fisiología, reforzado aquí desde la fuente KDIGO independiente.
+    8. **CKD-MBD e hiperuricemia** (`erc-mbd-urico`): CKD-MBD tratado
+       deliberadamente de forma breve, con remisión explícita a la
+       **KDIGO 2017 CKD-MBD Guideline Update** para dosificación de
+       quelantes/vitamina D/calcimiméticos (esta guía de 2024 no la
+       repite); anemia igual de breve, remitiendo a la **KDIGO 2012
+       Anemia Guideline** (en actualización); hiperuricemia con
+       recomendaciones explícitas en cajas de color (verde = tratar solo
+       la sintomática, rojo = no tratar la asintomática para frenar
+       progresión — grados 1C/2D reales de la fuente), HLA-B*5801 y
+       alopurinol.
+    9. **Riesgo cardiovascular: lípidos, FA y cardiopatía isquémica**
+       (`erc-cv`): estatinas por edad/FGe con grados reales (1A/1B/2A),
+       estrategia "fire-and-forget", AAS en prevención 2ª (recomendación
+       real 1C) vs. 1ª (sin recomendación firme), ISCHEMIA-CKD (tratamiento
+       médico vs. invasivo, con sus excepciones), FA/NOAC con
+       recomendación real 1C preferente sobre warfarina, y la limitación
+       conocida de añadir el FGe a CHA₂DS₂-VASc.
+    10. **Manejo de fármacos, nefrotoxicidad y contraste**
+        (`erc-farmacos`): tabla de fármacos nefrotóxicos con alternativas
+        (reutilizando el mismo patrón dos-columnas que la tabla de HTA
+        renovascular), remedios herbales por continente, ajuste de dosis
+        por FG (indexado/no indexado por superficie corporal), "sick day
+        rules" con el acrónimo real **SADMANS**, tabla de suspensión
+        perioperatoria, y contraste (terminología CA-AKI, tabla de
+        factores de riesgo, medidas sin beneficio consistente, gadolinio
+        por grupo ACR).
+    11. **Derivación, síntomas, modelos de atención y diálisis**
+        (`erc-atencion`): tabla completa de criterios de derivación,
+        tabla beneficios/consecuencias derivación precoz/tardía, los 13
+        síntomas más prevalentes de la ERC con su prevalencia/gravedad
+        real (Figura 49 de la fuente, recreada como `term-chips`, no
+        como imagen), manejo de síntomas comunes en `micro-prof-item`,
+        cribado de malnutrición, modelo de atención escalonado por
+        riesgo (tabla), transición pediatría-adultos, momento de inicio
+        de diálisis (incluido el resultado real del ensayo IDEAL — sin
+        beneficio de supervivencia con inicio precoz), y cuidados
+        conservadores integrales/paliativos.
+    - **Calculadora de FGe (CKD-EPI 2021) + categorización CGA**, en la
+      Ficha 1 (`calcCgaCategorizador()` en `erc.js`): 4 inputs
+      (creatinina, edad, sexo, ACR) → FGe con la ecuación real CKD-EPI
+      2021 sin coeficiente de raza (constantes kappa/alfa por sexo),
+      categoría G, categoría A, y nivel de riesgo (verde/amarillo/rojo,
+      mapeado a los 3 colores ya disponibles de `.tfg-estado-*` — el
+      4º nivel "naranja" del mapa de calor real de KDIGO se colapsa en
+      el mensaje de texto de "rojo", ya que no existe una 4ª clase CSS
+      de color en el proyecto y no se justificaba crear una solo para
+      esto). El mapa de riesgo G×A (`MAPA_RIESGO` en `erc.js`) reproduce
+      exactamente la matriz estándar de KDIGO 2012/2024, confirmada
+      contra las tablas de riesgo por eGFR×albuminuria del CKD Prognosis
+      Consortium vistas repetidamente en la fuente (mortalidad,
+      hiperpotasemia, FA). Deliberadamente NO se implementó una
+      calculadora de la KFRE (ver Ficha 3 arriba) por el mismo motivo de
+      seguridad clínica.
+    - Ningún dato de esta ficha se extrajo como imagen — a diferencia de
+      HTA renovascular (que sí tenía angiografías reales), todas las
+      figuras de la fuente KDIGO son gráficos estadísticos (forest-plots,
+      curvas de metaanálisis) o flujogramas fácilmente tabulables, así
+      que todo el contenido se recreó como `.data-table`/`.kv-row`/
+      `.term-chips`/`.micro-prof-item` nativos, siguiendo el mismo
+      criterio que ya se aplicó en HTA Ficha 1-4/7-8.
+    - Se creó `js/data/erc-preguntas.js` con **88 preguntas** (`erc-q001`-
+      `q088`, 8 por ficha × 11 fichas — mismo baseline de 8 ya usado al
+      arrancar Nefrología y HTA), añadida a la llamada única de
+      `initQuiz` en `nefrologia/index.js` (`triggerId` ganó un 3er botón,
+      `btn-erc-repasar`). El banco combinado Nefrología+HTA+ERC queda en
+      **431 preguntas** (343+88).
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

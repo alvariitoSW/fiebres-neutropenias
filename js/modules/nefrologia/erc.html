@@ -1,22 +1,781 @@
     <button class="back-btn btn-volver-nefro-kidney">← VOLVER</button>
     <div class="diag-header">
-        <h2 style="color: var(--accent-yellow); text-shadow: none;">ERC — Definición y diagnóstico</h2>
-        <p>Objetivo de rotación 3 · Nefrología al día (SEN)</p>
+        <h2 style="color: var(--accent-yellow); text-shadow: none;">ERC — Definición, evaluación y manejo</h2>
+        <p>Objetivo de rotación 3 · KDIGO 2024 Clinical Practice Guideline for CKD</p>
     </div>
 
-    <div class="card">
-        <h3 style="color: var(--accent-yellow);">🚧 En preparación</h3>
-        <p style="font-size: 0.85rem; line-height: 1.5; color: var(--text-muted);">
-            El contenido clínico de la Enfermedad Renal Crónica (definición KDIGO, estadificación,
-            pilares de manejo, criterios de derivación a ERCA) se irá añadiendo a partir de la
-            bibliografía citada abajo. Mientras tanto, los enlaces ya son reales y navegables.
-        </p>
+    <button class="accordion-btn nav-btn" id="btn-erc-repasar" style="border-left: 4px solid var(--accent-yellow);">
+        <span>🎯 Repasar (preguntas de repaso)</span>
+        <span style="font-size: 0.8rem; color: var(--accent-yellow);">[ EMPEZAR → ]</span>
+    </button>
+
+    <p class="section-label">Cuaderno de campo — Enfermedad Renal Crónica</p>
+    <div class="corkboard" id="erc-corkboard">
+        <div class="field-card" data-tab="erc-definicion">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 1</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><path d="M40,10 C40,10 24,30 24,38 a16,16 0 0,0 32,0 C56,30 40,10 40,10 Z" fill="none" stroke="var(--accent-yellow)" stroke-width="2"/><line x1="30" y1="30" x2="50" y2="30" stroke="var(--accent-blue)" stroke-width="1.5"/></svg>
+                    <div class="field-name">Definición, categorías y causas</div>
+                    <div class="field-hook">¿Cuánto tiempo deben persistir las alteraciones renales para poder hablar de ERC?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">≥3 meses — es el criterio temporal que distingue la ERC del daño renal agudo.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="erc-evaluacion">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 2</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><rect x="16" y="14" width="48" height="30" rx="2" fill="none" stroke="var(--accent-blue)" stroke-width="2"/><line x1="22" y1="22" x2="58" y2="22" stroke="var(--accent-yellow)" stroke-width="1.5"/><line x1="22" y1="29" x2="58" y2="29" stroke="var(--accent-yellow)" stroke-width="1.5"/><line x1="22" y1="36" x2="46" y2="36" stroke="var(--accent-yellow)" stroke-width="1.5"/></svg>
+                    <div class="field-name">Evaluación diagnóstica: FGe y albuminuria</div>
+                    <div class="field-hook">¿Qué ecuación de FGe recomienda KDIGO 2024 como primera aproximación, sin uso de raza?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">La ecuación CKD-EPI de creatinina 2021 (sin coeficiente de raza).</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="erc-riesgo">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 3</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><path d="M18,44 L30,28 L42,34 L54,16 L64,10" fill="none" stroke="var(--accent-red)" stroke-width="2"/><circle cx="64" cy="10" r="3" fill="var(--accent-red)"/></svg>
+                    <div class="field-name">Evaluación del riesgo y monitorización</div>
+                    <div class="field-hook">¿Qué ecuación predice el riesgo de progresión a fallo renal a 2 y 5 años a partir de solo 4 variables?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">La Kidney Failure Risk Equation (KFRE), con edad, sexo, FGe y ACR.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="erc-estilo-vida">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 4</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><circle cx="40" cy="20" r="8" fill="none" stroke="var(--accent-green)" stroke-width="2"/><path d="M40,28 L40,40 M32,44 L40,36 L48,44 M30,32 L40,28 L50,32" fill="none" stroke="var(--accent-green)" stroke-width="2"/></svg>
+                    <div class="field-name">Estilo de vida y nutrición</div>
+                    <div class="field-hook">¿Cuál es la ingesta de sodio recomendada en la ERC, expresada en gramos de sal al día?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">&lt;5 g/día (equivalente a &lt;2 g/día de sodio, ~90 mmol/día).</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="erc-pa-raas">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 5</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><rect x="18" y="20" width="44" height="16" rx="3" fill="none" stroke="var(--accent-red)" stroke-width="2"/><line x1="24" y1="28" x2="56" y2="28" stroke="var(--accent-yellow)" stroke-width="2"/><circle cx="24" cy="28" r="3" fill="var(--accent-red)"/></svg>
+                    <div class="field-name">Control de la PA y bloqueo del SRAA</div>
+                    <div class="field-hook">¿Cuál es el objetivo de PA sistólica en consulta recomendado por KDIGO 2024 para la mayoría de adultos con ERC?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">&lt;120 mmHg (medida estandarizada), salvo excepciones como trasplante o edad pediátrica.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="erc-nefroproteccion">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 6</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><rect x="16" y="24" width="12" height="16" rx="2" fill="none" stroke="var(--accent-purple)" stroke-width="2"/><rect x="34" y="18" width="12" height="22" rx="2" fill="none" stroke="var(--accent-purple)" stroke-width="2"/><rect x="52" y="12" width="12" height="28" rx="2" fill="none" stroke="var(--accent-purple)" stroke-width="2"/></svg>
+                    <div class="field-name">Nefroprotección: SGLT2i, ns-MRA y GLP-1</div>
+                    <div class="field-hook">¿A partir de qué FGe se recomienda iniciar un iSGLT2 en la ERC, independientemente de la diabetes?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">FGe ≥20 ml/min/1,73m² (con o sin diabetes tipo 2).</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="erc-acidosis-k">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 7</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><circle cx="30" cy="28" r="12" fill="none" stroke="var(--accent-blue)" stroke-width="2"/><circle cx="52" cy="28" r="12" fill="none" stroke="var(--accent-yellow)" stroke-width="2"/></svg>
+                    <div class="field-name">Acidosis metabólica e hiperpotasemia</div>
+                    <div class="field-hook">¿Qué cifra de bicarbonato sérico se recomienda mantener con suplementos orales en la ERC con acidosis?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">≥18 mEq/l (evitando superar el rango normal-alto).</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="erc-mbd-urico">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 8</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><path d="M40,10 L48,26 L64,28 L52,38 L56,54 L40,45 L24,54 L28,38 L16,28 L32,26 Z" fill="none" stroke="var(--accent-yellow)" stroke-width="1.6"/></svg>
+                    <div class="field-name">CKD-MBD e hiperuricemia</div>
+                    <div class="field-hook">¿Se recomienda tratar la hiperuricemia asintomática para frenar la progresión de la ERC?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">No — solo se recomienda tratar la hiperuricemia sintomática (gota).</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="erc-cv">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 9</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><path d="M14,30 h12 l6,-14 l8,28 l6,-20 l4,10 h16" fill="none" stroke="var(--accent-red)" stroke-width="2"/></svg>
+                    <div class="field-name">Riesgo cardiovascular: lípidos, FA y cardiopatía isquémica</div>
+                    <div class="field-hook">¿Qué anticoagulantes se recomiendan preferentemente sobre warfarina para la fibrilación auricular en ERC G1-G4?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Los NOAC (anticoagulantes orales de acción directa, no antagonistas de la vitamina K).</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="erc-farmacos">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 10</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><rect x="24" y="12" width="32" height="32" rx="4" fill="none" stroke="var(--accent-blue)" stroke-width="2"/><path d="M32,28 h16 M40,20 v16" stroke="var(--accent-red)" stroke-width="2"/></svg>
+                    <div class="field-name">Manejo de fármacos, nefrotoxicidad y contraste</div>
+                    <div class="field-hook">¿Qué acrónimo agrupa los fármacos a suspender temporalmente durante una enfermedad aguda deshidratante ("sick day rules")?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">SADMANS (sulfonilureas, ACEi, diuréticos/inhibidores directos de renina, metformina, ARA-II, NSAID, SGLT2i).</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="erc-atencion">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 11</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><ellipse cx="30" cy="24" rx="8" ry="6" fill="none" stroke="var(--accent-green)" stroke-width="2"/><ellipse cx="50" cy="24" rx="8" ry="6" fill="none" stroke="var(--accent-green)" stroke-width="2"/><line x1="40" y1="30" x2="40" y2="42" stroke="var(--accent-green)" stroke-width="1.6"/></svg>
+                    <div class="field-name">Derivación, síntomas, modelos de atención y diálisis</div>
+                    <div class="field-hook">¿Cuál es el síntoma más prevalente entre las personas con ERC no en diálisis, presente hasta en el 70%?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">La fatiga.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="tap-hint">Toca una ficha para voltearla, y de nuevo para abrir el tema completo</p>
+
+    <div class="card" id="panel-erc-tabs" style="display:none;">
+        <div id="erc-definicion" class="tab-content">
+            <h3 style="color: var(--accent-yellow);">Definición, categorías y causas de la ERC</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: KDIGO 2024 Clinical Practice Guideline for the Evaluation and Management of Chronic Kidney Disease. <em>Kidney Int.</em> 2024;105(4S):S117-S314.</p>
+
+            <dl class="kv-row"><dt>Definición</dt><dd>Alteraciones de la estructura o función renal, presentes durante ≥3 meses, con implicaciones para la salud. El criterio temporal de 3 meses es lo que distingue la ERC del daño renal agudo (fracaso renal agudo).</dd></dl>
+            <table class="data-table">
+                <thead><tr><th colspan="2">Criterios diagnósticos de ERC (cualquiera de los siguientes, presente ≥3 meses)</th></tr></thead>
+                <tbody>
+                    <tr><td>Marcadores de daño renal</td><td>Albuminuria (cociente albúmina/creatinina, ACR, ≥30 mg/g), alteraciones del sedimento urinario, alteraciones electrolíticas u otras por trastornos tubulares, anomalías detectadas por histología, anomalías estructurales detectadas por imagen, historia de trasplante renal</td></tr>
+                    <tr><td>Filtrado glomerular disminuido</td><td>FG &lt;60 ml/min/1,73m² (categorías G3a-G5)</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Un FG entre 60-89 ml/min/1,73m² (G2) sin ningún marcador de daño renal <strong>no</strong> se considera ERC — puede corresponder a una disminución fisiológica relacionada con la edad.</p>
+
+            <p class="section-label" style="margin-top:16px;">Categorías de FG (G) y albuminuria (A) — nomenclatura CGA</p>
+            <table class="data-table">
+                <thead><tr><th>Categoría G</th><th>FG (ml/min/1,73m²)</th><th>Términos</th></tr></thead>
+                <tbody>
+                    <tr><td>G1</td><td>≥90</td><td>Normal o alto</td></tr>
+                    <tr><td>G2</td><td>60-89</td><td>Ligeramente disminuido</td></tr>
+                    <tr><td>G3a</td><td>45-59</td><td>Ligera a moderadamente disminuido</td></tr>
+                    <tr><td>G3b</td><td>30-44</td><td>Moderada a gravemente disminuido</td></tr>
+                    <tr><td>G4</td><td>15-29</td><td>Gravemente disminuido</td></tr>
+                    <tr><td>G5</td><td>&lt;15</td><td>Fallo renal (kidney failure)</td></tr>
+                </tbody>
+            </table>
+            <table class="data-table">
+                <thead><tr><th>Categoría A</th><th>ACR (mg/g)</th><th>Términos</th></tr></thead>
+                <tbody>
+                    <tr><td>A1</td><td>&lt;30</td><td>Normal a ligeramente elevada</td></tr>
+                    <tr><td>A2</td><td>30-300</td><td>Moderadamente elevada</td></tr>
+                    <tr><td>A3</td><td>&gt;300</td><td>Gravemente elevada</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">La ERC se estadifica combinando ambas categorías (p. ej. "ERC G3aA2"), nunca solo por el FG — la nomenclatura CGA (Causa-FG-Albuminuria) es la que recomienda KDIGO desde 2012 y se mantiene en 2024.</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 El riesgo de mortalidad por cualquier causa, mortalidad cardiovascular y progresión a fallo renal aumenta de forma independiente y sinérgica tanto al ↓FG como al ↑albuminuria — el riesgo más bajo corresponde a G1-G2/A1, y el más alto a G4-G5/A3 (patrón de "mapa de calor" verde→amarillo→naranja→rojo→rojo oscuro, consistente en los datos del CKD Prognosis Consortium para mortalidad, eventos cardiovasculares, hiperpotasemia y progresión renal).</p>
+
+            <p class="section-label" style="margin-top:16px;">🧮 Calculadora: FGe (CKD-EPI 2021) y categorización CGA</p>
+            <div class="tfg-simulador">
+                <div class="form-group">
+                    <label for="erc-cr">Creatinina sérica (mg/dl)</label>
+                    <input type="number" id="erc-cr" step="0.01" min="0.1" max="20" value="1.0">
+                </div>
+                <div class="form-group">
+                    <label for="erc-edad">Edad (años)</label>
+                    <input type="number" id="erc-edad" step="1" min="18" max="110" value="55">
+                </div>
+                <div class="form-group">
+                    <label for="erc-sexo">Sexo</label>
+                    <select id="erc-sexo">
+                        <option value="mujer">Mujer</option>
+                        <option value="varon">Varón</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="erc-acr">Cociente albúmina/creatinina, ACR (mg/g)</label>
+                    <input type="number" id="erc-acr" step="1" min="0" max="10000" value="15">
+                </div>
+                <div id="erc-cga-resultado" class="tfg-estado tfg-estado-ok"></div>
+                <p style="font-size: 0.72rem; color: var(--text-muted); margin-top:8px;">Ecuación CKD-EPI de creatinina 2021 (sin coeficiente de raza) — la que recomienda KDIGO 2024 como primera aproximación en adultos. Herramienta de estudio, no sustituye la validación analítica del laboratorio ni el juicio clínico.</p>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Epidemiología</p>
+            <dl class="kv-row"><dt>Prevalencia global</dt><dd>La ERC afecta aproximadamente al 10% de la población mundial adulta, con variaciones geográficas sustanciales. Es una causa creciente de mortalidad global.</dd></dl>
+            <dl class="kv-row"><dt>Impacto</dt><dd>El riesgo de muerte por enfermedad cardiovascular supera, para la mayoría de las personas con ERC, el riesgo de progresar a fallo renal — la ERC debe entenderse ante todo como un potente factor de riesgo cardiovascular, no solo como una vía hacia la diálisis.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Causas de ERC</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩸 Nefropatía diabética</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Causa más frecuente de ERC y de fallo renal a nivel mundial. Su prevención y manejo se abordan también en la KDIGO 2022 Clinical Practice Guideline for Diabetes Management in Chronic Kidney Disease, con la que esta guía de ERC se articula estrechamente (comparten recomendaciones sobre SGLT2i, ns-MRA y GLP-1 RA).</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🫀 Enfermedad vascular (nefroangioesclerosis) e HTA</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Segunda causa más frecuente en muchos países. La relación es bidireccional: la HTA es causa y consecuencia de la ERC, lo que explica por qué el control de la PA es uno de los pilares centrales del manejo (ver Ficha 5).</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Glomerulonefritis y enfermedades glomerulares</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Grupo heterogéneo de enfermedades primarias (nefropatía IgA, glomeruloesclerosis focal y segmentaria, nefropatía membranosa) y secundarias (lupus, vasculitis) — requieren evaluación de causa específica, incluida la biopsia renal cuando esté indicada.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧫 Enfermedades quísticas y hereditarias</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La poliquistosis renal autosómica dominante es la nefropatía hereditaria más frecuente. Una historia familiar de ERC o una enfermedad renal hereditaria son criterios que justifican la derivación a nefrología para evaluación de causa (ver Ficha 11).</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧱 Uropatía obstructiva y otras causas urológicas</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Obstrucción del tracto urinario (litiasis recurrente, anomalías estructurales del riñón y la vía urinaria), pielonefritis crónica e infecciones urinarias recurrentes. La obstrucción del tracto urinario y las anomalías estructurales son indicación explícita de derivación pediátrica a nefrología.</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="erc-evaluacion" class="tab-content">
+            <h3 style="color: var(--accent-blue);">Evaluación diagnóstica: FGe y albuminuria</h3>
+
+            <p class="section-label">Evaluación inicial ante sospecha de ERC</p>
+            <table class="data-table">
+                <thead><tr><th colspan="2">Pruebas iniciales recomendadas</th></tr></thead>
+                <tbody>
+                    <tr><td colspan="2">Creatinina sérica para calcular el FGe · Cociente albúmina/creatinina en una muestra de orina puntual (ACR) · Sedimento urinario/tira reactiva de orina · Ecografía renal si está indicada por la historia clínica</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Ante un hallazgo alterado, se recomienda repetir la prueba para confirmar que se cumple el criterio de persistencia ≥3 meses antes de establecer el diagnóstico de ERC, salvo que existan hallazgos que ya de por sí sean indicativos de cronicidad (p. ej. riñones pequeños y ecogénicos, o anemia atribuible sin otra causa).</p>
+
+            <p class="section-label" style="margin-top:16px;">Filtrado glomerular estimado (FGe)</p>
+            <dl class="kv-row"><dt>Ecuación recomendada de primera línea</dt><dd>CKD-EPI de creatinina 2021 — desarrollada sin coeficiente de raza, a diferencia de las ecuaciones previas (CKD-EPI 2009, MDRD), que sí lo incluían. Este cambio (eliminación de la raza) fue una actualización mayor de la nefrología en 2021-2024, motivada por la falta de justificación biológica del ajuste racial y su contribución a la infraestimación sistemática de la gravedad de la ERC en personas afrodescendientes.</dd></dl>
+            <dl class="kv-row"><dt>Cuándo usar cistatina C</dt><dd>KDIGO recomienda confirmar el diagnóstico de ERC con una ecuación que combine creatinina y cistatina C (eGFRcr-cys) cuando: el eGFRcr por sí solo es menos preciso (p. ej. extremos de masa muscular, amputaciones, malnutrición, enfermedad muscular), o cuando se necesita mayor precisión en la toma de decisiones (p. ej. dosis de fármacos con ventana terapéutica estrecha, elegibilidad para trasplante o quimioterapia).</dd></dl>
+            <dl class="kv-row"><dt>Medida directa de FG (mGFR)</dt><dd>Mediante aclaramiento de un marcador de filtración exógeno (p. ej. iohexol, ⁵¹Cr-EDTA, iotalamato). Es el patrón de referencia, pero de uso reservado a situaciones muy seleccionadas por su complejidad logística — no se recomienda de forma rutinaria.</dd></dl>
+            <ul class="term-chips">
+                <li>eGFRcr — creatinina sérica</li>
+                <li>eGFRcys — cistatina C</li>
+                <li>eGFRcr-cys — combinada (mayor precisión)</li>
+                <li>mGFR — medida directa (referencia)</li>
+            </ul>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Cualquier ecuación de FGe validada y clínicamente aceptada se considera razonable para la práctica clínica — no existe una única ecuación "perfecta", y todas comparten limitaciones frente a la medida directa.</p>
+
+            <p class="section-label" style="margin-top:16px;">Determinantes no relacionados con el FG</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Tanto la creatinina como la cistatina C pueden estar influidas por factores independientes del FG, lo que puede llevar a estimaciones erróneas si no se tienen en cuenta.</p>
+            <table class="data-table">
+                <thead><tr><th>Marcador</th><th>Aumenta sin relación con ↓FG</th><th>Disminuye sin relación con ↑FG</th></tr></thead>
+                <tbody>
+                    <tr><td>Creatinina</td><td>Mayor masa muscular, dieta rica en carne, ejercicio intenso, algunos fármacos que inhiben la secreción tubular (trimetoprim, cimetidina)</td><td>Menor masa muscular, malnutrición, amputación, enfermedad muscular, dieta vegetariana, embarazo</td></tr>
+                    <tr><td>Cistatina C</td><td>Obesidad, inflamación/enfermedad inflamatoria activa, hipertiroidismo, corticoides a dosis altas, tabaquismo</td><td>Hipotiroidismo</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Medida de la albuminuria/proteinuria</p>
+            <dl class="kv-row"><dt>Prueba recomendada</dt><dd>Cociente albúmina/creatinina (ACR) en una muestra de orina puntual, preferiblemente la primera de la mañana. Es preferible a la recogida de orina de 24 horas, mucho más engorrosa y propensa a errores de recolección, y ofrece un rendimiento equivalente.</dd></dl>
+            <dl class="kv-row"><dt>Cuándo repetir</dt><dd>Un resultado de ACR ≥30 mg/g debe confirmarse, idealmente con una muestra de la primera orina de la mañana, antes de aceptarlo como albuminuria persistente (evitar falsos positivos por ejercicio intenso reciente, fiebre, infección urinaria o menstruación).</dd></dl>
+            <dl class="kv-row"><dt>Dispositivos point-of-care (POC)</dt><dd>Pueden facilitar el cribado en atención primaria o en entornos con recursos limitados, pero su precisión diagnóstica es menor que la de los métodos de laboratorio — un resultado positivo en un test POC debe confirmarse con un método cuantitativo de laboratorio.</dd></dl>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Cuando existe proteinuria no albuminúrica relevante (p. ej. proteinuria tubular, cadenas ligeras), el cociente proteína/creatinina (PCR) puede complementar al ACR.</p>
+
+            <p class="section-label" style="margin-top:16px;">Biopsia renal</p>
+            <dl class="kv-row"><dt>Indicación</dt><dd>Debe considerarse cuando el diagnóstico de causa no es evidente por la historia clínica, la analítica y las pruebas de imagen, y su resultado puede cambiar el manejo (p. ej. sospecha de glomerulonefritis con potencial tratamiento inmunosupresor).</dd></dl>
+            <dl class="kv-row"><dt>Seguridad</dt><dd>Las complicaciones graves (hemorragia significativa, necesidad de embolización, nefrectomía) son infrecuentes pero no despreciables — el riesgo/beneficio debe individualizarse, considerando el tamaño renal, la coagulación y la posibilidad técnica.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Monitorización</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">La frecuencia de monitorización del FGe y del ACR debe individualizarse según la categoría G y A (ver Ficha 3) — a mayor gravedad de ambas, mayor frecuencia recomendada, desde anual en G1-G2/A1 hasta cada 1-3 meses en G4-G5 o A3.</p>
+        </div>
+
+        <div id="erc-riesgo" class="tab-content">
+            <h3 style="color: var(--accent-red);">Evaluación del riesgo y monitorización</h3>
+
+            <p class="section-label">Kidney Failure Risk Equation (KFRE)</p>
+            <dl class="kv-row"><dt>Qué es</dt><dd>Ecuación de predicción del riesgo de progresión a fallo renal (necesidad de terapia renal sustitutiva) a 2 y 5 años, validada en múltiples poblaciones y ampliamente recomendada por KDIGO 2024 como herramienta preferente para decisiones de derivación y planificación.</dd></dl>
+            <dl class="kv-row"><dt>Versión de 4 variables</dt><dd>Edad, sexo, FGe y ACR — versión más sencilla, de uso extendido en atención primaria y nefrología.</dd></dl>
+            <dl class="kv-row"><dt>Versión de 8 variables</dt><dd>Añade albúmina sérica, bicarbonato sérico, calcio sérico y fósforo sérico — mejora marginalmente la precisión predictiva en algunos contextos.</dd></dl>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Esta app no incorpora una calculadora numérica de la KFRE (los coeficientes exactos de la ecuación de regresión no se recrean aquí para evitar errores de cálculo) — para uso clínico, consulta la calculadora validada en <a class="biblio-link" href="https://kidneyfailurerisk.com" target="_blank" rel="noopener">kidneyfailurerisk.com</a>.</p>
+
+            <p class="section-label" style="margin-top:16px;">Umbrales de riesgo que orientan la derivación</p>
+            <table class="data-table">
+                <thead><tr><th>Riesgo estimado por KFRE</th><th>Acción orientativa</th></tr></thead>
+                <tbody>
+                    <tr><td>&gt;3-5% a 5 años</td><td>Considerar derivación a nefrología para evaluación adicional y manejo</td></tr>
+                    <tr><td>&gt;10% a 5 años (o &gt;2% a 2 años en G4-G5)</td><td>Planificación y preparación para terapia renal sustitutiva (educación, acceso vascular, evaluación de trasplante)</td></tr>
+                    <tr><td>&gt;40% a 2 años</td><td>Umbral de alta probabilidad de fallo renal a corto plazo — anticipar activamente la preparación para diálisis o trasplante</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Comparado con los criterios clásicos basados solo en el FGe, el cribado basado en el riesgo mediante KFRE identifica de forma más precisa a las personas que realmente se beneficiarán de una derivación temprana — un estudio del Reino Unido mostró que hasta el 40% de los pacientes de alto riesgo por KFRE quedaban fuera de los criterios de derivación basados únicamente en el FGe.</p>
+
+            <p class="section-label" style="margin-top:16px;">Frecuencia de monitorización sugerida (FGe y ACR)</p>
+            <table class="data-table">
+                <thead><tr><th>Categoría G</th><th>A1 (&lt;30 mg/g)</th><th>A2 (30-300 mg/g)</th><th>A3 (&gt;300 mg/g)</th></tr></thead>
+                <tbody>
+                    <tr><td>G1-G2</td><td>1 vez/año (si hay factores de riesgo)</td><td>1 vez/año</td><td>2 veces/año</td></tr>
+                    <tr><td>G3a</td><td>1 vez/año</td><td>2 veces/año</td><td>3 veces/año</td></tr>
+                    <tr><td>G3b</td><td>2 veces/año</td><td>3 veces/año</td><td>4 veces/año</td></tr>
+                    <tr><td>G4</td><td>3 veces/año</td><td>4 veces/año</td><td>≥4 veces/año</td></tr>
+                    <tr><td>G5</td><td>≥4 veces/año</td><td>≥4 veces/año</td><td>≥4 veces/año</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Un descenso sostenido del FG ≥20% o ≥30% respecto al valor basal, o un aumento franco de la albuminuria, debe motivar una reevaluación completa: revisión de la medicación, descarte de causas reversibles (depleción de volumen, obstrucción, nefrotóxicos) y, si procede, derivación.</p>
+
+            <p class="section-label" style="margin-top:16px;">Predicción del riesgo cardiovascular</p>
+            <dl class="kv-row"><dt>Herramientas validadas en ERC</dt><dd>El "parche" (patch) específico para ERC del SCORE (Systematic Coronary Risk Evaluation) europeo, y las ecuaciones PREVENT de la American Heart Association, son —según el Work Group— las únicas herramientas de predicción de riesgo cardiovascular actualmente validadas específicamente para su uso en personas con ERC.</dd></dl>
+            <dl class="kv-row"><dt>Por qué importa</dt><dd>Las calculadoras de riesgo cardiovascular generales (p. ej. Framingham clásico) tienden a infraestimar el riesgo real en la ERC, porque no incorporan el FGe ni la albuminuria como variables — el uso de herramientas validadas específicamente para ERC evita este sesgo.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Incorporación del riesgo al modelo de atención</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">KDIGO 2024 promueve pasar de un modelo de atención basado únicamente en el estadio (G/A) a un modelo basado en el riesgo real de progresión, que determina la intensidad del seguimiento y el nivel asistencial (atención primaria vs. nefrología vs. equipo de preparación para terapia renal sustitutiva) — ver el detalle de este modelo escalonado en la Ficha 11.</p>
+        </div>
+
+        <div id="erc-estilo-vida" class="tab-content">
+            <h3 style="color: var(--accent-green);">Estilo de vida y nutrición</h3>
+
+            <p class="section-label">Actividad física</p>
+            <dl class="kv-row"><dt>Recomendación</dt><dd>Se aconseja actividad física de intensidad moderada durante un total acumulado de al menos 150 minutos por semana, o hasta un nivel compatible con la tolerancia y el estado cardiovascular de cada persona.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Peso corporal y tabaquismo</p>
+            <dl class="kv-row"><dt>Peso</dt><dd>Se recomienda mantener un peso saludable (IMC 20-25 kg/m² según el contexto), individualizando en poblaciones donde este rango no sea aplicable directamente.</dd></dl>
+            <dl class="kv-row"><dt>Tabaco</dt><dd>Se recomienda dejar de fumar cigarrillos y otros productos de tabaco.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Ingesta de proteínas</p>
+            <table class="data-table">
+                <thead><tr><th>Situación</th><th>Recomendación de ingesta proteica</th></tr></thead>
+                <tbody>
+                    <tr><td>ERC G3-G5 sin diabetes, metabólicamente estable</td><td>0,8 g/kg/día — evitar ingestas altas (&gt;1,3 g/kg/día) en personas con riesgo de progresión</td></tr>
+                    <tr><td>ERC con diabetes</td><td>0,8-1,0 g/kg/día</td></tr>
+                    <tr><td>En diálisis</td><td>Los requerimientos aumentan (fuera del alcance de esta guía, remite a las guías de nutrición específicas)</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 La restricción proteica más agresiva (dietas muy bajas en proteínas con cetoanálogos) puede considerarse en centros con experiencia y capacidad de seguimiento nutricional estrecho, por el riesgo de desnutrición si no se supervisa adecuadamente — no se recomienda de forma generalizada.</p>
+
+            <p class="section-label" style="margin-top:16px;">Restricción de sodio</p>
+            <dl class="kv-row"><dt>Recomendación</dt><dd>Limitar la ingesta de sodio a &lt;2 g/día (~90 mmol/día), equivalente a &lt;5 g/día de sal común (cloruro sódico) — coherente con las recomendaciones generales de salud cardiovascular.</dd></dl>
+            <dl class="kv-row"><dt>Beneficio</dt><dd>La restricción de sodio reduce la PA y la albuminuria, potenciando además el efecto antiproteinúrico del bloqueo del SRAA — es una medida coadyuvante, no sustitutiva, del tratamiento farmacológico.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Enfoques dietéticos globales</p>
+            <dl class="kv-row"><dt>Patrón recomendado</dt><dd>Dieta con mayor proporción de alimentos de origen vegetal (frutas, verduras, legumbres, fibra, cereales integrales) y menor proporción de carnes rojas y procesadas, sodio y azúcares refinados — un patrón similar al de la dieta mediterránea o DASH adaptada.</dd></dl>
+            <dl class="kv-row"><dt>Potasio en la dieta</dt><dd>En fases iniciales de la ERC, una ingesta alta de alimentos naturalmente ricos en potasio (frutas y verduras) parece protectora frente a la progresión, por lo que no se recomienda restringirla de forma sistemática salvo hiperpotasemia — ver el detalle completo de manejo dietético del potasio en la Ficha 7, incluida la distinción clave entre potasio de alimentos frescos (menor absorción) y potasio de aditivos en alimentos procesados (mayor absorción, ~90%).</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Alcohol</p>
+            <dl class="kv-row"><dt>Recomendación</dt><dd>Si se consume alcohol, hacerlo con moderación — sin que existan datos específicos de ERC que justifiquen una restricción distinta a la recomendada para la población general.</dd></dl>
+        </div>
+
+        <div id="erc-pa-raas" class="tab-content">
+            <h3 style="color: var(--accent-red);">Control de la PA y bloqueo del SRAA</h3>
+
+            <p class="section-label">Objetivo de presión arterial</p>
+            <dl class="kv-row"><dt>Recomendación principal</dt><dd>En adultos con ERC, se recomienda un objetivo de PA sistólica en consulta &lt;120 mmHg, cuando se tolere, utilizando una medida estandarizada (protocolizada, en condiciones de reposo, similar a la técnica usada en el ensayo SPRINT).</dd></dl>
+            <dl class="kv-row"><dt>Por qué "medida estandarizada"</dt><dd>Es un cambio importante frente a guías previas: el objetivo &lt;120 mmHg se basa en ensayos (como SPRINT) que usaron una técnica de medida muy protocolizada (varias lecturas automáticas, en reposo, sin personal presente) — cifras obtenidas con la medida clínica habitual (más alta que la estandarizada) no son directamente equiparables.</dd></dl>
+            <table class="data-table">
+                <thead><tr><th colspan="2">Situaciones donde el objetivo &lt;120 mmHg NO se aplica directamente</th></tr></thead>
+                <tbody>
+                    <tr><td colspan="2">Receptores de trasplante renal (objetivo distinto) · Niños y adolescentes · Embarazo · Hipotensión ortostática sintomática, fragilidad avanzada o esperanza de vida limitada, donde debe individualizarse</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 En personas con ERC y diabetes, el objetivo de PA también es &lt;120 mmHg sistólica (medida estandarizada) — se alinea con la KDIGO 2022 Diabetes Guideline, unificando el criterio entre ambas guías.</p>
+
+            <p class="section-label" style="margin-top:16px;">Bloqueo del sistema renina-angiotensina-aldosterona (SRAA)</p>
+            <dl class="kv-row"><dt>Indicación principal</dt><dd>Se recomienda un IECA o un ARA II (no ambos combinados) a la dosis máxima tolerada, para personas con ERC e HTA, especialmente si hay albuminuria significativa (ACR ≥300 mg/g) — con o sin diabetes.</dd></dl>
+            <dl class="kv-row"><dt>Por qué no combinar IECA + ARA II</dt><dd>La doble terapia con IECA y ARA II combinados no ha demostrado beneficio adicional sobre la monoterapia y sí un mayor riesgo de efectos adversos (hiperpotasemia, deterioro agudo de la función renal) — se desaconseja explícitamente.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Monitorización tras iniciar o intensificar el bloqueo del SRAA</p>
+            <table class="data-table">
+                <thead><tr><th>Semana tras inicio/cambio de dosis</th><th>Acción</th></tr></thead>
+                <tbody>
+                    <tr><td>2-4 semanas</td><td>Comprobar creatinina/FGe y potasio séricos</td></tr>
+                    <tr><td>Descenso del FGe &lt;25% respecto al basal</td><td>Aceptable — continuar el tratamiento y seguir monitorizando</td></tr>
+                    <tr><td>Descenso del FGe ≥25% respecto al basal</td><td>Investigar otras causas (depleción de volumen, uso concomitante de AINE, estenosis de arteria renal) antes de suspender de forma reactiva</td></tr>
+                    <tr><td>Potasio &gt;5,5 mEq/l tras el inicio</td><td>Aplicar el algoritmo de manejo de hiperpotasemia (ver Ficha 7) antes de suspender el fármaco — la suspensión debe ser la última opción, no la primera</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Un descenso inicial y moderado del FGe al iniciar el bloqueo del SRAA es un efecto hemodinámico esperado (por la vasodilatación preferente de la arteriola eferente) y no debe interpretarse como daño renal ni motivar la suspensión automática del fármaco.</p>
+
+            <p class="section-label" style="margin-top:16px;">Discontinuación del bloqueo del SRAA</p>
+            <dl class="kv-row"><dt>No se recomienda</dt><dd>Suspender el IECA/ARA II de forma preventiva únicamente por progresión de la ERC a estadios avanzados (G4-G5) — la evidencia observacional muestra que la discontinuación se asocia a mayor riesgo de eventos cardiovasculares mayores (MACE) y muerte, a pesar de que a veces reduce la recurrencia de eventos adversos como la hiperpotasemia o el deterioro agudo de función renal.</dd></dl>
+            <dl class="kv-row"><dt>Diálisis</dt><dd>El inicio de terapia renal sustitutiva no es, por sí mismo, un motivo automático para suspender el bloqueo del SRAA — debe reevaluarse individualmente.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Antagonistas mineralocorticoides esteroideos</p>
+            <dl class="kv-row"><dt>Papel en HTA resistente</dt><dd>La espironolactona (o eplerenona) puede añadirse como 4º fármaco en la HTA resistente en ERC, con vigilancia estrecha del potasio, especialmente si FGe &lt;45 ml/min/1,73m² (ver desarrollo completo en el módulo de HTA resistente).</dd></dl>
+        </div>
+
+        <div id="erc-nefroproteccion" class="tab-content">
+            <h3 style="color: var(--accent-purple);">Nefroprotección farmacológica: SGLT2i, ns-MRA y GLP-1 RA</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Los 3 pilares farmacológicos "nuevos" (además del bloqueo del SRAA) que han cambiado el manejo de la ERC desde 2020.</p>
+
+            <p class="section-label">Inhibidores del cotransportador sodio-glucosa tipo 2 (iSGLT2)</p>
+            <dl class="kv-row"><dt>Recomendación principal</dt><dd>Se recomienda tratamiento con un iSGLT2 en adultos con ERC y FGe ≥20 ml/min/1,73m², <strong>con o sin diabetes tipo 2</strong>, con o sin albuminuria significativa — uno de los cambios de mayor impacto de esta actualización, al extender la indicación más allá de la diabetes.</dd></dl>
+            <dl class="kv-row"><dt>Mecanismo de nefroprotección</dt><dd>Más allá del efecto glucosúrico, los iSGLT2 reducen la presión intraglomerular (por vasoconstricción de la arteriola aferente, mediada por la retroalimentación tubuloglomerular), con un efecto antiproteinúrico y de enlentecimiento de la progresión independiente del control glucémico.</dd></dl>
+            <dl class="kv-row"><dt>No aumentan el riesgo de hiperpotasemia</dt><dd>A diferencia de otros fármacos con efecto sobre el SRAA, los iSGLT2 no parecen aumentar el riesgo de hiperpotasemia — dato relevante al combinarlos con IECA/ARA-II o ns-MRA.</dd></dl>
+            <table class="data-table">
+                <thead><tr><th colspan="2">Precauciones y contexto perioperatorio</th></tr></thead>
+                <tbody>
+                    <tr><td colspan="2">Riesgo de cetoacidosis (euglucémica en diabetes, o de ayuno/inanición en no diabéticos) — suspender 3-4 días antes de cirugía electiva y durante enfermedades agudas deshidratantes ("sick day rules", ver Ficha 10)</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Antagonistas mineralocorticoides no esteroideos (ns-MRA): finerenona</p>
+            <dl class="kv-row"><dt>Recomendación</dt><dd>Se sugiere considerar un ns-MRA (finerenona) en adultos con ERC y diabetes tipo 2, con albuminuria persistente (ACR ≥30 mg/g) a pesar del tratamiento máximo tolerado con IECA/ARA-II, y potasio sérico dentro del rango normal.</dd></dl>
+            <dl class="kv-row"><dt>Diferencia frente a los antialdosterónicos clásicos</dt><dd>La finerenona tiene mayor selectividad por el receptor mineralocorticoide y una distribución tisular distinta a la espironolactona/eplerenona, lo que se traduce en un menor riesgo de ginecomastia y, en los ensayos pivotales (FIDELIO-DKD, FIGARO-DKD), un riesgo de hiperpotasemia menor que el descrito históricamente con los antialdosterónicos esteroideos — aun así, requiere monitorización de potasio.</dd></dl>
+            <dl class="kv-row"><dt>Monitorización de potasio con finerenona</dt><dd>KDIGO remite al algoritmo de monitorización de potasio de la KDIGO 2022 Diabetes Guideline al iniciar un ns-MRA — control analítico tras el inicio y en cada ajuste de dosis, siguiendo el mismo principio de vigilancia que con el resto de fármacos que actúan sobre el SRAA (ver Tabla de fármacos asociados a hiperpotasemia en la Ficha 7).</dd></dl>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 La combinación de iSGLT2 + IECA/ARA-II + ns-MRA representa hoy la triple terapia de nefroprotección farmacológica más potente disponible en la nefropatía diabética con albuminuria persistente — su introducción se recomienda de forma escalonada y con monitorización, no simultánea sin vigilancia.</p>
+
+            <p class="section-label" style="margin-top:16px;">Agonistas del receptor de GLP-1 (GLP-1 RA)</p>
+            <dl class="kv-row"><dt>Recomendación</dt><dd>Se sugiere un GLP-1 RA de eficacia demostrada en resultados cardiovasculares en adultos con ERC y diabetes tipo 2 que no alcanzan sus objetivos individualizados de control glucémico o de peso a pesar del tratamiento con metformina y/o iSGLT2, o que no pueden tomar estos fármacos.</dd></dl>
+            <dl class="kv-row"><dt>Beneficio en ERC</dt><dd>Además del efecto glucémico y de pérdida de peso, los GLP-1 RA han mostrado en ensayos dedicados (p. ej. FLOW, con semaglutida) reducción de eventos renales y cardiovasculares mayores en personas con ERC y diabetes tipo 2 — consolidando un tercer pilar farmacológico independiente del bloqueo del SRAA y de los iSGLT2.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Resumen de las 4 clases con nefroprotección demostrada</p>
+            <table class="data-table">
+                <thead><tr><th>Clase</th><th>Población principal</th><th>Beneficio clave</th></tr></thead>
+                <tbody>
+                    <tr><td>IECA / ARA II</td><td>ERC + HTA, especialmente con albuminuria</td><td>Antiproteinúrico, enlentece progresión, referencia histórica del bloqueo del SRAA</td></tr>
+                    <tr><td>iSGLT2</td><td>ERC con FGe ≥20, con o sin diabetes</td><td>Antiproteinúrico, enlentece progresión, beneficio cardiovascular y de insuficiencia cardíaca</td></tr>
+                    <tr><td>ns-MRA (finerenona)</td><td>ERC + diabetes tipo 2 + albuminuria persistente pese a IECA/ARA-II</td><td>Reducción adicional de progresión renal y eventos cardiovasculares</td></tr>
+                    <tr><td>GLP-1 RA</td><td>ERC + diabetes tipo 2, control glucémico/peso insuficiente</td><td>Reducción de eventos renales y cardiovasculares mayores, pérdida de peso</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="erc-acidosis-k" class="tab-content">
+            <h3 style="color: var(--accent-blue);">Acidosis metabólica e hiperpotasemia</h3>
+
+            <p class="section-label">Acidosis metabólica de la ERC</p>
+            <dl class="kv-row"><dt>Mecanismo</dt><dd>A medida que declina el FG, disminuye la capacidad renal de excretar la carga ácida diaria (generada sobre todo por el metabolismo de proteínas) y de regenerar bicarbonato — resultando en acidosis metabólica progresiva, generalmente de anión gap normal en fases iniciales.</dd></dl>
+            <dl class="kv-row"><dt>Consecuencias de la acidosis no corregida</dt><dd>Aceleración de la progresión de la ERC, catabolismo proteico muscular (sarcopenia), agravamiento de la enfermedad ósea, y peor pronóstico general.</dd></dl>
+            <dl class="kv-row"><dt>Recomendación</dt><dd>En adultos con ERC y bicarbonato sérico persistentemente &lt;18 mEq/l, se sugiere suplementación oral con álcalis (bicarbonato sódico u otras sales alcalinizantes) para mantener el bicarbonato dentro del rango normal, evitando superarlo.</dd></dl>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 El objetivo es normalizar el bicarbonato, no solo "mejorarlo" — pero sin sobrecorregir, ya que un exceso de aporte de sodio (en el caso del bicarbonato sódico) puede empeorar el control de la PA y la sobrecarga de volumen en personas susceptibles.</p>
+
+            <p class="section-label" style="margin-top:16px;">Hiperpotasemia en la ERC — conceptos clave</p>
+            <dl class="kv-row"><dt>Relación en forma de U</dt><dd>Tanto la hipopotasemia como la hiperpotasemia se asocian a mayor mortalidad — el potasio sérico y el riesgo de muerte siguen una relación en forma de U, con el nadir de riesgo en torno a 4-4,5 mEq/l. El riesgo de muerte por una misma cifra de hiperpotasemia es paradójicamente menor en estadios más avanzados de ERC, sugiriendo mecanismos adaptativos de mejor tolerancia al potasio elevado con la progresión de la enfermedad.</dd></dl>
+
+            <table class="data-table">
+                <thead><tr><th>Mecanismo</th><th>Ejemplos</th></tr></thead>
+                <tbody>
+                    <tr><td>Pseudohiperpotasemia (in vivo normal)</td><td>Torniquete apretado, hemólisis de la muestra por manejo inadecuado, trombocitosis/leucocitosis marcadas</td></tr>
+                    <tr><td>Alteración de la salida de potasio de las células</td><td>Hiperosmolaridad (deshidratación, hiperglucemia), rabdomiólisis, síndrome de lisis tumoral, bloqueo β-adrenérgico, déficit de insulina, acidosis no orgánica</td></tr>
+                    <tr><td>Alteración de la entrada de potasio a las células</td><td>Déficit de liberación de insulina en respuesta a la hiperpotasemia (diabetes mal controlada), déficit de liberación de aldosterona</td></tr>
+                    <tr><td>Disminución de la excreción renal</td><td>Progresión de la ERC, estreñimiento (el intestino asume un papel compensador más relevante en ERC avanzada), fármacos que bloquean el SRAA</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Existe variación diurna de la excreción de potasio (mayor cerca del mediodía) y diferencias entre el potasio sérico y plasmático (el sérico es típicamente algo mayor) — factores a tener en cuenta al interpretar valores límite.</p>
+
+            <p class="section-label" style="margin-top:16px;">Fármacos asociados a mayor riesgo de hiperpotasemia</p>
+            <table class="data-table">
+                <thead><tr><th>Clase</th><th>Mecanismo</th><th>Ejemplos</th></tr></thead>
+                <tbody>
+                    <tr><td>IECA</td><td>Inhiben la conversión de angiotensina I a II</td><td>Captopril, lisinopril, perindopril</td></tr>
+                    <tr><td>ARA II</td><td>Inhiben la activación del receptor de angiotensina I por la angiotensina II</td><td>Losartán, irbesartán, candesartán</td></tr>
+                    <tr><td>Antialdosterónicos</td><td>Bloquean la activación del receptor de aldosterona</td><td>Espironolactona, eplerenona, finerenona</td></tr>
+                    <tr><td>Betabloqueantes</td><td>Inhiben la liberación de renina</td><td>Propranolol, metoprolol, atenolol</td></tr>
+                    <tr><td>Digitálicos</td><td>Inhiben la Na⁺-K⁺-ATPasa, necesaria para la secreción de K⁺ en el túbulo colector</td><td>Digoxina</td></tr>
+                    <tr><td>Heparina</td><td>Reduce la producción de aldosterona</td><td>Heparina sódica</td></tr>
+                    <tr><td>Diuréticos ahorradores de potasio</td><td>Bloquean el canal apical de Na⁺ del túbulo colector</td><td>Amiloride, triamtereno</td></tr>
+                    <tr><td>AINE</td><td>Inhiben la síntesis de prostaglandina E y prostaciclina, inhibiendo la liberación de renina</td><td>Ibuprofeno, naproxeno, diclofenaco</td></tr>
+                    <tr><td>Inhibidores de la calcineurina</td><td>Inhiben la Na⁺-K⁺-ATPasa tubular</td><td>Ciclosporina, tacrolimus</td></tr>
+                    <tr><td>Otros</td><td>Bloquean el canal apical de Na⁺ del túbulo colector</td><td>Trimetoprim, pentamidina</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Los iSGLT2 no parecen aumentar el potasio sérico, a diferencia de casi todo el resto de fármacos con efecto sobre el SRAA.</p>
+
+            <p class="section-label" style="margin-top:16px;">Conducta ante hiperpotasemia moderada-grave</p>
+            <table class="data-table">
+                <thead><tr><th>Gravedad</th><th>Clínicamente estable</th><th>Inestable o hallazgo inesperado</th></tr></thead>
+                <tbody>
+                    <tr><td>Moderada: K⁺ 6,0-6,4 mmol/l</td><td>Evaluar y tratar</td><td>Repetir en 24h</td></tr>
+                    <tr><td>Grave: K⁺ ≥6,5 mmol/l</td><td>Actuar de inmediato: evaluar y tratar</td><td>Monitorización analítica y de ECG</td></tr>
+                </tbody>
+            </table>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Agentes captadores de potasio (no urgentes)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Resinas clásicas (poliestireno sulfonato)</dt><dd>Intercambio catiónico con sodio o calcio. Inicio de acción variable (horas a días); efectos adversos gastrointestinales relevantes, con riesgo raro pero grave de necrosis intestinal.</dd></dl>
+                        <dl class="kv-row"><dt>Patirómero</dt><dd>Polímero de intercambio calcio-potasio. Inicio de acción 4-7 horas; también capta magnesio.</dd></dl>
+                        <dl class="kv-row"><dt>Ciclosilicato de circonio sódico (SZC)</dt><dd>Compuesto cristalino que capta K⁺ a cambio de H⁺ y Na⁺. Empieza a reducir el potasio en la primera hora, con normopotasemia típica a las 24-48h; efectos adversos más frecuentes: edema e hipopotasemia (aporta sodio).</dd></dl>
+                        <dl class="kv-row"><dt>Uso clínico</dt><dd>Estos agentes más nuevos tienen menos problemas de tolerancia que las resinas clásicas y pueden facilitar mantener el bloqueo del SRAA en personas con hiperpotasemia recurrente, en vez de tener que suspenderlo.</dd></dl>
+                    </div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Manejo escalonado de la hiperpotasemia (K⁺ &gt;5,5 mmol/l) en la ERC</p>
+            <dl class="kv-row"><dt>1ª línea — abordar factores corregibles</dt><dd>Revisar medicación no relacionada con el SRAA (AINE, trimetoprim), evaluar la ingesta dietética de potasio (derivar a dietista) y considerar moderarla si procede.</dd></dl>
+            <dl class="kv-row"><dt>2ª línea — medicación</dt><dd>Considerar uso apropiado de diuréticos, optimizar el bicarbonato sérico, y valorar agentes captadores de potasio autorizados.</dd></dl>
+            <dl class="kv-row"><dt>3ª línea — último recurso</dt><dd>Reducir la dosis o suspender el bloqueo del SRAA/ns-MRA — su discontinuación se asocia a más eventos cardiovasculares, por lo que debe revisarse y reintroducirse a dosis bajas cuando la situación del paciente lo permita.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Consideraciones dietéticas sobre el potasio</p>
+            <dl class="kv-row"><dt>Enfoque individualizado</dt><dd>En ERC G3-G5 y en hiperpotasemia emergente, se recomienda un enfoque individualizado que combine intervención dietética y farmacológica, considerando comorbilidades y calidad de vida — idealmente con evaluación y educación por un dietista renal.</dd></dl>
+            <table class="data-table">
+                <thead><tr><th>Tipo de alimento</th><th>Tasa de absorción de potasio</th></tr></thead>
+                <tbody>
+                    <tr><td>Alimentos de origen vegetal (fruta, verdura)</td><td>50-60% — menor absorción, efecto neto alcalinizante, el potasio tiende a desplazarse al espacio intracelular</td></tr>
+                    <tr><td>Alimentos de origen animal</td><td>70-90% — mayor absorción, efecto neto acidificante</td></tr>
+                    <tr><td>Alimentos procesados (con aditivos de potasio)</td><td>~90% — la absorción de las sales de potasio añadidas como aditivo es prácticamente completa</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Mensaje clave de la guía: la restricción dietética indiscriminada de frutas y verduras (ricas en potasio "natural") puede ser innecesaria y contraproducente — el foco debe ponerse en limitar los alimentos altamente procesados con aditivos de potasio, no en las fuentes vegetales frescas. Un método de cocción útil: remojar los alimentos 5-10 minutos en agua previamente hervida puede reducir el contenido de potasio hasta a la mitad en algunos alimentos.</p>
+        </div>
+
+        <div id="erc-mbd-urico" class="tab-content">
+            <h3 style="color: var(--accent-yellow);">CKD-MBD e hiperuricemia</h3>
+
+            <p class="section-label">Trastorno mineral y óseo asociado a la ERC (CKD-MBD)</p>
+            <dl class="kv-row"><dt>Qué es</dt><dd>Término que engloba las alteraciones del metabolismo mineral y óseo que se desarrollan progresivamente con el descenso del FG: alteraciones del calcio, fósforo, metabolitos de la vitamina D, PTH y FGF-23 séricos, junto con osteodistrofia renal y calcificación vascular extraesquelética.</dd></dl>
+            <dl class="kv-row"><dt>Cronología</dt><dd>Los cambios en el metabolismo mineral empiezan de forma temprana en la ERC (ya detectables en G2-G3) y progresan a medida que declina el FG — el FGF-23 y la PTH tienden a elevarse progresivamente, mientras el fósforo y el calcio sérico se mantienen inicialmente normales por mecanismos compensadores, para alterarse abiertamente en fases más avanzadas.</dd></dl>
+            <dl class="kv-row"><dt>Relevancia clínica</dt><dd>El fósforo sérico elevado se asocia de forma independiente a mayor mortalidad, enfermedad ósea y calcificación vascular/cardiovascular.</dd></dl>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 KDIGO 2024 remite explícitamente a la <strong>KDIGO 2017 Clinical Practice Guideline Update for CKD-MBD</strong> para las recomendaciones específicas de selección y dosificación de quelantes de fósforo, análogos de vitamina D y calcimiméticos — esta guía de 2024 no las repite, solo resume el marco conceptual.</p>
+            <dl class="kv-row"><dt>Principio general de manejo (G3a-G5)</dt><dd>Basar el tratamiento del CKD-MBD en la evaluación conjunta y seriada de fósforo, calcio y PTH, en vez de perseguir un único valor aislado — las decisiones terapéuticas se toman sobre la tendencia y el conjunto de estos parámetros.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Anemia asociada a la ERC</p>
+            <dl class="kv-row"><dt>Prevalencia</dt><dd>La hemoglobina media disminuye progresivamente con el descenso del FG en ambos sexos — la prevalencia de anemia (Hb &lt;12 g/dl en varones, &lt;11 g/dl en mujeres) en ERC G3/A1 se sitúa en torno al 15% en varones y 11,5% en mujeres, aumentando hasta el 60-57% respectivamente en ERC G5/A3.</dd></dl>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 KDIGO 2024 remite a la <strong>KDIGO 2012 Clinical Practice Guideline for Anemia in CKD</strong> (con actualización en curso) para las recomendaciones específicas de tratamiento, selección y dosificación de agentes estimulantes de la eritropoyesis y de hierro — esta guía de 2024 no desarrolla el manejo detallado de la anemia.</p>
+
+            <p class="section-label" style="margin-top:16px;">Hiperuricemia</p>
+            <dl class="kv-row"><dt>Definición</dt><dd>Concentración sérica de ácido úrico ≥6,8 mg/dl (~400 μmol/l) — umbral de solubilidad del urato en condiciones fisiológicas.</dd></dl>
+            <dl class="kv-row"><dt>Prevalencia</dt><dd>Un FGe compatible con ERC G3 se asocia aproximadamente al doble de prevalencia de gota respecto a la población general.</dd></dl>
+            <div style="border: 1px solid var(--accent-green); border-radius: 2px; padding: 10px 14px; margin: 10px 0; background: rgba(144,160,106,0.08);">
+                <strong style="color: var(--accent-green);">Recomendación 3.14.1 (1C)</strong> — Se recomienda ofrecer tratamiento hipouricemiante a las personas con ERC e hiperuricemia <strong>sintomática</strong> (gota).
+            </div>
+            <div style="border: 1px solid var(--accent-red); border-radius: 2px; padding: 10px 14px; margin: 10px 0; background: rgba(184,92,62,0.08);">
+                <strong style="color: var(--accent-red);">Recomendación 3.14.2 (2D)</strong> — Se sugiere <strong>no</strong> usar tratamiento hipouricemiante en la hiperuricemia <strong>asintomática</strong> con el fin de enlentecer la progresión de la ERC — la evidencia de ensayos clínicos no respalda ese beneficio.
+            </div>
+            <dl class="kv-row"><dt>Fármaco de elección</dt><dd>Se prefieren los inhibidores de la xantina oxidasa (alopurinol, febuxostat) sobre los agentes uricosúricos (p. ej. probenecid), cuyo efecto se atenúa con el FG reducido.</dd></dl>
+            <dl class="kv-row"><dt>Tratamiento del brote agudo de gota</dt><dd>Se prefiere colchicina a dosis bajas o glucocorticoides (intraarticulares u orales) frente a los AINE, por el perfil de seguridad renal de estos últimos.</dd></dl>
+            <dl class="kv-row"><dt>Precaución con alopurinol</dt><dd>Riesgo de síndrome de hipersensibilidad grave (Stevens-Johnson) ligado al alelo HLA-B*5801, más frecuente en personas de ascendencia han china, coreana o tailandesa — cribado del alelo recomendado cuando esté disponible en estas poblaciones.</dd></dl>
+        </div>
+
+        <div id="erc-cv" class="tab-content">
+            <h3 style="color: var(--accent-red);">Riesgo cardiovascular: lípidos, antiagregación, cardiopatía isquémica y fibrilación auricular</h3>
+
+            <p class="section-label">Tratamiento hipolipemiante</p>
+            <table class="data-table">
+                <thead><tr><th>Población</th><th>Recomendación</th></tr></thead>
+                <tbody>
+                    <tr><td>≥50 años, FGe &lt;60 (G3a-G5), sin diálisis ni trasplante</td><td>Estatina o estatina + ezetimiba (1A)</td></tr>
+                    <tr><td>≥50 años, FGe ≥60 (G1-G2)</td><td>Estatina (1B)</td></tr>
+                    <tr><td>18-49 años con ERC, con cardiopatía coronaria conocida, diabetes, ictus isquémico previo, o riesgo estimado a 10 años &gt;10%</td><td>Estatina (2A)</td></tr>
+                </tbody>
+            </table>
+            <dl class="kv-row"><dt>Estrategia "fire-and-forget"</dt><dd>La decisión de tratar se basa en el riesgo, no en la cifra de colesterol — no se recomienda monitorizar el perfil lipídico de forma rutinaria tras iniciar la estatina, salvo sospecha de mala adherencia o causas secundarias de dislipemia grave.</dd></dl>
+            <dl class="kv-row"><dt>Elección de régimen</dt><dd>En la ERC, el beneficio relativo de bajar el LDL con estatinas se atenúa a medida que desciende el FGe (menor beneficio en diálisis) — por eso se recomienda elegir regímenes que maximicen la reducción absoluta de LDL (p. ej. atorvastatina 20 mg, rosuvastatina 10 mg, o simvastatina 20 mg + ezetimiba 10 mg), en vez de dosis mínimas.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Antiagregación con ácido acetilsalicílico (AAS)</p>
+            <dl class="kv-row"><dt>Prevención secundaria</dt><dd>Se recomienda AAS a dosis bajas (75-100 mg) para la prevención secundaria en personas con ERC y enfermedad cardiovascular isquémica establecida (1C) — el beneficio absoluto supera claramente el riesgo de sangrado en este contexto.</dd></dl>
+            <dl class="kv-row"><dt>Prevención primaria</dt><dd>No hay recomendación definitiva a favor o en contra del uso de AAS para prevención primaria en ERC sin enfermedad cardiovascular previa — la incertidumbre sobre el balance riesgo/beneficio motivó una recomendación de investigación en vez de una recomendación firme.</dd></dl>
+            <dl class="kv-row"><dt>Gastroprotección</dt><dd>Se recomienda considerar un inhibidor de la bomba de protones al prescribir antiagregación (sobre todo si se combina con otro antitrombótico).</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Cardiopatía isquémica estable: estrategia invasiva vs. médica</p>
+            <dl class="kv-row"><dt>Recomendación</dt><dd>En cardiopatía isquémica estable confirmada por prueba de esfuerzo, se sugiere que un tratamiento médico intensivo inicial es una alternativa razonable a una estrategia invasiva inicial (2D) — basado en los hallazgos del ensayo ISCHEMIA y su subestudio específico en ERC (ISCHEMIA-CKD).</dd></dl>
+            <dl class="kv-row"><dt>Excepciones</dt><dd>Esta recomendación no se aplica a personas con angina inaceptable a pesar del tratamiento médico, disfunción ventricular izquierda grave (FEVI &lt;35%) atribuible a isquemia, o enfermedad del tronco coronario izquierdo — situaciones excluidas de los ensayos que sustentan la recomendación, donde la revascularización sigue teniendo un papel central.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Fibrilación auricular (FA) y anticoagulación</p>
+            <dl class="kv-row"><dt>Prevalencia en ERC</dt><dd>Elevada y creciente con la gravedad de la ERC — el riesgo ajustado de FA aumenta de 1,2-1,5 en G3a/A1 hasta 4,2 en G5/A3, respecto a la población de referencia.</dd></dl>
+            <div style="border: 1px solid var(--accent-green); border-radius: 2px; padding: 10px 14px; margin: 10px 0; background: rgba(144,160,106,0.08);">
+                <strong style="color: var(--accent-green);">Recomendación 3.16.1 (1C)</strong> — Se recomienda el uso de anticoagulantes orales de acción directa no antagonistas de la vitamina K (NOAC) <strong>en preferencia a</strong> los antagonistas de la vitamina K (warfarina) para la tromboprofilaxis en FA, en personas con ERC G1-G4.
+            </div>
+            <dl class="kv-row"><dt>Por qué NOAC</dt><dd>Frente a warfarina, los NOAC reducen el riesgo de hemorragia intracraneal en aproximadamente la mitad, y modestamente la mortalidad global, con eficacia consistente en subgrupos de ERC — además de ofrecer una dosificación más simple, sin necesidad de monitorización de INR.</dd></dl>
+            <dl class="kv-row"><dt>Ajuste de dosis por FG</dt><dd>Necesario en FGe reducido — con cautela adicional en ERC G4-G5, donde la evidencia de ensayos aleatorizados es más limitada (participantes con FGe muy bajo generalmente excluidos de los grandes ensayos); consultar las fichas técnicas vigentes para la dosis exacta según aclaramiento de creatinina.</dd></dl>
+            <dl class="kv-row"><dt>Uso del CHA₂DS₂-VASc en ERC</dt><dd>Añadir el FGe a las escalas de riesgo tromboembólico habituales (p. ej. CHA₂DS₂-VASc) no ha demostrado una mejora relevante de su capacidad predictiva incremental — sin embargo, dado que el FGe reducido es en sí mismo un factor de riesgo independiente de ictus, se debe considerar la anticoagulación en la ERC con FA incluso con puntuaciones bajas (0-1) según estas escalas clásicas.</dd></dl>
+        </div>
+
+        <div id="erc-farmacos" class="tab-content">
+            <h3 style="color: var(--accent-blue);">Manejo de fármacos, nefrotoxicidad y contraste</h3>
+
+            <p class="section-label">Nefrotoxicidad medicamentosa</p>
+            <dl class="kv-row"><dt>Magnitud del problema</dt><dd>Entre el 18-20% de las personas con ERC G3-G5 reciben al menos una medicación potencialmente inapropiada por su nefrotoxicidad cada año, principalmente AINE, antivirales nefrotóxicos y bifosfonatos.</dd></dl>
+            <table class="data-table">
+                <thead><tr><th>Medicación nefrotóxica</th><th>Alternativa potencialmente no nefrotóxica</th></tr></thead>
+                <tbody>
+                    <tr><td>AINE (↓FG por reducción del flujo dependiente de prostaglandinas, nefritis intersticial alérgica, síndrome nefrótico)</td><td>Paracetamol</td></tr>
+                    <tr><td>Aminoglucósidos (necrosis tubular aguda)</td><td>Cefalosporinas y carbapenems</td></tr>
+                    <tr><td>Vancomicina (nefrotoxicidad de causa incierta, probable NTA/nefritis intersticial)</td><td>Linezolid y daptomicina</td></tr>
+                    <tr><td>Cotrimoxazol/trimetoprim-sulfametoxazol (nefritis intersticial, NTA, cristaluria)</td><td>Clindamicina + primaquina, pentamidina, atovacuona</td></tr>
+                    <tr><td>Inhibidores de la bomba de protones (nefritis tubulointersticial)</td><td>Antagonistas H2</td></tr>
+                    <tr><td>Warfarina (hemorragia glomerular, calcificación vascular)</td><td>Anticoagulantes orales de acción directa</td></tr>
+                    <tr><td>Litio (diabetes insípida nefrogénica, nefropatía tubulointersticial crónica)</td><td>Aripiprazol, lamotrigina, quetiapina, valproato</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 El uso juicioso de AINE, bajo supervisión de un nefrólogo, puede en ocasiones preferirse a opioides (con sus propios riesgos) — la decisión debe individualizarse, no ser automática.</p>
+            <dl class="kv-row"><dt>Remedios herbales y suplementos</dt><dd>Su regulación es muy variable a nivel mundial; algunos se han asociado a nefrotoxicidad documentada (p. ej. nefropatía por ácido aristolóquico ligada a hierbas chinas tradicionales) — se recomienda preguntar activamente por su uso y desaconsejar los no prescritos.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Ajuste de dosis según el FG</p>
+            <dl class="kv-row"><dt>Principio general</dt><dd>Cualquier ecuación de FGe validada y clínicamente aceptada es razonable para la dosificación de fármacos en la mayoría de personas y contextos clínicos.</dd></dl>
+            <dl class="kv-row"><dt>Cuándo usar mayor precisión (cistatina C, o FG medido)</dt><dd>Fármacos de ventana terapéutica estrecha, decisiones de alto riesgo (dosificación de quimioterapia), o situaciones donde la creatinina puede ser poco fiable (extremos de peso o de masa muscular).</dd></dl>
+            <dl class="kv-row"><dt>FGe no indexado por superficie corporal</dt><dd>En personas con peso corporal extremo (muy bajo o muy alto), puede ser preferible usar el FGe no indexado (en ml/min, en vez de ml/min/1,73m²) para la dosificación de fármacos de ventana estrecha, multiplicando el FGe indexado por la superficie corporal real y dividiendo entre 1,73.</dd></dl>
+            <dl class="kv-row"><dt>Situación clínica inestable</dt><dd>En personas con cambios rápidos del estado de salud (FG no estable), el FGe basado en creatinina/cistatina C puede no reflejar con precisión la función renal real en ese momento — reevaluar el riesgo/beneficio de la medicación con más frecuencia y considerar monitorización de niveles del fármaco cuando sea posible.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">"Sick day rules" — suspensión temporal en enfermedad aguda deshidratante</p>
+            <dl class="kv-row"><dt>Acrónimo SADMANS</dt><dd>Fármacos a suspender temporalmente durante un episodio agudo de deshidratación (vómitos, diarrea, fiebre con mala ingesta): <strong>S</strong>ulfonilureas, <strong>A</strong>CEi, <strong>D</strong>iuréticos/inhibidores directos de renina, <strong>M</strong>etformina, <strong>A</strong>RA-II, <strong>N</strong>SAID (AINE), <strong>S</strong>GLT2i.</dd></dl>
+            <dl class="kv-row"><dt>El problema más frecuente</dt><dd>No es la suspensión en sí, sino el fallo en <strong>reiniciar</strong> la medicación una vez resuelto el cuadro agudo — se recomienda un plan explícito y documentado de cuándo y cómo reanudar cada fármaco, comunicado claramente al paciente.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Suspensión antes de cirugía electiva</p>
+            <table class="data-table">
+                <thead><tr><th>Medicación</th><th>Efecto adverso perioperatorio potencial</th></tr></thead>
+                <tbody>
+                    <tr><td>IECA/ARA-II</td><td>Hipotensión, fracaso renal agudo</td></tr>
+                    <tr><td>Diuréticos</td><td>Depleción de volumen, fracaso renal agudo</td></tr>
+                    <tr><td>iSGLT2</td><td>Cetoacidosis (por ayuno o en diabetes) — suspender 3-4 días antes</td></tr>
+                    <tr><td>Metformina</td><td>Acidosis láctica si se produce fracaso renal agudo</td></tr>
+                    <tr><td>Aminoglucósidos</td><td>Necrosis tubular aguda/fracaso renal agudo</td></tr>
+                    <tr><td>AINE</td><td>Fracaso renal agudo, nefritis intersticial aguda</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Estudios con contraste radiológico</p>
+            <dl class="kv-row"><dt>Terminología actual</dt><dd>Se prefiere el término "AKI asociada a contraste" (CA-AKI) frente al histórico "AKI inducida por contraste", porque la evidencia causal directa es más débil de lo que se pensaba — la retirada o negativa a realizar una prueba diagnóstica potencialmente vital únicamente por el FGe no está justificada.</dd></dl>
+            <table class="data-table">
+                <thead><tr><th>Relacionados con el paciente</th><th>Relacionados con el procedimiento</th></tr></thead>
+                <tbody>
+                    <tr><td>FGe reducido, agudo o crónico<br>Diabetes mellitus<br>Volumen intravascular reducido<br>Uso concomitante de fármacos nefrotóxicos</td><td>Contraste hiperosmolar<br>Gran volumen de contraste<br>Procedimientos con contraste repetidos<br>Administración intraarterial (mayor riesgo que la intravenosa)</td></tr>
+                </tbody>
+            </table>
+            <dl class="kv-row"><dt>Medidas preventivas con respaldo</dt><dd>Uso de la dosis mínima de contraste necesaria para el diagnóstico, y retirada de medicación nefrotóxica no esencial (AINE, aminoglucósidos, anfotericina, platinos, zoledronato, metotrexato) 24-48h antes y después de la exposición si FGe &lt;30 o hay AKI.</dd></dl>
+            <dl class="kv-row"><dt>Medidas sin beneficio consistente</dt><dd>N-acetilcisteína, ácido ascórbico, furosemida, dopamina, fenoldopam o calcioantagonistas no han demostrado un beneficio preventivo consistente. La hemodiálisis profiláctica pericontraste puede ser potencialmente perjudicial y no se recomienda.</dd></dl>
+            <dl class="kv-row"><dt>Gadolinio (RM)</dt><dd>Con FGe &lt;30 ml/min/1,73m² (G4-G5), se recomienda preferir agentes de contraste basados en gadolinio del grupo II o III de la American College of Radiology (menor riesgo de fibrosis sistémica nefrogénica) sobre los agentes lineales del grupo I.</dd></dl>
+        </div>
+
+        <div id="erc-atencion" class="tab-content">
+            <h3 style="color: var(--accent-green);">Derivación, síntomas, modelos de atención y diálisis</h3>
+
+            <p class="section-label">Criterios de derivación a nefrología</p>
+            <table class="data-table">
+                <thead><tr><th>Categoría</th><th>Circunstancias</th></tr></thead>
+                <tbody>
+                    <tr><td>Causa incierta</td><td>Causa de la ERC no clara, sospecha de enfermedad renal hereditaria, nefrolitiasis recurrente extensa</td></tr>
+                    <tr><td>FGe / riesgo de fallo renal</td><td>Riesgo a 5 años &gt;3-5% por ecuación validada (KFRE) · FGe &lt;30 ml/min/1,73m² · caída sostenida del FG &gt;20% (o &gt;30% en quienes inician tratamientos hemodinámicamente activos)</td></tr>
+                    <tr><td>Albuminuria y hematuria microscópica</td><td>ACR ≥300 mg/g de forma persistente, o hallazgo persistente de ACR ≥300 mg/g combinado con hematuria · ↑2 veces de la albuminuria en seguimiento · ACR ≥700 mg/g de forma consistente · cilindros hemáticos urinarios o &gt;20 hematíes/campo de forma sostenida y no fácilmente explicable</td></tr>
+                    <tr><td>Otras</td><td>HTA resistente a ≥4 antihipertensivos · alteraciones persistentes del potasio · acidosis · anemia · enfermedad ósea</td></tr>
+                </tbody>
+            </table>
+            <table class="data-table">
+                <thead><tr><th>Consecuencias de la derivación tardía</th><th>Beneficios de la derivación precoz</th></tr></thead>
+                <tbody>
+                    <tr><td>HTA grave y sobrecarga de volumen, mayor comorbilidad cardiovascular</td><td>Retraso de la necesidad de terapia renal sustitutiva, mejor manejo de la comorbilidad</td></tr>
+                    <tr><td>Baja prevalencia de acceso vascular permanente</td><td>Menor necesidad de diálisis urgente con acceso temporal</td></tr>
+                    <tr><td>Derivación tardía para trasplante</td><td>Mayor elección de opciones de tratamiento y trasplante preventivo (preemptive)</td></tr>
+                    <tr><td>Mayor tasa de hospitalización inicial, mayor mortalidad al año</td><td>Menor estancia hospitalaria y costes, menor mortalidad al año</td></tr>
+                    <tr><td>Menor elección de modalidad de terapia renal sustitutiva, peor ajuste psicosocial</td><td>Mayor libertad informada de elección de modalidad, acceso precoz a apoyo psicosocial</td></tr>
+                    <tr><td>Malnutrición</td><td>Mejor estado nutricional</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Síntomas más prevalentes en la ERC (no en diálisis)</p>
+            <ul class="term-chips">
+                <li>Fatiga — 70%</li>
+                <li>Disnea — 42%</li>
+                <li>Disminución del apetito — 42%</li>
+                <li>Edema de miembros inferiores — 45%</li>
+                <li>Calambres musculares — 46%</li>
+                <li>Pirosis — 46%</li>
+                <li>Prurito — 46%</li>
+                <li>Peor movilidad — 56%</li>
+                <li>Dolor óseo/articular — 55%</li>
+                <li>Somnolencia — 53%</li>
+                <li>Dolor — 53%</li>
+                <li>Alteraciones del sueño — 49%</li>
+                <li>Disfunción sexual — 48% (la de mayor puntuación de gravedad)</li>
+            </ul>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩹 Manejo de síntomas comunes</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Dolor</dt><dd>Escalera analgésica de la OMS adaptada a la farmacocinética renal; fisioterapia, ejercicio y calor para el dolor musculoesquelético; precaución con opioides (valorar riesgo de abuso).</dd></dl>
+                        <dl class="kv-row"><dt>Prurito urémico</dt><dd>Gabapentinoides con titulación y seguimiento; emolientes rehidratantes; considerar fototerapia UVB.</dd></dl>
+                        <dl class="kv-row"><dt>Síndrome de piernas inquietas</dt><dd>Suspender fármacos que interfieren la vía dopaminérgica; considerar levodopa, agonistas dopaminérgicos o gabapentinoides a dosis bajas; corregir hiperfosfatemia y déficit de hierro/anemia asociados.</dd></dl>
+                        <dl class="kv-row"><dt>Depresión</dt><dd>Ejercicio, terapia cognitivo-conductual y apoyo social; si se precisa tratamiento farmacológico, ajustar dosis por función renal (ISRS, IRSN, atípicos o tricíclicos según el caso).</dd></dl>
+                    </div>
+                </div>
+            </div>
+            <dl class="kv-row"><dt>Malnutrición (desgaste energético-proteico)</dt><dd>Presente en el 20-45% de adultos con ERC G4-G5. Cribado recomendado 2 veces al año en G4-G5, edad &gt;65 años, fragilidad, pérdida de peso involuntaria o mal apetito, con herramientas validadas (SGA de 7 puntos, Malnutrition-Inflammation Score, Mini Nutritional Assessment) y derivación a dietista renal cuando esté disponible.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Modelo de atención escalonado por riesgo</p>
+            <table class="data-table">
+                <thead><tr><th>Riesgo de fallo renal</th><th>Nivel asistencial</th><th>Objetivo principal</th></tr></thead>
+                <tbody>
+                    <tr><td>&lt;3-5% a 5 años</td><td>Atención primaria</td><td>Reducción del riesgo cardiovascular, identificación de personas de alto riesgo</td></tr>
+                    <tr><td>≥3-5% a 5 años</td><td>Nefrología, equipo multidisciplinar</td><td>Promover el autocuidado, prevención y manejo de complicaciones</td></tr>
+                    <tr><td>≥10% a 5 años</td><td>Nefrología, equipo multidisciplinar</td><td>Discutir opciones de terapia renal sustitutiva, educación</td></tr>
+                    <tr><td>≥40% a 2 años</td><td>Equipo de preparación para TRS / cuidados conservadores integrales</td><td>Preparación activa para diálisis, trasplante o cuidados conservadores</td></tr>
+                </tbody>
+            </table>
+            <dl class="kv-row"><dt>Composición del equipo multidisciplinar</dt><dd>Nefrólogo, enfermería especializada, dietista renal/nutricionista acreditado, farmacéutico, trabajador social — con endocrinólogo, cardiólogo, cirujano trasplantador o psicólogo según necesidad.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Transición de pediatría a adultos</p>
+            <dl class="kv-row"><dt>Cuándo empezar</dt><dd>Preparar a adolescentes y familias para la transferencia a partir de los 11-14 años, con listas de verificación (checklists) que evalúen la disposición y guíen la preparación, incluyendo parte de cada visita a solas con el joven, sin el progenitor/tutor presente.</dd></dl>
+            <dl class="kv-row"><dt>Momento de la transferencia</dt><dd>Idealmente durante periodos de estabilidad médica y social, con un resumen escrito completo y, si es posible, un traspaso oral directo entre los equipos pediátrico y de adultos.</dd></dl>
+            <dl class="kv-row"><dt>Por qué los adultos jóvenes son un grupo de riesgo especial</dt><dd>La corteza prefrontal (responsable de la planificación, organización y control de impulsos) continúa madurando hasta aproximadamente los 25 años — los adultos jóvenes con ERC tienen peores resultados que otras franjas de edad en el mismo estadio, y se benefician de un seguimiento más frecuente en los 1-3 primeros años tras la transferencia.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Momento de inicio de la diálisis</p>
+            <dl class="kv-row"><dt>Principio general</dt><dd>Basar el inicio de la diálisis en una valoración conjunta de síntomas, signos, calidad de vida, preferencias del paciente, nivel de FG y alteraciones analíticas — no en un único valor umbral de FG.</dd></dl>
+            <table class="data-table">
+                <thead><tr><th colspan="2">Indicaciones para iniciar diálisis</th></tr></thead>
+                <tbody>
+                    <tr><td colspan="2">Síntomas/signos atribuibles al fallo renal (afectación neurológica urémica, pericarditis, anorexia, alteraciones ácido-base o electrolíticas resistentes al tratamiento médico, prurito intratable, serositis)</td></tr>
+                    <tr><td colspan="2">Incapacidad para controlar el estado de volumen o la PA</td></tr>
+                    <tr><td colspan="2">Deterioro progresivo del estado nutricional refractario a intervención dietética, o deterioro cognitivo</td></tr>
+                </tbody>
+            </table>
+            <dl class="kv-row"><dt>Rango habitual de FG</dt><dd>Esto ocurre con frecuencia, aunque no de forma invariable, con un FG entre 5 y 10 ml/min/1,73m².</dd></dl>
+            <dl class="kv-row"><dt>Evidencia sobre inicio precoz vs. tardío</dt><dd>El ensayo IDEAL (Initiating Dialysis Early and Late) no mostró beneficio de supervivencia con el inicio precoz de diálisis (a FGe más alto) frente al inicio tardío — reforzando que la decisión debe guiarse por clínica, no por un número aislado.</dd></dl>
+            <dl class="kv-row"><dt>Planificación de acceso/trasplante preventivo</dt><dd>Considerar planificar el acceso a diálisis o el trasplante renal preventivo (preemptive) cuando el FGe está en 15-20 ml/min/1,73m², o el riesgo de terapia renal sustitutiva es &gt;40% a 2 años.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Cuidados conservadores integrales y cuidados de soporte</p>
+            <dl class="kv-row"><dt>Cuidados de soporte (supportive care)</dt><dd>Concepto amplio centrado en mejorar la calidad de vida relacionada con la salud en cualquier estadio de la ERC, compatible con recibir terapia renal sustitutiva o no.</dd></dl>
+            <dl class="kv-row"><dt>Manejo conservador integral</dt><dd>Alternativa activa, planificada y centrada en la persona a la terapia renal sustitutiva para quienes eligen no iniciarla — incluye comunicación detallada con estimación de pronóstico, planificación de cuidados avanzados, toma de decisiones compartida, manejo activo de síntomas, y apoyo psicológico, social, familiar, cultural y espiritual.</dd></dl>
+            <dl class="kv-row"><dt>Planificación de cuidados avanzados (ACP)</dt><dd>Proceso de comunicación entre la persona con ERC, su familia/cuidadores y el equipo sanitario para clarificar las preferencias de cuidados al final de la vida — se considera un componente de todo manejo crónico integral, no algo reservado exclusivamente a quienes eligen cuidados conservadores.</dd></dl>
+        </div>
     </div>
 
     <div class="card">
         <h3 style="color: var(--accent-blue);">📚 Bibliografía</h3>
-        <p class="subtitle">Nefrología al día — Grupo Editorial Nefrología, SEN</p>
+        <p class="subtitle">Fuente principal y navegador temático</p>
         <ul class="biblio-list">
+            <li>
+                <a class="biblio-link" href="https://kdigo.org/guidelines/ckd-evaluation-and-management/" target="_blank" rel="noopener">KDIGO 2024 Clinical Practice Guideline for the Evaluation and Management of Chronic Kidney Disease</a>
+                <span class="biblio-nota"><em>Kidney International</em> (2024) 105 (Suppl 4S): S117-S314. Fuente de todo el contenido de esta sección.</span>
+            </li>
             <li><a class="biblio-link" href="https://nefrologiaaldia.org/es-articulo-historia-de-la-enfermedad-renal-cronica-670" target="_blank" rel="noopener">Historia de la Enfermedad Renal Crónica</a></li>
             <li>
                 <a class="biblio-link" href="https://www.nefrologiaaldia.org/es-navegador-tematico" target="_blank" rel="noopener">Guías KDIGO 2024 en español para Enfermedad Renal Crónica (ERC)</a>
