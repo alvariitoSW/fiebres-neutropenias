@@ -10,10 +10,12 @@ import { initRinon } from './rinon.js';
 import { init as initFisiologia } from './fisiologia.js';
 import { init as initHta } from './hta.js';
 import { init as initErc } from './erc.js';
+import { init as initFra } from './fra.js';
 import { initQuiz } from '../quiz/quiz.js';
 import { preguntasNefrologia, temasNefrologia } from '../../data/nefrologia-preguntas.js';
 import { preguntasHTA, temasHTA } from '../../data/hta-preguntas.js';
 import { preguntasERC, temasERC } from '../../data/erc-preguntas.js';
+import { preguntasFRA, temasFRA } from '../../data/fra-preguntas.js';
 
 function mostrarEnPreparacion() {
     const cont = document.getElementById('nefro-segmento-categorias');
@@ -60,10 +62,11 @@ export function init() {
     initFisiologia();
     initHta();
     initErc();
+    initFra();
     initQuiz({
-        triggerId: ['btn-nefro-repasar', 'btn-hta-repasar', 'btn-erc-repasar'],
-        banco: [...preguntasNefrologia, ...preguntasHTA, ...preguntasERC],
-        temas: [...temasNefrologia, ...temasHTA, ...temasERC],
+        triggerId: ['btn-nefro-repasar', 'btn-hta-repasar', 'btn-erc-repasar', 'btn-fra-repasar'],
+        banco: [...preguntasNefrologia, ...preguntasHTA, ...preguntasERC, ...preguntasFRA],
+        temas: [...temasNefrologia, ...temasHTA, ...temasERC, ...temasFRA],
     });
 
     nefroLevel.show('kidney');

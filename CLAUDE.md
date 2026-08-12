@@ -990,6 +990,103 @@ por encima que sí diera cabida a todos.
       `initQuiz` en `nefrologia/index.js` (`triggerId` ganó un 3er botón,
       `btn-erc-repasar`). El banco combinado Nefrología+HTA+ERC queda en
       **431 preguntas** (343+88).
+  - **`fra.html`** (objetivo de rotación 4) fue la 3ª de las 6 categorías
+    del mapa del riñón en pasar de placeholder a contenido real, con un
+    único artículo fuente de alcance más manejable que ERC (36 páginas,
+    similar en escala a HTA): Rodríguez Benítez P, Ramos Terrades N,
+    Poch E. **Insuficiencia Renal Aguda**. Nefrología al día (SEN),
+    actualizado 22/9/2025 — leído íntegro, incluidas sus 113 referencias
+    bibliográficas (revisadas para confirmar que no aportaban contenido
+    clínico adicional no recogido ya en el cuerpo del artículo). Sustituida
+    la tarjeta "🚧 en preparación" por un cuaderno de campo
+    (`#fra-corkboard`/`#panel-fra-tabs`, `js/modules/nefrologia/fra.js` vía
+    el mismo `core/corkboard.js` de siempre) con **9 fichas**:
+    1. **Concepto, definición y estadificación** (`fra-definicion`): Tabla 1
+       KDIGO de estadios (creatinina + diuresis), inconvenientes prácticos
+       de la definición (uso del criterio de diuresis restringido a UCI,
+       necesidad de Crs basal fiable, Crs como marcador poco sensible y
+       tardío), IRA subclínica (criterios ADQI, marcador + / marcador -),
+       y la cronología IRA → ERA (enfermedad renal aguda, acute kidney
+       disease) → ERC.
+    2. **Epidemiología y etiología** (`fra-epidemiologia`): incidencia por
+       contexto (comunidad, UCI, posquirúrgica), Tabla 2 completa de
+       etiología por mecanismo patogénico (prerrenal/renal-intrínseca/
+       posrenal, con todos los subtipos vascular/cardíaco/volemia,
+       inflamatorio/tóxico/oclusión de vasos, vía urinaria/intratubular).
+    3. **Subfenotipos I: posquirúrgica, sepsis y tóxica**
+       (`fra-subfenotipos-1`).
+    4. **Subfenotipos II: cardíaca, hepática, embarazo y obstructiva**
+       (`fra-subfenotipos-2`): Síndrome Cardiorrenal tipo I con VExUS,
+       IRA en cirrosis hepática con los criterios ICA y el subestadio
+       1A/1B, mecanismos fisiopatológicos del síndrome hepatorrenal en
+       `micro-prof-item`, IRA en el embarazo con tabla de causas por
+       grupo prerrenal/renal/posrenal, e IRA obstructiva.
+    5. **Diagnóstico: clínica, laboratorio e imagen** (`fra-diagnostico`):
+       algoritmo diagnóstico (antes Figura 1, recreado como secuencia
+       `kv-row`), pruebas de laboratorio, Tabla 3 de parámetros urinarios
+       (Na⁺ orina/FENa/IFR/osmolalidad/Cro-Crs/FE urea/sedimento) **con
+       calculadora de FENa e IFR** (ver más abajo), Tabla 4 de hallazgos
+       del sedimento, **Figura 2 real** (sedimento de orina, mosaico de
+       8 microfotografías) y **Figura 3 real** (ecografía renal normal
+       vs. uropatía obstructiva) extraídas con `pdfimages -all -j`
+       (`js/modules/nefrologia/img/ira-fig2-sedimento.png`,
+       `ira-fig3-ecografia.png` — buenas candidatas por ser fotografías
+       diagnósticas genuinas, a diferencia de la Figura 1 y la Figura 4,
+       que son flujogramas recreados como texto), test de respuesta a
+       furosemida, biomarcadores no convencionales (remite a la Ficha 8),
+       biopsia renal.
+    6. **Complicaciones y tratamiento médico** (`fra-complicaciones-tto`):
+       complicaciones a corto plazo, disfunción de otros órganos,
+       hiperpotasemia (umbral de tratamiento activo ≥6,5 mmol/l),
+       acidosis metabólica, hipocalcemia/hiperfosfatemia/hiperuricemia,
+       tabla de nutrición KDIGO en la IRA.
+    7. **Tratamiento renal sustitutivo** (`fra-trs`): indicaciones
+       urgentes de diálisis, los 5 grandes ensayos sobre el momento de
+       inicio (ELAIN único con beneficio; AKIKI/IDEAL-ICU/STARRT-AKI sin
+       diferencias; AKIKI 2 con el hallazgo de mayor mortalidad al
+       retrasar en oliguria >72h) en `micro-prof-item`, modalidades
+       (HDI/continuo/técnicas híbridas PIRRT, con las técnicas híbridas
+       desarrolladas en su propio `micro-prof-item`), dosis de diálisis,
+       anticoagulación (heparina vs. ARC), y finalización del TRS con
+       tabla de parámetros orientativos de retirada.
+    8. **Predicción y prevención** (`fra-prediccion`): biomarcadores no
+       convencionales (KIM-1, NGAL, L-FABP, cistatina C, hemojuvelina,
+       NAG, Netrina-1, GGT, GST, TIMP-2, IGFBP7) con 3
+       `micro-prof-item` para los de mayor impacto clínico (NephroCheck®
+       = TIMP-2×IGFBP7, NGAL, CCL14/CXCL9), IA y modelos predictivos, y
+       tabla de medidas de prevención KDIGO 2012.
+    9. **Evolución, pronóstico y seguimiento** (`fra-evolucion`): los 4
+       escenarios evolutivos (recuperación, ERC, ECV, mortalidad —
+       incluida la cifra real de mortalidad global del 23%, hasta 50%
+       en críticos con TRS), proteinuria como marcador de riesgo
+       (ASSESS-AKI), seguimiento ambulatorio sin pauta estandarizada,
+       recomendación FRASEN, tabla de quién debe hacer el seguimiento
+       (nefrólogo vs. Atención Primaria) y estratificación por
+       probabilidad de recuperación.
+    - **Dos calculadoras nuevas** en `fra.js`:
+      `calcEstadioKdigo()` (Ficha 1) clasifica el estadio KDIGO
+      **solo por el criterio de creatinina** (Δ absoluto o razón sobre
+      la basal) — deliberadamente NO evalúa el criterio de diuresis
+      (dependiente del tiempo, restringido a UCI, mal adaptable a un
+      formulario simple) ni el marco temporal exacto, con esa limitación
+      explícita en el propio texto de la calculadora; y
+      `calcFenaIfr()` (Ficha 5) calcula la FENa y el IFR a partir de
+      las fórmulas literales de la Tabla 3 de la fuente. **Detalle de
+      seguridad clínica**: la Tabla 3 original muestra el mismo valor
+      ">1" para el IFR tanto en la columna de hipoperfusión como en la
+      de NTA (posible errata del artículo, ya que conceptualmente el
+      IFR discrimina en el mismo sentido que la FENa) — en vez de
+      "corregir" este valor por criterio propio, se reprodujo la tabla
+      tal cual la publica la fuente (con una nota aclaratoria) y la
+      calculadora deliberadamente **no emite un veredicto automático
+      basado en el IFR**, solo en la FENa (cuyos cortes &lt;1%/&gt;2% sí
+      son inequívocos en la fuente) — el IFR se muestra como dato
+      adicional sin interpretación.
+    - Se creó `js/data/fra-preguntas.js` con **72 preguntas**
+      (`fra-q001`-`q072`, 8 por ficha × 9 fichas), añadida a la llamada
+      única de `initQuiz` (`triggerId` ganó un 4º botón,
+      `btn-fra-repasar`). El banco combinado Nefrología+HTA+ERC+FRA
+      queda en **503 preguntas** (431+72).
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

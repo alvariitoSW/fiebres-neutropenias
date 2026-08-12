@@ -1,17 +1,643 @@
     <button class="back-btn btn-volver-nefro-kidney">← VOLVER</button>
     <div class="diag-header">
-        <h2 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">FRA — Definición y diagnóstico</h2>
+        <h2 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">FRA — Insuficiencia Renal Aguda</h2>
         <p>Objetivo de rotación 4 · Nefrología al día (SEN)</p>
     </div>
 
-    <div class="card">
-        <h3 style="color: var(--accent-purple);">🚧 En preparación</h3>
-        <p style="font-size: 0.85rem; line-height: 1.5; color: var(--text-muted);">
-            El contenido clínico del Fracaso Renal Agudo (definición KDIGO, clasificación
-            prerrenal/renal/postrenal, subfenotipos, FRA-sepsis, FRA postquirúrgico) se irá
-            añadiendo a partir de la bibliografía citada abajo. Mientras tanto, los enlaces ya son
-            reales y navegables.
-        </p>
+    <button class="accordion-btn nav-btn" id="btn-fra-repasar" style="border-left: 4px solid var(--accent-yellow);">
+        <span>🎯 Repasar (preguntas de repaso)</span>
+        <span style="font-size: 0.8rem; color: var(--accent-yellow);">[ EMPEZAR → ]</span>
+    </button>
+
+    <p class="section-label">Cuaderno de campo — Insuficiencia Renal Aguda</p>
+    <div class="corkboard" id="fra-corkboard">
+        <div class="field-card" data-tab="fra-definicion">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 1</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><rect x="16" y="34" width="12" height="14" fill="none" stroke="var(--accent-purple)" stroke-width="2"/><rect x="34" y="26" width="12" height="22" fill="none" stroke="var(--accent-purple)" stroke-width="2"/><rect x="52" y="14" width="12" height="34" fill="none" stroke="var(--accent-purple)" stroke-width="2"/></svg>
+                    <div class="field-name">Concepto, definición y estadificación</div>
+                    <div class="field-hook">¿Qué incremento de creatinina sérica en 48 horas define la IRA según el consenso KDIGO?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">≥0,3 mg/dl en 48 horas (o ≥1,5 veces la basal en 7 días, o diuresis &lt;0,5 ml/kg/h durante ≥6h).</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="fra-epidemiologia">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 2</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><rect x="18" y="12" width="10" height="34" fill="none" stroke="var(--accent-blue)" stroke-width="2"/><rect x="35" y="24" width="10" height="22" fill="none" stroke="var(--accent-blue)" stroke-width="2"/><rect x="52" y="18" width="10" height="28" fill="none" stroke="var(--accent-blue)" stroke-width="2"/></svg>
+                    <div class="field-name">Epidemiología y etiología</div>
+                    <div class="field-hook">En pacientes críticos, ¿cuál es la causa más frecuente de IRA en UCI?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">La sepsis — la mayor parte de los casos de IRA en críticos son producidos o asociados a sepsis.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="fra-subfenotipos-1">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 3</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><circle cx="40" cy="28" r="16" fill="none" stroke="var(--accent-red)" stroke-width="2"/><path d="M32,28 h16 M40,20 v16" stroke="var(--accent-red)" stroke-width="2"/></svg>
+                    <div class="field-name">Subfenotipos I: posquirúrgica, sepsis y tóxica</div>
+                    <div class="field-hook">¿Qué porcentaje de pacientes con sepsis puede desarrollar IRA asociada?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Entre el 45-70% de los pacientes con sepsis.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="fra-subfenotipos-2">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 4</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><path d="M40,14 C40,14 24,30 24,38 a16,16 0 0,0 32,0 C56,30 40,14 40,14 Z" fill="none" stroke="var(--accent-yellow)" stroke-width="2"/></svg>
+                    <div class="field-name">Subfenotipos II: cardíaca, hepática, embarazo y obstructiva</div>
+                    <div class="field-hook">¿Cómo se define el Síndrome Cardiorrenal tipo I?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Aparición de IRA en el contexto de una insuficiencia cardíaca descompensada.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="fra-diagnostico">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 5</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><circle cx="34" cy="26" r="14" fill="none" stroke="var(--accent-blue)" stroke-width="2"/><line x1="44" y1="36" x2="56" y2="46" stroke="var(--accent-blue)" stroke-width="2"/></svg>
+                    <div class="field-name">Diagnóstico: clínica, laboratorio e imagen</div>
+                    <div class="field-hook">¿Qué fracción de excreción de sodio (FENa) orienta a una IRA por hipoperfusión?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">FENa &lt;1% (frente a &gt;2% en la necrosis tubular aguda).</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="fra-complicaciones-tto">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 6</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><rect x="30" y="8" width="20" height="34" rx="3" fill="none" stroke="var(--accent-green)" stroke-width="2"/><line x1="40" y1="42" x2="40" y2="50" stroke="var(--accent-green)" stroke-width="2"/></svg>
+                    <div class="field-name">Complicaciones y tratamiento médico</div>
+                    <div class="field-hook">¿A partir de qué cifra de potasio sérico se inicia habitualmente el tratamiento activo de la hiperpotasemia en la IRA?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">≥6,5 mmol/l, o menos si hay cambios electrocardiográficos asociados.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="fra-trs">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 7</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><rect x="16" y="20" width="16" height="16" rx="2" fill="none" stroke="var(--accent-red)" stroke-width="2"/><rect x="48" y="20" width="16" height="16" rx="2" fill="none" stroke="var(--accent-red)" stroke-width="2"/><line x1="32" y1="28" x2="48" y2="28" stroke="var(--accent-red)" stroke-width="2"/></svg>
+                    <div class="field-name">Tratamiento renal sustitutivo</div>
+                    <div class="field-hook">¿Qué ensayo unicéntrico alemán fue el único de los 5 grandes ensayos que mostró beneficio de supervivencia con el inicio precoz de la TRS?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">El ensayo ELAIN.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="fra-prediccion">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 8</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><circle cx="40" cy="28" r="16" fill="none" stroke="var(--accent-yellow)" stroke-width="2"/><circle cx="40" cy="28" r="4" fill="var(--accent-yellow)"/></svg>
+                    <div class="field-name">Predicción y prevención</div>
+                    <div class="field-hook">¿Qué dos biomarcadores urinarios se combinan en el test comercial NephroCheck®?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">TIMP-2 e IGFBP7.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="fra-evolucion">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 9</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><path d="M18,44 L32,30 L42,36 L62,14" fill="none" stroke="var(--accent-blue)" stroke-width="2"/><circle cx="62" cy="14" r="3" fill="var(--accent-blue)"/></svg>
+                    <div class="field-name">Evolución, pronóstico y seguimiento</div>
+                    <div class="field-hook">¿Qué mortalidad global se reportó para la IRA en un metaanálisis de 2013, y hasta cuánto puede alcanzar en críticos con TRS?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">23% global, hasta el 50% en pacientes críticos que precisan tratamiento renal sustitutivo.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="tap-hint">Toca una ficha para voltearla, y de nuevo para abrir el tema completo</p>
+
+    <div class="card" id="panel-fra-tabs" style="display:none;">
+        <div id="fra-definicion" class="tab-content">
+            <h3 style="color: var(--accent-purple);">Concepto, definición y estadificación</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Rodríguez Benítez P, Ramos Terrades N, Poch E. Insuficiencia Renal Aguda. Nefrología al día (SEN), actualizado 22/9/2025.</p>
+
+            <dl class="kv-row"><dt>Definición</dt><dd>Síndrome clínico caracterizado por un descenso de la tasa de filtración glomerular (TFG) que acontece en horas o días, de origen a menudo multifactorial. Se define por incrementos en la creatinina sérica (Crs) o por el descenso de la diuresis, ambos marcadores de función renal. Puede acontecer tanto sobre riñones sanos como sobre riñones con diversos grados de ERC.</dd></dl>
+
+            <table class="data-table">
+                <thead><tr><th>Estadio</th><th>Criterios de creatinina</th><th>Criterios de diuresis</th></tr></thead>
+                <tbody>
+                    <tr><td>1</td><td>Δcreatinina ≥0,3 mg/dl en 48h, o Δcreatinina entre 1,5 y 1,9 veces la basal en 7 días</td><td>&lt;0,5 ml/kg/h durante 6-12h</td></tr>
+                    <tr><td>2</td><td>Δcreatinina entre 2 y 2,9 veces la basal</td><td>&lt;0,5 ml/kg/h durante ≥12h</td></tr>
+                    <tr><td>3</td><td>Δcreatinina ≥3 veces la basal, o aumento de creatinina a ≥4 mg/dl (con un aumento agudo ≥0,5 mg/dl en 48h o 1,5 veces la basal), o inicio de TRS</td><td>&lt;0,3 ml/kg/h durante ≥24h, o anuria durante ≥12h</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Los pacientes que requieren tratamiento renal sustitutivo se consideran estadio 3 independientemente del estadio en que se encontraran al iniciarlo. Se categoriza según la creatinina, la diuresis, o ambas — entrando en el estadio correspondiente al parámetro que esté más afectado. El uso del criterio de diuresis está restringido en la práctica a los pacientes de UCI.</p>
+
+            <p class="section-label" style="margin-top:16px;">🧮 Calculadora orientativa de estadio KDIGO (solo por creatinina)</p>
+            <div class="tfg-simulador">
+                <div class="form-group">
+                    <label for="fra-cr-basal">Creatinina basal (mg/dl)</label>
+                    <input type="number" id="fra-cr-basal" step="0.01" min="0.1" max="20" value="0.9">
+                </div>
+                <div class="form-group">
+                    <label for="fra-cr-actual">Creatinina actual (mg/dl)</label>
+                    <input type="number" id="fra-cr-actual" step="0.01" min="0.1" max="20" value="1.4">
+                </div>
+                <div id="fra-estadio-resultado" class="tfg-estado tfg-estado-ok"></div>
+                <p style="font-size: 0.72rem; color: var(--text-muted); margin-top:8px;">Calcula únicamente el criterio de creatinina de la Tabla 1 (Δ absoluto o razón sobre la basal) — no evalúa el criterio de diuresis, que puede elevar el estadio de forma independiente, ni el marco temporal exacto (48h/7 días). Herramienta de estudio, no sustituye el juicio clínico ni el uso de una creatinina basal fiable.</p>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Inconvenientes prácticos de la definición KDIGO</p>
+            <ul class="term-chips">
+                <li>El criterio de diuresis está restringido a pacientes de UCI</li>
+                <li>Se necesita una Crs basal fiable, con frecuencia desconocida</li>
+                <li>La Crs puede alterarse por factores ajenos al FG (masa muscular, fármacos, embarazo, dilución/concentración plasmática)</li>
+                <li>La Crs es un marcador poco sensible y tardío (un cambio del FG debe ser &gt;50% para alterarla, tarda 24-48h en reflejarse)</li>
+                <li>Es una definición puramente funcional — no valora marcadores de lesión estructural (p. ej. proteinuria, biomarcadores)</li>
+            </ul>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Cuando no se conoce la Crs basal, se han sugerido aproximaciones (Crs al ingreso, la más baja disponible, o inferirla mediante MDRD-6 asumiendo un FG de 75 ml/min/1,73m²) — todas pueden sobre- o infraestimar la IRA, por lo que el juicio clínico ha de prevalecer.</p>
+
+            <p class="section-label" style="margin-top:16px;">IRA subclínica (criterios ADQI)</p>
+            <dl class="kv-row"><dt>Concepto</dt><dd>La Acute Disease Quality Initiative (ADQI) propone dividir cada estadio KDIGO en 2 subestadios según la positividad o no de biomarcadores de lesión renal, y añade un estado en el que no hay incremento de Crs ni descenso de la diuresis, pero sí positividad de biomarcadores de lesión — la llamada "IRA subclínica".</dd></dl>
+            <dl class="kv-row"><dt>Relevancia</dt><dd>La IRA subclínica se asocia a un elevado riesgo de IRA clínica, necesidad de terapia sustitutiva renal aguda y mayor mortalidad.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Del episodio agudo a la enfermedad crónica: IRA → ERA → ERC</p>
+            <dl class="kv-row"><dt>Enfermedad renal aguda (ERA, acute kidney disease — AKD)</dt><dd>Alteraciones en la TFGe que persisten más de 7 días y menos de 3 meses: TFGe &lt;60 ml/min/1,73m², o un descenso de TFGe ≥35%, o un incremento de Crs &gt;50%. Incluye también marcadores de lesión renal como proteinuria de novo o empeoramiento de una preexistente.</dd></dl>
+            <dl class="kv-row"><dt>Cronología</dt><dd>Dentro de los primeros 7 días del evento agudo se habla de IRA (si cumple criterios KDIGO); puede evolucionar después a ERA. Si las alteraciones persisten &gt;3 meses, se define como ERC. También puede darse una ERA sin criterios KDIGO de IRA en los primeros 7 días — pacientes "subagudos" con deterioro lento y persistente, que tienen un riesgo de mortalidad, de ERC progresiva o de novo, y de ERC terminal similar al de los pacientes con IRA.</dd></dl>
+        </div>
+
+        <div id="fra-epidemiologia" class="tab-content">
+            <h3 style="color: var(--accent-blue);">Epidemiología y etiología</h3>
+
+            <p class="section-label">Epidemiología</p>
+            <dl class="kv-row"><dt>Factores de riesgo principales de IRA hospitalaria</dt><dd>Edad, ERC, diabetes, HTA, insuficiencia cardíaca, cirrosis y EPOC.</dd></dl>
+            <table class="data-table">
+                <thead><tr><th>Contexto</th><th>Incidencia</th></tr></thead>
+                <tbody>
+                    <tr><td>Comunidad (Europa)</td><td>200-500 casos/100.000 personas-año; 7-30 casos/100.000 personas-año requieren TRS</td></tr>
+                    <tr><td>Metaanálisis global con criterios KDIGO</td><td>22% en adultos, 34% en edad pediátrica</td></tr>
+                    <tr><td>AKD sin IRA (estudio poblacional)</td><td>3,8 por 100 habitantes evaluados — el doble que la incidencia de IRA (1,4 por 100)</td></tr>
+                    <tr><td>Pacientes críticos (UCI)</td><td>19,2-57,3%, según se usen los criterios KDIGO de Crs, de diuresis, o ambos (se detectan más casos combinando ambos criterios)</td></tr>
+                    <tr><td>IRA posquirúrgica (cirugía mayor, primeros 3 días)</td><td>25% — 63,5% estadio 1, 25,7% estadio 2, 10,7% estadio 3; 33,8% cumple criterio de IRA persistente (&gt;48h de evolución)</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">A nivel de la comunidad, las causas más frecuentes son enfermedades agudas con inflamación, depleción de volumen y nefrotoxicidad. En el ámbito hospitalario, la incidencia más elevada se da en pacientes críticos y sometidos a cirugía mayor — las cirugías más frecuentemente asociadas a IRA fueron las urológicas, cardíacas, vasculares y generales.</p>
+            <dl class="kv-row"><dt>IRA asociada a sepsis</dt><dd>En un metaanálisis de 189 estudios con 150.978 pacientes, la IRA asociada a sepsis ocurría en el 40% de los pacientes, con una mortalidad del 48%, daño renal persistente del 40% y dependencia de la diálisis en el 10%.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Tabla 2. Etiología de la IRA por mecanismo patogénico</p>
+            <table class="data-table">
+                <thead><tr><th>Tipo</th><th>Mecanismo</th><th>Ejemplos</th></tr></thead>
+                <tbody>
+                    <tr><td rowspan="3"><strong>Prerrenal — hipoperfusión (*)</strong></td><td>Vascular: vasodilatación</td><td>Shock séptico (sistémico), síndrome hepatorrenal (local)</td></tr>
+                    <tr><td>Vascular: vasoconstricción</td><td>Preeclampsia, rabdomiólisis, contraste yodado, hipercalcemia, ↑presión intraabdominal (pancreatitis, cirugía abdominal), ↑permeabilidad vascular (anafilaxia, tormenta de citoquinas, CAR-T, quemados)</td></tr>
+                    <tr><td>Cardíaco / volemia</td><td>Disfunción de VD/VI biventricular, IC con FE preservada; ↓volemia (hipovolemia, shock hemorrágico); ↑volemia (congestión, hipoproteinemia)</td></tr>
+                    <tr><td rowspan="3"><strong>Renal / intrínseca</strong></td><td>Inflamatorio / inmune</td><td>Sepsis (PAMPs/DAMPs), glomerulonefritis agudas, nefritis intersticial aguda, vasculitis de pequeño vaso</td></tr>
+                    <tr><td>Toxicidad (*)</td><td>Fármacos, pesticidas, drogas de abuso, alcoholes, setas, mioglobina, hemoglobina libre</td></tr>
+                    <tr><td>Oclusión de vasos</td><td>Grandes: trombosis/embolia de arteria renal, trombosis de vena renal. Pequeños: esclerodermia, ateroembolia, microangiopatía trombótica</td></tr>
+                    <tr><td><strong>Posrenal</strong></td><td>Obstrucción del tracto urinario</td><td>Vía urinaria: hipertrofia benigna prostática, neoplasias, litiasis, fibrosis retroperitoneal. Intrarrenal (intratubular): cristales</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Adaptado de Stanski et al. PAMPs, patrones moleculares asociados a patógenos; DAMPs, patrones moleculares asociados a daño. (*) Ambas condiciones (hipoperfusión vascular y toxicidad) se pueden asociar a necrosis tubular aguda.</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Clásicamente la IRA se clasifica en prerrenal, intrínseca o posrenal según el lugar de actuación del mecanismo patogénico. La entidad más frecuente a nivel hospitalario es la necrosis tubular aguda (NTA), producida principalmente por hipoperfusión grave/persistente que provoca isquemia tisular, por exposición a nefrotoxinas, o asociada a sepsis. Clasificaciones más actualizadas buscan mecanismos patogénicos más precisos para identificar posibles dianas terapéuticas y describir subfenotipos específicos (ver Fichas 3 y 4).</p>
+        </div>
+
+        <div id="fra-subfenotipos-1" class="tab-content">
+            <h3 style="color: var(--accent-red);">Subfenotipos clínicos I: posquirúrgica, sepsis y tóxica</h3>
+
+            <p class="section-label">IRA posquirúrgica</p>
+            <dl class="kv-row"><dt>Patogenia</dt><dd>El factor inicial es la hipoperfusión renal, que puede ir asociada a hipovolemia (sangrado, pérdidas insensibles, terceros espacios), descenso del gasto cardíaco, o vasodilatación sistémica por la anestesia o la propia cirugía. La hipoperfusión mantenida asociada a un fallo de la autorregulación renal puede conducir a isquemia tubular y NTA — con liberación de PAMPs que activan la respuesta inflamatoria y oxidativa, la cascada de la coagulación, y producen daño endotelial, aumento de la permeabilidad capilar, microtrombosis y alteración del flujo intrarrenal.</dd></dl>
+            <ul class="term-chips">
+                <li>Exposición a fármacos nefrotóxicos</li>
+                <li>Daño de isquemia y reperfusión</li>
+                <li>↑Presión intraabdominal por neumoperitoneo (laparoscopia)</li>
+                <li>Hemólisis y microémbolos en cirugía cardíaca</li>
+                <li>Respuesta inflamatoria tras circulación extracorpórea prolongada</li>
+            </ul>
+            <dl class="kv-row"><dt>Bloqueo del SRAA perioperatorio</dt><dd>Hasta hace poco se recomendaba suspender sistemáticamente el bloqueo del SRAA antes de la cirugía; hoy esta recomendación no está tan clara, ya que existe evidencia de que su uso no implica necesariamente un mayor riesgo de IRA. Actualmente sí se recomienda la suspensión previa a la cirugía de los iSGLT2 — aunque un estudio sugiere un efecto nefroprotector del uso crónico de iSGLT2 frente al contraste en diabéticos sometidos a revascularización percutánea cardíaca, por lo que se necesitan más estudios.</dd></dl>
+            <dl class="kv-row"><dt>Tratamiento</dt><dd>No existe tratamiento específico, solo etiológico y de soporte. Es fundamental aplicar las medidas preventivas recomendadas por KDIGO en pacientes de riesgo (ver Ficha 8).</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">IRA en la sepsis</p>
+            <dl class="kv-row"><dt>Magnitud</dt><dd>En la UCI, la sepsis suele ser la causa más frecuente de IRA, pudiendo afectar al 45-70% de los pacientes. Alrededor del 10% llegará a requerir tratamiento renal sustitutivo, con una mortalidad que puede incrementarse hasta el 60%. Comporta también mayor estancia hospitalaria, mayor comorbilidad cardiovascular y mayor riesgo de ERC.</dd></dl>
+            <table class="data-table">
+                <thead><tr><th>Situación</th><th>Definición</th></tr></thead>
+                <tbody>
+                    <tr><td>IRA asociada a sepsis</td><td>Ambas situaciones concurren simultáneamente y la IRA se diagnostica dentro de los 7 días tras el diagnóstico de sepsis. Se relaciona con congestión venosa, síndrome compartimental abdominal o nefrotoxicidad por fármacos — otras causas que no dependen directamente de la sepsis</td></tr>
+                    <tr><td>IRA inducida por la sepsis</td><td>El mecanismo principal del daño renal es consecuencia directa de la sepsis. Se subclasifica en temprana (primeras 48h) y tardía (entre las 48h y el 7º día) — un subfenotipo en sí mismo</td></tr>
+                </tbody>
+            </table>
+            <dl class="kv-row"><dt>Mecanismos patogénicos implicados</dt><dd>Inicialmente se produce un incremento de los PAMPs; según la susceptibilidad individual (dependiente de características genéticas) y la disfunción orgánica resultante, predominará uno u otro mecanismo: alteraciones micro y macrocirculatorias, inflamación, inmunomodulación, activación del complemento, disfunción del SRAA, reprogramación del metabolismo, y disfunción mitocondrial.</dd></dl>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">La heterogeneidad de su forma de presentación explica que aún no exista un tratamiento específico pese a los diferentes ensayos realizados. El pronóstico de la IRA por sepsis está ligado estrechamente al pronóstico de la propia sepsis, donde el tratamiento fundamental va dirigido al control del foco infeccioso.</p>
+
+            <p class="section-label" style="margin-top:16px;">IRA tóxica</p>
+            <dl class="kv-row"><dt>Incidencia según el contexto</dt><dd>A nivel hospitalario, la causa principal de IRA tóxica son los fármacos, representando el 16-29% de todas las causas de IRA. A nivel extrahospitalario se añade el uso de drogas de abuso, hierbas medicinales, metales pesados, pesticidas y alcoholes — con una incidencia que puede oscilar entre el 59-72%, aumentando con la edad y la polifarmacia.</dd></dl>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>☠️ Mecanismos del daño renal por toxicidad</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <ul class="term-chips">
+                            <li>Toxicidad tubular directa</li>
+                            <li>Toxicidad por componentes eliminados por secreción tubular desde la membrana basolateral (interferencias metabólicas → necrosis y apoptosis)</li>
+                            <li>Depósito de cristales intratubulares (obstrucción y lesión celular)</li>
+                            <li>Formación de cilindros intratubulares</li>
+                            <li>Alteraciones de la hemodinámica intrarrenal</li>
+                            <li>Reacciones inmunoalérgicas (nefritis inmunoalérgica)</li>
+                            <li>Rabdomiólisis</li>
+                            <li>Daño endotelial directo, incluida la microangiopatía trombótica (MAT)</li>
+                            <li>Isquemia crónica</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <dl class="kv-row"><dt>Factores moduladores</dt><dd>En algunos casos, la lesión depende exclusivamente del mecanismo de acción del tóxico; en otras ocasiones intervienen además factores de riesgo no modificables (edad, sexo, alteraciones farmacogenéticas) y modificables (estado de hidratación, alteraciones metabólicas y del equilibrio ácido-base), además de la comorbilidad del paciente.</dd></dl>
+            <dl class="kv-row"><dt>Tratamiento</dt><dd>Retirada del tóxico o fármaco implicado, junto con terapia de soporte.</dd></dl>
+        </div>
+
+        <div id="fra-subfenotipos-2" class="tab-content">
+            <h3 style="color: var(--accent-yellow);">Subfenotipos clínicos II: cardíaca, hepática, embarazo y obstructiva</h3>
+
+            <p class="section-label">IRA en la insuficiencia cardíaca — Síndrome Cardiorrenal tipo I</p>
+            <dl class="kv-row"><dt>Definición</dt><dd>Aparición de IRA en el contexto de una insuficiencia cardíaca descompensada. Incidencia estimada del 25-30%, que se incrementa hasta el 60% en pacientes con ERC previa.</dd></dl>
+            <dl class="kv-row"><dt>Mecanismos patogénicos</dt><dd>Hipoperfusión renal por incapacidad de mantener el gasto cardíaco, con frecuencia acompañada de congestión venosa sistémica que aumenta la presión en las venas renales y produce congestión glomerular y edema intersticial renal — ambas situaciones reducen el flujo intrarrenal. La disminución del flujo intrarrenal activa el sistema nervioso simpático y el eje SRAA, que aumentan la retención hidrosalina para intentar aumentar la precarga, empeorando paradójicamente la congestión. Finalmente se genera un estado inflamatorio con ↑estrés oxidativo, que incrementa la disfunción renal y miocárdica.</dd></dl>
+            <dl class="kv-row"><dt>Clasificación por FEVI</dt><dd>FEVI preservada (&gt;50%), moderadamente disminuida (40-49%) y deprimida (&lt;40%) — en todas se debe evaluar el aumento de las presiones a nivel del ventrículo derecho, que puede traducirse en un aumento de la presión del compartimento venoso renal, reduciendo el gradiente entre la presión arterial y venosa renal y disminuyendo el flujo intrarrenal.</dd></dl>
+            <dl class="kv-row"><dt>Evaluación a pie de cama</dt><dd>La ecocardiografía y el VExUS (VExUS: valoración ecográfica de la congestión venosa) permiten obtener estos datos de forma sencilla y dirigir la terapia de descongestión.</dd></dl>
+            <dl class="kv-row"><dt>Tratamiento</dt><dd>En la IRA asociada a insuficiencia cardíaca, donde con frecuencia se encuentra una nefropatía por congestión, está especialmente indicado el tratamiento diurético, que puede monitorizarse por ecografía.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">IRA en la cirrosis hepática</p>
+            <dl class="kv-row"><dt>Incidencia</dt><dd>Puede alcanzar el 50% de los pacientes con cirrosis hepática (CiH), con un importante impacto negativo en el pronóstico.</dd></dl>
+            <dl class="kv-row"><dt>Criterios ICA (International Club of Ascites)</dt><dd>Añaden a las definiciones clásicas KDIGO los conceptos de progresión (a estadios más graves), regresión (a estadios menos graves), no respuesta (sin regresión), respuesta parcial (regresión a Crs ≥0,3 mg/dl por encima de la basal) y respuesta total (regresión a Crs &lt;0,3 mg/dl por encima del valor basal).</dd></dl>
+            <dl class="kv-row"><dt>Particularidad del estadio 1</dt><dd>Se subclasifica en 1A (Crs &lt;1,5 mg/dl) y 1B (Crs ≥1,5 mg/dl), ya que este segundo grupo presenta peor pronóstico. La función renal puede estar infraestimada por menor producción de creatinina (disfunción hepática, sarcopenia, desnutrición) o por interferencia de la bilirrubina en su medición. El criterio de diuresis se halla suprimido en las guías actuales para la IRA asociada a CiH, dada la oliguria habitual por ávida retención de sodio y agua, su influencia por diuréticos y los defectos de cuantificación de la orina en planta.</dd></dl>
+            <dl class="kv-row"><dt>Causas más frecuentes</dt><dd>Prerrenales (70%), seguidas del síndrome hepatorrenal (SHR-IRA) y la NTA.</dd></dl>
+            <dl class="kv-row"><dt>Diagnóstico de SHR-IRA</dt><dd>Persistencia de disfunción renal &gt;48h, con un incremento de más del doble de la creatinina basal, en un paciente con ascitis, sin respuesta a la retirada de diuréticos y a la expansión de volumen con albúmina. Además, deben haberse descartado shock, nefrotóxicos, proteinuria &gt;500 mg/dl, hematuria, y debe constatarse una exploración ecográfica renal normal.</dd></dl>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩸 Mecanismos fisiopatogénicos hemodinámicos</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Vasodilatación esplácnica</dt><dd>Por mediadores como óxido nítrico y TNF, especialmente con hipertensión portal grave — conlleva hipoperfusión sistémica y ↓volumen circulante efectivo (VCE) a pesar de una volemia normal o aumentada.</dd></dl>
+                        <dl class="kv-row"><dt>Vasoconstricción renal</dt><dd>La ↓VCE activa el SRAA y el sistema nervioso simpático como mecanismo compensador; la producción elevada de noradrenalina y angiotensina II promueve la vasoconstricción renal.</dd></dl>
+                        <dl class="kv-row"><dt>Rarefacción de la circulación en córtex renal</dt><dd>A diferencia de otras causas de IRA por hipoperfusión (donde se preserva la circulación medular), en el síndrome hepatorrenal hay preservación de las nefronas yuxtamedulares, con hipertrofia del asa de Henle, produciendo una elevada retención hidrosalina característica — si no se corrige, puede producir daño irreversible.</dd></dl>
+                        <dl class="kv-row"><dt>Otros mecanismos</dt><dd>Reactividad vascular aumentada en arteriolas del córtex por endotoxemia; reflejo hepatorrenal (activación simpática hepática por hipertensión portal, con vasoconstricción renal secundaria independiente de la volemia); cardiomiopatía cirrótica (deterioro progresivo del gasto cardíaco); hipertensión intraabdominal por ascitis a tensión; hipertensión porto-pulmonar.</dd></dl>
+                        <dl class="kv-row"><dt>Alteraciones no hemodinámicas</dt><dd>Necrosis tubular aguda, nefropatía colémica o por cilindros biliares, inflamación.</dd></dl>
+                    </div>
+                </div>
+            </div>
+            <dl class="kv-row"><dt>Tratamiento del SHR-IRA</dt><dd>El uso de terlipresina junto con albúmina revierte la vasodilatación esplácnica, optimiza la volemia intravascular y consigue la mejoría de la función renal.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">IRA en el embarazo</p>
+            <dl class="kv-row"><dt>Impacto</dt><dd>Elevado impacto en la morbimortalidad materno-perinatal: mayor riesgo de hemorragia uterina, síndrome HELLP, abruptio placentae y parto mediante cesárea. Aumenta también el riesgo cardiovascular y de desarrollar ERC a largo plazo. Su frecuencia es sensiblemente mayor en países en vías de desarrollo que en países del primer mundo (3,1% vs. 0,3%).</dd></dl>
+            <table class="data-table">
+                <thead><tr><th>Grupo</th><th>Causas</th></tr></thead>
+                <tbody>
+                    <tr><td>Prerrenal / hipoperfusión</td><td>Hiperemesis gravídica (sobre todo 1er trimestre); sepsis (abortos sépticos, sepsis urinarias/puerperales); hemorragias uterinas (abruptio placentae, placenta previa/acreta, abortos, atonía o rotura uterina — la hemorragia posparto grave puede condicionar necrosis cortical); insuficiencia cardíaca congestiva</td></tr>
+                    <tr><td>Renal / parenquimatosa</td><td>Necrosis tubular aguda (hipoperfusión mantenida o nefrotoxicidad); necrosis cortical (hasta 5-10% de las causas de IRA en el embarazo, ligada a sepsis puerperal/abruptio/hemorragias graves/muerte intraútero/MAT); glomerulonefritis (LES, síndrome antifosfolípido); microangiopatía trombótica (PTT, SHU — el SHU se diagnostica típicamente en periparto/posparto, con frecuencia un SHUa mediado por complemento precipitado por el embarazo); hígado agudo graso del embarazo; preeclampsia/síndrome HELLP (3-4% de gestaciones, desde semana 20, endoteliosis glomerular, 25-30% puede manifestarse como MAT)</td></tr>
+                    <tr><td>Posrenal</td><td>Hidronefrosis por compresión del útero grávido; nefrolitiasis; lesiones de uréter y/o vejiga (complicación rara, tanto en partos vaginales como en cesáreas)</td></tr>
+                </tbody>
+            </table>
+            <dl class="kv-row"><dt>Tratamiento</dt><dd>Medidas generales comunes a la población general (sueroterapia, antibioterapia, transfusiones, diuréticos, corrección hidroelectrolítica/ácido-base, diálisis si el manejo conservador no es suficiente), más medidas específicas dirigidas a la causa: inmunosupresión compatible con la gestación en GN; en MAT, preeclampsia grave, HELLP, hígado agudo graso o abruptio placentae, el único tratamiento eficaz es la inducción del parto. En la PTT: plasmaféresis (también posible durante la gestación), esteroides, caplacizumab y rituximab. En el SHU: eculizumab/ravulizumab. En la IRA posrenal: derivación de la vía urinaria.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">IRA obstructiva</p>
+            <dl class="kv-row"><dt>Magnitud</dt><dd>Constituye el 10% de las causas de IRA, y su incidencia aumenta con la edad.</dd></dl>
+            <dl class="kv-row"><dt>Fisiopatología</dt><dd>Compleja y dinámica, dependiente de la duración, gravedad y localización de la obstrucción. El aumento de presión en la vía urinaria se transmite de forma retrógrada hacia el parénquima: inicialmente disminuye el FG por el aumento de presión intratubular, que posteriormente se perpetúa por vasoconstricción de las arteriolas eferente y aferente (secundaria a la activación del SRAA y del sistema nervioso simpático). Si no se resuelve, la inflamación intersticial conduce a fibrosis tubular con pérdida de la capacidad de concentración y acidificación de la orina.</dd></dl>
+            <dl class="kv-row"><dt>Tratamiento</dt><dd>Derivación de la vía urinaria de la forma más precoz posible.</dd></dl>
+        </div>
+
+        <div id="fra-diagnostico" class="tab-content">
+            <h3 style="color: var(--accent-blue);">Diagnóstico: clínica, laboratorio e imagen</h3>
+
+            <p class="section-label">Cuadro clínico</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">La clínica es fundamental en el diagnóstico etiológico. Cinco preguntas clave de entrada: 1) ¿es una IRA en un riñón previamente normal, sobre una ERC preexistente, o es en realidad una ERC?; 2) ¿es probable una obstrucción de la vía urinaria?; 3) ¿existen causas de hipoperfusión renal?; 4) ¿hay sospecha de oclusión de grandes vasos renales (arteria o vena)?; 5) ¿hay indicios de enfermedad glomerular o inflamatoria intersticial?</p>
+            <dl class="kv-row"><dt>Anamnesis dirigida</dt><dd>Balance de fluidos, alteraciones en la micción, exposición a nefrotóxicos, síntomas de enfermedad sistémica, rash (nefritis intersticial), livedo reticularis (ateroembolia), púrpura (vasculitis, microangiopatías) y afectación de otros órganos.</dd></dl>
+            <dl class="kv-row"><dt>Volumen de la diuresis</dt><dd>En la IRA por hipoperfusión suele estar reducido, excepto si la causa es una depleción de origen renal (diuresis osmótica, diabetes insípida, insuficiencia suprarrenal), donde se mantendrá hasta que el FG caiga de forma crítica. En la IRA parenquimatosa, la diuresis suele preservarse en la NTA (con oliguria, &lt;400 ml/día) o hay anuria (&lt;100 ml/día) en glomerulonefritis rápidamente progresivas, uropatía obstructiva completa, u oclusión bilateral de grandes vasos (o unilateral sobre riñón único).</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Algoritmo diagnóstico</p>
+            <dl class="kv-row"><dt>1. Elevación de productos nitrogenados</dt><dd>Determinar si cumple criterios de ERC (Δcreatinina &lt;0,3 mg/dl y/o Crs alterada &gt;3 meses) frente a IRA (Δcreatinina ≥0,3 mg/dl en ≤68h, o ≥50% en ≤7 días) frente a "IRA sobre ERC" (ambos patrones combinados) — o, si el cuadro se prolonga &gt;7 días y &lt;3 meses, ERA.</dd></dl>
+            <dl class="kv-row"><dt>2. Datos de hipoperfusión</dt><dd>Si hay datos de hipoperfusión y mejoría al corregirla → IRA por hipoperfusión. Si no mejora o no hay datos claros de hipoperfusión → IRA establecida.</dd></dl>
+            <dl class="kv-row"><dt>3. Ecografía renal ± Doppler</dt><dd>Ante sospecha de obstrucción de vías o de vasos. Vía dilatada → completar estudio con uroTC/uroRM → IRA obstructiva. Vasos anormales → completar estudio con angioTC/angiografía.</dd></dl>
+            <dl class="kv-row"><dt>4. Perfiles IRA (sangre/orina)</dt><dd>Con vías/vasos normales: análisis de orina (índices urinarios, osmolalidad, densidad, sedimento — células, cilindros, cristales) y de sangre (Crs, BUN, equilibrio ácido-base, Na, K, y según sospecha clínica: Ca, P, Mg, CK, LDH, ácido úrico).</dd></dl>
+            <dl class="kv-row"><dt>5. Orientación final</dt><dd>Sin datos de patología glomerular/vascular/intersticial/cristales/depósitos tubulares → necrosis tubular aguda. Con datos positivos → completar estudio, considerando biopsia renal.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Pruebas de laboratorio</p>
+            <dl class="kv-row"><dt>Aclaramiento de creatinina</dt><dd>Puede ayudar a conocer mejor la función renal cuando la TFG es cambiante. En práctica ambulatoria se realiza habitualmente en orina de 24h; en UCI, una recogida de 4h se ha demostrado fiable. La creatinina se filtra pero también se secreta en los túbulos, por lo que el aclaramiento sobreestima la TFG en un 10-20%.</dd></dl>
+            <dl class="kv-row"><dt>Cistatina C</dt><dd>Alternativa o complemento a la Crs: se sintetiza de forma constante en todas las células nucleadas, su producción no se afecta por la masa muscular y se elimina prácticamente por filtración glomerular. Puede influenciarse por corticoides, proteína C reactiva, ERC, diabetes o estados inflamatorios — de ahí que no se haya implementado en los criterios diagnósticos de IRA ni se haya generalizado su medición estandarizada. Es de utilidad para evaluar la función renal en pacientes con IRA recuperada tras ingresos prolongados con pérdida de masa muscular.</dd></dl>
+            <dl class="kv-row"><dt>Otras determinaciones de utilidad en el diagnóstico diferencial</dt><dd>Hemograma (anemia, trombopenia, eosinofilia), frotis (esquistocitos en anemia microangiopática), calcemia, CK, LDH, ácido úrico; inmunología si hay sospecha clínica (complemento, ANCA, anticuerpos antimembrana basal glomerular anti-GBM, cadenas ligeras); equilibrio ácido-base (monitorización de complicaciones y diagnóstico de trastornos primarios); gap osmolar (diferencia entre osmolalidad medida y calculada — ayuda en intoxicaciones por alcoholes).</dd></dl>
+            <dl class="kv-row"><dt>Análisis de la proteinuria</dt><dd>La albuminuria es marcador de patología glomerular o endotelial. La excreción de proteínas de bajo peso molecular (proteinuria sin albuminuria) puede indicar exceso de producción (hemopatías) o déficit de reabsorción tubular (lesión tubular). Debe basarse en la excreción urinaria, ya que la concentración simple o los cocientes proteína/creatinina y albúmina/creatinina pueden sobreestimar los valores reales por la excreción urinaria reducida en la IRA.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">🧮 Calculadora: FENa e IFR</p>
+            <div class="tfg-simulador">
+                <div class="form-group">
+                    <label for="fra-na-orina">Sodio en orina, Nao (mmol/l)</label>
+                    <input type="number" id="fra-na-orina" step="1" min="0" max="300" value="15">
+                </div>
+                <div class="form-group">
+                    <label for="fra-na-serico">Sodio sérico, Nas (mmol/l)</label>
+                    <input type="number" id="fra-na-serico" step="1" min="100" max="170" value="138">
+                </div>
+                <div class="form-group">
+                    <label for="fra-cr-orina">Creatinina en orina, Cro (mg/dl)</label>
+                    <input type="number" id="fra-cr-orina" step="1" min="1" max="500" value="60">
+                </div>
+                <div class="form-group">
+                    <label for="fra-cr-serica">Creatinina sérica, Crs (mg/dl)</label>
+                    <input type="number" id="fra-cr-serica" step="0.01" min="0.1" max="20" value="1.8">
+                </div>
+                <div id="fra-fena-resultado" class="tfg-estado tfg-estado-ok"></div>
+                <p style="font-size: 0.72rem; color: var(--text-muted); margin-top:8px;">FENa = [(Nao × Crs)/(Nas × Cro)] × 100; IFR = (Crs × Nao)/Cro. La interpretación automática se basa en la FENa (&lt;1% sugiere hipoperfusión, &gt;2% sugiere NTA — con especificidad/sensibilidad del 90% en ausencia de ERC previa o tratamiento diurético, según la Tabla 3 de la fuente). El IFR se muestra como dato adicional sin verdicto automático, porque la propia Tabla 3 de la fuente no discrimina con un punto de corte distinto entre ambas situaciones. Ambos índices pierden fiabilidad bajo tratamiento diurético (considerar entonces la FE de urea).</p>
+            </div>
+
+            <table class="data-table">
+                <thead><tr><th>Parámetro</th><th>IRA por hipoperfusión</th><th>NTA</th></tr></thead>
+                <tbody>
+                    <tr><td>Na⁺ orina (mmol/l)</td><td>&lt;10</td><td>&gt;20</td></tr>
+                    <tr><td>FENa (%)</td><td>&lt;1</td><td>&gt;2</td></tr>
+                    <tr><td>IFR (%)</td><td>&gt;1</td><td>&gt;1</td></tr>
+                    <tr><td>Osmolalidad orina (mOsm/kg)</td><td>&gt;450</td><td>&lt;350</td></tr>
+                    <tr><td>Cro/Crs</td><td>&gt;40</td><td>&lt;20</td></tr>
+                    <tr><td>FE urea (%)</td><td>&lt;35%</td><td>&gt;35%</td></tr>
+                    <tr><td>Sedimento</td><td>Cilindros hialinos</td><td>Cilindros granulosos pigmentados, células epiteliales</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Tabla reproducida tal cual la publica la fuente — nótese que la fila de IFR muestra "&gt;1" en ambas columnas (posible inconsistencia del artículo original, dado que conceptualmente el IFR discrimina en el mismo sentido que la FENa); se mantiene fiel al documento fuente en vez de "corregirla" por criterio propio. FENa, fracción de excreción de sodio; IFR, índice de fallo renal; NTA, necrosis tubular aguda.</p>
+
+            <p class="section-label" style="margin-top:16px;">Sedimento de orina</p>
+            <div class="article-figure">
+                <img src="js/modules/nefrologia/img/ira-fig2-sedimento.png" alt="Sedimento de orina: hematíes dismórficos, cilindros eritrocitarios, cilindros granulosos, células epiteliales tubulares desprendidas, cristales de oxalato cálcico" loading="lazy">
+                <div class="article-figure-caption">Figura 2. Sedimento de orina — A. Hematíes dismórficos. B. Cilindros eritrocitarios. C-D. Cilindros granulosos (NTA). E. Cilindros granulosos en rabdomiólisis. F. Células epiteliales tubulares desprendidas (NTA por cirrosis descompensada). G-H. Cristales de oxalato cálcico en intoxicación por etilenglicol (luz clara y polarizada).</div>
+            </div>
+            <table class="data-table">
+                <thead><tr><th colspan="2">Tabla 4. Principales hallazgos en el sedimento de orina en la IRA</th></tr></thead>
+                <tbody>
+                    <tr><td>Cilindros hialinos</td><td>IRA por hipoperfusión</td></tr>
+                    <tr><td>Cilindros pigmentados</td><td>NTA</td></tr>
+                    <tr><td>Cilindros hemáticos</td><td>Glomerulonefritis aguda, vasculitis de pequeño vaso, NTIA, anticoagulantes</td></tr>
+                    <tr><td>Cristales de ácido úrico</td><td>Hiperuricemia/hiperuricosuria, síndrome de lisis tumoral</td></tr>
+                    <tr><td>Cristales de oxalato</td><td>Intoxicación por etilenglicol, hiperoxaluria</td></tr>
+                    <tr><td>Cristales por fármacos</td><td>Aciclovir, ganciclovir, metotrexato, ciprofloxacino, sulfametoxazol</td></tr>
+                    <tr><td>Cristales de estruvita</td><td>Infección por gérmenes urealíticos</td></tr>
+                    <tr><td>Pigmentos de mioglobina</td><td>Rabdomiólisis</td></tr>
+                    <tr><td>Pigmentos de hemoglobina</td><td>Hemólisis intravascular</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">En la NTA isquémica o nefrotóxica se observan, hasta en un 80% de los casos, cilindros granulosos de color marrón o cilindros de células epiteliales desprendidas. Los cilindros hemáticos son patognomónicos de enfermedad glomerular aguda, y a menudo se asocian a hematíes dismórficos. La eosinofiluria sugiere nefritis intersticial inmunoalérgica, pero también puede verse en enfermedad ateroembólica y (en menor cuantía, &lt;5%) en glomerulonefritis proliferativas, pielonefritis, cistitis y prostatitis. A pesar de la importancia del sedimento, existe una gran variabilidad interobservador reportada en la literatura reciente.</p>
+
+            <p class="section-label" style="margin-top:16px;">Test funcionales: prueba de respuesta a furosemida (PRF)</p>
+            <dl class="kv-row"><dt>Fundamento</dt><dd>La respuesta diurética a la furosemida es una medida de la integridad de los túbulos renales.</dd></dl>
+            <dl class="kv-row"><dt>Protocolo</dt><dd>Administración de 1 mg/kg de furosemida IV en pacientes sin tratamiento diurético previo, o 1,5 mg/kg si han estado expuestos a furosemida en los 7 días anteriores, monitorizando la diuresis a las 2 horas.</dd></dl>
+            <dl class="kv-row"><dt>Interpretación</dt><dd>Una diuresis &lt;200 ml predice la progresión de la IRA a estadio 3 o la necesidad de terapia de sustitución renal, con elevada sensibilidad y especificidad.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Pruebas de imagen</p>
+            <dl class="kv-row"><dt>Ecografía renal</dt><dd>Descarta causa obstructiva de vías urinarias en pacientes con factores de riesgo, y evalúa tamaño y morfología renal — algunos casos de IRA obstructiva pueden cursar sin dilatación de vías (fibrosis retroperitoneal, infiltración neoplásica). Riñones pequeños sugieren ERC avanzada (o IRA sobre ERC avanzada); múltiples quistes con riñones grandes sugieren poliquistosis renal. La ecografía a pie de cama es útil como primera evaluación de una posible obstrucción, y permite evaluar perfusión y congestión, así como el seguimiento de la respuesta a diuréticos. En la IRA parenquimatosa puede haber aumento de la ecogenicidad renal, aunque es un signo inespecífico. La ecografía Doppler permite verificar la perfusión renal y descartar obstrucción de arteria o vena renal.</dd></dl>
+            <div class="article-figure">
+                <img src="js/modules/nefrologia/img/ira-fig3-ecografia.png" alt="Ecografía renal: riñón normal frente a riñón con dilatación pielocalicial por uropatía obstructiva" loading="lazy">
+                <div class="article-figure-caption">Figura 3. Ecografía renal — A. Riñón normal. B. Riñón con uropatía obstructiva (dilatación del sistema pielocalicial).</div>
+            </div>
+            <dl class="kv-row"><dt>Pruebas de imagen avanzadas</dt><dd>En ocasiones se precisa afinar más con uroRM (detectar el nivel de una obstrucción urinaria), angioTC, gammagrafía renal o angiografía, para confirmar la sospecha de estenosis de arteria renal.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Biopsia renal</p>
+            <dl class="kv-row"><dt>Uso habitual</dt><dd>Dado que la mayoría de los episodios de IRA hospitalaria se deben a NTA o sepsis (sin tratamiento específico más allá del etiológico), la biopsia renal no se suele realizar en este contexto — el diagnóstico presunto de NTA o IRA por sepsis suele ser por exclusión de otras causas.</dd></dl>
+            <dl class="kv-row"><dt>Cuándo sí está indicada</dt><dd>En IRA atribuida a NTA con un patrón atípico (p. ej. duración &gt;2-3 semanas sin causa clara que lo justifique); cuando se sospecha una glomerulonefritis u otra enfermedad renal primaria (el tratamiento precoz puede prevenir o retrasar la fibrosis renal); cuando la causa de la IRA no está clara, habiéndose descartado hipoperfusión y causas obstructivas de vías o de vasos principales.</dd></dl>
+            <dl class="kv-row"><dt>Seguridad</dt><dd>Procedimiento generalmente seguro, con complicaciones mayores (básicamente sangrado) entre el 2-8%, y necesidad de embolización en solo el 0,3% de los procedimientos — aunque esta incidencia es más elevada en pacientes con IRA, por factores de riesgo concomitantes (uremia, anemia). La decisión debe balancear el riesgo de complicaciones frente al beneficio de una información que determine un tratamiento diferente.</dd></dl>
+        </div>
+
+        <div id="fra-complicaciones-tto" class="tab-content">
+            <h3 style="color: var(--accent-green);">Complicaciones y tratamiento médico</h3>
+
+            <p class="section-label">Complicaciones de la IRA</p>
+            <table class="data-table">
+                <thead><tr><th colspan="2">Complicaciones a corto plazo</th></tr></thead>
+                <tbody>
+                    <tr><td colspan="2">1. Sobrecarga de volumen (responsable de gran parte de las manifestaciones sistémicas) · 2. Acumulación de toxinas urémicas · 3. Alteraciones electrolíticas (hiperpotasemia, hiponatremia fundamentalmente) y del equilibrio ácido-base (acidosis metabólica) · 4. Desregulación del sistema inmune, con mayor riesgo de infección · 5. Alteración de la farmacocinética de los fármacos</td></tr>
+                </tbody>
+            </table>
+            <dl class="kv-row"><dt>Disfunción de otros órganos</dt><dd>La IRA puede asociarse a disfunción de otros órganos, ya sea en el contexto de un fracaso multiorgánico (p. ej. sepsis) o como consecuencia secundaria de la propia IRA (mecanismo proinflamatorio por uremia/acidosis, hemodinámico por sobrecarga de volumen y ↑permeabilidad vascular, o por activación neurohormonal SRAA/SNS/ADH). Órganos afectados: corazón (arritmias, insuficiencia cardíaca), pulmón (edema agudo de pulmón), hígado (congestión hepática, alteración del metabolismo de fármacos), cerebro (encefalopatía urémica) e intestino (congestión, disbiosis, translocación bacteriana).</dd></dl>
+            <dl class="kv-row"><dt>Complicaciones a largo plazo</dt><dd>Evolución a ERC (incluida la necesidad de entrar en programa de diálisis), desarrollo de patología cardiovascular, y mayor mortalidad — desarrolladas en la Ficha 9.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Ajuste del balance de fluidos</p>
+            <dl class="kv-row"><dt>Relevancia</dt><dd>Un exceso de volemia, más allá de la fase de resucitación de una hipovolemia intravascular, se asocia a fracaso multiorgánico y mayor mortalidad. Las guías KDIGO recomiendan el uso de diuréticos en la IRA exclusivamente para la regulación del balance de fluidos, no como tratamiento de la propia IRA. La monitorización de la volemia con parámetros dinámicos y ecografía a pie de cama mejora su manejo, sobre todo en pacientes con insuficiencia cardíaca.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Hiperpotasemia</p>
+            <dl class="kv-row"><dt>Relevancia</dt><dd>Junto a la hipervolemia, es la complicación potencialmente más grave de la IRA. Los niveles de potasio previos a un episodio de hiperpotasemia no predicen mayor mortalidad, pero sí lo pueden hacer después del mismo.</dd></dl>
+            <dl class="kv-row"><dt>Tratamiento activo</dt><dd>Se suele iniciar con niveles de potasio ≥6,5 mmol/l, asociados a cambios electrocardiográficos. Habitualmente: gluconato cálcico (estabilizador de la membrana miocárdica) + insulina-glucosa y/o agonistas beta-2 (promotores de la entrada de potasio a las células). El bicarbonato (otro potenciador de la entrada de potasio a las células) se reserva para pacientes con acidosis metabólica asociada.</dd></dl>
+            <dl class="kv-row"><dt>Eliminación de potasio</dt><dd>Diuréticos, resinas o diálisis. El sulfonato de poliestireno cálcico (resincalcio®) tiene un uso limitado en pacientes críticos o agudos por sus frecuentes efectos secundarios digestivos. Las nuevas resinas —ciclosilicato de sodio y zirconio, y patirómero— se han mostrado eficaces para reducir el potasio de forma rápida y segura, sobre todo el primero, con mejor tolerancia y seguridad que el resincalcio.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Acidosis metabólica</p>
+            <dl class="kv-row"><dt>Relevancia</dt><dd>Muy frecuente en la IRA, se asocia a mayor morbimortalidad. Un pH sérico &lt;7,1 condiciona inestabilidad hemodinámica por depresión miocárdica, vasodilatación arterial y respuesta alterada a drogas vasopresoras.</dd></dl>
+            <dl class="kv-row"><dt>Causas</dt><dd>La propia insuficiencia renal es la causa principal, aunque con frecuencia se asocia a hiperlactacidemia; también la cetoacidosis o intoxicaciones pueden causar acidosis metabólica que acabe en IRA.</dd></dl>
+            <dl class="kv-row"><dt>Papel del bicarbonato sódico</dt><dd>Debe tratarse la causa que produce la acidosis, ya que la administración indiscriminada de bicarbonato sódico no aumenta la supervivencia en la acidosis láctica ni en la cetoacidosis, y no está exenta de efectos adversos (hipervolemia, hiperosmolalidad, acidosis intracelular). En la IRA, el uso de bicarbonato para corregir la acidosis metabólica —fundamentalmente en casos de anion gap aumentado— es controvertido y requiere más estudios.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Otras alteraciones electrolíticas</p>
+            <dl class="kv-row"><dt>Hipocalcemia</dt><dd>Frecuente en la IRA, por reducción de la síntesis de 1,25-vitamina D, hiperfosfatemia y reducción de la reabsorción renal de calcio. Se recomienda su corrección en caso de manifestaciones clínicas asociadas (QT largo en el ECG, síntomas musculares), dado su potencial efecto sobre la hemodinámica y la predisposición a arritmias.</dd></dl>
+            <dl class="kv-row"><dt>Hiperfosfatemia</dt><dd>Por reducción de la excreción renal, aunque también puede provenir de la liberación intracelular en el síndrome de lisis tumoral, la rabdomiólisis o (más raramente) la acidosis láctica y la cetoacidosis. Se asocia a mayor morbimortalidad. En pacientes sin otros criterios de diálisis, se puede corregir con captores de fósforo y dieta. En pacientes con TRS continuo, la hipofosfatemia (no la hiperfosfatemia) se ha asociado a mayor morbilidad y estancia hospitalaria.</dd></dl>
+            <dl class="kv-row"><dt>Hiperuricemia</dt><dd>Frecuente en la IRA, pero solo plantea tratamiento o profilaxis en el contexto del síndrome de lisis tumoral, con alopurinol, febuxostat o rasburicasa según el riesgo. La rasburicasa (enzima que metaboliza el ácido úrico a un metabolito soluble) es de efecto inmediato y se reserva a los pacientes de mayor riesgo.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Nutrición en la IRA</p>
+            <table class="data-table">
+                <thead><tr><th colspan="2">Recomendaciones KDIGO de nutrición en la IRA</th></tr></thead>
+                <tbody>
+                    <tr><td>Aporte calórico</td><td>20-30 kcal/kg/día</td></tr>
+                    <tr><td>Proteínas — no catabólicos</td><td>0,8-1,0 g/kg/día (evitar restricción para retrasar la diálisis)</td></tr>
+                    <tr><td>Proteínas — catabólicos o con TRS</td><td>1,0-1,5 g/kg/día, hasta un máximo de 1,7 g/kg/día si hay TRS continuo e hipercatabolismo</td></tr>
+                    <tr><td>Carbohidratos</td><td>3-5 g/kg/día</td></tr>
+                    <tr><td>Lípidos</td><td>0,8-1,0 g/kg/día</td></tr>
+                    <tr><td>Vía de administración</td><td>Preferentemente enteral, para preservar las funciones digestivas</td></tr>
+                    <tr><td>Objetivo temporal</td><td>Aportar el 80% del objetivo calórico-proteico en las primeras 48-72h</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="fra-trs" class="tab-content">
+            <h3 style="color: var(--accent-red);">Tratamiento renal sustitutivo (TRS) en la IRA</h3>
+
+            <p class="section-label">Inicio del TRS</p>
+            <table class="data-table">
+                <thead><tr><th colspan="2">Indicaciones urgentes de diálisis (la decisión está clara)</th></tr></thead>
+                <tbody>
+                    <tr><td colspan="2">1. Oliguria/anuria que no responde al tratamiento médico habitual (expansión de volumen, diuréticos, drogas vasoactivas, agentes inotrópicos)</td></tr>
+                    <tr><td colspan="2">2. Edema agudo de pulmón que no responde a tratamiento diurético</td></tr>
+                    <tr><td colspan="2">3. Hiperpotasemia &gt;6,5 mmol/l y acidosis metabólica con pH &lt;7,2, refractarias a tratamiento médico</td></tr>
+                    <tr><td colspan="2">4. Retención de productos nitrogenados con complicaciones urémicas secundarias (encefalopatía, pericarditis, diátesis hemorrágica o derrame pericárdico, fundamentalmente)</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Fuera de estas situaciones urgentes, no existen evidencias que permitan establecer una recomendación definitiva sobre cuándo iniciar el TRS.</p>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📊 Los 5 grandes ensayos sobre el momento óptimo de inicio</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Definición de inicio precoz</dt><dd>En estos estudios, el inicio precoz se define como TRS dentro de las primeras 6-12h tras detectar una IRA estadio 2-3.</dd></dl>
+                        <dl class="kv-row"><dt>ELAIN (unicéntrico, Alemania)</dt><dd>Único de los 5 que concluyó que el inicio precoz se asociaba a una supervivencia a los 90 días significativamente superior respecto al inicio retrasado.</dd></dl>
+                        <dl class="kv-row"><dt>AKIKI, IDEAL-ICU y STARRT-AKI</dt><dd>No encontraron diferencias entre el inicio precoz y el tardío. Los tres pusieron en evidencia un hecho trascendente: un porcentaje elevado de los pacientes randomizados a la rama de inicio tardío finalmente no llegó a precisar TRS.</dd></dl>
+                        <dl class="kv-row"><dt>AKIKI 2</dt><dd>Concluyó que, en pacientes críticos con IRA estadio 3 de KDIGO, ante una oliguria &gt;72h y un nitrógeno ureico &gt;140 mg/dl, retrasar el inicio de diálisis se puede asociar a mayor mortalidad a los 60 días.</dd></dl>
+                    </div>
+                </div>
+            </div>
+            <dl class="kv-row"><dt>Metaanálisis y revisión Cochrane (2022)</dt><dd>Un metaanálisis con 5193 pacientes críticos concluyó que el inicio precoz del TRS no supone beneficio en supervivencia ni en recuperación de la función renal, e incrementa el riesgo de eventos adversos asociados a la técnica. Una revisión Cochrane, con nivel de evidencia bajo-moderado, llegó a conclusiones similares: sin beneficio en supervivencia, con un ligero beneficio posible en la recuperación de función renal y probablemente en la estancia en UCI/hospitalaria, pero con mayor riesgo de eventos adversos.</dd></dl>
+            <dl class="kv-row"><dt>En resumen</dt><dd>Se debe individualizar, utilizando criterios clínicos, hemodinámicos y bioquímicos, sopesando los beneficios de un inicio precoz (mejor control metabólico, nutricional, hemodinámico y de volumen) frente al riesgo de precipitarse y someter al paciente a un tratamiento innecesario y no exento de complicaciones.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Modalidades del TRS</p>
+            <dl class="kv-row"><dt>Elección general</dt><dd>No existe un TRS ideal para todos los pacientes — depende de la situación clínica y hemodinámica, de la disponibilidad de técnicas en cada hospital y de la experiencia del equipo con cada modalidad. En el paciente hemodinámicamente estable, la hemodiálisis intermitente (HDI) es la técnica de elección, con frecuencia variable según la situación clínica.</dd></dl>
+            <dl class="kv-row"><dt>Diálisis peritoneal</dt><dd>Su uso en el paciente con IRA es anecdótico en España, aunque un reciente ensayo clínico mostró resultados comparables a la HDI en cuanto a mortalidad — puede ser una técnica válida.</dd></dl>
+            <dl class="kv-row"><dt>TRS continuo (paciente crítico inestable)</dt><dd>Por lo general mejor tolerado. La menor tasa de ultrafiltración y la eliminación más lenta y continua de solutos, sin grandes fluctuaciones de la osmolaridad, se asocian a mejor relleno vascular, menor riesgo de hipovolemia y mejor tolerancia hemodinámica. Tiene además un efecto positivo en la microcirculación (eliminación preferente de líquido del espacio intersticial, con mejoría respiratoria) y un potencial papel inmunomodulador sobre la respuesta inflamatoria en la sepsis. En cuanto a recuperación de función renal o supervivencia, no se ha demostrado la superioridad de una técnica sobre la otra.</dd></dl>
+            <dl class="kv-row"><dt>Situaciones donde KDIGO sugiere preferir el TRS continuo</dt><dd>Pacientes neurocríticos (lesión cerebral aguda, edema cerebral generalizado, otras causas de ↑presión intracraneal), y pacientes hemodinámicamente inestables (PAM &lt;70 mmHg, con necesidad de soporte vasoactivo y/o dosis de noradrenalina ≥0,1 mcg/kg/min). En el resto de casos, incluidos pacientes críticos hemodinámicamente estables, la HDI será la técnica de elección.</dd></dl>
+            <dl class="kv-row"><dt>Estrategias para evitar la hipotensión durante la HDI</dt><dd>Conexión isovolémica (simultánea) de las líneas con circuito cebado con salino; evaluación diaria de la volemia (aumentando la frecuencia de diálisis si la ultrafiltración requerida pone en riesgo la estabilidad hemodinámica); concentración de sodio alta en el líquido de diálisis (conductividad total ≥14 mS/cm); perfiles descendentes de sodio y de ultrafiltración; concentración de calcio en el LD de 3 mEq/l y de potasio ≥2 mEq/l; temperatura baja del LD (&lt;37ºC); limitación del flujo de sangre en pacientes de riesgo. Se recomiendan dializadores de alto flujo, con membranas sintéticas y biocompatibles, evitando las celulósicas no modificadas.</dd></dl>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔀 Técnicas híbridas (PIRRT)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Qué son</dt><dd>Terapia de reemplazo renal intermitente prolongada — técnicas intermedias entre la HDI y las continuas, con distintas nomenclaturas: diálisis extendida (ED), diálisis diaria extendida (EDD), hemodiálisis lenta de baja eficiencia (SLED), hemodiafiltración de alto flujo extendida (E-HDF).</dd></dl>
+                        <dl class="kv-row"><dt>Escenarios de uso</dt><dd>a) Sustitución del TRS continuo; b) paso intermedio en el "destete" desde un TRS continuo a una HDI convencional; c) alternativa a la HDI convencional.</dd></dl>
+                        <dl class="kv-row"><dt>Características técnicas</dt><dd>Sesiones de 8-12 horas, con flujos menores que la HDI convencional (sangre 150-200 ml/min, líquido de diálisis hasta 200 ml/min) — la duración prolongada permite una ultrafiltración horaria más modesta, con mejor tolerancia hemodinámica que la HDI convencional. Frecuencia óptima de 4-7 sesiones/semana.</dd></dl>
+                        <dl class="kv-row"><dt>Ventajas</dt><dd>Comparadas con el TRS continuo, sin diferencias en estabilidad hemodinámica ni mortalidad, pero con mayor disponibilidad del paciente para movilización, fisioterapia o pruebas fuera de UCI (sobre todo si se realizan por la noche); menor exposición a la anticoagulación y menor coste económico. La National Kidney Foundation (KDOQI) las recomienda como alternativa válida a las terapias continuas.</dd></dl>
+                    </div>
+                </div>
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Las tres técnicas (HDI, PIRRT, continuas) deben considerarse complementarias, nunca excluyentes, en el manejo del paciente crítico con IRA — con transición desde continuas a PIRRT o HDI cuando se alcanza estabilidad hemodinámica &gt;24h.</p>
+
+            <p class="section-label" style="margin-top:16px;">Dosis de diálisis</p>
+            <dl class="kv-row"><dt>Principio general</dt><dd>Se desconoce la dosis de diálisis más apropiada para reducir la mortalidad — la idea general es que no debe ser fija, sino ajustarse a las necesidades del paciente en cada momento de su evolución, para mantener un medio interno y un balance de fluidos óptimos.</dd></dl>
+            <table class="data-table">
+                <thead><tr><th>Modalidad</th><th>Dosis recomendada</th></tr></thead>
+                <tbody>
+                    <tr><td>TRS continuo</td><td>25-30 ml/kg/h</td></tr>
+                    <tr><td>HDI</td><td>Kt/V semanal de 3,9</td></tr>
+                    <tr><td>Técnicas híbridas (6 sesiones/semana)</td><td>Kt/V monocompartimental por sesión de 0,9, para lograr un Kt/V estándar semanal de 3,5</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Tras los resultados de los ensayos ATN y RENAL, se aprendió que existe una dosis de diálisis por encima de la cual no se observan beneficios en supervivencia y aumenta el riesgo de efectos secundarios — de ahí las dosis recomendadas arriba, en vez de dosis más intensivas.</p>
+
+            <p class="section-label" style="margin-top:16px;">Anticoagulación</p>
+            <dl class="kv-row"><dt>Técnicas intermitentes</dt><dd>Predomina la heparina sódica no fraccionada como método de elección, seguida de la heparina de bajo peso molecular. Si existe contraindicación, es relativamente frecuente realizar las sesiones sin anticoagulación, con éxito.</dd></dl>
+            <dl class="kv-row"><dt>Técnicas continuas</dt><dd>La necesidad de anticoagular durante tiempos prolongados para prevenir la coagulación del circuito extracorpóreo (CEC) es uno de sus principales problemas. La heparina sódica prefiltro (5-10 U/kg/hora) sigue siendo un método válido, aunque puede asociarse a hemorragia y trombocitopenia inducida por heparina.</dd></dl>
+            <dl class="kv-row"><dt>Anticoagulación regional con citrato (ARC)</dt><dd>Desde la recomendación de la guía KDIGO de 2012, que la establece como método de elección, su uso se ha ido generalizando. Solo afecta al circuito extracorpóreo. Su base es la eficacia (alarga la vida de los filtros) y la seguridad (reduce el riesgo de sangrado comparada con la heparina) — se posiciona como terapia recomendada en el paciente crítico con alto riesgo de sangrado y necesidad de TRS continuo. Si existe riesgo de sangrado y está contraindicada la ARC, se puede proceder a terapia sin anticoagulación.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Finalización del TRS</p>
+            <dl class="kv-row"><dt>Principio general</dt><dd>El TRS debería retirarse cuando ya no se requiera, bien porque la función renal esté en fase de recuperación (permitiendo depuración de solutos y balances suficientes), o bien porque continuar con ella no esté acorde a los objetivos terapéuticos generales.</dd></dl>
+            <dl class="kv-row"><dt>Riesgo de retirar precozmente</dt><dd>La necesidad de reiniciar el TRS precozmente (en el espacio de una semana) se ha asociado a un aumento de la mortalidad — aunque es difícil discernir si existe una relación directa de causalidad o si es, más bien, un marcador de enfermedad más grave.</dd></dl>
+            <table class="data-table">
+                <thead><tr><th>Parámetro orientativo</th><th>Valor propuesto</th></tr></thead>
+                <tbody>
+                    <tr><td>Diuresis espontánea (sin diuréticos)</td><td>≥430 ml/día — predice retirada exitosa (área bajo la curva 0,845)</td></tr>
+                    <tr><td>Diuresis espontánea (con diuréticos)</td><td>&gt;500 ml/día, o &gt;2500 ml/día en presencia de diuréticos, según distintos autores</td></tr>
+                    <tr><td>Aclaramiento de creatinina en 2h, previo a la retirada del TRS continuo</td><td>&gt;23 ml/min predice la no necesidad de TRS en los días siguientes (valor predictivo positivo 88,8%)</td></tr>
+                    <tr><td>Aclaramiento de creatinina en orina de 24h</td><td>&gt;15 ml/min</td></tr>
+                    <tr><td>Test de respuesta a furosemida</td><td>De gran utilidad para decidir la retirada exitosa (ver Ficha 5)</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Existe consenso en que los diuréticos no deben administrarse para prevenir o acelerar la recuperación de la función renal, ni para tratar la IRA en sí misma — están indicados únicamente para el tratamiento de la sobrecarga hídrica.</p>
+        </div>
+
+        <div id="fra-prediccion" class="tab-content">
+            <h3 style="color: var(--accent-yellow);">Predicción y prevención de la IRA</h3>
+
+            <dl class="kv-row"><dt>Limitación de la creatinina para la detección precoz</dt><dd>La determinación de creatinina sérica ha sido históricamente la herramienta principal para detectar la IRA, pero su elevación puede ser tardía, y su concentración está influida por la masa muscular, el volumen de distribución o interferencias analíticas (p. ej. en pacientes con hiperbilirrubinemia).</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Biomarcadores de lesión renal</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Implicados en diferentes procesos fisiopatológicos relacionados con la lesión tubular, la inflamación, la integridad glomerular o el estrés celular. Entre los más estudiados: KIM-1 (Kidney Injury Molecule-1), NGAL (Neutrophil Gelatinase-Associated Lipocalin), L-FABP (Liver-type Fatty Acid Binding Protein), cistatina C, hemojuvelina, NAG (N-acetil-β-D-glucosaminidasa), Netrina-1, GGT (gamma-glutamil transferasa), GST (glutatión-S-transferasa), TIMP-2 (Tissue Inhibitor of Metalloproteinases-2) e IGFBP7 (Insulin-like Growth Factor Binding Protein 7).</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧪 NephroCheck® (TIMP-2 × IGFBP7)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">TIMP-2 e IGFBP7 se analizan de forma combinada en un parámetro conocido como NephroCheck®, aprobado por la FDA en 2012 como herramienta de estratificación del riesgo de IRA, especialmente en pacientes críticos. Es un marcador de arresto del ciclo celular en los túbulos renales, eficaz en la predicción de IRA moderada y severa. Su aplicación en la práctica clínica habitual aún no se ha generalizado, probablemente por la heterogeneidad de resultados entre estudios y la falta de consenso sobre los puntos de corte. El estudio PrevAKI, que lo usó para discriminar pacientes de alto riesgo (a quienes se aplicaron las medidas de la KDIGO), presentó menos eventos de IRA que el grupo control.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩸 NGAL</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Se sobreexpresa en los túbulos tras un daño isquémico y puede incrementarse de forma precoz en la IRA. Se ha mostrado útil en el diagnóstico diferencial de la IRA en el paciente con cirrosis hepática, discriminando entre el síndrome hepatorrenal (tributario de terlipresina) y la NTA (de manejo conservador).</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📈 Biomarcadores pronósticos: CCL14 y CXCL9</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La ADQI ha propuesto subdividir cada estadio de IRA en marcador (+) y marcador (-) según su capacidad predictiva de evolución. El CCL14 (C-C motif chemokine ligand 14) se ha mostrado útil como marcador de IRA estadio 3 persistente (más de 72h). La CXCL9 (chemokine C-X-C motif ligand 9) es altamente sugestiva de nefritis intersticial aguda.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Inteligencia artificial y modelos predictivos</p>
+            <dl class="kv-row"><dt>Estado actual</dt><dd>En los últimos años se han diseñado modelos de predicción basados en IA y aprendizaje automático, dirigidos a identificar precozmente a los pacientes de alto riesgo de desarrollar IRA para una intervención temprana. Hasta la actualidad, la experiencia publicada no muestra un impacto claro en la prevención de la IRA ni en la mortalidad a corto plazo o en la necesidad de TRS, pero sí parece haber un beneficio en el manejo clínico, acortando la estancia hospitalaria.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Medidas de prevención (KDIGO 2012)</p>
+            <table class="data-table">
+                <thead><tr><th colspan="2">Estrategias orientadas a la prevención y atenuación de episodios de IRA</th></tr></thead>
+                <tbody>
+                    <tr><td colspan="2">Correcto control del volumen y hemodinámico, manteniendo una presión arterial media &gt;65 mmHg</td></tr>
+                    <tr><td colspan="2">Monitorizar la reposición hídrica para evitar la hiperhidratación</td></tr>
+                    <tr><td colspan="2">Preferir soluciones balanceadas sobre soluciones salinas cuando se requieran volúmenes &gt;2 litros (las salinas aumentan el riesgo de IRA por acidosis hiperclorémica)</td></tr>
+                    <tr><td colspan="2">En sepsis, evitar coloides (excepto la albúmina) — se asocian a más IRA con necesidad de hemodiálisis, y a mayor mortalidad</td></tr>
+                    <tr><td colspan="2">Evitar nefrotóxicos y realizar un manejo óptimo de la glucemia</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 En la actualidad, el uso de diuréticos no ha demostrado ser eficaz ni en la prevención ni en el tratamiento de la IRA, a no ser que se encuentre asociada a estados congestivos.</p>
+        </div>
+
+        <div id="fra-evolucion" class="tab-content">
+            <h3 style="color: var(--accent-blue);">Evolución, pronóstico y seguimiento ambulatorio</h3>
+
+            <p class="section-label">Escenarios evolutivos tras un episodio de IRA</p>
+            <dl class="kv-row"><dt>1. Recuperación de la función renal</dt><dd>Puede ser completa (la creatinina retorna a su situación basal) o parcial (no alcanza ese nivel). Incluso cuando la creatinina y el FG vuelven a valores basales, puede haberse producido una reducción significativa de la reserva funcional renal, exponiendo al paciente a mayor susceptibilidad de sufrir nuevos episodios de IRA. La no recuperación de la función renal favorece, entre otros eventos adversos, el desarrollo de ERC.</dd></dl>
+            <dl class="kv-row"><dt>2. Desarrollo de enfermedad renal crónica</dt><dd>Factores que favorecen la progresión a ERC: a) gravedad de la IRA y necesidad de diálisis; b) ámbito en que se produce (intrahospitalario vs. adquirido en la comunidad); c) etiología; d) duración (una IRA persistente, &gt;48h, se asocia a mayor morbimortalidad); e) grado de recuperación de la función renal tras el episodio; f) recurrencia de la IRA; g) reserva funcional renal; h) edad y comorbilidad del paciente (fundamentalmente ERC preexistente, pero también HTA, DM o patología cardiovascular).</dd></dl>
+            <dl class="kv-row"><dt>Proteinuria como marcador de riesgo</dt><dd>El grado de proteinuria tras un episodio de IRA es una valiosa herramienta de estratificación del riesgo de progresión de enfermedad renal — el estudio ASSESS-AKI evidenció que valores más elevados de albuminuria a los 3 meses del alta se asociaban a mayor riesgo de progresión a ERC.</dd></dl>
+            <dl class="kv-row"><dt>3. Desarrollo de enfermedad cardiovascular</dt><dd>Mayor riesgo de eventos cardíacos: cardiopatía isquémica, insuficiencia cardíaca, accidente cerebrovascular agudo.</dd></dl>
+            <dl class="kv-row"><dt>4. Mortalidad</dt><dd>La mortalidad de la IRA es alta, condicionada en gran parte por las complicaciones a corto y largo plazo. Un metaanálisis de 2013 aportó una tasa de mortalidad global del 23%, cifra que aumenta con la gravedad de la IRA, pudiendo alcanzar hasta el 50% en pacientes críticos con necesidad de tratamiento renal sustitutivo.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Seguimiento ambulatorio de la IRA</p>
+            <dl class="kv-row"><dt>Situación actual</dt><dd>No existe una pauta estandarizada sobre el seguimiento que debería realizarse tras un episodio de IRA. Solo un pequeño porcentaje de los pacientes son seguidos tras el alta hospitalaria, y con frecuencia se lleva a cabo un manejo inadecuado. Tampoco hay consenso sobre el momento óptimo ni la duración del seguimiento.</dd></dl>
+            <dl class="kv-row"><dt>Recomendaciones KDIGO</dt><dd>La guía KDIGO de 2012 recomienda un seguimiento a los 3 meses del alta, para ver la evolución de la función renal (resolución de la IRA vs. persistencia con progresión a ERC). Las recomendaciones de 2020 sobre controversias en IRA sugieren que el seguimiento sea más estrecho y precoz cuanto mayor sea la duración y la gravedad de la IRA (fundamentalmente en los casos que requirieron TRS).</dd></dl>
+            <dl class="kv-row"><dt>Recomendación FRASEN (grupo de trabajo de FRA de la Sociedad Española de Nefrología)</dt><dd>Valorar, en el momento del alta hospitalaria, el grado de recuperación de la función renal mediante la determinación de la Crs, acompañada del cociente albúmina/creatinina en orina, y considerar de forma individualizada la realización del aclaramiento de creatinina medido en orina de 24h.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Funciones a llevar a cabo durante el seguimiento</p>
+            <dl class="kv-row"><dt>1. Monitorizar función renal y proteinuria</dt><dd>Creatinina plasmática y FG estimado por CKD-EPI son los parámetros más utilizados, aunque tienen limitaciones (sobre todo en ingresos prolongados con pérdida de masa muscular, donde puede ser útil la cistatina C). Monitorizar la albuminuria mediante el cociente albúmina/creatinina en cada determinación.</dd></dl>
+            <dl class="kv-row"><dt>2. Prevención de la recurrencia</dt><dd>Implementar cuidados y medidas de prevención para evitar nuevos episodios de IRA en la fase de ERA y el desarrollo de ERC, prestando especial atención al control de la HTA, la proteinuria, la diabetes mellitus y las enfermedades cardiovasculares.</dd></dl>
+            <dl class="kv-row"><dt>3. Nefroprotección farmacológica</dt><dd>Evitar el uso de fármacos nefrotóxicos (educar en nefroprotección) y propiciar el uso de fármacos nefroprotectores: iniciar o restablecer el tratamiento (si se hubiera suspendido durante el ingreso) con IECA/ARA II, antialdosterónicos e iSGLT2, que pueden ayudar a prevenir el desarrollo de una ERC.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">¿Quién debe hacer el seguimiento?</p>
+            <table class="data-table">
+                <thead><tr><th>Perfil</th><th>Seguimiento recomendado</th></tr></thead>
+                <tbody>
+                    <tr><td>IRA estadio 2 KDIGO, duración &gt;7 días, con historia previa de IRA/ERC o sin recuperación de función renal al alta</td><td>Nefrólogo</td></tr>
+                    <tr><td>Todos los casos de IRA estadio 3, o que requirieron diálisis (con o sin recuperación posterior)</td><td>Nefrólogo</td></tr>
+                    <tr><td>Casos más leves, duración &lt;7 días, con recuperación completa de función renal al alta</td><td>Atención Primaria</td></tr>
+                </tbody>
+            </table>
+            <dl class="kv-row"><dt>Atención multidisciplinar</dt><dd>Siempre que sea posible, se debería intentar un seguimiento por equipo multidisciplinar (nefrólogo, atención primaria, enfermería, farmacia, entre otros) — puede mejorar la evolución de estos pacientes mediante mejor calidad de atención, monitorización más estrecha, mayor educación en salud renal, y conciliación de la medicación.</dd></dl>
+            <dl class="kv-row"><dt>Pacientes que continúan en diálisis al alta</dt><dd>Deben monitorizarse estrechamente el estado hemodinámico y las variaciones del volumen intravascular durante la diálisis — tasas de ultrafiltración más altas y más episodios de hipotensión intradiálisis podrían interferir en la recuperación de la función renal. También se debe controlar periódicamente la diuresis residual.</dd></dl>
+            <dl class="kv-row"><dt>Estratificación por probabilidad de recuperación</dt><dd><strong>Alta probabilidad</strong> (FG normal previo al episodio, pacientes jóvenes con ERC pero sin otras comorbilidades, o dependencia de diálisis &lt;30 días): seguimiento estrecho durante al menos 90 días tras el alta. <strong>Baja probabilidad</strong> (&gt;75 años, ERC avanzada, comorbilidad grave como insuficiencia hepática o cardíaca descompensada, dependencia de diálisis &gt;90 días): considerar situación de ERC terminal establecida, acelerando la implantación de un acceso vascular adecuado y el estudio pretrasplante renal si fueran candidatos.</dd></dl>
+        </div>
     </div>
 
     <div class="card">
@@ -20,7 +646,7 @@
         <ul class="biblio-list">
             <li>
                 <a class="biblio-link" href="https://nefrologiaaldia.org/es-articulo-insuficiencia-renal-aguda-690" target="_blank" rel="noopener">Insuficiencia Renal Aguda</a>
-                <span class="biblio-nota">Gaínza de los Ríos FJ. Capítulo extenso: definición KDIGO, clasificación prerrenal/renal/postrenal, subfenotipos, epidemiología (IRA-sepsis, postquirúrgica), y manejo incluyendo TRR/técnicas híbridas.</span>
+                <span class="biblio-nota">Rodríguez Benítez P, Ramos Terrades N, Poch E. Capítulo extenso: definición KDIGO, clasificación prerrenal/renal/postrenal, subfenotipos, epidemiología (IRA-sepsis, postquirúrgica), y manejo incluyendo TRR/técnicas híbridas. Actualizado 22/9/2025. Fuente de todo el contenido de esta sección.</span>
             </li>
             <li>
                 <a class="biblio-link" href="https://www.nefrologiaaldia.org/es-navegador-tematico" target="_blank" rel="noopener">Lesión Renal Aguda Postcontraste Yodado</a>
