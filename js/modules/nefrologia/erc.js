@@ -87,6 +87,64 @@ function calcCgaCategorizador() {
     box.innerHTML = `FGe (CKD-EPI 2021): <strong>${fge.toFixed(0)} ml/min/1,73m²</strong> — Categoría <strong>${g}${a}</strong>, ${RIESGO_TEXTO[nivel]}${erc}`;
 }
 
+// Evaluación independiente de cada parámetro del panel analítico de una
+// visita (ACR, potasio, bicarbonato, hemoglobina) frente a los umbrales ya
+// citados en las fichas de esta sección (Fichas 1, 7 y 8). Los campos se
+// evalúan de forma independiente y se omiten si están vacíos — nunca se
+// inventa un umbral numérico para parámetros donde la fuente (KDIGO 2024)
+// explícitamente evita un único valor de corte (calcio, fósforo, PTH,
+// ácido úrico, LDL); esos quedan fuera de esta calculadora a propósito y
+// se explican en la tabla maestra de la propia ficha.
+function filaPanel(icono, color, texto) {
+    return `<div style="border-left:3px solid var(${color}); padding:8px 10px; margin-bottom:6px; font-size:0.8rem; background:rgba(255,255,255,0.03);">${icono} ${texto}</div>`;
+}
+
+function calcPanelAnalitico() {
+    const acrEl = document.getElementById('erc-panel-acr');
+    const kEl = document.getElementById('erc-panel-k');
+    const hco3El = document.getElementById('erc-panel-hco3');
+    const hbEl = document.getElementById('erc-panel-hb');
+    const sexoEl = document.getElementById('erc-panel-sexo');
+    const box = document.getElementById('erc-panel-resultado');
+    if (!acrEl || !kEl || !hco3El || !hbEl || !sexoEl || !box) return;
+
+    const filas = [];
+
+    if (acrEl.value !== '') {
+        const acr = Number(acrEl.value);
+        if (acr < 30) filas.push(filaPanel('✅', '--accent-green', `ACR ${acr} mg/g — categoría A1, en objetivo.`));
+        else if (acr <= 300) filas.push(filaPanel('⚠️', '--accent-yellow', `ACR ${acr} mg/g — categoría A2, moderadamente elevada. Revisar bloqueo del SRAA y criterio de iSGLT2 (Ficha 5-6).`));
+        else filas.push(filaPanel('🔴', '--accent-red', `ACR ${acr} mg/g — categoría A3, gravemente elevada. Intensificar bloqueo del SRAA e iSGLT2 si procede (Ficha 5-6); valorar derivación (Ficha 3).`));
+    }
+
+    if (kEl.value !== '') {
+        const k = Number(kEl.value);
+        if (k < 3.5) filas.push(filaPanel('⚠️', '--accent-yellow', `Potasio ${k} mEq/l — hipopotasemia, investigar causa.`));
+        else if (k <= 5.0) filas.push(filaPanel('✅', '--accent-green', `Potasio ${k} mEq/l — en rango normal.`));
+        else if (k <= 5.9) filas.push(filaPanel('⚠️', '--accent-yellow', `Potasio ${k} mEq/l — hiperpotasemia leve-moderada. Iniciar manejo escalonado (Ficha 7).`));
+        else if (k <= 6.4) filas.push(filaPanel('🔴', '--accent-red', `Potasio ${k} mEq/l — hiperpotasemia moderada. Evaluar y tratar (Ficha 7).`));
+        else filas.push(filaPanel('🔴', '--accent-red', `Potasio ${k} mEq/l — hiperpotasemia grave. Actuación inmediata, ECG y monitorización (Ficha 7).`));
+    }
+
+    if (hco3El.value !== '') {
+        const hco3 = Number(hco3El.value);
+        if (hco3 < 18) filas.push(filaPanel('🔴', '--accent-red', `Bicarbonato ${hco3} mEq/l — por debajo de 18, considerar suplementación oral con álcalis (Ficha 7).`));
+        else if (hco3 < 22) filas.push(filaPanel('⚠️', '--accent-yellow', `Bicarbonato ${hco3} mEq/l — algo bajo, vigilar evolución (Ficha 7).`));
+        else filas.push(filaPanel('✅', '--accent-green', `Bicarbonato ${hco3} mEq/l — en rango normal.`));
+    }
+
+    if (hbEl.value !== '') {
+        const hb = Number(hbEl.value);
+        const umbral = sexoEl.value === 'varon' ? 12 : 11;
+        if (hb < umbral) filas.push(filaPanel('⚠️', '--accent-yellow', `Hemoglobina ${hb} g/dl — por debajo de ${umbral} g/dl, compatible con anemia asociada a la ERC (Ficha 8).`));
+        else filas.push(filaPanel('✅', '--accent-green', `Hemoglobina ${hb} g/dl — en rango.`));
+    }
+
+    box.innerHTML = filas.length > 0
+        ? filas.join('')
+        : '<p style="font-size:0.78rem; color:var(--text-muted);">Introduce al menos un valor para ver la evaluación.</p>';
+}
+
 export function init() {
     initCorkboard('erc-corkboard', 'panel-erc-tabs');
 
@@ -95,4 +153,10 @@ export function init() {
         if (el) el.addEventListener('input', calcCgaCategorizador);
     });
     calcCgaCategorizador();
+
+    ['erc-panel-acr', 'erc-panel-k', 'erc-panel-hco3', 'erc-panel-hb', 'erc-panel-sexo'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', calcPanelAnalitico);
+    });
+    calcPanelAnalitico();
 }

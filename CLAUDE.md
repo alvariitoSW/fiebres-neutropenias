@@ -1180,6 +1180,35 @@ por encima que sí diera cabida a todos.
     leído). No se tocó ninguna calculadora existente ni se introdujeron
     fichas nuevas — es una ampliación de profundidad dentro de las 11
     fichas ya existentes, no una reestructuración.
+  - **Ficha 12 (`erc-tratamiento-objetivos`), a petición explícita del
+    usuario**: "Tratamiento por objetivos: guía rápida por analítica" —
+    una ficha de **síntesis pura**, deliberadamente distinta al resto:
+    no añade ningún hecho clínico nuevo, solo reorganiza el contenido ya
+    presente en las Fichas 1-11 desde el ángulo con el que se trabaja a
+    pie de cama (una analítica real delante, no un tema de estudio).
+    Consta de 3 bloques: 1) una **calculadora** (`calcPanelAnalitico()`
+    en `erc.js`) que evalúa de forma independiente ACR, potasio,
+    bicarbonato y hemoglobina (con selector de sexo) contra los umbrales
+    ya citados en las Fichas 1/7/8, mostrando un semáforo ✅/⚠️/🔴 por
+    parámetro — **deliberadamente NO incluye** calcio, fósforo, PTH,
+    ácido úrico ni LDL como campos evaluables con veredicto numérico,
+    porque la propia fuente (KDIGO 2024) evita un único valor de corte
+    para esos parámetros ("evaluación conjunta y seriada", "fire-and-forget");
+    2) una **tabla maestra** de 13 filas (una por parámetro analítico:
+    creatinina/FGe, ACR, urea, sodio, potasio, bicarbonato, calcio,
+    fósforo, PTH, ácido úrico, hemoglobina, LDL, PA) con objetivo/
+    referencia, acción si está alterado, y frecuencia orientativa —
+    cubre explícitamente también los parámetros sin objetivo numérico
+    (p. ej. "Urea/BUN: sin objetivo numérico establecido en manejo
+    ambulatorio — marcador de retención nitrogenada"), en vez de omitirlos;
+    3) un listado de **11 objetivos terapéuticos numerados** (estadio/
+    riesgo, frenar progresión, potasio, acidosis, óseo-mineral, ácido
+    úrico, riesgo CV, nefrotoxicidad/fármacos, anemia, nutrición,
+    derivación/TRS futura), cada uno como `micro-prof-item` con
+    referencia cruzada a la ficha de detalle correspondiente. No se le
+    añadieron preguntas de quiz propias (a diferencia de las Fichas 1-11)
+    porque, al ser pura reorganización sin contenido nuevo, cualquier
+    pregunta duplicaría el banco ya existente de los otros temas.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

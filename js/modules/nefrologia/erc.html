@@ -186,6 +186,22 @@
                 </div>
             </div>
         </div>
+
+        <div class="field-card" data-tab="erc-tratamiento-objetivos">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 12</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><circle cx="24" cy="28" r="10" fill="none" stroke="var(--accent-green)" stroke-width="2"/><circle cx="56" cy="28" r="10" fill="none" stroke="var(--accent-yellow)" stroke-width="2"/><path d="M34,28 h12" stroke="var(--text-muted)" stroke-width="1.5"/></svg>
+                    <div class="field-name">Tratamiento por objetivos: guía por analítica</div>
+                    <div class="field-hook">Ante una analítica de seguimiento de ERC, ¿qué parámetros hay que revisar sistemáticamente y con qué objetivo cada uno?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">FGe/creatinina, ACR, potasio, bicarbonato, calcio-fósforo-PTH, ácido úrico, hemoglobina y perfil lipídico — cada uno con su objetivo y su acción si está fuera de rango.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
     </div>
     <p class="tap-hint">Toca una ficha para voltearla, y de nuevo para abrir el tema completo</p>
 
@@ -882,6 +898,108 @@
             <dl class="kv-row"><dt>Cuidados de soporte (supportive care)</dt><dd>Concepto amplio centrado en mejorar la calidad de vida relacionada con la salud en cualquier estadio de la ERC, compatible con recibir terapia renal sustitutiva o no.</dd></dl>
             <dl class="kv-row"><dt>Manejo conservador integral</dt><dd>Alternativa activa, planificada y centrada en la persona a la terapia renal sustitutiva para quienes eligen no iniciarla — incluye comunicación detallada con estimación de pronóstico, planificación de cuidados avanzados, toma de decisiones compartida, manejo activo de síntomas, y apoyo psicológico, social, familiar, cultural y espiritual.</dd></dl>
             <dl class="kv-row"><dt>Planificación de cuidados avanzados (ACP)</dt><dd>Proceso de comunicación entre la persona con ERC, su familia/cuidadores y el equipo sanitario para clarificar las preferencias de cuidados al final de la vida — se considera un componente de todo manejo crónico integral, no algo reservado exclusivamente a quienes eligen cuidados conservadores.</dd></dl>
+        </div>
+
+        <div id="erc-tratamiento-objetivos" class="tab-content">
+            <h3 style="color: var(--accent-green);">Tratamiento por objetivos: guía rápida por analítica</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Ficha de síntesis práctica — no añade contenido nuevo, reorganiza el manejo ya desarrollado en las Fichas 1-11 desde el ángulo con el que se trabaja a pie de cama: los datos analíticos concretos de un paciente delante. Para el razonamiento clínico completo de cada objetivo, consulta la ficha referenciada.</p>
+
+            <p class="section-label" style="margin-top:16px;">🧮 Calculadora: panel analítico de la visita</p>
+            <div class="tfg-simulador">
+                <div class="form-group">
+                    <label for="erc-panel-acr">ACR — cociente albúmina/creatinina (mg/g)</label>
+                    <input type="number" id="erc-panel-acr" step="1" min="0" max="10000" placeholder="p. ej. 45">
+                </div>
+                <div class="form-group">
+                    <label for="erc-panel-k">Potasio sérico (mEq/l)</label>
+                    <input type="number" id="erc-panel-k" step="0.1" min="1" max="10" placeholder="p. ej. 4,8">
+                </div>
+                <div class="form-group">
+                    <label for="erc-panel-hco3">Bicarbonato sérico (mEq/l)</label>
+                    <input type="number" id="erc-panel-hco3" step="1" min="1" max="40" placeholder="p. ej. 20">
+                </div>
+                <div class="form-group">
+                    <label for="erc-panel-hb">Hemoglobina (g/dl)</label>
+                    <input type="number" id="erc-panel-hb" step="0.1" min="1" max="20" placeholder="p. ej. 11,5">
+                </div>
+                <div class="form-group">
+                    <label for="erc-panel-sexo">Sexo</label>
+                    <select id="erc-panel-sexo">
+                        <option value="varon">Varón</option>
+                        <option value="mujer">Mujer</option>
+                    </select>
+                </div>
+                <div id="erc-panel-resultado"></div>
+                <p style="font-size: 0.72rem; color: var(--text-muted); margin-top:8px;">Rellena solo los campos de los que dispongas — cada uno se evalúa de forma independiente. Combínala con la calculadora de FGe/categoría CGA de la Ficha 1 para el panel completo de una visita. Herramienta de estudio, no sustituye el juicio clínico.</p>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Tabla maestra: objetivo y actuación por parámetro</p>
+            <table class="data-table">
+                <thead><tr><th>Parámetro</th><th>Objetivo / referencia</th><th>Si está fuera de rango</th><th>Frecuencia orientativa</th></tr></thead>
+                <tbody>
+                    <tr><td>Creatinina → FGe (CKD-EPI 2021)</td><td>Determina la categoría G (ver Ficha 1)</td><td>Estadifica el riesgo y marca la frecuencia del resto de controles</td><td>Según categoría G×A (Ficha 3)</td></tr>
+                    <tr><td>ACR (albuminuria)</td><td>&lt;30 mg/g (A1)</td><td>A2/A3: intensificar IECA/ARA-II (con su gradación por categoría, Ficha 5) y valorar iSGLT2 si ACR ≥200 (Ficha 6)</td><td>Según categoría G×A (Ficha 3)</td></tr>
+                    <tr><td>Urea/BUN</td><td>Sin objetivo numérico establecido en manejo ambulatorio</td><td>Marcador de retención nitrogenada — relevante sobre todo para valorar clínica urémica y el momento de inicio de diálisis</td><td>Ver Ficha 11</td></tr>
+                    <tr><td>Sodio sérico</td><td>Rango normal de laboratorio</td><td>Vigilar en descompensaciones de volumen; sin objetivo numérico específico de esta guía para la ERC ambulatoria</td><td>Según contexto clínico</td></tr>
+                    <tr><td>Potasio sérico</td><td>3,5-5,0 mEq/l</td><td>Manejo escalonado en 3 líneas — revisar fármacos, dieta, diuréticos/bicarbonato/captadores, y solo como último recurso ajustar el bloqueo del SRAA (Ficha 7)</td><td>En cada control; más frecuente si toma IECA/ARA-II/ns-MRA</td></tr>
+                    <tr><td>Bicarbonato sérico</td><td>Rango normal, evitando &lt;18 mEq/l</td><td>Suplementación oral con álcalis si &lt;18 persistente, sin sobrepasar el límite superior normal (Ficha 7)</td><td>Junto al resto del panel metabólico</td></tr>
+                    <tr><td>Calcio sérico (corregido)</td><td>Sin valor aislado — evaluación conjunta con fósforo y PTH</td><td>Remite a la KDIGO 2017 CKD-MBD para dosificación de quelantes/vitamina D/calcimiméticos (Ficha 8)</td><td>Junto a fósforo y PTH desde G3a</td></tr>
+                    <tr><td>Fósforo sérico</td><td>Sin valor aislado — evaluación conjunta</td><td>Igual que calcio — el fósforo elevado se asocia a mortalidad y calcificación vascular</td><td>Junto a calcio y PTH desde G3a</td></tr>
+                    <tr><td>PTH</td><td>Sin valor aislado — evaluación conjunta</td><td>Igual que calcio y fósforo</td><td>Junto a calcio y fósforo desde G3a</td></tr>
+                    <tr><td>Ácido úrico</td><td>Sin objetivo de tratamiento si es asintomático</td><td>Tratar solo si hay gota sintomática o urolitiasis — no tratar la hiperuricemia asintomática para frenar la progresión (Ficha 8)</td><td>No requiere seguimiento específico si es asintomático</td></tr>
+                    <tr><td>Hemoglobina</td><td>Anemia si &lt;12 g/dl (varón) o &lt;11 g/dl (mujer)</td><td>Remite a la KDIGO 2012 Anemia Guideline para tratamiento/dosificación (Ficha 8)</td><td>Junto al resto del panel</td></tr>
+                    <tr><td>Perfil lipídico (LDL)</td><td>Decisión basada en riesgo, no en cifra ("fire-and-forget")</td><td>No se recomienda monitorización rutinaria tras iniciar estatina, salvo mala adherencia o dislipemia secundaria grave (Ficha 9)</td><td>No rutinaria tras iniciar tratamiento</td></tr>
+                    <tr><td>PA (medida estandarizada)</td><td>&lt;120 mmHg sistólica</td><td>Intensificar bloqueo del SRAA/tratamiento antihipertensivo según algoritmo de 3 ramas (Ficha 5)</td><td>Cada visita; en casa según indicación</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Objetivos terapéuticos de la ERC</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>1️⃣ Conocer el estadio y el riesgo real</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Calcular el FGe (CKD-EPI 2021) y el ACR en cada visita relevante, categorizar G×A, y estimar el riesgo de progresión con una ecuación validada (KFRE) — determina la intensidad de todo lo demás. Ver Fichas 1-3.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>2️⃣ Frenar la progresión renal</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Objetivo de PA &lt;120 mmHg sistólica, bloqueo del SRAA graduado por albuminuria, e iSGLT2/ns-MRA/GLP-1 según los criterios específicos de cada uno. Es el bloque farmacológico de mayor impacto pronóstico. Ver Fichas 5-6.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>3️⃣ Controlar el potasio</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Especialmente relevante al iniciar o intensificar fármacos que actúan sobre el SRAA — el objetivo no es solo bajar el potasio, sino hacerlo sin renunciar a estos fármacos, cuyo beneficio cardiovascular y renal supera el riesgo de suspenderlos. Ver Ficha 7.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>4️⃣ Corregir la acidosis metabólica</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Suplementar con álcalis si el bicarbonato es persistentemente &lt;18 mEq/l, con el objetivo de normalizarlo sin superarlo — la acidosis no corregida acelera la progresión y el catabolismo muscular. Ver Ficha 7.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>5️⃣ Vigilar el metabolismo óseo-mineral</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Calcio, fósforo y PTH se interpretan siempre juntos, nunca de forma aislada, a partir de G3a — el fósforo elevado es el que más se asocia a mortalidad y calcificación vascular. Ver Ficha 8.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>6️⃣ Manejar el ácido úrico con criterio</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Tratar únicamente si hay gota sintomática o urolitiasis — la evidencia no respalda tratar la hiperuricemia asintomática para frenar la ERC, y el fármaco de elección (alopurinol) tiene mejor perfil de seguridad cardiovascular que febuxostat. Ver Ficha 8.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>7️⃣ Reducir el riesgo cardiovascular</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Estatinas por edad/FGe con estrategia "fire-and-forget", antiagregación en prevención secundaria, y anticoagulación con NOAC preferente sobre warfarina si hay fibrilación auricular — el riesgo de muerte cardiovascular supera al de progresar a fallo renal en la mayoría de personas con ERC. Ver Ficha 9.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>8️⃣ Evitar la nefrotoxicidad y ajustar la medicación</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Revisar la medicación en cada visita (cascada de prescripción, "sick day rules", ajuste de dosis por FGe), y usar la dosis mínima de contraste necesaria cuando se precise una prueba de imagen. Ver Ficha 10.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>9️⃣ Vigilar la anemia</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Cribado con hemoglobina en el panel analítico habitual desde estadios tempranos, con manejo específico remitido a la guía KDIGO 2012 de anemia. Ver Ficha 8.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔟 Optimizar la nutrición y el estilo de vida</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Ingesta proteica ajustada (0,8 g/kg/día sin diabetes), restricción de sodio &lt;2 g/día, ejercicio, peso saludable y cribado de malnutrición en G4-G5 — medidas coadyuvantes, nunca sustitutivas, del tratamiento farmacológico. Ver Ficha 4 y Ficha 11.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>1️⃣1️⃣ Planificar la derivación y el futuro tratamiento renal sustitutivo</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Derivar a nefrología según criterios de riesgo/FGe/albuminuria, y anticipar la preparación de acceso o trasplante preventivo cuando el riesgo de fallo renal sea &gt;40% a 2 años o el FGe esté en 15-20 ml/min/1,73m². Ver Ficha 11.</div>
+                </div>
+            </div>
         </div>
     </div>
 
