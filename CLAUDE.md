@@ -1087,6 +1087,84 @@ por encima que sí diera cabida a todos.
       única de `initQuiz` (`triggerId` ganó un 4º botón,
       `btn-fra-repasar`). El banco combinado Nefrología+HTA+ERC+FRA
       queda en **503 preguntas** (431+72).
+  - **Auditoría sistemática de `erc.html` contra la guía KDIGO 2024**: tras
+    completar el módulo, se hizo una relectura íntegra y deliberada de las
+    198 páginas de la fuente comparándolas frase a frase con el contenido
+    ya construido, para detectar tanto huecos como imprecisiones — no una
+    relectura superficial, sino un cotejo sistemático ficha por ficha.
+    Se encontró y corrigió una **imprecisión clínica real**: el texto
+    original de la Ficha 6 decía que el iSGLT2 se recomienda "con o sin
+    albuminuria significativa" en cualquier persona con ERC — la guía en
+    realidad solo da recomendación firme (1A) sin exigir umbral de
+    albuminuria en personas con diabetes tipo 2, o con insuficiencia
+    cardíaca; en el resto (sin diabetes, sin IC) exige ACR ≥200 mg/g para
+    la recomendación fuerte, y da un grado más débil (2B) por debajo de
+    ese umbral. Se corrigió reemplazando el párrafo por una tabla con las
+    3 recomendaciones diferenciadas y una nota explícita señalando el
+    matiz. Además se añadió contenido genuinamente ausente (no solo
+    corregido), verificado contra la fuente antes de incorporarlo:
+    - Ficha 1: tabla de factores de riesgo de ERC para cribado dirigido
+      (comunes/geográficos-APOL1/genitourinarios/multisistémicos/
+      iatrogénicos/gestacionales/ocupacionales).
+    - Ficha 2: estudio genético en la evaluación de causa (>10% de
+      personas con ERC son portadoras de variantes patogénicas,
+      independientemente de historia familiar; genes "accionables" por
+      categoría de utilidad clínica), sección de POCT como apartado
+      propio, y cifra real de complicaciones de la biopsia (hematoma
+      perirrenal 16%, 12-22% según series).
+    - Ficha 3: otras ecuaciones de riesgo de fallo renal validadas más
+      allá de la KFRE (KPNW, Landray, Z6, Klinrisk, KidneyIntelX), y
+      herramientas de riesgo específicas por enfermedad (puntuación MEST
+      en nefropatía IgA; clasificación Mayo y PROPKD en poliquistosis
+      renal, con su relevancia directa para la elegibilidad a tolvaptán).
+    - Ficha 4: perla práctica sobre gramos de proteína real en 100g de
+      carne (~25g, no 100g — útil para educar al paciente), matiz sobre
+      nefropatías pierde-sal (la restricción de sodio no aplica
+      universalmente), y foco explícito en ultraprocesados como mensaje
+      distinto de "azúcares refinados" en general.
+    - Ficha 5: la recomendación de IECA/ARA-II reformulada como tabla con
+      su fuerza real por categoría de albuminuria (1B en A3 sin diabetes,
+      pero solo 2C —sugerencia débil— en A2 sin diabetes, dato que el
+      texto anterior colapsaba en una única recomendación uniforme),
+      algoritmo de monitorización en 3 ramas (normopotasemia/
+      hiperpotasemia/caída de FGe) y el ensayo STOP-ACEi.
+    - Ficha 6: cifras reales del metaanálisis de iSGLT2 (37%/23%/23%/10%
+      de reducción de progresión/FRA/muerte CV-IC/MACE), y el algoritmo
+      exacto de monitorización de potasio con finerenona (≤4,8 iniciar,
+      4,9-5,5 continuar, >5,5 pausar) con las cifras reales de riesgo de
+      hiperpotasemia del análisis FIDELITY.
+    - Ficha 8: el ensayo **CARES** (febuxostat vs. alopurinol: no
+      inferior en el objetivo CV compuesto, pero con mayor mortalidad
+      total y CV — señal de seguridad real que refuerza preferir
+      alopurinol), los 3 ensayos negativos de hiperuricemia asintomática
+      citados por nombre (CKD-FIX, PERL, FEATHER), prevalencia de gota de
+      NHANES, y el umbral práctico de inicio de tratamiento tras un
+      primer episodio de gota (ácido úrico >9 mg/dl o urolitiasis).
+    - Ficha 9: la complejidad diagnóstica del síndrome coronario agudo en
+      ERC (ergometría limitada, troponina de interpretación cauta,
+      presentación atípica como IC/síncope en vez de dolor torácico), y
+      la escala **HAS-BLED** junto al CHA₂DS₂-VASc ya existente, más la
+      estrategia diagnóstica en 3 pasos de la Figura 40 de la fuente.
+    - Ficha 10: el concepto de **cascada de prescripción**
+      ("prescribing cascade", con el ejemplo clásico calcioantagonista→
+      edema→diurético→hipopotasemia→más fármacos), el marco de revisión/
+      conciliación de medicación, contexto global de acceso a fármacos, y
+      una sección nueva de **fármacos y embarazo** (qué suspender antes
+      de la concepción — IECA/ARA-II, inhibidores de mTOR — y qué
+      mantener durante la gestación — hidroxicloroquina, tacrolimus,
+      azatioprina, prednisona, colchicina, IVIG).
+    - Ficha 11: sección de **telesalud** (monitorización remota,
+      educación, prestación de cuidados por vía digital), marco de
+      educación del paciente por estadio (G1-G2/G3-G4/G5), y dos entradas
+      de manejo de síntomas que faltaban en el acordeón (trastornos del
+      sueño, falta de apetito/náuseas — antes solo aparecían en la lista
+      de prevalencia sin manejo asociado).
+    Todas las adiciones se verificaron contra el texto exacto de la
+    fuente antes de incorporarlas (igual criterio que en el resto de la
+    app: nunca fabricar contenido clínico sin respaldo directo en el PDF
+    leído). No se tocó ninguna calculadora existente ni se introdujeron
+    fichas nuevas — es una ampliación de profundidad dentro de las 11
+    fichas ya existentes, no una reestructuración.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
