@@ -1271,6 +1271,92 @@ por encima que sí diera cabida a todos.
       mismo método ya establecido en la primera auditoría de bibliografía
       — `WebFetch` a `nefrologiaaldia.org` sigue bloqueado por el proxy de
       salida de red, así que no es una opción para verificar directamente.
+  - **`trr.html`** (objetivo de rotación 7, "Terapias de reemplazo renal")
+    fue la 4ª de las 6 categorías del mapa del riñón en pasar de
+    placeholder a contenido real, a partir de Valdenebro M,
+    Martín-Rodríguez L, Tarragón B, Sánchez-Briales P, Portolés J. Una
+    visión nefrológica del tratamiento sustitutivo renal en el paciente
+    crítico con fracaso renal agudo: horizonte 2020. Nefrología.
+    2021;41(2):102-114 — el mismo criterio de siempre: mismo cuaderno de
+    campo (`#trr-corkboard`/`#panel-trr-tabs`, `js/modules/nefrologia/trr.js`
+    vía `core/corkboard.js`), sin resumir el artículo. **6 fichas**, una por
+    cada pregunta que el propio artículo usa como estructura (qué/a
+    quién/cuándo/cuánto/cómo/hasta cuándo): Selección de modalidad (HD
+    intermitente vs. TRR continua vs. híbridas, con la Tabla 1 y Tabla 2 de
+    RCT de mortalidad — ningún RCT ni metaanálisis Cochrane demuestra
+    superioridad de ninguna modalidad), Indicaciones (los 3 pilares
+    clásicos: sobrecarga de volumen, alteraciones electrolíticas/ácido-base,
+    síntomas urémicos), Momento de inicio (Tabla 3 de 5 RCT — inicio precoz
+    solo con beneficio claro en posquirúrgicos con TRR continua), Dosis/
+    intensidad (Tabla 4 de 6 RCT — ninguna dosis alta &gt;25-35ml/kg/h
+    demuestra beneficio general, salvo el subgrupo de quemados con shock
+    séptico de RESCUE), Anticoagulación (Tabla 5 heparina vs. citrato — la
+    RCA se ha estandarizado como técnica de elección) y Finalización (la
+    recuperación de diuresis como criterio principal, transición vía HD
+    extendida como puente). Se añadieron 48 preguntas de quiz
+    (`js/data/trr-preguntas.js`, `trr-q001`-`q048`, 8 por ficha), con
+    `initQuiz` ganando un 5º botón (`btn-trr-repasar`). El banco combinado
+    de Nefrología queda en 551 preguntas (503+48).
+  - **`nefrotoxicidad.html`** (objetivo de rotación 5, "Nefrotoxicidad de
+    fármacos") fue la 5ª categoría en pasar de placeholder a contenido
+    real, y rompe deliberadamente con el patrón de cuaderno de campo — no
+    es contenido teórico para estudiar con preguntas de repaso, es una
+    **tabla de referencia densa para consulta rápida a pie de cama**
+    (585 fármacos), así que usa el acordeón `.micro-prof-item` ya
+    existente (una categoría terapéutica por item, con su `.data-table`
+    dentro) más un **buscador de texto libre** (`#farmaco-buscador`) que
+    filtra filas en vivo por nombre de fármaco, expandiendo automáticamente
+    la(s) categoría(s) con coincidencias y ocultando el resto — patrón
+    nuevo en la app, primera vez que se necesita "buscar en una tabla
+    grande" en vez de "navegar por temas". Fuente: García Montemayor V,
+    Sanchez-Agesta Martínez M, Naranjo Muñoz J. Ajuste de Fármacos en la
+    Enfermedad Renal Crónica. Nefrología al día (SEN), actualizado
+    24/5/2025 — un documento de **26 tablas** (aminoglucósidos hasta
+    misceláneas) con el ajuste de dosis de cada fármaco por aclaramiento de
+    creatinina (100-50/50-10/&lt;10 ml/min, con alguna tabla usando 4
+    bandas en vez de 3 — Antineoplásicos e Inmunomoduladores y
+    Anticoagulantes-Antiagregantes), más suplemento en hemodiálisis y, para
+    los antibióticos/antifúngicos/antivirales, dosis en HFVVC
+    (hemofiltración veno-venosa continua).
+    - **`js/data/ajuste-farmacos-data.js`** son los datos puros: un array
+      `categoriasFarmacos` de 25 categorías (las 26 tablas originales,
+      consolidando "Misceláneas 1" y "Misceláneas 2" en una sola porque en
+      la fuente son la misma tabla partida solo por el salto de página),
+      cada una con `tipo` ('antibiotico' con columna HFVVC, o 'estandar'
+      sin ella), `bandas` opcional (solo si la tabla no usa las 3 bandas de
+      CCr estándar) y `grupos` (subdivisiones internas de la tabla, p. ej.
+      "Aminoglucósidos"/"Carbapenem"/"Cefalosporinas" dentro de
+      Antibióticos 1). Cada fila es un array plano
+      `[nombre, dosisNormal, metodo, ...bandasCcr, hd, hfvvc?]`, no un
+      objeto — más compacto para un dataset de 585 filas y sin pérdida de
+      legibilidad porque el orden es fijo y está documentado en la
+      cabecera del archivo. `nefrotoxicidad.js` (`renderCategoria()`,
+      `cabeceraTabla()`) genera el HTML de cada tabla por JS a partir de
+      estos datos — igual que otros módulos de la app generan
+      `micro-prof-item` por JS (ver CLAUDE.md, sección de ese componente).
+    - **Límite de fidelidad reconocido y documentado explícitamente**: la
+      fuente es un PDF con 26 tablas en letra muy pequeña; para las 5
+      tablas de Antineoplásicos e Inmunomoduladores y para Antibióticos 2
+      (Fluorquinolonas/Macrólidos/Miscelánea antibacterianos) la columna
+      Hemodiálisis no siempre se distinguía con claridad de la última
+      banda de aclaramiento a la resolución de escaneo disponible — en vez
+      de inventar un valor, se repitió el de la banda más baja de CCr como
+      aproximación conservadora, documentado como comentario al principio
+      del propio archivo de datos **y** como aviso visible en la propia
+      página (banner amarillo bajo la introducción: "verifica siempre la
+      dosis exacta en la fuente original antes de prescribir"). Un puñado
+      de nombres de fármaco genuinamente ilegibles a esa resolución se
+      omitieron en vez de adivinarlos (p. ej. una fila entre Ribociclib y
+      Ripretinib en Antineoplásicos 4). Mismo criterio de seguridad clínica
+      ya aplicado antes en la app (p. ej. la Tabla 3 de FRA con el IFR
+      ambiguo, reproducida tal cual en vez de "corregida" por criterio
+      propio) — nunca fabricar una cifra de dosis, siempre declarar la
+      incertidumbre.
+    - Sin preguntas de quiz: al ser una tabla de referencia (no contenido
+      teórico narrativo), no encaja en el patrón pregunta-respuesta del
+      resto de la app — mismo criterio ya aplicado a la Ficha 12 de ERC
+      ("Tratamiento por objetivos"), que tampoco tiene preguntas propias
+      por el mismo motivo.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

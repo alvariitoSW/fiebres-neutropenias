@@ -12,6 +12,7 @@ import { init as initHta } from './hta.js';
 import { init as initErc } from './erc.js';
 import { init as initFra } from './fra.js';
 import { init as initTrr } from './trr.js';
+import { init as initNefrotoxicidad } from './nefrotoxicidad.js';
 import { initQuiz } from '../quiz/quiz.js';
 import { preguntasNefrologia, temasNefrologia } from '../../data/nefrologia-preguntas.js';
 import { preguntasHTA, temasHTA } from '../../data/hta-preguntas.js';
@@ -66,6 +67,7 @@ export function init() {
     initErc();
     initFra();
     initTrr();
+    initNefrotoxicidad();
     initQuiz({
         triggerId: ['btn-nefro-repasar', 'btn-hta-repasar', 'btn-erc-repasar', 'btn-fra-repasar', 'btn-trr-repasar'],
         banco: [...preguntasNefrologia, ...preguntasHTA, ...preguntasERC, ...preguntasFRA, ...preguntasTRR],
