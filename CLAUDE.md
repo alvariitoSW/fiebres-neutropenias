@@ -1209,6 +1209,68 @@ por encima que sí diera cabida a todos.
     añadieron preguntas de quiz propias (a diferencia de las Fichas 1-11)
     porque, al ser pura reorganización sin contenido nuevo, cualquier
     pregunta duplicaría el banco ya existente de los otros temas.
+  - **Segunda auditoría de bibliografía, más estricta que la del punto anterior
+    (que solo arregló los 12 enlaces al navegador temático genérico)**: a
+    petición explícita del usuario, se revisó cada entrada de
+    `📚 Bibliografía` de **todas** las secciones de Nefrología (no solo las
+    que tenían enlaces rotos) contra dos criterios: (1) ¿esta fuente se usó
+    de verdad para construir el contenido ya presente, o es un enlace de
+    "lectura futura" que nunca llegó a incorporarse?, y (2) ¿el enlace
+    resuelve a la página real del artículo? El criterio de uso se comprobó
+    cruzando cada entrada contra las líneas "Fuente:" de este mismo
+    `CLAUDE.md` y contra los créditos en el propio HTML — nunca a ojo.
+    Resultado, solo en las 4 secciones con contenido clínico real
+    construido (los 3 placeholders — `nefrotoxicidad.html`,
+    `tratamiento-ira-irc.html`, `trr.html` — se dejaron intactos a
+    propósito, ver el criterio ya establecido más arriba de que su
+    bibliografía es una lista de lectura futura legítima mientras no
+    tengan contenido, y sus enlaces sí se verificaron uno a uno sin quitar
+    ninguno, todos resolviendo correctamente):
+    - `erc.html`: de 9 entradas, solo la guía **KDIGO 2024** en sí es la
+      fuente real de las 12 fichas — las otras 8 (Historia de la ERC,
+      Guías KDIGO en español, Enfermedad Renal Crónica, Pautas de
+      derivación ERCA, Obesidad y Progresión, Calidad y seguridad,
+      Ejercicio Físico, Nefropatía Endémica Mesoamericana) nunca se leyeron
+      ni se usaron para ningún párrafo del módulo — eran enlaces de
+      lectura futura sin marcar como tal. Se eliminaron las 8, dejando solo
+      la entrada KDIGO.
+    - `hta.html`: de 9 entradas, se confirmaron 4 como fuente real
+      (Esencial-302, Secundaria-409, Renovascular-410, Resistente-408 —
+      las 4 releídas íntegras y usadas para las 8 fichas). Las otras 5
+      (Guía SEH-LELHA 2022, Hiperaldosteronismo primario, Feocromocitoma/
+      Paraganglioma, Trastornos Hipertensivos del Embarazo, Crisis
+      hipertensivas) nunca se leyeron como fuente — el contenido de HTA
+      secundaria endocrinológica y de embarazo de la Ficha 6/8 sale del
+      artículo general de HTA secundaria (409), no de esas monografías
+      específicas. Se eliminaron las 5.
+    - `fra.html`: de 3 entradas, solo "Insuficiencia Renal Aguda" (690) es
+      la fuente real (artículo único del que sale todo el módulo, ya
+      documentado como tal). "Lesión Renal Aguda Postcontraste Yodado" y
+      "Síndromes Clínicos en Nefrología" nunca se usaron. Se eliminaron
+      las 2.
+    - Bloque de Fisiología (`nefro-menu.html`): de 8 entradas, se
+      confirmaron 5 como fuente real (Fisiología Renal-335, Trastornos del
+      Agua-684, Trastornos del Potasio-613, Trastornos del Calcio Fósforo
+      y Magnesio-687, Alteraciones del Metabolismo Ácido Base-673 — las 5
+      con capítulos propios en el cuaderno de campo). "Síndromes Clínicos
+      en Nefrología", "Homeostasis y manejo del potasio en el enfermo
+      renal (2020)" y "Diuréticos y Alteraciones Electrolíticas" nunca se
+      leyeron como fuente (el contenido de potasio sale íntegro del
+      artículo de Trastornos del Potasio 2024, no de la versión 2020 ni de
+      un capítulo de diuréticos aparte). Se eliminaron las 3. Además se
+      encontró y corrigió una **URL rota real** en la entrada de
+      Trastornos del Potasio: le faltaba "hiperpotasemia" en el slug
+      (`...hipopotasemia-e-613` en vez de
+      `...hipopotasemia-e-hiperpotasemia-613`) — confirmado con
+      `WebSearch` que la URL corta nunca aparecía en el array estructurado
+      de resultados (solo variantes con el slug completo), señal de que
+      apuntaba a una página inexistente.
+    - Todas las URLs que se mantuvieron se reverificaron con `WebSearch`
+      exigiendo que aparecieran literalmente en el array de "Links"
+      estructurado de los resultados (nunca solo en el resumen en prosa),
+      mismo método ya establecido en la primera auditoría de bibliografía
+      — `WebFetch` a `nefrologiaaldia.org` sigue bloqueado por el proxy de
+      salida de red, así que no es una opción para verificar directamente.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
