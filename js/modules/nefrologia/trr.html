@@ -1,16 +1,310 @@
     <button class="back-btn btn-volver-nefro-kidney">← VOLVER</button>
     <div class="diag-header">
         <h2 style="color: var(--accent-blue); text-shadow: none;">Terapias de reemplazo renal</h2>
-        <p>Objetivo de rotación 7 · Aguda y crónica · Nefrología al día (SEN)</p>
+        <p>Objetivo de rotación 7 · Paciente crítico con FRA · Nefrología (SEN) 2021</p>
     </div>
 
-    <div class="card">
-        <h3 style="color: var(--accent-blue);">🚧 En preparación</h3>
-        <p style="font-size: 0.85rem; line-height: 1.5; color: var(--text-muted);">
-            El contenido clínico sobre TRR (HDI vs. TRR continua vs. técnicas híbridas en agudo;
-            hemodiálisis y diálisis peritoneal en crónico) se irá añadiendo a partir de la
-            bibliografía citada abajo. Mientras tanto, los enlaces ya son reales y navegables.
-        </p>
+    <button class="accordion-btn nav-btn" id="btn-trr-repasar" style="border-left: 4px solid var(--accent-yellow);">
+        <span>🎯 Repasar (preguntas de repaso)</span>
+        <span style="font-size: 0.8rem; color: var(--accent-yellow);">[ EMPEZAR → ]</span>
+    </button>
+
+    <p class="section-label">Cuaderno de campo — TRR en el paciente crítico</p>
+    <div class="corkboard" id="trr-corkboard">
+        <div class="field-card" data-tab="trr-modalidad">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 1</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><rect x="14" y="20" width="20" height="24" rx="3" fill="none" stroke="var(--accent-blue)" stroke-width="2"/><rect x="46" y="14" width="20" height="30" rx="3" fill="none" stroke="var(--accent-blue)" stroke-width="2"/><path d="M34,32 h12" stroke="var(--accent-blue)" stroke-width="2"/></svg>
+                    <div class="field-name">Selección de modalidad (qué)</div>
+                    <div class="field-hook">¿Alguna modalidad de TRR (HD intermitente vs. continua) ha demostrado superioridad en mortalidad?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">No. Los grandes metaanálisis (Cochrane 2007 y su actualización 2017) no muestran diferencias significativas en mortalidad, estancia ni recuperación renal entre HDI y TRR continua.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="trr-indicaciones">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 2</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><circle cx="40" cy="26" r="16" fill="none" stroke="var(--accent-red)" stroke-width="2"/><path d="M40,18 v10 l7,4" stroke="var(--accent-red)" stroke-width="2" fill="none"/></svg>
+                    <div class="field-name">Indicaciones (a quién)</div>
+                    <div class="field-hook">¿Qué nivel de potasio sérico indica el inicio urgente de TRR?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Hiperpotasemia grave (K &gt;6,5 mmol/l) resistente al tratamiento médico, por el riesgo de cardiotoxicidad y arritmias.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="trr-inicio">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 3</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><circle cx="40" cy="28" r="18" fill="none" stroke="var(--accent-yellow)" stroke-width="2"/><line x1="40" y1="28" x2="40" y2="16" stroke="var(--accent-yellow)" stroke-width="2"/><line x1="40" y1="28" x2="49" y2="32" stroke="var(--accent-yellow)" stroke-width="2"/></svg>
+                    <div class="field-name">Momento de inicio (cuándo)</div>
+                    <div class="field-hook">¿En qué subgrupo de pacientes críticos el inicio precoz de TRR continua ha mostrado más beneficio?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">En pacientes posquirúrgicos hemodinámicamente inestables, sobre todo tras cirugía cardíaca — ahí sí hay una tendencia consistente a menor mortalidad con TRR continua de alto flujo iniciada precozmente.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="trr-dosis">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 4</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><rect x="20" y="34" width="10" height="14" fill="none" stroke="var(--accent-green)" stroke-width="2"/><rect x="35" y="24" width="10" height="24" fill="none" stroke="var(--accent-green)" stroke-width="2"/><rect x="50" y="12" width="10" height="36" fill="none" stroke="var(--accent-green)" stroke-width="2"/></svg>
+                    <div class="field-name">Dosis / intensidad (cuánto)</div>
+                    <div class="field-hook">¿Una dosis de TRR &gt;35 ml/kg/h mejora la supervivencia frente a la dosis convencional?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">No de forma general. Ningún ensayo de los recogidos en la Cochrane 2016 demuestra beneficio significativo de dosis altas, salvo en subgrupos concretos (p. ej. quemados con shock séptico en el subanálisis de RESCUE).</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="trr-anticoagulacion">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 5</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><path d="M20,28 h40" stroke="var(--accent-purple)" stroke-width="2"/><circle cx="30" cy="28" r="5" fill="none" stroke="var(--accent-purple)" stroke-width="2"/><circle cx="50" cy="28" r="5" fill="none" stroke="var(--accent-purple)" stroke-width="2"/></svg>
+                    <div class="field-name">Anticoagulación (cómo)</div>
+                    <div class="field-hook">¿Qué técnica de anticoagulación se ha estandarizado hoy en las UCI para la TRR continua?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">La anticoagulación regional con citrato (RCA) — mejor permeabilidad del circuito, menor riesgo de sangrado y evita la trombocitopenia inducida por heparina.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="trr-finalizacion">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 6</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><path d="M20,40 C30,20 50,20 60,40" fill="none" stroke="var(--accent-blue)" stroke-width="2"/><circle cx="40" cy="34" r="3" fill="var(--accent-blue)"/></svg>
+                    <div class="field-name">Finalización (hasta cuándo)</div>
+                    <div class="field-hook">¿Cuál es el acontecimiento fundamental para plantear la retirada de la TRR?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">La recuperación de un ritmo de diuresis adecuado — la normalización analítica puede demorarse más tiempo.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" id="panel-trr-tabs" style="display:none;">
+        <div id="trr-modalidad" class="tab-content">
+            <h3 style="color: var(--accent-blue);">Selección de modalidad (qué)</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Valdenebro M, Martín-Rodríguez L, Tarragón B, Sánchez-Briales P, Portolés J. Una visión nefrológica del tratamiento sustitutivo renal en el paciente crítico con fracaso renal agudo: horizonte 2020. Nefrología. 2021;41(2):102-114.</p>
+
+            <p class="section-label">Contexto y epidemiología</p>
+            <dl class="kv-row"><dt>Magnitud del problema</dt><dd>El fracaso renal agudo (FRA) es muy común en los enfermos críticos de UCI y asocia una importante morbimortalidad a corto y largo plazo. Aproximadamente el 5-10% de los pacientes con FRA establecido requieren TRR durante su estancia en UCI. Estudios españoles estiman una prevalencia de FRA en UCI del 42,4%, con necesidad de TRR en el 38% de esos casos y una mortalidad asociada del 29,7%.</dd></dl>
+            <dl class="kv-row"><dt>Factores de riesgo para necesitar TRR</dt><dd>Edad avanzada, sexo masculino, gravedad de la enfermedad de base, sepsis, insuficiencia cardíaca descompensada, cirugía cardíaca, insuficiencia hepática y uso de ventilación mecánica. La indicación de TRR aumenta un 10% al año, quizá por la evolución hacia un perfil de paciente crítico cada vez más añoso, comórbido y sometido a cirugías complejas.</dd></dl>
+            <dl class="kv-row"><dt>Cambio de paradigma</dt><dd>La TRR, antes considerada una medida extraordinaria en la UCI para pacientes con necesidad de diálisis e inestables hemodinámicamente, se ha convertido en una técnica rutinaria en el abordaje de estos enfermos. Sin embargo, el manejo de las TRR continuas ha ido desapareciendo del currículo básico de formación del nefrólogo medio: solo 4 de los 24 servicios de nefrología de la comunidad autónoma de los autores continúan implicados en el manejo completo del FRA en UCI.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Las 3 grandes familias de TRR</p>
+            <table class="data-table">
+                <thead><tr><th>Modalidad</th><th>Mecanismo</th><th>Duración típica</th></tr></thead>
+                <tbody>
+                    <tr><td>Hemodiálisis intermitente (HD)</td><td>Aclaramiento difusivo rápido de moléculas de pequeño tamaño</td><td>3-5 h</td></tr>
+                    <tr><td>TRR continua (TRRcont)</td><td>Eliminación gradual de fluidos y solutos mediante aclaramiento convectivo de moléculas de mayor tamaño</td><td>Hasta 24 h/día</td></tr>
+                    <tr><td>Modalidades híbridas</td><td>Combinan rasgos de HD y TRR continua (SLED/PIRRT)</td><td>8-16 h, con velocidades de UF y aclaramiento intermedias</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Ventajas e inconvenientes teóricos</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
+                        <span>💧 TRR continua</span> <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Ventajas</dt><dd>Mayor estabilidad hemodinámica, mejor control del equilibrio hidroelectrolítico, mejora la microcirculación por la eliminación preferente de líquido intersticial, flexibilidad para adaptar el tratamiento a las necesidades puntuales del paciente en cada momento, y fácil monitorización clínica de la terapia.</dd></dl>
+                        <dl class="kv-row"><dt>Inconvenientes</dt><dd>Necesidad de inmovilización, incremento del coste frente a la HD, y el riesgo clásico de hipotermia (pérdida de energía, escalofríos, incremento de la demanda de oxígeno, vasoconstricción, inmunosupresión, arritmias, disminución de la contractilidad cardíaca, hipoxia tisular y alteraciones de la coagulación) — hoy subsanable con sistemas de control de temperatura (calentadores de líneas o mantas de aire).</dd></dl>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
+                        <span>⚡ Hemodiálisis intermitente</span> <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Ventajas</dt><dd>Mayor eficacia depurativa, lo que la hace más recomendable en hipercalcemia o hiperpotasemia grave, algunas intoxicaciones agudas y síndromes de lisis tumoral. Su corta duración permite disponer de tiempo para la movilización y rehabilitación precoz, así como para realizar otras intervenciones diagnósticas y terapéuticas sin necesidad de interrumpir la terapia.</dd></dl>
+                        <dl class="kv-row"><dt>Inconvenientes</dt><dd>Su funcionamiento rápido y condicionado por la tasa de ultrafiltración (UF) a la tolerancia hemodinámica del paciente conlleva menor estabilidad hemodinámica que la TRR continua.</dd></dl>
+                    </div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">La evidencia: ninguna modalidad ha demostrado superioridad</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">Las guías <strong>KDIGO</strong> y el <strong>Acute Disease Quality Initiative (ADQI) Workgroup</strong> recomiendan conocer los mecanismos funcionales de cada técnica, pero no establecen preferencia. La revisión sistemática de la <strong>Cochrane Library (2007)</strong>, que agrupó 15 ensayos clínicos aleatorizados (RCT) de mortalidad, no demostró ventajas significativas de la HD frente a la TRR continua (ni viceversa) en mortalidad en UCI/hospitalización, tiempo de estancia, recuperación de la función renal ni estabilidad cardiovascular — sí se observó mayor tendencia a la coagulación de filtros en los tratados con TRR continua. La actualización de <strong>Schoenfelder et al. (2017)</strong>, que integró 5 RCT publicados después de 2008, llega a la misma conclusión sin tendencia favorable respecto a los estudios más antiguos.</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">Estos estudios tienen limitaciones importantes para su integración en un metaanálisis: no emplean las mismas definiciones de FRA, hay alta tasa de intercambio entre modalidades de TRR y existen diferencias en aspectos técnicos (tipo y dosis de anticoagulación). Los estudios observacionales sí apuntan a que la TRR continua es más efectiva para lograr un balance hídrico negativo bien tolerado, mejorando el soporte hemodinámico y ampliando la indicación de TRR en el paciente crítico.</p>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
+                        <span>🩺 Angiotensina II como estrategia futura</span> <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="micro-prof-body">Tumlin et al. (2018) proponen que, con la estrategia de tratamiento vasoactivo con angiotensina II, se conseguiría mejorar la recuperación de la función renal y limitar la necesidad de TRR a largo plazo en el enfermo crítico con FRA. Esta línea se ha visto reforzada tras la aprobación por la FDA de la angiotensina II en el tratamiento del shock distributivo, ya que su administración ha demostrado un aumento de la presión arterial media en dichos pacientes con menos efectos deletéreos (como la retención de agua a nivel renal) en comparación con otros vasopresores con poder modulador del sistema simpático y efecto directo vasoconstrictor sobre el músculo liso (dopamina, felinefrina y vasopresina).</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="trr-indicaciones" class="tab-content">
+            <h3 style="color: var(--accent-red);">Indicaciones de la TRR (a quién)</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Valdenebro M, et al. Nefrología. 2021;41(2):102-114.</p>
+
+            <dl class="kv-row"><dt>Base de la indicación</dt><dd>Los niveles de creatinina y el filtrado glomerular se consideran cruciales para definir la severidad del FRA y la necesidad de iniciar la TRR. Inicialmente, la Conferencia de Consenso del grupo ADQI en 2004 definió el método <strong>RIFLE</strong> (Risk, Injury, Failure, Loss, End-stage) con 3 niveles de disfunción renal aguda basado en el incremento de creatinina y la reducción de diuresis. Esta clasificación se ha visto superada tras la publicación del consenso entre intensivistas y nefrólogos del <strong>Acute Kidney Injury Network (AKIN)</strong>, que se ha impuesto por tener mayor especificidad que el RIFLE.</dd></dl>
+            <dl class="kv-row"><dt>Los 3 pilares clásicos de la indicación</dt><dd>Sobrecarga de volumen, alteraciones electrolíticas y acidosis metabólica, y/o síntomas urémicos debido a la reducción del filtrado glomerular.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Sobrecarga de volumen</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">Es frecuente que pacientes no oligúricos presenten sobrecarga de volumen por la incapacidad del riñón para eliminar el aporte masivo de sueroterapia, nutrición parenteral, hemoderivados y medicamentos intravenosos requeridos en la situación crítica. No existe un umbral de hipervolemia que determine el inicio de la TRR, pero varios estudios observacionales encuentran asociación entre la cuantía de la sobrecarga de volumen al inicio de la TRR y la mortalidad en la UCI. Por ello muchos recomiendan iniciar TRR en situaciones de sobrecarga refractaria a diuréticos que comprometa la función de un órgano vital (aumento de poscarga cardíaca, ascitis, distrés respiratorio o aumento de presión intrarrenal).</p>
+
+            <p class="section-label" style="margin-top:16px;">Alteraciones electrolíticas y ácido-base</p>
+            <table class="data-table">
+                <thead><tr><th>Alteración</th><th>Umbral orientativo</th><th>Comentario</th></tr></thead>
+                <tbody>
+                    <tr><td>Acidosis metabólica</td><td>pH &lt;7,1-7,2 o bicarbonato &lt;12-15 mmol/l</td><td>Forma parte del FRA — es uno de los pilares de indicación</td></tr>
+                    <tr><td>Hiperpotasemia grave</td><td>K sérico &gt;6,5 mmol/l resistente al tratamiento médico</td><td>Riesgo de cardiotoxicidad y arritmias; precisa inicio precoz de TRR — la HD es más eficaz que la TRR continua para estos 2 casos (acidosis e hiperpotasemia)</td></tr>
+                    <tr><td>Hiponatremia severa</td><td>En el contexto de FRA</td><td>La TRR continua permite una corrección lenta y controlada de la natremia, previniendo las secuelas neurológicas por desmielinización — al contrario que la HD</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Síntomas urémicos</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">El uso de la TRR está indicado para paliar los síntomas y efectos de la uremia (BUN &gt;100-110 mg/dl) favoreciendo la disfunción plaquetaria, desnutrición/anorexia, insuficiencia cardíaca y mayor susceptibilidad a la infección y sepsis.</p>
+
+            <p class="section-label" style="margin-top:16px;">TRR continua como coadyuvante en la sepsis (controvertido)</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">Diversos estudios proponen la TRR continua con una tasa convectiva alta como complemento en el manejo de la sepsis en las UCI para eliminar citoquinas proinflamatorias. Sin embargo, los ensayos revisados no han demostrado beneficio significativo sobre el abordaje con HD habitual, ni siquiera cuando se usan dosis altas de recambio en la TRR continua. Aunque la TRR aumenta el aclaramiento de lactato, existe poca evidencia de que su inicio únicamente por este motivo modifique la evolución clínica en pacientes con acidosis láctica grave sin toxicidad farmacológica asociada (por ejemplo, en el caso de la metformina).</p>
+
+            <p class="section-label" style="margin-top:16px;">Recomendación de síntesis</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">Tras revisar la literatura disponible se debería iniciar una TRR en todos aquellos pacientes con FRA AKIN III con clara clínica de sobrecarga hídrica (edema agudo de pulmón, insuficiencia cardíaca, disfunción plaquetaria, congestión intestinal y edema refractario a pesar del empleo de diuréticos) y/o en aquellos casos en los que los síntomas urémicos, alteraciones iónicas o del equilibrio ácido-base conlleven riesgo vital por comprometer el correcto funcionamiento de órganos principales.</p>
+        </div>
+
+        <div id="trr-inicio" class="tab-content">
+            <h3 style="color: var(--accent-yellow);">Inicio de la TRR (cuándo)</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Valdenebro M, et al. Nefrología. 2021;41(2):102-114.</p>
+
+            <dl class="kv-row"><dt>Sin protocolo unívoco</dt><dd>No existe un protocolo que defina cuándo iniciar TRR de forma unívoca entre países, centros o incluso entre intensivistas y nefrólogos de un mismo centro. El inicio de la TRR generalmente se establece con un estadio AKIN III (definido por KDIGO), aunque algunas situaciones pueden recomendar su inicio de manera temprana, incluso sin disfunción renal — p. ej. alteraciones electrolíticas críticas, sobrecarga hídrica o intoxicaciones.</dd></dl>
+            <dl class="kv-row"><dt>Riesgos a sopesar del inicio precoz</dt><dd>Las complicaciones inherentes a la técnica: complicaciones del acceso vascular (hemorragia, trombosis, lesión vascular e infección), la hipotensión intradialítica, y el disbalance iónico (hipocalcemia, hipofosfatemia o hipopotasemia).</dd></dl>
+            <dl class="kv-row"><dt>Propuestas de algoritmo</dt><dd>Bagshaw et al. propusieron un algoritmo basado en indicaciones absolutas, grado RIFLE e indicaciones no renales. En España, Leoz et al. publicaron una guía con recomendaciones para el inicio y elección de modalidad más adecuada de TRR en la UCI.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">🧪 Tabla 3 — Ensayos clínicos aleatorizados: inicio precoz vs. tardío</p>
+            <table class="data-table">
+                <thead><tr><th>Estudio</th><th>Perfil</th><th>Resultado</th></tr></thead>
+                <tbody>
+                    <tr><td>Gaudry 2015/Francia (AKIKI)</td><td>FRA AKIN III + VM + NA</td><td>Sin diferencias generales en mortalidad al día 28-60 entre inicio temprano y tardío ("espera")</td></tr>
+                    <tr><td>Bouman 2002/Países Bajos</td><td>FRA oligúrico + insuficiencia respiratoria/cardíaca</td><td>Inicio temprano: ↓ riesgo de muerte al día 28, ↑ recuperación de función renal</td></tr>
+                    <tr><td>Zarbock 2016/Alemania (ELAIN)</td><td>FRA AKIN II + reposición vol.</td><td>Inicio temprano: ↓ riesgo de muerte al día 90, ↓ FMO-inflamación, ↑ recuperación de función renal — único ensayo con beneficio claro de inicio precoz</td></tr>
+                    <tr><td>Smith 2013/Canadá (STARRT-AKI piloto)</td><td>FRA oligúrico ± necesidad de TRR</td><td>Inicio temprano: ↓ estancia UCI/hospitalización, ↑ recuperación función renal</td></tr>
+                    <tr><td>Sugahara y Suzuki 2004/Japón</td><td>FRA oligúrico + bypass coronario</td><td>Inicio temprano: ↓ riesgo de muerte, ↑ recuperación función renal, ↓ tiempo de estancia UCI al día 14</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Fuente: Cochrane Library 2018 (metaanálisis de estos 5 RCT + otros). En el análisis estratificado, el beneficio del inicio precoz se restringe al subgrupo de pacientes posquirúrgicos tratados siempre con TRR continua; además se describe un aumento de la incidencia de efectos adversos relacionados con el inicio precoz de TRR, por lo que el grado de evidencia se considera moderado-bajo.</p>
+
+            <p class="section-label" style="margin-top:16px;">Metaanálisis más recientes (2017): sin beneficio rotundo</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">Lai et al., Christiansen et al. y Zou et al., todos en 2017, no encuentran beneficios rotundos para el inicio precoz de TRR en cuanto a mortalidad, recuperación de la función renal ni tiempo de estancia en UCI, aunque una vez más refieren una tendencia favorable en el subgrupo de pacientes sometidos a cirugía cardíaca con inicio de TRR en las primeras 24h posquirúrgicas.</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">Un estudio observacional retrospectivo de Jia et al. concluye que el inicio tardío de la TRR podría estar asociado con mayor incidencia de mortalidad a corto plazo entre los pacientes críticos en la UCI, y recomienda el inicio temprano de TRR en presencia de oliguria previo al desarrollo de AKIN III. Sin embargo, deben tenerse muy en cuenta las limitaciones, potencia estadística y diseño retrospectivo en comparación con los estudios previamente mencionados.</p>
+
+            <p class="section-label" style="margin-top:16px;">Recomendación de síntesis</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">Tras revisar los ensayos y metaanálisis reseñados en este apartado, solo cabría recomendar un inicio precoz de una TRR continua en los pacientes críticos posquirúrgicos, ya que esta modalidad prescrita de forma temprana podría reducir la tasa de mortalidad y promover la recuperación de la función renal basal en este perfil de enfermos.</p>
+        </div>
+
+        <div id="trr-dosis" class="tab-content">
+            <h3 style="color: var(--accent-green);">Dosis de la TRR (cuánto)</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Valdenebro M, et al. Nefrología. 2021;41(2):102-114.</p>
+
+            <dl class="kv-row"><dt>Base fisicoquímica</dt><dd>Varios estudios observacionales exploran el efecto de la dosis de diálisis y sugieren que una tasa elevada del flujo del efluente (&gt;25 ml/kg/h) se asocia con mejor supervivencia en UCI. Sin embargo, estas conclusiones no se han confirmado en revisiones sistemáticas posteriores.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">🧪 Tabla 4 — Ensayos clínicos aleatorizados: intensidad de dosis</p>
+            <table class="data-table">
+                <thead><tr><th>Estudio</th><th>Perfil</th><th>Resultado</th></tr></thead>
+                <tbody>
+                    <tr><td>Palevsky 2005/EE.UU. (ATN)</td><td>1.124 FRA por NTA + necesidad de TRR + FMO o sepsis</td><td>Sin diferencias en mortalidad al día 60 ni tiempo de estancia UCI entre dosis intensiva y convencional</td></tr>
+                    <tr><td>Bouman 2002/Países Bajos</td><td>106 FRA oligúrico + insuficiencia respiratoria/cardíaca</td><td>Sin diferencias por volumen de UF (alto vs. bajo) en mortalidad al día 28</td></tr>
+                    <tr><td>Bellomo 2006/Australia-Nueva Zelanda (RENAL)</td><td>1.465 FRA oligúrico + necesidad TRR + edema pulmonar</td><td>Sin diferencias en mortalidad ni duración de TRR/FMO entre alta y baja intensidad</td></tr>
+                    <tr><td>Ronco 2000/Italia</td><td>425 FRA oligúrico + necesidad TRR + reposición vol.</td><td>Sin diferencias en eventos clínicos entre alta y baja intensidad</td></tr>
+                    <tr><td>Saudan 2006/Suiza</td><td>206 FRA oligúrico + necesidad TRR</td><td>Sin diferencias en eventos clínicos entre alta y baja intensidad</td></tr>
+                    <tr><td>Tolwani 2008/EE.UU.</td><td>200 FRA oligúrico + necesidad TRR sin respuesta a diuréticos</td><td>Sin diferencias en eventos clínicos entre alta y baja intensidad</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Fuente: Cochrane Library 2016. En ninguno de los 6 ensayos controlados incluidos se pudieron demostrar beneficios significativos en mortalidad a los 30 días, tiempo de hospitalización posterior ni recuperación de la función renal a medio/largo plazo con mayores dosis de flujo del efluente.</p>
+
+            <p class="section-label" style="margin-top:16px;">Subgrupos con posible beneficio</p>
+            <ul class="term-chips">
+                <li>Pacientes posquirúrgicos: mayor posibilidad de recuperar la función renal con TRR continua de alto flujo</li>
+                <li>Insuficiencia hepática fulminante</li>
+                <li>Lesión cerebral con presión intracraneal elevada — TRR continua de alta dosis, mejor mantenimiento de la perfusión cerebral</li>
+                <li>Quemados con shock séptico (subanálisis de RESCUE)</li>
+            </ul>
+            <p style="font-size: 0.85rem; line-height: 1.6;">Estudios más recientes como el <strong>IVOIRE</strong> (2013) y el <strong>RESCUE</strong> (2017) no resuelven la incertidumbre, y concluyen que ni siquiera flujos muy elevados (hasta 70 ml/kg/h) consiguen una mejoría de supervivencia renal o del paciente. Debe asumirse también la posibilidad de iatrogenia por «dialitrauma» y la pérdida de citoquinas beneficiosas en el manejo inicial de la sepsis presente en estos pacientes.</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">En el subanálisis por terciles del estudio <strong>RENAL</strong> (1.434 pacientes de 34 UCI), se demostró que el tercil de riesgo de mortalidad a 90 días fue superior en aquellos que recibieron una UF de 1,75 ml/kg/h que los que recibieron 1,01 ml/kg/h (es decir, 25 ml/kg/día). Los propios autores reconocen que hay factores de confusión no depurados y que, al tratarse de un estudio observacional no controlado donde la tasa de UF se dejó a criterio del clínico, no puede determinarse si la UF elevada es deletérea por sí misma o identifica a aquellos que necesitan una dosis mayor.</p>
+        </div>
+
+        <div id="trr-anticoagulacion" class="tab-content">
+            <h3 style="color: var(--accent-purple);">Anticoagulación de la TRR (cómo)</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Valdenebro M, et al. Nefrología. 2021;41(2):102-114.</p>
+
+            <dl class="kv-row"><dt>El problema</dt><dd>La coagulación del circuito extracorpóreo es la complicación técnica más común durante las TRR continuas, favorecida por el hecho de que el 30-60% de los pacientes no pueden ser anticoagulados por un riesgo hemorrágico añadido.</dd></dl>
+            <dl class="kv-row"><dt>Estrategias para minimizar el riesgo de coagulación del circuito</dt><dd>Aumentar la tasa de flujo sanguíneo, disminuir la fracción de filtración, comprobar la función óptima del catéter, balancear la dosis de UF/convección (alternando incluso la reposición pre y posfiltro), y aumentar la frecuencia de reemplazo programado del circuito extracorpóreo. Todo ello depende de un estrecho control de la terapia con monitorización clínica y técnica por parte de un equipo multidisciplinar de enfermería especializada, intensivistas y nefrólogos.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">🧪 Tabla 5 — Ventajas e inconvenientes de cada sistema de anticoagulación</p>
+            <table class="data-table">
+                <thead><tr><th>Anticoagulante</th><th>Ventajas</th><th>Inconvenientes</th></tr></thead>
+                <tbody>
+                    <tr><td>Heparina no fraccionada</td><td>Vida media corta; antídoto: protamina; monitorización con TTPA</td><td>Índice terapéutico estrecho, mayor riesgo hemorrágico; anticoagulación sistémica (cinética impredecible); trombocitopenia; no actúa como tampón; riesgo de sobredosis</td></tr>
+                    <tr><td>Citrato</td><td>Anticoagulación regional estricta; &lt;riesgo de sangrado; actúa como tampón (conversión a bicarbonato)</td><td>&gt;riesgo de alteraciones hidroelectrolíticas/ácido-base; monitorización con protocolo estricto</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Anticoagulación regional con citrato (RCA)</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">Se ha utilizado de forma rutinaria para la TRR continua en pacientes críticos durante más de 25 años, y se recomienda para pacientes con y sin contraindicación para la heparina. La evidencia reciente ha confirmado la superioridad del citrato regional en comparación con la anticoagulación sistémica con heparina, tanto para mantener la permeabilidad del circuito extracorpóreo como para reducir las complicaciones hemorrágicas.</p>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
+                        <span>⚙️ Mecanismo del citrato</span> <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="micro-prof-body">La anticoagulación con citrato se basa en su efecto quelante del calcio (Ca) en el circuito extracorpóreo, lo que inhibe la cascada de coagulación. Esto sucede cuando el Ca iónico cae por debajo de 0,5 mmol/l y alcanza su máxima eficacia por debajo de 0,25 mmol/l. El citrato se infunde con bomba en el extremo precircuito de la TRR en proporción al flujo sanguíneo, para que sus niveles alcancen entre 4 a 6 mmol/l, suficientes para reducir el nivel de Ca iónico en el circuito por debajo de 0,35 mmol, consiguiendo la inhibición de la cascada de coagulación. La mayoría de los protocolos de RCA requieren una infusión de calcio para mantener los niveles fisiológicos de Ca iónico en la circulación sistémica y lograr una anticoagulación efectiva.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
+                        <span>🖥️ Monitores dedicados</span> <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="micro-prof-body">Existen nuevos monitores de TRR continua con RCA integrado, como el Aquarius™, que permiten el empleo de soluciones de citrato ácido dextrosa en la bomba previa a sangre en lugar del clásico citrato trisódico. Estas soluciones, como por ejemplo el Prismocitrate® 10/2, contienen 10 mmol/l de citrato, 2 mmol/l de ácido cítrico, además de sodio y cloruro en concentraciones fisiológicas. De esta manera se minimiza el riesgo de hipernatremia y alcalosis metabólica, soslayando los problemas de equilibrio electrolítico y ácido-base clásicamente asociados a la RCA. Finalmente, el complejo de citrato-calcio se disocia en la circulación sistémica y se metaboliza rápidamente por el hígado sirviendo como agente alcalinizante beneficioso en los pacientes con FRA y acidosis.</div>
+                </div>
+            </div>
+
+            <p style="font-size: 0.85rem; line-height: 1.6;">Por tanto, tras revisar la evidencia disponible, podemos concluir que la RCA se asocia con una mejor permeabilidad del circuito, menores riesgos de sangrado y evita la trombocitopenia inducida por heparina. La prescripción debe individualizarse y se beneficiaría de un equipo multidisciplinar por un equipo multidisciplinar que asegure la eficacia y minimice las complicaciones.</p>
+        </div>
+
+        <div id="trr-finalizacion" class="tab-content">
+            <h3 style="color: var(--accent-blue);">Finalización de la TRR (hasta cuándo)</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Valdenebro M, et al. Nefrología. 2021;41(2):102-114.</p>
+
+            <dl class="kv-row"><dt>Criterio fundamental</dt><dd>La recuperación de un ritmo de diuresis adecuado suele ser el acontecimiento fundamental para plantearse la retirada de la TRR, según las recomendaciones de las guías KDIGO y del grupo ADQI, aunque la normalización de los parámetros analíticos puede demorarse más tiempo. Es por esto que la posibilidad de finalizar definitivamente la TRR es poco probable en la práctica clínica real, y se considera recomendable la transición a otras modalidades durante el proceso de recuperación del paciente crítico.</dd></dl>
+            <dl class="kv-row"><dt>Papel de la HD extendida como puente</dt><dd>La HD extendida puede usarse como terapia puente entre las técnicas continuas y la HD si lo justifica el estado clínico del paciente. Este aspecto depende tanto del criterio médico individual como de las circunstancias del paciente y medios de los que disponga el centro.</dd></dl>
+            <dl class="kv-row"><dt>Movilización precoz</dt><dd>La transición de TRR continua a HD permite el comienzo de la recuperación física y la movilización del paciente fuera de la cama, siendo este un aspecto fundamental de su evolución antes de su paso a una planta de hospitalización.</dd></dl>
+            <dl class="kv-row"><dt>Información al paciente</dt><dd>Es importante asegurar una buena calidad de información para el paciente, familiares o tutores legales sobre cada uno de los aspectos que conlleva una TRR y su pronóstico a corto plazo, tanto por parte del servicio de medicina intensiva a cargo del enfermo, como por los consultores de nefrología que administran la TRR.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Conclusiones de la revisión</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">Tanto el FRA como la sobrecarga de volumen son complicaciones frecuentes de los pacientes críticos en UCI que comprometen su situación hemodinámica y respiratoria, lo que resulta en un aumento de su morbimortalidad. Muchos grupos de trabajo han propuesto adelantarse a estos factores con un uso casi preventivo de la TRR, lo cual no tiene claro sustento científico de forma generalizada. Únicamente en los pacientes críticos posoperados se consigue un descenso en la mortalidad y tiempo de estancia en UCI cuando prescribimos, de forma precoz, una TRR continua de alto flujo.</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">Cabe destacar la evolución en el ámbito de la anticoagulación de los filtros, donde la RCA se va consolidando como técnica de elección a la hora de optimizar la permeabilidad del circuito, disminuir el riesgo de sangrado y la trombocitopenia tan habituales con el empleo de la heparina clásica.</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">Actualmente, con cualquier modalidad de TRR (ya sea continua, híbrida o intermitente) prescrita de forma adecuada, individualizada e incluso secuencial, podemos garantizar una buena tolerancia a pesar de la inestabilidad hemodinámica grave característica de estos enfermos. Tanto los intensivistas como los nefrólogos implicados en su manejo debemos conocer los pros y los contras de cada técnica, para así establecer protocolos comunes de tratamiento personalizado y adaptarlos en función de la evolución clínica de cada individuo. Sigue sin resolverse la incógnita de cuándo y cómo finalizar un tratamiento con TRR, lo que constituye un reto para futuros estudios.</p>
+        </div>
     </div>
 
     <div class="card">
@@ -18,8 +312,12 @@
         <p class="subtitle">Nefrología al día — Grupo Editorial Nefrología, SEN</p>
         <ul class="biblio-list">
             <li>
+                <a class="biblio-link" href="https://doi.org/10.1016/j.nefro.2020.07.016" target="_blank" rel="noopener">Valdenebro M, Martín-Rodríguez L, Tarragón B, Sánchez-Briales P, Portolés J. Una visión nefrológica del tratamiento sustitutivo renal en el paciente crítico con fracaso renal agudo: horizonte 2020</a>
+                <span class="biblio-nota">Nefrología. 2021;41(2):102-114. Revisión narrativa. Fuente de todo el contenido de esta sección.</span>
+            </li>
+            <li>
                 <a class="biblio-link" href="https://nefrologiaaldia.org/es-articulo-insuficiencia-renal-aguda-690" target="_blank" rel="noopener">Insuficiencia Renal Aguda</a>
-                <span class="biblio-nota">Incluye comparativa HDI vs. TRR continua vs. técnicas híbridas (PIRRT/SLED/EDD/E-HDF), indicaciones según estabilidad hemodinámica.</span>
+                <span class="biblio-nota">Incluye comparativa HDI vs. TRR continua vs. técnicas híbridas (PIRRT/SLED/EDD/E-HDF), indicaciones según estabilidad hemodinámica — complementa el enfoque de esta sección.</span>
             </li>
             <li>
                 <a class="biblio-link" href="https://www.nefrologiaaldia.org/es-articulo-tecnicas-hemodialisis-575" target="_blank" rel="noopener">Técnicas de hemodiálisis</a>
