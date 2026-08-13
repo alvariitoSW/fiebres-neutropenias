@@ -347,9 +347,24 @@ por encima que sí diera cabida a todos.
   una de esas 6 vistas es: cabecera + tarjeta "🚧 en preparación" + tarjeta
   **"📚 Bibliografía"** con los enlaces reales de ese bloque como
   `<ul class="biblio-list">` de `<a class="biblio-link" target="_blank"
-  rel="noopener">` (con `<span class="biblio-nota">` para las aclaraciones
-  del documento fuente, p. ej. cuando un artículo no tiene URL individual
-  confirmada y se enlaza al navegador temático general en su lugar). El
+  rel="noopener">` (con `<span class="biblio-nota">` para aclaraciones del
+  documento fuente cuando aporten contexto real). **Nunca enlaces a la
+  página genérica del navegador temático**
+  (`https://www.nefrologiaaldia.org/es-navegador-tematico`) como sustituto
+  de un artículo individual — se detectó en una auditoría (agosto 2026)
+  que esto se había usado 12 veces en `erc.html`/`fra.html`/`hta.html`/
+  `trr.html` como solución provisional cuando la URL exacta no se había
+  confirmado, y el usuario lo reportó como enlaces "que no llevan a ningún
+  sitio" (llevan a un buscador genérico, no al artículo prometido por el
+  texto del enlace). Se corrigieron las 12 con `WebSearch` verificando que
+  la URL apareciera literalmente en los resultados estructurados (no solo
+  mencionada en el resumen en prosa, que puede alucinar rutas con el
+  patrón `es-articulo-...-NNN` inexistentes — pasó exactamente una vez
+  con "Toxinas Urémicas", detectado al re-buscar la URL exacta y no
+  encontrarla, y esa entrada se eliminó de la bibliografía en vez de
+  enlazarla sin confirmar). Si en el futuro no se encuentra la URL real de
+  un artículo citado, es preferible omitir la entrada de la bibliografía
+  que enlazarla a una página genérica o a una URL no verificada. El
   bloque 1 ("Fisiopatología renal") no es una vista nueva — su bibliografía
   se añadió como una tarjeta más al final de `nefro-menu.html`, porque esa
   vista ya trata la fisiología tubular. **No uses `.pkpd-btn` para estos
