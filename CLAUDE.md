@@ -1357,6 +1357,40 @@ por encima que sí diera cabida a todos.
       resto de la app — mismo criterio ya aplicado a la Ficha 12 de ERC
       ("Tratamiento por objetivos"), que tampoco tiene preguntas propias
       por el mismo motivo.
+  - **`tratamiento-ira-irc.html`** (objetivo de rotación 6) fue el último
+    nodo del mapa del riñón en salir de placeholder, pero con un patrón
+    deliberadamente distinto al resto: el usuario, al preguntarse si el
+    tratamiento de IRA/ERC no estaba ya cubierto por las fuentes de
+    `erc.html` (KDIGO 2024) y `fra.html`/`trr.html` (Rodríguez Benítez et
+    al. y Valdenebro et al.), confirmó que sí — y pidió reconvertir este
+    nodo en una **guía rápida transversal por escenario clínico** en vez
+    de duplicar contenido ya construido ficha a ficha. Por tanto **no
+    tiene fuente PDF propia**: es pura reorganización/navegación cruzada
+    sobre hechos ya citados y verificados en ERC/FRA/TRR (mismo criterio
+    que la Ficha 12 de ERC, "Tratamiento por objetivos") — y por el mismo
+    motivo tampoco se le añadió bibliografía propia ni preguntas de quiz.
+    Estructura: 1) tabla comparativa IRA vs. ERC (instauración, criterio
+    temporal, tamaño renal, anemia/hipocalcemia, reversibilidad); 2) 4
+    escenarios urgentes en acordeón `.micro-prof-item` (hiperpotasemia
+    grave, acidosis metabólica grave, sobrecarga de volumen refractaria,
+    síntomas urémicos) con las acciones inmediatas y el umbral de TRR de
+    cada uno; 3) 4 escenarios de manejo no urgente (ajuste de fármacos,
+    nefroprotección farmacológica, derivación/preparación para diálisis
+    crónica, anemia y CKD-MBD); 4) checklist de 6 pasos para las primeras
+    horas ante sospecha de IRA. No usa el patrón de cuaderno de campo — es
+    una página de navegación rápida, no teoría para estudiar.
+    - **Enlaces de navegación cruzada entre módulos** (`.tx-link`, nueva
+      clase en `components.css`): un `<button>` (no `<a>`, no navega por
+      `href`) con `data-view`/`data-panel`/`data-tab`. `nefrologia/index.js`
+      los engancha todos con un único listener genérico en su `init()`: al
+      pulsar, hace `nefroLevel.show(view)` y, si lleva `panel`/`tab`, llama
+      a `openCorkboardTopic(panel, tab)` — mismo patrón ya usado por el
+      Atlas Hematológico para enlazar a un tema de Síndromes Urgentes desde
+      `modules/home/index.js`, aquí aplicado por primera vez **entre vistas
+      de nivel medio dentro de un mismo módulo** (de `tratamiento` a
+      `erc`/`fra`/`trr`/`nefrotoxicidad`). Si se necesita otro enlace
+      cruzado de este tipo en el futuro, añade el botón con esos
+      `data-*` — no hace falta tocar el JS.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

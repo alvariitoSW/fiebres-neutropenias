@@ -5,6 +5,7 @@
 // contenido clínico). Este archivo solo orquesta el switcher de nivel
 // medio y resuelve qué vista abrir desde cada nodo/segmento.
 import { createViewSwitcher } from '../../core/navigation.js';
+import { openCorkboardTopic } from '../../core/corkboard.js';
 import { initNefrona } from './nefrona.js';
 import { initRinon } from './rinon.js';
 import { init as initFisiologia } from './fisiologia.js';
@@ -60,6 +61,19 @@ export function init() {
     };
     const rinon = initRinon({
         onRoute: (key) => rutasRinon[key]?.(),
+    });
+
+    // Enlaces internos de la guía transversal de tratamiento IRA/ERC:
+    // saltan a una vista distinta del propio switcher (ERC/FRA/TRR/
+    // Nefrotoxicidad) y, si llevan panel/tab, abren directamente esa
+    // ficha del cuaderno de campo destino — mismo patrón que usa el Atlas
+    // Hematológico para enlazar a Síndromes Urgentes desde otro módulo.
+    document.querySelectorAll('.tx-link').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const { view, panel, tab } = btn.dataset;
+            if (view) nefroLevel.show(view);
+            if (panel && tab) openCorkboardTopic(panel, tab);
+        });
     });
 
     initFisiologia();

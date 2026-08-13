@@ -540,6 +540,12 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 .biblio-link:hover { text-decoration: underline; }
 .biblio-nota { display: block; font-size: 0.74rem; font-style: italic; color: var(--text-muted); margin-top: 3px; line-height: 1.4; }
 
+/* Enlace interno de navegación cruzada entre módulos de Nefrología (p. ej.
+   la guía transversal de tratamiento saltando a una ficha de ERC/FRA/TRR).
+   Es un <button>, no un <a> — no navega por href, dispara JS. */
+.tx-link { display: inline-block; background: none; border: none; padding: 4px 0; margin: 6px 12px 2px 0; color: var(--accent-blue); font-size: 0.8rem; font-weight: bold; font-family: inherit; text-decoration: none; cursor: pointer; }
+.tx-link:hover { text-decoration: underline; color: var(--accent-yellow); }
+
 /* ===================================================== */
 /* NEFRONA INTERACTIVA — menú principal de Nefrología.     */
 /* Ilustración anatómica real (nefrona-anatomia.jpg) con    */

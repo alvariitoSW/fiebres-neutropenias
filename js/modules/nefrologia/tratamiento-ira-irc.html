@@ -1,31 +1,129 @@
     <button class="back-btn btn-volver-nefro-kidney">← VOLVER</button>
     <div class="diag-header">
-        <h2 style="color: var(--accent-green); text-shadow: var(--glow-green);">Tratamiento médico de la IRA y la IRC</h2>
-        <p>Objetivo de rotación 6 · Nefrología al día (SEN)</p>
+        <h2 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">Guía rápida: manejo por escenario clínico</h2>
+        <p>Objetivo de rotación 6 · Tratamiento transversal IRA / ERC</p>
     </div>
 
     <div class="card">
-        <h3 style="color: var(--accent-green);">🚧 En preparación</h3>
-        <p style="font-size: 0.85rem; line-height: 1.5; color: var(--text-muted);">
-            Este objetivo no tiene bibliografía propia en el documento fuente: el manejo médico
-            específico por etiología y estadio está incluido dentro de los capítulos generales de
-            <strong>Enfermedad Renal Crónica</strong> e <strong>Insuficiencia Renal Aguda</strong> (ver
-            los apartados "ERC" y "FRA" de este mismo mapa). El contenido de este apartado se irá
-            desarrollando a partir de esas dos fuentes.
-        </p>
+        <h3 style="color: var(--accent-purple);">🧭 Cómo usar esta guía</h3>
+        <p style="font-size: 0.85rem; line-height: 1.6;">El tratamiento detallado de la Enfermedad Renal Crónica y del Fracaso Renal Agudo ya está desarrollado ficha a ficha en <strong>ERC</strong>, <strong>FRA</strong> y <strong>TRR</strong> — esta guía no repite ese contenido. Es un índice transversal por escenario clínico: ante una situación concreta a pie de cama, aquí tienes la orientación inmediata y un enlace directo a la ficha completa donde profundizar. Todo el contenido remite a fichas ya construidas a partir de KDIGO 2024, Rodríguez Benítez et al. (IRA) y Valdenebro et al. (TRR).</p>
     </div>
 
     <div class="card">
-        <h3 style="color: var(--accent-blue);">📚 Bibliografía</h3>
-        <p class="subtitle">Nefrología al día — Grupo Editorial Nefrología, SEN</p>
-        <ul class="biblio-list">
-            <li>
-                <a class="biblio-link" href="https://nefrologiaaldia.org/es-articulo-enfermedad-renal-cronica-654" target="_blank" rel="noopener">Enfermedad Renal Crónica</a>
-                <span class="biblio-nota">Capítulo general — incluye manejo médico específico por estadio.</span>
-            </li>
-            <li>
-                <a class="biblio-link" href="https://nefrologiaaldia.org/es-articulo-insuficiencia-renal-aguda-690" target="_blank" rel="noopener">Insuficiencia Renal Aguda</a>
-                <span class="biblio-nota">Gaínza de los Ríos FJ. Incluye manejo médico específico por etiología.</span>
-            </li>
-        </ul>
+        <h3 style="color: var(--accent-blue);">🔍 Diferenciación inicial: IRA vs. ERC vs. IRA sobre ERC</h3>
+        <table class="data-table">
+            <thead><tr><th></th><th>IRA (fracaso renal agudo)</th><th>ERC (enfermedad renal crónica)</th></tr></thead>
+            <tbody>
+                <tr><td>Instauración</td><td>Horas a días</td><td>Meses a años</td></tr>
+                <tr><td>Criterio temporal</td><td>Δ creatinina/diuresis en 48h-7 días (KDIGO)</td><td>Alteración persistente ≥3 meses</td></tr>
+                <tr><td>Tamaño renal (eco)</td><td>Habitualmente normal o aumentado</td><td>Habitualmente reducido, corteza adelgazada</td></tr>
+                <tr><td>Anemia/hipocalcemia</td><td>Infrecuentes salvo evento agudo grave</td><td>Frecuentes, proporcionales al estadio</td></tr>
+                <tr><td>Reversibilidad</td><td>Potencialmente reversible</td><td>Progresiva, no reversible</td></tr>
+            </tbody>
+        </table>
+        <p style="font-size: 0.8rem; color: var(--text-muted);">Un paciente con ERC puede desarrollar una IRA sobreañadida ("AKI on CKD") — la cronología completa IRA → ERA (enfermedad renal aguda, 7 días-3 meses) → ERC está desarrollada en <button class="tx-link" data-view="fra" data-panel="panel-fra-tabs" data-tab="fra-definicion">FRA · Concepto y estadificación →</button>. La ERC de base es, además, el principal factor de riesgo para desarrollar una IRA.</p>
+    </div>
+
+    <div class="card">
+        <h3 style="color: var(--accent-red);">⚡ Escenarios urgentes</h3>
+        <div class="micro-profiles">
+            <div class="micro-prof-item">
+                <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
+                    <span>🔴 Hiperpotasemia grave</span> <span class="toggle-icon">+</span>
+                </div>
+                <div class="micro-prof-body">
+                    <ul class="term-chips">
+                        <li>ECG inmediato</li>
+                        <li>Gluconato cálcico si cambios ECG</li>
+                        <li>Insulina + glucosa, salbutamol</li>
+                        <li>Captadores de K⁺ (resinas/patirómero/SZC)</li>
+                    </ul>
+                    <p style="font-size: 0.8rem;">K &gt;6,5 mmol/l resistente al tratamiento médico es indicación de TRR urgente.</p>
+                    <button class="tx-link" data-view="fra" data-panel="panel-fra-tabs" data-tab="fra-complicaciones-tto">Ver manejo médico completo (FRA) →</button>
+                    <button class="tx-link" data-view="trr" data-panel="panel-trr-tabs" data-tab="trr-indicaciones">Ver umbral de TRR (TRR) →</button>
+                    <button class="tx-link" data-view="erc" data-panel="panel-erc-tabs" data-tab="erc-acidosis-k">Ver manejo crónico en ERC →</button>
+                </div>
+            </div>
+            <div class="micro-prof-item">
+                <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
+                    <span>🔴 Acidosis metabólica grave</span> <span class="toggle-icon">+</span>
+                </div>
+                <div class="micro-prof-body">
+                    <p style="font-size: 0.85rem;">pH &lt;7,1-7,2 o bicarbonato &lt;12-15 mmol/l es indicación de TRR. En ERC, el umbral de suplementación oral con álcalis es más laxo (HCO₃⁻ &lt;18 mmol/l), sin llegar a indicación de diálisis salvo compromiso vital.</p>
+                    <button class="tx-link" data-view="trr" data-panel="panel-trr-tabs" data-tab="trr-indicaciones">Ver indicaciones de TRR →</button>
+                    <button class="tx-link" data-view="erc" data-panel="panel-erc-tabs" data-tab="erc-acidosis-k">Ver manejo crónico en ERC →</button>
+                </div>
+            </div>
+            <div class="micro-prof-item">
+                <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
+                    <span>🔴 Sobrecarga de volumen refractaria</span> <span class="toggle-icon">+</span>
+                </div>
+                <div class="micro-prof-body">
+                    <p style="font-size: 0.85rem;">Edema agudo de pulmón, disnea o distrés respiratorio refractarios a diuréticos son indicación de TRR, independientemente del grado de disfunción renal.</p>
+                    <button class="tx-link" data-view="trr" data-panel="panel-trr-tabs" data-tab="trr-indicaciones">Ver indicaciones de TRR →</button>
+                </div>
+            </div>
+            <div class="micro-prof-item">
+                <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
+                    <span>🔴 Síntomas urémicos</span> <span class="toggle-icon">+</span>
+                </div>
+                <div class="micro-prof-body">
+                    <p style="font-size: 0.85rem;">BUN &gt;100-110 mg/dl con disfunción plaquetaria, desnutrición/anorexia, insuficiencia cardíaca o mayor susceptibilidad a la infección es indicación de TRR para paliar los efectos de la uremia.</p>
+                    <button class="tx-link" data-view="trr" data-panel="panel-trr-tabs" data-tab="trr-indicaciones">Ver indicaciones de TRR →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 style="color: var(--accent-yellow);">🩺 Manejo no urgente</h3>
+        <div class="micro-profiles">
+            <div class="micro-prof-item">
+                <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
+                    <span>💊 Ajuste de fármacos en insuficiencia renal</span> <span class="toggle-icon">+</span>
+                </div>
+                <div class="micro-prof-body">
+                    <p style="font-size: 0.85rem;">Aplica tanto en IRA como en ERC — cualquier fármaco de eliminación renal necesita reajuste por aclaramiento de creatinina. Antes de prescribir, revisa siempre el fármaco concreto.</p>
+                    <button class="tx-link" data-view="nefrotoxicidad">Buscar fármaco en la tabla de ajuste →</button>
+                </div>
+            </div>
+            <div class="micro-prof-item">
+                <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
+                    <span>🛡️ Nefroprotección farmacológica</span> <span class="toggle-icon">+</span>
+                </div>
+                <div class="micro-prof-body">
+                    <p style="font-size: 0.85rem;">iSGLT2, ns-MRA (finerenona) y GLP-1 RA son los 3 pilares farmacológicos con nefroprotección demostrada en ERC — relevante también al alta de un episodio de IRA, para frenar la progresión posterior.</p>
+                    <button class="tx-link" data-view="erc" data-panel="panel-erc-tabs" data-tab="erc-nefroproteccion">Ver Ficha de nefroprotección (ERC) →</button>
+                </div>
+            </div>
+            <div class="micro-prof-item">
+                <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
+                    <span>🗓️ Derivación y preparación para diálisis crónica</span> <span class="toggle-icon">+</span>
+                </div>
+                <div class="micro-prof-body">
+                    <p style="font-size: 0.85rem;">Criterios de derivación a nefrología por riesgo/FGe/albuminuria, momento de inicio de diálisis (el ensayo IDEAL no mostró beneficio de supervivencia con inicio precoz) y cuidados conservadores integrales.</p>
+                    <button class="tx-link" data-view="erc" data-panel="panel-erc-tabs" data-tab="erc-atencion">Ver Ficha de derivación y atención (ERC) →</button>
+                </div>
+            </div>
+            <div class="micro-prof-item">
+                <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
+                    <span>🩸 Anemia y CKD-MBD</span> <span class="toggle-icon">+</span>
+                </div>
+                <div class="micro-prof-body">
+                    <p style="font-size: 0.85rem;">Alteración mineral-ósea e hiperuricemia asociadas a la ERC — la dosificación de quelantes/vitamina D/calcimiméticos remite a la KDIGO 2017 CKD-MBD (guía específica no repetida en la de 2024).</p>
+                    <button class="tx-link" data-view="erc" data-panel="panel-erc-tabs" data-tab="erc-mbd-urico">Ver Ficha de CKD-MBD e hiperuricemia (ERC) →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 style="color: var(--accent-green);">✅ Checklist — primeras horas ante sospecha de IRA</h3>
+        <dl class="kv-row"><dt>1. Clasificar</dt><dd>Aplicar criterios KDIGO (creatinina y/o diuresis) para confirmar y estadificar la IRA.</dd></dl>
+        <dl class="kv-row"><dt>2. Buscar la causa</dt><dd>Diferenciar prerrenal / renal intrínseca / posrenal — historia clínica, exploración de volemia, sedimento urinario, ecografía si hay sospecha obstructiva.</dd></dl>
+        <dl class="kv-row"><dt>3. Revisar fármacos</dt><dd>Suspender nefrotóxicos evitables y ajustar por función renal actual todos los que se mantengan.</dd></dl>
+        <dl class="kv-row"><dt>4. Optimizar volemia</dt><dd>Corregir hipoperfusión si prerrenal; evitar sobrecarga si ya hay oliguria/anuria.</dd></dl>
+        <dl class="kv-row"><dt>5. Vigilar indicaciones de TRR</dt><dd>Reevaluar de forma activa hiperpotasemia, acidosis, sobrecarga de volumen y síntomas urémicos — no esperar a la disfunción renal extrema si aparecen.</dd></dl>
+        <dl class="kv-row"><dt>6. Documentar la basal</dt><dd>Registrar creatinina/FGe previos si se conocen, para distinguir IRA de una ERC no diagnosticada.</dd></dl>
+        <p style="font-size: 0.8rem; color: var(--text-muted);">Desarrollo completo de cada paso en <button class="tx-link" data-view="fra" data-panel="panel-fra-tabs" data-tab="fra-diagnostico">FRA · Diagnóstico →</button>.</p>
     </div>
