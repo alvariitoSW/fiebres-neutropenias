@@ -43,6 +43,19 @@ export function init() {
     document.getElementById('btn-escalas-generales').addEventListener('click', () => topLevel.show('escalas'));
     document.querySelectorAll('.btn-volver-home').forEach(b => b.addEventListener('click', goHome));
 
+    // Enlaces cruzados entre especialidades (p. ej. la Matriz de Combate
+    // MDR de Neutropenia Febril saltando al buscador de ajuste de
+    // fármacos por función renal de Nefrología). Cambia de especialidad
+    // en el switcher raíz y delega en la API que expone nefrologia.init().
+    document.querySelectorAll('.especialidad-link').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (btn.dataset.target === 'nefrotoxicidad') {
+                topLevel.show('nefrologia');
+                nefrologiaApi?.irANefrotoxicidad();
+            }
+        });
+    });
+
     const citopeniasLevel = createViewSwitcher({
         menu: document.getElementById('citopenias-menu-view'),
         neutropeniaFebril: document.getElementById('neutropenia-febril-container'),
@@ -75,6 +88,13 @@ export function init() {
         onRoute: (key) => rutasAtlas[key]?.(),
         onCompass: () => topLevel.show('escalas'),
     });
+
+    // Enlaces cruzados entre módulos de Hematología fuera del propio Atlas
+    // (p. ej. desde la ficha de Terapias Dirigidas de Reconocimiento hacia
+    // el módulo completo de CAR-T) — reutilizan las mismas rutas de
+    // rutasAtlas, sin duplicar lógica de navegación.
+    document.querySelectorAll('[data-atlas-route]').forEach(btn =>
+        btn.addEventListener('click', () => rutasAtlas[btn.dataset.atlasRoute]?.()));
 
     topLevel.show('especialidades');
     citopeniasLevel.show('menu');

@@ -90,9 +90,9 @@ export function initNefrona({ onCategoria }) {
         if (data.categorias.length === 0) {
             categoriasCont.innerHTML = '<p style="font-size: 0.8rem; color: var(--text-muted);">🚧 Contenido clínico de esta zona en preparación.</p>';
         } else {
-            categoriasCont.innerHTML = data.categorias.map(key =>
-                `<button class="accordion-btn nav-btn nefro-categoria-btn" data-categoria="${key}" style="border-left: 4px solid var(--accent-green);">
-                    <span>Ver contenido clínico</span>
+            categoriasCont.innerHTML = data.categorias.map(cat =>
+                `<button class="accordion-btn nav-btn nefro-categoria-btn" data-categoria="${cat.key}" style="border-left: 4px solid var(--accent-green);">
+                    <span>${cat.etiqueta}</span>
                     <span style="font-size: 0.8rem; color: var(--accent-green);">[ VER → ]</span>
                 </button>`
             ).join('');

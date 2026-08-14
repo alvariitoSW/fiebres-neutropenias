@@ -1391,6 +1391,80 @@ por encima que sí diera cabida a todos.
       `erc`/`fra`/`trr`/`nefrotoxicidad`). Si se necesita otro enlace
       cruzado de este tipo en el futuro, añade el botón con esos
       `data-*` — no hace falta tocar el JS.
+  - **Auditoría de Hematología y Nefrología (a petición del usuario) y
+    correcciones aplicadas**: se revisó la estructura y consistencia
+    interna de los 4 módulos de Hematología y de Nefrología en conjunto
+    (sin releer los PDF fuente línea a línea, a diferencia de la auditoría
+    sistemática de ERC) y se aplicaron las correcciones factibles sin
+    fuente nueva:
+    - **Nefrona interactiva**: 6 de los 7 segmentos no llevaban a ningún
+      "contenido clínico" (solo mostraban la info de canales) — mostraban
+      el mensaje "🚧 en preparación" al buscar categorías. Se enlazaron 5
+      de esos 6 segmentos a fichas ya existentes del cuaderno de campo de
+      fisiología (`js/data/nefrona-data.js`, campo `categorias` ahora es
+      un array de `{key, etiqueta}` en vez de strings sueltos —
+      `nefrona.js` actualizado para pintar la `etiqueta` real en vez de un
+      texto genérico "Ver contenido clínico"): glomérulo →
+      Filtración/Regulación del filtrado; túbulo proximal → Reabsorción y
+      secreción; asa descendente → Regulación del agua corporal; túbulo
+      distal → Regulación del potasio/Hipopotasemia; colector →
+      Hiponatremia/Hipernatremia/Hiperpotasemia. La rama ascendente
+      delgada se dejó deliberadamente sin categoría — es un segmento de
+      transporte puramente pasivo sin diana farmacológica ni ficha propia,
+      forzar un enlace ahí sería relleno. `categoriaDisponible` en
+      `nefrologia/index.js` resuelve cada clave nueva con
+      `openCorkboardTopic('panel-fisio-tabs', 'fisio-XXX')` directamente
+      (sin cambiar de vista, porque el cuaderno de fisiología vive en la
+      misma página que la nefrona).
+    - **Etiquetas del mapa del riñón desactualizadas**: los nodos de ERC y
+      FRA en `rinon-menu.html` decían "ERC — dx y definición" / "FRA — dx
+      y definición", texto que se quedó de cuando esas páginas eran
+      placeholders. Corregido a "Enfermedad Renal Crónica" / "Fracaso
+      Renal Agudo", reflejando que hoy tienen tratamiento completo.
+    - **`diureticos-asa.html` sin bibliografía propia**: era la única
+      página de Nefrología sin su tarjeta 📚 — se le añadió, reutilizando
+      el enlace a "Diuréticos y Alteraciones Electrolíticas" de
+      nefrologiaaldia.org que se había retirado de la bibliografía de
+      `nefro-menu.html` en la auditoría anterior (por no ser fuente real
+      del cuaderno de fisiología) pero que sí es la fuente correcta de
+      esta página en concreto.
+    - **Enlace cruzado entre especialidades**: `nefrologia/index.js`
+      expone `irANefrotoxicidad()` en el objeto que devuelve `init()`
+      (junto a `volverAlMapa`), y `home/index.js` engancha un listener
+      genérico para botones `.especialidad-link[data-target]` que hace
+      `topLevel.show('nefrologia')` + `nefrologiaApi.irANefrotoxicidad()`.
+      Usado desde la Matriz de Combate MDR y la calculadora PK/PD de
+      Neutropenia Febril (`tratamiento-dirigido-view.html`), cuyos
+      antibióticos ya están en la tabla de 585 fármacos de Nefrología —
+      mismo patrón `.tx-link` reutilizado, pero cruzando el switcher raíz
+      de especialidades en vez de solo el switcher interno de un módulo.
+    - **"Fuentes y Evidencia" solo documentaba Neutropenia Febril**: las
+      otras 3 categorías de Hematología (Reconocimiento, Síndromes
+      Urgentes, Trasplante) tienen su propia bibliografía al final de su
+      página, pero no aparecían en este índice central. Se añadieron 3
+      tarjetas más (10-12) agregando esas mismas fuentes ya citadas — sin
+      fuente nueva, solo agregación.
+    - **Bibliografía de CID/PTT/SLT convertida a enlaces clicables**:
+      `sindromes.html` citaba sus fuentes como texto plano (`<p>`) en vez
+      del patrón `.biblio-link`/`.biblio-nota` ya estandarizado en
+      Nefrología. Se verificaron y confirmaron por `WebSearch` los DOI de
+      las 6 fuentes (Iba 2025, Levi 2009, Zheng 2025, Coppo 2010/French
+      score, Bendapudi 2017/PLASMIC score, Chan 2025, Cairo/Bishop 2004) y
+      se enlazaron.
+    - **Ficha "Terapias Dirigidas" de Reconocimiento** (la más corta de
+      las 9, fiel a su fuente pero comparativamente pobre): se le añadió
+      un enlace `🔗 Ver módulo completo de CAR-T →` que salta al módulo
+      completo de Trasplante/CAR-T (indicaciones, SLC/CRS, ICANS) — nuevo
+      patrón `data-atlas-route`, un listener genérico en `home/index.js`
+      que reutiliza las mismas rutas ya definidas en `rutasAtlas` del
+      Atlas Hematológico, sin duplicar lógica de navegación. No se amplió
+      el contenido de la ficha en sí (el propio Table 4 de Azoulay que la
+      sustenta ya está completo) para no fabricar contenido clínico sin
+      releer la fuente.
+    - **Pendiente, requiere fuente nueva del usuario** (no aplicado en
+      esta pasada): sistema de repaso/quiz para toda Hematología (0
+      preguntas hoy, frente a las 551 de Nefrología) y ampliar "Manejo
+      Citopenias" más allá de Neutropenia Febril.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

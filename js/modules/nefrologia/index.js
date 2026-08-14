@@ -42,8 +42,22 @@ export function init() {
     document.querySelectorAll('.btn-volver-nefro-kidney').forEach(b =>
         b.addEventListener('click', () => { nefroLevel.show('kidney'); nefrona.reset(); }));
 
+    // Categorías de contenido clínico de cada segmento de la nefrona. La
+    // mayoría abren directamente una ficha del cuaderno de campo de
+    // fisiología (mismo panel, no hace falta cambiar de vista porque
+    // fisio-corkboard vive en la misma página que la nefrona) — solo
+    // 'diureticos-asa' cambia de vista porque es una página aparte.
     const categoriaDisponible = {
         'diureticos-asa': () => nefroLevel.show('diureticosAsa'),
+        'fisio-filtracion': () => openCorkboardTopic('panel-fisio-tabs', 'fisio-filtracion'),
+        'fisio-regulacion': () => openCorkboardTopic('panel-fisio-tabs', 'fisio-regulacion'),
+        'fisio-tubular': () => openCorkboardTopic('panel-fisio-tabs', 'fisio-tubular'),
+        'fisio-agua-regulacion': () => openCorkboardTopic('panel-fisio-tabs', 'fisio-agua-regulacion'),
+        'fisio-potasio-regulacion': () => openCorkboardTopic('panel-fisio-tabs', 'fisio-potasio-regulacion'),
+        'fisio-hipopotasemia': () => openCorkboardTopic('panel-fisio-tabs', 'fisio-hipopotasemia'),
+        'fisio-hiponatremia': () => openCorkboardTopic('panel-fisio-tabs', 'fisio-hiponatremia'),
+        'fisio-hipernatremia': () => openCorkboardTopic('panel-fisio-tabs', 'fisio-hipernatremia'),
+        'fisio-hiperpotasemia': () => openCorkboardTopic('panel-fisio-tabs', 'fisio-hiperpotasemia'),
     };
 
     const nefrona = initNefrona({
@@ -99,5 +113,10 @@ export function init() {
             rinon.reset();
             nefrona.reset();
         },
+        // Usado desde Hematología (home/index.js) para saltar directamente
+        // al buscador de ajuste de fármacos por función renal — p. ej.
+        // desde la Matriz de Combate MDR de Neutropenia Febril, cuyos
+        // antibióticos ya están en esa misma tabla.
+        irANefrotoxicidad: () => nefroLevel.show('nefrotoxicidad'),
     };
 }

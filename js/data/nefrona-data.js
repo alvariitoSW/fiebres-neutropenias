@@ -19,7 +19,10 @@ export const segmentosNefrona = {
             { nombre: 'Barrera de filtración', funcion: 'Endotelio fenestrado + membrana basal + podocitos: filtra agua y solutos pequeños, retiene células y proteínas grandes.', diana: '—' },
             { nombre: '2 tipos de nefrona según su posición', funcion: 'Nefronas corticales (~85%): glomérulo en la corteza externa, asa de Henle corta que apenas entra en la médula. Nefronas yuxtamedulares (~15%): glomérulo junto a la unión corticomedular, asa de Henle larga que llega hasta la papila — son las responsables de generar el gradiente que permite concentrar mucho la orina.', diana: '—' },
         ],
-        categorias: [],
+        categorias: [
+            { key: 'fisio-filtracion', etiqueta: 'Filtración glomerular' },
+            { key: 'fisio-regulacion', etiqueta: 'Regulación del filtrado (simulador de TFG)' },
+        ],
     },
     'tubulo-proximal': {
         nombre: 'Túbulo contorneado proximal',
@@ -28,20 +31,27 @@ export const segmentosNefrona = {
             { nombre: 'Anhidrasa carbónica', funcion: 'Cataliza la hidratación de CO₂, clave en la reabsorción de bicarbonato.', diana: 'Acetazolamida', flujo: [{ ion: 'HCO₃⁻', direccion: 'reabsorcion' }, { ion: 'H⁺', direccion: 'secrecion' }] },
             { nombre: 'Intercambiador Na⁺/H⁺ (NHE3)', funcion: 'Reabsorción de Na⁺ acoplada a secreción de H⁺.', diana: '—', flujo: [{ ion: 'Na⁺', direccion: 'reabsorcion' }, { ion: 'H⁺', direccion: 'secrecion' }] },
         ],
-        categorias: [],
+        categorias: [
+            { key: 'fisio-tubular', etiqueta: 'Reabsorción y secreción tubular' },
+        ],
     },
     'asa-descendente': {
         nombre: 'Asa de Henle — rama descendente delgada',
         canales: [
             { nombre: 'Acuaporina-1', funcion: 'Muy permeable al agua; concentra la orina en su trayecto hacia la médula. Es mucho más larga en las nefronas yuxtamedulares (llega hasta la papila) que en las corticales (apenas entra en la médula externa) — de esa diferencia depende la capacidad máxima de concentración de la orina.', diana: '—', flujo: [{ ion: 'H₂O', direccion: 'reabsorcion' }] },
         ],
-        categorias: [],
+        categorias: [
+            { key: 'fisio-agua-regulacion', etiqueta: 'Regulación del agua corporal' },
+        ],
     },
     'asa-ascendente-delgada': {
         nombre: 'Asa de Henle — rama ascendente delgada (segmento fino)',
         canales: [
             { nombre: 'Transporte pasivo paracelular', funcion: 'Reabsorbe Na⁺, Cl⁻, Ca²⁺ y Mg²⁺ de forma pasiva (sin bomba activa), a favor del gradiente generado por la médula hipertónica.', diana: 'No es diana de diuréticos — al ser transporte pasivo, no hay ningún canal que bloquear farmacológicamente.', flujo: [{ ion: 'Na⁺/Cl⁻', direccion: 'reabsorcion' }, { ion: 'Ca²⁺/Mg²⁺', direccion: 'reabsorcion' }] },
         ],
+        // Sin categoría propia a propósito: es un segmento de transporte
+        // puramente pasivo, sin diana farmacológica ni ficha clínica
+        // dedicada — forzar un enlace aquí sería relleno, no contenido.
         categorias: [],
     },
     'asa-ascendente-gruesa': {
@@ -49,14 +59,19 @@ export const segmentosNefrona = {
         canales: [
             { nombre: 'NKCC2', funcion: 'Cotransporte activo Na⁺/K⁺/2Cl⁻; impermeable al agua, genera el gradiente medular hipertónico.', diana: 'Diuréticos de asa (furosemida, torasemida, bumetanida)', flujo: [{ ion: 'Na⁺', direccion: 'reabsorcion' }, { ion: 'K⁺', direccion: 'reabsorcion' }, { ion: 'Cl⁻', direccion: 'reabsorcion' }] },
         ],
-        categorias: ['diureticos-asa'],
+        categorias: [
+            { key: 'diureticos-asa', etiqueta: 'Diuréticos de asa' },
+        ],
     },
     'tubulo-distal': {
         nombre: 'Túbulo contorneado distal',
         canales: [
             { nombre: 'NCC', funcion: 'Cotransportador Na⁺/Cl⁻ sensible a tiazidas.', diana: 'Tiazidas (hidroclorotiazida, clortalidona)', flujo: [{ ion: 'Na⁺', direccion: 'reabsorcion' }, { ion: 'Cl⁻', direccion: 'reabsorcion' }] },
         ],
-        categorias: [],
+        categorias: [
+            { key: 'fisio-potasio-regulacion', etiqueta: 'Regulación del potasio corporal' },
+            { key: 'fisio-hipopotasemia', etiqueta: 'Hipopotasemia (Gitelman, tiazidas)' },
+        ],
     },
     colector: {
         nombre: 'Túbulo y conducto colector',
@@ -65,7 +80,11 @@ export const segmentosNefrona = {
             { nombre: 'Acuaporina-2', funcion: 'Canal de agua regulado por ADH en la membrana luminal.', diana: 'Antagonistas del receptor V2 de ADH (tolvaptán); relevante en diabetes insípida y SIADH', flujo: [{ ion: 'H₂O', direccion: 'reabsorcion' }] },
             { nombre: 'ROMK', funcion: 'Canal de K⁺ que permite su secreción hacia la luz tubular.', diana: '—', flujo: [{ ion: 'K⁺', direccion: 'secrecion' }] },
         ],
-        categorias: [],
+        categorias: [
+            { key: 'fisio-hiponatremia', etiqueta: 'Hiponatremia (SIADH)' },
+            { key: 'fisio-hipernatremia', etiqueta: 'Hipernatremia (diabetes insípida)' },
+            { key: 'fisio-hiperpotasemia', etiqueta: 'Hiperpotasemia (aldosterona, ENaC)' },
+        ],
     },
 };
 
