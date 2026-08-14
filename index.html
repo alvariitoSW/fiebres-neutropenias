@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HUD Clínico UCI</title>
-<link rel="stylesheet" href="css/variables.css?v=20260814">
-<link rel="stylesheet" href="css/base.css?v=20260814">
-<link rel="stylesheet" href="css/components.css?v=20260814">
+<link rel="stylesheet" href="css/variables.css?v=20260814-2">
+<link rel="stylesheet" href="css/base.css?v=20260814-2">
+<link rel="stylesheet" href="css/components.css?v=20260814-2">
 </head>
 <body>
 
@@ -240,11 +240,14 @@
     <!-- ========================================== -->
     <!-- VISTA: UCI / PAPERS TUITER                  -->
     <!-- ========================================== -->
-    <div id="uci-papers-view" style="display: none;" data-include="js/modules/uci-papers/uci-papers.html"></div>
+    <div id="uci-papers-view" style="display: none;">
+        <div id="uci-papers-menu-view" data-include="js/modules/uci-papers/uci-papers-menu.html"></div>
+        <div id="uci-paper-shock-view" style="display: none;" data-include="js/modules/uci-papers/shock-septico.html"></div>
+    </div>
 
     <div data-include="js/modules/quiz/quiz.html"></div>
 </div>
 
-<script type="module" src="js/main.js?v=20260814"></script>
+<script type="module" src="js/main.js?v=20260814-2"></script>
 </body>
 </html>

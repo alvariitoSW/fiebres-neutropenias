@@ -29,6 +29,13 @@ export function onNefrologiaListo(api) {
     nefrologiaApi = api;
 }
 
+// Mismo patrón de inyección perezosa que nefrologiaApi, para la API que
+// devuelve uciPapers.init() (ver modules/uci-papers/index.js).
+let uciPapersApi = null;
+export function onUciPapersListo(api) {
+    uciPapersApi = api;
+}
+
 export function init() {
     const topLevel = createViewSwitcher({
         especialidades: document.getElementById('especialidades-view'),
@@ -52,7 +59,10 @@ export function init() {
         topLevel.show('nefrologia');
         nefrologiaApi?.volverAlMapa();
     });
-    document.getElementById('btn-uci-papers').addEventListener('click', () => topLevel.show('uciPapers'));
+    document.getElementById('btn-uci-papers').addEventListener('click', () => {
+        topLevel.show('uciPapers');
+        uciPapersApi?.volverAlMenu();
+    });
     document.querySelectorAll('.btn-volver-especialidades').forEach(b => b.addEventListener('click', () => topLevel.show('especialidades')));
 
     document.getElementById('btn-escalas-generales').addEventListener('click', () => topLevel.show('escalas'));

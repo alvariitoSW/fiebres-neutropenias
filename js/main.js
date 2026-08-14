@@ -27,16 +27,17 @@ async function start() {
     trasplante.init();
     const nefrologiaApi = nefrologia.init();
     home.onNefrologiaListo(nefrologiaApi);
-    uciPapers.init();
+    const uciPapersApi = uciPapers.init();
+    home.onUciPapersListo(uciPapersApi);
 
     // Única llamada a initQuiz() de toda la app — el modal
-    // (#quiz-modal-overlay) es un partial compartido, así que Hematología
-    // y Nefrología exponen su banco/temas ya combinados en vez de llamar
+    // (#quiz-modal-overlay) es un partial compartido, así que cada
+    // especialidad expone su banco/temas ya combinados en vez de llamar
     // a initQuiz() cada una por su lado (ver comentario en quiz.js).
     initQuiz({
-        triggerId: [...home.quizTriggerId, ...nefrologia.quizTriggerId],
-        banco: [...home.quizBanco, ...nefrologia.quizBanco],
-        temas: [...home.quizTemas, ...nefrologia.quizTemas],
+        triggerId: [...home.quizTriggerId, ...nefrologia.quizTriggerId, ...uciPapers.quizTriggerId],
+        banco: [...home.quizBanco, ...nefrologia.quizBanco, ...uciPapers.quizBanco],
+        temas: [...home.quizTemas, ...nefrologia.quizTemas, ...uciPapers.quizTemas],
     });
 }
 

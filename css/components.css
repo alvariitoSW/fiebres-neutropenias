@@ -546,6 +546,13 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 .tx-link { display: inline-block; background: none; border: none; padding: 4px 0; margin: 6px 12px 2px 0; color: var(--accent-blue); font-size: 0.8rem; font-weight: bold; font-family: inherit; text-decoration: none; cursor: pointer; }
 .tx-link:hover { text-decoration: underline; color: var(--accent-yellow); }
 
+/* Resaltado tipo "subrayador" para conceptos clave dentro de prosa narrativa
+   — pensado para contenido de estudio denso (p. ej. UCI/Papers Tuiter),
+   complementario a <strong> (que ya colorea con --item-color dentro de
+   .micro-prof-body). Simula un trazo de rotulador bajo el texto en vez de
+   cambiar el color del texto en sí. */
+.hl { background: linear-gradient(to bottom, transparent 62%, rgba(212, 175, 55, 0.32) 62%); font-weight: 600; }
+
 /* ===================================================== */
 /* NEFRONA INTERACTIVA — menú principal de Nefrología.     */
 /* Ilustración anatómica real (nefrona-anatomia.jpg) con    */

@@ -1511,23 +1511,81 @@ Tercera especialidad del menú raíz (`#btn-uci-papers`, junto a Hematología y
 Nefrología), pensada para recoger resúmenes esquematizados de papers de
 Medicina Intensiva que circulan por redes sociales (X/Twitter) — el estudio,
 su diseño, el resultado principal y su aplicación práctica a pie de cama.
-Arranca como **placeholder puro** (`js/modules/uci-papers/uci-papers.html` +
-`index.js`, vista `#uci-papers-view` registrada en el mismo `topLevel`
-switcher de `modules/home/index.js` que el resto de vistas de nivel
-raíz — mismo patrón que usa Escalas Generales, sin switcher propio porque
-todavía es una sola pantalla), igual que arrancó Nefrología en su día:
-mismo criterio de todo el proyecto de "nunca fabricar contenido clínico sin
-una fuente real" — no hay ningún PDF/hilo/artículo aportado todavía, así
-que la vista es solo cabecera + tarjeta "🚧 en preparación" explicando el
-propósito. Cuando el usuario aporte los primeros papers/hilos a resumir,
-sigue el mismo patrón ya establecido en el resto de la app (cuaderno de
-campo si hay varios temas, bibliografía con enlaces verificados por
-`WebSearch`, preguntas de quiz opcionales) — no reinventar la estructura.
-`js/modules/uci-papers/index.js` no tiene lógica propia aún (el botón
-"← VOLVER" ya lo engancha `home/index.js` vía `.btn-volver-especialidades`,
-igual que en Nefrología); se registra en `js/main.js` como un módulo más
-(`uciPapers.init()`), siguiendo la misma convención de módulo que el resto
-de categorías.
+Arrancó como placeholder puro, igual que Nefrología en su día, y pasó a
+tener contenido real en cuanto el usuario aportó el primer PDF.
+
+- **Dos niveles**, mismo patrón que Citopenias/Trasplante en Hematología:
+  un **submenú de papers** (`#uci-papers-menu-view`,
+  `js/modules/uci-papers/uci-papers-menu.html`, con `.btn-volver-especialidades`)
+  del que cuelga un botón por paper, y la **vista propia de cada paper**
+  (p. ej. `#uci-paper-shock-view`) con su propio cuaderno de campo. El
+  switcher `uciLevel` vive dentro de `js/modules/uci-papers/index.js`
+  (`createViewSwitcher({ menu, shockSeptico })`), no en
+  `modules/home/index.js` — mismo motivo que Nefrología tiene su propio
+  `nefroLevel`: la vista raíz `#uci-papers-view` (registrada en el
+  `topLevel` de `home/index.js`) es solo el contenedor exterior. Al volver
+  a "UCI / Papers Tuiter" desde Especialidades, `uciPapers.init()` devuelve
+  `{ volverAlMenu }`, que `home/index.js` inyecta perezosamente
+  (`onUciPapersListo`, mismo patrón que `onNefrologiaListo`) para dejar
+  siempre el submenú de papers como pantalla de entrada — igual que
+  `goHome()`/`nefrologia.volverAlMapa()` hacen con el Atlas y el mapa del
+  riñón. Añadir un paper nuevo en el futuro: 1) botón nuevo en
+  `uci-papers-menu.html`, 2) su propio `<vista>.html` con
+  `.btn-volver-uci-menu`, 3) registrarlo en `index.html` dentro de
+  `#uci-papers-view` y en el switcher `uciLevel` de `uci-papers/index.js`.
+- **Primer paper: "25 años de resucitación hemodinámica en el shock
+  séptico"** (`js/modules/uci-papers/shock-septico.html`). Fuente:
+  Hernandez G, Hunsicker O, De Backer D, Angus DC, Bakker J, Basmaji J, et
+  al. Twenty-five years of septic shock hemodynamic resuscitation trials: a
+  conceptual perspective. Crit Care. 2026;30:400 (artículo tipo
+  *Perspective*/Open Access, no una guía de práctica clínica — recoge la
+  lectura conceptual de los autores sobre 6 ensayos landmark: EGDT 2001,
+  LACTATE 2010, SEPSISPAM 2014, ANDROMEDA-SHOCK 2019, CLASSIC 2022,
+  ANDROMEDA-SHOCK 2 2025). PDF completo subido a
+  `docs/hernandez-2026-resucitacion-shock-septico.pdf`, mismo criterio que
+  el resto de fuentes del proyecto (preferible a enlazar a una URL externa
+  que pueda dejar de estar viva).
+  - **Cuaderno de campo de 8 fichas** (`#uci-shock-corkboard`/
+    `#panel-uci-shock-tabs`, mismo `core/corkboard.js` de siempre):
+    Introducción, EGDT (2001), LACTATE (2010), SEPSISPAM (2014),
+    ANDROMEDA-SHOCK (2019), CLASSIC (2022), ANDROMEDA-SHOCK 2 (2025), y
+    Motores del progreso y reflexiones finales. Cada ficha de ensayo
+    incluye su fila completa de la Tabla 1 del artículo (racional
+    fisiológico / limitaciones potenciales / aportación metodológica,
+    como `.kv-row`) además del texto narrativo — no se resumió ni se
+    dejó fuera ningún ensayo de los 6.
+  - **3 figuras reales del artículo** extraídas rasterizando las páginas
+    completas con `pdftoppm -r 300` y recortando con Pillow (no
+    `pdfimages`: las figuras de este PDF están compuestas de decenas de
+    imágenes/iconos superpuestos en InDesign, así que extraer los objetos
+    de imagen individuales da fragmentos irreconocibles — hay que
+    rasterizar la página entera y recortar la región de la figura, método
+    nuevo en el proyecto, distinto del `pdfimages -all` ya usado en
+    Nefrología/Reconocimiento): `shock-fig1-evolucion.jpg` (línea
+    temporal de los 6 ensayos, Fig. 1), `shock-fig2-conceptual.jpg` (mapa
+    conceptual circular, Fig. 2) y `shock-fig3-drivers.jpg` (motores del
+    progreso, Fig. 3) en `js/modules/uci-papers/img/`. La Tabla 2 del
+    artículo (5 dominios de progreso conceptual) se recreó como
+    `.data-table` nativa en la última ficha, no como imagen.
+  - **Nueva clase `.hl`** (`css/components.css`) — resaltado tipo
+    "rotulador" (gradiente de fondo bajo el texto) para conceptos clave
+    dentro de la prosa, a petición explícita del usuario ("subrayados y
+    resaltados para que sea fácil estudiar"). Complementa a `<strong>`
+    (que ya colorea con `--item-color` dentro de `.micro-prof-item`) en
+    vez de sustituirlo: `<strong>` para términos/definiciones, `.hl` para
+    frases o datos clave dentro del párrafo — mismo criterio a seguir si
+    se añaden más papers con contenido narrativo denso.
+  - **40 preguntas de quiz** (`js/data/shock-septico-preguntas.js`,
+    `shock-q001`-`q040`, 5 por ficha × 8 fichas — mismo baseline mínimo ya
+    usado al arrancar otros módulos), con `triggerId: 'btn-uci-shock-repasar'`
+    exportado desde `uci-papers/index.js` (`quizTriggerId`/`quizBanco`/
+    `quizTemas`, mismo patrón de fusión en `main.js` que Hematología y
+    Nefrología — ver más abajo). El banco combinado de toda la app queda
+    en **767 preguntas** (727 previas + 40 de este paper).
+  - Bibliografía: una única entrada enlazando al PDF en `docs/`, con nota
+    explícita de que es un artículo de perspectiva/opinión, no una
+    revisión sistemática ni una guía — para que no se lea como
+    recomendación normativa.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

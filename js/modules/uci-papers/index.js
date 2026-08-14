@@ -1,10 +1,39 @@
 // Módulo "UCI / Papers Tuiter": resúmenes de papers de Medicina Intensiva
-// compartidos en redes sociales. Arranca como placeholder puro, igual que
-// Nefrología al principio de este proyecto — sin contenido clínico hasta
-// que se aporten los artículos/hilos reales a resumir (nunca se fabrica
-// contenido sin fuente, ver CLAUDE.md). El único elemento interactivo de
-// la vista, el botón "← VOLVER", ya se engancha de forma genérica en
-// home/index.js (.btn-volver-especialidades) — este init() no tiene nada
-// propio que hacer todavía.
+// compartidos en redes sociales. Cada paper es una entrada de un submenú
+// propio (mismo patrón que Citopenias/Trasplante en Hematología) y, dentro
+// de él, un cuaderno de campo con sus bloques temáticos — nunca se fabrica
+// contenido clínico sin una fuente real (ver CLAUDE.md).
+import { createViewSwitcher } from '../../core/navigation.js';
+import { initCorkboard } from '../../core/corkboard.js';
+import { preguntasShockSeptico, temasShockSeptico } from '../../data/shock-septico-preguntas.js';
+
+// El modal de repaso (#quiz-modal-overlay) es un único partial compartido
+// por TODA la app — solo puede existir una llamada activa a initQuiz() en
+// toda la página (ver quiz.js). UCI/Papers Tuiter expone aquí su
+// banco/temas para que main.js los fusione con los de Hematología y
+// Nefrología en una única llamada.
+export const quizTriggerId = ['btn-uci-shock-repasar'];
+export const quizBanco = [...preguntasShockSeptico];
+export const quizTemas = [...temasShockSeptico];
+
 export function init() {
+    const uciLevel = createViewSwitcher({
+        menu: document.getElementById('uci-papers-menu-view'),
+        shockSeptico: document.getElementById('uci-paper-shock-view'),
+    });
+
+    document.getElementById('btn-paper-shock').addEventListener('click', () => uciLevel.show('shockSeptico'));
+    document.querySelectorAll('.btn-volver-uci-menu').forEach(b => b.addEventListener('click', () => uciLevel.show('menu')));
+
+    initCorkboard('uci-shock-corkboard', 'panel-uci-shock-tabs');
+
+    uciLevel.show('menu');
+
+    // Deja siempre el submenú de papers como pantalla de entrada al
+    // reentrar desde Especialidades — mismo comportamiento que
+    // nefrologia.volverAlMapa() y atlas.reset() ya dan a Nefrología y
+    // Hematología. Lo usa home/index.js.
+    return {
+        volverAlMenu: () => uciLevel.show('menu'),
+    };
 }
