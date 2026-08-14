@@ -14,6 +14,7 @@ export const temasERC = [
     { key: 'erc-cv', etiqueta: 'Riesgo cardiovascular: lípidos, FA y cardiopatía isquémica' },
     { key: 'erc-farmacos', etiqueta: 'Manejo de fármacos, nefrotoxicidad y contraste' },
     { key: 'erc-atencion', etiqueta: 'Derivación, síntomas, modelos de atención y diálisis' },
+    { key: 'erc-unidad-erca', etiqueta: 'La Unidad de ERCA: equipo, decisiones y preparación del TRS' },
 ];
 
 export const preguntasERC = [
@@ -966,5 +967,71 @@ export const preguntasERC = [
         opciones: ['11-14 años', '25-30 años', '1-2 años', 'No se recomienda ninguna preparación específica'],
         correcta: 0,
         explicacion: 'Se recomienda preparar a adolescentes y sus familias para la transferencia a la atención de adultos a partir de los 11-14 años, usando listas de verificación que evalúen la disposición y guíen la preparación.',
+    },
+
+    // ---- La Unidad de ERCA: equipo, decisiones y preparación del TRS ----
+    {
+        id: 'erc-q089',
+        tema: 'erc-unidad-erca',
+        enunciado: '¿Con qué filtrado glomerular (FG), en al menos 2 determinaciones, deben ser remitidos los pacientes a la consulta de ERCA, y con qué antelación ideal respecto al inicio estimado de TRS?',
+        opciones: ['FG <25 ml/min, idealmente antes de los 6 meses previos al inicio estimado de TRS', 'FG <60 ml/min, sin plazo definido', 'FG <10 ml/min, en la misma semana del inicio de TRS', 'FG <45 ml/min, con al menos 5 años de antelación'],
+        correcta: 0,
+        explicacion: 'Deben ser remitidos a la consulta ERCA los pacientes con FG por debajo de 25 ml/min en al menos 2 determinaciones, y el tiempo ideal de derivación debería ser antes de los 6 meses del inicio estimado de TRS.',
+    },
+    {
+        id: 'erc-q090',
+        tema: 'erc-unidad-erca',
+        enunciado: '¿Cuántos estándares tiene el manual ACERCA (Acreditación de Calidad de las Unidades ERCA) y en cuántos bloques temáticos se agrupan?',
+        opciones: ['66 estándares en 5 bloques', '10 estándares en 2 bloques', '200 estándares en 10 bloques', '30 estándares en 3 bloques'],
+        correcta: 0,
+        explicacion: 'El manual de ACERCA cuenta con 66 estándares, divididos en obligatorios y recomendables, agrupados en 5 bloques: requisitos generales, recursos materiales y humanos, procesos, derechos y seguridad de los pacientes, y resultados.',
+    },
+    {
+        id: 'erc-q091',
+        tema: 'erc-unidad-erca',
+        enunciado: '¿Qué profesionales debería incluir, en lo posible, el equipo interdisciplinar de una unidad de ERCA?',
+        opciones: ['Nefrólogo/a, enfermero/a referente, nutricionista/dietista, psicólogo/a, trabajador/a social, fisioterapeuta, farmacéutico/a y cirujano/a vascular o general', 'Únicamente nefrólogo/a y enfermero/a', 'Solo cirujano vascular y anestesista', 'Únicamente psicólogo/a y trabajador/a social'],
+        correcta: 0,
+        explicacion: 'La unidad interdisciplinar de ERCA debería incluir en lo posible: nefrólogo/a, enfermero/a referente, nutricionista o dietista, psicólogo/a, trabajador/a social, fisioterapeuta, farmacéutico/a y cirujano/a vascular o general.',
+    },
+    {
+        id: 'erc-q092',
+        tema: 'erc-unidad-erca',
+        enunciado: 'Según la Tabla de indicaciones/contraindicaciones de la diálisis peritoneal, ¿qué determinantes esenciales suelen definir, en la práctica, la asignación de DP frente a otra técnica, más allá de los factores médicos categóricos?',
+        opciones: ['El estilo de vida, la actitud y las posibilidades del paciente', 'Únicamente el peso corporal', 'Exclusivamente la edad del paciente', 'Solo la distancia geográfica al hospital'],
+        correcta: 0,
+        explicacion: 'En la práctica es habitual la ausencia de factores médicos que indiquen o contraindiquen de forma categórica la DP — siendo el estilo de vida, la actitud y las posibilidades del paciente los determinantes esenciales para asignar una u otra técnica de diálisis.',
+    },
+    {
+        id: 'erc-q093',
+        tema: 'erc-unidad-erca',
+        enunciado: 'De los 3 factores pronósticos con mayor peso (+++) en la decisión de tratamiento conservador en ERCA, ¿cuáles son?',
+        opciones: ['Velocidad de pérdida de la función renal, funcionalidad, estado nutricional, deterioro cognitivo y comorbilidad', 'Edad y sintomatología únicamente', 'Solo la autopercepción del paciente', 'Ninguno tiene peso relevante en la decisión'],
+        correcta: 0,
+        explicacion: 'Según la Tabla de factores pronósticos en ERCA, la velocidad de pérdida de la función renal, la funcionalidad, el estado nutricional, el deterioro cognitivo y la comorbilidad tienen la máxima importancia (+++) en la toma de decisiones sobre tratamiento conservador.',
+    },
+    {
+        id: 'erc-q094',
+        tema: 'erc-unidad-erca',
+        enunciado: '¿Cuáles son las 3 fases del proceso de información, deliberación y elección de la modalidad de TRS?',
+        opciones: ['Fase de determinación de valores, fase informativa, y fase deliberativa/reflexiva', 'Fase de diagnóstico, fase de tratamiento y fase de alta', 'Fase preoperatoria, intraoperatoria y postoperatoria', 'Solo existe una única fase informativa'],
+        correcta: 0,
+        explicacion: 'El proceso consta de 3 fases: determinación de valores (valoración integral, tarjetas de valores, agenda de un día normal), fase informativa (detalle de las modalidades de TRS), y fase deliberativa/reflexiva (resolución de dudas y elección final).',
+    },
+    {
+        id: 'erc-q095',
+        tema: 'erc-unidad-erca',
+        enunciado: 'Según la guía ISPD de diálisis peritoneal en la lesión renal aguda, ¿qué objetivo de urea Kt/V semanal se plantea como comparable a la hemodiálisis diaria en pacientes críticamente enfermos?',
+        opciones: ['Kt/V semanal de 3,5', 'Kt/V semanal de 0,5', 'Kt/V semanal de 10', 'No se define ningún objetivo de Kt/V'],
+        correcta: 0,
+        explicacion: 'La guía ISPD plantea que un objetivo de urea Kt/V semanal de 3,5 en diálisis peritoneal proporciona resultados comparables a los de la hemodiálisis diaria en pacientes críticamente enfermos.',
+    },
+    {
+        id: 'erc-q096',
+        tema: 'erc-unidad-erca',
+        enunciado: '¿Qué muestra el metaanálisis de Garofalo et al. sobre la hemodiálisis incremental (2 veces/semana adaptada a la función renal residual) frente a la diálisis completa (3 veces/semana)?',
+        opciones: ['Permite preservar la función renal residual un año más, sin aumento del riesgo de mortalidad', 'Aumenta significativamente la mortalidad frente a la diálisis completa', 'No tiene ningún efecto sobre la función renal residual', 'Solo es aplicable a la diálisis peritoneal, nunca a la hemodiálisis'],
+        correcta: 0,
+        explicacion: 'El metaanálisis de Garofalo et al. (22 estudios, 75.292 pacientes) concluyó que la hemodiálisis incremental permite preservar la función renal residual un año más que la diálisis completa, tanto en HD como en DP, sin aumento del riesgo de mortalidad.',
     },
 ];

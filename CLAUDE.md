@@ -1274,6 +1274,44 @@ por encima que sí diera cabida a todos.
       mismo método ya establecido en la primera auditoría de bibliografía
       — `WebFetch` a `nefrologiaaldia.org` sigue bloqueado por el proxy de
       salida de red, así que no es una opción para verificar directamente.
+  - **Ficha 13 de `erc.html`: "La Unidad de ERCA: equipo, decisiones y
+    preparación del TRS"** — añadida a partir de un PDF nuevo aportado por
+    el usuario: Arenas MD, Collado S, Fernández Chamarro M. Pautas de
+    derivación a la Unidad de Enfermedad Renal Crónica Avanzada (ERCA).
+    Nefrología al día (SEN), actualizado 3/10/2024 (28 págs.), archivado en
+    `docs/arenas-2024-pautas-derivacion-erca.pdf`. Se evaluó primero el
+    contenido completo del PDF para decidir dónde encajaba mejor en la app
+    ya existente: se descartó ampliar `trr.html` (esa fuente —Valdenebro et
+    al.— es sobre elección de modalidad de TRS en el paciente crítico de
+    UCI con FRA, un contexto agudo distinto) y se descartó duplicar la
+    Ficha 11 ya existente de `erc.html` ("Derivación, síntomas, modelos de
+    atención y diálisis", de fuente KDIGO 2024) porque, aunque ambas tratan
+    "derivación e inicio de diálisis", el contenido de este PDF es
+    genuinamente nuevo y no se solapa: el proceso concreto de toma de
+    decisiones compartida de modalidad de TRS (con sus herramientas reales
+    — tarjetas de valores, cuestionario de estilo de vida, agenda de un día
+    normal, hoja de ventajas/desventajas, cuestionario de decisión —, sus 3
+    fases, y el test de elegibilidad por modalidad con la Tabla de
+    indicaciones/contraindicaciones de DP y la Tabla de factores
+    pronósticos de tratamiento conservador), el modelo de acreditación
+    ACERCA, la composición del equipo interdisciplinar, los criterios
+    detallados de inicio de diálisis urgente/no urgente y
+    planificado/no planificado (ausentes en la Ficha 11, que solo cubre el
+    principio general KDIGO), diálisis peritoneal urgente (guía ISPD),
+    hemodiálisis incremental, criterios de acceso vascular, valoración
+    psicológica, valoración socioeconómica (con la Escala Socio-Familiar de
+    Gijón) y pacientes mentores — ninguno de estos 9 subtemas existía antes
+    en ningún punto de Nefrología. Las figuras del PDF (equipo
+    interdisciplinar, fases del proceso, tarjetas de valores, cuestionarios)
+    son capturas de formularios/plantillas de la consulta, no imágenes
+    diagnósticas ni fotografías clínicas — siguiendo el mismo criterio ya
+    aplicado en HTA Fichas 1-4/7-8 (flujogramas/tablas fácilmente
+    tabulables no se extraen como imagen), se recrearon íntegramente como
+    `.kv-row`/`.term-chips`/`.micro-prof-item`/`.data-table` nativos, sin
+    extraer ninguna imagen nueva. Se añadieron 8 preguntas de quiz
+    (`erc-q089`-`q096`, mismo baseline de 8 usado al arrancar el resto de
+    fichas de ERC), llevando el banco de ERC a 96 preguntas y el banco
+    combinado de toda la app a **775 preguntas** (767 previas + 8).
   - **`trr.html`** (objetivo de rotación 7, "Terapias de reemplazo renal")
     fue la 4ª de las 6 categorías del mapa del riñón en pasar de
     placeholder a contenido real, a partir de Valdenebro M,
