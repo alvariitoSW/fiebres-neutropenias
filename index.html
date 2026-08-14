@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HUD Clínico UCI</title>
-<link rel="stylesheet" href="css/variables.css?v=20260813-2">
-<link rel="stylesheet" href="css/base.css?v=20260813-2">
-<link rel="stylesheet" href="css/components.css?v=20260813-2">
+<link rel="stylesheet" href="css/variables.css?v=20260814">
+<link rel="stylesheet" href="css/base.css?v=20260814">
+<link rel="stylesheet" href="css/components.css?v=20260814">
 </head>
 <body>
 
@@ -36,6 +36,11 @@
         <button class="accordion-btn nav-btn" id="btn-nefrologia" style="border-left: 4px solid var(--accent-green);">
             <span><span class="gral-icon" style="color: var(--accent-green); text-shadow: var(--glow-green);">🫘</span>NEFROLOGÍA</span>
             <span style="font-size: 0.8rem; color: var(--accent-green);">[ VER → ]</span>
+        </button>
+
+        <button class="accordion-btn nav-btn" id="btn-uci-papers" style="border-left: 4px solid var(--accent-purple);">
+            <span><span class="gral-icon" style="color: var(--accent-purple); text-shadow: var(--glow-purple);">🐦</span>UCI / PAPERS TUITER</span>
+            <span style="font-size: 0.8rem; color: var(--accent-purple);">[ VER → ]</span>
         </button>
     </div>
 
@@ -232,9 +237,14 @@
         <div id="nefro-tratamiento-view" style="display: none;" data-include="js/modules/nefrologia/tratamiento-ira-irc.html"></div>
         <div id="nefro-trr-view" style="display: none;" data-include="js/modules/nefrologia/trr.html"></div>
     </div>
+    <!-- ========================================== -->
+    <!-- VISTA: UCI / PAPERS TUITER                  -->
+    <!-- ========================================== -->
+    <div id="uci-papers-view" style="display: none;" data-include="js/modules/uci-papers/uci-papers.html"></div>
+
     <div data-include="js/modules/quiz/quiz.html"></div>
 </div>
 
-<script type="module" src="js/main.js?v=20260813-2"></script>
+<script type="module" src="js/main.js?v=20260814"></script>
 </body>
 </html>

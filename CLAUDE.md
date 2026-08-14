@@ -4,11 +4,14 @@ App web de estratificación de riesgo clínico y apoyo a la decisión en UCI,
 organizada por especialidad. Hoy tiene contenido completo de **Hematología**
 (manejo de citopenias, reconocimiento temprano del paciente hematológico,
 síndromes urgentes, trasplante de progenitores, más un acceso directo a
-escalas generales de UCI) y un espacio reservado para **Nefrología**
-(en preparación). Está pensada para ir creciendo con más especialidades
-(cardiología, radiología, etc.) según se vaya aportando contenido. Es una
-herramienta de apoyo para médicos, pensada para consultarse a pie de cama
-en el móvil.
+escalas generales de UCI), **Nefrología** con contenido real en la mayoría
+de sus objetivos de rotación (fisiología/electrolitos, HTA, ERC, FRA, TRR,
+ajuste de fármacos), y un espacio reservado para **UCI / Papers Tuiter**
+(en preparación) pensado para resúmenes de papers de Medicina Intensiva
+compartidos en redes sociales. Está pensada para ir creciendo con más
+especialidades (cardiología, radiología, etc.) según se vaya aportando
+contenido. Es una herramienta de apoyo para médicos, pensada para
+consultarse a pie de cama en el móvil.
 
 ## Decisiones de arquitectura (ya tomadas, no las reabras sin preguntar)
 
@@ -1502,10 +1505,34 @@ por encima que sí diera cabida a todos.
       desde el índice de la especialidad, nunca llamar a `initQuiz()`
       dentro de un módulo de especialidad.
 
+### UCI / Papers Tuiter
+
+Tercera especialidad del menú raíz (`#btn-uci-papers`, junto a Hematología y
+Nefrología), pensada para recoger resúmenes esquematizados de papers de
+Medicina Intensiva que circulan por redes sociales (X/Twitter) — el estudio,
+su diseño, el resultado principal y su aplicación práctica a pie de cama.
+Arranca como **placeholder puro** (`js/modules/uci-papers/uci-papers.html` +
+`index.js`, vista `#uci-papers-view` registrada en el mismo `topLevel`
+switcher de `modules/home/index.js` que el resto de vistas de nivel
+raíz — mismo patrón que usa Escalas Generales, sin switcher propio porque
+todavía es una sola pantalla), igual que arrancó Nefrología en su día:
+mismo criterio de todo el proyecto de "nunca fabricar contenido clínico sin
+una fuente real" — no hay ningún PDF/hilo/artículo aportado todavía, así
+que la vista es solo cabecera + tarjeta "🚧 en preparación" explicando el
+propósito. Cuando el usuario aporte los primeros papers/hilos a resumir,
+sigue el mismo patrón ya establecido en el resto de la app (cuaderno de
+campo si hay varios temas, bibliografía con enlaces verificados por
+`WebSearch`, preguntas de quiz opcionales) — no reinventar la estructura.
+`js/modules/uci-papers/index.js` no tiene lógica propia aún (el botón
+"← VOLVER" ya lo engancha `home/index.js` vía `.btn-volver-especialidades`,
+igual que en Nefrología); se registra en `js/main.js` como un módulo más
+(`uciPapers.init()`), siguiendo la misma convención de módulo que el resto
+de categorías.
+
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
-también `especialidades` y `nefrologia` como vistas más del mismo switcher
-raíz —, submenú de Citopenias, submenú de Trasplante), inicializa el Atlas
+también `especialidades`, `nefrologia` y `uciPapers` como vistas más del
+mismo switcher raíz —, submenú de Citopenias, submenú de Trasplante), inicializa el Atlas
 (`initAtlas()` de `modules/home/atlas.js`) y conecta los botones. Los
 botones "← VOLVER" usan una clase específica según a qué nivel deben
 volver: `.btn-volver-especialidades`, `.btn-volver-home`,

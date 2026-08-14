@@ -12,6 +12,7 @@ import * as reconocimiento from './modules/reconocimiento/index.js';
 import * as sindromesUrgentes from './modules/sindromes-urgentes/index.js';
 import * as trasplante from './modules/trasplante/index.js';
 import * as nefrologia from './modules/nefrologia/index.js';
+import * as uciPapers from './modules/uci-papers/index.js';
 import { initQuiz } from './modules/quiz/quiz.js';
 
 async function start() {
@@ -26,6 +27,7 @@ async function start() {
     trasplante.init();
     const nefrologiaApi = nefrologia.init();
     home.onNefrologiaListo(nefrologiaApi);
+    uciPapers.init();
 
     // Única llamada a initQuiz() de toda la app — el modal
     // (#quiz-modal-overlay) es un partial compartido, así que Hematología

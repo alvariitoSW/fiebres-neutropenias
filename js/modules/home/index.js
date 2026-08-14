@@ -39,6 +39,7 @@ export function init() {
         sindromes: document.getElementById('sindromes-view'),
         trasplante: document.getElementById('trasplante-view'),
         nefrologia: document.getElementById('nefrologia-view'),
+        uciPapers: document.getElementById('uci-papers-view'),
     });
 
     function goHome() {
@@ -51,6 +52,7 @@ export function init() {
         topLevel.show('nefrologia');
         nefrologiaApi?.volverAlMapa();
     });
+    document.getElementById('btn-uci-papers').addEventListener('click', () => topLevel.show('uciPapers'));
     document.querySelectorAll('.btn-volver-especialidades').forEach(b => b.addEventListener('click', () => topLevel.show('especialidades')));
 
     document.getElementById('btn-escalas-generales').addEventListener('click', () => topLevel.show('escalas'));
