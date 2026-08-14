@@ -1461,10 +1461,46 @@ por encima que sí diera cabida a todos.
       el contenido de la ficha en sí (el propio Table 4 de Azoulay que la
       sustenta ya está completo) para no fabricar contenido clínico sin
       releer la fuente.
-    - **Pendiente, requiere fuente nueva del usuario** (no aplicado en
-      esta pasada): sistema de repaso/quiz para toda Hematología (0
-      preguntas hoy, frente a las 551 de Nefrología) y ampliar "Manejo
-      Citopenias" más allá de Neutropenia Febril.
+    - **Pendiente, requiere fuente nueva del usuario**: ampliar "Manejo
+      Citopenias" más allá de Neutropenia Febril — no se puede fabricar
+      contenido clínico de anemia/trombocitopenia sin una fuente real.
+  - **Sistema de repaso/quiz añadido a toda Hematología** (176 preguntas
+    nuevas, repartidas en 34 temas, 5-6 por tema): hasta ahora Hematología
+    era la única especialidad sin `initQuiz()` — 4 bancos nuevos, uno por
+    módulo, mismo formato `{id, tema, enunciado, opciones, correcta,
+    explicacion}` que los de Nefrología: `js/data/neutropenia-febril-preguntas.js`
+    (26, 5 temas: triaje/MASCC/CISNE, catéter, diagnóstico, empírico,
+    dirigido-MDR), `js/data/reconocimiento-preguntas.js` (45, los 9 temas
+    del cuaderno de campo), `js/data/sindromes-urgentes-preguntas.js` (15,
+    CID/PTT/SLT), `js/data/trasplante-preguntas.js` (90, los 18 temas
+    repartidos entre Introducción/CAR-T/Complicaciones). Un botón
+    "🎯 Repasar" por módulo (`btn-nf-repasar`, `btn-recon-repasar`,
+    `btn-sind-repasar`, `btn-tph-repasar` — este último en
+    `trasplante-menu.html`, cubre los 18 temas de sus 3 subvistas desde un
+    único punto de entrada).
+    - **Bug real encontrado y corregido al integrar esto**: el modal de
+      quiz (`#quiz-modal-overlay`) es un partial único compartido por TODA
+      la app, y la propia `quiz.js` ya avisaba en un comentario de que solo
+      puede existir **una** llamada activa a `initQuiz()` por página. Al
+      añadir el quiz de Hematología con una llamada en `home/index.js`,
+      quedaron **dos** llamadas activas simultáneas (esa nueva + la ya
+      existente en `nefrologia/index.js`) — cada botón "Repasar" disparaba
+      *ambas* instancias a la vez sobre los mismos elementos del DOM
+      compartido, y la instancia cuyo banco no tenía preguntas para el tema
+      elegido intentaba renderizar un array vacío (`orden[0]` undefined),
+      lanzando `Cannot read properties of undefined (reading 'enunciado')`
+      — capturado con Playwright al probar el flujo completo de una
+      pregunta, no solo con el `check` de sintaxis. Solucionado moviendo la
+      única llamada a `initQuiz()` a `js/main.js` (el verdadero punto de
+      entrada que inicializa ambas especialidades), con `home/index.js` y
+      `nefrologia/index.js` exportando ahora `quizTriggerId`/`quizBanco`/
+      `quizTemas` en vez de llamar a `initQuiz()` cada uno por su lado —
+      `main.js` los fusiona en una sola llamada. El banco combinado de toda
+      la app queda en **727 preguntas** (551 Nefrología + 176 Hematología).
+      Si se añade contenido a un especialidad nueva en el futuro con su
+      propio quiz, sigue este mismo patrón: exportar banco/temas/triggerId
+      desde el índice de la especialidad, nunca llamar a `initQuiz()`
+      dentro de un módulo de especialidad.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

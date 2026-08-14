@@ -6,12 +6,21 @@
 // entrada) que filtra el banco por su campo `tema` — opcional y con
 // degradación elegante: sin `temas`, el quiz arranca directo como siempre.
 // El modal (#quiz-modal-overlay y sus elementos internos) es un único
-// partial compartido por toda la app — por eso solo debe existir UNA
-// llamada activa a initQuiz por página, con el banco/temas ya combinados
-// si varios módulos (p. ej. Nefrología + HTA) quieren aportar preguntas.
-// `triggerId` acepta un string o un array de strings: cada botón listado
-// abre el mismo banco combinado, para que cada módulo pueda tener su
-// propio botón "🎯 Repasar" sin duplicar el motor del quiz.
+// partial compartido por TODA la app — por eso solo debe existir UNA
+// llamada activa a initQuiz en toda la página, nunca una por especialidad.
+// Dos llamadas activas (p. ej. una en home/index.js y otra en
+// nefrologia/index.js) registran listeners duplicados sobre los mismos
+// elementos del DOM: cada clic dispara ambas instancias a la vez, y la que
+// no tiene preguntas para el tema elegido revienta con
+// "Cannot read properties of undefined (reading 'enunciado')" al intentar
+// pintar un array vacío — ocurrió de verdad al integrar el quiz de
+// Hematología, ver CLAUDE.md. Patrón correcto: cada especialidad exporta
+// su propio `quizTriggerId`/`quizBanco`/`quizTemas` desde su índice, y
+// `js/main.js` (el único punto de entrada real) los fusiona en una sola
+// llamada a initQuiz(). `triggerId` acepta un string o un array de
+// strings: cada botón listado abre el mismo banco combinado, para que
+// cada módulo pueda tener su propio botón "🎯 Repasar" sin duplicar el
+// motor del quiz.
 //
 // Única excepción de persistencia del proyecto: guarda aciertos/fallos por
 // pregunta en localStorage (solo ese dispositivo, sin cuentas ni

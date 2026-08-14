@@ -5,6 +5,19 @@
 import { createViewSwitcher } from '../../core/navigation.js';
 import { openCorkboardTopic } from '../../core/corkboard.js';
 import { initAtlas } from './atlas.js';
+import { preguntasNeutropeniaFebril, temasNeutropeniaFebril } from '../../data/neutropenia-febril-preguntas.js';
+import { preguntasReconocimiento, temasReconocimiento } from '../../data/reconocimiento-preguntas.js';
+import { preguntasSindromes, temasSindromes } from '../../data/sindromes-urgentes-preguntas.js';
+import { preguntasTrasplante, temasTrasplante } from '../../data/trasplante-preguntas.js';
+
+// El modal de repaso (#quiz-modal-overlay) es un único partial compartido
+// por TODA la app — solo puede existir una llamada activa a initQuiz() en
+// toda la página (ver quiz.js). Hematología expone aquí su banco/temas ya
+// combinados en vez de llamar a initQuiz() directamente, para que main.js
+// pueda fusionarlos con los de Nefrología en una única llamada.
+export const quizTriggerId = ['btn-nf-repasar', 'btn-recon-repasar', 'btn-sind-repasar', 'btn-tph-repasar'];
+export const quizBanco = [...preguntasNeutropeniaFebril, ...preguntasReconocimiento, ...preguntasSindromes, ...preguntasTrasplante];
+export const quizTemas = [...temasNeutropeniaFebril, ...temasReconocimiento, ...temasSindromes, ...temasTrasplante];
 
 // Referencia a la API que devuelve nefrologia.init() (ver
 // modules/nefrologia/index.js). nefrologia.init() se llama después de

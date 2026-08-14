@@ -12,6 +12,7 @@ import * as reconocimiento from './modules/reconocimiento/index.js';
 import * as sindromesUrgentes from './modules/sindromes-urgentes/index.js';
 import * as trasplante from './modules/trasplante/index.js';
 import * as nefrologia from './modules/nefrologia/index.js';
+import { initQuiz } from './modules/quiz/quiz.js';
 
 async function start() {
     await includeAll();
@@ -25,6 +26,16 @@ async function start() {
     trasplante.init();
     const nefrologiaApi = nefrologia.init();
     home.onNefrologiaListo(nefrologiaApi);
+
+    // Única llamada a initQuiz() de toda la app — el modal
+    // (#quiz-modal-overlay) es un partial compartido, así que Hematología
+    // y Nefrología exponen su banco/temas ya combinados en vez de llamar
+    // a initQuiz() cada una por su lado (ver comentario en quiz.js).
+    initQuiz({
+        triggerId: [...home.quizTriggerId, ...nefrologia.quizTriggerId],
+        banco: [...home.quizBanco, ...nefrologia.quizBanco],
+        temas: [...home.quizTemas, ...nefrologia.quizTemas],
+    });
 }
 
 start();

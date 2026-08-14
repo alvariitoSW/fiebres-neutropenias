@@ -1,0 +1,232 @@
+// Banco de preguntas de repaso — Neutropenia Febril. Mismo formato que
+// nefrologia-preguntas.js. Fuente: documento de consenso SEIMC-SEHH sobre
+// manejo de neutropenia febril en pacientes hematológicos en la era de la
+// multirresistencia (2020), actualizado con ECIL-10 (Averbuch D, et al.
+// Lancet Infect Dis 2026;26:e232-47).
+export const temasNeutropeniaFebril = [
+    { key: 'nf-triaje', etiqueta: 'Triaje inicial, MASCC y CISNE' },
+    { key: 'nf-cateter', etiqueta: 'Manejo del catéter venoso central' },
+    { key: 'nf-diagnostico', etiqueta: 'Diagnóstico: microbiología, hongos, biomarcadores' },
+    { key: 'nf-empirico', etiqueta: 'Tratamiento empírico y duración' },
+    { key: 'nf-dirigido-mdr', etiqueta: 'Tratamiento dirigido y multirresistencia' },
+];
+
+export const preguntasNeutropeniaFebril = [
+    // ---- Triaje, MASCC, CISNE ----
+    {
+        id: 'nf-q001',
+        tema: 'nf-triaje',
+        enunciado: '¿Cuál es el umbral de fiebre puntual usado en toda la app para definir fiebre en el paciente neutropénico?',
+        opciones: ['≥38,3°C puntual, o ≥38°C mantenida durante 1 hora', '≥37,5°C en cualquier determinación', '≥39°C puntual únicamente', '≥38°C puntual sin más matices'],
+        correcta: 0,
+        explicacion: 'La app define fiebre como ≥38,3°C en una determinación puntual, o ≥38°C mantenida durante al menos 1 hora.',
+    },
+    {
+        id: 'nf-q002',
+        tema: 'nf-triaje',
+        enunciado: '¿Qué recuento absoluto de neutrófilos (RAN) define el umbral de riesgo muy alto (>50%) de complicación?',
+        opciones: ['RAN <100/mm³', 'RAN <1000/mm³', 'RAN <2000/mm³', 'RAN <500/mm³ únicamente, sin umbral superior de riesgo'],
+        correcta: 0,
+        explicacion: 'El umbral histórico de riesgo muy alto es RAN <100/mm³, con una probabilidad de complicación mayor del 50%.',
+    },
+    {
+        id: 'nf-q003',
+        tema: 'nf-triaje',
+        enunciado: '¿En qué plazo debe administrarse la primera dosis de antibiótico empírico tras la sospecha de neutropenia febril?',
+        opciones: ['En la primera hora', 'En las primeras 6 horas', 'En las primeras 24 horas', 'No hay un plazo definido, depende del foco'],
+        correcta: 0,
+        explicacion: 'La primera dosis de antibiótico debe administrarse en la primera hora tras la sospecha de neutropenia febril, dado el riesgo de deterioro rápido.',
+    },
+    {
+        id: 'nf-q004',
+        tema: 'nf-triaje',
+        enunciado: '¿Cuántos criterios componen el índice MASCC y cuál es la puntuación máxima?',
+        opciones: ['6 criterios, máximo 26 puntos', '10 criterios, máximo 100 puntos', '4 criterios, máximo 10 puntos', '8 criterios, máximo 40 puntos'],
+        correcta: 0,
+        explicacion: 'El índice MASCC tiene 6 criterios con una puntuación máxima de 26 puntos; el umbral de bajo riesgo es ≥21 (Grado B-II).',
+    },
+    {
+        id: 'nf-q005',
+        tema: 'nf-triaje',
+        enunciado: '¿Por qué la guía SEIMC-SEHH avisa de que el índice CISNE tiene aplicación limitada en pacientes hematológicos?',
+        opciones: ['Se desarrolló y validó específicamente para tumores sólidos ambulatorios con quimioterapia de intensidad leve/moderada', 'Porque el CISNE nunca ha sido validado en ningún contexto', 'Porque el CISNE sustituye completamente al MASCC en hematología', 'Porque el CISNE solo aplica a pacientes pediátricos'],
+        correcta: 0,
+        explicacion: 'El CISNE se desarrolló y validó específicamente para tumores sólidos ambulatorios con quimioterapia de intensidad leve/moderada (ECOG 0-2), por lo que su aplicación en pacientes hematológicos es limitada — la app lo incluye igualmente como apoyo adicional, con ese aviso siempre visible.',
+    },
+    {
+        id: 'nf-q006',
+        tema: 'nf-triaje',
+        enunciado: '¿Qué situaciones obligan a ingreso e inicio de antibiótico IV directamente, sin pasar por el cálculo del MASCC?',
+        opciones: ['Sepsis/shock séptico e inducción de LMA o pre-TPH', 'Fiebre de más de 38°C sin otro dato', 'Cualquier neutropenia, sin excepción', 'Solo la presencia de mucositis leve'],
+        correcta: 0,
+        explicacion: 'La sepsis/shock séptico y la inducción de LMA o el contexto pre-TPH obligan a ingreso y tratamiento IV directo, invalidando el uso del MASCC para estratificar como bajo riesgo.',
+    },
+
+    // ---- Catéter ----
+    {
+        id: 'nf-q007',
+        tema: 'nf-cateter',
+        enunciado: '¿Qué diferencial de tiempo de positivización entre hemocultivo de catéter y periférico sugiere origen en el catéter?',
+        opciones: ['≥2 horas', '≥30 minutos', '≥12 horas', 'El tiempo de positivización no aporta información sobre el origen'],
+        correcta: 0,
+        explicacion: 'Un diferencial de positivización ≥2 horas (el hemocultivo del catéter se positiviza antes que el periférico) sugiere que el catéter es el origen de la bacteriemia.',
+    },
+    {
+        id: 'nf-q008',
+        tema: 'nf-cateter',
+        enunciado: '¿Qué microorganismos obligan a la retirada del catéter con el grado de evidencia más alto (Grado A-II)?',
+        opciones: ['Hongos, S. aureus, enterococos, BGN como P. aeruginosa, y micobacterias', 'Staphylococcus epidermidis exclusivamente', 'Cualquier bacteriemia sin excepción', 'Solo virus'],
+        correcta: 0,
+        explicacion: 'La retirada del catéter es obligatoria con Grado A-II ante hongos, S. aureus, enterococos, bacilos gram-negativos como P. aeruginosa, y micobacterias.',
+    },
+    {
+        id: 'nf-q009',
+        tema: 'nf-cateter',
+        enunciado: '¿Qué microorganismos, de menor virulencia, indican retirada del catéter con un grado de evidencia B-II (menor que el A-II)?',
+        opciones: ['Bacillus, Micrococcus y Propionibacterium', 'S. aureus y Candida', 'P. aeruginosa exclusivamente', 'Ninguno, todos los microorganismos tienen el mismo grado'],
+        correcta: 0,
+        explicacion: 'Bacillus, Micrococcus y Propionibacterium indican retirada del catéter con Grado B-II, un nivel de evidencia menor que el A-II reservado a hongos, S. aureus, enterococos, BGN y micobacterias.',
+    },
+    {
+        id: 'nf-q010',
+        tema: 'nf-cateter',
+        enunciado: 'Además de la positividad microbiológica, ¿qué otras situaciones clínicas obligan a retirar el catéter?',
+        opciones: ['Sepsis/shock, signos locales de infección, bacteriemia persistente 48-72h, o endocarditis/embolismo', 'Únicamente la fiebre aislada sin ningún otro signo', 'Solo si el catéter lleva más de 30 días implantado', 'Nunca se retira por criterios exclusivamente clínicos'],
+        correcta: 0,
+        explicacion: 'Además de los microorganismos concretos, la retirada del catéter está indicada ante sepsis/shock, signos locales de infección, bacteriemia persistente 48-72h, o endocarditis/embolismo séptico.',
+    },
+    {
+        id: 'nf-q011',
+        tema: 'nf-cateter',
+        enunciado: '¿En qué guías se basa el manejo del catéter venoso central en la app?',
+        opciones: ['Guías IDSA, SEIMC y AGIHO de infección relacionada con catéter', 'Únicamente en la guía KDIGO', 'Solo en protocolos internos sin respaldo de sociedades científicas', 'En la guía ECIL-10 exclusivamente'],
+        correcta: 0,
+        explicacion: 'El manejo del catéter venoso central en neutropenia febril se basa en las guías IDSA, SEIMC y AGIHO de infección relacionada con catéter.',
+    },
+
+    // ---- Diagnóstico: microbiología, hongos, biomarcadores ----
+    {
+        id: 'nf-q012',
+        tema: 'nf-diagnostico',
+        enunciado: '¿Qué corte de galactomanano sérico se usa con 1 sola determinación según el criterio ECIL?',
+        opciones: ['≥0,7', '≥0,5', '≥1,0 siempre, sin importar el número de determinaciones', '≥2,0'],
+        correcta: 0,
+        explicacion: 'El corte ECIL para galactomanano sérico con 1 sola determinación es ≥0,7; con 2 determinaciones el corte baja a >0,5; en BAL (lavado broncoalveolar) el corte es ≥1.',
+    },
+    {
+        id: 'nf-q013',
+        tema: 'nf-diagnostico',
+        enunciado: '¿Qué nivel de PCR se asocia a mayor mortalidad en el paciente neutropénico febril, según el grado de evidencia citado?',
+        opciones: ['>20-30 mg/dL (Grado C-III)', '>1 mg/dL', '>5 mg/dL', 'La PCR no tiene ningún valor pronóstico en este contexto'],
+        correcta: 0,
+        explicacion: 'Una PCR >20-30 mg/dL se asocia a mayor mortalidad en el paciente neutropénico febril, con un grado de evidencia C-III.',
+    },
+    {
+        id: 'nf-q014',
+        tema: 'nf-diagnostico',
+        enunciado: '¿Qué corte de galactomanano en lavado broncoalveolar (BAL) se usa para el diagnóstico de aspergilosis invasiva?',
+        opciones: ['≥1', '≥0,5', '≥5', 'El BAL no se usa para galactomanano'],
+        correcta: 0,
+        explicacion: 'En BAL, el corte de galactomanano para el diagnóstico de aspergilosis invasiva es ≥1, más alto que el usado en suero.',
+    },
+    {
+        id: 'nf-q015',
+        tema: 'nf-diagnostico',
+        enunciado: '¿Cuáles son los 3 grandes bloques en los que se organiza la Arquitectura Diagnóstica de Neutropenia Febril en la app?',
+        opciones: ['Microbiología, Cribado Fúngico y Biomarcadores', 'Radiología, Anatomía Patológica y Genética', 'Solo hemocultivos, sin más pruebas', 'Serologías, Cultivos y Antibiograma exclusivamente'],
+        correcta: 0,
+        explicacion: 'La Arquitectura Diagnóstica de Neutropenia Febril se organiza en 3 bloques: A. Microbiología, B. Cribado Fúngico y C. Biomarcadores.',
+    },
+    {
+        id: 'nf-q016',
+        tema: 'nf-diagnostico',
+        enunciado: '¿Qué determina el diferencial de positivización entre hemocultivo central y periférico en el bloque de Microbiología?',
+        opciones: ['Orienta si el origen de la bacteriemia es el catéter venoso central', 'El pronóstico general del paciente, sin relación con el foco', 'El tipo de germen exclusivamente gram-positivo', 'No aporta ninguna información diagnóstica'],
+        correcta: 0,
+        explicacion: 'El diferencial de tiempo de positivización entre el hemocultivo extraído de catéter y el periférico orienta sobre si el origen de la bacteriemia es la vía central.',
+    },
+
+    // ---- Tratamiento empírico y duración ----
+    {
+        id: 'nf-q017',
+        tema: 'nf-empirico',
+        enunciado: '¿Qué criterios ECIL-10 (2025) definen la suspensión del tratamiento antibiótico en el paciente sin foco identificado?',
+        opciones: ['Afebril ≥48h + estable hemodinámicamente desde el inicio + ≥72h de tratamiento acumulado, independientemente del RAN', 'Únicamente la recuperación completa del RAN por encima de 500/mm³', 'Afebril durante 7 días consecutivos sin excepción', 'No existe ningún criterio de suspensión definido'],
+        correcta: 0,
+        explicacion: 'ECIL-10 (2025) establece la suspensión sin foco cuando el paciente lleva afebril ≥48h, estable hemodinámicamente desde el inicio, y ha completado ≥72h de tratamiento acumulado, independientemente del recuento de neutrófilos — esto actualiza el criterio previo del ensayo español "How Long".',
+    },
+    {
+        id: 'nf-q018',
+        tema: 'nf-empirico',
+        enunciado: 'Para la infección microbiológicamente documentada, ¿qué cambio introdujo ECIL-10 sobre el umbral de apirexia respecto al consenso SEIMC-SEHH 2020?',
+        opciones: ['Unifica el umbral a ≥72h afebril (antes se exigían ≥4 días afebril)', 'Alarga el umbral a 10 días afebril', 'Elimina por completo el requisito de apirexia', 'No hubo ningún cambio en este punto'],
+        correcta: 0,
+        explicacion: 'ECIL-10 unifica el umbral de apirexia a ≥72h también para la infección microbiológicamente documentada (antes el consenso SEIMC-SEHH exigía ≥4 días afebril), manteniendo el mínimo de 7 días de tratamiento y la erradicación microbiológica cuando aplica.',
+    },
+    {
+        id: 'nf-q019',
+        tema: 'nf-empirico',
+        enunciado: '¿Qué combinación se recomienda para el paso a vía oral y manejo ambulatorio en el paciente de bajo riesgo?',
+        opciones: ['Ciprofloxacino 750mg/12h + amoxicilina-clavulánico 875mg/8h', 'Solo amoxicilina en monoterapia', 'Vancomicina oral en monoterapia', 'No se recomienda nunca el paso a vía oral en neutropenia febril'],
+        correcta: 0,
+        explicacion: 'La combinación recomendada (Grado A-I) para vía oral y manejo ambulatorio en el paciente de bajo riesgo es ciprofloxacino 750mg/12h más amoxicilina-clavulánico 875mg/8h.',
+    },
+    {
+        id: 'nf-q020',
+        tema: 'nf-empirico',
+        enunciado: '¿En qué circunstancias se recomienda añadir tratamiento antifúngico empírico?',
+        opciones: ['4-5 días de fiebre e inestabilidad sin profilaxis previa (Grado B-II), o >10 días con profilaxis previa', 'Siempre desde el primer día de fiebre, sin excepción', 'Nunca se añade antifúngico empírico, solo dirigido', 'Solo si hay confirmación microbiológica de hongo filamentoso'],
+        correcta: 0,
+        explicacion: 'El antifúngico empírico se añade tras 4-5 días de fiebre con inestabilidad en un paciente sin profilaxis previa (Grado B-II), o tras >10 días de fiebre si ya llevaba profilaxis antifúngica.',
+    },
+    {
+        id: 'nf-q021',
+        tema: 'nf-empirico',
+        enunciado: '¿Cómo se organiza la Tabla 5 de tratamiento empírico por foco clínico?',
+        opciones: ['Con recomendaciones específicas por foco (mucositis, enterocolitis, perianal, piel, catéter, sinusal, neumonía, ITU, SNC)', 'Con una única pauta universal para cualquier foco', 'Solo diferencia entre foco respiratorio y no respiratorio', 'La Tabla 5 no existe en la guía'],
+        correcta: 0,
+        explicacion: 'La Tabla 5 da recomendaciones específicas por foco clínico: mucositis, enterocolitis, perianal, piel, catéter, sinusal, neumonía, infección urinaria y SNC, con grados de evidencia de A-III a B-III según el foco.',
+    },
+
+    // ---- Tratamiento dirigido y MDR ----
+    {
+        id: 'nf-q022',
+        tema: 'nf-dirigido-mdr',
+        enunciado: '¿Qué combinación se recomienda frente a CRE productor de KPC u OXA-48, según ECIL-10?',
+        opciones: ['Ceftazidima-avibactam', 'Meropenem en monoterapia a dosis estándar', 'Amoxicilina-clavulánico', 'Ciprofloxacino en monoterapia'],
+        correcta: 0,
+        explicacion: 'Ceftazidima-avibactam es la recomendación ECIL-10 para CRE (enterobacterias resistentes a carbapenems) productoras de KPC u OXA-48; si se trata de una metalo-betalactamasa (NDM/VIM/IMP), se añade aztreonam.',
+    },
+    {
+        id: 'nf-q023',
+        tema: 'nf-dirigido-mdr',
+        enunciado: '¿Qué se añade al ceftazidima-avibactam cuando la carbapenemasa es de tipo metalo-betalactamasa (NDM/VIM/IMP)?',
+        opciones: ['Aztreonam', 'Colistina en monoterapia', 'Vancomicina', 'No se añade nada, el ceftazidima-avibactam cubre todas las carbapenemasas por igual'],
+        correcta: 0,
+        explicacion: 'Cuando la carbapenemasa es una metalo-betalactamasa (NDM/VIM/IMP), no sensible por sí sola a avibactam, se añade aztreonam a la ceftazidima-avibactam.',
+    },
+    {
+        id: 'nf-q024',
+        tema: 'nf-dirigido-mdr',
+        enunciado: '¿Qué opciones terapéuticas se recomiendan frente a Pseudomonas aeruginosa difícil de tratar (DTR)?',
+        opciones: ['Ceftolozano-tazobactam, ceftazidima-avibactam, imipenem-relebactam o cefiderocol', 'Solo colistina en monoterapia', 'Amoxicilina-clavulánico', 'Ciprofloxacino en monoterapia'],
+        correcta: 0,
+        explicacion: 'Frente a P. aeruginosa difícil de tratar se recomiendan ceftolozano-tazobactam, ceftazidima-avibactam, imipenem-relebactam o cefiderocol.',
+    },
+    {
+        id: 'nf-q025',
+        tema: 'nf-dirigido-mdr',
+        enunciado: '¿Qué combinación se recomienda para Acinetobacter baumannii resistente a carbapenems?',
+        opciones: ['Sulbactam-durlobactam + imipenem, o sulbactam a dosis altas + colistina', 'Amoxicilina-clavulánico en monoterapia', 'Ciprofloxacino a dosis altas', 'Vancomicina + metronidazol'],
+        correcta: 0,
+        explicacion: 'Para A. baumannii resistente a carbapenems se recomienda sulbactam-durlobactam combinado con imipenem, o sulbactam a dosis altas combinado con colistina.',
+    },
+    {
+        id: 'nf-q026',
+        tema: 'nf-dirigido-mdr',
+        enunciado: '¿Por qué Stenotrophomonas maltophilia se trata con cotrimoxazol en combinación y no en monoterapia?',
+        opciones: ['Porque la monoterapia se asocia a mayor riesgo de fracaso y desarrollo de resistencias en este microorganismo intrínsecamente multirresistente', 'Porque el cotrimoxazol no tiene actividad frente a S. maltophilia', 'Porque S. maltophilia nunca causa infección grave', 'Porque la combinación reduce el coste del tratamiento, sin razón microbiológica'],
+        correcta: 0,
+        explicacion: 'S. maltophilia se trata con cotrimoxazol en combinación (no en monoterapia) por su perfil de multirresistencia intrínseca, que favorece el fracaso terapéutico y el desarrollo de resistencias con monoterapia.',
+    },
+];

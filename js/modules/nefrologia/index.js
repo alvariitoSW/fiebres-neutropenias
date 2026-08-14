@@ -14,12 +14,20 @@ import { init as initErc } from './erc.js';
 import { init as initFra } from './fra.js';
 import { init as initTrr } from './trr.js';
 import { init as initNefrotoxicidad } from './nefrotoxicidad.js';
-import { initQuiz } from '../quiz/quiz.js';
 import { preguntasNefrologia, temasNefrologia } from '../../data/nefrologia-preguntas.js';
 import { preguntasHTA, temasHTA } from '../../data/hta-preguntas.js';
 import { preguntasERC, temasERC } from '../../data/erc-preguntas.js';
 import { preguntasFRA, temasFRA } from '../../data/fra-preguntas.js';
 import { preguntasTRR, temasTRR } from '../../data/trr-preguntas.js';
+
+// El modal de repaso (#quiz-modal-overlay) es un único partial compartido
+// por TODA la app — solo puede existir una llamada activa a initQuiz() en
+// toda la página (ver quiz.js). Nefrología expone aquí su banco/temas ya
+// combinados en vez de llamar a initQuiz() directamente, para que main.js
+// pueda fusionarlos con los de Hematología en una única llamada.
+export const quizTriggerId = ['btn-nefro-repasar', 'btn-hta-repasar', 'btn-erc-repasar', 'btn-fra-repasar', 'btn-trr-repasar'];
+export const quizBanco = [...preguntasNefrologia, ...preguntasHTA, ...preguntasERC, ...preguntasFRA, ...preguntasTRR];
+export const quizTemas = [...temasNefrologia, ...temasHTA, ...temasERC, ...temasFRA, ...temasTRR];
 
 function mostrarEnPreparacion() {
     const cont = document.getElementById('nefro-segmento-categorias');
@@ -96,11 +104,6 @@ export function init() {
     initFra();
     initTrr();
     initNefrotoxicidad();
-    initQuiz({
-        triggerId: ['btn-nefro-repasar', 'btn-hta-repasar', 'btn-erc-repasar', 'btn-fra-repasar', 'btn-trr-repasar'],
-        banco: [...preguntasNefrologia, ...preguntasHTA, ...preguntasERC, ...preguntasFRA, ...preguntasTRR],
-        temas: [...temasNefrologia, ...temasHTA, ...temasERC, ...temasFRA, ...temasTRR],
-    });
 
     nefroLevel.show('kidney');
 
