@@ -384,7 +384,7 @@ export const preguntasHTA = [
         enunciado: '¿Qué proporción aproximada de los pacientes con HTA resistente puede en realidad tener una PA ambulatoria bien controlada (pseudo-resistencia por bata blanca)?',
         opciones: ['1 de cada 3', '1 de cada 20', '1 de cada 100', 'Ninguno, por definición la HTA resistente excluye la bata blanca'],
         correcta: 0,
-        explicacion: 'Hasta 1 de cada 3 pacientes con HTA resistente (y 1 de cada 4 con HTA refractaria) puede presentar una PA ambulatoria adecuadamente controlada, siendo por tanto un caso de falsa resistencia.',
+        explicacion: 'Hasta 1 de cada 3 pacientes con HTA resistente puede presentar una PA ambulatoria adecuadamente controlada, siendo por tanto un caso de falsa resistencia.',
     },
     {
         id: 'hta-q038',

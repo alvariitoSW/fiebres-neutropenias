@@ -1615,6 +1615,81 @@ por encima que sí diera cabida a todos.
       Ninguno de los 6 PDF de bibliografía audita a favor de una u otra —
       el propio Agente 3 lo marcó como duda para revisión humana, no como
       error confirmado.
+  - **Auditoría de 3 agentes de "HTA"**: mismo método de 3 agentes que
+    Fisiopatología renal, aplicado a las 8 fichas de `hta.html` contra los
+    5 PDF de bibliografía (con el hallazgo colateral de que
+    `HTA_2_.pdf`/`HTA_SECUNDARIA.pdf` son el mismo archivo — MD5
+    idéntico —, así que solo hay 4 documentos únicos). El Agente 2 tuvo
+    una fuga puntual y autocontenida (una frase final mencionando que
+    ninguno de los PDF de HTA cita KDIGO 2024 "que si se hubiera usado
+    como referencia cruzada en otra sección del proyecto..." — delata que
+    sabe que existe una sección de ERC basada en KDIGO), descontada del
+    resto del informe igual que en la auditoría anterior. Varios
+    hallazgos del Agente 1 resultaron ser fieles a la fuente y no errores
+    de la app (el Agente 2 los CONTRADIJO, no los confirmó) — aplicar
+    ciegamente todo lo que señala un agente de auditoría de solo-app,
+    sin el cruce del Agente 2, habría "corregido" contenido que en
+    realidad ya era correcto:
+    - **Dosis de espironolactona distintas en fichas 4/5/7**: NO era un
+      error — la propia bibliografía usa 3 dosis distintas según
+      indicación (25-50 mg/día 3er escalón general; 12,5-50 mg dosis de
+      inicio en HTA resistente; 25→100 mg/día en hiperaldosteronismo
+      primario). Se añadió una nota aclaratoria en la ficha 5 explicando
+      que son indicaciones distintas, en vez de unificar las cifras.
+    - **"Fenilalanina"/"neonatálico" en la tabla de IMAO** (ficha 8):
+      confirmado que ambos términos están literalmente en la Tabla 5 del
+      PDF original (con alta probabilidad, error/artefacto de la propia
+      publicación fuente) — no son un error de transcripción de la app.
+      Se añadió una nota bajo la tabla señalando que es una posible
+      errata de la fuente, sin sustituir los nombres por una suposición
+      no verificada.
+    - **Fórmula del Índice de Resistencia** (ficha 6, `IR = [(1 −
+      Ved/Vsmax) − 100]`): confirmado que esta forma matemáticamente
+      incoherente con el corte diagnóstico &gt;80 (resta en vez de
+      multiplicación por 100) aparece palabra por palabra en el PDF
+      original — no es un fallo de transcripción de la app. Mismo
+      criterio que el precedente ya documentado del IFR en Fracaso Renal
+      Agudo: se mantuvo la fórmula tal cual la publica la fuente, con una
+      nota aclaratoria del problema aritmético, en vez de "corregirla"
+      silenciosamente a la forma multiplicativa por criterio propio.
+    - **Doppler renal — cifra de rendimiento diagnóstico "sensibilidad
+      85%/especificidad 92%"** (pregunta `hta-q044`): el Agente 1 había
+      concluido que esta cifra del quiz no estaba respaldada por la
+      ficha; el Agente 2 la encontró literalmente en la fuente (artículo
+      general de HTA secundaria) como cifra de rendimiento de la prueba
+      inicial — el problema real era que la ficha no la incluía. Añadida
+      a la ficha 6.
+    - **"~15%" de prevalencia de HTA resistente** (pregunta `hta-q035`):
+      mismo patrón — cifra de síntesis confirmada en el artículo general
+      de HTA secundaria, ausente en la tabla detallada por fuente que ya
+      tenía la ficha 5 (NHANES/Kaiser/Registro Español/ERC). Añadida como
+      cifra resumen antes de esa tabla.
+    - **"Subtipo más frecuente" duplicado en hiperaldosteronismo
+      primario** (ficha 7): la ficha etiquetaba tanto la hiperplasia
+      suprarrenal bilateral como el adenoma productor de aldosterona como
+      "(subtipo más frecuente)", una contradicción interna. La fuente
+      real usa una fórmula plural ambigua ("las formas más frecuentes son
+      hiperplasia bilateral y adenoma", sin declarar una única ganadora)
+      — reformulado siguiendo esa misma fórmula plural en vez de repetir
+      el superlativo en cada entrada.
+    - **"1 de cada 4" con HTA refractaria** (`hta-q037`, explicación):
+      cifra sin respaldo encontrado en ninguno de los 4 documentos únicos
+      leídos por el Agente 2 — eliminada de la explicación, dejando solo
+      la cifra sí confirmada ("1 de cada 3" para HTA resistente general).
+    - **Sin tocar** (dudas para revisión humana, sin arbitraje posible o
+      pendientes de relectura dirigida): el umbral de velocidad Doppler
+      "elevada" es realmente inconsistente entre los propios documentos
+      de la bibliografía (&gt;180 cm/s en el artículo general de HTA
+      secundaria vs. &gt;200-300 cm/s en la monografía específica de
+      renovascular) — se añadió una nota en la ficha 6 declarando ambos
+      valores en vez de elegir uno; el rango de dosis de ARA II
+      "8-1.200 mg/día" y de betabloqueantes "2,5-480 mg/día" de la tabla
+      de fármacos (ficha 4) no se pudo confirmar ni negar cifra por cifra
+      contra la Tabla 17 de la fuente (pendiente de relectura dirigida de
+      esa tabla concreta); la contraindicación "Taquiarritmias" en
+      calcioantagonistas dihidropiridínicos tiene un indicio débil de
+      posible confusión con la subclase no dihidropiridínica, sin
+      confirmación textual directa.
 
 ### UCI / Papers Tuiter
 
