@@ -671,6 +671,20 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 }
 .quiz-siguiente:hover { background: rgba(207,154,62,0.28); }
 
+/* Preguntas "de redactar" (tipo: 'redactar') — sin opciones de A/B/C/D,
+   el usuario escribe su propia respuesta antes de revelar la respuesta
+   modelo y autoevaluarse. El textarea no se guarda ni se envía a
+   ningún sitio, es solo apoyo para pensar la respuesta antes de verla. */
+.quiz-redactar-input {
+    width: 100%; min-height: 90px; font-family: inherit; font-size: 0.82rem;
+    color: var(--text-main); background: rgba(0,0,0,0.25); border: 1px solid var(--border-color);
+    border-radius: 4px; padding: 10px 12px; resize: vertical; margin-bottom: 10px;
+}
+.quiz-redactar-input:focus { outline: none; border-color: var(--accent-blue); }
+.quiz-autoeval-titulo { font-size: 0.78rem; color: var(--text-muted); margin: 0 0 8px; }
+.quiz-autoeval { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.quiz-autoeval-btn { text-align: center; }
+
 /* Pantalla previa de selección de tema (solo si initQuiz recibe `temas`).
    Mismos botones .quiz-opcion reutilizados, sin CSS nuevo por botón. */
 .quiz-temas-titulo { font-size: 0.95rem; font-weight: bold; margin-bottom: 14px; }

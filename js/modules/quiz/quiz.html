@@ -8,7 +8,16 @@
             <div class="quiz-progreso" id="quiz-progreso"></div>
             <div class="quiz-enunciado" id="quiz-enunciado"></div>
             <div class="quiz-opciones" id="quiz-opciones"></div>
+            <div class="quiz-redactar" id="quiz-redactar" style="display:none;">
+                <textarea class="quiz-redactar-input" id="quiz-redactar-input" placeholder="Escribe tu respuesta aquí (no se guarda — es solo para pensarla antes de ver la respuesta modelo)..."></textarea>
+                <button class="quiz-siguiente" id="quiz-ver-respuesta">Ver respuesta modelo →</button>
+            </div>
             <div class="quiz-explicacion" id="quiz-explicacion" style="display:none;"></div>
+            <div class="quiz-autoeval" id="quiz-autoeval" style="display:none;">
+                <p class="quiz-autoeval-titulo">¿Tu respuesta se acercaba a la modelo?</p>
+                <button class="quiz-opcion quiz-autoeval-btn" data-acierto="true">✅ Sí, lo tenía claro</button>
+                <button class="quiz-opcion quiz-autoeval-btn" data-acierto="false">❌ No, a repasar</button>
+            </div>
             <button class="quiz-siguiente" id="quiz-siguiente" style="display:none;">Siguiente →</button>
         </div>
     </div>

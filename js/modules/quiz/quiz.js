@@ -1,6 +1,13 @@
 // Motor genérico de quiz de repaso (tipo Anki, 4 opciones). No es
 // específico de Nefrología — cualquier módulo puede llamar a
 // initQuiz({ triggerId, banco }) con su propio banco de preguntas.
+// Dos tipos de pregunta conviven en el mismo banco: las normales, de
+// opción múltiple ({ enunciado, opciones, correcta, explicacion }), y las
+// de redactar ({ tipo: 'redactar', enunciado, respuestaModelo }) — estas
+// últimas no tienen opciones ni corrección automática: el usuario escribe
+// su respuesta en un textarea (no se guarda), revela la respuesta modelo,
+// y se autoevalúa con dos botones que alimentan el mismo
+// aciertos/fallos por pregunta que las de opción múltiple.
 // Si además se pasa `temas` (array de { key, etiqueta }), se muestra antes
 // una pantalla de selección de tema ("Todos los temas" + uno por cada
 // entrada) que filtra el banco por su campo `tema` — opcional y con
@@ -63,7 +70,11 @@ export function initQuiz({ triggerId, banco, temas }) {
     const progresoEl = document.getElementById('quiz-progreso');
     const enunciadoEl = document.getElementById('quiz-enunciado');
     const opcionesEl = document.getElementById('quiz-opciones');
+    const redactarEl = document.getElementById('quiz-redactar');
+    const redactarInputEl = document.getElementById('quiz-redactar-input');
+    const verRespuestaBtn = document.getElementById('quiz-ver-respuesta');
     const explicacionEl = document.getElementById('quiz-explicacion');
+    const autoevalEl = document.getElementById('quiz-autoeval');
     const siguienteBtn = document.getElementById('quiz-siguiente');
     const closeBtn = document.getElementById('quiz-modal-close');
 
@@ -72,7 +83,12 @@ export function initQuiz({ triggerId, banco, temas }) {
 
     function mostrarPantallaQuiz(visible) {
         [progresoEl, enunciadoEl, opcionesEl].forEach(el => el.style.display = visible ? '' : 'none');
-        if (!visible) { explicacionEl.style.display = 'none'; siguienteBtn.style.display = 'none'; }
+        if (!visible) {
+            explicacionEl.style.display = 'none';
+            siguienteBtn.style.display = 'none';
+            redactarEl.style.display = 'none';
+            autoevalEl.style.display = 'none';
+        }
         if (temasEl) temasEl.style.display = visible ? 'none' : (temas ? 'block' : 'none');
     }
 
@@ -81,10 +97,19 @@ export function initQuiz({ triggerId, banco, temas }) {
         progresoEl.textContent = `Pregunta ${indice + 1} / ${orden.length}`;
         enunciadoEl.textContent = pregunta.enunciado;
         explicacionEl.style.display = 'none';
+        autoevalEl.style.display = 'none';
         siguienteBtn.style.display = 'none';
 
-        opcionesEl.innerHTML = pregunta.opciones.map((op, i) =>
-            `<button class="quiz-opcion" data-indice="${i}">${op}</button>`).join('');
+        if (pregunta.tipo === 'redactar') {
+            opcionesEl.style.display = 'none';
+            redactarEl.style.display = 'block';
+            redactarInputEl.value = '';
+        } else {
+            redactarEl.style.display = 'none';
+            opcionesEl.style.display = 'flex';
+            opcionesEl.innerHTML = pregunta.opciones.map((op, i) =>
+                `<button class="quiz-opcion" data-indice="${i}">${op}</button>`).join('');
+        }
     }
 
     function empezar(subBanco) {
@@ -119,9 +144,32 @@ export function initQuiz({ triggerId, banco, temas }) {
         siguienteBtn.textContent = indice + 1 < orden.length ? 'Siguiente →' : 'Terminar';
     }
 
+    function verRespuesta() {
+        const pregunta = orden[indice];
+        redactarEl.style.display = 'none';
+        explicacionEl.style.display = 'block';
+        explicacionEl.textContent = pregunta.respuestaModelo;
+        autoevalEl.style.display = 'flex';
+    }
+
+    function autoevaluar(acierto) {
+        const pregunta = orden[indice];
+        registrarRespuesta(pregunta.id, acierto);
+        autoevalEl.style.display = 'none';
+        siguienteBtn.style.display = 'inline-block';
+        siguienteBtn.textContent = indice + 1 < orden.length ? 'Siguiente →' : 'Terminar';
+    }
+
     opcionesEl.addEventListener('click', (e) => {
         const btn = e.target.closest('.quiz-opcion');
         if (btn && !btn.disabled) responder(Number(btn.dataset.indice));
+    });
+
+    verRespuestaBtn.addEventListener('click', verRespuesta);
+
+    autoevalEl.addEventListener('click', (e) => {
+        const btn = e.target.closest('.quiz-autoeval-btn');
+        if (btn) autoevaluar(btn.dataset.acierto === 'true');
     });
 
     if (temasListaEl) {

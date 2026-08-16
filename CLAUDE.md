@@ -1751,6 +1751,77 @@ tener contenido real en cuanto el usuario aportó el primer PDF.
     explícita de que es una revisión narrativa que mezcla evidencia
     preclínica y clínica de muy distinto nivel — no leer como
     recomendación de uso clínico generalizado del iNO.
+- **Tercer paper: "Disfunción del ventrículo derecho y lesión renal
+  postoperatoria"** (`js/modules/uci-papers/vd-lra-postoperatoria.html`).
+  Fuente: Siegman A, Sidhu PS, Li D. Right Heart Dysfunction and
+  Postoperative Renal Injury: Venous Congestion, Renal Perfusion Pressure,
+  and Perioperative Implications. Curr Anesthesiol Rep. 2026;16:10 (revisión
+  breve de 8 páginas, no una guía). PDF completo subido a
+  `docs/siegman-2026-disfuncion-vd-lra-postoperatoria.pdf`. Tercer botón del
+  submenú de papers (`#btn-paper-vdlra`), misma tercera entrada añadida al
+  switcher `uciLevel`.
+  - **Cuaderno de campo de 7 fichas** (`#vdlra-corkboard`/`#panel-vdlra-tabs`):
+    Introducción (el modelo cardiorrenal), Fisiología del VD y su
+    relevancia renal, Hemodinámica renal (por qué importa la PVC),
+    Evidencia clínica en humanos (con la Tabla 1 del artículo recreada),
+    Evidencia en cirugía cardiaca, Implicaciones perioperatorias (con la
+    Tabla 2 recreada, primera tabla de la app que usa `rowspan` para
+    agrupar dos filas por fase intraoperatoria/postoperatoria — se
+    verificó con Playwright que `.data-table` renderiza `rowspan`
+    correctamente sin CSS adicional), y Conclusiones con las 3
+    referencias clave que los propios autores anotan al final del
+    artículo (recreadas como acordeón `.micro-prof-item`, con la
+    anotación explicativa de cada autor, no solo la cita).
+  - **1 figura real** (`vdlra-fig1-mecanismo.jpg`, el diagrama de flujo de
+    mecanismos VD→LRA con la ecuación de la RPP) extraída directamente con
+    `pdfimages -png` — mismo caso que el paper de óxido nítrico (PDF de
+    Springer con la figura como imagen única embebida, sin fragmentar).
+  - **Banco de quiz deliberadamente pequeño — nuevo estándar para todos
+    los papers de UCI/Papers Tuiter**: a petición explícita del usuario
+    ("no hagas muchas preguntas, pon entre 8-10 y 3-4 de redactar"), este
+    paper rompe con el patrón de ~5 preguntas por ficha usado en los dos
+    papers anteriores (40 y 50 preguntas). En su lugar:
+    **9 preguntas de opción múltiple + 4 "de redactar"** (13 en total,
+    `js/data/vd-lra-preguntas.js`, `vdlra-q001`-`q013`), reflejo del
+    equilibrio entre "no abrumar con preguntas" y no dejar ningún tema del
+    cuaderno de campo sin al menos 1 pregunta — **regla dura**: nunca
+    registres una entrada en `temasXxx` si su recuento en el banco es 0,
+    porque el selector de temas del quiz pintaría un botón "Tema (0)" que,
+    al pulsarse, llama a `empezar([])` y revienta con
+    `Cannot read properties of undefined (reading 'enunciado')` al
+    intentar pintar `orden[0]` — mismo síntoma que el bug de doble
+    `initQuiz()` ya documentado más abajo, pero con una causa distinta
+    (banco vacío para un tema, no llamada duplicada); prevenido aquí
+    verificando antes de escribir el banco que cada tema tenga ≥1
+    pregunta. **De ahora en adelante, todo paper nuevo de UCI/Papers
+    Tuiter debe seguir este mismo formato reducido (8-10 opción múltiple +
+    3-4 de redactar)**, no el formato de ~40-50 preguntas usado en los dos
+    primeros papers — esos dos no se han recortado retroactivamente
+    porque no se pidió explícitamente, pero cualquier paper nuevo debe
+    nacer ya con el banco pequeño.
+  - **Nuevo tipo de pregunta "de redactar" en el motor de quiz
+    (`js/modules/quiz/quiz.js` y `quiz.html`)**: hasta ahora `initQuiz()`
+    solo sabía renderizar preguntas de opción múltiple
+    (`{ enunciado, opciones, correcta, explicacion }`). Se añadió un
+    segundo tipo, marcado con `tipo: 'redactar'`
+    (`{ tipo: 'redactar', enunciado, respuestaModelo }`, sin `opciones` ni
+    `correcta`) que convive en el mismo banco: el usuario escribe su
+    propia respuesta en un `<textarea>` nuevo (`#quiz-redactar-input`,
+    contenido nunca guardado ni enviado a ningún sitio — solo apoyo para
+    pensar antes de mirar la respuesta), pulsa "Ver respuesta modelo →"
+    (`#quiz-ver-respuesta`), y entonces se revela `respuestaModelo` en el
+    mismo `#quiz-explicacion` que ya usan las preguntas normales, seguido
+    de un autoevaluación de dos botones ("✅ Sí, lo tenía claro" /
+    "❌ No, a repasar", `#quiz-autoeval`) que alimenta el mismo
+    `registrarRespuesta()`/`localStorage` de aciertos-fallos que las
+    preguntas de opción múltiple — así el sistema de progreso por
+    pregunta sigue siendo uniforme independientemente del tipo.
+    `renderPregunta()` ahora ramifica en `pregunta.tipo === 'redactar'`
+    para decidir si mostrar `#quiz-opciones` o `#quiz-redactar`; el resto
+    del motor (barajado, navegación "Siguiente", selector de temas) es
+    compartido sin cambios entre ambos tipos. Si se añaden preguntas de
+    redactar a un banco existente, no hace falta tocar nada más —
+    conviven con las de opción múltiple en el mismo array `banco`.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
