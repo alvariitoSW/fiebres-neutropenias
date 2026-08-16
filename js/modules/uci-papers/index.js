@@ -6,26 +6,30 @@
 import { createViewSwitcher } from '../../core/navigation.js';
 import { initCorkboard } from '../../core/corkboard.js';
 import { preguntasShockSeptico, temasShockSeptico } from '../../data/shock-septico-preguntas.js';
+import { preguntasOxidoNitrico, temasOxidoNitrico } from '../../data/oxido-nitrico-preguntas.js';
 
 // El modal de repaso (#quiz-modal-overlay) es un único partial compartido
 // por TODA la app — solo puede existir una llamada activa a initQuiz() en
 // toda la página (ver quiz.js). UCI/Papers Tuiter expone aquí su
 // banco/temas para que main.js los fusione con los de Hematología y
 // Nefrología en una única llamada.
-export const quizTriggerId = ['btn-uci-shock-repasar'];
-export const quizBanco = [...preguntasShockSeptico];
-export const quizTemas = [...temasShockSeptico];
+export const quizTriggerId = ['btn-uci-shock-repasar', 'btn-no-repasar'];
+export const quizBanco = [...preguntasShockSeptico, ...preguntasOxidoNitrico];
+export const quizTemas = [...temasShockSeptico, ...temasOxidoNitrico];
 
 export function init() {
     const uciLevel = createViewSwitcher({
         menu: document.getElementById('uci-papers-menu-view'),
         shockSeptico: document.getElementById('uci-paper-shock-view'),
+        oxidoNitrico: document.getElementById('uci-paper-no-view'),
     });
 
     document.getElementById('btn-paper-shock').addEventListener('click', () => uciLevel.show('shockSeptico'));
+    document.getElementById('btn-paper-no').addEventListener('click', () => uciLevel.show('oxidoNitrico'));
     document.querySelectorAll('.btn-volver-uci-menu').forEach(b => b.addEventListener('click', () => uciLevel.show('menu')));
 
     initCorkboard('uci-shock-corkboard', 'panel-uci-shock-tabs');
+    initCorkboard('no-corkboard', 'panel-no-tabs');
 
     uciLevel.show('menu');
 

@@ -1697,6 +1697,60 @@ tener contenido real en cuanto el usuario aportó el primer PDF.
     explícita de que es un artículo de perspectiva/opinión, no una
     revisión sistemática ni una guía — para que no se lea como
     recomendación normativa.
+- **Segundo paper: "Óxido nítrico inhalado: fisiopatología cardio-cerebrovascular
+  y respiratoria"** (`js/modules/uci-papers/oxido-nitrico-inhalado.html`).
+  Fuente: Signori D, Magliocca A, Hayashida K, Graw JA, Malhotra R, Bellani
+  G, Berra L, Rezoagli E. Inhaled nitric oxide: role in the pathophysiology
+  of cardio-cerebrovascular and respiratory diseases. Intensive Care Med
+  Exp. 2022;10:28 (revisión narrativa, no una guía de práctica clínica ni
+  un ensayo — sintetiza evidencia preclínica y clínica de muy distinto
+  nivel sobre un mismo mecanismo molecular, el NO, en muchas condiciones
+  distintas). PDF completo subido a
+  `docs/signori-2022-oxido-nitrico-inhalado.pdf`. Segundo botón del
+  submenú de papers (`#btn-paper-no`), mismo patrón de switcher anidado
+  que el primer paper (`uciLevel` en `uci-papers/index.js` ganó una
+  tercera entrada, `oxidoNitrico`).
+  - **Cuaderno de campo de 10 fichas** (`#no-corkboard`/`#panel-no-tabs`,
+    mismo `core/corkboard.js` de siempre — más grande que el del primer
+    paper porque la fuente es una revisión narrativa mucho más extensa,
+    28 páginas cubriendo desde la bioquímica básica del NO hasta 9
+    condiciones clínicas distintas): Introducción (historia y biología),
+    Mecanismo de acción y toxicología, Disfunción endotelial, Síndrome de
+    isquemia-reperfusión, NO y el cerebro, NO y el sistema cardiovascular,
+    NO y la hemólisis, NO y el pulmón, NO/sepsis/COVID-19, y Conclusiones
+    con la Tabla 1 del artículo recreada como `.data-table` (nivel de
+    evidencia preclínica/clínica por condición clínica — simplificada de
+    la tabla original, que además distingue explícitamente estudios en
+    animales pequeños/grandes y evidencia clínica de menor/mayor nivel
+    celda por celda).
+  - **3 figuras reales del artículo**, extraídas esta vez directamente con
+    `pdfimages -png` (a diferencia del primer paper de UCI/Papers Tuiter,
+    este PDF de Springer/BioMed Central tiene cada figura como una única
+    imagen ráster incrustada por página, sin fragmentar en decenas de
+    objetos como el InDesign del paper de Hernandez — no hizo falta
+    rasterizar la página entera y recortar): `no-fig1-enos-uncoupling.jpg`
+    (biosíntesis del NO y desacoplamiento de la eNOS, Fig. 1),
+    `no-fig2-hemolisis.jpg` (secuestro de NO en la hemólisis con el
+    espectro de absorción oxi-Hb/met-Hb, Fig. 2), y
+    `no-fig3-hpv-selectividad.jpg` (reversión por iNO de la hipoxemia y la
+    HPV con la curva V/Q, Fig. 3) en `js/modules/uci-papers/img/`. Si en
+    el futuro se añade otro paper de una revista Springer/BioMed
+    Central/similar (con figuras ya incrustadas como imagen única por
+    página), prueba primero `pdfimages -list` en la página del PDF: si
+    devuelve una sola imagen grande por figura, usa `pdfimages -png`
+    directamente — el método de rasterizar+recortar con Pillow queda
+    reservado para PDFs con figuras compuestas por InDesign (fragmentadas
+    en decenas de objetos pequeños).
+  - **50 preguntas de quiz** (`js/data/oxido-nitrico-preguntas.js`,
+    `no-q001`-`q050`, 5 por ficha × 10 fichas), con
+    `quizTriggerId: 'btn-no-repasar'` añadido al array que ya exporta
+    `uci-papers/index.js` (junto a `btn-uci-shock-repasar`). El banco
+    combinado de toda la app queda en **825 preguntas** (775 previas + 50
+    de este paper).
+  - Bibliografía: una única entrada enlazando al PDF en `docs/`, con nota
+    explícita de que es una revisión narrativa que mezcla evidencia
+    preclínica y clínica de muy distinto nivel — no leer como
+    recomendación de uso clínico generalizado del iNO.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
