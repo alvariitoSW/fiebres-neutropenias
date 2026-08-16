@@ -88,7 +88,7 @@ export const factoresDistribucionPotasio = {
 
 export const sindromesHipopotasemicos = {
     bartter: { etiqueta: 'Síndrome de Bartter', herencia: 'Autosómica recesiva', inicio: 'Niños (90% neonatal)', ta: 'Normal o ↓', aldosterona: '↑', otras: 'Hipercalciuria' },
-    gitelman: { etiqueta: 'Síndrome de Gitelman', herencia: 'Autosómica dominante', inicio: 'Adultos', ta: '↓', aldosterona: '↑', otras: 'Hipocalciuria, hipomagnesemia' },
+    gitelman: { etiqueta: 'Síndrome de Gitelman', herencia: 'Autosómica recesiva', inicio: 'Adultos', ta: '↓', aldosterona: '↑', otras: 'Hipocalciuria, hipomagnesemia' },
     liddle: { etiqueta: 'Síndrome de Liddle', herencia: 'Autosómica dominante', inicio: 'Niños', ta: '↑', aldosterona: 'Suprimida', otras: 'No responde a espironolactona; sí a triamtereno' },
     diureticos: { etiqueta: 'Ingesta de diuréticos', herencia: 'No hereditario', inicio: 'Adultos', ta: 'Normal o ↓', aldosterona: '↑', otras: 'Diuréticos detectables en orina' },
     regaliz: { etiqueta: 'Ingesta de regaliz', herencia: 'No hereditario', inicio: 'Adultos o niños', ta: '↑', aldosterona: 'Suprimida', otras: 'El ácido glicirrínico potencia el efecto mineralocorticoide del cortisol endógeno' },

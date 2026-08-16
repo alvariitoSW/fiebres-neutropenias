@@ -676,10 +676,10 @@ export const preguntasNefrologia = [
     {
         id: 'nefro-q063',
         tema: 'fisio-hiponatremia',
-        enunciado: '¿Cuál es la corrección máxima recomendada de una hiponatremia crónica en 24h según las guías europeas?',
-        opciones: ['2 mEq/l', '8 mEq/l', '20 mEq/l', 'Sin límite si el paciente está asintomático'],
+        enunciado: '¿Cuál es la corrección máxima recomendada de una hiponatremia crónica en las primeras 24h según las guías europeas?',
+        opciones: ['2 mEq/l', '10 mEq/l', '20 mEq/l', 'Sin límite si el paciente está asintomático'],
         correcta: 1,
-        explicacion: 'Las guías europeas recomiendan no superar un aumento de 10 mEq/l en las primeras 24h y de 8 mmol/l en periodos de 24h a partir de entonces, para minimizar el riesgo de desmielinización osmótica.',
+        explicacion: 'Las guías europeas recomiendan no superar un aumento de 10 mEq/l en las primeras 24h y de 8 mmol/l en periodos de 24h a partir de entonces (sin superar 18 mEq/l en 48h), para minimizar el riesgo de desmielinización osmótica.',
     },
     {
         id: 'nefro-q064',
@@ -929,7 +929,7 @@ export const preguntasNefrologia = [
             'Bartter nunca causa hipopotasemia',
         ],
         correcta: 0,
-        explicacion: 'Bartter: autosómico recesivo, inicio neonatal (90%), hipercalciuria. Gitelman: autosómico dominante, inicio en adultos, síntomas más leves, con hipocalciuria e hipomagnesemia.',
+        explicacion: 'Bartter: autosómico recesivo, inicio neonatal (90%), hipercalciuria. Gitelman: autosómico recesivo también (mutación bialélica de SLC12A3/NCC), inicio en adultos, síntomas más leves, con hipocalciuria e hipomagnesemia.',
     },
     {
         id: 'nefro-q087',

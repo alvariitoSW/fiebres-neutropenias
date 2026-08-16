@@ -35,7 +35,7 @@ function calcTfgSimulador() {
     } else if (pam < 80) {
         phg = Math.round(0.6875 * pam);
         tfg = Math.max(0, Math.round(125 * Math.pow(pam / 80, 2)));
-        aferente = 80;
+        aferente = Math.min(85, 70 + (80 - pam) * 0.5);
         if (pam < 60) {
             estado = 'danger';
             mensaje = '🔴 Autorregulación superada. La arteriola aferente ya está dilatada al máximo y no puede compensar más — el filtrado cae con fuerza. Este es el sustrato fisiopatológico de la lesión renal aguda prerrenal.';
@@ -47,7 +47,7 @@ function calcTfgSimulador() {
         const exceso = pam - 180;
         phg = Math.round(55 + exceso * 0.15);
         tfg = Math.round(125 + exceso * 0.3);
-        aferente = 25;
+        aferente = Math.max(20, 40 - exceso * 0.5);
         estado = 'warn';
         mensaje = '⚠️ Por encima del límite superior (180 mmHg). La arteriola aferente se contrae con fuerza para proteger el glomérulo — la TFG sube, pero muy poco.';
     }
@@ -203,7 +203,12 @@ function calcAcidoBaseClasificador() {
     // metabólica o una acidosis normoclorémica sobreañadidas) — método
     // Δ-ratio = (HA − 12) / (24 − HCO3-), complementario a la comparación
     // pCO2/HCO3 de arriba, que por sí sola no detecta este tipo de mixto.
-    if (naEl && clEl && naEl.value && clEl.value && hco3 < 24) {
+    // Exige ph < 7.35 (trastorno primario ya clasificado como acidosis)
+    // además de hco3 < 24, para no activarse con gasometrías de alcalosis
+    // respiratoria compensada que también puedan tener HCO3 bajo e hiato
+    // aniónico algo elevado — el Δ-ratio solo tiene sentido en el contexto
+    // de una acidosis metabólica real.
+    if (naEl && clEl && naEl.value && clEl.value && ph < 7.35 && hco3 < 24) {
         const na = Number(naEl.value), cl = Number(clEl.value);
         const hiatoAnionico = na - (cl + hco3);
         if (hiatoAnionico > 12) {

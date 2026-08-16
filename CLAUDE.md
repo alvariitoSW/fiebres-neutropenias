@@ -1542,6 +1542,79 @@ por encima que sí diera cabida a todos.
       propio quiz, sigue este mismo patrón: exportar banco/temas/triggerId
       desde el índice de la especialidad, nunca llamar a `initQuiz()`
       dentro de un módulo de especialidad.
+  - **Auditoría de 3 agentes de "Fisiopatología renal"**: a petición
+    explícita del usuario, se auditaron las 18 fichas de este cuaderno de
+    campo (`nefro-menu.html`) con un método de doble revisión ciega +
+    arbitraje: un **Agente 1** revisó solo el contenido ya escrito en la
+    app (sin ver ninguna fuente externa), un **Agente 2** revisó de forma
+    independiente los 6 PDF de bibliografía (sin ver ningún archivo del
+    repo), y un **Agente 3** comparó ambos informes y auditó explícitamente
+    que no hubiera "fuga de información" entre ellos antes de fiarse de la
+    comparación — detectó una fuga puntual y autocontenida en el informe
+    del Agente 2 (una frase mencionó "el CLAUDE.md de la app"), la descontó
+    del resto del análisis, y concluyó que el resto de ambos informes eran
+    sustancialmente independientes. Este patrón (1: solo app, 2: solo
+    fuente, 3: cruce + verificación de fuga) es el que replicar si se
+    piden auditorías similares de otras secciones — cada agente debe
+    recibir instrucciones explícitas de NO tocar los archivos del otro.
+    Correcciones aplicadas tras la auditoría (confirmadas por el Agente 3
+    contra la bibliografía, no solo por el Agente 1):
+    - **Herencia del síndrome de Gitelman**: estaba como "autosómica
+      dominante" en `agua-potasio-data.js` (`sindromesHipopotasemicos.gitelman.herencia`)
+      y en la explicación de `nefro-q086`, contradiciendo a la propia
+      ficha "Ácido-base: alcalosis" (que sí decía correctamente
+      "autosómica recesiva" para Bartter Y Gitelman). El Agente 3 rastreó
+      el origen: es una **errata real del PDF fuente** de Hipopotasemia
+      (Tabla 3), pero los documentos de Ácido-Base y de Ca-P-Mg, además
+      del consenso médico establecido, confirman que es recesiva —
+      corregido en ambos sitios.
+    - **Umbral de corrección de hiponatremia en 24h**: la ficha decía
+      "8 mEq/l/24h" como límite plano europeo, mientras que `nefro-q063`
+      dudaba entre 8 y 10 en su enunciado/explicación (con la opción "8"
+      marcada como correcta pese a que la propia explicación decía 10).
+      La bibliografía confirma **10 mEq/l en las primeras 24h, 8 mEq/l en
+      periodos de 24h posteriores** (sin superar 18 mEq/l en 48h) —
+      unificado en la ficha y en la pregunta (opción/respuesta correcta
+      corregidas a "10 mEq/l").
+    - **Cifra de mortalidad de la hiperpotasemia**: el kv-row mezclaba,
+      bajo la misma etiqueta "Mortalidad", una cifra de incidencia como
+      motivo de ingreso en urgencias (mal citada como "0,5-2%") con la
+      mortalidad real entre los ya ingresados (2%). Separado en dos
+      kv-row con etiquetas propias ("Incidencia como motivo de ingreso":
+      0,5-1%, cifra corregida contra la fuente; "Mortalidad entre los
+      ingresados": 2%, ya era correcta).
+    - **Bug del Δ-ratio en el clasificador ácido-base** (`calcAcidoBaseClasificador`,
+      `fisiologia.js`): el cálculo del Δ-ratio solo comprobaba
+      `hco3 < 24`, sin exigir que el trastorno primario ya clasificado
+      fuera una acidosis metabólica (`ph < 7.35`) — con valores
+      plausibles de una alcalosis respiratoria crónica compensada e
+      hiato aniónico algo elevado, aparecía un mensaje añadido de
+      "acidosis metabólica con hiato elevado" superpuesto a la
+      interpretación correcta de alcalosis. Corregido añadiendo la
+      condición `ph < 7.35`; verificado con Playwright que el caso límite
+      ya no dispara el mensaje incorrecto.
+    - **Discontinuidad visual del simulador de TFG** (`calcTfgSimulador`):
+      el ancho de la barra "aferente" saltaba bruscamente en los límites
+      PAM=80 y PAM=180 (70%→80% y 40%→25%) al pasar de la fórmula del
+      tramo central a un valor fijo en los tramos extremos. Corregido
+      sustituyendo los valores fijos por fórmulas que empalman
+      continuamente en ambos límites (`70 + (80−pam)×0,5`, tope 85;
+      `40 − exceso×0,5`, suelo 20) — verificado con Playwright que ya no
+      hay salto en PAM 79/80/81 ni 179/180/181. La barra "eferente", que
+      nunca cambiaba (bug menor, valor fijo en 45%), se dejó tal cual
+      siguiendo la recomendación explícita del Agente 1 de aclarar en vez
+      de inventar una nueva curva fisiológica sin verificar contra
+      fuente — se añadió una nota bajo el simulador explicando que esa
+      barra se mantiene constante en este modelo simplificado.
+    - **Sin tocar** (fuera del alcance de "correcciones confirmadas",
+      pendiente de decisión editorial): dos preguntas de quiz de viñeta
+      clínica (`nefro-q137`, `nefro-q138`) citan la fórmula clásica de
+      Winters para la compensación respiratoria esperada, mientras que la
+      ficha "Ácido-base: acidosis" y su clasificador interactivo usan una
+      fórmula distinta (compensación 0,85-1,2 mmHg por mEq/l "desde 25").
+      Ninguno de los 6 PDF de bibliografía audita a favor de una u otra —
+      el propio Agente 3 lo marcó como duda para revisión humana, no como
+      error confirmado.
 
 ### UCI / Papers Tuiter
 
