@@ -36,6 +36,13 @@ export function onUciPapersListo(api) {
     uciPapersApi = api;
 }
 
+// Mismo patrón de inyección perezosa, para la API que devuelve
+// fisioUci.init() (ver modules/fisio-uci/index.js).
+let fisioUciApi = null;
+export function onFisioUciListo(api) {
+    fisioUciApi = api;
+}
+
 export function init() {
     const topLevel = createViewSwitcher({
         especialidades: document.getElementById('especialidades-view'),
@@ -47,6 +54,7 @@ export function init() {
         trasplante: document.getElementById('trasplante-view'),
         nefrologia: document.getElementById('nefrologia-view'),
         uciPapers: document.getElementById('uci-papers-view'),
+        fisioUci: document.getElementById('fisio-uci-view'),
     });
 
     function goHome() {
@@ -62,6 +70,10 @@ export function init() {
     document.getElementById('btn-uci-papers').addEventListener('click', () => {
         topLevel.show('uciPapers');
         uciPapersApi?.volverAlMenu();
+    });
+    document.getElementById('btn-fisio-uci').addEventListener('click', () => {
+        topLevel.show('fisioUci');
+        fisioUciApi?.volverAlMenu();
     });
     document.querySelectorAll('.btn-volver-especialidades').forEach(b => b.addEventListener('click', () => topLevel.show('especialidades')));
 

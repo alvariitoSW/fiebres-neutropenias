@@ -1,0 +1,915 @@
+    <button class="back-btn btn-volver-fuci-menu">← VOLVER</button>
+    <div class="diag-header">
+        <h2 style="color: var(--accent-red); text-shadow: var(--glow-red);">Hematología y Hemostasia en Cuidados Críticos</h2>
+        <p>El Libro Azul: Bases Fisiopatológicas de la Medicina Crítica · Sección II, capítulos 12-16</p>
+    </div>
+
+    <button class="accordion-btn nav-btn" id="btn-fuci-hemato-repasar" style="border-left: 4px solid var(--accent-yellow);">
+        <span>🎯 Repasar (preguntas de repaso)</span>
+        <span style="font-size: 0.8rem; color: var(--accent-yellow);">[ EMPEZAR → ]</span>
+    </button>
+
+    <p class="section-label">Elige un tema</p>
+    <div class="corkboard" id="fuci-hemato-corkboard">
+
+        <div class="field-card" data-tab="fuci-anemia">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 1</div>
+                    <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-red)" stroke-width="1.6">
+                        <path d="M40,10 C40,10 26,28 26,36 a14,14 0 0,0 28,0 C54,28 40,10 40,10 Z" stroke-opacity="0.85"/>
+                        <circle cx="40" cy="38" r="4" fill="var(--accent-red)" stroke="none" opacity="0.6"/>
+                    </svg>
+                    <div class="field-name">Fisiopatología<br>de la anemia</div>
+                    <div class="field-hook">¿Por qué hasta el 97% de los pacientes de UCI acaba anémico hacia el 8º día de ingreso?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Por la anemia de la enfermedad crónica/inflamación — una respuesta hipoproliferativa mediada por hepcidina que secuestra el hierro, no por un simple déficit dietético.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="fuci-trombocitopenia">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 2</div>
+                    <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-yellow)" stroke-width="1.6">
+                        <ellipse cx="40" cy="28" rx="14" ry="9" stroke-opacity="0.85"/>
+                        <path d="M40,19 L40,37 M31,28 L49,28" stroke-width="1.2" stroke-opacity="0.5"/>
+                        <circle cx="40" cy="28" r="3" fill="var(--accent-yellow)" stroke="none"/>
+                    </svg>
+                    <div class="field-name">Fisiopatología<br>de la trombocitopenia</div>
+                    <div class="field-hook">¿Cuál es el mecanismo más frecuente de trombocitopenia grave en el paciente crítico?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">La CID asociada a sepsis y otros tipos de shock — con microtrombosis generalizada, consumo de factores y aumento de la fibrinólisis.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="fuci-transfusion">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 3</div>
+                    <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-blue)" stroke-width="1.6">
+                        <path d="M32,10 h16 l4,14 h-24 z" stroke-opacity="0.85"/>
+                        <path d="M28,24 h24 l-3,20 a9,9 0 0,1 -18,0 z" stroke-opacity="0.85"/>
+                        <line x1="40" y1="44" x2="40" y2="52" stroke-width="1.4"/>
+                    </svg>
+                    <div class="field-name">¿Cuándo<br>transfundir?</div>
+                    <div class="field-hook">¿Existe un nivel óptimo de hemoglobina para transfundir en patologías críticas?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">No un número único — la estrategia restrictiva (Hb ~7) es mejor en la mayoría de los escenarios, pero la decisión real depende del aporte/consumo de oxígeno tisular, no solo del hemograma.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="fuci-teg">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 4</div>
+                    <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-purple)" stroke-width="1.8">
+                        <path d="M14,28 C14,28 26,14 40,28 C54,42 66,28 66,28" stroke-opacity="0.85"/>
+                    </svg>
+                    <div class="field-name">Monitorización de la<br>hemostasia: TEG/ROTEM</div>
+                    <div class="field-hook">¿Por qué el TP y el TTPa —los "análisis de siempre"— no bastan para guiar la transfusión en el paciente crítico?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Porque solo documentan los primeros 20-60 segundos de la formación del coágulo — no evalúan la función plaquetaria, la fibrinólisis ni la estabilidad del coágulo. Los métodos viscoelásticos (TEG/ROTEM) sí.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="fuci-eosinofilia">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 5</div>
+                    <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-green)" stroke-width="1.6">
+                        <circle cx="40" cy="28" r="15" stroke-opacity="0.85"/>
+                        <circle cx="34" cy="24" r="3.4" fill="var(--accent-green)" stroke="none" opacity="0.7"/>
+                        <circle cx="46" cy="24" r="3.4" fill="var(--accent-green)" stroke="none" opacity="0.7"/>
+                        <path d="M34,24 a4,4 0 0,1 12,0" stroke-width="1.2"/>
+                    </svg>
+                    <div class="field-name">Eosinofilia en<br>el paciente crítico</div>
+                    <div class="field-hook">En la UCI, ¿cuál es la causa más frecuente de hipereosinofilia?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">La hipersensibilidad a medicamentos y el síndrome de DRESS — no las causas parasitarias, dominantes en países en desarrollo.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <p class="tap-hint">☝ toca una ficha para ver la pista, y de nuevo para abrir el tema completo</p>
+
+    <div class="card" id="panel-fuci-hemato-tabs" style="display:none;">
+
+        <!-- ===== FICHA 1: ANEMIA ===== -->
+        <div id="fuci-anemia" class="tab-content">
+            <h3 style="color: var(--accent-red);">Fisiopatología de la anemia en cuidados intensivos</h3>
+
+            <p class="section-label">Epidemiología</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La anemia es de <strong>alta prevalencia</strong> en pacientes críticamente enfermos: se estima que
+                <span class="hl">dos terceras partes presentan Hb &lt;12 g/dL al ingreso</span>, y que el
+                <strong>97% se vuelve anémico hacia el 8º día</strong> de hospitalización. El 30-50% de los
+                pacientes recibe transfusión de glóbulos rojos durante su estancia en UCI, con un promedio de
+                <strong>1,87 unidades transfundidas por admisión</strong>. La anemia en pacientes quirúrgicos y no
+                quirúrgicos se ha relacionado con peores resultados clínicos (mayor estancia hospitalaria y
+                mortalidad en los transfundidos), y varios metaanálisis han demostrado asociación entre anemia y
+                mayor mortalidad/morbilidad en patologías específicas (falla renal, falla cardíaca congestiva, cáncer).
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Mecanismos fisiopatológicos: anemia de la enfermedad crónica</p>
+            <dl class="kv-row"><dt>Qué es</dt><dd>Una <strong>anemia hipoproliferativa</strong> que se desarrolla en respuesta a una enfermedad sistémica o inflamación — descrita por primera vez en los años 30 (Cartwright y Wintrobe la caracterizaron en los 50). Se considera una respuesta biológicamente <strong>adaptativa</strong>, muy coordinada y conservada genéticamente — sus efectores (como la hepcidina) son evolutivamente antiguos, presentes incluso en el pez cebra.</dd></dl>
+            <dl class="kv-row"><dt>Mecanismos que contribuyen (independientes entre sí)</dt><dd>Secuestro de hierro (el mejor estudiado) · supresión de la producción de eritropoyetina · inhibición de los progenitores eritroides · disminución de la supervivencia de los glóbulos rojos. La contribución relativa de cada uno es incierta.</dd></dl>
+
+            <div class="article-figure">
+                <img src="js/modules/fisio-uci/img/fig1-hepcidina.jpg" alt="Mecanismos por los que las citocinas de la inflamación reducen la hemoglobina, vía hepcidina, ferroportina y hemofagocitosis" loading="lazy">
+                <div class="article-figure-caption">Figura 1. En enfermedades inflamatorias, las citocinas liberadas por leucocitos activados ejercen múltiples efectos que reducen la hemoglobina: A) inducción de la síntesis de hepcidina en el hígado (sobre todo por IL-6); B) inhibición de la liberación de eritropoyetina del riñón (por IL-1β y TNFα); C) inhibición directa de la proliferación de progenitores eritroides (TNFα, IFN-γ, IL-1β); D) aumento de la eritrofagocitosis por macrófagos reticuloendoteliales (TNFα).</div>
+            </div>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🛡️ ¿Por qué el secuestro de hierro sería beneficioso?</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">El hierro es un nutriente esencial para el crecimiento de muchos microorganismos y promueve la infección y el crecimiento de células malignas. La <strong>hipoferremia</strong> se cree una estrategia innata antimicrobiana — el plasma tiene propiedades antimicrobianas que se atenúan al añadir hierro, y la inhibición del crecimiento bacteriano ocurre en condiciones deficientes en hierro (esto explicaría el aumento de infecciones en pacientes con β-talasemia mayor, que tienen sobrecarga de hierro). Además, el hierro libre es tóxico: en el contexto del aumento del estrés oxidativo de la inflamación, la supresión de la reacción de Fenton (radicales libres de hidroxilo catalizados por hierro ferroso) mediante el secuestro de hierro puede atenuar la producción de especies reactivas de oxígeno.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚖️ Otros beneficios adaptativos hipotéticos de la anemia</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La disminución de la producción de médula ósea reduce la utilización de nutrientes en momentos de estrés. La anemia moderada y la expansión compensatoria del volumen plasmático reducen la viscosidad de la sangre, lo que disminuye el trabajo del ictus ventricular izquierdo y puede mejorar la perfusión microvascular. La disminución de la marginación plaquetaria y de la eliminación del óxido nítrico también podrían reducir la trombosis. <strong>Ninguna de estas hipótesis se ha demostrado ni descartado formalmente.</strong></div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Metabolismo del hierro</p>
+            <ul class="term-chips">
+                <li>Ingesta diaria: 10-20 mg de Fe</li>
+                <li>Absorción diaria: ~10% de la ingesta (1-2 mg)</li>
+                <li>Puede aumentar hasta 20% en embarazo, crecimiento infantil o pérdidas aumentadas</li>
+                <li>Pérdida diaria: ~1 mg/día (~2 mg/día en menstruantes)</li>
+                <li>Hombres: 35-45 mg Fe/kg de peso corporal (4-6 g totales)</li>
+                <li>80% del hierro corporal es funcional (80% de ese en hemoglobina, resto en mioglobina/citocromos)</li>
+                <li>20% se almacena como ferritina o hemosiderina</li>
+                <li>Requerimiento diario para eritropoyesis: 20-25 mg (la mayoría se recicla del reciclado de hematíes senescentes por macrófagos)</li>
+            </ul>
+
+            <div class="article-figure">
+                <img src="js/modules/fisio-uci/img/fig2-ciclohierro.jpg" alt="Ciclo normal del hierro: ingesta, absorción intestinal, transporte por transferrina, distribución a hemoglobina/eritropoyesis, ferritina y pérdidas" loading="lazy">
+                <div class="article-figure-caption">Figura 2. Ciclo normal del hierro.</div>
+            </div>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🚪 Mecanismo de absorción</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">El hierro se absorbe principalmente en el <strong>duodeno proximal</strong>. El hierro no hemo (mayoritariamente en estado férrico) se reduce a ferroso por la enzima <strong>duodenal citocromo B (DcytB)</strong> en el borde en cepillo, y cruza la membrana apical mediante el <strong>transportador de metales divalentes 1 (DMT1)</strong>. El hierro hemo se transporta por una vía separada, la <strong>proteína transportadora de hemo (HCP1)</strong>. Si el requerimiento de hierro es bajo, el hierro absorbido queda secuestrado como ferritina dentro del enterocito y se pierde con su descamación; si hay necesidad de hierro, atraviesa la membrana basolateral vía <strong>ferroportina (FPN)</strong> — el único exportador de hierro de todas las células que lo contienen (macrófagos, enterocitos, células placentarias).</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🚚 Transporte y almacenamiento</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La <strong>transferrina (TF)</strong> es la principal proteína transportadora en la circulación sistémica, con 2 sitios de unión de alta afinidad para Fe³⁺ — permite que el hierro permanezca soluble y no tóxico, y facilita su importación celular al unirse al receptor de transferrina (TfR1). Capacidad de unión: 330 g de hierro por decilitro; en condiciones normales, 25-45% de los sitios de unión están ocupados (% de saturación de transferrina). El <strong>hígado</strong> es el sitio principal de almacenamiento, predominantemente como <strong>ferritina</strong> (una sola molécula puede almacenar hasta 4000 átomos de hierro). La ferritina sérica (12-300 μg/L en promedio) es un buen reflejo del hierro de depósito en sujetos normales, pero es un <strong>reactante de fase aguda</strong> — sus niveles aumentan desproporcionadamente en inflamación, malignidad y trastornos hepatocelulares.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Regulación celular (IRP/IRE)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Los niveles de hierro intracelular son detectados por las proteínas reguladoras de hierro <strong>IRP1/IRP2</strong>, que se unen a elementos de respuesta al hierro (IRE) en el ARNm. Si el IRE está en la región 3' del ARNm, la unión por IRP evita su degradación (↑estabilidad, ↑nivel de la proteína); si está en la región 5', la unión bloquea la traducción (↓síntesis). En estados de bajo contenido de hierro, la unión de IRP aumenta la estabilidad del ARNm de la transferrina (↑TIBC) y disminuye la síntesis de ferritina — e inversamente en estados de alto contenido de hierro. Otros ARNm regulados por IRP: DMT1, DcytB y ferroportina.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Regulación sistémica: la hepcidina</p>
+            <dl class="kv-row"><dt>Qué es</dt><dd>Un péptido de 25 aminoácidos secretado predominantemente por los hepatocitos, miembro de las proteínas de la defensina (relacionado con la inmunidad innata) — es el <strong>principal regulador de la homeostasis del hierro</strong>. Circula unida a una macroglobulina β₂ y se elimina por el riñón.</dd></dl>
+            <dl class="kv-row"><dt>Mecanismo de acción</dt><dd>La hepcidina se une e induce la <strong>internalización y degradación de la ferroportina</strong> (única proteína de exportación de hierro en enterocitos y macrófagos duodenales) — disminuye así el flujo de salida de hierro de estas células. En los enterocitos, este hierro secuestrado se pierde con la descamación celular (↓absorción intestinal); en los macrófagos, el hierro permanece almacenado en el sistema reticuloendotelial y no puede utilizarse para la eritropoyesis.</dd></dl>
+            <ul class="term-chips">
+                <li>↑Producción de hepcidina: reservas de hierro suficientes, inflamación</li>
+                <li>↓Producción de hepcidina: deficiencia de hierro, hipoxia, mayor demanda eritropoyética</li>
+            </ul>
+
+            <div class="article-figure">
+                <img src="js/modules/fisio-uci/img/fig3-regulacionhepcidina.jpg" alt="Modelo de regulación de la hepcidina: reservas de hierro, demanda eritropoyética, hipoxia e inflamación como estímulos sobre el hepatocito" loading="lazy">
+                <div class="article-figure-caption">Figura 3. Modelo de regulación de hepcidina de la homeostasis del hierro. El aumento de las reservas de hierro y la inflamación incrementan la expresión de hepcidina, mientras que el aumento de la demanda eritropoyética y la hipoxia la disminuyen.</div>
+            </div>
+
+            <dl class="kv-row"><dt>Genes implicados</dt><dd>Mutaciones en <strong>hemojuvelina (HJV)</strong>, <strong>HFE</strong> y el <strong>receptor de transferrina 2 (TfR2)</strong> conducen a sobrecarga de hierro y hemocromatosis — imitan la carga de hierro observada con mutaciones del propio gen de la hepcidina (que producen deficiencia de hepcidina). HJV, HFE y TfR2 forman parte de la misma vía reguladora; la vía de la <strong>proteína morfogenética ósea (BMP)-SMAD</strong> parece fundamental para la regulación final de la hepcidina.</dd></dl>
+            <dl class="kv-row"><dt>GDF15 y HIF</dt><dd>La regulación de la hepcidina por la actividad eritropoyética está mediada por el <strong>factor 15 de diferenciación del crecimiento (GDF15)</strong> — elevado en talasemia intermedia, suprime la síntesis de hepcidina permitiendo mayor absorción de hierro independientemente de las reservas corporales. Un <strong>factor inducible por hipoxia (HIF)</strong> también suprime la síntesis de hepcidina en condiciones de hipoxia.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Anemia en los pacientes de UCI: 3 anormalidades principales</p>
+            <ul class="term-chips">
+                <li>Desregulación de la homeostasis del hierro por ↑hepcidina</li>
+                <li>Proliferación alterada de células progenitoras eritroides</li>
+                <li>Respuesta embotada (atenuada) a la eritropoyetina</li>
+            </ul>
+
+            <div class="article-figure">
+                <img src="js/modules/fisio-uci/img/fig4-rolhepcidina.jpg" alt="Rol de la hepcidina en la anemia inflamatoria: la hepcidina bloquea el flujo de hierro desde macrófagos, hepatocitos y duodeno, produciendo hipoferremia y reducción de la eritropoyesis" loading="lazy">
+                <div class="article-figure-caption">Figura 4. El aumento de las concentraciones séricas de hepcidina es responsable de la anemia en la UCI: restringe la eritropoyesis al bloquear la absorción intestinal de hierro y la liberación de hierro desde el sistema reticuloendotelial.</div>
+            </div>
+
+            <dl class="kv-row"><dt>Eritroferrona (ERFE)</dt><dd>Hormona identificada más recientemente, producida por eritroblastos en respuesta al tratamiento con agentes estimulantes de la eritropoyesis (ESA) — media, en parte, la disminución de la expresión de hepcidina.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Mensaje clínico</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La medición de marcadores específicos como la <strong>hepcidina</strong> podría orientar la toma de
+                decisiones en pacientes con anemia en UCI. Es indispensable considerar las indicaciones de
+                transfusión en pacientes con factores de riesgo (falla renal, falla cardíaca congestiva, cáncer),
+                donde se ha demostrado beneficio de la intervención. La evidencia lleva a considerar la anemia como
+                un <span class="hl">mecanismo compensador fisiológico</span> en respuesta a una noxa — sin desestimar
+                su impacto en el estado hemodinámico, y evaluándola con criterio clínico en cada caso.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Fuente</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Arenas Villamizar AR, Ocampo Pérez AM, Ugarte Ubiergo S. Fisiopatología de la anemia en cuidados intensivos. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección II, Capítulo 12, págs. 171-183.</p>
+        </div>
+
+        <!-- ===== FICHA 2: TROMBOCITOPENIA ===== -->
+        <div id="fuci-trombocitopenia" class="tab-content">
+            <h3 style="color: var(--accent-yellow);">Fisiopatología de la trombocitopenia en el paciente crítico</h3>
+
+            <p class="section-label">Fisiología plaquetaria: estructura</p>
+            <dl class="kv-row"><dt>Cifras normales</dt><dd>150-300 × 10⁹/L (150.000-300.000/mm³). Diámetro 2-5 micras, volumen celular 6-10 fL. Además de la hemostasia/trombosis, las plaquetas participan en la inflamación, la aterogénesis, la defensa antimicrobiana, el crecimiento tumoral y el desarrollo de metástasis.</dd></dl>
+            <ul class="term-chips">
+                <li>Zona periférica: glicocálix + glucoproteínas para adhesión/activación/agregación</li>
+                <li>Zona sol-gel: matriz gelatinosa, microtúbulos, citoesqueleto contráctil</li>
+                <li>Zona de organelos: gránulos α, gránulos densos, lisosomas</li>
+                <li>Sistema de membranas: sistema canalicular abierto, sistema tubular denso, RE rugoso</li>
+            </ul>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🟡 Gránulos α (50-80/plaqueta)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Los más numerosos. Contienen <strong>factor de von Willebrand (FvW)</strong>, factor V, trombospondina, selectina-P, y proteínas tomadas/internalizadas por la plaqueta. La fusión de gránulos entre sí es un signo de daño plaquetario.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔵 Gránulos densos (3-8/plaqueta)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Gran variabilidad morfológica. Contienen ATP, ADP, serotonina, pirofosfato de calcio y magnesio.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚪ Lisosomas (0-2/plaqueta)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Más de 13 hidrolasas ácidas, catepsina D y E, proteína lisosomal asociada a la membrana (LAMP-2) y CD63 — se liberan intensamente con la activación plaquetaria <em>in vitro</em>, pero su rol <em>in vivo</em> no está establecido.</div>
+                </div>
+            </div>
+            <dl class="kv-row"><dt>Trombopoyetina (TPO)</dt><dd>Principal regulador de la función plaquetaria, producida en hígado, riñón, médula ósea y hueso — estimula todas las células madre hematopoyéticas, con funciones especiales sobre las precursoras de megacariocitos. Su producción/liberación aumenta ante la trombocitopenia (respuesta del estroma medular) y también responde a IL-6 (hígado). Niveles elevados de TPO no solo aumentan la producción plaquetaria, sino que <strong>reducen el umbral de activación</strong> (menor estímulo necesario para adhesión/agregación).</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Trombocitopenia en el paciente crítico</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Es una condición muy frecuente en cuidados críticos. Si se define <strong>trombocitopenia grave o
+                severa</strong> como un recuento ≤50.000/mm³, la incidencia llega a ser de alrededor del <strong>20%</strong>.
+                La trombocitopenia grave no solo afecta la hemostasia primaria, sino que se asocia con la
+                <span class="hl">inflamación y el pronóstico global</span> del paciente crítico.
+            </p>
+
+            <table class="data-table">
+                <thead><tr><th colspan="2">Tabla 1. Diagnóstico diferencial de la trombocitopenia en el paciente crítico</th></tr></thead>
+                <tbody>
+                    <tr><td colspan="2">Sepsis</td></tr>
+                    <tr><td colspan="2">Coagulación intravascular diseminada</td></tr>
+                    <tr><td colspan="2">Hemorragia masiva</td></tr>
+                    <tr><td colspan="2">Microangiopatía trombótica. Púrpura trombocitopénica trombótica</td></tr>
+                    <tr><td colspan="2">Trombocitopenia inducida por heparina</td></tr>
+                    <tr><td colspan="2">Trombocitopenia inmune</td></tr>
+                    <tr><td colspan="2">Trombocitopenia inducida por fármacos</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Trombocitopenia grave asociada a SIRS y shock</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El mecanismo más frecuente en el paciente crítico es la <strong>CID asociada a sepsis</strong> — trastornos
+                hemodinámicos graves que disminuyen difusamente la perfusión tisular, producen hipoxia de parénquimas,
+                daño endotelial difuso y generación de microtrombos que ocluyen la microcirculación. La activación
+                generalizada de la coagulación se acompaña de prolongación de TP/TTPa/TT, descenso del fibrinógeno
+                (Fg) y aumento del dímero D (DD), por consumo/destrucción de factores secundaria a la microtrombosis
+                y aumento de la fibrinólisis.
+            </p>
+            <dl class="kv-row"><dt>Factor de mal pronóstico</dt><dd>Recuento plaquetario &lt;50.000/mm³ al ingreso a UCI, o su descenso durante la evolución a &lt;50% del recuento inicial — sobre todo si se acompaña de otras alteraciones de la coagulación como hipofibrinogenemia por exceso de fibrinólisis.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">¿Qué hacer? Evaluación de la hemostasia</p>
+            <dl class="kv-row"><dt>Hemostasia basal seriada</dt><dd>Además de TP/TTPa, es recomendable medir y seguir el <strong>fibrinógeno</strong> — excelente marcador de la intensidad/evolución de la CID, y de la capacidad de síntesis hepática. El DD estará elevado pero carece de especificidad (sepsis, cirugías, procedimientos invasivos, úlcera por presión también lo elevan).</dd></dl>
+            <dl class="kv-row"><dt>Tromboelastograma</dt><dd>Permite evaluar el estado de la hemostasia repetidamente y al lado del paciente, distinguiendo hiperfibrinólisis de un estado protrombótico — útil especialmente en hipercríticos y en circulación extracorpórea o posparo cardiorrespiratorio. Ver Ficha 4 para el detalle completo de TEG/ROTEM.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Indicaciones actuales de transfusión de plaquetas</p>
+            <ul class="term-chips">
+                <li>Hemorragia activa (digestiva, hematuria, hemoptisis) y recuento &lt;50.000/mm³</li>
+                <li>Cirugía mayor o procedimientos invasivos en sitios profundos no compresibles: mantener &gt;100.000/mm³</li>
+                <li>Neurocirugía o procedimientos invasivos neurorradiológicos, o sangrado intracraneal/intramedular: mantener &gt;100.000/mm³</li>
+                <li>Hemodinamia cardiovascular o cirugía cardíaca/vascular: mantener &gt;100.000/mm³</li>
+                <li>Vía venosa central (tunelizada o no), guiada por ultrasonido, por profesional entrenado: &gt;20.000/mm³</li>
+                <li>Punción lumbar: recomendación internacional ≥40.000/mm³ (1C) — localmente ningún centro la realiza con &lt;100.000/mm³</li>
+                <li>Recuentos normales pero con antiagregantes plaquetarios conocidos: medir el tiempo de sangría por método de Ivy</li>
+            </ul>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 La transfusión no solo se guía por el número: también hay que considerar el efecto de medicamentos (antiagregantes), la CID (los productos de degradación del fibrinógeno interfieren con la agregación) o la uremia (trombastenia secundaria a falla renal). El tiempo de sangría por Ivy empieza a prolongarse con recuentos &lt;50.000/mm³, pero es infrecuente poder realizarlo en críticos por su piel edematosa/trastornos de perfusión. Además de plaquetas, considerar plasma fresco congelado (corregir TP/TTPa antes de procedimiento invasivo o si sangra activamente, sin tratar solo el número), factores liofilizados (rFVIIa o complejos dependientes de vitamina K, sin problema de volumen pero con riesgo de trombosis, indicados por hematólogo), y crioprecipitados si el fibrinógeno &lt;150 mg/dL.</p>
+
+            <p class="section-label" style="margin-top:16px;">Otras causas de trombocitopenia grave en el paciente crítico</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩸 Púrpura trombocitopénica inmunológica (PTI)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Enfermedad autoinmune con intenso descenso plaquetario, frecuentemente &lt;10.000/mm³. Habitualmente ingresa a cuidados intermedios para terapia esteroidal, con altas probabilidades de éxito inicial. Si es refractaria a esteroides: altas dosis de gammaglobulinas, terapias biológicas y otras inmunosupresoras. La transfusión de plaquetas está muy acortada por potentes anticuerpos y solo se indica como medida transitoria (inestabilidad hemodinámica/neurológica por hemorragia grave) mientras otras terapias hacen efecto.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Secundaria a quimioterapia antineoplásica</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Puede ser muy severa, generalmente en contexto de mielosupresión con pancitopenia (destacando la neutropenia febril). Ingresan a cuidados intermedios para factores de crecimiento granulocítico, antibióticos y aislamiento estricto. Al ser pacientes relativamente crónicos con alta probabilidad de sensibilización a transfusiones repetidas, se transfunden con recuentos &lt;10.000/mm³ o en caso de sangrado grave/procedimiento invasivo.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💉 Secundaria a fármacos</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Vancomicina, fenobarbital, carbamazepina, metildopa, diazepam, piperacilina, heparinas de bajo peso molecular, naproxeno, entre otras. Generalmente leve-moderada, se recupera al retirar el fármaco. Si la trombocitopenia severa se prolonga (infrecuente), existen recursos como trombopag o romiplostim (análogos de TPO, estimuladores de megacariocitos) indicados por el subespecialista.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚠️ Trombocitopenia inducida por heparina (TIH)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Muy grave y altamente inmunopatológica. La heparina (sobre todo HBPM) genera anticuerpos IgG específicos contra los complejos <strong>heparina-factor plaquetario 4 (FP4)</strong>, que se unen a la superficie plaquetaria (vía fragmento Fc), activándolas anormalmente — liberan más FP4, creando un ciclo reverberante con trombos en pequeños y grandes vasos. Puede haber trombosis (tipo CID o de grandes vasos, especialmente venosos) junto con trombocitopenia muy intensa (&lt;10.000/mm³) y hemorragias. Es imperioso suspender la heparina de inmediato, tomar muestra para anticuerpos TIH, y usar un anticoagulante sin reactividad cruzada: <strong>argatrobán, bivalirudina o fondaparinux</strong> (pentasacárido). La transfusión de plaquetas solo está indicada en sangrado o antes de procedimientos invasivos.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🌀 PTT y otras microangiopatías trombóticas</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Cuadro polimorfo: anemia hemolítica microangiopática, trombocitopenia, compromiso neurológico y falla renal — mortalidad &gt;50% sin tratamiento. Deficiencia de la metaloproteinasa <strong>ADAMTS-13</strong> (encargada de clivar los multímeros gigantes de FvW), con actividad &lt;6% característica de la enfermedad (congénita o adquirida por autoanticuerpos inhibidores). El mejor tratamiento en UCI es la <strong>plasmaféresis diaria</strong>, recambiando 1-1,5 volemias por sesión, reponiendo con plasma fresco congelado. Al ingreso: tomar muestra de actividad ADAMTS-13 e inhibidor antes de la primera sesión. Si no hay mejoría con varias sesiones: inmunosupresores adicionales (vincristina, ciclofosfamida, rituximab, caplacizumab). Los corticoides son frecuentes pero no demostrada su utilidad. Transfusión de plaquetas solo si hay sangrado o antes de procedimientos invasivos.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Trombocitosis</p>
+            <dl class="kv-row"><dt>Definición</dt><dd>Recuento plaquetario &gt;450 × 10⁹/L. Frecuentemente un hallazgo incidental, más común en población pediátrica. Se clasifica en <strong>primaria</strong> (alteración clonal de la trombopoyesis, p. ej. trombocitemia esencial) y <strong>secundaria o reactiva</strong> (proceso fisiopatológico externo identificable).</dd></dl>
+
+            <table class="data-table">
+                <thead><tr><th colspan="2">Tabla 2. Causas de la trombocitosis reactiva</th></tr></thead>
+                <tbody>
+                    <tr><td colspan="2"><strong>Asociadas con trombocitosis de larga evolución</strong></td></tr>
+                    <tr><td colspan="2">Infección crónica (tuberculosis, ITU con obstrucción de la vía urinaria)</td></tr>
+                    <tr><td colspan="2">Estados inflamatorios crónicos (artritis reumatoide, enfermedad inflamatoria intestinal)</td></tr>
+                    <tr><td colspan="2">Neoplasias no hematológicas (cáncer esofágico, dermatológico, hepático, o reactivo a quimioterapia)</td></tr>
+                    <tr><td colspan="2">Ferropenia</td></tr>
+                    <tr><td colspan="2"><strong>Asociadas con trombocitosis de evolución aguda</strong></td></tr>
+                    <tr><td colspan="2">Esplenectomía</td></tr>
+                    <tr><td colspan="2">Trauma</td></tr>
+                    <tr><td colspan="2">Sepsis</td></tr>
+                    <tr><td colspan="2">Hemólisis</td></tr>
+                    <tr><td colspan="2">Fármacos (antifúngicos, ciprofloxacino, piperacilina/tazobactam, amoxicilina/clavulanato, enoxaparina)</td></tr>
+                </tbody>
+            </table>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>❓ ¿Es un proceso hematológico maligno?</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">En adultos con trombocitosis <em>de novo</em>, solo algunos casos corresponden a trombocitosis primaria — habitualmente <strong>trombocitemia esencial</strong>, con incidencia de 1 a 2,5 por 100.000 personas/año. Más frecuente en mujeres, pico de aparición 50-70 años. Presentación habitual: paciente asintomático o con complicaciones vasculares — hasta 30% presenta un fenómeno trombótico (más frecuente la trombosis arterial que la venosa) y ~10% debuta con hemorragias. Si un paciente con trombocitemia esencial conocida ingresa a UCI con recuentos controlados &lt;800.000/mm³, no es deletéreo suspender la hidroxiurea oral varios días — se recomienda trombo­profilaxis habitual o de riesgo moderado, control seriado, e interconsulta al hematólogo si es necesario.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🤕 Trombocitosis reactiva en el paciente crítico</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Se asocia principalmente con enfermedad aguda: sepsis, procesos inflamatorios sistémicos, posesplenectomía, cirugía reciente, neoplasias no hematológicas — con niveles elevados de citocinas de fase aguda (IL-1, IL-6, IFN-γ) que inducen una trombopoyesis acelerada. En <strong>politrauma grave</strong>, respuesta bimodal con aumento sobre el valor normal la semana siguiente al trauma; hasta 25% de los pacientes de trauma desarrolla trombocitosis (estudios retrospectivos). En una cohorte francesa de 176 pacientes, 20,1% desarrolló trombocitosis, con mayor severidad (SAPS II), más días de ventilación mecánica y estadía más prolongada en UCI — pero mortalidad relativamente menor (8% vs. 14%, sin significación estadística, p=0,34); se reportaron 3 complicaciones tromboembólicas en esta cohorte pese a tromboprofilaxis mecánica y farmacológica instalada. Los recuentos en trombocitosis reactiva fluctúan entre 500.000 y 800.000/mm³; muy infrecuentemente superan el millón (contexto clínico como edad y recuentos previos orientan). La incidencia de complicaciones tromboembólicas en trombocitosis reactiva severa (&gt;800.000/mm³) es tan reducida que <strong>no justifica farmacoterapia específica</strong> más allá de la tromboprofilaxis estándar ya establecida — ningún ensayo clínico o cohorte ha evaluado innovar en las medidas estándar para esta situación.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Conclusión</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La trombocitopenia severa, acompañada de CID, constituye un <strong>factor determinante de gravedad y
+                mayor mortalidad</strong> en el paciente crítico — debe enfatizarse el mejor tratamiento intensivo e
+                integral de la enfermedad de base. El apoyo transfusional debe realizarse en forma racional, de
+                acuerdo con la situación clínica y los requerimientos de terapias/procedimientos invasivos, teniendo
+                en cuenta que los <span class="hl">mecanismos fisiopatológicos de las diversas trombocitopenias que
+                podemos recibir en la UCI son radicalmente distintos</span> — y por tanto también lo son sus
+                tratamientos.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Fuente</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Monsalve Molina V, Valenzuela Cáceres R. Fisiopatología de la trombocitopenia en el paciente crítico. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección II, Capítulo 13, págs. 185-198.</p>
+        </div>
+
+        <!-- ===== FICHA 3: TRANSFUSIÓN ===== -->
+        <div id="fuci-transfusion" class="tab-content">
+            <h3 style="color: var(--accent-blue);">¿Cuándo transfundir? ¿Existe un nivel óptimo de hemoglobina en patologías críticas?</h3>
+
+            <p class="section-label">Contexto histórico</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Gran cantidad de sangre se transfunde innecesariamente, exponiendo a los pacientes a riesgos
+                derivados de la exposición a hemocomponentes. Especialmente tras la publicación en 1999 del estudio
+                <strong>TRICC</strong> creció la seguridad de mantener a los pacientes con hemoglobinas más bajas que
+                lo usual — en los 90 se transfundía para mantener Hb 10-12 mg/dL; tras esa publicación (y las
+                subsiguientes en los primeros 10 años del siglo XXI) la meta se redujo a
+                <span class="hl">7-7,5 mg/dL como disparador de la transfusión</span>. Cada estudio posterior
+                demostró que la incidencia de falla cardíaca, infecciones y eventos vasculares no aumentaba, y que
+                a 30 días la mortalidad mejoraba con estrategias restrictivas — salvo en pacientes neurológicos,
+                especialmente hemorragia subaracnoidea.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Fisiología de la perfusión de oxígeno tisular</p>
+            <dl class="kv-row"><dt>Definición de hipoxia</dt><dd>Baja concentración de oxígeno en los tejidos (Mac Intyre). Siggaard-Andersen (1995) describió 9 etiologías diferentes de hipoxia.</dd></dl>
+            <table class="data-table">
+                <thead><tr><th>Tipo de hipoxia</th><th>Mecanismo</th></tr></thead>
+                <tbody>
+                    <tr><td>Hipóxica</td><td>Baja concentración plasmática de O₂ (baja PaO₂ inspirada, grandes alturas, o barrera de difusión alveolocapilar)</td></tr>
+                    <tr><td>Isquémica</td><td>Caída de la perfusión tisular (obstrucción arterial o falla de la bomba cardíaca)</td></tr>
+                    <tr><td>Anémica</td><td>Disminución del transportador de O₂ suficientemente profunda para evitar entrega adecuada</td></tr>
+                    <tr><td>Hipermetabólica</td><td>Desfase entre requerimientos metabólicos y aporte de O₂/nutrientes, por ↑tasa metabólica basal (fiebre, convulsiones)</td></tr>
+                    <tr><td>Por cortocircuito (shunt)</td><td>Frecuente en sépticos: inhomogeneidad del flujo por diferencias de resistencias vasculares — unidades microvasculares "débiles" hipoperfunden pese a presiones tisulares de O₂ globalmente adecuadas</td></tr>
+                    <tr><td>Por alta afinidad</td><td>↑Afinidad Hb-O₂ (hipocapnia, alcalosis, hipotermia) compromete la entrega a los tejidos</td></tr>
+                    <tr><td>Por disperfusión</td><td>El edema intersticial se convierte en barrera física para la difusión de O₂ desde capilares a mitocondrias</td></tr>
+                    <tr><td>Por desacople</td><td>Incremento en la reducción de O₂ sin incremento concomitante de ATP</td></tr>
+                    <tr><td>Histotóxica</td><td>Citocromos de la respiración mitocondrial inhibidos (p. ej. cianuro)</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Raramente en cuidado intensivo se encuentran tipos aislados de hipoxia. En sépticos concurren la hipoxia anémica + hipermetabólica + por disperfusión (edema por vasoplejía) + con frecuencia isquémica (disfunción VI) y por shunt — decidir la transfusión con base en solo un número (la hemoglobina) resulta bastante simplista.</p>
+
+            <p class="section-label" style="margin-top:16px;">Aporte y consumo de oxígeno</p>
+            <div class="kv-row"><dt>Aporte de oxígeno (DO₂)</dt><dd><strong>DO₂ = gasto cardíaco (GC) × contenido arterial de O₂ (CaO₂) × 10</strong> — valor usual 900-1000 mL/min. CaO₂ = Hb × SatO₂ arterial × 1,39 + PaO₂ × 0,003 — en condiciones normales, CaO₂ es 18-20 mL/dL de sangre (el O₂ disuelto contribuye muy poco; la hemoglobina es el determinante principal).</dd></div>
+            <div class="kv-row"><dt>Consumo de oxígeno (VO₂)</dt><dd><strong>VO₂ = GC × 1,39 × [Hb] × (SaO₂ - SvO₂) × 10</strong> — valor usual en individuos sanos 200-300 mL/min. Índice de extracción de O₂ (EO₂ = VO₂/DO₂), en reposo ~25%, variará según la actividad metabólica de los tejidos.</dd></div>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Los sistemas de transporte ayudan a mantener un VO₂ constante pese a variaciones en el DO₂, mediante
+                compensación en la extracción o en el gasto cardíaco — mientras el DO₂ esté por encima de
+                ~900-1000 mL/min, el consumo permanece constante (VO₂ = EO₂ × DO₂, ecuación independiente del
+                gasto cardíaco). Por debajo de ese valor, una reducción del DO₂ causa una <strong>disminución lineal
+                del VO₂</strong> — la <span class="hl">disponibilidad crítica de oxígeno</span>, que se caracteriza
+                por metabolismo anaeróbico y acidosis láctica.
+            </p>
+
+            <div class="article-figure">
+                <div style="background:rgba(212,175,55,0.06); border:1px dashed var(--border-color); border-radius:8px; padding:16px; text-align:center; font-size:0.8rem; color:var(--text-muted);">
+                    📊 Placeholder — Figura 1 del capítulo: curva de disociación de la hemoglobina (saturación % vs. presión parcial de O₂), sigmoidea, p50 ≈22,5-23 mmHg
+                </div>
+                <div class="article-figure-caption">Figura 1 del capítulo (no extraída — es un gráfico vectorial, no una imagen incrustada). La curva se explica por el efecto homotrópico del oxígeno: cada molécula unida facilita la unión de la siguiente. Entre el p50 y el 90% de saturación la curva es muy empinada; para saturar entre el 90% y el 100% se necesita cada vez más oxígeno (la curva se aplana).</div>
+            </div>
+            <ul class="term-chips">
+                <li>Desplazan la curva a la <strong>derecha</strong> (↓afinidad, facilita entrega de O₂): acidosis, hipercarbia, hipertermia, sulfohemoglobina, ↑2,3-DPG</li>
+                <li>Desplazan la curva a la <strong>izquierda</strong> (↑afinidad, dificulta entrega de O₂): alcalosis, hipotermia, intoxicación por monóxido de carbono</li>
+            </ul>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Efecto homotrópico: la hemoglobina tiene 4 sitios activos y cada O₂ unido facilita la unión del siguiente. Efecto Haldane: a PO₂ muy alta, ↑afinidad por O₂ y ↓afinidad por CO₂ (capilares pulmonares). Efecto Bohr: a PCO₂ muy elevada, facilita la donación de O₂ y captación de CO₂ (tejidos periféricos) — H⁺ y CO₂ son efectores heterotrópicos que dificultan la unión del O₂ a la Hb.</p>
+
+            <p class="section-label" style="margin-top:16px;">Deuda de oxígeno y punto crítico</p>
+            <div class="article-figure">
+                <div style="background:rgba(212,175,55,0.06); border:1px dashed var(--border-color); border-radius:8px; padding:16px; text-align:center; font-size:0.8rem; color:var(--text-muted);">
+                    📊 Placeholder — Figuras 2 y 3 del capítulo: relación aporte/consumo de O₂ con el punto crítico del DO₂, y el efecto de la hipertermia/edema intersticial desplazando ese punto crítico
+                </div>
+            </div>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Simplemente normalizar las variables macrohemodinámicas (PA, FC, gasto urinario) <strong>no es
+                suficiente</strong> para considerar pagada la deuda de oxígeno. Con deuda acumulada, el resultado es
+                disfunción multiorgánica y muerte. Cuando las variables hemodinámicas están controladas pero no se
+                ha mejorado la perfusión tisular (lactato alto, saturación venosa elevada, delta de CO₂ &gt;6), se
+                está ante un <strong>choque oculto</strong> — escenario peligroso porque da una falsa sensación de
+                tranquilidad y puede llevar a descuidar la reanimación continuada. La relación
+                <strong>lactato/piruvato (L/P)</strong> es más sensible que el lactato aislado: un valor &gt;25
+                indica hipoperfusión — el lactato arterial no solo refleja toda la economía (puede ocultar tejidos
+                específicos hipoperfundidos), sino que es la suma del producido por metabolismo anaeróbico más el
+                introducido al metabolismo intermediario en el hígado. Aunque el lactato elevado es predictor de
+                mortalidad en trauma, solo es predictor de transfusión masiva cuando &gt;4 (área bajo la curva 0,71).
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Transfusión en situaciones especiales</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🦠 Paciente séptico</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Rivers (2001), EGDT</dt><dd>Terapia dirigida por metas: Hcto 30 (Hb ~10), ScvO₂ &gt;90, PAM &gt;65, PVC 8-12 → reducción absoluta de mortalidad del 12,5% vs. control. Pero el análisis detallado sugiere que <strong>la reanimación hídrica con lactato como meta y la normalización de la PAM</strong> son las variables realmente importantes — las transfusiones no aportaron mejora en el pronóstico (Cho, 2015).</dd></dl>
+                        <dl class="kv-row"><dt>Evolución de las guías</dt><dd>Del protocolo de Rivers a la guía de Sobreviviendo a la Sepsis 2012, desaparece el hematocrito como meta inicial — hoy es más importante la normalización del lactato en las primeras 6h que el valor del transportador. El estudio <strong>ARISE</strong> mostró que era más importante cumplir cabalmente las metas a las 3h que conseguir ScvO₂&gt;70%/Hcto&gt;30/PVC 8-12.</dd></dl>
+                        <dl class="kv-row"><dt>TRISS (Holst, 2014)</dt><dd>998 pacientes, transfusión con Hb &lt;7 vs. &lt;9. Mortalidad similar (43% vs. 45%), soporte vital avanzado igual a 5/14/28 días, sin diferencias en eventos isquémicos coronarios/sistémicos (7,2% vs. 8%). <strong>Conclusión: sin ventaja de mantener Hb más alta a expensas de transfusiones.</strong> El análisis de subgrupos 2016 confirmó lo mismo también en pacientes con EPOC/asma, neoplasias hematológicas, cáncer metastásico y cirugía.</dd></dl>
+                        <dl class="kv-row"><dt>Metaanálisis de Dupuis</dt><dd>La estrategia restrictiva no muestra diferencia de mortalidad frente a la liberal, pero sí impacto estadísticamente significativo en <strong>infecciones nosocomiales, lesión renal aguda y lesión pulmonar aguda</strong> en el subgrupo de transfusiones liberales.</dd></dl>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">👉 En sépticos, la estrategia restrictiva es mejor y <strong>7 es el número</strong> bajo el cual la transfusión se hace indispensable — habitualmente se transfunde solo 1 unidad, y se controla a las 3h para comprobar si se logró Hb≥7 (evitando una segunda unidad innecesaria).</p>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🚑 Paciente politraumatizado</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Coagulopatía asociada al trauma</dt><dd>Presente en el 25% de los politraumatizados severos, aumenta ×4 la mortalidad. Iniciada por la exposición masiva de factor tisular subendotelial (daño de múltiples focos) → fenómeno hipercoagulable → complicado por coagulopatía de consumo. La trombomodulina limita el proceso activando la proteína C (anticoagulación endógena); si hay consumo concomitante de plaquetas (CID), predomina la anticoagulación estimulada por trombina, con más sangrado.</dd></dl>
+                        <dl class="kv-row"><dt>Disfunción plaquetaria</dt><dd>Segundo fenómeno de la coagulopatía del trauma — no infrecuentemente hay disfunción plaquetaria pese a recuento normal. Con ADP (estimula receptores P2Y), la disfunción tiene la mejor correlación con mortalidad: <strong>32% frente a 8% en normofuncionantes</strong> (Daley, et al.). Aparece muy temprano (6h en promedio) y se extiende hasta 96h.</dd></dl>
+                        <dl class="kv-row"><dt>Hiperglucemia y coagulopatía</dt><dd>Valores &gt;151 mg/dL se asociaron con la aparición de coagulopatía y peor pronóstico en TCE severo (Alexiou), el tipo de trauma donde mejor se ha estudiado este impacto negativo.</dd></dl>
+                        <dl class="kv-row"><dt>Transfusión 1:1:1</dt><dd>Proporción propuesta entre glóbulos rojos:plasma:plaquetas (Holcomb, medicina táctica militar) — la transfusión balanceada se convirtió en estándar en cirugía de trauma para minimizar la mortalidad. Riesgo: TRALI en volúmenes altos de plasma/plaquetas.</dd></dl>
+                        <dl class="kv-row"><dt>Ácido tranexámico</dt><dd><strong>CRASH-2</strong>: &gt;20.000 pacientes, reduce la mortalidad por hemorragia sin incrementar eventos trombóticos/tromboembólicos. <strong>MATTERs</strong> (896 militares, heridas penetrantes): mortalidad por transfusión masiva del 6,5% (vs. 1,5% en CRASH-2) — mayor proporción de heridas penetrantes/transfusión masiva. Ventana terapéutica: la aplicación temprana es fundamental (mortalidad por sangrado ocurre principalmente en las primeras 12h); tras <strong>200 minutos</strong> del sangrado, el tranexámico pierde toda correlación con el pronóstico (Gayet-Ageron).</dd></dl>
+                        <dl class="kv-row"><dt>Lactato/piruvato y gasto cardíaco</dt><dd>Bursa et al. mostraron correlación estrecha entre la relación L/P y el gasto cardíaco: con Hb entre 7,0-9,0 aparecen signos de isquemia si el índice cardíaco &lt;3,2 L/min/m². Si Hb &lt;7 y el índice cardíaco &gt;4,8 L/min/m², no se demostró isquemia tisular — el valor óptimo de transfusión depende de las condiciones hemodinámicas, no solo del número absoluto de hemoglobina.</dd></dl>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>❤️ Paciente cardiovascular</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Cirugía cardiovascular</dt><dd>6 estudios controlados prospectivos aleatorizados, &gt;3000 pacientes: liberal (Hb 8-10) vs. restrictiva (7-8). <strong>TRICS-III</strong> (Mazer, 5243 pacientes riesgo moderado-alto EUROSCORE I&gt;6): restrictiva (&lt;7,5) no inferior a liberal (&lt;9,5 en quirófano/UCI o &lt;8,5 fuera de UCI) — más días en UCI/ventilación mecánica en el grupo liberal.</dd></dl>
+                        <dl class="kv-row"><dt>Síndrome coronario agudo</dt><dd>Punto de corte desconocido pese a la alta prevalencia de anemia + SCA. Recomendación habitual: transfundir si Hb &lt;8 g/dL asintomático; si síntomas isquémicos, mantener Hb ≥10 g/dL — recomendación basada en un solo estudio de 110 pacientes (corte 10 vs. 8, mortalidad a 30 días 98% vs. 87%).</dd></dl>
+                        <dl class="kv-row"><dt>EPOC / paciente pulmonar crónico</dt><dd>Prevalencia de anemia 7,5-33% (normocítica normocrómica de enfermedad crónica) — más frecuente incluso que la policitemia clásicamente asociada (13,6% vs. 8,4%). Schonhofer: en 20 pacientes anémicos (Hb &lt;11), la transfusión redujo la ventilación minuto y el trabajo respiratorio — sin estudios que hayan abordado un punto de corte distinto al recomendado (7-8 g/dL).</dd></dl>
+                    </div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Conclusión</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Los estudios en pacientes críticos han mostrado, en general, mejores resultados con estrategias
+                restrictivas (tolerancia Hb &gt;7) que con liberales (Hb de 9). Sin embargo, siendo la hipoxia
+                tisular un fenómeno muy complejo (sistema cardiovascular, concentración de Hb, edema intersticial y
+                función mitocondrial), <strong>no es tan sencillo utilizar solo un número</strong> para decidir la
+                transfusión. Procrastinar la decisión de transfundir puede empeorar la deuda de oxígeno que se paga
+                en disfunción orgánica múltiple — es fundamental un análisis integral de las variables que
+                determinan el aporte y el consumo, más allá del valor de la hemoglobina.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Fuente</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Carreño JN, Hernández A. ¿Cuándo transfundir? ¿Existe un nivel óptimo de hemoglobina en patologías críticas? En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección II, Capítulo 14, págs. 199-222.</p>
+        </div>
+
+        <!-- ===== FICHA 4: TROMBOELASTOGRAFÍA ===== -->
+        <div id="fuci-teg" class="tab-content">
+            <h3 style="color: var(--accent-purple);">Monitorización de la hemostasia en el paciente crítico: TEG y ROTEM</h3>
+
+            <p class="section-label">Hemostasia y vías de la coagulación</p>
+            <dl class="kv-row"><dt>Hemostasia</dt><dd>Prevención de la pérdida de sangre — el proceso por el que la sangre pasa de un estado líquido a uno gelatinoso, manteniendo la integridad de un sistema circulatorio cerrado de alta presión tras un daño vascular. Mecanismos: espasmo vascular, formación del tapón plaquetario, formación del coágulo, y proliferación final de tejido fibroso. Fase <strong>primaria</strong> (adhesión/agregación plaquetaria) y <strong>secundaria</strong> (activación de proteínas que forman el coágulo de fibrina).</dd></dl>
+            <dl class="kv-row"><dt>Del concepto de "2 vías" al modelo de coagulación celular</dt><dd>El concepto histórico (Davie y Ratnoff, 1964) contemplaba 2 vías independientes (extrínseca: factor tisular + factor VII; intrínseca: factores V, VIII, IX, XI, XII). Hoy se acepta una <strong>vía única</strong>, iniciada por la activación del factor tisular — el <strong>modelo de coagulación celular</strong> (Hoffman, 2003), con 3 fases: iniciación, amplificación y propagación.</dd></dl>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>1️⃣ Fase de iniciación</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Ocurre en el endotelio/subendotelio, donde están las células portadoras de factor tisular. El factor tisular interactúa con el factor VIIa (circula inactivo), incrementando ×10⁷ la actividad del factor VII, y forma el complejo FVIIa/factor tisular que activa los factores X y IX. El factor Xa formado genera pequeñas cantidades de trombina a nivel local. <strong>Teoría de la mínima función</strong>: el factor tisular tiene actividad constante generando pequeñas cantidades de trombina fuera del sistema vascular, previniendo el estado de hipercoagulabilidad sin lesión.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>2️⃣ Fase de amplificación</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Depende de las plaquetas activadas y su interacción con los factores de coagulación (especialmente trombina). Migración plaquetaria, degranulación, adhesión, agregación y formación de tapón. Cambio en la polaridad de los fosfolípidos de membrana → interacción con factores de coagulación → activación del factor X y mayor síntesis de trombina. La trombina recluta plaquetas y retroalimenta positivamente activando los factores V, VIII y XI. El complejo IXa/VIIIa se ensambla en la superficie plaquetaria, generando grandes cantidades de factor X y trombina.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>3️⃣ Fase de propagación</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Cambio de localización de los procesos, de la célula portadora de factor tisular a la plaqueta activada. La trombina generada condiciona la ruptura del fibrinógeno y la formación del monómero de fibrina, que polimeriza para consolidar el coágulo. La trombina activa el factor XIII (mayor estabilidad). Se activa también la retroalimentación negativa: antitrombina III, proteína C y S, e inhibidor tisular.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Estudios de rutina o pruebas estándar</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                TP, RIN, TTPa, fibrinógeno y recuento de plaquetas. <strong>Limitaciones</strong>: todas documentan
+                únicamente los primeros <span class="hl">20 a 60 segundos</span> de la formación del trombo (no
+                monitorización en tiempo real); se realizan a 37°C (no detectan coagulopatía por hipotermia); el
+                recuento plaquetario es meramente cuantitativo (no detecta disfunción); no dan información sobre la
+                estabilidad del coágulo ni la fibrinólisis, y <strong>no predicen el riesgo de hemorragia</strong> —
+                de uso limitado en pacientes quirúrgicos/críticos.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Métodos viscoelásticos: historia</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Los inicios de la tromboelastografía se remontan a Heidelberg (Alemania), 1948, investigación del
+                Dr. Hartert — no se utilizó en ese momento. A mediados de los 80, el equipo del Dr. Kang retomó su
+                uso, adecuándola a pacientes sometidos a cirugía cardíaca con circulación extracorpórea y a
+                trasplantes hepáticos. Apareció primero la <strong>tromboelastometría (TEG)</strong>; entre 1995 y
+                1997, la <strong>tromboelastometría rotacional (ROTEM)</strong>.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Ventajas y limitaciones</p>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <div>
+                    <p style="font-size: 0.78rem; color: var(--accent-green); font-weight:600; margin:0 0 4px;">✅ Ventajas</p>
+                    <ul class="term-chips">
+                        <li>Mínima cantidad de sangre entera, sin bioquímico entrenado</li>
+                        <li>Reproducibles, resultados a corto plazo</li>
+                        <li>Detectan anticoagulantes pese a acidosis/hipotermia</li>
+                        <li>Cuantifican fibrinólisis y guían antifibrinolíticos</li>
+                        <li>Guían el uso de rFVIIa</li>
+                        <li>Distinguen hemorragia quirúrgica vs. coagulopática</li>
+                        <li>Estándar de oro para detección de coagulopatía</li>
+                    </ul>
+                </div>
+                <div>
+                    <p style="font-size: 0.78rem; color: var(--accent-red); font-weight:600; margin:0 0 4px;">⚠️ Limitaciones</p>
+                    <ul class="term-chips">
+                        <li>Baja sensibilidad a antagonistas IIb/IIIa</li>
+                        <li>Baja sensibilidad a clopidogrel y aspirina</li>
+                        <li>Baja sensibilidad a HBPM y ACO en rango</li>
+                        <li>No detectan déficit de FvW ni plaquetas defectuosas</li>
+                        <li>Sin proceso de estandarización universal</li>
+                        <li>No evalúan comportamiento con flujo</li>
+                        <li>Sin correlación directa con TP/TTPa</li>
+                    </ul>
+                </div>
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Shore-Lesserson y Spiess demostraron reducción de transfusiones y predicción de hemorragia posoperatoria/reintervención quirúrgica con el uso rutinario de TEG/ROTEM. Estudios que involucraron &gt;5000 pacientes quirúrgicos confirmaron que guían de forma más efectiva la reposición de hemoderivados e identifican mejor la coagulopatía asociada al trauma.</p>
+
+            <p class="section-label" style="margin-top:16px;">La TEG: aspectos técnicos y parámetros</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                2 cm³ de sangre entera citratada (venosa, línea arterial o vía central), colocada en cubeta con
+                rotación/oscilación a 4°45" — preferiblemente dentro de los primeros 15 minutos. Un pin registra las
+                propiedades físicas de la formación del coágulo mediante un transductor electromecánico.
+            </p>
+            <table class="data-table">
+                <thead><tr><th>Parámetro TEG</th><th>Valor normal</th><th>Descripción</th><th>Evalúa</th></tr></thead>
+                <tbody>
+                    <tr><td>r (tiempo de reacción)</td><td>5-10 min</td><td>Formación inicial de la fibrina</td><td>Factores de coagulación (vía intrínseca y extrínseca)</td></tr>
+                    <tr><td>k (tiempo de apertura)</td><td>1-3 min</td><td>Tiempo hasta que la malla de fibrina alcanza una fuerza de 20 mm</td><td>Fibrinógeno y número de plaquetas</td></tr>
+                    <tr><td>Ángulo alfa</td><td>53-72°</td><td>Ángulo desde la línea basal hasta el punto de inflexión de la curva de formación</td><td>Fibrinógeno y número de plaquetas</td></tr>
+                    <tr><td>Amplitud máxima (MA)</td><td>50-70 mm</td><td>Amplitud máxima de la curva</td><td>Función plaquetaria y actividad del fibrinógeno</td></tr>
+                    <tr><td>G</td><td>5,3-12,4 dinas/cm²</td><td>Valor de la fuerza del coágulo</td><td>Visión completa de la coagulación</td></tr>
+                    <tr><td>LY30</td><td>0%-8%</td><td>Lisis del coágulo a los 30 min siguientes a la MA</td><td>Fibrinólisis</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">r: se prolonga por deficiencia/inhibición de factores (VIII, XI, XII) y por anticoagulantes (heparina, warfarina); su acortamiento implica hipercoagulabilidad. MA: mayor de lo normal cuanto más alto el recuento plaquetario o ante hiperfibrinogenemia; menor en trombocitopenia/hipofibrinogenemia. LY30 &gt;8% puede indicar hiperfibrinólisis. <strong>Índice de coagulación</strong>: ecuación lineal que combina todas las variables en un número — &lt;-2 indica hipocoagulabilidad, &gt;2 hipercoagulabilidad.</p>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📈 Los 7 patrones de la TEG (A-G)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>A — Normal</dt><dd>Trazado en forma de huso simétrico, dentro de rangos normales.</dd></dl>
+                        <dl class="kv-row"><dt>B — Prolongado</dt><dd>Déficit de factores de coagulación (r prolongado).</dd></dl>
+                        <dl class="kv-row"><dt>C — Amplitud máxima disminuida</dt><dd>Trombocitopenia o disfunción plaquetaria.</dd></dl>
+                        <dl class="kv-row"><dt>D — Fibrinólisis</dt><dd>El trazado se estrecha tras alcanzar su amplitud (lisis acelerada del coágulo).</dd></dl>
+                        <dl class="kv-row"><dt>E — Hipercoagulabilidad</dt><dd>Formación rápida, amplitud elevada.</dd></dl>
+                        <dl class="kv-row"><dt>F — CID</dt><dd>Coagulación intravascular diseminada — patrón mixto de hiper- e hipocoagulabilidad.</dd></dl>
+                        <dl class="kv-row"><dt>G — Hipocoagulabilidad</dt><dd>CID tardía — trazado estrecho y aplanado, consumo avanzado de factores.</dd></dl>
+                    </div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">La ROTEM: aspectos técnicos y parámetros</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Cubeta cilíndrica con un eje vertical que oscila permanentemente (rotación de 4,75°), impulsado por
+                un motor conectado a un resorte elástico, detectado ópticamente por una placa espejo, un diodo como
+                fuente de luz y un sensor. Al formarse el coágulo, se adhiere a la superficie del pistón,
+                obstruyendo el movimiento — el resultado es un equilibrio entre la tensión del resorte y la del
+                coágulo. Permite abreviar el tiempo de reacción, aumentar la precisión, inhibir factores como la
+                heparina y diferenciar las características viscoelásticas del coágulo.
+            </p>
+            <table class="data-table">
+                <thead><tr><th>Parámetro ROTEM</th><th>Descripción</th></tr></thead>
+                <tbody>
+                    <tr><td>CT (tiempo de coagulación)</td><td>Desde el inicio hasta el comienzo de la formación del coágulo</td></tr>
+                    <tr><td>CFT (tiempo de formación del coágulo)</td><td>Desde el inicio de la coagulación hasta un coágulo de 20 mm — interacción coágulo por plaquetas-fibrina</td></tr>
+                    <tr><td>Ángulo alfa</td><td>Velocidad de formación del coágulo</td></tr>
+                    <tr><td>A10</td><td>Amplitud a los 10 min después del tiempo de coagulación</td></tr>
+                    <tr><td>MCF (máxima firmeza del coágulo)</td><td>Estabilización por polimerización de fibrina, factor XIII e interacción plaquetas-fibrina</td></tr>
+                    <tr><td>ML (máxima lisis)</td><td>Reducción de la firmeza del coágulo</td></tr>
+                </tbody>
+            </table>
+            <ul class="term-chips">
+                <li>EXTEM: activa la vía extrínseca — formación del coágulo y fibrinólisis</li>
+                <li>INTEM: activa la vía intrínseca — formación del coágulo y polimerización de la fibrina</li>
+                <li>FIBTEM: extrínseca + inhibidores plaquetarios — función del fibrinógeno/factor XIII, sin interferencia plaquetaria</li>
+                <li>apTEM: detecta la fibrinólisis</li>
+                <li>hepTEM: detecta la presencia de heparina</li>
+            </ul>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔬 Patrones ROTEM característicos (valores reales del capítulo)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Normal</dt><dd>EXTEM CT 67s/MCF 57mm · INTEM CT 200s/MCF 61mm · FIBTEM MCF 9mm · apTEM MCF 61mm — todos con ML sin lisis relevante.</dd></dl>
+                        <dl class="kv-row"><dt>Plaquetopenia</dt><dd>EXTEM CFT prolongado a 444s (vs. normal), A10 reducida a 64mm, MCF 35mm — FIBTEM prácticamente sin cambio en MCF (16mm), confirmando que el defecto es plaquetario, no de fibrinógeno.</dd></dl>
+                        <dl class="kv-row"><dt>Hipofibrinogenemia</dt><dd>FIBTEM con MCF muy reducido (3mm) y CFR de solo 3mm — EXTEM/INTEM con MCF también reducidos (57mm/42mm) pero mucho menos que FIBTEM, localizando el defecto en el fibrinógeno.</dd></dl>
+                        <dl class="kv-row"><dt>Hiperfibrinólisis</dt><dd>ML del 100% en EXTEM e INTEM (lisis completa), FIBTEM ML 94% — patrón clásico "en forma de hoja" con estrechamiento tras el pico de amplitud.</dd></dl>
+                        <dl class="kv-row"><dt>Efecto de la heparina</dt><dd>INTEM con ML 100% y CT muy prolongado (88s con curva característica), mientras hepTEM (no mostrado en el capítulo con esos valores exactos, pero conceptualmente) corrige el efecto — EXTEM relativamente conservado, evidenciando que el defecto es de la vía intrínseca (sensible a heparina).</dd></dl>
+                    </div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Prueba de punto de atención y principales aplicaciones</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Análisis rápido, específico y a la cabecera del paciente, con sangre entera, resultados rápidos e
+                información sobre la totalidad del proceso de coagulación — reduce y minimiza las transfusiones
+                inapropiadas, prolongando la sobrevida. Las principales patologías donde se usan hoy son el trauma,
+                el sangrado perioperatorio masivo y la hemorragia posparto.
+            </p>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🤰 Hemorragia obstétrica</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Principal causa de mortalidad materna en el mundo — se estiman <strong>143.000 muertes anuales</strong>. Se define como pérdida &gt;500 mL vía transvaginal en las primeras 24h posparto, o &gt;1000 mL en el posquirúrgico de cesárea. El 1,7% de todas las mujeres con parto vaginal o cesárea tendrá hemorragia obstétrica. Los métodos viscoelásticos permiten el inicio temprano de la terapia transfusional — el <strong>FIBTEM A5</strong> (amplitud a los 5 min de formación del coágulo) es el biomarcador temprano predictor de hemorragia obstétrica más importante disponible.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🚗 Politraumatismo</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Patología tiempo-dependiente — hemorragia y coagulopatía, dos causas principales de morbimortalidad, sobre todo al asociarse con acidosis metabólica e hipotermia. <strong>Control de daños</strong>: identificar lesiones que amenazan la vida precozmente, tolerar hipotensión moderada (TAS 80-90 mmHg; media de 80 mmHg en TCE grave para evitar lesión secundaria cerebral), reposición de fluidos racional (la expansión indiscriminada se asocia a síndrome compartimental abdominal y lesión pulmonar), suero salino hipertónico al 7,5% como expansor eficaz con papel inmunomodulador, prevenir hipotermia/acidosis, optimizar transportadores de O₂, e identificar déficits del paciente (plasma fresco, plaquetas, ácido tranexámico, fibrinógeno, crioprecipitados, complejo protrombínico). La <strong>coagulopatía asociada al trauma (CIT)</strong> es causa de muerte en el 40% de los traumatizados, mayormente en las primeras 6h — se genera por daño tisular e hipoperfusión, que conllevan a un estado de <strong>hipercoagulabilidad</strong>. 25-43% de los traumatizados presenta trastornos de la coagulación, exacerbados por pérdidas en sitios de sangrado, dilución, activación de la fibrinólisis (trombomodulina + proteína C) y alteración de los factores por acidosis/hipotermia/hipoperfusión.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚖️ Factores clave de la CIT</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Hipotermia</dt><dd>Predispone a disfunción plaquetaria grave y bloqueo enzimático de las reacciones fisiológicas de coagulación — factor de riesgo independiente de mortalidad en trauma.</dd></dl>
+                        <dl class="kv-row"><dt>Acidosis metabólica/hipoperfusión</dt><dd>pH &lt;7,2 se correlaciona con ↓50% de la generación de trombina, ↓actividad del factor VIIa del complejo factor tisular/factor VIIa y del complejo Xa/Va, y ↑fibrinólisis. Para revertir la CIT, debe mejorarse el pH y revertirse el shock asociado, no solo el pH aislado.</dd></dl>
+                        <dl class="kv-row"><dt>Otros</dt><dd>Hemodilución (por reanimación con cristaloides/coloides), lesión tisular, fibrinólisis acelerada, mecanismos inflamatorios (exacerban la hipercoagulabilidad), CID. <strong>Tríada letal</strong>: coagulopatía + hipotermia + acidosis metabólica.</dd></dl>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">En ROTEM, la CIT muestra un coágulo con formación alterada (CFT), en amplitud, firmeza y ángulo alfa — formación lenta y reducción de un 40% en su fuerza.</p>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩸 Sangrado perioperatorio masivo</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Definición (cualquiera de estos criterios)</dt><dd>Pérdida &gt;20% de la volemia · pérdida del 100% de la volemia en 24h · &gt;50% en 3h · &gt;150 mL/min en 20 min · &gt;1,5 mL/kg/min en 20 min · necesidad de &gt;6 unidades de glóbulos rojos en 24h.</dd></dl>
+                        <dl class="kv-row"><dt>Se genera/perpetúa por</dt><dd>Lesión tisular, consumo de factores de coagulación, hiperfibrinólisis, aumento de la trombomodulina (inhibe la trombina), hemodilución por resucitación con fluidos — asociados a factores de riesgo individuales y al consumo habitual de antiagregantes/anticoagulantes, resultando en disfunción epitelial, hipotermia, acidosis metabólica severa e hipocalcemia, que a su vez perpetúan y potencian el sangrado.</dd></dl>
+                    </div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Conclusiones</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Los métodos viscoelásticos son una herramienta óptima para analizar la coagulopatía perioperatoria y
+                la asociada al trauma, y para predecir la hemorragia obstétrica. Guían el tratamiento con
+                hemoderivados y detectan estados de hiperfibrinólisis — son métodos <span class="hl">"en la cabecera
+                del paciente"</span>, de fácil realización, con resultados rápidos y efectivos, reproducibles y
+                multicanal.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Fuente</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Sutton G. Monitorización de la hemostasia en el paciente crítico. Aplicaciones actuales de la tromboelastografía. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección II, Capítulo 15, págs. 223-238.</p>
+        </div>
+
+        <!-- ===== FICHA 5: EOSINOFILIA ===== -->
+        <div id="fuci-eosinofilia" class="tab-content">
+            <h3 style="color: var(--accent-green);">Eosinofilia en el paciente crítico</h3>
+
+            <p class="section-label">Definiciones</p>
+            <table class="data-table">
+                <thead><tr><th>Término</th><th>Definición</th></tr></thead>
+                <tbody>
+                    <tr><td>Eosinofilia</td><td>Recuento absoluto de eosinófilos &gt;1500/mm³ en sangre periférica</td></tr>
+                    <tr><td>Eosinofilia primaria</td><td>Trastorno a nivel de la médula ósea, de origen clonal si presenta alteración molecular/citogenética/histológica, o idiopática si no ocurre</td></tr>
+                    <tr><td>Eosinofilia secundaria</td><td>Eosinofilia reactiva a estímulos externos</td></tr>
+                    <tr><td>Eosinofilia tisular</td><td>Extensa infiltración de eosinófilos en tejidos o médula ósea (&gt;20%), o marcado depósito de gránulos eosinofílicos</td></tr>
+                    <tr><td>Síndrome hipereosinofílico</td><td>Hipereosinofilia o eosinofilia tisular asociada con daño de órgano, independientemente de la etiología (primaria o secundaria)</td></tr>
+                </tbody>
+            </table>
+            <ul class="term-chips">
+                <li>Grado leve: &gt;1500/mm³</li>
+                <li>Grado moderado: 1500-5000/mm³</li>
+                <li>Grado grave: &gt;5000/mm³</li>
+            </ul>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">La principal causa de eosinofilia reactiva en países en vía de desarrollo es la <strong>infección parasitaria</strong>; en países industrializados, la <strong>hipersensibilidad tipo I</strong> (reacción alérgica) y el <strong>síndrome de DRESS</strong>. En el paciente crítico, toda hipereosinofilia debe ser estudiada.</p>
+
+            <p class="section-label" style="margin-top:16px;">Características morfológicas del eosinófilo</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Descubierto por Ehrlich en 1900. Granulocito de 10-15 nanómetros de diámetro, núcleo bilobulado, con
+                gránulos citoplasmáticos característicos. Se origina en la médula ósea a partir de la célula madre
+                pluripotencial por acción de <strong>IL-5, IL-3</strong> y el <strong>factor estimulante de
+                granulocitos y macrófagos (GM-CSF)</strong>. Representa normalmente 3-5% de los leucocitos de sangre
+                periférica (límite superior normal 350-500/mm³) — por cada eosinófilo circulante hay alrededor de
+                300 a 500 eosinófilos a nivel tisular.
+            </p>
+
+            <table class="data-table">
+                <thead><tr><th>Proteína del eosinófilo</th><th>Características</th><th>Efecto clínico</th></tr></thead>
+                <tbody>
+                    <tr><td>Proteína básica mayor tipo 1 y 2 (MBP1/MBP2)</td><td>13,8 kDa. Tóxica frente a mamíferos <em>in vitro</em>, bacterias y helmintos. Interrumpe membrana celular. Activa neutrófilos/plaquetas, estimula basófilos/mastocitos</td><td>Broncoconstricción, hiperreactividad bronquial, fibrosis del músculo liso</td></tr>
+                    <tr><td>Peroxidasa de los eosinófilos (EPX)</td><td>66 kDa. Usa peróxido de hidrógeno como oxidante — genera especies reactivas de O₂. Inductor potente del factor tisular endotelial</td><td>Complicaciones tromboembólicas</td></tr>
+                    <tr><td>Proteína catiónica del eosinófilo (ECP)</td><td>21 kDa (ribonucleasa). Tóxica frente a helmintos, hemoflagelados, bacterias, virus ARN de cadena simple. Induce toxicidad tisular</td><td>Fibrosis tisular</td></tr>
+                    <tr><td>Neurotoxina derivada del eosinófilo</td><td>19 kDa (ribonucleasa). Hidroliza ARN</td><td>En células dendríticas: expresión de quimiocinas/citocinas/factores de crecimiento; ataxia, incoordinación, parálisis espasmódica, rigidez muscular y muerte de células de Purkinje (modelos animales)</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Eosinopenia en UCI</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Descrita por primera vez por Zappert en 1893. Se utilizó durante el siglo pasado como marcador
+                diagnóstico útil para diferenciar sepsis (sepsis, sepsis severa y choque séptico) de otras causas de
+                SIRS no infeccioso — un recuento &lt;40 células/mm³ sugería etiología bacteriana. Sin embargo, la
+                eosinopenia forma parte de la respuesta normal al estrés, por lo que el recuento pierde valor
+                diagnóstico (más aún considerando el efecto negativo de intervenciones frecuentes en UCI, como
+                epinefrina o hidrocortisona). A pesar de ello, un recuento absoluto &gt;<strong>210 células/mm³</strong>
+                parecería seguro como marcador pronóstico para el <span class="hl">egreso de la UCI</span>.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Eosinofilia en el paciente crítico</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Se presenta como respuesta al estrés y a múltiples intervenciones que reducen el recuento absoluto
+                de neutrófilos, de tal forma que <strong>toda hipereosinofilia en UCI debe ser estudiada</strong>. El
+                síndrome hipereosinofílico es consecuencia del proceso de degranulación (exocitosis, exocitosis
+                compuesta en helmintos, fusión con gránulos primarios, liberación por poros de la membrana o
+                durante la apoptosis). En la UCI, la causa más frecuente de hipereosinofilia es la
+                <strong>hipersensibilidad a medicamentos y el síndrome de DRESS</strong>; menos frecuentes son
+                enfermedades sistémicas, infección parasitaria y eosinofilia por neoplasias.
+            </p>
+
+            <table class="data-table">
+                <thead><tr><th>Medicamentos</th><th>Manifestaciones asociadas</th></tr></thead>
+                <tbody>
+                    <tr><td>Penicilinas, cefalosporinas</td><td>Asintomáticos</td></tr>
+                    <tr><td>GM-CSF, IL-2</td><td>Edema de tejidos blandos</td></tr>
+                    <tr><td>AINE</td><td>Infiltrados pulmonares</td></tr>
+                    <tr><td>Penicilinas semisintéticas, tetraciclinas</td><td>Nefritis intersticial</td></tr>
+                    <tr><td>Ranitidina</td><td>Miocarditis eosinofílica</td></tr>
+                    <tr><td>Alopurinol, fenitoína</td><td>Hipersensibilidad, vasculitis</td></tr>
+                    <tr><td>AINE</td><td>Gastroenterocolitis</td></tr>
+                    <tr><td>Aspirina</td><td>Asma, pólipos nasales</td></tr>
+                    <tr><td>L-triptófano</td><td>Síndrome de eosinofilia-mialgias</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Síndrome de DRESS</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                <em>Drug reaction with eosinophilia and systemic symptoms</em>: reacción adversa grave inducida por
+                fármacos, con erupción cutánea grave, eosinofilia y compromiso de órganos. Entidad rara (incidencia
+                1 de cada 5000-10.000 exposiciones a fármacos), <strong>mortalidad ~10%</strong>, principalmente por
+                daño hepático mediado por infiltración de eosinófilos. Chaiken describió el primer caso en 1950
+                (inicialmente "síndrome de hipersensibilidad inducido por fármacos"); Bocquet introdujo el acrónimo
+                DRESS en 1996. Predisposición genética a reacciones adversas y defectos en la detoxificación de
+                fármacos (p. ej. acetiladores lentos) → acúmulo de metabolitos reactivos → activación inmunológica y
+                reactivación de virus de la familia <em>Herpesviridae</em> (Epstein-Barr, HHV-6, citomegalovirus,
+                paramixovirus) — la reactivación del HHV-6 se ha propuesto como marcador diagnóstico.
+            </p>
+
+            <table class="data-table">
+                <thead><tr><th>Bocquet y colaboradores</th><th>RegiSCAR</th><th>J-SCAR</th></tr></thead>
+                <tbody>
+                    <tr><td>Erupción cutánea relacionada con fármacos*</td><td>Erupción cutánea aguda*</td><td>Erupción maculopapular desarrollada en más de 3 semanas tras comenzar el fármaco</td></tr>
+                    <tr><td>Anormalidades hematológicas*: eosinófilos ≥1,5×10⁹/L; linfocitos atípicos</td><td>Hospitalización*</td><td>Síntomas clínicos persistentes tras la discontinuación del fármaco causal</td></tr>
+                    <tr><td>Involucro sistémico*: adenopatías ≥2cm; hepatitis con transaminasas ≥2×; nefritis intersticial; neumonitis intersticial; miocarditis</td><td>Sospecha de reacción por fármacos*: fiebre &gt;38°C**, crecimiento ganglionar en ≥2 sitios**, involucro de ≥1 órgano interno**</td><td>Fiebre &gt;38°C; anomalías hepáticas (ALT&gt;100 U/L) o de otros órganos; anomalías leucocitarias (leucocitosis &gt;11×10⁹/L, linfocitos atípicos &gt;5%, eosinofilia &gt;1,5×10⁹/L); linfadenopatías; reactivación del herpesvirus-6</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Bocquet: los 3 criterios son necesarios. RegiSCAR: * criterios necesarios, ** 3 de los 4 son necesarios. J-SCAR: DRESS clásico = presencia de los 7 criterios; DRESS atípico = primeros 5 criterios.</p>
+
+            <p class="section-label" style="margin-top:16px;">Eosinofilia por enfermedades sistémicas</p>
+            <table class="data-table">
+                <thead><tr><th>Sistema</th><th>Enfermedad</th></tr></thead>
+                <tbody>
+                    <tr><td>Piel y tejidos blandos</td><td>Angioedema episódico con eosinofilia · celulitis eosinofílica (Wells) · paniculitis eosinofílica · hiperplasia angiolinfoide con eosinofilia · dermatitis pustulosa eosinofílica · vasculitis eosinofílica cutánea necrotizante</td></tr>
+                    <tr><td>Pulmonar eosinofílica</td><td>Síndrome de Loeffler (helmintos) · eosinofilia pulmonar tropical · neumonía eosinofílica crónica/aguda · síndrome de Churg-Strauss</td></tr>
+                    <tr><td>Cardíacas</td><td>Miocarditis por hipersensibilidad · síndrome de Churg-Strauss</td></tr>
+                    <tr><td>Gastrointestinales</td><td>Trastornos GI eosinófilos (EGID) · esofagitis eosinofílica · gastroenteritis eosinofílica · cirrosis biliar primaria · colangitis esclerosante/eosinofílica · colecistitis eosinofílica</td></tr>
+                    <tr><td>Neurológicas</td><td>Meningitis eosinofílica · leucemia/linfoma con compromiso del SNC · derivación ventrículo-peritoneal</td></tr>
+                    <tr><td>Endocrinológicas</td><td>Enfermedad de Addison · hipopituitarismo</td></tr>
+                    <tr><td>Reumatológicas</td><td>Churg-Strauss · otras vasculitis · síndrome eosinofilia-mialgia</td></tr>
+                    <tr><td>Genitourinaria</td><td>Nefritis intersticial inducida por medicamentos · cistitis eosinofílica</td></tr>
+                    <tr><td>Tumores sólidos</td><td>Adenocarcinomas gástrico e intestinal · carcinoma de pulmón · carcinoma de vagina/pene/cuello uterino</td></tr>
+                    <tr><td>Neoplasias hematológicas</td><td>Linfoma de Hodgkin (celularidad mixta y esclerosis nodular) · LLA de células B · leucemia de células T · linfoma no Hodgkin</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Otras causas reactivas</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🪱 Infecciones (helmintos)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Casi exclusivamente parásitos helmintos provocan eosinofilia marcada, sobre todo durante la <strong>migración</strong> tisular: triquinosis, ascariasis, gnatostomiasis, estrongiloidiasis, esquistosomiasis y filariasis. Los protozoos, en general, no causan eosinofilia — excepciones: <em>Cystoisospora belli</em> y <em>Sarcocystis</em> spp.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🎗️ Neoplasias</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Las células tumorales secretan IL-3 e IL-5, estimulando eosinofilia paraneoplásica — 0,5-7% de los casos, en tumores de cabeza/cuello, pulmón, GI, ovario y cuello uterino (generalmente enfermedad en estadio avanzado). El <strong>linfoma de Hodgkin</strong> (celularidad mixta y esclerosis nodular) y, en menor frecuencia, la <strong>leucemia linfoblástica aguda de células B</strong> (asociada a la translocación t(5;14)) pueden cursar con eosinofilia. ~10% de la leucemia/linfoma de células T está asociado a eosinofilia reactiva, y 20% del linfoma no Hodgkin de células T.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Eosinofilias primarias</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El término <strong>hipereosinofilia</strong> se reserva para la eosinofilia persistente y marcada
+                (recuento absoluto &gt;1500/mm³). Subtipos (conferencia de 2011): variante hereditaria (familiar),
+                HE de significación indeterminada, HE primaria (clonal/neoplásica, producida por eosinófilos
+                clonales/neoplásicos), y secundaria (reactiva). Cualquier HE asociada con daño orgánico se denomina
+                <strong>síndrome hipereosinofílico</strong>.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Manifestaciones clínicas del síndrome hipereosinofílico</p>
+            <table class="data-table">
+                <thead><tr><th>Signos y síntomas</th><th>Porcentaje</th></tr></thead>
+                <tbody>
+                    <tr><td>Debilidad y fatiga</td><td>26%</td></tr>
+                    <tr><td>Tos</td><td>24%</td></tr>
+                    <tr><td>Disnea</td><td>16%</td></tr>
+                    <tr><td>Mialgias o angioedema</td><td>14%</td></tr>
+                    <tr><td>Erupción o fiebre</td><td>12%</td></tr>
+                    <tr><td>Rinitis</td><td>10%</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">La leucocitosis (20.000-30.000/mm³ o superior) con eosinofilia periférica se presenta en el 30%-70% y es un hallazgo frecuente. Hallazgos hematológicos: neutrofilia, basofilia, inmadurez mieloide, eosinófilos maduros/inmaduros con diversos grados de displasia. La <strong>trombocitopenia es más común que la trombocitosis</strong> (31% vs. 16%) y la eosinofilia en médula ósea oscila entre 7%-57% (33%). Hallazgos medulares: cristales de Charcot-Leyden, aumento de blastos y fibrosis. Todos los órganos pueden ser susceptibles a la eosinofilia sostenida — compromiso dermatológico 69%, pulmonar 44%, gastrointestinal 38%, cardíaco 20% (asociado a gran morbimortalidad por miocardiopatía restrictiva, enfermedad valvular y eventos cardioembólicos).</p>
+
+            <p class="section-label" style="margin-top:16px;">Enfoque diagnóstico (2 pasos)</p>
+            <dl class="kv-row"><dt>Paso 1 — Excluir causas secundarias</dt><dd>Considerar etiología infecciosa (parásitos invasivos), atopia e hipersensibilidad tipo I, reacción a fármacos o enfermedad sistémica. Química sanguínea, hepatograma, parcial de orina y coprológico seriado. Proteinograma y cuantificación de inmunoglobulinas séricas (incluida IgE si hay picos monoclonales). Según signos/síntomas: vitamina B₁₂ y triptasa séricas (indicadores indirectos de mieloproliferación), factor reumatoide, VSG, pANCA, cANCA y marcadores inflamatorios/inmunológicos (elevados en el 30% de los pacientes). Ecocardiograma (± cardiorresonancia si es anormal). TC de tórax, abdomen y pelvis para esplenomegalia, linfadenopatías y neoplasias ocultas — considerar biopsia de tejidos afectados.</dd></dl>
+            <dl class="kv-row"><dt>Paso 2 — Evaluar la eosinofilia primaria/clonal</dt><dd>Evaluación morfológica en sangre periférica y médula ósea, junto con vitamina B₁₂/triptasa y estudios de citogenética/inmunofenotipo. Detección en sangre periférica de la fusión del gen <strong>FIP1L1-PDGFRα</strong> (por RT-PCR o FISH) — la presencia de la deleción 4q12 da como resultado <em>FIP1L1-PDGFRα</em>; otras deleciones incluyen <em>PDGFRβ</em> (5q31-33) y <em>FGFR</em> 8p11-12. Si el cribado de FIP1L1-PDGFRα no está disponible, la triptasa sérica puede ser un marcador sustituto útil (aumenta en presencia de las anomalías moleculares señaladas).</dd></dl>
+
+            <div class="article-figure">
+                <div style="background:rgba(212,175,55,0.06); border:1px dashed var(--border-color); border-radius:8px; padding:16px; text-align:center; font-size:0.8rem; color:var(--text-muted);">
+                    📊 Placeholder — Figura 1 del capítulo: flujograma completo del enfoque diagnóstico de la hipereosinofilia (etiología → química sanguínea/otros → Paso 2 → morfología/fusión FIP1L1-PDGFRα)
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Tratamiento</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Objetivo: reducción a largo plazo de los eosinófilos en sangre y tejidos, para prevenir la lesión de
+                órganos diana y el desarrollo de eventos tromboembólicos.
+            </p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🎯 Hipereosinofilia secundaria</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Manejar la causa desencadenante — en el síndrome de DRESS, retirar el medicamento causal, seguido de corticosteroides sistémicos. La inmunoglobulina se ha empleado en casos aislados.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Hipereosinofilia primaria</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Los corticosteroides sistémicos a largo plazo son la terapia de elección — <strong>excepto</strong> en la variante mieloproliferativa asociada al gen de fusión FIP1L1-PDGFRα, donde el <strong>mesilato de imatinib es tratamiento de primera línea</strong>. Corticoides: prednisona 1 mg/kg/día (o equivalente), o metilprednisolona 1 g según severidad. En pacientes con potencial exposición a helmintos (<em>Strongyloides stercoralis</em>): administrar concomitantemente <strong>ivermectina</strong> (200 μg/kg dosis única) para evitar efectos potencialmente mortales inducidos por los corticoides. Si tras 1-2 días de corticoides en altas dosis no hay reducción del recuento, añadir un segundo agente según la variante clínica/molecular, el compromiso de órganos, el perfil de seguridad del fármaco y la preferencia del paciente.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Imatinib</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Aprobado por la FDA en síndrome eosinofílico primario. Inhibidor de la tirosina cinasa, dependiente de la fusión BCR/ABL, indicado en el síndrome hipereosinofílico con reordenamiento PDGFRα/PDGFRβ, 100-400 mg/día VO. La mayoría de los pacientes alcanza respuesta hematológica completa temprana (resolución de síntomas + normalización del conteo). La identificación de la fusión FIP1L1-PDGFRα como diana terapéutica llevó al concepto de <strong>remisión molecular completa</strong> (ausencia de la fusión detectable por RT-PCR) — la interrupción del imatinib a menudo resulta en reaparición de la enfermedad y recaída clínica. Otros agentes en ausencia de respuesta: hidroxiurea, interferón α, clorambucilo, vincristina, etopósido, citarabina, metotrexato, ciclosporina, ciclofosfamida.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧪 Anticuerpos monoclonales</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body"><strong>Mepolizumab</strong>: anticuerpo monoclonal IgG humanizado, vida media de 19 días — se une a la IL-5 con alta afinidad/especificidad, evitando su asociación con el receptor en la superficie de los eosinófilos y sus progenitores. Alternativa en pacientes que no responden a tratamientos previos: reducción sostenida de eosinófilos con efecto ahorrador de corticoesteroides — reducción de la dosis diaria de prednisona en el 79% de los tratados, y destete de corticoesteroides en 9 meses en el 50% de los pacientes. Otros anticuerpos monoclonales no han mostrado resultados tan alentadores. <strong>Alemtuzumab</strong> (anti-CD52): corta duración y profundo efecto inmunosupresor — requiere estrecha vigilancia y profilaxis antiinfecciosa durante y después del tratamiento.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Fuente</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Borre Naranjo D, Dueñas Castell C, Almanza A, Ortiz Ruiz G. Eosinofilia en el paciente crítico. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección II, Capítulo 16, págs. 239-251.</p>
+        </div>
+
+    </div>
+
+    <div class="card" style="margin-top: 20px;">
+        <h3>📚 Bibliografía</h3>
+        <ul class="biblio-list">
+            <li>
+                <a class="biblio-link" href="docs/libro-azul-seccion-ii-hematologia-hemostasia.pdf#page=1" target="_blank" rel="noopener">Cap. 12 — Fisiopatología de la anemia en cuidados intensivos</a>
+                <span class="biblio-nota">Arenas Villamizar AR, Ocampo Pérez AM, Ugarte Ubiergo S. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección II, págs. 171-183.</span>
+            </li>
+            <li>
+                <a class="biblio-link" href="docs/libro-azul-seccion-ii-hematologia-hemostasia.pdf#page=15" target="_blank" rel="noopener">Cap. 13 — Fisiopatología de la trombocitopenia en el paciente crítico</a>
+                <span class="biblio-nota">Monsalve Molina V, Valenzuela Cáceres R. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección II, págs. 185-198.</span>
+            </li>
+            <li>
+                <a class="biblio-link" href="docs/libro-azul-seccion-ii-hematologia-hemostasia.pdf#page=29" target="_blank" rel="noopener">Cap. 14 — ¿Cuándo transfundir? ¿Existe un nivel óptimo de hemoglobina en patologías críticas?</a>
+                <span class="biblio-nota">Carreño JN, Hernández A. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección II, págs. 199-222.</span>
+            </li>
+            <li>
+                <a class="biblio-link" href="docs/libro-azul-seccion-ii-hematologia-hemostasia.pdf#page=55" target="_blank" rel="noopener">Cap. 15 — Monitorización de la hemostasia en el paciente crítico. Aplicaciones actuales de la tromboelastografía</a>
+                <span class="biblio-nota">Sutton G. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección II, págs. 223-238.</span>
+            </li>
+            <li>
+                <a class="biblio-link" href="docs/libro-azul-seccion-ii-hematologia-hemostasia.pdf#page=71" target="_blank" rel="noopener">Cap. 16 — Eosinofilia en el paciente crítico</a>
+                <span class="biblio-nota">Borre Naranjo D, Dueñas Castell C, Almanza A, Ortiz Ruiz G. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección II, págs. 239-251.</span>
+            </li>
+        </ul>
+    </div>

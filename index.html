@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HUD Clínico UCI</title>
-<link rel="stylesheet" href="css/variables.css?v=20260816">
-<link rel="stylesheet" href="css/base.css?v=20260816">
-<link rel="stylesheet" href="css/components.css?v=20260816">
+<link rel="stylesheet" href="css/variables.css?v=20260817">
+<link rel="stylesheet" href="css/base.css?v=20260817">
+<link rel="stylesheet" href="css/components.css?v=20260817">
 </head>
 <body>
 
@@ -41,6 +41,11 @@
         <button class="accordion-btn nav-btn" id="btn-uci-papers" style="border-left: 4px solid var(--accent-purple);">
             <span><span class="gral-icon" style="color: var(--accent-purple); text-shadow: var(--glow-purple);">🐦</span>UCI / PAPERS TUITER</span>
             <span style="font-size: 0.8rem; color: var(--accent-purple);">[ VER → ]</span>
+        </button>
+
+        <button class="accordion-btn nav-btn" id="btn-fisio-uci" style="border-left: 4px solid var(--accent-yellow);">
+            <span><span class="gral-icon" style="color: var(--accent-yellow);">🧬</span>FISIOPATOLOGÍA UCI</span>
+            <span style="font-size: 0.8rem; color: var(--accent-yellow);">[ VER → ]</span>
         </button>
     </div>
 
@@ -246,10 +251,17 @@
         <div id="uci-paper-no-view" style="display: none;" data-include="js/modules/uci-papers/oxido-nitrico-inhalado.html"></div>
         <div id="uci-paper-vdlra-view" style="display: none;" data-include="js/modules/uci-papers/vd-lra-postoperatoria.html"></div>
     </div>
+    <!-- ========================================== -->
+    <!-- VISTA: FISIOPATOLOGÍA UCI                   -->
+    <!-- ========================================== -->
+    <div id="fisio-uci-view" style="display: none;">
+        <div id="fisio-uci-menu-view" data-include="js/modules/fisio-uci/fisio-uci-menu.html"></div>
+        <div id="fisio-uci-hematologia-view" style="display: none;" data-include="js/modules/fisio-uci/hematologia.html"></div>
+    </div>
 
     <div data-include="js/modules/quiz/quiz.html"></div>
 </div>
 
-<script type="module" src="js/main.js?v=20260816"></script>
+<script type="module" src="js/main.js?v=20260817"></script>
 </body>
 </html>

@@ -6,12 +6,14 @@ organizada por especialidad. Hoy tiene contenido completo de **Hematología**
 síndromes urgentes, trasplante de progenitores, más un acceso directo a
 escalas generales de UCI), **Nefrología** con contenido real en la mayoría
 de sus objetivos de rotación (fisiología/electrolitos, HTA, ERC, FRA, TRR,
-ajuste de fármacos), y un espacio reservado para **UCI / Papers Tuiter**
-(en preparación) pensado para resúmenes de papers de Medicina Intensiva
-compartidos en redes sociales. Está pensada para ir creciendo con más
-especialidades (cardiología, radiología, etc.) según se vaya aportando
-contenido. Es una herramienta de apoyo para médicos, pensada para
-consultarse a pie de cama en el móvil.
+ajuste de fármacos), **UCI / Papers Tuiter** con varios papers resumidos
+(resucitación hemodinámica en shock séptico, óxido nítrico inhalado,
+disfunción del VD y LRA postoperatoria), y **Fisiopatología UCI** con
+repasos de capítulos de "El Libro Azul: Bases Fisiopatológicas de la
+Medicina Crítica" (hoy, Hematología y Hemostasia en Cuidados Críticos).
+Está pensada para ir creciendo con más especialidades (cardiología,
+radiología, etc.) según se vaya aportando contenido. Es una herramienta de
+apoyo para médicos, pensada para consultarse a pie de cama en el móvil.
 
 ## Decisiones de arquitectura (ya tomadas, no las reabras sin preguntar)
 
@@ -2063,14 +2065,131 @@ tener contenido real en cuanto el usuario aportó el primer PDF.
     redactar a un banco existente, no hace falta tocar nada más —
     conviven con las de opción múltiple en el mismo array `banco`.
 
+### Fisiopatología UCI
+
+Cuarta especialidad del menú raíz (`#btn-fisio-uci`, junto a Hematología,
+Nefrología y UCI/Papers Tuiter), pensada para repasos esquematizados de
+capítulos de **"El Libro Azul: Bases Fisiopatológicas de la Medicina
+Crítica"** (a diferencia de UCI/Papers Tuiter, que resume papers sueltos
+compartidos en redes, esta especialidad resume capítulos completos de un
+libro de texto de fisiopatología). Mismo patrón de dos niveles que
+UCI/Papers Tuiter: un **submenú de bloques**
+(`#fisio-uci-menu-view`/`js/modules/fisio-uci/fisio-uci-menu.html`, con
+`.btn-volver-especialidades`) del que cuelga un botón por bloque temático
+del libro, y la **vista propia de cada bloque** con su propio cuaderno de
+campo. El switcher `fisioUciLevel` vive en `js/modules/fisio-uci/index.js`
+(`createViewSwitcher({ menu, hematologia })`), no en
+`modules/home/index.js` — mismo motivo que Nefrología/UCI Papers Tuiter
+tienen su propio switcher interno: la vista raíz `#fisio-uci-view`
+(registrada en el `topLevel` de `home/index.js`) es solo el contenedor
+exterior. Al volver a "Fisiopatología UCI" desde Especialidades,
+`fisioUci.init()` devuelve `{ volverAlMenu }`, inyectado perezosamente en
+`home/index.js` (`onFisioUciListo`, mismo patrón que
+`onNefrologiaListo`/`onUciPapersListo`) para dejar siempre el submenú de
+bloques como pantalla de entrada — igual que el resto de especialidades.
+Añadir un bloque nuevo en el futuro: 1) botón nuevo en
+`fisio-uci-menu.html`, 2) su propio `<vista>.html` con
+`.btn-volver-fuci-menu`, 3) registrarlo en `index.html` dentro de
+`#fisio-uci-view` y en el switcher `fisioUciLevel` de `fisio-uci/index.js`.
+
+- **Primer bloque: "Hematología y Hemostasia en Cuidados Críticos"**
+  (`js/modules/fisio-uci/hematologia.html`). Fuente: El libro azul. Bases
+  fisiopatológicas de la medicina crítica. Sección II, Hematología y
+  Hemostasia, capítulos 12-16 (86 páginas) — PDF completo subido a
+  `docs/libro-azul-seccion-ii-hematologia-hemostasia.pdf`, mismo criterio
+  que el resto de fuentes del proyecto (preferible a un enlace externo que
+  pueda dejar de estar vivo). El usuario pidió inicialmente un sistema
+  paralelo con formato JSON (`GUIA_DATA`) y convenciones ("UMI Hemato") de
+  otro proyecto suyo — se le preguntó explícitamente por esa discrepancia
+  antes de escribir nada, confirmó que era un error y pidió seguir la
+  arquitectura real de este repo; **si en el futuro se piden convenciones
+  que no existen en este `CLAUDE.md`, preguntar primero, nunca asumir que
+  vienen de otro proyecto sin confirmarlo**.
+  - **Cuaderno de campo de 5 fichas** (`#fuci-hemato-corkboard`/
+    `#panel-fuci-hemato-tabs`, mismo `core/corkboard.js` de siempre, sin
+    calculadoras propias — `hematologia.js` solo llama a
+    `initCorkboard(...)`), una por capítulo: Fisiopatología de la anemia
+    (metabolismo del hierro, hepcidina como regulador central, anemia de
+    la enfermedad crónica como respuesta adaptativa), Fisiopatología de
+    la trombocitopenia (estructura/función plaquetaria, CID como causa
+    más frecuente en el crítico, tabla de indicaciones de transfusión de
+    plaquetas, PTI/TIH/PTT, trombocitosis reactiva), ¿Cuándo transfundir?
+    (los 9 tipos de hipoxia, fórmulas de DO₂/VO₂, curva de disociación de
+    la Hb, deuda de oxígeno, transfusión en sepsis/trauma/cardiovascular
+    con los ensayos TRICC/Rivers/TRISS/TRICS-III/CRASH-2/MATTERs
+    detallados), Monitorización de la hemostasia — TEG/ROTEM (modelo de
+    coagulación celular, limitaciones de TP/TTPa, parámetros y patrones
+    completos de ambas técnicas, aplicaciones en hemorragia
+    obstétrica/politrauma/sangrado masivo), y Eosinofilia en el paciente
+    crítico (definiciones OMS 2016, síndrome de DRESS con sus 3 sistemas
+    de criterios diagnósticos, enfoque diagnóstico en 2 pasos, tratamiento
+    incluido imatinib/mepolizumab). Contenido íntegro sin resumir por
+    debajo del detalle de la fuente, siguiendo el mismo criterio ya
+    establecido en Nefrología (fisiología/electrolitos) — cifras exactas,
+    fórmulas, nombres de ensayos clínicos y tablas completas.
+  - **4 figuras reales** extraídas con `pdfimages -png` (PDF con figuras
+    como imagen única embebida por página, mismo caso que los papers de
+    Springer de UCI/Papers Tuiter — comprobado con `pdfimages -list` antes
+    de extraer): las 4 figuras del capítulo de anemia
+    (`js/modules/fisio-uci/img/fig1-hepcidina.jpg`,
+    `fig2-ciclohierro.jpg`, `fig3-regulacionhepcidina.jpg`,
+    `fig4-rolhepcidina.jpg` — ilustraciones biológicas genuinas del
+    mecanismo hepcidina-ferroportina, extraídas componiendo la imagen base
+    con su `smask` de transparencia vía Pillow). El resto de figuras del
+    libro (curva de disociación de la Hb, diagramas de aporte/consumo de
+    O₂, los 7 patrones de TEG, los diagramas ROTEM, el flujograma
+    diagnóstico de hipereosinofilia) son gráficos **vectoriales** nativos
+    del PDF, no imágenes incrustadas (confirmado con `pdfimages -list`:
+    sin entradas de imagen grande en esas páginas) — no se rasterizaron ni
+    recortaron (el método de rasterizar+recortar queda reservado para
+    figuras compuestas por InDesign con muchos fragmentos pequeños, no
+    para vectores simples). En su lugar: los 7 patrones de TEG y los
+    parámetros/patrones de ROTEM se recrearon íntegramente como
+    `.data-table`/`.kv-row` con los valores numéricos reales citados en el
+    capítulo (más fieles para el detalle clínico que una figura pequeña
+    con letras diminutas); la curva de disociación de la Hb y los
+    diagramas de aporte/consumo de O₂ y el flujograma de hipereosinofilia
+    llevan un **placeholder de texto explícito** (recuadro punteado con
+    descripción de qué figura debería ir ahí) para que el usuario los
+    añada más adelante si quiere la imagen real — mismo criterio ya usado
+    en el proyecto de no fabricar ni forzar una recreación SVG de un
+    diagrama que no se pudo verificar pixel a pixel contra el original.
+  - **40 preguntas de quiz** (`js/data/fisio-uci-hematologia-preguntas.js`,
+    `fuci-q001`-`q040`, 8 por ficha × 5 fichas — 6 de opción múltiple + 2
+    de tipo `redactar` por ficha, sin romper la regla dura de ≥1 pregunta
+    por tema). Las preguntas de redactar incluyen tanto conceptos de
+    desarrollo corto como **casos clínicos** (viñeta breve + pregunta de
+    manejo/diagnóstico), reutilizando el mismo tipo `redactar` del motor
+    de quiz ya existente (ver el apartado de UCI/Papers Tuiter más arriba)
+    — no hizo falta ningún cambio en `quiz.js`/`quiz.html`. `triggerId:
+    'btn-fuci-hemato-repasar'`, exportado junto a `quizBanco`/`quizTemas`
+    desde `fisio-uci/index.js` y fusionado en la única llamada a
+    `initQuiz()` de `main.js`, igual que el resto de especialidades. El
+    banco combinado de toda la app queda en **878 preguntas** (838 previas
+    + 40 de este bloque).
+  - **Énfasis de términos clave**: se reutilizó el mismo sistema ya
+    establecido (`<strong>`, coloreado automáticamente vía `--item-color`
+    dentro de `.micro-prof-item`, y la clase `.hl` para frases/cifras
+    clave dentro de un párrafo) en vez de introducir `<u>` u otra
+    convención nueva — comprobado explícitamente contra `components.css`
+    antes de escribir contenido, tal como pidió el usuario.
+  - **Bibliografía**: 5 entradas, una por capítulo, cada una enlazando a
+    `docs/libro-azul-seccion-ii-hematologia-hemostasia.pdf#page=N` (N
+    calculado como página_impresa − 168, verificado contra el propio
+    índice de páginas del PDF — el desplazamiento sale de que la portada y
+    una página en blanco preceden a la página impresa 171, que es la
+    página 3 del PDF).
+
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
-también `especialidades`, `nefrologia` y `uciPapers` como vistas más del
-mismo switcher raíz —, submenú de Citopenias, submenú de Trasplante), inicializa el Atlas
+también `especialidades`, `nefrologia`, `uciPapers` y `fisioUci` como
+vistas más del mismo switcher raíz —, submenú de Citopenias, submenú de
+Trasplante), inicializa el Atlas
 (`initAtlas()` de `modules/home/atlas.js`) y conecta los botones. Los
 botones "← VOLVER" usan una clase específica según a qué nivel deben
 volver: `.btn-volver-especialidades`, `.btn-volver-home`,
-`.btn-volver-citopenias-menu`, `.btn-volver-trasplante-menu`. Las
+`.btn-volver-citopenias-menu`, `.btn-volver-trasplante-menu`,
+`.btn-volver-fuci-menu`. Las
 calculadoras en sí (Escalas Generales, Neutropenia Febril) no saben nada de
 estos niveles superiores ni del Atlas — siguen inicializándose igual que
 siempre, solo cambia qué contenedor está visible.
