@@ -2179,6 +2179,98 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
     índice de páginas del PDF — el desplazamiento sale de que la portada y
     una página en blanco preceden a la página impresa 171, que es la
     página 3 del PDF).
+- **Segundo bloque: "Vías Urinarias"** (`js/modules/fisio-uci/vias-urinarias.html`).
+  Fuente: El libro azul. Bases fisiopatológicas de la medicina crítica.
+  Sección VII, Vías Urinarias, capítulos 46-48 (42 páginas) — PDF completo
+  subido a `docs/libro-azul-seccion-vii-vias-urinarias.pdf`, mismo criterio
+  que el resto de fuentes del proyecto. Segundo botón del submenú de
+  bloques (`#btn-fuci-vias-urinarias`), con `fisioUciLevel` (en
+  `fisio-uci/index.js`) ganando una segunda entrada (`viasUrinarias`) junto
+  a `hematologia` — mismo patrón exacto ya validado con el usuario para el
+  primer bloque, sin cambios de arquitectura.
+  - **Cuaderno de campo de 3 fichas** (`#vu-corkboard`/`#panel-vu-tabs`,
+    mismo `core/corkboard.js` de siempre, sin calculadoras propias —
+    `vias-urinarias.js` solo llama a `initCorkboard(...)`), una por
+    capítulo — a diferencia del bloque de Hematología (5 fichas para 5
+    capítulos cortos), aquí la fuente tiene solo 3 capítulos, así que la
+    correspondencia 1:1 capítulo↔ficha se mantiene igual: **Fisiopatología
+    renal** (Cap. 46 — clasificación prerrenal/renal/posrenal, balance
+    energético e hipoxia como noxa principal de la LRA, distribución del
+    flujo cortical 90%/medular 10%, ecuación de Starling aplicada al
+    glomérulo, autorregulación 60-150 mmHg PAM vía 3 sistemas —miogénico,
+    simpático extrínseco, hormonal—, la médula externa/asa gruesa
+    ascendente de Henle como zona más vulnerable a la isquemia por su
+    hipoxia relativa fisiológica, condiciones predisponentes, índices
+    urinarios clásicos prerrenal vs. renal, y el enfoque terapéutico
+    inicial con furosemida en infusión superior a bolos), **Fisiopatología
+    de la LRA** (Cap. 47 — los 3 criterios diagnósticos de consenso,
+    evolución RIFLE 2004→AKIN 2007, epidemiología con los estudios de
+    Hoste/Uchino/el metaanálisis de Coca —con la cifra real de que un
+    aumento de solo 10-20% de creatinina ya duplica la mortalidad—,
+    limitaciones de la creatinina como marcador subrogado, la
+    clasificación etiológica completa prerrenal/posrenal/intrínseca con
+    sus causas y mecanismos, y el tratamiento por etiología incluida la
+    evidencia real —y contraintuitiva— de que los diuréticos de asa en la
+    LRA establecida se asocian a mayor mortalidad sin beneficio funcional
+    pese a su racional fisiológico), y **Monitorización de la función
+    renal en el paciente crítico** (Cap. 48 — la ficha más extensa de las
+    3, con las 8 tablas reales del capítulo recreadas como `.data-table`
+    nativas: condiciones que reducen el FG, factores condicionantes de
+    creatinina/urea, biomarcadores nuevos con sus tiempos de detección,
+    mediciones derivadas prerrenal vs. daño renal intrínseco, las
+    principales ecuaciones de estimación de la TFG —con la advertencia
+    explícita de KDIGO 2012 de que MDRD/CKD-EPI/Cockcroft-Gault no deben
+    usarse en críticos—, factores de riesgo de LRA, y la clasificación
+    KDIGO de estadios—, más los 4 escenarios especiales de LRA —contraste,
+    cirrosis, rabdomiólisis, hipertensión abdominal— como acordeón
+    `micro-prof-item`).
+  - **7 figuras reales** extraídas de las páginas 21-45 del PDF —a
+    diferencia del bloque de Hematología, donde solo el capítulo de anemia
+    tenía imágenes incrustadas, aquí las figuras están concentradas en el
+    Cap. 48 (Monitorización)—: `vu-fig1-creatinina.jpg` (producción y
+    depuración de creatinina, imagen con `smask` de transparencia,
+    compuesta con Pillow igual que las 4 figuras de hepcidina del primer
+    bloque), `vu-fig6-hidronefrosis.jpg` (ecografía real de hidronefrosis,
+    también con `smask`), y las **5 miniaturas de microscopía del
+    sedimento urinario** de la Figura 5 original (`vu-fig5-celulas-tubulares.jpg`,
+    `vu-fig5-cilindros-eritrocitarios.jpg`, `-leucocitarios.jpg`,
+    `-hialinos.jpg`, `-granulosos.jpg`) — detectadas con `pdfimages -list`
+    como 5 imágenes pequeñas independientes (266×152 aprox.) en la misma
+    página, en vez de una única figura compuesta, así que se extrajeron y
+    maquetaron como 5 `.article-figure` individuales en vez de una sola
+    imagen de mosaico. El resto de figuras del libro (curvas/gráficos de
+    depuración de creatinina, el flujograma de clasificación de la LRA,
+    el flujograma de evolución de biomarcadores) son gráficos
+    **vectoriales** nativos del PDF —confirmado con `pdfimages -list`,
+    sin imágenes grandes en esas páginas— y se recrearon como
+    `.data-table`/prosa con los valores reales, sin placeholder de
+    imagen porque el contenido numérico ya queda cubierto por las tablas
+    nativas (a diferencia del bloque de Hematología, donde 3 figuras sí
+    se dejaron como placeholder explícito por no tener un equivalente
+    tabular razonable).
+  - **24 preguntas de quiz** (`js/data/fisio-uci-vias-urinarias-preguntas.js`,
+    `vu-q001`-`q024`, 8 por ficha × 3 fichas — 6 de opción múltiple + 2 de
+    tipo `redactar` por ficha, mismo formato exacto que el primer bloque,
+    con casos clínicos en varias de las preguntas de redactar). `triggerId:
+    'btn-fuci-vu-repasar'`, añadido al array que ya exporta
+    `fisio-uci/index.js` junto a `btn-fuci-hemato-repasar` — sin tocar
+    `main.js` (que ya fusiona `fisioUci.quizTriggerId/quizBanco/quizTemas`
+    genéricamente). El banco combinado de toda la app queda en **902
+    preguntas** (878 previas + 24 de este bloque).
+  - **Bibliografía**: 3 entradas, una por capítulo, enlazando a
+    `docs/libro-azul-seccion-vii-vias-urinarias.pdf#page=N` (N = página
+    impresa − 814, verificado contra 4 puntos de anclaje distintos del
+    propio PDF — portada + una página en blanco preceden a la página
+    impresa 817, que es la página 3 del PDF; mismo patrón de offset que el
+    primer bloque, pero con un desplazamiento propio de este PDF).
+  - **Enlace cruzado**: la Ficha 1 (Fisiopatología renal) menciona
+    explícitamente, en el punto donde el capítulo remite al manejo con
+    TRR, que el desarrollo completo de indicaciones/momento de
+    inicio/modalidad de la TRR vive en el módulo TRR de Nefrología (dentro
+    del mapa del riñón) — sin duplicar ese contenido aquí, mismo criterio
+    de no repetir texto ya construido en otro módulo con fuente propia
+    distinta (ver el precedente ya establecido entre TRR y FRA en
+    Nefrología).
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

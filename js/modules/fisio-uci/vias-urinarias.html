@@ -1,0 +1,674 @@
+    <button class="back-btn btn-volver-fuci-menu">← VOLVER</button>
+    <div class="diag-header">
+        <h2 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">Vías Urinarias</h2>
+        <p>El Libro Azul: Bases Fisiopatológicas de la Medicina Crítica · Sección VII, capítulos 46-48</p>
+    </div>
+
+    <button class="accordion-btn nav-btn" id="btn-fuci-vu-repasar" style="border-left: 4px solid var(--accent-yellow);">
+        <span>🎯 Repasar (preguntas de repaso)</span>
+        <span style="font-size: 0.8rem; color: var(--accent-yellow);">[ EMPEZAR → ]</span>
+    </button>
+
+    <p class="section-label">Elige un tema</p>
+    <div class="corkboard" id="vu-corkboard">
+
+        <div class="field-card" data-tab="vu-fisiologia-renal">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 1</div>
+                    <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-blue)" stroke-width="1.6">
+                        <path d="M46,10 C34,10 26,20 26,30 a14,16 0 0,0 24,10 C56,36 54,20 46,10 Z" stroke-opacity="0.85"/>
+                        <path d="M38,20 C33,25 33,33 38,38" stroke-width="1.2" stroke-opacity="0.5"/>
+                    </svg>
+                    <div class="field-name">Fisiopatología<br>renal</div>
+                    <div class="field-hook">¿Por qué la médula renal externa es la zona más vulnerable a la isquemia, pese a recibir sangre de sobra?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Porque su PaO₂ es &lt;20 mmHg incluso en condiciones normales — el asa gruesa ascendente de Henle extrae ~90% del oxígeno que recibe para sostener el transporte activo de sodio, dejándola sin margen ante cualquier caída de la perfusión.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="vu-lra">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 2</div>
+                    <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-red)" stroke-width="1.6">
+                        <path d="M46,10 C34,10 26,20 26,30 a14,16 0 0,0 24,10 C56,36 54,20 46,10 Z" stroke-opacity="0.85"/>
+                        <path d="M40,20 L40,32 M40,36 L40,37.5" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <div class="field-name">Fisiopatología<br>de la LRA</div>
+                    <div class="field-hook">¿Qué aumento de creatinina basta para duplicar el riesgo de mortalidad a corto plazo en el paciente crítico?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Uno sorprendentemente modesto — un incremento del 10-20% (0,3-0,4 mg/dL) ya duplica el riesgo, y aumentos del 25-29% (0,5-0,9 mg/dL) lo multiplican por 5, según el metaanálisis de Coca.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="vu-monitorizacion">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 3</div>
+                    <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-green)" stroke-width="1.6">
+                        <path d="M14,38 L26,38 L32,20 L40,44 L46,28 L52,38 L66,38" stroke-opacity="0.85" stroke-linejoin="round"/>
+                    </svg>
+                    <div class="field-name">Monitorización<br>de la función renal</div>
+                    <div class="field-hook">¿Por qué la creatinina sérica puede tardar días en reflejar una caída ya grave de la TFG?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Por la relación inversa entre ambas: en ausencia total de filtrado glomerular la creatinina solo sube 1-2 mg/dL/día, así que pueden producirse reducciones muy significativas de la TFG antes de que el laboratorio lo muestre con claridad.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <p class="tap-hint">☝ toca una ficha para ver la pista, y de nuevo para abrir el tema completo</p>
+
+    <div class="card" id="panel-vu-tabs" style="display:none;">
+
+        <!-- ===== FICHA 1: FISIOPATOLOGÍA RENAL ===== -->
+        <div id="vu-fisiologia-renal" class="tab-content">
+            <h3 style="color: var(--accent-blue);">Fisiopatología renal</h3>
+
+            <p class="section-label">Introducción</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El sistema renal ha evolucionado como un órgano altamente especializado en el control del volumen y
+                la composición de los líquidos corporales. La <strong>lesión renal aguda (LRA)</strong> es una
+                condición frecuente y grave en el paciente crítico: su mortalidad se <span class="hl">triplica</span>
+                respecto a pacientes sin disfunción renal, con una incidencia del <strong>7-23%</strong> en
+                pacientes críticos. Durante años no existieron criterios unificados para definir la disfunción
+                renal, lo que dificultó comparar estudios y estandarizar el manejo — un problema que las
+                clasificaciones RIFLE, AKIN y KDIGO (ver más abajo) vinieron a resolver.
+            </p>
+            <dl class="kv-row"><dt>Clasificación clásica</dt><dd><strong>Prerrenal</strong> (hipoperfusión sin daño estructural), <strong>renal o intrínseca</strong> (daño del parénquima) y <strong>posrenal</strong> (obstrucción de la vía urinaria) — el eje que organiza todo el enfoque diagnóstico de la LRA (ver Ficha 2).</dd></dl>
+            <dl class="kv-row"><dt>El núcleo fisiopatológico: balance energético</dt><dd>A diferencia de otras causas de fallo orgánico, en la LRA del paciente crítico casi nunca hay un nefrotóxico identificable — la <strong>hipoxia tisular renal</strong> es la noxa principal, resultado de un desequilibrio entre el aporte y la demanda de oxígeno a nivel tubular.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Distribución del flujo: nefronas "ahorradoras" vs. "perdedoras"</p>
+            <ul class="term-chips">
+                <li>Nefronas corticales (asa corta): mayoría de las nefronas, flujo abundante — "ahorradoras" de agua/sodio en condiciones normales</li>
+                <li>Nefronas yuxtamedulares (asa larga): penetran hasta la médula profunda, sometidas a condiciones de hipoxia relativa fisiológica — "perdedoras", las más vulnerables a la isquemia</li>
+                <li>Córtex renal: recibe ~90% del flujo sanguíneo renal total</li>
+                <li>Médula renal: recibe solo ~10% del flujo, pese a su alta demanda metabólica de transporte activo</li>
+            </ul>
+
+            <p class="section-label" style="margin-top:16px;">Fisiología aplicada</p>
+            <dl class="kv-row"><dt>Peso y perfusión</dt><dd>Los riñones representan solo el <strong>0,5% del peso corporal</strong>, pero reciben el <strong>20-25% del gasto cardíaco</strong> — una desproporción que refleja su función depuradora, no una necesidad metabólica propia tan alta.</dd></dl>
+            <dl class="kv-row"><dt>Depuración de creatinina</dt><dd>Sigue siendo la <strong>mejor herramienta clínica disponible</strong> para estimar la función renal a pie de cama, pese a sus limitaciones conocidas (desarrolladas en detalle en la Ficha 3).</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Ecuación de Starling aplicada al glomérulo</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La filtración glomerular obedece a la misma física que el intercambio capilar sistémico, reformulada
+                para la unidad glomerular:
+            </p>
+            <dl class="kv-row"><dt>Fórmula general (capilar sistémico)</dt><dd>q = k<sub>f</sub> [(P<sub>c</sub> − P<sub>i</sub>) − (π<sub>c</sub> − π<sub>i</sub>)]</dd></dl>
+            <dl class="kv-row"><dt>Reformulada para el glomérulo</dt><dd>V<sub>FG</sub> = k<sub>f</sub> [(P<sub>g</sub> − P<sub>b</sub>) − (π<sub>g</sub> − π<sub>b</sub>)] — donde P<sub>g</sub> es la presión hidrostática glomerular (motor principal de la filtración), P<sub>b</sub> la presión de la cápsula de Bowman, y π<sub>g</sub>/π<sub>b</sub> las presiones oncóticas correspondientes.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Autorregulación del flujo renal (PAM 60-150 mmHg)</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔄 Reflejos miogénicos</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Respuesta intrínseca de la arteriola aferente: el aumento de la presión de perfusión estira la pared vascular, lo que provoca su contracción refleja — mantiene el flujo sanguíneo renal y la TFG relativamente constantes pese a cambios en la presión arterial sistémica, dentro del rango de autorregulación.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧠 Regulación simpática extrínseca</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">El sistema nervioso simpático puede sobrepasar la autorregulación miogénica en situaciones de estrés extremo (choque, hemorragia grave) — vasoconstricción intensa de la arteriola aferente para redirigir flujo hacia órganos vitales (cerebro, corazón), a costa de la perfusión renal.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧪 Regulación hormonal</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body"><strong>Angiotensina II:</strong> vasoconstrictor potente, con efecto preferente sobre la arteriola eferente — ayuda a mantener la presión de filtración cuando cae el flujo sanguíneo renal. <strong>Prostaciclinas (PGI₂) y PGE₂:</strong> vasodilatadores que contrarregulan el exceso de vasoconstricción, protegiendo el flujo cortical y medular — su síntesis aumenta precisamente en los estados de hipoperfusión, lo que explica por qué los AINE (que las inhiben) son especialmente nefrotóxicos en el paciente hipovolémico. <strong>ADH:</strong> además de su rol en la concentración urinaria, contribuye a la regulación del tono vascular renal.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">El rol central de la isquemia</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La <strong>médula renal externa</strong>, y en particular el <strong>asa gruesa ascendente de
+                Henle</strong>, es la zona más vulnerable a la lesión isquémica de todo el riñón. Aunque el córtex
+                recibe la mayor parte del flujo sanguíneo renal, la médula funciona en condiciones de
+                <span class="hl">hipoxia relativa fisiológica</span> (PaO₂ &lt;20 mmHg) incluso en un riñón sano —
+                consecuencia del alto gasto metabólico del transporte activo de sodio (~90% de extracción de
+                oxígeno) combinado con el mecanismo de contracorriente vascular, que preserva el gradiente
+                osmótico medular pero limita el aporte neto de oxígeno a esa zona. Ante cualquier caída adicional
+                de la perfusión, esta región carece de margen de reserva.
+            </p>
+            <dl class="kv-row"><dt>Mecanismos de redistribución protectora</dt><dd>Prostaglandinas, óxido nítrico (NO), dopamina endógena y adenosín difosfato (ADP) participan en una redistribución compensadora del flujo hacia la médula en situaciones de estrés — mecanismos que pueden verse anulados por fármacos que inhiben su síntesis (p. ej. AINE sobre las prostaglandinas).</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Condiciones predisponentes</p>
+            <ul class="term-chips">
+                <li>Enfermedad renal crónica (ERC) preexistente</li>
+                <li>Edad avanzada</li>
+                <li>Diabetes mellitus / aterosclerosis</li>
+                <li>Embarazo</li>
+                <li>Estados de vasoconstricción efectiva: insuficiencia cardíaca, cirrosis, síndrome nefrótico</li>
+                <li>Estados obstructivos de la vía urinaria</li>
+                <li>Fármacos nefrotóxicos: AINE, anfotericina B, ciclofosfamida</li>
+                <li>Pigmentos hemo (rabdomiólisis, hemólisis) y endotoxinas (sepsis)</li>
+            </ul>
+
+            <p class="section-label" style="margin-top:16px;">Clasificación clínica clásica: índices urinarios</p>
+            <table class="data-table">
+                <thead><tr><th>Parámetro</th><th>Prerrenal (funcional)</th><th>Renal / NTA (intrínseca)</th></tr></thead>
+                <tbody>
+                    <tr><td>Diuresis</td><td>Oliguria &lt;30 cc/h × 4h</td><td>Variable</td></tr>
+                    <tr><td>Sodio urinario</td><td>&lt;20 mEq/L</td><td>&gt;40 mEq/L</td></tr>
+                    <tr><td>FE<sub>Na</sub></td><td>&lt;1%</td><td>&gt;1%</td></tr>
+                    <tr><td>Osmolalidad urinaria</td><td>&gt;500 mOsm/L</td><td>&lt;350 mOsm/L</td></tr>
+                    <tr><td>Densidad urinaria</td><td>&gt;1020</td><td>&lt;1010</td></tr>
+                    <tr><td>BUN/creatinina</td><td>&gt;10</td><td>~10 (proporcional)</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Estos mismos índices (fracción de excreción de sodio y de urea) se desarrollan con su fórmula completa y sus limitaciones en la Ficha 3.</p>
+
+            <p class="section-label" style="margin-top:16px;">Enfoque terapéutico inicial</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💧 Corrección de factores prerrenales</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Primer paso siempre: corregir los factores prerrenales antes de asumir daño intrínseco establecido. Requiere <strong>monitorización hemodinámica</strong> para optimizar las presiones de llenado — objetivo clásico de PVC/PCP en torno a <strong>12 mmHg</strong>. Si no hay mejoría, medir el gasto cardíaco.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Vasopresores</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Cuando la reposición de volumen no basta, se usan vasopresores con objetivo de <strong>índice cardíaco &gt;3 L/min/m²</strong> para asegurar la perfusión renal.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💉 Furosemida en infusión, no en bolos</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Si persiste la oliguria, infusión de furosemida <strong>1-10 mg/h</strong> — señalada como superior a los bolos intermitentes, que solo alcanzan una concentración tubular eficaz durante ~10% del tiempo entre dosis.</div>
+                </div>
+            </div>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Si estas medidas no revierten el cuadro, el manejo final se apoya en la <strong>terapia de reemplazo
+                renal (TRR)</strong> — desarrollada con su enfoque de indicaciones, momento de inicio y modalidad en
+                el módulo de Nefrología de esta misma app (TRR, dentro del mapa del riñón).
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Fuente</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Ardila Otero A. Fisiopatología renal. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección VII, Capítulo 46, págs. 817-826.</p>
+        </div>
+
+        <!-- ===== FICHA 2: FISIOPATOLOGÍA DE LA LRA ===== -->
+        <div id="vu-lra" class="tab-content">
+            <h3 style="color: var(--accent-red);">Fisiopatología de la lesión renal aguda (LRA)</h3>
+
+            <p class="section-label">Definición y criterios diagnósticos</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La LRA se define como una <strong>disminución súbita de la tasa de filtración glomerular
+                (TFG)</strong>. El consenso diagnóstico actual exige cualquiera de estos 3 criterios:
+            </p>
+            <ul class="term-chips">
+                <li>Aumento de creatinina sérica ≥0,3 mg/dL</li>
+                <li>Aumento porcentual ≥50% sobre el valor basal</li>
+                <li>Oliguria &lt;0,5 mL/kg/h durante ≥6 horas</li>
+            </ul>
+            <dl class="kv-row"><dt>Evolución de las clasificaciones</dt><dd>RIFLE (2004, <em>Risk/Injury/Failure/Loss/End-stage</em>) fue la primera clasificación consensuada. La <strong>AKIN 2007</strong> (Acute Kidney Injury Network) modificó RIFLE: fijó el umbral de 0,3 mg/dL dentro de una <strong>ventana de 48 horas</strong> (mayor sensibilidad para detectar el Estadio 1) y sustituyó las siglas R/I/F por Estadios 1/2/3. Ver la Tabla 8 de la Ficha 3 para la clasificación KDIGO 2012, que combinó RIFLE y AKIN en el sistema hoy más usado.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Epidemiología</p>
+            <ul class="term-chips">
+                <li>LRA en ~7% de todos los pacientes hospitalizados</li>
+                <li>36-67% de los pacientes críticos, según la serie</li>
+            </ul>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📊 Estudio de Hoste</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">5383 pacientes en 7 UCI: incidencia global de LRA del <strong>67%</strong>, con distribución por criterio RIFLE de <strong>Risk 12% / Injury 27% / Failure 28%</strong>. Mortalidad asociada, escalonada por gravedad: <strong>Risk 8,8% / Injury 11,4% / Failure 26,3%</strong> — una relación dosis-respuesta clara entre gravedad de la LRA y mortalidad.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🌍 Estudio de Uchino (multinacional)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">~30.000 pacientes: prevalencia de LRA de ~6%, con <strong>60% de mortalidad antes del alta</strong> en los pacientes que la desarrollaron — cifra que ilustra la gravedad de la LRA establecida en el crítico, no solo su frecuencia.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📈 Metaanálisis de Coca</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Incluso aumentos <strong>modestos</strong> de creatinina se asocian a un exceso claro de mortalidad: un incremento del <strong>10-20% (0,3-0,4 mg/dL)</strong> ya <span class="hl">duplica</span> el riesgo de mortalidad a corto plazo, y un aumento del <strong>25-29% (0,5-0,9 mg/dL)</strong> lo multiplica por <span class="hl">5</span>. Este hallazgo es la base racional de por qué los criterios diagnósticos actuales exigen cambios tan pequeños como 0,3 mg/dL.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Fisiopatología: limitaciones de la creatinina como marcador</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La función renal normal implica 4 etapas: aporte sanguíneo a los glomérulos, formación del
+                ultrafiltrado, reabsorción/excreción tubular, y flujo de la orina a través de pelvis, uréteres,
+                vejiga y uretra. Cada riñón contiene aproximadamente <strong>1 millón de nefronas</strong>.
+            </p>
+            <dl class="kv-row"><dt>Por qué la creatinina detecta tarde</dt><dd>Solo se eleva de forma detectable después de haberse perdido <strong>~50% de la TFG</strong> — una reducción ya sustancial. Además, está influida por factores no renales: masa muscular, raza, sexo, dieta; y ciertos fármacos (<strong>cimetidina, trimetoprim</strong>) inhiben su secreción tubular, elevándola de forma transitoria y reversible sin que haya caído realmente la TFG.</dd></dl>
+            <dl class="kv-row"><dt>Limitación de las fórmulas de depuración</dt><dd>La depuración de creatinina y las fórmulas derivadas (MDRD, Cockcroft-Gault — desarrolladas con detalle en la Ficha 3) se diseñaron y validaron para pacientes con función renal <strong>estable</strong>, no para la LRA en curso, donde la creatinina cambia día a día y no refleja un estado estacionario.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Clasificación etiológica</p>
+
+            <p class="section-label" style="margin-top:12px; font-size:0.8rem;">LRA prerrenal (la más frecuente)</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Respuesta <strong>adaptativa</strong> a la hipoperfusión, hipotensión o depleción severa de volumen,
+                con función glomerular y tubular intrínsecamente <strong>normal</strong> — es reversible si se
+                corrige a tiempo (ver Ficha 1 para el manejo).
+            </p>
+            <ul class="term-chips">
+                <li>Hipovolemia de cualquier causa</li>
+                <li>↓Flujo arterial efectivo: insuficiencia cardíaca aguda, hepatopatía, sepsis grave/shock séptico</li>
+            </ul>
+            <dl class="kv-row"><dt>Poliuria posobstructiva</dt><dd>Complicación rara pero grave tras resolver una obstrucción urinaria: natriuresis y diuresis masivas que pueden llevar a <strong>hipotensión por deshidratación severa</strong>, junto con alteraciones electrolíticas — hipopotasemia, hiponatremia, hipomagnesemia. Requiere vigilancia estrecha del balance hídrico y electrolítico tras desobstruir.</dd></dl>
+
+            <p class="section-label" style="margin-top:12px; font-size:0.8rem;">LRA posrenal</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Procesos obstructivos en cualquier punto desde el sistema colector hasta la uretra. Para producir
+                LRA requiere <strong>obstrucción bilateral</strong> (o unilateral en un riñón único funcionante).
+                Más frecuente en <strong>ancianos y hombres</strong>, sobre todo por enfermedad prostática; también
+                común por vejiga neurogénica y sondas urinarias obstruidas. El <strong>ultrasonido</strong> es el
+                método de evaluación de elección — rápido y no invasivo.
+            </p>
+
+            <p class="section-label" style="margin-top:12px; font-size:0.8rem;">LRA intrínseca</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Respuesta fisiológica a inflamación citotóxica o a lesión isquémica directa del parénquima. Se
+                subdivide en causas <strong>glomerulares, intersticiales y tubulares</strong>.
+            </p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔵 Causas glomerulares</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Síndrome nefrítico y síndrome nefrótico, ambos de inicio agudo o insidioso. La <strong>nefritis aguda</strong> cursa con sedimento urinario activo: proteinuria, hematíes, leucocitos y cilindros granulosos/celulares. Características clínicas típicas del síndrome nefrítico: <strong>hipertensión, hematuria, edema</strong> y con frecuencia el antecedente de una infección sistémica reciente.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🟠 Necrosis tubular aguda (NTA)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La forma <strong>más común</strong> de LRA intrínseca, en especial en pacientes hospitalizados/críticos. Etiologías: reacciones de hipersensibilidad a fármacos, nefropatías asociadas a mieloma múltiple, síndrome de lisis tumoral tras quimioterapia, nefropatía por fosfatos (de ciertas preparaciones intestinales que los contienen), e hipotensión prolongada tras paro cardíaco, hemorragia masiva, sepsis grave o intoxicación por psicofármacos.</div>
+                </div>
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 En la práctica de urgencias/UCI, la causa suele ser <strong>multifactorial</strong> — hipovolemia, sepsis, fármacos y alteraciones hemodinámicas combinadas actuando a la vez, no un mecanismo único y aislado.</p>
+
+            <p class="section-label" style="margin-top:16px;">Tratamiento</p>
+            <dl class="kv-row"><dt>Prerrenal</dt><dd>A menudo reversible si se identifica y trata a tiempo. Reposición con cristaloides como intervención de emergencia ante hipovolemia. Pueden necesitarse vasopresores para sostener la perfusión renal, pero <strong>nunca sustituyen</strong> a la fluidoterapia. Precaución especial con fármacos nefrotóxicos y medios de contraste en este contexto.</dd></dl>
+            <dl class="kv-row"><dt>Posobstructiva</dt><dd>El tratamiento se centra en corregir la obstrucción y en el manejo activo de las alteraciones electrolíticas de la poliuria posobstructiva (ver arriba).</dd></dl>
+            <dl class="kv-row"><dt>NTA establecida</dt><dd>Se centra en <strong>prevenir complicaciones</strong>, evitar nuevas agresiones renales, y preparar el entorno para que la lesión revierta espontáneamente — no existe un tratamiento específico que revierta la NTA ya instaurada.</dd></dl>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Diuréticos de asa: una promesa fisiológica sin respaldo clínico</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La furosemida tiene un racional teórico atractivo: al disminuir la demanda de oxígeno tubular, aumentar el flujo tubular y mejorar la TFG, debería proteger frente a la lesión hipóxica — con clara elevación demostrada del flujo sanguíneo renal. Sin embargo, los <strong>estudios observacionales</strong> encontraron que el uso de diuréticos en pacientes críticos con LRA se asocia a <span class="hl">mayor riesgo de muerte, sin beneficio en la recuperación funcional</span>. Ningún ensayo clínico aleatorizado de gran tamaño ha demostrado beneficio de los diuréticos en ninguna dirección en la LRA establecida — su uso no debe basarse en la expectativa de "proteger" el riñón.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩺 Terapia de reemplazo renal continua (TRRC)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">El <strong>mejor método</strong> para el paciente crítico hemodinámicamente inestable: mejor tolerancia hemodinámica que la HD intermitente, control continuo de líquidos/ácido-base/electrolitos, y permite un soporte nutricional enteral/parenteral adecuado sin las limitaciones de volumen y proteínas que impone la HD intermitente.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔬 Terapias en investigación</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body"><strong>Células madre mesenquimales:</strong> estudios de fase 1 en curso en pacientes de alto riesgo de LRA asociada a cirugía cardíaca; la fase 2 está pendiente de que la fase 1 demuestre seguridad. <strong>Bicarbonato de sodio:</strong> evidencia todavía insuficiente para recomendar o rechazar su uso rutinario en el tratamiento de la LRA. <strong>Biomarcadores:</strong> la investigación futura se centra en encontrar marcadores capaces de un diagnóstico más temprano que la creatinina (ver Ficha 3, Otros biomarcadores).</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Conclusiones del capítulo</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La LRA es una patología cada vez más común e importante, con peor pronóstico y mortalidad aumentada.
+                La investigación en curso se centra en encontrar <strong>biomarcadores tempranos efectivos</strong>
+                que permitan actuar antes de que la lesión esté establecida — momento en el que la probabilidad de
+                recuperación ya es baja. Es responsabilidad del médico conocer la fisiopatología, el enfoque
+                diagnóstico, los factores de riesgo y los signos/síntomas de la LRA para instaurar una terapéutica
+                rápida — pero la <span class="hl">tarea más importante sigue siendo la prevención</span> de la LRA,
+                no su tratamiento una vez establecida.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Fuente</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Arias Aguilera MA. Fisiopatología de la lesión renal aguda. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección VII, Capítulo 47, págs. 827-837.</p>
+        </div>
+
+        <!-- ===== FICHA 3: MONITORIZACIÓN DE LA FUNCIÓN RENAL ===== -->
+        <div id="vu-monitorizacion" class="tab-content">
+            <h3 style="color: var(--accent-green);">Monitorización de la función renal en el paciente crítico</h3>
+
+            <p class="section-label">Introducción</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                En el paciente crítico, la función renal se evalúa fundamentalmente por las alteraciones en la
+                concentración sérica de urea y creatinina, o por la disminución sostenida del gasto urinario — los
+                parámetros que se usan para el diagnóstico y estratificación de la LRA. La LRA tiene una prevalencia
+                del <strong>1-9%</strong> en pacientes hospitalizados, que llega a ser del <span class="hl">40% en
+                pacientes de UCI con sepsis</span>. La incidencia es &gt;36% durante el primer día tras el ingreso a
+                UCI, y la prevalencia supera el <strong>60%</strong> durante toda la estancia. Las causas más
+                frecuentes son la <strong>sepsis y la hipovolemia</strong>, seguidas de agentes nefrotóxicos — la
+                causa suele ser multifactorial, con comorbilidades preexistentes que aumentan aún más el riesgo.
+            </p>
+            <dl class="kv-row"><dt>Puntos clave: estimación de la TFG</dt><dd>El marcador ideal debería ser endógeno, hidrosoluble, no unido a proteínas, filtrado totalmente en el glomérulo y eliminado de forma inalterable por la orina. En protocolos de investigación se usa la medición directa de la TFG con métodos clásicos (aclaramiento de inulina) o más modernos (ácidos nucleicos radiomarcados) — ninguno es práctico a pie de cama en la UCI.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Prevención de la LRA</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La <strong>prevención primaria</strong> se limita a los casos en los que el momento de la lesión
+                renal es predecible: administración de medios de contraste, cirugía con circulación extracorpórea,
+                paracentesis de gran volumen en cirróticos, o quimioterapia. La <strong>prevención secundaria</strong>
+                consiste en reconocer los factores de riesgo predisponentes (diabetes, ERC, edad, hipertensión,
+                insuficiencia cardíaca o hepática) y aplicar medidas de perfusión adecuada, evitando la hipoglucemia
+                y los agentes nefrotóxicos.
+            </p>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Las guías <strong>KDIGO</strong> recomiendan monitorización hemodinámica estricta en pacientes con riesgo de LRA, optimizando la presión arterial y el gasto cardíaco para evitar tanto la hipoperfusión renal como la sobrecarga de volumen — objetivo de presión arterial media &gt;65 mmHg, evitando la depleción de volumen.</p>
+
+            <p class="section-label" style="margin-top:16px;">Tasa de filtración glomerular (TFG)</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                De los 500-700 mL de plasma por minuto que llegan a los riñones, un <strong>25% es
+                ultrafiltrado</strong>. El valor normal es de aproximadamente <strong>120 mL/min/1,73 m² en
+                mujeres</strong> y <strong>130 mL/min/1,73 m² en hombres</strong> sanos; disminuye con la edad, y se
+                ve influenciado por el sexo, el peso y el aporte nutricional. No existe hoy un método de medición
+                directa de la TFG rápido, asequible y seguro en el paciente crítico — por eso se habla de
+                <em>estimación</em> de la TFG.
+            </p>
+            <table class="data-table">
+                <thead><tr><th colspan="2">Tabla 1. Condiciones clínicas que disminuyen el filtrado glomerular</th></tr></thead>
+                <tbody>
+                    <tr><td colspan="2">Hipotensión arterial, choque</td></tr>
+                    <tr><td colspan="2">Depleción de volumen</td></tr>
+                    <tr><td colspan="2">Obstrucción del tracto urinario</td></tr>
+                    <tr><td colspan="2">Necrosis tubular aguda</td></tr>
+                    <tr><td colspan="2">Balance positivo de líquidos</td></tr>
+                    <tr><td colspan="2">Edema intersticial</td></tr>
+                    <tr><td colspan="2">Diabetes</td></tr>
+                    <tr><td colspan="2">Hipertensión arterial</td></tr>
+                    <tr><td colspan="2">Hipercapnia</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Volumen urinario</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Se mide de rutina y puede usarse como indicador dinámico de la función renal, en especial de los
+                cambios en la perfusión — pero es un parámetro con <strong>pobre sensibilidad y especificidad</strong>
+                para determinar LRA por sí solo, ya que la LRA grave puede cursar con volumen urinario normal o
+                aumentado pese a creatinina elevada.
+            </p>
+            <ul class="term-chips">
+                <li>Oliguria: &lt;0,5 mL/kg/hora, o entre 400-800 mL/24h — casi siempre indica LRA (aunque cualquier forma, prerrenal/renal/posrenal, puede ser no oligúrica)</li>
+                <li>Anuria: ausencia de diuresis — siempre requiere atención precoz; si es verdadera, sospechar uropatía obstructiva</li>
+            </ul>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 La NTA rara vez causa anuria; cuando ocurre, suele durar solo unas pocas horas. Tanto la oliguria como la anuria deben definirse según el volumen y el tiempo en que se desarrollan.</p>
+
+            <p class="section-label" style="margin-top:16px;">Marcadores séricos</p>
+
+            <p class="section-label" style="margin-top:12px; font-size:0.8rem;">Creatinina sérica</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Aminoácido compuesto, producto del metabolismo de la creatina (muscular y hepática). Se libera al
+                plasma a una tasa constante y se filtra libremente por el glomérulo, sin reabsorberse ni
+                metabolizarse en el riñón — por eso su valor está íntimamente relacionado con el filtrado
+                glomerular: si la creatinina sérica sube, necesariamente hay un descenso de la TFG.
+            </p>
+
+            <div class="article-figure">
+                <img src="js/modules/fisio-uci/img/vu-fig1-creatinina.jpg" alt="Producción y depuración de creatinina: creatina de las carnes rojas, circulación sistémica, producción muscular de creatina y creatinina, depuración renal" loading="lazy">
+                <div class="article-figure-caption">Figura 1. Producción y depuración de creatinina.</div>
+            </div>
+
+            <dl class="kv-row"><dt>Secreción tubular</dt><dd>A diferencia de la inulina, la creatinina también se <strong>secreta en el túbulo renal</strong>, y esta secreción aumenta a medida que la TFG disminuye y la creatinina sérica sube — un mecanismo que tiende a sobrestimar la TFG real cuando se calcula por depuración de creatinina.</dd></dl>
+            <dl class="kv-row"><dt>Producción</dt><dd>Se correlaciona con la masa muscular magra: en promedio <strong>20-25 mg/kg/día en hombres</strong> adultos sanos y <strong>15-20 mg/kg/día en mujeres</strong> adultas sanas.</dd></dl>
+            <dl class="kv-row"><dt>En ausencia de filtrado glomerular</dt><dd>Como puede suceder en la LRA establecida, la creatinina sérica sube <strong>1-2 mg/dL/día</strong>. Sin embargo, por la relación inversa entre creatinina y TFG, pueden producirse reducciones muy significativas de la TFG <em>antes</em> de que se evidencie el aumento de creatinina — en condiciones estables, la creatinina debe duplicarse por cada 50% de reducción en la depuración de creatinina.</dd></dl>
+
+            <table class="data-table">
+                <thead><tr><th>Factores condicionantes</th><th>Efecto</th></tr></thead>
+                <tbody>
+                    <tr><td>Rabdomiólisis (fiebre, trauma, convulsiones)</td><td rowspan="4">↑ Creatinina</td></tr>
+                    <tr><td>Hipoperfusión renal (shock, insuficiencia cardíaca)</td></tr>
+                    <tr><td>Reabsorción tisular</td></tr>
+                    <tr><td>Disminución del volumen de distribución corporal</td></tr>
+                    <tr><td>Masa muscular disminuida</td><td rowspan="4">↓ Creatinina</td></tr>
+                    <tr><td>Volemia aumentada</td></tr>
+                    <tr><td>Uso de cierta antibioticoterapia</td></tr>
+                    <tr><td>Alteraciones hepáticas / estados hiperdinámicos</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Tabla 2. Factores condicionantes del nivel de creatinina sérica.</p>
+
+            <p class="section-label" style="margin-top:12px; font-size:0.8rem;">Urea sérica</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Molécula hidrosoluble de bajo peso molecular, sintetizada en el hígado y eliminada por el riñón. Se
+                filtra libremente y aumenta en sangre cuando falla la TFG — pero su producción depende de la
+                <strong>carga proteica</strong> (endógena o exógena), por lo que un aumento de la urea <span class="hl">no
+                se traduce necesariamente</span> en una disminución de la TFG.
+            </p>
+            <table class="data-table">
+                <thead><tr><th>Factores endógenos</th><th>Factores exógenos</th></tr></thead>
+                <tbody>
+                    <tr><td>Estados hipercatabólicos (sepsis, quemaduras, fiebre)</td><td>Ingesta excesiva de proteínas</td></tr>
+                    <tr><td>Hemorragia gastrointestinal</td><td>Infusión de aminoácidos</td></tr>
+                    <tr><td></td><td>Medicamentos: tetraciclinas, terapia con corticoides</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Tabla 3. Factores condicionantes del aumento de urea sérica.</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Además, la urea se reabsorbe a lo largo de los túbulos tras filtrarse, y esta reabsorción
+                <strong>aumenta en estados de bajo flujo</strong> (depleción de volumen, insuficiencia cardíaca
+                grave) — un aumento de urea sérica desproporcionado a la disminución real de la TFG. Pese a ello, su
+                concentración sí se relaciona clínicamente con síntomas urémicos, que aparecen cuando el valor supera
+                los <strong>85-100 mg/dL</strong>.
+            </p>
+
+            <p class="section-label" style="margin-top:12px; font-size:0.8rem;">Cistatina C</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Proteína no glucosilada del grupo de las inhibidoras de proteinasa de cisterna, de bajo peso
+                molecular, sintetizada por <strong>todas las células nucleadas</strong> y liberada al torrente
+                sanguíneo a una tasa relativamente constante. Se filtra libremente en el glomérulo y se reabsorbe y
+                cataboliza en el túbulo proximal — normalmente no aparece en orina.
+            </p>
+            <dl class="kv-row"><dt>Por qué es más sensible que la creatinina</dt><dd>Su vida media es más corta, lo que la hace un marcador más sensible a los <strong>cambios agudos</strong> del filtrado glomerular. Un metaanálisis de 19 estudios y 3336 pacientes reportó una sensibilidad del <strong>71%</strong> y una especificidad del <strong>92%</strong> para la cistatina sérica, con mejor valor predictivo que la cistatina urinaria y que la creatinina sérica.</dd></dl>
+            <ul class="term-chips">
+                <li>Menos dependiente de edad, sexo, masa muscular o función hepática que la creatinina</li>
+                <li>Sus niveles se alteran en pacientes con cáncer, disfunción tiroidea, corticoterapia y en fumadores</li>
+                <li>También detectable en orina en estados de LRA — herramienta adicional para cuantificar la gravedad de la lesión tubular</li>
+            </ul>
+
+            <table class="data-table">
+                <thead><tr><th>Biomarcador</th><th>Marcador para</th><th>Tiempo de detección (h)</th></tr></thead>
+                <tbody>
+                    <tr><td>Cistatina C sérica</td><td>TFG</td><td>12-14</td></tr>
+                    <tr><td>Cistatina C urinaria</td><td>Lesión del túbulo proximal</td><td>—</td></tr>
+                    <tr><td>IL-18 urinaria</td><td>Lesión del túbulo proximal</td><td>4-6</td></tr>
+                    <tr><td>KIM-1 urinaria</td><td>Lesión del túbulo proximal</td><td>12-24</td></tr>
+                    <tr><td>NGAL sérica</td><td>Lesión del túbulo proximal</td><td>2-4</td></tr>
+                    <tr><td>NGAL urinaria</td><td>Lesión del túbulo proximal</td><td>2-4</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Tabla 4. Resumen de biomarcadores para la detección temprana de LRA.</p>
+
+            <p class="section-label" style="margin-top:16px;">Otros biomarcadores</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 NGAL (lipocalina asociada a gelatinasa de neutrófilo)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Proteína de bajo peso molecular implicada en el desarrollo del epitelio renal, expresada por neutrófilos y otras células epiteliales — en especial las del túbulo proximal. Se eleva precozmente tras una LRA; útil tanto para el diagnóstico temprano como para predecir la necesidad de TRR, y puede incrementarse hasta <strong>2 días antes</strong> que los marcadores convencionales (creatinina/urea).</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔥 IL-18 urinaria</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Numerosas citocinas se detectan en orina en la LRA (IL-1, IL-6, IL-8, IL-18, TNF-α, factor activador de plaquetas), pero la <strong>IL-18 urinaria</strong> es posiblemente la mejor caracterizada — se produce en el túbulo proximal y se detecta en orina en estados de LRA de causa isquémica. El aumento temprano de IL-18 urinaria tras el trasplante renal ha demostrado ser predictivo de <strong>retraso en la función del injerto</strong>.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🎯 KIM-1</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Glucoproteína transmembrana tipo 1 que se expresa mínimamente en el tejido renal sano, pero cuya producción aumenta en las células del túbulo proximal en respuesta a lesión renal aguda por isquemia o nefrotoxicidad. Se detecta por inmunoanálisis en orina — biomarcador temprano y no invasivo de LRA del túbulo proximal.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Mediciones derivadas</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El enfoque diagnóstico considera las 3 categorías principales de la patogenia de la LRA: prerrenal
+                (<strong>60-70%</strong>), intrínseca (<strong>25-40%</strong>) y posrenal (<strong>5-10%</strong>).
+                La causa intrínseca se subdivide en lesión de la célula tubular (80-90% de la intrínseca), nefritis
+                intersticial (5-10%) y glomerulonefritis aguda (&lt;5%) — la lesión de la célula tubular, a su vez,
+                se origina por isquemia/inflamación (sepsis, cirugía, hipoperfusión) o por toxinas, sean directas
+                (aminoglucósidos, cisplatino) o vasoconstrictoras (AINE, ciclosporina, contrastes radiológicos).
+            </p>
+
+            <p class="section-label" style="margin-top:12px; font-size:0.8rem;">Fracción de excreción de sodio (FE<sub>Na</sub>)</p>
+            <dl class="kv-row"><dt>Fórmula</dt><dd>FE<sub>Na</sub> = (sodio urinario × creatinina sérica) / (sodio sérico × creatinina urinaria) × 100</dd></dl>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Una FE<sub>Na</sub> &lt;1% caracteriza la LRA prerrenal o funcional; &gt;1% sugiere NTA o LRA con
+                daño renal. <strong>Limitaciones importantes:</strong> puede estar falsamente <em>baja</em> pese a
+                daño renal intrínseco en sepsis grave, insuficiencia cardíaca o cirrosis; y falsamente
+                <em>alta</em> en pacientes con uso de diuréticos, glucosuria o insuficiencia renal preexistente.
+            </p>
+
+            <p class="section-label" style="margin-top:12px; font-size:0.8rem;">Fracción de excreción de urea (FE Urea)</p>
+            <dl class="kv-row"><dt>Fórmula</dt><dd>FE Urea = (urea urinaria × creatinina sérica) / (urea sérica × creatinina urinaria) × 100</dd></dl>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Alternativa útil precisamente cuando la FE<sub>Na</sub> pierde fiabilidad: en pacientes que usan
+                diuréticos como la furosemida, la FE<sub>Na</sub> puede ser &gt;1% pese a tratarse de una LRA
+                prerrenal, por la natriuresis inducida por el propio diurético. La FE Urea <strong>&lt;35%</strong>
+                indica LRA prerrenal o funcional; <strong>&gt;50%</strong>, daño renal.
+            </p>
+
+            <table class="data-table">
+                <thead><tr><th>Medición</th><th>LRA funcional o prerrenal</th><th>LRA con daño renal intrínseco</th></tr></thead>
+                <tbody>
+                    <tr><td>Respuesta a los fluidos</td><td>Dentro de 24-72 h</td><td>No responde</td></tr>
+                    <tr><td>FE<sub>Na</sub></td><td>&lt;1%</td><td>&gt;1%</td></tr>
+                    <tr><td>FE Urea</td><td>&lt;35%</td><td>&gt;50%</td></tr>
+                    <tr><td>Relación BUN/creatinina</td><td>20</td><td>10</td></tr>
+                    <tr><td>Sodio urinario (mEq/L)</td><td>&lt;20</td><td>&gt;30</td></tr>
+                    <tr><td>Osmolaridad urinaria (mOsm/L)</td><td>&gt;350</td><td>300</td></tr>
+                    <tr><td>Urianálisis</td><td>Normal o cilindros hialinos</td><td>Cilindros granulosos pigmentados</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Tabla 5. Mediciones derivadas para el diagnóstico diferencial entre LRA funcional (prerrenal) y daño renal intrínseco.</p>
+
+            <p class="section-label" style="margin-top:16px;">Estimación de la TFG y depuración de creatinina</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Se han desarrollado varias ecuaciones basadas en creatinina sérica o cistatina C junto con variables
+                clínicas/demográficas (edad, sexo, raza, peso). La TFG puede estimarse mejor midiendo la depuración
+                de creatinina en orina de 24 horas, pero esto es <strong>poco práctico en la UCI</strong> — de ahí
+                el desarrollo de fórmulas basadas en una muestra aislada de creatinina sérica.
+            </p>
+
+            <table class="data-table">
+                <thead><tr><th colspan="2">Tabla 6. Principales ecuaciones para estimar la TFG o depuración de creatinina</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Cockcroft-Gault</strong></td><td>C<sub>cr</sub> = [(140 − edad) × peso (kg)] / (72 × Cr<sub>s</sub>) — × 0,85 si mujer</td></tr>
+                    <tr><td><strong>MDRD</strong></td><td>Basada en Cr<sub>s</sub>, edad, sexo, raza (± BUN/albúmina según la versión) — mayor precisión que Cockcroft-Gault, pero imprecisa quando TFG &gt;60 mL/min/1,73 m²</td></tr>
+                    <tr><td><strong>CKD-EPI</strong></td><td>Modificación de MDRD desarrollada para mejorar la precisión en valores más altos de TFG (hasta 90 mL/min/1,73 m²), con ecuaciones distintas por raza/sexo/rango de creatinina</td></tr>
+                    <tr><td><strong>Jelliffe / Jelliffe modificada</strong></td><td>Alternativa que ajusta la creatinina sérica por el balance de fluidos — podría evitar la sobrestimación de la función renal que producen MDRD/CKD-EPI/Cockcroft-Gault en la LRA en curso</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Las recomendaciones KDIGO 2012 son explícitas: MDRD, CKD-EPI y Cockcroft-Gault <strong>no deben usarse</strong> para estimar la función renal en pacientes críticos, porque se desarrollaron y validaron en pacientes estables con ERC — aunque siguen siendo útiles para guiar la <strong>dosificación de fármacos</strong> en la LRA. Por el riesgo de sobrestimar la función renal durante la LRA, la ecuación de Jelliffe (que ajusta por el balance de fluidos) podría ser preferible en ese escenario concreto.</p>
+
+            <p class="section-label" style="margin-top:16px;">Análisis urinario</p>
+            <dl class="kv-row"><dt>Proteinuria</dt><dd>Frecuente en adultos mayores, con diabetes, ERC o choque. La detección temprana de <strong>microalbuminuria</strong> es sugestiva de un aumento de la permeabilidad capilar a las proteínas, y aporta valor predictivo y pronóstico de gravedad/mortalidad.</dd></dl>
+            <dl class="kv-row"><dt>Sedimento urinario</dt><dd>El uroanálisis con microscopio es una herramienta útil para determinar la causa de la LRA — la presencia de cilindros u otras células puede sugerir o confirmar un diagnóstico. Tiene especial valor cuando se sospecha vasculitis sistémica, glomerulonefritis aguda o rápidamente progresiva, o síndromes pulmón-riñón.</dd></dl>
+
+            <div class="article-figure" style="max-width:420px;">
+                <img src="js/modules/fisio-uci/img/vu-fig5-cilindros-eritrocitarios.jpg" alt="Cilindros eritrocitarios en el sedimento urinario" loading="lazy">
+                <div class="article-figure-caption">Figura 5a. Cilindros eritrocitarios — diagnóstico de enfermedad glomerular.</div>
+            </div>
+            <div class="article-figure" style="max-width:420px;">
+                <img src="js/modules/fisio-uci/img/vu-fig5-cilindros-leucocitarios.jpg" alt="Cilindros leucocitarios en el sedimento urinario" loading="lazy">
+                <div class="article-figure-caption">Figura 5b. Cilindros leucocitarios — infección renal.</div>
+            </div>
+            <div class="article-figure" style="max-width:420px;">
+                <img src="js/modules/fisio-uci/img/vu-fig5-cilindros-granulosos.jpg" alt="Cilindros granulosos pigmentados en el sedimento urinario" loading="lazy">
+                <div class="article-figure-caption">Figura 5c. Cilindros granulosos pigmentados — células tubulares necróticas junto con proteína de Tamm-Horsfall, indican lesión tubular aguda.</div>
+            </div>
+            <div class="article-figure" style="max-width:420px;">
+                <img src="js/modules/fisio-uci/img/vu-fig5-cilindros-hialinos.jpg" alt="Cilindros hialinos en el sedimento urinario" loading="lazy">
+                <div class="article-figure-caption">Figura 5d. Cilindros hialinos — pueden verse en cualquier tipo de enfermedad renal (incluida la LRA prerrenal).</div>
+            </div>
+            <div class="article-figure" style="max-width:420px;">
+                <img src="js/modules/fisio-uci/img/vu-fig5-celulas-tubulares.jpg" alt="Células tubulares renales en el sedimento urinario" loading="lazy">
+                <div class="article-figure-caption">Figura 5e. Células tubulares renales — lesión tubular aguda.</div>
+            </div>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Figura 5. Interpretación de algunos hallazgos microscópicos del sedimento urinario. En la LRA de causa prerrenal o funcional, el sedimento puede mostrar ocasionalmente cilindros hialinos o granulosos finos.</p>
+
+            <p class="section-label" style="margin-top:16px;">Imágenes en la evaluación de la función renal</p>
+            <dl class="kv-row"><dt>Ultrasonido renal</dt><dd>El <strong>primer examen de elección</strong>. Útil para evaluar lesión renal estructural y diagnosticar obstrucción del sistema colector (hidronefrosis). Permite determinar el tamaño renal, la ecogenicidad y el espesor cortical; la presencia de reducción de la diferenciación corticomedular y de riñones de tamaño disminuido es indicativa de <strong>ERC subyacente</strong>.</dd></dl>
+
+            <div class="article-figure">
+                <img src="js/modules/fisio-uci/img/vu-fig6-hidronefrosis.jpg" alt="Imagen ecográfica de riñón con hidronefrosis" loading="lazy">
+                <div class="article-figure-caption">Figura 6. Riñón con hidronefrosis.</div>
+            </div>
+
+            <dl class="kv-row"><dt>Doppler color / índice de resistencia (IR)</dt><dd>Mide la perfusión del flujo renal a nivel de las arterias arcuatas e interlobares. Puede diferenciarse entre LRA prerrenal (IR normal), renal/intrínseca (IR disminuido) u obstructiva/posrenal (IR elevado). <strong>Sin embargo, no se recomienda su uso rutinario</strong> para diagnosticar o tratar la LRA en pacientes críticos: los estudios preliminares mostraron un nivel de evidencia pobre, con dudas sobre si es un método factible y reproducible en la UCI.</dd></dl>
+            <dl class="kv-row"><dt>TC/RM y angioTC</dt><dd>La TC sin contraste o la RM pueden ser útiles para definir presencia/ausencia de enfermedad retroperitoneal. Los medios de contraste yodados son nefrotóxicos, así que elegir una TC contrastada debe decidirse cuidadosamente por el riesgo de LRA. La angioTC puede usarse ante sospecha de estenosis renal y para el seguimiento de posibles sitios de sangrado activo tras biopsia renal.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Escenarios especiales de LRA</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💉 Nefropatía por contraste</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">El factor de riesgo más importante es la <strong>ERC preexistente</strong> — con función renal normal, el riesgo de LRA es &lt;1%. Otros factores: edad avanzada, diabetes mellitus, insuficiencia cardíaca congestiva, depleción de volumen y uso concomitante de AINE. <strong>Definición más usada:</strong> aumento de creatinina sérica &gt;0,5 mg/dL o &gt;25% del basal, 48-72h tras la administración de contraste. <strong>Prevención:</strong> hidratación adecuada antes y después del contraste, y uso de volúmenes pequeños de contraste de baja osmolaridad o isoosmolar. <strong>Fármacos evaluados sin beneficio demostrado</strong> (y en algunos casos con resultados conflictivos): manitol, furosemida, dopamina, fenoldopam, bloqueantes de canales de calcio, aminofilina, teofilina, estatinas y ácido ascórbico. La <strong>N-acetilcisteína (NAC)</strong>, antioxidante con propiedades vasodilatadoras, se justificó por su capacidad teórica de remover especies reactivas de oxígeno y estimular la producción de sustancias vasodilatadoras (incluido el óxido nítrico) — pero su uso <strong>no se recomienda</strong>. La depuración extracorpórea periprocedimental tampoco ha demostrado efecto protector.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🍷 Nefropatía en pacientes cirróticos</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La LRA es una complicación frecuente en el crítico con hepatopatía crónica — alta incidencia por predisposiciones fisiológicas (vasodilatación esplácnica con disminución del volumen circulante arterial efectivo), complicaciones propias de la cirrosis (hipertensión portal, hemorragia, sepsis) y la medicación usada para su tratamiento. <strong>Albúmina intravenosa</strong> en cirrosis con peritonitis bacteriana espontánea disminuye la incidencia de LRA y la mortalidad; el uso de albúmina (8 g por cada litro de ascitis evacuada) tras paracentesis evacuatoria también disminuye la incidencia de LRA; y administrada junto con fármacos vasoconstrictores esplácnicos disminuye la mortalidad en el <strong>síndrome hepatorrenal</strong>.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💪 LRA por rabdomiólisis</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Entre el <strong>5% y el 10%</strong> de la LRA en la UCI. Frecuente tras trauma mayor, sobredosis de narcóticos, embolia vascular, o fármacos que inducen lesión muscular. La mioglobina liberada por las células musculares lesionadas se deposita y cristaliza en los túbulos renales, obstruyéndolos — se libera en paralelo con la <strong>creatina fosfocinasa (CPK)</strong>. La mioglobinuria ocurre con mioglobina sérica &gt;1500-3000 ng/mL. Valores de <strong>creatinina &gt;1,6 mg/dL y CPK &gt;5000 U/L</strong> están relacionados con desarrollo de LRA o necesidad de TRR. <strong>Tratamiento:</strong> reanimación rápida y agresiva con fluidos isotónicos, eliminación de fármacos causales, corrección del síndrome compartimental, alcalinización de la orina (pH &gt;6,5) y mantenimiento de poliuria (&gt;300 mL/h).</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🎈 LRA por hipertensión abdominal</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La hipertensión intraabdominal (HIA) es la elevación persistente de la presión intraabdominal (PIA) &gt;12 mmHg, en 4 grados: <strong>Grado I</strong> 12-15 mmHg, <strong>Grado II</strong> 16-20 mmHg, <strong>Grado III</strong> 21-25 mmHg, <strong>Grado IV</strong> &gt;25 mmHg. En los grados III y IV se define el <strong>síndrome compartimental abdominal (SCA)</strong>, en el que la HIA causa disminución de la perfusión de los órganos intraabdominales, con una o más disfunciones orgánicas asociadas — entre ellas la LRA. Ante SCA demostrado: medición seriada de la PIA e instauración rápida de medidas — drenaje percutáneo de colecciones, evacuación del colon, corrección del balance hídrico positivo, relajantes musculares, y descompresión abdominal quirúrgica urgente — para descender la PIA y prevenir o limitar la gravedad de la LRA.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Enfoque de la monitorización de la función renal</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Debe basarse, en primer lugar, en las mediciones de creatinina sérica y gasto urinario. Los
+                pacientes con una reducción aguda de la función renal deben someterse a una evaluación sistemática y
+                rápida para identificar la causa específica, con particular atención en identificar y tratar las
+                <strong>etiologías reversibles</strong> de LRA. Este enfoque debe incluir una revisión de las
+                condiciones predisponentes y de la exposición aguda a situaciones que aumentan el riesgo de LRA.
+            </p>
+
+            <table class="data-table">
+                <thead><tr><th>Condiciones predisponentes</th><th>Exposiciones agudas</th></tr></thead>
+                <tbody>
+                    <tr><td>ERC</td><td>Sepsis</td></tr>
+                    <tr><td>Edad avanzada</td><td>Choque circulatorio</td></tr>
+                    <tr><td>Sexo femenino</td><td>Cirugía cardíaca/derivación cardiopulmonar</td></tr>
+                    <tr><td>Raza negra</td><td>Cirugía mayor no cardíaca</td></tr>
+                    <tr><td>Depleción de volumen</td><td>Quemaduras</td></tr>
+                    <tr><td>Insuficiencia cardíaca</td><td>Trauma</td></tr>
+                    <tr><td>Insuficiencia hepática / diabetes mellitus</td><td>Medicaciones nefrotóxicas (aminoglucósidos, anfotericina B, cisplatino)</td></tr>
+                    <tr><td>Fármacos AINE</td><td>Medios de contraste</td></tr>
+                    <tr><td>Inhibidores del sistema R-A-A</td><td>Toxinas (etilenglicol)</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Tabla 7. Factores de riesgo para el desarrollo de LRA.</p>
+
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El diagnóstico de LRA está basado clásicamente en el aumento de creatinina sérica o la disminución
+                del gasto urinario. Esta definición ha evolucionado desde los criterios <strong>RIFLE</strong> en
+                2004 hasta la clasificación <strong>AKIN</strong> en 2007 (ver Ficha 2). No fue hasta 2012 cuando el
+                consorcio <strong>KDIGO</strong> combinó los criterios RIFLE y AKIN para desarrollar la definición y
+                clasificación de LRA más ampliamente aceptada en la actualidad.
+            </p>
+
+            <table class="data-table">
+                <thead><tr><th>Etapa de LRA</th><th>Creatinina sérica</th><th>Volumen urinario</th></tr></thead>
+                <tbody>
+                    <tr><td>1</td><td>Entre 1,5 y 1,9 veces el valor basal, o &gt;0,3 mg/dL de aumento</td><td>&lt;0,5 mL/kg/h durante 6-12 h</td></tr>
+                    <tr><td>2</td><td>Entre 2,0 y 2,9 veces el valor basal</td><td>&lt;0,5 mL/kg/h durante &gt;12 h</td></tr>
+                    <tr><td>3</td><td>3 veces el valor basal, o aumento de creatinina sérica &gt;4,0 mg/dL, o inicio de terapia de reemplazo</td><td>&lt;0,3 mL/kg/h durante &gt;24 h, o anuria durante &gt;12 h</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Tabla 8. Clasificación KDIGO de la LRA.</p>
+
+            <p class="section-label" style="margin-top:16px;">Comentario final</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Un deterioro agudo de la función renal es común en la UCI y contribuye significativamente a
+                incrementar la morbimortalidad. Por esto, la monitorización de la función renal para identificar a
+                los pacientes en riesgo de LRA es crítica, ya que los mejores resultados en el pronóstico de estos
+                pacientes dependen de una <strong>detección temprana, intervención precoz y tratamiento específico a
+                tiempo</strong>. Solo el incremento de la urea y creatinina sérica, y la disminución del gasto
+                urinario, son las manifestaciones cardinales de LRA; la <span class="hl">recuperación espontánea del
+                volumen urinario y la reducción de las concentraciones de urea y creatinina</span> anuncian
+                generalmente la recuperación de la función renal.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Fuente</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Vergara J, González Zambrano L, Abrigo Robles J. Monitorización de la función renal en el paciente crítico. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección VII, Capítulo 48, págs. 839-857.</p>
+        </div>
+
+    </div>
+
+    <div class="card" style="margin-top: 20px;">
+        <h3>📚 Bibliografía</h3>
+        <ul class="biblio-list">
+            <li>
+                <a class="biblio-link" href="docs/libro-azul-seccion-vii-vias-urinarias.pdf#page=3" target="_blank" rel="noopener">Cap. 46 — Fisiopatología renal</a>
+                <span class="biblio-nota">Ardila Otero A. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección VII, págs. 817-826.</span>
+            </li>
+            <li>
+                <a class="biblio-link" href="docs/libro-azul-seccion-vii-vias-urinarias.pdf#page=13" target="_blank" rel="noopener">Cap. 47 — Fisiopatología de la lesión renal aguda</a>
+                <span class="biblio-nota">Arias Aguilera MA. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección VII, págs. 827-837.</span>
+            </li>
+            <li>
+                <a class="biblio-link" href="docs/libro-azul-seccion-vii-vias-urinarias.pdf#page=25" target="_blank" rel="noopener">Cap. 48 — Monitorización de la función renal en el paciente crítico</a>
+                <span class="biblio-nota">Vergara J, González Zambrano L, Abrigo Robles J. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección VII, págs. 839-857.</span>
+            </li>
+        </ul>
+    </div>

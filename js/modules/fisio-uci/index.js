@@ -5,27 +5,32 @@
 // una fuente real (ver CLAUDE.md).
 import { createViewSwitcher } from '../../core/navigation.js';
 import * as hematologia from './hematologia.js';
+import * as viasUrinarias from './vias-urinarias.js';
 import { preguntasFuciHematologia, temasFuciHematologia } from '../../data/fisio-uci-hematologia-preguntas.js';
+import { preguntasFuciViasUrinarias, temasFuciViasUrinarias } from '../../data/fisio-uci-vias-urinarias-preguntas.js';
 
 // El modal de repaso (#quiz-modal-overlay) es un único partial compartido
 // por TODA la app — solo puede existir una llamada activa a initQuiz() en
 // toda la página (ver quiz.js). Fisiopatología UCI expone aquí su
 // banco/temas para que main.js los fusione con los del resto de
 // especialidades en una única llamada.
-export const quizTriggerId = ['btn-fuci-hemato-repasar'];
-export const quizBanco = [...preguntasFuciHematologia];
-export const quizTemas = [...temasFuciHematologia];
+export const quizTriggerId = ['btn-fuci-hemato-repasar', 'btn-fuci-vu-repasar'];
+export const quizBanco = [...preguntasFuciHematologia, ...preguntasFuciViasUrinarias];
+export const quizTemas = [...temasFuciHematologia, ...temasFuciViasUrinarias];
 
 export function init() {
     const fisioUciLevel = createViewSwitcher({
         menu: document.getElementById('fisio-uci-menu-view'),
         hematologia: document.getElementById('fisio-uci-hematologia-view'),
+        viasUrinarias: document.getElementById('fisio-uci-vias-urinarias-view'),
     });
 
     document.getElementById('btn-fuci-hematologia').addEventListener('click', () => fisioUciLevel.show('hematologia'));
+    document.getElementById('btn-fuci-vias-urinarias').addEventListener('click', () => fisioUciLevel.show('viasUrinarias'));
     document.querySelectorAll('.btn-volver-fuci-menu').forEach(b => b.addEventListener('click', () => fisioUciLevel.show('menu')));
 
     hematologia.init();
+    viasUrinarias.init();
 
     fisioUciLevel.show('menu');
 
