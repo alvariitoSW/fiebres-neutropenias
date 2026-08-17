@@ -391,9 +391,9 @@ export const preguntasERC = [
         id: 'erc-q036',
         tema: 'erc-pa-raas',
         enunciado: 'Tras iniciar o intensificar el bloqueo del SRAA, ¿qué descenso del FGe respecto al basal se considera aceptable, sin necesidad de suspender el fármaco?',
-        opciones: ['Un descenso <25% respecto al basal', 'Cualquier descenso, sin excepción, obliga a suspender', 'Solo se acepta un descenso del 90%', 'No se recomienda monitorizar el FGe tras iniciar estos fármacos'],
+        opciones: ['Un descenso <30% respecto al basal', 'Cualquier descenso, sin excepción, obliga a suspender', 'Solo se acepta un descenso del 90%', 'No se recomienda monitorizar el FGe tras iniciar estos fármacos'],
         correcta: 0,
-        explicacion: 'Un descenso del FGe <25% respecto al basal es aceptable y se continúa el tratamiento; un descenso ≥25% debe motivar investigar otras causas (depleción de volumen, AINE, estenosis de arteria renal) antes de suspender de forma reactiva.',
+        explicacion: 'Un descenso del FGe <30% respecto al basal es aceptable y se continúa el tratamiento; un descenso ≥30% debe motivar investigar otras causas (depleción de volumen, AINE, estenosis de arteria renal) antes de suspender de forma reactiva.',
     },
     {
         id: 'erc-q037',
@@ -450,7 +450,7 @@ export const preguntasERC = [
         enunciado: '¿A partir de qué FGe se recomienda iniciar un iSGLT2 en la ERC, independientemente de si hay diabetes tipo 2?',
         opciones: ['FGe ≥20 ml/min/1,73m²', 'FGe ≥90 ml/min/1,73m² únicamente', 'Solo si el FGe es <15', 'No existe ningún umbral de FGe para su uso'],
         correcta: 0,
-        explicacion: 'Se recomienda tratamiento con un iSGLT2 en adultos con ERC y FGe ≥20 ml/min/1,73m², con o sin diabetes tipo 2, con o sin albuminuria significativa — uno de los cambios de mayor impacto de esta actualización.',
+        explicacion: 'Se recomienda tratamiento con un iSGLT2 desde un FGe ≥20 ml/min/1,73m² — uno de los cambios de mayor impacto de esta actualización. Matiz importante: la recomendación firme (1A) es independiente del nivel de albuminuria solo en diabetes tipo 2 o insuficiencia cardíaca; sin ninguna de las dos, exige ACR ≥200 mg/g (por debajo de ese umbral, la recomendación es más débil, 2B).',
     },
     {
         id: 'erc-q042',

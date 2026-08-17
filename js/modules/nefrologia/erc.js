@@ -63,8 +63,9 @@ function calcCgaCategorizador() {
     const creatinina = Number(crEl.value);
     const edad = Number(edadEl.value);
     const sexo = sexoEl.value;
+    if (!creatinina || !edad || acrEl.value === '') return;
     const acr = Number(acrEl.value);
-    if (!creatinina || !edad || acr === '' || Number.isNaN(acr)) return;
+    if (Number.isNaN(acr)) return;
 
     const fge = ckdEpi2021(creatinina, edad, sexo);
     const g = categoriaG(fge);
@@ -122,7 +123,7 @@ function calcPanelAnalitico() {
         if (k < 3.5) filas.push(filaPanel('⚠️', '--accent-yellow', `Potasio ${k} mEq/l — hipopotasemia, investigar causa.`));
         else if (k <= 5.0) filas.push(filaPanel('✅', '--accent-green', `Potasio ${k} mEq/l — en rango normal.`));
         else if (k <= 5.9) filas.push(filaPanel('⚠️', '--accent-yellow', `Potasio ${k} mEq/l — hiperpotasemia leve-moderada. Iniciar manejo escalonado (Ficha 7).`));
-        else if (k <= 6.4) filas.push(filaPanel('🔴', '--accent-red', `Potasio ${k} mEq/l — hiperpotasemia moderada. Evaluar y tratar (Ficha 7).`));
+        else if (k < 6.5) filas.push(filaPanel('🔴', '--accent-red', `Potasio ${k} mEq/l — hiperpotasemia moderada. Evaluar y tratar (Ficha 7).`));
         else filas.push(filaPanel('🔴', '--accent-red', `Potasio ${k} mEq/l — hiperpotasemia grave. Actuación inmediata, ECG y monitorización (Ficha 7).`));
     }
 

@@ -1690,6 +1690,101 @@ por encima que sí diera cabida a todos.
       calcioantagonistas dihidropiridínicos tiene un indicio débil de
       posible confusión con la subclase no dihidropiridínica, sin
       confirmación textual directa.
+  - **Auditoría de 3 agentes de "ERC"**: mismo método de 3 agentes que
+    Fisiopatología renal y HTA, aplicado a las 13 fichas de `erc.html`,
+    `erc.js` (calculadoras) y `erc-preguntas.js` contra los 3 PDF de
+    bibliografía (KDIGO 2024, 198 páginas en 2 partes, y el PDF de Arenas
+    sobre la Unidad de ERCA que sustenta la Ficha 13). Sin fuga de
+    información real en ninguna dirección. A diferencia de las 2
+    auditorías anteriores, esta incluyó dos "dudas" que no se podían
+    resolver con los PDF ya disponibles (los ensayos STOP-ACEi y FEATHER,
+    citados por nombre pero sin cifras exactas en KDIGO) — se abrieron con
+    `WebSearch` contra las publicaciones originales, siguiendo el mismo
+    criterio de nunca fabricar una cifra sin verificarla:
+    - **Bug de código confirmado sin necesitar bibliografía** en
+      `calcCgaCategorizador()`: el guard `acr === ''` se comprobaba
+      DESPUÉS de convertir el valor con `Number()` (`Number('') === 0`,
+      nunca `''`) — al borrar el campo ACR tras haber calculado con un
+      valor real, la calculadora recalculaba silenciosamente con ACR=0 en
+      vez de detenerse, mostrando una categoría A1 falsa. Corregido
+      comprobando `acrEl.value === ''` antes de convertir a número.
+      Verificado con Playwright: tras introducir ACR=350 y borrarlo, la
+      calculadora ya no recalcula a A1, se abstiene y mantiene el último
+      resultado válido.
+    - **Inconsistencia app↔app confirmada, sin necesitar bibliografía**
+      en `calcPanelAnalitico()`: el umbral de "hiperpotasemia grave" en el
+      código empezaba en &gt;6,4 (es decir, ya clasificaba 6,41-6,49 como
+      grave), mientras que la propia Ficha 7 de la app define grave como
+      "K⁺ ≥6,5 mmol/l" y moderada como "6,0-6,4 mmol/l". Corregido el
+      corte del código a &lt;6,5 para "moderada" / ≥6,5 para "grave",
+      alineándolo con el texto ya existente.
+    - **Mapa de riesgo de "5 niveles" en el texto de la Ficha 1**
+      (`erc-definicion`): mencionaba un patrón "verde→amarillo→naranja→
+      rojo→rojo oscuro" (5 niveles) que contradecía tanto la matriz real
+      de KDIGO (4 niveles) como el propio código de `erc.js`
+      (`MAPA_RIESGO`/`RIESGO_TEXTO`, ya con 4 niveles correctos desde el
+      principio). Corregido el texto a 4 niveles.
+    - **Descenso de FGe tras bloqueo del SRAA: 25% vs. 30%**
+      (`erc-pa-raas`): el "algoritmo en 3 ramas" de la propia ficha ya
+      usaba correctamente ≥30%, pero la tabla de monitorización semanal
+      justo debajo, y la pregunta `erc-q036`, usaban 25% para el mismo
+      punto de decisión — contradicción interna real. Verificado
+      releyendo directamente el PDF de KDIGO (Practice Point 3.6.4 y el
+      algoritmo de la Figura 21): el umbral correcto es ≥30% ("$30%
+      decrease in eGFR ... should be a trigger to investigate"), no 25%.
+      Corregidos la tabla y la pregunta del quiz a 30%.
+    - **Tabla de umbrales KFRE con una cifra sin respaldo**
+      (`erc-riesgo`): la fila "&gt;10% a 5 años (o &gt;2% a 2 años en
+      G4-G5)" mezclaba de forma incorrecta un umbral a 5 años con uno a 2
+      años y añadía una cifra ("&gt;2% a 2 años en G4-G5") no presente en
+      la fuente. Releyendo KDIGO directamente (Practice Points 2.2.1-2.2.3):
+      son 3 umbrales reales y distintos — riesgo a 5 años &gt;3-5% →
+      derivación a nefrología (ya correcto en la fila anterior de la
+      tabla); riesgo a 2 años &gt;10% → determinar el momento de la
+      atención multidisciplinar; riesgo a 2 años &gt;40% → educación de
+      modalidad y preparación de TRS. Tabla reescrita con los 3 umbrales
+      reales tal como los cita la fuente.
+    - **Ensayo STOP-ACEi con FGe basal y FGe de resultado confundidos**
+      (`erc-nefroproteccion`): el texto decía "411 participantes con FGe
+      medio de 13 ml/min/1,73m² fueron aleatorizados", pero verificando
+      la publicación original (NEJM 2022) por `WebSearch`, el FGe basal
+      mediano al azar era 18 ml/min/1,73m² — el "13" era en realidad el
+      FGe medio a los 3 años (resultado final, no la cifra basal: 12,6 en
+      el grupo de suspensión vs. 13,3 en el de continuación, sin
+      diferencia significativa). Corregido para citar ambas cifras en su
+      lugar correcto.
+    - **Verificadas como correctas, sin cambios**: la atribución de la
+      definición de hiperuricemia (≥6,8 mg/dl) al American College of
+      Rheumatology (`erc-q061`) está literalmente en KDIGO ("The American
+      College of Rheumatology defines hyperuricemia as..."); el tamaño
+      muestral "n=467" del ensayo FEATHER citado en la Ficha 8 coincide
+      con la publicación original (467 personas incluidas, 443
+      aleatorizadas);
+      la cifra de biopsia renal "hematoma perirrenal ~16%" no era una
+      contradicción con "12-22% según las series" — son la misma cifra
+      agrupada de un metaanálisis de 14 estudios con su IC95%, solo mal
+      redactada (corregido a "incidencia estimada del 16% (IC95%
+      12-22%)"); la nuance de iSGLT2 "con o sin albuminuria significativa"
+      ya estaba bien matizada en la propia ficha (con nota explícita del
+      umbral ACR≥200 en no diabéticos/sin IC) — solo faltaba trasladar el
+      mismo matiz a la explicación de `erc-q041`, que repetía la
+      formulación simplificada.
+    - **Contenido añadido tras confirmar el hueco**: la cifra de
+      prevalencia de fatiga en la población CONTROL sin ERC (34%, IC95%
+      0-70%, de la misma Figura 49/revisión sistemática ya citada para el
+      70% en ERC) — presente en KDIGO pero ausente de la Ficha 11, se
+      añadió como contraste explícito junto al 70%.
+    - **Nota de reconciliación añadida, sin cambiar cifras** (Ficha 13,
+      `erc-unidad-erca`): los umbrales de FG para inicio de diálisis de
+      la Ficha 13 (protocolo Arenas/SEN: FGe 8-10 habitual, límite duro
+      6-7 aunque asintomático) y de la Ficha 11 (KDIGO: FG 5-10 "habitual
+      pero no invariable", basado en clínica según el ensayo IDEAL) son
+      compatibles pero no idénticos — ambos agentes, de forma
+      independiente, señalaron esta fricción real entre las dos fuentes.
+      No se cambió ninguna cifra (cada ficha es fiel a su propia fuente);
+      se añadió una nota aclarando que el umbral duro de la Ficha 13 actúa
+      como límite de seguridad práctico dentro del mismo rango que KDIGO
+      cita como "habitual", no como sustituto del criterio clínico.
 
 ### UCI / Papers Tuiter
 
