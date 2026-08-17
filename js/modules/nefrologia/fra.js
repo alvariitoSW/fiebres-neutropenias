@@ -23,7 +23,7 @@ function calcEstadioKdigo() {
     const razon = actual / basal;
 
     let estadio = 0;
-    if (razon >= 3 || actual >= 4) estadio = 3;
+    if (razon >= 3 || (actual >= 4 && (delta >= 0.5 || razon >= 1.5))) estadio = 3;
     else if (razon >= 2) estadio = 2;
     else if (delta >= 0.3 || razon >= 1.5) estadio = 1;
 
@@ -60,11 +60,12 @@ function calcFenaIfr() {
     const box = document.getElementById('fra-fena-resultado');
     if (!naoEl || !nasEl || !croEl || !crsEl || !box) return;
 
+    if ([naoEl, nasEl, croEl, crsEl].some(el => el.value === '')) return;
     const nao = Number(naoEl.value);
     const nas = Number(nasEl.value);
     const cro = Number(croEl.value);
     const crs = Number(crsEl.value);
-    if (!nao || !nas || !cro || !crs) return;
+    if ([nao, nas, cro, crs].some(Number.isNaN) || !nas || !cro) return;
 
     const fena = ((nao * crs) / (nas * cro)) * 100;
     const ifr = (crs * nao) / cro;

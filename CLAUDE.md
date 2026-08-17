@@ -1785,6 +1785,76 @@ por encima que sí diera cabida a todos.
       se añadió una nota aclarando que el umbral duro de la Ficha 13 actúa
       como límite de seguridad práctico dentro del mismo rango que KDIGO
       cita como "habitual", no como sustituto del criterio clínico.
+  - **Auditoría de 3 agentes de "FRA"**: mismo método de 3 agentes que
+    Fisiopatología renal, HTA y ERC, aplicado a las 9 fichas de `fra.html`,
+    `fra.js` (calculadoras) y `fra-preguntas.js` contra el único PDF de
+    bibliografía (Rodríguez Benítez, Ramos Terrades, Poch. Insuficiencia
+    Renal Aguda. Nefrología al día, 2025). Sin fuga de información
+    sustancial (un desliz autocontenido del Agente 1, citando "36
+    páginas/113 referencias" del artículo — dato ya presente en este
+    mismo `CLAUDE.md`, no algo que requiriera leer el PDF prohibido).
+    Todas las dudas se abrieron con relectura/verificación dirigida, sin
+    dejar ninguna sin resolver, siguiendo el mismo criterio ya usado en
+    la auditoría de ERC:
+    - **Bug real en `calcEstadioKdigo()`** (`fra.js`): clasificaba
+      Estadio 3 con solo `creatinina actual ≥4 mg/dl`, sin exigir el
+      aumento agudo (`≥0,5 mg/dl en 48h` o `1,5× basal`) que exige la
+      propia Tabla 1 de la ficha — un paciente con ERC avanzada cuya
+      creatinina bajaba de 10 a 4,5 (mejorando claramente) se marcaba
+      igual como falso Estadio 3. Corregido a
+      `razon >= 3 || (actual >= 4 && (delta >= 0.5 || razon >= 1.5))`;
+      verificado con Playwright que el caso de "mejoría" ya no dispara
+      Estadio 3, y que los casos reales de Estadio 3 (por razón ≥3, o por
+      creatinina ≥4 con aumento agudo genuino) se siguen detectando bien.
+    - **"≤68h" — hallazgo de máxima confianza**: typo real de la ficha
+      (`fra-diagnostico`, debería ser "≤48h", el marco temporal que usa
+      KDIGO en el resto del documento) coincidente EXACTAMENTE con la
+      misma cifra "68h" que el Agente 2 encontró, de forma
+      completamente independiente, en la Figura 1 del PDF original — no
+      es un error introducido por la app, es una errata real de la
+      fuente, fielmente reproducida. Añadida una nota aclaratoria en vez
+      de "corregir" la cifra por criterio propio (mismo patrón que el
+      IFR de esta misma sección y la fórmula del IR de HTA).
+    - **Guard clause de "0 tratado como vacío"** en ambas calculadoras
+      (`fra.js`): `if (!nao || ...) return;` congelaba silenciosamente
+      el resultado si el sodio en orina era 0 (valor legítimo — mín. del
+      campo es `0` — en hipoperfusión grave con retención ávida de
+      sodio). Corregido comprobando `.value === ''` antes de convertir a
+      número, manteniendo el guard de división por cero para los
+      denominadores (Nas, Cro) que sí no pueden ser 0. Verificado con
+      Playwright: Nao=0 ahora calcula FENa=0,00% en vez de congelarse.
+    - **NephroCheck® "FDA 2012"**: confirmado que el PDF original dice
+      literalmente "2012" — verificado por `WebSearch` contra el propio
+      documento de la FDA (den130031) que el clearance real fue en 2014.
+      Añadida una nota junto a la cifra señalando la posible errata del
+      artículo, sin sustituir la cifra citada por la fuente.
+    - **"Proteinuria &gt;500 mg/dl" en el criterio de SHR-IRA**:
+      confirmado que el PDF dice literalmente "mg/dl" — verificado por
+      `WebSearch` que los criterios estándar del International Club of
+      Ascites (ICA) usan mg/**día** (500 mg/24h), no mg/dl (una
+      concentración así sería clínicamente extrema). Añadida una nota
+      aclaratoria junto a la cifra, mismo criterio que el resto de
+      erratas de fuente ya documentadas.
+    - **Descartado tras el cruce, sin necesitar cambios**: la diferencia
+      "0,3 mg/dl" (criterio general de IRA) vs. "0,5 mg/dl" (criterio de
+      aumento agudo específico del Estadio 3) no era una inconsistencia
+      — son dos criterios reales y distintos de la misma Tabla 1 KDIGO,
+      ambos ya bien transcritos en la ficha.
+    - **Notas de reconciliación añadidas, sin cambiar cifras**: la
+      incidencia de IRA-sepsis "40%" (metaanálisis general, Ficha 2) y
+      "45-70%" (específica de UCI, Ficha 3) — el Agente 2 confirmó que
+      ambas cifras son reales, de secciones distintas del mismo artículo,
+      sin que la propia fuente las reconcilie tampoco; y la redacción
+      "Hiperpotasemia &gt;6,5 mmol/l **y** acidosis metabólica con pH
+      &lt;7,2, refractarias" (Ficha 7, indicaciones urgentes de TRS) —
+      fiel a la fuente pero clínicamente ambigua (podría leerse como
+      exigir ambas a la vez), aclarada con una nota de que cada una es
+      indicación urgente independiente si es grave y refractaria por sí
+      sola.
+    - Añadidas también las referencias bibliográficas concretas
+      (Castro I et al., Clin Kidney J. 2022; Fayad AI et al., Cochrane
+      2022) al metaanálisis y la revisión Cochrane de la Ficha 7, que
+      antes se citaban sin autor.
 
 ### UCI / Papers Tuiter
 
