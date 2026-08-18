@@ -10,10 +10,11 @@ ajuste de fármacos), **UCI / Papers Tuiter** con varios papers resumidos
 (resucitación hemodinámica en shock séptico, óxido nítrico inhalado,
 disfunción del VD y LRA postoperatoria), y **Fisiopatología UCI** con
 repasos de capítulos de "El Libro Azul: Bases Fisiopatológicas de la
-Medicina Crítica" (hoy, Hematología y Hemostasia en Cuidados Críticos).
-Está pensada para ir creciendo con más especialidades (cardiología,
-radiología, etc.) según se vaya aportando contenido. Es una herramienta de
-apoyo para médicos, pensada para consultarse a pie de cama en el móvil.
+Medicina Crítica" (hoy, Hematología y Hemostasia en Cuidados Críticos,
+Vías Urinarias, y Cardiología). Está pensada para ir creciendo con más
+especialidades (radiología, etc.) según se vaya aportando contenido. Es
+una herramienta de apoyo para médicos, pensada para consultarse a pie de
+cama en el móvil.
 
 ## Decisiones de arquitectura (ya tomadas, no las reabras sin preguntar)
 
@@ -2271,6 +2272,107 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
     de no repetir texto ya construido en otro módulo con fuente propia
     distinta (ver el precedente ya establecido entre TRR y FRA en
     Nefrología).
+- **Tercer bloque: "Cardiología"** (`js/modules/fisio-uci/cardiologia.html`).
+  Fuente: El libro azul. Bases fisiopatológicas de la medicina crítica.
+  Sección I, Aparato Cardiovascular, capítulos 1-11 (165 páginas) — el
+  bloque más extenso de Fisiopatología UCI hasta ahora, más del doble de
+  cualquier bloque anterior. PDF subido en **2 archivos** por el propio
+  tamaño de la sección (`docs/libro-azul-seccion-i-cardiovascular-parte1.pdf`,
+  100 págs., capítulos 1-6; `docs/libro-azul-seccion-i-cardiovascular-parte2.pdf`,
+  70 págs., capítulos 7-11) — a diferencia de Hematología/Vías Urinarias,
+  aquí no hay offset de página único: Parte 1 no tiene desplazamiento
+  (página impresa = página del PDF, portada=1, contenido desde página 3) y
+  Parte 2 sí (offset −100, porque continúa la numeración de libro desde la
+  página 101 pero es un PDF nuevo que empieza en su propia página 1) —
+  verificado leyendo ambos PDF completos página por página antes de
+  extraer nada, sin asumir que la numeración fuera continua entre archivos.
+  Tercer botón del submenú de bloques (`#btn-fuci-cardiologia`), con
+  `fisioUciLevel` (en `fisio-uci/index.js`) ganando una tercera entrada
+  (`cardiologia`) junto a `hematologia`/`viasUrinarias` — mismo patrón
+  exacto, sin cambios de arquitectura.
+  - **Cuaderno de campo de 11 fichas** (`#cardio-corkboard`/
+    `#panel-cardio-tabs`, mismo `core/corkboard.js` de siempre, sin
+    calculadoras propias — `cardiologia.js` solo llama a
+    `initCorkboard(...)`), una por capítulo, todos con correspondencia
+    1:1 fuente↔ficha igual que en los bloques anteriores: Fisiología
+    cardíaca aplicada (sistema de conducción, ciclo de Wiggers, tonos
+    cardíacos, onda de PVY, Frank-Starling, ley de Laplace, MVO₂),
+    Fisiopatología cardiovascular — de lo fundamental a lo importante
+    (marco conceptual: el sistema CV como transportador de oxígeno, los
+    4 componentes interdependientes — bomba, volumen, continente
+    vascular, microcirculación —, capítulo breve y puramente conceptual
+    sin figuras propias), Disfunción cardíaca sistólica y diastólica
+    (curva presión-volumen, Ees/FRSPV, FRPVD, manejo del calcio,
+    interdependencia sistólica-diastólica), ¿Cómo funciona la
+    microcirculación? (circulación mayor/menor, red microcirculatoria,
+    fuerzas de Starling capilares, glucocálix endotelial, disociación
+    macro-microcirculatoria), Monitorización hemodinámica sistémica
+    clásica — la ficha más extensa, con 9 de las 21 figuras del bloque
+    (colocación del catéter de arteria pulmonar, presiones normales de
+    cavidades, onda de PVC a-c-x-v-y, índices DO₂/VO₂/GC/IC/OEI con sus
+    fórmulas, PPV, 17 segmentos del VI, TAPSE, patrones de disfunción
+    diastólica, gradientes de pared del VI), Fisiopatología de la
+    enfermedad coronaria (estabilidad de placa vs. tamaño, cascada
+    isquémica, lesión por reperfusión — capítulo corto, 4 páginas, sin
+    figuras propias), Hipertensión pulmonar en el paciente crítico
+    (definiciones hemodinámicas PAPm/PEP/GTPd, predictores de mortalidad
+    PVRI/REI, vasodilatadores pulmonares específicos, acrónimo CRASH),
+    Fisiopatología de la embolia pulmonar (tríada de Virchow, mediadores
+    vasoactivos TXA2/serotonina/endotelina-1, cascada VD→isquemia→colapso,
+    alteración V/Q), Fisiopatología del ventrículo derecho (retorno
+    venoso, disfunción del VD por TEP/taponamiento/choque
+    cardiogénico/sepsis/SDRA-EPOC, VD y VM), Fisiopatología de los
+    estados de choque (epidemiología por tipo, tabla de 4 patrones
+    hemodinámicos GC/RVS/PVC/PCP/VSTI/ScVO₂/láctico, mediadores del
+    choque séptico, mecanismos de respuesta compensadora), y
+    Fisiopatología de la interacción corazón-pulmón (Ppl/GC/retorno
+    venoso, interdependencia ventricular, efectos de la VM sobre la
+    vasculatura pulmonar, ecocardiografía en la interacción
+    cardiopulmonar — VCI, evaluación del VD, índice E/Em, ITV).
+  - **21 figuras reales**, el bloque con más imágenes de todo el proyecto
+    — a diferencia de los bloques anteriores, donde `pdfimages -list`
+    encontraba pocas imágenes grandes y el resto eran gráficos
+    vectoriales, en este PDF **todas** las figuras clínicamente
+    relevantes (curvas de presión, diagramas de circulación,
+    ecocardiografías reales, cortes histológicos) están embebidas como
+    imagen rasterizada — se extrajeron con `pdfimages -png` + composición
+    Pillow con `smask` (mismo método ya establecido), tras filtrar con
+    `pdfimages -list | awk` las imágenes genuinamente grandes (>300×300)
+    frente a los logos de marca de agua repetidos (189×107, presentes en
+    casi todas las páginas). Cada una de las ~21 candidatas encontradas
+    se revisó visualmente antes de decidir incluirla — todas resultaron
+    ser contenido real y valioso (ninguna se descartó), a diferencia de
+    bloques anteriores donde algunas imágenes eran solo logos: sistema de
+    conducción cardíaco, ciclo de Wiggers, curva presión-volumen del VI,
+    corte histológico de hipertrofia ventricular concéntrica, esquema de
+    circulación mayor/menor, red microcirculatoria, fuerzas de Starling
+    capilares, colocación del catéter de arteria pulmonar, onda de PVC
+    a-c-x-v-y, presiones normales de las cavidades, catéter de arteria
+    pulmonar con curvas, gradientes de pared del VI con sarcómeros,
+    variación de la presión de pulso, los 17 segmentos del VI, TAPSE real
+    (ecografía M-mode), los 4 patrones de disfunción diastólica, patrones
+    del choque circulatorio, curva GC-presión AD por presión intrapleural,
+    curvas hemodinámicas simultáneas durante VM, esquema corazón-pulmón-
+    pleura, y la ecografía subcostal real de la VCI (paneles A/B).
+    Ninguna tabla se extrajo como imagen — todas (definiciones de HP,
+    índices DO₂/VO₂, presiones normales, patrones de choque, mediadores
+    del choque séptico) se recrearon como `.data-table` nativas, mismo
+    criterio que el resto del proyecto.
+  - **88 preguntas de quiz** (`js/data/fisio-uci-cardiologia-preguntas.js`,
+    `cardio-q001`-`q088`, 8 por ficha × 11 fichas — 6 de opción múltiple +
+    2 de tipo `redactar` por ficha, mismo formato exacto que los bloques
+    anteriores, con varias preguntas de redactar planteadas como casos
+    clínicos que integran mecanismos de más de una ficha — p. ej.
+    distinguir hipovolemia real de interdependencia ventricular por
+    disfunción del VD usando la VVP). `triggerId: 'btn-fuci-cardio-repasar'`,
+    añadido al array que ya exporta `fisio-uci/index.js` — sin tocar
+    `main.js`. El banco combinado de toda la app queda en **990
+    preguntas** (902 previas + 88 de este bloque).
+  - **Bibliografía**: 11 entradas, una por capítulo, enlazando a
+    `docs/libro-azul-seccion-i-cardiovascular-parte1.pdf#page=N` (capítulos
+    1-6, N = página impresa, sin offset) o
+    `docs/libro-azul-seccion-i-cardiovascular-parte2.pdf#page=N` (capítulos
+    7-11, N = página impresa − 100) según corresponda.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
