@@ -1315,6 +1315,55 @@ por encima que sí diera cabida a todos.
     (`erc-q089`-`q096`, mismo baseline de 8 usado al arrancar el resto de
     fichas de ERC), llevando el banco de ERC a 96 preguntas y el banco
     combinado de toda la app a **775 preguntas** (767 previas + 8).
+  - **Integración del documento S.E.N. 2014 sobre las guías KDIGO**: a
+    petición del usuario, se revisó Gorostidi M, Santamaría R, Alcázar R,
+    et al. Documento de la Sociedad Española de Nefrología sobre las guías
+    KDIGO para la evaluación y el tratamiento de la enfermedad renal
+    crónica. Nefrología. 2014;34(3):302-16 (archivado en
+    `docs/gorostidi-2014-sen-guias-kdigo-erc.pdf`) — el resumen que la
+    S.E.N. hizo en su día de las guías **KDIGO 2012/2013** (definición,
+    estadificación, HTA, derivación), es decir, la versión **anterior** a
+    la KDIGO 2024 ya usada como fuente principal de `erc.html`. Antes de
+    añadir nada se comprobó explícitamente, ficha por ficha, qué
+    contenido del documento ya estaba cubierto (para no duplicar) y qué
+    era genuinamente nuevo — la mayor parte del documento (definición de
+    ERC, categorías G/A, causas, derivación) ya estaba desarrollada con
+    más detalle a partir de KDIGO 2024, así que solo se incorporó lo que
+    faltaba: 1) **Tabla de prevalencia de complicaciones por grado de FG**
+    (HTA/anemia/hiperparatiroidismo/hiperfosfatemia/déficit de vitamina D/
+    acidosis/hipoalbuminemia, con cifras reales de Lerin et al. e Inker et
+    al.) añadida a la Ficha 1, un dato epidemiológico ausente hasta
+    ahora; 2) **valores objetivo concretos de metabolismo óseo-mineral**
+    (calcidiol &gt;30 ng/ml, calcio 8,4-9,5 mg/dl, fósforo 2,5-4,5 mg/dl,
+    PTHi 35-70/70-110 pg/ml según estadio) añadidos a la Ficha 8, que
+    hasta ahora solo decía que KDIGO 2024 remite a una guía aparte sin
+    repetir cifras — un hueco real que este documento sí cubre con
+    valores prácticos; junto con los **criterios de tratamiento de la
+    anemia** (Hb objetivo ≤11,5 g/dl, umbral de IST≤30%/ferritina≤500
+    ng/ml para iniciar hierro antes que ESA, Hb&lt;10 g/dl como umbral de
+    inicio de ESA), igual de ausentes hasta ahora; 3) **tamaños de efecto
+    cuantificados** de las medidas no farmacológicas sobre la PA
+    (reducción de peso: 9-23 mmHg; restricción de sal a 4-6 g/día: 4-5
+    mmHg; ejercicio 3-5 sesiones/semana: 6 mmHg) añadidos a la Ficha 4,
+    enriqueciendo recomendaciones que ya existían pero sin cifra de
+    impacto; 4) una **nota histórica** en la Ficha 5 explicando que el
+    objetivo &lt;130/80 (albuminuria elevada) / &lt;140/90 (S.E.N.
+    2014/KDIGO 2012) no es una versión "menos estricta" del &lt;120 mmHg
+    de KDIGO 2024 sin más — son técnicas de medida distintas (clínica
+    convencional vs. protocolizada tipo SPRINT), y compararlas cifra a
+    cifra sin ese matiz lleva a conclusiones erróneas; y 5) una
+    **sección nueva de Vacunaciones** en la Ficha 11 (gripe con FGe &lt;60,
+    neumocócica con FGe &lt;30 o síndrome nefrótico/diabetes/
+    inmunosupresión, hepatitis B con FGe &lt;30 y riesgo de progresión) —
+    un tema ausente por completo en toda la app hasta ahora, confirmado
+    por grep antes de escribir nada. Añadida una 3ª entrada a la
+    bibliografía de `erc.html` documentando exactamente qué fichas usan
+    esta fuente. Ninguna calculadora ni cifra ya existente se tocó ni se
+    "corrigió" con las cifras más antiguas de este documento — el
+    criterio, como en el resto del proyecto, es que una fuente más
+    reciente no invalida una más antigua salvo contradicción directa
+    verificada, y aquí no la hubo: son complementarias, cubriendo huecos
+    distintos.
   - **`trr.html`** (objetivo de rotación 7, "Terapias de reemplazo renal")
     fue la 4ª de las 6 categorías del mapa del riñón en pasar de
     placeholder a contenido real, a partir de Valdenebro M,
