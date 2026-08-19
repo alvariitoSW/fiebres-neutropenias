@@ -1,2 +1,6 @@
 # graft's local graph cache — regenerable, not committed (run `graft build`).
 /graft/
+
+# Isolated git worktrees created by background agents (Agent tool,
+# isolation: "worktree") — transient scratch state, cleaned up automatically.
+/.claude/worktrees/
