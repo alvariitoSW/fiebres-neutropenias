@@ -218,6 +218,25 @@
             </div>
         </div>
 
+        <div class="field-card" data-tab="cardio-bibliografia">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 12</div>
+                    <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-yellow)" stroke-width="1.6">
+                        <rect x="20" y="14" width="40" height="28" rx="2" stroke-opacity="0.85"/>
+                        <path d="M26,20 L54,20 M26,26 L54,26 M26,32 L46,32" stroke-width="1.2"/>
+                    </svg>
+                    <div class="field-name">Bibliografía</div>
+                    <div class="field-hook">¿De dónde sale todo el contenido de este bloque de Cardiología?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">De los 11 capítulos de la Sección I (Aparato Cardiovascular) de "El libro azul: Bases fisiopatológicas de la medicina crítica" — con enlace directo a la página exacta de cada uno.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
     </div>
     <p class="tap-hint">☝ toca una ficha para ver la pista, y de nuevo para abrir el tema completo</p>
 
@@ -1253,6 +1272,18 @@
                 <div class="article-figure-caption">Esquema de las presiones endocavitarias cardíacas.</div>
             </div>
 
+            <p class="section-label" style="margin-top:16px;">Presión capilar pulmonar y gradiente transpulmonar</p>
+            <dl class="kv-row"><dt>Presión capilar pulmonar</dt><dd>Fuerza dinámica que permite el paso de líquido a través de los capilares pulmonares — niveles elevados condicionan edema pulmonar. No puede evaluarse directamente: oscila entre la presión de la arteria pulmonar y la de la aurícula izquierda, con un gradiente de <strong>6-8 mmHg</strong>, determinado por el flujo sanguíneo, la resistencia vascular pulmonar y la presión de la arteria pulmonar.</dd></dl>
+            <dl class="kv-row"><dt>Gradiente transpulmonar (GTP)</dt><dd>GTP = PAP media − presión Wedge. Permite distinguir si la hipertensión pulmonar (HP) de un paciente es simplemente el reflejo pasivo de presiones izquierdas elevadas, o si tiene un componente vascular pulmonar propio añadido.</dd></dl>
+            <table class="data-table">
+                <thead><tr><th>Gradiente transpulmonar</th><th>Resistencia vascular pulmonar</th><th>Interpretación</th></tr></thead>
+                <tbody>
+                    <tr><td>&lt;12-15</td><td>&lt;200-240 din·s/cm⁵ (2,5-3 UW)</td><td><strong>HP proporcional o pasiva</strong> — al reducir la presión Wedge (p. ej. tratando la falla izquierda) se logra disminuir la PAP</td></tr>
+                    <tr><td>&gt;12-15</td><td>&gt;200-240 din·s/cm⁵ (2,5-3 UW)</td><td><strong>HP desproporcionada o reactiva</strong> — patrón independiente de la Wedge, con un componente vascular pulmonar propio que no revierte solo con bajar la presión de llenado izquierda</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">👉 Nota sobre el análisis de la curva: el paso por la aurícula genera un contorno de baja amplitud (6-12 mmHg); el ventrículo tiene una amplitud de 20-25 mmHg con diastólica de 0; en la arteria pulmonar la diastólica aumenta a 6-12 mmHg, en comparación con la previa, que disminuye la amplitud.</p>
+
             <table class="data-table">
                 <thead><tr><th colspan="2">Indicaciones del catéter de Swan-Ganz</th></tr></thead>
                 <tbody>
@@ -1341,6 +1372,7 @@
                 </tbody>
             </table>
             <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Nota de fidelidad: el capítulo advierte que ninguno de estos valores aislados basta — "el manejo integral es guiado por metas", conociendo que aproximadamente la mitad de los pacientes de UCI no son respondedores a fluidos, y que la sobrecarga de líquidos se ha asociado con aumento de la mortalidad.</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Inconsistencia real de la propia fuente: el capítulo define el IRVS de 2 formas distintas en puntos diferentes del texto — como <strong>(PAM − PVC) × 80/IC</strong> (normal 1600-2400 din·s·m²/cm⁵, la fórmula usada arriba) y, más adelante en su tabla-resumen, como <strong>RVS × ASC</strong> (normal 1800-2500 din·s/cm⁵/m²) — dos definiciones matemáticamente distintas del mismo índice, con rangos normales ligeramente diferentes. Se reproduce aquí la primera (la que el capítulo desarrolla paso a paso), señalando la discrepancia en vez de ocultarla.</p>
 
             <p class="section-label" style="margin-top:16px;">Termodilución cardíaca</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
@@ -1356,6 +1388,42 @@
             </ul>
             <dl class="kv-row"><dt>Gasto cardíaco continuo</dt><dd>Catéteres modificados con filamento térmico (10 cm, a 15-25 cm de la punta) registran durante 3-5 minutos, actualizando cada 30-60 segundos — minimiza los errores de la termodilución manual.</dd></dl>
 
+            <p class="section-label" style="margin-top:16px;">Indicadores estáticos de volumen y termodilución transpulmonar</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La relación entre el volumen y las presiones telediastólicas depende del grado de distensibilidad
+                ventricular — por eso, aunque en condiciones normales las presiones invasivas son una aproximación
+                válida de los volúmenes telediastólicos, en ciertas circunstancias esa relación puede estar
+                alterada, y conviene medir el volumen directamente.
+            </p>
+            <dl class="kv-row"><dt>Volumen telediastólico del VD indexado (VTDVDi)</dt><dd>Predice la respuesta a la expansión de volumen: valores <strong>&lt;90 mL/m²</strong> predicen respuesta, valores <strong>&gt;140 mL/m²</strong> predicen ausencia de respuesta — los valores intermedios (90-140 mL/m²) no permiten discriminar entre respondedores y no respondedores.</dd></dl>
+            <dl class="kv-row"><dt>Área telediastólica del VI</dt><dd>Un valor <strong>&lt;5 cm²/m²</strong> es específico de precarga baja, pero poco sensible en la dilatación importante del ventrículo derecho.</dd></dl>
+            <dl class="kv-row"><dt>Volumen telediastólico global indexado (VTDGi)</dt><dd>Permite evaluar la precarga biventricular (a diferencia de la PVC/PoAP, que solo reflejan una cavidad): el porcentaje de respondedores con valores <strong>&lt;600 mL/m²</strong> es del <strong>80%</strong>, mientras que con valores <strong>&gt;800 mL/m²</strong> es del <strong>30%</strong> — en los valores intermedios tampoco se puede discriminar entre respondedores y no respondedores.</dd></dl>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La <strong>termodilución transpulmonar</strong> (a diferencia de la termodilución cardíaca clásica
+                del catéter de Swan-Ganz) necesita la colocación de un catéter arterial femoral o radial además del
+                acceso venoso central, y existe en 2 modalidades:
+            </p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💧 Modalidad dual (doble indicador)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        Usa 2 indicadores simultáneos — <strong>líquido</strong> (se distribuye en todo el compartimiento del fluido) y <strong>colorante</strong> (se limita al volumen de sangre intratorácico, por su unión a proteínas) — para calcular el volumen de sangre intratorácico, un indicador de precarga más óptimo que la PVC o la PoAP:
+                        <dl class="kv-row" style="margin-top:8px;"><dt>VLT</dt><dd>Volumen de líquido intratorácico = GC × tiempo medio de tránsito (MTt) del líquido</dd></dl>
+                        <dl class="kv-row"><dt>VST</dt><dd>Volumen de sangre intratorácico = GC × MTt del colorante</dd></dl>
+                        <dl class="kv-row"><dt>EVLW</dt><dd>Agua pulmonar extravascular = VLT − VST</dd></dl>
+                        Ventaja: efectivo y exacto. Desventaja: poco aplicable en la práctica clínica por lo tedioso del estudio.
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📈 Modalidad simple: PICCO</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        El dispositivo con esta tecnología es el <em>Pulse-Induced Contour Cardiac Output</em> (PICCO). El contorno de la onda de presión arterial es proporcional al del volumen sistólico — con un análisis de latido a latido se convierte la señal de presión en volumen. Se inyecta suero fisiológico frío (10-20 mL, &lt;10 °C) por la luz central; el líquido recorre la circulación a través del pulmón hasta llegar al catéter arterial (femoral o radial, con sensor de temperatura), generando una curva de termodilución en función del tiempo.
+                        <p style="margin-top:8px;">Productos del análisis: <strong>GC</strong>, <strong>VTDG</strong> (volumen de precarga), <strong>EVLW</strong> y <strong>contractilidad</strong>.</p>
+                        <p style="margin-top:6px; font-size:0.8rem; color:var(--text-muted);">Factores de corrección: talla, peso, sexo, edad. La fiabilidad depende decisivamente de la calidad de la señal de presión arterial — no debe realizarse en pacientes con arritmias, requiere una correcta calibración y una morfología de la curva de presión arterial adecuada.</p>
+                    </div>
+                </div>
+            </div>
+
             <p class="section-label" style="margin-top:16px;">Indicadores dinámicos y ventilación mecánica</p>
             <table class="data-table">
                 <thead><tr><th>Interrelación corazón-pulmón</th><th>Inspiración</th><th>Espiración</th></tr></thead>
@@ -1365,6 +1433,22 @@
                 </tbody>
             </table>
             <dl class="kv-row"><dt>Delta-down / delta-up</dt><dd>El delta-<em>down</em> es el mejor indicador de la variación en hipovolemia — se correlaciona con la respuesta a la precarga, ya que disminuye con la administración de volumen. El delta-<em>up</em> es el componente más importante en falla ventricular e hipervolemia.</dd></dl>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La insuflación de un volumen corriente durante la ventilación mecánica interfiere de forma cíclica
+                sobre la hemodinamia — la base de la <strong>monitorización hemodinámica funcional</strong>, reflejo
+                directo de la interacción corazón-pulmón: los incrementos cíclicos de la presión pleural (Ppl) se
+                transmiten a la vasculatura intratorácica y abdominal adyacente por 2 mecanismos distintos:
+            </p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⏸️ Dependencia en paralelo</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Durante la inspiración, al existir un aumento de la poscarga del VD, se genera un incremento del volumen de llenado del ventrículo derecho que provoca <strong>desplazamiento del septum interventricular</strong> y reduce la distensibilidad del ventrículo izquierdo — el mismo fenómeno de interdependencia ventricular ya desarrollado en la Ficha 9.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⏭️ Dependencia en serie</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La <strong>reducción del retorno venoso</strong> al VD durante la insuflación mecánica puede ser tan significativa — particularmente con volumen corriente elevado y en condiciones de hipovolemia — que reduce consecutivamente la capacidad eyectiva del VD, el llenado telediastólico del VI y, finalmente, su volumen eyectivo efectivo.</div>
+                </div>
+            </div>
             <dl class="kv-row"><dt>VPP (variación de presión de pulso)</dt><dd>No es indicador de volumen sanguíneo total, sino un predictor de respuesta a volumen. Usualmente pequeña (1%-5%), se incrementa en hipovolemia &gt;13% — capaz de predecir respuesta a volumen, influenciada por la magnitud del volumen corriente.</dd></dl>
             <p style="font-size: 0.85rem; line-height: 1.6;">
                 La monitorización actual parte de la premisa de que, si el corazón derecho es respondedor a
@@ -1443,7 +1527,7 @@
             <ul class="term-chips">
                 <li>Grado I (leve): relajación disminuida, onda E de menor altura, llenado dependiente de la contracción auricular (onda A mayor)</li>
                 <li>Grado II (seudonormal/moderada): presión auricular elevada compensa, manteniendo el gradiente transvalvular</li>
-                <li>Grado III (severa): presión diastólica del VI evita el flujo transvalvular durante la contracción auricular</li>
+                <li>Grado III (severa): presión diastólica del VI evita el flujo transvalvular durante la contracción auricular — al inicio de la diástole se genera un flujo corto y de alta velocidad, que luego disminuye hacia el final</li>
                 <li>Grado IV (grave): sin mejoría ante maniobras de Valsalva</li>
             </ul>
 
@@ -1463,7 +1547,7 @@
                     <tr><td>Maniobra de Valsalva</td><td>Negativa</td><td>Positiva</td><td>Positiva</td><td>Positiva</td><td>Negativa</td></tr>
                 </tbody>
             </table>
-            <p style="font-size: 0.75rem; color: var(--text-muted);">Estratificación de la disfunción diastólica y parámetros de evaluación. E/e' &gt;14 se asocia con presiones de llenado elevadas; volumen auricular izquierdo &gt;34 mL/m² es predictor independiente de morbimortalidad cardiovascular.</p>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Estratificación de la disfunción diastólica y parámetros de evaluación. E/e' &gt;14 se asocia con presiones de llenado elevadas; volumen auricular izquierdo &gt;34 mL/m² es predictor independiente de morbimortalidad cardiovascular, evaluado en 2 y 4 cámaras por ecocardiografía transtorácica (ETT) — la ecocardiografía transesofágica (ETE) podría subestimar el tamaño auricular. La presión arterial pulmonar suele estar elevada cuando la disfunción diastólica es marcada.</p>
 
             <p class="section-label" style="margin-top:16px;">Adaptación ventricular a la sobrecarga</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
@@ -1600,27 +1684,6 @@
             <dl class="kv-row"><dt>Progresión lenta de la placa</dt><dd>Un número considerable de placas progresan muy lentamente; aproximadamente el <strong>24% de las lesiones con oclusiones superiores al 80% progresarán hacia la oclusión total en 5 años</strong>.</dd></dl>
             <dl class="kv-row"><dt>Infarto transmural</dt><dd>Causado por la oclusión súbita y persiste por algunas horas (<strong>de 6 a 8 horas</strong>); se comporta como una entidad homogénea, diferente a los infartos no transmurales, que por lo general están compuestos por muchas áreas de necrosis de diferentes edades, con embolización progresiva y presencia de vasos colaterales.</dd></dl>
 
-            <div class="micro-profiles">
-                <div class="micro-prof-item">
-                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔴 Cascada isquémica</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">
-                        La isquemia miocárdica sigue una secuencia predecible y escalonada — el síntoma clínico es, paradójicamente, el evento más tardío de toda la cascada:
-                        <dl class="kv-row" style="margin-top:8px;"><dt>1º</dt><dd><strong>Disfunción diastólica</strong> — la relajación, dependiente de ATP, es lo primero en fallar</dd></dl>
-                        <dl class="kv-row"><dt>2º</dt><dd><strong>Disfunción sistólica regional</strong> — hipoquinesia/aquinesia del territorio afectado</dd></dl>
-                        <dl class="kv-row"><dt>3º</dt><dd><strong>Cambios electrocardiográficos</strong></dd></dl>
-                        <dl class="kv-row"><dt>4º</dt><dd><strong>Dolor torácico</strong></dd></dl>
-                    </div>
-                </div>
-                <div class="micro-prof-item">
-                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⏱️ "Tiempo es músculo"</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">La necrosis miocárdica progresa desde el subendocardio (la zona más vulnerable, por su mayor demanda metabólica y menor reserva de flujo colateral) hacia el epicardio conforme se prolonga la oclusión — de ahí la urgencia de la reperfusión precoz (farmacológica o mecánica) para limitar la extensión transmural del infarto, que se completa entre las 6 y las 8 horas de oclusión sostenida.</div>
-                </div>
-                <div class="micro-prof-item">
-                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💥 Lesión por reperfusión</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">Paradójicamente, restaurar el flujo sanguíneo tras la isquemia prolongada puede añadir daño adicional: generación súbita de especies reactivas de oxígeno, sobrecarga de calcio intracelular y apertura del poro de transición de permeabilidad mitocondrial, que pueden precipitar la muerte celular de miocitos que habían sobrevivido a la isquemia inicial.</div>
-                </div>
-            </div>
-
             <p class="section-label" style="margin-top:16px;">Angina inestable</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
                 Los estudios de necrosis han mostrado que en esta entidad se conserva parcialmente el flujo
@@ -1694,7 +1757,23 @@
                 presente la HP, la perfusión del VD ocurre predominantemente en diástole, reduciendo el aporte de
                 oxígeno del VD precisamente en la fase — la sístole — en la que su consumo miocárdico de oxígeno es
                 máximo</span>. En los pacientes críticos, la HP aguda se relaciona con el incremento súbito de la
-                poscarga del VD, frecuentemente asociada al tromboembolismo pulmonar masivo o al SDRA.
+                poscarga del VD, frecuentemente asociada al tromboembolismo pulmonar masivo o al SDRA. En estas
+                situaciones se produce además un <strong>aumento de la impedancia al flujo de salida</strong>,
+                deterioro de la fracción de eyección y dilatación del VD — un deterioro conjunto de la función
+                ventricular tanto en <strong>sístole como en diástole</strong> que conduce finalmente a
+                insuficiencia circulatoria. En estos escenarios, la identificación y corrección de la etiología de
+                la HP contribuye a <span class="hl">revertir los cambios hemodinámicos</span> — a diferencia de la
+                HAP crónica establecida, la HP aguda del paciente crítico suele ser potencialmente reversible si se
+                trata la causa de base.
+            </p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La causa más frecuente de HP en los pacientes en cuidado crítico es la relacionada con
+                <strong>insuficiencia ventricular izquierda</strong>, secundaria al incremento de las presiones de
+                la aurícula izquierda (Grupo 2) — no los escenarios agudos que siguen. En la población con
+                antecedentes de HAP crónica, la agudización de esta condición es también una causa frecuente de
+                ingreso a UCI. Por último, en el caso de la <strong>HP aguda</strong> — la que se desarrolla en
+                pacientes sin historia previa de HP —, las etiologías más comunes se atribuyen al SDRA, al
+                tromboembolismo pulmonar masivo y a la sepsis, los 3 escenarios que se desarrollan a continuación.
             </p>
 
             <p class="section-label" style="margin-top:16px;">Clasificación de la hipertensión pulmonar (5 grupos)</p>
@@ -1705,9 +1784,9 @@
                     <tr><td>1'</td><td>Enfermedad venooclusiva pulmonar / hemangiomatosis capilar</td><td>Idiopática, heredable (EIF2AK4), inducida por drogas/toxinas/radiación, asociada a enf. del tejido conectivo o VIH</td></tr>
                     <tr><td>1''</td><td>HP persistente del recién nacido</td><td>—</td></tr>
                     <tr><td>2</td><td>HP secundaria a cardiopatía izquierda</td><td>Disfunción sistólica/diastólica del VI, valvulopatías, obstrucción del tracto de entrada/salida del VI, estenosis de venas pulmonares</td></tr>
-                    <tr><td>3</td><td>HP secundaria a enfermedades pulmonares / hipoxia</td><td>EPOC, enfermedad intersticial, patrón mixto, trastornos respiratorios del sueño, hipoventilación alveolar, grandes alturas</td></tr>
+                    <tr><td>3</td><td>HP secundaria a enfermedades pulmonares / hipoxia</td><td>EPOC, enfermedad intersticial, patrón mixto, trastornos respiratorios del sueño, hipoventilación alveolar, grandes alturas, enfermedades del desarrollo pulmonar</td></tr>
                     <tr><td>4</td><td>HP tromboembólica crónica y otras obstrucciones de arterias pulmonares</td><td>HP tromboembólica crónica, angiosarcoma y otros tumores intravasculares, arteritis, estenosis congénita, parásitos (hidatidosis)</td></tr>
-                    <tr><td>5</td><td>HP de mecanismo desconocido o multifactorial</td><td>Trastornos hematológicos (anemia hemolítica crónica, mieloproliferativos, esplenectomía), sarcoidosis, enf. de depósito de glucógeno, ERC, hipertensión pulmonar segmentaria</td></tr>
+                    <tr><td>5</td><td>HP de mecanismo desconocido o multifactorial</td><td>Trastornos hematológicos (anemia hemolítica crónica, mieloproliferativos, esplenectomía); trastornos sistémicos (sarcoidosis, histiocitosis pulmonar, linfangioleiomiomatosis, neurofibromatosis); trastornos metabólicos (enf. de depósito de glucógeno, enfermedad de Gaucher, trastornos tiroideos); otros (microangiopatía trombótica tumoral pulmonar, mediastinitis fibrosante, ERC con o sin diálisis, hipertensión pulmonar segmentaria)</td></tr>
                 </tbody>
             </table>
             <p style="font-size: 0.75rem; color: var(--text-muted);">BMPR2: gen del receptor de proteínas morfogenéticas óseas tipo 2; EIF2AK4: gen del factor de iniciación de la traducción de alfacinasa 4. Algunos autores (Tsapenko et al.) proponen clasificar la HP en el paciente crítico según la causa precipitante, dado que esta clasificación tiene limitaciones al aplicarse en la UCI — sin estudios que validen aún esta aproximación.</p>
@@ -1763,7 +1842,10 @@
                 PAPm, presión auricular derecha, índice cardíaco, PAOP, índice de resistencia vascular pulmonar
                 [PVRI] e índice funcional del VD [RFI]) y concluyen que los <strong>índices compuestos</strong>,
                 como el PVRI y el RFI, son <strong>predictores independientes de mortalidad</strong>, por encima de
-                la utilización de los parámetros hemodinámicos individuales aislados.
+                la utilización de los parámetros hemodinámicos individuales aislados. Por esta razón, la
+                monitorización invasiva puede ser útil en el paciente crítico con HP — aunque, en la práctica
+                clínica diaria, su utilidad está limitada por la disponibilidad real de estas técnicas de
+                monitorización.
             </p>
 
             <p class="section-label" style="margin-top:16px;">Enfoque terapéutico desde la fisiología</p>
@@ -2305,11 +2387,16 @@
             <p style="font-size: 0.78rem; color: var(--text-muted);">Poblano Morales M, Lomelí Terán M, Vidal Andrade E. Fisiopatología de la interacción corazón-pulmón. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección I, Capítulo 11, págs. 155-167.</p>
         </div>
 
-    </div>
-
-    <div class="card" style="margin-top: 20px;">
-        <h3>📚 Bibliografía</h3>
-        <ul class="biblio-list">
+        <!-- ===== FICHA 12: BIBLIOGRAFÍA ===== -->
+        <div id="cardio-bibliografia" class="tab-content">
+            <h3 style="color: var(--accent-yellow);">📚 Bibliografía</h3>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Todo el contenido clínico de este bloque de Cardiología está extraído de la Sección I (Aparato
+                Cardiovascular) de <em>El libro azul. Bases fisiopatológicas de la medicina crítica</em>, capítulos
+                1-11 — enlace directo a la página exacta de cada capítulo en el PDF fuente, archivado en
+                <code>docs/</code> para no depender de un enlace externo que pueda dejar de estar disponible.
+            </p>
+            <ul class="biblio-list">
             <li>
                 <a class="biblio-link" href="docs/libro-azul-seccion-i-cardiovascular-parte1.pdf#page=3" target="_blank" rel="noopener">Cap. 1 — Fisiología cardíaca aplicada</a>
                 <span class="biblio-nota">En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección I, págs. 3-21.</span>
@@ -2355,4 +2442,6 @@
                 <span class="biblio-nota">Poblano Morales M, Lomelí Terán M, Vidal Andrade E. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección I, págs. 155-167.</span>
             </li>
         </ul>
+        </div>
+
     </div>

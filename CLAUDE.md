@@ -2885,6 +2885,102 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
     quiz de la Ficha 1 (incluida una de tipo `redactar`), sin errores de
     consola ni 404 reales (el único 404 detectado es el `favicon.ico` que
     el navegador pide automáticamente, sin relación con la app).
+  - **Auditoría de bibliografía de las Fichas 5, 6 y 7, con relectura íntegra
+    de sus 3 capítulos fuente** (37+4+13 páginas), a petición explícita del
+    usuario de "rellenar los huecos de información... revisa que se ha
+    incluido correctamente la información de las fichas respecto a la
+    bibliografía" — releídos directamente con el `Read` tool (páginas 59-95
+    y 97-100 de `libro-azul-seccion-i-cardiovascular-parte1.pdf`, páginas
+    1-13 de `libro-azul-seccion-i-cardiovascular-parte2.pdf`) y comparados
+    frase a frase contra el contenido ya escrito, mismo método que las
+    auditorías anteriores de Nefrología/HTA/ERC/FRA.
+    - **Hallazgo más importante: contenido no sourced en la Ficha 6**. El
+      Capítulo 6 (Ramírez Vallejo, solo 4 páginas) es exclusivamente sobre
+      biología de la placa/trombosis — no menciona en ningún punto la
+      cascada isquémica, la progresión subendocardio→epicardio de la
+      necrosis ("tiempo es músculo") ni la lesión por reperfusión. Los 3
+      `micro-prof-item` que desarrollaban estos temas en la ficha (contenido
+      médicamente correcto y estándar, pero no presente en el capítulo
+      citado) se **eliminaron**, junto con las 5 preguntas de quiz que
+      dependían de ellos (`cardio-q043`-`q045`, `q047`-`q048`) — mismo
+      criterio ya aplicado al "marco de 4 componentes" fabricado que se
+      encontró y quitó de la Ficha 2 de Cardiología en una auditoría
+      anterior: nunca dejar contenido clínico sin respaldo directo en la
+      fuente citada, aunque el contenido en sí no sea incorrecto. El resto
+      del Capítulo 6 —de hecho, la práctica totalidad de su texto real— ya
+      estaba fielmente transcrito en la ficha; el banco de preguntas de ese
+      tema queda en 7 (de 8), todas ancladas a contenido real del capítulo.
+    - **Ficha 5** (capítulo más extenso del bloque, 37 páginas) ganó 4
+      secciones nuevas, ninguna presente antes: 1) **Gradiente
+      transpulmonar (GTP)**, con la tabla de 2 filas que distingue HP
+      proporcional/pasiva (GTP&lt;12-15, RVP&lt;200-240/2,5-3UW, revierte al
+      bajar la Wedge) de HP desproporcionada/reactiva (GTP&gt;12-15,
+      independiente de la Wedge) — ausente por completo hasta ahora; 2)
+      **Dependencia en paralelo/serie**, los 2 mecanismos reales por los que
+      la ventilación mecánica interfiere cíclicamente con la hemodinamia
+      (desplazamiento septal por sobrecarga del VD vs. reducción del retorno
+      venoso), como 2 `micro-prof-item` nuevos; 3) **Termodilución
+      transpulmonar y PICCO**, con las fórmulas reales del método dual
+      (VLT/VST/EVLW) y del PICCO (productos del análisis, factores de
+      corrección, contraindicaciones) — antes PICCO solo aparecía como
+      nombre de instrumento en una tabla, sin ninguna explicación de cómo
+      funciona; 4) **indicadores volumétricos de precarga** (VTDVDi &lt;90
+      mL/m² predice respuesta/&gt;140 no respuesta, VTDGi &lt;600→80%
+      respondedores/&gt;800→30%, área telediastólica VI &lt;5cm²/m²). Se
+      añadió también una **nota de discrepancia real de la propia fuente**:
+      el capítulo define el IRVS de 2 formas matemáticamente distintas en
+      2 puntos diferentes del texto — (PAM−PVC)×80/IC (1600-2400) y
+      RVS×ASC (1800-2500) —, señalada en vez de silenciada, mismo criterio
+      que el IFR de Fracaso Renal Agudo o el TAPSE&gt;16/&gt;17mm de esta
+      misma sección. Enriquecimientos menores: detalle del flujo Grado III
+      de disfunción diastólica, matiz ETT vs. ETE en la subestimación del
+      volumen auricular izquierdo y su correlación con la PAP.
+    - **Ficha 7** ganó: 1) un párrafo mecanístico que faltaba al final de
+      "Mecanismos fisiopatológicos" (aumento de la impedancia al flujo de
+      salida, deterioro sistodiastólico del VD hacia insuficiencia
+      circulatoria, y la reversibilidad al corregir la etiología de la HP);
+      2) un párrafo epidemiológico ausente hasta ahora: la causa más
+      frecuente de HP en el paciente crítico es en realidad la
+      insuficiencia ventricular izquierda (Grupo 2), no los 3 escenarios
+      agudos (SDRA/TEP/sepsis) que la ficha desarrolla a continuación —
+      matiz importante que faltaba antes de esa sección; 3) subcategorías
+      completas que faltaban en la tabla de clasificación de 5 grupos:
+      "enfermedades del desarrollo pulmonar" en el Grupo 3, y varias del
+      Grupo 5 (histiocitosis pulmonar, linfangioleiomiomatosis,
+      neurofibromatosis, enfermedad de Gaucher, trastornos tiroideos,
+      microangiopatía trombótica tumoral pulmonar, mediastinitis
+      fibrosante) — antes solo se citaba un subconjunto parcial de cada
+      grupo; 4) una frase sobre la utilidad limitada de la monitorización
+      invasiva por disponibilidad real de las técnicas en la práctica
+      diaria.
+    - Verificado con Playwright tras todos los cambios: las 3 fichas siguen
+      abriendo sin error de consola, el contenido nuevo está presente
+      (`Gradiente transpulmonar`, `PICCO`, `Dependencia en paralelo`,
+      `VTDVDi`, `enfermedades del desarrollo pulmonar`, `causa más frecuente
+      de HP`) y el contenido eliminado ya no aparece (`Cascada isquémica`,
+      `Lesión por reperfusión`); el tema de quiz "enfermedad coronaria"
+      recorre sus 7 preguntas restantes sin excepciones JS.
+  - **Bibliografía movida a una Ficha 12 nueva, dentro del propio cuaderno
+    de campo** — a petición explícita del usuario ("quiero que quites la
+    bibliografía del final de cardio y la pongas en una nueva ficha, la
+    ficha 12"). Antes vivía en un `<div class="card">` suelto, fuera de
+    `#panel-cardio-tabs`, debajo del cuaderno de campo — único bloque de
+    todo el módulo de Cardiología que no seguía el patrón de ficha del
+    resto de la app. Ahora es `<div id="cardio-bibliografia"
+    class="tab-content">` dentro del panel, con su propio `.field-card`
+    (Ficha 12, ilustración de un libro) en `#cardio-corkboard` — mismo
+    patrón exacto que las otras 11 fichas (voltea con una pregunta de
+    "gancho", el botón `.back-cta` abre el contenido vía
+    `openCorkboardTopic`), aunque, al ser una ficha de referencia y no de
+    teoría para repasar, no lleva preguntas de quiz propias — mismo
+    criterio ya aplicado a "Tratamiento por objetivos" de ERC y a
+    `nefrotoxicidad.html`. El contenido de las 11 entradas de bibliografía
+    no cambió, solo su ubicación estructural. Verificado con Playwright:
+    el corkboard ahora reporta 12 fichas (antes 11), la Ficha 12 abre y
+    muestra sus 11 enlaces (primer href `...parte1.pdf#page=3`, último
+    `...parte2.pdf#page=55`), y ya no queda ningún bloque de bibliografía
+    suelto fuera del panel (`body > .card:has(h3:has-text("Bibliografía"))`
+    da 0 resultados).
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

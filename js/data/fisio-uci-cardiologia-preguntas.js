@@ -462,40 +462,6 @@ export const preguntasCardiologia = [
         explicacion: 'El diagnóstico diferencial entre angina inestable e IAMSEST depende exclusivamente de la negatividad o positividad de la troponina seriada — ambos comparten el mecanismo de trombosis no oclusiva o parcialmente oclusiva sobre una placa rota/erosionada, pero solo el IAMSEST produce necrosis miocárdica detectable.',
     },
     {
-        id: 'cardio-q043',
-        tema: 'cardio-enfermedad-coronaria',
-        enunciado: '¿Cuál es el primer evento de la cascada isquémica miocárdica, antes de los cambios electrocardiográficos y el dolor torácico?',
-        opciones: ['El dolor torácico', 'Los cambios electrocardiográficos', 'La disfunción diastólica', 'El shock cardiogénico'],
-        correcta: 2,
-        explicacion: 'La cascada isquémica sigue una secuencia escalonada: primero la disfunción diastólica (la relajación, dependiente de ATP, falla primero), luego la disfunción sistólica regional, después los cambios electrocardiográficos, y por último el dolor torácico — el síntoma clínico es el evento más tardío de toda la cascada.',
-    },
-    {
-        id: 'cardio-q044',
-        tema: 'cardio-enfermedad-coronaria',
-        enunciado: '¿Desde qué capa del miocardio progresa típicamente la necrosis durante una oclusión coronaria prolongada?',
-        opciones: [
-            'Desde el epicardio hacia el subendocardio',
-            'Desde el subendocardio hacia el epicardio',
-            'De forma simultánea en toda la pared',
-            'Solo afecta al epicardio',
-        ],
-        correcta: 1,
-        explicacion: 'La necrosis progresa desde el subendocardio (la zona más vulnerable, por mayor demanda metabólica y menor reserva de flujo colateral) hacia el epicardio conforme se prolonga la oclusión — de ahí la urgencia de la reperfusión precoz para limitar la extensión transmural del infarto ("tiempo es músculo").',
-    },
-    {
-        id: 'cardio-q045',
-        tema: 'cardio-enfermedad-coronaria',
-        enunciado: '¿Qué es la lesión por reperfusión?',
-        opciones: [
-            'El daño que produce la propia oclusión coronaria antes de tratarla',
-            'El daño adicional que puede producirse al restaurar el flujo sanguíneo tras una isquemia prolongada',
-            'Una complicación exclusiva de la angina estable',
-            'La cicatriz fibrosa que queda tras un infarto antiguo',
-        ],
-        correcta: 1,
-        explicacion: 'Paradójicamente, restaurar el flujo tras la isquemia prolongada puede añadir daño adicional: generación súbita de especies reactivas de oxígeno, sobrecarga de calcio intracelular y apertura del poro de transición de permeabilidad mitocondrial, que pueden matar miocitos que habían sobrevivido a la isquemia inicial.',
-    },
-    {
         id: 'cardio-q046',
         tema: 'cardio-enfermedad-coronaria',
         enunciado: '¿Qué caracteriza fisiopatológicamente al infarto con elevación del ST (IAMCEST)?',
@@ -508,21 +474,6 @@ export const preguntasCardiologia = [
         correcta: 1,
         explicacion: 'El IAMCEST se produce por la oclusión trombótica completa y súbita de una arteria coronaria epicárdica — a diferencia de la angina inestable/IAMSEST, donde la trombosis es no oclusiva o parcialmente oclusiva.',
     },
-    {
-        id: 'cardio-q047',
-        tema: 'cardio-enfermedad-coronaria',
-        tipo: 'redactar',
-        enunciado: 'Explica por qué el dolor torácico es, paradójicamente, el evento "más tardío" de la cascada isquémica, y qué implicación tiene esto para el diagnóstico precoz de isquemia en el paciente crítico sedado o inconsciente.',
-        respuestaModelo: 'La cascada isquémica sigue un orden fijo: primero falla la relajación diastólica (proceso activo dependiente de ATP, el más sensible a la falta de energía), luego la contractilidad sistólica regional, después aparecen los cambios en el ECG, y solo al final el dolor torácico —que depende de que se acumulen suficientes metabolitos isquémicos para activar los nociceptores cardíacos—. Esto tiene una implicación práctica importante en el paciente crítico sedado, intubado o con alteración del estado de conciencia: el síntoma "clásico" de alarma (dolor torácico) puede no estar disponible como señal de aviso, precisamente porque es el último eslabón de la cascada. Por eso, en estos pacientes, hay que apoyarse en signos más tempranos y objetivos —cambios en la función diastólica o contractilidad regional por ecocardiografía, alteraciones electrocardiográficas, elevación de biomarcadores— en vez de esperar un síntoma que puede llegar demasiado tarde o no manifestarse en absoluto.',
-    },
-    {
-        id: 'cardio-q048',
-        tema: 'cardio-enfermedad-coronaria',
-        tipo: 'redactar',
-        enunciado: 'Un paciente recibe reperfusión exitosa (angioplastia) tras 4 horas de oclusión coronaria completa, pero su función ventricular empeora transitoriamente justo después del procedimiento. Explica el mecanismo fisiopatológico más probable.',
-        respuestaModelo: 'Este cuadro es compatible con lesión por reperfusión: aunque restaurar el flujo sanguíneo es indispensable para salvar el miocardio isquémico, el propio proceso de reperfusión puede añadir daño adicional a las células que habían sobrevivido a la isquemia. Al reintroducirse oxígeno de forma súbita, se genera una oleada de especies reactivas de oxígeno que dañan las membranas celulares; simultáneamente ocurre una sobrecarga de calcio intracelular (por disfunción de los transportadores que se recuperan de forma desincronizada) que puede desencadenar contractura y muerte celular; y se abre el poro de transición de permeabilidad mitocondrial, comprometiendo la producción de ATP justo cuando las células más lo necesitan para recuperarse. Este mecanismo explica por qué, pese a una reperfusión angiográficamente exitosa, puede observarse un empeoramiento funcional transitorio (aturdimiento miocárdico) antes de la recuperación progresiva de la función contráctil en los días siguientes.',
-    },
-
     // ===== cardio-hipertension-pulmonar =====
     {
         id: 'cardio-q049',
