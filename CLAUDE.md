@@ -728,6 +728,38 @@ por encima que sí diera cabida a todos.
   memoria de sesión (sin `localStorage`, coherente con el resto de la
   app), igual que las marcas `.visited` del Atlas Hematológico y del mapa
   del riñón.
+- **Botón "Siguiente ficha →" al final de cada tema**, a petición
+  explícita del usuario ("quiero que al final de cada ficha hubiera un
+  botón... y pasases a la siguiente en vez de tener que subir arriba del
+  todo constantemente"). Implementado una sola vez en
+  `core/corkboard.js` (`initCorkboard()`), igual que la marca de "ya
+  visto" de arriba — por eso apareció automáticamente en **todos** los
+  cuadernos de campo de la app (Reconocimiento, Síndromes Urgentes, las 3
+  subvistas de Trasplante, las 5 categorías del bloque de fisiología de
+  Nefrología + HTA/ERC/FRA/TRR, los 3 papers de UCI/Papers Tuiter, y los 3
+  bloques de Fisiopatología UCI) sin tocar el HTML de ninguna ficha ni el
+  `.js` de ningún módulo concreto. El orden que sigue el botón es el orden
+  real de las `.field-card` en el tablero (no el orden de los
+  `.tab-content` en el panel, que podría no coincidir) — calculado una vez
+  con `Array.from(board.querySelectorAll('.field-card'))` y usado para
+  añadir un `<button class="siguiente-ficha-btn">` al final de cada
+  `.tab-content` vía `appendChild()`, con el nombre de la ficha siguiente
+  ya en el propio texto del botón (extraído de `.field-name`, sustituyendo
+  el `<br>` interno por un espacio en vez de dejarlo concatenado). La
+  última ficha de cada tablero enlaza de vuelta a la primera (ciclo
+  cerrado) — así el botón existe siempre, sin un caso especial "última
+  ficha sin botón" que rompiera la uniformidad; en Cardiología esto
+  significa que la Ficha 12 (Bibliografía) enlaza de vuelta a la Ficha 1.
+  Tableros de una sola ficha (ninguno existe hoy, pero por si acaso) no
+  reciben el botón, para no enlazar una ficha consigo misma. Reutiliza
+  `openCorkboardTopic()` ya existente, así que hereda gratis el
+  scroll-to-top suave y la marca de "ya visto" de la ficha de destino.
+  Estilo nuevo en `components.css` (`.siguiente-ficha-btn`, borde/color
+  `--accent-blue` como `.back-btn` pero orientado hacia adelante en vez de
+  "← volver"). Verificado con Playwright en 2 módulos independientes
+  (Cardiología: Ficha 1→2 y Ficha 12→1 cierran el ciclo; HTA: la Ficha 1
+  también lleva el botón sin haber tocado `hta.js`), confirmando que el
+  cambio centralizado se propaga sin wiring adicional por módulo.
 - **`js/modules/nefrologia/index.js`** es el orquestador de los 3 niveles
   (mapa del riñón / nefrona / categoría): un único `nefroLevel`
   (`core/navigation.js`) con una entrada por vista (`kidney`, `nefrona`,

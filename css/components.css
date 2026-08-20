@@ -500,6 +500,18 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 
 .tap-hint { text-align: center; font-size: 0.62rem; color: var(--text-muted); margin: -8px 0 18px; letter-spacing: 0.5px; }
 
+/* Botón "Siguiente ficha →" — añadido por core/corkboard.js al final de
+   CADA .tab-content de CUALQUIER cuaderno de campo de la app (genérico,
+   sin tocar el HTML de cada ficha), para no obligar al usuario a volver a
+   subir hasta el tablero cada vez que termina de leer un tema. */
+.siguiente-ficha-btn {
+    display: block; width: 100%; margin-top: 26px; padding: 14px 16px;
+    background: rgba(212, 175, 55, 0.08); border: 1px solid var(--accent-blue);
+    color: var(--accent-blue); border-radius: 4px; font-weight: 600;
+    font-size: 0.85rem; text-align: center; cursor: pointer; transition: all 0.2s;
+}
+.siguiente-ficha-btn:hover { background: rgba(212, 175, 55, 0.18); box-shadow: var(--glow-blue); }
+
 /* ===================================================== */
 /* MAPA DEL RIÑÓN — nivel 0 de Nefrología. Silueta de       */
 /* riñón en corte dibujada a mano (a diferencia deliberada  */
