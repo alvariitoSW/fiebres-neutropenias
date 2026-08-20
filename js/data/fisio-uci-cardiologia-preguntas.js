@@ -1193,4 +1193,65 @@ export const preguntasCardiologia = [
         enunciado: 'Un paciente con un inotrópico a dosis alta tiene un doble producto de 15.000 y un triple producto de 140.000. Usando los conceptos de "costo de funcionamiento miocárdico" de la Ficha 2, explica por qué esto podría ser una señal de alarma pese a que el gasto cardíaco haya mejorado.',
         respuestaModelo: 'El doble producto (FC × PAS, normal máximo 12.000) y el triple producto (doble producto × presión en cuña, normal máximo 120.000) son índices del consumo de oxígeno miocárdico —el "costo de funcionamiento" del corazón—. En este caso, ambos valores superan claramente sus límites normales (15.000 y 140.000), lo que indica que el corazón está consumiendo oxígeno muy por encima de lo habitual, probablemente porque el inotrópico está aumentando desproporcionadamente la frecuencia cardíaca y/o la presión arterial sistólica. Según la fisiopatología de la Ficha 2, si un inotrópico aumenta tanto la frecuencia cardíaca que incrementa el costo de funcionamiento más de lo que mejora el aporte de oxígeno, la medida NO es benéfica, aunque el gasto cardíaco "se vea mejor" en el monitor — el paciente queda en riesgo de una catástrofe coronaria, porque el aumento de la demanda miocárdica de oxígeno puede superar la capacidad de la perfusión coronaria de suplirla (especialmente si la presión de perfusión coronaria, PAD menos la presión en cuña o la PVC, no aumenta en la misma proporción). La conducta correcta sería reevaluar la dosis del inotrópico, calculando también la presión de perfusión coronaria y el índice de aporte-consumo, en vez de guiarse solo por la mejoría aparente del gasto cardíaco.',
     },
+
+    // ===== Preguntas añadidas tras la relectura exhaustiva de las Fichas 3 y 4 =====
+    {
+        id: 'cardio-q114',
+        tema: 'cardio-disfuncion-sistolica-diastolica',
+        enunciado: 'En el paciente con falla cardíaca, ¿por qué están elevados los niveles de calcio citosólico, según los 2 mecanismos que describe la fuente?',
+        opciones: [
+            'Solo por un aumento de la entrada de calcio por los canales tipo L',
+            'Por la menor actividad de la SERCA2a y la depleción de los depósitos de calcio del retículo sarcoplásmico por eflujo a través del receptor rianodina',
+            'Únicamente por la inhibición del intercambiador Na⁺/Ca²⁺',
+            'Por un aumento en la síntesis de troponina C',
+        ],
+        correcta: 1,
+        explicacion: 'Los niveles de calcio citosólico elevados en la falla cardíaca ocurren por 2 mecanismos combinados: la menor actividad de la SERCA2a (que recapta menos calcio hacia el retículo sarcoplásmico) y la depleción de los depósitos de calcio del retículo sarcoplásmico por un eflujo anormal a través del receptor rianodina — ambos son objetivos de investigación activa para futuras terapias.',
+    },
+    {
+        id: 'cardio-q115',
+        tema: 'cardio-disfuncion-sistolica-diastolica',
+        enunciado: 'Según la Figura 3 del capítulo (curvas de Starling y retorno venoso), ¿qué desplaza el punto de equilibrio de B hacia C tras una caída inicial de la contractilidad ventricular?',
+        opciones: [
+            'La vasodilatación arterial pulmonar',
+            'La retención de líquidos secundaria a la hipoperfusión renal, que desplaza la curva de retorno venoso',
+            'El aumento directo de la frecuencia cardíaca',
+            'La activación del sistema parasimpático',
+        ],
+        correcta: 1,
+        explicacion: 'Al disminuir la contractilidad ventricular (1), el gasto cardíaco se reduce y la presión auricular aumenta, moviendo el equilibrio de A hacia B. La hipoperfusión renal resultante lleva a retención de líquidos, que desplaza la curva del retorno venoso (2) para restaurar el gasto cardíaco a un estado normal — generando una mayor presión auricular que conduce al punto de equilibrio C. Si esto produce edema pulmonar e hipoxia, se genera un círculo vicioso.',
+    },
+    {
+        id: 'cardio-q116',
+        tema: 'cardio-disfuncion-sistolica-diastolica',
+        tipo: 'redactar',
+        enunciado: 'Usando la calculadora de tensión de pared (ley de Laplace, Ficha 3) como referencia, explica por qué la hipertrofia concéntrica es, en teoría, un mecanismo compensador "lógico" ante la sobrecarga crónica de presión (p. ej. HTA no controlada), aunque termine siendo perjudicial a largo plazo.',
+        respuestaModelo: 'La ley de Laplace dice que la tensión de la pared ventricular T = (P × R) / 2t: la tensión es directamente proporcional a la presión (P) y al radio (R) de la cámara, e inversamente proporcional al grosor de la pared (t). Ante una sobrecarga crónica de presión (como la HTA no controlada), P aumenta de forma sostenida, lo que elevaría directamente la tensión de la pared si no cambiara nada más. El corazón "responde" lógicamente aumentando el grosor de la pared (t) mediante hipertrofia concéntrica — al estar t en el denominador, este aumento COMPENSA matemáticamente el aumento de P, devolviendo la tensión de pared hacia un rango más normal y protegiendo así al miocardio de un estrés de pared excesivo (que aumentaría el consumo de oxígeno miocárdico). El problema es que esta hipertrofia tiene un costo: aumenta la masa miocárdica y la rigidez de la pared, compromete la distensibilidad ventricular (disfunción diastólica), aumenta la distancia entre los capilares y los cardiomiocitos (isquemia subendocárdica relativa) y, si el estímulo persiste en el tiempo, puede progresar hacia la dilatación de la cámara con hipertrofia excéntrica y disfunción sistólica sobreañadida. Es decir: el mecanismo compensador que "resuelve" el problema matemático de la tensión de pared termina generando, con el tiempo, un problema fisiopatológico distinto y potencialmente peor.',
+    },
+    {
+        id: 'cardio-q117',
+        tema: 'cardio-microcirculacion',
+        enunciado: '¿Cuáles son los 4 mecanismos por los que ocurre el intercambio capilar, según el capítulo?',
+        opciones: [
+            'Solo la difusión a través de la membrana celular',
+            'Uniones entre células endoteliales, fenestraciones con membrana/diafragma, transporte activo por vesículas, y difusión a través de la membrana celular endotelial',
+            'Solo el transporte activo mediado por ATP',
+            'Exclusivamente los poros anatómicos sin membrana',
+        ],
+        correcta: 1,
+        explicacion: 'El intercambio capilar se lleva a cabo mediante 4 mecanismos: las uniones entre las células endoteliales, las fenestraciones en las células endoteliales (cubiertas por una delgada membrana o diafragma), el transporte activo por vesículas que se movilizan a través del endotelio, y la difusión a través de la membrana celular endotelial.',
+    },
+    {
+        id: 'cardio-q118',
+        tema: 'cardio-microcirculacion',
+        enunciado: '¿Qué sustancias vasodilatadoras y vasoconstrictoras secreta el endotelio para controlar el tono vasomotor, según la fuente?',
+        opciones: [
+            'Vasodilatadoras: angiotensina II y endotelina-1; vasoconstrictoras: óxido nítrico y prostaciclina',
+            'Vasodilatadoras: óxido nítrico y prostaciclina; vasoconstrictoras: angiotensina II y endotelina-1',
+            'El endotelio no secreta ninguna sustancia vasoactiva',
+            'Solo secreta sustancias vasoconstrictoras, nunca vasodilatadoras',
+        ],
+        correcta: 1,
+        explicacion: 'El endotelio controla el tono vasomotor mediante la secreción de sustancias vasodilatadoras (óxido nítrico y prostaciclina) o vasoconstrictoras (angiotensina II y endotelina-1), además de realizar funciones antiinflamatorias, antitrombóticas y de fibrinólisis microvascular.',
+    },
 ];

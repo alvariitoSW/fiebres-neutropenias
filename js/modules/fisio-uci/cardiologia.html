@@ -628,6 +628,30 @@
                 <strong>"remodelamiento ventricular"</strong>, asociado al deterioro de la función y la aparición de
                 síntomas.
             </p>
+            <div class="article-figure">
+                <svg viewBox="0 0 340 190" class="micro-svg" xmlns="http://www.w3.org/2000/svg">
+                    <text x="170" y="14" text-anchor="middle" class="micro-svg-label" style="font-weight:bold;">Patogénesis de la falla cardíaca</text>
+                    <line x1="45" y1="20" x2="45" y2="160" stroke="var(--text-muted)" stroke-width="1"/>
+                    <line x1="45" y1="160" x2="310" y2="160" stroke="var(--text-muted)" stroke-width="1"/>
+                    <text x="12" y="35" class="micro-svg-label">60%</text>
+                    <text x="12" y="158" class="micro-svg-label">20%</text>
+                    <text x="8" y="95" class="micro-svg-label" transform="rotate(-90 8 95)">FE (%)</text>
+                    <text x="175" y="180" text-anchor="middle" class="micro-svg-label">Tiempo (años)</text>
+                    <path d="M 65 40 Q 150 55 200 90 Q 250 120 290 148" fill="none" stroke="var(--accent-blue)" stroke-width="2"/>
+                    <circle cx="65" cy="40" r="5" fill="var(--accent-blue)"/>
+                    <circle cx="115" cy="50" r="4" fill="var(--accent-blue)" fill-opacity="0.7"/>
+                    <circle cx="165" cy="68" r="4" fill="var(--accent-blue)" fill-opacity="0.7"/>
+                    <circle cx="230" cy="105" r="5" fill="var(--accent-red)"/>
+                    <line x1="20" y1="40" x2="60" y2="40" stroke="var(--accent-yellow)" stroke-width="2" marker-end="url(#arrowY)"/>
+                    <text x="20" y="30" class="micro-svg-label" style="fill:var(--accent-yellow);font-weight:bold;">Evento índice</text>
+                    <text x="120" y="35" class="micro-svg-label" style="fill:var(--accent-blue);">Mecanismos compensatorios</text>
+                    <text x="235" y="130" class="micro-svg-label" style="fill:var(--accent-red);font-weight:bold;">Daño secundario</text>
+                    <text x="90" y="176" text-anchor="middle" class="micro-svg-label">Asintomático</text>
+                    <text x="260" y="176" text-anchor="middle" class="micro-svg-label">Sintomático</text>
+                    <defs><marker id="arrowY" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="var(--accent-yellow)"/></marker></defs>
+                </svg>
+                <div class="article-figure-caption">Patogénesis de la falla cardíaca: inicia después de un evento índice y produce una declinación en la capacidad de bombear del corazón, inicialmente enmascarada por mecanismos compensatorios.</div>
+            </div>
 
             <p class="section-label" style="margin-top:16px;">Análisis gráfico: curva de Starling y curva de retorno venoso</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
@@ -636,7 +660,10 @@
                 hemodinámica general. La <strong>presión de llenado circulatoria media (MCFP)</strong> es la fuerza
                 de conducción para el retorno venoso y el llenado de aurículas/ventrículos — establece, junto con el
                 mecanismo de Starling, el punto de equilibrio entre gasto cardíaco y retorno venoso a una presión
-                auricular específica.
+                auricular específica. El retorno venoso y el gasto cardíaco llegan a cero cuando la presión
+                auricular iguala a la MCFP (presión de llenado circulatoria media). Los mecanismos regulatorios a
+                largo plazo de este equilibrio obedecen a la reactividad vascular del riñón y a la cantidad de
+                líquido en el sistema cardiovascular.
             </p>
 
             <div style="background:rgba(212,175,55,0.06); border:1px dashed var(--border-color); border-radius:8px; padding:16px; text-align:center; font-size:0.8rem; color:var(--text-muted);">
@@ -644,11 +671,14 @@
             </div>
 
             <p style="font-size: 0.85rem; line-height: 1.6;">
-                En la falla cardíaca, la depresión del gasto cardíaco desplaza el equilibrio hacia un aumento de la
-                presión auricular. La hipoperfusión renal inicia una cascada neurohormonal compensatoria que retiene
-                líquidos para incrementar el retorno venoso y restaurar el gasto cardíaco — a costa de una presión
-                auricular más elevada, que si produce edema pulmonar/hipoxia genera un <span class="hl">círculo
-                vicioso</span> de mayor reducción del gasto cardíaco.
+                En la falla cardíaca (Figura 3 del capítulo), al disminuir la contractilidad ventricular <strong>(1)</strong>,
+                el gasto cardíaco se reduce y la presión auricular aumenta, moviendo el punto de equilibrio de
+                <strong>A</strong> (normal) hacia <strong>B</strong>. La hipoperfusión renal resultante lleva a la
+                retención de líquidos, lo cual desplaza la curva del retorno venoso <strong>(2)</strong> para
+                restaurar el gasto cardíaco a un estado normal — esto genera una mayor presión auricular que conduce
+                al nuevo punto de equilibrio <strong>C</strong>. Si ese aumento de la presión auricular produce
+                edema pulmonar, hipoxia y una mayor reducción del gasto cardíaco, se genera un <span class="hl">círculo
+                vicioso</span> de deterioro progresivo.
             </p>
             <dl class="kv-row"><dt>Disfunción diastólica: mecanismo hemodinámico</dt><dd>Contractilidad normal + distensibilidad ventricular disminuida (frecuente en obesidad e HTA). La distensibilidad reducida limita el llenado de aurículas/ventrículos, requiriendo acumulación de líquido en el sistema venoso para aumentar la presión de conducción del retorno venoso — lo que lleva a edema periférico o pulmonar.</dd></dl>
 
@@ -705,13 +735,20 @@
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Manejo del calcio y disfunción</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">La contracción y la relajación miocárdicas dependen del ciclo del calcio intracelular: la entrada de Ca²⁺ por los canales tipo L dispara la liberación masiva desde el retículo sarcoplásmico (liberación de calcio inducida por calcio), que permite el acoplamiento actina-miosina; la relajación requiere la recaptación activa de ese calcio por la bomba SERCA2a (dependiente de ATP) y su extrusión por el intercambiador Na⁺/Ca²⁺. En la isquemia o la insuficiencia cardíaca, la disfunción de SERCA2a compromete tanto la fuerza de contracción como, especialmente, la velocidad y calidad de la relajación — explicando por qué la disfunción diastólica acompaña con frecuencia a la sistólica.</div>
+                    <div class="micro-prof-body">El flujo de calcio intracelular es fundamental en la función del aparato contráctil del miocito: los miofilamentos de actina y miosina se acoplan y desacoplan dependiendo de las corrientes y los niveles de calcio. El <strong>calcio intracelular aumenta por la entrada vía canales tipo L en los túbulos transversos</strong> y es liberado de los depósitos del retículo sarcoplásmico a través del canal de calcio conocido como <strong>receptor rianodina</strong> — esta liberación desde el retículo sarcoplásmico es el activador primario de la contracción; la recaptación, por su parte, finaliza la contracción y promueve la relajación. El calcio es secuestrado de vuelta en el retículo sarcoplásmico por acción de la bomba ATP dependiente de calcio (<strong>SERCA2a</strong>). En el paciente con falla cardíaca, los niveles de calcio citosólico están elevados, lo cual ocurre por 2 mecanismos combinados: la <strong>menor actividad de la SERCA2a</strong> y la <strong>depleción de los depósitos de calcio del retículo sarcoplásmico por eflujo a través del receptor rianodina</strong> (un receptor rianodina "permeable") — ambos son objetivos de investigación activa para futuras terapias de la falla cardíaca.</div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚖️ Interdependencia sistólica-diastólica y remodelamiento</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">Ambas disfunciones no son compartimentos estancos: un ventrículo con disfunción sistólica grave suele desarrollar también disfunción diastólica secundaria (dilatación + fibrosis reactiva), y viceversa. El tipo de remodelamiento varía según el tipo de sobrecarga: la sobrecarga de <strong>presión</strong> (HTA, estenosis aórtica) produce hipertrofia del VI, rigidez miocárdica y un volumen sistólico restringido en relación con la masa ventricular; la sobrecarga de <strong>volumen</strong> (insuficiencias valvulares) produce dilatación de las cámaras, presión de fin de diástole elevada y función sistólica disminuida; y las condiciones que afectan la contractilidad (infarto, miopatías primarias) producen sobrecarga combinada de presión y volumen. La ley de Laplace formaliza la tensión de pared: <strong>T = (P×R)/2t</strong> (P: presión ventricular, R: radio ventricular, t: grosor de la pared) — el aumento del radio eleva la tensión, y el aumento del grosor (hipertrofia) busca compensarla.</div>
                 </div>
             </div>
+
+            <p class="section-label" style="margin-top:16px;">🧮 Calculadora interactiva: tensión de la pared ventricular (ley de Laplace)</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">T = (P × R) / 2t — a mayor radio (dilatación) o menor grosor de pared, mayor tensión para una misma presión; la hipertrofia (↑t) es el mecanismo compensador que busca normalizar la tensión.</p>
+            <div class="form-group"><label for="cardio-laplace-p">Presión ventricular, P (mmHg)</label><input type="number" id="cardio-laplace-p" step="1" min="10" max="300" value="120"></div>
+            <div class="form-group"><label for="cardio-laplace-r">Radio ventricular, R (cm)</label><input type="number" id="cardio-laplace-r" step="0.1" min="1" max="6" value="2.5"></div>
+            <div class="form-group"><label for="cardio-laplace-t">Grosor de la pared, t (cm)</label><input type="number" id="cardio-laplace-t" step="0.1" min="0.3" max="3" value="1"></div>
+            <div id="cardio-laplace-resultado" class="tfg-estado tfg-estado-ok" style="display:none;"></div>
 
             <p class="section-label" style="margin-top:16px;">Activación neurohormonal y de citocinas</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
@@ -813,10 +850,31 @@
                 <div class="article-figure-caption">Fuerzas de Starling a nivel del capilar.</div>
             </div>
 
+            <p class="section-label" style="margin-top:16px;">4 mecanismos de intercambio capilar</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                En algunos capilares existen <strong>poros o fenestraciones</strong>, cubiertos por una delgada
+                membrana o diafragma, que permiten el intercambio de sustancias entre la luz del capilar y los
+                espacios contiguos. El diámetro de un capilar está diseñado para dejar pasar células sanguíneas, de
+                esta manera la mayoría de nutrientes y oxígeno se difunden libremente entre las membranas celulares.
+            </p>
+            <ul class="term-chips">
+                <li>Uniones entre células endoteliales</li>
+                <li>Fenestraciones en las células endoteliales (con membrana/diafragma)</li>
+                <li>Transporte activo por vesículas que se movilizan a través del endotelio</li>
+                <li>Difusión a través de la membrana celular endotelial</li>
+            </ul>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La presión dentro de los capilares permite una continua fuga de líquido entre estos y los tejidos
+                adyacentes — este líquido contiene agua, nutrientes, hormonas, proteínas y productos de desecho, que
+                son diluidos e intercambiados por difusión. En el espacio intracapilar circulan células sanguíneas
+                (eritrocitos, leucocitos y plaquetas).
+            </p>
+            <dl class="kv-row"><dt>El endotelio como órgano de control</dt><dd>Además de su función metabólica, el endotelio vascular constituye uno de los órganos más extensos de control de la microcirculación y la homeostasis. Controla el tono vasomotor mediante la secreción de sustancias <strong>vasodilatadoras</strong> (óxido nítrico y prostaciclina) o <strong>vasoconstrictoras</strong> (angiotensina II, endotelina-1), y realiza funciones antiinflamatorias, antitrombóticas y de fibrinólisis microvascular — funciones que permiten la transferencia de células y nutrientes a los tejidos, garantizando la permeabilidad capilar y el reclutamiento capilar, lo que regula el área de superficie de irrigación.</dd></dl>
+
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧊 El glucocálix endotelial</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">Capa de glucoproteínas y proteoglicanos que recubre la luz interna del endotelio capilar — actúa como una barrera adicional que modula el paso de líquido y proteínas, más allá de las simples uniones intercelulares. Además regula la adhesión y migración leucocitaria e inhibe la trombosis intravascular. En estados inflamatorios (sepsis) el glucocálix se degrada (glucocalicólisis), aumentando la permeabilidad vascular y contribuyendo al edema y a la fuga capilar característicos del shock distributivo.</div>
+                    <div class="micro-prof-body">Capa de glucoproteínas y proteoglicanos que recubre la luz interna del endotelio capilar — actúa como una barrera adicional que modula el paso de líquido y proteínas, más allá de las simples uniones intercelulares. Mantiene además un <strong>gradiente oncótico</strong> propio, regula la adhesión y migración leucocitaria e inhibe la trombosis intravascular. En estados inflamatorios (sepsis) el glucocálix se degrada (glucocalicólisis), aumentando la permeabilidad vascular y contribuyendo al edema y a la fuga capilar característicos del shock distributivo.</div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>👁️ Disociación macro-microcirculatoria y coherencia hemodinámica</span> <span class="toggle-icon">+</span></div>

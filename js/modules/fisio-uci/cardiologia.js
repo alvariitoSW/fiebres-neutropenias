@@ -157,6 +157,28 @@ function calcIDO2Ficha2() {
         '<br><span style="font-size:0.72rem;opacity:0.85;">Valor normal de referencia (Tabla 12, Capítulo 5): 520-650 mL/min/m².</span>';
 }
 
+// Tensión de la pared ventricular, ley de Laplace (Ficha 3): T = (P×R)/2t.
+function calcLaplaceTension() {
+    const pEl = document.getElementById('cardio-laplace-p');
+    const rEl = document.getElementById('cardio-laplace-r');
+    const tEl = document.getElementById('cardio-laplace-t');
+    const box = document.getElementById('cardio-laplace-resultado');
+    if (!pEl || !rEl || !tEl || !box) return;
+    if (pEl.value === '' || rEl.value === '' || tEl.value === '') { box.style.display = 'none'; return; }
+
+    const p = Number(pEl.value);
+    const r = Number(rEl.value);
+    const t = Number(tEl.value);
+    if (t === 0) { box.style.display = 'none'; return; }
+
+    const tension = (p * r) / (2 * t);
+
+    box.style.display = 'block';
+    box.className = 'tfg-estado tfg-estado-ok';
+    box.innerHTML = `T = (P × R) / 2t = (${p} × ${r}) / (2 × ${t}) = <strong>${tension.toFixed(1)}</strong> (unidades de presión×longitud/longitud)` +
+        '<br><span style="font-size:0.72rem;opacity:0.85;">A mayor radio (dilatación) o menor grosor de pared, mayor tensión para la misma presión — la hipertrofia (↑t) es el mecanismo compensador que busca normalizarla.</span>';
+}
+
 export function init() {
     initCorkboard('cardio-corkboard', 'panel-cardio-tabs');
 
@@ -173,6 +195,10 @@ export function init() {
     const ladoEl = document.getElementById('cardio-costo-lado');
     if (ladoEl) ladoEl.addEventListener('change', calcCostoFuncionamiento);
     calcCostoFuncionamiento();
+
+    document.querySelectorAll('#cardio-laplace-p, #cardio-laplace-r, #cardio-laplace-t')
+        .forEach(el => el && el.addEventListener('input', calcLaplaceTension));
+    calcLaplaceTension();
 
     document.querySelectorAll('#cardio-ido2-gc, #cardio-ido2-sc, #cardio-ido2-hb, #cardio-ido2-sao2, #cardio-ido2-pao2')
         .forEach(el => el && el.addEventListener('input', calcIDO2Ficha2));

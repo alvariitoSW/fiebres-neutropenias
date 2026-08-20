@@ -2576,6 +2576,54 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
       (esta vez ya se hizo en las Fichas 1-2 solamente, a petición
       explícita), a confirmar con el usuario si se continúa automáticamente
       o ficha por ficha según vaya pidiendo.
+  - **Tercera ronda: Fichas 3 y 4** (a petición explícita del usuario de
+    "continuar con las 2 siguientes fichas"), releídos íntegros los
+    Capítulos 3 (págs. 29-43) y 4 (págs. 45-57) de la fuente. A diferencia
+    de las Fichas 1-2, estas dos ya estaban en un nivel de detalle alto
+    desde la primera ronda — la relectura encontró huecos más puntuales,
+    no una reescritura completa:
+    - **Ficha 3**: nueva **Figura 1 del capítulo** recreada como SVG
+      (patogénesis de la falla cardíaca — FE vs. tiempo, evento índice →
+      mecanismos compensatorios → daño secundario, asintomático→sintomático
+      — ausente hasta ahora, aunque ya se citaba en prosa); los puntos
+      **A/B/C** de la Figura 3 (curvas de Starling/retorno venoso)
+      explicitados en el texto en vez de quedar implícitos; el dato de que
+      el retorno venoso y el GC llegan a cero cuando la presión auricular
+      iguala la MCFP; ampliado el mecanismo de elevación del calcio
+      citosólico en falla cardíaca con el detalle real de los **2
+      mecanismos combinados** (menor actividad de SERCA2a + depleción de
+      los depósitos del retículo sarcoplásmico por eflujo a través del
+      **receptor rianodina** "permeable") y los términos **túbulos
+      transversos**/canales tipo L, ausentes en la versión anterior (más
+      genérica). Añadida una **calculadora interactiva de tensión de pared
+      (ley de Laplace, T=(P×R)/2t)** — primera calculadora de la ficha.
+    - **Ficha 4**: nueva sección de **4 mecanismos de intercambio
+      capilar** (uniones entre células endoteliales, fenestraciones con
+      membrana/diafragma, transporte activo por vesículas, difusión por la
+      membrana celular) — completamente ausente hasta ahora, pese a ser
+      contenido explícito del capítulo; nuevo kv-row sobre el **endotelio
+      como órgano de control** con la distinción real fuente/vasodilatador
+      (óxido nítrico, prostaciclina) vs. vasoconstrictor (angiotensina II,
+      endotelina-1) — antes solo cubierta indirectamente por el
+      glucocálix. No se añadió calculadora nueva en esta ficha porque sus
+      fórmulas (DO₂, ATP de la respiración celular) ya tienen calculadora
+      interactiva equivalente en las Fichas 1, 2 y 5 (DO₂/Fick) — evitar
+      duplicar la misma interactividad 3 veces.
+    - Añadidas **5 preguntas de quiz nuevas** (`cardio-q114`-`q118`,
+      incluido un caso tipo `redactar` sobre por qué la hipertrofia
+      concéntrica es, matemáticamente, una respuesta "lógica" a la
+      sobrecarga de presión según la ley de Laplace), llevando el banco de
+      Cardiología a 118 preguntas y el banco combinado de toda la app a
+      **1020 preguntas** (1015 previas + 5). Verificado con Playwright: la
+      calculadora de Laplace responde en vivo (150,0 → 240,0 al cambiar el
+      radio de 2,5 a 4 cm), las 11 fichas siguen abriendo sin error de
+      consola ni 404, y el quiz completa un recorrido de 10 preguntas del
+      tema "¿Cómo funciona la microcirculación?" sin excepciones.
+      **Pendiente**: quedan las Fichas 5-11 por esta misma relectura
+      exhaustiva de tercera ronda (las Fichas 5-6 ya tuvieron una revisión
+      profunda en la primera ronda general, pero no la relectura
+      frase-a-frase de segunda/tercera ronda que sí tuvieron las Fichas
+      1-4) — a confirmar con el usuario cómo continuar.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
