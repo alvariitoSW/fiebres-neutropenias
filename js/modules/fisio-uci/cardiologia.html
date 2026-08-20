@@ -456,11 +456,15 @@
                     <div class="micro-prof-body">Descrita a principios del siglo XX por el fisiólogo alemán Otto Frank y el británico Ernest Starling: a mayor estiramiento de la fibra miocárdica (dentro de un rango fisiológico), mayor es la fuerza de la contracción siguiente. Se cuantifica mediante la <strong>distensibilidad</strong> (compliance), C = ΔV/ΔP — el corazón normal ajusta automáticamente su volumen sistólico a los cambios en el volumen de fin de diástole. <strong>Escenario clínico de riesgo:</strong> en un paciente con insuficiencia diastólica y baja distensibilidad ventricular, administrar diuréticos para "aliviar" una precarga aparentemente alta puede en realidad reducir el gasto cardíaco y empeorar la perfusión, porque ese ventrículo rígido necesita presiones de llenado más altas de lo habitual para generar el mismo volumen sistólico.
 
                         <p class="section-label" style="margin-top:14px; font-size:0.8rem;">🧮 Simulador interactivo: curva de Frank-Starling</p>
-                        <p style="font-size: 0.78rem; color: var(--text-muted);">Modelo ilustrativo de la relación precarga-volumen sistólico, reproduciendo la forma cualitativa descrita en la fuente — una <strong>meseta con posterior reducción</strong> ante presión/volumen excesivos, no una fórmula clínica exacta para un paciente real. Mueve el slider y cambia el estado contráctil para ver cómo se desplaza el punto de trabajo del ventrículo.</p>
+                        <p style="font-size: 0.78rem; color: var(--text-muted);">Modelo ilustrativo de la relación precarga-volumen sistólico, reproduciendo la forma cualitativa descrita en la fuente — una <strong>meseta con posterior reducción</strong> ante presión/volumen excesivos, no una fórmula clínica exacta para un paciente real. Mueve el slider o escribe directamente el volumen de fin de diástole (mL) — ambos están sincronizados — y cambia el estado contráctil para ver cómo se desplaza el punto de trabajo del ventrículo.</p>
                         <div class="tfg-slider-row">
-                            <label for="cardio-fs-precarga">Precarga (volumen de fin de diástole)</label>
+                            <label for="cardio-fs-precarga">Precarga (% de la escala)</label>
                             <input type="range" id="cardio-fs-precarga" min="0" max="100" value="50" step="1">
                             <span id="cardio-fs-precarga-valor">50%</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="cardio-fs-edv-ml" title="Volumen de fin de diástole en mL, sincronizado con el slider de arriba">🧮 Volumen de fin de diástole (mL)</label>
+                            <input type="number" id="cardio-fs-edv-ml" step="1" min="70" max="160" value="115">
                         </div>
                         <div class="form-group">
                             <label for="cardio-fs-estado">Estado contráctil</label>
@@ -470,11 +474,20 @@
                                 <option value="aumentada">Aumentada (inotrópico +)</option>
                             </select>
                         </div>
-                        <svg viewBox="0 0 320 160" class="micro-svg" xmlns="http://www.w3.org/2000/svg">
+                        <svg viewBox="0 0 320 170" class="micro-svg" xmlns="http://www.w3.org/2000/svg">
                             <line x1="40" y1="10" x2="40" y2="140" stroke="var(--text-muted)" stroke-width="1"/>
                             <line x1="40" y1="140" x2="300" y2="140" stroke="var(--text-muted)" stroke-width="1"/>
-                            <text x="8" y="80" text-anchor="middle" class="micro-svg-label" transform="rotate(-90 8 80)">Volumen sistólico</text>
-                            <text x="170" y="155" text-anchor="middle" class="micro-svg-label">Precarga (volumen de fin de diástole)</text>
+                            <text x="8" y="80" text-anchor="middle" class="micro-svg-label" transform="rotate(-90 8 80)">Volumen sistólico (mL)</text>
+                            <text x="170" y="165" text-anchor="middle" class="micro-svg-label">Precarga — volumen de fin de diástole (mL)</text>
+                            <text x="35" y="143" text-anchor="end" class="micro-svg-label" style="font-size:7px;">0</text>
+                            <text x="35" y="103" text-anchor="end" class="micro-svg-label" style="font-size:7px;">40</text>
+                            <text x="35" y="63" text-anchor="end" class="micro-svg-label" style="font-size:7px;">80</text>
+                            <text x="35" y="23" text-anchor="end" class="micro-svg-label" style="font-size:7px;">120</text>
+                            <text x="40" y="151" text-anchor="middle" class="micro-svg-label" style="font-size:7px;">70</text>
+                            <text x="105" y="151" text-anchor="middle" class="micro-svg-label" style="font-size:7px;">93</text>
+                            <text x="170" y="151" text-anchor="middle" class="micro-svg-label" style="font-size:7px;">115</text>
+                            <text x="235" y="151" text-anchor="middle" class="micro-svg-label" style="font-size:7px;">138</text>
+                            <text x="300" y="151" text-anchor="middle" class="micro-svg-label" style="font-size:7px;">160</text>
                             <path id="cardio-fs-curva-disminuida" class="cardio-fs-curva" d="M 40,140 L 66,122.37 L 92,108.66 L 118,98.21 L 144,90.45 L 170,84.94 L 196,81.25 L 222,79.1 L 248,78.1 L 261,78 L 274,78.1 L 300,78.85" fill="none" stroke="var(--accent-red)" stroke-width="1.5"/>
                             <path id="cardio-fs-curva-normal" class="cardio-fs-curva" d="M 40,140 L 66,106.3 L 92,81.6 L 118,64.1 L 144,52.3 L 170,45 L 196,41.1 L 222,40 L 248,40.9 L 274,43.4 L 300,46.94" fill="none" stroke="var(--accent-blue)" stroke-width="1.5"/>
                             <path id="cardio-fs-curva-aumentada" class="cardio-fs-curva" d="M 40,140 L 66,91.4 L 92,58.95 L 118,38.7 L 144,27.25 L 170,22.5 L 183,22 L 196,22.5 L 222,25.7 L 248,31 L 274,37.9 L 300,45.3" fill="none" stroke="var(--accent-green)" stroke-width="1.5"/>
@@ -487,6 +500,7 @@
                         </svg>
                         <p style="font-size:0.8rem; text-align:center; color:var(--text-main);" id="cardio-fs-resultado"></p>
                         <div id="cardio-fs-interpretacion" class="tfg-estado tfg-estado-ok" style="margin-top:10px;"></div>
+                        <p style="font-size:0.72rem; color:var(--text-muted); margin-top:6px;">👉 Valores fisiológicos de referencia: EDV normal ≈ <strong>70-120 mL</strong>; volumen sistólico normal <strong>60-100 mL</strong> (ver Ficha 5). Por encima de ~140-150 mL de EDV, la mayoría de los ventrículos ya han superado el pico de su propia curva.</p>
                     </div>
                 </div>
                 <div class="micro-prof-item">
@@ -494,23 +508,29 @@
                     <div class="micro-prof-body">
                         <dl class="kv-row"><dt>Ley de Laplace (T = P×r)</dt><dd>Descrita originalmente a partir de observaciones sobre burbujas de jabón en el siglo XIX — la tensión de la pared es proporcional a la presión intracavitaria y al radio de la cavidad. Aplicada al ventrículo, la presión transmural es la suma de la presión intratorácica y la impedancia arterial, y el radio corresponde al diámetro de fin de diástole.</dd></dl>
 
-                        <p class="section-label" style="margin-top:10px; font-size:0.78rem;">📊 Diagrama interactivo: radio ventricular y tensión de pared</p>
-                        <p style="font-size:0.75rem; color:var(--text-muted);">A presión constante, mueve el slider del radio y observa cómo crece la tensión de pared (T = P×r) — el mismo principio por el que un ventrículo dilatado necesita generar mucha más tensión que uno de tamaño normal para alcanzar la misma presión de eyección.</p>
+                        <p class="section-label" style="margin-top:10px; font-size:0.78rem;">📊 Diagrama interactivo + calculadora: radio ventricular y tensión de pared</p>
+                        <p style="font-size:0.75rem; color:var(--text-muted);">Escribe la presión y mueve el slider del radio para calcular T = P×r en vivo — el mismo principio por el que un ventrículo dilatado necesita generar mucha más tensión que uno de tamaño normal para alcanzar la misma presión de eyección.</p>
+                        <div class="form-group">
+                            <label for="cardio-laplace-mini-p" title="Presión intraventricular">🧮 Presión, P (mmHg)</label>
+                            <input type="number" id="cardio-laplace-mini-p" step="1" min="20" max="250" value="120">
+                        </div>
                         <div class="tfg-slider-row">
-                            <label for="cardio-laplace-mini-r">Radio ventricular (relativo)</label>
+                            <label for="cardio-laplace-mini-r">Radio ventricular, r</label>
                             <input type="range" id="cardio-laplace-mini-r" min="0" max="100" value="35" step="1">
                             <span id="cardio-laplace-mini-r-valor">3,0 cm</span>
                         </div>
                         <svg viewBox="0 0 260 140" class="micro-svg" xmlns="http://www.w3.org/2000/svg">
-                            <text x="130" y="14" text-anchor="middle" class="micro-svg-label">Corte transversal del ventrículo (P constante)</text>
+                            <text x="130" y="14" text-anchor="middle" class="micro-svg-label">Corte transversal del ventrículo</text>
                             <circle id="cardio-laplace-mini-circulo" cx="70" cy="85" r="30" fill="rgba(212,175,55,0.12)" stroke="var(--accent-blue)" stroke-width="3"/>
                             <line id="cardio-laplace-mini-radio" x1="70" y1="85" x2="100" y2="85" stroke="var(--accent-yellow)" stroke-width="1.5" stroke-dasharray="2,2"/>
                             <text id="cardio-laplace-mini-radio-label" x="85" y="79" text-anchor="middle" class="micro-svg-label" style="fill:var(--accent-yellow);">r</text>
-                            <text x="190" y="45" text-anchor="middle" class="micro-svg-label" style="fill:var(--text-main);">Tensión de pared (T)</text>
+                            <text x="190" y="45" text-anchor="middle" class="micro-svg-label" style="fill:var(--text-main);">Tensión de pared (T = P×r)</text>
                             <rect x="140" y="55" width="100" height="12" rx="2" fill="rgba(0,0,0,0.3)"/>
                             <rect id="cardio-laplace-mini-barra" x="140" y="55" width="10" height="12" rx="2" fill="var(--accent-red)"/>
-                            <text id="cardio-laplace-mini-t" x="190" y="88" text-anchor="middle" class="micro-svg-label" style="font-weight:bold;">T relativa: 35%</text>
+                            <text id="cardio-laplace-mini-t" x="190" y="88" text-anchor="middle" class="micro-svg-label" style="font-weight:bold;">T = 420</text>
                         </svg>
+                        <div id="cardio-laplace-mini-interpretacion" class="tfg-estado tfg-estado-ok"></div>
+                        <p style="font-size:0.72rem; color:var(--text-muted); margin-top:6px;">👉 Valores fisiológicos de referencia: presión sistólica del VI ≈ <strong>90-140 mmHg</strong>; radio ventricular de fin de diástole ≈ <strong>2,5-3,5 cm</strong> (hasta &gt;4,5 cm en la dilatación importante). Esta calculadora usa unidades ilustrativas (mmHg·cm), no una escala clínica validada.</p>
 
                         <dl class="kv-row"><dt>Impedancia</dt><dd>Se compone de la distensibilidad arterial y la resistencia vascular — el verdadero determinante de cuánto le cuesta al ventrículo eyectar la sangre.</dd></dl>
                         <dl class="kv-row"><dt>Ley de Hagen-Poiseuille</dt><dd>Q = ΔP/R (el flujo es proporcional al gradiente de presión e inversamente proporcional a la resistencia) — reordenada, R = ΔP/Q, la base de las fórmulas clínicas de resistencia vascular.</dd></dl>

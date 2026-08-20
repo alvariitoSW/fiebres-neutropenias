@@ -13,27 +13,43 @@ const FS_CURVAS = {
 };
 // Explicación fisiopatológica según la zona de la curva en la que cae el
 // punto de trabajo (r = precarga/xp del estado seleccionado) — qué
-// significa, qué mecanismo lo mantiene ahí, y cómo se descompensa.
+// significa, qué mecanismo lo mantiene ahí, y cómo se descompensa. Devuelve
+// HTML esquematizado (kv-row Zona/Mecanismo/Riesgo) en vez de un párrafo
+// corrido, con <strong>/.hl para las palabras clave.
 function textoZonaFrankStarling(r) {
     if (r < 0.35) {
-        return 'Zona ascendente pronunciada de la curva — el ventrículo es muy <strong>dependiente de la precarga</strong>: pequeños aumentos de volumen producen grandes aumentos del volumen sistólico (un paciente aquí sí responde a la administración de líquidos). El mecanismo es el propio acoplamiento actina-miosina de Frank-Starling: a mayor longitud de la fibra en reposo, más puentes cruzados eficaces se forman. El riesgo en esta zona no es el exceso, sino el defecto: si la precarga sigue cayendo (hemorragia, deshidratación, venodilatación por sepsis/anestesia), el volumen sistólico y el gasto cardíaco caen en paralelo, sin ningún mecanismo que lo evite más allá de la taquicardia compensadora.';
+        return `<dl class="kv-row"><dt>Zona</dt><dd>Ascendente pronunciada — el ventrículo es muy <strong>dependiente de la precarga</strong>: pequeños aumentos de volumen producen grandes aumentos del volumen sistólico (<span class="hl">paciente que sí responde a líquidos</span>).</dd></dl>
+        <dl class="kv-row"><dt>Mecanismo</dt><dd>Acoplamiento actina-miosina de Frank-Starling — a mayor longitud de la fibra en reposo, más puentes cruzados eficaces se forman.</dd></dl>
+        <dl class="kv-row"><dt>Riesgo</dt><dd>No el exceso, sino el <strong>defecto</strong>: si la precarga sigue cayendo (hemorragia, deshidratación, venodilatación por sepsis/anestesia), el volumen sistólico y el gasto cardíaco caen en paralelo, sin más mecanismo compensador que la taquicardia.</dd></dl>`;
     }
     if (r < 1.0) {
-        return 'Zona de meseta/eficiencia — el ventrículo trabaja cerca de su punto óptimo: el mecanismo de Frank-Starling ya extrajo casi todo el beneficio posible del estiramiento de la fibra, y el volumen sistólico se mantiene relativamente estable ante cambios moderados de precarga. Es el rango de trabajo habitual del corazón sano en reposo. Lo que mantiene a un paciente en esta zona es la regulación renal del volumen circulante (eje renina-angiotensina-aldosterona) y el tono venoso simpático, que ajustan el retorno venoso para no sobrepasar el pico de la curva.';
+        return `<dl class="kv-row"><dt>Zona</dt><dd>Meseta/eficiencia — el ventrículo trabaja cerca de su <strong>punto óptimo</strong>: el volumen sistólico se mantiene relativamente estable ante cambios moderados de precarga.</dd></dl>
+        <dl class="kv-row"><dt>Mecanismo</dt><dd>Regulación renal del volumen circulante (eje renina-angiotensina-aldosterona) y tono venoso simpático, que ajustan el retorno venoso para no sobrepasar el pico de la curva.</dd></dl>
+        <dl class="kv-row"><dt>Riesgo</dt><dd><span class="hl">Bajo riesgo</span> — es el rango de trabajo habitual del corazón sano en reposo.</dd></dl>`;
     }
-    return 'Se ha sobrepasado el pico de la curva — <strong>sobredistensión</strong>: pese a seguir aumentando el volumen de fin de diástole, la fuerza de contracción empieza a declinar, porque el sarcómero se ha estirado más allá de su longitud óptima de solapamiento actina-miosina. Es lo que ocurre al sobrecargar de volumen a un ventrículo ya comprometido: seguir administrando líquidos deja de aumentar el gasto cardíaco (o incluso lo reduce) mientras la presión de llenado sigue subiendo — el círculo vicioso de la Ficha 3, que termina en edema pulmonar/sistémico. Es el punto en el que la estrategia debe cambiar de volumen a diuréticos/vasodilatadores.';
+    return `<dl class="kv-row"><dt>Zona</dt><dd><strong>Sobredistensión</strong> — se ha sobrepasado el pico de la curva: pese a seguir aumentando el volumen de fin de diástole, la fuerza de contracción empieza a declinar.</dd></dl>
+    <dl class="kv-row"><dt>Mecanismo</dt><dd>El sarcómero se ha estirado más allá de su longitud óptima de solapamiento actina-miosina.</dd></dl>
+    <dl class="kv-row"><dt>Riesgo</dt><dd>Seguir administrando líquidos <span class="hl">deja de aumentar el gasto cardíaco</span> (o incluso lo reduce) mientras la presión de llenado sigue subiendo — el círculo vicioso de la Ficha 3, que termina en edema pulmonar/sistémico. La estrategia debe cambiar de volumen a diuréticos/vasodilatadores.</dd></dl>`;
 }
 function textoEstadoFrankStarling(estado) {
     if (estado === 'disminuida') {
-        return 'Con contractilidad <strong>disminuida</strong> (falla sistólica), toda la curva se desplaza abajo y a la derecha: para el mismo volumen de fin de diástole el corazón genera menos volumen sistólico, y alcanza su pico (más bajo) con más precarga de la habitual. El organismo compensa activando el sistema simpático y el eje renina-angiotensina-aldosterona para retener líquido y así elevar la precarga — pero esa misma compensación, sostenida en el tiempo, es la que termina produciendo la congestión y el remodelamiento ventricular descritos en la Ficha 3.';
+        return `<dl class="kv-row"><dt>Contractilidad</dt><dd><strong style="color:var(--accent-red);">Disminuida</strong> (falla sistólica) — toda la curva se desplaza abajo y a la derecha: para el mismo volumen de fin de diástole, el corazón genera menos volumen sistólico. El organismo compensa reteniendo líquido (sistema simpático + eje renina-angiotensina-aldosterona) para elevar la precarga — pero esa misma compensación, sostenida en el tiempo, produce la congestión y el remodelamiento ventricular de la Ficha 3.</dd></dl>`;
     }
     if (estado === 'aumentada') {
-        return 'Con contractilidad <strong>aumentada</strong> (estímulo inotrópico, catecolaminas endógenas o fármacos), la curva se desplaza arriba y a la izquierda: se alcanza un volumen sistólico mayor con menos precarga. El costo, desarrollado en la Ficha 2, es un mayor consumo de oxígeno miocárdico — sostener este estado con dosis altas de inotrópicos puede desencadenar isquemia o arritmias si el aporte coronario de oxígeno no logra igualar ese mayor consumo.';
+        return `<dl class="kv-row"><dt>Contractilidad</dt><dd><strong style="color:var(--accent-green);">Aumentada</strong> (inotrópico, catecolaminas) — la curva se desplaza arriba y a la izquierda: mayor volumen sistólico con menos precarga. El costo (Ficha 2) es un mayor consumo miocárdico de oxígeno — sostenerlo con dosis altas puede desencadenar isquemia o arritmias.</dd></dl>`;
     }
-    return 'Con contractilidad <strong>normal</strong>, este es el comportamiento fisiológico de base del ventrículo — el punto de referencia frente al que se comparan los desplazamientos por falla sistólica o por estímulo inotrópico.';
+    return `<dl class="kv-row"><dt>Contractilidad</dt><dd><strong style="color:var(--accent-blue);">Normal</strong> — comportamiento fisiológico de base, el punto de referencia frente al que se comparan los desplazamientos por falla sistólica o estímulo inotrópico.</dd></dl>`;
 }
-function calcFrankStarlingSimulador() {
+// Escala de precarga del simulador — mapeo % ↔ mL, consistente con el rango
+// EDV (70-160 mL) ya usado en el asa presión-volumen de la Ficha 3.
+const FS_EDV_MIN = 70;
+const FS_EDV_MAX = 160;
+function fsPrecargaToEdv(precarga) { return FS_EDV_MIN + (precarga / 100) * (FS_EDV_MAX - FS_EDV_MIN); }
+function fsEdvToPrecarga(edv) { return ((edv - FS_EDV_MIN) / (FS_EDV_MAX - FS_EDV_MIN)) * 100; }
+
+function calcFrankStarlingSimulador(origen) {
     const precargaEl = document.getElementById('cardio-fs-precarga');
+    const edvMlEl = document.getElementById('cardio-fs-edv-ml');
     const estadoEl = document.getElementById('cardio-fs-estado');
     const marker = document.getElementById('cardio-fs-marker');
     const guideV = document.getElementById('cardio-fs-guia-v');
@@ -43,7 +59,17 @@ function calcFrankStarlingSimulador() {
     const interpretacionEl = document.getElementById('cardio-fs-interpretacion');
     if (!precargaEl || !estadoEl || !marker) return;
 
+    // Sincronización bidireccional entre el slider (%) y el input numérico
+    // (mL) — el input numérico es "la calculadora" del simulador.
+    if (origen === 'edv' && edvMlEl && edvMlEl.value !== '') {
+        const edvClamped = Math.max(FS_EDV_MIN, Math.min(FS_EDV_MAX, Number(edvMlEl.value)));
+        precargaEl.value = fsEdvToPrecarga(edvClamped);
+    }
+
     const precarga = Number(precargaEl.value);
+    const edvMl = fsPrecargaToEdv(precarga);
+    if (edvMlEl && origen !== 'edv') edvMlEl.value = edvMl.toFixed(0);
+
     const curva = FS_CURVAS[estadoEl.value];
     const vsRaw = curva.A * (precarga / curva.xp) * Math.exp(1 - precarga / curva.xp);
     const vs = Math.max(0, Math.min(vsRaw, 130));
@@ -55,20 +81,19 @@ function calcFrankStarlingSimulador() {
     marker.setAttribute('cy', svgY);
     if (guideV) { guideV.setAttribute('x1', svgX); guideV.setAttribute('x2', svgX); guideV.setAttribute('y2', svgY); }
     if (guideH) { guideH.setAttribute('y1', svgY); guideH.setAttribute('y2', svgY); guideH.setAttribute('x2', svgX); }
-    if (valorEl) valorEl.textContent = `${precarga}%`;
+    if (valorEl) valorEl.textContent = `${precarga.toFixed(0)}%`;
 
     document.querySelectorAll('.cardio-fs-curva').forEach(p => p.classList.remove('cardio-fs-curva-activa'));
     const activa = document.getElementById(`cardio-fs-curva-${estadoEl.value}`);
     if (activa) activa.classList.add('cardio-fs-curva-activa');
 
-    const pct = curva.A > 0 ? Math.round((vs / curva.A) * 100) : 0;
     const etiquetaEstado = { aumentada: 'aumentada (inotrópico +)', normal: 'normal', disminuida: 'disminuida (falla sistólica)' }[estadoEl.value];
     if (salidaEl) {
-        salidaEl.textContent = `Volumen sistólico relativo: ≈${pct}% del máximo alcanzable con contractilidad ${etiquetaEstado} (modelo ilustrativo, no una cifra clínica real).`;
+        salidaEl.innerHTML = `EDV ≈ <strong>${edvMl.toFixed(0)} mL</strong> · Volumen sistólico estimado ≈ <strong>${vs.toFixed(0)} mL</strong> (contractilidad ${etiquetaEstado}) — modelo ilustrativo, no una cifra clínica real.`;
     }
     if (interpretacionEl) {
         const r = precarga / curva.xp;
-        interpretacionEl.innerHTML = textoZonaFrankStarling(r) + ' ' + textoEstadoFrankStarling(estadoEl.value);
+        interpretacionEl.innerHTML = textoZonaFrankStarling(r) + textoEstadoFrankStarling(estadoEl.value);
     }
 }
 
@@ -79,31 +104,53 @@ function calcFrankStarlingSimulador() {
 // (T=(P×R)/2t, con grosor de pared incluido).
 function calcLaplaceMiniDiagrama() {
     const rEl = document.getElementById('cardio-laplace-mini-r');
+    const pEl = document.getElementById('cardio-laplace-mini-p');
     const rValorEl = document.getElementById('cardio-laplace-mini-r-valor');
     const circulo = document.getElementById('cardio-laplace-mini-circulo');
     const radioLinea = document.getElementById('cardio-laplace-mini-radio');
     const radioLabel = document.getElementById('cardio-laplace-mini-radio-label');
     const barra = document.getElementById('cardio-laplace-mini-barra');
     const tTexto = document.getElementById('cardio-laplace-mini-t');
+    const interpEl = document.getElementById('cardio-laplace-mini-interpretacion');
     if (!rEl || !circulo) return;
 
     const frac = Number(rEl.value) / 100;
     const rCm = 1.5 + frac * 3.5;
     const pxRadio = 15 + frac * 35;
+    const p = pEl && pEl.value !== '' ? Number(pEl.value) : 120;
 
     if (rValorEl) rValorEl.textContent = `${rCm.toFixed(1)} cm`;
     circulo.setAttribute('r', pxRadio);
     if (radioLinea) radioLinea.setAttribute('x2', 70 + pxRadio);
     if (radioLabel) radioLabel.setAttribute('x', 70 + pxRadio / 2);
 
+    // T = P × r (versión simple de la ley de Laplace de esta ficha, sin
+    // grosor de pared — ver la calculadora completa T=(P×R)/2t de la Ficha 3).
+    // Unidades ilustrativas (mmHg·cm), escala 0-700 solo para la barra visual.
+    const tension = p * rCm;
+    const ESCALA_MAX = 700;
     let color = 'var(--accent-green)';
-    if (frac > 0.7) color = 'var(--accent-red)';
-    else if (frac > 0.4) color = 'var(--accent-yellow)';
+    let estado = 'ok';
+    if (tension > 450) { color = 'var(--accent-red)'; estado = 'danger'; }
+    else if (tension > 280) { color = 'var(--accent-yellow)'; estado = 'warn'; }
     circulo.setAttribute('stroke', color);
 
-    const tPct = Math.round(frac * 100);
-    if (barra) { barra.setAttribute('width', 10 + frac * 90); barra.setAttribute('fill', color); }
-    if (tTexto) tTexto.textContent = `T relativa: ${tPct}%`;
+    const pctBarra = Math.max(0, Math.min(100, (tension / ESCALA_MAX) * 100));
+    if (barra) { barra.setAttribute('width', 10 + (pctBarra / 100) * 90); barra.setAttribute('fill', color); }
+    if (tTexto) tTexto.textContent = `T = P×r = ${tension.toFixed(0)}`;
+
+    if (interpEl) {
+        interpEl.className = `tfg-estado tfg-estado-${estado}`;
+        let texto;
+        if (estado === 'danger') {
+            texto = 'Tensión de pared <strong>muy elevada</strong> — dilatación y/o presión intraventricular altas combinadas. Es el escenario que más eleva el consumo miocárdico de oxígeno (ver doble/triple producto, Ficha 2) y el estímulo que dispara la hipertrofia compensadora (↑ grosor de pared) para intentar normalizar la tensión.';
+        } else if (estado === 'warn') {
+            texto = 'Tensión de pared <strong>por encima de lo habitual</strong> — dilatación o presión moderadamente elevadas; el ventrículo aún compensa, pero con un coste energético mayor.';
+        } else {
+            texto = 'Tensión de pared <strong>dentro de un rango habitual</strong> para un ventrículo de tamaño y presión normales.';
+        }
+        interpEl.innerHTML = texto;
+    }
 }
 
 // Demostración interactiva del artefacto de acoplamiento matemático de la
@@ -748,11 +795,13 @@ export function init() {
     initCorkboard('cardio-corkboard', 'panel-cardio-tabs');
 
     document.querySelectorAll('#cardio-fs-precarga, #cardio-fs-estado')
-        .forEach(el => el && el.addEventListener('input', calcFrankStarlingSimulador));
+        .forEach(el => el && el.addEventListener('input', () => calcFrankStarlingSimulador()));
+    const fsEdvMlEl = document.getElementById('cardio-fs-edv-ml');
+    if (fsEdvMlEl) fsEdvMlEl.addEventListener('input', () => calcFrankStarlingSimulador('edv'));
     calcFrankStarlingSimulador();
 
-    const laplaceMiniR = document.getElementById('cardio-laplace-mini-r');
-    if (laplaceMiniR) laplaceMiniR.addEventListener('input', calcLaplaceMiniDiagrama);
+    document.querySelectorAll('#cardio-laplace-mini-r, #cardio-laplace-mini-p')
+        .forEach(el => el && el.addEventListener('input', calcLaplaceMiniDiagrama));
     calcLaplaceMiniDiagrama();
 
     const laplaceMiniGc = document.getElementById('cardio-laplace-mini-gc');

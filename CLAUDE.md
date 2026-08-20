@@ -2981,6 +2981,57 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
     `...parte2.pdf#page=55`), y ya no queda ningún bloque de bibliografía
     suelto fuera del panel (`body > .card:has(h3:has-text("Bibliografía"))`
     da 0 resultados).
+  - **Ficha 1: ejes numéricos + calculadora en Frank-Starling, calculadora +
+    interpretación en el diagrama de Laplace**, a petición explícita del
+    usuario ("añadir datos numéricos en el eje de abscisas y ordenadas...
+    me gustaría que se pudiera hacer una calculadora en el simulador...
+    algo parecido en el diagrama interactivo de Laplace, que hubiera una
+    parte pequeña para calcular esta ley... información breve sobre qué
+    implican los valores extremos, cuáles son los valores fisiológicos").
+    - **Frank-Starling**: el eje X (antes "Precarga" sin unidades) ahora
+      lleva marcas numéricas de EDV en mL (70/93/115/138/160) y el eje Y
+      marcas de volumen sistólico en mL (0/40/80/120) — usando el mismo
+      rango EDV 70-160 mL ya establecido en el asa presión-volumen de la
+      Ficha 3, para que ambos simuladores hablen el mismo lenguaje
+      numérico. Se añadió un input numérico `cardio-fs-edv-ml`
+      **sincronizado bidireccionalmente** con el slider de precarga
+      (`fsPrecargaToEdv()`/`fsEdvToPrecarga()` en `cardiologia.js`) — es la
+      "calculadora" pedida: escribir un EDV en mL mueve el slider y
+      recalcula el punto de la curva, y mover el slider actualiza el
+      campo numérico. El resultado ahora reporta EDV y volumen sistólico
+      en mL reales (antes solo "% del máximo alcanzable"). Las funciones
+      `textoZonaFrankStarling()`/`textoEstadoFrankStarling()` se
+      reescribieron para devolver HTML esquematizado (`<dl class="kv-row">`
+      con Zona/Mecanismo/Riesgo, y Contractilidad por separado) en vez de
+      un párrafo corrido, con `<strong>` de color (`--accent-red/blue/green`
+      según el estado contráctil) y `.hl` en las frases clave — mismo
+      patrón visual ya usado en el resto de la app. Se añadió una nota de
+      valores fisiológicos de referencia (EDV 70-120 mL, VS 60-100 mL).
+    - **Laplace (mini-diagrama de la Ficha 1, dentro de "Poscarga")**: ganó
+      un input numérico de presión (`cardio-laplace-mini-p`, mmHg) que,
+      junto al slider de radio ya existente, calcula T = P×r en vivo
+      (`calcLaplaceMiniDiagrama()` actualizada) — la "calculadora pequeña"
+      pedida, distinta y más simple que la calculadora numérica completa
+      de la Ficha 3 (T=(P×R)/2t, con grosor de pared). El color del
+      círculo/barra ahora responde a la **tensión calculada** (P×r), no
+      solo al radio como antes, con 3 tramos (verde/amarillo/rojo en
+      280/450 sobre una escala ilustrativa 0-700) y un nuevo
+      `#cardio-laplace-mini-interpretacion` (`.tfg-estado`) que explica qué
+      implica cada tramo — desde "dentro de un rango habitual" hasta
+      "estímulo que dispara la hipertrofia compensadora", enlazando con el
+      doble/triple producto de la Ficha 2. Se añadió una nota de valores
+      fisiológicos de referencia (P sistólica VI 90-140 mmHg, radio VI
+      2,5-3,5 cm, hasta &gt;4,5 cm en dilatación), con la aclaración
+      explícita de que las unidades (mmHg·cm) son ilustrativas, no una
+      escala clínica validada.
+    - Verificado con Playwright: la sincronización slider↔input mL
+      funciona en ambas direcciones (precarga 90% → EDV 151 mL; EDV 80 mL
+      → precarga 11%), la interpretación esquematizada contiene los
+      `kv-row`/`<dt>Zona</dt>` esperados, las marcas numéricas de los ejes
+      están presentes en el SVG, y la calculadora de Laplace responde
+      correctamente a cambios de P y r (P=200→T=545/rojo,
+      P=40+r mínimo→T=67/verde) — las 11 fichas de contenido y la Ficha 12
+      de bibliografía siguen abriendo sin error de consola ni 404 reales.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
