@@ -2804,6 +2804,28 @@ existan los elementos que busca).
    categoría.
 6. Si es una categoría nueva, añade su import + llamada en `js/main.js`.
 
+## Flujo de git: mergear siempre a `main`
+
+El usuario ha pedido explícitamente ("siempre mergea a main") que cada
+tanda de commits en la rama de trabajo (`claude/medical-app-restructure-5xv3qn`)
+se lleve también a `main` y se suba, sin esperar a que lo pida cada vez —
+es una autorización estándar para este repo, no puntual. Tras dejar
+committeado y pusheado el trabajo en la rama:
+
+```
+git checkout main
+git merge --ff-only origin/claude/medical-app-restructure-5xv3qn
+git push origin main
+git checkout claude/medical-app-restructure-5xv3qn   # volver a la rama de trabajo
+```
+
+Si el fast-forward falla (`main` tiene commits que la rama no tiene), no
+forzar nada por cuenta propia — avisar al usuario en vez de reescribir
+historia. Al cambiar de rama reaparece a veces el drift de
+`.gitignore`/`.ignore` documentado en la nota de graft más abajo — se
+arregla igual, con `git checkout -- .gitignore .ignore` antes de comitear
+o mergear cualquier cosa.
+
 ## Cómo probar cambios
 
 No hay build. Para ver la app:
