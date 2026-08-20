@@ -27,7 +27,15 @@ import { preguntasTRR, temasTRR } from '../../data/trr-preguntas.js';
 // pueda fusionarlos con los de Hematología en una única llamada.
 export const quizTriggerId = ['btn-nefro-repasar', 'btn-hta-repasar', 'btn-erc-repasar', 'btn-fra-repasar', 'btn-trr-repasar'];
 export const quizBanco = [...preguntasNefrologia, ...preguntasHTA, ...preguntasERC, ...preguntasFRA, ...preguntasTRR];
-export const quizTemas = [...temasNefrologia, ...temasHTA, ...temasERC, ...temasFRA, ...temasTRR];
+// Menú del quiz en 3 niveles (asignatura → bloque → ficha, ver quiz.js).
+const ASIGNATURA = 'Nefrología';
+export const quizTemas = [
+    ...temasNefrologia.map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'Fisiología renal y electrolitos' })),
+    ...temasHTA.map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'Hipertensión Arterial' })),
+    ...temasERC.map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'Enfermedad Renal Crónica' })),
+    ...temasFRA.map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'Fracaso Renal Agudo' })),
+    ...temasTRR.map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'Terapias de Reemplazo Renal' })),
+];
 
 function mostrarEnPreparacion() {
     const cont = document.getElementById('nefro-segmento-categorias');

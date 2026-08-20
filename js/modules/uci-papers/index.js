@@ -16,7 +16,15 @@ import { preguntasVdLra, temasVdLra } from '../../data/vd-lra-preguntas.js';
 // Nefrología en una única llamada.
 export const quizTriggerId = ['btn-uci-shock-repasar', 'btn-no-repasar', 'btn-vdlra-repasar'];
 export const quizBanco = [...preguntasShockSeptico, ...preguntasOxidoNitrico, ...preguntasVdLra];
-export const quizTemas = [...temasShockSeptico, ...temasOxidoNitrico, ...temasVdLra];
+// Menú del quiz en 3 niveles (asignatura → bloque → ficha, ver quiz.js) —
+// aquí cada "bloque" es directamente un paper, ya que cada uno es su propio
+// submenú de nivel medio en la navegación real de la app.
+const ASIGNATURA = 'UCI / Papers Tuiter';
+export const quizTemas = [
+    ...temasShockSeptico.map(t => ({ ...t, asignatura: ASIGNATURA, bloque: '25 años de resucitación en shock séptico' })),
+    ...temasOxidoNitrico.map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'Óxido nítrico inhalado' })),
+    ...temasVdLra.map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'Disfunción del VD y LRA postoperatoria' })),
+];
 
 export function init() {
     const uciLevel = createViewSwitcher({

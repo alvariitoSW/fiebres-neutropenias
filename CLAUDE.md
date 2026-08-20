@@ -3032,6 +3032,57 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
       correctamente a cambios de P y r (P=200→T=545/rojo,
       P=40+r mínimo→T=67/verde) — las 11 fichas de contenido y la Ficha 12
       de bibliografía siguen abriendo sin error de consola ni 404 reales.
+  - **Menú del quiz reorganizado en 3 niveles** (asignatura → bloque →
+    ficha), a petición explícita del usuario ("me gustaría que el pool de
+    preguntas estuviera mejor dividido... 1º asignatura 2º Tema 3º título
+    de ficha"). Antes `initQuiz()` mostraba una única pantalla con TODOS
+    los temas de la app en una lista plana (más de 60 botones, sumando
+    Hematología+Nefrología+UCI Papers Tuiter+Fisiopatología UCI) bajo
+    "¿Qué quieres repasar?". Ahora es una navegación jerárquica:
+    - **Nivel 0** (asignaturas): "Todos los temas" (banco completo) + un
+      botón por especialidad (Hematología/Nefrología/UCI Papers
+      Tuiter/Fisiopatología UCI), cada uno con su recuento real.
+    - **Nivel 1** (bloques, tras elegir una asignatura): "← Especialidades"
+      + "Todos los temas de [asignatura]" + un botón por bloque — el
+      agrupamiento natural que ya existe en la navegación real de la app
+      (p. ej. dentro de Nefrología: Fisiología renal y electrolitos/HTA/
+      ERC/FRA/TRR; dentro de Fisiopatología UCI: Hematología y
+      Hemostasia/Vías Urinarias/Cardiología). **Trasplante** (18 fichas en
+      un único banco hasta ahora) se reparte en 3 bloques según el
+      prefijo real de sus claves (`tph-`/`cart-`/`comp-`), reflejando las
+      3 subvistas ya existentes del módulo — sin este reparto, hubiera
+      sido el único bloque desproporcionadamente grande de todo el árbol.
+    - **Nivel 2** (fichas, tras elegir un bloque): "← [asignatura]" +
+      "Todos los temas de [bloque]" + un botón por ficha individual (el
+      comportamiento de siempre, ya existente antes de este cambio).
+    - Implementación: `quiz.js` ganó `renderNivelAsignaturas()`/
+      `renderNivelBloques()`/`renderNivelTemas()` (sustituyendo a la única
+      `renderTemas()` anterior) y un manejador de clic genérico basado en
+      `data-accion`/`data-valor` en vez de `data-tema` directo — cada
+      nivel es solo una lista de botones generada a partir de `temas`
+      filtrado por `asignatura`/`bloque`, sin estado adicional más que
+      `nivelAsignatura`/`nivelBloque` para resolver las opciones "Todos
+      los temas de...". Los 4 `index.js` de especialidad (`home`,
+      `nefrologia`, `uci-papers`, `fisio-uci`) ahora mapean sus
+      `temasXxx.map(t => ({ ...t, asignatura, bloque }))` antes de
+      exportar `quizTemas`, en vez de solo `[...temasA, ...temasB]` — la
+      jerarquía se etiqueta en el punto exacto donde cada especialidad ya
+      combina sus propios bloques, sin tocar ningún archivo
+      `js/data/*-preguntas.js` ni añadir ningún paso nuevo en `main.js`
+      (que sigue haciendo un `[...home.quizTemas, ...]` idéntico a antes —
+      el `asignatura`/`bloque` ya viaja dentro de cada objeto `tema`).
+      Degradación elegante conservada: un `tema` sin `asignatura`/`bloque`
+      se agrupa bajo etiquetas genéricas ("Otros"/"General") en vez de
+      romper el árbol.
+    - Verificado con Playwright: nivel 0 muestra las 4 especialidades con
+      sus recuentos correctos (1019 total = 176+559+103+181); nivel 1 de
+      Nefrología muestra sus 5 bloques con recuentos que suman el total
+      (255+88+96+72+48=559); nivel 1 de Hematología confirma el reparto en
+      3 de Trasplante (35+25+30=90, mismo total que antes); nivel 2 de
+      Trasplante-CAR-T muestra sus 5 fichas reales; la navegación
+      "← Especialidades"/"← [asignatura]" vuelve al nivel correcto; "Todos
+      los temas de Cardiología" arranca un recorrido de 117 preguntas; sin
+      errores de consola ni 404 reales en ningún punto del árbol.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

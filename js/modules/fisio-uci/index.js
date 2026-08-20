@@ -18,7 +18,14 @@ import { preguntasCardiologia, temasCardiologia } from '../../data/fisio-uci-car
 // especialidades en una única llamada.
 export const quizTriggerId = ['btn-fuci-hemato-repasar', 'btn-fuci-vu-repasar', 'btn-fuci-cardio-repasar'];
 export const quizBanco = [...preguntasFuciHematologia, ...preguntasFuciViasUrinarias, ...preguntasCardiologia];
-export const quizTemas = [...temasFuciHematologia, ...temasFuciViasUrinarias, ...temasCardiologia];
+// Menú del quiz en 3 niveles (asignatura → bloque → ficha, ver quiz.js) —
+// cada "bloque" es uno de los 3 bloques del submenú de Fisiopatología UCI.
+const ASIGNATURA = 'Fisiopatología UCI';
+export const quizTemas = [
+    ...temasFuciHematologia.map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'Hematología y Hemostasia' })),
+    ...temasFuciViasUrinarias.map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'Vías Urinarias' })),
+    ...temasCardiologia.map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'Cardiología' })),
+];
 
 export function init() {
     const fisioUciLevel = createViewSwitcher({

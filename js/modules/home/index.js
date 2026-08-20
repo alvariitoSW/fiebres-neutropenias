@@ -17,7 +17,25 @@ import { preguntasTrasplante, temasTrasplante } from '../../data/trasplante-preg
 // pueda fusionarlos con los de Nefrología en una única llamada.
 export const quizTriggerId = ['btn-nf-repasar', 'btn-recon-repasar', 'btn-sind-repasar', 'btn-tph-repasar'];
 export const quizBanco = [...preguntasNeutropeniaFebril, ...preguntasReconocimiento, ...preguntasSindromes, ...preguntasTrasplante];
-export const quizTemas = [...temasNeutropeniaFebril, ...temasReconocimiento, ...temasSindromes, ...temasTrasplante];
+// Menú del quiz en 3 niveles (asignatura → bloque → ficha, ver quiz.js):
+// cada tema se etiqueta aquí con su `asignatura` (Hematología) y su
+// `bloque` — Trasplante se reparte en 3 bloques según el prefijo real de
+// sus claves (tph-/cart-/comp-), reflejando las 3 subvistas ya existentes
+// del módulo (Introducción/CAR-T/Complicaciones post-TPH) en vez de dejarlo
+// como un único bloque de 18 fichas.
+const ASIGNATURA = 'Hematología';
+export const quizTemas = [
+    ...temasNeutropeniaFebril.map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'Manejo Citopenias' })),
+    ...temasReconocimiento.map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'Reconocimiento Temprano' })),
+    ...temasSindromes.map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'Síndromes Urgentes' })),
+    ...temasTrasplante.map(t => ({
+        ...t,
+        asignatura: ASIGNATURA,
+        bloque: t.key.startsWith('cart-') ? 'Trasplante: CAR-T'
+            : t.key.startsWith('comp-') ? 'Trasplante: Complicaciones post-TPH'
+            : 'Trasplante: Introducción',
+    })),
+];
 
 // Referencia a la API que devuelve nefrologia.init() (ver
 // modules/nefrologia/index.js). nefrologia.init() se llama después de
