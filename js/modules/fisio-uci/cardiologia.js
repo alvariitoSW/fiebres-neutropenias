@@ -11,6 +11,27 @@ const FS_CURVAS = {
     normal: { A: 100, xp: 70 },
     disminuida: { A: 62, xp: 85 },
 };
+// Explicación fisiopatológica según la zona de la curva en la que cae el
+// punto de trabajo (r = precarga/xp del estado seleccionado) — qué
+// significa, qué mecanismo lo mantiene ahí, y cómo se descompensa.
+function textoZonaFrankStarling(r) {
+    if (r < 0.35) {
+        return 'Zona ascendente pronunciada de la curva — el ventrículo es muy <strong>dependiente de la precarga</strong>: pequeños aumentos de volumen producen grandes aumentos del volumen sistólico (un paciente aquí sí responde a la administración de líquidos). El mecanismo es el propio acoplamiento actina-miosina de Frank-Starling: a mayor longitud de la fibra en reposo, más puentes cruzados eficaces se forman. El riesgo en esta zona no es el exceso, sino el defecto: si la precarga sigue cayendo (hemorragia, deshidratación, venodilatación por sepsis/anestesia), el volumen sistólico y el gasto cardíaco caen en paralelo, sin ningún mecanismo que lo evite más allá de la taquicardia compensadora.';
+    }
+    if (r < 1.0) {
+        return 'Zona de meseta/eficiencia — el ventrículo trabaja cerca de su punto óptimo: el mecanismo de Frank-Starling ya extrajo casi todo el beneficio posible del estiramiento de la fibra, y el volumen sistólico se mantiene relativamente estable ante cambios moderados de precarga. Es el rango de trabajo habitual del corazón sano en reposo. Lo que mantiene a un paciente en esta zona es la regulación renal del volumen circulante (eje renina-angiotensina-aldosterona) y el tono venoso simpático, que ajustan el retorno venoso para no sobrepasar el pico de la curva.';
+    }
+    return 'Se ha sobrepasado el pico de la curva — <strong>sobredistensión</strong>: pese a seguir aumentando el volumen de fin de diástole, la fuerza de contracción empieza a declinar, porque el sarcómero se ha estirado más allá de su longitud óptima de solapamiento actina-miosina. Es lo que ocurre al sobrecargar de volumen a un ventrículo ya comprometido: seguir administrando líquidos deja de aumentar el gasto cardíaco (o incluso lo reduce) mientras la presión de llenado sigue subiendo — el círculo vicioso de la Ficha 3, que termina en edema pulmonar/sistémico. Es el punto en el que la estrategia debe cambiar de volumen a diuréticos/vasodilatadores.';
+}
+function textoEstadoFrankStarling(estado) {
+    if (estado === 'disminuida') {
+        return 'Con contractilidad <strong>disminuida</strong> (falla sistólica), toda la curva se desplaza abajo y a la derecha: para el mismo volumen de fin de diástole el corazón genera menos volumen sistólico, y alcanza su pico (más bajo) con más precarga de la habitual. El organismo compensa activando el sistema simpático y el eje renina-angiotensina-aldosterona para retener líquido y así elevar la precarga — pero esa misma compensación, sostenida en el tiempo, es la que termina produciendo la congestión y el remodelamiento ventricular descritos en la Ficha 3.';
+    }
+    if (estado === 'aumentada') {
+        return 'Con contractilidad <strong>aumentada</strong> (estímulo inotrópico, catecolaminas endógenas o fármacos), la curva se desplaza arriba y a la izquierda: se alcanza un volumen sistólico mayor con menos precarga. El costo, desarrollado en la Ficha 2, es un mayor consumo de oxígeno miocárdico — sostener este estado con dosis altas de inotrópicos puede desencadenar isquemia o arritmias si el aporte coronario de oxígeno no logra igualar ese mayor consumo.';
+    }
+    return 'Con contractilidad <strong>normal</strong>, este es el comportamiento fisiológico de base del ventrículo — el punto de referencia frente al que se comparan los desplazamientos por falla sistólica o por estímulo inotrópico.';
+}
 function calcFrankStarlingSimulador() {
     const precargaEl = document.getElementById('cardio-fs-precarga');
     const estadoEl = document.getElementById('cardio-fs-estado');
@@ -19,6 +40,7 @@ function calcFrankStarlingSimulador() {
     const guideH = document.getElementById('cardio-fs-guia-h');
     const valorEl = document.getElementById('cardio-fs-precarga-valor');
     const salidaEl = document.getElementById('cardio-fs-resultado');
+    const interpretacionEl = document.getElementById('cardio-fs-interpretacion');
     if (!precargaEl || !estadoEl || !marker) return;
 
     const precarga = Number(precargaEl.value);
@@ -39,10 +61,14 @@ function calcFrankStarlingSimulador() {
     const activa = document.getElementById(`cardio-fs-curva-${estadoEl.value}`);
     if (activa) activa.classList.add('cardio-fs-curva-activa');
 
+    const pct = curva.A > 0 ? Math.round((vs / curva.A) * 100) : 0;
+    const etiquetaEstado = { aumentada: 'aumentada (inotrópico +)', normal: 'normal', disminuida: 'disminuida (falla sistólica)' }[estadoEl.value];
     if (salidaEl) {
-        const pct = curva.A > 0 ? Math.round((vs / curva.A) * 100) : 0;
-        const etiquetaEstado = { aumentada: 'aumentada (inotrópico +)', normal: 'normal', disminuida: 'disminuida (falla sistólica)' }[estadoEl.value];
         salidaEl.textContent = `Volumen sistólico relativo: ≈${pct}% del máximo alcanzable con contractilidad ${etiquetaEstado} (modelo ilustrativo, no una cifra clínica real).`;
+    }
+    if (interpretacionEl) {
+        const r = precarga / curva.xp;
+        interpretacionEl.innerHTML = textoZonaFrankStarling(r) + ' ' + textoEstadoFrankStarling(estadoEl.value);
     }
 }
 
@@ -69,6 +95,30 @@ function initCicloCardiacoAnimado() {
     }
 }
 
+// Interpretación fisiopatológica del DO2I calculado: qué significa la
+// cifra, qué mecanismo compensador está (o no) en marcha para sostenerla,
+// y qué implica que ese mecanismo se agote (descompensación). Cruza con
+// el concepto de DO2 crítico y extracción máxima (60-70%) ya desarrollado
+// en la Ficha 5.
+function textoZonaDO2I(do2i) {
+    if (do2i < 350) {
+        return 'Por debajo del <strong>DO₂ crítico</strong> habitual — el aporte de oxígeno ya no cubre la demanda ni siquiera con la extracción tisular al máximo (60-70%). El metabolismo celular se vuelve <strong>dependiente del aporte</strong>: el VO₂ empieza a caer en paralelo al DO₂, forzando la vía anaeróbica (ácido láctico, acidosis metabólica) y con riesgo real de disfunción orgánica múltiple si no se corrige con urgencia la causa (gasto cardíaco, hemoglobina u oxigenación).';
+    }
+    if (do2i < 450) {
+        return 'Por debajo del rango normal. El mecanismo compensador ya en marcha es el <strong>aumento de la extracción tisular de oxígeno</strong> (↑EO₂, hasta un máximo fisiológico de 60-70%) para mantener constante el VO₂ — así puede haber un paciente hemodinámicamente "compensado" con un DO₂ bajo. Si la causa de fondo (anemia, hipoxemia, bajo gasto) no se corrige y la extracción llega a su límite, el siguiente paso es la caída del VO₂ y la aparición de hiperlactatemia.';
+    }
+    if (do2i < 530) {
+        return 'En el límite inferior de la normalidad — todavía dentro de un rango en el que la extracción de oxígeno puede compensar variaciones moderadas de la demanda, pero con poco margen de reserva ante un aumento brusco del consumo (fiebre, dolor, agitación, destete de la ventilación mecánica).';
+    }
+    if (do2i <= 600) {
+        return 'Dentro del rango normal de referencia (Tabla 3) — el aporte de oxígeno cubre la demanda metabólica basal con margen de extracción de reserva (EO₂ normal 25-35%), sin necesitar mecanismos compensadores adicionales.';
+    }
+    if (do2i <= 750) {
+        return 'Por encima del rango de referencia. Puede ser una respuesta fisiológica apropiada (ejercicio, fiebre, embarazo, anemia crónica compensada con gasto cardíaco elevado) o el reflejo de un estado hiperdinámico temprano (sepsis, hipertiroidismo) — el número por sí solo no distingue entre ambos escenarios; hay que interpretarlo junto con la saturación venosa y el lactato.';
+    }
+    return 'Marcadamente elevado, sugestivo de un estado <strong>hiperdinámico</strong> franco (fase inicial de la sepsis, anemia grave con gasto cardíaco muy aumentado, tirotoxicosis). Un DO₂ alto no garantiza una oxigenación tisular adecuada: en el shock distributivo puede coexistir con hipoxia celular real por alteración de la microcirculación y del shunt arteriovenoso (Ficha 4) — el escenario clásico en el que "los números se ven bien" en el monitor pero el paciente sigue hipoperfundido a nivel tisular.';
+}
+
 // Principio de Fick (Ficha 1: Fisiología cardíaca aplicada) — CaO2, DO2 y,
 // si se dan datos venosos, CvO2/VO2/EO2. DO2/VO2 se multiplican x10 para
 // convertir el CaO2 (mL/dL) x GC (L/min) a mL/min, igual que la Tabla 12
@@ -77,11 +127,13 @@ function calcFickTransporte() {
     const ids = ['cardio-fick-hb', 'cardio-fick-sao2', 'cardio-fick-pao2', 'cardio-fick-fc', 'cardio-fick-vs', 'cardio-fick-sc'];
     const els = ids.map(id => document.getElementById(id));
     const box = document.getElementById('cardio-fick-resultado');
+    const interpretacionEl = document.getElementById('cardio-fick-interpretacion');
     if (els.some(e => !e) || !box) return;
     if (els.some(e => e.value === '')) {
         box.style.display = 'none';
         const gaugeRow = document.getElementById('cardio-fick-gauge-row');
         if (gaugeRow) gaugeRow.style.display = 'none';
+        if (interpretacionEl) interpretacionEl.style.display = 'none';
         return;
     }
 
@@ -102,6 +154,8 @@ function calcFickTransporte() {
     if (do2i < 450) estado = 'danger';
     else if (do2i < 530) estado = 'warn';
 
+    let textoInterpretacion = textoZonaDO2I(do2i);
+
     const svo2El = document.getElementById('cardio-fick-svo2');
     const pvo2El = document.getElementById('cardio-fick-pvo2');
     if (svo2El && pvo2El && svo2El.value !== '' && pvo2El.value !== '') {
@@ -114,12 +168,21 @@ function calcFickTransporte() {
         lineas.push(`VO₂ = GC × (CaO₂ − CvO₂) × 10 = ${vo2.toFixed(0)} mL/min`);
         lineas.push(`EO₂ = VO₂/DO₂ = ${eo2.toFixed(1)}%`);
         if (eo2 > 35 && estado === 'ok') estado = 'warn';
+        if (eo2 >= 50) {
+            textoInterpretacion += ' Con una extracción de oxígeno (EO₂) del ' + eo2.toFixed(0) + '%, el organismo ya está usando gran parte de su reserva de extracción (el máximo fisiológico ronda el 60-70%) — queda poco margen de compensación antes de que el VO₂ empiece a depender directamente del DO₂.';
+        }
     }
 
     box.style.display = 'block';
     box.className = `tfg-estado tfg-estado-${estado}`;
     box.innerHTML = lineas.join('<br>') +
         `<br><span style="font-size:0.72rem;opacity:0.85;">Valores normales de referencia (Tabla 3): DO₂I 530-600 mL/min/m², EO₂ 25-35%.</span>`;
+
+    if (interpretacionEl) {
+        interpretacionEl.style.display = 'block';
+        interpretacionEl.className = `tfg-estado tfg-estado-${estado}`;
+        interpretacionEl.innerHTML = textoInterpretacion;
+    }
 
     actualizarGaugeDO2I(do2i, estado);
 }
@@ -143,14 +206,53 @@ function actualizarGaugeDO2I(do2i, estado) {
     num.textContent = `${do2i.toFixed(0)}`;
 }
 
+// Interpretación fisiopatológica de la RVS: qué significa cada zona, qué
+// mecanismo reflejo la sostiene, y qué implica que ese mecanismo se agote
+// o se vuelva insuficiente (paso de shock compensado a descompensado).
+function zonaRVS(rvs) {
+    if (rvs < 8) {
+        return {
+            estado: 'danger',
+            texto: 'Resistencia vascular muy baja — <strong>vasoplejía</strong>. Es el patrón característico del shock distributivo (séptico, anafiláctico, neurogénico): pérdida del tono vasomotor por sobreproducción de óxido nítrico y otros mediadores inflamatorios, con hiporrespuesta del músculo liso vascular a las catecolaminas. Mientras puede, el organismo compensa aumentando el gasto cardíaco de forma refleja (PAM = GC × RVS) — el patrón hiperdinámico típico del shock séptico precoz. Cuando ni el aumento del GC compensa la caída de RVS, o esta se hace refractaria a vasopresores en dosis crecientes, se habla de <strong>shock vasopléjico</strong>, de mal pronóstico.',
+        };
+    }
+    if (rvs < 10) {
+        return {
+            estado: 'warn',
+            texto: 'Resistencia vascular por debajo de lo habitual — vasodilatación relativa, que puede ser un signo precoz de un proceso distributivo, un efecto de sedación/anestesia/fármacos vasodilatadores, o parte de una respuesta fisiológica normal (fiebre, ejercicio, embarazo avanzado).',
+        };
+    }
+    if (rvs <= 15) {
+        return {
+            estado: 'ok',
+            texto: 'Dentro del rango de referencia habitual — el tono vasomotor sostiene la perfusión tisular sin imponer una poscarga excesiva al ventrículo izquierdo.',
+        };
+    }
+    if (rvs <= 20) {
+        return {
+            estado: 'warn',
+            texto: 'Resistencia vascular elevada — <strong>vasoconstricción compensadora</strong>, el reflejo (barorreceptores → sistema simpático → eje renina-angiotensina-aldosterona) que el organismo activa para sostener la PAM cuando el gasto cardíaco cae (hipovolemia, disfunción sistólica). Es útil a corto plazo, pero aumenta la poscarga del VI y, sostenida, puede comprometer aún más un corazón con reserva contráctil limitada — además reduce el flujo esplácnico y renal, con riesgo de isquemia mesentérica y lesión renal aguda.',
+        };
+    }
+    return {
+        estado: 'danger',
+        texto: 'Vasoconstricción extrema — el organismo está sacrificando el flujo a órganos no vitales (piel, músculo, esplácnico, renal) para sostener la presión arterial central (cerebro, corazón). Si el gasto cardíaco sigue cayendo pese a esta vasoconstricción máxima, la RVS no puede seguir aumentando indefinidamente y la presión arterial empieza a caer también — es el paso de <strong>shock compensado a shock descompensado</strong>.',
+    };
+}
+
 // Resistencias vasculares (ley de Hagen-Poiseuille), Ficha 1.
 function calcResistenciasVasculares() {
     const gcEl = document.getElementById('cardio-rv-gc');
     const pamEl = document.getElementById('cardio-rv-pam');
     const padEl = document.getElementById('cardio-rv-pad');
     const box = document.getElementById('cardio-rv-resultado');
+    const interpretacionEl = document.getElementById('cardio-rv-interpretacion');
     if (!gcEl || !pamEl || !padEl || !box) return;
-    if (gcEl.value === '' || pamEl.value === '' || padEl.value === '') { box.style.display = 'none'; return; }
+    if (gcEl.value === '' || pamEl.value === '' || padEl.value === '') {
+        box.style.display = 'none';
+        if (interpretacionEl) interpretacionEl.style.display = 'none';
+        return;
+    }
 
     const gc = Number(gcEl.value);
     const pam = Number(pamEl.value);
@@ -169,10 +271,18 @@ function calcResistenciasVasculares() {
         lineas.push(`RVP = (PAMP − PAI) / GC = ${rvp.toFixed(2)} unidades de Wood ≈ ${(rvp * 80).toFixed(0)} dyn·s·cm⁻⁵`);
     }
 
+    const zona = zonaRVS(rvs);
+
     box.style.display = 'block';
-    box.className = 'tfg-estado tfg-estado-ok';
+    box.className = `tfg-estado tfg-estado-${zona.estado}`;
     box.innerHTML = lineas.join('<br>') +
         '<br><span style="font-size:0.72rem;opacity:0.85;">Recuerda: la fuente advierte que RVS/RVP no reflejan fielmente la poscarga real, por el acoplamiento matemático con el propio GC.</span>';
+
+    if (interpretacionEl) {
+        interpretacionEl.style.display = 'block';
+        interpretacionEl.className = `tfg-estado tfg-estado-${zona.estado}`;
+        interpretacionEl.innerHTML = zona.texto;
+    }
 }
 
 // Costo de funcionamiento miocárdico (doble/triple producto, presión de

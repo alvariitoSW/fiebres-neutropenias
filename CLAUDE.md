@@ -2713,6 +2713,53 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
     implementado aún): asa presión-volumen interactiva en Ficha 3,
     simulador de fuerzas de Starling capilares en Ficha 4, y el mismo
     gauge visual en las 2 calculadoras de la Ficha 2.
+  - **Reformulación de las 3 calculadoras de la Ficha 1: interpretación
+    fisiopatológica dinámica, no solo un número y una barra "inerte"**
+    (feedback explícito del usuario: quería que las calculadoras
+    explicaran "qué significa que salgan en valores extremos, qué implica
+    que se mantenga en rango, qué mecanismos hay para mantenerse en rango
+    y cómo se puede descompensar"). Las 3 calculadoras (Frank-Starling,
+    Fick, resistencias vasculares) ganaron una función de interpretación
+    por zonas (`textoZonaFrankStarling`/`textoEstadoFrankStarling`,
+    `textoZonaDO2I`, `zonaRVS` en `cardiologia.js`) que, según en qué
+    tramo cae el valor calculado, inyecta un párrafo distinto (no una
+    plantilla fija con el número insertado) cubriendo los 3 ejes pedidos:
+    qué significa esa cifra, qué mecanismo compensador la sostiene ahí, y
+    qué pasa si ese mecanismo se agota. Contenido anclado a conceptos ya
+    desarrollados en otras fichas para no fabricar nada nuevo sin
+    respaldo: el DO₂ crítico y la extracción máxima 60-70% (Ficha 5), el
+    círculo vicioso de congestión por retención de líquidos (Ficha 3), el
+    coste miocárdico de los inotrópicos (Ficha 2), la vasoplejía séptica
+    por sobreproducción de NO (ya citada en Ficha 10) y el shunt
+    arteriovenoso en el shock distributivo (Ficha 4). Cada calculadora
+    ganó un `<div>` de interpretación nuevo (`#cardio-fs-interpretacion`,
+    `#cardio-fick-interpretacion`, `#cardio-rv-interpretacion`, mismo
+    patrón visual `.tfg-estado` ya existente) situado justo debajo del
+    resultado numérico:
+    - **Frank-Starling**: el texto combina la zona de la curva en la que
+      cae la precarga (ascendente pronunciada/precarga-dependiente, meseta
+      de eficiencia, o sobredistensión con reducción de fuerza — esta
+      última explicando explícitamente el mecanismo de sobreestiramiento
+      del sarcómero) con el estado contráctil seleccionado (normal,
+      disminuida — con el ciclo de retención de líquidos que termina en
+      congestión —, o aumentada — con el coste en consumo miocárdico de
+      oxígeno de sostener inotrópicos).
+    - **Fick (DO₂I)**: 6 tramos (crítico &lt;350, bajo 350-449, límite
+      bajo 450-529, normal 530-600, alto 601-750, muy alto &gt;750), cada
+      uno con su propia lectura clínica — incluida la advertencia
+      explícita de que un DO₂ muy alto no garantiza buena oxigenación
+      tisular (shock distributivo con shunt). Si se dan datos venosos y la
+      EO₂ calculada es ≥50%, se añade una frase extra señalando que la
+      reserva de extracción ya está casi agotada.
+    - **Resistencias vasculares**: 5 tramos de RVS (muy baja/vasopléjica,
+      baja, normal, alta/compensadora, muy alta/extrema), con el color del
+      recuadro (`tfg-estado-ok/warn/danger`) ahora también dinámico según
+      la zona — antes siempre verde, sin importar el valor.
+    Verificado con Playwright cruzando varios inputs por calculadora
+    (precarga 10% vs. 95%; Hb 5 g/dl vs. Hb 20 g/dl + FC 150; PAM/GC que
+    simulan vasoplejía vs. vasoconstricción extrema): cada caso muestra un
+    párrafo de interpretación distinto y el color de la caja cambia en
+    consecuencia: las 11 fichas y el quiz siguen sin error de consola.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

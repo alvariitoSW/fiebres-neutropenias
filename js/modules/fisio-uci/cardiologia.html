@@ -484,6 +484,7 @@
                 <circle id="cardio-fs-marker" cx="170" cy="45" r="4.5" fill="var(--accent-yellow)" stroke="#000" stroke-width="0.5"/>
             </svg>
             <p style="font-size:0.8rem; text-align:center; color:var(--text-main);" id="cardio-fs-resultado"></p>
+            <div id="cardio-fs-interpretacion" class="tfg-estado tfg-estado-ok" style="margin-top:10px;"></div>
 
             <table class="data-table">
                 <thead><tr><th colspan="3">Determinantes del gasto cardíaco</th></tr></thead>
@@ -535,6 +536,7 @@
                 </div>
                 <p style="font-size:0.68rem; color:var(--text-muted); margin-top:2px;">Escala 0-800 mL/min/m² · banda 530-600 = rango normal (Tabla 3)</p>
             </div>
+            <div id="cardio-fick-interpretacion" class="tfg-estado tfg-estado-ok" style="margin-top:10px; display:none;"></div>
 
             <p class="section-label" style="margin-top:16px;">🧮 Calculadora interactiva: resistencias vasculares (ley de Hagen-Poiseuille)</p>
             <p style="font-size: 0.8rem; color: var(--text-muted);">RVS = (PAM − PAD) / GC; RVP = (PAMP − PAI) / GC, tal como las da la fuente (en unidades de Wood, mmHg·min/L). Recuerda la advertencia de la propia ficha: el GC aparece en el denominador de su propio cálculo, un acoplamiento matemático que limita su interpretación como poscarga "pura".</p>
@@ -544,6 +546,7 @@
             <div class="form-group"><label for="cardio-rv-pamp">Presión arterial pulmonar media, PAMP (mmHg) — opcional</label><input type="number" id="cardio-rv-pamp" step="1" min="5" max="80" placeholder="p. ej. 15"></div>
             <div class="form-group"><label for="cardio-rv-pai">Presión de la aurícula izquierda / enclavamiento, PAI (mmHg) — opcional</label><input type="number" id="cardio-rv-pai" step="1" min="0" max="40" placeholder="p. ej. 8"></div>
             <div id="cardio-rv-resultado" class="tfg-estado tfg-estado-ok" style="display:none;"></div>
+            <div id="cardio-rv-interpretacion" class="tfg-estado tfg-estado-ok" style="margin-top:10px; display:none;"></div>
 
             <p class="section-label" style="margin-top:16px;">Fuente</p>
             <p style="font-size: 0.78rem; color: var(--text-muted);">Atehortúa L LH, Mendoza H. Fisiología cardíaca aplicada. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección I, Capítulo 1, págs. 3-21.</p>
