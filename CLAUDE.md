@@ -3115,6 +3115,86 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
       "← Especialidades"/"← [asignatura]" vuelve al nivel correcto; "Todos
       los temas de Cardiología" arranca un recorrido de 117 preguntas; sin
       errores de consola ni 404 reales en ningún punto del árbol.
+  - **Auditoría de bibliografía y ampliación de las Fichas 9, 10 y 11**
+    (cierre de la ronda de auditoría fuente-a-fuente iniciada con las
+    Fichas 5-7): releídos íntegros los 3 capítulos fuente restantes de
+    Cardiología (Echeverry D., Cap. 9, Ventrículo Derecho, págs. 121-128;
+    Urrutia N./Ugarte Ubiergo S., Cap. 10, Estados de Choque, págs.
+    129-153 — el capítulo más extenso de todo el bloque; Poblano Morales
+    M. et al., Cap. 11, Interacción Corazón-Pulmón, págs. 155-167).
+    **Ficha 8** (Embolia pulmonar) se revisó también y se confirmó fiel a
+    su fuente sin huecos reales — no recibió cambios.
+    - **Ficha 9**: nueva **curva de retorno venoso** (SVG estático, RV
+      frente a Pad, con la meseta por colapso venoso y la pendiente
+      inversamente proporcional a la resistencia venosa, marcando el
+      punto Pad=0 y el punto PCM donde RV=0) — la única figura realmente
+      nueva de estas 3 fichas, porque la onda a-c-x-v-y ya tiene su
+      propio registro real en la Ficha 5 (`cardio-fig9-onda-pvc.jpg`), y
+      aquí solo se referencia en vez de duplicarse.
+    - **Ficha 10** (la que más contenido ganó, acorde al volumen real de
+      su capítulo fuente): tabla nueva de precarga/contractilidad/
+      poscarga por tipo de choque (sustituyendo en formato tabular el
+      contenido de las hourglass-icons originales del capítulo, más
+      legible que recrearlas como 4 SVG); nuevo acordeón "Cascada
+      leucocitaria y daño del glucocálix" (secuencia margination→
+      rodamiento→adhesión firme→transmigración→fagocitosis→muerte por
+      ROS propios; la adhesión independiente de selectinas/integrinas en
+      pulmón e hígado, que explica por qué son los primeros órganos en
+      fallar; la ventana crítica de ~6 horas de migración neutrofílica
+      ligada a mortalidad; la degradación del glucocálix por ROS como
+      mecanismo directo de la fuga capilar séptica); ampliado el kv-row
+      del NO con el mecanismo iNOS y el efecto paradójico (el mismo
+      exceso de NO que causa hipotensión refractaria también bloquea la
+      adhesión leucocitaria, limitando la extracción tisular de O₂ pese
+      al GC alto); nuevo diagrama SVG de heterogeneidad del flujo capilar
+      (capilares con flujo normal/intermitente/detenido conviviendo en el
+      mismo lecho); nuevo acordeón de 2 items — límites de la SvO₂/ScvO₂
+      como promedio que enmascara la heterogeneidad regional, y la fase
+      terminal de fallo mitocondrial/hipoxia citopática (la mitocondria
+      pierde la capacidad de usar el O₂ que le llega); nuevo diagrama SVG
+      del triángulo endotelio-inflamación-coagulación (ya citado en
+      prosa, ahora visual); nueva tabla "Correlato clínico-temporal"
+      (flujo capilar × OEI × SvO₂ por fase, Fig. 8 del capítulo,
+      recreada como `.data-table`); enriquecimientos puntuales: nota
+      sobre los límites del umbral PAS&lt;90 en pacientes previamente
+      hipertensos o jóvenes sanos, causas ampliadas de choque
+      hipovolémico no hemorrágico (pancreatitis/quemados/aplastamiento/
+      anafilaxia con pérdida de volumen plasmático, no solo sangre),
+      catéter urinario añadido al diagnóstico del choque cardiogénico, y
+      el mecanismo de sustrato (glucogenólisis→gluconeogénesis a
+      expensas de proteólisis/lipólisis) ampliado en la respuesta
+      endocrino-metabólica compensadora.
+    - **Ficha 11**: nuevo párrafo sobre el carácter <strong>pasivo</strong>
+      del retorno venoso sistémico (sin bomba activa, solo el gradiente
+      PCM-Pad, enlazando con la curva nueva de la Ficha 9); nueva sección
+      "Cambios en el retorno venoso inducidos por el PEEP" con el
+      concepto de <strong>hipovolemia funcional</strong> (base fisiológica
+      de la VPP/VVS ya citadas en la Ficha 5) y el matiz de por qué el
+      PEEP puede mejorar la función del VI en disfunción sistólica pese a
+      no aumentar el GC por sí mismo (menor poscarga efectiva); el
+      **TRIVI** (tiempo de relajación isovolumétrica) añadido como
+      parámetro complementario en el item de función diastólica; nuevo
+      acordeón "Taponamiento cardíaco: hallazgos Doppler" — tema
+      completamente ausente hasta ahora — con el colapso pasivo de la
+      pared libre de la AD como signo ecocardiográfico más precoz, la
+      variación respiratoria recíproca del flujo transmitral/
+      transtricuspídeo como correlato Doppler objetivo del pulso
+      paradójico, y la VCI dilatada sin colapso inspiratorio.
+    - Añadidas **12 preguntas de quiz nuevas** (`cardio-q123`-`q134`, 4
+      por ficha — 3 de opción múltiple + 1 de tipo `redactar` en cada
+      una), llevando el banco de Cardiología a 129 preguntas (117 tras la
+      poda de Ficha 6 + 12) y el banco combinado de toda la app a
+      **1031 preguntas**. Verificado con Playwright: las 12 fichas del
+      cuaderno de campo (incluida la Ficha 12 de bibliografía) abren y
+      voltean sin error de consola ni 404 real (el único 404 es el
+      `favicon.ico`, ya documentado como inocuo); el nuevo SVG de
+      retorno venoso está presente en la Ficha 9; los 4 fragmentos de
+      texto/componentes nuevos de la Ficha 10 (cascada leucocitaria,
+      hipoxia citopática, tabla de precarga/poscarga, correlato
+      clínico-temporal) y los 4 de la Ficha 11 (hipovolemia funcional,
+      taponamiento cardíaco, TRIVI, retorno venoso sistémico) se
+      detectan correctamente en el DOM; un recorrido por el quiz de los 3
+      temas nuevos/ampliados no generó ninguna excepción JS.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
