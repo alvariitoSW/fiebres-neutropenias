@@ -227,34 +227,81 @@
         <div id="cardio-fisiologia-aplicada" class="tab-content">
             <h3 style="color: var(--accent-red);">Fisiología cardíaca aplicada</h3>
 
-            <p class="section-label">Sistema de conducción eléctrica</p>
+            <p class="section-label">Anatomía funcional</p>
+            <dl class="kv-row"><dt>El corazón como bomba aspirante-impelente</dt><dd>Durante la diástole "aspira" sangre desde el sistema venoso (baja presión) y durante la sístole la "impele" hacia el sistema arterial (alta presión) — un mismo órgano cumpliendo las dos mitades del ciclo de bombeo.</dd></dl>
+            <dl class="kv-row"><dt>Principio de continuidad</dt><dd>El volumen que sale del ventrículo derecho por minuto debe ser igual, en estado estacionario, al que sale del ventrículo izquierdo — el gasto cardíaco de ambos ventrículos es el mismo pese a trabajar contra resistencias completamente distintas (desarrollado con las cifras de resistencia en la Ficha 4).</dd></dl>
+            <ul class="term-chips">
+                <li>Endocardio: capa interna, en contacto con la sangre</li>
+                <li>Miocardio: capa muscular, responsable de la contracción</li>
+                <li>Pericardio: capa externa serosa, restringe la distensión aguda del volumen cardíaco</li>
+            </ul>
+            <dl class="kv-row"><dt>Cortocircuito fisiológico</dt><dd>Las venas de Tebesio (drenan directamente en las cavidades cardíacas) y las venas bronquiales (drenan en las venas pulmonares) devuelven sangre venosa no oxigenada directamente a la circulación arterial sistémica sin pasar por el intercambio pulmonar — un pequeño shunt derecha-izquierda anatómico presente incluso en el corazón sano.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Sistema de conducción eléctrica</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
-                El impulso eléctrico normal se origina en el <strong>nodo sinusal</strong> (aurícula derecha, cerca
-                de la desembocadura de la vena cava superior) y se propaga por las aurículas, incluido el
-                <strong>haz de Bachmann</strong> (conexión interauricular). Llega al <strong>nodo
-                auriculoventricular (NAV)</strong>, donde se produce un retraso fisiológico que permite completar el
-                llenado ventricular, y continúa por el <strong>haz de His</strong> y sus ramas hasta las
+                El impulso eléctrico normal se origina en el <strong>nodo sinusal</strong> (nodo de Keith y Flack,
+                aurícula derecha, cerca de la desembocadura de la vena cava superior) y se propaga por las
+                aurículas, incluido el <strong>haz de Bachmann</strong> (conexión interauricular). Llega al
+                <strong>nodo auriculoventricular (NAV, nodo de Aschoff-Tawara)</strong>, donde se produce un retraso
+                fisiológico de <span class="hl">0,12 segundos</span> que permite completar el llenado ventricular
+                antes de la contracción, y continúa por el <strong>haz de His</strong> y sus ramas hasta las
                 <strong>fibras de Purkinje</strong>, que despolarizan el miocardio ventricular de forma casi
                 simultánea.
             </p>
+            <table class="data-table">
+                <thead><tr><th>Estructura</th><th>Frecuencia de disparo (impulsos/min)</th><th>Velocidad de conducción (m/s)</th></tr></thead>
+                <tbody>
+                    <tr><td>Nodo sinusal</td><td>70-80</td><td>0,05</td></tr>
+                    <tr><td>Nodo AV</td><td>40-60</td><td>0,05 (retraso de 0,12 s)</td></tr>
+                    <tr><td>Haz de His</td><td>40</td><td>2</td></tr>
+                    <tr><td>Fibras de Purkinje</td><td>15-20</td><td>4</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Nota histórica: la propiedad de automatismo del tejido de conducción es tan robusta que los corazones extraídos en los sacrificios aztecas seguían latiendo visiblemente durante varios segundos fuera del cuerpo — una de las primeras observaciones documentadas de la actividad eléctrica intrínseca del corazón, independiente de la inervación central.</p>
 
             <div class="article-figure">
                 <img src="js/modules/fisio-uci/img/cardio-fig1-sistema-conduccion.jpg" alt="Sistema de conducción cardíaco: nodo sinusal, haz de Bachmann, nodo AV, haz de His, fibras de Purkinje" loading="lazy">
                 <div class="article-figure-caption">Sistema de conducción eléctrica del corazón.</div>
             </div>
 
-            <p class="section-label" style="margin-top:16px;">El ciclo cardíaco (diagrama de Wiggers)</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚡ Potencial de acción del miocito (5 fases)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Fase 0 (despolarización rápida)</dt><dd>Apertura de canales rápidos de Na⁺, entrada masiva de sodio, el potencial sube hasta ~+45 mV.</dd></dl>
+                        <dl class="kv-row"><dt>Fase 1 (repolarización precoz)</dt><dd>Corriente transitoria de salida de potasio (Ito), pequeña muesca descendente.</dd></dl>
+                        <dl class="kv-row"><dt>Fase 2 (meseta/plateau)</dt><dd>Entrada de calcio por canales tipo L, equilibrada con salida de potasio — es la fase más larga, y la que dispara la liberación de calcio del retículo sarcoplásmico (acoplamiento excitación-contracción, ver más abajo).</dd></dl>
+                        <dl class="kv-row"><dt>Fase 3 (repolarización rápida)</dt><dd>Corrientes de salida de potasio (I<sub>Ks</sub>/I<sub>Kr</sub>), el potencial vuelve a ~-90 mV.</dd></dl>
+                        <dl class="kv-row"><dt>Fase 4 (potencial de reposo)</dt><dd>Estabilidad hasta el siguiente estímulo — en las células marcapasos, una despolarización espontánea y lenta durante esta fase es lo que genera el automatismo.</dd></dl>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top:6px;">👉 El potencial de acción cardíaco dura ~300 ms — hasta 100 veces más que el de una neurona o el músculo esquelético (~1 ms) — precisamente por la meseta de la fase 2, que impide la sumación de estímulos y protege al corazón de una contracción tetánica sostenida. La clasificación de Vaughan-Williams de los antiarrítmicos se organiza según sobre cuál de estas fases/corrientes iónicas actúa cada fármaco.</p>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Acoplamiento excitación-contracción-relajación</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La entrada de calcio durante la fase 2 del potencial de acción (canales tipo L) dispara la <strong>liberación masiva de calcio del retículo sarcoplásmico</strong> ("liberación de calcio inducida por calcio"), que se une a la <strong>troponina C</strong> y permite el ciclo de puentes cruzados actina-miosina (contracción). La relajación requiere la recaptación activa de ese calcio hacia el retículo sarcoplásmico por la bomba <strong>SERCA</strong> (Ca²⁺-ATPasa), regulada por la proteína <strong>fosfolamban</strong> — un proceso que consume ATP, por lo que la relajación (no solo la contracción) es energéticamente costosa. Este mismo ciclo del calcio es el eje de la disfunción sistólica y diastólica desarrollada en la Ficha 3.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">El ciclo cardíaco: 7 fases (diagrama de Wiggers)</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
                 El diagrama de Wiggers integra en una misma línea de tiempo la presión aórtica, la presión
                 ventricular, la presión auricular, los tonos cardíacos, la onda de pulso venoso yugular (PVY) y el
-                electrocardiograma — la herramienta clásica para entender cómo se relacionan entre sí.
+                electrocardiograma. La fuente describe el ciclo en <strong>7 fases</strong>, no en las 4 clásicas
+                simplificadas:
             </p>
-            <ul class="term-chips">
-                <li>Contracción isovolumétrica: válvulas AV y sigmoideas cerradas, sube la presión sin cambio de volumen</li>
-                <li>Eyección: se abre la válvula aórtica, sale el volumen sistólico</li>
-                <li>Relajación isovolumétrica: válvulas cerradas de nuevo, cae la presión sin cambio de volumen</li>
-                <li>Llenado ventricular: se abre la válvula mitral, entra sangre pasivamente y luego por contracción auricular</li>
-            </ul>
+            <table class="data-table">
+                <thead><tr><th>Fase</th><th>Eventos principales</th><th>Válvulas</th><th>Ruido cardíaco</th></tr></thead>
+                <tbody>
+                    <tr><td>A — Sístole auricular</td><td>Contracción auricular, completa el llenado ventricular</td><td>AV abierta, sigmoideas cerradas</td><td>—</td></tr>
+                    <tr><td>B — Contracción isovolumétrica</td><td>Sube la presión ventricular sin cambio de volumen</td><td>Todas cerradas</td><td>S1</td></tr>
+                    <tr><td>C — Eyección rápida</td><td>Salida veloz del volumen sistólico</td><td>Sigmoideas abiertas</td><td>—</td></tr>
+                    <tr><td>D — Eyección lenta</td><td>Continúa la salida de sangre, a menor velocidad</td><td>Sigmoideas abiertas</td><td>—</td></tr>
+                    <tr><td>E — Relajación isovolumétrica</td><td>Cae la presión ventricular sin cambio de volumen</td><td>Todas cerradas</td><td>S2</td></tr>
+                    <tr><td>F — Llenado ventricular rápido</td><td>Entrada pasiva veloz de sangre</td><td>AV abierta</td><td>S3 (si patológico)</td></tr>
+                    <tr><td>G — Diástasis</td><td>Fase de llenado lento, previa a la siguiente sístole auricular</td><td>AV abierta</td><td>—</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 La <strong>incisura dicrótica</strong> (pequeña muesca en la curva de presión aórtica al cerrarse la válvula aórtica, inicio de la fase E) es la referencia temporal que usa el balón de contrapulsación intraaórtico para sincronizar su inflado — debe inflarse justo después de la incisura dicrótica (inicio de diástole) y desinflarse justo antes de la siguiente sístole.</p>
             <dl class="kv-row"><dt>Asimetría sístole/diástole</dt><dd>La diástole ocupa la mayor parte del ciclo cardíaco en reposo — consecuencia directa: la <strong>perfusión coronaria del ventrículo izquierdo ocurre casi exclusivamente durante la diástole</strong> (durante la sístole, la compresión miocárdica colapsa los vasos intramurales). Esto explica por qué la taquicardia extrema, al acortar desproporcionadamente la diástole, compromete la perfusión coronaria.</dd></dl>
 
             <div class="article-figure">
@@ -275,28 +322,57 @@
             </div>
 
             <p class="section-label" style="margin-top:16px;">Determinantes del gasto cardíaco</p>
-            <dl class="kv-row"><dt>Gasto cardíaco (GC)</dt><dd>GC = Frecuencia cardíaca × Volumen sistólico. El volumen sistólico depende de 3 factores clásicos: <strong>precarga</strong>, <strong>poscarga</strong> y <strong>contractilidad</strong>.</dd></dl>
-            <ul class="term-chips">
-                <li>Precarga: grado de estiramiento de la fibra miocárdica al final de la diástole (aproximado por el volumen/presión de fin de diástole)</li>
-                <li>Poscarga: resistencia contra la que el ventrículo debe eyectar (tensión de pared durante la sístole)</li>
-                <li>Contractilidad: capacidad intrínseca de la fibra de generar fuerza, independiente de precarga/poscarga</li>
-                <li>Cronotropismo: la frecuencia cardíaca, determinada por la estimulación simpática del nodo sinusal y el reflejo de Bainbridge</li>
-            </ul>
+            <dl class="kv-row"><dt>Gasto cardíaco (GC) — principio de Fick</dt><dd>GC = Frecuencia cardíaca × Volumen sistólico. El principio de Fick lo estima de forma indirecta a partir de una sustancia trazadora: el flujo (GC) es igual a la cantidad de sustancia captada por unidad de tiempo, dividida entre la diferencia de su concentración arteriovenosa — el mismo principio que sustenta el cálculo del GC a partir del consumo de oxígeno (VO₂) y la diferencia arteriovenosa de oxígeno.</dd></dl>
 
             <div class="micro-profiles">
                 <div class="micro-prof-item">
-                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📐 Ley de Frank-Starling</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">A mayor estiramiento de la fibra miocárdica (dentro de un rango fisiológico), mayor es la fuerza de la contracción siguiente — el corazón "se adapta" a lo que recibe. Es la base fisiológica de la respuesta a volumen: aumentar la precarga aumenta el volumen sistólico, hasta que la curva se aplana (corazón que ya no responde a más volumen).</div>
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📐 Precarga: ley de Frank-Starling</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Descrita a principios del siglo XX por el fisiólogo alemán Otto Frank y el británico Ernest Starling: a mayor estiramiento de la fibra miocárdica (dentro de un rango fisiológico), mayor es la fuerza de la contracción siguiente. Se cuantifica mediante la <strong>distensibilidad</strong> (compliance), C = ΔV/ΔP — el corazón normal ajusta automáticamente su volumen sistólico a los cambios en el volumen de fin de diástole. <strong>Escenario clínico de riesgo:</strong> en un paciente con insuficiencia diastólica y baja distensibilidad ventricular, administrar diuréticos para "aliviar" una precarga aparentemente alta puede en realidad reducir el gasto cardíaco y empeorar la perfusión, porque ese ventrículo rígido necesita presiones de llenado más altas de lo habitual para generar el mismo volumen sistólico.</div>
                 </div>
                 <div class="micro-prof-item">
-                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⭕ Ley de Laplace</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">La tensión de la pared ventricular es proporcional a la presión intracavitaria y al radio de la cavidad, e inversamente proporcional al grosor de la pared (T ∝ P×r/espesor). Explica por qué un ventrículo dilatado necesita generar más tensión de pared para la misma presión — y por qué la hipertrofia (aumento del espesor) es, hasta cierto punto, un mecanismo compensador que reduce esa tensión.</div>
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⭕ Poscarga: ley de Laplace y resistencia vascular</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Ley de Laplace (T = P×r)</dt><dd>Descrita originalmente a partir de observaciones sobre burbujas de jabón en el siglo XIX — la tensión de la pared es proporcional a la presión intracavitaria y al radio de la cavidad. Aplicada al ventrículo, la presión transmural es la suma de la presión intratorácica y la impedancia arterial, y el radio corresponde al diámetro de fin de diástole.</dd></dl>
+                        <dl class="kv-row"><dt>Impedancia</dt><dd>Se compone de la distensibilidad arterial y la resistencia vascular — el verdadero determinante de cuánto le cuesta al ventrículo eyectar la sangre.</dd></dl>
+                        <dl class="kv-row"><dt>Ley de Hagen-Poiseuille</dt><dd>Q = ΔP/R (el flujo es proporcional al gradiente de presión e inversamente proporcional a la resistencia) — reordenada, R = ΔP/Q, la base de las fórmulas clínicas de resistencia vascular.</dd></dl>
+                        <dl class="kv-row"><dt>Resistencia vascular sistémica (RVS)</dt><dd>RVS = (PAM − PAD) / GC</dd></dl>
+                        <dl class="kv-row"><dt>Resistencia vascular pulmonar (RVP)</dt><dd>RVP = (PAMP − PAI) / GC</dd></dl>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top:6px;">👉 Advertencia conceptual de la propia fuente: la RVS y la RVP calculadas así <strong>no reflejan fielmente la poscarga real</strong>, porque el gasto cardíaco (GC) aparece en el denominador de su propio cálculo — un artefacto de acoplamiento matemático que conviene tener presente al interpretar estos valores como si fueran una medida "pura" e independiente de poscarga.</p>
+                    </div>
                 </div>
                 <div class="micro-prof-item">
-                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚡ Consumo miocárdico de oxígeno (MVO₂)</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">Determinado principalmente por la frecuencia cardíaca, la tensión de la pared (precarga y poscarga) y la contractilidad. El miocardio extrae la mayor parte del oxígeno que recibe incluso en reposo (a diferencia de otros tejidos) — por eso, ante un aumento de la demanda, la única forma real de aumentar el aporte es incrementar el flujo coronario, no la extracción.</div>
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💪 Contractilidad</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Capacidad intrínseca de la fibra de generar fuerza, independiente de la precarga y la poscarga. La medida invasiva de referencia es la <strong>dP/dt</strong> (velocidad de cambio de la presión intraventricular durante la contracción isovolumétrica). La <strong>fracción de eyección (FE)</strong>, la medida clínica más usada, tiene limitaciones importantes: depende de la distensibilidad ventricular, y la insuficiencia mitral puede sobrestimarla artificialmente (parte del volumen "eyectado" regresa a la aurícula, no sale realmente a la aorta).</div>
                 </div>
             </div>
+
+            <table class="data-table">
+                <thead><tr><th colspan="3">Determinantes del gasto cardíaco</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Determinante</strong></td><td><strong>Definición</strong></td><td><strong>Medición clínica</strong></td></tr>
+                    <tr><td>Precarga</td><td>Volumen de fin de diástole, presión de fin de diástole, volemia, retorno venoso, distensibilidad</td><td>PVC, PoAP, volúmenes/áreas de fin de diástole por ecocardiografía</td></tr>
+                    <tr><td>Contractilidad</td><td>Fracción de eyección, velocidad de acortamiento, índices de trabajo ventricular</td><td>dP/dt, FE, ITSVI/ITSVD (ver Ficha 5)</td></tr>
+                    <tr><td>Poscarga</td><td>Resistencia periférica, impedancia aórtica, tono vasomotor, propiedades reológicas</td><td>RVS, RVP (ver arriba)</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Parámetros de transporte de oxígeno</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El objetivo final de toda la fisiología cardiovascular es entregar oxígeno a los tejidos — estos son
+                los parámetros que la cuantifican, con su valor absoluto y su valor <span class="hl">ajustado a la
+                superficie corporal</span> (indexado):
+            </p>
+            <table class="data-table">
+                <thead><tr><th>Parámetro</th><th>Valor normal absoluto</th><th>Valor normal indexado (SC)</th><th>Fórmula</th></tr></thead>
+                <tbody>
+                    <tr><td>Gasto cardíaco (GC)</td><td>5-6 L/min</td><td>2,4-4 L/min/m² (IC)</td><td>FC × VS</td></tr>
+                    <tr><td>Contenido arterial de O₂ (CaO₂)</td><td>250 mL</td><td>18-20 mL/dL</td><td>(Hb × SaO₂ × 1,34) + (PaO₂ × 0,0031)</td></tr>
+                    <tr><td>Entrega de O₂ (DO₂)</td><td>900-1100 mL/min</td><td>530-600 mL/min/m² (<strong>DO₂I</strong>)</td><td>GC × CaO₂</td></tr>
+                    <tr><td>Consumo de O₂ (VO₂)</td><td>200-270 mL/min</td><td>120-150 mL/min/m² (VO₂I)</td><td>GC × (CaO₂ − CvO₂)</td></tr>
+                    <tr><td>Extracción de O₂ (EO₂)</td><td colspan="2" style="text-align:center;">25%-35%</td><td>VO₂/DO₂</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 El <strong>DO₂ indexado por superficie corporal (DO₂I)</strong> es la forma correcta de comparar la entrega de oxígeno entre pacientes de distinto tamaño corporal — equivalente conceptual del índice cardíaco (IC) aplicado a la entrega de oxígeno en vez de al gasto cardíaco. La Ficha 2 desarrolla el <strong>índice de aporte de oxígeno (IDO₂)</strong>, una fórmula relacionada pero distinta (IDO₂ = IC × CaO₂), y la Ficha 5 retoma estas mismas fórmulas con su rango normal ligeramente ajustado y las aplica al monitoreo hemodinámico completo (DO₂, VO₂, IC, OEI).</p>
 
             <p class="section-label" style="margin-top:16px;">Fuente</p>
             <p style="font-size: 0.78rem; color: var(--text-muted);">Capítulo 1. Fisiología cardíaca aplicada. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección I, Capítulo 1, págs. 3-21.</p>
@@ -333,6 +409,65 @@
                 inestabilidad hemodinámica.
             </p>
 
+            <p class="section-label" style="margin-top:16px;">Insuficiencia cardiovascular: un déficit energético</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La insuficiencia cardiovascular es el resultado de un <strong>déficit energético</strong> que
+                ocasiona un desbalance entre la producción y el consumo de la energía requerida para la activación
+                y la progresión de la contracción del músculo cardíaco. Cuando disminuye la irrigación sanguínea
+                sobre la pared ventricular, la menor disponibilidad de ATP interfiere con la relajación de la fibra
+                muscular y reduce la concentración de calcio en el citosol — por ejemplo, en la HTA no controlada,
+                el aumento persistente del grosor de la pared (mecanismo compensador para vencer la resistencia
+                vascular elevada) incrementa el espacio intercapilar y la distancia entre los capilares y el
+                endocardio, produciendo <span class="hl">isquemia local</span> — la región subendocárdica es la más
+                afectada, agravada por el aplanamiento de los vasos sanguíneos que reduce aún más la perfusión.
+            </p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Con la prolongación del déficit de ATP se produce un deterioro persistente del tejido: fibrosis,
+                destrucción de miofibrillas, dilatación de las cavidades cardíacas e insuficiencia cardíaca — un
+                estado de empeoramiento persistente del miocardio conocido como <strong>miocardio
+                hibernado</strong>.
+            </p>
+            <dl class="kv-row"><dt>"Rigor de diástole"</dt><dd>El ATP modula la bomba intracelular de calcio; si no se produce una relajación adecuada durante la diástole (por persistencia de la fase de contracción), hay una reducción del transporte de calcio hacia afuera del citosol y menor movilización desde su sitio de unión en la troponina — el llamado "rigor de diástole". El miocito entra en un círculo de aumento del metabolismo glucolítico, menor disponibilidad de ATP, desequilibrio iónico y aumento del número de mitocondrias.</dd></dl>
+            <dl class="kv-row"><dt>Remodelación cardíaca</dt><dd>Se produce cuando hay un evento isquémico: comienzan a sintetizarse nuevas fibras de colágeno mientras el colágeno "viejo" se degrada, las miofibrillas sufren hibernación y las fuerzas de Starling incrementan la presión de distensión — las células no afectadas se estiran en un patrón anormal, estableciendo hipertrofia con alto metabolismo glucolítico, mayor uso de glicógeno y baja producción de ATP (mecanismo de defensa a la hipoxia). Sumado al aumento de la tensión de la pared, se genera la <strong>hipertrofia concéntrica</strong> (ley de Laplace). Si la sobrecarga es de volumen (no de presión), el estiramiento de las fibras produce en cambio <strong>hipertrofia excéntrica</strong>.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Consumo de oxígeno miocárdico y costo de funcionamiento</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                En la insuficiencia cardiovascular no se pueden dejar de lado 3 conceptos: la <strong>perfusión</strong>,
+                la <strong>presión</strong> y el <strong>costo de funcionamiento</strong>. El consumo de oxígeno
+                miocárdico (costo) depende de la frecuencia cardíaca, el estado contráctil del miocardio y la
+                tensión intracavitaria ventricular.
+            </p>
+            <table class="data-table">
+                <thead><tr><th>Índice</th><th>Cómo se obtiene</th><th>Valor normal máximo</th></tr></thead>
+                <tbody>
+                    <tr><td>Doble producto</td><td>Frecuencia cardíaca × presión arterial sistólica (PAS)</td><td>12.000</td></tr>
+                    <tr><td>Triple producto</td><td>Doble producto × presión en cuña</td><td>120.000</td></tr>
+                    <tr><td>Índice de aporte-consumo</td><td>Presión de perfusión coronaria / (triple producto / 1000)</td><td>&gt;0,6 (valor normal, no máximo)</td></tr>
+                </tbody>
+            </table>
+            <dl class="kv-row"><dt>Presión de perfusión coronaria</dt><dd>= Presión arterial diastólica (PAD) − presión venosa central (lado derecho), o PAD − presión en cuña (lado izquierdo). En lo posible, debe ser mayor de <strong>60 mmHg</strong>.</dd></dl>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Utilidad clínica de estos índices: permiten decidir con base fisiopatológica si continuar o no una medida terapéutica — p. ej., si un inotrópico aumenta tanto la frecuencia cardíaca que incrementa el costo de funcionamiento más de lo que mejora el aporte de oxígeno, la medida no es benéfica pese a "mejorar" el gasto cardíaco, y pone al paciente en riesgo de una catástrofe coronaria. Obliga a evaluar cada fármaco de forma individual y específica en cada paciente.</p>
+
+            <p class="section-label" style="margin-top:16px;">Índice de aporte de oxígeno (IDO₂)</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La perfusión tisular depende del movimiento de oxígeno y sustratos hacia las células y de la
+                concentración de la sustancia presente:
+            </p>
+            <dl class="kv-row"><dt>IDO₂ = IC × CaO₂</dt><dd>IDO₂ es el índice de aporte de oxígeno; IC es el índice cardíaco (gasto cardíaco entre superficie corporal). El GC depende de frecuencia cardíaca, precarga, poscarga y contractilidad; el CaO₂ depende de la concentración de hemoglobina, su capacidad de transporte de oxígeno, su saturación y la presión arterial de oxígeno.</dd></dl>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Cómo aumentar el IDO₂</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body"><strong>Farmacológico:</strong> agonistas adrenérgicos, betaadrenérgicos, digitálicos, inhibidores de la fosfodiesterasa, diuréticos, nitroglicerina, IECA, nitroprusiato, antihipertensivos y betabloqueadores, entre otros. <strong>No farmacológico:</strong> el objetivo es aumentar la contractilidad miocárdica y aumentar o disminuir la precarga según el caso — restricción de líquidos, disminución de la ingesta de sodio, ejercicio supervisado o administración de líquidos IV (según la situación hemodinámica de cada paciente), ventilación mecánica, balón de contrapulsación aórtico y dispositivos de asistencia ventricular.</div>
+                </div>
+            </div>
+            <p class="section-label" style="margin-top:12px; font-size:0.8rem;">Objetivos terapéuticos fisiopatológicos</p>
+            <ul class="term-chips">
+                <li>Frecuencia cardíaca &lt;90/min (menor costo de funcionamiento)</li>
+                <li>Frecuencia respiratoria &lt;20/min</li>
+                <li>Saturación arterial de oxígeno &gt;90%</li>
+                <li>Presión arterial &gt;90 mmHg o PAM &gt;65 mmHg en normotensos; no &lt;30% de la PA previa en pacientes con HTA conocida</li>
+            </ul>
+
             <p class="section-label" style="margin-top:16px;">De la fisiología normal a la disfunción</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
                 Los mecanismos que en condiciones normales mantienen la homeostasis circulatoria (autorregulación,
@@ -350,39 +485,108 @@
         <div id="cardio-disfuncion-sistolica-diastolica" class="tab-content">
             <h3 style="color: var(--accent-blue);">Fisiopatología de la disfunción cardíaca sistólica y diastólica</h3>
 
-            <p class="section-label">La curva presión-volumen</p>
+            <p class="section-label">Antecedentes históricos y epidemiología</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
-                La forma más completa de entender la función ventricular es a través del bucle presión-volumen: en
-                cada latido, el ventrículo recorre la fase de llenado diastólico, la contracción isovolumétrica, la
-                eyección sistólica y la relajación isovolumétrica, dibujando un bucle cuya área representa el
-                trabajo cardíaco.
+                La falla cardíaca es un diagnóstico antiguo — sus primeras descripciones se atribuyen a
+                <strong>Hipócrates</strong> (470-370 a.C.), con múltiples casos de disnea y edemas. En el antiguo
+                Egipto y el Imperio Bizantino se refería como <em>hidropesía</em> (del griego <em>hydrops</em>,
+                agua). Solo hasta principios del siglo XVII, tras el trabajo de <strong>William Harvey</strong>
+                (que definió el funcionamiento del sistema circulatorio), se implicó al corazón en este proceso
+                patológico — y el médico inglés <strong>William Withering</strong> documentó el primer tratamiento
+                exitoso, con el uso de <em>foxglove</em> (<em>Digitalis purpurea</em>).
             </p>
-            <dl class="kv-row"><dt>Relación fin-sistólica presión-volumen (FRSPV / Ees)</dt><dd>La línea que conecta los puntos de fin de sístole de bucles con distinta precarga (maniobra de oclusión de la vena cava inferior). Su pendiente (<strong>Ees</strong>, elastancia máxima) es un índice de <strong>contractilidad independiente de la carga</strong> — más inclinada = más contráctil.</dd></dl>
-            <dl class="kv-row"><dt>Relación fin-diastólica presión-volumen (FRPVD)</dt><dd>La curva que describe la rigidez pasiva del ventrículo al final de la diástole. Una FRPVD desplazada hacia arriba/a la izquierda (más pendiente) indica un <strong>ventrículo más rígido</strong> — la base de la disfunción diastólica.</dd></dl>
+            <ul class="term-chips">
+                <li>~5 millones de personas afectadas en EE. UU.</li>
+                <li>Incidencia anual: 500.000 casos nuevos</li>
+                <li>300.000 muertes/año</li>
+                <li>50% de los pacientes con falla cardíaca sintomática tiene fracción de eyección preservada</li>
+            </ul>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 "El corazón en falla cardíaca es mucho más que solo un corazón en disfunción sistólica" — cambio de paradigma de la última década, con foco creciente en el diagnóstico y el entendimiento de la disfunción diastólica.</p>
+            <dl class="kv-row"><dt>Definición de falla cardíaca</dt><dd>Incapacidad del corazón de satisfacer las demandas de perfusión y oxigenación de los tejidos para su adecuado funcionamiento, manteniendo presiones de llenado normales. Puede ocurrir por 2 mecanismos: <strong>disfunción sistólica</strong> (función contráctil deprimida) o <strong>disfunción diastólica</strong> (alteración en la relajación o el llenado). Ambos comparten presiones de llenado elevadas, pero su fisiopatología difiere — mejor entendida con la relación presión/volumen del VI.</dd></dl>
 
-            <div class="article-figure">
-                <img src="js/modules/fisio-uci/img/cardio-fig3-presion-volumen.jpg" alt="Curva presión-volumen del ventrículo izquierdo: relación fin-sistólica (Ees/FRSPV), relación fin-diastólica (FRPVD), y las 4 fases del ciclo obtenidas con oclusión de la vena cava inferior" loading="lazy">
-                <div class="article-figure-caption">Curva presión-volumen del ventrículo izquierdo, obtenida con oclusión progresiva de la vena cava inferior.</div>
+            <p class="section-label" style="margin-top:16px;">Patogénesis: del evento índice a los síntomas</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La falla cardíaca es un desorden progresivo que inicia tras un <strong>evento índice</strong> que
+                daña el músculo cardíaco (inicio abrupto como el infarto, gradual/insidioso como la sobrecarga de
+                presión o volumen, o hereditario como las miocardiopatías congénitas). Muchos pacientes permanecen
+                asintomáticos tras la declinación inicial de la función de bomba, porque se activan mecanismos
+                compensatorios — pero la activación sostenida de los sistemas neurohormonales y de citocinas produce
+                <strong>"remodelamiento ventricular"</strong>, asociado al deterioro de la función y la aparición de
+                síntomas.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Análisis gráfico: curva de Starling y curva de retorno venoso</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Usando los diagramas clásicos de Guyton, que equiparan el flujo eyectado del corazón (curva de
+                Starling) con el flujo que llega desde la periferia (curva de retorno venoso), se puede ilustrar la
+                hemodinámica general. La <strong>presión de llenado circulatoria media (MCFP)</strong> es la fuerza
+                de conducción para el retorno venoso y el llenado de aurículas/ventrículos — establece, junto con el
+                mecanismo de Starling, el punto de equilibrio entre gasto cardíaco y retorno venoso a una presión
+                auricular específica.
+            </p>
+
+            <div style="background:rgba(212,175,55,0.06); border:1px dashed var(--border-color); border-radius:8px; padding:16px; text-align:center; font-size:0.8rem; color:var(--text-muted);">
+                📊 Placeholder — Figuras 2, 3 y 4 del capítulo: 3 gráficos de líneas (curva de Starling vs. curva de retorno venoso) mostrando el punto de equilibrio normal, el desplazamiento por caída de contractilidad, y el desplazamiento por acumulación de líquidos en disfunción diastólica — diagramas vectoriales del PDF, no imágenes incrustadas.
             </div>
 
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                En la falla cardíaca, la depresión del gasto cardíaco desplaza el equilibrio hacia un aumento de la
+                presión auricular. La hipoperfusión renal inicia una cascada neurohormonal compensatoria que retiene
+                líquidos para incrementar el retorno venoso y restaurar el gasto cardíaco — a costa de una presión
+                auricular más elevada, que si produce edema pulmonar/hipoxia genera un <span class="hl">círculo
+                vicioso</span> de mayor reducción del gasto cardíaco.
+            </p>
+            <dl class="kv-row"><dt>Disfunción diastólica: mecanismo hemodinámico</dt><dd>Contractilidad normal + distensibilidad ventricular disminuida (frecuente en obesidad e HTA). La distensibilidad reducida limita el llenado de aurículas/ventrículos, requiriendo acumulación de líquido en el sistema venoso para aumentar la presión de conducción del retorno venoso — lo que lleva a edema periférico o pulmonar.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">La curva presión-volumen</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El corazón como bomba hidráulica trae volumen a baja presión a sus cámaras y lo eyecta a mayor
+                presión — el asa presión-volumen grafica esta relación en sentido antihorario, permitiendo
+                identificar las 4 fases del ciclo cardíaco simplificado.
+            </p>
+            <dl class="kv-row"><dt>Relación fin-sistólica presión-volumen (FRSPV / Ees)</dt><dd>La línea que conecta los puntos de fin de sístole de bucles con distinta precarga (maniobra de oclusión de la vena cava inferior). Su pendiente (<strong>Ees</strong>, elastancia sistólica final) es un índice de <strong>contractilidad independiente de la carga</strong> — aumenta con inotrópicos positivos y disminuye con inotrópicos negativos.</dd></dl>
+            <dl class="kv-row"><dt>Relación fin-diastólica presión-volumen (FRPVD)</dt><dd>La curva que describe la rigidez pasiva del ventrículo al final de la diástole. Una FRPVD desplazada hacia arriba/a la izquierda (más pendiente) indica un <strong>ventrículo más rígido</strong> — la base de la disfunción diastólica. La anormalidad en las propiedades elásticas del ventrículo suele deberse a una combinación de aumento de la masa miocárdica, alteraciones del colágeno extramiocárdico (fibrosis, relacionada con inflamación endotelial microvascular) y aumento del estrés oxidativo de los cardiomiocitos.</dd></dl>
+
+            <div class="article-figure">
+                <img src="js/modules/fisio-uci/img/cardio-fig3-presion-volumen.jpg" alt="El asa presión-volumen y sus componentes estructurales: FRSPV, FRPVD, contracción isovolémica, relajación isovolémica, oclusión de la vena cava inferior" loading="lazy">
+                <div class="article-figure-caption">El asa presión-volumen y sus componentes estructurales, obtenida con oclusión progresiva de la vena cava inferior.</div>
+            </div>
+
+            <div class="article-figure">
+                <img src="js/modules/fisio-uci/img/cardio-fig4-hvi-corte.jpg" alt="Corte histológico de un corazón con hipertrofia ventricular izquierda concéntrica, pared engrosada" loading="lazy">
+                <div class="article-figure-caption">Corte transversal de un corazón con hipertrofia ventricular izquierda concéntrica — sustrato anatómico clásico de la disfunción diastólica.</div>
+            </div>
+
+            <table class="data-table">
+                <thead><tr><th>Patrón</th><th>Disfunción sistólica</th><th>Normal</th><th>Disfunción diastólica</th></tr></thead>
+                <tbody>
+                    <tr><td>Línea presión-volumen fin de sístole</td><td>Desplazada abajo y a la derecha</td><td>—</td><td>—</td></tr>
+                    <tr><td>Capacidad de eyección</td><td>Disminuida</td><td>Normal</td><td>Normal</td></tr>
+                    <tr><td>Línea de llenado diastólico</td><td>—</td><td>—</td><td>Desplazada arriba y a la izquierda</td></tr>
+                    <tr><td>Capacidad de llenado a baja presión</td><td>—</td><td>Normal</td><td>Disminuida</td></tr>
+                    <tr><td>Fracción de eyección</td><td>Disminuida</td><td>Normal</td><td>Normal</td></tr>
+                    <tr><td>Presión de fin de diástole</td><td>Normal</td><td>Normal</td><td>Aumentada</td></tr>
+                </tbody>
+            </table>
+
             <p class="section-label" style="margin-top:16px;">Disfunción sistólica</p>
-            <dl class="kv-row"><dt>Definición</dt><dd>Incapacidad del ventrículo para <strong>expulsar</strong> un volumen sistólico adecuado — típicamente con fracción de eyección (FE) reducida. El bucle presión-volumen se desplaza hacia la derecha (mayor volumen residual) y la Ees cae (pendiente más plana, menos contráctil).</dd></dl>
             <ul class="term-chips">
                 <li>Causas: isquemia/infarto, miocardiopatías dilatadas, miocarditis, toxicidad por fármacos (antracíclicos), sepsis (depresión miocárdica séptica)</li>
                 <li>Mecanismos compensadores: dilatación ventricular (Frank-Starling), activación neurohormonal (simpática, SRAA), remodelación excéntrica</li>
             </ul>
 
             <p class="section-label" style="margin-top:16px;">Disfunción diastólica</p>
-            <dl class="kv-row"><dt>Definición</dt><dd>Incapacidad del ventrículo para <strong>llenarse</strong> a presiones normales — la FE puede ser completamente normal (insuficiencia cardíaca con FE preservada, ICFEp). El problema es la relajación activa (proceso que consume ATP) y/o la rigidez pasiva de la pared.</dd></dl>
             <ul class="term-chips">
                 <li>Causas: hipertrofia ventricular izquierda (HTA crónica, estenosis aórtica), isquemia (la relajación es dependiente de energía), fibrosis miocárdica, edad avanzada, miocardiopatías restrictivas</li>
                 <li>Consecuencia hemodinámica: presiones de llenado elevadas transmitidas retrógradamente → congestión pulmonar, pese a contractilidad normal</li>
             </ul>
-
-            <div class="article-figure">
-                <img src="js/modules/fisio-uci/img/cardio-fig4-hvi-corte.jpg" alt="Corte histológico de un corazón con hipertrofia ventricular izquierda concéntrica, pared engrosada" loading="lazy">
-                <div class="article-figure-caption">Corte transversal de un corazón con hipertrofia ventricular izquierda concéntrica — sustrato anatómico clásico de la disfunción diastólica.</div>
-            </div>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Un número sustancial de pacientes con falla cardíaca y fracción de eyección preservada tiene un
+                volumen latido y gasto cardíaco bajos — pese a la FE normal, su capacidad de aumentar el gasto
+                cardíaco durante el ejercicio puede estar limitada, en relación con el aumento de la presión venosa
+                pulmonar y la reducción de la distensibilidad pulmonar que genera disnea, además de la hipoperfusión
+                de los músculos de las extremidades inferiores y accesorios de la respiración.
+            </p>
 
             <div class="micro-profiles">
                 <div class="micro-prof-item">
@@ -390,13 +594,52 @@
                     <div class="micro-prof-body">La contracción y la relajación miocárdicas dependen del ciclo del calcio intracelular: la entrada de Ca²⁺ por los canales tipo L dispara la liberación masiva desde el retículo sarcoplásmico (liberación de calcio inducida por calcio), que permite el acoplamiento actina-miosina; la relajación requiere la recaptación activa de ese calcio por la bomba SERCA2a (dependiente de ATP) y su extrusión por el intercambiador Na⁺/Ca²⁺. En la isquemia o la insuficiencia cardíaca, la disfunción de SERCA2a compromete tanto la fuerza de contracción como, especialmente, la velocidad y calidad de la relajación — explicando por qué la disfunción diastólica acompaña con frecuencia a la sistólica.</div>
                 </div>
                 <div class="micro-prof-item">
-                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚖️ Interdependencia sistólica-diastólica</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">Ambas disfunciones no son compartimentos estancos: un ventrículo con disfunción sistólica grave suele desarrollar también disfunción diastólica secundaria (dilatación + fibrosis reactiva), y viceversa, la isquemia que compromete la relajación (proceso activo dependiente de ATP) puede preceder al deterioro de la contractilidad. Por eso la evaluación clínica y ecocardiográfica debe buscar sistemáticamente ambos componentes, no solo la fracción de eyección.</div>
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚖️ Interdependencia sistólica-diastólica y remodelamiento</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Ambas disfunciones no son compartimentos estancos: un ventrículo con disfunción sistólica grave suele desarrollar también disfunción diastólica secundaria (dilatación + fibrosis reactiva), y viceversa. El tipo de remodelamiento varía según el tipo de sobrecarga: la sobrecarga de <strong>presión</strong> (HTA, estenosis aórtica) produce hipertrofia del VI, rigidez miocárdica y un volumen sistólico restringido en relación con la masa ventricular; la sobrecarga de <strong>volumen</strong> (insuficiencias valvulares) produce dilatación de las cámaras, presión de fin de diástole elevada y función sistólica disminuida; y las condiciones que afectan la contractilidad (infarto, miopatías primarias) producen sobrecarga combinada de presión y volumen. La ley de Laplace formaliza la tensión de pared: <strong>T = (P×R)/2t</strong> (P: presión ventricular, R: radio ventricular, t: grosor de la pared) — el aumento del radio eleva la tensión, y el aumento del grosor (hipertrofia) busca compensarla.</div>
                 </div>
             </div>
 
+            <p class="section-label" style="margin-top:16px;">Activación neurohormonal y de citocinas</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El estímulo inicial es la alteración de la función ventricular (isquemia, inflamación, enfermedad
+                valvular, cardiomiopatía) — la hipoperfusión censada por los barorreceptores induce la activación
+                del sistema nervioso simpático. Esta activación, útil por periodos limitados, se vuelve
+                <span class="hl">deletérea si es excesiva o persiste</span> — un rol central en la fisiopatología de
+                la falla cardíaca, un estado de hipoperfusión crónica con agudizaciones frecuentes.
+            </p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚡ Sistema nervioso simpático</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La <strong>noradrenalina</strong> fue uno de los primeros hallazgos en estudios de activación neurohormonal en falla cardíaca — su grado de elevación se relaciona con la severidad de la disfunción y el pronóstico: la supervivencia a 1 año de pacientes con noradrenalina &gt;800 pg/mL fue menor al <strong>40%</strong>. Es directamente tóxica para los cardiomiocitos (sobrecarga de calcio, apoptosis, regulación a la baja de receptores β1, desacoplamiento de receptores β2, aumento de la proteína G inhibitoria) — los cambios en los receptores β1 inducen hipertrofia con progresión a remodelamiento, dilatación y alteración progresiva de la función. Efectos adicionales: taquicardia, vasoconstricción, isquemia y arritmias — activando además, directa e indirectamente, el sistema renina-angiotensina-aldosterona.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧪 Sistema renina-angiotensina-aldosterona</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La falla cardíaca se asocia con elevaciones marcadas de todos sus componentes. La renina (liberada del aparato yuxtaglomerular en respuesta al estímulo simpático y a la hipoperfusión renal) metaboliza el angiotensinógeno a angiotensina I, y la ECA la convierte en angiotensina II — potente vasoconstrictor con múltiples acciones adicionales: aumento del tono simpático, liberación de arginina vasopresina, síntesis de aldosterona, retención de sodio y agua, e inducción de remodelamiento cardíaco/vascular. Tiene efectos tóxicos directos sobre el miocardio (hipertrofia, apoptosis); su concentración plasmática se correlaciona con la severidad de la disfunción y el pronóstico. La aldosterona, además de la retención renal de sodio, promueve fibrosis cardíaca/vascular, disfunción endotelial, hipertrofia cardíaca y mayor riesgo de muerte.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💧 Arginina vasopresina</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Secretada por la hipófisis, potente vasoconstrictor y regulador de la osmolaridad plasmática y la depuración de agua libre — elevada en falla cardíaca, con liberación influenciada por estímulos osmóticos y no osmóticos (incluida la angiotensina II). Induce vasoconstricción vía receptores V1, y promueve la reabsorción renal de agua y la secreción de renina vía receptores V2. Su contribución a la vasoconstricción en falla cardíaca requiere niveles muy elevados.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🫀 Péptidos natriuréticos</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">El péptido natriurético auricular (ANP) y el cerebral (BNP) se activan por receptores de presión y volumen en aurículas y ventrículos respectivamente, y están especialmente elevados en falla cardíaca. Promueven la natriuresis, reducen la actividad simpática y del SRAA, inhiben la vasopresina y la endotelina, disminuyen la resistencia vascular sistémica e inducen venodilatación — con importancia clínica en diagnóstico y pronóstico. El BNP se sintetiza como un péptido de 134 aminoácidos (prepro-BNP), que se metaboliza a pro-BNP, y este a una forma activa (BNP) y otra inactiva (pro-BNP N-terminal, NT-proBNP).</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔥 Mediadores inflamatorios</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Las <strong>endotelinas</strong> (principalmente la endotelina-1) son potentes vasoconstrictores producidos por el endotelio, con retención renal de sodio y producción de FNT-α — se elevan en falla cardíaca (su mayor fuente es la vasculatura pulmonar) y sus niveles elevados se asocian a mayor mortalidad. El <strong>FNT-α</strong> tiene un rol importante en la respuesta inflamatoria, produciendo fibrosis, remodelamiento y apoptosis — se eleva en falla cardíaca con niveles directamente relacionados con la severidad y la mortalidad. Las <strong>interleucinas</strong> (IL-1, IL-6) también están aumentadas, inhiben la respuesta de los miocitos al estímulo β y promueven la apoptosis.</div>
+                </div>
+            </div>
+
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Estas 3 vías (lesión secundaria con remodelamiento del VI, activación neurohormonal, y disfunción
+                endotelial con vasoconstricción/citocinas) se retroalimentan entre sí en un ciclo que perpetúa el
+                episodio índice hacia una <strong>insuficiencia cardíaca progresiva</strong> — a corto plazo
+                restauran la función cardiovascular a un rango homeostático normal, pero con el tiempo la activación
+                sostenida produce daño orgánico, remodelamiento cardíaco y empeoramiento de la función ventricular.
+            </p>
+
             <p class="section-label" style="margin-top:16px;">Fuente</p>
-            <p style="font-size: 0.78rem; color: var(--text-muted);">Capítulo 3. Fisiopatología de la disfunción cardíaca sistólica y diastólica. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección I, Capítulo 3, págs. 29-43.</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Atehortúa L LH, Escobar S JF. Fisiopatología de la disfunción cardíaca sistólica y diastólica. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección I, Capítulo 3, págs. 29-43.</p>
         </div>
 
         <!-- ===== FICHA 4: MICROCIRCULACIÓN ===== -->
@@ -429,18 +672,26 @@
                 <div class="article-figure-caption">Red microcirculatoria: arteriola, capilares, vénula y tejido celular circundante.</div>
             </div>
 
+            <dl class="kv-row"><dt>Dimensiones del lecho capilar</dt><dd>Superficie total de intercambio: <strong>500-700 m²</strong>. Cada capilar mide ~8 μm de diámetro interno, con una pared de ~1 μm de espesor y ~1 mm de longitud — la sangre fluye lentamente, a una presión de 1-4 kPa, y los elementos formes prácticamente viajan en fila (el grosor del vaso es apenas del tamaño de una célula, 4-10 μm).</dd></dl>
+            <dl class="kv-row"><dt>3 secciones de la microcirculación</dt><dd>a) <strong>Precapilar</strong> (proximal a la arteriola); b) <strong>capilar</strong> (la red de vasos que irriga el lecho); c) <strong>poscapilar</strong> (distal a la arteriola, hacia vénulas y microlinfáticos, diámetro &lt;100 μm).</dd></dl>
             <ul class="term-chips">
-                <li>Esfínteres precapilares: regulan qué capilares están abiertos/perfundidos en cada momento</li>
+                <li>Esfínteres precapilares: anillos de músculo liso que regulan qué capilares están abiertos/perfundidos en cada momento (vasoconstricción/vasodilatación)</li>
                 <li>Densidad capilar funcional: proporción de capilares realmente perfundidos, no solo anatómicamente presentes</li>
                 <li>Heterogeneidad del flujo: en estados de shock, unos capilares reciben flujo normal/alto mientras otros quedan sin flujo — el problema no es solo "cuánta sangre llega", sino "cómo se distribuye" (desarrollado con más detalle en la Ficha 10, shock séptico)</li>
+                <li>Autorregulación: el flujo sanguíneo se mantiene constante bajo una demanda metabólica constante, independiente de los cambios en la presión arterial sistémica</li>
             </ul>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 El primer modelo de transporte de oxígeno tisular, propuesto por <strong>Krogh</strong>, enfatiza que existe una limitada difusión de oxígeno hacia los tejidos — por eso hay mayor densidad capilar en los órganos que requieren mayor consumo de oxígeno, y aún más en las áreas específicas de mayor demanda dentro de ese órgano. A lo largo del árbol arteriolar hasta el lecho capilar, los niveles de oxígeno disminuyen hasta <strong>2/3</strong>, en parte por el consumo de los propios eritrocitos — evidencia directa de la heterogeneidad de la perfusión capilar. La extracción capilar de oxígeno es de aproximadamente el <strong>25%</strong> del transportado.</p>
 
             <p class="section-label" style="margin-top:16px;">Fuerzas de Starling a nivel capilar</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
                 El intercambio de líquido entre el capilar y el intersticio depende del balance entre la presión
-                hidrostática (que empuja líquido hacia afuera) y la presión oncótica (que lo retiene dentro del
-                vaso) — el mismo marco conceptual de la ecuación de Starling ya introducido para la filtración
-                glomerular en otros módulos de esta app, aplicado aquí a la microcirculación sistémica.
+                hidrostática (que empuja líquido hacia afuera, originada en la sístole cardíaca) y la presión
+                oncótica (que lo retiene dentro del vaso, generada por las proteínas plasmáticas) — el mismo marco
+                conceptual de la ecuación de Starling ya introducido para la filtración glomerular en otros módulos
+                de esta app, aplicado aquí a la microcirculación sistémica. A la entrada arterial del capilar, la
+                presión hidrostática excede a la fuerza oncótica y desplaza oxígeno/glucosa/aminoácidos hacia el
+                intersticio; ambas presiones se igualan en el centro, y en el extremo distal predomina la presión
+                oncótica, favoreciendo el retorno de líquido hacia el vaso.
             </p>
 
             <div class="article-figure">
@@ -451,109 +702,316 @@
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧊 El glucocálix endotelial</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">Capa de glucoproteínas y proteoglicanos que recubre la luz interna del endotelio capilar — actúa como una barrera adicional que modula el paso de líquido y proteínas, más allá de las simples uniones intercelulares. En estados inflamatorios (sepsis) el glucocálix se degrada (glucocalicólisis), aumentando la permeabilidad vascular y contribuyendo al edema y a la fuga capilar característicos del shock distributivo.</div>
+                    <div class="micro-prof-body">Capa de glucoproteínas y proteoglicanos que recubre la luz interna del endotelio capilar — actúa como una barrera adicional que modula el paso de líquido y proteínas, más allá de las simples uniones intercelulares. Además regula la adhesión y migración leucocitaria e inhibe la trombosis intravascular. En estados inflamatorios (sepsis) el glucocálix se degrada (glucocalicólisis), aumentando la permeabilidad vascular y contribuyendo al edema y a la fuga capilar característicos del shock distributivo.</div>
                 </div>
                 <div class="micro-prof-item">
-                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>👁️ Disociación macro-microcirculatoria</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">Un hallazgo central de la investigación en microcirculación: la reanimación guiada exclusivamente por parámetros macrocirculatorios (presión arterial, gasto cardíaco) puede "normalizarlos" sin que la perfusión microcirculatoria real se recupere en paralelo — sobre todo en sepsis. Es la base racional de las técnicas de videomicroscopía (imagen de campo oscuro lateral, OPS/SDF) usadas en investigación para visualizar directamente la perfusión capilar de la mucosa sublingual.</div>
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>👁️ Disociación macro-microcirculatoria y coherencia hemodinámica</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Un hallazgo central de la investigación en microcirculación: la reanimación guiada exclusivamente por parámetros macrocirculatorios (presión arterial, gasto cardíaco, saturación venosa mixta, lactato arterial) puede "normalizarlos" sin que la perfusión microcirculatoria real se recupere en paralelo — sobre todo en sepsis. Ince y colaboradores denominan a este delicado balance <strong>"coherencia hemodinámica"</strong>. Estudios de microscopía directa muestran que la propia reanimación puede producir 4 alteraciones microvasculares al intentar restaurar la estabilidad hemodinámica: <strong>heterogeneidad, hemodilución, obstrucción/taponamiento y edema</strong> — la pérdida de coherencia hemodinámica, secundaria a las propias estrategias de reanimación, es un efecto contrario al esperado que complica aún más el estado del paciente. Es la base racional de las técnicas de videomicroscopía (imagen de campo oscuro lateral, OPS/SDF) usadas en investigación para visualizar directamente la perfusión capilar de la mucosa oral.</div>
                 </div>
             </div>
 
+            <p class="section-label" style="margin-top:16px;">Transporte de oxígeno a nivel tisular: ley de Fick</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La difusión de oxígeno depende de la <strong>ley de Fick</strong>, determinada por el gradiente de
+                presión de oxígeno entre el capilar y la mitocondria, la distancia de difusión y el área disponible
+                de intercambio de gases. La hemoglobina también tiene efectos sobre el tono vascular al generar ATP
+                en situaciones de baja concentración de oxígeno — un mecanismo adicional para garantizar el
+                metabolismo aeróbico.
+            </p>
+            <dl class="kv-row"><dt>Respiración celular — 3 fases</dt><dd><strong>1) Glucólisis</strong> (citosol): 1 glucosa → 2 ATP + 2 piruvato. <strong>2) Ciclo de Krebs</strong> (matriz mitocondrial): carboxilación y óxido-reducción, produce 3 NADH + 1 FADH + 1 ATP por vuelta — cada NADH genera 3 ATP y cada FADH genera 2 ATP en la cadena respiratoria. <strong>3) Cadena respiratoria y fosforilación oxidativa</strong> (membrana mitocondrial interna): producción final de <strong>36-38 moléculas de ATP</strong> por molécula de glucosa, con formación de CO₂ y agua — el CO₂ se elimina intercambiándose por oxígeno a nivel capilar (hematosis).</dd></dl>
+            <dl class="kv-row"><dt>Vía anaeróbica (glucólisis + ácido láctico)</dt><dd>Cuando la demanda de oxígeno excede al aporte, se activa la vía del piruvato sin presencia de oxígeno — produce solo 2 ATP y ácido láctico, mucho menos eficiente energéticamente que la vía aeróbica completa.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Monitorización de la microcirculación</p>
+            <dl class="kv-row"><dt>DO₂ (fórmula del capítulo)</dt><dd>DO₂ = CaO₂ × GC, expandida como DO₂ = (Hb × SaO₂ × 1,34) + (PaO₂ × 0,0031), multiplicado por (VL × FC) — la medición intermitente por gasometría arterial tiene la limitación de captar solo un momento puntual, mientras que el estado hemodinámico cambia constantemente.</dd></dl>
+            <dl class="kv-row"><dt>Saturación venosa central (ScvO₂)</dt><dd>Marcador indirecto de la relación aporte/consumo de oxígeno, obtenido de sangre de un catéter central o de Swan-Ganz (con sensores de luz infrarroja para monitorización continua). Promedio normal: <strong>70-80%</strong>.</dd></dl>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Ante una caída de la saturación venosa, las medidas de tratamiento siguen un orden: 1º disminuir la
+                demanda metabólica (control de fiebre, infección, convulsiones, dolor); 2º incrementar el aporte de
+                oxígeno (↑saturación de la hemoglobina, ventilación mecánica); 3º incrementar la hemoglobina
+                circulante y mejorar el gasto cardíaco (transfusión, vasopresores, inotrópicos).
+            </p>
+            <ul class="term-chips">
+                <li>Microscopía vital manual (videomicroscopía de mucosa oral)</li>
+                <li>Técnicas Doppler láser (perfusión de piel/mucosas, resolución de 0,5-1 mm³, en investigación)</li>
+                <li>Saturación venosa central y mixta</li>
+                <li>Espectrofotometría tisular</li>
+                <li>Electrodos transcutáneos de PO₂/PCO₂</li>
+                <li>Gradiente venoarterial de CO₂</li>
+                <li>Marcadores bioquímicos (lactato)</li>
+                <li>Estimaciones clínicas: diferencia de temperatura central-periférica, tiempo de llenado capilar</li>
+            </ul>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 La monitorización de la microcirculación no es de uso común en la UCI — se ha usado con mayor frecuencia en sepsis grave y estados de shock, pero aún debe determinarse mejor su impacto real sobre las medidas terapéuticas para restablecer el flujo microcirculatorio y prevenir la disfunción orgánica múltiple.</p>
+
             <p class="section-label" style="margin-top:16px;">Fuente</p>
-            <p style="font-size: 0.78rem; color: var(--text-muted);">Vázquez de Anda GF, et al. ¿Cómo funciona la microcirculación? En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección I, Capítulo 4, págs. 45-57.</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Vázquez de Anda GF, Dávila Fernández JC, Delsye Aguilar MG, Pérez Castañeda AI. ¿Cómo funciona la microcirculación? En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección I, Capítulo 4, págs. 45-57.</p>
         </div>
 
         <!-- ===== FICHA 5: MONITORIZACIÓN HEMODINÁMICA CLÁSICA ===== -->
         <div id="cardio-monitorizacion-hemodinamica" class="tab-content">
             <h3 style="color: var(--accent-green);">Monitorización hemodinámica sistémica clásica. Papel actual del ultrasonido a pie de cama</h3>
 
-            <p class="section-label">Colocación del catéter de arteria pulmonar</p>
-            <p style="font-size: 0.85rem; line-height: 1.6;">
-                El catéter de Swan-Ganz se introduce por acceso venoso central y avanza guiado por las curvas de
-                presión características de cada cámara que atraviesa: aurícula derecha → ventrículo derecho →
-                arteria pulmonar → posición de enclavamiento (con el balón inflado, "mirando" retrógradamente la
-                presión de la aurícula izquierda).
-            </p>
+            <p class="section-label">Conceptos básicos: VS, GC, IC</p>
+            <dl class="kv-row"><dt>Volumen sistólico (VS)</dt><dd>Volumen de sangre que bombea el corazón por latido, dependiente de precarga/poscarga/contractilidad. Valores: <strong>60-100 mL</strong>.</dd></dl>
+            <dl class="kv-row"><dt>Gasto cardíaco (GC)</dt><dd>Volumen que bombea el corazón por minuto = VS × FC. Valores: <strong>4-8 L/min</strong> (ejemplo: FC 70 lpm × VS 70 mL = 4900 mL/min ≈ 5 L/min).</dd></dl>
+            <dl class="kv-row"><dt>Índice cardíaco (IC)</dt><dd>GC ajustado a la superficie corporal (ASC): ASC (m²) = [talla (cm) + peso (kg) − 60]/100. Valores: <strong>2,5-4,5 L/min/m²</strong>.</dd></dl>
 
             <div class="article-figure">
-                <img src="js/modules/fisio-uci/img/cardio-fig8-colocacion-cateter.jpg" alt="Tres esquemas secuenciales de la colocación del catéter de arteria pulmonar a través de las cavidades derechas" loading="lazy">
-                <div class="article-figure-caption">Colocación del catéter de arteria pulmonar a través de las cavidades cardíacas derechas.</div>
-            </div>
-
-            <div class="article-figure">
-                <img src="js/modules/fisio-uci/img/cardio-fig11-cateter-arteria-pulmonar.jpg" alt="Catéter de arteria pulmonar: acceso venoso, presión de aurícula derecha, presión ventricular derecha, presión de arteria pulmonar y presión de enclavamiento o wedge, con balón inflado y desinflado" loading="lazy">
-                <div class="article-figure-caption">Curvas de presión durante el avance del catéter de arteria pulmonar (Swan-Ganz).</div>
+                <img src="js/modules/fisio-uci/img/cardio-fig8-colocacion-cateter.jpg" alt="Variables del volumen sistólico: contractilidad, precarga y poscarga, representadas sobre 3 diagramas del corazón" loading="lazy">
+                <div class="article-figure-caption">Variables del volumen sistólico: contractilidad (fuerza con la que se contrae el corazón), precarga (longitud de la fibra miocárdica en telediástole) y poscarga (resistencia que debe vencer el corazón para impulsar la sangre).</div>
             </div>
 
             <table class="data-table">
-                <thead><tr><th>Cámara / posición</th><th>Presión normal (mmHg)</th></tr></thead>
+                <thead><tr><th>Precarga</th><th>Contractilidad</th><th>Poscarga</th></tr></thead>
                 <tbody>
-                    <tr><td>Aurícula derecha</td><td>0-8 (media)</td></tr>
-                    <tr><td>Ventrículo derecho</td><td>25/0-8 (sistólica/diastólica)</td></tr>
-                    <tr><td>Arteria pulmonar</td><td>25/12 (sistólica/diastólica), media 15</td></tr>
-                    <tr><td>Presión de enclavamiento (wedge, POAP)</td><td>6-12 (media)</td></tr>
-                    <tr><td>Aurícula izquierda</td><td>5-12 (media)</td></tr>
-                    <tr><td>Ventrículo izquierdo</td><td>120/5-12 (sistólica/diastólica)</td></tr>
+                    <tr><td>Retorno venoso: hipovolemia, embolia pulmonar, estenosis mitral</td><td rowspan="1">Infarto agudo de miocardio</td><td>HTA</td></tr>
+                    <tr><td>Fallo diastólico: taponamiento, pericarditis constrictiva, hipertrofia ventricular izquierda</td><td>Miocardiopatía</td><td>Estenosis aórtica</td></tr>
+                    <tr><td>Problemas de llenado: fibrilación auricular de alta respuesta rápida</td><td>Depresión por sepsis</td><td>Elasticidad del vaso</td></tr>
+                    <tr><td>—</td><td>Quimioterápicos</td><td>—</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Variables y factores que intervienen en el volumen sistólico.</p>
+
+            <p class="section-label" style="margin-top:16px;">Presión arterial (PA = VM × RVS)</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                PA = volumen minuto (VM) × resistencia vascular sistémica (RVS). En la UCI existen 2 formas de
+                medirla: <strong>invasiva</strong> (canalización arterial) o <strong>no invasiva</strong> (manguito).
+                Con ventilación mecánica y vasopresores/inotrópicos, ambas técnicas pueden diferir de forma
+                significativa — asumible en decisiones de emergencia a corto plazo, pero a tener en cuenta.
+            </p>
+            <dl class="kv-row"><dt>Autorregulación y objetivo de PAM</dt><dd>La capacidad de autorregulación se pierde con PAM &lt;60-65 mmHg. La mayoría de estudios propone un objetivo de <strong>65 mmHg</strong>; niveles más altos no han mostrado superioridad, salvo en TCE grave con deterioro neurológico y sin evidencia de hemorragia sistémica, donde se recomienda mantener PAM de <strong>90 mmHg</strong> (al desconocerse la presión de perfusión cerebral real).</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Macrohemodinamia: indicadores estáticos y dinámicos</p>
+            <table class="data-table">
+                <thead><tr><th>Tipo</th><th>Índice</th><th>Instrumento</th><th>Valores normales</th></tr></thead>
+                <tbody>
+                    <tr><td rowspan="2">De presión</td><td>PVC</td><td>Catéter venoso central</td><td>8-12 mmHg</td></tr>
+                    <tr><td>PoAP</td><td>Catéter de Swan-Ganz</td><td>18 mmHg</td></tr>
+                    <tr><td rowspan="5">De volumen (estáticos)</td><td>Volumen de fin de diástole del VD/VI</td><td>Ecocardiografía</td><td>75±13 / 66±5 mL/m²</td></tr>
+                    <tr><td>Área de fin de diástole del VD/VI</td><td>Ecocardiografía</td><td>11-16 / 5-10 cm/m²</td></tr>
+                    <tr><td>Volumen de sangre intratorácico</td><td>PICCO</td><td>850-1000 mL/m²</td></tr>
+                    <tr><td>VTDGi (volumen telediastólico global indexado)</td><td>PICCO</td><td>680-800 mL/m²</td></tr>
+                    <tr><td>—</td><td>—</td><td>—</td></tr>
+                    <tr><td rowspan="4">Dinámicos (grupo A — variación con el VS durante VM)</td><td>VPP: variación de la presión de pulso durante el ciclo ventilatorio</td><td>PP máx.−PP mín. / ½(PPmáx.+PPmin.) × 100</td><td>&lt;10%</td></tr>
+                    <tr><td>VPS: variación de PAS durante inspiración-espiración</td><td>VS máx.−VS mín. / ½(VSmáx.+VSmin.) × 100</td><td>&lt;10 mmHg</td></tr>
+                    <tr><td>VVS: variación del volumen sistólico</td><td>Análisis de contorno de onda de pulso (PICCO)</td><td>&lt;13%</td></tr>
+                    <tr><td>VVpoak: variación de la velocidad del pico de flujo aórtico</td><td>Vp máx.−Vp mín. / ½(Vpmáx.+Vpmin.) × 100</td><td>&lt;13%</td></tr>
+                    <tr><td rowspan="3">Dinámicos (grupo B — variación de parámetros no relacionados con el VS)</td><td>Índice de colapsabilidad VCI (en VE)</td><td>Dmáx.−Dmin. / Dmáx. × 100</td><td>&lt;38%</td></tr>
+                    <tr><td>Índice de distensibilidad VCI (en VM)</td><td>Dmáx.−Dmin. / Dmin. × 100</td><td>&lt;18%</td></tr>
+                    <tr><td rowspan="2">Dinámicos (grupo C — respuesta de precarga no asociada a VM)</td><td>VFA por EPP: variación del flujo aórtico tras elevación pasiva de piernas</td><td>FA EPP − FA basal</td><td>&lt;10%</td></tr>
+                    <tr><td colspan="3">Elevación pasiva de piernas (EPP): desafío de fluido endógeno, útil incluso en arritmias/respiración espontánea. Respuesta en 30-90 segundos.</td></tr>
+                </tbody>
+            </table>
+            <table class="data-table">
+                <thead><tr><th>Tipo</th><th>Utilidad</th><th>Controversia</th></tr></thead>
+                <tbody>
+                    <tr><td>Estáticos</td><td>Determinación de precarga</td><td>Valor limitado para estimar respuesta al volumen</td></tr>
+                    <tr><td>Dinámicos</td><td>Estimación de la respuesta al volumen</td><td>Ningún valor aislado es útil — se necesita correlacionarlos</td></tr>
                 </tbody>
             </table>
 
-            <div class="article-figure">
-                <img src="js/modules/fisio-uci/img/cardio-fig10-presiones-normales.jpg" alt="Presiones normales en las cavidades cardíacas derechas, capilares pulmonares y cavidades izquierdas" loading="lazy">
-                <div class="article-figure-caption">Presiones normales a lo largo de la circulación pulmonar.</div>
-            </div>
-
-            <p class="section-label" style="margin-top:16px;">Onda de presión venosa central: a-c-x-v-y</p>
+            <p class="section-label" style="margin-top:16px;">Presión venosa central (PVC)</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
-                La misma morfología de onda descrita para el pulso venoso yugular (Ficha 1) se traduce
-                directamente en la curva de presión venosa central invasiva, correlacionada con el ciclo mecánico
-                de la aurícula y la válvula tricúspide.
+                Presión a nivel de la aurícula derecha. Valores normales en no ventilados: <strong>8-12 mmHg</strong>.
+                Una PVC &gt;10 mmHg se correlaciona con baja probabilidad de responder a volumen; &lt;10 mmHg se
+                asocia con caídas del GC — pero una revisión sistemática demostró <span class="hl">pobre
+                correlación entre PVC y volumen sanguíneo circulante</span>, y su incapacidad como predictor de
+                respuesta a fluidos — guiar la resucitación solo por PVC lleva con frecuencia a sobrecarga de
+                volumen y edema pulmonar.
             </p>
+            <ul class="term-chips">
+                <li>Situaciones que alteran la PVC: infarto agudo de miocardio, estenosis tricuspídea, estado hiperadrenérgico, posición, respiración</li>
+            </ul>
 
             <div class="article-figure">
                 <img src="js/modules/fisio-uci/img/cardio-fig9-onda-pvc.jpg" alt="Onda de presión venosa central con componentes a, c, x, v, y correlacionados con el estado de la válvula tricúspide" loading="lazy">
-                <div class="article-figure-caption">Onda de presión venosa central (a-c-x-v-y) y su correlación con el ciclo de la válvula tricúspide.</div>
+                <div class="article-figure-caption">Curva de presión venosa central: a (contracción auricular), c (contracción ventricular), x (vaciamiento auricular), v (llenado auricular).</div>
             </div>
 
-            <p class="section-label" style="margin-top:16px;">Índices hemodinámicos derivados</p>
+            <p class="section-label" style="margin-top:16px;">Catéter de Swan-Ganz</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Dispositivo controversial pero presente en la monitorización del crítico. 100 cm de longitud, con
+                una <strong>luz proximal</strong> (a 30 cm de la punta, mide PVC en la aurícula derecha) y una
+                <strong>luz distal</strong> con balón y sensor de temperatura (arteria pulmonar; al inflar el balón,
+                obtiene la presión de oclusión capilar pulmonar, que determina la precarga del VI).
+            </p>
+
+            <div class="article-figure">
+                <img src="js/modules/fisio-uci/img/cardio-fig11-cateter-arteria-pulmonar.jpg" alt="Catéter de arteria pulmonar: acceso venoso, presión de aurícula derecha, presión ventricular derecha, presión de arteria pulmonar y presión de enclavamiento o wedge, con balón inflado y desinflado" loading="lazy">
+                <div class="article-figure-caption">Colocación del catéter de arteria pulmonar y curvas de presión: AD 0-8, VD sistólica 20-25/diastólica 4-8, arteria pulmonar sistólica 20-25/diastólica 6-12, presión de enclavamiento (wedge) 6-12 mmHg.</div>
+            </div>
+
+            <div class="article-figure">
+                <img src="js/modules/fisio-uci/img/cardio-fig10-presiones-normales.jpg" alt="Esquema de las presiones endocavitarias cardíacas: AD 0-8, VD 25-02, arteria pulmonar, capilares pulmonares, vena pulmonar, AI 5-12, VI 120-12" loading="lazy">
+                <div class="article-figure-caption">Esquema de las presiones endocavitarias cardíacas.</div>
+            </div>
+
             <table class="data-table">
-                <thead><tr><th colspan="2">Parámetros y fórmulas</th></tr></thead>
+                <thead><tr><th colspan="2">Indicaciones del catéter de Swan-Ganz</th></tr></thead>
                 <tbody>
-                    <tr><td>Contenido arterial de O₂ (CaO₂)</td><td>Hb × 1,34 × SaO₂ + PaO₂ × 0,003 (17-20 vol%)</td></tr>
-                    <tr><td>Contenido venoso de O₂ (CvO₂)</td><td>Hb × 1,34 × SvO₂ + PvO₂ × 0,003 (12-15 vol%)</td></tr>
-                    <tr><td>Entrega de O₂ (DO₂)</td><td>CaO₂ × GC × 10 (870-1200 mL/min)</td></tr>
-                    <tr><td>Consumo de O₂ (VO₂)</td><td>GC × (CaO₂ - CvO₂) (180-300 mL/min)</td></tr>
-                    <tr><td>Gasto cardíaco (GC)</td><td>Volumen sistólico × frecuencia cardíaca (4-6 L/min)</td></tr>
-                    <tr><td>Índice cardíaco (IC)</td><td>GC / superficie corporal (2,4-4 L/min/m²)</td></tr>
-                    <tr><td>Índice de extracción de O₂ (OEI)</td><td>(SaO₂ - SvO₂) / SaO₂ (20-30%)</td></tr>
+                    <tr><td colspan="2">Shock cardiogénico bajo tratamiento vasoactivo</td></tr>
+                    <tr><td colspan="2">Insuficiencia cardíaca crónica descompensada</td></tr>
+                    <tr><td colspan="2">Sospecha de pseudosepsis (GC elevado, RVS baja)</td></tr>
+                    <tr><td colspan="2">Fallo cardíaco sistólico potencialmente reversible (miocarditis fulminante, intoxicaciones farmacológicas, miocardiopatía periparto)</td></tr>
+                    <tr><td colspan="2">Diagnóstico diferencial hemodinámico de la hipertensión pulmonar</td></tr>
+                    <tr><td colspan="2">Trasplante cardíaco, pulmonar o cardiopulmonar</td></tr>
+                    <tr><td colspan="2">Descartar hipertensión portopulmonar previo al trasplante hepático</td></tr>
                 </tbody>
             </table>
-            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Estas mismas fórmulas (ver también la Tabla 1 de la Ficha 10) son la base de todo el razonamiento del transporte de oxígeno: la hipoxia tisular puede producirse por un problema de oferta (↓DO₂), de distribución (mala perfusión pese a DO₂ normal) o de utilización (incapacidad celular de usar el oxígeno disponible, hipoxia citopática).</p>
+            <table class="data-table">
+                <thead><tr><th>Contraindicaciones absolutas</th><th>Contraindicaciones relativas</th></tr></thead>
+                <tbody>
+                    <tr><td>Estenosis de válvula tricúspide o pulmonar</td><td>Arritmias severas</td></tr>
+                    <tr><td>Prótesis tricuspídea</td><td>Coagulopatías</td></tr>
+                    <tr><td>Masas intracavitarias derechas</td><td>Marcapasos definitivos (&lt;4-6 semanas)</td></tr>
+                    <tr><td>Tetralogía de Fallot</td><td>—</td></tr>
+                </tbody>
+            </table>
 
-            <p class="section-label" style="margin-top:16px;">Variación de la presión de pulso (PPV) y respuesta a volumen</p>
+            <p class="section-label" style="margin-top:16px;">Patrones hemodinámicos clásicos por tipo de shock</p>
+            <table class="data-table">
+                <thead><tr><th>Tipo</th><th>PVC</th><th>Wedge (PW)</th><th>GC</th><th>RVS</th><th>SvO₂</th></tr></thead>
+                <tbody>
+                    <tr><td>Hipovolémico</td><td>↓</td><td>↓</td><td>↓</td><td>↑</td><td>↓</td></tr>
+                    <tr><td>Distributivo</td><td>No↓</td><td>No↑</td><td>No↓ o ↑</td><td>↑</td><td>↓ o ↑</td></tr>
+                    <tr><td>Obstructivo</td><td>↑</td><td>↑ o ↓</td><td>↓</td><td>↑</td><td>↓</td></tr>
+                    <tr><td>Cardiogénico</td><td>↑</td><td>↑</td><td>↓</td><td>↑</td><td>↓</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Cuadrantes de Forrester</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
-                En un paciente ventilado mecánicamente con ritmo sinusal, la presión de pulso arterial varía
-                cíclicamente con la respiración — el fundamento de las variables dinámicas de precarga (PPV, VVS)
-                usadas para predecir la respuesta a volumen.
+                El punto de corte normal de IC es <strong>2,2 L/min/m²</strong> y de presión de oclusión
+                <strong>18 mmHg</strong>. Por debajo de 18 mmHg de PoAP: normal o hipovolemia; por encima:
+                hipervolemia o shock cardiogénico. En el shock cardiogénico, el objetivo es mejorar el inotropismo
+                para pasar del cuadrante IV al II y luego al I; en hipovolemia (IC bajo, PoAP baja), el objetivo es
+                pasar del cuadrante III al I optimizando la volemia.
+            </p>
+            <table class="data-table">
+                <thead><tr><th>Cuadrante</th><th>IC / PoAP</th><th>Manejo típico</th></tr></thead>
+                <tbody>
+                    <tr><td>I — Normal</td><td>IC ≥2,2, PoAP ≤18</td><td>—</td></tr>
+                    <tr><td>II — Hipervolemia</td><td>IC ≥2,2, PoAP &gt;18</td><td>Diuréticos, vasodilatadores</td></tr>
+                    <tr><td>III — Hipovolemia</td><td>IC &lt;2,2, PoAP ≤18</td><td>Expansión de fluidos, vasopresores</td></tr>
+                    <tr><td>IV — Shock cardiogénico</td><td>IC &lt;2,2, PoAP &gt;18 (hasta 40)</td><td>Inotrópicos</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Problemas en la medición (PEEP, HVI)</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El PEEP genera una presión que reduce el estiramiento del sarcómero, dificultando valorar la presión
+                telediastólica real del VI — se convierte de cmH₂O a mmHg (1 mmHg = 1 cmH₂O × 0,74) y se resta de la
+                presión Wedge medida (PEEP=&gt; PTDVI &gt; PAI &gt; PCP). La hipertrofia ventricular izquierda (HVI)
+                produce el efecto contrario: la Wedge no refleja el estiramiento real del sarcómero, cerrándose
+                precozmente la válvula mitral (HVI=&gt; PTDVI &lt; PAI &lt; PCP).
+            </p>
+            <table class="data-table">
+                <thead><tr><th>Variable</th><th>Normal</th><th>PEEP</th><th>HVI</th></tr></thead>
+                <tbody>
+                    <tr><td>PoAP (mmHg)</td><td>18</td><td>20</td><td>16</td></tr>
+                    <tr><td>PEEP (cmH₂O)</td><td>−5</td><td>+10</td><td>−5</td></tr>
+                    <tr><td>PFDVI (mmHg)</td><td>+20</td><td>+20</td><td>+20</td></tr>
+                    <tr><td>Presión transmural</td><td>25</td><td>10</td><td>25</td></tr>
+                    <tr><td>Distensibilidad del VI</td><td>Normal</td><td>Normal</td><td>Rígida</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 La PCP solo es asimilable a la PAI cuando la punta del catéter está en la zona 3 del pulmón (la más declive, donde la presión capilar supera a la presión alveolar) — la mayoría de los catéteres se localizan allí por ser la zona con mayor flujo sanguíneo. En vasoconstricción hipóxica, la PCP puede superar a la presión telediastólica del VI.</p>
+
+            <p class="section-label" style="margin-top:16px;">Parámetros hemodinámicos calculados</p>
+            <table class="data-table">
+                <thead><tr><th>Parámetro</th><th>Fórmula</th><th>Valor normal</th></tr></thead>
+                <tbody>
+                    <tr><td>Índice de resistencia vascular sistémica (IRVS)</td><td>(PAM − PVC) × 80/IC</td><td>1600-2400 dinas·s·m²/cm⁵</td></tr>
+                    <tr><td>Índice de resistencia vascular pulmonar (IRVP)</td><td>(PAP − PCP) × 80/IC</td><td>250-340 dinas·s·m²/cm⁵</td></tr>
+                    <tr><td>RVS</td><td>(PAM − PVC) × 80/GC</td><td>900-1200 dinas·s/cm⁵</td></tr>
+                    <tr><td>Índice de trabajo sistólico del VI (ITSVI)</td><td>(PAM − PCP) × IVS × 0,0136</td><td>44-64 g·min/m²</td></tr>
+                    <tr><td>Índice de trabajo sistólico del VD (ITSVD)</td><td>(PAP − PVC) × IVS × 0,0136</td><td>7-12 g·min/m²</td></tr>
+                    <tr><td>Índice de volumen sistólico (IVS)</td><td>IC/FC × 1000</td><td>—</td></tr>
+                    <tr><td>DO₂ (mL/min/m²)</td><td>IC × Hb × Sat.O₂ × 1,39</td><td>Intermitente</td></tr>
+                    <tr><td>Agua extravascular pulmonar indexada (ELWi)</td><td>VLT − VST</td><td>3-7 mL/kg</td></tr>
+                    <tr><td>Fracción de acortamiento (FA)</td><td>(Dts−Dtd)/Dtd × 100</td><td>28%-40%</td></tr>
+                    <tr><td>Fracción de eyección (FEy)</td><td>(Dts−Dtd)/Dtd × 100</td><td>&gt;50%</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Nota de fidelidad: el capítulo advierte que ninguno de estos valores aislados basta — "el manejo integral es guiado por metas", conociendo que aproximadamente la mitad de los pacientes de UCI no son respondedores a fluidos, y que la sobrecarga de líquidos se ha asociado con aumento de la mortalidad.</p>
+
+            <p class="section-label" style="margin-top:16px;">Termodilución cardíaca</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Se inyectan 5-10 mL de suero frío (4°C) por el puerto proximal; el termistor de la punta registra el
+                cambio de temperatura en la arteria pulmonar y el área bajo la curva estima el GC. Se recomiendan 3
+                mediciones con variabilidad &lt;10% entre ellas — la primera determinación es la más propensa a
+                error, por lo que se descarta primero si hay discrepancia.
+            </p>
+            <ul class="term-chips">
+                <li>Insuficiencia tricuspídea: resultados falsamente bajos (curva prolongada y de baja amplitud)</li>
+                <li>Estados de bajo gasto: subestimación de hasta 30% si se usan volúmenes pequeños — usar soluciones frías de 10 mL</li>
+                <li>Shunts intracardíacos derecha-izquierda: resultados falsamente elevados; izquierda-derecha: curva similar a gasto elevado</li>
+            </ul>
+            <dl class="kv-row"><dt>Gasto cardíaco continuo</dt><dd>Catéteres modificados con filamento térmico (10 cm, a 15-25 cm de la punta) registran durante 3-5 minutos, actualizando cada 30-60 segundos — minimiza los errores de la termodilución manual.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Indicadores dinámicos y ventilación mecánica</p>
+            <table class="data-table">
+                <thead><tr><th>Interrelación corazón-pulmón</th><th>Inspiración</th><th>Espiración</th></tr></thead>
+                <tbody>
+                    <tr><td>Ventilación mecánica</td><td>Aumenta (delta-up)</td><td>Disminuye (delta-down)</td></tr>
+                    <tr><td>Ventilación espontánea</td><td>Disminuye</td><td>Aumenta</td></tr>
+                </tbody>
+            </table>
+            <dl class="kv-row"><dt>Delta-down / delta-up</dt><dd>El delta-<em>down</em> es el mejor indicador de la variación en hipovolemia — se correlaciona con la respuesta a la precarga, ya que disminuye con la administración de volumen. El delta-<em>up</em> es el componente más importante en falla ventricular e hipervolemia.</dd></dl>
+            <dl class="kv-row"><dt>VPP (variación de presión de pulso)</dt><dd>No es indicador de volumen sanguíneo total, sino un predictor de respuesta a volumen. Usualmente pequeña (1%-5%), se incrementa en hipovolemia &gt;13% — capaz de predecir respuesta a volumen, influenciada por la magnitud del volumen corriente.</dd></dl>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La monitorización actual parte de la premisa de que, si el corazón derecho es respondedor a
+                precarga, resultarán grandes variaciones en el gasto cardíaco derecho y, en consecuencia, del
+                izquierdo, con la administración de volumen — respuesta a la precarga definida como <span class="hl">↑15%
+                del gasto cardíaco tras el volumen</span>. Los <strong>no respondedores (~50%)</strong> incluyen el
+                embolismo pulmonar masivo y la falla del VI (donde el exceso de volumen puede ser más perjudicial
+                que benéfico) y aquellos con tono arterial muy disminuido, donde pese a aumentar el GC la presión de
+                perfusión no basta.
             </p>
 
             <div class="article-figure">
                 <img src="js/modules/fisio-uci/img/cardio-fig13-variacion-presion-pulso.jpg" alt="Trazado de presión arterial mostrando la variación de la presión de pulso con la ventilación mecánica" loading="lazy">
-                <div class="article-figure-caption">Variación de la presión de pulso arterial con los ciclos de la ventilación mecánica.</div>
+                <div class="article-figure-caption">Variación de la presión de pulso arterial (PP máx./PP mín.) con los ciclos de la ventilación mecánica.</div>
             </div>
 
+            <p class="section-label" style="margin-top:16px;">Microhemodinamia</p>
+            <table class="data-table">
+                <thead><tr><th>Parámetro</th><th>Fórmula</th><th>Valor normal</th></tr></thead>
+                <tbody>
+                    <tr><td>Saturación arterial (SaO₂)</td><td>—</td><td>&gt;90%-100%</td></tr>
+                    <tr><td>Saturación venosa central (SvcO₂)</td><td>—</td><td>70%-80%</td></tr>
+                    <tr><td>Contenido arterial de O₂ (CaO₂)</td><td>(Hb×1,34×SatO₂) + (0,031×PaO₂)</td><td>17-20 mL/dL</td></tr>
+                    <tr><td>Contenido venoso de O₂ (CvO₂)</td><td>(Hb×1,34×SatvO₂) + (0,031×PvO₂)</td><td>12-15 mL/dL</td></tr>
+                    <tr><td>Disponibilidad de O₂ (DO₂)</td><td>GC×CaO₂×10</td><td>850-1050 mL/min</td></tr>
+                    <tr><td>Índice de disponibilidad de O₂ (IDO₂)</td><td>IC×CaO₂×10</td><td>520-650 mL/min/m²</td></tr>
+                    <tr><td>Consumo de O₂ (VO₂)</td><td>GC×(CaO₂−CvO₂)×10</td><td>200-250 mL/min</td></tr>
+                    <tr><td>Índice de consumo de O₂ (IVO₂)</td><td>IC×(CaO₂−CvO₂)×10</td><td>110-180 mL/min/m²</td></tr>
+                    <tr><td>Coeficiente de extracción de O₂ (CEO₂)</td><td>VO₂/DO₂ × 100</td><td>0,2-0,3 (20%-30%)</td></tr>
+                    <tr><td>Lactato</td><td>—</td><td>&lt;2,2 mmol/L</td></tr>
+                    <tr><td>Delta de CO₂ (ΔCO₂)</td><td>PaCO₂ − PvCO₂</td><td>&lt;6 mmHg</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Esta tabla trae explícitamente el <strong>IDO₂ (índice de disponibilidad de O₂)</strong> con su rango normal de 520-650 mL/min/m² — el mismo concepto desarrollado con su fórmula IC×CaO₂ en la Ficha 2, aquí con el factor ×10 explícito y su rango normal exacto.</p>
+            <dl class="kv-row"><dt>Curva DO₂-VO₂ y transporte crítico de oxígeno</dt><dd>A medida que el DO₂ cae por debajo de lo normal (bajo gasto, anemia, desaturación), el CEO₂ aumenta proporcionalmente, manteniendo constante el VO₂. Cuando el CEO₂ alcanza su máximo (60%-70%), descensos ulteriores del DO₂ se acompañan de descensos del VO₂ — el <strong>DO₂ crítico</strong>, punto en que la producción energética celular queda limitada por el oxígeno. En el paciente crítico varía ampliamente, entre 150 y 1000 mL/min/m².</dd></dl>
+            <dl class="kv-row"><dt>Lactato</dt><dd>Marcador de perfusión tisular, producto final del metabolismo anaeróbico de la glucólisis — en bajo flujo, el piruvato no puede ingresar a la mitocondria y se desdobla a lactato. Producción: músculo esquelético, cerebro, intestino, glóbulos rojos. Aclaramiento: vía renal y hepática. El aclaramiento temprano (24h) reduce la mortalidad un 3,9%; en un estudio multicéntrico, aclarar lactato se asoció a un decremento del 41% de la mortalidad absoluta frente a quienes no lo aclararon. La <strong>hiperlactatemia tipo A</strong> se debe a liberación/consumo inadecuado de O₂; la <strong>tipo B</strong> es inducida por fármacos (metformina, epinefrina, metanol) — es la acidosis láctica, no la hiperlactatemia aislada, la que determina mal pronóstico hospitalario.</dd></dl>
+
             <p class="section-label" style="margin-top:16px;">Papel actual del ultrasonido a pie de cama</p>
+            <dl class="kv-row"><dt>Velocidad integral en tiempo (IVT)</dt><dd>El volumen que atraviesa una sección se calcula como el área de esa zona (cm²) por la integral de la velocidad respecto al tiempo. Normal <strong>18-20 cm</strong>; &lt;12 cm puede indicar shock.</dd></dl>
+            <dl class="kv-row"><dt>Vena cava inferior — ventilación espontánea</dt><dd>Índice de colapsabilidad = (Dmáx.−Dmin.)/Dmáx. × 100 (diámetro máximo en espiración, mínimo en inspiración). Respondedores a fluidos: &gt;38% (sensibilidad 70%, especificidad 80%).</dd></dl>
+            <dl class="kv-row"><dt>Vena cava inferior — ventilación mecánica</dt><dd>Índice de distensibilidad = (Dmáx.−Dmin.)/Dmin. × 100 (diámetro máximo en inspiración, mínimo en espiración). Respondedores a volumen: &gt;18% (sensibilidad y especificidad del 90%).</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Evaluación de la contractilidad global (Teichholz y Simpson)</p>
+            <dl class="kv-row"><dt>Fracción de acortamiento (FA), método de Teichholz</dt><dd>FA = (Dtd−Dts)/Dtd × 100, con diámetros de fin de diástole/sístole del VI en plano paraesternal largo, modo M. Normal: <strong>28%-41%</strong>.</dd></dl>
+            <dl class="kv-row"><dt>Fracción de eyección (FEy), método de Teichholz</dt><dd>FEy = (Vtd−Vts)/Vtd × 100. Método más usado, pero pierde fiabilidad en bloqueo de rama izquierda del haz de His o sobrecarga del VD con motilidad anormal del tabique.</dd></dl>
+            <dl class="kv-row"><dt>Fracción de eyección (FEy), método de Simpson</dt><dd>En plano apical se delimita la circunferencia endocárdica en diástole y sístole; el software divide el área en discos y calcula/integra los volúmenes — más fiable ante alteraciones de la geometría ventricular que el método de Teichholz.</dd></dl>
+
             <div class="micro-profiles">
                 <div class="micro-prof-item">
-                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📐 17 segmentos del ventrículo izquierdo</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">El modelo estandarizado de segmentación del VI (basal, cavidad media, apical, más el ápex propiamente dicho) usado para describir alteraciones regionales de la contractilidad (p. ej. en la isquemia coronaria por territorio vascular) y para la valoración sistemática por ecocardiografía.</div>
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📐 Contractilidad segmentaria y 17 segmentos del VI</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Según la American Society of Echocardiography, se evalúan 17 segmentos (basal, cavidad media, apical, más el ápex) — la hipocontractilidad de un área concreta orienta sobre el territorio coronario afectado. Durante la sístole el miocardio normal se engruesa &gt;40%; en <strong>hipoquinesia</strong> el engrosamiento es del 30%; en <strong>aquinesia</strong>, &lt;10%; en <strong>discinesia</strong>, el desplazamiento ocurre en sentido contrario al de la cavidad endocárdica.</div>
                 </div>
                 <div class="micro-prof-item">
-                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📏 TAPSE</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">Excursión sistólica del plano del anillo tricuspídeo, medida en modo M — el parámetro ecocardiográfico más simple y reproducible para evaluar la función sistólica longitudinal del ventrículo derecho. Valor normal &gt;17 mm.</div>
-                </div>
-                <div class="micro-prof-item">
-                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🫀 Patrones de llenado diastólico</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">El Doppler transmitral (ondas E y A) y el Doppler tisular del anillo mitral (ondas e' y a') permiten clasificar la disfunción diastólica en 4 patrones: normal, retardo en la relajación (grado I), seudonormal (grado II) y estándar restrictivo (grados III-IV) — el correlato ecocardiográfico directo de la fisiopatología desarrollada en la Ficha 3.</div>
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📏 Función sistólica del VD: TAPSE y TAPSV</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body"><strong>TAPSE</strong> (Tricuspid Anular Plane Systolic Excursion): desplazamiento del anillo tricuspídeo hacia el ápex en sístole, corte apical de 4 cámaras en modo M sobre la porción lateral del anillo. Valor normal &gt;16 mm. <strong>TAPSV</strong> (Tricuspid Anular Plane Systolic Velocity): velocidad sistólica máxima de la pared del VD por Doppler pulsado, misma localización. Valor normal &gt;10 cm/s.</div>
                 </div>
             </div>
 
@@ -567,10 +1025,37 @@
                 <div class="article-figure-caption">Medición del TAPSE por ecocardiografía en modo M.</div>
             </div>
 
+            <p class="section-label" style="margin-top:16px;">Evaluación de la función diastólica del VI</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Entidad subdiagnosticada, reflejo del aumento de las presiones de llenado telediastólico del VI
+                (&gt;16 mmHg) — factor de riesgo independiente de eventos cardiovasculares. El 50% de los pacientes
+                con síntomas de insuficiencia cardíaca tiene función sistólica preservada. La disminución de la
+                recaptación de calcio por el retículo sarcoplásmico reduce la capacidad viscoelástica del miocardio.
+            </p>
+            <ul class="term-chips">
+                <li>Grado I (leve): relajación disminuida, onda E de menor altura, llenado dependiente de la contracción auricular (onda A mayor)</li>
+                <li>Grado II (seudonormal/moderada): presión auricular elevada compensa, manteniendo el gradiente transvalvular</li>
+                <li>Grado III (severa): presión diastólica del VI evita el flujo transvalvular durante la contracción auricular</li>
+                <li>Grado IV (grave): sin mejoría ante maniobras de Valsalva</li>
+            </ul>
+
             <div class="article-figure">
                 <img src="js/modules/fisio-uci/img/cardio-fig16-disfuncion-diastolica.jpg" alt="Los 4 patrones de llenado diastólico: normal, retardo en la relajación, seudonormal y restrictivo, con las ondas E, A, e' y a'" loading="lazy">
-                <div class="article-figure-caption">Patrones de disfunción diastólica por Doppler transmitral y tisular.</div>
+                <div class="article-figure-caption">Evaluación de los grados de disfunción diastólica por Doppler pulsado transmitral y Doppler tisular.</div>
             </div>
+
+            <table class="data-table">
+                <thead><tr><th>Indicador</th><th>Normal</th><th>Grado I</th><th>Grado II</th><th>Grado III</th><th>Grado IV</th></tr></thead>
+                <tbody>
+                    <tr><td>Cociente E/A</td><td>1-1,5</td><td>&lt;1</td><td>1-1,5</td><td>&gt;2</td><td>&gt;2,5</td></tr>
+                    <tr><td>E/e'</td><td>&lt;10</td><td>&lt;10</td><td>10-14</td><td>&gt;14</td><td>&gt;14</td></tr>
+                    <tr><td>e' (cm/s)</td><td>&gt;7</td><td>&lt;7</td><td>&lt;7</td><td>&lt;5</td><td>&lt;5</td></tr>
+                    <tr><td>Volumen auricular izquierdo (mL/m²)</td><td>22±6</td><td>&gt;28</td><td>&gt;28</td><td>&gt;35</td><td>&gt;40</td></tr>
+                    <tr><td>DDT (ms)</td><td>140-250</td><td>&gt;250</td><td>140-250</td><td>&lt;140</td><td>&lt;140</td></tr>
+                    <tr><td>Maniobra de Valsalva</td><td>Negativa</td><td>Positiva</td><td>Positiva</td><td>Positiva</td><td>Negativa</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Estratificación de la disfunción diastólica y parámetros de evaluación. E/e' &gt;14 se asocia con presiones de llenado elevadas; volumen auricular izquierdo &gt;34 mL/m² es predictor independiente de morbimortalidad cardiovascular.</p>
 
             <p class="section-label" style="margin-top:16px;">Adaptación ventricular a la sobrecarga</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
@@ -585,41 +1070,142 @@
             </div>
 
             <p class="section-label" style="margin-top:16px;">Fuente</p>
-            <p style="font-size: 0.78rem; color: var(--text-muted);">Vergara J, Campozano Burgos G, et al. Monitorización hemodinámica sistémica clásica. Papel actual del ultrasonido a pie de cama. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección I, Capítulo 5, págs. 59-95.</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Vergara J, Campozano Burgos C. Monitorización hemodinámica sistémica clásica. Papel actual del ultrasonido a pie de cama. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección I, Capítulo 5, págs. 59-95.</p>
         </div>
 
         <!-- ===== FICHA 6: ENFERMEDAD CORONARIA ===== -->
         <div id="cardio-enfermedad-coronaria" class="tab-content">
             <h3 style="color: var(--accent-red);">Fisiopatología de la enfermedad coronaria</h3>
 
-            <p class="section-label">Aterosclerosis coronaria: de la placa estable a la ruptura</p>
+            <p class="section-label">Introducción: el vaso "culpable"</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
-                La enfermedad coronaria aterosclerótica progresa desde la disfunción endotelial temprana (con
-                acumulación subendotelial de LDL oxidado y reclutamiento de monocitos/macrófagos) hasta la
-                formación de la placa fibroateromatosa madura. La <span class="hl">clínica no depende tanto del
-                tamaño de la placa como de su estabilidad</span>: placas con una cápsula fibrosa delgada y un núcleo
-                lipídico grande, con infiltrado inflamatorio activo (macrófagos, metaloproteinasas que degradan el
-                colágeno de la cápsula), son las más propensas a romperse — con independencia de si producen o no
-                una estenosis angiográficamente significativa.
+                La <span class="hl">gran mayoría de los síndromes coronarios agudos son causados por la ruptura de
+                una placa aterosclerótica en un vaso "culpable"</span>. Existen excepciones — disección de una
+                arteria coronaria, arteritis, embolia coronaria, espasmo coronario, presencia de "puentes"
+                musculares, entre otras — pero el principal factor desencadenante sigue siendo la <strong>trombosis</strong>,
+                igualmente responsable de un gran porcentaje de los diferentes síndromes coronarios agudos, incluida
+                la angina inestable y los infartos con y sin elevación del segmento ST. Los estudios de necropsia
+                sugieren que <strong>un evento trombótico agudo coronario es responsable del 50% al 70% de las
+                muertes súbitas secundarias a la enfermedad isquémica coronaria</strong>.
             </p>
 
-            <p class="section-label" style="margin-top:16px;">Del síndrome coronario crónico al agudo</p>
+            <p class="section-label" style="margin-top:16px;">De la placa estable a la placa inestable</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La placa responsable sufre una transformación de un estado estable (sin trombo) a un estado
+                inestable (con trombo). La placa aterosclerótica coronaria es rica en <strong>fosfolípidos, células
+                espumosas, linfocitos, células dendríticas y neutrófilos</strong>. El centro de la placa (<em>core</em>)
+                posee además colesterol y sus ésteres, algunos de ellos en forma cristalina, rodeado por macrófagos y
+                células espumosas formadas por los monocitos que han cruzado el endotelio — esto ayuda a la
+                formación de los estados procoagulantes, desencadenados por el factor tisular, y mediados por el
+                factor de necrosis tumoral alfa (FNT-α), las interleucinas (IL), las metaloproteinasas, los
+                derivados de la médula ósea (monocitos tipo Ly6C<sup>high</sup>) y, fundamentalmente, los macrófagos
+                activados. La capa fibrosa que separa la placa del lumen vascular está conformada por colágeno,
+                sintetizado por las células del músculo liso.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Clasificación AHA de la placa</p>
+            <table class="data-table">
+                <thead><tr><th>Estadio AHA</th><th>Denominación</th><th>Estabilidad</th></tr></thead>
+                <tbody>
+                    <tr><td>Tipo I - III</td><td>Placa inicial</td><td>Estable, con poco riesgo</td></tr>
+                    <tr><td>Tipo IV</td><td>Placa ateromatosa avanzada</td><td>Vulnerable — inicia cambios endoteliales relacionados con inmadurez y función fisiológica anormal</td></tr>
+                    <tr><td>Tipo Va</td><td>Placa fibroateromatosa</td><td>Vulnerable — expone el factor tisular, favorece la agregación plaquetaria y libera el factor de crecimiento derivado de plaquetas</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Al progresar hacia el estadio IV-Va la placa se vuelve vulnerable y con riesgo de ruptura, con acción añadida de neutrófilos y células T que llevan a la formación del trombo y la oclusión.</p>
+
+            <p class="section-label" style="margin-top:16px;">Los 2 mecanismos de inicio de la trombosis</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🦠 1. Erosión endotelial</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Es el <strong>principal proceso del inicio de la trombosis</strong>. Se caracteriza por la activación de los macrófagos y el reclutamiento de monocitos, los cuales causan muerte celular por apoptosis y la liberación de proteasas. La sobrepoblación de monocitos interfiere además en la cicatrización del infarto, al reducir la expresión del ligando de la quemocina C-X-C — un efecto potenciado por la sobreexpresión del sistema nervioso simpático.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💥 2. Ruptura de la placa</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Expone el lumen vascular al factor tisular y al colágeno. Es secundario a un proceso inflamatorio que <strong>reduce la síntesis de colágeno</strong> por la inhibición de las células del músculo liso y su muerte por apoptosis — debilitando la capa fibrosa que hasta entonces contenía la placa.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Metaloproteinasas</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Los macrófagos producen una variedad de metaloproteinasas, capaces de degradar todos los componentes de la matriz de tejido conectivo y el colágeno. Se secretan inicialmente en forma inactiva y son activadas por la plasmina, potenciadas por citocinas inflamatorias como el FNT-α — conformando un proceso de autodestrucción con severa actividad inflamatoria, incluida la expresión de la prointerleucina 1 beta.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🕸️ NETosis: un mecanismo de defensa emergente</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Un mecanismo nuevo de defensa de los neutrófilos es su habilidad de formar "trampas" extracelulares (<strong>NET</strong>), lo que actualmente se conoce como <strong>"NETosis"</strong>. La formación de la NET se traduce en un incremento de la peptidil arginina deiminasa-4 (<strong>PAD4</strong>), que conforma neoantígenos y despliega un proceso similar a la autoinmunidad, ayudado fundamentalmente por las células T y el interferón gamma (IFN-γ), y la producción de IL-17 — que ocasiona así una lisis celular y libera la cromatina, con su alto poder de trombosis.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Diferencias por raza y sexo</p>
+            <dl class="kv-row"><dt>Raza blanca</dt><dd>La ruptura de la placa es la causa predominante de <strong>más del 85%</strong> de la formación de trombos "blancos", con altos contenidos de LDL y bajos de HDL.</dd></dl>
+            <dl class="kv-row"><dt>Mujeres</dt><dd>La causante predominante es la <strong>erosión endotelial</strong>, con un mayor componente de inflamación.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Las 5 características de la placa vulnerable</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El análisis de las placas ha permitido determinar las características de aquellas que son más
+                vulnerables:
+            </p>
             <ul class="term-chips">
-                <li>Angina estable: desbalance oferta/demanda predecible, reproducible con el esfuerzo, por estenosis fija</li>
-                <li>Angina inestable: ruptura/erosión de placa con trombosis no oclusiva, sin elevación de biomarcadores</li>
-                <li>Infarto sin elevación del ST (IAMSEST): trombosis parcialmente oclusiva con necrosis miocárdica (biomarcadores positivos)</li>
-                <li>Infarto con elevación del ST (IAMCEST): oclusión trombótica completa y súbita de una arteria coronaria epicárdica</li>
+                <li>Centro de la placa (<em>core</em>) rico en lípidos, que ocupa al menos el 50% del volumen total de la placa</li>
+                <li>Alta densidad de macrófagos</li>
+                <li>Presencia de células del músculo liso de baja densidad en la capa</li>
+                <li>Contenido elevado de factor tisular</li>
+                <li>Capa delgada, con estructura de colágeno desorganizada</li>
+            </ul>
+            <p style="font-size:0.85rem; background:rgba(239,68,68,0.08); border-left:3px solid var(--accent-red); padding:10px 14px; border-radius:6px; margin-top:10px;">
+                👉 <strong>El número de placas vulnerables — y no el número total de placas, vulnerables o no — es lo
+                que hace al paciente más propenso a desarrollar un evento coronario agudo.</strong>
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Mecánica del trombo</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Una vez se inicia el mecanismo de la trombosis, el trombo comienza su protrusión hacia "la luz"
+                vascular, lo que aumenta la fibrina y la agregación plaquetaria, las cuales migran hacia la región
+                distal, a la oclusión en forma de microémbolos, iniciándose así la oclusión de la arteria. Los
+                trombos que <strong>no</strong> ocluyen totalmente la luz del vaso son los responsables de la
+                <strong>angina inestable</strong>, y pueden producir:
+            </p>
+            <ul class="term-chips">
+                <li>Cuadros intermitentes de dolor</li>
+                <li>Vasoconstricción de las placas excéntricas</li>
+                <li>Una severa acumulación de plaquetas en pacientes con vasoconstricción, con embolización de estas</li>
             </ul>
 
+            <p class="section-label" style="margin-top:16px;">Del síndrome coronario crónico al agudo</p>
+            <table class="data-table">
+                <thead><tr><th>Entidad</th><th>Estado del trombo</th><th>Biomarcadores</th><th>Síntoma / mecanismo</th></tr></thead>
+                <tbody>
+                    <tr><td>Angina estable</td><td>Sin trombo — estenosis fija</td><td>Negativos</td><td>Desbalance oferta/demanda predecible, reproducible con el esfuerzo</td></tr>
+                    <tr><td>Angina inestable</td><td>No oclusivo / transitoriamente oclusivo</td><td>Negativos (troponina seriada negativa)</td><td>Síntomas en reposo o con mínimo esfuerzo, sin necrosis detectable</td></tr>
+                    <tr><td>IAMSEST</td><td>Parcialmente oclusivo</td><td>Positivos</td><td>Necrosis miocárdica con troponina elevada</td></tr>
+                    <tr><td>IAMCEST</td><td>Oclusión completa y súbita</td><td>Positivos</td><td>Oclusión trombótica total de una arteria coronaria epicárdica</td></tr>
+                </tbody>
+            </table>
+
             <p class="section-label" style="margin-top:16px;">Infarto agudo de miocardio</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Definitivamente la trombosis del vaso "culpable" es la responsable del bloqueo total o parcial. Con
+                la aparición de las diferentes modalidades diagnósticas en el laboratorio de hemodinamia — el
+                <strong>ultrasonido intravascular (IVUS)</strong>, la <strong>reserva funcional fraccionada (FFR)</strong>
+                y el <strong>radio de onda libre instantáneo (iFR)</strong>, entre otros — se ha confirmado que
+                muchas placas estables "invisibles" angiográficamente son mejor evaluadas con estas nuevas
+                modalidades.
+            </p>
+            <dl class="kv-row"><dt>Progresión lenta de la placa</dt><dd>Un número considerable de placas progresan muy lentamente; aproximadamente el <strong>24% de las lesiones con oclusiones superiores al 80% progresarán hacia la oclusión total en 5 años</strong>.</dd></dl>
+            <dl class="kv-row"><dt>Infarto transmural</dt><dd>Causado por la oclusión súbita y persiste por algunas horas (<strong>de 6 a 8 horas</strong>); se comporta como una entidad homogénea, diferente a los infartos no transmurales, que por lo general están compuestos por muchas áreas de necrosis de diferentes edades, con embolización progresiva y presencia de vasos colaterales.</dd></dl>
+
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔴 Cascada isquémica</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">La isquemia miocárdica sigue una secuencia predecible y escalonada: primero la <strong>disfunción diastólica</strong> (la relajación, dependiente de ATP, es lo primero en fallar), luego la <strong>disfunción sistólica regional</strong> (hipoquinesia/aquinesia del territorio afectado), después los <strong>cambios electrocardiográficos</strong>, y por último el <strong>dolor torácico</strong> — el síntoma clínico es, paradójicamente, el evento más tardío de toda la cascada.</div>
+                    <div class="micro-prof-body">
+                        La isquemia miocárdica sigue una secuencia predecible y escalonada — el síntoma clínico es, paradójicamente, el evento más tardío de toda la cascada:
+                        <dl class="kv-row" style="margin-top:8px;"><dt>1º</dt><dd><strong>Disfunción diastólica</strong> — la relajación, dependiente de ATP, es lo primero en fallar</dd></dl>
+                        <dl class="kv-row"><dt>2º</dt><dd><strong>Disfunción sistólica regional</strong> — hipoquinesia/aquinesia del territorio afectado</dd></dl>
+                        <dl class="kv-row"><dt>3º</dt><dd><strong>Cambios electrocardiográficos</strong></dd></dl>
+                        <dl class="kv-row"><dt>4º</dt><dd><strong>Dolor torácico</strong></dd></dl>
+                    </div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⏱️ "Tiempo es músculo"</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">La necrosis miocárdica progresa desde el subendocardio (la zona más vulnerable, por su mayor demanda metabólica y menor reserva de flujo colateral) hacia el epicardio conforme se prolonga la oclusión — de ahí la urgencia de la reperfusión precoz (farmacológica o mecánica) para limitar la extensión transmural del infarto.</div>
+                    <div class="micro-prof-body">La necrosis miocárdica progresa desde el subendocardio (la zona más vulnerable, por su mayor demanda metabólica y menor reserva de flujo colateral) hacia el epicardio conforme se prolonga la oclusión — de ahí la urgencia de la reperfusión precoz (farmacológica o mecánica) para limitar la extensión transmural del infarto, que se completa entre las 6 y las 8 horas de oclusión sostenida.</div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💥 Lesión por reperfusión</span> <span class="toggle-icon">+</span></div>
@@ -629,22 +1215,112 @@
 
             <p class="section-label" style="margin-top:16px;">Angina inestable</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
-                Representa un espectro intermedio entre la angina estable y el infarto: la ruptura o erosión de la
-                placa genera un trombo <strong>no oclusivo o transitoriamente oclusivo</strong>, con isquemia
-                suficiente para producir síntomas en reposo o con mínimo esfuerzo, pero sin necrosis miocárdica
-                detectable por biomarcadores — el diagnóstico diferencial con el IAMSEST depende exclusivamente de
-                la negatividad de la troponina seriada.
+                Los estudios de necrosis han mostrado que en esta entidad se conserva parcialmente el flujo
+                anterógrado, que progresa a la oclusión completa de la luz o a la lisis del coágulo, con la
+                presencia de trombo, de acuerdo con los fenómenos protrombóticos y antitrombóticos. La
+                <strong>embolización distal frecuente de plaquetas</strong> en esta patología explica las pequeñas
+                áreas de necrosis, con la consecuente elevación de las troponinas en la angina inestable — el
+                diagnóstico diferencial con el IAMSEST depende, en la práctica, de la negatividad de la troponina
+                seriada.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Un fenómeno inflamatorio, no exclusivo del vaso coronario</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El fenómeno de la arteriosclerosis coronaria y el proceso de ruptura <span class="hl">no son
+                diferentes de aquellas alteraciones inflamatorias</span> encontradas en entidades como la artritis
+                reumatoide o el virus de la inmunodeficiencia humana, con la elevación de las LDL oxidadas, los
+                macrófagos y los reactantes de fase aguda — como la velocidad de sedimentación globular, la
+                proteína C-reactiva ultrasensible y la procalcitonina.
             </p>
 
             <p class="section-label" style="margin-top:16px;">Fuente</p>
-            <p style="font-size: 0.78rem; color: var(--text-muted);">Capítulo 6. Fisiopatología de la enfermedad coronaria. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección I, Capítulo 6, págs. 97-100.</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Ramírez Vallejo E. Fisiopatología de la enfermedad coronaria. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección I, Capítulo 6, págs. 97-100.</p>
         </div>
 
         <!-- ===== FICHA 7: HIPERTENSIÓN PULMONAR ===== -->
         <div id="cardio-hipertension-pulmonar" class="tab-content">
             <h3 style="color: var(--accent-yellow);">Fisiología de la hipertensión pulmonar en el paciente crítico</h3>
 
-            <p class="section-label">Definiciones hemodinámicas</p>
+            <p class="section-label">Introducción</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La HP se origina por diferentes vías fisiopatológicas, a partir de condiciones propias del
+                parénquima pulmonar, cardíacas y extracardíacas o sistémicas, que conducen finalmente a una
+                elevación en las presiones de la arteria pulmonar. Es una condición <span class="hl">común en los
+                pacientes críticamente enfermos</span>; sin embargo, su prevalencia real se desconoce, dada la
+                heterogeneidad en los parámetros hemodinámicos empleados para definirla en los diferentes trabajos.
+                Se asocia a una <strong>mortalidad mayor al 40%</strong>, con respecto a la población admitida a la
+                UCI sin HP. En escenarios críticos, la HP contribuye al curso clínico adverso de los pacientes
+                mediante la <strong>falla ventricular derecha (FVD)</strong>, que culmina muchas veces con el colapso
+                hemodinámico y la muerte; sin embargo, frecuentemente no es reconocida o es subestimada.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Definiciones clave</p>
+            <dl class="kv-row"><dt>Hipertensión pulmonar (HP)</dt><dd>Aumento de la presión arterial pulmonar media (PAPm) &gt;25 mmHg en reposo, medido mediante cateterismo cardíaco derecho (CCD).</dd></dl>
+            <dl class="kv-row"><dt>Hipertensión arterial pulmonar (HAP)</dt><dd>PAPm &gt;25 mmHg en reposo, asociada a presión de enclavamiento pulmonar (PEP) &lt;15 mmHg y resistencia vascular pulmonar (RVP) &gt;3 unidades de Wood (UW), medido mediante CCD.</dd></dl>
+            <dl class="kv-row"><dt>Falla ventricular derecha (FVD)</dt><dd>Síndrome rápidamente progresivo, con congestión sistémica como resultado del deterioro en el llenado del VD y la reducción de su fracción de eyección.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Anatomía básica de la circulación pulmonar</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El pulmón tiene un <strong>doble sistema circulatorio</strong>: la circulación bronquial (aporte
+                circulatorio de las estructuras pulmonares no involucradas en el intercambio gaseoso — tráquea,
+                árbol bronquial, tejidos de sostén, capas exteriores de arterias y venas pulmonares) y la
+                circulación pulmonar propiamente dicha, que lleva sangre desoxigenada del VD a los capilares
+                alveolares y regresa la sangre oxigenada a la aurícula izquierda. En condiciones fisiológicas, la
+                circulación pulmonar se comporta como un sistema de <strong>alto flujo, baja resistencia y baja
+                presión</strong>, diseñado para beneficiar el intercambio gaseoso, evitar la extravasación de
+                líquido al intersticio y favorecer que el VD realice su función con un bajo gasto energético.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Mecanismos fisiopatológicos de la HP</p>
+            <dl class="kv-row"><dt>PAPm normal</dt><dd>14 ± 3 mmHg, con un límite superior de la normalidad de 20 mmHg.</dd></dl>
+            <dl class="kv-row"><dt>HP límitrofe (<em>borderline</em>)</dt><dd>PAPm entre 19 y 24 mmHg — se desconocía su valor pronóstico, pero Marón y colaboradores señalan que estos valores se asocian a un incremento en la mortalidad y la hospitalización.</dd></dl>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La <strong>función del VD es el principal determinante</strong> de la sintomatología y de los
+                desenlaces asociados a la HP. En los pacientes que la padecen, el aumento en las presiones del VD se
+                traduce en modificaciones de su volumen: para compensar los aumentos en la poscarga, el VD se dilata
+                intentando mantener el volumen sistólico, aunque con una reducción de la fracción de eyección — lo
+                que a su vez acelera el aumento de la presión y el flujo de la arteria pulmonar. Además, el aumento
+                de la poscarga prolonga la fase de contracción isovolumétrica y el tiempo de eyección, aumentando el
+                consumo miocárdico de oxígeno. En condiciones fisiológicas, el VD es perfundido por la arteria
+                coronaria derecha tanto en sístole como en diástole; sin embargo, <span class="hl">cuando está
+                presente la HP, la perfusión del VD ocurre predominantemente en diástole, reduciendo el aporte de
+                oxígeno del VD precisamente en la fase — la sístole — en la que su consumo miocárdico de oxígeno es
+                máximo</span>. En los pacientes críticos, la HP aguda se relaciona con el incremento súbito de la
+                poscarga del VD, frecuentemente asociada al tromboembolismo pulmonar masivo o al SDRA.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Clasificación de la hipertensión pulmonar (5 grupos)</p>
+            <table class="data-table">
+                <thead><tr><th>Grupo</th><th>Categoría</th><th>Ejemplos</th></tr></thead>
+                <tbody>
+                    <tr><td>1</td><td>Hipertensión arterial pulmonar</td><td>Idiopática, heredable (BMPR2), inducida por drogas/toxinas, asociada a enf. del tejido conectivo, VIH, hipertensión portal, cardiopatías congénitas, esquistosomiasis</td></tr>
+                    <tr><td>1'</td><td>Enfermedad venooclusiva pulmonar / hemangiomatosis capilar</td><td>Idiopática, heredable (EIF2AK4), inducida por drogas/toxinas/radiación, asociada a enf. del tejido conectivo o VIH</td></tr>
+                    <tr><td>1''</td><td>HP persistente del recién nacido</td><td>—</td></tr>
+                    <tr><td>2</td><td>HP secundaria a cardiopatía izquierda</td><td>Disfunción sistólica/diastólica del VI, valvulopatías, obstrucción del tracto de entrada/salida del VI, estenosis de venas pulmonares</td></tr>
+                    <tr><td>3</td><td>HP secundaria a enfermedades pulmonares / hipoxia</td><td>EPOC, enfermedad intersticial, patrón mixto, trastornos respiratorios del sueño, hipoventilación alveolar, grandes alturas</td></tr>
+                    <tr><td>4</td><td>HP tromboembólica crónica y otras obstrucciones de arterias pulmonares</td><td>HP tromboembólica crónica, angiosarcoma y otros tumores intravasculares, arteritis, estenosis congénita, parásitos (hidatidosis)</td></tr>
+                    <tr><td>5</td><td>HP de mecanismo desconocido o multifactorial</td><td>Trastornos hematológicos (anemia hemolítica crónica, mieloproliferativos, esplenectomía), sarcoidosis, enf. de depósito de glucógeno, ERC, hipertensión pulmonar segmentaria</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">BMPR2: gen del receptor de proteínas morfogenéticas óseas tipo 2; EIF2AK4: gen del factor de iniciación de la traducción de alfacinasa 4. Algunos autores (Tsapenko et al.) proponen clasificar la HP en el paciente crítico según la causa precipitante, dado que esta clasificación tiene limitaciones al aplicarse en la UCI — sin estudios que validen aún esta aproximación.</p>
+
+            <p class="section-label" style="margin-top:16px;">La HP en el paciente crítico: 3 escenarios</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🫀 SDRA</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Causa ampliamente reconocida de HP y FVD (algunos autores sugieren clasificarla como HP del grupo 3). El proceso de alteración de la circulación pulmonar es <strong>multifactorial</strong>: hipoxia, hipercapnia, compresión vascular por edema o fibrosis pulmonar, vasoconstricción y remodelación inducida por mediadores inflamatorios, trombosis <em>in situ</em> y embolia pulmonar. Todos estos factores aumentan la presión alveolar y transpulmonar, por la disminución de la distensibilidad pulmonar y el aumento de la presión intratorácica (relacionada con el PEEP) — traduciéndose en el incremento de la RVP y la PAPm. Clínicamente se puede considerar el desarrollo de <em>cor pulmonale</em> cuando la causa del SDRA es la neumonía, con una presión de conducción ≥18 cmH₂O, PaO₂/FiO₂ &lt;150 mmHg, PCO₂ &gt;48 mmHg — variables agrupadas por Mekontso y colaboradores en una escala de riesgo (puntuación 0-4, cada variable vale 1 punto) con un AUC de 0,73 (IC 95%: 0,67-0,78; p&lt;0,001), recomendando ecocardiograma transesofágico rutinario con puntuación ≥2.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩸 Embolismo pulmonar agudo</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La oclusión arterial produce dos fenómenos simultáneos: <strong>obstrucción mecánica</strong> de las arterias pulmonares por trombos, y <strong>vasoconstricción mediada por sustancias inflamatorias</strong> (tromboxano A2, serotonina). Estas alteraciones hemodinámicas y funcionales se traducen en un incremento de la RVP y una disminución de la distensibilidad de las arterias, produciendo la elevación de la PAPm — cambios que son transferidos al VD, generando cambios estructurales mediados por la sobrecarga de presión.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🦠 Sepsis</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Incluso en pacientes sin HP, la sepsis se asocia a FVD de forma <strong>directa</strong> (mediante las citocinas, que inducen depresión miocárdica) y de forma <strong>indirecta</strong> (por la vasoconstricción y la hipoxia pulmonar, asociadas a lesión pulmonar y con correlación al desarrollo de SDRA). Los pacientes con HP conocida son un subgrupo con desenlaces particularmente pobres cuando esta se asocia a sepsis.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Definiciones hemodinámicas de la hipertensión pulmonar</p>
             <table class="data-table">
                 <thead><tr><th>Definición</th><th>Características</th><th>Grupo clínico</th></tr></thead>
                 <tbody>
@@ -657,50 +1333,97 @@
             </table>
             <p style="font-size: 0.75rem; color: var(--text-muted);">PAPm: presión arterial pulmonar media; PEP: presión de enclavamiento pulmonar; GTPd: gradiente transpulmonar diastólico (PAP media − PEP media); RVP: resistencia vascular pulmonar; UW: unidades de Wood.</p>
 
-            <p class="section-label" style="margin-top:16px;">Predictores de mortalidad</p>
+            <p class="section-label" style="margin-top:16px;">Diagnóstico: variables hemodinámicas</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
-                Los índices compuestos — como el <strong>índice de resistencia vascular pulmonar (PVRI)</strong> y
-                el <strong>índice funcional del VD (REI)</strong> — han demostrado ser <span class="hl">predictores
-                independientes de mortalidad</span> en pacientes con HP en la UCI, por encima del valor de los
-                parámetros hemodinámicos individuales aislados (PSAP, PAPm, presión auricular derecha, índice
-                cardíaco, presión de oclusión de la arteria pulmonar).
+                El diagnóstico se fundamenta en una sospecha clínica basada en síntomas y exploración física, que
+                debe corroborarse mediante estudios orientados a documentar los cambios hemodinámicos y describir la
+                etiología. ECG y radiografía de tórax pueden ser normales, aunque es posible que muestren datos
+                indirectos (arritmias, patrón de deformación o <em>strain</em> del VD, cardiomegalia). El
+                <strong>cateterismo de arteria pulmonar continúa siendo el estándar de oro</strong> para el
+                diagnóstico y la aproximación etiológica, permitiendo medir de forma continua la presión arterial
+                pulmonar sistólica/diastólica/media, la presión venosa central, la presión capilar pulmonar y el
+                gasto cardíaco derecho por termodilución. La ecocardiografía continúa siendo el estudio más
+                frecuentemente empleado a la cabecera del paciente crítico, permitiendo la estimación indirecta de
+                la PAP sistólica mediante la medición con Doppler continuo de la velocidad de regurgitación
+                tricuspídea.
+            </p>
+            <p style="font-size:0.85rem; background:rgba(239,68,68,0.08); border-left:3px solid var(--accent-red); padding:10px 14px; border-radius:6px;">
+                👉 La HP es un <strong>parámetro independiente de la mortalidad</strong> en los pacientes en UCI —
+                este incremento en la mortalidad se ha atribuido principalmente a la <strong>disfunción
+                ventricular derecha</strong>, independientemente de otras condiciones (severidad al ingreso,
+                comorbilidades, sepsis). Saydain y colaboradores evaluaron distintos parámetros hemodinámicos (PSAP,
+                PAPm, presión auricular derecha, índice cardíaco, PAOP, índice de resistencia vascular pulmonar
+                [PVRI] e índice funcional del VD [RFI]) y concluyen que los <strong>índices compuestos</strong>,
+                como el PVRI y el RFI, son <strong>predictores independientes de mortalidad</strong>, por encima de
+                la utilización de los parámetros hemodinámicos individuales aislados.
             </p>
 
             <p class="section-label" style="margin-top:16px;">Enfoque terapéutico desde la fisiología</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Los fundamentos para el manejo de la HP y la FVD en cuidados intensivos incluyen el tratamiento de
+                los factores precipitantes, la optimización del balance hídrico, la reducción de la poscarga del
+                VD, la mejoría del gasto cardíaco y el mantenimiento de las cifras de tensión arterial.
+            </p>
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🫁 Ventilación mecánica: cautela</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">Se debe evitar la intubación orotraqueal en pacientes con HP e insuficiencia del VD siempre que sea posible, por su tendencia a producir colapso hemodinámico. Estudios observacionales han encontrado mayor mortalidad en pacientes con HP que requieren ventilación mecánica invasiva frente a los que se manejan con VMNI (39,1% vs. 12,6%, p&lt;0,001).</div>
+                    <div class="micro-prof-body">Se debe evitar la intubación orotraqueal en pacientes con insuficiencia del VD siempre que sea posible, dada su tendencia a producir colapso hemodinámico. Se ha encontrado mayor mortalidad en pacientes con HP que requieren <strong>ventilación mecánica invasiva (VMI)</strong> frente a los que se manejan con <strong>VMNI (39,1% vs. 12,6%, p&lt;0,001)</strong>, al igual que una mayor estancia hospitalaria en quienes requieren VMI (11,9 días, RIC 6,1-22,2) frente a VMNI (6-7 días, RIC 3,4-11,9; p&lt;0,001).</div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Vasodilatadores pulmonares específicos</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body"><strong>Óxido nítrico inhalado (iNO):</strong> reduce la RVP con efectos mínimos sobre la resistencia vascular sistémica y aumenta el gasto cardíaco — pero, pese a su beneficio hemodinámico, no se ha asociado a mejoría de supervivencia. <strong>Inhibidores de la PDE5</strong> (p. ej. sildenafilo): disminuyen la PAPm y la RVP en escenarios agudos. <strong>Análogos de la prostaciclina:</strong> vasodilatadores sistémicos y pulmonares potentes, con efecto antiagregante añadido, útiles en el posquirúrgico de cirugía cardiovascular y trasplante cardíaco. <strong>Antagonistas del receptor de endotelina y agonistas de la guanilatociclasa:</strong> NO recomendados en escenarios agudos — los primeros por toxicidad hepática, los segundos por hipotensión sistémica significativa.</div>
+                    <div class="micro-prof-body">La reducción de la RVP es fundamental en el manejo de la FVD, dada la alta sensibilidad del VD ante los cambios en la poscarga — la principal limitante para el uso de estos medicamentos es la hipotensión.</div>
                 </div>
             </div>
+            <table class="data-table">
+                <thead><tr><th>Fármaco</th><th>Mecanismo</th><th>Efecto hemodinámico</th><th>Recomendación en agudo</th></tr></thead>
+                <tbody>
+                    <tr><td>Óxido nítrico inhalado (iNO)</td><td>Vasodilatación pulmonar selectiva</td><td>↓RVP, efectos mínimos sobre RVS, ↑GC — mejoría hemodinámica demostrada en infarto de VD, embolia pulmonar aguda, complicaciones posquirúrgicas, dispositivos de asistencia VI y trasplante cardíaco</td><td>Uso aceptado, pero sin asociación a mejoría de supervivencia</td></tr>
+                    <tr><td>Inhibidores de la PDE5 (sildenafilo)</td><td>Evitan la hidrólisis del GMPc → efecto vasodilatador y antiproliferativo</td><td>↓PAPm y ↓RVP, asociado a ↑GC</td><td>Empleado con éxito en escenarios de FVD</td></tr>
+                    <tr><td>Análogos de la prostaciclina</td><td>Actúan sobre el receptor de prostaciclina (plaquetas/endotelio) → ↑AMPc</td><td>Inhibición de la agregación plaquetaria, relajación del músculo liso, vasodilatación sistémica y pulmonar potente</td><td>Empleados con éxito en posquirúrgicos de cirugía cardiovascular y trasplante cardíaco</td></tr>
+                    <tr><td>Antagonistas del receptor de endotelina (ERA)</td><td>Bloqueo del receptor de endotelina-1</td><td>—</td><td><strong>NO recomendado</strong> en agudo — toxicidad hepática</td></tr>
+                    <tr><td>Agonistas de la guanilatociclasa</td><td>↑GMPc por vía independiente del NO</td><td>—</td><td><strong>NO recomendado</strong> en agudo — hipotensión sistémica significativa</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.85rem; line-height: 1.6; margin-top:10px;">
+                Existen medicamentos específicos aprobados principalmente para la HP de grupo 1 y para la HP
+                tromboembólica crónica, aunque sin traducirse en grandes cambios en la morbilidad y la mortalidad.
+                Para las demás formas de HP (grupos 2, 3 y 5) de momento no existen terapias específicas — en estos
+                escenarios se da tratamiento a la causa de base.
+            </p>
 
             <p class="section-label" style="margin-top:16px;">Complicaciones de la hipertensión pulmonar: CRASH</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
-                Las causas más comunes de descompensación aguda que motivan el ingreso a UCI de un paciente con
-                hipertensión arterial pulmonar se resumen en el acrónimo <strong>CRASH</strong>:
+                En la UCI, la condición del paciente con HP, con o sin FVD, puede complicarse con sepsis, sobrecarga
+                de volumen, hipoxemia, arritmias o efectos secundarios de la ventilación mecánica; adicionalmente
+                puede estar acompañada de disfunción ventricular izquierda. En el subgrupo de pacientes con HAP, las
+                causas más comunes de descompensación aguda que motivan el ingreso a UCI se resumen en el acrónimo
+                <strong>CRASH</strong>:
             </p>
             <ul class="term-chips">
-                <li>C — dolor torácico (isquémico o no isquémico: embolismo, infarto pulmonar, pericarditis, disección arterial)</li>
+                <li>C — dolor torácico (isquémico: enfermedad aterosclerótica, compresión de la coronaria derecha por dilatación de la AP, taquiarritmia SV que reduce el tiempo de llenado diastólico; no isquémico: embolismo pulmonar, infarto pulmonar, pericarditis en LES/enf. del colágeno, disección arterial con o sin ruptura, taponamiento cardíaco)</li>
                 <li>R — insuficiencia ventricular derecha</li>
                 <li>A — arritmias (aleteo/flutter y fibrilación auricular, incidencia 2,8%/año)</li>
-                <li>S — sepsis</li>
+                <li>S — sepsis (activación de procesos inflamatorios → daño endotelial directo e indirecto → ↑RVP)</li>
                 <li>H — hemoptisis</li>
             </ul>
 
             <p class="section-label" style="margin-top:16px;">Hipertensión pulmonar, VD y ventilación mecánica</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
                 La HP y el <em>cor pulmonale</em> impactan de forma deletérea al VD, con el SDRA como escenario más
-                dramático (múltiples causas de HP aguda coexistiendo). Las estrategias ventilatorias como el PEEP,
-                la ventilación protectora y especialmente la <strong>ventilación en posición prona</strong> mejoran
-                la función del VD al reducir su poscarga y aumentar su precarga.
+                dramático (múltiples causas de HP aguda coexistiendo, responsables de la alta frecuencia de FVD en
+                este contexto). Las estrategias ventilatorias como el PEEP, la ventilación protectora y
+                especialmente la <strong>ventilación en posición prona</strong> han demostrado mejorar la eficiencia
+                y el rendimiento del VD, al reducir su poscarga y aumentar su precarga.
             </p>
 
+            <p class="section-label" style="margin-top:16px;">Conclusiones</p>
+            <ul class="term-chips">
+                <li>La HP es una condición frecuente en la UCI y se comporta como un factor independiente de la mortalidad</li>
+                <li>El conocimiento de los aspectos fisiopatológicos es fundamental para guiar el manejo en escenarios críticos como el embolismo pulmonar agudo o el SDRA</li>
+            </ul>
+
             <p class="section-label" style="margin-top:16px;">Fuente</p>
-            <p style="font-size: 0.78rem; color: var(--text-muted);">Capítulo 7. Fisiología de la hipertensión pulmonar en el paciente crítico. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección I, Capítulo 7, págs. 101-113.</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Dueñas Castell C, Borre Naranjo D, Rodríguez Yánez T. Fisiología de la hipertensión pulmonar en el paciente crítico. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección I, Capítulo 7, págs. 101-113.</p>
         </div>
 
         <!-- ===== FICHA 8: EMBOLIA PULMONAR ===== -->
@@ -713,53 +1436,88 @@
                 <li>~600.000 pacientes/año, 50.000-200.000 muertes/año</li>
                 <li>Mortalidad hospitalaria: 30% sin tratamiento, ~2,5% con tratamiento actualizado</li>
                 <li>&gt;90% de los émbolos proceden de TVP de miembros inferiores</li>
+                <li>La incidencia de EP ha disminuido con el tiempo; la de TVP permanece sin cambios en hombres y está aumentando en mujeres mayores</li>
             </ul>
-            <dl class="kv-row"><dt>Tríada de Virchow (Rudolf Virchow, siglo XIX)</dt><dd>Lesión endotelial, estasis/turbulencia del flujo sanguíneo, e hipercoagulabilidad — las 3 condiciones necesarias para la formación patológica de un trombo, un marco conceptual que mantiene plena vigencia.</dd></dl>
+            <p style="font-size:0.85rem; background:rgba(59,130,246,0.08); border-left:3px solid var(--accent-blue); padding:10px 14px; border-radius:6px;">
+                👉 Los pacientes con <strong>TVP iliocava y trombos grandes flotantes tienen un mayor riesgo de
+                EP</strong>, a pesar de recibir una anticoagulación adecuada — un dato con implicación directa en la
+                vigilancia de este subgrupo.
+            </p>
+            <dl class="kv-row"><dt>Tríada de Virchow (Rudolf Virchow, siglo XIX)</dt><dd>Lesión endotelial, estasis/turbulencia del flujo sanguíneo, e hipercoagulabilidad — las 3 condiciones necesarias para la formación patológica de un trombo. Virchow fue el primero en darse cuenta de que los coágulos pulmonares no se formaban <em>in situ</em>, sino que procedían de trombos formados en los miembros inferiores y la pelvis — un marco conceptual del siglo XIX que mantiene plena vigencia, enriquecido hoy con el conocimiento de la fisiopatología del endotelio, los mediadores de la inflamación y los mecanismos de la coagulación.</dd></dl>
+            <dl class="kv-row"><dt>Otras causas de embolismo pulmonar (no trombótico)</dt><dd>Líquido amniótico, aire, tejido adiposo, material proveniente de una cirugía traumatológica, tumores o vegetaciones a partir de una endocarditis derecha — la TVP sigue siendo, con diferencia, la causa más frecuente.</dd></dl>
+            <dl class="kv-row"><dt>Criterio de EP masiva</dt><dd>El principal criterio para calificar un TEP como masivo es la <strong>hipotensión arterial sistémica</strong>. El impacto clínico y la evolución dependen no solamente del tamaño del émbolo o de la carga embólica, sino también del <strong>estado cardiopulmonar basal del paciente</strong> — en situaciones dramáticas, con gran parte de la circulación pulmonar afectada o antecedentes de enfermedad cardiopulmonar significativa, pueden presentarse hipotensión, bajo gasto cardíaco e hipoxemia significativa.</dd></dl>
 
             <p class="section-label" style="margin-top:16px;">Mediadores inflamatorios vasoactivos</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
-                Tras la obstrucción arterial pulmonar se liberan mediadores que producen vasoconstricción pulmonar
-                activa, amplificando el compromiso hemodinámico más allá del efecto puramente mecánico de la
-                obstrucción.
+                Tras la obstrucción arterial pulmonar se liberan mediadores — tromboxano A2, serotonina, endotelina,
+                prostaglandina F2α (PGF2α), el inhibidor del activador del plasminógeno, y una menor producción de
+                sustancias vasodilatadoras como la prostaciclina (PGI2) y el óxido nítrico (ON) — que producen
+                vasoconstricción pulmonar activa, amplificando el compromiso hemodinámico más allá del efecto
+                puramente mecánico de la obstrucción. En resumen, en la HP asociada a EP existe un
+                <strong>desbalance entre vasoconstrictores y vasodilatadores</strong>, con predominio de las
+                sustancias vasoconstrictoras.
             </p>
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩸 Tromboxano A2 (TXA2)</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">Metabolito del ácido araquidónico liberado por plaquetas, macrófagos y neutrófilos. Vasoconstrictor potente del músculo liso (sistémico y pulmonar) y promotor de la agregación plaquetaria — su aumento en suero se correlaciona estrechamente con la caída del recuento plaquetario posterior a la embolia.</div>
+                    <div class="micro-prof-body">Metabolito del ácido araquidónico liberado por plaquetas, macrófagos y neutrófilos. Vasoconstrictor potente del músculo liso (sistémico y pulmonar) y promotor de la agregación plaquetaria, con el fin de lograr una hemostasia eficaz — su aumento en suero se correlaciona estrechamente con la caída del recuento plaquetario posterior a la embolia, lo que sugiere que estos mediadores se originan de las propias plaquetas.</div>
                 </div>
                 <div class="micro-prof-item">
-                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧪 Serotonina y endotelina-1</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">La serotonina, liberada por las plaquetas activadas agregadas, es un potente vasoconstrictor pulmonar (a diferencia de su efecto vasodilatador en la circulación sistémica). La endotelina-1, secretada por el endotelio vascular, es también un potente vasoconstrictor y mitógeno del músculo liso, con aumento de la resistencia vascular pulmonar.</div>
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧪 Serotonina (5-hidroxitriptamina)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Producida por las células enterocromafines gastrointestinales, las neuronas serotoninérgicas, las células neuroendocrinas pulmonares y las plaquetas activadas agregadas. Es un potente vasoconstrictor pulmonar conocido — mientras que, en la circulación sistémica, produce vasodilatación.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔬 Endotelina-1 (ET-1)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Potente vasoconstrictor y mitógeno del músculo liso, sintetizado y secretado por las células endoteliales vasculares. Produce un aumento de la RVP y efectos proliferativos en las células del músculo liso vascular. Interactúa con dos tipos de receptores: <strong>ET-A</strong> (isoforma A) y <strong>ET-B</strong> (isoforma B, localizado principalmente en el endotelio vascular) — los receptores ET-B están principalmente involucrados en la depuración de la ET-1, particularmente en los lechos vasculares del pulmón y el riñón, y pueden inducir vasodilatación a través de la liberación de óxido nítrico y prostaciclina de las células endoteliales.</div>
                 </div>
             </div>
             <p style="font-size: 0.85rem; line-height: 1.6;">
-                En experimentos con animales, el bloqueo farmacológico de estos mediadores permitió la supervivencia
-                a una EP masiva sin alteraciones hemodinámicas marcadas, mientras que la mayoría de los animales no
-                tratados murió o desarrolló un choque circulatorio severo — evidencia directa del papel causal de
-                estos mediadores, más allá del efecto puramente obstructivo.
+                La producción de estos y otros mediadores inflamatorios trae consigo respuestas como el
+                <strong>broncoespasmo, el colapso alveolar y la inhibición de la producción del surfactante
+                pulmonar</strong> — generando atelectasias, con pérdida del volumen residual, la capacidad vital, y
+                de la capacidad residual funcional y pulmonar total. En experimentos con animales, el bloqueo
+                farmacológico de estos mediadores permitió la supervivencia a una EP masiva sin alteraciones
+                hemodinámicas marcadas, mientras que la mayoría de los animales control no tratados murió o
+                desarrolló un choque circulatorio severo — evidencia directa del papel causal de estos mediadores,
+                más allá del efecto puramente obstructivo.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Alteración de la relación ventilación/perfusión</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Todo lo anterior conduce a la manifestación más frecuente de la EP: la <strong>hipoxemia</strong>.
+                Las alteraciones de la relación V/Q no serán iguales para todo el pulmón: existirán zonas en las
+                cuales la relación estará aumentada porque la ventilación es efectiva pero la perfusión es nula
+                (espacio muerto alveolar, por la reducción del área transversal del lecho arterial pulmonar),
+                mientras que otras áreas continuarán teniendo buena perfusión, pero con los alvéolos colapsados —
+                es decir, con la relación V/Q disminuida.
             </p>
 
             <p class="section-label" style="margin-top:16px;">De la obstrucción al colapso: la cascada del VD</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
-                La insuficiencia cardíaca aguda del lado derecho, por el aumento de la resistencia vascular
-                pulmonar, es la <strong>principal causa de muerte</strong> en la EP — más que el propio trastorno
-                del intercambio gaseoso.
+                La HAP resultante, secundaria al embolismo pulmonar, afecta tanto a la vasculatura pulmonar como al
+                corazón; aunque el insulto inicial involucra la vasculatura pulmonar, la <span class="hl">supervivencia
+                de los pacientes está estrechamente relacionada con la función ventricular derecha</span> — la
+                insuficiencia cardíaca aguda del lado derecho, debida al aumento de la RVP, es la
+                <strong>principal causa de muerte</strong> en la EP.
             </p>
             <ul class="term-chips">
-                <li>↑Poscarga del VD súbita → ↑tensión de pared → dilatación progresiva del VD</li>
-                <li>Desplazamiento del septo interventricular hacia el VI (interdependencia ventricular)</li>
-                <li>↓Llenado y ↓volumen sistólico del VI → ↓gasto cardíaco total</li>
-                <li>↓Presión de perfusión coronaria + ↑tensión de pared del VD → isquemia subendocárdica del VD → microinfartos (troponina/BNP elevados, predictores de mortalidad)</li>
+                <li>↑Poscarga del VD súbita, por reducción del área del lecho vascular pulmonar y aumento de la resistencia al flujo de sangre</li>
+                <li>El VD lucha contra la sobrecarga: no puede vaciarse adecuadamente ni tolerar bien los incrementos de presión → aumento rápido de los volúmenes telesistólico y telediastólico</li>
+                <li>El VD se adapta mediante el engrosamiento de su pared — un evento de EP, o eventos recurrentes, que obstruyan &gt;50% del lecho vascular pulmonar, precipitan al VD a su disfunción (incapacidad de generar presiones mayores)</li>
+                <li>Dado que la pared del VD es delgada y no está diseñada para soportar presiones altas ni un trabajo intenso, una vez sobrepasada su capacidad de adaptación (pobre por sus características intrínsecas), se dilata de forma progresiva</li>
+                <li>La elevación de la presión diastólica del VD desplaza el septo interventricular hacia el VI (interdependencia ventricular), provocando la falla de ambos ventrículos</li>
+                <li>La dilatación del VD, limitada por el pericardio, conduce a un aumento de las presiones intrapericárdicas y a una restricción adicional, tanto en el llenado del VD como del VI</li>
+                <li>Estos cambios producen una depresión del propio VD, una disminución de la precarga del VI, y posteriormente del gasto cardíaco total</li>
+                <li>La <strong>regurgitación tricúspide aguda</strong>, resultante de la dilatación del VD y la disfunción sistólica, conduce además a una disminución del gasto cardíaco del lado derecho y de la precarga del VI</li>
+                <li>↓Presión de perfusión coronaria + ↑tensión de pared del VD → desequilibrio oferta/demanda de oxígeno del miocardio → isquemia y posible infarto → el VD comienza a dilatarse y perder elasticidad, con pérdida de la fuerza contráctil → mayor desplazamiento del septo hacia el VI → ↓volumen de fin de diástole y ↓volumen sistólico del VI → falla cardíaca izquierda, adicional a la falla derecha inicial</li>
+                <li>Los microinfartos resultantes se demuestran mediante la elevación de troponinas y el aumento de los niveles de BNP, condicionando y proyectándose como un predictor directo de la mortalidad</li>
                 <li>Colapso cardiovascular y muerte súbita, si el proceso no se revierte</li>
             </ul>
-            <dl class="kv-row"><dt><em>Cor pulmonale</em> agudo</dt><dd>Se origina cuando la obstrucción vascular pulmonar supera el 30% del lecho, magnitud que vence la capacidad de compensación del VD. Con obstrucción &lt;30%, el VD suele adaptarse y compensar sin colapsar.</dd></dl>
-
-            <p class="section-label" style="margin-top:16px;">Alteración de la relación ventilación/perfusión</p>
+            <dl class="kv-row"><dt><em>Cor pulmonale</em> agudo</dt><dd>Se origina cuando existe una obstrucción vascular pulmonar mayor al 30% del lecho, de tal magnitud que vence la capacidad del VD y precipita su falla en la compensación, produciendo una falla cardíaca derecha — el TEP es la causa más frecuente de <em>cor pulmonale</em>. Con obstrucción &lt;30%, el VD es capaz de adaptarse y compensar fácilmente este límite de poscarga.</dd></dl>
             <p style="font-size: 0.85rem; line-height: 1.6;">
-                La zona con obstrucción arterial genera espacio muerto alveolar (ventilada pero no perfundida),
-                mientras que otras zonas mantienen buena perfusión con alvéolos colapsados (por inhibición del
-                surfactante) — atelectasias, pérdida del volumen residual y de la capacidad vital, y finalmente la
-                manifestación más frecuente de la EP: la <strong>hipoxemia</strong>.
+                La gravedad de la patología depende del grado de la obstrucción y de la función cardíaca previa, ya
+                que de esto depende la adaptación y la puesta en funcionamiento de los mecanismos compensatorios en
+                favor de la supervivencia.
             </p>
 
             <p class="section-label" style="margin-top:16px;">Fuente</p>
@@ -779,18 +1537,38 @@
                 por eso se adapta bien a los cambios de volumen, pero se afecta mal con los cambios de presión.
             </p>
 
+            <p class="section-label" style="margin-top:16px;">Presión de la aurícula derecha: la onda a-c-x-v-y</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La presión en la AD se encuentra entre <strong>4 y 6 mmHg</strong> durante la contracción auricular
+                (onda <strong>a</strong>, el final de la sístole auricular). Tras el cierre inmediato de las
+                válvulas AV, su protrusión genera un flujo retrógrado y produce la onda <strong>c</strong> (cierre de
+                la tricúspide). El llenado auricular por el flujo de las venas hacia la cavidad ocasiona una
+                elevación de la presión que se observa en la onda <strong>v</strong> (final de la contracción
+                ventricular); la onda <strong>y</strong> corresponde al llenado-vaciamiento auricular (caída de
+                presión al abrirse la válvula AV), que se realiza en un 80% de forma pasiva, mientras el 20%
+                restante equivale a la contracción auricular; la onda <strong>x</strong> corresponde al llenado
+                auricular tras la onda c.
+            </p>
+
             <p class="section-label" style="margin-top:16px;">Retorno venoso</p>
-            <dl class="kv-row"><dt>Determinantes</dt><dd>El retorno venoso (RV) depende de la presión en la aurícula derecha (Pad), de la presión circulatoria media (PCM, presión media de llenado sistémico), y de la resistencia al flujo entre los vasos periféricos y la AD. RV = (PCM − Pad) / resistencia venosa.</dd></dl>
-            <dl class="kv-row"><dt>Mecanismo de Frank-Starling y cronotropismo</dt><dd>El gasto cardíaco depende del grado de estiramiento de la fibra durante la diástole (Frank-Starling) y del cronotropismo — este último no solo por estimulación simpática directa, sino también por la dilatación del tejido alrededor del nodo sinusal (reflejo de Bainbridge).</dd></dl>
+            <dl class="kv-row"><dt>Determinantes</dt><dd>El retorno venoso (RV) depende de la presión en la aurícula derecha (Pad), de la presión circulatoria media (PCM, presión media de llenado sistémico), y de la resistencia al flujo entre los vasos periféricos y la AD. RV = (PCM − Pad) / resistencia venosa — esta relación se conoce como <em>pendiente</em>: a mayor inclinación, mayor flujo de retorno; el RV es inversamente proporcional a la resistencia venosa. Cuando la Pad disminuye, aumenta el RV hasta que el decremento deja de generar cambios en el flujo (la <strong>meseta</strong>), límite ocasionado por el colapso de las grandes venas ante presiones subatmosféricas.</dd></dl>
+            <dl class="kv-row"><dt>Mecanismo de Frank-Starling y cronotropismo</dt><dd>El gasto cardíaco depende del grado de estiramiento de la fibra durante la diástole (Frank-Starling) y del cronotropismo — este último no solo por estimulación simpática directa, sino también por la dilatación del tejido circundante alrededor del nódulo sinusal, que aumenta la frecuencia cardíaca de un 10% a un 15% y estimula el centro vasomotor para desencadenar una respuesta simpática adicional, conocida como el <strong>reflejo de Bainbridge</strong>.</dd></dl>
+            <dl class="kv-row"><dt>Circulación pulmonar</dt><dd>La arteria pulmonar (AP) tiene alta capacidad de albergar sangre sin aumentos importantes de la presión, y recibe la totalidad del gasto cardíaco. Las variaciones posturales afectan la circulación en la AP: el cambio de posición de supino a erecto disminuye el volumen sanguíneo pulmonar en aproximadamente <strong>un tercio</strong> de la sangre acumulada en las zonas dependientes de la circulación sistémica. La presión en la AP disminuye considerablemente en relación con la presión sistémica, mientras las presiones venosas y la resistencia pulmonar son iguales a las de la circulación sistémica. La presión de impulso a través de la circulación pulmonar depende en gran medida de la presión venosa pulmonar.</dd></dl>
 
             <p class="section-label" style="margin-top:16px;">Disfunción del ventrículo derecho: mecanismo general</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
-                La disminución de la contractilidad del VD reduce el volumen sistólico y aumenta el volumen
-                residual, produciendo regurgitación yugular y dilatación de las cámaras derechas. Esto genera
-                <strong>interdependencia ventricular</strong> (el septo se desplaza hacia el VI, reduciendo su
-                llenado) y congestión venosa retrógrada que compromete el flujo del seno coronario, la función
-                hepática y renal, agravando la retención hidrosalina.
+                Un gran número de entidades nosológicas afectan la función normal del VD: cada patología representa
+                un reto fisiológico impuesto sobre las presiones y volúmenes de las cámaras del lado derecho. La
+                disminución de la contractilidad del VD <strong>reduce el volumen sistólico y aumenta el volumen
+                residual</strong>, produciendo regurgitación yugular y dilatación de las cámaras derechas. Esto
+                genera <strong>interdependencia ventricular</strong> (el septo se desplaza hacia el VI, reduciendo
+                su llenado) y congestión venosa retrógrada que compromete el flujo del seno coronario — evocando
+                isquemia e infarto — además de afectar la función hepática y renal por vía retrógrada, agravando la
+                retención hidrosalina y los estados de congestión. El gasto cardíaco empeora progresivamente hasta el
+                colapso y la muerte; la respuesta hemodinámica depende de la velocidad de instauración y del grado
+                de trabajo impuesto al VD.
             </p>
+            <dl class="kv-row"><dt>Poscarga del VD (ley de Laplace)</dt><dd>La poscarga del VD depende en gran parte de la <strong>presión transmural</strong> (producto de la presión sobre la fosa pericárdica) y, sobre todo, de la presión en la arteria pulmonar — de modo que pequeños cambios en esta afectan sobremanera la función normal del VD. Según la <strong>ley de Laplace</strong>, la presión sobre la pared ventricular depende de la presión de la fosa pericárdica, el diámetro ventricular y el espesor de la pared.</dd></dl>
 
             <p class="section-label" style="margin-top:16px;">Causas específicas de disfunción del VD</p>
             <div class="micro-profiles">
@@ -808,7 +1586,7 @@
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🦠 Sepsis y choque séptico</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">Las alteraciones de la relación V/Q disminuyen la presión arterial de oxígeno y aumentan la permeabilidad capilar pulmonar, reduciendo el área efectiva de intercambio y la distensibilidad pulmonar — todo esto aumenta la distensión sobre el VD. Cerca de la mitad de los pacientes con choque séptico desarrollan disfunción ventricular (↑volumen de fin de diástole, ↓fracción de eyección), que en los sobrevivientes suele regresar a la normalidad.</div>
+                    <div class="micro-prof-body">Las alteraciones de la relación V/Q disminuyen la presión arterial de oxígeno y aumentan la permeabilidad capilar pulmonar, reduciendo el área efectiva de intercambio y la distensibilidad pulmonar — todo esto aumenta la distensión sobre el VD. Cerca de la mitad de los pacientes con choque séptico desarrollan disfunción ventricular (↑volumen de fin de diástole, ↓fracción de eyección), que en los sobrevivientes es <strong>completamente reversible 7-10 días después de que el episodio de choque séptico está resuelto</strong> (ver la mecánica completa de la depresión miocárdica séptica — TNF-α, IL-1, IL-2, NO — en la Ficha 10).</div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🌬️ SDRA y EPOC</span> <span class="toggle-icon">+</span></div>
@@ -861,6 +1639,38 @@
                 intrahospitalaria de 59,4%.
             </p>
 
+            <p class="section-label" style="margin-top:16px;">Entrega de oxígeno: macrohemodinamia y factores bioquímicos</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La entrega de oxígeno a las células (DO₂) depende del contenido en la sangre, combinado
+                principalmente con la hemoglobina, regulado por el sistema respiratorio y el transporte sanguíneo —
+                es una función del gasto cardíaco, la PAM y la resistencia vascular periférica, interrelacionados
+                con la extracción de oxígeno, la tasa de consumo celular y el nivel de oxígeno tisular (el
+                principal modulador del sistema de suministro de oxígeno). Debido a que el oxígeno tiene baja
+                solubilidad en el plasma, el contenido arterial de oxígeno está determinado principalmente por el
+                oxígeno transportado por los glóbulos rojos combinado con la Hb.
+            </p>
+            <table class="data-table">
+                <thead><tr><th>Parámetro</th><th>Fórmula</th><th>Valor normal</th></tr></thead>
+                <tbody>
+                    <tr><td>CaO₂ (contenido arterial de O₂)</td><td>Hb × 1,34 × SaO₂ + PaO₂ × 0,003</td><td>17-20 vol%</td></tr>
+                    <tr><td>CvO₂ (contenido venoso de O₂)</td><td>Hb × 1,34 × SvO₂ + PvO₂ × 0,003</td><td>12-15 vol%</td></tr>
+                    <tr><td>DO₂ (entrega de O₂)</td><td>CaO₂ × GC × 10 → (FC × VS) × [(1,34 × Hb × SaO₂) + (PaO₂ × 0,003)] × 10</td><td>870-1200 mL/min</td></tr>
+                    <tr><td>VO₂ (consumo de O₂)</td><td>GC × (CaO₂ − CvO₂)</td><td>180-300 mL/min</td></tr>
+                    <tr><td>GC (gasto cardíaco)</td><td>VS × FC → GC = VO₂ / (CaO₂ − CvO₂)</td><td>4-6 L/min</td></tr>
+                    <tr><td>IC (índice cardíaco)</td><td>GC × ASC</td><td>2,4-4 L/min/m²</td></tr>
+                    <tr><td>OEI (índice de extracción de O₂)</td><td>(SaO₂ − SvO₂) / SaO₂</td><td>20-30%</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Hb: hemoglobina; SaO₂/SvO₂: saturación arterial/venosa de O₂; PaO₂/PvO₂: presión arterial/venosa de O₂; FC: frecuencia cardíaca; VS: volumen sistólico; ASC: área de superficie corporal total.</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La hipoxia se clasifica en 3 categorías principales: la <strong>oferta escasa</strong> de oxígeno, la
+                <strong>mala distribución</strong> de la oferta, y la <strong>incapacidad de consumo</strong>. El
+                choque es una causa de hipoxemia o disoxia, que se refiere al intercambio alterado e insuficiente en
+                los órganos y tejidos diana — existe una interrelación indisoluble entre choque e hipoxia en
+                términos biológicos y conceptuales: la etiología y el tratamiento a menudo se superponen.
+            </p>
+            <dl class="kv-row"><dt>Reserva cardíaca</dt><dd>Es la cantidad máxima de sangre que se puede bombear, dentro de los límites fisiológicos, por encima del nivel normal basal durante el ejercicio o para compensar el déficit — dada por la reserva funcional del miocardio. Cuanto menor es la parte sana del miocardio capaz de responder a las variaciones del retorno venoso durante la diástole con un aumento de la contractilidad, mayores son las posibilidades de una falla de bomba: la disminución de la distensibilidad conduce a un aumento de las presiones diastólicas finales VI/VD, causando un aumento en la tensión de la pared y, en consecuencia, un mayor consumo de oxígeno (VO₂), que finalmente disminuye el gasto cardíaco.</dd></dl>
+
             <p class="section-label" style="margin-top:16px;">4 mecanismos fisiopatológicos (no excluyentes)</p>
             <table class="data-table">
                 <thead><tr><th>Patrón</th><th>GC</th><th>RVS</th><th>PVC</th><th>PCP</th><th>VSTI</th><th>ScVO₂</th><th>Láctico</th></tr></thead>
@@ -906,21 +1716,50 @@
             <dl class="kv-row"><dt>Disoxia y heterogeneidad del flujo capilar</dt><dd>La disoxia en sepsis es una discrepancia entre entrega y extracción de oxígeno, causada por la distribución inadecuada del flujo — heterogeneidad espacial y temporal: capilares poco perfundidos (flujo detenido) junto a otros con flujo anormalmente alto. Fase hiperdinámica: ↑GC, ↑DO₂, ↓RVS, ↓capacidad de extracción con acidosis láctica — cuando la SvO₂ llega a 50%, el metabolismo se vuelve anaeróbico.</dd></dl>
 
             <table class="data-table">
-                <thead><tr><th colspan="2">Mediadores del choque séptico</th></tr></thead>
+                <thead><tr><th>Categoría</th><th>Mediadores</th></tr></thead>
                 <tbody>
-                    <tr><td colspan="2"><strong>Citocinas:</strong> TNF-α, IL-1, IL-6, IL-8, interferón-γ</td></tr>
-                    <tr><td colspan="2"><strong>Factor activador de plaquetas (PAF)</strong></td></tr>
-                    <tr><td colspan="2"><strong>Eicosanoides:</strong> prostaglandinas (PGE2, PGI2), leucotrienos, tromboxanos (TXA2)</td></tr>
-                    <tr><td colspan="2"><strong>Factores derivados de neutrófilos:</strong> proteasas, radicales libres de O₂</td></tr>
-                    <tr><td colspan="2"><strong>Neuropéptidos:</strong> β-endorfina, encefalina</td></tr>
-                    <tr><td colspan="2"><strong>Factores del endotelio:</strong> NO, endotelina-1</td></tr>
-                    <tr><td colspan="2"><strong>Proteasas plasmáticas:</strong> coagulación, fibrinolítico, cininas, complemento</td></tr>
-                    <tr><td colspan="2"><strong>Hormonas:</strong> glucagón, insulina, hormona del crecimiento, tiroxina, glucocorticoides</td></tr>
-                    <tr><td colspan="2"><strong>Aminas vasoactivas:</strong> histamina, serotonina, adrenalina, noradrenalina</td></tr>
-                    <tr><td colspan="2"><strong>Otros:</strong> agotamiento de fibronectina, factores depresores del miocardio</td></tr>
+                    <tr><td>Citocinas</td><td>Factor de necrosis tumoral-α (TNF-α), interleucinas (IL-1, IL-6, IL-8), interferón gamma (IFN-γ)</td></tr>
+                    <tr><td>Factor activador de plaquetas (PAF)</td><td>Mediador fosfolípido potente: amplifica la liberación de citocinas, produce vasoconstricción y broncoconstricción</td></tr>
+                    <tr><td>Eicosanoides (metabolitos del ácido araquidónico)</td><td>Prostaglandinas (PGE2, PGI2), leucotrienos (LB4, LC4, LD4, LE4), tromboxanos (TXA2)</td></tr>
+                    <tr><td>Factores derivados de los neutrófilos</td><td>Proteasas (enzimas lisosomales, elastasa, colagenasa), activador del plasminógeno, radicales libres de oxígeno</td></tr>
+                    <tr><td>Neuropéptidos</td><td>β-endorfina, encefalina — liberados por la hipófisis anterior en respuesta al estrés/endotoxina</td></tr>
+                    <tr><td>Factores del endotelio</td><td>NO, endotelina-1</td></tr>
+                    <tr><td>Proteasas plasmáticas</td><td>Sistemas de coagulación, fibrinolítico, cininas, complemento</td></tr>
+                    <tr><td>Hormonas</td><td>Glucagón, insulina, hormona del crecimiento (somatotropina), tiroxina, glucocorticoides</td></tr>
+                    <tr><td>Aminas vasoactivas</td><td>Histamina (mastocitos), serotonina, adrenalina, noradrenalina</td></tr>
+                    <tr><td>Otros factores</td><td>Agotamiento de fibronectina (glicoproteína de opsonización), factores depresores del miocardio</td></tr>
                 </tbody>
             </table>
-            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 El TNF-α es el estímulo más potente conocido de sí mismo: tras endotoxina IV aparece en circulación en minutos, pico a las 2h. La depresión miocárdica del choque séptico se atribuye hoy al efecto sinérgico del TNF-α y la IL-1, en gran parte mediado por el NO — es completamente reversible 7-10 días después de resuelto el episodio.</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 La endotoxina (capa externa de lipopolisacáridos de gramnegativos) es el estímulo más potente conocido de la producción de TNF-α: tras inyectarse por vía IV, el TNF-α aparece en circulación en cuestión de minutos, alcanza un pico en 2 horas y luego disminuye rápidamente; los niveles de IL-1 aumentan 3-4 horas después y permanecen elevados 24 horas. La depresión miocárdica del choque séptico se atribuye hoy al efecto sinérgico del TNF-α y la IL-1, en gran parte mediado por el NO — es completamente reversible 7-10 días después de resuelto el episodio.</p>
+
+            <p class="section-label" style="margin-top:16px;">Cambios cardiorrespiratorios del choque séptico</p>
+            <table class="data-table">
+                <thead><tr><th>Fase</th><th>Hemodinamia</th><th>Mecanismo del defecto</th></tr></thead>
+                <tbody>
+                    <tr><td>1. Vasodilatación temprana</td><td>Extremidades calientes, ↓RVS, GC normal/alto, PA normal/baja, ↑presión de pulso</td><td>Vasodilatación periférica + pérdida de volumen intravascular por ↑permeabilidad capilar</td></tr>
+                    <tr><td>2. Vasoconstricción posterior</td><td>Extremidades frías, ↓presión de pulso, GC bajo, RVS normal/alta</td><td>↓Contractilidad miocárdica + pérdida de volumen intravascular + vasoconstricción periférica</td></tr>
+                    <tr><td>3. Cambios miocárdicos</td><td>Dilatación ventricular, ↓fracción de eyección (↓distensibilidad ventricular también puede ocurrir)</td><td>Depresión miocárdica por TNF-α/IL-1 vía NO — reversible en 7-10 días</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size:0.85rem; background:rgba(34,197,94,0.08); border-left:3px solid var(--accent-green); padding:10px 14px; border-radius:6px;">
+                👉 En la fase de vasodilatación temprana, la <strong>albúmina sale de la circulación al 20%/hora en
+                pacientes sépticos</strong>, frente al 8%/hora fisiológico normal — un dato directo sobre la
+                magnitud de la fuga capilar séptica.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Monitorización de perfusión e inflamación</p>
+            <dl class="kv-row"><dt>Lactato arterial</dt><dd>Elemento imprescindible para la evaluación inicial y el seguimiento en la fase de reanimación — su medición seriada (al menos cada 6 horas durante la reanimación) permite evaluar la tendencia con la terapia implementada. El incremento progresivo es indicador de mala evolución; una reducción &gt;10% se asocia con mayor posibilidad de supervivencia.</dd></dl>
+            <dl class="kv-row"><dt>ScvO₂/SvO₂</dt><dd>Instrumento valioso para evaluar la perfusión tisular sistémica, con cambios significativos más precoces que el lactato. La adecuada corrección de este parámetro (ScvO₂ &gt;70%) durante las primeras 6 horas de reanimación ha demostrado reducir la mortalidad.</dd></dl>
+            <dl class="kv-row"><dt>PCR y procalcitonina (PCT)</dt><dd>La PCR se eleva en el SIRS de cualquier etiología, útil para el grado de respuesta inflamatoria y su tendencia (valoración al ingreso y cada 24-48h). La PCT es un péptido precursor de la calcitonina que se incrementa con el SIRS infeccioso y no infeccioso — no es marcador específico de infección bacteriana, pero el empleo conjunto de PCR+PCT ayuda a establecer infección o sobreinfección en casos complejos; niveles altos de PCT se han asociado a mayor riesgo de muerte.</dd></dl>
+            <dl class="kv-row"><dt>Glucemia</dt><dd>La hiperglucemia ejerce un efecto proinflamatorio en el paciente crítico (no se considera un proceso adaptativo, sino nocivo) — una vez alcanzada la estabilidad hemodinámica, se debe mantener &lt;150 mg/dL con insulina cristalina protocolizada.</dd></dl>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                En el síndrome del choque existen 3 factores que contribuyen al agravamiento del paciente:
+                <strong>hipoxemia, acidosis y CID</strong>. Si el proceso no se revierte, ocurrirán trastornos
+                sistémicos (generación de radicales de oxígeno citotóxicos, activación de leucocitos/macrófagos/
+                células endoteliales, activación de la vía extrínseca de la coagulación) que desencadenan un SIRS,
+                pudiendo inducir la CID que empeorará la isquemia presente — un triángulo de interacción entre
+                <strong>endotelio, inflamación y coagulación</strong> que converge en el choque.
+            </p>
 
             <p class="section-label" style="margin-top:16px;">Mecanismos de respuesta compensadora</p>
             <div class="micro-profiles">
@@ -969,7 +1808,14 @@
                 <div class="article-figure-caption">Gasto cardíaco, presión pleural y presión de la aurícula derecha.</div>
             </div>
 
-            <dl class="kv-row"><dt>Presión pleural y ventilación mecánica</dt><dd>En VM, la presión pleural se eleva en proporción al volumen corriente (VC) dividido entre la distensibilidad pulmonar — con VC de 400 mL y distensibilidad de 80, la Ppl sube 5 cmH₂O; si la distensibilidad cae a 40, sube 10 cmH₂O. Menor distensibilidad y mayor VC producen mayor cambio en la presión pleural.</dd></dl>
+            <dl class="kv-row"><dt>Presión pleural y ventilación mecánica</dt><dd>En VM, la presión pleural (Ppl) se eleva en proporción al volumen corriente (VC) dividido entre la distensibilidad pulmonar: Ppl = VC / distensibilidad. Menor distensibilidad y mayor VC producen mayor cambio en la presión pleural.</dd></dl>
+            <table class="data-table">
+                <thead><tr><th>Volumen corriente</th><th>Distensibilidad pulmonar</th><th>ΔPresión pleural</th></tr></thead>
+                <tbody>
+                    <tr><td>400 mL</td><td>80 mL/cmH₂O</td><td>+5 cmH₂O</td></tr>
+                    <tr><td>400 mL</td><td>40 mL/cmH₂O (distensibilidad reducida)</td><td>+10 cmH₂O</td></tr>
+                </tbody>
+            </table>
 
             <p class="section-label" style="margin-top:16px;">Interdependencia ventricular</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
@@ -988,10 +1834,10 @@
             <p style="font-size: 0.85rem; line-height: 1.6;">
                 Cuando el volumen pulmonar es bajo, la RVP aumenta por vasoconstricción hipóxica (vasos tortuosos).
                 Al aumentar el volumen pulmonar, los vasos se vuelven más lineales y capacitantes, cae la hipoxia y
-                se reduce la RVP — hasta acercarse a la capacidad residual funcional, donde la RVP alcanza su
-                mínimo. Más allá de ese punto, la <strong>sobredistensión alveolar comprime los capilares
-                intraalveolares</strong>, aumentando de nuevo la RVP — sobredistensión asociada a <em>cor
-                pulmonale</em>.
+                se reduce la RVP — hasta acercarse a la <strong class="hl">capacidad residual funcional, el punto de
+                inflexión donde la RVP alcanza su mínimo</strong>. Más allá de ese punto, la
+                <strong>sobredistensión alveolar comprime los capilares intraalveolares</strong>, aumentando de
+                nuevo la RVP — sobredistensión asociada a <em>cor pulmonale</em>.
             </p>
 
             <div class="article-figure">
@@ -1017,7 +1863,7 @@
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📐 Evaluación del VD por ecocardiografía</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">Relación VD/VI (normal &lt;1) en ventana apical; TAPSE (normal &gt;17 mm, ver Ficha 5); cambio de área fraccional &lt;35% como signo de disfunción; Doppler tisular de la pared libre (normal &gt;9,5 cm/s). El diagnóstico de insuficiencia del VD permite anticipar interdependencia ventricular — hipotensión sistémica y movimiento septal anormal (plano o paradójico).</div>
+                    <div class="micro-prof-body">Relación VD/VI (normal &lt;1) en ventana apical; TAPSE normal &gt;17 mm (este capítulo cita &gt;17 mm; el capítulo de Monitorización hemodinámica, Ficha 5, cita &gt;16 mm — ambas cifras se reproducen tal como las da cada fuente, sin forzar una única cifra); cambio de área fraccional &lt;35% como signo de disfunción; Doppler tisular de la pared libre (normal &gt;9,5 cm/s). El diagnóstico de insuficiencia del VD permite anticipar interdependencia ventricular — hipotensión sistémica y movimiento septal anormal (plano o paradójico).</div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💧 Índice E/Em y función diastólica del VI</span> <span class="toggle-icon">+</span></div>

@@ -2422,6 +2422,73 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
     1-6, N = página impresa, sin offset) o
     `docs/libro-azul-seccion-i-cardiovascular-parte2.pdf#page=N` (capítulos
     7-11, N = página impresa − 100) según corresponda.
+  - **Revisión sistemática de profundidad (a petición explícita del usuario,
+    con feedback crítico directo)**: tras el build inicial de las 11 fichas,
+    el usuario señaló que el contenido era "muy carente" — con el ejemplo
+    concreto de que faltaba por completo la fórmula del **índice de aporte
+    de oxígeno (IDO₂)**, pese a estar en la fuente, y una queja general de
+    que el resto del bloque leía como "un breve resumen de partes que no son
+    muy importantes", sin apenas fórmulas, con pocas tablas/imágenes y sin
+    estructura esquematizada. El usuario pidió explícitamente un flujo de
+    **2 agentes que hablaran entre sí** (uno solo-bibliografía, otro
+    solo-app) para planificar la ampliación — el agente de bibliografía
+    agotó el límite de gasto de la cuenta antes de completar su análisis (el
+    de app sí terminó, en
+    `/tmp/.../scratchpad/cardio-audit-app.md`), así que en vez de reintentar
+    con otro agente (y arriesgar el mismo fallo), se optó por releer
+    directamente los 2 PDF fuente página por página con el propio `Read`
+    tool — más verificable que un resumen de agente, aunque perdiendo la
+    conversación cruzada entre los dos agentes que pedía el usuario. El
+    informe de auditoría de app sí se usó íntegro: confirmó con métricas
+    exactas la queja del usuario (0,55 `.data-table`/ficha y 1,45
+    `.kv-row`/ficha en Cardiología, frente a 2,5 y 11,1 respectivamente en
+    `erc.html`, tomado como referencia de calidad ya establecida en el
+    proyecto) y señaló, ficha por ficha, qué contenido "olía a resumen" y
+    cómo reestructurarlo (convertir `term-chips` de comparaciones
+    multi-atributo en `.data-table`, añadir `.kv-row` internos dentro de
+    `.micro-prof-item` en vez de dejarlos como párrafo único, etc.).
+    Reescritas las 11 fichas con contenido sustancialmente más profundo,
+    verificado frase a frase contra una relectura íntegra de los 2 PDF
+    (170 páginas): fórmulas antes ausentes (IDO₂=IC×CaO₂ del Capítulo 2, y
+    su variante IDO₂=IC×CaO₂×10 con rango normal 520-650 mL/min/m² de la
+    Tabla 12 del Capítulo 5 — ambas cruzadas explícitamente entre sí en las
+    Fichas 1/2/5; ley de Laplace T=P×r/2t; ley de Hagen-Poiseuille;
+    ecuación de Fick; doble/triple producto y presión de perfusión
+    coronaria; fórmulas de RVS/RVP), tablas nuevas (ciclo de Wiggers en 7
+    fases con válvulas/ruidos por fase; clasificación AHA de la placa
+    coronaria I-Va; escala de riesgo de *cor pulmonale* agudo de Mekontso;
+    vasodilatadores pulmonares específicos con mecanismo/efecto/
+    recomendación; macrohemodinamia y factores bioquímicos vitales —
+    CaO₂/CvO₂/DO₂/VO₂/GC/IC/OEI — del Capítulo 10; tabla comparativa
+    angina→IAMCEST con trombo/biomarcadores/síntoma), y conceptos
+    mecanísticos completos que antes faltaban (NETosis/PAD4 y los 2
+    mecanismos de inicio de la trombosis en la enfermedad coronaria;
+    activación neurohormonal completa en la disfunción cardíaca — SNS,
+    SRAA, AVP, péptidos natriuréticos, citocinas —; modelo de Krogh y
+    coherencia hemodinámica en la microcirculación; cascada completa
+    VD→interdependencia ventricular→isquemia subendocárdica en la embolia
+    pulmonar). La tabla de mediadores del choque séptico (Ficha 10), que
+    usaba `colspan="2"` como lista disfrazada de tabla, se corrigió a una
+    tabla real de 2 columnas (categoría/mediadores). Se corrigió también
+    una **discrepancia real entre fichas** detectada durante la relectura:
+    el TAPSE normal aparece como &gt;16 mm en el Capítulo 5 (Ficha 5) y
+    &gt;17 mm en el Capítulo 11 (Ficha 11) — ambas cifras son fieles a su
+    propio capítulo/autor de origen dentro del mismo libro, así que se
+    mantuvieron las dos con una nota cruzada explícita en la Ficha 11, en
+    vez de forzar una única cifra por criterio propio (mismo criterio de
+    fidelidad a la fuente ya establecido en el resto del proyecto — ver el
+    precedente del IFR en Fracaso Renal Agudo). Se añadieron **18
+    preguntas de quiz nuevas** (`cardio-q089`-`q106`,
+    `js/data/fisio-uci-cardiologia-preguntas.js`) centradas específicamente
+    en las fórmulas y datos que motivaron la revisión (IDO₂, clasificación
+    AHA, NETosis, macrohemodinamia, PAPm/HP límitrofe, escala de Mekontso,
+    receptores ET-A/ET-B), llevando el banco de Cardiología a 106 preguntas
+    y el banco combinado de toda la app a **1008 preguntas** (990 previas +
+    18). Verificado con Playwright tras la reescritura: las 11 fichas del
+    cuaderno de campo abren y voltean sin error de consola, ninguna imagen
+    da 404, y el quiz completa un recorrido de 12 preguntas del tema
+    "enfermedad coronaria" (incluida una pregunta tipo `redactar`) sin
+    excepciones JS.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
