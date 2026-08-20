@@ -251,6 +251,18 @@ function calcFickTransporte() {
         if (interpretacionEl) interpretacionEl.style.display = 'none';
         return;
     }
+    // La saturación es un % de sitios de la Hb ocupados: no puede ser
+    // negativa ni superar el 100%, con independencia de lo que permitan
+    // las flechas del campo (escribir a mano sí puede saltarse min/max).
+    if (sao2 < 0 || sao2 > 100) {
+        box.style.display = 'block';
+        box.className = 'tfg-estado tfg-estado-danger';
+        box.innerHTML = '<strong>⚠️ Valor no fisiológico</strong> — la SaO₂ es un porcentaje de saturación y no puede ser negativa ni superar el 100%. Revisa el dato.';
+        const gaugeRow = document.getElementById('cardio-fick-gauge-row');
+        if (gaugeRow) gaugeRow.style.display = 'none';
+        if (interpretacionEl) interpretacionEl.style.display = 'none';
+        return;
+    }
     const gc = (fc * vs) / 1000;
     const cao2 = hb * 1.34 * (sao2 / 100) + pao2 * 0.003;
     const do2 = gc * cao2 * 10;
@@ -269,11 +281,23 @@ function calcFickTransporte() {
 
     let textoInterpretacion = textoZonaDO2I(do2i);
 
+    let avisoVenoso = '';
     const svo2El = document.getElementById('cardio-fick-svo2');
     const pvo2El = document.getElementById('cardio-fick-pvo2');
     if (svo2El && pvo2El && svo2El.value !== '' && pvo2El.value !== '') {
         const svo2 = Number(svo2El.value);
         const pvo2 = Number(pvo2El.value);
+        // La sangre venosa mixta no puede estar MÁS oxigenada que la
+        // arterial (el O2 se extrae, no se añade, al pasar por los
+        // tejidos) — SvO2>SaO2 o PvO2>PaO2 son combinaciones no
+        // fisiológicas, casi siempre un error de entrada de datos.
+        if (svo2 < 0 || svo2 > 100) {
+            estado = 'danger';
+            avisoVenoso = '<br><strong>⚠️ Valor no fisiológico</strong> — la SvO₂ es un porcentaje y no puede ser negativa ni superar el 100%.';
+        } else if (svo2 > sao2 || pvo2 > pao2) {
+            estado = 'danger';
+            avisoVenoso = '<br><strong>⚠️ Combinación de valores no fisiológica</strong> — la sangre venosa (SvO₂/PvO₂) no puede estar más oxigenada que la arterial (SaO₂/PaO₂): el oxígeno se extrae en los tejidos, no se añade. Revisa esos datos.';
+        }
         const cvo2 = hb * 1.34 * (svo2 / 100) + pvo2 * 0.003;
         const vo2 = gc * (cao2 - cvo2) * 10;
         const eo2 = do2 > 0 ? (vo2 / do2) * 100 : 0;
@@ -281,14 +305,14 @@ function calcFickTransporte() {
         lineas.push(`VO₂ = GC × (CaO₂ − CvO₂) × 10 = ${vo2.toFixed(0)} mL/min`);
         lineas.push(`EO₂ = VO₂/DO₂ = ${eo2.toFixed(1)}%`);
         if (eo2 > 35 && estado === 'ok') estado = 'warn';
-        if (eo2 >= 50) {
+        if (eo2 >= 50 && !avisoVenoso) {
             textoInterpretacion += ' Con una extracción de oxígeno (EO₂) del ' + eo2.toFixed(0) + '%, el organismo ya está usando gran parte de su reserva de extracción (el máximo fisiológico ronda el 60-70%) — queda poco margen de compensación antes de que el VO₂ empiece a depender directamente del DO₂.';
         }
     }
 
     box.style.display = 'block';
     box.className = `tfg-estado tfg-estado-${estado}`;
-    box.innerHTML = lineas.join('<br>') +
+    box.innerHTML = lineas.join('<br>') + avisoVenoso +
         `<br><span style="font-size:0.72rem;opacity:0.85;">Valores normales de referencia (Tabla 3): DO₂I 530-600 mL/min/m², EO₂ 25-35%.</span>`;
 
     if (interpretacionEl) {
@@ -377,11 +401,19 @@ function calcResistenciasVasculares() {
 
     const pampEl = document.getElementById('cardio-rv-pamp');
     const paiEl = document.getElementById('cardio-rv-pai');
+    let avisoRvp = '';
     if (pampEl && paiEl && pampEl.value !== '' && paiEl.value !== '') {
         const pamp = Number(pampEl.value);
         const pai = Number(paiEl.value);
         const rvp = (pamp - pai) / gc;
         lineas.push(`RVP = (PAMP − PAI) / GC = ${rvp.toFixed(2)} unidades de Wood ≈ ${(rvp * 80).toFixed(0)} dyn·s·cm⁻⁵`);
+        // Igual que con PAD/PAM: la PAI (presión de la aurícula izquierda/
+        // enclavamiento) no puede igualar o superar a la PAMP en un
+        // paciente estable — sin gradiente anterógrado no hay flujo
+        // pulmonar posible.
+        if (pamp <= pai) {
+            avisoRvp = '<br><strong>⚠️ RVP no fisiológica</strong> — la PAI introducida es igual o mayor que la PAMP. Sin gradiente de presión anterógrado no puede haber flujo pulmonar; revisa esos 2 datos.';
+        }
     }
 
     // PAD > PAM da una RVS ≤0, una combinación no fisiológica (la presión
@@ -392,7 +424,8 @@ function calcResistenciasVasculares() {
         box.style.display = 'block';
         box.className = 'tfg-estado tfg-estado-danger';
         box.innerHTML = lineas.join('<br>') +
-            '<br><strong>⚠️ Combinación de valores no fisiológica</strong> — la PAD (presión de la aurícula derecha) introducida es igual o mayor que la PAM. Revisa los datos: en un paciente estable la PAM siempre supera a la PAD.';
+            '<br><strong>⚠️ Combinación de valores no fisiológica</strong> — la PAD (presión de la aurícula derecha) introducida es igual o mayor que la PAM. Revisa los datos: en un paciente estable la PAM siempre supera a la PAD.' +
+            avisoRvp;
         if (interpretacionEl) interpretacionEl.style.display = 'none';
         return;
     }
@@ -400,9 +433,10 @@ function calcResistenciasVasculares() {
     const zona = zonaRVS(rvs);
 
     box.style.display = 'block';
-    box.className = `tfg-estado tfg-estado-${zona.estado}`;
+    box.className = `tfg-estado tfg-estado-${avisoRvp ? 'danger' : zona.estado}`;
     box.innerHTML = lineas.join('<br>') +
-        '<br><span style="font-size:0.72rem;opacity:0.85;">Recuerda: la fuente advierte que RVS/RVP no reflejan fielmente la poscarga real, por el acoplamiento matemático con el propio GC.</span>';
+        '<br><span style="font-size:0.72rem;opacity:0.85;">Recuerda: la fuente advierte que RVS/RVP no reflejan fielmente la poscarga real, por el acoplamiento matemático con el propio GC.</span>' +
+        avisoRvp;
 
     if (interpretacionEl) {
         interpretacionEl.style.display = 'block';
@@ -484,6 +518,16 @@ function calcCostoFuncionamiento() {
     if (dobleProducto > 12000 || tripleProducto > 120000) estado = 'danger';
     else if (ppc < 60 || (indiceAporteConsumo !== null && indiceAporteConsumo < 0.6)) estado = 'warn';
 
+    // La presión diastólica sistémica (donde nace el flujo coronario) debe
+    // superar a la presión de referencia (cuña/PVC, aguas abajo) para que
+    // exista gradiente anterógrado — una PPC ≤0 sostenida es incompatible
+    // con la perfusión miocárdica, no solo "baja".
+    let avisoPpc = '';
+    if (ppc <= 0) {
+        estado = 'danger';
+        avisoPpc = `<br><strong>⚠️ Combinación de valores no fisiológica</strong> — la presión de referencia (${esDerecho ? 'PVC' : 'cuña/POAP'}) es igual o mayor que la PAD sistémica. Sin gradiente anterógrado no hay perfusión coronaria posible; revisa esos 2 datos.`;
+    }
+
     const lineas = [
         `Doble producto = FC × PAS = ${dobleProducto.toLocaleString('es')} (normal máx. 12.000)`,
         `Triple producto = doble producto × presión en cuña = ${tripleProducto.toLocaleString('es')} (normal máx. 120.000)`,
@@ -493,7 +537,7 @@ function calcCostoFuncionamiento() {
 
     box.style.display = 'block';
     box.className = `tfg-estado tfg-estado-${estado}`;
-    box.innerHTML = lineas.join('<br>');
+    box.innerHTML = lineas.join('<br>') + avisoPpc;
 
     actualizarGaugeCosto(dobleProducto, tripleProducto);
 }
@@ -535,6 +579,14 @@ function calcIDO2Ficha2() {
 
     const [gc, sc, hb, sao2, pao2] = els.map(e => Number(e.value));
     if (sc === 0) { box.style.display = 'none'; return; }
+    if (sao2 < 0 || sao2 > 100) {
+        box.style.display = 'block';
+        box.className = 'tfg-estado tfg-estado-danger';
+        box.innerHTML = '<strong>⚠️ Valor no fisiológico</strong> — la SaO₂ es un porcentaje de saturación y no puede ser negativa ni superar el 100%. Revisa el dato.';
+        const gaugeRow = document.getElementById('cardio-ido2-gauge-row');
+        if (gaugeRow) gaugeRow.style.display = 'none';
+        return;
+    }
 
     const cao2 = hb * 1.34 * (sao2 / 100) + pao2 * 0.003;
     const ic = gc / sc;

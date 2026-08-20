@@ -3348,6 +3348,47 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
     3 puntos se distinguen a simple vista. También se corrigió un
     desbordamiento del texto de la curva de retorno venoso desplazada,
     que se salía del `viewBox` en su posición original.
+  - **Avisos de "combinación no fisiológica" en las calculadoras de
+    Cardiología**, a petición explícita del usuario ("busca los límites
+    fisiológicos de las calculadoras... y pon una advertencia cuando meta
+    un dato que sea incompatible con la fisiología si es que fuera
+    científicamente y médicamente posible"). Revisadas una por una las 10
+    calculadoras/simuladores de `cardiologia.js`: los simuladores basados
+    solo en sliders (Frank-Starling, asa presión-volumen, fuerzas de
+    Starling capilar, artefacto RVS) no necesitan aviso porque cualquier
+    combinación dentro de su rango acotado ya es representable por el
+    modelo; los candidatos reales eran las calculadoras con campos
+    numéricos libres, donde cada campo por separado puede ser válido pero
+    la <em>combinación</em> no lo es — mismo criterio que el aviso de
+    PAD≥PAM ya añadido en la ronda anterior, extendido ahora a:
+    - **RVP** (Ficha 1, misma calculadora de resistencias): PAI≥PAMP —
+      sin gradiente de presión anterógrado no puede haber flujo pulmonar,
+      igual razonamiento que PAD/PAM para el lado sistémico.
+    - **Fick — sangre venosa más oxigenada que la arterial** (Ficha 1):
+      SvO₂&gt;SaO₂ o PvO₂&gt;PaO₂ — el oxígeno se extrae en los tejidos,
+      nunca se añade, así que la sangre venosa mixta no puede saturar más
+      que la arterial.
+    - **Saturaciones fuera de 0-100%** (Fick y IDO₂ Ficha 2, campos SaO₂/
+      SvO₂): a diferencia de los avisos anteriores (clínicamente
+      implausibles pero calculables), esta es una imposibilidad física
+      pura — un % no puede superar 100 — así que se valida aunque el
+      campo ya tenga `max="100"` en el HTML (que no impide escribir a
+      mano un valor mayor).
+    - **Costo de funcionamiento miocárdico** (Ficha 2): cuña/PVC ≥ PAD
+      diastólica sistémica → presión de perfusión coronaria ≤0, que sin
+      gradiente anterógrado es incompatible con la perfusión miocárdica
+      sostenida (no solo "baja", como ya marcaba el aviso `warn`
+      preexistente para PPC&lt;60).
+    Revisadas también, sin encontrar ningún cruce imposible que añadir:
+    Laplace (Ficha 1 y Ficha 3, parámetros geométricos/presión
+    independientes entre sí) y el diagrama mini de Laplace (un único
+    campo libre). Verificado con Playwright: los 6 avisos nuevos aparecen
+    exactamente con los datos que los disparan y desaparecen al corregir
+    el dato (SaO₂=150→aviso→98=normal; SvO₂=99&gt;SaO₂=98→aviso;
+    PvO₂=95&gt;PaO₂=90→aviso; PAI=20≥PAMP=15→aviso en la línea de RVP sin
+    romper la de RVS; SaO₂=120 en Ficha 2→aviso; cuña=80≥PAD=70→aviso con
+    PPC=-10 mostrado explícitamente); las 12 fichas y el resto de
+    calculadoras siguen funcionando sin error de consola ni 404 real.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
