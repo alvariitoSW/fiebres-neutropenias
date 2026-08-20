@@ -3323,6 +3323,31 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
     funcionar con normalidad; las notas cruzadas de TAPSE y DO₂I están
     presentes en el DOM; las 12 fichas siguen abriendo sin error de
     consola ni 404 real.
+  - **Placeholder de las Figuras 2-4 (Ficha 3) sustituido por un diagrama
+    real**, a petición explícita del usuario tras ver una captura de
+    móvil del recuadro punteado ("ahora quiero que corrijas esto que se
+    ve así de mal"). Era el único recuadro `📊 Placeholder` que quedaba en
+    todo el bloque de Cardiología (los 3 que siguen en el bloque de
+    Hematología de Fisiopatología UCI son de otro módulo, sin tocar). Se
+    recreó como SVG el diagrama clásico de Guyton que el texto ya describe
+    en prosa: 2 curvas de Starling (gasto cardíaco, normal vs. con
+    contractilidad deprimida) cruzándose con 2 curvas de retorno venoso
+    (normal vs. desplazada por retención de líquidos con MCFP más alta),
+    con los 3 puntos de equilibrio A→B→C ya nombrados en el texto
+    adyacente y las transiciones (1)/(2) marcadas. **Bug de color
+    encontrado y corregido durante la propia verificación con capturas de
+    Playwright, antes de darlo por bueno**: la primera versión usaba
+    `--accent-yellow` para los puntos A/B/C y `--accent-blue` para la
+    curva de Starling normal — en la paleta real de esta app (ver
+    `css/variables.css`) `--accent-blue` es en realidad un dorado
+    (`#d4af37`) casi idéntico a `--accent-yellow` (`#cf9a3e`), así que los
+    puntos se confundían visualmente con la curva. Corregido usando
+    `--text-main` (crema, con borde `--bg-main` para contraste) para los
+    3 puntos, dejando cada curva en un color de la paleta real
+    (verde/rojo/dorado/púrpura) — verificado que ahora los 4 trazos y los
+    3 puntos se distinguen a simple vista. También se corrigió un
+    desbordamiento del texto de la curva de retorno venoso desplazada,
+    que se salía del `viewBox` en su posición original.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
