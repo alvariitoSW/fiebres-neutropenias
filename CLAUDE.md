@@ -3195,6 +3195,73 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
       taponamiento cardíaco, TRIVI, retorno venoso sistémico) se
       detectan correctamente en el DOM; un recorrido por el quiz de los 3
       temas nuevos/ampliados no generó ninguna excepción JS.
+  - **Relectura verbatim de las páginas 137-142 y 163-167 del capítulo 10
+    y 11**, a petición explícita del usuario de "terminar las fichas que
+    queden por repasar" — en vez de fiarse de las notas de la ronda
+    anterior, se releyeron literalmente las páginas fuente del apartado
+    de microcirculación/mediadores (Cap. 10) y del cierre del capítulo de
+    interacción corazón-pulmón (Cap. 11), lo que permitió corregir
+    imprecisiones y añadir contenido más fiel al texto original:
+    - **Corrección real**: el "efecto paradójico" del NO en sepsis no era
+      (como se había escrito en la ronda anterior) que el exceso de NO
+      bloquee la extracción de O₂ vía adhesión leucocitaria — el propio
+      capítulo formula el paradójico al revés: la sobreproducción de NO
+      tiene un <em>efecto protector</em> sobre la microcirculación de los
+      órganos, de modo que <strong>inhibir</strong> el NO farmacológicamente
+      sube la PA pero no restaura el O₂ER/VO₂ y reduce el GC/DO₂, con
+      riesgo de insuficiencia cardíaca e hipoperfusión coronaria/
+      intestinal — el motivo real por el que los inhibidores no
+      selectivos de la NOS fracasaron en los ensayos de choque séptico.
+      Corregido en `cardiologia.html` y añadida `cardio-q135` para
+      fijarlo en el quiz.
+    - **Cascada leucocitaria ampliada** con los pasos exactos del texto
+      (quimiotaxis, reconocimiento por opsoninas/linfocitos, fagosomas
+      por macrófagos, degradación lisosomal) y el ejemplo concreto de
+      peritonitis secundaria/terciaria como fallo clásico de contención
+      local por fracaso de la migración neutrofílica.
+    - **Figura 7 del capítulo (heterogeneidad espacial y temporal del
+      flujo capilar) recreada con fidelidad** — la versión anterior
+      simplificaba en exceso (3 líneas "flujo normal/intermitente/
+      detenido" sin etiquetas de O₂ER/SvO₂); la nueva versión sigue la
+      Figura 7 real: capilar detenido con ↓O₂ER/↑SvO₂ local (la sangre
+      "no usada" vuelve con más oxígeno) junto a un capilar normal
+      adyacente que compensa con ↑O₂ER/↓SvO₂.
+    - **Tabla "Correlato clínico-temporal" (Figura 8) reescrita** con la
+      secuencia de 4 fases que el propio capítulo describe como la más
+      probable (heterogeneidad inicial → fase hiperdinámica compensadora
+      → prevalencia de flujo bajo/sin flujo → fase terminal de hiperoxia
+      por fallo mitocondrial) — la versión anterior tenía la direccionalidad
+      del O₂ER de la fase inicial invertida respecto a la fuente.
+    - **Nuevo acordeón "Correlación clínica: una brecha reconocida por los
+      propios autores"**, citando textualmente que el capítulo admite un
+      "eslabón perdido" en el conocimiento actual sobre el orden temporal
+      exacto entre los fenómenos microcirculatorios y el cuadro clínico —
+      antes la app presentaba la secuencia como si fuera un hecho
+      establecido, sin esa salvedad explícita de la fuente.
+    - **Gráfico de tarta SVG de la epidemiología por tipo de choque**
+      (62/16/16/4/2%, Ficha 10) — visualiza la tabla ya existente sin
+      añadir ningún dato nuevo, cierre del hueco de "Fig. 1" señalado en
+      la ronda de auditoría anterior.
+    - **Sección "Perspectivas futuras" añadida a la Ficha 11** (ausente
+      hasta ahora): la ecocardiografía como herramienta indispensable
+      para documentar los efectos de la VM, interpretable por
+      profesionales capacitados no necesariamente ecocardiografistas, la
+      necesidad de formación en ecocardiografía transesofágica, y las 3
+      técnicas avanzadas que el capítulo señala como de mayor utilidad
+      futura (velocidad de deformación/<em>strain</em> en miocardiopatía
+      séptica, modos 3D para valoración de cavidades, análisis detallado
+      de valvulopatías complejas).
+    - Añadidas **4 preguntas de quiz nuevas** (`cardio-q135`-`q138`,
+      incluida una de tipo `redactar` sobre la "brecha" reconocida en la
+      microcirculación séptica), llevando el banco de Cardiología a 133
+      preguntas y el banco combinado de la app a **1035 preguntas**.
+      Verificado con Playwright: las 12 fichas abren/voltean sin error de
+      consola ni 404 real; el donut de epidemiología, el párrafo del
+      efecto paradójico de inhibir el NO, el acordeón de la "brecha
+      reconocida", el ejemplo de peritonitis secundaria y la sección de
+      Perspectivas futuras se detectan correctamente en el DOM. Con esta
+      ronda se da por cerrada la auditoría fuente-a-fuente completa de
+      las 11 fichas de contenido clínico de Cardiología.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

@@ -1400,4 +1400,52 @@ export const preguntasCardiologia = [
         enunciado: 'Un paciente con sospecha de taponamiento cardíaco tiene pulso paradójico palpable dudoso. Describe qué hallazgo Doppler transvalvular buscarías para objetivarlo, y por qué se produce.',
         respuestaModelo: 'Buscaría la variación respiratoria marcada del flujo Doppler transmitral y transtricuspídeo: en el taponamiento, el flujo transmitral cae de forma marcada con la inspiración espontánea mientras que, en ese mismo momento, el flujo transtricuspídeo aumenta. Esto ocurre porque el taponamiento exagera la interdependencia ventricular fisiológica — al estar el corazón restringido por el líquido pericárdico a tensión, el aumento del retorno venoso al VD durante la inspiración (por la presión intratorácica negativa) solo puede acomodarse desplazando el septo interventricular hacia el VI, lo que reduce agudamente el llenado y el volumen de eyección del VI. Este patrón Doppler es el correlato ecocardiográfico directo y objetivable del pulso paradójico palpable, y es especialmente útil cuando la exploración física por sí sola genera dudas.',
     },
+
+    // ===== Preguntas añadidas tras la relectura verbatim de las páginas 137-142 (mediadores/NO/disoxia) y 165 (perspectivas futuras) =====
+    {
+        id: 'cardio-q135',
+        tema: 'cardio-estados-choque',
+        enunciado: '¿Por qué la inhibición farmacológica no selectiva del óxido nítrico (NO) en el choque séptico, pese a subir la PA, resultó decepcionante en los ensayos clínicos?',
+        opciones: [
+            'Porque no consigue subir la presión arterial en absoluto',
+            'Porque aumenta la PA pero no aumenta el O₂ER ni el VO₂, y reduce el GC y el DO₂, con riesgo de insuficiencia cardíaca e hipoperfusión coronaria/intestinal',
+            'Porque el NO no tiene ningún papel en la hipotensión séptica',
+            'Porque solo puede administrarse por vía inhalada',
+        ],
+        correcta: 1,
+        explicacion: 'La sobreproducción de NO tiene, además de su efecto hipotensor, un efecto protector sobre la microcirculación de los órganos. Inhibir el NO sube la PA pero no restaura la extracción/consumo de oxígeno (O₂ER, VO₂) y reduce el GC y el DO₂, con riesgo de progresar a insuficiencia cardíaca e hipoperfusión coronaria e intestinal — el motivo por el que "corregir" la PA con esta estrategia no mejoró la supervivencia en los ensayos.',
+    },
+    {
+        id: 'cardio-q136',
+        tema: 'cardio-estados-choque',
+        enunciado: 'En un capilar con flujo detenido durante la sepsis, ¿qué ocurre con la extracción de oxígeno (O₂ER) y la SvO₂ locales, y qué sucede en los capilares normales adyacentes?',
+        opciones: [
+            'Capilar detenido: O₂ER↑/SvO₂↓; capilares adyacentes: O₂ER↓/SvO₂↑',
+            'Capilar detenido: O₂ER↓/SvO₂↑ (la sangre "no usada" vuelve con más O₂); capilares adyacentes: O₂ER↑/SvO₂↓ (compensan descargando más O₂)',
+            'Ambos se comportan siempre igual, sin diferencias',
+            'La SvO₂ no puede medirse a nivel de un capilar individual bajo ninguna circunstancia',
+        ],
+        correcta: 1,
+        explicacion: 'En los capilares con flujo detenido, la extracción de O₂ está alterada (↓) y la SvO₂ local aumenta porque la sangre no es utilizada; en los capilares normales adyacentes ocurre lo contrario por un mecanismo compensador — mayor extracción (↑O₂ER) y menor SvO₂ local, porque terminan descargando más oxígeno al volumen de tejido que ya no reciben los capilares ocluidos.',
+    },
+    {
+        id: 'cardio-q137',
+        tema: 'cardio-estados-choque',
+        tipo: 'redactar',
+        enunciado: 'El capítulo reconoce explícitamente una "brecha" o "eslabón perdido" en el entendimiento de la microcirculación séptica. ¿Cuál es esa brecha, y qué secuencia temporal propone el capítulo pese a reconocerla?',
+        respuestaModelo: 'La brecha reconocida es que el orden temporal exacto de los eventos microcirculatorios durante la evolución de sepsis a choque séptico, y su correlación con el cuadro clínico observado en el paciente, todavía no está bien establecido — es decir, no sabemos con precisión "cuándo" en la evolución clínica ocurre cada fenómeno microcirculatorio. Pese a esta incertidumbre, el capítulo propone la secuencia que considera más probable: primero aparece la heterogeneidad del flujo capilar (flujo bajo con SvO₂ alto y O₂ER bajo, como hecho primario); esto desencadena una respuesta compensadora de mayor flujo en los capilares sanos adyacentes dentro del mismo tejido, lo que a nivel sistémico se traduce en la fase hiperdinámica (GC alto, DO₂ alto, RVS/PAM bajas, capacidad global de extracción disminuida, acidosis láctica) que termina cuando se alcanza la tasa de extracción crítica (SvO₂ 50%, metabolismo anaeróbico); si el daño persiste, predominan los capilares de flujo bajo/sin flujo, agravando la hipoxia por oclusión simple, hasta llegar a la fase terminal de hiperoxia por fallo mitocondrial (hipoxia citopática).',
+    },
+    {
+        id: 'cardio-q138',
+        tema: 'cardio-interaccion-corazon-pulmon',
+        enunciado: 'Según la sección "Perspectivas futuras" del capítulo, ¿qué técnicas ecocardiográficas avanzadas se señalan como de mayor utilidad futura para el paciente crítico?',
+        opciones: [
+            'Solo la medición aislada de la PVC por catéter venoso central',
+            'Velocidad de deformación (strain) en la miocardiopatía séptica, modos tridimensionales para valoración de cavidades, y análisis detallado de valvulopatías complejas',
+            'Únicamente la radiografía de tórax portátil',
+            'La ecocardiografía no tiene ningún papel futuro según el capítulo',
+        ],
+        correcta: 1,
+        explicacion: 'El capítulo señala que la especialidad deberá encontrar en las técnicas más avanzadas y complejas su mayor utilidad para el paciente crítico: la velocidad de deformación (strain) en la miocardiopatía séptica, los modos tridimensionales para la valoración precisa de cavidades, y el análisis detallado de valvulopatías complejas — junto con la necesidad de formar a más intensivistas en técnicas como la ecocardiografía transesofágica.',
+    },
 ];

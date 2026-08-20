@@ -2171,6 +2171,23 @@
                     <tr><td>Obstructivo</td><td>2%</td></tr>
                 </tbody>
             </table>
+
+            <div class="article-figure">
+                <svg viewBox="0 0 220 220" style="width:100%; max-width:220px; margin:8px auto; display:block; background:var(--bg-card,#10131c); border-radius:10px;">
+                    <g transform="translate(110,110) rotate(-90)">
+                        <circle r="70" fill="none" stroke="#334155" stroke-width="34"/>
+                        <circle r="70" fill="none" stroke="var(--accent-red)" stroke-width="34" stroke-dasharray="272.7 439.8" stroke-dashoffset="0"/>
+                        <circle r="70" fill="none" stroke="var(--accent-blue)" stroke-width="34" stroke-dasharray="70.4 439.8" stroke-dashoffset="-272.7"/>
+                        <circle r="70" fill="none" stroke="var(--accent-green)" stroke-width="34" stroke-dasharray="70.4 439.8" stroke-dashoffset="-343.1"/>
+                        <circle r="70" fill="none" stroke="#eab308" stroke-width="34" stroke-dasharray="17.6 439.8" stroke-dashoffset="-413.5"/>
+                        <circle r="70" fill="none" stroke="#a78bfa" stroke-width="34" stroke-dasharray="8.8 439.8" stroke-dashoffset="-431.1"/>
+                    </g>
+                    <text x="110" y="106" font-size="22" text-anchor="middle" fill="var(--text-primary,#e5e7eb)" font-weight="600">62%</text>
+                    <text x="110" y="124" font-size="9" text-anchor="middle" fill="var(--text-muted)">séptico</text>
+                </svg>
+                <div class="article-figure-caption">Distribución por tipo de choque: distributivo séptico 62% (rojo), cardiogénico 16% (azul), hipovolémico 16% (verde), distributivo no séptico 4% (amarillo), obstructivo 2% (violeta).</div>
+            </div>
+
             <p style="font-size: 0.85rem; line-height: 1.6;">
                 El choque séptico es la manifestación más severa de la sepsis, con mortalidad 40-50% e incidencia
                 6,3-14,7% (aún en crecimiento). El choque cardiogénico tiene incidencia 6-9%, con mortalidad
@@ -2262,47 +2279,56 @@
                 inmediata (toda la microcirculación, por daño endotelial directo) y una respuesta persistente
                 retardada de inicio lento (capilares y vénulas).
             </p>
-            <dl class="kv-row"><dt>El NO como principal factor de hipotensión refractaria</dt><dd>El óxido nítrico mantiene la homeostasis microvascular regulando el tono arteriolar en condiciones fisiológicas (vasodilatación dependiente del endotelio, vía eNOS constitutiva). Durante la sepsis, la sobreproducción de NO (vía la isoforma <strong>inducible, iNOS</strong>, activada por endotoxina/citocinas) inhibe la liberación de vasopresina — se considera el <strong>principal factor de la hipotensión refractaria</strong> en la sepsis. La sobreproducción de NO también se asocia con reactividad microvascular reducida, deformabilidad de glóbulos rojos disminuida y adhesión de leucocitos bloqueada — un aparente <span class="hl">efecto paradójico</span>: el mismo exceso de NO que vasodilata y baja la PA de forma refractaria, al bloquear la adhesión leucocitaria a nivel capilar, también podría limitar la extracción tisular de oxígeno (↓OEI) pese al aumento del gasto cardíaco y del VO₂ global característico de la fase hiperdinámica.</dd></dl>
+            <dl class="kv-row"><dt>El NO como principal factor de hipotensión refractaria</dt><dd>El NO mantiene la homeostasis microvascular regulando el tono arteriolar, los glóbulos rojos y la deformabilidad de los leucocitos, la adhesión leucocitaria endotelial en las vénulas poscapilares, la adhesión/agregación plaquetaria y hasta la respiración mitocondrial. Se considera el <strong>principal factor de la hipotensión refractaria</strong> de la sepsis — el mecanismo subyacente es que el NO inhibe la liberación de vasopresina (AVP) durante la endotoxemia. Su sobreproducción también se asocia con reactividad microvascular reducida, deformabilidad de los glóbulos rojos disminuida, densidad capilar funcional disminuida y adhesión de leucocitos bloqueada.</dd></dl>
+            <dl class="kv-row"><dt>El efecto paradójico de <em>inhibir</em> el NO</dt><dd>La sobreproducción de NO baja la PA, pero también tiene un <span class="hl">efecto protector sobre la microcirculación de los órganos</span> — de ahí la paradoja clínica: la <strong>inhibición</strong> del NO (p. ej. con un bloqueante no selectivo de la NOS) aumenta la PA, pero <strong>no</strong> aumenta el O₂ER ni el VO₂, y resulta en una disminución del GC y del DO₂, con riesgo de progresar a insuficiencia cardíaca y a hipoperfusión coronaria e intestinal. Es la base fisiológica de por qué los ensayos clínicos de inhibidores no selectivos de la NOS en el choque séptico no mejoraron la supervivencia pese a "corregir" la PA.</dd></dl>
 
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Cascada leucocitaria y daño del glucocálix</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
-                        <dl class="kv-row"><dt>Secuencia de adhesión</dt><dd>Margination (los leucocitos se desplazan hacia la pared del vaso) → rodamiento (<em>rolling</em>, mediado por selectinas) → adhesión firme (mediada por integrinas) → transmigración a través de la pared endotelial → fagocitosis del patógeno → muerte del leucocito por sus propios radicales libres de oxígeno (ROS), que además dañan el endotelio adyacente de forma colateral.</dd></dl>
-                        <dl class="kv-row"><dt>Pulmón e hígado: adhesión independiente de selectinas</dt><dd>A diferencia de la mayoría de los lechos capilares (donde la adhesión depende de selectinas/integrinas), en la microcirculación pulmonar y hepática los neutrófilos pueden adherirse por mecanismos independientes — relevante porque explica por qué estos 2 órganos son con frecuencia los primeros en fallar en la sepsis (SDRA, disfunción hepática).</dd></dl>
-                        <dl class="kv-row"><dt>Ventana temporal crítica (~6 horas)</dt><dd>Si la migración efectiva de neutrófilos hacia el foco infeccioso no ocurre en las primeras <strong>~6 horas</strong>, se asocia a mayor mortalidad — un fallo de la respuesta inmune local temprana, no solo de la hemodinamia sistémica, ya predice mal pronóstico.</dd></dl>
-                        <dl class="kv-row"><dt>Glucocálix</dt><dd>La capa de glucocálix que recubre la superficie luminal del endotelio (barrera fisiológica que regula la permeabilidad capilar) se degrada por los ROS liberados durante la cascada leucocitaria — su pérdida es uno de los mecanismos directos de la fuga capilar séptica (ver el dato del 20%/hora de fuga de albúmina, más abajo).</dd></dl>
+                        <dl class="kv-row"><dt>Secuencia completa</dt><dd>Margination del flujo laminar (los leucocitos se desplazan hacia la pared del vaso) → unión laminar por rodamiento leucocitario (<em>rolling</em>, mediado por selectinas) → adhesión (mediada por integrinas) → transmigración/diapédesis por contractilidad y cambios en la conformación de pseudópodos. El proceso se completa con: quimiotaxis; reconocimiento del objetivo a través de opsoninas o linfocitos; envoltura del agente lesivo en fagosomas por macrófagos; degradación enzimática en lisosomas; y muerte a través de radicales de oxígeno, aniones superóxido o sus productos (p. ej. peróxido de hidrógeno) — estos mismos radicales dañan colateralmente células y tejidos sanos.</dd></dl>
+                        <dl class="kv-row"><dt>Pulmón e hígado: adhesión independiente</dt><dd>En los leucocitos del pulmón y el hígado, la adhesión puede ocurrir de forma independiente de este mecanismo habitual — esto puede explicar por qué la neumonía y la hepatitis son más fáciles de detectar clínicamente que la miositis o la miocarditis.</dd></dl>
+                        <dl class="kv-row"><dt>Ventana temporal crítica (~6 horas)</dt><dd>La reacción inflamatoria se vuelve potencialmente mortal cuando se prolonga más allá de la interacción local con la causa primaria, o al volverse sistémica — se necesitan alrededor de <strong>seis horas</strong> para esta activación. La reducción o el fracaso de la migración de neutrófilos a los sitios de infección se asocia con mal resultado en la sepsis; la <strong>peritonitis secundaria y la terciaria</strong> son ejemplos clásicos de este fallo de contención local.</dd></dl>
+                        <dl class="kv-row"><dt>Glucocálix</dt><dd>Los leucocitos activados por la inflamación séptica generan especies reactivas de oxígeno (ERO) que desorganizan las estructuras microcirculatorias, incluidas las uniones entre células y, posiblemente, la glucocálix endotelial — lo que produce edema tisular y un mayor déficit de extracción de oxígeno. La intensidad y la persistencia de este daño se correlacionan con la falla orgánica múltiple y la muerte.</dd></dl>
                     </div>
                 </div>
             </div>
 
-            <dl class="kv-row"><dt>Disoxia y heterogeneidad del flujo capilar</dt><dd>La disoxia en sepsis es una discrepancia entre entrega y extracción de oxígeno, causada por la distribución inadecuada del flujo — heterogeneidad espacial y temporal: capilares poco perfundidos (flujo detenido) junto a otros con flujo anormalmente alto, incluso dentro de la misma región tisular. Fase hiperdinámica: ↑GC, ↑DO₂, ↓RVS, ↓capacidad de extracción con acidosis láctica — cuando la SvO₂ llega a 50%, el metabolismo se vuelve anaeróbico.</dd></dl>
+            <dl class="kv-row"><dt>Disoxia y heterogeneidad espacial/temporal del flujo capilar</dt><dd>La disoxia en sepsis es una discrepancia entre la entrega y la extracción de oxígeno, causada por la distribución inadecuada del flujo — se explica por el fenómeno de heterogeneidad espacial y temporal del flujo capilar: capilares poco perfundidos (densidad capilar reducida, flujo lento/detenido) junto a otros con flujo sanguíneo anormalmente alto, incluso dentro del mismo tejido — notable en el músculo esquelético, las vellosidades intestinales, el diafragma, la lengua y el hígado. Ocurre tanto en normotensión como en hipotensión.</dd></dl>
+            <dl class="kv-row"><dt>Cómo se comporta cada capilar por separado</dt><dd>En los capilares con flujo <strong>detenido</strong>, la extracción de oxígeno (O₂ER) está alterada (↓) y la SvO₂ local está <strong>aumentada</strong> — la sangre "no usada" vuelve con más oxígeno. En los capilares <strong>normales adyacentes</strong>, ocurre lo contrario por un mecanismo compensador: la extracción de oxígeno aumenta (↑) y la SvO₂ local disminuye, porque esos capilares terminan descargando más oxígeno al mayor volumen de tejido circundante que ya no reciben los capilares ocluidos.</dd></dl>
 
             <div class="article-figure">
-                <svg viewBox="0 0 340 150" style="width:100%; max-width:440px; margin:8px auto; display:block; background:var(--bg-card,#10131c); border-radius:10px;">
-                    <text x="10" y="18" font-size="10" fill="var(--text-muted)">Heterogeneidad del flujo capilar en sepsis</text>
-                    <line x1="20" y1="45" x2="320" y2="45" stroke="var(--accent-blue)" stroke-width="6" stroke-linecap="round"/>
-                    <polygon points="300,40 315,45 300,50" fill="var(--accent-blue)"/>
-                    <text x="20" y="35" font-size="8" fill="var(--accent-blue)">Flujo normal</text>
-                    <line x1="20" y1="80" x2="320" y2="80" stroke="var(--accent-green)" stroke-width="6" stroke-linecap="round" stroke-dasharray="10,4"/>
-                    <text x="20" y="70" font-size="8" fill="var(--accent-green)">Flujo intermitente</text>
-                    <line x1="20" y1="115" x2="180" y2="115" stroke="#6b7280" stroke-width="6" stroke-linecap="round"/>
-                    <line x1="180" y1="105" x2="200" y2="125" stroke="var(--accent-red)" stroke-width="3"/>
-                    <line x1="200" y1="105" x2="180" y2="125" stroke="var(--accent-red)" stroke-width="3"/>
-                    <line x1="220" y1="115" x2="320" y2="115" stroke="#6b7280" stroke-width="6" stroke-linecap="round"/>
-                    <text x="20" y="105" font-size="8" fill="var(--accent-red)">Flujo detenido (capilar "no perfundido")</text>
+                <svg viewBox="0 0 360 230" style="width:100%; max-width:460px; margin:8px auto; display:block; background:var(--bg-card,#10131c); border-radius:10px;">
+                    <text x="10" y="18" font-size="10" fill="var(--text-muted)">Heterogeneidad espacial y temporal del flujo capilar (Fig. 7)</text>
+                    <path d="M20,60 C80,30 120,90 180,60 C240,30 280,90 340,60" fill="none" stroke="var(--accent-blue)" stroke-width="5" stroke-linecap="round"/>
+                    <circle cx="70" cy="46" r="4" fill="#a78bfa"/>
+                    <circle cx="150" cy="72" r="4" fill="#a78bfa"/>
+                    <circle cx="230" cy="46" r="4" fill="#a78bfa"/>
+                    <circle cx="300" cy="72" r="4" fill="#a78bfa"/>
+                    <text x="80" y="20" font-size="8" fill="var(--text-muted)">Disfunción endotelial · glucocálix alterado</text>
+                    <rect x="215" y="90" width="120" height="34" rx="6" fill="rgba(59,130,246,0.12)" stroke="var(--accent-blue)"/>
+                    <text x="275" y="104" font-size="9" text-anchor="middle" fill="var(--accent-blue)">↑O₂ER / ↓SvO₂</text>
+                    <text x="275" y="116" font-size="7.5" text-anchor="middle" fill="var(--text-muted)">capilar normal (compensa)</text>
+                    <rect x="25" y="90" width="150" height="34" rx="6" fill="rgba(239,68,68,0.12)" stroke="var(--accent-red)"/>
+                    <text x="100" y="104" font-size="9" text-anchor="middle" fill="var(--accent-red)">↓Flujo / ↓O₂ER / ↑SvO₂</text>
+                    <text x="100" y="116" font-size="7.5" text-anchor="middle" fill="var(--text-muted)">capilar detenido/hipoperfundido</text>
+                    <text x="20" y="150" font-size="8" fill="var(--text-muted)">🔵 Glóbulos rojos (deformabilidad alterada)   🟣 Leucocitos (adhesión a la pared)</text>
+                    <text x="20" y="168" font-size="7.5" fill="var(--text-muted)">Fig. 7 del capítulo: la pérdida de perfusión en los capilares afectados se</text>
+                    <text x="20" y="180" font-size="7.5" fill="var(--text-muted)">acompaña de una tasa de extracción alterada y ↑SvO₂ local; en los capilares</text>
+                    <text x="20" y="192" font-size="7.5" fill="var(--text-muted)">normales adyacentes ocurre lo contrario (↑O₂ER, ↓SvO₂) — la extracción</text>
+                    <text x="20" y="204" font-size="7.5" fill="var(--text-muted)">global sigue siendo alta pese a la mala distribución local.</text>
                 </svg>
-                <div class="article-figure-caption">Heterogeneidad microcirculatoria séptica: capilares vecinos con flujo normal, intermitente o completamente detenido coexisten en el mismo lecho tisular — la causa de la disoxia, distinta de una simple caída global del DO₂.</div>
+                <div class="article-figure-caption">Fenómeno de heterogeneidad espacial y temporal del flujo capilar (recreación esquemática de la Figura 7 del capítulo).</div>
             </div>
 
             <div class="micro-profiles">
                 <div class="micro-prof-item">
-                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚠️ Correlación clínica: los límites de la SvO₂/ScvO₂</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">La SvO₂/ScvO₂ refleja el balance <strong>global</strong> entre entrega y consumo de oxígeno, pero no detecta la heterogeneidad microcirculatoria regional descrita arriba — un paciente puede tener una SvO₂ normal o incluso alta con áreas tisulares en disoxia franca, porque la sangre venosa mezclada "promedia" capilares bien perfundidos con otros sin flujo. Esta es una de las razones por las que la corrección aislada de la SvO₂ no garantiza la resolución de la hipoxia tisular real.</div>
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚠️ "Correlación clínica": una brecha reconocida por los propios autores</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">El propio capítulo lo señala explícitamente como una limitación del conocimiento actual: <span class="hl">existe una brecha, un eslabón perdido, entre los fenómenos observados en la microcirculación durante la sepsis y el cuadro clínico</span> en cuanto al momento y su correlación — el orden temporal exacto de los eventos microcirculatorios durante la evolución de sepsis→choque séptico aún no está claro. La secuencia que mejor se sostiene hoy: la heterogeneidad debe ser la primera alteración (flujo capilar bajo con SvO₂ alto y O₂ER bajo como hecho primario) → esto provoca mayor flujo compensador en capilares adyacentes dentro del mismo tejido (fase <strong>hiperdinámica</strong> sistémica: ↑GC, ↑DO₂, ↓RVS/PAM, ↓capacidad global de extracción, acidosis láctica) → esta fase de "dependencia del suministro patológico" finaliza cuando se alcanza la tasa de extracción crítica (SvO₂ 50% → metabolismo anaeróbico) → si el daño persiste, sigue una fase con prevalencia de capilares de flujo bajo/sin flujo, agravando la hipoxia disóxica por la simple oclusión.</div>
                 </div>
                 <div class="micro-prof-item">
-                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔻 Fase terminal: fallo mitocondrial e hipoxia citopática</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">Si el choque progresa sin corrección, el problema deja de ser solo de <em>entrega/distribución</em> de oxígeno para convertirse en un fallo de <strong>utilización celular</strong> — la mitocondria, aun recibiendo oxígeno, pierde la capacidad de emplearlo en la fosforilación oxidativa (disfunción de la cadena respiratoria, en parte por el propio NO y sus derivados nitrosativos). Este estado, conocido como <strong>hipoxia citopática</strong>, explica por qué en la fase terminal del choque la célula puede fallar pese a un DO₂ aparentemente adecuado — el correlato final de la disoxia que inicia el proceso.</div>
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔻 Fase terminal: hiperoxia, fallo mitocondrial e hipoxia citopática</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Una vez que persiste la lesión de las células endoteliales, la disfunción se convierte en daño estructural — empeoramiento de la respuesta inflamatoria local, mayor agregación de leucocitos/plaquetas y fibrinólisis deteriorada, que agravan la hipoxia disóxica por oclusión simple. El endotelio de las arteriolas pierde la capacidad de responder a los estímulos vasomotores, y se hace presente la <strong>hiperoxia</strong> (↑↑SvO₂) — indicando ya no un problema de entrega sino una <strong>insuficiencia mitocondrial (hipoxia citopática)</strong> como etapa terminal: la mitocondria, aun recibiendo oxígeno, ya no puede utilizarlo. El nivel de disfunción respiratoria mitocondrial se correlaciona directamente con el resultado del paciente — y es probable que, ya en la fase inicial de la sepsis, la disfunción de la microcirculación y el fallo mitocondrial coexistan, indicando una insuficiencia de los mecanismos de compensación desde etapas tempranas.</div>
                 </div>
             </div>
 
@@ -2374,16 +2400,17 @@
                 <div class="article-figure-caption">El triángulo endotelio–inflamación–coagulación: cada vértice amplifica a los otros dos, formando un círculo vicioso que converge en la CID y agrava la isquemia tisular.</div>
             </div>
 
-            <p class="section-label" style="margin-top:16px;">Correlato clínico-temporal: flujo capilar, extracción de O₂ y SvO₂</p>
+            <p class="section-label" style="margin-top:16px;">Correlato clínico-temporal: flujo capilar, extracción de O₂ y SvO₂ (Figura 8)</p>
             <table class="data-table">
-                <thead><tr><th>Fase</th><th>Flujo capilar</th><th>OEI (extracción de O₂)</th><th>SvO₂</th></tr></thead>
+                <thead><tr><th>Fase</th><th>Flujo capilar</th><th>O₂ER (extracción de O₂)</th><th>SvO₂ sistémica</th></tr></thead>
                 <tbody>
-                    <tr><td>Temprana (compensada)</td><td>Heterogéneo, predominio conservado</td><td>↑ (compensa el DO₂ límite)</td><td>Normal/límite-bajo</td></tr>
-                    <tr><td>Intermedia (disoxia establecida)</td><td>Heterogéneo, áreas sin flujo junto a otras con shunt</td><td>Limitada (no puede compensar más)</td><td>Variable — puede parecer engañosamente normal</td></tr>
-                    <tr><td>Tardía (fallo de extracción)</td><td>Predominio de capilares no perfundidos</td><td>Colapsada (defecto de extracción, no solo de entrega)</td><td>Alta pese a la disoxia (la sangre "no usada" vuelve con más O₂)</td></tr>
+                    <tr><td>1. Heterogeneidad inicial</td><td>Flujo capilar bajo — el hecho primario, en algunas zonas</td><td>Bajo en esas zonas (localmente)</td><td>Alto en esas zonas (localmente)</td></tr>
+                    <tr><td>2. Hiperdinámica (compensadora)</td><td>Mayor flujo en capilares adyacentes sanos, dentro del mismo tejido</td><td>Disminuida globalmente pese al esfuerzo compensador</td><td>Sistémica cae hasta el umbral crítico (50% → anaerobiosis)</td></tr>
+                    <tr><td>3. Prevalencia de flujo bajo/sin flujo</td><td>Predominan los capilares de flujo bajo/sin flujo</td><td>Disminuido, con hipoxia</td><td>Adecuada/prevalente — "engañosamente" normal</td></tr>
+                    <tr><td>4. Terminal (fallo mitocondrial)</td><td>Endotelio arteriolar sin respuesta a estímulos vasomotores</td><td>Colapsado — defecto de utilización, no solo de entrega</td><td>Hiperoxia (↑↑) — la célula ya no extrae el O₂ disponible</td></tr>
                 </tbody>
             </table>
-            <p style="font-size: 0.75rem; color: var(--text-muted);">OEI: índice de extracción de oxígeno. Esta progresión es la base fisiológica de por qué una SvO₂ "normal" o alta no descarta disoxia tisular en fases avanzadas del choque séptico (ver la nota de "Correlación clínica" más arriba).</p>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">O₂ER: índice de extracción de oxígeno. El propio capítulo advierte que el orden temporal exacto entre estas fases y el cuadro clínico observado todavía no está bien establecido (ver "Correlación clínica" más arriba) — esta tabla resume la secuencia que la fuente considera más probable, no un algoritmo validado.</p>
 
             <p class="section-label" style="margin-top:16px;">Mecanismos de respuesta compensadora</p>
             <div class="micro-profiles">
@@ -2525,6 +2552,21 @@
                 <div class="article-figure-caption">Estudio ultrasónico de la vena cava inferior en ventana subcostal, en espiración (A) e inspiración espontánea (B).</div>
             </div>
             <p style="font-size: 0.8rem; color: var(--text-muted);">👉 La valoración ultrasónica siempre debe complementar el contexto clínico del enfermo — un colapso del 50% de la VCI puede sugerir presión de AD baja, pero factores como la alineación no tangencial, el esfuerzo respiratorio aumentado o la hipertensión de la arteria pulmonar pueden sesgar la interpretación.</p>
+
+            <p class="section-label" style="margin-top:16px;">Perspectivas futuras</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La ecocardiografía es una herramienta <strong>indispensable</strong> para documentar los efectos de
+                la VM sobre la hemodinamia, sobre todo cuando otros métodos de monitorización no están disponibles
+                a la cabecera del enfermo o simplemente no han logrado ser útiles. Los parámetros descritos en esta
+                ficha pueden ser obtenidos e interpretados por profesionales capacitados, no necesariamente
+                ecocardiografistas — pero en tanto otras técnicas (como la <strong>ecocardiografía
+                transesofágica</strong>) se difunden entre el personal de atención al enfermo crítico, es necesario
+                promover la formación adecuada de los intensivistas en esta habilidad. La especialidad deberá
+                encontrar en las técnicas más avanzadas y complejas su mayor utilidad futura para el paciente
+                crítico: <span class="hl">velocidad de deformación (<em>strain</em>) en la miocardiopatía
+                séptica</span>, modos tridimensionales para la valoración precisa de cavidades, y el análisis
+                detallado de valvulopatías complejas.
+            </p>
 
             <p class="section-label" style="margin-top:16px;">Conclusiones</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
