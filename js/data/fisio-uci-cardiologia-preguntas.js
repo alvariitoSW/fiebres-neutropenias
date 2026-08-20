@@ -1254,4 +1254,53 @@ export const preguntasCardiologia = [
         correcta: 1,
         explicacion: 'El endotelio controla el tono vasomotor mediante la secreción de sustancias vasodilatadoras (óxido nítrico y prostaciclina) o vasoconstrictoras (angiotensina II y endotelina-1), además de realizar funciones antiinflamatorias, antitrombóticas y de fibrinólisis microvascular.',
     },
+
+    // ===== Preguntas sobre los nuevos elementos interactivos (Ficha 1):    =====
+    // simulador de la curva de Frank-Starling y animación del ciclo cardíaco.
+    {
+        id: 'cardio-q119',
+        tema: 'cardio-fisiologia-aplicada',
+        enunciado: 'Según el capítulo, ¿qué le ocurre a la fuerza de contracción cuando la precarga (presión o volumen) es excesiva, más allá del rango fisiológico normal?',
+        opciones: [
+            'Sigue aumentando de forma indefinida sin ningún límite',
+            'Se produce una meseta con posterior reducción de la fuerza de contracción',
+            'Cae a cero de forma inmediata',
+            'No tiene ningún efecto sobre la contractilidad',
+        ],
+        correcta: 1,
+        explicacion: 'El incremento en la precarga ventricular aumenta la contractilidad como fenómeno fisiológico básico, pero este fenómeno dinámico tiene un límite: tanto la presión como el volumen excesivo causan una meseta con posterior reducción en la fuerza de contracción (ley de Starling del corazón) — es precisamente la forma que reproduce el simulador interactivo de la ficha (curva que sube, alcanza un pico y luego declina levemente).',
+    },
+    {
+        id: 'cardio-q120',
+        tema: 'cardio-fisiologia-aplicada',
+        enunciado: 'En el simulador interactivo de la curva de Frank-Starling, ¿qué representa mover el punto de trabajo hacia la curva "disminuida"?',
+        opciones: [
+            'Un estado de contractilidad aumentada por inotrópicos',
+            'Un estado de falla sistólica, con un volumen sistólico máximo menor y alcanzado con más precarga',
+            'Ningún cambio real en la fisiología cardíaca',
+            'Un aumento de la frecuencia cardíaca únicamente',
+        ],
+        correcta: 1,
+        explicacion: 'La curva "disminuida" representa un estado de falla sistólica: para la misma precarga, el ventrículo genera un volumen sistólico menor, y necesita más precarga para alcanzar su (menor) pico — un ventrículo con menos reserva contráctil, desplazado hacia abajo y a la derecha respecto a la curva normal.',
+    },
+    {
+        id: 'cardio-q121',
+        tema: 'cardio-fisiologia-aplicada',
+        enunciado: 'En la animación dinámica del ciclo cardíaco de la ficha, ¿en qué fase se produce el primer ruido cardíaco (S1)?',
+        opciones: [
+            'Fase A, sístole auricular',
+            'Fase B, contracción isovolumétrica (cierre de las válvulas AV)',
+            'Fase E, relajación isovolumétrica',
+            'Fase G, diástasis',
+        ],
+        correcta: 1,
+        explicacion: 'S1 se produce al cierre de las válvulas mitral y tricúspide, al inicio de la contracción isovolumétrica (fase B) — coincide con el complejo QRS del ECG, que marca la despolarización ventricular que dispara la contracción.',
+    },
+    {
+        id: 'cardio-q122',
+        tema: 'cardio-fisiologia-aplicada',
+        tipo: 'redactar',
+        enunciado: 'Usando la animación del ciclo cardíaco como referencia, explica por qué la incisura dicrótica de la curva de presión aórtica aparece justo al final de la fase D (eyección lenta) y no antes, y qué relevancia clínica tiene ese momento exacto.',
+        respuestaModelo: 'La incisura dicrótica es la pequeña muesca que aparece en la curva de presión aórtica en el momento exacto en que se cierra la válvula aórtica. Esto ocurre cuando la presión ventricular cae por debajo de la presión aórtica — es decir, justo al final de la fase D (eyección lenta), cuando el ventrículo ya ha perdido el momentum de la eyección rápida y su presión empieza a caer más rápido que la aórtica. En ese instante el flujo neto hacia adelante se detiene y, de hecho, hay un breve reflujo de sangre hacia el ventrículo que es interceptado por las valvas aórticas al cerrarse, generando la pequeña muesca (notch) característica antes de que la presión aórtica retome su descenso diastólico suave. Este punto marca el inicio de la fase E (relajación isovolumétrica) y es clínicamente relevante porque es la referencia temporal que usa el balón de contrapulsación intraaórtico para sincronizarse: debe inflarse justo después de la incisura dicrótica (es decir, al inicio de la diástole, cuando aumenta la perfusión coronaria) y desinflarse justo antes de la siguiente sístole (para reducir la poscarga en el momento en que el ventrículo va a eyectar). Un balón mal sincronizado, inflado antes o después de este punto exacto, pierde gran parte de su beneficio hemodinámico o incluso puede ser perjudicial.',
+    },
 ];

@@ -1,5 +1,74 @@
 import { initCorkboard } from '../../core/corkboard.js';
 
+// Simulador de la curva de Frank-Starling (Ficha 1) — modelo ilustrativo
+// "pico con reducción posterior" (f(x) = A * (x/xp) * e^(1-x/xp)), elegido
+// porque la propia fuente describe la curva como una meseta con posterior
+// reducción de la fuerza ante presión/volumen excesivos (no una recta ni
+// una simple saturación monótona). NO es una fórmula clínica real de la
+// fuente — es puramente cualitativo, como el .tfg-simulador de Nefrología.
+const FS_CURVAS = {
+    aumentada: { A: 118, xp: 55 },
+    normal: { A: 100, xp: 70 },
+    disminuida: { A: 62, xp: 85 },
+};
+function calcFrankStarlingSimulador() {
+    const precargaEl = document.getElementById('cardio-fs-precarga');
+    const estadoEl = document.getElementById('cardio-fs-estado');
+    const marker = document.getElementById('cardio-fs-marker');
+    const guideV = document.getElementById('cardio-fs-guia-v');
+    const guideH = document.getElementById('cardio-fs-guia-h');
+    const valorEl = document.getElementById('cardio-fs-precarga-valor');
+    const salidaEl = document.getElementById('cardio-fs-resultado');
+    if (!precargaEl || !estadoEl || !marker) return;
+
+    const precarga = Number(precargaEl.value);
+    const curva = FS_CURVAS[estadoEl.value];
+    const vsRaw = curva.A * (precarga / curva.xp) * Math.exp(1 - precarga / curva.xp);
+    const vs = Math.max(0, Math.min(vsRaw, 130));
+
+    const svgX = 40 + (precarga / 100) * 260;
+    const svgY = 140 - vs;
+
+    marker.setAttribute('cx', svgX);
+    marker.setAttribute('cy', svgY);
+    if (guideV) { guideV.setAttribute('x1', svgX); guideV.setAttribute('x2', svgX); guideV.setAttribute('y2', svgY); }
+    if (guideH) { guideH.setAttribute('y1', svgY); guideH.setAttribute('y2', svgY); guideH.setAttribute('x2', svgX); }
+    if (valorEl) valorEl.textContent = `${precarga}%`;
+
+    document.querySelectorAll('.cardio-fs-curva').forEach(p => p.classList.remove('cardio-fs-curva-activa'));
+    const activa = document.getElementById(`cardio-fs-curva-${estadoEl.value}`);
+    if (activa) activa.classList.add('cardio-fs-curva-activa');
+
+    if (salidaEl) {
+        const pct = curva.A > 0 ? Math.round((vs / curva.A) * 100) : 0;
+        const etiquetaEstado = { aumentada: 'aumentada (inotrópico +)', normal: 'normal', disminuida: 'disminuida (falla sistólica)' }[estadoEl.value];
+        salidaEl.textContent = `Volumen sistólico relativo: ≈${pct}% del máximo alcanzable con contractilidad ${etiquetaEstado} (modelo ilustrativo, no una cifra clínica real).`;
+    }
+}
+
+// Controles de la animación del ciclo cardíaco (Ficha 1) — la animación en
+// sí es 100% CSS (@keyframes sobre x del cursor, opacity de las etiquetas
+// de fase y r de los pulsos de tonos cardíacos), sin requestAnimationFrame;
+// aquí solo se conecta el botón pausa/reanuda y el selector de velocidad,
+// que cambian una clase y la custom property --ciclo-duracion.
+function initCicloCardiacoAnimado() {
+    const container = document.getElementById('cardio-wiggers-anim');
+    if (!container) return;
+    const btn = document.getElementById('cardio-wiggers-playpause');
+    if (btn) {
+        btn.addEventListener('click', () => {
+            container.classList.toggle('paused');
+            btn.textContent = container.classList.contains('paused') ? '▶ Reanudar' : '⏸ Pausar';
+        });
+    }
+    const speedSel = document.getElementById('cardio-wiggers-velocidad');
+    if (speedSel) {
+        speedSel.addEventListener('change', () => {
+            container.style.setProperty('--ciclo-duracion', speedSel.value);
+        });
+    }
+}
+
 // Principio de Fick (Ficha 1: Fisiología cardíaca aplicada) — CaO2, DO2 y,
 // si se dan datos venosos, CvO2/VO2/EO2. DO2/VO2 se multiplican x10 para
 // convertir el CaO2 (mL/dL) x GC (L/min) a mL/min, igual que la Tabla 12
@@ -181,6 +250,12 @@ function calcLaplaceTension() {
 
 export function init() {
     initCorkboard('cardio-corkboard', 'panel-cardio-tabs');
+
+    document.querySelectorAll('#cardio-fs-precarga, #cardio-fs-estado')
+        .forEach(el => el && el.addEventListener('input', calcFrankStarlingSimulador));
+    calcFrankStarlingSimulador();
+
+    initCicloCardiacoAnimado();
 
     document.querySelectorAll('#cardio-fick-hb, #cardio-fick-sao2, #cardio-fick-pao2, #cardio-fick-fc, #cardio-fick-vs, #cardio-fick-sc, #cardio-fick-svo2, #cardio-fick-pvo2')
         .forEach(el => el && el.addEventListener('input', calcFickTransporte));

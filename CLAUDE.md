@@ -2624,6 +2624,70 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
       profunda en la primera ronda general, pero no la relectura
       frase-a-frase de segunda/tercera ronda que sí tuvieron las Fichas
       1-4) — a confirmar con el usuario cómo continuar.
+  - **Gráficas interactivas — simulador de Frank-Starling y ciclo cardíaco
+    dinámico** (a petición explícita del usuario: "pon gráficas
+    interactivas... sobre todo con la ley de Frank Starling e intenta poner
+    el ciclo cardíaco de manera dinámica"), ambas en la Ficha 1:
+    - **Simulador de la curva de Frank-Starling** (`calcFrankStarlingSimulador()`
+      en `cardiologia.js`, mismo patrón slider→JS que `.tfg-simulador` de
+      Nefrología): 3 curvas SVG (aumentada/normal/disminuida) dibujadas con
+      la fórmula `f(x) = A·(x/xp)·e^(1−x/xp)` — una curva de "pico con
+      reducción posterior" elegida deliberadamente porque el propio
+      capítulo describe la relación precarga-contractilidad como una
+      "meseta con posterior reducción de la fuerza" ante presión/volumen
+      excesivos, no una simple saturación monótona. Un slider de precarga
+      (0-100%) y un selector de estado contráctil mueven un marcador sobre
+      la curva activa (resaltada con `.cardio-fs-curva-activa`, las otras
+      dos atenuadas) y actualizan un texto de "volumen sistólico relativo"
+      en <strong>porcentaje</strong>, no en mL — deliberado, para no
+      fabricar una cifra clínica de mL que la fuente no da (misma
+      disciplina de honestidad que ya lleva el propio `.tfg-simulador`
+      del simulador de TFG en Nefrología, con su aviso de "modelo
+      simplificado, no una calculadora clínica real").
+    - **Animación dinámica del ciclo cardíaco** (Wiggers), añadida junto a
+      la imagen estática ya existente (no la sustituye — sigue siendo la
+      referencia fiel al diagrama real del capítulo): implementada
+      **100% en CSS**, sin `requestAnimationFrame`, deliberadamente por
+      coste en móvil — un `<rect>` cursor animado vía `@keyframes` sobre
+      la propiedad `x` (CSS-animable en SVG2, a diferencia de `x1`/`x2` de
+      `<line>`, que no lo son — por eso se usa `<rect>` y no `<line>` para
+      el cursor), 7 `<text>` de fase (A-G) con `@keyframes` de `opacity`
+      cuya ventana on/off codifica directamente los límites temporales de
+      cada fase (sin JS de temporización), y 4 círculos de pulso para los
+      tonos cardíacos (S1 en el límite A→B, S2 en el límite D→E, S3/S4
+      atenuados como en el resto de la app). Las curvas de presión
+      aórtica/ventricular, la onda de PVY (a-c-x-v-y) y un trazado
+      esquemático de ECG son paths SVG estáticos dibujados a mano (mismo
+      método que la Figura 1 de interdependencia ventricular y la Figura 1
+      de patogénesis de la Ficha 3), con las proporciones temporales de
+      las 7 fases estimadas sobre el ciclo de 800 ms que sí da la Figura 4
+      original (la fuente no desglosa la duración exacta de cada fase
+      individual, así que se usan proporciones fisiológicas estándar,
+      declarado explícitamente en el texto de la ficha). Un botón
+      pausa/reanuda alterna la clase `.paused` (que fija
+      `animation-play-state: paused` en cursor/etiquetas/pulsos) y un
+      selector de velocidad cambia la custom property `--ciclo-duracion`
+      (6s/4s/2s/0,8s — el último, tiempo real a FC 75 lpm) — ambos
+      controles son JS mínimo (`initCicloCardiacoAnimado()`), la animación
+      en sí no requiere ningún bucle de JS.
+    - CSS nuevo en `components.css` (bloque "GRÁFICAS INTERACTIVAS DE
+      CARDIOLOGÍA"), 100% aditivo — no se tocó ninguna regla existente
+      (confirmado con `git diff --stat`, 0 líneas eliminadas). Se
+      actualizó la fecha de `?v=` de `index.html` a `20260820` (regla ya
+      establecida del proyecto: cualquier cambio a un `.css` exige
+      refrescar el cache-busting).
+    - Añadidas **4 preguntas de quiz nuevas** (`cardio-q119`-`q122`,
+      incluida una de tipo `redactar` sobre la incisura dicrótica y el
+      balón de contrapulsación), llevando el banco de Cardiología a 122
+      preguntas y el banco combinado de toda la app a **1024 preguntas**
+      (1020 previas + 4). Verificado con Playwright: el marcador de Frank-Starling se mueve
+      en vivo al cambiar precarga/estado contráctil (cx 170→274 al subir
+      precarga a 90%, curva activa cambia correctamente a "aumentada"), el
+      cursor del ciclo cardíaco avanza con el tiempo (x 115,8→183→252,3 en
+      2 lecturas de 500ms) y se congela exactamente al pausar (misma x en
+      2 lecturas separadas), solo una etiqueta de fase visible a la vez
+      (opacity 1 en la fase activa, 0 en las demás 6), y las 11 fichas
+      siguen sin error de consola ni 404.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
