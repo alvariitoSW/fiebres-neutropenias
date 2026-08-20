@@ -2688,6 +2688,31 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
       2 lecturas separadas), solo una etiqueta de fase visible a la vez
       (opacity 1 en la fase activa, 0 en las demás 6), y las 11 fichas
       siguen sin error de consola ni 404.
+  - **Auditoría propia de las 4 primeras fichas e informe al usuario**: a
+    petición explícita ("evalúa la posibilidad de añadir o mejorar algo en
+    relación con las partes interactivas"), se revisó con `grep` el estado
+    real (no de memoria) de calculadoras/sliders/SVG en las Fichas 1-4 y se
+    entregó un informe priorizado: Ficha 3 sin visual para el asa
+    presión-volumen (mayor oportunidad), Ficha 4 sin ningún elemento
+    interactivo (única de las 4), y Fichas 1-2 con calculadoras que
+    devuelven solo texto sin gauge visual. El usuario pidió empezar por la
+    Ficha 1. Añadido un **gauge visual para el DO₂I** de la calculadora de
+    Fick (`actualizarGaugeDO2I()` en `cardiologia.js`, reutilizando el
+    patrón `.kinetic-row`/`.kinetic-fill`/`.kinetic-marker` ya existente en
+    las calculadoras ISTH de Síndromes Urgentes — sin CSS nuevo): escala
+    0-800 mL/min/m² con 2 marcadores en 530 y 600 (banda normal), relleno
+    coloreado según el mismo `estado` (ok/warn/danger) que ya calculaba la
+    función. También se aclaró en el propio diagrama animado que S3 y S4
+    son "si patológico" (ya lo decía la Ficha F para S3; se añadió el
+    mismo matiz a la etiqueta de la fase A para S4, y se renombró la
+    etiqueta estática "S1-S4" a "Tonos" para no dar a entender que los 4
+    tonos suenan siempre). Verificado con Playwright: el gauge cambia de
+    68% (verde, DO₂I 544) a 34,5% (rojo, DO₂I 276) al bajar la Hb a 7 g/dl,
+    y vuelve a verde al restaurarla — las 11 fichas siguen sin error de
+    consola ni 404. **Pendiente** (según el propio informe, no
+    implementado aún): asa presión-volumen interactiva en Ficha 3,
+    simulador de fuerzas de Starling capilares en Ficha 4, y el mismo
+    gauge visual en las 2 calculadoras de la Ficha 2.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

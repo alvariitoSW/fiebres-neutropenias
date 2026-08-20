@@ -78,7 +78,12 @@ function calcFickTransporte() {
     const els = ids.map(id => document.getElementById(id));
     const box = document.getElementById('cardio-fick-resultado');
     if (els.some(e => !e) || !box) return;
-    if (els.some(e => e.value === '')) { box.style.display = 'none'; return; }
+    if (els.some(e => e.value === '')) {
+        box.style.display = 'none';
+        const gaugeRow = document.getElementById('cardio-fick-gauge-row');
+        if (gaugeRow) gaugeRow.style.display = 'none';
+        return;
+    }
 
     const [hb, sao2, pao2, fc, vs, sc] = els.map(e => Number(e.value));
     const gc = (fc * vs) / 1000;
@@ -115,6 +120,27 @@ function calcFickTransporte() {
     box.className = `tfg-estado tfg-estado-${estado}`;
     box.innerHTML = lineas.join('<br>') +
         `<br><span style="font-size:0.72rem;opacity:0.85;">Valores normales de referencia (Tabla 3): DO₂I 530-600 mL/min/m², EO₂ 25-35%.</span>`;
+
+    actualizarGaugeDO2I(do2i, estado);
+}
+
+// Gauge visual del DO2I (escala 0-800 mL/min/m², banda normal 530-600
+// marcada con 2 marcadores) — mismo patrón .kinetic-row/.kinetic-fill/
+// .kinetic-marker ya usado en las calculadoras ISTH de Síndromes Urgentes.
+const DO2I_GAUGE_MAX = 800;
+function actualizarGaugeDO2I(do2i, estado) {
+    const row = document.getElementById('cardio-fick-gauge-row');
+    const fill = document.getElementById('cardio-fick-gauge-fill');
+    const num = document.getElementById('cardio-fick-gauge-num');
+    if (!row || !fill || !num) return;
+
+    row.style.display = 'block';
+    fill.style.width = `${Math.max(0, Math.min(100, (do2i / DO2I_GAUGE_MAX) * 100))}%`;
+    const colores = { ok: 'var(--accent-green)', warn: 'var(--accent-yellow)', danger: 'var(--accent-red)' };
+    const glows = { ok: 'var(--glow-green)', warn: 'none', danger: 'var(--glow-red)' };
+    fill.style.background = colores[estado] || colores.ok;
+    fill.style.boxShadow = glows[estado] || 'none';
+    num.textContent = `${do2i.toFixed(0)}`;
 }
 
 // Resistencias vasculares (ley de Hagen-Poiseuille), Ficha 1.

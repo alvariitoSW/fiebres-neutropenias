@@ -392,7 +392,7 @@
                     <circle class="wiggers-pulso wiggers-s1" cx="72.5" cy="146" r="3" fill="var(--accent-yellow)"/>
                     <circle class="wiggers-pulso wiggers-s2" cx="150.5" cy="146" r="3" fill="var(--accent-yellow)"/>
                     <circle class="wiggers-pulso wiggers-s3" cx="170" cy="146" r="2.5" fill="var(--accent-yellow)"/>
-                    <text x="6" y="150" class="micro-svg-label">S1-S4</text>
+                    <text x="6" y="150" class="micro-svg-label">Tonos</text>
 
                     <line x1="40" y1="185" x2="300" y2="185" stroke="var(--text-muted)" stroke-width="0.5" stroke-dasharray="1,2"/>
                     <text x="6" y="172" class="micro-svg-label">PVY</text>
@@ -402,7 +402,7 @@
                     <path d="M 40,215 C 44,215 46,209 50,208 C 54,208 58,212 62,215 L 68,215 L 71,217 L 74,190 L 77,222 L 80,215 L 128,215 C 134,215 138,206 142,205 C 146,206 150,211 154,215 L 300,215" fill="none" stroke="var(--accent-green)" stroke-width="1.2"/>
 
                     <g>
-                        <text class="wiggers-fase wiggers-fase-a" x="170" y="244" text-anchor="middle">A — Sístole auricular (onda P)</text>
+                        <text class="wiggers-fase wiggers-fase-a" x="170" y="244" text-anchor="middle">A — Sístole auricular (onda P, S4 si patológico)</text>
                         <text class="wiggers-fase wiggers-fase-b" x="170" y="244" text-anchor="middle">B — Contracción isovolumétrica (S1, QRS)</text>
                         <text class="wiggers-fase wiggers-fase-c" x="170" y="244" text-anchor="middle">C — Eyección ventricular rápida</text>
                         <text class="wiggers-fase wiggers-fase-d" x="170" y="244" text-anchor="middle">D — Eyección ventricular lenta (onda T)</text>
@@ -524,6 +524,17 @@
             <div class="form-group"><label for="cardio-fick-svo2">Saturación venosa de O₂, SvO₂ (%) — opcional</label><input type="number" id="cardio-fick-svo2" step="1" min="0" max="100" placeholder="p. ej. 70"></div>
             <div class="form-group"><label for="cardio-fick-pvo2">Presión venosa de O₂, PvO₂ (mmHg) — opcional</label><input type="number" id="cardio-fick-pvo2" step="1" min="0" max="100" placeholder="p. ej. 40"></div>
             <div id="cardio-fick-resultado" class="tfg-estado tfg-estado-ok" style="display:none;"></div>
+            <div class="kinetic-row" id="cardio-fick-gauge-row" style="margin-top:14px; display:none;">
+                <div class="kinetic-label"><span>DO₂I (mL/min/m²)</span><strong id="cardio-fick-gauge-num">—</strong></div>
+                <div class="kinetic-track">
+                    <div class="kinetic-fill" id="cardio-fick-gauge-fill" style="width: 0%;"></div>
+                    <div class="kinetic-marker" style="left: 66.25%;"></div>
+                    <div class="kinetic-marker-label" style="left: 66.25%;">530</div>
+                    <div class="kinetic-marker" style="left: 75%;"></div>
+                    <div class="kinetic-marker-label" style="left: 75%;">600</div>
+                </div>
+                <p style="font-size:0.68rem; color:var(--text-muted); margin-top:2px;">Escala 0-800 mL/min/m² · banda 530-600 = rango normal (Tabla 3)</p>
+            </div>
 
             <p class="section-label" style="margin-top:16px;">🧮 Calculadora interactiva: resistencias vasculares (ley de Hagen-Poiseuille)</p>
             <p style="font-size: 0.8rem; color: var(--text-muted);">RVS = (PAM − PAD) / GC; RVP = (PAMP − PAI) / GC, tal como las da la fuente (en unidades de Wood, mmHg·min/L). Recuerda la advertencia de la propia ficha: el GC aparece en el denominador de su propio cálculo, un acoplamiento matemático que limita su interpretación como poscarga "pura".</p>
