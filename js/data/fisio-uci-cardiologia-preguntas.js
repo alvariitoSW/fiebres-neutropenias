@@ -1114,4 +1114,83 @@ export const preguntasCardiologia = [
         enunciado: 'Explica, integrando el efecto mecánico y el efecto de los mediadores inflamatorios, por qué el bloqueo farmacológico de mediadores como el TXA2 y la serotonina permite en animales la supervivencia a una EP masiva sin colapso hemodinámico marcado.',
         respuestaModelo: 'La obstrucción arterial pulmonar en la EP produce dos fenómenos simultáneos: un efecto puramente mecánico (obstrucción del lecho vascular, que reduce directamente el área transversal disponible para el flujo) y un efecto mediado por sustancias liberadas por plaquetas activadas y el endotelio dañado (tromboxano A2, serotonina, endotelina-1), que producen vasoconstricción pulmonar ACTIVA en el resto del lecho vascular no obstruido mecánicamente. Este segundo componente amplifica el aumento de la resistencia vascular pulmonar y de la presión arterial pulmonar más allá de lo que explicaría solo el trombo. En los experimentos con animales, cuando se bloquean farmacológicamente estos mediadores (antagonistas específicos), se elimina el componente de vasoconstricción activa, dejando solo el efecto puramente mecánico de la obstrucción —que por sí solo resulta más tolerable hemodinámicamente—, permitiendo la supervivencia sin alteraciones hemodinámicas marcadas. Los animales control, sin ese bloqueo, sufren el efecto combinado (obstrucción mecánica + vasoconstricción mediada) y desarrollan choque circulatorio severo o mueren. Esto demuestra que gran parte del compromiso hemodinámico de la EP no es solo mecánico, sino activamente mediado por sustancias vasoactivas —lo que también explica por qué algunas terapias dirigidas a estos mediadores podrían tener un rol teórico más allá de la simple resolución del trombo.',
     },
+
+    // ===== Preguntas añadidas tras la segunda revisión (relectura exhaustiva
+    // Cap. 1 y 2), centradas en el contenido nuevo de las Fichas 1 y 2:
+    // interdependencia ventricular por el pericardio, automatismo/ritmicidad,
+    // período refractario, y los 2 pares de calculadoras interactivas nuevas =====
+    {
+        id: 'cardio-q107',
+        tema: 'cardio-fisiologia-aplicada',
+        enunciado: '¿Por qué la sobrecarga de presión del VD (p. ej. por PEEP en ventilación mecánica) puede reducir el volumen diastólico final del VI?',
+        opciones: [
+            'Porque el VI y el VD no comparten ninguna estructura común',
+            'Porque ambos ventrículos comparten el mismo pericardio (un continente de tamaño fijo) y están ordenados en serie: la dilatación del VD compite por el espacio del VI',
+            'Porque el PEEP aumenta directamente la contractilidad del VI',
+            'Porque el pericardio se distiende de forma ilimitada ante cualquier sobrecarga',
+        ],
+        correcta: 1,
+        explicacion: 'El pericardio no es solo una capa de revestimiento: también sirve de continente de ambas cavidades cardíacas. Al compartir el VD y el VI una misma envoltura rígida, compiten por el volumen diastólico final — si el PEEP aumenta la presión intratorácica, disminuye el retorno venoso hacia el VD y puede haber colapso del VI, con caída de su volumen diastólico final (interdependencia ventricular).',
+    },
+    {
+        id: 'cardio-q108',
+        tema: 'cardio-fisiologia-aplicada',
+        enunciado: '¿Cuál es la diferencia entre "automatismo" y "ritmicidad" del tejido cardíaco?',
+        opciones: [
+            'Son sinónimos exactos, sin ninguna diferencia',
+            'Automatismo = habilidad de generar su propio latido; ritmicidad = el marcapasos intrínseco que regula la frecuencia de esa contracción',
+            'Automatismo se refiere solo al nodo AV; ritmicidad solo al nodo sinusal',
+            'Automatismo es una propiedad del músculo esquelético, no del cardíaco',
+        ],
+        correcta: 1,
+        explicacion: 'El automatismo es la habilidad del corazón de generar su propio latido; la ritmicidad se refiere al marcapasos cardíaco intrínseco que regula la frecuencia con que se contrae el corazón — dos propiedades distintas pero relacionadas del tejido de conducción.',
+    },
+    {
+        id: 'cardio-q109',
+        tema: 'cardio-fisiologia-aplicada',
+        enunciado: 'Durante el período refractario efectivo del potencial de acción cardíaco, ¿en qué fases es incapaz la célula de volverse a activar por un nuevo estímulo?',
+        opciones: [
+            'Solo en la fase 4',
+            'Fases 0, 1, 2 y parte de la 3',
+            'Solo en la fase 0',
+            'En todas las fases por igual, incluida la fase 4',
+        ],
+        correcta: 1,
+        explicacion: 'Una vez estimulada la célula cardíaca, es incapaz de volverse a activar por un nuevo estímulo si se encuentra durante las fases 0, 1, 2 y parte de la 3 (período refractario efectivo) — un mecanismo de protección que da al corazón el tiempo necesario para relajarse y contraerse adecuadamente.',
+    },
+    {
+        id: 'cardio-q110',
+        tema: 'cardio-fisiologia-aplicada',
+        tipo: 'redactar',
+        enunciado: 'Usando la calculadora de transporte de oxígeno de la Ficha 1 como referencia, explica qué le ocurre al DO₂ de un paciente si su hemoglobina cae de 14 a 7 g/dl sin que cambien el resto de variables (GC, SaO₂, PaO₂), y por qué la fórmula matemáticamente predice ese resultado.',
+        respuestaModelo: 'El DO₂ se calcula como GC × CaO₂ × 10, y el CaO₂ = Hb×1,34×SaO₂ + PaO₂×0,003. Como el término de la hemoglobina (Hb×1,34×SaO₂) es, con diferencia, el componente dominante del CaO₂ frente al oxígeno disuelto en plasma (PaO₂×0,003, casi despreciable), una caída del 50% de la hemoglobina (de 14 a 7 g/dl) produce, manteniendo igual la saturación, una caída aproximadamente proporcional del CaO₂ — y por tanto del DO₂, ya que el GC no cambió. En términos numéricos, con Hb=14, SaO₂=98% y PaO₂=90: CaO₂≈18,7 mL/dL; con Hb=7 y el resto igual: CaO₂≈9,4 mL/dL, casi exactamente la mitad. Como el DO₂ es directamente proporcional al CaO₂ (a GC constante), el DO₂ también cae a aproximadamente la mitad. Esto explica por qué la anemia severa, incluso con una saturación arterial de oxígeno perfecta (SaO₂ 98-100%) y un gasto cardíaco normal, puede comprometer gravemente la entrega de oxígeno a los tejidos — y por qué la transfusión de glóbulos rojos es una de las medidas más directas para restaurar el DO₂ en un paciente con anemia severa y signos de hipoperfusión.',
+    },
+    {
+        id: 'cardio-q111',
+        tema: 'cardio-fisiopatologia-fundamental',
+        enunciado: 'Según la fuente, ¿cuánto disminuye la supervivencia de individuos previamente sanos cuando la presión arterial sistólica cae por debajo de 90 mmHg durante más de 30 minutos?',
+        opciones: ['Hasta un 5%', 'Hasta un 20%', 'Hasta un 48%', 'Hasta un 90%'],
+        correcta: 2,
+        explicacion: 'Todos los estudios han demostrado que la disminución de la presión sistólica por debajo de 90 mmHg durante más de 30 minutos disminuye la supervivencia de individuos previamente sanos, hasta en un 48% — de ahí que el objetivo fundamental del apoyo farmacológico sea mantener una PAS >90 mmHg (normotensos) o una PAM >65 mmHg.',
+    },
+    {
+        id: 'cardio-q112',
+        tema: 'cardio-fisiopatologia-fundamental',
+        enunciado: 'Según el Capítulo 2, ¿cuáles son las características hemodinámicas que distinguen a la circulación pulmonar de la circulación sistémica?',
+        opciones: [
+            'Ambas tienen exactamente la misma resistencia y capacitancia',
+            'Pulmonar: baja resistencia y alta capacitancia (especializada en el intercambio de gases); sistémica: múltiples lechos de alta resistencia (aporte de O₂/nutrientes, retirada de CO₂ y desechos)',
+            'Pulmonar: alta resistencia; sistémica: baja resistencia',
+            'La circulación pulmonar no tiene ninguna función de intercambio de gases',
+        ],
+        correcta: 1,
+        explicacion: 'Existe una circulación pulmonar, con un lecho vascular de baja resistencia y alta capacitancia especializado en el intercambio de gases, y una circulación sistémica, con múltiples lechos vasculares de alta resistencia, especializados en el aporte de oxígeno y nutrientes y la retirada de anhídrido carbónico y productos metabólicos de desecho.',
+    },
+    {
+        id: 'cardio-q113',
+        tema: 'cardio-fisiopatologia-fundamental',
+        tipo: 'redactar',
+        enunciado: 'Un paciente con un inotrópico a dosis alta tiene un doble producto de 15.000 y un triple producto de 140.000. Usando los conceptos de "costo de funcionamiento miocárdico" de la Ficha 2, explica por qué esto podría ser una señal de alarma pese a que el gasto cardíaco haya mejorado.',
+        respuestaModelo: 'El doble producto (FC × PAS, normal máximo 12.000) y el triple producto (doble producto × presión en cuña, normal máximo 120.000) son índices del consumo de oxígeno miocárdico —el "costo de funcionamiento" del corazón—. En este caso, ambos valores superan claramente sus límites normales (15.000 y 140.000), lo que indica que el corazón está consumiendo oxígeno muy por encima de lo habitual, probablemente porque el inotrópico está aumentando desproporcionadamente la frecuencia cardíaca y/o la presión arterial sistólica. Según la fisiopatología de la Ficha 2, si un inotrópico aumenta tanto la frecuencia cardíaca que incrementa el costo de funcionamiento más de lo que mejora el aporte de oxígeno, la medida NO es benéfica, aunque el gasto cardíaco "se vea mejor" en el monitor — el paciente queda en riesgo de una catástrofe coronaria, porque el aumento de la demanda miocárdica de oxígeno puede superar la capacidad de la perfusión coronaria de suplirla (especialmente si la presión de perfusión coronaria, PAD menos la presión en cuña o la PVC, no aumenta en la misma proporción). La conducta correcta sería reevaluar la dosis del inotrópico, calculando también la presión de perfusión coronaria y el índice de aporte-consumo, en vez de guiarse solo por la mejoría aparente del gasto cardíaco.',
+    },
 ];

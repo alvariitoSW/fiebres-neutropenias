@@ -2489,6 +2489,93 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
     da 404, y el quiz completa un recorrido de 12 preguntas del tema
     "enfermedad coronaria" (incluida una pregunta tipo `redactar`) sin
     excepciones JS.
+  - **Segunda ronda de revisión, centrada en Fichas 1 y 2 (a petición
+    explícita del usuario, tras seguir señalando la primera revisión como
+    insuficiente)**: el usuario pidió, esta vez, ir "por partes" — empezando
+    por una relectura exhaustiva de los Capítulos 1 y 2 (ya releídos una vez
+    en la primera ronda, pero con margen real de profundidad no explotado) y
+    pidiendo explícitamente que las fórmulas fuesen **interactivas**, no solo
+    texto/tablas. Releídas de nuevo, página por página, las 25 páginas de
+    ambos capítulos (Parte 1, págs. 1-28), se encontraron 2 tipos de huecos:
+    1. **Contenido real del capítulo aún no trasladado**: en la Ficha 1 — la
+       Figura 1 original del capítulo (esquema de interdependencia
+       ventricular, corazón normal vs. *cor pulmonale*, con el mecanismo
+       completo de por qué el PEEP puede colapsar el VI al compartir
+       pericardio con un VD sobrecargado), las propiedades de
+       **automatismo y ritmicidad** como conceptos distintos, la
+       diferenciación embriológica de los miocitos (unos forman fibras
+       contráctiles, otros conservan automatismo y forman el sistema de
+       conducción), las **uniones comunicantes en hendidura** (*gap
+       junctions*) como mecanismo de propagación célula a célula, la
+       localización anatómica precisa del nodo AV, y el **período
+       refractario efectivo** (fases 0-2 y parte de la 3) como mecanismo de
+       protección — ninguno de estos conceptos, todos presentes en el
+       capítulo, estaba en la ficha. En la Ficha 2, un hallazgo más serio:
+       la sección "Interdependencia de los componentes del sistema" (con un
+       marco conceptual de "4 componentes" — bomba/volumen/continente
+       vascular/microcirculación) **no existe en el Capítulo 2 releído** —
+       es contenido que se había escrito en una sesión anterior sin
+       verificación directa contra la fuente, y no aparece en ningún punto
+       del texto real (que en su lugar describe la circulación pulmonar de
+       baja resistencia/alta capacitancia frente a la sistémica de alta
+       resistencia, con una única bomba bajo control neurohormonal). Se
+       **eliminó por completo** esa sección fabricada y se sustituyó por la
+       distinción real pulmonar/sistémica del propio capítulo, siguiendo el
+       mismo criterio ya establecido en el proyecto de nunca dejar contenido
+       clínico sin respaldo directo verificado — el propio proceso de
+       relectura exhaustiva de esta segunda ronda es lo que permitió
+       detectar este caso concreto, que la primera ronda (más centrada en
+       añadir contenido nuevo que en auditar frase a frase el ya existente)
+       no había capturado. También se añadió la cifra real de la fuente de
+       que una PAS &lt;90 mmHg mantenida &gt;30 min reduce la supervivencia
+       hasta un 48% en individuos previamente sanos (ausente hasta ahora).
+    2. **Inconsistencia interna real de la propia fuente, documentada con
+       nota en vez de "corregida" silenciosamente** (mismo criterio que el
+       IFR de Fracaso Renal Agudo o el TAPSE &gt;16/&gt;17mm de Cardiología):
+       el Capítulo 1 describe el cierre de las válvulas mitral/tricúspide
+       (fase de contracción isovolumétrica) como el "segundo ruido cardíaco
+       (S2)" — un error real del propio texto, contradicho por su propia
+       descripción, unas páginas después, del cierre de las válvulas
+       aórtica/pulmonar como S2. La ficha reproduce la nomenclatura
+       fisiológica estándar (S1 para el cierre AV) con una nota explícita
+       señalando la contradicción interna de la fuente.
+    - **4 calculadoras interactivas nuevas** (`cardiologia.js`, mismo patrón
+      `calcXxx()`/`.tfg-estado-ok/warn/danger` ya usado en Nefrología —
+      primeras calculadoras de todo el bloque de Cardiología, que hasta
+      ahora no tenía ninguna, a diferencia del resto de la app):
+      **Ficha 1** — "Transporte de oxígeno (principio de Fick)"
+      (`calcFickTransporte()`: Hb/SaO₂/PaO₂/FC/VS/SC obligatorios,
+      SvO₂/PvO₂ opcionales → CaO₂, GC, IC, DO₂, DO₂I y, si hay datos
+      venosos, CvO₂/VO₂/EO₂ en vivo) y "Resistencias vasculares (ley de
+      Hagen-Poiseuille)" (`calcResistenciasVasculares()`: GC/PAM/PAD → RVS
+      en unidades de Wood y su equivalente en dyn·s·cm⁻⁵; PAMP/PAI
+      opcionales → RVP). **Ficha 2** — "Costo de funcionamiento
+      miocárdico" (`calcCostoFuncionamiento()`: FC/PAS/presión en
+      cuña/PAD sistémica + selector de ventrículo izquierdo/derecho, que
+      alterna dinámicamente si el cálculo de presión de perfusión coronaria
+      usa la cuña o la PVC → doble producto, triple producto, PPC, índice
+      de aporte-consumo) y "Índice de aporte de oxígeno (IDO₂)"
+      (`calcIDO2Ficha2()`: GC/SC/Hb/SaO₂/PaO₂ → IC, CaO₂, IDO₂ = IC×CaO₂×10,
+      cruzado contra el rango normal 520-650 mL/min/m² ya citado en la
+      Ficha 5). Todas actualizan el resultado en vivo con cada `input`,
+      siguiendo exactamente el guard `.value === ''` (nunca `Number('')`)
+      ya establecido como lección aprendida en las auditorías de FRA/ERC
+      para no tratar un campo vacío como 0.
+    - Añadidas **7 preguntas de quiz nuevas** (`cardio-q107`-`q113`,
+      incluidos 2 casos clínicos tipo `redactar` que usan directamente las
+      calculadoras nuevas — uno sobre el efecto de la anemia en el DO₂,
+      otro sobre interpretar un doble/triple producto elevado), llevando el
+      banco de Cardiología a 113 preguntas y el banco combinado de toda la
+      app a **1015 preguntas** (1008 previas + 7). Verificado con
+      Playwright: las 4 calculadoras responden en vivo a cambios de input
+      (confirmado recalculando tras modificar Hb, GC y el selector de
+      ventrículo), las 11 fichas siguen abriendo sin error de consola ni
+      404, y el quiz completa un recorrido de 10 preguntas sin excepciones.
+      **Pendiente**: el usuario planteó esta revisión "por partes" — quedan
+      las Fichas 3-11 por la misma relectura exhaustiva de segunda ronda
+      (esta vez ya se hizo en las Fichas 1-2 solamente, a petición
+      explícita), a confirmar con el usuario si se continúa automáticamente
+      o ficha por ficha según vaya pidiendo.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
