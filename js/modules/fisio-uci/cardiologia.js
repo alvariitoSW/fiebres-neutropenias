@@ -64,6 +64,11 @@ function calcFrankStarlingSimulador(origen) {
     if (origen === 'edv' && edvMlEl && edvMlEl.value !== '') {
         const edvClamped = Math.max(FS_EDV_MIN, Math.min(FS_EDV_MAX, Number(edvMlEl.value)));
         precargaEl.value = fsEdvToPrecarga(edvClamped);
+        // Si el usuario escribe un valor fuera de 70-160 mL, el campo debe
+        // reflejar el valor realmente usado (clamp) — antes se quedaba
+        // mostrando el número tecleado aunque el cálculo ya lo hubiera
+        // recortado, dando la impresión de que la calculadora lo ignoraba.
+        if (Number(edvMlEl.value) !== edvClamped) edvMlEl.value = edvClamped.toFixed(0);
     }
 
     const precarga = Number(precargaEl.value);
@@ -239,6 +244,13 @@ function calcFickTransporte() {
     }
 
     const [hb, sao2, pao2, fc, vs, sc] = els.map(e => Number(e.value));
+    if (sc === 0) {
+        box.style.display = 'none';
+        const gaugeRow = document.getElementById('cardio-fick-gauge-row');
+        if (gaugeRow) gaugeRow.style.display = 'none';
+        if (interpretacionEl) interpretacionEl.style.display = 'none';
+        return;
+    }
     const gc = (fc * vs) / 1000;
     const cao2 = hb * 1.34 * (sao2 / 100) + pao2 * 0.003;
     const do2 = gc * cao2 * 10;
@@ -370,6 +382,19 @@ function calcResistenciasVasculares() {
         const pai = Number(paiEl.value);
         const rvp = (pamp - pai) / gc;
         lineas.push(`RVP = (PAMP − PAI) / GC = ${rvp.toFixed(2)} unidades de Wood ≈ ${(rvp * 80).toFixed(0)} dyn·s·cm⁻⁵`);
+    }
+
+    // PAD > PAM da una RVS ≤0, una combinación no fisiológica (la presión
+    // en la aurícula derecha no puede superar a la presión arterial media
+    // en un paciente estable) — se avisa de la revisión de los datos en
+    // vez de interpretarlo como "vasoplejía extrema", que sería engañoso.
+    if (rvs <= 0) {
+        box.style.display = 'block';
+        box.className = 'tfg-estado tfg-estado-danger';
+        box.innerHTML = lineas.join('<br>') +
+            '<br><strong>⚠️ Combinación de valores no fisiológica</strong> — la PAD (presión de la aurícula derecha) introducida es igual o mayor que la PAM. Revisa los datos: en un paciente estable la PAM siempre supera a la PAD.';
+        if (interpretacionEl) interpretacionEl.style.display = 'none';
+        return;
     }
 
     const zona = zonaRVS(rvs);

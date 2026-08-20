@@ -3262,6 +3262,67 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
       Perspectivas futuras se detectan correctamente en el DOM. Con esta
       ronda se da por cerrada la auditoría fuente-a-fuente completa de
       las 11 fichas de contenido clínico de Cardiología.
+  - **Informe de bugs/mejoras de Cardiología y correcciones aplicadas**, a
+    petición explícita del usuario ("haz un informe sobre mejoras... sobre
+    puntos que están mal, y sobre fallos"). Auditoría de código (no de
+    bibliografía esta vez) sobre `cardiologia.js`/`cardiologia.html`,
+    verificando cada hallazgo con Playwright antes de reportarlo — mismo
+    estándar que las auditorías anteriores, pero aplicado al código en vez
+    de al contenido clínico. 2 bugs reales confirmados y corregidos:
+    - **`calcFickTransporte` (Ficha 1) sin guard para SC=0**: a diferencia
+      de la calculadora casi gemela `calcIDO2Ficha2` (Ficha 2, misma
+      fórmula IC×CaO₂), esta no comprobaba `sc === 0` antes de dividir —
+      con superficie corporal 0 mostraba literalmente "IC = Infinity
+      L/min/m²" y "DO₂I = Infinity mL/min/m²". Corregido añadiendo el
+      mismo guard ya usado en la Ficha 2 (oculta el resultado y el gauge
+      en vez de dividir por cero).
+    - **Simulador de Frank-Starling (Ficha 1) — el campo mL no se
+      autocorregía fuera de rango**: escribir un EDV fuera de 70-160 mL
+      clampaba el cálculo interno correctamente pero dejaba el propio
+      campo de texto mostrando el valor tecleado sin corregir (p. ej.
+      "300" en pantalla mientras el resultado ya decía "EDV ≈ 160 mL") —
+      confuso, parecía que la calculadora ignoraba la entrada. Corregido
+      reescribiendo el campo con el valor clampado cuando difiere.
+    A petición del usuario, se corrigieron también (sin fabricar cifras
+    nuevas, solo mejorando cómo se presentan discrepancias de la propia
+    fuente ya documentadas) manteniendo intactas las referencias cruzadas
+    entre fichas:
+    - **TAPSE**: la Ficha 5 (&gt;16 mm) no mencionaba que la Ficha 11
+      (&gt;17 mm) cita una cifra distinta para el mismo parámetro — solo
+      Ficha 11→Ficha 5 era explícito. Añadida la referencia inversa en la
+      Ficha 5, dejando la discrepancia señalada en ambas direcciones (sin
+      elegir una cifra "ganadora", mismo criterio que el resto de la app).
+    - **Rango normal de DO₂I distinto entre Ficha 1 (530-600, Tabla 3,
+      Capítulo 1) y Ficha 2/Ficha 5 (520-650, Tabla 12, Capítulo 5)**:
+      ambas cifras son correctas (dos tablas distintas del mismo libro),
+      pero no estaba explicado por qué difieren — añadida una nota de
+      fidelidad explícita en la Ficha 1 aclarando que no es un error de
+      la app. La discrepancia del IRVS (Ficha 5, 2 fórmulas del propio
+      capítulo) ya tenía una nota igual de clara desde la auditoría
+      anterior — no requería ningún cambio adicional.
+    Además, un punto de mejora nuevo (no reportado como bug porque no
+    rompía nada, pero podía inducir a error): la calculadora de
+    resistencias vasculares (Ficha 1) no distinguía una PAD mayor que la
+    PAM (combinación no fisiológica: la presión de la aurícula derecha no
+    puede superar a la PAM en un paciente estable) de una vasoplejía
+    extrema real — ambas daban RVS negativa interpretada como "shock
+    vasopléjico". Añadido un aviso específico (`⚠️ Combinación de valores
+    no fisiológica`) que se antepone a la interpretación clínica normal
+    cuando RVS≤0, pidiendo revisar los datos en vez de diagnosticar una
+    vasoplejía inexistente. Otros 2 puntos señalados en el informe se
+    dejaron deliberadamente sin tocar por no ser accionables sin más
+    fuente o sin romper la arquitectura ya establecida: la Ficha 6
+    (enfermedad coronaria) es la más corta del bloque porque su capítulo
+    fuente son solo 4 páginas ya agotadas, y `cardiologia.html` es el
+    archivo de contenido más grande de la app — dividirlo iría contra el
+    patrón "un partial por categoría" ya asentado en el proyecto.
+    Verificado con Playwright: SC=0 ya no muestra "Infinity" (el bloque de
+    resultado se oculta, igual que en la Ficha 2); un EDV de 300 mL
+    corrige el campo a 160 tras el cálculo; PAD&gt;PAM muestra el aviso de
+    no fisiológico y, al corregir el dato, la calculadora vuelve a
+    funcionar con normalidad; las notas cruzadas de TAPSE y DO₂I están
+    presentes en el DOM; las 12 fichas siguen abriendo sin error de
+    consola ni 404 real.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
