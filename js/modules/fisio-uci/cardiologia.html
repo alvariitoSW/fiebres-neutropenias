@@ -434,17 +434,86 @@
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📐 Precarga: ley de Frank-Starling</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">Descrita a principios del siglo XX por el fisiólogo alemán Otto Frank y el británico Ernest Starling: a mayor estiramiento de la fibra miocárdica (dentro de un rango fisiológico), mayor es la fuerza de la contracción siguiente. Se cuantifica mediante la <strong>distensibilidad</strong> (compliance), C = ΔV/ΔP — el corazón normal ajusta automáticamente su volumen sistólico a los cambios en el volumen de fin de diástole. <strong>Escenario clínico de riesgo:</strong> en un paciente con insuficiencia diastólica y baja distensibilidad ventricular, administrar diuréticos para "aliviar" una precarga aparentemente alta puede en realidad reducir el gasto cardíaco y empeorar la perfusión, porque ese ventrículo rígido necesita presiones de llenado más altas de lo habitual para generar el mismo volumen sistólico.</div>
+                    <div class="micro-prof-body">Descrita a principios del siglo XX por el fisiólogo alemán Otto Frank y el británico Ernest Starling: a mayor estiramiento de la fibra miocárdica (dentro de un rango fisiológico), mayor es la fuerza de la contracción siguiente. Se cuantifica mediante la <strong>distensibilidad</strong> (compliance), C = ΔV/ΔP — el corazón normal ajusta automáticamente su volumen sistólico a los cambios en el volumen de fin de diástole. <strong>Escenario clínico de riesgo:</strong> en un paciente con insuficiencia diastólica y baja distensibilidad ventricular, administrar diuréticos para "aliviar" una precarga aparentemente alta puede en realidad reducir el gasto cardíaco y empeorar la perfusión, porque ese ventrículo rígido necesita presiones de llenado más altas de lo habitual para generar el mismo volumen sistólico.
+
+                        <p class="section-label" style="margin-top:14px; font-size:0.8rem;">🧮 Simulador interactivo: curva de Frank-Starling</p>
+                        <p style="font-size: 0.78rem; color: var(--text-muted);">Modelo ilustrativo de la relación precarga-volumen sistólico, reproduciendo la forma cualitativa descrita en la fuente — una <strong>meseta con posterior reducción</strong> ante presión/volumen excesivos, no una fórmula clínica exacta para un paciente real. Mueve el slider y cambia el estado contráctil para ver cómo se desplaza el punto de trabajo del ventrículo.</p>
+                        <div class="tfg-slider-row">
+                            <label for="cardio-fs-precarga">Precarga (volumen de fin de diástole)</label>
+                            <input type="range" id="cardio-fs-precarga" min="0" max="100" value="50" step="1">
+                            <span id="cardio-fs-precarga-valor">50%</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="cardio-fs-estado">Estado contráctil</label>
+                            <select id="cardio-fs-estado">
+                                <option value="disminuida">Disminuida (falla sistólica)</option>
+                                <option value="normal" selected>Normal</option>
+                                <option value="aumentada">Aumentada (inotrópico +)</option>
+                            </select>
+                        </div>
+                        <svg viewBox="0 0 320 160" class="micro-svg" xmlns="http://www.w3.org/2000/svg">
+                            <line x1="40" y1="10" x2="40" y2="140" stroke="var(--text-muted)" stroke-width="1"/>
+                            <line x1="40" y1="140" x2="300" y2="140" stroke="var(--text-muted)" stroke-width="1"/>
+                            <text x="8" y="80" text-anchor="middle" class="micro-svg-label" transform="rotate(-90 8 80)">Volumen sistólico</text>
+                            <text x="170" y="155" text-anchor="middle" class="micro-svg-label">Precarga (volumen de fin de diástole)</text>
+                            <path id="cardio-fs-curva-disminuida" class="cardio-fs-curva" d="M 40,140 L 66,122.37 L 92,108.66 L 118,98.21 L 144,90.45 L 170,84.94 L 196,81.25 L 222,79.1 L 248,78.1 L 261,78 L 274,78.1 L 300,78.85" fill="none" stroke="var(--accent-red)" stroke-width="1.5"/>
+                            <path id="cardio-fs-curva-normal" class="cardio-fs-curva" d="M 40,140 L 66,106.3 L 92,81.6 L 118,64.1 L 144,52.3 L 170,45 L 196,41.1 L 222,40 L 248,40.9 L 274,43.4 L 300,46.94" fill="none" stroke="var(--accent-blue)" stroke-width="1.5"/>
+                            <path id="cardio-fs-curva-aumentada" class="cardio-fs-curva" d="M 40,140 L 66,91.4 L 92,58.95 L 118,38.7 L 144,27.25 L 170,22.5 L 183,22 L 196,22.5 L 222,25.7 L 248,31 L 274,37.9 L 300,45.3" fill="none" stroke="var(--accent-green)" stroke-width="1.5"/>
+                            <text x="255" y="70" text-anchor="middle" class="micro-svg-label" style="fill:var(--accent-red);font-weight:bold;">Disminuida</text>
+                            <text x="222" y="34" text-anchor="middle" class="micro-svg-label" style="fill:var(--accent-blue);font-weight:bold;">Normal</text>
+                            <text x="183" y="14" text-anchor="middle" class="micro-svg-label" style="fill:var(--accent-green);font-weight:bold;">Aumentada</text>
+                            <line id="cardio-fs-guia-v" x1="170" y1="45" x2="170" y2="140" stroke="var(--accent-yellow)" stroke-width="1" stroke-dasharray="2,2"/>
+                            <line id="cardio-fs-guia-h" x1="40" y1="45" x2="170" y2="45" stroke="var(--accent-yellow)" stroke-width="1" stroke-dasharray="2,2"/>
+                            <circle id="cardio-fs-marker" cx="170" cy="45" r="4.5" fill="var(--accent-yellow)" stroke="#000" stroke-width="0.5"/>
+                        </svg>
+                        <p style="font-size:0.8rem; text-align:center; color:var(--text-main);" id="cardio-fs-resultado"></p>
+                        <div id="cardio-fs-interpretacion" class="tfg-estado tfg-estado-ok" style="margin-top:10px;"></div>
+                    </div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⭕ Poscarga: ley de Laplace y resistencia vascular</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
                         <dl class="kv-row"><dt>Ley de Laplace (T = P×r)</dt><dd>Descrita originalmente a partir de observaciones sobre burbujas de jabón en el siglo XIX — la tensión de la pared es proporcional a la presión intracavitaria y al radio de la cavidad. Aplicada al ventrículo, la presión transmural es la suma de la presión intratorácica y la impedancia arterial, y el radio corresponde al diámetro de fin de diástole.</dd></dl>
+
+                        <p class="section-label" style="margin-top:10px; font-size:0.78rem;">📊 Diagrama interactivo: radio ventricular y tensión de pared</p>
+                        <p style="font-size:0.75rem; color:var(--text-muted);">A presión constante, mueve el slider del radio y observa cómo crece la tensión de pared (T = P×r) — el mismo principio por el que un ventrículo dilatado necesita generar mucha más tensión que uno de tamaño normal para alcanzar la misma presión de eyección.</p>
+                        <div class="tfg-slider-row">
+                            <label for="cardio-laplace-mini-r">Radio ventricular (relativo)</label>
+                            <input type="range" id="cardio-laplace-mini-r" min="0" max="100" value="35" step="1">
+                            <span id="cardio-laplace-mini-r-valor">3,0 cm</span>
+                        </div>
+                        <svg viewBox="0 0 260 140" class="micro-svg" xmlns="http://www.w3.org/2000/svg">
+                            <text x="130" y="14" text-anchor="middle" class="micro-svg-label">Corte transversal del ventrículo (P constante)</text>
+                            <circle id="cardio-laplace-mini-circulo" cx="70" cy="85" r="30" fill="rgba(212,175,55,0.12)" stroke="var(--accent-blue)" stroke-width="3"/>
+                            <line id="cardio-laplace-mini-radio" x1="70" y1="85" x2="100" y2="85" stroke="var(--accent-yellow)" stroke-width="1.5" stroke-dasharray="2,2"/>
+                            <text id="cardio-laplace-mini-radio-label" x="85" y="79" text-anchor="middle" class="micro-svg-label" style="fill:var(--accent-yellow);">r</text>
+                            <text x="190" y="45" text-anchor="middle" class="micro-svg-label" style="fill:var(--text-main);">Tensión de pared (T)</text>
+                            <rect x="140" y="55" width="100" height="12" rx="2" fill="rgba(0,0,0,0.3)"/>
+                            <rect id="cardio-laplace-mini-barra" x="140" y="55" width="10" height="12" rx="2" fill="var(--accent-red)"/>
+                            <text id="cardio-laplace-mini-t" x="190" y="88" text-anchor="middle" class="micro-svg-label" style="font-weight:bold;">T relativa: 35%</text>
+                        </svg>
+
                         <dl class="kv-row"><dt>Impedancia</dt><dd>Se compone de la distensibilidad arterial y la resistencia vascular — el verdadero determinante de cuánto le cuesta al ventrículo eyectar la sangre.</dd></dl>
                         <dl class="kv-row"><dt>Ley de Hagen-Poiseuille</dt><dd>Q = ΔP/R (el flujo es proporcional al gradiente de presión e inversamente proporcional a la resistencia) — reordenada, R = ΔP/Q, la base de las fórmulas clínicas de resistencia vascular.</dd></dl>
                         <dl class="kv-row"><dt>Resistencia vascular sistémica (RVS)</dt><dd>RVS = (PAM − PAD) / GC</dd></dl>
                         <dl class="kv-row"><dt>Resistencia vascular pulmonar (RVP)</dt><dd>RVP = (PAMP − PAI) / GC</dd></dl>
                         <p style="font-size: 0.8rem; color: var(--text-muted); margin-top:6px;">👉 Advertencia conceptual de la propia fuente: la RVS y la RVP calculadas así <strong>no reflejan fielmente la poscarga real</strong>, porque el gasto cardíaco (GC) aparece en el denominador de su propio cálculo — un artefacto de acoplamiento matemático que conviene tener presente al interpretar estos valores como si fueran una medida "pura" e independiente de poscarga.</p>
+
+                        <p class="section-label" style="margin-top:10px; font-size:0.78rem;">📊 Diagrama interactivo: el artefacto de acoplamiento matemático</p>
+                        <p style="font-size:0.75rem; color:var(--text-muted);">Mueve el GC manteniendo la PAM y la PAD fijas — verás que la RVS "calculada" cambia mucho, aunque el tono vascular arteriolar real (el que de verdad define la poscarga) no se haya movido ni un milímetro: solo cambió porque GC está en el denominador de su propia fórmula.</p>
+                        <div class="tfg-slider-row">
+                            <label for="cardio-laplace-mini-gc">Gasto cardíaco simulado (PAM 80, PAD 5 mmHg fijas)</label>
+                            <input type="range" id="cardio-laplace-mini-gc" min="20" max="80" value="50" step="1">
+                            <span id="cardio-laplace-mini-gc-valor">5,0 L/min</span>
+                        </div>
+                        <div class="kinetic-row">
+                            <div class="kinetic-label"><span>RVS "calculada" (cambia con el GC)</span><strong id="cardio-laplace-mini-rvs-valor">—</strong></div>
+                            <div class="kinetic-track"><div class="kinetic-fill" id="cardio-laplace-mini-rvs-fill" style="width:0%; background:var(--accent-red);"></div></div>
+                        </div>
+                        <div class="kinetic-row">
+                            <div class="kinetic-label"><span>Tono vascular arteriolar real (el mismo paciente, sin cambios)</span><strong>constante</strong></div>
+                            <div class="kinetic-track"><div class="kinetic-fill" style="width:50%; background:var(--accent-green);"></div></div>
+                        </div>
                     </div>
                 </div>
                 <div class="micro-prof-item">
@@ -452,39 +521,6 @@
                     <div class="micro-prof-body">Capacidad intrínseca de la fibra de generar fuerza, independiente de la precarga y la poscarga. La medida invasiva de referencia es la <strong>dP/dt</strong> (velocidad de cambio de la presión intraventricular durante la contracción isovolumétrica). La <strong>fracción de eyección (FE)</strong>, la medida clínica más usada, tiene limitaciones importantes: depende de la distensibilidad ventricular, y la insuficiencia mitral puede sobrestimarla artificialmente (parte del volumen "eyectado" regresa a la aurícula, no sale realmente a la aorta).</div>
                 </div>
             </div>
-
-            <p class="section-label" style="margin-top:16px;">🧮 Simulador interactivo: curva de Frank-Starling</p>
-            <p style="font-size: 0.8rem; color: var(--text-muted);">Modelo ilustrativo de la relación precarga-volumen sistólico, reproduciendo la forma cualitativa descrita en la fuente — una <strong>meseta con posterior reducción</strong> ante presión/volumen excesivos, no una fórmula clínica exacta para un paciente real. Mueve el slider y cambia el estado contráctil para ver cómo se desplaza el punto de trabajo del ventrículo.</p>
-            <div class="tfg-slider-row">
-                <label for="cardio-fs-precarga">Precarga (volumen de fin de diástole)</label>
-                <input type="range" id="cardio-fs-precarga" min="0" max="100" value="50" step="1">
-                <span id="cardio-fs-precarga-valor">50%</span>
-            </div>
-            <div class="form-group">
-                <label for="cardio-fs-estado">Estado contráctil</label>
-                <select id="cardio-fs-estado">
-                    <option value="disminuida">Disminuida (falla sistólica)</option>
-                    <option value="normal" selected>Normal</option>
-                    <option value="aumentada">Aumentada (inotrópico +)</option>
-                </select>
-            </div>
-            <svg viewBox="0 0 320 160" class="micro-svg" xmlns="http://www.w3.org/2000/svg">
-                <line x1="40" y1="10" x2="40" y2="140" stroke="var(--text-muted)" stroke-width="1"/>
-                <line x1="40" y1="140" x2="300" y2="140" stroke="var(--text-muted)" stroke-width="1"/>
-                <text x="8" y="80" text-anchor="middle" class="micro-svg-label" transform="rotate(-90 8 80)">Volumen sistólico</text>
-                <text x="170" y="155" text-anchor="middle" class="micro-svg-label">Precarga (volumen de fin de diástole)</text>
-                <path id="cardio-fs-curva-disminuida" class="cardio-fs-curva" d="M 40,140 L 66,122.37 L 92,108.66 L 118,98.21 L 144,90.45 L 170,84.94 L 196,81.25 L 222,79.1 L 248,78.1 L 261,78 L 274,78.1 L 300,78.85" fill="none" stroke="var(--accent-red)" stroke-width="1.5"/>
-                <path id="cardio-fs-curva-normal" class="cardio-fs-curva" d="M 40,140 L 66,106.3 L 92,81.6 L 118,64.1 L 144,52.3 L 170,45 L 196,41.1 L 222,40 L 248,40.9 L 274,43.4 L 300,46.94" fill="none" stroke="var(--accent-blue)" stroke-width="1.5"/>
-                <path id="cardio-fs-curva-aumentada" class="cardio-fs-curva" d="M 40,140 L 66,91.4 L 92,58.95 L 118,38.7 L 144,27.25 L 170,22.5 L 183,22 L 196,22.5 L 222,25.7 L 248,31 L 274,37.9 L 300,45.3" fill="none" stroke="var(--accent-green)" stroke-width="1.5"/>
-                <text x="255" y="70" text-anchor="middle" class="micro-svg-label" style="fill:var(--accent-red);font-weight:bold;">Disminuida</text>
-                <text x="222" y="34" text-anchor="middle" class="micro-svg-label" style="fill:var(--accent-blue);font-weight:bold;">Normal</text>
-                <text x="183" y="14" text-anchor="middle" class="micro-svg-label" style="fill:var(--accent-green);font-weight:bold;">Aumentada</text>
-                <line id="cardio-fs-guia-v" x1="170" y1="45" x2="170" y2="140" stroke="var(--accent-yellow)" stroke-width="1" stroke-dasharray="2,2"/>
-                <line id="cardio-fs-guia-h" x1="40" y1="45" x2="170" y2="45" stroke="var(--accent-yellow)" stroke-width="1" stroke-dasharray="2,2"/>
-                <circle id="cardio-fs-marker" cx="170" cy="45" r="4.5" fill="var(--accent-yellow)" stroke="#000" stroke-width="0.5"/>
-            </svg>
-            <p style="font-size:0.8rem; text-align:center; color:var(--text-main);" id="cardio-fs-resultado"></p>
-            <div id="cardio-fs-interpretacion" class="tfg-estado tfg-estado-ok" style="margin-top:10px;"></div>
 
             <table class="data-table">
                 <thead><tr><th colspan="3">Determinantes del gasto cardíaco</th></tr></thead>
@@ -516,14 +552,16 @@
 
             <p class="section-label" style="margin-top:16px;">🧮 Calculadora interactiva: transporte de oxígeno (principio de Fick)</p>
             <p style="font-size: 0.8rem; color: var(--text-muted);">Aplica en vivo las fórmulas de la Tabla 3 (CaO₂, DO₂, VO₂, EO₂) con tus propios valores. Los campos de sangre venosa (SvO₂/PvO₂) son opcionales — sin ellos se calcula el DO₂ pero no el VO₂ ni el EO₂ reales.</p>
-            <div class="form-group"><label for="cardio-fick-hb">Hemoglobina (g/dl)</label><input type="number" id="cardio-fick-hb" step="0.1" min="1" max="20" value="14"></div>
-            <div class="form-group"><label for="cardio-fick-sao2">Saturación arterial de O₂, SaO₂ (%)</label><input type="number" id="cardio-fick-sao2" step="1" min="0" max="100" value="98"></div>
-            <div class="form-group"><label for="cardio-fick-pao2">Presión arterial de O₂, PaO₂ (mmHg)</label><input type="number" id="cardio-fick-pao2" step="1" min="0" max="600" value="90"></div>
-            <div class="form-group"><label for="cardio-fick-fc">Frecuencia cardíaca (lpm)</label><input type="number" id="cardio-fick-fc" step="1" min="20" max="220" value="75"></div>
-            <div class="form-group"><label for="cardio-fick-vs">Volumen sistólico (ml)</label><input type="number" id="cardio-fick-vs" step="1" min="10" max="200" value="70"></div>
-            <div class="form-group"><label for="cardio-fick-sc">Superficie corporal (m²)</label><input type="number" id="cardio-fick-sc" step="0.01" min="0.5" max="3" value="1.8"></div>
-            <div class="form-group"><label for="cardio-fick-svo2">Saturación venosa de O₂, SvO₂ (%) — opcional</label><input type="number" id="cardio-fick-svo2" step="1" min="0" max="100" placeholder="p. ej. 70"></div>
-            <div class="form-group"><label for="cardio-fick-pvo2">Presión venosa de O₂, PvO₂ (mmHg) — opcional</label><input type="number" id="cardio-fick-pvo2" step="1" min="0" max="100" placeholder="p. ej. 40"></div>
+            <div class="calc-grid">
+                <div class="form-group"><label for="cardio-fick-hb" title="Hemoglobina">Hb (g/dl)</label><input type="number" id="cardio-fick-hb" step="0.1" min="1" max="20" value="14"></div>
+                <div class="form-group"><label for="cardio-fick-sao2" title="Saturación arterial de O₂">SaO₂ (%)</label><input type="number" id="cardio-fick-sao2" step="1" min="0" max="100" value="98"></div>
+                <div class="form-group"><label for="cardio-fick-pao2" title="Presión arterial de O₂">PaO₂ (mmHg)</label><input type="number" id="cardio-fick-pao2" step="1" min="0" max="600" value="90"></div>
+                <div class="form-group"><label for="cardio-fick-fc" title="Frecuencia cardíaca">FC (lpm)</label><input type="number" id="cardio-fick-fc" step="1" min="20" max="220" value="75"></div>
+                <div class="form-group"><label for="cardio-fick-vs" title="Volumen sistólico">VS (ml)</label><input type="number" id="cardio-fick-vs" step="1" min="10" max="200" value="70"></div>
+                <div class="form-group"><label for="cardio-fick-sc" title="Superficie corporal">SC (m²)</label><input type="number" id="cardio-fick-sc" step="0.01" min="0.5" max="3" value="1.8"></div>
+                <div class="form-group"><label for="cardio-fick-svo2" title="Saturación venosa de O₂ — opcional">SvO₂ (%) opc.</label><input type="number" id="cardio-fick-svo2" step="1" min="0" max="100" placeholder="70"></div>
+                <div class="form-group"><label for="cardio-fick-pvo2" title="Presión venosa de O₂ — opcional">PvO₂ (mmHg) opc.</label><input type="number" id="cardio-fick-pvo2" step="1" min="0" max="100" placeholder="40"></div>
+            </div>
             <div id="cardio-fick-resultado" class="tfg-estado tfg-estado-ok" style="display:none;"></div>
             <div class="kinetic-row" id="cardio-fick-gauge-row" style="margin-top:14px; display:none;">
                 <div class="kinetic-label"><span>DO₂I (mL/min/m²)</span><strong id="cardio-fick-gauge-num">—</strong></div>
@@ -540,11 +578,13 @@
 
             <p class="section-label" style="margin-top:16px;">🧮 Calculadora interactiva: resistencias vasculares (ley de Hagen-Poiseuille)</p>
             <p style="font-size: 0.8rem; color: var(--text-muted);">RVS = (PAM − PAD) / GC; RVP = (PAMP − PAI) / GC, tal como las da la fuente (en unidades de Wood, mmHg·min/L). Recuerda la advertencia de la propia ficha: el GC aparece en el denominador de su propio cálculo, un acoplamiento matemático que limita su interpretación como poscarga "pura".</p>
-            <div class="form-group"><label for="cardio-rv-gc">Gasto cardíaco, GC (L/min)</label><input type="number" id="cardio-rv-gc" step="0.1" min="0.5" max="15" value="5"></div>
-            <div class="form-group"><label for="cardio-rv-pam">Presión arterial media, PAM (mmHg)</label><input type="number" id="cardio-rv-pam" step="1" min="20" max="180" value="80"></div>
-            <div class="form-group"><label for="cardio-rv-pad">Presión de la aurícula derecha, PAD (mmHg)</label><input type="number" id="cardio-rv-pad" step="1" min="-5" max="30" value="5"></div>
-            <div class="form-group"><label for="cardio-rv-pamp">Presión arterial pulmonar media, PAMP (mmHg) — opcional</label><input type="number" id="cardio-rv-pamp" step="1" min="5" max="80" placeholder="p. ej. 15"></div>
-            <div class="form-group"><label for="cardio-rv-pai">Presión de la aurícula izquierda / enclavamiento, PAI (mmHg) — opcional</label><input type="number" id="cardio-rv-pai" step="1" min="0" max="40" placeholder="p. ej. 8"></div>
+            <div class="calc-grid">
+                <div class="form-group"><label for="cardio-rv-gc" title="Gasto cardíaco">GC (L/min)</label><input type="number" id="cardio-rv-gc" step="0.1" min="0.5" max="15" value="5"></div>
+                <div class="form-group"><label for="cardio-rv-pam" title="Presión arterial media">PAM (mmHg)</label><input type="number" id="cardio-rv-pam" step="1" min="20" max="180" value="80"></div>
+                <div class="form-group"><label for="cardio-rv-pad" title="Presión de la aurícula derecha">PAD (mmHg)</label><input type="number" id="cardio-rv-pad" step="1" min="-5" max="30" value="5"></div>
+                <div class="form-group"><label for="cardio-rv-pamp" title="Presión arterial pulmonar media — opcional">PAMP (mmHg) opc.</label><input type="number" id="cardio-rv-pamp" step="1" min="5" max="80" placeholder="15"></div>
+                <div class="form-group"><label for="cardio-rv-pai" title="Presión de la aurícula izquierda / enclavamiento — opcional">PAI (mmHg) opc.</label><input type="number" id="cardio-rv-pai" step="1" min="0" max="40" placeholder="8"></div>
+            </div>
             <div id="cardio-rv-resultado" class="tfg-estado tfg-estado-ok" style="display:none;"></div>
             <div id="cardio-rv-interpretacion" class="tfg-estado tfg-estado-ok" style="margin-top:10px; display:none;"></div>
 
@@ -647,6 +687,22 @@
             </div>
             <div class="form-group" id="cardio-costo-pvc-group"><label for="cardio-costo-pvc">Presión venosa central, PVC (mmHg)</label><input type="number" id="cardio-costo-pvc" step="1" min="0" max="30" value="8"></div>
             <div id="cardio-costo-resultado" class="tfg-estado tfg-estado-ok" style="display:none;"></div>
+            <div class="kinetic-row" id="cardio-costo-gauge-dp-row" style="margin-top:10px; display:none;">
+                <div class="kinetic-label"><span>Doble producto (FC × PAS)</span><strong id="cardio-costo-gauge-dp-num">—</strong></div>
+                <div class="kinetic-track">
+                    <div class="kinetic-fill" id="cardio-costo-gauge-dp-fill" style="width:0%;"></div>
+                    <div class="kinetic-marker" style="left:80%;"></div>
+                    <div class="kinetic-marker-label" style="left:80%;">12.000</div>
+                </div>
+            </div>
+            <div class="kinetic-row" id="cardio-costo-gauge-tp-row" style="margin-top:6px; display:none;">
+                <div class="kinetic-label"><span>Triple producto (× presión en cuña)</span><strong id="cardio-costo-gauge-tp-num">—</strong></div>
+                <div class="kinetic-track">
+                    <div class="kinetic-fill" id="cardio-costo-gauge-tp-fill" style="width:0%;"></div>
+                    <div class="kinetic-marker" style="left:80%;"></div>
+                    <div class="kinetic-marker-label" style="left:80%;">120.000</div>
+                </div>
+            </div>
 
             <p class="section-label" style="margin-top:16px;">Índice de aporte de oxígeno (IDO₂)</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
@@ -664,6 +720,16 @@
             <div class="form-group"><label for="cardio-ido2-sao2">Saturación arterial de O₂ (%)</label><input type="number" id="cardio-ido2-sao2" step="1" min="0" max="100" value="98"></div>
             <div class="form-group"><label for="cardio-ido2-pao2">Presión arterial de O₂ (mmHg)</label><input type="number" id="cardio-ido2-pao2" step="1" min="0" max="600" value="90"></div>
             <div id="cardio-ido2-resultado" class="tfg-estado tfg-estado-ok" style="display:none;"></div>
+            <div class="kinetic-row" id="cardio-ido2-gauge-row" style="margin-top:10px; display:none;">
+                <div class="kinetic-label"><span>IDO₂ (mL/min/m²)</span><strong id="cardio-ido2-gauge-num">—</strong></div>
+                <div class="kinetic-track">
+                    <div class="kinetic-fill" id="cardio-ido2-gauge-fill" style="width:0%;"></div>
+                    <div class="kinetic-marker" style="left:65%;"></div>
+                    <div class="kinetic-marker-label" style="left:65%;">520</div>
+                    <div class="kinetic-marker" style="left:81.25%;"></div>
+                    <div class="kinetic-marker-label" style="left:81.25%;">650</div>
+                </div>
+            </div>
 
             <div class="micro-profiles" style="margin-top:12px;">
                 <div class="micro-prof-item">
@@ -788,6 +854,45 @@
             <dl class="kv-row"><dt>Relación fin-sistólica presión-volumen (FRSPV / Ees)</dt><dd>La línea que conecta los puntos de fin de sístole de bucles con distinta precarga (maniobra de oclusión de la vena cava inferior). Su pendiente (<strong>Ees</strong>, elastancia sistólica final) es un índice de <strong>contractilidad independiente de la carga</strong> — aumenta con inotrópicos positivos y disminuye con inotrópicos negativos.</dd></dl>
             <dl class="kv-row"><dt>Relación fin-diastólica presión-volumen (FRPVD)</dt><dd>La curva que describe la rigidez pasiva del ventrículo al final de la diástole. Una FRPVD desplazada hacia arriba/a la izquierda (más pendiente) indica un <strong>ventrículo más rígido</strong> — la base de la disfunción diastólica. La anormalidad en las propiedades elásticas del ventrículo suele deberse a una combinación de aumento de la masa miocárdica, alteraciones del colágeno extramiocárdico (fibrosis, relacionada con inflamación endotelial microvascular) y aumento del estrés oxidativo de los cardiomiocitos.</dd></dl>
 
+            <p class="section-label" style="margin-top:16px;">🧮 Simulador interactivo: asa presión-volumen</p>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Modelo ilustrativo simplificado (método de elastancia de un solo latido — Ees/Ea/V0 —, estándar en fisiología cardiovascular didáctica; el capítulo describe el asa solo de forma cualitativa, así que las constantes de este simulador no son cifras literales de la fuente). Mueve la precarga y la poscarga, y cambia el estado ventricular: verás cómo se desplaza la línea de fin de sístole (Ees, contractilidad) y la línea de llenado diastólico (FRPVD, rigidez) — exactamente los 2 patrones de la tabla de arriba.</p>
+            <div class="tfg-slider-row">
+                <label for="cardio-pv-precarga">Precarga (retorno venoso)</label>
+                <input type="range" id="cardio-pv-precarga" min="0" max="100" value="50" step="1">
+                <span id="cardio-pv-precarga-valor">50%</span>
+            </div>
+            <div class="tfg-slider-row">
+                <label for="cardio-pv-poscarga">Poscarga (resistencia arterial)</label>
+                <input type="range" id="cardio-pv-poscarga" min="0" max="100" value="50" step="1">
+                <span id="cardio-pv-poscarga-valor">50%</span>
+            </div>
+            <div class="form-group">
+                <label for="cardio-pv-estado">Estado ventricular</label>
+                <select id="cardio-pv-estado">
+                    <option value="normal">Normal</option>
+                    <option value="sistolica">Disfunción sistólica (↓ contractilidad)</option>
+                    <option value="diastolica">Disfunción diastólica (↑ rigidez)</option>
+                </select>
+            </div>
+            <svg viewBox="0 0 340 230" class="micro-svg" xmlns="http://www.w3.org/2000/svg">
+                <text x="170" y="14" text-anchor="middle" class="micro-svg-label" style="font-weight:bold;">Asa presión-volumen del ventrículo izquierdo</text>
+                <line x1="45" y1="20" x2="45" y2="195" stroke="var(--text-muted)" stroke-width="1"/>
+                <line x1="45" y1="195" x2="320" y2="195" stroke="var(--text-muted)" stroke-width="1"/>
+                <text x="10" y="112" text-anchor="middle" class="micro-svg-label" transform="rotate(-90 10 112)">Presión (mmHg)</text>
+                <text x="182" y="216" text-anchor="middle" class="micro-svg-label">Volumen ventricular (mL)</text>
+                <text x="41" y="199" text-anchor="end" class="micro-svg-label">0</text>
+                <text x="163" y="199" text-anchor="middle" class="micro-svg-label">100</text>
+                <text x="281" y="199" text-anchor="middle" class="micro-svg-label">200</text>
+                <path id="cardio-pv-frpvd-path" d="" fill="none" stroke="var(--accent-yellow)" stroke-width="1.3" stroke-dasharray="3,3"/>
+                <line id="cardio-pv-espvr-line" x1="0" y1="0" x2="0" y2="0" stroke="var(--accent-blue)" stroke-width="1.3" stroke-dasharray="3,3"/>
+                <text id="cardio-pv-espvr-label" x="313" y="32" text-anchor="end" class="micro-svg-label" style="fill:var(--accent-blue);">Ees</text>
+                <text id="cardio-pv-frpvd-label" x="0" y="0" class="micro-svg-label" style="fill:var(--accent-yellow);">FRPVD</text>
+                <path id="cardio-pv-loop-path" d="" fill="rgba(212,175,55,0.15)" stroke="var(--accent-blue)" stroke-width="2.2"/>
+                <circle id="cardio-pv-punto-a" cx="0" cy="0" r="3.5" fill="var(--accent-green)"/>
+                <circle id="cardio-pv-punto-c" cx="0" cy="0" r="3.5" fill="var(--accent-red)"/>
+            </svg>
+            <div id="cardio-pv-resultado" class="tfg-estado tfg-estado-ok"></div>
+
             <div class="article-figure">
                 <img src="js/modules/fisio-uci/img/cardio-fig3-presion-volumen.jpg" alt="El asa presión-volumen y sus componentes estructurales: FRSPV, FRPVD, contracción isovolémica, relajación isovolémica, oclusión de la vena cava inferior" loading="lazy">
                 <div class="article-figure-caption">El asa presión-volumen y sus componentes estructurales, obtenida con oclusión progresiva de la vena cava inferior.</div>
@@ -846,6 +951,17 @@
             <div class="form-group"><label for="cardio-laplace-r">Radio ventricular, R (cm)</label><input type="number" id="cardio-laplace-r" step="0.1" min="1" max="6" value="2.5"></div>
             <div class="form-group"><label for="cardio-laplace-t">Grosor de la pared, t (cm)</label><input type="number" id="cardio-laplace-t" step="0.1" min="0.3" max="3" value="1"></div>
             <div id="cardio-laplace-resultado" class="tfg-estado tfg-estado-ok" style="display:none;"></div>
+            <svg viewBox="0 0 260 150" class="micro-svg" xmlns="http://www.w3.org/2000/svg">
+                <text x="130" y="14" text-anchor="middle" class="micro-svg-label">Corte transversal: radio y grosor de pared</text>
+                <circle id="cardio-laplace-t3-luz" cx="75" cy="90" r="30" fill="rgba(212,175,55,0.12)"/>
+                <circle id="cardio-laplace-t3-pared" cx="75" cy="90" r="35" fill="none" stroke="var(--accent-blue)" stroke-width="10"/>
+                <line id="cardio-laplace-t3-radio" x1="75" y1="90" x2="105" y2="90" stroke="var(--accent-yellow)" stroke-width="1.3" stroke-dasharray="2,2"/>
+                <text id="cardio-laplace-t3-radio-label" x="90" y="84" text-anchor="middle" class="micro-svg-label" style="fill:var(--accent-yellow);">R</text>
+                <text x="190" y="45" text-anchor="middle" class="micro-svg-label">Tensión de pared (T)</text>
+                <rect x="140" y="55" width="100" height="12" rx="2" fill="rgba(0,0,0,0.3)"/>
+                <rect id="cardio-laplace-t3-barra" x="140" y="55" width="10" height="12" rx="2" fill="var(--accent-red)"/>
+                <text id="cardio-laplace-t3-t" x="190" y="88" text-anchor="middle" class="micro-svg-label" style="font-weight:bold;">T = —</text>
+            </svg>
 
             <p class="section-label" style="margin-top:16px;">Activación neurohormonal y de citocinas</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
@@ -946,6 +1062,29 @@
                 <img src="js/modules/fisio-uci/img/cardio-fig7-fuerzas-starling-capilar.jpg" alt="Microcirculación capilar: presión hidrostática, presión osmótica y líquido intersticial entre arteriola y vénula" loading="lazy">
                 <div class="article-figure-caption">Fuerzas de Starling a nivel del capilar.</div>
             </div>
+
+            <p class="section-label" style="margin-top:16px;">🧮 Simulador interactivo: balance de fuerzas a lo largo del capilar</p>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Mueve la presión hidrostática del extremo arteriolar y la presión oncótica plasmática — observa cómo se desplaza el punto donde el capilar deja de filtrar (flechas rojas hacia afuera) y empieza a reabsorber (flechas verdes hacia adentro).</p>
+            <div class="tfg-slider-row">
+                <label for="cardio-starling-ph">Presión hidrostática arteriolar (mmHg)</label>
+                <input type="range" id="cardio-starling-ph" min="15" max="45" value="32" step="1">
+                <span id="cardio-starling-ph-valor">32 mmHg</span>
+            </div>
+            <div class="tfg-slider-row">
+                <label for="cardio-starling-onc">Presión oncótica plasmática (proteínas)</label>
+                <input type="range" id="cardio-starling-onc" min="10" max="35" value="25" step="1">
+                <span id="cardio-starling-onc-valor">25 mmHg</span>
+            </div>
+            <svg viewBox="0 0 320 130" class="micro-svg" xmlns="http://www.w3.org/2000/svg">
+                <text x="160" y="14" text-anchor="middle" class="micro-svg-label" style="font-weight:bold;">Capilar: extremo arteriolar → extremo venular</text>
+                <rect x="40" y="55" width="240" height="20" rx="10" fill="rgba(212,175,55,0.08)" stroke="var(--text-muted)" stroke-width="1.3"/>
+                <text x="40" y="112" text-anchor="middle" class="micro-svg-label">Arteriolar</text>
+                <text x="280" y="112" text-anchor="middle" class="micro-svg-label">Venular</text>
+                <g id="cardio-starling-flechas"></g>
+                <line id="cardio-starling-cruce" x1="160" y1="42" x2="160" y2="100" stroke="var(--text-main)" stroke-width="1" stroke-dasharray="2,2"/>
+                <text id="cardio-starling-cruce-label" x="160" y="34" text-anchor="middle" class="micro-svg-label">punto de equilibrio</text>
+            </svg>
+            <div id="cardio-starling-resultado" class="tfg-estado tfg-estado-ok"></div>
 
             <p class="section-label" style="margin-top:16px;">4 mecanismos de intercambio capilar</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">

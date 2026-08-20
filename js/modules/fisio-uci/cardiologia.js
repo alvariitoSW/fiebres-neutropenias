@@ -72,6 +72,60 @@ function calcFrankStarlingSimulador() {
     }
 }
 
+// Diagrama interactivo de la ley de Laplace (Ficha 1, dentro de "Poscarga"):
+// a presión constante, un slider de radio mueve un círculo (corte del
+// ventrículo) y una barra de tensión relativa T=P×r — versión visual y
+// más simple que la calculadora numérica completa de la Ficha 3
+// (T=(P×R)/2t, con grosor de pared incluido).
+function calcLaplaceMiniDiagrama() {
+    const rEl = document.getElementById('cardio-laplace-mini-r');
+    const rValorEl = document.getElementById('cardio-laplace-mini-r-valor');
+    const circulo = document.getElementById('cardio-laplace-mini-circulo');
+    const radioLinea = document.getElementById('cardio-laplace-mini-radio');
+    const radioLabel = document.getElementById('cardio-laplace-mini-radio-label');
+    const barra = document.getElementById('cardio-laplace-mini-barra');
+    const tTexto = document.getElementById('cardio-laplace-mini-t');
+    if (!rEl || !circulo) return;
+
+    const frac = Number(rEl.value) / 100;
+    const rCm = 1.5 + frac * 3.5;
+    const pxRadio = 15 + frac * 35;
+
+    if (rValorEl) rValorEl.textContent = `${rCm.toFixed(1)} cm`;
+    circulo.setAttribute('r', pxRadio);
+    if (radioLinea) radioLinea.setAttribute('x2', 70 + pxRadio);
+    if (radioLabel) radioLabel.setAttribute('x', 70 + pxRadio / 2);
+
+    let color = 'var(--accent-green)';
+    if (frac > 0.7) color = 'var(--accent-red)';
+    else if (frac > 0.4) color = 'var(--accent-yellow)';
+    circulo.setAttribute('stroke', color);
+
+    const tPct = Math.round(frac * 100);
+    if (barra) { barra.setAttribute('width', 10 + frac * 90); barra.setAttribute('fill', color); }
+    if (tTexto) tTexto.textContent = `T relativa: ${tPct}%`;
+}
+
+// Demostración interactiva del artefacto de acoplamiento matemático de la
+// RVS/RVP (Ficha 1, dentro de "Poscarga"): PAM y PAD fijas, solo cambia el
+// GC — la RVS "calculada" sube o baja aunque el tono vascular real (barra
+// fija de abajo) no se haya movido, ilustrando la advertencia de la fuente.
+const RVS_ARTEFACTO_MAX = 25;
+function calcRVSArtefactoDiagrama() {
+    const gcEl = document.getElementById('cardio-laplace-mini-gc');
+    const gcValorEl = document.getElementById('cardio-laplace-mini-gc-valor');
+    const rvsValorEl = document.getElementById('cardio-laplace-mini-rvs-valor');
+    const rvsFill = document.getElementById('cardio-laplace-mini-rvs-fill');
+    if (!gcEl || !rvsFill) return;
+
+    const gc = Number(gcEl.value) / 10;
+    if (gcValorEl) gcValorEl.textContent = `${gc.toFixed(1)} L/min`;
+
+    const rvs = (80 - 5) / gc;
+    if (rvsValorEl) rvsValorEl.textContent = `${rvs.toFixed(1)} UW`;
+    rvsFill.style.width = `${Math.max(0, Math.min(100, (rvs / RVS_ARTEFACTO_MAX) * 100))}%`;
+}
+
 // Controles de la animación del ciclo cardíaco (Ficha 1) — la animación en
 // sí es 100% CSS (@keyframes sobre x del cursor, opacity de las etiquetas
 // de fase y r de los pulsos de tonos cardíacos), sin requestAnimationFrame;
@@ -287,6 +341,39 @@ function calcResistenciasVasculares() {
 
 // Costo de funcionamiento miocárdico (doble/triple producto, presión de
 // perfusión coronaria, índice aporte-consumo), Ficha 2.
+// Gauges de doble/triple producto (Ficha 2) — mismo patrón .kinetic-row/
+// .kinetic-fill que el DO2I de la Ficha 1, escala con margen sobre el
+// límite normal (12.000/120.000) para que la barra nunca se sature de
+// golpe al superar el corte.
+const COSTO_DP_MAX = 15000;
+const COSTO_TP_MAX = 150000;
+function actualizarGaugeCosto(dp, tp) {
+    const dpRow = document.getElementById('cardio-costo-gauge-dp-row');
+    const dpFill = document.getElementById('cardio-costo-gauge-dp-fill');
+    const dpNum = document.getElementById('cardio-costo-gauge-dp-num');
+    const tpRow = document.getElementById('cardio-costo-gauge-tp-row');
+    const tpFill = document.getElementById('cardio-costo-gauge-tp-fill');
+    const tpNum = document.getElementById('cardio-costo-gauge-tp-num');
+    if (!dpRow || !dpFill || !dpNum || !tpRow || !tpFill || !tpNum) return;
+
+    const colores = { ok: 'var(--accent-green)', warn: 'var(--accent-yellow)', danger: 'var(--accent-red)' };
+    const glows = { ok: 'var(--glow-green)', warn: 'none', danger: 'var(--glow-red)' };
+    const estadoDp = dp > 12000 ? 'danger' : (dp > 10200 ? 'warn' : 'ok');
+    const estadoTp = tp > 120000 ? 'danger' : (tp > 102000 ? 'warn' : 'ok');
+
+    dpRow.style.display = 'block';
+    dpFill.style.width = `${Math.max(0, Math.min(100, (dp / COSTO_DP_MAX) * 100))}%`;
+    dpFill.style.background = colores[estadoDp];
+    dpFill.style.boxShadow = glows[estadoDp];
+    dpNum.textContent = dp.toLocaleString('es');
+
+    tpRow.style.display = 'block';
+    tpFill.style.width = `${Math.max(0, Math.min(100, (tp / COSTO_TP_MAX) * 100))}%`;
+    tpFill.style.background = colores[estadoTp];
+    tpFill.style.boxShadow = glows[estadoTp];
+    tpNum.textContent = tp.toLocaleString('es');
+}
+
 function calcCostoFuncionamiento() {
     const fcEl = document.getElementById('cardio-costo-fc');
     const pasEl = document.getElementById('cardio-costo-pas');
@@ -303,6 +390,10 @@ function calcCostoFuncionamiento() {
 
     if (fcEl.value === '' || pasEl.value === '' || cunaEl.value === '' || padEl.value === '' || (esDerecho && pvcEl.value === '')) {
         box.style.display = 'none';
+        const dpRow = document.getElementById('cardio-costo-gauge-dp-row');
+        const tpRow = document.getElementById('cardio-costo-gauge-tp-row');
+        if (dpRow) dpRow.style.display = 'none';
+        if (tpRow) tpRow.style.display = 'none';
         return;
     }
 
@@ -331,6 +422,28 @@ function calcCostoFuncionamiento() {
     box.style.display = 'block';
     box.className = `tfg-estado tfg-estado-${estado}`;
     box.innerHTML = lineas.join('<br>');
+
+    actualizarGaugeCosto(dobleProducto, tripleProducto);
+}
+
+// Gauge visual del IDO2 de la Ficha 2 (escala 0-800, banda normal 520-650
+// de la Tabla 12) — mismo patrón .kinetic-row que el gauge de DO2I de la
+// Ficha 1, reutilizando la misma escala máxima para que ambas calculadoras
+// se lean con el mismo lenguaje visual.
+const IDO2_F2_GAUGE_MAX = 800;
+function actualizarGaugeIDO2Ficha2(ido2, estado) {
+    const row = document.getElementById('cardio-ido2-gauge-row');
+    const fill = document.getElementById('cardio-ido2-gauge-fill');
+    const num = document.getElementById('cardio-ido2-gauge-num');
+    if (!row || !fill || !num) return;
+
+    row.style.display = 'block';
+    fill.style.width = `${Math.max(0, Math.min(100, (ido2 / IDO2_F2_GAUGE_MAX) * 100))}%`;
+    const colores = { ok: 'var(--accent-green)', warn: 'var(--accent-yellow)', danger: 'var(--accent-red)' };
+    const glows = { ok: 'var(--glow-green)', warn: 'none', danger: 'var(--glow-red)' };
+    fill.style.background = colores[estado] || colores.ok;
+    fill.style.boxShadow = glows[estado] || 'none';
+    num.textContent = `${ido2.toFixed(0)}`;
 }
 
 // Índice de aporte de oxígeno (IDO2 = IC x CaO2), Ficha 2 — versión x10
@@ -341,7 +454,12 @@ function calcIDO2Ficha2() {
     const els = ids.map(id => document.getElementById(id));
     const box = document.getElementById('cardio-ido2-resultado');
     if (els.some(e => !e) || !box) return;
-    if (els.some(e => e.value === '')) { box.style.display = 'none'; return; }
+    if (els.some(e => e.value === '')) {
+        box.style.display = 'none';
+        const gaugeRow = document.getElementById('cardio-ido2-gauge-row');
+        if (gaugeRow) gaugeRow.style.display = 'none';
+        return;
+    }
 
     const [gc, sc, hb, sao2, pao2] = els.map(e => Number(e.value));
     if (sc === 0) { box.style.display = 'none'; return; }
@@ -360,6 +478,49 @@ function calcIDO2Ficha2() {
         `CaO₂ = ${cao2.toFixed(1)} mL/dL<br>` +
         `IDO₂ = IC × CaO₂ × 10 = ${ido2.toFixed(0)} mL/min/m²` +
         '<br><span style="font-size:0.72rem;opacity:0.85;">Valor normal de referencia (Tabla 12, Capítulo 5): 520-650 mL/min/m².</span>';
+
+    actualizarGaugeIDO2Ficha2(ido2, estado);
+}
+
+// Esquema circular de la calculadora de Laplace de la Ficha 3 (radio/grosor
+// de pared reales, no un slider ilustrativo como el mini-diagrama de la
+// Ficha 1) — el círculo interior representa la cavidad (escalado con R), el
+// anillo su pared (grosor de trazo escalado con t), y la barra la tensión
+// calculada en una escala ilustrativa (no clínica).
+function calcLaplaceCirculoFicha3(r, t, tension) {
+    const luz = document.getElementById('cardio-laplace-t3-luz');
+    const pared = document.getElementById('cardio-laplace-t3-pared');
+    const radioLinea = document.getElementById('cardio-laplace-t3-radio');
+    const radioLabel = document.getElementById('cardio-laplace-t3-radio-label');
+    const barra = document.getElementById('cardio-laplace-t3-barra');
+    const tTexto = document.getElementById('cardio-laplace-t3-t');
+    if (!luz || !pared) return;
+
+    if (r === null || t === null) {
+        if (tTexto) tTexto.textContent = 'T = —';
+        return;
+    }
+
+    const rPx = Math.max(10, Math.min(55, 8 + r * 8));
+    const tPx = Math.max(2, Math.min(24, t * 8));
+
+    luz.setAttribute('r', rPx);
+    pared.setAttribute('r', rPx + tPx / 2);
+    pared.setAttribute('stroke-width', tPx);
+    if (radioLinea) radioLinea.setAttribute('x2', 75 + rPx);
+    if (radioLabel) radioLabel.setAttribute('x', 75 + rPx / 2);
+
+    let color = 'var(--accent-green)';
+    let pctBarra = 0;
+    if (tension !== null) {
+        const escalaMax = 300; // escala ilustrativa de la barra, no un umbral clínico
+        pctBarra = Math.max(0, Math.min(100, (tension / escalaMax) * 100));
+        if (tension > 200) color = 'var(--accent-red)';
+        else if (tension > 100) color = 'var(--accent-yellow)';
+    }
+    pared.setAttribute('stroke', color);
+    if (barra) { barra.setAttribute('width', 10 + (pctBarra / 100) * 90); barra.setAttribute('fill', color); }
+    if (tTexto) tTexto.textContent = tension !== null ? `T = ${tension.toFixed(1)}` : 'T = —';
 }
 
 // Tensión de la pared ventricular, ley de Laplace (Ficha 3): T = (P×R)/2t.
@@ -369,12 +530,24 @@ function calcLaplaceTension() {
     const tEl = document.getElementById('cardio-laplace-t');
     const box = document.getElementById('cardio-laplace-resultado');
     if (!pEl || !rEl || !tEl || !box) return;
-    if (pEl.value === '' || rEl.value === '' || tEl.value === '') { box.style.display = 'none'; return; }
+
+    const rVal = rEl.value !== '' ? Number(rEl.value) : null;
+    const tVal = tEl.value !== '' ? Number(tEl.value) : null;
+
+    if (pEl.value === '' || rEl.value === '' || tEl.value === '') {
+        box.style.display = 'none';
+        calcLaplaceCirculoFicha3(rVal, tVal, null);
+        return;
+    }
 
     const p = Number(pEl.value);
     const r = Number(rEl.value);
     const t = Number(tEl.value);
-    if (t === 0) { box.style.display = 'none'; return; }
+    if (t === 0) {
+        box.style.display = 'none';
+        calcLaplaceCirculoFicha3(r, t, null);
+        return;
+    }
 
     const tension = (p * r) / (2 * t);
 
@@ -382,6 +555,193 @@ function calcLaplaceTension() {
     box.className = 'tfg-estado tfg-estado-ok';
     box.innerHTML = `T = (P × R) / 2t = (${p} × ${r}) / (2 × ${t}) = <strong>${tension.toFixed(1)}</strong> (unidades de presión×longitud/longitud)` +
         '<br><span style="font-size:0.72rem;opacity:0.85;">A mayor radio (dilatación) o menor grosor de pared, mayor tensión para la misma presión — la hipertrofia (↑t) es el mecanismo compensador que busca normalizarla.</span>';
+
+    calcLaplaceCirculoFicha3(r, t, tension);
+}
+
+// Simulador del asa presión-volumen (Ficha 3) — modelo ilustrativo del
+// método de elastancia de un solo latido (Ees/Ea/V0), estándar en
+// fisiología cardiovascular didáctica. El capítulo solo describe el asa de
+// forma cualitativa (los patrones ya recogidos en la tabla de la propia
+// ficha), así que las constantes de aquí NO son cifras literales de la
+// fuente — igual que el modelo del simulador de Frank-Starling de la
+// Ficha 1, es puramente ilustrativo.
+const PV_V0 = 20;   // volumen teórico a presión 0 (constante del modelo)
+const PV_PD0 = 1;   // constante de escala de la curva diastólica exponencial
+const PV_ESTADOS = {
+    normal: { ees: 2.2, beta: 0.022 },
+    sistolica: { ees: 0.9, beta: 0.022 },
+    diastolica: { ees: 2.2, beta: 0.040 },
+};
+function pvMapV(vol) { return 45 + (vol / 220) * 275; }
+function pvMapP(pres) { return 195 - (pres / 180) * 175; }
+
+function calcAsaPresionVolumen() {
+    const precargaEl = document.getElementById('cardio-pv-precarga');
+    const poscargaEl = document.getElementById('cardio-pv-poscarga');
+    const estadoEl = document.getElementById('cardio-pv-estado');
+    const loopPath = document.getElementById('cardio-pv-loop-path');
+    if (!precargaEl || !poscargaEl || !estadoEl || !loopPath) return;
+
+    const precarga = Number(precargaEl.value);
+    const poscarga = Number(poscargaEl.value);
+    const { ees, beta } = PV_ESTADOS[estadoEl.value];
+
+    const edv = 70 + precarga * 0.9;    // 70-160 mL
+    const ea = 0.6 + poscarga * 0.018;  // 0.6-2.4 (elastancia arterial efectiva)
+
+    const esv = (ea * edv + ees * PV_V0) / (ees + ea);
+    const esp = ees * (esv - PV_V0);
+    // Clamp: con precarga alta + disfunción diastólica la exponencial puede
+    // disparar la presión de llenado muy por encima del lienzo — se limita
+    // a 170 mmHg (aun así "fuera de escala", pero mantiene el asa dibujable).
+    const edp = Math.min(170, PV_PD0 * (Math.exp(beta * (edv - PV_V0)) - 1));
+    const edpEsv = Math.min(170, PV_PD0 * (Math.exp(beta * (esv - PV_V0)) - 1));
+    const pao = 0.35 * esp + 20; // presión de apertura aórtica aproximada (< esp)
+    const sv = edv - esv;
+    const ef = edv > 0 ? (sv / edv) * 100 : 0;
+
+    const ax = pvMapV(edv), ay = pvMapP(edp);
+    const bx = pvMapV(edv), by = pvMapP(pao);
+    const cx = pvMapV(esv), cy = pvMapP(esp);
+    const dx = pvMapV(esv), dy = pvMapP(edpEsv);
+
+    const ejeccionCtrlX = (bx + cx) / 2;
+    const ejeccionCtrlY = Math.min(by, cy) - 12;
+    const llenadoCtrlX = dx + (ax - dx) * 0.7;
+    const llenadoCtrlY = dy + (ay - dy) * 0.15;
+
+    loopPath.setAttribute('d', `M ${ax},${ay} L ${bx},${by} Q ${ejeccionCtrlX},${ejeccionCtrlY} ${cx},${cy} L ${dx},${dy} Q ${llenadoCtrlX},${llenadoCtrlY} ${ax},${ay} Z`);
+
+    const colores = { normal: 'var(--accent-blue)', sistolica: 'var(--accent-red)', diastolica: 'var(--accent-purple)' };
+    const color = colores[estadoEl.value];
+    loopPath.setAttribute('stroke', color);
+    loopPath.setAttribute('fill', color);
+    loopPath.style.fillOpacity = '0.15';
+
+    // Línea ESPVR (Ees): desde V0 hasta el borde del lienzo.
+    const pMaxCanvas = 180;
+    const vEnPMax = PV_V0 + pMaxCanvas / ees;
+    const vFinLinea = Math.min(220, vEnPMax);
+    const pFinLinea = ees * (vFinLinea - PV_V0);
+    const espvrLine = document.getElementById('cardio-pv-espvr-line');
+    if (espvrLine) {
+        espvrLine.setAttribute('x1', pvMapV(PV_V0));
+        espvrLine.setAttribute('y1', pvMapP(0));
+        espvrLine.setAttribute('x2', pvMapV(vFinLinea));
+        espvrLine.setAttribute('y2', pvMapP(pFinLinea));
+    }
+    // La etiqueta "Ees" queda fija en la esquina superior derecha (ver HTML)
+    // — anclarla al extremo dinámico de la línea la hacía chocar con el
+    // título del diagrama cuando Ees es alto (línea casi vertical).
+
+    // Curva FRPVD (llenado diastólico), muestreada desde V0 hasta EDV+30.
+    const frpvdPuntos = [];
+    const vMaxFrpvd = Math.min(220, edv + 30);
+    for (let v = PV_V0; v <= vMaxFrpvd; v += (vMaxFrpvd - PV_V0) / 20) {
+        const p = PV_PD0 * (Math.exp(beta * (v - PV_V0)) - 1);
+        if (p > 180) break;
+        frpvdPuntos.push(`${pvMapV(v)},${pvMapP(p)}`);
+    }
+    const frpvdPath = document.getElementById('cardio-pv-frpvd-path');
+    if (frpvdPath) frpvdPath.setAttribute('d', frpvdPuntos.length ? 'M ' + frpvdPuntos.join(' L ') : '');
+    const frpvdLabel = document.getElementById('cardio-pv-frpvd-label');
+    if (frpvdLabel && frpvdPuntos.length) {
+        const [lx, ly] = frpvdPuntos[frpvdPuntos.length - 1].split(',');
+        frpvdLabel.setAttribute('x', Number(lx) - 26);
+        frpvdLabel.setAttribute('y', Number(ly) - 6);
+    }
+
+    const puntoA = document.getElementById('cardio-pv-punto-a');
+    if (puntoA) { puntoA.setAttribute('cx', ax); puntoA.setAttribute('cy', ay); }
+    const puntoC = document.getElementById('cardio-pv-punto-c');
+    if (puntoC) { puntoC.setAttribute('cx', cx); puntoC.setAttribute('cy', cy); }
+
+    const precargaValorEl = document.getElementById('cardio-pv-precarga-valor');
+    if (precargaValorEl) precargaValorEl.textContent = `${precarga}%`;
+    const poscargaValorEl = document.getElementById('cardio-pv-poscarga-valor');
+    if (poscargaValorEl) poscargaValorEl.textContent = `${poscarga}%`;
+
+    const resultadoEl = document.getElementById('cardio-pv-resultado');
+    if (resultadoEl) {
+        let estadoBox = 'ok';
+        if (ef < 30) estadoBox = 'danger';
+        else if (ef < 45) estadoBox = 'warn';
+        const etiquetaEstado = { normal: 'normal', sistolica: 'disfunción sistólica', diastolica: 'disfunción diastólica' }[estadoEl.value];
+        resultadoEl.className = `tfg-estado tfg-estado-${estadoBox}`;
+        resultadoEl.innerHTML = `EDV ≈ ${edv.toFixed(0)} mL · ESV ≈ ${esv.toFixed(0)} mL · Volumen sistólico ≈ ${sv.toFixed(0)} mL · FE ≈ ${ef.toFixed(0)}% (${etiquetaEstado})` +
+            '<br><span style="font-size:0.72rem;opacity:0.85;">Modelo ilustrativo — fíjate en cómo la línea azul discontinua (Ees) se desplaza abajo/derecha en disfunción sistólica, y la línea amarilla discontinua (FRPVD) se desplaza arriba/izquierda en disfunción diastólica, tal como describe la tabla de patrones de arriba.</span>';
+    }
+}
+
+// Simulador de fuerzas de Starling a lo largo del capilar (Ficha 4):
+// presión hidrostática decreciente linealmente del extremo arteriolar al
+// venular (diferencial fijo de 17 mmHg, valores de partida clásicos de la
+// docencia fisiológica ~32→15 mmHg) frente a una presión oncótica
+// plasmática constante — encuentra el punto donde se cruzan (filtración →
+// reabsorción). Modelo simplificado: la fuente no da esta fórmula, solo
+// describe el balance en prosa (ver el texto que precede al simulador).
+function calcFuerzasStarlingCapilar() {
+    const phEl = document.getElementById('cardio-starling-ph');
+    const oncEl = document.getElementById('cardio-starling-onc');
+    const flechasG = document.getElementById('cardio-starling-flechas');
+    const cruceLinea = document.getElementById('cardio-starling-cruce');
+    const cruceLabel = document.getElementById('cardio-starling-cruce-label');
+    const resultadoEl = document.getElementById('cardio-starling-resultado');
+    if (!phEl || !oncEl || !flechasG) return;
+
+    const phArt = Number(phEl.value);
+    const onc = Number(oncEl.value);
+    const phVen = Math.max(5, phArt - 17);
+
+    const phValorEl = document.getElementById('cardio-starling-ph-valor');
+    if (phValorEl) phValorEl.textContent = `${phArt} mmHg`;
+    const oncValorEl = document.getElementById('cardio-starling-onc-valor');
+    if (oncValorEl) oncValorEl.textContent = `${onc} mmHg`;
+
+    const pendiente = phVen - phArt;
+    let x0 = pendiente !== 0 ? (onc - phArt) / pendiente : 0.5;
+    x0 = Math.max(0, Math.min(1, x0));
+    const todoFiltra = (phVen - onc) >= 0;
+    const todoReabsorbe = (phArt - onc) <= 0;
+
+    // Ambas flechas viven en la misma banda (el espacio intersticial, debajo
+    // del tubo capilar) para que la dirección sea lo único que cambia: hacia
+    // abajo/afuera = filtración (sale del vaso), hacia arriba/adentro =
+    // reabsorción (entra al vaso) — antes usaban bandas opuestas (una
+    // arriba, otra abajo) y las dos apuntaban "hacia afuera" de su propia
+    // banda, sin transmitir realmente "entra" vs. "sale" del capilar.
+    const nPuntos = 5;
+    let svgFlechas = '';
+    for (let i = 0; i < nPuntos; i++) {
+        const frac = i / (nPuntos - 1);
+        const ph = phArt + (phVen - phArt) * frac;
+        const neto = ph - onc;
+        const x = 55 + frac * 210;
+        if (neto > 0.5) {
+            svgFlechas += `<line x1="${x}" y1="76" x2="${x}" y2="90" stroke="var(--accent-red)" stroke-width="2"/><polygon points="${x - 4},90 ${x + 4},90 ${x},98" fill="var(--accent-red)"/>`;
+        } else if (neto < -0.5) {
+            svgFlechas += `<line x1="${x}" y1="98" x2="${x}" y2="84" stroke="var(--accent-green)" stroke-width="2"/><polygon points="${x - 4},84 ${x + 4},84 ${x},76" fill="var(--accent-green)"/>`;
+        } else {
+            svgFlechas += `<circle cx="${x}" cy="87" r="2.5" fill="var(--text-muted)"/>`;
+        }
+    }
+    flechasG.innerHTML = svgFlechas;
+
+    let cruceX = 55 + x0 * 210;
+    if (todoFiltra) { cruceX = 280; if (cruceLabel) cruceLabel.textContent = 'filtración en todo el capilar'; }
+    else if (todoReabsorbe) { cruceX = 40; if (cruceLabel) cruceLabel.textContent = 'reabsorción en todo el capilar'; }
+    else if (cruceLabel) cruceLabel.textContent = 'punto de equilibrio';
+    if (cruceLinea) { cruceLinea.setAttribute('x1', cruceX); cruceLinea.setAttribute('x2', cruceX); }
+
+    if (resultadoEl) {
+        const netoArt = phArt - onc;
+        const netoVen = phVen - onc;
+        resultadoEl.className = 'tfg-estado tfg-estado-ok';
+        resultadoEl.innerHTML = `Presión neta en el extremo arteriolar: ${netoArt.toFixed(1)} mmHg (${netoArt > 0 ? 'filtración' : 'reabsorción'}) · Presión neta en el extremo venular: ${netoVen.toFixed(1)} mmHg (${netoVen > 0 ? 'filtración' : 'reabsorción'})` +
+            (todoFiltra || todoReabsorbe ? '' : ` · Punto de equilibrio a ≈${Math.round(x0 * 100)}% del trayecto`) +
+            '<br><span style="font-size:0.72rem;opacity:0.85;">Modelo simplificado (presión oncótica constante a lo largo del capilar) — en la realidad la oncótica también sube ligeramente al concentrarse las proteínas conforme el capilar filtra líquido.</span>';
+    }
 }
 
 export function init() {
@@ -390,6 +750,14 @@ export function init() {
     document.querySelectorAll('#cardio-fs-precarga, #cardio-fs-estado')
         .forEach(el => el && el.addEventListener('input', calcFrankStarlingSimulador));
     calcFrankStarlingSimulador();
+
+    const laplaceMiniR = document.getElementById('cardio-laplace-mini-r');
+    if (laplaceMiniR) laplaceMiniR.addEventListener('input', calcLaplaceMiniDiagrama);
+    calcLaplaceMiniDiagrama();
+
+    const laplaceMiniGc = document.getElementById('cardio-laplace-mini-gc');
+    if (laplaceMiniGc) laplaceMiniGc.addEventListener('input', calcRVSArtefactoDiagrama);
+    calcRVSArtefactoDiagrama();
 
     initCicloCardiacoAnimado();
 
@@ -414,4 +782,14 @@ export function init() {
     document.querySelectorAll('#cardio-ido2-gc, #cardio-ido2-sc, #cardio-ido2-hb, #cardio-ido2-sao2, #cardio-ido2-pao2')
         .forEach(el => el && el.addEventListener('input', calcIDO2Ficha2));
     calcIDO2Ficha2();
+
+    document.querySelectorAll('#cardio-pv-precarga, #cardio-pv-poscarga')
+        .forEach(el => el && el.addEventListener('input', calcAsaPresionVolumen));
+    const pvEstadoEl = document.getElementById('cardio-pv-estado');
+    if (pvEstadoEl) pvEstadoEl.addEventListener('change', calcAsaPresionVolumen);
+    calcAsaPresionVolumen();
+
+    document.querySelectorAll('#cardio-starling-ph, #cardio-starling-onc')
+        .forEach(el => el && el.addEventListener('input', calcFuerzasStarlingCapilar));
+    calcFuerzasStarlingCapilar();
 }

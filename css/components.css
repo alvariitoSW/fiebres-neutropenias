@@ -626,6 +626,16 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 .tfg-estado-warn { background: rgba(207,154,62,0.14); border-color: var(--accent-yellow); color: var(--text-main); }
 .tfg-estado-danger { background: rgba(184,92,62,0.16); border-color: var(--accent-red); color: var(--text-main); }
 
+/* Rejilla compacta de 2 columnas para los inputs numéricos de una       */
+/* calculadora con muchos campos (Fick, resistencias vasculares) — evita */
+/* que la calculadora ocupe media pantalla solo en inputs, para que el   */
+/* gauge/interpretación que viene justo debajo quede más integrado       */
+/* visualmente. Reduce label a una línea (por eso las calculadoras que   */
+/* la usan acortan la etiqueta a la abreviatura, ej. "PAM (mmHg)").      */
+.calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; margin-bottom: 10px; }
+.calc-grid .form-group { margin-bottom: 6px; }
+.calc-grid .form-group label { font-size: 0.72rem; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
 /* ===================================================== */
 /* GRÁFICAS INTERACTIVAS DE CARDIOLOGÍA (Fisiopatología    */
 /* UCI) — simulador de la curva de Frank-Starling y        */

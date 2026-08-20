@@ -2760,6 +2760,131 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
     simulan vasoplejía vs. vasoconstricción extrema): cada caso muestra un
     párrafo de interpretación distinto y el color de la caja cambia en
     consecuencia: las 11 fichas y el quiz siguen sin error de consola.
+  - **Cierre de los 3 pendientes del informe de auditoría anterior**
+    (gauges de Ficha 2, asa presión-volumen de Ficha 3, fuerzas de Starling
+    de Ficha 4), más 2 pulidos adicionales de la Ficha 1 pedidos
+    explícitamente por el usuario ("quiero un diagrama interactivo para
+    la precarga de Frank-Starling", "que la ley de Laplace se explique con
+    imagen", "explica con imagen por qué la RVS/RVP no reflejan fielmente
+    la poscarga"):
+    - **Diagrama de la ley de Laplace en la Ficha 1** (dentro del
+      micro-prof-item "Poscarga"): antes solo texto (`T = P×r`), ahora un
+      slider de radio ventricular mueve en vivo un círculo (corte
+      transversal del ventrículo) y una barra de tensión relativa
+      (`calcLaplaceMiniDiagrama()`, IDs `cardio-laplace-mini-*`) —
+      distinto y más simple que la calculadora numérica completa de la
+      Ficha 3 (`T=(P×R)/2t`, con grosor de pared).
+    - **Demostración del artefacto de acoplamiento RVS/RVP-GC**, en el
+      mismo micro-prof-item: un slider de GC (con PAM/PAD fijas) mueve dos
+      barras `.kinetic-row` — la RVS "calculada" (que sube/baja solo por
+      el GC) frente al "tono vascular real" (constante) — para que se vea
+      visualmente por qué la RVS calculada así no es un reflejo fiel de la
+      poscarga (`calcRVSArtefactoDiagrama()`).
+    - **Simulador de Frank-Starling movido dentro del acordeón de
+      "Precarga"**: antes era una sección aparte entre `.micro-profiles` y
+      la tabla de determinantes del GC; ahora vive dentro del propio
+      micro-prof-item "Precarga: ley de Frank-Starling", justo después de
+      su párrafo explicativo — mismos IDs, sin cambios de JS más allá de
+      la reubicación en el HTML, para que "la explicación tenga el
+      diagrama al lado" como pidió el usuario, en vez de un simulador
+      genérico más abajo en la página sin conexión visual directa con el
+      texto que lo motiva.
+    - **Bug de solapamiento de texto SVG, encontrado y corregido durante
+      esta misma tanda**: el primer intento del mini-diagrama de Laplace
+      usaba un `viewBox="0 0 240 140"` con la etiqueta "Tensión de pared
+      (T)" sin `text-anchor="middle"`, así que el texto (~21 caracteres)
+      se salía del lienzo y quedaba cortado — confirmado con una captura
+      de Playwright antes de corregirlo. Solución: `viewBox` ensanchado a
+      `0 0 260 140`, círculo/barra/textos recentrados con
+      `text-anchor="middle"`.
+    - **Gauges visuales en las 2 calculadoras de la Ficha 2** (mismo
+      patrón `.kinetic-row`/`.kinetic-fill`/`.kinetic-marker` del DO₂I de
+      la Ficha 1, sin CSS nuevo): doble producto (escala 0-15.000, marca
+      en 12.000) y triple producto (escala 0-150.000, marca en 120.000)
+      bajo la calculadora de costo de funcionamiento miocárdico
+      (`actualizarGaugeCosto()`); IDO₂ (escala 0-800, banda normal
+      520-650, 2 marcadores — mismo lenguaje visual que el DO₂I de la
+      Ficha 1 aunque sea un rango normal distinto, Tabla 12 vs. Tabla 3)
+      bajo la calculadora de IDO₂ (`actualizarGaugeIDO2Ficha2()`).
+    - **Simulador interactivo del asa presión-volumen, Ficha 3** — la
+      "oportunidad más grande" señalada por el informe de auditoría
+      anterior. Modelo ilustrativo del método de elastancia de un solo
+      latido (Ees/Ea/V0), estándar en fisiología cardiovascular didáctica
+      — el capítulo solo describe el asa de forma cualitativa (los
+      patrones ya recogidos en la tabla de la propia ficha), así que las
+      constantes del simulador NO son cifras literales de la fuente,
+      mismo criterio de honestidad ya aplicado al simulador de
+      Frank-Starling de la Ficha 1. Dos sliders (precarga → EDV,
+      poscarga → elastancia arterial efectiva Ea) y un selector de estado
+      ventricular (normal/disfunción sistólica/disfunción diastólica, que
+      cambian Ees y el coeficiente de rigidez diastólica beta) redibujan
+      en vivo un asa cerrada (`calcAsaPresionVolumen()` en
+      `cardiologia.js`, SVG con 2 tramos rectos de isovolumia + 2 curvas
+      de Bézier para eyección/llenado) junto con 2 líneas de referencia
+      discontinuas — la ESPVR (Ees, azul) y la FRPVD (rigidez diastólica,
+      amarilla) — que se desplazan exactamente como describe la tabla de
+      patrones ya existente en la ficha (abajo/derecha en disfunción
+      sistólica, arriba/izquierda en diastólica). Lectura numérica debajo
+      (EDV/ESV/volumen sistólico/FE, con semáforo de color por FE). El
+      coeficiente de rigidez de la disfunción diastólica se afinó a 0,040
+      (frente a 0,022 basal) tras comprobar con una primera captura que la
+      diferencia visual entre estado normal y diastólico era demasiado
+      sutil para ser pedagógicamente útil — con el valor ajustado el
+      desplazamiento de la curva FRPVD es claramente visible. La presión
+      de llenado se limita a 170 mmHg (`Math.min(170, ...)`) para que la
+      combinación de precarga alta + disfunción diastólica no dispare la
+      exponencial fuera del lienzo. **Bug encontrado y corregido durante
+      la verificación con Playwright**: la etiqueta "Ees" se posicionaba
+      dinámicamente en el extremo de la línea ESPVR, lo que la hacía
+      solaparse con el título del diagrama cuando Ees es alto (línea casi
+      vertical, extremo cerca de la esquina superior) — se fijó en su
+      lugar a una posición constante en la esquina superior derecha del
+      lienzo (`text-anchor="end"`), que queda razonablemente cerca del
+      extremo real de la línea en la mayoría de combinaciones de sliders
+      sin arriesgar el solape.
+    - **Esquema circular en la calculadora numérica de Laplace de la
+      Ficha 3** (`T=(P×R)/2t`, con grosor de pared) — a diferencia del
+      mini-diagrama ilustrativo de la Ficha 1 (que usa un slider propio),
+      este reacciona a los 3 inputs numéricos reales de la propia
+      calculadora: el círculo interior (cavidad) escala con R, el grosor
+      del trazo del anillo (pared) escala con t, y una barra de tensión
+      se colorea según la T calculada (`calcLaplaceCirculoFicha3()`).
+    - **Simulador de fuerzas de Starling a lo largo del capilar, Ficha 4**
+      — la única de las 4 fichas sin ningún elemento interactivo hasta
+      ahora. Modelo simplificado (presión oncótica constante a lo largo
+      del capilar, presión hidrostática decreciente linealmente del
+      extremo arteriolar al venular con un diferencial fijo de 17 mmHg,
+      valores de partida ~32→15 mmHg clásicos de la docencia fisiológica)
+      — la fuente no da esta fórmula, solo describe el balance en prosa
+      (ya citada en el texto que precede al simulador), así que es
+      puramente ilustrativo. Dos sliders (presión hidrostática arteriolar,
+      presión oncótica plasmática) mueven 5 flechas a lo largo de un tubo
+      capilar y un marcador de "punto de equilibrio"
+      (`calcFuerzasStarlingCapilar()`). **Bug real encontrado y corregido
+      durante la verificación con capturas de Playwright**: la primera
+      versión dibujaba la flecha de filtración por debajo del tubo
+      apuntando hacia abajo (alejándose, correcto) pero la de reabsorción
+      por ENCIMA del tubo apuntando hacia arriba (también alejándose, del
+      lado opuesto) — ambas flechas apuntaban "hacia afuera" de su propia
+      banda en vez de una entrar y otra salir del vaso, así que no se leía
+      realmente como filtración-vs-reabsorción. Corregido para que ambas
+      vivan en la misma banda (el espacio intersticial, debajo del tubo):
+      la de filtración apunta hacia abajo/afuera (sale del vaso) y la de
+      reabsorción hacia arriba/adentro (entra al vaso) — verificado con
+      captura que ahora se lee correctamente como flujo cruzando la pared
+      capilar en cada dirección.
+    Verificado con Playwright: gauges de Ficha 2 cambian de color/anchura
+    correctamente en valores extremos (doble producto en rojo al 100% con
+    FC 180/PAS 220; IDO₂ en rojo al bajar Hb a 7 g/dl); el asa
+    presión-volumen cambia de forma con cada slider y de color por estado
+    (azul/rojo/púrpura); el círculo de Laplace de la Ficha 3 crece/cambia
+    de color con R/t; el simulador de Starling desplaza correctamente el
+    punto de equilibrio y llega a los extremos "filtración en todo el
+    capilar"/"reabsorción en todo el capilar"; recorrido completo de las
+    11 fichas (abrir/cerrar cada una) y un recorrido de 8 preguntas del
+    quiz de la Ficha 1 (incluida una de tipo `redactar`), sin errores de
+    consola ni 404 reales (el único 404 detectado es el `favicon.ico` que
+    el navegador pide automáticamente, sin relación con la app).
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
