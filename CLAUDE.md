@@ -3425,6 +3425,37 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
     la animación sigue avanzando con el cursor y mostrando una única
     etiqueta de fase a la vez, y las 12 fichas siguen sin error de
     consola ni 404 real.
+  - **Mini-diagrama de estado valvular sincronizado**, a petición
+    explícita del usuario tras la fusión anterior ("¿podrías construir
+    algo más sofisticado con la fusión de ambas gráficas?"). La Figura 2
+    estática también incluye el "ciclo de Lewis" — una fila de 9
+    corazones esquemáticos mostrando el estado de las válvulas mitral/
+    aórtica en cada fase — que la animación no reproducía en absoluto.
+    En vez de animar 9 iconos estáticos por separado, se construyó
+    **un único corazón esquemático** (aurícula izq./ventrículo izq./
+    aorta, `viewBox` propio dentro del mismo `#cardio-wiggers-anim`) con
+    2 "válvulas" (círculos rojo=cerrada / verde=abierta con flecha de
+    flujo superpuesta) que cambian de estado con el mismo cursor que ya
+    mueve las curvas de presión — sin JS nuevo: los nuevos elementos
+    llevan las clases `wiggers-mitral-open`/`wiggers-aortic-open`/
+    `wiggers-iso-label`, con 3 `@keyframes` nuevos en `components.css`
+    que reutilizan los mismos puntos de corte porcentuales ya definidos
+    para `wiggers-fase-a` a `-g` (mitral abierta en A+F+G, aórtica
+    abierta en C+D, "ISO" centrado en el ventrículo durante B y E) — el
+    mismo patrón de "una animación CSS por elemento, cero JS de
+    temporización" ya establecido para el resto del diagrama. Añadidas
+    también las 3 clases nuevas a la regla `.wiggers-anim.paused` para
+    que el botón de pausa las congele igual que al cursor y las fases.
+    **Verificación más rigurosa que capturas sueltas**: en vez de solo
+    mirar una captura de pantalla, se usó la Web Animations API desde
+    Playwright (`element.getAnimations()[0].currentTime = fracción ×
+    duración`) para fijar el ciclo exactamente en 7 puntos (uno por
+    fase) y comprobar programáticamente que el estado de las 2 válvulas
+    y la etiqueta ISO coinciden con la fisiología esperada en los 7 —
+    los 7 casos coincidieron exactamente, incluida la sincronía con la
+    etiqueta de fase de texto ya existente (mismo instante, misma
+    fase). También se confirmó que el botón de pausa congela los nuevos
+    elementos y que reanudar los vuelve a mover.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

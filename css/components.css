@@ -704,9 +704,25 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 
 .wiggers-anim.paused .wiggers-cursor,
 .wiggers-anim.paused .wiggers-fase,
-.wiggers-anim.paused .wiggers-pulso {
+.wiggers-anim.paused .wiggers-pulso,
+.wiggers-anim.paused .wiggers-mitral-open,
+.wiggers-anim.paused .wiggers-aortic-open,
+.wiggers-anim.paused .wiggers-iso-label {
     animation-play-state: paused;
 }
+
+/* Estado valvular sincronizado (Ficha 1 de Cardiología): reutiliza el
+   mismo --ciclo-duracion y el mismo cronograma de fases A-G ya usado por
+   wiggers-fase-* arriba, para que el mini-diagrama de válvulas quede
+   perfectamente sincronizado con el cursor y las curvas de presión sin
+   necesitar JS adicional. Mitral abierta en A+F+G (llenado), cerrada en
+   B+C+D+E; aórtica abierta en C+D (eyección), cerrada el resto. */
+@keyframes wiggers-mitral-open { 0%, 11.5% { opacity: 1; } 12.5%, 49% { opacity: 0; } 50%, 100% { opacity: 1; } }
+@keyframes wiggers-aortic-open { 0%, 19% { opacity: 0; } 20%, 42% { opacity: 1; } 43%, 100% { opacity: 0; } }
+@keyframes wiggers-iso-label { 0%, 11.5% { opacity: 0; } 12.5%, 19% { opacity: 1; } 20%, 42% { opacity: 0; } 43%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+.wiggers-mitral-open { animation: wiggers-mitral-open var(--ciclo-duracion, 4s) linear infinite; opacity: 0; }
+.wiggers-aortic-open { animation: wiggers-aortic-open var(--ciclo-duracion, 4s) linear infinite; opacity: 0; }
+.wiggers-iso-label { animation: wiggers-iso-label var(--ciclo-duracion, 4s) linear infinite; opacity: 0; }
 
 /* ===================================================== */
 /* QUIZ DE REPASO — motor genérico de preguntas de 4       */
