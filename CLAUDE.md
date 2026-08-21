@@ -3767,6 +3767,39 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
       error de consola ni 404 real; sin overflow horizontal del panel a
       390px de viewport. Bump de cache-busting (`?v=20260821-6`), 6º
       cambio de `components.css` en el mismo día.
+  - **Prototipo del "mini ciclo"** — a petición explícita del usuario de
+    empezar por "la opción ligera" para ver una pequeña mejora antes de
+    decidir si merecía la pena un rediseño visual mayor (fusionar todas
+    las calculadoras en un único panel de instrumentos, propuesta que se
+    dejó explícitamente aparcada). Un componente reutilizable
+    (`.mini-ciclo` en `components.css`) — una barra compacta de 3 tramos
+    (sístole auricular 11,5%/sístole ventricular 37,5%/diástole
+    ventricular 51%, proporciones reales de las fases A-G) con el mismo
+    cursor sincronizado que la animación grande de Wiggers y una letra de
+    fase (reutilizando tal cual las clases `.wiggers-fase-a`..`-g` ya
+    existentes, sin CSS nuevo para eso) — pensado para incrustarse dentro
+    de cualquier calculadora de la ficha como ancla de orientación ("en
+    qué fase del ciclo estás ahora"). **Sincronización sin JS por
+    instancia**: `actualizarDuracion()` e `irAFase()`
+    (`initCicloCardiacoAnimado()`, `cardiologia.js`) ahora replican
+    `--ciclo-duracion` y la clase `.paused` también en el contenedor raíz
+    de toda la ficha (`#cardio-fisiologia-aplicada`, no solo en
+    `#cardio-wiggers-anim`) — como las custom properties CSS heredan por
+    el árbol del DOM, cualquier `.mini-ciclo` en cualquier punto de la
+    ficha queda automáticamente sincronizado (duración, pausa) por pura
+    herencia, sin tener que registrar cada instancia como listener de
+    `CicloEstado` ni tocar JS al añadir una nueva. Primera instancia
+    colocada en el simulador de Frank-Starling (justo antes del slider de
+    precarga), a modo de prueba — pendiente de decidir con el usuario si
+    se extiende a Fick/Laplace/RVS o se ajusta el diseño primero.
+    Verificado con Playwright: el cursor avanza con el tiempo (dos
+    lecturas de `left` distintas separadas 400ms), exactamente una letra
+    de fase visible a la vez, se congela al pulsar pausa en la animación
+    grande (dos lecturas de `left` idénticas tras pausar), la duración
+    heredada cambia correctamente al modificar la FC del panel (FC
+    150→"0.4s", coincide con 60/150), y sin overflow horizontal a 390px.
+    Bump de cache-busting (`?v=20260821-7`), 7º cambio de
+    `components.css` en el mismo día.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

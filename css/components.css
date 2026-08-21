@@ -866,6 +866,69 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 }
 .ciclo-sync-btn:hover { background: rgba(212,175,55,0.28); }
 
+/* "Mini ciclo" — versión en miniatura del cursor del ciclo de Wiggers,
+   pensada para incrustarse dentro de cualquier calculadora de la Ficha 1
+   (Frank-Starling, Fick, Laplace, RVS) como ancla de orientación ("en qué
+   fase del ciclo estás ahora mismo"), sin duplicar el diagrama grande.
+   Reutiliza tal cual --ciclo-duracion (heredada por CSS desde el
+   contenedor de la ficha, #cardio-fisiologia-aplicada, donde
+   actualizarDuracion() la fija) y las clases .wiggers-fase/.wiggers-fase-a..g
+   ya existentes para las etiquetas de fase — ningún JS nuevo por instancia,
+   solo maquetación. Pausa/reanuda junto con la animación grande porque
+   ambas cuelgan del mismo toggle de .paused en el contenedor de la ficha. */
+.mini-ciclo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0 6px;
+    padding: 7px 10px;
+    background: rgba(212,175,55,0.06);
+    border: 1px solid rgba(212,175,55,0.22);
+    border-radius: 6px;
+}
+.mini-ciclo-track {
+    position: relative;
+    flex: 1;
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+}
+.mini-ciclo-seg { height: 100%; border-right: 1px solid rgba(0,0,0,0.35); }
+.mini-ciclo-seg:last-child { border-right: none; }
+.mini-ciclo-seg-sistole { background: rgba(184,92,62,0.4); }
+.mini-ciclo-seg-diastole { background: rgba(144,160,106,0.35); }
+
+@keyframes mini-ciclo-cursor-sweep { from { left: 0%; } to { left: 100%; } }
+.mini-ciclo-cursor {
+    position: absolute;
+    top: -2px;
+    left: 0;
+    width: 2px;
+    height: 12px;
+    background: var(--text-main);
+    animation: mini-ciclo-cursor-sweep var(--ciclo-duracion, 4s) linear infinite;
+}
+.mini-ciclo-label {
+    position: relative;
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: var(--text-muted);
+    min-width: 20px;
+    height: 1.1em;
+    text-align: center;
+}
+.mini-ciclo-label .wiggers-fase {
+    position: absolute;
+    left: 0; right: 0;
+    font-size: 0.7rem;
+    color: var(--text-main);
+}
+#cardio-fisiologia-aplicada.paused .mini-ciclo-cursor,
+#cardio-fisiologia-aplicada.paused .mini-ciclo-label .wiggers-fase {
+    animation-play-state: paused;
+}
+
 /* ===================================================== */
 /* QUIZ DE REPASO — motor genérico de preguntas de 4       */
 /* opciones (js/modules/quiz/). Única excepción de         */

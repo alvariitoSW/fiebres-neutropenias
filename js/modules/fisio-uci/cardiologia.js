@@ -267,6 +267,11 @@ const WIGGERS_MULTIPLICADORES = { '1': 1, '2': 2, '4': 4, '8': 8 };
 function initCicloCardiacoAnimado() {
     const container = document.getElementById('cardio-wiggers-anim');
     if (!container) return;
+    // Contenedor de toda la ficha: aquí se replican --ciclo-duracion y la
+    // clase .paused para que cualquier .mini-ciclo incrustado en otra
+    // sección de la Ficha 1 (Frank-Starling, Fick, Laplace...) quede
+    // sincronizado por pura herencia de CSS, sin JS adicional por instancia.
+    const fichaRoot = document.getElementById('cardio-fisiologia-aplicada');
     // Optimización: cachear una sola vez la lista de nodos animados del
     // contenedor, en vez de volver a recorrer todo el DOM
     // (container.querySelectorAll('*')) en cada clic del stepper de fases
@@ -280,6 +285,7 @@ function initCicloCardiacoAnimado() {
     if (btn) {
         btn.addEventListener('click', () => {
             container.classList.toggle('paused');
+            if (fichaRoot) fichaRoot.classList.toggle('paused', container.classList.contains('paused'));
             btn.textContent = container.classList.contains('paused') ? '▶ Reanudar' : '⏸ Pausar';
         });
     }
@@ -312,6 +318,7 @@ function initCicloCardiacoAnimado() {
     function actualizarDuracion() {
         const ms = duracionMs();
         container.style.setProperty('--ciclo-duracion', `${(ms / 1000).toFixed(3)}s`);
+        if (fichaRoot) fichaRoot.style.setProperty('--ciclo-duracion', `${(ms / 1000).toFixed(3)}s`);
         if (duracionLabel) duracionLabel.textContent = `≈ ${ms.toFixed(0)} ms/ciclo (FC ${CicloEstado.fc} lpm)`;
         if (faseFijada) aplicarFaseActual();
     }
@@ -319,6 +326,7 @@ function initCicloCardiacoAnimado() {
         faseIdx = ((idx % WIGGERS_FASES.length) + WIGGERS_FASES.length) % WIGGERS_FASES.length;
         faseFijada = true;
         container.classList.add('paused');
+        if (fichaRoot) fichaRoot.classList.add('paused');
         if (btn) btn.textContent = '▶ Reanudar';
         aplicarFaseActual();
     }

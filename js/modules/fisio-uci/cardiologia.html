@@ -557,6 +557,23 @@
 
                         <p class="section-label" style="margin-top:14px; font-size:0.8rem;">🧮 Simulador interactivo: curva de Frank-Starling</p>
                         <p style="font-size: 0.78rem; color: var(--text-muted);">Modelo ilustrativo de la relación precarga-volumen sistólico, reproduciendo la forma cualitativa descrita en la fuente — una <strong>meseta con posterior reducción</strong> ante presión/volumen excesivos, no una fórmula clínica exacta para un paciente real. Mueve el slider o escribe directamente el volumen de fin de diástole (mL) — ambos están sincronizados — y cambia el estado contráctil para ver cómo se desplaza el punto de trabajo del ventrículo.</p>
+                        <div class="mini-ciclo" title="Mismo cursor que la animación del ciclo de Wiggers de más arriba — sirve de referencia de en qué fase del ciclo estarías mientras exploras esta calculadora.">
+                            <div class="mini-ciclo-track">
+                                <div class="mini-ciclo-seg mini-ciclo-seg-diastole" style="flex:11.5" title="A — sístole auricular"></div>
+                                <div class="mini-ciclo-seg mini-ciclo-seg-sistole" style="flex:37.5" title="B-C-D-E — sístole ventricular"></div>
+                                <div class="mini-ciclo-seg mini-ciclo-seg-diastole" style="flex:51" title="F-G — diástole ventricular"></div>
+                                <div class="mini-ciclo-cursor"></div>
+                            </div>
+                            <div class="mini-ciclo-label">
+                                <span class="wiggers-fase wiggers-fase-a">A</span>
+                                <span class="wiggers-fase wiggers-fase-b">B</span>
+                                <span class="wiggers-fase wiggers-fase-c">C</span>
+                                <span class="wiggers-fase wiggers-fase-d">D</span>
+                                <span class="wiggers-fase wiggers-fase-e">E</span>
+                                <span class="wiggers-fase wiggers-fase-f">F</span>
+                                <span class="wiggers-fase wiggers-fase-g">G</span>
+                            </div>
+                        </div>
                         <div class="tfg-slider-row">
                             <label for="cardio-fs-precarga">Precarga (% de la escala) 🔗 panel</label>
                             <input type="range" id="cardio-fs-precarga" min="0" max="100" value="50" step="1">
