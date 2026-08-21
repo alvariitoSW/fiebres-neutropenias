@@ -384,7 +384,7 @@
             </div>
 
             <p class="section-label" style="margin-top:16px;">▶ Versión dinámica del ciclo cardíaco</p>
-            <p style="font-size: 0.8rem; color: var(--text-muted);">Animación ilustrativa de las 7 fases sobre el ciclo de 800 ms de la Figura 4 (FC ≈75 lpm) — las duraciones de cada fase son aproximaciones fisiológicas estándar para reconstruir la animación; la fuente solo da la duración total del ciclo, no un desglose exacto en milisegundos por fase.</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Animación ilustrativa de las 7 fases sobre el ciclo de 800 ms de la Figura 4 (FC ≈75 lpm) — las duraciones de cada fase son aproximaciones fisiológicas estándar para reconstruir la animación; la fuente solo da la duración total del ciclo, no un desglose exacto en milisegundos por fase. Fusiona en un único panel lo que en la Figura 4 estática aparece repartido en 2 gráficos: la <strong style="color:var(--accent-purple);">presión auricular</strong> (línea discontinua, misma onda a-c-x-v-y que la PVY de abajo pero reescalada al rango de presión del panel superior) y el punto de <strong>cruzamiento</strong> donde cae por debajo de la presión ventricular — el instante exacto en que se abre la válvula mitral y arranca la fase F, marcado con un círculo.</p>
             <div class="wiggers-anim" id="cardio-wiggers-anim" style="--ciclo-duracion:4s;">
                 <div class="wiggers-controles">
                     <button type="button" id="cardio-wiggers-playpause">⏸ Pausar</button>
@@ -404,18 +404,34 @@
                     <text x="34" y="142" text-anchor="end" class="micro-svg-label">0</text>
                     <path d="M 40,60 C 55,60.5 65,61.5 72.5,62 C 80,62.5 88,63.5 92,64 C 95,55 100,30 110,18 C 116,18 120,19 124.5,22 C 132,28 142,35 150.5,38 L 153,48 L 156,44 C 162,47 166,49 170,50 C 185,53 197,56 209,58 C 240,59 270,59.5 300,60" fill="none" stroke="var(--accent-red)" stroke-width="1.8"/>
                     <path d="M 40,134 C 55,133 65,131.5 72.5,130 C 78,122 84,90 92,58 C 100,38 106,22 110,18 C 116,18 121,20 124.5,22 C 133,28 143,34 150.5,40 C 155,70 162,110 170,132 C 180,133.5 195,134 209,134 C 240,134 270,134 300,134" fill="none" stroke="var(--accent-blue)" stroke-width="1.8"/>
+                    <!-- Presión auricular: mismo trazado a-c-x-v-y que la onda de PVY de abajo
+                         (fisiológicamente son la misma onda), reescalado a la banda de baja
+                         presión (0-14 mmHg) de este mismo panel — fusiona en un único gráfico
+                         lo que en el diagrama de Wiggers estático son 2 paneles separados. -->
+                    <path d="M 40,135.5 C 48,125 52,125 56,125 C 62,133 68,135 72.5,135.5 C 76,131 78,130 80,130 C 85,136 90,138 92,139 C 105,137 115,134 124.5,132 C 135,129 145,128.5 150.5,128.5 L 160,136.75 C 180,138.5 195,139.5 209,140 C 240,138 270,136.5 300,135.5" fill="none" stroke="var(--accent-purple)" stroke-width="1.2" stroke-dasharray="3,2"/>
                     <text x="215" y="52" class="micro-svg-label" style="fill:var(--accent-red);">Presión aórtica</text>
-                    <text x="215" y="128" class="micro-svg-label" style="fill:var(--accent-blue);">Presión ventricular</text>
+                    <text x="215" y="120" class="micro-svg-label" style="fill:var(--accent-blue);">Presión ventricular</text>
+                    <text x="42" y="108" class="micro-svg-label" style="fill:var(--accent-purple); font-size: 6px;">Presión auricular</text>
+
+                    <circle cx="172" cy="133.5" r="3" fill="none" stroke="var(--text-main)" stroke-width="1.2"/>
+                    <line x1="172" y1="130.5" x2="180" y2="112" stroke="var(--text-muted)" stroke-width="0.5" stroke-dasharray="1,1"/>
+                    <text x="182" y="106" class="micro-svg-label" style="font-size: 6px;">Cruzamiento</text>
+                    <text x="182" y="112" class="micro-svg-label" style="font-size: 6px;">(apertura mitral, inicio F)</text>
 
                     <circle class="wiggers-pulso wiggers-s4" cx="65" cy="146" r="2.5" fill="var(--accent-yellow)"/>
                     <circle class="wiggers-pulso wiggers-s1" cx="72.5" cy="146" r="3" fill="var(--accent-yellow)"/>
+                    <text x="72.5" y="159" text-anchor="middle" class="micro-svg-label" style="font-size: 6px;">S1</text>
                     <circle class="wiggers-pulso wiggers-s2" cx="150.5" cy="146" r="3" fill="var(--accent-yellow)"/>
+                    <text x="150.5" y="159" text-anchor="middle" class="micro-svg-label" style="font-size: 6px;">S2</text>
                     <circle class="wiggers-pulso wiggers-s3" cx="170" cy="146" r="2.5" fill="var(--accent-yellow)"/>
                     <text x="6" y="150" class="micro-svg-label">Tonos</text>
 
                     <line x1="40" y1="185" x2="300" y2="185" stroke="var(--text-muted)" stroke-width="0.5" stroke-dasharray="1,2"/>
                     <text x="6" y="172" class="micro-svg-label">PVY</text>
                     <path d="M 40,167.5 C 48,157 52,157 56,157 C 62,165 68,167 72.5,167.5 C 76,163 78,162 80,162 C 85,168 90,170 92,171 C 105,169 115,166 124.5,164 C 135,161 145,160.5 150.5,160.5 L 160,168.75 C 180,170.5 195,171.5 209,172 C 240,170 270,168.5 300,167.5" fill="none" stroke="var(--accent-yellow)" stroke-width="1.2"/>
+                    <text x="56" y="181" text-anchor="middle" class="micro-svg-label" style="font-size: 6px;">a</text>
+                    <text x="80" y="181" text-anchor="middle" class="micro-svg-label" style="font-size: 6px;">c</text>
+                    <text x="150.5" y="181" text-anchor="middle" class="micro-svg-label" style="font-size: 6px;">v</text>
 
                     <text x="6" y="212" class="micro-svg-label">ECG</text>
                     <path d="M 40,215 C 44,215 46,209 50,208 C 54,208 58,212 62,215 L 68,215 L 71,217 L 74,190 L 77,222 L 80,215 L 128,215 C 134,215 138,206 142,205 C 146,206 150,211 154,215 L 300,215" fill="none" stroke="var(--accent-green)" stroke-width="1.2"/>

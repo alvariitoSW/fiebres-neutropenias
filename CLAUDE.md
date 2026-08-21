@@ -3389,6 +3389,42 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
     romper la de RVS; SaO₂=120 en Ficha 2→aviso; cuña=80≥PAD=70→aviso con
     PPC=-10 mostrado explícitamente); las 12 fichas y el resto de
     calculadoras siguen funcionando sin error de consola ni 404 real.
+  - **Fusión de la Figura estática y la animación dinámica del ciclo
+    cardíaco (Ficha 1)**, a petición explícita del usuario tras ver una
+    captura mostrando ambas gráficas por separado ("hay alguna manera de
+    fusionar ambas gráficas para una mejor explicación?"). La animación
+    (`#cardio-wiggers-anim`) solo tenía presión aórtica/ventricular, PVY y
+    ECG — le faltaban 3 elementos que sí están en la Figura 2 estática
+    (`cardio-fig2-ciclo-wiggers.jpg`): la curva de <strong>presión
+    auricular</strong>, el punto de <strong>cruzamiento</strong> donde
+    cruza por debajo de la presión ventricular (apertura de la válvula
+    mitral, el instante exacto en que arranca la fase F), y las
+    etiquetas de los tonos (S1/S2) y de la onda a-c-v de la PVY. Añadidos
+    los 3 sin duplicar trabajo: la curva de presión auricular reutiliza
+    literalmente el mismo trazado a-c-x-v-y ya validado de la PVY (son
+    fisiológicamente la misma onda), reescalado con un simple offset de
+    coordenadas a la banda de baja presión (0-14 mmHg) del panel superior
+    — no se recalculó ninguna curva nueva a mano. El punto de cruzamiento
+    no se colocó a ojo: cae de forma natural donde ya estaba el marcador
+    de S3 (x=170, inicio de la fase F), porque las curvas de presión
+    ventricular y auricular reescalada ya se cruzan justo ahí — coherencia
+    física gratis por reutilizar el trazado real de la PVY en vez de
+    inventar una curva nueva. **2 rondas de ajuste de layout tras
+    verificar con capturas de Playwright** (mismo método ya establecido
+    en esta sesión): la 1ª colocación del texto "Presión auricular" caía
+    encima del pico de su propia curva, y las etiquetas S1/"c" de PVY se
+    solapaban con el aro de pulso animado (que llega a r=6 en el pico de
+    la animación, más grande que el r=3 en reposo); corregido separando
+    todas las etiquetas de sus curvas/marcadores con más margen vertical
+    y moviendo las letras a-c-v de la PVY por debajo de su curva en vez
+    de por encima (donde chocaban con la fila de Tonos). El párrafo
+    introductorio de la sección se amplió para explicar explícitamente
+    qué se fusionó y por qué. Verificado con Playwright (captura a
+    devicePixelRatio 3 para inspeccionar el texto pequeño): las 3
+    etiquetas nuevas y el marcador de cruzamiento se leen sin solapes,
+    la animación sigue avanzando con el cursor y mostrando una única
+    etiqueta de fase a la vez, y las 12 fichas siguen sin error de
+    consola ni 404 real.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
