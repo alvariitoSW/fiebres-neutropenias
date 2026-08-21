@@ -790,7 +790,81 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
     transform-box: fill-box;
     transform-origin: center;
     animation: wiggers-ventriculo-vol var(--ciclo-duracion, 4s) linear infinite;
+    /* Multiplicador adicional que compone con el transform:scale() de arriba
+       (propiedad CSS scale independiente, Transforms Level 2) — lo fija por
+       JS el EDV compartido del panel de control: un ventrículo con más
+       precarga se ve, dentro de la misma animación, algo más grande en todo
+       el ciclo, sin tocar el cronograma de fases ya validado. */
+    scale: var(--wiggers-edv-mult, 1);
 }
+
+/* ===================================================== */
+/* PANEL DE CONTROL UNIFICADO DEL CICLO CARDÍACO (Ficha 1 de
+   Cardiología) — un único estado fisiológico compartido (FC, EDV/
+   precarga, contractilidad, PAM, PAD) que alimenta el simulador de
+   Frank-Starling, la calculadora de Fick, la de resistencias
+   vasculares, el demo del artefacto RVS y la duración/escala de la
+   animación del ciclo de Wiggers, en vez de que cada widget viva en
+   su propia burbuja con una copia desconectada del mismo dato. */
+.ciclo-panel {
+    background: linear-gradient(135deg, rgba(212,175,55,0.10), rgba(184,92,62,0.05));
+    border: 1px solid var(--accent-blue);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 14px 0 18px;
+}
+.ciclo-panel-titulo {
+    font-weight: bold;
+    color: var(--accent-blue);
+    font-size: 0.92rem;
+    margin-bottom: 4px;
+}
+.ciclo-panel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+    gap: 10px 12px;
+    margin-top: 10px;
+}
+.ciclo-panel-grid .form-group { margin: 0; }
+.ciclo-panel-grid label { font-size: 0.66rem; }
+.ciclo-panel-grid input, .ciclo-panel-grid select { font-size: 0.85rem; padding: 5px 6px; }
+
+.ciclo-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px 14px;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(212,175,55,0.3);
+}
+.ciclo-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.68rem;
+    color: var(--text-muted);
+}
+.ciclo-legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: inline-block;
+}
+.ciclo-legend-dot.linea { border-radius: 2px; height: 3px; width: 15px; }
+
+.ciclo-sync-btn {
+    background: rgba(212,175,55,0.15);
+    border: 1px solid var(--accent-blue);
+    color: var(--accent-blue);
+    border-radius: 6px;
+    padding: 4px 9px;
+    font-size: 0.68rem;
+    cursor: pointer;
+    margin-top: 6px;
+    display: inline-block;
+}
+.ciclo-sync-btn:hover { background: rgba(212,175,55,0.28); }
 
 /* ===================================================== */
 /* QUIZ DE REPASO — motor genérico de preguntas de 4       */

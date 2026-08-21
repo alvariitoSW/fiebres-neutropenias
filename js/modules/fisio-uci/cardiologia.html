@@ -246,6 +246,40 @@
         <div id="cardio-fisiologia-aplicada" class="tab-content">
             <h3 style="color: var(--accent-red);">Fisiología cardíaca aplicada</h3>
 
+            <div class="ciclo-panel">
+                <div class="ciclo-panel-titulo">🎛️ Panel de control del ciclo cardíaco</div>
+                <p style="font-size:0.78rem; color:var(--text-muted); margin:0;">
+                    Estos 5 valores son un único estado fisiológico compartido por el simulador de Frank-Starling,
+                    la calculadora de Fick, la de resistencias vasculares, el demo del artefacto RVS y la animación
+                    del ciclo de Wiggers de esta ficha — cámbialos aquí <strong>o</strong> en cualquiera de los
+                    campos marcados con 🔗 más abajo: quedan sincronizados en ambas direcciones, sin tener que
+                    escribir el mismo dato varias veces.
+                </p>
+                <div class="ciclo-panel-grid">
+                    <div class="form-group"><label for="ciclo-panel-fc" title="Frecuencia cardíaca — fija la duración real del ciclo de Wiggers">FC (lpm)</label><input type="number" id="ciclo-panel-fc" min="20" max="220" step="1" value="75"></div>
+                    <div class="form-group"><label for="ciclo-panel-edv" title="Volumen de fin de diástole / precarga">EDV (mL)</label><input type="number" id="ciclo-panel-edv" min="70" max="160" step="1" value="115"></div>
+                    <div class="form-group"><label for="ciclo-panel-contractilidad">Contractilidad</label>
+                        <select id="ciclo-panel-contractilidad">
+                            <option value="disminuida">Disminuida</option>
+                            <option value="normal" selected>Normal</option>
+                            <option value="aumentada">Aumentada</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label for="ciclo-panel-pam" title="Presión arterial media">PAM (mmHg)</label><input type="number" id="ciclo-panel-pam" min="20" max="180" step="1" value="80"></div>
+                    <div class="form-group"><label for="ciclo-panel-pad" title="Presión de la aurícula derecha">PAD (mmHg)</label><input type="number" id="ciclo-panel-pad" min="-5" max="30" step="1" value="5"></div>
+                </div>
+                <div class="ciclo-legend">
+                    <span class="ciclo-legend-item"><span class="ciclo-legend-dot linea" style="background:var(--accent-red);"></span>Presión aórtica</span>
+                    <span class="ciclo-legend-item"><span class="ciclo-legend-dot linea" style="background:var(--accent-blue);"></span>Presión ventricular</span>
+                    <span class="ciclo-legend-item"><span class="ciclo-legend-dot linea" style="background:var(--accent-purple);"></span>Presión auricular</span>
+                    <span class="ciclo-legend-item"><span class="ciclo-legend-dot linea" style="background:var(--accent-yellow);"></span>PVY / tonos cardíacos</span>
+                    <span class="ciclo-legend-item"><span class="ciclo-legend-dot linea" style="background:var(--accent-green);"></span>ECG</span>
+                    <span class="ciclo-legend-item"><span class="ciclo-legend-dot" style="background:var(--accent-red);"></span>Válvula cerrada</span>
+                    <span class="ciclo-legend-item"><span class="ciclo-legend-dot" style="background:var(--accent-green);"></span>Válvula abierta</span>
+                    <span class="ciclo-legend-item"><span class="ciclo-legend-dot" style="background:var(--text-main);"></span>Cursor del ciclo</span>
+                </div>
+            </div>
+
             <p class="section-label">Anatomía funcional</p>
             <dl class="kv-row"><dt>El corazón como bomba aspirante-impelente</dt><dd>Durante la diástole "aspira" sangre desde el sistema venoso (baja presión) y durante la sístole la "impele" hacia el sistema arterial (alta presión) — un mismo órgano cumpliendo las dos mitades del ciclo de bombeo.</dd></dl>
             <dl class="kv-row"><dt>Principio de continuidad</dt><dd>El volumen que sale del ventrículo derecho por minuto debe ser igual, en estado estacionario, al que sale del ventrículo izquierdo — el gasto cardíaco de ambos ventrículos es el mismo pese a trabajar contra resistencias completamente distintas (desarrollado con las cifras de resistencia en la Ficha 4). Las arterias (con gruesa capa muscular intermedia) aumentan la resistencia al paso de la sangre; las venas, con mayor contenido elástico, tienen más distensibilidad y menos resistencia, lo que les permite albergar un mayor contenido de sangre — propiedad conocida como <strong>capacitancia</strong>.</dd></dl>
@@ -385,15 +419,16 @@
 
             <p class="section-label" style="margin-top:16px;">▶ Versión dinámica del ciclo cardíaco</p>
             <p style="font-size: 0.8rem; color: var(--text-muted);">Animación ilustrativa de las 7 fases sobre el ciclo de 800 ms de la Figura 4 (FC ≈75 lpm) — las duraciones de cada fase son aproximaciones fisiológicas estándar para reconstruir la animación; la fuente solo da la duración total del ciclo, no un desglose exacto en milisegundos por fase. Usa ◀▶ para saltar y quedarte parado en cada fase concreta en vez de depender de pausar a ciegas en marcha. Fusiona en un único panel lo que en la Figura 4 estática aparece repartido en 2 gráficos: la <strong style="color:var(--accent-purple);">presión auricular</strong> (línea discontinua, misma onda a-c-x-v-y que la PVY de abajo pero reescalada al rango de presión del panel superior — <span style="font-size:0.85em;">nota de fidelidad: la PVY es en rigor la aurícula derecha, no la izquierda que acompaña aquí a la ventricular/aórtica; se reutiliza como aproximación porque la morfología a-c-x-v-y es análoga en ambos lados, no porque sea la misma medición</span>) y los 2 puntos de <strong>cruzamiento</strong> con la presión ventricular: uno al inicio (se abre la aórtica, empieza C) y otro al final (se abre la mitral, empieza F), cada uno marcado con su propia válvula en miniatura.</p>
-            <div class="wiggers-anim" id="cardio-wiggers-anim" style="--ciclo-duracion:4s;">
+            <div class="wiggers-anim" id="cardio-wiggers-anim" style="--ciclo-duracion:0.8s;">
                 <div class="wiggers-controles">
                     <button type="button" id="cardio-wiggers-playpause">⏸ Pausar</button>
                     <select id="cardio-wiggers-velocidad">
-                        <option value="6s">Lenta (6 s/ciclo)</option>
-                        <option value="4s" selected>Media (4 s/ciclo)</option>
-                        <option value="2s">Rápida (2 s/ciclo)</option>
-                        <option value="0.8s">Tiempo real (~800 ms, FC 75 lpm)</option>
+                        <option value="1" selected>⏱ Tiempo real (según FC del panel)</option>
+                        <option value="2">🐢 2× más lento (estudio)</option>
+                        <option value="4">🐢🐢 4× más lento (detalle)</option>
+                        <option value="8">🐢🐢🐢 8× más lento (fase a fase)</option>
                     </select>
+                    <span id="cardio-wiggers-duracion-actual" style="font-size:0.7rem; color:var(--text-muted);">≈ 800 ms/ciclo (FC 75 lpm)</span>
                 </div>
                 <div class="wiggers-controles" style="margin-top:2px;">
                     <button type="button" id="cardio-wiggers-fase-prev" title="Fase anterior">◀</button>
@@ -523,16 +558,16 @@
                         <p class="section-label" style="margin-top:14px; font-size:0.8rem;">🧮 Simulador interactivo: curva de Frank-Starling</p>
                         <p style="font-size: 0.78rem; color: var(--text-muted);">Modelo ilustrativo de la relación precarga-volumen sistólico, reproduciendo la forma cualitativa descrita en la fuente — una <strong>meseta con posterior reducción</strong> ante presión/volumen excesivos, no una fórmula clínica exacta para un paciente real. Mueve el slider o escribe directamente el volumen de fin de diástole (mL) — ambos están sincronizados — y cambia el estado contráctil para ver cómo se desplaza el punto de trabajo del ventrículo.</p>
                         <div class="tfg-slider-row">
-                            <label for="cardio-fs-precarga">Precarga (% de la escala)</label>
+                            <label for="cardio-fs-precarga">Precarga (% de la escala) 🔗 panel</label>
                             <input type="range" id="cardio-fs-precarga" min="0" max="100" value="50" step="1">
                             <span id="cardio-fs-precarga-valor">50%</span>
                         </div>
                         <div class="form-group">
-                            <label for="cardio-fs-edv-ml" title="Volumen de fin de diástole en mL, sincronizado con el slider de arriba">🧮 Volumen de fin de diástole (mL)</label>
+                            <label for="cardio-fs-edv-ml" title="Volumen de fin de diástole en mL, sincronizado con el slider de arriba y con el panel de control">🧮 Volumen de fin de diástole (mL) 🔗 panel</label>
                             <input type="number" id="cardio-fs-edv-ml" step="1" min="70" max="160" value="115">
                         </div>
                         <div class="form-group">
-                            <label for="cardio-fs-estado">Estado contráctil</label>
+                            <label for="cardio-fs-estado">Estado contráctil 🔗 panel</label>
                             <select id="cardio-fs-estado">
                                 <option value="disminuida">Disminuida (falla sistólica)</option>
                                 <option value="normal" selected>Normal</option>
@@ -584,6 +619,7 @@
                             <input type="range" id="cardio-laplace-mini-r" min="0" max="100" value="35" step="1">
                             <span id="cardio-laplace-mini-r-valor">3,0 cm</span>
                         </div>
+                        <button type="button" class="ciclo-sync-btn" id="cardio-laplace-mini-sync-edv">🔗 Usar el EDV del panel (<span id="cardio-laplace-mini-sync-edv-valor">115</span> mL) como radio de partida</button>
                         <svg viewBox="0 0 260 140" class="micro-svg" xmlns="http://www.w3.org/2000/svg">
                             <text x="130" y="14" text-anchor="middle" class="micro-svg-label">Corte transversal del ventrículo</text>
                             <circle id="cardio-laplace-mini-circulo" cx="70" cy="85" r="30" fill="rgba(212,175,55,0.12)" stroke="var(--accent-blue)" stroke-width="3"/>
@@ -606,7 +642,7 @@
                         <p class="section-label" style="margin-top:10px; font-size:0.78rem;">📊 Diagrama interactivo: el artefacto de acoplamiento matemático</p>
                         <p style="font-size:0.75rem; color:var(--text-muted);">Mueve el GC manteniendo la PAM y la PAD fijas — verás que la RVS "calculada" cambia mucho, aunque el tono vascular arteriolar real (el que de verdad define la poscarga) no se haya movido ni un milímetro: solo cambió porque GC está en el denominador de su propia fórmula.</p>
                         <div class="tfg-slider-row">
-                            <label for="cardio-laplace-mini-gc">Gasto cardíaco simulado (PAM 80, PAD 5 mmHg fijas)</label>
+                            <label for="cardio-laplace-mini-gc">Gasto cardíaco simulado (PAM/PAD <span id="cardio-rv-artefacto-pam-pad">80/5</span> mmHg del panel 🔗, fijas mientras mueves el GC)</label>
                             <input type="range" id="cardio-laplace-mini-gc" min="20" max="80" value="50" step="1">
                             <span id="cardio-laplace-mini-gc-valor">5,0 L/min</span>
                         </div>
@@ -660,7 +696,7 @@
                 <div class="form-group"><label for="cardio-fick-hb" title="Hemoglobina">Hb (g/dl)</label><input type="number" id="cardio-fick-hb" step="0.1" min="1" max="20" value="14"></div>
                 <div class="form-group"><label for="cardio-fick-sao2" title="Saturación arterial de O₂">SaO₂ (%)</label><input type="number" id="cardio-fick-sao2" step="1" min="0" max="100" value="98"></div>
                 <div class="form-group"><label for="cardio-fick-pao2" title="Presión arterial de O₂">PaO₂ (mmHg)</label><input type="number" id="cardio-fick-pao2" step="1" min="0" max="600" value="90"></div>
-                <div class="form-group"><label for="cardio-fick-fc" title="Frecuencia cardíaca">FC (lpm)</label><input type="number" id="cardio-fick-fc" step="1" min="20" max="220" value="75"></div>
+                <div class="form-group"><label for="cardio-fick-fc" title="Frecuencia cardíaca, sincronizada con el panel de control">FC (lpm) 🔗 panel</label><input type="number" id="cardio-fick-fc" step="1" min="20" max="220" value="75"></div>
                 <div class="form-group"><label for="cardio-fick-vs" title="Volumen sistólico">VS (ml)</label><input type="number" id="cardio-fick-vs" step="1" min="10" max="200" value="70"></div>
                 <div class="form-group"><label for="cardio-fick-sc" title="Superficie corporal">SC (m²)</label><input type="number" id="cardio-fick-sc" step="0.01" min="0.5" max="3" value="1.8"></div>
                 <div class="form-group"><label for="cardio-fick-svo2" title="Saturación venosa de O₂ — opcional">SvO₂ (%) opc.</label><input type="number" id="cardio-fick-svo2" step="1" min="0" max="100" placeholder="70"></div>
@@ -684,11 +720,12 @@
             <p style="font-size: 0.8rem; color: var(--text-muted);">RVS = (PAM − PAD) / GC; RVP = (PAMP − PAI) / GC, tal como las da la fuente (en unidades de Wood, mmHg·min/L). Recuerda la advertencia de la propia ficha: el GC aparece en el denominador de su propio cálculo, un acoplamiento matemático que limita su interpretación como poscarga "pura".</p>
             <div class="calc-grid">
                 <div class="form-group"><label for="cardio-rv-gc" title="Gasto cardíaco">GC (L/min)</label><input type="number" id="cardio-rv-gc" step="0.1" min="0.5" max="15" value="5"></div>
-                <div class="form-group"><label for="cardio-rv-pam" title="Presión arterial media">PAM (mmHg)</label><input type="number" id="cardio-rv-pam" step="1" min="20" max="180" value="80"></div>
-                <div class="form-group"><label for="cardio-rv-pad" title="Presión de la aurícula derecha">PAD (mmHg)</label><input type="number" id="cardio-rv-pad" step="1" min="-5" max="30" value="5"></div>
+                <div class="form-group"><label for="cardio-rv-pam" title="Presión arterial media, sincronizada con el panel de control">PAM (mmHg) 🔗 panel</label><input type="number" id="cardio-rv-pam" step="1" min="20" max="180" value="80"></div>
+                <div class="form-group"><label for="cardio-rv-pad" title="Presión de la aurícula derecha, sincronizada con el panel de control">PAD (mmHg) 🔗 panel</label><input type="number" id="cardio-rv-pad" step="1" min="-5" max="30" value="5"></div>
                 <div class="form-group"><label for="cardio-rv-pamp" title="Presión arterial pulmonar media — opcional">PAMP (mmHg) opc.</label><input type="number" id="cardio-rv-pamp" step="1" min="5" max="80" placeholder="15"></div>
                 <div class="form-group"><label for="cardio-rv-pai" title="Presión de la aurícula izquierda / enclavamiento — opcional">PAI (mmHg) opc.</label><input type="number" id="cardio-rv-pai" step="1" min="0" max="40" placeholder="8"></div>
             </div>
+            <button type="button" class="ciclo-sync-btn" id="cardio-rv-sync-gc">🔗 Usar el GC calculado en la calculadora de Fick de arriba</button>
             <div id="cardio-rv-resultado" class="tfg-estado tfg-estado-ok" style="display:none;"></div>
             <div id="cardio-rv-interpretacion" class="tfg-estado tfg-estado-ok" style="margin-top:10px; display:none;"></div>
 

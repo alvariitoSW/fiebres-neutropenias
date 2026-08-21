@@ -3669,6 +3669,104 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
       ni 404 real (solo el `favicon.ico` ya documentado como inocuo). Bump
       de cache-busting (`?v=20260821-5`), 5º cambio de `components.css` en
       el mismo día.
+  - **Panel de control unificado del ciclo cardíaco (Ficha 1)** — a
+    petición explícita del usuario de "unificar todo lo del ciclo cardíaco
+    de la primera ficha, con ciertos cambios de estética y de mejora de
+    optimización de función". Hasta ahora la Ficha 1 tenía 5 widgets
+    interactivos independientes (simulador de Frank-Starling, calculadora
+    de Fick, mini-diagrama de Laplace, demo del artefacto RVS, calculadora
+    RVS/RVP, animación del ciclo de Wiggers) cada uno con su propia copia
+    desconectada de los mismos parámetros fisiológicos (FC, precarga/EDV,
+    contractilidad, PAM, PAD) — cambiar la FC en Fick no afectaba a la
+    duración de la animación de Wiggers, cambiar la PAM en la calculadora
+    RVS no afectaba al demo del artefacto (hardcodeado en 80/5 mmHg), etc.
+    - **Estado compartido** (`CicloEstado` en `cardiologia.js`): un único
+      objeto `{fc, edv, contractilidad, pam, pad}` con `on()`/`set()` — las
+      notificaciones se agrupan en un único `requestAnimationFrame` aunque
+      cambien varios campos en el mismo tick (p. ej. el propio panel
+      reescribiendo los 5 campos a la vez), evitando recalcular cada
+      widget suscrito una vez por campo modificado. `set()` nunca dispara
+      eventos DOM (las funciones de renderizado escriben `.value`
+      directamente), así que no hay riesgo de bucles de actualización
+      cruzada entre widgets — cada campo compartido (slider de
+      Frank-Starling, campo mL, select de contractilidad, FC de Fick,
+      PAM/PAD de la calculadora RVS, y los 5 campos del panel) escribe en
+      `CicloEstado.set()` en su propio listener 'input'/'change', y cada
+      widget se suscribe con `CicloEstado.on()` para re-renderizarse
+      cuando cambia cualquiera de los 5 campos, venga de donde venga.
+    - **Panel de control visible** (`.ciclo-panel`, nueva tarjeta al
+      principio de la Ficha 1, antes de "Anatomía funcional"): 5 campos
+      (FC, EDV, Contractilidad, PAM, PAD) que son literalmente la misma
+      variable que sus contrapartes en Frank-Starling/Fick/RVS — cambiar
+      cualquiera desde el panel o desde el widget correspondiente deja
+      ambos sincronizados. Los campos sincronizados en cada widget se
+      marcaron con "🔗 panel" en su propia etiqueta para que quede
+      explícito cuáles son compartidos y cuáles siguen siendo locales
+      (Hb/SaO₂/PaO₂/VS/SC de Fick, GC/PAMP/PAI de la calculadora RVS —
+      estos NO se unificaron porque son variables de exploración propias
+      de cada calculadora, no parte del "estado del paciente" común).
+    - **Leyenda de color única** (`.ciclo-legend`, dentro del propio
+      panel): documenta explícitamente, una sola vez para toda la ficha,
+      el mapeo de color ya usado de forma consistente pero implícita en
+      los distintos SVG (presión aórtica = rojo, ventricular = dorado,
+      auricular = púrpura, PVY/tonos = amarillo, ECG = verde, válvula
+      cerrada = rojo, válvula abierta = verde, cursor = neutro) — no se
+      cambió ningún color existente, solo se hizo legible de un vistazo lo
+      que antes había que inferir diagrama a diagrama.
+    - **Vínculos fisiológicos reales, no solo cosméticos**: la FC
+      compartida ahora fija la duración REAL de la animación de Wiggers
+      (duración = 60/FC × multiplicador, con el selector de velocidad
+      repensado como multiplicador relativo — "⏱ Tiempo real (según FC
+      del panel)"/2×/4×/8× más lento — en vez de una duración absoluta en
+      segundos desconectada de cualquier FC) y un readout en vivo
+      (`#cardio-wiggers-duracion-actual`, "≈ 800 ms/ciclo (FC 75 lpm)").
+      El EDV compartido modula además, vía la propiedad CSS `scale`
+      independiente (que compone con el `transform:scale()` ya animado por
+      las `@keyframes` sin sustituirlo), un multiplicador 0,85-1,15 sobre
+      el tamaño del ventrículo esquemático animado — un EDV alto se ve,
+      en todo el ciclo, algo más grande. El demo del artefacto RVS ya no
+      usa PAM/PAD hardcodeados (80/5 mmHg en el texto Y en la fórmula):
+      lee `CicloEstado.pam/pad` en vivo, con su propia etiqueta
+      actualizándose. Dos botones de "autorrelleno con un clic" completan
+      la unificación sin forzar ataduras continuas que limitarían la
+      exploración libre: "🔗 Usar el EDV del panel..." en el mini-diagrama
+      de Laplace (mapea el EDV 70-160 mL a un radio ventricular
+      ilustrativo 2,0-4,5 cm, el mismo rango ya citado en la nota de esa
+      ficha, y posiciona el slider de radio ahí — el slider sigue
+      libremente explorable después) y "🔗 Usar el GC calculado en Fick"
+      en la calculadora RVS/RVP (GC = FC×VS de los campos de Fick).
+    - **Optimización de rendimiento pedida explícitamente**: `irAFase()`
+      (el stepper de fases del ciclo de Wiggers) hacía
+      `container.querySelectorAll('*')` en cada clic — un recorrido
+      completo del DOM del contenedor repetido en cada salto de fase.
+      Como la estructura del diagrama es estática (no se crean/destruyen
+      nodos tras el render inicial), se cachea la lista de nodos animados
+      una sola vez en `initCicloCardiacoAnimado()` y se reutiliza en cada
+      llamada a `aplicarFaseActual()`, eliminando el re-query repetido.
+      De paso, se simplificó `calcFrankStarlingSimulador` (renombrada
+      `renderFrankStarling`): el parámetro `origen` que distinguía
+      "vengo del slider" vs. "vengo del campo mL" para decidir qué campo
+      NO reescribir desapareció — ahora todos los campos que reflejan
+      `CicloEstado.edv` comprueban `document.activeElement !== el` antes
+      de reescribirse (no interrumpir al usuario a mitad de tecleo), un
+      único criterio en vez de una rama de código por origen posible.
+    - Verificado con Playwright: los 5 campos del panel se sincronizan en
+      ambas direcciones con sus 3 contrapartes (Frank-Starling, FC de
+      Fick, PAM/PAD de la calculadora RVS) — probado explícitamente en
+      ambos sentidos (panel→widget y widget→panel); el multiplicador de
+      EDV sobre el ventrículo (`--wiggers-edv-mult`) cambia de 1.150 a
+      0.850 en los extremos del rango; el readout de duración de Wiggers
+      recalcula correctamente al cambiar la FC (FC 120→"≈500 ms/ciclo",
+      FC 60→"≈1000 ms/ciclo"); el bug de desincronía del stepper de fases
+      corregido en la ronda anterior sigue protegido también en el NUEVO
+      camino que no existía entonces (cambiar la FC del panel mientras
+      hay una fase fijada, no solo cambiar el multiplicador de velocidad);
+      los 2 botones de autorrelleno funcionan (EDV→radio de Laplace,
+      GC de Fick→calculadora RVS); las 12 fichas de Cardiología y el resto
+      de calculadoras (incluida la advertencia de PAD≥PAM) siguen sin
+      error de consola ni 404 real; sin overflow horizontal del panel a
+      390px de viewport. Bump de cache-busting (`?v=20260821-6`), 6º
+      cambio de `components.css` en el mismo día.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
