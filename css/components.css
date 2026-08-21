@@ -707,7 +707,8 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 .wiggers-anim.paused .wiggers-pulso,
 .wiggers-anim.paused .wiggers-mitral-open,
 .wiggers-anim.paused .wiggers-aortic-open,
-.wiggers-anim.paused .wiggers-iso-label {
+.wiggers-anim.paused .wiggers-iso-label,
+.wiggers-anim.paused .wiggers-ventriculo {
     animation-play-state: paused;
 }
 
@@ -723,6 +724,30 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 .wiggers-mitral-open { animation: wiggers-mitral-open var(--ciclo-duracion, 4s) linear infinite; opacity: 0; }
 .wiggers-aortic-open { animation: wiggers-aortic-open var(--ciclo-duracion, 4s) linear infinite; opacity: 0; }
 .wiggers-iso-label { animation: wiggers-iso-label var(--ciclo-duracion, 4s) linear infinite; opacity: 0; }
+
+/* Volumen ventricular esquemático: el ventrículo escala (transform, no
+   width/height — más barato de animar) siguiendo el mismo cronograma de
+   fases. Fijo en las 2 fases isovolumétricas (B, E) por definición sin
+   cambio de volumen; se contrae en la eyección (C-D) y se distiende en
+   el llenado (F-G-A). No son cifras clínicas reales (EDV/ESV exactos ya
+   se calculan en la Ficha 1) — es una escala ilustrativa 0,6-1,0. */
+@keyframes wiggers-ventriculo-vol {
+    0% { transform: scale(0.97); }
+    11.5% { transform: scale(1); }
+    12.5%, 19% { transform: scale(1); }
+    20% { transform: scale(1); }
+    31.5% { transform: scale(0.78); }
+    42.5%, 49% { transform: scale(0.6); }
+    50% { transform: scale(0.6); }
+    64% { transform: scale(0.9); }
+    65%, 99.5% { transform: scale(0.97); }
+    100% { transform: scale(0.97); }
+}
+.wiggers-ventriculo {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: wiggers-ventriculo-vol var(--ciclo-duracion, 4s) linear infinite;
+}
 
 /* ===================================================== */
 /* QUIZ DE REPASO — motor genérico de preguntas de 4       */

@@ -449,28 +449,31 @@
                     <rect class="wiggers-cursor" x="40" y="10" width="1.5" height="230" fill="var(--accent-red)"/>
                 </svg>
 
-                <p style="font-size:0.78rem; color: var(--text-muted); margin-top:10px;">🫀 <strong>Estado valvular sincronizado</strong> — el mismo cursor de arriba controla esta vista esquemática de las válvulas mitral y aórtica: verde con flecha de flujo cuando están abiertas, rojo cuando están cerradas. En B y E (contracción/relajación isovolumétrica) las dos están cerradas a la vez — el corazón "ISO", ni entra ni sale sangre, solo cambia la presión.</p>
-                <svg viewBox="0 0 200 150" class="micro-svg" xmlns="http://www.w3.org/2000/svg" style="max-width:220px; margin:4px auto 0; display:block;">
+                <p style="font-size:0.78rem; color: var(--text-muted); margin-top:10px;">🫀 <strong>Estado valvular sincronizado</strong> — el mismo cursor de arriba controla esta vista esquemática de las válvulas mitral y aórtica: verde con flecha de flujo cuando están abiertas, rojo cuando están cerradas. En B y E (contracción/relajación isovolumétrica) las dos están cerradas a la vez — el corazón "ISO", ni entra ni sale sangre, solo cambia la presión. El propio <strong>ventrículo</strong> también "respira" con el ciclo: se mantiene fijo de tamaño durante las 2 fases isovolumétricas (por definición, sin cambio de volumen) y se contrae/distiende visiblemente durante la eyección (C-D) y el llenado (F-G-A) — el correlato visual directo del volumen sistólico ya calculado en la Ficha 1.</p>
+                <svg viewBox="0 0 200 155" class="micro-svg" xmlns="http://www.w3.org/2000/svg" style="max-width:220px; margin:4px auto 0; display:block;">
+                    <defs>
+                        <marker id="wigHeartArrow" markerWidth="7" markerHeight="7" refX="4.5" refY="3.5" orient="auto">
+                            <path d="M0,0 L7,3.5 L0,7 z" fill="var(--accent-green)"/>
+                        </marker>
+                    </defs>
                     <ellipse cx="100" cy="28" rx="32" ry="20" fill="rgba(144,160,106,0.12)" stroke="var(--text-muted)" stroke-width="1.2"/>
                     <text x="100" y="14" text-anchor="middle" class="micro-svg-label" style="font-size:7px;">Aurícula izq.</text>
 
-                    <ellipse cx="100" cy="95" rx="42" ry="44" fill="rgba(184,92,62,0.10)" stroke="var(--text-muted)" stroke-width="1.2"/>
-                    <text x="100" y="132" text-anchor="middle" class="micro-svg-label" style="font-size:7px;">Ventrículo izq.</text>
-                    <text x="100" y="102" text-anchor="middle" class="wiggers-iso-label" style="font-size:10px; font-weight:bold; fill:var(--accent-yellow);">ISO</text>
+                    <ellipse class="wiggers-ventriculo" cx="100" cy="95" rx="42" ry="44" fill="rgba(184,92,62,0.10)" stroke="var(--text-muted)" stroke-width="1.2"/>
+                    <text x="100" y="146" text-anchor="middle" class="micro-svg-label" style="font-size:7px;">Ventrículo izq. (volumen)</text>
+                    <text x="100" y="98" text-anchor="middle" class="wiggers-iso-label" style="font-size:10px; font-weight:bold; fill:var(--accent-yellow);">ISO</text>
 
                     <path d="M 128,58 C 138,45 155,30 178,18" stroke="var(--text-muted)" stroke-width="10" fill="none" stroke-linecap="round" opacity="0.3"/>
                     <text x="178" y="10" text-anchor="middle" class="micro-svg-label" style="font-size:7px;">Aorta</text>
 
                     <circle cx="100" cy="50" r="6" fill="var(--accent-red)"/>
                     <circle class="wiggers-mitral-open" cx="100" cy="50" r="6" fill="var(--accent-green)"/>
-                    <path class="wiggers-mitral-open" d="M 100,46 L 100,68" stroke="var(--accent-green)" stroke-width="2.5" stroke-linecap="round"/>
-                    <polygon class="wiggers-mitral-open" points="94,64 106,64 100,74" fill="var(--accent-green)"/>
+                    <path class="wiggers-mitral-open" d="M 100,46 L 100,68" stroke="var(--accent-green)" stroke-width="2.5" stroke-linecap="round" marker-end="url(#wigHeartArrow)"/>
                     <text x="118" y="53" class="micro-svg-label" style="font-size:6.5px;">Mitral</text>
 
                     <circle cx="131" cy="55" r="5.5" fill="var(--accent-red)"/>
                     <circle class="wiggers-aortic-open" cx="131" cy="55" r="5.5" fill="var(--accent-green)"/>
-                    <path class="wiggers-aortic-open" d="M 128,58 L 145,42" stroke="var(--accent-green)" stroke-width="2.2" stroke-linecap="round"/>
-                    <polygon class="wiggers-aortic-open" points="138,37 150,36 143,48" fill="var(--accent-green)"/>
+                    <path class="wiggers-aortic-open" d="M 128,58 L 144,42" stroke="var(--accent-green)" stroke-width="2.2" stroke-linecap="round" marker-end="url(#wigHeartArrow)"/>
                     <text x="118" y="72" class="micro-svg-label" style="font-size:6.5px;">Aórtica</text>
                 </svg>
             </div>

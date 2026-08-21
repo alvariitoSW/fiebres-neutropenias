@@ -3456,6 +3456,42 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
     etiqueta de fase de texto ya existente (mismo instante, misma
     fase). También se confirmó que el botón de pausa congela los nuevos
     elementos y que reanudar los vuelve a mover.
+  - **Ventrículo con volumen animado + optimización de las flechas**, a
+    petición explícita del usuario de mejorar y optimizar más la fusión
+    ("mejoralo más y optimizalo mejor"). Dos cambios:
+    1. **El propio ventrículo del corazón esquemático ahora cambia de
+       tamaño con el ciclo** (`transform: scale()`, no `rx`/`ry` — más
+       barato de animar por ser una propiedad compuesta en GPU en vez de
+       forzar recálculo de layout), reutilizando otra vez el mismo
+       cronograma porcentual de fases: tamaño <strong>fijo</strong>
+       durante las 2 fases isovolumétricas B y E (por definición, sin
+       cambio de volumen — la propia fuente ya lo explica así en el
+       texto de esta ficha) y variable durante la eyección (C-D, se
+       contrae hasta un ~60% ilustrativo del tamaño máximo) y el llenado
+       (F-G-A, se distiende de vuelta). No son cifras clínicas reales de
+       EDV/ESV (esas ya se calculan con la calculadora de Fick de esta
+       misma ficha) — es una escala 0,6-1,0 puramente ilustrativa, mismo
+       criterio que el resto de simuladores cualitativos de la app.
+    2. **Optimización real de marcado**: las flechas de flujo (mitral y
+       aórtica) usaban un `<path>` + un `<polygon>` por flecha (4
+       elementos en total); se sustituyeron por un único `<marker>` SVG
+       reutilizado como `marker-end` en ambos `<path>`, eliminando los 2
+       `<polygon>` — menos nodos DOM sin cambiar el resultado visual.
+    - **Verificación exhaustiva con la Web Animations API**: se
+      fijó el ciclo en 10 puntos (no solo 1 por fase — incluidos los 2
+      límites exactos de cada ventana isovolumétrica, 11,5%/19% para B y
+      42,5%/46% para E) y se leyó `getComputedStyle(...).transform` en
+      cada uno: confirmado que el tamaño es <strong>idéntico</strong> en
+      ambos extremos de B (matrix con escala 1 en 11,5% y en 19%) y de E
+      (escala 0,6 en 42,5% y en 46%) — el ventrículo no se mueve ni un
+      píxel durante las fases isovolumétricas, tal como exige la
+      fisiología — y que decrece monótonamente durante C-D y crece
+      monótonamente durante F-G-A. Confirmado también que el botón de
+      pausa sigue congelando el nuevo elemento (añadido a la regla
+      `.wiggers-anim.paused`) y que las 12 fichas y el resto de
+      calculadoras siguen sin error de consola ni 404 real. Bump de
+      cache-busting (`?v=20260821-2`) por el segundo cambio de
+      `components.css` en el mismo día.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
