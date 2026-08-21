@@ -181,8 +181,28 @@ function calcRVSArtefactoDiagrama() {
 // Controles de la animación del ciclo cardíaco (Ficha 1) — la animación en
 // sí es 100% CSS (@keyframes sobre x del cursor, opacity de las etiquetas
 // de fase y r de los pulsos de tonos cardíacos), sin requestAnimationFrame;
-// aquí solo se conecta el botón pausa/reanuda y el selector de velocidad,
-// que cambian una clase y la custom property --ciclo-duracion.
+// aquí solo se conecta el botón pausa/reanuda, el selector de velocidad
+// (que cambian una clase y la custom property --ciclo-duracion) y el
+// selector de fase a fase (que sí usa JS: reposiciona el currentTime de
+// cada Animation vía la Web Animations API, dejando el estado en la
+// misma clase .paused que ya controla el botón de pausa normal — nunca
+// se llama a .play()/.pause() de la API, solo se fija currentTime con el
+// contenedor ya en pausa por CSS, así que el botón "Reanudar" normal
+// sigue funcionando después de usar los saltos de fase sin más lógica).
+const WIGGERS_FASES = [
+    { nombre: 'A — Sístole auricular', frac: 0.0575 },
+    { nombre: 'B — Contracción isovolumétrica', frac: 0.1575 },
+    { nombre: 'C — Eyección rápida', frac: 0.2575 },
+    { nombre: 'D — Eyección lenta', frac: 0.37 },
+    { nombre: 'E — Relajación isovolumétrica', frac: 0.4575 },
+    { nombre: 'F — Llenado rápido', frac: 0.57 },
+    { nombre: 'G — Diástasis', frac: 0.8225 },
+];
+function parseDuracionMs(container) {
+    const raw = getComputedStyle(container).getPropertyValue('--ciclo-duracion').trim();
+    const m = raw.match(/([\d.]+)\s*s/);
+    return m ? parseFloat(m[1]) * 1000 : 4000;
+}
 function initCicloCardiacoAnimado() {
     const container = document.getElementById('cardio-wiggers-anim');
     if (!container) return;
@@ -197,6 +217,33 @@ function initCicloCardiacoAnimado() {
     if (speedSel) {
         speedSel.addEventListener('change', () => {
             container.style.setProperty('--ciclo-duracion', speedSel.value);
+        });
+    }
+
+    const faseLabel = document.getElementById('cardio-wiggers-fase-actual');
+    let faseIdx = 0;
+    function irAFase(idx) {
+        faseIdx = ((idx % WIGGERS_FASES.length) + WIGGERS_FASES.length) % WIGGERS_FASES.length;
+        container.classList.add('paused');
+        if (btn) btn.textContent = '▶ Reanudar';
+        const durMs = parseDuracionMs(container);
+        const targetMs = WIGGERS_FASES[faseIdx].frac * durMs;
+        container.querySelectorAll('*').forEach(el => {
+            el.getAnimations().forEach(a => { a.currentTime = targetMs; });
+        });
+        if (faseLabel) faseLabel.textContent = `Fase: ${WIGGERS_FASES[faseIdx].nombre}`;
+    }
+    const prevBtn = document.getElementById('cardio-wiggers-fase-prev');
+    const nextBtn = document.getElementById('cardio-wiggers-fase-next');
+    if (prevBtn) prevBtn.addEventListener('click', () => irAFase(faseIdx - 1));
+    if (nextBtn) nextBtn.addEventListener('click', () => irAFase(faseIdx + 1));
+    // Al reanudar manualmente tras usar los saltos de fase, el indicador de
+    // texto deja de tener sentido (vuelve a estar "en marcha" libremente).
+    if (btn) {
+        btn.addEventListener('click', () => {
+            if (!container.classList.contains('paused') && faseLabel) {
+                faseLabel.textContent = 'Fase: en marcha';
+            }
         });
     }
 }

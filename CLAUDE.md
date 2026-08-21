@@ -3534,6 +3534,78 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
       puntos de fase y la comprobación de pausa/reanudación, sin
       regresiones. Bump de cache-busting (`?v=20260821-3`), 3er cambio
       de `components.css` en el mismo día.
+  - **Informe crítico de la fusión y las 6 correcciones aplicadas**, a
+    petición explícita del usuario ("hazme un informe sobre lo que está
+    mal... y como se puede hacer mejor" seguido de "quiero que apliques
+    todas las mejoras"). El informe (solo texto, sin tocar código) señaló
+    6 problemas reales verificados con `grep` sobre los `stroke`/`fill`
+    reales del SVG, no solo a ojo — todos corregidos a continuación:
+    1. **Colisión de rojo entre 3 elementos distintos**: `--accent-red`
+       se usaba a la vez para la curva de presión aórtica, el cursor que
+       la atraviesa constantemente, y las valvas cerradas. Corregido
+       cambiando solo el cursor a `--text-main` (marcador neutro) — es
+       la colisión más grave porque el cursor cruza literalmente por
+       encima de la curva roja en cada ciclo; el rojo compartido entre
+       la curva aórtica y las valvas cerradas se dejó así a propósito
+       (con solo 5 colores de acento en toda la paleta de la app y 8
+       conceptos distintos que colorear, la colisión total es
+       matemáticamente imposible sin añadir colores nuevos ajenos al
+       sistema de diseño — se prioriza resolver la que de verdad
+       confunde, no todas).
+    2. **Fusión asimétrica (solo la mitral tenía marcador en la curva)**:
+       añadida la válvula aórtica en miniatura en su propio cruce (x=110,
+       donde la presión ventricular sube por encima de la aórtica —
+       inicio de C), con el mismo patrón de línea guía + etiqueta
+       "Cruzamiento (apertura aórtica, inicio C)" que ya tenía la mitral.
+    3. **El corazón esquemático grande sigue siendo una caja aparte**: no
+       se resolvió con un rediseño de layout (habría significado mover
+       toda la estructura del panel) — documentado como limitación
+       aceptada, ver el punto 3 del informe.
+    4. **Imprecisión de fidelidad no señalada**: añadida una nota inline
+       en el párrafo introductorio aclarando que la curva de "presión
+       auricular" reutiliza la forma de la PVY (aurícula **derecha**) como
+       aproximación a la izquierda, no como una medición real de esa
+       aurícula.
+    5. **Válvula aórtica casi invisible al abrir**: rediseñada con el
+       mismo lenguaje visual que la mitral (bisagras horizontales en vez
+       de intentar alinearse con las paredes del tubo) pero abriendo
+       hacia <strong>arriba</strong> en vez de hacia abajo (a diferencia
+       de la mitral, que abre hacia el ventrículo, la aórtica debe abrir
+       hacia la aorta) — ahora se ve como una "Λ" verde clara flanqueando
+       la base del tubo, con la flecha de flujo bien visible en vez de
+       solaparse con ella. 2 ajustes más de posición de las etiquetas
+       "Mitral"/"Aórtica" tras detectar por captura que quedaban
+       tapadas por la propia flecha de flujo.
+    6. **Rendimiento nunca medido en reproducción real** (toda la
+       verificación previa manipulaba `currentTime` a mano): se dejó
+       correr la animación sin tocarla durante 9 segundos (algo más de 2
+       ciclos a la velocidad por defecto) muestreando la posición real
+       del cursor (`getBoundingClientRect`) cada segundo — avanza de
+       forma monótona y envuelve correctamente en cada ciclo, sin
+       bloqueos ni saltos erráticos, con 24 animaciones CSS concurrentes
+       activas en el contenedor — todas sobre `opacity`/`transform`
+       (barato en GPU), así que no hizo falta consolidar nada.
+    - **Nuevo control interactivo real**: 2 botones ◀▶ + un indicador de
+      texto ("Fase: X — nombre") que saltan a un punto representativo de
+      cada una de las 7 fases y dejan la animación pausada ahí — primer
+      control con JS "de verdad" de este diagrama (el resto de la
+      interactividad es 100% CSS). Implementado con cuidado para no
+      romper el botón de pausa/reanudar normal: nunca se llama a
+      `.play()`/`.pause()` de la Web Animations API, solo se fija
+      `currentTime` con el contenedor ya en pausa por CSS
+      (`.wiggers-anim.paused`), así que reanudar después de saltar de
+      fase sigue funcionando con la misma lógica de siempre — verificado
+      explícitamente con Playwright (clic en cada fase, luego "Reanudar",
+      confirmando que el cursor vuelve a avanzar de verdad, no se queda
+      congelado ni salta a un sitio inesperado).
+    - Verificado con Playwright: el stepper cicla correctamente por las 7
+      fases (incluido el ciclo prev/next), el color del cursor ya no es
+      rojo, las 2 miniválvulas del cruce (mitral y aórtica) aparecen y
+      cambian de estado en el punto correcto, la válvula aórtica grande
+      se ve claramente en ambos estados en capturas recortadas con
+      Pillow, y las 12 fichas + el resto de calculadoras siguen sin
+      error de consola ni 404 real. Bump de cache-busting
+      (`?v=20260821-4`), 4º cambio de `components.css` en el mismo día.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

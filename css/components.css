@@ -751,12 +751,12 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 }
 @keyframes wiggers-flap-aortic-l {
     0%, 19% { transform: rotate(0deg); stroke: var(--accent-red); }
-    20%, 42% { transform: rotate(-65deg); stroke: var(--accent-green); }
+    20%, 42% { transform: rotate(-75deg); stroke: var(--accent-green); }
     43%, 100% { transform: rotate(0deg); stroke: var(--accent-red); }
 }
 @keyframes wiggers-flap-aortic-r {
     0%, 19% { transform: rotate(0deg); stroke: var(--accent-red); }
-    20%, 42% { transform: rotate(65deg); stroke: var(--accent-green); }
+    20%, 42% { transform: rotate(75deg); stroke: var(--accent-green); }
     43%, 100% { transform: rotate(0deg); stroke: var(--accent-red); }
 }
 .wiggers-flap-mitral-l { animation: wiggers-flap-mitral-l var(--ciclo-duracion, 4s) linear infinite; }
