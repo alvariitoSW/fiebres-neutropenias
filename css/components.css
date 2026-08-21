@@ -708,7 +708,11 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 .wiggers-anim.paused .wiggers-mitral-open,
 .wiggers-anim.paused .wiggers-aortic-open,
 .wiggers-anim.paused .wiggers-iso-label,
-.wiggers-anim.paused .wiggers-ventriculo {
+.wiggers-anim.paused .wiggers-ventriculo,
+.wiggers-anim.paused .wiggers-flap-mitral-l,
+.wiggers-anim.paused .wiggers-flap-mitral-r,
+.wiggers-anim.paused .wiggers-flap-aortic-l,
+.wiggers-anim.paused .wiggers-flap-aortic-r {
     animation-play-state: paused;
 }
 
@@ -717,13 +721,48 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
    wiggers-fase-* arriba, para que el mini-diagrama de válvulas quede
    perfectamente sincronizado con el cursor y las curvas de presión sin
    necesitar JS adicional. Mitral abierta en A+F+G (llenado), cerrada en
-   B+C+D+E; aórtica abierta en C+D (eyección), cerrada el resto. */
+   B+C+D+E; aórtica abierta en C+D (eyección), cerrada el resto. Las
+   flechas de flujo (opacity) siguen esta misma ventana. */
 @keyframes wiggers-mitral-open { 0%, 11.5% { opacity: 1; } 12.5%, 49% { opacity: 0; } 50%, 100% { opacity: 1; } }
 @keyframes wiggers-aortic-open { 0%, 19% { opacity: 0; } 20%, 42% { opacity: 1; } 43%, 100% { opacity: 0; } }
 @keyframes wiggers-iso-label { 0%, 11.5% { opacity: 0; } 12.5%, 19% { opacity: 1; } 20%, 42% { opacity: 0; } 43%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
 .wiggers-mitral-open { animation: wiggers-mitral-open var(--ciclo-duracion, 4s) linear infinite; opacity: 0; }
 .wiggers-aortic-open { animation: wiggers-aortic-open var(--ciclo-duracion, 4s) linear infinite; opacity: 0; }
 .wiggers-iso-label { animation: wiggers-iso-label var(--ciclo-duracion, 4s) linear infinite; opacity: 0; }
+
+/* Válvulas MÓVILES: cada valva es una línea fina que gira sobre su
+   bisagra (transform: rotate, con transform-origin fijado en el punto
+   de bisagra) — cerrada = tumbada tapando el orificio, abierta = girada
+   hacia dentro del ventrículo/aorta, fuera del paso de flujo. Se anima
+   junto con el color (stroke) en el mismo @keyframes, mismo cronograma
+   A-G que el resto del diagrama. Reutilizable en cualquier tamaño (el
+   mini-corcazón del panel grande y las valvas en miniatura incrustadas
+   en la curva de PVY comparten las mismas clases/ángulos). */
+.wiggers-valva { stroke-width: 2.2; stroke-linecap: round; fill: none; transform-box: view-box; }
+@keyframes wiggers-flap-mitral-l {
+    0%, 11.5% { transform: rotate(75deg); stroke: var(--accent-green); }
+    12.5%, 49% { transform: rotate(0deg); stroke: var(--accent-red); }
+    50%, 100% { transform: rotate(75deg); stroke: var(--accent-green); }
+}
+@keyframes wiggers-flap-mitral-r {
+    0%, 11.5% { transform: rotate(-75deg); stroke: var(--accent-green); }
+    12.5%, 49% { transform: rotate(0deg); stroke: var(--accent-red); }
+    50%, 100% { transform: rotate(-75deg); stroke: var(--accent-green); }
+}
+@keyframes wiggers-flap-aortic-l {
+    0%, 19% { transform: rotate(0deg); stroke: var(--accent-red); }
+    20%, 42% { transform: rotate(-65deg); stroke: var(--accent-green); }
+    43%, 100% { transform: rotate(0deg); stroke: var(--accent-red); }
+}
+@keyframes wiggers-flap-aortic-r {
+    0%, 19% { transform: rotate(0deg); stroke: var(--accent-red); }
+    20%, 42% { transform: rotate(65deg); stroke: var(--accent-green); }
+    43%, 100% { transform: rotate(0deg); stroke: var(--accent-red); }
+}
+.wiggers-flap-mitral-l { animation: wiggers-flap-mitral-l var(--ciclo-duracion, 4s) linear infinite; }
+.wiggers-flap-mitral-r { animation: wiggers-flap-mitral-r var(--ciclo-duracion, 4s) linear infinite; }
+.wiggers-flap-aortic-l { animation: wiggers-flap-aortic-l var(--ciclo-duracion, 4s) linear infinite; }
+.wiggers-flap-aortic-r { animation: wiggers-flap-aortic-r var(--ciclo-duracion, 4s) linear infinite; }
 
 /* Volumen ventricular esquemático: el ventrículo escala (transform, no
    width/height — más barato de animar) siguiendo el mismo cronograma de

@@ -3492,6 +3492,48 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
       calculadoras siguen sin error de consola ni 404 real. Bump de
       cache-busting (`?v=20260821-2`) por el segundo cambio de
       `components.css` en el mismo día.
+  - **Válvulas realmente móviles + fusión con la curva de presión**, a
+    petición explícita del usuario ("¿puedes hacer unas válvulas móviles
+    para las diferentes fases del ciclo cardíaco? y también fusionarlo
+    con la curva de presión venosa?"). Hasta ahora las "válvulas" eran 2
+    círculos superpuestos (rojo/verde) que solo cambiaban de opacidad —
+    útil pero no una válvula que se mueve de verdad. Rediseñadas como
+    **valvas con bisagra**: cada válvula son 2 líneas finas ancladas a un
+    punto de bisagra fijo (`transform-origin` en las coordenadas exactas
+    de la bisagra) que giran con `transform: rotate()` — tumbadas
+    formando una línea recta y en rojo cuando cierran el orificio,
+    giradas ~70-75° hacia dentro del ventrículo/aorta y en verde cuando
+    lo dejan abierto — con el giro y el color animados juntos en el
+    mismo `@keyframes` (`wiggers-flap-mitral-l/r`,
+    `wiggers-flap-aortic-l/r`, mismo cronograma A-G que el resto del
+    diagrama, cero JS). Las flechas de flujo (ahora con un único
+    `<marker>` SVG reutilizado en vez de un `<polygon>` por flecha,
+    optimización aprovechando el cambio) se mantienen sin tocar.
+  - **Fusión con la curva de presión (auricular/PVY)**: las mismas 2
+    clases de la valva mitral (`wiggers-flap-mitral-l/r`) se reutilizan
+    en miniatura **directamente incrustadas en el gráfico principal**,
+    en el punto exacto de "Cruzamiento" (x=172, donde la curva de presión
+    ventricular cruza por debajo de la presión auricular — que a su vez
+    reutiliza el trazado real de la PVY, ver la ronda de fusión
+    anterior). El marcador circular genérico que había ahí se sustituyó
+    por esta valva mitral en miniatura — mismos ángulos, mismo giro,
+    solo con un segmento más corto y sin bisagra propia nueva que
+    calcular (reutiliza literalmente las clases ya definidas para el
+    corazón esquemático de abajo). El resultado: el mismo fotograma en
+    el que la valva del corazón esquemático se abre es exactamente el
+    fotograma en el que aparece la V verde sobre la curva de presión —
+    una sola animación, dos vistas del mismo instante.
+    - Verificado con capturas recortadas con Pillow (el crop nativo de
+      Playwright con `boundingBox()` no dio las coordenadas esperadas
+      sobre un SVG con `viewBox`, así que se recortó la imagen completa
+      después en vez de perseguir el cálculo de coordenadas) en los 2
+      estados (cerrada, con la valva en rojo tumbada sobre la curva;
+      abierta, con la V verde) tanto en el corazón esquemático grande
+      como en la miniatura incrustada — coinciden. Repetida también la
+      verificación programática con la Web Animations API en los 7
+      puntos de fase y la comprobación de pausa/reanudación, sin
+      regresiones. Bump de cache-busting (`?v=20260821-3`), 3er cambio
+      de `components.css` en el mismo día.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
