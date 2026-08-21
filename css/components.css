@@ -723,8 +723,12 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
    necesitar JS adicional. Mitral abierta en A+F+G (llenado), cerrada en
    B+C+D+E; aórtica abierta en C+D (eyección), cerrada el resto. Las
    flechas de flujo (opacity) siguen esta misma ventana. */
-@keyframes wiggers-mitral-open { 0%, 11.5% { opacity: 1; } 12.5%, 49% { opacity: 0; } 50%, 100% { opacity: 1; } }
-@keyframes wiggers-aortic-open { 0%, 19% { opacity: 0; } 20%, 42% { opacity: 1; } 43%, 100% { opacity: 0; } }
+/* Las transiciones de apertura/cierre se reparten en una ventana de ~5%
+   del ciclo (no un salto de 1%) para que el giro se perciba como
+   movimiento real incluso a la velocidad "Tiempo real" (0,8s/ciclo,
+   donde un salto de 1% dura ~8ms — imperceptible para el ojo). */
+@keyframes wiggers-mitral-open { 0%, 10% { opacity: 1; } 14%, 47% { opacity: 0; } 53%, 100% { opacity: 1; } }
+@keyframes wiggers-aortic-open { 0%, 17% { opacity: 0; } 22%, 40% { opacity: 1; } 45%, 100% { opacity: 0; } }
 @keyframes wiggers-iso-label { 0%, 11.5% { opacity: 0; } 12.5%, 19% { opacity: 1; } 20%, 42% { opacity: 0; } 43%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
 .wiggers-mitral-open { animation: wiggers-mitral-open var(--ciclo-duracion, 4s) linear infinite; opacity: 0; }
 .wiggers-aortic-open { animation: wiggers-aortic-open var(--ciclo-duracion, 4s) linear infinite; opacity: 0; }
@@ -740,24 +744,24 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
    en la curva de PVY comparten las mismas clases/ángulos). */
 .wiggers-valva { stroke-width: 2.2; stroke-linecap: round; fill: none; transform-box: view-box; }
 @keyframes wiggers-flap-mitral-l {
-    0%, 11.5% { transform: rotate(75deg); stroke: var(--accent-green); }
-    12.5%, 49% { transform: rotate(0deg); stroke: var(--accent-red); }
-    50%, 100% { transform: rotate(75deg); stroke: var(--accent-green); }
+    0%, 10% { transform: rotate(75deg); stroke: var(--accent-green); }
+    14%, 47% { transform: rotate(0deg); stroke: var(--accent-red); }
+    53%, 100% { transform: rotate(75deg); stroke: var(--accent-green); }
 }
 @keyframes wiggers-flap-mitral-r {
-    0%, 11.5% { transform: rotate(-75deg); stroke: var(--accent-green); }
-    12.5%, 49% { transform: rotate(0deg); stroke: var(--accent-red); }
-    50%, 100% { transform: rotate(-75deg); stroke: var(--accent-green); }
+    0%, 10% { transform: rotate(-75deg); stroke: var(--accent-green); }
+    14%, 47% { transform: rotate(0deg); stroke: var(--accent-red); }
+    53%, 100% { transform: rotate(-75deg); stroke: var(--accent-green); }
 }
 @keyframes wiggers-flap-aortic-l {
-    0%, 19% { transform: rotate(0deg); stroke: var(--accent-red); }
-    20%, 42% { transform: rotate(-75deg); stroke: var(--accent-green); }
-    43%, 100% { transform: rotate(0deg); stroke: var(--accent-red); }
+    0%, 17% { transform: rotate(0deg); stroke: var(--accent-red); }
+    22%, 40% { transform: rotate(-75deg); stroke: var(--accent-green); }
+    45%, 100% { transform: rotate(0deg); stroke: var(--accent-red); }
 }
 @keyframes wiggers-flap-aortic-r {
-    0%, 19% { transform: rotate(0deg); stroke: var(--accent-red); }
-    20%, 42% { transform: rotate(75deg); stroke: var(--accent-green); }
-    43%, 100% { transform: rotate(0deg); stroke: var(--accent-red); }
+    0%, 17% { transform: rotate(0deg); stroke: var(--accent-red); }
+    22%, 40% { transform: rotate(75deg); stroke: var(--accent-green); }
+    45%, 100% { transform: rotate(0deg); stroke: var(--accent-red); }
 }
 .wiggers-flap-mitral-l { animation: wiggers-flap-mitral-l var(--ciclo-duracion, 4s) linear infinite; }
 .wiggers-flap-mitral-r { animation: wiggers-flap-mitral-r var(--ciclo-duracion, 4s) linear infinite; }

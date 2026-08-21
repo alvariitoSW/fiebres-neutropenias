@@ -207,25 +207,27 @@ function initCicloCardiacoAnimado() {
     const container = document.getElementById('cardio-wiggers-anim');
     if (!container) return;
     const btn = document.getElementById('cardio-wiggers-playpause');
+    if (btn) btn.setAttribute('aria-label', 'Pausar o reanudar la animación del ciclo cardíaco');
     if (btn) {
         btn.addEventListener('click', () => {
             container.classList.toggle('paused');
             btn.textContent = container.classList.contains('paused') ? '▶ Reanudar' : '⏸ Pausar';
         });
     }
-    const speedSel = document.getElementById('cardio-wiggers-velocidad');
-    if (speedSel) {
-        speedSel.addEventListener('change', () => {
-            container.style.setProperty('--ciclo-duracion', speedSel.value);
-        });
-    }
 
     const faseLabel = document.getElementById('cardio-wiggers-fase-actual');
+    if (faseLabel) faseLabel.setAttribute('aria-live', 'polite');
     let faseIdx = 0;
-    function irAFase(idx) {
-        faseIdx = ((idx % WIGGERS_FASES.length) + WIGGERS_FASES.length) % WIGGERS_FASES.length;
-        container.classList.add('paused');
-        if (btn) btn.textContent = '▶ Reanudar';
+    // Si el usuario ha saltado a una fase concreta (el gráfico está pausado
+    // EN esa fase), se guarda como fracción del ciclo, no como currentTime
+    // en ms absolutos — así, si luego cambia la velocidad sin volver a
+    // tocar el stepper, se puede recalcular el ms correcto para la nueva
+    // duración en vez de dejar el currentTime viejo apuntando a una
+    // fracción distinta del ciclo (el bug real que tenía esta función:
+    // cambiar de "Media" a "Tiempo real" tras saltar a la fase F dejaba el
+    // gráfico mostrando la fase G, con la etiqueta de texto aún diciendo F).
+    let faseFijada = false;
+    function aplicarFaseActual() {
         const durMs = parseDuracionMs(container);
         const targetMs = WIGGERS_FASES[faseIdx].frac * durMs;
         container.querySelectorAll('*').forEach(el => {
@@ -233,16 +235,32 @@ function initCicloCardiacoAnimado() {
         });
         if (faseLabel) faseLabel.textContent = `Fase: ${WIGGERS_FASES[faseIdx].nombre}`;
     }
+    function irAFase(idx) {
+        faseIdx = ((idx % WIGGERS_FASES.length) + WIGGERS_FASES.length) % WIGGERS_FASES.length;
+        faseFijada = true;
+        container.classList.add('paused');
+        if (btn) btn.textContent = '▶ Reanudar';
+        aplicarFaseActual();
+    }
+    const speedSel = document.getElementById('cardio-wiggers-velocidad');
+    if (speedSel) {
+        speedSel.setAttribute('aria-label', 'Velocidad de la animación del ciclo cardíaco');
+        speedSel.addEventListener('change', () => {
+            container.style.setProperty('--ciclo-duracion', speedSel.value);
+            if (faseFijada) aplicarFaseActual();
+        });
+    }
     const prevBtn = document.getElementById('cardio-wiggers-fase-prev');
     const nextBtn = document.getElementById('cardio-wiggers-fase-next');
-    if (prevBtn) prevBtn.addEventListener('click', () => irAFase(faseIdx - 1));
-    if (nextBtn) nextBtn.addEventListener('click', () => irAFase(faseIdx + 1));
+    if (prevBtn) { prevBtn.setAttribute('aria-label', 'Fase anterior del ciclo cardíaco'); prevBtn.addEventListener('click', () => irAFase(faseIdx - 1)); }
+    if (nextBtn) { nextBtn.setAttribute('aria-label', 'Fase siguiente del ciclo cardíaco'); nextBtn.addEventListener('click', () => irAFase(faseIdx + 1)); }
     // Al reanudar manualmente tras usar los saltos de fase, el indicador de
     // texto deja de tener sentido (vuelve a estar "en marcha" libremente).
     if (btn) {
         btn.addEventListener('click', () => {
-            if (!container.classList.contains('paused') && faseLabel) {
-                faseLabel.textContent = 'Fase: en marcha';
+            if (!container.classList.contains('paused')) {
+                faseFijada = false;
+                if (faseLabel) faseLabel.textContent = 'Fase: en marcha';
             }
         });
     }

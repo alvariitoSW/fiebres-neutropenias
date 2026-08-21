@@ -3606,6 +3606,69 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
       Pillow, y las 12 fichas + el resto de calculadoras siguen sin
       error de consola ni 404 real. Bump de cache-busting
       (`?v=20260821-4`), 4º cambio de `components.css` en el mismo día.
+  - **Segundo informe de auditoría del diagrama fusionado (esta vez probando
+    en vivo con Playwright, no solo releyendo el código) y sus 3 correcciones
+    aplicadas**, a petición explícita del usuario ("ahora haz un informe con
+    las mejoras que se pueden aplicar a ese gráfico interactivo y que cosas
+    hay mal" seguido de "aplicalos"). A diferencia del informe anterior
+    (6 puntos, encontrados releyendo el propio código), este se hizo
+    manipulando el diagrama de verdad en el navegador — encontró 3 problemas
+    reales nuevos:
+    1. **Bug real de desincronía al cambiar de velocidad tras usar el
+       stepper de fases**: `irAFase()` fijaba `currentTime` en milisegundos
+       absolutos calculados a partir de la duración del ciclo EN ESE
+       INSTANTE; si después se cambiaba la velocidad (`--ciclo-duracion`)
+       sin volver a pulsar el stepper, ese mismo valor absoluto de ms pasaba
+       a representar una fracción distinta del ciclo (más corto o más
+       largo), y el dibujo saltaba a una fase distinta de la que seguía
+       mostrando la etiqueta de texto — confirmado reproduciéndolo
+       (saltar a fase F, cambiar a "Tiempo real" 0,8s sin tocar el stepper,
+       el dibujo pasaba a mostrar la fase G mientras el texto seguía
+       diciendo F). Corregido guardando la fase fijada como **fracción**
+       (`faseIdx`/`faseFijada`, no como ms absolutos) y recalculando
+       `currentTime` bajo demanda (`aplicarFaseActual()`) cada vez que
+       cambia la velocidad mientras hay una fase fijada — el propio
+       cambio de velocidad (`change` del selector) ahora vuelve a aplicar
+       la fase activa con la duración nueva. El botón de play/pause libera
+       `faseFijada` al reanudar la reproducción libre.
+    2. **Válvulas casi instantáneas**: las 4 `@keyframes` de rotación de
+       las valvas (`wiggers-flap-mitral-l/r`, `wiggers-flap-aortic-l/r`) y
+       las 2 de opacidad de las flechas de flujo (`wiggers-mitral-open`,
+       `wiggers-aortic-open`) cambiaban de estado en una ventana de solo
+       ~1% del ciclo — a la velocidad "Tiempo real" (0,8s/ciclo) eso son
+       ~8ms, imperceptible como movimiento de bisagra real (confirmado
+       midiendo con la Web Animations API el `transform` calculado en 8
+       puntos alrededor de la transición: saltaba de 0° a 75° casi de
+       golpe). Ensanchadas las 6 ventanas a ~5% del ciclo (14%/47%/53%/10%
+       para mitral, 17%/22%/40%/45% para aórtica — mismos puntos de corte
+       en las 6 `@keyframes`, para que la flecha de flujo y la valva a la
+       que pertenece giren exactamente sincronizadas), preservando el
+       ángulo de giro y los colores de cada una (rojo cerrada/verde
+       abierta) — solo cambia la anchura de la ventana, no los valores en
+       cada extremo.
+    3. **Sin accesibilidad**: ninguno de los 5 controles interactivos
+       (play/pause, selector de velocidad, ◀▶ del stepper, indicador de
+       fase) llevaba `aria-label`/`aria-live` — confirmado leyendo los
+       atributos por JS, todos `null`. Añadido `aria-label` descriptivo a
+       los 4 botones/select y `aria-live="polite"` al `<span>` del nombre
+       de fase, para que un lector de pantalla anuncie los cambios de fase
+       sin tener que sondear el DOM.
+    - Verificado con Playwright tras aplicar los 3 arreglos: el bug de
+      desincronía ya no se reproduce (saltar a F y cambiar a 0,8s deja el
+      texto de fase visible y la etiqueta del stepper coincidiendo, ambos
+      "F"); los 4 `aria-label` y el `aria-live` están presentes; la
+      rotación de la valva mitral-l ahora avanza de forma gradual entre
+      f=0,485 y f=0,51 (de ~19° a ~50°, en vez de saltar de 0° a 75° en un
+      único frame); el recorrido completo de las 7 fases sigue
+      sincronizando correctamente válvulas/ventrículo/ISO/flechas (mismo
+      patrón de verificación con Web Animations API ya usado en rondas
+      anteriores); 9 segundos de reproducción libre muestran el cursor
+      avanzando de forma monótona con envoltura correcta de ciclo, 24
+      animaciones CSS activas sin caídas de rendimiento; y las 12 fichas +
+      el resto de calculadoras de Cardiología siguen sin error de consola
+      ni 404 real (solo el `favicon.ico` ya documentado como inocuo). Bump
+      de cache-busting (`?v=20260821-5`), 5º cambio de `components.css` en
+      el mismo día.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
