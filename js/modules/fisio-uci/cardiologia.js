@@ -314,6 +314,13 @@ function initCicloCardiacoAnimado() {
             el.getAnimations().forEach(a => { a.currentTime = targetMs; });
         });
         if (faseLabel) faseLabel.textContent = `Fase: ${WIGGERS_FASES[faseIdx].nombre}`;
+        // El stepper deja el diagrama grande fijo en una fase exacta, pero
+        // los .mini-ciclo de otras secciones de la ficha corren con su
+        // propio reloj (aunque se congelan por CSS al mismo tiempo, vía la
+        // clase .paused heredada) — sin este resync se quedarían
+        // congelados en la fase que tuvieran en ese instante, no en la
+        // fase a la que se acaba de saltar.
+        sincronizarMiniCiclosConMaestro();
     }
     function actualizarDuracion() {
         const ms = duracionMs();
@@ -364,6 +371,39 @@ function actualizarEscalaVentriculoPorEdv() {
     if (!container) return;
     const mult = 0.85 + ((CicloEstado.edv - FS_EDV_MIN) / (FS_EDV_MAX - FS_EDV_MIN)) * 0.3;
     container.style.setProperty('--wiggers-edv-mult', mult.toFixed(3));
+}
+
+// Los .mini-ciclo incrustados dentro de un acordeón colapsado (Frank-Starling
+// vive dentro de "Precarga", el mini-diagrama de Laplace dentro de
+// "Poscarga") heredan --ciclo-duracion por CSS, pero su animación no
+// arranca hasta que el elemento deja de estar display:none — y en ese
+// instante el navegador reinicia su propio reloj interno desde cero, en
+// vez de seguir el mismo punto del ciclo que el cursor grande (que lleva
+// corriendo desde la carga de la página). El resultado, sin este ajuste:
+// un mini-ciclo recién revelado muestra una fase distinta a la del resto,
+// pese a compartir la misma duración. Se corrige leyendo el currentTime
+// real del cursor maestro (vía Web Animations API, funciona esté o no en
+// marcha) y aplicándolo a los mini-ciclo del ámbito indicado.
+function sincronizarMiniCiclosConMaestro(scope) {
+    const masterCursor = document.querySelector('#cardio-wiggers-anim .wiggers-cursor');
+    if (!masterCursor) return;
+    const masterAnim = masterCursor.getAnimations()[0];
+    if (!masterAnim) return;
+    const t = masterAnim.currentTime;
+    (scope || document).querySelectorAll('.mini-ciclo-cursor, .mini-ciclo-label .wiggers-fase').forEach(el => {
+        el.getAnimations().forEach(a => { a.currentTime = t; });
+    });
+}
+function initMiniCiclosSync() {
+    // Sincroniza de entrada los mini-ciclo que ya son visibles al cargar
+    // (Fick y RVS/RVP, fuera de cualquier acordeón).
+    requestAnimationFrame(() => sincronizarMiniCiclosConMaestro());
+    // Y cualquiera que se revele después al abrir un acordeón de la ficha.
+    document.querySelectorAll('#cardio-fisiologia-aplicada .micro-prof-head').forEach(head => {
+        head.addEventListener('click', () => {
+            requestAnimationFrame(() => sincronizarMiniCiclosConMaestro(head.nextElementSibling));
+        });
+    });
 }
 
 // Interpretación fisiopatológica del DO2I calculado: qué significa la
@@ -1100,6 +1140,7 @@ export function init() {
     initCicloCardiacoAnimado();
     CicloEstado.on(actualizarEscalaVentriculoPorEdv);
     actualizarEscalaVentriculoPorEdv();
+    initMiniCiclosSync();
 
     document.querySelectorAll('#cardio-fick-hb, #cardio-fick-sao2, #cardio-fick-pao2, #cardio-fick-vs, #cardio-fick-sc, #cardio-fick-svo2, #cardio-fick-pvo2')
         .forEach(el => el && el.addEventListener('input', calcFickTransporte));

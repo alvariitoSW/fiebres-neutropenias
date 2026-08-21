@@ -3800,6 +3800,53 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
     150→"0.4s", coincide con 60/150), y sin overflow horizontal a 390px.
     Bump de cache-busting (`?v=20260821-7`), 7º cambio de
     `components.css` en el mismo día.
+  - **Extensión del "mini ciclo" a Fick, Laplace y RVS/RVP**, a petición
+    explícita del usuario tras aprobar el prototipo. 3 instancias nuevas
+    (misma marcado que la de Frank-Starling, `cardiologia.html`): una
+    justo antes del grid de la calculadora de Fick, otra antes del
+    diagrama de Laplace (dentro del acordeón "Poscarga"), y otra antes
+    del grid de la calculadora RVS/RVP — con un `title` propio en cada
+    una aclarando qué implica ese momento del ciclo para esa calculadora
+    en concreto (la tensión de Laplace es máxima en la eyección C-D; el
+    GC/DO₂ de Fick y la RVS/RVP de la otra calculadora son promedios de
+    todo el ciclo, no un valor de un instante). Total: 4 instancias en la
+    ficha.
+    - **Bug real de desincronía encontrado y corregido durante la propia
+      verificación con Playwright, no al desplegar sin más**: los 2
+      `.mini-ciclo` que viven dentro de un acordeón colapsado
+      (Frank-Starling en "Precarga", Laplace en "Poscarga") mostraban una
+      fase distinta a la de los otros 2 (siempre visibles, fuera de
+      acordeón) — confirmado con una prueba que abría ambos acordeones
+      con ~150 ms de diferencia y leía la fase visible en las 4 a la vez:
+      2 mostraban "G", 1 mostraba "F". Causa: una animación CSS en un
+      elemento `display:none` no corre, y al hacerse visible el navegador
+      reinicia su propio reloj interno desde cero en vez de continuar
+      desde el mismo punto que el cursor grande (que lleva corriendo
+      desde la carga de la página) — pese a compartir la misma
+      `--ciclo-duracion` heredada. Corregido con
+      `sincronizarMiniCiclosConMaestro(scope)` (`cardiologia.js`): lee el
+      `currentTime` real del cursor maestro vía Web Animations API
+      (funciona tanto en marcha como pausado) y lo aplica a los
+      `.mini-ciclo` del ámbito indicado. Se llama en 3 momentos:
+      1) al cargar la página, para los mini-ciclo ya visibles (Fick/RVS);
+      2) en un listener nuevo sobre cada `.micro-prof-head` de la ficha
+      (`initMiniCiclosSync()`), que resincroniza el `.mini-ciclo` de un
+      acordeón justo después de abrirlo; 3) dentro de `aplicarFaseActual()`
+      —el motor del stepper ◀▶—, porque fijar una fase congela el diagrama
+      grande pero, sin este aviso, los `.mini-ciclo` de otras secciones
+      seguían su propio reloj hasta el instante exacto en que la clase
+      `.paused` heredada los frenaba, quedando congelados en una fase
+      distinta a la fijada.
+    - Verificado con Playwright tras el arreglo: las 4 instancias
+      muestran la misma letra de fase en el mismo instante (antes: 3
+      "G" + 1 "F"; después: 4 "G"); tras fijar una fase con el stepper con
+      ambos acordeones abiertos, las 4 instancias muestran exactamente la
+      fase fijada (verificado con "D"); pausar/reanudar desde el botón
+      principal sigue congelando/reanudando las 4 a la vez; sin overflow
+      horizontal en ninguna de las 4 secciones a 420px; el resto de
+      calculadoras y las 12 fichas de Cardiología sin regresiones ni
+      error de consola real. Sin bump de cache-busting (solo cambió
+      `cardiologia.html`/`cardiologia.js`, no `.css` ni `main.js`).
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
