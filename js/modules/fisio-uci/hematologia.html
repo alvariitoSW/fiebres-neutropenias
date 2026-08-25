@@ -133,7 +133,14 @@
 
             <p class="section-label" style="margin-top:16px;">Mecanismos fisiopatológicos: anemia de la enfermedad crónica</p>
             <dl class="kv-row"><dt>Qué es</dt><dd>Una <strong>anemia hipoproliferativa</strong> que se desarrolla en respuesta a una enfermedad sistémica o inflamación — descrita por primera vez en los años 30 (Cartwright y Wintrobe la caracterizaron en los 50). Se considera una respuesta biológicamente <strong>adaptativa</strong>, muy coordinada y conservada genéticamente — sus efectores (como la hepcidina) son evolutivamente antiguos, presentes incluso en el pez cebra.</dd></dl>
-            <dl class="kv-row"><dt>Mecanismos que contribuyen (independientes entre sí)</dt><dd>Secuestro de hierro (el mejor estudiado) · supresión de la producción de eritropoyetina · inhibición de los progenitores eritroides · disminución de la supervivencia de los glóbulos rojos. La contribución relativa de cada uno es incierta.</dd></dl>
+            <p class="section-label" style="margin-top:16px;">Mecanismos que contribuyen (independientes entre sí)</p>
+            <ul class="term-chips">
+                <li>Secuestro de hierro (el mejor estudiado)</li>
+                <li>Supresión de la producción de eritropoyetina</li>
+                <li>Inhibición de los progenitores eritroides</li>
+                <li>Disminución de la supervivencia de los glóbulos rojos</li>
+            </ul>
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin-top:-4px;">La contribución relativa de cada uno es incierta.</p>
             <dl class="kv-row"><dt>Por qué se tolera la anemia leve-moderada</dt><dd>En circunstancias normales, el <strong>consumo</strong> de oxígeno en reposo es ~4 veces menor que el <strong>suministro</strong> de oxígeno a los tejidos — ese margen es lo que permite compensar. El aumento de la extracción tisular de O₂, combinado con un desplazamiento hacia la derecha de la curva de disociación hemoglobina-oxígeno (ver Ficha 3), es suficiente para mantener el suministro de oxígeno pese a una anemia de leve a moderada, sin necesidad de intervenir.</dd></dl>
             <p style="font-size: 0.8rem; color: var(--text-muted);">👉 <strong>Zarychanski y colaboradores</strong> plantean un matiz importante: aunque la anemia se ha asociado con peores resultados en diversas patologías, eso <span class="hl">no es razón suficiente para atribuirle una relación causal</span> — y, siendo la anemia de la enfermedad crónica una respuesta fisiológica adaptativa, tratar la anemia leve a moderada de la enfermedad crónica (es decir, intervenir sobre ella sin más) se ha asociado a un <strong>aumento de la mortalidad</strong>, no a una mejora.</p>
 
@@ -192,6 +199,31 @@
                 <li>↑Producción de hepcidina: reservas de hierro suficientes, inflamación</li>
                 <li>↓Producción de hepcidina: deficiencia de hierro, hipoxia, mayor demanda eritropoyética</li>
             </ul>
+
+            <div class="tfg-simulador">
+                <h4 style="color: var(--accent-red);">🧪 Simulador: secuestro de hierro por hepcidina</h4>
+                <p class="subtitle">Mueve el nivel de inflamación y observa el circuito hepcidina → ferroportina → hierro sérico (modelo simplificado, con fines didácticos — no es una calculadora clínica)</p>
+                <div class="tfg-slider-row">
+                    <label for="fuci-hepc-inflamacion">Nivel de inflamación (IL-6)</label>
+                    <input type="range" id="fuci-hepc-inflamacion" min="0" max="100" value="10" step="1">
+                    <span id="fuci-hepc-inflamacion-valor">10%</span>
+                </div>
+                <div class="tfg-vasos">
+                    <div class="tfg-vaso-item">
+                        <span class="tfg-vaso-label">Hepcidina hepática</span>
+                        <div class="tfg-vaso-track"><div class="tfg-vaso-fill" id="fuci-hepc-hepcidina"></div></div>
+                    </div>
+                    <div class="tfg-vaso-item">
+                        <span class="tfg-vaso-label">Ferroportina activa (enterocito/macrófago)</span>
+                        <div class="tfg-vaso-track"><div class="tfg-vaso-fill" id="fuci-hepc-ferroportina"></div></div>
+                    </div>
+                    <div class="tfg-vaso-item">
+                        <span class="tfg-vaso-label">Hierro sérico disponible</span>
+                        <div class="tfg-vaso-track"><div class="tfg-vaso-fill" id="fuci-hepc-hierro"></div></div>
+                    </div>
+                </div>
+                <div class="tfg-estado tfg-estado-ok" id="fuci-hepc-estado"></div>
+            </div>
 
             <div class="article-figure">
                 <img src="js/modules/fisio-uci/img/fig3-regulacionhepcidina.jpg" alt="Modelo de regulación de la hepcidina: reservas de hierro, demanda eritropoyética, hipoxia e inflamación como estímulos sobre el hepatocito" loading="lazy">
@@ -300,12 +332,28 @@
                 y aumento de la fibrinólisis.
             </p>
             <dl class="kv-row"><dt>Factor de mal pronóstico</dt><dd>Recuento plaquetario &lt;50.000/mm³ al ingreso a UCI, o su descenso durante la evolución a &lt;50% del recuento inicial — sobre todo si se acompaña de otras alteraciones de la coagulación como hipofibrinogenemia por exceso de fibrinólisis.</dd></dl>
+            <button class="tx-link" data-atlas-route="sindromes-cid">🔗 Ver ficha completa de CID (criterios ISTH, calculadoras Overt DIC/SIC, tratamiento) →</button>
 
             <p class="section-label" style="margin-top:16px;">¿Qué hacer? Evaluación de la hemostasia</p>
             <dl class="kv-row"><dt>Hemostasia basal seriada</dt><dd>Además de TP/TTPa, es recomendable medir y seguir el <strong>fibrinógeno</strong> — excelente marcador de la intensidad/evolución de la CID, y de la capacidad de síntesis hepática. El DD estará elevado pero carece de especificidad (sepsis, cirugías, procedimientos invasivos, úlcera por presión también lo elevan).</dd></dl>
-            <dl class="kv-row"><dt>Tromboelastograma</dt><dd>Permite evaluar el estado de la hemostasia repetidamente y al lado del paciente, distinguiendo hiperfibrinólisis de un estado protrombótico — útil especialmente en hipercríticos y en circulación extracorpórea o posparo cardiorrespiratorio. Ver Ficha 4 para el detalle completo de TEG/ROTEM.</dd></dl>
+            <dl class="kv-row"><dt>Tromboelastograma</dt><dd>Permite evaluar el estado de la hemostasia repetidamente y al lado del paciente, distinguiendo hiperfibrinólisis de un estado protrombótico — útil especialmente en hipercríticos y en circulación extracorpórea o posparo cardiorrespiratorio.</dd></dl>
+            <button class="tx-link" id="fuci-link-a-teg">🔗 Ver Ficha 4 — detalle completo de TEG/ROTEM →</button>
 
             <p class="section-label" style="margin-top:16px;">Indicaciones actuales de transfusión de plaquetas</p>
+            <div class="form-group">
+                <label for="fuci-plt-select">🎯 Selector rápido — elige el escenario clínico</label>
+                <select id="fuci-plt-select">
+                    <option value="">— Selecciona un escenario —</option>
+                    <option value="hemorragia">Hemorragia activa (digestiva, hematuria, hemoptisis)</option>
+                    <option value="cirugia">Cirugía mayor / procedimiento invasivo en sitio profundo no compresible</option>
+                    <option value="neuro">Neurocirugía, procedimiento neurorradiológico o sangrado intracraneal/intramedular</option>
+                    <option value="cardio">Hemodinamia cardiovascular o cirugía cardíaca/vascular</option>
+                    <option value="vvc">Vía venosa central (guiada por ultrasonido, profesional entrenado)</option>
+                    <option value="pl">Punción lumbar</option>
+                    <option value="antiagregantes">Recuento normal pero con antiagregantes plaquetarios conocidos</option>
+                </select>
+            </div>
+            <div id="fuci-plt-resultado" class="result-box" style="display:none;"></div>
             <ul class="term-chips">
                 <li>Hemorragia activa (digestiva, hematuria, hemoptisis) y recuento &lt;50.000/mm³</li>
                 <li>Cirugía mayor o procedimientos invasivos en sitios profundos no compresibles: mantener &gt;100.000/mm³</li>
@@ -333,11 +381,32 @@
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚠️ Trombocitopenia inducida por heparina (TIH)</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">Muy grave y altamente inmunopatológica. La heparina (sobre todo HBPM) genera anticuerpos IgG específicos contra los complejos <strong>heparina-factor plaquetario 4 (FP4)</strong>, que se unen a la superficie plaquetaria (vía fragmento Fc), activándolas anormalmente — liberan más FP4, creando un ciclo reverberante con trombos en pequeños y grandes vasos. Puede haber trombosis (tipo CID o de grandes vasos, especialmente venosos) junto con trombocitopenia muy intensa (&lt;10.000/mm³) y hemorragias. Es imperioso suspender la heparina de inmediato, tomar muestra para anticuerpos TIH, y usar un anticoagulante sin reactividad cruzada: <strong>argatrobán, bivalirudina o fondaparinux</strong> (pentasacárido). La transfusión de plaquetas solo está indicada en sangrado o antes de procedimientos invasivos.</div>
+                    <div class="micro-prof-body">Muy grave y altamente inmunopatológica. La heparina (sobre todo HBPM) genera anticuerpos IgG específicos contra los complejos <strong>heparina-factor plaquetario 4 (FP4)</strong>, que se unen a la superficie plaquetaria (vía fragmento Fc), activándolas anormalmente — liberan más FP4, creando un ciclo reverberante con trombos en pequeños y grandes vasos. Puede haber trombosis (tipo CID o de grandes vasos, especialmente venosos) junto con trombocitopenia muy intensa (&lt;10.000/mm³) y hemorragias. Es imperioso suspender la heparina de inmediato, tomar muestra para anticuerpos TIH, y usar un anticoagulante sin reactividad cruzada: <strong>argatrobán, bivalirudina o fondaparinux</strong> (pentasacárido). La transfusión de plaquetas solo está indicada en sangrado o antes de procedimientos invasivos.
+                        <svg viewBox="0 0 280 200" style="width:100%; max-width:320px; display:block; margin:12px auto 4px;" aria-label="Ciclo reverberante de la TIH">
+                            <defs>
+                                <marker id="fuci-tih-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M0,0 L10,5 L0,10 z" fill="var(--accent-yellow)"></path>
+                                </marker>
+                            </defs>
+                            <circle cx="140" cy="100" r="70" fill="none" stroke="var(--border-color)" stroke-width="1" stroke-dasharray="3,3"></circle>
+                            <text x="140" y="24" text-anchor="middle" font-size="10.5" fill="var(--text-main)">Heparina + FP4</text>
+                            <text x="234" y="104" text-anchor="middle" font-size="10.5" fill="var(--text-main)">Anticuerpo IgG</text>
+                            <text x="140" y="184" text-anchor="middle" font-size="10.5" fill="var(--text-main)">Activación plaquetaria</text>
+                            <text x="60" y="104" text-anchor="middle" font-size="9" fill="var(--text-main)">Liberación de más FP4</text>
+                            <path class="flow-arrow" d="M 168.7 49.8 A 70 70 0 0 1 208.2 85.6" fill="none" stroke="var(--accent-yellow)" stroke-width="2" marker-end="url(#fuci-tih-arrow)"></path>
+                            <path class="flow-arrow" d="M 211.8 121.5 A 70 70 0 0 1 172.3 155.6" fill="none" stroke="var(--accent-yellow)" stroke-width="2" marker-end="url(#fuci-tih-arrow)"></path>
+                            <path class="flow-arrow" d="M 107.7 155.6 A 70 70 0 0 1 68.2 119.7" fill="none" stroke="var(--accent-yellow)" stroke-width="2" marker-end="url(#fuci-tih-arrow)"></path>
+                            <path class="flow-arrow" d="M 68.2 80.3 A 70 70 0 0 1 111.3 48.0" fill="none" stroke="var(--accent-yellow)" stroke-width="2" marker-end="url(#fuci-tih-arrow)"></path>
+                        </svg>
+                        <p style="font-size:0.72rem; color:var(--text-muted); text-align:center; margin:0;">El ciclo se retroalimenta a sí mismo — por eso una trombocitopenia que empieza moderada puede volverse muy grave en pocas horas si no se suspende la heparina.</p>
+                        <p style="font-size:0.72rem; color:var(--text-muted); margin-top:8px;">👉 El capítulo no menciona el <strong>4T score</strong> (herramienta de probabilidad pre-test para TIH ampliamente citada fuera de esta fuente) — verificado explícitamente contra el texto completo del Capítulo 13 antes de decidir no incluirlo, para no añadir una herramienta clínica sin respaldo directo en la bibliografía de este bloque.</p>
+                    </div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🌀 PTT y otras microangiopatías trombóticas</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">Cuadro polimorfo: anemia hemolítica microangiopática, trombocitopenia, compromiso neurológico y falla renal — mortalidad &gt;50% sin tratamiento. Deficiencia de la metaloproteinasa <strong>ADAMTS-13</strong> (encargada de clivar los multímeros gigantes de FvW), con actividad &lt;6% característica de la enfermedad (congénita o adquirida por autoanticuerpos inhibidores). El mejor tratamiento en UCI es la <strong>plasmaféresis diaria</strong>, recambiando 1-1,5 volemias por sesión, reponiendo con plasma fresco congelado. Al ingreso: tomar muestra de actividad ADAMTS-13 e inhibidor antes de la primera sesión. Si no hay mejoría con varias sesiones: inmunosupresores adicionales (vincristina, ciclofosfamida, rituximab, caplacizumab). Los corticoides son frecuentes pero no demostrada su utilidad. Transfusión de plaquetas solo si hay sangrado o antes de procedimientos invasivos.</div>
+                    <div class="micro-prof-body">Cuadro polimorfo: anemia hemolítica microangiopática, trombocitopenia, compromiso neurológico y falla renal — mortalidad &gt;50% sin tratamiento. Deficiencia de la metaloproteinasa <strong>ADAMTS-13</strong> (encargada de clivar los multímeros gigantes de FvW), con actividad &lt;6% característica de la enfermedad (congénita o adquirida por autoanticuerpos inhibidores). El mejor tratamiento en UCI es la <strong>plasmaféresis diaria</strong>, recambiando 1-1,5 volemias por sesión, reponiendo con plasma fresco congelado. Al ingreso: tomar muestra de actividad ADAMTS-13 e inhibidor antes de la primera sesión. Si no hay mejoría con varias sesiones: inmunosupresores adicionales (vincristina, ciclofosfamida, rituximab, caplacizumab). Los corticoides son frecuentes pero no demostrada su utilidad. Transfusión de plaquetas solo si hay sangrado o antes de procedimientos invasivos.
+                        <button class="tx-link" data-atlas-route="sindromes-ptt">🔗 Ver ficha completa de PTT (French/PLASMIC score, algoritmo, caplacizumab) →</button>
+                    </div>
                 </div>
             </div>
 
@@ -368,7 +437,19 @@
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🤕 Trombocitosis reactiva en el paciente crítico</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">Se asocia principalmente con enfermedad aguda: sepsis, procesos inflamatorios sistémicos, posesplenectomía, cirugía reciente, neoplasias no hematológicas — con niveles elevados de citocinas de fase aguda (IL-1, IL-6, IFN-γ) que inducen una trombopoyesis acelerada. En <strong>politrauma grave</strong>, respuesta bimodal con aumento sobre el valor normal la semana siguiente al trauma; hasta 25% de los pacientes de trauma desarrolla trombocitosis (estudios retrospectivos). En una cohorte francesa de 176 pacientes, 20,1% desarrolló trombocitosis, con mayor severidad (SAPS II), más días de ventilación mecánica y estadía más prolongada en UCI — pero mortalidad relativamente menor (8% vs. 14%, sin significación estadística, p=0,34); se reportaron 3 complicaciones tromboembólicas en esta cohorte pese a tromboprofilaxis mecánica y farmacológica instalada. Los recuentos en trombocitosis reactiva fluctúan entre 500.000 y 800.000/mm³; muy infrecuentemente superan el millón (contexto clínico como edad y recuentos previos orientan). La incidencia de complicaciones tromboembólicas en trombocitosis reactiva severa (&gt;800.000/mm³) es tan reducida que <strong>no justifica farmacoterapia específica</strong> más allá de la tromboprofilaxis estándar ya establecida — ningún ensayo clínico o cohorte ha evaluado innovar en las medidas estándar para esta situación.</div>
+                    <div class="micro-prof-body">Se asocia principalmente con enfermedad aguda: sepsis, procesos inflamatorios sistémicos, posesplenectomía, cirugía reciente, neoplasias no hematológicas — con niveles elevados de citocinas de fase aguda (IL-1, IL-6, IFN-γ) que inducen una trombopoyesis acelerada. En <strong>politrauma grave</strong>, respuesta bimodal con aumento sobre el valor normal la semana siguiente al trauma; hasta 25% de los pacientes de trauma desarrolla trombocitosis (estudios retrospectivos).
+                        <table class="data-table" style="margin:10px 0;">
+                            <thead><tr><th colspan="2">Cohorte francesa (176 pacientes) — trombocitosis reactiva en UCI</th></tr></thead>
+                            <tbody>
+                                <tr><td>Incidencia</td><td>20,1% desarrolló trombocitosis</td></tr>
+                                <tr><td>Severidad</td><td>Mayor SAPS II</td></tr>
+                                <tr><td>Ventilación mecánica</td><td>Más días</td></tr>
+                                <tr><td>Estancia en UCI</td><td>Más prolongada</td></tr>
+                                <tr><td>Mortalidad</td><td>8% vs. 14% — menor, sin significación estadística (p=0,34)</td></tr>
+                                <tr><td>Complicaciones tromboembólicas</td><td>3 casos, pese a tromboprofilaxis mecánica y farmacológica instalada</td></tr>
+                            </tbody>
+                        </table>
+                        Los recuentos en trombocitosis reactiva fluctúan entre 500.000 y 800.000/mm³; muy infrecuentemente superan el millón (contexto clínico como edad y recuentos previos orientan). La incidencia de complicaciones tromboembólicas en trombocitosis reactiva severa (&gt;800.000/mm³) es tan reducida que <strong>no justifica farmacoterapia específica</strong> más allá de la tromboprofilaxis estándar ya establecida — ningún ensayo clínico o cohorte ha evaluado innovar en las medidas estándar para esta situación.</div>
                 </div>
             </div>
 
@@ -423,8 +504,25 @@
             <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Raramente en cuidado intensivo se encuentran tipos aislados de hipoxia. En sépticos concurren la hipoxia anémica + hipermetabólica + por disperfusión (edema por vasoplejía) + con frecuencia isquémica (disfunción VI) y por shunt — decidir la transfusión con base en solo un número (la hemoglobina) resulta bastante simplista.</p>
 
             <p class="section-label" style="margin-top:16px;">Aporte y consumo de oxígeno</p>
-            <div class="kv-row"><dt>Aporte de oxígeno (DO₂)</dt><dd><strong>DO₂ = gasto cardíaco (GC) × contenido arterial de O₂ (CaO₂) × 10</strong> — valor usual 900-1000 mL/min. CaO₂ = Hb × SatO₂ arterial × 1,39 + PaO₂ × 0,003 — en condiciones normales, CaO₂ es 18-20 mL/dL de sangre (el O₂ disuelto contribuye muy poco; la hemoglobina es el determinante principal).</dd></div>
-            <div class="kv-row"><dt>Consumo de oxígeno (VO₂)</dt><dd><strong>VO₂ = GC × 1,39 × [Hb] × (SaO₂ - SvO₂) × 10</strong> — valor usual en individuos sanos 200-300 mL/min. Índice de extracción de O₂ (EO₂ = VO₂/DO₂), en reposo ~25%, variará según la actividad metabólica de los tejidos. Puede estimarse por el <strong>método de Fick invertido</strong> o por <strong>calorimetría indirecta</strong>.</dd></div>
+            <dl class="kv-row"><dt>Aporte de oxígeno (DO₂)</dt><dd><strong>DO₂ = gasto cardíaco (GC) × contenido arterial de O₂ (CaO₂) × 10</strong> — valor usual 900-1000 mL/min. CaO₂ = Hb × SatO₂ arterial × 1,39 + PaO₂ × 0,003 — en condiciones normales, CaO₂ es 18-20 mL/dL de sangre (el O₂ disuelto contribuye muy poco; la hemoglobina es el determinante principal).</dd></dl>
+            <dl class="kv-row"><dt>Consumo de oxígeno (VO₂)</dt><dd><strong>VO₂ = GC × 1,39 × [Hb] × (SaO₂ - SvO₂) × 10</strong> — valor usual en individuos sanos 200-300 mL/min. Índice de extracción de O₂ (EO₂ = VO₂/DO₂), en reposo ~25%, variará según la actividad metabólica de los tejidos. Puede estimarse por el <strong>método de Fick invertido</strong> o por <strong>calorimetría indirecta</strong>.</dd></dl>
+            <p class="section-label" style="margin-top:16px;">🧮 Calculadora — aporte, consumo y extracción de O₂ (Fick)</p>
+            <div class="calc-grid">
+                <div class="form-group"><label for="fuci-fick-gc" title="Gasto cardíaco">GC (L/min)</label><input type="number" id="fuci-fick-gc" step="0.1" min="0" max="20" value="5"></div>
+                <div class="form-group"><label for="fuci-fick-hb" title="Hemoglobina">Hb (g/dL)</label><input type="number" id="fuci-fick-hb" step="0.1" min="0" max="20" value="12"></div>
+                <div class="form-group"><label for="fuci-fick-sao2" title="Saturación arterial de O₂">SaO₂ (%)</label><input type="number" id="fuci-fick-sao2" step="1" min="0" max="100" value="98"></div>
+                <div class="form-group"><label for="fuci-fick-pao2" title="Presión arterial de O₂">PaO₂ (mmHg)</label><input type="number" id="fuci-fick-pao2" step="1" min="0" max="600" value="90"></div>
+                <div class="form-group"><label for="fuci-fick-svo2" title="Saturación venosa mixta — opcional">SvO₂ (%) opc.</label><input type="number" id="fuci-fick-svo2" step="1" min="0" max="100" placeholder="70"></div>
+            </div>
+            <div id="fuci-fick-resultado" class="tfg-estado tfg-estado-ok" style="display:none;"></div>
+            <div class="kinetic-row" id="fuci-fick-gauge-row" style="margin-top:14px; display:none;">
+                <div class="kinetic-label"><span>DO₂ (mL/min) — punto crítico ≈900-1000</span><strong id="fuci-fick-gauge-num">—</strong></div>
+                <div class="kinetic-track">
+                    <div class="kinetic-fill" id="fuci-fick-gauge-fill" style="width: 0%;"></div>
+                    <div class="kinetic-marker" style="left:56.25%;" title="Punto crítico ≈900 mL/min"></div>
+                    <div class="kinetic-marker" style="left:62.5%;" title="Punto crítico ≈1000 mL/min"></div>
+                </div>
+            </div>
             <p style="font-size: 0.85rem; line-height: 1.6;">
                 Los sistemas de transporte ayudan a mantener un VO₂ constante pese a variaciones en el DO₂, mediante
                 compensación en la extracción o en el gasto cardíaco — mientras el DO₂ esté por encima de
@@ -435,11 +533,29 @@
             </p>
             <dl class="kv-row"><dt>Por qué la hipermetabolia agrava la anemia</dt><dd>El metabolismo basal consume <strong>1000-12.000 kcal/día</strong> y, en reposo, un individuo sano requiere ~20 kcal/kg/día — pero en la enfermedad crítica ese requerimiento puede llegar a <span class="hl">duplicarse</span>. Como el cuerpo no puede aumentar la concentración de hemoglobina, el único mecanismo adaptativo real ante esta nueva línea basal de gasto calórico es <strong>aumentar el gasto cardíaco</strong> — si a ese estado hipermetabólico se le suma la anemia, la perfusión tisular se compromete críticamente: siempre hay un componente de <strong>hipoxia hipermetabólica</strong> de fondo en el paciente crítico anémico, independientemente del tipo de hipoxia predominante.</dd></dl>
 
-            <div class="article-figure">
-                <div style="background:rgba(212,175,55,0.06); border:1px dashed var(--border-color); border-radius:8px; padding:16px; text-align:center; font-size:0.8rem; color:var(--text-muted);">
-                    📊 Placeholder — Figura 1 del capítulo: curva sinusoidal de disociación de la hemoglobina (Hb saturada % vs. presión parcial de O₂ en mmHg) — <strong>p50 ≈22,5 mmHg</strong> (50% de saturación) y con <strong>112,5 mmHg</strong> se satura al menos el 95%
+            <div class="tfg-simulador">
+                <h4 style="color: var(--accent-blue);">📈 Curva de disociación de la hemoglobina (Figura 1 del capítulo)</h4>
+                <p class="subtitle">Basada en la Figura 1 del capítulo (gráfico vectorial del PDF, no extraíble como imagen — confirmado con <code>pdfimages</code>) — p50 real citada por la fuente: <strong>≈22,5 mmHg</strong>. Los desplazamientos derecha/izquierda son un modelo simplificado con fines didácticos, no cifras de la fuente.</p>
+                <div class="form-group">
+                    <label for="fuci-hbcurva-select">Estado</label>
+                    <select id="fuci-hbcurva-select">
+                        <option value="normal">Normal — p50 ≈22,5 mmHg</option>
+                        <option value="derecha">Desplazada a la derecha (↓afinidad): acidosis, hipercarbia, hipertermia, ↑2,3-DPG</option>
+                        <option value="izquierda">Desplazada a la izquierda (↑afinidad): alcalosis, hipotermia, intoxicación por CO</option>
+                    </select>
                 </div>
-                <div class="article-figure-caption">Figura 1 del capítulo (no extraída — confirmado con <code>pdfimages</code> que es un gráfico vectorial dibujado en el propio PDF, no una imagen incrustada). La curva se explica por el efecto homotrópico del oxígeno: cada molécula unida facilita la unión de la siguiente. Entre el p50 y el 90% de saturación la curva es muy empinada; para saturar entre el 90% y el 100% se necesita cada vez más oxígeno (la curva se aplana).</div>
+                <svg viewBox="0 0 300 190" style="width:100%; max-width:400px; display:block; margin:8px auto;">
+                    <line x1="34" y1="10" x2="34" y2="160" stroke="var(--border-color)" stroke-width="1"></line>
+                    <line x1="34" y1="160" x2="290" y2="160" stroke="var(--border-color)" stroke-width="1"></line>
+                    <text x="4" y="14" font-size="9" fill="var(--text-muted)">100%</text>
+                    <text x="4" y="86" font-size="9" fill="var(--text-muted)">50%</text>
+                    <text x="10" y="164" font-size="9" fill="var(--text-muted)">0%</text>
+                    <text x="150" y="180" font-size="9" fill="var(--text-muted)" text-anchor="middle">PO₂ (mmHg) — eje 0 a 150</text>
+                    <line x1="34" y1="85" x2="290" y2="85" stroke="var(--border-color)" stroke-width="0.6" stroke-dasharray="3,3"></line>
+                    <path id="fuci-hbcurva-path" fill="none" stroke="var(--accent-blue)" stroke-width="2.4"></path>
+                    <circle id="fuci-hbcurva-p50marker" r="4" fill="var(--accent-yellow)"></circle>
+                </svg>
+                <div class="tfg-estado tfg-estado-ok" id="fuci-hbcurva-estado"></div>
             </div>
             <ul class="term-chips">
                 <li>Desplazan la curva a la <strong>derecha</strong> (↓afinidad, facilita entrega de O₂): acidosis, hipercarbia, hipertermia, sulfohemoglobina, ↑2,3-DPG</li>
@@ -447,11 +563,25 @@
             </ul>
             <p style="font-size: 0.8rem; color: var(--text-muted);">Efecto homotrópico: la hemoglobina tiene 4 sitios activos y cada O₂ unido facilita la unión del siguiente. Efecto Haldane: a PO₂ muy alta, ↑afinidad por O₂ y ↓afinidad por CO₂ (capilares pulmonares). Efecto Bohr: a PCO₂ muy elevada, facilita la donación de O₂ y captación de CO₂ (tejidos periféricos) — H⁺ y CO₂ son efectores heterotrópicos que dificultan la unión del O₂ a la Hb.</p>
 
-            <p class="section-label" style="margin-top:16px;">Deuda de oxígeno y punto crítico</p>
-            <div class="article-figure">
-                <div style="background:rgba(212,175,55,0.06); border:1px dashed var(--border-color); border-radius:8px; padding:16px; text-align:center; font-size:0.8rem; color:var(--text-muted);">
-                    📊 Placeholder — Figuras 2 y 3 del capítulo: relación aporte/consumo de O₂ con el punto crítico del DO₂, y el efecto de la hipertermia/edema intersticial desplazando ese punto crítico
+            <p class="section-label" style="margin-top:16px;">Deuda de oxígeno y punto crítico (Figuras 2 y 3 del capítulo)</p>
+            <div class="tfg-simulador">
+                <p class="subtitle">Recreado a partir de la relación aporte/consumo de O₂ descrita en las Figuras 2-3 del capítulo (gráficos vectoriales, no extraíbles como imagen) — mueve el DO₂ y observa cómo el VO₂ deja de ser independiente del aporte por debajo del punto crítico.</p>
+                <div class="tfg-slider-row">
+                    <label for="fuci-do2debt-slider">DO₂ actual (mL/min)</label>
+                    <input type="range" id="fuci-do2debt-slider" min="200" max="1600" value="1000" step="10">
+                    <span id="fuci-do2debt-valor">1000 mL/min</span>
                 </div>
+                <svg viewBox="0 0 300 190" style="width:100%; max-width:400px; display:block; margin:8px auto;">
+                    <line x1="34" y1="10" x2="34" y2="160" stroke="var(--border-color)" stroke-width="1"></line>
+                    <line x1="34" y1="160" x2="290" y2="160" stroke="var(--border-color)" stroke-width="1"></line>
+                    <text x="150" y="180" font-size="9" fill="var(--text-muted)" text-anchor="middle">DO₂ (mL/min) — eje 0 a 1600</text>
+                    <text x="6" y="14" font-size="8" fill="var(--text-muted)">VO₂</text>
+                    <path d="M 34 155 L 186 40 L 290 40" fill="none" stroke="var(--accent-green)" stroke-width="2.4"></path>
+                    <line id="fuci-do2debt-critline" x1="186" y1="10" x2="186" y2="160" stroke="var(--accent-yellow)" stroke-width="1" stroke-dasharray="4,3"></line>
+                    <text id="fuci-do2debt-critlabel" x="186" y="20" font-size="8" fill="var(--accent-yellow)" text-anchor="middle">punto crítico ≈950</text>
+                    <circle id="fuci-do2debt-marker" r="5" fill="var(--accent-red)"></circle>
+                </svg>
+                <div class="tfg-estado tfg-estado-ok" id="fuci-do2debt-estado"></div>
             </div>
             <p style="font-size: 0.85rem; line-height: 1.6;">
                 Simplemente normalizar las variables macrohemodinámicas (PA, FC, gasto urinario) <strong>no es
@@ -468,6 +598,19 @@
             </p>
 
             <p class="section-label" style="margin-top:16px;">Transfusión en situaciones especiales</p>
+            <div class="form-group">
+                <label for="fuci-transf-escenario">🎯 Resumen rápido — elige el escenario clínico</label>
+                <select id="fuci-transf-escenario">
+                    <option value="">— Selecciona un escenario —</option>
+                    <option value="septico">Paciente séptico</option>
+                    <option value="trauma">Paciente politraumatizado</option>
+                    <option value="cardiovascular">Paciente cardiovascular (sin SCA reciente)</option>
+                    <option value="sca">Síndrome coronario agudo</option>
+                    <option value="epoc">EPOC / paciente pulmonar crónico</option>
+                </select>
+            </div>
+            <div id="fuci-transf-resultado" class="result-box" style="display:none;"></div>
+            <p style="font-size:0.75rem; color:var(--text-muted); margin:-4px 0 12px;">Resumen de 1 línea — el detalle completo con la evidencia de cada escenario está en los acordeones de abajo.</p>
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🦠 Paciente séptico</span> <span class="toggle-icon">+</span></div>
@@ -653,6 +796,28 @@
                 </div>
             </div>
 
+            <div class="tfg-simulador">
+                <h4 style="color: var(--accent-purple);">📈 Visualizador — forma del trazado TEG por patrón</h4>
+                <p class="subtitle">Selecciona un patrón (A-G) y observa la forma del huso — la habilidad real que se usa a pie de cama al reconocer un trazado. Recreación esquemática, no una réplica exacta del trazado real.</p>
+                <div class="form-group">
+                    <label for="fuci-teg-shape-select">Patrón</label>
+                    <select id="fuci-teg-shape-select">
+                        <option value="A">A — Normal</option>
+                        <option value="B">B — Prolongado</option>
+                        <option value="C">C — Amplitud máxima disminuida</option>
+                        <option value="D">D — Fibrinólisis</option>
+                        <option value="E">E — Hipercoagulabilidad</option>
+                        <option value="F">F — CID</option>
+                        <option value="G">G — Hipocoagulabilidad</option>
+                    </select>
+                </div>
+                <svg viewBox="0 0 300 140" style="width:100%; max-width:400px; display:block; margin:8px auto;">
+                    <line x1="10" y1="70" x2="290" y2="70" stroke="var(--border-color)" stroke-width="1"></line>
+                    <path id="fuci-teg-shape-path" fill="var(--accent-purple)" fill-opacity="0.5" stroke="var(--accent-purple)" stroke-width="1.6"></path>
+                </svg>
+                <div class="tfg-estado tfg-estado-ok" id="fuci-teg-shape-estado"></div>
+            </div>
+
             <p class="section-label" style="margin-top:16px;">La ROTEM: aspectos técnicos y parámetros</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
                 Cubeta cilíndrica con un eje vertical que oscila permanentemente (rotación de 4,75°), impulsado por
@@ -681,6 +846,19 @@
                 <li>hepTEM: detecta la presencia de heparina</li>
             </ul>
 
+            <p class="section-label" style="margin-top:16px;">Equivalencias de nomenclatura TEG ↔ ROTEM</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom:8px;">En la práctica un centro suele usar solo uno de los dos sistemas — esta tabla evita confundir los términos si te encuentras con el otro.</p>
+            <table class="data-table">
+                <thead><tr><th>Concepto</th><th>TEG</th><th>ROTEM</th></tr></thead>
+                <tbody>
+                    <tr><td>Tiempo hasta el inicio del coágulo</td><td>r</td><td>CT</td></tr>
+                    <tr><td>Tiempo hasta una firmeza de 20mm</td><td>k</td><td>CFT</td></tr>
+                    <tr><td>Velocidad de formación</td><td>Ángulo alfa</td><td>Ángulo alfa (mismo nombre)</td></tr>
+                    <tr><td>Firmeza máxima del coágulo</td><td>MA (amplitud máxima)</td><td>MCF (máxima firmeza)</td></tr>
+                    <tr><td>Fibrinólisis</td><td>LY30 (% lisis a los 30 min de la MA)</td><td>ML (máxima lisis)</td></tr>
+                </tbody>
+            </table>
+
             <p style="font-size: 0.8rem; color: var(--text-muted);">👉 <strong>Corrección de fidelidad (auditoría de esta sesión)</strong>: una versión anterior de esta tabla citaba el <strong>FIBTEM MCF</strong> del patrón normal como "9mm" y el <strong>EXTEM MCF</strong> del patrón de hipofibrinogenemia como "reducido a 57mm" — ambos eran errores de transcripción de las Figuras 4-8 del capítulo (9mm es en realidad la <em>CFR</em> del FIBTEM normal, no su MCF; y 57mm en hipofibrinogenemia es un EXTEM MCF esencialmente <strong>normal</strong>, no reducido). Corregidos abajo con los valores reales de las 5 figuras.</p>
             <div style="overflow-x:auto;">
             <table class="data-table">
@@ -706,6 +884,20 @@
                 </div>
             </div>
 
+            <p class="section-label" style="margin-top:16px;">🎯 ¿Qué patrón tengo delante?</p>
+            <div class="form-group">
+                <label for="fuci-rotem-select">Elige un conjunto de valores ROTEM y comprueba tu lectura antes de ver la respuesta</label>
+                <select id="fuci-rotem-select">
+                    <option value="">— Selecciona unos valores —</option>
+                    <option value="normal">EXTEM CT 67s·MCF 57mm · INTEM CT 200s·MCF 61mm · FIBTEM MCF 57mm</option>
+                    <option value="plaquetopenia">EXTEM CFT 444s↑·MCF 35mm↓ · INTEM CFT 449s↑·MCF 32mm↓ · FIBTEM MCF 16mm (conservado)</option>
+                    <option value="hipofibrinogenemia">EXTEM MCF 57mm (normal) · INTEM MCF 42mm↓leve · FIBTEM MCF 3mm↓↓↓</option>
+                    <option value="hiperfibrinolisis">EXTEM/INTEM ML 100% · FIBTEM MCF 7mm·ML 94% · APTEM ML 0%</option>
+                    <option value="heparina">EXTEM CT 67s·MCF 57mm (conservado) · INTEM CT 200s·ML 100% · hepTEM corrige</option>
+                </select>
+            </div>
+            <div id="fuci-rotem-resultado" class="result-box" style="display:none;"></div>
+
             <p class="section-label" style="margin-top:16px;">Prueba de punto de atención y principales aplicaciones</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
                 Análisis rápido, específico y a la cabecera del paciente, con sangre entera, resultados rápidos e
@@ -717,7 +909,7 @@
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🤰 Hemorragia obstétrica</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">Principal causa de mortalidad materna en el mundo — se estiman <strong>143.000 muertes anuales</strong>. Se define como pérdida &gt;500 mL vía transvaginal en las primeras 24h posparto, o &gt;1000 mL en el posquirúrgico de cesárea. El 1,7% de todas las mujeres con parto vaginal o cesárea tendrá hemorragia obstétrica. Los métodos viscoelásticos permiten el inicio temprano de la terapia transfusional — el <strong>FIBTEM A5</strong> (amplitud a los 5 min de formación del coágulo) es el biomarcador temprano predictor de hemorragia obstétrica más importante disponible.</div>
+                    <div class="micro-prof-body">Principal causa de mortalidad materna en el mundo — se estiman <strong>143.000 muertes anuales</strong>. Se define como pérdida &gt;500 mL vía transvaginal en las primeras 24h posparto, o &gt;1000 mL en el posquirúrgico de cesárea. El 1,7% de todas las mujeres con parto vaginal o cesárea tendrá hemorragia obstétrica. Los métodos viscoelásticos permiten el inicio temprano de la terapia transfusional — el <strong>FIBTEM A5</strong> (amplitud a los 5 min de formación del coágulo) es el biomarcador temprano predictor de hemorragia obstétrica más importante disponible. <span style="font-size:0.85em; color:var(--text-muted);">(El capítulo no da un punto de corte numérico para este uso concreto — verificado contra el texto completo antes de decidir no inventar una cifra.)</span></div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🚗 Politraumatismo</span> <span class="toggle-icon">+</span></div>
@@ -758,7 +950,7 @@
         <div id="fuci-eosinofilia" class="tab-content">
             <h3 style="color: var(--accent-green);">Eosinofilia en el paciente crítico</h3>
 
-            <p class="section-label">Definiciones</p>
+            <p class="section-label">Tabla 1. Definiciones</p>
             <table class="data-table">
                 <thead><tr><th>Término</th><th>Definición</th></tr></thead>
                 <tbody>
@@ -774,7 +966,17 @@
                 <li>Grado moderado: 1500-5000/mm³</li>
                 <li>Grado grave: &gt;5000/mm³</li>
             </ul>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">👉 <strong>Nota de fidelidad</strong>: el propio capítulo (OMS 2016) usa esta misma redacción — "leve &gt;1500/mm³" solapa literalmente con el rango de "moderada" y "grave" en vez de acotarse como una banda propia (p. ej. 500-1500/mm³, el uso más habitual del término en la literatura). No es un error de transcripción de la app: se reproduce tal cual la publica la fuente, con esta advertencia, en vez de "corregir" los rangos por criterio propio.</p>
             <p style="font-size: 0.8rem; color: var(--text-muted);">La principal causa de eosinofilia reactiva en países en vía de desarrollo es la <strong>infección parasitaria</strong>; en países industrializados, la <strong>hipersensibilidad tipo I</strong> (reacción alérgica) y el <strong>síndrome de DRESS</strong>. En el paciente crítico, toda hipereosinofilia debe ser estudiada.</p>
+
+            <div class="tfg-simulador">
+                <h4 style="color: var(--accent-green);">🧮 Calculadora — clasificación de gravedad</h4>
+                <div class="form-group">
+                    <label for="fuci-eos-grado-input">Recuento absoluto de eosinófilos (/mm³)</label>
+                    <input type="number" id="fuci-eos-grado-input" min="0" step="10" placeholder="ej. 3200">
+                </div>
+                <div class="tfg-estado tfg-estado-ok" id="fuci-eos-grado-estado" style="display:none;"></div>
+            </div>
 
             <p class="section-label" style="margin-top:16px;">Características morfológicas del eosinófilo</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
@@ -786,6 +988,7 @@
                 300 a 500 eosinófilos a nivel tisular.
             </p>
 
+            <p class="section-label" style="margin-top:16px;">Tabla 2. Características de las proteínas del eosinófilo</p>
             <table class="data-table">
                 <thead><tr><th>Proteína del eosinófilo</th><th>Características</th><th>Efecto clínico</th></tr></thead>
                 <tbody>
@@ -818,6 +1021,7 @@
                 enfermedades sistémicas, infección parasitaria y eosinofilia por neoplasias.
             </p>
 
+            <p class="section-label" style="margin-top:16px;">Tabla 3. Eosinofilia inducida por medicamentos</p>
             <table class="data-table">
                 <thead><tr><th>Medicamentos</th><th>Manifestaciones asociadas</th></tr></thead>
                 <tbody>
@@ -846,6 +1050,7 @@
                 paramixovirus) — la reactivación del HHV-6 se ha propuesto como marcador diagnóstico.
             </p>
 
+            <p class="section-label" style="margin-top:16px;">Tabla 4. Criterios diagnósticos para el síndrome de DRESS</p>
             <table class="data-table">
                 <thead><tr><th>Bocquet y colaboradores</th><th>RegiSCAR</th><th>J-SCAR</th></tr></thead>
                 <tbody>
@@ -856,7 +1061,37 @@
             </table>
             <p style="font-size: 0.75rem; color: var(--text-muted);">Bocquet: los 3 criterios son necesarios. RegiSCAR: * criterios necesarios, ** 3 de los 4 son necesarios. J-SCAR: DRESS clásico = presencia de los 7 criterios; DRESS atípico = primeros 5 criterios.</p>
 
-            <p class="section-label" style="margin-top:16px;">Eosinofilia por enfermedades sistémicas</p>
+            <div class="tfg-simulador">
+                <h4 style="color: var(--accent-green);">✅ Checklist interactivo — ¿cumple criterios de DRESS?</h4>
+                <p class="subtitle">Marca los criterios presentes en cada sistema y comprueba el veredicto en vivo.</p>
+
+                <p style="font-size:0.82rem; font-weight:600; margin:10px 0 4px;">Bocquet y colaboradores (los 3 son necesarios)</p>
+                <label class="checkbox-label"><input type="checkbox" class="fuci-dress-bq"> Erupción cutánea relacionada con fármacos</label>
+                <label class="checkbox-label"><input type="checkbox" class="fuci-dress-bq"> Anormalidades hematológicas (eosinófilos ≥1,5×10⁹/L; linfocitos atípicos)</label>
+                <label class="checkbox-label"><input type="checkbox" class="fuci-dress-bq"> Involucro sistémico (adenopatías ≥2cm; hepatitis ≥2×; nefritis/neumonitis intersticial; miocarditis)</label>
+                <div class="tfg-estado tfg-estado-ok" id="fuci-dress-bq-estado" style="margin-top:6px;"></div>
+
+                <p style="font-size:0.82rem; font-weight:600; margin:16px 0 4px;">RegiSCAR (los 2 primeros son necesarios; de los 4 siguientes hacen falta ≥3)</p>
+                <label class="checkbox-label"><input type="checkbox" class="fuci-dress-rc-nec"> Erupción cutánea aguda*</label>
+                <label class="checkbox-label"><input type="checkbox" class="fuci-dress-rc-nec"> Hospitalización*</label>
+                <label class="checkbox-label"><input type="checkbox" class="fuci-dress-rc-opt"> Fiebre &gt;38°C**</label>
+                <label class="checkbox-label"><input type="checkbox" class="fuci-dress-rc-opt"> Crecimiento de ganglios linfáticos en ≥2 sitios**</label>
+                <label class="checkbox-label"><input type="checkbox" class="fuci-dress-rc-opt"> Involucro de ≥1 órgano interno**</label>
+                <label class="checkbox-label"><input type="checkbox" class="fuci-dress-rc-opt"> Anormalidades hematológicas** (linfocitosis o linfopenia; eosinofilia)</label>
+                <div class="tfg-estado tfg-estado-ok" id="fuci-dress-rc-estado" style="margin-top:6px;"></div>
+
+                <p style="font-size:0.82rem; font-weight:600; margin:16px 0 4px;">J-SCAR (7 = DRESS clásico; primeros 5 = DRESS atípico)</p>
+                <label class="checkbox-label"><input type="checkbox" class="fuci-dress-js"> Erupción maculopapular &gt;3 semanas tras iniciar el fármaco</label>
+                <label class="checkbox-label"><input type="checkbox" class="fuci-dress-js"> Síntomas persistentes tras discontinuar el fármaco causal</label>
+                <label class="checkbox-label"><input type="checkbox" class="fuci-dress-js"> Fiebre &gt;38°C</label>
+                <label class="checkbox-label"><input type="checkbox" class="fuci-dress-js"> Anomalías hepáticas (ALT&gt;100 U/L) o de otros órganos</label>
+                <label class="checkbox-label"><input type="checkbox" class="fuci-dress-js"> Anomalías leucocitarias (leucocitosis &gt;11×10⁹/L; linfocitos atípicos &gt;5%; eosinofilia &gt;1,5×10⁹/L)</label>
+                <label class="checkbox-label"><input type="checkbox" class="fuci-dress-js"> Linfadenopatías</label>
+                <label class="checkbox-label"><input type="checkbox" class="fuci-dress-js"> Reactivación del herpesvirus-6</label>
+                <div class="tfg-estado tfg-estado-ok" id="fuci-dress-js-estado" style="margin-top:6px;"></div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Tabla 5. Enfermedades sistémicas relacionadas con eosinofilia</p>
             <table class="data-table">
                 <thead><tr><th>Sistema</th><th>Enfermedad</th></tr></thead>
                 <tbody>
@@ -894,7 +1129,7 @@
                 <strong>síndrome hipereosinofílico</strong>.
             </p>
 
-            <p class="section-label" style="margin-top:16px;">Manifestaciones clínicas del síndrome hipereosinofílico</p>
+            <p class="section-label" style="margin-top:16px;">Manifestaciones clínicas del síndrome hipereosinofílico (Tabla 7)</p>
             <table class="data-table">
                 <thead><tr><th>Signos y síntomas</th><th>Porcentaje</th></tr></thead>
                 <tbody>
@@ -908,7 +1143,8 @@
             </table>
             <p style="font-size: 0.8rem; color: var(--text-muted);">La leucocitosis (20.000-30.000/mm³ o superior) con eosinofilia periférica se presenta en el 30%-70% y es un hallazgo frecuente. Hallazgos hematológicos: neutrofilia, basofilia, inmadurez mieloide, eosinófilos maduros/inmaduros con diversos grados de displasia. La <strong>trombocitopenia es más común que la trombocitosis</strong> (31% vs. 16%) y la eosinofilia en médula ósea oscila entre 7%-57% (33%). Hallazgos medulares: cristales de Charcot-Leyden, aumento de blastos y fibrosis. Todos los órganos pueden ser susceptibles a la eosinofilia sostenida — compromiso dermatológico 69%, pulmonar 44%, gastrointestinal 38%, cardíaco 20% (asociado a gran morbimortalidad por miocardiopatía restrictiva, enfermedad valvular y eventos cardioembólicos).</p>
 
-            <p class="section-label" style="margin-top:16px;">Tabla 6. Mecanismos de lesión de órganos</p>
+            <p class="section-label" style="margin-top:16px;">Mecanismos de lesión de órganos</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom:8px;">👉 <strong>Nota de fidelidad</strong>: en el capítulo, esta tabla aparece impresa como "<strong>Tabla 6. Infecciones relacionadas con la eosinofilia</strong>" — pero su contenido real (columnas Mecanismo/Descripción, filas infiltración tisular/fibrosis/hipercoagulabilidad) no tiene relación con agentes infecciosos, y tampoco coincide con el párrafo que la precede en la fuente (que anuncia una lista de parásitos). Es, con alta probabilidad, un error de maquetación del propio libro — una tabla equivocada bajo el título "Tabla 6". Se reproduce aquí el contenido real de la tabla impresa, con un título descriptivo en vez del título impreso (que induciría a error), y esta advertencia — mismo criterio de fidelidad ya usado en el resto de la app ante erratas de fuente (p. ej. el IFR de Fracaso Renal Agudo).</p>
             <table class="data-table">
                 <thead><tr><th>Mecanismo</th><th>Cómo lesiona el órgano</th></tr></thead>
                 <tbody>
@@ -923,7 +1159,36 @@
             <dl class="kv-row"><dt>Paso 2 — Evaluar la eosinofilia primaria/clonal</dt><dd>Evaluación morfológica en sangre periférica y médula ósea, junto con vitamina B₁₂/triptasa y estudios de citogenética/inmunofenotipo. Detección en sangre periférica de la fusión del gen <strong>FIP1L1-PDGFRα</strong> (por RT-PCR o FISH) — la presencia de la deleción 4q12 da como resultado <em>FIP1L1-PDGFRα</em>; otras deleciones incluyen <em>PDGFRβ</em> (5q31-33) y <em>FGFR</em> 8p11-12. Si el cribado de FIP1L1-PDGFRα no está disponible, la triptasa sérica puede ser un marcador sustituto útil (aumenta en presencia de las anomalías moleculares señaladas).</dd></dl>
 
             <p class="section-label" style="margin-top:16px;">Flujograma diagnóstico (Figura 1 del capítulo)</p>
-            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom:8px;">Recreado como secuencia esquematizada (no como imagen — es un flujograma vectorial del PDF original, sin figura rasterizada que extraer, verificado con <code>pdfimages -list</code>).</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom:8px;">Recreado como diagrama (no como imagen — es un flujograma vectorial del PDF original, sin figura rasterizada que extraer, verificado con <code>pdfimages -list</code>).</p>
+            <svg viewBox="0 0 320 260" style="width:100%; max-width:320px; display:block; margin:0 auto 12px;">
+                <defs>
+                    <marker id="fuci-eos-flow-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M0,0 L10,5 L0,10 z" fill="var(--accent-green)"></path>
+                    </marker>
+                </defs>
+                <rect x="35" y="8" width="250" height="34" rx="6" fill="none" stroke="var(--accent-green)" stroke-width="1.4"></rect>
+                <text x="160" y="29" text-anchor="middle" font-size="10" fill="var(--text-main)">① Etiología a considerar</text>
+                <path class="flow-arrow" d="M 160 42 L 160 60" stroke="var(--accent-green)" stroke-width="1.6" marker-end="url(#fuci-eos-flow-arrow)"></path>
+
+                <rect x="20" y="60" width="280" height="46" rx="6" fill="none" stroke="var(--accent-green)" stroke-width="1.4"></rect>
+                <text x="160" y="79" text-anchor="middle" font-size="9.5" fill="var(--text-main)">② Laboratorio dirigido +</text>
+                <text x="160" y="93" text-anchor="middle" font-size="9.5" fill="var(--text-main)">③ complementarios + ④ imágenes</text>
+                <path class="flow-arrow" d="M 160 106 L 160 124" stroke="var(--accent-green)" stroke-width="1.6" marker-end="url(#fuci-eos-flow-arrow)"></path>
+
+                <rect x="35" y="124" width="250" height="34" rx="6" fill="var(--accent-green)" fill-opacity="0.1" stroke="var(--accent-green)" stroke-width="1.4"></rect>
+                <text x="160" y="145" text-anchor="middle" font-size="9.5" fill="var(--text-main)">¿Causa secundaria identificada?</text>
+                <text x="230" y="176" text-anchor="middle" font-size="8.5" fill="var(--text-muted)">sí → tratar la causa</text>
+                <path d="M 210 158 L 250 158" stroke="var(--accent-green)" stroke-width="1.4" marker-end="url(#fuci-eos-flow-arrow)"></path>
+                <text x="110" y="176" text-anchor="middle" font-size="8.5" fill="var(--text-muted)">no</text>
+                <path class="flow-arrow" d="M 160 158 L 160 182" stroke="var(--accent-green)" stroke-width="1.6" marker-end="url(#fuci-eos-flow-arrow)"></path>
+
+                <rect x="35" y="182" width="250" height="34" rx="6" fill="none" stroke="var(--accent-green)" stroke-width="1.4"></rect>
+                <text x="160" y="203" text-anchor="middle" font-size="9.5" fill="var(--text-main)">⑤ Paso 2 — morfología/biopsia MO</text>
+                <path class="flow-arrow" d="M 160 216 L 160 234" stroke="var(--accent-green)" stroke-width="1.6" marker-end="url(#fuci-eos-flow-arrow)"></path>
+
+                <rect x="15" y="234" width="290" height="24" rx="6" fill="var(--accent-green)" fill-opacity="0.14" stroke="var(--accent-green)" stroke-width="1.6"></rect>
+                <text x="160" y="250" text-anchor="middle" font-size="9" fill="var(--text-main)">⑥ Confirmación molecular FIP1L1-PDGFRα</text>
+            </svg>
             <dl class="kv-row"><dt>① Etiología a considerar</dt><dd>Parásitos, hipersensibilidad, fármacos.</dd></dl>
             <dl class="kv-row"><dt>② Estudios de laboratorio dirigidos</dt><dd>Química sanguínea, hepatograma, parcial de orina, coprológico, proteinograma electroforético e inmunoglobulinas.</dd></dl>
             <dl class="kv-row"><dt>③ Estudios complementarios (en paralelo con ②)</dt><dd>ANAS, ANCA, vitamina B₁₂, VSG.</dd></dl>

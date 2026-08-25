@@ -1037,3 +1037,16 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
    Mismos botones .quiz-opcion reutilizados, sin CSS nuevo por botón. */
 .quiz-temas-titulo { font-size: 0.95rem; font-weight: bold; margin-bottom: 14px; }
 .quiz-temas-lista { display: flex; flex-direction: column; gap: 8px; max-height: 60vh; overflow-y: auto; }
+
+/* ==========================================================================
+   FLECHA DE FLUJO ANIMADA (genérica, reutilizable)
+   Dashes que "fluyen" a lo largo de un <path> — pensada para diagramas de
+   ciclo/circuito (p. ej. el ciclo reverberante de la TIH en Hematología,
+   Fisiopatología UCI). Aplícala a cualquier <path stroke-dasharray="6,4">
+   con class="flow-arrow"; respeta prefers-reduced-motion.
+   ========================================================================== */
+.flow-arrow { stroke-dasharray: 6,4; animation: flow-dash 1.6s linear infinite; }
+@keyframes flow-dash { to { stroke-dashoffset: -20; } }
+@media (prefers-reduced-motion: reduce) {
+    .flow-arrow { animation: none; }
+}

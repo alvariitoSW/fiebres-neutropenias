@@ -2347,6 +2347,142 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
       (`.micro-prof-item`/`Paciente séptico` para la tabla de sepsis,
       `Mecanismo de absorción` para la ferroportina); la tabla ROTEM
       corregida renderiza sus 5 filas con los valores nuevos.
+  - **Informe de auditoría (fallos/huecos/interactividad/mejoras) y las
+    4 rondas de correcciones aplicadas, en ese orden explícito pedido por
+    el usuario**: a petición de "mándame un informe... donde se vea todos
+    los fallos, las fallas de información, las partes que se podrían poner
+    algo interactivo y las partes que se podrían mejorar", se auditaron
+    las 5 fichas ya existentes y se publicó un informe estructurado como
+    Artifact (severidad por color: fallo/hueco/interactividad/mejora,
+    tarjetas con ubicación exacta en el archivo). El usuario pidió después
+    corregir **todo** lo señalado, en el mismo orden — fallos primero,
+    luego huecos, luego oportunidades, luego mejoras menores.
+    - **Fallos reales corregidos**: (1) 2 bloques de DO₂/VO₂ en la Ficha 3
+      usaban `<div class="kv-row">` en vez de `<dl class="kv-row">`
+      (HTML inválido, sin efecto visual porque el CSS es por clase — pero
+      inconsistente con las +150 instancias de `kv-row` del resto de la
+      app) — corregidos a `<dl>`. (2) Los 3 grados de eosinofilia de la
+      Ficha 5 ("leve &gt;1500/mm³ · moderada 1500-5000/mm³ · grave
+      &gt;5000/mm³") se solapan literalmente en el corte de 1500 —
+      **verificado directamente contra la página 240 del PDF**: es una
+      ambigüedad real de la propia fuente (OMS 2016), no un error de
+      transcripción — se añadió una nota de fidelidad explícita en vez de
+      "corregir" los rangos por criterio propio. (3) Solo la Tabla 6
+      añadida en la ronda anterior llevaba numeración real de fuente,
+      mientras las otras 5 tablas de la misma ficha no — **releídas las
+      páginas 74-79 del PDF** para confirmar los números reales (Tabla 1
+      Definiciones, Tabla 2 Proteínas del eosinófilo, Tabla 3 Fármacos,
+      Tabla 4 Criterios DRESS, Tabla 5 Enfermedades sistémicas, Tabla 7
+      Signos y síntomas) y añadirlos a las 6 tablas restantes. Hallazgo
+      colateral en esa misma relectura: la "Tabla 6" del capítulo está
+      impresa con el título "Infecciones relacionadas con la eosinofilia"
+      pero su contenido real (mecanismo/descripción: infiltración
+      tisular/fibrosis/hipercoagulabilidad) no tiene ninguna relación con
+      agentes infecciosos ni con el párrafo que la precede — con alta
+      probabilidad, una tabla equivocada bajo ese título en el propio
+      libro. Se mantuvo el contenido real (ya correcto desde la ronda
+      anterior) con un título descriptivo en vez del título impreso
+      (que induciría a error) y una nota de fidelidad explicando la
+      discrepancia, mismo criterio que el resto de erratas de fuente ya
+      documentadas en el proyecto.
+    - **Huecos de información, verificados contra el PDF antes de decidir
+      si añadir o no**: el capítulo 13 (Trombocitopenia) **no menciona el
+      4T score de TIH** (herramienta de probabilidad pre-test muy citada
+      fuera de esta fuente) — verificado releyendo el capítulo completo
+      (págs. 188-194); el capítulo 15 (TEG/ROTEM) **no da un punto de
+      corte numérico** para el FIBTEM A5 como predictor de hemorragia
+      obstétrica, solo lo cita como "el biomarcador más importante
+      disponible" — verificado en la pág. 235. En ambos casos, siguiendo
+      la disciplina ya establecida del proyecto de nunca fabricar
+      contenido clínico sin respaldo directo en la fuente, no se añadió
+      ninguna cifra ni herramienta — se dejó una nota transparente
+      explicando que se verificó y no está en el capítulo, en vez de
+      dejarlo simplemente sin mencionar.
+    - **13 piezas interactivas nuevas** — el bloque no tenía ninguna
+      calculadora/simulador propio hasta ahora (a diferencia de
+      Cardiología o Nefrología), la brecha más señalada por el informe:
+      - Ficha 1: simulador del secuestro de hierro por hepcidina (slider
+        de "nivel de inflamación" que mueve en vivo 3 barras — hepcidina,
+        ferroportina activa, hierro sérico —, mismo patrón
+        `.tfg-simulador` que el resto de la app).
+      - Ficha 2: selector "umbral de transfusión de plaquetas por
+        escenario" (patrón `wireSelectExplicacion`, 7 escenarios ya
+        citados) y un SVG animado del ciclo reverberante de la TIH
+        (heparina-FP4 → anticuerpo IgG → activación plaquetaria →
+        liberación de más FP4), con una nueva clase CSS genérica
+        `.flow-arrow` (dashes que fluyen a lo largo de un `<path>`,
+        respeta `prefers-reduced-motion`) reutilizable en cualquier
+        diagrama de ciclo futuro de la app.
+      - Ficha 3, la más beneficiada (4 piezas): **calculadora de Fick**
+        (DO₂/VO₂/EO₂ con gauge visual y marcadores en el punto crítico
+        900-1000 mL/min — mismas fórmulas que ya citaba el texto, con el
+        coeficiente 1,39 propio de esta ficha, distinto del 1,34 que usa
+        Cardiología para su propia cita bibliográfica, mismo criterio de
+        fidelidad-a-la-fuente-citada-en-cada-ficha ya visto con el DO₂I de
+        Cardiología); **curva de disociación de la Hb interactiva**
+        (ecuación de Hill n=2,7, p50=22,5mmHg la única cifra real de la
+        fuente, sustituyendo el placeholder de imagen) con 3 estados
+        (normal/derecha/izquierda); **diagrama de deuda de oxígeno** con
+        slider de DO₂ y un marcador que recorre una curva ascendente hasta
+        el punto crítico (≈950 mL/min) y luego se aplana — sustituye el
+        2º placeholder; y un **selector-resumen de umbral de transfusión
+        por escenario clínico** (séptico/trauma/cardiovascular/SCA/EPOC).
+      - Ficha 4: **visualizador del trazado TEG por patrón** (A-G, un
+        huso SVG parametrizado — inicio/pico/amplitud/cola — que cambia
+        de forma según el patrón elegido, incluida la "hoja" característica
+        de la fibrinólisis) y un selector **"¿qué patrón tengo delante?"**
+        con los 5 patrones ROTEM ya tabulados, que revela la lógica
+        diagnóstica al elegir. Se descartaron 2 candidatos del informe por
+        falta de respaldo en la fuente: el "índice de coagulación" (el
+        capítulo no da la ecuación lineal exacta) y una versión del 4T
+        score para TIH (ver huecos, arriba).
+      - Ficha 5 (3 piezas): **checklist interactivo de criterios DRESS**
+        con recuento en vivo y veredicto automático para los 3 sistemas
+        (Bocquet: 3/3 necesarios; RegiSCAR: 2 necesarios + ≥3 de 4
+        adicionales; J-SCAR: 7=clásico/primeros 5=atípico) — granularidad
+        más precisa que la tabla comparativa ya existente, verificada
+        contra el texto exacto de la Tabla 4 del capítulo (pág. 244);
+        **calculadora de clasificación de gravedad** (maneja
+        explícitamente la ambigüedad de rangos ya señalada como fallo); y
+        el **flujograma diagnóstico como diagrama SVG real** (cajas +
+        flechas, con un único punto de "¿causa secundaria identificada?"
+        — sin inventar rombos de decisión que la fuente no describe),
+        sustituyendo la secuencia de texto `kv-row` de la ronda anterior
+        (que se mantiene debajo, íntegra, como referencia accesible).
+    - **Mejoras menores aplicadas**: el kv-row de "Mecanismos que
+      contribuyen" (Ficha 1) pasó a `term-chips`; la cohorte francesa de
+      trombocitosis reactiva (Ficha 2) pasó de un párrafo denso a una
+      mini-tabla de 6 filas; la mención en texto plano "Ver Ficha 4 para
+      el detalle..." (Ficha 2) pasó a un botón `.tx-link` real que salta
+      con `openCorkboardTopic()` (mismo panel, sin necesidad de
+      `data-atlas-route`); nueva tabla de **equivalencias de nomenclatura
+      TEG↔ROTEM** (Ficha 4, r↔CT, k↔CFT, MA↔MCF, LY30↔ML) para quien solo
+      conoce uno de los dos sistemas. Los 2 candidatos restantes del
+      informe (tabla-resumen de umbrales al principio de la Ficha 3,
+      legibilidad de la tabla DRESS en la Ficha 5) se consideraron ya
+      resueltos por las piezas interactivas nuevas de esas mismas fichas,
+      sin necesidad de una segunda estructura redundante.
+    - **Enlaces cruzados nuevos hacia Síndromes Urgentes** (observación
+      transversal del informe): la Ficha 2 mencionaba PTT y CID a nivel de
+      fisiopatología general sin enlazar a las fichas completas que la app
+      ya tiene en Síndromes Urgentes (French score, PLASMIC score,
+      calculadoras Overt DIC/SIC) — añadidos 2 botones `.tx-link` con
+      `data-atlas-route="sindromes-ptt"`/`"sindromes-cid"`, reutilizando
+      el listener genérico ya registrado en `home/index.js` sobre
+      `[data-atlas-route]` (mismo patrón que ya usa Reconocimiento para
+      enlazar a CAR-T) — sin tocar `home/index.js`, porque las rutas
+      `sindromes-ptt`/`sindromes-cid` ya existían en `rutasAtlas`.
+    - Verificado con Playwright: las 5 fichas abren sin timeout ni error
+      de consola real; las 13 piezas interactivas responden correctamente
+      a la entrada (capturas de pantalla revisadas una a una — curva de
+      Hb con forma sigmoidea correcta, diagrama de deuda de O₂ con la
+      dirección fisiológica correcta tras corregir un bug propio donde la
+      relación estaba invertida en el primer intento, huso de fibrinólisis
+      con la "hoja" característica, flujograma y checklist DRESS legibles
+      sin overlaps); los 2 cross-links a Síndromes Urgentes (PTT y CID) y
+      el cross-link interno a la Ficha 4 navegan correctamente. Bump de
+      cache-busting (`?v=20260825`) por el cambio en `components.css`
+      (`.flow-arrow`).
 - **Segundo bloque: "Vías Urinarias"** (`js/modules/fisio-uci/vias-urinarias.html`).
   Fuente: El libro azul. Bases fisiopatológicas de la medicina crítica.
   Sección VII, Vías Urinarias, capítulos 46-48 (42 páginas) — PDF completo
