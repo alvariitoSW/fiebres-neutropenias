@@ -2575,6 +2575,77 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
     de no repetir texto ya construido en otro módulo con fuente propia
     distinta (ver el precedente ya establecido entre TRR y FRA en
     Nefrología).
+  - **Auditoría de contenido contra las 46 páginas del PDF fuente, a
+    petición explícita del usuario** ("revisión de la bibliografía y del
+    contenido... al igual que hemos hecho con cardio y con hematología").
+    Se releyó el PDF completo en 6 tramos con el `Read` tool y se comparó
+    frase a frase contra las 3 fichas ya escritas, mismo método ya
+    establecido en el resto del proyecto. A diferencia de Hematología, no
+    se encontró ningún error de transcripción — todas las cifras, tablas y
+    umbrales ya presentes (Tabla 1/2/3/4/5/7/8, FE<sub>Na</sub>/FE Urea,
+    escenarios especiales de contraste/cirrosis/rabdomiólisis/hipertensión
+    abdominal) se verificaron exactos contra el PDF. El hallazgo principal
+    fueron **huecos de contenido genuinos**, verificados uno a uno antes de
+    incorporarlos:
+    - **Ficha 3 ganó una Tabla 6 completamente reescrita**: la versión
+      anterior solo describía en prosa qué variables usa cada ecuación
+      (Cockcroft-Gault, MDRD, CKD-EPI, Jelliffe); el capítulo en realidad
+      da las **fórmulas matemáticas completas**, incluida la ecuación
+      CKD-EPI desglosada por raza/sexo/umbral de creatinina (8
+      combinaciones) y las 2 versiones de Jelliffe con su fórmula exacta
+      — antes solo se mencionaba como concepto ("ajusta la creatinina por
+      el balance de fluidos") sin dar la ecuación. Se verificó la
+      coherencia de los coeficientes CKD-EPI contra el conocimiento
+      estándar de la fórmula (2009) antes de darlos por buenos. Marcada
+      explícitamente como tabla de referencia, no como calculadora — no se
+      construyó ningún widget interactivo con estas fórmulas.
+    - **Ficha 3 ganó una Tabla nueva (Figura 3 del capítulo)**:
+      "Evolución de la LRA y biomarcadores por etapa" — el continuo
+      función renal normal → riesgo aumentado de lesión renal → daño
+      renal → reducción de la TFG → insuficiencia renal → muerte, con las
+      4 categorías de biomarcadores (tempranos/diagnósticos/diagnósticos
+      de TFG/pronósticos) mapeadas a la etapa en la que son más útiles —
+      contenido completamente ausente hasta ahora, recreado como tabla
+      nativa en vez de placeholder (la figura original es un diagrama de
+      cajas con flechas, vectorial, sin imagen rasterizada que extraer).
+    - **Ficha 2 ganó la cascada celular del daño isquémico** (radicales
+      libres/citocinas → activación endotelial → adhesión de leucocitos →
+      apoptosis, autoperpetuante incluso tras restituir el flujo; daño
+      tubular → fuga del filtrado + desprendimiento celular → obstrucción
+      tubular) y la perla de que la isquemia renal puede empezar **antes**
+      de que la hipotensión sistémica sea detectable.
+    - **Ficha 2 ganó 2 premisas de AKIN y una regla de clasificación**
+      que faltaban: los criterios diagnósticos solo aplican tras
+      optimizar la volemia; si la oliguria es el único criterio, hay que
+      descartar antes una uropatía obstructiva; y todo paciente en TRR se
+      clasifica automáticamente como Estadio 3, con independencia de su
+      creatinina. Además, el origen de RIFLE (conferencia ADQI, Vicenza
+      2002), la regla del "peor criterio" y la ventana de evaluación de 7
+      días, y una revisión sistemática de 13 estudios/&gt;71.000
+      pacientes (mortalidad 6,95% sin LRA vs. 31,2% con LRA) — datos
+      epidemiológicos distintos de los ya citados (Hoste/Uchino/Coca).
+    - **Ficha 2 ganó las manifestaciones clínicas de la LRA** (edema
+      pulmonar, acidosis, hiperpotasemia, uremia) en su propia definición,
+      el dato de que hasta el 13% de los supervivientes del estudio de
+      Uchino requirió TRR, un matiz metodológico sobre los diuréticos de
+      asa (un segundo estudio no encontró exceso de mortalidad, aunque
+      tampoco beneficio funcional — con la salvedad de que el estudio
+      observacional original no se diseñó para demostrar causalidad), y
+      una ampliación de "Terapias en investigación" con eritropoyetina,
+      péptidos natriuréticos, dispositivos de asistencia túbulo-renal y
+      hemofiltración/hemodiafiltración de alto flujo — antes solo se
+      mencionaban células madre, bicarbonato y biomarcadores.
+    - **Ficha 1 ganó la 2ª meta hemodinámica** (15 mmHg de presión de
+      llenado con mayor aporte de precarga, antes de recurrir a
+      vasopresores) que faltaba junto al objetivo ya citado de 12 mmHg.
+    - Verificado con Playwright: las 3 fichas abren sin error de consola
+      ni 404 real; el nuevo contenido se detectó correctamente en el DOM
+      tras abrir cada acordeón/ficha correspondiente; la Figura 3 (tabla
+      de 4 columnas) se envolvió en `overflow-x:auto` tras detectar que
+      desbordaba el ancho de pantalla en móvil sin ese contenedor —
+      confirmado que ya no hay overflow horizontal a nivel de página
+      (`document.body.scrollWidth === clientWidth`); la Tabla 6 (24 filas,
+      2 columnas) no necesitó envoltorio por ser suficientemente estrecha.
 - **Tercer bloque: "Cardiología"** (`js/modules/fisio-uci/cardiologia.html`).
   Fuente: El libro azul. Bases fisiopatológicas de la medicina crítica.
   Sección I, Aparato Cardiovascular, capítulos 1-11 (165 páginas) — el
