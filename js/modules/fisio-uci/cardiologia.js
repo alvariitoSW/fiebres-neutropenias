@@ -77,6 +77,17 @@ const FS_EDV_MAX = 160;
 function fsPrecargaToEdv(precarga) { return FS_EDV_MIN + (precarga / 100) * (FS_EDV_MAX - FS_EDV_MIN); }
 function fsEdvToPrecarga(edv) { return ((edv - FS_EDV_MIN) / (FS_EDV_MAX - FS_EDV_MIN)) * 100; }
 
+// Límites de FC/PAM/PAD del estado compartido — mismos rangos que ya
+// llevaban como min/max en los campos HTML, pero antes solo como tope
+// visual del `<input>` (no impedían escribir 0 o un negativo a mano). Sin
+// este clamp, una FC=0 o negativa dejaba `--ciclo-duracion` en
+// "Infinitys"/negativo (CSS inválido) y paraba por completo la animación
+// del ciclo — bug real encontrado auditando la ficha con Playwright.
+const FC_MIN = 20, FC_MAX = 220;
+const PAM_MIN = 20, PAM_MAX = 180;
+const PAD_MIN = -5, PAD_MAX = 30;
+function clamp(val, min, max) { return Math.max(min, Math.min(max, val)); }
+
 // Lee y escribe directamente sobre CicloEstado.edv/contractilidad (el
 // panel de control y este simulador son, a todos los efectos, la misma
 // variable) — sustituye al antiguo parámetro `origen` que distinguía
@@ -373,6 +384,21 @@ function actualizarEscalaVentriculoPorEdv() {
     container.style.setProperty('--wiggers-edv-mult', mult.toFixed(3));
 }
 
+// La contractilidad compartida también modula el pozo sistólico del
+// ventrículo animado (más profundo si es "aumentada", más superficial si
+// es "disminuida" — ver las 2 keyframes alternativas en components.css),
+// no solo la curva de Frank-Starling. Cambiar animation-name reinicia el
+// timeline del elemento a 0%, así que se resincroniza de inmediato con el
+// cursor maestro para que no se vea un salto visual a la fase A.
+function actualizarContractilidadVentriculo() {
+    const el = document.querySelector('#cardio-wiggers-anim .wiggers-ventriculo');
+    if (!el) return;
+    el.classList.remove('wiggers-contr-aumentada', 'wiggers-contr-disminuida');
+    if (CicloEstado.contractilidad === 'aumentada') el.classList.add('wiggers-contr-aumentada');
+    else if (CicloEstado.contractilidad === 'disminuida') el.classList.add('wiggers-contr-disminuida');
+    requestAnimationFrame(() => resincronizarConMaestro(el));
+}
+
 // Los .mini-ciclo incrustados dentro de un acordeón colapsado (Frank-Starling
 // vive dentro de "Precarga", el mini-diagrama de Laplace dentro de
 // "Poscarga") heredan --ciclo-duracion por CSS, pero su animación no
@@ -384,15 +410,16 @@ function actualizarEscalaVentriculoPorEdv() {
 // pese a compartir la misma duración. Se corrige leyendo el currentTime
 // real del cursor maestro (vía Web Animations API, funciona esté o no en
 // marcha) y aplicándolo a los mini-ciclo del ámbito indicado.
-function sincronizarMiniCiclosConMaestro(scope) {
+function resincronizarConMaestro(el) {
     const masterCursor = document.querySelector('#cardio-wiggers-anim .wiggers-cursor');
-    if (!masterCursor) return;
+    if (!masterCursor || !el) return;
     const masterAnim = masterCursor.getAnimations()[0];
     if (!masterAnim) return;
     const t = masterAnim.currentTime;
-    (scope || document).querySelectorAll('.mini-ciclo-cursor, .mini-ciclo-label .wiggers-fase').forEach(el => {
-        el.getAnimations().forEach(a => { a.currentTime = t; });
-    });
+    el.getAnimations().forEach(a => { a.currentTime = t; });
+}
+function sincronizarMiniCiclosConMaestro(scope) {
+    (scope || document).querySelectorAll('.mini-ciclo-cursor, .mini-ciclo-label .wiggers-fase').forEach(resincronizarConMaestro);
 }
 function initMiniCiclosSync() {
     // Sincroniza de entrada los mini-ciclo que ya son visibles al cargar
@@ -1087,14 +1114,34 @@ function initPanelControl() {
     const padEl = document.getElementById('ciclo-panel-pad');
     if (!fcEl || !edvEl || !contrEl || !pamEl || !padEl) return;
 
-    fcEl.addEventListener('input', () => { if (fcEl.value !== '') CicloEstado.set({ fc: Number(fcEl.value) }); });
+    fcEl.addEventListener('input', () => {
+        if (fcEl.value === '') return;
+        const v = clamp(Number(fcEl.value), FC_MIN, FC_MAX);
+        CicloEstado.set({ fc: v });
+        if (Number(fcEl.value) !== v) fcEl.value = v;
+    });
     edvEl.addEventListener('input', () => {
         if (edvEl.value === '') return;
         CicloEstado.set({ edv: Math.max(FS_EDV_MIN, Math.min(FS_EDV_MAX, Number(edvEl.value))) });
     });
     contrEl.addEventListener('change', () => CicloEstado.set({ contractilidad: contrEl.value }));
-    pamEl.addEventListener('input', () => { if (pamEl.value !== '') CicloEstado.set({ pam: Number(pamEl.value) }); });
-    padEl.addEventListener('input', () => { if (padEl.value !== '') CicloEstado.set({ pad: Number(padEl.value) }); });
+    pamEl.addEventListener('input', () => {
+        if (pamEl.value === '') return;
+        const v = clamp(Number(pamEl.value), PAM_MIN, PAM_MAX);
+        CicloEstado.set({ pam: v });
+        if (Number(pamEl.value) !== v) pamEl.value = v;
+    });
+    padEl.addEventListener('input', () => {
+        if (padEl.value === '') return;
+        const v = clamp(Number(padEl.value), PAD_MIN, PAD_MAX);
+        CicloEstado.set({ pad: v });
+        if (Number(padEl.value) !== v) padEl.value = v;
+    });
+
+    const resetBtn = document.getElementById('ciclo-panel-reset');
+    if (resetBtn) resetBtn.addEventListener('click', () => {
+        CicloEstado.set({ fc: 75, edv: 115, contractilidad: 'normal', pam: 80, pad: 5 });
+    });
 
     CicloEstado.on((s) => {
         if (document.activeElement !== fcEl) fcEl.value = s.fc;
@@ -1140,12 +1187,19 @@ export function init() {
     initCicloCardiacoAnimado();
     CicloEstado.on(actualizarEscalaVentriculoPorEdv);
     actualizarEscalaVentriculoPorEdv();
+    CicloEstado.on(actualizarContractilidadVentriculo);
+    actualizarContractilidadVentriculo();
     initMiniCiclosSync();
 
     document.querySelectorAll('#cardio-fick-hb, #cardio-fick-sao2, #cardio-fick-pao2, #cardio-fick-vs, #cardio-fick-sc, #cardio-fick-svo2, #cardio-fick-pvo2')
         .forEach(el => el && el.addEventListener('input', calcFickTransporte));
     const fickFcEl = document.getElementById('cardio-fick-fc');
-    if (fickFcEl) fickFcEl.addEventListener('input', () => { if (fickFcEl.value !== '') CicloEstado.set({ fc: Number(fickFcEl.value) }); });
+    if (fickFcEl) fickFcEl.addEventListener('input', () => {
+        if (fickFcEl.value === '') return;
+        const v = clamp(Number(fickFcEl.value), FC_MIN, FC_MAX);
+        CicloEstado.set({ fc: v });
+        if (Number(fickFcEl.value) !== v) fickFcEl.value = v;
+    });
     CicloEstado.on((s) => {
         if (fickFcEl && document.activeElement !== fickFcEl) fickFcEl.value = s.fc;
         calcFickTransporte();
@@ -1156,8 +1210,18 @@ export function init() {
         .forEach(el => el && el.addEventListener('input', calcResistenciasVasculares));
     const rvPamEl = document.getElementById('cardio-rv-pam');
     const rvPadEl = document.getElementById('cardio-rv-pad');
-    if (rvPamEl) rvPamEl.addEventListener('input', () => { if (rvPamEl.value !== '') CicloEstado.set({ pam: Number(rvPamEl.value) }); });
-    if (rvPadEl) rvPadEl.addEventListener('input', () => { if (rvPadEl.value !== '') CicloEstado.set({ pad: Number(rvPadEl.value) }); });
+    if (rvPamEl) rvPamEl.addEventListener('input', () => {
+        if (rvPamEl.value === '') return;
+        const v = clamp(Number(rvPamEl.value), PAM_MIN, PAM_MAX);
+        CicloEstado.set({ pam: v });
+        if (Number(rvPamEl.value) !== v) rvPamEl.value = v;
+    });
+    if (rvPadEl) rvPadEl.addEventListener('input', () => {
+        if (rvPadEl.value === '') return;
+        const v = clamp(Number(rvPadEl.value), PAD_MIN, PAD_MAX);
+        CicloEstado.set({ pad: v });
+        if (Number(rvPadEl.value) !== v) rvPadEl.value = v;
+    });
     CicloEstado.on((s) => {
         if (rvPamEl && document.activeElement !== rvPamEl) rvPamEl.value = s.pam;
         if (rvPadEl && document.activeElement !== rvPadEl) rvPadEl.value = s.pad;

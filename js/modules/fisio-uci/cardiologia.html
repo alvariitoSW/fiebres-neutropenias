@@ -268,6 +268,7 @@
                     <div class="form-group"><label for="ciclo-panel-pam" title="Presión arterial media">PAM (mmHg)</label><input type="number" id="ciclo-panel-pam" min="20" max="180" step="1" value="80"></div>
                     <div class="form-group"><label for="ciclo-panel-pad" title="Presión de la aurícula derecha">PAD (mmHg)</label><input type="number" id="ciclo-panel-pad" min="-5" max="30" step="1" value="5"></div>
                 </div>
+                <button type="button" class="ciclo-sync-btn" id="ciclo-panel-reset">↺ Restaurar valores por defecto (FC 75, EDV 115, normal, PAM 80, PAD 5)</button>
                 <div class="ciclo-legend">
                     <span class="ciclo-legend-item"><span class="ciclo-legend-dot linea" style="background:var(--accent-red);"></span>Presión aórtica</span>
                     <span class="ciclo-legend-item"><span class="ciclo-legend-dot linea" style="background:var(--accent-blue);"></span>Presión ventricular</span>
@@ -557,7 +558,8 @@
 
                         <p class="section-label" style="margin-top:14px; font-size:0.8rem;">🧮 Simulador interactivo: curva de Frank-Starling</p>
                         <p style="font-size: 0.78rem; color: var(--text-muted);">Modelo ilustrativo de la relación precarga-volumen sistólico, reproduciendo la forma cualitativa descrita en la fuente — una <strong>meseta con posterior reducción</strong> ante presión/volumen excesivos, no una fórmula clínica exacta para un paciente real. Mueve el slider o escribe directamente el volumen de fin de diástole (mL) — ambos están sincronizados — y cambia el estado contráctil para ver cómo se desplaza el punto de trabajo del ventrículo.</p>
-                        <div class="mini-ciclo" title="Mismo cursor que la animación del ciclo de Wiggers de más arriba — sirve de referencia de en qué fase del ciclo estarías mientras exploras esta calculadora.">
+                        <div class="mini-ciclo">
+                            <span class="mini-ciclo-caption">🫀 Mismo cursor que la animación del ciclo de Wiggers de más arriba — referencia de en qué fase del ciclo estarías mientras exploras esta calculadora.</span>
                             <div class="mini-ciclo-track">
                                 <div class="mini-ciclo-seg mini-ciclo-seg-diastole" style="flex:11.5" title="A — sístole auricular"></div>
                                 <div class="mini-ciclo-seg mini-ciclo-seg-sistole" style="flex:37.5" title="B-C-D-E — sístole ventricular"></div>
@@ -627,7 +629,8 @@
 
                         <p class="section-label" style="margin-top:10px; font-size:0.78rem;">📊 Diagrama interactivo + calculadora: radio ventricular y tensión de pared</p>
                         <p style="font-size:0.75rem; color:var(--text-muted);">Escribe la presión y mueve el slider del radio para calcular T = P×r en vivo — el mismo principio por el que un ventrículo dilatado necesita generar mucha más tensión que uno de tamaño normal para alcanzar la misma presión de eyección.</p>
-                        <div class="mini-ciclo" title="Mismo cursor que la animación del ciclo de Wiggers de más arriba. La tensión de pared es máxima durante la eyección (C-D), cuando la presión intraventricular está en su pico.">
+                        <div class="mini-ciclo">
+                            <span class="mini-ciclo-caption">🫀 Mismo cursor que la animación del ciclo de Wiggers de más arriba. La tensión de pared es máxima durante la eyección (C-D), cuando la presión intraventricular está en su pico.</span>
                             <div class="mini-ciclo-track">
                                 <div class="mini-ciclo-seg mini-ciclo-seg-diastole" style="flex:11.5" title="A — sístole auricular"></div>
                                 <div class="mini-ciclo-seg mini-ciclo-seg-sistole" style="flex:37.5" title="B-C-D-E — sístole ventricular"></div>
@@ -726,7 +729,8 @@
 
             <p class="section-label" style="margin-top:16px;">🧮 Calculadora interactiva: transporte de oxígeno (principio de Fick)</p>
             <p style="font-size: 0.8rem; color: var(--text-muted);">Aplica en vivo las fórmulas de la Tabla 3 (CaO₂, DO₂, VO₂, EO₂) con tus propios valores. Los campos de sangre venosa (SvO₂/PvO₂) son opcionales — sin ellos se calcula el DO₂ pero no el VO₂ ni el EO₂ reales.</p>
-            <div class="mini-ciclo" title="Mismo cursor que la animación del ciclo de Wiggers de más arriba — el GC/DO₂ que calculas aquí es un promedio de todo el ciclo, no un valor de un instante concreto.">
+            <div class="mini-ciclo">
+                <span class="mini-ciclo-caption">🫀 Mismo cursor que la animación del ciclo de Wiggers de más arriba — el GC/DO₂ que calculas aquí es un promedio de todo el ciclo, no un valor de un instante concreto.</span>
                 <div class="mini-ciclo-track">
                     <div class="mini-ciclo-seg mini-ciclo-seg-diastole" style="flex:11.5" title="A — sístole auricular"></div>
                     <div class="mini-ciclo-seg mini-ciclo-seg-sistole" style="flex:37.5" title="B-C-D-E — sístole ventricular"></div>
@@ -769,7 +773,8 @@
 
             <p class="section-label" style="margin-top:16px;">🧮 Calculadora interactiva: resistencias vasculares (ley de Hagen-Poiseuille)</p>
             <p style="font-size: 0.8rem; color: var(--text-muted);">RVS = (PAM − PAD) / GC; RVP = (PAMP − PAI) / GC, tal como las da la fuente (en unidades de Wood, mmHg·min/L). Recuerda la advertencia de la propia ficha: el GC aparece en el denominador de su propio cálculo, un acoplamiento matemático que limita su interpretación como poscarga "pura".</p>
-            <div class="mini-ciclo" title="Mismo cursor que la animación del ciclo de Wiggers de más arriba — la RVS/RVP, igual que el GC de Fick, es un promedio del ciclo completo, no un valor de un instante concreto.">
+            <div class="mini-ciclo">
+                <span class="mini-ciclo-caption">🫀 Mismo cursor que la animación del ciclo de Wiggers de más arriba — la RVS/RVP, igual que el GC de Fick, es un promedio del ciclo completo, no un valor de un instante concreto.</span>
                 <div class="mini-ciclo-track">
                     <div class="mini-ciclo-seg mini-ciclo-seg-diastole" style="flex:11.5" title="A — sístole auricular"></div>
                     <div class="mini-ciclo-seg mini-ciclo-seg-sistole" style="flex:37.5" title="B-C-D-E — sístole ventricular"></div>

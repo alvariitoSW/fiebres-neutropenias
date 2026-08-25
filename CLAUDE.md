@@ -3847,6 +3847,75 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
       calculadoras y las 12 fichas de Cardiología sin regresiones ni
       error de consola real. Sin bump de cache-busting (solo cambió
       `cardiologia.html`/`cardiologia.js`, no `.css` ni `main.js`).
+  - **Informe de bugs/mejoras de Cardiología y correcciones aplicadas**, a
+    petición explícita del usuario ("haz un informe sobre mejoras... sobre
+    puntos que están mal, y sobre fallos"). Auditoría de código (no de
+    bibliografía esta vez) sobre `cardiologia.js`/`cardiologia.html`,
+    verificando cada hallazgo con Playwright antes de reportarlo — mismo
+    estándar que las auditorías anteriores, pero aplicado al código en vez
+    de al contenido clínico. 2 bugs reales confirmados y corregidos:
+    - **FC=0 o negativa en el panel/Fick rompía toda la animación**: a
+      diferencia del EDV (clampado en sus 3 puntos de escritura desde la
+      ronda de unificación), ningún campo de FC/PAM/PAD tenía ese mismo
+      tratamiento — confirmado escribiendo FC=0: el readout mostraba
+      literalmente "≈ Infinity ms/ciclo", `--ciclo-duracion` quedaba en
+      `Infinitys` (CSS inválido) y el cursor grande y las 4 instancias del
+      mini-ciclo perdían por completo su animación (`getAnimations()`
+      vacío). Con FC negativa, duración negativa (igual de inválida).
+      Corregido añadiendo `FC_MIN/MAX`, `PAM_MIN/MAX`, `PAD_MIN/MAX` y un
+      helper `clamp()`, aplicado en los 6 puntos de escritura reales
+      (panel×3, Fick FC, RVS/RVP PAM y PAD) con el mismo patrón ya usado
+      para EDV: clamp inmediato + reescritura del propio campo si el valor
+      tecleado difiere del clampado.
+    A petición del usuario se aplicaron también las mejoras del informe,
+    **excepto la de velocidad más rápida que tiempo real** (descartada
+    explícitamente):
+    - **La contractilidad ahora también modula la animación del
+      ventrículo**, no solo la curva de Frank-Starling — 2 variantes
+      nuevas de la keyframe `wiggers-ventriculo-vol` (`-aumentada` con un
+      pozo sistólico más profundo, escala hasta 0,48 en vez de 0,6;
+      `-disminuida` más superficial, hasta 0,75) activadas por clase desde
+      `actualizarContractilidadVentriculo()`, registrada como listener de
+      `CicloEstado` igual que `actualizarEscalaVentriculoPorEdv()`. Cambiar
+      `animation-name` reinicia el timeline del elemento a 0% (se vería un
+      salto a la fase A) — se corrige resincronizando de inmediato con el
+      cursor maestro, reutilizando el mismo mecanismo ya construido para
+      los mini-ciclo (extraído a un helper común `resincronizarConMaestro(el)`,
+      del que `sincronizarMiniCiclosConMaestro()` ahora es un caso
+      particular).
+    - **Texto explicativo del mini-ciclo ahora siempre visible, no solo en
+      `title`**: un `title` de hover nunca se ve en touch sin hover, y esta
+      app es explícitamente "a pie de cama en el móvil". Sustituido el
+      `title` del contenedor por un `<span class="mini-ciclo-caption">`
+      como primer hijo (texto idéntico al que llevaba el `title`), con
+      `flex-wrap:wrap` + `flex-basis:100%` para que ocupe su propia fila
+      sin competir por espacio con la barra y la letra de fase en móvil.
+    - **Botón "↺ Restaurar valores por defecto"** en el panel de control
+      (FC 75/EDV 115/normal/PAM 80/PAD 5), para volver al punto de partida
+      tras explorar varios escenarios sin tener que escribir los 5 campos
+      a mano.
+    Otros 2 puntos señalados en el informe se dejaron deliberadamente sin
+    tocar por no ser accionables sin más fuente o sin romper la
+    arquitectura ya establecida: la Ficha 6 (enfermedad coronaria) es la
+    más corta del bloque porque su capítulo fuente son solo 4 páginas ya
+    agotadas, y `cardiologia.html` es el archivo de contenido más grande
+    de la app — dividirlo iría contra el patrón "un partial por categoría"
+    ya asentado en el proyecto.
+    Verificado con Playwright: FC=0 en el panel se autocorrige a 20 (el
+    mínimo real ya usado como `min` del `<input>`) y la duración vuelve a
+    "≈3000 ms/ciclo (FC 20 lpm)" en vez de "Infinity"; FC=-999 en el campo
+    de Fick se clampa igual a 20; PAM=999 en la calculadora RVS se clampa
+    a 180 y se refleja en el panel; el botón de reset devuelve los 5
+    campos a 75/115/normal/80/5; el `scale` computado del ventrículo en
+    fase E (ESV) es 0,6 en normal, 0,48 en aumentada y 0,75 en disminuida
+    (confirmado leyendo la matriz de `transform` vía
+    `getComputedStyle`); el caption del mini-ciclo tiene texto real en el
+    DOM y el `title` del contenedor ya no existe; sin overflow horizontal
+    a 360px en el panel ni en ninguna de las 4 instancias del mini-ciclo;
+    la sincronización de las 4 instancias (incluida la del stepper de
+    fases) y el resto de calculadoras de Cardiología siguen sin
+    regresiones. Bump de cache-busting (`?v=20260821-8`), 8º cambio de
+    `components.css` en el mismo día.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
