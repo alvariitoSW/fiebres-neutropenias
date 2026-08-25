@@ -2261,6 +2261,92 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
     índice de páginas del PDF — el desplazamiento sale de que la portada y
     una página en blanco preceden a la página impresa 171, que es la
     página 3 del PDF).
+  - **Auditoría de contenido contra las 86 páginas del PDF fuente, a
+    petición explícita del usuario** ("repasa la información que ya hay de
+    hematología... revisa la información que no esté en la app y sí en la
+    bibliografía... que contenga el contenido íntegro de la bibliografía
+    que te he mandado"). Se releyó el PDF completo en 6 tramos con el
+    `Read` tool (no de memoria) y se comparó frase a frase contra las 5
+    fichas ya escritas, siguiendo el mismo método de auditoría ya
+    establecido en el resto del proyecto (Nefrología/HTA/ERC/FRA/
+    Cardiología): buscar tanto huecos de contenido como errores reales de
+    transcripción.
+    - **Hallazgo más importante: 2 errores reales de transcripción en la
+      tabla de patrones ROTEM de la Ficha 4** (`fuci-teg`), detectables
+      solo comparando cifra a cifra contra las Figuras 4-8 del capítulo,
+      no releyendo la prosa. (1) El patrón "Normal" tenía el FIBTEM MCF
+      escrito como "9mm" — en realidad 9mm es el <strong>CFR</strong>
+      (tiempo de formación del coágulo) de esa misma figura, no su MCF; el
+      MCF real es 57mm. (2) El patrón "Hipofibrinogenemia" afirmaba que
+      "EXTEM/INTEM tenían MCF también reducidos (57mm/42mm)" — pero 57mm
+      es literalmente idéntico al EXTEM MCF del patrón Normal (o sea, NO
+      está reducido); solo el INTEM (42 vs. 61mm normal) muestra una
+      reducción leve, y el defecto real se localiza casi en exclusiva en
+      el FIBTEM (MCF 3mm). Corregida la tabla completa con los valores
+      reales de las 5 figuras (Normal/Plaquetopenia/Hipofibrinogenemia/
+      Hiperfibrinólisis/Efecto de la heparina), añadido el valor APTEM
+      ML=0% que faltaba en Hiperfibrinólisis (dato diagnóstico clave: la
+      corrección <em>in vitro</em> de la lisis confirma hiperfibrinólisis
+      verdadera y no un artefacto), una nota explícita de "Corrección de
+      fidelidad" documentando ambos errores, y un
+      `.micro-prof-item` nuevo explicando la lógica diagnóstica de cada
+      patrón. **Erratum real de la propia fuente, no corregido
+      silenciosamente**: los valores INTEM de la Figura 8 (Efecto de la
+      heparina) son idénticos a los de la Figura 7 (Hiperfibrinólisis) —
+      casi con certeza una duplicación de tabla en el PDF original, no un
+      hallazgo real de "la heparina causa 100% de lisis". Reproducido tal
+      cual lo publica la fuente, con una nota de fidelidad explícita en
+      vez de inventar un valor "corregido" — mismo criterio ya establecido
+      en el proyecto para el IFR de Fracaso Renal Agudo.
+    - **Contenido añadido, verificado contra el texto exacto de cada
+      capítulo**: en la Ficha 1 (Anemia), el mecanismo de oxidación
+      acoplado a la exportación de hierro por ferroportina (hemooxidasas/
+      hefaestina y ceruloplasmina, paso obligado para que el hierro pueda
+      unirse a la transferrina) y una nota sobre Zarychanski et al. y el
+      hallazgo contraintuitivo de que tratar la anemia leve-moderada de
+      la enfermedad crónica se asocia a mayor mortalidad. En la Ficha 2
+      (Trombocitopenia), las 3 funciones del sistema canalicular abierto
+      (transporte de entrada de fibrinógeno a los gránulos α, transporte
+      de salida del contenido granular, y reserva de membrana para el
+      cambio de forma plaquetaria) y el detalle de que la membrana
+      plaquetaria expone factor tisular inactivo y fosfatidilserina como
+      plataforma para los factores Va/VIIa/Xa. En la Ficha 3
+      (Transfusión), una tabla nueva "Metas de la reanimación en sepsis"
+      (objetivos reales a las 3h/6h de la campaña Sobreviviendo a la
+      Sepsis 2012, ausente hasta ahora pese a que el texto ya comentaba
+      su evolución desde el protocolo de Rivers), el mecanismo de la
+      hipoxia hipermetabólica del paciente crítico, detalle metodológico
+      de la agregometría de 4 agonistas en la disfunción plaquetaria del
+      politraumatizado, la proporción real MATTERS (1:1:0,87), la cifra
+      real de transfusiones innecesarias (36,1%, Mitra et al.), y un
+      matiz sobre el metaanálisis de 6 ECA en cirugía cardiovascular (sin
+      significación estadística a favor de la estrategia liberal, sin
+      parámetros de perfusión clínicos/bioquímicos en los perfiles de
+      decisión de los estudios). En la Ficha 4 (TEG/ROTEM), la cifra
+      epidemiológica de apertura (21 millones de hemoderivados/año en
+      EE.UU., 50% administrados por anestesiólogos) y los 4 procesos que
+      documenta la TEG en un único trazado (formación de fibrina,
+      retracción del coágulo, agregación plaquetaria, lisis del coágulo).
+      En la Ficha 5 (Eosinofilia), una **Tabla 6 nueva** "Mecanismos de
+      lesión de órganos" (infiltración tisular / fibrosis vía TGF-β /
+      hipercoagulabilidad por activación del factor tisular e inhibición
+      de la trombomodulina), completamente ausente hasta ahora, y el
+      **placeholder de la Figura 1** (flujograma diagnóstico) sustituido
+      por su contenido real recreado como secuencia `kv-row` de 6 pasos
+      (Paso 1: etiología → laboratorio dirigido → estudios complementarios
+      → imágenes; Paso 2: morfología/biopsia de médula ósea → confirmación
+      molecular FIP1L1-PDGFRα) — mismo patrón ya usado en otros módulos
+      del proyecto (p. ej. el proceso diagnóstico de 7 pasos de HTA
+      resistente) para flujogramas cuyo contenido completo ya se conoce
+      con certeza a partir de la fuente, en vez de dejarlos como
+      placeholder de imagen.
+    - Verificado con Playwright: las 5 fichas abren/voltean sin error de
+      consola ni 404 real (el único 404 es el `favicon.ico`, ya
+      documentado como inocuo); el nuevo contenido se detectó
+      correctamente en el DOM tras abrir cada acordeón correspondiente
+      (`.micro-prof-item`/`Paciente séptico` para la tabla de sepsis,
+      `Mecanismo de absorción` para la ferroportina); la tabla ROTEM
+      corregida renderiza sus 5 filas con los valores nuevos.
 - **Segundo bloque: "Vías Urinarias"** (`js/modules/fisio-uci/vias-urinarias.html`).
   Fuente: El libro azul. Bases fisiopatológicas de la medicina crítica.
   Sección VII, Vías Urinarias, capítulos 46-48 (42 páginas) — PDF completo
