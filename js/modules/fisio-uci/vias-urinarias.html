@@ -114,7 +114,9 @@
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔄 Reflejos miogénicos</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">Respuesta intrínseca de la arteriola aferente: el aumento de la presión de perfusión estira la pared vascular, lo que provoca su contracción refleja — mantiene el flujo sanguíneo renal y la TFG relativamente constantes pese a cambios en la presión arterial sistémica, dentro del rango de autorregulación.</div>
+                    <div class="micro-prof-body">Respuesta intrínseca de la arteriola aferente: el aumento de la presión de perfusión estira la pared vascular, lo que provoca su contracción refleja — mantiene el flujo sanguíneo renal y la TFG relativamente constantes pese a cambios en la presión arterial sistémica, dentro del rango de autorregulación.
+                    <p style="font-size: 0.78rem; color: var(--text-muted); margin: 8px 0 0;">👉 El módulo de <strong>Nefrología</strong> de esta app (mapa del riñón → Fisiopatología renal, cuaderno de campo → "Regulación del filtrado") tiene un simulador interactivo de este mismo mecanismo — con un matiz de fidelidad: su fuente (Nefrología al día) cita la ventana de autorregulación como <strong>80-180 mmHg</strong>, mientras que este capítulo (El Libro Azul) la cita como <strong>60-150 mmHg</strong>; ambas cifras se reproducen tal cual las da cada fuente, sin forzar una única ganadora.</p>
+                    </div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧠 Regulación simpática extrínseca</span> <span class="toggle-icon">+</span></div>
@@ -150,6 +152,7 @@
                 <li>Fármacos nefrotóxicos: AINE, anfotericina B, ciclofosfamida</li>
                 <li>Pigmentos hemo (rabdomiólisis, hemólisis) y endotoxinas (sepsis)</li>
             </ul>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Ver también la <strong>Tabla 7</strong> de la Ficha 3 ("Factores de riesgo para el desarrollo de LRA") — misma idea desde el capítulo de monitorización, con solapamiento parcial (ERC, edad, diabetes, fármacos nefrotóxicos) pero también factores propios no repetidos aquí (raza negra, sexo femenino, insuficiencia cardíaca, inhibidores del SRAA).</p>
 
             <p class="section-label" style="margin-top:16px;">Clasificación clínica clásica: índices urinarios</p>
             <table class="data-table">
@@ -163,13 +166,25 @@
                     <tr><td>BUN/creatinina</td><td>&gt;10</td><td>~10 (proporcional)</td></tr>
                 </tbody>
             </table>
-            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Estos mismos índices (fracción de excreción de sodio y de urea) se desarrollan con su fórmula completa y sus limitaciones en la Ficha 3.</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Estos mismos índices (fracción de excreción de sodio y de urea) se desarrollan con su fórmula completa y sus limitaciones en la Ficha 3 — donde la Tabla 5 cita la relación BUN/creatinina como <strong>20 (prerrenal) / 10 (renal)</strong>, una cifra más precisa que el ">10 / ~10" de esta tabla (dos capítulos distintos del mismo libro); y también en el módulo <strong>FRA de Nefrología</strong> (mapa del riñón → Ficha 5, "Diagnóstico"), con sus propios cortes de FE<sub>Na</sub> — algo distintos a los de este capítulo, ver la nota de la Ficha 3.</p>
 
             <p class="section-label" style="margin-top:16px;">Enfoque terapéutico inicial</p>
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💧 Corrección de factores prerrenales</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">Primer paso siempre: corregir los factores prerrenales antes de asumir daño intrínseco establecido. Requiere <strong>monitorización hemodinámica</strong> (idealmente invasiva) para optimizar las presiones de llenado — objetivo clásico de PVC/PCP en torno a <strong>12 mmHg</strong>. Si no mejora el gasto urinario, medir el gasto cardíaco; si está bajo, se puede recurrir a un mayor aporte de flujo con precarga, llevando las presiones de llenado hasta <strong>15 mmHg</strong>, antes de recurrir a vasopresores.</div>
+                    <div class="micro-prof-body">Primer paso siempre: corregir los factores prerrenales antes de asumir daño intrínseco establecido. Requiere <strong>monitorización hemodinámica</strong> (idealmente invasiva) para optimizar las presiones de llenado — objetivo clásico de PVC/PCP en torno a <strong>12 mmHg</strong>. Si no mejora el gasto urinario, medir el gasto cardíaco; si está bajo, se puede recurrir a un mayor aporte de flujo con precarga, llevando las presiones de llenado hasta <strong>15 mmHg</strong>, antes de recurrir a vasopresores.
+                    <div class="kinetic-row" style="margin-top:12px;">
+                        <span style="font-size:0.7rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px;">Objetivo de PVC/PCP (0-20 mmHg)</span>
+                        <div style="position:relative; height:8px; background:var(--surface-2, rgba(255,255,255,0.08)); border-radius:2px; margin-top:6px;">
+                            <div class="kinetic-fill" style="width:75%;"></div>
+                            <div class="kinetic-marker" style="left:60%;"></div>
+                            <div class="kinetic-marker-label" style="left:60%;">12</div>
+                            <div class="kinetic-marker" style="left:75%;"></div>
+                            <div class="kinetic-marker-label" style="left:75%;">15</div>
+                        </div>
+                        <p style="font-size:0.72rem; color:var(--text-muted); margin:16px 0 0;">Primer objetivo en 12 mmHg; si el gasto cardíaco sigue bajo pese a alcanzarlo, se amplía hasta 15 mmHg antes de recurrir a vasopresores.</p>
+                    </div>
+                    </div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Vasopresores</span> <span class="toggle-icon">+</span></div>
@@ -208,6 +223,16 @@
                 <li>Oliguria &lt;0,5 mL/kg/h durante ≥6 horas</li>
             </ul>
             <dl class="kv-row"><dt>Evolución de las clasificaciones</dt><dd>RIFLE (<em>Risk/Injury/Failure/Loss/End-stage</em>) se desarrolló en la Segunda Conferencia de Consenso de la <strong>Acute Dialysis Quality Initiative (ADQI)</strong>, Vicenza (Italia), 2002, y fue la primera clasificación consensuada (publicada en 2004). La <strong>AKIN 2007</strong> (Acute Kidney Injury Network) modificó RIFLE: fijó el umbral de 0,3 mg/dL dentro de una <strong>ventana de 48 horas</strong> (mayor sensibilidad para detectar el Estadio 1 — un aumento de solo 0,3-0,5 mg/dL ya se asocia a un <strong>80% más de riesgo de mortalidad</strong>) y sustituyó las siglas R/I/F por Estadios 1/2/3. Ver la Tabla 8 de la Ficha 3 para la clasificación KDIGO 2012, que combinó RIFLE y AKIN en el sistema hoy más usado.</dd></dl>
+
+            <table class="data-table">
+                <thead><tr><th>Sistema</th><th>Año / origen</th><th>Aportación principal</th></tr></thead>
+                <tbody>
+                    <tr><td>RIFLE</td><td>2004 — ADQI, Vicenza</td><td>Primera clasificación consensuada; 5 categorías (Risk/Injury/Failure/Loss/End-stage) por creatinina, TFG o diuresis</td></tr>
+                    <tr><td>AKIN</td><td>2007 — Acute Kidney Injury Network</td><td>Umbral de 0,3 mg/dL en ventana de 48h; Estadios 1/2/3 en vez de R/I/F; regla de TRR = Estadio 3 automático</td></tr>
+                    <tr><td>KDIGO</td><td>2012 — combina RIFLE + AKIN</td><td>Sistema hoy más usado (Tabla 8, Ficha 3): 3 estadios por creatinina y/o diuresis</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Resumen visual de la evolución ya descrita arriba en prosa — la Ficha 1 de FRA ("Concepto, definición y estadificación", módulo Nefrología, mapa del riñón) tiene además un clasificador interactivo de estadio KDIGO por criterio de creatinina.</p>
             <dl class="kv-row"><dt>Reglas de aplicación de RIFLE/AKIN</dt><dd>RIFLE: para clasificar a un paciente se usa siempre el <strong>peor criterio</strong> (creatinina, filtrado glomerular o diuresis) que lo sitúe en el estadio de mayor gravedad, evaluando los cambios en una ventana de <strong>7 días</strong>. AKIN añadió 2 premisas: los criterios diagnósticos solo deben aplicarse <strong>después de optimizar la volemia</strong> del paciente, y si la oliguria es el único criterio usado, primero hay que <strong>descartar una uropatía obstructiva</strong>. Además, un paciente se clasifica automáticamente como Estadio 3/Fracaso si recibe <strong>terapia de reemplazo renal</strong>, con independencia de cuál sea su creatinina en ese momento.</dd></dl>
             <dl class="kv-row"><dt>RIFLE como marcador pronóstico</dt><dd>Una revisión sistemática de <strong>13 estudios y &gt;71.000 pacientes</strong> comparó la mortalidad de pacientes con y sin LRA estimada por el sistema RIFLE: <strong>6,95%</strong> sin LRA frente a <strong>31,2%</strong> con LRA.</dd></dl>
 
@@ -237,7 +262,7 @@
                 ultrafiltrado, reabsorción/excreción tubular, y flujo de la orina a través de pelvis, uréteres,
                 vejiga y uretra. Cada riñón contiene aproximadamente <strong>1 millón de nefronas</strong>.
             </p>
-            <dl class="kv-row"><dt>Por qué la creatinina detecta tarde</dt><dd>Solo se eleva de forma detectable después de haberse perdido <strong>~50% de la TFG</strong> — una reducción ya sustancial. Además, está influida por factores no renales: masa muscular, raza, sexo, dieta; y ciertos fármacos (<strong>cimetidina, trimetoprim</strong>) inhiben su secreción tubular, elevándola de forma transitoria y reversible sin que haya caído realmente la TFG.</dd></dl>
+            <dl class="kv-row"><dt>Por qué la creatinina detecta tarde</dt><dd>Solo se eleva de forma detectable después de haberse perdido <strong>~50% de la TFG</strong> — una reducción ya sustancial. Además, está influida por factores no renales: masa muscular, raza, sexo, dieta; y ciertos fármacos (<strong>cimetidina, trimetoprim</strong>) inhiben su secreción tubular, elevándola de forma transitoria y reversible sin que haya caído realmente la TFG. Ver también la relación inversa creatinina↔TFG (con simulador interactivo) y la limitación equivalente de las fórmulas de depuración, ambas desarrolladas en la Ficha 3 — misma idea, dos ángulos distintos del mismo capítulo.</dd></dl>
             <dl class="kv-row"><dt>Limitación de las fórmulas de depuración</dt><dd>La depuración de creatinina y las fórmulas derivadas (MDRD, Cockcroft-Gault — desarrolladas con detalle en la Ficha 3) se diseñaron y validaron para pacientes con función renal <strong>estable</strong>, no para la LRA en curso, donde la creatinina cambia día a día y no refleja un estado estacionario.</dd></dl>
 
             <p class="section-label" style="margin-top:16px;">Clasificación etiológica</p>
@@ -404,6 +429,29 @@
             <dl class="kv-row"><dt>Producción</dt><dd>Se correlaciona con la masa muscular magra: en promedio <strong>20-25 mg/kg/día en hombres</strong> adultos sanos y <strong>15-20 mg/kg/día en mujeres</strong> adultas sanas.</dd></dl>
             <dl class="kv-row"><dt>En ausencia de filtrado glomerular</dt><dd>Como puede suceder en la LRA establecida, la creatinina sérica sube <strong>1-2 mg/dL/día</strong>. Sin embargo, por la relación inversa entre creatinina y TFG, pueden producirse reducciones muy significativas de la TFG <em>antes</em> de que se evidencie el aumento de creatinina — en condiciones estables, la creatinina debe duplicarse por cada 50% de reducción en la depuración de creatinina.</dd></dl>
 
+            <div class="tfg-simulador">
+                <h4 style="color: var(--accent-green);">🧪 La relación inversa creatinina↔TFG</h4>
+                <p class="subtitle">Mueve la TFG relativa y observa cómo responde la creatinina (relación proporcional ilustrativa, no una calculadora clínica — ningún valor absoluto de un paciente real)</p>
+                <div class="tfg-slider-row">
+                    <label for="vu-tfg-relativa">TFG relativa (% de la basal)</label>
+                    <input type="range" id="vu-tfg-relativa" min="10" max="100" value="100" step="5">
+                    <span id="vu-tfg-relativa-valor">100%</span>
+                </div>
+                <svg viewBox="0 0 300 160" style="width:100%; max-width:340px; display:block; margin:0 auto 10px;">
+                    <line x1="20" y1="140" x2="290" y2="140" stroke="var(--text-muted)" stroke-width="1" opacity="0.5"/>
+                    <line x1="20" y1="10" x2="20" y2="140" stroke="var(--text-muted)" stroke-width="1" opacity="0.5"/>
+                    <text x="155" y="156" text-anchor="middle" font-size="8" fill="var(--text-muted)">TFG relativa (%) — 10 ────────── 100</text>
+                    <text x="10" y="80" text-anchor="middle" font-size="8" fill="var(--text-muted)" transform="rotate(-90 10 80)">Creatinina relativa (%)</text>
+                    <path d="M20,20 L34.4,20 L48.9,20 L63.3,20 L77.8,46.8 L106.7,80 L135.6,100 L164.4,113.2 L193.3,122.8 L222.2,130 L251.1,135.6 L280,140" fill="none" stroke="var(--accent-green)" stroke-width="2" opacity="0.85"/>
+                    <circle id="vu-tfg-curva-marcador" cx="280" cy="140" r="5" fill="var(--accent-yellow)"/>
+                </svg>
+                <div class="tfg-resultados">
+                    <div class="tfg-resultado-item"><span class="tfg-resultado-label">TFG relativa</span><span class="tfg-resultado-valor" id="vu-tfg-relativa-out">100%</span></div>
+                    <div class="tfg-resultado-item"><span class="tfg-resultado-label">Creatinina relativa estimada</span><span class="tfg-resultado-valor" id="vu-cr-relativa-out">100%</span></div>
+                </div>
+                <div class="tfg-estado tfg-estado-ok" id="vu-tfg-curva-estado"></div>
+            </div>
+
             <table class="data-table">
                 <thead><tr><th>Factores condicionantes</th><th>Efecto</th></tr></thead>
                 <tbody>
@@ -470,6 +518,21 @@
             </table>
             <p style="font-size: 0.75rem; color: var(--text-muted);">Tabla 4. Resumen de biomarcadores para la detección temprana de LRA.</p>
 
+            <div style="margin: 12px 0 16px;">
+                <p style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Misma tabla, en línea de tiempo (0-24h)</p>
+                <div style="position: relative; height: 92px; border-left: 1px solid var(--border-color, rgba(255,255,255,0.15)); border-bottom: 1px solid var(--border-color, rgba(255,255,255,0.15)); margin: 32px 6px 0;">
+                    <div style="position:absolute; left:16.6%; top:28px; bottom:0; width:1px; background:var(--accent-green); opacity:0.7;"></div>
+                    <div style="position:absolute; left:16.6%; top:0; font-size:0.62rem; color:var(--accent-green); transform:translateX(-50%); text-align:center; white-space:nowrap;">IL-18 / NGAL<br>4-6h</div>
+                    <div style="position:absolute; left:50%; top:46px; bottom:0; width:1px; background:var(--accent-yellow); opacity:0.7;"></div>
+                    <div style="position:absolute; left:50%; top:18px; font-size:0.62rem; color:var(--accent-yellow); transform:translateX(-50%); text-align:center; white-space:nowrap;">Cistatina C<br>12-14h</div>
+                    <div style="position:absolute; left:100%; top:64px; bottom:0; width:1px; background:var(--accent-red); opacity:0.7;"></div>
+                    <div style="position:absolute; left:100%; top:36px; font-size:0.62rem; color:var(--accent-red); transform:translateX(-95%); text-align:right; white-space:nowrap;">KIM-1<br>12-24h</div>
+                    <span style="position:absolute; left:0; bottom:-18px; font-size:0.65rem; color:var(--text-muted);">0h</span>
+                    <span style="position:absolute; right:0; bottom:-18px; font-size:0.65rem; color:var(--text-muted);">24h</span>
+                </div>
+                <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 26px;">NGAL (sérica y urinaria) es el más precoz de los seis; KIM-1 el más tardío — la Tabla 4 de arriba sigue siendo la referencia exacta por biomarcador.</p>
+            </div>
+
             <p class="section-label" style="margin-top:16px;">Otros biomarcadores</p>
             <div class="micro-profiles">
                 <div class="micro-prof-item">
@@ -526,6 +589,7 @@
                 daño renal intrínseco en sepsis grave, insuficiencia cardíaca o cirrosis; y falsamente
                 <em>alta</em> en pacientes con uso de diuréticos, glucosuria o insuficiencia renal preexistente.
             </p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">👉 El módulo <strong>FRA de Nefrología</strong> (mapa del riñón → Ficha 5, "Diagnóstico") ya tiene una calculadora interactiva de FE<sub>Na</sub> — con un corte algo distinto (&gt;2% para NTA, con una zona intermedia 1-2% "no discriminativa"), tomado de su propia fuente (Rodríguez Benítez et al., Nefrología al día). Los cortes de <em>este</em> capítulo (&lt;1%/&gt;1%, sin zona intermedia) se reproducen aquí tal cual los cita El Libro Azul.</p>
 
             <p class="section-label" style="margin-top:12px; font-size:0.8rem;">Fracción de excreción de urea (FE Urea)</p>
             <dl class="kv-row"><dt>Fórmula</dt><dd>FE Urea = (urea urinaria × creatinina sérica) / (urea sérica × creatinina urinaria) × 100</dd></dl>
@@ -587,7 +651,46 @@
                 </tbody>
             </table>
             <p style="font-size: 0.75rem; color: var(--text-muted);">Cr<sub>s</sub>: creatinina sérica (mg/dL); ASC: área de superficie corporal; BUN: nitrógeno ureico sérico; Alb: albúmina. La TFG por MDRD/CKD-EPI se expresa en mL/min/1,73 m². Nota de referencia, no calculadora: estas fórmulas se muestran con fines de consulta — el propio texto que sigue explica por qué KDIGO desaconseja usarlas para estimar la función renal en la LRA.</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">👉 <strong>Nota de fidelidad — MDRD (2):</strong> tal como la publica la fuente, esta fórmula simplificada no lleva exponente sobre Cr<sub>s</sub> (a diferencia de MDRD (1), justo arriba, que sí lo lleva completo). Verificado contra el propio PDF: el texto extraído reproduce literalmente "TFG = 186 x [Crs] x [edad]⁻⁰'²⁰³..." sin exponente visible sobre la creatinina — casi con certeza un exponente (habitualmente Cr<sub>s</sub>⁻¹'¹⁵⁴ en la versión de 4 variables ampliamente publicada) que se perdió al maquetar el libro original. Se reproduce aquí tal cual la fuente, sin insertar un valor no verificado en este documento concreto.</p>
             <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Las recomendaciones KDIGO 2012 son explícitas: MDRD, CKD-EPI y Cockcroft-Gault <strong>no deben usarse</strong> para estimar la función renal en pacientes críticos, porque se desarrollaron y validaron en pacientes estables con ERC — no se han validado en pacientes críticos con función renal inestable — aunque siguen siendo útiles para guiar la <strong>dosificación de fármacos</strong> en la LRA. Por el riesgo de sobrestimar la función renal durante la LRA, la ecuación de Jelliffe (que ajusta por el balance de fluidos) podría ser preferible en ese escenario concreto.</p>
+
+            <div class="tfg-simulador">
+                <h4 style="color: var(--accent-green);">🧪 Calculadora: Cockcroft-Gault y CKD-EPI (Tabla 6)</h4>
+                <div class="tfg-estado tfg-estado-warn" style="margin-bottom:12px;">⚠️ <strong>Solo para dosificación de fármacos</strong> en la LRA, nunca para estimar la función renal real del paciente crítico — ver el aviso KDIGO 2012 justo arriba. Fuera de la UCI, para ERC estable, la app ya tiene la ecuación recomendada actual (CKD-EPI 2021 sin raza) en el módulo ERC de Nefrología.</div>
+                <div class="calc-grid">
+                    <div class="form-group">
+                        <label for="vu-cg-peso">Peso (kg)</label>
+                        <input type="number" id="vu-cg-peso" min="20" max="250" step="1" value="70">
+                    </div>
+                    <div class="form-group">
+                        <label for="vu-cg-edad">Edad (años)</label>
+                        <input type="number" id="vu-cg-edad" min="18" max="110" step="1" value="60">
+                    </div>
+                    <div class="form-group">
+                        <label for="vu-cg-crs">Creatinina sérica (mg/dL)</label>
+                        <input type="number" id="vu-cg-crs" min="0.1" max="20" step="0.01" value="1.0">
+                    </div>
+                    <div class="form-group">
+                        <label for="vu-cg-sexo">Sexo</label>
+                        <select id="vu-cg-sexo">
+                            <option value="M">Hombre</option>
+                            <option value="F">Mujer</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="vu-cg-raza">Raza (CKD-EPI, versión 2009)</label>
+                        <select id="vu-cg-raza">
+                            <option value="otra">Blanca u otras</option>
+                            <option value="negra">Negra</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="tfg-resultados">
+                    <div class="tfg-resultado-item"><span class="tfg-resultado-label">Cockcroft-Gault (C<sub>cr</sub>)</span><span class="tfg-resultado-valor" id="vu-cg-resultado">— mL/min</span></div>
+                    <div class="tfg-resultado-item"><span class="tfg-resultado-label">CKD-EPI (TFG estimada)</span><span class="tfg-resultado-valor" id="vu-ckdepi-resultado">— mL/min/1,73m²</span></div>
+                </div>
+                <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 6px;">CKD-EPI aquí usa la versión de 2009 (con coeficiente racial) — la misma que da la Tabla 6 de esta ficha, distinta de la CKD-EPI 2021 sin raza que usa la calculadora de ERC.</p>
+            </div>
 
             <p class="section-label" style="margin-top:16px;">Análisis urinario</p>
             <dl class="kv-row"><dt>Proteinuria</dt><dd>Frecuente en adultos mayores, con diabetes, ERC o choque. La detección temprana de <strong>microalbuminuria</strong> es sugestiva de un aumento de la permeabilidad capilar a las proteínas, y aporta valor predictivo y pronóstico de gravedad/mortalidad.</dd></dl>
@@ -669,7 +772,7 @@
                     <tr><td>Inhibidores del sistema R-A-A</td><td>Toxinas (etilenglicol)</td></tr>
                 </tbody>
             </table>
-            <p style="font-size: 0.75rem; color: var(--text-muted);">Tabla 7. Factores de riesgo para el desarrollo de LRA.</p>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Tabla 7. Factores de riesgo para el desarrollo de LRA. Ver también "Condiciones predisponentes" en la Ficha 1, con solapamiento parcial (ambas listas vienen de capítulos distintos del mismo libro).</p>
 
             <p style="font-size: 0.85rem; line-height: 1.6;">
                 El diagnóstico de LRA está basado clásicamente en el aumento de creatinina sérica o la disminución

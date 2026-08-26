@@ -2646,6 +2646,91 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
       confirmado que ya no hay overflow horizontal a nivel de página
       (`document.body.scrollWidth === clientWidth`); la Tabla 6 (24 filas,
       2 columnas) no necesitó envoltorio por ser suficientemente estrecha.
+  - **Informe de fallos/huecos/interactividad/mejoras (distinto de la
+    auditoría de contenido anterior) y sus correcciones aplicadas**, a
+    petición explícita del usuario. Publicado como Artifact (mismo formato
+    que los informes de Cardiología/Hematología: severidad por color,
+    tablero de métricas por ficha) y luego corregido en su totalidad:
+    - **Fallo real, verificado con `pdftotext` contra el PDF de nuevo**: la
+      fórmula MDRD (2) de la Tabla 6 no lleva exponente sobre la
+      creatinina — el propio texto extraído del PDF fuente reproduce
+      literalmente el mismo hueco ("TFG = 186 x [Crs] x [edad] -0,203...",
+      sin exponente visible sobre Cr<sub>s</sub>), casi con certeza un
+      exponente perdido al maquetar el libro (el valor real ampliamente
+      publicado es Cr<sub>s</sub><sup>−1,154</sup>). Se añadió una nota de
+      fidelidad explícita bajo la Tabla 6, sin insertar el exponente sin
+      verificar en esta fuente concreta — mismo criterio que el resto de
+      erratas de fuente ya documentadas en el proyecto.
+    - **2 huecos estructurales corregidos**: la Ficha 2 (LRA) era la única
+      de las 3 sin ninguna tabla pese a tener contenido tabulable — se
+      añadió una tabla-resumen "RIFLE → AKIN → KDIGO" (sistema/año-origen/
+      aportación principal) junto a la `kv-row` que ya lo explicaba en
+      prosa; y se añadieron notas cruzadas entre "Condiciones
+      predisponentes" (Ficha 1) y la "Tabla 7. Factores de riesgo" (Ficha
+      3), dos listas con solapamiento parcial que antes no se remitían
+      entre sí.
+    - **Descubrimiento clave durante la implementación de la
+      interactividad**: varias de las piezas propuestas en el informe
+      (simulador de autorregulación PAM, clasificador de estadio KDIGO,
+      calculadora de FE<sub>Na</sub>) resultaron ser **casi duplicados** de
+      calculadoras que el módulo FRA de Nefrología ya tiene
+      (`calcTfgSimulador()`, `calcEstadioKdigo()`, `calcFenaIfr()`) — con
+      cortes/rangos ligeramente distintos porque vienen de fuentes
+      distintas (Nefrología al día vs. El Libro Azul). En vez de construir
+      calculadoras nuevas casi idénticas, se optó por **notas cruzadas de
+      texto plano** apuntando al módulo/ficha exacta de Nefrología donde ya
+      existen (mismo patrón ya usado en la Ficha 1 para la referencia a
+      TRR), documentando explícitamente la diferencia de cifras entre
+      fuentes en vez de forzar una única cifra ganadora — este hallazgo de
+      duplicación real entre especialidades es la base directa de la
+      propuesta de fusión Nefrología↔Vías Urinarias que seguía en el
+      informe.
+    - **3 piezas interactivas nuevas, sin equivalente ya existente en la
+      app** (`vias-urinarias.js`, que hasta ahora solo llamaba a
+      `initCorkboard()`): 1) un **gauge de objetivo PVC/PCP** (0-20 mmHg,
+      marcadores en 12 y 15) en el micro-prof-item "Corrección de factores
+      prerrenales" de la Ficha 1, reutilizando `.kinetic-row`/
+      `.kinetic-fill`/`.kinetic-marker` (mismo patrón ya usado en los
+      gauges de Cardiología); 2) un **simulador de la relación inversa
+      creatinina↔TFG** en la Ficha 3 (`calcCreatininaTfgCurva()`, slider de
+      TFG relativa 10-100% que mueve un marcador sobre una curva hiperbólica
+      SVG dibujada a mano — relación proporcional ilustrativa, sin cifras
+      clínicas absolutas, mismo criterio de honestidad que el resto de
+      simuladores de la app); 3) una **calculadora de Cockcroft-Gault y
+      CKD-EPI** (versión 2009, con coeficiente racial — la misma que da la
+      Tabla 6, distinta de la CKD-EPI 2021 sin raza que ya usa la
+      calculadora de ERC en Nefrología) con un aviso KDIGO 2012 repetido de
+      forma prominente **encima** del resultado, no solo en el texto
+      previo, para que la calculadora no se lea como una validación
+      implícita de su uso en la LRA aguda.
+    - **2 mejoras menores**: una mini línea de tiempo (0-24h) bajo la Tabla
+      4 de biomarcadores, visualizando los mismos 6 tiempos de detección
+      ya tabulados; y un enlace de una frase entre "Por qué la creatinina
+      detecta tarde" (Ficha 2) y su desarrollo completo en la Ficha 3.
+    - **2 bugs propios encontrados y corregidos durante la propia
+      verificación con Playwright** (no señalados en el informe original,
+      surgidos al implementar sus propuestas): la nota cruzada añadida a
+      "Por qué la creatinina detecta tarde" decía "más abajo" para referirse
+      a contenido que en realidad está en la Ficha 3 (una ficha distinta,
+      no más abajo en la misma) — corregido a "en la Ficha 3"; y la
+      etiqueta "IL-18 / NGAL 4-6h" de la línea de tiempo de biomarcadores se
+      solapaba visualmente con el título "MISMA TABLA, EN LÍNEA DE TIEMPO"
+      justo encima — detectado con una captura de Playwright, no por
+      inspección del código — corregido reestructurando el espaciado
+      vertical del componente (contenedor con más margen superior, las 3
+      etiquetas escalonadas dentro de la caja en vez de una asomando por
+      encima).
+    - Verificado con Playwright: las 3 fichas abren/voltean sin error de
+      consola ni 404 real; el simulador de TFG-creatinina mueve el
+      marcador y recalcula el mensaje/color correctamente (probado en TFG
+      25% → creatinina 400%/danger, marcador en la posición SVG exacta
+      precalculada); la calculadora Cockcroft-Gault/CKD-EPI da resultados
+      verificados a mano (peso 80/edad 55/Cr 1,2/hombre/raza negra → C<sub>cr</sub>
+      78,7 mL/min, CKD-EPI 78,2 mL/min/1,73m², ambos confirmados por
+      cálculo manual de las fórmulas); capturas de pantalla a 390px sin
+      overlaps de texto en el gauge PVC/PCP, la curva TFG-creatinina, la
+      calculadora y la línea de tiempo; sin overflow horizontal a nivel de
+      página.
 - **Tercer bloque: "Cardiología"** (`js/modules/fisio-uci/cardiologia.html`).
   Fuente: El libro azul. Bases fisiopatológicas de la medicina crítica.
   Sección I, Aparato Cardiovascular, capítulos 1-11 (165 páginas) — el
