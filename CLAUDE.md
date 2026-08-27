@@ -2833,6 +2833,39 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
       consola reales (solo el `favicon.ico` ya documentado como inocuo).
       Las Opciones 3 (página de comparativa de fuentes) y 4 (fusión
       completa, descartada) quedan pendientes de decisión del usuario.
+  - **Opción 3 aplicada; Opción 4 descartada explícitamente por el
+    usuario tras preguntarle** ("corrige las otras 2 opciones que
+    mandaste"). Antes de tocar la Opción 4 (fusión completa) se usó
+    `AskUserQuestion` para confirmar, porque el propio informe la
+    marcaba como "no recomendada" por romper una decisión de
+    arquitectura ya tomada del proyecto (nunca fusionar contenido de
+    fuentes distintas) y ser un cambio grande y difícil de revertir — el
+    usuario confirmó mantener los módulos separados, así que la Opción 4
+    no se implementó. La Opción 3 sí: una tarjeta nueva
+    **"📊 Comparativa de fuentes: cifras que no coinciden"** en
+    `tratamiento-ira-irc.html` (justo debajo de la tarjeta "¿Vienes de
+    Fisiopatología UCI?" de la ronda anterior, mismo patrón de card sin
+    fuente propia — pura reorganización de hechos ya citados y
+    verificados en otros módulos), con una `.data-table` de 3 filas
+    yuxtaponiendo las cifras que de verdad difieren entre Nefrología al
+    día y El Libro Azul para el mismo parámetro (ventana de
+    autorregulación PAM 80-180 vs. 60-150 mmHg; corte de FE<sub>Na</sub>
+    &gt;2%-con-zona-intermedia vs. &gt;1%-sin-zona-intermedia; ecuación de
+    TFG CKD-EPI 2021 sin raza vs. Cockcroft-Gault/CKD-EPI 2009 con raza —
+    los mismos 3 pares ya señalados con notas cruzadas sueltas en la
+    ronda anterior, aquí reunidos en un solo sitio en vez de repartidos),
+    más una nota aparte para el caso distinto del BUN/creatinina (no es
+    Nefrología-vs-Libro-Azul, son 2 capítulos del propio Libro Azul) y 2
+    botones `.especialidad-link` (a FRA · Diagnóstico y a Vías Urinarias
+    · Monitorización) para verificar cada cifra en su ficha de origen.
+    Ninguna cifra nueva — solo yuxtaposición de las ya verificadas en
+    rondas anteriores. Verificado con Playwright: la tarjeta se detecta
+    en el DOM, las 3 filas de la tabla contienen las 6 cifras esperadas,
+    ambos botones saltan correctamente (a FRA/Nefrología y a Vías
+    Urinarias/Fisiopatología UCI), sin overflow horizontal ni errores de
+    consola reales. Sin cambios de JS ni de CSS — solo HTML, reutilizando
+    el mecanismo `.especialidad-link` ya generalizado en la ronda
+    anterior, así que no hizo falta bump de cache-busting.
 - **Tercer bloque: "Cardiología"** (`js/modules/fisio-uci/cardiologia.html`).
   Fuente: El libro azul. Bases fisiopatológicas de la medicina crítica.
   Sección I, Aparato Cardiovascular, capítulos 1-11 (165 páginas) — el
