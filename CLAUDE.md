@@ -1422,6 +1422,14 @@ por encima que sí diera cabida a todos.
     (`js/data/trr-preguntas.js`, `trr-q001`-`q048`, 8 por ficha), con
     `initQuiz` ganando un 5º botón (`btn-trr-repasar`). El banco combinado
     de Nefrología queda en 551 preguntas (503+48).
+  - **Pendiente, a petición explícita del usuario ("guarda esa
+    información para hacerlo en un futuro no lejano")**: a diferencia de
+    Fisiopatología renal/HTA/ERC/FRA, `trr.html` todavía **no** ha pasado
+    por la auditoría de 3 agentes (contenido, solo-app vs. solo-fuente vs.
+    cruce) ni por un informe de fallos/huecos/interactividad/mejoras — es
+    el único bloque de contenido real de Nefrología sin ninguna de las dos
+    rondas. Cuando se pida, seguir el mismo método ya documentado arriba
+    para HTA/ERC/FRA.
   - **`nefrotoxicidad.html`** (objetivo de rotación 5, "Nefrotoxicidad de
     fármacos") fue la 5ª categoría en pasar de placeholder a contenido
     real, y rompe deliberadamente con el patrón de cuaderno de campo — no
@@ -1598,6 +1606,21 @@ por encima que sí diera cabida a todos.
     - **Pendiente, requiere fuente nueva del usuario**: ampliar "Manejo
       Citopenias" más allá de Neutropenia Febril — no se puede fabricar
       contenido clínico de anemia/trombocitopenia sin una fuente real.
+    - **Pendiente, a petición explícita del usuario ("guarda esa
+      información para hacerlo en un futuro no lejano")**: la especialidad
+      **Hematología** (Neutropenia Febril, Reconocimiento Temprano,
+      Síndromes Urgentes, Trasplante TPH) solo ha pasado por esta
+      auditoría estructural/de consistencia (bibliografía, enlaces
+      cruzados, navegación) — a diferencia de Fisiopatología
+      renal/HTA/ERC/FRA en Nefrología, o del bloque "Hematología y
+      Hemostasia" de Fisiopatología UCI, **nunca** ha tenido una auditoría
+      de fidelidad de contenido releyendo sus PDF/PNT fuente frase a
+      frase (método de 3 agentes u otro), ni un informe de
+      fallos/huecos/interactividad/mejoras. Cuando se pida, seguir el
+      mismo método ya documentado para HTA/ERC/FRA — con la salvedad de
+      que varias fuentes de Hematología son PNT internos del Servicio, no
+      artículos públicos, así que conviene confirmar con el usuario qué
+      documentos concretos releer antes de empezar.
   - **Sistema de repaso/quiz añadido a toda Hematología** (176 preguntas
     nuevas, repartidas en 34 temas, 5-6 por tema): hasta ahora Hematología
     era la única especialidad sin `initQuiz()` — 4 bancos nuevos, uno por
