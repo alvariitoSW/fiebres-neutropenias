@@ -1,0 +1,493 @@
+    <button class="back-btn btn-volver-uci-menu">← VOLVER</button>
+    <div class="diag-header">
+        <h2 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">VExUS: ecografía de la congestión venosa</h2>
+        <p>3 artículos · Mullens et al. JACC 2009 · Beaubien-Souligny et al. Ultrasound J 2020 · Rola et al. Ultrasound J 2021</p>
+    </div>
+
+    <button class="accordion-btn nav-btn" id="btn-vexus-repasar" style="border-left: 4px solid var(--accent-purple);">
+        <span>🎯 Repasar (preguntas de repaso)</span>
+        <span style="font-size: 0.8rem; color: var(--accent-purple);">[ EMPEZAR → ]</span>
+    </button>
+
+    <p class="section-label">Elige un bloque</p>
+    <div class="corkboard" id="vexus-corkboard">
+
+        <div class="field-card" data-tab="vexus-intro"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha I</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-purple)" stroke-width="1.6">
+                    <path d="M12,44 C20,44 20,20 30,20 C36,20 36,30 40,30 C44,30 44,14 52,14 C62,14 62,44 68,44" stroke-opacity="0.8"/>
+                    <line x1="12" y1="44" x2="68" y2="44" stroke-width="1" stroke-opacity="0.4"/>
+                </svg>
+                <div class="field-name">Introducción: el<br>riñón congestivo</div>
+                <div class="field-hook">"la perfusión de un órgano es MAP menos CVP... ¿por qué nunca se mide así?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Porque la presión arterial acapara toda la atención clínica, mientras que la presión venosa —el otro lado de la ecuación de perfusión— rara vez se examina, pese a que su impacto fisiológico es mayor de lo que parece.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="vexus-mullens"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha II</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-red)" stroke-width="1.6">
+                    <path d="M40,44 C20,30 20,14 34,14 C38,14 40,18 40,20 C40,18 42,14 46,14 C60,14 60,30 40,44 Z" stroke-opacity="0.75"/>
+                    <path d="M40,20 L40,44" stroke-width="1.2" stroke-dasharray="2 2"/>
+                </svg>
+                <div class="field-name">Mullens et al. 2009<br>— el estudio seminal</div>
+                <div class="field-hook">"145 pacientes con IC avanzada... ¿qué prediría mejor el fallo renal: la PVC o el gasto cardíaco?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">La PVC (AUC 0,734), no el índice cardíaco (AUC 0,552, sin significación) — con un 75% de incidencia de empeoramiento renal cuando la PVC basal superaba 24 mmHg. El estudio que acuñó el "riñón congestivo".</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="vexus-fisiologia-doppler"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha III</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-blue)" stroke-width="1.6">
+                    <line x1="12" y1="28" x2="68" y2="28" stroke-opacity="0.4" stroke-dasharray="2 2"/>
+                    <path d="M14,28 Q20,10 26,28 Q32,44 38,28 Q44,10 50,28 Q56,44 62,28" stroke-width="1.8"/>
+                </svg>
+                <div class="field-name">Fisiología del<br>Doppler venoso</div>
+                <div class="field-hook">"la misma onda que un cardiólogo llama S y D... ¿por qué se deforma con la congestión?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Porque la compliance de las venas pequeñas, que normalmente amortigua el pulso auricular antes de que llegue al hígado/porta/riñón, se agota — y las pulsaciones de la aurícula derecha se transmiten cada vez más lejos.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="vexus-score"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha IV</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-yellow)" stroke-width="1.6">
+                    <rect x="14" y="10" width="52" height="36" rx="2" stroke-opacity="0.7"/>
+                    <line x1="14" y1="19" x2="66" y2="19" stroke-width="1"/>
+                    <line x1="14" y1="28" x2="66" y2="28" stroke-width="1"/>
+                    <line x1="14" y1="37" x2="66" y2="37" stroke-width="1"/>
+                    <line x1="32" y1="10" x2="32" y2="46" stroke-width="1"/>
+                    <line x1="50" y1="10" x2="50" y2="46" stroke-width="1"/>
+                </svg>
+                <div class="field-name">Desarrollo del<br>score VExUS</div>
+                <div class="field-hook">"probaron 5 formas distintas de combinar los mismos hallazgos Doppler... ¿cuál ganó, y por qué?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">El sistema "C": exige anomalías Doppler graves en al menos 2 de 3 lechos venosos junto a una VCI ≥2 cm para el grado 3 — el que mejor predijo lesión renal aguda tras cirugía cardiaca (HR 3,69), superando a la PVC medida de forma aislada.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="vexus-casos"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha V</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-green)" stroke-width="1.6">
+                    <circle cx="34" cy="26" r="14" stroke-opacity="0.75"/>
+                    <line x1="44" y1="36" x2="58" y2="50" stroke-width="2"/>
+                </svg>
+                <div class="field-name">Aplicación clínica:<br>5 casos reales</div>
+                <div class="field-hook">"una 'colecistitis' que en realidad no lo era... ¿qué vio realmente el ecógrafo?</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Congestión hepática por insuficiencia cardíaca no diagnosticada, con una FEVI &lt;10% — VExUS evitó una colecistectomía innecesaria. Uno de los 5 casos reales donde el score cambió el manejo.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="vexus-integracion"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha VI</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-purple)" stroke-width="1.6">
+                    <circle cx="24" cy="28" r="7" stroke-opacity="0.75"/>
+                    <circle cx="56" cy="16" r="7" stroke-opacity="0.75"/>
+                    <circle cx="56" cy="40" r="7" stroke-opacity="0.75"/>
+                    <line x1="30" y1="26" x2="50" y2="18" stroke-width="1.3"/>
+                    <line x1="30" y1="30" x2="50" y2="38" stroke-width="1.3"/>
+                </svg>
+                <div class="field-name">Dónde más aparece<br>en esta app</div>
+                <div class="field-hook">"VExUS ya se citaba en 2 sitios de la app antes de esta ficha... ¿dónde?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">En el síndrome cardiorrenal de FRA (Nefrología) y en la revisión de VD y LRA postoperatoria (este mismo submenú) — ambos con las cifras clave, ahora enlazados aquí para el desarrollo completo.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+    </div>
+    <p class="tap-hint">☝ toca una ficha para ver la pista, y de nuevo para abrir el bloque completo</p>
+
+    <div class="card" id="panel-vexus-tabs" style="display:none;">
+
+        <!-- ===== FICHA I: INTRODUCCIÓN ===== -->
+        <div id="vexus-intro" class="tab-content">
+            <h3 style="color: var(--accent-purple);">Introducción: el riñón congestivo</h3>
+
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El lado venoso de la circulación ha jugado históricamente un papel secundario frente al arterial —
+                la presión arterial, su onda y su variación han sido objeto de estudio constante, mientras que la
+                presión venosa central (PVC) recibe mucha menos atención pese a que su impacto fisiológico sobre la
+                función orgánica es <span class="hl">mayor de lo comúnmente pensado</span>.
+            </p>
+
+            <div class="article-figure">
+                <img src="js/modules/uci-papers/img/vexus-rola-fig1-presion-circulatoria.jpg" alt="Presión a lo largo del sistema circulatorio: ventrículo izquierdo, aorta, grandes y pequeñas arterias, arteriolas, capilares, venas y vena cava" loading="lazy">
+                <div class="article-figure-caption">Presión en los distintos puntos del sistema circulatorio. Nótese que la presión arteriolar precapilar es sustancialmente menor que la presión arterial (Rola et al., Fig. 1).</div>
+            </div>
+
+            <dl class="kv-row"><dt>La perfusión real de un órgano</dt><dd>No es la presión arterial media (MAP) menos la PVC, como suele simplificarse — la verdadera presión de perfusión es la <strong>presión arteriolar precapilar</strong> menos la <strong>presión venular postcapilar</strong>. Mientras que la MAP suele estar por encima de 90 mmHg, la presión arteriolar precapilar real puede estar en el rango de <strong>35-40 mmHg</strong>. El gradiente de presión que perfunde el órgano es, por tanto, mucho más estrecho de lo que sugiere mirar solo la MAP — y el impacto de subir la presión venosa es proporcionalmente mucho mayor de lo comúnmente asumido.</dd></dl>
+
+            <dl class="kv-row"><dt>Un hallazgo de casi un siglo</dt><dd>Ya en 1931, <strong>Winton</strong> observó en el riñón aislado de mamífero que el impacto de elevar la presión venosa sobre el gasto urinario era <strong>mayor</strong> que el de una caída equivalente de la presión arterial — la fisiología no es nueva, aunque las herramientas para aplicarla a pie de cama sí lo son.</dd></dl>
+
+            <dl class="kv-row"><dt>El concepto de "riñón congestivo"</dt><dd>Los riñones son órganos <strong>encapsulados</strong>: un aumento de la presión venosa renal se transmite directamente a un aumento de la presión intersticial renal, comprimiendo los túbulos y reduciendo el flujo sanguíneo cortical neto — un mecanismo hidráulico y potencialmente reversible, distinto de la isquemia por bajo gasto. Ver desarrollo completo en la Ficha II.</dd></dl>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>👁️ Por qué la presión venosa se ha ignorado clínicamente</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La estimación de la PVC por examen físico (ingurgitación yugular) es notoriamente <strong>subjetiva y poco reproducible</strong> entre observadores. La medición invasiva (catéter venoso central) está sujeta a errores técnicos de posicionamiento del transductor incluso en manos experimentadas, y no siempre está disponible ni justificada fuera de la UCI. El desarrollo del ecógrafo de bolsillo (point-of-care ultrasound, POCUS) en la última década ha puesto por primera vez en manos del clínico agudo una herramienta capaz de visualizar directamente la anatomía venosa y cuantificar la velocidad del flujo sanguíneo a pie de cama — el punto de partida real de todo lo que desarrollan las 3 fuentes de esta ficha.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Fuente</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Rola P, Miralles-Aguiar F, Argaiz E, Beaubien-Souligny W, Haycock K, Karimov T, Dinh VA, Spiegel R. Clinical applications of the venous excess ultrasound (VExUS) score: conceptual review and case series. Ultrasound J. 2021;13:32 (sección "Background") — con el marco de "riñón congestivo" desarrollado en Mullens et al. 2009 (Ficha II).</p>
+        </div>
+
+        <!-- ===== FICHA II: MULLENS 2009 ===== -->
+        <div id="vexus-mullens" class="tab-content">
+            <h3 style="color: var(--accent-red);">Mullens et al. 2009 — el estudio seminal</h3>
+
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Publicado en el <em>Journal of the American College of Cardiology</em> en 2009, este estudio prospectivo
+                puso a prueba directamente una premisa que hasta entonces se daba por sentada: que el <span class="hl">bajo
+                gasto cardíaco</span>, no la congestión venosa, era el principal determinante del deterioro renal en la
+                insuficiencia cardíaca descompensada avanzada (ADHF).
+            </p>
+
+            <dl class="kv-row"><dt>Población</dt><dd><strong>145 pacientes</strong> consecutivos ≥18 años con ADHF clase funcional NYHA III-IV, ingresados en una unidad dedicada de insuficiencia cardíaca (Cleveland Clinic, 2006-2007), manejados con terapia médica intensiva guiada por catéter de arteria pulmonar (PAC). Criterios de inclusión: FEVI &lt;30%, índice cardíaco (CI) ≤2,4 L/min/m², y PCWP &gt;18 mmHg y/o PVC &gt;8 mmHg. Se excluyó a pacientes con ventilación mecánica, terapia de reemplazo renal, inotrópicos IV al ingreso, cardiopatía congénita o trasplante cardíaco previo.</dd></dl>
+
+            <dl class="kv-row"><dt>Definición de empeoramiento renal (WRF)</dt><dd>Aumento de la creatinina sérica ≥0,3 mg/dl durante la hospitalización — definición estricta, consistente con la literatura previa.</dd></dl>
+
+            <dl class="kv-row"><dt>Objetivo hemodinámico del tratamiento</dt><dd>PCWP ≤18 mmHg, PVC ≤8 mmHg, e índice cardíaco ≥2,4 L/min/m² manteniendo la PAM &gt;65-70 mmHg — con diuréticos IV/orales, vasodilatadores y/o inotrópicos, además de continuar/optimizar terapias basadas en evidencia (IECA, betabloqueantes, espironolactona) según tolerancia.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Resultados principales</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El <strong>40%</strong> de los pacientes (58 de 145) desarrolló WRF durante la hospitalización, la mayoría
+                en los primeros 5 días. Los pacientes con WRF tenían una PVC significativamente mayor al ingreso
+                (<strong>18 ± 7 mmHg</strong> vs. 12 ± 6 mmHg, p &lt; 0,001) y tras la terapia médica intensiva
+                (<strong>11 ± 8 mmHg</strong> vs. 8 ± 5 mmHg, p = 0,04). No hubo correlación entre la PVC basal y el
+                índice cardíaco basal.
+            </p>
+
+            <div class="article-figure">
+                <img src="js/modules/uci-papers/img/vexus-mullens-fig1-wrf-por-categoria.jpg" alt="Prevalencia de empeoramiento de la función renal según categorías de PVC, índice cardíaco, presión arterial sistólica y PCWP al ingreso" loading="lazy">
+                <div class="article-figure-caption">Fig. 1. Prevalencia de WRF durante la hospitalización según categorías de PVC, CI, presión arterial sistólica (SBP) y PCWP al ingreso — obsérvese el incremento casi lineal con la PVC (8% a 75%), frente a la ausencia de gradiente claro con las otras 3 variables.</div>
+            </div>
+
+            <dl class="kv-row"><dt>El hallazgo central</dt><dd>Existió un <strong>riesgo incremental</strong> de WRF con categorías crecientes de PVC basal: <strong>75%</strong> de los pacientes con PVC &gt;24 mmHg desarrollaron WRF, frente a solo el 8% con PVC &lt;8 mmHg. En cambio, ni la presión arterial sistólica ni la PCWP mostraron una relación clara con el riesgo de WRF.</dd></dl>
+
+            <div class="article-figure">
+                <img src="js/modules/uci-papers/img/vexus-mullens-fig2-roc.jpg" alt="Curvas ROC comparando la capacidad de la PVC y del índice cardíaco para predecir el empeoramiento de la función renal" loading="lazy">
+                <div class="article-figure-caption">Fig. 2. Curvas ROC al ingreso: la PVC predijo el desarrollo de WRF (AUC 0,734, p &lt; 0,0001) mientras que el índice cardíaco no lo hizo (AUC 0,552, p = 0,6) — diferencia estadísticamente significativa entre ambas curvas (p = 0,012).</div>
+            </div>
+
+            <dl class="kv-row"><dt>Contribución relativa de CI y PVC a la TFG</dt><dd>Al final de la terapia con PAC, los pacientes se estratificaron en 4 grupos combinando CI alto/bajo con PVC alta/baja. La TFG fue significativamente más baja en los grupos con <strong>PVC alta</strong> (~50 ml/min), con independencia de si el CI era alto o bajo — mientras que, con PVC baja, el CI (alto o bajo) apenas modificó la TFG (~70 ml/min en ambos). Es decir: la congestión venosa, no el gasto cardíaco, fue el factor que separó a los grupos.</dd></dl>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Mecanismos propuestos (evidencia experimental previa)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La transmisión de la congestión venosa al riñón está descrita desde <strong>la década de 1930</strong>: en modelos animales, la hipervolemia iatrogénica que eleva la presión de la vena renal produce insuficiencia renal <strong>directa</strong>, independiente del gasto cardíaco o del flujo sanguíneo renal — un fenómeno <strong>reversible</strong> al bajar de nuevo la presión venosa renal. El aumento de la PVC también eleva la presión intersticial renal, generando un estado hipóxico del parénquima renal por un mecanismo similar al que produce disfunción hepática en la congestión hepática. El aumento crónico de volumen y PVC además atenúa los reflejos vasculares (barorreceptores), deteriorando aún más la capacidad de respuesta arterial.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📊 El ensayo ESCAPE, citado en discusión</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">El ensayo <strong>ESCAPE</strong> (Evaluation Study of Congestive Heart Failure and Pulmonary Artery Catheterization Effectiveness) mostró que la función renal no empeoró cuando el tratamiento se dirigió a bajar la PVC y la PCWP medidas de forma invasiva, mientras que sí empeoró en el brazo guiado solo por evaluación clínica — apoyo indirecto a la importancia de monitorizar activamente (y corregir) la congestión venosa.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Limitaciones reconocidas por los autores</p>
+            <ul class="term-chips">
+                <li>Sin medición directa de la hemodinámica renal ni del volumen intravascular regional</li>
+                <li>El índice cardíaco se estimó por el método de Fick, asumiendo una tasa metabólica estándar</li>
+                <li>Estudio unicéntrico, sin evaluación de peso/balance hídrico seriado</li>
+                <li>No pretende implicar la necesidad de monitorización invasiva rutinaria — el objetivo es entender los determinantes hemodinámicos del WRF</li>
+            </ul>
+
+            <p class="section-label" style="margin-top:16px;">Conclusión</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                En esta cohorte de insuficiencia cardíaca avanzada, la <strong>congestión venosa</strong>, más que el
+                gasto cardíaco reducido, fue el determinante hemodinámico principal del empeoramiento de la función
+                renal — un hallazgo con implicaciones directas para cómo debe monitorizarse y tratarse la descongestión
+                en la ADHF, y la base clínica sobre la que se construyó, una década después, el score VExUS
+                (Ficha IV).
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Fuente</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Mullens W, Abrahams Z, Francis GS, Sokos G, Taylor DO, Starling RC, Young JB, Tang WHW. Importance of venous congestion for worsening of renal function in advanced decompensated heart failure. J Am Coll Cardiol. 2009;53(7):589-96.</p>
+        </div>
+
+        <!-- ===== FICHA III: FISIOLOGÍA DEL DOPPLER VENOSO ===== -->
+        <div id="vexus-fisiologia-doppler" class="tab-content">
+            <h3 style="color: var(--accent-blue);">Fisiología del Doppler venoso</h3>
+
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Entender por qué cada onda Doppler cambia de forma con la congestión requiere partir de un concepto:
+                el sistema venoso es, en condiciones normales, un <span class="hl">reservorio de alta capacitancia</span>
+                que amortigua el pulso generado por la aurícula derecha antes de que llegue a las venas periféricas.
+                Cuando ese margen de compliance se agota, el pulso se transmite cada vez más lejos.
+            </p>
+
+            <dl class="kv-row"><dt>Presión de llenado sistémico medio (Pmsf)</dt><dd>Generada por el retroceso elástico de las paredes venosas sobre el <strong>volumen estresado</strong> (el volumen que sí distiende la pared venosa, a diferencia del volumen no estresado, que ocupa el compartimento venoso sin ejercer presión). La Pmsf es la fuerza motriz del retorno venoso: el flujo va desde el sistema venoso hacia la aurícula derecha siempre que la Pmsf supere a la presión auricular derecha — y en dirección contraria cuando la presión auricular la supera.</dd></dl>
+
+            <dl class="kv-row"><dt>Onda de pulso venoso yugular (referencia)</dt><dd>Las ondas A, S y D del pulso venoso corresponden, respectivamente, a la <strong>contracción auricular</strong> (A — flujo alejándose del corazón), la <strong>relajación auricular durante la sístole ventricular</strong> con desplazamiento del anillo tricúspide hacia el ápex (S — flujo hacia el corazón), y el <strong>llenado ventricular pasivo en diástole</strong> (D — flujo hacia el corazón, cuando la aurícula derecha actúa como conducto pasivo). A medida que sube la presión auricular derecha media, la onda A se hace más prominente y la onda S disminuye en amplitud hasta invertirse y fusionarse con la A.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Onda de la vena hepática</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Resultado directo de las interacciones entre el retorno venoso (impulsado por la Pmsf) y la aurícula/
+                ventrículo derechos. Patrón normal: onda por encima de la línea basal por contracción auricular (S),
+                seguida de flujo por debajo de la basal durante la sístole (relajación auricular/movimiento del anillo
+                tricúspide) — <strong>anomalía leve</strong>: componente S de menor magnitud que D (pero aún hacia el
+                hígado); <strong>anomalía grave</strong>: reversión completa de la fase sistólica.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Onda de la vena porta</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La vena porta está separada de la circulación sistémica por los sinusoides hepáticos, que amortiguan
+                la transmisión de presión — por eso su flujo normal es <strong>ondulante y fásico</strong>, no
+                pulsátil, en dirección hepatópeta (~20 cm/s). Al subir la congestión, el reflujo venoso generado por
+                la contracción auricular se transmite a través de los sinusoides hasta la porta, dando <strong>impedancia
+                al flujo hepatópeto</strong> — la onda se vuelve progresivamente más pulsátil hasta un patrón bifásico
+                (flujo hacia adelante y hacia atrás en el mismo ciclo).
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Onda venosa intrarrenal</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Obtenida de los vasos interlobares o arcuatos, con señal arterial (por encima de la basal) y venosa
+                (por debajo) visibles durante al menos 2 ciclos cardíacos. Patrón normal: flujo <strong>continuo
+                monofásico</strong> por debajo de la basal. Con congestión creciente, se vuelve <strong>pulsátil</strong>,
+                luego <strong>discontinuo bifásico</strong> (componentes S y D, como el hepático) y finalmente
+                <strong>discontinuo monofásico</strong> (solo componente D) cuando la onda S desaparece por completo —
+                el patrón más grave.
+            </p>
+
+            <table class="data-table">
+                <thead><tr><th>Onda</th><th>Normal</th><th>Anomalía leve</th><th>Anomalía grave</th></tr></thead>
+                <tbody>
+                    <tr><td>Hepática</td><td>S &gt; D</td><td>S &lt; D (aún anterógrada)</td><td>Reversión de S</td></tr>
+                    <tr><td>Porta</td><td>Ondulante, fásica (PF &lt;30%)</td><td>Pulsátil, PF 30-49%</td><td>Bifásica, PF ≥50%</td></tr>
+                    <tr><td>Intrarrenal</td><td>Continua monofásica</td><td>Discontinua bifásica (S+D)</td><td>Discontinua monofásica (solo D)</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">PF: fracción de pulsatilidad de la vena porta. Criterios exactos usados por Beaubien-Souligny et al. para derivar el score VExUS (Ficha IV).</p>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚠️ Limitaciones y trampas de interpretación (reconocidas por los propios autores)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La <strong>VCI</strong> puede comprimirse por hipertensión intraabdominal independientemente de la presión de la aurícula derecha, y puede estar crónicamente dilatada por remodelado en la hipertensión pulmonar sin reflejar congestión aguda. La <strong>vena hepática</strong> puede no mostrar alteraciones incluso con regurgitación tricuspídea grave si la compliance auricular está preservada. La <strong>vena porta</strong> puede ser pulsátil en voluntarios sanos delgados o en presencia de malformaciones arteriovenosas — sin congestión — y, en el extremo opuesto, en el hígado <strong>cirrótico</strong> la rigidez del parénquima amortigua la transmisión de presión desde la aurícula derecha, por lo que la porta puede NO ser pulsátil pese a congestión venosa grave. El <strong>Doppler intrarrenal</strong> es técnicamente el más difícil de obtener, con más señales subóptimas, y la propia enfermedad parenquimatosa renal puede alterar sus ondas de forma independiente a la congestión. Por todo esto, realizar el <strong>examen protocolizado completo</strong> (VCI + vena hepática + vena porta + vena intrarrenal) aumenta la precisión frente a interpretar cualquiera de estos marcadores de forma aislada.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Fuente</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Rola P, et al. Ultrasound J. 2021;13:32 (sección "Venous congestion and the VExUS grading system: pathological basis, pitfalls and limitations"); criterios de anomalía leve/grave según Beaubien-Souligny W, et al. Ultrasound J. 2020;12:16.</p>
+        </div>
+
+        <!-- ===== FICHA IV: DESARROLLO DEL SCORE VEXUS ===== -->
+        <div id="vexus-score" class="tab-content">
+            <h3 style="color: var(--accent-yellow);">Beaubien-Souligny et al. 2020 — desarrollo del score VExUS</h3>
+
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Análisis post-hoc de una cohorte prospectiva de <strong>145 pacientes</strong> de cirugía cardiaca con
+                circulación extracorpórea (Montreal Heart Institute, 2016-2017), con ecografía Doppler <strong>repetida</strong>
+                de vena hepática, vena porta, vena intrarrenal y diámetro de la VCI: el día antes de la cirugía, al
+                ingreso en UCI tras la cirugía, y diariamente los días 1 a 3 postoperatorios — 706 evaluaciones
+                ecográficas en total. Se excluyeron pacientes con enfermedad renal crónica avanzada (FGe &lt;15) o
+                diálisis, así como condiciones que interfieren con el Doppler portal (cirrosis, trombosis portal).
+            </p>
+
+            <dl class="kv-row"><dt>Objetivo</dt><dd>Desarrollar varios prototipos de sistema de gradación de congestión venosa combinando múltiples marcadores ecográficos, y determinar cuál predecía mejor la lesión renal aguda (LRA) tras la cirugía cardiaca — comparándolo además con la medición de PVC.</dd></dl>
+
+            <dl class="kv-row"><dt>Medición de la VCI</dt><dd>Diámetro máximo durante el ciclo respiratorio, medido en su porción intrahepática a 2 cm de la unión con las venas hepáticas, desde una ventana subxifoidea (o lateral sobre el hígado si esa ventana no era adecuada).</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Los 5 prototipos comparados (VExUS A-E)</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Un equipo multidisciplinar (intensivistas, anestesiólogo, urgenciólogos, nefrólogo) desarrolló 5
+                combinaciones distintas de los mismos hallazgos Doppler (I-IX en la figura) con la VCI, variando cuántas
+                anomalías graves se exigían y en cuántos lechos venosos distintos.
+            </p>
+
+            <div class="article-figure">
+                <img src="js/modules/uci-papers/img/vexus-dev-fig1-grading-system.jpg" alt="Los 9 patrones Doppler normal/leve/grave de vena hepática, porta e intrarrenal, y la tabla comparativa de los 5 prototipos VExUS A-E por grado" loading="lazy">
+                <div class="article-figure-caption">Fig. 1. Los 9 patrones Doppler de referencia (I-IX) y los 5 prototipos de sistema de gradación VExUS comparados, con sus criterios exactos de grado 0 a 3 (Beaubien-Souligny et al., Fig. 1).</div>
+            </div>
+
+            <dl class="kv-row"><dt>El sistema "C" — el que se usa hoy como VExUS</dt><dd>Exige <strong>VCI ≥2 cm</strong> para cualquier grado de congestión; grado 1 = patrones normales o con alguna anomalía leve; grado 2 (congestión moderada) = anomalía <strong>grave</strong> en <strong>al menos un</strong> lecho venoso; grado 3 (congestión grave) = anomalías <strong>graves en al menos 2 de los 3</strong> lechos venosos (hepático, porta, intrarrenal). Es más exigente que los sistemas A/B (que permiten grado 3 con solo 1 lecho grave) y menos exigente que D/E en el uso de la VCI.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Resultado principal</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La congestión grave (grado 3) definida por el sistema <strong>VExUS C</strong> fue la que mostró la
+                asociación más fuerte con el desarrollo de LRA tras la cirugía (HR crudo <strong>3,69</strong>, IC 95%
+                1,65-8,24, p = 0,001), asociación que se mantuvo significativa tras ajustar por el riesgo preoperatorio
+                de LRA (HR 2,83) y también tras añadir el soporte vasopresor/inotrópico (HR 2,82, p = 0,02) — a
+                diferencia de los sistemas que exigían solo 1 lecho afectado (A) o que combinaban anomalías leves y
+                graves indistintamente (B/D).
+            </p>
+
+            <table class="data-table">
+                <thead><tr><th>Sistema</th><th>Grado</th><th>HR (IC 95%)</th><th>p</th></tr></thead>
+                <tbody>
+                    <tr><td>VExUS A</td><td>3</td><td>3,21 (1,55-6,67)</td><td>0,002</td></tr>
+                    <tr><td>VExUS B</td><td>3</td><td>2,43 (1,18-5,02)</td><td>0,02</td></tr>
+                    <tr><td><strong>VExUS C</strong></td><td><strong>3</strong></td><td><strong>3,69 (1,65-8,24)</strong></td><td><strong>0,001</strong></td></tr>
+                    <tr><td>VExUS D</td><td>2</td><td>1,95 (1,02-3,75)</td><td>0,045</td></tr>
+                    <tr><td>VExUS E</td><td>2</td><td>2,68 (1,41-5,12)</td><td>0,003</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Tabla 1 del artículo (extracto) — asociación entre cada sistema de gradación y el riesgo de LRA postoperatoria, modelo de Cox con las categorías de grado como covariable dependiente del tiempo.</p>
+
+            <p class="section-label" style="margin-top:16px;">Rendimiento diagnóstico al ingreso en UCI</p>
+            <div class="article-figure">
+                <img src="js/modules/uci-papers/img/vexus-dev-fig5-ejemplo-doppler.jpg" alt="Ejemplo real de Doppler de vena hepática, porta e intrarrenal en dos pacientes: uno con grado 1 (patrones normales) y otro con grado 3 (anomalías graves múltiples)" loading="lazy">
+                <div class="article-figure-caption">Fig. 5. Ejemplo real de evaluación VExUS C: paciente #1, patrones normales (grado 1, no desarrolló LRA); paciente #2, anomalías graves en portal e intrarrenal (grado 3, desarrolló LRA grave y delirium) (Beaubien-Souligny et al., Fig. 5).</div>
+            </div>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El grado 3 de VExUS C, evaluado solo al ingreso en UCI, mostró una <strong>especificidad del 96%</strong>
+                (IC 89-99%) pero una <strong>sensibilidad baja</strong> (27%, IC 15-41%), resultando en una razón de
+                verosimilitud positiva (<strong>+LR</strong>) de <strong>6,37</strong> (IC 2,19-18,5) — la más alta de
+                todos los sistemas y variables individuales estudiadas, incluida la PVC (+LR 1,91 con el corte
+                ≥12 mmHg). La dilatación aislada de la VCI, sin más, tuvo un rendimiento diagnóstico pobre
+                (especificidad 41%) — <strong>no basta por sí sola</strong> para identificar congestión clínicamente
+                significativa.
+            </p>
+
+            <dl class="kv-row"><dt>Correlación con otros marcadores de congestión</dt><dd>El grado 3 de VExUS C se asoció con un <strong>balance de fluidos acumulado mayor</strong> y una <strong>PVC más alta</strong> (sin interacción significativa con el momento de la evaluación), y con niveles de <strong>NT-proBNP</strong> más elevados en cada uno de los 4 puntos temporales estudiados.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Limitaciones reconocidas por los autores</p>
+            <ul class="term-chips">
+                <li>Estudio pequeño, unicéntrico, solo en pacientes de cirugía cardiaca</li>
+                <li>La permeabilidad vascular (y por tanto la formación de edema) varía según la enfermedad de base — cautela al extrapolar a otros contextos clínicos</li>
+                <li>No se evaluó la función del ventrículo derecho de forma sistemática</li>
+                <li>Análisis retrospectivo sobre datos ya recogidos — no se incorporó la colapsabilidad respiratoria de la VCI ni medición 3D</li>
+                <li>Intervalos de confianza amplios por el tamaño muestral limitado — no puede afirmarse con certeza la superioridad definitiva de VExUS C frente a las otras variantes</li>
+            </ul>
+
+            <p class="section-label" style="margin-top:16px;">Conclusión</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La combinación de múltiples marcadores POCUS de congestión venosa —no un único hallazgo aislado— <span class="hl">puede
+                identificar congestión venosa clínicamente significativa</span> y su riesgo asociado de LRA tras cirugía
+                cardiaca. Un VExUS grado 3 (VCI ≥2 cm con anomalías Doppler graves en ≥2 de 3 lechos venosos) señala un
+                riesgo alto de LRA postoperatoria — es el sistema de gradación que, desde su publicación, se usa
+                clínicamente como "VExUS" sin más.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Fuente</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Beaubien-Souligny W, Rola P, Haycock K, Bouchard J, Lamarche Y, Spiegel R, Denault AY. Quantifying systemic congestion with point-of-care ultrasound: development of the venous excess ultrasound grading system. Ultrasound J. 2020;12:16.</p>
+        </div>
+
+        <!-- ===== FICHA V: APLICACIÓN CLÍNICA — 5 CASOS ===== -->
+        <div id="vexus-casos" class="tab-content">
+            <h3 style="color: var(--accent-green);">Aplicación clínica — 5 casos reales</h3>
+
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Rola et al. (2021) ilustran, con 5 casos reales, cómo el examen VExUS protocolizado —siempre los 4
+                componentes juntos: <strong>VCI + vena hepática + vena porta + vena intrarrenal</strong>— cambió el
+                razonamiento clínico y el manejo en escenarios donde la evaluación convencional (examen físico,
+                monitores de gasto cardíaco continuo, incluso otras pruebas de imagen) llevaba a una conclusión
+                equivocada.
+            </p>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>1️⃣ Cirrosis + insuficiencia cardíaca — el fallo renal "de bajo flujo" que no lo era</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Varón de 75 años, cirrosis alcohólica y miocardiopatía dilatada (FEVI 20%), con anasarca y creatinina en ascenso (121→285 µmol/L en 2 semanas) pese a ajustes de furosemida. Se atribuyó el fallo renal a "bajo flujo" por disfunción del VI y se planteó manejo paliativo. El VExUS mostró VCI &gt;30 mm fija, portal con &gt;100% de pulsatilidad y reversión de flujo, y reversión de la onda S hepática — <span class="grade-badge red">Grado 3</span>. Con drenaje de 12 L de ascitis y furosemida IV a dosis altas (balance −1000 cc/8 h), la pulsatilidad portal bajó a ~30%, la VCI a 22-25 mm, y la creatinina se normalizó (85 µmol/L).<br><br><strong>Enseña:</strong> un patrón que parecía "cardiorrenal de bajo gasto" era en realidad congestivo — la descongestión, no la mejora del flujo anterógrado, resolvió el fallo renal.
+                    <div class="article-figure">
+                        <img src="js/modules/uci-papers/img/vexus-rola-fig2-caso1.jpg" alt="Caso 1: IVC dilatada, Doppler de vena hepática con reversión de la onda S, y Doppler portal con más del 100% de pulsatilidad y reversión de flujo" loading="lazy">
+                        <div class="article-figure-caption">a. VCI en eje corto y Doppler hepático (reversión de la onda S). b. Doppler portal con &gt;100% de pulsatilidad y reversión de flujo (Rola et al., Fig. 2).</div>
+                    </div>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>2️⃣ La "colecistitis" que era congestión hepática</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Varón de 45 años con dolor abdominal en hipocondrio derecho; una ecografía externa mostraba engrosamiento de la pared vesicular y líquido pericolecístico, sugestivo de colecistitis alitiásica — programado para colecistectomía. Al revisar las imágenes, el médico de urgencias notó una VCI y vena hepática pletóricas. El VExUS confirmó: hepática con ondas A&gt;S de alta amplitud, porta trifásica, intrarrenal discontinua bifásica — <span class="grade-badge red">Grado 2</span>. La ecocardiografía reveló FEVI &lt;10%, patrón restrictivo, insuficiencia mitral funcional grave e hipertensión pulmonar, con un gasto cardíaco de solo 1,4 L/min. Se canceló la cirugía; alta con furosemida y seguimiento cardiológico.<br><br><strong>Enseña:</strong> la congestión venosa puede <strong>mimetizar patología biliar aguda</strong> (edema de la pared vesicular por congestión hepática, no colecistitis real) — VExUS evitó una cirugía innecesaria y de alto riesgo en un paciente con insuficiencia cardíaca grave no diagnosticada.
+                    <div class="article-figure">
+                        <img src="js/modules/uci-papers/img/vexus-rola-fig3-caso2.jpg" alt="Caso 2: vesícula biliar con signos de colecistitis acalculosa, Doppler de vena hepática con onda A de alta amplitud y flujo anterógrado S menor que D, Doppler portal trifásico, y flujo venoso intrarrenal bifásico discontinuo" loading="lazy">
+                        <div class="article-figure-caption">a. Vesícula con signos de "colecistitis" acalculosa. b. Doppler hepático con ondas A de alta amplitud, S&lt;D. c. Doppler portal trifásico. d. Flujo venoso intrarrenal bifásico discontinuo (Rola et al., Fig. 3).</div>
+                    </div>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>3️⃣ Cirugía valvular con hipertensión pulmonar previa</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Varón de 81 años con hipertensión pulmonar moderada e insuficiencia mitral grave, tras reemplazo valvular mitral. Balance positivo de 2910 mL en las primeras 24h, disfunción del VD, PVC 15 cmH₂O con soporte de noradrenalina + dobutamina. El VExUS mostró grado 3 (VCI dilatada, reversión de S hepática, porta 65% pulsátil, intrarrenal discontinua monofásica). Con furosemida IV en dosis altas (balance −1200 cc/24h), la PAP y la PVC bajaron; al 3er día, con furosemida en infusión y balance −3200 cc/24h, la PVC llegó a 2 mmHg, la porta a 20% de pulsatilidad y la hepática se normalizó — creatinina normalizada al 4º día.<br><br><strong>Enseña:</strong> la hipertensión pulmonar preexistente complica la interpretación aislada de la PVC/VCI (remodelado crónico) — el VExUS permitió diferenciar la contribución de la congestión aguda sobreañadida y guiar la titulación de diuréticos pese al soporte inotrópico activo.
+                    <div class="article-figure">
+                        <img src="js/modules/uci-papers/img/vexus-rola-fig4-caso3.jpg" alt="Caso 3: perfiles Doppler de vena porta, vena hepática y vasculatura intrarrenal en los días 1, 2 y 3 tras la cirugía valvular, mostrando la mejoría progresiva del patrón congestivo con la descongestión" loading="lazy">
+                        <div class="article-figure-caption">Perfiles Doppler de vena porta, hepática e intrarrenal en los días 1, 2 y 3 — obsérvese la normalización progresiva de los 3 lechos venosos a medida que avanza la descongestión activa (Rola et al., Fig. 4).</div>
+                    </div>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>4️⃣ Hipertensión pulmonar de grupo 1 con lesión renal — ¿exceso o defecto de diuréticos?</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Paciente de 57 años con HTP de grupo 1, creatinina en ascenso ambulatorio; se suspendieron bumetanida y espironolactona por sospecha de sobre-diuresis. Tres semanas después: edema, ascitis, creatinina 311 µmol/L, potasio 6,7 mEq/L. El VExUS mostró grado 3 (VCI 30 mm sin colapso inspiratorio, reversión sistólica hepática, porta &gt;100% pulsátil, intrarrenal discontinua monofásica) — la creatinina reflejaba <strong>congestión</strong>, no depleción de volumen. La furosemida IV a dosis altas no obtuvo respuesta (anuria); se inició ultrafiltración por catéter de alto flujo, con mejoría de los patrones Doppler tras la UF. Posteriormente el paciente recuperó diuresis espontánea y se dio de alta con diuréticos orales.<br><br><strong>Enseña:</strong> diferenciar diuresis inadecuada de exceso de diuréticos es difícil solo con la creatinina — suspender el tratamiento diurético en este caso fue el error inicial (empeoró la descompensación); VExUS guio tanto el inicio de la ultrafiltración cuando falló la furosemida como el ajuste posterior de dosis.
+                    <div class="article-figure">
+                        <img src="js/modules/uci-papers/img/vexus-rola-fig5-caso4.jpg" alt="Caso 4: perfiles Doppler congestivos iniciales de vena cava inferior, hepática, portal e intrarrenal, y su mejoría tras la ultrafiltración con hemodiálisis" loading="lazy">
+                        <div class="article-figure-caption">A. Perfiles Doppler congestivos iniciales (VCI/hepática/porta/intrarrenal). B. Perfiles tras la ultrafiltración con hemodiálisis, con mejoría clara de los 4 marcadores (Rola et al., Fig. 5).</div>
+                    </div>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>5️⃣ Choque obstétrico — cuando el monitor de gasto cardíaco engaña</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Gestante de 28 años, embarazo gemelar de 32 semanas, cesárea emergente complicada con CID y transfusión masiva (&gt;10 unidades). Un monitor de gasto cardíaco continuo mostró una variación del volumen sistólico (VVS) del 23%, interpretada como "respuesta a fluidos" — recibió &gt;6 L de cristaloides adicionales. El VExUS mostró VCI dilatada, onda S retrógrada en la vena hepática y porta 100% pulsátil — <span class="grade-badge red">Grado 3</span>; la ecocardiografía reveló un VD dilatado con signo D y regurgitación tricuspídea grave, y se detectó además un trombo móvil en la vena femoral izquierda (TC confirmó tromboembolismo pulmonar subsegmentario bilateral). Se inició ultrafiltración de urgencia (5 L en 24h, sin poder anticoagular por la CID activa y la cesárea reciente); el lactato se normalizó y mejoró el requerimiento vasopresor.<br><br><strong>Enseña:</strong> el monitor de gasto cardíaco continuo dio una lectura <strong>engañosa</strong> de hipovolemia — la causa real era disfunción aguda del VD por TEP más sobrecarga de volumen. VExUS demostró congestión venosa significativa y motivó una estrategia activa de <strong>retirada</strong> de volumen, no más precarga.
+                    <div class="article-figure">
+                        <img src="js/modules/uci-papers/img/vexus-rola-fig6-caso5.jpg" alt="Caso 5: VCI dilatada, Doppler de vena hepática con onda S retrógrada, Doppler portal con 100% de pulsatilidad, vista paraesternal eje corto con ventrículo izquierdo en forma de D, insuficiencia tricuspídea grave por Doppler continuo, y trombo móvil en la vena femoral izquierda" loading="lazy">
+                        <div class="article-figure-caption">a. VCI dilatada. b. Vena hepática con onda S retrógrada. c. Vena porta con 100% de pulsatilidad. d. VI en forma de D (sobrecarga del VD). e. Insuficiencia tricuspídea grave. f. Trombo móvil en vena femoral izquierda (Rola et al., Fig. 6).</div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Algoritmo de gradación VExUS, resumido</p>
+            <div class="article-figure">
+                <img src="js/modules/uci-papers/img/vexus-rola-fig7-algoritmo-gradacion.jpg" alt="Diagrama del algoritmo VExUS: medir la VCI, evaluar Doppler de vena hepática, porta y venas interlobares, y contar cuántos patrones muestran anomalía grave para asignar el grado 0 a 3" loading="lazy">
+                <div class="article-figure-caption">Diámetro de la VCI (&lt;2 cm = grado 0, sin más evaluación necesaria) y, si es ≥2 cm, número de lechos venosos (hepático/porta/interlobar) con anomalía grave: 0/3 → grado 1 (en riesgo), 1/3 → grado 2 (congestión moderada), 2-3/3 → grado 3 (congestión grave) (Rola et al., Fig. 7).</div>
+            </div>
+
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Como resumen general de los 5 casos: el VExUS <strong>probablemente no informa bien</strong> sobre la
+                necesidad de <em>administrar</em> volumen — pero sí parece útil para identificar qué pacientes
+                <strong>toleran, o incluso se benefician, de la retirada activa de volumen</strong>.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Fuente</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Rola P, et al. Ultrasound J. 2021;13:32 (sección "Case presentations", casos 1-5).</p>
+        </div>
+
+        <!-- ===== FICHA VI: INTEGRACIÓN CON EL RESTO DE LA APP ===== -->
+        <div id="vexus-integracion" class="tab-content">
+            <h3 style="color: var(--accent-purple);">Dónde más aparece VExUS en esta app</h3>
+
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                VExUS y el hallazgo de Mullens et al. ya se citaban, con sus cifras clave, en otros dos puntos de la
+                app antes de que existiera esta ficha completa — se enlazan aquí en vez de duplicar el contenido.
+            </p>
+
+            <dl class="kv-row"><dt>Síndrome cardiorrenal tipo I (FRA, Nefrología)</dt><dd>La Ficha "Subfenotipos II" de FRA menciona que "la ecocardiografía y el VExUS permiten obtener estos datos de forma sencilla y dirigir la terapia de descongestión" dentro del síndrome cardiorrenal tipo I — el desarrollo completo del score, incluida la comparación de los 5 prototipos y su rendimiento diagnóstico, vive aquí (Ficha IV).</dd></dl>
+            <button class="especialidad-link" data-especialidad="nefrologia" data-view="fra" data-panel="panel-fra-tabs" data-tab="fra-subfenotipos-2">🔗 Ver FRA · Subfenotipos II (Nefrología) →</button>
+
+            <dl class="kv-row" style="margin-top:16px;"><dt>Disfunción del VD y LRA postoperatoria (este mismo submenú)</dt><dd>Ese paper (Siegman et al. 2026) ya cita el AUC de la PVC frente al índice cardíaco de Mullens et al. (Ficha II) y el HR/+LR del grado 3 de VExUS C (Ficha IV) como evidencia de apoyo dentro de su propia síntesis sobre la disfunción del ventrículo derecho — aquí se desarrollan ambos estudios con su metodología y resultados completos.</dd></dl>
+            <button class="paper-link" data-view="vdLra" data-panel="panel-vdlra-tabs" data-tab="vdlra-evidencia-humana">🔗 Ver VD y LRA postoperatoria · Evidencia clínica →</button>
+
+            <dl class="kv-row" style="margin-top:16px;"><dt>Interacción corazón-pulmón (Cardiología, Fisiopatología UCI)</dt><dd>Esa ficha ya desarrolla la ecocardiografía de la interacción cardiopulmonar (VCI, evaluación del VD, índice E/Em) — el examen VExUS completo (vena hepática + porta + intrarrenal, no solo la VCI) es una extensión natural de esa misma evaluación ecográfica a pie de cama.</dd></dl>
+            <button class="especialidad-link" data-especialidad="fisioUci" data-view="cardiologia" data-panel="panel-cardio-tabs" data-tab="cardio-interaccion-corazon-pulmon">🔗 Ver Interacción corazón-pulmón (Cardiología) →</button>
+
+            <p class="section-label" style="margin-top:20px;">Las 3 fuentes de este bloque, en una frase cada una</p>
+            <ul class="term-chips">
+                <li>Mullens 2009 — por qué la congestión venosa, no el bajo gasto, es el determinante del riñón congestivo</li>
+                <li>Beaubien-Souligny 2020 — cómo se mide y grada esa congestión con Doppler (el score VExUS)</li>
+                <li>Rola 2021 — cómo se aplica a pie de cama, con 5 casos reales donde cambió el manejo</li>
+            </ul>
+        </div>
+
+    </div>

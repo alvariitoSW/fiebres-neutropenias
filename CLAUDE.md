@@ -2178,6 +2178,141 @@ tener contenido real en cuanto el usuario aportó el primer PDF.
     compartido sin cambios entre ambos tipos. Si se añaden preguntas de
     redactar a un banco existente, no hace falta tocar nada más —
     conviven con las de opción múltiple en el mismo array `banco`.
+- **Cuarto paper: "VExUS: ecografía de la congestión venosa"**
+  (`js/modules/uci-papers/vexus.html`) — a diferencia de los 3 papers
+  anteriores (cada uno de una sola fuente), este bloque fusiona
+  **3 artículos** que cuentan la misma historia en 3 capas: Mullens W,
+  Abrahams Z, Francis GS, et al. Importance of venous congestion for
+  worsening of renal function in advanced decompensated heart failure. J
+  Am Coll Cardiol. 2009;53(7):589-96 (el "por qué" — el estudio seminal
+  que desplazó el foco del bajo gasto cardíaco a la congestión venosa
+  como determinante del "riñón congestivo"); Beaubien-Souligny W, Rola P,
+  Haycock K, et al. Quantifying systemic congestion with point-of-care
+  ultrasound: development of the venous excess ultrasound grading system.
+  Ultrasound J. 2020;12:16 (el "qué" — el paper que define el score
+  VExUS tal como se usa hoy, comparando 5 prototipos de gradación); y
+  Rola P, Miralles-Aguiar F, Argaiz E, et al. Clinical applications of
+  the venous excess ultrasound (VExUS) score: conceptual review and case
+  series. Ultrasound J. 2021;13:32 (el "cómo" — fisiología del Doppler
+  venoso + 5 casos clínicos reales donde VExUS cambió el manejo). Los 3
+  PDF están archivados en `docs/mullens-2009-congestion-venosa-funcion-renal.pdf`,
+  `docs/beaubien-souligny-2020-desarrollo-vexus.pdf` y
+  `docs/rola-2021-vexus-revision-conceptual-casos.pdf`.
+  - **Auditoría previa a implementar nada, a petición explícita del
+    usuario** ("antes de subir información... me gustaría auditar sobre
+    cómo sería la forma más eficiente de volcar el contenido"). Antes de
+    escribir una sola línea de contenido, se leyeron los 3 PDF completos y
+    se publicó un plan como Artifact (mapa de qué aporta cada fuente,
+    hallazgo de que 2 de los 3 artículos ya se citaban parcialmente en la
+    app — ver más abajo —, estructura de fichas propuesta e inventario de
+    figuras extraíbles) con 3 decisiones explícitas a confirmar antes de
+    tocar el repositorio, resueltas con `AskUserQuestion`: 1) fusionar los
+    3 artículos en una sola entrada nueva (elegido, sobre 3 entradas
+    separadas) — la primera vez que un "paper" de este submenú se
+    construye a partir de más de una fuente; 2) tamaño del banco de quiz:
+    el "estándar reducido" ya fijado para los papers de este apartado
+    (elegido, sobre el formato completo de ~40-50 preguntas de los 2
+    primeros papers); 3) convertir las menciones de Mullens/VExUS ya
+    existentes en Siegman (VD-LRA postoperatoria, este mismo submenú) y en
+    FRA (Nefrología) en enlaces reales a la ficha nueva en vez de dejarlas
+    como prosa suelta (elegido). Este patrón de "auditar/planificar y
+    confirmar antes de construir" es el que replicar cuando se traigan
+    varios artículos relacionados a la vez en el futuro, en vez de
+    empezar a escribir contenido directamente.
+  - **Hallazgo clave de la auditoría**: Mullens et al. y el score VExUS ya
+    se citaban, con sus cifras clave (AUC 0,734/0,552; HR 3,69; +LR 6,37),
+    como evidencia de apoyo dentro de la síntesis propia de
+    `vd-lra-postoperatoria.html` (Siegman et al. 2026, Ficha IV
+    "Evidencia clínica en humanos" y Ficha VI "Implicaciones
+    perioperatorias") y en una sola frase de `fra.html` (Ficha
+    "Subfenotipos II") — sin su metodología completa, sin los 5
+    prototipos A-E, y sin nada de Rola et al. 2021 (100% contenido
+    nuevo). Esto confirmó la decisión de fusionar en una entrada y de
+    enlazar en vez de duplicar cifras que ya vivían en 2 sitios distintos
+    con riesgo real de desincronizarse.
+  - **Cuaderno de campo de 6 fichas**: Introducción — el riñón congestivo
+    (marco conceptual: el gradiente de perfusión real es la presión
+    arteriolar precapilar menos la venular postcapilar, no MAP−CVP sin
+    más; el experimento de Winton 1931), Mullens et al. 2009 (metodología
+    completa del PAC, Tablas 1-2, Figuras 1-3 con las barras de WRF por
+    categoría de PVC/CI/PAS/PCWP y las curvas ROC, mecanismos
+    experimentales desde los años 30, el ensayo ESCAPE), Fisiología del
+    Doppler venoso (por qué cambian las ondas hepática/portal/intrarrenal
+    con la congestión, con sus criterios exactos de anomalía leve/grave, y
+    las limitaciones/trampas de interpretación reconocidas por los propios
+    autores de Rola et al.), Desarrollo del score VExUS (los 5 prototipos
+    A-E comparados con la Figura 1 completa del artículo, por qué ganó el
+    sistema "C", Tabla de HR por sistema, rendimiento diagnóstico
+    completo), Aplicación clínica — 5 casos reales (cada uno con su propia
+    imagen Doppler real anotada, extraída del artículo, y su lección
+    concreta — desde una "colecistitis" que en realidad era congestión
+    hepática hasta un choque obstétrico donde un monitor de gasto cardíaco
+    continuo dio una lectura engañosa de hipovolemia), y Dónde más aparece
+    en la app (los 3 enlaces cruzados reales, ver abajo).
+  - **11 figuras reales extraídas** con `pdfimages -png` + conversión a
+    JPEG con Pillow (los 3 PDF tienen las figuras como imagen única
+    embebida por página, sin fragmentar — mismo caso que Signori/Siegman,
+    no hizo falta rasterizar+recortar): 2 de Mullens (Fig. 1 barras de WRF,
+    Fig. 2 curvas ROC — la Fig. 3 de contribución CI/PVC a la TFG se
+    describe en texto sin imagen, por ser de menor prioridad pedagógica),
+    2 de Beaubien-Souligny (Fig. 1, la tabla de grading + los 9 patrones
+    Doppler de referencia — pieza central del bloque; Fig. 5, ejemplo real
+    de dos pacientes grado 1 vs. grado 3 — la Fig. 2 de distribución de
+    grados por prototipo se dejó fuera por ser secundaria/estadística), y
+    7 de Rola (Fig. 1 presión a lo largo del sistema circulatorio, Fig.
+    2-6 una imagen Doppler real por cada uno de los 5 casos clínicos, Fig.
+    7 el diagrama del algoritmo de gradación completo). Bug propio
+    detectado y corregido antes de la verificación con Playwright: las 5
+    imágenes de los casos clínicos se habían extraído y copiado a
+    `js/modules/uci-papers/img/` pero nunca se llegaron a insertar como
+    `<img>` en el HTML de la Ficha V — solo quedaban en texto — corregido
+    insertando cada imagen dentro del `.micro-prof-body` de su caso
+    correspondiente.
+  - **14 preguntas de quiz** (`js/data/vexus-preguntas.js`,
+    `vexus-q001`-`q014`, 10 de opción múltiple + 4 de redactar — el
+    "estándar reducido" ya usado en este submenú, repartido esta vez entre
+    6 fichas de 3 fuentes distintas en vez de las ~3 fichas habituales de
+    un solo paper), con `triggerId: 'btn-vexus-repasar'` añadido al array
+    que ya exporta `uci-papers/index.js`. El banco combinado de toda la
+    app queda en <strong>1049 preguntas</strong> (1035 previas + 14).
+  - **Enlaces cruzados reales en las 2 direcciones**, generalizando el
+    mecanismo ya existente en vez de duplicar contenido:
+    - **Dentro del mismo submenú** (VExUS ↔ VD-LRA postoperatoria): nueva
+      clase `.paper-link`, deliberadamente **distinta** de `.tx-link` — el
+      listener global `.tx-link` de `nefrologia/index.js`
+      (`document.querySelectorAll('.tx-link')`, sin acotar a su propio
+      DOM) habría intentado procesar cualquier botón `.tx-link` con
+      `data-view="vdLra"`/`"vexus"` como si fueran claves de SU PROPIO
+      switcher (`nefroLevel`), claves inválidas que vacían todas sus
+      vistas — exactamente el mismo bug ya detectado y evitado con
+      `.especialidad-link` en la ronda anterior de fusión Nefrología↔Vías
+      Urinarias. `.paper-link` tiene su propio listener, registrado en
+      `uci-papers/index.js`, que opera sobre `uciLevel` (sus propias
+      claves: `shockSeptico`/`oxidoNitrico`/`vdLra`/`vexus`) sin colisión
+      posible con ningún otro listener global de la app.
+    - **Entre especialidades** (VExUS ↔ FRA/Nefrología, VExUS ↔
+      Cardiología/Fisiopatología UCI): el mecanismo `.especialidad-link`
+      +`irAFicha()` ya generalizado para Nefrología↔Fisiopatología UCI se
+      extiende aquí a una tercera especialidad — `uci-papers/index.js`
+      exporta ahora su propio `irAFicha(view, panel, tab)`, y el listener
+      de `home/index.js` reconoce `data-especialidad="uciPapers"` además
+      de `"nefrologia"`/`"fisioUci"`.
+    - `css/components.css` actualizado para que `.tx-link`,
+      `.especialidad-link` y `.paper-link` compartan la misma regla visual
+      en vez de triplicar el CSS.
+  - Verificado con Playwright: las 6 fichas abren/voltean sin error de
+    consola ni 404 real; las 6 imágenes visibles de entrada cargan
+    correctamente (`naturalWidth`&gt;0) y las 5 imágenes de los casos
+    clínicos, inicialmente con `loading="lazy"` dentro de un acordeón
+    cerrado (`naturalWidth`=0 hasta abrirlo — comportamiento esperado, no
+    un bug), cargan correctamente en cuanto se abre su `.micro-prof-item`;
+    los 6 saltos cruzados (2 `.paper-link` desde VD-LRA hacia VExUS, 1
+    `.especialidad-link` desde FRA hacia VExUS, y los 3 de vuelta desde la
+    Ficha VI de VExUS hacia FRA/VD-LRA/Cardiología) cambian de vista y
+    abren la ficha exacta de destino; el selector de temas del quiz
+    muestra las 6 fichas con sus recuentos reales (2/3/2/3/3/1=14) y un
+    recorrido completo de las 14 preguntas (incluidas las 4 de redactar)
+    no generó ninguna excepción JS; sin overflow horizontal a 390px.
 
 ### Fisiopatología UCI
 

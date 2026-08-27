@@ -103,11 +103,12 @@ export function init() {
     // Neutropenia Febril saltando al buscador de ajuste de fármacos por
     // función renal de Nefrología); 2) `data-especialidad` +
     // `data-view`/`data-panel`/`data-tab` genérico, para saltar a
-    // CUALQUIER ficha de Nefrología o Fisiopatología UCI desde otra
-    // especialidad (p. ej. Vías Urinarias ↔ FRA/ERC) — mismo patrón que
-    // `.tx-link` ya usa dentro de un solo módulo, aquí generalizado entre
-    // especialidades vía las `irAFicha()` que exponen nefrologia/index.js
-    // y fisio-uci/index.js.
+    // CUALQUIER ficha de Nefrología, Fisiopatología UCI o UCI/Papers
+    // Tuiter desde otra especialidad (p. ej. Vías Urinarias ↔ FRA/ERC, o
+    // FRA ↔ VExUS) — mismo patrón que `.tx-link` ya usa dentro de un solo
+    // módulo, aquí generalizado entre especialidades vía las `irAFicha()`
+    // que exponen nefrologia/index.js, fisio-uci/index.js y
+    // uci-papers/index.js.
     document.querySelectorAll('.especialidad-link').forEach(btn => {
         btn.addEventListener('click', () => {
             const { target, especialidad, view, panel, tab } = btn.dataset;
@@ -120,6 +121,9 @@ export function init() {
             } else if (especialidad === 'fisioUci') {
                 topLevel.show('fisioUci');
                 fisioUciApi?.irAFicha(view, panel, tab);
+            } else if (especialidad === 'uciPapers') {
+                topLevel.show('uciPapers');
+                uciPapersApi?.irAFicha(view, panel, tab);
             }
         });
     });
