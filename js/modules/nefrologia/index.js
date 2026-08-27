@@ -129,5 +129,15 @@ export function init() {
         // desde la Matriz de Combate MDR de Neutropenia Febril, cuyos
         // antibióticos ya están en esa misma tabla.
         irANefrotoxicidad: () => nefroLevel.show('nefrotoxicidad'),
+        // Versión genérica del mismo salto, usada por los botones
+        // `.especialidad-link[data-especialidad="nefrologia"]` de OTRAS
+        // especialidades (p. ej. Vías Urinarias en Fisiopatología UCI,
+        // saltando a una ficha concreta de FRA/ERC) — mismo patrón que
+        // `.tx-link` ya usa dentro de la propia Nefrología, aquí expuesto
+        // para poder llamarse desde fuera del módulo.
+        irAFicha: (view, panel, tab) => {
+            nefroLevel.show(view);
+            if (panel && tab) openCorkboardTopic(panel, tab);
+        },
     };
 }

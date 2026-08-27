@@ -98,15 +98,28 @@ export function init() {
     document.getElementById('btn-escalas-generales').addEventListener('click', () => topLevel.show('escalas'));
     document.querySelectorAll('.btn-volver-home').forEach(b => b.addEventListener('click', goHome));
 
-    // Enlaces cruzados entre especialidades (p. ej. la Matriz de Combate
-    // MDR de Neutropenia Febril saltando al buscador de ajuste de
-    // fármacos por función renal de Nefrología). Cambia de especialidad
-    // en el switcher raíz y delega en la API que expone nefrologia.init().
+    // Enlaces cruzados entre especialidades. Dos formas: 1) `data-target`
+    // fijo para atajos ya nombrados (p. ej. la Matriz de Combate MDR de
+    // Neutropenia Febril saltando al buscador de ajuste de fármacos por
+    // función renal de Nefrología); 2) `data-especialidad` +
+    // `data-view`/`data-panel`/`data-tab` genérico, para saltar a
+    // CUALQUIER ficha de Nefrología o Fisiopatología UCI desde otra
+    // especialidad (p. ej. Vías Urinarias ↔ FRA/ERC) — mismo patrón que
+    // `.tx-link` ya usa dentro de un solo módulo, aquí generalizado entre
+    // especialidades vía las `irAFicha()` que exponen nefrologia/index.js
+    // y fisio-uci/index.js.
     document.querySelectorAll('.especialidad-link').forEach(btn => {
         btn.addEventListener('click', () => {
-            if (btn.dataset.target === 'nefrotoxicidad') {
+            const { target, especialidad, view, panel, tab } = btn.dataset;
+            if (target === 'nefrotoxicidad') {
                 topLevel.show('nefrologia');
                 nefrologiaApi?.irANefrotoxicidad();
+            } else if (especialidad === 'nefrologia') {
+                topLevel.show('nefrologia');
+                nefrologiaApi?.irAFicha(view, panel, tab);
+            } else if (especialidad === 'fisioUci') {
+                topLevel.show('fisioUci');
+                fisioUciApi?.irAFicha(view, panel, tab);
             }
         });
     });

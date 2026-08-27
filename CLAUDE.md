@@ -1563,6 +1563,15 @@ por encima que sí diera cabida a todos.
       antibióticos ya están en la tabla de 585 fármacos de Nefrología —
       mismo patrón `.tx-link` reutilizado, pero cruzando el switcher raíz
       de especialidades en vez de solo el switcher interno de un módulo.
+      **Generalizado más adelante** (ver "Segundo informe: mapa de
+      solapamiento con Nefrología..." en el bloque Vías Urinarias de
+      Fisiopatología UCI): el listener de `.especialidad-link` ahora
+      también acepta `data-especialidad="nefrologia"|"fisioUci"` +
+      `data-view`/`data-panel`/`data-tab` genéricos (además del
+      `data-target="nefrotoxicidad"` original, que se mantiene sin
+      cambios), y `fisio-uci/index.js` expone el mismo `irAFicha()` que
+      `nefrologia/index.js` — el patrón ya no está limitado a
+      Nefrotoxicidad ni a una sola dirección.
     - **"Fuentes y Evidencia" solo documentaba Neutropenia Febril**: las
       otras 3 categorías de Hematología (Reconocimiento, Síndromes
       Urgentes, Trasplante) tienen su propia bibliografía al final de su
@@ -2731,6 +2740,99 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
       overlaps de texto en el gauge PVC/PCP, la curva TFG-creatinina, la
       calculadora y la línea de tiempo; sin overflow horizontal a nivel de
       página.
+  - **Segundo informe: mapa de solapamiento con Nefrología y 4 propuestas
+    de fusión**, publicado también como Artifact — a raíz del hallazgo del
+    informe anterior de que varias piezas de interactividad de Vías
+    Urinarias eran casi duplicadas de calculadoras ya existentes en FRA
+    (Nefrología). Comparó las 3 fichas de Vías Urinarias contra las 9 de
+    FRA + la Ficha de fisiología renal + ERC, marcando el solapamiento
+    como Alto/Parcial/Bajo por subtema, y propuso 4 opciones (de notas
+    cruzadas sueltas hasta fusión completa de módulos), recomendando
+    explícitamente **no fusionar contenido** — Fisiopatología UCI y
+    Nefrología son especialidades de nivel raíz con audiencia y propósito
+    distintos, y el proyecto ya tiene un precedente exacto para este
+    mismo problema (`tratamiento-ira-irc.html`, guía transversal sin
+    fuente propia dentro de Nefrología) — y en su lugar aplicar, en este
+    orden, las Opciones 1 y 2: rematar las notas cruzadas que faltaban, y
+    extender esa guía transversal para que también cruce a Fisiopatología
+    UCI. A petición explícita del usuario ("corrige en principio las 2
+    primeras opciones"), se implementaron ambas:
+    - **Opción 1 — 4 notas cruzadas nuevas** (sumadas a las 3 ya
+      existentes de la ronda anterior — autorregulación PAM, FE<sub>Na</sub>,
+      KDIGO): epidemiología (Ficha 2 ↔ FRA Ficha 2), biomarcadores (Ficha
+      3 ↔ FRA Ficha 8 "Predicción y prevención"), y estimación de la TFG
+      (Ficha 3, calculadora Cockcroft-Gault/CKD-EPI 2009 ↔ la calculadora
+      CKD-EPI 2021 sin raza de ERC) — las 3 filas "Alto" de la matriz de
+      solapamiento que aún no tenían nota. Las 7 notas cruzadas totales de
+      Vías Urinarias ganaron además un botón clicable (ver Opción 2).
+    - **Opción 2 — cross-link real entre especialidades, no solo texto**:
+      generalizado el patrón `.tx-link` (hasta ahora solo funcionaba
+      *dentro* de un módulo, vía el listener global de
+      `nefrologia/index.js`) para saltar *entre* especialidades.
+      `nefrologia/index.js` y `fisio-uci/index.js` exponen ahora, junto a
+      sus métodos ya existentes (`volverAlMapa`/`volverAlMenu`), un
+      `irAFicha(view, panel, tab)` genérico — misma firma en ambos,
+      simple `show(view)` del switcher de nivel medio propio +
+      `openCorkboardTopic(panel, tab)` si se dan ambos. `home/index.js`
+      generaliza su listener de `.especialidad-link` (antes solo sabía
+      saltar a Nefrotoxicidad vía `data-target="nefrotoxicidad"`, ver el
+      cross-link de la Matriz de Combate MDR) para leer también
+      `data-especialidad="nefrologia"|"fisioUci"` +
+      `data-view`/`data-panel`/`data-tab`, cambiar el switcher raíz
+      (`topLevel.show(...)`) y delegar en el `irAFicha` de la
+      especialidad destino — el mismo mecanismo sirve ahora para
+      cualquier salto entre Nefrología y Fisiopatología UCI, no solo para
+      Vías Urinarias. Las 7 notas cruzadas de Vías Urinarias (Ficha 1: 2;
+      Ficha 2: 2; Ficha 3: 3) ganaron un botón `.especialidad-link` real
+      apuntando a la ficha exacta de destino (FRA Ficha 1/2/5/8, ERC
+      Ficha 1, o la ficha "Regulación del filtrado" del cuaderno de
+      fisiología dentro de la nefrona). En la dirección contraria, la
+      guía transversal `tratamiento-ira-irc.html` de Nefrología ganó una
+      tarjeta nueva "🔗 ¿Vienes de Fisiopatología UCI?" con 3 botones a
+      las 3 fichas de Vías Urinarias.
+    - **Bug real encontrado y corregido antes de dar la tarea por
+      completada**: combinar `class="tx-link especialidad-link"` en los 3
+      botones de la tarjeta nueva (Nefrología → Vías Urinarias) habría
+      hecho que el listener `.tx-link` YA existente de `nefrologia/index.js`
+      (registrado con `document.querySelectorAll('.tx-link')`, sin acotar
+      a su propio DOM) también intentara procesarlos — con
+      `data-view="viasUrinarias"`, una clave que **no existe** en el
+      `nefroLevel` de Nefrología, `createViewSwitcher().show()` no lanza
+      error con una clave desconocida, simplemente pone `display:none` en
+      **todas** las vistas del switcher (ninguna coincide con la clave) —
+      corrompiendo silenciosamente el estado interno de Nefrología cada
+      vez que se usara uno de esos 3 botones (autocorregido después, eso
+      sí, porque `nefrologiaApi.volverAlMapa()` siempre fija `nefroLevel`
+      a `'kidney'` al reentrar a Nefrología desde Especialidades — pero
+      dependía de ese reset implícito en vez de no corromperse nunca).
+      Detectado por inspección del flujo antes de llegar a probarlo con
+      Playwright, no por el propio test. Solución: los 3 botones de vuelta
+      (Nefrología → Vías Urinarias) llevan **solo** `.especialidad-link`,
+      sin `.tx-link` — y, por coherencia y para no dejar la misma trampa
+      sembrada en la otra dirección, los 7 botones de ida (Vías Urinarias
+      → Nefrología) se simplificaron también a solo `.especialidad-link`
+      (antes combinaban ambas clases; era "seguro" en esa dirección
+      porque `fisio-uci/index.js` no tiene ningún listener global
+      equivalente a interferir, pero mantenía una asimetría innecesaria).
+      `css/components.css` actualizado para que `.tx-link` y
+      `.especialidad-link` compartan la misma regla visual
+      (`.tx-link, .especialidad-link { ... }`) en vez de duplicar el CSS
+      — bump de cache-busting a `?v=20260827` por este cambio.
+    - Verificado con Playwright: los 7 botones de ida (autorregulación
+      PAM → nefrona/fisio-regulacion, FE<sub>Na</sub> ×2 → FRA
+      Ficha 5, KDIGO → FRA Ficha 1, epidemiología → FRA Ficha 2,
+      biomarcadores → FRA Ficha 8, TFG → ERC Ficha 1) cambian el switcher
+      raíz a Nefrología y abren la ficha exacta de destino (`.active` en
+      el `.tab-content` correcto); los 3 botones de vuelta cambian el
+      switcher raíz a Fisiopatología UCI y abren la ficha de Vías
+      Urinarias correcta; y — la prueba específica del bug ya corregido —
+      tras usar un botón de vuelta y reentrar a Nefrología desde
+      Especialidades, el mapa del riñón se muestra con normalidad (sin
+      rastro de la corrupción de `nefroLevel` que sí se habría producido
+      con el diseño anterior). Sin overflow horizontal ni errores de
+      consola reales (solo el `favicon.ico` ya documentado como inocuo).
+      Las Opciones 3 (página de comparativa de fuentes) y 4 (fusión
+      completa, descartada) quedan pendientes de decisión del usuario.
 - **Tercer bloque: "Cardiología"** (`js/modules/fisio-uci/cardiologia.html`).
   Fuente: El libro azul. Bases fisiopatológicas de la medicina crítica.
   Sección I, Aparato Cardiovascular, capítulos 1-11 (165 páginas) — el

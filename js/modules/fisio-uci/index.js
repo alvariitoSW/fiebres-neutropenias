@@ -4,6 +4,7 @@
 // cuaderno de campo con sus temas — nunca se fabrica contenido clínico sin
 // una fuente real (ver CLAUDE.md).
 import { createViewSwitcher } from '../../core/navigation.js';
+import { openCorkboardTopic } from '../../core/corkboard.js';
 import * as hematologia from './hematologia.js';
 import * as viasUrinarias from './vias-urinarias.js';
 import * as cardiologia from './cardiologia.js';
@@ -51,5 +52,14 @@ export function init() {
     // uciPapers.volverAlMenu() y nefrologia.volverAlMapa().
     return {
         volverAlMenu: () => fisioUciLevel.show('menu'),
+        // Salto genérico desde OTRAS especialidades (p. ej. la guía
+        // transversal de tratamiento IRA/ERC de Nefrología, enlazando a
+        // una ficha concreta de Vías Urinarias) — mismo patrón que
+        // `irAFicha` expone en nefrologia/index.js, en la dirección
+        // contraria.
+        irAFicha: (view, panel, tab) => {
+            fisioUciLevel.show(view);
+            if (panel && tab) openCorkboardTopic(panel, tab);
+        },
     };
 }
