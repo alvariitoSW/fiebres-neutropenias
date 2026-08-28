@@ -1,15 +1,16 @@
 // Banco de preguntas de repaso — "Trasplante renal y enfermedades
 // glomerulares" (Nefrología, mapa del riñón). 8 preguntas por ficha ×
-// 4 fichas (mismo baseline mínimo ya usado al arrancar otros bloques de
+// 5 fichas (mismo baseline mínimo ya usado al arrancar otros bloques de
 // Nefrología). Fuentes: PNT-NEF-13 (Timoglobulina), PNT-NEF-16
 // (C. difficile), HUGCDN-A4I-PT-02 (Ciclofosfamida), HUGCDN-4AI-PT-03
-// (Rituximab) — protocolos internos del Servicio de Nefrología/Enfermería
-// del HUGCDN.
+// (Rituximab), PNT-NEF-07 (Infecciones por bacterias multirresistentes) —
+// protocolos internos del Servicio de Nefrología/Enfermería del HUGCDN.
 export const temasTrasplanteRenal = [
     { key: 'tr-timoglobulina', etiqueta: 'Timoglobulina (TMG)' },
     { key: 'tr-cdifficile', etiqueta: 'Infección por Clostridium difficile' },
     { key: 'tr-ciclofosfamida', etiqueta: 'Ciclofosfamida' },
     { key: 'tr-rituximab', etiqueta: 'Rituximab' },
+    { key: 'tr-multirresistentes', etiqueta: 'Infecciones por bacterias MR en TOS' },
 ];
 
 export const preguntasTrasplanteRenal = [
@@ -271,5 +272,70 @@ export const preguntasTrasplanteRenal = [
         tipo: 'redactar',
         enunciado: 'Explica la lógica fisiopatológica común que justifica usar rituximab tanto en la nefritis lúpica como en el rechazo humoral agudo del injerto renal, pese a ser 2 entidades clínicamente muy distintas.',
         respuestaModelo: 'Ambas entidades comparten un mecanismo patogénico central: la producción de anticuerpos (o autoanticuerpos) por linfocitos B es la que causa o perpetúa el daño renal. En la nefritis lúpica, son autoanticuerpos (como los anti-ADN de doble cadena) los que forman inmunocomplejos y activan el complemento en el glomérulo. En el rechazo humoral del injerto, son anticuerpos donante-específicos producidos por células B/plasmáticas los que atacan el endotelio del injerto. Al unirse específicamente a CD20 —presente en toda la línea B madura hasta la célula de memoria, pero no en la célula plasmática ya diferenciada— rituximab elimina la población de células B responsable de generar nuevos anticuerpos patogénicos, cortando la fuente de producción del anticuerpo dañino en ambos contextos, aunque el anticuerpo en sí sea completamente distinto en cada caso.',
+    },
+
+    // ---- Infecciones por bacterias multirresistentes en TOS ----
+    {
+        id: 'tr-q033',
+        tema: 'tr-multirresistentes',
+        enunciado: '¿Qué porcentaje aproximado de los trasplantados renales desarrolla un episodio infeccioso por bacterias multirresistentes (MR) en el postrasplante?',
+        opciones: ['~14%', '~1%', '~50%', '~80%'],
+        correcta: 0,
+        explicacion: 'Aproximadamente el 14% de los receptores de trasplante renal desarrolla un episodio infeccioso causado por bacterias MR en el período postrasplante.',
+    },
+    {
+        id: 'tr-q034',
+        tema: 'tr-multirresistentes',
+        enunciado: '¿Qué 6 patógenos representan el paradigma de patogenia, transmisión y resistencia antibiótica según el acrónimo ESKAPE?',
+        opciones: ['Enterococcus faecium, Staphylococcus aureus, Klebsiella pneumoniae, Acinetobacter baumannii, Pseudomonas aeruginosa, Enterobacter spp.', 'E. coli, S. epidermidis, K. oxytoca, A. lwoffii, P. mirabilis, Enterobacter cloacae', 'Solo bacterias Gram negativas: Klebsiella, Acinetobacter, Pseudomonas, Enterobacter y 2 más', 'Solo hongos multirresistentes'],
+        correcta: 0,
+        explicacion: 'ESKAPE: Enterococcus faecium, Staphylococcus aureus, Klebsiella pneumoniae, Acinetobacter baumannii, Pseudomonas aeruginosa y Enterobacter spp.',
+    },
+    {
+        id: 'tr-q035',
+        tema: 'tr-multirresistentes',
+        enunciado: '¿Qué es la "heterorresistencia", y para qué combinación patógeno-fármaco se ha descrito con mayor frecuencia?',
+        opciones: ['Presencia de poblaciones mixtas (sensibles y resistentes) en la misma muestra; descrita sobre todo para vancomicina en S. aureus', 'Resistencia simultánea a 3 clases distintas de antibióticos', 'Resistencia que solo aparece en cultivo pero no in vivo', 'Un sinónimo de pan-resistencia'],
+        correcta: 0,
+        explicacion: 'La heterorresistencia es la coexistencia de cepas sensibles y resistentes en una misma muestra clínica — descrita con mayor frecuencia para vancomicina en S. aureus, y también en E. faecium, K. pneumoniae, P. aeruginosa y A. baumannii.',
+    },
+    {
+        id: 'tr-q036',
+        tema: 'tr-multirresistentes',
+        enunciado: 'Para la bacteriemia por MRSA con CMI ≤1 mg/l para vancomicina, ¿cuál es el tratamiento de elección (grado A-I)?',
+        opciones: ['Vancomicina o daptomicina', 'Colistina en monoterapia', 'Tigeciclina en monoterapia', 'Fosfomicina oral'],
+        correcta: 0,
+        explicacion: 'Con CMI ≤1 mg/l para vancomicina, vancomicina o daptomicina son de elección (A-I); si la CMI es ≥1 mg/l, se recomienda daptomicina (B-I).',
+    },
+    {
+        id: 'tr-q037',
+        tema: 'tr-multirresistentes',
+        enunciado: 'Según la Tabla 2 del protocolo, ¿qué política de aislamiento se recomienda para E. coli productor de BLEA a diferencia de otras enterobacterias MR?',
+        opciones: ['Aislamiento de contacto sí, pero SIN habitación individual obligatoria ni cribado rutinario', 'Ninguna medida de aislamiento', 'Habitación individual obligatoria + cribado rutinario, igual que K. pneumoniae KPC', 'Descolonización sistemática con mupirocina'],
+        correcta: 0,
+        explicacion: 'A diferencia de K. pneumoniae KPC o de las enterobacterias AmpC (que sí requieren habitación aislada), el E. coli BLEA+ solo requiere aislamiento de contacto — es mucho menos transmisible entre pacientes.',
+    },
+    {
+        id: 'tr-q038',
+        tema: 'tr-multirresistentes',
+        enunciado: '¿Qué toxicidad característica obliga a retirar las estatinas durante el tratamiento con daptomicina?',
+        opciones: ['Toxicidad muscular (elevación de CPK), 7-10% a dosis de 6-8mg/kg/día', 'Hepatotoxicidad grave', 'Nefrotoxicidad directa', 'Prolongación del QT'],
+        correcta: 0,
+        explicacion: 'La daptomicina produce toxicidad sobre el músculo esquelético (elevación de CPK) en el 7-10% de los pacientes a dosis de 6-8mg/kg/día — se recomienda interrumpir las estatinas durante el tratamiento.',
+    },
+    {
+        id: 'tr-q039',
+        tema: 'tr-multirresistentes',
+        enunciado: 'En un receptor de TOS con poliquistosis renal y un quiste hepático infectado, ¿qué grupos de antibióticos alcanzan BUENA penetración en el quiste?',
+        opciones: ['Fluoroquinolonas, cotrimoxazol, metronidazol y clindamicina', 'β-lactámicos y aminoglucósidos', 'Solo los carbapenemes', 'Ningún antibiótico penetra en los quistes'],
+        correcta: 0,
+        explicacion: 'Fluoroquinolonas, cotrimoxazol, metronidazol y clindamicina alcanzan concentraciones óptimas en el quiste; β-lactámicos y aminoglucósidos tienen mala penetración, con riesgo de concentraciones subterapéuticas.',
+    },
+    {
+        id: 'tr-q040',
+        tema: 'tr-multirresistentes',
+        tipo: 'redactar',
+        enunciado: 'Un receptor de trasplante renal con antecedente de ITU de repetición desarrolla una peritonitis terciaria tras una cirugía abdominal, ya bajo antibióticos de amplio espectro. Explica por qué este escenario tiene mayor riesgo de estar causado por patógenos multirresistentes, y qué antibióticos de los citados en la ficha alcanzan concentraciones óptimas en líquido peritoneal.',
+        respuestaModelo: 'El escenario reúne varios factores de riesgo citados explícitamente en el protocolo: recibir ya antibióticos de amplio espectro selecciona la flora hacia cepas resistentes, y la propia cirugía abdominal con manipulación intestinal es un factor de riesgo reconocido de infección MR. La peritonitis terciaria en particular se describe como la evolución típica cuando la infección peritoneal ocurre en un paciente ya expuesto a antibióticos de amplio espectro, con mayor riesgo de patógenos Gram positivos y Gram negativos MR, e incluso Candida spp. como copatógeno. Según la ficha, imipenem, meropenem, daptomicina, linezolid y colistina alcanzan probablemente concentraciones óptimas en líquido peritoneal tras la administración sistémica, mientras que ertapenem y tigeciclina pueden necesitar un aumento de dosis por concentraciones peritoneales inadecuadas.',
     },
 ];

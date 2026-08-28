@@ -2106,11 +2106,97 @@ por encima que sí diera cabida a todos.
     DOM; el cross-link Vías Urinarias→ERC funciona; un recorrido completo
     del banco de quiz nuevo (32 preguntas, incluidas las 4 de redactar) no
     generó ninguna excepción JS; sin overflow horizontal a 390px.
+  - **3ª tanda de PNT (5 documentos IT-4AI-E)**: enviada con "vamos a
+    continuar con los siguientes archivos" — 5 instrucciones técnicas de
+    Enfermería (IT-4AI-E-19 estabilidad de medicamentos termolábiles,
+    IT-4AI-E-18 estabilidad de soluciones antisépticas, IT-4AI-E-15
+    canalización venosa periférica, IT-4AI-E-13 catéter venoso central de
+    acceso periférico/PICC, IT-4AI-E-12 inserción y cuidados de sonda
+    vesical). Mismo criterio de descarte ya aplicado a IT-NEF-31: son
+    técnica de enfermería/logística de conservación de fármacos, sin
+    contenido de decisión diagnóstica ni algoritmo terapéutico por
+    gravedad/diferencial. El usuario confirmó explícitamente ("pues los
+    descartamos") — los 5 se descartaron sin ningún cambio en el
+    repositorio.
+  - **4ª tanda de PNT (4 documentos)**, enviada con "seguimos con estos":
+    HUGCDN-RFH-4AI-PT-02 (Manejo del paciente sometido a terapia metabólica
+    con Lutecio-177) y HUGCDN-RFH-4AI-PT-01 (ídem con Iodo-131) —
+    documentos de Radiofísica Hospitalaria + Unidad 4AI, logística de
+    radioprotección (preparación de habitación, EPI, residuos, criterios de
+    alta por dosimetría) sin encaje en ninguna especialidad existente de la
+    app (ni siquiera son de autoría de Nefrología) — **descartados**, mismo
+    criterio de logística/procedimiento ya aplicado a los IT-4AI-E; PNT-NEF-06
+    (Diagnóstico diferencial de las poliurias) y PNT-NEF-07 (Infecciones por
+    bacterias multirresistentes en receptores de órgano sólido) — con
+    contenido clínico real, **incorporados**:
+    - **`fisio-hipernatremia` ampliada con PNT-NEF-06**: antes de escribir
+      nada se releyó la ficha completa para no duplicar el selector
+      interactivo `#agua-di-select` y el test de deprivación/copeptina ya
+      existentes (fuente: Nefrología al día) — el PNT aporta un
+      **protocolo hospitalario práctico** distinto y complementario, no
+      repetido: definición formal de poliuria (adultos &gt;3l/día o
+      &gt;50ml/kg/día; niños &gt;2l/día o &gt;100ml/kg/día), distinción
+      poliuria osmótica/no osmótica, tabla diferencial completa
+      (Osm-u/Osm-p/Na/ADH por Normal/Polidipsia 1ª/DIC/DIN), claves de
+      sospecha clínica, el **protocolo del test de deshidratación en 2
+      fases** paso a paso (criterios de interrupción a-d de la fase 1,
+      dosis de desmopresina de la fase 2, la excepción de saltar
+      directamente a fase 2, y cuándo medir ADH en plasma), y ampliación
+      etiológica (herencia autosómica dominante en la DIC familiar por
+      mutación del gen AVP-neurofisina II; rifampicina/foscarnet/contrastes
+      angiográficos añadidos a las causas de DIN adquirida). **Discrepancia
+      real entre fuentes, documentada con nota de fidelidad en vez de
+      "corregida" silenciosamente** (mismo criterio que el IFR de FRA o el
+      TAPSE de Cardiología): los cortes de la tabla de interpretación del
+      PNT (Normal &gt;750 mOsm/l, DIN &lt;300 para completa y parcial) no
+      coinciden exactamente con los ya citados en el selector interactivo
+      existente (Normal &gt;800, DIN 300-500) — 2 fuentes distintas
+      (artículo de Nefrología al día vs. protocolo interno), ambas
+      reproducidas tal cual.
+    - **5ª ficha del nodo "Trasplante renal y enfermedades glomerulares"
+      con PNT-NEF-07** ("Infecciones por bacterias MR en TOS"): mismo
+      criterio ya anotado — ampliar el nodo existente en vez de fragmentar
+      en uno nuevo, dado el volumen y la temática (inmunosupresión/
+      infección en trasplante renal) compartida con las 4 fichas ya
+      presentes. Contenido: factores de riesgo, heterorresistencia como
+      problema diagnóstico añadido, características de la cirugía renal
+      como fuente de infección, patógenos MR por categoría (MRSA con
+      recomendaciones graduadas A-I/B-II de cribado/descolonización/
+      tratamiento; EVR; enterobacterias BLEA/AmpC/carbapenemasas-KPC; P.
+      aeruginosa/no fermentadores), **Tabla 1** (patógenos × familias
+      antimicrobianas activas), **Tabla 2** (políticas de aislamiento/
+      habitación/cribado/descolonización por patógeno), **Tabla 3**
+      (tigeciclina/daptomicina/linezolid/fosfomicina/colistina —
+      interacciones, toxicidad, efectos adversos, información específica
+      en TOS), e infecciones MR difíciles de tratar (ITU recurrente,
+      quistes infectados en riñón nativo poliquístico, infección
+      intraabdominal/peritonitis terciaria) — todo en un nuevo
+      `micro-profiles`/`.data-table` fieles a la fuente, con las 3 tablas
+      anchas envueltas en `overflow-x:auto` tras detectar overflow
+      horizontal a 390px con Playwright (mismo patrón ya usado en Vías
+      Urinarias/Hematología para tablas de muchas columnas). Cross-link
+      interno nuevo hacia la Ficha II (C. difficile) — ambas tratan
+      infección en el receptor de TOS favorecida por la misma
+      inmunosupresión/hospitalización. 8 preguntas de quiz nuevas
+      (`tr-q033`-`q040`, 7 opción múltiple + 1 de redactar, mismo baseline
+      ya usado al arrancar el resto de fichas del nodo), llevando el banco
+      de "Trasplante renal y enfermedades glomerulares" a 40 preguntas.
+    - Verificado con Playwright: ambas fichas abren/voltean sin error de
+      consola ni 404 real; el contenido nuevo de `fisio-hipernatremia` (50
+      ml/kg, tabla ADH, "fase 1", "750", nota de fidelidad, foscarnet) y de
+      `tr-multirresistentes` (14%, ESKAPE, las 3 tablas, heterorresistencia,
+      colistina, peritonitis) se detecta correctamente en el DOM; el
+      cross-link interno a C. difficile funciona; el menú del quiz muestra
+      el bloque "Trasplante renal y enfermedades glomerulares (40)" con la
+      5ª ficha "Infecciones por bacterias MR en TOS (8)", y un recorrido
+      completo de sus 8 preguntas (incluida la de redactar) no generó
+      ninguna excepción JS; sin overflow horizontal a 390px tras envolver
+      las tablas anchas.
   - **Pendiente**: el usuario sigue mandando más PNT del Servicio en tandas
     — cuando lleguen más documentos de este mismo tema (trasplante renal/
     inmunosupresión), amplían el nodo ya creado en vez de fragmentar en
     nodos nuevos; si llegan de un tema distinto, aplicar el mismo método de
-    análisis-antes-de-construir ya usado en estas 2 tandas.
+    análisis-antes-de-construir ya usado en estas tandas.
 
 ### UCI / Papers Tuiter
 

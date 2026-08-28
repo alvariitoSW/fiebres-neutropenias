@@ -83,6 +83,24 @@
             </div>
         </div></div>
 
+        <div class="field-card" data-tab="tr-multirresistentes"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha V</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-blue)" stroke-width="1.6">
+                    <ellipse cx="30" cy="24" rx="9" ry="6" stroke-opacity="0.75"/>
+                    <ellipse cx="48" cy="34" rx="9" ry="6" stroke-opacity="0.5"/>
+                    <path d="M22,20 L18,15 M38,20 L42,15 M40,38 L36,44 M56,38 L60,44" stroke-width="1.2" stroke-opacity="0.6"/>
+                </svg>
+                <div class="field-name">Infecciones por<br>bacterias MR en TOS</div>
+                <div class="field-hook">"vancomicina, daptomicina, linezolid, colistina... ¿por qué en el trasplantado hay tan poca experiencia con estos fármacos?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Porque son de 2ª/3ª línea, de uso casi exclusivamente parenteral, con más efectos adversos y menos conocimiento de su farmacocinética — y el ~14% de los trasplantados renales desarrolla una infección por bacterias multirresistentes en el postrasplante.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
     </div>
     <p class="tap-hint">☝ toca una ficha para ver la pista, y de nuevo para abrir el bloque completo</p>
 
@@ -435,6 +453,127 @@
             <button class="tx-link" data-panel="panel-trasplante-renal-tabs" data-tab="tr-timoglobulina">🔗 Ver Timoglobulina (Ficha I) →</button>
         </div>
 
+        <!-- ===== FICHA V: MULTIRRESISTENTES ===== -->
+        <div id="tr-multirresistentes" class="tab-content">
+            <h3 style="color: var(--accent-blue);">Infecciones por bacterias multirresistentes en receptores de TOS</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: PNT-NEF-07. Diagnóstico y tratamiento de las infecciones por bacterias multirresistentes en receptores de órgano sólido. Servicio de Nefrología, HUGCDN.</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Las bacterias son la <strong>principal causa de infección tras el trasplante de órgano sólido (TOS)</strong>,
+                con un crecimiento progresivo de cepas <span class="hl-rojo">multirresistentes (MR)</span> — no
+                susceptibles a ≥1 agente activo en ≥3 categorías antimicrobianas — y <span class="hl-rojo">ampliamente
+                resistentes (AR)</span>. Los 6 patógenos <strong>ESKAPE</strong> (<em>Enterococcus faecium,
+                Staphylococcus aureus, Klebsiella pneumoniae, Acinetobacter baumannii, Pseudomonas aeruginosa</em> y
+                <em>Enterobacter</em> spp.) representan el paradigma de patogenia, transmisión y resistencia
+                antibiótica. Aproximadamente el <strong>14%</strong> de los trasplantados renales desarrolla un
+                episodio infeccioso por bacterias MR en el postrasplante — complicación asociada a peor supervivencia
+                del injerto y del paciente. La infección es la <strong>2ª causa de muerte</strong> en receptores de
+                trasplante renal, y la bacteriemia por patógenos MR tiene una tasa de mortalidad del 50% cuando cursa
+                con sepsis grave/shock séptico (~15% de las bacteriemias en TOS). El tratamiento antibiótico empírico
+                inadecuado aumenta la mortalidad — de ahí la importancia de conocer las tasas locales de resistencia.
+            </p>
+
+            <p class="section-label">Factores de riesgo y prevención</p>
+            <ul class="term-chips">
+                <li>Hospitalización prolongada, antibióticos de amplio espectro</li>
+                <li>Catéteres centrales y urinarios, nutrición parenteral</li>
+                <li>Intubación prolongada, necesidad de TRR</li>
+            </ul>
+            <dl class="kv-row">
+                <dt>Estrategias de prevención de la transmisión</dt>
+                <dd><strong>Verticales</strong>: dirigidas a un patógeno específico, requieren cribado microbiológico y consumen más recursos. <strong>Horizontales</strong>: se aplican universalmente a todos los patógenos por el mismo mecanismo (lavado de manos, baños con clorhexidina). En trasplantados, el riesgo de adquirir patógenos MR es mayor que en otros hospitalizados y probablemente se necesitan ambas estrategias — junto con programas de administración antibiótica multidisciplinar.</dd>
+            </dl>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧪 Heterorresistencia: un problema diagnóstico añadido</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">El aislamiento de la cepa responsable es obligatorio, más aún si se sospecha MR, para permitir su identificación y estudio de susceptibilidad (E-test, dilución en agar, microdilución). La heterorresistencia — presencia de poblaciones mixtas (cepas sensibles y resistentes) en una misma muestra clínica — se ha descrito especialmente para vancomicina en S. aureus, para vancomicina en E. faecium, para colistina y meropenem en K. pneumoniae productoras de carbapenemasas, para polimixina B en P. aeruginosa carbapenem-resistente y para colistina en A. baumannii. Sus consecuencias clínicas: bacteriemia más prolongada, mayor tasa de complicaciones y aparición de resistencia a rifampicina.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔪 Características de la cirugía e implicación en la infección</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La mayoría de los receptores de TOS requieren vías venosas centrales, cateterización urinaria, drenajes abdominales o ventilación mecánica — todas ellas fuentes de infección bacteriana, además del uso inevitable de antibióticos de amplio espectro. En el trasplante renal, el injerto se implanta en la fosa ilíaca (riñones nativos habitualmente no se retiran) y el uréter se implanta directamente a la vejiga; las alteraciones del flujo urinario por estenosis ureteral o RVU aumentan el riesgo de ITU, la complicación infecciosa más común postrasplante. El trasplante de donante en asistolia desarrolla función renal retrasada con más frecuencia, lo que a su vez aumenta la necesidad de diálisis y el riesgo de infección.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Bacterias Gram positivas</p>
+            <dl class="kv-row">
+                <dt>S. aureus meticilín-resistente (MRSA)</dt>
+                <dd>La fuente más frecuente de infección es la colonización nasal (20-30% de adultos sanos, 1,5-3% portadores persistentes de MRSA; puede ser mayor en receptores de TOS por el contacto sanitario permanente). El espectro incluye bacteriemia relacionada con catéter, infección de herida quirúrgica y neumonía. <strong>Recomendaciones</strong>: búsqueda pre-trasplante de portadores nasales y descolonización con mupirocina (B-II); considerar descolonización universal + baño diario con clorhexidina en UCI post-trasplante en zonas de alta prevalencia (A-I); vancomicina o daptomicina de elección para bacteriemia con CMI ≤1 mg/l para vancomicina (A-I); si CMI ≥1 mg/l, se recomienda daptomicina (B-I) o combinaciones con daptomicina si persiste la bacteriemia (B-II).</dd>
+                <dt>Enterococo resistente a vancomicina (EVR)</dt>
+                <dd>Espectro clínico en TOS: ITU, abscesos intraabdominales, bacteriemia y, raramente, endocarditis — la mayoría en pacientes previamente colonizados. No se recomienda cribado rutinario en zonas de baja/moderada prevalencia; sí vigilancia activa en brotes o alta prevalencia (B-III). Aislamiento de contacto en pacientes colonizados (B-II); no se recomienda descolonización (D-II). Tratamiento de bacteriemia: linezolid (o ampicilina si hay alergia a penicilinas, B-II); para infecciones monomicrobianas no bacteriémicas: quinupristina-dalfopristina o linezolid, o daptomicina si no hay afectación pulmonar (B-III). E. faecalis VR puede tratarse con ampicilina ± gentamicina; E. faecium VR es mucho más problemático (resistente a β-lactámicos en la mayoría de cepas).</dd>
+            </dl>
+
+            <p class="section-label" style="margin-top:16px;">Bacterias Gram negativas</p>
+            <dl class="kv-row">
+                <dt>Enterobacterias MR</dt>
+                <dd>Resistencia a cefalosporinas por BLEA (β-lactamasas de espectro ampliado, típicas de E. coli y K. pneumoniae) o AmpC cromosómica inducible (Citrobacter freundii, Morganella morganii). Fenotipo típico: resistencia a penicilinas/cefalosporinas, susceptibilidad a carbapenemes. El trasplante renal es factor de riesgo independiente de bacteriemia por E. coli/Klebsiella BLEA+; la mayoría de infecciones (70%) son ITU. Las enterobacterias productoras de carbapenemasas (KPC) han emergido como amenaza global — colistina, tigeciclina y fosfomicina son los agentes más eficaces in vitro. Aislamiento de contacto siempre en BLEA/KPC; no se recomienda vigilancia activa rutinaria para BLEA/AmpC, sí para brotes o K. pneumoniae KPC.</dd>
+                <dt>P. aeruginosa y otros no fermentadores</dt>
+                <dd>Patógeno nosocomial significativo en todo receptor de TOS, responsable de bacteriemia y neumonía postrasplante precoz — la frecuencia de aislamientos MR/AR/PR es mayor en TOS que en no trasplantados (50% de los aislamientos en torrente sanguíneo). Evitar el contacto entre pacientes y aislar a los que tienen P. aeruginosa/B. cepacia MR/AR. Tratamiento: β-lactámicos tiempo-dependientes en infusión continua/prolongada (piperacilina-tazobactam, ceftazidima, meropenem); aminoglucósidos/fluoroquinolonas (concentración-dependientes) en altas dosis una vez al día. En infección MR/AR: combinación de 2-3 clases distintas (β-lactámico + aminoglucósido ± fluoroquinolona) 10-14 días; colistina o β-lactámicos aerosolizados en casos difíciles.</dd>
+            </dl>
+
+            <p class="section-label" style="margin-top:16px;">🧪 Tabla 1. Patógenos y familias antimicrobianas activas (resumen)</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table">
+                <thead><tr><th>Patógeno</th><th>Familias con actividad</th></tr></thead>
+                <tbody>
+                    <tr><td>S. aureus</td><td>Glicopéptidos, lipopéptidos (daptomicina), oxazolidinonas (linezolid), glicilciclinas (tigeciclina), estreptograminas, fosfomicina, cefalosporinas anti-MRSA (ceftarolina)</td></tr>
+                    <tr><td>Enterococcus spp.</td><td>Glicopéptidos, lipopéptidos, oxazolidinonas, glicilciclinas, estreptograminas; carbapenemes/fluoroquinolonas solo en cepas sensibles</td></tr>
+                    <tr><td>Enterobacterias</td><td>Carbapenemes, cefalosporinas anti-MRSA (ceftarolina), polimixinas (colistina), fosfomicina, aminoglucósidos, penicilinas + inhibidor de β-lactamasas, monobactames (aztreonam)</td></tr>
+                    <tr><td>P. aeruginosa</td><td>Carbapenemes/cefalosporinas/penicilinas anti-pseudomona, fluoroquinolonas anti-pseudomona, polimixinas, aminoglucósidos, aztreonam, fosfomicina</td></tr>
+                </tbody>
+            </table>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">🛡️ Tabla 2. Políticas de control de infección por patógeno</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table">
+                <thead><tr><th></th><th>Aislamiento contacto</th><th>Habitación aislada</th><th>Cultivos screening</th><th>Descolonización</th></tr></thead>
+                <tbody>
+                    <tr><td>MRSA</td><td>Recomendado</td><td>Recomendado</td><td>Recomendado previo al Tx</td><td>Baños clorhexidina en UCI + mupirocina en colonizados</td></tr>
+                    <tr><td>EVR</td><td>Recomendado</td><td>Recomendado</td><td>Solo brotes/alta prevalencia</td><td>No recomendada</td></tr>
+                    <tr><td>E. coli BLEA+</td><td>Recomendado</td><td>No recomendado</td><td>No recomendado</td><td>No recomendada</td></tr>
+                    <tr><td>Enterobacterias AmpC/BLEA (no E. coli)</td><td>Recomendado</td><td>Recomendado</td><td>No recomendado</td><td>No recomendada</td></tr>
+                    <tr><td>K. pneumoniae KPC</td><td>Recomendado</td><td>Recomendado</td><td>Recomendado</td><td>No recomendada</td></tr>
+                    <tr><td>BGN no fermentadores MR/AR</td><td>Recomendado</td><td>Recomendado</td><td>Solo Tx pulmonar</td><td>No recomendada</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p style="font-size:0.78rem; color:var(--text-muted);">Limpieza ambiental recomendada en todos los casos salvo E. coli BLEA+ (solo durante brotes o si la infección es epidémica).</p>
+
+            <p class="section-label" style="margin-top:16px;">💊 Tabla 3. Antibióticos de 2ª/3ª línea — características</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table">
+                <thead><tr><th></th><th>Espectro MR</th><th>Toxicidad</th><th>Otros EA</th><th>En TOS</th></tr></thead>
+                <tbody>
+                    <tr><td>Tigeciclina</td><td>MRSA, EVR, enterobacterias MR, C. difficile — sin actividad frente a P. aeruginosa</td><td>Hepática rara; no renal</td><td>Náuseas (26%), vómitos (18%), pancreatitis, rash (Stevens-Johnson)</td><td>Aumenta la biodisponibilidad de la ciclosporina; mayor experiencia en enterobacterias productoras de carbapenemasas</td></tr>
+                    <tr><td>Daptomicina</td><td>MRSA, EVR</td><td>Hepática rara; no renal (menos nefrotóxica que el comparador en ensayos)</td><td>Toxicidad muscular 7-10% a 6-8mg/kg/d (retirar estatinas durante el tratamiento)</td><td>Sin interacciones relevantes con inmunosupresores</td></tr>
+                    <tr><td>Linezolid</td><td>MRSA, EVR, micobacterias, patógenos atípicos</td><td>No hepática ni renal directa (nefritis intersticial descrita, 1 caso en trasplante renal)</td><td>Trombopenia (4,7%), anemia, acidosis láctica, neuropatía periférica, síndrome serotoninérgico</td><td>Sin interacciones relevantes con inmunosupresores</td></tr>
+                    <tr><td>Fosfomicina</td><td>MRSA, EVR, enterobacterias BLEA, P. aeruginosa MR (sinergia con vancomicina/daptomicina/linezolid)</td><td>No hepática ni renal directa</td><td>Diarrea oral (10%), alta ingesta de sodio (IV) → HTA/edemas/ICC</td><td>Buena opción oral para ITU por MR; aclaramiento bacteriano bajo (31%) y alta recurrencia (54%) a 3 meses en trasplante renal</td></tr>
+                    <tr><td>Colistina / Polimixina B</td><td>Enterobacterias MR, BGN no fermentadores</td><td>Hipertransaminasemia ocasional; renal 0-54,5% según series, dependiente de la función renal basal</td><td>Parestesias, ataxia, alteraciones visuales, vértigo, confusión, convulsiones, bloqueo neuromuscular (parálisis respiratoria)</td><td>Toxicidad renal en ~1/3 de los receptores de TOS; mayor riesgo si se combina con aminoglucósidos</td></tr>
+                </tbody>
+            </table>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">🎯 Infecciones por gérmenes MR difíciles de tratar</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔁 Infección urinaria recurrente</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Definición: ≥3 episodios sintomáticos en 12 meses, o 2 episodios en 6 meses — problema común en el trasplante renal. Si es secundaria a RVU postrasplante, la corrección quirúrgica suele resolverla y prolonga la vida del injerto; la mayoría de las cistitis recurrentes y algunas ITU febriles recurrentes, sin embargo, cursan sin alteración anatómica y deben manejarse médicamente. La primera aproximación diagnóstica incluye estudios de imagen del área genitourinaria. Hay pocos datos sobre eficacia de la profilaxis antibiótica en ITU recurrente con patógenos MR, y ninguno sobre medidas no farmacológicas como el arándano. La profilaxis con nitrofurantoína a dosis bajas es eficaz pero debe usarse con cautela si FG &lt;60 ml/min (riesgo de toxicidad por niveles séricos elevados y menor concentración urinaria, con fracaso terapéutico).</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🫘 Quistes infectados (riñón nativo)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Puede ocurrir en trasplantados con poliquistosis renal de base (muchos tienen también quistes hepáticos). ~75% de los episodios causados por E. coli; ~70% se cura solo con antibióticos. El éxito depende de la penetración del fármaco en el quiste: fluoroquinolonas, cotrimoxazol, metronidazol y clindamicina alcanzan buena penetración; β-lactámicos y aminoglucósidos, mala penetración (riesgo de concentraciones subterapéuticas y más resistencias). Los quistes grandes, o infectados por patógenos MR agresivos como P. aeruginosa, pueden requerir drenaje quirúrgico o nefrectomía del riñón nativo.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩹 Infección intraabdominal y abscesos</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Complicación común tras trasplante de hígado, páncreas, multivisceral o intestinal (afecta al 22%), frecuentemente acompañada de infección del torrente sanguíneo. La peritonitis secundaria se cura tras reparación quirúrgica del foco + terapia antimicrobiana; muchos de estos pacientes ya reciben antibióticos de amplio espectro, por lo que las infecciones peritoneales con patógenos MR (Gram+ y Gram−, con Candida spp. como copatógeno frecuente) llevan a peritonitis terciaria, con deterioro de la capacidad de cicatrización. Imipenem, meropenem, daptomicina, linezolid y colistina alcanzan probablemente concentraciones óptimas en líquido peritoneal; ertapenem y tigeciclina pueden necesitar aumento de dosis. Fluconazol es de elección para la peritonitis por Candida spp.; equinocandinas como alternativa en Candida no-albicans.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">🔗 Dónde más aparece en la app</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">La infección por Clostridium difficile —también favorecida por la inmunosupresión, hospitalización y exposición antibiótica del receptor de TOS— se desarrolla en la Ficha II de este mismo bloque.</p>
+            <button class="tx-link" data-panel="panel-trasplante-renal-tabs" data-tab="tr-cdifficile">🔗 Ver Infección por C. difficile (Ficha II) →</button>
+        </div>
+
     </div>
 
     <div class="card" style="margin-top: 20px;">
@@ -444,5 +583,6 @@
             <li><span class="biblio-nota">PNT-NEF-16. Protocolo de tratamiento de la infección por Clostridium difficile (ICD). Servicio de Nefrología, HUGCDN. 28-05-2021, v2.0.</span></li>
             <li><span class="biblio-nota">HUGCDN-A4I-PT-02. Administración de Ciclofosfamida. Enfermería, Hospitalización 4AI, HUGCDN. 20-12-2024, v2.0.</span></li>
             <li><span class="biblio-nota">HUGCDN-4AI-PT-03. Administración de Rituximab. Enfermería, Hospitalización 4AI, HUGCDN. 20-12-2024, v2.1.</span></li>
+            <li><span class="biblio-nota">PNT-NEF-07. Diagnóstico y tratamiento de las infecciones por bacterias multirresistentes en receptores de órgano sólido. Servicio de Nefrología, HUGCDN. 28-05-2021, v2.0.</span></li>
         </ul>
     </div>
