@@ -2313,6 +2313,141 @@ tener contenido real en cuanto el usuario aportó el primer PDF.
     muestra las 6 fichas con sus recuentos reales (2/3/2/3/3/1=14) y un
     recorrido completo de las 14 preguntas (incluidas las 4 de redactar)
     no generó ninguna excepción JS; sin overflow horizontal a 390px.
+- **Quinto paper: "Guías PUMA de extubación traqueal"**
+  (`js/modules/uci-papers/extubacion-puma.html`). Fuente: Ellard L, Higgs A,
+  Cooper RM, Hagberg CA, Baker PA, Greif R, et al. Project for Universal
+  Management of Airways: guidelines for tracheal extubation. Anaesthesia.
+  2026. PDF completo subido a
+  `docs/ellard-2026-puma-guias-extubacion-traqueal.pdf`. Sexto botón del
+  submenú de papers (`#btn-paper-extub`), con `uciLevel` (en
+  `uci-papers/index.js`) ganando una quinta entrada (`extubacionPuma`).
+  **Antes de construir nada**, se hizo un mini-informe (a petición
+  explícita del usuario: "ahora haz un mini informe sobre como subir estos
+  papers a la parte de tuiter" — deliberadamente más ligero que el
+  plan+Artifact+`AskUserQuestion` completo de VExUS, sin publicar Artifact
+  ni pedir confirmación, porque ninguna decisión estructural era ambigua:
+  a diferencia de VExUS, este paper y el de citrato —ver más abajo— no
+  comparten fisiopatología entre sí, así que la recomendación de 2 entradas
+  separadas era evidente sin necesidad de `AskUserQuestion`) comprobando
+  primero, por `grep`, que no existía contenido previo de vía
+  aérea/extubación/laringoespasmo en ningún módulo de la app.
+  - **Cuaderno de campo de 7 fichas**
+    (`#extub-corkboard`/`#panel-extub-tabs`, mismo `core/corkboard.js` de
+    siempre — `extubacion-puma.js` es el primer módulo de UCI/Papers
+    Tuiter con calculadoras propias, siguiendo el patrón `calcXxx()`/
+    `init()` ya establecido en Nefrología/Cardiología, nunca usado antes en
+    este submenú): Introducción y evaluación del riesgo (10 recomendaciones
+    clave, Tabla 1 de precondiciones, Tabla 2 de factores de riesgo, las 4
+    preguntas que enlazan evaluación con estrategia), El algoritmo de
+    extubación (las 3 preguntas encadenadas del algoritmo real —Fig. 2— y
+    las 5 estrategias posibles, con un **simulador interactivo** que
+    reproduce su lógica esencial — 3 `<select>` que recalculan en vivo la
+    estrategia sugerida, reutilizando `.tfg-estado-ok/warn/danger`),
+    Extubación de secuencia protectora (análoga a la secuencia rápida de
+    intubación, Tabla de componentes de la Fig. 3), Catéteres de
+    intercambio de vía aérea y checklist (tasas reales de éxito 87%/92%,
+    Fig. 4 recreada como lista de 5 bloques), Secuencia de extubación
+    despierta (Fig. 5 recreada como tabla de 8 pasos, más el detalle de
+    posicionamiento/nivel de consciencia despierto-vs-profundo), y
+    Laringoespasmo (manejo inicial/refractario con un **selector
+    interactivo** de dosis reales de propofol/succinilcolina/rocuronio,
+    más los 2 avisos críticos de la guía sobre bradicardia y obstrucción
+    persistente), Complicaciones y conversión de vía aérea (EPPN, mordedura
+    del tubo, y la distinción conversión-vs-reemplazo).
+  - **Sin figuras extraídas como imagen**: las 6 figuras del artículo
+    (Fig. 1-6) son infografías de marca (Universal Airway Guidelines,
+    licencia CC-BY-NC-ND) con texto denso pensadas para imprimirse en A3 —
+    mismo criterio ya aplicado en el resto del proyecto a flujogramas/
+    tablas fácilmente tabulables: se recrearon íntegras como
+    `.data-table`/`kv-row`/listas ordenadas/selectores interactivos nativos
+    en vez de incrustarlas como imagen de baja legibilidad en móvil.
+  - **10 preguntas de opción múltiple + 4 de redactar**
+    (`js/data/extubacion-puma-preguntas.js`, `extub-q001`-`q014` — el
+    "estándar reducido" ya fijado para papers de este submenú desde
+    VD-LRA/VExUS), con `triggerId: 'btn-extub-repasar'` añadido al array
+    que ya exporta `uci-papers/index.js`. El banco combinado de toda la
+    app queda en <strong>1063 preguntas</strong> (1049 previas + 14).
+  - Bibliografía: una única entrada enlazando al PDF en `docs/`.
+- **Sexto paper: "Toxicidad sistémica por citrato en TRR continua"**
+  (`js/modules/uci-papers/citrato-trr.html`). Fuente: Redant S, Attou R,
+  Talpos MT, Honoré PM. Systemic Citrate Toxicity During Regional Citrate
+  Anticoagulation for Continuous Kidney Replacement Therapy. J Clin Med.
+  2026;15:6564. PDF completo subido a
+  `docs/redant-2026-toxicidad-citrato-trr.pdf`. Séptimo botón del submenú
+  de papers (`#btn-paper-citrato`), con `uciLevel` ganando una sexta
+  entrada (`citratoTrr`).
+  - **Hallazgo de la comprobación previa**: la ficha "Anticoagulación de la
+    TRR" del módulo TRR de Nefrología (`trr.html`, `trr-anticoagulacion`)
+    ya mencionaba el citrato como técnica de anticoagulación regional
+    estandarizada con su mecanismo básico de quelación del calcio, pero sin
+    desarrollar su principal complicación metabólica — exactamente el
+    contenido íntegro de este paper. Se añadió un cross-link real en
+    ambas direcciones (ver más abajo), sin duplicar ningún párrafo ya
+    escrito en `trr.html`.
+  - **Cuaderno de campo de 5 fichas**
+    (`#citrato-corkboard`/`#panel-citrato-tabs`, `citrato-trr.js` con su
+    propia calculadora, mismo patrón nuevo que estrenó el paper de
+    extubación en este submenú): Fisiología del citrato y su balance (el
+    cambio de paradigma central del artículo — la acumulación sistémica ya
+    no se entiende como fallo hepático aislado, sino como aporte de
+    citrato &gt; capacidad metabólica+extracorpórea combinada, con el
+    balance de la Fig. 1 recreado como `.data-table`), Factores de riesgo y
+    perfil bioquímico (shock circulatorio como determinante principal,
+    "sobrecarga de citrato" vs. acumulación verdadera, Tabla 2 del perfil
+    bioquímico completo), Diagnóstico y monitorización (con una
+    **calculadora interactiva del ratio T/iCa** —`calcRatioTiCa()`, calcio
+    total/calcio iónico, semáforo por el umbral &gt;2,5/&gt;3,0 reutilizando
+    `.tfg-estado-ok/warn/danger`, con el guard `.value === ''` ya
+    establecido como lección aprendida en las auditorías de FRA/ERC para no
+    tratar un campo vacío como 0—, Tabla 4 de parámetros de monitorización,
+    y el algoritmo diagnóstico de la Fig. 2 recreado como secuencia
+    `kv-row`), Manejo escalonado y controversias (los 8 pasos del algoritmo
+    de la Fig. 3, los hallazgos que apoyan discontinuar la RCA, y las 4
+    controversias actuales del artículo como acordeón `micro-prof-item`), y
+    Marco integrado y dónde más aparece (síntesis + el cross-link hacia
+    Nefrología).
+  - **Sin figuras extraídas como imagen**: las 5 figuras del artículo
+    (Fig. 1-5) son diagramas conceptuales generados con IA y validados por
+    los autores (declarado explícitamente en el propio artículo), no fotos
+    clínicas — mismo criterio que el resto del proyecto: recreadas como
+    `.data-table`/`kv-row`/calculadora nativos.
+  - **Cross-link real en ambas direcciones** (mismo mecanismo
+    `.especialidad-link`+`irAFicha()` ya generalizado a 3 especialidades):
+    un botón en `trr-anticoagulacion` (Nefrología) apunta a
+    `citrato-diagnostico` de este paper, y un botón en la Ficha V de este
+    paper (`citrato-conclusiones`) apunta de vuelta a
+    `trr-anticoagulacion` — verificado que ninguno de los dos usa `.tx-link`
+    (que colisionaría con el listener global de `nefrologia/index.js`,
+    mismo riesgo ya documentado y evitado en Vías Urinarias↔Nefrología).
+  - **10 preguntas de opción múltiple + 4 de redactar**
+    (`js/data/citrato-trr-preguntas.js`, `citrato-q001`-`q014`, mismo
+    estándar reducido), con `triggerId: 'btn-citrato-repasar'`. El banco
+    combinado de toda la app queda en <strong>1077 preguntas</strong>
+    (1063 previas + 14).
+  - Bibliografía: una única entrada enlazando al PDF en `docs/`.
+  - **Nueva convención de resaltado por color**: a petición explícita del
+    usuario ("con palabras resaltadas en diferentes colores para facilitar
+    el estudio"), se añadieron variantes de color al rotulador `.hl` ya
+    existente (`css/components.css`): `.hl-verde`/`.hl-rojo`/`.hl-azul`/
+    `.hl-purpura`, mismo trazo de "subrayador" que `.hl` pero reutilizando
+    los 5 acentos ya existentes de la paleta (nunca colores nuevos ajenos
+    al sistema de diseño) para codificar semánticamente el tipo de dato
+    resaltado — rojo para valores de riesgo/alarma, verde para
+    normal/seguro, azul para mecanismos/conceptos clave, púrpura para
+    definiciones. Usado extensamente en ambos papers nuevos (extubación y
+    citrato). Si se necesita en el futuro, es el patrón a reutilizar en vez
+    de introducir un nuevo esquema de resaltado.
+  - Verificado con Playwright ambos papers: las 12 fichas nuevas (7+5)
+    abren/voltean sin error de consola ni 404 real; la calculadora del
+    algoritmo de extubación devuelve las 5 estrategias correctas según la
+    combinación de respuestas; el selector de laringoespasmo cambia entre
+    manejo inicial/refractario; la calculadora T/iCa calcula correctamente
+    (2,60/0,85 = 3,06, estado danger) y se abstiene con campos vacíos sin
+    tratarlos como 0; los cross-links citrato↔TRR funcionan en ambas
+    direcciones; ambos bancos de quiz (14+14 preguntas, incluidas las 8 de
+    redactar) se recorren sin excepciones JS; sin overflow horizontal a
+    390px. Bump de cache-busting a `?v=20260827-3` por el cambio en
+    `components.css` (clases `.hl-*`).
 
 ### Fisiopatología UCI
 

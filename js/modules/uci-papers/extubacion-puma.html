@@ -1,0 +1,526 @@
+    <button class="back-btn btn-volver-uci-menu">← VOLVER</button>
+    <div class="diag-header">
+        <h2 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">Guías PUMA de extubación traqueal</h2>
+        <p>Guideline · Ellard L, et al. Project for Universal Management of Airways. Anaesthesia. 2026</p>
+    </div>
+
+    <button class="accordion-btn nav-btn" id="btn-extub-repasar" style="border-left: 4px solid var(--accent-purple);">
+        <span>🎯 Repasar (preguntas de repaso)</span>
+        <span style="font-size: 0.8rem; color: var(--accent-purple);">[ EMPEZAR → ]</span>
+    </button>
+
+    <p class="section-label">Elige un bloque</p>
+    <div class="corkboard" id="extub-corkboard">
+
+        <div class="field-card" data-tab="extub-intro"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha I</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-purple)" stroke-width="1.6">
+                    <rect x="30" y="8" width="20" height="34" rx="8" stroke-opacity="0.75"/>
+                    <line x1="40" y1="42" x2="40" y2="50" stroke-width="1.4"/>
+                    <path d="M32,50 L48,50" stroke-width="1.6"/>
+                    <circle cx="40" cy="18" r="3" fill="var(--accent-purple)" stroke="none" opacity="0.5"/>
+                </svg>
+                <div class="field-name">Introducción y<br>evaluación del riesgo</div>
+                <div class="field-hook">"la extubación adopta las mismas mejoras que la intubación... ¿por qué sus complicaciones no han bajado igual?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Porque la extubación exige el mismo nivel de evaluación, estrategia, preparación y vigilancia que la intubación — y durante 25 años se le ha dado mucho menos. Casi un tercio de los eventos adversos graves de vía aérea ocurren en la extubación.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="extub-algoritmo"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha II</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-blue)" stroke-width="1.6">
+                    <rect x="34" y="6" width="12" height="8" rx="2" stroke-opacity="0.75"/>
+                    <path d="M40,14 L40,20 M40,20 L26,28 M40,20 L54,28" stroke-width="1.3"/>
+                    <rect x="18" y="28" width="16" height="8" rx="2" stroke-opacity="0.65"/>
+                    <rect x="46" y="28" width="16" height="8" rx="2" stroke-opacity="0.65"/>
+                    <path d="M26,36 L26,44 M54,36 L54,44" stroke-width="1.1" stroke-dasharray="1.5 1.5"/>
+                </svg>
+                <div class="field-name">El algoritmo<br>de extubación</div>
+                <div class="field-hook">"3 preguntas de sí/no... ¿pueden decidir entre 5 estrategias distintas de extubación?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Sí — riesgo de reintubación difícil, riesgo de que mascarilla Y dispositivo supraglótico estén "en riesgo", y si diferir reduce el riesgo. El resultado: manejo discrecional, extubación despierta, sobre catéter de intercambio, traqueostomía, o diferir.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="extub-secuencia-protectora"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha III</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-yellow)" stroke-width="1.6">
+                    <path d="M40,10 C26,10 20,22 20,30 C20,40 30,46 40,46 C50,46 60,40 60,30 C60,22 54,10 40,10 Z" stroke-opacity="0.7"/>
+                    <path d="M40,20 L40,36 M32,28 L48,28" stroke-width="1.3" stroke-opacity="0.6"/>
+                </svg>
+                <div class="field-name">Extubación de<br>secuencia protectora</div>
+                <div class="field-hook">"análoga a la inducción de secuencia rápida... ¿pero para el otro extremo del manejo de la vía aérea?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Exactamente: un conjunto de intervenciones (aspiración, tono muscular, posición, nivel de consciencia, insuflación pulmonar sostenida) para pacientes "en riesgo" de aspiración pulmonar durante la extubación.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="extub-catwe-checklist"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha IV</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-green)" stroke-width="1.6">
+                    <line x1="20" y1="28" x2="60" y2="28" stroke-width="2.2" stroke-opacity="0.75"/>
+                    <line x1="20" y1="24" x2="20" y2="32" stroke-width="1.4"/>
+                    <line x1="60" y1="24" x2="60" y2="32" stroke-width="1.4"/>
+                    <rect x="14" y="10" width="14" height="10" rx="2" stroke-opacity="0.5"/>
+                    <path d="M17,15 L19,17 L23,13" stroke-width="1.3"/>
+                </svg>
+                <div class="field-name">Catéteres de intercambio<br>y checklist</div>
+                <div class="field-hook">"87% vs. 14% de éxito al primer intento... ¿la diferencia de un solo dispositivo?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">El catéter de intercambio de vía aérea (AEC): una guía fina que se deja en la tráquea tras retirar el tubo, con tasas de reintubación exitosa del 92% en manos entrenadas.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="extub-secuencia-despierta"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha V</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-red)" stroke-width="1.6">
+                    <circle cx="40" cy="20" r="10" stroke-opacity="0.75"/>
+                    <path d="M34,18 Q37,15 40,18 M40,18 Q43,15 46,18" stroke-width="1.2"/>
+                    <path d="M24,44 Q40,32 56,44" stroke-width="1.4" stroke-opacity="0.6"/>
+                </svg>
+                <div class="field-name">Secuencia de<br>extubación despierta</div>
+                <div class="field-hook">"despierta o profunda... ¿por qué el punto intermedio es el más peligroso?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Los planos intermedios de consciencia disparan tos, laringoespasmo y broncoespasmo — extubar en un extremo (despierto obedeciendo órdenes, o profundamente anestesiado) evita esa ventana de máximo riesgo.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="extub-laringoespasmo"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha VI</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-blue)" stroke-width="1.6">
+                    <path d="M40,8 L46,24 L62,24 L49,34 L54,50 L40,40 L26,50 L31,34 L18,24 L34,24 Z" stroke-opacity="0.75"/>
+                </svg>
+                <div class="field-name">Laringoespasmo</div>
+                <div class="field-hook">"maniobra de Larson, propofol a dosis bajas... ¿y si no cede?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Manejo escalonado en 2 fases: inicial (retirar el desencadenante, O₂ al 100%, CPAP, maniobra de Larson, propofol a dosis bajas) y refractario (propofol a dosis de inducción + succinilcolina o rocuronio).</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="extub-complicaciones"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha VII</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-purple)" stroke-width="1.6">
+                    <rect x="18" y="22" width="44" height="14" rx="7" stroke-opacity="0.7"/>
+                    <path d="M30,22 L30,36 M50,22 L50,36" stroke-width="1.2" stroke-dasharray="2 2"/>
+                    <path d="M60,10 L66,16 M66,10 L60,16" stroke-width="1.6"/>
+                </svg>
+                <div class="field-name">Complicaciones y<br>conversión de vía aérea</div>
+                <div class="field-hook">"morder el tubo, edema pulmonar por presión negativa... ¿y cuándo conviertes en vez de reemplazar?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">La conversión (sustituir un lifeline por otro manteniendo siempre una guía que asegure la ventilación) es más segura que el reemplazo (interrumpir la ventilación) cuando el manejo de la vía aérea se considera "en riesgo".</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+    </div>
+    <p class="tap-hint">☝ toca una ficha para ver la pista, y de nuevo para abrir el bloque completo</p>
+
+    <div class="card" id="panel-extub-tabs" style="display:none;">
+
+        <!-- ===== FICHA I: INTRODUCCIÓN Y EVALUACIÓN DEL RIESGO ===== -->
+        <div id="extub-intro" class="tab-content">
+            <h3 style="color: var(--accent-purple);">Introducción y evaluación del riesgo</h3>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Las guías <strong>PUMA</strong> (Project for Universal Management of Airways) son un proyecto
+                internacional y multidisciplinar que ya había producido guías de referencia para el manejo de la
+                vía aérea difícil. Esta entrega se centra específicamente en la <strong>extubación traqueal</strong>,
+                pero sus principios se extienden a toda forma de interrupción del soporte de vía aérea: retirada de
+                un dispositivo supraglótico (SGA), cese del soporte con mascarilla, retirada de traqueostomía, y
+                conversión entre lifelines de vía aérea o hacia/desde una vía aérea de cuello.
+            </p>
+            <div class="result-box">
+                <div style="font-size: 0.85rem; line-height: 1.6;">
+                    Los eventos adversos asociados a la extubación representan aproximadamente
+                    <span class="hl-rojo">un tercio</span> de los resultados graves documentados en el 4º Proyecto
+                    de Auditoría Nacional (NAP4) del Royal College of Anaesthetists del Reino Unido, y tienen
+                    <strong>más probabilidad de causar lesión cerebral y muerte</strong> que los eventos ocurridos
+                    durante la intubación. Muchas complicaciones de la extubación resultan de una
+                    <span class="hl-azul">planificación inadecuada</span>. Pese a ello, las mejoras logradas en los
+                    resultados de la intubación traqueal en los últimos 25 años no se han visto reflejadas en los
+                    datos de eventos adversos de la extubación.
+                </div>
+            </div>
+
+            <p class="section-label">10 recomendaciones clave de la guía</p>
+            <ol style="font-size: 0.83rem; line-height: 1.7; padding-left: 20px;">
+                <li>La extubación traqueal exige un nivel de evaluación, estrategia, preparación y vigilancia <strong>equivalente</strong> al de la intubación traqueal.</li>
+                <li>La evaluación del riesgo debe considerar el <strong>riesgo basal</strong> del paciente y cualquier <strong>riesgo alterado</strong> (cambios de paciente, equipo o situación desde la intubación).</li>
+                <li>Si el "éxito de la vía aérea" con cualquier lifeline superior tras la extubación no se considera "rápido y fiable", ese lifeline —y por tanto la extubación— debe designarse <span class="hl-rojo">"en riesgo"</span>.</li>
+                <li>El abordaje de la extubación debe proporcionar un margen de seguridad adecuado frente a la hipoxemia.</li>
+                <li>La extubación traqueal planificada es <strong>siempre electiva</strong>. Debe diferirse siempre que esto reduzca significativamente el riesgo.</li>
+                <li>La estrategia de extubación debe combinar un enfoque previsto con un enfoque de rescate de vía aérea.</li>
+                <li>Diferir la extubación puede dar tiempo para optimizar factores de riesgo de paciente, equipo y situación. Sin embargo, si esto no reduce el riesgo, diferir no está recomendado salvo que se espere que sí lo haga.</li>
+                <li>Cuando se usan bloqueantes neuromusculares, se recomienda la <strong>monitorización neuromuscular cuantitativa</strong> para confirmar la recuperación de la función basal antes de extubar.</li>
+                <li>Se recomienda la extubación despierta sobre un catéter de intercambio de vía aérea si se necesita un margen de seguridad adecuado frente a la hipoxemia.</li>
+                <li>Cuando hay un tubo traqueal o SGA in situ y se requiere sustitución de lifelines, se prefiere la <strong>conversión</strong> de vía aérea sobre los procedimientos de reemplazo, particularmente cuando el margen de seguridad frente a la hipoxemia está reducido.</li>
+            </ol>
+
+            <p class="section-label" style="margin-top:16px;">🧪 Tabla 1 — Precondiciones para plantear la extubación traqueal</p>
+            <table class="data-table">
+                <thead><tr><th>Dominio</th><th>Precondiciones</th></tr></thead>
+                <tbody>
+                    <tr><td>Respiratorio</td><td>SpO₂ adecuada con FiO₂/PEEP/soporte de presión aceptables; ventilación adecuada para CO₂ arterial apropiado; aspirado traqueal mínimo</td></tr>
+                    <tr><td>Hemodinámico</td><td>Estabilidad cardiovascular; sin sangrado activo mayor</td></tr>
+                    <tr><td>Neurológico</td><td>Estado de consciencia adecuado; recuperación de la función neuromuscular basal; control del dolor sin restricción a la ventilación ni sedación excesiva</td></tr>
+                    <tr><td>Metabólico</td><td>Temperatura corporal adecuada; equilibrio ácido-base adecuado</td></tr>
+                    <tr><td>Quirúrgico</td><td>Sin reintubación inminente prevista (quirófano, radiología, traslado); sin cierre diferido de cavidades mayores (abdomen abierto, tórax abierto)</td></tr>
+                    <tr><td>Recursos</td><td>Equipo y factores de la situación adecuados para extubar, observar y restaurar la vía aérea con seguridad si es necesario</td></tr>
+                    <tr><td>Trayectoria y estabilidad</td><td>Sin deterioro significativo previsto en ninguno de los dominios anteriores en las próximas 24h (p. ej. sepsis evolutiva)</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Enlazando la evaluación con la estrategia</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Incluso la evaluación del riesgo más completa tiene un valor mínimo si los riesgos identificados no
+                se reflejan en la estrategia de vía aérea. La falta de una estrategia que aborde adecuadamente los
+                riesgos identificados es un contribuyente reconocido de mortalidad prevenible y morbilidad grave
+                durante el manejo de la vía aérea. Cuatro preguntas guían el enlace entre evaluación y estrategia:
+            </p>
+            <dl class="kv-row">
+                <dt>1. ¿Es apropiado plantear la extubación traqueal?</dt>
+                <dd>Requiere que se cumplan las precondiciones de la Tabla 1.</dd>
+                <dt>2. ¿La extubación traqueal está "en riesgo"?</dt>
+                <dd>Implica considerar el riesgo de hipoxemia, aspiración pulmonar, daño por estimulación de vía aérea, y cualquier otro riesgo identificado — evaluando tanto el riesgo basal del paciente como cualquier cambio desde la intubación.</dd>
+                <dt>3. ¿Diferir la extubación traqueal reducirá el riesgo?</dt>
+                <dd>La extubación planificada es siempre electiva, maximizando la oportunidad de controlar el momento, el entorno y los recursos disponibles.</dd>
+                <dt>4. ¿Cómo se puede proporcionar un margen de seguridad adecuado frente a la hipoxemia tras la extubación?</dt>
+                <dd>El riesgo de hipoxemia depende de la probabilidad de que se requiera reintubación, la probabilidad de que esta sea difícil, y el tiempo de apnea segura anticipado.</dd>
+            </dl>
+
+            <p class="section-label" style="margin-top:16px;">🧪 Tabla 2 — Factores del paciente a evaluar antes de la extubación</p>
+            <table class="data-table">
+                <thead><tr><th>Categoría</th><th>Factores</th></tr></thead>
+                <tbody>
+                    <tr><td>Historia relacionada con la vía aérea</td><td>Evaluación original del riesgo (antes de la intubación); dificultades encontradas en la propia intubación; posibles cambios de riesgo desde entonces (edema evolutivo, sangrado, infección residual)</td></tr>
+                    <tr><td>Evaluación externa/de supraglotis/glotis-subglotis</td><td>Hinchazón/trauma/sangrado; retirada confirmada de tapones faríngeos; videolaringoscopia si procede; test de fuga del neumotaponamiento; ecografía de la anchura de la columna aérea laríngea</td></tr>
+                    <tr><td>Evaluación de vía aérea inferior</td><td>Endoscopia flexible para detectar secreciones/sangre/trauma; profundidad del tubo si se plantea catéter de intercambio; Rx de tórax si hay sospecha de aspiración</td></tr>
+                    <tr><td>Factores respiratorios no relacionados con la vía aérea</td><td>Enfermedad respiratoria preexistente o adquirida; necesidad de aspiración traqueal continua por secreciones/hemoptisis; trauma o restricción torácica</td></tr>
+                    <tr><td>Factores neurológicos y de comportamiento</td><td>Déficits neuromusculares nuevos o preexistentes; estado de consciencia anticipado tras cese de sedación; nivel de cooperación anticipado; probabilidad de control adecuado del dolor</td></tr>
+                    <tr><td>Trayectoria y estabilidad</td><td>Deterioro significativo anticipado en cualquiera de los dominios anteriores en las próximas 24h</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.83rem; line-height: 1.5; color: var(--text-muted);">Un dato importante: incluso si el "éxito de la vía aérea" (ventilación alveolar + SpO₂ adecuada) parece alcanzable con cada lifeline, esto no implica ausencia de dificultad — solo que el operador confía en superarla con facilidad. La reintubación puede ser necesaria hasta en el <strong>20%</strong> de los pacientes que han sido extubados en UCI.</p>
+        </div>
+
+        <!-- ===== FICHA II: EL ALGORITMO DE EXTUBACIÓN ===== -->
+        <div id="extub-algoritmo" class="tab-content">
+            <h3 style="color: var(--accent-blue);">El algoritmo de extubación</h3>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El algoritmo traduce la evaluación del riesgo en una <strong>estrategia concreta</strong>. Se basa en
+                3 preguntas encadenadas, evaluadas para <strong>cada lifeline</strong> de vía aérea (mascarilla
+                facial y dispositivo supraglótico, considerados juntos como "ambos en riesgo" o no):
+            </p>
+            <dl class="kv-row">
+                <dt>Pregunta 1 — ¿Riesgo de que la reintubación sea difícil?</dt>
+                <dd>¿La intubación original indicó que la reintubación debería ser "rápida y fiable"? ¿Podría esa capacidad haberse visto comprometida desde entonces? ¿Existe un riesgo significativamente aumentado de necesitar manejo de vía aérea time-crítico tras la extubación?</dd>
+                <dt>Pregunta 2 — ¿Mascarilla facial Y dispositivo supraglótico "en riesgo"?</dt>
+                <dd>Se evalúa en cada rama del algoritmo — si ambos lifelines superiores están comprometidos, el riesgo de hipoxemia aumenta sustancialmente.</dd>
+                <dt>Pregunta 3 — ¿Diferir la extubación reduciría significativamente el riesgo?</dt>
+                <dd>Se pregunta en cada punto de decisión relevante, antes de escalar hacia estrategias más conservadoras.</dd>
+            </dl>
+
+            <p class="section-label" style="margin-top:16px;">🧮 Simulador del algoritmo</p>
+            <p style="font-size: 0.83rem; color: var(--text-muted);">Marca las respuestas según tu evaluación del paciente — el resultado reproduce la lógica del algoritmo original (Fig. 2 de la guía), simplificada a texto para uso a pie de cama.</p>
+            <div class="form-group">
+                <label>¿Existe riesgo significativo de que la reintubación sea difícil o time-crítica?</label>
+                <select id="extub-alg-q1"><option value="no">No</option><option value="si">Sí</option></select>
+            </div>
+            <div class="form-group">
+                <label>¿Mascarilla facial Y dispositivo supraglótico están AMBOS "en riesgo" (no rápidos/fiables)?</label>
+                <select id="extub-alg-q2"><option value="no">No</option><option value="si">Sí</option></select>
+            </div>
+            <div class="form-group">
+                <label>¿Diferir la extubación reduciría significativamente el riesgo?</label>
+                <select id="extub-alg-q3"><option value="no">No</option><option value="si">Sí</option></select>
+            </div>
+            <div id="extub-alg-resultado" class="tfg-estado tfg-estado-ok">Completa las 3 preguntas para ver la estrategia sugerida.</div>
+
+            <p class="section-label" style="margin-top:16px;">Las 5 estrategias posibles</p>
+            <table class="data-table">
+                <thead><tr><th>Estrategia</th><th>Cuándo</th></tr></thead>
+                <tbody>
+                    <tr><td><strong class="hl-verde">Manejo discrecional</strong></td><td>Sin riesgo relevante de reintubación difícil, o mascarilla/SGA no están ambos "en riesgo" — el operador elige libremente entre las opciones habituales</td></tr>
+                    <tr><td><strong class="hl-azul">Extubación despierta</strong></td><td>Riesgo aumentado, pero sin necesitar el margen de seguridad extra de un catéter de intercambio</td></tr>
+                    <tr><td><strong class="hl-azul">Extubación despierta sobre catéter de intercambio</strong></td><td>Riesgo de hipoxemia significativo tras evaluar mascarilla y SGA como "en riesgo" — máximo margen de seguridad sin renunciar al lifeline traqueal</td></tr>
+                    <tr><td><strong class="hl-rojo">Traqueostomía</strong></td><td>Riesgo de vía aérea time-crítica persistente incluso tras las opciones anteriores, y no se espera mejoría diferible</td></tr>
+                    <tr><td><strong class="hl-rojo">Diferir extubación</strong></td><td>Cuando diferir reduciría significativamente el riesgo — se repite toda la evaluación antes de reconsiderar</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.83rem; line-height: 1.5; color: var(--text-muted); margin-top: 8px;">El algoritmo original está pensado como herramienta de implementación en tiempo real — existe una versión interactiva oficial en la app PUMA. Este simulador reproduce su lógica esencial para el estudio, no sustituye la consulta del algoritmo completo ni el juicio clínico individualizado.</p>
+        </div>
+
+        <!-- ===== FICHA III: EXTUBACIÓN DE SECUENCIA PROTECTORA ===== -->
+        <div id="extub-secuencia-protectora" class="tab-content">
+            <h3 style="color: var(--accent-yellow);">Extubación de secuencia protectora</h3>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Análoga a los componentes de la inducción de secuencia rápida, la <strong>extubación de secuencia
+                protectora</strong> es el conjunto de intervenciones recomendadas en pacientes designados
+                <span class="hl-rojo">"en riesgo" de aspiración pulmonar</span> durante la extubación. Muchas de
+                estas medidas son buena práctica para cualquier extubación, pero son particularmente importantes
+                para reducir la incidencia y gravedad del daño relacionado con la aspiración.
+            </p>
+
+            <p class="section-label">🧪 Componentes de la secuencia protectora (Fig. 3)</p>
+            <table class="data-table">
+                <thead><tr><th>Componente</th><th>Medidas</th></tr></thead>
+                <tbody>
+                    <tr><td>Tiempo de apnea segura</td><td>Reoxigenación óptima hasta EtO₂ ≥ 85%</td></tr>
+                    <tr><td>Aspiración</td><td>Aspirar estómago con sonda gástrica*; aspirar faringe antes de extubar; aspirador de calibre ancho disponible*; aspiración encendida al alcance del operador; evitar aspiración faríngea profunda tras extubar</td></tr>
+                    <tr><td>Tono muscular</td><td>Bloque de mordida*; confirmar recuperación de la función neuromuscular con monitorización cuantitativa</td></tr>
+                    <tr><td>Posición</td><td>Evitar extubar en supino; cama capaz de adoptar Trendelenburg rápidamente†</td></tr>
+                    <tr><td>Nivel de consciencia</td><td>Despierto (obedeciendo órdenes)</td></tr>
+                    <tr><td>Insuflación pulmonar sostenida</td><td>Entregar respiración a capacidad vital inmediatamente antes de extubar; mantener presión positiva mientras se deshincha el neumotaponamiento y se retira el tubo†</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">*Opcional si no se requiere. †Sugerido, salvo elementos marcados. El resto son recomendaciones de categoría 1 (AHA).</p>
+
+            <p class="section-label" style="margin-top:16px;">Por qué funciona cada componente</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🫧 Insuflación pulmonar sostenida</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Mantener presión positiva mientras se deflaciona el manguito y se retira el tubo genera una <strong>exhalación pasiva</strong> que ayuda a limpiar cualquier contaminación de vía aérea acumulada por encima del manguito, reduciendo el riesgo de laringoespasmo subsiguiente. La insuflación sostenida también aporta una <span class="hl-verde">reserva de oxígeno aumentada</span> si ocurre obstrucción de la vía aérea inmediatamente tras la extubación.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩹 Descompresión gástrica</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Para minimizar el compromiso respiratorio por distensión diafragmática y el potencial de regurgitación, debe considerarse la descompresión del estómago vía sonda gástrica antes de extubar si ha podido producirse insuflación gástrica significativa (ventilación con presión positiva prolongada vía mascarilla o SGA, o ventilación tras intubación esofágica) o donde existe riesgo de contenido gástrico residual significativo. Es especialmente importante en lactantes y neonatos.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🪑 Posicionamiento</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Extubar en supino o con ≤30° "cabeza arriba" (Trendelenburg inverso o inclinación de Fowler) suele ofrecer el mejor acceso para intervenciones de vía aérea posteriores, incluida la reintubación traqueal. En pacientes "en riesgo" de aspiración pulmonar, debe <strong>evitarse el supino</strong> — la posición lateral puede proteger el pulmón no dependiente si ocurre aspiración. La cabeza-abajo (Trendelenburg) favorece la regurgitación pasiva pero facilita el drenaje de material regurgitado/vomitado.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== FICHA IV: CATÉTERES DE INTERCAMBIO Y CHECKLIST ===== -->
+        <div id="extub-catwe-checklist" class="tab-content">
+            <h3 style="color: var(--accent-green);">Catéteres de intercambio de vía aérea y checklist</h3>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Los <strong>catéteres de intercambio de vía aérea (AEC)</strong> son guías largas y finas de
+                reintubación diseñadas específicamente para colocarse en la tráquea antes de retirar el tubo
+                traqueal, permaneciendo in situ mientras el paciente sigue en riesgo aumentado de necesitar
+                reintubación.
+            </p>
+            <div class="result-box">
+                <div style="font-size: 0.85rem; line-height: 1.6;">
+                    El uso de un AEC mejora significativamente las tasas de <span class="hl-verde">éxito al primer
+                    intento</span> (87% frente al 14% sin AEC) y las tasas globales de éxito de reintubación
+                    traqueal (<strong>92%</strong>) — aunque no garantizan que la reintubación se logre, en manos de
+                    operadores experimentados aportan una tasa de éxito muy elevada.
+                </div>
+            </div>
+
+            <p class="section-label">Uso práctico del AEC</p>
+            <dl class="kv-row">
+                <dt>Elección</dt>
+                <dd>Al menos el doble de longitud que el tubo traqueal existente, para minimizar el riesgo de desplazamiento durante la extubación; debe ser suficientemente rígido para permitir la reintubación (no se recomiendan guías tipo hilo/alambre).</dd>
+                <dt>Inserción</dt>
+                <dd>Con el paciente despierto y listo, se inserta a través del tubo traqueal existente, alineando las marcas de distancia con las del tubo — la misma profundidad que llevaba el tubo, medida en dientes/labios.</dd>
+                <dt>Fijación</dt>
+                <dd>Fijación de 4 puntos en la línea media (por debajo de la boca), con etiquetado claro para distinguirlo de una sonda gástrica.</dd>
+                <dt>Oxígeno suplementario</dt>
+                <dd>No debe insuflarse oxígeno a través del AEC por riesgo inaceptable de barotrauma — el oxígeno se aporta vía mascarilla facial o gafas nasales.</dd>
+                <dt>Tolerancia y permanencia</dt>
+                <dd>No suele requerir sedación ni anestesia tópica; el paciente puede hablar, toser y respirar profundamente alrededor del dispositivo. Los tiempos de permanencia pueden ser de horas a varios días, aunque muchos AEC no están autorizados para ello (uso off-label).</dd>
+                <dt>Reintubación sobre el AEC</dt>
+                <dd>Se recomiendan inducción de inconsciencia y bloqueo neuromuscular en la mayoría de los casos; se recomienda el uso de videolaringoscopio. La reintubación traqueal a ciegas sobre un AEC se desaconseja.</dd>
+            </dl>
+            <p style="font-size: 0.83rem; line-height: 1.5; color: var(--text-muted);">La retirada del AEC solo debe hacerse cuando ya no exista riesgo de necesitar reintubación, o cuando ya no haya dudas sobre si esta sería difícil.</p>
+
+            <p class="section-label" style="margin-top:16px;">🗒️ Checklist de extubación (Fig. 4)</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">Herramienta de implementación para verificar que las tareas críticas de preparación ya se han completado, especialmente cuando se anticipa que la extubación será desafiante — organizada en 5 bloques:</p>
+            <ul class="term-chips">
+                <li>EQUIPO — presente, accesible, equipo de rescate disponible</li>
+                <li>PACIENTE — monitorización conectada, acceso vascular, criterios "en riesgo" evaluados</li>
+                <li>EQUIPAMIENTO — succión, bloque de mordida, mascarillas, SGA, laringoscopios, tubo/introductor listos</li>
+                <li>MEDICACIÓN — antagonista, agente de inducción, bloqueante neuromuscular disponibles</li>
+                <li>ESTRATEGIA — comunicada al equipo: plan previsto + plan de rescate</li>
+            </ul>
+            <p style="font-size: 0.83rem; line-height: 1.5; color: var(--text-muted);">Usado en formato "reto-respuesta" (un miembro del equipo verbaliza cada ítem) inmediatamente antes de comenzar la secuencia de extubación, cuando esta se anticipa desafiante.</p>
+        </div>
+
+        <!-- ===== FICHA V: SECUENCIA DE EXTUBACIÓN DESPIERTA ===== -->
+        <div id="extub-secuencia-despierta" class="tab-content">
+            <h3 style="color: var(--accent-red);">Secuencia de extubación despierta, posición y nivel de consciencia</h3>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La extubación (o retirada de un SGA) debe realizarse con el paciente <strong>profundamente
+                inconsciente</strong> (extubación profunda) o <strong>completamente despierto</strong> (extubación
+                despierta), evitando planos intermedios de consciencia por su mayor riesgo de complicaciones.
+            </p>
+            <dl class="kv-row">
+                <dt>"Despierto"</dt>
+                <dd>Obedecer órdenes (o un nivel equivalente en pacientes con dificultades de comunicación). La apertura ocular en respuesta a órdenes verbales puede ser una reacción inespecífica y no fiable — pedir tareas más específicas (p. ej. "aprieta mi mano") evita esta ambigüedad. Los movimientos con propósito (p. ej. alcanzar el tubo) no indican de forma fiable que el paciente esté despierto.</dd>
+                <dt>Extubación profunda</dt>
+                <dd>Técnica avanzada, solo en presencia de un operador experimentado capaz de rescate de vía aérea si se interrumpe la ventilación alveolar. Solo debe realizarse si el riesgo de aspiración pulmonar es mínimo, el tiempo de apnea segura es adecuado, y se espera que la reintubación y la ventilación con al menos uno de los otros lifelines sea rápida y fiable.</dd>
+            </dl>
+
+            <p class="section-label">Emergencia gradual, con estimulación mínima</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Tanto en extubación despierta como profunda, una vez cesadas las medicaciones sedantes, el paciente
+                debe poder despertar de forma gradual, con la <span class="hl-rojo">mínima estimulación física o
+                auditiva</span> posible durante la fase de emergencia. Esto implica evitar manipulación física
+                vigorosa, insistencia verbal excesiva y estimulación de vía aérea durante los planos intermedios de
+                consciencia. Estímulos abruptos o dolorosos pueden precipitar tos, esfuerzo, mordedura,
+                regurgitación, laringoespasmo (tras extubación profunda), hipertensión y taquicardia.
+            </p>
+            <div class="result-box">
+                <div style="font-size: 0.85rem; line-height: 1.6;">
+                    Los pacientes que se han sometido a extubación profunda deben observarse con particular
+                    atención hasta que obedezcan órdenes.
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">📋 Secuencia de extubación despierta (Fig. 5)</p>
+            <table class="data-table">
+                <thead><tr><th>Paso</th><th>Contenido</th></tr></thead>
+                <tbody>
+                    <tr><td>1. Extender el tiempo de apnea segura</td><td>Reoxigenar con O₂ 100% hasta EtO₂ ≥ 85%</td></tr>
+                    <tr><td>2. Minimizar contaminación de vía aérea</td><td>Retirar tapones faríngeos*, examinar/limpiar faringe (incluido el "clot del forense"), aspirar faringe ± tubo traqueal, descompresión gástrica*</td></tr>
+                    <tr><td>3. Optimizar la permeabilidad</td><td>Colocar vía aérea naso/orofaríngea*, colocar bloque de mordida*</td></tr>
+                    <tr><td>4. Posicionar al paciente</td><td>Según los riesgos identificados</td></tr>
+                    <tr><td>5. Restaurar el tono muscular</td><td>Antagonizar bloqueo neuromuscular*, confirmar recuperación de función</td></tr>
+                    <tr><td>6. Emergencia</td><td>Confirmar cese de sedantes, restaurar ventilación espontánea adecuada, evitar más estimulación, confirmar que el paciente obedece órdenes</td></tr>
+                    <tr><td>7. Extubación</td><td>Repetir aspiración*, colocar catéter de intercambio*, respiración a capacidad vital + mantener presión positiva†, deflacionar manguito y retirar tubo</td></tr>
+                    <tr><td>8. Post-extubación</td><td>Aspiración suave de orofaringe*, confirmar permeabilidad y ventilación, aplicar O₂ suplementario, reevaluar constantes</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">*Solo si procede. †Omitir si no se usa catéter de intercambio.</p>
+        </div>
+
+        <!-- ===== FICHA VI: LARINGOESPASMO ===== -->
+        <div id="extub-laringoespasmo" class="tab-content">
+            <h3 style="color: var(--accent-blue);">Laringoespasmo</h3>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El laringoespasmo puede causar obstrucción de vía aérea superior <span class="hl-rojo">parcial o
+                completa</span>, típicamente con estridor en el paciente que respira espontáneamente. Otras causas
+                de obstrucción de vía aérea superior o presión de vía aérea aumentada (cuerpo extraño, regurgitación
+                gástrica, sangrado, colapso de tejidos faríngeos, broncoespasmo) pueden ser difíciles de distinguir
+                del laringoespasmo y deben considerarse siempre.
+            </p>
+
+            <p class="section-label">🧮 Selector de manejo por fase</p>
+            <div class="form-group">
+                <label>Fase del manejo</label>
+                <select id="extub-laring-select">
+                    <option value="inicial">Manejo inicial</option>
+                    <option value="refractario">Manejo refractario (persiste o desaturación/bradicardia)</option>
+                </select>
+            </div>
+            <div id="extub-laring-resultado" class="tfg-estado tfg-estado-warn"></div>
+
+            <p class="section-label" style="margin-top:16px;">⚠️ Dos avisos críticos de la guía</p>
+            <div class="result-box">
+                <div style="font-size: 0.85rem; line-height: 1.6;">
+                    <span class="hl-rojo">La obstrucción de vía aérea o la presión de ventilación elevada que NO se
+                    resuelve con una dosis de intubación de bloqueante neuromuscular NO se debe a
+                    laringoespasmo</span> — hay que buscar otra causa. Y el manejo de la bradicardia secundaria a
+                    hipoxemia es <span class="hl-rojo">resolver la hipoxemia</span>, no administrar atropina (la
+                    atropina sí es apropiada para tratar la bradicardia asociada al uso de succinilcolina).
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">💊 Dosis de referencia</p>
+            <table class="data-table">
+                <thead><tr><th>Fármaco</th><th>Dosis</th></tr></thead>
+                <tbody>
+                    <tr><td>Propofol, dosis baja</td><td>0,25 mg/kg IV</td></tr>
+                    <tr><td>Propofol, dosis de inducción</td><td>2-4 mg/kg IV</td></tr>
+                    <tr><td>Succinilcolina, dosis de intubación</td><td>1-2 mg/kg IV/IO, 2-4 mg/kg IM</td></tr>
+                    <tr><td>Rocuronio, dosis de intubación</td><td>1,5 mg/kg IV</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.83rem; line-height: 1.5; color: var(--text-muted);">Maniobra de Larson: fuerza intensa bilateral aplicada alto entre la rama posterior de la mandíbula y la apófisis mastoides, justo debajo de la base del cráneo, dirigida medial, superior y posteriormente hacia la apófisis estiloides.</p>
+        </div>
+
+        <!-- ===== FICHA VII: COMPLICACIONES Y CONVERSIÓN ===== -->
+        <div id="extub-complicaciones" class="tab-content">
+            <h3 style="color: var(--accent-purple);">Complicaciones de la extubación y conversión de vía aérea</h3>
+
+            <p class="section-label">Morder el tubo traqueal o el SGA</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Adultos jóvenes y sanos tienden a morder con fuerza durante el despertar si no hay bloque de
+                mordida. Cuando se produce esta obstrucción en este grupo de pacientes, los músculos respiratorios
+                fuertes combinados con una compliance de la pared torácica limitada predisponen al desarrollo de
+                <strong>edema pulmonar por presión negativa (EPPN)</strong> cuando se realizan esfuerzos
+                inspiratorios contra una vía aérea obstruida.
+            </p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🫁 Edema pulmonar por presión negativa</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Si ocurre EPPN, la eliminación del líquido de edema de la vía aérea se logra aplicando <strong>presión positiva a los pulmones</strong>, en vez de intentar aspirar el líquido — la succión aumenta la pérdida de fluido e interrumpe el aporte de oxígeno y la presión positiva, empeorando la hipoxemia. Los diuréticos <span class="hl-rojo">no son beneficiosos</span> en el EPPN y pueden agravar la hipovolemia derivada de la transferencia de fluido a los pulmones.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🦷 Manejo de la mordedura</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Deflacionar el manguito del tubo/SGA mordido puede permitir que el paciente respire alrededor del dispositivo, evitando el EPPN. Si esto está contraindicado (p. ej. riesgo de aspiración pulmonar) o no tiene éxito, debe profundizarse la sedación, seguida de un bloqueante neuromuscular de inicio rápido si es necesario.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Regurgitación gástrica o aspiración pulmonar</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Si ocurre regurgitación gástrica, el paciente debe colocarse de lado o en posición cabeza-abajo. Se
+                prefiere la succión de calibre ancho sobre un aspirador Yankauer estándar para material regurgitado
+                de gran volumen, viscoso o semisólido. Debe evitarse estimular el reflejo nauseoso durante la
+                succión, ya que puede disparar o empeorar el vómito. Si ocurre aspiración pulmonar significativa,
+                debe considerarse la necesidad de broncoscopia.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Conversión de vía aérea</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La sustitución de un lifeline exitoso por otro, o entre un lifeline y una vía aérea de cuello, puede
+                clasificarse como <strong>conversión</strong> o <strong>reemplazo</strong>.
+            </p>
+            <dl class="kv-row">
+                <dt class="hl-verde">Conversión</dt>
+                <dd>Mantiene la capacidad continua de ventilación alveolar, o la presencia de una guía que facilita su rápida restauración (p. ej. intubación traqueal vía SGA, o extubación despierta sobre catéter de intercambio). Se prefiere sobre el reemplazo, particularmente cuando el manejo de vía aérea se considera "en riesgo".</dd>
+                <dt class="hl-rojo">Reemplazo</dt>
+                <dd>Interrumpe inevitablemente la ventilación alveolar vía el lifeline inicial hasta que se restaura con el siguiente, y no emplea ninguna guía en la vía aérea (p. ej. retirar un SGA para intentar intubación traqueal a ciegas). Se conceptualiza más adecuadamente como interrupción del manejo de vía aérea combinada con restauración inmediata planificada con un lifeline alternativo.</dd>
+            </dl>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La conversión de vía aérea exige un nivel de evaluación, estrategia, preparación y vigilancia
+                equivalente a la intubación y la extubación — incluye planes de rescate, ya que la conversión no
+                elimina el riesgo de obstrucción de vía aérea. Salvo que se requiera ventilación espontánea para
+                mantener la ventilación alveolar durante la conversión, el bloqueo neuromuscular profundo suele
+                mejorar la seguridad al reducir el riesgo de pérdida de vía aérea por tos o laringoespasmo, y al
+                facilitar el rescate de vía aérea. Cuando se realiza intercambio de tubo traqueal, debe usarse un
+                catéter de intercambio de vía aérea en vez de una bujía, por su mayor longitud.
+            </p>
+        </div>
+
+    </div>
+
+    <div class="card" style="margin-top: 20px;">
+        <h3>📚 Bibliografía</h3>
+        <ul class="biblio-list">
+            <li>
+                <a class="biblio-link" href="docs/ellard-2026-puma-guias-extubacion-traqueal.pdf" target="_blank" rel="noopener">Ellard L, Higgs A, Cooper RM, et al. Project for Universal Management of Airways: guidelines for tracheal extubation</a>
+                <span class="biblio-nota">Anaesthesia. 2026. https://doi.org/10.1111/anae.70365 — guía de consenso internacional y multidisciplinar (categorías de recomendación AHA); complementa, sin sustituir, las guías previas de intubación difícil del mismo proyecto (PUMA).</span>
+            </li>
+        </ul>
+    </div>

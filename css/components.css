@@ -564,6 +564,15 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
    .micro-prof-body). Simula un trazo de rotulador bajo el texto en vez de
    cambiar el color del texto en sí. */
 .hl { background: linear-gradient(to bottom, transparent 62%, rgba(212, 175, 55, 0.32) 62%); font-weight: 600; }
+/* Variantes de color del rotulador — mismo trazo, distinto acento, para
+   codificar semánticamente el tipo de dato resaltado (p. ej. rojo = riesgo/
+   valor crítico, verde = normal/seguro, azul = mecanismo, púrpura =
+   definición clave) reutilizando los 5 acentos ya existentes de la paleta,
+   nunca colores nuevos ajenos al sistema de diseño. */
+.hl-verde { background: linear-gradient(to bottom, transparent 62%, rgba(144, 160, 106, 0.34) 62%); font-weight: 600; }
+.hl-rojo { background: linear-gradient(to bottom, transparent 62%, rgba(184, 92, 62, 0.32) 62%); font-weight: 600; }
+.hl-azul { background: linear-gradient(to bottom, transparent 62%, rgba(212, 175, 55, 0.32) 62%); font-weight: 600; color: var(--accent-blue); }
+.hl-purpura { background: linear-gradient(to bottom, transparent 62%, rgba(156, 84, 118, 0.30) 62%); font-weight: 600; }
 
 /* ===================================================== */
 /* NEFRONA INTERACTIVA — menú principal de Nefrología.     */
