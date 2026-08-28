@@ -1,0 +1,448 @@
+    <button class="back-btn btn-volver-nefro-kidney">← VOLVER</button>
+    <div class="diag-header">
+        <h2 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">Trasplante renal y enfermedades glomerulares</h2>
+        <p>Inmunosupresión: inducción, rechazo, y tratamiento de la enfermedad glomerular autoinmune</p>
+    </div>
+
+    <button class="accordion-btn nav-btn" id="btn-trasplante-renal-repasar" style="border-left: 4px solid var(--accent-purple);">
+        <span>🎯 Repasar (preguntas de repaso)</span>
+        <span style="font-size: 0.8rem; color: var(--accent-purple);">[ EMPEZAR → ]</span>
+    </button>
+
+    <p class="section-label">Elige un bloque</p>
+    <div class="corkboard" id="trasplante-renal-corkboard">
+
+        <div class="field-card" data-tab="tr-timoglobulina"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha I</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-purple)" stroke-width="1.6">
+                    <path d="M40,10 C26,10 20,22 20,30 C20,40 30,46 40,46 C50,46 60,40 60,30 C60,22 54,10 40,10 Z" stroke-opacity="0.7"/>
+                    <circle cx="32" cy="26" r="3" fill="var(--accent-purple)" stroke="none" opacity="0.6"/>
+                    <circle cx="46" cy="30" r="3" fill="var(--accent-purple)" stroke="none" opacity="0.6"/>
+                    <circle cx="40" cy="38" r="3" fill="var(--accent-purple)" stroke="none" opacity="0.6"/>
+                </svg>
+                <div class="field-name">Timoglobulina<br>(TMG)</div>
+                <div class="field-hook">"depleción de linfocitos T... ¿inducción o rechazo, misma molécula?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Ambas — inmunoglobulina de conejo antitimocitos humanos, usada para prevenir el rechazo (inducción, 1,5mg/kg/día perioperatorio) y para tratarlo cuando ya está establecido (7-14 días según grado de Banff).</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="tr-cdifficile"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha II</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-red)" stroke-width="1.6">
+                    <ellipse cx="40" cy="28" rx="16" ry="20" stroke-opacity="0.75"/>
+                    <path d="M32,20 L32,36 M40,18 L40,38 M48,20 L48,36" stroke-width="1.2" stroke-opacity="0.5"/>
+                </svg>
+                <div class="field-name">Infección por<br>Clostridium difficile</div>
+                <div class="field-hook">"la diarrea infecciosa nosocomial más frecuente... ¿por qué el trasplantado renal está en el grupo de mayor riesgo?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Inmunosupresión + hospitalización + exposición antibiótica — la incidencia en trasplante de órgano sólido llega al 3-13%, con mayor mortalidad y riesgo de pérdida del injerto que en la población general.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="tr-ciclofosfamida"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha III</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-yellow)" stroke-width="1.6">
+                    <rect x="26" y="14" width="28" height="28" rx="4" stroke-opacity="0.7"/>
+                    <path d="M32,28 L48,28 M40,20 L40,36" stroke-width="1.3"/>
+                </svg>
+                <div class="field-name">Ciclofosfamida</div>
+                <div class="field-hook">"nefritis lúpica, vasculitis con afectación renal... ¿bolos IV en vez de vía oral, por qué?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Menor dosis acumulada y menos efectos secundarios que la vía oral continua, manteniendo la eficacia — con MESNA como protección obligatoria frente a la cistitis hemorrágica.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="tr-rituximab"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha IV</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-green)" stroke-width="1.6">
+                    <circle cx="30" cy="28" r="10" stroke-opacity="0.75"/>
+                    <circle cx="50" cy="28" r="10" stroke-opacity="0.4"/>
+                    <path d="M24,22 L36,34 M36,22 L24,34" stroke-width="1.4"/>
+                </svg>
+                <div class="field-name">Rituximab</div>
+                <div class="field-hook">"anti-CD20... ¿qué tienen en común la nefritis lúpica y el rechazo humoral del injerto?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Ambas dependen de linfocitos B productores de anticuerpos/autoanticuerpos — eliminando la célula B CD20+ se corta la síntesis del anticuerpo patogénico, ya sea autoinmune o dirigido contra el injerto.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+    </div>
+    <p class="tap-hint">☝ toca una ficha para ver la pista, y de nuevo para abrir el bloque completo</p>
+
+    <div class="card" id="panel-trasplante-renal-tabs" style="display:none;">
+
+        <!-- ===== FICHA I: TIMOGLOBULINA ===== -->
+        <div id="tr-timoglobulina" class="tab-content">
+            <h3 style="color: var(--accent-purple);">Administración de Timoglobulina (TMG)</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: PNT-NEF-13. Administración de Timoglobulina. Servicio de Nefrología, HUGCDN.</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La TMG (inmunoglobulina de conejo antitimocitos humanos) es un <strong>inmunosupresor selectivo</strong>
+                que actúa sobre los linfocitos T. Reconoce a la mayoría de las moléculas involucradas en la cascada
+                de activación de las células T durante el rechazo de un injerto (CD2, CD3, CD4, CD8, CD11a, CD18,
+                CD25, HLA-DR y HLA clase I). Las células T se eliminan de la circulación mediante lisis dependiente
+                del complemento y mediante un mecanismo de opsonización dependiente de Fc mediado por monocitos y
+                fagocitos. La <span class="hl-purpura">depleción de linfocitos T</span> es probablemente su principal
+                mecanismo de inmunosupresión.
+            </p>
+
+            <p class="section-label">Indicaciones y dosificación</p>
+            <dl class="kv-row">
+                <dt>Inducción con TMG</dt>
+                <dd>Dosis preoperatoria: 1,5 mg/kg de peso; la infusión se inicia al comienzo de la intervención quirúrgica y se programa para que dure 10-12 horas. Postoperatorio: continuar con 1,5 mg/kg/día hasta completar <strong>7 dosis</strong>.</dd>
+            </dl>
+            <dl class="kv-row">
+                <dt>Rechazo agudo leve (Grado I de Banff)</dt>
+                <dd>3 dosis de 500 mg/día IV de 6-metil-prednisolona (no requiere TMG).</dd>
+                <dt>Rechazo agudo moderado (Grado II de Banff)</dt>
+                <dd>Iniciar tratamiento conjuntamente con esteroides (500 mg/día, 3 días) y TMG: 1,5 mg/kg/día hasta completar 7-14 dosis (dosis acumulada total 10 mg/kg).</dd>
+                <dt>Rechazo agudo corticorresistente</dt>
+                <dd>Normalmente se esperan 24-48h para ver si hay respuesta a los esteroides; si no la hubiera, iniciar TMG 1,5 mg/kg/día durante 7-14 días (dosis acumulada 10 mg/kg).</dd>
+            </dl>
+
+            <p class="section-label" style="margin-top:16px;">🧪 Clasificación de Banff 2017 (rechazo celular)</p>
+            <table class="data-table">
+                <thead><tr><th>Grado</th><th>Hallazgos</th></tr></thead>
+                <tbody>
+                    <tr><td>IA</td><td>Inflamación intersticial que involucra &gt;25% del parénquima cortical no esclerótico (i2/i3) con tubulitis moderada (t2, 4-10 células mononucleares/túbulo)</td></tr>
+                    <tr><td>IB</td><td>Inflamación intersticial &gt;25% (i2/i3) con tubulitis severa (t3, &gt;10 células mononucleares/túbulo)</td></tr>
+                    <tr><td>IIA</td><td>Arteritis intimal leve a moderada (v1), con o sin inflamación intersticial y/o tubulitis</td></tr>
+                    <tr><td>IIB</td><td>Arteritis intimal severa (v2), con o sin inflamación intersticial y/o tubulitis</td></tr>
+                    <tr><td>III</td><td>Arteritis transmural y/o necrosis fibrinoide arterial de músculo liso medial con arteritis de la íntima (v3), con o sin inflamación intersticial y/o tubulitis</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Infiltración intersticial (i), tubulitis (t), arteritis intimal (v) — los 3 hallazgos histológicos que definen cada grado.</p>
+
+            <p class="section-label" style="margin-top:16px;">⚠️ Contraindicaciones</p>
+            <ul class="term-chips">
+                <li>Alergia al principio activo</li>
+                <li>Vacunaciones con virus vivos atenuados en las 4 semanas previas</li>
+                <li>Infección activa</li>
+                <li>Leucopenia, plaquetopenia</li>
+                <li>Evitar en embarazo salvo necesidad absoluta</li>
+                <li>Evitar lactancia durante el tratamiento</li>
+            </ul>
+
+            <p class="section-label" style="margin-top:16px;">Reacciones adversas</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Reacciones asociadas a la perfusión (RAPs): fiebre, escalofríos/temblores, disnea, náuseas/vómitos,
+                diarrea, hipotensión o hipertensión, malestar, rash, urticaria y/o cefalea — suelen ser leves y
+                transitorias. Se han descrito casos raros de <span class="hl-rojo">síndrome de liberación de
+                citoquinas grave</span> y potencialmente mortal (disfunción cardiorrespiratoria, SDRA, edema
+                pulmonar, infarto de miocardio, taquicardia y/o muerte). Enfermedad del suero (fiebre, erupción,
+                urticaria, artralgia/mialgia) a los 5-15 días de iniciar el tratamiento. Hematológicas: leucopenia,
+                linfopenia y trombocitopenia (muy frecuentes) — requieren monitorización para el ajuste de dosis. A
+                largo plazo, relación con procesos linfoproliferativos.</p>
+
+            <p class="section-label" style="margin-top:16px;">Administración práctica</p>
+            <dl class="kv-row">
+                <dt>Preparación</dt>
+                <dd>Un vial de TMG contiene 25 mg tras reconstitución con 5 ml de agua para preparaciones inyectables (5 mg/ml). Para optimizar costes, redondear la dosis calculada a los ±25 mg más próximos (viales de 25 mg).</dd>
+                <dt>Infusión</dt>
+                <dd>Diluir en 500 ml de suero fisiológico y administrar en 12 horas (vía central, PICC o fístula A-V). Si buena tolerancia, a partir del 3º-4º día puede administrarse más rápido, pero siempre como mínimo en 6 horas. Puede reducirse el volumen a 250 ml (mínimo 50 ml por vial) en sobrecarga de volumen/oliguria.</dd>
+                <dt>Antes de la 1ª dosis</dt>
+                <dd>El paciente debe estar en su peso seco (forzar diuresis con furosemida, o diálisis/ultrafiltración si es necesario). Temperatura &lt;38ºC y descartar infección activa.</dd>
+            </dl>
+            <p class="section-label" style="margin-top:16px;">Premedicación</p>
+            <dl class="kv-row">
+                <dt>1ª y 2ª dosis, 1h antes</dt>
+                <dd>Hidrocortisona 100 mg IV en 100cc de SF + dexclorfeniramina 5 mg IV + paracetamol 1g IV.</dd>
+                <dt>Dosis sucesivas</dt>
+                <dd>Solo dexclorfeniramina 5 mg IV + paracetamol 1g IV.</dd>
+            </dl>
+            <p style="font-size: 0.85rem; line-height: 1.6;">Ante reacción adversa: suspender la infusión, valorar reanudar cuando esté asintomático (repitiendo la premedicación y a ritmo más lento, 10-12h). Si aparece fiebre: extraer cultivos y descartar infección activa (contraindica temporalmente la TMG). Si se reduce la dosis diaria por un efecto adverso, se prolongan los días de administración hasta completar la dosis acumulada esperada (≈10 mg/kg).</p>
+
+            <p class="section-label" style="margin-top:16px;">Profilaxis de infecciones oportunistas</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">Siempre que se use TMG: profilaxis para citomegalovirus (salvo status D-/R-) y para <em>Pneumocystis jirovecii</em> durante 3 meses — cotrimoxazol (Septrim forte, 1 comp. L-M-V) o valganciclovir ajustado a la función renal.</p>
+            <table class="data-table">
+                <thead><tr><th>FG (ml/min)</th><th>Dosis de tratamiento (valganciclovir)</th><th>Dosis de profilaxis</th></tr></thead>
+                <tbody>
+                    <tr><td>≥60 ml/min</td><td>900 mg, 2 veces/día</td><td>900 mg/día, 1 vez/día</td></tr>
+                    <tr><td>40-59 ml/min</td><td>450 mg, 2 veces/día</td><td>450 mg/día, 1 vez/día</td></tr>
+                    <tr><td>25-39 ml/min</td><td>450 mg, 1 vez/día</td><td>450 mg/días alternos</td></tr>
+                    <tr><td>10-24 ml/min</td><td>450 mg cada 2 días</td><td>450 mg 2 veces/semana</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Consideraciones adicionales</p>
+            <ul class="term-chips">
+                <li>Precaución especial en enfermedad hepática (puede agravar trastornos preexistentes)</li>
+                <li>Monitorizar plaquetas y parámetros de coagulación</li>
+                <li>Extraer hemograma durante y tras el tratamiento para ajuste de dosis</li>
+                <li>Micofenolato: mantener 500mg/12h vigilando leucocitos/plaquetas</li>
+                <li>Prednisona: mantener misma dosis</li>
+                <li>Anticalcineurínico/inhibidor de mTOR: ajustar según niveles</li>
+                <li>Uso inmediato tras dilución; si se conserva, máximo 24h entre 2-8ºC, no congelar</li>
+            </ul>
+        </div>
+
+        <!-- ===== FICHA II: C. DIFFICILE ===== -->
+        <div id="tr-cdifficile" class="tab-content">
+            <h3 style="color: var(--accent-red);">Infección por Clostridium difficile (ICD)</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: PNT-NEF-16. Protocolo de tratamiento de la ICD. Servicio de Nefrología, HUGCDN.</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La ICD es la <strong>principal causa de diarrea infecciosa nosocomial</strong> en países industrializados,
+                con una mortalidad del <span class="hl-rojo">5%</span> y aumento de la estancia y costes hospitalarios.
+                Existen más de 5 ribotipos aislados en Europa; en Norteamérica y algunos países europeos circula una
+                cepa más virulenta (BI/NAP1/027/toxinotipo III). <strong>La incidencia en trasplante de órganos
+                sólidos (TOS) se estima entre un 3-13%</strong>, asociándose a un incremento de la mortalidad y de la
+                pérdida del injerto — dato de especial relevancia en el paciente trasplantado renal.
+            </p>
+
+            <p class="section-label">Factores de riesgo</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;"><strong>Terapia antimicrobiana</strong>: presente en el 90% de los casos. Los síntomas ocurren generalmente hacia el 4º-9º día del tratamiento antibiótico, aunque puede presentarse tras la primera dosis o hasta 3 meses después de retirarlo.</p>
+            <table class="data-table">
+                <thead><tr><th>Muy frecuente</th><th>Ocasionalmente frecuente</th><th>Poco frecuente</th></tr></thead>
+                <tbody>
+                    <tr><td>Fluorquinolonas<br>Clindamicina<br>Cefalosporinas<br>Penicilinas/Ampicilina</td><td>Macrólidos<br>Trimetoprim-sulfametoxazol</td><td>Aminoglucósidos<br>Tetraciclinas<br>Metronidazol<br>Vancomicina</td></tr>
+                </tbody>
+            </table>
+            <dl class="kv-row">
+                <dt>Otros factores</dt>
+                <dd>Edad &gt;65 años, hospitalización, quimioterapia, inmunosupresores, <strong>TOS</strong>, cirugía digestiva, IBP, alimentación por sonda nasogástrica, enfermedad inflamatoria intestinal, <strong>ERC</strong>, VIH, exposición a portador asintomático, episodio previo de ICD.</dd>
+            </dl>
+
+            <p class="section-label" style="margin-top:16px;">Diagnóstico</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">Cuadro clínico amplio: desde el portador asintomático (no precisa tratamiento) hasta enfermedad fulminante. <strong>Diarrea</strong>: síntoma cardinal, aunque excepcionalmente puede no estar presente (&lt;1%). Otros: dolor abdominal, fiebre, leucocitosis, hipoalbuminemia, FRA, ↑PCR. <strong>Colitis pseudomembranosa</strong>: diagnosticada por visualización directa (endoscopia, colectomía o autopsia). La infección grave puede cursar con íleo adinámico, megacolon tóxico (colon transverso &gt;6cm), perforación colónica o fracaso multiorgánico.</p>
+            <dl class="kv-row">
+                <dt>Método de laboratorio</dt>
+                <dd>2 pasos: EIA de glutamato deshidrogenasa (GDH) como análisis inicial; si es positivo, confirmar por PCR de toxinas (VPN &gt;95%). No se recomiendan pruebas en heces de pacientes asintomáticos ni control post-tratamiento.</dd>
+                <dt>Imagen</dt>
+                <dd>Radiografía simple de abdomen en colitis severa (evaluar megacolon tóxico). TAC con/sin contraste en abdomen agudo (descartar perforación/obstrucción/isquemia). Endoscopia digestiva baja: no recomendada con clínica clásica y PCR positiva; útil en íleo o colitis fulminante sin diarrea.</dd>
+            </dl>
+
+            <p class="section-label" style="margin-top:16px;">Clasificación por gravedad</p>
+            <table class="data-table">
+                <thead><tr><th>Categoría</th><th>Criterios</th></tr></thead>
+                <tbody>
+                    <tr><td>No grave</td><td>Diarrea sin colitis, afebril, dolor abdominal leve-moderado, leucocitosis &lt;15.000/mm³, creatinina &lt;1,5× basal</td></tr>
+                    <tr><td>Grave</td><td>Presencia de al menos 2: diarrea con colitis (&gt;10 deposiciones/día), dolor abdominal severo, Tª &gt;38,5ºC, leucocitosis &gt;15.000/mm³, albúmina &lt;2,5 g/dl, ↑reactantes de fase aguda, creatinina ≥1,5× basal. Pseudomembranas en endoscopia o ascitis con engrosamiento mural también son criterio de gravedad</td></tr>
+                    <tr><td>Potencialmente grave</td><td>ICD no grave + factores de mal pronóstico (edad &gt;65, ingreso previo en UCI, inmunodeprimidos, elevada comorbilidad)</td></tr>
+                    <tr><td>Formas graves complicadas</td><td>Íleo, megacolon tóxico, peritonitis, perforación del colon, sepsis o fracaso multiorgánico</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Recurrencia</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">Definición: ICD que ocurre antes de 8 semanas tras la resolución de un episodio previo. Riesgo del 20% tras el primer episodio hasta el 60% tras múltiples episodios. Factores de riesgo: edad &gt;65, IBP, incapacidad para restablecer la microflora, mantenimiento del ATB causal, esporas intestinales, inadecuada respuesta inmunitaria, <strong>TOS o trasplante de progenitores hematopoyéticos, ERC en programa de diálisis</strong>, EII, fibrosis quística, episodio previo de ICD.</p>
+
+            <p class="section-label" style="margin-top:16px;">💊 Tratamiento — algoritmo por escenario</p>
+            <dl class="kv-row">
+                <dt>ICD no grave</dt>
+                <dd>Manejo generalmente ambulatorio. Metronidazol oral 500mg/8h (o 250mg/6h) 10-14 días, o vancomicina oral 125mg/6h 10-14 días. Estudios recientes sugieren eficacia similar o superior de vancomicina frente a metronidazol incluso en formas no graves. Si se opta por metronidazol y persiste clínica &gt;3-5 días, cambiar a vancomicina o fidaxomicina.</dd>
+                <dt>ICD grave o potencialmente grave</dt>
+                <dd>Ingreso hospitalario. Vancomicina oral 125mg/6h 10-14 días, o fidaxomicina (Dificlir®) 200mg/12h 10 días. La fidaxomicina obtiene tasa de curación equivalente a vancomicina con menor riesgo de recidiva en cepas no BI/NAP1/027 (15% vs. 25%) — se prefiere si no puede retirarse el antibiótico causal o el riesgo de recurrencia es elevado. Requiere autorización a Dirección Médica (RAPFARMA).</dd>
+                <dt>Íleo o intolerancia a vía oral</dt>
+                <dd>No grave: metronidazol IV 500mg/8h 10 días. Grave complicada con íleo: metronidazol IV + vancomicina en enemas (500mg en 250-500ml SSF c/6h) y/o por SNG (250-500mg c/6h) 10 días. Se han empleado inmunoglobulinas IV (400mg/kg) y tigeciclina (50mg/12h 14 días).</dd>
+                <dt>Formas graves complicadas</dt>
+                <dd>Íleo/megacolon/perforación/abdomen agudo: valoración por cirugía general, considerar colectomía subtotal.</dd>
+                <dt>Cepas BI/NAP1/027 con riesgo de recidiva</dt>
+                <dd>Metronidazol + vancomicina.</dd>
+                <dt>Primera recurrencia</dt>
+                <dd>Si el episodio inicial se trató con metronidazol: vancomicina oral 125mg/6h 14 días. Si se trató con vancomicina: misma pauta o fidaxomicina 200mg/12h 10 días si la recaída es grave, hay inmunosupresión (onco-hematológicos o TOS), o debe continuarse tratamiento antibiótico no dirigido a C. difficile.</dd>
+                <dt>Segunda recurrencia</dt>
+                <dd>Evitar metronidazol (riesgo de neurotoxicidad). Fidaxomicina 200mg/12h 10 días. Alternativas: vancomicina en pauta descendente 4-6 semanas (125mg/6h 7-10 días → /8h 1 sem → /12h 1 sem → /24h 1 sem → /48h 1 sem → /3 días 1 sem y suspender); rifaximina, nitazoxanida, teicoplanina, probióticos asociados, gammaglobulina IV, o trasplante fecal (enemas de microbiota).</dd>
+            </dl>
+
+            <p class="section-label" style="margin-top:16px;">Prevención</p>
+            <ul class="term-chips">
+                <li>Minimizar el uso de antibióticos (medida más eficaz)</li>
+                <li>Probióticos: evidencia contradictoria, uso generalizado no recomendable</li>
+                <li>Aislamiento de contacto/habitación/guantes ≥48h tras resolución de la diarrea</li>
+                <li>Lavado de manos con agua y jabón (no soluciones alcohólicas, ineficaces frente a esporas)</li>
+            </ul>
+        </div>
+
+        <!-- ===== FICHA III: CICLOFOSFAMIDA ===== -->
+        <div id="tr-ciclofosfamida" class="tab-content">
+            <h3 style="color: var(--accent-yellow);">Administración de Ciclofosfamida</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: HUGCDN-A4I-PT-02. Administración de Ciclofosfamida (antes "Genoxal"). Enfermería, Hospitalización 4AI.</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La mayoría de las enfermedades nefrológicas autoinmunes (nefritis lúpica, glomerulonefritis asociadas
+                a vasculitis), en las que fisiopatológicamente intervienen de forma primaria los linfocitos T y B, se
+                tratan con dosis altas endovenosas de corticoides y de ciclofosfamida. Las ventajas de la
+                ciclofosfamida <strong>endovenosa en bolos</strong> frente a la vía oral continua son la celeridad en
+                la obtención de resultados y la <span class="hl-verde">minimización de efectos secundarios</span> por
+                su menor dosis acumulada.
+            </p>
+
+            <p class="section-label">Indicaciones</p>
+            <ul class="term-chips">
+                <li>Nefritis lúpica</li>
+                <li>Glomerulonefritis rápidamente progresiva</li>
+                <li>Vasculitis y otros procesos inmunológicos con afectación renal</li>
+            </ul>
+
+            <p class="section-label" style="margin-top:16px;">💊 Dosis y ajuste</p>
+            <dl class="kv-row">
+                <dt>Dosis</dt>
+                <dd>0,6 g/m², equivalente en adultos a <strong>15 mg/kg</strong>, en forma de bolos IV. Preparada desde el Servicio de Farmacia, diluida en 500cc de suero fisiológico a administrar en 60 minutos (o 150cc en 60 min si hay indicación médica).</dd>
+                <dt>Se ajusta según</dt>
+                <dd>Edad, función renal (aclaramiento de creatinina) y número de neutrófilos.</dd>
+            </dl>
+            <table class="data-table">
+                <thead><tr><th>Edad</th><th>Función renal normal (Crp &lt;3mg/dl, ClCr &gt;25ml/min)</th><th>Función renal alterada (Crp &gt;3mg/dl, ClCr &lt;24ml/min)</th></tr></thead>
+                <tbody>
+                    <tr><td>&lt;60 años</td><td>Dosis completa</td><td>85%</td></tr>
+                    <tr><td>60-70 años</td><td>85%</td><td>65%</td></tr>
+                    <tr><td>&gt;70 años</td><td>65%</td><td>50%</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Tratamiento complementario obligatorio</p>
+            <dl class="kv-row">
+                <dt>Hidratación</dt>
+                <dd>Objetivo: forzar la diuresis. Recomendado 2 l/m² (1 litro cada 4h de suero salino + 1 litro cada 8h tras el bolo, hasta un total de 3-4 litros), ajustado según el estado basal, presencia de edemas o disfunción ventricular.</dd>
+                <dt>MESNA (mercaptoetan-sulfonato-Na, uromitexán)</dt>
+                <dd>Objetivo: prevención de la <strong>cistitis hemorrágica</strong>. Dosis: 60% de la dosis calculada de ciclofosfamida, repartida en 3 dosis — 30 min antes del bolo, a las 4h y a las 8h desde el inicio del bolo.</dd>
+                <dt>Ondansetrón</dt>
+                <dd>Objetivo: evitar las náuseas asociadas. Dosis: previo al bolo, a las 4h y a las 8h.</dd>
+            </dl>
+
+            <p class="section-label" style="margin-top:16px;">⚠️ Efectos secundarios</p>
+            <ul class="term-chips">
+                <li>Cistitis hemorrágica</li>
+                <li>Tumores a largo plazo, en clara relación con la dosis acumulada</li>
+                <li>Náuseas y vómitos</li>
+            </ul>
+            <div class="result-box">
+                <div style="font-size: 0.85rem; line-height: 1.6;">
+                    <strong>Toxicidad ovárica</strong> — muy dependiente de la edad y la duración del tratamiento. En
+                    mujeres &lt;25 años: amenorrea nula si el tratamiento dura &lt;6 meses, 17% si dura 2 años. Entre
+                    26-30 años: 12% y 43% a los 6 meses y 2 años respectivamente. En mayores de 31 años: incidencia
+                    <span class="hl-rojo">25-100%</span>.
+                </div>
+            </div>
+            <p style="font-size: 0.85rem; line-height: 1.6;">Deben vigilarse las infecciones por virus herpes zóster y <em>Pneumocystis jirovecii</em>, por lo que se pauta generalmente profilaxis con Septrim forte 3 veces por semana.</p>
+
+            <p class="section-label" style="margin-top:16px;">Generalidades del ingreso</p>
+            <ul class="term-chips">
+                <li>Ingreso la misma mañana del tratamiento, en ayunas</li>
+                <li>Canalización de VVP de calibre adecuado a la infusión</li>
+                <li>Hemograma y bioquímica previos a la administración del bolo</li>
+                <li>Alta médica una vez finalizada la infusión</li>
+                <li>Desecho de productos en contenedores amarillos disponibles en planta</li>
+            </ul>
+        </div>
+
+        <!-- ===== FICHA IV: RITUXIMAB ===== -->
+        <div id="tr-rituximab" class="tab-content">
+            <h3 style="color: var(--accent-green);">Administración de Rituximab</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: HUGCDN-4AI-PT-03. Administración de Rituximab. Enfermería, Hospitalización 4AI.</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                En determinadas situaciones se intenta eliminar las células B, impidiendo la síntesis de anticuerpo,
+                para ello se utiliza rituximab. Es un <strong>anticuerpo monoclonal quimérico</strong>, obtenido por
+                ingeniería genética: una inmunoglobulina glicosilada con las regiones constantes de la IgG1 humana y
+                las secuencias de la región variable de las cadenas ligeras y pesadas murinas. Se une de forma
+                específica a la molécula <span class="hl-azul">CD20</span> — un antígeno transmembrana que se expresa
+                desde el estadio de célula pre-B hasta la célula B de memoria (NO se detecta en células madre, pro-B
+                ni células plasmáticas). Su acción conduce a la eliminación de la célula B CD20+, y así a la síntesis
+                de autoanticuerpos.
+            </p>
+
+            <p class="section-label">Indicaciones en patología renal</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">Como tratamiento de inducción (A), rescate (B), o en fase de mantenimiento (C):</p>
+            <ul class="term-chips">
+                <li>Vasculitis (GMRP pauciinmune) asociada a ANCA: Wegener o PAM (A, B y C) — única indicación en la guía de la AEP</li>
+                <li>Nefritis lúpica (B)</li>
+                <li>GNM membranosa 1ª/idiopática (B)</li>
+                <li>GNM esclerosante y focal primaria (B)</li>
+                <li>Rechazo humoral agudo/crónico del injerto renal (A)</li>
+                <li>GNM fibrilar (A, solo estudios limitados, no aleatorizados)</li>
+                <li>GNM crioglobulinémica (A)</li>
+            </ul>
+
+            <p class="section-label" style="margin-top:16px;">Efectos secundarios (&gt;10%)</p>
+            <table class="data-table">
+                <thead><tr><th>Sistema</th><th>Efectos</th></tr></thead>
+                <tbody>
+                    <tr><td>Cardiovascular</td><td>HTA, edemas</td></tr>
+                    <tr><td>SNC</td><td>Cefalea, fiebre, escalofríos</td></tr>
+                    <tr><td>Dermatológico</td><td>Rash, prurito, angioedema</td></tr>
+                    <tr><td>Gastrointestinal</td><td>Diarrea, dolor abdominal, náuseas</td></tr>
+                    <tr><td>Hematológico</td><td>Citopenias (anemia, neutropenia, linfopenia), fiebre</td></tr>
+                    <tr><td>Hepático</td><td>Hipertransaminasemia</td></tr>
+                    <tr><td>Respiratorio</td><td>Tos, epistaxis</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Generalidades y profilaxis</p>
+            <dl class="kv-row">
+                <dt>Analítica</dt>
+                <dd>Extraer previa a cada dosis (bioquímica básica, urianálisis y hemograma). Solicitar subpoblaciones linfocitarias e inmunoglobulinas al inicio, al finalizar el tratamiento, y a los 3 y 6 meses (monitorización de la respuesta, dada la variabilidad en la depleción de linfocitos B).</dd>
+                <dt>Profilaxis de <em>Pneumocystis jirovecii</em></dt>
+                <dd>Septrim forte 800/160mg, 1 comp. L-X-V durante el tratamiento y mantener 6 meses tras finalizarlo.</dd>
+                <dt>Calendario vacunal</dt>
+                <dd>Actualizar; contactar con Medicina Preventiva al menos 2 semanas antes de la 1ª dosis. Vacunas de organismos vivos atenuados <strong>contraindicadas</strong> hasta 3 meses tras finalizar el tratamiento inmunosupresor.</dd>
+                <dt>Mantoux</dt>
+                <dd>Realizar previo si no se hizo con anterioridad.</dd>
+            </dl>
+
+            <p class="section-label" style="margin-top:16px;">💊 Posología</p>
+            <div class="result-box">
+                <div style="font-size: 0.85rem; line-height: 1.6;">
+                    <strong>Tratamiento estándar (utilizado en este Servicio):</strong> 375 mg/m²/semana, 4 dosis en
+                    total; o 1g/15 días, 2 dosis en total.
+                </div>
+            </div>
+            <dl class="kv-row">
+                <dt>Premedicación (45 min antes)</dt>
+                <dd>1g de paracetamol IV + 1 ampolla de dexclorfeniramina IV + 1 ampolla de hidrocortisona/metilprednisona IV.</dd>
+            </dl>
+
+            <p class="section-label" style="margin-top:16px;">🧪 Tabla de velocidad de infusión</p>
+            <table class="data-table">
+                <thead><tr><th>1000mg en 250cc SF</th><th>1000mg en 500cc SF</th></tr></thead>
+                <tbody>
+                    <tr><td>12,5 mL/h</td><td>25 mL/h</td></tr>
+                    <tr><td>25 mL/h</td><td>50 mL/h</td></tr>
+                    <tr><td>37,5 mL/h</td><td>75 mL/h</td></tr>
+                    <tr><td>50 mL/h</td><td>100 mL/h</td></tr>
+                    <tr><td>62,5 mL/h</td><td>125 mL/h</td></tr>
+                    <tr><td>75 mL/h</td><td>150 mL/h</td></tr>
+                    <tr><td>87,5 mL/h</td><td>175 mL/h</td></tr>
+                    <tr><td>100 mL/h</td><td>200 mL/h</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.83rem; line-height: 1.5; color: var(--text-muted);">Comenzar a 50 mg/h; si no hay reacciones a la media hora, aumentar al doble (100 mg/h); pasados otros 30 min, al triple respecto a la dosis inicial (150 mg/h); y así sucesivamente cada 30 minutos hasta la velocidad máxima de la tabla, momento en el que se toman constantes si precisa. <strong>NO administrar en pulso o bolo IV.</strong></p>
+
+            <p class="section-label" style="margin-top:16px;">Manejo de reacciones a la infusión</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">Si reacción: <span class="hl-rojo">PARAR la infusión</span> y administrar hidrocortisona 200mg / metilprednisona 40mg IV; repetir paracetamol y antihistamínico según el tipo de reacción; si broncoespasmo, aerosoles de salbutamol. Reiniciar la infusión al paso anterior del ritmo que tenía cuando presentó la reacción.</p>
+
+            <p class="section-label" style="margin-top:16px;">Duración del efecto</p>
+            <ul class="term-chips">
+                <li>Detectable en suero desde 3-6 meses tras completar el tratamiento</li>
+                <li>Recuperación de células B CD20 desde los 6 meses, normalización a los 12 meses</li>
+            </ul>
+
+            <p class="section-label" style="margin-top:16px;">🔗 Dónde más aparece en la app</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">El rechazo humoral del injerto renal también se trata con Timoglobulina en la inducción — ver Ficha I de este mismo bloque.</p>
+            <button class="tx-link" data-panel="panel-trasplante-renal-tabs" data-tab="tr-timoglobulina">🔗 Ver Timoglobulina (Ficha I) →</button>
+        </div>
+
+    </div>
+
+    <div class="card" style="margin-top: 20px;">
+        <h3>📚 Fuentes</h3>
+        <ul class="biblio-list">
+            <li><span class="biblio-nota">PNT-NEF-13. Administración de Timoglobulina (TMG). Servicio de Nefrología, HUGCDN. 28-05-2021, v1.1. Protocolo interno — no reproducido como documento original.</span></li>
+            <li><span class="biblio-nota">PNT-NEF-16. Protocolo de tratamiento de la infección por Clostridium difficile (ICD). Servicio de Nefrología, HUGCDN. 28-05-2021, v2.0.</span></li>
+            <li><span class="biblio-nota">HUGCDN-A4I-PT-02. Administración de Ciclofosfamida. Enfermería, Hospitalización 4AI, HUGCDN. 20-12-2024, v2.0.</span></li>
+            <li><span class="biblio-nota">HUGCDN-4AI-PT-03. Administración de Rituximab. Enfermería, Hospitalización 4AI, HUGCDN. 20-12-2024, v2.1.</span></li>
+        </ul>
+    </div>

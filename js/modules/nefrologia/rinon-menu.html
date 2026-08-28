@@ -82,6 +82,44 @@
                 <span class="region-label">Terapias de<br>reemplazo renal</span>
                 <span class="region-visited"></span>
             </button>
+
+            <button class="region-btn" data-route="trasplanteRenal" style="left:50%; top:8%;">
+                <div class="region-orb" style="--orb-color:var(--accent-purple); --orb-glow:rgba(156,84,118,0.5);">
+                    <svg viewBox="0 0 40 40"><path d="M20,8 C28,8 33,15 33,22 C33,29 28,33 20,33 C12,33 7,29 7,22 C7,15 12,8 20,8 Z" fill="none" stroke="#fff" stroke-opacity="0.8" stroke-width="2"/><circle cx="15" cy="19" r="2" fill="#fff"/><circle cx="25" cy="19" r="2" fill="#fff"/><circle cx="20" cy="26" r="2" fill="#fff"/></svg>
+                </div>
+                <span class="region-label">Trasplante renal y<br>enf. glomerulares</span>
+                <span class="region-visited"></span>
+            </button>
         </div>
         <p class="atlas-hint">Corteza · pirámides · pelvis renal · uréter</p>
+    </div>
+
+    <button class="accordion-btn" data-target="pnt-nefrologia" style="border-left: 4px solid var(--accent-purple); margin-top: 20px;">
+        <span><span class="gral-icon" style="color: var(--accent-purple); text-shadow: var(--glow-purple);">📋</span>PROTOCOLOS DEL SERVICIO (PNT)</span>
+        <span id="pnt-nefrologia-status" style="font-size: 0.8rem; color: var(--accent-purple);">[ ABRIR ]</span>
+    </button>
+    <div id="pnt-nefrologia" class="accordion-content">
+        <div class="card" style="margin-top: 10px;">
+            <p style="font-size: 0.83rem; color: var(--text-muted); margin-top: -4px;">Acceso rápido a los procedimientos normalizados de trabajo (PNT) del Servicio de Nefrología ya incorporados en la app — cada enlace lleva directamente a la ficha donde vive ese protocolo, sin duplicar el contenido en dos sitios distintos.</p>
+
+            <p class="section-label" style="margin-top:12px;">Fisiología y electrolitos</p>
+            <dl class="kv-row"><dt>PNT-NEF-10 · Manejo hospitalario de la hiponatremia</dt><dd>Protocolo de infusión de suero hipertónico, índice de Fürst y algoritmo de titulación del tolvaptán.</dd></dl>
+            <button class="tx-link" data-view="nefrona" data-panel="panel-fisio-tabs" data-tab="fisio-hiponatremia">🔗 Ir a Hiponatremia →</button>
+            <dl class="kv-row" style="margin-top:10px;"><dt>HUGCDN-NEF-PT-01 · Manejo de la hiperpotasemia aguda y crónica</dt><dd>Algoritmo de titulación de iSRAA/ARM/ARNi por nivel de potasio, y seguimiento tras el alta.</dd></dl>
+            <button class="tx-link" data-view="nefrona" data-panel="panel-fisio-tabs" data-tab="fisio-hiperpotasemia">🔗 Ir a Hiperpotasemia →</button>
+
+            <p class="section-label" style="margin-top:16px;">Enfermedad Renal Crónica</p>
+            <dl class="kv-row"><dt>PNT-NEF-20 · Prevención de la nefropatía inducida por contraste iodado</dt><dd>Calculadora del esquema de riesgo de Mehran, niveles de evidencia, contrastes usados en el hospital y protocolo de profilaxis en 8 pasos.</dd></dl>
+            <button class="tx-link" data-view="erc" data-panel="panel-erc-tabs" data-tab="erc-farmacos">🔗 Ir a Manejo de fármacos y contraste (ERC) →</button>
+
+            <p class="section-label" style="margin-top:16px;">Trasplante renal y enfermedades glomerulares</p>
+            <dl class="kv-row"><dt>PNT-NEF-13 · Administración de Timoglobulina (TMG)</dt><dd>Inducción y tratamiento del rechazo agudo del trasplante renal.</dd></dl>
+            <button class="tx-link" data-view="trasplanteRenal" data-panel="panel-trasplante-renal-tabs" data-tab="tr-timoglobulina">🔗 Ir a Timoglobulina →</button>
+            <dl class="kv-row" style="margin-top:10px;"><dt>PNT-NEF-16 · Protocolo de tratamiento de la infección por Clostridium difficile</dt><dd>Factores de riesgo, diagnóstico, clasificación por gravedad y tratamiento escalonado.</dd></dl>
+            <button class="tx-link" data-view="trasplanteRenal" data-panel="panel-trasplante-renal-tabs" data-tab="tr-cdifficile">🔗 Ir a Clostridium difficile →</button>
+            <dl class="kv-row" style="margin-top:10px;"><dt>HUGCDN-A4I-PT-02 · Administración de Ciclofosfamida</dt><dd>Dosis, ajuste por edad/función renal, MESNA y tratamiento complementario.</dd></dl>
+            <button class="tx-link" data-view="trasplanteRenal" data-panel="panel-trasplante-renal-tabs" data-tab="tr-ciclofosfamida">🔗 Ir a Ciclofosfamida →</button>
+            <dl class="kv-row" style="margin-top:10px;"><dt>HUGCDN-4AI-PT-03 · Administración de Rituximab</dt><dd>Indicaciones en patología renal, posología, premedicación y tabla de velocidad de infusión.</dd></dl>
+            <button class="tx-link" data-view="trasplanteRenal" data-panel="panel-trasplante-renal-tabs" data-tab="tr-rituximab">🔗 Ir a Rituximab →</button>
+        </div>
     </div>

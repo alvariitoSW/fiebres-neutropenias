@@ -146,8 +146,44 @@ function calcPanelAnalitico() {
         : '<p style="font-size:0.78rem; color:var(--text-muted);">Introduce al menos un valor para ver la evaluación.</p>';
 }
 
+// Esquema de riesgo de Mehran et al. (J Am Coll Cardiol 2004;44:1393-1399)
+// para nefropatía inducida por contraste (NIC) — score aditivo simple, a
+// diferencia de la KFRE (regresión compleja, deliberadamente no
+// implementada en esta app). Fuente: PNT-NEF-20 (HUGCDN).
+function calcMehran() {
+    const ids = ['mehran-hipotension', 'mehran-iabp', 'mehran-icc', 'mehran-edad', 'mehran-anemia', 'mehran-dm'];
+    const box = document.getElementById('mehran-resultado');
+    const volEl = document.getElementById('mehran-volumen');
+    const renalEl = document.getElementById('mehran-renal');
+    if (!box || !volEl || !renalEl) return;
+    if (ids.some(id => !document.getElementById(id))) return;
+
+    let puntos = 0;
+    const pesos = { 'mehran-hipotension': 5, 'mehran-iabp': 5, 'mehran-icc': 5, 'mehran-edad': 4, 'mehran-anemia': 3, 'mehran-dm': 3 };
+    ids.forEach(id => { if (document.getElementById(id).checked) puntos += pesos[id]; });
+
+    if (volEl.value !== '') puntos += Math.floor(Number(volEl.value) / 100);
+    if (renalEl.value !== '') puntos += Number(renalEl.value);
+
+    let estado, riesgoNic, riesgoDialisis;
+    if (puntos <= 5) { estado = 'ok'; riesgoNic = '7,5%'; riesgoDialisis = '0,04%'; }
+    else if (puntos <= 10) { estado = 'warn'; riesgoNic = '14,0%'; riesgoDialisis = '0,12%'; }
+    else if (puntos <= 16) { estado = 'warn'; riesgoNic = '26,1%'; riesgoDialisis = '1,09%'; }
+    else { estado = 'danger'; riesgoNic = '57,3%'; riesgoDialisis = '12,6%'; }
+
+    box.className = `tfg-estado tfg-estado-${estado}`;
+    box.innerHTML = `<strong>Puntuación de Mehran: ${puntos}</strong> — riesgo de nefropatía por contraste ≈ <strong>${riesgoNic}</strong>, riesgo de requerir diálisis ≈ <strong>${riesgoDialisis}</strong>.`;
+}
+
 export function init() {
     initCorkboard('erc-corkboard', 'panel-erc-tabs');
+
+    ['mehran-hipotension', 'mehran-iabp', 'mehran-icc', 'mehran-edad', 'mehran-anemia', 'mehran-dm'].forEach(id => {
+        document.getElementById(id)?.addEventListener('change', calcMehran);
+    });
+    document.getElementById('mehran-volumen')?.addEventListener('input', calcMehran);
+    document.getElementById('mehran-renal')?.addEventListener('change', calcMehran);
+    calcMehran();
 
     ['erc-cr', 'erc-edad', 'erc-sexo', 'erc-acr'].forEach(id => {
         const el = document.getElementById(id);

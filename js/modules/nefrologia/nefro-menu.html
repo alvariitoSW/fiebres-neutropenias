@@ -827,6 +827,32 @@
                 </div>
             </div>
 
+            <p class="section-label" style="margin-top:16px;">🏥 Protocolo hospitalario práctico (PNT-NEF-10)</p>
+            <p style="font-size: 0.83rem; color: var(--text-muted);">Fuente: Manejo Hospitalario de la Hiponatremia. Servicio de Nefrología, HUGCDN. Complementa, con un nomograma paso a paso, a la estimación teórica de Adrogué-Madias de arriba.</p>
+            <dl class="kv-row"><dt>Hiponatremias graves y/o agudas</dt><dd>Suero salino hipertónico: 3 ampollas de ClNa al 20% (10 ml cada una) en 250 ml de SSF 0,9%, o 6 ampollas en 500 ml. Iniciar a <strong>11 ml/h</strong>, con nuevo control de Na⁺ a las 4 horas.</dd></dl>
+            <table class="data-table">
+                <thead><tr><th>Control (Na⁺ plasmático)</th><th>Δ de sodio</th><th>Acción</th></tr></thead>
+                <tbody>
+                    <tr><td>A las 4h (cualquier Na⁺)</td><td>&lt;2 mEq/l</td><td>Aumentar a 13 ml/h</td></tr>
+                    <tr><td>A las 4h (cualquier Na⁺)</td><td>2-6 mEq/l</td><td>Mantener el ritmo</td></tr>
+                    <tr><td>A las 4h (cualquier Na⁺)</td><td>&gt;6 mEq/l</td><td>Suspender la perfusión; valorar medidas correctoras (aporte hídrico, glucosado 5%, desmopresina)</td></tr>
+                    <tr><td>Controles siguientes, cada 6h: Na⁺ &lt;120 mEq/l</td><td>&lt;2 mEq/l</td><td>Aumentar a 15 ml/h</td></tr>
+                    <tr><td>Controles siguientes, cada 6h: Na⁺ 120-130 mEq/l</td><td>&lt;4-6 mEq/l</td><td>Mantener el ritmo</td></tr>
+                    <tr><td>Controles siguientes, cada 6h: Na⁺ 120-130 mEq/l</td><td>&gt;4-6 mEq/l</td><td>Suspender la perfusión</td></tr>
+                    <tr><td>Controles siguientes: Na⁺ &gt;130 mEq/l</td><td>—</td><td>Suspender la perfusión</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.8rem; color: var(--text-muted);"><strong>Importante:</strong> una corrección demasiado rápida de la hiponatremia aguda aumenta el riesgo de edema cerebral — la velocidad/ritmo de infusión propuesta varía según la literatura consultada; este es el esquema adoptado por el propio Servicio.</p>
+
+            <dl class="kv-row"><dt>Hiponatremias leves y/o crónicas — índice de Fürst</dt><dd>Cociente (Na⁺+K⁺)orina / Na⁺plasma, que orienta el grado de restricción hídrica necesaria: <strong>&lt;0,5</strong> → restricción &lt;1000 ml/día. <strong>0,5-1</strong> → restricción &lt;500 ml/día. Si (Na⁺+K⁺)orina &gt;140 mEq/l, el suero salino fisiológico <strong>empeora</strong> la hiponatremia — no debe usarse el suero salino hipotónico en ningún caso. Puede plantearse furosemida 20-40 mg/8-12-24h si la osmolalidad urinaria &gt;350 mOsm/kg y la restricción hídrica está indicada.</dd></dl>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Si la restricción hídrica resulta ineficaz (aumento del Na⁺ &lt;2 mEq/l durante 2 días consecutivos) o no es factible por las condiciones clínicas del paciente, se inicia igualmente tolvaptán a 7,5 mg/día — ver algoritmo debajo. <strong>NO corregir el Na⁺ &gt;10 mEq/l en las primeras 24h</strong>, y a partir de entonces a ritmo &lt;8 mEq/l/día.</p>
+
+            <p class="section-label" style="margin-top:16px;">💊 Algoritmo de titulación del tolvaptán</p>
+            <dl class="kv-row"><dt>1º</dt><dd>Iniciar a 7,5 mg/día. Control de natremia a las <strong>6 horas</strong>.</dd></dl>
+            <dl class="kv-row"><dt>Incremento de Na⁺ &gt;5 mEq/l a las 6h</dt><dd>Valorar suspender el tolvaptán y aplicar medidas correctoras si procede (riesgo de sobrecorrección).</dd></dl>
+            <dl class="kv-row"><dt>Incremento de Na⁺ 1-5 mEq/l a las 6h</dt><dd>Nuevo control a las <strong>12-24 horas</strong>. Si el incremento acumulado es &lt;8 mEq/l desde el inicio (o Na⁺ &lt;128 mEq/l): puede doblarse la dosis hasta 15 mg/día, y así sucesivamente hasta un máximo de <strong>60 mg/día</strong>. Si el incremento acumulado ya es &gt;8 mEq/l desde el inicio: mantener la dosis actual. Si Na⁺ &gt;128-130 mEq/l y la patología de base lo permite: plantear la retirada del tolvaptán.</dd></dl>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">No administrar tolvaptán el mismo día que salinos hipertónicos. Puede haber efecto residual hasta 7 días tras retirarlo — control de natremia a la semana, o antes si hay clínica.</p>
+
             <p class="section-label" style="margin-top:16px;">🔀 Diferencial: SIADH vs. síndrome pierde sal</p>
             <p style="font-size: 0.8rem; color: var(--text-muted);">Ambos cursan con hiponatremia hipoosmolar y orina concentrada, pero el tratamiento es opuesto — distinguirlos es crítico en el paciente neurocrítico.</p>
             <table class="data-table">
@@ -1168,7 +1194,7 @@
                 <thead><tr><th>Agente</th><th>Dosis</th><th>Inicio/duración</th><th>Mecanismo</th></tr></thead>
                 <tbody>
                     <tr><td>Gluconato cálcico 10%</td><td>10-30 ml en 2-5 min IV</td><td>5-10 min / 30-60 min</td><td>Antagoniza el efecto cardíaco (no baja el K⁺ plasmático)</td></tr>
-                    <tr><td>Salbutamol nebulizado</td><td>10-20 mg (2-4cc) en 10'</td><td>30 min / 2-3h</td><td>Desplazamiento de K⁺ al interior celular</td></tr>
+                    <tr><td>Salbutamol nebulizado o IV</td><td>10-20 mg (2-4cc) en 10' inhalado, o 0,5 mg en 100 ml de glucosado 5% en 15' IV</td><td>30 min / 2-3h</td><td>Desplazamiento de K⁺ al interior celular</td></tr>
                     <tr><td>Insulina + glucosa</td><td>10 U rápida en 500 ml glucosado 10% (o 50 ml glucosado 50%) IV</td><td>15 min / 6-8h</td><td>Desplazamiento de K⁺ al interior celular</td></tr>
                     <tr><td>Bicarbonato sódico</td><td>Sobre todo si hay acidosis concomitante</td><td>30-60 min / 6-8h</td><td>Desplazamiento de K⁺ al interior celular</td></tr>
                     <tr><td>Diuréticos de asa</td><td>Furosemida 40-200 mg IV / torasemida</td><td>30 min / horas</td><td>Eliminan K⁺ del organismo</td></tr>
@@ -1238,6 +1264,22 @@
                 </select>
             </div>
             <div id="k-hiper-explicacion" class="result-box" style="display: none;"></div>
+
+            <p class="section-label" style="margin-top:16px;">🏥 Protocolo hospitalario (PNT HUGCDN-NEF-PT-01)</p>
+            <p style="font-size: 0.83rem; color: var(--text-muted);">Fuente: Manejo de la Hiperpotasemia Aguda y Crónica. Servicio de Nefrología, HUGCDN. Ante cualquier hiperpotasemia, especialmente inesperada o aguda, el primer paso es <strong>confirmarla con un nuevo control analítico</strong> (evitar pseudohiperpotasemia) y completar el estudio con hemograma, gasometría venosa, bioquímica con el resto de iones, urea/función renal, y orina con iones y creatinina.</p>
+
+            <p class="section-label" style="margin-top:16px;">💊 Titulación de iSRAA/ARM/ARNi según el potasio</p>
+            <dl class="kv-row"><dt>K⁺ &gt; 6,5 mEq/l</dt><dd>Suspender/reducir/no iniciar iSRAA, ARM o ARNi, e iniciar un agente reductor de potasio (el CSZ tiene aquí un papel específico en el momento agudo).</dd></dl>
+            <dl class="kv-row"><dt>K⁺ 5-6,5 mEq/l</dt><dd>Si ya está con dosis máxima de iSRAA/ARM/ARNi: iniciar agente reductor de potasio y monitorizar K⁺ (o, si no se inicia, mantener el tratamiento vigilando el K⁺). Si aún no está con dosis máxima: continuar la titulación de iSRAA/ARM/ARNi vigilando el K⁺.</dd></dl>
+            <dl class="kv-row"><dt>K⁺ &lt; 5 mEq/l</dt><dd>Titular iSRAA/ARM/ARNi con normalidad, vigilando el K⁺ en controles sucesivos.</dd></dl>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">El objetivo es siempre mantener o alcanzar la dosis máxima tolerada de iSRAA/ARM/ARNi por su beneficio cardio-renal — los captores de potasio existen precisamente para no tener que retirarlos ante una hiperpotasemia leve-moderada (ver también Nefroprotección y Acidosis/Hiperpotasemia en ERC).</p>
+
+            <p class="section-label" style="margin-top:16px;">📋 Seguimiento tras el episodio</p>
+            <dl class="kv-row"><dt>Si no requirió ingreso</dt><dd>Aplicar el protocolo de hiperpotasemia crónica de esta misma ficha, en el ámbito de Urgencias o consulta.</dd></dl>
+            <dl class="kv-row"><dt>Si tenía seguimiento previo por otra especialidad</dt><dd>Analítica de control en 7-14 días para reevaluar el potasio y, si es posible, reintroducir progresivamente los fármacos retirados.</dd></dl>
+            <dl class="kv-row"><dt>Sin seguimiento previo, con comorbilidad de riesgo</dt><dd>(ERC, insuficiencia cardíaca, DM-2 mal controlada, o fármacos que aumenten el K⁺) → derivar a la especialidad correspondiente para control en 7-14 días.</dd></dl>
+            <dl class="kv-row"><dt>Sin grandes comorbilidades</dt><dd>Seguimiento por Atención Primaria, con control en 7-14 días.</dd></dl>
+            <dl class="kv-row"><dt>Si requirió ingreso hospitalario</dt><dd>Ajustar el tratamiento durante el ingreso según este protocolo, y al alta aplicar el criterio anterior según el perfil del paciente.</dd></dl>
         </div>
 
         <div id="fisio-acidobase-acidosis" class="tab-content">

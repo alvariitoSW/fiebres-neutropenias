@@ -14,19 +14,21 @@ import { init as initErc } from './erc.js';
 import { init as initFra } from './fra.js';
 import { init as initTrr } from './trr.js';
 import { init as initNefrotoxicidad } from './nefrotoxicidad.js';
+import { init as initTrasplanteRenal } from './trasplante-renal.js';
 import { preguntasNefrologia, temasNefrologia } from '../../data/nefrologia-preguntas.js';
 import { preguntasHTA, temasHTA } from '../../data/hta-preguntas.js';
 import { preguntasERC, temasERC } from '../../data/erc-preguntas.js';
 import { preguntasFRA, temasFRA } from '../../data/fra-preguntas.js';
 import { preguntasTRR, temasTRR } from '../../data/trr-preguntas.js';
+import { preguntasTrasplanteRenal, temasTrasplanteRenal } from '../../data/trasplante-renal-preguntas.js';
 
 // El modal de repaso (#quiz-modal-overlay) es un único partial compartido
 // por TODA la app — solo puede existir una llamada activa a initQuiz() en
 // toda la página (ver quiz.js). Nefrología expone aquí su banco/temas ya
 // combinados en vez de llamar a initQuiz() directamente, para que main.js
 // pueda fusionarlos con los de Hematología en una única llamada.
-export const quizTriggerId = ['btn-nefro-repasar', 'btn-hta-repasar', 'btn-erc-repasar', 'btn-fra-repasar', 'btn-trr-repasar'];
-export const quizBanco = [...preguntasNefrologia, ...preguntasHTA, ...preguntasERC, ...preguntasFRA, ...preguntasTRR];
+export const quizTriggerId = ['btn-nefro-repasar', 'btn-hta-repasar', 'btn-erc-repasar', 'btn-fra-repasar', 'btn-trr-repasar', 'btn-trasplante-renal-repasar'];
+export const quizBanco = [...preguntasNefrologia, ...preguntasHTA, ...preguntasERC, ...preguntasFRA, ...preguntasTRR, ...preguntasTrasplanteRenal];
 // Menú del quiz en 3 niveles (asignatura → bloque → ficha, ver quiz.js).
 const ASIGNATURA = 'Nefrología';
 export const quizTemas = [
@@ -35,6 +37,7 @@ export const quizTemas = [
     ...temasERC.map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'Enfermedad Renal Crónica' })),
     ...temasFRA.map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'Fracaso Renal Agudo' })),
     ...temasTRR.map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'Terapias de Reemplazo Renal' })),
+    ...temasTrasplanteRenal.map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'Trasplante renal y enfermedades glomerulares' })),
 ];
 
 function mostrarEnPreparacion() {
@@ -53,6 +56,7 @@ export function init() {
         nefrotoxicidad: document.getElementById('nefro-nefrotoxicidad-view'),
         tratamiento: document.getElementById('nefro-tratamiento-view'),
         trr: document.getElementById('nefro-trr-view'),
+        trasplanteRenal: document.getElementById('nefro-trasplante-renal-view'),
     });
 
     document.querySelectorAll('.btn-volver-nefro-kidney').forEach(b =>
@@ -88,6 +92,7 @@ export function init() {
         nefrotoxicidad: () => nefroLevel.show('nefrotoxicidad'),
         tratamiento: () => nefroLevel.show('tratamiento'),
         trr: () => nefroLevel.show('trr'),
+        trasplanteRenal: () => nefroLevel.show('trasplanteRenal'),
     };
     const rinon = initRinon({
         onRoute: (key) => rutasRinon[key]?.(),
@@ -112,6 +117,7 @@ export function init() {
     initFra();
     initTrr();
     initNefrotoxicidad();
+    initTrasplanteRenal();
 
     nefroLevel.show('kidney');
 

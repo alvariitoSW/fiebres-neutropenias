@@ -844,6 +844,75 @@
             <dl class="kv-row"><dt>Medidas preventivas con respaldo</dt><dd>Uso de la dosis mínima de contraste necesaria para el diagnóstico, y retirada de medicación nefrotóxica no esencial (AINE, aminoglucósidos, anfotericina, platinos, zoledronato, metotrexato) 24-48h antes y después de la exposición si FGe &lt;30 o hay AKI.</dd></dl>
             <dl class="kv-row"><dt>Medidas sin beneficio consistente</dt><dd>N-acetilcisteína, ácido ascórbico, furosemida, dopamina, fenoldopam o calcioantagonistas no han demostrado un beneficio preventivo consistente. La hemodiálisis profiláctica pericontraste puede ser potencialmente perjudicial y no se recomienda.</dd></dl>
             <dl class="kv-row"><dt>Gadolinio (RM)</dt><dd>Con FGe &lt;30 ml/min/1,73m² (G4-G5), se recomienda preferir agentes de contraste basados en gadolinio del grupo II o III de la American College of Radiology (menor riesgo de fibrosis sistémica nefrogénica) sobre los agentes lineales del grupo I.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">🏥 Protocolo hospitalario de prevención (PNT-NEF-20)</p>
+            <p style="font-size: 0.83rem; color: var(--text-muted);">Fuente: Prevención de la Nefropatía Inducida por Contraste Iodado. Servicio de Nefrología, HUGCDN. La nefropatía inducida por contraste (NIC) es la 3ª causa de FRA intrahospitalario.</p>
+
+            <p class="section-label" style="margin-top:16px;">🧮 Esquema de riesgo de Mehran</p>
+            <p style="font-size: 0.83rem; color: var(--text-muted);">Score aditivo simple (a diferencia de la KFRE, deliberadamente no implementada) — punto de corte validado en 10 puntos.</p>
+            <div class="checkbox-label"><input type="checkbox" id="mehran-hipotension"><label for="mehran-hipotension">Hipotensión (5 pts)</label></div>
+            <div class="checkbox-label"><input type="checkbox" id="mehran-iabp"><label for="mehran-iabp">Balón de contrapulsación intraaórtico (5 pts)</label></div>
+            <div class="checkbox-label"><input type="checkbox" id="mehran-icc"><label for="mehran-icc">Insuficiencia cardíaca congestiva (5 pts)</label></div>
+            <div class="checkbox-label"><input type="checkbox" id="mehran-edad"><label for="mehran-edad">Edad &gt;75 años (4 pts)</label></div>
+            <div class="checkbox-label"><input type="checkbox" id="mehran-anemia"><label for="mehran-anemia">Anemia (3 pts)</label></div>
+            <div class="checkbox-label"><input type="checkbox" id="mehran-dm"><label for="mehran-dm">Diabetes mellitus (3 pts)</label></div>
+            <div class="form-group">
+                <label for="mehran-volumen">Volumen de contraste previsto (cc) — 1 punto por cada 100cc</label>
+                <input type="number" id="mehran-volumen" min="0" step="10" placeholder="p. ej. 150">
+            </div>
+            <div class="form-group">
+                <label for="mehran-renal">Función renal</label>
+                <select id="mehran-renal">
+                    <option value="0">Creatinina ≤1,5 mg/dl y FGe ≥60 ml/min</option>
+                    <option value="4">Creatinina &gt;1,5 mg/dl (sin FGe disponible)</option>
+                    <option value="2">FGe 40-60 ml/min/1,73m²</option>
+                    <option value="4">FGe 20-40 ml/min/1,73m²</option>
+                    <option value="6">FGe &lt;20 ml/min/1,73m²</option>
+                </select>
+            </div>
+            <div id="mehran-resultado" class="tfg-estado tfg-estado-ok"></div>
+
+            <p class="section-label" style="margin-top:16px;">📊 Niveles de evidencia</p>
+            <table class="data-table">
+                <thead><tr><th>Afirmación</th><th>Nivel</th></tr></thead>
+                <tbody>
+                    <tr><td>La insuficiencia renal (Ccr &lt;60) es un factor de riesgo para NIC</td><td>A</td></tr>
+                    <tr><td>Los contrastes de alta osmolaridad tienen más riesgo que los de baja</td><td>A</td></tr>
+                    <tr><td>El gadolinio está contraindicado en Ccr &lt;30 por el riesgo de fibrosis sistémica nefrogénica</td><td>B</td></tr>
+                    <tr><td>La hidratación previa con líquidos IV es eficaz</td><td>A</td></tr>
+                    <tr><td>La hidratación con salino isotónico es superior a la hidratación con hipotónico</td><td>A</td></tr>
+                    <tr><td>La hidratación oral en las 24h previas es inferior a la IV, pero útil si no es posible la IV</td><td>C</td></tr>
+                    <tr><td>La profilaxis con diuréticos, manitol, péptido natriurético, dopamina, AC anti-endotelina o fenoldopam está contraindicada</td><td>A</td></tr>
+                    <tr><td>La profilaxis con NAC 600 mg el día previo y el día de la prueba puede ser útil</td><td>B</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.83rem; color: var(--text-muted);">Estudios recientes sugieren un efecto nefroprotector de la atorvastatina a dosis de 40 mg/día en la NIC, administrada de forma crónica (&gt;1 mes antes) o al menos 3 días antes de la exploración.</p>
+
+            <p class="section-label" style="margin-top:16px;">🧪 Contrastes radiológicos usados en este hospital</p>
+            <table class="data-table">
+                <thead><tr><th>Servicio</th><th>Contraste</th><th>Osmolaridad</th></tr></thead>
+                <tbody>
+                    <tr><td>Cardiología</td><td>Hexabrix 320 (ioxaglato Na/meglumina, iónico)</td><td>600 mOsm/kg</td></tr>
+                    <tr><td>TAC</td><td>Visipaque 320 (iodixanol, dimérico isoosmolar no iónico)</td><td>290 mOsm/kg</td></tr>
+                    <tr><td>Rx Vascular Intervencionista 1</td><td>Optiray (ioversol, no iónico)</td><td>780 mOsm/kg</td></tr>
+                    <tr><td>Rx Vascular Intervencionista 2</td><td>Xenetix 350 (iobitridol, no iónico)</td><td>915 mOsm/kg</td></tr>
+                    <tr><td>RMN</td><td>Omniscan (gadodiamida, 287 mg/ml)</td><td>—</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.83rem; color: var(--text-muted);">No debe usarse Omniscan si FGe &lt;30 ml/min o en trasplante hepático, por el riesgo de fibrosis sistémica nefrogénica (engrosamiento de piel/tejido conectivo, con posible afectación articular, muscular y de órganos internos).</p>
+
+            <p class="section-label" style="margin-top:16px;">✅ Protocolo de actuación en 8 pasos</p>
+            <p style="font-size: 0.83rem; color: var(--text-muted);">Si Mehran &gt;10 puntos, y/o FGe &lt;60 ml/min, y/o creatinina &gt;1,5 mg/dl:</p>
+            <ol style="font-size: 0.83rem; line-height: 1.7; padding-left: 20px;">
+                <li>Hidratación con suero salino 0,9% a 1 ml/kg/h, 12h antes y 12h después del procedimiento.</li>
+                <li>N-acetilcisteína 600 mg/12h vía oral, el día antes y el día después del procedimiento.</li>
+                <li>Retirada de diuréticos, ARA-II, IECA, metformina, AINE y otros fármacos nefrotóxicos.</li>
+                <li>Corrección de la hiperglucemia.</li>
+                <li>Corrección de la anemia.</li>
+                <li>Monitorización de creatinina a las 48 y 72 horas del procedimiento.</li>
+                <li>Atorvastatina 40 mg/día al menos 3 días antes del estudio y 3 días después.</li>
+                <li>Si es un estudio urgente y el paciente tiene riesgo de NIC: bicarbonato sódico 1/6 molar a 0,5 ml/kg IV antes de la infusión del contraste, seguido de perfusión de 1 ml/kg/h durante 6 horas.</li>
+            </ol>
         </div>
 
         <div id="erc-atencion" class="tab-content">

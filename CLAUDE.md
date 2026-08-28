@@ -1971,6 +1971,146 @@ por encima que sí diera cabida a todos.
       (Castro I et al., Clin Kidney J. 2022; Fayad AI et al., Cochrane
       2022) al metaanálisis y la revisión Cochrane de la Ficha 7, que
       antes se citaban sin autor.
+- **Primer lote de PNT del propio hospital, análogo al de los PNT internos de
+  Hematología/Trasplante**: el usuario empezó a mandar, en 2 tandas de 5
+  documentos cada una, los Procedimientos Normalizados de Trabajo (PNT) reales
+  del Servicio de Nefrología del HUGCDN. Mismo criterio ya establecido en el
+  proyecto para este tipo de fuente (ver Trasplante de Hematología): nunca
+  reproducir el documento original ni los nombres del personal que figura en
+  él, extraer solo el contenido clínico y reescribirlo con la voz propia de la
+  app, citando de forma genérica el código del PNT. Antes de tocar el
+  repositorio, se hizo un análisis documento-por-documento y un informe de
+  dónde encajaba cada uno (ampliar una ficha ya existente, justificar una
+  ficha/nodo nuevo, o descartar por falta de contenido clínico real) — mismo
+  método ya usado para el lote de PNT de Trasplante en Hematología.
+  - **3 documentos descartados por no aportar contenido clínico** (pura
+    logística/programa, sin datos diagnósticos ni terapéuticos): PNT-NEF-09
+    (Manejo y seguimiento de la patología infecciosa en ERCA — describe solo
+    la mecánica de la sesión conjunta semanal con Infecciosas, sin citar
+    ninguna infección/tratamiento concreto), PNT-NEF-63 (Atención al
+    paciente: Paciente Experto — programa de apoyo entre pacientes por
+    modalidad de TRS, 3 sesiones grupales, sin contenido clínico), e
+    IT-NEF-31 (Recogida de orina de 24 horas — instrucción técnica de
+    enfermería sin contenido diagnóstico).
+  - **3 fichas ya existentes ampliadas** con contenido real de PNT que no
+    duplicaba lo ya escrito:
+    - `fisio-hiponatremia` (Nefrología → Fisiología/electrolitos), con
+      PNT-NEF-10 (Manejo hospitalario de la hiponatremia): protocolo
+      práctico de infusión de suero salino hipertónico para hiponatremias
+      graves/agudas (3 ampollas ClNa 20% en 250ml, inicio a 11 ml/h, tabla
+      de ajuste por controles a las 4h y luego cada 6h), el **índice de
+      Fürst** ((Na⁺+K⁺)orina/Na⁺plasma) para graduar la restricción hídrica
+      en hiponatremias leves/crónicas, y el **algoritmo completo de
+      titulación del tolvaptán** (inicio 7,5 mg/día, control a 6h, luego
+      12-24h, doblando dosis hasta 60 mg/día máx.) — la ficha ya tenía la
+      calculadora de Adrogué-Madias y las guías europeas/americanas, pero no
+      este nomograma práctico paso a paso ni el índice de Fürst ni la
+      titulación de tolvaptán, verificado antes de escribir releyendo la
+      ficha completa para no duplicar contenido.
+    - `fisio-hiperpotasemia` (mismo bloque), con HUGCDN-NEF-PT-01 (Manejo de
+      la hiperpotasemia aguda y crónica): la ficha ya tenía una tabla de
+      tratamiento agudo casi idéntica (mismas dosis de gluconato
+      cálcico/insulina-glucosa/captores), así que la ampliación fue
+      quirúrgica — se añadió solo la dosis IV de salbutamol (0,5 mg en
+      100 ml de glucosado 5% en 15 min, ausente hasta ahora, solo estaba la
+      vía inhalada), el **algoritmo de titulación de iSRAA/ARM/ARNi por
+      nivel de potasio** (K&gt;6,5 suspender+reductor; K 5-6,5 según dosis ya
+      alcanzada; K&lt;5 titular con normalidad — ausente por completo) y el
+      **algoritmo de seguimiento tras el alta** (con/sin seguimiento previo,
+      con/sin comorbilidad de riesgo, con/sin ingreso).
+    - Ficha 10 de ERC (`erc-farmacos`, "Manejo de fármacos, nefrotoxicidad y
+      contraste"), con PNT-NEF-20 (Prevención de la nefropatía inducida por
+      contraste iodado): **calculadora interactiva del esquema de riesgo de
+      Mehran** (`calcMehran()` en `erc.js` — score aditivo simple de 6
+      factores clínicos + volumen de contraste + función renal, con las 4
+      bandas de riesgo de NIC/diálisis del estudio original; mismo criterio
+      de seguridad clínica ya aplicado a KFRE/Cairo-Bishop/ISTH-DIC: un
+      score aditivo simple sí se implementa, una regresión compleja no),
+      tabla de niveles de evidencia, **los contrastes radiológicos reales
+      usados en este hospital** por servicio (Hexabrix/Visipaque/Optiray/
+      Xenetix/Omniscan, con sus osmolaridades/viscosidades — información "a
+      pie de cama" genuina), y el protocolo de profilaxis en 8 pasos
+      (hidratación, NAC, retirada de nefrotóxicos, corrección de
+      hiperglucemia/anemia, monitorización a 48/72h, atorvastatina,
+      bicarbonato para estudios urgentes).
+  - **Cross-link reforzado Vías Urinarias → ERC**: el micro-prof-item
+    "Nefropatía por contraste" de la Ficha 3 de Vías Urinarias
+    (Fisiopatología UCI) solo mencionaba el tema de pasada; se añadió un
+    botón `.especialidad-link` real hacia la Ficha 10 de ERC ya ampliada, y
+    una **nota de fidelidad explícita** documentando que esta fuente (Libro
+    Azul) no recomienda la NAC mientras que el PNT hospitalario sí la
+    incluye (nivel de evidencia B) — discrepancia real entre fuentes
+    distintas, mismo criterio de nunca elegir un "ganador" por criterio
+    propio ya aplicado al resto de discrepancias documentadas en el
+    proyecto (IFR de FRA, TAPSE de Cardiología, etc.).
+  - **8º nodo nuevo del mapa del riñón: "Trasplante renal y enfermedades
+    glomerulares"** (`js/modules/nefrologia/trasplante-renal.html`+`.js`,
+    posicionado en la zona superior del riñón, `left:50%; top:8%`, sin
+    solapar con los 7 nodos ya existentes). Con los 2 documentos de
+    inmunosupresión del lote anterior (Timoglobulina, C. difficile) más 2
+    nuevos del segundo lote (Ciclofosfamida, Rituximab), el volumen de
+    contenido ya justificaba un nodo propio en vez de esperar — los 4
+    comparten una lógica clínica común (inmunosupresión en trasplante renal
+    y enfermedad glomerular autoinmune: Rituximab trata tanto la nefritis
+    lúpica como el rechazo humoral del injerto, C. difficile es una
+    complicación infecciosa de riesgo elevado precisamente en TOS/ERC en
+    diálisis). **Cuaderno de campo de 4 fichas** (mismo `core/corkboard.js`
+    de siempre, sin calculadoras propias): Timoglobulina (inducción y
+    tratamiento del rechazo con la clasificación de Banff 2017, premedicación,
+    ajuste de dosis, profilaxis de infecciones oportunistas por FG),
+    Infección por Clostridium difficile (factores de riesgo con la tabla de
+    antibióticos por frecuencia de asociación, diagnóstico GDH+PCR,
+    clasificación por gravedad, algoritmo terapéutico completo por
+    escenario/recurrencia), Ciclofosfamida (dosis 0,6 g/m² con tabla de
+    ajuste por edad×función renal, MESNA/hidratación/ondansetrón como
+    tratamiento complementario obligatorio, toxicidad ovárica por edad),
+    Rituximab (indicaciones en patología renal con su fuerza real —única
+    indicación AEP: vasculitis ANCA—, posología, premedicación, tabla de
+    velocidad de infusión, manejo de reacciones), con un cross-link interno
+    Rituximab→Timoglobulina para el rechazo humoral del injerto. Ganó su
+    propio banco de quiz (`js/data/trasplante-renal-preguntas.js`,
+    `tr-q001`-`q032`, 8 preguntas por ficha × 4 fichas, mismo baseline
+    mínimo ya usado al arrancar otros bloques de Nefrología), con
+    `triggerId: 'btn-trasplante-renal-repasar'` añadido al array que ya
+    exporta `nefrologia/index.js`.
+  - **Nueva ventana "PNT" — índice de acceso rápido a los protocolos**, a
+    petición explícita del usuario ("haz una nueva ventana llamada PNT y ahí
+    es donde vas a poner un enlace que te dirija a donde está cada
+    protocolo en la app... para que estén localizados y sean fácilmente
+    accesibles de manera rápida"). Implementado como un **acordeón de solo
+    contenido** justo debajo del mapa del riñón en `rinon-menu.html`
+    (`data-target="pnt-nefrologia"`, detectado automáticamente por
+    `core/accordion.js` sin necesidad de registrarlo en ningún sitio — mismo
+    patrón exacto que "FUENTES Y EVIDENCIA" en Hematología, el precedente
+    establecido para "categoría solo de contenido/índice, no un nodo del
+    mapa"), en vez de un 9º nodo visual en el riñón (que hubiera mezclado un
+    índice de navegación puro con los nodos de contenido clínico real). Los
+    7 enlaces (uno por PNT ya incorporado) usan `.tx-link` con
+    `data-view`/`data-panel`/`data-tab` — mismo mecanismo ya usado por la
+    guía transversal `tratamiento-ira-irc.html` — resuelto por el listener
+    global ya existente en `nefrologia/index.js`, sin JS nuevo. Los 2
+    enlaces a fichas de Fisiología (hiponatremia/hiperpotasemia) llevan
+    `data-view="nefrona"` explícito (viven en una vista distinta del propio
+    switcher `nefroLevel` a la del mapa del riñón donde vive el acordeón
+    PNT) — detalle verificado con Playwright antes de darlo por bueno, ya
+    que sin él `openCorkboardTopic` habría actuado sobre un panel oculto.
+  - Verificado con Playwright: las 4 fichas nuevas abren/voltean sin error
+    de consola ni 404 real; el cross-link interno Rituximab→Timoglobulina
+    funciona; el acordeón PNT se abre y sus 7 enlaces navegan cada uno a la
+    ficha exacta de destino (incluidos los 2 que cruzan a la vista
+    `nefrona`); la calculadora de Mehran calcula correctamente (hipotensión
+    +ICC+150cc+creatinina&gt;1,5 = 5+5+1+4 = 15 puntos → banda 11-16,
+    26,1%/1,09%); el contenido nuevo de hiponatremia (índice de Fürst,
+    "11 ml/h", titulación del tolvaptán) e hiperpotasemia (titulación de
+    iSRAA, seguimiento tras el episodio) se detecta correctamente en el
+    DOM; el cross-link Vías Urinarias→ERC funciona; un recorrido completo
+    del banco de quiz nuevo (32 preguntas, incluidas las 4 de redactar) no
+    generó ninguna excepción JS; sin overflow horizontal a 390px.
+  - **Pendiente**: el usuario sigue mandando más PNT del Servicio en tandas
+    — cuando lleguen más documentos de este mismo tema (trasplante renal/
+    inmunosupresión), amplían el nodo ya creado en vez de fragmentar en
+    nodos nuevos; si llegan de un tema distinto, aplicar el mismo método de
+    análisis-antes-de-construir ya usado en estas 2 tandas.
 
 ### UCI / Papers Tuiter
 
