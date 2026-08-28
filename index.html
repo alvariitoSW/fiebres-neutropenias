@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HUD Clínico UCI</title>
-<link rel="stylesheet" href="css/variables.css?v=20260827-3">
-<link rel="stylesheet" href="css/base.css?v=20260827-3">
-<link rel="stylesheet" href="css/components.css?v=20260827-3">
+<link rel="stylesheet" href="css/variables.css?v=20260828">
+<link rel="stylesheet" href="css/base.css?v=20260828">
+<link rel="stylesheet" href="css/components.css?v=20260828">
 </head>
 <body>
 
@@ -46,6 +46,11 @@
         <button class="accordion-btn nav-btn" id="btn-fisio-uci" style="border-left: 4px solid var(--accent-yellow);">
             <span><span class="gral-icon" style="color: var(--accent-yellow);">🧬</span>FISIOPATOLOGÍA UCI</span>
             <span style="font-size: 0.8rem; color: var(--accent-yellow);">[ VER → ]</span>
+        </button>
+
+        <button class="accordion-btn nav-btn" id="btn-cardiologia" style="border-left: 4px solid var(--accent-blue);">
+            <span><span class="gral-icon" style="color: var(--accent-blue); text-shadow: var(--glow-blue);">🫀</span>CARDIOLOGÍA</span>
+            <span style="font-size: 0.8rem; color: var(--accent-blue);">[ VER → ]</span>
         </button>
     </div>
 
@@ -264,10 +269,17 @@
         <div id="fisio-uci-vias-urinarias-view" style="display: none;" data-include="js/modules/fisio-uci/vias-urinarias.html"></div>
         <div id="fisio-uci-cardiologia-view" style="display: none;" data-include="js/modules/fisio-uci/cardiologia.html"></div>
     </div>
+    <!-- ========================================== -->
+    <!-- VISTA: CARDIOLOGÍA                          -->
+    <!-- ========================================== -->
+    <div id="cardiologia-view" style="display: none;">
+        <div id="cardiologia-menu-view" data-include="js/modules/cardiologia/cardiologia-menu.html"></div>
+        <div id="cardio-ic-view" style="display: none;" data-include="js/modules/cardiologia/insuficiencia-cardiaca.html"></div>
+    </div>
 
     <div data-include="js/modules/quiz/quiz.html"></div>
 </div>
 
-<script type="module" src="js/main.js?v=20260827-3"></script>
+<script type="module" src="js/main.js?v=20260828"></script>
 </body>
 </html>

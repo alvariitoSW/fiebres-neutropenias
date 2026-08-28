@@ -1,0 +1,763 @@
+    <button class="back-btn btn-volver-cardio-menu">← VOLVER</button>
+    <div class="diag-header">
+        <h2 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">Insuficiencia Cardíaca</h2>
+        <p>2026 ESC Guidelines for the management of heart failure — Parte 1/2 (secciones 1-8)</p>
+    </div>
+
+    <button class="accordion-btn nav-btn" id="btn-cardio-ic-repasar" style="border-left: 4px solid var(--accent-blue);">
+        <span>🎯 Repasar (preguntas de repaso)</span>
+        <span style="font-size: 0.8rem; color: var(--accent-blue);">[ EMPEZAR → ]</span>
+    </button>
+
+    <p class="section-label">Elige un bloque</p>
+    <div class="corkboard" id="cardio-ic-corkboard">
+
+        <div class="field-card" data-tab="ic-definicion"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha I</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-blue)" stroke-width="1.6">
+                    <path d="M40,14 C30,6 16,10 16,24 C16,38 40,48 40,48 C40,48 64,38 64,24 C64,10 50,6 40,14 Z" stroke-opacity="0.75"/>
+                    <path d="M22,26 L30,26 L34,18 L40,34 L44,22 L48,26 L58,26" stroke-width="1.2"/>
+                </svg>
+                <div class="field-name">Definición,<br>epidemiología y clasificaciones</div>
+                <div class="field-hook">"HFmrEF desaparece, FMT/AMT/GDIT aparecen... ¿por qué se reclasifica toda la IC en 2026?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Porque un único corte de FEVI al 50% simplifica la práctica clínica sin perder matices — y porque la nueva pirámide de tratamiento (fundamental/adicional/dispositivos) sustituye al antiguo "GDMT" para hacer sitio a los fármacos más recientes.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="ic-prevencion"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha II</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-green)" stroke-width="1.6">
+                    <circle cx="40" cy="28" r="18" stroke-opacity="0.7"/>
+                    <path d="M40,14 L40,28 L50,34" stroke-width="1.4"/>
+                </svg>
+                <div class="field-name">Prevención de<br>la insuficiencia cardíaca</div>
+                <div class="field-hook">"diabetes, hipertensión, obesidad y tabaco explican la mitad de los eventos... ¿y el estadio B, antes de que aparezca ni un síntoma?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">El estadio B (disfunción ventricular o valvular asintomática) es la última ventana real de prevención — un IECA/ARA-II y un betabloqueante ya reducen el riesgo de hospitalización antes de que el paciente note nada.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="ic-diagnostico"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha III</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-purple)" stroke-width="1.6">
+                    <rect x="18" y="12" width="44" height="32" rx="3" stroke-opacity="0.7"/>
+                    <path d="M24,28 L30,28 L33,20 L38,36 L42,24 L46,28 L56,28" stroke-width="1.2"/>
+                </svg>
+                <div class="field-name">Diagnóstico de<br>la IC crónica</div>
+                <div class="field-hook">"NT-proBNP &gt;125, &gt;250 o &gt;500... el mismo umbral no vale para los 20 que para los 80 años"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Los péptidos natriuréticos ahora se interpretan con cortes ajustados por edad — y la ecocardiografía sigue siendo la prueba que confirma el diagnóstico y separa HFrEF de HFpEF.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="ic-farmacologia"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha IV</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-red)" stroke-width="1.6">
+                    <rect x="20" y="10" width="14" height="36" rx="4" stroke-opacity="0.7"/>
+                    <rect x="46" y="18" width="14" height="28" rx="4" stroke-opacity="0.5"/>
+                    <path d="M20,26 L34,26 M46,32 L60,32" stroke-width="1.1"/>
+                </svg>
+                <div class="field-name">Terapia farmacológica<br>de la IC crónica</div>
+                <div class="field-hook">"IECA/ARNI, betabloqueante, MRA, iSGLT2 — los 4 pilares. ¿en qué orden se empiezan?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">En el que sea clínicamente posible, a la vez si se puede — la secuencia estricta ya no es la recomendación: cuanto antes estén los 4 pilares, antes se reduce el riesgo de hospitalización y muerte.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="ic-dispositivos"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha V</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-yellow)" stroke-width="1.6">
+                    <rect x="30" y="8" width="20" height="14" rx="2" stroke-opacity="0.75"/>
+                    <path d="M40,22 L40,32 M32,32 L48,32 M32,32 L28,46 M48,32 L52,46" stroke-width="1.3"/>
+                </svg>
+                <div class="field-name">Terapia intervencionista<br>dirigida por guía</div>
+                <div class="field-hook">"DAI para prevenir la muerte súbita, TRC para resincronizar... ¿QRS de cuántos ms marca la diferencia?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">150 ms es el punto de corte que separa una indicación de Clase I de una de Clase IIa/IIb para la resincronización — y el bloqueo de rama izquierda pesa tanto como la anchura del QRS.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="ic-descompensada"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha VI</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-red)" stroke-width="1.6">
+                    <path d="M16,40 L28,40 L34,20 L40,44 L46,28 L52,40 L64,40" stroke-width="1.4"/>
+                    <path d="M16,40 L64,40" stroke-opacity="0.3" stroke-width="1"/>
+                </svg>
+                <div class="field-name">IC descompensada</div>
+                <div class="field-hook">"congestión, hipoperfusión, shock cardiogénico... 5 categorías SCAI, de 'en riesgo' a 'extremis'"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">3 fases hospitalarias (manejo inicial → estabilización → prealta), un algoritmo de diuréticos guiado por sodio en orina, y un Shock Team multidisciplinar cuando aparece el shock cardiogénico.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="ic-avanzada"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha VII</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-purple)" stroke-width="1.6">
+                    <circle cx="40" cy="28" r="16" stroke-opacity="0.7"/>
+                    <path d="M40,16 L40,28 L48,32" stroke-width="1.3"/>
+                    <path d="M40,4 L40,10 M40,46 L40,52 M4,28 L10,28 M70,28 L76,28" stroke-width="1"/>
+                </svg>
+                <div class="field-name">IC avanzada</div>
+                <div class="field-hook">"'Rule of three' o 'I NEED HELP'... ¿cuándo remitir a un centro de IC avanzada?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Con solo 1 criterio de cualquiera de las 2 listas ya es momento de discutir el caso con un centro de IC avanzada — antes de que el trasplante o el soporte circulatorio durable dejen de ser una opción real.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+    </div>
+    <p class="tap-hint">☝ toca una ficha para ver la pista, y de nuevo para abrir el bloque completo</p>
+
+    <div class="card" id="panel-cardio-ic-tabs" style="display:none;">
+
+        <!-- ===== FICHA I: DEFINICIÓN, EPIDEMIOLOGÍA Y CLASIFICACIONES ===== -->
+        <div id="ic-definicion" class="tab-content">
+            <h3 style="color: var(--accent-blue);">Definición, epidemiología y clasificaciones</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: 2026 ESC Guidelines for the management of heart failure. Eur Heart J. 2026;00:1-112 (sec. 2-3).</p>
+
+            <dl class="kv-row"><dt>Definición</dt><dd>Síndrome clínico con signos y/o síntomas causados por anomalías estructurales y/o funcionales del corazón que resultan en presiones intracardíacas elevadas y/o gasto cardíaco inadecuado en reposo y/o durante el ejercicio. A los síntomas subjetivos deben sumarse evidencia objetiva de congestión pulmonar y/o sistémica y pruebas diagnósticas de apoyo.</dd></dl>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Las personas asintomáticas <strong>no</strong> se incluyen bajo esta definición de IC — se definen como en riesgo de IC (estadio A) o con IC preclínica (estadio B). La identificación de la etiología no forma parte de la definición, aunque es clínicamente imprescindible porque determina tratamiento y pronóstico.</p>
+
+            <p class="section-label" style="margin-top:16px;">Epidemiología</p>
+            <ul class="term-chips">
+                <li>Prevalencia: 1-3% de la población adulta general</li>
+                <li>Prevalencia en Europa: 12-58 casos/1000 personas</li>
+                <li>Incidencia cruda en ancianos: 2-13/1000 personas-año (&lt;1 en &lt;45 años, &gt;12 en &gt;74 años)</li>
+                <li>Supervivencia global a 5 años: &lt;60%</li>
+                <li>Mortalidad a 5 años &lt;65 años: 15% · 65-79 años: 39%</li>
+            </ul>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Casi la mitad de los casos son HFpEF, proporción en aumento por el mejor tratamiento de la enfermedad coronaria y el peso creciente de HTA/obesidad/otros factores de riesgo de HFpEF. En el registro sueco de IC, la edad media al debut de HFpEF es 77 años (55% mujeres); en HFrEF, 72 años (71% varones).</p>
+
+            <p class="section-label" style="margin-top:16px;">Clasificación por FEVI (nueva en 2026)</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">La guía 2021 distinguía 3 fenotipos: HFrEF (FEVI ≤40%), HFmrEF (FEVI 41-49%) y HFpEF (FEVI ≥50%). El grupo de trabajo de 2026 <strong>elimina el fenotipo HFmrEF</strong> y reclasifica la IC en solo 2 fenotipos:</p>
+            <table class="data-table">
+                <thead><tr><th>Fenotipo</th><th>Criterio</th></tr></thead>
+                <tbody>
+                    <tr><td>HFrEF</td><td>FEVI &lt;50% + síntomas y/o signos de IC</td></tr>
+                    <tr><td>HFpEF</td><td>FEVI ≥50% + síntomas y/o signos de IC + evidencia objetiva de disfunción diastólica del VI/presiones de llenado elevadas, apoyada por péptidos natriuréticos elevados</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size:0.8rem; color:var(--text-muted);">La razón: el HFmrEF se introdujo en 2016 para captar los ensayos que excluían FEVI ≤40%, pero su fisiopatología y su respuesta al tratamiento son más similares a HFrEF que a HFpEF — así que ahora se agrupa directamente ahí. Usar un único corte de FEVI es en cierto modo arbitrario (la FEVI varía según técnica de imagen y observador), pero simplifica la práctica; la valvulopatía (p. ej. insuficiencia mitral) puede elevar falsamente la FEVI medida.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);"><strong>FEVI mejorada (HFimpEF)</strong>: aumento ≥10 puntos absolutos respecto a la FEVI basal, y por encima de 40% (a menudo normalizada) — estos pacientes deben seguir tratados con FMT salvo casos muy seleccionados.</p>
+
+            <p class="section-label" style="margin-top:16px;">Estadios de la IC (nuevos en 2026)</p>
+            <table class="data-table">
+                <thead><tr><th>Estadio</th><th>Definición</th></tr></thead>
+                <tbody>
+                    <tr><td>A · En riesgo</td><td>Factores de riesgo presentes, sin síntomas/signos actuales o previos de IC, sin cambios cardíacos estructurales, sin biomarcadores elevados</td></tr>
+                    <tr><td>B · Pre-IC</td><td>Sin síntomas/signos, pero con ≥1 de: anomalías estructurales, función cardíaca anormal, péptidos natriuréticos o troponina persistentemente elevados</td></tr>
+                    <tr><td>C · IC sintomática</td><td>Síntomas y/o signos actuales o previos causados por una anomalía estructural/funcional → se subdivide en HFrEF (FEVI &lt;50%) o HFpEF (FEVI ≥50%)</td></tr>
+                    <tr><td>D · IC avanzada</td><td>Síntomas graves, deterioro grave de la capacidad de ejercicio, disfunción cardíaca grave, y episodios recurrentes de IC, pese a FMT/AMT/GDIT óptimos</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Nueva nomenclatura del tratamiento (Fig. 3)</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">El término "GDMT" (guideline-directed medical therapy) se queda corto ante los nuevos fármacos y dispositivos — el grupo de trabajo introduce 3 clasificaciones nuevas:</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧱 Terapia médica fundamental (FMT)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Terapia con recomendación Clase I para la población general de IC, con evidencia convincente de mejora en morbimortalidad. En HFrEF: betabloqueante, IECA/ARNI/ARA-II, MRA, iSGLT2. En HFpEF: iSGLT2 y MRA. No incluye fármacos con Clase I solo en subgrupos específicos.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧩 Terapia médica adicional (AMT)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Cualquier otra terapia médica con Clase IIa/IIb, O Clase I con efecto probado solo en síntomas/calidad de vida, O Clase I en subgrupos específicos de pacientes/fenotipos de IC (p. ej. ivabradina, vericiguat, hidralazina/ISDN, digoxina/digitoxina, GLP-1 RA).</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔌 Terapia intervencionista dirigida por guía (GDIT)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Todos los dispositivos electrónicos implantables cardíacos (CIED) y terapias intervencionistas con recomendación en la guía: DAI, TRC, revascularización, cirugía/intervención valvular, ablación de FA, soporte circulatorio mecánico.</div>
+                </div>
+            </div>
+            <p style="font-size:0.8rem; color:var(--text-muted);">FMT + AMT = GDMT (el término sigue existiendo, pero ahora como suma de las 2 terapias médicas). "FMT óptimo" se refiere a la dosis objetivo usada en los ensayos, o la máxima tolerada.</p>
+
+            <p class="section-label" style="margin-top:16px;">Otras clasificaciones</p>
+            <ul class="term-chips">
+                <li><em>De novo</em> vs. IC preexistente vs. IC crónica descompensada (DHF)</li>
+                <li>IC izquierda vs. derecha vs. combinada — causa principal de IC derecha aislada crónica: hipertensión pulmonar por disfunción del VI</li>
+                <li>Guideline-directed medical therapy (GDMT) = FMT + AMT</li>
+            </ul>
+
+            <p class="section-label" style="margin-top:16px;">🆕 Qué cambia respecto a 2021 — resumen</p>
+            <table class="data-table">
+                <thead><tr><th>Concepto nuevo</th><th>Detalle</th></tr></thead>
+                <tbody>
+                    <tr><td>HFrEF ampliado</td><td>Incluye FEVI hasta 50% (antes ≤40%)</td></tr>
+                    <tr><td>HFmrEF eliminado</td><td>Se reparte entre HFrEF y HFpEF</td></tr>
+                    <tr><td>HFpEF</td><td>Incluye FEVI desde 50% en adelante</td></tr>
+                    <tr><td>IC descompensada</td><td>Sustituye al término "IC aguda"</td></tr>
+                    <tr><td>Estadios A-D</td><td>De factores de riesgo a IC avanzada</td></tr>
+                    <tr><td>FMT/AMT/GDIT</td><td>Nuevas clasificaciones de tratamiento médico e intervencionista</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ===== FICHA II: PREVENCIÓN DE LA IC ===== -->
+        <div id="ic-prevencion" class="tab-content">
+            <h3 style="color: var(--accent-green);">Prevención de la insuficiencia cardíaca</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: 2026 ESC Guidelines for the management of heart failure (sec. 4).</p>
+
+            <p class="section-label">4.1. Pacientes en riesgo (estadio A)</p>
+            <dl class="kv-row"><dt>Factores cardiometabólicos</dt><dd>Diabetes, hipertensión, obesidad y tabaquismo explican <strong>~50% de todos los eventos de IC</strong> a nivel poblacional — 30-40% en mayores de 75 años, 75-80% en menores de 55 años (similar en HFpEF y HFrEF). Estos factores tienden a agruparse en los mismos individuos y a ser estables a lo largo de la vida salvo que se intervenga.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Puntuaciones de riesgo</p>
+            <ul class="term-chips">
+                <li>AHA PREVENT — riesgo a 10 y 30 años, sin IC previa</li>
+                <li>ESC SCORE2-HF — calibrado para Europa</li>
+                <li>ESC SMART2-HF — riesgo a 10 años en pacientes con ASCVD ya establecida</li>
+                <li>ESC LIFE-HF (HFrEF) y LIFE-Preserved (HFpEF) — riesgo en pacientes con IC ya establecida</li>
+            </ul>
+
+            <p class="section-label" style="margin-top:16px;">Estilo de vida</p>
+            <dl class="kv-row">
+                <dt>Dieta y actividad física</dt>
+                <dd>Dietas ricas en azúcares, grasas saturadas, granos refinados y alimentos procesados se asocian a mayor riesgo (sobre todo HFpEF). Dieta rica en vegetales/frutos secos/granos integrales/pescado/grasas insaturadas se asocia a menor riesgo. El sedentarismo y la inactividad física son factores de riesgo fuertes, especialmente para HFpEF.</dd>
+                <dt>Tabaco, alcohol y sustancias</dt>
+                <dd>El cese tabáquico reduce el riesgo con el tiempo. El consumo elevado de alcohol se asocia a mayor riesgo de IC; el consumo leve-moderado tiene datos mixtos. Cocaína, anfetaminas y esteroides anabolizantes se asocian a mayor riesgo de miocardiopatía e IC.</dd>
+            </dl>
+
+            <p class="section-label" style="margin-top:16px;">Poblaciones específicas en riesgo</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💓 Arritmias</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">FA y otras taquiarritmias supraventriculares, ectopia ventricular frecuente y trastornos de la conducción pueden conducir a IC. Investigar disfunción del VI y causas subyacentes (genética, infiltrativa, inflamatoria) según el contexto clínico.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>❤️‍🩹 Infarto de miocardio</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Alto riesgo de IC incluso sin anomalías de motilidad/estructurales. Optimizar factores de riesgo cardiometabólico. En post-IAM con FEVI preservada (&gt;50%), el ensayo REDUCE-AMI no mostró diferencia en riesgo de IC entre betabloqueante y placebo — argumenta contra su uso rutinario en este escenario.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩸 Enfermedad renal crónica</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Marcador de riesgo fuerte para IC futura. Fuerte evidencia de que iSGLT2 y finerenona reducen el riesgo de IC en pacientes con T2DM y ERC.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🎗️ Supervivientes de cáncer</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Mayor riesgo de disfunción del VI asintomática e IC tras exposición a agentes cardiotóxicos (antraciclinas, ciclofosfamida, inhibidores de puntos de control inmunológico, trastuzumab).</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Predisposición familiar/genética sin enfermedad manifiesta</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">En portadores de variantes de miocardiopatía dilatada, VI no dilatada o ARVC, se sugiere control óptimo de factores de riesgo modificables y seguimiento/cribado cardíaco regular.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>😴 Trastornos pulmonares y del sueño</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Mala calidad del sueño, respiración con trastorno del sueño (SDB), apnea del sueño y EPOC se asocian a mayor incidencia de IC.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🦋 Trastornos endocrinos</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Trastornos tiroideos, acromegalia y feocromocitoma se asocian a mayor riesgo de IC — la prevención se relaciona con la corrección de la disfunción hormonal subyacente.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>👶 Cardiopatía congénita</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Riesgo relativo de IC 8 veces mayor, con debut 20-25 años más joven que controles pareados por edad/sexo — el riesgo es máximo en lesiones complejas (defectos conotruncales, ventrículo único, corazón izquierdo hipoplásico).</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">4.2. Estadio B — disfunción ventricular asintomática y valvulopatía</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Con FEVI &lt;50%, sin síntomas ni causa alternativa (p. ej. corazón de atleta), en ambos sexos: se recomienda IECA (o ARA-II si intolerancia) y betabloqueante si FEVI &lt;50% para reducir el riesgo de IC y muerte. La eplerenona se recomienda tras IAM con FEVI ≤40% y signos de IC o diabetes.</p>
+
+            <p class="section-label" style="margin-top:16px;">4.3. Predicción de riesgo en IC ya establecida</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">MAGGIC, Seattle Heart Failure Model, y los más recientes LIFE-HF (HFrEF)/LIFE-Preserved (HFpEF) del ESC predicen hospitalización y mortalidad en pacientes ambulatorios con IC establecida — útiles para identificar pacientes de alto riesgo que se beneficiarían de seguimiento más estrecho, sin que deban condicionar el tratamiento farmacológico ya indicado por guía independientemente del riesgo estimado.</p>
+
+            <p class="section-label" style="margin-top:16px;">📋 Recomendaciones clave</p>
+            <dl class="kv-row"><dt>Estilo de vida</dt><dd>Consejo sobre peso saludable, dieta equilibrada, evitar sedentarismo, tabaco, alcohol excesivo y drogas (cocaína/anfetaminas/esteroides) en todos los pacientes en estadio A o B. <span class="grade-badge">I · C</span></dd></dl>
+            <dl class="kv-row"><dt>Presión arterial</dt><dd>Control estricto de la PA (objetivo sistólica &lt;130 mmHg) en pacientes con hipertensión o IC estadio B para reducir el riesgo de IC. <span class="grade-badge">I · A</span></dd></dl>
+            <dl class="kv-row"><dt>IECA/ARA-II en estadio B</dt><dd>Recomendado con FEVI ≤40% para reducir riesgo de hospitalización y muerte. <span class="grade-badge">I · A</span></dd></dl>
+            <dl class="kv-row"><dt>Betabloqueante en estadio B</dt><dd>Recomendado con FEVI &lt;50%. <span class="grade-badge">I · B1</span></dd></dl>
+            <dl class="kv-row"><dt>Eplerenona post-IAM</dt><dd>Recomendada con FEVI ≤40% y signos de IC o diabetes. <span class="grade-badge">I · B1</span></dd></dl>
+            <dl class="kv-row"><dt>iSGLT2 en diabetes con riesgo de IC</dt><dd>Recomendado en T2DM con múltiples factores de riesgo ASCVD o ASCVD establecida, y en T2DM+ERC, para reducir riesgo de IC/muerte CV. <span class="grade-badge">I · A</span></dd></dl>
+            <dl class="kv-row"><dt>Finerenona en T2DM+ERC</dt><dd>Recomendada para reducir riesgo de IC. <span class="grade-badge">I · A</span></dd></dl>
+            <dl class="kv-row"><dt>GLP-1 RA</dt><dd>Debe considerarse en T2DM con ≥1 factor de riesgo CV adicional para reducir riesgo de IC o muerte CV. <span class="grade-badge yellow">IIa · A</span></dd></dl>
+            <dl class="kv-row"><dt>Estatinas</dt><dd>Deben considerarse en personas con alto riesgo de/con ASCVD establecida, para reducir el riesgo de IC. <span class="grade-badge yellow">IIa · A</span></dd></dl>
+        </div>
+
+        <!-- ===== FICHA III: DIAGNÓSTICO DE LA IC CRÓNICA ===== -->
+        <div id="ic-diagnostico" class="tab-content">
+            <h3 style="color: var(--accent-purple);">Diagnóstico de la IC crónica</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: 2026 ESC Guidelines for the management of heart failure (sec. 5).</p>
+
+            <p class="section-label">Síntomas y signos</p>
+            <table class="data-table">
+                <thead><tr><th>Típicos</th><th>Más específicos</th></tr></thead>
+                <tbody>
+                    <tr><td>Disnea, ortopnea, disnea paroxística nocturna, intolerancia al ejercicio, fatiga, edema en tobillos</td><td>↑Presión venosa yugular, reflujo hepatoyugular, 3er ruido (galope), impulso apical desplazado</td></tr>
+                </tbody>
+            </table>
+            <table class="data-table">
+                <thead><tr><th>Menos típicos</th><th>Menos específicos</th></tr></thead>
+                <tbody>
+                    <tr><td>Tos nocturna, sibilancias, sensación de hinchazón, pérdida de apetito, confusión (sobre todo en ancianos), depresión, palpitaciones, mareo, síncope, bendopnea (disnea al inclinarse hacia delante)</td><td>Aumento de peso &gt;2kg/semana, pérdida de peso (IC avanzada), caquexia, soplo cardíaco, crepitantes pulmonares, derrame pleural, taquicardia/irregularidad del pulso, taquipnea, respiración de Cheyne-Stokes, hepatomegalia, ascitis, extremidades frías, oliguria, presión de pulso estrecha</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Clase funcional NYHA</p>
+            <table class="data-table">
+                <thead><tr><th>Clase</th><th>Descripción</th></tr></thead>
+                <tbody>
+                    <tr><td>I</td><td>Sin limitación de la actividad física; la actividad ordinaria no causa disnea/fatiga/palpitaciones indebidas</td></tr>
+                    <tr><td>II</td><td>Limitación leve; cómodo en reposo, la actividad ordinaria causa síntomas</td></tr>
+                    <tr><td>III</td><td>Limitación marcada; cómodo en reposo, actividad menor a la ordinaria causa síntomas</td></tr>
+                    <tr><td>IV</td><td>Incapaz de realizar actividad física sin molestias; síntomas en reposo, que aumentan con cualquier actividad</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">🧪 Péptidos natriuréticos</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">NT-proBNP es el más usado en Europa: buena estabilidad a temperatura ambiente y resultados no alterados por el tratamiento con ARNI (a diferencia del BNP, que el ARNI degrada). Umbrales de "descarte" clásicos (no ajustados por edad): NT-proBNP &lt;125 pg/ml, BNP &lt;35 pg/ml, MR-proANP &lt;40 pg/ml. Más del 75% de la población sana &gt;80 años supera el umbral de NT-proBNP de 125 pg/ml — de ahí el ajuste por edad.</p>
+            <table class="data-table">
+                <thead><tr><th>Edad</th><th>NT-proBNP "probable" en ambulatorio</th></tr></thead>
+                <tbody>
+                    <tr><td>&lt;50 años</td><td>≥125 pg/ml</td></tr>
+                    <tr><td>50-75 años</td><td>≥250 pg/ml</td></tr>
+                    <tr><td>&gt;75 años</td><td>≥500 pg/ml</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size:0.85rem; color:var(--text-dim);">NT-proBNP &gt;2000 pg/ml en atención primaria se asocia a un riesgo 2 veces mayor de hospitalización precoz por IC — justifica valoración especialista expedita.</p>
+
+            <p class="section-label" style="margin-top:16px;">Causas de alteración de los péptidos natriuréticos</p>
+            <table class="data-table">
+                <thead><tr><th>↑ Péptidos</th><th>↓ Péptidos</th></tr></thead>
+                <tbody>
+                    <tr><td>SCA, edad avanzada, FA, contusión cardíaca, EPOC, enfermedad crítica, sexo femenino, disfunción renal, hipertrofia del VI, miocarditis, apnea del sueño, síndrome paraneoplásico, TEP, hipertensión pulmonar, marcapasos VD, anemia grave, infecciones graves (incl. sepsis), hemorragia subaracnoidea, acidosis metabólica/cetoacidosis diabética grave, hipertensión sistémica, valvulopatía</td><td>Ascendencia africana, ARNI (sube BNP, no NT-proBNP), IECA/ARA-II, betabloqueantes, MRA, obesidad, iSGLT2</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size:0.8rem; color:var(--text-muted);">La obesidad se asocia a valores de corte más bajos para los péptidos natriuréticos — cautela al interpretar en pacientes obesos. La disfunción renal se asocia a NT-proBNP más alto, pero no debe descartarse la interpretación en ese contexto.</p>
+
+            <p class="section-label" style="margin-top:16px;">🗺️ Algoritmo diagnóstico ambulatorio (Fig. 4)</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧭 Secuencia diagnóstica</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <p>1. Signos y/o síntomas de sospecha de IC.</p>
+                        <p>2. Evaluación clínica, ECG, analítica, radiografía de tórax.</p>
+                        <p>3. Test de péptidos natriuréticos disponible → si elevados (o si no disponible pero alta sospecha clínica) → ecocardiograma y valoración especialista (preferiblemente en &lt;2 semanas si NT-proBNP &gt;2000 pg/ml).</p>
+                        <p>4. Ecocardiograma sin hallazgos anormales → IC descartada, considerar otras causas. Ecocardiograma confirma IC → clasificar HFrEF (FEVI &lt;50%) vs. HFpEF (FEVI ≥50%) → evaluación multiparamétrica de la etiología y tratamiento.</p>
+                        <p>5. Si péptidos natriuréticos no elevados y sin alta sospecha clínica → IC muy improbable, considerar otras causas de los síntomas.</p>
+                    </div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">🔬 Otras pruebas de laboratorio</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Hemograma completo, urea/electrolitos/creatinina, HbA1c, lípidos, estado del hierro (TSAT y ferritina), función hepática y tiroidea — para evaluar comorbilidades, aportar información pronóstica y guiar el tratamiento. La UACR (ratio albúmina/creatinina en orina) se incorpora a las investigaciones basales: independiente del FG, tiene valor pronóstico fuerte y es un trastorno tratable y reversible con IECA/ARNI/ARA-II/MRA/iSGLT2.</p>
+
+            <p class="section-label" style="margin-top:16px;">Fenotipos por FEVI</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);"><strong>HFrEF</strong> exige (i) síntomas/signos actuales o previos de IC y (ii) FEVI &lt;50%. Los péptidos natriuréticos elevados apoyan el diagnóstico pero un valor "normal" no lo excluye por la variabilidad de medición/interpretación de la FEVI.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);"><strong>HFpEF</strong> exige los 3: (i) síntomas/signos de IC, (ii) FEVI ≥50% (que no haya sido &lt;50% previamente), y (iii) evidencia objetiva de anomalías estructurales/funcionales consistentes con disfunción diastólica/presiones de llenado elevadas, apoyada por péptidos natriuréticos elevados. El test de esfuerzo hemodinámico invasivo (PCP ≥15 mmHg reposo, ≥25 mmHg ejercicio, o presión telediastólica del VI ≥16 mmHg reposo) es el patrón oro pero de uso limitado a investigación/incertidumbre diagnóstica por su coste y disponibilidad — la mayoría de los diagnósticos de HFpEF se hacen con historia clínica y hallazgos ecocardiográficos.</p>
+            <table class="data-table">
+                <thead><tr><th>Criterio ecocardiográfico HFpEF</th><th>Umbral</th></tr></thead>
+                <tbody>
+                    <tr><td>Hipertrofia del VI</td><td>Masa VI ≥95 g/m² (mujer)/≥115 g/m² (varón), o grosor relativo de pared &gt;0,42</td></tr>
+                    <tr><td>Dilatación auricular izquierda</td><td>Volumen indexado &gt;34 ml/m² (ritmo sinusal), &gt;40 ml/m² (FA)</td></tr>
+                    <tr><td>↑Probabilidad de presión de llenado elevada</td><td>E/e′ &gt;9 en reposo</td></tr>
+                    <tr><td>Presión sistólica de arteria pulmonar elevada</td><td>&gt;35 mmHg, o velocidad de regurgitación tricuspídea &gt;2,8 m/s</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">🔎 Etiología y evaluación multiparamétrica (Fig. 7)</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Secuencia: historia + exploración → ECG + analítica → ecocardiografía (primera línea, cornerstone de la evaluación) → pruebas adicionales según hallazgos: CTCA/angiografía invasiva, 18F-FDG-PET (sarcoidosis), genética, biopsia endomiocárdica, CMR, gammagrafía DPD/PYP/HMDP (amiloide), cateterismo derecho.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">La <strong>CMR</strong> es el patrón oro para volúmenes/masa del VI; el realce tardío de gadolinio (LGE) distingue etiología isquémica de no isquémica y es útil en múltiples miocardiopatías. La ecocardiografía con speckle-tracking (strain longitudinal global) detecta disfunción sistólica precoz, útil en cardiotoxicidad o patrones sugestivos de amiloidosis/HCM.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);"><strong>Principales causas contribuyentes de HFrEF</strong> (Fig. 5): miocardiopatía dilatada, enfermedad isquémica, hipertensión, tóxicos (fármacos/quimioterapia), arritmias, alteración de la conducción cardíaca, causas genéticas, enfermedad de depósito/infiltrativa, infecciosa/inflamatoria, valvulopatía, cardiopatía congénita, otras.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);"><strong>Principales factores de riesgo de HFpEF</strong> (Fig. 6): edad avanzada, sexo femenino, FA, enfermedad isquémica, obesidad, diabetes tipo 2, hipertensión, sedentarismo, apnea del sueño, ERC, anemia, enfermedad pulmonar, valvulopatía, enfermedad inflamatoria/infiltrativa.</p>
+
+            <p class="section-label" style="margin-top:16px;">Investigación de la enfermedad coronaria</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">La CAD es la causa más común de HFrEF. La CTCA tiene alto valor predictivo negativo y debe considerarse con probabilidad baja-moderada de CAD. La angiografía invasiva está indicada con FEVI reducida, alta probabilidad de CAD obstructiva, y angina, independientemente de la FEVI.</p>
+
+            <p class="section-label" style="margin-top:16px;">IC asociada a arritmia o a conducción anormal</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Definida como disfunción del VI por anomalías de conducción (QRS ≥130 ms sin otra causa de IC) o por taquiarritmias sostenidas (FA, flutter, taquicardias supraventriculares/ventriculares, extrasistolia ventricular frecuente). Diagnóstico de exclusión, a menudo solo confirmado retrospectivamente si la FEVI mejora tras el tratamiento (control del ritmo/frecuencia, o TRC). Más probable ser la única causa cuando hay LBBB, QRS ancho, y sin cicatriz miocárdica en CMR.</p>
+
+            <p class="section-label" style="margin-top:16px;">📋 Recomendaciones clave</p>
+            <dl class="kv-row"><dt>Analítica inicial</dt><dd>Hemograma, función renal (FGe y UACR), electrolitos, función hepática/tiroidea, HbA1c, lípidos, estado del hierro (TSAT y ferritina), en todos los pacientes con sospecha de IC. <span class="grade-badge">I · C</span></dd></dl>
+            <dl class="kv-row"><dt>Péptidos natriuréticos, ECG, radiografía de tórax, ecocardiograma</dt><dd>Recomendados en todos los pacientes con sospecha de IC. <span class="grade-badge">I · C</span></dd></dl>
+            <dl class="kv-row"><dt>CMR con realce de contraste</dt><dd>Recomendada si se sospecha miocardiopatía, o si la etiología es incierta y una caracterización más detallada aportaría valor. <span class="grade-badge">I · C</span></dd></dl>
+        </div>
+
+        <!-- ===== FICHA IV: TERAPIA FARMACOLÓGICA DE LA IC CRÓNICA ===== -->
+        <div id="ic-farmacologia" class="tab-content">
+            <h3 style="color: var(--accent-red);">Terapia farmacológica de la IC crónica</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: 2026 ESC Guidelines for the management of heart failure (sec. 6.1).</p>
+
+            <p style="font-size:0.85rem; color:var(--text-dim);">3 objetivos del tratamiento en IC estadio C: (i) reducir mortalidad; (ii) prevenir hospitalizaciones recurrentes por empeoramiento de la IC (WHF); (iii) mejorar estado clínico, capacidad funcional y calidad de vida. No hay diferencias por sexo en las recomendaciones farmacológicas.</p>
+
+            <p class="section-label">🧱 Los 4 pilares del FMT en HFrEF</p>
+            <table class="data-table">
+                <thead><tr><th>Pilar</th><th>Fármacos</th><th>Efecto principal</th></tr></thead>
+                <tbody>
+                    <tr><td>IECA/ARNI/ARA-II</td><td>Enalapril, ramipril... / sacubitrilo-valsartán / candesartán, losartán, valsartán</td><td>↓mortalidad y morbilidad; ARNI superior a IECA (PARADIGM-HF: -20% muerte CV/HFH vs. enalapril)</td></tr>
+                    <tr><td>Betabloqueante</td><td>Bisoprolol, carvedilol, metoprolol succinato, nebivolol</td><td>↓mortalidad y morbilidad; iniciar precozmente, estable, dosis bajas y titular</td></tr>
+                    <tr><td>MRA</td><td>Eplerenona, espironolactona (esteroideas) · Finerenona (no esteroidea)</td><td>↓hospitalización o muerte; recomendado independientemente de la FEVI (sMRA en HFrEF, sMRA/nsMRA en HFpEF)</td></tr>
+                    <tr><td>iSGLT2</td><td>Dapagliflozina, empagliflozina</td><td>↓HFH o muerte CV, independientemente de la FEVI; también mejora QoL</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size:0.85rem; color:var(--text-dim);">No hay evidencia que favorezca un orden concreto de inicio — el consenso es <strong>iniciar y titular en paralelo</strong>, individualizando según el cuadro clínico, tan pronto como se establece el diagnóstico de HFrEF, en vez del abordaje secuencial tradicional.</p>
+
+            <p class="section-label" style="margin-top:16px;">MRA — matices</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Precaución al iniciar con FGe &lt;25 ml/min/1,73m² o K⁺ ≥5,0 mmol/l. Si K⁺ &gt;5,5 mEq/l durante el tratamiento, indicación de reducir dosis o discontinuar temporalmente. Finerenona/eplerenona son más selectivas del receptor mineralocorticoide → menos ginecomastia que espironolactona.</p>
+
+            <p class="section-label" style="margin-top:16px;">ARNI — matices</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Requiere un periodo de lavado ≥36h tras la última dosis de IECA para minimizar el riesgo de angioedema. Se puede iniciar de novo en HFrEF sintomática crónica para simplificar el manejo. Precaución con PAS &lt;100 mmHg, FGe &lt;30 ml/min/1,73m², K⁺ &gt;5,2 mEq/l.</p>
+
+            <p class="section-label" style="margin-top:16px;">💊 Tabla 11 — Dosis de inicio y objetivo</p>
+            <table class="data-table">
+                <thead><tr><th>Fármaco</th><th>Dosis inicial</th><th>Dosis objetivo</th></tr></thead>
+                <tbody>
+                    <tr><td colspan="3"><strong>IECA</strong></td></tr>
+                    <tr><td>Captopril</td><td>6,25 mg/8h</td><td>50 mg/8h</td></tr>
+                    <tr><td>Enalapril</td><td>2,5 mg/12h</td><td>10-20 mg/12h</td></tr>
+                    <tr><td>Lisinopril</td><td>2,5-5 mg/24h</td><td>20-35 mg/24h</td></tr>
+                    <tr><td>Ramipril</td><td>1,25-2,5 mg/12h</td><td>5 mg/12h</td></tr>
+                    <tr><td>Trandolapril</td><td>0,5 mg/24h</td><td>4 mg/24h</td></tr>
+                    <tr><td colspan="3"><strong>ARNI</strong></td></tr>
+                    <tr><td>Sacubitrilo-valsartán</td><td>49/51 mg/12h</td><td>97/103 mg/12h</td></tr>
+                    <tr><td colspan="3"><strong>ARA-II</strong></td></tr>
+                    <tr><td>Candesartán</td><td>4 mg/24h</td><td>32 mg/24h</td></tr>
+                    <tr><td>Losartán</td><td>25-50 mg/24h</td><td>150 mg/24h</td></tr>
+                    <tr><td>Valsartán</td><td>40 mg/12h</td><td>160 mg/12h</td></tr>
+                    <tr><td colspan="3"><strong>Betabloqueantes</strong></td></tr>
+                    <tr><td>Bisoprolol</td><td>1,25 mg/24h</td><td>10 mg/24h</td></tr>
+                    <tr><td>Carvedilol</td><td>3,125 mg/12h</td><td>25 mg/12h (máx. 50mg/12h si &gt;85kg)</td></tr>
+                    <tr><td>Metoprolol succinato (CR/XL)</td><td>12,5-25 mg/24h</td><td>200 mg/24h</td></tr>
+                    <tr><td>Nebivolol</td><td>1,25 mg/24h</td><td>10 mg/24h</td></tr>
+                    <tr><td colspan="3"><strong>MRA</strong></td></tr>
+                    <tr><td>Eplerenona</td><td>25 mg/24h</td><td>50 mg/24h</td></tr>
+                    <tr><td>Espironolactona</td><td>12,5-25 mg/24h</td><td>50 mg/24h</td></tr>
+                    <tr><td>Finerenona</td><td>10-20 mg/24h (según FGe)</td><td>20-40 mg/24h (según FGe)</td></tr>
+                    <tr><td colspan="3"><strong>iSGLT2</strong></td></tr>
+                    <tr><td>Dapagliflozina / Empagliflozina</td><td>10 mg/24h</td><td>10 mg/24h</td></tr>
+                    <tr><td colspan="3"><strong>Otros (AMT)</strong></td></tr>
+                    <tr><td>Digoxina</td><td>62,5 µg/24h</td><td>250 µg/24h</td></tr>
+                    <tr><td>Digitoxina</td><td>0,07 mg/24h</td><td>0,1 mg/24h</td></tr>
+                    <tr><td>Ivabradina</td><td>5 mg/12h</td><td>7,5 mg/12h</td></tr>
+                    <tr><td>Vericiguat</td><td>2,5 mg/24h</td><td>10 mg/24h</td></tr>
+                    <tr><td>Hidralazina/ISDN</td><td>37,5 mg/20mg t.i.d.</td><td>75 mg/40mg t.i.d.</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size:0.78rem; color:var(--text-muted);">Digoxina/digitoxina deben titularse según niveles plasmáticos (digoxina objetivo &lt;1,2 ng/ml). Finerenona: 10-20mg si FGe ≤60, 20-40mg si FGe &gt;60 ml/min/1,73m².</p>
+
+            <p class="section-label" style="margin-top:16px;">🧩 Terapia médica adicional (AMT) en HFrEF</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💓 Ivabradina</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Considerar en HFrEF sintomática, ritmo sinusal, FC en reposo ≥70 lpm, FEVI ≤35%, y HFH reciente pese a FMT optimizado con betabloqueante en dosis máxima tolerada. Inhibe la corriente I<sub>f</sub> del nodo sinusal. En SHIFT redujo el objetivo compuesto de muerte CV/HFH, sobre todo por reducción de HFH.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧪 Vericiguat</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Estimulador oral de la guanilato ciclasa soluble; considerar en HFrEF sintomática y FEVI &lt;45% pese a FMT óptimo. En VICTORIA, neutro para el objetivo compuesto primario pero con reducción numérica de muerte CV en el seguimiento a más largo plazo (VICTOR/VICTORIA combinados).</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Hidralazina/ISDN</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Debe considerarse en pacientes autoidentificados como de raza negra, sintomáticos, con FEVI ≤40% pese a FMT óptimo — reduce mortalidad, HFH y mejora QoL. Puede considerarse en no negros que no toleran IECA/ARNI/ARA-II.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Glucósidos cardíacos (digoxina/digitoxina)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Considerar con FEVI ≤40% pese a FMT óptimo, para reducir HFH. En DIGIT-HF, digitoxina redujo el objetivo compuesto muerte/HFH (39,5% vs. 44,1%; HR 0,82; p=.03). Ventana terapéutica estrecha, monitorización cuidadosa — digoxina se elimina por vía renal, digitoxina por vía hepática.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🫀 Omecamtiv mecarbilo</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Activador de la miosina cardíaca. En GALACTIC-HF redujo modestamente eventos de IC pero sin beneficio significativo en mortalidad — no está actualmente aprobado para uso clínico en IC.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Potasio elevado y diuréticos</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Los captores de potasio (patirómero, ciclosilicato de circonio sódico) permiten mantener/titular IECA/ARNI/ARA-II/MRA en pacientes con hiperpotasemia — sin recomendación específica todavía por evidencia insuficiente de beneficio clínico duro. Diuréticos de asa: recomendados para aliviar signos/síntomas de congestión; sin ensayos adecuadamente potenciados sobre mortalidad, pero un metaanálisis sugiere reducción de muerte y WHF frente a placebo. Evitar tiazidas crónicas en pacientes estables por riesgo de alteraciones electrolíticas graves.</p>
+
+            <p class="section-label" style="margin-top:16px;">💊 Terapia farmacológica en HFpEF</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">FMT: iSGLT2 y MRA (sMRA en ensayos HFrEF, evidencia de nsMRA/sMRA en HFpEF vía metaanálisis FINEARTS-HF/TOPCAT). ARNI puede considerarse (Clase IIb) — PARAGON-HF fue neutro para el objetivo primario pero un metaanálisis con PARADIGM-HF sugiere beneficio con FEVI 40-65%. Diuréticos para signos/síntomas de congestión. IECA/ARA-II/betabloqueante pueden usarse por comorbilidades sin evidencia de efecto sobre morbimortalidad de la IC en sí.</p>
+
+            <p class="section-label" style="margin-top:16px;">📋 Recomendaciones clave</p>
+            <dl class="kv-row"><dt>Betabloqueante en HFrEF</dt><dd>Recomendado en pacientes estables sintomáticos, para reducir riesgo de HFH y muerte. <span class="grade-badge">I · A</span></dd></dl>
+            <dl class="kv-row"><dt>IECA o ARNI en HFrEF</dt><dd>Recomendado para reducir riesgo de HFH y muerte. <span class="grade-badge">I · A</span></dd></dl>
+            <dl class="kv-row"><dt>Cambio de IECA/ARA-II a ARNI</dt><dd>Recomendado en HFrEF sintomática, para reducir riesgo de HFH y muerte. <span class="grade-badge">I · B1</span></dd></dl>
+            <dl class="kv-row"><dt>ARA-II</dt><dd>Recomendado si no se tolera IECA o ARNI, para reducir riesgo de HFH y muerte CV. <span class="grade-badge">I · A</span></dd></dl>
+            <dl class="kv-row"><dt>MRA</dt><dd>Recomendado en pacientes sintomáticos independientemente de la FEVI, para reducir riesgo de HFH o muerte CV. <span class="grade-badge">I · A</span></dd></dl>
+            <dl class="kv-row"><dt>iSGLT2</dt><dd>Recomendado en pacientes sintomáticos independientemente de la FEVI, para reducir riesgo de HFH o muerte CV. <span class="grade-badge">I · A</span></dd></dl>
+            <dl class="kv-row"><dt>Glucósido cardíaco</dt><dd>Debe considerarse con FEVI ≤40% pese a FMT óptimo, para reducir riesgo de HFH. <span class="grade-badge yellow">IIa · B1</span></dd></dl>
+            <dl class="kv-row"><dt>Vericiguat</dt><dd>Puede considerarse con FEVI &lt;45% pese a tratamiento óptimo, para reducir HFH y muerte CV. <span class="grade-badge yellow">IIb · B1</span></dd></dl>
+            <dl class="kv-row"><dt>ARNI/IECA/ARA-II en HFpEF</dt><dd>Puede considerarse para reducir riesgo de HFH. <span class="grade-badge yellow">IIb · C</span></dd></dl>
+        </div>
+
+        <!-- ===== FICHA V: TERAPIA INTERVENCIONISTA DIRIGIDA POR GUÍA ===== -->
+        <div id="ic-dispositivos" class="tab-content">
+            <h3 style="color: var(--accent-yellow);">Terapia intervencionista dirigida por guía</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: 2026 ESC Guidelines for the management of heart failure (sec. 6.2).</p>
+
+            <p class="section-label">🔌 Desfibrilador automático implantable (DAI)</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">La muerte súbita cardíaca arrítmica explica ~30-60% de las muertes en los primeros ensayos de HFrEF. A diferencia de los antiarrítmicos (amiodarona/dronedarona, que reducen arritmias ventriculares pero no prolongan la supervivencia y pueden acortarla), el DAI sí previene la muerte súbita y prolonga la supervivencia en HFrEF de alto riesgo.</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔁 Prevención secundaria</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Recuperados de arritmia ventricular con inestabilidad hemodinámica, esperando &gt;1 año con buen estado funcional, sin causa reversible (o arritmia &lt;48h tras IAM) — reduce muerte súbita y mortalidad total, independientemente de FEVI o presencia de IC.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🛡️ Prevención primaria</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">HFrEF sintomática (NYHA II/III) de etiología isquémica con IAM &gt;40 días antes, y FEVI ≤35% pese a ≥3 meses de FMT óptimo, con expectativa de vida &gt;1 año en buen estado funcional — reduce muerte súbita y mortalidad total (SCD-HeFT: -23%; MADIT-II: -31%). En etiología no isquémica, mismo umbral de FEVI ≤35%, considerar (Clase IIa) — el beneficio absoluto puede ser menor que en isquémica pero un metaanálisis mostró beneficio de supervivencia también aquí.</div>
+                </div>
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-dim);"><strong>Timing</strong>: la implantación de DAI de prevención primaria dentro de los 40 días post-IAM no mejora los resultados (Clase III, B1) — la espera de 3 meses tras optimizar el FMT es razonable, y retrasar la decisión conlleva un riesgo de muerte súbita de ~2% a 6 meses y ~7% a 1 año.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);"><strong>Sustitución del generador</strong>: la decisión debe ser compartida entre paciente y cardiólogo experto antes de cada recambio — la relación riesgo/beneficio puede cambiar con la progresión de comorbilidades, fragilidad y esperanza de vida.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);"><strong>DAI subcutáneo (S-ICD)</strong>: cable extravascular, no propenso a infección endovascular, útil con acceso venoso difícil o alto riesgo infeccioso; no trata bradiarritmia (salvo estimulación post-shock) ni ofrece estimulación antitaquicardia. <strong>Desfibrilador extravascular</strong>: generador subfascial/submuscular + electrodo substernal, tamaño similar a un DAI transvenoso. <strong>Desfibrilador portátil (wearable)</strong>: puede considerarse como puente a decisión/DAI definitivo/trasplante en riesgo elevado transitorio de muerte súbita (Clase IIb — sin beneficio de mortalidad demostrado en ECA).</p>
+
+            <p class="section-label" style="margin-top:16px;">🔌 Terapia de resincronización cardíaca (TRC)</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Mejora función cardíaca, QoL y reduce hospitalizaciones/muerte en HFrEF seleccionada. COMPANION redujo mortalidad/hospitalización un 20% con CRT-D/CRT-P; CARE-HF, MADIT-CRT y REVERSE ampliaron la evidencia a clases funcionales más leves (NYHA I-II).</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🗺️ Indicaciones por QRS y morfología (Fig. 10)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <p>Requisito de partida: HFrEF con FEVI ≤35% pese a FMT óptimo (reevaluar tras uptitration).</p>
+                        <p><strong>QRS ≥150 ms + LBBB</strong>: TRC Clase I. <strong>QRS ≥150 ms + no-LBBB</strong>: Clase IIa.</p>
+                        <p><strong>QRS 130-149 ms + LBBB</strong>: Clase IIa. <strong>QRS 130-149 ms + no-LBBB</strong>: Clase IIb.</p>
+                        <p><strong>QRS &lt;130 ms</strong>: TRC Clase III (no recomendada), salvo indicación de estimulación por bloqueo AV de alto grado.</p>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔺 IC por conducción anormal</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Cuando la disfunción del VI por bloqueo de conducción es la única causa identificable de HFrEF (bajo el umbral habitual de indicación), planificar TRC de forma precoz, incluso antes de completar la titulación del FMT — probabilidad de respuesta espectacular a la resincronización.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚡ IC inducida por estimulación del VD</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La estimulación crónica del VD (marcapasos convencional) induce HFrEF en 5,9-39% de los pacientes, según la definición usada. El ensayo BUDAPEST-CRT Upgrade (2024) mostró que actualizar a CRT-D reduce significativamente muerte/HFH en pacientes con carga de estimulación VD ≥20% y QRS ≥150 ms (HR 0,27; p&lt;.001) — primer ECA en este escenario específico.</div>
+                </div>
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-dim);"><strong>Estimulación del sistema de conducción (CSP)</strong>, incluida estimulación de rama izquierda y de haz de His: posible alternativa a la TRC cuando el implante convencional es difícil — sin ECA con resultados centrados en el paciente todavía, por lo que actualmente no hay recomendaciones establecidas.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);"><strong>Otros dispositivos implantables</strong>: la modulación de la contractilidad cardíaca mejoró marginalmente el VO₂ pico/QoL en un pequeño ECA con QRS &lt;130ms; la estimulación de barorreceptores mejoró distancia de marcha de 6 min/QoL en un piloto pequeño; el shunt interauricular no mostró diferencias en el objetivo compuesto de RELIEVE-HF/REDUCE LAP-HF II — ninguno con evidencia suficiente para recomendación de guía.</p>
+
+            <p class="section-label" style="margin-top:16px;">📋 Recomendaciones clave</p>
+            <dl class="kv-row"><dt>DAI secundaria</dt><dd>Recomendado tras arritmia ventricular con inestabilidad hemodinámica, esperando &gt;1 año con buen estado funcional. <span class="grade-badge">I · A</span></dd></dl>
+            <dl class="kv-row"><dt>DAI primaria, etiología isquémica</dt><dd>Recomendado en NYHA II/III, FEVI ≤35% pese a ≥3 meses de FMT óptimo. <span class="grade-badge">I · B1</span></dd></dl>
+            <dl class="kv-row"><dt>DAI primaria, etiología no isquémica</dt><dd>Debe considerarse en el mismo escenario. <span class="grade-badge yellow">IIa · B1</span></dd></dl>
+            <dl class="kv-row"><dt>DAI &lt;40 días post-IAM</dt><dd>No recomendado, por falta de mejora del pronóstico. <span class="grade-badge red">III · B1</span></dd></dl>
+            <dl class="kv-row"><dt>TRC, LBBB y QRS ≥150ms</dt><dd>Recomendada en HFrEF sintomática pese a FMT óptimo, en ritmo sinusal. <span class="grade-badge">I · A</span></dd></dl>
+            <dl class="kv-row"><dt>Actualización a TRC por RV pacing</dt><dd>Debe considerarse en HFrEF con carga significativa de estimulación VD pese a FMT óptimo. <span class="grade-badge yellow">IIa · B1</span></dd></dl>
+            <dl class="kv-row"><dt>TRC con QRS &lt;130ms</dt><dd>No recomendada, salvo indicación de estimulación por bloqueo AV de alto grado. <span class="grade-badge red">III · A</span></dd></dl>
+        </div>
+
+        <!-- ===== FICHA VI: IC DESCOMPENSADA ===== -->
+        <div id="ic-descompensada" class="tab-content">
+            <h3 style="color: var(--accent-red);">IC descompensada</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: 2026 ESC Guidelines for the management of heart failure (sec. 7).</p>
+
+            <dl class="kv-row"><dt>Definición</dt><dd>Aparición aguda o gradual de síntomas y/o signos de IC, suficientemente graves para requerir atención médica urgente, iniciación o intensificación del tratamiento — sustituye al término "IC aguda". Puede ser <em>de novo</em> o empeoramiento de IC preexistente (WHF).</dd></dl>
+            <ul class="term-chips">
+                <li>Mortalidad: 3-10% durante el ingreso; 20-30% al año; &gt;50% a 5 años</li>
+                <li>Reingreso a 1 año: 35-44%</li>
+                <li>Hasta 50% de los pacientes con IC descompensada requieren intensificación en urgencias/ambulatorio sin ingreso</li>
+            </ul>
+
+            <p class="section-label" style="margin-top:16px;">Presentación clínica — 4 categorías</p>
+            <table class="data-table">
+                <thead><tr><th>Congestión izquierda</th><th>Congestión derecha</th><th>Hipoperfusión</th></tr></thead>
+                <tbody>
+                    <tr><td>Disnea, ortopnea, tos, taquipnea, crepitantes, 3er ruido, derrame pleural, péptidos natriuréticos elevados</td><td>Edema periférico, distensión abdominal, hepatomegalia, ingurgitación yugular, reflujo hepatoyugular, derrame pleural, ↑bilirrubina/ALP/GGT, péptidos natriuréticos ligeramente elevados</td><td>Extremidades frías/sudorosas, palidez, mareo, confusión mental, oliguria, pulso estrecho, ↑creatinina sérica, lactato elevado, ↑creatinina sérica</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Las 4 categorías clínicas —IC izquierda descompensada, IC derecha descompensada, edema agudo de pulmón (EAP), y shock cardiogénico— pueden solaparse. El EAP se caracteriza por congestión pulmonar masiva de instauración rápida por redistribución de fluidos hacia el pulmón, no necesariamente sobrecarga total de volumen — a menudo no requiere altas dosis de diuréticos, sí vasodilatadores.</p>
+
+            <p class="section-label" style="margin-top:16px;">🚨 Shock cardiogénico — clasificación SCAI</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Estado de hipoperfusión crítica de órganos causada por disfunción cardíaca primaria, con evidencia clínica y bioquímica de hipoperfusión tisular mantenida. El lactato &gt;2 mmol/l es el mejor marcador bioquímico. El shock séptico e hipovolémico también producen hipoperfusión — pueden coexistir formas mixtas.</p>
+            <table class="data-table">
+                <thead><tr><th>Estadio SCAI</th><th>Descripción</th></tr></thead>
+                <tbody>
+                    <tr><td>A — "En riesgo"</td><td>Sin signos/síntomas de shock, pero en riesgo de desarrollarlo</td></tr>
+                    <tr><td>B — "Inicial/pre-shock"</td><td>Evidencia clínica de inestabilidad hemodinámica (hipotensión relativa, taquicardia) sin hipoperfusión</td></tr>
+                    <tr><td>C — "Clásico"</td><td>Hipoperfusión que requiere intervención (inotrópico, vasopresor, o soporte mecánico)</td></tr>
+                    <tr><td>D — "Deteriorante"</td><td>Similar a C pero con fallo de respuesta a las intervenciones iniciales</td></tr>
+                    <tr><td>E — "Extremis"</td><td>Shock refractario o parada cardíaca, requiriendo múltiples intervenciones simultáneas, incluida RCP</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">🗺️ Diagnóstico (Fig. 11)</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Sospecha de IC descompensada → historia/constantes/signos/analítica/ECG → descartar shock cardiogénico/EAP (si presentes, tratamiento inmediato) → alta sospecha clínica → NT-proBNP ≥300 pg/ml (umbral no ajustado por edad para descarte de IC descompensada; con edad, umbrales "rule-in": &gt;450 [&lt;50 años], &gt;900 [50-74], &gt;1800 [&gt;74]) → ecocardiografía y otras pruebas (radiografía, ecografía pulmonar) → hallazgos anormales confirman IC descompensada.</p>
+
+            <p class="section-label" style="margin-top:16px;">🏥 Manejo general — 3 fases hospitalarias (Fig. 12)</p>
+            <table class="data-table">
+                <thead><tr><th>Fase</th><th>Objetivos</th></tr></thead>
+                <tbody>
+                    <tr><td>1 · Manejo inicial</td><td>Manejar condiciones que amenazan la vida, tratar etiología/factor precipitante, iniciar estabilización hemodinámica y descongestión</td></tr>
+                    <tr><td>2 · Estabilización</td><td>Consolidar estabilización, intentar descongestión completa + diuréticos orales, iniciar/optimizar FMT, identificar etiología/comorbilidades</td></tr>
+                    <tr><td>3 · Prealta y postalta precoz</td><td>Excluir congestión persistente, iniciar/optimizar FMT/AMT, considerar GDIT, optimizar comorbilidades, planificar manejo a largo plazo</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Cada categoría clínica recorre estas fases de forma distinta: el shock cardiogénico suele permanecer días en fase 1 (puede no llegar nunca a fase 2); IC izquierda/derecha no complicada o EAP pueden progresar rápido por las 3.</p>
+
+            <p class="section-label" style="margin-top:16px;">Fase 1 — identificación y tratamiento de causas agudas (Fig. 13, mnemónico "CHAMPIT")</p>
+            <table class="data-table">
+                <thead><tr><th>Letra</th><th>Causa</th></tr></thead>
+                <tbody>
+                    <tr><td>C</td><td>Síndrome coronario agudo</td></tr>
+                    <tr><td>H</td><td>Emergencia hipertensiva</td></tr>
+                    <tr><td>A</td><td>Arritmias</td></tr>
+                    <tr><td>M</td><td>Causas mecánicas</td></tr>
+                    <tr><td>P</td><td>Embolia pulmonar</td></tr>
+                    <tr><td>I</td><td>Infecciones/inflamación</td></tr>
+                    <tr><td>T</td><td>Taponamiento</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size:0.85rem; color:var(--text-dim);">En paralelo, identificar el fenotipo clínico: shock cardiogénico (inotrópicos/vasopresores/MCS/diuréticos si preciso) · EAP (diuréticos/vasodilatadores si PAS&gt;110) · IC izquierda descompensada (diuréticos) · IC derecha descompensada (optimización de fluidos + diuréticos). Soporte ventilatorio si hipoxemia.</p>
+
+            <p class="section-label" style="margin-top:16px;">💧 Diuréticos — algoritmo guiado por Na⁺ urinario (Fig. 15)</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📐 Secuencia del algoritmo</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <p>1. Iniciar diurético de asa IV — 40mg de furosemida (naïve) o el doble de la dosis oral crónica.</p>
+                        <p>2. A las 2h: Na⁺ urinario puntual ≥70 mmol/l, O a las 6h diuresis ≥100 ml/h → respuesta adecuada → repetir la pauta cada 12h hasta descongestión completa.</p>
+                        <p>3. Si no → doblar la dosis del diurético de asa, O añadir acetazolamida IV o hidroclorotiazida ajustada a FGe (en uso crónico de diurético de asa) → reevaluar Na⁺/diuresis.</p>
+                        <p>4. Si sigue sin respuesta → escalada progresiva del diurético de asa hasta la dosis IV máxima + considerar añadir otros no-asa → si aun así falla, considerar ultrafiltración.</p>
+                        <p>Durante todo el proceso: iniciar/titular FMT en paralelo, vigilar hipotensión/hipoperfusión, controlar creatinina y electrolitos cada 24h como mínimo.</p>
+                    </div>
+                </div>
+            </div>
+            <ul class="term-chips">
+                <li>Dosis IV diaria máxima habitual de furosemida: 600 mg (hasta 1000 mg en insuficiencia renal grave)</li>
+                <li>Acetazolamida IV: 500 mg/24h (ADVOR: más descongestión sin sobrecarga a los 3 días)</li>
+                <li>Hidroclorotiazida oral ajustada a FGe: 25mg (FGe&gt;50) / 50mg (FGe 20-50) / 100mg (FGe&lt;20) al día (CLOROTIC)</li>
+            </ul>
+            <p style="font-size:0.85rem; color:var(--text-dim);">CLOROTIC no mostró beneficio en disnea reportada por el paciente pese a mayor pérdida de peso, y se asoció a más empeoramiento renal e hipopotasemia — cautela con la adición de tiazidas.</p>
+
+            <p class="section-label" style="margin-top:16px;">🎯 Objetivos de descongestión pre-alta (Fig. 14)</p>
+            <table class="data-table">
+                <thead><tr><th>Dominio</th><th>Óptimo</th><th>Aceptable</th></tr></thead>
+                <tbody>
+                    <tr><td>Score de congestión clínica</td><td>0</td><td>1-2</td></tr>
+                    <tr><td>Péptidos natriuréticos</td><td>ΔNP ≥30%, o NT-proBNP &lt;1500, o BNP &lt;250 pg/ml</td><td>—</td></tr>
+                    <tr><td>E/e′ (llenado del VI)</td><td>&lt;10 (o ΔE/e′&gt;5)</td><td>&lt;15</td></tr>
+                    <tr><td>Vena cava inferior</td><td>&lt;21mm y colapsabilidad &gt;50%</td><td>&lt;21mm o colapsabilidad &gt;50%</td></tr>
+                    <tr><td>Ecografía pulmonar (líneas B)</td><td>&lt;5 (28 puntos)</td><td>&lt;15 (28 puntos)</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Otros tratamientos</p>
+            <dl class="kv-row"><dt>Oxígeno/ventilación</dt><dd>Oxígeno si SpO₂ &lt;90% o PaO₂ &lt;60 mmHg (no de forma indiscriminada — puede ser perjudicial sin hipoxemia). Ventilación no invasiva en EAP/shock cardiogénico con distrés respiratorio, para mejorar oxigenación y reducir necesidad de intubación.</dd></dl>
+            <dl class="kv-row"><dt>iSGLT2</dt><dd>Inicio hospitalario tras estabilización inicial recomendado — mejora QoL/congestión y reduce riesgo de HFH (EMPULSE: mayor beneficio clínico a 90 días con empagliflozina 10mg iniciada intrahospitalaria).</dd></dl>
+            <dl class="kv-row"><dt>Vasodilatadores IV</dt><dd>Nitroglicerina o nitroprusiato, en EAP con PAS &gt;110 mmHg, para reducir congestión pulmonar por redistribución de volumen — vigilancia estrecha de la PA.</dd></dl>
+            <dl class="kv-row"><dt>Inotrópicos/inodilatadores</dt><dd>Considerar con PAS &lt;90 mmHg y evidencia de hipoperfusión que no responde al tratamiento estándar, para mejorar perfusión — uso cauteloso por riesgo arrítmico/isquémico. Levosimendán o inhibidores de la fosfodiesterasa-III pueden preferirse sobre dobutamina en pacientes con betabloqueante.</dd></dl>
+            <dl class="kv-row"><dt>Vasopresores</dt><dd>Noradrenalina preferida sobre dopamina en shock (menos eventos arrítmicos).</dd></dl>
+            <dl class="kv-row"><dt>Opiáceos</dt><dd>No recomendados de forma rutinaria — reservar para ansiedad/distrés grave refractarios, con precaución por riesgo de fallo respiratorio.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">🔧 Soporte circulatorio mecánico temporal en shock cardiogénico</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Un Shock Team multidisciplinar guía la selección del dispositivo. Bombas de flujo microaxial (hasta 4-5,5 l/min): en DanGer Shock, en IAMCEST + shock, redujo mortalidad a 180 días (HR 0,74) pero aumentó sangrado/isquemia de miembro — indicado en seleccionados sin riesgo de daño cerebral hipóxico. ECLS venoarterial (hasta 6 l/min): sin beneficio de mortalidad en ECLS-SHOCK. Balón de contrapulsación intraaórtico: sin beneficio en shock post-IAM (ensayo IABP-SHOCK II) — no recomendado de forma no seleccionada, aunque puede considerarse en complicaciones mecánicas del IAM como puente al tratamiento definitivo.</p>
+
+            <p class="section-label" style="margin-top:16px;">📋 Recomendaciones clave</p>
+            <dl class="kv-row"><dt>Diuréticos de asa IV</dt><dd>Recomendados en todos los pacientes con sobrecarga de fluidos, para mejorar síntomas. <span class="grade-badge">I · A</span></dd></dl>
+            <dl class="kv-row"><dt>iSGLT2 intrahospitalario</dt><dd>Recomendado tras estabilización inicial, para mejorar QoL/congestión y reducir HFH. <span class="grade-badge">I · B1</span></dd></dl>
+            <dl class="kv-row"><dt>Shock Team multidisciplinar</dt><dd>Recomendado en candidatos potenciales a MCS temporal, para guiar la selección del dispositivo. <span class="grade-badge">I · C</span></dd></dl>
+            <dl class="kv-row"><dt>Bomba de flujo microaxial en shock post-IAM seleccionado</dt><dd>Debe considerarse para reducir riesgo de muerte. <span class="grade-badge yellow">IIa · B1</span></dd></dl>
+            <dl class="kv-row"><dt>BCIA no seleccionado post-IAM</dt><dd>No recomendado, por falta de efecto. <span class="grade-badge red">III · B1</span></dd></dl>
+            <dl class="kv-row"><dt>MCS temporal no seleccionado en shock cardiogénico</dt><dd>No recomendado, por riesgo de daño. <span class="grade-badge red">III · B1</span></dd></dl>
+        </div>
+
+        <!-- ===== FICHA VII: IC AVANZADA ===== -->
+        <div id="ic-avanzada" class="tab-content">
+            <h3 style="color: var(--accent-purple);">IC avanzada</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: 2026 ESC Guidelines for the management of heart failure (sec. 8, hasta soporte circulatorio mecánico durable — trasplante cardíaco y fin de vida se desarrollan en la Parte 2).</p>
+
+            <dl class="kv-row"><dt>Epidemiología</dt><dd>5,1-7,7% de los pacientes con IC tienen IC avanzada (estadio D); mortalidad al año &gt;40% con tratamiento médico exclusivamente.</dd></dl>
+
+            <p class="section-label">Criterios de definición (Tabla 14) — deben cumplirse los 4, pese a FMT/AMT/GDIT óptimos</p>
+            <table class="data-table">
+                <thead><tr><th>#</th><th>Criterio</th></tr></thead>
+                <tbody>
+                    <tr><td>1</td><td>Síntomas graves y persistentes de IC (NYHA III o IV)</td></tr>
+                    <tr><td>2</td><td>Disfunción cardíaca grave: FEVI ≤30%, o VD aislado (p. ej. ARVC), o valvulopatía no operable, o cardiopatía congénita no operable, o BNP/NT-proBNP persistentemente alto/en aumento con disfunción diastólica grave o miocardiopatía hipertrófica/restrictiva</td></tr>
+                    <tr><td>3</td><td>Episodios de congestión pulmonar/sistémica que requieren diuréticos IV en dosis altas, o arritmias malignas causando ≥2 visitas/ingresos no planificados en 12 meses, o ≥1 episodio de bajo gasto que requiere inotrópicos/vasoactivos</td></tr>
+                    <tr><td>4</td><td>Deterioro grave de la capacidad de ejercicio: incapacidad de ejercicio, o distancia de marcha en 6 min &lt;300m, o VO₂ pico 12-14 ml/kg/min (o &lt;50% del predicho) de origen cardíaco</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Una FEVI muy reducida es común pero no obligatoria para el diagnóstico — puede desarrollarse también en HFpEF u otras anomalías estructurales.</p>
+
+            <p class="section-label" style="margin-top:16px;">🚦 Triaje y remisión oportuna (Fig. 16)</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>3️⃣ "Rule of three" (≥1 criterio)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <p>· ≥2 HFH, o ≥1 requiriendo inotrópicos, en el último año.</p>
+                        <p>· Resistencia diurética.</p>
+                        <p>· Intolerancia a fármacos neurohormonales con síndrome cardiorrenal de inicio.</p>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🆘 "I NEED HELP" (≥1 criterio)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <p><strong>I</strong>notropos · <strong>N</strong>YHA III/IV persistente o péptidos natriuréticos altos · <strong>E</strong>nd-organ dysfunction (hígado/riñón) · <strong>E</strong>F &lt;20% o mala función del VD · <strong>D</strong>efibrilador shocks (descargas del DAI) · <strong>H</strong>FH &gt;1 · <strong>E</strong>scalating diuretics · <strong>L</strong>ow blood pressure/high heart rate · <strong>P</strong>rognostic medication intolerance/necesidad de reducir dosis.</p>
+                    </div>
+                </div>
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Con muy limitada esperanza de vida o condiciones que empeorarían el pronóstico post-trasplante/LVAD (comorbilidad grave, fragilidad, disfunción cognitiva irreversible, trastorno psiquiátrico/psicosocial) → manejo y reevaluación periódica en el servicio local de IC. Sin esas limitaciones y con NYHA III-IV pese a FMT/AMT/GDIT, o alto riesgo por "Rule of three"/"I NEED HELP" → remitir o discutir con un centro de IC avanzada. Herramientas clave de estratificación: CPET y cateterismo cardíaco derecho.</p>
+
+            <p class="section-label" style="margin-top:16px;">🩺 Manejo farmacológico y renal</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Muchos pacientes con IC avanzada alcanzan un punto donde la reducción/cese de la terapia neurohormonal es necesario por intolerancia progresiva — ajuste individualizado: en hipotensión con bajo volumen sistólico, reducir/suspender IECA primero para poder mantener betabloqueante; en hipoperfusión con FC baja persistente, considerar reducir/suspender betabloqueante antes, con amiodarona como alternativa mejor tolerada frente a arritmias. Terapia renal sustitutiva y ultrafiltración: considerar con sobrecarga de volumen refractaria y fallo renal terminal.</p>
+            <dl class="kv-row"><dt>Inotrópicos continuos</dt><dd>Deben considerarse en HFrEF avanzada con bajo gasto e hipoperfusión/disfunción de órganos, como puente a decisión/trasplante/MCS durable, para aumentar gasto cardíaco y mejorar síntomas.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">🔧 Soporte circulatorio mecánico</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);"><strong>Temporal</strong>: en pacientes seleccionados, para revertir hipoperfusión crítica y ganar tiempo hasta que se aclare la trayectoria — recuperación, trasplante, o MCS durable. Se guía por la clasificación SCAI y los perfiles INTERMACS.</p>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📊 Clasificación INTERMACS (Fig. 17)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <p><strong>1 · Shock cardiogénico crítico</strong> ("crash and burn") — hipotensión potencialmente mortal pese a soporte inotrópico creciente, hipoperfusión de órganos confirmada por acidosis/lactato. Marco temporal: horas.</p>
+                        <p><strong>2 · Declive progresivo</strong> ("sliding on inotropes") — deterioro pese a inotrópicos IV; incluye intolerantes a inotrópicos. Días.</p>
+                        <p><strong>3 · Estable con inotrópico/dependiente</strong> ("dependent stability") — estable con soporte continuo o temporal, fallo repetido al retirarlo por hipotensión/deterioro renal. Semanas-meses (electivo).</p>
+                        <p><strong>4 · Síntomas en reposo</strong> ("frequent flyer") — congestión diaria pese a volumen casi normal, necesidad fluctuante de diuréticos altos. Variable.</p>
+                        <p><strong>5 · Confinado al domicilio</strong> ("housebound") — cómodo en reposo pero incapaz de otra actividad fuera de casa.</p>
+                        <p><strong>6 · Limitación al esfuerzo</strong> ("walking wounded") — cómodo con actividades menores, fatiga con cualquier esfuerzo significativo, requiere CPET para confirmar gravedad.</p>
+                        <p><strong>7 · NYHA III avanzada</strong> ("placeholder") — cómodo con esfuerzo leve, sin inestabilidad de fluidos reciente, no cumple aún criterios de MCS/trasplante.</p>
+                    </div>
+                </div>
+            </div>
+
+            <p style="font-size:0.85rem; color:var(--text-dim);"><strong>Durable</strong>: prolonga la vida y mejora QoL en pacientes seleccionados cuando FMT/GDIT no logran recuperación o mejoría clínica. El dispositivo de asistencia ventricular izquierda (LVAD) es el más común y fiable; el corazón artificial total o el DAV biventricular se usan ocasionalmente en fallo biventricular o anatomía especial. Con las bombas de flujo continuo con levitación magnética completa más recientes, supervivencia a 2 y 5 años del 79% y 58,4% (MOMENTUM 3) — comparable a la del trasplante cardíaco reciente.</p>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🌳 Algoritmo de decisión (Fig. 18)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <p>Todo paciente con IC avanzada → consulta con centro de IC avanzada (Clase I).</p>
+                        <p>INTERMACS 1 o 2 → MCS temporal (Clase IIa) → persistencia de daño irreversible de órganos → retirada de MCS + cuidados paliativos; recuperación cardíaca/orgánica → destete del MCS + seguimiento estrecho; recuperación orgánica sin recuperación cardíaca → LVAD y/o lista de trasplante (Clase I).</p>
+                        <p>INTERMACS 3-4 → LVAD y/o lista de trasplante directamente (Clase I).</p>
+                        <p>INTERMACS &gt;4 → si alto riesgo (hospitalización recurrente, fallo orgánico progresivo, tormenta arrítmica, angina refractaria) → terapias avanzadas (trasplante/LVAD); si no → pueden diferirse con seguimiento muy estrecho.</p>
+                        <p>La planificación de cuidados avanzados y los cuidados paliativos están integrados en todo el proceso de decisión, no reservados al final.</p>
+                    </div>
+                </div>
+            </div>
+
+            <p style="font-size:0.85rem; color:var(--text-dim);">Efectos adversos del LVAD: eventos hemorrágicos (minimizables evitando antiagregación innecesaria junto a la anticoagulación), infección del cable de transmisión percutáneo (persistente pese a dispositivos más nuevos), fallo del VD y arritmias como causas frecuentes de reingreso — la trombosis de la bomba es hoy muy rara con los dispositivos de levitación magnética.</p>
+
+            <p class="section-label" style="margin-top:16px;">📋 Recomendaciones clave</p>
+            <dl class="kv-row"><dt>Consulta precoz con centro de IC avanzada</dt><dd>Recomendada en pacientes con IC avanzada o en riesgo de estarlo, motivados y sin contraindicaciones absolutas, para evaluar candidatura. <span class="grade-badge">I · A</span></dd></dl>
+            <dl class="kv-row"><dt>Down-titración de betabloqueante/ivabradina en hipoperfusión</dt><dd>Debe considerarse en HFrEF avanzada seleccionada con hipoperfusión, para aumentar gasto cardíaco. <span class="grade-badge yellow">IIa · C</span></dd></dl>
+            <dl class="kv-row"><dt>MCS temporal como puente en shock relacionado con IC</dt><dd>Debe considerarse en inestabilidad hemodinámica seleccionada, como BTD/BTT/BTB/BTC. <span class="grade-badge yellow">IIa · C</span></dd></dl>
+            <dl class="kv-row"><dt>LVAD durable</dt><dd>Recomendado en seleccionados con HFrEF avanzada pese a FMT/GDIT óptimos, como BTT/BTC/BTR o terapia de destino, para mejorar síntomas y reducir riesgo de muerte. <span class="grade-badge">I · C</span></dd></dl>
+        </div>
+
+    </div>
+
+    <div class="card" style="margin-top: 20px;">
+        <h3>📚 Fuentes</h3>
+        <ul class="biblio-list">
+            <li><span class="biblio-nota">2026 ESC Guidelines for the management of heart failure. Developed by the Task Force for the management of heart failure of the European Society of Cardiology (ESC). Eur Heart J. 2026;00:1-112. https://doi.org/10.1093/eurheartj/ehag100 — Parte 1/2 (secciones 1-8, hasta soporte circulatorio mecánico durable). La Parte 2 (comorbilidades, manejo multidisciplinar y condiciones específicas) se incorporará al recibirse.</span></li>
+        </ul>
+    </div>

@@ -14,6 +14,7 @@ import * as trasplante from './modules/trasplante/index.js';
 import * as nefrologia from './modules/nefrologia/index.js';
 import * as uciPapers from './modules/uci-papers/index.js';
 import * as fisioUci from './modules/fisio-uci/index.js';
+import * as cardiologia from './modules/cardiologia/index.js';
 import { initQuiz } from './modules/quiz/quiz.js';
 
 async function start() {
@@ -32,15 +33,17 @@ async function start() {
     home.onUciPapersListo(uciPapersApi);
     const fisioUciApi = fisioUci.init();
     home.onFisioUciListo(fisioUciApi);
+    const cardiologiaApi = cardiologia.init();
+    home.onCardiologiaListo(cardiologiaApi);
 
     // Única llamada a initQuiz() de toda la app — el modal
     // (#quiz-modal-overlay) es un partial compartido, así que cada
     // especialidad expone su banco/temas ya combinados en vez de llamar
     // a initQuiz() cada una por su lado (ver comentario en quiz.js).
     initQuiz({
-        triggerId: [...home.quizTriggerId, ...nefrologia.quizTriggerId, ...uciPapers.quizTriggerId, ...fisioUci.quizTriggerId],
-        banco: [...home.quizBanco, ...nefrologia.quizBanco, ...uciPapers.quizBanco, ...fisioUci.quizBanco],
-        temas: [...home.quizTemas, ...nefrologia.quizTemas, ...uciPapers.quizTemas, ...fisioUci.quizTemas],
+        triggerId: [...home.quizTriggerId, ...nefrologia.quizTriggerId, ...uciPapers.quizTriggerId, ...fisioUci.quizTriggerId, ...cardiologia.quizTriggerId],
+        banco: [...home.quizBanco, ...nefrologia.quizBanco, ...uciPapers.quizBanco, ...fisioUci.quizBanco, ...cardiologia.quizBanco],
+        temas: [...home.quizTemas, ...nefrologia.quizTemas, ...uciPapers.quizTemas, ...fisioUci.quizTemas, ...cardiologia.quizTemas],
     });
 }
 

@@ -129,6 +129,7 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
     white-space: nowrap;
 }
 .grade-badge.red { border-color: var(--accent-red); color: var(--accent-red); background: rgba(184, 92, 62, 0.12); }
+.grade-badge.yellow { border-color: var(--accent-yellow); color: var(--accent-yellow); background: rgba(207, 154, 62, 0.12); }
 
 .nav-btn { justify-content: space-between; }
 .nav-btn:hover { box-shadow: var(--glow-blue); }

@@ -8,10 +8,13 @@ escalas generales de UCI), **Nefrología** con contenido real en la mayoría
 de sus objetivos de rotación (fisiología/electrolitos, HTA, ERC, FRA, TRR,
 ajuste de fármacos), **UCI / Papers Tuiter** con varios papers resumidos
 (resucitación hemodinámica en shock séptico, óxido nítrico inhalado,
-disfunción del VD y LRA postoperatoria), y **Fisiopatología UCI** con
+disfunción del VD y LRA postoperatoria), **Fisiopatología UCI** con
 repasos de capítulos de "El Libro Azul: Bases Fisiopatológicas de la
 Medicina Crítica" (hoy, Hematología y Hemostasia en Cuidados Críticos,
-Vías Urinarias, y Cardiología). Está pensada para ir creciendo con más
+Vías Urinarias, y Cardiología), y **Cardiología** con guías de práctica
+clínica de manejo (hoy, Insuficiencia Cardíaca — Guías ESC 2026 — a
+diferencia del bloque de Cardiología de Fisiopatología UCI, que es
+fisiopatología pura, no manejo). Está pensada para ir creciendo con más
 especialidades (radiología, etc.) según se vaya aportando contenido. Es
 una herramienta de apoyo para médicos, pensada para consultarse a pie de
 cama en el móvil.
@@ -4949,10 +4952,138 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
     regresiones. Bump de cache-busting (`?v=20260821-8`), 8º cambio de
     `components.css` en el mismo día.
 
+### Cardiología
+
+Quinta especialidad del menú raíz (`#btn-cardiologia`, junto a Hematología,
+Nefrología, UCI/Papers Tuiter y Fisiopatología UCI) — deliberadamente
+**distinta** del bloque "Cardiología" ya existente dentro de Fisiopatología
+UCI: aquel es fisiopatología pura (capítulos de El Libro Azul, sin
+recomendaciones de tratamiento), mientras que esta especialidad nueva es
+**guías de práctica clínica de manejo** (recomendaciones graduadas Clase
+I-III / Nivel A-C, dosis de fármacos, algoritmos terapéuticos) — la misma
+distinción que ya existe entre Nefrología (KDIGO, HTA, FRA: manejo clínico)
+y el bloque "Vías Urinarias" de Fisiopatología UCI (mismo Libro Azul,
+fisiología pura): nunca se fusionaron esos dos, y forzar esta guía dentro
+del bloque de fisiopatología habría repetido el mismo error ya descartado
+explícitamente para Nefrología. Antes de tocar el repositorio se publicó
+una propuesta como Artifact (arquitectura, plan de fichas, tratamiento del
+contenido) y se confirmó con `AskUserQuestion` tanto la arquitectura de
+especialidad nueva como el ritmo de construcción (empezar ya con la Parte 1
+en vez de esperar a la Parte 2 completa).
+
+Mismo patrón de dos niveles que UCI/Papers Tuiter y Fisiopatología UCI: un
+**submenú de guías** (`#cardiologia-menu-view`/
+`js/modules/cardiologia/cardiologia-menu.html`, con
+`.btn-volver-especialidades`) del que cuelga un botón por guía, y la
+**vista propia de cada guía** con su propio cuaderno de campo. El switcher
+`cardioLevel` vive en `js/modules/cardiologia/index.js`
+(`createViewSwitcher({ menu, insuficienciaCardiaca })`) — mismo motivo que
+el resto de especialidades con submenú interno: la vista raíz
+`#cardiologia-view` (registrada en el `topLevel` de `home/index.js`) es
+solo el contenedor exterior. Al volver a "Cardiología" desde
+Especialidades, `cardiologia.init()` devuelve `{ volverAlMenu, irAFicha }`,
+inyectado perezosamente en `home/index.js` (`onCardiologiaListo`, mismo
+patrón que `onNefrologiaListo`/`onUciPapersListo`/`onFisioUciListo`) para
+dejar siempre el submenú de guías como pantalla de entrada. Añadir una guía
+nueva en el futuro: 1) botón nuevo en `cardiologia-menu.html`, 2) su propio
+`<guia>.html` con `.btn-volver-cardio-menu`, 3) registrarlo en `index.html`
+dentro de `#cardiologia-view` y en el switcher `cardioLevel` de
+`cardiologia/index.js`.
+
+- **Primera guía: "Insuficiencia Cardíaca (ESC 2026)"**
+  (`js/modules/cardiologia/insuficiencia-cardiaca.html`). Fuente: 2026 ESC
+  Guidelines for the management of heart failure. Developed by the Task
+  Force for the management of heart failure of the European Society of
+  Cardiology (ESC). Eur Heart J. 2026;00:1-112 — la actualización oficial
+  que sustituye a la guía de 2021, enviada por el usuario en 2 partes
+  (Parte 1: 56 págs., secciones 1-8, hasta soporte circulatorio mecánico
+  durable; Parte 2 pendiente de envío, cubrirá previsiblemente las
+  secciones 9-19: comorbilidades, manejo multidisciplinar y condiciones
+  específicas). Con la Parte 1 ya se construyó un **cuaderno de campo de 7
+  fichas** (`#cardio-ic-corkboard`/`#panel-cardio-ic-tabs`, mismo
+  `core/corkboard.js` de siempre, sin calculadoras propias en este primer
+  pase — `insuficiencia-cardiaca.js` solo llama a `initCorkboard(...)`),
+  correspondencia 1:1 con las secciones numeradas de la propia guía (mismo
+  patrón ya usado en ERC/FRA/HTA/Vías Urinarias): Definición, epidemiología
+  y clasificaciones (nueva nomenclatura FMT/AMT/GDIT, eliminación del
+  HFmrEF, reclasificación HFrEF/HFpEF en el corte del 50%, estadios A-D),
+  Prevención de la IC (estadio A/B, factores de riesgo cardiometabólicos,
+  puntuaciones de riesgo, poblaciones específicas), Diagnóstico de la IC
+  crónica (péptidos natriuréticos con cortes ajustados por edad, algoritmo
+  diagnóstico, fenotipos por FEVI, evaluación multiparamétrica de la
+  etiología), Terapia farmacológica de la IC crónica (los 4 pilares del
+  FMT, terapia adicional, Tabla 11 de dosis completa), Terapia
+  intervencionista dirigida por guía (DAI, TRC con el algoritmo de
+  indicaciones por QRS/morfología, estimulación del sistema de conducción),
+  IC descompensada (las 4 categorías clínicas, clasificación SCAI del shock
+  cardiogénico, las 3 fases del manejo hospitalario, algoritmo de
+  descongestión guiado por Na⁺ urinario, soporte circulatorio temporal), e
+  IC avanzada (criterios de definición, triaje "Rule of three"/"I NEED
+  HELP", clasificación INTERMACS, soporte circulatorio temporal/durable —
+  cierra con trasplante cardíaco y cuidados de fin de vida pendientes de la
+  Parte 2).
+  - **Grados de recomendación en toda la ficha**: nueva variante
+    `.grade-badge.yellow` en `components.css` (reutilizando
+    `--accent-yellow`, mismo criterio ya aplicado en ERC de colapsar un
+    mapa de 4 niveles en las 3 clases de color ya disponibles en vez de
+    inventar un token nuevo) — Clase I en verde (clase base ya existente),
+    Clase IIa/IIb en amarillo (distinguidas por el propio texto del
+    badge), Clase III en rojo (`.grade-badge.red`, ya existente). Cada
+    recomendación clave de la guía real se reprodujo con su Clase y Nivel
+    de evidencia exactos citados entre corchetes tras el texto.
+  - **Tablas y figuras**: ninguna figura de la Parte 1 es una fotografía
+    clínica genuina — todas son flujogramas/tablas reconstruibles
+    fielmente, así que se recrearon íntegras como `.data-table` y
+    secuencias `kv-row`/`micro-prof-item` (algoritmo diagnóstico Fig. 4,
+    fases de manejo de IC descompensada Fig. 12-13, algoritmo de
+    diuréticos guiado por Na⁺ urinario Fig. 15, clasificación INTERMACS
+    Fig. 17, algoritmo de decisión de soporte circulatorio Fig. 18), mismo
+    criterio ya aplicado en KDIGO/HTA/FRA — nunca se incrusta como imagen
+    lo que se puede tabular.
+  - **56 preguntas de quiz** (`js/data/insuficiencia-cardiaca-preguntas.js`,
+    `ic-q001`-`q056`, 8 por ficha × 7 fichas — 6 de opción múltiple + 2 de
+    tipo `redactar` por ficha, mismo formato ya establecido en
+    Fisiopatología UCI/UCI Papers Tuiter). `triggerId:
+    'btn-cardio-ic-repasar'`, exportado junto a `quizBanco`/`quizTemas`
+    desde `cardiologia/index.js` y fusionado en la única llamada a
+    `initQuiz()` de `main.js`, igual que el resto de especialidades — el
+    menú del quiz gana una 5ª asignatura ("Cardiología") en su nivel 0. El
+    banco combinado de toda la app queda en <strong>1173
+    preguntas</strong> (1117 previas + 56).
+  - **Sin calculadoras en este primer pase** — a diferencia de otros
+    bloques de manejo clínico (ERC/FRA/HTA), esta primera construcción se
+    limitó a transcribir fielmente el contenido de la Parte 1 sin diseñar
+    interactividad nueva; candidatas ya identificadas para rondas futuras:
+    umbral de NT-proBNP ajustado por edad, el algoritmo de descongestión
+    guiado por Na⁺ urinario como flujograma interactivo (en la línea del ya
+    construido para el citrato en TRR continua), y selectores explicativos
+    (no numéricos) para SCAI/INTERMACS.
+  - **Cross-links pendientes, identificados pero no resueltos todavía**:
+    shock cardiogénico ↔ Ficha 10 de Cardiología/Fisiopatología UCI
+    (fisiopatología de los estados de choque — complementarios, sin
+    solape); SGLT2i en IC ↔ Ficha 6 de ERC/Nefrología (mismo fármaco,
+    indicación distinta); TRR en IC avanzada ↔ módulo TRR de Nefrología.
+  - Verificado con Playwright: las 7 fichas abren/voltean sin error de
+    consola ni 404 real; los `.grade-badge` (verde/amarillo/rojo) se
+    detectan correctamente en cada ficha con contenido de recomendaciones;
+    el menú del quiz en 3 niveles muestra "Cardiología (56)" → "Insuficiencia
+    Cardíaca (ESC 2026) (56)" → las 7 fichas con 8 preguntas cada una, y un
+    recorrido completo de las 56 preguntas (incluidas las 14 de redactar)
+    no generó ninguna excepción JS; sin overflow horizontal a 390px. Bump
+    de cache-busting (`?v=20260828`) por el cambio en `components.css`
+    (`.grade-badge.yellow`).
+  - **Pendiente**: la Parte 2 del PDF (secciones 9-19) ampliará este mismo
+    cuaderno de campo con 4 fichas más (Comorbilidades cardiovasculares,
+    Comorbilidades no cardiovasculares, Manejo multidisciplinar y
+    seguimiento, Condiciones específicas) en cuanto el usuario la envíe —
+    seguir el mismo criterio de correspondencia 1:1 con las secciones
+    numeradas de la guía ya aplicado a la Parte 1.
+
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
-también `especialidades`, `nefrologia`, `uciPapers` y `fisioUci` como
-vistas más del mismo switcher raíz —, submenú de Citopenias, submenú de
+también `especialidades`, `nefrologia`, `uciPapers`, `fisioUci` y
+`cardiologia` como vistas más del mismo switcher raíz —, submenú de
+Citopenias, submenú de
 Trasplante), inicializa el Atlas
 (`initAtlas()` de `modules/home/atlas.js`) y conecta los botones. Los
 botones "← VOLVER" usan una clase específica según a qué nivel deben

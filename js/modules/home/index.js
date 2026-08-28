@@ -61,6 +61,13 @@ export function onFisioUciListo(api) {
     fisioUciApi = api;
 }
 
+// Mismo patrón de inyección perezosa, para la API que devuelve
+// cardiologia.init() (ver modules/cardiologia/index.js).
+let cardiologiaApi = null;
+export function onCardiologiaListo(api) {
+    cardiologiaApi = api;
+}
+
 export function init() {
     const topLevel = createViewSwitcher({
         especialidades: document.getElementById('especialidades-view'),
@@ -73,6 +80,7 @@ export function init() {
         nefrologia: document.getElementById('nefrologia-view'),
         uciPapers: document.getElementById('uci-papers-view'),
         fisioUci: document.getElementById('fisio-uci-view'),
+        cardiologia: document.getElementById('cardiologia-view'),
     });
 
     function goHome() {
@@ -92,6 +100,10 @@ export function init() {
     document.getElementById('btn-fisio-uci').addEventListener('click', () => {
         topLevel.show('fisioUci');
         fisioUciApi?.volverAlMenu();
+    });
+    document.getElementById('btn-cardiologia').addEventListener('click', () => {
+        topLevel.show('cardiologia');
+        cardiologiaApi?.volverAlMenu();
     });
     document.querySelectorAll('.btn-volver-especialidades').forEach(b => b.addEventListener('click', () => topLevel.show('especialidades')));
 
@@ -124,6 +136,9 @@ export function init() {
             } else if (especialidad === 'uciPapers') {
                 topLevel.show('uciPapers');
                 uciPapersApi?.irAFicha(view, panel, tab);
+            } else if (especialidad === 'cardiologia') {
+                topLevel.show('cardiologia');
+                cardiologiaApi?.irAFicha(view, panel, tab);
             }
         });
     });
