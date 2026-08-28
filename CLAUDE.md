@@ -5072,12 +5072,121 @@ dentro de `#cardiologia-view` y en el switcher `cardioLevel` de
     no generó ninguna excepción JS; sin overflow horizontal a 390px. Bump
     de cache-busting (`?v=20260828`) por el cambio en `components.css`
     (`.grade-badge.yellow`).
-  - **Pendiente**: la Parte 2 del PDF (secciones 9-19) ampliará este mismo
-    cuaderno de campo con 4 fichas más (Comorbilidades cardiovasculares,
-    Comorbilidades no cardiovasculares, Manejo multidisciplinar y
-    seguimiento, Condiciones específicas) en cuanto el usuario la envíe —
-    seguir el mismo criterio de correspondencia 1:1 con las secciones
-    numeradas de la guía ya aplicado a la Parte 1.
+  - **Parte 2 recibida e incorporada** ("continúa con la 2° parte"): antes
+    de escribir nada se releyeron las 56 páginas completas de la Parte 2 —
+    un primer intento de lectura en un único lote de 20 páginas perdió
+    silenciosamente el contenido de 16 de ellas (mostradas como "media
+    removed: request limit" sin imagen real, un límite del propio tool de
+    lectura de PDF con muchas páginas de una vez, no un error del PDF) —
+    detectado al notar que esas páginas nunca llegaron a renderizarse como
+    imagen, y corregido releyendo esas 16 páginas en lotes más pequeños
+    (6-8 páginas) antes de dar la lectura por completa. **Lección para el
+    futuro**: con PDFs largos, si un lote grande devuelve menos imágenes
+    "output_image" que páginas pedidas, no asumir que el resto era texto
+    sin figuras — releer el resto en lotes más pequeños hasta confirmar
+    que se ha visto contenido real de cada página.
+    - **Ficha VII (IC avanzada) ampliada**, no duplicada en una ficha
+      nueva — la Parte 1 ya había construido la mayor parte de la sección
+      8 (criterios, triaje, MCS temporal/durable) dejando explícitamente
+      pendientes las subsecciones 8.2.3 (trasplante cardíaco) y 8.2.4
+      (control de síntomas y fin de vida), que llegan al principio mismo
+      de la Parte 2 — se añadieron ahí, no como ficha aparte, siguiendo el
+      mismo criterio de correspondencia 1:1 sección↔ficha ya usado en el
+      resto del cuaderno. Contenido nuevo: Tabla 16 (indicaciones/
+      contraindicaciones de LVAD, con la lista completa de contraindicaciones
+      absolutas/relativas), Tabla 17 (indicaciones/contraindicaciones de
+      trasplante cardíaco), supervivencia post-trasplante (80-90% al año,
+      mediana ~12,5 años), el desafío central del equilibrio
+      inmunosupresión-efectos secundarios, los programas de donación tras
+      muerte circulatoria (DCD) como vía real de aumento de donantes,
+      consideraciones de edad/complejidad quirúrgica, planificación de
+      cuidados avanzados (qué es, qué debe documentar), cuidados
+      paliativos integrados a lo largo de toda la trayectoria (no solo al
+      final), y la retirada de MCS por decisión del paciente. 6 preguntas
+      de quiz nuevas (`ic-q057`-`q062`), llevando el tema de IC avanzada a
+      14 preguntas — único tema del cuaderno que rompe el baseline de 8,
+      justificado por el volumen real de contenido añadido.
+    - **4 fichas nuevas** (Ficha VIII-XI), correspondencia 1:1 con las
+      secciones 9-12 de la guía, mismo patrón que las 7 de la Parte 1:
+      - **Ficha VIII — Comorbilidades cardiovasculares** (sec. 9): FA
+        (prevalencia, identificación de desencadenantes, CHA₂DS₂-VA
+        actualizado sin el criterio de sexo femenino —Tabla 18—,
+        anticoagulación obligatoria en HCM/amiloidosis independientemente
+        de la puntuación, DOAC sobre AVK, control de frecuencia/ritmo,
+        ablación de nodo AV+TRC vs. ablación con catéter de la propia FA),
+        arritmias ventriculares y bradiarritmias, cardiopatía coronaria
+        crónica (revascularización, el algoritmo de manejo de la Figura 19
+        recreado como secuencia de decisión en vez de imagen, y la
+        discrepancia de grado reconocida por el propio Task Force frente a
+        las guías 2024 de SCC), y valvulopatía (estenosis/insuficiencia
+        aórtica, insuficiencia mitral primaria/secundaria con la nueva
+        clasificación atrial vs. ventricular, insuficiencia tricuspídea),
+        hipertensión, e ictus.
+      - **Ficha IX — Comorbilidades no cardiovasculares** (sec. 10):
+        obesidad (semaglutida/tirzepatida, cirugía bariátrica), diabetes
+        (iSGLT2 universal, metformina, insulina, iDPP-4/glitazonas
+        contraindicadas), ERC (caída transitoria de FGe esperable y no
+        motivo de retirada precoz del fármaco), ferropenia/anemia (la
+        propia guía reconoce que la definición clásica por ferritina no
+        identifica bien a los pacientes, con una definición alternativa
+        por TSAT&lt;20% propuesta), cáncer, enfermedad pulmonar y
+        trastornos del sueño (ASV contraindicada en CSA predominante por
+        SERVE-HF), ansiedad/depresión/deterioro cognitivo, fragilidad, y
+        otras comorbilidades (infecciones, vacunación, tiroides,
+        hiperuricemia, disfunción eréctil).
+      - **Ficha X — Manejo multidisciplinar y seguimiento** (sec. 11):
+        el equipo HF-MDT (Figura 21 recreada como texto — núcleo +
+        miembros ampliados), educación/autocuidado, implementación y
+        adherencia (papel de enfermería y farmacia especializadas),
+        entrenamiento físico/rehabilitación cardíaca (modelo FITT,
+        seguridad/contraindicaciones), telemonitorización (no invasiva vs.
+        basada en dispositivo vs. hemodinámica invasiva por presión de
+        arteria pulmonar), seguimiento a largo plazo (Figura 22, intervalos
+        por estadio A-D), y planificación de cuidados avanzados/paliativos
+        — con un cross-link interno real (`.tx-link`) hacia la Ficha VII,
+        que es donde vive el desarrollo completo de fin de vida, en vez de
+        duplicar el contenido.
+      - **Ficha XI — Condiciones específicas** (sec. 12): embarazo
+        (fármacos contraindicados, cambio a betabloqueante beta1-selectivo),
+        miocardiopatías (remite a las guías 2023 de miocardiopatías),
+        amiloidosis cardíaca (Tabla 20 de banderas rojas TTR/AL, el
+        algoritmo diagnóstico de la Figura 23 recreado como secuencia de
+        texto en vez de imagen, AL-CA vs. ATTR-CA con los 4 fármacos reales
+        —tafamidis/acoramidis/vutrisiran— y sus ensayos pivotales
+        ATTR-ACT/ATTRibute-CM/HELIOS-B, manejo de comorbilidades CV en CA),
+        miocarditis (criterios de alto riesgo, remite a las guías 2025 de
+        miocarditis/pericarditis), y cardiopatía congénita del adulto —
+        cierra con una lista de las 9 guías ESC complementarias citadas a
+        lo largo de la sección, para que quede claro qué remite a dónde.
+      - **2 figuras (19 y 23) recreadas como secuencias de texto
+        (`micro-prof-item`) en vez de imágenes**: ambas son flujogramas
+        nativos de la propia guía (no fotografías ni diagramas complejos
+        no verificables), así que se recrearon fielmente como texto
+        siguiendo el mismo criterio ya establecido en el resto del
+        proyecto (KDIGO, HTA, FRA) de nunca incrustar como imagen lo que
+        se puede reconstruir con exactitud — un primer borrador sí dejó
+        `&lt;img&gt;` apuntando a archivos inexistentes (`fig19-...png`/
+        `fig23-...png`) con un `onerror` para ocultarlos silenciosamente
+        si fallaban; detectado y corregido antes de la verificación con
+        Playwright, sustituyendo ambos bloques por la secuencia de texto
+        completa.
+    - **38 preguntas de quiz nuevas** en total (`ic-q057`-`q094`: 6 de la
+      ampliación de Ficha VII + 8×4 de las fichas nuevas), llevando el
+      banco de "Insuficiencia Cardíaca" a 94 preguntas. El banco combinado
+      de toda la app queda en <strong>1211 preguntas</strong> (1173 previas
+      + 38).
+    - La cabecera de la ficha y la tarjeta de bibliografía general se
+      actualizaron para reflejar que la guía ya está completa
+      (secciones 1-14), sin la coletilla de "Parte 2 pendiente".
+    - Verificado con Playwright: las 11 fichas del corkboard abren/voltean
+      sin error de consola ni 404 real; los `.grade-badge` se detectan en
+      las 4 fichas nuevas y en la Ficha VII ampliada; el cross-link interno
+      Ficha X→Ficha VII funciona; el menú del quiz en 3 niveles muestra
+      "Cardiología (94)" → "Insuficiencia Cardíaca (ESC 2026) (94)" → las
+      11 fichas con sus recuentos reales (8×10 + 14 en IC avanzada), y un
+      recorrido completo de las 94 preguntas no generó ninguna excepción
+      JS; sin overflow horizontal a 390px en ninguna de las 4 fichas
+      nuevas ni en la Ficha VII ampliada.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
