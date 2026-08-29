@@ -5273,9 +5273,69 @@ dentro de `#cardiologia-view` y en el switcher `cardioLevel` de
       de NT-proBNP de la Ficha VI está presente; sin overflow horizontal a
       390px; un recorrido de 15 preguntas del quiz de Cardiología no
       generó ninguna excepción JS. La pregunta de si extraer alguna de las
-      23 figuras vectoriales de la guía como imagen real queda
+      23 figuras vectoriales de la guía como imagen real quedó
       explícitamente aplazada a petición del usuario ("y después ya vemos
-      que pasa con las imágenes").
+      que pasa con las imágenes") — resuelta en la siguiente ronda, ver
+      justo abajo.
+  - **Extracción de imágenes reales de la guía**, a petición explícita del
+    usuario ("revisa todas las imágenes del documento, hay una gran
+    mayoría que se pueden incluir en la app, sobre todo las imágenes que
+    sale un corazón o imágenes como tal"). Los 2 PDF fuente se archivaron
+    en `docs/esc-2026-hf-guideline-parte1.pdf` y `...-parte2.pdf`, mismo
+    criterio que el resto de fuentes del proyecto. Auditoría sistemática
+    con `pdfimages -list` sobre ambos PDF completos (no solo relectura de
+    prosa): la Parte 1 tiene contenido de imagen real en 6 páginas
+    (2 — solo perfil de color ICC, ignorada —, 10, 26, 27, 28, 45, 47), la
+    Parte 2 en 2 páginas (14, 17) — el resto de las decenas de figuras del
+    documento son gráficos **vectoriales** nativos (confirmado por la
+    ausencia de entradas de imagen grande), no imágenes incrustadas.
+    Cada página candidata está compuesta de docenas de fragmentos de
+    imagen pequeños superpuestos (mismo patrón InDesign ya documentado
+    para el paper de Hernandez de UCI/Papers Tuiter) — se rasterizó la
+    página completa a 300dpi con `pdftoppm` y se recortó con Pillow
+    (detección automática del borde rojo característico de las
+    ilustraciones ESC vía umbral de color RGB, en vez de recortar a ojo),
+    no `pdfimages -png` de fragmentos individuales.
+    - **5 imágenes incorporadas**, las que combinan valor clínico genuino
+      con contenido fotográfico real (corazones ilustrados o pruebas
+      diagnósticas reales, no solo iconos/flujogramas de texto — criterio
+      explícito del usuario): **Figura 1** ("Central illustration",
+      manejo de la IC por continuo de FEVI con las 4 categorías de
+      tratamiento coloreadas por clase — insertada al inicio de la Ficha
+      IV, como resumen visual de las Fichas IV y V), **Figura 5** (causas
+      de HFrEF, con una ilustración anatómica real del corazón en el
+      centro — Ficha III), **Figura 6** (factores de riesgo de HFpEF,
+      misma ilustración de corazón — Ficha III), **Figura 7** (abordaje
+      multiparamétrico de la etiología, con miniaturas de pruebas
+      diagnósticas reales: angio-TC coronaria, angiografía invasiva, PET,
+      biopsia endomiocárdica con histología real, CMR, gammagrafía —
+      Ficha III), y **Figura 14** (herramientas de evaluación de la
+      descongestión pre-alta, con radiografía de tórax y ecografía de
+      vena cava real — Ficha VI). 3 páginas candidatas se descartaron
+      explícitamente por no aportar contenido fotográfico genuino más
+      allá de lo ya recreado como texto: Figura 12 (fases/objetivos del
+      manejo hospitalario, cajas de texto puras, ya en la Ficha VI),
+      Figura 21 (equipo HF-MDT, solo iconos de personas, ya recreado en
+      la Ficha X) y Figura 22 (seguimiento por estadio, tabla con iconos,
+      ya recreada en la Ficha X).
+    - Imágenes guardadas en `js/modules/cardiologia/img/` (JPEG,
+      1600px de ancho máximo, calidad 88 — 224-402 KB cada una) e
+      insertadas con el patrón `.article-figure` estándar del proyecto
+      (`<img loading="lazy">` + `.article-figure-caption`), heredando
+      gratis el lightbox de `core/lightbox.js` sin tocar JS.
+    - **Lección de verificación con Playwright, documentada para futuras
+      rondas**: un primer intento de comprobar `naturalWidth` tras un
+      único `click()` sobre cada `.field-card` daba `naturalWidth: 0` en
+      las 5 imágenes nuevas pese a `curl` confirmar 200 OK en el recurso
+      — no era un fallo de carga, sino que un solo click en el cuaderno
+      de campo solo <strong>voltea</strong> la ficha (revela la pregunta
+      de repaso), sin abrir el panel; hace falta un segundo click sobre
+      `.back-cta` (`openCorkboardTopic()`) para que el `.tab-content`
+      pase a `.active` y el navegador dispare la carga `loading="lazy"`.
+      Verificado corrigiendo el script de prueba: las 5 imágenes cargan
+      (`naturalWidth: 1600`, `complete: true`) una vez el panel real está
+      activo, sin 404 ni overflow horizontal a 390px en ninguna de las 3
+      fichas afectadas (III, IV, VI).
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
