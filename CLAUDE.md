@@ -5423,6 +5423,91 @@ dentro de `#cardiologia-view` y en el switcher `cardioLevel` de
       quiz de Cardiología sin excepciones JS. Bump de cache-busting dos
       veces el mismo día (`?v=20260829` tras añadir `.algo-flow` a
       `components.css`, `?v=20260829-2` tras añadir `.kv-row-tool`).
+  - **Sexta imagen real: Figura 21 (equipo HF Team)**, a petición de
+    "revisa todas las imágenes del documento... que se pueden incluir en
+    la app". Auditoría exhaustiva con `pdfimages -list` (umbral ≥80×80px,
+    más permisivo que el ≥200×200px usado antes) sobre los 2 PDF
+    completos: solo 8 páginas tienen contenido de imagen real en las 112
+    páginas del documento — 6 en la Parte 1 (páginas 10/26/27/28/45/47,
+    de las cuales 5 ya estaban extraídas como Fig. 1/5/6/7/14, y la 45 es
+    la Fig. 12, un diagrama de cajas de texto sin foto real, ya recreado
+    como tabla) y 2 en la Parte 2 (páginas 14 y 17). La página 14 es la
+    Fig. 21 (rueda de iconos "HF Team" + 5 filas de texto por principio
+    del programa), extraída con `pdftoppm -r 300` + recorte por umbral de
+    color del borde rojo característico ESC (mismo método que las 5
+    anteriores) e insertada en la Ficha X. La página 17 es la Fig. 22
+    (tabla what/when/who por estadio), mismo tipo de diagrama de cajas de
+    texto que la Fig. 12 — descartada, ya recreada como tabla nativa.
+    **Nota de coherencia detectada en la propia auditoría posterior**: la
+    Fig. 21, a diferencia de las Fig. 1/5/6/7/14 (todas con fotografía o
+    ilustración anatómica real), es en realidad un diagrama de iconos sin
+    ninguna foto — el mismo tipo de contenido que excluyó a la Fig. 12 y
+    la Fig. 22. Se dejó explícitamente como punto a decidir por el
+    usuario (mantenerla por su valor como resumen visual, o retirarla por
+    coherencia estricta), no corregida por cuenta propia.
+  - **2 informes de auditoría adicionales (huecos de contenido, no
+    errores) y su implementación completa**, a petición de "ahora quiero
+    un informe sobre las fallas de contenido..." y después "quiero que
+    vuelvas a hacer otro informe... termina la relectura de la parte uno
+    y haz una relectura entera de la parte 2". El primer informe releyó
+    las páginas 30-56 de la Parte 1 cruzando cada Recommendation Table
+    contra "📋 Recomendaciones clave" de las Fichas III-VII; el segundo
+    terminó las páginas 1-29 de la Parte 1 (cruzadas contra la Tabla 5
+    "New recommendations"/Tabla 6 "Revised recommendations" de la propia
+    guía, confirmando sin huecos la Ficha II) y releyó la Parte 2
+    **íntegra**, confirmando explícitamente (abriendo las páginas 40 y 56
+    del archivo) que sus páginas 29-56 son solo bibliografía (referencias
+    500+, afiliaciones, sociedades nacionales), sin contenido clínico
+    adicional — con esto, las 112 páginas reales de la guía quedaron
+    cubiertas al 100% por esta auditoría. Ningún error de transcripción
+    nuevo en ninguna de las 2 rondas — el patrón encontrado es de
+    **omisión**: recomendaciones graduadas de la fuente que el texto ya
+    menciona en prosa o dentro de un algoritmo interactivo ya construido,
+    pero que nunca se convirtieron en su propio `kv-row` con `.grade-badge`
+    dentro de "Recomendaciones clave" — más un hueco de contenido real
+    (no solo de badge) en la Tabla 9 de causas de alteración de péptidos
+    natriuréticos. A petición de "aplica todas las mejoras del ultimo
+    informe", se implementaron todos los hallazgos verificados:
+    - **Ficha III**: añadidas 3 causas ausentes de la Tabla 9 (disfunción
+      endocrina grave y enfermedad hepática grave en la columna de
+      aumento; pericarditis constrictiva en la de disminución) — el
+      único hallazgo de contenido real, no de badge, de las 2 rondas.
+    - **Ficha VI**: 9 recomendaciones de la Tabla 9 sin badge (oxígeno,
+      intubación, VNI, acetazolamida/HCT, diuresis guiada por Na⁺,
+      ultrafiltración, vasodilatadores, inotrópicos, vasopresores,
+      opiáceos) + MCS en complicación mecánica del IAM (Tabla 10) +
+      matiz de NT-proBNP&gt;5000 pg/ml (Fig. 11, "ingreso generalmente
+      recomendado" en mayores) añadido al texto del algoritmo.
+    - **Ficha VII**: CPET y cateterismo derecho (Tabla 11), y TRS/
+      ultrafiltración con sus 2 grados reales distintos (Tabla 12,
+      IIa·C/IIb·C, antes fusionados en una sola frase sin badge).
+    - **Ficha V**: los 4 tramos restantes de la matriz TRC por QRS/
+      morfología (que el propio selector interactivo ya calculaba bien)
+      + el desfibrilador portátil (wearable).
+    - **Ficha VIII**: digoxina/digitoxina, ablación del nodo AV+TRC y
+      amiodarona/digoxina IV en FA inestable (Tabla 15) + TEER mitral
+      "de rescate" fuera de los criterios completos de la Tabla 17 (que
+      el algoritmo de la Fig. 20 ya resolvía bien, sin badge propio).
+    - **Ficha IX**: 2ª recomendación de hierro IV (reducir riesgo de
+      HFH, IIa·B1), distinta de la ya badgeada (aliviar síntomas, I·B1).
+    - **Pulido**: la Ficha XI ganó su propia sección de cierre
+      "Recomendaciones clave" (era la única de las 11 sin ella, pese a
+      tener 3 recomendaciones graduadas repartidas en el texto) y se
+      añadió un cross-link `.tx-link` en ambas direcciones entre la
+      "Revisión de la proporción de estimulación del VD" (Ficha III) y
+      "IC inducida por estimulación del VD" (Ficha V) — mismo tema,
+      antes sin enlazar entre sí.
+    - **Punto explícitamente no tocado**: la inconsistencia de la Fig.
+      21 (ver arriba) sigue pendiente de decisión del usuario, no se
+      resolvió por cuenta propia al aplicar "todas las mejoras del
+      informe" porque estaba marcada como "a revisar contigo", no como
+      hallazgo accionable.
+    - Verificado con Playwright: las 11 fichas siguen abriendo/volteando
+      sin error de consola ni 404 real; recuento de `.grade-badge` por
+      ficha confirmado exacto contra lo esperado tras cada bloque de
+      cambios (Ficha III 13, V 12, VI 19, VII 12, VIII 13, IX 10, XI 6);
+      los 2 `.tx-link` nuevos navegan a la ficha correcta en ambas
+      direcciones; sin overflow horizontal a 390px en ninguna ficha.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

@@ -433,7 +433,7 @@
             <table class="data-table">
                 <thead><tr><th>↑ Péptidos</th><th>↓ Péptidos</th></tr></thead>
                 <tbody>
-                    <tr><td>SCA, edad avanzada, FA, contusión cardíaca, EPOC, enfermedad crítica, sexo femenino, disfunción renal, hipertrofia del VI, miocarditis, apnea del sueño, síndrome paraneoplásico, TEP, hipertensión pulmonar, marcapasos VD, anemia grave, infecciones graves (incl. sepsis), hemorragia subaracnoidea, acidosis metabólica/cetoacidosis diabética grave, hipertensión sistémica, valvulopatía</td><td>Ascendencia africana, ARNI (sube BNP, no NT-proBNP), IECA/ARA-II, betabloqueantes, MRA, obesidad, iSGLT2</td></tr>
+                    <tr><td>SCA, edad avanzada, FA, contusión cardíaca, EPOC, enfermedad crítica, sexo femenino, disfunción renal, hipertrofia del VI, miocarditis, apnea del sueño, síndrome paraneoplásico, TEP, hipertensión pulmonar, marcapasos VD, anemia grave, disfunción endocrina grave, infecciones graves (incl. sepsis), enfermedad hepática grave, acidosis metabólica/cetoacidosis diabética grave, hemorragia subaracnoidea, hipertensión sistémica, valvulopatía</td><td>Ascendencia africana, ARNI (sube BNP, no NT-proBNP), IECA/ARA-II, betabloqueantes, pericarditis constrictiva, MRA, obesidad, iSGLT2</td></tr>
                 </tbody>
             </table>
             <p style="font-size:0.8rem; color:var(--text-muted);">La obesidad se asocia a valores de corte más bajos para los péptidos natriuréticos — cautela al interpretar en pacientes obesos. La disfunción renal se asocia a NT-proBNP más alto, pero no debe descartarse la interpretación en ese contexto.</p>
@@ -526,6 +526,7 @@
             <dl class="kv-row"><dt>Test genético</dt><dd>Recomendado en pacientes que cumplen criterios diagnósticos de miocardiopatía, cuando permite diagnóstico, pronóstico, estratificación terapéutica o cribado familiar en cascada. <span class="grade-badge">I · C</span></dd></dl>
             <dl class="kv-row"><dt>Angiografía invasiva</dt><dd>Recomendada en IC, angina y alta probabilidad de CAD obstructiva, candidatos a revascularización. <span class="grade-badge">I · C</span></dd></dl>
             <dl class="kv-row"><dt>Revisión de la proporción de estimulación del VD</dt><dd>Debe considerarse en todos los pacientes con CIED y HFrEF de novo o que empeora. <span class="grade-badge yellow">IIa · C</span></dd></dl>
+            <button class="tx-link" data-panel="panel-cardio-ic-tabs" data-tab="ic-dispositivos">🔗 Ver IC inducida por estimulación del VD y actualización a TRC (Ficha V) →</button>
             <dl class="kv-row"><dt>18F-FDG-PET</dt><dd>Debe considerarse para el diagnóstico si se sospecha sarcoidosis cardíaca. <span class="grade-badge yellow">IIa · C</span></dd></dl>
             <dl class="kv-row"><dt>Biopsia endomiocárdica</dt><dd>Debe considerarse en IC rápidamente progresiva pese al tratamiento estándar, o cuando otras pruebas sugieren inflamación/infiltración/depósito que no puede identificarse de otro modo. <span class="grade-badge yellow">IIa · C</span></dd></dl>
             <dl class="kv-row"><dt>Cateterismo derecho en pericarditis constrictiva/cardiopatía congénita</dt><dd>Debe considerarse si se sospecha esa causa de IC. <span class="grade-badge yellow">IIa · C</span></dd></dl>
@@ -713,7 +714,8 @@
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚡ IC inducida por estimulación del VD</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">La estimulación crónica del VD (marcapasos convencional) induce HFrEF en 5,9-39% de los pacientes, según la definición usada. El ensayo BUDAPEST-CRT Upgrade (2024) mostró que actualizar a CRT-D reduce significativamente muerte/HFH en pacientes con carga de estimulación VD ≥20% y QRS ≥150 ms (HR 0,27; p&lt;.001) — primer ECA en este escenario específico.</div>
+                    <div class="micro-prof-body">La estimulación crónica del VD (marcapasos convencional) induce HFrEF en 5,9-39% de los pacientes, según la definición usada. El ensayo BUDAPEST-CRT Upgrade (2024) mostró que actualizar a CRT-D reduce significativamente muerte/HFH en pacientes con carga de estimulación VD ≥20% y QRS ≥150 ms (HR 0,27; p&lt;.001) — primer ECA en este escenario específico.
+                    <button class="tx-link" data-panel="panel-cardio-ic-tabs" data-tab="ic-diagnostico">🔗 Ver la revisión de la proporción de estimulación del VD en el diagnóstico (Ficha III) →</button></div>
                 </div>
             </div>
             <p style="font-size:0.85rem; color:var(--text-dim);"><strong>Estimulación del sistema de conducción (CSP)</strong>, incluida estimulación de rama izquierda y de haz de His: posible alternativa a la TRC cuando el implante convencional es difícil — sin ECA con resultados centrados en el paciente todavía, por lo que actualmente no hay recomendaciones establecidas.</p>
@@ -729,8 +731,12 @@
             <dl class="kv-row"><dt>DAI &lt;40 días post-IAM</dt><dd>No recomendado, por falta de mejora del pronóstico. <span class="grade-badge red">III · B1</span></dd></dl>
             <dl class="kv-row"><dt>DAI en NYHA IV refractaria</dt><dd>No recomendado en pacientes con síntomas graves refractarios al tratamiento farmacológico, salvo que sean candidatos a TRC, dispositivo de asistencia ventricular o trasplante cardíaco. <span class="grade-badge red">III · C</span></dd></dl>
             <dl class="kv-row kv-row-tool"><dt>TRC, LBBB y QRS ≥150ms</dt><dd>Recomendada en HFrEF sintomática pese a FMT óptimo, en ritmo sinusal. <span class="grade-badge">I · A</span><span class="kv-row-tool-tag">🧮 selector arriba</span></dd></dl>
+            <dl class="kv-row kv-row-tool"><dt>TRC, no-LBBB y QRS ≥150ms</dt><dd>Debe considerarse en el mismo escenario. <span class="grade-badge yellow">IIa · B1</span><span class="kv-row-tool-tag">🧮 selector arriba</span></dd></dl>
+            <dl class="kv-row kv-row-tool"><dt>TRC, LBBB y QRS 130-149ms</dt><dd>Debe considerarse en el mismo escenario. <span class="grade-badge yellow">IIa · B1</span><span class="kv-row-tool-tag">🧮 selector arriba</span></dd></dl>
+            <dl class="kv-row kv-row-tool"><dt>TRC, no-LBBB y QRS 130-149ms</dt><dd>Puede considerarse en el mismo escenario. <span class="grade-badge yellow">IIb · B1</span><span class="kv-row-tool-tag">🧮 selector arriba</span></dd></dl>
             <dl class="kv-row"><dt>Actualización a TRC por RV pacing</dt><dd>Debe considerarse en HFrEF con carga significativa de estimulación VD pese a FMT óptimo. <span class="grade-badge yellow">IIa · B1</span></dd></dl>
             <dl class="kv-row"><dt>TRC con QRS &lt;130ms</dt><dd>No recomendada, salvo indicación de estimulación por bloqueo AV de alto grado. <span class="grade-badge red">III · A</span></dd></dl>
+            <dl class="kv-row"><dt>Desfibrilador portátil (wearable)</dt><dd>Puede considerarse como puente a decisión/DAI definitivo/trasplante en riesgo elevado transitorio de muerte súbita. <span class="grade-badge yellow">IIb · C</span></dd></dl>
         </div>
 
         <!-- ===== FICHA VI: IC DESCOMPENSADA ===== -->
@@ -788,7 +794,7 @@
                 <div class="algo-branch algo-branch-si"><span class="algo-branch-label">NT-proBNP &lt;300 pg/ml</span><span class="hl-verde">Descarta IC descompensada</span> (umbral no ajustado por edad; también BNP &lt;100 pg/ml o MR-proANP &lt;120 pg/ml).</div>
                 <div class="algo-branch algo-branch-no"><span class="algo-branch-label">NT-proBNP ≥300 pg/ml</span><span class="hl-rojo">Continuar el estudio</span> → ecocardiografía y otras pruebas (radiografía, ecografía pulmonar) → hallazgos anormales confirman IC descompensada.</div>
             </div>
-            <p style="font-size:0.85rem; color:var(--text-dim);">Combinar con umbrales "rule-in" ajustados por edad reduce exámenes innecesarios: <span class="hl-rojo">&gt;450 pg/ml (&lt;50 años)</span>, <span class="hl-rojo">&gt;900 pg/ml (50-74 años)</span>, <span class="hl-rojo">&gt;1800 pg/ml (&gt;74 años)</span>.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Combinar con umbrales "rule-in" ajustados por edad reduce exámenes innecesarios: <span class="hl-rojo">&gt;450 pg/ml (&lt;50 años)</span>, <span class="hl-rojo">&gt;900 pg/ml (50-74 años)</span>, <span class="hl-rojo">&gt;1800 pg/ml (&gt;74 años)</span>. Por encima de <span class="hl-rojo">5000 pg/ml en pacientes de más edad</span>, la propia Figura 11 marca una categoría de riesgo muy alto en la que el ingreso hospitalario está generalmente recomendado, independientemente del resto de la evaluación.</p>
 
             <p class="section-label" style="margin-top:16px;">🏥 Manejo general — 3 fases hospitalarias (Fig. 12)</p>
             <table class="data-table">
@@ -898,12 +904,23 @@
             <p style="font-size:0.85rem; color:var(--text-dim);">Los pacientes con IC descompensada tienen mayor riesgo tromboembólico, pero ningún ECA ha comparado anticoagulación frente a placebo en esta población, así que no puede hacerse una recomendación definitiva. Sin embargo, ante inmovilización u otros factores de riesgo, la profilaxis tromboembólica está generalmente indicada.</p>
 
             <p class="section-label" style="margin-top:16px;">📋 Recomendaciones clave</p>
+            <dl class="kv-row"><dt>Oxígeno</dt><dd>Recomendado si SpO₂&lt;90% o PaO₂&lt;60mmHg, para corregir la hipoxemia. <span class="grade-badge">I · C</span></dd></dl>
+            <dl class="kv-row"><dt>Intubación</dt><dd>Recomendada en fallo respiratorio persistente/progresivo pese a oxígeno o ventilación no invasiva, para corregir la hipoxemia. <span class="grade-badge">I · C</span></dd></dl>
+            <dl class="kv-row"><dt>Ventilación no invasiva</dt><dd>Debe considerarse en distrés respiratorio (FR&gt;25/min, SpO₂&lt;90%), iniciada lo antes posible, para disminuir el distrés respiratorio y reducir la necesidad de intubación. <span class="grade-badge yellow">IIa · B2</span></dd></dl>
             <dl class="kv-row kv-row-tool"><dt>Diuréticos de asa IV</dt><dd>Recomendados en todos los pacientes con sobrecarga de fluidos, para mejorar síntomas. <span class="grade-badge">I · A</span><span class="kv-row-tool-tag">🧮 asistente arriba</span></dd></dl>
+            <dl class="kv-row"><dt>Añadir acetazolamida IV o hidroclorotiazida oral</dt><dd>Debe considerarse en sobrecarga de fluidos ya tratada previamente con diurético de asa, para reducir la congestión. <span class="grade-badge yellow">IIa · B1</span></dd></dl>
+            <dl class="kv-row"><dt>Diuresis guiada por Na⁺ urinario</dt><dd>Puede considerarse durante los primeros días de tratamiento de la DHF, para mejorar la natriuresis y la diuresis. <span class="grade-badge yellow">IIb · B1</span></dd></dl>
             <dl class="kv-row"><dt>iSGLT2 intrahospitalario</dt><dd>Recomendado tras estabilización inicial, para mejorar QoL/congestión y reducir HFH. <span class="grade-badge">I · B1</span></dd></dl>
+            <dl class="kv-row"><dt>Ultrafiltración</dt><dd>Puede considerarse en pacientes seleccionados que responden de forma insuficiente a la escalada del tratamiento diurético. <span class="grade-badge yellow">IIb · C</span></dd></dl>
+            <dl class="kv-row"><dt>Vasodilatadores IV</dt><dd>Pueden considerarse como terapia inicial en DHF con PAS&gt;110mmHg, para mejorar síntomas y reducir la congestión. <span class="grade-badge yellow">IIb · C</span></dd></dl>
+            <dl class="kv-row"><dt>Inotrópicos</dt><dd>Pueden considerarse con PAS&lt;90mmHg y evidencia de hipoperfusión que no responde al tratamiento estándar, para mejorar la perfusión. <span class="grade-badge yellow">IIb · C</span></dd></dl>
+            <dl class="kv-row"><dt>Vasopresores</dt><dd>Preferiblemente noradrenalina, pueden considerarse en shock cardiogénico para aumentar la PA y la perfusión de órganos vitales. <span class="grade-badge yellow">IIb · C</span></dd></dl>
+            <dl class="kv-row"><dt>Opiáceos de uso rutinario</dt><dd>No recomendados en DHF, salvo ansiedad/dolor intratable grave, por riesgo de daño. <span class="grade-badge red">III · C</span></dd></dl>
             <dl class="kv-row kv-row-tool"><dt>Evaluación cuidadosa antes del alta</dt><dd>Recomendada en pacientes hospitalizados por IC descompensada, para excluir signos persistentes de congestión. <span class="grade-badge">I · C</span><span class="kv-row-tool-tag">🧮 checklist arriba</span></dd></dl>
             <dl class="kv-row"><dt>Estrategia intensiva de titulación rápida tras el alta</dt><dd>Recomendada, con inicio/titulación rápida de FMT antes del alta y en visitas frecuentes durante las primeras 6 semanas tras una HFH, para reducir el riesgo de reingreso o muerte. <span class="grade-badge">I · B2</span></dd></dl>
             <dl class="kv-row"><dt>Shock Team multidisciplinar</dt><dd>Recomendado en candidatos potenciales a MCS temporal, para guiar la selección del dispositivo. <span class="grade-badge">I · C</span></dd></dl>
             <dl class="kv-row"><dt>Bomba de flujo microaxial en shock post-IAM seleccionado</dt><dd>Debe considerarse para reducir riesgo de muerte. <span class="grade-badge yellow">IIa · B1</span></dd></dl>
+            <dl class="kv-row"><dt>MCS temporal en complicaciones mecánicas del IAM</dt><dd>Debe considerarse como puente al tratamiento definitivo. <span class="grade-badge yellow">IIa · C</span></dd></dl>
             <dl class="kv-row"><dt>BCIA no seleccionado post-IAM</dt><dd>No recomendado, por falta de efecto. <span class="grade-badge red">III · B1</span></dd></dl>
             <dl class="kv-row"><dt>MCS temporal no seleccionado en shock cardiogénico</dt><dd>No recomendado, por riesgo de daño. <span class="grade-badge red">III · B1</span></dd></dl>
         </div>
@@ -1041,7 +1058,11 @@
 
             <p class="section-label" style="margin-top:16px;">📋 Recomendaciones clave</p>
             <dl class="kv-row kv-row-tool"><dt>Consulta precoz con centro de IC avanzada</dt><dd>Recomendada en pacientes con IC avanzada o en riesgo de estarlo, motivados y sin contraindicaciones absolutas, para evaluar candidatura. <span class="grade-badge">I · A</span><span class="kv-row-tool-tag">🧮 checklist arriba</span></dd></dl>
+            <dl class="kv-row"><dt>Prueba de esfuerzo cardiopulmonar (CPET)</dt><dd>Recomendada en IC avanzada, como parte de la evaluación para trasplante y MCS durable. <span class="grade-badge">I · C</span></dd></dl>
+            <dl class="kv-row"><dt>Cateterismo cardíaco derecho</dt><dd>Recomendado en IC avanzada, como parte de la evaluación para trasplante y MCS durable. <span class="grade-badge">I · C</span></dd></dl>
             <dl class="kv-row"><dt>Down-titración de betabloqueante/ivabradina en hipoperfusión</dt><dd>Debe considerarse en HFrEF avanzada seleccionada con hipoperfusión, para aumentar gasto cardíaco. <span class="grade-badge yellow">IIa · C</span></dd></dl>
+            <dl class="kv-row"><dt>Terapia renal sustitutiva</dt><dd>Debe considerarse en sobrecarga de volumen refractaria y fallo renal terminal, para mejorar síntomas. <span class="grade-badge yellow">IIa · C</span></dd></dl>
+            <dl class="kv-row"><dt>Ultrafiltración</dt><dd>Puede considerarse en sobrecarga de volumen refractaria a la escalada del tratamiento diurético, para reducir el riesgo de reingreso. <span class="grade-badge yellow">IIb · C</span></dd></dl>
             <dl class="kv-row"><dt>MCS temporal como puente en shock relacionado con IC</dt><dd>Debe considerarse en inestabilidad hemodinámica seleccionada, como BTD/BTT/BTB/BTC. <span class="grade-badge yellow">IIa · C</span></dd></dl>
             <dl class="kv-row"><dt>LVAD durable</dt><dd>Recomendado en seleccionados con HFrEF avanzada pese a FMT/GDIT óptimos, como BTT/BTC/BTR o terapia de destino, para mejorar síntomas y reducir riesgo de muerte. <span class="grade-badge">I · C</span></dd></dl>
             <dl class="kv-row"><dt>Examen histopatológico del tejido explantado</dt><dd>Debe considerarse en IC no isquémica tras LVAD o trasplante, para identificar un diagnóstico etiológico tratable o facilitar el cribado familiar. <span class="grade-badge yellow">IIa · C</span></dd></dl>
@@ -1201,12 +1222,16 @@
             <dl class="kv-row kv-row-tool"><dt>Anticoagulación oral en FA de riesgo elevado</dt><dd>Recomendada para prevenir ictus y tromboembolismo, según CHA₂DS₂-VA. <span class="grade-badge">I · A</span><span class="kv-row-tool-tag">🧮 calculadora arriba</span></dd></dl>
             <dl class="kv-row"><dt>DOAC sobre AVK</dt><dd>Recomendados en pacientes con IC para prevenir ictus y tromboembolismo. <span class="grade-badge">I · B1</span></dd></dl>
             <dl class="kv-row"><dt>Betabloqueante en FA con HFrEF</dt><dd>Recomendado como 1ª línea para control de frecuencia. <span class="grade-badge">I · C</span></dd></dl>
+            <dl class="kv-row"><dt>Digoxina/digitoxina en FA con control de frecuencia subóptimo</dt><dd>Debe considerarse en estable con FC alta pese a betabloqueante, o si el betabloqueante está contraindicado/no tolerado, para el control de frecuencia. <span class="grade-badge yellow">IIa · C</span></dd></dl>
+            <dl class="kv-row"><dt>Ablación del nodo AV + TRC</dt><dd>Debe considerarse en FA permanente muy sintomática con mal control de frecuencia pese a tratamiento médico y ≥1 HFH, para reducir síntomas, limitaciones físicas, HFH recurrente y muerte. <span class="grade-badge yellow">IIa · B1</span></dd></dl>
             <dl class="kv-row"><dt>Ablación con catéter en HFrEF y FA sintomática seleccionada</dt><dd>Debe considerarse para mejorar QoL y reducir riesgo de HFH o muerte. <span class="grade-badge yellow">IIa · B1</span></dd></dl>
             <dl class="kv-row"><dt>Cardioversión urgente en DHF con FA e inestabilidad</dt><dd>Recomendada para restaurar el ritmo sinusal. <span class="grade-badge">I · C</span></dd></dl>
+            <dl class="kv-row"><dt>Amiodarona o digoxina IV en FA hemodinámicamente inestable</dt><dd>Puede considerarse en HFrEF con FA para estabilizar al paciente y lograr control agudo de la frecuencia cardíaca. <span class="grade-badge yellow">IIb · C</span></dd></dl>
             <dl class="kv-row"><dt>Revascularización por angina persistente</dt><dd>Recomendada pese a FMT y antianginosos optimizados, para aliviar síntomas. <span class="grade-badge">I · C</span></dd></dl>
             <dl class="kv-row"><dt>CABG en HFrEF, FEVI ≤35%, multivaso, candidato quirúrgico</dt><dd>Debe considerarse como estrategia de revascularización preferida. <span class="grade-badge yellow">IIa · B1</span></dd></dl>
             <dl class="kv-row"><dt>Intervención de la válvula aórtica en EAo grave con IC</dt><dd>Recomendada con esperanza de vida &gt;1 año, independientemente de la FEVI. <span class="grade-badge">I · B1</span></dd></dl>
             <dl class="kv-row"><dt>TEER mitral en MR secundaria grave, HFrEF, tras optimizar FMT/CRT</dt><dd>Recomendado si se cumplen los criterios clínicos/ecocardiográficos. <span class="grade-badge">I · B1</span></dd></dl>
+            <dl class="kv-row"><dt>TEER mitral fuera de los criterios de selección completos</dt><dd>Puede considerarse en pacientes sintomáticos seleccionados que no cumplen los criterios clínicos/ecocardiográficos completos, tras excluir LVAD o trasplante, para mejorar síntomas. <span class="grade-badge yellow">IIb · C</span></dd></dl>
         </div>
 
         <!-- ===== FICHA IX: COMORBILIDADES NO CARDIOVASCULARES ===== -->
@@ -1256,6 +1281,7 @@
             <dl class="kv-row"><dt>Semaglutida/tirzepatida en HFpEF con obesidad</dt><dd>Debe considerarse en HFpEF (FEVI ≥45%) con IMC ≥30 kg/m², independientemente del estatus diabético, para reducir peso corporal y mejorar QoL. <span class="grade-badge yellow">IIa · B1</span></dd></dl>
             <dl class="kv-row"><dt>Cirugía bariátrica</dt><dd>Puede considerarse en obesos con IC e IMC ≥35 kg/m² para reducir el riesgo de reingreso. <span class="grade-badge yellow">IIb · C</span></dd></dl>
             <dl class="kv-row"><dt>Hierro IV en HFrEF sintomática con ferropenia</dt><dd>Recomendado para aliviar síntomas y mejorar QoL. <span class="grade-badge">I · B1</span></dd></dl>
+            <dl class="kv-row"><dt>Hierro IV para reducir el riesgo de HFH</dt><dd>Debe considerarse en HFrEF sintomática con ferropenia. <span class="grade-badge yellow">IIa · B1</span></dd></dl>
             <dl class="kv-row"><dt>Agentes estimulantes de la eritropoyesis</dt><dd>No recomendados para tratar la anemia asociada a la IC. <span class="grade-badge red">III · A</span></dd></dl>
             <dl class="kv-row"><dt>NSAID y COX-2</dt><dd>No recomendados en IC, por mayor riesgo de empeoramiento y HFH. <span class="grade-badge red">III · B2</span></dd></dl>
             <dl class="kv-row"><dt>ASV en HFrEF con SDB de predominio obstructivo</dt><dd>Puede considerarse para mejorar calidad de sueño, salud y síntomas. <span class="grade-badge yellow">IIb · C</span></dd></dl>
@@ -1394,6 +1420,11 @@
 
             <p class="section-label" style="margin-top:16px;">12.5. Cardiopatía congénita del adulto (ACHD)</p>
             <p style="font-size:0.85rem; color:var(--text-dim);">Grupo heterogéneo de anomalías estructurales de complejidad variable. Ha habido una mejora en la supervivencia con el cuidado contemporáneo. Consecuentemente, la IC en ACHD es cada vez más frecuente, y representa un contribuyente mayor a la morbimortalidad, con tasas más altas en las lesiones más complejas — hasta el 26-46% de las muertes en ACHD. El manejo de la IC en ACHD plantea desafíos específicos relacionados con la anatomía original, la presencia de hemodinámica lesional previa, intervenciones previas, y complicaciones extracardíacas como la disfunción renal y hepática. Las indicaciones específicas sobre el manejo de estos pacientes se reportan en las <em>Guías ESC 2020 de cardiopatía congénita del adulto</em> y en un consenso clínico reciente del ESC.</p>
+
+            <p class="section-label" style="margin-top:16px;">📋 Recomendaciones clave</p>
+            <dl class="kv-row"><dt>Fármacos contraindicados en el embarazo</dt><dd>IECA, ARA-II, ARNI, MRA, ivabradina e iSGLT2 no recomendados por riesgo de fetotoxicidad o teratogenicidad. <span class="grade-badge red">III · C</span></dd></dl>
+            <dl class="kv-row"><dt>Betabloqueantes en HFrEF y embarazo</dt><dd>Se recomienda cambiar de betabloqueantes no selectivos a beta1-selectivos, con monitorización materno-fetal estrecha. <span class="grade-badge">I · C</span></dd></dl>
+            <dl class="kv-row"><dt>Tratamiento con TTR silenciador o estabilizador</dt><dd>En amiloidosis cardíaca por transtiretina variante o wild-type y NYHA I-III, recomendado para reducir la progresión de síntomas y el riesgo de hospitalización CV y muerte por cualquier causa. <span class="grade-badge">I · A</span></dd></dl>
 
             <p class="section-label" style="margin-top:16px;">📚 Fuentes de esta ficha (guías complementarias citadas)</p>
             <ul class="term-chips">
