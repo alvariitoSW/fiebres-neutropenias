@@ -414,6 +414,21 @@
             </table>
             <p style="font-size:0.85rem; color:var(--text-dim);"><span class="hl-rojo">NT-proBNP &gt;2000 pg/ml</span> en atención primaria se asocia a un riesgo 2 veces mayor de hospitalización precoz por IC — justifica valoración especialista expedita.</p>
 
+            <p class="section-label" style="margin-top:16px;">🧮 Interpretador de NT-proBNP por edad</p>
+            <div class="card" style="padding:14px 16px;">
+                <div class="calc-grid">
+                    <div class="form-group">
+                        <label for="ntprobnp-edad">Edad (años)</label>
+                        <input type="number" id="ntprobnp-edad" min="18" max="110" placeholder="ej. 68">
+                    </div>
+                    <div class="form-group">
+                        <label for="ntprobnp-valor">NT-proBNP (pg/ml)</label>
+                        <input type="number" id="ntprobnp-valor" min="0" placeholder="ej. 380">
+                    </div>
+                </div>
+                <div class="result-box" id="ntprobnp-resultado" style="text-align:left;"></div>
+            </div>
+
             <p class="section-label" style="margin-top:16px;">Causas de alteración de los péptidos natriuréticos</p>
             <table class="data-table">
                 <thead><tr><th>↑ Péptidos</th><th>↓ Péptidos</th></tr></thead>

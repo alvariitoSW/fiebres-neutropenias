@@ -40,7 +40,53 @@ function initCha2ds2Va() {
     calcCha2ds2Va();
 }
 
+// Interpretador de NT-proBNP ambulatorio ajustado por edad — umbral fijo
+// de descarte (<125 pg/ml) + umbral "probable" por tramo de edad, ambos
+// citados literalmente en la ficha.
+function calcNtProBnp() {
+    const resultado = document.getElementById('ntprobnp-resultado');
+    if (!resultado) return;
+    const edadEl = document.getElementById('ntprobnp-edad');
+    const valorEl = document.getElementById('ntprobnp-valor');
+    if (edadEl.value === '' || valorEl.value === '') {
+        resultado.className = 'result-box';
+        resultado.innerHTML = '<span style="color:var(--text-muted);">Introduce edad y NT-proBNP.</span>';
+        return;
+    }
+    const edad = Number(edadEl.value);
+    const valor = Number(valorEl.value);
+    const umbral = edad < 50 ? 125 : (edad <= 75 ? 250 : 500);
+    const tramo = edad < 50 ? '<50 años' : (edad <= 75 ? '50-75 años' : '>75 años');
+
+    let estado, texto;
+    if (valor < 125) {
+        estado = 'tfg-estado-ok';
+        texto = `<strong>${valor} pg/ml — descarta IC</strong> (umbral de descarte no ajustado por edad, &lt;125 pg/ml).`;
+    } else if (valor >= umbral) {
+        estado = 'tfg-estado-danger';
+        texto = `<strong>${valor} pg/ml — IC probable</strong> para el tramo de edad ${tramo} (umbral ≥${umbral} pg/ml).`;
+    } else {
+        estado = 'tfg-estado-warn';
+        texto = `<strong>${valor} pg/ml — zona intermedia</strong> para el tramo de edad ${tramo}: por encima del umbral de descarte (125 pg/ml) pero por debajo del umbral "probable" para su edad (≥${umbral} pg/ml). Valorar clínicamente y considerar ecocardiograma.`;
+    }
+    if (valor > 2000) {
+        texto += '<p style="font-size:0.78rem; margin-top:8px; color:var(--text-muted);">NT-proBNP &gt;2000 pg/ml se asocia a 2× riesgo de hospitalización precoz por IC — justifica valoración especialista expedita.</p>';
+    }
+    resultado.className = `result-box ${estado}`;
+    resultado.style.textAlign = 'left';
+    resultado.innerHTML = texto;
+}
+
+function initNtProBnp() {
+    const resultado = document.getElementById('ntprobnp-resultado');
+    if (!resultado) return;
+    document.getElementById('ntprobnp-edad').addEventListener('input', calcNtProBnp);
+    document.getElementById('ntprobnp-valor').addEventListener('input', calcNtProBnp);
+    calcNtProBnp();
+}
+
 export function init() {
     initCorkboard('cardio-ic-corkboard', 'panel-cardio-ic-tabs');
     initCha2ds2Va();
+    initNtProBnp();
 }
