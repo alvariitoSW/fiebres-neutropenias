@@ -309,6 +309,12 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 }
 .kv-row dd { margin: 0; color: var(--text-main); }
 
+/* Marca las recomendaciones clave que ya tienen su propia calculadora/
+   selector interactivo en la misma ficha, para distinguir "puedo usar
+   esto ahora mismo" del resto de recomendaciones de solo lectura. */
+.kv-row-tool { border-left: 3px solid var(--accent-blue); padding: 4px 0 4px 10px; background: rgba(212, 175, 55, 0.05); border-radius: 0 4px 4px 0; }
+.kv-row-tool-tag { display: inline-block; font-size: 0.68rem; color: var(--accent-blue); margin-left: 6px; font-weight: 600; }
+
 /* Lista de términos sueltos (antes separados por "·" en un párrafo) como
    píldoras individuales, más fáciles de escanear de un vistazo. */
 .term-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
