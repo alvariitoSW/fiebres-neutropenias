@@ -5187,6 +5187,95 @@ dentro de `#cardiologia-view` y en el switcher `cardioLevel` de
       recorrido completo de las 94 preguntas no generó ninguna excepción
       JS; sin overflow horizontal a 390px en ninguna de las 4 fichas
       nuevas ni en la Ficha VII ampliada.
+  - **Auditoría de contenido de la Parte 1 y correcciones aplicadas**, a
+    petición explícita del usuario ("haz un informe sobre el contenido de
+    la parte 1 de la guía de cardiología sobre los errores, faltas de
+    contenido y mejoras"). Releídas de nuevo las 56 páginas de la Parte 1
+    y comparadas frase a frase contra las 7 fichas que se construyeron a
+    partir de ella (I-VII), mismo método de auditoría ya establecido en el
+    resto del proyecto (Nefrología/HTA/ERC/FRA). Publicado un informe como
+    Artifact (errores confirmados/huecos de contenido/mejoras menores por
+    ficha), corregido en su totalidad tras la instrucción explícita del
+    usuario de "primero implementa todas las cosas del informe de
+    auditoría y después ya vemos que pasa con las imágenes":
+    - **Error real confirmado en la Ficha VI** (`ic-descompensada`): el
+      texto tenía invertido el sentido del umbral de descarte de
+      NT-proBNP del algoritmo diagnóstico (Figura 11) — decía
+      "NT-proBNP ≥300 pg/ml (umbral... para descarte...)", cuando en
+      realidad es &lt;300 pg/ml el que descarta la IC descompensada;
+      ≥300 pg/ml es lo que obliga a continuar el estudio, no lo que
+      descarta el diagnóstico. Corregido explicitando ambas direcciones.
+      Ampliada también con las citas de ensayos que el texto mencionaba
+      sin nombrar (DOSE-AHF, PUSH-AHF, ENACT-HF), detalle de metolazona,
+      una nueva sección "🏁 Fase 3 — prealta y titulación rápida" (STRONG-HF,
+      con sus limitaciones), el contrapunto de &gt;100.000 pacientes por
+      emparejamiento de propensión y el RR exacto de ECLS-SHOCK (0,98; IC95%
+      0,80-1,19) junto a DanGer Shock, y una nueva sección "🩸 Profilaxis
+      tromboembólica" — más 2 recomendaciones nuevas en la tabla de
+      Clase/Nivel (evaluación pre-alta I·C, estrategia intensiva de
+      titulación I·B2).
+    - **Error real confirmado en la Ficha I** (`ic-definicion`): la cifra
+      de incidencia cruda europea (2-13/1000 personas-año) se presentaba
+      como "Incidencia cruda en ancianos", cuando en realidad es el rango
+      completo por edad de toda la población, no una cifra exclusiva de
+      ancianos — y el extremo inferior estaba mal atribuido a "&lt;45
+      años" cuando la fuente dice "45-54 años". Corregido explicitando que
+      es el rango general europeo, con el tramo de edad exacto.
+    - **Huecos de contenido añadidos, verificados contra el texto exacto
+      de la Parte 1 antes de incorporarlos**: Ficha IV (`ic-farmacologia`)
+      — matiz de incertidumbre de los betabloqueantes en FA, sección nueva
+      "ARA-II — matices" (CHARM-Alternative/HEAAL/Val-HeFT), contexto del
+      Veterans Administration Cooperative Study para hidralazina/ISDN,
+      distinción DIG (digoxina) vs. DIGIT-HF (digitoxina) en glucósidos
+      cardíacos, efectos adversos/señal REALIZE-K de los captores de
+      potasio, nueva sección "⚠️ Discontinuación temporal del FMT", y
+      nueva sección "🔄 Tratamiento en la FEVI mejorada (HFimpEF)"
+      (TRED-HF/CATHEDRAL-HF/STOP-CRT); Ficha V (`ic-dispositivos`) — cifras
+      exactas de COMPANION/MADIT-CRT/REVERSE en el párrafo de TRC (los
+      nombres de los ensayos ya estaban, solo faltaban las cifras — el
+      propio informe de auditoría lo señalaba como hueco total, corregido
+      a "parcial" al releer la ficha ya existente antes de duplicar
+      contenido), cifra de "&gt;15%" de shock tras recambio de DAI, nueva
+      sección "⚙️ Programación y seguimiento del CIED (6.2.4)", y la
+      recomendación Clase III·C de "DAI en NYHA IV refractaria" que
+      faltaba; Ficha VII (`ic-avanzada`) — cita del ensayo REMATCH y el
+      dato de "&gt;85% INTERMACS 1-3 al implante" en soporte circulatorio
+      durable, y el hallazgo de inequidad (mujeres/minorías con menor
+      acceso a MCS/trasplante) más el modelo "Hub and Spoke" en el
+      párrafo de triaje; Ficha III (`ic-diagnostico`) — mención de
+      "diastolic stress testing", categorías que faltaban en las listas de
+      causas de las Figuras 5 y 6 (otras miocardiopatías, "mitad de HFrEF
+      es isquémica", subtipos metabólico/obesidad vs. edad/vascular de
+      HFpEF), nuevo `micro-prof-item` "🗺️ Diagnóstico de la IC de origen
+      isquémico (Fig. 8)", y la tabla de "Recomendaciones clave" ampliada
+      de 3 a 13 entradas para cubrir toda la Tabla 4 de recomendaciones de
+      la fuente; Ficha II (`ic-prevencion`) — nuevo párrafo tras la
+      recomendación de Estadio B citando SOLVD-Prevention, TRACE, SAVE,
+      CAPRICORN (HR 0,77; IC95% 0,60-0,98), REVERT, y el metaanálisis
+      BETAMI-DANBLOCK/REBOOT-CNIC.
+    - **Inconsistencia de color de badge encontrada durante la propia
+      implementación, no señalada en el informe original**: al añadir las
+      10 recomendaciones nuevas de la Ficha III, 2 entradas Clase IIb se
+      escribieron con `grade-badge red` en vez de `grade-badge yellow` —
+      contradiciendo la convención ya documentada en este mismo `CLAUDE.md`
+      de que IIa y IIb comparten el amarillo, dejando el rojo solo para
+      Clase III. Detectado con `grep` sobre `"IIb ·"` en todo el archivo
+      (encontrando 3 usos ya correctos en amarillo frente a 2 nuevos + 1
+      preexistente en rojo, este último en la línea de
+      "Telemonitorización no invasiva" de la Ficha X) y corregidos los 3
+      a amarillo.
+    - Verificado con Playwright: las 11 fichas abren/voltean sin error de
+      consola ni 404 real; 141 `.grade-badge` en total (101 verdes/26
+      amarillos/14 rojos), con los 6 badges "IIb" del corkboard todos en
+      amarillo; el texto corregido de la Ficha I ("Incidencia cruda actual
+      en Europa"/"45-54 años") está presente y el texto erróneo anterior
+      ("Incidencia cruda en ancianos") ya no aparece; el texto corregido
+      de NT-proBNP de la Ficha VI está presente; sin overflow horizontal a
+      390px; un recorrido de 15 preguntas del quiz de Cardiología no
+      generó ninguna excepción JS. La pregunta de si extraer alguna de las
+      23 figuras vectoriales de la guía como imagen real queda
+      explícitamente aplazada a petición del usuario ("y después ya vemos
+      que pasa con las imágenes").
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
