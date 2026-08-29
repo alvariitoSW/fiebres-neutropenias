@@ -121,9 +121,50 @@ function initTrc() {
     calcTrc();
 }
 
+// "¿Dónde cae mi paciente?" — localizador sobre el continuo de FEVI de la
+// Figura 1. No repite los cortes borde a borde del gráfico original (no
+// verificables pixel a pixel), solo los umbrales ya citados literalmente
+// en el texto de esta ficha y de la Ficha V/Ficha IX.
+function calcFeviLocator() {
+    const resultado = document.getElementById('fevi-locator-resultado');
+    if (!resultado) return;
+    const fevi = Number(document.getElementById('fevi-locator').value);
+    document.getElementById('fevi-locator-val').textContent = fevi;
+
+    const items = [];
+    if (fevi < 50) {
+        items.push('🧱 <strong>FMT (siempre):</strong> IECA/ARNI/ARA-II, betabloqueante, MRA, iSGLT2 — los 4 pilares en paralelo (HFrEF).');
+    } else {
+        items.push('🧱 <strong>FMT (siempre):</strong> iSGLT2 y MRA (HFpEF). IECA/ARNI/ARA-II solo Clase IIb.');
+    }
+    if (fevi <= 35) {
+        items.push('🔌 <strong>GDIT a valorar:</strong> DAI de prevención primaria (si isquémica, NYHA II/III, IAM &gt;40 días) y TRC (si QRS ≥130ms con criterios de la Ficha V) — ver Ficha V.');
+    }
+    if (fevi <= 40) {
+        items.push('🧩 <strong>AMT a valorar:</strong> hidralazina/ISDN (pacientes autoidentificados como de raza negra), glucósidos cardíacos.');
+    }
+    if (fevi < 45) {
+        items.push('🧩 <strong>AMT a valorar:</strong> vericiguat (Clase IIb).');
+    }
+    if (fevi >= 45) {
+        items.push('🧩 <strong>AMT a valorar (con IMC ≥30 kg/m²):</strong> semaglutida/tirzepatida (Clase IIa) — ver Ficha IX.');
+    }
+    resultado.innerHTML = items.map(i => `<p style="margin:4px 0; font-size:0.85rem;">${i}</p>`).join('');
+    resultado.className = 'result-box';
+    resultado.style.textAlign = 'left';
+}
+
+function initFeviLocator() {
+    const resultado = document.getElementById('fevi-locator-resultado');
+    if (!resultado) return;
+    document.getElementById('fevi-locator').addEventListener('input', calcFeviLocator);
+    calcFeviLocator();
+}
+
 export function init() {
     initCorkboard('cardio-ic-corkboard', 'panel-cardio-ic-tabs');
     initCha2ds2Va();
     initNtProBnp();
     initTrc();
+    initFeviLocator();
 }
