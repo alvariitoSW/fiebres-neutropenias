@@ -5336,6 +5336,93 @@ dentro de `#cardiologia-view` y en el switcher `cardioLevel` de
       (`naturalWidth: 1600`, `complete: true`) una vez el panel real está
       activo, sin 404 ni overflow horizontal a 390px en ninguna de las 3
       fichas afectadas (III, IV, VI).
+  - **Informe de errores/huecos/mejoras visuales/interactividad de toda la
+    guía, y sus 19 implementaciones**, a petición explícita del usuario
+    ("ahora quiero un informe sobre errores, faltas de contenido y
+    mejoras... también qué mejoras a nivel visual se pueden añadir, como
+    poner ciertos conceptos en x color o poner el tratamiento de manera
+    más esquematizada... el incorporar alguna cosa de manera interactiva").
+    A diferencia de la auditoría anterior (solo Parte 1), esta releyó
+    entera la **Parte 2** (secciones 9-14, Fichas VIII-XI) — nunca
+    auditada contra la fuente hasta ahora — y añadió dos ejes nuevos:
+    diseño visual e interactividad, evaluados sobre las 11 fichas
+    completas. Publicado como Artifact con el mismo formato ya establecido
+    (severidad por color: error/hueco/visual/interactividad). El usuario
+    pidió implementar **todo**, subiendo a `main` tras cada mejora
+    individual en vez de en un único commit final — 19 commits
+    independientes, cada uno verificado con Playwright antes de
+    mergear:
+    1. **Tabla 19 + Figura 20 en Ficha VIII**: corrige una referencia
+       rota ("ver Figura 20 y Tabla 19, Ficha IV de este mismo bloque",
+       que no llevaba a ningún contenido real) reproduciendo ambas en su
+       propia ficha — los 12 criterios de selección para TEER mitral y
+       el algoritmo de decisión completo.
+    2. **Semaglutida/tirzepatida en HFpEF**: añadidos los 2 umbrales
+       numéricos reales de la Recommendation Table 18 (FEVI ≥45%, IMC
+       ≥30 kg/m²), ausentes del texto anterior.
+    3. **ASV en apnea obstructiva predominante**: la Recommendation
+       Table 20 real tiene 2 filas — contraindicada en CSA predominante
+       (ya presente) y "puede considerarse" (IIb, C) en SDB de
+       predominio obstructivo (ausente); añadida la segunda mitad.
+    4. **Ensayo APOLLO-B (patisiran)** en amiloidosis ATTR: 4º ensayo
+       citado por la fuente para silenciadores/estabilizadores de TTR,
+       explicando por qué patisiran no llegó a tener recomendación de
+       guía pese al ensayo (solo datos funcionales, sin morbimortalidad).
+    5. **Tabla 20 de banderas rojas de amiloidosis completada**: de 10 a
+       las ~19 filas reales, agrupadas por categoría (extracardíaca,
+       clínica cardíaca, ECG, laboratorio, ecocardiografía, CMR) — la
+       tabla ya se titulaba explícitamente "(selección)".
+    6. **Resaltado de color** (`.hl-verde/rojo/azul/purpura`, ya
+       establecido en la app pero ausente por completo en esta guía):
+       aplicado a cifras/umbrales clave en al menos un pasaje de cada
+       una de las 11 fichas.
+    7. **Tabla 11 de dosis agrupada por pilar**: filas de cabecera
+       tintadas (verde = los 4 pilares del FMT, ámbar = AMT opcional)
+       para que se distinga de un vistazo cuáles son "siempre" y cuáles
+       son terapia adicional según fenotipo.
+    8. **Componente `.algo-flow` nuevo** (pasos numerados + línea
+       conectora + bifurcaciones Sí/No como chips de color) que
+       sustituye la prosa "1. ... 2. ... 3." de 5 algoritmos (Fig. 4,
+       11, 18, 19, 20) por un esquema legible de un vistazo — sin
+       necesitar un SVG dibujado a mano por cada uno.
+    9. **Calculadora CHA₂DS₂-VA** (Ficha VIII): checkboxes puntuables en
+       vivo + semáforo por corte (≥2 anticoagulación indicada, =1
+       considerar), primera pieza interactiva de esta guía.
+    10. **Interpretador de NT-proBNP por edad** (Ficha III): edad +
+        valor → descarta/zona intermedia/probable, usando los cortes ya
+        tabulados.
+    11. **Selector de elegibilidad de TRC** (Ficha V): slider de QRS +
+        morfología LBBB/no-LBBB → clase de recomendación en vivo.
+    12. **Localizador de FEVI** (Ficha IV): slider de FEVI (20-65%)
+        debajo de la Figura 1 que resume qué fármacos/dispositivos
+        aplican en ese punto — anclado a umbrales ya citados en el
+        texto, no a los bordes exactos del gráfico original (no
+        verificables pixel a pixel).
+    13. **Selector "¿qué estadio SCAI tengo delante?"** (Ficha VI).
+    14. **Asistente paso a paso del algoritmo de diuréticos** (Ficha
+        VI): flujo clicable Sí/No por las 3 decisiones reales del
+        algoritmo guiado por Na⁺ urinario, con botón de reinicio.
+    15. **Checklist de descongestión pre-alta** (Ficha VI): 5 checkboxes
+        (uno por dominio de la Fig. 14) con veredicto global en vivo.
+    16. **Checklist "Rule of three"/"I NEED HELP"** (Ficha VII): 12
+        criterios puntuables con conteo en vivo — 1 solo criterio ya
+        activa la recomendación de derivación.
+    17. **`.kv-row-tool`**: marca con borde + etiqueta las 5
+        recomendaciones clave que ya tienen su propia calculadora en la
+        misma ficha, distinguiendo "puedo usar esto ahora" del resto de
+        recomendaciones de solo lectura — cierra el último punto del
+        informe.
+    - **Verificado con Playwright tras cada commit** (no solo al final):
+      las 11 fichas abren/voltean sin error de consola ni 404 real en
+      ningún punto de la ronda; cada calculadora nueva se probó con
+      valores concretos verificando el veredicto/color esperado (p. ej.
+      CHA₂DS₂-VA con C+S+edad≥75 → 5 puntos/rojo; asistente de
+      diuréticos con No×3 → ultrafiltración/rojo; checklist de
+      descongestión con 5/5 → verde, 4/5 → ámbar); sin overflow
+      horizontal a 390px en ninguna ficha; un recorrido completo del
+      quiz de Cardiología sin excepciones JS. Bump de cache-busting dos
+      veces el mismo día (`?v=20260829` tras añadir `.algo-flow` a
+      `components.css`, `?v=20260829-2` tras añadir `.kv-row-tool`).
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
