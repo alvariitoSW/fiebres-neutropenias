@@ -244,6 +244,39 @@ function initDiureticosWizard() {
     document.getElementById('diureticos-wizard-reset').addEventListener('click', () => renderDiureticosWizard('inicio'));
 }
 
+// Checklist de descongestión pre-alta (Fig. 14) — mismo patrón "checklist
+// puntuable con veredicto global" ya usado para los 3 sistemas de
+// criterios DRESS en Hematología/Fisiopatología UCI.
+function calcDescongestion() {
+    const resultado = document.getElementById('desc-resultado');
+    if (!resultado) return;
+    const checks = document.querySelectorAll('.descongestion-check');
+    const total = checks.length;
+    const marcados = Array.from(checks).filter(c => c.checked).length;
+
+    let estado, texto;
+    if (marcados === total) {
+        estado = 'tfg-estado-ok';
+        texto = `<strong>${marcados}/${total} dominios en rango óptimo/aceptable.</strong> Sin signos persistentes de congestión detectados en los dominios evaluados — compatible con evaluación de alta.`;
+    } else if (marcados === 0) {
+        estado = 'tfg-estado-danger';
+        texto = `<strong>0/${total} dominios en rango óptimo/aceptable.</strong> Marca los dominios que ya cumplen criterio, o revisa si persiste congestión relevante antes del alta.`;
+    } else {
+        estado = 'tfg-estado-warn';
+        texto = `<strong>${marcados}/${total} dominios en rango óptimo/aceptable.</strong> Persiste al menos un dominio fuera de rango — la guía recomienda excluir signos persistentes de congestión antes del alta (Clase I, C).`;
+    }
+    resultado.className = `result-box ${estado}`;
+    resultado.style.textAlign = 'left';
+    resultado.innerHTML = texto;
+}
+
+function initDescongestion() {
+    const resultado = document.getElementById('desc-resultado');
+    if (!resultado) return;
+    document.querySelectorAll('.descongestion-check').forEach(c => c.addEventListener('change', calcDescongestion));
+    calcDescongestion();
+}
+
 export function init() {
     initCorkboard('cardio-ic-corkboard', 'panel-cardio-ic-tabs');
     initCha2ds2Va();
@@ -252,4 +285,5 @@ export function init() {
     initFeviLocator();
     initScai();
     initDiureticosWizard();
+    initDescongestion();
 }
