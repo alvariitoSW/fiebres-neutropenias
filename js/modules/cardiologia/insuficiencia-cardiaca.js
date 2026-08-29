@@ -184,6 +184,66 @@ function initScai() {
     });
 }
 
+// Asistente paso a paso del algoritmo de diuréticos guiado por Na⁺
+// urinario (Fig. 15) — mismo patrón ya usado en el algoritmo de citrato
+// de TRR continua (UCI/Papers Tuiter): un flujo clicable que avanza según
+// la respuesta hasta llegar a la conducta recomendada.
+const DIURETICOS_WIZARD = {
+    inicio: {
+        pregunta: 'Diurético de asa IV iniciado (40mg de furosemida naïve, o el doble de la dosis oral crónica). A las 2h: Na⁺ urinario ≥70 mmol/l, O a las 6h: diuresis ≥100 ml/h.',
+        si: { estado: 'tfg-estado-ok', final: 'Respuesta adecuada. Repetir la pauta cada 12h hasta descongestión completa.' },
+        no: 'paso2',
+    },
+    paso2: {
+        pregunta: 'Tras doblar la dosis del diurético de asa, O añadir acetazolamida IV o hidroclorotiazida ajustada a FGe (uso crónico) — ¿mejora Na⁺ urinario/diuresis?',
+        si: { estado: 'tfg-estado-ok', final: 'Respuesta tras escalada. Continuar reevaluando Na⁺/diuresis en esta pauta.' },
+        no: 'paso3',
+    },
+    paso3: {
+        pregunta: 'Tras escalada progresiva del diurético de asa hasta la dosis IV máxima + considerar añadir otros no-asa — ¿mejora?',
+        si: { estado: 'tfg-estado-ok', final: 'Respuesta tras escalada máxima. Continuar la pauta con vigilancia estrecha.' },
+        no: { estado: 'tfg-estado-danger', final: 'Sin respuesta pese a escalada máxima. Considerar ultrafiltración.' },
+    },
+};
+function renderDiureticosWizard(pasoKey) {
+    const preguntaEl = document.getElementById('diureticos-wizard-pregunta');
+    const botonesEl = document.getElementById('diureticos-wizard-botones');
+    const resultadoEl = document.getElementById('diureticos-wizard-resultado');
+    const resetEl = document.getElementById('diureticos-wizard-reset');
+    if (!preguntaEl) return;
+    const paso = DIURETICOS_WIZARD[pasoKey];
+    preguntaEl.textContent = paso.pregunta;
+    resultadoEl.style.display = 'none';
+    resetEl.style.display = 'none';
+    botonesEl.innerHTML = '';
+    ['si', 'no'].forEach(resp => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opcion';
+        btn.style.flex = '1';
+        btn.textContent = resp === 'si' ? 'Sí' : 'No';
+        btn.addEventListener('click', () => {
+            const next = paso[resp];
+            if (typeof next === 'string') {
+                renderDiureticosWizard(next);
+            } else {
+                botonesEl.innerHTML = '';
+                resultadoEl.style.display = 'block';
+                resultadoEl.className = `result-box ${next.estado}`;
+                resultadoEl.style.textAlign = 'left';
+                resultadoEl.innerHTML = `<strong>${next.final}</strong>`;
+                resetEl.style.display = 'inline-block';
+            }
+        });
+        botonesEl.appendChild(btn);
+    });
+}
+function initDiureticosWizard() {
+    const preguntaEl = document.getElementById('diureticos-wizard-pregunta');
+    if (!preguntaEl) return;
+    renderDiureticosWizard('inicio');
+    document.getElementById('diureticos-wizard-reset').addEventListener('click', () => renderDiureticosWizard('inicio'));
+}
+
 export function init() {
     initCorkboard('cardio-ic-corkboard', 'panel-cardio-ic-tabs');
     initCha2ds2Va();
@@ -191,4 +251,5 @@ export function init() {
     initTrc();
     initFeviLocator();
     initScai();
+    initDiureticosWizard();
 }
