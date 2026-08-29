@@ -277,6 +277,35 @@ function initDescongestion() {
     calcDescongestion();
 }
 
+// Checklist de derivación a centro de IC avanzada ("Rule of three" +
+// "I NEED HELP") — con solo 1 criterio de cualquiera de las 2 listas ya
+// es momento de discutir el caso, según el propio texto de la ficha.
+function calcDerivacion() {
+    const resultado = document.getElementById('derivacion-resultado');
+    if (!resultado) return;
+    const checks = document.querySelectorAll('.derivacion-check');
+    const marcados = Array.from(checks).filter(c => c.checked).length;
+
+    let estado, texto;
+    if (marcados === 0) {
+        estado = 'tfg-estado-ok';
+        texto = 'Sin criterios marcados. Marca los que apliquen al paciente.';
+    } else {
+        estado = 'tfg-estado-danger';
+        texto = `<strong>${marcados} criterio${marcados > 1 ? 's' : ''} marcado${marcados > 1 ? 's' : ''}.</strong> Con solo 1 criterio de cualquiera de las 2 listas ya es momento de discutir el caso con un centro de IC avanzada — salvo muy limitada esperanza de vida u otras condiciones que empeorarían el pronóstico post-trasplante/LVAD.`;
+    }
+    resultado.className = `result-box ${estado}`;
+    resultado.style.textAlign = 'left';
+    resultado.innerHTML = texto;
+}
+
+function initDerivacion() {
+    const resultado = document.getElementById('derivacion-resultado');
+    if (!resultado) return;
+    document.querySelectorAll('.derivacion-check').forEach(c => c.addEventListener('change', calcDerivacion));
+    calcDerivacion();
+}
+
 export function init() {
     initCorkboard('cardio-ic-corkboard', 'panel-cardio-ic-tabs');
     initCha2ds2Va();
@@ -286,4 +315,5 @@ export function init() {
     initScai();
     initDiureticosWizard();
     initDescongestion();
+    initDerivacion();
 }
