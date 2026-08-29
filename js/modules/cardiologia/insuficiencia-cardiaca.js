@@ -161,10 +161,34 @@ function initFeviLocator() {
     calcFeviLocator();
 }
 
+// Selector "¿qué estadio SCAI tengo delante?" — misma tabla de 5 estadios
+// ya tabulada, con el nivel de intervención esperable por estadio.
+const SCAI_INFO = {
+    A: { estado: 'tfg-estado-ok', texto: 'Sin signos/síntomas de shock, pero en riesgo de desarrollarlo. Nivel de intervención esperable: vigilancia, sin intervención activa del shock todavía.' },
+    B: { estado: 'tfg-estado-warn', texto: 'Evidencia clínica de inestabilidad hemodinámica (hipotensión relativa, taquicardia) sin hipoperfusión. Nivel de intervención esperable: optimización de volumen/vigilancia estrecha, sin soporte farmacológico/mecánico todavía.' },
+    C: { estado: 'tfg-estado-danger', texto: 'Hipoperfusión que requiere intervención. Nivel de intervención esperable: inotrópico, vasopresor, o soporte circulatorio mecánico.' },
+    D: { estado: 'tfg-estado-danger', texto: 'Similar a C pero con fallo de respuesta a las intervenciones iniciales. Nivel de intervención esperable: escalada de soporte — considerar Shock Team y MCS temporal si no está ya en marcha.' },
+    E: { estado: 'tfg-estado-danger', texto: 'Shock refractario o parada cardíaca. Nivel de intervención esperable: múltiples intervenciones simultáneas, incluida RCP.' },
+};
+function initScai() {
+    const select = document.getElementById('scai-select');
+    const resultado = document.getElementById('scai-resultado');
+    if (!select || !resultado) return;
+    select.addEventListener('change', () => {
+        const info = SCAI_INFO[select.value];
+        if (!info) { resultado.style.display = 'none'; return; }
+        resultado.style.display = 'block';
+        resultado.className = `result-box ${info.estado}`;
+        resultado.style.textAlign = 'left';
+        resultado.innerHTML = `<strong>Estadio ${select.value}</strong><p style="font-size:0.85rem; margin-top:6px;">${info.texto}</p>`;
+    });
+}
+
 export function init() {
     initCorkboard('cardio-ic-corkboard', 'panel-cardio-ic-tabs');
     initCha2ds2Va();
     initNtProBnp();
     initTrc();
     initFeviLocator();
+    initScai();
 }
