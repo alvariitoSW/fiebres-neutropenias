@@ -428,11 +428,20 @@
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧭 Secuencia diagnóstica</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
-                        <p>1. Signos y/o síntomas de sospecha de IC.</p>
-                        <p>2. Evaluación clínica, ECG, analítica, radiografía de tórax.</p>
-                        <p>3. Test de péptidos natriuréticos disponible → si elevados (o si no disponible pero alta sospecha clínica) → ecocardiograma y valoración especialista (preferiblemente en &lt;2 semanas si NT-proBNP &gt;2000 pg/ml).</p>
-                        <p>4. Ecocardiograma sin hallazgos anormales → IC descartada, considerar otras causas. Ecocardiograma confirma IC → clasificar HFrEF (FEVI &lt;50%) vs. HFpEF (FEVI ≥50%) → evaluación multiparamétrica de la etiología y tratamiento.</p>
-                        <p>5. Si péptidos natriuréticos no elevados y sin alta sospecha clínica → IC muy improbable, considerar otras causas de los síntomas.</p>
+                        <div class="algo-flow">
+                            <div class="algo-step"><span class="algo-num">1</span><div class="algo-text">Signos y/o síntomas de sospecha de IC.</div></div>
+                            <div class="algo-step"><span class="algo-num">2</span><div class="algo-text">Evaluación clínica, ECG, analítica, radiografía de tórax.</div></div>
+                            <div class="algo-step"><span class="algo-num">3</span><div class="algo-text">Test de péptidos natriuréticos disponible.</div></div>
+                            <div class="algo-branches">
+                                <div class="algo-branch algo-branch-si"><span class="algo-branch-label">Elevados</span>(o si no disponible pero alta sospecha clínica) → ecocardiograma y valoración especialista (preferiblemente en &lt;2 semanas si NT-proBNP &gt;2000 pg/ml).</div>
+                                <div class="algo-branch algo-branch-no"><span class="algo-branch-label">No elevados y sin alta sospecha</span>IC muy improbable — considerar otras causas de los síntomas.</div>
+                            </div>
+                            <div class="algo-step"><span class="algo-num">4</span><div class="algo-text">Ecocardiograma.</div></div>
+                            <div class="algo-branches">
+                                <div class="algo-branch algo-branch-no"><span class="algo-branch-label">Sin hallazgos anormales</span>IC descartada — considerar otras causas.</div>
+                                <div class="algo-branch algo-branch-si"><span class="algo-branch-label">Confirma IC</span>clasificar HFrEF (FEVI &lt;50%) vs. HFpEF (FEVI ≥50%) → evaluación multiparamétrica de la etiología y tratamiento.</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -722,7 +731,15 @@
             </table>
 
             <p class="section-label" style="margin-top:16px;">🗺️ Diagnóstico (Fig. 11)</p>
-            <p style="font-size:0.85rem; color:var(--text-dim);">Sospecha de IC descompensada → historia/constantes/signos/analítica/ECG → descartar shock cardiogénico/EAP (si presentes, tratamiento inmediato) → alta sospecha clínica → <span class="hl-verde">NT-proBNP &lt;300 pg/ml descarta IC descompensada</span> (umbral no ajustado por edad; también BNP &lt;100 pg/ml o MR-proANP &lt;120 pg/ml); si <span class="hl-rojo">NT-proBNP ≥300 pg/ml</span> (o no descarta pese a sospecha alta), continuar el estudio → ecocardiografía y otras pruebas (radiografía, ecografía pulmonar) → hallazgos anormales confirman IC descompensada. Combinar con umbrales "rule-in" ajustados por edad reduce exámenes innecesarios: <span class="hl-rojo">&gt;450 pg/ml (&lt;50 años)</span>, <span class="hl-rojo">&gt;900 pg/ml (50-74 años)</span>, <span class="hl-rojo">&gt;1800 pg/ml (&gt;74 años)</span>.</p>
+            <div class="algo-flow">
+                <div class="algo-step"><span class="algo-num">1</span><div class="algo-text">Sospecha de IC descompensada → historia, constantes, signos, analítica, ECG.</div></div>
+                <div class="algo-step"><span class="algo-num">2</span><div class="algo-text">Descartar shock cardiogénico/EAP — si presentes, tratamiento inmediato. Si alta sospecha clínica sin ellos → NT-proBNP.</div></div>
+            </div>
+            <div class="algo-branches">
+                <div class="algo-branch algo-branch-si"><span class="algo-branch-label">NT-proBNP &lt;300 pg/ml</span><span class="hl-verde">Descarta IC descompensada</span> (umbral no ajustado por edad; también BNP &lt;100 pg/ml o MR-proANP &lt;120 pg/ml).</div>
+                <div class="algo-branch algo-branch-no"><span class="algo-branch-label">NT-proBNP ≥300 pg/ml</span><span class="hl-rojo">Continuar el estudio</span> → ecocardiografía y otras pruebas (radiografía, ecografía pulmonar) → hallazgos anormales confirman IC descompensada.</div>
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Combinar con umbrales "rule-in" ajustados por edad reduce exámenes innecesarios: <span class="hl-rojo">&gt;450 pg/ml (&lt;50 años)</span>, <span class="hl-rojo">&gt;900 pg/ml (50-74 años)</span>, <span class="hl-rojo">&gt;1800 pg/ml (&gt;74 años)</span>.</p>
 
             <p class="section-label" style="margin-top:16px;">🏥 Manejo general — 3 fases hospitalarias (Fig. 12)</p>
             <table class="data-table">
@@ -756,10 +773,17 @@
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📐 Secuencia del algoritmo</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
-                        <p>1. Iniciar diurético de asa IV — 40mg de furosemida (naïve) o el doble de la dosis oral crónica.</p>
-                        <p>2. A las 2h: Na⁺ urinario puntual ≥70 mmol/l, O a las 6h diuresis ≥100 ml/h → respuesta adecuada → repetir la pauta cada 12h hasta descongestión completa.</p>
-                        <p>3. Si no → doblar la dosis del diurético de asa, O añadir acetazolamida IV o hidroclorotiazida ajustada a FGe (en uso crónico de diurético de asa) → reevaluar Na⁺/diuresis.</p>
-                        <p>4. Si sigue sin respuesta → escalada progresiva del diurético de asa hasta la dosis IV máxima + considerar añadir otros no-asa → si aun así falla, considerar ultrafiltración.</p>
+                        <div class="algo-flow">
+                            <div class="algo-step"><span class="algo-num">1</span><div class="algo-text">Iniciar diurético de asa IV — 40mg de furosemida (naïve) o el doble de la dosis oral crónica.</div></div>
+                            <div class="algo-step"><span class="algo-num">2</span><div class="algo-text">A las 2h: Na⁺ urinario puntual ≥70 mmol/l, O a las 6h diuresis ≥100 ml/h.</div></div>
+                        </div>
+                        <div class="algo-branches">
+                            <div class="algo-branch algo-branch-si"><span class="algo-branch-label">Respuesta adecuada</span>Repetir la pauta cada 12h hasta descongestión completa.</div>
+                            <div class="algo-branch algo-branch-no"><span class="algo-branch-label">Sin respuesta</span>Doblar la dosis del diurético de asa, O añadir acetazolamida IV o hidroclorotiazida ajustada a FGe (uso crónico de diurético de asa) → reevaluar Na⁺/diuresis.</div>
+                        </div>
+                        <div class="algo-flow">
+                            <div class="algo-step"><span class="algo-num">4</span><div class="algo-text">Si sigue sin respuesta → escalada progresiva del diurético de asa hasta la dosis IV máxima + considerar añadir otros no-asa → si aun así falla, considerar ultrafiltración.</div></div>
+                        </div>
                         <p>Durante todo el proceso: iniciar/titular FMT en paralelo, vigilar hipotensión/hipoperfusión, controlar creatinina y electrolitos cada 24h como mínimo.</p>
                     </div>
                 </div>
@@ -893,10 +917,17 @@
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🌳 Algoritmo de decisión (Fig. 18)</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
-                        <p>Todo paciente con IC avanzada → consulta con centro de IC avanzada (Clase I).</p>
-                        <p>INTERMACS 1 o 2 → MCS temporal (Clase IIa) → persistencia de daño irreversible de órganos → retirada de MCS + cuidados paliativos; recuperación cardíaca/orgánica → destete del MCS + seguimiento estrecho; recuperación orgánica sin recuperación cardíaca → LVAD y/o lista de trasplante (Clase I).</p>
-                        <p>INTERMACS 3-4 → LVAD y/o lista de trasplante directamente (Clase I).</p>
-                        <p>INTERMACS &gt;4 → si alto riesgo (hospitalización recurrente, fallo orgánico progresivo, tormenta arrítmica, angina refractaria) → terapias avanzadas (trasplante/LVAD); si no → pueden diferirse con seguimiento muy estrecho.</p>
+                        <div class="algo-flow">
+                            <div class="algo-step"><span class="algo-num">1</span><div class="algo-text">Todo paciente con IC avanzada → consulta con centro de IC avanzada (Clase I).</div></div>
+                        </div>
+                        <div class="algo-branches">
+                            <div class="algo-branch algo-branch-no"><span class="algo-branch-label">INTERMACS 1 o 2</span>MCS temporal (Clase IIa) → daño irreversible de órganos: retirada de MCS + cuidados paliativos; recuperación cardíaca/orgánica: destete del MCS + seguimiento estrecho; recuperación orgánica sin cardíaca: LVAD y/o lista de trasplante (Clase I).</div>
+                            <div class="algo-branch algo-branch-si"><span class="algo-branch-label">INTERMACS 3-4</span>LVAD y/o lista de trasplante directamente (Clase I).</div>
+                        </div>
+                        <div class="algo-branches">
+                            <div class="algo-branch algo-branch-no"><span class="algo-branch-label">INTERMACS &gt;4, alto riesgo</span>(hospitalización recurrente, fallo orgánico progresivo, tormenta arrítmica, angina refractaria) → terapias avanzadas (trasplante/LVAD).</div>
+                            <div class="algo-branch algo-branch-si"><span class="algo-branch-label">INTERMACS &gt;4, sin alto riesgo</span>Pueden diferirse con seguimiento muy estrecho.</div>
+                        </div>
                         <p>La planificación de cuidados avanzados y los cuidados paliativos están integrados en todo el proceso de decisión, no reservados al final.</p>
                     </div>
                 </div>
@@ -975,9 +1006,22 @@
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🗺️ Algoritmo de manejo de la CAD en IC (Fig. 19)</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
-                        <p>CAD obstructiva + IC en candidatos a revascularización → separar HFrEF vs. HFpEF, optimizando FMT en ambos casos primero.</p>
-                        <p><strong>HFrEF</strong>: ¿enfermedad multivaso y FEVI ≤35%? Sí → Heart Team → CABG (Clase IIa). No, o sin angina → seguir a la rama de angina común con HFpEF.</p>
-                        <p><strong>Rama de angina</strong> (HFrEF sin multivaso/FEVI≤35%, y toda HFpEF): ¿angina? No → continuar tratamiento médico. Sí → up-titular antianginosos → ¿persiste la angina pese a terapia optimizada? No → continuar tratamiento médico. Sí → Heart Team → CABG o PCI según riesgo quirúrgico, comorbilidades, anatomía coronaria y preferencia del paciente (Clase I).</p>
+                        <div class="algo-flow">
+                            <div class="algo-step"><span class="algo-num">1</span><div class="algo-text">CAD obstructiva + IC en candidatos a revascularización → separar HFrEF vs. HFpEF, optimizando FMT en ambos casos primero.</div></div>
+                        </div>
+                        <div class="algo-branches">
+                            <div class="algo-branch algo-branch-si"><span class="algo-branch-label">HFrEF, multivaso + FEVI ≤35%</span>Heart Team → <strong>CABG (Clase IIa)</strong>.</div>
+                            <div class="algo-branch algo-branch-no"><span class="algo-branch-label">HFrEF sin multivaso/FEVI≤35%, o HFpEF</span>→ rama de angina común.</div>
+                        </div>
+                        <p style="font-size:0.85rem; color:var(--text-dim);"><strong>Rama de angina</strong> (HFrEF sin multivaso/FEVI≤35%, y toda HFpEF):</p>
+                        <div class="algo-branches">
+                            <div class="algo-branch algo-branch-no"><span class="algo-branch-label">Sin angina</span>Continuar tratamiento médico.</div>
+                            <div class="algo-branch algo-branch-si"><span class="algo-branch-label">Con angina</span>Up-titular antianginosos.</div>
+                        </div>
+                        <div class="algo-branches">
+                            <div class="algo-branch algo-branch-no"><span class="algo-branch-label">Angina resuelta con terapia optimizada</span>Continuar tratamiento médico.</div>
+                            <div class="algo-branch algo-branch-si"><span class="algo-branch-label">Angina persiste pese a terapia optimizada</span>Heart Team → <strong>CABG o PCI (Clase I)</strong> según riesgo quirúrgico, comorbilidades, anatomía coronaria y preferencia del paciente.</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1020,9 +1064,21 @@
                             </tbody>
                         </table>
                         <p class="section-label" style="margin-top:12px;">🗺️ Figura 20 — algoritmo de decisión en MR secundaria grave</p>
-                        <p>1. Paciente con HFrEF y MR secundaria grave, FMT optimizado y TRC implantada si indicada → ¿persiste MR secundaria grave? No → seguimiento. Sí →</p>
-                        <p>2. ¿Cumple los criterios clínicos/ecocardiográficos de la Tabla 19? Sí → <strong>TEER (Clase I)</strong>.</p>
-                        <p>3. No → evaluar criterios de IC avanzada (ver Ficha VII). Sin IC avanzada → <strong>TEER (Clase IIb)</strong>. Con IC avanzada → según valoración del Heart Team: cirugía, TEER, o tratamiento médico — <strong>LVAD o trasplante cardíaco (Clase I)</strong> si procede, o <strong>TEER (Clase IIb)</strong> si no es candidato.</p>
+                        <div class="algo-flow">
+                            <div class="algo-step"><span class="algo-num">1</span><div class="algo-text">Paciente con HFrEF y MR secundaria grave, FMT optimizado y TRC implantada si indicada.</div></div>
+                        </div>
+                        <div class="algo-branches">
+                            <div class="algo-branch algo-branch-no"><span class="algo-branch-label">No persiste MR grave</span>Seguimiento.</div>
+                            <div class="algo-branch algo-branch-si"><span class="algo-branch-label">Persiste MR secundaria grave</span>→ ¿cumple los criterios de la Tabla 19?</div>
+                        </div>
+                        <div class="algo-branches">
+                            <div class="algo-branch algo-branch-si"><span class="algo-branch-label">Cumple Tabla 19</span><strong>TEER (Clase I)</strong>.</div>
+                            <div class="algo-branch algo-branch-no"><span class="algo-branch-label">No cumple Tabla 19</span>Evaluar criterios de IC avanzada (Ficha VII).</div>
+                        </div>
+                        <div class="algo-branches">
+                            <div class="algo-branch algo-branch-no"><span class="algo-branch-label">Sin IC avanzada</span><strong>TEER (Clase IIb)</strong>.</div>
+                            <div class="algo-branch algo-branch-si"><span class="algo-branch-label">Con IC avanzada</span>Según Heart Team: <strong>LVAD o trasplante (Clase I)</strong> si procede, o <strong>TEER (Clase IIb)</strong> si no es candidato.</div>
+                        </div>
                     </div>
                 </div>
                 <div class="micro-prof-item">

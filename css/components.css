@@ -1060,3 +1060,35 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 @media (prefers-reduced-motion: reduce) {
     .flow-arrow { animation: none; }
 }
+
+/* ==========================================================================
+   ALGORITMO ESQUEMATIZADO (genérico, reutilizable)
+   Convierte un algoritmo diagnóstico/terapéutico narrado en pasos
+   numerados con línea conectora vertical + bifurcaciones Sí/No como
+   chips de color — sustituye la prosa "1. ... 2. ... 3." dentro de un
+   micro-prof-item por un esquema legible de un vistazo, sin necesitar
+   un SVG dibujado a mano por algoritmo.
+   ========================================================================== */
+.algo-flow { display: flex; flex-direction: column; margin: 10px 0 4px; }
+.algo-step { display: flex; gap: 12px; align-items: flex-start; position: relative; padding-bottom: 16px; }
+.algo-step:not(:last-child)::before {
+    content: ''; position: absolute; left: 14px; top: 30px; bottom: -2px; width: 2px;
+    background: var(--border-color);
+}
+.algo-num {
+    flex-shrink: 0; width: 29px; height: 29px; border-radius: 50%;
+    background: var(--accent-blue); color: #1a1512;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.82rem; z-index: 1;
+}
+.algo-text { flex: 1; font-size: 0.85rem; color: var(--text-dim); padding-top: 4px; }
+.algo-branches { display: flex; gap: 10px; margin: 2px 0 14px 41px; flex-wrap: wrap; }
+.algo-branch { flex: 1; min-width: 130px; border-radius: 7px; padding: 9px 12px; font-size: 0.82rem; color: var(--text-dim); }
+.algo-branch-si { background: rgba(144, 160, 106, 0.14); border-left: 3px solid var(--accent-green); }
+.algo-branch-no { background: rgba(184, 92, 62, 0.13); border-left: 3px solid var(--accent-red); }
+.algo-branch-label {
+    font-weight: 700; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em;
+    display: block; margin-bottom: 4px;
+}
+.algo-branch-si .algo-branch-label { color: var(--accent-green); }
+.algo-branch-no .algo-branch-label { color: var(--accent-red); }
