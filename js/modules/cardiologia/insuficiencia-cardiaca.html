@@ -683,6 +683,19 @@
                         <p><span class="hl-verde">QRS ≥150 ms + LBBB</span>: TRC Clase I. <strong>QRS ≥150 ms + no-LBBB</strong>: Clase IIa.</p>
                         <p><strong>QRS 130-149 ms + LBBB</strong>: Clase IIa. <strong>QRS 130-149 ms + no-LBBB</strong>: Clase IIb.</p>
                         <p><span class="hl-rojo">QRS &lt;130 ms</span>: TRC Clase III (no recomendada), salvo indicación de estimulación por bloqueo AV de alto grado.</p>
+                        <p class="section-label" style="margin-top:12px;">🧮 Selector de elegibilidad</p>
+                        <div class="form-group">
+                            <label for="trc-qrs">Duración del QRS: <span id="trc-qrs-val">150</span> ms</label>
+                            <input type="range" id="trc-qrs" min="80" max="200" step="1" value="150">
+                        </div>
+                        <div class="form-group">
+                            <label for="trc-morfologia">Morfología</label>
+                            <select id="trc-morfologia">
+                                <option value="lbbb">LBBB</option>
+                                <option value="no-lbbb">No-LBBB</option>
+                            </select>
+                        </div>
+                        <div class="result-box" id="trc-resultado" style="text-align:left;"></div>
                     </div>
                 </div>
                 <div class="micro-prof-item">

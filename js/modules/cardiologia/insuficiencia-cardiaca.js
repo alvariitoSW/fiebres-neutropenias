@@ -85,8 +85,45 @@ function initNtProBnp() {
     calcNtProBnp();
 }
 
+// Selector de elegibilidad de TRC por QRS + morfología (Fig. 10) — misma
+// tabla de 5 escenarios ya desarrollada en texto, aquí como selector.
+function calcTrc() {
+    const resultado = document.getElementById('trc-resultado');
+    if (!resultado) return;
+    const qrs = Number(document.getElementById('trc-qrs').value);
+    document.getElementById('trc-qrs-val').textContent = qrs;
+    const lbbb = document.getElementById('trc-morfologia').value === 'lbbb';
+
+    let clase, estado, detalle;
+    if (qrs < 130) {
+        clase = 'Clase III (no recomendada)';
+        estado = 'tfg-estado-danger';
+        detalle = 'salvo indicación de estimulación por bloqueo AV de alto grado.';
+    } else if (qrs < 150) {
+        clase = lbbb ? 'Clase IIa' : 'Clase IIb';
+        estado = 'tfg-estado-warn';
+        detalle = lbbb ? 'QRS 130-149 ms + LBBB.' : 'QRS 130-149 ms + no-LBBB — indicación más débil.';
+    } else {
+        clase = lbbb ? 'Clase I' : 'Clase IIa';
+        estado = lbbb ? 'tfg-estado-ok' : 'tfg-estado-warn';
+        detalle = lbbb ? 'QRS ≥150 ms + LBBB — indicación más fuerte.' : 'QRS ≥150 ms + no-LBBB.';
+    }
+    resultado.className = `result-box ${estado}`;
+    resultado.style.textAlign = 'left';
+    resultado.innerHTML = `<strong>TRC: ${clase}</strong><p style="font-size:0.82rem; margin-top:6px;">${detalle}</p><p style="font-size:0.78rem; margin-top:8px; color:var(--text-muted);">Requisito de partida en todos los casos: HFrEF con FEVI ≤35% pese a FMT óptimo (reevaluar tras uptitration).</p>`;
+}
+
+function initTrc() {
+    const resultado = document.getElementById('trc-resultado');
+    if (!resultado) return;
+    document.getElementById('trc-qrs').addEventListener('input', calcTrc);
+    document.getElementById('trc-morfologia').addEventListener('change', calcTrc);
+    calcTrc();
+}
+
 export function init() {
     initCorkboard('cardio-ic-corkboard', 'panel-cardio-ic-tabs');
     initCha2ds2Va();
     initNtProBnp();
+    initTrc();
 }
