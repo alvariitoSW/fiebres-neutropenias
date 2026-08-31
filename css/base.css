@@ -18,6 +18,20 @@ body {
     padding-bottom: 40px;
 }
 
+/* A partir de aquí no hay ningún breakpoint más — toda la app (Atlas,
+   mapa del riñón, nefrona interactiva, cuadernos de campo, tablas,
+   calculadoras) se posiciona con % o con grid fluido, así que ensanchar
+   el contenedor es seguro sin tocar ningún otro componente. En tablet/
+   escritorio se aprovecha el ancho extra para que haya menos scroll
+   vertical por pantalla, en vez de estirar la misma columna estrecha de
+   móvil en medio de una pantalla grande. */
+@media (min-width: 760px) {
+    .app-container { max-width: 700px; }
+}
+@media (min-width: 1080px) {
+    .app-container { max-width: 920px; }
+}
+
 .header { text-align: center; margin-bottom: 30px; }
 .header h1 {
     color: var(--accent-blue);
