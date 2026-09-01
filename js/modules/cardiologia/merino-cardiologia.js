@@ -247,6 +247,14 @@ function initLinkASeptico() {
     btn.addEventListener('click', () => openCorkboardTopic('panel-merino-cardio-tabs', 'mc-shock-septico'));
 }
 
+// Enlace interno Ficha XXIV → Ficha XXII (Tabla 21.1, que sustenta la
+// cifra "1-7% de éxito" citada en el cierre "percepción vs. realidad").
+function initLinkATabla211() {
+    const btn = document.getElementById('mc-link-a-tabla211');
+    if (!btn) return;
+    btn.addEventListener('click', () => openCorkboardTopic('panel-merino-cardio-tabs', 'mc-paro-soporte'));
+}
+
 export function init() {
     initCorkboard('merino-cardio-corkboard', 'panel-merino-cardio-tabs');
     initTipoShock();
@@ -254,6 +262,7 @@ export function init() {
     initTeg();
     initDispositivoSelector();
     initLinkASeptico();
+    initLinkATabla211();
     initCha2ds2Vasc();
     initQtc();
 }

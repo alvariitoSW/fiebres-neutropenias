@@ -5959,6 +5959,109 @@ dentro de `#cardiologia-view` y en el switcher `cardioLevel` de
       las 24 fichas con 8 preguntas cada una, y un recorrido de 6
       preguntas (mezcla de opción múltiple y `redactar`) no generó
       ninguna excepción JS; sin overflow horizontal a 390px.
+  - **Auditoría de huecos/imágenes/mejoras de las 24 fichas, y sus
+    correcciones aplicadas** — a petición explícita del usuario
+    ("ahora haz un informe/auditoría de las partes que faltan en cardio
+    merino, de los huecos de información, de las imágenes que no están,
+    de las cosas que se podrían mejorar, y de las posibles interacciones
+    interactivas se podrían añadir"). Se releyeron íntegros ambos PDF
+    fuente (142 páginas) y se hizo un inventario completo de imágenes con
+    `pdfimages -list` sobre los 2 archivos, comparándolo contra las 13
+    imágenes ya extraídas hasta ese momento — publicado como Artifact
+    (severidad por color: huecos/imágenes/mejoras/interactividad, con 5
+    miniaturas reales incrustadas de las propias candidatas). Aplicados a
+    continuación los 3 primeros bloques del informe (huecos, imágenes,
+    mejoras menores) — el 4º bloque, 10 propuestas de piezas
+    interactivas nuevas, quedó documentado en el informe pero no
+    implementado en esta ronda:
+    - **4 huecos de contenido reales, verificados con `grep` antes de
+      reportarlos** (ninguno era una reformulación de algo ya presente):
+      el objetivo de <strong>Hb 7-9 g/dl</strong> propio del shock
+      hemorrágico (Fig. 15.6, distinto del umbral transfusional general
+      ya citado en la Ficha I) — añadido como nueva Tabla 15.6
+      "Objetivos completos de la reanimación en shock hemorrágico" al
+      final de la Ficha III, consolidando también los objetivos de
+      perfusión/hemostasia/TEG ya dispersos en Fichas I y V; el ejemplo
+      numérico real de un paciente postoperatorio (Fig. 18.3: presión de
+      enclavamiento 10→20-30 mmHg, FC 80→100 lpm, VS 60→20 mL, IC
+      3,5→2,0 L/min/m² en 4h) que faltaba junto a las "3 etapas
+      progresivas" ya descritas de forma abstracta en la Ficha XIII —
+      añadido junto a la figura misma; la <strong>Tabla 21.1</strong>
+      (datos reales de paro cardíaco en EE. UU. 2021 — extrahospitalario
+      143.018 casos/17% FV-TV/75% AESP-asistolia/9% supervivencia al
+      alta/7% con buen estado funcional; intrahospitalario
+      8.619/13%/78%/19%/1%), citada por nombre en el cierre "percepción
+      vs. realidad" de la Ficha XXIV sin haberse reproducido nunca —
+      añadida como `.data-table` nativa en la Ficha XXII (no como
+      imagen, aunque en el PDF fuente está incrustada como tal), con un
+      botón `#mc-link-a-tabla211` que salta de la cita en la Ficha XXIV
+      a la tabla real; y el paso "amiodarona IV" del algoritmo de manejo
+      de TV en la Ficha XVIII, que no repetía su dosis (sí presente en
+      la Tabla 19.1 de la Ficha XVI) — corregido a "(misma pauta que la
+      Tabla 19.1, Ficha XVI)" en vez de duplicar los números.
+    - **8 imágenes reales extraídas** con `pdfimages -png` (todas como
+      imagen única embebida por página, mismo método ya establecido):
+      `mc-fig15-1-volumen-hto.jpg` (cilindros de volumen sanguíneo/Hto
+      antes y después de hemorragia/reanimación, Ficha III — visualiza
+      la "trampa del hematocrito" ya explicada en prosa),
+      `mc-fig15-5-teg-trazado.jpg` (trazado TEG de referencia con
+      R/k/α/MA/LY30 etiquetados, Ficha V), `mc-fig16-3-iabp.jpg`
+      (inflado/desinflado del balón de contrapulsación con curvas de
+      presión), `mc-fig16-4-impella.jpg` (catéter Impella con motor
+      housing/propeller blades/pigtail) y `mc-fig16-5-ecmo-circuito.jpg`
+      (circuito VA-ECMO completo) — las 3 en Ficha VIII, cada una dentro
+      del `micro-prof-item` de su dispositivo; `mc-fig18-1-curvas-funcion.jpg`
+      (curvas de función ventricular y distensibilidad sistólica vs.
+      diastólica) y `mc-fig18-3-etapas-postop.jpg` (el ejemplo numérico
+      real de arriba) en Ficha XIII; y `mc-fig20-1-rotura-placa.jpg`
+      (ilustración de vaso con rotura de placa/trombo oclusivo con
+      hebras de fibrina) en Ficha XIX. Todas genuinamente anatómicas o
+      de registro real — ninguna era un gráfico estadístico
+      reconstruible como tabla (esos, cuando aparecían en el inventario,
+      se dejaron fuera de la extracción, mismo criterio de siempre).
+    - **7 mejoras menores** (el mensaje cualitativo ya estaba en la app;
+      solo faltaban las cifras exactas del gráfico original): flujo por
+      gravedad exacto de la Fig. 15.2 (16G periférico 10,8 L/h/18G 5,4
+      L/h vs. 16G central 2,3 L/h/18G 0,9 L/h) en Ficha IV; tabla
+      completa EE. UU./Europa de mortalidad por nº de órganos fallados
+      (Fig. 17.2: 1→23/24%, 2→44/38%, 3→65/68%, ≥4→75/85%) en Ficha IX,
+      sustituyendo el rango aproximado que había antes; la curva
+      diltiazem/amiodarona/digoxina de la Fig. 19.5 (diltiazem cruza el
+      objetivo de 100 lpm a las ~2,3h, digoxina apenas lo alcanza a las
+      6h) en Ficha XVI; las cifras exactas de vidas salvadas por 100
+      tratados de la Fig. 20.2 (puerta-balón, 4,4→8,8 según demora) y la
+      Fig. 20.3 (trombólisis, 3,5→0,4 con la pérdida de beneficio en
+      13-18h) en Ficha XX; los puntos intermedios y el tamaño muestral
+      de la Fig. 21.1 (N=1.667; 29% a los 10 min, 19% a los 15 min,
+      entre los extremos 40%/5min y 9%/20min ya citados) en Ficha XXII;
+      y los valores exactos con N por grupo de la Fig. 21.4 (ETCO₂ con
+      RCE 27→32 mmHg N=402 vs. sin RCE 19→7 mmHg N=335) en Ficha XXIII.
+    - **Pendiente, documentado en el propio informe pero no
+      implementado en esta ronda**: las 10 propuestas de interactividad
+      nueva (simulador paso a paso del algoritmo ACLS en Ficha XXII,
+      checklist puntuable de los 7 predictores de mal pronóstico de la
+      Tabla 21.5 en Ficha XXIV, selector de perfil hemodinámico en
+      shock cardiogénico para las Fichas VI/VII —hoy sin ninguna pieza
+      interactiva—, cronómetro de tiempo puerta-balón en Ficha XX,
+      selector de vasopresor/inotrópico por escenario en Ficha II,
+      calculadora de delta de troponina en Ficha XIX, selector de
+      antihipertensivo en disección aórtica para Ficha XXI, selector de
+      fármaco de control de frecuencia en FA para Ficha XVI, intérprete
+      de ETCO₂ a los 20 min para Ficha XXIII, y gauge visual del
+      objetivo de PAM para Ficha I) — a la espera de que el usuario
+      confirme si quiere que se implementen.
+    - Verificado con Playwright: las 9 fichas tocadas
+      (III/IV/V/VIII/IX/XIII/XIX/XXII/XXIII) abren/voltean sin error de
+      consola ni 404 real; las 8 imágenes nuevas cargan
+      (`naturalWidth`&gt;0 una vez visibles — confirmado también con
+      `scrollIntoView` para la que queda fuera del viewport inicial de
+      390×844 tras abrir la ficha); el cross-link
+      `#mc-link-a-tabla211` (Ficha XXIV → Ficha XXII) navega
+      correctamente y la tabla de destino contiene las cifras reales
+      (143.018/8.619); las calculadoras ya existentes (clasificador de
+      hemorragia, TEG, selector de dispositivo/tipo de shock,
+      CHA₂DS₂-VASc, QTc) siguen funcionando sin regresiones; sin
+      overflow horizontal a 390px pese a las tablas nuevas.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
