@@ -363,6 +363,53 @@ El Atlas sustituyó estos 4 botones grandes:
    bloque propio "Merino HEMATO" en el nivel 2 del menú del quiz. El
    banco combinado de toda la app queda en <strong>1259 preguntas</strong>
    (1211 previas + 48).
+   - **Auditoría de fidelidad de contenido contra las 38 páginas del PDF
+     fuente**, a petición explícita del usuario ("una revisión sobre el
+     contenido... y su bibliografía para que no haya huecos reales de
+     contenido"). Releído el PDF completo comparándolo frase a frase con
+     las 6 fichas ya publicadas — mismo método ya establecido en el resto
+     del proyecto. Sin errores de transcripción, pero sí varios huecos de
+     contenido reales, todos corregidos:
+     - **Ficha 1**: la Tabla 12.1 (rangos de referencia) solo reproducía 3
+       de las 6 filas reales — añadidas volumen corpuscular medio (80-100
+       fl), recuento de hematíes (4,6-6,2×10¹²/l varones, 4,2-5,4×10¹²/l
+       mujeres) y recuento de reticulocitos (25-75×10⁹/l). La Tabla 12.2
+       de viscosidad solo tenía 5 puntos de una tabla real de 7 (faltaban
+       Hto 10%/30%/50%) y una fila "45% normal, ~4" que no existe como tal
+       en la fuente (esa cifra es una frase aparte del texto, no una fila
+       de tabla) — corregida a los 7 puntos reales con sus 2 columnas
+       (viscosidad relativa y absoluta), moviendo el dato de "Hto normal"
+       a una nota de texto. Añadida también la nota teleológica de la
+       fuente sobre por qué la sangre se "espesa" al caer el flujo local
+       (limita la pérdida de sangre por una herida).
+     - **Ficha 2**: añadido el hecho fundacional (ausente hasta ahora) de
+       que la sangre completa solo se almacena bajo petición expresa,
+       fraccionándose de forma rutinaria en sus componentes; y el matiz de
+       que el almacenamiento prolongado de los hematíes puede empeorar
+       (no solo no mejorar) la oxigenación tisular tras la transfusión.
+     - **Ficha 3**: añadida la transmisión bacteriana (1:500.000) a la
+       tabla resumen de eventos adversos de hematíes — presente en la
+       Tabla 12.5 original pero ausente de la reproducción de la app.
+     - **Ficha 6**: la Tabla 13.4 (reacciones a plaquetas multidonante vs.
+       aféresis) solo tenía 5 de las 8 filas reales — añadidas transmisión
+       bacteriana, transmisión viral y la fila de "Total de reacciones"
+       (70 vs. 478, la cifra que resume todo el mensaje de la tabla), más
+       la columna de significación estadística (p) que faltaba por
+       completo. Añadida una sección nueva "Riesgos propios del PFC"
+       (ausente hasta ahora): el PFC tiene su propio umbral de sobrecarga
+       circulatoria (>1 ml/kg/h) e incidencia de TACO (1:70-1:1.500)
+       distintos de los de hematíes/plaquetas, mayor tasa de
+       hipersensibilidad por su mayor volumen de proteínas plasmáticas
+       (1:600-1:2.000), y cifras de transmisión de infecciones propias
+       (hepatitis B 1:280.000, hepatitis C 1:1,2 millones, VIH 1:1,6
+       millones — distintas de las ya citadas para hematíes en la Ficha 3)
+       — un bloque completo del capítulo 13 que no se había trasladado a
+       ninguna ficha.
+     - Verificado con Playwright: las 6 fichas siguen abriendo/volteando
+       sin error de consola ni 404 real; las tablas ampliadas (6 filas en
+       Ficha 1, 7 filas/3 columnas en Ficha 1, 8 filas/4 columnas en Ficha
+       6) renderizan sin overflow horizontal a 390px; la calculadora 4Ts y
+       el resto de interactividad siguen funcionando sin regresiones.
 
 **Escalas Generales** (`modules/generales/`, qSOFA/SRIS/SOFA/Glasgow) ya NO
 es una de las 4 categorías del menú: es un botón pequeño y fijo arriba a la
