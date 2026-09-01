@@ -1,0 +1,1022 @@
+    <button class="back-btn btn-volver-cardio-menu">← VOLVER</button>
+    <div class="diag-header">
+        <h2 style="color: var(--accent-red); text-shadow: var(--glow-blue);">Merino Cardiología</h2>
+        <p>Shock clínico: enfoque general, hemorrágico, cardiogénico e inflamatorio — Marik PE, <em>Handbook of Evidence-Based Critical Care</em>, Cap. 14-17</p>
+    </div>
+
+    <button class="accordion-btn nav-btn" id="btn-merino-cardio-repasar" style="border-left: 4px solid var(--accent-red);">
+        <span>🎯 Repasar (preguntas de repaso)</span>
+        <span style="font-size: 0.8rem; color: var(--accent-red);">[ EMPEZAR → ]</span>
+    </button>
+
+    <p class="section-label">Elige un bloque</p>
+    <div class="corkboard" id="merino-cardio-corkboard">
+
+        <div class="field-card" data-tab="mc-definiciones"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha I</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-blue)" stroke-width="1.6">
+                    <circle cx="40" cy="28" r="18" stroke-opacity="0.7"/>
+                    <path d="M22,28 L30,28 L34,18 L40,38 L44,22 L48,28 L58,28" stroke-width="1.3"/>
+                </svg>
+                <div class="field-name">Shock: definiciones<br>y monitorización</div>
+                <div class="field-hook">"la hipotensión no es la causa del shock — es su consecuencia. entonces, ¿qué es realmente el shock?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Shock es una alteración en la utilización celular de O₂, no en la presión arterial — de ahí que el objetivo universal de reanimación sea normalizar el lactato, no "subir la tensión" a toda costa.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="mc-vasopresores"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha II</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-purple)" stroke-width="1.6">
+                    <path d="M40,10 L40,32" stroke-width="1.4"/>
+                    <path d="M30,32 L50,32 L46,46 L34,46 Z" stroke-opacity="0.7"/>
+                    <circle cx="40" cy="10" r="4" stroke-opacity="0.6"/>
+                </svg>
+                <div class="field-name">Vasopresores<br>y dosis</div>
+                <div class="field-hook">"norepinefrina, vasopresina, angiotensina II, midodrina... ¿cuál es el vasopresor de elección y por qué?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">La norepinefrina es el vasopresor de primera línea en casi todos los tipos de shock — pero tiene un efecto inmunosupresor que pocos protocolos mencionan, y la evidencia de añadir un tercer vasopresor es más débil de lo que parece.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="mc-hemorragico-clasificacion"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha III</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-red)" stroke-width="1.6">
+                    <path d="M40,10 C32,22 24,30 24,38 C24,46.6 31.2,52 40,52 C48.8,52 56,46.6 56,38 C56,30 48,22 40,10 Z" stroke-opacity="0.75"/>
+                </svg>
+                <div class="field-name">Shock hemorrágico:<br>fisiología y clasificación</div>
+                <div class="field-hook">"perder el 75% de los pulmones, hígado o riñones no es letal — perder el 30% del volumen sanguíneo, sí. ¿por qué esa intolerancia?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">El sistema circulatorio es un diseño energéticamente eficiente pero de volumen limitado — y en las primeras horas tras una hemorragia, la hemoglobina y el hematocrito reflejan el esfuerzo de reanimación, no la magnitud real de la pérdida.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="mc-hemorragico-fluidos"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha IV</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-green)" stroke-width="1.6">
+                    <rect x="30" y="8" width="20" height="26" rx="3" stroke-opacity="0.7"/>
+                    <path d="M40,34 L40,48" stroke-width="1.3"/>
+                    <path d="M34,48 L46,48" stroke-width="1.3"/>
+                </svg>
+                <div class="field-name">Reanimación:<br>catéteres y fluidos</div>
+                <div class="field-hook">"un catéter periférico corto y grueso mueve más sangre que una vía central larga y fina — ¿por qué la intuición clínica suele ir al revés?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">La ecuación de Hagen-Poiseuille lo explica: el flujo depende del radio a la cuarta potencia y es inversamente proporcional a la longitud — un catéter periférico de 1,2 pulgadas supera en flujo a uno central de 8 pulgadas del mismo calibre.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="mc-damage-control"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha V</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-yellow)" stroke-width="1.6">
+                    <path d="M14,28 C22,10 30,10 34,22 C38,34 42,4 46,20 C50,36 56,46 66,28" stroke-width="1.3"/>
+                </svg>
+                <div class="field-name">Damage control:<br>hipotensión, TIC y TEG</div>
+                <div class="field-hook">"40% de los heridos en combate tienen coagulopatía traumática al ingreso — y multiplica la mortalidad por 6. ¿de dónde sale, si no es dilucional?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">La activación de la proteína C por lesión endotelial desactiva los factores V y VIII y dispara la fibrinólisis — una coagulopatía propia del trauma, independiente de la acidosis, la hipotermia o la dilución por fluidos.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="mc-cardiogenico-fisio"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha VI</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-red)" stroke-width="1.6">
+                    <path d="M40,14 C30,6 16,10 16,24 C16,38 40,48 40,48 C40,48 64,38 64,24 C64,10 50,6 40,14 Z" stroke-opacity="0.7"/>
+                    <circle cx="46" cy="26" r="4" fill="var(--accent-red)" stroke="none" opacity="0.5"/>
+                </svg>
+                <div class="field-name">Shock cardiogénico:<br>fisiopatología</div>
+                <div class="field-hook">"el 79% de los shocks cardiogénicos vienen de un infarto del ventrículo izquierdo... pero hay 3 complicaciones mecánicas que aparecen en las primeras 24 horas, no tarde"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Rotura del músculo papilar, del septo interventricular o de la pared libre — las 3 complicaciones catastróficas del infarto aparecen mucho antes de lo que enseña la noción tradicional de "complicación tardía".</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="mc-cardiogenico-farmaco"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha VII</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-blue)" stroke-width="1.6">
+                    <rect x="18" y="12" width="44" height="32" rx="3" stroke-opacity="0.7"/>
+                    <path d="M26,28 L34,28 L38,18 L44,38 L48,24 L54,28" stroke-width="1.2"/>
+                </svg>
+                <div class="field-name">Shock cardiogénico:<br>soporte farmacológico</div>
+                <div class="field-hook">"dobutamina, milrinona, levosimendán... los 3 aumentan la contractilidad, pero solo uno de ellos no sube el consumo de O₂ del miocardio"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">El soporte farmacológico del shock cardiogénico tiene una paradoja incómoda: casi todo lo que aumenta el gasto cardíaco también aumenta el trabajo del corazón que se intenta rescatar.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="mc-soporte-mecanico"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha VIII</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-purple)" stroke-width="1.6">
+                    <rect x="30" y="8" width="20" height="14" rx="2" stroke-opacity="0.75"/>
+                    <path d="M40,22 L40,32 M32,32 L48,32 M32,32 L28,46 M48,32 L52,46" stroke-width="1.3"/>
+                </svg>
+                <div class="field-name">Soporte circulatorio<br>mecánico</div>
+                <div class="field-hook">"balón de contrapulsación, Impella, ECMO veno-arterial... ¿cuál elegir cuando el fármaco ya no basta?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Ningún dispositivo ha demostrado ser claramente superior a los demás en supervivencia — salvo cuando el shock cardiogénico viene con fallo respiratorio, donde el ECMO VA es la opción preferida sin discusión.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="mc-inflamacion-ros"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha IX</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-green)" stroke-width="1.6">
+                    <ellipse cx="40" cy="30" rx="16" ry="12" stroke-opacity="0.7"/>
+                    <circle cx="40" cy="30" r="3" fill="var(--accent-green)" stroke="none" opacity="0.5"/>
+                    <path d="M40,8 L40,16 M40,44 L40,52 M12,30 L20,30 M60,30 L68,30" stroke-width="1"/>
+                </svg>
+                <div class="field-name">Fisiopatología de la<br>inflamación: ROS</div>
+                <div class="field-hook">"el 'estallido respiratorio' del neutrófilo no fabrica energía — fabrica lejía. ¿por qué esa confusión de nombre?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">El neutrófilo activado genera especies reactivas de oxígeno (superóxido, peróxido de hidrógeno, radical hidroxilo e hipoclorito) para matar microbios — pero cuando esa misma maquinaria se descontrola, es la propia inflamación la que mata al órgano.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="mc-shock-septico"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha X</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-red)" stroke-width="1.6">
+                    <circle cx="40" cy="28" r="10" stroke-opacity="0.7"/>
+                    <path d="M40,18 L40,10 M40,38 L40,46 M30,28 L22,28 M50,28 L58,28 M33,21 L27,15 M47,21 L53,15 M33,35 L27,41 M47,35 L53,41" stroke-width="1.1"/>
+                </svg>
+                <div class="field-name">Shock séptico:<br>definiciones y manejo</div>
+                <div class="field-hook">"en el 70% de los casos de sepsis y shock séptico no hay infección documentada. entonces, ¿de qué estamos hablando en realidad?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Todo apunta a que la sepsis es una respuesta desregulada a la inflamación, no a la infección — y en el shock séptico, el problema real no es la falta de oxígeno tisular, sino la disfunción mitocondrial que impide usarlo.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="mc-shock-toxico"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha XI</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-yellow)" stroke-width="1.6">
+                    <ellipse cx="40" cy="28" rx="22" ry="14" stroke-opacity="0.6"/>
+                    <circle cx="30" cy="24" r="2" fill="var(--accent-yellow)" stroke="none" opacity="0.6"/>
+                    <circle cx="44" cy="20" r="2" fill="var(--accent-yellow)" stroke="none" opacity="0.6"/>
+                    <circle cx="50" cy="32" r="2" fill="var(--accent-yellow)" stroke="none" opacity="0.6"/>
+                    <circle cx="34" cy="34" r="2" fill="var(--accent-yellow)" stroke="none" opacity="0.6"/>
+                </svg>
+                <div class="field-name">Síndrome de<br>shock tóxico</div>
+                <div class="field-hook">"un tampón, una faringitis, una infección de partes blandas... ¿cómo llegan a producir un fallo multiorgánico en 48 horas?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Toxinas estafilocócicas o estreptocócicas activan linfocitos T a escala masiva — una "tormenta de citocinas" que distingue el shock tóxico del resto del shock séptico, con un antibiótico obligatorio en todos los casos por su capacidad de frenar la producción de toxina.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="mc-anafilaxia"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha XII</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-blue)" stroke-width="1.6">
+                    <path d="M40,10 L40,32" stroke-width="1.4"/>
+                    <path d="M30,32 L50,32 L46,46 L34,46 Z" stroke-opacity="0.7"/>
+                    <path d="M28,18 L34,22 M52,18 L46,22" stroke-width="1"/>
+                </svg>
+                <div class="field-name">Anafilaxia y<br>shock anafiláctico</div>
+                <div class="field-hook">"los corticoides son casi un reflejo en cualquier reacción alérgica grave... salvo que no tienen ningún papel demostrado en el manejo agudo de la anafilaxia"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">La epinefrina es el único fármaco capaz de frenar una reacción anafiláctica en marcha — todo lo demás (antihistamínicos, broncodilatadores, corticoides) alivia síntomas, pero nunca la sustituye.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+    </div>
+    <p class="tap-hint">☝ toca una ficha para ver la pista, y de nuevo para abrir el bloque completo</p>
+
+    <div class="card" id="panel-merino-cardio-tabs" style="display:none;">
+
+        <!-- ===== FICHA I: SHOCK — DEFINICIONES Y MONITORIZACIÓN ===== -->
+        <div id="mc-definiciones" class="tab-content">
+            <h3 style="color: var(--accent-blue);">Shock: definiciones y monitorización</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Marik PE. <em>Handbook of Evidence-Based Critical Care</em>, Cap. 14 "Approaches to Clinical Shock".</p>
+
+            <p class="section-label">¿Qué es el shock?</p>
+            <dl class="kv-row"><dt>Definición</dt><dd>Alteración en la <span class="hl-azul">utilización celular de oxígeno</span> — no una alteración de la presión arterial. Esta distinción es central: el shock puede existir con presión arterial normal, y presiones bajas pueden darse sin shock (neuropatías autonómicas, insuficiencia suprarrenal, hasta el 5% de adultos sanos).</dd></dl>
+            <p style="font-size:0.85rem; color:var(--text-dim);">El sistema circulatorio funciona con un volumen limitado y una bomba de eyección sensible al volumen — un diseño energéticamente eficiente, pero intolerante a la pérdida de volumen: los pulmones, el hígado y los riñones pueden perder hasta el 75% de su masa funcional sin un desenlace fatal, mientras que perder tan solo el 30% del volumen sanguíneo (limitado) puede ser mortal.</p>
+
+            <p class="section-label" style="margin-top:16px;">Monitorización de la presión arterial</p>
+            <dl class="kv-row"><dt>Objetivo</dt><dd>Presión arterial media (PAM) <span class="hl-verde">≥65 mmHg</span>, medida con catéter arterial (registro intra-arterial directo).</dd></dl>
+            <p style="font-size:0.85rem; color:var(--text-dim);">No monitorizar la presión sistólica si es posible: es una onda de presión reflejada que viaja de vuelta hacia el corazón (alejándose de la periferia), mientras que el flujo en la microcirculación es laminar, no pulsátil, y carece de componentes sistólico/diastólico reales.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">La monitorización del gasto cardíaco con catéter de arteria pulmonar (PAC) fue un pilar del manejo crítico, pero cayó en desuso hace ~25 años tras evidencia de que los catéteres de PA no mejoran la supervivencia en pacientes críticos — un juicio "duro", según la propia fuente, ya que el catéter es un dispositivo de monitorización, no una terapia. Si se dispone de gasto cardíaco medido, el objetivo es un índice cardíaco (IC) &gt;2,5 L/min/m².</p>
+
+            <p class="section-label" style="margin-top:16px;">Perfusión tisular</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💨 Gap de PCO₂</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Mide el lavado de CO₂ tisular. Un gap &lt;6 mmHg se considera evidencia de perfusión tisular adecuada — se obtiene fácilmente y debe monitorizarse en todo shock, incluso cuando ya se dispone de gasto cardíaco (el flujo microcirculatorio puede ser lento aunque el gasto global sea normal). <em>Precaución:</em> la acidosis metabólica puede aumentar la producción no metabólica de CO₂ y elevar el gap de forma espuria.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💧 Diuresis</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La caída de la diuresis es uno de los signos más precoces de shock inminente. Oliguria = diuresis &lt;0,5 mL/kg/h — objetivo de reanimación: superar ese umbral. El estado mental también se puede monitorizar, aunque es más difícil de cuantificar que la diuresis.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Tabla 14.5 — Objetivos de reanimación del shock</p>
+            <table class="data-table">
+                <thead><tr><th>Categoría</th><th>Objetivos</th></tr></thead>
+                <tbody>
+                    <tr><td>Perfusión tisular</td><td>PAM ≥65 mmHg · IC ≥2,5 L/min/m² · Gap de PCO₂ &lt;6 mmHg · Diuresis &gt;0,5 mL/kg/h</td></tr>
+                    <tr><td>Transporte de O₂</td><td>DO₂ &gt;300 mL/min/m² · VO₂ &gt;110 mL/min/m² · Extracción de O₂ &lt;50% · ScvO₂ &gt;50% · Lactato &lt;2 mmol/l</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Transporte de oxígeno</p>
+            <ul class="term-chips">
+                <li>Hipovolémico, cardiogénico y obstructivo: son shocks de "bajo flujo" — DO₂ inadecuado, con contribución de Hb baja en la hemorragia</li>
+                <li>Objetivos en estos 3: IC &gt;2,5 L/min/m², DO₂ &gt;300, VO₂ &gt;110</li>
+                <li>Si no se monitorizan (lo habitual): ScvO₂ &gt;50% y lactato &lt;2 mmol/l</li>
+            </ul>
+            <p style="font-size:0.85rem; color:var(--text-dim);"><strong>El shock séptico es la excepción</strong>: <span class="hl-rojo">NO es el resultado de un aporte inadecuado de O₂</span>, sino de un defecto en la fosforilación oxidativa de mitocondrias disfuncionales — la "hipoxia citopática". Puede asociarse a un defecto en la extracción de O₂ de la sangre capilar. Objetivos en este caso: extracción de O₂ &lt;80% y VO₂ &gt;110 mL/min/m² (la ScvO₂ puede no ser fiable en sepsis por la extracción defectuosa); si no se monitorizan, el objetivo es simplemente un lactato plasmático normal. <button id="mc-link-a-septico" style="background:none; border:none; padding:0; font:inherit; color:var(--accent-red); text-decoration:underline; cursor:pointer;">🔗 Ver Ficha X — Shock séptico →</button></p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">El objetivo universal de reanimación en todo shock clínico es la normalización del lactato plasmático (&lt;2 mmol/l). Y, por supuesto, el objetivo tácito de toda reanimación es la supervivencia.</p>
+
+            <p class="section-label" style="margin-top:16px;">Una palabra final: la hipotensión como consecuencia, no como causa</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">La reanimación del shock está dominada por el deseo de elevar la presión arterial, asumiendo que la hipotensión es la responsable del shock. Varias observaciones cuestionan este enfoque:</p>
+            <ul class="term-chips">
+                <li>El shock se define como una alteración de la utilización celular de O₂, no de la presión arterial</li>
+                <li>Aliviar la hipotensión ha sido el foco principal del manejo del shock desde hace más de 70 años (desde que la norepinefrina se introdujo en 1950), y aun así la mortalidad sigue siendo inaceptablemente alta, sin beneficio de supervivencia al usar 2 o incluso 3 vasopresores</li>
+                <li>Existen presiones bajas en condiciones distintas del shock (neuropatías autonómicas, insuficiencia suprarrenal, 5% de adultos sanos) sin lesión orgánica anóxica ni lactato elevado; de hecho, presiones bajas han demostrado ser beneficiosas en heridas penetrantes al limitar la pérdida de sangre</li>
+            </ul>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Una explicación posible: <em>la hipotensión no causa el shock, sino que es una consecuencia del shock</em>. El shock es bien conocido por causar disfunción multiorgánica, y uno de los órganos disfuncionales podría ser el propio vaso sanguíneo — si es así, corregir la presión arterial no corregiría el shock (ni mejoraría la supervivencia), igual que la hemodiálisis en el fallo renal relacionado con el shock no corrige el shock.</p>
+        </div>
+
+        <!-- ===== FICHA II: VASOPRESORES Y DOSIS ===== -->
+        <div id="mc-vasopresores" class="tab-content">
+            <h3 style="color: var(--accent-purple);">Vasopresores en el shock: fármacos y dosis</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Marik PE. <em>Handbook of Evidence-Based Critical Care</em>, Cap. 14.</p>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Norepinefrina</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <dl class="kv-row"><dt>Dosis</dt><dd>Infusión continua, sin dosis de carga, iniciando a 5 μg/min (0,05 μg/kg/min), titulando cada 5 min. Rango habitual: 5-30 μg/min (0,05-0,5 μg/kg/min).</dd></dl>
+                        <p style="font-size:0.85rem; color:var(--text-dim); margin:6px 0;">Vasoconstrictor con estimulación cardíaca leve que tiende a preservar el gasto cardíaco pese a la vasoconstricción, al menos en el rango de dosis bajo.</p>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💉 Vasopresina</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">En shock séptico, infusión continua de 0,03-0,04 U/h — dosis <strong>no titulable</strong> (a diferencia de los vasopresores catecolaminérgicos). Efectos adversos similares en tipo y frecuencia a los de la norepinefrina.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Angiotensina II</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Análogo sintético de la angiotensina humana: vasoconstricción del músculo liso vascular + estimula la liberación de vasopresina de la hipófisis posterior. Aprobado para shock vasodilatador en 2018, usado principalmente en resistencia a norepinefrina — eleva la PA hasta en el 67% de los casos, con impacto inconsistente en mortalidad.
+                        <dl class="kv-row" style="margin-top:8px;"><dt>Dosis</dt><dd>Infusión IV continua: dosis inicial 20 ng/kg/min (0,02 μg/kg/min), incrementable cada 10-15 min hasta 80 ng/kg/min (0,08 μg/kg/min) en las primeras 3 horas; mantenimiento ≤40 ng/kg/min (0,04 μg/kg/min). Sin ajuste por función hepática/renal.</dd></dl>
+                        <p style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;"><strong>Riesgo mayor:</strong> trombosis venosa — estimula la liberación de PAI-1 del músculo liso vascular (bloquea la fibrinólisis) y aumenta la adhesión plaquetaria. En un ensayo clínico, la incidencia de eventos trombóticos fue más del doble con angiotensina II que con placebo (13% vs. 5%).</p>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Midodrina</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Agonista α oral, aprobado por la FDA en 1996 para hipotensión ortostática. Eficaz para limitar/prevenir la hipotensión durante hemodiálisis (5-20 mg, 20-30 min antes de la diálisis, con dosis adicional menor si es necesario durante la sesión). El tratamiento adyuvante con midodrina (20 mg/8h) <span class="hl-rojo">no acelera</span> la discontinuación de vasopresores parenterales. Pese a su atractivo por ser fácil de administrar, <strong>no ofrece ninguna ventaja real para el manejo del shock.</strong></div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Otros vasopresores catecolaminérgicos (referencia rápida)</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Epinefrina, dopamina y fenilefrina se desarrollan con detalle en el contexto de cada tipo de shock específico (ver Fichas VII y X) — la elección de vasopresor de primera línea depende del escenario: norepinefrina es la preferida en shock cardiogénico y shock séptico; fenilefrina es la excepción en la obstrucción dinámica del tracto de salida del VI (Ficha VII), donde un vasoconstrictor puro evita el efecto inotrópico/cronotrópico indeseado.</p>
+
+            <p class="section-label" style="margin-top:16px;">Comentario de seguridad</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">La norepinefrina tiene efectos inmunosupresores demostrados: estudios en animales y humanos muestran que suprime la producción de citocinas proinflamatorias durante su infusión — el significado clínico es incierto, pero levanta una señal de alarma sobre su uso generalizado en shock séptico. Además, la recomendación de múltiples vasopresores en el shock refractario a vasopresores debería cuestionarse: no hay evidencia convincente de que añadir vasopresina o un tercer vasopresor mejore los resultados en shock séptico.</p>
+        </div>
+
+        <!-- ===== FICHA III: SHOCK HEMORRÁGICO — FISIOLOGÍA Y CLASIFICACIÓN ===== -->
+        <div id="mc-hemorragico-clasificacion" class="tab-content">
+            <h3 style="color: var(--accent-red);">Shock hemorrágico: fisiología y clasificación</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Marik PE. <em>Handbook of Evidence-Based Critical Care</em>, Cap. 15 "Hemorrhagic Shock".</p>
+
+            <p style="font-size:0.85rem; color:var(--text-dim);">El trauma es la principal causa de muerte a nivel mundial en el grupo de 25-49 años, y la causa más tratable de muerte en estos casos es el shock hemorrágico.</p>
+
+            <p class="section-label">Pérdida aguda de sangre</p>
+            <dl class="kv-row"><dt>Volumen sanguíneo normal</dt><dd><strong>Varones:</strong> 66 mL/kg de peso corporal magro (ej. 75 kg → ~5 litros). <strong>Mujeres:</strong> 60 mL/kg de peso corporal magro (ej. 60 kg → ~3,6 litros).</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Respuestas compensadoras</p>
+            <ul class="term-chips">
+                <li><strong>Relleno transcapilar:</strong> la caída de PA moviliza líquido intersticial hacia el torrente sanguíneo — puede añadir hasta 1 litro al volumen plasmático, a costa de un déficit de líquido intersticial</li>
+                <li><strong>Respuesta simpática:</strong> taquicardia y vasoconstricción periférica para preservar la perfusión tisular</li>
+                <li><strong>ADH:</strong> liberación de hormona antidiurética que promueve la retención renal de agua</li>
+                <li><strong>Sistema renina-angiotensina-aldosterona:</strong> angiotensina (vasoconstricción generalizada) + aldosterona (retención renal de sodio, sosteniendo el volumen extracelular)</li>
+            </ul>
+
+            <p class="section-label" style="margin-top:16px;">Tabla 15.1 — Sistema de clasificación de la pérdida aguda de sangre</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table">
+                <thead><tr><th></th><th>Clase I</th><th>Clase II</th><th>Clase III</th><th>Clase IV</th></tr></thead>
+                <tbody>
+                    <tr><td>Déficit de volumen</td><td>&lt;15%</td><td>15-30%</td><td>31-40%</td><td>&gt;40%</td></tr>
+                    <tr><td>Pérdida de volumen</td><td>&lt;10 mL/kg</td><td>10-20 mL/kg</td><td>21-30 mL/kg</td><td>&gt;30 mL/kg</td></tr>
+                    <tr><td>Frecuencia cardíaca</td><td>↔</td><td>↑</td><td>↑↑</td><td>↑↑ / ↓</td></tr>
+                    <tr><td>Presión arterial</td><td>↔</td><td>↔ / ↓</td><td>↓</td><td>↓↓</td></tr>
+                    <tr><td>Diuresis</td><td>↔</td><td>↔ / ↓</td><td>↓</td><td>↓↓</td></tr>
+                    <tr><td>Lactato plasmático</td><td>↔</td><td>↔</td><td>↑</td><td>↑↑</td></tr>
+                    <tr><td>Interpretación</td><td>Fase asintomática</td><td>Fase compensada</td><td>Fase de shock</td><td>Shock avanzado</td></tr>
+                    <tr><td>Reanimación</td><td>Ninguna</td><td>Cristaloides</td><td>Sangre</td><td>Transfusión masiva</td></tr>
+                </tbody>
+            </table>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">🧮 Clasificador de shock hemorrágico</p>
+            <div class="form-group">
+                <label for="mc-clase-perdida">% de volumen sanguíneo perdido (estimado)</label>
+                <input type="number" id="mc-clase-perdida" class="mc-clase-input" min="0" max="100" step="1" placeholder="Ej. 25">
+            </div>
+            <div id="mc-clase-resultado" class="result-box"></div>
+
+            <div class="micro-profiles" style="margin-top:12px;">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>Clase I</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Pérdida &lt;15% del volumen sanguíneo (&lt;10 mL/kg). Volumen totalmente restaurado por relleno transcapilar (típicamente &lt;1 litro), volumen sanguíneo mantenido, hallazgos clínicos mínimos o ausentes — reanimación con volumen no necesaria.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>Clase II</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Pérdida 15-30% (10-20 mL/kg). Fase compensada de hipovolemia: PA mantenida por vasoconstricción sistémica. La diuresis puede empezar a caer, pero no llega al nivel de oliguria (&lt;0,5 mL/kg/h). La respuesta vasoconstrictora es más intensa en la circulación esplácnica, y la hipoperfusión esplácnica puede llevar a disrupción de la mucosa intestinal e invasión de patógenos entéricos en el torrente sanguíneo.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>Clase III</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Pérdida 31-40% (21-30 mL/kg). Inicio de la pérdida de sangre descompensada o <em>shock hemorrágico</em>: la respuesta vasoconstrictora ya no basta para sostener PA/perfusión orgánica. Consecuencias clínicas: hipotensión en decúbito supino, signos de hipoperfusión orgánica (oliguria, alteración mental, extremidades frías) y evidencia de metabolismo anaeróbico (acumulación de lactato en sangre).</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>Clase IV</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Pérdida &gt;40% (&gt;30 mL/kg). Shock hemorrágico profundo, potencialmente irreversible. Manifestaciones clínicas: fallo multiorgánico y acidosis metabólica (láctica) grave. Esta categoría incluye la <em>pérdida masiva de sangre</em>.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Hemoglobina y hematocrito: una trampa de interpretación</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">El uso de la Hb/Hct (H &amp; H) para evaluar la presencia y gravedad de la pérdida aguda de sangre es común pero inapropiado. Los cambios en el hematocrito se correlacionan mal con el déficit real de volumen sanguíneo y con el déficit de eritrocitos: la pérdida aguda de sangre involucra la pérdida de sangre completa, con descensos <strong>proporcionales</strong> del plasma y de los eritrocitos — como resultado, la pérdida aguda de sangre reduce el volumen sanguíneo, pero <strong>no</strong> el H &amp; H. El H &amp; H solo declinará más tarde, por efecto del relleno transcapilar y del aumento de ADH/aldosterona — un efecto que tarda 8-12 horas en aparecer y puede tardar días en completarse.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">El tipo de fluido de reanimación también determina el hematocrito, no la magnitud de la pérdida: la infusión de suero salino isotónico expande el volumen plasmático pero no el de eritrocitos → dilución del Hto. La reanimación con sangre completa añade plasma y eritrocitos de forma proporcional → sin cambio en el Hto.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);"><em>En las primeras horas tras una pérdida aguda de sangre, la hemoglobina y el hematocrito son un reflejo del esfuerzo de reanimación (tipo y volumen de fluidos infundidos), y no de la magnitud de la pérdida de sangre.</em></p>
+        </div>
+
+        <!-- ===== FICHA IV: REANIMACIÓN — CATÉTERES Y FLUIDOS ===== -->
+        <div id="mc-hemorragico-fluidos" class="tab-content">
+            <h3 style="color: var(--accent-green);">Reanimación del shock hemorrágico: catéteres y fluidos</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Marik PE. <em>Handbook of Evidence-Based Critical Care</em>, Cap. 15.</p>
+
+            <p class="section-label">Los catéteres</p>
+            <dl class="kv-row"><dt>Ecuación de Hagen-Poiseuille</dt><dd>Q = ΔP × (π r⁴/8 μL) — el flujo laminar (Q) en un catéter rígido depende directamente del gradiente de presión (ΔP) y de la <strong>4ª potencia del radio</strong> del catéter (r⁴), y es inversamente proporcional a la longitud del catéter (L) y a la viscosidad del fluido (μ).</dd></dl>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Consecuencia práctica: <span class="hl-verde">los catéteres periféricos cortos y de calibre grueso son mucho mejores para infusiones rápidas que los catéteres venosos centrales, más largos</span>. Para un mismo calibre, el flujo por gravedad de agua a través de un catéter venoso periférico de 1,2 pulgadas es ~5 veces mayor que el de un catéter venoso central de 8 pulgadas. Además, pasar de un catéter de calibre 18G a 16G duplica la tasa de flujo.</p>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💧 Catéteres de infusión rápida</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Catéteres periféricos de calibre muy grueso disponibles en 7 y 9 French (equivalentes a calibres 13G y 11G), de ~2 pulgadas de longitud. Se usan típicamente con sistemas de infusión presurizados, y pueden entregar hasta 1 litro por minuto.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💧 Catéteres introductores</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Usados como conductos para catéteres multilumen, pero también sirven como dispositivos de infusión independientes. Disponibles en 8,5 y 9 French (~11G), de ~10 cm (4 pulgadas), insertados en venas centrales grandes — su longitud los hace menos atractivos que los catéteres de infusión rápida. Pueden llevar un puerto de infusión lateral adicional, pero su capacidad de flujo es solo el 25% de la del catéter principal, por lo que debe evitarse para tasas de infusión rápidas.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Tabla 15.2 — Fluidos de reanimación para pérdida de sangre</p>
+            <table class="data-table">
+                <thead><tr><th>Tipo de fluido</th><th>Productos</th><th>Efecto principal</th></tr></thead>
+                <tbody>
+                    <tr><td>Coloide</td><td>Albúmina (5%, 25%), almidones hidroxietílicos, dextranos</td><td>Expande el volumen plasmático</td></tr>
+                    <tr><td>Cristaloide</td><td>Salino isotónico, Ringer lactato, Normosol, Plasma-Lyte</td><td>Expande el volumen extracelular</td></tr>
+                    <tr><td>Concentrado de hematíes</td><td>Hematíes empaquetados</td><td>Aumenta el contenido de O₂ de la sangre</td></tr>
+                    <tr><td>Plasma</td><td>Plasma fresco congelado, plasma líquido</td><td>Aporta proteínas procoagulantes</td></tr>
+                    <tr><td>Precipitado de plasma</td><td>Crioprecipitado, concentrado de fibrinógeno</td><td>Aumenta los niveles de fibrinógeno</td></tr>
+                    <tr><td>Concentrado de plaquetas</td><td>Plaquetas de múltiples donantes, de donante único</td><td>Aumenta las plaquetas circulantes</td></tr>
+                    <tr><td>Sangre completa</td><td>Sangre tipo-específica, sangre grupo O</td><td>Todo lo anterior</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Fluidos asanguíneos (coloides y cristaloides)</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Se usan en pérdidas moderadas (Clase II) y en la fase inicial de reanimación de pérdidas mayores. Los coloides son mucho más eficaces para aumentar el gasto cardíaco que los cristaloides (expanden más el volumen plasmático). Pese a esta superioridad de los coloides, <strong>los cristaloides han sido el fluido preferido para la reanimación de la pérdida aguda de sangre</strong> — estudios en animales de los años 60 mostraron que la supervivencia mejoraba de forma marcada al añadir un cristaloide (Ringer lactato) a la reposición con sangre extraída, corrigiendo un déficit desproporcionado (40%) de volumen intersticial. El consenso actual es que los desenlaces fatales en el shock hemorrágico son el resultado de sangrado persistente y de una coagulopatía imparable, y que el uso agresivo de cristaloides puede agravar el sangrado al promover una disminución dilucional de los factores de coagulación — de ahí el énfasis actual en limitar el uso de cristaloides en la hemorragia grave (ver Ficha V, "damage control resuscitation").</p>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩸 Concentrados de eritrocitos</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Producidos por centrifugación de sangre de donante. Cada unidad: hematocrito ~60%, volumen ~350 mL. No promueven el gasto cardíaco (por su alta viscosidad) — se usan solo para aumentar la capacidad de transporte de O₂ de la sangre.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧊 Productos de plasma</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">El plasma fresco congelado (PFC) se almacena a −18°C y debe descongelarse antes de usar (unidades ~230 mL) — fuente de factores de coagulación y expansor de volumen en protocolos de transfusión masiva. Desventajas: tiempo de descongelación (retrasa la reanimación) y vida útil limitada tras descongelar (riesgo de desperdicio). El <em>plasma líquido</em> no está congelado, se almacena entre 34-43°F hasta 26 días, con eficacia equivalente al PFC y menos desperdicio.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧊 Crioprecipitado</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Precipitado de plasma congelado rico en fibrinógeno y Factor VIII, volumen ~10-15 mL, usado para elevar el fibrinógeno plasmático. Mismas desventajas que el PFC (descongelación, vida útil limitada), además de contenido de fibrinógeno variable y mayor riesgo de infecciones transmitidas — problemas que no comparten los <em>concentrados de fibrinógeno</em>, con contenido consistente (20 g/L), sin necesidad de descongelar, y sin riesgo de infección transmitida.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩸 Sangre completa</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Considerada el fluido de reposición ideal para la pérdida aguda de sangre, almacenable a 1-6°C hasta 35 días — sin embargo, no está fácilmente disponible por la práctica estándar de separar la sangre de donante en sus componentes. La sangre completa "fresca" se ha usado en conflictos militares recientes (mediante "bancos de sangre andantes", es decir, compañeros de armas) con beneficio de supervivencia frente a terapia por componentes; en el contexto civil (sangre completa fría almacenada) no se ha replicado el mismo beneficio, aunque sí hay evidencia de beneficio al combinarla con terapia por componentes.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🅾️ Sangre grupo O de bajo título</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La sangre grupo O se considera donante universal, usada cuando la sangre tipo-específica no está disponible de inmediato — pero se han descrito reacciones transfusionales con sangre O de títulos excepcionalmente altos de anticuerpos anti-A y anti-B. La sangre O "de bajo título" tiene niveles bajos de esos anticuerpos y se considera una alternativa más segura, con experiencia similar a la sangre completa (beneficio de supervivencia demostrado en estudios militares, no replicado aún en población civil).</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Sistemas de infusión rápida</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Disponibles para entregar hemoderivados calentados a tasas de hasta 1 litro por minuto, usando una bomba de rodillo que genera presiones de hasta 300 mmHg para lograr una tasa de infusión preseleccionada, con bobinas de calentamiento que evitan la hipotermia por infusión de fluidos a temperatura ambiente. Son especialmente útiles para transfundir concentrados de eritrocitos (muy viscosos, de flujo pobre por gravedad) — la infusión de hematíes por gravedad es lenta, y mejora al diluir con salino; en hemorragia grave se pueden alcanzar tasas de reposición de 5 L/h (83 mL/min) o más, solo alcanzables con sistemas presurizados.</p>
+
+            <p class="section-label" style="margin-top:16px;">Tabla 15.3 — Infusión de hematíes: influencia de la dilución, presión y calibre del catéter</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table">
+                <thead><tr><th>Configuración</th><th>18G / 1,2 in</th><th>16G / 1,2 in</th><th>7 Fr RIC / 2,0 in</th></tr></thead>
+                <tbody>
+                    <tr><td>1 unidad de hematíes — sin dilución, gravedad</td><td>5 mL/min</td><td>7 mL/min</td><td>—</td></tr>
+                    <tr><td>1 unidad de hematíes + 100 mL salino — gravedad</td><td>39 mL/min</td><td>49 mL/min</td><td>—</td></tr>
+                    <tr><td>1 unidad de hematíes + 1 unidad de PFC — presurizado (300 mmHg)</td><td>183 mL/min</td><td>448 mL/min</td><td>1.000 mL/min</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p style="font-size:0.8rem; color:var(--text-muted);">RIC = catéter de infusión rápida ("rapid infusion catheter").</p>
+
+            <p class="section-label" style="margin-top:16px;">Estrategias de reanimación</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Dos objetivos fundamentales en el paciente sangrante: (1) apoyar el aporte de O₂ a los tejidos, promoviendo el gasto cardíaco y manteniendo una concentración adecuada de hemoglobina; y (2) el "control de la fuente" para detener el sangrado — el sangrado continuo no solo agota recursos, también aumenta el riesgo de una coagulopatía potencialmente mortal (ver Ficha V).</p>
+
+            <p class="section-label" style="margin-top:16px;">Tabla 15.4 — Volumen de reanimación asanguínea para hemorragia Clase II</p>
+            <table class="data-table">
+                <thead><tr><th>Paso</th><th>Método</th></tr></thead>
+                <tbody>
+                    <tr><td>1. Estimar volumen plasmático normal (VP)</td><td>VP = 40 mL/kg (varones) · 36 mL/kg (mujeres)</td></tr>
+                    <tr><td>2. Estimar % de pérdida de volumen plasmático</td><td>Clase II: 15-30% de pérdida</td></tr>
+                    <tr><td>3. Calcular el déficit de volumen plasmático (DVP)</td><td>DVP = VP × % de pérdida</td></tr>
+                    <tr><td>4. Estimar el volumen de reanimación (VR)</td><td>VR = DVP × 1 (coloides) · VR = DVP × 3 (cristaloides)</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Nota: el factor ×3 para cristaloides es una estimación conservadora, ya que solo el 20-25% del cristaloide infundido permanece expandiendo el volumen plasmático.</p>
+
+            <p class="section-label" style="margin-top:16px;">Hemorragia sin shock</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Pérdida de sangre acompañada de descenso de PA o diuresis, pero sin evidencia de shock (lactato no elevado) — equivalente a la Clase II — puede manejarse inicialmente con fluidos asanguíneos, con el volumen estimado según la Tabla 15.4. Una vez repuesto el volumen plasmático, pueden ser necesarios hematíes para alcanzar una Hb objetivo de 7-8 g/dl, PFC si el INR es &gt;1,5, y transfusión de plaquetas si el recuento cae por debajo de 50.000/μl. Si el sangrado continúa, considerar la estrategia de "damage control resuscitation" de la Ficha V.</p>
+        </div>
+
+        <!-- ===== FICHA V: DAMAGE CONTROL, TIC Y TEG ===== -->
+        <div id="mc-damage-control" class="tab-content">
+            <h3 style="color: var(--accent-yellow);">Damage control resuscitation: hipotensión permisiva, coagulopatía y TEG</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Marik PE. <em>Handbook of Evidence-Based Critical Care</em>, Cap. 15.</p>
+
+            <p style="font-size:0.85rem; color:var(--text-dim);">La reanimación del shock hemorrágico grave sigue los principios de la <strong>"reanimación de control de daños"</strong> — usada típicamente en pérdidas masivas de sangre (ej. infusión de 4 unidades de hematíes en 1 hora), pero de utilidad en cualquier hemorragia potencialmente mortal. Sus 4 pilares: control de la fuente oportuno, hipotensión permisiva, restricción de la infusión de cristaloides, y reanimación con sangre completa (o su equivalente en terapia por componentes).</p>
+
+            <p class="section-label">Hipotensión permisiva</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Impulsada por estudios de hemorragia relacionada con trauma que mostraron que la reanimación agresiva con fluidos puede exacerbar el sangrado antes de controlarlo. Esto llevó a reducir la reanimación con fluidos para mantener presiones más bajas que lo normal (ej. PA sistólica 80-90 mmHg o PAM 50 mmHg) hasta controlar el sangrado. Esta estrategia ha demostrado reducir los requerimientos transfusionales y el riesgo de coagulopatía dilucional, aunque el efecto sobre la mortalidad ha sido inconsistente. <strong>El problema principal es asegurar que la presión baja no está promoviendo una hipoperfusión tisular peligrosa</strong> — de ahí que monitorizar el lactato plasmático y marcadores de perfusión orgánica (diuresis) sea esencial, como en todo shock hemorrágico.</p>
+
+            <p class="section-label" style="margin-top:16px;">Coagulopatía traumática</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Uno de los principales temores en el paciente sangrante es la pérdida persistente de sangre, resultado de un control de fuente inadecuado y/o una coagulopatía. Esta última suele ser el resultado de acidosis (inhibe los factores de coagulación a pH &lt;7,2), hipotermia (reduce la adherencia plaquetaria), o la infusión de fluidos asanguíneos (efecto dilucional sobre los factores de coagulación). Sin embargo, las víctimas de trauma pueden tener una coagulopatía independiente de esos orígenes tradicionales: la <strong>"coagulopatía inducida por trauma" (TIC)</strong> tiene un impacto negativo en los desenlaces. Estudios de bajas de combate en Oriente Medio mostraron que la TIC estaba presente al ingreso en el 40% de los casos, y su presencia creó un incremento de 6 veces en la tasa de mortalidad.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">El principal culpable en la TIC es la <strong>activación de la proteína C</strong> como resultado de la lesión endotelial. La proteína C activada no solo desactiva los factores V y VIII (lo que inhibe la formación de coágulo), también desencadena fibrinólisis (que promueve la disolución del coágulo y lleva a un descenso consuntivo de los niveles de fibrinógeno). La disfunción plaquetaria también puede jugar un papel en la TIC.</p>
+
+            <p class="section-label" style="margin-top:16px;">Figura 15.4 — Reanimación hemostática</p>
+            <div class="algo-flow">
+                <div class="algo-step"><span class="algo-num">1</span><div class="algo-text"><strong>Reposición 1:1:1</strong> — infundir hematíes y PFC en proporción 1:1, añadiendo 1 pack de plaquetas multidonante (o 1 unidad de plaquetas de donante único) por cada 5 unidades de hematíes+PFC infundidas. Recuerda que una transfusión de plaquetas equivale a las plaquetas de 5-6 donantes.</div></div>
+                <div class="algo-step"><span class="algo-num">2</span><div class="algo-text"><strong>Evitar la hipotermia</strong> — calentar los infusatos a 37°C con sistema de infusión rápida.</div></div>
+                <div class="algo-step"><span class="algo-num">3</span><div class="algo-text"><strong>Medidas adyuvantes</strong> — 1 gramo de gluconato cálcico por cada 2 unidades de hematíes (mantener calcio iónico 1,2-1,3 mmol/l); crioprecipitado (2 unidades) si fibrinógeno &lt;100 mg/dl; ácido tranexámico (bolo de 1 g, luego 1 g en infusión durante 8h) para la fibrinólisis.</div></div>
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Esta estrategia 1:1:1 no solo optimiza la reposición de elementos de la coagulación (factores + plaquetas), también minimiza el riesgo de una coagulopatía dilucional por la infusión de fluidos cristaloides.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);"><strong>Objetivos de la reanimación hemostática:</strong> fibrinógeno plasmático &gt;100 mg/dl, INR &lt;1,5, TTPa &lt;1,5× el control, y recuento de plaquetas ≥100.000/μl. Sin embargo, estas medidas convencionales no están bien adaptadas para detectar los defectos hemostáticos propios de la TIC — los "ensayos viscoelásticos" como la <strong>tromboelastografía</strong> han demostrado ser métodos más sensibles de monitorización de la hemostasia en víctimas de trauma.</p>
+
+            <p class="section-label" style="margin-top:16px;">Tromboelastografía (TEG)</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">La TEG aporta información sobre la iniciación, progresión, fuerza y lisis del coágulo a partir de muestras de sangre completa a temperatura corporal — se logra colocando una muestra de sangre en una copa cilíndrica con un pin central suspendido; la copa rota en dirección alternante horaria/antihoraria, y el pin estacionario registra el torque producido a medida que la sangre coagula y luego se lisa. (Un método alternativo, la tromboelastometría rotacional o ROTEM, usa una copa estacionaria y un pin rotatorio.)</p>
+            <ul class="term-chips">
+                <li><strong>R</strong> ("reaction time") — tiempo hasta el inicio de la formación del coágulo. Normal: 5-10 min. Se prolonga por defectos en la cascada de coagulación, incluidos todos los anticoagulantes excepto la warfarina (el INR sigue siendo la única medida fiable de la anticoagulación con warfarina)</li>
+                <li><strong>k</strong> ("kinetic time") — tiempo desde el inicio del coágulo hasta una resistencia de 20 mm. Normal: 1-3 min</li>
+                <li><strong>Ángulo α</strong> — tasa temprana de formación del coágulo, dependiente de la polimerización de fibrina. Normal: 53-72°</li>
+                <li><strong>MA</strong> (amplitud máxima) — medida de la fuerza del coágulo, reflejo del entrecruzamiento fibrinógeno-plaquetas. Normal: 50-70 mm</li>
+                <li><strong>LY30</strong> — % de lisis del coágulo desde la amplitud máxima hasta los 30 minutos, medida de fibrinólisis. Normal: 2,3-5,7%</li>
+            </ul>
+
+            <p class="section-label" style="margin-top:16px;">🧪 Terapia guiada por TEG</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Estudios clínicos en víctimas de trauma y en pacientes posquirúrgicos con hemorragia potencialmente mortal han mostrado que el manejo hemostático guiado por TEG mejora la supervivencia y reduce el uso de hemoderivados. Marca cada parámetro anormal para ver la intervención recomendada:</p>
+            <div class="form-group"><label for="mc-teg-r">Tiempo R</label><select id="mc-teg-r" class="mc-teg-select"><option value="">— sin evaluar —</option><option value="normal">Normal (5-10 min)</option><option value="anormal">Anormal (&gt;9 min)</option></select></div>
+            <div class="form-group"><label for="mc-teg-k">Tiempo k</label><select id="mc-teg-k" class="mc-teg-select"><option value="">— sin evaluar —</option><option value="normal">Normal (1-3 min)</option><option value="anormal">Anormal (&gt;2,5 min)</option></select></div>
+            <div class="form-group"><label for="mc-teg-alfa">Ángulo α</label><select id="mc-teg-alfa" class="mc-teg-select"><option value="">— sin evaluar —</option><option value="normal">Normal (53-72°)</option><option value="anormal">Anormal (&lt;65°)</option></select></div>
+            <div class="form-group"><label for="mc-teg-ma">MA (amplitud máxima)</label><select id="mc-teg-ma" class="mc-teg-select"><option value="">— sin evaluar —</option><option value="normal">Normal (50-70 mm)</option><option value="anormal">Anormal (&lt;55 mm)</option></select></div>
+            <div class="form-group"><label for="mc-teg-ly30">LY30</label><select id="mc-teg-ly30" class="mc-teg-select"><option value="">— sin evaluar —</option><option value="normal">Normal (2,3-5,7%)</option><option value="anormal">Anormal (&gt;3%)</option></select></div>
+            <div id="mc-teg-resultado" class="result-box"></div>
+
+            <p class="section-label" style="margin-top:16px;">Lesión postresucitación</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Una reanimación aparentemente exitosa del shock hemorrágico puede ir seguida, en 48-72 horas, de un fallo multiorgánico progresivo. La manifestación más precoz es una disfunción respiratoria progresiva, seguida en días por disfunción progresiva de riñones, hígado, corazón y sistema nervioso central — la mortalidad se determina por el número de órganos implicados, con una media de 50-60%.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Se cree que esta lesión postresucitación es una forma de <em>lesión por reperfusión</em>, originada en la circulación esplácnica: la reperfusión del intestino isquémico libera citocinas proinflamatorias que acceden a la circulación sistémica e incitan una respuesta inflamatoria sistémica responsable del daño multiorgánico. Predisponen a ella el tiempo requerido para revertir el shock, el volumen de reanimación con cristaloides (que promueve edema intestinal y predispone al síndrome compartimental abdominal), y el número de unidades de hematíes transfundidas (&gt;6 unidades en 12h). Puede haber infección de origen intestinal si el fallo multiorgánico aparece más de 3 días tras la reanimación.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">No hay terapia específica para la lesión postresucitación — las medidas preventivas (reversión rápida del shock, limitar la infusión de cristaloides/hematíes cuando sea posible) pueden ser útiles. En el fallo multiorgánico de aparición tardía (&gt;72h tras la reanimación), el reconocimiento y tratamiento pronto de una sepsis subyacente es esencial.</p>
+
+            <p class="section-label" style="margin-top:16px;">Resumen práctico</p>
+            <ul class="term-chips">
+                <li>Catéteres cortos y de gran calibre, evitando la hipotermia (calentar infusatos a 37°C)</li>
+                <li>Restringir los cristaloides a 1-2 litros antes de usar hemoderivados (si es posible)</li>
+                <li>Reponer componentes en una proporción que imite la sangre completa (1:1:1) + medidas adyuvantes de la Fig. 15.4</li>
+                <li>"Hipotensión permisiva" hasta controlar el sangrado (PA sistólica 80-90 mmHg o PAM 50 mmHg), siempre que la perfusión tisular esté garantizada (lactato &lt;2 mmol/l)</li>
+                <li>Guiar el manejo hemostático con TEG (o ROTEM) cuando sea posible</li>
+                <li>Tras una reanimación exitosa: vigilancia por lesión postresucitación y sepsis de origen intestinal</li>
+            </ul>
+        </div>
+
+        <!-- ===== FICHA VI: SHOCK CARDIOGÉNICO — FISIOPATOLOGÍA ===== -->
+        <div id="mc-cardiogenico-fisio" class="tab-content">
+            <h3 style="color: var(--accent-red);">Shock cardiogénico: fisiopatología</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Marik PE. <em>Handbook of Evidence-Based Critical Care</em>, Cap. 16 "Cardiogenic Shock".</p>
+
+            <dl class="kv-row"><dt>Definición</dt><dd>Fallo de la bomba cardíaca que resulta en un aporte de O₂ a los tejidos inadecuado y metabolismo oxidativo alterado — su culminación es fallo multiorgánico y desenlace fatal. El reto real: la mitad de los pacientes no sobreviven pese al mejor manejo posible.</dd></dl>
+
+            <p class="section-label">Etiologías</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">El infarto agudo de miocardio (IAM) es responsable de ~2/3 de los casos de shock cardiogénico, y se desarrolla en el 5-10% de los casos de IAM.</p>
+            <p class="section-label" style="margin-top:12px;">Figura 16.1 — Mecanismos de shock cardiogénico por IAM</p>
+            <table class="data-table">
+                <thead><tr><th>Mecanismo</th><th>% de casos</th></tr></thead>
+                <tbody>
+                    <tr><td>Infarto del VI</td><td>79%</td></tr>
+                    <tr><td>Infarto del VD</td><td>3%</td></tr>
+                    <tr><td>Rotura del músculo papilar</td><td>7%</td></tr>
+                    <tr><td>Rotura del septo</td><td>4%</td></tr>
+                    <tr><td>Rotura de la pared libre</td><td>1%</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size:0.85rem; color:var(--text-dim);">El infarto del VI causa ~80% de los casos, y requiere la pérdida de al menos el 40% de la masa funcional del ventrículo. El infarto del VD está implicado en &lt;5% de los casos.</p>
+            <div class="micro-profiles" style="margin-top:8px;">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔴 Rotura del músculo papilar (7%)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Resulta en insuficiencia mitral aguda y potencialmente mortal. Los músculos papilares, vía las cuerdas tendinosas, se unen a los velos de la válvula mitral, y su contracción evita el prolapso de la válvula durante la sístole ventricular.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔴 Rotura del septo interventricular (4%)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Se acompaña de un gran shunt izquierda-derecha, que inunda la circulación pulmonar y desvía flujo de la circulación sistémica.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔴 Rotura de la pared libre (1%)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Complicación catastrófica de infartos transmurales, que resulta en hemopericardio de rápida acumulación y taponamiento pericárdico.</div>
+                </div>
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Estas 3 complicaciones típicamente aparecen dentro de las <strong>primeras 24 horas</strong> del infarto — lo cual contradice la noción tradicional de que son complicaciones de aparición tardía.</p>
+
+            <p class="section-label" style="margin-top:16px;">Tabla 16.1 — Otras causas de shock cardiogénico distintas del IAM</p>
+            <table class="data-table">
+                <thead><tr><th>General</th><th>Circunstancias específicas</th></tr></thead>
+                <tbody>
+                    <tr><td>Insuficiencia cardíaca crónica con descompensación aguda</td><td>Shock postcardiotomía</td></tr>
+                    <tr><td>Miocarditis aguda</td><td>Miocardiopatía periparto</td></tr>
+                    <tr><td>Miocardiopatía de Takotsubo</td><td>Shock post-parada cardíaca</td></tr>
+                    <tr><td>Obstrucción dinámica del tracto de salida</td><td></td></tr>
+                    <tr><td>Valvulopatía avanzada</td><td></td></tr>
+                </tbody>
+            </table>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Las exacerbaciones agudas de IC crónica se identifican en hasta el 30% de los casos de shock cardiogénico, y la miocardiopatía de Takotsubo (inducida por estrés) ha emergido como un culpable potencial.</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🌀 Obstrucción dinámica del tracto de salida</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">En la miocardiopatía hipertrófica, el flujo a través del tracto de salida del VI estrechado crea un efecto de succión que atrae anteriormente los velos de la válvula mitral, y el contacto mesosistólico entre la válvula mitral y el septo interventricular crea una "obstrucción dinámica del tracto de salida del VI". El diagnóstico se hace con ecografía Doppler de onda continua en la vista apical de 4 cámaras, calculando el gradiente de presión sistólica pico a través de la región subaórtica del VI. Reconocer esta condición es importante porque se trata de forma distinta: el objetivo es enlentecer la frecuencia cardíaca y aumentar el llenado diastólico, usando betabloqueantes no vasodilatadores (ej. metoprolol, nadolol).</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🏥 Cirugía cardíaca</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Shock cardiogénico reportado en 2-5% de pacientes sometidos a cirugía cardíaca — este "shock postcardiotomía" puede empezar en quirófano o en el postoperatorio precoz. Mecanismos presuntos: hibernación o "aturdimiento" miocárdico, y cardioprotección inadecuada. La vasodilatación también puede jugar un papel en la hipotensión.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🤰 Embarazo</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Existe una miocardiopatía idiopática que puede aparecer en las últimas fases del embarazo o en los primeros meses tras el parto, con disfunción sistólica y un curso clínico variable. La incidencia de esta <em>miocardiopatía periparto</em> en EE. UU. es de 1 caso por 3.000-4.000 embarazos. Factores de riesgo: edad &gt;30 años, embarazo multigestacional, ascendencia africana, e historia familiar de miocardiopatía. Puede progresar a shock cardiogénico e incluso parada cardíaca, con una mortalidad reportada del 7-20% en EE. UU.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Shock obstructivo</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">La categoría de "shock obstructivo" es, esencialmente, shock cardiogénico causado por condiciones extrínsecas al corazón: embolia pulmonar aguda, taponamiento pericárdico y neumotórax a tensión. Las consecuencias hemodinámicas son las mismas que las del shock cardiogénico, y el manejo se dirige a corregir la condición responsable.</p>
+
+            <p class="section-label" style="margin-top:16px;">Cambios hemodinámicos</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">El descenso del gasto cardíaco se acompaña de un aumento de las presiones de llenado (PVC o presión en cuña de arteria pulmonar, según qué ventrículo haya fallado) y un aumento de las resistencias vasculares sistémicas (por activación simpática y del sistema renina-angiotensina-aldosterona). Estos cambios ocurren tanto en IC como en shock cardiogénico — <span class="hl-azul">el shock cardiogénico se distingue de la IC por la presencia de hipoperfusión tisular</span> (ej. hipotensión, diuresis disminuida) y oxigenación tisular inadecuada (ej. lactato plasmático elevado).</p>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💙 Fallo del corazón derecho</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">El shock cardiogénico por fallo del VD tiene muchas similitudes con el del VI, pero menor mortalidad. Rasgos que identifican fallo del VD: aumento del ratio PVC/PCP, VD dilatado, y FEVI normal. La dilatación grave del VD puede empujar el septo interventricular hacia la cámara del VI, reduciendo su llenado y perjudicando aún más el gasto sistólico del corazón izquierdo.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚠️ Excepciones</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">El IC en shock cardiogénico es típicamente &lt;2,2 L/min/m² (normal 2,4-4,0), pero las presiones de llenado NO están aumentadas en hasta el 30% de los casos de shock cardiogénico relacionado con infarto. Además, las resistencias vasculares sistémicas pueden no estar elevadas cuando el shock cardiogénico se acompaña de inflamación sistémica (ver abajo). Finalmente, la hipotensión está ausente en ~5% de los casos de shock cardiogénico.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔬 La microcirculación</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Estudios con videomicroscopía sublingual muestran que el shock cardiogénico se asocia a un descenso de la perfusión capilar independiente de los cambios en las medidas hemodinámicas "macrocirculatorias" (gasto cardíaco y presión arterial), con mayor impacto en la mortalidad que los cambios macrocirculatorios. Esta disfunción microcirculatoria podría explicar por qué corregir el gasto cardíaco y la presión arterial en el shock cardiogénico no garantiza la supervivencia. Monitorizar la perfusión microcirculatoria con el gap de PCO₂ es potencialmente útil en este contexto.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔥 Inflamación sistémica</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La necrosis miocárdica dispara una respuesta inflamatoria localizada que puede progresar a una respuesta inflamatoria sistémica. Signos de inflamación sistémica (fiebre, leucocitosis, etc.) se han reportado en el 20-40% de los pacientes con shock cardiogénico que complica un IAM, y estos pacientes tienen menores resistencias vasculares sistémicas (por el efecto vasodilatador del óxido nítrico) y mayor mortalidad. Esta inflamación sistémica se ha relacionado con la disfunción microcirculatoria en el shock cardiogénico.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== FICHA VII: SHOCK CARDIOGÉNICO — SOPORTE FARMACOLÓGICO ===== -->
+        <div id="mc-cardiogenico-farmaco" class="tab-content">
+            <h3 style="color: var(--accent-blue);">Shock cardiogénico: soporte farmacológico</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Marik PE. <em>Handbook of Evidence-Based Critical Care</em>, Cap. 16.</p>
+
+            <p class="section-label">Manejo</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">La mayoría de los casos de shock cardiogénico se asocian a IAM, así que el manejo suele incluir medidas de revascularización coronaria (angioplastia, cirugía de bypass, terapia antitrombótica) — el foco aquí es en las medidas que promueven la perfusión tisular.</p>
+
+            <p class="section-label" style="margin-top:16px;">Monitorización</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">El manejo del shock cardiogénico requiere una medida fiable del gasto cardíaco, y la más fiable disponible es la termodilución del catéter de arteria pulmonar (PAC) — que también aporta las presiones de llenado, las resistencias vasculares sistémicas y las variables de transporte de O₂. El uso de PAC ha demostrado mejorar los desenlaces en shock cardiogénico, y las guías más recientes de la American Heart Association enfatizan su valor en este contexto.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">La perfusión tisular puede acompañarse de déficits microcirculatorios independientes de los cambios del gasto cardíaco, y persistir tras normalizar gasto cardíaco/presión arterial — de ahí el valor de monitorizar la perfusión tisular con el gap de PCO₂ y con signos clínicos de perfusión orgánica (diuresis). La oxigenación tisular es probablemente el parámetro más importante a monitorizar (el shock se define por una anomalía en la utilización celular de O₂): aunque no es posible monitorizar directamente el O₂ tisular, la SvO₂ aporta información sobre el balance DO₂/VO₂, y el lactato plasmático una evaluación indirecta de la adecuación de la oxigenación tisular.</p>
+
+            <p class="section-label" style="margin-top:16px;">Tabla 16.2 — Objetivos del manejo en shock cardiogénico</p>
+            <table class="data-table">
+                <thead><tr><th>Categoría</th><th>Objetivos</th></tr></thead>
+                <tbody>
+                    <tr><td>Hemodinámica</td><td>PCP = 19-20 mmHg · IC ≥2,5 L/min/m² · IRVS = 25-30 unidades Wood · PAM ≥65 mmHg</td></tr>
+                    <tr><td>Perfusión tisular</td><td>Gap de PCO₂ &lt;6 mmHg · Diuresis &gt;0,5 mL/kg/h</td></tr>
+                    <tr><td>Oxigenación tisular</td><td>SvO₂ &gt;50% · Lactato plasmático &lt;2 mmol/l</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Optimizar las presiones de llenado</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">La presión de llenado del VI (presión en cuña de arteria pulmonar) no siempre está elevada en shock cardiogénico, y en esos casos la infusión de volumen puede ser instrumental para aumentar el gasto cardíaco. El objetivo de la infusión de volumen es la presión de cuña más alta que aumente el gasto cardíaco sin producir edema pulmonar — presión que depende de la presión coloidosmótica (COP) plasmática. La COP plasmática es normalmente ~28 mmHg, pero una COP más baja (20-25 mmHg) es más razonable en pacientes críticos, que suelen tener una concentración de albúmina plasmática subnormal (el determinante principal de la COP). Así, <span class="hl-azul">la presión de llenado del VI (presión de cuña) óptima se considera 18-20 mmHg</span>.</p>
+
+            <p class="section-label" style="margin-top:16px;">Terapia vasopresora</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">La hipotensión es casi universal en shock cardiogénico, y se usan vasoconstrictores (vasopresores) para elevar la PA a una sistólica ≥90 mmHg o una PAM ≥65 mmHg. <span class="hl-verde">El vasopresor de elección en shock cardiogénico es la norepinefrina</span>, catecolamina que produce vasoconstricción sistémica y estimulación cardíaca leve. Una excepción a esta preferencia es el shock cardiogénico por obstrucción dinámica del tracto de salida del VI, donde un vasoconstrictor puro como la fenilefrina (que puede desencadenar bradicardia refleja) es más apropiado.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">La preferencia por norepinefrina viene de estudios que la comparan con otros vasopresores populares (epinefrina y dopamina), mostrando menor riesgo de taquicardia y arritmias problemáticas, y asociada a menos muertes. La estimulación cardíaca leve producida por norepinefrina tiende a preservar el gasto cardíaco frente a la vasoconstricción, al menos en el rango de dosis bajo.</p>
+            <dl class="kv-row"><dt>Dosis</dt><dd>Infusión continua (sin dosis de carga) iniciando a 5 μg/min (0,05 μg/kg/min), titulando cada 5 min. Rango habitual en estudios de shock cardiogénico: 5-30 μg/min (0,05-0,5 μg/kg/min).</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Terapia inotrópica</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">La terapia vasopresora no alivia el fallo de bomba cardíaca, y puede agravarlo — por eso se añaden habitualmente fármacos que aumentan la fuerza contráctil (inotrópicos) a la terapia vasopresora. La terapia inotrópica está <span class="hl-rojo">contraindicada</span> en shock cardiogénico por obstrucción dinámica del tracto de salida del VI.</p>
+
+            <p class="section-label" style="margin-top:12px;">Tabla 16.3 — Agentes inotrópicos para shock cardiogénico</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table">
+                <thead><tr><th>Agente</th><th>Régimen de dosis y comentarios</th></tr></thead>
+                <tbody>
+                    <tr><td>Dobutamina</td><td>Iniciar a 3-5 μg/kg/min, incrementar en pasos de 3-5 μg/kg/min si es necesario. Dosis habitual: 3-20 μg/kg/min. Desventaja principal: aumento de la frecuencia cardíaca.</td></tr>
+                    <tr><td>Milrinona</td><td>Dosis inicial 50 μg/kg (en 10 min), seguida de infusión de 0,375-0,75 μg/kg/min (máx. 1,13 mg/kg/día). Ajuste por insuficiencia renal (ClCr 50→0,43 μg/kg/min · 40→0,38 · 30→0,33 · 20→0,28). Desventaja principal: riesgo de hipotensión.</td></tr>
+                    <tr><td>Levosimendán</td><td>Dosis inicial 12 μg/kg (en 10 min), seguida de infusión de 0,1 μg/kg/min (aumentable a 0,2 tras 1h si es necesario). Vida media larga (80h). Aprobado en ~60 países, no en EE. UU.</td></tr>
+                </tbody>
+            </table>
+            </div>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Dobutamina</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">El inotrópico más usado en shock cardiogénico — catecolamina sintética que estimula receptores β₁ cardíacos, aumentando tanto el volumen sistólico como la frecuencia cardíaca. También tiene efectos vasodilatadores leves, pero no reduce la PA porque el efecto vasodilatador se compensa con el aumento del volumen sistólico cardíaco — esta capacidad de preservar (y a veces aumentar) la PA es su principal ventaja frente a otros inotrópicos. Desventajas: aumento de FC (habitualmente 5-15 lpm, puede superar 30 lpm) y de consumo miocárdico de O₂ — cambios asociados a un aumento del trabajo cardíaco, deletéreo tanto en el IAM agudo como en el miocardio ya fallido.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Milrinona</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Inhibidor de la fosfodiesterasa que actúa como inotrópico al inhibir la degradación del AMPc, potenciando el influjo de calcio mediado por AMPc en los miocitos cardíacos. También actúa como vasodilatador, promoviendo aún más el volumen sistólico cardíaco — pero sus acciones vasodilatadoras pueden producir hipotensión problemática, la principal desventaja en shock cardiogénico. Su semivida de eliminación (2,5h) se prolonga significativamente en insuficiencia renal, con ajuste de dosis recomendado si el aclaramiento de creatinina es &lt;50 mL/min/1,73m². Los efectos inotrópicos son comparables a los de la dobutamina, pero con menor riesgo de taquicardia problemática — pese a este menor riesgo, el riesgo significativo de hipotensión limita su popularidad en shock cardiogénico. Más apropiada para el manejo de la IC descompensada sin hipotensión.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Levosimendán</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Aumenta la contractilidad cardíaca sensibilizando los miofilamentos cardíacos al calcio, y también promueve vasodilatación al facilitar el influjo de potasio en el músculo liso vascular. Especialmente atractivo en shock cardiogénico relacionado con infarto porque dilata las arterias coronarias y no estimula el consumo miocárdico de O₂ — esto podría explicar por qué estudios que comparan dobutamina con levosimendán muestran un beneficio de mortalidad con levosimendán. Sin embargo, existe riesgo de hipotensión, una desventaja. Popular en Europa y Sudamérica desde su introducción en 2000, pero no aprobado para uso en EE. UU.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Carga de trabajo cardíaco</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">El manejo farmacológico del shock cardiogénico tiene la desventaja de aumentar el trabajo cardíaco (los vasopresores aumentan la poscarga del VI, los inotrópicos aumentan la contractilidad y pueden aumentar la FC) — este aumento de trabajo es contraproducente en el miocardio ya fallido, y parece improbable que facilite ninguna mejora en la función cardíaca "nativa". Los dispositivos de soporte mecánico (Ficha VIII), en cambio, están diseñados para reducir el trabajo cardíaco — así que es importante <span class="hl-rojo">evitar retrasos en pasar a soporte mecánico si no hay evidencia de mejoría rápida</span> durante el soporte farmacológico.</p>
+        </div>
+
+        <!-- ===== FICHA VIII: SOPORTE CIRCULATORIO MECÁNICO ===== -->
+        <div id="mc-soporte-mecanico" class="tab-content">
+            <h3 style="color: var(--accent-purple);">Soporte circulatorio mecánico</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Marik PE. <em>Handbook of Evidence-Based Critical Care</em>, Cap. 16.</p>
+
+            <p style="font-size:0.85rem; color:var(--text-dim);">El soporte circulatorio mecánico (MCS) se reserva generalmente para casos refractarios de shock cardiogénico, donde se espera una mejoría de la función cardíaca (típicamente tras un IAM o cirugía cardíaca), o donde se planea otra intervención (ej. cirugía de bypass).</p>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🎈 Balón de contrapulsación intraaórtico (IABP)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <p style="margin:0 0 6px;">La forma más antigua de MCS (introducida en los años 60), pese a la evidencia de que no mejora la supervivencia — comparaciones del IABP con otras formas de MCS tampoco muestran mejora en la supervivencia con ninguno de los métodos (aparente testimonio de todo el enfoque de soporte mecánico en shock cardiogénico: hay pacientes individuales que se benefician del MCS, pero es a menudo difícil predecir quién lo hará antes de la intervención). Es la forma de MCS más disponible en hospitales fuera de grandes centros terciarios, pero es solo una medida temporal. <strong>Contraindicado</strong> en insuficiencia valvular aórtica o disección aórtica.</p>
+                        <p style="margin:0 0 6px;"><strong>Método:</strong> balón de poliuretano elongado insertado por vía percutánea en la arteria femoral, avanzado hasta situarse justo por debajo del origen de la subclavia izquierda. Una bomba conectada al balón usa helio (gas de baja densidad) para inflarlo/desinflarlo rápidamente (volumen de inflado ~35-40 mL). El inflado empieza al inicio de la diástole (justo tras el cierre de la válvula aórtica — la onda R del ECG es un disparador habitual); el desinflado ocurre al inicio de la sístole ventricular, justo antes de que se abra la válvula aórtica (durante la contracción isovolumétrica).</p>
+                        <p style="margin:0;">El inflado durante la diástole aumenta la presión diastólica pico (aumenta el flujo coronario, predominantemente diastólico) y también aumenta la PAM (aumenta el flujo sistémico). El desinflado crea un efecto de succión que reduce la presión en la aorta cuando se abre la válvula aórtica — reduciendo la poscarga del VI y aumentando el volumen sistólico. Así, el IABP reduce el trabajo cardíaco mientras aumenta el flujo coronario y sistémico.</p>
+                        <p style="margin:6px 0 0; font-size:0.8rem; color:var(--text-muted);"><strong>Complicaciones:</strong> isquemia de la extremidad (principal preocupación — trombosis in situ en el sitio de inserción del catéter, o lesión aortoilíaca), pérdida de pulsos distales sin pérdida de función sensitivomotora (no exige retirar el dispositivo), pérdida de función sensitivomotora (exige retirada inmediata + posible cirugía), septicemia, rotura del balón, neuropatía periférica, pseudoaneurisma. Fiebre en 50% de los pacientes, bacteriemia en 15%.</p>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🌀 Catéteres Impella®</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <p style="margin:0 0 6px;">Proporcionan asistencia de flujo para el gasto ventricular. Usados principalmente como dispositivos de asistencia del ventrículo izquierdo (LVAD), aunque también hay un catéter diseñado para asistir el ventrículo derecho (un RVAD).</p>
+                        <p style="margin:0 0 6px;"><strong>Método:</strong> equipados con una bomba centrífuga miniaturizada (aspas rotatorias "de hélice" que crean un flujo no pulsátil), insertada por vía percutánea en una arteria femoral y avanzada hasta el ventrículo izquierdo (un extremo tipo "pigtail" permite el avance seguro). La bomba mueve sangre del ventrículo izquierdo a la aorta proximal, a tasas de flujo de 2,5-5,5 L/min (varía según el catéter). Algunos dispositivos monitorizan el gasto cardíaco nativo y ajustan automáticamente el flujo de la bomba para alcanzar un gasto cardíaco total preseleccionado.</p>
+                        <p style="margin:0;">Efectos hemodinámicos similares al IABP: descarga el VI y aumenta el gasto cardíaco, mientras también aumenta el flujo coronario. No ha mostrado ventaja de supervivencia sobre el IABP en shock cardiogénico relacionado con infarto — su mayor ventaja está en pacientes con fallo ventricular izquierdo terminal, donde pueden implantarse para uso a largo plazo. Contraindicados en enfermedad/prótesis valvular aórtica y en trombo del VI.</p>
+                        <p style="margin:6px 0 0; font-size:0.8rem; color:var(--text-muted);"><strong>Complicaciones:</strong> similares en tipo al IABP, pero con más sangrado mayor e isquemia de extremidad. Incidencia de hemólisis significativa (5-10%) mayor que con otras formas de soporte mecánico.</p>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🫁 ECMO veno-arterial (VA-ECMO)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <p style="margin:0 0 6px;">La oxigenación por membrana extracorpórea (ECMO) está diseñada para dar soporte tanto al flujo circulatorio como al intercambio gaseoso pulmonar. El ECMO VA se usa en shock cardiogénico refractario asociado a IAM y cirugía cardíaca, y va ganando popularidad. Ofrece ventajas: soporte biventricular completo (solo igualado combinando catéteres Impella de VD y VI), y capacidad de soportar oxigenación y eliminación de CO₂ — ventajoso en fallo respiratorio (complicación frecuente del shock cardiogénico). <span class="hl-verde">El ECMO VA es el método de soporte mecánico preferido en shock cardiogénico asociado a fallo respiratorio.</span></p>
+                        <p style="margin:0 0 6px;"><strong>Método:</strong> acceso vascular por canulación percutánea de arteria y vena femorales. El catéter venoso femoral se avanza por la vena cava inferior hasta situarse cerca de la aurícula derecha. La sangre pasa por una bomba centrífuga (genera las presiones y tasas de flujo deseadas) y luego por un oxigenador de membrana, antes de calentarse a 37°C y devolverse por el catéter de arteria femoral. El flujo retrógrado por la aorta busca alcanzar el arco aórtico para mejorar el flujo sanguíneo cerebral. Las tasas de flujo varían según el gasto cardíaco nativo del paciente, pero pueden alcanzar 5-6 L/min para soporte circulatorio completo. Como en el resto de formas de soporte mecánico, se necesita anticoagulación plena.</p>
+                        <p style="margin:0;"><strong>Poscarga del VI:</strong> el ECMO VA tiene un problema no compartido por otras formas de soporte mecánico — el flujo retrógrado en la aorta aumenta la poscarga del VI, que puede ser lo bastante grave como para reducir el gasto del VI y causar edema pulmonar agudo. Abordajes para este problema: combinar IABP o catéteres Impella con el ECMO VA para reducir la poscarga del VI, y drenar sangre del ventrículo izquierdo para reducir la presión telediastólica (conocido como "venteo").</p>
+                        <p style="margin:6px 0 0; font-size:0.8rem; color:var(--text-muted);"><strong>Complicaciones:</strong> variadas y considerables — sangrado mayor (41%), sepsis (30%), isquemia de extremidad (17%), síndrome compartimental de extremidad inferior (10%), ictus (6%), amputación de extremidad inferior (5%).</p>
+                    </div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Resultados</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">El mayor registro de pacientes con ECMO ha reportado una tasa de supervivencia al alta hospitalaria del 42% cuando se usa VA-ECMO para shock cardiogénico. Las comparaciones de supervivencia entre VA-ECMO y otras formas de soporte mecánico (IABP o LVAD) han dado resultados inconsistentes: mejor supervivencia con VA-ECMO en algunos reportes, mejor con catéter Impella en otros.</p>
+
+            <p class="section-label" style="margin-top:16px;">🧭 Selección de dispositivo</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">La elección del dispositivo de soporte mecánico dependerá en gran medida de la disponibilidad y de las preferencias individuales de cada hospital.</p>
+            <div class="form-group">
+                <label for="mc-dispositivo-select">¿Qué dispositivo quieres consultar?</label>
+                <select id="mc-dispositivo-select" class="mc-dispositivo-select">
+                    <option value="">— elige un dispositivo —</option>
+                    <option value="iabp">Balón de contrapulsación (IABP)</option>
+                    <option value="impella">Catéter Impella</option>
+                    <option value="ecmo">ECMO veno-arterial</option>
+                </select>
+            </div>
+            <div id="mc-dispositivo-resultado" class="result-box" style="display:none;"></div>
+            <p style="font-size:0.85rem; color:var(--text-dim); margin-top:12px;">VA-ECMO es el método de elección si el shock cardiogénico se acompaña de fallo respiratorio, y hay una tendencia creciente hacia el VA-ECMO como soporte mecánico general. Sin embargo, el ECMO no está disponible en muchos hospitales, y el soporte mecánico con IABP o un LVAD puede ser la única opción (los pacientes pueden entonces trasladarse para ECMO si no hay mejoría). Los catéteres Impella se prefieren al IABP en muchos hospitales, aunque los resultados parecen ser similares con ambos dispositivos.</p>
+
+            <p class="section-label" style="margin-top:16px;">Resumen práctico</p>
+            <ul class="term-chips">
+                <li>El manejo del shock cardiogénico busca "ganar tiempo" hasta que el corazón sane de un insulto agudo, o hasta que se realice otra intervención definitiva</li>
+                <li>El soporte farmacológico es una necesidad inmediata, pero aumenta el trabajo cardíaco y es contraproducente</li>
+                <li>Los dispositivos mecánicos pueden "descargar" el ventrículo (IABP), dar asistencia de flujo al gasto ventricular (Impella), o dar soporte de intercambio gaseoso y flujo circulatorio (VA-ECMO)</li>
+                <li>VA-ECMO es el método de elección si el shock cardiogénico se acompaña de fallo respiratorio</li>
+                <li>Evitar retrasos en el inicio del soporte mecánico optimiza los resultados — el soporte iniciado tras la aparición de fallo multiorgánico se ha descrito como un "puente a ningún sitio"</li>
+            </ul>
+        </div>
+
+        <!-- ===== FICHA IX: FISIOPATOLOGÍA DE LA INFLAMACIÓN — ROS ===== -->
+        <div id="mc-inflamacion-ros" class="tab-content">
+            <h3 style="color: var(--accent-green);">Fisiopatología de la inflamación: ROS y disfunción de órganos</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Marik PE. <em>Handbook of Evidence-Based Critical Care</em>, Cap. 17 "Inflammatory Shock Syndromes".</p>
+
+            <p style="font-size:0.85rem; color:var(--text-dim);">La respuesta inflamatoria está diseñada para eliminar amenazas externas y "limpiar"/curar tejidos dañados — no suele ser dañina para el huésped, pero una inflamación grave o persistente puede producir lesión tisular extensa. La lesión inflamatoria del tejido es especialmente problemática porque puede autoperpetuarse (la lesión inflamatoria dispara otra respuesta inflamatoria, que produce más lesión, y así sucesivamente) — esta condición de lesión inflamatoria progresiva se conoce como <strong>"inflamación maligna"</strong>, y juega un papel central en el fallo multiorgánico que puede complicar el shock séptico.</p>
+
+            <p class="section-label">Activación de neutrófilos</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">En la fase inicial de la respuesta inflamatoria, los neutrófilos circulantes experimentan un aumento precipitado (hasta 20 veces) del consumo celular de O₂, que dura 15-20 minutos — el <strong>"estallido respiratorio"</strong>, un nombre engañoso porque ese consumo de O₂ no se dedica a producir moléculas de ATP de alta energía (respiración celular); en cambio, el estallido respiratorio genera derivados químicos nocivos del oxígeno usados para matar microbios invasores.</p>
+
+            <p class="section-label" style="margin-top:16px;">Figura 17.1 — Secuencia de reacciones de la activación de neutrófilos</p>
+            <div class="algo-flow">
+                <div class="algo-step"><span class="algo-num">1</span><div class="algo-text">La enzima NADPH oxidasa de la membrana celular se activa e inicia una serie de reacciones que añaden electrones (uno a la vez) al oxígeno.</div></div>
+                <div class="algo-step"><span class="algo-num">2</span><div class="algo-text">O₂ → <strong>radical superóxido</strong> (O₂·) → + 2H⁺ → <strong>peróxido de hidrógeno</strong> (H₂O₂).</div></div>
+                <div class="algo-step"><span class="algo-num">3</span><div class="algo-text">H₂O₂ se bifurca en 2 vías: (a) + Fe²⁺/Fe³⁺ → <strong>radical hidroxilo</strong> (HO·) → + 2H⁺ → 2H₂O; (b) + Cl⁻ vía mieloperoxidasa → H₂O + <strong>hipoclorito</strong> (OCl⁻, ingrediente activo de la lejía doméstica).</div></div>
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Estas "especies reactivas de oxígeno" (ROS) se almacenan en gránulos citoplasmáticos y se liberan durante la degranulación del neutrófilo. Un radical es un átomo o molécula con un electrón sin aparear — extremadamente reactivo. La <strong>enfermedad granulomatosa crónica</strong> (incidencia 1:200.000 nacimientos en EE. UU.) es un trastorno genético raro en el que la NADPH oxidasa de los neutrófilos es defectuosa, y estos pacientes sufren infecciones bacterianas y fúngicas recurrentes y potencialmente mortales — demostración clara del papel de las ROS en la erradicación de microorganismos infecciosos.</p>
+
+            <p class="section-label" style="margin-top:16px;">Lesión oxidante</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Las ROS también son capaces de dañar los tejidos del huésped, incluidas la matriz extracelular, las células parenquimatosas, y el endotelio y su glucocálix protector. Los efectos oxidantes de las ROS pueden dañar todos los componentes celulares vitales (lípidos de membrana, todo tipo de proteínas celulares, moléculas de ADN). Esta <strong>lesión oxidante</strong> ocurre cuando la actividad de las ROS supera las acciones protectoras de los antioxidantes endógenos — una condición conocida como <strong>estrés oxidante</strong>.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Los tejidos inflamados se inundan de ROS, y el radical superóxido se ha implicado como fuente del dolor inflamatorio. La lesión tisular oxidante suele aparecer cuando la inflamación es persistente o progresiva (posiblemente por agotamiento de antioxidantes protectores). Además, el peróxido de hidrógeno se mueve libremente por los tejidos y puede entrar al torrente sanguíneo y alcanzar órganos distantes, donde puede entrar en células y generar radicales hidroxilo al encontrar hierro en estado reducido (Fe²⁺) — un posible mecanismo del fallo multiorgánico que puede desarrollarse en pacientes con lesión pulmonar inflamatoria, o sepsis, o tras la reperfusión diseminada que sigue a un paro cardíaco.</p>
+
+            <p class="section-label" style="margin-top:16px;">Disfunción endotelial</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Como los neutrófilos, las células endoteliales están equipadas con NADPH oxidasa, y la ROS resultante ayuda a promover la adhesión de leucocitos al endotelio y su migración a los tejidos. Sin embargo, la inflamación también promueve disfunción endotelial por estrés oxidante, que lleva a un aumento de la permeabilidad capilar y formación de edema.</p>
+            <dl class="kv-row"><dt>Reacción clave</dt><dd>O₂· + NO· → ONOO⁻ — el radical superóxido reacciona con el óxido nítrico (NO·) para generar <strong>peroxinitrito</strong> (ONOO⁻). Esta reacción no solo elimina los efectos beneficiosos del óxido nítrico en promover el flujo sanguíneo circulatorio, también genera una potente toxina oxidativa (peroxinitrito) capaz de producir lesión tisular extensa.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Tabla 17.1 — Lesión inflamatoria de órganos en el paciente crítico</p>
+            <table class="data-table">
+                <thead><tr><th>Sistema/órgano</th><th>Condición clínica</th></tr></thead>
+                <tbody>
+                    <tr><td>Cerebro</td><td>Encefalopatía séptica</td></tr>
+                    <tr><td>Médula ósea</td><td>Anemia de la enfermedad crítica</td></tr>
+                    <tr><td>Sistema circulatorio</td><td>Shock séptico, shock anafiláctico</td></tr>
+                    <tr><td>Riñones</td><td>Lesión renal aguda</td></tr>
+                    <tr><td>Pulmones</td><td>Síndrome de dificultad respiratoria aguda</td></tr>
+                    <tr><td>Nervios periféricos</td><td>Polineuropatía del paciente crítico</td></tr>
+                    <tr><td>Músculo esquelético</td><td>Miopatía del paciente crítico, rabdomiólisis</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size:0.85rem; color:var(--text-dim);">La morbimortalidad de la lesión inflamatoria de órganos se relaciona no solo con la gravedad de la afectación de un órgano individual, sino también con el <strong>número</strong> de órganos implicados: encuestas de EE. UU. y Europa muestran una relación directa entre la mortalidad y el número de fallos orgánicos relacionados con inflamación (mortalidad de ~22-24% con 1 órgano fallado, subiendo a 74-85% con ≥4 órganos).</p>
+
+            <p class="section-label" style="margin-top:16px;">Una palabra final: inflamación (no hipoxia) como causa principal de muerte en UCI</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">El shock séptico es la causa líder de muerte intrahospitalaria en EE. UU. (Ficha X), y la fuente del fallo orgánico en shock séptico es la disfunción mitocondrial (no la oxigenación tisular inadecuada), cuyo origen es, a su vez, la inflamación. Esto crea dudas sobre el énfasis habitual en promover la oxigenación tisular (ej. con O₂ inhalado y transfusiones de hematíes) en el paciente crítico — dado que los efectos dañinos de la inflamación son, en gran medida, por oxidación, promover la oxigenación tisular podría tener un efecto diametralmente opuesto al que se pretende.</p>
+        </div>
+
+        <!-- ===== FICHA X: SHOCK SÉPTICO ===== -->
+        <div id="mc-shock-septico" class="tab-content">
+            <h3 style="color: var(--accent-red);">Shock séptico: definiciones y manejo</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Marik PE. <em>Handbook of Evidence-Based Critical Care</em>, Cap. 17.</p>
+
+            <p style="font-size:0.85rem; color:var(--text-dim);">La sepsis es responsable de 1 de cada 2-3 muertes intrahospitalarias en EE. UU., y de 1 de cada 5 muertes a nivel mundial. La mortalidad varía por edad y localización geográfica: en EE. UU., ~30% cuando el shock séptico está presente al ingreso, y ~50% cuando se desarrolla tras el ingreso. Pese a que se presume que la sepsis es infección, <span class="hl-rojo">la mortalidad en sepsis NO se relaciona con el organismo causal</span>, incluidos los microorganismos multirresistentes — observación consistente con la noción de que el problema principal en sepsis no es la infección en sí, sino la respuesta del huésped a la infección.</p>
+
+            <p class="section-label">Definiciones (2016, Sepsis-3)</p>
+            <ul class="term-chips">
+                <li><strong>Sepsis:</strong> infección (sospechada o confirmada) asociada a disfunción orgánica potencialmente mortal, resultado de una respuesta del huésped desregulada a la infección</li>
+                <li><strong>Shock séptico:</strong> subgrupo de sepsis caracterizado por la necesidad de soporte vasopresor y un lactato plasmático &gt;2 mmol/l</li>
+            </ul>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Estas definiciones (2016) sustituyeron a las previas (1992), que definían sepsis como una infección acompañada de respuesta inflamatoria sistémica (fiebre, leucocitosis, etc.), elevando esta última condición a un síndrome — el "síndrome de respuesta inflamatoria sistémica" (SRIS). Sin embargo, el SRIS es un hallazgo inespecífico en el paciente crítico (menos del 50% de los pacientes con SRIS tienen una infección documentada), por lo que el SRIS se abandonó como criterio diagnóstico de sepsis.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim)"><strong>Un mejor entendimiento:</strong> la presencia de infección es un rasgo central en la definición de sepsis y shock séptico. Sin embargo, a menudo no hay infección documentada en casos de sepsis — en una encuesta de 2,5 millones de pacientes con sepsis y shock séptico, no hubo infección documentada en el 70% de los casos. Dado que la sospecha clínica de infección en casos de sepsis se basa típicamente en la presencia de una respuesta inflamatoria sistémica (fiebre, leucocitosis, etc.), parece probable que <em>la sepsis sea una respuesta del huésped desregulada a la inflamación, no a la infección</em>.</p>
+
+            <p class="section-label" style="margin-top:16px;">Fisiopatología</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Sea o no una respuesta desregulada a la infección o a la inflamación, el shock séptico se distingue de la sepsis por la presencia de inestabilidad hemodinámica y disfunción mitocondrial.</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💓 Alteraciones hemodinámicas</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <p style="margin:0 0 6px;">El problema hemodinámico principal es la hipotensión por vasodilatación sistémica — atribuida a un aumento en la producción de óxido nítrico por el endotelio vascular, aunque la inactivación del óxido nítrico por estrés oxidante (ver Ficha IX, O₂·+NO·→ONOO⁻) sugiere que hay otros factores implicados.</p>
+                        <p style="margin:0 0 6px;">La lesión oxidante en el endotelio vascular lleva a extravasación de fluidos e hipovolemia, que agrava la hipotensión.</p>
+                        <p style="margin:0 0 6px;">Las citocinas proinflamatorias promueven disfunción cardíaca (tanto sistólica como diastólica), pero el gasto cardíaco suele estar aumentado como resultado de la taquicardia y de un descenso de la poscarga del VI (por la vasodilatación) — el gasto cardíaco empieza a declinar en los estadios avanzados del shock, lo que conlleva mal pronóstico.</p>
+                        <p style="margin:0;">Pese al gasto cardíaco aumentado, el flujo sanguíneo esplácnico típicamente se reduce en shock séptico — lo que puede llevar a disrupción de la mucosa intestinal y translocación de patógenos entéricos a la circulación sistémica, agravando el problema.</p>
+                        <p style="margin:6px 0 0; font-size:0.85rem;">Por el gasto cardíaco elevado y la vasodilatación periférica, el shock séptico también se conoce como <em>"shock hiperdinámico"</em> o <em>"caliente"</em>.</p>
+                    </div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔋 Disfunción mitocondrial</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">
+                        <p style="margin:0 0 6px;">La disfunción orgánica en sepsis y shock séptico se atribuye a un defecto en la producción de moléculas de ATP de alta energía en las mitocondrias, condición atribuida a lesión oxidativa en la cadena de transporte de electrones y a la inhibición mediada por citocinas de la piruvato deshidrogenasa (la enzima que facilita la entrada del piruvato a la mitocondria).</p>
+                        <p style="margin:0 0 6px;">Este descenso en el uso mitocondrial de O₂ podría explicar la observación de que la PO₂ tisular está <strong>aumentada</strong> en el músculo esquelético de pacientes con sepsis grave (medida real de músculo del antebrazo: ~13 mmHg en voluntarios sanos vs. ~33 mmHg en sepsis grave, p&lt;0,05) — sin embargo, este descenso del consumo mitocondrial de O₂ no es consistente con el aumento observado en el consumo de O₂ de todo el cuerpo en sepsis. Esta discrepancia se resuelve proponiendo que el aumento del consumo de O₂ en sepsis es un reflejo del marcado aumento de consumo de O₂ que ocurre durante la activación de neutrófilos (Ficha IX).</p>
+                        <p style="margin:0; font-size:0.85rem;"><strong>Implicaciones:</strong> (1) como los niveles tisulares de O₂ no están alterados en shock séptico, el uso liberal de O₂ suplementario para promover la oxigenación tisular no está justificado, y podría ser dañino (por promover estrés oxidante); (2) el aumento del lactato plasmático en shock séptico no es el resultado de una oxigenación tisular inadecuada — el paradigma emergente es que la producción de lactato aumenta en periodos de estrés metabólico, donde el lactato sirve como fuente de energía alternativa.</p>
+                    </div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Monitorización</p>
+            <ul class="term-chips">
+                <li>El menor uso mitocondrial de O₂ se asocia a un descenso en la extracción de O₂ de la microcirculación — la ScvO₂ estará inapropiadamente aumentada, y engañosa como medida de la adecuación del aporte de O₂</li>
+                <li>El gap de PCO₂ no está influido por la oxigenación sistémica, y puede ser útil para identificar hipoperfusión tisular</li>
+                <li>Aunque el lactato no es un marcador de metabolismo anaeróbico en shock séptico, sus niveles plasmáticos tienen valor pronóstico, y su normalización es un objetivo importante del manejo</li>
+            </ul>
+
+            <p class="section-label" style="margin-top:16px;">Tabla 17.2 — Manejo inicial del shock séptico</p>
+            <table class="data-table">
+                <thead><tr><th>Terapia</th><th>Recomendaciones</th></tr></thead>
+                <tbody>
+                    <tr><td>Infusión de volumen</td><td>30 mL/kg (peso corporal ideal) de un fluido cristaloide, infundidos en las primeras 3h desde la presentación.</td></tr>
+                    <tr><td>Terapia vasopresora</td><td>Puede iniciarse por una vena periférica proximal a la fosa antecubital. Comenzar con norepinefrina, titulando dosis para alcanzar PAM ≥65 mmHg. Si la dosis de norepinefrina necesaria es 0,25-0,5 μg/kg/min, añadir vasopresina. Si necesario, añadir epinefrina como 3er vasopresor.</td></tr>
+                    <tr><td>Terapia con corticosteroides</td><td>Si la dosis de norepinefrina es &gt;0,25 μg/kg/min, dar hidrocortisona IV 50 mg cada 6h.</td></tr>
+                    <tr><td>Terapia antimicrobiana</td><td>Iniciar en la primera hora de presentación. Obtener cultivos apropiados antes de la primera dosis de antibiótico.</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Reanimación con volumen</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Debe ser la intervención inicial en cualquier paciente con un síndrome de shock. El régimen de fluidos recomendado en shock séptico es 30 mL/kg (peso corporal ideal) de un fluido cristaloide, infundidos en las primeras 3 horas del diagnóstico. La necesidad de bolos repetidos de fluidos debería guiarse por una evaluación de la respuesta a fluidos. La infusión liberal de fluidos es habitual en shock séptico, pero la acumulación de fluidos tiene un impacto negativo en la supervivencia — por eso, tras el periodo inicial de reanimación con volumen, la infusión diaria de fluidos debería ajustarse para igualar las pérdidas diarias de fluidos, lo que aumentará la probabilidad de un desenlace exitoso.</p>
+
+            <p class="section-label" style="margin-top:16px;">Vasopresores</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Si la hipotensión persiste tras la reanimación inicial con volumen, debe iniciarse la infusión de un vasoconstrictor (vasopresor). Si es necesario, las infusiones de vasopresor pueden iniciarse por una vena periférica proximal a la fosa antecubital — se recomienda la transición a acceso venoso central tan pronto como sea posible, aunque las infusiones de vasopresor por catéteres de línea media han continuado hasta 7 días sin daño. El objetivo de la terapia vasopresora es una PAM ≥65 mmHg.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim)"><em>La norepinefrina es el vasopresor inicial de elección en shock séptico.</em> Si la hipotensión persiste pese a una dosis de norepinefrina de 0,25-0,5 μg/kg/min (18-35 μg/min en un adulto de 70 kg), debe añadirse vasopresina, y si la hipotensión es refractaria a norepinefrina y vasopresina, la epinefrina debe considerarse como 3er vasopresor.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);"><strong>Comentarios:</strong> la norepinefrina tiene efectos inmunosupresores (estudios muestran que la producción de citocinas proinflamatorias se suprime durante infusiones de norepinefrina, tanto en animales como en humanos) — el significado clínico de este efecto es incierto, pero levanta una señal de alarma sobre esta recomendación. Además, la recomendación de múltiples vasopresores en shock refractario a vasopresores debería cuestionarse, ya que no hay evidencia convincente de que añadir vasopresina o un tercer vasopresor mejore los desenlaces en shock séptico.</p>
+
+            <p class="section-label" style="margin-top:16px;">Corticoides</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Los corticoides tienen 2 acciones potencialmente beneficiosas en shock séptico: actividad antiinflamatoria y facilitación de la respuesta vasoconstrictora a las catecolaminas. Sin embargo, innumerables estudios desde los años 60 han fracasado en producir evidencia convincente de que los corticoides mejoren los desenlaces en shock séptico. Aun así, los esteroides continúan siendo populares, como refleja la recomendación de la guía más reciente, basada en un único metaanálisis que mostró que los corticoides acortan la resolución del shock séptico (1,5 días), pero sin mejorar la tasa de supervivencia. Recomendación: hidrocortisona IV en dosis de 50 mg cada 6h (200 mg diarios) para pacientes con shock séptico que reciben norepinefrina o epinefrina a dosis ≥0,25 μg/kg/min; sin recomendación firme sobre duración (la mayoría de estudios clínicos usan un periodo de tratamiento de ~7 días).</p>
+
+            <p class="section-label" style="margin-top:16px;">Terapia antimicrobiana</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Se considera la piedra angular del manejo del shock séptico. La recomendación actual es que la terapia antimicrobiana debe comenzar en la primera hora de la presentación — esto no deja mucho tiempo para identificar una infección, pero es importante obtener cultivos apropiados (sangre, orina, etc.) antes de la primera dosis de antimicrobiano.</p>
+            <ul class="term-chips">
+                <li>Al menos 2 sets de hemocultivos, usando 2 sitios de venopunción distintos (uno puede obtenerse de un catéter permanente)</li>
+                <li>2 sets detectan ~90% de las infecciones del torrente sanguíneo; 3 sets, cerca del 98%</li>
+                <li>Volumen recomendado por set de hemocultivo: al menos 20 mL</li>
+                <li>Cobertura antibiótica empírica de amplio espectro (ej. piperacilina/tazobactam), cobertura para SARM (vancomicina o daptomicina) si historia previa de MRSA o prevalencia hospitalaria alta — descontinuable si todos los cultivos son negativos, incluido un hisopo nasal</li>
+                <li>Si se sospecha organismo multirresistente: 2 agentes antimicrobianos con cobertura gramnegativa (ej. cefepima + piperacilina/tazobactam)</li>
+                <li>Descontinuar antibióticos si todos los cultivos son negativos y no hay otra evidencia de infección</li>
+            </ul>
+
+            <p class="section-label" style="margin-top:16px;">Objetivos</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Los objetivos inmediatos del manejo son similares a los del shock clínico en general (Ficha I, Tabla 14.5): mejoras en la perfusión tisular (ej. gap de PCO₂ &lt;6 mmHg) y en la función de órganos diana (ej. aumento de la diuresis a &gt;0,5 mL/kg/h), y normalización del lactato plasmático (&lt;2 mmol/l).</p>
+        </div>
+
+        <!-- ===== FICHA XI: SÍNDROME DE SHOCK TÓXICO ===== -->
+        <div id="mc-shock-toxico" class="tab-content">
+            <h3 style="color: var(--accent-yellow);">Síndrome de shock tóxico</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Marik PE. <em>Handbook of Evidence-Based Critical Care</em>, Cap. 17.</p>
+
+            <p style="font-size:0.85rem; color:var(--text-dim);">El síndrome de shock tóxico (TSS) es una forma especializada de shock séptico, causada por cepas productoras de toxinas de <em>Staphylococcus aureus</em> y <em>Streptococcus pyogenes</em> (estreptococo del grupo A), caracterizada por un fallo multiorgánico rápidamente progresivo.</p>
+
+            <p class="section-label">Patogénesis</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Las toxinas liberadas por los microorganismos responsables son capaces de activar linfocitos T a escala masiva, creando una <strong>"tormenta de citocinas"</strong> capaz de una lesión inflamatoria generalizada. La culminación de este proceso es fallo multiorgánico y coagulación intravascular diseminada (CID). Los cambios hemodinámicos en TSS son similares a los del shock séptico, con hipotensión por vasodilatación sistémica. La disrupción del endotelio es pronunciada en TSS, y la extravasación de fluidos resultante puede llevar a hipovolemia profunda.</p>
+            <ul class="term-chips">
+                <li><strong>TSS estafilocócico:</strong> puede surgir de colonización o infección invasiva, con organismo sensible o resistente a meticilina (aunque el sensible se implica con más frecuencia). ~40% de los casos ocurren durante la menstruación (presumiblemente por colonización vaginal de estafilococos productores de toxina, combinada con disrupción de la mucosa vaginal por el uso de tampones). Casos no menstruales pueden surgir de infecciones de partes blandas como infecciones de heridas quirúrgicas y abscesos subcutáneos. Sin infección identificable en ~35% de los casos</li>
+                <li><strong>TSS estreptocócico:</strong> complicación de infecciones estreptocócicas del grupo A invasivas, más notablemente fascitis necrotizante, miositis, y sepsis posparto (fiebre puerperal). Sin infección identificable en casi la mitad de los casos</li>
+            </ul>
+
+            <p class="section-label" style="margin-top:16px;">Tabla 17.3 — Rasgos comparativos de los síndromes de shock tóxico</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table">
+                <thead><tr><th>Rasgo</th><th>TSS estafilocócico</th><th>TSS estreptocócico</th></tr></thead>
+                <tbody>
+                    <tr><td>Fuentes notables</td><td>Menstruación (tampones), heridas quirúrgicas, sin fuente (35%)</td><td>Fascitis necrotizante, sepsis posparto, sin fuente (45%)</td></tr>
+                    <tr><td>Hemocultivos positivos</td><td>&lt;5% de los casos</td><td>60% de los casos</td></tr>
+                    <tr><td>Terapia antibiótica</td><td>MSSA: cefazolina + clindamicina · MRSA: vancomicina + clindamicina</td><td>Penicilina en dosis alta + clindamicina</td></tr>
+                    <tr><td>Tasa de mortalidad</td><td>TSS menstrual: &lt;2% · TSS no menstrual: 6%</td><td>35%</td></tr>
+                </tbody>
+            </table>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Presentación clínica</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">El TSS típicamente empieza con un cuadro pseudogripal (fiebre, mialgias, letargia), a menudo asociado a diarrea y un exantema eritematoso difuso (parece una quemadura solar) que afecta palmas y plantas (la descamación de la piel aparece a las 2-3 semanas). Esto progresa en 48 horas a hipotensión e implicación de múltiples órganos: SNC (alteración mental), pulmones (síndrome de dificultad respiratoria aguda), riñones (lesión renal aguda), hígado (transaminasas y bilirrubina elevadas), músculo esquelético (rabdomiólisis), y sistema hematopoyético (CID). La cianosis de extremidades distales puede aparecer, y la extravasación de fluidos a través de capilares permeables puede producir edema sin fóvea.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Las infecciones de partes blandas por estreptococo del grupo A pueden producir dolor grave (habitualmente en extremidades, abdomen o pelvis) sin hallazgos asociados en el examen físico — el dolor desproporcionado al examen debe elevar la sospecha de una infección estreptocócica profunda.</p>
+
+            <p class="section-label" style="margin-top:16px;">Diagnóstico</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Cualquier caso de shock séptico asociado a exantema eritematoso y fallo multiorgánico de inicio rápido debe elevar la sospecha de TSS, sobre todo si hay asociación con menstruación o embarazo — sin embargo, el exantema puede ser sutil y fugaz, y el TSS puede confundirse con un caso grave de shock séptico con fallo multiorgánico. Los hemocultivos son positivos en solo el 5% de los casos de TSS estafilocócico, por lo que el diagnóstico se apoya fuertemente en la asociación con la menstruación y en cualquier evidencia de infección estafilocócica (ej. abscesos subcutáneos). Los hemocultivos tienen mayor rendimiento en TSS estreptocócico (~60%). Ante sospecha de infección de partes blandas estreptocócica, la resonancia magnética puede ayudar a descubrir una fascitis encubierta, y la ecografía a pie de cama es una alternativa razonable en pacientes demasiado inestables para traslado a resonancia.</p>
+
+            <p class="section-label" style="margin-top:16px;">Manejo</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">El manejo hemodinámico del TSS es similar al descrito para shock séptico, con reanimación agresiva de volumen seguida de vasopresores si es necesario. La mayoría de pacientes con TSS también requieren intubación y ventilación mecánica.</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Terapia antimicrobiana</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La naturaleza rápidamente progresiva del TSS enfatiza la necesidad de inicio rápido de antibioterapia. Cobertura empírica de amplio espectro (ej. piperacilina/tazobactam o meropenem) más cobertura grampositiva reforzada con vancomicina, <strong>más clindamicina</strong>. La clindamicina se usa en todos los casos de TSS por su capacidad de inhibir la producción de toxina.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔪 Control de la fuente</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Componente importante del manejo. Para TSS estafilocócico: retirar tampones y dispositivos intrauterinos, erradicar la colonización nasal, drenar cualquier absceso identificado. Para TSS estreptocócico: el desbridamiento de infecciones necrotizantes de partes blandas es imperativo para un desenlace exitoso.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Resultados</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">La mayoría de los pacientes sobreviven al TSS estafilocócico: la mortalidad es &lt;2% en casos asociados a menstruación, y 6% en casos no menstruales. El TSS estreptocócico tiene muchos menos supervivientes, con una tasa de mortalidad del 35%.</p>
+        </div>
+
+        <!-- ===== FICHA XII: ANAFILAXIA Y SHOCK ANAFILÁCTICO ===== -->
+        <div id="mc-anafilaxia" class="tab-content">
+            <h3 style="color: var(--accent-blue);">Anafilaxia y shock anafiláctico</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Marik PE. <em>Handbook of Evidence-Based Critical Care</em>, Cap. 17.</p>
+
+            <dl class="kv-row"><dt>Definición</dt><dd>Síndrome agudo de disfunción multiorgánica producido por la liberación inmunogénica de mediadores inflamatorios de basófilos y mastocitos. El rasgo característico es una respuesta exagerada de inmunoglobulina E (IgE) a un antígeno externo — una <em>reacción de hipersensibilidad</em>. Involucra típicamente piel, pulmones, tracto gastrointestinal y sistema cardiovascular; desencadenantes frecuentes: fármacos (especialmente antimicrobianos), alimentos y picaduras de insecto. Al contrario de la percepción popular, las muertes por anafilaxia son raras, con una tasa de mortalidad del 0,25-0,33%.</dd></dl>
+
+            <p class="section-label">Características clínicas</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Las reacciones anafilácticas suelen aparecer a los pocos minutos de la exposición al desencadenante externo, y pueden recurrir dentro de las 72 horas de la reacción inicial (<em>anafilaxia bifásica</em>). Rasgo característico: edema e hinchazón en el órgano afectado, resultado de un aumento de la permeabilidad vascular.</p>
+
+            <p class="section-label" style="margin-top:16px;">Tabla 17.4 — Signos y síntomas de la anafilaxia</p>
+            <table class="data-table">
+                <thead><tr><th>Manifestación</th><th>Frecuencia</th></tr></thead>
+                <tbody>
+                    <tr><td>Urticaria y angioedema</td><td>60-90%</td></tr>
+                    <tr><td>Angioedema de vía aérea superior</td><td>50-60%</td></tr>
+                    <tr><td>Flushing (enrojecimiento)</td><td>45-55%</td></tr>
+                    <tr><td>Disnea, sibilancias</td><td>45-50%</td></tr>
+                    <tr><td>Hipotensión, síncope</td><td>30-35%</td></tr>
+                    <tr><td>Dolor abdominal, diarrea</td><td>25-30%</td></tr>
+                    <tr><td>Síndrome coronario agudo</td><td>4-5%</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Manifestaciones frecuentes: urticaria, angioedema subcutáneo (típicamente facial), flushing, angioedema de vía aérea superior (ej. edema laríngeo) y broncoespasmo. La manifestación más temida es la hipotensión (shock anafiláctico), y la más pasada por alto es un síndrome coronario agudo (ver abajo).</p>
+
+            <p class="section-label" style="margin-top:16px;">Insuficiencia coronaria alérgica (síndrome de Kounis)</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">La asociación de anafilaxia y síndromes coronarios agudos (el <strong>síndrome de Kounis</strong>) se atribuye a vasoespasmo coronario (73% de los casos), rotura de placa de arteria coronaria (22%) y trombosis de stent coronario (5%). Mecanismos presuntos: liberación de sustancias vasoactivas por la degranulación de mastocitos, y activación plaquetaria. El vasoespasmo coronario es el mecanismo subyacente más frecuente, y ocurre predominantemente en pacientes jóvenes sin historia de enfermedad coronaria. Los síntomas cardíacos suelen aparecer dentro de la primera hora de la reacción anafiláctica (urticaria, angioedema, broncoespasmo), y pueden incluir dolor torácico fugaz (por espasmo coronario) o infarto con elevación del ST (por rotura de placa o trombosis de stent).</p>
+
+            <p class="section-label" style="margin-top:16px;">Tratamiento</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">El tratamiento de la anafilaxia incluye un fármaco que detiene la reacción (epinefrina), y fármacos que alivian síntomas (antihistamínicos, broncodilatadores).</p>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💉 Epinefrina</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Bloquea la liberación de mediadores inflamatorios de basófilos y mastocitos sensibilizados, y es <strong>el único fármaco capaz de frenar una reacción anafiláctica en marcha</strong>. Disponible en un abanico confuso de soluciones acuosas (Tabla 17.5). La dosis óptima para anafilaxia es incierta, pero la habitual en adultos es 0,3-0,5 mg (0,3-0,5 mL de solución 1:1000) por inyección intramuscular profunda en el muslo anterolateral, repetida cada 5-15 min si es necesario. La absorción del fármaco es más lenta con inyección subcutánea. Se puede nebulizar para edema laríngeo con el régimen de la Tabla 17.5, aunque la eficacia de este régimen no está clara.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Tabla 17.5 — Soluciones acuosas de epinefrina y sus usos clínicos</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table">
+                <thead><tr><th>Dilución acuosa</th><th>Condición</th><th>Régimen de dosis</th></tr></thead>
+                <tbody>
+                    <tr><td>1:100 (10 mg/mL)</td><td>Edema laríngeo</td><td>0,25 mL (2,5 mg) en 2 mL de salino, nebulizado</td></tr>
+                    <tr><td>1:1.000 (1 mg/mL)</td><td>Anafilaxia</td><td>0,3-0,5 mL (mg) por inyección IM profunda en el muslo, cada 5-15 min según necesidad</td></tr>
+                    <tr><td>1:10.000 (0,1 mg/mL)</td><td>Asistolia o AESP</td><td>10 mL (1 mg) IV cada 3-5 min según necesidad</td></tr>
+                    <tr><td>1:100.000 (10 μg/mL)</td><td>Shock anafiláctico</td><td>Añadir 2 mL de solución 1:1000 (2 mg) a 200 mL de salino (10 μg/mL) e infundir a 5-15 μg/min</td></tr>
+                </tbody>
+            </table>
+            </div>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Glucagón</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Las acciones inhibitorias de la epinefrina sobre la degranulación de mastocitos están mediadas por receptores β-adrenérgicos, y los antagonistas de receptores β pueden atenuar o eliminar la respuesta a la epinefrina. En reacciones anafilácticas refractarias a epinefrina en pacientes que toman fármacos betabloqueantes, el glucagón puede restaurar la respuesta. Dosis: 1-5 mg IV lenta (en 5 min), seguida de infusión continua a 5-15 μg/min, titulada a la respuesta deseada. Puede desencadenar vómitos — colocar al paciente en decúbito lateral si tiene la consciencia deprimida, para limitar el riesgo de aspiración.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Agentes de segunda línea</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Se usan para alivio sintomático, y no alteran el curso de la enfermedad — se administran tras la epinefrina, y nunca deben usarse como sustituto de ella. <strong>Antihistamínicos:</strong> difenhidramina (25-50 mg VO/IM/IV) y ranitidina (50 mg IV o 150 mg VO), consideradas de eficacia equivalente pero la terapia combinada produce mejores resultados. <strong>Broncodilatadores:</strong> agonistas β₂ inhalados como albuterol para aliviar el broncoespasmo (2,5 mL de solución 0,5% nebulizada, o inhalador de dosis medida).</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Corticoides</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Han disfrutado de una popularidad prolongada en el tratamiento de reacciones de hipersensibilidad, y a veces se prefieren a la epinefrina en el manejo agudo de la anafilaxia. Sin embargo, no hay evidencia de que los corticoides sean eficaces para revertir, enlentecer, o prevenir la recurrencia de reacciones anafilácticas. Cita textual de una guía de práctica clínica sobre anafilaxia: <em>"El uso de corticoides no tiene ningún papel en el manejo agudo de la anafilaxia."</em></div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Shock anafiláctico</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">El shock anafiláctico se caracteriza por las mismas anomalías hemodinámicas descritas para el shock séptico, pero la hipotensión en shock anafiláctico puede ser más pronunciada por la pérdida exagerada de fluidos a través de capilares permeables. El manejo incluye epinefrina intravenosa y reanimación agresiva de volumen.</p>
+            <ul class="term-chips">
+                <li><strong>Epinefrina IV:</strong> sin régimen de dosis estandarizado, pero la tasa de 5-15 μg/min de la Tabla 17.5 ha demostrado eficacia. Puede precederse de un bolo de 10 μg IV, repetible periódicamente si es necesario para mantener la PAM ≥65 mmHg</li>
+                <li><strong>Reanimación de volumen:</strong> esencial, ya que hasta el 35% del volumen intravascular puede perderse a través de capilares permeables — suficiente para producir shock hipovolémico (ver Ficha III, Tabla 15.1). Puede iniciarse infundiendo 1-2 litros de un cristaloide (o 20-30 mL/kg), o 500 mL de albúmina 5%, en los primeros 5-10 minutos. Después, ajustar el manejo de fluidos a la condición clínica del paciente — considerar añadir un fluido coloide (ej. albúmina 5%) al régimen de volumen, ya que la gravedad de la fuga capilar en shock anafiláctico asegurará que la mayor parte del cristaloide infundido salga del compartimento vascular y se sume al edema</li>
+                <li><strong>Hipotensión refractaria:</strong> si persiste pese a epinefrina y reanimación de volumen, dar glucagón si el paciente ha recibido un betabloqueante recientemente. En caso contrario, añadir un segundo vasopresor como norepinefrina o fenilefrina (la vasopresina no se ha evaluado en shock anafiláctico). El pronóstico en esta situación es pobre</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="card" style="margin-top: 20px;">
+        <h3>📚 Fuentes</h3>
+        <ul class="biblio-list">
+            <li><a class="biblio-link" href="docs/marik-2024-shock-caps14-17.pdf#page=1" target="_blank" rel="noopener">Capítulo 14 — Approaches to Clinical Shock</a> <span class="biblio-nota">Definiciones, monitorización de PA/perfusión tisular/transporte de O₂, vasopresores, objetivos de reanimación.</span></li>
+            <li><a class="biblio-link" href="docs/marik-2024-shock-caps14-17.pdf#page=21" target="_blank" rel="noopener">Capítulo 15 — Hemorrhagic Shock</a> <span class="biblio-nota">Fisiología y clasificación de la pérdida de sangre, catéteres, fluidos de reanimación, damage control resuscitation, TEG, lesión postresucitación.</span></li>
+            <li><a class="biblio-link" href="docs/marik-2024-shock-caps14-17.pdf#page=37" target="_blank" rel="noopener">Capítulo 16 — Cardiogenic Shock</a> <span class="biblio-nota">Etiologías, fisiopatología, monitorización, soporte farmacológico y soporte circulatorio mecánico.</span></li>
+            <li><a class="biblio-link" href="docs/marik-2024-shock-caps14-17.pdf#page=52" target="_blank" rel="noopener">Capítulo 17 — Inflammatory Shock Syndromes</a> <span class="biblio-nota">ROS y disfunción de órganos, shock séptico, síndrome de shock tóxico, anafilaxia.</span></li>
+        </ul>
+        <p style="font-size:0.8rem; color:var(--text-muted); margin-top:8px;">Marik PE. <em>Handbook of Evidence-Based Critical Care</em> — misma fuente que Merino HEMATO (Cap. 12-13), Sección VI: Síndromes de shock. Hay más contenido de este mismo bloque pendiente de un archivo adicional que ampliará este apartado — probablemente los capítulos siguientes de la Sección VII "Cardiac Disorders".</p>
+    </div>

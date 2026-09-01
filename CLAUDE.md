@@ -12,9 +12,10 @@ disfunción del VD y LRA postoperatoria), **Fisiopatología UCI** con
 repasos de capítulos de "El Libro Azul: Bases Fisiopatológicas de la
 Medicina Crítica" (hoy, Hematología y Hemostasia en Cuidados Críticos,
 Vías Urinarias, y Cardiología), y **Cardiología** con guías de práctica
-clínica de manejo (hoy, Insuficiencia Cardíaca — Guías ESC 2026 — a
-diferencia del bloque de Cardiología de Fisiopatología UCI, que es
-fisiopatología pura, no manejo). Está pensada para ir creciendo con más
+clínica de manejo (hoy, Insuficiencia Cardíaca — Guías ESC 2026 — y
+Merino Cardiología, sobre shock clínico — a diferencia del bloque de
+Cardiología de Fisiopatología UCI, que es fisiopatología pura, no
+manejo). Está pensada para ir creciendo con más
 especialidades (radiología, etc.) según se vaya aportando contenido. Es
 una herramienta de apoyo para médicos, pensada para consultarse a pie de
 cama en el móvil.
@@ -5616,6 +5617,129 @@ dentro de `#cardiologia-view` y en el switcher `cardioLevel` de
       cambios (Ficha III 13, V 12, VI 19, VII 12, VIII 13, IX 10, XI 6);
       los 2 `.tx-link` nuevos navegan a la ficha correcta en ambas
       direcciones; sin overflow horizontal a 390px en ninguna ficha.
+
+- **Segunda guía: "Merino Cardiología" (shock clínico)**
+  (`js/modules/cardiologia/merino-cardiologia.html`+`.js`), a petición
+  explícita del usuario ("debajo de la nueva guía que subimos hace poco
+  quiero que haya un nuevo apartado llamado merino cardiología... falta
+  otro [archivo] que luego te añadiré pero primero completalo con este").
+  Botón nuevo debajo de "Insuficiencia Cardíaca (ESC 2026)" en
+  `cardiologia-menu.html` (`#btn-merino-cardio`), con `cardioLevel` (en
+  `cardiologia/index.js`) ganando una segunda entrada
+  (`merinoCardiologia`) — mismo patrón exacto, sin cambios de
+  arquitectura. Fuente: Marik PE. *Handbook of Evidence-Based Critical
+  Care*, Sección VI "Shock Syndromes", Cap. 14-17 (70 páginas) — **el
+  mismo libro que Merino HEMATO** (Cap. 12-13, Hematología), confirmado
+  por el formato/marca de agua idénticos ("A L G r a w a n y") y el
+  estilo de cita — pero un archivo distinto, subido para esta sección de
+  Cardiología. PDF archivado en `docs/marik-2024-shock-caps14-17.pdf`
+  (páginas del PDF = página impresa del capítulo, sin offset: Cap.
+  14→pág. 1, Cap. 15→pág. 21, Cap. 16→pág. 37, Cap. 17→pág. 52 —
+  confirmado con `pdftotext` página a página, no a ojo). El usuario avisó
+  explícitamente que **hay un segundo archivo pendiente** que ampliará
+  este mismo apartado en el futuro (probablemente los capítulos
+  siguientes de la Sección VII "Cardiac Disorders", que el propio PDF
+  muestra como página de corte final) — la instrucción fue completar ya
+  esta primera tanda con el archivo recibido, no esperar al segundo.
+  - **Cuaderno de campo de 12 fichas** (`#merino-cardio-corkboard`/
+    `#panel-merino-cardio-tabs`, mismo `core/corkboard.js` de siempre),
+    correspondencia 1:1 con los 4 capítulos pero partiendo cada uno en
+    2-4 fichas por volumen real de contenido (mismo criterio ya usado en
+    Merino HEMATO): **Cap. 14 "Approaches to Clinical Shock"** → Ficha I
+    (definiciones, monitorización de PA/perfusión tisular/transporte de
+    O₂, con la excepción del shock séptico —hipoxia citopática— y el
+    argumento final de "la hipotensión como consecuencia, no causa, del
+    shock") y Ficha II (los 6 vasopresores — norepinefrina, vasopresina,
+    angiotensina II con su riesgo real de trombosis 13% vs. 5%,
+    midodrina sin ventaja real para el shock —el resto, epinefrina/
+    dopamina/fenilefrina, se desarrollan en las fichas de cada shock
+    específico—); **Cap. 15 "Hemorrhagic Shock"** → Ficha III
+    (fisiología del volumen sanguíneo, Tabla 15.1 de clasificación I-IV
+    con calculadora interactiva, y la trampa de interpretación de
+    Hb/Hct — reflejan el esfuerzo de reanimación, no la pérdida real),
+    Ficha IV (ecuación de Hagen-Poiseuille, catéteres de infusión
+    rápida, Tabla 15.2 de fluidos, productos sanguíneos uno a uno, Tabla
+    15.3/15.4) y Ficha V (damage control resuscitation: hipotensión
+    permisiva, coagulopatía inducida por trauma —40% de bajas de
+    combate, 6× mortalidad, mecanismo de la proteína C activada—,
+    reposición 1:1:1, tromboelastografía con **intérprete TEG
+    interactivo**, y lesión postresucitación); **Cap. 16 "Cardiogenic
+    Shock"** → Ficha VI (etiologías con Fig. 16.1 —79% infarto del VI,
+    3 complicaciones mecánicas en &lt;24h—, Tabla 16.1 de otras causas,
+    cambios hemodinámicos, microcirculación e inflamación sistémica),
+    Ficha VII (monitorización, Tabla 16.2 de objetivos, norepinefrina
+    como vasopresor de elección salvo obstrucción dinámica del TSVI,
+    Tabla 16.3 de inotrópicos —dobutamina/milrinona/levosimendán— y la
+    "paradoja" de la carga de trabajo cardíaco) y Ficha VIII (IABP con
+    el mecanismo de inflado/desinflado, catéteres Impella, VA-ECMO con
+    el problema de la poscarga del VI/venteo, y un **selector
+    interactivo de elección de dispositivo**); **Cap. 17 "Inflammatory
+    Shock Syndromes"** → Ficha IX (activación de neutrófilos/estallido
+    respiratorio, Fig. 17.1 de la cascada de ROS recreada como
+    `algo-flow`, disfunción endotelial, Tabla 17.1 de lesión de órganos,
+    y el cierre "inflamación no hipoxia" que enlaza con Merino HEMATO),
+    Ficha X (definiciones Sepsis-3, "sepsis como respuesta desregulada a
+    la inflamación —70% sin infección documentada—", hipoxia citopática,
+    Tabla 17.2 de manejo inicial, con un **enlace interno real** desde
+    la Ficha I), Ficha XI (síndrome de shock tóxico, Tabla 17.3
+    comparativa estafilocócico vs. estreptocócico) y Ficha XII
+    (anafilaxia, síndrome de Kounis, Tabla 17.4/17.5, y la cita textual
+    de que los corticoides "no tienen ningún papel" en el manejo agudo).
+  - **Sin imágenes extraídas**: auditado con `pdftotext`/lectura íntegra
+    de las 70 páginas — a diferencia de Merino HEMATO (con 2 fotografías
+    reales, radiografía y frotis), todas las figuras de este PDF son
+    ilustraciones de corazón dibujadas por el propio libro (IABP,
+    Impella, mecanismos de IAM) o gráficos/diagramas/curvas (TEG, ROS,
+    hemodinámica) — mismo criterio ya establecido en el proyecto de
+    nunca extraer como imagen lo que se puede recrear fielmente como
+    `.data-table`/`kv-row`/`algo-flow`/`micro-prof-item` nativo.
+  - **3 calculadoras interactivas** (`merino-cardiologia.js`, primeras
+    de todo el bloque de Merino Cardiología, a diferencia de Merino
+    HEMATO que solo tuvo 1 —4Ts—): `calcClaseHemorragia()` (Ficha III,
+    input numérico de % de volumen perdido → Clase I-IV con
+    interpretación, clampado 0-100); intérprete TEG (Ficha V, 5
+    `<select>` normal/anormal —nunca radio buttons, mismo criterio ya
+    establecido tras el bug de tachado de Merino HEMATO— que listan las
+    intervenciones de la Tabla 15.5 para cada parámetro anormal
+    marcado); y el selector "elección de dispositivo" (Ficha VIII,
+    puramente informativo, sin puntuación — no hay un único ganador
+    entre IABP/Impella/ECMO según la fuente).
+  - **Enlace cruzado interno Ficha I → Ficha X**, implementado con
+    cuidado para NO reutilizar la clase `.tx-link` (que en
+    `nefrologia/index.js` tiene un listener global
+    `document.querySelectorAll('.tx-link')` sin acotar a su propio DOM —
+    reutilizarla aquí sin `data-view` habría corrompido silenciosamente
+    el estado de `nefroLevel` en cada click, el mismo bug ya documentado
+    y corregido para Vías Urinarias↔Nefrología). En su lugar, un botón
+    con `id="mc-link-a-septico"` y un listener propio en
+    `merino-cardiologia.js` que llama a
+    `openCorkboardTopic('panel-merino-cardio-tabs', 'mc-shock-septico')`
+    directamente — mismo patrón ya usado por `fisio-uci/hematologia.js`
+    para su propio cross-link interno a la Ficha 4 de TEG/ROTEM.
+  - **96 preguntas de quiz** (`js/data/merino-cardiologia-preguntas.js`,
+    `mc-q001`-`q096`, 8 por ficha × 12 fichas — 6 de opción múltiple + 2
+    de tipo `redactar`, mismo formato ya establecido).
+    `triggerId: 'btn-merino-cardio-repasar'`, añadido al array que ya
+    exporta `cardiologia/index.js` junto a `btn-cardio-ic-repasar`. El
+    bloque "Merino Cardiología" del quiz de Cardiología queda con 96
+    preguntas (94 de Insuficiencia Cardíaca + 96 = 190 en la asignatura
+    Cardiología). El banco combinado de toda la app queda en
+    <strong>1355 preguntas</strong> (1259 previas + 96).
+  - Verificado con Playwright: las 12 fichas abren/voltean sin error de
+    consola ni 404 real; las 3 calculadoras responden correctamente
+    (35% → Clase III/rojo; TEG con R y MA marcados "anormal" → 2
+    intervenciones listadas; selector ECMO → texto informativo
+    correcto); el cross-link interno Ficha I→Ficha X funciona; el menú
+    del quiz en 3 niveles muestra "Cardiología (190)" →
+    "Merino Cardiología (96)" → las 12 fichas con 8 preguntas cada una,
+    y un recorrido de 6 preguntas (mezcla de opción múltiple y
+    `redactar`) no generó ninguna excepción JS; sin overflow horizontal
+    a 390px en las fichas con tablas anchas (Tabla 15.1, Tabla 15.3).
+    **Pendiente**: el segundo archivo que el usuario anunció explícitamente
+    ampliará este mismo apartado — cuando llegue, seguir el mismo
+    criterio ya usado en Merino HEMATO/otros bloques (leer completo,
+    decidir si amplía fichas existentes o añade fichas nuevas según el
+    contenido real, nunca fabricar contenido sin fuente).
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
