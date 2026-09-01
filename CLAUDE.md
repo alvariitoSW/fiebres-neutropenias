@@ -5740,6 +5740,104 @@ dentro de `#cardiologia-view` y en el switcher `cardioLevel` de
     criterio ya usado en Merino HEMATO/otros bloques (leer completo,
     decidir si amplía fichas existentes o añade fichas nuevas según el
     contenido real, nunca fabricar contenido sin fuente).
+  - **Auditoría de contenido de la Ficha I/II tras el build inicial, y
+    correcciones aplicadas** — a petición explícita del usuario ("quiero
+    una auditoría sobre el contenido... busques los fallos, las faltas de
+    contenido, los errores, las imágenes que no salen y las mejoras").
+    Releídas las 70 páginas del PDF **página a página** (no por lotes de
+    15, como en la construcción inicial) para descartar el mismo problema
+    ya documentado una vez en Cardiología/Fisiopatología UCI: el `Read`
+    tool puede devolver menos imágenes `output_image` que páginas
+    pedidas en un lote grande, sin avisar — y esta vez sí ocurrió: el
+    primer lote de la construcción inicial (páginas 1-15) solo devolvió
+    6 imágenes, y el segundo (16-30) solo 7, así que gran parte del
+    Capítulo 14 nunca se llegó a ver. Publicado un informe como Artifact
+    (severidad por color: error/hueco de contenido/imagen candidata/
+    mejora) antes de tocar el repositorio, y aplicado íntegro a
+    continuación por orden de importancia:
+    - **1 error real**: la Ficha II afirmaba que epinefrina/dopamina/
+      fenilefrina "se desarrollan con detalle en las Fichas VII y X" —
+      no era cierto, nunca se habían escrito. Corregido añadiendo las 3
+      como `micro-prof-item` propios con dosis/efectos adversos reales
+      (Tabla 14.4 completa, antes con solo 4 de 6 vasopresores), y
+      reconciliado el rango de norepinefrina (5-40 μg/min según la
+      Tabla 14.4, antes citaba solo "5-30" de la prosa sin la tabla).
+    - **9 huecos de contenido, todos en el Capítulo 14 salvo 1**: (1) el
+      marco de clasificación fisiológica completo — Q=(Pin−Pout)/R →
+      GC=(PAM−PAD)/RVS → PAM=(GC×RVS)+PAD, y la Tabla 14.1 de los 4 tipos
+      de shock por patrón PVC/GC/RVS con su prevalencia real (vasodilatador
+      66%, el más frecuente con diferencia — dato ausente hasta ahora),
+      con la epidemiología propia de cada tipo (hipovolémico &gt;30% de
+      pérdida; cardiogénico ~50% por SCA — con nota de fidelidad frente
+      al "~2/3 por IAM" ya citado en la Ficha VI, misma disciplina que el
+      TAPSE de Cardiología o el IFR de FRA; obstructivo 2%; vasodilatador
+      con el shock séptico como causa dominante); (2) fisiología de la
+      onda de presión arterial y amplificación sistólica (hasta 20 mmHg
+      de aumento sistólico de aorta a radial/femoral, con la analogía de
+      las "olas monstruo" por convergencia de ondas reflejadas — la PAM
+      no cambia, de ahí su preferencia sobre la sistólica); (3) medición
+      indirecta de la PA (método oscilométrico/auscultatorio, regla del
+      manguito L=0,8×C/W=0,4×C con la Tabla 14.2 de 4 tamaños, y el dato
+      de seguridad real — la PA automática puede diferir de la directa
+      hasta 55 mmHg en el crítico); (4) la Tabla 14.3 de medidas globales
+      de perfusión/oxigenación (rango crítico + interpretación) con las 5
+      ecuaciones del transporte de O₂ (DO₂=IC×CaO₂, VO₂=GC×(CaO₂−CvO₂),
+      Extracción=VO₂/DO₂≈SaO₂−ScvO₂) y el matiz de que una ScvO₂ ≥80% es
+      rasgo característico del shock séptico (fallo de extracción, no
+      exceso de aporte); (5) manejo de la extravasación de vasopresores
+      (fentolamina 5-10 mg en 10 mL de salino, inyección directa, ventana
+      de 12h) y la seguridad real de la vía periférica (16 estudios,
+      hasta 48h) — añadido a la Ficha II; (6) cifras concretas de volumen
+      de reanimación inicial (no exceder 2L de cristaloide en 1-2h, con
+      la razón fisiológica del 15% del volumen plasmático); (7) los datos
+      reales de la Figura 15.3 (ΔIC por tipo de fluido a 30/60 min:
+      coloide &gt; plasma &gt; sangre completa &gt; cristaloide &gt;
+      hematíes empaquetados) añadidos a la Ficha IV, antes solo una
+      afirmación cualitativa.
+    - **3 imágenes extraídas** (`js/modules/cardiologia/img/mc-fig1-
+      onda-arterial.jpg`, `mc-fig2-korotkoff.jpg`, `mc-fig3-manguito.jpg`,
+      `pdfimages -png` de las páginas 5-7, sin `smask` que componer) — las
+      únicas 3 de las 17 figuras del bloque que son ilustraciones/curvas
+      reales de un objeto físico (un torso con las 4 ondas de presión
+      arterial reales superpuestas, la curva real de sonidos de
+      Korotkoff, el esquema del manguito) en vez de gráficos estadísticos
+      reconstruibles como tabla — mismo criterio que ya justificó
+      extraer la radiografía de TRALI o el frotis con esquistocitos en
+      Merino HEMATO. Las otras 15 imágenes incrustadas del PDF
+      (corazones ilustrados, circuito de ECMO, cascada de ROS, gráficos
+      de barras/líneas) se confirmaron como diagramas/estadísticas ya
+      bien recreadas como `.data-table`/`algo-flow` nativos — no se
+      extrajo ninguna más.
+    - **4 mejoras**: (1) selector "¿qué tipo de shock tengo delante?" en
+      la Ficha I (`calcTipoShock()`, 3 `<select>` PVC/GC/RVS → tipo de
+      shock según la Tabla 14.1 — declara honestamente que cardiogénico y
+      obstructivo comparten el mismo patrón hemodinámico y no son
+      distinguibles solo con estas 3 variables, en vez de forzar un único
+      resultado); (2) cross-link real en ambas direcciones entre el shock
+      cardiogénico de Merino Cardiología (Fichas VI y VIII) y la
+      clasificación SCAI/recomendaciones de soporte mecánico de la guía
+      ESC de IC (`ic-descompensada`) — **nunca con `.tx-link`** (ese
+      listener global vive en `nefrologia/index.js` y solo conoce las
+      claves de `nefroLevel`; reutilizarlo aquí habría repetido el bug ya
+      documentado y corregido para Vías Urinarias↔Nefrología), sino con
+      una clase local `.cardio-cross-link` + 2 IDs sueltos
+      (`mc-link-a-scai`, `mc-link-a-mcs-esc`), todos enganchados dentro
+      del propio `cardiologia/index.js` (que ya controla `cardioLevel`,
+      el switcher de ambas guías); (3) y (4) ya cubiertas por los huecos
+      de contenido de arriba (nota de fidelidad SCA/IAM, tabla de
+      extravasación).
+    - Verificado con Playwright: las 12 fichas de Merino Cardiología y
+      las de la guía ESC de IC abren/voltean sin error de consola ni 404
+      real; las 3 imágenes nuevas cargan (`naturalWidth`&gt;0); el
+      selector de tipo de shock da el resultado correcto en los 3
+      patrones reales de la Tabla 14.1 (incluida la ambigüedad
+      cardiogénico/obstructivo declarada); los 3 cross-links nuevos
+      (guía ESC→Ficha VI, Ficha VI→guía ESC, Ficha VIII→guía ESC)
+      navegan a la ficha exacta de destino en ambas direcciones; las
+      calculadoras ya existentes (clasificador de hemorragia, TEG,
+      selector de dispositivo) siguen funcionando sin regresiones; sin
+      overflow horizontal a 390px pese a las 2 tablas nuevas anchas
+      (Tabla 14.1, Tabla 14.3).
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

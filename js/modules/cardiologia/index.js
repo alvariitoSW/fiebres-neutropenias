@@ -39,6 +39,31 @@ export function init() {
     initInsuficienciaCardiaca();
     initMerinoCardiologia();
 
+    // Enlaces cruzados entre las 2 guías de Cardiología (misma especialidad,
+    // ambas ya colgando de este mismo cardioLevel) — shock cardiogénico se
+    // trata desde 2 ángulos: fisiopatología detallada en Merino Cardiología,
+    // recomendaciones graduadas en la guía ESC de IC. Nunca se usa .tx-link
+    // aquí (ese listener global vive en nefrologia/index.js y solo conoce
+    // las claves de nefroLevel) — cardioLevel.show() ya está en el cierre
+    // de este init(), así que basta un listener propio y local.
+    document.querySelectorAll('.cardio-cross-link').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const { view, tab } = btn.dataset;
+            cardioLevel.show(view);
+            openCorkboardTopic('panel-merino-cardio-tabs', tab);
+        });
+    });
+    const linkAScai = document.getElementById('mc-link-a-scai');
+    if (linkAScai) linkAScai.addEventListener('click', () => {
+        cardioLevel.show('insuficienciaCardiaca');
+        openCorkboardTopic('panel-cardio-ic-tabs', 'ic-descompensada');
+    });
+    const linkAMcsEsc = document.getElementById('mc-link-a-mcs-esc');
+    if (linkAMcsEsc) linkAMcsEsc.addEventListener('click', () => {
+        cardioLevel.show('insuficienciaCardiaca');
+        openCorkboardTopic('panel-cardio-ic-tabs', 'ic-descompensada');
+    });
+
     cardioLevel.show('menu');
 
     // Deja siempre el submenú de guías como pantalla de entrada al

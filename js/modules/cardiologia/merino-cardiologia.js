@@ -114,6 +114,49 @@ function initDispositivoSelector() {
     });
 }
 
+// Tabla 14.1 — selector "¿qué tipo de shock tengo delante?" por patrón
+// PVC/gasto cardíaco/RVS. Cardiogénico y obstructivo comparten exactamente
+// el mismo patrón en la tabla real (PVC alta/GC bajo/RVS alta) — el
+// selector lo declara honestamente en vez de fingir que puede distinguirlos.
+function calcTipoShock() {
+    const pvc = document.getElementById('mc-shock-pvc')?.value;
+    const gc = document.getElementById('mc-shock-gc')?.value;
+    const rvs = document.getElementById('mc-shock-rvs')?.value;
+    const resultado = document.getElementById('mc-shock-tipo-resultado');
+    if (!resultado) return;
+
+    if (!pvc || !gc || !rvs) {
+        resultado.className = 'result-box';
+        resultado.innerHTML = '<span style="color:var(--text-muted);">Elige los 3 valores para ver el tipo de shock compatible.</span>';
+        return;
+    }
+
+    let estado, texto;
+    if (pvc === 'baja' && gc === 'bajo' && rvs === 'alta') {
+        estado = 'tfg-estado-warn';
+        texto = '<strong>Patrón compatible con shock hipovolémico.</strong> Ver Ficha III (fisiología y clasificación).';
+    } else if (pvc === 'alta' && gc === 'bajo' && rvs === 'alta') {
+        estado = 'tfg-estado-danger';
+        texto = '<strong>Patrón compatible con shock cardiogénico u obstructivo</strong> — la Tabla 14.1 no los distingue entre sí con estas 3 variables: ambos comparten exactamente el mismo patrón. Se necesita evaluación adicional (ecocardiograma para función del VI, descartar taponamiento/embolia pulmonar/neumotórax a tensión). Ver Fichas VI-VIII (cardiogénico).';
+    } else if (pvc === 'baja' && gc === 'normal-alto' && rvs === 'baja') {
+        estado = 'tfg-estado-ok';
+        texto = '<strong>Patrón compatible con shock vasodilatador (distributivo).</strong> El más frecuente con diferencia — el shock séptico explica la mayoría de los casos. Ver Ficha X (séptico) o Ficha XII (anafiláctico).';
+    } else {
+        estado = 'tfg-estado-warn';
+        texto = 'Combinación no descrita en la Tabla 14.1 — puede tratarse de un patrón mixto, una fase de transición entre 2 tipos de shock, o un dato aislado poco fiable. Reevaluar con el cuadro clínico completo.';
+    }
+    resultado.className = `result-box ${estado}`;
+    resultado.style.textAlign = 'left';
+    resultado.innerHTML = texto;
+}
+
+function initTipoShock() {
+    const resultado = document.getElementById('mc-shock-tipo-resultado');
+    if (!resultado) return;
+    document.querySelectorAll('.mc-shock-tipo-select').forEach(s => s.addEventListener('change', calcTipoShock));
+    calcTipoShock();
+}
+
 // Enlace interno Ficha I → Ficha X (mismo panel, sin depender del
 // listener global .tx-link de nefrologia/index.js, que escanea todo el
 // DOM y no debe reutilizarse fuera de sus propias claves de vista).
@@ -125,6 +168,7 @@ function initLinkASeptico() {
 
 export function init() {
     initCorkboard('merino-cardio-corkboard', 'panel-merino-cardio-tabs');
+    initTipoShock();
     initClaseHemorragia();
     initTeg();
     initDispositivoSelector();
