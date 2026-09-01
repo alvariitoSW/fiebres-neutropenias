@@ -116,13 +116,14 @@ clínico real al que da acceso.
 
 - **Nivel general** (`#atlas-screen-overview`): un `<svg class="landscape">`
   puramente decorativo (gradientes/blobs de brillo + un trazado
-  `.vessel-line` que conecta los nodos) de fondo, con 4 `.region-btn`
+  `.vessel-line` que conecta los nodos) de fondo, con 5 `.region-btn`
   posicionados encima (vía `left`/`top` en `%` + `transform:
   translate(-50%,-50%)`, sin JS de animación): Manejo Citopenias,
-  Reconocimiento Temprano, Síndromes Urgentes y Trasplante TPH. Cada nodo
-  con `data-zone="..."` lleva a una pantalla de zona; el único nodo que no
-  tiene zona intermedia (Reconocimiento) lleva `data-route="reconocimiento"`
-  directamente.
+  Reconocimiento Temprano, Síndromes Urgentes, Trasplante TPH y Merino
+  HEMATO (ver punto 5 más abajo). Cada nodo con `data-zone="..."` lleva a
+  una pantalla de zona; los 2 nodos que no tienen zona intermedia
+  (Reconocimiento y Merino HEMATO) llevan `data-route="..."` directamente
+  a su vista.
 - **Pantallas de zona** (`#atlas-screen-citopenias`, `#atlas-screen-sindromes`,
   `#atlas-screen-trasplante`): nodos más pequeños (`.node-sm`) con los
   subtemas reales de esa categoría, cada uno con `data-route="clave"`; un
@@ -139,7 +140,7 @@ clínico real al que da acceso.
   repaso activo, aún no implementado.
 - Al volver a Hematología desde cualquier vista (`goHome()` en
   `home/index.js`) el Atlas se resetea siempre al mapa general
-  (`atlas.reset()`), para que las 4 regiones estén siempre a un toque tras
+  (`atlas.reset()`), para que las 5 regiones estén siempre a un toque tras
   salir de cualquier contenido.
 - Fuera del `<div class="stage">` del Atlas, sigue habiendo un botón
   `.compass` (⚡) fijo que abre Escalas Generales, igual que antes.
@@ -302,6 +303,66 @@ El Atlas sustituyó estos 4 botones grandes:
    filtrado: descarta los puramente administrativos (orden de archivo,
    digitalización, gestor de datos, contingencia informática) e incorpora
    solo los que aporten valor clínico real.
+5. **Merino HEMATO** (`modules/merino-hemato/`) — 5º nodo del Atlas
+   Hematológico (verde, sin zona intermedia, `data-route="merino-hemato"`
+   directo, posicionado abajo a la izquierda del mapa y conectado por su
+   propio `.vessel-line` al nodo de Trasplante TPH), a petición explícita
+   del usuario ("abre una nueva sección llamada Merino HEMATO"). Fuente:
+   capítulos "Anemia and Red Blood Cell Transfusions" (Cap. 12) y
+   "Platelets and Plasma" (Cap. 13) de Marik PE, *Handbook of
+   Evidence-Based Critical Care* — PDF archivado en
+   `docs/marik-2024-anemia-transfusion-hemostasia-uci.pdf`. A diferencia
+   del resto de módulos de Hematología (todos con submenú o subvistas
+   propias), este es un módulo plano de una sola vista con cuaderno de
+   campo de **6 fichas**, mismo patrón `initCorkboard()` que el resto:
+   Anemia en el paciente crítico (definición, la trampa del volumen
+   plasmático — el mismo cambio de Hto que produce pasar de pie a
+   tumbado o infundir 20 ml/kg de salino equivale a perder una unidad de
+   sangre —, anemia propia de la UCI por inflamación/flebotomía,
+   fisiología compensadora — viscosidad, gasto cardíaco, extracción de
+   O₂ hasta el techo del 50% —, tolerancia a la anemia extrema en
+   Testigos de Jehová postoperatorios), El umbral transfusional
+   (historia del "10/30", umbrales actuales Hb&lt;7/&lt;8 g/dl, por qué
+   la Hb es mal disparador, alternativa de extracción de O₂,
+   preparaciones/infusión/filtros de hematíes, evidencia de que la
+   transfusión sube el DO₂ pero no el VO₂, "qué es peor: la anemia o la
+   transfusión", volumen sanguíneo vs. masa de hematíes), Riesgos de la
+   transfusión (tabla completa de eventos adversos por unidad
+   transfundida, reacción hemolítica aguda, fiebre no hemolítica,
+   hipersensibilidad, TRALI, TACO, infecciones nosocomiales — con la
+   radiografía real de TRALI, Figura 12.5 del capítulo), Trombocitopenia
+   y HIT (hemostasia resumida, umbral clínico &lt;100.000/µl,
+   pseudotrombocitopenia por anti-EDTA, causas farmacológicas/no
+   farmacológicas en el crítico, mecanismo/factores de
+   riesgo/clínica/diagnóstico de la HIT, y una **calculadora interactiva
+   de la escala 4Ts** — 4 `<select>` puntuables 0-2, banda de riesgo
+   bajo/intermedio/alto reutilizando `.tfg-estado-ok/warn/danger`,
+   deliberadamente con `<select>` y no `<input type="radio">` tras
+   detectar con Playwright que `.checkbox-label:has(input:checked)` ya
+   lleva un `text-decoration:line-through` pensado para checklists de
+   "hecho/no hecho", que con radios de puntuación se leía como si la
+   opción elegida hubiera sido "tachada/rechazada" — mismo patrón
+   `<select>` ya usado por las calculadoras ISTH de Síndromes Urgentes),
+   Microangiopatías trombóticas (CID/PTT/SHU, con la Figura 13.1 real —
+   frotis con esquistocitos — y la tabla comparativa de perfil
+   hematológico que distingue la CID, con consumo de factores, de la
+   PTT/SHU, sin él), y Plaquetas y plasma (indicaciones/preparaciones/
+   respuesta/efectos adversos de la transfusión de plaquetas,
+   PFC/complejo protrombínico de 4 factores/crioprecipitado, y la
+   discrepancia real citada en la fuente entre la mejora del INR con PFC
+   y el aumento simultáneo de antitrombina que la contrarresta).
+   **Solo 2 imágenes reales extraídas** (radiografía de TRALI y frotis
+   con esquistocitos) — el resto de figuras del PDF (7 de las 9 imágenes
+   incrustadas detectadas con `pdfimages -list`) son gráficos de barras/
+   líneas estadísticos, recreados como texto/tabla nativos en vez de
+   extraídos como imagen, mismo criterio que el resto del proyecto.
+   48 preguntas de quiz (`js/data/merino-hemato-preguntas.js`,
+   `merino-q001`-`q048`, 8 por ficha × 6 fichas), con
+   `triggerId: 'btn-merino-repasar'` añadido al array que ya exporta
+   `home/index.js` (junto a los otros 4 triggers de Hematología) y
+   bloque propio "Merino HEMATO" en el nivel 2 del menú del quiz. El
+   banco combinado de toda la app queda en <strong>1259 preguntas</strong>
+   (1211 previas + 48).
 
 **Escalas Generales** (`modules/generales/`, qSOFA/SRIS/SOFA/Glasgow) ya NO
 es una de las 4 categorías del menú: es un botón pequeño y fijo arriba a la

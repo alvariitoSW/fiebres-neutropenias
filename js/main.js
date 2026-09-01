@@ -11,6 +11,7 @@ import * as neutropeniaFebril from './modules/neutropenia-febril/index.js';
 import * as reconocimiento from './modules/reconocimiento/index.js';
 import * as sindromesUrgentes from './modules/sindromes-urgentes/index.js';
 import * as trasplante from './modules/trasplante/index.js';
+import * as merinoHemato from './modules/merino-hemato/index.js';
 import * as nefrologia from './modules/nefrologia/index.js';
 import * as uciPapers from './modules/uci-papers/index.js';
 import * as fisioUci from './modules/fisio-uci/index.js';
@@ -27,6 +28,7 @@ async function start() {
     reconocimiento.init();
     sindromesUrgentes.init();
     trasplante.init();
+    merinoHemato.init();
     const nefrologiaApi = nefrologia.init();
     home.onNefrologiaListo(nefrologiaApi);
     const uciPapersApi = uciPapers.init();

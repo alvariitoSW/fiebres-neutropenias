@@ -9,14 +9,15 @@ import { preguntasNeutropeniaFebril, temasNeutropeniaFebril } from '../../data/n
 import { preguntasReconocimiento, temasReconocimiento } from '../../data/reconocimiento-preguntas.js';
 import { preguntasSindromes, temasSindromes } from '../../data/sindromes-urgentes-preguntas.js';
 import { preguntasTrasplante, temasTrasplante } from '../../data/trasplante-preguntas.js';
+import { preguntasMerino, temasMerino } from '../../data/merino-hemato-preguntas.js';
 
 // El modal de repaso (#quiz-modal-overlay) es un único partial compartido
 // por TODA la app — solo puede existir una llamada activa a initQuiz() en
 // toda la página (ver quiz.js). Hematología expone aquí su banco/temas ya
 // combinados en vez de llamar a initQuiz() directamente, para que main.js
 // pueda fusionarlos con los de Nefrología en una única llamada.
-export const quizTriggerId = ['btn-nf-repasar', 'btn-recon-repasar', 'btn-sind-repasar', 'btn-tph-repasar'];
-export const quizBanco = [...preguntasNeutropeniaFebril, ...preguntasReconocimiento, ...preguntasSindromes, ...preguntasTrasplante];
+export const quizTriggerId = ['btn-nf-repasar', 'btn-recon-repasar', 'btn-sind-repasar', 'btn-tph-repasar', 'btn-merino-repasar'];
+export const quizBanco = [...preguntasNeutropeniaFebril, ...preguntasReconocimiento, ...preguntasSindromes, ...preguntasTrasplante, ...preguntasMerino];
 // Menú del quiz en 3 niveles (asignatura → bloque → ficha, ver quiz.js):
 // cada tema se etiqueta aquí con su `asignatura` (Hematología) y su
 // `bloque` — Trasplante se reparte en 3 bloques según el prefijo real de
@@ -35,6 +36,7 @@ export const quizTemas = [
             : t.key.startsWith('comp-') ? 'Trasplante: Complicaciones post-TPH'
             : 'Trasplante: Introducción',
     })),
+    ...temasMerino.map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'Merino HEMATO' })),
 ];
 
 // Referencia a la API que devuelve nefrologia.init() (ver
@@ -77,6 +79,7 @@ export function init() {
         reconocimiento: document.getElementById('reconocimiento-view'),
         sindromes: document.getElementById('sindromes-view'),
         trasplante: document.getElementById('trasplante-view'),
+        merinoHemato: document.getElementById('merino-hemato-view'),
         nefrologia: document.getElementById('nefrologia-view'),
         uciPapers: document.getElementById('uci-papers-view'),
         fisioUci: document.getElementById('fisio-uci-view'),
@@ -170,6 +173,7 @@ export function init() {
         'trasplante-intro': () => { topLevel.show('trasplante'); trasplanteLevel.show('intro'); },
         'trasplante-cart': () => { topLevel.show('trasplante'); trasplanteLevel.show('cart'); },
         'trasplante-complicaciones': () => { topLevel.show('trasplante'); trasplanteLevel.show('complicaciones'); },
+        'merino-hemato': () => topLevel.show('merinoHemato'),
     };
     const atlas = initAtlas({
         onRoute: (key) => rutasAtlas[key]?.(),
