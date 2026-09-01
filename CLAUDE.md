@@ -5735,11 +5735,8 @@ dentro de `#cardiologia-view` y en el switcher `cardioLevel` de
     y un recorrido de 6 preguntas (mezcla de opción múltiple y
     `redactar`) no generó ninguna excepción JS; sin overflow horizontal
     a 390px en las fichas con tablas anchas (Tabla 15.1, Tabla 15.3).
-    **Pendiente**: el segundo archivo que el usuario anunció explícitamente
-    ampliará este mismo apartado — cuando llegue, seguir el mismo
-    criterio ya usado en Merino HEMATO/otros bloques (leer completo,
-    decidir si amplía fichas existentes o añade fichas nuevas según el
-    contenido real, nunca fabricar contenido sin fuente).
+    El segundo archivo anunciado por el usuario llegó después — ver
+    "Parte 2" más abajo, con las 12 fichas nuevas que lo incorporan.
   - **Auditoría de contenido de la Ficha I/II tras el build inicial, y
     correcciones aplicadas** — a petición explícita del usuario ("quiero
     una auditoría sobre el contenido... busques los fallos, las faltas de
@@ -5838,6 +5835,130 @@ dentro de `#cardiologia-view` y en el switcher `cardioLevel` de
       selector de dispositivo) siguen funcionando sin regresiones; sin
       overflow horizontal a 390px pese a las 2 tablas nuevas anchas
       (Tabla 14.1, Tabla 14.3).
+  - **Parte 2: IC aguda, taquiarritmias, SCA/disección aórtica y paro
+    cardíaco (Cap. 18-21)** — el segundo archivo que el usuario había
+    anunciado explícitamente ("guarda esa información para hacerlo en
+    un futuro no lejano") llegó con el pedido "vamos a completar
+    cardiología merino con la 2° parte que faltaba". Cubre la **Sección
+    VII "Cardiac Disorders"** del mismo libro (Marik PE. *Handbook of
+    Evidence-Based Critical Care*) — distinta de la Sección VI "Shock
+    Syndromes" (Cap. 14-17) ya incorporada: PDF archivado en
+    `docs/marik-2024-cardiac-disorders-caps18-21.pdf` (72 páginas, sin
+    offset — página del PDF = página impresa del capítulo: Cap. 18→pág.
+    1, Cap. 19→pág. 18, Cap. 20→pág. 38, Cap. 21→pág. 55, verificado con
+    `pdftotext -f N -l N` en las páginas de inicio de cada capítulo).
+    **Detalle de nomenclatura corregido durante el propio proceso**: el
+    archivo se archivó en un primer momento como
+    `marik-2024-shock-caps18-21.pdf` (arrastrando el nombre del bloque
+    anterior) — al leer el contenido real se confirmó que los Cap. 18-21
+    NO son de shock, sino de trastornos cardíacos (IC, arritmias, SCA,
+    paro), así que se renombró a
+    `marik-2024-cardiac-disorders-caps18-21.pdf` antes de que el nombre
+    incorrecto se propagara a ningún enlace de bibliografía.
+    - Ampliado el cuaderno de campo de 12 a **24 fichas**
+      (`#merino-cardio-corkboard`/`#panel-merino-cardio-tabs`, mismo
+      `core/corkboard.js` de siempre), correspondencia capítulo→bloque de
+      fichas según su volumen real (mismo criterio ya establecido en el
+      resto del proyecto): **Cap. 18 "Acute Heart Failure(s)"** → Ficha
+      XIII (tipos de IC por FEVI —ecuaciones de distensibilidad y FE—,
+      fallo derecho con interdependencia ventricular y **Figura 18.2 real**
+      —ecografía de dilatación del VD—, 3 etapas progresivas, respuestas
+      neurohumorales —péptidos natriuréticos/SNS/SRAA—, congestión venosa
+      con **Figura 18.4 real** —Rx de edema pulmonar cardiogénico— y
+      síndrome cardiorrenal, biomarcadores con Tabla 18.2) y Ficha XIV
+      (vasodilatadores —Tabla 18.3, nitroglicerina/nitroprusiato con sus
+      riesgos propios de adsorción a PVC/cianuro/robo coronario—,
+      diuréticos con sus 3 preocupaciones reales —incluido el "edema
+      pulmonar flash"—, Tabla 18.4, ventilación con presión positiva, y el
+      cierre "cuidado con los diuréticos"); **Cap. 19 "Tachyarrhythmias"**
+      → Ficha XV (algoritmo de reconocimiento en 3 pasos QRS/R-R/actividad
+      auricular, con **Figuras 19.2/19.3 reales** —trazados ECG de
+      AVNRT/TAM/FA—), Ficha XVI (FA — epidemiología hospitalaria, Tabla
+      19.1 de control de frecuencia con sus 5 fármacos, **Figura 19.4
+      real** —déficit de pulso—), Ficha XVII (FA — cardioversión eléctrica,
+      **calculadora interactiva CHA₂DS₂-VASc** con 8 checkboxes puntuables
+      y semáforo por corte de riesgo, Tabla 19.3 de DOAC/warfarina, WPW),
+      y Ficha XVIII (TAM con el régimen de magnesio del 88% de éxito,
+      AVNRT/adenosina con Tabla 19.4, TV vs. SVT aberrante con **Figuras
+      19.6/19.7 reales**, algoritmo de manejo de QRS ancho, torsade de
+      pointes con **Figura 19.9 real** y **calculadora interactiva de QTc**
+      —fórmula de Bazett QTc=QT/√(R-R), semáforo por los cortes 0,44/0,5s—);
+      **Cap. 20 "Acute Coronary Syndromes"** → Ficha XIX (patogénesis de la
+      rotura de placa y mieloperoxidasa, los 3 síndromes STEMI/NSTEMI/AI,
+      los 3 componentes de la evaluación diagnóstica, Tabla 20.1) y Ficha
+      XX (estrategias de reperfusión por tiempo puerta-balón/puerta-aguja,
+      Tabla 20.2 de trombolíticos, Tabla 20.3 de medidas cardioprotectoras,
+      Tabla 20.4 antitrombóticas, anticoagulación, terapias a largo plazo,
+      cierre "el dogma de oferta-demanda de O₂"), más Ficha XXI (disección
+      aórtica aguda — fisiopatología tipo A/B, presentación clínica con el
+      dato real de que 1 de cada 3 casos se pasa por alto, imagen
+      diagnóstica con **Figura 20.4 real** —TC con el colgajo íntimal—,
+      Tabla 20.5 de antihipertensivos con la advertencia clave de nunca
+      usar vasodilatador sin betabloqueante); **Cap. 21 "Cardiac Arrest"**
+      → Ficha XXII (SVB con Tabla 21.2 de 7 elementos esenciales, SVCA con
+      el algoritmo de la AHA — Fig. 21.2 original **recreado de forma
+      nativa como `algo-flow` en vez de reproducir la imagen**, por llevar
+      aviso explícito de copyright "© 2020 American Heart Association" en
+      la fuente —, desfibrilación, epinefrina, causas reversibles "las T"),
+      Ficha XXIII (ETCO₂ para monitorizar calidad de RCP y predecir RCE,
+      ecografía a pie de cama con **Figura 21.5 real** —derrame
+      pericárdico—), y Ficha XXIV (síndrome posparo cardíaco, manejo
+      dirigido de temperatura con Tabla 21.3 y su evolución histórica de
+      32-34°C obligatorio a "solo prevenir la fiebre", Tabla 21.4 de otras
+      preocupaciones, predictores de mal pronóstico neurológico con Tabla
+      21.5, cierre "percepción vs. realidad" con la cifra real de éxito de
+      la RCP, 1-7%, frente al 75% que muestra la televisión).
+    - **10 imágenes reales extraídas** con `pdfimages -png`
+      (todas como imagen única embebida por página, sin fragmentar —mismo
+      caso que los papers de Springer de UCI/Papers Tuiter, confirmado con
+      `pdfimages -list` antes de extraer): `mc-fig18-2-tte-vd.jpg`,
+      `mc-fig18-4-edema-pulmonar.jpg`, `mc-fig19-2-ecg-avnrt.jpg`,
+      `mc-fig19-3-ecg-mat-fa.jpg`, `mc-fig19-4-onda-pulso-fa.jpg`,
+      `mc-fig19-6-ecg-tv-vs-svt.jpg`, `mc-fig19-7-ecg-latido-fusion.jpg`,
+      `mc-fig19-9-ecg-torsade.jpg`, `mc-fig20-4-tc-diseccion-aortica.jpg`,
+      `mc-fig21-5-eco-derrame-pericardico.jpg` — todas con contenido
+      fotográfico/de registro real (ecografías, Rx, trazados ECG
+      genuinos, TC), mismo criterio de extracción ya establecido en el
+      resto del proyecto (nunca imágenes de gráficos estadísticos
+      reconstruibles como tabla). La única figura del bloque con licencia
+      restrictiva explícita (el algoritmo ACLS de la AHA, Fig. 21.2) se
+      recreó nativamente en vez de extraerse, por la nota de copyright ya
+      mencionada.
+    - **2 calculadoras interactivas nuevas** en `merino-cardiologia.js`
+      (`calcCha2ds2Vasc()`/`initCha2ds2Vasc()` y `calcQtc()`/`initQtc()`,
+      mismo patrón `.tfg-estado-ok/warn/danger` ya usado en el resto de la
+      app, con el guard `.value === ''` ya establecido como lección
+      aprendida en las auditorías de FRA/ERC para no tratar un campo
+      vacío como 0) — llevando el total de calculadoras del módulo a 5
+      (más el clasificador de hemorragia, el intérprete TEG y el selector
+      de tipo de shock/dispositivo ya existentes de la Parte 1). Los
+      contenedores de ambas calculadoras usan `.card` con
+      `padding:14px 16px` (el mismo patrón ya usado para calculadoras
+      embebidas en Cardiología/Nefrología), no una clase `.calc-box`
+      nueva sin definir en `components.css`.
+    - **96 preguntas de quiz nuevas** (`js/data/merino-cardiologia-preguntas.js`,
+      `mc-q097`-`q192`, 8 por ficha × 12 fichas — mismo formato 6 opción
+      múltiple + 2 `redactar` ya establecido), llevando el banco de
+      Merino Cardiología a **192 preguntas** y el de Cardiología (sumado a
+      las 94 de la guía ESC de IC) a 286. El banco combinado de toda la
+      app queda en <strong>1451 preguntas</strong> (1355 previas + 96).
+    - Bibliografía ampliada con las 4 entradas de los Cap. 18-21 (mismo
+      patrón `.biblio-link` con `#page=N`), y la nota de cierre corregida
+      para reflejar que ambas secciones (VI y VII) del libro ya están
+      incorporadas, sin ninguna coletilla de "pendiente".
+    - Verificado con Playwright: las 24 fichas del corkboard abren/voltean
+      sin error de consola ni 404 real; las 10 imágenes nuevas cargan
+      (`naturalWidth`&gt;0 una vez se abre su acordeón/ficha); la
+      calculadora CHA₂DS₂-VASc puntúa correctamente (edad&gt;75+ictus = 4
+      puntos, riesgo definido) y la de QTc calcula bien (QT=480ms/FC=90 →
+      588ms, riesgo de torsade) y se abstiene con el campo vacío sin
+      tratarlo como 0; las calculadoras ya existentes de la Parte 1
+      (clasificador de hemorragia, TEG, selector de dispositivo/tipo de
+      shock) siguen funcionando sin regresiones; el menú del quiz en 3
+      niveles muestra "Cardiología (286)" → "Merino Cardiología (192)" →
+      las 24 fichas con 8 preguntas cada una, y un recorrido de 6
+      preguntas (mezcla de opción múltiple y `redactar`) no generó
+      ninguna excepción JS; sin overflow horizontal a 390px.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

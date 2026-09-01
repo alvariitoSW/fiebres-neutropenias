@@ -157,6 +157,87 @@ function initTipoShock() {
     calcTipoShock();
 }
 
+// Tabla 19.2 — CHA2DS2-VASc: riesgo de ictus en FA no valvular.
+function calcCha2ds2Vasc() {
+    const checks = document.querySelectorAll('.mc-cha2ds2-check');
+    const resultado = document.getElementById('mc-cha2ds2-resultado');
+    if (!resultado || checks.length === 0) return;
+
+    let puntos = 0;
+    checks.forEach(c => { if (c.checked) puntos += Number(c.dataset.puntos); });
+    const sexoMarcado = document.getElementById('mc-cha-sexo')?.checked;
+
+    let estado, texto;
+    if (puntos === 0) {
+        estado = 'tfg-estado-ok';
+        texto = 'Riesgo mínimo. Sin indicación clara de anticoagulación (excepto FA valvular, que siempre la requiere independientemente de esta puntuación).';
+    } else if (puntos === 1 && !sexoMarcado) {
+        estado = 'tfg-estado-warn';
+        texto = 'Riesgo bajo-intermedio ("Considerar" anticoagulación) — 1 punto en varones o 2 en mujeres (por convención, el punto de "sexo femenino" no cuenta por sí solo como factor de riesgo independiente).';
+    } else if (puntos <= 2) {
+        estado = 'tfg-estado-warn';
+        texto = 'Riesgo intermedio. "Considerar" anticoagulación — valorar el resto del cuadro clínico y el riesgo de sangrado.';
+    } else {
+        estado = 'tfg-estado-danger';
+        texto = 'Riesgo definido de ictus (≥2 en varones, ≥3 en mujeres según la fuente) — anticoagulación indicada salvo contraindicación (hemorragia activa, historia de HIC, tumor intracraneal, sangrado recurrente de lesión presente, plaquetas <50.000/µL).';
+    }
+    resultado.className = `result-box ${estado}`;
+    resultado.style.textAlign = 'left';
+    resultado.innerHTML = `<strong>CHA₂DS₂-VASc = ${puntos} puntos</strong><p style="font-size:0.85rem; margin-top:6px;">${texto}</p><p style="font-size:0.75rem; color:var(--text-muted); margin-top:6px;">No aplica a FA valvular (estenosis mitral significativa o cualquier prótesis valvular), que siempre requiere anticoagulación con warfarina.</p>`;
+}
+
+function initCha2ds2Vasc() {
+    const resultado = document.getElementById('mc-cha2ds2-resultado');
+    if (!resultado) return;
+    document.querySelectorAll('.mc-cha2ds2-check').forEach(c => c.addEventListener('change', calcCha2ds2Vasc));
+    calcCha2ds2Vasc();
+}
+
+// Ecuación 19.1 — QTc de Bazett: QTc = QT / raiz(R-R).
+function calcQtc() {
+    const qtEl = document.getElementById('mc-qtc-qt');
+    const fcEl = document.getElementById('mc-qtc-fc');
+    const resultado = document.getElementById('mc-qtc-resultado');
+    if (!qtEl || !fcEl || !resultado) return;
+
+    if (qtEl.value === '' || fcEl.value === '') {
+        resultado.className = 'result-box';
+        resultado.innerHTML = '<span style="color:var(--text-muted);">Introduce el QT medido (ms) y la frecuencia cardíaca (lpm).</span>';
+        return;
+    }
+    let qtMs = Number(qtEl.value);
+    let fc = Number(fcEl.value);
+    if (qtMs < 0) { qtMs = 0; qtEl.value = 0; }
+    if (fc <= 0) { fc = 1; fcEl.value = 1; }
+
+    const rrSeg = 60 / fc;
+    const qtSeg = qtMs / 1000;
+    const qtcSeg = qtSeg / Math.sqrt(rrSeg);
+    const qtcMs = qtcSeg * 1000;
+
+    let estado, texto;
+    if (qtcSeg <= 0.44) {
+        estado = 'tfg-estado-ok';
+        texto = 'QTc normal (≤0,44 s / ≤440 ms).';
+    } else if (qtcSeg <= 0.5) {
+        estado = 'tfg-estado-warn';
+        texto = 'QTc prolongado, por debajo del umbral de mayor riesgo (0,5 s). Revisar fármacos/electrolitos que prolongan el QT (Tabla 19.5: antiarrítmicos IA/III, macrólidos, neurolépticos, cisaprida; hipopotasemia, hipocalcemia, hipomagnesemia).';
+    } else {
+        estado = 'tfg-estado-danger';
+        texto = 'QTc &gt;0,5 s: riesgo de torsade de pointes. Corregir causas reversibles. Recuerda: el QT prolongado es frecuente en el crítico mientras que la torsade es infrecuente — su valor predictivo aislado es limitado.';
+    }
+    resultado.className = `result-box ${estado}`;
+    resultado.style.textAlign = 'left';
+    resultado.innerHTML = `<strong>QTc = ${qtcMs.toFixed(0)} ms (${qtcSeg.toFixed(3)} s)</strong><p style="font-size:0.85rem; margin-top:6px;">${texto}</p>`;
+}
+
+function initQtc() {
+    const resultado = document.getElementById('mc-qtc-resultado');
+    if (!resultado) return;
+    document.querySelectorAll('.mc-qtc-input').forEach(el => el.addEventListener('input', calcQtc));
+    calcQtc();
+}
+
 // Enlace interno Ficha I → Ficha X (mismo panel, sin depender del
 // listener global .tx-link de nefrologia/index.js, que escanea todo el
 // DOM y no debe reutilizarse fuera de sus propias claves de vista).
@@ -173,4 +254,6 @@ export function init() {
     initTeg();
     initDispositivoSelector();
     initLinkASeptico();
+    initCha2ds2Vasc();
+    initQtc();
 }
