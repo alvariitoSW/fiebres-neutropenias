@@ -6062,6 +6062,124 @@ dentro de `#cardiologia-view` y en el switcher `cardioLevel` de
       hemorragia, TEG, selector de dispositivo/tipo de shock,
       CHA₂DS₂-VASc, QTc) siguen funcionando sin regresiones; sin
       overflow horizontal a 390px pese a las tablas nuevas.
+  - **Segunda auditoría, cuarta relectura del módulo** — a petición
+    explícita del usuario de un nuevo informe de huecos/imágenes/mejoras/
+    interactividad. A diferencia de las 3 rondas anteriores (centradas en
+    figuras y tablas con nombre propio), esta releyó el **texto corrido**
+    completo de los Cap. 14, 15, 17 y 18 (y las secciones de etiología/
+    hemodinámica/farmacología del 16) con `pdftotext`, comparando frase a
+    frase contra el HTML ya existente — buscando cifras/protocolos/matices
+    sin tabla asociada que los delatara. Resultado: **0 huecos de
+    contenido nuevos** y **0 imágenes reales sin extraer** (inventario de
+    `pdfimages -list` reconfirmado) — las 3 rondas anteriores ya habían
+    alcanzado un nivel de fidelidad que esta relectura solo pudo
+    confirmar, no ampliar. Solo 2 mejoras cosméticas encontradas (sin
+    contenido clínico, pura consistencia estructural del HTML): 5 de las
+    imágenes más antiguas (Fig. 14.1-14.3, 18.2, 18.4) usaban
+    `<div class="article-figure-caption">` en vez de `<p>` (visualmente
+    idéntico, el CSS aplica por clase — inconsistente solo dentro del
+    propio archivo, corregido con un script de sustitución verificando
+    después que los 21 `<article-figure-caption>` del archivo ya son
+    `<p>` y que el recuento de `<div>` abiertos/cerrados seguía
+    balanceado); y `.hl-purpura` (reservado para definiciones formales en
+    la convención ya establecida de la app) no se usaba ni una vez pese a
+    tener 4 candidatas claras — añadido a las definiciones de sepsis/
+    shock séptico, TSS y anafilaxia. Publicado el informe como Artifact
+    con 13 propuestas de interactividad (las 10 ya pendientes de la
+    auditoría anterior, sin cambios, + 3 nuevas descubiertas en esta
+    relectura del texto corrido del Cap. 18: asistente de titulación de
+    furosemida IV, conversor de equivalencia de diuréticos de asa, y
+    diferenciador TSS estafilocócico vs. estreptocócico).
+  - **Implementación de las 13 piezas interactivas propuestas**, a
+    petición explícita del usuario ("ahora aplica las mejoras
+    propuestas"). Todas verificadas contra el contenido ya escrito en
+    cada ficha (nunca fabricando una cifra nueva) y con Playwright antes
+    de darlas por completadas:
+    - **Ficha I**: gauge visual del objetivo de PAM (`#mc-pam-actual` +
+      `.kinetic-row`/`.kinetic-fill` con marcador en 65 mmHg sobre una
+      escala 0-120, mismo patrón ya usado en el DO₂I de Cardiología/
+      Fisiopatología UCI) añadido justo debajo del selector de tipo de
+      shock ya existente.
+    - **Ficha II**: selector "¿qué agente para este escenario?" (6
+      escenarios — inicial en séptico, 2º/3er agente en séptico
+      resistente, anafiláctico, bradicardia, hipotensión de anestesia —
+      basado en la Tabla 14.4 y en los perfiles de fármaco ya
+      desarrollados en la propia ficha).
+    - **Ficha VI**: selector de perfil hemodinámico en shock cardiogénico
+      (VI/VD/obstrucción dinámica del TSVI/inflamación sistémica
+      sobreañadida) — primera pieza interactiva de las Fichas VI/VII, que
+      hasta ahora no tenían ninguna.
+    - **Ficha XI**: diferenciador TSS estafilocócico vs. estreptocócico —
+      checklist de 4 datos disponibles (hemocultivo positivo, fuente
+      menstrual/quirúrgica, fuente fascitis/posparto, dolor
+      desproporcionado) con un sistema de puntos simple basado en la
+      Tabla 17.3, declarando explícitamente cuándo los datos son mixtos o
+      insuficientes en vez de forzar un veredicto.
+    - **Ficha XIV** (2 piezas): asistente de titulación de furosemida IV
+      — wizard/estado-máquina (mismo patrón ya usado por el algoritmo de
+      diuréticos de la guía ESC de IC en `insuficiencia-cardiaca.js`,
+      replicado aquí sin importarlo, cada módulo con su propia copia)
+      que recorre naïve-función renal normal (40 mg) / naïve-insuficiencia
+      renal (60-80 mg) / dosis crónica oral equivalente, evalúa la
+      diuresis a las 2h, y si es inadecuada pregunta si ya se alcanzó el
+      máximo de 200 mg antes de declarar resistencia a furosemida; y
+      conversor de equivalencia de diuréticos de asa (1 campo numérico,
+      furosemida → bumetanida/torsemida por la razón 40:1:20 de la Tabla
+      18.4).
+    - **Ficha XVI**: selector de fármaco de control de frecuencia en FA
+      por comorbilidad (general/HFrEF/hiperadrenérgico/titulación
+      rápida/control crónico/WPW), basado en la Tabla 19.1 y en los
+      matices de eficacia ya citados en la ficha (diltiazem más rápido,
+      amiodarona preferida en HFrEF, betabloqueantes en estados
+      hiperadrenérgicos, digoxina solo para control crónico, y el aviso
+      explícito de que ninguno de estos fármacos debe usarse en WPW).
+    - **Ficha XIX**: calculadora de delta de troponina (hs-cTn inicial +
+      a la 1h → % de cambio, veredicto de isquemia aguda si &gt;10% según
+      el protocolo de 3 pasos ya descrito en la propia ficha).
+    - **Ficha XX**: cronómetro de tiempo puerta-balón en tiempo real
+      (botón "Iniciar" que arranca un `setInterval` de 1s, semáforo
+      `tfg-estado-ok/warn/danger` en los cortes de 90/120 min ya citados
+      en el micro-perfil "STEMI — tiempo puerta-balón").
+    - **Ficha XXI**: selector de antihipertensivo en disección aórtica
+      (5 escenarios — titulación rápida, monoterapia, mantenimiento oral,
+      vasodilatador ya con betabloqueante, coexistencia con IC aguda —
+      basado en la Tabla 20.5, remarcando la regla de la propia ficha de
+      que un vasodilatador SIEMPRE debe combinarse con betabloqueante).
+    - **Ficha XXII**: simulador paso a paso del algoritmo ACLS — segundo
+      wizard/estado-máquina del módulo, recorriendo la rama FV/TV
+      (desfibrilar → 2 min RCP → epinefrina + 2º choque → amiodarona/
+      lidocaína tras el 3er choque sin respuesta) y la rama AESP/asistolia
+      (RCP + epinefrina cada 3-5 min, buscando "las T", con posibilidad de
+      pasar a la rama de FV/TV si el ritmo cambia) hasta RCE o
+      consideración de terminar la reanimación — fiel a la lógica de
+      decisión del `algo-flow` ya existente (recreado por la restricción
+      de copyright de la Fig. 21.2 original de la AHA), nunca a la imagen
+      protegida.
+    - **Ficha XXIII**: intérprete de ETCO₂ a los 20 minutos (1 campo
+      numérico contra el umbral 10-15 mmHg, con una zona límite explícita
+      entre ambos cortes citados por la fuente en vez de fingir un único
+      corte consensuado).
+    - **Ficha XXIV**: checklist puntuable de los 7 predictores de mal
+      pronóstico de la Tabla 21.5 (conteo en vivo, mismo patrón que el
+      checklist DRESS de Fisiopatología UCI, con el aviso de que cada
+      criterio predice mal resultado aislado — no hace falta que se
+      acumulen varios — y de respetar el día de evaluación de cada uno).
+    - Verificado con Playwright (viewport 390×844, navegación real
+      ficha→abrir→voltear→panel activo, no solo lectura del DOM oculto):
+      las 13 piezas responden correctamente a valores concretos (PAM 55 →
+      gauge rojo; angiotensina II como 3er vasopresor; TSS con fascitis
+      marcada → estreptocócico; TSVI → aviso de betabloqueante no
+      vasodilatador; wizard de furosemida navega renal-normal→40mg;
+      conversor 80mg→2mg bumetanida/40mg torsemida; troponina 10→25 →
+      Δ150%/isquemia; cronómetro puerta-balón cuenta en tiempo real;
+      nicardipino → aviso de "siempre con betabloqueante"; ACLS wizard
+      desfibrilable→2º paso; ETCO₂ 8 → "improbable"; checklist de
+      pronóstico cuenta 1/7; WPW → aviso de no usar ningún fármaco de la
+      tabla; CHA₂DS₂-VASc y el resto de calculadoras ya existentes sin
+      regresiones); sin errores de consola ni 404 reales; sin overflow
+      horizontal a 390px en ninguna de las 24 fichas. Con esta ronda, las
+      13 propuestas de interactividad de la Segunda Auditoría quedan
+      todas implementadas — ninguna pendiente.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

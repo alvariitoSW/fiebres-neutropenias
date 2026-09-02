@@ -255,6 +255,474 @@ function initLinkATabla211() {
     btn.addEventListener('click', () => openCorkboardTopic('panel-merino-cardio-tabs', 'mc-paro-soporte'));
 }
 
+// Gauge visual del objetivo de PAM (Ficha I) — mismo patrón .kinetic-row/
+// .kinetic-fill/.kinetic-marker ya usado en el resto de la app (DO2I de
+// Cardiología/Fisiopatología UCI).
+const MC_PAM_GAUGE_MAX = 120;
+function calcPamGauge() {
+    const input = document.getElementById('mc-pam-actual');
+    const row = document.getElementById('mc-pam-gauge-row');
+    const fill = document.getElementById('mc-pam-gauge-fill');
+    const num = document.getElementById('mc-pam-gauge-num');
+    if (!input || !row || !fill || !num) return;
+    if (input.value === '') { row.style.display = 'none'; return; }
+    let pam = Number(input.value);
+    if (pam < 0) { pam = 0; input.value = 0; }
+    if (pam > 180) { pam = 180; input.value = 180; }
+    row.style.display = 'block';
+    fill.style.width = `${Math.max(0, Math.min(100, (pam / MC_PAM_GAUGE_MAX) * 100))}%`;
+    fill.style.background = pam >= 65 ? 'var(--accent-green)' : 'var(--accent-red)';
+    fill.style.boxShadow = pam >= 65 ? 'var(--glow-green)' : 'var(--glow-red)';
+    num.textContent = `${pam}`;
+}
+function initPamGauge() {
+    const input = document.getElementById('mc-pam-actual');
+    if (!input) return;
+    input.addEventListener('input', calcPamGauge);
+    calcPamGauge();
+}
+
+// Selector "¿qué agente para este escenario?" (Ficha II), basado en la
+// Tabla 14.4 y en los perfiles de cada fármaco ya desarrollados en la ficha.
+const VASOPRESOR_ESCENARIO = {
+    'septico-inicial': { estado: 'tfg-estado-ok', texto: '<strong>Norepinefrina</strong> — vasopresor inicial de elección en shock séptico. Infusión continua sin dosis de carga, iniciar a 5-10 μg/min y titular cada 5 min (rango 5-40 μg/min).' },
+    'septico-2': { estado: 'tfg-estado-warn', texto: '<strong>Vasopresina</strong> — 2º agente si la hipotensión persiste pese a norepinefrina. Infusión continua 0,01-0,04 U/h, dosis no titulable (a diferencia de los catecolaminérgicos).' },
+    'septico-3': { estado: 'tfg-estado-danger', texto: '<strong>Angiotensina II</strong> — 3er agente en resistencia a norepinefrina + vasopresina. Inicio 20 ng/kg/min, hasta 80 ng/kg/min en las primeras 3h, mantenimiento ≤40 ng/kg/min. Riesgo mayor: trombosis venosa (13% vs. 5% con placebo en un ensayo). No hay evidencia convincente de que un 3er vasopresor mejore la supervivencia en shock séptico.' },
+    anafilactico: { estado: 'tfg-estado-danger', texto: '<strong>Epinefrina</strong> — elección en shock anafiláctico (ver Ficha XII para dosis IM/IV). En otros contextos es 2ª línea en séptico (produce lactato, dificultando su uso como marcador de perfusión).' },
+    bradicardia: { estado: 'tfg-estado-warn', texto: '<strong>Dopamina</strong> — estimulación cardíaca (cronotrópica) más marcada que otros vasopresores, útil si coexiste bradicardia con hipotensión, aunque hoy limitada en la mayoría de los demás contextos por esa misma estimulación indeseada.' },
+    anestesia: { estado: 'tfg-estado-ok', texto: '<strong>Fenilefrina</strong> — agonista α puro, sobre todo para la hipotensión inducida por anestesia (sin componente cronotrópico que complique procedimientos breves).' },
+};
+function initVasopresorEscenario() {
+    const select = document.getElementById('mc-vasopresor-escenario');
+    const resultado = document.getElementById('mc-vasopresor-escenario-resultado');
+    if (!select || !resultado) return;
+    select.addEventListener('change', () => {
+        const info = VASOPRESOR_ESCENARIO[select.value];
+        if (!info) { resultado.style.display = 'none'; return; }
+        resultado.style.display = 'block';
+        resultado.className = `result-box ${info.estado}`;
+        resultado.style.textAlign = 'left';
+        resultado.innerHTML = `<p style="font-size:0.85rem;">${info.texto}</p>`;
+    });
+}
+
+// Diferenciador TSS estafilocócico vs. estreptocócico (Ficha XI), basado en
+// la Tabla 17.3 — orientativo por conteo de datos disponibles, nunca
+// diagnóstico por sí solo.
+function calcTss() {
+    const hemo = document.getElementById('mc-tss-hemocultivo-pos')?.checked;
+    const menstrual = document.getElementById('mc-tss-fuente-menstrual')?.checked;
+    const fascitis = document.getElementById('mc-tss-fuente-fascitis')?.checked;
+    const dolor = document.getElementById('mc-tss-dolor-desproporcionado')?.checked;
+    const resultado = document.getElementById('mc-tss-resultado');
+    if (!resultado) return;
+
+    if (!hemo && !menstrual && !fascitis && !dolor) {
+        resultado.className = 'result-box';
+        resultado.innerHTML = '<span style="color:var(--text-muted);">Marca los datos disponibles para ver hacia qué síndrome apuntan (orientativo, no diagnóstico).</span>';
+        return;
+    }
+    let puntosEstrepto = 0, puntosEstafilo = 0;
+    if (hemo) puntosEstrepto += 1;
+    if (menstrual) puntosEstafilo += 2;
+    if (fascitis) puntosEstrepto += 2;
+    if (dolor) puntosEstrepto += 1;
+
+    let estado, texto;
+    if (puntosEstrepto > puntosEstafilo) {
+        estado = 'tfg-estado-danger';
+        texto = 'Los datos marcados orientan más hacia <strong>TSS estreptocócico</strong> (mortalidad 35%, muy superior al estafilocócico) — hemocultivos positivos en ~60% de los casos, fuente típica fascitis necrotizante/sepsis posparto, dolor desproporcionado al examen. Terapia: penicilina en dosis alta + clindamicina.';
+    } else if (puntosEstafilo > puntosEstrepto) {
+        estado = 'tfg-estado-warn';
+        texto = 'Los datos marcados orientan más hacia <strong>TSS estafilocócico</strong> — hemocultivos positivos en &lt;5% de los casos (su ausencia NO lo descarta), fuente típica menstruación/tampones o herida quirúrgica. Terapia: MSSA → cefazolina + clindamicina · MRSA → vancomicina + clindamicina.';
+    } else {
+        estado = 'tfg-estado-warn';
+        texto = 'Datos mixtos o insuficientes para orientar el diagnóstico diferencial — recuerda que sin fuente identificable (~35% estafilocócico, ~45% estreptocócico) el diagnóstico se apoya en el cuadro clínico global, no en un único dato aislado. En ambos casos: cobertura empírica de amplio espectro + vancomicina + clindamicina mientras se aclara.';
+    }
+    resultado.className = `result-box ${estado}`;
+    resultado.style.textAlign = 'left';
+    resultado.innerHTML = texto;
+}
+function initTss() {
+    const resultado = document.getElementById('mc-tss-resultado');
+    if (!resultado) return;
+    document.querySelectorAll('.mc-tss-check').forEach(c => c.addEventListener('change', calcTss));
+    calcTss();
+}
+
+// Selector de perfil hemodinámico en shock cardiogénico (Ficha VI) — VI,
+// VD, obstrucción dinámica del TSVI e inflamación sistémica sobreañadida.
+const CARDIOGENICO_PERFIL_INFO = {
+    vi: { estado: 'tfg-estado-danger', texto: 'Fallo del <strong>ventrículo izquierdo</strong> — la causa más frecuente de shock cardiogénico (síndrome coronario agudo ~50% de los casos según el Cap. 14; ~2/3 según el Cap. 16, ver nota de fidelidad en Ficha I). Manejo dirigido a la perfusión tisular y la revascularización — ver Ficha VII.' },
+    vd: { estado: 'tfg-estado-warn', texto: 'Fallo del <strong>ventrículo derecho</strong> — mismas similitudes fisiopatológicas que el fallo del VI, pero con menor mortalidad. La dilatación grave del VD puede desplazar el septo interventricular hacia el VI, comprometiendo también su llenado (interdependencia ventricular).' },
+    tsvi: { estado: 'tfg-estado-warn', texto: '<strong>Obstrucción dinámica del tracto de salida del VI</strong> (miocardiopatía hipertrófica) — se trata de forma distinta al resto: el objetivo es enlentecer la FC y aumentar el llenado diastólico con betabloqueantes no vasodilatadores (metoprolol, nadolol), NO con inotrópicos ni reducción de precarga, que empeoran la obstrucción.' },
+    inflamatorio: { estado: 'tfg-estado-warn', texto: '<strong>Shock cardiogénico con inflamación sistémica sobreañadida</strong> (20-40% de los casos post-IAM) — las RVS pueden NO estar elevadas pese al bajo gasto (vasodilatación por óxido nítrico), y la mortalidad es mayor. Se relaciona con la disfunción microcirculatoria del shock cardiogénico.' },
+};
+function initCardiogenicoPerfil() {
+    const select = document.getElementById('mc-cardiogenico-perfil-select');
+    const resultado = document.getElementById('mc-cardiogenico-perfil-resultado');
+    if (!select || !resultado) return;
+    select.addEventListener('change', () => {
+        const info = CARDIOGENICO_PERFIL_INFO[select.value];
+        if (!info) { resultado.style.display = 'none'; return; }
+        resultado.style.display = 'block';
+        resultado.className = `result-box ${info.estado}`;
+        resultado.style.textAlign = 'left';
+        resultado.innerHTML = `<p style="font-size:0.85rem;">${info.texto}</p>`;
+    });
+}
+
+// Asistente de titulación de furosemida IV (Ficha XIV) — mismo patrón
+// wizard/estado-máquina ya usado por el algoritmo de diuréticos de la
+// guía ESC 2026 de IC (insuficiencia-cardiaca.js).
+const MC_FUROSEMIDA_WIZARD = {
+    inicio: {
+        pregunta: '¿El paciente ya recibe furosemida oral de forma crónica?',
+        si: 'evaluarCronico',
+        no: 'preguntaRenal',
+    },
+    preguntaRenal: {
+        pregunta: '¿Función renal normal (sin insuficiencia renal conocida)?',
+        si: 'evaluarNormal',
+        no: 'evaluarIR',
+    },
+    evaluarNormal: {
+        pregunta: 'Dosis IV inicial: 40 mg (naïve, función renal normal). A las 2h, ¿diuresis ≥1 litro?',
+        si: { estado: 'tfg-estado-ok', final: 'Respuesta adecuada a 40 mg IV. Mantener la dosis eficaz IV dos veces al día hasta descongestión completa.' },
+        no: 'dosisMax',
+    },
+    evaluarIR: {
+        pregunta: 'Dosis IV inicial: 60-80 mg (naïve, insuficiencia renal). A las 2h, ¿diuresis ≥1 litro?',
+        si: { estado: 'tfg-estado-ok', final: 'Respuesta adecuada a la dosis inicial. Mantener la dosis eficaz IV dos veces al día hasta descongestión completa.' },
+        no: 'dosisMax',
+    },
+    evaluarCronico: {
+        pregunta: 'Dosis IV inicial: igual a la dosis oral diaria total (solo ~50% de la dosis oral se absorbe — puede necesitar ajuste al alza). A las 2h, ¿diuresis ≥1 litro?',
+        si: { estado: 'tfg-estado-ok', final: 'Respuesta adecuada a la dosis inicial. Mantener la dosis eficaz IV dos veces al día hasta descongestión completa.' },
+        no: 'dosisMax',
+    },
+    dosisMax: {
+        pregunta: '¿La dosis IV actual ya alcanza 200 mg?',
+        si: { estado: 'tfg-estado-danger', final: 'Resistencia a furosemida confirmada (sin respuesta a 200 mg IV). Considerar bumetanida/torsemida, metolazona adyuvante, infusión continua, o ultrafiltración — ver Tabla 18.4 y el micro-perfil "Resistencia a la furosemida" de esta misma ficha.' },
+        no: { estado: 'tfg-estado-warn', final: 'Doblar la dosis IV (hasta un máximo de 200 mg) y reevaluar la diuresis a las 2h.' },
+    },
+};
+function renderFurosemidaWizard(pasoKey) {
+    const preguntaEl = document.getElementById('mc-furosemida-wizard-pregunta');
+    const botonesEl = document.getElementById('mc-furosemida-wizard-botones');
+    const resultadoEl = document.getElementById('mc-furosemida-wizard-resultado');
+    const resetEl = document.getElementById('mc-furosemida-wizard-reset');
+    if (!preguntaEl) return;
+    const paso = MC_FUROSEMIDA_WIZARD[pasoKey];
+    preguntaEl.textContent = paso.pregunta;
+    resultadoEl.style.display = 'none';
+    resetEl.style.display = 'none';
+    botonesEl.innerHTML = '';
+    ['si', 'no'].forEach(resp => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opcion';
+        btn.style.flex = '1';
+        btn.textContent = resp === 'si' ? 'Sí' : 'No';
+        btn.addEventListener('click', () => {
+            const next = paso[resp];
+            if (typeof next === 'string') {
+                renderFurosemidaWizard(next);
+            } else {
+                botonesEl.innerHTML = '';
+                resultadoEl.style.display = 'block';
+                resultadoEl.className = `result-box ${next.estado}`;
+                resultadoEl.style.textAlign = 'left';
+                resultadoEl.innerHTML = `<strong>${next.final}</strong>`;
+                resetEl.style.display = 'inline-block';
+            }
+        });
+        botonesEl.appendChild(btn);
+    });
+}
+function initFurosemidaWizard() {
+    const preguntaEl = document.getElementById('mc-furosemida-wizard-pregunta');
+    if (!preguntaEl) return;
+    renderFurosemidaWizard('inicio');
+    document.getElementById('mc-furosemida-wizard-reset').addEventListener('click', () => renderFurosemidaWizard('inicio'));
+}
+
+// Conversor de equivalencia de diuréticos de asa (Ficha XIV) — Tabla 18.4:
+// 40 mg furosemida = 1 mg bumetanida = 20 mg torsemida.
+function calcDiureticoEquiv() {
+    const input = document.getElementById('mc-diuretico-equiv-input');
+    const resultado = document.getElementById('mc-diuretico-equiv-resultado');
+    if (!input || !resultado) return;
+    if (input.value === '') { resultado.style.display = 'none'; return; }
+    let mg = Number(input.value);
+    if (mg < 0) { mg = 0; input.value = 0; }
+    const bumetanida = mg / 40;
+    const torsemida = mg / 2;
+    resultado.style.display = 'block';
+    resultado.className = 'result-box';
+    resultado.style.textAlign = 'left';
+    resultado.innerHTML = `<strong>${mg} mg furosemida ≈ ${bumetanida.toFixed(2)} mg bumetanida ≈ ${torsemida.toFixed(1)} mg torsemida</strong><p style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">Equivalencia de la Tabla 18.4 (40:1:20) — útil en resistencia a furosemida, dado que bumetanida/torsemida tienen mayor biodisponibilidad.</p>`;
+}
+function initDiureticoEquiv() {
+    const input = document.getElementById('mc-diuretico-equiv-input');
+    if (!input) return;
+    input.addEventListener('input', calcDiureticoEquiv);
+    calcDiureticoEquiv();
+}
+
+// Calculadora de delta de troponina (Ficha XIX), protocolo de 3 pasos de
+// hs-cTn al ingreso y a la 1h ya descrito en la propia ficha.
+function calcTroponinaDelta() {
+    const inicialEl = document.getElementById('mc-troponina-inicial');
+    const horaEl = document.getElementById('mc-troponina-1h');
+    const resultado = document.getElementById('mc-troponina-resultado');
+    if (!inicialEl || !horaEl || !resultado) return;
+    if (inicialEl.value === '' || horaEl.value === '') { resultado.style.display = 'none'; return; }
+    const inicial = Number(inicialEl.value);
+    const hora = Number(horaEl.value);
+    if (inicial < 0 || hora < 0) { resultado.style.display = 'none'; return; }
+
+    let deltaPct = inicial === 0 ? (hora === 0 ? 0 : Infinity) : ((hora - inicial) / inicial) * 100;
+
+    let estado, texto;
+    if (!isFinite(deltaPct)) {
+        estado = 'tfg-estado-danger';
+        texto = 'Cambio no cuantificable como % desde un valor inicial de 0 — valora el cambio absoluto y el cuadro clínico.';
+    } else if (Math.abs(deltaPct) > 10) {
+        estado = 'tfg-estado-danger';
+        texto = `Cambio ${deltaPct > 0 ? 'ascendente' : 'descendente'} &gt;10% — evidencia de isquemia aguda (IM agudo), según el protocolo de 3 pasos de esta ficha.`;
+    } else {
+        estado = 'tfg-estado-ok';
+        texto = 'Cambio ≤10% — sin evidencia de isquemia aguda por este criterio. Si la hs-cTn inicial ya está elevada (por encima del percentil 99 del ensayo) y han pasado ≥3h desde el inicio de síntomas, sigue siendo compatible con necrosis miocárdica ya establecida (causas no isquémicas: miocardiopatía, taquicardia sostenida, IC, hipertensión pulmonar, sepsis).';
+    }
+    resultado.style.display = 'block';
+    resultado.className = `result-box ${estado}`;
+    resultado.style.textAlign = 'left';
+    resultado.innerHTML = `<strong>Δ = ${isFinite(deltaPct) ? deltaPct.toFixed(1) + '%' : '—'}</strong><p style="font-size:0.85rem; margin-top:6px;">${texto}</p>`;
+}
+function initTroponinaDelta() {
+    const resultado = document.getElementById('mc-troponina-resultado');
+    if (!resultado) return;
+    document.getElementById('mc-troponina-inicial')?.addEventListener('input', calcTroponinaDelta);
+    document.getElementById('mc-troponina-1h')?.addEventListener('input', calcTroponinaDelta);
+    calcTroponinaDelta();
+}
+
+// Cronómetro de tiempo puerta-balón (Ficha XX) — tiempo real desde que se
+// pulsa "Iniciar", comparado contra el objetivo AHA de 90-120 min.
+let mcPuertaBalonInterval = null;
+let mcPuertaBalonInicio = null;
+function actualizarPuertaBalon() {
+    const resultado = document.getElementById('mc-puerta-balon-resultado');
+    if (!resultado || !mcPuertaBalonInicio) return;
+    const segundos = Math.floor((Date.now() - mcPuertaBalonInicio) / 1000);
+    const min = Math.floor(segundos / 60);
+    const seg = segundos % 60;
+    let estado, mensaje;
+    if (min < 90) { estado = 'tfg-estado-ok'; mensaje = 'Dentro del objetivo (&lt;90 min).'; }
+    else if (min < 120) { estado = 'tfg-estado-warn'; mensaje = 'Por encima del objetivo AHA de 90 min, dentro del límite de 120 min.'; }
+    else { estado = 'tfg-estado-danger'; mensaje = 'Por encima de 120 min — la mortalidad aumenta significativamente a partir de aquí (Fig. 20.2).'; }
+    resultado.style.display = 'block';
+    resultado.className = `result-box ${estado}`;
+    resultado.style.textAlign = 'left';
+    resultado.innerHTML = `<strong>${min} min ${seg.toString().padStart(2, '0')} s</strong><p style="font-size:0.85rem; margin-top:6px;">${mensaje}</p>`;
+}
+function initPuertaBalon() {
+    const iniciarBtn = document.getElementById('mc-puerta-balon-iniciar');
+    const resetBtn = document.getElementById('mc-puerta-balon-reset');
+    if (!iniciarBtn || !resetBtn) return;
+    iniciarBtn.addEventListener('click', () => {
+        mcPuertaBalonInicio = Date.now();
+        iniciarBtn.style.display = 'none';
+        resetBtn.style.display = 'inline-block';
+        actualizarPuertaBalon();
+        mcPuertaBalonInterval = setInterval(actualizarPuertaBalon, 1000);
+    });
+    resetBtn.addEventListener('click', () => {
+        clearInterval(mcPuertaBalonInterval);
+        mcPuertaBalonInicio = null;
+        iniciarBtn.style.display = 'inline-block';
+        resetBtn.style.display = 'none';
+        const resultado = document.getElementById('mc-puerta-balon-resultado');
+        if (resultado) resultado.style.display = 'none';
+    });
+}
+
+// Selector de antihipertensivo en disección aórtica (Ficha XXI), Tabla 20.5.
+const DISECCION_FARMACO_INFO = {
+    'titulacion-rapida': { estado: 'tfg-estado-ok', texto: '<strong>Esmolol</strong> — betabloqueante ultrarrápido (semivida ~9 min), preferido cuando se necesita ajustar la dosis con rapidez. 500 μg/kg bolo, luego 50 μg/kg/min, incrementos de 25 hasta 200 μg/kg/min máx. Evitar en IC aguda.' },
+    monoterapia: { estado: 'tfg-estado-ok', texto: '<strong>Labetalol</strong> — α y β bloqueante combinado, la única opción de la tabla que puede usarse en monoterapia (cubre control de FC y PA a la vez). 20 mg IV en 2 min, luego 20-40 mg cada 10 min o infusión 1-2 mg/min (máx. 300 mg acumulados). Evitar en IC aguda.' },
+    'oral-mantenimiento': { estado: 'tfg-estado-ok', texto: '<strong>Metoprolol</strong> — adecuado para el betabloqueo inicial junto a un vasodilatador, con dosificación intermitente. 5 mg bolo, repetible ×2 en 5 min, luego 5-10 mg cada 4-6h.' },
+    'vasodilatador-asociado': { estado: 'tfg-estado-warn', texto: '<strong>Nicardipino</strong> (o nitroprusiato) — SIEMPRE combinado con betabloqueante, nunca en monoterapia (la taquicardia refleja y el aumento del gasto cardíaco de un vasodilatador solo, sin betabloqueo, aumentan las fuerzas de cizalla). Nicardipino: infusión 5 mg/h, +2,5 mg/h cada 5 min hasta 15 mg/h máx.' },
+    'ic-aguda': { estado: 'tfg-estado-danger', texto: 'Esmolol, labetalol y metoprolol son betabloqueantes — usar con cautela o evitarlos si coexiste IC aguda descompensada. Considerar nitroprusiato + betabloqueo con vigilancia hemodinámica estrecha, y valorar el manejo combinado con la Ficha XIV (IC aguda: manejo).' },
+};
+function initDiseccionFarmaco() {
+    const select = document.getElementById('mc-diseccion-farmaco-select');
+    const resultado = document.getElementById('mc-diseccion-farmaco-resultado');
+    if (!select || !resultado) return;
+    select.addEventListener('change', () => {
+        const info = DISECCION_FARMACO_INFO[select.value];
+        if (!info) { resultado.style.display = 'none'; return; }
+        resultado.style.display = 'block';
+        resultado.className = `result-box ${info.estado}`;
+        resultado.style.textAlign = 'left';
+        resultado.innerHTML = `<p style="font-size:0.85rem;">${info.texto}</p>`;
+    });
+}
+
+// Selector de fármaco de control de frecuencia en FA por comorbilidad
+// (Ficha XVI), Tabla 19.1.
+const FA_FARMACO_INFO = {
+    general: { estado: 'tfg-estado-ok', texto: '<strong>Diltiazem</strong> — el más popular y eficaz en las primeras horas (cruza el objetivo de 100 lpm a las ~2,3h). 0,25 mg/kg IV en 2 min, luego infusión 5-15 mg/h. Limitado por hipotensión (20-30%) y efecto inotrópico negativo.' },
+    hfref: { estado: 'tfg-estado-warn', texto: '<strong>Amiodarona</strong> — preferida en HFrEF (menos inotropismo negativo que diltiazem/betabloqueantes), y puede además convertir a ritmo sinusal. 150 mg IV en 10 min (repetible), luego 1 mg/min×6h y 0,5 mg/min×18h (máx. 2,2 g/24h).' },
+    hiperadrenergico: { estado: 'tfg-estado-ok', texto: '<strong>Betabloqueante</strong> (metoprolol o esmolol) — más eficaz en estados hiperadrenérgicos (dolor, ansiedad, sepsis) que diltiazem. Éxito en ~70% de los casos.' },
+    'titulacion-rapida': { estado: 'tfg-estado-ok', texto: '<strong>Esmolol</strong> — betabloqueante ultra-corto (semivida 9 min), permite titulación rápida y reversible. 500 μg/kg IV bolo, luego 50 μg/kg/min, incrementos de 25 μg/kg/min cada 5 min hasta 200 μg/kg/min máx.' },
+    'control-cronico': { estado: 'tfg-estado-warn', texto: '<strong>Digoxina</strong> — acción lenta, NO debe usarse sola para control agudo (apenas alcanza el objetivo &lt;100 lpm a las 6h), pero es una opción de control a largo plazo, sobre todo en HFrEF. 0,25 mg IV cada 2h hasta 1,5 mg total, luego 0,125-0,375 mg IV/día.' },
+    wpw: { estado: 'tfg-estado-danger', texto: '<span class="hl-rojo">Ninguno de los fármacos de la Tabla 19.1 debe usarse</span> si la FA se origina de una vía accesoria en el nodo AV (WPW, ver Ficha XVII) — el bloqueo selectivo del nodo AV puede precipitar fibrilación ventricular. Requiere manejo especializado distinto.' },
+};
+function initFaFarmaco() {
+    const select = document.getElementById('mc-fa-farmaco-select');
+    const resultado = document.getElementById('mc-fa-farmaco-resultado');
+    if (!select || !resultado) return;
+    select.addEventListener('change', () => {
+        const info = FA_FARMACO_INFO[select.value];
+        if (!info) { resultado.style.display = 'none'; return; }
+        resultado.style.display = 'block';
+        resultado.className = `result-box ${info.estado}`;
+        resultado.style.textAlign = 'left';
+        resultado.innerHTML = `<p style="font-size:0.85rem;">${info.texto}</p>`;
+    });
+}
+
+// Simulador paso a paso del algoritmo ACLS (Ficha XXII) — mismo patrón
+// wizard que el asistente de furosemida de más arriba, recorriendo la
+// lógica del algo-flow ya presente en la ficha (protegido por copyright
+// AHA en su forma gráfica original, aquí solo la secuencia de decisión).
+const MC_ACLS_WIZARD = {
+    inicio: {
+        pregunta: 'Paro sin pulso confirmado — RCP inmediata (compresiones + O₂) en marcha, monitor/desfibrilador conectado. ¿Ritmo desfibrilable (FV/TV sin pulso)?',
+        si: 'desfib1',
+        no: 'noDesfib1',
+    },
+    desfib1: {
+        pregunta: 'Desfibrila (choque bifásico 120-200 J) y reanuda RCP 2 min sin interrupción. Tras 2 min, ¿persiste ritmo desfibrilable?',
+        si: 'epi1',
+        no: { estado: 'tfg-estado-ok', final: 'Ritmo cambia. Comprueba pulso — si organizado y con pulso, posible RCE (ver cuidados posparo, Ficha XXIV). Si sigue sin pulso pero ya no desfibrilable, pasa a la vía de asistolia/AESP (epinefrina cada 3-5 min + buscar causas reversibles).' },
+    },
+    epi1: {
+        pregunta: 'Epinefrina 1 mg IV/IO (repetir cada 3-5 min durante toda la reanimación) + 2º choque. Tras el 2º choque y 2 min de RCP, ¿persiste FV/TV?',
+        si: 'antiarritmico',
+        no: { estado: 'tfg-estado-ok', final: 'Ritmo cambia tras el 2º choque + epinefrina. Comprueba pulso — posible RCE (ver Ficha XXIV) o transición a la vía de asistolia/AESP si sigue sin pulso.' },
+    },
+    antiarritmico: {
+        pregunta: 'Tras el 3er choque sin respuesta: amiodarona 300 mg IV/IO (2ª dosis 150 mg si es necesario; si no hay amiodarona, lidocaína 1-1,5 mg/kg). ¿Persiste FV/TV pese a 3 choques + epinefrina + antiarrítmico?',
+        si: { estado: 'tfg-estado-danger', final: 'Mal pronóstico tras el fallo de 3 desfibrilaciones (~5% de resultado satisfactorio). Busca activamente causas reversibles ("las H y las T": hipovolemia, hipoxia, hidrogenión-acidosis, hipo/hiperpotasemia, hipotermia, neumoTórax a tensión, Taponamiento, Tromboembolismo, oclusión Trombótica coronaria) y considera ECMO emergente si está disponible en 24h.' },
+        no: { estado: 'tfg-estado-ok', final: 'Ritmo cambia. Comprueba pulso — posible RCE (ver Ficha XXIV) o transición a la vía de asistolia/AESP si sigue sin pulso.' },
+    },
+    noDesfib1: {
+        pregunta: 'Ritmo no desfibrilable (asistolia/AESP). RCP 2 min + epinefrina 1 mg IV/IO cada 3-5 min, buscando causas reversibles ("las T": neumoTórax a tensión, Taponamiento pericárdico, Tromboembolismo venoso, oclusión Trombótica coronaria). Al reevaluar a los 2 min, ¿cambia a ritmo desfibrilable?',
+        si: 'desfib1',
+        no: 'noDesfib2',
+    },
+    noDesfib2: {
+        pregunta: 'Sigue en asistolia/AESP. ¿Hay retorno de circulación espontánea (pulso palpable o ETCO₂ en ascenso, ver Ficha XXIII)?',
+        si: { estado: 'tfg-estado-ok', final: 'RCE — inicia cuidados posparo cardíaco de inmediato (control de temperatura, hemodinámica, pronóstico neurológico: ver Ficha XXIV).' },
+        no: { estado: 'tfg-estado-warn', final: 'Continúa ciclos de RCP 2 min + epinefrina cada 3-5 min, reevaluando ritmo y causas reversibles cada 2 min. Si el esfuerzo ha sido adecuado y prolongado sin RCE, considera la terminación de la reanimación.' },
+    },
+};
+function renderAclsWizard(pasoKey) {
+    const preguntaEl = document.getElementById('mc-acls-wizard-pregunta');
+    const botonesEl = document.getElementById('mc-acls-wizard-botones');
+    const resultadoEl = document.getElementById('mc-acls-wizard-resultado');
+    const resetEl = document.getElementById('mc-acls-wizard-reset');
+    if (!preguntaEl) return;
+    const paso = MC_ACLS_WIZARD[pasoKey];
+    preguntaEl.textContent = paso.pregunta;
+    resultadoEl.style.display = 'none';
+    resetEl.style.display = 'none';
+    botonesEl.innerHTML = '';
+    ['si', 'no'].forEach(resp => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opcion';
+        btn.style.flex = '1';
+        btn.textContent = resp === 'si' ? 'Sí' : 'No';
+        btn.addEventListener('click', () => {
+            const next = paso[resp];
+            if (typeof next === 'string') {
+                renderAclsWizard(next);
+            } else {
+                botonesEl.innerHTML = '';
+                resultadoEl.style.display = 'block';
+                resultadoEl.className = `result-box ${next.estado}`;
+                resultadoEl.style.textAlign = 'left';
+                resultadoEl.innerHTML = `<strong>${next.final}</strong>`;
+                resetEl.style.display = 'inline-block';
+            }
+        });
+        botonesEl.appendChild(btn);
+    });
+}
+function initAclsWizard() {
+    const preguntaEl = document.getElementById('mc-acls-wizard-pregunta');
+    if (!preguntaEl) return;
+    renderAclsWizard('inicio');
+    document.getElementById('mc-acls-wizard-reset').addEventListener('click', () => renderAclsWizard('inicio'));
+}
+
+// Checklist puntuable de predictores de mal pronóstico (Ficha XXIV),
+// Tabla 21.5 — mismo patrón que el checklist DRESS de Fisiopatología UCI.
+function calcPronostico() {
+    const checks = document.querySelectorAll('.mc-pronostico-check');
+    const resultado = document.getElementById('mc-pronostico-resultado');
+    if (!resultado || checks.length === 0) return;
+    const marcados = Array.from(checks).filter(c => c.checked).length;
+    if (marcados === 0) {
+        resultado.className = 'result-box';
+        resultado.innerHTML = '<span style="color:var(--text-muted);">Marca los criterios presentes (Tabla 21.5) — cualquiera de los 7, en su momento de evaluación correcto, predice mal resultado con alto grado de certeza.</span>';
+        return;
+    }
+    resultado.className = 'result-box tfg-estado-danger';
+    resultado.style.textAlign = 'left';
+    resultado.innerHTML = `<strong>${marcados} de 7 criterios presentes.</strong><p style="font-size:0.85rem; margin-top:6px;">Cada uno de estos 7 predictores, aislado, ya se asocia a mal resultado neurológico con alto grado de certeza — no es necesario que se acumulen varios. Verifica siempre que se haya respetado el momento de evaluación de cada criterio (día 2 o día 4 según el hallazgo) antes de usarlo con fines pronósticos.</p>`;
+}
+function initPronostico() {
+    const resultado = document.getElementById('mc-pronostico-resultado');
+    if (!resultado) return;
+    document.querySelectorAll('.mc-pronostico-check').forEach(c => c.addEventListener('change', calcPronostico));
+    calcPronostico();
+}
+
+// Intérprete de ETCO₂ a los 20 minutos (Ficha XXIII), umbral 10-15 mmHg.
+function calcEtco2() {
+    const input = document.getElementById('mc-etco2-20min');
+    const resultado = document.getElementById('mc-etco2-resultado');
+    if (!input || !resultado) return;
+    if (input.value === '') { resultado.style.display = 'none'; return; }
+    let etco2 = Number(input.value);
+    if (etco2 < 0) { etco2 = 0; input.value = 0; }
+
+    let estado, texto;
+    if (etco2 < 10) {
+        estado = 'tfg-estado-danger';
+        texto = 'Por debajo de 10 mmHg — reanimación exitosa improbable a los 20 min de RCP.';
+    } else if (etco2 <= 15) {
+        estado = 'tfg-estado-warn';
+        texto = 'Zona límite (10-15 mmHg) — la fuente cita ambos umbrales (15 mmHg en un estudio, 10 mmHg en otro) sin un único corte consensuado. Valora la trayectoria (¿sube o baja?, ver Fig. 21.4) junto al resto del cuadro.';
+    } else {
+        estado = 'tfg-estado-ok';
+        texto = 'Por encima de 15 mmHg — compatible con RCE probable/reanimación con más opciones. Continuar la reanimación hasta 1½ horas se ha asociado a resultados favorables cuando el ETCO₂ se mantiene por encima de este nivel.';
+    }
+    resultado.style.display = 'block';
+    resultado.className = `result-box ${estado}`;
+    resultado.style.textAlign = 'left';
+    resultado.innerHTML = `<strong>${etco2} mmHg</strong><p style="font-size:0.85rem; margin-top:6px;">${texto}</p>`;
+}
+function initEtco2() {
+    const input = document.getElementById('mc-etco2-20min');
+    if (!input) return;
+    input.addEventListener('input', calcEtco2);
+    calcEtco2();
+}
+
 export function init() {
     initCorkboard('merino-cardio-corkboard', 'panel-merino-cardio-tabs');
     initTipoShock();
@@ -265,4 +733,17 @@ export function init() {
     initLinkATabla211();
     initCha2ds2Vasc();
     initQtc();
+    initPamGauge();
+    initVasopresorEscenario();
+    initTss();
+    initCardiogenicoPerfil();
+    initFurosemidaWizard();
+    initDiureticoEquiv();
+    initTroponinaDelta();
+    initPuertaBalon();
+    initDiseccionFarmaco();
+    initFaFarmaco();
+    initAclsWizard();
+    initPronostico();
+    initEtco2();
 }

@@ -484,13 +484,23 @@
             <div class="form-group"><label for="mc-shock-rvs">RVS</label><select id="mc-shock-rvs" class="mc-shock-tipo-select"><option value="">— elige —</option><option value="alta">Alta</option><option value="baja">Baja</option></select></div>
             <div id="mc-shock-tipo-resultado" class="result-box"></div>
 
+            <div class="form-group" style="margin-top:10px;"><label for="mc-pam-actual">PAM actual (mmHg), opcional</label><input type="number" id="mc-pam-actual" min="0" max="180" step="1" placeholder="Ej. 58"></div>
+            <div class="kinetic-row" id="mc-pam-gauge-row" style="display:none;">
+                <div class="kinetic-label"><span>PAM (mmHg) · objetivo ≥65</span><strong id="mc-pam-gauge-num">—</strong></div>
+                <div class="kinetic-track">
+                    <div class="kinetic-fill" id="mc-pam-gauge-fill" style="width: 0%;"></div>
+                    <div class="kinetic-marker" style="left: 54.2%;"></div>
+                    <div class="kinetic-marker-label" style="left: 54.2%;">65</div>
+                </div>
+            </div>
+
             <p class="section-label" style="margin-top:16px;">Monitorización de la presión arterial</p>
             <dl class="kv-row"><dt>Objetivo</dt><dd>Presión arterial media (PAM) <span class="hl-verde">≥65 mmHg</span>, medida con catéter arterial (registro intra-arterial directo).</dd></dl>
             <p style="font-size:0.85rem; color:var(--text-dim);">Registro directo: se obtiene de las arterias radial, braquial, axilar o femoral, y el sitio de canulación puede influir en la forma de la onda registrada.</p>
 
             <div class="article-figure">
                 <img src="js/modules/cardiologia/img/mc-fig1-onda-arterial.jpg" alt="Onda de presión arterial en aorta, braquial, radial y femoral" loading="lazy">
-                <div class="article-figure-caption">Figura 14.1 — La onda de presión arterial cambia a medida que se aleja de la aorta proximal.</div>
+                <p class="article-figure-caption">Figura 14.1 — La onda de presión arterial cambia a medida que se aleja de la aorta proximal.</p>
             </div>
             <p style="font-size:0.85rem; color:var(--text-dim);"><strong>Amplificación sistólica:</strong> a medida que la onda de presión se mueve hacia la periferia, la porción sistólica se estrecha y la presión sistólica aumenta progresivamente — puede subir hasta <strong>20 mmHg</strong> entre la aorta proximal y las arterias radial o femoral. El aumento es el resultado de ondas de presión reflejadas en las bifurcaciones vasculares y los vasos estrechados: las ondas reflejadas viajan más rápido cuando las arterias están rígidas, y alcanzan la onda de presión arterial antes de que decrezca — la convergencia de las ondas anterógrada y retrógrada acentúa el pico de la onda (el mismo efecto que forma las "olas monstruo" cuando dos oleajes convergen desde direcciones opuestas). La amplificación sistólica aumenta la poscarga del VI, pero <span class="hl-verde">no promueve el flujo sistémico</span>.</p>
             <p style="font-size:0.85rem; color:var(--text-dim);">Por eso <em>no monitorizar la presión sistólica si es posible</em>: es una onda reflejada que se aleja de la periferia, mientras que el flujo en la microcirculación es laminar, no pulsátil, y carece de componentes sistólico/diastólico reales. <strong>La PAM es la presión preferida para la monitorización hemodinámica</strong> por 2 motivos: es la fuerza motriz principal del flujo sistémico, y no cambia a medida que la onda de presión se desplaza hacia la periferia (a diferencia de la sistólica).</p>
@@ -499,11 +509,11 @@
             <p style="font-size:0.85rem; color:var(--text-dim);">Cuando el registro directo no está disponible: un manguito inflable comprime la arteria subyacente, y las oscilaciones de presión que produce se convierten en presión sistólica/diastólica/media por el <em>método oscilométrico</em> (estándar en los monitores automáticos de UCI) — las mismas oscilaciones, convertidas en ondas sonoras, son la base del <em>método auscultatorio</em> (ruidos de Korotkoff) más antiguo.</p>
             <div class="article-figure">
                 <img src="js/modules/cardiologia/img/mc-fig2-korotkoff.jpg" alt="Métodos oscilométrico y auscultatorio de medición de la presión arterial" loading="lazy">
-                <div class="article-figure-caption">Figura 14.2 — Métodos oscilométrico y auscultatorio de medición de la PA.</div>
+                <p class="article-figure-caption">Figura 14.2 — Métodos oscilométrico y auscultatorio de medición de la PA.</p>
             </div>
             <div class="article-figure">
                 <img src="js/modules/cardiologia/img/mc-fig3-manguito.jpg" alt="Relación entre el tamaño del manguito y la circunferencia del brazo" loading="lazy">
-                <div class="article-figure-caption">Figura 14.3 — Relaciones óptimas entre longitud (L) y ancho (W) del manguito y la circunferencia (C) del brazo: L = 0,8×C · W = 0,4×C.</div>
+                <p class="article-figure-caption">Figura 14.3 — Relaciones óptimas entre longitud (L) y ancho (W) del manguito y la circunferencia (C) del brazo: L = 0,8×C · W = 0,4×C.</p>
             </div>
             <p style="font-size:0.85rem; color:var(--text-dim);"><strong>La fuente más común de error es un manguito de tamaño inapropiado</strong> para la circunferencia del brazo — un manguito demasiado pequeño sobreestima falsamente la presión. Método rápido: el manguito debe rodear alrededor de la mitad de la circunferencia del brazo; si rodea menos, es demasiado pequeño.</p>
             <p class="section-label" style="margin-top:12px;">Tabla 14.2 — Tamaño de manguito según circunferencia del brazo</p>
@@ -645,6 +655,21 @@
                     <tr><td>Angiotensina II</td><td>0,02-0,08 μg/kg/min<br>(inicial, luego ≤0,04)</td><td>Puede favorecer trombosis venosa</td></tr>
                 </tbody>
             </table>
+
+            <p class="section-label" style="margin-top:16px;">🧭 ¿Qué agente para este escenario?</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Selector basado en la Tabla 14.4 y en los perfiles de cada fármaco de esta ficha:</p>
+            <div class="form-group"><label for="mc-vasopresor-escenario">Escenario clínico</label>
+                <select id="mc-vasopresor-escenario">
+                    <option value="">— elige —</option>
+                    <option value="septico-inicial">Shock séptico — vasopresor inicial</option>
+                    <option value="septico-2">Shock séptico resistente a norepinefrina (2º agente)</option>
+                    <option value="septico-3">Shock séptico resistente a norepinefrina + vasopresina (3er agente)</option>
+                    <option value="anafilactico">Shock anafiláctico</option>
+                    <option value="bradicardia">Hipotensión con bradicardia</option>
+                    <option value="anestesia">Hipotensión durante anestesia/procedimiento breve</option>
+                </select>
+            </div>
+            <div id="mc-vasopresor-escenario-resultado" class="result-box" style="display:none;"></div>
 
             <p class="section-label" style="margin-top:16px;">Comentario de seguridad</p>
             <p style="font-size:0.85rem; color:var(--text-dim);">La norepinefrina tiene efectos inmunosupresores demostrados: estudios en animales y humanos muestran que suprime la producción de citocinas proinflamatorias durante su infusión — el significado clínico es incierto, pero levanta una señal de alarma sobre su uso generalizado en shock séptico. Además, la recomendación de múltiples vasopresores en el shock refractario a vasopresores debería cuestionarse: no hay evidencia convincente de que añadir vasopresina o un tercer vasopresor mejore los resultados en shock séptico.</p>
@@ -1019,6 +1044,20 @@
                     <div class="micro-prof-body">La necrosis miocárdica dispara una respuesta inflamatoria localizada que puede progresar a una respuesta inflamatoria sistémica. Signos de inflamación sistémica (fiebre, leucocitosis, etc.) se han reportado en el 20-40% de los pacientes con shock cardiogénico que complica un IAM, y estos pacientes tienen menores resistencias vasculares sistémicas (por el efecto vasodilatador del óxido nítrico) y mayor mortalidad. Esta inflamación sistémica se ha relacionado con la disfunción microcirculatoria en el shock cardiogénico.</div>
                 </div>
             </div>
+
+            <p class="section-label" style="margin-top:16px;">🧭 ¿Qué perfil hemodinámico tengo delante?</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Selector orientativo de los 3 perfiles descritos en esta ficha — VI, VD y obstrucción dinámica del TSVI comparten el mismo patrón global de shock cardiogénico (IC bajo, presiones de llenado altas), pero cada uno cambia el manejo inicial:</p>
+            <div class="form-group"><label for="mc-cardiogenico-perfil-select">Hallazgo predominante</label>
+                <select id="mc-cardiogenico-perfil-select">
+                    <option value="">— elige —</option>
+                    <option value="vi">Presión en cuña (PCP) elevada, VD normal</option>
+                    <option value="vd">PVC/PCP elevado (ratio PVC/PCP aumentado), VD dilatado, FEVI normal</option>
+                    <option value="tsvi">Soplo sistólico dinámico + gradiente subaórtico en el Doppler, empeora con inotrópicos/hipovolemia</option>
+                    <option value="inflamatorio">Fiebre/leucocitosis + RVS bajas de lo esperado para shock cardiogénico</option>
+                </select>
+            </div>
+            <div id="mc-cardiogenico-perfil-resultado" class="result-box" style="display:none;"></div>
+
             <button id="mc-link-a-scai" style="background:none; border:none; padding:0; margin-top:8px; font:inherit; font-size:0.85rem; color:var(--accent-blue); text-decoration:underline; cursor:pointer;">🔗 Ver la clasificación SCAI y el manejo hospitalario del shock cardiogénico (guía ESC 2026 de IC) →</button>
         </div>
 
@@ -1227,8 +1266,8 @@
 
             <p class="section-label">Definiciones (2016, Sepsis-3)</p>
             <ul class="term-chips">
-                <li><strong>Sepsis:</strong> infección (sospechada o confirmada) asociada a disfunción orgánica potencialmente mortal, resultado de una respuesta del huésped desregulada a la infección</li>
-                <li><strong>Shock séptico:</strong> subgrupo de sepsis caracterizado por la necesidad de soporte vasopresor y un lactato plasmático &gt;2 mmol/l</li>
+                <li><strong>Sepsis:</strong> <span class="hl-purpura">infección (sospechada o confirmada) asociada a disfunción orgánica potencialmente mortal, resultado de una respuesta del huésped desregulada a la infección</span></li>
+                <li><strong>Shock séptico:</strong> <span class="hl-purpura">subgrupo de sepsis caracterizado por la necesidad de soporte vasopresor y un lactato plasmático &gt;2 mmol/l</span></li>
             </ul>
             <p style="font-size:0.85rem; color:var(--text-dim);">Estas definiciones (2016) sustituyeron a las previas (1992), que definían sepsis como una infección acompañada de respuesta inflamatoria sistémica (fiebre, leucocitosis, etc.), elevando esta última condición a un síndrome — el "síndrome de respuesta inflamatoria sistémica" (SRIS). Sin embargo, el SRIS es un hallazgo inespecífico en el paciente crítico (menos del 50% de los pacientes con SRIS tienen una infección documentada), por lo que el SRIS se abandonó como criterio diagnóstico de sepsis.</p>
             <p style="font-size:0.85rem; color:var(--text-dim)"><strong>Un mejor entendimiento:</strong> la presencia de infección es un rasgo central en la definición de sepsis y shock séptico. Sin embargo, a menudo no hay infección documentada en casos de sepsis — en una encuesta de 2,5 millones de pacientes con sepsis y shock séptico, no hubo infección documentada en el 70% de los casos. Dado que la sospecha clínica de infección en casos de sepsis se basa típicamente en la presencia de una respuesta inflamatoria sistémica (fiebre, leucocitosis, etc.), parece probable que <em>la sepsis sea una respuesta del huésped desregulada a la inflamación, no a la infección</em>.</p>
@@ -1305,7 +1344,7 @@
             <h3 style="color: var(--accent-yellow);">Síndrome de shock tóxico</h3>
             <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Marik PE. <em>Handbook of Evidence-Based Critical Care</em>, Cap. 17.</p>
 
-            <p style="font-size:0.85rem; color:var(--text-dim);">El síndrome de shock tóxico (TSS) es una forma especializada de shock séptico, causada por cepas productoras de toxinas de <em>Staphylococcus aureus</em> y <em>Streptococcus pyogenes</em> (estreptococo del grupo A), caracterizada por un fallo multiorgánico rápidamente progresivo.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);"><span class="hl-purpura">El síndrome de shock tóxico (TSS) es una forma especializada de shock séptico, causada por cepas productoras de toxinas de <em>Staphylococcus aureus</em> y <em>Streptococcus pyogenes</em> (estreptococo del grupo A), caracterizada por un fallo multiorgánico rápidamente progresivo.</span></p>
 
             <p class="section-label">Patogénesis</p>
             <p style="font-size:0.85rem; color:var(--text-dim);">Las toxinas liberadas por los microorganismos responsables son capaces de activar linfocitos T a escala masiva, creando una <strong>"tormenta de citocinas"</strong> capaz de una lesión inflamatoria generalizada. La culminación de este proceso es fallo multiorgánico y coagulación intravascular diseminada (CID). Los cambios hemodinámicos en TSS son similares a los del shock séptico, con hipotensión por vasodilatación sistémica. La disrupción del endotelio es pronunciada en TSS, y la extravasación de fluidos resultante puede llevar a hipovolemia profunda.</p>
@@ -1326,6 +1365,14 @@
                 </tbody>
             </table>
             </div>
+
+            <p class="section-label" style="margin-top:16px;">🧭 ¿Estafilocócico o estreptocócico?</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Selector basado en la Tabla 17.3 — marca los datos que tengas disponibles (déjalos sin marcar si no aplican o no los conoces todavía):</p>
+            <div class="form-group"><label class="checkbox-label"><input type="checkbox" class="mc-tss-check" id="mc-tss-hemocultivo-pos"> Hemocultivo positivo</label></div>
+            <div class="form-group"><label class="checkbox-label"><input type="checkbox" class="mc-tss-check" id="mc-tss-fuente-menstrual"> Fuente sospechada: menstruación (tampón) o herida quirúrgica</label></div>
+            <div class="form-group"><label class="checkbox-label"><input type="checkbox" class="mc-tss-check" id="mc-tss-fuente-fascitis"> Fuente sospechada: fascitis necrotizante o sepsis posparto</label></div>
+            <div class="form-group"><label class="checkbox-label"><input type="checkbox" class="mc-tss-check" id="mc-tss-dolor-desproporcionado"> Dolor desproporcionado al examen físico (partes blandas)</label></div>
+            <div id="mc-tss-resultado" class="result-box"></div>
 
             <p class="section-label" style="margin-top:16px;">Presentación clínica</p>
             <p style="font-size:0.85rem; color:var(--text-dim);">El TSS típicamente empieza con un cuadro pseudogripal (fiebre, mialgias, letargia), a menudo asociado a diarrea y un exantema eritematoso difuso (parece una quemadura solar) que afecta palmas y plantas (la descamación de la piel aparece a las 2-3 semanas). Esto progresa en 48 horas a hipotensión e implicación de múltiples órganos: SNC (alteración mental), pulmones (síndrome de dificultad respiratoria aguda), riñones (lesión renal aguda), hígado (transaminasas y bilirrubina elevadas), músculo esquelético (rabdomiólisis), y sistema hematopoyético (CID). La cianosis de extremidades distales puede aparecer, y la extravasación de fluidos a través de capilares permeables puede producir edema sin fóvea.</p>
@@ -1356,7 +1403,7 @@
             <h3 style="color: var(--accent-blue);">Anafilaxia y shock anafiláctico</h3>
             <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Marik PE. <em>Handbook of Evidence-Based Critical Care</em>, Cap. 17.</p>
 
-            <dl class="kv-row"><dt>Definición</dt><dd>Síndrome agudo de disfunción multiorgánica producido por la liberación inmunogénica de mediadores inflamatorios de basófilos y mastocitos. El rasgo característico es una respuesta exagerada de inmunoglobulina E (IgE) a un antígeno externo — una <em>reacción de hipersensibilidad</em>. Involucra típicamente piel, pulmones, tracto gastrointestinal y sistema cardiovascular; desencadenantes frecuentes: fármacos (especialmente antimicrobianos), alimentos y picaduras de insecto. Al contrario de la percepción popular, las muertes por anafilaxia son raras, con una tasa de mortalidad del 0,25-0,33%.</dd></dl>
+            <dl class="kv-row"><dt>Definición</dt><dd><span class="hl-purpura">Síndrome agudo de disfunción multiorgánica producido por la liberación inmunogénica de mediadores inflamatorios de basófilos y mastocitos. El rasgo característico es una respuesta exagerada de inmunoglobulina E (IgE) a un antígeno externo — una <em>reacción de hipersensibilidad</em></span>. Involucra típicamente piel, pulmones, tracto gastrointestinal y sistema cardiovascular; desencadenantes frecuentes: fármacos (especialmente antimicrobianos), alimentos y picaduras de insecto. Al contrario de la percepción popular, las muertes por anafilaxia son raras, con una tasa de mortalidad del 0,25-0,33%.</dd></dl>
 
             <p class="section-label">Características clínicas</p>
             <p style="font-size:0.85rem; color:var(--text-dim);">Las reacciones anafilácticas suelen aparecer a los pocos minutos de la exposición al desencadenante externo, y pueden recurrir dentro de las 72 horas de la reacción inicial (<em>anafilaxia bifásica</em>). Rasgo característico: edema e hinchazón en el órgano afectado, resultado de un aumento de la permeabilidad vascular.</p>
@@ -1459,7 +1506,7 @@
             <p style="font-size:0.85rem; color:var(--text-dim);">Habitualmente consecuencia de hipertensión pulmonar (ej. embolia pulmonar, enfermedad pulmonar crónica) o de un infarto de la pared inferior. El mecanismo es disfunción sistólica, con aumento del volumen telediastólico del VD (VTDVD) — difícil de detectar clínicamente porque la PVC no sube (ni aparece ingurgitación yugular) hasta que el aumento del VTDVD queda restringido por el pericardio (<em>constricción pericárdica</em>).</p>
             <div class="article-figure">
                 <img src="js/modules/cardiologia/img/mc-fig18-2-tte-vd.jpg" alt="Ecocardiografía transtorácica mostrando agrandamiento del VD" loading="lazy">
-                <div class="article-figure-caption">Figura 18.2 — Eje corto paraesternal mostrando agrandamiento del VD: la cavidad del VD es mayor que la del VI, y el septo interventricular se aplana en diástole (flechas), signo de sobrecarga de volumen del VD.</div>
+                <p class="article-figure-caption">Figura 18.2 — Eje corto paraesternal mostrando agrandamiento del VD: la cavidad del VD es mayor que la del VI, y el septo interventricular se aplana en diástole (flechas), signo de sobrecarga de volumen del VD.</p>
             </div>
             <p style="font-size:0.85rem; color:var(--text-dim);">La ecocardiografía transtorácica (ETT) es el método estándar para detectar IC derecha a pie de cama. Normalmente la cavidad del VD es ~2/3 del tamaño de la del VI. La distensión adicional del VD empuja el septo interventricular hacia el VI, reduciendo el tamaño de su cámara — este desplazamiento septal altera el llenado del VI y aumenta su presión telediastólica: así, <span class="hl-rojo">la IC derecha puede producir disfunción diastólica en el ventrículo izquierdo</span>, por el proceso conocido como <em>interdependencia interventricular</em>.</p>
             <p style="font-size:0.85rem; color:var(--text-dim);">Las medidas cuantitativas 2D del tamaño/acortamiento fraccional del VD son propensas a errores (geometría anómala del VD, diferencias interobservador de posición de la sonda). La ecocardiografía 3D supera este problema y aporta VTDVD/FEVD (FEVD normal &gt;45%). La resonancia magnética cardíaca es la técnica más precisa, aunque no se cubre aquí. Con catéter de arteria pulmonar: la IC derecha es una consideración si la PVC es igual o mayor que la presión de enclavamiento (PCP) — pero esta equiparación también ocurre en el taponamiento pericárdico, así que se necesita ecocardiografía para distinguir ambas condiciones.</p>
@@ -1502,7 +1549,7 @@
                     <div class="micro-prof-body">
                         <div class="article-figure">
                             <img src="js/modules/cardiologia/img/mc-fig18-4-edema-pulmonar.jpg" alt="Radiografía de tórax con edema pulmonar cardiogénico" loading="lazy">
-                            <div class="article-figure-caption">Figura 18.4 — Radiografía portátil de tórax en un paciente con IC aguda y edema pulmonar. Los infiltrados irradian desde las regiones hiliares — el rasgo que distingue el edema pulmonar cardiogénico del no cardiogénico.</div>
+                            <p class="article-figure-caption">Figura 18.4 — Radiografía portátil de tórax en un paciente con IC aguda y edema pulmonar. Los infiltrados irradian desde las regiones hiliares — el rasgo que distingue el edema pulmonar cardiogénico del no cardiogénico.</p>
                         </div>
                         La presentación clínica de la IC aguda está dominada por disnea y evidencia de congestión pulmonar (crepitantes basilares, cambios radiológicos, hipoxemia). La radiografía puede mostrar cambios mínimos o edema pulmonar franco. Los derrames pleurales también son frecuentes con el edema pulmonar cardiogénico.
                     </div>
@@ -1593,6 +1640,20 @@
                     <div class="micro-prof-body">Para pacientes masivamente sobrecargados de volumen, puede producir una diuresis más sostenida que la inyección en bolo (hallazgo no consistente). Régimen para furosemida en infusión continua: bolo IV inicial de 80 mg. Si el FGe estimado es ≥30 mL/1,73m², iniciar infusión a 5 mg/hr (si la respuesta —diuresis ≥100 mL/h— es inadecuada, dar un segundo bolo y aumentar a 10 mg/hr, hasta un máximo de 40 mg/hr). Si el FGe estimado es &lt;30 mL/1,73m², iniciar a 20 mg/hr (segundo bolo + aumento a 40 mg/hr si respuesta inadecuada).</div>
                 </div>
             </div>
+
+            <p class="section-label" style="margin-top:16px;">🧭 Asistente de titulación de furosemida IV</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Recorre el protocolo de escalada descrito arriba paso a paso:</p>
+            <div class="card" id="mc-furosemida-wizard" style="padding:14px 16px;">
+                <div id="mc-furosemida-wizard-pregunta" style="font-size:0.88rem; margin-bottom:10px;"></div>
+                <div id="mc-furosemida-wizard-botones" style="display:flex; gap:10px;"></div>
+                <div class="result-box" id="mc-furosemida-wizard-resultado" style="display:none; text-align:left; margin-top:12px;"></div>
+                <button class="siguiente-ficha-btn" id="mc-furosemida-wizard-reset" style="display:none; margin-top:10px;">↺ Reiniciar</button>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">🧭 Conversor de equivalencia de diuréticos de asa</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">40 mg furosemida = 1 mg bumetanida = 20 mg torsemida (ver Tabla 18.4):</p>
+            <div class="form-group"><label for="mc-diuretico-equiv-input">Dosis de furosemida (mg)</label><input type="number" id="mc-diuretico-equiv-input" min="0" step="1" placeholder="Ej. 80"></div>
+            <div id="mc-diuretico-equiv-resultado" class="result-box" style="display:none;"></div>
 
             <p class="section-label" style="margin-top:16px;">Terapias a largo plazo</p>
             <p style="font-size:0.85rem; color:var(--text-dim);">Se instituyen cuando el paciente está clínicamente estable, y se continúan indefinidamente. El beneficio principal es en la IC con FE reducida (HFrEF), pero también son populares en la IC con FE preservada (HFpEF) si se toleran. Todos los tratamientos son orales, y <span class="hl-rojo">NO se recomiendan en pacientes con hipotensión o evidencia de perfusión tisular alterada</span>.</p>
@@ -1718,6 +1779,21 @@
             </table>
             <p style="font-size:0.85rem; color:var(--text-dim); margin-top:6px;"><strong>Diltiazem</strong> es el agente más popular, y es más eficaz que amiodarona o digoxina en las primeras horas de tratamiento (Fig. 19.5 del capítulo: diltiazem cruza el objetivo de 100 lpm a las ~2,3h, amiodarona a las ~5h, digoxina apenas lo alcanza incluso a las 6h). Los <strong>betabloqueantes</strong> logran control exitoso en el 70% de los casos, más eficaces en estados hiperadrenérgicos — esmolol es preferible a metoprolol por su semivida ultracorta. La <strong>digoxina</strong> tiene un efecto lento de desarrollar (poco efecto en la 1ª hora, FC objetivo &lt;100 aún no alcanzada a las 6h), por lo que no debe usarse sola para control agudo.</p>
             <p style="font-size:0.85rem; color:var(--text-dim);"><span class="hl-rojo">Estos fármacos NO deben usarse si la FA se origina de una vía accesoria en el nodo AV</span> (síndrome de WPW, ver Ficha XVII) — el bloqueo selectivo del nodo AV puede precipitar fibrilación ventricular.</p>
+
+            <p class="section-label" style="margin-top:16px;">🧭 ¿Qué fármaco para este paciente?</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Selector basado en la Tabla 19.1 y en los matices de esta ficha:</p>
+            <div class="form-group"><label for="mc-fa-farmaco-select">Contexto clínico</label>
+                <select id="mc-fa-farmaco-select">
+                    <option value="">— elige —</option>
+                    <option value="general">Sin comorbilidad destacada — de entrada</option>
+                    <option value="hfref">Insuficiencia cardíaca con FE reducida (HFrEF)</option>
+                    <option value="hiperadrenergico">Estado hiperadrenérgico (ansiedad/dolor/sepsis)</option>
+                    <option value="titulacion-rapida">Necesito titulación muy rápida/reversible</option>
+                    <option value="control-cronico">Control de frecuencia a largo plazo, ya estable</option>
+                    <option value="wpw">Vía accesoria conocida (síndrome de WPW)</option>
+                </select>
+            </div>
+            <div id="mc-fa-farmaco-resultado" class="result-box" style="display:none;"></div>
 
             <p class="section-label" style="margin-top:16px;">Punto final del control de frecuencia</p>
             <p style="font-size:0.85rem; color:var(--text-dim);">Sorprendente falta de acuerdo sobre el punto final de la reducción de frecuencia — se han usado FC objetivo de 80 a 110 lpm en distintos estudios. La eliminación del déficit de pulso, o la resolución de la presión sistólica variable (Fig. 19.4), ofrece un objetivo más fisiológico, aunque a menudo se pasa por alto.</p>
@@ -1896,6 +1972,12 @@
                 </div>
             </div>
 
+            <p class="section-label" style="margin-top:16px;">🧭 Calculadora de delta de troponina</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">2 determinaciones (ingreso y 1h) → % de cambio, según el protocolo de 3 pasos de arriba:</p>
+            <div class="form-group"><label for="mc-troponina-inicial">hs-cTn inicial (ng/l)</label><input type="number" id="mc-troponina-inicial" min="0" step="0.1"></div>
+            <div class="form-group"><label for="mc-troponina-1h">hs-cTn a la 1h (ng/l)</label><input type="number" id="mc-troponina-1h" min="0" step="0.1"></div>
+            <div id="mc-troponina-resultado" class="result-box" style="display:none;"></div>
+
             <p class="section-label" style="margin-top:16px;">Tabla 20.1 — Cambios ECG en el SCA</p>
             <table class="data-table">
                 <thead><tr><th>Patrón</th><th>Criterio</th></tr></thead>
@@ -1941,6 +2023,14 @@
                     </div>
                 </div>
             </div>
+
+            <p class="section-label" style="margin-top:16px;">🧭 Cronómetro de tiempo puerta-balón</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Pulsa "Iniciar" en el momento de llegada del paciente — el cronómetro compara el tiempo transcurrido contra el objetivo de 90-120 min:</p>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="quiz-opcion" id="mc-puerta-balon-iniciar" type="button" style="flex:none;">▶️ Iniciar</button>
+                <button class="quiz-opcion" id="mc-puerta-balon-reset" type="button" style="flex:none; display:none;">↺ Reiniciar</button>
+            </div>
+            <div id="mc-puerta-balon-resultado" class="result-box" style="display:none; margin-top:10px;"></div>
 
             <p class="section-label" style="margin-top:16px;">Tabla 20.3 — Medidas cardioprotectoras</p>
             <table class="data-table">
@@ -2026,6 +2116,20 @@
                 </tbody>
             </table>
             <p style="font-size:0.85rem; color:var(--text-dim); margin-top:6px;">Objetivo: PAS de <strong>120 mmHg</strong> (hasta 90 mmHg suele tolerarse). Dolor: opioides IV precoces (activan el sistema simpático, agravando la disección). <strong>Cirugía</strong>: reparación abierta de la aorta ascendente es el estándar en disección tipo A — la mortalidad aumenta 1-2%/hora tras el inicio de síntomas; la reparación puede reducir la mortalidad hasta ~10%.</p>
+
+            <p class="section-label" style="margin-top:16px;">🧭 ¿Qué antihipertensivo elijo?</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Selector basado en la Tabla 20.5 — recuerda que un vasodilatador SIEMPRE debe combinarse con betabloqueante:</p>
+            <div class="form-group"><label for="mc-diseccion-farmaco-select">Situación</label>
+                <select id="mc-diseccion-farmaco-select">
+                    <option value="">— elige —</option>
+                    <option value="titulacion-rapida">Necesito titulación muy rápida/reversible</option>
+                    <option value="monoterapia">Prefiero un único fármaco (α+β combinado)</option>
+                    <option value="oral-mantenimiento">Betabloqueo de mantenimiento, dosis intermitente</option>
+                    <option value="vasodilatador-asociado">Ya tiene betabloqueante — necesito bajar más la PA</option>
+                    <option value="ic-aguda">Coexiste con insuficiencia cardíaca aguda</option>
+                </select>
+            </div>
+            <div id="mc-diseccion-farmaco-resultado" class="result-box" style="display:none;"></div>
         </div>
 
         <!-- ===== FICHA XXII: PARO CARDÍACO — SOPORTE VITAL BÁSICO Y AVANZADO ===== -->
@@ -2109,6 +2213,15 @@
                 <div class="algo-step"><span class="algo-num">•</span><div><strong>Ritmo no desfibrilable (asistolia/AESP)</strong> → RCP 2 min + epinefrina cada 3-5 min → reevaluar ritmo cada 2 min (desfibrilar si cambia a FV/TV) → buscar y tratar causas reversibles.</div></div>
                 <div class="algo-step"><span class="algo-num">•</span><div>Ambas vías convergen en: si hay RCE → cuidados posparo (Ficha XXIV); si no hay RCE tras esfuerzo adecuado → considerar terminación de la reanimación.</div></div>
             </div>
+
+            <p class="section-label" style="margin-top:16px;">🧭 Simulador paso a paso del algoritmo</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Recorre la secuencia de decisión de arriba, un paso cada vez:</p>
+            <div class="card" id="mc-acls-wizard" style="padding:14px 16px;">
+                <div id="mc-acls-wizard-pregunta" style="font-size:0.88rem; margin-bottom:10px;"></div>
+                <div id="mc-acls-wizard-botones" style="display:flex; gap:10px;"></div>
+                <div class="result-box" id="mc-acls-wizard-resultado" style="display:none; text-align:left; margin-top:12px;"></div>
+                <button class="siguiente-ficha-btn" id="mc-acls-wizard-reset" style="display:none; margin-top:10px;">↺ Reiniciar</button>
+            </div>
         </div>
 
         <!-- ===== FICHA XXIII: PARO CARDÍACO — MONITORIZACIÓN DE LA REANIMACIÓN ===== -->
@@ -2126,6 +2239,11 @@
             </ul>
             <p style="font-size:0.85rem; color:var(--text-dim);">Un ETCO₂ que separa respondedores de no respondedores: <strong>15 mmHg tras 20 min</strong> en un estudio (otros: 10 mmHg). En conjunto, la evidencia indica que <span class="hl-rojo">una reanimación exitosa es improbable si el ETCO₂ no supera 10-15 mmHg tras 20 min de RCP</span> — cuando se mantiene por encima de ese nivel, continuar la reanimación hasta 1½ horas se ha asociado a resultados favorables.</p>
             <p style="font-size:0.85rem; color:var(--text-dim);">Fig. 21.4 (734 casos de paro extrahospitalario): con RCE (N=402), el ETCO₂ parte de ~27 mmHg al minuto 1 y sube a ~32 mmHg a los 20 min; sin RCE (N=335), parte de ~19 mmHg y cae a ~7 mmHg a los 20 min — trayectorias que divergen desde los primeros minutos de la reanimación.</p>
+
+            <p class="section-label" style="margin-top:16px;">🧭 Intérprete de ETCO₂ a los 20 minutos</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Un único valor contra el umbral de 10-15 mmHg:</p>
+            <div class="form-group"><label for="mc-etco2-20min">ETCO₂ a los 20 min de RCP (mmHg)</label><input type="number" id="mc-etco2-20min" min="0" step="1" placeholder="Ej. 12"></div>
+            <div id="mc-etco2-resultado" class="result-box" style="display:none;"></div>
 
             <p class="section-label" style="margin-top:16px;">Ecografía a pie de cama</p>
             <p style="font-size:0.85rem; color:var(--text-dim);">Invaluable para detectar causas potencialmente reversibles del paro (neumotórax a tensión, taponamiento pericárdico). Sensibilidad 91%/especificidad 99% para neumotórax en decúbito supino. Los derrames pericárdicos se detectan fácilmente en las vistas subcostal o paraesternal eje largo.</p>
@@ -2198,6 +2316,17 @@
                 <div class="algo-step"><span class="algo-num">7</span><div>TC con edema cerebral difuso.</div></div>
             </div>
             <p style="font-size:0.85rem; color:var(--text-dim); margin-top:8px;">80-95% de los que recuperan consciencia despiertan en 72h, pero puede tardar 5 días o más (sobre todo con hipotermia inducida a 32-34°C) — el tiempo hasta despertar es un mal predictor en la 1ª semana, sobre todo si hay sedación intensa. La postura de descerebración (respuesta extensora anómala) <span class="hl-rojo">NO es muy predictiva</span> de mal resultado, contrariamente a la percepción popular. La aparición de <strong>mioclonías</strong> aisladas es un signo desfavorable pero no descarta recuperación — el <strong>estatus mioclónico</strong> en cualquier momento sí predice mal resultado con casi 100% de certeza.</p>
+
+            <p class="section-label" style="margin-top:16px;">🧭 Checklist puntuable de predictores de mal pronóstico</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Marca los criterios de la Tabla 21.5 presentes en el paciente (respetando el momento de evaluación de cada uno):</p>
+            <div class="form-group"><label class="checkbox-label"><input type="checkbox" class="mc-pronostico-check" id="mc-pron-1"> Ausencia bilateral de reflejo fotomotor pupilar (día 4)</label></div>
+            <div class="form-group"><label class="checkbox-label"><input type="checkbox" class="mc-pronostico-check" id="mc-pron-2"> Ausencia bilateral de reflejo corneal (día 4)</label></div>
+            <div class="form-group"><label class="checkbox-label"><input type="checkbox" class="mc-pronostico-check" id="mc-pron-3"> Ausencia de reflejo oculocefálico o nauseoso (día 2)</label></div>
+            <div class="form-group"><label class="checkbox-label"><input type="checkbox" class="mc-pronostico-check" id="mc-pron-4"> Estatus mioclónico en cualquier momento</label></div>
+            <div class="form-group"><label class="checkbox-label"><input type="checkbox" class="mc-pronostico-check" id="mc-pron-5"> Ausencia bilateral del pico N20 en potenciales evocados somatosensoriales</label></div>
+            <div class="form-group"><label class="checkbox-label"><input type="checkbox" class="mc-pronostico-check" id="mc-pron-6"> EEG con estatus epiléptico no convulsivo, o supresión de fondo con descargas periódicas</label></div>
+            <div class="form-group"><label class="checkbox-label"><input type="checkbox" class="mc-pronostico-check" id="mc-pron-7"> TC con edema cerebral difuso</label></div>
+            <div id="mc-pronostico-resultado" class="result-box"></div>
 
             <p class="section-label" style="margin-top:16px;">Una palabra final: percepción vs. realidad</p>
             <p style="font-size:0.85rem; color:var(--text-dim);">La RCP ha gozado siempre de una popularidad muy superior a la merecida. En encuestas a la población general, el 95% tiene expectativas irreales sobre la RCP, incluida la creencia de que más de la mitad de las víctimas de paro sobreviven y vuelven a la vida diaria sin secuelas — la televisión alimenta esta percepción, retratando la RCP como un éxito hasta en el 75% de los casos. <span class="hl-rojo">La realidad está muy alejada de esa percepción: la RCP tiene un resultado exitoso en solo 1-7% de los casos</span> (<button id="mc-link-a-tabla211" style="background:none; border:none; padding:0; font:inherit; color:var(--accent-red); text-decoration:underline; cursor:pointer;">Tabla 21.1 →</button>). ¿Por qué importa esto? Porque son los pacientes quienes deciden si se realiza la RCP — así que es la percepción errónea, no la realidad, la que está dictando su aplicación.</p>
