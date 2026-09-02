@@ -6181,10 +6181,143 @@ dentro de `#cardiologia-view` y en el switcher `cardioLevel` de
       13 propuestas de interactividad de la Segunda Auditoría quedan
       todas implementadas — ninguna pendiente.
 
+### Neumología
+
+Sexta especialidad del menú raíz (`#btn-neumologia`, junto a Hematología,
+Nefrología, UCI/Papers Tuiter, Fisiopatología UCI y Cardiología). Mismo
+patrón de dos niveles que Cardiología: un **submenú de guías**
+(`#neumologia-menu-view`/`js/modules/neumologia/neumologia-menu.html`, con
+`.btn-volver-especialidades`) del que cuelga un botón por guía, y la
+**vista propia de cada guía** con su propio cuaderno de campo. El switcher
+`neumoLevel` vive en `js/modules/neumologia/index.js`
+(`createViewSwitcher({ menu, merinoNeumologia })`) — mismo motivo que el
+resto de especialidades con submenú interno: la vista raíz
+`#neumologia-view` (registrada en el `topLevel` de `home/index.js`) es solo
+el contenedor exterior. Al volver a "Neumología" desde Especialidades,
+`neumologia.init()` devuelve `{ volverAlMenu, irAFicha }`, inyectado
+perezosamente en `home/index.js` (`onNeumologiaListo`, mismo patrón que
+`onCardiologiaListo`) para dejar siempre el submenú de guías como pantalla
+de entrada. Añadir una guía nueva en el futuro: 1) botón nuevo en
+`neumologia-menu.html`, 2) su propio `<guia>.html` con
+`.btn-volver-neumo-menu`, 3) registrarlo en `index.html` dentro de
+`#neumologia-view` y en el switcher `neumoLevel` de `neumologia/index.js`.
+
+- **Primera guía: "Merino Neumología"**
+  (`js/modules/neumologia/merino-neumologia.html`). Fuente: Marik PE.
+  *Handbook of Evidence-Based Critical Care*, Cap. 22-26 (Acute Pulmonary
+  Embolism, Asthma and COPD in the ICU, Acute Respiratory Distress
+  Syndrome, Oxygen Inhalation, Noninvasive Ventilation — 90 páginas) — el
+  mismo libro que Merino HEMATO (Cap. 12-13) y Merino Cardiología (Cap.
+  14-21), pero un archivo distinto (`docs/marik-2024-respiratory-management-caps22-26.pdf`,
+  sin offset: página del PDF = página impresa del capítulo, verificado con
+  `pdftotext -f N -l N` en el inicio de cada capítulo — Cap22→pág.1,
+  Cap23→pág.15, Cap24→pág.32, Cap25→pág.56, Cap26→pág.76). El usuario avisó
+  explícitamente que es solo **"la primera parte"** — hay más contenido de
+  Marik pendiente de envío en el futuro, que ampliará este mismo módulo
+  (mismo patrón ya visto en Merino Cardiología Parte 1/Parte 2).
+  - **Cuaderno de campo de 13 fichas** (`#merino-neumo-corkboard`/
+    `#panel-merino-neumo-tabs`, mismo `core/corkboard.js` de siempre),
+    correspondencia capítulo→bloque de fichas según su volumen real (mismo
+    criterio ya establecido en el resto del proyecto): **Cap. 22 "Acute
+    Pulmonary Embolism"** → Ficha I (infra/sobrediagnóstico simultáneo de
+    la EP, Tabla 22.1 de valor predictivo de hallazgos clínicos —ninguno
+    supera el 50% de VPP—, dímero D con VPP 27%/VPN 92%, Tabla 22.2 de
+    estudios de imagen —ecografía venosa, angio-TC, gammagrafía V/Q,
+    ecocardiografía—, real Fig. 22.1) y Ficha II (estratificación de riesgo
+    en 3 niveles, Tabla 22.3 de estrategias antitrombóticas, calculadora de
+    peso ajustado para heparina por peso en obesidad mórbida, trombólisis,
+    real Fig. 22.2 de trombectomía por catéter, filtros de vena cava);
+    **Cap. 23 "Asthma and COPD in the ICU"** → Ficha III (monitorización
+    por PEFR con calculador de gravedad, PEEP intrínseca, dispositivos de
+    aerosol —nebulizador vs. MDI, con la discrepancia dosis-respuesta sin
+    explicación—, Tabla 23.1), Ficha IV (algo-flow del algoritmo NAEP,
+    regímenes de SABA, Tabla 23.2, anticolinérgicos, corticoides + Tabla
+    23.3, magnesio/ketamina) y Ficha V (exacerbación de EPOC, Tabla 23.4,
+    antibióticos, hiperinflación dinámica/PEEP intrínseca, estrategias de
+    ventilador); **Cap. 24 "Acute Respiratory Distress Syndrome"** → Ficha
+    VI (patogénesis, Tabla 24.1 de condiciones predisponentes,
+    peculiaridad de la COVID-19, criterios diagnósticos Tabla 24.2,
+    calculadora de gravedad de Berlín por PaO₂/FiO₂, reales Figs.
+    24.1/24.2/24.3), Ficha VII (P-SILI con diagrama SVG propio, HFNO,
+    aviso de toxicidad por O₂, manejo de fluidos, corticoides Tabla 24.3,
+    posición prono Tabla 24.4) y Ficha VIII (VILI —volutrauma/
+    atelectrauma/biotrauma—, real Fig. 24.6, ventilación protectora Tabla
+    24.5 + calculadora de PBW/volumen tidal, hipercapnia permisiva, APRV,
+    tabla de fallo multiorgánico, ECMO); **Cap. 25 "Oxygen Inhalation"** →
+    Ficha IX (historia de las indicaciones, ecuación de CaO₂ +
+    calculadora, Tabla 25.1 de tolerancia a la hipoxemia, la anécdota de
+    Reinhold Messner en el Everest sin O₂ suplementario, efectos sobre el
+    gasto metabólico/vasoconstricción) y Ficha X (Tabla 25.2 de sistemas de
+    administración, sistemas de bajo/alto flujo, HFNO Tabla 25.3), más
+    Ficha XI (química de ROS con diagrama SVG de la cascada de reacción,
+    activación de neutrófilos, antioxidantes —SOD/glutatión+NAC/selenio/
+    vitamina E/vitamina C/ceruloplasmina—, estrés oxidativo, toxicidad
+    pulmonar por O₂, Ecuación 25.3 como palabra final); **Cap. 26
+    "Noninvasive Ventilation"** → Ficha XII (CPAP/BiPAP/PSV/PAV,
+    mascarillas faciales/casco, con el dato de que la intolerancia a la
+    mascarilla explica hasta el 18% de los fracasos de VNI) y Ficha XIII
+    (selección de pacientes Tabla 26.1, tasas de éxito en fallo
+    hipercápnico/hipoxémico, edema pulmonar cardiogénico, papel del HFNO,
+    rendimiento cardíaco —precarga/poscarga, Ecuación 26.1— y la palabra
+    final sobre no demorar la intubación).
+  - **6 imágenes reales extraídas** con `pdfimages -j` desde las páginas
+    exactas del PDF (cruzando la página con `pdftotext` porque la leyenda
+    de la figura a veces aparece en la página SIGUIENTE a la imagen — un
+    primer intento de mapeo de las Figs. 24.2/24.3 se corrigió viendo
+    directamente las imágenes extraídas antes de darlas por buenas, no
+    fiándose solo del `grep` de texto): `neumo-fig22-1-tc-embolia-pulmonar.jpg`
+    (angio-TC con defecto de repleción, Ficha I), `neumo-fig22-2-trombectomia-cateter.jpg`
+    (recuperación de coágulo por catéter, Ficha II), `neumo-fig24-1-histologia-sdra.jpg`
+    (histología de pulmón normal vs. SDRA, Ficha VI), `neumo-fig24-2-radiografia-sdra.jpg`
+    (2 radiografías de tórax, Ficha VI), `neumo-fig24-3-tc-sdra.jpg` (2 TC
+    en distintas fases del SDRA, Ficha VI) y `neumo-fig24-6-microscopia-electronica-vili.jpg`
+    (micrografías electrónicas de desgarro alveolo-capilar por VILI, Ficha
+    VIII) — todas fotografías/registros diagnósticos reales, nunca
+    ilustraciones de dispositivo ni gráficos estadísticos. Mismo criterio
+    de extracción ya establecido en el resto del proyecto aplicado también
+    a lo NO extraído: 2 candidatas (una ilustración de mascarilla de
+    no-reinhalación del Cap. 25 y una de la mascarilla de VNI del Cap. 26)
+    se descartaron tras inspeccionarlas — resultaron ser clip-art
+    estilizado de un dispositivo, no una fotografía clínica real — y se
+    dejaron como descripción de texto en vez de como `<img>`, mismo
+    criterio ya aplicado a los diagramas de dispositivo del resto de la
+    app (nunca dejar una referencia a un archivo `<img>` que no llegó a
+    extraerse).
+  - **5 calculadoras interactivas** (`merino-neumologia.js`, mismo patrón
+    `calcXxx()`/`.tfg-estado-ok/warn/danger` ya usado en el resto de la
+    app, con el guard `.value === ''` ya establecido como lección
+    aprendida en las auditorías de FRA/ERC para no tratar un campo vacío
+    como 0): peso ajustado para heparina por peso (Ecuación 22.1, Ficha
+    II), clasificador de gravedad por PEFR % predicho (Ficha III),
+    clasificador de gravedad del SDRA por PaO₂/FiO₂ según Berlín (Ficha
+    VI), peso corporal predicho (PBW) + volumen tidal inicial/objetivo
+    para ventilación protectora (Ficha VIII), y contenido arterial de O₂
+    (CaO₂, Ecuación 25.1, Ficha IX).
+  - **Bibliografía**: patrón simple de tarjeta única (`<div class="card">`
+    con `.biblio-list`, mismo patrón que `merino-hemato.html` — NO el
+    patrón de "Ficha N dedicada a bibliografía dentro del corkboard" que
+    solo se aplicó a Cardiología tras un pedido explícito posterior),
+    con 5 entradas (una por capítulo) enlazando a
+    `docs/marik-2024-respiratory-management-caps22-26.pdf#page=N`.
+  - **104 preguntas de quiz** (`js/data/merino-neumologia-preguntas.js`,
+    `neumo-q001`-`q104`, 8 por ficha × 13 fichas — 6 de opción múltiple + 2
+    de tipo `redactar` por ficha, mismo formato ya establecido en el resto
+    de módulos Merino). `triggerId: 'btn-merino-neumo-repasar'`, exportado
+    junto a `quizBanco`/`quizTemas` desde `neumologia/index.js` y
+    fusionado en la única llamada a `initQuiz()` de `main.js` — el menú
+    del quiz gana una 6ª asignatura ("Neumología") con un único bloque
+    ("Merino Neumología") de 13 fichas.
+  - **Pendiente**: el usuario ya avisó de que enviará más contenido de
+    Marik para ampliar este módulo — cuando llegue, sigue el mismo
+    criterio ya establecido para Merino Cardiología Parte 2 (nueva tanda
+    de fichas correlativas, banco de quiz ampliado, sin romper la
+    correspondencia 1:1 capítulo↔bloque de fichas ya establecida aquí).
+
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
-también `especialidades`, `nefrologia`, `uciPapers`, `fisioUci` y
-`cardiologia` como vistas más del mismo switcher raíz —, submenú de
+también `especialidades`, `nefrologia`, `uciPapers`, `fisioUci`,
+`cardiologia` y `neumologia` como vistas más del mismo switcher raíz —,
+submenú de
 Citopenias, submenú de
 Trasplante), inicializa el Atlas
 (`initAtlas()` de `modules/home/atlas.js`) y conecta los botones. Los

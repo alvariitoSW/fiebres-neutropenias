@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HUD Clínico UCI</title>
-<link rel="stylesheet" href="css/variables.css?v=20260831">
-<link rel="stylesheet" href="css/base.css?v=20260831">
-<link rel="stylesheet" href="css/components.css?v=20260831">
+<link rel="stylesheet" href="css/variables.css?v=20260902">
+<link rel="stylesheet" href="css/base.css?v=20260902">
+<link rel="stylesheet" href="css/components.css?v=20260902">
 </head>
 <body>
 
@@ -51,6 +51,11 @@
         <button class="accordion-btn nav-btn" id="btn-cardiologia" style="border-left: 4px solid var(--accent-blue);">
             <span><span class="gral-icon" style="color: var(--accent-blue); text-shadow: var(--glow-blue);">🫀</span>CARDIOLOGÍA</span>
             <span style="font-size: 0.8rem; color: var(--accent-blue);">[ VER → ]</span>
+        </button>
+
+        <button class="accordion-btn nav-btn" id="btn-neumologia" style="border-left: 4px solid var(--accent-green);">
+            <span><span class="gral-icon" style="color: var(--accent-green);">🫁</span>NEUMOLOGÍA</span>
+            <span style="font-size: 0.8rem; color: var(--accent-green);">[ VER → ]</span>
         </button>
     </div>
 
@@ -289,10 +294,17 @@
         <div id="cardio-ic-view" style="display: none;" data-include="js/modules/cardiologia/insuficiencia-cardiaca.html"></div>
         <div id="merino-cardio-view" style="display: none;" data-include="js/modules/cardiologia/merino-cardiologia.html"></div>
     </div>
+    <!-- ========================================== -->
+    <!-- VISTA: NEUMOLOGÍA                           -->
+    <!-- ========================================== -->
+    <div id="neumologia-view" style="display: none;">
+        <div id="neumologia-menu-view" data-include="js/modules/neumologia/neumologia-menu.html"></div>
+        <div id="merino-neumo-view" style="display: none;" data-include="js/modules/neumologia/merino-neumologia.html"></div>
+    </div>
 
     <div data-include="js/modules/quiz/quiz.html"></div>
 </div>
 
-<script type="module" src="js/main.js?v=20260831"></script>
+<script type="module" src="js/main.js?v=20260902"></script>
 </body>
 </html>
