@@ -1,8 +1,10 @@
 // Banco de preguntas de repaso — "Merino Neumología" (embolia pulmonar
-// aguda, asma/EPOC en la UCI, SDRA, oxigenoterapia y ventilación no
-// invasiva). 8 preguntas por ficha (6 opción múltiple + 2 de redactar)
-// × 13 fichas. Fuente: Marik PE. Handbook of Evidence-Based Critical Care,
-// Cap. 22-26.
+// aguda, asma/EPOC en la UCI, SDRA, oxigenoterapia, ventilación no
+// invasiva, ventilación mecánica convencional, vía aérea artificial,
+// neumonía asociada a ventilación y destete de la ventilación). 8
+// preguntas por ficha (6 opción múltiple + 2 de redactar) × 23 fichas.
+// Fuente: Marik PE. Handbook of Evidence-Based Critical Care, Cap. 22-30
+// (Cap. 22-26: Parte 1; Cap. 27-30: Parte 2).
 export const temasMerinoNeumologia = [
     { key: 'neumo-ep-diagnostico', etiqueta: 'Embolia pulmonar: evaluación y diagnóstico' },
     { key: 'neumo-ep-manejo', etiqueta: 'Embolia pulmonar: manejo' },
@@ -17,6 +19,16 @@ export const temasMerinoNeumologia = [
     { key: 'neumo-o2-toxicidad', etiqueta: 'Oxígeno como fuente de lesión' },
     { key: 'neumo-vni-metodos', etiqueta: 'Ventilación no invasiva: métodos' },
     { key: 'neumo-vni-uso', etiqueta: 'Ventilación no invasiva: uso clínico y corazón' },
+    { key: 'neumo-vm-modos', etiqueta: 'Ventilación mecánica: modos básicos' },
+    { key: 'neumo-vm-ajuste', etiqueta: 'Disparo del ventilador y ajuste práctico' },
+    { key: 'neumo-vias-artificiales', etiqueta: 'Vías aéreas artificiales: tubos y traqueostomía' },
+    { key: 'neumo-cuidado-barotrauma', etiqueta: 'Cuidado de la vía aérea y barotrauma pulmonar' },
+    { key: 'neumo-peep-oculta', etiqueta: 'PEEP oculta (intrínseca)' },
+    { key: 'neumo-nav-prevencion', etiqueta: 'NAV: generalidades y prevención' },
+    { key: 'neumo-nav-diagnostico', etiqueta: 'Diagnóstico clínico y microbiológico de la NAV' },
+    { key: 'neumo-derrame-antimicrobiano', etiqueta: 'Derrames paraneumónicos y tratamiento antimicrobiano' },
+    { key: 'neumo-sbt', etiqueta: 'Estrategias del ventilador y respiración espontánea' },
+    { key: 'neumo-weaning-extubacion', etiqueta: 'Fracaso del weaning y extubación' },
 ];
 
 export const preguntasMerinoNeumologia = [
@@ -720,5 +732,547 @@ export const preguntasMerinoNeumologia = [
         id: 'neumo-q104', tema: 'neumo-vni-uso', tipo: 'redactar',
         enunciado: 'Un paciente con edema pulmonar cardiogénico mejora notablemente con CPAP. Explica el mecanismo hemodinámico (no solo respiratorio) que sustenta este beneficio, usando el concepto de precarga/poscarga y la función cardíaca.',
         respuestaModelo: 'El beneficio de la CPAP en el edema pulmonar cardiogénico no se limita a mejoras en la función pulmonar — la presión intratorácica positiva reduce la poscarga del ventrículo izquierdo (al promover el movimiento hacia dentro de la pared ventricular durante la sístole), lo que aumenta el gasto sistólico cardíaco (visible como el aumento inspiratorio de la presión arterial, "pulso paradójico invertido"). Esto es posible porque el corazón que falla opera en la porción plana de la curva de precarga y la empinada de poscarga — así que reducir la poscarga (el efecto dominante de la presión positiva en este tipo de corazón) tiene más impacto positivo en el gasto cardíaco que el posible efecto negativo de reducir algo la precarga. Esto contrasta con el corazón normal, donde la presión positiva tendería más bien a impedir el gasto cardíaco al reducir el llenado ventricular.',
+    },
+
+    // ==================== PARTE 2 (Cap. 27-30) ====================
+
+    // ---- Ficha XIV: Ventilación mecánica — modos básicos ----
+    {
+        id: 'neumo-q105', tema: 'neumo-vm-modos',
+        enunciado: '¿De qué depende realmente el riesgo de rotura alveolar (barotrauma), según el capítulo?',
+        opciones: ['De la presión alveolar (presión meseta), no de la presión pico', 'De la presión pico exclusivamente', 'Del modo de ventilación (VCV vs. PCV)', 'De la frecuencia respiratoria'],
+        correcta: 0,
+        explicacion: 'La presión pico es mayor con VCV, pero el riesgo de rotura alveolar es función de la presión alveolar (meseta). El riesgo es despreciable si la presión meseta es ≤30 cmH₂O.',
+    },
+    {
+        id: 'neumo-q106', tema: 'neumo-vm-modos',
+        enunciado: '¿Cuál es la principal desventaja de la ventilación por volumen control (VCV)?',
+        opciones: ['El flujo inspiratorio constante limita el flujo máximo disponible y puede acortar la inspiración', 'El volumen tidal cambia con la resistencia pulmonar', 'No puede usarse en ventilación protectora', 'Requiere sedación profunda obligatoria'],
+        correcta: 0,
+        explicacion: 'El flujo constante de VCV crea 2 problemas: duración inspiratoria relativamente corta (llenado alveolar desigual) y flujo inspiratorio máximo limitado, inadecuado para demandas ventilatorias altas.',
+    },
+    {
+        id: 'neumo-q107', tema: 'neumo-vm-modos',
+        enunciado: '¿Qué modo adaptativo proporciona un volumen tidal constante (como VCV) pero limita la presión de vía aérea al final de la inspiración (como PCV)?',
+        opciones: ['Presión regulada, volumen control (PRVC)', 'SIMV', 'CPAP', 'BiPAP'],
+        correcta: 0,
+        explicacion: 'La PRVC monitoriza la distensibilidad pulmonar y selecciona la presión más baja necesaria para administrar el volumen tidal deseado, combinando ventajas de VCV y PCV.',
+    },
+    {
+        id: 'neumo-q108', tema: 'neumo-vm-modos',
+        enunciado: 'Durante una maniobra de pausa inspiratoria (inflation-hold), ¿a qué equivale la presión meseta?',
+        opciones: ['A la presión alveolar (Palv)', 'A la presión pico', 'A la presión de resistencia de la vía aérea', 'A la PEEP aplicada'],
+        correcta: 0,
+        explicacion: 'Sin flujo aéreo durante la pausa, la presión meseta equivale a la presión alveolar: Pmeseta=Palv=Pel (Ecuación 27.2).',
+    },
+    {
+        id: 'neumo-q109', tema: 'neumo-vm-modos',
+        enunciado: 'En pacientes con pulmones normales, ¿cuál es el rango típico de compliance estática torácica (Cstat)?',
+        opciones: ['50-80 mL/cmH₂O', '5-10 mL/cmH₂O', '150-200 mL/cmH₂O', '&lt;25 mL/cmH₂O'],
+        correcta: 0,
+        explicacion: 'La Cstat normal es 50-80 mL/cmH₂O; en enfermedades infiltrativas (edema pulmonar, SDRA) es típicamente &lt;25 mL/cmH₂O.',
+    },
+    {
+        id: 'neumo-q110', tema: 'neumo-vm-modos',
+        enunciado: '¿Por qué contribuye la pared torácica hasta un 35% de la compliance torácica total durante la ventilación pasiva, y qué implica esto para medir la compliance?',
+        opciones: ['Las mediciones deben hacerse con esfuerzo respiratorio mínimo o nulo, porque la contracción de los músculos de la pared torácica aumenta esa contribución', 'No implica nada, la contribución es despreciable', 'Solo afecta a pacientes obesos', 'La pared torácica solo importa en modo VCV'],
+        correcta: 0,
+        explicacion: 'La contribución de la pared torácica aumenta cuando se contraen sus músculos — para evitar errores, las mediciones de compliance deben hacerse en pacientes con esfuerzo respiratorio mínimo o nulo.',
+    },
+    {
+        id: 'neumo-q111', tema: 'neumo-vm-modos', tipo: 'redactar',
+        enunciado: 'Explica la diferencia fisiológica entre volumen control (VCV) y presión control (PCV), incluyendo el patrón de flujo de cada uno y por qué PCV se asocia a mejor tolerancia del paciente.',
+        respuestaModelo: 'En VCV se preselecciona el volumen tidal, administrado a flujo constante, con aumento constante de volumen y presión hasta el objetivo; la exhalación es pasiva. En PCV se preselecciona la presión de insuflación, con un flujo inspiratorio desacelerante (flujo pico al inicio, decreciendo a cero); esto alcanza la presión deseada pronto, y un tiempo inspiratorio preseleccionado determina el final de la inspiración. La mejor tolerancia de PCV se atribuye a los flujos iniciales altos y la mayor duración de la inspiración, que reducen el riesgo de asincronía ventilatoria comparado con el flujo constante y limitado de VCV.',
+    },
+    {
+        id: 'neumo-q112', tema: 'neumo-vm-modos', tipo: 'redactar',
+        enunciado: 'Un paciente en VCV tiene un volumen tidal preseleccionado de 500 mL y una presión pico de 40 cmH₂O. La compliance de la tubuladura del ventilador es 3 mL/cmH₂O. ¿Cuál es el volumen tidal real que llega al paciente, y por qué es importante este ajuste?',
+        respuestaModelo: '3×40=120 mL del volumen administrado se pierden en la expansión de la tubuladura, así que el volumen tidal real que llega al paciente es 500−120=380 mL. Este ajuste es importante porque, sin él, se sobreestimaría el volumen tidal real administrado — algo especialmente relevante en ventilación protectora pulmonar, donde el control preciso del volumen tidal (≤6 mL/kg PBW) es un objetivo central para limitar el riesgo de volutrauma.',
+    },
+
+    // ---- Ficha XV: Disparo, ciclo respiratorio y ajuste práctico ----
+    {
+        id: 'neumo-q113', tema: 'neumo-vm-ajuste',
+        enunciado: '¿Por qué el disparo por flujo ha reemplazado al disparo por presión como mecanismo de disparo estándar?',
+        opciones: ['Involucra menos trabajo mecánico, con poco o ningún cambio en presiones y volúmenes', 'Es más barato de implementar', 'Elimina por completo el riesgo de auto-disparo', 'Requiere menos experiencia del terapeuta respiratorio'],
+        correcta: 0,
+        explicacion: 'El disparo por flujo involucra menos trabajo mecánico que el disparo por presión (que requiere generar 2-3 cmH₂O de presión negativa, y en el que hasta un tercio de los esfuerzos fracasan).',
+    },
+    {
+        id: 'neumo-q114', tema: 'neumo-vm-ajuste',
+        enunciado: '¿Cuál es el problema principal asociado al disparo por flujo?',
+        opciones: ['El auto-disparo por fugas del sistema', 'Requiere presiones negativas muy altas', 'No funciona en pacientes sedados', 'Aumenta el riesgo de barotrauma'],
+        correcta: 0,
+        explicacion: 'Las fugas del sistema crean cambios de flujo que pueden disparar respiraciones no deseadas del ventilador — el problema principal del disparo por flujo.',
+    },
+    {
+        id: 'neumo-q115', tema: 'neumo-vm-ajuste',
+        enunciado: 'Según el estudio animal citado, ¿cuánto se redujo la fuerza de las contracciones diafragmáticas tras 3 días de ventilación controlada (sin esfuerzos de disparo)?',
+        opciones: ['~50%, en cada frecuencia de estimulación probada', '~10%', 'No hubo reducción medible', '~90%'],
+        correcta: 0,
+        explicacion: 'La ventilación controlada durante 3 días se asoció a una reducción de cerca del 50% en la fuerza de las contracciones diafragmáticas, comparada con respiración espontánea o ventilación asistida.',
+    },
+    {
+        id: 'neumo-q116', tema: 'neumo-vm-ajuste',
+        enunciado: '¿Cuál es la indicación principal para cambiar de asisto-control a IMV (ventilación mandatoria intermitente)?',
+        opciones: ['Respiración rápida con exhalación incompleta durante ACV', 'Insuficiencia cardíaca izquierda', 'Debilidad de la musculatura respiratoria', 'SDRA grave'],
+        correcta: 0,
+        explicacion: 'La IMV se indica cuando hay respiración rápida con exhalación incompleta durante ACV — los periodos de respiración espontánea promueven el vaciado alveolar y reducen el riesgo de PEEP intrínseca.',
+    },
+    {
+        id: 'neumo-q117', tema: 'neumo-vm-ajuste',
+        enunciado: '¿En qué 2 grupos de pacientes la IMV NO se recomienda?',
+        opciones: ['Debilidad de la musculatura respiratoria e insuficiencia cardíaca izquierda', 'Asma y EPOC', 'SDRA leve y moderado', 'Pacientes con traqueostomía'],
+        correcta: 0,
+        explicacion: 'La IMV puede aumentar el trabajo respiratorio (en debilidad muscular) y comprometer el gasto cardíaco (en disfunción del VI, por aumento de la poscarga durante los periodos de respiración espontánea).',
+    },
+    {
+        id: 'neumo-q118', tema: 'neumo-vm-ajuste',
+        enunciado: 'Según el protocolo de ventilación protectora (Tabla 27.1), ¿cuáles son los objetivos finales de la 3ª etapa?',
+        opciones: ['V<sub>T</sub>=6 mL/kg, Pmeseta ≤30 cmH₂O, SpO₂ 88-95%, pH 7,30-7,45', 'V<sub>T</sub>=8 mL/kg, Pmeseta ≤40 cmH₂O, SpO₂ &gt;95%', 'V<sub>T</sub>=4 mL/kg siempre, sin importar el pH', 'PEEP=20 cmH₂O fijo'],
+        correcta: 0,
+        explicacion: 'Los objetivos finales del protocolo de ventilación protectora son V<sub>T</sub>=6 mL/kg PBW, presión meseta ≤30 cmH₂O, SpO₂ 88-95%, y pH 7,30-7,45.',
+    },
+    {
+        id: 'neumo-q119', tema: 'neumo-vm-ajuste', tipo: 'redactar',
+        enunciado: 'Explica el concepto de "mejor PEEP" usando los conceptos de compliance pulmonar y presión de conducción (driving pressure).',
+        respuestaModelo: 'Niveles bajos de PEEP pueden prevenir el colapso de espacios aéreos distales, y niveles más altos pueden reclutar espacios ya colapsados (aumentando la compliance), pero niveles excesivos sobredistienden alveolos normales (volutrauma, disminuyendo la compliance). La compliance pulmonar aumenta cuando la PEEP promueve reclutamiento, y disminuye cuando sobredistiende. La presión de conducción (diferencia entre presión alveolar pico y PEEP) es especular: disminuye con niveles bajos de PEEP (predominio de reclutamiento) pero aumenta con niveles altos (riesgo de sobredistensión). El punto de transición donde la compliance es máxima y la presión de conducción es mínima identifica el nivel de "mejor PEEP" — en el ejemplo real de la fuente, ese punto fue PEEP=12 cmH₂O.',
+    },
+    {
+        id: 'neumo-q120', tema: 'neumo-vm-ajuste', tipo: 'redactar',
+        enunciado: 'Un paciente con SDRA en PEEP incremental muestra un aumento progresivo del cociente PaO₂/FIO₂, pero un descenso progresivo del gasto cardíaco. ¿Por qué el aumento del cociente PaO₂/FIO₂ no garantiza que mejore el aporte de O₂ a los tejidos, y qué parámetro podría usarse como sustituto del gasto cardíaco para monitorizar esto?',
+        respuestaModelo: 'El aporte de O₂ (DO₂) depende de la Ecuación 27.6: DO₂=GC×CaO₂ — no solo del contenido arterial de O₂ (reflejado por el cociente PaO₂/FIO₂). La PEEP puede promover el reclutamiento alveolar y aumentar la oxigenación arterial, pero al mismo tiempo puede reducir el gasto cardíaco (al aumentar la presión intratorácica media e impedir el llenado cardíaco), anulando el beneficio sobre el aporte sistémico de O₂. Como el gasto cardíaco no se monitoriza rutinariamente, la saturación venosa central de O₂ (ScvO₂) puede usarse como medida sustituta de los cambios en el gasto cardíaco y el aporte de O₂.',
+    },
+
+    // ---- Ficha XVI: Vías aéreas artificiales ----
+    {
+        id: 'neumo-q121', tema: 'neumo-vias-artificiales',
+        enunciado: '¿Dónde debe estar la punta del tubo endotraqueal, con la cabeza en posición neutra?',
+        opciones: ['3 a 5 cm por encima de la bifurcación traqueal (carina)', 'Justo en la carina', '10 cm por encima de la carina', 'En el bronquio principal derecho'],
+        correcta: 0,
+        explicacion: 'La punta del tubo ET debe estar 3 a 5 cm por encima de la bifurcación traqueal, o a medio camino entre la bifurcación y las cuerdas vocales.',
+    },
+    {
+        id: 'neumo-q122', tema: 'neumo-vias-artificiales',
+        enunciado: '¿A qué distancia máxima de los dientes debe mantenerse la punta del tubo ET para reducir el riesgo de migración al bronquio principal derecho?',
+        opciones: ['21 cm en mujeres, 23 cm en hombres', '15 cm en ambos sexos', '30 cm en ambos sexos', 'No hay recomendación de distancia'],
+        correcta: 0,
+        explicacion: 'Mantener el tubo a no más de 21 cm de los dientes en mujeres y 23 cm en hombres reduce el riesgo de migración distal hacia el bronquio principal derecho.',
+    },
+    {
+        id: 'neumo-q123', tema: 'neumo-vias-artificiales',
+        enunciado: '¿Qué porcentaje de pacientes intubados más de 12 horas tienen lesión laríngea demostrada?',
+        opciones: ['Más de la mitad', 'Menos del 5%', 'Cerca del 20%', 'Prácticamente ninguno'],
+        correcta: 0,
+        explicacion: 'La lesión laríngea se ha demostrado en más de la mitad de los pacientes de UCI intubados durante más de 12 horas.',
+    },
+    {
+        id: 'neumo-q124', tema: 'neumo-vias-artificiales',
+        enunciado: '¿Cuál es la práctica habitual respecto al momento de la traqueostomía?',
+        opciones: ['Considerarla tras una semana de intubación si hay poca probabilidad de extubación en la semana siguiente', 'Realizarla siempre en las primeras 24 horas', 'Nunca antes de 4 semanas', 'Solo si falla la ventilación no invasiva'],
+        correcta: 0,
+        explicacion: 'La traqueostomía precoz (dentro de la 1ª semana) reduce sedación y tiempo en ventilación, pero no reduce NAV ni mortalidad — la práctica habitual es considerarla tras una semana si la extubación es poco probable en la semana siguiente.',
+    },
+    {
+        id: 'neumo-q125', tema: 'neumo-vias-artificiales',
+        enunciado: '¿Qué presión NO debe exceder el manguito (cuff) de un tubo endotraqueal o de traqueostomía, y por qué?',
+        opciones: ['25 mmHg, porque presiones mayores pueden comprimir los capilares de la mucosa traqueal y producir lesión isquémica', '50 mmHg, porque menos presión no sella bien la vía aérea', '10 mmHg, para evitar cualquier daño', 'No hay límite establecido'],
+        correcta: 0,
+        explicacion: 'La presión del manguito no debe exceder 25 mmHg, basado en la asunción de que la presión hidrostática capilar de la pared traqueal es 25 mmHg — presiones mayores pueden comprimir capilares y producir isquemia mucosa.',
+    },
+    {
+        id: 'neumo-q126', tema: 'neumo-vias-artificiales',
+        enunciado: 'Si un tubo de traqueostomía se desplaza dentro de los primeros días tras su inserción (decanulación accidental), ¿qué debe hacerse?',
+        opciones: ['Reintubar al paciente por vía oral antes de intentar reinsertar el tubo de traqueostomía', 'Reinsertar el tubo a ciegas de inmediato', 'Esperar a que el trayecto cicatrice por sí solo', 'Colocar VNI y observar'],
+        correcta: 0,
+        explicacion: 'Si el trayecto del estoma no ha madurado (tarda cerca de una semana), se cierra rápidamente, y la reinserción a ciegas puede crear falsos trayectos — el paciente debe reintubarse por vía oral primero.',
+    },
+    {
+        id: 'neumo-q127', tema: 'neumo-vias-artificiales', tipo: 'redactar',
+        enunciado: 'Compara la traqueostomía dilatacional percutánea con la traqueostomía quirúrgica abierta: ¿qué ventajas tiene la técnica percutánea, y qué la limita?',
+        respuestaModelo: 'En la traqueostomía dilatacional percutánea se pasa una guía a través de una pequeña punción con aguja en la pared anterior traqueal, avanzando un tubo de traqueostomía sobre el alambre — se realiza a pie de cama. Sus ventajas sobre la quirúrgica incluyen menor coste, evitar la anestesia general, y menos infecciones, lo que la convierte en el método preferido. Sin embargo, tiene más dificultades técnicas que el procedimiento quirúrgico, lo que enfatiza la importancia de contar con un operador experto y capacitado.',
+    },
+    {
+        id: 'neumo-q128', tema: 'neumo-vias-artificiales', tipo: 'redactar',
+        enunciado: 'Un tubo endotraqueal migra distalmente durante una sesión de aspiración. Explica por qué es más probable que termine en el bronquio principal derecho que en el izquierdo, y qué consecuencia radiográfica produciría.',
+        respuestaModelo: 'El bronquio principal derecho sigue un curso más recto desde la tráquea que el izquierdo (que se angula más), así que un tubo que migra distalmente tiende a introducirse en el bronquio derecho. Esto produce intubación selectiva del pulmón derecho, con el pulmón izquierdo no ventilado colapsándose — en la radiografía de tórax esto se ve como atelectasia del pulmón izquierdo, con el tubo visible entrando al bronquio derecho (ver Figura 28.2).',
+    },
+
+    // ---- Ficha XVII: Cuidado de la vía aérea y barotrauma pulmonar ----
+    {
+        id: 'neumo-q129', tema: 'neumo-cuidado-barotrauma',
+        enunciado: '¿Por qué las guías de práctica clínica ya NO recomiendan la aspiración rutinaria de la vía aérea?',
+        opciones: ['Puede desalojar biofilms con organismos patógenos de la superficie interna de los tubos, inoculando los pulmones', 'Es demasiado costosa', 'Aumenta la duración de la ventilación mecánica directamente', 'Solo se recomendaba en niños'],
+        correcta: 0,
+        explicacion: 'Se encuentran biofilms con organismos patógenos en la superficie interna de los tubos ET/traqueostomía, y pasar un catéter de aspiración puede desalojarlos e inocular los pulmones.',
+    },
+    {
+        id: 'neumo-q130', tema: 'neumo-cuidado-barotrauma',
+        enunciado: '¿Por qué la instilación de suero salino antes de aspirar NO se recomienda?',
+        opciones: ['El suero salino no reduce la viscosidad de las secreciones (que no es soluble en agua) y puede desalojar bacterias patógenas del tubo', 'Provoca siempre broncoespasmo grave', 'Está contraindicado en todos los pacientes intubados', 'Reduce la SpO₂ de forma peligrosa'],
+        correcta: 0,
+        explicacion: 'La capa que da viscosidad a las secreciones es hidrofóbica (insoluble en agua), así que el suero salino no la reduce; además, la inyección de 5 mL de salino puede desalojar hasta 300.000 colonias bacterianas viables.',
+    },
+    {
+        id: 'neumo-q131', tema: 'neumo-cuidado-barotrauma',
+        enunciado: '¿Cuál es el hallazgo clínico MÁS específico de neumotórax en el paciente dependiente del ventilador?',
+        opciones: ['El enfisema subcutáneo', 'La ausencia de ruidos respiratorios', 'La taquicardia', 'La fiebre'],
+        correcta: 0,
+        explicacion: 'El hallazgo más específico es el enfisema subcutáneo (aparece inicialmente en cuello y tórax superior); la ausencia de ruidos respiratorios es poco fiable por sonidos transmitidos de tubos/tubuladura.',
+    },
+    {
+        id: 'neumo-q132', tema: 'neumo-cuidado-barotrauma',
+        enunciado: '¿Por qué es difícil detectar un neumotórax en una radiografía supina?',
+        opciones: ['El aire pleural no se acumula en el ápex en posición supina, sino justo delante de ambas bases pulmonares', 'El aire pleural siempre es invisible en radiografía', 'Solo se puede diagnosticar con ecografía', 'La radiografía portátil nunca detecta neumotórax'],
+        correcta: 0,
+        explicacion: 'En supino, el aire pleural se acumula en la región más superior del hemitórax, que es justo anterior a ambas bases — las colecciones basilares y subpulmonares son características del neumotórax en posición supina.',
+    },
+    {
+        id: 'neumo-q133', tema: 'neumo-cuidado-barotrauma',
+        enunciado: '¿Qué hallazgo ecográfico es sugestivo (aunque no patognomónico) de neumotórax?',
+        opciones: ['La ausencia de "deslizamiento pulmonar" (lung sliding)', 'La presencia de deslizamiento pulmonar', 'Un derrame pleural anecoico', 'Una línea pleural hipoecoica'],
+        correcta: 0,
+        explicacion: 'Cuando hay aire en el espacio pleural, las 2 superficies pleurales se separan y se pierde el deslizamiento pulmonar — sugestivo (no patognomónico) de neumotórax; su presencia SÍ descarta el diagnóstico.',
+    },
+    {
+        id: 'neumo-q134', tema: 'neumo-cuidado-barotrauma',
+        enunciado: '¿Cuál es el procedimiento recomendado para la descompresión inmediata de un neumotórax a tensión?',
+        opciones: ['Angiocatéter de calibre 14, 8 cm, en el 5º espacio intercostal anterior a la línea medioaxilar', 'Toracocentesis diagnóstica con aguja fina', 'Esperar a colocar un tubo torácico grande directamente', 'Ventilación no invasiva urgente'],
+        correcta: 0,
+        explicacion: 'Se recomienda un angiocatéter de calibre 14, 8 cm (3,25 pulgadas), en el 5º espacio intercostal anterior a la línea medioaxilar — la tasa de fracaso es mayor con catéteres más cortos o en el 2º espacio en línea medioclavicular.',
+    },
+    {
+        id: 'neumo-q135', tema: 'neumo-cuidado-barotrauma', tipo: 'redactar',
+        enunciado: 'Explica por qué aplicar succión a un sistema de drenaje pleural puede ser contraproducente en presencia de una fístula broncopleural.',
+        respuestaModelo: 'La succión puede ayudar a reinflar el pulmón cuando se evacua el aire pleural, pero después la presión negativa en el espacio pleural aumenta la presión transpulmonar (diferencia entre presión alveolar y pleural), lo que promueve el flujo de aire A TRAVÉS de la fístula broncopleural (un orificio en los pulmones) — es decir, la succión promueve las fugas de aire desde los pulmones e impide el cierre de la fístula. Por eso, si hay una fuga de aire persistente con succión activa, esta debe apagarse: las fugas seguirán evacuándose de todos modos cuando la presión pleural se vuelva más positiva que la presión del sello de agua.',
+    },
+    {
+        id: 'neumo-q136', tema: 'neumo-cuidado-barotrauma', tipo: 'redactar',
+        enunciado: 'Distingue el volutrauma del barotrauma, y explica cómo se relacionan ambos conceptos con el escape de gas alveolar y sus posibles presentaciones clínicas.',
+        respuestaModelo: 'El volutrauma es una expresión de la TENSIÓN (el grado de deformación) sobre los alveolos por sobredistensión en regiones pulmonares normales; el barotrauma es una expresión del ESTRÉS (las fuerzas que producen esa deformación, es decir, la presión transpulmonar) impuesto sobre los alveolos. El volutrauma rompe la interfaz alveolo-capilar, permitiendo el escape de gas de los espacios aéreos distales — esto es el barotrauma pulmonar en su sentido clínico, que puede manifestarse como enfisema intersticial pulmonar (gas disecando planos tisulares), neumomediastino (gas hacia el mediastino), enfisema subcutáneo (gas mediastínico hacia el cuello), neumoperitoneo (gas bajo el diafragma), o neumotórax (si la rotura involucra la pleura visceral) — cada uno puede ocurrir solo o combinado con los demás.',
+    },
+
+    // ---- Ficha XVIII: PEEP oculta (intrínseca) ----
+    {
+        id: 'neumo-q137', tema: 'neumo-peep-oculta',
+        enunciado: '¿En qué grupo de pacientes dependientes del ventilador se considera universal la presencia de PEEP oculta?',
+        opciones: ['Pacientes con asma y EPOC', 'Pacientes con neumonía adquirida en la comunidad', 'Pacientes postoperados sin patología pulmonar', 'Pacientes con traqueostomía reciente'],
+        correcta: 0,
+        explicacion: 'La PEEP oculta se considera universal en pacientes dependientes del ventilador con asma y EPOC; niveles bajos (≤3 cmH₂O) también son frecuentes en SDRA.',
+    },
+    {
+        id: 'neumo-q138', tema: 'neumo-peep-oculta',
+        enunciado: '¿Por qué la PEEP oculta aumenta el trabajo respiratorio?',
+        opciones: ['Porque se requieren presiones negativas mayores para atraer el volumen tidal hacia los pulmones hiperinflados', 'Porque disminuye la frecuencia respiratoria', 'Porque aumenta el gasto cardíaco', 'Porque reduce la resistencia de la vía aérea'],
+        correcta: 0,
+        explicacion: 'La hiperinflación asociada a PEEP oculta aumenta el trabajo respiratorio porque se requieren presiones negativas mayores para atraer el volumen tidal — análogo a intentar respirar tras una inspiración profunda.',
+    },
+    {
+        id: 'neumo-q139', tema: 'neumo-peep-oculta',
+        enunciado: '¿En qué condición es fiable el método de oclusión al final de la espiración para cuantificar la PEEP oculta?',
+        opciones: ['Solo en pacientes que NO respiran espontáneamente', 'Solo en pacientes con respiración espontánea', 'En cualquier paciente, sin restricciones', 'Solo en modo de presión control'],
+        correcta: 0,
+        explicacion: 'La precisión de la oclusión al final de la espiración requiere que ocurra justo al final de la espiración, algo que no puede cronometrarse adecuadamente si el paciente respira espontáneamente.',
+    },
+    {
+        id: 'neumo-q140', tema: 'neumo-peep-oculta',
+        enunciado: '¿Qué evidencia en la onda de flujo espiratorio sugiere PEEP oculta?',
+        opciones: ['La presencia de flujo aéreo al final de la espiración', 'La ausencia total de flujo desde el inicio de la espiración', 'Un pico de flujo inspiratorio elevado', 'Una meseta de presión prolongada'],
+        correcta: 0,
+        explicacion: 'La PEEP oculta es fácil de detectar (aunque difícil de cuantificar) por la evidencia de flujo aéreo persistente al final de la espiración en la onda de flujo.',
+    },
+    {
+        id: 'neumo-q141', tema: 'neumo-peep-oculta',
+        enunciado: '¿Qué nivel de PEEP aplicada se recomienda para reducir la hiperinflación sin impedir el flujo espiratorio?',
+        opciones: ['Justo por debajo del nivel de PEEP oculta', 'Muy por encima del nivel de PEEP oculta', 'Siempre 20 cmH₂O', 'Cero, nunca debe añadirse PEEP externa'],
+        correcta: 0,
+        explicacion: 'El nivel de PEEP aplicada debe ser suficiente para contrarrestar el colapso de vías pequeñas, pero no exceder el nivel de PEEP oculta (para no impedir el flujo espiratorio) — justo por debajo de ese nivel.',
+    },
+    {
+        id: 'neumo-q142', tema: 'neumo-peep-oculta',
+        enunciado: '¿Qué relación de presiones caracteriza a la PEEP oculta al final de la espiración?',
+        opciones: ['La presión alveolar (Palv) es mayor que la presión proximal de la vía aérea (Pprox)', 'La presión proximal es mayor que la alveolar', 'Ambas presiones son siempre iguales a cero', 'La presión alveolar es siempre negativa'],
+        correcta: 0,
+        explicacion: 'Si hay flujo aéreo al final de la espiración, hay una caída de presión desde el alveolo hasta la vía aérea proximal, de modo que Palv&gt;Pprox — la presión proximal vuelve a cero mientras la alveolar sigue positiva, de ahí "oculta".',
+    },
+    {
+        id: 'neumo-q143', tema: 'neumo-peep-oculta', tipo: 'redactar',
+        enunciado: 'Enumera los 4 efectos adversos principales de la PEEP oculta descritos en la fuente.',
+        respuestaModelo: 'Los 4 efectos adversos son: (1) aumenta la presión intratorácica media, lo que puede impedir el retorno venoso y disminuir el gasto cardíaco; (2) aumenta el trabajo respiratorio, porque se requieren presiones negativas mayores para atraer el volumen tidal hacia pulmones hiperinflados; (3) aumenta el volumen y la presión alveolar al final de la inspiración, aumentando el riesgo de volutrauma y barotrauma; (4) puede transmitirse a la vena cava superior y crear un aumento espurio en las mediciones de presión venosa central.',
+    },
+    {
+        id: 'neumo-q144', tema: 'neumo-peep-oculta', tipo: 'redactar',
+        enunciado: 'Un paciente asmático en ventilación mecánica muestra flujo persistente al final de la espiración. Describe qué maniobras de ajuste del ventilador podrían reducir la hiperinflación dinámica y la PEEP oculta, sin recurrir a PEEP aplicada.',
+        respuestaModelo: 'Las maniobras están todas dirigidas a promover el vaciado alveolar durante la espiración: reducir el volumen tidal, aumentar el flujo inspiratorio (para acortar el tiempo inspiratorio y dejar más tiempo para exhalar), reducir el tiempo inspiratorio (en control por presión), y reducir la frecuencia respiratoria si es posible — todo esto para prolongar el tiempo disponible para la espiración y permitir un vaciado alveolar más completo. Debe tenerse en cuenta que algunas de estas maniobras (sobre todo reducir la frecuencia respiratoria) pueden reducir la ventilación minuto, lo que no siempre es deseable.',
+    },
+
+    // ---- Ficha XIX: NAV — generalidades y prevención ----
+    {
+        id: 'neumo-q145', tema: 'neumo-nav-prevencion',
+        enunciado: '¿Qué porcentaje de las neumonías adquiridas en UCI representa la NAV, y qué fracción de esas es de inicio tardío?',
+        opciones: ['80% de las neumonías adquiridas en UCI; 60% son de inicio tardío', '20% de las neumonías; 10% tardías', '50% de las neumonías; 50% tardías', '95% de las neumonías; ninguna tardía'],
+        correcta: 0,
+        explicacion: 'La NAV representa el 80% de las neumonías adquiridas en UCI, y el 60% de las NAV son de inicio tardío (≥5 días tras la intubación).',
+    },
+    {
+        id: 'neumo-q146', tema: 'neumo-nav-prevencion',
+        enunciado: '¿Por qué la clorhexidina ya no se recomienda para descontaminación oral en las guías más recientes?',
+        opciones: ['Evidencia de mayor mortalidad, atribuida a mucositis inducida por clorhexidina que rompe la barrera mucosa oral', 'No tiene ningún efecto sobre la colonización bacteriana', 'Es demasiado cara comparada con otros antisépticos', 'Solo funciona en niños'],
+        correcta: 0,
+        explicacion: 'Hay evidencia de mayor mortalidad asociada a la clorhexidina, atribuida a mucositis inducida que rompe la barrera mucosa oral y lleva a septicemia con organismos patógenos de la boca.',
+    },
+    {
+        id: 'neumo-q147', tema: 'neumo-nav-prevencion',
+        enunciado: '¿Qué método de descontaminación oral es el preferido según la fuente, y cuál es su objetivo?',
+        opciones: ['Descontaminación digestiva selectiva (SDD) con antibióticos no absorbibles, para eliminar patógenos selectivamente mientras se retiene el ambiente microbiano normal', 'Cepillado dental mecánico exclusivamente', 'Enjuagues con agua estéril únicamente', 'Antibióticos sistémicos profilácticos'],
+        correcta: 0,
+        explicacion: 'La SDD usa antibióticos no absorbibles aplicados sobre la mucosa oral, buscando eliminar "selectivamente" los patógenos mientras se retiene el ambiente microbiano normal de la boca.',
+    },
+    {
+        id: 'neumo-q148', tema: 'neumo-nav-prevencion',
+        enunciado: 'En el estudio real citado, ¿qué efecto tuvo la SDD sobre la colonización traqueal y la neumonía?',
+        opciones: ['Colonización traqueal del 52% al 22%; neumonía del 31% al 10% (ambos p≤0,01)', 'No hubo diferencia significativa en ningún desenlace', 'Aumentó la colonización traqueal', 'Solo redujo la neumonía, no la colonización'],
+        correcta: 0,
+        explicacion: 'La SDD se asoció a un descenso significativo tanto en la colonización traqueal (52%→22%) como en la neumonía (31%→10%), ambos con p≤0,01.',
+    },
+    {
+        id: 'neumo-q149', tema: 'neumo-nav-prevencion',
+        enunciado: '¿Cuáles son las 5 prácticas del "paquete del ventilador" (Tabla 29.2)?',
+        opciones: ['Cabecera 30-45°, profilaxis de úlcera de estrés, profilaxis de TEV, suspensión diaria de sedación, valoración diaria de disposición para extubar', 'Solo aspiración rutinaria de secreciones cada 2 horas', 'Solo antibioterapia profiláctica', 'Cambio de tubo endotraqueal cada 48 horas'],
+        correcta: 0,
+        explicacion: 'El paquete del ventilador incluye: elevar cabecera 30-45°, profilaxis de sangrado por úlcera de estrés, profilaxis de tromboembolismo venoso, suspensión diaria de sedación, y valoración diaria de disposición para extubar.',
+    },
+    {
+        id: 'neumo-q150', tema: 'neumo-nav-prevencion',
+        enunciado: '¿Qué han demostrado los estudios clínicos sobre despejar secreciones subglóticas con tubos endotraqueales especializados?',
+        opciones: ['Una reducción significativa en la incidencia de NAV', 'Ningún efecto sobre la NAV', 'Un aumento de la NAV', 'Solo son útiles en pacientes con traqueostomía'],
+        correcta: 0,
+        explicacion: 'Los tubos con puerto de succión subglótica (Figura 29.2), conectado a succión continua ≤−20 cmH₂O, han mostrado una reducción significativa en la incidencia de NAV.',
+    },
+    {
+        id: 'neumo-q151', tema: 'neumo-nav-prevencion', tipo: 'redactar',
+        enunciado: 'El texto plantea un "comentario" crítico sobre la posición semirreclinada como medida preventiva de la NAV. Explícalo.',
+        respuestaModelo: 'Dado que la fuente principal de la NAV es la aspiración de patógenos en secreciones de la boca, elevar la cabecera de la cama podría en realidad AUMENTAR el riesgo de NAV al promover el movimiento de secreciones de la boca hacia los pulmones por flujo gravitacional — una hipótesis que, según la fuente, nunca se ha estudiado ni se menciona nunca en las discusiones sobre la posición semirreclinada. Esto es coherente con el hallazgo de que, mientras algunos estudios validan el beneficio de la semirrecumbencia sobre el reflujo gastroesofágico, otros no muestran diferencia en la incidencia real de NAV entre las posiciones supina y semirreclinada.',
+    },
+    {
+        id: 'neumo-q152', tema: 'neumo-nav-prevencion', tipo: 'redactar',
+        enunciado: 'Enumera los principales factores de riesgo mencionados para la aparición de patógenos multirresistentes en NAV/HAP.',
+        respuestaModelo: 'Los patógenos multirresistentes son más probables en pacientes que han recibido antibióticos intravenosos en los últimos 90 días, en pacientes inmunocomprometidos o que reciben terapia de reemplazo renal, y en pacientes con shock séptico.',
+    },
+
+    // ---- Ficha XX: Diagnóstico clínico y microbiológico de la NAV ----
+    {
+        id: 'neumo-q153', tema: 'neumo-nav-diagnostico',
+        enunciado: 'Verificados contra biopsia pulmonar, ¿qué tienen en común los 4 criterios clínicos tradicionales de NAV (fiebre, leucocitosis, secreciones purulentas, infiltrado radiográfico)?',
+        opciones: ['Ninguno es sensible ni específico, y todos tienen una razón de probabilidades diagnóstica pobre (&lt;3)', 'Todos son altamente específicos', 'Solo la fiebre tiene buen rendimiento diagnóstico', 'Juntos alcanzan un 100% de precisión diagnóstica'],
+        correcta: 0,
+        explicacion: 'La Tabla 29.3 muestra que ninguno de los 4 criterios clínicos es sensible ni específico, con razones de probabilidades diagnósticas pobres — indicando que el diagnóstico de NAV no es posible usando solo criterios clínicos.',
+    },
+    {
+        id: 'neumo-q154', tema: 'neumo-nav-diagnostico',
+        enunciado: '¿Qué porcentaje de los infiltrados pulmonares en pacientes de UCI representa realmente la neumonía?',
+        opciones: ['Solo un tercio', 'La mayoría (más del 80%)', 'Prácticamente el 100%', 'Menos del 5%'],
+        correcta: 0,
+        explicacion: 'La neumonía representa solo un tercio de los infiltrados pulmonares en pacientes de UCI — otras condiciones (atelectasia focal, edema pulmonar, SDRA) son la causa más frecuente.',
+    },
+    {
+        id: 'neumo-q155', tema: 'neumo-nav-diagnostico',
+        enunciado: 'En el análisis microscópico de un aspirado traqueal, ¿qué indica la presencia de más de 10 células epiteliales escamosas por campo de bajo poder (×10)?',
+        opciones: ['Que la muestra está contaminada con secreciones de la boca y no es apropiada para cultivo', 'Que hay infección activa confirmada', 'Que el paciente tiene NAV precoz', 'Que la muestra es de alta calidad diagnóstica'],
+        correcta: 0,
+        explicacion: 'La presencia de más de 10 células escamosas por campo de bajo poder indica contaminación con secreciones de la boca — la muestra no es apropiada para cultivo.',
+    },
+    {
+        id: 'neumo-q156', tema: 'neumo-nav-diagnostico',
+        enunciado: 'Para cultivos rutinarios (cualitativos) de aspirados traqueales, ¿qué se puede concluir de un cultivo negativo frente a uno positivo?',
+        opciones: ['Un cultivo negativo excluye infección tratable; un cultivo positivo NO es evidencia fiable del organismo culpable', 'Ambos son igual de fiables', 'Un cultivo positivo siempre identifica el patógeno correcto', 'Un cultivo negativo no aporta ninguna información'],
+        correcta: 0,
+        explicacion: 'Los cultivos cualitativos tienen alta sensibilidad (&gt;90%) pero baja especificidad (15-40%) — un negativo excluye infección tratable, pero un positivo no es fiable por contaminación con secreciones de la boca.',
+    },
+    {
+        id: 'neumo-q157', tema: 'neumo-nav-diagnostico',
+        enunciado: '¿Cuál es el umbral de UFC/mL para el diagnóstico de NAV con cultivos cuantitativos de lavado broncoalveolar (BAL)?',
+        opciones: ['10⁴ UFC/mL', '10² UFC/mL', '10⁶ UFC/mL', '10 UFC/mL'],
+        correcta: 0,
+        explicacion: 'El umbral para el diagnóstico de NAV con cultivos cuantitativos de BAL es 10⁴ UFC/mL (frente a 10⁵ para aspirado traqueal y 10³ para cepillo protegido).',
+    },
+    {
+        id: 'neumo-q158', tema: 'neumo-nav-diagnostico',
+        enunciado: '¿Qué método de cultivo tiene la razón de probabilidades diagnóstica MÁS alta según la Tabla 29.4 (comparado contra biopsia pulmonar)?',
+        opciones: ['Lavado broncoalveolar (BAL), con razón de probabilidades 9,6', 'Aspirado traqueal, con 6,6', 'Cepillo protegido, con 5,1', 'Todos son equivalentes'],
+        correcta: 0,
+        explicacion: 'El BAL tiene la razón de probabilidades diagnóstica más alta (9,6), seguido del aspirado traqueal (6,6) y el cepillo protegido (5,1) — los cultivos de BAL son los más fiables disponibles.',
+    },
+    {
+        id: 'neumo-q159', tema: 'neumo-nav-diagnostico', tipo: 'redactar',
+        enunciado: 'Explica el método del BAL no broncoscópico (mini-BAL) y compáralo en rendimiento con el BAL broncoscópico.',
+        respuestaModelo: 'El mini-BAL usa un catéter enfundado (~50 cm) insertado a través de un tubo endotraqueal o de traqueostomía y avanzado "a ciegas" hasta encajar en una vía aérea distal; la punta tiene un tapón bioabsorbible que evita contaminación durante el avance. Una vez encajado, se avanza una cánula interna para desalojar el tapón, y se realiza el lavado con 10-20 mL de suero salino estéril. Es un procedimiento seguro que puede realizar un terapeuta respiratorio. Pese a la incertidumbre sobre la ubicación exacta de la punta del catéter en relación con la región de sospecha de infección, el rendimiento de los cultivos cuantitativos con mini-BAL es equivalente al rendimiento con BAL broncoscópico — evitando además el coste extra de la broncoscopia.',
+    },
+    {
+        id: 'neumo-q160', tema: 'neumo-nav-diagnostico', tipo: 'redactar',
+        enunciado: 'Las imágenes de la Figura 29.3 se obtuvieron con minutos de diferencia en el mismo paciente. Describe qué cambio radiográfico produjo la combinación de posición supina y exhalación, y por qué podría inducir a un diagnóstico erróneo.',
+        respuestaModelo: 'La imagen supina tras la exhalación muestra marcas pulmonares apiñadas en la base derecha, causadas por el hemidiafragma elevado (propio de la posición supina) y el volumen pulmonar relativamente bajo (propio de la exhalación) — un efecto puramente posicional y de volumen, no patológico. En un paciente con fiebre, este hallazgo podría confundirse fácilmente con una neumonía basilar, ilustrando la baja especificidad (26%) de los infiltrados radiográficos como criterio diagnóstico de NAV.',
+    },
+
+    // ---- Ficha XXI: Derrames paraneumónicos y tratamiento antimicrobiano ----
+    {
+        id: 'neumo-q161', tema: 'neumo-derrame-antimicrobiano',
+        enunciado: '¿Qué caracteriza a un derrame paraneumónico de Categoría 3 (complicado)?',
+        opciones: ['Está loculado o rellena más del 50% del hemitórax, con pH &lt;7,20, glucosa &lt;60 mg/dl, y Gram/cultivo positivos', 'Es &lt;10 mm de grosor, sin necesidad de toracocentesis', 'Es de flujo libre con pH &gt;7,20 y cultivo negativo', 'Es siempre purulento a simple vista'],
+        correcta: 0,
+        explicacion: 'La Categoría 3 (derrames complicados) está loculada o rellena &gt;50% del hemitórax, con evidencia de infección en el análisis del líquido pleural — requiere drenaje con tubo torácico.',
+    },
+    {
+        id: 'neumo-q162', tema: 'neumo-derrame-antimicrobiano',
+        enunciado: '¿Qué tamaño de tubo torácico logra un drenaje equivalente en un empiema franco (Categoría 4), según la fuente?',
+        opciones: ['Los tubos de calibre pequeño (8,5-14 French) logran un drenaje equivalente a los tubos grandes (28-36 French)', 'Solo los tubos grandes (28-36 French) funcionan', 'Se necesitan siempre tubos &gt;40 French', 'No se recomienda ningún tubo torácico en empiema'],
+        correcta: 0,
+        explicacion: 'Aunque algunos prefieren tubos grandes para drenar pus, los tubos de calibre pequeño (8,5-14 French) logran un drenaje equivalente al de los tubos más grandes.',
+    },
+    {
+        id: 'neumo-q163', tema: 'neumo-derrame-antimicrobiano',
+        enunciado: '¿Cuál sería un régimen antibiótico empírico adecuado para un derrame paraneumónico infectado en un paciente hospitalizado?',
+        opciones: ['Vancomicina más cefepima o piperacilina/tazobactam', 'Amoxicilina en monoterapia', 'Ciprofloxacino en monoterapia', 'Ningún antibiótico, solo drenaje'],
+        correcta: 0,
+        explicacion: 'La cobertura empírica debe incluir MRSA y organismos entéricos gram-negativos (incluida P. aeruginosa) — un régimen adecuado sería vancomicina más cefepima o piperacilina/tazobactam.',
+    },
+    {
+        id: 'neumo-q164', tema: 'neumo-derrame-antimicrobiano',
+        enunciado: '¿Qué se recomienda para derrames loculados con drenaje inadecuado tras el tubo torácico inicial?',
+        opciones: ['Un tubo adicional bajo guía de TC, y si persisten problemas, consulta quirúrgica para VATS', 'Fibrinolíticos intrapleurales de rutina', 'Aumentar la dosis de antibióticos únicamente', 'Esperar sin intervenir'],
+        correcta: 0,
+        explicacion: 'Puede colocarse un tubo adicional (preferiblemente bajo TC); problemas adicionales deben motivar consulta quirúrgica para cirugía toracoscópica videoasistida (VATS) — los fibrinolíticos intrapleurales generalmente no se aconsejan.',
+    },
+    {
+        id: 'neumo-q165', tema: 'neumo-derrame-antimicrobiano',
+        enunciado: 'Un caso de NAV de inicio precoz, sin shock séptico ni otros factores de riesgo, ¿con qué régimen puede tratarse?',
+        opciones: ['Un único agente que cubra MSSA, gram-negativos entéricos y P. aeruginosa (p. ej., cefepima)', 'Vancomicina + linezolid siempre', 'Únicamente un aminoglucósido', 'No requiere antibióticos hasta tener cultivos'],
+        correcta: 0,
+        explicacion: 'El régimen de bajo riesgo usa un único agente que cubra MSSA, gram-negativos, y Pseudomonas — candidatos: cefepima, levofloxacino, o piperacilina/tazobactam.',
+    },
+    {
+        id: 'neumo-q166', tema: 'neumo-derrame-antimicrobiano',
+        enunciado: '¿Cuál es la duración recomendada de la antibioterapia para NAV documentada?',
+        opciones: ['7 días', '3 días', '21 días', '6 semanas'],
+        correcta: 0,
+        explicacion: 'La duración recomendada de la antibioterapia para NAV documentada es de 7 días.',
+    },
+    {
+        id: 'neumo-q167', tema: 'neumo-derrame-antimicrobiano', tipo: 'redactar',
+        enunciado: 'La fuente plantea 3 posibles explicaciones para el hecho de que la NAV tenga poco o ningún impacto en la mortalidad. Enuméralas y explica cuál se considera la más apropiada.',
+        respuestaModelo: 'Las 3 explicaciones posibles son: (1) "somos realmente buenos tratando las NAV", (2) "las NAV no son infecciones que amenacen la vida", y (3) "las NAV están sobrediagnosticadas". Recordando la falta de especificidad de los criterios diagnósticos clínicos y microbiológicos para NAV (Tablas 29.3 y 29.4), la tercera opción —el sobrediagnóstico— se considera la más apropiada.',
+    },
+    {
+        id: 'neumo-q168', tema: 'neumo-derrame-antimicrobiano', tipo: 'redactar',
+        enunciado: 'Describe los 5 factores de riesgo para un resultado desfavorable en NAV que determinan si se usa un régimen antibiótico de bajo o alto riesgo.',
+        respuestaModelo: 'Los 5 factores de riesgo son: (a) NAV de inicio tardío, (b) shock séptico, (c) infección previa con MRSA o un organismo multirresistente (resistente a al menos 2 clases distintas de antibióticos), (d) un antibiograma hospitalario en el que el 25% de los aislados son organismos resistentes, y (e) exposición a antibióticos en los últimos 90 días. La presencia de cualquiera de estos motiva el uso del régimen de alto riesgo (cobertura MRSA + antipseudomonal β-lactámica, ± un agente no β-lactámico adicional si hay alta sospecha de multirresistencia).',
+    },
+
+    // ---- Ficha XXII: Estrategias del ventilador y respiración espontánea ----
+    {
+        id: 'neumo-q169', tema: 'neumo-sbt',
+        enunciado: '¿Qué fracción de los pacientes experimenta dificultades en la transición a la respiración no asistida?',
+        opciones: ['Cerca de uno de cada tres', 'Prácticamente ninguno', 'La mitad', 'Prácticamente todos'],
+        correcta: 0,
+        explicacion: 'Aunque discontinuar la ventilación mecánica suele ser rápido y sin incidentes, cerca de uno de cada tres pacientes experimenta dificultades en la transición.',
+    },
+    {
+        id: 'neumo-q170', tema: 'neumo-sbt',
+        enunciado: 'Según la Tabla 30.1, ¿cuáles son los "criterios de disposición" para iniciar una prueba de respiración espontánea?',
+        opciones: ['SpO₂ ≥90% con FIO₂ ≤50%, PEEP ≤8 cmH₂O, PaCO₂ normal o basal, hemodinámicamente estable, despertable y cooperador', 'SpO₂ ≥99% con FIO₂ 21%, sin excepciones', 'Solo requiere estar hemodinámicamente estable', 'Solo requiere PEEP=0'],
+        correcta: 0,
+        explicacion: 'Los criterios de disposición incluyen oxigenación adecuada (SpO₂ ≥90% con FIO₂ ≤50%), PEEP ≤8 cmH₂O, PaCO₂ normal/basal, estabilidad hemodinámica, y estar despierto/despertable y cooperador.',
+    },
+    {
+        id: 'neumo-q171', tema: 'neumo-sbt',
+        enunciado: 'En un estudio real comparando SBT con y sin presión de soporte (PSV a 5 cmH₂O), ¿qué se encontró sobre el trabajo respiratorio?',
+        opciones: ['La PSV no redujo significativamente el trabajo respiratorio, y este aumentó de forma marcada 1 hora después de la extubación', 'La PSV redujo el trabajo respiratorio a la mitad', 'El trabajo respiratorio desapareció tras la extubación', 'No hubo ninguna diferencia en ningún momento'],
+        correcta: 0,
+        explicacion: 'El trabajo respiratorio fue similar con y sin PSV (~50 vs. ~40 J/L, diferencia no significativa), pero aumentó de forma marcada a ~90 J/L una hora tras la extubación.',
+    },
+    {
+        id: 'neumo-q172', tema: 'neumo-sbt',
+        enunciado: '¿Cuál es la desventaja principal del circuito en T (T-piece) para las pruebas de respiración espontánea?',
+        opciones: ['La incapacidad de monitorizar la frecuencia respiratoria y el volumen tidal', 'Requiere sedación profunda', 'No se puede usar en asma ni EPOC', 'Solo funciona con oxígeno al 100%'],
+        correcta: 0,
+        explicacion: 'A diferencia de dejar al paciente en el circuito del ventilador, el circuito en T no permite monitorizar la frecuencia respiratoria ni el volumen tidal.',
+    },
+    {
+        id: 'neumo-q173', tema: 'neumo-sbt',
+        enunciado: 'Durante una SBT, un paciente desarrolla respiración rápida con un AUMENTO del volumen tidal. ¿Qué sugiere esto?',
+        opciones: ['Ansiedad (que produce hiperventilación, con aumento de RR y V<sub>T</sub>)', 'Fracaso ventilatorio inminente', 'Neumotórax a tensión', 'Disfunción diafragmática grave'],
+        correcta: 0,
+        explicacion: 'La ansiedad produce hiperventilación (RR y V<sub>T</sub> ambos aumentados), mientras que el fracaso ventilatorio produce respiración rápida y superficial (RR aumentada, V<sub>T</sub> disminuido).',
+    },
+    {
+        id: 'neumo-q174', tema: 'neumo-sbt',
+        enunciado: '¿Qué porcentaje de pacientes que toleran una SBT durante 2 horas puede retirarse de forma permanente del ventilador?',
+        opciones: ['Cerca del 80%', 'Cerca del 20%', 'Prácticamente el 100%', 'Menos del 50%'],
+        correcta: 0,
+        explicacion: 'La mayoría de pacientes (~80%) que toleran SBT durante 2 horas pueden retirarse de forma permanente del ventilador.',
+    },
+    {
+        id: 'neumo-q175', tema: 'neumo-sbt', tipo: 'redactar',
+        enunciado: 'Explica por qué permitir al paciente disparar las respiraciones del ventilador (en vez de ventilación puramente controlada) ayuda a preservar la fuerza del diafragma, citando el hallazgo experimental relevante.',
+        respuestaModelo: 'El diafragma es un músculo involuntario que se contrae mientras exista impulso central para respirar. La ventilación controlada (donde el paciente no dispara ninguna respiración) puede promover la "disfunción diafragmática inducida por el ventilador" por desuso del músculo. En un estudio animal real, 3 días de ventilación controlada se asociaron a una reducción de cerca del 50% en la fuerza de las contracciones diafragmáticas (en cada frecuencia de estimulación probada), comparada con respiración espontánea o ventilación asistida (donde cada respiración es iniciada por un esfuerzo inspiratorio del paciente). Por eso, evitar la parálisis neuromuscular o la sedación profunda —permitiendo al paciente disparar respiraciones— ayuda a preservar la fuerza diafragmática y facilita la transición del soporte ventilatorio a la respiración espontánea.',
+    },
+    {
+        id: 'neumo-q176', tema: 'neumo-sbt', tipo: 'redactar',
+        enunciado: 'Un paciente con EPOC desarrolla respiración rápida durante una SBT. Explica 4 formas distintas en que esta respiración rápida podría ser perjudicial, según los mecanismos descritos en la fuente.',
+        respuestaModelo: 'La respiración rápida puede ser perjudicial de varias formas: en asma/EPOC promueve hiperinflación y PEEP intrínseca, que puede disminuir el gasto cardíaco, aumentar la ventilación de espacio muerto, disminuir la compliance pulmonar, y producir disfunción diafragmática al aplanar el diafragma. En enfermedad pulmonar infiltrativa (como SDRA) reduce la ventilación en regiones enfermas (con constantes de tiempo prolongadas), promoviendo colapso alveolar e hipoxemia. Y en todos los pacientes con fallo respiratorio agudo, puede aumentar el consumo de O₂ de todo el cuerpo, añadiendo una carga extra al transporte sistémico de O₂.',
+    },
+
+    // ---- Ficha XXIII: Fracaso del weaning y extubación ----
+    {
+        id: 'neumo-q177', tema: 'neumo-weaning-extubacion',
+        enunciado: '¿En qué porcentaje de pruebas fallidas de destete se ha identificado disfunción cardíaca?',
+        opciones: ['40%', '5%', '95%', '15%'],
+        correcta: 0,
+        explicacion: 'La disfunción cardíaca se ha identificado en el 40% de las pruebas de destete fallidas — un factor a menudo pasado por alto.',
+    },
+    {
+        id: 'neumo-q178', tema: 'neumo-weaning-extubacion',
+        enunciado: 'En un estudio real comparando SvO₂ durante trials exitosos y fallidos de respiración espontánea, ¿qué se observó en los trials FALLIDOS?',
+        opciones: ['Un descenso progresivo de la SvO₂ (de ~61% a ~51%), sugiriendo un descenso del gasto cardíaco', 'La SvO₂ se mantuvo estable en ambos grupos', 'La SvO₂ aumentó en los trials fallidos', 'No se pudo medir la SvO₂ en ningún caso'],
+        correcta: 0,
+        explicacion: 'La SvO₂ se mantuvo estable (~65-68%) durante los ensayos exitosos, pero descendió progresivamente (~61% a ~51%) durante los fallidos, sugiriendo un descenso del gasto cardíaco como causa del fracaso.',
+    },
+    {
+        id: 'neumo-q179', tema: 'neumo-weaning-extubacion',
+        enunciado: '¿Qué intervención puede beneficiar a pacientes que desarrollan disfunción sistólica durante una SBT?',
+        opciones: ['CPAP, que promueve el gasto cardíaco al cancelar el efecto de aumento de poscarga de la presión intratorácica negativa', 'Restricción absoluta de líquidos en todos los casos', 'Betabloqueantes IV de rescate', 'Ventilación controlada obligatoria permanente'],
+        correcta: 0,
+        explicacion: 'La CPAP (administrada de forma no invasiva) promueve el gasto cardíaco al cancelar el efecto de aumento de poscarga de la presión intratorácica negativa, sin impedir la retirada de la ventilación mecánica.',
+    },
+    {
+        id: 'neumo-q180', tema: 'neumo-weaning-extubacion',
+        enunciado: '¿Cuál es el umbral de presión inspiratoria máxima (PI<sub>max</sub>) por debajo del cual se amenaza la ventilación en reposo?',
+        opciones: ['−20 o −30 cmH₂O', '−100 cmH₂O', '0 cmH₂O', '−5 cmH₂O'],
+        correcta: 0,
+        explicacion: 'La ventilación en reposo se ve amenazada cuando la PI<sub>max</sub> cae a −20 o −30 cmH₂O, el umbral usado para predecir el éxito de las SBT.',
+    },
+    {
+        id: 'neumo-q181', tema: 'neumo-weaning-extubacion',
+        enunciado: 'Según el estudio real citado sobre la prueba de fuga del manguito (cuff-leak), ¿qué volumen de fuga elimina el riesgo de edema laríngeo post-extubación con ~95% de certeza?',
+        opciones: ['&gt;110 mL', '&lt;10 mL', '&gt;500 mL', 'Cualquier fuga audible, sin importar el volumen'],
+        correcta: 0,
+        explicacion: 'Un volumen de fuga &gt;110 mL elimina el riesgo de edema laríngeo post-extubación con cerca del 95% de certeza; &lt;110 mL aumenta el riesgo 7 veces.',
+    },
+    {
+        id: 'neumo-q182', tema: 'neumo-weaning-extubacion',
+        enunciado: 'En el estudio multicéntrico real sobre pretratamiento con metilprednisolona (20 mg IV cada 4h, empezando 12h antes de la extubación), ¿qué efecto tuvo sobre el edema laríngeo y la reintubación?',
+        opciones: ['Edema laríngeo del 22% al 3% (p&lt;0,001); reintubación del 8% al 4% (p=0,02)', 'No tuvo ningún efecto medible', 'Aumentó ambas tasas', 'Solo redujo la reintubación, no el edema'],
+        correcta: 0,
+        explicacion: 'El pretratamiento con esteroides redujo el edema laríngeo del 22% (placebo) al 3% (esteroide) — una caída 7 veces —, y la reintubación del 8% al 4%, una caída del 50%.',
+    },
+    {
+        id: 'neumo-q183', tema: 'neumo-weaning-extubacion', tipo: 'redactar',
+        enunciado: 'Explica por qué el estridor post-extubación (por edema laríngeo) es siempre más evidente durante la INSPIRACIÓN que durante la espiración.',
+        respuestaModelo: 'La obstrucción laríngea es de localización extratorácica. Durante la inspiración espontánea, las presiones intratorácicas negativas generadas se transmiten a las vías aéreas superiores fuera del tórax, produciendo un estrechamiento de las vías aéreas extratorácicas (laringe y faringe) durante esa fase — de ahí que el estridor sea siempre más evidente durante la inspiración. En contraste, las vías aéreas intratorácicas se estrechan durante la espiración, no durante la inspiración.',
+    },
+    {
+        id: 'neumo-q184', tema: 'neumo-weaning-extubacion', tipo: 'redactar',
+        enunciado: 'Un paciente desarrolla estridor 45 minutos tras la extubación. Describe el manejo apropiado según la fuente, incluyendo qué tratamientos son "populares pero no probados".',
+        respuestaModelo: 'La reintubación no siempre es necesaria, pero cualquier signo de fallo respiratorio inminente (desaturación de O₂, respiración rápida) debe motivar reintubación inmediata, porque los retrasos pueden dificultar restablecer una vía aérea estable. No hay tratamientos probados para el edema laríngeo post-extubación establecido — los tratamientos populares pero no probados son la epinefrina en aerosol y los esteroides intravenosos; como no hay evidencia de que ninguna de estas intervenciones sea eficaz en este punto, no es posible recomendar una dosificación eficaz para ellas.',
     },
 ];

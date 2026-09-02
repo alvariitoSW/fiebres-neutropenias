@@ -6307,11 +6307,152 @@ de entrada. Añadir una guía nueva en el futuro: 1) botón nuevo en
     fusionado en la única llamada a `initQuiz()` de `main.js` — el menú
     del quiz gana una 6ª asignatura ("Neumología") con un único bloque
     ("Merino Neumología") de 13 fichas.
-  - **Pendiente**: el usuario ya avisó de que enviará más contenido de
-    Marik para ampliar este módulo — cuando llegue, sigue el mismo
-    criterio ya establecido para Merino Cardiología Parte 2 (nueva tanda
-    de fichas correlativas, banco de quiz ampliado, sin romper la
-    correspondencia 1:1 capítulo↔bloque de fichas ya establecida aquí).
+  - **Parte 2: ventilación mecánica convencional, vía aérea artificial,
+    NAV y destete (Cap. 27-30)** — llegó con el pedido "ahora vamos a
+    continuar con la segunda parte para añadirla a la app", el envío ya
+    anunciado en la Parte 1. Cubre Conventional Mechanical Ventilation,
+    The Ventilator-Dependent Patient, Ventilator-Associated Pneumonia, y
+    Discontinuing Mechanical Ventilation (62 páginas) — un archivo
+    distinto (`docs/marik-2024-respiratory-management-caps27-30.pdf`, sin
+    offset, verificado con `pdftotext -f N -l N` en el inicio de cada
+    capítulo — Cap27→pág.1, Cap28→pág.17, Cap29→pág.35, Cap30→pág.50; la
+    página 63 del PDF ya es la "Section X — Acid-Base Disorders" del
+    libro, fuera de alcance de este envío). Ampliado el cuaderno de campo
+    de 13 a **23 fichas** (mismo `#merino-neumo-corkboard`/
+    `#panel-merino-neumo-tabs`), correspondencia capítulo→bloque de fichas
+    según su volumen real, mismo criterio ya establecido en el resto del
+    proyecto: **Cap. 27 "Conventional Mechanical Ventilation"** → Ficha
+    XIV (modos básicos VCV/PCV, Ecuación 27.1 Ppico=Pres+Pel, maniobra de
+    pausa inspiratoria y presión meseta —Ecuaciones 27.2/27.3—, el hallazgo
+    de que el riesgo de rotura alveolar depende de la presión meseta
+    ≤30 cmH₂O y no de la presión pico, PRVC como modo adaptativo, ZEEP/PEEP
+    aplicada/PEEP oculta, presión media de la vía aérea, Ecuaciones 27.4/27.5
+    de compliance estática y sus 3 fuentes de error con el ejemplo numérico
+    real de la compliance de la tubuladura) y Ficha XV (asisto-control,
+    disparo por presión vs. flujo, ciclo respiratorio e I:E, IMV/SIMV con
+    sus efectos adversos sobre trabajo respiratorio y gasto cardíaco,
+    "mejor PEEP" por compliance/driving pressure con los datos reales de la
+    Fig. 27.5 —mejor PEEP=12 cmH₂O—, Ecuación 27.6 DO₂=GC×CaO₂ y el efecto
+    opuesto de la PEEP sobre oxigenación/gasto cardíaco de la Fig. 27.6,
+    Tabla 27.1 completa del protocolo de ventilación protectora de la ARDS
+    Network); **Cap. 28 "The Ventilator-Dependent Patient"** → Ficha XVI
+    (tubos endotraqueales, posición correcta con reales Figs. 28.1/28.2,
+    daño laríngeo, tubos de drenaje subglótico, traqueostomía —momento,
+    técnicas percutánea/quirúrgica/cricotiroidotomía, complicaciones,
+    estenosis traqueal—, manejo del manguito y fugas), Ficha XVII
+    (aspiración de secreciones —ya no recomendada de rutina—, instilación
+    de suero salino —tampoco recomendada, con la cifra real de 300.000
+    colonias bacterianas desalojadas—, terapia mucolítica con NAC + Tabla
+    28.1, barotrauma pulmonar —volutrauma vs. barotrauma, neumotórax con
+    reales Figs. 28.5/28.6/28.7 de radiografía/TC/ecografía/neumotórax a
+    tensión, descompresión con aguja, evacuación pleural con el sistema de
+    3 cámaras Tabla 28.2 y la advertencia real de que la succión puede
+    promover fugas de aire a través de una fístula broncopleural—, real
+    Fig. 28.4 de biofilm) y Ficha XVIII (PEEP oculta/intrínseca — efectos
+    adversos, monitorización por oclusión al final de la espiración —solo
+    fiable sin respiración espontánea—, manejo con PEEP aplicada justo por
+    debajo del nivel oculto); **Cap. 29 "Ventilator-Associated Pneumonia"**
+    → Ficha XIX (generalidades y epidemiología, Tabla 29.1 de aislados por
+    tipo de NAV/HAP, prevención — por qué la clorhexidina ya no se
+    recomienda, descontaminación digestiva selectiva con los datos reales
+    de la Fig. 29.1, el "paquete del ventilador" Tabla 29.2, el comentario
+    crítico de la propia fuente sobre la posición semirreclinada, aspiración
+    subglótica), Ficha XX (la falta de fiabilidad de los 4 criterios
+    clínicos clásicos verificados contra biopsia pulmonar —Tabla 29.3—, la
+    baja especificidad de la radiografía de tórax con reales Fig. 29.3,
+    aspirados traqueales —análisis microscópico con real Fig. 29.4, cultivos
+    cualitativos vs. cuantitativos—, BAL/mini-BAL, cepillo protegido de
+    espécimen, Tabla 29.4 comparando los 3 métodos de cultivo contra biopsia
+    pulmonar, y la disparidad entre guías internacionales/EE.UU. sobre qué
+    método preferir) y Ficha XXI (clasificación de derrames paraneumónicos
+    en 4 categorías —Tabla 29.5—, antibioterapia de derrames infectados,
+    drenaje ineficaz/VATS, factores de riesgo de mal pronóstico, regímenes
+    empíricos de bajo/alto riesgo —Tabla 29.6—, duración de 7 días para NAV
+    documentada, y la reflexión final de la fuente sobre el sobrediagnóstico
+    de la NAV como explicación de su bajo impacto en mortalidad); **Cap. 30
+    "Discontinuing Mechanical Ventilation"** → Ficha XXII (estrategias del
+    ventilador para facilitar el destete —respiraciones disparadas por el
+    paciente con el dato real del estudio animal de −50% de fuerza
+    diafragmática tras 3 días de ventilación controlada, fisioterapia,
+    prácticas de sedación—, la prueba de respiración espontánea —criterios
+    de disposición y predictores de éxito Tabla 30.1, método del circuito
+    del ventilador vs. circuito en T, con el dato real de que la presión de
+    soporte NO reduce significativamente el trabajo respiratorio—, distinguir
+    ansiedad de fracaso ventilatorio por el volumen tidal) y Ficha XXIII
+    (disfunción cardíaca en el 40% de los destetes fallidos con el dato
+    real de la SvO₂ decreciente en trials fallidos, monitorización y manejo
+    —CPAP/diuresis/nitratos—, debilidad de la musculatura respiratoria
+    —neuromiopatía de la enfermedad crítica, PI<sub>max</sub>—, extubación
+    —reflejos protectores, prueba de fuga del manguito con las cifras reales
+    de corte &gt;110 mL, pretratamiento con esteroides con los datos reales
+    del estudio multicéntrico —22%→3% edema laríngeo, 8%→4% reintubación—,
+    estridor post-extubación y por qué siempre es más evidente en
+    inspiración).
+  - **8 imágenes reales extraídas** con `pdfimages -f N -l N -j` desde las
+    páginas exactas del PDF (cruzando cada página candidata con la lectura
+    visual del propio PDF antes de extraer, mismo método ya establecido en
+    la Parte 1): `neumo-fig28-1-radiografia-tubo-et.jpg` (radiografía de
+    tórax con la posición correcta del tubo ET, Ficha XVI),
+    `neumo-fig28-2-radiografia-intubacion-selectiva.jpg` (radiografía de
+    intubación del bronquio principal derecho con atelectasia izquierda,
+    Ficha XVI), `neumo-fig28-4-microscopia-biofilm.jpg` (micrografía
+    electrónica de biofilm en un tubo endotraqueal, Ficha XVII),
+    `neumo-fig28-5-radiografia-tc-neumotorax.jpg` (radiografía + TC con
+    neumotórax anterior no visible en la radiografía, Ficha XVII),
+    `neumo-fig28-6-ecografia-linea-pleural.jpg` (ecografía de la línea
+    pleural hiperecoica, Ficha XVII), `neumo-fig28-7-radiografia-neumotorax-tension.jpg`
+    (radiografía de neumotórax a tensión con desplazamiento mediastínico,
+    Ficha XVII), `neumo-fig29-3-radiografias-posicion.jpg` (2 radiografías
+    del mismo paciente en supino/espiración vs. erguido/inspiración,
+    Ficha XX) y `neumo-fig29-4-tincion-gram-esputo.jpg` (tinción de Gram
+    real con células escamosas y neutrófilos, Ficha XX) — todas
+    fotografías/registros diagnósticos genuinos. Mismo criterio de
+    extracción aplicado también a lo NO extraído (12 figuras más,
+    identificadas y confirmadas como gráficos/diagramas de dispositivo
+    mediante `pdfimages -list` + inspección visual antes de descartarlas):
+    Figs. 27.1-27.6 (gráficos de ondas de presión/volumen y datos de
+    estudios, recreados como texto/tablas con los valores numéricos
+    reales), Fig. 28.3 (ilustración del tubo de traqueostomía), Fig. 28.8
+    (diagrama del sistema de drenaje pleural de 3 cámaras, recreado como
+    Tabla 28.2), Fig. 28.9 (esquema de la PEEP oculta, descrito en texto),
+    Fig. 29.1 (gráfico de barras de la SDD, recreado como tabla con los
+    datos reales), Fig. 29.2 (ilustración del tubo con puerto de succión
+    subglótico) y Fig. 29.5 (ilustración del catéter de mini-BAL) — estas 2
+    últimas descritas explícitamente en el propio texto como "ilustración
+    esquemática del dispositivo... no reproducida como imagen", en vez de
+    dejar una referencia `<img>` sin archivo (lección ya aprendida y
+    documentada en la Parte 1: nunca dejar una referencia a un archivo que
+    no llegó a extraerse, ni siquiera con un `onerror` de respaldo).
+  - **Sin calculadoras nuevas** — las 5 calculadoras de la Parte 1
+    (peso ajustado, PEFR, Berlín, PBW, CaO₂) ya cubren las fórmulas
+    numéricas más claras del libro; el contenido de la Parte 2 es más
+    descriptivo/algorítmico (protocolos, clasificaciones, criterios de
+    decisión) que aritmético, así que se transcribió íntegro como
+    `.data-table`/`kv-row`/`micro-prof-item` nativos sin forzar una
+    calculadora donde la fuente no da una fórmula numérica propia.
+  - **80 preguntas de quiz nuevas** (`js/data/merino-neumologia-preguntas.js`,
+    `neumo-q105`-`q184`, 8 por ficha × 10 fichas nuevas — mismo formato 6
+    opción múltiple + 2 `redactar` ya establecido), añadidas al mismo
+    array `preguntasMerinoNeumologia` ya exportado (sin tocar
+    `neumologia/index.js`, que ya fusiona el banco completo). El banco de
+    Merino Neumología queda en **184 preguntas** repartidas en 23 fichas,
+    y el banco combinado de toda la app en <strong>1635 preguntas</strong>
+    (1555 previas + 80 de esta Parte 2).
+  - **Bibliografía**: ampliada de 5 a 10 entradas (misma tarjeta única, sin
+    cambiar de patrón), con las 5 nuevas enlazando a
+    `docs/marik-2024-respiratory-management-caps27-30.pdf#page=N`. El
+    encabezado del módulo se actualizó para reflejar el rango completo
+    (Cap. 22-30) en vez de solo Cap. 22-26.
+  - Verificado con Playwright: las 23 fichas abren/voltean sin error de
+    consola ni 404 real; las 8 imágenes nuevas cargan (`naturalWidth`&gt;0,
+    incluida la que vive dentro de un acordeón cerrado); ninguna referencia
+    `<img>` rota en las 10 fichas nuevas; el menú del quiz en 3 niveles
+    muestra "Neumología (184)" → "Merino Neumología (184)" → las 23 fichas
+    con 8 preguntas cada una, y un recorrido de varias preguntas de las
+    fichas nuevas (incluida al menos una de tipo `redactar`) no generó
+    ninguna excepción JS; sin overflow horizontal a 390px; la ficha
+    original `neumo-ep-diagnostico` (Parte 1) sigue funcionando sin
+    regresiones.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
