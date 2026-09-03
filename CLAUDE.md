@@ -6453,6 +6453,101 @@ de entrada. Añadir una guía nueva en el futuro: 1) botón nuevo en
     ninguna excepción JS; sin overflow horizontal a 390px; la ficha
     original `neumo-ep-diagnostico` (Parte 1) sigue funcionando sin
     regresiones.
+  - **Auditoría de huecos/mejoras/interactividad de las 23 fichas, y sus
+    correcciones aplicadas**, a petición explícita del usuario ("ahora haz
+    una auditoría del contenido de neumología... sobre los huecos de
+    contenido, las mejoras, las faltas de contenido etc" seguido de "ahora
+    aplica las mejoras del chequeo merino neumología"). Auditoría con 5
+    agentes en paralelo (4 iniciales, repartiéndose las 152 páginas de los
+    2 PDF fuente, + 1 de relleno para las páginas 41-55/Fichas VII-VIII que
+    quedaron fuera del reparto de los 4 primeros), cada uno comparando
+    frase a frase su tramo del PDF contra el HTML ya escrito — mismo método
+    de auditoría ya establecido en el resto del proyecto. Resultado: 0
+    errores reales (1 errata de la propia fuente ya fielmente reproducida),
+    2 huecos de contenido reales, 5 referencias cruzadas obsoletas
+    ("Capítulo N, no incluido en este bloque" — ciertas ahora de que la
+    Parte 2 ya está incorporada), y 13 propuestas de mejora/interactividad.
+    Publicado como Artifact y aplicado íntegro a continuación:
+    - **2 huecos de contenido**: en la Ficha I (`neumo-ep-diagnostico`), el
+      cierre real del capítulo ("A Final Word", verificado con
+      `pdftotext -f 12 -l 14` contra el texto exacto en inglés antes de
+      traducirlo) — 3 viñetas: "cuando crees que está ahí, normalmente no
+      lo está" (solo 10% de confirmación tras sospecha), "cuando está ahí,
+      normalmente no lo sabes" (origen del émbolo clínicamente silente en
+      la mayoría de casos), y la conclusión de que es mejor prevenir la EP
+      que diagnosticarla; en la Ficha VII (`neumo-sdra-no-ventilatorio`),
+      las 4 contraindicaciones relativas de la posición prono (shock
+      circulatorio, embarazo, arritmias potencialmente mortales recientes,
+      tubos torácicos funcionantes) con la aclaración explícita de que los
+      vasopresores NO son una contraindicación si la condición clínica es
+      estable o mejora — ausentes junto a la Tabla 24.4 de
+      contraindicaciones absolutas ya existente.
+    - **5 referencias cruzadas obsoletas convertidas en enlaces internos
+      reales** (`.tx-link` descartado a propósito — ese listener global
+      vive en `nefrologia/index.js` y solo conoce las claves de
+      `nefroLevel`; reutilizarlo aquí habría repetido el mismo bug ya
+      documentado y corregido para Vías Urinarias↔Nefrología y
+      Merino Cardiología — se creó en su lugar `.neumo-internal-link`, con
+      su propio listener en `merino-neumologia.js`, `initInternalLinks()`,
+      llamando a `openCorkboardTopic('panel-merino-neumo-tabs', ...)`, y
+      añadida a la regla compartida `.tx-link, .especialidad-link,
+      .paper-link, .neumo-internal-link` de `components.css` en vez de
+      duplicar CSS): Ficha V (`neumo-epoc-vpp`) → Ficha XVIII
+      (`neumo-peep-oculta`), ×2; Ficha VIII (`neumo-sdra-ventilacion`) →
+      Ficha XIV (`neumo-vm-modos`, presión meseta) y Ficha XV
+      (`neumo-vm-ajuste`, PEEP); Ficha XII (`neumo-vni-metodos`) → Ficha
+      XXII (`neumo-sbt`, prueba de respiración espontánea). Otras 3
+      referencias similares ("Capítulo 8"/"Capítulo 17"×2/"Capítulo 52")
+      se dejaron sin tocar a propósito — confirmado que esos capítulos
+      pertenecen a otras secciones del mismo *Handbook* de Marik, fuera del
+      alcance de los 2 PDF de Neumología, así que siguen correctamente
+      "no incluidos".
+    - **13 piezas de interactividad/mejora**: selector de sistema de O₂ por
+      FiO₂ objetivo (Ficha X, filtra `SISTEMAS_O2` por rango de FiO₂);
+      calculadora de compliance estática Cstat = VT/(Pmeseta−PEEP) (Ficha
+      XIV, con aviso de "combinación no fisiológica" si Pmeseta≤PEEP y
+      semáforo de 3 tramos ≥50/25-49/&lt;25 mL/cmH₂O); selector puramente
+      explicativo de disparo por presión vs. flujo (Ficha XV); checklist de
+      contraindicaciones de la IMV (debilidad de musculatura respiratoria,
+      disfunción de VI — con los 2 motivos combinados con "y" si se marcan
+      ambos); selector "¿qué método de cultivo elijo?" con gauge visual de
+      razón de probabilidades diagnóstica (Ficha XX, reutilizando
+      `.kinetic-row`/`.kinetic-fill`, coloreado verde/amarillo/rojo por
+      DOR≥8/≥6/menor); clasificador completo de derrame paraneumónico en 4
+      categorías (Ficha XXI, siguiendo la Tabla 29.5 — purulento→Cat4,
+      &lt;10mm→Cat1, loculado/pH&lt;7,20/glucosa&lt;60/Gram+→Cat3,
+      resto→Cat2, con tubo torácico marcado Sí desde Cat3; ambos selectores
+      obligatorios —loculado y Gram— se abstienen de dar veredicto hasta
+      que se responden los dos, aunque uno solo ya bastaría por la lógica
+      OR, para no asumir una respuesta no dada); calculadora de la prueba
+      de fuga del manguito (Ficha XXIII, umbral &gt;110 mL); 2 tablas de
+      datos reales de figura (Fig. 25.2 PaO₂/VO₂ por FiO₂ en Ficha IX, y 2
+      etiquetas "Figura 26.4/26.5 (datos)" en Ficha XIII); nota de
+      fidelidad nueva en Ficha VI (unidades de PEEP mmHg vs. cmH₂O, misma
+      errata de la fuente ya documentada, nunca "corregida" por criterio
+      propio) y en Ficha XVI (presión del manguito citada en mmHg y cmH₂O,
+      confirmado que son la misma cifra en la práctica —1 mmHg≈1,36
+      cmH₂O—, no 2 umbrales distintos); ficha del casco (helmet) separada
+      de "Mascarillas faciales" en su propio `micro-prof-item` (Ficha XII);
+      y una corrección de errata de tecleo ("puerto de sección" → "puerto
+      de succión", Ficha XIX).
+    - Todas las calculadoras nuevas siguen el guard `.value === ''` ya
+      establecido como lección aprendida en las auditorías de FRA/ERC (
+      nunca tratar un campo vacío como 0).
+    - Verificado con Playwright: los 5 enlaces internos navegan a su ficha
+      exacta de destino sin corromper ningún switcher; las 7 piezas
+      interactivas nuevas responden correctamente a valores concretos
+      (Cstat 420/(24-8)=26,3 mL/cmH₂O tramo warn; Cstat con
+      Pmeseta≤PEEP → aviso no fisiológico; checklist IMV con 2 marcados
+      combina motivos con "y"; selector de cultivo BAL → DOR 9,6 con gauge
+      al 96%; derrame purulento → Categoría 4; derrame &lt;10mm →
+      Categoría 1; derrame loculado+Gram- → Categoría 3, solo tras
+      responder ambos selectores obligatorios; fuga 80 mL → aviso de riesgo
+      ×7; fuga 150 mL → mensaje de normalidad) y se abstienen sin error en
+      campo vacío (nunca `NaN`); sin overflow horizontal a 390px en
+      ninguna de las 14 fichas tocadas; sin errores de consola ni 404 reales
+      (el único 404 es el `favicon.ico`, ya documentado como inocuo). Bump
+      de cache-busting (`?v=20260903`) por el cambio en `components.css`.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

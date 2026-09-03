@@ -562,8 +562,8 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 /* Enlace interno de navegación cruzada entre módulos de Nefrología (p. ej.
    la guía transversal de tratamiento saltando a una ficha de ERC/FRA/TRR).
    Es un <button>, no un <a> — no navega por href, dispara JS. */
-.tx-link, .especialidad-link, .paper-link { display: inline-block; background: none; border: none; padding: 4px 0; margin: 6px 12px 2px 0; color: var(--accent-blue); font-size: 0.8rem; font-weight: bold; font-family: inherit; text-decoration: none; cursor: pointer; }
-.tx-link:hover, .especialidad-link:hover, .paper-link:hover { text-decoration: underline; color: var(--accent-yellow); }
+.tx-link, .especialidad-link, .paper-link, .neumo-internal-link { display: inline-block; background: none; border: none; padding: 4px 0; margin: 6px 12px 2px 0; color: var(--accent-blue); font-size: 0.8rem; font-weight: bold; font-family: inherit; text-decoration: none; cursor: pointer; }
+.tx-link:hover, .especialidad-link:hover, .paper-link:hover, .neumo-internal-link:hover { text-decoration: underline; color: var(--accent-yellow); }
 
 /* Resaltado tipo "subrayador" para conceptos clave dentro de prosa narrativa
    — pensado para contenido de estudio denso (p. ej. UCI/Papers Tuiter),
