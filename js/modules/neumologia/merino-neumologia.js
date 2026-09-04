@@ -400,6 +400,228 @@ function initFugaManguito() {
     calcFugaManguito();
 }
 
+// Ficha I — checklist de las 4 condiciones para retener anticoagulación
+// en un émbolo pulmonar subsegmentario único.
+function calcEpSubseg() {
+    const checks = document.querySelectorAll('.neumo-ep-subseg-check:checked');
+    const total = document.querySelectorAll('.neumo-ep-subseg-check').length;
+    const resultado = document.getElementById('neumo-ep-subseg-resultado');
+    if (!resultado) return;
+    if (checks.length === 0) { resultado.style.display = 'none'; return; }
+    resultado.style.display = 'block';
+    resultado.style.textAlign = 'left';
+    if (checks.length === total) {
+        resultado.className = 'result-box tfg-estado-ok';
+        resultado.innerHTML = `<strong>✅ Razonable retener la anticoagulación</strong><p style="font-size:0.85rem; margin-top:6px;">Se cumplen las 4 condiciones descritas en el texto — vigilancia clínica en vez de anticoagulación inmediata.</p>`;
+    } else {
+        resultado.className = 'result-box tfg-estado-warn';
+        resultado.innerHTML = `<strong>⚠️ No se cumplen las 4 condiciones (${checks.length}/${total})</strong><p style="font-size:0.85rem; margin-top:6px;">Se recomienda anticoagulación estándar para el émbolo subsegmentario.</p>`;
+    }
+}
+function initEpSubseg() {
+    const boxes = document.querySelectorAll('.neumo-ep-subseg-check');
+    if (!boxes.length) return;
+    boxes.forEach(b => b.addEventListener('change', calcEpSubseg));
+    calcEpSubseg();
+}
+
+// Ficha II — clasificador de riesgo de la EP (bajo/intermedio/alto) por
+// disfunción del VD, troponina, inestabilidad hemodinámica y comorbilidades.
+function calcEpRiesgo() {
+    const hemo = document.querySelector('.neumo-ep-riesgo-check[value="hemo"]');
+    const vd = document.querySelector('.neumo-ep-riesgo-check[value="vd"]');
+    const tropo = document.querySelector('.neumo-ep-riesgo-check[value="tropo"]');
+    const comorb = document.querySelector('.neumo-ep-riesgo-check[value="comorb"]');
+    const resultado = document.getElementById('neumo-ep-riesgo-resultado');
+    if (!hemo || !vd || !tropo || !comorb || !resultado) return;
+    const marcados = document.querySelectorAll('.neumo-ep-riesgo-check:checked').length;
+    if (marcados === 0) { resultado.style.display = 'none'; return; }
+    resultado.style.display = 'block';
+    resultado.style.textAlign = 'left';
+    if (hemo.checked) {
+        resultado.className = 'result-box tfg-estado-danger';
+        resultado.innerHTML = `<strong>🔴 EP de alto riesgo (masiva)</strong><p style="font-size:0.85rem; margin-top:6px;">Inestabilidad hemodinámica — trombolisis + heparina no fraccionada por peso (Tabla 22.3).</p>`;
+    } else if (vd.checked) {
+        resultado.className = 'result-box tfg-estado-warn';
+        resultado.innerHTML = `<strong>🟡 EP de riesgo intermedio (submasiva)</strong><p style="font-size:0.85rem; margin-top:6px;">Disfunción del VD${tropo.checked ? ' + troponina elevada (sobrecarga del corazón derecho)' : ''} sin inestabilidad hemodinámica — enoxaparina 1 mg/kg/12h y observación 24-48h.</p>`;
+    } else if (comorb.checked) {
+        resultado.className = 'result-box tfg-estado-warn';
+        resultado.innerHTML = `<strong>🟡 No cumple estrictamente los criterios de bajo riesgo</strong><p style="font-size:0.85rem; margin-top:6px;">Comorbilidad significativa sin disfunción del VD ni inestabilidad hemodinámica — la fuente no define una categoría específica para este escenario; valorar manejo individualizado (posible alta diferida).</p>`;
+    } else {
+        resultado.className = 'result-box tfg-estado-ok';
+        resultado.innerHTML = `<strong>🟢 EP de bajo riesgo</strong><p style="font-size:0.85rem; margin-top:6px;">Sin disfunción del VD, inestabilidad hemodinámica ni comorbilidades significativas — anticoagulación oral y alta precoz (Tabla 22.3).</p>`;
+    }
+}
+function initEpRiesgo() {
+    const boxes = document.querySelectorAll('.neumo-ep-riesgo-check');
+    if (!boxes.length) return;
+    boxes.forEach(b => b.addEventListener('change', calcEpRiesgo));
+    calcEpRiesgo();
+}
+
+// Ficha VI — checklist de los 5 criterios diagnósticos de SDRA (Berlín).
+function calcSdraCriterio() {
+    const checks = document.querySelectorAll('.neumo-sdra-criterio-check:checked');
+    const total = document.querySelectorAll('.neumo-sdra-criterio-check').length;
+    const resultado = document.getElementById('neumo-sdra-criterio-resultado');
+    if (!resultado) return;
+    if (checks.length === 0) { resultado.style.display = 'none'; return; }
+    resultado.style.display = 'block';
+    resultado.style.textAlign = 'left';
+    if (checks.length === total) {
+        resultado.className = 'result-box tfg-estado-danger';
+        resultado.innerHTML = `<strong>Compatible con SDRA (${checks.length}/${total} criterios)</strong><p style="font-size:0.85rem; margin-top:6px;">Se cumplen los 5 criterios de la Tabla 24.2 — clasifica la gravedad con el cociente PaO₂/FiO₂ justo debajo.</p>`;
+    } else {
+        resultado.className = 'result-box tfg-estado-warn';
+        resultado.innerHTML = `<strong>No compatible con SDRA por definición formal (${checks.length}/${total} criterios)</strong><p style="font-size:0.85rem; margin-top:6px;">Faltan criterios de la Tabla 24.2 — considera diagnósticos alternativos (edema pulmonar cardiogénico, neumonía, etc.).</p>`;
+    }
+}
+function initSdraCriterio() {
+    const boxes = document.querySelectorAll('.neumo-sdra-criterio-check');
+    if (!boxes.length) return;
+    boxes.forEach(b => b.addEventListener('change', calcSdraCriterio));
+    calcSdraCriterio();
+}
+
+// Ficha XVI — tamaño de tubo ET recomendado según la altura (cm), a partir
+// de los cortes en pulgadas de la fuente (≤5'2" / 5'3"-5'10" / ≥5'11").
+function calcEtTubo() {
+    const alturaEl = document.getElementById('neumo-et-altura');
+    const resultado = document.getElementById('neumo-et-resultado');
+    if (!alturaEl || !resultado) return;
+    if (alturaEl.value === '') { resultado.style.display = 'none'; return; }
+    let altura = Number(alturaEl.value);
+    if (altura < 0) { altura = 0; alturaEl.value = 0; }
+
+    let tamano;
+    if (altura <= 157) tamano = '7';
+    else if (altura < 180) tamano = '7,5';
+    else tamano = '8';
+
+    resultado.style.display = 'block';
+    resultado.className = 'result-box';
+    resultado.style.textAlign = 'left';
+    resultado.innerHTML = `<strong>Tamaño de tubo ET sugerido: ${tamano}</strong><p style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">Orientativo por altura corporal — la fuente recuerda que no hay evidencia de que el tamaño del tubo ET afecte los resultados clínicos.</p>`;
+}
+function initEtTubo() {
+    const input = document.getElementById('neumo-et-altura');
+    if (!input) return;
+    input.addEventListener('input', calcEtTubo);
+    calcEtTubo();
+}
+
+// Ficha XXII — checklist de disposición para SBT + predictores de éxito
+// (Tabla 30.1), reutilizando el PBW ya calculado en la Ficha VIII.
+function calcSbtChecklist() {
+    const checks = document.querySelectorAll('.neumo-sbt-check:checked');
+    const total = document.querySelectorAll('.neumo-sbt-check').length;
+    const resultado = document.getElementById('neumo-sbt-resultado');
+    if (!resultado) return;
+    if (checks.length === 0) { resultado.style.display = 'none'; return; }
+    resultado.style.display = 'block';
+    resultado.style.textAlign = 'left';
+    if (checks.length === total) {
+        resultado.className = 'result-box tfg-estado-ok';
+        resultado.innerHTML = `<strong>✅ Criterios de disposición cumplidos (${checks.length}/${total})</strong><p style="font-size:0.85rem; margin-top:6px;">Puede iniciarse la prueba de respiración espontánea.</p>`;
+    } else {
+        resultado.className = 'result-box tfg-estado-warn';
+        resultado.innerHTML = `<strong>Faltan criterios de disposición (${checks.length}/${total})</strong><p style="font-size:0.85rem; margin-top:6px;">Revisa los criterios de la Tabla 30.1 antes de iniciar la SBT.</p>`;
+    }
+}
+function initSbtChecklist() {
+    const boxes = document.querySelectorAll('.neumo-sbt-check');
+    if (!boxes.length) return;
+    boxes.forEach(b => b.addEventListener('change', calcSbtChecklist));
+    calcSbtChecklist();
+}
+function calcSbtPredictores() {
+    const vtEl = document.getElementById('neumo-sbt-vt');
+    const pbwEl = document.getElementById('neumo-sbt-pbw');
+    const rrEl = document.getElementById('neumo-sbt-rr');
+    const pimaxEl = document.getElementById('neumo-sbt-pimax');
+    const resultado = document.getElementById('neumo-sbt-predictores-resultado');
+    if (!vtEl || !pbwEl || !rrEl || !pimaxEl || !resultado) return;
+    if (vtEl.value === '' || pbwEl.value === '' || rrEl.value === '' || pimaxEl.value === '') { resultado.style.display = 'none'; return; }
+    const vt = Number(vtEl.value);
+    const pbw = Number(pbwEl.value);
+    const rr = Number(rrEl.value);
+    const pimax = Number(pimaxEl.value);
+    if (vt <= 0 || pbw <= 0 || rr <= 0) { resultado.style.display = 'none'; return; }
+
+    const vtPorKg = vt / pbw;
+    const rsbi = rr / (vt / 1000);
+    const criterios = [
+        { nombre: 'V<sub>T</sub> 4-6 mL/kg PBW', valor: `${vtPorKg.toFixed(1)} mL/kg`, ok: vtPorKg >= 4 && vtPorKg <= 6 },
+        { nombre: 'RR &lt;40/min', valor: `${rr} /min`, ok: rr < 40 },
+        { nombre: 'RR/V<sub>T</sub> 60-105 rpm/L', valor: `${rsbi.toFixed(0)} rpm/L`, ok: rsbi >= 60 && rsbi <= 105 },
+        { nombre: 'PI<sub>max</sub> más negativa que −20 cmH₂O', valor: `${pimax} cmH₂O`, ok: pimax <= -20 },
+    ];
+    const favorables = criterios.filter(c => c.ok).length;
+    const nivel = favorables === 4 ? 'ok' : favorables >= 2 ? 'warn' : 'danger';
+    resultado.style.display = 'block';
+    resultado.className = `result-box tfg-estado-${nivel}`;
+    resultado.style.textAlign = 'left';
+    resultado.innerHTML = `<strong>${favorables}/4 predictores favorables</strong><ul style="margin:6px 0 0; padding-left:18px; font-size:0.85rem;">${criterios.map(c => `<li>${c.ok ? '✅' : '❌'} ${c.nombre}: ${c.valor}</li>`).join('')}</ul><p style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">Cada predictor por separado es poco fiable — tomados en conjunto, y con su evolución seriada, orientan mejor el pronóstico de la SBT.</p>`;
+}
+function initSbtPredictores() {
+    const resultado = document.getElementById('neumo-sbt-predictores-resultado');
+    if (!resultado) return;
+    ['neumo-sbt-vt', 'neumo-sbt-pbw', 'neumo-sbt-rr', 'neumo-sbt-pimax'].forEach(id => {
+        document.getElementById(id)?.addEventListener('input', calcSbtPredictores);
+    });
+    calcSbtPredictores();
+}
+
+// Ficha XIII — evaluador de respuesta a la VNI a la 1ª hora (PaCO₂ para
+// fallo hipercápnico, PaO₂/FiO₂ para fallo hipoxémico).
+function calcVniRespuesta() {
+    const tipoEl = document.getElementById('neumo-vni-respuesta-tipo');
+    const basalEl = document.getElementById('neumo-vni-respuesta-basal');
+    const h1El = document.getElementById('neumo-vni-respuesta-1h');
+    const resultado = document.getElementById('neumo-vni-respuesta-resultado');
+    if (!tipoEl || !basalEl || !h1El || !resultado) return;
+    if (tipoEl.value === '' || basalEl.value === '' || h1El.value === '') { resultado.style.display = 'none'; return; }
+    const basal = Number(basalEl.value);
+    const h1 = Number(h1El.value);
+    if (basal <= 0) { resultado.style.display = 'none'; return; }
+
+    resultado.style.display = 'block';
+    resultado.style.textAlign = 'left';
+    if (tipoEl.value === 'hipercapnico') {
+        const deltaPct = ((basal - h1) / basal) * 100;
+        const favorable = deltaPct >= 10;
+        resultado.className = `result-box tfg-estado-${favorable ? 'ok' : 'danger'}`;
+        resultado.innerHTML = `<strong>PaCO₂: ${deltaPct >= 0 ? '−' : '+'}${Math.abs(deltaPct).toFixed(1)}% respecto al basal</strong><p style="font-size:0.85rem; margin-top:6px;">${favorable ? '✅ Descenso ≥10% — respuesta favorable a la VNI.' : '⚠️ Fracaso en disminuir la PaCO₂ ≥10% tras 1h — evidencia de respuesta pobre (fracaso de la VNI); considerar intubación.'}</p>`;
+    } else {
+        const favorable = h1 > basal;
+        resultado.className = `result-box tfg-estado-${favorable ? 'ok' : 'danger'}`;
+        resultado.innerHTML = `<strong>PaO₂/FiO₂: ${basal.toFixed(0)} → ${h1.toFixed(0)} mmHg</strong><p style="font-size:0.85rem; margin-top:6px;">${favorable ? '✅ El cociente ha aumentado — respuesta favorable a la VNI.' : '⚠️ Fracaso en aumentar el cociente tras 1h — evidencia de respuesta pobre (fracaso de la VNI); considerar intubación si la hipoxemia es grave o la enfermedad subyacente tiene alta tasa de fracaso (Figura 26.5).'}</p>`;
+    }
+}
+function initVniRespuesta() {
+    const tipoEl = document.getElementById('neumo-vni-respuesta-tipo');
+    const basalLabel = document.getElementById('neumo-vni-respuesta-basal-label');
+    const h1Label = document.getElementById('neumo-vni-respuesta-1h-label');
+    const resultado = document.getElementById('neumo-vni-respuesta-resultado');
+    if (!tipoEl || !resultado) return;
+    tipoEl.addEventListener('change', () => {
+        if (tipoEl.value === 'hipercapnico') {
+            basalLabel.textContent = 'PaCO₂ basal (mmHg)';
+            h1Label.textContent = 'PaCO₂ a la 1ª hora (mmHg)';
+        } else if (tipoEl.value === 'hipoxemico') {
+            basalLabel.textContent = 'PaO₂/FiO₂ basal (mmHg)';
+            h1Label.textContent = 'PaO₂/FiO₂ a la 1ª hora (mmHg)';
+        } else {
+            basalLabel.textContent = 'Valor basal';
+            h1Label.textContent = 'Valor a la 1ª hora';
+        }
+        calcVniRespuesta();
+    });
+    document.getElementById('neumo-vni-respuesta-basal')?.addEventListener('input', calcVniRespuesta);
+    document.getElementById('neumo-vni-respuesta-1h')?.addEventListener('input', calcVniRespuesta);
+    calcVniRespuesta();
+}
+
 export function init() {
     initCorkboard('merino-neumo-corkboard', 'panel-merino-neumo-tabs');
     initInternalLinks();
@@ -415,4 +637,11 @@ export function init() {
     initCultivoSelect();
     initDerrame();
     initFugaManguito();
+    initEpSubseg();
+    initEpRiesgo();
+    initSdraCriterio();
+    initEtTubo();
+    initSbtChecklist();
+    initSbtPredictores();
+    initVniRespuesta();
 }

@@ -6180,6 +6180,134 @@ dentro de `#cardiologia-view` y en el switcher `cardioLevel` de
       horizontal a 390px en ninguna de las 24 fichas. Con esta ronda, las
       13 propuestas de interactividad de la Segunda Auditoría quedan
       todas implementadas — ninguna pendiente.
+  - **Tercera auditoría, esta vez cubriendo también Merino Cardiología (a
+    petición explícita: "revisa el contenido de neumología y de
+    cardiología del merino respecto a la bibliografía... buscar los huecos
+    de contenido, las mejoras, las posibles partes interactivas... y
+    corregir las partes interactivas")**, con 4 agentes en paralelo
+    repartiéndose las 24 fichas por tramos de páginas de los 2 PDF fuente
+    (Fichas I-V/shock pág. 1-35, VI-XII/shock pág. 36-70,
+    XIII-XVIII/cardiac-disorders pág. 1-37, XIX-XXIV/cardiac-disorders pág.
+    38-72). Tras las 4 rondas de auditoría previas ya documentadas, este
+    módulo tenía fidelidad muy alta — 5 errores reales (uno clínicamente
+    significativo) y ~20 huecos de contenido puntuales, ningún hueco
+    estructural grande:
+    - **Ficha XVI** (`mc-fa-frecuencia`): "excepto en el hiperparatiroidismo"
+      — error de transcripción real, la fuente dice "hyperthyroidism"
+      (hipertiroidismo), una entidad endocrina distinta. Corregido.
+    - **`calcCha2ds2Vasc()` (Ficha XVII) — bug real de umbral, el más
+      significativo de esta ronda**: la Tabla 19.2 define "Definido" como
+      ≥2 puntos en varones / ≥3 en mujeres, pero el código nunca evaluaba
+      el umbral de 2 puntos para varones — un varón con exactamente 2
+      puntos (p. ej. solo "Edad &gt;75") caía en la rama "Riesgo
+      intermedio. Considerar" en vez de "Riesgo definido", infrarrecomendando
+      anticoagulación en un escenario real y frecuente. Corregido
+      calculando `umbralDefinido`/`umbralConsiderar` explícitamente por
+      sexo (2/1 en varones, 3/2 en mujeres) en vez de un único corte fijo
+      "≤2" compartido para ambos sexos; el caso límite de una mujer con
+      solo el punto de "sexo femenino" (1 punto, insuficiente para
+      "Considerar" según la Tabla 19.2) ahora también se distingue
+      correctamente.
+    - **Ficha XXII (`mc-paro-soporte`) — las "5 T" de las causas
+      reversibles de paro cardíaco estaban incompletas**, tanto en el
+      `kv-row` de causas de AESP como en el `algo-step` de FV/TV y en el
+      mensaje final del wizard ACLS (JS): faltaba "Tóxicos" en las 3
+      ubicaciones (solo se listaban 4 de las 5 T reales de la Fig. 21.2:
+      neumoTórax, Taponamiento, Tromboembolismo pulmonar, oclusión
+      Trombótica coronaria). Añadido en las 3.
+    - **Ficha XXI (`mc-diseccion-aortica`)**: la frase "opioides IV
+      precoces (activan el sistema simpático, agravando la disección)"
+      invertía la causalidad — es el **dolor no tratado** el que activa el
+      sistema simpático; los opioides son la intervención que lo previene.
+      Reformulada explícitamente.
+    - **Ficha II (`mc-vasopresores`)**: la cifra "titulando cada 5 min"
+      para norepinefrina no tenía respaldo textual directo en el Cap. 14
+      (a diferencia de otros fármacos de la misma tabla, donde "cada 5
+      min" sí viene citado explícitamente) — suavizada a "titulando al
+      alza según respuesta" en las 3 ubicaciones (Ficha II, Ficha VII, y
+      el selector JS de vasopresor por escenario), sin tocar el resto de
+      intervalos de 5 min de otros fármacos (nitroglicerina, nitroprusiato,
+      esmolol, nicardipino), todos ellos sí confirmados contra sus tablas
+      de origen.
+    - **~20 huecos de contenido**, verificados uno a uno contra el texto
+      exacto de la fuente antes de incorporarlos: en Ficha I, el estudio
+      real de UCI (2/3 de mediciones con manguito inapropiado, 62%
+      difiriendo &gt;10 mmHg de la PA directa) y la nota de que un manguito
+      demasiado *grande* no requiere cambio (solo uno demasiado pequeño);
+      en Ficha II, la excepción real del Cap. 14 para fenilefrina (shock
+      séptico con FA rápida, antes ausente — se mantuvo también la
+      excepción de TSVI ya citada, con enlace a Ficha VII); en Ficha VII,
+      que las infusiones de levosimendán se limitan habitualmente a 24h;
+      en Ficha XII, que los antihistamínicos alivian prurito/rinorrea pero
+      con eficacia no probada; 2 cross-links internos nuevos (Ficha
+      VI→Ficha XIII para el desarrollo completo del fallo del VD, Ficha
+      VII→Ficha XX para las estrategias de reperfusión), implementados con
+      IDs de botón propios y sus propios listeners en JS —nunca
+      reutilizando `.tx-link`, que es global de `nefrologia/index.js` y
+      colisionaría—; en Ficha XVIII, el párrafo de definición de la TV
+      (FC 140-200 lpm, monomórfica/polimórfica, umbral de sostenida
+      &gt;30s) que faltaba por completo pese a usarse después sin
+      definir, la mención de que existen 5 tipos de PSVT, y la **Tabla
+      19.5 completa de fármacos que inducen torsade** (14 fármacos por
+      categoría — antes solo resumida en prosa, rompiendo la convención
+      del proyecto de recrear siempre las tablas de la fuente íntegras);
+      en Ficha XVII, la cifra de "riesgo de ictus ≥5× mayor" para
+      indicación definida y la posibilidad de medir actividad anti-Xa en
+      insuficiencia renal; en Ficha XVI, el matiz de que algunos estudios
+      no encuentran diferencia de eficacia entre amiodarona y diltiazem
+      para cardioversión; en Ficha XX (la de mayor volumen de huecos):
+      las dosis intermedias reales de tenecteplasa (35/40/45 mg, antes
+      solo los 2 extremos), la taquifilaxia de nitroglicerina &gt;24h, las
+      dosis completas de eptifibatida/tirofibán (antes solo nombradas sin
+      dosis), el tope de infusión de heparina (1.000 U/h) y su duración
+      típica (24-48h), las dosis completas de bivalirudina/fondaparinux
+      (antes solo nombradas como "alternativa en TIH" sin cifra), y la
+      contraindicación/precaución de la inhibición del SRAA (angioedema
+      previo/insuficiencia renal); en Ficha XXI, el bolo de repetición de
+      esmolol antes de cada incremento, la dosis eficaz típica de
+      nitroprusiato (2-5 μg/kg/min) y el antídoto de tiosulfato, y el
+      mecanismo de los pulsos desiguales (obstrucción de la subclavia
+      izquierda); en Ficha XXII, el consejo práctico de volumen de
+      insuflación con bolsas de 1L; en Ficha XXIV, la recomendación de
+      evitar dextrosa IV, el 3er criterio de EEG altamente predictivo
+      (isoeléctrico &lt;2 μV, antes solo 2 de los 3 reales) y el matiz de
+      ACV masivo/HIC con herniación + el momento "día 2 o después" en el
+      criterio de edema cerebral difuso de la Tabla 21.5 — estos 2 últimos
+      actualizados también en el checklist puntuable `calcPronostico()`
+      para mantener el texto sincronizado entre el `algo-flow` de
+      referencia y la calculadora.
+    - **5 piezas de interactividad nuevas**, todas con fórmula/criterios
+      explícitos en la fuente: calculadora de volumen de reanimación
+      asanguínea (Tabla 15.4: VP=40/36 mL/kg por sexo → DVP=VP×%pérdida →
+      VR=DVP×1 coloide/×3 cristaloide, Ficha IV); semáforo "¿estoy en
+      objetivo?" contra los 8 parámetros de la Tabla 16.2 —hemodinámica/
+      perfusión/oxigenación tisular— con cada campo opcional evaluado
+      independientemente (Ficha VII); asistente paso a paso (Sí/No, mismo
+      patrón `renderXxxWizard()`/`initXxxWizard()` que el wizard ACLS ya
+      existente) del manejo escalonado de la TAM — corrección electrolítica
+      + magnesio empírico → si persiste, metoprolol (sin EPOC) o
+      verapamilo (con EPOC) (Ficha XVIII); el cronómetro de tiempo
+      puerta-balón ya existente ganó un segundo modo puerta-aguja
+      (objetivo &lt;30 min) mediante un `&lt;select&gt;` que cambia el
+      umbral evaluado sin duplicar la lógica del temporizador (Ficha XX);
+      e indicador de estado de la temperatura frente al objetivo del TTM
+      (Tabla 21.3: ≤37,5°C objetivo, &gt;37,7°C dispara enfriamiento
+      activo, &lt;32°C aviso de hipotermia excesiva) (Ficha XXIV).
+    - Verificado con Playwright: el bug de CHA₂DS₂-VASc corregido en ambos
+      casos límite (varón con 2 puntos → "Riesgo definido"; mujer con solo
+      el punto de sexo → "Riesgo mínimo", ya no "Considerar"); las 5 T de
+      ACLS presentes con "Tóxicos"; la frase de disección aórtica
+      corregida; el hipertiroidismo corregido; la calculadora de volumen
+      de reanimación da 1680 mL para 70kg/varón/20%/cristaloide (VP=2800,
+      DVP=560, ×3); el semáforo de objetivos evalúa correctamente los
+      campos rellenos; el wizard de MAT completa su recorrido de 2
+      preguntas hasta metoprolol/verapamilo; el cronómetro puerta-aguja
+      cuenta con el umbral de 30 min; el indicador TTM da "iniciar
+      enfriamiento activo" a 38,0°C; las dosis de tenecteplasa/eptifibatida/
+      bivalirudina y la Tabla 19.5 completa están presentes; sin overflow
+      horizontal ni errores de consola reales (el único 404 es el
+      `favicon.ico`, ya documentado como inocuo) en ninguna de las 13
+      fichas tocadas.
 
 ### Neumología
 
@@ -6548,6 +6676,67 @@ de entrada. Añadir una guía nueva en el futuro: 1) botón nuevo en
       ninguna de las 14 fichas tocadas; sin errores de consola ni 404 reales
       (el único 404 es el `favicon.ico`, ya documentado como inocuo). Bump
       de cache-busting (`?v=20260903`) por el cambio en `components.css`.
+  - **Segunda auditoría (a petición explícita del usuario: "revisa el
+    contenido de neumología... respecto a la bibliografía... buscar los
+    huecos de contenido, las mejoras, las posibles partes interactivas...
+    y corregir las partes interactivas")**, con 4 agentes en paralelo
+    repartiéndose las 23 fichas por tramos de páginas de los 2 PDF fuente
+    (Fichas I-VI/pág. 1-40, VII-XIII/pág. 32-90, XIV-XVIII/pág. 1-36,
+    XIX-XXIII/pág. 33-63), cada uno comparando frase a frase su tramo
+    contra el HTML ya escrito. Resultado: fidelidad muy alta tras las 2
+    rondas de auditoría previas — solo 4 errores reales menores y ningún
+    hueco de contenido genuino. Corregidos los 4 errores:
+    - **Ficha III** (`neumo-asma-epoc-basicos`): la velocidad del spray de
+      un MDI decía "más de 100 km/h" — el PDF dice literalmente "más de
+      60 millas/hora" (≈97 km/h, no &gt;100). Corregido a la cifra real.
+    - **Ficha XV/XVIII** (`neumo-vm-ajuste`/`neumo-peep-oculta`): el propio
+      Capítulo 27 menciona de pasada el método de oclusión de la PEEP
+      oculta como "al final de la **inspiración**", contradiciendo el
+      desarrollo fisiológico completo del Capítulo 28 (correctamente
+      reflejado en la app como "al final de la espiración") — inconsistencia
+      interna real de la fuente, documentada con una nota de fidelidad
+      explícita en vez de "corregirse" en silencio.
+    - **Ficha XXIII** (`neumo-weaning-extubacion`): la SvO₂ durante SBT
+      exitosas decía "~65-68%" — los 3 puntos reales de la Fig. 30.4 son
+      65/66/66%, máximo real 66% no 68%. Corregido a "~65-66%".
+    - **Ficha XXI** (`neumo-derrame-antimicrobiano`): el texto del
+      "Régimen de alto riesgo" describe el levofloxacino como "un
+      antibiótico β-lactámico", contradiciendo la propia Tabla 29.6
+      (justo debajo, en el mismo capítulo) que lo clasifica en el grupo C
+      —"agente no β-lactámico"— por ser una fluorquinolona. Misma
+      inconsistencia interna de la fuente, documentada con nota de
+      fidelidad en vez de corregida en silencio.
+    - **6 piezas de interactividad nuevas**, todas con criterios/fórmulas
+      explícitos en la fuente, ninguna fabricada: checklist de las 4
+      condiciones para retener anticoagulación en émbolo subsegmentario
+      único (Ficha I); clasificador de riesgo de EP bajo/intermedio/alto
+      por VD/troponina/inestabilidad hemodinámica/comorbilidades (Ficha
+      II); checklist de los 5 criterios diagnósticos de Berlín, con
+      veredicto "compatible/no compatible con SDRA" (Ficha VI); selector
+      de tamaño de tubo ET por altura, con los cortes en pulgadas de la
+      fuente convertidos a cm (Ficha XVI); checklist de disposición para
+      SBT + calculadora de los 4 predictores de éxito de la Tabla 30.1
+      (V<sub>T</sub>/kg, RR, RR/V<sub>T</sub>, PI<sub>max</sub>),
+      reutilizando el PBW ya calculado en la Ficha VIII vía un enlace
+      `.neumo-internal-link` (Ficha XXII); y evaluador de respuesta a la
+      VNI a la 1ª hora, con 2 modos (PaCO₂ para fallo hipercápnico —corte
+      ≥10% de descenso—, PaO₂/FiO₂ para fallo hipoxémico —debe aumentar—)
+      que cambia las etiquetas de los campos dinámicamente según el modo
+      elegido (Ficha XIII).
+    - Todas las calculadoras nuevas siguen el guard `.value === ''` ya
+      establecido (nunca tratar un campo vacío como 0), y los checklists
+      distinguen explícitamente "todos los criterios cumplidos" de
+      "cumplimiento parcial" en vez de un simple sí/no binario.
+    - Verificado con Playwright: las 6 piezas responden correctamente a
+      valores concretos (checklist subsegmentaria 4/4 → verde; clasificador
+      de riesgo con inestabilidad hemodinámica marcada → alto riesgo;
+      checklist Berlín 5/5 → compatible con SDRA; altura 190cm → tubo
+      tamaño 8; checklist SBT 5/5 → criterios cumplidos, predictores
+      VT=400mL/PBW=70kg/RR=25/PImax=-25 → 4/4 favorables; evaluador VNI
+      hipercápnico con descenso del 21,4% → respuesta favorable); las 4
+      correcciones de contenido están presentes y las cifras erróneas ya
+      no aparecen; sin overflow horizontal ni errores de consola reales
+      (el único 404 es el `favicon.ico`, ya documentado como inocuo).
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

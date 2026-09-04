@@ -166,20 +166,24 @@ function calcCha2ds2Vasc() {
     let puntos = 0;
     checks.forEach(c => { if (c.checked) puntos += Number(c.dataset.puntos); });
     const sexoMarcado = document.getElementById('mc-cha-sexo')?.checked;
+    // Tabla 19.2: Definido — varones ≥2 puntos, mujeres ≥3 puntos.
+    // Considerar — varones 1 punto, mujeres 2 puntos.
+    const umbralDefinido = sexoMarcado ? 3 : 2;
+    const umbralConsiderar = sexoMarcado ? 2 : 1;
 
     let estado, texto;
     if (puntos === 0) {
         estado = 'tfg-estado-ok';
         texto = 'Riesgo mínimo. Sin indicación clara de anticoagulación (excepto FA valvular, que siempre la requiere independientemente de esta puntuación).';
-    } else if (puntos === 1 && !sexoMarcado) {
-        estado = 'tfg-estado-warn';
-        texto = 'Riesgo bajo-intermedio ("Considerar" anticoagulación) — 1 punto en varones o 2 en mujeres (por convención, el punto de "sexo femenino" no cuenta por sí solo como factor de riesgo independiente).';
-    } else if (puntos <= 2) {
-        estado = 'tfg-estado-warn';
-        texto = 'Riesgo intermedio. "Considerar" anticoagulación — valorar el resto del cuadro clínico y el riesgo de sangrado.';
-    } else {
+    } else if (puntos >= umbralDefinido) {
         estado = 'tfg-estado-danger';
-        texto = 'Riesgo definido de ictus (≥2 en varones, ≥3 en mujeres según la fuente) — anticoagulación indicada salvo contraindicación (hemorragia activa, historia de HIC, tumor intracraneal, sangrado recurrente de lesión presente, plaquetas <50.000/µL).';
+        texto = 'Riesgo definido de ictus (≥2 en varones, ≥3 en mujeres según la Tabla 19.2) — anticoagulación indicada salvo contraindicación (hemorragia activa, historia de HIC, tumor intracraneal, sangrado recurrente de lesión presente, plaquetas <50.000/µL).';
+    } else if (puntos >= umbralConsiderar) {
+        estado = 'tfg-estado-warn';
+        texto = 'Riesgo bajo-intermedio ("Considerar" anticoagulación) — 1 punto en varones o 2 en mujeres, valorando el resto del cuadro clínico y el riesgo de sangrado.';
+    } else {
+        estado = 'tfg-estado-ok';
+        texto = 'Riesgo mínimo — el sexo femenino aislado (sin ningún otro factor de riesgo) no alcanza por sí solo el umbral de "Considerar" anticoagulación de la Tabla 19.2 (2 puntos en mujeres).';
     }
     resultado.className = `result-box ${estado}`;
     resultado.style.textAlign = 'left';
@@ -255,6 +259,22 @@ function initLinkATabla211() {
     btn.addEventListener('click', () => openCorkboardTopic('panel-merino-cardio-tabs', 'mc-paro-soporte'));
 }
 
+// Enlace interno Ficha VI (fallo del VD) → Ficha XIII (IC aguda: tipos y
+// consecuencias, donde vive el desarrollo completo del fallo del VD).
+function initLinkAIcTipos() {
+    const btn = document.getElementById('mc-link-a-ic-tipos');
+    if (!btn) return;
+    btn.addEventListener('click', () => openCorkboardTopic('panel-merino-cardio-tabs', 'mc-ic-tipos'));
+}
+
+// Enlace interno Ficha VII (soporte farmacológico) → Ficha XX (estrategias
+// de reperfusión completas del SCA).
+function initLinkAScaTratamiento() {
+    const btn = document.getElementById('mc-link-a-sca-tratamiento');
+    if (!btn) return;
+    btn.addEventListener('click', () => openCorkboardTopic('panel-merino-cardio-tabs', 'mc-sca-tratamiento'));
+}
+
 // Gauge visual del objetivo de PAM (Ficha I) — mismo patrón .kinetic-row/
 // .kinetic-fill/.kinetic-marker ya usado en el resto de la app (DO2I de
 // Cardiología/Fisiopatología UCI).
@@ -285,7 +305,7 @@ function initPamGauge() {
 // Selector "¿qué agente para este escenario?" (Ficha II), basado en la
 // Tabla 14.4 y en los perfiles de cada fármaco ya desarrollados en la ficha.
 const VASOPRESOR_ESCENARIO = {
-    'septico-inicial': { estado: 'tfg-estado-ok', texto: '<strong>Norepinefrina</strong> — vasopresor inicial de elección en shock séptico. Infusión continua sin dosis de carga, iniciar a 5-10 μg/min y titular cada 5 min (rango 5-40 μg/min).' },
+    'septico-inicial': { estado: 'tfg-estado-ok', texto: '<strong>Norepinefrina</strong> — vasopresor inicial de elección en shock séptico. Infusión continua sin dosis de carga, iniciar a 5-10 μg/min y titular al alza según respuesta (rango 5-40 μg/min).' },
     'septico-2': { estado: 'tfg-estado-warn', texto: '<strong>Vasopresina</strong> — 2º agente si la hipotensión persiste pese a norepinefrina. Infusión continua 0,01-0,04 U/h, dosis no titulable (a diferencia de los catecolaminérgicos).' },
     'septico-3': { estado: 'tfg-estado-danger', texto: '<strong>Angiotensina II</strong> — 3er agente en resistencia a norepinefrina + vasopresina. Inicio 20 ng/kg/min, hasta 80 ng/kg/min en las primeras 3h, mantenimiento ≤40 ng/kg/min. Riesgo mayor: trombosis venosa (13% vs. 5% con placebo en un ensayo). No hay evidencia convincente de que un 3er vasopresor mejore la supervivencia en shock séptico.' },
     anafilactico: { estado: 'tfg-estado-danger', texto: '<strong>Epinefrina</strong> — elección en shock anafiláctico (ver Ficha XII para dosis IM/IV). En otros contextos es 2ª línea en séptico (produce lactato, dificultando su uso como marcador de perfusión).' },
@@ -507,20 +527,27 @@ function initTroponinaDelta() {
     calcTroponinaDelta();
 }
 
-// Cronómetro de tiempo puerta-balón (Ficha XX) — tiempo real desde que se
-// pulsa "Iniciar", comparado contra el objetivo AHA de 90-120 min.
+// Cronómetro de tiempo puerta-balón / puerta-aguja (Ficha XX) — tiempo real
+// desde que se pulsa "Iniciar", comparado contra el objetivo AHA de cada
+// modo (90-120 min puerta-balón; &lt;30 min puerta-aguja).
 let mcPuertaBalonInterval = null;
 let mcPuertaBalonInicio = null;
 function actualizarPuertaBalon() {
     const resultado = document.getElementById('mc-puerta-balon-resultado');
+    const modoEl = document.getElementById('mc-puerta-balon-modo');
     if (!resultado || !mcPuertaBalonInicio) return;
     const segundos = Math.floor((Date.now() - mcPuertaBalonInicio) / 1000);
     const min = Math.floor(segundos / 60);
     const seg = segundos % 60;
     let estado, mensaje;
-    if (min < 90) { estado = 'tfg-estado-ok'; mensaje = 'Dentro del objetivo (&lt;90 min).'; }
-    else if (min < 120) { estado = 'tfg-estado-warn'; mensaje = 'Por encima del objetivo AHA de 90 min, dentro del límite de 120 min.'; }
-    else { estado = 'tfg-estado-danger'; mensaje = 'Por encima de 120 min — la mortalidad aumenta significativamente a partir de aquí (Fig. 20.2).'; }
+    if (modoEl && modoEl.value === 'aguja') {
+        if (min < 30) { estado = 'tfg-estado-ok'; mensaje = 'Dentro del objetivo de tiempo puerta-aguja (&lt;30 min).'; }
+        else { estado = 'tfg-estado-danger'; mensaje = 'Por encima del objetivo de 30 min para iniciar trombólisis.'; }
+    } else {
+        if (min < 90) { estado = 'tfg-estado-ok'; mensaje = 'Dentro del objetivo (&lt;90 min).'; }
+        else if (min < 120) { estado = 'tfg-estado-warn'; mensaje = 'Por encima del objetivo AHA de 90 min, dentro del límite de 120 min.'; }
+        else { estado = 'tfg-estado-danger'; mensaje = 'Por encima de 120 min — la mortalidad aumenta significativamente a partir de aquí (Fig. 20.2). Si no se ha hecho ya, valorar trombólisis previa a la transferencia.'; }
+    }
     resultado.style.display = 'block';
     resultado.className = `result-box ${estado}`;
     resultado.style.textAlign = 'left';
@@ -544,6 +571,9 @@ function initPuertaBalon() {
         resetBtn.style.display = 'none';
         const resultado = document.getElementById('mc-puerta-balon-resultado');
         if (resultado) resultado.style.display = 'none';
+    });
+    document.getElementById('mc-puerta-balon-modo')?.addEventListener('change', () => {
+        if (mcPuertaBalonInicio) actualizarPuertaBalon();
     });
 }
 
@@ -615,11 +645,11 @@ const MC_ACLS_WIZARD = {
     },
     antiarritmico: {
         pregunta: 'Tras el 3er choque sin respuesta: amiodarona 300 mg IV/IO (2ª dosis 150 mg si es necesario; si no hay amiodarona, lidocaína 1-1,5 mg/kg). ¿Persiste FV/TV pese a 3 choques + epinefrina + antiarrítmico?',
-        si: { estado: 'tfg-estado-danger', final: 'Mal pronóstico tras el fallo de 3 desfibrilaciones (~5% de resultado satisfactorio). Busca activamente causas reversibles ("las H y las T": hipovolemia, hipoxia, hidrogenión-acidosis, hipo/hiperpotasemia, hipotermia, neumoTórax a tensión, Taponamiento, Tromboembolismo, oclusión Trombótica coronaria) y considera ECMO emergente si está disponible en 24h.' },
+        si: { estado: 'tfg-estado-danger', final: 'Mal pronóstico tras el fallo de 3 desfibrilaciones (~5% de resultado satisfactorio). Busca activamente causas reversibles ("las H y las T": hipovolemia, hipoxia, hidrogenión-acidosis, hipo/hiperpotasemia, hipotermia, neumoTórax a tensión, Taponamiento, Tóxicos, Tromboembolismo pulmonar, oclusión Trombótica coronaria) y considera ECMO emergente si está disponible en 24h.' },
         no: { estado: 'tfg-estado-ok', final: 'Ritmo cambia. Comprueba pulso — posible RCE (ver Ficha XXIV) o transición a la vía de asistolia/AESP si sigue sin pulso.' },
     },
     noDesfib1: {
-        pregunta: 'Ritmo no desfibrilable (asistolia/AESP). RCP 2 min + epinefrina 1 mg IV/IO cada 3-5 min, buscando causas reversibles ("las T": neumoTórax a tensión, Taponamiento pericárdico, Tromboembolismo venoso, oclusión Trombótica coronaria). Al reevaluar a los 2 min, ¿cambia a ritmo desfibrilable?',
+        pregunta: 'Ritmo no desfibrilable (asistolia/AESP). RCP 2 min + epinefrina 1 mg IV/IO cada 3-5 min, buscando causas reversibles ("las T": neumoTórax a tensión, Taponamiento pericárdico, Tóxicos, Tromboembolismo pulmonar, oclusión Trombótica coronaria). Al reevaluar a los 2 min, ¿cambia a ritmo desfibrilable?',
         si: 'desfib1',
         no: 'noDesfib2',
     },
@@ -666,6 +696,59 @@ function initAclsWizard() {
     if (!preguntaEl) return;
     renderAclsWizard('inicio');
     document.getElementById('mc-acls-wizard-reset').addEventListener('click', () => renderAclsWizard('inicio'));
+}
+
+// Ficha XVIII — asistente paso a paso del manejo escalonado de la TAM
+// (mismo patrón Sí/No que renderAclsWizard).
+const MC_MAT_WIZARD = {
+    inicio: {
+        pregunta: 'Corrige hipomagnesemia/hipopotasemia (magnesio antes que potasio si coexisten) e inicia magnesio empírico IV incluso con nivel sérico normal: 2 g MgSO₄ en 50 mL salino en 15 min, luego 6 g en 500 mL en 6h. ¿Persiste la TAM tras el magnesio?',
+        si: 'farmaco',
+        no: { estado: 'tfg-estado-ok', final: 'Éxito con corrección electrolítica + magnesio empírico — 88% de conversión a ritmo sinusal en el estudio de referencia, independiente del nivel sérico de magnesio.' },
+    },
+    farmaco: {
+        pregunta: 'TAM persiste tras el magnesio empírico. ¿Tiene el paciente EPOC?',
+        si: { estado: 'tfg-estado-warn', final: 'Verapamilo 0,25-5 mg IV en 2 min, repetible cada 15-30 min hasta 20 mg total — &lt;50% de éxito de conversión, pero puede frenar la frecuencia ventricular. Inotrópico negativo potente, no recomendado en HFrEF.' },
+        no: { estado: 'tfg-estado-ok', final: 'Metoprolol (Tabla 19.1) — 80% de éxito de conversión a ritmo sinusal.' },
+    },
+};
+function renderMatWizard(pasoKey) {
+    const preguntaEl = document.getElementById('mc-mat-wizard-pregunta');
+    const botonesEl = document.getElementById('mc-mat-wizard-botones');
+    const resultadoEl = document.getElementById('mc-mat-wizard-resultado');
+    const resetEl = document.getElementById('mc-mat-wizard-reset');
+    if (!preguntaEl) return;
+    const paso = MC_MAT_WIZARD[pasoKey];
+    preguntaEl.textContent = paso.pregunta;
+    resultadoEl.style.display = 'none';
+    resetEl.style.display = 'none';
+    botonesEl.innerHTML = '';
+    ['si', 'no'].forEach(resp => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opcion';
+        btn.style.flex = '1';
+        btn.textContent = resp === 'si' ? 'Sí' : 'No';
+        btn.addEventListener('click', () => {
+            const next = paso[resp];
+            if (typeof next === 'string') {
+                renderMatWizard(next);
+            } else {
+                botonesEl.innerHTML = '';
+                resultadoEl.style.display = 'block';
+                resultadoEl.className = `result-box ${next.estado}`;
+                resultadoEl.style.textAlign = 'left';
+                resultadoEl.innerHTML = `<strong>${next.final}</strong>`;
+                resetEl.style.display = 'inline-block';
+            }
+        });
+        botonesEl.appendChild(btn);
+    });
+}
+function initMatWizard() {
+    const preguntaEl = document.getElementById('mc-mat-wizard-pregunta');
+    if (!preguntaEl) return;
+    renderMatWizard('inicio');
+    document.getElementById('mc-mat-wizard-reset').addEventListener('click', () => renderMatWizard('inicio'));
 }
 
 // Checklist puntuable de predictores de mal pronóstico (Ficha XXIV),
@@ -723,6 +806,104 @@ function initEtco2() {
     calcEtco2();
 }
 
+// Ficha IV — calculadora de volumen de reanimación asanguínea, Tabla 15.4.
+function calcVolumenReanimacion() {
+    const pesoEl = document.getElementById('mc-vr-peso');
+    const sexoEl = document.getElementById('mc-vr-sexo');
+    const perdidaEl = document.getElementById('mc-vr-perdida');
+    const fluidoEl = document.getElementById('mc-vr-fluido');
+    const resultado = document.getElementById('mc-vr-resultado');
+    if (!pesoEl || !sexoEl || !perdidaEl || !fluidoEl || !resultado) return;
+    if (pesoEl.value === '' || sexoEl.value === '' || perdidaEl.value === '' || fluidoEl.value === '') { resultado.style.display = 'none'; return; }
+    const peso = Number(pesoEl.value);
+    let perdida = Number(perdidaEl.value);
+    if (peso <= 0) { resultado.style.display = 'none'; return; }
+    if (perdida < 0) { perdida = 0; perdidaEl.value = 0; }
+    if (perdida > 100) { perdida = 100; perdidaEl.value = 100; }
+
+    const vp = peso * (sexoEl.value === 'hombre' ? 40 : 36);
+    const dvp = vp * (perdida / 100);
+    const factor = fluidoEl.value === 'cristaloide' ? 3 : 1;
+    const vr = dvp * factor;
+
+    resultado.style.display = 'block';
+    resultado.className = 'result-box';
+    resultado.style.textAlign = 'left';
+    resultado.innerHTML = `<strong>Volumen de reanimación ≈ ${vr.toFixed(0)} mL</strong><p style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">VP ≈ ${vp.toFixed(0)} mL · DVP ≈ ${dvp.toFixed(0)} mL · factor ×${factor} (${fluidoEl.value}).</p>`;
+}
+function initVolumenReanimacion() {
+    const resultado = document.getElementById('mc-vr-resultado');
+    if (!resultado) return;
+    ['mc-vr-peso', 'mc-vr-sexo', 'mc-vr-perdida', 'mc-vr-fluido'].forEach(id => {
+        document.getElementById(id)?.addEventListener('input', calcVolumenReanimacion);
+        document.getElementById(id)?.addEventListener('change', calcVolumenReanimacion);
+    });
+    calcVolumenReanimacion();
+}
+
+// Ficha VII — semáforo "¿estoy en objetivo?" contra la Tabla 16.2.
+function calcObjetivosCardiogenico() {
+    const campos = [
+        { id: 'mc-obj-pcp', nombre: 'PCP', unidad: 'mmHg', ok: v => v >= 19 && v <= 20 },
+        { id: 'mc-obj-ic', nombre: 'Índice cardíaco', unidad: 'L/min/m²', ok: v => v >= 2.5 },
+        { id: 'mc-obj-irvs', nombre: 'IRVS', unidad: 'unidades Wood', ok: v => v >= 25 && v <= 30 },
+        { id: 'mc-obj-pam', nombre: 'PAM', unidad: 'mmHg', ok: v => v >= 65 },
+        { id: 'mc-obj-gap', nombre: 'Gap de PCO₂', unidad: 'mmHg', ok: v => v < 6 },
+        { id: 'mc-obj-diuresis', nombre: 'Diuresis', unidad: 'mL/kg/h', ok: v => v > 0.5 },
+        { id: 'mc-obj-svo2', nombre: 'SvO₂', unidad: '%', ok: v => v > 50 },
+        { id: 'mc-obj-lactato', nombre: 'Lactato', unidad: 'mmol/l', ok: v => v < 2 },
+    ];
+    const resultado = document.getElementById('mc-objetivos-resultado');
+    if (!resultado) return;
+    const rellenos = campos.filter(c => document.getElementById(c.id)?.value !== '');
+    if (rellenos.length === 0) { resultado.style.display = 'none'; return; }
+
+    const evaluados = rellenos.map(c => {
+        const valor = Number(document.getElementById(c.id).value);
+        return { ...c, valor, ok: c.ok(valor) };
+    });
+    const enObjetivo = evaluados.filter(c => c.ok).length;
+    const nivel = enObjetivo === evaluados.length ? 'ok' : enObjetivo === 0 ? 'danger' : 'warn';
+    resultado.style.display = 'block';
+    resultado.className = `result-box tfg-estado-${nivel}`;
+    resultado.style.textAlign = 'left';
+    resultado.innerHTML = `<strong>${enObjetivo}/${evaluados.length} objetivos alcanzados</strong><ul style="margin:6px 0 0; padding-left:18px; font-size:0.85rem;">${evaluados.map(c => `<li>${c.ok ? '✅' : '❌'} ${c.nombre}: ${c.valor} ${c.unidad}</li>`).join('')}</ul>`;
+}
+function initObjetivosCardiogenico() {
+    const resultado = document.getElementById('mc-objetivos-resultado');
+    if (!resultado) return;
+    ['mc-obj-pcp', 'mc-obj-ic', 'mc-obj-irvs', 'mc-obj-pam', 'mc-obj-gap', 'mc-obj-diuresis', 'mc-obj-svo2', 'mc-obj-lactato'].forEach(id => {
+        document.getElementById(id)?.addEventListener('input', calcObjetivosCardiogenico);
+    });
+}
+
+// Ficha XXIV — estado de la temperatura respecto al objetivo del TTM
+// (Tabla 21.3: objetivo ≤37,5°C, disparo de enfriamiento activo si &gt;37,7°C).
+function calcTtmTemp() {
+    const input = document.getElementById('mc-ttm-temp');
+    const resultado = document.getElementById('mc-ttm-resultado');
+    if (!input || !resultado) return;
+    if (input.value === '') { resultado.style.display = 'none'; return; }
+    const temp = Number(input.value);
+
+    let estado, mensaje;
+    if (temp > 37.7) { estado = 'danger'; mensaje = 'Por encima de 37,7°C — iniciar enfriamiento activo, objetivo 37,5°C.'; }
+    else if (temp > 37.5) { estado = 'warn'; mensaje = 'Entre 37,5 y 37,7°C — reforzar medidas (paracetamol, reducir temperatura ambiente) antes de llegar al disparo de enfriamiento activo.'; }
+    else if (temp < 32) { estado = 'warn'; mensaje = 'Por debajo de 32°C — hipotermia más profunda de lo recomendado; considerar recalentamiento controlado.'; }
+    else { estado = 'ok'; mensaje = temp < 36 ? 'Hipotermia leve espontánea (32-36°C) — no recalentar activamente.' : 'Dentro del objetivo (≤37,5°C).'; }
+
+    resultado.style.display = 'block';
+    resultado.className = `result-box tfg-estado-${estado}`;
+    resultado.style.textAlign = 'left';
+    resultado.innerHTML = `<strong>${temp}°C</strong><p style="font-size:0.85rem; margin-top:6px;">${mensaje}</p>`;
+}
+function initTtmTemp() {
+    const input = document.getElementById('mc-ttm-temp');
+    if (!input) return;
+    input.addEventListener('input', calcTtmTemp);
+    calcTtmTemp();
+}
+
 export function init() {
     initCorkboard('merino-cardio-corkboard', 'panel-merino-cardio-tabs');
     initTipoShock();
@@ -731,6 +912,8 @@ export function init() {
     initDispositivoSelector();
     initLinkASeptico();
     initLinkATabla211();
+    initLinkAIcTipos();
+    initLinkAScaTratamiento();
     initCha2ds2Vasc();
     initQtc();
     initPamGauge();
@@ -746,4 +929,8 @@ export function init() {
     initAclsWizard();
     initPronostico();
     initEtco2();
+    initVolumenReanimacion();
+    initObjetivosCardiogenico();
+    initMatWizard();
+    initTtmTemp();
 }

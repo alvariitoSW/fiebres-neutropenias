@@ -502,6 +502,12 @@
                         <p style="font-size:0.85rem; color:var(--text-dim);">La CTPA multidetector tiene un <span class="hl-verde">valor predictivo negativo del 95%</span>, lo que significa que una CTPA normal esencialmente elimina la posibilidad de EP aguda.</p>
                         <p style="font-size:0.85rem; color:var(--text-dim); margin-top:6px;"><strong>Émbolos subsegmentarios:</strong> la detección de émbolos en la CTPA suele motivar anticoagulación inmediata, pero hay evidencia de que émbolos pequeños en arterias subsegmentarias (&lt;2,5 mm de diámetro) podrían no requerir anticoagulación. Un análisis conjunto de 14 estudios clínicos mostró que retener la anticoagulación en pacientes con émbolos subsegmentarios y sin evidencia de TVP no tuvo influencia significativa en la mortalidad ni en la tasa de recurrencia de EP. Sin embargo, un estudio más reciente mostró que retener la anticoagulación no fue perjudicial si había un único émbolo subsegmentario, pero si había múltiples émbolos subsegmentarios, la tasa de recurrencia de EP fue mucho mayor sin anticoagulación.</p>
                         <p style="font-size:0.85rem; color:var(--text-muted); margin-top:6px;"><strong>QUÉ HACER:</strong> según los estudios disponibles, es razonable retener la anticoagulación para émbolos pulmonares subsegmentarios si se cumplen las siguientes 4 condiciones: 1) hay un único émbolo subsegmentario, 2) no hay carga de coágulo residual en las piernas (por ecografía venosa), 3) no hay evidencia de disfunción del VD, y 4) no hay comorbilidades significativas (p. ej., hipoxemia).</p>
+                        <p class="section-label" style="margin-top:10px;">🧮 Checklist — ¿es razonable retener la anticoagulación?</p>
+                        <label class="checkbox-label"><input type="checkbox" class="neumo-ep-subseg-check" value="unico"> Único émbolo subsegmentario (no múltiples)</label>
+                        <label class="checkbox-label"><input type="checkbox" class="neumo-ep-subseg-check" value="tvp"> Sin carga de coágulo residual en las piernas (ecografía venosa negativa)</label>
+                        <label class="checkbox-label"><input type="checkbox" class="neumo-ep-subseg-check" value="vd"> Sin evidencia de disfunción del VD</label>
+                        <label class="checkbox-label"><input type="checkbox" class="neumo-ep-subseg-check" value="comorb"> Sin comorbilidades significativas (p. ej., hipoxemia)</label>
+                        <div id="neumo-ep-subseg-resultado" class="result-box"></div>
                         <p style="font-size:0.85rem; color:var(--text-dim); margin-top:8px;"><strong>Efectos adversos:</strong> la preocupación principal es el riesgo de nefrotoxicidad por el contraste radiológico. Factores predisponentes: insuficiencia renal, diabetes, depleción de volumen. Recomendación actual: evitar contraste radiológico si es posible cuando la función renal es inestable o el aclaramiento de creatinina es &lt;30 mL/min/1,73m². Si se considera necesaria la CTPA, es posible proteger de la nefropatía inducida por contraste con un régimen de infusión de volumen y N-acetilcisteína IV.</p>
                         <p style="font-size:0.85rem; color:var(--text-dim);"><strong>EXPOSICIÓN A RADIACIÓN:</strong> una característica indeseable de la CTPA que a menudo se pasa por alto es la exposición a radiación relativamente alta, que promedia <strong>15 milisieverts (mSv)</strong> por procedimiento. Como referencia, la exposición a radiación media de una radiografía de tórax (proyección única) es de 0,02 mSv, y el límite anual de radiación para trabajadores es de 50 mSv. Por esta dosis de radiación, deberían considerarse alternativas a la CTPA durante el embarazo y la lactancia.</p>
                     </div>
@@ -542,6 +548,13 @@
                 <li><strong>EP de riesgo intermedio</strong> (también "submasiva"): evidencia de disfunción del VD (con o sin troponina elevada), pero sin inestabilidad hemodinámica</li>
                 <li><strong>EP de alto riesgo</strong> (también "masiva"): evidencia de sobrecarga del corazón derecho (disfunción del VD + troponina elevada) CON inestabilidad hemodinámica</li>
             </ul>
+
+            <p class="section-label" style="margin-top:12px;">🧮 Clasificador de riesgo</p>
+            <label class="checkbox-label"><input type="checkbox" class="neumo-ep-riesgo-check" value="vd"> Evidencia de disfunción del VD</label>
+            <label class="checkbox-label"><input type="checkbox" class="neumo-ep-riesgo-check" value="tropo"> Troponina elevada</label>
+            <label class="checkbox-label"><input type="checkbox" class="neumo-ep-riesgo-check" value="hemo"> Inestabilidad hemodinámica</label>
+            <label class="checkbox-label"><input type="checkbox" class="neumo-ep-riesgo-check" value="comorb"> Comorbilidades significativas (p. ej., hipoxemia)</label>
+            <div id="neumo-ep-riesgo-resultado" class="result-box"></div>
 
             <p class="section-label" style="margin-top:12px;">Tabla 22.3 — Estrategias antitrombóticas según categoría de riesgo</p>
             <div style="overflow-x:auto;">
@@ -674,7 +687,7 @@
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Inhalador de dosis medida (MDI)</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
                         <p>Funciona como un bote de spray para el pelo. El MDI tiene un cartucho presurizado que contiene una solución de fármaco con un punto de ebullición por debajo de la temperatura ambiente. Al apretar el cartucho entre el pulgar y los dedos, una válvula se abre y libera un volumen fijo de la solución de fármaco. El líquido se vaporiza inmediatamente al emerger del cartucho, y el propelente líquido de la solución crea un spray de alta velocidad.</p>
-                        <p style="font-size:0.85rem; color:var(--text-dim); margin-top:6px;"><strong>DEPÓSITO PULMONAR:</strong> el spray generado por un MDI tiene una velocidad superior a 30 metros/segundo (más de 100 km/h), y cuando se administra directamente en la boca, la mayoría del spray impacta en la pared posterior de la orofaringe ("impactación inercial"), y no se inhala. El depósito de fármaco en los pulmones puede aumentarse añadiendo una cámara de retención o "espaciador" entre el MDI y la boca, que reduce la velocidad del spray. <span class="hl-verde">Se recomiendan espaciadores para todos los tratamientos broncodilatadores que usan MDI.</span></p>
+                        <p style="font-size:0.85rem; color:var(--text-dim); margin-top:6px;"><strong>DEPÓSITO PULMONAR:</strong> el spray generado por un MDI tiene una velocidad superior a 30 metros/segundo (más de 60 millas/hora, ~97 km/h), y cuando se administra directamente en la boca, la mayoría del spray impacta en la pared posterior de la orofaringe ("impactación inercial"), y no se inhala. El depósito de fármaco en los pulmones puede aumentarse añadiendo una cámara de retención o "espaciador" entre el MDI y la boca, que reduce la velocidad del spray. <span class="hl-verde">Se recomiendan espaciadores para todos los tratamientos broncodilatadores que usan MDI.</span></p>
                     </div>
                 </div>
             </div>
@@ -935,6 +948,14 @@
                     </div>
                 </div>
             </div>
+
+            <p class="section-label" style="margin-top:16px;">🧮 Checklist — ¿cumple los 5 criterios de SDRA?</p>
+            <label class="checkbox-label"><input type="checkbox" class="neumo-sdra-criterio-check" value="inicio"> Inicio agudo (dentro de 7 días)</label>
+            <label class="checkbox-label"><input type="checkbox" class="neumo-sdra-criterio-check" value="infiltrados"> Infiltrados alveolares bilaterales en la radiografía de tórax</label>
+            <label class="checkbox-label"><input type="checkbox" class="neumo-sdra-criterio-check" value="pf"> PaO₂/FiO₂ ≤300 mmHg con PEEP ≥5 mmHg (o cmH₂O, ver nota de fidelidad)</label>
+            <label class="checkbox-label"><input type="checkbox" class="neumo-sdra-criterio-check" value="cardiaco"> Sin evidencia de fallo cardíaco izquierdo o sobrecarga de fluidos</label>
+            <label class="checkbox-label"><input type="checkbox" class="neumo-sdra-criterio-check" value="predisponente"> Presencia de una condición predisponente</label>
+            <div id="neumo-sdra-criterio-resultado" class="result-box"></div>
 
             <p class="section-label" style="margin-top:16px;">🧭 Clasificador de gravedad por PaO₂/FiO₂ (Berlín)</p>
             <div class="form-group"><label for="neumo-sdra-pao2fio2">Cociente PaO₂/FiO₂ (mmHg)</label><input type="number" id="neumo-sdra-pao2fio2" min="0" max="600" step="1" placeholder="Ej. 180"></div>
@@ -1576,6 +1597,25 @@
             <p class="section-label" style="margin-top:8px;">Evaluando la respuesta</p>
             <p style="font-size:0.85rem; color:var(--text-dim);">El fracaso en aumentar el cociente PaO₂/FiO₂ tras 1 hora de VNI es evidencia de una respuesta pobre, es decir, fracaso de la VNI. Debería ser una indicación de intubación si la hipoxemia es grave, o si la enfermedad subyacente tiene una tasa de fracaso alta para la VNI.</p>
 
+            <p class="section-label" style="margin-top:12px;">🧮 Evaluador de respuesta a la 1ª hora</p>
+            <div class="form-group">
+                <label for="neumo-vni-respuesta-tipo">Tipo de fallo respiratorio</label>
+                <select id="neumo-vni-respuesta-tipo">
+                    <option value="">— Selecciona —</option>
+                    <option value="hipercapnico">Hipercápnico (PaCO₂)</option>
+                    <option value="hipoxemico">Hipoxémico (PaO₂/FiO₂)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="neumo-vni-respuesta-basal" id="neumo-vni-respuesta-basal-label">Valor basal</label>
+                <input type="number" id="neumo-vni-respuesta-basal" step="0.1" placeholder="Ej. 70">
+            </div>
+            <div class="form-group">
+                <label for="neumo-vni-respuesta-1h" id="neumo-vni-respuesta-1h-label">Valor a la 1ª hora</label>
+                <input type="number" id="neumo-vni-respuesta-1h" step="0.1" placeholder="Ej. 60">
+            </div>
+            <div id="neumo-vni-respuesta-resultado" class="result-box"></div>
+
             <p class="section-label" style="margin-top:12px;">Edema pulmonar cardiogénico</p>
             <p style="font-size:0.85rem; color:var(--text-dim);">Tanto la CPAP como la VNI son muy exitosas (e igualmente eficaces) en el edema pulmonar cardiogénico. Este beneficio no se limita a mejorías en la función pulmonar, porque la presión intratorácica positiva puede aumentar el gasto sistólico cardíaco. Esto se demuestra observando los cambios en la presión arterial durante una insuflación pulmonar a presión positiva: las áreas sombreadas en las curvas de presión arterial (proporcionales al volumen sistólico) muestran que el aumento en la presión arterial es un reflejo de un aumento en el gasto sistólico cardíaco. Esto demuestra que la presión intratorácica positiva aumenta el gasto sistólico del ventrículo izquierdo, un efecto debido a una <strong>disminución de la poscarga del VI</strong> (que se explica en la sección de rendimiento cardíaco a continuación). <em>Nota:</em> los cambios respiratorios en el volumen sistólico durante la ventilación mecánica pueden usarse para evaluar la respuesta a fluidos (Figura 11.5, no incluida en este bloque).</p>
 
@@ -1830,7 +1870,13 @@
             <p style="font-size:0.85rem; color:var(--text-dim);">La ventilación con presión positiva se administra a través de tubos plásticos que se pasan hacia la tráquea a través de las cuerdas vocales (tubos endotraqueales) o se insertan directamente en la tráquea (tubos de traqueostomía). Estos tubos llevan un balón inflable en el extremo distal (llamado <strong>manguito</strong> o <em>cuff</em>) que sella la tráquea y evita que los volúmenes de insuflación con presión positiva escapen a través de la laringe.</p>
 
             <p class="section-label">Tubos endotraqueales</p>
-            <p style="font-size:0.85rem; color:var(--text-dim);">Los tubos endotraqueales (ET) varían en longitud de 25 a 35 cm, y se dimensionan según su diámetro interno, que varía de 5 a 10 mm. El tamaño del tubo se relaciona principalmente con la altura corporal: tubo de tamaño 7 para altura ≤5'2", tamaño 7,5 para 5'3" a 5'10", y tamaño 8 para altura ≥5'11". Pese a estas recomendaciones, no hay evidencia de que el tamaño del tubo ET afecte los resultados clínicos.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Los tubos endotraqueales (ET) varían en longitud de 25 a 35 cm, y se dimensionan según su diámetro interno, que varía de 5 a 10 mm. El tamaño del tubo se relaciona principalmente con la altura corporal: tubo de tamaño 7 para altura ≤5'2" (~157 cm), tamaño 7,5 para 5'3" a 5'10" (~160-178 cm), y tamaño 8 para altura ≥5'11" (~180 cm). Pese a estas recomendaciones, no hay evidencia de que el tamaño del tubo ET afecte los resultados clínicos.</p>
+            <p class="section-label" style="margin-top:8px;">🧮 ¿Qué tamaño de tubo ET según la altura?</p>
+            <div class="form-group">
+                <label for="neumo-et-altura">Altura (cm)</label>
+                <input type="number" id="neumo-et-altura" min="0" step="1" placeholder="Ej. 170">
+            </div>
+            <div id="neumo-et-resultado" class="result-box"></div>
             <dl class="kv-row"><dt>Posición correcta del tubo</dt><dd>Con la cabeza en posición neutra, la punta del tubo ET debe estar 3 a 5 cm por encima de la bifurcación traqueal, o a medio camino entre la bifurcación y las cuerdas vocales. Si la carina no es visible, puede localizarse al nivel del espacio T4-T5 en una radiografía portátil de tórax. La flexión o extensión de la cabeza y el cuello produce un desplazamiento de 2 cm de la punta del tubo endotraqueal.</dd></dl>
             <div class="article-figure">
                 <img src="js/modules/neumologia/img/neumo-fig28-1-radiografia-tubo-et.jpg" alt="Radiografía portátil de tórax mostrando la posición correcta de un tubo endotraqueal, con la punta a medio camino entre el estrecho torácico superior y la bifurcación traqueal (carina)" loading="lazy">
@@ -1975,6 +2021,7 @@
             <p style="font-size:0.85rem; color:var(--text-dim);">Como indica su nombre, la PEEP oculta no es evidente en las presiones de vía aérea monitorizadas durante la ventilación mecánica. Es fácil de detectar, pero difícil de cuantificar. La evidencia de PEEP oculta la aporta la onda de flujo espiratorio, que muestra la presencia de flujo aéreo al final de la espiración. Determinar el nivel de PEEP oculta requiere una maniobra de oclusión al final de la espiración.</p>
             <dl class="kv-row"><dt>Oclusión al final de la espiración</dt><dd>La oclusión del circuito espiratorio al final de la espiración revelará la PEEP oculta, porque en ausencia de flujo aéreo, la presión en las vías aéreas proximales será equivalente a la presión alveolar al final de la espiración. La precisión requiere que la oclusión ocurra justo al final de la espiración, y esto no puede cronometrarse adecuadamente si los pacientes respiran espontáneamente. <span class="hl-rojo">Por tanto, el método de oclusión al final de la espiración solo es fiable en pacientes que no respiran espontáneamente</span>.</dd></dl>
             <p style="font-size:0.85rem; color:var(--text-dim);">El principio físico: si hay flujo aéreo (V̇) al final de la espiración, entonces (por la relación P=V̇×R) hay una caída de presión desde el alveolo (Palv) hasta la vía aérea proximal (Pprox), de modo que la presión alveolar es mayor que la presión proximal (Palv&gt;Pprox) — de ahí el término "oculta": la presión proximal de la vía aérea vuelve a cero al final de la espiración, mientras la presión alveolar permanece positiva.</p>
+            <p style="font-size:0.8rem; color:var(--text-muted); font-style:italic;">Nota de fidelidad: el propio Capítulo 27 (ajustes prácticos del ventilador) menciona de pasada este mismo método como oclusión "al final de la <strong>inspiración</strong>", una inconsistencia interna real de la fuente — el desarrollo fisiológico completo de este Capítulo 28 (y el principio de la relación P=V̇×R justo arriba) confirma sin ambigüedad que la oclusión debe hacerse al final de la <strong>espiración</strong>, como se reproduce aquí.</p>
 
             <p class="section-label" style="margin-top:16px;">Manejo</p>
             <p style="font-size:0.85rem; color:var(--text-dim);">Las maniobras usadas para prevenir o reducir la hiperinflación y la PEEP oculta están todas dirigidas a promover el vaciado alveolar durante la espiración. Estas maniobras incluyen reducir el volumen tidal, aumentar el flujo inspiratorio, reducir el tiempo inspiratorio (en control por presión), y reducir la frecuencia respiratoria si es posible. Algunas de estas maniobras reducirán la ventilación minuto, lo que puede no ser deseable.</p>
@@ -2263,6 +2310,7 @@
             </table>
             </div>
             <p style="font-size:0.75rem; color:var(--text-muted);">§Incluir el régimen C solo si hay alto riesgo de infección con organismos multirresistentes. MSSA = <em>S. aureus</em> sensible a meticilina.</p>
+            <p style="font-size:0.8rem; color:var(--text-muted); font-style:italic;">Nota de fidelidad: el párrafo de "Régimen de alto riesgo" de más arriba describe la cobertura antipseudomonal como "un antibiótico β-lactámico (cefepima, levofloxacino, o piperacilina/tazobactam)" — pero la propia Tabla 29.6, justo debajo, clasifica el levofloxacino en el grupo C ("agente <strong>no</strong> β-lactámico"), no en el grupo B (β-lactámicos). El levofloxacino es una fluorquinolona, no un β-lactámico — una inconsistencia interna real de la fuente entre su prosa y su propia tabla, reproducida aquí tal cual sin "corregir" la frase por criterio propio; la clasificación correcta es la que da la Tabla 29.6.</p>
             <p style="font-size:0.85rem; color:var(--text-dim);">Hay una tendencia a continuar antibióticos empíricos pese a cultivos negativos si el paciente está mejorando, pero esto no está justificado, y los antibióticos deberían discontinuarse si todos los cultivos son negativos.</p>
 
             <dl class="kv-row"><dt>Tratamiento de la neumonía documentada</dt><dd>La antibioterapia de la NAV documentada vendrá dictada por las sensibilidades del o los patógenos aislados. La duración recomendada de la antibioterapia es de 7 días.</dd></dl>
@@ -2311,6 +2359,35 @@
             </table>
             </div>
             <p style="font-size:0.75rem; color:var(--text-muted);">†Mediciones obtenidas durante la respiración espontánea. PBW = peso corporal predicho.</p>
+
+            <p class="section-label" style="margin-top:12px;">🧮 Checklist de disposición</p>
+            <label class="checkbox-label"><input type="checkbox" class="neumo-sbt-check" value="spo2"> SpO₂ ≥90% con FiO₂ ≤50%</label>
+            <label class="checkbox-label"><input type="checkbox" class="neumo-sbt-check" value="peep"> PEEP ≤8 cmH₂O</label>
+            <label class="checkbox-label"><input type="checkbox" class="neumo-sbt-check" value="paco2"> PaCO₂ normal o basal</label>
+            <label class="checkbox-label"><input type="checkbox" class="neumo-sbt-check" value="hemo"> Hemodinámicamente estable</label>
+            <label class="checkbox-label"><input type="checkbox" class="neumo-sbt-check" value="despierto"> Despertable y cooperador</label>
+            <div id="neumo-sbt-resultado" class="result-box"></div>
+
+            <p class="section-label" style="margin-top:12px;">🧮 Predictores de éxito (durante la SBT)</p>
+            <div class="form-group">
+                <label for="neumo-sbt-vt">Volumen tidal medido (mL)</label>
+                <input type="number" id="neumo-sbt-vt" min="0" step="1" placeholder="Ej. 350">
+            </div>
+            <div class="form-group">
+                <label for="neumo-sbt-pbw">PBW — peso corporal predicho (kg)</label>
+                <input type="number" id="neumo-sbt-pbw" min="0" step="0.1" placeholder="Ej. 70">
+            </div>
+            <p style="margin:2px 0 8px;"><button class="neumo-internal-link" data-target="neumo-sdra-ventilacion">🔗 Calcular el PBW por altura y sexo — Ficha VIII →</button></p>
+            <div class="form-group">
+                <label for="neumo-sbt-rr">Frecuencia respiratoria (rpm)</label>
+                <input type="number" id="neumo-sbt-rr" min="0" step="1" placeholder="Ej. 22">
+            </div>
+            <div class="form-group">
+                <label for="neumo-sbt-pimax">Presión inspiratoria máxima (cmH₂O, valor negativo)</label>
+                <input type="number" id="neumo-sbt-pimax" step="1" placeholder="Ej. -30">
+            </div>
+            <div id="neumo-sbt-predictores-resultado" class="result-box"></div>
+
             <p style="font-size:0.85rem; color:var(--text-dim);">Cuando se satisfacen los criterios de disposición y empieza la prueba de respiración espontánea, las mediciones listadas en la columna derecha de la Tabla 30.1 pueden ayudar a determinar si la respiración espontánea tendrá éxito. Cada uno de estos parámetros puede ser un predictor pobre de éxito o fracaso en pacientes individuales, pero tomados en conjunto darán una buena idea de cómo van a evolucionar las cosas. Los cambios seriados en estas mediciones tienen más valor predictivo que mediciones puntuales obtenidas al inicio de la prueba de respiración espontánea.</p>
 
             <p class="section-label" style="margin-top:12px;">Métodos</p>
@@ -2358,7 +2435,7 @@
             <p style="font-size:0.85rem; color:var(--text-dim);">Los siguientes abordajes pueden usarse para detectar disfunción cardíaca en pacientes que fracasan en intentos repetidos de discontinuar la ventilación mecánica.</p>
             <dl class="kv-row"><dt>Catéter de arteria pulmonar</dt><dd>Aunque se usa raramente, el catéter de arteria pulmonar sería útil para detectar aumentos de la presión capilar pulmonar y descensos del gasto cardíaco inducidos por el destete.</dd></dl>
             <dl class="kv-row"><dt>Ecografía cardíaca</dt><dd>La ecografía cardíaca es una herramienta útil para detectar cambios en la función sistólica y diastólica durante pruebas fallidas de respiración espontánea.</dd></dl>
-            <dl class="kv-row"><dt>Saturación venosa central de O₂</dt><dd>Un descenso en el gasto cardíaco se acompaña de un aumento compensatorio en la extracción periférica de O₂ y un descenso subsecuente en la saturación venosa de O₂. Por tanto, un descenso en la saturación venosa central de O₂ (ScvO₂) durante una SBT fallida podría señalar la aparición de disfunción cardíaca. En un estudio real que comparó los cambios en la saturación venosa mixta de O₂ (SvO₂) durante pruebas de respiración espontánea exitosas y fallidas: la SvO₂ se mantuvo estable (~65-68%) durante los ensayos exitosos, pero descendió progresivamente (de ~61% a ~51%) durante los ensayos fallidos, sugiriendo que un descenso del gasto cardíaco puede ser responsable del fracaso para sostener la respiración espontánea. (<em>Nota:</em> la ScvO₂ imita el comportamiento de la SvO₂.)</dd></dl>
+            <dl class="kv-row"><dt>Saturación venosa central de O₂</dt><dd>Un descenso en el gasto cardíaco se acompaña de un aumento compensatorio en la extracción periférica de O₂ y un descenso subsecuente en la saturación venosa de O₂. Por tanto, un descenso en la saturación venosa central de O₂ (ScvO₂) durante una SBT fallida podría señalar la aparición de disfunción cardíaca. En un estudio real que comparó los cambios en la saturación venosa mixta de O₂ (SvO₂) durante pruebas de respiración espontánea exitosas y fallidas: la SvO₂ se mantuvo estable (~65-66%) durante los ensayos exitosos, pero descendió progresivamente (de ~61% a ~51%) durante los ensayos fallidos, sugiriendo que un descenso del gasto cardíaco puede ser responsable del fracaso para sostener la respiración espontánea. (<em>Nota:</em> la ScvO₂ imita el comportamiento de la SvO₂.)</dd></dl>
 
             <p class="section-label" style="margin-top:12px;">Manejo</p>
             <p style="font-size:0.85rem; color:var(--text-dim);">Hay sorprendentemente poca información sobre métodos para corregir la disfunción cardíaca que se desarrolla durante las pruebas de respiración espontánea, pero deberían considerarse las siguientes intervenciones:</p>
