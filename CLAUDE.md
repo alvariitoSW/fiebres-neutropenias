@@ -8,14 +8,17 @@ escalas generales de UCI), **Nefrología** con contenido real en la mayoría
 de sus objetivos de rotación (fisiología/electrolitos, HTA, ERC, FRA, TRR,
 ajuste de fármacos), **UCI / Papers Tuiter** con varios papers resumidos
 (resucitación hemodinámica en shock séptico, óxido nítrico inhalado,
-disfunción del VD y LRA postoperatoria), **Fisiopatología UCI** con
+disfunción del VD y LRA postoperatoria, VExUS, extubación traqueal y
+toxicidad por citrato en TRR continua), **Fisiopatología UCI** con
 repasos de capítulos de "El Libro Azul: Bases Fisiopatológicas de la
 Medicina Crítica" (hoy, Hematología y Hemostasia en Cuidados Críticos,
-Vías Urinarias, y Cardiología), y **Cardiología** con guías de práctica
-clínica de manejo (hoy, Insuficiencia Cardíaca — Guías ESC 2026 — y
-Merino Cardiología, sobre shock clínico — a diferencia del bloque de
+Vías Urinarias, Cardiología e Inmunología), **Cardiología** con guías de
+práctica clínica de manejo (hoy, Insuficiencia Cardíaca — Guías ESC 2026 —
+y Merino Cardiología, sobre shock clínico — a diferencia del bloque de
 Cardiología de Fisiopatología UCI, que es fisiopatología pura, no
-manejo). Está pensada para ir creciendo con más
+manejo), y **Neumología** con Merino Neumología (embolia pulmonar, asma/
+EPOC, SDRA, oxigenoterapia/VNI, ventilación mecánica, vía aérea
+artificial, NAV y destete). Está pensada para ir creciendo con más
 especialidades (radiología, etc.) según se vaya aportando contenido. Es
 una herramienta de apoyo para médicos, pensada para consultarse a pie de
 cama en el móvil.
@@ -5060,6 +5063,171 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
     fases) y el resto de calculadoras de Cardiología siguen sin
     regresiones. Bump de cache-busting (`?v=20260821-8`), 8º cambio de
     `components.css` en el mismo día.
+- **Cuarto bloque: "Inmunología"** (`js/modules/fisio-uci/inmunologia.html`).
+  Fuente: El libro azul. Bases fisiopatológicas de la medicina crítica.
+  Sección III, Sistema Inmunitario, capítulos 17-23 (130 páginas) — PDF
+  subido en **2 archivos** por el tamaño de la sección
+  (`docs/libro-azul-seccion-iii-inmunitario-parte1.pdf`, 60 págs., capítulos
+  17-19; `docs/libro-azul-seccion-iii-inmunitario-parte2.pdf`, 74 págs.,
+  capítulos 20-23, confirmado que el capítulo 23 es el último de la Sección
+  III porque la página siguiente ya es la portada de la Sección IV "Aparato
+  Respiratorio") — mismo patrón de offset independiente por archivo ya usado
+  en Cardiología: Parte 1 con offset +252 (página impresa − página del PDF)
+  y Parte 2 con offset +312, ambos verificados cruzando varias páginas antes
+  de darlos por buenos. Cuarto botón del submenú de bloques
+  (`#btn-fuci-inmunologia`), con `fisioUciLevel` (en `fisio-uci/index.js`)
+  ganando una cuarta entrada (`inmunologia`) junto a
+  `hematologia`/`viasUrinarias`/`cardiologia` — mismo patrón exacto, sin
+  cambios de arquitectura.
+  - **Auditoría de imágenes antes de construir nada**: `pdfimages -list`
+    sobre ambos PDF (filtrando los logos de marca de agua repetidos,
+    189×107) encontró solo 3 imágenes grandes reales: las 2 portadas de
+    sección (Sección III y Sección IV, decorativas, sin contenido clínico) y
+    una única figura de 1558×850 dentro del Capítulo 20 (página 15 de
+    Parte2, Figura 4 "Excitación-contracción en sepsis") — verificada
+    visualmente y confirmada como un **diagrama esquemático** (sarcolema,
+    intercambiador Na⁺/Ca²⁺, SERCA/PLB, contracción), no una fotografía ni
+    un registro diagnóstico real. Con esto, **Inmunología es el primer
+    bloque de Fisiopatología UCI sin ninguna imagen extraída** — a
+    diferencia de Hematología/Vías Urinarias/Cardiología (todos con al
+    menos alguna fotografía/ecografía/angiografía real), aquí las ~15
+    figuras del texto (curvas pro/antiinflamatorias, balanzas de
+    homeostasis, flujogramas de señalización LPS-TLR4/NF-κB, diagramas de
+    excitación-contracción, algoritmos diagnósticos) son en su totalidad
+    esquemas/diagramas conceptuales, así que se recrearon íntegros como
+    `.algo-flow`/`.data-table`/`.kv-row`/`.micro-prof-item` nativos, mismo
+    criterio ya aplicado en el resto del proyecto de nunca incrustar como
+    imagen lo que se puede reconstruir fielmente como texto/tabla.
+  - **Cuaderno de campo de 13 fichas** (`#inmuno-corkboard`/
+    `#panel-inmuno-tabs`, mismo `core/corkboard.js` de siempre),
+    correspondencia capítulo→bloque de fichas según el volumen real de cada
+    capítulo (2 fichas para los capítulos largos, 1 para los cortos):
+    **Cap. 17 "El huésped crítico: mecanismos habituales de defensa"**
+    (Holuigue Rodríguez GA, 26 págs.) → Ficha 1 (el modelo SIRS/CARS/PICS
+    frente al SRIS clásico, Figura 1 —curva pro/antiinflamatoria con FOM
+    precoz/muerte tardía—, Figura 2 —respuesta bifásica con/sin
+    complicaciones—, reconocimiento del patógeno vía DAMP/PAMP/PRR con los
+    3 tipos de receptores TLR/NLR/RLR) y Ficha 2 (citocinas pirogénicas
+    TNF-α/IL-1β/IL-6/IL-12-IFN-γ/MIF/IL-8-MCP-1, complemento C3a/C4a/C5a,
+    mediadores lipídicos vía fosfolipasa A2, radicales libres/deferoxamina,
+    las 3 isoformas de la NOS, hipocalcemia/disfunción mitocondrial, y las
+    terapias inmunomoduladoras — G-CSF/GM-CSF, IFN-γ, eje PD-1/PD-L1, IL-3/
+    7/15, nervio vago/7nAChR, efecto Warburg, propanolol/oxandrolona/
+    dronabinol, con la conclusión CARS/inmunoparálisis); **Cap. 18
+    "Fisiopatología de la fiebre y las alteraciones en la temperatura
+    corporal"** (Cortés López A, 23 págs.) → Ficha 3 (termorregulación
+    normal —POA/OVLT—, medición de temperatura, variaciones fisiológicas
+    del estudio de 148 sujetos, la distinción formal fiebre/hipertermia/
+    hiperpirexia por set point, pirógenos exógenos/endógenos, la vía
+    completa PGE2 de la Figura 1 recreada como `.algo-flow` de 5 pasos con
+    los 2 puntos de bloqueo farmacológico distintos —antipiréticos vs.
+    corticoides—, terapias anticitocina que enmascaran la fiebre, y las
+    5 enfermedades autoinflamatorias) y Ficha 4 (golpe de calor/
+    hipertiroidismo/atropina/MDMA como causas de hipertermia verdadera,
+    tabla comparativa fiebre vs. hipertermia, hipertermia maligna
+    —receptor de rianodina—/síndrome neuroléptico maligno/síndrome
+    serotoninérgico como 3 síndromes específicos, mecanismos de los
+    antipiréticos, y el tratamiento deliberadamente diferenciado
+    fiebre-vs-hipertermia, mismo criterio de nunca mezclar ambos protocolos
+    ya establecido en el resto de la app); **Cap. 19 "Fisiopatología de la
+    sepsis"** (Gipis Saavedra AJ, solo 8 págs., el capítulo más corto de
+    la sección) → Ficha 5, ficha única (epidemiología con los datos reales
+    de Colombia —prevalencia 10,8%, mortalidad 33,6%—, hipoxia citopática
+    mitocondrial, el endotelio como amplificador activo y no solo víctima,
+    microcirculación con heterogeneidad del flujo capilar, inmunoparálisis
+    con el estudio brasileño de HLA-DR —46% vs. 7% de mortalidad—, y
+    apoptosis por vía extrínseca/caspasa-8 vs. intrínseca/mitocondrial con
+    el patrón selectivo linfocitos-vs-neutrófilos y el GALT); **Cap. 20
+    "Fisiopatología del corazón en sepsis"** (Romero Lamas R, el capítulo
+    más extenso de la sección, con una lista de referencias muy larga) →
+    Ficha 6 (el déficit energético miocárdico —70% del ATP normalmente de
+    ácidos grasos, sin el incremento compensador de oxidación de glucosa
+    que sí tiene la IC crónica—, Tabla 1 de factores de depresión
+    miocárdica, la cascada completa LPS→LBP/CD14→TLR4→MyD88→IRAK-1/IRAK-4→
+    TRAF-6→TAK1/TAB1/TAB2→IKK/NF-κB o JNK recreada como `.algo-flow` con
+    2 ramas, disfunción por estimulación adrenérgica —ARB1 proapoptótico
+    vs. ARB2 antiapoptótico, GRK2—, Tablas 2-3 de mecanismos) y Ficha 7
+    (disfunción por inanición celular —Tablas 4-6, LpL/Angptl4/CD36/
+    PPAR-RxR-TR-PGC1—, disfunción mitocondrial —levosimendán, catalasa,
+    mitofagia/PARK2-Parkin, Tabla 7—, el ciclo completo de excitación-
+    contracción con SERCA2/RyR/intercambiador Na⁺-Ca²⁺ y las 5 alteraciones
+    de la Tabla 9, óxido nítrico/endotelina-1); **Cap. 21 "Encefalopatía
+    séptica"** (Romero Carratalá M, Borges Sá M, Aranda Pérez M) → Ficha 8
+    (terminología —"disfunción cerebral asociada a sepsis" con el delirio
+    como subconjunto—, mortalidad escalonada por GCS 15→16%/13-14→20%/
+    9-12→50%/3-8→63%, morbilidad a largo plazo del estudio de Iwashyna,
+    la cascada fisiopatológica completa de la Figura 1 —vago/OVC→glía→BHE→
+    neurotransmisores/apoptosis— recreada como `.algo-flow`, Tabla 1 de
+    moléculas neurotóxicas) y Ficha 9 (clínica del delirio hiper/
+    hipoactivo, CAM-UCI con sus 4 criterios y la regla 1+2+(3 o 4), ICDSC,
+    neuroimagen/EEG con el espectro de gravedad theta→delta→trifásicas→
+    epileptiforme→burst-suppression, Doppler transcraneal, biomarcadores
+    S100β/NSE, y el tratamiento con dexmedetomidina/ventanas de sedación/
+    medidas no farmacológicas); **Cap. 22 "Fisiopatogenia del choque
+    séptico"** (Aranda Pérez M, Borges Sá M, Romero Carratalá M) → Ficha 10
+    (evolución de las definiciones SRIS→Sepsis-3 con la Tabla 1 completa de
+    diferencias, los 3 pilares SOFA/qSOFA/criterios de choque séptico,
+    Figura 1 —sinopsis simplificada— y Figura 2 —balanza de homeostasis con
+    PAI-1/TAFI/proteína C— recreadas como `.algo-flow`, y susceptibilidad
+    genética con los polimorfismos TNF2/familia IL-1/IL-6 -174G/C) y Ficha
+    11 (las 4 funciones del endotelio, Tabla 2 endotelio-sepsis, efecto
+    procoagulante con la Figura 3 de activación de trombina, regulación del
+    tono vasomotor —"endotelio aturdido"—, efecto proadhesivo con las 6
+    moléculas de adhesión, Tabla 3, respuesta Th1/Th2 con el estudio
+    INTERSEPT de anti-TNF, apoptosis/Tabla 4, disfunción cardiovascular con
+    la Figura 4, y perspectivas futuras con la Figura 5 y el precedente ya
+    documentado de la proteína C activada recombinante/Prowess-Shock); y
+    **Cap. 23 "Monitorización de la función de los parénquimas en
+    sepsis"** (Vázquez de Anda GF, Dávila Fernández JC, Delaye Aguilar MG,
+    Mejía Pérez CI) → Ficha 12 (epidemiología de la S-DOM, los 3 mecanismos
+    de disfunción orgánica múltiple —microcirculación/glucocálix,
+    adaptación bioenergética/"oxígeno de conformidad", respuesta inmune—,
+    afectación órgano por órgano —cerebro/corazón/pulmón/riñón/hígado/
+    intestino-bazo/hematológico/metabólico-endocrino, cada uno como
+    `.micro-prof-item`—, y la escala SOFA/qSOFA con sus cifras reales de
+    sensibilidad/especificidad) y Ficha 13 (el biomarcador ideal, origen y
+    cinética de la PCT desde el gen CALC-1, los 4 estudios reales citados
+    —Muller/neumonía, Lipinska-Gediga/depuración, Azevedo/PCTd-vs-SOFA,
+    Andriolo/Cochrane—, y el algoritmo triangular de la Figura 1).
+  - **2 calculadoras y 1 selector explicativo** (`inmunologia.js`, mismo
+    patrón `calcXxx()`/`.tfg-estado-ok/warn/danger` ya usado en el resto de
+    la app, con el guard `.value === ''` ya establecido como lección
+    aprendida en las auditorías de FRA/ERC para no tratar un campo vacío
+    como 0): **calculadora qSOFA** (Ficha 12, 3 checkboxes puntuables →
+    riesgo alto si ≥2/3, con las cifras reales de sensibilidad 55%/
+    especificidad 84%); **intérprete de PCT** (Ficha 13, campo numérico
+    ng/mL → banda del algoritmo triangular original de la Figura 1 del
+    Capítulo 23, con su recomendación de antibiótico por tramo); y un
+    **selector "¿fiebre o hipertermia?"** (Ficha 4, puramente explicativo,
+    mismo patrón `wireSelectExplicacion` ya usado en Nefrología — 5
+    escenarios clínicos que resuelven a fiebre/hipertermia maligna/
+    síndrome neuroléptico maligno/síndrome serotoninérgico/golpe de calor,
+    reforzando la distinción fisiopatológica central del bloque).
+  - **104 preguntas de quiz** (`js/data/fisio-uci-inmunologia-preguntas.js`,
+    `inmuno-q001`-`q104`, 8 por ficha × 13 fichas — 6 de opción múltiple + 2
+    de tipo `redactar` por ficha, mismo formato ya establecido en el resto
+    de bloques de Fisiopatología UCI, con varias preguntas de redactar
+    planteadas como casos clínicos que aplican los mecanismos de la ficha).
+    `triggerId: 'btn-fuci-inmuno-repasar'`, añadido al array que ya exporta
+    `fisio-uci/index.js` junto a los otros 3 bloques — sin tocar
+    `main.js`. El banco combinado de toda la app queda en
+    <strong>1739 preguntas</strong> (1635 previas + 104 de este bloque).
+  - **Bibliografía**: 7 entradas, una por capítulo, enlazando a
+    `docs/libro-azul-seccion-iii-inmunitario-parte1.pdf#page=N` (capítulos
+    17-19) o `docs/libro-azul-seccion-iii-inmunitario-parte2.pdf#page=N`
+    (capítulos 20-23) según corresponda, con los offsets ya verificados
+    (+252 / +312).
+  - Verificado con Playwright: las 13 fichas abren/voltean sin error de
+    consola ni 404 real (el único 404 es el `favicon.ico`, ya documentado
+    como inocuo); la calculadora qSOFA puntúa correctamente (2 criterios
+    marcados → 2/3, banda roja de alto riesgo); el intérprete de PCT
+    clasifica bien ambos extremos (0,8 ng/mL → banda &gt;0,5, antibiótico
+    altamente recomendado; 0,05 ng/mL → banda &lt;0,1, antibiótico
+    altamente no recomendado) y se abstiene correctamente con el campo
+    vacío sin tratarlo como 0; el selector fiebre/hipertermia devuelve la
+    explicación correcta por escenario; el menú del quiz en 3 niveles
+    muestra "Fisiopatología UCI (301)" → "Inmunología (104)" → las 13
+    fichas con 8 preguntas cada una; sin overflow horizontal a 390px.
 
 ### Cardiología
 

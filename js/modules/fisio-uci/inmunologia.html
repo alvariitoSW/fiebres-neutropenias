@@ -1,0 +1,1362 @@
+    <button class="back-btn btn-volver-fuci-menu">← VOLVER</button>
+    <div class="diag-header">
+        <h2 style="color: var(--accent-purple); text-shadow: var(--glow-blue);">Inmunología</h2>
+        <p>El Libro Azul: Bases Fisiopatológicas de la Medicina Crítica · Sección III, capítulos 17-23</p>
+    </div>
+
+    <button class="accordion-btn nav-btn" id="btn-fuci-inmuno-repasar" style="border-left: 4px solid var(--accent-yellow);">
+        <span>🎯 Repasar (preguntas de repaso)</span>
+        <span style="font-size: 0.8rem; color: var(--accent-yellow);">[ EMPEZAR → ]</span>
+    </button>
+
+    <p class="section-label">Elige un tema</p>
+    <div class="corkboard" id="inmuno-corkboard">
+
+        <div class="field-card" data-tab="inmuno-huesped-defensa">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 1</div>
+                    <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-blue)" stroke-width="1.6">
+                        <path d="M40,8 L58,16 L58,30 C58,42 50,48 40,50 C30,48 22,42 22,30 L22,16 Z" stroke-opacity="0.85"/>
+                        <path d="M32,28 L38,34 L50,20" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7"/>
+                    </svg>
+                    <div class="field-name">El huésped crítico:<br>defensa y desregulación</div>
+                    <div class="field-hook">¿Qué diferencia real hay entre el SRIS clásico y el modelo SIRS/CARS/PICS de la sepsis moderna?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">El SRIS describía solo la fase hiperinflamatoria (Th1); el modelo SIRS/CARS/PICS reconoce que, en paralelo, se activa una respuesta antiinflamatoria compensadora (CARS) que puede derivar en un estado de inmunosupresión persistente (PICS) — la muerte tardía por sepsis se explica hoy más por PICS que por la tormenta inflamatoria inicial.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="inmuno-mediadores-terapias">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 2</div>
+                    <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-red)" stroke-width="1.6">
+                        <circle cx="30" cy="26" r="7" stroke-opacity="0.85"/>
+                        <circle cx="50" cy="18" r="5" stroke-opacity="0.7"/>
+                        <circle cx="52" cy="36" r="6" stroke-opacity="0.7"/>
+                        <path d="M36,24 L45,20 M35,30 L47,34" stroke-width="1.2" stroke-opacity="0.5"/>
+                    </svg>
+                    <div class="field-name">Mediadores y<br>terapias inmunomoduladoras</div>
+                    <div class="field-hook">¿Por qué un anticuerpo monoclonal contra el TNF-α (estudio INTERSEPT) no mejoró la supervivencia global en el choque séptico?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Porque el TNF es solo uno de docenas de mediadores redundantes (IL-1, IL-6, complemento, mediadores lipídicos, radicales libres, óxido nítrico...) que actúan en paralelo — bloquear uno solo no basta para revertir una cascada tan redundante, aunque sí se observó una recuperación más rápida de la primera falla de órgano en el subgrupo tratado.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="inmuno-fiebre-fisiologia">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 3</div>
+                    <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-green)" stroke-width="1.6">
+                        <rect x="36" y="8" width="8" height="28" rx="4" stroke-opacity="0.85"/>
+                        <circle cx="40" cy="42" r="8" stroke-opacity="0.85"/>
+                        <line x1="40" y1="18" x2="40" y2="34" stroke-width="2.4" stroke-opacity="0.5"/>
+                    </svg>
+                    <div class="field-name">Termorregulación<br>y fiebre</div>
+                    <div class="field-hook">¿Qué diferencia fisiológica exacta separa la fiebre de la hipertermia, más allá del número en el termómetro?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">En la fiebre el punto de ajuste hipotalámico (set point) se desplaza hacia arriba por acción de pirógenos y PGE2, y el cuerpo genera/conserva calor activamente para alcanzarlo; en la hipertermia el set point permanece normal, pero los mecanismos de disipación de calor fallan o se ven sobrepasados — por eso los antipiréticos, que actúan sobre el set point, no sirven para tratar la hipertermia.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="inmuno-hipertermia-sindromes">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 4</div>
+                    <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-yellow)" stroke-width="1.6">
+                        <path d="M40,10 C34,20 28,24 28,32 a12,12 0 0,0 24,0 C52,24 46,20 40,10 Z" stroke-opacity="0.85"/>
+                        <path d="M40,20 C37,25 35,28 35,32 a5,5 0 0,0 10,0 c0,-3 -2,-6 -5,-12 Z" stroke-width="1.2" stroke-opacity="0.5"/>
+                    </svg>
+                    <div class="field-name">Hipertermia:<br>síndromes y tratamiento</div>
+                    <div class="field-hook">¿Qué tienen en común el golpe de calor, la hipertermia maligna, el síndrome neuroléptico maligno y el síndrome serotoninérgico?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Los 4 son hipertermias verdaderas (set point normal, fallo de disipación o producción excesiva de calor no mediada por pirógenos), no fiebre — y ninguno responde a antipiréticos: cada uno requiere enfriamiento activo más un tratamiento específico (dantroleno, ciproheptadina, suspender el fármaco causal).</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="inmuno-sepsis-fisiopatologia">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 5</div>
+                    <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-purple)" stroke-width="1.6">
+                        <path d="M40,10 C30,10 22,20 22,30 a18,18 0 0,0 36,0 C58,20 50,10 40,10 Z" stroke-opacity="0.85"/>
+                        <path d="M32,30 h16 M40,22 v16" stroke-width="1.4" stroke-opacity="0.5"/>
+                    </svg>
+                    <div class="field-name">Fisiopatología<br>de la sepsis</div>
+                    <div class="field-hook">¿Por qué en la sepsis la apoptosis afecta masivamente a los linfocitos pero los neutrófilos resisten, al menos transitoriamente?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Porque activan vías distintas: los linfocitos B, T CD4, células dendríticas y epiteliales intestinales sufren apoptosis intensa (vía mitocondrial/Bcl-2), depletando la capacidad de respuesta adaptativa, mientras que los neutrófilos tienen mecanismos antiapoptóticos que retrasan su muerte — la linfocitopenia (&lt;0,8 g/L) resultante es un sello característico de la inmunoparálisis séptica.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="inmuno-corazon-lps">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 6</div>
+                    <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-red)" stroke-width="1.6">
+                        <path d="M40,44 C24,32 20,20 28,14 C34,10 40,14 40,20 C40,14 46,10 52,14 C60,20 56,32 40,44 Z" stroke-opacity="0.85"/>
+                    </svg>
+                    <div class="field-name">Corazón séptico I:<br>vía LPS-TLR4</div>
+                    <div class="field-hook">¿Por qué el corazón séptico no logra compensar el déficit energético cambiando a oxidación de glucosa, como sí hace el corazón insuficiente crónico?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Porque en la sepsis se reduce drásticamente la oxidación de ácidos grasos (que normalmente aporta ~70% del ATP miocárdico) SIN el incremento compensador de oxidación de glucosa que sí ocurre en la insuficiencia cardíaca crónica — un déficit energético neto, no solo un cambio de sustrato.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="inmuno-corazon-mitocondria-calcio">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 7</div>
+                    <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-yellow)" stroke-width="1.6">
+                        <ellipse cx="40" cy="28" rx="18" ry="12" stroke-opacity="0.85"/>
+                        <path d="M28,28 C32,20 36,36 40,28 C44,20 48,36 52,28" stroke-width="1.2" stroke-opacity="0.6"/>
+                    </svg>
+                    <div class="field-name">Corazón séptico II:<br>mitocondria y calcio</div>
+                    <div class="field-hook">¿Qué 5 alteraciones concretas del manejo del calcio intracelular describe la sepsis en el miocito cardíaco?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Inhibición de SERCA (bomba que recaptura Ca²⁺ al retículo sarcoplásmico), disminución del Ca²⁺ almacenado en el RS, inhibición del intercambiador Na⁺/Ca²⁺, disminución de los receptores de rianodina (RyR, liberan el Ca²⁺) y desensibilización de los miofilamentos al calcio — cada uno degrada un paso distinto del ciclo excitación-contracción.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="inmuno-encefalopatia-fisiopatologia">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 8</div>
+                    <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-blue)" stroke-width="1.6">
+                        <path d="M40,10 C28,10 22,18 22,26 c0,6 3,10 3,14 c0,4 3,6 6,6 h18 c3,0 6,-2 6,-6 c0,-4 3,-8 3,-14 C58,18 52,10 40,10 Z" stroke-opacity="0.85"/>
+                        <path d="M30,22 c3,-3 6,0 6,3 c0,3 -4,4 -2,7" stroke-width="1.1" stroke-opacity="0.5"/>
+                    </svg>
+                    <div class="field-name">Encefalopatía séptica:<br>fisiopatología</div>
+                    <div class="field-hook">¿Por qué la encefalopatía asociada a sepsis puede aparecer sin ninguna lesión isquémica demostrable del cerebro?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Porque su mecanismo dominante no es la isquemia, sino la disfunción difusa mediada por citocinas (TNF-α, IL-6), óxido nítrico, activación de la microglía, alteración de la barrera hematoencefálica y desregulación de neurotransmisores — una encefalopatía "funcional" antes que estructural en la mayoría de los casos.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="inmuno-encefalopatia-diagnostico">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 9</div>
+                    <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-green)" stroke-width="1.6">
+                        <rect x="20" y="20" width="40" height="20" rx="3" stroke-opacity="0.85"/>
+                        <path d="M24,30 L30,24 L36,32 L42,22 L48,34 L54,26" stroke-width="1.2" stroke-opacity="0.6"/>
+                    </svg>
+                    <div class="field-name">Encefalopatía séptica:<br>diagnóstico y manejo</div>
+                    <div class="field-hook">¿Qué 4 elementos evalúa la escala CAM-UCI para diagnosticar delirio?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Inicio agudo o curso fluctuante, inatención, pensamiento desorganizado y nivel de conciencia alterado — el diagnóstico de delirio exige los 2 primeros criterios más al menos uno de los otros dos.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="inmuno-choque-definiciones">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 10</div>
+                    <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-red)" stroke-width="1.6">
+                        <path d="M20,44 L40,12 L60,44 Z" stroke-opacity="0.85"/>
+                        <line x1="30" y1="44" x2="40" y2="26" stroke-width="1.2" stroke-opacity="0.5"/>
+                        <line x1="40" y1="26" x2="50" y2="44" stroke-width="1.2" stroke-opacity="0.5"/>
+                    </svg>
+                    <div class="field-name">Definiciones de sepsis<br>y homeostasis</div>
+                    <div class="field-hook">¿Qué 2 criterios definen hoy el choque séptico, tras abandonarse el concepto de "sepsis grave"?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Necesidad de vasopresores para mantener una TAM ≥65 mmHg, Y un lactato sérico &gt;2 mmol/L, ambos persistiendo a pesar de una resucitación con fluidos adecuada — la combinación se asocia a una mortalidad cercana al 40%.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="inmuno-endotelio-cardiovascular">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 11</div>
+                    <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-yellow)" stroke-width="1.6">
+                        <path d="M14,28 C24,14 56,14 66,28" stroke-opacity="0.85"/>
+                        <path d="M14,28 C24,42 56,42 66,28" stroke-opacity="0.85"/>
+                        <circle cx="40" cy="28" r="4" stroke-opacity="0.6"/>
+                    </svg>
+                    <div class="field-name">Endotelio vascular y<br>disfunción cardiovascular</div>
+                    <div class="field-hook">¿Cómo puede el endotelio estar, a la vez, patológicamente vasodilatado a nivel sistémico y vasoconstreñido a nivel microcirculatorio en la sepsis?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Por el "endotelio aturdido": disminuye la forma constitutiva de óxido nítrico y se altera la relajación endotelial normal, seguido de un aumento de la forma inducible de NO a nivel de la circulación general (vasodilatación patológica e hipotensión), mientras que a nivel microcirculatorio predomina la vasoconstricción — el resultado combinado es hipoperfusión tisular pese a presión arterial sistémica relativamente conservada.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="inmuno-sofa-dom">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 12</div>
+                    <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-purple)" stroke-width="1.6">
+                        <rect x="18" y="14" width="12" height="28" stroke-opacity="0.7"/>
+                        <rect x="34" y="20" width="12" height="22" stroke-opacity="0.85"/>
+                        <rect x="50" y="10" width="12" height="32" stroke-opacity="0.6"/>
+                    </svg>
+                    <div class="field-name">SOFA/qSOFA y<br>disfunción orgánica múltiple</div>
+                    <div class="field-hook">¿Por qué el qSOFA se validó mejor fuera de la UCI (urgencias, planta) que dentro de ella?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Porque es una versión simplificada, sin pruebas de laboratorio, pensada para detectar rápido a un paciente potencialmente séptico en un entorno con menos monitorización — en la UCI, donde ya se dispone de datos de laboratorio y monitorización continua, la escala SOFA completa ofrece mejor validación.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-card" data-tab="inmuno-biomarcadores-pct">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 13</div>
+                    <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-blue)" stroke-width="1.6">
+                        <path d="M34,10 h12 v6 l6,20 a8,8 0 0,1 -8,10 h-8 a8,8 0 0,1 -8,-10 l6,-20 Z" stroke-opacity="0.85"/>
+                        <line x1="34" y1="30" x2="46" y2="30" stroke-width="1.2" stroke-opacity="0.5"/>
+                    </svg>
+                    <div class="field-name">Biomarcadores en sepsis:<br>procalcitonina</div>
+                    <div class="field-hook">¿De qué gen y en qué órgano se produce fisiológicamente la PCT antes de que exista ninguna infección?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Del gen CALC-1, en las células C tiroideas, donde la práctica totalidad de la preprocalcitonina se convierte en calcitonina — por eso los niveles circulantes de PCT son normalmente muy bajos (&lt;0,5 ng/mL) en ausencia de infección.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <p class="tap-hint">☝ toca una ficha para ver la pista, y de nuevo para abrir el tema completo</p>
+
+    <div class="card" id="panel-inmuno-tabs" style="display:none;">
+
+        <!-- ===== FICHA 1: EL HUÉSPED CRÍTICO: DEFENSA Y DESREGULACIÓN ===== -->
+        <div id="inmuno-huesped-defensa" class="tab-content">
+            <h3 style="color: var(--accent-blue);">El huésped crítico: mecanismos habituales de defensa</h3>
+
+            <p class="section-label">Del SRIS al modelo SIRS/CARS/PICS</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La respuesta del huésped a una agresión infecciosa grave no es una simple "tormenta inflamatoria":
+                es un proceso <strong>bifásico y dinámico</strong>. Clásicamente se describió el
+                <strong>síndrome de respuesta inflamatoria sistémica (SRIS)</strong> como la fase dominante, pero
+                la evidencia acumulada muestra que, de forma casi simultánea, se activa una
+                <strong>respuesta antiinflamatoria compensadora (CARS,
+                <em>compensatory anti-inflammatory response syndrome</em>)</strong> destinada a limitar el daño
+                tisular del propio SRIS. Cuando esta respuesta compensadora se vuelve excesiva o se prolonga en el
+                tiempo, deriva en el <strong>síndrome de inflamación persistente, inmunosupresión y catabolismo
+                (PICS)</strong> — un estado de <span class="hl">inmunoparálisis</span> que predispone a
+                infecciones secundarias, mala cicatrización y disfunción orgánica prolongada.
+            </p>
+            <dl class="kv-row"><dt>Mensaje central del capítulo</dt><dd>La <strong>muerte precoz</strong> por sepsis se asocia más con la fase hiperinflamatoria (falla multiorgánica aguda, FOM precoz), mientras que la <strong>muerte tardía</strong> se relaciona cada vez más con el estado de inmunosupresión sostenida (CARS/PICS) — el paciente sobrevive a la tormenta inicial pero queda incapaz de controlar infecciones secundarias.</dd></dl>
+
+            <div class="algo-flow" style="margin-top:12px;">
+                <div class="algo-step"><span class="algo-num">📈</span><div class="algo-text"><strong>Figura 1 — Curva de la respuesta pro/antiinflamatoria en el tiempo.</strong> Tras el insulto séptico, la respuesta proinflamatoria (Th1) asciende rápido y domina la fase inicial — su exceso se asocia con <strong>FOM precoz</strong>. En paralelo, la respuesta antiinflamatoria (Th2/CARS) crece de forma más sostenida y puede predominar en fases tardías, asociándose con <strong>muerte tardía</strong> por inmunosupresión e infecciones secundarias no controladas.</div></div>
+                <div class="algo-step"><span class="algo-num">📉</span><div class="algo-text"><strong>Figura 2 — Respuesta bifásica según evolución clínica.</strong> Se comparan dos trayectorias: pacientes <strong>sin complicaciones</strong>, en los que ambas curvas (pro y antiinflamatoria) se resuelven de forma coordinada y en paralelo tras el pico inicial; y pacientes <strong>con complicaciones</strong>, en los que la curva antiinflamatoria se mantiene elevada y no decae al mismo ritmo que la proinflamatoria — reflejando la persistencia del estado CARS/PICS.</div></div>
+            </div>
+
+            <dl class="kv-row"><dt>Concepto clínico central</dt><dd>El paciente séptico no transita por una única fase: puede tener simultáneamente zonas de hiperinflamación (daño tisular, disfunción orgánica) y zonas de inmunosupresión funcional (linfocitos anérgicos, capacidad reducida de presentación antigénica) — ambos procesos coexisten desde etapas tempranas, no son estadios estrictamente secuenciales.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Reconocimiento del patógeno: DAMP, PAMP y PRR</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El sistema inmune innato reconoce la agresión a través de <strong>receptores de reconocimiento de
+                patrones (PRR)</strong>, que detectan dos tipos de señales de peligro:
+            </p>
+            <ul class="term-chips">
+                <li><strong>PAMP</strong> (patrones moleculares asociados a patógenos): moléculas microbianas conservadas — LPS de Gramnegativos, peptidoglicano/ácido lipoteicoico de Grampositivos, ADN/ARN microbiano</li>
+                <li><strong>DAMP</strong> (patrones moleculares asociados a daño): moléculas propias liberadas por células dañadas o muertas — HMGB1, ADN mitocondrial, ATP extracelular, proteínas de choque térmico</li>
+            </ul>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Este doble sistema explica por qué la respuesta inflamatoria sistémica puede activarse de forma
+                indistinguible tanto en infecciones (sepsis) como en agresiones estériles graves (trauma,
+                pancreatitis, quemaduras) — el organismo responde igual ante el "peligro molecular", venga de un
+                microorganismo o del propio tejido dañado.
+            </p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Receptores tipo Toll (TLR)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La familia mejor caracterizada de PRR. Se localizan tanto en la membrana celular (TLR-4 para LPS de Gramnegativos, con la colaboración de CD14 y MD-2; TLR-2 para componentes de Grampositivos y hongos) como en compartimentos intracelulares (TLR-3/7/8/9, reconocen ácidos nucleicos microbianos). Su activación converge en la translocación nuclear del factor de transcripción <strong>NF-κB</strong>, que induce la producción masiva de citocinas y otros mediadores inflamatorios.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔬 Receptores tipo NOD (NLR)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Receptores citoplasmáticos que reconocen componentes bacterianos que logran penetrar la célula. Algunos NLR forman parte del <strong>inflamasoma</strong>, un complejo multiproteico que activa la caspasa-1 y procesa las formas inactivas de IL-1β e IL-18 a sus formas activas — una vía de amplificación inflamatoria paralela a la de los TLR.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🦠 Receptores tipo RIG-I (RLR)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Sensores citoplasmáticos especializados en el reconocimiento de ARN viral, activando la producción de interferones tipo I como parte de la respuesta antiviral del huésped crítico.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Sinopsis</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El resto de las fichas de este bloque desarrollan, paso a paso, lo que ocurre después de este
+                reconocimiento inicial: los mediadores concretos que se liberan y las terapias que intentan
+                modularlos (Ficha 2), la fiebre como consecuencia directa de estos mismos mediadores (Fichas 3-4),
+                y la fisiopatología integrada de la sepsis y el choque séptico en los órganos diana — corazón
+                (Fichas 6-7), cerebro (Fichas 8-9), el conjunto del organismo (Fichas 5, 10-11) y su monitorización
+                (Fichas 12-13).
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Fuente</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Holuigue Rodríguez GA. El huésped crítico: mecanismos habituales de defensa. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección III, Capítulo 17, págs. 255-280.</p>
+        </div>
+
+        <!-- ===== FICHA 2: MEDIADORES Y TERAPIAS INMUNOMODULADORAS ===== -->
+        <div id="inmuno-mediadores-terapias" class="tab-content">
+            <h3 style="color: var(--accent-red);">Mediadores de la respuesta inflamatoria y terapias inmunomoduladoras</h3>
+
+            <p class="section-label">Citocinas pirogénicas/inflamatorias</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔴 TNF-α</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Uno de los mediadores más precoces y potentes de la cascada inflamatoria — producido principalmente por macrófagos activados. Induce fiebre, activación endotelial, expresión de moléculas de adhesión y, en exceso, contribuye directamente a la hipotensión y la disfunción orgánica del choque séptico.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔴 IL-1β</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Citocina pirogénica de acción sinérgica con el TNF-α, requiere solo cantidades muy pequeñas (del orden de 10 ng/kg) para inducir fiebre — mucho menos que otras citocinas como la IL-6.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🟠 IL-6</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Se eleva de forma marcada en la sepsis y se correlaciona con el pronóstico — pero, a diferencia de TNF-α e IL-1, requiere cantidades del orden de microgramos por kilo para inducir fiebre por sí sola, mucho mayores.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🟡 IL-12 e IFN-γ</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Eje que conecta la respuesta innata con la respuesta celular Th1 adaptativa — la IL-12 (producida por macrófagos/células dendríticas) estimula a linfocitos T y células NK a producir IFN-γ, amplificando la activación de macrófagos.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🟢 MIF (factor inhibidor de la migración de macrófagos)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Mediador proinflamatorio distintivo porque, a diferencia de otras citocinas, contrarresta parcialmente el efecto antiinflamatorio de los corticosteroides — de interés como diana terapéutica precisamente por esa capacidad de sostener la inflamación incluso bajo tratamiento esteroideo.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔵 Quimiocinas: IL-8 y MCP-1</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Responsables del reclutamiento dirigido de leucocitos hacia el foco de infección o daño: la IL-8 atrae fundamentalmente neutrófilos, y la MCP-1 (proteína quimioatrayente de monocitos-1) atrae monocitos/macrófagos.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Sistema del complemento</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La activación del complemento genera <strong>anafilotoxinas</strong> (C3a, C4a, C5a) con potente
+                actividad proinflamatoria: inducen degranulación de mastocitos/basófilos, aumentan la
+                permeabilidad vascular y actúan como quimioatrayentes de neutrófilos — otra vía, independiente de
+                las citocinas, que amplifica la respuesta inflamatoria sistémica.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Mediadores lipídicos</p>
+            <dl class="kv-row"><dt>Cascada del ácido araquidónico</dt><dd>La <strong>fosfolipasa A2</strong> libera ácido araquidónico de la membrana celular, que se metaboliza por dos vías: la <strong>ciclooxigenasa</strong> genera <strong>prostaglandinas</strong> (incluida la PGE2, motor directo de la fiebre — ver Ficha 3) y <strong>tromboxanos</strong>; la <strong>lipooxigenasa</strong> genera <strong>leucotrienos</strong>, con efectos quimiotácticos y vasoactivos propios. El <strong>factor activador de plaquetas (PAF)</strong> es otro mediador lipídico de esta misma familia, con efectos proinflamatorios y protrombóticos.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Radicales libres y óxido nítrico</p>
+            <dl class="kv-row"><dt>Radicales libres de oxígeno</dt><dd>Producidos por neutrófilos y macrófagos activados como parte del estallido respiratorio antimicrobiano — en exceso, dañan directamente el endotelio y otras estructuras tisulares. El <strong>hierro libre</strong> cataliza reacciones que generan radicales especialmente reactivos (reacción de Fenton), lo que da soporte teórico al uso de quelantes de hierro como la <strong>deferoxamina</strong> como posible estrategia citoprotectora.</dd></dl>
+            <dl class="kv-row"><dt>Óxido nítrico (ON) — 3 isoformas de la sintasa (NOS)</dt><dd><strong>n-NOS</strong> (neuronal, constitutiva): funciones de neurotransmisión. <strong>e-NOS</strong> (endotelial, constitutiva): regulación fisiológica del tono vascular. <strong>i-NOS</strong> (inducible, la relevante en sepsis): se expresa masivamente en respuesta a citocinas/LPS y genera cantidades muy superiores de ON, siendo el principal responsable de la <span class="hl">vasodilatación patológica refractaria</span> característica del choque séptico.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Otras alteraciones de la sepsis</p>
+            <dl class="kv-row"><dt>Hipocalcemia</dt><dd>Alteración electrolítica frecuente en la sepsis grave, con implicaciones sobre la función contráctil cardíaca y vascular.</dd></dl>
+            <dl class="kv-row"><dt>Disfunción mitocondrial</dt><dd>La sepsis compromete la capacidad de las mitocondrias para producir ATP de forma eficiente pese a un aporte de oxígeno tisular en apariencia adecuado — la llamada <em>hipoxia citopática</em>, desarrollada con más detalle en la Ficha 5 y en las Fichas 6-7 (corazón séptico).</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Terapias inmunomoduladoras en sepsis</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💉 Factores estimulantes de colonias (G-CSF, GM-CSF)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Buscan potenciar la producción y función de neutrófilos en pacientes con inmunosupresión establecida — estrategia dirigida a revertir la fase CARS/PICS más que la fase hiperinflamatoria inicial.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🎯 IFN-γ y bloqueo del eje PD-1/PD-L1</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">El IFN-γ intenta restaurar la capacidad de activación de los macrófagos anérgicos. El eje <strong>PD-1/PD-L1</strong> (mismo sistema de "puntos de control inmunológico" explotado por los tumores) está sobreexpresado en la inmunoparálisis séptica — bloquearlo es una estrategia en investigación para revertir el agotamiento funcional de los linfocitos T.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧪 IL-3, IL-7 e IL-15</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Citocinas con potencial para expandir/restaurar poblaciones linfocitarias depletadas por apoptosis (ver Ficha 5) — estrategias en fase de investigación clínica temprana para la inmunoparálisis séptica.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧠 Modulación del nervio vago (vía colinérgica antiinflamatoria)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">El nervio vago, a través del <strong>receptor nicotínico α7 (7nAChR)</strong> en macrófagos, puede inhibir la liberación de citocinas proinflamatorias (reflejo colinérgico antiinflamatorio) — la estimulación de esta vía (farmacológica o eléctrica) es una diana terapéutica en investigación.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚡ Regulación metabólica (efecto Warburg)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Las células inmunes activadas, igual que las células tumorales, tienden a favorecer la glucólisis aeróbica sobre la fosforilación oxidativa incluso con oxígeno disponible (efecto Warburg) — comprender y modular esta reprogramación metabólica es una línea de investigación activa en inmunoterapia de la sepsis.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Otros fármacos en investigación</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body"><strong>Propanolol</strong> (betabloqueo, atenuación de la respuesta hipermetabólica/hiperadrenérgica), <strong>oxandrolona</strong> (esteroide anabólico, contrarresta el catabolismo proteico) y <strong>dronabinol</strong> (cannabinoide, propiedades inmunomoduladoras) — estrategias adyuvantes exploradas en el contexto de la respuesta metabólica al estrés séptico prolongado.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">CARS e inmunoparálisis: conclusión</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El reto terapéutico central de la sepsis moderna ya no es solo "apagar" la inflamación inicial —
+                varios ensayos con antagonistas de citocinas aisladas (como el propio estudio INTERSEPT con
+                anti-TNF) no lograron mejorar la supervivencia global pese a un racional fisiológico sólido. El
+                énfasis se ha desplazado hacia comprender y, eventualmente, <span class="hl">revertir el estado de
+                inmunoparálisis (CARS/PICS)</span> que explica buena parte de la mortalidad tardía y las
+                infecciones secundarias del paciente séptico — el objetivo de todas las terapias descritas arriba.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Fuente</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Holuigue Rodríguez GA. El huésped crítico: mecanismos habituales de defensa. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección III, Capítulo 17, págs. 255-280.</p>
+        </div>
+
+        <!-- ===== FICHA 3: TERMORREGULACIÓN Y FIEBRE ===== -->
+        <div id="inmuno-fiebre-fisiologia" class="tab-content">
+            <h3 style="color: var(--accent-green);">Fisiopatología de la fiebre y la temperatura corporal normal</h3>
+
+            <p class="section-label">Termorregulación normal</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El centro termorregulador se localiza en el <strong>hipotálamo</strong>, específicamente en el
+                <strong>área preóptica (POA)</strong> y el <strong>órgano vasculoso de la lámina terminal
+                (OVLT)</strong> — una región con barrera hematoencefálica incompleta que le permite "sentir"
+                directamente mediadores circulantes como la PGE2 (ver más abajo). El hipotálamo integra señales
+                térmicas periféricas y centrales para mantener la temperatura corporal alrededor de un
+                <strong>punto de ajuste (set point)</strong>.
+            </p>
+            <dl class="kv-row"><dt>Medición de la temperatura</dt><dd>Los métodos <strong>centrales</strong> (arteria pulmonar, esofágico, vesical) son los más fiables por reflejar la temperatura core real; los métodos <strong>periféricos</strong> (oral, axilar, timpánico, temporal) son más prácticos pero menos precisos y más sensibles a factores externos.</dd></dl>
+            <dl class="kv-row"><dt>Variaciones fisiológicas normales</dt><dd>Un estudio de referencia en 148 sujetos sanos encontró un rango de temperatura oral normal de <strong>35,6-38,2°C</strong>, con una media de <strong>36,8±0,4°C</strong> — la temperatura varía además con el <strong>ritmo circadiano</strong> (más baja de madrugada, más alta al final de la tarde), la <strong>edad</strong> y el <strong>ciclo menstrual</strong> (ligero ascenso posovulatorio por progesterona).</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Fiebre, hipertermia e hiperpirexia: 3 conceptos distintos</p>
+            <table class="data-table">
+                <thead><tr><th>Concepto</th><th>Set point hipotalámico</th><th>Mecanismo</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Fiebre</strong></td><td>Desplazado hacia arriba</td><td>Pirógenos (exógenos/endógenos) → PGE2 → nuevo set point más alto; el cuerpo genera/conserva calor <em>activamente</em> para alcanzarlo</td></tr>
+                    <tr><td><strong>Hipertermia</strong></td><td>Normal, inalterado</td><td>Fallo o sobrecarga de los mecanismos de disipación de calor, o producción excesiva de calor no mediada por pirógenos — el cuerpo no "quiere" estar más caliente, pero no logra enfriarse</td></tr>
+                    <tr><td><strong>Hiperpirexia</strong></td><td>Desplazado (fiebre extrema)</td><td>Fiebre &gt;41,5°C — umbral asociado a mayor riesgo de daño tisular directo por el calor</td></tr>
+                </tbody>
+            </table>
+            <dl class="kv-row"><dt>Implicación práctica clave</dt><dd>Los <strong>antipiréticos</strong> actúan inhibiendo la síntesis de PGE2 (ver más abajo) — por eso son eficaces en la <em>fiebre</em>, pero son <span class="hl">ineficaces en la hipertermia verdadera</span>, donde el set point nunca estuvo alterado. Distinguir ambas entidades es, por tanto, una decisión terapéutica directa (ver Ficha 4 para el desarrollo completo de los síndromes hipertérmicos y su tratamiento diferenciado).</dd></dl>
+            <dl class="kv-row"><dt>Fiebre hipotalámica</dt><dd>Entidad rara en la que una lesión estructural del propio hipotálamo (tumor, hemorragia, trauma, cirugía) altera directamente el set point, produciendo fiebre sin que medie ningún pirógeno circulante — un diagnóstico de exclusión tras descartar causas infecciosas/inflamatorias.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Mecanismos de conservación y producción de calor</p>
+            <ul class="term-chips">
+                <li>Vasoconstricción cutánea (reduce la pérdida de calor por la piel)</li>
+                <li>Piloerección</li>
+                <li>Escalofríos (tiritona): contracción muscular involuntaria que genera calor</li>
+                <li>Termogénesis sin escalofríos (grasa parda, más relevante en neonatos)</li>
+                <li>Conducta: búsqueda activa de abrigo/calor</li>
+            </ul>
+
+            <p class="section-label" style="margin-top:16px;">Pirógenos: exógenos y endógenos</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🦠 Pirógenos exógenos</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Sustancias externas al huésped, típicamente de origen microbiano: la <strong>endotoxina (LPS)</strong> de bacterias Gramnegativas, reconocida por TLR (ver Ficha 1); y <strong>superantígenos</strong> como la <strong>toxina del síndrome de choque tóxico (TSST-1)</strong> de <em>Staphylococcus aureus</em>, capaces de activar de forma masiva y no específica a los linfocitos T.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔥 Pirógenos endógenos: citocinas pirogénicas</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Producidas por el propio huésped en respuesta a los pirógenos exógenos (o a daño tisular estéril). Las más potentes son <strong>IL-1</strong> y <strong>TNF</strong>, que requieren cantidades del orden de solo <strong>10 ng/kg</strong> para inducir fiebre; la <strong>IL-6</strong> requiere dosis muy superiores, del orden de <strong>microgramos por kilo</strong>, para el mismo efecto — una diferencia de potencia pirogénica de varios órdenes de magnitud entre citocinas.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Elevación del set point: la vía de la PGE2</p>
+            <div class="algo-flow">
+                <div class="algo-step"><span class="algo-num">1</span><div class="algo-text">Agentes infecciosos (o daño tisular estéril) activan macrófagos y células endoteliales.</div></div>
+                <div class="algo-step"><span class="algo-num">2</span><div class="algo-text">Liberación de citocinas pirógenas (IL-1, TNF, IL-6).</div></div>
+                <div class="algo-step"><span class="algo-num">3</span><div class="algo-text">Las citocinas actúan sobre el endotelio de los vasos hipotalámicos (área preóptica/OVLT, con barrera hematoencefálica incompleta).</div></div>
+                <div class="algo-step"><span class="algo-num">4</span><div class="algo-text">Inducción local de <strong>PGE2</strong> (vía ciclooxigenasa), que actúa directamente sobre las neuronas termosensibles del centro termorregulador.</div></div>
+                <div class="algo-step"><span class="algo-num">5</span><div class="algo-text">El "termostato" hipotalámico se reajusta hacia un valor más alto → activación del centro vasomotor → vasoconstricción periférica, escalofríos → <strong>FIEBRE</strong>.</div></div>
+            </div>
+            <dl class="kv-row"><dt>Dos puntos de bloqueo farmacológico distintos</dt><dd>Los <strong>antipiréticos</strong> (AINE, paracetamol) actúan inhibiendo la <strong>ciclooxigenasa</strong>, bloqueando la síntesis de PGE2 en el paso 4. Los <strong>corticosteroides</strong> actúan más arriba en la cascada, inhibiendo la <strong>producción de las propias citocinas pirógenas</strong> en el paso 2 — dos mecanismos distintos que confluyen en el mismo efecto antipirético final.</dd></dl>
+            <dl class="kv-row"><dt>Producción de citocinas en el SNC</dt><dd>Además de la señal periférica que cruza la barrera hematoencefálica incompleta del OVLT, existe evidencia de que también se producen citocinas pirógenas <em>localmente</em> dentro del propio sistema nervioso central, amplificando la respuesta febril desde dentro.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Terapias anticitocina y enmascaramiento de la fiebre</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Un problema práctico creciente: los pacientes tratados con <strong>terapias biológicas
+                anticitocina</strong> (p. ej. anti-TNF, anti-IL-6, en enfermedades reumatológicas o
+                inflamatorias) pueden tener la vía de producción de fiebre <span class="hl">bloqueada
+                farmacológicamente</span> — lo que significa que pueden cursar una infección grave sin fiebre,
+                enmascarando un signo clínico que normalmente alertaría de la gravedad del cuadro.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Enfermedades autoinflamatorias</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Grupo de entidades genéticas caracterizadas por episodios recurrentes de fiebre y activación
+                inflamatoria <strong>sin un desencadenante infeccioso identificable</strong>, por mutaciones en
+                genes reguladores de la respuesta inmune innata (a menudo relacionados con el inflamasoma):
+            </p>
+            <ul class="term-chips">
+                <li>Enfermedad de Still del adulto</li>
+                <li>Fiebre mediterránea familiar (FMF)</li>
+                <li>Síndrome periódico asociado al receptor del TNF (TRAPS)</li>
+                <li>Síndrome de Schnitzler</li>
+                <li>Síndrome de Muckle-Wells</li>
+            </ul>
+
+            <p class="section-label" style="margin-top:16px;">Fuente</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Cortés López A. Fisiopatología de la fiebre y las alteraciones en la temperatura corporal. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección III, Capítulo 18, págs. 281-303.</p>
+        </div>
+
+        <!-- ===== FICHA 4: HIPERTERMIA, SÍNDROMES Y TRATAMIENTO ===== -->
+        <div id="inmuno-hipertermia-sindromes" class="tab-content">
+            <h3 style="color: var(--accent-yellow);">Hipertermia: síndromes específicos y tratamiento diferenciado</h3>
+
+            <p class="section-label">Causas de hipertermia verdadera</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                A diferencia de la fiebre, en la hipertermia el set point hipotalámico <strong>nunca se
+                altera</strong> — el problema es un exceso de producción de calor, un fallo de disipación, o
+                ambos a la vez, que sobrepasa la capacidad normal de termorregulación.
+            </p>
+            <ul class="term-chips">
+                <li>Golpe de calor (exposición ambiental extrema, esfuerzo físico intenso)</li>
+                <li>Hipertiroidismo / tormenta tiroidea (exceso de producción metabólica de calor)</li>
+                <li>Intoxicación por atropina y anticolinérgicos (bloquean la sudoración, principal vía de disipación)</li>
+                <li>Éxtasis / MDMA y otras drogas simpaticomiméticas (hiperactividad muscular e hipermetabolismo)</li>
+            </ul>
+
+            <p class="section-label" style="margin-top:16px;">Diagnóstico diferencial fiebre vs. hipertermia</p>
+            <table class="data-table">
+                <thead><tr><th>Característica</th><th>Fiebre</th><th>Hipertermia</th></tr></thead>
+                <tbody>
+                    <tr><td>Set point hipotalámico</td><td>Elevado</td><td>Normal</td></tr>
+                    <tr><td>Respuesta a antipiréticos</td><td>Sí</td><td>No</td></tr>
+                    <tr><td>Sudoración</td><td>Presente (una vez alcanzado el nuevo set point)</td><td>Variable — puede estar abolida (golpe de calor clásico, anticolinérgicos) o exagerada (esfuerzo, simpaticomiméticos)</td></tr>
+                    <tr><td>Instauración</td><td>Progresiva (horas)</td><td>A menudo rápida (minutos-horas)</td></tr>
+                    <tr><td>Tratamiento eficaz</td><td>Antipiréticos + tratar la causa</td><td>Enfriamiento físico activo + tratamiento específico de la causa</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Síndromes hipertérmicos específicos</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🌡️ Hipertermia maligna</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Trastorno farmacogenético del <strong>receptor de rianodina</strong> del músculo esquelético, desencadenado clásicamente por <strong>succinilcolina</strong> y <strong>agentes anestésicos volátiles</strong> (halotano, sevoflurano, etc.). El defecto del receptor provoca una liberación masiva e incontrolada de calcio desde el retículo sarcoplásmico, con contractura muscular sostenida, hipermetabolismo extremo e <span class="hl">hipertermia rápidamente progresiva</span> — una urgencia farmacogenética potencialmente mortal si no se reconoce y trata de inmediato (dantroleno, suspensión del agente causal, enfriamiento activo).</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Síndrome neuroléptico maligno</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Reacción idiosincrásica a <strong>antipsicóticos/neurolépticos</strong> (bloqueo dopaminérgico central), o por retirada brusca de agonistas dopaminérgicos. Cursa con rigidez muscular "en tubo de plomo", hipertermia, inestabilidad autonómica y alteración del estado mental. Tratamiento: suspender el fármaco causal, enfriamiento, y fármacos que restauran el tono dopaminérgico (bromocriptina) o relajantes musculares (dantroleno).</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧠 Síndrome serotoninérgico</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Exceso de actividad serotoninérgica central, típicamente por combinación de fármacos serotoninérgicos (ISRS, IMAO, tramadol, entre otros). Cursa con la tríada clásica de alteración del estado mental, hiperactividad autonómica e hiperactividad neuromuscular (clonus, hiperreflexia) — a diferencia del síndrome neuroléptico maligno, el clonus y la hiperreflexia son más característicos. Tratamiento: suspender los agentes causales, enfriamiento activo, benzodiacepinas, y en casos graves <strong>ciproheptadina</strong> (antagonista serotoninérgico).</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Mecanismos de acción de los antipiréticos</p>
+            <dl class="kv-row"><dt>Inhibición de la ciclooxigenasa (COX-1/COX-2)</dt><dd>Los AINE y el paracetamol reducen la síntesis de PGE2 bloqueando las isoformas 1 y/o 2 de la ciclooxigenasa — el mecanismo antipirético principal (ver Ficha 3, "vía de la PGE2").</dd></dl>
+            <dl class="kv-row"><dt>Corticosteroides — 2 niveles de acción</dt><dd>Actúan de forma más proximal en la cascada: (1) inhiben la <strong>producción</strong> de las propias citocinas pirógenas, y (2) inhiben también, de forma más distal, la vía de la fosfolipasa A2/ácido araquidónico — un doble mecanismo que explica su potente efecto antiinflamatorio y antipirético combinado.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Tratamiento: nunca el mismo para fiebre e hipertermia</p>
+            <dl class="kv-row"><dt>Fiebre</dt><dd>Antipiréticos (paracetamol, AINE) + tratamiento de la causa subyacente (p. ej. antibioticoterapia si es infecciosa). El objetivo no es necesariamente "normalizar" la temperatura a toda costa, sino el confort del paciente y el control de la causa.</dd></dl>
+            <dl class="kv-row"><dt>Hipertermia</dt><dd><span class="hl">Los antipiréticos NO tienen ningún papel</span> — al no haber un set point elevado que "corregir", son ineficaces. El tratamiento es <strong>enfriamiento físico activo</strong> (medidas externas: hielo, mantas de enfriamiento, lavado gástrico/vesical frío en casos graves) más el tratamiento específico de la causa (dantroleno en hipertermia maligna/síndrome neuroléptico maligno, ciproheptadina en síndrome serotoninérgico, betabloqueo/antitiroideos en tormenta tiroidea).</dd></dl>
+
+            <div class="card" style="padding:14px 16px; margin-top:16px;">
+                <h4 style="color: var(--accent-yellow); margin-top:0;">🌡️ ¿Fiebre o hipertermia?</h4>
+                <p class="subtitle">Selecciona el escenario clínico para ver la orientación diagnóstica y terapéutica</p>
+                <select id="inmuno-fiebre-selector">
+                    <option value="">— Elige un escenario —</option>
+                    <option value="infeccion">Cuadro infeccioso con ascenso progresivo de temperatura y respuesta a paracetamol</option>
+                    <option value="golpe-calor">Exposición a calor ambiental extremo, piel seca/caliente, alteración de conciencia</option>
+                    <option value="succinilcolina">Aparición brusca de rigidez e hipertermia tras succinilcolina/anestésico volátil</option>
+                    <option value="antipsicotico">Rigidez "en tubo de plomo" e hipertermia en paciente con antipsicóticos</option>
+                    <option value="isrs">Clonus, hiperreflexia e hipertermia tras combinar fármacos serotoninérgicos</option>
+                </select>
+                <div class="result-box" id="inmuno-fiebre-resultado" style="margin-top:10px;"></div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Fuente</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Cortés López A. Fisiopatología de la fiebre y las alteraciones en la temperatura corporal. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección III, Capítulo 18, págs. 281-303.</p>
+        </div>
+
+        <!-- ===== FICHA 5: FISIOPATOLOGÍA DE LA SEPSIS ===== -->
+        <div id="inmuno-sepsis-fisiopatologia" class="tab-content">
+            <h3 style="color: var(--accent-purple);">Fisiopatología de la sepsis</h3>
+
+            <p class="section-label">Epidemiología</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La sepsis mantiene una <strong>mortalidad global &gt;30%</strong> pese a las mejoras en su
+                reconocimiento y manejo. Los datos regionales muestran una carga de enfermedad considerable:
+            </p>
+            <ul class="term-chips">
+                <li>Colombia: prevalencia del 10,8%, con 51% de origen comunitario y 44% adquirida en UCI; mortalidad del 33,6%</li>
+                <li>Datos consistentes con series de Turquía, otros países de Latinoamérica y México</li>
+            </ul>
+
+            <p class="section-label" style="margin-top:16px;">Fisiopatología: PAMP, DAMP e hipoxia citopática</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El proceso arranca con el reconocimiento de <strong>PAMP y DAMP</strong> por los PRR del sistema
+                inmune innato (desarrollado en la Ficha 1), pero el elemento distintivo de la sepsis grave es que
+                el daño celular resultante no depende únicamente de la hipoxia macroscópica: existe una
+                <strong>hipoxia citopática mitocondrial</strong>, en la que la mitocondria pierde la capacidad de
+                utilizar eficazmente el oxígeno disponible para producir ATP — el aporte de O₂ puede ser adecuado
+                y, aun así, la célula sufre un déficit energético funcional.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Activación de la respuesta procoagulante y proinflamatoria</p>
+            <dl class="kv-row"><dt>Endotelio: amplificador, no solo víctima</dt><dd>El endotelio no es un espectador pasivo del daño séptico: participa activamente <strong>amplificando</strong> tanto la respuesta inflamatoria como la procoagulante — expresa moléculas de adhesión, pierde su función anticoagulante normal y contribuye directamente a la propagación sistémica del proceso (desarrollado en detalle en la Ficha 11).</dd></dl>
+            <dl class="kv-row"><dt>Activación de la coagulación</dt><dd>La sepsis activa de forma directa la cascada de la coagulación, con riesgo de progresar a <strong>coagulación intravascular diseminada (CID)</strong> — microtrombosis difusa que compromete aún más la perfusión de la microcirculación (ver también Ficha 11, Figura 3).</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Microcirculación en la sepsis</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Uno de los hallazgos fisiopatológicos más característicos de la sepsis es la
+                <strong>heterogeneidad del flujo capilar</strong> — no una simple caída global del flujo, sino una
+                alteración tanto <strong>cuantitativa</strong> (disminución de la densidad capilar funcional) como
+                <strong>cualitativa</strong> (capilares adyacentes con flujo normal, intermitente o completamente
+                detenido, coexistiendo en el mismo lecho tisular). Esta heterogeneidad explica por qué parámetros
+                hemodinámicos sistémicos "normalizados" (presión arterial, gasto cardíaco) no garantizan una
+                perfusión tisular adecuada a nivel microcirculatorio.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Inmunoparálisis y sepsis</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La expresión de <strong>HLA-DR</strong> en la superficie de los monocitos es un biomarcador
+                establecido de inmunoparálisis: su disminución sostenida refleja una capacidad reducida de
+                presentación antigénica y correlaciona con peor pronóstico. Un estudio realizado en Brasil
+                encontró una mortalidad del <strong>46%</strong> en pacientes con inmunoparálisis (HLA-DR bajo)
+                frente al <strong>7%</strong> en pacientes sin ella — una diferencia de más de <span class="hl">6
+                veces</span> en el riesgo de muerte asociada específicamente al estado inmune, no solo a la
+                gravedad inicial del cuadro.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Apoptosis y sepsis</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La apoptosis desempeña un papel central en la inmunosupresión séptica, activándose por dos vías
+                distintas:
+            </p>
+            <ul class="term-chips">
+                <li>Vía extrínseca (receptores de muerte): activación de la caspasa-8</li>
+                <li>Vía intrínseca (mitocondrial): regulada por la familia Bcl-2</li>
+            </ul>
+            <dl class="kv-row"><dt>Patrón celular selectivo</dt><dd>Los <strong>linfocitos</strong> (B, T CD4, y también células dendríticas y epiteliales del tracto gastrointestinal — GALT) sufren apoptosis <strong>masiva</strong> en la sepsis, provocando una <strong>linfocitopenia marcada (&lt;0,8 g/L)</strong> que es un sello distintivo del estado de inmunoparálisis. En contraste, los <strong>neutrófilos</strong> desarrollan mecanismos que <strong>retrasan/resisten</strong> transitoriamente su propia apoptosis — una asimetría funcional que contribuye a la desregulación global de la respuesta inmune (predominio relativo de neutrófilos disfuncionales frente a una capacidad linfocitaria muy mermada).</dd></dl>
+            <dl class="kv-row"><dt>GALT (tejido linfoide asociado al intestino)</dt><dd>Especialmente vulnerable a la apoptosis inducida por sepsis — su depleción compromete la primera línea de defensa inmune de la mucosa intestinal, con implicaciones directas sobre la translocación bacteriana.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Conclusión</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La sepsis integra en un mismo proceso la activación desregulada de la inflamación, la coagulación,
+                la disfunción microcirculatoria y una apoptosis selectiva que erosiona la capacidad de respuesta
+                inmune adaptativa — un ciclo que, sin intervención, conduce a la disfunción orgánica múltiple
+                (ver Fichas 12-13) y al choque séptico (ver Fichas 10-11).
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Fuente</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Gipis Saavedra AJ. Fisiopatología de la sepsis. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección III, Capítulo 19, págs. 305-312.</p>
+        </div>
+
+        <!-- ===== FICHA 6: CORAZÓN SÉPTICO I — VÍA LPS-TLR4 ===== -->
+        <div id="inmuno-corazon-lps" class="tab-content">
+            <h3 style="color: var(--accent-red);">Fisiopatología del corazón en sepsis (I): mediadores y vía LPS-TLR4</h3>
+
+            <p class="section-label">El déficit energético miocárdico en la sepsis</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                En condiciones normales, aproximadamente el <strong>70% del ATP</strong> que consume el
+                miocardio proviene de la <strong>oxidación de ácidos grasos</strong>. En la sepsis, esta vía se
+                reduce de forma severa — pero, a diferencia de lo que ocurre en la <strong>insuficiencia
+                cardíaca crónica</strong> (donde el corazón compensa aumentando la oxidación de glucosa), en la
+                sepsis <span class="hl">no hay un incremento compensador equivalente de la oxidación de
+                glucosa</span>. El resultado neto es un <strong>déficit energético real</strong>, no solo un
+                cambio de sustrato preferente.
+            </p>
+
+            <table class="data-table">
+                <thead><tr><th colspan="2">Tabla 1. Factores asociados con depresión miocárdica en sepsis</th></tr></thead>
+                <tbody>
+                    <tr><td colspan="2">Citocinas: IL-1, IL-6, IL-8, TNF-α</td></tr>
+                    <tr><td colspan="2">Activación del complemento: C3, C5a</td></tr>
+                    <tr><td colspan="2">HMGB1 (proteína de alta movilidad del grupo caja 1) y otros DAMP</td></tr>
+                    <tr><td colspan="2">Matriz-metaloproteinasa-9</td></tr>
+                    <tr><td colspan="2">Respuesta β-adrenérgica alterada</td></tr>
+                    <tr><td colspan="2">Metabolismo energético alterado</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">La vía de señalización LPS → TLR4 → NF-κB</p>
+            <div class="algo-flow">
+                <div class="algo-step"><span class="algo-num">1</span><div class="algo-text">LPS bacteriano se une a la proteína fijadora de LPS (LBP) y al CD14 soluble.</div></div>
+                <div class="algo-step"><span class="algo-num">2</span><div class="algo-text">El complejo LPS-CD14 activa el receptor <strong>TLR4</strong> (con la colaboración de MD-2) en la membrana del cardiomiocito y de células inmunes.</div></div>
+                <div class="algo-step"><span class="algo-num">3</span><div class="algo-text">Reclutamiento del adaptador <strong>MyD88</strong> → activación secuencial de <strong>IRAK-1/IRAK-4</strong> → <strong>TRAF-6</strong> → complejo <strong>TAK1/TAB1/TAB2</strong>.</div></div>
+                <div class="algo-branches">
+                    <div class="algo-branch algo-branch-si"><span class="algo-branch-label">Vía IKK</span>Activación de <strong>IKK</strong> → degradación de <strong>IκBα</strong> → translocación nuclear de <strong>NF-κB</strong> → transcripción masiva de genes proinflamatorios.</div>
+                    <div class="algo-branch algo-branch-no"><span class="algo-branch-label">Vía JNK</span>Activación de <strong>JNK</strong> (vía MKK7) → contribuye también a la respuesta inflamatoria y, específicamente, <strong>suprime la oxidación de ácidos grasos</strong> en el cardiomiocito — un nexo directo entre la señalización inflamatoria y el déficit energético descrito arriba.</div>
+                </div>
+            </div>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">👉 <strong>Figura 1</strong> del capítulo resume esta cascada como un "balance" (seesaw) entre mediadores pro y antiinflamatorios que determina el grado final de disfunción cardíaca; la <strong>Figura 2</strong> desarrolla el diagrama completo LPS→...→reducción de la oxidación de ácidos grasos→reducción de la energía cardíaca→disfunción cardíaca→aumento de ácidos grasos circulantes (un círculo que se retroalimenta).</p>
+
+            <p class="section-label" style="margin-top:16px;">Disfunción cardíaca y estimulación adrenérgica</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La sepsis altera profundamente la respuesta del corazón a la estimulación adrenérgica, a través
+                de varios mecanismos que actúan en direcciones opuestas sobre la supervivencia celular:
+            </p>
+            <dl class="kv-row"><dt>Receptor β1-adrenérgico (ARB1)</dt><dd>Predomina en el miocardio normal; su sobreestimulación sostenida en la sepsis tiene un efecto <strong>proapoptótico</strong> sobre el cardiomiocito.</dd></dl>
+            <dl class="kv-row"><dt>Receptor β2-adrenérgico (ARB2)</dt><dd>A diferencia del ARB1, su activación tiene un efecto <strong>antiapoptótico</strong> — la proporción relativa ARB1/ARB2 y su regulación diferencial influyen en el destino final del cardiomiocito séptico.</dd></dl>
+            <dl class="kv-row"><dt>GRK2 (quinasa de receptores acoplados a proteína G)</dt><dd>Media la <strong>desensibilización</strong> de los receptores adrenérgicos ante la estimulación catecolaminérgica sostenida y prolongada característica de la sepsis — un mecanismo que contribuye a la refractariedad a catecolaminas exógenas observada en el choque séptico avanzado.</dd></dl>
+
+            <table class="data-table">
+                <thead><tr><th colspan="2">Tabla 2. Mecanismos de disfunción cardíaca por estimulación adrenérgica alterada (6 mecanismos)</th></tr></thead>
+                <tbody>
+                    <tr><td colspan="2">Desensibilización de receptores por GRK2</td></tr>
+                    <tr><td colspan="2">Desequilibrio en la proporción de señalización ARB1 (proapoptótica) vs. ARB2 (antiapoptótica)</td></tr>
+                    <tr><td colspan="2">Alteración de las vías de señalización intracelular acopladas (Epac, PI3K, AKT)</td></tr>
+                    <tr><td colspan="2">Interacción con la vía NF-κB/inflamatoria</td></tr>
+                    <tr><td colspan="2">Toxicidad directa por catecolaminas exógenas a dosis sostenidas</td></tr>
+                    <tr><td colspan="2">Reducción de la densidad de receptores en la membrana</td></tr>
+                </tbody>
+            </table>
+            <table class="data-table">
+                <thead><tr><th colspan="2">Tabla 3. Mecanismos moleculares implicados (3 mecanismos)</th></tr></thead>
+                <tbody>
+                    <tr><td colspan="2">Degradación de IκBα</td></tr>
+                    <tr><td colspan="2">Activación de NF-κB</td></tr>
+                    <tr><td colspan="2">Aumento de marcadores inflamatorios circulantes</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">👉 <strong>Figura 5</strong> del capítulo detalla el diagrama completo de señales de activación de los receptores adrenérgicos (glosario de términos: NF-κB, Epac, GRK2, PI3K, IκBα, PAK, la propia señalización de ARB1/ARB2, AKT) — la interacción molecular exacta entre la vía inflamatoria (Ficha 6) y la vía adrenérgica que aquí se resume en las Tablas 2-3.</p>
+
+            <p class="section-label" style="margin-top:16px;">Fuente</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Romero Lamas R. Fisiopatología del corazón en sepsis. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección III, Capítulo 20, págs. 313-340.</p>
+        </div>
+
+        <!-- ===== FICHA 7: CORAZÓN SÉPTICO II — MITOCONDRIA Y CALCIO ===== -->
+        <div id="inmuno-corazon-mitocondria-calcio" class="tab-content">
+            <h3 style="color: var(--accent-yellow);">Fisiopatología del corazón en sepsis (II): mitocondria, calcio y disfunción por inanición celular</h3>
+
+            <p class="section-label">Disfunción miocárdica secundaria a inanición celular</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Más allá del déficit por reducción de la oxidación de ácidos grasos (Ficha 6), la sepsis
+                compromete múltiples pasos adicionales del metabolismo energético del cardiomiocito — un
+                verdadero estado de "inanición celular" pese al aporte de sustratos circulantes.
+            </p>
+            <table class="data-table">
+                <thead><tr><th colspan="2">Tabla 4. Causas de disfunción por inanición celular</th></tr></thead>
+                <tbody>
+                    <tr><td colspan="2">Expresión reducida de genes de transporte/oxidación de ácidos grasos</td></tr>
+                    <tr><td colspan="2">Disfunción mitocondrial (ver más abajo)</td></tr>
+                    <tr><td colspan="2">Lipoproteína lipasa (LpL) cardíaca reducida</td></tr>
+                    <tr><td colspan="2">Angptl4 (angiopoyetina-like 4) aumentada — inhibe la LpL</td></tr>
+                    <tr><td colspan="2">CD36 (transportador de ácidos grasos) reducido</td></tr>
+                    <tr><td colspan="2">Receptor de VLDL reducido</td></tr>
+                </tbody>
+            </table>
+            <dl class="kv-row"><dt>Mecanismos de reducción de la movilización/oxidación intracelular (Tabla 5)</dt><dd>Convergen sobre la disponibilidad y el procesamiento intracelular de ácidos grasos ya captados por el cardiomiocito, agravando el déficit ya causado por la menor captación desde la circulación.</dd></dl>
+            <dl class="kv-row"><dt>Factores transcripcionales reducidos (Tabla 6)</dt><dd>La sepsis reduce la expresión de los reguladores maestros del metabolismo oxidativo cardíaco: <strong>PPAR</strong> (receptor activado por proliferador de peroxisomas), <strong>RxR</strong> (receptor X retinoide, su heterodímero obligado), <strong>TR</strong> (receptor de hormona tiroidea) y <strong>PGC-1</strong> (coactivador transcripcional, regulador central de la biogénesis mitocondrial) — una desactivación coordinada, a nivel de la transcripción génica, de todo el programa metabólico oxidativo del corazón.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Disfunción mitocondrial en la sepsis</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La mitocondria es a la vez víctima y protagonista activo del daño cardíaco séptico. Estrategias y
+                mecanismos citoprotectores en investigación:
+            </p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Levosimendán</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Sensibilizador del calcio con efectos citoprotectores mitocondriales descritos, además de su acción inotrópica ya conocida — de interés específico en la disfunción miocárdica séptica.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧪 Catalasa</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Enzima antioxidante que degrada el peróxido de hidrógeno — su sobreexpresión experimental protege frente al daño oxidativo mitocondrial inducido por la sepsis.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>♻️ PARK2/Parkin y mitofagia</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La <strong>mitofagia</strong> (degradación selectiva de mitocondrias dañadas mediada por <strong>Parkin</strong>, producto del gen <strong>PARK2</strong>) es un mecanismo de control de calidad mitocondrial — su activación adecuada podría limitar la acumulación de mitocondrias disfuncionales durante la sepsis.</div>
+                </div>
+            </div>
+            <table class="data-table">
+                <thead><tr><th colspan="2">Tabla 7. Mecanismos de déficit energético mitocondrial en la sepsis</th></tr></thead>
+                <tbody>
+                    <tr><td colspan="2">Inhibición de complejos de la cadena de transporte de electrones</td></tr>
+                    <tr><td colspan="2">Aumento del estrés oxidativo mitocondrial (radicales libres)</td></tr>
+                    <tr><td colspan="2">Alteración de la biogénesis mitocondrial (vía PGC-1, ver Tabla 6)</td></tr>
+                    <tr><td colspan="2">Desacoplamiento de la fosforilación oxidativa</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Alteración del transporte intracelular de Ca²⁺</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El acoplamiento excitación-contracción (ACC) normal depende de un manejo preciso del calcio
+                intracelular. La sepsis altera múltiples componentes de este sistema:
+            </p>
+            <dl class="kv-row"><dt>Ciclo normal simplificado</dt><dd>La despolarización del sarcolema abre canales de Ca²⁺ tipo L → entrada de una pequeña cantidad de Ca²⁺ que dispara la <strong>liberación masiva de Ca²⁺</strong> desde el retículo sarcoplásmico (RS) a través de los <strong>receptores de rianodina (RyR)</strong> — el fenómeno de "liberación de calcio inducida por calcio" — permitiendo la unión Ca²⁺-troponina C y la contracción. La relajación requiere la recaptura del Ca²⁺ por la bomba <strong>SERCA2</strong> (regulada por el fosfolambano, PLB) de vuelta al RS, y su extrusión celular por el <strong>intercambiador Na⁺/Ca²⁺ (3Na⁺/Ca²⁺)</strong>.</dd></dl>
+            <table class="data-table">
+                <thead><tr><th colspan="2">Tabla 9. Alteraciones del manejo del calcio descritas en la sepsis</th></tr></thead>
+                <tbody>
+                    <tr><td colspan="2">Inhibición de SERCA</td></tr>
+                    <tr><td colspan="2">Disminución del Ca²⁺ almacenado en el retículo sarcoplásmico (RS)</td></tr>
+                    <tr><td colspan="2">Inhibición del intercambiador Na⁺/Ca²⁺</td></tr>
+                    <tr><td colspan="2">Disminución de los receptores de rianodina (RyR)</td></tr>
+                    <tr><td colspan="2">Desensibilización de los miofilamentos al calcio</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">👉 <strong>Figura 4</strong> (excitación-contracción en sepsis) representa gráficamente este ciclo con sus componentes clave (sarcolema, intercambiador Na⁺/Ca²⁺, SERCA/PLB, RyR, contracción); <strong>Figura 3</strong> resume en un diagrama los múltiples factores que confluyen en el daño miocárdico global de este bloque (Fichas 6-7). Las troponinas <strong>TnC, TnT y TnI</strong> forman el complejo troponínico que traduce el pulso de calcio en fuerza contráctil.</p>
+
+            <p class="section-label" style="margin-top:16px;">Óxido nítrico y endotelina-1</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El <strong>óxido nítrico</strong> producido en exceso por la iNOS (ver Ficha 2) tiene efectos
+                inotrópicos negativos directos sobre el cardiomiocito, mientras que la <strong>endotelina-1</strong>,
+                un potente vasoconstrictor de origen endotelial, contribuye a la alteración del tono vascular
+                coronario y a la disfunción microcirculatoria miocárdica local durante la sepsis.
+            </p>
+
+            <p style="font-size: 0.78rem; color: var(--text-muted);">👉 La <strong>Tabla 8</strong> del capítulo (Alteraciones moleculares en sepsis y daño miocárdico) reúne, canal por canal, la patogénesis/referencia/estudio/método/potencial tratamiento de cada una de las alteraciones descritas en las Fichas 6-7 — una tabla de síntesis extensa que agrupa todo lo desarrollado en ambas fichas por mecanismo molecular concreto.</p>
+
+            <p class="section-label" style="margin-top:16px;">Perspectiva terapéutica</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El desarrollo de intervenciones dirigidas a regular las vías inflamatorias y metabólicas descritas
+                en las Fichas 6-7, con el fin de prevenir la falla multiorgánica devastadora que sigue a la
+                endotoxemia diseminada grave, es una línea de investigación activa — por ejemplo, compuestos
+                capaces de inactivar <strong>IRAK-1</strong>, combinados con agentes antiinflamatorios, podrían
+                llegar a ser útiles en el tratamiento de la sepsis.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Fuente</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Romero Lamas R. Fisiopatología del corazón en sepsis. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección III, Capítulo 20, págs. 313-340.</p>
+        </div>
+
+        <!-- ===== FICHA 8: ENCEFALOPATÍA SÉPTICA — FISIOPATOLOGÍA ===== -->
+        <div id="inmuno-encefalopatia-fisiopatologia" class="tab-content">
+            <h3 style="color: var(--accent-blue);">Encefalopatía séptica (I): definición, epidemiología y fisiopatología</h3>
+
+            <p class="section-label">Definición y terminología</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El término histórico <strong>"encefalopatía asociada a sepsis" (EAS)</strong> se ha ido
+                sustituyendo por el más preciso <strong>"disfunción cerebral asociada a la sepsis"</strong>, que
+                refleja mejor que se trata de un espectro continuo de alteración funcional (no siempre una
+                verdadera "encefalopatía" estructural). El <strong>delirio</strong>, con sus criterios
+                diagnósticos específicos (ver Ficha 9), se considera un <span class="hl">subconjunto</span> de
+                este espectro más amplio de disfunción cerebral, no un sinónimo.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Prevalencia y mortalidad</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La prevalencia reportada varía ampliamente (<strong>25-70%</strong>) según los criterios
+                diagnósticos empleados en cada estudio. La mortalidad se correlaciona de forma clara con la
+                gravedad de la alteración de conciencia medida por la escala de coma de Glasgow (GCS):
+            </p>
+            <table class="data-table">
+                <thead><tr><th>Escala de Glasgow (GCS)</th><th>Mortalidad asociada</th></tr></thead>
+                <tbody>
+                    <tr><td>15</td><td>16%</td></tr>
+                    <tr><td>13-14</td><td>20%</td></tr>
+                    <tr><td>9-12</td><td>50%</td></tr>
+                    <tr><td>3-8</td><td>63%</td></tr>
+                </tbody>
+            </table>
+            <dl class="kv-row"><dt>Morbilidad a largo plazo</dt><dd>El estudio de <strong>Iwashyna</strong> documentó deterioro cognitivo persistente tras un episodio de sepsis grave, con un impacto especialmente marcado en pacientes de <strong>edad &gt;70 años</strong> — la encefalopatía séptica no es solo un problema agudo reversible, puede dejar secuelas cognitivas duraderas.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Etiopatogenia y fisiopatología</p>
+            <div class="algo-flow">
+                <div class="algo-step"><span class="algo-num">1</span><div class="algo-text">Sepsis → señales aferentes por el nervio vago (a través de sus órganos circunventriculares, OVC) y LPS circulante llegan al hipotálamo/amígdala.</div></div>
+                <div class="algo-step"><span class="algo-num">2</span><div class="algo-text">Activación de la glía (microglía/astrocitos) y producción local de citocinas y óxido nítrico dentro del propio SNC.</div></div>
+                <div class="algo-step"><span class="algo-num">3</span><div class="algo-text">Disfunción de la barrera hematoencefálica (BHE), que permite el paso adicional de aminoácidos aromáticos (AAA), citocinas circulantes y especies reactivas de oxígeno/óxido nítrico (EOR-ON).</div></div>
+                <div class="algo-step"><span class="algo-num">4</span><div class="algo-text">Consecuencias funcionales: alteración de neurotransmisores, apoptosis neuronal, y reducción de la respiración mitocondrial neuronal → <strong>disfunción cerebral clínica</strong>.</div></div>
+            </div>
+
+            <table class="data-table">
+                <thead><tr><th colspan="2">Tabla 1. Moléculas neurotóxicas implicadas en el SNC</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>TNF-α</strong></td><td>Disfunción de la barrera hematoencefálica, activación glial, efectos proapoptóticos neuronales</td></tr>
+                    <tr><td><strong>IL-6</strong></td><td>Correlaciona con la gravedad de la disfunción cerebral; efectos sobre la neurotransmisión</td></tr>
+                    <tr><td><strong>Óxido nítrico (ON) y especies reactivas de oxígeno (EOR)</strong></td><td>Daño mitocondrial neuronal directo, disfunción de la BHE</td></tr>
+                    <tr><td><strong>Aminoácidos aromáticos (AAA)</strong></td><td>Alteran el balance de neurotransmisores al cruzar la BHE disfuncional en exceso, compitiendo con precursores normales</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Fuente</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Romero Carratalá M, Borges Sá M, Aranda Pérez M. Encefalopatía séptica. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección III, Capítulo 21, págs. 341-351.</p>
+        </div>
+
+        <!-- ===== FICHA 9: ENCEFALOPATÍA SÉPTICA — DIAGNÓSTICO Y MANEJO ===== -->
+        <div id="inmuno-encefalopatia-diagnostico" class="tab-content">
+            <h3 style="color: var(--accent-green);">Encefalopatía séptica (II): clínica, diagnóstico y tratamiento</h3>
+
+            <p class="section-label">Clínica</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El espectro clínico es amplio: desde alteraciones sutiles de la atención hasta coma profundo.
+                Puede manifestarse como un <strong>delirio hiperactivo</strong> (agitación, hiperalerta) o
+                <strong>hipoactivo</strong> (el fenotipo más frecuente e infradiagnosticado en el paciente
+                crítico, por confundirse fácilmente con sedación adecuada). Signos motores asociados:
+                <strong>asterixis, temblor y mioclonías</strong>.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Diagnóstico: escalas de cribado de delirio</p>
+            <table class="data-table">
+                <thead><tr><th colspan="2">Tabla 2. Criterios CAM-UCI (Confusion Assessment Method para la UCI)</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>1. Inicio agudo o curso fluctuante</strong></td><td>Cambio agudo del estado mental basal, o fluctuación en las últimas 24h</td></tr>
+                    <tr><td><strong>2. Inatención</strong></td><td>Dificultad para focalizar, mantener o desviar la atención (evaluada con pruebas de atención estandarizadas)</td></tr>
+                    <tr><td><strong>3. Pensamiento desorganizado</strong></td><td>Pensamiento incoherente o desorganizado, conversación irrelevante, ideas ilógicas</td></tr>
+                    <tr><td><strong>4. Nivel de conciencia alterado</strong></td><td>Cualquier nivel distinto de "alerta y normal" (vigilante, letárgico, estuporoso, comatoso)</td></tr>
+                </tbody>
+            </table>
+            <dl class="kv-row"><dt>Regla diagnóstica CAM-UCI</dt><dd>Delirio positivo si están presentes los criterios <strong>1 y 2</strong>, más al menos uno de los criterios <strong>3 o 4</strong>.</dd></dl>
+            <dl class="kv-row"><dt>ICDSC (Intensive Care Delirium Screening Checklist)</dt><dd>Herramienta alternativa de cribado basada en una lista de verificación de 8 ítems, útil como complemento o alternativa al CAM-UCI en la práctica diaria de la UCI.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Diagnóstico diferencial y estudios complementarios</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧲 Neuroimagen</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La <strong>resonancia magnética (RM)</strong> es más sensible que la TC para detectar los hallazgos característicos: edema citotóxico, edema vasogénico y leucoencefalopatía — aunque en muchos pacientes con encefalopatía séptica clínicamente evidente la neuroimagen puede ser normal, reforzando que el mecanismo dominante es funcional (citocinas, ON, glía) más que estructural (ver Ficha 8).</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📉 Electroencefalograma (EEG)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Los hallazgos se correlacionan con la gravedad, en un espectro progresivo: ondas <strong>theta</strong> (leve) → ondas <strong>delta</strong> → <strong>ondas trifásicas</strong> → <strong>descargas epileptiformes</strong> → <strong>patrón de salva-supresión (burst-suppression)</strong>, el hallazgo más grave, asociado a peor pronóstico.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩺 Doppler transcraneal</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Un <strong>índice de pulsatilidad de la arteria cerebral media &gt;1,3</strong> se ha propuesto como marcador de alteración de la autorregulación cerebrovascular en la sepsis.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧪 Marcadores sanguíneos</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Los biomarcadores más establecidos son <strong>S100β</strong> (proteína glial, marcador de daño astrocitario) y <strong>NSE</strong> (enolasa neuronal específica, marcador de daño neuronal) — con biomarcadores emergentes en investigación como <strong>S100A8</strong> y los perfiles de subpoblaciones linfocitarias <strong>CD4+/CD8+/NK</strong>.</div>
+                </div>
+            </div>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">👉 <strong>Figura 2</strong> del capítulo desarrolla un algoritmo de decisión completo (con múltiples ramas Sí/No) para el estudio diagnóstico escalonado ante sospecha de disfunción cerebral asociada a sepsis, integrando clínica, neuroimagen, EEG y marcadores.</p>
+
+            <p class="section-label" style="margin-top:16px;">Tratamiento</p>
+            <dl class="kv-row"><dt>Sedación</dt><dd>Se prefiere <strong>dexmedetomidina</strong> sobre benzodiacepinas y opioides — menor asociación con delirio en la evidencia disponible. Se recomiendan <strong>ventanas de sedación diarias</strong> (interrupción/reducción programada) para permitir una evaluación neurológica repetida y minimizar el tiempo de sedación innecesaria.</dd></dl>
+            <dl class="kv-row"><dt>Medidas no farmacológicas</dt><dd><strong>Higiene del sueño</strong> (reducir ruido/luz nocturna, agrupar cuidados), <strong>movilización precoz</strong>, y <strong>reorientación</strong> del paciente al menos 3 veces al día — intervenciones con buen respaldo para reducir la incidencia y duración del delirio en el paciente crítico.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Fuente</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Romero Carratalá M, Borges Sá M, Aranda Pérez M. Encefalopatía séptica. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección III, Capítulo 21, págs. 341-351.</p>
+        </div>
+
+        <!-- ===== FICHA 10: DEFINICIONES DE SEPSIS Y HOMEOSTASIS ===== -->
+        <div id="inmuno-choque-definiciones" class="tab-content">
+            <h3 style="color: var(--accent-red);">Fisiopatogenia del choque séptico (I): definiciones y homeostasis</h3>
+
+            <p class="section-label">Evolución de las definiciones de sepsis</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                En 1992 se establecieron los criterios del <strong>síndrome de respuesta inflamatoria sistémica
+                (SRIS)</strong> y la primera definición de sepsis. En 2016, la <strong>Surviving Sepsis
+                Campaign</strong> impulsó un cambio conceptual profundo: se <span class="hl">descartó el
+                SRIS</span> como criterio diagnóstico (muy sensible pero poco específico, ya que no siempre es de
+                origen infeccioso) y se redefinió la sepsis como <em>"una condición que amenaza la vida y que
+                surge cuando la respuesta del individuo a una infección produce daño (disfunción) en sus propios
+                tejidos y órganos"</em>.
+            </p>
+            <table class="data-table">
+                <thead><tr><th>Definición</th><th>Previa</th><th>Actual (Singer et al.)</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Sepsis</strong></td><td>SRIS + infección sospecha/documentada</td><td>Infección (sospecha/DOC) + 2 de 3 variables qSOFA, o aumento ≥2 puntos SOFA</td></tr>
+                    <tr><td><strong>Sepsis grave</strong></td><td>Sepsis + hipotensión arterial, lactato &gt;2 mmol/L, INR&gt;1,5 o TTPa&gt;60, plaquetas &lt;100.000, bilirrubina&gt;4 mg/L, diuresis &lt;0,5 mL/h (2h), SatO₂ &lt;90% basal</td><td><span class="hl">Desaparece</span> como categoría</td></tr>
+                    <tr><td><strong>Choque séptico</strong></td><td>Sepsis + hipotensión arterial a pesar de resucitación adecuada con fluidos</td><td>Sepsis + necesidad de vasopresores (TAM&gt;65) + lactato&gt;2 mmol/L, tras resucitación adecuada con fluidos</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Los 3 pilares del reconocimiento actual</p>
+            <ol style="font-size:0.85rem; line-height:1.7; padding-left:20px;">
+                <li><strong>Escala SOFA</strong> (<em>Sequential Organ Failure Assessment</em>): una puntuación SOFA ≥2 puntos refleja una mortalidad de aproximadamente el <strong>10%</strong> en pacientes con sospecha de infección — ha mostrado mayor validación en el paciente crítico de UCI (ver desarrollo completo en Ficha 12).</li>
+                <li><strong>quick SOFA (qSOFA)</strong>: versión simplificada con 3 parámetros clínicos, sin necesidad de laboratorio — alteración del estado mental, presión sistólica ≤100 mmHg, y frecuencia respiratoria ≥22 rpm. Mejor validado <em>fuera</em> de la UCI (urgencias, hospitalización general).</li>
+                <li><strong>Criterios de choque séptico</strong>: hipotensión persistente que requiere vasopresores para mantener TAM ≥65 mmHg, junto con un lactato sérico ≥2 mmol/L (18 mg/dL), a pesar de una resucitación con fluidos adecuada. Mortalidad asociada de aproximadamente el <strong>40%</strong>.</li>
+            </ol>
+
+            <div class="algo-flow" style="margin-top:12px;">
+                <div class="algo-step"><span class="algo-num">📊</span><div class="algo-text"><strong>Figura 1 — Sinopsis de la fisiopatogenia simplificada de la sepsis.</strong> Sepsis → (↑coagulación/↓fibrinolisis por un lado, ↑inflamación por el otro) → convergen en <strong>daño endotelial</strong> → disfunción orgánica → posible muerte — el endotelio como eje central que integra ambas cascadas (desarrollado en la Ficha 11).</div></div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Homeostasis y sepsis</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La homeostasis es el equilibrio que mantiene la estabilidad clínica frente a estímulos agresivos
+                diarios. Cuando ese equilibrio se pierde por la entrada de microorganismos o sus productos
+                patogénicos al torrente circulatorio, el resultado depende de múltiples factores: características
+                del individuo (comorbilidades), capacidad de respuesta celular/humoral, inmunidad, factores
+                externos (inmunomoduladores, quimioterapia, esteroides), ambientales y genéticos.
+            </p>
+            <div class="algo-flow">
+                <div class="algo-step"><span class="algo-num">⚖️</span><div class="algo-text"><strong>Figura 2 — Homeostasis y sepsis (balanza).</strong> En un lado: mediadores proinflamatorios, lesión endotelial, expresión del factor tisular y producción de trombina — determinan <strong>↑coagulación / ↑inflamación</strong>. En el otro lado, el sistema pierde capacidad de contrarrestarlo: <strong>↓fibrinólisis</strong>, con <strong>↑PAI-1</strong> (inhibidor del activador del plasminógeno-1), <strong>↑TAFI</strong> (inhibidor de la fibrinólisis activado por trombina) y <strong>↓proteína C</strong> — el desequilibrio resultante favorece la microtrombosis generalizada.</div></div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Susceptibilidad genética</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Solo algunos pacientes expuestos a una misma agresión infecciosa desarrollan sepsis grave — en
+                buena medida por su <strong>susceptibilidad genética</strong> individual, mediada por
+                <strong>polimorfismos genéticos (PG)</strong>: variaciones en la secuencia de ADN que pueden
+                ocurrir en intrones, exones o regiones promotoras, y que actúan como marcadores de
+                diagnóstico/pronóstico con alta especificidad y sensibilidad en varios estudios.
+            </p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Alelo TNF2</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Variante alélica del gen del TNF-α asociada con <strong>mayor producción de TNF-α</strong>. Los individuos portadores son significativamente más susceptibles a desarrollar sepsis — pero no se ha encontrado asociación entre esta variante y la mortalidad una vez desarrollada.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Familia de la IL-1 (IL-1α, IL-1β, IL-1ra)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Fang y colaboradores (93 pacientes sépticos vs. donantes de sangre): el alelo <strong>RN2</strong> del gen de IL-1ra se asoció a mayor frecuencia en sépticos, sin diferencia clara de mortalidad. Ma y colaboradores encontraron que los pacientes homocigotos para los genotipos <strong>A2, B2 y RN2</strong> (los 3 juntos) tuvieron una mortalidad del <strong>70-80%</strong>; homocigotos para 2 de los 3 alelos, mortalidad del <strong>55-65%</strong>; y homocigotos para A1, B1 o RN1 (formas "salvajes"), mortalidad de solo <strong>0-13%</strong> — un gradiente claro de riesgo genético.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Polimorfismo de IL-6 (-174 G/C)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Este PG en la región promotora del gen de IL-6 no afecta a la <em>incidencia</em> de sepsis, pero los pacientes sépticos <strong>homocigotos G/C</strong> tuvieron porcentajes de <strong>supervivencia superiores</strong> al resto de genotipos — un ejemplo de PG relevante para el pronóstico, no para el riesgo de desarrollar la enfermedad.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Fuente</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Aranda Pérez M, Borges Sá M, Romero Carratalá M. Fisiopatogenia del choque séptico. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección III, Capítulo 22, págs. 353-369.</p>
+        </div>
+
+        <!-- ===== FICHA 11: ENDOTELIO VASCULAR Y DISFUNCIÓN CARDIOVASCULAR ===== -->
+        <div id="inmuno-endotelio-cardiovascular" class="tab-content">
+            <h3 style="color: var(--accent-yellow);">Fisiopatogenia del choque séptico (II): endotelio vascular y disfunción cardiovascular</h3>
+
+            <p class="section-label">Las 4 funciones básicas del endotelio</p>
+            <ol style="font-size:0.85rem; line-height:1.7; padding-left:20px;">
+                <li>Control de la coagulación, manteniendo el equilibrio con la fibrinólisis</li>
+                <li>Regulación del tono vascular</li>
+                <li>Control de la permeabilidad vascular</li>
+                <li>Regulación de la adhesión y migración de leucocitos/macrófagos, y de la actividad inflamatoria</li>
+            </ol>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                En condiciones normales el endotelio es <strong>anticoagulante, antiadhesivo</strong> para los
+                leucocitos y regula el tono vascular. Durante la sepsis, esta función se altera de forma
+                significativa: el endotelio adopta una función <strong>procoagulante</strong>, induce
+                vasodilatación patológica a nivel de grandes vasos y vasoconstricción a nivel microcirculatorio,
+                altera la permeabilidad vascular y amplifica la inflamación.
+            </p>
+            <table class="data-table">
+                <thead><tr><th>Estímulo</th><th>Efecto</th></tr></thead>
+                <tbody>
+                    <tr><td>Endotoxina / infección directa</td><td>Alteración de la homeostasis</td></tr>
+                    <tr><td>Citocinas / complemento</td><td>Efecto vasomotor</td></tr>
+                    <tr><td>Hipoxia tisular / trombina</td><td>Adhesión celular</td></tr>
+                    <tr><td>Factores VIIa, Xa / óxido nítrico (ON)</td><td>Supervivencia celular</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Tabla 2 del capítulo (Endotelio y sepsis) — la célula endotelial integra estos 4 estímulos distintos, cada uno con su propio efecto fisiopatológico predominante.</p>
+
+            <p class="section-label" style="margin-top:16px;">Endotelio: efecto procoagulante</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                En condiciones normales el endotelio impide el contacto entre la sangre y las proteínas
+                procoagulantes subendoteliales. Durante la sepsis, el daño endotelial expone esas estructuras: se
+                activa la cascada de coagulación con formación de trombina, mientras se inhiben simultáneamente
+                los anticoagulantes naturales — la producción del <strong>receptor de trombomodulina</strong>
+                (necesario para activar la vía anticoagulante de la proteína C) está disminuida, por lo que
+                <span class="hl">predomina la acción procoagulante</span> de la trombina.
+            </p>
+            <dl class="kv-row"><dt>Fibrinólisis bifásica</dt><dd>Inicialmente se activa por producción endotelial de <strong>t-PA</strong> (activador tisular del plasminógeno), pero esta activación es rápidamente seguida de una <strong>supresión sostenida</strong> por sobreproducción de <strong>PAI-1</strong> (inhibidor del activador del plasminógeno) — el resultado neto es un aumento de la coagulación con disminución de la fibrinólisis, que favorece la microtrombosis.</dd></dl>
+
+            <div class="algo-flow">
+                <div class="algo-step"><span class="algo-num">🩸</span><div class="algo-text"><strong>Figura 3 — Activación de la trombina y sus 3 efectos convergentes.</strong> La activación de la trombina desencadena: activación de FV/FVIII, activación de FXI, conversión de fibrinógeno en fibrina, activación de FXIII (estabiliza el coágulo), activación plaquetaria, activación de células endoteliales, ↑adhesión de leucocitos/endotelio, ↑permeabilidad vascular, ↑citocinas/proteasas, ↑unión a trombomodulina, ↑APC (proteína C activada) y TAFI — con 3 efectos fisiopatológicos finales: <strong>procoagulante, proinflamatorio y antifibrinolítico</strong>, todos convergiendo en microtrombosis.</div></div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Endotelio y regulación del tono vasomotor</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                En condiciones normales existe un equilibrio entre sustancias vasodilatadoras (<strong>PGI2,
+                óxido nítrico, bradicininas, factor hiperpolarizante dependiente del endotelio</strong>) y
+                vasoconstrictoras (<strong>endotelinas</strong> — las más potentes — y <strong>angiotensina
+                II</strong>).
+            </p>
+            <dl class="kv-row"><dt>Endotelio aturdido</dt><dd>En la fase inicial de la sepsis disminuye la forma <strong>constitutiva</strong> de ON y se altera la relajación endotelial normal — el "endotelio aturdido". Esta fase es seguida de un <strong>incremento de la forma inducible de ON</strong> a nivel de la circulación general, asociado a <span class="hl">vasodilatación patológica</span> e hipotensión sistémica. A nivel <strong>microcirculatorio</strong>, sin embargo, predomina la <strong>vasoconstricción</strong> — el resultado combinado (vasodilatación sistémica + vasoconstricción microcirculatoria) contribuye directamente a la hipoperfusión tisular característica del choque séptico.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Endotelio: efecto proadhesivo y amplificación de la inflamación</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Frente a los mediadores inflamatorios, el endotelio expresa en su superficie moléculas de
+                adhesión: <strong>P-selectina (CD62P), E-selectina (CD62E), ICAM-1 (CD54), VCAM-1 (CD106),
+                PECAM-1</strong> (molécula de adhesión células endoteliales/plaquetas-1) y <strong>CD99</strong>
+                — todas favorecen el tráfico de leucocitos desde el torrente circulatorio hacia el tejido
+                subyacente, principalmente en el territorio precapilar y los capilares de órganos como el
+                <strong>corazón y el pulmón</strong>.
+            </p>
+            <table class="data-table">
+                <thead><tr><th>Mecanismo inducido por la infección</th><th>Efecto promovido por el endotelio</th></tr></thead>
+                <tbody>
+                    <tr><td>Promoción de la coagulación / disminución de la fibrinólisis</td><td>Favorecimiento de la microtrombosis</td></tr>
+                    <tr><td>Inducción de vasodilatación sistémica refractaria / vasoconstricción capilar excesiva</td><td>Disminución de la perfusión tisular</td></tr>
+                    <tr><td>Activación de mediadores proinflamatorios</td><td>Amplificación del proceso inflamatorio</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:16px;">Respuesta inflamatoria (Th1) y antiinflamatoria (Th2)</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                El gatillo de la sepsis comienza cuando los microorganismos son reconocidos por macrófagos y
+                células endoteliales a través de TLR (ver Ficha 1) — cabe distinguir 2 fases temporales:
+            </p>
+            <ul class="term-chips">
+                <li>Fase temprana: TNF, IL-6 e IL-1β dominan, con pico en las primeras horas</li>
+                <li>Fase tardía: mediada fundamentalmente por HMGB1</li>
+            </ul>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧪 Estudio INTERSEPT (anti-TNF)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">564 pacientes, 420 con choque séptico, tratados con un anticuerpo monoclonal murino anti-TNF-α. No hubo beneficio sobre la <strong>supervivencia a 28 días</strong> frente a placebo, aunque en el grupo tratado se apreció una recuperación <strong>más rápida de la primera falla de órgano</strong>. Ilustra la discordancia entre la relevancia fisiopatológica del TNF y el éxito clínico de bloquearlo aisladamente.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧪 IL-1</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Su elevación se correlaciona positivamente con la evolución clínica, pero la administración exógena de antagonistas ha fracasado en mejorarla — se duda de su capacidad real como mediador de resolución de la sepsis. Es de difícil detección analítica en pacientes sépticos, aunque cuando se detecta sí presenta relación con la mortalidad.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧪 IL-10 (antiinflamatoria)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Suprime la producción de IFN-γ por linfocitos T/NK y de TNF/IL-1/IL-6/IL-8 por monocitos, mientras sobrerregula la producción de IL-1ra. Su inhibición aumenta reactivamente TNF e IL-6. Se han encontrado niveles elevados en sepsis, aunque no en todos los pacientes.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Apoptosis: los 4 procesos de inmunomodulación</p>
+            <table class="data-table">
+                <thead><tr><th>Proceso</th><th>Respuesta</th><th>Consecuencias</th><th>Efecto</th></tr></thead>
+                <tbody>
+                    <tr><td>Activación del CD4</td><td>Producción de citocinas</td><td>Inflamatorias (Th1) / antiinflamatorias (Th2)</td><td>TNF-α, IFN-γ / IL-4, IL-10</td></tr>
+                    <tr><td>Anergia</td><td>Sin respuesta a un antígeno</td><td>Células T incapaces de proliferar/secretar citocinas</td><td>—</td></tr>
+                    <tr><td>Apoptosis</td><td>Muerte genéticamente programada</td><td>Célula necrótica / célula apoptótica</td><td>↑Th1 / ↑Th2 y anergia</td></tr>
+                    <tr><td>Muerte de células inmunes</td><td>Sin capacidad de respuesta</td><td>Ineficacia frente a la infección</td><td>—</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Tabla 4 del capítulo — la apoptosis de linfocitos B, células T CD4, células dendríticas y epiteliales gastrointestinales induce anergia y producción de citocinas antiinflamatorias, dificultando la respuesta al patógeno (ver también la Ficha 5, que desarrolla la vía extrínseca/caspasa-8 vs. intrínseca/mitocondrial de esta misma apoptosis).</p>
+
+            <p class="section-label" style="margin-top:16px;">Disfunción cardiovascular</p>
+            <div class="algo-flow">
+                <div class="algo-step"><span class="algo-num">🫀</span><div class="algo-text"><strong>Figura 4 — Afectación cardiovascular en la sepsis.</strong> Infección → mediadores inflamatorios + activación de la coagulación/neuroendocrina → 4 efectos precoces (hipovolemia, vasodilatación, depresión miocárdica, alteración de la microcirculación) → insuficiencia cardiovascular → hipoxia tisular global → marcadores de gravedad → disfunción orgánica.</div></div>
+            </div>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Los pacientes sépticos suelen tener, como efectos precoces: <strong>hipovolemia</strong> (real o
+                relativa, por el aumento de permeabilidad vascular o la vasodilatación), <strong>depresión
+                miocárdica</strong> asociada a factores vasculares, afectación coronaria previa, disfunción
+                miocárdica previa (cardiopatía isquémica/hipertensiva) o inmunomodulada, y afectación de la
+                microcirculación. El resultado es una <strong>insuficiencia cardiovascular</strong> con hipoxia
+                tisular global — aunque con diferencias regionales de perfusión (el organismo puede sacrificar la
+                perfusión esplácnica/renal para preservar el sistema nervioso central).
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Perspectivas futuras</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Desde hace décadas se han planteado múltiples estrategias terapéuticas frente a la sepsis, la
+                mayoría sin superar estudios en fase II o III — con la excepción destacada de la <strong>proteína
+                C activada recombinante</strong>, que finalmente se <span class="hl">retiró del mercado</span>
+                tras el resultado del <strong>estudio Prowess-Shock</strong>, sin diferencias entre el grupo
+                placebo y el grupo tratado. Aunque se han planteado problemas metodológicos de aquel diseño de
+                estudio, hoy no existen otros fármacos específicos aprobados para el manejo de la sepsis salvo la
+                antibioticoterapia; con menor nivel de evidencia se encuentran los esteroides en casos concretos,
+                y persiste gran controversia sobre el uso de inmunoglobulinas.
+            </p>
+            <div class="algo-flow">
+                <div class="algo-step"><span class="algo-num">💊</span><div class="algo-text"><strong>Figura 5 — Fisiopatogenia de la sepsis y posibles vías de tratamiento.</strong> (1) Bloqueo/disminución/eliminación de la producción de endotoxinas. (2) Bloqueo de los mediadores proinflamatorios (p. ej. anti-TNF). (3) Bloqueo de las vías procoagulantes o estimulación de la fibrinólisis. (4) Fármacos con actividad citoprotectora — las 4 vías convergen en intentar frenar la progresión infección → respuesta celular → inflamación-lesión vascular → apoptosis/coagulopatía/inflamación incontrolada → FMO, choque, muerte.</div></div>
+            </div>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                <span class="hl">La posibilidad de nuevas opciones terapéuticas sigue en investigación</span> — la
+                denominada <em>inmunoterapia en sepsis</em> está en continuo desarrollo (ver también Ficha 2 para
+                el desarrollo completo de estas terapias inmunomoduladoras).
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Comentarios finales</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Un aspecto que sigue generando controversia es la fisiopatogenia exacta de la muerte en el
+                paciente séptico: en muchas autopsias hay una clara <strong>disociación anatomoclínica</strong> —
+                por ejemplo, pacientes con fracaso renal agudo anúrico en los que la biopsia renal no muestra
+                lesiones significativas. Las posibles causas de muerte en la sepsis se asocian muchas veces con
+                choque séptico refractario, SDRA con hipoxemia refractaria, arritmias, depresión miocárdica y
+                otras causas asociadas al fracaso multiorgánico, sin que siempre sea claro el verdadero motivo
+                último de la muerte.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Fuente</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Aranda Pérez M, Borges Sá M, Romero Carratalá M. Fisiopatogenia del choque séptico. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección III, Capítulo 22, págs. 353-369.</p>
+        </div>
+
+        <!-- ===== FICHA 12: SOFA/QSOFA Y DISFUNCIÓN ORGÁNICA MÚLTIPLE ===== -->
+        <div id="inmuno-sofa-dom" class="tab-content">
+            <h3 style="color: var(--accent-purple);">Monitorización de la función de los parénquimas en sepsis (I): SOFA, qSOFA y disfunción orgánica múltiple</h3>
+
+            <p class="section-label">Epidemiología de la S-DOM</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La sepsis asociada con disfunción orgánica múltiple (<strong>S-DOM</strong>) y el choque séptico
+                constituyen una de las principales causas de ingreso y muerte en la UCI. La prevalencia de S-DOM
+                en la UCI es del <strong>29,5%</strong>, con una mortalidad asociada de entre <strong>25,8% y
+                75%</strong> según la serie. En Estados Unidos se reportan alrededor de <strong>750.000 casos de
+                sepsis al año</strong>, con mortalidad reportada del 24-75%. En 2017 la OMS declaró la S-DOM un
+                problema de salud global de alta prioridad.
+            </p>
+            <dl class="kv-row"><dt>Distribución del foco infeccioso</dt><dd>El <strong>80%</strong> de los casos de sepsis se desarrolla en la comunidad. Dos tercios presentan como sitio de infección los <strong>pulmones</strong>, seguido de infección abdominal, hematológica, renal y genitourinaria en menor proporción — bacterias Grampositivas y Gramnegativas son la causa más común.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Mecanismos de disfunción orgánica múltiple</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La base fisiopatológica de la S-DOM no se conoce por completo, pero la lesión se inicia en el
+                <strong>endotelio vascular</strong> como precursora del proceso inflamatorio. El endotelio
+                desempeña 3 funciones clave: modula la respuesta inflamatoria ante la infección, tiene una
+                respuesta trombótica a la infección, y presenta una respuesta fibrinolítica — se observan
+                alteraciones microcirculatorias con disminución de la densidad capilar funcional, incremento en
+                la heterogeneidad de la perfusión y aumento de la proporción de capilares con perfusión
+                intermitente. Tres mecanismos convergen en la disfunción orgánica:
+            </p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩸 Alteraciones de la microcirculación</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Se han descrito al menos 2 mecanismos de alteración del flujo sanguíneo: disminución del flujo en un lecho capilar con distribución <strong>homogénea</strong>, y un flujo conservado o aumentado pero con distribución <strong>heterogénea</strong> en el lecho capilar. En ambos casos, el resultado es hipoxia tisular ante la demanda — con aumento reactivo de la extracción de oxígeno y, si es insuficiente, cambio a metabolismo anaeróbico y aumento del lactato circulante. La combinación de hipoxia tisular, extracción incrementada y pérdida del balance entre presiones hidrostática/oncótica lleva a <strong>edema intersticial</strong>, que a su vez incrementa el espacio de difusión entre el capilar y la célula, acrecentando la hipoxia. La pérdida de función del <strong>glucocálix</strong> (capa de glucosaminoglicanos que cubre la superficie luminal del endotelio) incrementa la rigidez del vaso, impide la deformidad eritrocitaria, aumenta la viscosidad sanguínea, activa plaquetas y favorece adhesión/rodamiento de leucocitos y activación del complemento.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚡ Adaptación bioenergética</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">A nivel celular, principalmente mitocondrial, se producen ajustes adaptativos de supervivencia ante la falta de oxígeno: disminución del metabolismo celular, cambio de la fosforilación oxidativa a la glucólisis aeróbica, inhibición del transporte de electrones de la cadena respiratoria, mitofagia, biogénesis y falla del ciclo celular. El organismo prioriza el consumo de energía, limita la lesión tisular, mantiene un balance energético y preserva la composición celular mediante el mecanismo llamado <strong>"oxígeno de conformidad"</strong> — disminuir los requerimientos energéticos como medida para mantener con vida a las células.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Respuesta inmune</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La isquemia, la <strong>hipoxia citopática</strong> y la <strong>apoptosis</strong> se consideran los principales mecanismos de disfunción orgánica en sepsis — esta última asociada de forma directa con el mal pronóstico observado en la S-DOM.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Afectación por órgano</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧠 Cerebro</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Encefalopatía asociada con sepsis en el 8-80% de los pacientes (ver desarrollo completo en Fichas 8-9). El grupo de trabajo de Sepsis-3 incluyó una calificación de Glasgow &lt;13 dentro de los criterios de q-SOFA.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🫀 Corazón</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">La sepsis induce disminución de la contractilidad, asociada con reducción de la actividad del citocromo C oxidasa mitocondrial y citocinas que deprimen la función cardíaca (ver desarrollo completo en Fichas 6-7). Pese al incremento de troponinas, no se documentan cambios isquémicos a nivel miocárdico — la troponina I se correlaciona con disfunción ventricular y es predictor de necesidad de soporte inotrópico/vasopresor y de mortalidad.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🫁 Pulmón</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Pérdida de energía y de transportadores de sodio/cloro; las bombas transmembrana ligadas a ATPasa están inactivadas, dificultando el drenaje del líquido del espacio alveolar (una de las causas del edema alveolar). Progresa a inestabilidad alveolar, colapso alveolar y SDRA en el 50% de los casos, principalmente por gérmenes Gramnegativos — se asocia mortalidad cuando no hay mejoría de la oxigenación tras 1 semana de tratamiento.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🫘 Riñón</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Disminución de la actividad de canales de sodio/cloro y reducción de energía en el epitelio tubular; disminución del filtrado glomerular secundaria al aumento en la concentración de cloro a nivel tubular (incapacidad de reabsorberse por pérdida de energía) y constricción de la arteriola aferente. Complicación más común en sepsis: <strong>16-19%</strong> en sepsis, <strong>50%</strong> en choque séptico. Mortalidad hospitalaria del <strong>29,7%</strong>, el doble cuando el paciente está en choque séptico.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🫘 Hígado</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Disminución en la síntesis de proteínas e incapacidad de procesar exo/endotoxinas. Clínicamente: isquemia hepática ("hígado de choque") con zonas isquémicas/necróticas, incremento de transaminasas, acidosis láctica (por menor depuración de lactato) e hipoglucemia. La lesión centrilobular es el segundo mecanismo de lesión hepática, con incremento de transaminasas y LDH en 1-3 días; en etapas tempranas no hay incremento sustancial de bilirrubinas.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🦠 Intestino, bazo y sistema inmune</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Apoptosis con mayor frecuencia que en otros órganos (ver Ficha 5). En el intestino, incremento de la permeabilidad del epitelio, favoreciendo la permeación bacteriana. Manifestaciones clínicas más comunes: íleo, gastritis erosiva, pancreatitis, colecistitis acalculosa y hemorragia colónica.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩸 Hematológico</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Activación de la coagulación directamente desde el endotelio, que puede producir CID (ver Ficha 11), trombocitopenia y coagulopatía. La disminución de energía lleva a depresión de la médula ósea con reducción en la producción de eritrocitos; la falla hepática contribuye con una caída en la producción de factores de coagulación (factores K dependientes). La S-DOM es la principal causa de CID, presente en el <strong>25%</strong> de los casos de sepsis por Gramnegativos — se sospecha por tiempos de coagulación prolongados, hipofibrinogenemia, incremento de productos de degradación de la fibrina y presencia de dímero D.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🍬 Metabólico y endocrino</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Hiperglucemia multifactorial (respuesta a catecolaminas, estimulación simpatoadrenal, liberación de ACTH/glucocorticoides/glucagón con caída de la liberación de insulina → glucogenólisis y gluconeogénesis), incremento de la resistencia a la insulina, hipertrigliceridemia, y balance nitrogenado negativo. A nivel endocrino: insuficiencia adrenal relativa en choque séptico, caída de T4/T3 séricas, y <strong>síndrome de eutiroideo enfermo</strong> (hormonas tiroideas bajas en pacientes clínicamente eutiroideos, con T3 reversa (rT3) incrementada en enfermedad prolongada, sin elevación de la hormona estimulante de la tiroides).</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Escala de evaluación secuencial de falla orgánica (SOFA)</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Evalúa 6 sistemas orgánicos, con puntuación de 0 (función normal) a 4 (falla del órgano) en cada
+                uno: respiratorio (PaO₂/FiO₂), coagulación (plaquetas), hepático (bilirrubina), cardiovascular
+                (PAM y dosis de vasopresores), neurológico (Glasgow) y renal (creatinina/diuresis). Sensibilidad
+                del <strong>68%</strong>, especificidad del <strong>65%</strong>, área bajo la curva (ROC) de
+                <strong>0,79</strong>.
+            </p>
+            <dl class="kv-row"><dt>qSOFA</dt><dd>Simplificación de uso rutinario en la UCI: alteración del estado mental (Glasgow ≤13), frecuencia respiratoria ≥22/min y presión arterial sistólica ≤100 mmHg — riesgo de pronóstico malo si están presentes 2 o más criterios. Sensibilidad del <strong>55%</strong>, especificidad del <strong>84%</strong>, ROC de <strong>0,81</strong> — mejor especificidad, menor sensibilidad que SOFA completo.</dd></dl>
+
+            <div class="card" style="padding:14px 16px; margin-top:16px;">
+                <h4 style="color: var(--accent-purple); margin-top:0;">🧮 Calculadora qSOFA</h4>
+                <p class="subtitle">3 criterios clínicos, sin necesidad de laboratorio — marca los presentes</p>
+                <label class="checkbox-label"><input type="checkbox" id="inmuno-qsofa-mental"> Alteración del estado mental (Glasgow ≤13)</label>
+                <label class="checkbox-label"><input type="checkbox" id="inmuno-qsofa-fr"> Frecuencia respiratoria ≥22 rpm</label>
+                <label class="checkbox-label"><input type="checkbox" id="inmuno-qsofa-pas"> Presión arterial sistólica ≤100 mmHg</label>
+                <div class="result-box" id="inmuno-qsofa-resultado" style="margin-top:10px;"></div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Fuente</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Vázquez de Anda GF, Dávila Fernández JC, Delaye Aguilar MG, Mejía Pérez CI. Monitorización de la función de los parénquimas en sepsis. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección III, Capítulo 23, págs. 371-384.</p>
+        </div>
+
+        <!-- ===== FICHA 13: BIOMARCADORES EN SEPSIS: PROCALCITONINA ===== -->
+        <div id="inmuno-biomarcadores-pct" class="tab-content">
+            <h3 style="color: var(--accent-blue);">Monitorización de la función de los parénquimas en sepsis (II): biomarcadores y procalcitonina</h3>
+
+            <p class="section-label">El biomarcador ideal</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Debe poseer una elevada precisión, con el fin de permitir un diagnóstico temprano y rápido, y
+                sobre todo debe permitir al clínico tomar una decisión de tratamiento en función del resultado —
+                alta sensibilidad y especificidad, accesible y, de preferencia, disponible en el sitio de
+                atención. Existen marcadores enfocados al <strong>diagnóstico</strong> y otros al
+                <strong>pronóstico</strong>. En los últimos 20 años se han estudiado alrededor de <strong>100
+                biomarcadores</strong>, con resultados en general desalentadores — el conteo de leucocitos, la
+                proteína C reactiva y la procalcitonina (PCT) han sido los más utilizados en la práctica.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Procalcitonina: origen y cinética</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Normalmente por debajo de <strong>0,5 ng/mL</strong> en sangre; niveles &gt;<strong>2
+                ng/mL</strong> son indicativos de sepsis. Se origina del gen <strong>CALC-1</strong>, en el
+                cromosoma 11 — el ARN mensajero producido (preprocalcitonina) contiene la PCT (114-116
+                aminoácidos). En condiciones libres de infección, prácticamente toda la PCT se produce en las
+                <strong>células C tiroideas</strong> y se convierte en calcitonina, por lo que los niveles
+                circulantes son muy bajos en condiciones normales.
+            </p>
+            <dl class="kv-row"><dt>Ante la infección</dt><dd>Se produce un incremento en la expresión del gen CALC-1 en tejidos con mayor potencial de expresión — hígado, leucocitos, pulmones y células neuroendocrinas. Existe un mecanismo <strong>directo</strong> (inducido por LPS u otro metabolito tóxico microbiano) y uno <strong>indirecto</strong> (mediado por citocinas como IL-6 y TNFα).</dd></dl>
+            <dl class="kv-row"><dt>Cinética</dt><dd>Estable en muestras sanguíneas. Detectable a las <strong>4 horas</strong>, con concentración pico a las <strong>12 horas</strong>, y vida media de <strong>22 a 35 horas</strong>. Se considera hoy más bien un <em>intensificador/modulador</em> de la respuesta inflamatoria a la infección que un iniciador — una respuesta del huésped al reto infeccioso, no la causa de él.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Uso clínico de la PCT</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                Se utiliza en la práctica diaria de UCI como estándar para complementar el diagnóstico de
+                S-DOM/choque séptico y monitorizar el inicio, evolución y finalización de la terapia dirigida
+                — principalmente en antibióticos, y estudios recientes lo sugieren como medida de seguimiento y
+                pronóstico en las primeras 72 horas de tratamiento.
+            </p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📊 Muller y colaboradores — neumonía comunitaria</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Área bajo la curva de <strong>0,88</strong> para el diagnóstico de neumonía bacteriana. Sensibilidad del <strong>90%</strong> y especificidad del <strong>59%</strong> ante concentraciones de <strong>0,1 ng/mL</strong> para predecir neumonía bacteriana. Los niveles elevados de PCT tienen una asociación significativa con todas las causas de mortalidad en pacientes sépticos.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📊 Lipinska-Gediga y colaboradores — depuración de PCT (PCTd)</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">50 pacientes en UCI con sepsis grave/choque séptico, con cortes de PCT al ingreso, día 2, 3 y 5. La cinética de la PCT fue estadísticamente diferente entre supervivientes y fallecidos (menores concentraciones entre supervivientes) — impacto discriminatorio en los primeros 2 días, y valor pronóstico tras el 3er día en el grupo que finalmente falleció. Fórmula de depuración: PCTd = (PCT inicial − PCT final) × 100 / PCT inicial.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📊 Azevedo y colaboradores — PCTd vs. SOFA</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Comparó la depuración de PCT con la diferencia de evaluación SOFA durante el tratamiento, en pacientes con S-DOM/choque séptico. No hubo correlación entre el valor inicial de la PCT y la evaluación de SOFA en el mismo período — pero el aclaramiento de PCT a las 24-48h puede usarse para predecir el pronóstico, con un ROC de <strong>0,76</strong> y el mejor punto de corte en una reducción del <strong>-25%</strong> a las 48 horas (otro punto de corte descrito, -73%, con el mismo ROC de 0,76).</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📊 Andriolo y colaboradores — revisión Cochrane</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Revisión sistemática de 10 estudios sobre el uso de PCT para guiar el tratamiento antimicrobiano y reducir la mortalidad en S-DOM/choque séptico. No se encontraron diferencias significativas en mortalidad entre guiar la terapia con PCT vs. cuidado estándar, ni en la duración del soporte ventilatorio, la gravedad clínica, la reinfección durante la terapia ni el espectro de cobertura antimicrobiana — calidad de la evidencia muy baja a moderada.</div>
+                </div>
+            </div>
+
+            <div class="card" style="padding:14px 16px; margin-top:16px;">
+                <h4 style="color: var(--accent-blue); margin-top:0;">🧪 Interpretación de la PCT (Figura 1)</h4>
+                <p class="subtitle">Introduce la concentración de PCT (ng/mL) para ver la recomendación del algoritmo original</p>
+                <div class="form-group">
+                    <label for="inmuno-pct-input">PCT (ng/mL)</label>
+                    <input type="number" id="inmuno-pct-input" min="0" step="0.01" placeholder="p. ej. 0,3">
+                </div>
+                <div class="result-box" id="inmuno-pct-resultado" style="margin-top:10px;"></div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Conclusión</p>
+            <p style="font-size: 0.85rem; line-height: 1.6;">
+                La S-DOM y el choque séptico constituyen la principal causa de ingreso a la UCI, con alto riesgo
+                de muerte. Se define como una disfunción orgánica grave causada por una respuesta no regulada del
+                huésped a una infección, por lo que es primordial establecer el diagnóstico temprano a través de
+                la escala qSOFA. Además, se recomienda determinar las concentraciones sanguíneas de PCT, ya que
+                valores superiores a <strong>0,1 ng/mL</strong> se relacionan con infección — la PCT es útil en
+                el diagnóstico, inicio, mantenimiento y terminación del tratamiento antibiótico, así como en el
+                pronóstico desde las 24 horas de seguimiento, a través de la <span class="hl">depuración de la
+                PCT</span>.
+            </p>
+
+            <p class="section-label" style="margin-top:16px;">Fuente</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Vázquez de Anda GF, Dávila Fernández JC, Delaye Aguilar MG, Mejía Pérez CI. Monitorización de la función de los parénquimas en sepsis. En: El libro azul. Bases fisiopatológicas de la medicina crítica. Sección III, Capítulo 23, págs. 371-384.</p>
+        </div>
+
+        <!-- ===== FICHA 14: BIBLIOGRAFÍA ===== -->
+        <div class="card" style="margin-top: 20px;">
+            <h3 style="color: var(--accent-purple);">📚 Bibliografía</h3>
+            <ul class="biblio-list">
+                <li><a class="biblio-link" href="docs/libro-azul-seccion-iii-inmunitario-parte1.pdf#page=3" target="_blank" rel="noopener">Holuigue Rodríguez GA. El huésped crítico: mecanismos habituales de defensa (Cap. 17)</a> <span class="biblio-nota">Fichas 1-2</span></li>
+                <li><a class="biblio-link" href="docs/libro-azul-seccion-iii-inmunitario-parte1.pdf#page=29" target="_blank" rel="noopener">Cortés López A. Fisiopatología de la fiebre y las alteraciones en la temperatura corporal (Cap. 18)</a> <span class="biblio-nota">Fichas 3-4</span></li>
+                <li><a class="biblio-link" href="docs/libro-azul-seccion-iii-inmunitario-parte1.pdf#page=53" target="_blank" rel="noopener">Gipis Saavedra AJ. Fisiopatología de la sepsis (Cap. 19)</a> <span class="biblio-nota">Ficha 5</span></li>
+                <li><a class="biblio-link" href="docs/libro-azul-seccion-iii-inmunitario-parte2.pdf#page=1" target="_blank" rel="noopener">Romero Lamas R. Fisiopatología del corazón en sepsis (Cap. 20)</a> <span class="biblio-nota">Fichas 6-7</span></li>
+                <li><a class="biblio-link" href="docs/libro-azul-seccion-iii-inmunitario-parte2.pdf#page=29" target="_blank" rel="noopener">Romero Carratalá M, Borges Sá M, Aranda Pérez M. Encefalopatía séptica (Cap. 21)</a> <span class="biblio-nota">Fichas 8-9</span></li>
+                <li><a class="biblio-link" href="docs/libro-azul-seccion-iii-inmunitario-parte2.pdf#page=41" target="_blank" rel="noopener">Aranda Pérez M, Borges Sá M, Romero Carratalá M. Fisiopatogenia del choque séptico (Cap. 22)</a> <span class="biblio-nota">Fichas 10-11</span></li>
+                <li><a class="biblio-link" href="docs/libro-azul-seccion-iii-inmunitario-parte2.pdf#page=59" target="_blank" rel="noopener">Vázquez de Anda GF, Dávila Fernández JC, Delaye Aguilar MG, Mejía Pérez CI. Monitorización de la función de los parénquimas en sepsis (Cap. 23)</a> <span class="biblio-nota">Fichas 12-13</span></li>
+            </ul>
+        </div>
+    </div>
