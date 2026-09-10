@@ -32,8 +32,10 @@ cama en el móvil.
   `localStorage` para recordar aciertos/fallos por pregunta en el
   dispositivo del usuario; y el **Modo Estudio** (`js/core/pomodoro.js`,
   ver "Modo Estudio y reloj Pomodoro" más abajo) usa `localStorage` para
-  recordar el nº de pomodoros completados en el dispositivo del usuario. No
-  añadas `localStorage` (ni ningún otro tipo de persistencia) a ningún otro
+  recordar, también en el dispositivo del usuario, el nº de pomodoros
+  completados, la duración de enfoque/descanso configurada, y el
+  progreso de estudio (pomodoros invertidos) por ficha. No añadas
+  `localStorage` (ni ningún otro tipo de persistencia) a ningún otro
   módulo sin que sea, igual que estos dos, una decisión explícita — el
   resto de la app sigue sin guardar nada.
 - **Sin build tool.** No hay npm/Vite/webpack. Todo es HTML/CSS/JS que el
@@ -7266,6 +7268,89 @@ las especialidades, sin tocar el HTML/JS de ningún módulo concreto.
   panel se cierra; sin errores de consola ni de página en ningún punto
   del recorrido. Bump de cache-busting a `?v=20260910` (cambió
   `css/components.css` y `js/main.js`).
+- **Duración editable + progreso de estudio persistente por ficha**, a
+  petición explícita del usuario ("quiero que se pueda editar el
+  pomodoro, que puedas poner los minutos que quieres estudiar y los que
+  descansar. También quiero que se guarde el progreso de estudio y poder
+  llevar un conteo de lo que llevo estudiando y lo que me falta por
+  estudiar cuando me conecte en diferentes dias"):
+  - **Enfoque/descanso editables** (`#pomo-cfg-enfoque`/`#pomo-cfg-descanso`,
+    2 `<input type="number">` dentro del propio panel del reloj, debajo de
+    Iniciar/Reiniciar), persistidos en `localStorage`
+    (`hud-pomodoro-config`, `{enfoque, descanso}` en minutos) — sobreviven
+    a recargar la página o volver otro día, igual que el resto de este
+    módulo. Clamp 1-180 min (enfoque) / 1-60 min (descanso); un valor no
+    numérico o vacío cae al valor por defecto (25/5). Si el reloj está
+    **parado** y la fase visible es la que se acaba de editar, la cuenta
+    atrás mostrada se actualiza al momento; si está **corriendo**, el
+    cambio se guarda pero no toca la cuenta atrás en marcha (evita un
+    salto brusco a mitad de sesión) — se aplica ya en la fase siguiente.
+    Los `<input type="number">` del panel necesitaron el selector
+    `.pomodoro-panel .pomo-config-input` (2 clases) para ganar
+    especificidad sobre la regla global `input[type="number"] { width:
+    100%; ... }` de `components.css` línea ~18 — un simple `.pomo-config-input`
+    a secas no habría bastado (misma especificidad que la regla global,
+    y esta es anterior en el archivo).
+  - **Progreso de estudio por ficha, persistente entre sesiones**
+    (`localStorage`, clave `hud-estudio-progreso`, `{ [dataTab]:
+    pomodorosHechos }` — mismo módulo/excepción ya documentada arriba
+    para Modo Estudio, que ahora guarda 3 claves en vez de 1: el contador
+    de pomodoros completados, la configuración de duración, y este
+    progreso por ficha): cada ficha ahora lleva la cuenta de cuántos de sus
+    pomodoros estimados ya se han "invertido" en ella, de dos formas
+    independientes y complementarias:
+    1. **Automática**: al completarse una fase de Enfoque del reloj, se
+       busca qué ficha está realmente visible en ese momento
+       (`obtenerFichaActivaVisible()` — de entre todos los
+       `.tab-content.active` del documento, que puede haber varios sueltos
+       de otras vistas ocultas ya que cada especialidad tiene su propio
+       grupo de pestañas independiente, se queda con el único cuyo `id`
+       está en el mapa de estimaciones **y** es visible de verdad ahora
+       mismo, comprobado con `offsetParent !== null`) y se le suma 1
+       pomodoro (tope: su propia estimación, nunca de más).
+    2. **Manual**: tocar la propia etiqueta `🍅 P/N` de cualquier ficha
+       la marca/desmarca como "estudiada" (progreso = su estimación
+       completa, o vuelve a 0) — pensado para cuando se lee sin el reloj
+       corriendo, o para corregir a mano. La etiqueta pasó de
+       `pointer-events:none` a ser un botón real (`cursor:pointer`, con
+       `e.stopPropagation()` en su propio listener para no disparar
+       también el volteo de la ficha, que escucha clicks en toda la
+       `.field-card`).
+    Con progreso ≥ estimación, la etiqueta cambia de "🍅 P/N" a
+    "✅ P/N" y de color (`.pomo-badge.pomo-done`, borde/fondo
+    `--accent-green`) — visualmente distinta de un vistazo del check ✓
+    verde de "ya visto" de `core/corkboard.js` (esquina superior
+    derecha; la etiqueta de pomodoro vive en la izquierda, así que nunca
+    se solapan aunque ambas puedan estar activas a la vez en la misma
+    ficha).
+  - **Resumen global de progreso**, en el propio panel del reloj, debajo
+    del contador de pomodoros completados: barra de progreso
+    (`.pomo-progreso-fill`) + texto "Progreso: H/T 🍅 (P%)" + "Quedan ~R
+    pomodoros por estudiar" (o "¡Todo estudiado! 🎉" si R=0) — `H`/`T`/`R`
+    calculados sumando el progreso y la estimación de **todas** las
+    fichas de **toda** la app (`calcularResumenProgreso()`), no solo la
+    especialidad que se esté viendo en ese momento; se recalcula en cada
+    cambio de progreso (fin de un pomodoro, toggle manual).
+  - Verificado con Playwright: los inputs de duración arrancan en 25/5,
+    aceptan un valor nuevo (probado con enfoque=1 min para no esperar 25
+    minutos reales en el test) y lo clampan si se sale de rango
+    (9999→180); con el reloj parado en fase Enfoque, cambiar el propio
+    campo de enfoque actualiza la cuenta atrás ya mismo, mientras que
+    cambiar el de descanso no la toca (fase distinta); tras dejar correr
+    un pomodoro real de 1 minuto completo, el contador sube a 1, la fase
+    pasa a Descanso, y la ficha que estaba abierta en ese momento
+    (`fisio-anatomia`, con estimación 1/1) pasa automáticamente a
+    "✅ 1/1" con `.pomo-done`; tocar la etiqueta de otra ficha
+    (`fisio-filtracion`) la marca manualmente como estudiada sin voltear
+    la ficha (confirmado que `.flipped` no se activa), y un segundo toque
+    la desmarca; el resumen global pasa de "0/255" a "1/255 (0%)" tras el
+    pomodoro automático y a "2/255 (1%)" tras el toggle manual; tras
+    recargar la página (simulando "otro día"), la configuración de
+    duración, el contador de pomodoros completados, el progreso de ambas
+    fichas y el resumen global se leen correctamente de `localStorage` sin
+    perder nada; sin overflow horizontal a 390px ni errores de consola en
+    ningún punto. Bump de cache-busting a `?v=20260910-2` (segundo
+    despliegue del mismo día que toca `css/components.css`).
 
 ## Cómo probar cambios
 
