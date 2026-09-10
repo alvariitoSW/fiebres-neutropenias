@@ -5,6 +5,7 @@
 import { includeAll } from './core/include.js';
 import { initAccordions } from './core/accordion.js';
 import { initLightbox } from './core/lightbox.js';
+import { initStudyMode } from './core/pomodoro.js';
 import * as home from './modules/home/index.js';
 import * as generales from './modules/generales/index.js';
 import * as neutropeniaFebril from './modules/neutropenia-febril/index.js';
@@ -45,11 +46,18 @@ async function start() {
     // (#quiz-modal-overlay) es un partial compartido, así que cada
     // especialidad expone su banco/temas ya combinados en vez de llamar
     // a initQuiz() cada una por su lado (ver comentario en quiz.js).
+    const quizBancoCompleto = [...home.quizBanco, ...nefrologia.quizBanco, ...uciPapers.quizBanco, ...fisioUci.quizBanco, ...cardiologia.quizBanco, ...neumologia.quizBanco];
     initQuiz({
         triggerId: [...home.quizTriggerId, ...nefrologia.quizTriggerId, ...uciPapers.quizTriggerId, ...fisioUci.quizTriggerId, ...cardiologia.quizTriggerId, ...neumologia.quizTriggerId],
-        banco: [...home.quizBanco, ...nefrologia.quizBanco, ...uciPapers.quizBanco, ...fisioUci.quizBanco, ...cardiologia.quizBanco, ...neumologia.quizBanco],
+        banco: quizBancoCompleto,
         temas: [...home.quizTemas, ...nefrologia.quizTemas, ...uciPapers.quizTemas, ...fisioUci.quizTemas, ...cardiologia.quizTemas, ...neumologia.quizTemas],
     });
+
+    // Modo Estudio: estimación de pomodoros por ficha (lectura + preguntas
+    // del quiz ya fusionado de arriba) y reloj Pomodoro flotante — ver
+    // core/pomodoro.js. Genérico: no requiere tocar ningún módulo de
+    // especialidad, igual que core/corkboard.js.
+    initStudyMode({ quizBanco: quizBancoCompleto });
 }
 
 start();

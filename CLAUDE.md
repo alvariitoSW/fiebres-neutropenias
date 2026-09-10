@@ -27,12 +27,15 @@ cama en el móvil.
 
 - **Sin backend, sin login, sin base de datos.** Es una calculadora estática:
   el usuario abre la página, rellena campos, ve un resultado. Nada se guarda.
-  **Única excepción, deliberada y acotada:** el quiz de repaso
-  (`js/modules/quiz/`, ver "Sistema de estudio tipo Anki" más abajo) sí usa
+  **Dos excepciones, deliberadas y acotadas:** el quiz de repaso
+  (`js/modules/quiz/`, ver "Sistema de estudio tipo Anki" más abajo) usa
   `localStorage` para recordar aciertos/fallos por pregunta en el
-  dispositivo del usuario. No añadas `localStorage` (ni ningún otro tipo de
-  persistencia) a ningún otro módulo sin que sea, igual que este, una
-  decisión explícita — el resto de la app sigue sin guardar nada.
+  dispositivo del usuario; y el **Modo Estudio** (`js/core/pomodoro.js`,
+  ver "Modo Estudio y reloj Pomodoro" más abajo) usa `localStorage` para
+  recordar el nº de pomodoros completados en el dispositivo del usuario. No
+  añadas `localStorage` (ni ningún otro tipo de persistencia) a ningún otro
+  módulo sin que sea, igual que estos dos, una decisión explícita — el
+  resto de la app sigue sin guardar nada.
 - **Sin build tool.** No hay npm/Vite/webpack. Todo es HTML/CSS/JS que el
   navegador ejecuta tal cual. Se despliega copiando el repo a GitHub Pages,
   sirviendo `index.html` desde la raíz.
@@ -86,6 +89,12 @@ js/
                                   main.js; no hace falta tocarlo al añadir
                                   imágenes nuevas en otros módulos, basta con
                                   envolver la <img> en un div.article-figure
+    pomodoro.js                  Modo Estudio: estimación de pomodoros por
+                                  ficha (lectura + preguntas de quiz) y
+                                  reloj Pomodoro flotante. Se inicializa una
+                                  sola vez desde main.js, ver "Modo Estudio
+                                  y reloj Pomodoro" más abajo — no hace
+                                  falta tocarlo al añadir fichas nuevas.
   data/                       Objetos de datos puros (tablas de dosis,
                                tratamientos por foco, etc.), sin DOM.
   modules/
@@ -7162,6 +7171,101 @@ historia. Al cambiar de rama reaparece a veces el drift de
 `.gitignore`/`.ignore` documentado en la nota de graft más abajo — se
 arregla igual, con `git checkout -- .gitignore .ignore` antes de comitear
 o mergear cualquier cosa.
+
+## Modo Estudio y reloj Pomodoro (`js/core/pomodoro.js`)
+
+A petición explícita del usuario ("quiero añadir una actualización para
+poder usar la app en modo estudio, que puedas seleccionar esa opción y en
+cada apartado te ponga un estimado de pomodoros de 25 minutos con 5
+minutos de descanso tardas en leer el contenido y luego lo que tardarias
+en resolver las preguntas... un reloj tipo pomodoro, donde pueda ponerse
+modo estudio y llevar una cuenta de los pomodoros que se han hecho"), se
+añadió un **Modo Estudio** transversal a toda la app — no una calculadora
+ni un módulo de contenido más, sino infraestructura genérica (mismo
+espíritu que `core/corkboard.js`/`core/lightbox.js`): se implementa una
+sola vez y aparece automáticamente en **todas** las fichas de **todas**
+las especialidades, sin tocar el HTML/JS de ningún módulo concreto.
+
+- **Botón de cabecera** (`#btn-modo-estudio`, junto a `#btn-escalas-generales`
+  en `.header-row` de `index.html`, mismo patrón visual `.accordion-btn.
+  nav-btn.corner-btn`) activa/desactiva `body.study-mode-on`. Con Modo
+  Estudio activo aparecen dos cosas a la vez, ambas gobernadas por esa
+  única clase CSS en `body` (nunca JS que muestre/oculte elemento a
+  elemento): las etiquetas de pomodoros por ficha, y el reloj Pomodoro
+  flotante — apagar Modo Estudio oculta ambas y, si el reloj estaba
+  corriendo, lo pausa (nunca sigue corriendo en segundo plano sin que se
+  vea).
+- **Estimación de pomodoros por ficha, calculada de forma genérica, no
+  hardcodeada por ficha**: `initStudyMode({ quizBanco })` (llamada una
+  única vez desde `js/main.js`, justo después de la única llamada a
+  `initQuiz()` — reutiliza el mismo `quizBancoCompleto` ya fusionado de
+  las 6 asignaturas, sin volver a fusionar nada) recorre TODOS los
+  `.field-card[data-tab]` ya presentes en el DOM (todas las fichas de
+  todas las especialidades están cargadas desde el arranque, aunque
+  ocultas — ver `js/core/include.js`) y para cada una calcula:
+  - **Minutos de lectura**: `textContent` del `.tab-content` con el mismo
+    id que el `data-tab` de la ficha (mismo mapeo 1:1 que ya usa
+    `core/corkboard.js`), contado en palabras (`\S+`) y dividido entre
+    180 palabras/minuto (estimación de lectura técnica en español).
+  - **Minutos de preguntas**: se filtra `quizBanco` por
+    `pregunta.tema === data-tab` (campo ya existente en cada pregunta,
+    mismo que usa el selector de temas del quiz) y se pondera cada
+    pregunta según su tipo — 1,2 min si es de opción múltiple, 2,5 min si
+    es `tipo: 'redactar'` (más lenta de responder).
+  - **Pomodoros** = `Math.ceil((minLectura + minPreguntas) / 25)`, mínimo
+    1 si la ficha tiene contenido, 0 (sin etiqueta) si por lo que sea no
+    tiene ni texto ni preguntas asociadas.
+  Fichas de solo referencia sin preguntas propias (p. ej. la Ficha 12 de
+  bibliografía de Cardiología, o `nefrotoxicidad.html`) muestran solo el
+  tiempo de lectura, sin la parte de preguntas — el cálculo no fuerza un
+  segundo número si no hay banco de quiz para ese `data-tab`.
+- **Etiqueta visual** (`.pomo-badge`, inyectada una sola vez por
+  `inyectarBadges()` dentro de cada `.card-face.front`, oculta por CSS —
+  `display:none` hasta que `body.study-mode-on` — en vez de esperar al
+  toggle para crearla, así no hay coste de recomputar nada al
+  activar/desactivar el modo): "🍅×N" más una segunda línea con el
+  desglose ("📖~X m ❓~Y m"), en la esquina superior **izquierda** de la
+  ficha — deliberadamente el lado opuesto al check ✓ verde de "ya visto"
+  que pinta `core/corkboard.js` en la esquina superior derecha, para que
+  nunca se solapen.
+- **Reloj Pomodoro flotante** (FAB `#pomodoro-fab`, 🍅, esquina inferior
+  derecha, visible solo con `body.study-mode-on`; panel `#pomodoro-panel`
+  que se abre/cierra con el propio FAB): 25 min de "Enfoque" → 5 min de
+  "Descanso" → vuelta a "Enfoque", con los botones Iniciar/Pausar y
+  Reiniciar ya estándar de la app (`.pomo-btn`, mismo lenguaje visual que
+  `.pomo-btn`/`.tfg-estado`). La cuenta atrás se calcula a partir de una
+  **hora de fin** (`Date.now() + duración`), nunca restando segundo a
+  segundo en cada tick — así no acumula deriva si la pestaña pasa a
+  segundo plano y el `setInterval` deja de dispararse puntualmente. Al
+  completarse una fase de "Enfoque" se incrementa el contador de
+  pomodoros completados; al completarse un "Descanso" se vuelve a
+  "Enfoque" sin incrementar nada.
+- **Contador de pomodoros completados persistente** (`localStorage`,
+  clave `hud-pomodoros-completados`) — la única cifra de todo este módulo
+  que sobrevive a un `location.reload()` o a cerrar la pestaña,
+  deliberada y documentada como la segunda excepción a "sin persistencia"
+  del proyecto (ver "Decisiones de arquitectura" al principio de este
+  archivo) — igual que el quiz ya hace con aciertos/fallos por pregunta.
+- Sin partial `.html` nuevo: el FAB y el panel se generan por JS
+  (`construirWidget()`) y se anexan a `document.body` una sola vez, mismo
+  criterio que otros widgets flotantes de la app (`.lightbox-overlay`, el
+  modal del quiz) — no había ningún contenido estático que mereciera su
+  propio `data-include`.
+- Verificado con Playwright (viewport 390×844): el botón de cabecera
+  activa/desactiva `body.study-mode-on` y la clase `.active` del propio
+  botón; el FAB y el panel están ocultos (`display:none`) hasta activar
+  el modo; las etiquetas de pomodoros aparecen con el desglose correcto
+  en fichas de Reconocimiento (Hematología) y en las 18 fichas del
+  cuaderno de fisiología de Nefrología (todas con etiqueta, formato
+  "🍅×1 📖~Xm ❓~10m"); sin overflow horizontal a 390px con las etiquetas
+  activas; el reloj cuenta hacia atrás correctamente (25:00→24:58 tras
+  ~2s), se congela al pausar y no avanza mientras está en pausa, y
+  "Reiniciar" lo devuelve a 25:00/Enfoque; el contador de pomodoros
+  completados lee correctamente el valor guardado en `localStorage` tras
+  recargar la página; al desactivar Modo Estudio el FAB se oculta y el
+  panel se cierra; sin errores de consola ni de página en ningún punto
+  del recorrido. Bump de cache-busting a `?v=20260910` (cambió
+  `css/components.css` y `js/main.js`).
 
 ## Cómo probar cambios
 
