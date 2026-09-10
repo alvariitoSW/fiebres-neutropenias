@@ -5228,6 +5228,124 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
     explicación correcta por escenario; el menú del quiz en 3 niveles
     muestra "Fisiopatología UCI (301)" → "Inmunología (104)" → las 13
     fichas con 8 preguntas cada una; sin overflow horizontal a 390px.
+  - **Auditoría de contenido contra las 134 páginas del PDF fuente, a
+    petición explícita del usuario** ("revisa la bibliografía que te he
+    pasado de inmunología... busca errores, huecos de contenido, mejoras y
+    cosas que se pueden poner de otra manera o que están mal o que falta
+    contenido"). Se releyeron íntegros los 2 PDF (extraídos a texto con
+    `pdftotext -layout`, ya que `pdfimages`/`pdftoppm` no estaban
+    instalados en esta sesión — instalados con `apt-get install
+    poppler-utils` antes de empezar) y se comparó frase a frase contra las
+    13 fichas ya escritas, mismo método ya establecido en el resto del
+    proyecto. A diferencia de auditorías anteriores (Nefrología/HTA/ERC/
+    FRA/Cardiología), aquí se encontraron **errores reales de contenido
+    sustituido**, no solo huecos — 3 tablas donde el contenido de la app
+    no coincidía con el de la fuente, pese a llevar el mismo número/título
+    de tabla:
+    - **Ficha 2, entrada "MIF"**: la frase "contrarresta parcialmente el
+      efecto antiinflamatorio de los corticosteroides" no aparece en
+      ningún punto del Capítulo 17 (confirmado con `grep` sobre el texto
+      completo) — contenido fabricado, aunque sea un hecho real conocido
+      de otra literatura (el MIF fue descubierto precisamente por esa
+      propiedad). Sustituido por el contenido real de la fuente: células
+      productoras (epitelio pulmonar/renal, macrófagos, eosinófilos) y su
+      valor pronóstico (mayor concentración plasmática = manifestaciones
+      clínicas graves y mortalidad precoz).
+    - **Ficha 6, Tabla 1** ("Factores asociados con depresión miocárdica"):
+      la fuente tiene 7 filas distintas, pero la app había colapsado
+      "Metabolismo alterado" y "Reducción de la producción de energía" en
+      una sola fila "Metabolismo energético alterado" — separadas de
+      vuelta en 2 filas.
+    - **Ficha 6, Tabla 2** ("Mecanismos de disfunción cardíaca por
+      estimulación adrenérgica"): el hallazgo más serio de la auditoría —
+      el contenido de la app (desequilibrio ARB1/ARB2, vías Epac/PI3K/AKT,
+      interacción NF-κB, toxicidad por catecolaminas exógenas) no
+      corresponde a la Tabla 2 real del capítulo, que en realidad lista 6
+      mecanismos distintos (reducción de densidad de receptores β1,
+      desensibilización miocárdica, regulación a la baja de receptores β,
+      autooxidación/ROS, aumento de GRK2, reducción de unión a arrestinas
+      β) — sustituida por el contenido real.
+    - **Ficha 8, Tabla 1** ("Moléculas neurotóxicas"): las 4 filas
+      (TNF-α/IL-6/ON-EOR/AAA) estaban parafraseadas de forma que perdían
+      mecanismos específicos reales de la fuente — corregidas con el
+      mecanismo exacto de cada una: TNF-α (infiltración neutrofílica →
+      apoptosis + edema, no solo "disfunción de BHE"), IL-6 (induce COX-2
+      glial → PGE2 → eje hipotálamo-hipófisis-adrenal → fiebre y
+      alteración del comportamiento, un mecanismo completo ausente hasta
+      ahora), ON/EOR (inhiben la respiración mitocondrial → déficit
+      energético neuronal + apoptosis) y AAA (origen por rabdomiólisis/
+      hepatopatía, actúan como neurotransmisores falsos que reducen el
+      aporte de glucosa en zonas serotoninérgicas/noradrenérgicas — no
+      "compiten con precursores normales" como decía la versión anterior).
+    - **Huecos de contenido reales, verificados contra el texto exacto
+      antes de incorporarlos**: en la Ficha 3, el umbral práctico de
+      O'Grady et al. (≥38,3°C para considerar febril a un adulto,
+      ausente hasta ahora pese a ser la cifra de referencia más citada en
+      la práctica), los cortes por hora del día del propio estudio de
+      148 sujetos (&gt;37,2°C por la mañana / &gt;37,7°C por la tarde), el
+      desplazamiento recto-oral (+0,6°C), el coste metabólico de la
+      fiebre (+13% de consumo de O₂ por cada grado &gt;37°C, dato
+      clínicamente relevante ausente por completo), el signo de Faget/
+      disociación pulso-temperatura (+4,4 lpm por 1°C en sujetos sanos;
+      bradicardia relativa en fiebre tifoidea/brucelosis/leptospirosis/
+      fiebre facticia — un hallazgo semiológico clásico que no estaba en
+      ningún punto de la app), el receptor EP-3 de la PGE2 (ratones
+      knockout del gen no desarrollan fiebre) y el cAMP como segundo
+      mensajero real corriente abajo de la PGE2 en las células gliales, y
+      la lista completa de enfermedades autoinflamatorias (la fuente cita
+      9, la app solo tenía 5 — añadidas enfermedad de Still juvenil,
+      síndrome de hiper-IgD, síndrome autoinflamatorio familiar por frío,
+      enfermedad autoinflamatoria multisistémica neonatal y síndrome de
+      Blau). En la Ficha 4, el método práctico de enfriamiento activo
+      (baños tibios ~20°C, nunca fríos, sin alcohol, evitar vía central
+      con líquidos fríos). En la Ficha 5, la epidemiología por país estaba
+      reducida a una frase vaga ("datos consistentes con series de
+      Turquía...") sin ninguna cifra real — añadidas las cifras reales de
+      Turquía (92% de mortalidad con al menos una disfunción orgánica),
+      Brasil (46% comunitaria vs. 58% nosocomial) y México (16%/17% de
+      prevalencia, 33,6% de mortalidad), más el detalle demográfico/
+      etiológico de Colombia (edad media 54 años, predominio masculino,
+      foco intraabdominal más frecuente). En la Ficha 6, la epidemiología
+      de admisión a UCI por sepsis (~50% de los sépticos puede requerir
+      UCI, ~10% de los ingresos a UCI son por sepsis — ausente por
+      completo) y la evidencia experimental que conecta IRAK-1 con el
+      déficit energético cardíaco (ratones IRAK-1 knockout no desarrollan
+      el aumento de ácidos grasos libres/triglicéridos tras LPS letal y
+      sobreviven más, más el experimento de Drosatos 2013 con rosiglitazona
+      —agonista PPARγ— que previno la disfunción cardíaca pese a inflamación
+      persistente). En la Ficha 8, el mecanismo de excitotoxicidad vía
+      receptores AMPA/NMDA del glutamato (ausente del algo-flow original)
+      y la nota de que LPS aislado en voluntarios sanos no basta para
+      producir clínica de disfunción cerebral. En la Ficha 9, un paso
+      intermedio ausente en la progresión EEG ("convulsiones
+      electroencefalográficas" entre las descargas epileptiformes y el
+      patrón de salva-supresión) y la correlación específica del Doppler
+      transcraneal con la positividad de CAM-UCI independiente de edad/
+      APACHE II (antes descrito de forma genérica como "marcador de
+      autorregulación"), además de varias medidas no farmacológicas
+      ausentes (prevención de úlceras por presión, incontinencia urinaria,
+      corrección de visión/audición, entrenamiento del personal en
+      desescalada, visitas familiares, educación familiar). En la Ficha 12,
+      la <strong>tabla numérica completa de la escala SOFA</strong> (6
+      sistemas × 5 niveles de puntuación con los cortes exactos de
+      PaO₂/FiO₂, plaquetas, bilirrubina, PAM/vasopresores, Glasgow y
+      creatinina/diuresis) — un hueco significativo, ya que hasta ahora la
+      app solo describía la escala en prosa sin dar sus cortes reales,
+      pese a ser la herramienta más citada de todo el bloque — y la cifra
+      de que la encefalopatía séptica se asocia a un 70% de mortalidad. En
+      la Ficha 13, los 2 estudios reales (Ruiz-Rodríguez et al. y
+      Suberviola et al.) que acuñaron y validaron el término "depuración de
+      PCT (PCTd)" con la misma fórmula ya citada, ausentes hasta ahora pese
+      a que la fórmula ya estaba en la app sin atribuir a ningún estudio
+      concreto.
+    - Verificado con Playwright: las 13 fichas siguen abriendo/volteando
+      sin error de consola ni 404 real; los 14 fragmentos de contenido
+      nuevo/corregido se detectan correctamente en el DOM; la calculadora
+      qSOFA (2/3 → alto riesgo) y el intérprete de PCT (0,8 ng/mL → banda
+      &gt;0,5/antibiótico altamente recomendado) siguen funcionando sin
+      regresiones; la nueva tabla numérica de SOFA no genera overflow
+      horizontal a 390px (envuelta en su propio `overflow-x:auto`, mismo
+      patrón ya usado en el resto de la app para tablas anchas).
 
 ### Cardiología
 
