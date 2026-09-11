@@ -346,14 +346,14 @@ const RECEPTORES_FARMACO = {
     },
     epi: {
         nombre: 'Epinefrina',
-        activacion: { a1: 3, b1: 3, b2: 2 },
-        efecto: 'Agonista β potente con acción α₁ significativa — activa los 3 receptores a la vez, con intensidad creciente en todo el rango de dosis (0,1-0,5 μg/kg/min). Efecto neto: ↑FC, ↑volumen sistólico y ↑PA.',
-        nota: 'La fuente no desglosa un punto de corte numérico entre predominio β y α — que a dosis bajas tienda a predominar el efecto β y a dosis altas el α es farmacología general de catecolaminas, no una cifra citada en este capítulo.',
+        activacion: { a1: 2, b1: 3, b2: 2 },
+        efecto: 'Agonista β potente con acción α₁ añadida — activa los 3 receptores a la vez, con intensidad creciente en todo el rango de dosis (0,1-0,5 μg/kg/min). Efecto neto: ↑FC, ↑volumen sistólico y ↑PA.',
+        nota: 'La fuente no desglosa un punto de corte numérico entre predominio β y α — que a dosis bajas tienda a predominar el efecto β y a dosis altas el α es farmacología general de catecolaminas, no una cifra citada en este capítulo. El nivel α₁ se muestra en "Moderado" y no en "Intenso" porque, a diferencia de fenilefrina/norepinefrina en rango alto (agonistas α predominantes o puros), en epinefrina el componente β sigue siendo el protagonista clínico en la mayor parte del rango de dosis.',
     },
     dopa: {
         nombre: 'Dopamina',
         dosis: [
-            { valor: 'bajo', etiqueta: '≤3 μg/kg/min', receptor: 'receptores dopaminérgicos D1 (renal/esplácnico) — no adrenérgicos', activacion: { a1: 0, b1: 0, b2: 0 }, efecto: 'Vasodilatación renal/esplácnica mediada por receptores D1, ajenos al sistema adrenérgico — aumenta el flujo regional sin activar α/β.' },
+            { valor: 'bajo', etiqueta: '≤3 μg/kg/min', receptor: 'receptores dopaminérgicos (renal/esplácnico) — no adrenérgicos', activacion: { a1: 0, b1: 0, b2: 0 }, efecto: 'Vasodilatación renal/esplácnica mediada por receptores dopaminérgicos, ajenos al sistema adrenérgico — aumenta el flujo regional sin activar α/β.', nota: 'El Cap. 14 habla de "receptores dopaminérgicos" sin especificar el subtipo D1 — la distinción D1/D2 es farmacología general de dopamina, no una precisión que haga el propio capítulo.' },
             { valor: 'medio', etiqueta: '3-10 μg/kg/min', activacion: { a1: 0, b1: 3, b2: 0 }, efecto: 'Predomina la estimulación β₁ cardíaca: aumenta el volumen sistólico.' },
             { valor: 'alto', etiqueta: '>10 μg/kg/min', activacion: { a1: 3, b1: 1, b2: 0 }, efecto: 'Activación α₁ periférica dosis-dependiente: vasoconstricción progresiva que puede revertir la augmentación del volumen sistólico lograda a dosis más bajas.' },
         ],
@@ -376,7 +376,7 @@ const RECEPTORES_FARMACO = {
     vasopresina: {
         nombre: 'Vasopresina',
         noAdrenergico: true,
-        efecto: 'Actúa sobre receptores V1 de vasopresina (músculo liso vascular), al margen del sistema adrenérgico — mismo efecto final (vasoconstricción) por una vía molecular completamente distinta.',
+        efecto: 'Actúa sobre 3 receptores no adrenérgicos distintos: <strong>V1</strong> (músculo liso vascular) — el responsable del efecto vasoconstrictor de esta ficha, mismo resultado final que α₁ pero por una vía molecular completamente aparte; <strong>V2</strong> (túbulo colector renal) — reabsorción de agua libre, el mismo receptor que media el efecto antidiurético fisiológico de la hormona; y <strong>V3</strong> (hipófisis anterior) — estimula la liberación de ACTH. Solo el efecto V1 es relevante para su uso como vasopresor en shock.',
     },
     angio2: {
         nombre: 'Angiotensina II',
@@ -402,6 +402,28 @@ function pintarBarrasReceptor(activacion) {
     });
 }
 
+// Opacidad de cada columna del SVG estático según el nivel de activación
+// (0-3) del fármaco elegido: Nulo casi apagado, Intenso a plena opacidad —
+// así el propio diagrama "reacciona" a la selección, en vez de quedarse
+// siempre igual de coloreado sin importar qué fármaco se elija.
+const RECEPTOR_OPACIDAD_NIVEL = [0.15, 0.45, 0.7, 1];
+
+function resaltarDiagramaReceptores(activacion) {
+    const grupos = {
+        a1: document.getElementById('mc-recep-g-a1'),
+        b1: document.getElementById('mc-recep-g-b1'),
+        b2: document.getElementById('mc-recep-g-b2'),
+    };
+    Object.entries(grupos).forEach(([clave, g]) => {
+        if (!g) return;
+        if (!activacion) {
+            g.style.opacity = '1';
+            return;
+        }
+        g.style.opacity = String(RECEPTOR_OPACIDAD_NIVEL[activacion[clave]] ?? 1);
+    });
+}
+
 function mostrarResultadoReceptor(nombre, datos) {
     const barras = document.getElementById('mc-receptor-barras');
     const resultado = document.getElementById('mc-receptor-resultado');
@@ -412,11 +434,13 @@ function mostrarResultadoReceptor(nombre, datos) {
 
     if (datos.noAdrenergico) {
         if (barras) barras.style.display = 'none';
+        resaltarDiagramaReceptores({ a1: 0, b1: 0, b2: 0 });
         resultado.innerHTML = `<p style="font-size:0.85rem;"><strong>${nombre}</strong> — ${datos.efecto}</p>`;
         return;
     }
 
     pintarBarrasReceptor(datos.activacion);
+    resaltarDiagramaReceptores(datos.activacion);
     let html = `<p style="font-size:0.85rem;"><strong>${nombre}${datos.receptor ? ` — ${datos.receptor}` : ''}</strong>${datos.efecto ? `: ${datos.efecto}` : ''}</p>`;
     if (datos.nota) html += `<p style="font-size:0.7rem; color:var(--text-muted); margin-top:6px;">${datos.nota}</p>`;
     resultado.innerHTML = html;
@@ -435,17 +459,25 @@ function actualizarReceptorFarmaco() {
         dosisWrap.style.display = 'none';
         if (barras) barras.style.display = 'none';
         resultado.style.display = 'none';
+        resaltarDiagramaReceptores(null);
         return;
     }
 
     if (farmaco.dosis) {
         dosisWrap.style.display = 'block';
         if (dosisSelect.dataset.farmaco !== select.value) {
-            dosisSelect.innerHTML = farmaco.dosis.map(d => `<option value="${d.valor}">${d.etiqueta}</option>`).join('');
+            dosisSelect.innerHTML = '<option value="">— elige un rango —</option>' +
+                farmaco.dosis.map(d => `<option value="${d.valor}">${d.etiqueta}</option>`).join('');
             dosisSelect.dataset.farmaco = select.value;
+            dosisSelect.value = '';
         }
-        const tramo = farmaco.dosis.find(d => d.valor === dosisSelect.value) || farmaco.dosis[0];
-        dosisSelect.value = tramo.valor;
+        const tramo = farmaco.dosis.find(d => d.valor === dosisSelect.value);
+        if (!tramo) {
+            if (barras) barras.style.display = 'none';
+            resultado.style.display = 'none';
+            resaltarDiagramaReceptores(null);
+            return;
+        }
         mostrarResultadoReceptor(farmaco.nombre, tramo);
     } else {
         dosisWrap.style.display = 'none';

@@ -6673,6 +6673,104 @@ dentro de `#cardiologia-view` y en el switcher `cardioLevel` de
     `.kinetic-row`/`.kinetic-fill`/`.kinetic-track`/`.kinetic-label`,
     `.result-box`, `.hl-rojo`, `.form-group` ya existentes), así que no
     hizo falta bump de cache-busting.
+  - **Auditoría del propio diagrama de receptores y sus 12 correcciones
+    aplicadas**, a petición explícita del usuario ("Haz un informe de
+    mejoras de esa parte que acabas de poner..." seguido de "Aplica los
+    hallazgos de la auditoria"). Publicado primero como Artifact
+    (severidad por categoría: precisión farmacológica/huecos de
+    contenido/diseño visual/interactividad), verificado contra el texto
+    exacto del PDF (`docs/marik-2024-shock-caps14-17.pdf`) antes de
+    reportar nada — mismo estándar del resto de auditorías del
+    proyecto —, y aplicado íntegro a continuación:
+    - **F1 (precisión)**: el nivel α₁ de epinefrina estaba en "Intenso"
+      (3/3) sin justificación clara frente a fenilefrina/norepinefrina en
+      rango alto (agonistas α predominantes o puros) — bajado a
+      "Moderado" (2/3), con la `nota` ampliada explicando por qué (el
+      componente β sigue siendo protagonista clínico en la mayor parte
+      del rango de dosis de epinefrina).
+    - **F2 (precisión)**: el tramo bajo de dopamina especificaba
+      "receptores dopaminérgicos <strong>D1</strong>" — el Cap. 14 solo
+      habla de "receptores dopaminérgicos" sin distinguir subtipo.
+      Quitado "D1" del campo `receptor` (texto principal) y movido a un
+      campo `nota` nuevo aclarando que la distinción D1/D2 es
+      farmacología general no citada por este capítulo — mismo patrón ya
+      usado en la `nota` de epinefrina.
+    - **H1 (hueco de contenido)**: el texto de vasopresina solo
+      describía el receptor V1 (el relevante para su uso como
+      vasopresor) — ampliado para mencionar también V2 (túbulo
+      colector, reabsorción de agua) y V3 (hipófisis anterior,
+      liberación de ACTH), aclarando que solo V1 es el que importa para
+      esta ficha de shock.
+    - **H2 (hueco de contenido)**: añadida una nota bajo el selector de
+      dosis aclarando que Nulo/Leve/Moderado/Intenso es una lectura
+      cualitativa <strong>dentro de cada fármaco</strong>, no una escala
+      estandarizada para comparar intensidad absoluta entre fármacos
+      distintos (evita leer, p. ej., el "Moderado" de un fármaco como
+      equivalente en magnitud real al "Moderado" de otro).
+    - **V1 (visual, la de mayor impacto)**: el SVG estático no reaccionaba
+      en absoluto a la selección — quedaba igual de coloreado eligiera lo
+      que eligiera el usuario, desconectado de las barras `.kinetic-row`
+      de debajo. Añadidos IDs a los 3 `<g>` de columna
+      (`mc-recep-g-a1`/`-b1`/`-b2`) y una función nueva
+      `resaltarDiagramaReceptores(activacion)` (`merino-cardiologia.js`)
+      que fija la opacidad de cada columna según su nivel 0-3
+      (`RECEPTOR_OPACIDAD_NIVEL = [0.15, 0.45, 0.7, 1]`, con transición
+      CSS de 0,25s) — llamada desde `mostrarResultadoReceptor()` con los
+      mismos datos que ya pintan las barras, y reseteada a opacidad
+      plena (`null` → 1 en las 3) al deseleccionar, para que el estado
+      "sin fármaco elegido" siga siendo el diagrama neutro/decorativo
+      original.
+    - **V2 (visual)**: los textos de mecanismo (↑IP₃/DAG, ↑AMPc, etc.)
+      subidos de `font-size="7.5"` a `"8.5"` — apenas legibles a la
+      resolución del móvil en el tamaño original.
+    - **V3 (visual)**: "Vaso-" / "constricción" y "Vaso-" / "dilatación"
+      partidos en 2 líneas con un guion que no corresponde a una
+      hifenación real del español (ambas son palabras compuestas sin
+      guion) — unificados en una sola línea centrada
+      ("Vasoconstricción"/"Vasodilatación").
+    - **V4 (visual)**: las etiquetas "extracelular"/"intracelular" solo
+      aparecían pegadas al borde izquierdo del diagrama, lejos de la
+      columna β₂ — duplicadas también en el borde derecho
+      (`text-anchor="end"`) para que se lean sin tener que recorrer todo
+      el ancho del SVG con la vista.
+    - **V5 (visual, sin cambio de código)**: documentado en un comentario
+      HTML + en el propio pie de figura que el rojo de α₁ coincide por
+      pura casualidad de paleta con el rojo de "alarma/riesgo" del resto
+      de la app (solo 5 acentos disponibles para muchos más conceptos) —
+      no es una señal de que la vasoconstricción α₁ sea en sí misma
+      peligrosa.
+    - **I1 (interactividad, la de mayor impacto tras V1)**: elegir
+      norepinefrina/dopamina auto-seleccionaba `farmaco.dosis[0]` (el
+      tramo bajo) sin que el usuario hubiera elegido ningún rango de
+      dosis — podía leerse como si ese fuera el único/el más
+      representativo. Corregido: el `<select>` de dosis ahora arranca
+      con `<option value="">— elige un rango —</option>`, y
+      `actualizarReceptorFarmaco()` mantiene barras/resultado ocultos
+      (`display:none`) hasta que se elige un tramo real — mismo criterio
+      de "abstenerse en vez de asumir" ya aplicado a los guards
+      `.value === ''` de las calculadoras numéricas del resto del
+      proyecto, aquí aplicado a un `<select>` en vez de a un campo
+      numérico.
+    - **I2 (interactividad)**: añadida una frase conectora antes del
+      selector de fármaco ("Elige uno de los agentes de la Tabla 14.4 de
+      más arriba...") — antes el selector aparecía sin ningún puente
+      textual con la tabla de dosis ya presente más arriba en la misma
+      ficha.
+    - **I3**: confirmado correcto en la propia auditoría, sin cambios.
+    - Verificado con Playwright (viewport 390×844): I1 confirmado (sin
+      tramo elegido, barras/resultado ocultos; opacidad del SVG en 1 en
+      las 3 columnas); F1 confirmado (epinefrina α₁ → "Moderado"); F2
+      confirmado (el texto principal de dopamina bajo ya no dice "D1",
+      solo la `nota` aparte lo menciona para explicar la omisión); H1
+      confirmado (V2/V3/ACTH presentes en el texto de vasopresina); V1
+      confirmado con una captura de pantalla real del SVG (norepinefrina
+      dosis alta: α₁ a opacidad 1, β₁ a 0,45, β₂ a 0,15 — coincide
+      exactamente con los niveles Intenso/Leve/Nulo de las barras); I2/H2
+      confirmados presentes en el DOM; deseleccionar el fármaco resetea
+      la opacidad de las 3 columnas a 1; recorrido completo de las 24
+      fichas del corkboard sin errores de consola ni overflow horizontal
+      a 390px. Sin cambios de CSS, así que no hizo falta bump de
+      cache-busting.
 
 ### Neumología
 
