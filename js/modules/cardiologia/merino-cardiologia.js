@@ -326,6 +326,141 @@ function initVasopresorEscenario() {
     });
 }
 
+// Diagrama de receptores adrenérgicos (Ficha II) — asocia cada
+// vasopresor/inotrópico ya desarrollado en la ficha (+ dobutamina de la
+// Ficha VII) con el receptor que activa y, cuando la propia fuente da un
+// desglose por dosis (norepinefrina >10/<10 μg/min; dopamina en sus 3
+// tramos), con el receptor predominante en cada tramo. Vasopresina y
+// angiotensina II se marcan explícitamente como no-adrenérgicas (V1/AT1)
+// para no confundirlas con el sistema α/β. Niveles 0-3 (Nulo/Leve/
+// Moderado/Intenso) son una traducción visual de los calificativos
+// cualitativos ya usados en el texto de cada fármaco ("predominante",
+// "leve", "puro", "progresiva"), no una cifra de afinidad nueva.
+const RECEPTORES_FARMACO = {
+    norepi: {
+        nombre: 'Norepinefrina',
+        dosis: [
+            { valor: 'bajo', etiqueta: '<10 μg/min (rango bajo)', activacion: { a1: 1, b1: 2, b2: 0 }, efecto: 'A dosis bajas la estimulación β₁ leve-moderada aumenta el gasto cardíaco, con vasoconstricción α₁ todavía discreta.' },
+            { valor: 'alto', etiqueta: '>10 μg/min (rango alto)', activacion: { a1: 3, b1: 1, b2: 0 }, efecto: 'La vasoconstricción α₁ pasa a predominar sobre el efecto β₁. Por encima de ~30 μg/min es improbable que aumentos adicionales sumen más respuesta vasoconstrictora — techo terapéutico.' },
+        ],
+    },
+    epi: {
+        nombre: 'Epinefrina',
+        activacion: { a1: 3, b1: 3, b2: 2 },
+        efecto: 'Agonista β potente con acción α₁ significativa — activa los 3 receptores a la vez, con intensidad creciente en todo el rango de dosis (0,1-0,5 μg/kg/min). Efecto neto: ↑FC, ↑volumen sistólico y ↑PA.',
+        nota: 'La fuente no desglosa un punto de corte numérico entre predominio β y α — que a dosis bajas tienda a predominar el efecto β y a dosis altas el α es farmacología general de catecolaminas, no una cifra citada en este capítulo.',
+    },
+    dopa: {
+        nombre: 'Dopamina',
+        dosis: [
+            { valor: 'bajo', etiqueta: '≤3 μg/kg/min', receptor: 'receptores dopaminérgicos D1 (renal/esplácnico) — no adrenérgicos', activacion: { a1: 0, b1: 0, b2: 0 }, efecto: 'Vasodilatación renal/esplácnica mediada por receptores D1, ajenos al sistema adrenérgico — aumenta el flujo regional sin activar α/β.' },
+            { valor: 'medio', etiqueta: '3-10 μg/kg/min', activacion: { a1: 0, b1: 3, b2: 0 }, efecto: 'Predomina la estimulación β₁ cardíaca: aumenta el volumen sistólico.' },
+            { valor: 'alto', etiqueta: '>10 μg/kg/min', activacion: { a1: 3, b1: 1, b2: 0 }, efecto: 'Activación α₁ periférica dosis-dependiente: vasoconstricción progresiva que puede revertir la augmentación del volumen sistólico lograda a dosis más bajas.' },
+        ],
+    },
+    fenil: {
+        nombre: 'Fenilefrina',
+        activacion: { a1: 3, b1: 0, b2: 0 },
+        efecto: 'Agonista α₁ puro: vasoconstricción generalizada sin ningún estímulo β — de ahí el riesgo de bradicardia refleja y de caída del volumen sistólico si ya existe disfunción cardíaca.',
+    },
+    midodrina: {
+        nombre: 'Midodrina',
+        activacion: { a1: 2, b1: 0, b2: 0 },
+        efecto: 'Agonista α₁ oral — mismo mecanismo que fenilefrina, pero por vía oral y sin ningún componente β.',
+    },
+    dobuta: {
+        nombre: 'Dobutamina',
+        activacion: { a1: 0, b1: 3, b2: 1 },
+        efecto: 'Predominio β₁ (↑volumen sistólico y FC) con un componente β₂ vasodilatador leve — el efecto vasodilatador queda enmascarado porque el aumento del volumen sistólico compensa la caída de resistencia, así que la PA no suele bajar. Desarrollo completo en Ficha VII (shock cardiogénico).',
+    },
+    vasopresina: {
+        nombre: 'Vasopresina',
+        noAdrenergico: true,
+        efecto: 'Actúa sobre receptores V1 de vasopresina (músculo liso vascular), al margen del sistema adrenérgico — mismo efecto final (vasoconstricción) por una vía molecular completamente distinta.',
+    },
+    angio2: {
+        nombre: 'Angiotensina II',
+        noAdrenergico: true,
+        efecto: 'Actúa sobre receptores AT1 de angiotensina (músculo liso vascular) — vasoconstricción por una vía ajena a la adrenérgica, más la liberación estimulada de vasopresina desde la hipófisis posterior.',
+    },
+};
+const RECEPTOR_NIVEL_TEXTO = ['Nulo', 'Leve', 'Moderado', 'Intenso'];
+
+function pintarBarrasReceptor(activacion) {
+    const barras = document.getElementById('mc-receptor-barras');
+    if (!barras) return;
+    barras.style.display = 'block';
+    const pares = [
+        [document.getElementById('mc-recep-a1-fill'), document.getElementById('mc-recep-a1-num'), activacion.a1],
+        [document.getElementById('mc-recep-b1-fill'), document.getElementById('mc-recep-b1-num'), activacion.b1],
+        [document.getElementById('mc-recep-b2-fill'), document.getElementById('mc-recep-b2-num'), activacion.b2],
+    ];
+    pares.forEach(([fill, num, nivel]) => {
+        if (!fill || !num) return;
+        fill.style.width = `${(nivel / 3) * 100}%`;
+        num.textContent = RECEPTOR_NIVEL_TEXTO[nivel];
+    });
+}
+
+function mostrarResultadoReceptor(nombre, datos) {
+    const barras = document.getElementById('mc-receptor-barras');
+    const resultado = document.getElementById('mc-receptor-resultado');
+    if (!resultado) return;
+    resultado.style.display = 'block';
+    resultado.style.textAlign = 'left';
+    resultado.className = 'result-box';
+
+    if (datos.noAdrenergico) {
+        if (barras) barras.style.display = 'none';
+        resultado.innerHTML = `<p style="font-size:0.85rem;"><strong>${nombre}</strong> — ${datos.efecto}</p>`;
+        return;
+    }
+
+    pintarBarrasReceptor(datos.activacion);
+    let html = `<p style="font-size:0.85rem;"><strong>${nombre}${datos.receptor ? ` — ${datos.receptor}` : ''}</strong>${datos.efecto ? `: ${datos.efecto}` : ''}</p>`;
+    if (datos.nota) html += `<p style="font-size:0.7rem; color:var(--text-muted); margin-top:6px;">${datos.nota}</p>`;
+    resultado.innerHTML = html;
+}
+
+function actualizarReceptorFarmaco() {
+    const select = document.getElementById('mc-receptor-farmaco');
+    const dosisWrap = document.getElementById('mc-receptor-dosis-wrap');
+    const dosisSelect = document.getElementById('mc-receptor-dosis');
+    const barras = document.getElementById('mc-receptor-barras');
+    const resultado = document.getElementById('mc-receptor-resultado');
+    if (!select || !dosisWrap || !dosisSelect || !resultado) return;
+
+    const farmaco = RECEPTORES_FARMACO[select.value];
+    if (!farmaco) {
+        dosisWrap.style.display = 'none';
+        if (barras) barras.style.display = 'none';
+        resultado.style.display = 'none';
+        return;
+    }
+
+    if (farmaco.dosis) {
+        dosisWrap.style.display = 'block';
+        if (dosisSelect.dataset.farmaco !== select.value) {
+            dosisSelect.innerHTML = farmaco.dosis.map(d => `<option value="${d.valor}">${d.etiqueta}</option>`).join('');
+            dosisSelect.dataset.farmaco = select.value;
+        }
+        const tramo = farmaco.dosis.find(d => d.valor === dosisSelect.value) || farmaco.dosis[0];
+        dosisSelect.value = tramo.valor;
+        mostrarResultadoReceptor(farmaco.nombre, tramo);
+    } else {
+        dosisWrap.style.display = 'none';
+        mostrarResultadoReceptor(farmaco.nombre, farmaco);
+    }
+}
+
+function initReceptorFarmaco() {
+    const select = document.getElementById('mc-receptor-farmaco');
+    const dosisSelect = document.getElementById('mc-receptor-dosis');
+    if (!select || !dosisSelect) return;
+    select.addEventListener('change', actualizarReceptorFarmaco);
+    dosisSelect.addEventListener('change', actualizarReceptorFarmaco);
+}
+
 // Diferenciador TSS estafilocócico vs. estreptocócico (Ficha XI), basado en
 // la Tabla 17.3 — orientativo por conteo de datos disponibles, nunca
 // diagnóstico por sí solo.
@@ -917,6 +1052,7 @@ export function init() {
     initCha2ds2Vasc();
     initQtc();
     initPamGauge();
+    initReceptorFarmaco();
     initVasopresorEscenario();
     initTss();
     initCardiogenicoPerfil();

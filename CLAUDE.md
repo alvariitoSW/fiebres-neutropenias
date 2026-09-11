@@ -6605,6 +6605,74 @@ dentro de `#cardiologia-view` y en el switcher `cardioLevel` de
       horizontal ni errores de consola reales (el único 404 es el
       `favicon.ico`, ya documentado como inocuo) en ninguna de las 13
       fichas tocadas.
+  - **Diagrama de receptores adrenérgicos (Ficha II, vasopresores)**, a
+    petición explícita del usuario, con una infografía de referencia
+    propia sobre receptores α/β adjunta como inspiración visual — no
+    copiada literalmente (esa imagen desarrolla 7 partes de farmacología
+    general de receptores adrenérgicos con mucho más detalle del que
+    necesita esta ficha; se adaptó solo lo relevante para explicar los
+    fármacos ya presentes en la app). Nuevo bloque `.card` justo antes del
+    selector "¿Qué agente para este escenario?", con 3 piezas:
+    1. **Diagrama SVG estático** de mecanismo (α₁→Gq→IP₃/DAG/Ca²⁺→
+       vasoconstricción; β₁→Gs→AMPc/PKA→↑FC/↑contractilidad; β₂→Gs→AMPc→
+       vasodilatación), con una nota explícita de que es
+       <strong>farmacología general</strong> complementaria a Marik Cap.
+       14, no un diagrama del propio capítulo — mismo criterio de
+       transparencia fuente-vs-genérico ya aplicado en el resto del
+       proyecto (p. ej. la ley de Hagen-Poiseuille/ecuación de Fick en
+       Cardiología). Colores reutilizados de la paleta ya existente
+       (`--accent-red`=α₁, `--accent-purple`=β₁, `--accent-green`=β₂) —
+       deliberadamente **no** se usó `--accent-blue` para evitar el gotcha
+       ya documentado de que es casi idéntico a `--accent-yellow`.
+    2. **Selector de fármaco** (`#mc-receptor-farmaco`, los 8 agentes ya
+       desarrollados en la ficha + dobutamina de la Ficha VII) que
+       actualiza 3 `.kinetic-row` (α₁/β₁/β₂, reutilizando el mismo
+       componente de gauge ya usado en el resto de la app, sin CSS nuevo)
+       con el nivel de activación de cada receptor — 4 niveles (Nulo/
+       Leve/Moderado/Intenso, `RECEPTOR_NIVEL_TEXTO` en
+       `merino-cardiologia.js`) que son una <strong>traducción visual</strong>
+       de los calificativos cualitativos ya usados en el texto de cada
+       fármaco ("predominante", "leve", "puro", "progresiva"), no una
+       cifra de afinidad nueva o inventada.
+    3. **Selector de dosis condicional** (`#mc-receptor-dosis`, solo
+       visible para norepinefrina y dopamina): ambos fármacos son los
+       únicos de la ficha cuyo texto ya da un desglose explícito por dosis
+       con receptor predominante distinto en cada tramo — norepinefrina
+       (&lt;10 μg/min: β₁ leve-moderado + α₁ discreto · &gt;10 μg/min: α₁
+       predominante, techo ~30 μg/min) y dopamina (≤3 μg/kg/min:
+       receptores <strong>dopaminérgicos D1</strong>, no adrenérgicos,
+       vasodilatación renal/esplácnica · 3-10: β₁ · &gt;10: α₁
+       progresivo) — exactamente los mismos 2 fármacos con tramos de
+       dosis ya citados en la propia ficha, sin fabricar cortes numéricos
+       nuevos para el resto (epinefrina, por ejemplo, se dejó como una
+       única entrada con nota de fidelidad explícita: la fuente no da un
+       punto de corte numérico entre predominio β y α, así que no se
+       inventó uno).
+    **Vasopresina y angiotensina II tratadas como caso especial**: ambas
+    producen vasoconstricción pero por receptores **no adrenérgicos** (V1
+    y AT1 respectivamente) — el selector las reconoce (`noAdrenergico:
+    true`) y oculta las 3 barras α/β en vez de forzarlas a "0/0/0" sin
+    explicación, mostrando solo el texto del mecanismo real; evita el
+    error de conceptualmente mezclarlas con el sistema adrenérgico que sí
+    protagoniza el resto de la ficha. `RECEPTORES_FARMACO` en
+    `merino-cardiologia.js` es la única fuente de verdad de estos datos —
+    añadir un fármaco nuevo con perfil de receptor conocido a otra ficha
+    futura es solo añadir una entrada ahí, sin tocar el SVG.
+    Verificado con Playwright: las 8 opciones del selector de fármaco
+    devuelven el texto/barras correctos (fenilefrina → α₁ Intenso/resto
+    Nulo; norepinefrina bajo→alto cambia de β₁ Moderado/α₁ Leve a α₁
+    Intenso/β₁ Leve; dopamina recorre sus 3 tramos, incluido el tramo D1
+    con las 3 barras en Nulo y la nota de receptor no adrenérgico;
+    dobutamina → β₁ Intenso/β₂ Leve; vasopresina/angiotensina II ocultan
+    las barras y muestran el texto de mecanismo no adrenérgico; epinefrina
+    muestra los 3 receptores activos más la nota de fidelidad); el
+    selector de dosis solo aparece para norepinefrina/dopamina y se
+    reconstruye correctamente al cambiar de fármaco; deseleccionar el
+    fármaco oculta dosis/barras/resultado; sin overflow horizontal a
+    390px ni errores de consola. Sin cambios de CSS (reutiliza `.card`,
+    `.kinetic-row`/`.kinetic-fill`/`.kinetic-track`/`.kinetic-label`,
+    `.result-box`, `.hl-rojo`, `.form-group` ya existentes), así que no
+    hizo falta bump de cache-busting.
 
 ### Neumología
 
