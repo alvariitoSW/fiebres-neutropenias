@@ -426,15 +426,115 @@ El Atlas sustituyó estos 4 botones grandes:
        6) renderizan sin overflow horizontal a 390px; la calculadora 4Ts y
        el resto de interactividad siguen funcionando sin regresiones.
 
-**Escalas Generales** (`modules/generales/`, qSOFA/SRIS/SOFA/Glasgow) ya NO
-es una de las 4 categorías del menú: es un botón pequeño y fijo arriba a la
-derecha de la cabecera (`#btn-escalas-generales`), fuera del flujo del menú
-principal, porque se consulta con mucha frecuencia y de forma independiente
-del resto. Es accesible desde cualquier pantalla (está fuera de los
-contenedores de vista en `index.html`) y su "← VOLVER" regresa al menú
-principal de Hematología (`.btn-volver-home`); si en el futuro se usa
-también desde Nefrología u otra especialidad, revisa si conviene que
-regrese en su lugar al menú de especialidades.
+**Escalas Generales** (`modules/generales/`, qSOFA/SRIS/SOFA/Glasgow/
+APACHE II/Charlson) ya NO es una de las 4 categorías del menú: es un botón
+pequeño y fijo arriba a la derecha de la cabecera (`#btn-escalas-generales`),
+fuera del flujo del menú principal, porque se consulta con mucha frecuencia
+y de forma independiente del resto. Es accesible desde cualquier pantalla
+(está fuera de los contenedores de vista en `index.html`) y su "← VOLVER"
+regresa al menú principal de Hematología (`.btn-volver-home`); si en el
+futuro se usa también desde Nefrología u otra especialidad, revisa si
+conviene que regrese en su lugar al menú de especialidades.
+
+- **APACHE II y el índice de comorbilidad de Charlson**, a petición
+  explícita del usuario ("busca la escala apache II y charlson para
+  meterlas en la parte de escalas"). Añadidas como 2 tarjetas más al final
+  de `generales.html` (`apache2.js`/`charlson.js`, registradas en el
+  `index.js` de `modules/generales/`), siguiendo el mismo patrón
+  `.result-box`/`.result-score`/`.management-text` con color inline ya
+  usado por qSOFA/SRIS/SOFA/Glasgow en este mismo archivo — no
+  `.tfg-estado-ok/warn/danger` (ese patrón es de otras especialidades).
+  Ambas son escalas estándar públicas (Knaus et al. 1985 y Charlson et al.
+  1987, prácticamente inmutables desde su publicación), verificadas con
+  `WebSearch` antes de implementarlas — sin PDF fuente propio en `docs/`,
+  a diferencia del resto de calculadoras del proyecto, porque no vienen de
+  un documento aportado por el usuario sino de la literatura médica
+  estándar ya citada en miles de fuentes — mismo criterio que ya se aplicó
+  a CHA₂DS₂-VASc/qSOFA/SOFA/Glasgow, también implementados sin PDF propio.
+  - **APACHE II** (`apache2.js`, 0-71 pts): 12 variables fisiológicas +
+    edad + salud crónica previa. Cada variable simple (temperatura, PAM,
+    FC, FR, pH/HCO₃⁻, sodio, potasio, hematocrito, leucocitos) es un
+    `<select class="apache-input">` con los 8 tramos reales de la tabla
+    original (ascendente por valor fisiológico, 0 = normal), sumados con
+    el mismo patrón `.reduce()` ya usado por `sofa.js`. 3 variables llevan
+    lógica propia, no la suma genérica:
+    - **Oxigenación**: un `<select id="apache-fio2">` (FiO₂ &lt;50%/≥50%)
+      alterna qué bloque se muestra — PaO₂ (`#apache-o2-baja`) o gradiente
+      A-a de O₂ (`#apache-o2-alta`), cada uno con clase propia
+      `.apache-o2-input` (no `.apache-input`, para no sumar los dos a la
+      vez) — mismo patrón de "campo condicional según selector" ya usado
+      en otras calculadoras de la app (p. ej. la dosis condicional del
+      diagrama de receptores adrenérgicos de Merino Cardiología).
+    - **Creatinina**: un segundo `<select id="apache-fra">` ("¿Fracaso
+      renal agudo?") duplica los puntos de creatinina si está marcado
+      "Sí" — regla real de la escala original, implementada como
+      `creatBase * 2` en vez de un select con el doble de opciones.
+    - **Componente neurológico (15 − Glasgow)**: en vez de un 4º `<select>`
+      de rango de GCS (que hubiera duplicado la calculadora de Glasgow ya
+      presente más arriba en la misma ficha), `calcApache()` lee
+      directamente los 3 `<select class="gcs-input">` de esa calculadora
+      (`gcs-eye`/`gcs-verbal`/`gcs-motor`, con el mismo tratamiento de
+      "1T" = intubado ya usado en `glasgow.js`) y `init()` añade un
+      listener extra sobre esos mismos selects para que APACHE II se
+      recalcule solo con cambiar el Glasgow de arriba — mismo espíritu de
+      cross-link de estado compartido dentro de una misma ficha ya
+      documentado para `CicloEstado` en Cardiología, aquí sin necesidad de
+      un objeto de estado propio por ser un único valor derivado.
+    - **Interpretación**: 4 bandas cualitativas (leve/moderada/alta/muy
+      alta) por rango de puntuación, sin una cifra de mortalidad % por
+      banda — deliberado: la escala original relaciona la puntuación con
+      la mortalidad hospitalaria esperada, pero esa cifra exacta varía
+      según si el ingreso es médico o quirúrgico y no se pudo verificar
+      byte a byte contra la tabla original en esta sesión (`WebFetch` a
+      Wikipedia/MDCalc/MSD Manual bloqueado por el proxy de salida de
+      red) — mismo criterio de seguridad clínica ya aplicado en el
+      proyecto a la KFRE de ERC (Nefrología): implementar el score aditivo
+      verificable, abstenerse de una cifra de resultado no verificable en
+      vez de fabricarla.
+    - Un `.micro-prof-item` explica qué cuenta como "insuficiencia
+      orgánica grave/inmunosupresión" para el campo de salud crónica
+      previa (hepática/cardiovascular/respiratoria/renal/inmunosupresión),
+      con los 5 puntos si es ingreso no quirúrgico/postoperatorio urgente
+      y 2 si es postoperatorio electivo — regla real de la escala.
+  - **Índice de comorbilidad de Charlson** (`charlson.js`): edad (0-5 pts,
+    +1 por década desde los 50) + 19 comorbilidades en 4 bloques de peso
+    (10 de 1 punto, 6 de 2 puntos, 1 de 3 puntos —hepatopatía moderada-
+    grave—, 2 de 6 puntos —tumor sólido metastásico y SIDA—), cada una
+    como `<select class="charlson-item" data-pts="N">` No/Sí — nunca
+    `<input type="checkbox">`, mismo criterio ya establecido tras el bug
+    de tachado (`text-decoration:line-through` en `.checkbox-label:has
+    (input:checked)`) que motivó pasar a `<select>` en la calculadora 4Ts
+    de Merino HEMATO. Se muestran y usan 2 índices distintos, como hacen
+    la mayoría de calculadoras clínicas reales de esta escala: el
+    **índice de comorbilidad puro** (sin edad, mostrado como resultado
+    principal, con las bandas cualitativas 0=sin comorbilidad/1-2=baja/
+    3-4=moderada/≥5=alta) y el **índice ajustado por edad** (comorbilidad
+    + edad), usado exclusivamente para la fórmula de supervivencia
+    estimada a 10 años de la publicación original — `10-year survival =
+    0,983^(e^(índice_ajustado × 0,9))` — verificada con `WebSearch` antes
+    de implementarla (la base 0,983 = supervivencia a 10 años de la
+    cohorte de referencia sin comorbilidad).
+  - Verificado con Playwright: con todos los campos en su valor por
+    defecto, APACHE II da 0/71 y Charlson 0 pts/~98% de supervivencia
+    estimada (coincide con la base 0,983 de la fórmula); fijando las 9
+    variables genéricas de APACHE II en su punto más alto (4 cada una) +
+    creatinina en el tramo más alto (4) con fracaso renal agudo marcado
+    (dobla a 8) da 44/71, exactamente la suma esperada a mano; cambiar
+    `#apache-fio2` a "≥50%" oculta el campo de PaO₂ y muestra el de
+    gradiente A-a, y sumar su valor (4) sube el total a 48/71; cambiar el
+    Glasgow de la calculadora de arriba a 3/15 (mínimo) recalcula APACHE
+    II automáticamente sin tocar ningún campo propio, sumando 12 puntos
+    (60/71); fijar edad ≥75 (6) y salud crónica "no quirúrgico" (5) lleva
+    el total al máximo teórico exacto de la escala, 71/71; en Charlson,
+    marcar tumor sólido metastásico + SIDA (6+6=12 pts) con edad ≥90 años
+    (5 pts) da un índice de comorbilidad de 12 pts (banda "alta") y un
+    índice ajustado de 17 pts, con una supervivencia estimada &lt;1% —
+    confirmado que los 19 `<select class="charlson-item">` existen y se
+    suman todos correctamente; sin errores de consola ni overflow
+    horizontal a 390px en ninguna de las 2 tarjetas nuevas. Sin cambios de
+    CSS (reutiliza `.card`/`.form-group`/`.result-box`/`.result-score`/
+    `.management-text`/`.section-label`/`.micro-profiles` ya existentes),
+    así que no hizo falta bump de cache-busting.
 
 ### Nefrología
 
