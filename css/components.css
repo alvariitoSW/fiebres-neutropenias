@@ -436,13 +436,14 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 }
 .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border-color); }
 
-.corkboard { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 14px; margin-bottom: 22px; padding: 6px 4px 16px; }
+.corkboard { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 16px; margin-bottom: 22px; padding: 6px 4px 16px; }
 
 .field-card {
     position: relative; height: 236px; perspective: 1000px;
     transform: rotate(var(--tilt, -1deg));
     transition: transform 0.6s cubic-bezier(.3,.7,.2,1);
     cursor: pointer;
+    touch-action: manipulation;
 }
 .corkboard .field-card:nth-child(4n+1) { --tilt: -1.6deg; --tape: var(--accent-blue); }
 .corkboard .field-card:nth-child(4n+2) { --tilt: 1.1deg; --tape: var(--accent-red); }
@@ -467,12 +468,14 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
     content: ''; position: absolute; bottom: 0; right: 0; width: 16px; height: 16px;
     background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.18) 50%);
     border-radius: 0 0 2px 0;
+    pointer-events: none; /* decoración de esquina doblada: nunca debe robar el toque */
 }
 
 .washi {
     position: absolute; top: -9px; left: 50%; transform: translateX(-50%) rotate(-3deg);
     width: 48px; height: 17px; background: color-mix(in srgb, var(--tape, var(--accent-blue)) 55%, transparent);
     border: 1px solid rgba(255,255,255,0.25);
+    pointer-events: none;
 }
 
 .plate-label {
@@ -487,11 +490,35 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 }
 
 .back-hook { font-size: 0.78rem; line-height: 1.55; color: #362a1a; margin-bottom: 10px; }
+
+/* .back-cta es el ÚNICO camino al contenido real de la ficha. Antes era
+   solo texto centrado (0.6rem, sin min-height ni ancho propio: dentro de
+   un flex column con align-items:center se encoge al tamaño de su propio
+   texto) — su zona de toque real era una tira diminuta en el centro de la
+   cara trasera. En móvil, fallar ese toque no hacía nada: el toque caía
+   sobre el resto de la cara trasera, que vuelve a voltear la ficha en vez
+   de abrir el contenido — de ahí "no puedo clickar bien / no puedo
+   acceder al contenido". Ahora es una franja entera pegada al borde
+   inferior de la ficha (mismo ancho que la cara, min-height 44px — el
+   mínimo táctil recomendado), con fondo propio para que se vea como un
+   botón real y no como una línea de texto más. */
 .back-cta {
-    font-family: 'Courier New', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px;
-    color: #5c4c34; border-top: 1px dashed rgba(54,42,26,0.35); padding-top: 8px; margin-top: auto;
+    align-self: stretch;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    min-height: 44px;
+    margin-top: auto; margin-left: -15px; margin-right: -15px; margin-bottom: -18px;
+    padding: 12px 15px;
+    font-family: 'Courier New', monospace; font-size: 0.72rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px;
+    color: #362a1a;
+    background: rgba(212, 175, 55, 0.24);
+    border-top: 1px dashed rgba(54, 42, 26, 0.4);
+    border-radius: 0 0 2px 2px;
+    transition: background 0.15s, transform 0.1s;
+    touch-action: manipulation; -webkit-tap-highlight-color: transparent;
 }
-.back-cta:hover { color: #362a1a; }
+.back-cta:hover { background: rgba(212, 175, 55, 0.4); color: #1e1608; }
+.back-cta:active { background: rgba(212, 175, 55, 0.55); transform: scale(0.97); }
 
 /* Marca de "ya visto" — puesta por core/corkboard.js en cualquier ficha
    cuyo tema se haya abierto (aunque sea desde fuera, vía openCorkboardTopic).

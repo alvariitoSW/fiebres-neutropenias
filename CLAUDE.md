@@ -210,6 +210,50 @@ El Atlas sustituyó estos 4 botones grandes:
    interacción de dos toques no encaja en su patrón de un solo clic. Si
    en el futuro se detecta contenido teórico denso en un módulo nuevo con
    barra de pestañas, este es el patrón a replicar.
+   - **Rediseño táctil de `.back-cta`, a petición explícita del usuario**
+     ("muchas veces en el móvil no puedo clickar bien. Y no puedo acceder
+     al contenido"). Bug real de zona de toque, presente en las **25**
+     páginas que usan este patrón desde que arrancó (no solo aquí): el
+     `.card-face.back` es un `flex-direction:column` con
+     `align-items:center`, así que `.back-cta` (antes solo texto, 0.6rem,
+     sin `min-height` ni ancho propio) se encogía al tamaño de su propio
+     texto y quedaba centrado — su zona de toque real era una tira
+     diminuta en el medio de la cara trasera, no la ficha entera. Fallar
+     ese toque (fácil en móvil) no abría nada: el toque caía sobre el
+     resto de la cara trasera, que vuelve a voltear la ficha en vez de
+     abrir el contenido — exactamente el síntoma reportado. Corregido
+     una sola vez en `css/components.css` (`.back-cta` con
+     `align-self: stretch`, franja de ancho completo pegada al borde
+     inferior de la ficha vía márgenes negativos que cancelan el padding
+     de `.card-face.back`, `min-height: 44px` — el mínimo táctil
+     recomendado —, fondo/borde propios para que se vea como un botón
+     real en vez de una línea de texto) — se propaga sola a los 25
+     archivos sin tocar ninguno, mismo criterio ya establecido en el
+     proyecto para `core/corkboard.js`. De paso, corregido un segundo bug
+     real detectado al auditar el componente: `.card-face::after` (la
+     decoración de "esquina doblada") no llevaba `pointer-events: none`,
+     así que en la esquina inferior derecha de cualquier ficha —incluida
+     la zona ahora ocupada por el nuevo botón— ese elemento puramente
+     decorativo podía robar el toque; añadido también a `.washi` (la
+     cinta washi del frente) por el mismo motivo, aunque ahí nunca
+     coincidía con ningún control real. Añadido `touch-action:
+     manipulation` a `.field-card` y a `.back-cta`, y ensanchado
+     ligeramente el `gap` del grid del corkboard (14px→16px horizontal,
+     22px→24px vertical) para reducir el riesgo de toques accidentales
+     sobre la ficha vecina. Verificado con Playwright (viewport
+     390×844 y 360×780, `hasTouch`/`isMobile`): el `.back-cta` mide
+     ahora ~164px de ancho × ~55px de alto (antes, una tira de texto sin
+     `min-height`); una batería de toques a lo largo de toda la franja
+     (3%, 25%, 50%, 75%, 97% de su ancho, cerca del borde inferior)
+     impacta `.back-cta` en el 100% de los casos y abre el tema correcto,
+     incluido un toque deliberadamente impreciso a 6px del borde
+     izquierdo de la ficha que con el diseño anterior habría fallado por
+     completo; `getComputedStyle` confirma `pointer-events: none` en
+     `::after`; sin overflow horizontal ni errores de consola. Sin
+     cambios en `core/corkboard.js` ni en el HTML de ninguna ficha — la
+     lógica de clic ya delegaba correctamente en `.back-cta` vía
+     `e.target.closest('.back-cta')`, el problema era puramente de
+     tamaño/posición del área clicable, no de JS.
 3. **Síndromes Hematológicos Urgentes** (`modules/sindromes-urgentes/`) —
    una sola vista con 3 temas (CID / PTT / Síndrome de Lisis Tumoral),
    navegados desde un cuaderno de campo (`#sindromes-corkboard`, ver
