@@ -6,22 +6,37 @@
 
     <p class="section-label">Elige un bloque</p>
 
-    <button class="accordion-btn nav-btn" id="btn-fuci-hematologia" style="border-left: 4px solid var(--accent-red);">
-        <span>🩸 Hematología y Hemostasia</span>
-        <span style="font-size: 0.8rem; color: var(--accent-red);">[ VER → ]</span>
-    </button>
-
-    <button class="accordion-btn nav-btn" id="btn-fuci-vias-urinarias" style="border-left: 4px solid var(--accent-blue);">
-        <span>🫘 Vías Urinarias</span>
-        <span style="font-size: 0.8rem; color: var(--accent-blue);">[ VER → ]</span>
-    </button>
-
-    <button class="accordion-btn nav-btn" id="btn-fuci-cardiologia" style="border-left: 4px solid var(--accent-purple);">
-        <span>🫀 Cardiología</span>
-        <span style="font-size: 0.8rem; color: var(--accent-purple);">[ VER → ]</span>
-    </button>
-
-    <button class="accordion-btn nav-btn" id="btn-fuci-inmunologia" style="border-left: 4px solid var(--accent-green);">
-        <span>🛡️ Inmunología</span>
-        <span style="font-size: 0.8rem; color: var(--accent-green);">[ VER → ]</span>
-    </button>
+    <div class="constellation" style="--const-accent: var(--accent-yellow);">
+        <button class="const-node" id="btn-fuci-hematologia">
+            <span class="const-orb" style="--orb-color: var(--accent-red); --orb-glow: rgba(184,92,62,0.5);">🩸</span>
+            <span class="const-card">
+                <span class="const-title">Hematología y Hemostasia</span>
+                <span class="const-desc">Anemia, trombocitopenia, transfusión, TEG/ROTEM, eosinofilia</span>
+                <span class="const-tag" style="--orb-color: var(--accent-red);">Ver →</span>
+            </span>
+        </button>
+        <button class="const-node" id="btn-fuci-vias-urinarias">
+            <span class="const-orb" style="--orb-color: var(--accent-blue); --orb-glow: rgba(212,175,55,0.5);">🫘</span>
+            <span class="const-card">
+                <span class="const-title">Vías Urinarias</span>
+                <span class="const-desc">Fisiopatología renal, LRA y monitorización de la función renal</span>
+                <span class="const-tag" style="--orb-color: var(--accent-blue);">Ver →</span>
+            </span>
+        </button>
+        <button class="const-node" id="btn-fuci-cardiologia">
+            <span class="const-orb" style="--orb-color: var(--accent-purple); --orb-glow: rgba(156,84,118,0.5);">🫀</span>
+            <span class="const-card">
+                <span class="const-title">Cardiología</span>
+                <span class="const-desc">Fisiología cardíaca, hemodinamia, choque, VD, corazón-pulmón</span>
+                <span class="const-tag" style="--orb-color: var(--accent-purple);">Ver →</span>
+            </span>
+        </button>
+        <button class="const-node" id="btn-fuci-inmunologia">
+            <span class="const-orb" style="--orb-color: var(--accent-green); --orb-glow: rgba(144,160,106,0.5);">🛡️</span>
+            <span class="const-card">
+                <span class="const-title">Inmunología</span>
+                <span class="const-desc">Respuesta del huésped crítico, fiebre, sepsis, choque séptico</span>
+                <span class="const-tag" style="--orb-color: var(--accent-green);">Ver →</span>
+            </span>
+        </button>
+    </div>

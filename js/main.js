@@ -6,6 +6,7 @@ import { includeAll } from './core/include.js';
 import { initAccordions } from './core/accordion.js';
 import { initLightbox } from './core/lightbox.js';
 import { initStudyMode } from './core/pomodoro.js';
+import { initSearch } from './core/search.js';
 import * as home from './modules/home/index.js';
 import * as generales from './modules/generales/index.js';
 import * as neutropeniaFebril from './modules/neutropenia-febril/index.js';
@@ -24,7 +25,7 @@ async function start() {
     await includeAll();
     initAccordions();
     initLightbox();
-    home.init();
+    const homeApi = home.init();
     generales.init();
     neutropeniaFebril.init();
     reconocimiento.init();
@@ -58,6 +59,12 @@ async function start() {
     // core/pomodoro.js. Genérico: no requiere tocar ningún módulo de
     // especialidad, igual que core/corkboard.js.
     initStudyMode({ quizBanco: quizBancoCompleto });
+
+    // Buscador global (header, botón "🔍 Buscar"): indexa en vivo todas las
+    // fichas de todas las especialidades — ver core/search.js. La
+    // navegación a cada resultado reutiliza el router que home.init() ya
+    // expone para los botones .especialidad-link.
+    initSearch({ navegar: homeApi?.irAResultadoBusqueda });
 }
 
 start();

@@ -7662,6 +7662,149 @@ las especialidades, sin tocar el HTML/JS de ningún módulo concreto.
     ningún punto. Bump de cache-busting a `?v=20260910-2` (segundo
     despliegue del mismo día que toca `css/components.css`).
 
+## Rediseño "Constelación" de los 4 submenús planos + buscador global
+
+A petición explícita del usuario ("Quiero dar una vuelta de tuerca al
+diseño visual de la app, menos a la parte de hemato y de nefro que más o
+menos están completadas" → tras ver 3 direcciones de `/design`, eligió la
+B: "Me gusta más el B, y a partir de ese modelo hacer otro /design para
+mejorar la interfaz visual. Además estaría bien que se agrupase los
+estudios de tuiter por temas... Incluso poder añadir un buscador... para
+buscar en toda la app" → tras ver el refinamiento: "Me gusta, pásalo a
+código"), se aplicó un rediseño visual a los 4 submenús de especialidad que
+seguían siendo una lista plana de botones (`.accordion-btn.nav-btn`) —
+**deliberadamente excluidos Hematología (Atlas) y Nefrología (mapa del
+riñón)**, que ya tienen su propio tratamiento visual rico — más un
+buscador global nuevo, transversal a toda la app.
+
+- **Patrón "Constelación"** (`.constellation` en `css/components.css`,
+  bloque nuevo insertado tras `.siguiente-ficha-btn`): extiende el
+  lenguaje visual ya establecido por el Atlas Hematológico/mapa del riñón
+  (nodos circulares con halo de color) pero en formato de lista vertical
+  en vez de mapa posicionado por `%` — pensado para listas de 1-6 guías/
+  papers sin el volumen de contenido que justificaría un mapa de zonas
+  propio. Estructura: un `<div class="constellation" style="--const-accent:
+  var(--accent-X)">` (la variable fija el tono de la "columna vertebral"
+  punteada que dibuja `.constellation::before`) con uno o más
+  `.const-group` (cada uno con su `.const-group-tag`, una píldora de
+  color propio vía `--tag-color`, para agrupar temáticamente), y dentro
+  de cada grupo uno o más `.const-node` — un `<button>` reseteado
+  (`display:flex`, sin fondo/borde propio) con un `.const-orb` (círculo de
+  54px con color/halo propios vía `--orb-color`/`--orb-glow`, hover/active
+  con `transform:scale()`) y un `.const-card` (`display:block`, contiene
+  `.const-title`/`.const-desc`/`.const-tag`, los 3 con `display:block`
+  explícito — **necesario** porque viven como `<span>` anidados dentro de
+  un `<button>` y sin `display:block` se apelmazan en una sola línea
+  corrida en vez de apilarse título/descripción/etiqueta, bug real
+  detectado por comparación de captura contra el mockup aprobado y
+  corregido antes de dar el componente por bueno).
+- **Aplicado a los 4 submenús**, cada uno conservando exactamente los
+  mismos `id` de botón de siempre (la Constelación es solo el envoltorio
+  visual — ningún JS de ningún módulo tuvo que tocarse):
+  `uci-papers-menu.html` (`--const-accent: var(--accent-purple)`, **4
+  grupos temáticos nuevos** — "Shock y hemodinamia" rojo/"Cardiorrenal y
+  congestión venosa" dorado/"Vía aérea y respiratorio" verde/"Renal-TRR"
+  púrpura — agrupando los 6 papers por afinidad clínica en vez de la lista
+  plana anterior, la parte explícitamente pedida de "agrupar los estudios
+  de tuiter por temas, para buscarlos mejor"), `fisio-uci-menu.html`
+  (`--const-accent: var(--accent-yellow)`, 4 nodos sin agrupar, cada uno
+  con su color de acento ya usado en el resto de la app), `cardiologia-menu.html`
+  (`--const-accent: var(--accent-blue)`, 2 nodos) y `neumologia-menu.html`
+  (`--const-accent: var(--accent-blue)`, 1 nodo).
+- **Cabecera reestructurada de 1 a 2 filas** (`css/base.css`,
+  `.header-row`): al añadir el 3er botón de esquina (`🔍 Buscar`, ver
+  buscador global abajo) junto a los 2 ya existentes (`⚡ Escalas`/
+  `🍅 Estudio`), la fila única `justify-content:space-between` original
+  apretaba el título "HUD CLÍNICO UCI" hasta partirlo en 2-3 líneas rotas
+  a 390px — detectado con captura de Playwright antes de darlo por bueno,
+  un riesgo ya anticipado explícitamente al planificar el cambio. Un
+  primer intento de arreglo (solo encoger `font-size`/`letter-spacing` del
+  título) mejoró pero no resolvió el problema del todo — sustituido por
+  la solución real: `.header-row` pasó a `flex-direction:column` (título
+  arriba a ancho completo, sin apretarse contra nada) con una fila nueva
+  `.header-actions` (`flex-wrap:wrap; justify-content:center`) debajo
+  para los 3 botones — los 3 conservan sus mismos `id`, sin tocar ningún
+  listener.
+- **Buscador global** (`js/core/search.js`, módulo nuevo, `initSearch({
+  navegar })`, llamado una única vez desde `js/main.js` al final de
+  `start()`, mismo patrón "se inicializa una sola vez y funciona en toda
+  la app" que `core/corkboard.js`/`core/lightbox.js`/`core/pomodoro.js`):
+  - **Índice construido en runtime, no a mano**: recorre todos los
+    `.field-card[data-tab]` ya presentes en el DOM (todas las fichas de
+    todas las especialidades cargan desde el arranque vía `data-include`,
+    aunque estén ocultas — mismo hecho ya explotado por
+    `core/pomodoro.js`), y para cada una resuelve su `.tab-content` por
+    `id`, su panel contenedor real (`.closest('[id^="panel-"]')` — técnica
+    fiable porque los 25 paneles de cuaderno de campo de la app siguen sin
+    excepción la convención `panel-*-tabs`) y su título (`.field-name`,
+    reutilizando el mismo helper de limpieza de `<br>`/tags que
+    `core/corkboard.js` usa internamente, duplicado aquí en vez de
+    exportado para no acoplar los dos módulos).
+  - **`PANEL_NAV`, la tabla de rutas — construida a mano leyendo el código
+    real, nunca inferida**: mapea cada uno de los 25 `panel-*-tabs`
+    conocidos a `{ especialidad, view, trasplante?, bloque }` —
+    `especialidad` + `view` son las claves reales que ya acepta
+    `irAResultadoBusqueda`/cada switcher medio de especialidad, `trasplante`
+    solo existe para los 3 paneles de Trasplante de Hematología (que tienen
+    un 3er nivel de switcher interno), y `bloque` es el texto legible que
+    se muestra como "breadcrumb" bajo el título de cada resultado.
+    Construida cruzando cada `initCorkboard(boardId, panelId)` real (grep
+    en todo `js/`) contra los `createViewSwitcher(...)` reales de cada
+    `index.js` de especialidad — nunca adivinada, para no arriesgar un
+    resultado de búsqueda que aterrice en un sitio roto o vacío.
+  - **Búsqueda por texto simple, con scoring**: substring case-insensitive
+    sobre el título (peso 2) y sobre el `textContent` completo de la ficha
+    (peso 1), ordenado por score descendente, tope 40 resultados,
+    agrupados por especialidad en el orden fijo del menú raíz. Mínimo 2
+    caracteres antes de buscar (por debajo, un hint en vez de "sin
+    resultados").
+  - **Navegación reutiliza el router ya generalizado, no uno nuevo**: el
+    click de un resultado llama a `navegar({ especialidad, view,
+    trasplante, panel, tab })`, que es literalmente `irAResultadoBusqueda`
+    — la misma función que ya resuelve los botones `.especialidad-link`
+    (ver "Segundo informe: mapa de solapamiento con Nefrología..." en
+    Vías Urinarias) — inyectada como callback desde `main.js`
+    (`initSearch({ navegar: homeApi?.irAResultadoBusqueda })`) en vez de
+    duplicar lógica de navegación dentro de `search.js`.
+    `irAResultadoBusqueda` ganó un caso nuevo, `especialidad === 'home'`
+    (antes nunca hacía falta enrutar DE VUELTA a Hematología desde fuera,
+    solo salir de ella) — `topLevel.show(view)` + `trasplanteLevel.show(
+    trasplante)` opcional + `openCorkboardTopic(panel, tab)`, mismo patrón
+    que los otros 5 casos ya existentes (ahora reescritos para compartir
+    esta misma función en vez de tener su propia copia del switch).
+    `home/index.js` `init()` ahora devuelve `{ irAResultadoBusqueda }`
+    (antes no devolvía nada), y `main.js` guarda ese valor
+    (`const homeApi = home.init()`) para pasárselo a `initSearch`.
+  - **Alcance v1, deliberado y documentado en la cabecera del propio
+    archivo**: solo indexa fichas del patrón cuaderno de campo
+    (`.field-card`), que es donde vive la inmensa mayoría del contenido
+    teórico de la app — quedan fuera las calculadoras/tablas de
+    referencia sueltas sin ese patrón (Escalas Generales, Neutropenia
+    Febril, la tabla de 585 fármacos de Nefrotoxicidad, la guía
+    transversal IRA/ERC). Ampliar el alcance a esas páginas es un paso
+    aparte, no solo añadir entradas a `PANEL_NAV`.
+  - **UI**: overlay (`#btn-buscar-global` en la cabecera lo abre) con
+    campo de texto autofocado, cierre por botón/click fuera/Esc,
+    resultados agrupados por especialidad con icono+color propios de cada
+    una (mismos 4-6 colores de acento ya establecidos), cada fila un
+    `<button>` real (nunca un `<a>` ni un `<div>` con `onclick`, para
+    accesibilidad de teclado).
+  - Verificado con Playwright (viewport 390×844): el overlay abre/cierra
+    (botón, click fuera, Esc); la query "citrato" devuelve 12 resultados
+    en 3 especialidades (Hematología/Nefrología/UCI Papers Tuiter,
+    incluidas las 5 fichas propias del paper de citrato); "trasplante"
+    devuelve 40 resultados en 5 especialidades; clicar un resultado cierra
+    el overlay y dejar la ficha de destino con `.active` real y visible
+    (confirmado con `offsetParent !== null`, no solo la clase) — probado
+    explícitamente con un resultado de Hematología (`cart-indicaciones`,
+    el caso nuevo `especialidad:'home'`, nunca antes ejercitado) navegando
+    Especialidades→Hematología→Trasplante→CAR-T con la ficha abierta y
+    con scroll hasta ella; consulta de 1 carácter muestra el hint en vez
+    de resultados; sin overflow horizontal a 390px con el overlay abierto;
+    sin errores de consola ni de página en ningún punto. Bump de
+    cache-busting a `?v=20260915` (cambian `css/components.css`,
+    `css/base.css`, `index.html`, `js/main.js`).
+
 ## Cómo probar cambios
 
 No hay build. Para ver la app:

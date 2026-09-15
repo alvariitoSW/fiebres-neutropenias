@@ -43,8 +43,13 @@ body {
 }
 .header p { color: var(--text-muted); font-size: 0.85rem; margin: 0; text-transform: uppercase; letter-spacing: 1px;}
 
-.header-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-.header-row .header { flex: 1; margin-bottom: 0; min-width: 0; }
+/* Cabecera en 2 filas: título arriba (ancho completo, sin competir por
+   espacio con nada), fila de acciones (Escalas/Estudio/Buscar) debajo —
+   con 3 botones ya no cabían junto al título en una sola fila a 390px sin
+   partir "HUD CLÍNICO UCI" en 3 líneas apiladas contra ellos. */
+.header-row { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.header-row .header { margin-bottom: 0; }
+.header-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; width: 100%; }
 .header-row::after {
     content: '';
     display: block;

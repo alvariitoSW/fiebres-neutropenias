@@ -6,12 +6,21 @@
 
     <p class="section-label">Elige una guía</p>
 
-    <button class="accordion-btn nav-btn" id="btn-cardio-ic" style="border-left: 4px solid var(--accent-blue);">
-        <span>🫀 Insuficiencia Cardíaca (Guías ESC 2026)</span>
-        <span style="font-size: 0.8rem; color: var(--accent-blue);">[ VER → ]</span>
-    </button>
-
-    <button class="accordion-btn nav-btn" id="btn-merino-cardio" style="border-left: 4px solid var(--accent-red);">
-        <span>🩺 Merino Cardiología (Shock clínico)</span>
-        <span style="font-size: 0.8rem; color: var(--accent-red);">[ VER → ]</span>
-    </button>
+    <div class="constellation" style="--const-accent: var(--accent-blue);">
+        <button class="const-node" id="btn-cardio-ic">
+            <span class="const-orb" style="--orb-color: var(--accent-blue); --orb-glow: rgba(212,175,55,0.5);">🫀</span>
+            <span class="const-card">
+                <span class="const-title">Insuficiencia Cardíaca (Guías ESC 2026)</span>
+                <span class="const-desc">Diagnóstico, tratamiento farmacológico y dispositivos, IC avanzada</span>
+                <span class="const-tag" style="--orb-color: var(--accent-blue);">Ver →</span>
+            </span>
+        </button>
+        <button class="const-node" id="btn-merino-cardio">
+            <span class="const-orb" style="--orb-color: var(--accent-red); --orb-glow: rgba(184,92,62,0.5);">🩺</span>
+            <span class="const-card">
+                <span class="const-title">Merino Cardiología (Shock clínico)</span>
+                <span class="const-desc">Shock hemorrágico, cardiogénico e inflamatorio — vasopresores, IABP/ECMO</span>
+                <span class="const-tag" style="--orb-color: var(--accent-red);">Ver →</span>
+            </span>
+        </button>
+    </div>

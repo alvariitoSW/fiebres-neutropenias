@@ -125,38 +125,57 @@ export function init() {
     document.getElementById('btn-escalas-generales').addEventListener('click', () => topLevel.show('escalas'));
     document.querySelectorAll('.btn-volver-home').forEach(b => b.addEventListener('click', goHome));
 
+    // Router genérico de "ir a una ficha concreta de cualquier especialidad
+    // desde fuera" — usado por los botones `.especialidad-link` (ver más
+    // abajo) y también por el buscador global (core/search.js, inyectado
+    // como `navegar` desde main.js). Mismo patrón que ya usaban los
+    // `.especialidad-link` antes de extraerse a esta función: `especialidad`
+    // decide qué switcher raíz mostrar y, para las especialidades con
+    // switcher medio propio, delega en su `irAFicha(view, panel, tab)`
+    // (nefrologia/fisio-uci/uci-papers/cardiologia/neumologia). El caso
+    // 'home' es nuevo — antes nada apuntaba de vuelta a Hematología desde
+    // fuera — y usa el propio switcher raíz + `trasplanteLevel` para las 3
+    // subvistas de Trasplante, más `openCorkboardTopic` directo (nunca hacía
+    // falta pasar por `rutasAtlas`, que solo cubre 3 fichas fijas de
+    // Síndromes Urgentes, no cualquier ficha de Reconocimiento/Síndromes/
+    // Trasplante/Merino HEMATO).
+    function irAResultadoBusqueda({ especialidad, view, panel, tab, trasplante }) {
+        if (especialidad === 'home') {
+            topLevel.show(view);
+            if (trasplante) trasplanteLevel.show(trasplante);
+            if (panel && tab) openCorkboardTopic(panel, tab);
+        } else if (especialidad === 'nefrologia') {
+            topLevel.show('nefrologia');
+            nefrologiaApi?.irAFicha(view, panel, tab);
+        } else if (especialidad === 'fisioUci') {
+            topLevel.show('fisioUci');
+            fisioUciApi?.irAFicha(view, panel, tab);
+        } else if (especialidad === 'uciPapers') {
+            topLevel.show('uciPapers');
+            uciPapersApi?.irAFicha(view, panel, tab);
+        } else if (especialidad === 'cardiologia') {
+            topLevel.show('cardiologia');
+            cardiologiaApi?.irAFicha(view, panel, tab);
+        } else if (especialidad === 'neumologia') {
+            topLevel.show('neumologia');
+            neumologiaApi?.irAFicha(view, panel, tab);
+        }
+    }
+
     // Enlaces cruzados entre especialidades. Dos formas: 1) `data-target`
     // fijo para atajos ya nombrados (p. ej. la Matriz de Combate MDR de
     // Neutropenia Febril saltando al buscador de ajuste de fármacos por
     // función renal de Nefrología); 2) `data-especialidad` +
-    // `data-view`/`data-panel`/`data-tab` genérico, para saltar a
-    // CUALQUIER ficha de Nefrología, Fisiopatología UCI o UCI/Papers
-    // Tuiter desde otra especialidad (p. ej. Vías Urinarias ↔ FRA/ERC, o
-    // FRA ↔ VExUS) — mismo patrón que `.tx-link` ya usa dentro de un solo
-    // módulo, aquí generalizado entre especialidades vía las `irAFicha()`
-    // que exponen nefrologia/index.js, fisio-uci/index.js y
-    // uci-papers/index.js.
+    // `data-view`/`data-panel`/`data-tab` genérico, resuelto por
+    // `irAResultadoBusqueda` de arriba.
     document.querySelectorAll('.especialidad-link').forEach(btn => {
         btn.addEventListener('click', () => {
             const { target, especialidad, view, panel, tab } = btn.dataset;
             if (target === 'nefrotoxicidad') {
                 topLevel.show('nefrologia');
                 nefrologiaApi?.irANefrotoxicidad();
-            } else if (especialidad === 'nefrologia') {
-                topLevel.show('nefrologia');
-                nefrologiaApi?.irAFicha(view, panel, tab);
-            } else if (especialidad === 'fisioUci') {
-                topLevel.show('fisioUci');
-                fisioUciApi?.irAFicha(view, panel, tab);
-            } else if (especialidad === 'uciPapers') {
-                topLevel.show('uciPapers');
-                uciPapersApi?.irAFicha(view, panel, tab);
-            } else if (especialidad === 'cardiologia') {
-                topLevel.show('cardiologia');
-                cardiologiaApi?.irAFicha(view, panel, tab);
-            } else if (especialidad === 'neumologia') {
-                topLevel.show('neumologia');
-                neumologiaApi?.irAFicha(view, panel, tab);
+            } else if (especialidad) {
+                irAResultadoBusqueda({ especialidad, view, panel, tab });
             }
         });
     });
@@ -205,4 +224,9 @@ export function init() {
     topLevel.show('especialidades');
     citopeniasLevel.show('menu');
     trasplanteLevel.show('menu');
+
+    // Expuesto para que main.js lo inyecte en core/search.js como la
+    // función `navegar` del buscador global — ver el comentario de
+    // irAResultadoBusqueda más arriba.
+    return { irAResultadoBusqueda };
 }

@@ -6,32 +6,70 @@
 
     <p class="section-label">Elige un paper</p>
 
-    <button class="accordion-btn nav-btn" id="btn-paper-shock" style="border-left: 4px solid var(--accent-purple);">
-        <span>🩺 25 años de resucitación hemodinámica en el shock séptico</span>
-        <span style="font-size: 0.8rem; color: var(--accent-purple);">[ VER → ]</span>
-    </button>
+    <div class="constellation" style="--const-accent: var(--accent-purple);">
 
-    <button class="accordion-btn nav-btn" id="btn-paper-no" style="border-left: 4px solid var(--accent-purple);">
-        <span>💨 Óxido nítrico inhalado: fisiopatología cardio-cerebrovascular y respiratoria</span>
-        <span style="font-size: 0.8rem; color: var(--accent-purple);">[ VER → ]</span>
-    </button>
+        <div class="const-group">
+            <div class="const-group-tag" style="--tag-color: var(--accent-red);">Shock y hemodinamia</div>
+            <button class="const-node" id="btn-paper-shock">
+                <span class="const-orb" style="--orb-color: var(--accent-red); --orb-glow: rgba(184,92,62,0.5);">🩺</span>
+                <span class="const-card">
+                    <span class="const-title">25 años de resucitación hemodinámica en el shock séptico</span>
+                    <span class="const-desc">Perspectiva conceptual sobre 6 ensayos landmark, 2001-2025</span>
+                    <span class="const-tag" style="--orb-color: var(--accent-red);">Ver →</span>
+                </span>
+            </button>
+        </div>
 
-    <button class="accordion-btn nav-btn" id="btn-paper-vdlra" style="border-left: 4px solid var(--accent-purple);">
-        <span>🫀 Disfunción del ventrículo derecho y lesión renal postoperatoria</span>
-        <span style="font-size: 0.8rem; color: var(--accent-purple);">[ VER → ]</span>
-    </button>
+        <div class="const-group">
+            <div class="const-group-tag" style="--tag-color: var(--accent-blue);">Cardiorrenal y congestión venosa</div>
+            <button class="const-node" id="btn-paper-vdlra">
+                <span class="const-orb" style="--orb-color: var(--accent-blue); --orb-glow: rgba(212,175,55,0.5);">🫀</span>
+                <span class="const-card">
+                    <span class="const-title">Disfunción del ventrículo derecho y lesión renal postoperatoria</span>
+                    <span class="const-desc">El modelo cardiorrenal: congestión venosa y presión de perfusión renal</span>
+                    <span class="const-tag" style="--orb-color: var(--accent-blue);">Ver →</span>
+                </span>
+            </button>
+            <button class="const-node" id="btn-paper-vexus">
+                <span class="const-orb" style="--orb-color: var(--accent-blue); --orb-glow: rgba(212,175,55,0.5);">🩸</span>
+                <span class="const-card">
+                    <span class="const-title">VExUS: ecografía de la congestión venosa</span>
+                    <span class="const-desc">3 artículos, una misma historia: el riñón congestivo</span>
+                    <span class="const-tag" style="--orb-color: var(--accent-blue);">Ver →</span>
+                </span>
+            </button>
+        </div>
 
-    <button class="accordion-btn nav-btn" id="btn-paper-vexus" style="border-left: 4px solid var(--accent-purple);">
-        <span>🩸 VExUS: ecografía de la congestión venosa</span>
-        <span style="font-size: 0.8rem; color: var(--accent-purple);">[ VER → ]</span>
-    </button>
+        <div class="const-group">
+            <div class="const-group-tag" style="--tag-color: var(--accent-green);">Vía aérea y respiratorio</div>
+            <button class="const-node" id="btn-paper-no">
+                <span class="const-orb" style="--orb-color: var(--accent-green); --orb-glow: rgba(144,160,106,0.5);">💨</span>
+                <span class="const-card">
+                    <span class="const-title">Óxido nítrico inhalado</span>
+                    <span class="const-desc">Fisiopatología cardio-cerebrovascular y respiratoria</span>
+                    <span class="const-tag" style="--orb-color: var(--accent-green);">Ver →</span>
+                </span>
+            </button>
+            <button class="const-node" id="btn-paper-extub">
+                <span class="const-orb" style="--orb-color: var(--accent-green); --orb-glow: rgba(144,160,106,0.5);">🫁</span>
+                <span class="const-card">
+                    <span class="const-title">Guías PUMA de extubación traqueal</span>
+                    <span class="const-desc">Evaluación de riesgo y algoritmo de extubación, 2026</span>
+                    <span class="const-tag" style="--orb-color: var(--accent-green);">Ver →</span>
+                </span>
+            </button>
+        </div>
 
-    <button class="accordion-btn nav-btn" id="btn-paper-extub" style="border-left: 4px solid var(--accent-purple);">
-        <span>🫁 Guías PUMA de extubación traqueal</span>
-        <span style="font-size: 0.8rem; color: var(--accent-purple);">[ VER → ]</span>
-    </button>
+        <div class="const-group">
+            <div class="const-group-tag" style="--tag-color: var(--accent-purple);">Renal / TRR</div>
+            <button class="const-node" id="btn-paper-citrato">
+                <span class="const-orb" style="--orb-color: var(--accent-purple); --orb-glow: rgba(156,84,118,0.5);">⚗️</span>
+                <span class="const-card">
+                    <span class="const-title">Toxicidad sistémica por citrato en TRR</span>
+                    <span class="const-desc">Anticoagulación regional continua</span>
+                    <span class="const-tag" style="--orb-color: var(--accent-purple);">Ver →</span>
+                </span>
+            </button>
+        </div>
 
-    <button class="accordion-btn nav-btn" id="btn-paper-citrato" style="border-left: 4px solid var(--accent-purple);">
-        <span>⚗️ Toxicidad sistémica por citrato en TRR</span>
-        <span style="font-size: 0.8rem; color: var(--accent-purple);">[ VER → ]</span>
-    </button>
+    </div>
