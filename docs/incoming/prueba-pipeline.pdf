@@ -1,0 +1,99 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+2 0 obj
+<< /Length 1086 >>
+stream
+BT
+/F1 12 Tf
+14 TL
+50 780 Td
+(PRUEBA DE INTEGRACION AUTOMATICA - HUD CLINICO UCI) Tj
+T*
+() Tj
+T*
+(Este documento es un PDF de prueba, sin contenido clinico real,) Tj
+T*
+(generado unicamente para validar el pipeline de integracion) Tj
+T*
+(automatica \(GitHub Actions + Claude Agent SDK\).) Tj
+T*
+() Tj
+T*
+(Instruccion para el agente que procese este documento:) Tj
+T*
+(1. No inventes contenido clinico a partir de este texto.) Tj
+T*
+(2. Este documento no corresponde a ninguna especialidad real) Tj
+T*
+(   de la app ni debe integrarse como ficha de contenido.) Tj
+T*
+(3. Limitate a confirmar que puedes: leer CLAUDE.md, usar Bash,) Tj
+T*
+(   crear un fichero de prueba, y escribir el resumen final.) Tj
+T*
+(4. Crea un fichero docs/incoming/PRUEBA_PIPELINE_OK.md con una) Tj
+T*
+(   sola linea de texto confirmando que pudiste leer este PDF) Tj
+T*
+(   \(usa pdftotext sobre el PDF de origen\) y ejecutar Bash.) Tj
+T*
+(5. NO toques ningun otro fichero del repositorio.) Tj
+T*
+(6. Escribe igualmente los ficheros de resumen para la PR, tal) Tj
+T*
+(   como indica tu prompt de sistema.) Tj
+ET
+endstream
+endobj
+3 0 obj
+<< /Length 317 >>
+stream
+BT
+/F1 12 Tf
+14 TL
+50 780 Td
+(Pagina 2 de la prueba.) Tj
+T*
+() Tj
+T*
+(Texto de relleno sin valor clinico, solo para confirmar que) Tj
+T*
+(el PDF tiene mas de una pagina y que la extraccion de texto) Tj
+T*
+(\(pdftotext\) funciona correctamente sobre varias paginas.) Tj
+T*
+() Tj
+T*
+(Fin del documento de prueba.) Tj
+ET
+endstream
+endobj
+4 0 obj
+<< /Type /Pages /Kids [5 0 R 6 0 R] /Count 2 >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 4 0 R /Resources << /Font << /F1 1 0 R >> >> /MediaBox [0 0 612 792] /Contents 2 0 R >>
+endobj
+6 0 obj
+<< /Type /Page /Parent 4 0 R /Resources << /Font << /F1 1 0 R >> >> /MediaBox [0 0 612 792] /Contents 3 0 R >>
+endobj
+7 0 obj
+<< /Type /Catalog /Pages 4 0 R >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000079 00000 n 
+0000001217 00000 n 
+0000001585 00000 n 
+0000001648 00000 n 
+0000001774 00000 n 
+0000001900 00000 n 
+trailer
+<< /Size 8 /Root 7 0 R >>
+startxref
+1949
+%%EOF
