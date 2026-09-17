@@ -1,0 +1,4 @@
+Carpeta donde el panel /admin deja los PDF subidos antes de que el
+pipeline de integración automática los procese (ver backend/README.md).
+Los ficheros de aquí viven solo en la rama temporal `content/incoming-*`
+de cada integración — no se acumulan en `main`.

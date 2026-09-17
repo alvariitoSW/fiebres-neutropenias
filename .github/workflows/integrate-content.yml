@@ -1,0 +1,156 @@
+name: Integrar contenido nuevo
+
+# Pipeline de integración automática de contenido, ver backend/README.md.
+# Se dispara: (a) a mano desde la UI de GitHub Actions (workflow_dispatch,
+# útil para probar/reintentar), o (b) por el Cloudflare Worker del panel
+# /admin, que ya deja el PDF subido y la rama creada antes de disparar
+# este workflow.
+#
+# Este workflow NUNCA mergea a main por sí solo: siempre abre una Pull
+# Request (en borrador) para que el usuario la revise y la mergee a mano.
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_pdf_path:
+        description: "Ruta del PDF ya subido al repo (p.ej. docs/incoming/xxx.pdf)"
+        required: false
+        type: string
+      source_url:
+        description: "Link a la fuente, si no se sube un PDF"
+        required: false
+        type: string
+      notes:
+        description: "Notas: qué es esto, a qué especialidad/bloque crees que pertenece"
+        required: false
+        type: string
+        default: ""
+      branch:
+        description: "Rama ya creada con el PDF (la deja el panel /admin). Vacío = crear una nueva desde main, útil para pruebas manuales."
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: integrate-content-${{ github.event.inputs.branch || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Validar que hay una fuente
+        env:
+          SOURCE_PDF_PATH: ${{ github.event.inputs.source_pdf_path }}
+          SOURCE_URL: ${{ github.event.inputs.source_url }}
+        run: |
+          if [ -z "$SOURCE_PDF_PATH" ] && [ -z "$SOURCE_URL" ]; then
+            echo "::error::Hay que indicar source_pdf_path o source_url."
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch || 'main' }}
+          fetch-depth: 0
+
+      - name: Preparar rama de trabajo
+        env:
+          INPUT_BRANCH: ${{ github.event.inputs.branch }}
+        run: |
+          if [ -z "$INPUT_BRANCH" ]; then
+            BRANCH="content/incoming-$(date +%Y%m%d-%H%M%S)"
+            git checkout -B "$BRANCH"
+          else
+            BRANCH="$INPUT_BRANCH"
+          fi
+          echo "BRANCH=$BRANCH" >> "$GITHUB_ENV"
+
+      - name: Instalar dependencias del sistema (poppler, Python, Pillow)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y poppler-utils python3-pip
+          pip3 install --quiet --break-system-packages Pillow
+
+      - name: Instalar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Instalar dependencias del agente
+        working-directory: backend/agent
+        run: npm install
+
+      - name: Instalar Playwright (Chromium)
+        run: npx --yes playwright install --with-deps chromium
+
+      - name: Ejecutar el agente de integración
+        working-directory: backend/agent
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SOURCE_PDF_PATH: ${{ github.event.inputs.source_pdf_path }}
+          SOURCE_URL: ${{ github.event.inputs.source_url }}
+          USER_NOTES: ${{ github.event.inputs.notes }}
+          REPO_ROOT: ${{ github.workspace }}
+          AGENT_MODEL: ${{ vars.AGENT_MODEL }}
+          AGENT_MAX_TURNS: ${{ vars.AGENT_MAX_TURNS }}
+          AGENT_MAX_BUDGET_USD: ${{ vars.AGENT_MAX_BUDGET_USD }}
+        run: node run.mjs
+
+      - name: Extraer resumen y limpiar ficheros temporales
+        run: |
+          if [ -f .github/PR_SUMMARY.generated.md ]; then
+            cp .github/PR_SUMMARY.generated.md /tmp/PR_SUMMARY.md
+          else
+            echo "El agente terminó sin escribir un resumen (backend/agent/run.mjs debería haber generado uno de emergencia — revisa los logs de este run)." > /tmp/PR_SUMMARY.md
+          fi
+          if [ -f .github/PR_TITLE.generated.txt ]; then
+            cp .github/PR_TITLE.generated.txt /tmp/PR_TITLE.txt
+          else
+            echo "Contenido nuevo (integración automática)" > /tmp/PR_TITLE.txt
+          fi
+          rm -f .github/PR_SUMMARY.generated.md .github/PR_TITLE.generated.txt
+
+      - name: Comprobar que hay cambios reales
+        id: diff
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit y push
+        if: steps.diff.outputs.has_changes == 'true'
+        env:
+          COMMIT_NOTES: ${{ github.event.inputs.notes }}
+        run: |
+          git config user.name "content-integration-bot"
+          git config user.email "content-integration-bot@users.noreply.github.com"
+          git add -A
+          git commit -m "Integración automática de contenido nuevo" -m "Notas del usuario: ${COMMIT_NOTES}"
+          git push origin "$BRANCH" --force-with-lease
+
+      - name: Abrir Pull Request (borrador — nunca se mergea sola)
+        if: steps.diff.outputs.has_changes == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --title "$(cat /tmp/PR_TITLE.txt)" \
+            --body-file /tmp/PR_SUMMARY.md \
+            --draft
+
+      - name: Sin cambios — avisar
+        if: steps.diff.outputs.has_changes == 'false'
+        run: |
+          echo "::warning::El agente no generó cambios en el repo. Revisa /tmp/PR_SUMMARY.md en los logs de este paso:"
+          cat /tmp/PR_SUMMARY.md

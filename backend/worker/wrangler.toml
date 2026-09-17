@@ -1,0 +1,14 @@
+name = "hud-clinico-uci-admin"
+main = "src/index.ts"
+compatibility_date = "2026-09-01"
+
+# Variables no sensibles — ajusta si cambia el owner/repo/nombre del workflow.
+[vars]
+GITHUB_OWNER = "alvariitoSW"
+GITHUB_REPO = "fiebres-neutropenias"
+WORKFLOW_FILE = "integrate-content.yml"
+
+# Secretos reales — NUNCA los pongas aquí. Se configuran una vez con:
+#   wrangler secret put ADMIN_PASSCODE
+#   wrangler secret put GITHUB_TOKEN
+# Ver backend/README.md para el paso a paso completo.

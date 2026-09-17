@@ -1,0 +1,9 @@
+{
+  "name": "integrate-content-agent",
+  "private": true,
+  "type": "module",
+  "description": "Driver no interactivo del Claude Agent SDK que corre dentro del workflow de GitHub Actions integrate-content.yml. No forma parte de la app estática — ver backend/README.md.",
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "latest"
+  }
+}

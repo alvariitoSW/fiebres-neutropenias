@@ -7805,6 +7805,111 @@ buscador global nuevo, transversal a toda la app.
     cache-busting a `?v=20260915` (cambian `css/components.css`,
     `css/base.css`, `index.html`, `js/main.js`).
 
+## Panel de subida de contenido + integración automática (`backend/`, `admin/`)
+
+A petición explícita del usuario ("me gustaría poder desarrollar una
+skill en la app para poder subir directamente desde ahí... que la propia
+app con Claude lo integre y además pueda revisar si el contenido subido
+es correcto... poder mandar un link y se suba automático"), se construyó
+un sistema para disparar la integración de contenido nuevo **desde un
+panel dentro de la propia web**, sin tener que abrir una sesión de Claude
+Code cada vez. Antes de tocar el repo se presentó un plan completo (modo
+plan) que el usuario aprobó explícitamente, con 2 decisiones ya
+confirmadas por él vía `AskUserQuestion`: el panel vive en la web real
+(no un simple comando), y el resultado **nunca se mergea solo** — siempre
+queda como una Pull Request en borrador pendiente de su aprobación.
+
+- **Esto rompe deliberadamente "sin backend, sin base de datos"** — la
+  única decisión de arquitectura del proyecto marcada como "no reabrir
+  sin preguntar" que sí se reabrió aquí, con permiso explícito del
+  usuario. El resto de la app (todas las calculadoras, fichas, quiz)
+  sigue siendo 100% estática, sin backend ni base de datos — esta es una
+  pieza nueva, separada y con su propio coste real (API de Anthropic +
+  minutos de GitHub Actions), documentada aparte en `backend/README.md`.
+- **Corrección técnica hecha explícita al usuario antes de construir**:
+  Cloudflare Workers no tiene sistema de archivos ni puede ejecutar
+  Python/`pdfimages`/Playwright — las herramientas que de verdad producen
+  la calidad de contenido de este proyecto (extracción real de figuras,
+  verificación con navegador). Por eso el Worker **no** llama
+  directamente a la API de Claude para generar contenido en un solo paso
+  (habría dado peor calidad que el resto de la app) — solo actúa como
+  puerta de entrada protegida por contraseña + disparador. El trabajo
+  pesado real corre en un **runner de GitHub Actions** (Linux completo y
+  gratuito, con git/GitHub nativos), usando el **Claude Agent SDK**
+  (`@anthropic-ai/claude-agent-sdk`, Node — el mismo motor que usa Claude
+  Code, con acceso real a Bash/ficheros) para replicar, sin supervisión
+  humana en tiempo real, el mismo proceso que ya se ha hecho a mano
+  decenas de veces en este proyecto.
+
+### Arquitectura
+
+```
+/admin (web, protegido por contraseña)
+    → Cloudflare Worker (backend/worker/): valida contraseña, sube el PDF
+      a una rama nueva vía API de GitHub, dispara workflow_dispatch
+    → GitHub Actions (.github/workflows/integrate-content.yml):
+      instala poppler-utils/Python/Playwright, corre el Claude Agent SDK
+      (backend/agent/run.mjs) con acceso a Bash/ficheros, siguiendo
+      backend/agent/system-prompt.md + este mismo CLAUDE.md (que el
+      agente lee por su cuenta, igual que cualquier sesión de Claude
+      Code) — construye fichas/quiz, extrae imágenes reales, verifica
+      con Playwright, audita fidelidad contra la fuente, y abre una
+      Pull Request en borrador a main (nunca mergea)
+    → El usuario revisa y mergea la PR desde GitHub (web o móvil)
+```
+
+- **`backend/agent/system-prompt.md`**: instrucciones específicas del
+  pipeline no interactivo (nunca ejecutar `git commit`/`push`/`merge` —
+  eso lo hace el propio workflow después —, nunca tocar `backend/`/
+  `admin/`, siempre escribir `.github/PR_SUMMARY.generated.md` y
+  `.github/PR_TITLE.generated.txt` al terminar con el resumen para la
+  PR). Deliberadamente **no** duplica las convenciones de contenido de
+  este `CLAUDE.md` — le indica al agente que lo lea directamente con su
+  propia herramienta `Read`, como hace cualquier sesión de Claude Code,
+  para no tener dos copias de las convenciones que puedan desincronizarse.
+- **`backend/agent/run.mjs`**: script driver que invoca `query()` del
+  Agent SDK con `cwd` = raíz del repo, `permissionMode: 'bypassPermissions'`
+  (necesario por correr sin supervisión humana), `allowedTools` acotado a
+  `Bash`/`Read`/`Write`/`Edit`/`Glob`/`Grep`, y topes de coste/turnos
+  (`maxTurns`/`maxBudgetUsd`, configurables vía variables de repo de
+  GitHub Actions sin tocar código). Si el agente no escribe su fichero de
+  resumen (por error o por no seguir la instrucción), el script genera
+  uno de emergencia con su último texto visible, para que el fallo quede
+  documentado en la propia PR/logs en vez de fallar en silencio. **Nota
+  explícita dejada en el propio fichero**: se escribió siguiendo la
+  documentación pública del Agent SDK sin haber podido ejecutarlo de
+  verdad todavía (necesita `ANTHROPIC_API_KEY` real + un runner de
+  GitHub Actions) — la primera prueba manual (ver `backend/README.md`,
+  paso 4) es la que valida/corrige la forma exacta de las opciones.
+- **`backend/worker/src/index.ts`**: el Worker en sí. Sin base de datos
+  propia — GitHub (rama nueva + *run* de Actions + PR) es el único
+  estado. Compara la contraseña en tiempo aproximadamente constante,
+  crea la rama vía la API Git Data de GitHub (`git/refs`) antes de subir
+  el PDF (la API de Contenidos no crea ramas nuevas por sí sola), y usa
+  un token de GitHub de grano fino con permisos acotados solo a este
+  repo (Contents/Pull requests/Actions, todos en escritura).
+- **`admin/index.html` + `admin/admin.js`**: página nueva, deliberadamente
+  **no enlazada** desde la navegación principal de la app (solo accesible
+  por URL directa) — reutiliza `css/variables.css` para el mismo look
+  oscuro del resto de la app, pero vive fuera del flujo de
+  `index.html`/`main.js` para no acoplarla a la arquitectura estática del
+  resto del sitio. Formulario simple: contraseña, pestañas PDF/Link,
+  notas libres de contexto (mismo espíritu que hoy el usuario le da
+  contexto a Claude al mandar un PDF a mano). Tras enviar, muestra el
+  enlace a la pestaña de GitHub Actions para seguir el progreso desde el
+  móvil.
+- **Pendiente, requiere acción del propio usuario (no ejecutable desde
+  una sesión de Claude Code)**: crear la cuenta de Cloudflare y hacer
+  `wrangler deploy`, generar el token de GitHub de grano fino, añadir
+  `ANTHROPIC_API_KEY` como secreto del repo, y sustituir la URL real del
+  Worker desplegado en `admin/admin.js` (constante `WORKER_URL`) — todo
+  documentado paso a paso en `backend/README.md`. El **orden de
+  verificación acordado** es: primero validar el pipeline de Actions +
+  Agent SDK disparándolo a mano (`workflow_dispatch` desde la UI de
+  GitHub con un PDF corto ya subido) hasta que dé resultados de calidad
+  aceptable, y solo entonces confiar en el panel `/admin` público — nunca
+  al revés.
+
 ## Cómo probar cambios
 
 No hay build. Para ver la app:
