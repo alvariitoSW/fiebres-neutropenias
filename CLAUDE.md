@@ -7909,6 +7909,78 @@ queda como una Pull Request en borrador pendiente de su aprobación.
   GitHub con un PDF corto ya subido) hasta que dé resultados de calidad
   aceptable, y solo entonces confiar en el panel `/admin` público — nunca
   al revés.
+- **Primera prueba real, ya ejecutada**: se disparó el workflow a mano
+  (`mcp__github__actions_run_trigger`, sin depender de `wrangler`/la
+  cuenta de Cloudflare, que en esta sesión remota está bloqueada por la
+  política de red del sandbox — `api.cloudflare.com` devuelve 403 en el
+  túnel CONNECT del proxy) contra un PDF sintético de 2 páginas sin
+  contenido clínico real (`docs/incoming/prueba-pipeline.pdf`, rama
+  `content/test-pipeline`, `run_id` 35265950079). Resultado: **toda la
+  parte mecánica funciona** — checkout, preparar la rama, instalar
+  `poppler-utils`/Python/Pillow, Node, las dependencias del agente
+  (`@anthropic-ai/claude-agent-sdk` con `"latest"` resuelve e instala
+  bien) y Playwright con Chromium, todo en menos de un minuto — y el
+  único fallo fue el esperado: `Falta ANTHROPIC_API_KEY`, porque ese
+  secreto todavía no se había añadido al repo. Queda pendiente repetir
+  esta misma prueba en cuanto el usuario añada el secreto, para validar
+  por fin la llamada real al Agent SDK (`query()` en
+  `backend/agent/run.mjs`), la única pieza que nunca se ha llegado a
+  ejecutar de verdad.
+- **Destino sugerido + archivado en bibliografía + auditoría de huecos +
+  propuestas de mejora**, a petición explícita del usuario ("quiero
+  añadir una función de que yo suba un documento que diga que vaya a
+  tal... y guardes en la bibliografía el documento y después hagas una
+  revisión... para valorar que está incluido todo... y qué mejoras
+  puedes poner o partes interactivas"). 4 ampliaciones, ninguna requiere
+  tocar el Worker ni el workflow:
+  - **`admin/index.html`/`admin/admin.js`**: nuevo `<select id="destino">`
+    (opcional, con las 6 especialidades + "especialidad nueva" +
+    "No estoy seguro — que lo decida Claude") justo encima del campo de
+    notas ya existente. `admin.js` antepone el valor elegido a las notas
+    como una línea `Destino sugerido por el usuario: <especialidad>`
+    antes de enviarlas — deliberadamente **no** se añadió como campo
+    nuevo del formulario multipart ni como input nuevo del workflow, para
+    no tener que redesplegar el Worker ni tocar
+    `.github/workflows/integrate-content.yml`: desde el punto de vista
+    del Worker/workflow sigue siendo el mismo campo `notes` de siempre.
+  - **`backend/agent/system-prompt.md`**: el agente lee ese "destino
+    sugerido" como una simple ayuda, nunca como una decisión firme — si
+    el contenido real encaja mejor en otro sitio, prioriza el contenido y
+    lo explica en el resumen (mismo criterio ya aplicado en el resto del
+    proyecto: el contenido manda, nunca una etiqueta).
+  - **Archivado real en la bibliografía** (paso 3 nuevo de "Tu tarea"):
+    antes, el PDF se quedaba para siempre en `docs/incoming/` sin que
+    nada lo moviera ni lo citara — ahora el agente debe moverlo a
+    `docs/<autor>-<año>-<tema-corto>.pdf` (mismo patrón que ya usan las
+    decenas de PDF existentes en `docs/`), borrar el original de
+    `docs/incoming/`, y añadir/ajustar una tarjeta "📚 Bibliografía" con
+    `.biblio-link`/`.biblio-nota` enlazando a `docs/<archivo>.pdf#page=N`
+    en el módulo donde aterrizó el contenido — un link, nunca una fuente
+    externa que pueda dejar de estar viva, mismo criterio que ya rige
+    toda la bibliografía de la app.
+  - **Auditoría en dos direcciones, no solo fabricación** (paso 5
+    ampliado): antes solo se pedía comprobar que no se hubiera fabricado
+    contenido; ahora se pide releer la fuente completa buscando también
+    lo contrario — huecos reales (tablas/cifras/figuras que la fuente
+    tiene y la app no llegó a recoger) — y declararlos con su ubicación
+    exacta en una sección nueva del resumen (`## Huecos de contenido
+    detectados`) en vez de callarlos, mismo criterio que las decenas de
+    auditorías de contenido ya documentadas en este archivo para
+    Nefrología/HTA/ERC/FRA/Cardiología/Fisiopatología UCI.
+  - **Propuestas de mejora e interactividad, sin implementarlas** (paso 6
+    nuevo): tras verificar el contenido base, el agente debe revisarlo
+    con la misma mirada que los informes de
+    "fallos/huecos/interactividad/mejoras" ya hechos a mano en el resto
+    del proyecto, y anotar candidatos concretos (calculadora/selector/
+    simulador/enlace cruzado) en una sección nueva del resumen (`##
+    Propuestas de mejora e interactividad (no implementadas)`) —
+    **deliberadamente sin construirlas en la misma PR**: sin un humano
+    revisando en tiempo real es más seguro dejar la base ya verificada y
+    proponer el resto para una ronda futura explícita, mismo patrón de
+    "primero informe, después 'aplica todo' si se pide" ya usado en
+    todas las rondas de auditoría manuales de este proyecto.
+  - `backend/README.md` actualizado para reflejar las 4 ampliaciones y
+    el estado real de la primera prueba (arriba).
 
 ## Cómo probar cambios
 

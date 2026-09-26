@@ -28,7 +28,7 @@
     }
     label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 6px; margin-top: 14px; }
     label:first-child { margin-top: 0; }
-    input[type="password"], input[type="url"], input[type="file"], textarea {
+    input[type="password"], input[type="url"], input[type="file"], select, textarea {
         width: 100%;
         background: var(--bg-main);
         border: 1px solid var(--border-color);
@@ -39,6 +39,7 @@
         font-family: inherit;
     }
     textarea { min-height: 90px; resize: vertical; }
+    select { appearance: none; cursor: pointer; }
     .tabs { display: flex; gap: 8px; margin-bottom: 4px; }
     .tab-btn {
         flex: 1;
@@ -97,8 +98,20 @@
             <input type="url" id="link" placeholder="https://...">
         </div>
 
-        <label for="notes">Notas — qué es esto y dónde crees que encaja</label>
-        <textarea id="notes" placeholder="Ej: guía de práctica clínica sobre... creo que amplía la Ficha X de Cardiología, o que es un nodo nuevo en..."></textarea>
+        <label for="destino">Destino sugerido (opcional)</label>
+        <select id="destino">
+            <option value="">No estoy seguro — que lo decida Claude</option>
+            <option value="Hematología">Hematología</option>
+            <option value="Nefrología">Nefrología</option>
+            <option value="UCI / Papers Tuiter">UCI / Papers Tuiter</option>
+            <option value="Fisiopatología UCI">Fisiopatología UCI</option>
+            <option value="Cardiología">Cardiología</option>
+            <option value="Neumología">Neumología</option>
+            <option value="Especialidad nueva">Especialidad nueva (no existe todavía)</option>
+        </select>
+
+        <label for="notes">Notas — qué es esto y, si lo sabes, a qué ficha/bloque concreto crees que va</label>
+        <textarea id="notes" placeholder="Ej: guía de práctica clínica sobre... creo que amplía la Ficha X, o que es un nodo nuevo dentro de..."></textarea>
 
         <button type="submit" id="submit-btn">Enviar a integración</button>
     </form>

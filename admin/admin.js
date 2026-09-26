@@ -33,7 +33,12 @@ form.addEventListener('submit', async (e) => {
     statusEl.className = 'status';
 
     const passcode = document.getElementById('passcode').value;
-    const notes = document.getElementById('notes').value;
+    const destino = document.getElementById('destino').value.trim();
+    const notesRaw = document.getElementById('notes').value;
+    // El destino se antepone a las notas en vez de mandarse como campo
+    // aparte — así no hace falta tocar el Worker ni el workflow (que solo
+    // conocen "notes"), y el agente lo lee igual, con una etiqueta clara.
+    const notes = destino ? `Destino sugerido por el usuario: ${destino}\n\n${notesRaw}` : notesRaw;
     const file = document.getElementById('file').files[0];
     const link = document.getElementById('link').value.trim();
 

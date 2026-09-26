@@ -8,16 +8,28 @@ rige el resto de la app (ver `CLAUDE.md`). El resto de la app sigue siendo
 ## Qué hace
 
 1. Abres `/admin` en la web, metes la contraseña, subes un PDF o pegas un
-   link, y añades notas de contexto.
+   link, opcionalmente eliges un **destino sugerido** (especialidad —
+   solo una ayuda, no una decisión firme: el agente puede ir a otro sitio
+   si el contenido encaja mejor ahí, y lo explica en el resumen), y
+   añades notas de contexto.
 2. Un **Cloudflare Worker** valida la contraseña, sube el PDF a una rama
    nueva del repo (si hay PDF) y dispara un workflow de GitHub Actions.
 3. Ese workflow instala Python/`poppler-utils`/Playwright, y corre el
    **Claude Agent SDK** (el mismo motor de Claude Code) con acceso a
    Bash/ficheros para construir el contenido real, siguiendo las
-   convenciones de `CLAUDE.md`, verificar con Playwright, y auditar su
-   propio trabajo contra la fuente.
+   convenciones de `CLAUDE.md`: construye fichas/quiz/calculadoras,
+   **archiva el PDF fuente en la bibliografía** (`docs/`, nunca se queda
+   en `docs/incoming/`) con su enlace `.biblio-link` correspondiente,
+   verifica con Playwright, y audita su propio trabajo contra la fuente
+   en dos direcciones — qué pudo haber fabricado sin respaldo, y qué
+   huecos de contenido real quedaron sin trasladar — y además propone
+   (sin implementar) mejoras e interactividad candidatas para una ronda
+   futura.
 4. Al terminar, abre una **Pull Request en borrador** a `main` — nunca
-   mergea sola. La revisas y la mergeas tú, desde GitHub (web o móvil).
+   mergea sola. Su descripción incluye qué se añadió, la fuente, lo
+   verificado, la auditoría de fidelidad, los huecos detectados, y las
+   propuestas de mejora — la revisas y la mergeas tú, desde GitHub (web o
+   móvil).
 
 ## Coste real
 
@@ -80,6 +92,16 @@ ajustar el comportamiento sin tocar código:
 Sigue el orden ya decidido: valida el pipeline real (Actions + agente)
 disparándolo tú mismo antes de fiarte del panel público.
 
+**Ya se probó una vez** con un PDF sintético de 2 páginas (rama
+`content/test-pipeline`, `run_id` 35265950079): todo lo mecánico
+funciona — checkout, instalar `poppler`/Node/Playwright, instalar las
+dependencias del agente (`@anthropic-ai/claude-agent-sdk` con `"latest"`
+resuelve bien) — y el único fallo fue el esperado, `Falta
+ANTHROPIC_API_KEY`, porque ese secreto todavía no estaba puesto. En
+cuanto lo añadas (paso 3 de arriba), repetir esa misma prueba es lo que
+falta para validar de verdad la llamada al Agent SDK (`query()` en
+`backend/agent/run.mjs`), que nunca se ha llegado a ejecutar.
+
 1. Sube un PDF corto (2-3 páginas) a `docs/incoming/` en una rama de
    prueba y comitéalo.
 2. En GitHub → Actions → "Integrar contenido nuevo" → Run workflow, con
@@ -88,9 +110,13 @@ disparándolo tú mismo antes de fiarte del panel público.
 3. Sigue el *run* en vivo. Si el Agent SDK falla por un nombre de opción
    incorrecto (ver la nota al principio de `backend/agent/run.mjs`),
    corrígelo ahí contra el error real de los logs.
-4. Cuando termine, revisa la PR en borrador a mano contra el PDF, con el
-   mismo criterio de auditoría que ya se usa en el resto del proyecto,
-   antes de aprobarla.
+4. Cuando termine, revisa la PR en borrador a mano contra el PDF —
+   comprobando en particular que el PDF quedó archivado en `docs/` (no
+   en `docs/incoming/`) con su entrada de bibliografía enlazada, y que
+   las secciones nuevas del resumen (huecos detectados, propuestas de
+   mejora) tienen contenido real y no genérico — con el mismo criterio
+   de auditoría que ya se usa en el resto del proyecto, antes de
+   aprobarla.
 
 Solo cuando este paso dé resultados de calidad aceptable, usa el panel
 `/admin` de verdad — GitHub Pages lo sirve automáticamente en cuanto esta
