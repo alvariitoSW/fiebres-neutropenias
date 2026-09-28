@@ -6916,6 +6916,72 @@ dentro de `#cardiologia-view` y en el switcher `cardioLevel` de
       a 390px. Sin cambios de CSS, así que no hizo falta bump de
       cache-busting.
 
+- **Tercera guía: "Manual UMI Negrín — Cardiología práctica"**
+  (`js/modules/cardiologia/manual-umi-cardio.html`+`.js`). Fuente: manual de
+  orientación interno de la Unidad de Medicina Intensiva del Hospital
+  Universitario de Gran Canaria Dr. Negrín (HUGCDN), "Cómo estar en la UCI
+  sin matar ni morir" (105 páginas, enviado por el usuario en 2 partes) —
+  mismo criterio ya establecido en el proyecto para PNT/manuales internos
+  de un servicio (ver Trasplante de Hematología y los PNT de Nefrología):
+  nunca reproducir el documento original ni nombres de personal, extraer
+  solo el contenido clínico y reescribirlo con la voz propia de la app,
+  citando de forma genérica. Los 2 PDF se archivaron en
+  `docs/hugcdn-umi-manual-guardia-parte1.pdf` (52 págs. reales, la 53
+  duplica la 52 — artefacto de exportación) y
+  `docs/hugcdn-umi-manual-guardia-parte2.pdf` (offset de página real =
+  página impresa − 52). Es un documento de orientación general de guardia,
+  no organizado por especialidad de órgano — antes de construir nada se
+  hizo un análisis del contenido completo (ambas partes, ~30 temas
+  clínicos distintos) y se presentó al usuario con `AskUserQuestion` un
+  plan de reparto: los temas cardiológicos a Cardiología, los respiratorios
+  a Neumología, y los genuinamente sin especialidad de órgano (nutrición,
+  sedoanalgesia, glucemia, shock séptico/infección) a una especialidad
+  nueva, "Protocolos UCI" (ver más abajo) — con el bloque neurocrítico
+  (TCE/PIC/HSA/hidrocefalia/Doppler transcraneal/meningitis-ventriculitis)
+  aplazado a una tanda futura por su volumen. **Cuaderno de campo de 8
+  fichas**: Fármacos vasoactivos — receptores y dosis (α/β adrenérgicos,
+  dopamina/dobutamina/noradrenalina/adrenalina/nitroglicerina/nitroprusiato,
+  más una tabla de sedantes/relajantes musculares/antibióticos en perfusión
+  continua reutilizada de la misma fuente), Endocarditis infecciosa —
+  criterios de Duke (originales y modificados, algoritmo diagnóstico
+  ETT/ETE, ESC 2015), Ecocardiografía FATE a pie de cama (las 4 ventanas
+  básicas, dimensiones/contractilidad normales, índice de colapsabilidad de
+  VCI, patología importante de referencia), Marcapasos — código de 5 letras
+  (NBG) con los grupos de recomendación I-III, Hemodinámica invasiva y
+  protocolo Swan-Ganz (fórmulas PAM/IC/RVS/RVP/DO₂/VO₂, patrones
+  hemodinámicos del shock, algoritmo de reanimación por PAM/TAS), Cirugía
+  cardiaca — anticoagulación y sangrado (protocolo de heparina sódica
+  guiado por rAPTT, algoritmo de sangrado post-CCV guiado por
+  tromboelastograma), Síndrome posparada cardíaca (componentes, 5 fases,
+  manejo inicial y optimización guiada por objetivos), y Fibrilación
+  auricular — algoritmo de anticoagulación (con enlace explícito, sin
+  duplicar, a la calculadora de CHA₂DS₂-VASc ya existente en Merino
+  Cardiología Ficha XVII). **Sin imágenes extraídas** en esta primera
+  tanda — las figuras del manual (anatomía TC, territorios vasculares,
+  esquemas FATE) se recrearon como `.data-table`/`.algo-flow` nativos.
+  **5 preguntas por ficha (4 opción múltiple + 1 de redactar) × 8 fichas =
+  40 preguntas** (`js/data/manual-umi-cardio-preguntas.js`,
+  `umi-cq001`-`q040`) — formato reducido, mismo criterio ya establecido en
+  UCI/Papers Tuiter para fuentes de tipo protocolo/manual práctico en vez
+  del formato completo de ~8 por ficha. `triggerId:
+  'btn-umi-cardio-repasar'`. El banco de Cardiología queda en 326 preguntas
+  y el banco combinado de toda la app en <strong>1829 preguntas</strong>.
+  **Bug real de layout encontrado y corregido durante la propia
+  verificación con Playwright**: 3 tablas anchas (índice de colapsabilidad
+  VCI ×2, patrones hemodinámicos del shock de 7 columnas) causaban overflow
+  horizontal a 390px — corregidas envolviéndolas en
+  `<div style="overflow-x:auto;">`, mismo patrón ya usado en el resto de la
+  app para tablas anchas. **Segundo hallazgo, más sutil**: 4 frases de
+  `.field-hook`/`.back-hook` en las 3 guías nuevas de este lote (esta y las
+  2 de abajo) usaban una palabra compuesta con barras sin espacios
+  (p. ej. "α1/α2/β1/β2/β3", "PVC/PAPM/GC/RVS") que Chromium no trata como
+  punto de ruptura de línea válido — el texto no envolvía y desbordaba la
+  ficha en 14px de forma consistente. Corregido sustituyendo las barras por
+  comas/"y" en las 4 frases — lección para el futuro: evitar compuestos de
+  3+ términos unidos solo por "/" sin espacios en el texto de gancho de una
+  ficha (las tablas y el cuerpo sí pueden usar "/" sin espacio con
+  seguridad, porque ahí el ancho de columna ya fuerza el ajuste).
+
 ### Neumología
 
 Sexta especialidad del menú raíz (`#btn-neumologia`, junto a Hematología,
@@ -7345,10 +7411,125 @@ de entrada. Añadir una guía nueva en el futuro: 1) botón nuevo en
       no aparecen; sin overflow horizontal ni errores de consola reales
       (el único 404 es el `favicon.ico`, ya documentado como inocuo).
 
+- **Segunda guía: "Manual UMI Negrín — Manejo respiratorio práctico"**
+  (`js/modules/neumologia/manual-umi-neumo.html`+`.js`). Misma fuente que la
+  nueva guía de Cardiología (manual de orientación de la UMI, HUGCDN, ver
+  esa sección para el detalle completo de los 2 PDF archivados y el
+  análisis de reparto de contenido). **Cuaderno de campo de 4 fichas**:
+  Secuencia de intubación rápida (SIR) — los 7 pasos, tabla de fármacos de
+  inducción/relajantes con dosis reales, algoritmo por estabilidad
+  hemodinámica; Programación inicial del respirador — tabla de parámetros
+  iniciales, fórmula de PBW, tabla FiO₂/PEEP de la ARDS Network, checklist
+  de verificación antes de conectar al paciente; Criterios de extubación y
+  brecha aniónica — 5 criterios requeridos + 3 opcionales, fórmula y causas
+  de hiato aniónico elevado; Protocolo BLUE de ecografía pulmonar —
+  algoritmo completo en 3 pasos (sliding/líneas A-B/PLAPS) hasta los 5
+  diagnósticos (edema pulmonar, neumonía, EPOC/asma, TEP, neumotórax).
+  **5 preguntas por ficha (4 opción múltiple + 1 de redactar) × 4 fichas =
+  20 preguntas** (`js/data/manual-umi-neumo-preguntas.js`,
+  `umi-nq001`-`q020`), `triggerId: 'btn-umi-neumo-repasar'`. El banco de
+  Neumología queda en 204 preguntas. **2 tablas anchas envueltas en
+  `overflow-x:auto`** (fármacos de la SIR con `rowspan`, tabla FiO₂/PEEP de
+  17 columnas) tras el mismo hallazgo de overflow ya documentado en la
+  guía de Cardiología. Verificado con Playwright: las 4 fichas
+  abren/voltean sin error de consola ni 404 real, sin overflow horizontal
+  a 390px, y un recorrido del quiz de este bloque no generó ninguna
+  excepción JS.
+
+### Protocolos UCI
+
+Séptima especialidad del menú raíz (`#btn-protocolos-uci`, junto a
+Hematología, Nefrología, UCI/Papers Tuiter, Fisiopatología UCI, Cardiología
+y Neumología) — deliberadamente **distinta** del resto: no está ligada a un
+órgano/sistema concreto, sino a protocolos prácticos de guardia
+transversales (nutrición, electrolitos, sedoanalgesia, control de
+infección, glucemia, logística de traslado). Nació al procesar el manual
+de orientación de la UMI del HUGCDN (ver Cardiología y Neumología más
+arriba para el resto de su contenido): tras el análisis completo del
+documento y confirmar con el usuario vía `AskUserQuestion` la creación de
+una especialidad nueva, los temas sin hueco en ninguna especialidad de
+órgano existente (nutrición, reposición de electrolitos, shock séptico/
+cóctel de Marik, descontaminación digestiva selectiva y aislamiento por
+BMR, control glucémico, rutinas de guardia/traslado intrahospitalario)
+aterrizaron aquí en vez de fragmentarse como ampliaciones forzadas de
+fichas ya existentes de otras especialidades. Mismo patrón de dos niveles
+que Cardiología/Neumología/UCI Papers Tuiter: un **submenú de guías**
+(`#protocolos-uci-menu-view`/
+`js/modules/protocolos-uci/protocolos-uci-menu.html`, con
+`.btn-volver-especialidades`) del que cuelga un botón por guía, y la
+**vista propia de cada guía** con su propio cuaderno de campo. El switcher
+`protocolosLevel` vive en `js/modules/protocolos-uci/index.js`
+(`createViewSwitcher({ menu, manualUmi })`); `protocolosUci.init()`
+devuelve `{ volverAlMenu, irAFicha }`, inyectado perezosamente en
+`home/index.js` (`onProtocolosUciListo`, mismo patrón que
+`onNeumologiaListo`) para dejar siempre el submenú de guías como pantalla
+de entrada. Añadir una guía nueva en el futuro: 1) botón nuevo en
+`protocolos-uci-menu.html`, 2) su propio `<guia>.html` con
+`.btn-volver-protocolos-menu`, 3) registrarlo en `index.html` dentro de
+`#protocolos-uci-view` y en el switcher `protocolosLevel` de
+`protocolos-uci/index.js`.
+
+- **Primera guía: "Manual UMI Negrín — Protocolos generales"**
+  (`js/modules/protocolos-uci/manual-umi-protocolos.html`+`.js`). Misma
+  fuente que las 2 nuevas guías de Cardiología/Neumología (ver esas
+  secciones para el detalle de los 2 PDF archivados en `docs/` y el
+  criterio de nunca reproducir el documento original ni nombres de
+  personal). **Cuaderno de campo de 6 fichas**: Nutrición en el paciente
+  crítico (principios de inicio precoz, fórmulas de peso ideal/ajustado,
+  cálculo energético por Harris-Benedict e Ireton-Jones, requerimientos de
+  macronutrientes, cribado NRS2002), Reposición de electrolitos en la UMI
+  (tablas reales de dosis de K⁺/Ca²⁺/Mg²⁺/fósforo por déficit, fármacos que
+  causan hipopotasemia, fórmula de TTKG — complementario, no redundante,
+  con la fisiología de electrolitos ya desarrollada en Nefrología), Shock
+  séptico — manejo inicial y cóctel de Marik (definiciones Sepsis-3,
+  objetivos de reanimación en 6h, protocolo completo del cóctel de
+  vitamina C/tiamina/hidrocortisona), Descontaminación digestiva selectiva
+  y aislamiento por BMR (criterios de riesgo al ingreso, protocolo DDS
+  estándar/mixta, reglas de aislamiento de contacto — complementario a
+  Merino Neumología Ficha XIX), Control glucémico — algoritmos y pauta
+  móvil (los 6 algoritmos escalonados de perfusión de insulina I-VI, pauta
+  móvil subcutánea, reglas de medición), y Rutinas de guardia y traslado
+  intrahospitalario (estructura del pase de guardia por sistemas,
+  checklist completo de traslado antes/durante/después). **Sin
+  calculadoras propias** en esta primera tanda — contenido de referencia
+  puro (tablas/algoritmos), mismo criterio ya aplicado a otros bloques
+  iniciales de manual/protocolo de la app. **5 preguntas por ficha (4
+  opción múltiple + 1 de redactar) × 6 fichas = 30 preguntas**
+  (`js/data/manual-umi-protocolos-preguntas.js`, `umi-pq001`-`q030`),
+  `triggerId: 'btn-umi-protocolos-repasar'`. El banco combinado de toda la
+  app queda en <strong>1829 preguntas</strong> (contando también las 60
+  preguntas nuevas de las guías hermanas de Cardiología/Neumología del
+  mismo lote). **3 tablas anchas envueltas en `overflow-x:auto`** (tabla de
+  6 algoritmos de glucemia, tabla de fármacos causantes de hipopotasemia
+  por categoría, tabla de estructura del evolutivo por sistema) tras el
+  mismo hallazgo de overflow ya documentado en la guía hermana de
+  Cardiología — más una frase de `.back-hook` con una palabra compuesta de
+  3 términos unidos por "/" sin espacios ("inicio/mantenimiento/retirada")
+  que no envolvía, corregida a comas. Verificado con Playwright: las 6
+  fichas abren/voltean sin error de consola ni 404 real, sin overflow
+  horizontal a 390px, el menú del quiz en 3 niveles muestra "Protocolos
+  UCI (30)" → "Manual UMI Negrín (30)" → las 6 fichas con 5 preguntas cada
+  una, y un recorrido mixto de preguntas de opción múltiple y de redactar
+  no generó ninguna excepción JS.
+  - **Pendiente**: el bloque neurocrítico (TCE, PIC, hidrocefalia,
+    fibrinolisis intraventricular, escalas de HSA — Marshall/Fisher/
+    Fisher modificado/Hunt-Hess —, Doppler transcraneal/vasoespasmo,
+    ecografía de la vaina del nervio óptico, GOS, Rankin modificado,
+    neuroanatomía TC/vascular) y meningitis/ventriculitis (algoritmo
+    diagnóstico, criterios de Lozier, profilaxis antibiótica) del mismo
+    manual UMI quedan pendientes de una especialidad nueva "Neurocrítico"
+    — confirmada con el usuario, aplazada a una tanda futura por su
+    volumen (~18 páginas de guías completas). Las "ampliaciones rápidas"
+    identificadas en el análisis inicial (ácido-base — considerado
+    redundante con el clasificador ya existente de Nefrología, descartado
+    —, HFVVC/fórmulas de TRR → ampliación de `trr.html` en Nefrología)
+    también quedan pendientes de una tanda futura.
+
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
 también `especialidades`, `nefrologia`, `uciPapers`, `fisioUci`,
-`cardiologia` y `neumologia` como vistas más del mismo switcher raíz —,
+`cardiologia`, `neumologia` y `protocolosUci` como vistas más del mismo
+switcher raíz —,
 submenú de
 Citopenias, submenú de
 Trasplante), inicializa el Atlas

@@ -1,0 +1,468 @@
+    <button class="back-btn btn-volver-protocolos-menu">← VOLVER</button>
+    <div class="diag-header">
+        <h2 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">Manual UMI Negrín — Protocolos generales</h2>
+        <p>Protocolos y referencias a pie de cama de la Unidad de Medicina Intensiva (HUGCDN)</p>
+    </div>
+
+    <button class="accordion-btn nav-btn" id="btn-umi-protocolos-repasar" style="border-left: 4px solid var(--accent-purple);">
+        <span>🎯 Repasar (preguntas de repaso)</span>
+        <span style="font-size: 0.8rem; color: var(--accent-purple);">[ EMPEZAR → ]</span>
+    </button>
+
+    <p class="section-label">Elige un bloque</p>
+    <div class="corkboard" id="umi-protocolos-corkboard">
+
+        <div class="field-card" data-tab="umi-nutricion"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha I</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-green)" stroke-width="1.6">
+                    <path d="M28,12 L28,44 M52,12 L52,44 M20,12 L36,12 M44,12 L60,12" stroke-width="1.4"/>
+                    <path d="M28,26 C36,26 36,20 28,20" stroke-width="1.3"/>
+                </svg>
+                <div class="field-name">Nutrición en el<br>paciente crítico</div>
+                <div class="field-hook">"todo paciente que no comerá en 72h necesita nutrición enteral — pero, ¿qué peso usar para calcular sus calorías si está obeso?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Inicio precoz (&lt;24h) de nutrición enteral, fórmulas para calcular el gasto energético (Harris-Benedict, Ireton-Jones) y el cribado NRS2002 de riesgo nutricional — con reglas específicas de peso ajustado en el obeso crítico.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="umi-electrolitos"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha II</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-blue)" stroke-width="1.6">
+                    <circle cx="30" cy="28" r="10" stroke-opacity="0.7"/>
+                    <circle cx="50" cy="28" r="6" stroke-opacity="0.5"/>
+                    <path d="M30,18 L30,38 M20,28 L40,28" stroke-width="1.2"/>
+                </svg>
+                <div class="field-name">Reposición de electrolitos<br>en la UMI</div>
+                <div class="field-hook">"no más de 20 mEq/h de potasio por vía central, salvo si K &lt;2 — ¿por qué esa única excepción, y qué límite tiene la vía periférica?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Tablas de reposición reales de potasio, calcio, fósforo y magnesio por déficit — con los límites de velocidad de infusión que evitan una hiperpotasemia iatrogénica por corrección demasiado rápida.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="umi-shock-septico"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha III</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-red)" stroke-width="1.6">
+                    <path d="M40,10 C32,22 24,30 24,38 C24,46.6 31.2,52 40,52 C48.8,52 56,46.6 56,38 C56,30 48,22 40,10 Z" stroke-opacity="0.75"/>
+                </svg>
+                <div class="field-name">Shock séptico: manejo<br>inicial y cóctel de Marik</div>
+                <div class="field-hook">"vitamina C, tiamina e hidrocortisona en sepsis grave con PCT &gt;2 — ¿qué evidencia hay detrás de este cóctel, y cuándo se administra?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Objetivos de reanimación en las primeras 6 horas (TAM, PVC, diuresis, SvO₂), la definición de Sepsis-3/qSOFA, y el protocolo local del "cóctel de Marik" con sus 3 fármacos y su ventana temporal exacta.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="umi-dds-aislamiento"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha IV</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-yellow)" stroke-width="1.6">
+                    <rect x="24" y="14" width="32" height="28" rx="4" stroke-opacity="0.7"/>
+                    <circle cx="40" cy="28" r="6" stroke-opacity="0.6"/>
+                </svg>
+                <div class="field-name">Descontaminación digestiva<br>selectiva y aislamiento BMR</div>
+                <div class="field-hook">"colonización o infección previa por BMR: aislamiento preventivo desde el minuto 1, sin esperar el cultivo. ¿qué otros 5 criterios disparan la misma regla?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Criterios de riesgo de bacterias multirresistentes al ingreso, el protocolo completo de descontaminación digestiva selectiva (estándar vs. mixta) y las reglas de inicio, mantenimiento y retirada del aislamiento de contacto.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="umi-glucemia"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha V</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-purple)" stroke-width="1.6">
+                    <path d="M16,42 L26,20 L36,36 L46,14 L56,30 L64,20" stroke-width="1.4"/>
+                </svg>
+                <div class="field-name">Control glucémico:<br>algoritmos y pauta móvil</div>
+                <div class="field-hook">"6 algoritmos de intensidad distinta, y el paciente empieza en uno u otro según lleve catecolaminas, corticoides o sea diabético insulinizado. ¿cómo se decide?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">El protocolo de perfusión de insulina en 6 algoritmos escalonados (I-VI) con objetivo 140-180 mg/dl, más la pauta móvil de insulina subcutánea — con la regla explícita de nunca medir glucemia capilar en el paciente en shock.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="umi-rutinas"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha VI</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-green)" stroke-width="1.6">
+                    <rect x="18" y="10" width="44" height="36" rx="3" stroke-opacity="0.6"/>
+                    <path d="M26,20 L54,20 M26,28 L54,28 M26,36 L44,36" stroke-width="1.2"/>
+                </svg>
+                <div class="field-name">Rutinas de guardia<br>y traslado intrahospitalario</div>
+                <div class="field-hook">"2 balas de O₂ cargadas, fármacos de parada individualizados, y el médico lleva siempre la voz de mando. ¿qué checklist reduce de verdad el riesgo de un traslado?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">El pase de guardia estructurado por sistemas (neurológico, hemodinámico, respiratorio, otros) y el checklist completo de un traslado intrahospitalario seguro — antes, durante y después.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+    </div>
+
+    <div class="card" id="panel-umi-protocolos-tabs" style="display:none;">
+
+        <!-- ===== FICHA I: NUTRICIÓN ===== -->
+        <div id="umi-nutricion" class="tab-content">
+            <h3 style="color: var(--accent-green);">Nutrición en el paciente crítico</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Manual de orientación de la UMI, HUGCDN.</p>
+
+            <p class="section-label">Principios generales</p>
+            <div class="algo-flow">
+                <div class="algo-step"><span class="algo-num">1</span><div class="algo-text">Todo paciente crítico que no recibirá dieta oral por 72h debería recibir nutrición enteral (NET).</div></div>
+                <div class="algo-step"><span class="algo-num">2</span><div class="algo-text"><strong>Inicio precoz</strong> (antes de 24h), con hemodinámia estable y aparato gastrointestinal funcional.</div></div>
+                <div class="algo-step"><span class="algo-num">3</span><div class="algo-text">Evitar la nutrición parenteral (NP) en pacientes que toleran la enteral y alcanzan el 80% del objetivo por esta vía.</div></div>
+                <div class="algo-step"><span class="algo-num">4</span><div class="algo-text">No hay diferencias entre la vía yeyunal vs. gástrica.</div></div>
+                <div class="algo-step"><span class="algo-num">5</span><div class="algo-text">Usar fórmulas poliméricas apropiadas.</div></div>
+                <div class="algo-step"><span class="algo-num">6</span><div class="algo-text">Uso de procinéticos en intolerancia digestiva.</div></div>
+                <div class="algo-step"><span class="algo-num">7</span><div class="algo-text">Usar NTP suplementaria cuando la NE no logra cubrir los requerimientos estimados.</div></div>
+            </div>
+
+            <p class="section-label" style="margin-top:14px;">Peso: fórmulas de referencia</p>
+            <dl class="kv-row"><dt>Peso ideal — hombre</dt><dd>0,75 × altura (cm) − 62,5</dd></dl>
+            <dl class="kv-row"><dt>Peso ideal — mujer</dt><dd>0,675 × altura (cm) − 56,25</dd></dl>
+            <dl class="kv-row"><dt>Índice de Broca (peso ideal)</dt><dd>Altura (cm) − 100</dd></dl>
+            <dl class="kv-row"><dt>Peso ajustado</dt><dd>0,25 × (peso actual − peso ideal) + peso ideal</dd></dl>
+            <table class="data-table">
+                <thead><tr><th>IMC</th><th>Categoría</th></tr></thead>
+                <tbody>
+                    <tr><td>&lt;18,4</td><td>Insuficiencia ponderal</td></tr>
+                    <tr><td>18,5-24,9</td><td>Normal</td></tr>
+                    <tr><td>25-29,9</td><td>Sobrepeso</td></tr>
+                    <tr><td>30-34,9</td><td>Obesidad I</td></tr>
+                    <tr><td>35-39,9</td><td>Obesidad II</td></tr>
+                    <tr><td>&gt;40</td><td>Obesidad III</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:14px;">Cálculo energético diario (CED)</p>
+            <dl class="kv-row"><dt>CED</dt><dd>CED = TEB × FA (factor de actividad)</dd></dl>
+            <dl class="kv-row"><dt>Tasa energética basal (TEB) — Harris-Benedict, hombre</dt><dd>(13,75 × peso kg) + (5 × altura cm) − (6,76 × edad) + 66,5</dd></dl>
+            <dl class="kv-row"><dt>TEB — mujer</dt><dd>(9,56 × peso kg) + (1,85 × altura cm) − (4,68 × edad) + 66,5</dd></dl>
+            <table class="data-table">
+                <thead><tr><th>Factor de actividad (FA)</th><th>Valor</th></tr></thead>
+                <tbody>
+                    <tr><td>Sedentario</td><td>1,2</td></tr>
+                    <tr><td>Activo 1-3 días/semana</td><td>1,375</td></tr>
+                    <tr><td>Activo 3-5 días/semana</td><td>1,55</td></tr>
+                    <tr><td>Activo 5-6 días/semana</td><td>1,725</td></tr>
+                    <tr><td>Extremadamente activo (2×/día)</td><td>1,9</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:14px;">Ecuación de Ireton-Jones (alternativa específica de UCI)</p>
+            <dl class="kv-row"><dt>Paciente ventilado</dt><dd>1784 − 11×edad + 5×peso(kg) + 244×sexo + 239×trauma + 804×quemaduras (sexo: varón=1, mujer=0; trauma=1 si sí; quemaduras=1 si sí)</dd></dl>
+            <dl class="kv-row"><dt>Paciente en ventilación espontánea</dt><dd>629 − 11×edad + 25×peso − 609×obesidad (obesidad=1 si sí)</dd></dl>
+            <p style="font-size:0.85rem; color:var(--text-dim);">En ausencia de estos cálculos, un aporte de 25-30 kcal/kg/día es adecuado para la mayoría de pacientes críticos. Por escenario: fase aguda 20-25 kcal/kg/día · TCE 30-35 kcal/kg/día · HFVVC 30-35 kcal/kg/día · paciente obeso crítico 22-25 kcal/kg de peso ajustado.</p>
+
+            <p class="section-label" style="margin-top:14px;">Requerimientos diarios de macronutrientes</p>
+            <dl class="kv-row"><dt>Proteína</dt><dd>1,5-2,5 g/kg/día. Relación calorías proteicas/g de N: 120/1 a 70/1. Balance nitrogenado (BN) = N ingresado − N eliminado; N ingresado = g proteína/6,25; N eliminado = urea en orina(g/l) × 0,46 × vol. orina(l/24h) + 4g (pérdidas por heces/sudor + N no ureico en orina).</dd></dl>
+            <dl class="kv-row"><dt>Carbohidratos</dt><dd>2 g/kg/día — deben representar el 60% de las calorías no proteicas. En estrés metabólico, no exceder 5 mg/kg/min.</dd></dl>
+            <dl class="kv-row"><dt>Lípidos</dt><dd>1 g/kg/día, no &gt;1,5 g/kg/día — 40% de las calorías no proteicas. En estrés metabólico, no exceder 0,12 g/kg/h. LCT/LMC al 20-30% es mejor que al 10% en sepsis y trauma.</dd></dl>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Objetivo: lograr el 50-60% de los requerimientos calculados en la primera semana; si no se llega al 100% en 7-10 días, iniciar suplemento parenteral. La NTP debe contener 0,2-0,4 g/kg/día de L-glutamina (ESPEN, evidencia A).</p>
+
+            <p class="section-label" style="margin-top:14px;">Cribado de riesgo nutricional — NRS2002</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);"><strong>Pre-screening</strong>: ¿IMC &lt;20,5? ¿ha perdido peso en los últimos 3 meses? ¿ha reducido la ingesta en la última semana? ¿está gravemente enfermo (p. ej. en cuidados intensivos)? Si cualquier respuesta es sí, se realiza el screening final.</p>
+            <table class="data-table">
+                <thead><tr><th>Puntos</th><th>Alteración del estado nutricional</th><th>Gravedad de la enfermedad</th></tr></thead>
+                <tbody>
+                    <tr><td>0</td><td>Estado nutricional normal</td><td>Requerimientos normales</td></tr>
+                    <tr><td>1</td><td>Pérdida &gt;5% en 3 meses o ingesta 50-75% del requerimiento</td><td>Fractura de cadera, EPOC/cirrosis/HD/DM agudizados, oncológicos</td></tr>
+                    <tr><td>2</td><td>Pérdida &gt;5% en 2 meses, o IMC 18,5-20,5 + alteración del estado general, o ingesta 25-60%</td><td>Cirugía mayor abdominal, ictus, neumonía grave, tumor hematológico</td></tr>
+                    <tr><td>3</td><td>Pérdida &gt;5% en 1 mes (&gt;15% en 3 meses) o IMC &lt;18,5 + alteración del estado general, o ingesta 0-25%</td><td>Lesión craneal, TMO, UCI (APACHE &gt;10)</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Si edad ≥70 años, añadir 1 punto a la puntuación total. Puntuación ≥3 = riesgo nutricional (iniciar plan nutricional). Puntuación &lt;3 = reevaluación semanal.</p>
+        </div>
+
+        <!-- ===== FICHA II: ELECTROLITOS ===== -->
+        <div id="umi-electrolitos" class="tab-content">
+            <h3 style="color: var(--accent-blue);">Reposición de electrolitos en la UMI</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Manual de orientación de la UMI, HUGCDN. Tablas de dosis reales de la unidad — complementarias, no redundantes, con la fisiología de electrolitos ya desarrollada en Nefrología.</p>
+
+            <p class="section-label">Hipopotasemia — reposición de K⁺</p>
+            <table class="data-table">
+                <thead><tr><th>Tipo</th><th>Tratamiento</th></tr></thead>
+                <tbody>
+                    <tr><td>Déficit &gt;20% · K &lt;2,5, o K 2-2,5 con pH &lt;7,2</td><td>40 mEq/l en 100 ml SF en 1h, control a 1h, si &lt;2,8 repetir, si &gt;2,8 seguir con PC 10-20 mEq/h sin pasar de 200 mEq/día</td></tr>
+                    <tr><td>Déficit =20% · K 2-2,5</td><td>20 mEq en 50 ml SF en 1h, control, PC 5-10 mEq/h hasta K&gt;2,8</td></tr>
+                    <tr><td>Déficit 15% · K 2,5-3</td><td>10 mEq en 50cc SF en 1h, luego control, PC 2-3 hasta K&gt;3,2</td></tr>
+                    <tr><td>Déficit 10% · K 3-3,5</td><td>3 mEq/h</td></tr>
+                    <tr><td>Déficit &lt;10% · K &gt;3,5</td><td>1-2 mEq/h</td></tr>
+                </tbody>
+            </table>
+            <ul class="term-chips">
+                <li>Máx. 200 mEq/día</li>
+                <li>No más de 20 mEq/h por VVC (salvo K&lt;2)</li>
+                <li>No más de 3 mEq/h por VVP</li>
+                <li>No más de 40-60 mEq/l por VVP</li>
+                <li>Evitar disolver en G5% (puede producir descenso inicial de K 0,2-1,4 mEq/l)</li>
+                <li>Mejor VVC femoral, o verificar que la punta del catéter no llega a la aurícula</li>
+                <li>Déficit de K = 50 mEq × kg × % déficit</li>
+                <li>Requerimientos diarios K = 1 mEq/kg</li>
+                <li>10 mEq de K aumentan 0,1 mEq/l si la función renal es normal</li>
+            </ul>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Si no corrige, pensar en déficit de Mg IV. Revisar tratamiento: presencia de perfusión de G5%, beta-agonistas, diuréticos, digoxina — buscar la causa.</p>
+
+            <p class="section-label" style="margin-top:14px;">Fármacos que pueden causar hipopotasemia</p>
+            <table class="data-table">
+                <thead><tr><th>Movilización transcelular de K</th><th>Aumento de pérdida renal de K</th><th>Aumento de pérdida en heces</th></tr></thead>
+                <tbody>
+                    <tr><td>Epinefrina, seudoefinefrina, fenilpropanolona, salbutamol, albuterol, terbutalina, fenoterol, efedrina, isoproterenol, cloroquina, verapamilo, cafeína, teofilina, insulina</td><td>Tiazidas, furosemida, acetazolamida, indapamida, glucocorticoides, fludocortisona, penicilina, nafcilina, ampicilina, aminoglucósidos, cisplatino, anfotericina B</td><td>Fenolftaleína, Na sulfato poliestireno</td></tr>
+                </tbody>
+            </table>
+            <dl class="kv-row"><dt>TTKG (si K en orina no disminuido en hipoK, confirma pérdidas renales)</dt><dd>TTKG = K(orina)×Osm(plasma) / [K(plasma)×Osm(orina)]</dd></dl>
+            <dl class="kv-row"><dt>Cálculo de K a reponer</dt><dd>(K real − K esperado [3,5]) × peso + requerimientos diarios (1 mEq/kg) — al resultado se agregan 30 mEq por cada litro de diuresis, llegando a usar reposiciones de 200-350 mEq en 24h.</dd></dl>
+
+            <p class="section-label" style="margin-top:14px;">Hiperpotasemia</p>
+            <table class="data-table">
+                <thead><tr><th>Objetivo</th><th>Medida</th></tr></thead>
+                <tbody>
+                    <tr><td>Reducir la despolarización de membrana</td><td>Ca 10% 10ml IV en 3min. Si sin cambios en ECG en 5-10min, repetir; efecto dura 30-60 min.</td></tr>
+                    <tr><td rowspan="4">Favorecer transferencia de K al medio intracelular</td><td>Insulina 10U IV + 50g glucosa (1amp Glucosmón) en 5 min.</td></tr>
+                    <tr><td>HCO₃ 1M 50-100 mEq IV VVC en 10-30 min — evitar en nefropatía terminal.</td></tr>
+                    <tr><td>Salbutamol nebulizado 10-20mg (2-4ml sol 0,5%) + 5cc SF, o IV 1amp (0,5mg) + 100ml SF en 20 min.</td></tr>
+                    <tr><td>Agonistas de la aldosterona: fludocortisona 0,5mg.</td></tr>
+                    <tr><td rowspan="3">Facilitar la pérdida de K</td><td>Resinas de intercambio VO 15-30g c/6-8h, o enema (50g + 250ml agua + 125 lactulosa, retener 30-60min c/6-8h).</td></tr>
+                    <tr><td>Furosemida 60mg dosis única IV, si función renal suficiente.</td></tr>
+                    <tr><td>Hemodiálisis.</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:14px;">Otros electrolitos</p>
+            <table class="data-table">
+                <thead><tr><th>Ion</th><th>Nivel</th><th>Dosis</th></tr></thead>
+                <tbody>
+                    <tr><td rowspan="3">Fósforo sérico</td><td>2,3-3 mg/dl</td><td>0,32 mmol/kg</td></tr>
+                    <tr><td>1,6-2,2 mg/dl</td><td>0,64 mmol/kg</td></tr>
+                    <tr><td>&lt;1,6 mg/dl</td><td>1 mmol/kg (250ml SG5% en 6h)</td></tr>
+                    <tr><td rowspan="3">Magnesio sérico</td><td>1,6-1,8 mg/dl</td><td>0,05 g/kg</td></tr>
+                    <tr><td>1-1,5 mg/dl</td><td>0,1 g/kg</td></tr>
+                    <tr><td>&lt;1 mg/dl</td><td>0,15 g/kg (50-100ml SF o SG5% en 10 min)</td></tr>
+                    <tr><td rowspan="2">Calcio iónico</td><td>1-1,12</td><td>2g (9,3 mEq)</td></tr>
+                    <tr><td>&lt;1</td><td>4g (18,6 mEq), en 50-100ml SF o SG5% en 10 min</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ===== FICHA III: SHOCK SÉPTICO ===== -->
+        <div id="umi-shock-septico" class="tab-content">
+            <h3 style="color: var(--accent-red);">Shock séptico: manejo inicial y cóctel de Marik</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Manual de orientación de la UMI, HUGCDN. Complementario a la fisiopatología de la sepsis ya desarrollada en Fisiopatología UCI → Inmunología y en el paper de Hernandez et al. en UCI/Papers Tuiter.</p>
+
+            <p class="section-label">Definiciones (Sepsis-3, 2016)</p>
+            <dl class="kv-row"><dt>Sepsis</dt><dd>Infección constatada o sospechada + 2 o 3 criterios qSOFA (HAT: Hipotensión TAS≤100 mmHg, Alteración mental GCS&lt;13, Taquipnea &gt;21rpm), o aumento del SOFA en 2 puntos o más.</dd></dl>
+            <dl class="kv-row"><dt>Shock séptico</dt><dd>Sepsis + necesidad de vasopresores para mantener TAM ≥65 mmHg + lactato &gt;2 mmol/l tras adecuada resucitación con volumen.</dd></dl>
+            <dl class="kv-row"><dt>Prueba de volumen</dt><dd>Administrar 500 ml de SF o Ringer lactato en no más de 30 min. Objetivo: TAM 75 mmHg, límite de seguridad PVC 15 mmHg. Medir TAM y PVC al inicio, a los 10 y a los 20 min. Mientras no se llegue al objetivo de TA o al límite de PVC, se asume que sigue faltando fluido.</dd></dl>
+
+            <p class="section-label" style="margin-top:14px;">Objetivos de reanimación en las primeras 6 horas</p>
+            <ul class="term-chips">
+                <li>TAM ≥65-70 mmHg</li>
+                <li>PVC entre 8-12 mmHg (12-15 mmHg si VM o hiperpresión abdominal)</li>
+                <li>Diuresis ≥0,5 ml/kg/h</li>
+                <li>SvO₂ ≥65% o ScvO₂ ≥70% (si Hb &lt;7, transfundir; si Hb &gt;7, dobutamina máx. 20 mcg/kg/min)</li>
+            </ul>
+
+            <p class="section-label" style="margin-top:14px;">Medidas de reanimación en las primeras 6h</p>
+            <div class="algo-flow">
+                <div class="algo-step"><span class="algo-num">1</span><div class="algo-text">Monitorización de ácido láctico (en minutos).</div></div>
+                <div class="algo-step"><span class="algo-num">2</span><div class="algo-text">Obtener hemocultivos ANTES de iniciar tratamiento antibiótico (en las primeras 2h).</div></div>
+                <div class="algo-step"><span class="algo-num">3</span><div class="algo-text">Inicio precoz de antibiótico — en las primeras 2h si se atiende en urgencias, en la primera hora si se atiende en la UMI sin proceder de urgencias.</div></div>
+                <div class="algo-step"><span class="algo-num">4</span><div class="algo-text">Si hipotensión o lactato &gt;3 mmol/l (27 mg/dl): iniciar reanimación con mínimo 20-30 ml/kg de cristaloides; emplear vasopresores (dopamina o noradrenalina) durante y después de la reanimación con líquidos si persiste la hipotensión.</div></div>
+                <div class="algo-step"><span class="algo-num">5</span><div class="algo-text">Si shock séptico o lactato &gt;3 mmol/l: medir PVC y mantenerla &gt;8 mmHg; medir SvcO₂ y mantenerla ≥70% mediante transfusión si Hb&lt;7 y/o dobutamina si Hto&gt;30%.</div></div>
+            </div>
+
+            <p class="section-label" style="margin-top:14px;">Cóctel de Marik para sepsis</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);"><strong>Cuidados estándar en la UMI</strong>: 1) antibióticos empíricos de amplio espectro en la primera hora (con toma previa de cultivos); 2) reanimación con líquidos ("sobrevivir a la sepsis"); 3) hidrocortisona IV 50 mg cada 6h; 4) ventilación de protección, evitar hiperoxia; 5) uso limitado de sedantes (agente preferido: dexmedetomidina); 6) noradrenalina como vasopresor de elección (objetivo TAM &gt;65 mmHg); 7) nutrición enteral entre las 6-24h tras el ingreso; 8) profilaxis de TVP con enoxaparina (o heparina si aclaramiento &lt;30 ml/min) + dispositivos.</p>
+            <dl class="kv-row"><dt>Indicación del cóctel</dt><dd>Sepsis grave o shock séptico, con procalcitonina (PCT) &gt;2.</dd></dl>
+            <table class="data-table">
+                <thead><tr><th>Fármaco</th><th>Dosis</th><th>Dilución y ritmo</th></tr></thead>
+                <tbody>
+                    <tr><td>Vitamina C</td><td>1,5g IV cada 6h × 4 días</td><td>100cc SG5% o SF0,9%, pasar en 30min-1h</td></tr>
+                    <tr><td>Tiamina</td><td>200mg IC cada 12h × 4 días</td><td>50ml SG5% o SF0,9%, pasar en 30min</td></tr>
+                    <tr><td>Hidrocortisona</td><td>50mg IV cada 6h × 7 días</td><td>50ml SG5% o SF0,9%, pasar en 30min</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ===== FICHA IV: DDS Y AISLAMIENTO ===== -->
+        <div id="umi-dds-aislamiento" class="tab-content">
+            <h3 style="color: var(--accent-yellow);">Descontaminación digestiva selectiva y aislamiento por BMR</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Manual de orientación de la UMI, HUGCDN. Complementario al abordaje ya desarrollado en Merino Neumología, Ficha XIX ("prevención de NAV").</p>
+
+            <p class="section-label">Factores de riesgo, al ingreso, de ser portador de BMR (Resistencia Zero)</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Se considera "paciente de riesgo" a quien presenta al menos una de las siguientes condiciones al ingreso en UMI:</p>
+            <ul class="term-chips">
+                <li>Ingreso hospitalario ≥5 días en los últimos 3 meses</li>
+                <li>Institucionalizado (prisión, centros sociosanitarios, residencias)</li>
+                <li>Colonización o infección conocida por BMR</li>
+                <li>Antibioterapia ≥7 días en el mes previo</li>
+                <li>ERC en hemodiálisis o diálisis peritoneal ambulatoria continua</li>
+                <li>Patología crónica susceptible: fibrosis quística, bronquiectasias, úlceras crónicas</li>
+            </ul>
+            <p style="font-size:0.85rem; color:var(--text-dim);">En estos casos: aplicar precauciones de contacto de forma <strong>preventiva</strong> y esperar los resultados de las muestras microbiológicas de vigilancia.</p>
+
+            <p class="section-label" style="margin-top:14px;">Criterios de inclusión en la DDS</p>
+            <div class="algo-flow">
+                <div class="algo-step"><span class="algo-num">1</span><div class="algo-text">Cultivo positivo de cualquier muestra para SAMR y los Gram− indicados en protocolo.</div></div>
+                <div class="algo-step"><span class="algo-num">2</span><div class="algo-text">Todos los pacientes con IOT o traqueostomía prevista &gt;72h.</div></div>
+                <div class="algo-step"><span class="algo-num">3</span><div class="algo-text">Pacientes no IOT con: GCS &lt;11 o GCS 8T, cirugía con esófago/gastrectomía radical, pancreatitis necrotizante, o neutropénicos.</div></div>
+                <div class="algo-step"><span class="algo-num">4</span><div class="algo-text">Todos los pacientes quemados.</div></div>
+            </div>
+
+            <p class="section-label" style="margin-top:14px;">Toma y envío de muestras</p>
+            <p style="font-size:0.85rem; color:var(--text-dim)"><strong>Cuándo</strong>: al ingreso, tras la intubación, al día siguiente de prever extubación (continuando con ella), y a las 07:00h de cada martes. <strong>Qué</strong>: torunda faríngea, rectal, nasal (nasal solo al ingreso si negativo); si hay quemaduras/UPP/heridas quirúrgicas con signos de infección, muestra de la lesión. <strong>Tipo de torunda</strong>: con gel. <strong>Conservación</strong>: fuera del horario de recepción de microbiología, en nevera (noches, festivos, fines de semana). <strong>Envío</strong>: los lunes, solicitud impresa de Neumonía Zero.</p>
+
+            <p class="section-label" style="margin-top:14px;">Tipo de descontaminación digestiva</p>
+            <dl class="kv-row"><dt>Descontaminación mixta</dt><dd>Todo paciente procedente de otro hospital; todo paciente de este hospital con &gt;72h de ingreso hasta obtener muestras negativas para SAMR; todo paciente portador de SAMR (actual o en ingreso previo) hasta el alta.</dd></dl>
+            <dl class="kv-row"><dt>Descontaminación estándar</dt><dd>El resto de pacientes incluidos en la DDS.</dd></dl>
+            <p style="font-size:0.85rem; color:var(--text-dim);"><strong>Administración</strong>: 1) ATB IV (ajustando dosis a función renal/alergias) tras el ingreso; 2) antimicrobianos tópicos, en IOT o no, cada 8h hasta el alta; 3) antimicrobianos por vía rectal cada 12h en pacientes colonizados en recto pese al tratamiento digestivo.</p>
+            <dl class="kv-row"><dt>DDS estándar</dt><dd>Tobra + Nistatina + Colistina = 14ml de solución.</dd></dl>
+            <dl class="kv-row"><dt>DDS mixta</dt><dd>Vanco (Tobra + Nistatina + Colistina) = 14ml de solución. Los 14ml de DDS estándar + 7ml si viene de otro hospital, o hasta obtener 2 cultivos consecutivos negativos para SAMR.</dd></dl>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Supositorios (Nistatina + Colistina): solo si no hay tránsito adecuado o persiste BMR en recto tras 2 cultivos seguidos negativos, se retiran. Si BMR es resistente a Colistina, iniciar Paramomicina 1g cada 6h o Rifaximina 200mg cada 6h enteral. Si BMR es resistente a Tobramicina y Gentamicina (no tiene Nistatina), iniciar DDS estándar Gentamicina.</p>
+
+            <p class="section-label" style="margin-top:14px;">Aislamientos</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);"><strong>Preventivo si</strong>: los mismos criterios de riesgo de arriba. Mantener aislamiento hasta resultado de cultivos. Si cultivo positivo para Acinetobacter productor de KPC, Klebsiella pneumoniae BLEE+ o SAMR: <strong>iniciar aislamiento de contacto</strong>, mantenerlo hasta 2 cultivos consecutivos negativos separados entre sí por al menos 3 días. Los cultivos de vigilancia se informan los jueves tarde o viernes por la mañana, por lo que se recomienda, en caso de resultado negativo, solicitar nuevos cultivos para el viernes y así reducir tiempos de aislamiento innecesarios.</p>
+
+            <p class="section-label" style="margin-top:14px;">Antipseudomónicos — clasificación de referencia</p>
+            <table class="data-table">
+                <thead><tr><th>Familia</th><th>Fármacos</th></tr></thead>
+                <tbody>
+                    <tr><td>Penicilinas</td><td>Ticarcilina, piperacilina+tazobactam</td></tr>
+                    <tr><td>Cefalosporinas</td><td>Ceftazidima, cefepime</td></tr>
+                    <tr><td>Carbapenems</td><td>Imipenem, meropenem, doripenem</td></tr>
+                    <tr><td>Monobactámicos</td><td>Aztreonam</td></tr>
+                    <tr><td>Fluorquinolonas</td><td>Ciprofloxacino, levofloxacino</td></tr>
+                    <tr><td>Aminoglucósidos</td><td>Gentamicina, tobramicina, amikacina</td></tr>
+                    <tr><td>Otros</td><td>Colistina</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ===== FICHA V: GLUCEMIA ===== -->
+        <div id="umi-glucemia" class="tab-content">
+            <h3 style="color: var(--accent-purple);">Control glucémico: algoritmos y pauta móvil</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Manual de orientación de la UMI, HUGCDN — protocolo basado en Endocrinol Diabetes Nutr 2017;64:250-7.</p>
+
+            <p class="section-label">Pauta móvil de insulina</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">La vía subcutánea para insulina rápida solo se podrá usar en caso de perfusión periférica normal. Si shock, uso de catecolaminas u otra situación que comprometa la perfusión periférica, la vía de administración será la <strong>intravenosa</strong>.</p>
+            <table class="data-table">
+                <thead><tr><th>Glucemia</th><th>Insulina</th></tr></thead>
+                <tbody>
+                    <tr><td>&lt;150 mg/dl</td><td>0</td></tr>
+                    <tr><td>151-180 mg/dl</td><td>4 UI</td></tr>
+                    <tr><td>181-200 mg/dl</td><td>6 UI</td></tr>
+                    <tr><td>201-250 mg/dl</td><td>8 UI</td></tr>
+                    <tr><td>251-300 mg/dl</td><td>10 UI</td></tr>
+                    <tr><td>301-350 mg/dl</td><td>12 UI</td></tr>
+                    <tr><td>&gt;351 mg/dl</td><td>AVISAR</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Si el paciente cumple criterios para iniciar perfusión continua (PC) IV, iniciarla al tener un control de glucemia ≥180 mg/dl.</p>
+
+            <p class="section-label" style="margin-top:14px;">Protocolo de perfusión de insulina en 6 algoritmos</p>
+            <p style="font-size:0.85rem; color:var(--text-dim)">Comienzan en el <strong>Algoritmo II</strong> los pacientes con catecolaminas o postoperados, tratamiento corticoideo, nutrición parenteral total (NTP), o diabetes tipo I/II insulinizados. Todos los demás comienzan en el <strong>Algoritmo I</strong>. Objetivo de glucemia: 140-180 mg/dl.</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table">
+                <thead><tr><th>Glucemia</th><th>I</th><th>II</th><th>III</th><th>IV</th><th>V</th><th>VI</th></tr></thead>
+                <tbody>
+                    <tr><td>61-119</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0,5</td><td>0,5</td></tr>
+                    <tr><td>120-149</td><td>0</td><td>0,5</td><td>1</td><td>1,5</td><td>2</td><td>3</td></tr>
+                    <tr><td>150-179</td><td>0,5</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+                    <tr><td>180-209</td><td>1</td><td>1,5</td><td>3</td><td>4</td><td>6</td><td>8</td></tr>
+                    <tr><td>210-239</td><td>1,5</td><td>2</td><td>4</td><td>6</td><td>9</td><td>12</td></tr>
+                    <tr><td>240-269</td><td>2</td><td>3</td><td>5</td><td>8</td><td>12</td><td>16</td></tr>
+                    <tr><td>270-299</td><td>3</td><td>4</td><td>6</td><td>10</td><td>16</td><td>22</td></tr>
+                    <tr><td>300-349</td><td>4</td><td>5</td><td>8</td><td>12</td><td>20</td><td>28</td></tr>
+                    <tr><td>350-400</td><td>5</td><td>6</td><td>10</td><td>16</td><td>24</td><td>36</td></tr>
+                    <tr><td>&gt;401</td><td>6</td><td>7</td><td>12</td><td>20</td><td>30</td><td>44</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Glucemia &lt;60 = hipoglucemia. Si glucemia &gt;180 durante 2h seguidas → pasar al algoritmo superior. Si glucemia &lt;120 durante 2h seguidas → pasar al algoritmo inferior.</p>
+            <ul class="term-chips">
+                <li>Siempre sangre arterial o de VVC — <strong>nunca</strong> capilar</li>
+                <li>Control al comenzar la PC, a la hora del inicio, o de cada cambio de ritmo</li>
+                <li>Cada 2h si no hay cambios de ritmo entre 2 determinaciones de 1h</li>
+                <li>Cada 4h si no hay cambios de ritmo entre 2 determinaciones de 2h</li>
+                <li>Bolo al inicio de la PC para purgar la luz distal de la VVC: 0,6ml</li>
+                <li>No parar la PC de insulina en pacientes DM tipo I, salvo hipoglucemia (dejar PC a 0,5ml/h)</li>
+            </ul>
+        </div>
+
+        <!-- ===== FICHA VI: RUTINAS Y TRASLADO ===== -->
+        <div id="umi-rutinas" class="tab-content">
+            <h3 style="color: var(--accent-green);">Rutinas de guardia y traslado intrahospitalario</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Manual de orientación de la UMI, HUGCDN.</p>
+
+            <p class="section-label">Rutinas en la sección</p>
+            <div class="algo-flow">
+                <div class="algo-step"><span class="algo-num">1</span><div class="algo-text">Ver al paciente más grave o al nuevo ingreso.</div></div>
+                <div class="algo-step"><span class="algo-num">2</span><div class="algo-text">Preguntar a enfermería incidencias ocurridas en la guardia.</div></div>
+                <div class="algo-step"><span class="algo-num">3</span><div class="algo-text">Valoración rápida del estado del paciente y sus problemas activos, para priorizar actividades.</div></div>
+                <div class="algo-step"><span class="algo-num">4</span><div class="algo-text">Actualizar la HC electrónica: diagnósticos, analíticas, radiografías, listado de problemas, cultivos (comprobando que esté pautada la DDS correspondiente y el aislamiento), tipo de vías/lugar/tiempo, cálculo APACHE a las 24h del ingreso y Charlson, antibióticos y tiempo de tratamiento.</div></div>
+                <div class="algo-step"><span class="algo-num">5</span><div class="algo-text">Evolutivos por sistema: neurológico, hemodinámico, respiratorio, medio interno/función renal, otros — antibióticos, dosis y días, incidencias, plan.</div></div>
+                <div class="algo-step"><span class="algo-num">6</span><div class="algo-text">Verificar que esté realizado y actualizado el informe de traslado y/o alta antes de movilizar al paciente, siempre.</div></div>
+            </div>
+
+            <p class="section-label" style="margin-top:14px;">Estructura del evolutivo y pase de guardia</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table">
+                <thead><tr><th>Neurológico</th><th>Hemodinámica</th><th>Respiratorio</th><th>Otros</th></tr></thead>
+                <tbody>
+                    <tr><td>Nivel de conciencia, GCS (M,O,V), pupilas (simetría/reactividad), focalidad, PIC, PPC, DVE (si/no, abierto, altura en mmHg, débito y aspecto)</td><td>TA/TAM, FC y ritmo, catecolaminas (dosis en mcg/kg/min), BCPIA si/no, PVC, auscultación/pulsos periféricos/examen físico, GC/IC/RVS/RVP/PEP/PAP/VS</td><td>Espontánea/VMNI/VMI, trabajo respiratorio, adaptado si/no, modo/FR/FiO₂/PEEP/Vt pico, pH/pO₂/pCO₂</td><td>Función renal (creatinina/urea/iones), diuresis (espontánea/forzada, volumen, balance hídrico), HFVVC/HD, NET si/no tolera, NPT si/no, fiebre, leucocitos/Hb/Hto, cultivos informados, aislamiento, antibióticos y tiempo</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-dim);">En un ingreso nuevo durante el pase de guardia, mencionar siempre: nombre, HC, edad, antecedentes personales patológicos, enfermedad actual, motivo de ingreso hospitalario, motivo de ingreso en UMI, condición en que se recibe, evolución y estado actual, más las pruebas diagnósticas relevantes previas al ingreso y durante.</p>
+
+            <p class="section-label" style="margin-top:14px;">Traslado intrahospitalario — antes</p>
+            <div class="algo-flow">
+                <div class="algo-step"><span class="algo-num">1</span><div class="algo-text"><strong>Monitorización</strong>: ECG, TA, SpO₂, PIC, PPC, etc.</div></div>
+                <div class="algo-step"><span class="algo-num">2</span><div class="algo-text"><strong>Oxigenación</strong>: 2 balas de O₂ cargadas (volumen total O₂ = vol. botella × bar/atm; tiempo total de autonomía en min = volumen total O₂ / flujo en l/min). Armar y verificar el respirador de traslado. Pieza en T con mascarilla. Ambú. Cánula de Guedel si no IOT. Laringoscopio y palas verificadas, y TOT.</div></div>
+                <div class="algo-step"><span class="algo-num">3</span><div class="algo-text"><strong>Fármacos</strong>: siempre los de parada, más individualizar según el paciente (atropina, adrenalina, midazolam/propofol/etomidato, morfina, succinilcolina).</div></div>
+                <div class="algo-step"><span class="algo-num">4</span><div class="algo-text">Fijar TOT, catéter de PIC y accesos vasculares centrales antes de movilizar.</div></div>
+                <div class="algo-step"><span class="algo-num">5</span><div class="algo-text">Gasometría previa al traslado e inmediatamente al regresar.</div></div>
+            </div>
+
+            <p class="section-label" style="margin-top:14px;">Traslado intrahospitalario — durante y después</p>
+            <div class="algo-flow">
+                <div class="algo-step"><span class="algo-num">1</span><div class="algo-text">Control visual continuo de monitor, respirador y paciente durante todo el traslado.</div></div>
+                <div class="algo-step"><span class="algo-num">2</span><div class="algo-text">En ascensores: subir los pies primero, situarse a la cabeza del paciente para control de la vía aérea, mantener baja la barandilla superior izquierda.</div></div>
+                <div class="algo-step"><span class="algo-num">3</span><div class="algo-text">Garantizar la fijación de vía aérea/VVC/drenajes ventriculares/catéteres de PIC en cada movilización — verificando antes que las tubuladuras y cables no generen tracción.</div></div>
+                <div class="algo-step"><span class="algo-num">4</span><div class="algo-text">El médico lleva la "voz de mando" — el paciente solo se moviliza cuando él lo indica.</div></div>
+                <div class="algo-step"><span class="algo-num">5</span><div class="algo-text">En caso de emergencia, garantizar aviso inmediato al adjunto responsable e iniciar de inmediato las maniobras pertinentes.</div></div>
+                <div class="algo-step"><span class="algo-num">6</span><div class="algo-text">Al regresar: monitorizar y reconectar al respirador de la unidad, gasometría, registrar la prueba/técnica realizada y cualquier incidencia en las notas clínicas.</div></div>
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-dim);">⚠️ Para RNM: bajar la tubuladura del respirador y hacer chequeo previo, con 3 alargaderas por bomba — cuidado con el magnetismo, las tubuladuras del respirador no llegan sin un estudio de abdomen o tórax.</p>
+        </div>
+
+    </div>
+
+    <div class="card">
+        <h3 style="color: var(--accent-purple);">📚 Bibliografía</h3>
+        <p style="font-size:0.85rem; color:var(--text-dim);">Manual de orientación interno de la Unidad de Medicina Intensiva (UMI), Hospital Universitario de Gran Canaria Dr. Negrín (HUGCDN) — "Cómo estar en la UCI sin matar ni morir". Contenido clínico extraído y reescrito con la voz propia de esta app; nunca se reproduce el documento original ni nombres de personal.</p>
+        <ul class="biblio-list">
+            <li><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte1.pdf#page=12" target="_blank" rel="noopener">Nutrición en el paciente crítico</a> <span class="biblio-nota">Manual UMI, págs. 12-16</span></li>
+            <li><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte1.pdf#page=9" target="_blank" rel="noopener">Reposición de electrolitos en UMI</a> <span class="biblio-nota">Manual UMI, págs. 9-12</span></li>
+            <li><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte1.pdf#page=17" target="_blank" rel="noopener">Shock séptico: manejo inicial y cóctel de Marik</a> <span class="biblio-nota">Manual UMI, págs. 17-19</span></li>
+            <li><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte1.pdf#page=24" target="_blank" rel="noopener">DDS y aislamiento por BMR (Resistencia Zero)</a> <span class="biblio-nota">Manual UMI, págs. 24-29</span></li>
+            <li><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=50" target="_blank" rel="noopener">Control glucémico: algoritmos y pauta móvil</a> <span class="biblio-nota">Manual UMI, págs. 102-104</span></li>
+            <li><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte1.pdf#page=4" target="_blank" rel="noopener">Rutinas de guardia y traslado intrahospitalario</a> <span class="biblio-nota">Manual UMI, págs. 4-8</span></li>
+        </ul>
+    </div>

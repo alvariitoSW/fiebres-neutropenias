@@ -61,6 +61,11 @@
             <span><span class="gral-icon" style="color: var(--accent-green);">🫁</span>NEUMOLOGÍA</span>
             <span style="font-size: 0.8rem; color: var(--accent-green);">[ VER → ]</span>
         </button>
+
+        <button class="accordion-btn nav-btn" id="btn-protocolos-uci" style="border-left: 4px solid var(--accent-purple);">
+            <span><span class="gral-icon" style="color: var(--accent-purple); text-shadow: var(--glow-purple);">📋</span>PROTOCOLOS UCI</span>
+            <span style="font-size: 0.8rem; color: var(--accent-purple);">[ VER → ]</span>
+        </button>
     </div>
 
     <!-- ========================================== -->
@@ -298,6 +303,7 @@
         <div id="cardiologia-menu-view" data-include="js/modules/cardiologia/cardiologia-menu.html"></div>
         <div id="cardio-ic-view" style="display: none;" data-include="js/modules/cardiologia/insuficiencia-cardiaca.html"></div>
         <div id="merino-cardio-view" style="display: none;" data-include="js/modules/cardiologia/merino-cardiologia.html"></div>
+        <div id="umi-cardio-view" style="display: none;" data-include="js/modules/cardiologia/manual-umi-cardio.html"></div>
     </div>
     <!-- ========================================== -->
     <!-- VISTA: NEUMOLOGÍA                           -->
@@ -305,11 +311,19 @@
     <div id="neumologia-view" style="display: none;">
         <div id="neumologia-menu-view" data-include="js/modules/neumologia/neumologia-menu.html"></div>
         <div id="merino-neumo-view" style="display: none;" data-include="js/modules/neumologia/merino-neumologia.html"></div>
+        <div id="umi-neumo-view" style="display: none;" data-include="js/modules/neumologia/manual-umi-neumo.html"></div>
+    </div>
+    <!-- ========================================== -->
+    <!-- VISTA: PROTOCOLOS UCI                       -->
+    <!-- ========================================== -->
+    <div id="protocolos-uci-view" style="display: none;">
+        <div id="protocolos-uci-menu-view" data-include="js/modules/protocolos-uci/protocolos-uci-menu.html"></div>
+        <div id="umi-protocolos-view" style="display: none;" data-include="js/modules/protocolos-uci/manual-umi-protocolos.html"></div>
     </div>
 
     <div data-include="js/modules/quiz/quiz.html"></div>
 </div>
 
-<script type="module" src="js/main.js?v=20260915"></script>
+<script type="module" src="js/main.js?v=20260928"></script>
 </body>
 </html>

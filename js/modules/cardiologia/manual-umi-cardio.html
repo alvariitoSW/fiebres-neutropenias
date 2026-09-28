@@ -1,0 +1,611 @@
+    <button class="back-btn btn-volver-cardio-menu">← VOLVER</button>
+    <div class="diag-header">
+        <h2 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">Manual UMI Negrín — Cardiología práctica</h2>
+        <p>Protocolos y referencias a pie de cama de la Unidad de Medicina Intensiva (HUGCDN)</p>
+    </div>
+
+    <button class="accordion-btn nav-btn" id="btn-umi-cardio-repasar" style="border-left: 4px solid var(--accent-purple);">
+        <span>🎯 Repasar (preguntas de repaso)</span>
+        <span style="font-size: 0.8rem; color: var(--accent-purple);">[ EMPEZAR → ]</span>
+    </button>
+
+    <p class="section-label">Elige un bloque</p>
+    <div class="corkboard" id="umi-cardio-corkboard">
+
+        <div class="field-card" data-tab="umi-vasoactivos"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha I</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-red)" stroke-width="1.6">
+                    <path d="M40,10 L40,32" stroke-width="1.4"/>
+                    <path d="M30,32 L50,32 L46,46 L34,46 Z" stroke-opacity="0.7"/>
+                    <circle cx="40" cy="10" r="4" stroke-opacity="0.6"/>
+                </svg>
+                <div class="field-name">Fármacos vasoactivos:<br>receptores y dosis</div>
+                <div class="field-hook">"¿por qué la noradrenalina sube la RVP más que la dopamina, y por qué ninguna de las dos se diluye en bicarbonato?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Los receptores adrenérgicos α1, α2, β1, β2 y β3 explican por completo el perfil de cada catecolamina — y el pH básico del bicarbonato inactiva a las 4 catecolaminas clásicas, una incompatibilidad de vía real que se olvida con facilidad a pie de cama.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="umi-endocarditis"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha II</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-blue)" stroke-width="1.6">
+                    <circle cx="40" cy="28" r="16" stroke-opacity="0.7"/>
+                    <circle cx="34" cy="24" r="3" fill="var(--accent-blue)" stroke="none" opacity="0.8"/>
+                    <circle cx="47" cy="30" r="2.4" fill="var(--accent-blue)" stroke="none" opacity="0.6"/>
+                </svg>
+                <div class="field-name">Endocarditis infecciosa:<br>criterios de Duke</div>
+                <div class="field-hook">"un hemocultivo positivo para Coxiella burnetii vale, por sí solo, como criterio mayor. ¿por qué esa excepción?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Los criterios de Duke modificados combinan microbiología, ecocardiografía y una constelación de hallazgos clínicos menores — y desde 2015 la ESC añade imagen avanzada (PET/TAC, SPECT-leucocitos) para las prótesis valvulares, el escenario donde el ecocardiograma solo falla con más frecuencia.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="umi-fate"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha III</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-green)" stroke-width="1.6">
+                    <path d="M20,20 L40,20 L60,44 L20,44 Z" stroke-opacity="0.7"/>
+                    <path d="M40,20 L20,44" stroke-width="1.2" stroke-opacity="0.5"/>
+                </svg>
+                <div class="field-name">Ecocardiografía FATE<br>a pie de cama</div>
+                <div class="field-hook">"4 posiciones, 4 preguntas — ¿derrame, dilatación, hipertrofia o función?. ¿qué mide en realidad un intensivista sin ser cardiólogo?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">El protocolo FATE (Focus Assessed Transthoracic Echo) reduce la ecocardiografía a un examen dirigido de 4 ventanas básicas — pensado para responder preguntas binarias de manejo inmediato, no para sustituir un estudio completo.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="umi-marcapasos"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha IV</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-yellow)" stroke-width="1.6">
+                    <rect x="26" y="18" width="28" height="18" rx="3" stroke-opacity="0.7"/>
+                    <path d="M20,27 L26,27 M54,27 L60,27" stroke-width="1.3"/>
+                    <path d="M32,27 L36,20 L40,32 L44,22 L48,27" stroke-width="1.2" stroke-opacity="0.6"/>
+                </svg>
+                <div class="field-name">Marcapasos: código<br>de 5 letras</div>
+                <div class="field-hook">"VVI, DDD, DDDR... ¿qué significa cada letra, y por qué el modo elegido cambia tanto la respuesta hemodinámica?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Las 5 posiciones del código NBG (estimulación / detección / respuesta / programabilidad / antitaquicardia) describen por completo cómo "razona" un marcapasos — y las indicaciones se gradúan igual que cualquier otra recomendación clínica, por grupos I-III.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="umi-hemodinamica"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha V</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-purple)" stroke-width="1.6">
+                    <path d="M14,40 L26,40 L30,16 L36,44 L42,24 L48,40 L66,40" stroke-width="1.3"/>
+                </svg>
+                <div class="field-name">Hemodinámica invasiva:<br>fórmulas y Swan-Ganz</div>
+                <div class="field-hook">"IC, RVS, DO₂, VO₂... ¿qué fórmula usar y en qué orden mirar los números que da un catéter de Swan-Ganz?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Los 4 patrones hemodinámicos clásicos del shock (hipovolémico, cardiogénico, obstructivo, distributivo) se leen directamente de PVC, PAPM, GC y RVS — y el protocolo Swan-Ganz encadena SvO₂→SaO₂→gasto cardíaco→Hb en un único árbol de decisión terapéutica.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="umi-cirugia-cardiaca"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha VI</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-red)" stroke-width="1.6">
+                    <circle cx="40" cy="28" r="17" stroke-opacity="0.7"/>
+                    <path d="M32,28 L36,34 L48,20" stroke-width="1.6"/>
+                </svg>
+                <div class="field-name">Cirugía cardiaca:<br>anticoagulación y sangrado</div>
+                <div class="field-hook">"débito por drenajes &gt;300ml en la 1ª hora — ¿sangrado quirúrgico o coagulopatía? el tromboelastograma decide en minutos, no en horas."</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">El postoperatorio de cirugía cardiaca combina 2 protocolos opuestos por diseño: anticoagular con heparina sódica guiada por rAPTT si hay recambio valvular, y un algoritmo de sangrado guiado por tromboelastograma que corrige solo lo que de verdad falla.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="umi-posparada"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha VII</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-blue)" stroke-width="1.6">
+                    <path d="M14,28 L26,28 L30,14 L34,40 L38,20 L42,28 L66,28" stroke-width="1.3"/>
+                    <circle cx="40" cy="28" r="20" stroke-opacity="0.3" stroke-dasharray="2 3"/>
+                </svg>
+                <div class="field-name">Síndrome posparada<br>cardíaca</div>
+                <div class="field-hook">"la PPC pasa a depender directamente de la TA sistémica tras la parada. ¿qué 3 componentes forman este síndrome, y por qué las primeras 20 minutos son distintos del resto?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">El síndrome posparada combina daño cerebral, aturdimiento miocárdico y una respuesta inflamatoria sistémica que imita a la sepsis — con un protocolo de reanimación guiado por objetivos (PAM, SvO₂, PVC) igual de estructurado que el del shock séptico.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+        <div class="field-card" data-tab="umi-fa-anticoagulacion"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha VIII</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-green)" stroke-width="1.6">
+                    <path d="M18,28 C18,16 30,10 40,10 C50,10 62,16 62,28 C62,40 50,46 40,46 C30,46 18,40 18,28 Z" stroke-opacity="0.6"/>
+                    <path d="M30,28 L36,22 L44,34 L50,24" stroke-width="1.4"/>
+                </svg>
+                <div class="field-name">Fibrilación auricular:<br>algoritmo de anticoagulación</div>
+                <div class="field-hook">"válvula mecánica o estenosis mitral: la respuesta cambia por completo antes incluso de calcular ninguna puntuación. ¿por qué esa excepción va primero?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">El algoritmo de decisión de anticoagulación en FA empieza descartando 2 escenarios que anulan la puntuación CHA₂DS₂-VASc por completo (prótesis mecánica, estenosis mitral) antes de estratificar por riesgo de ictus en el resto de pacientes.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
+
+    </div>
+
+    <div class="card" id="panel-umi-cardio-tabs" style="display:none;">
+
+        <!-- ===== FICHA I: VASOACTIVOS ===== -->
+        <div id="umi-vasoactivos" class="tab-content">
+            <h3 style="color: var(--accent-red);">Fármacos vasoactivos: receptores y dosis</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Manual de orientación de la UMI, Hospital Universitario de Gran Canaria Dr. Negrín (HUGCDN).</p>
+
+            <p class="section-label">Drogas vasoactivas (DVA)</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Son fármacos capaces de modificar el tono vasomotor. Se dividen en <strong>vasoconstrictoras</strong> (estimulación de receptores α, receptores de arginina-vasopresina) y <strong>vasodilatadoras</strong> (agonistas β2, inhibidores de receptores α, inhibidores de canales de Ca²⁺, estimulación de receptores dopaminérgicos, inducción de GMPc mediada por óxido nítrico, inhibidores de fosfodiesterasa III, IECA).</p>
+            <table class="data-table">
+                <thead><tr><th>Efecto en el miocardio</th><th>Fármaco de referencia</th></tr></thead>
+                <tbody>
+                    <tr><td>Vasoconstrictor puro</td><td>Fenilefrina</td></tr>
+                    <tr><td>Vasoconstrictor + inótropo positivo</td><td>Noradrenalina</td></tr>
+                    <tr><td>Vasodilatador puro</td><td>Nitroprusiato</td></tr>
+                    <tr><td>Vasodilatador + inótropo positivo</td><td>Isoproterenol</td></tr>
+                    <tr><td>Vasodilatador + inótropo negativo</td><td>Nifedipino</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:14px;">Receptores adrenérgicos</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔴 Receptores α</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Se unen con epinefrina y norepinefrina; la fenilefrina es agonista selectivo de α1. <strong>Efectos comunes</strong>: vasoconstricción de arterias coronarias y de venas, disminución de la motilidad del músculo liso GI. <strong>α1</strong>: contracción del músculo liso, vasoconstricción de piel/arteria renal/cerebro. <strong>α2</strong>: inhibición de la liberación de insulina, inducción de liberación de glucagón, contracción de esfínteres GI, agregación plaquetaria, inhibición de la descarga de noradrenalina/acetilcolina, vasoconstricción.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔵 Receptores β</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Los 3 subtipos (asociados a la vía de proteínas Gs) estimulan la adenilciclasa y aumentan la conversión de ATP en AMPc. <strong>β1</strong>: receptor predominante en el corazón — efectos inotrópico y cronotrópico positivos, aumenta el GC (↑FC + ↑FE), libera renina de las células yuxtaglomerulares, lipólisis en tejido adiposo. <strong>β2</strong>: receptor polimórfico predominante en músculo liso — relajación bronquial, del esfínter urinario/GI/útero grávido, dilatación de arterias del músculo esquelético, glucogenólisis/gluconeogénesis, inhibición de liberación de histamina de mastocitos, aumento de secreción de renina. <strong>β3</strong>: predominantemente efectos metabólicos, incluida la lipólisis del tejido adiposo.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:14px;">Catecolaminas — características, dosis y reacciones adversas</p>
+            <p style="font-size:0.8rem; color:var(--text-muted);">⚠️ Las 4 catecolaminas de esta ficha (dopamina, dobutamina, noradrenalina, adrenalina) comparten la misma advertencia: <strong>no administrar con NaHCO₃</strong> — el pH básico las inactiva.</p>
+
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Dopamina</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Catecolamina endógena, actúa como neurotransmisor y precursor de síntesis de noradrenalina, simpaticomimético, no atraviesa la barrera hematoencefálica. La administración exógena activa receptores dopaminérgicos (D1-D5) según la dosis. <dl class="kv-row"><dt>3 μg/kg/min</dt><dd>Activación de receptores β cardíacos y en circulación periférica — inótropo/cronótropo (+), menor efecto que dobutamina, vasodilatador periférico.</dd></dl><dl class="kv-row"><dt>&gt;10 μg/kg/min</dt><dd>Agonista de receptores α en circulación sistémica y pulmonar → vasoconstricción.</dd></dl>Reacciones adversas: necrosis isquémica por extravasación, taquiarritmias (taquicardia sinusal), arritmias ventriculares (muy ocasional), reacciones alérgicas.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Dobutamina</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Catecolamina sintética → aumenta el gasto cardíaco. Agonista β1 (inótropo, cronótropo, dromótropo +, aumenta GC dosis-dependiente, cronotropismo variable) y agonista β2 (efecto débil, vasodilatación periférica — como resultado, usualmente no varía la PA). Aumenta el consumo de O₂, efecto deletéreo en el contexto de falla cardíaca. <strong>Dosis</strong>: 3-15 μg/kg/min. Reacciones adversas: taquicardia, extrasístole ventricular (usualmente no conduce a TV). Contraindicaciones: miocardiopatía hipertrófica, taquiarritmias ventriculares.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Noradrenalina</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Catecolamina con múltiples funciones fisiológicas y homeostáticas, actúa como hormona y como neurotransmisor. Vasopresor de intenso efecto. Acción β1 y α → mayor aumento de RVP; la ausencia de efecto β2 no provoca vasodilatación. Receptores α → aumentan la RVP (dosis-dependiente); receptores β cardíacos → respuesta variable. <strong>Dosis</strong>: 0,2-1,3 μg/kg/min. <strong>Dilución</strong>: 10 mg en 100 ml SG5% o SF 0,9%. Reacciones adversas: necrosis tisular por extravasación, disfunción de órgano por vasoconstricción, reacción alérgica.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Adrenalina</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Catecolamina tipo monoamina, producida solo por las glándulas suprarrenales a partir de fenilalanina y tirosina. β2 agonista → vasodilatación muscular/coronaria → disminución de la PA diastólica → taquicardia refleja. β1 agonista → aumento de cronotropismo/dromotropismo/inotropismo → aumento del GC → broncodilatación. α agonista → aumenta la RVP, aumenta el retorno venoso (venoconstricción) → aumenta la PA. <strong>Dosis</strong>: efecto β 1-4 μg/min, efecto α &gt;20 μg/min. En RCP: 1 mg cada ciclo de 2 min. <strong>Dilución</strong>: 1 mg o 2 mg en 100 ml SG5% o SF 0,9%. Reacciones adversas: taquiarritmias, disfunción miocárdica.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Nitroglicerina</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Nitrato orgánico que relaja la célula muscular lisa vascular → vasodilatación. Libera óxido nítrico en la célula endotelial; el NO no ingresa a la célula muscular lisa, induce la formación de GMPc, que relaja la célula muscular. Vasodilatación a nivel arterial y venoso (sistémica y pulmonar). <dl class="kv-row"><dt>&lt;40 μg/min</dt><dd>Efecto venoso — disminuye la RVS sin alterar el GC.</dd></dl><dl class="kv-row"><dt>40-200 μg/min</dt><dd>Efecto arterial y venoso.</dd></dl><dl class="kv-row"><dt>&gt;200 μg/min</dt><dd>Efecto principalmente arterial — disminuye la RVS → aumenta el GC.</dd></dl>Reacciones adversas: hipotensión (contraindicado en IAM de VD por precarga-dependencia), hipertensión endocraneana (aumento del flujo cerebral → sube la PIC), hipoxemia en patología pulmonar (aumento de flujo en regiones hipoventiladas → shunt). <strong>Metahemoglobinemia</strong>: libera nitritos inorgánicos que oxidan el grupo hemo, a mayores dosis. <strong>Tolerancia</strong>: a las 24h de administración continua (mecanismo desconocido) — suspender su uso 6h al día. Interacción: contraindicada con inhibidores de la fosfodiesterasa (sildenafilo) por hipotensión.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Nitroprusiato</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body">Relajación del músculo liso, vasodilatador arteriovenoso más rápido y potente. Actúa como donador de óxido nítrico, mediado por activación de la guanilciclasa y formación de GMPc. Mayor acción a nivel arterial, rápido inicio y corta duración. Produce aumento del GC en pacientes con IC descompensada. <strong>Dosis</strong>: 0,2 μg/kg/min, aumentar cada 5 min hasta efecto deseado, sin sobrepasar 3 μg/kg/min (falla renal: 1 μg/kg/min); infusión máxima 10 μg/kg/min por 10 min. <strong>Dilución</strong>: 50 mg (1 frasco) en 250 ml de SG5% solamente. Proteger de la luz (fotosensible). Reacciones adversas: presenta 5 moléculas de cianuro que se liberan, se unen a metahemoglobina y forman tiocianato (filtrado por el riñón); intoxicación por tiocianato — ansiedad, confusión, miosis, tinitus, alucinaciones, convulsiones; el cianuro se combina con el hierro de las mitocondrias y bloquea la citocromo oxidasa.</div>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:14px;">Sedantes, relajantes musculares y otros fármacos de perfusión — dosis reales de la unidad</p>
+            <table class="data-table">
+                <thead><tr><th>Fármaco</th><th>Dosis y dilución</th><th>Observaciones</th></tr></thead>
+                <tbody>
+                    <tr><td>Midazolam (15mg/5ml)</td><td>Inicio 0,03-0,3 mg/kg (↑1-2,5 mg) · mantenimiento 0,03-0,2 mg/kg/h</td><td>—</td></tr>
+                    <tr><td>Etomidato (20mg/10ml)</td><td>0,15-0,3 mg/kg IV lenta · dosis máx. total 60 mg</td><td>Efecto prolongable con dosis adicionales</td></tr>
+                    <tr><td>Propofol 2% (20mg/ml)</td><td>Sedación inicial 0,5-1 mg/kg en 1-5 min · mantenimiento 1,5-4,5 mg/kg/h (bolos IV 10-20 mg)</td><td>Hipotensión, apnea transitoria, movimientos epileptiformes, EAP, asistolia, bradicardia, fiebre posquirúrgica</td></tr>
+                    <tr><td>Amiodarona (150mg/3ml)</td><td>Bolo 300 mg · PC 900 mg en 24h</td><td>[ ] &gt;2 mg/ml produce flebitis</td></tr>
+                    <tr><td>Urapidilo (50mg/10ml)</td><td>25 mg en 20seg, repetir 25 mg a los 2 min y 50 mg a los 2 min si necesario · perfusión 60-180 mg/h</td><td>Vasodilatador — ↓RVS sin ↓GC</td></tr>
+                    <tr><td>Cisatracurio "Nimbex" (no despolarizante)</td><td>Intubación 0,15 mg/kg · mantenimiento 0,03-0,6 mg/kg/h</td><td>Menos efectos hemodinámicos que atracurio</td></tr>
+                    <tr><td>Rocuronio "Esmeron" (no despolarizante)</td><td>Intubación 0,6-0,9 mg/kg · mantenimiento 0,15 mg/kg</td><td>Antídoto: sugammadex "Bridion" 4 mg/kg (reversión inmediata 16 mg/kg)</td></tr>
+                    <tr><td>Succinilcolina "Mioflex" (despolarizante)</td><td>Intubación 1-1,5 mg/kg · bolo 0,04-0,07 mg/kg cada 5-10 min</td><td>↑PIC, ↑K⁺ y presión gástrica; efecto en 1-3 min</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:14px;">Antibióticos en perfusión continua o extendida</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Vancomicina, imipenem-cilastina, ceftazidima, cefepime, piperacilina-tazobactam y meropenem admiten pauta en perfusión continua o extendida (frente al bolo intermitente clásico) para mantener la concentración por encima de la CMI más tiempo — cada uno con su propia estabilidad en solución (2-8h según fármaco) y ajuste de dosis por función renal.</p>
+        </div>
+
+        <!-- ===== FICHA II: ENDOCARDITIS ===== -->
+        <div id="umi-endocarditis" class="tab-content">
+            <h3 style="color: var(--accent-blue);">Endocarditis infecciosa: criterios de Duke</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Manual de orientación de la UMI, HUGCDN.</p>
+
+            <p class="section-label">Criterios de Duke (originales)</p>
+            <table class="data-table">
+                <thead><tr><th>Categoría</th><th>Criterios</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Mayores</strong></td><td>1) Hemocultivos: agente típico Gram +, cultivos persistentemente +, o un cultivo único + para <em>Coxiella burnetii</em>. 2) Ecocardiograma: vegetación / absceso / dehiscencia de válvula protésica / nueva regurgitación valvular.</td></tr>
+                    <tr><td><strong>Menores</strong></td><td>1) Predisposición (cardiopatía predisponente, uso de drogas IV). 2) Fiebre &gt;38°C. 3) Fenómeno vascular (émbolo arterial grave, infarto pulmonar séptico, aneurisma micótico, hemorragias intracraneales, hemorragias conjuntivales, lesiones de Janeway). 4) Fenómeno inmunitario (glomerulonefritis, nódulos de Osler, manchas de Roth, factor reumatoide +).</td></tr>
+                </tbody>
+            </table>
+            <dl class="kv-row"><dt>Definitivo</dt><dd>2 mayores, o 1 mayor + 3 menores, o 5 menores.</dd></dl>
+            <dl class="kv-row"><dt>Posible</dt><dd>Hallazgos compatibles pero que no permiten definirla ni rechazarla.</dd></dl>
+            <dl class="kv-row"><dt>Rechazada</dt><dd>Diagnóstico alternativo que justifique los síntomas, con resolución del cuadro con menos de 4 días de tratamiento antibiótico.</dd></dl>
+
+            <p class="section-label" style="margin-top:14px;">Criterios de Duke modificados</p>
+            <table class="data-table">
+                <thead><tr><th>Categoría</th><th>Criterios</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>EI definida</strong></td><td>Criterios patológicos: microorganismos demostrados por cultivo o examen histológico de una vegetación (embolizada o no) o absceso intracardiaco; o lesiones patológicas con endocarditis activa confirmada por histología. Criterios clínicos: 2 mayores, o 1 mayor + 3 menores, o 5 menores.</td></tr>
+                    <tr><td><strong>EI posible</strong></td><td>1 criterio mayor y 1 menor, o 3 criterios menores.</td></tr>
+                    <tr><td><strong>EI descartada</strong></td><td>Diagnóstico alternativo firme; o resolución de los síntomas con tratamiento antibiótico ≤4 días; o ausencia de evidencia patológica de EI en cirugía/necropsia con tratamiento ≤4 días; o no se cumplen los criterios de EI posible.</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:14px;">Algoritmo diagnóstico (ESC 2015)</p>
+            <div class="algo-flow">
+                <div class="algo-step"><span class="algo-num">1</span><div class="algo-text">Sospecha clínica de EI → aplicar criterios de Duke modificados.</div></div>
+                <div class="algo-branches">
+                    <div class="algo-branch algo-branch-si"><span class="algo-branch-label">EI definitiva</span>Tratamiento antibiótico dirigido, valorar cirugía.</div>
+                    <div class="algo-branch"><span class="algo-branch-label">EI posible/descartada con alto grado de sospecha</span>Continuar el estudio según válvula.</div>
+                    <div class="algo-branch algo-branch-no"><span class="algo-branch-label">EI descartada, bajo grado de sospecha</span>Buscar diagnóstico alternativo.</div>
+                </div>
+                <div class="algo-step"><span class="algo-num">2</span><div class="algo-text"><strong>Válvula nativa</strong>: repetir ecografía (ETT+ETE) + microbiología, explorar complicaciones embólicas, TAC cardíaca.</div></div>
+                <div class="algo-step"><span class="algo-num">2'</span><div class="algo-text"><strong>Válvula protésica</strong>: repetir ecografía (ETT+ETE) + microbiología, <sup>18</sup>F-FDG PET/TAC o SPECT/TAC con leucocitos marcados con isótopos, TAC cardíaca, explorar complicaciones embólicas.</div></div>
+                <div class="algo-step"><span class="algo-num">3</span><div class="algo-text">Reevaluar con los criterios diagnósticos modificados de la ESC 2015 → EI definitiva / posible / descartada.</div></div>
+            </div>
+
+            <p class="section-label" style="margin-top:14px;">Secuencia ecocardiográfica ante sospecha clínica</p>
+            <div class="algo-flow">
+                <div class="algo-step"><span class="algo-num">1</span><div class="algo-text">ETT (ecocardiograma transtorácico).</div></div>
+                <div class="algo-branches">
+                    <div class="algo-branch algo-branch-si"><span class="algo-branch-label">Prótesis valvulares / dispositivos intracardiacos, ETT de pobre calidad, o ETT positivo</span>→ ETE (ecocardiograma transesofágico).</div>
+                    <div class="algo-branch algo-branch-no"><span class="algo-branch-label">ETT negativo</span>Reevaluar sospecha clínica de EI → alta (parar) o baja (ETE igualmente).</div>
+                </div>
+                <div class="algo-step"><span class="algo-num">2</span><div class="algo-text">Si el ETE es negativo pero se sigue sospechando EI, repetir en 7-10 días.</div></div>
+            </div>
+        </div>
+
+        <!-- ===== FICHA III: FATE ===== -->
+        <div id="umi-fate" class="tab-content">
+            <h3 style="color: var(--accent-green);">Ecocardiografía FATE a pie de cama</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Focus Assessed Transthoracic Echo (FATE), protocolo estandarizado (Eur J Anaesthesiol 2004;21:700-707) — material de referencia de la UMI, HUGCDN.</p>
+
+            <p class="section-label">Las 4 ventanas básicas del FATE</p>
+            <table class="data-table">
+                <thead><tr><th>Posición</th><th>Nombre</th><th>Qué muestra</th></tr></thead>
+                <tbody>
+                    <tr><td>Pos 1</td><td>Subcostal 4 cámaras</td><td>RA-RV-LA-LV en un único plano; buena para derrame pericárdico.</td></tr>
+                    <tr><td>Pos 2</td><td>Apical 4 cámaras</td><td>Comparación de tamaño VD/VI, función global de ambos ventrículos.</td></tr>
+                    <tr><td>Pos 3</td><td>Paraesternal eje largo</td><td>LA-AO-LV-RV; permite valorar aurícula/aorta/ventrículo izquierdo en un solo corte.</td></tr>
+                    <tr><td>Pos 3'</td><td>Paraesternal eje corto de VI</td><td>Corte transversal del VI — función global y regional, comparación con el VD adyacente.</td></tr>
+                    <tr><td>Pos 4</td><td>Escaneo pleural</td><td>Explora derrame pleural sobre el diafragma, con el hígado/bazo como ventana acústica.</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:14px;">Las 6 preguntas del examen sistemático</p>
+            <div class="algo-flow">
+                <div class="algo-step"><span class="algo-num">1</span><div class="algo-text">Buscar patología obvia.</div></div>
+                <div class="algo-step"><span class="algo-num">2</span><div class="algo-text">Valorar el grosor de la pared y las dimensiones de las cámaras.</div></div>
+                <div class="algo-step"><span class="algo-num">3</span><div class="algo-text">Evaluar la función biventricular.</div></div>
+                <div class="algo-step"><span class="algo-num">4</span><div class="algo-text">Explorar pleura en ambos lados.</div></div>
+                <div class="algo-step"><span class="algo-num">5</span><div class="algo-text">Relacionar los hallazgos con el contexto clínico.</div></div>
+                <div class="algo-step"><span class="algo-num">6</span><div class="algo-text">Aplicar ecografía adicional si hace falta (extended FATE: VCI, eje corto de la mitral, aorta paraesternal, apical 5-cámaras/2-cámaras).</div></div>
+            </div>
+
+            <p class="section-label" style="margin-top:14px;">Dimensiones y contractilidad normales (eje largo paraesternal)</p>
+            <table class="data-table">
+                <thead><tr><th>Estructura</th><th>Valor normal</th></tr></thead>
+                <tbody>
+                    <tr><td>Pared VD</td><td>~5 mm</td></tr>
+                    <tr><td>VD (diástole)</td><td>0,6-3,0 cm</td></tr>
+                    <tr><td>Tabique interventricular</td><td>6-10 mm</td></tr>
+                    <tr><td>VI diástole (LVDd)</td><td>3,5-5,5 cm</td></tr>
+                    <tr><td>VI sístole (LVSd)</td><td>2,0-4,0 cm</td></tr>
+                    <tr><td>Pared posterior</td><td>6-10 mm</td></tr>
+                    <tr><td>Aorta / aurícula izquierda</td><td>~2,5 cm ambas</td></tr>
+                </tbody>
+            </table>
+            <dl class="kv-row"><dt>Fracción de acortamiento (FS)</dt><dd>FS = (LVDd−LVSd)/LVDd. La fracción de eyección se estima ≈ 2 × FS.</dd></dl>
+
+            <p class="section-label" style="margin-top:14px;">Estimación visual de la función sistólica del VI (eje largo paraesternal)</p>
+            <div class="algo-flow">
+                <div class="algo-step"><span class="algo-num">1</span><div class="algo-text"><strong>Movimiento endocárdico</strong> — normal si es simétrico.</div></div>
+                <div class="algo-step"><span class="algo-num">2</span><div class="algo-text"><strong>Engrosamiento del miocardio</strong> — normal si es de al menos el 40% en todos los segmentos del VI.</div></div>
+                <div class="algo-step"><span class="algo-num">3</span><div class="algo-text"><strong>Movimiento de la válvula mitral</strong> — si se acerca al septo a menos de 1cm, se puede estimar FEVI &gt;40%.</div></div>
+            </div>
+
+            <p class="section-label" style="margin-top:14px;">Índice de colapsabilidad de la vena cava inferior (VCI)</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table">
+                <thead><tr><th>Contexto</th><th>Fórmula</th><th>Respondedor a volumen si</th></tr></thead>
+                <tbody>
+                    <tr><td>Ventilación espontánea</td><td>(Dmáx−Dmín)/Dmáx × 100</td><td>&gt;40%</td></tr>
+                    <tr><td>VM sin esfuerzo respiratorio</td><td>(Dmáx−Dmín)×100/Dmín</td><td>&gt;18%</td></tr>
+                    <tr><td>VM (fórmula general)</td><td>(Dmáx−Dmín)×100/[0,5×(Dmín+Dmáx)]</td><td>&gt;12%</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <div style="overflow-x:auto;">
+            <table class="data-table">
+                <thead><tr><th></th><th>Normal (0-5 mmHg)</th><th>Intermedio (5-10 mmHg)</th><th>Alto (10-20 mmHg)</th></tr></thead>
+                <tbody>
+                    <tr><td>Diámetro VCI</td><td>&lt;2,1 cm</td><td>&lt;2,1 → &gt;2,1 cm</td><td>&gt;2,1 cm</td></tr>
+                    <tr><td>Colapso respiratorio</td><td>&gt;50%</td><td>50% ↔ &lt;50%</td><td>&lt;50%</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Estima la presión de la aurícula derecha (equivalente aproximado de la PVC) — 3 / 8 / 15 mmHg según la banda.</p>
+
+            <p class="section-label" style="margin-top:14px;">Patología importante a considerar (tarjeta de referencia FATE)</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Derrame pericárdico, dilatación de cavidades (VD, VI, AD+VD, AI+VI), hipertrofia de VI/VD — contexto: cateterización cardiaca reciente, cirugía cardiaca, embolismo pulmonar, infarto de VD, sepsis, hipertensión pulmonar, cardiomiopatía dilatada, sobrecarga de volumen, obstrucción del tracto de salida del VI, insuficiencia aórtica, hipertensión arterial, miocardiopatía hipertrófica, enfermedades por depósito miocárdico.</p>
+        </div>
+
+        <!-- ===== FICHA IV: MARCAPASOS ===== -->
+        <div id="umi-marcapasos" class="tab-content">
+            <h3 style="color: var(--accent-yellow);">Marcapasos: código de 5 letras</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Manual de orientación de la UMI, HUGCDN.</p>
+
+            <p class="section-label">Modos de estimulación (código NBG)</p>
+            <table class="data-table">
+                <thead><tr><th>Posición</th><th>Función</th><th>Letras y significado</th></tr></thead>
+                <tbody>
+                    <tr><td>1</td><td>Estimulación</td><td>A = aurícula · V = ventrículo · D = doble · S = single</td></tr>
+                    <tr><td>2</td><td>Detección</td><td>A = aurícula · V = ventrículo · D = doble · S = single</td></tr>
+                    <tr><td>3</td><td>Respuesta</td><td>T = disparado (trigger) · I = inhibido · D = disparado + inhibido</td></tr>
+                    <tr><td>4</td><td>Programabilidad</td><td>C = comunicación/telemetría · P = mono o biprogramable · M = multiprogramable · R = frecuencia variable</td></tr>
+                    <tr><td>5</td><td>Antitaquicardia</td><td>P = estimulación · S = choque · D = estimulación + choque</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:14px;">Grados de recomendación de indicación</p>
+            <dl class="kv-row"><dt>Grupo I</dt><dd>Evidencia y/o acuerdo general en que el procedimiento/tratamiento es beneficioso, útil y eficaz.</dd></dl>
+            <dl class="kv-row"><dt>Grupo II</dt><dd>Evidencia controvertida y/o divergencia de opinión sobre la utilidad/eficacia. <strong>IIa</strong>: la evidencia/opinión se inclina a favor. <strong>IIb</strong>: la utilidad/eficacia se basa en menor grado de evidencia o la opinión mayoritaria es menos favorable.</dd></dl>
+            <dl class="kv-row"><dt>Grupo III</dt><dd>Evidencia y/o acuerdo general que apoya la ineficacia del procedimiento — en algunos casos, incluso perjudicial.</dd></dl>
+        </div>
+
+        <!-- ===== FICHA V: HEMODINÁMICA ===== -->
+        <div id="umi-hemodinamica" class="tab-content">
+            <h3 style="color: var(--accent-purple);">Hemodinámica invasiva: fórmulas y protocolo Swan-Ganz</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Manual de orientación de la UMI, HUGCDN.</p>
+
+            <p class="section-label">Presiones y valores normales</p>
+            <table class="data-table">
+                <thead><tr><th>Parámetro</th><th>Valor normal</th></tr></thead>
+                <tbody>
+                    <tr><td>Presión sistólica de arteria pulmonar (PSAP)</td><td>15-30 mmHg</td></tr>
+                    <tr><td>Presión diastólica de arteria pulmonar (PDAP)</td><td>4-12 mmHg</td></tr>
+                    <tr><td>Presión media de arteria pulmonar (PMAP)</td><td>9-16 mmHg</td></tr>
+                    <tr><td>Presión sistólica del VD (PSVD)</td><td>15-30 mmHg</td></tr>
+                    <tr><td>Presión del VD al final de la diástole (PVDFD)</td><td>0-8 mmHg</td></tr>
+                    <tr><td>Presión venosa central (PVC)</td><td>0-8 mmHg</td></tr>
+                    <tr><td>Presión de oclusión de arteria pulmonar (POAP)</td><td>2-12 mmHg</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:14px;">Fórmulas derivadas</p>
+            <table class="data-table">
+                <thead><tr><th>Parámetro</th><th>Fórmula</th><th>Valor normal</th></tr></thead>
+                <tbody>
+                    <tr><td>PAM</td><td>(PAD+PAS−PAD)/3</td><td>70-105 mmHg</td></tr>
+                    <tr><td>Índice cardíaco (IC)</td><td>GC/SC</td><td>2,8-4,2 L/min/m²</td></tr>
+                    <tr><td>Volumen sistólico (VS)</td><td>GC/FC</td><td>varía según tamaño</td></tr>
+                    <tr><td>Índice sistólico (IS)</td><td>VS/SC</td><td>30-65 ml/latido/m²</td></tr>
+                    <tr><td>ITSVI</td><td>[VS×(PAM−POAP)]/SC × 0,0136</td><td>43-61 g×m/m²</td></tr>
+                    <tr><td>ITSVD</td><td>[VS×(PMAP−PC)]/SC × 0,0136</td><td>7-12 g×m/m²</td></tr>
+                    <tr><td>RVS</td><td>[PAM−PVC]/GC × 80</td><td>900-1400 dina×s×cm⁻⁵</td></tr>
+                    <tr><td>RVP</td><td>[(PAPM−PCP)×80]/GC</td><td>60-120 dina×s×cm⁻⁵</td></tr>
+                    <tr><td>Transporte de O₂ (DO₂)</td><td>GC×(1,34×Hb×SatO₂)×10</td><td>850-1050 ml/min</td></tr>
+                    <tr><td>Consumo de O₂ (VO₂)</td><td>IC×1,34×Hb×(satO₂−satVO₂)</td><td>110-160 ml/min/m²</td></tr>
+                    <tr><td>Saturación venosa mixta (SvO₂)</td><td>Hb×1,34×%saturación venosa</td><td>70-75%</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Nota: esta ficha usa el coeficiente 1,34 (mL O₂/g Hb) tal como lo cita el manual — Merino Cardiología (Ficha I de esta misma app) usa 1,38-1,39 según la fuente citada en cada calculadora, fiel a su propio origen bibliográfico en cada caso.</p>
+
+            <p class="section-label" style="margin-top:14px;">Patrones hemodinámicos del shock</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table">
+                <thead><tr><th>Tipo</th><th>Etiopatogenia</th><th>PVC</th><th>PAPM</th><th>PEP</th><th>TAM</th><th>GC</th><th>RVS</th></tr></thead>
+                <tbody>
+                    <tr><td>Hipovolémico</td><td>—</td><td>Baja</td><td>Baja</td><td>Baja</td><td>Baja</td><td>Bajo</td><td>Alta</td></tr>
+                    <tr><td>Cardiogénico</td><td>IAM</td><td>Alta</td><td>Alta</td><td>Alta</td><td>Baja</td><td>Bajo</td><td>Alta</td></tr>
+                    <tr><td>Obstructivo</td><td>TEP</td><td>Alta</td><td>Alta</td><td>N/B</td><td>Baja</td><td>Bajo</td><td>Alta</td></tr>
+                    <tr><td>Extracardiaco</td><td>Taponamiento</td><td>Alta</td><td>Baja</td><td>Baja</td><td>Baja</td><td>Bajo</td><td>Alta</td></tr>
+                    <tr><td>Distributivo — anafilaxia</td><td>—</td><td>Baja</td><td>Baja</td><td>Baja</td><td>Baja</td><td>Bajo</td><td>Baja</td></tr>
+                    <tr><td>Distributivo — sepsis</td><td>—</td><td>N/B</td><td>N/A</td><td>Baja</td><td>Baja</td><td>Alto</td><td>Baja</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p style="font-size:0.8rem; color:var(--text-muted);">N/A = normal o alta · N/B = normal o baja.</p>
+
+            <p class="section-label" style="margin-top:14px;">Protocolo Swan-Ganz — reanimar hasta TAM &gt;65 mmHg</p>
+            <div class="algo-flow">
+                <div class="algo-step"><span class="algo-num">1</span><div class="algo-text">Medir SvO₂.</div></div>
+                <div class="algo-branches">
+                    <div class="algo-branch algo-branch-no"><span class="algo-branch-label">SvO₂ &lt;60%</span>Evaluar SaO₂.</div>
+                    <div class="algo-branch"><span class="algo-branch-label">SvO₂ 60-80%</span>No hacer nada.</div>
+                    <div class="algo-branch algo-branch-si"><span class="algo-branch-label">SvO₂ &gt;90%</span>Evaluar niveles de oxigenación tisular, lactato, déficit de base.</div>
+                </div>
+                <div class="algo-step"><span class="algo-num">2</span><div class="algo-text">Si SaO₂ baja &lt;95% → hipoxemia → oxigenoterapia, aumentar PEEP. Si SaO₂ normal &gt;95% (VO₂/VEO₂ aumentado) → evaluar gasto cardíaco.</div></div>
+                <div class="algo-step"><span class="algo-num">3</span><div class="algo-text">Gasto cardíaco alto (IC &gt;2,5 L/min/m²) o bajo (&lt;2,5 L/min/m²) → evaluar Hb.</div></div>
+                <div class="algo-step"><span class="algo-num">4</span><div class="algo-text">Hb &lt;8 g/dl → anemia → transfusión. Hb &gt;8 g/dl (estrés, angustia, dolor, VO₂ alto) → analgesia/sedación.</div></div>
+                <div class="algo-step"><span class="algo-num">5</span><div class="algo-text">Si IC bajo con PEP/IVTDVD &lt;10 mmHg / &lt;140 ml/m² (hipovolemia) → fluidos. Si PEP/IVTDVD &gt;18 mmHg / &gt;140 ml/m² (disfunción miocárdica) → dobutamina.</div></div>
+            </div>
+
+            <p class="section-label" style="margin-top:14px;">Algoritmo de shock por problema principal</p>
+            <div class="algo-flow">
+                <div class="algo-step"><span class="algo-num">1</span><div class="algo-text">Signos clínicos de shock (hipoperfusión, ICC, EAP) → ¿problema más probable?</div></div>
+                <div class="algo-branches">
+                    <div class="algo-branch"><span class="algo-branch-label">EAP</span>Oxígeno/IOT si precisa, NTG SL, furosemida 0,5-1 mg/kg IV, morfina 2-4 mg IV.</div>
+                    <div class="algo-branch"><span class="algo-branch-label">Problemas de volumen</span>Líquidos, transfusión, causa específica.</div>
+                    <div class="algo-branch"><span class="algo-branch-label">Problemas de bomba/FC</span>→ evaluar TAS.</div>
+                </div>
+                <div class="algo-step"><span class="algo-num">2</span><div class="algo-text">Según TAS: &lt;70mmHg → noradrenalina 0,5-30 μg/kg/min. 70-100mmHg con shock → dopamina 2-20 μg/kg/min. 70-100mmHg sin shock → dobutamina 2-20 μg/kg/min. &gt;100mmHg → NTG 10-20 μg/min.</div></div>
+                <div class="algo-step"><span class="algo-num">3</span><div class="algo-text">Diagnóstico posterior: identificar/tratar causa reversible, cateterismo de arteria pulmonar, angiografía, cirugía, BCPIAo.</div></div>
+            </div>
+
+            <p class="section-label" style="margin-top:14px;">Clasificación fisiopatológica del choque (¿bajo gasto o falla respiratoria?)</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">↓DO₂ con ↓VO₂ y ↓SvcO₂: si es por bajo gasto cardíaco → choque cardiogénico (enfermedad cardíaca) o hipovolemia (hemorragia → choque hemorrágico con ↓Hb, o choque hipovolémico sin hemorragia). Si es por falla respiratoria aguda → hipoxemia (↓SaO₂) o choque distributivo con ↓extracción de O₂ (hipoxia citopática, alergia → choque anafiláctico, infección → choque séptico).</p>
+            <table class="data-table">
+                <thead><tr><th>SvO₂</th><th>Interpretación</th></tr></thead>
+                <tbody>
+                    <tr><td>&gt;70%</td><td>Extracción normal, disponibilidad de O₂ &gt; demanda de O₂</td></tr>
+                    <tr><td>70-50%</td><td>Extracción compensatoria, incremento de demanda, descenso de disponibilidad</td></tr>
+                    <tr><td>30-50%</td><td>Extracción máxima, inicio de acidosis láctica, disponibilidad &lt; demanda</td></tr>
+                    <tr><td>30-25%</td><td>Acidosis láctica</td></tr>
+                    <tr><td>&lt;25%</td><td>Muerte celular</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ===== FICHA VI: CIRUGÍA CARDIACA ===== -->
+        <div id="umi-cirugia-cardiaca" class="tab-content">
+            <h3 style="color: var(--accent-red);">Cirugía cardiaca: anticoagulación y sangrado</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Manual de orientación de la UMI, HUGCDN.</p>
+
+            <p class="section-label">Anticoagulación en postoperatorio de cirugía cardiaca</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Si recambio valvular mecánico o biológico: <strong>iniciar</strong> anticoagulación con heparina sódica cuando el sangrado es &lt;50 ml/h durante más de 5h. Objetivo: APTT alargado 1,5-2,3 veces sobre el control, según esquema de titulación por rAPTT.</p>
+            <table class="data-table">
+                <thead><tr><th>rAPTT</th><th>Acción</th><th>Control</th></tr></thead>
+                <tbody>
+                    <tr><td>Inicio</td><td>80 UI/kg bolo, luego PC 20 UI/kg/h</td><td>APTT a las 6h</td></tr>
+                    <tr><td>&lt;2</td><td>80 UI/kg bolo, ↑PC en 4 UI/kg/h</td><td>Repetir a las 6h</td></tr>
+                    <tr><td>1,2-1,5</td><td>40 UI bolo, ↑PC en 2 UI/kg/h</td><td>Repetir a las 6h</td></tr>
+                    <tr><td>1,5-2,3</td><td>Sin cambios</td><td>APTT a las 24h</td></tr>
+                    <tr><td>2,3-3</td><td>↓PC en 2 UI/kg/h</td><td>Repetir a las 6h</td></tr>
+                    <tr><td>&gt;3</td><td>Detener PC 1h, luego ↓PC en 3 UI/kg/h</td><td>Repetir a las 6h</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Iniciar tratamiento simultáneo con anticoagulación oral (ACO) cuando el paciente esté perfectamente estable y no se prevea la necesidad inmediata de técnicas invasivas.</p>
+
+            <p class="section-label" style="margin-top:14px;">Sangrado postoperatorio de cirugía cardiovascular (CCV)</p>
+            <dl class="kv-row"><dt>Débito por drenajes</dt><dd>&gt;300 ml en la 1ª hora, o &gt;250 ml en la 2ª hora con tendencia al aumento — <strong>sangrado anormal</strong> a estudiar.</dd></dl>
+            <p style="font-size:0.85rem; color:var(--text-dim);"><strong>Evaluación clínica</strong>: características del drenaje (sangre, claro-oscuro, coágulos), con o sin gravedad — solicitar coagulación (plaquetas, PT, PTT, fibrinógeno, productos de degradación del fibrinógeno, tromboelastograma).</p>
+            <div class="algo-flow">
+                <div class="algo-step"><span class="algo-num">1</span><div class="algo-text">Tiempo de coagulación activada (TCA) &gt;140seg = protamina 50 mg.</div></div>
+                <div class="algo-step"><span class="algo-num">2</span><div class="algo-text">Tiempo de coagulación (TEG) &gt;1,5 (control) → plasma 15 ml/kg.</div></div>
+                <div class="algo-step"><span class="algo-num">3</span><div class="algo-text">Plaquetas &lt;100.000 → plaquetas 1U/10kg.</div></div>
+                <div class="algo-step"><span class="algo-num">4</span><div class="algo-text">Amplitud máxima TEG &lt;45 → desmopresina 0,3 μg/kg.</div></div>
+                <div class="algo-step"><span class="algo-num">5</span><div class="algo-text">Fibrinógeno &lt;150 mg/dl → crioprecipitados.</div></div>
+                <div class="algo-step"><span class="algo-num">6</span><div class="algo-text">Antitrombolíticos (ác. tranexámico, ác. aminocaproico, aprotinina) según PDF/TEG.</div></div>
+            </div>
+            <dl class="kv-row"><dt>Sangrado quirúrgico</dt><dd>T&gt;36°, pH&gt;7,2, Ca²⁺&gt;1 y Hb&gt;8, &gt;8ml/kg en la 1ª hora, &gt;7ml/kg o &gt;400ml en la 2ª hora, &gt;6ml/kg o &gt;300ml en la 3ª hora, &gt;5ml/kg en cualquier hora, &gt;1000ml en las 4 primeras horas, aumento súbito 300 a 500ml/h durante 3hrs consecutivas.</dd></dl>
+            <p style="font-size:0.85rem; color:var(--text-dim);"><strong>Sangrado normal</strong> = 1,5-2 ml/kg/h. Corregir todo lo corregible, pero sangrados con estas características son generalmente indicación de reintervención.</p>
+        </div>
+
+        <!-- ===== FICHA VII: SÍNDROME POSPARADA ===== -->
+        <div id="umi-posparada" class="tab-content">
+            <h3 style="color: var(--accent-blue);">Síndrome posparada cardíaca (SPP)</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Manual de orientación de la UMI, HUGCDN.</p>
+
+            <p class="section-label">Componentes del SPP</p>
+            <ul class="term-chips">
+                <li>Persistencia de la enfermedad precipitante</li>
+                <li>Daño cerebral posparada (isquemia + liberación de radicales libres de O₂ + pérdida de autorregulación cerebral — la PPC pasa a depender de la TA sistémica)</li>
+                <li>Daño miocárdico posparada (aturdimiento miocárdico, disfunción sistólica/diastólica, encharcamiento de calcio en el citoplasma)</li>
+                <li>SRIS (cuadro hemodinámico similar al de la sepsis)</li>
+            </ul>
+
+            <p class="section-label" style="margin-top:14px;">Fases del SPP</p>
+            <table class="data-table">
+                <thead><tr><th>Fase</th><th>Ventana</th></tr></thead>
+                <tbody>
+                    <tr><td>1) Inmediata</td><td>Primeros 20 min tras RCE</td></tr>
+                    <tr><td>2) Precoz</td><td>20 min - 6/12h (intervenciones precoces con mayor relevancia potencial)</td></tr>
+                    <tr><td>3) Intermedia</td><td>6/12h - 72h (mantener tratamiento intensivo)</td></tr>
+                    <tr><td>4) Recuperación</td><td>A partir de 72h (pronóstico más fiable y predecible)</td></tr>
+                    <tr><td>5) Rehabilitación</td><td>Desde el alta hospitalaria hasta lograr la máxima función</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:14px;">Manejo inicial del síndrome posparada</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);"><strong>Monitorización</strong>: ECG continuo, SpO₂, TA (S/DM) continua/invasiva, diuresis continua u horaria, SvcO₂ continua, GC.</p>
+            <div class="algo-flow">
+                <div class="algo-step"><span class="algo-num">1</span><div class="algo-text">HC: Dx o causa obvia de PCR no cardiaca; ECG 12 derivaciones + post y derch; GCS.</div></div>
+                <div class="algo-branches">
+                    <div class="algo-branch algo-branch-si"><span class="algo-branch-label">Elevación de ST o dolor isquémico</span>CATE urgente e ICP inmediata si procede.</div>
+                    <div class="algo-branch"><span class="algo-branch-label">Causa cardiaca probable</span>Considerar CATE urgente e ICP inmediata si procede.</div>
+                    <div class="algo-branch algo-branch-no"><span class="algo-branch-label">Causa obvia no cardiaca</span>Seguir protocolo para optimizar guiada por objetivos.</div>
+                </div>
+                <div class="algo-step"><span class="algo-num">2</span><div class="algo-text">GCS ≥8 tras 20 min de RCE → analítica (urea, glucosa, iones, lactato, GSA), Rx tórax, GCS. GCS &lt;8 tras 20 min de RCE sin otra causa de coma → analítica ampliada + T° central + TAC craneal en los primeros 120 min → considerar hipotermia terapéutica inducida (HTI: 30 ml/kg SF 0,9% o Ringer lactato a 4°C).</div></div>
+                <div class="algo-step"><span class="algo-num">3</span><div class="algo-text">Objetivos: PCO₂ 38-42 mmHg, SaO₂ 94-96%, glucemia 100-180 mg%, FC 50-100 lpm, T° &lt;37°C (32-34°C si HTI).</div></div>
+            </div>
+
+            <p class="section-label" style="margin-top:14px;">Optimización hemodinámica por PAM/PVC</p>
+            <table class="data-table">
+                <thead><tr><th>PAM</th><th>Acción</th></tr></thead>
+                <tbody>
+                    <tr><td>&lt;80 mmHg, PVC &lt;8-12</td><td>500 ml de volumen IV en 5-10 min (20 min si HTI, con SF a 4°C), hasta PVC 8-12 y PAM &gt;80mmHg.</td></tr>
+                    <tr><td>&lt;80 mmHg, PVC 8-12 pero sigue &lt;80</td><td>Si RVS bajas → vasoconstrictores (NA o dopamina). Si FE/GC bajos → inótropos + considerar BCPIAo. Si RVS bajas y FE bajas → NA + inótropos.</td></tr>
+                    <tr><td>80-100 mmHg</td><td>Mantener objetivo (~80 en SCA/ICC/shock; 90-100 en HTA previa).</td></tr>
+                    <tr><td>&gt;100 mmHg</td><td>Vasodilatadores IV hasta PAM &lt;100, asegurar PVC 8-12, diuréticos si ICC/sobrecarga, beta-bloqueantes si taquicardia y/o SCA con FE normal.</td></tr>
+                </tbody>
+            </table>
+
+            <p class="section-label" style="margin-top:14px;">Protocolo de optimización guiada por objetivos</p>
+            <div class="algo-flow">
+                <div class="algo-step"><span class="algo-num">1</span><div class="algo-text">PAM 80-100 (o alrededor de 80 en SCA/ICC/shock) → SvcO₂.</div></div>
+                <div class="algo-branches">
+                    <div class="algo-branch algo-branch-si"><span class="algo-branch-label">SvcO₂ &gt;65%</span>Objetivos hemodinámicos conseguidos → sedación y bloqueo neuromuscular, control/prevención de convulsiones, monitorización EEG, evaluación pronóstica.</div>
+                    <div class="algo-branch algo-branch-no"><span class="algo-branch-label">SvcO₂ &lt;65%</span>Optimizar PVC/PCP, transfundir hematíes si Hb &lt;9 g/dl, optimizar gasto cardíaco/RVS/FE.</div>
+                </div>
+                <div class="algo-step"><span class="algo-num">2</span><div class="algo-text">Si sigue sin conseguir SvcO₂ &gt;65% → revaluar objetivos.</div></div>
+            </div>
+        </div>
+
+        <!-- ===== FICHA VIII: FA Y ANTICOAGULACIÓN ===== -->
+        <div id="umi-fa-anticoagulacion" class="tab-content">
+            <h3 style="color: var(--accent-green);">Fibrilación auricular: algoritmo de anticoagulación</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Manual de orientación de la UMI, HUGCDN.</p>
+
+            <div class="algo-flow">
+                <div class="algo-step"><span class="algo-num">1</span><div class="algo-text">¿Válvulas cardiacas mecánicas o estenosis mitral?</div></div>
+                <div class="algo-branches">
+                    <div class="algo-branch algo-branch-si"><span class="algo-branch-label">Sí</span>Anticoagulación oral con AVK (antagonista de vitamina K) — Clase I·A. Los NACO están contraindicados en esta población.</div>
+                    <div class="algo-branch algo-branch-no"><span class="algo-branch-label">No</span>Estimar el riesgo de ACV con la escala CHA₂DS₂-VASc (calculadora ya disponible en Merino Cardiología, Ficha XVII de Cardiología).</div>
+                </div>
+                <div class="algo-step"><span class="algo-num">2</span><div class="algo-text">Según puntuación CHA₂DS₂-VASc:</div></div>
+                <div class="algo-branches">
+                    <div class="algo-branch"><span class="algo-branch-label">0 puntos</span>No están indicados los tratamientos antiagregante ni anticoagulante — Clase III·B.</div>
+                    <div class="algo-branch"><span class="algo-branch-label">1 punto</span>Se debe considerar la anticoagulación oral — Clase IIa·B.</div>
+                    <div class="algo-branch algo-branch-si"><span class="algo-branch-label">≥2 puntos</span>Anticoagulación oral indicada — NACO (Clase I·A) preferido sobre AVK (Clase I·A).</div>
+                </div>
+                <div class="algo-step"><span class="algo-num">3</span><div class="algo-text">Si la anticoagulación oral está contraindicada: evaluar y corregir los factores de riesgo hemorrágico reversibles; se puede considerar el uso de oclusores de la orejuela izquierda en pacientes con contraindicaciones claras — Clase IIb·C.</div></div>
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-dim); margin-top:10px;">Este algoritmo es el marco de decisión completo; la puntuación CHA₂DS₂-VASc en sí (8 ítems puntuables con semáforo de riesgo) ya está implementada como calculadora interactiva en <strong>Merino Cardiología → Ficha XVII, "FA: cardioversión y prevención de ictus"</strong> — no se duplica aquí.</p>
+        </div>
+
+    </div>
+
+    <div class="card">
+        <h3 style="color: var(--accent-purple);">📚 Bibliografía</h3>
+        <p style="font-size:0.85rem; color:var(--text-dim);">Manual de orientación interno de la Unidad de Medicina Intensiva (UMI), Hospital Universitario de Gran Canaria Dr. Negrín (HUGCDN) — "Cómo estar en la UCI sin matar ni morir". Contenido clínico extraído y reescrito con la voz propia de esta app; nunca se reproduce el documento original ni nombres de personal.</p>
+        <ul class="biblio-list">
+            <li><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte1.pdf#page=33" target="_blank" rel="noopener">Vasoactivos, sedantes, relajantes y antibióticos en perfusión</a> <span class="biblio-nota">Manual UMI, págs. 33-44</span></li>
+            <li><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte1.pdf#page=20" target="_blank" rel="noopener">Endocarditis infecciosa: criterios de Duke</a> <span class="biblio-nota">Manual UMI, págs. 20-23</span></li>
+            <li><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=13" target="_blank" rel="noopener">Ecocardiografía FATE</a> <span class="biblio-nota">Manual UMI, págs. 65-71 (Eur J Anaesthesiol 2004;21:700-707)</span></li>
+            <li><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=17" target="_blank" rel="noopener">Marcapasos: código de 5 letras</a> <span class="biblio-nota">Manual UMI, pág. 69</span></li>
+            <li><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=6" target="_blank" rel="noopener">Hemodinámica invasiva y protocolo Swan-Ganz</a> <span class="biblio-nota">Manual UMI, págs. 59-64</span></li>
+            <li><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=5" target="_blank" rel="noopener">Anticoagulación y sangrado en cirugía cardiaca</a> <span class="biblio-nota">Manual UMI, págs. 57-58</span></li>
+            <li><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=20" target="_blank" rel="noopener">Síndrome posparada cardíaca</a> <span class="biblio-nota">Manual UMI, págs. 72-75</span></li>
+            <li><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=23" target="_blank" rel="noopener">FA: algoritmo de anticoagulación</a> <span class="biblio-nota">Manual UMI, pág. 76</span></li>
+        </ul>
+    </div>
