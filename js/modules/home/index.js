@@ -78,10 +78,10 @@ export function onNeumologiaListo(api) {
 }
 
 // Mismo patrón de inyección perezosa, para la API que devuelve
-// protocolosUci.init() (ver modules/protocolos-uci/index.js).
-let protocolosUciApi = null;
-export function onProtocolosUciListo(api) {
-    protocolosUciApi = api;
+// sobrevivirUmi.init() (ver modules/sobrevivir-umi/index.js).
+let sobrevivirUmiApi = null;
+export function onSobrevivirUmiListo(api) {
+    sobrevivirUmiApi = api;
 }
 
 export function init() {
@@ -99,7 +99,7 @@ export function init() {
         fisioUci: document.getElementById('fisio-uci-view'),
         cardiologia: document.getElementById('cardiologia-view'),
         neumologia: document.getElementById('neumologia-view'),
-        protocolosUci: document.getElementById('protocolos-uci-view'),
+        sobrevivirUmi: document.getElementById('sobrevivir-umi-view'),
     });
 
     function goHome() {
@@ -128,9 +128,9 @@ export function init() {
         topLevel.show('neumologia');
         neumologiaApi?.volverAlMenu();
     });
-    document.getElementById('btn-protocolos-uci').addEventListener('click', () => {
-        topLevel.show('protocolosUci');
-        protocolosUciApi?.volverAlMenu();
+    document.getElementById('btn-sobrevivir-umi').addEventListener('click', () => {
+        topLevel.show('sobrevivirUmi');
+        sobrevivirUmiApi?.volverAlMenu();
     });
     document.querySelectorAll('.btn-volver-especialidades').forEach(b => b.addEventListener('click', () => topLevel.show('especialidades')));
 
@@ -171,9 +171,9 @@ export function init() {
         } else if (especialidad === 'neumologia') {
             topLevel.show('neumologia');
             neumologiaApi?.irAFicha(view, panel, tab);
-        } else if (especialidad === 'protocolosUci') {
-            topLevel.show('protocolosUci');
-            protocolosUciApi?.irAFicha(view, panel, tab);
+        } else if (especialidad === 'sobrevivirUmi') {
+            topLevel.show('sobrevivirUmi');
+            sobrevivirUmiApi?.irAFicha(view, panel, tab);
         }
     }
 

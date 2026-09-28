@@ -19,7 +19,7 @@ import * as uciPapers from './modules/uci-papers/index.js';
 import * as fisioUci from './modules/fisio-uci/index.js';
 import * as cardiologia from './modules/cardiologia/index.js';
 import * as neumologia from './modules/neumologia/index.js';
-import * as protocolosUci from './modules/protocolos-uci/index.js';
+import * as sobrevivirUmi from './modules/sobrevivir-umi/index.js';
 import { initQuiz } from './modules/quiz/quiz.js';
 
 async function start() {
@@ -43,18 +43,18 @@ async function start() {
     home.onCardiologiaListo(cardiologiaApi);
     const neumologiaApi = neumologia.init();
     home.onNeumologiaListo(neumologiaApi);
-    const protocolosUciApi = protocolosUci.init();
-    home.onProtocolosUciListo(protocolosUciApi);
+    const sobrevivirUmiApi = sobrevivirUmi.init();
+    home.onSobrevivirUmiListo(sobrevivirUmiApi);
 
     // Única llamada a initQuiz() de toda la app — el modal
     // (#quiz-modal-overlay) es un partial compartido, así que cada
     // especialidad expone su banco/temas ya combinados en vez de llamar
     // a initQuiz() cada una por su lado (ver comentario en quiz.js).
-    const quizBancoCompleto = [...home.quizBanco, ...nefrologia.quizBanco, ...uciPapers.quizBanco, ...fisioUci.quizBanco, ...cardiologia.quizBanco, ...neumologia.quizBanco, ...protocolosUci.quizBanco];
+    const quizBancoCompleto = [...home.quizBanco, ...nefrologia.quizBanco, ...uciPapers.quizBanco, ...fisioUci.quizBanco, ...cardiologia.quizBanco, ...neumologia.quizBanco, ...sobrevivirUmi.quizBanco];
     initQuiz({
-        triggerId: [...home.quizTriggerId, ...nefrologia.quizTriggerId, ...uciPapers.quizTriggerId, ...fisioUci.quizTriggerId, ...cardiologia.quizTriggerId, ...neumologia.quizTriggerId, ...protocolosUci.quizTriggerId],
+        triggerId: [...home.quizTriggerId, ...nefrologia.quizTriggerId, ...uciPapers.quizTriggerId, ...fisioUci.quizTriggerId, ...cardiologia.quizTriggerId, ...neumologia.quizTriggerId, ...sobrevivirUmi.quizTriggerId],
         banco: quizBancoCompleto,
-        temas: [...home.quizTemas, ...nefrologia.quizTemas, ...uciPapers.quizTemas, ...fisioUci.quizTemas, ...cardiologia.quizTemas, ...neumologia.quizTemas, ...protocolosUci.quizTemas],
+        temas: [...home.quizTemas, ...nefrologia.quizTemas, ...uciPapers.quizTemas, ...fisioUci.quizTemas, ...cardiologia.quizTemas, ...neumologia.quizTemas, ...sobrevivirUmi.quizTemas],
     });
 
     // Modo Estudio: estimación de pomodoros por ficha (lectura + preguntas

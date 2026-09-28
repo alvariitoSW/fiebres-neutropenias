@@ -9,15 +9,13 @@ import { preguntasInsuficienciaCardiaca, temasInsuficienciaCardiaca } from '../.
 import { init as initInsuficienciaCardiaca } from './insuficiencia-cardiaca.js';
 import { preguntasMerinoCardiologia, temasMerinoCardiologia } from '../../data/merino-cardiologia-preguntas.js';
 import { init as initMerinoCardiologia } from './merino-cardiologia.js';
-import { preguntasManualUmiCardio, temasManualUmiCardio } from '../../data/manual-umi-cardio-preguntas.js';
-import { init as initManualUmiCardio } from './manual-umi-cardio.js';
 
 // El modal de repaso (#quiz-modal-overlay) es un único partial compartido
 // por TODA la app — solo puede existir una llamada activa a initQuiz() en
 // toda la página (ver quiz.js). Cardiología expone aquí su banco/temas para
 // que main.js los fusione con el resto de especialidades.
-export const quizTriggerId = ['btn-cardio-ic-repasar', 'btn-merino-cardio-repasar', 'btn-umi-cardio-repasar'];
-export const quizBanco = [...preguntasInsuficienciaCardiaca, ...preguntasMerinoCardiologia, ...preguntasManualUmiCardio];
+export const quizTriggerId = ['btn-cardio-ic-repasar', 'btn-merino-cardio-repasar'];
+export const quizBanco = [...preguntasInsuficienciaCardiaca, ...preguntasMerinoCardiologia];
 // Menú del quiz en 3 niveles (asignatura → bloque → ficha, ver quiz.js) —
 // aquí cada "bloque" es directamente una guía, ya que cada una es su propio
 // submenú de nivel medio en la navegación real de la app.
@@ -25,7 +23,6 @@ const ASIGNATURA = 'Cardiología';
 export const quizTemas = [
     ...temasInsuficienciaCardiaca.map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'Insuficiencia Cardíaca (ESC 2026)' })),
     ...temasMerinoCardiologia.map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'Merino Cardiología' })),
-    ...temasManualUmiCardio.map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'Manual UMI Negrín' })),
 ];
 
 export function init() {
@@ -33,17 +30,14 @@ export function init() {
         menu: document.getElementById('cardiologia-menu-view'),
         insuficienciaCardiaca: document.getElementById('cardio-ic-view'),
         merinoCardiologia: document.getElementById('merino-cardio-view'),
-        manualUmi: document.getElementById('umi-cardio-view'),
     });
 
     document.getElementById('btn-cardio-ic').addEventListener('click', () => cardioLevel.show('insuficienciaCardiaca'));
     document.getElementById('btn-merino-cardio').addEventListener('click', () => cardioLevel.show('merinoCardiologia'));
-    document.getElementById('btn-umi-cardio').addEventListener('click', () => cardioLevel.show('manualUmi'));
     document.querySelectorAll('.btn-volver-cardio-menu').forEach(b => b.addEventListener('click', () => cardioLevel.show('menu')));
 
     initInsuficienciaCardiaca();
     initMerinoCardiologia();
-    initManualUmiCardio();
 
     // Enlaces cruzados entre las 2 guías de Cardiología (misma especialidad,
     // ambas ya colgando de este mismo cardioLevel) — shock cardiogénico se
