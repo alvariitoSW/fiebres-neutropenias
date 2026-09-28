@@ -405,8 +405,24 @@
                     <tr><td>Epinefrina, seudoefinefrina, fenilpropanolona, salbutamol, albuterol, terbutalina, fenoterol, efedrina, isoproterenol, cloroquina, verapamilo, cafeína, teofilina, insulina</td><td>Tiazidas, furosemida, acetazolamida, indapamida, glucocorticoides, fludocortisona, penicilina, nafcilina, ampicilina, aminoglucósidos, cisplatino, anfotericina B</td><td>Fenolftaleína, Na sulfato poliestireno</td></tr>
                 </tbody>
             </table>
-            <dl class="kv-row"><dt>TTKG (si K en orina no disminuido en hipoK, confirma pérdidas renales)</dt><dd>TTKG = K(orina)×Osm(plasma) / [K(plasma)×Osm(orina)]</dd></dl>
-            <dl class="kv-row"><dt>Cálculo de K a reponer</dt><dd>(K real − K esperado [3,5]) × peso + requerimientos diarios (1 mEq/kg) — al resultado se agregan 30 mEq por cada litro de diuresis, llegando a usar reposiciones de 200-350 mEq en 24h.</dd></dl>
+            <p class="section-label" style="margin-top:14px;">🧮 Calculadora: TTKG (si K en orina no disminuido en hipoK, confirma pérdidas renales)</p>
+            <div class="tfg-simulador">
+                <div class="form-group"><label for="umi-ttkg-ko">K⁺ orina (mmol/l)</label><input type="number" id="umi-ttkg-ko" step="1" min="0" max="200" value="20"></div>
+                <div class="form-group"><label for="umi-ttkg-oso">Osm orina (mOsm/kg)</label><input type="number" id="umi-ttkg-oso" step="1" min="1" max="1400" value="400"></div>
+                <div class="form-group"><label for="umi-ttkg-kp">K⁺ plasma (mmol/l)</label><input type="number" id="umi-ttkg-kp" step="0.1" min="0.1" max="10" value="2.8"></div>
+                <div class="form-group"><label for="umi-ttkg-osp">Osm plasma (mOsm/kg)</label><input type="number" id="umi-ttkg-osp" step="1" min="1" max="500" value="285"></div>
+                <div id="umi-ttkg-resultado" class="tfg-estado tfg-estado-ok"></div>
+                <p style="font-size: 0.72rem; color: var(--text-muted); margin-top:8px;">TTKG = K(orina)×Osm(plasma) / [K(plasma)×Osm(orina)].</p>
+            </div>
+
+            <p class="section-label" style="margin-top:14px;">🧮 Calculadora: déficit de K⁺ a reponer</p>
+            <div class="tfg-simulador">
+                <div class="form-group"><label for="umi-defk-peso">Peso (kg)</label><input type="number" id="umi-defk-peso" step="1" min="1" max="300" value="70"></div>
+                <div class="form-group"><label for="umi-defk-kreal">K⁺ real (mEq/l)</label><input type="number" id="umi-defk-kreal" step="0.1" min="0.1" max="6" value="2.8"></div>
+                <div class="form-group"><label for="umi-defk-diuresis">Diuresis (l/24h, opcional)</label><input type="number" id="umi-defk-diuresis" step="0.1" min="0" max="15"></div>
+                <div id="umi-defk-resultado" class="tfg-estado tfg-estado-ok"></div>
+                <p style="font-size: 0.72rem; color: var(--text-muted); margin-top:8px;">(K esperado[3,5] − K real) × peso + requerimientos diarios (1 mEq/kg) + 30 mEq por litro de diuresis.</p>
+            </div>
 
             <p class="section-label" style="margin-top:14px;">Hiperpotasemia</p>
             <table class="data-table">
@@ -493,6 +509,26 @@
                     <tr><td>Extremadamente activo (2×/día)</td><td>1,9</td></tr>
                 </tbody>
             </table>
+
+            <p class="section-label" style="margin-top:14px;">🧮 Calculadora: peso ideal/ajustado, IMC, TEB y CED</p>
+            <div class="tfg-simulador">
+                <div class="form-group"><label for="umi-nut-sexo">Sexo</label>
+                    <select id="umi-nut-sexo"><option value="h">Hombre</option><option value="m">Mujer</option></select>
+                </div>
+                <div class="form-group"><label for="umi-nut-altura">Altura (cm)</label><input type="number" id="umi-nut-altura" step="1" min="100" max="220" value="170"></div>
+                <div class="form-group"><label for="umi-nut-peso">Peso actual (kg)</label><input type="number" id="umi-nut-peso" step="1" min="20" max="300" value="80"></div>
+                <div class="form-group"><label for="umi-nut-edad">Edad (años)</label><input type="number" id="umi-nut-edad" step="1" min="14" max="110" value="60"></div>
+                <div class="form-group"><label for="umi-nut-fa">Factor de actividad</label>
+                    <select id="umi-nut-fa">
+                        <option value="1.2">Sedentario (1,2)</option>
+                        <option value="1.375">Activo 1-3 días/sem (1,375)</option>
+                        <option value="1.55">Activo 3-5 días/sem (1,55)</option>
+                        <option value="1.725">Activo 5-6 días/sem (1,725)</option>
+                        <option value="1.9">Extremadamente activo (1,9)</option>
+                    </select>
+                </div>
+                <div id="umi-nut-resultado" class="tfg-estado tfg-estado-ok"></div>
+            </div>
 
             <p class="section-label" style="margin-top:14px;">Ecuación de Ireton-Jones (alternativa específica de UCI)</p>
             <dl class="kv-row"><dt>Paciente ventilado</dt><dd>1784 − 11×edad + 5×peso(kg) + 244×sexo + 239×trauma + 804×quemaduras (sexo: varón=1, mujer=0; trauma=1 si sí; quemaduras=1 si sí)</dd></dl>
@@ -830,6 +866,16 @@
             </table>
             <dl class="kv-row"><dt>Peso corporal predicho (PBW)</dt><dd>Hombre = 50 + 0,91×(altura cm − 152,4) · Mujer = 45,5 + 0,91×(altura cm − 152,4).</dd></dl>
 
+            <p class="section-label" style="margin-top:14px;">🧮 Calculadora: PBW y volumen tidal</p>
+            <div class="tfg-simulador">
+                <div class="form-group"><label for="umi-vt-sexo">Sexo</label>
+                    <select id="umi-vt-sexo"><option value="h">Hombre</option><option value="m">Mujer</option></select>
+                </div>
+                <div class="form-group"><label for="umi-vt-altura">Altura (cm)</label><input type="number" id="umi-vt-altura" step="1" min="100" max="220" value="170"></div>
+                <div class="form-group"><label for="umi-vt-mlkg">Volumen tidal objetivo (ml/kg de PBW)</label><input type="number" id="umi-vt-mlkg" step="0.5" min="4" max="10" value="6"></div>
+                <div id="umi-vt-resultado" class="tfg-estado tfg-estado-ok"></div>
+            </div>
+
             <p class="section-label" style="margin-top:14px;">Tabla FiO₂/PEEP (ARDS Network)</p>
             <div style="overflow-x:auto;">
             <table class="data-table">
@@ -879,6 +925,17 @@
             <p class="section-label" style="margin-top:14px;">Brecha aniónica (anion gap)</p>
             <dl class="kv-row"><dt>Fórmula</dt><dd>(Na⁺ + K⁺) − (Cl⁻ + HCO₃⁻). Normal &lt;15.</dd></dl>
             <p style="font-size:0.85rem; color:var(--text-dim);"><strong>Si &gt;15</strong>, causas a considerar: metanol, urea (uremia), cetosis, paraldehído, isoniacida, hierro, lactato, etanol, salicilato — mnemotecnia clásica de acidosis metabólica con hiato aniónico elevado.</p>
+
+            <p class="section-label" style="margin-top:14px;">🧮 Calculadora: brecha aniónica</p>
+            <div class="tfg-simulador">
+                <div class="form-group"><label for="umi-ag-na">Na⁺ (mEq/l)</label><input type="number" id="umi-ag-na" step="1" min="100" max="170" value="138"></div>
+                <div class="form-group"><label for="umi-ag-k">K⁺ (mEq/l, opcional)</label><input type="number" id="umi-ag-k" step="0.1" min="0" max="10"></div>
+                <div class="form-group"><label for="umi-ag-cl">Cl⁻ (mEq/l)</label><input type="number" id="umi-ag-cl" step="1" min="60" max="140" value="102"></div>
+                <div class="form-group"><label for="umi-ag-hco3">HCO₃⁻ (mEq/l)</label><input type="number" id="umi-ag-hco3" step="1" min="1" max="45" value="24"></div>
+                <div id="umi-ag-resultado" class="tfg-estado tfg-estado-ok"></div>
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Si el hiato aniónico está elevado, el clasificador completo de gasometrías (con Δ-gap/Δ-ratio para detectar un trastorno metabólico sobreañadido) ya está disponible en Nefrología:</p>
+<p><button class="especialidad-link" data-especialidad="nefrologia" data-view="nefrona" data-panel="panel-fisio-tabs" data-tab="fisio-acidobase-acidosis">🔗 Abrir el clasificador ácido-base completo (Nefrología) →</button></p>
             <p style="font-size:0.85rem; color:var(--text-dim);">Estos 5 criterios son la versión de guardia; la prueba de respiración espontánea con sus predictores de éxito y las guías PUMA completas de extubación (con checklist y algoritmo de estrategia) ya están desarrolladas en otros 2 puntos de la app:</p>
 <p><button class="especialidad-link" data-especialidad="neumologia" data-view="merinoNeumologia" data-panel="panel-merino-neumo-tabs" data-tab="neumo-sbt">🔗 Predictores de éxito de la SBT (Merino Neumología) →</button></p>
 <p><button class="especialidad-link" data-especialidad="uciPapers" data-view="extubacionPuma" data-panel="panel-extub-tabs" data-tab="extub-algoritmo">🔗 Algoritmo completo de extubación PUMA (UCI/Papers Tuiter) →</button></p>
@@ -941,6 +998,13 @@
                     <tr><td>&gt;3</td><td>Detener PC 1h, luego ↓PC en 3 UI/kg/h</td><td>Repetir a las 6h</td></tr>
                 </tbody>
             </table>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Nota de fidelidad: el manual imprime la primera fila como "rAPTT &lt;2", un rango que se solapa literalmente con la fila siguiente ("1,2-1,5") — probable errata del propio documento. Se interpreta aquí, y en la calculadora de abajo, como "&lt;1,2" para que las 5 bandas sean contiguas, siguiendo la misma lógica clínica del resto del esquema (nunca corregido en silencio).</p>
+
+            <p class="section-label" style="margin-top:14px;">🧮 Calculadora: titulación por rAPTT</p>
+            <div class="tfg-simulador">
+                <div class="form-group"><label for="umi-raptt-ratio">rAPTT (ratio sobre control)</label><input type="number" id="umi-raptt-ratio" step="0.1" min="0.5" max="5" value="1.4"></div>
+                <div id="umi-raptt-resultado" class="tfg-estado tfg-estado-ok"></div>
+            </div>
             <p style="font-size:0.85rem; color:var(--text-dim);">Iniciar tratamiento simultáneo con anticoagulación oral (ACO) cuando el paciente esté perfectamente estable y no se prevea la necesidad inmediata de técnicas invasivas.</p>
 
             <p class="section-label" style="margin-top:14px;">Sangrado postoperatorio de cirugía cardiovascular (CCV)</p>
@@ -997,6 +1061,24 @@
                 </tbody>
             </table>
             <p style="font-size:0.8rem; color:var(--text-muted);">Nota: esta ficha usa el coeficiente 1,34 (mL O₂/g Hb) tal como lo cita el manual — Merino Cardiología (Ficha I de esta misma app) usa 1,38-1,39 según la fuente citada en cada calculadora, fiel a su propio origen bibliográfico en cada caso.</p>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Nota de fidelidad: el manual imprime <strong>PAM = (PAD + PAS − PAD)/3</strong>, una fórmula que algebraicamente se reduce a PAS/3 — con PAS 120/PAD 80 daría PAM=40 mmHg, fuera de rango fisiológico. Es un error tipográfico real de la fuente (confirmado en la propia tabla del manual), no introducido por esta app; la fórmula estándar y clínicamente correcta es PAM = PAD + (PAS−PAD)/3 (equivalente a (PAS+2×PAD)/3), y es la que usa la calculadora de abajo. De igual modo, la fórmula impresa del VO₂ carece del factor ×10 que sí lleva la de DO₂ en la misma tabla — sin él, el resultado no alcanza el rango normal citado (110-160 ml/min/m²) — así que la calculadora lo aplica, dejándolo señalado aquí en vez de corregirlo en silencio. La fila "Sat venosa mixta (SvO₂)" del manual da, en realidad, la fórmula del contenido de O₂ venoso (no de una saturación, que se mide directamente como %) — reproducida tal cual en la tabla de arriba, sin usarla en la calculadora.</p>
+
+            <p class="section-label" style="margin-top:14px;">🧮 Calculadora hemodinámica</p>
+            <div class="tfg-simulador">
+                <div class="form-group"><label for="umi-hemo-pas">PA sistólica (mmHg)</label><input type="number" id="umi-hemo-pas" step="1" min="30" max="300" value="110"></div>
+                <div class="form-group"><label for="umi-hemo-pad">PA diastólica (mmHg)</label><input type="number" id="umi-hemo-pad" step="1" min="10" max="200" value="70"></div>
+                <div class="form-group"><label for="umi-hemo-pvc">PVC (mmHg)</label><input type="number" id="umi-hemo-pvc" step="1" min="-5" max="40" value="8"></div>
+                <div class="form-group"><label for="umi-hemo-gc">GC (l/min)</label><input type="number" id="umi-hemo-gc" step="0.1" min="0.5" max="15" value="5"></div>
+                <div class="form-group"><label for="umi-hemo-sc">SC (m²)</label><input type="number" id="umi-hemo-sc" step="0.01" min="0.5" max="3" value="1.8"></div>
+                <div class="form-group"><label for="umi-hemo-hb">Hb (g/dl)</label><input type="number" id="umi-hemo-hb" step="0.1" min="1" max="20" value="12"></div>
+                <div class="form-group"><label for="umi-hemo-sat">SatO₂ arterial (%)</label><input type="number" id="umi-hemo-sat" step="1" min="0" max="100" value="98"></div>
+                <div class="form-group"><label for="umi-hemo-satv">SatVO₂ mixta (%, opcional)</label><input type="number" id="umi-hemo-satv" step="1" min="0" max="100"></div>
+                <div class="form-group"><label for="umi-hemo-pmap">PMAP (mmHg, opcional — para RVP)</label><input type="number" id="umi-hemo-pmap" step="1" min="0" max="80"></div>
+                <div class="form-group"><label for="umi-hemo-poap">POAP/PCP (mmHg, opcional — para RVP)</label><input type="number" id="umi-hemo-poap" step="1" min="0" max="40"></div>
+                <div id="umi-hemo-resultado" class="tfg-estado tfg-estado-ok"></div>
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Si el patrón hemodinámico calculado sugiere un tipo de shock, la Tabla de patrones por PVC/GC/RVS con su prevalencia relativa ya está disponible en Merino Cardiología:</p>
+<p><button class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-definiciones">🔗 Ver patrones hemodinámicos del shock (Merino Cardiología) →</button></p>
 
             <p class="section-label" style="margin-top:14px;">Patrones hemodinámicos del shock</p>
             <div style="overflow-x:auto;">
@@ -1098,6 +1180,13 @@
             </table>
             <dl class="kv-row"><dt>Fracción de acortamiento (FS)</dt><dd>FS = (LVDd−LVSd)/LVDd. La fracción de eyección se estima ≈ 2 × FS.</dd></dl>
 
+            <p class="section-label" style="margin-top:14px;">🧮 Calculadora: FS y FEVI estimada</p>
+            <div class="tfg-simulador">
+                <div class="form-group"><label for="umi-fs-lvdd">LVDd — VI diástole (cm)</label><input type="number" id="umi-fs-lvdd" step="0.1" min="1" max="9" value="4.8"></div>
+                <div class="form-group"><label for="umi-fs-lvsd">LVSd — VI sístole (cm)</label><input type="number" id="umi-fs-lvsd" step="0.1" min="0.5" max="8" value="3.2"></div>
+                <div id="umi-fs-resultado" class="tfg-estado tfg-estado-ok"></div>
+            </div>
+
             <p class="section-label" style="margin-top:14px;">Estimación visual de la función sistólica del VI (eje largo paraesternal)</p>
             <div class="algo-flow">
                 <div class="algo-step"><span class="algo-num">1</span><div class="algo-text"><strong>Movimiento endocárdico</strong> — normal si es simétrico.</div></div>
@@ -1127,6 +1216,22 @@
             </div>
             <p style="font-size:0.8rem; color:var(--text-muted);">Estima la presión de la aurícula derecha (equivalente aproximado de la PVC) — 3 / 8 / 15 mmHg según la banda.</p>
 
+            <p class="section-label" style="margin-top:14px;">🧮 Calculadora: índice de colapsabilidad de la VCI</p>
+            <div class="tfg-simulador">
+                <div class="form-group"><label for="umi-vci-modo">Contexto</label>
+                    <select id="umi-vci-modo">
+                        <option value="espontanea">Ventilación espontánea</option>
+                        <option value="vm-sin-esfuerzo">VM sin esfuerzo respiratorio</option>
+                        <option value="vm-general">VM (fórmula general)</option>
+                    </select>
+                </div>
+                <div class="form-group"><label for="umi-vci-dmax">Diámetro máximo (cm)</label><input type="number" id="umi-vci-dmax" step="0.1" min="0.3" max="4" value="2.2"></div>
+                <div class="form-group"><label for="umi-vci-dmin">Diámetro mínimo (cm)</label><input type="number" id="umi-vci-dmin" step="0.1" min="0" max="4" value="1.4"></div>
+                <div id="umi-vci-resultado" class="tfg-estado tfg-estado-ok"></div>
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Este índice estima la respuesta a volumen; el objetivo clínico de PVC/PCP (0-20 mmHg) con el que se guía la corrección de la precarga ya está disponible como gauge interactivo en Fisiopatología UCI:</p>
+<p><button class="especialidad-link" data-especialidad="fisioUci" data-view="viasUrinarias" data-panel="panel-vu-tabs" data-tab="vu-fisiologia-renal">🔗 Ver objetivo de PVC/PCP (Fisiopatología UCI, Vías Urinarias) →</button></p>
+
             <p class="section-label" style="margin-top:14px;">Patología importante a considerar (tarjeta de referencia FATE)</p>
             <p style="font-size:0.85rem; color:var(--text-dim);">Derrame pericárdico, dilatación de cavidades (VD, VI, AD+VD, AI+VI), hipertrofia de VI/VD — contexto: cateterización cardiaca reciente, cirugía cardiaca, embolismo pulmonar, infarto de VD, sepsis, hipertensión pulmonar, cardiomiopatía dilatada, sobrecarga de volumen, obstrucción del tracto de salida del VI, insuficiencia aórtica, hipertensión arterial, miocardiopatía hipertrófica, enfermedades por depósito miocárdico.</p>
         </div>
@@ -1147,6 +1252,26 @@
                     <tr><td>5</td><td>Antitaquicardia</td><td>P = estimulación · S = choque · D = estimulación + choque</td></tr>
                 </tbody>
             </table>
+
+            <p class="section-label" style="margin-top:14px;">🧮 Constructor del código NBG</p>
+            <div class="tfg-simulador">
+                <div class="form-group"><label for="umi-nbg-1">1 · Estimulación</label>
+                    <select id="umi-nbg-1"><option value="">—</option><option value="A">A · aurícula</option><option value="V">V · ventrículo</option><option value="D">D · doble</option><option value="S">S · single</option></select>
+                </div>
+                <div class="form-group"><label for="umi-nbg-2">2 · Detección</label>
+                    <select id="umi-nbg-2"><option value="">—</option><option value="A">A · aurícula</option><option value="V">V · ventrículo</option><option value="D">D · doble</option><option value="S">S · single</option></select>
+                </div>
+                <div class="form-group"><label for="umi-nbg-3">3 · Respuesta</label>
+                    <select id="umi-nbg-3"><option value="">—</option><option value="T">T · disparado</option><option value="I">I · inhibido</option><option value="D">D · disparado+inhibido</option></select>
+                </div>
+                <div class="form-group"><label for="umi-nbg-4">4 · Programabilidad (opcional)</label>
+                    <select id="umi-nbg-4"><option value="">—</option><option value="C">C · comunicación/telemetría</option><option value="P">P · mono/biprogramable</option><option value="M">M · multiprogramable</option><option value="R">R · frecuencia variable</option></select>
+                </div>
+                <div class="form-group"><label for="umi-nbg-5">5 · Antitaquicardia (opcional)</label>
+                    <select id="umi-nbg-5"><option value="">—</option><option value="P">P · estimulación</option><option value="S">S · choque</option><option value="D">D · estimulación+choque</option></select>
+                </div>
+                <div id="umi-nbg-resultado" class="tfg-estado tfg-estado-ok"></div>
+            </div>
 
             <p class="section-label" style="margin-top:14px;">Grados de recomendación de indicación</p>
             <dl class="kv-row"><dt>Grupo I</dt><dd>Evidencia y/o acuerdo general en que el procedimiento/tratamiento es beneficioso, útil y eficaz.</dd></dl>
@@ -1259,6 +1384,18 @@
                 </tbody>
             </table>
             <p style="font-size:0.85rem; color:var(--text-dim);">Si el paciente cumple criterios para iniciar perfusión continua (PC) IV, iniciarla al tener un control de glucemia ≥180 mg/dl.</p>
+
+            <p class="section-label" style="margin-top:14px;">🧮 Calculadora: dosis por glucemia</p>
+            <div class="tfg-simulador">
+                <div class="form-group"><label for="umi-ins-glucemia">Glucemia (mg/dl)</label><input type="number" id="umi-ins-glucemia" step="1" min="20" max="600" value="200"></div>
+                <div class="form-group"><label for="umi-ins-algoritmo">Algoritmo de perfusión IV</label>
+                    <select id="umi-ins-algoritmo">
+                        <option value="0">I</option><option value="1">II</option><option value="2">III</option>
+                        <option value="3">IV</option><option value="4">V</option><option value="5">VI</option>
+                    </select>
+                </div>
+                <div id="umi-ins-resultado" class="tfg-estado tfg-estado-ok"></div>
+            </div>
 
             <p class="section-label" style="margin-top:14px;">Protocolo de perfusión de insulina en 6 algoritmos</p>
             <p style="font-size:0.85rem; color:var(--text-dim)">Comienzan en el <strong>Algoritmo II</strong> los pacientes con catecolaminas o postoperados, tratamiento corticoideo, nutrición parenteral total (NTP), o diabetes tipo I/II insulinizados. Todos los demás comienzan en el <strong>Algoritmo I</strong>. Objetivo de glucemia: 140-180 mg/dl.</p>

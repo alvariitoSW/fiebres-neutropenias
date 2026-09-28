@@ -7533,6 +7533,106 @@ página impresa − 52).
     clasificador ya existente de Nefrología, descartado —, HFVVC/fórmulas
     de TRR → ampliación de `trr.html` en Nefrología) también quedan
     pendientes de una tanda futura.
+  - **Auditoría de contenido + interactividad y sus correcciones**, a
+    petición explícita del usuario ("revisa que está todo correctamente,
+    comprueba que falta, que está mal escrito... comprueba que partes se
+    pueden hacer interactivas, además las fórmulas matemáticas
+    presentarlas mejor visualmente con una pequeña parte interactiva...
+    croslinkear cosas con el contenido ya incluido en la app"). Releídas
+    contra la imagen real del PDF (ambos archivos son escaneados —
+    `pdftotext` no extrae texto —, así que la verificación se hizo viendo
+    las páginas como imagen con el `Read` tool) las fórmulas de las 3
+    fichas más numéricas del manual: Hemodinámica (Ficha XIII), rAPTT
+    (Ficha XII) y electrolitos (Ficha II) — se encontraron **3 erratas
+    reales de la propia fuente**, tratadas con el mismo criterio ya
+    establecido en el proyecto (nunca "corregir" en silencio, reproducir
+    fielmente + nota de fidelidad, e implementar la calculadora nueva con
+    la forma correcta):
+    - **PAM**: la tabla ya transcrita en `umi-hemodinamica` reproduce la
+      fórmula del manual, `(PAD+PAS−PAD)/3` — que se reduce
+      algebraicamente a PAS/3 sin más, matemáticamente incoherente
+      (con PAS 120/PAD 80 daría PAM=40). Confirmado en la imagen de la
+      página real del PDF que es así como está impresa. Añadida una nota
+      de fidelidad explícita bajo la tabla, y la calculadora nueva usa la
+      fórmula estándar correcta `PAM = PAD + (PAS−PAD)/3`.
+    - **VO₂**: la fórmula de la misma tabla, `IC×1,34×Hb×(SatO₂−SatVO₂)`,
+      da un resultado ~10× por debajo del propio rango normal que la
+      fuente cita en la fila de al lado (110-160 ml/min/m²) — le falta el
+      factor ×10 (mismo que ya lleva la fórmula de DO₂ de la fila
+      anterior). Verificado que solo con ×10 el resultado cae dentro del
+      rango que la propia fuente declara normal — no una cifra inventada,
+      sino una reconciliación contra el propio rango de referencia de la
+      misma tabla. Nota de fidelidad añadida; calculadora con el ×10.
+    - **rAPTT**: la tabla de titulación de heparina tiene una banda
+      "&lt;2" que se solapa literalmente con la banda "1,2-1,5" de la fila
+      de abajo — confirmado en la imagen de la página real. Interpretado
+      como "&lt;1,2" en la calculadora nueva (para dejar las 5 bandas
+      contiguas, la intención clínica evidente), documentado con nota de
+      fidelidad en vez de "arreglar" la tabla original en silencio.
+    - **11 calculadoras interactivas nuevas** añadidas, una por fórmula
+      matemática real del manual que antes solo aparecía como texto/`kv-row`
+      — mismo patrón `.tfg-simulador`/`.form-group` y guard
+      `.value === ''` ya usado en toda la app (nunca tratar un campo vacío
+      como 0): TTKG y déficit de K⁺ a reponer (Ficha II); peso ideal/
+      ajustado + IMC + TEB (Harris-Benedict) + CED (Ficha III, Nutrición);
+      PBW + volumen tidal objetivo (Ficha IX, Respirador); brecha aniónica
+      (Ficha X, Extubación); titulación de heparina por rAPTT (Ficha XII,
+      Cirugía cardiaca); calculadora hemodinámica completa —PAM/IC/RVS/
+      DO₂/DO₂I, con VO₂ y RVP opcionales si se rellenan los campos venosos/
+      pulmonares— con 2 avisos de "combinación no fisiológica" (PAD≥PAS,
+      SatVO₂&gt;SatO₂) (Ficha XIII); FS/FEVI por ecocardiografía + índice
+      de colapsabilidad de VCI con 3 modos según ventilación (Ficha XIV,
+      FATE), ambas con su propio aviso de combinación no fisiológica
+      (diámetro sistólico≥diastólico, dmin&gt;dmax); constructor
+      interactivo del código NBG de 5 letras, con la descripción de cada
+      posición actualizándose en vivo (Ficha XV, Marcapasos); y doble
+      calculadora de dosis de insulina —pauta móvil subcutánea + perfusión
+      IV por los 6 algoritmos I-VI— a partir de la sola glucemia
+      introducida (Ficha XVIII).
+    - **3 cross-links nuevos** hacia contenido ya existente en otras
+      especialidades, siempre `.especialidad-link` (nunca `.tx-link`, que
+      tiene su propio listener global sin acotar en `nefrologia/index.js`
+      y colisionaría con cualquier `data-view` ajeno a `nefroLevel` — mismo
+      riesgo ya documentado y evitado en el resto del proyecto): Ficha X
+      (Extubación) → Nefrología, clasificador ácido-base completo
+      (`nefrona`/`panel-fisio-tabs`/`fisio-acidobase-acidosis`); Ficha XIII
+      (Hemodinámica) → Merino Cardiología, tabla de patrones hemodinámicos
+      del shock (`merinoCardiologia`/`panel-merino-cardio-tabs`/
+      `mc-definiciones`); Ficha XIV (FATE) → Fisiopatología UCI, bloque
+      Vías Urinarias, el gauge de PVC/PCP ya existente
+      (`viasUrinarias`/`panel-vu-tabs`/`vu-fisiologia-renal`) — deliberadamente
+      solo de ida (sin botón de vuelta en las 3 fichas destino), a
+      diferencia de los cross-links bidireccionales ya construidos entre
+      otras especialidades, porque este manual ya lleva 14 enlaces de ida
+      hacia el resto de la app (ver el bloque de cross-links más arriba) y
+      añadir uno más de vuelta a cada uno de esos 3 destinos no aportaba
+      valor proporcional al esfuerzo.
+    - Verificado con Playwright (viewport 390×844): las 18 fichas
+      abren/voltean sin error de consola ni 404 real (solo el `favicon.ico`
+      ya documentado como inocuo) y todas activan su `.tab-content`
+      correctamente; las 11 calculadoras nuevas responden a la entrada con
+      los valores esperados (comprobado a mano, p. ej. AG con Na 140/K 4/
+      Cl 100/HCO₃ 15 → 29,0 mEq/l elevada; rAPTT 1,30 → banda "40 UI bolo,
+      subir 2 UI/kg/h"; NBG con V/V/I → "VVI"; glucemia 250 + Algoritmo III
+      → "8 UI SC" + "5 UI/h IV"), el guard de campo vacío se respeta (borrar
+      Na en la calculadora de AG deja el último resultado válido en vez de
+      recalcular con 0); los 3 cross-links nuevos navegan a la especialidad
+      y ficha exacta de destino; sin overflow horizontal a 390px. **Nota de
+      metodología de verificación**: un primer intento de comprobar el
+      volteo de la Ficha X con clicks de coordenadas de Playwright
+      (`{force:true}`) dio un falso positivo de fallo — el click de
+      coordenadas no siempre landea de forma fiable sobre `.back-cta`
+      cuando la ficha está en plena transformación 3D (`rotateY(180deg)`);
+      el disparo del evento `click()` real vía `page.evaluate()` confirmó
+      que la lógica de la app (y el propio `core/corkboard.js`) es
+      correcta — si en el futuro un test de Playwright reporta que una
+      ficha "no voltea" o "no activa su panel" sin motivo aparente, probar
+      primero con un click DOM directo antes de asumir un bug de la app.
+    - Sin cambios de contenido/redacción de las 18 fichas más allá de las
+      3 notas de fidelidad — no se encontraron erratas de transcripción
+      propias de la app (nombres, dosis, tablas ya trasladadas
+      correctamente desde el manual), solo las 3 erratas ya presentes en
+      la fuente original documentadas arriba.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
