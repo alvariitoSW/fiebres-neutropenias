@@ -379,6 +379,49 @@ El Atlas sustituyó estos 4 botones grandes:
        verificados) — quedan documentados aquí como algo a tener en
        cuenta si se rediseña el sistema de color, nunca a "corregir" sin
        que el usuario lo pida explícitamente.
+     - **Bug real de móvil encontrado y corregido tras el despliegue
+       anterior**, a partir del reporte explícito del usuario vía `/debug`
+       ("no puedo acceder bien a las fichas nuevas"). La verificación de la
+       ronda anterior usaba `element.click()` de Playwright (JS puro), que
+       **nunca dispara `:active`** — así que quedó ciega a un bug real que
+       solo aparece con un toque de verdad. Causa: `.field-card:active {
+       transform: scale(0.99); }` (línea única, sin acotar a modo)
+       convierte a `.field-card` en un nuevo *containing block* CSS para
+       cualquier descendiente `position:fixed` mientras el `transform` no
+       sea `none` — y en modo compacta la cara trasera (`.card-face.back`)
+       es justo eso, la hoja fija al pie de pantalla. Confirmado de forma
+       empírica con `page.mouse.down()`/`page.mouse.up()` (que sí disparan
+       `:active`, a diferencia de `.click()`): con el toque en marcha, la
+       hoja queda encajonada dentro de la propia fila (`rect` ~350×168,
+       pegado a la posición de la fila) en vez de anclada al fondo del
+       viewport (`rect` 390 de ancho × pegada a `bottom:844`) — el mismo
+       síntoma exacto de "no puedo acceder bien". En iOS Safari `:active`
+       se mantiene durante todo el gesto de toque (no se libera limpio en
+       "mouseup" como en el test sintético), así que esa ventana rota
+       podía cubrir el toque completo del usuario sobre `.back-cta`.
+       Corregido acotando el `transform` de `:active` solo a
+       `.corkboard-cajon` (ahí la cara trasera nunca es `position:fixed`,
+       así que es inofensivo) y sustituyéndolo en `.corkboard-compacta` por
+       un feedback de toque que no participa en containing blocks —
+       `background: rgba(255,255,255,0.05)`, nunca `transform`/`filter`/
+       `perspective`/`backdrop-filter`, los 4 CSS que crean containing
+       block para `position:fixed`. **Lección para el futuro**: cualquier
+       regla `:active`/hover/toque nueva sobre un ANCESTRO de un elemento
+       `position:fixed` (aquí, o en cualquier otro overlay/hoja fija de la
+       app) debe evitar esas 4 propiedades, o acotarse a un modo/contexto
+       donde no haya ningún descendiente fijo — y verificarse con
+       `page.mouse.down()`/`up()` real, nunca solo con `.click()`, porque
+       `.click()` no ejercita `:active` y puede dar un falso verde a este
+       tipo de bug. Verificado con Playwright tras el arreglo: en modo
+       compacta, el `transform` de `.field-card` durante `:active` es
+       ahora `none` (feedback visual solo por `background`), la hoja
+       aparece ya desde el primer frame con `left:0, width:390` anclada al
+       viewport, y el botón `.back-cta` real queda en `x:0, width:390,
+       y:800` (tocable de verdad); en modo cajón, el toque sigue
+       escalando/rotando la ficha (`:active` combinado con el `--tilt`
+       propio) y el volteo sigue abriendo con normalidad — sin regresión.
+       Bump de cache-busting a `?v=20260929-2` (segundo despliegue del
+       mismo día que toca `components.css`).
 3. **Síndromes Hematológicos Urgentes** (`modules/sindromes-urgentes/`) —
    una sola vista con 3 temas (CID / PTT / Síndrome de Lisis Tumoral),
    navegados desde un cuaderno de campo (`#sindromes-corkboard`, ver

@@ -459,9 +459,24 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 .corkboard-cajon { gap: 16px; padding: 8px 6px 16px; }
 .corkboard-compacta { gap: 0; padding: 4px 0 10px; }
 
-.field-card { position: relative; cursor: pointer; touch-action: manipulation; transition: transform 0.15s; }
-.field-card:active { transform: scale(0.99); }
+.field-card { position: relative; cursor: pointer; touch-action: manipulation; }
 .field-card-inner { position: relative; width: 100%; }
+
+/* El feedback de :active en modo cajón usa transform (seguro: la cara
+   trasera ahí nunca es position:fixed). En modo compacta la cara trasera
+   SÍ es position:fixed (la hoja al pie de pantalla) — cualquier transform
+   no-none en un ANCESTRO suyo (.field-card), aunque sea transitorio en
+   pleno :active, crea un nuevo containing block para ese descendiente
+   fixed y lo deja encajonado dentro de la propia fila en vez de anclado
+   al viewport (confirmado con Playwright: rect ~350x168 pegado a la fila
+   en vez de 390px de ancho anclado al fondo de pantalla, exactamente el
+   bug real reportado como "no puedo acceder bien a las fichas nuevas" en
+   iOS, donde :active se mantiene durante todo el gesto de toque). Por
+   eso el feedback de compacta usa solo background, nunca
+   transform/filter/perspective/backdrop-filter. */
+.corkboard-cajon .field-card { transition: transform 0.15s; }
+.corkboard-cajon .field-card:active { transform: scale(0.99); }
+.corkboard-compacta .field-card:active { background: rgba(255, 255, 255, 0.05); }
 
 .corkboard-cajon .field-card { transform: rotate(var(--tilt, -1deg)); }
 .corkboard .field-card:nth-child(4n+1) { --tilt: -1.1deg; --tape: var(--accent-blue); }
