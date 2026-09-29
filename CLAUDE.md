@@ -7971,6 +7971,84 @@ reagrupación de especialidades detallada abajo.
     la vía más simple es matizar solo la tile interna (p. ej. "Fisiopatología
     UCI — El Libro Azul", ya insinuado en su `especialidad-tile-desc`),
     nunca el nombre del grupo raíz sin que el usuario lo pida.
+  - **De dónde sale el nombre "PIF"**, a petición explícita del usuario de
+    darle contexto ("ahora quiero darle contexto a lo de pif"). PIF =
+    **Plan Individualizado de Formación** (PFI-UMI-R1-01, Rev. 1/Junio
+    2016, Servicio Canario de la Salud — HUGCDN, Unidad Docente de
+    Medicina Intensiva): el documento oficial de la Comisión de Docencia
+    que planifica, rotación a rotación, los objetivos teórico-prácticos
+    que debe cumplir un médico residente durante cada año de su
+    especialidad. Medicina Intensiva son **5 años de residencia (R1-R5)**,
+    y el usuario, como residente R1, **hoy solo tiene el documento del
+    primer año (R1)** — los de R2-R5 llegarán en el futuro, cada uno con
+    sus propias rotaciones/objetivos nuevos.
+    - **El grupo "PIF" del menú raíz corresponde, en sentido estricto, a
+      las rotaciones reales de ESTE documento R1** — no es un nombre
+      genérico de conveniencia. El documento R1 define 9 rotaciones a lo
+      largo del año (junio 2026-mayo 2027), cada una con su lista de
+      objetivos teóricos: **Hematología** (jul 2026 — manejo de citopenias
+      con énfasis en neutropenia febril, reconocimiento temprano del
+      paciente hematológico crítico, transfusión de hemoderivados,
+      síndromes urgentes —lisis tumoral/CID/PTT—, introducción a
+      trasplante de progenitores, contacto inicial con CAR-T/CRS/ICANS),
+      **Nefrología** (ago 2026 — fisiopatología renal, HTA, IRA/ERC,
+      equilibrio hidroelectrolítico-ácido base, nefrotoxicidad, TRR),
+      **Radiología, sección de tórax** (sep 2026 — semiología Rx tórax,
+      patrones, técnicas UMI —IOT/VVC/SNG/drenajes— y sus complicaciones,
+      ecografía torácica, introducción a TC/TCAR), **Neuro-Radiología**
+      (oct 2026 — técnicas radiológicas, ACV isquémico vs. hemorrágico,
+      HTIC, hematoma epidural/subdural, hipoxia cerebral, catéteres
+      intracraneales, HSA por imagen), **Cardiología** (nov-dic 2026 —
+      historia clínica cardiológica, IC aguda, EKG/arritmias, SCA,
+      endocarditis/pericarditis/miocarditis, ecocardiografía/cateterismo
+      básicos), **Medicina Interna** (ene-feb 2027 — historia clínica y
+      exploración completas, hipótesis de trabajo/plan terapéutico,
+      rotación en Infecciosas, signos de gravedad y reanimación inicial
+      del paciente séptico en planta), **U. Infecciosas** (mar 2027 —
+      mismos objetivos base de historia clínica/exploración/sepsis, ya
+      solapados con los de Medicina Interna en el propio documento),
+      **Neurología** (abr 2027 — historia/exploración neurológica, código
+      ictus, punción lumbar, deterioro del nivel de consciencia, patología
+      neurológica con afectación respiratoria —miastenia gravis, Guillain-
+      Barré—, meningitis, crisis comiciales/estado postcrítico), y
+      **Neumología** (may-jun 2027 — insuficiencia respiratoria aguda,
+      neumonía comunitaria/nosocomial, fisiopatología del intercambio
+      gaseoso, patología respiratoria crónica, TEP no complicado, pruebas
+      funcionales respiratorias, VMNI básica). El documento incluye
+      además una lista transversal de **conocimientos prácticos/
+      habilidades** (sistemas Drago/PISCIS, monitorización hemodinámica,
+      EKG, drenaje ventricular, ecocardiografía/cateterismo, IOT/VVC/
+      catéter arterial durante la rotación en Anestesia, punción lumbar,
+      gasometrías, fibrobroncoscopia, VMNI, suturas, RCP básica) sin
+      rotación asignada, y detalles puramente administrativos (guardias
+      5-6/mes en Urgencias+UMI, sesiones clínicas, entrevistas tutor-
+      residente) que no son contenido clínico y no se trasladan a la app.
+    - **Solo 2 de las 9 rotaciones de R1 tienen ya contenido real en la
+      app** (Hematología y Nefrología, ambas construidas antes de que se
+      diera este contexto explícito — ya cubrían de hecho casi todos los
+      objetivos reales del documento, confirmado al leerlo). Las 7
+      restantes (Radiología-tórax, Neuro-Radiología, Cardiología —como
+      rotación PIF, distinta de la especialidad "Cardiología" ya
+      existente en el grupo "Fisiopatología UCI", que es guías de manejo
+      sin relación con este documento—, Medicina Interna, Infecciosas,
+      Neurología, Neumología) son candidatas naturales a ampliar el
+      grupo "PIF" en el futuro, según vaya llegando el resto de la
+      rotación R1 y, más adelante, los documentos de R2-R5 — mismo
+      criterio de siempre: nunca fabricar contenido clínico sin una
+      fuente real que el usuario aporte primero.
+    - **El resto de la app (UCI/Papers Tuiter, Fisiopatología UCI,
+      Cardiología/Neumología como especialidades de guías de manejo, y
+      Sobrevivir a la UMI) NO está atado a este documento PIF** — son la
+      visión más amplia del proyecto, explícita ya en la primera línea de
+      este mismo `CLAUDE.md` ("herramienta de apoyo para médicos... para
+      ir creciendo con más especialidades según se vaya aportando
+      contenido"): una gran biblioteca de autoayuda al estudio, construida
+      con Claude Code, donde cada pieza de contenido queda siempre
+      trazable a su bibliografía real (PDF en `docs/`, con
+      `.biblio-link`/`#page=N`) para poder auditarla y actualizarla con el
+      tiempo — no una app que solo cubre el temario formal de la
+      residencia, sino una que crece con cualquier fuente clínica que el
+      usuario aporte, PIF incluido como una fuente más entre otras.
 - **2 switchers intermedios nuevos**, mismo patrón `createViewSwitcher()`
   ya usado por el resto de menús medios de la app (`nefroLevel`,
   `cardioLevel`...), pero esta vez viviendo dentro del propio `topLevel`
