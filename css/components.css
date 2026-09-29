@@ -737,6 +737,34 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 .biblio-link:hover { text-decoration: underline; }
 .biblio-nota { display: block; font-size: 0.74rem; font-style: italic; color: var(--text-muted); margin-top: 3px; line-height: 1.4; }
 
+/* ===================================================== */
+/* ÍNDICE RÁPIDO POR BLOQUE — grid de accesos directos a un */
+/* grupo temático de fichas dentro de UN ÚNICO cuaderno de  */
+/* campo grande (18+ fichas), cuando agruparlas en varios    */
+/* .const-node sería redundante (todas abren el mismo        */
+/* manual, solo cambia la ficha de entrada) — ver Sobrevivir */
+/* a la UMI. Reutiliza el mismo lenguaje de "barra de color   */
+/* por categoría" que .micro-prof-item (--item-color), en vez */
+/* de una tarjeta .const-node completa por bloque (demasiado  */
+/* pesada para un simple atajo de navegación). Color fijo por  */
+/* bloque, nunca ciclado — mismo criterio categórico ya         */
+/* aplicado en el resto de la app.                              */
+/* ===================================================== */
+.quick-index { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+.qi-item {
+    display: flex; flex-direction: column; gap: 2px; text-align: left;
+    background: rgba(46, 38, 28, 0.6); border: 1px solid var(--border-color);
+    border-left: 3px solid var(--qi-color, var(--accent-blue));
+    border-radius: 4px; padding: 9px 10px; cursor: pointer; font-family: inherit;
+    color: var(--text-main); transition: transform 0.12s ease, border-color 0.12s ease;
+}
+.qi-item:hover, .qi-item:focus-visible { transform: translateY(-1px); border-color: var(--qi-color, var(--accent-blue)); }
+.qi-item:active { transform: translateY(0) scale(0.98); }
+.qi-icon { font-size: 1.1rem; line-height: 1; margin-bottom: 3px; }
+.qi-title { font-weight: 700; font-size: 0.74rem; line-height: 1.25; color: var(--qi-color, var(--accent-blue)); }
+.qi-desc { font-size: 0.62rem; color: var(--text-muted); line-height: 1.3; }
+.qi-count { font-size: 0.6rem; color: var(--text-muted); font-family: 'Courier New', monospace; letter-spacing: 0.5px; margin-top: 2px; }
+
 /* Enlace interno de navegación cruzada entre módulos de Nefrología (p. ej.
    la guía transversal de tratamiento saltando a una ficha de ERC/FRA/TRR).
    Es un <button>, no un <a> — no navega por href, dispara JS. */

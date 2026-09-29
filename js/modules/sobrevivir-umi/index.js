@@ -31,6 +31,26 @@ export function init() {
     document.getElementById('btn-manual-umi').addEventListener('click', () => sobrevivirLevel.show('manualUmi'));
     document.querySelectorAll('.btn-volver-sobrevivir-umi-menu').forEach(b => b.addEventListener('click', () => sobrevivirLevel.show('menu')));
 
+    // Índice rápido por bloque temático (ver sobrevivir-umi-menu.html): cada
+    // bloque salta a la primera ficha real de ese tema dentro del cuaderno
+    // de campo único de 18 fichas — mismo patrón data-route→onRoute ya usado
+    // por el Atlas Hematológico (rutasAtlas), aquí sin pantalla de zona
+    // intermedia porque todos los bloques comparten el mismo destino
+    // (manual-umi-view), solo cambia la ficha de entrada.
+    const rutasCategoria = {
+        guardia: 'umi-rutinas',
+        shock: 'umi-shock-septico',
+        respiratorio: 'umi-rsi',
+        cardiovascular: 'umi-cirugia-cardiaca',
+    };
+    document.querySelectorAll('[data-categoria-route]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            sobrevivirLevel.show('manualUmi');
+            const tab = rutasCategoria[btn.dataset.categoriaRoute];
+            if (tab) openCorkboardTopic('panel-manual-umi-tabs', tab);
+        });
+    });
+
     initManualUmi();
 
     sobrevivirLevel.show('menu');

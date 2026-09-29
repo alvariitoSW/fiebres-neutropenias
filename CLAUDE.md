@@ -7840,6 +7840,77 @@ página impresa − 52).
       `.tab-content` de destino con `.active` real y `offsetParent !==
       null` (visible de verdad, no solo con la clase puesta); sin errores
       de consola ni de página en ningún punto del recorrido.
+  - **Rediseño visual de `sobrevivir-umi-menu.html` con `/dataviz`**, a
+    petición explícita del usuario. La pantalla de entrada tenía un solo
+    `.const-node` cuyo `.const-desc` embutía los 18 nombres de ficha en
+    una sola línea de texto corrido, con mucho espacio vacío debajo —
+    confirmado con una captura de Playwright antes de tocar nada (mismo
+    método ya establecido en el proyecto: nunca rediseñar a ciegas).
+    Aplicado el método de `/dataviz` aunque no hubiera ningún gráfico de
+    datos real que dibujar — su principio de **color categórico fijo, sin
+    ciclar** (identidad de bloque = color siempre igual) sí aplicaba
+    directamente a organizar las 18 fichas en bloques temáticos:
+    - Nuevo componente **`.quick-index`/`.qi-item`** (`css/components.css`,
+      bloque nuevo antes de `.tx-link`): grid 2×2 de tarjetas compactas con
+      barra de color izquierda (`--qi-color`), icono, título y descripción
+      — deliberadamente más ligero que un `.const-node` completo por
+      bloque (los 4 bloques abren el mismo destino, `manual-umi-view`,
+      solo cambia la ficha de entrada — un `.const-node` por bloque habría
+      repetido peso visual sin aportar una decisión de navegación
+      distinta).
+    - **4 bloques temáticos**, agrupando las 18 fichas por afinidad
+      clínica real (no por orden de aparición): Guardia y metabolismo
+      (rutinas, electrolitos, nutrición, glucemia — púrpura, mismo acento
+      ya usado por la cabecera de la especialidad), Shock e infección
+      (shock séptico, endocarditis, DDS/aislamiento, vasoactivos — rojo),
+      Vía aérea y ventilación (SIR, respirador, extubación, BLUE — verde),
+      Cardiovascular avanzado (cirugía cardiaca, Swan-Ganz, FATE,
+      marcapasos, posparada, FA — azul/dorado). Mismos 4 colores de acento
+      ya usados en el resto de la app, nunca un color nuevo — mismo
+      criterio de "plugging into the system" del propio método `/dataviz`
+      (nunca inventar tokens de color, solo usar los del sistema de diseño
+      ya validado).
+    - **Validador de paleta ejecutado antes de dar el diseño por bueno**
+      (`scripts/validate_palette.js` de la skill `/dataviz`, mismo método
+      ya usado en la auditoría de fidelidad de Fisiopatología UCI): los 4
+      colores elegidos (`--accent-red/purple/green/blue`) **fallan** 3 de
+      los 6 chequeos contra el fondo oscuro de la app — confirma, con
+      cifras, los 2 "gotchas" ya documentados en varios puntos de este
+      mismo archivo (`--accent-green` con poca saturación sobre fondo
+      oscuro, "lee como gris"; el par púrpura/rojo-tierra con ΔE de visión
+      normal 10,2, por debajo del suelo de 15). No es una regresión nueva
+      — es una limitación ya conocida y documentada del sistema de 5
+      colores de toda la app, que el proyecto ya decidió no tocar sin
+      petición explícita (cambiar un token de color afecta a decenas de
+      sitios ya verificados). La mitigación aplicada, siguiendo la propia
+      regla del método `/dataviz` para paletas que fallan la validación
+      ("identity is never color-alone"): cada `.qi-item` lleva icono +
+      título en negrita + descripción de texto — la identidad del bloque
+      nunca depende solo del color, exactamente el mismo criterio de
+      "barra de color + `<strong>`" que ya usa `.micro-prof-item` en toda
+      la app.
+    - **Wiring**: `sobrevivir-umi/index.js` ganó una tabla `rutasCategoria`
+      (mismo patrón `data-route`→`onRoute` que `rutasAtlas` del Atlas
+      Hematológico, aquí sin pantalla de zona intermedia porque los 4
+      bloques comparten el mismo destino) que resuelve cada
+      `[data-categoria-route]` a `sobrevivirLevel.show('manualUmi')` +
+      `openCorkboardTopic('panel-manual-umi-tabs', <primera ficha del
+      bloque>)` — reutiliza `openCorkboardTopic` ya importado, sin lógica
+      de navegación nueva.
+    - El `.const-node` original ("Manual UMI Negrín — Guía completa") se
+      mantuvo sin quitar, con su `.const-desc` acortado (ya no enumera las
+      18 fichas, remite al índice rápido de abajo) — sigue siendo el
+      camino directo a la guía completa sin pasar por ningún bloque.
+    - Verificado con Playwright (viewport 390×844): captura de pantalla
+      antes/después confirmando visualmente el resultado (grid 2×2 sin
+      huecos ni solapes, texto legible); los 4 botones de bloque navegan
+      cada uno a la ficha exacta esperada
+      (`umi-rutinas`/`umi-shock-septico`/`umi-rsi`/`umi-cirugia-cardiaca`)
+      con `.active` real y `offsetParent !== null`; el botón original de
+      "Ver todo →" sigue abriendo la guía completa sin regresión; sin
+      overflow horizontal a 390px (`scrollWidth === clientWidth`); sin
+      errores de consola ni de página. Bump de cache-busting a
+      `?v=20260929-4` (cambia `css/components.css`).
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
