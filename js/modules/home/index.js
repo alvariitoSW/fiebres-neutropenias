@@ -109,8 +109,9 @@ export function init() {
         atlas.reset();
     }
 
-    // Las 4 puertas de la raíz: PIF y Cardiorrespiratorio son menús
-    // combinados intermedios (ver index.html), sin API propia que
+    // Las 4 puertas de la raíz: PIF y Fisiopatología UCI (grupo
+    // Cardio+Neumo+Fisio UCI, id interno "cardiorrespi" sin cambiar) son
+    // menús combinados intermedios (ver index.html), sin API propia que
     // inyectar — solo cambian de vista. UCI/Papers Tuiter y Sobrevivir a
     // la UMI siguen siendo puertas directas, sin nivel intermedio.
     document.getElementById('btn-pif').addEventListener('click', () => topLevel.show('pifMenu'));
@@ -143,8 +144,9 @@ export function init() {
     });
     document.querySelectorAll('.btn-volver-especialidades').forEach(b => b.addEventListener('click', () => topLevel.show('especialidades')));
     // Hematología/Nefrología viven ahora un nivel más abajo, dentro de PIF;
-    // Cardiología/Neumología/Fisiopatología UCI dentro de Cardiorrespiratorio
-    // — su "← VOLVER" propio regresa al menú combinado, no a la raíz.
+    // Cardiología/Neumología/Fisiopatología UCI dentro del grupo
+    // "Fisiopatología UCI" (id interno cardiorrespiMenu, sin cambiar) —
+    // su "← VOLVER" propio regresa al menú combinado, no a la raíz.
     document.querySelectorAll('.btn-volver-pif-menu').forEach(b => b.addEventListener('click', () => topLevel.show('pifMenu')));
     document.querySelectorAll('.btn-volver-cardiorrespi-menu').forEach(b => b.addEventListener('click', () => topLevel.show('cardiorrespiMenu')));
 

@@ -7820,7 +7820,7 @@ calculadoras en sí (Escalas Generales, Neutropenia Febril) no saben nada de
 estos niveles superiores ni del Atlas — siguen inicializándose igual que
 siempre, solo cambia qué contenedor está visible.
 
-## Rediseño del menú raíz: hero-tiles + 4 puertas de entrada (PIF, Cardiorrespiratorio, UCI/Papers Tuiter, Sobrevivir a la UMI)
+## Rediseño del menú raíz: hero-tiles + 4 puertas de entrada (PIF, Fisiopatología UCI, UCI/Papers Tuiter, Sobrevivir a la UMI)
 
 A petición explícita del usuario ("Quiero un rediseño del menú principal"),
 se rediseñó visualmente el menú de "Especialidades" y, en el mismo pedido,
@@ -7842,18 +7842,30 @@ reagrupación de especialidades detallada abajo.
 
 - **Las 4 puertas raíz** (`#especialidades-view`, ahora con la clase nueva
   `.especialidad-tile` en vez de `.accordion-btn.nav-btn`): **PIF**
-  (Hematología + Nefrología), **Cardiorrespiratorio** (Cardiología +
-  Neumología + Fisiopatología UCI — nombre provisional, elegido por
-  Claude al no haberlo fijado el usuario todavía; trivial de renombrar,
-  es solo texto en `index.html` y en este mismo `CLAUDE.md`, sin tocar
-  ningún id/switcher), **UCI / Papers Tuiter** y **Sobrevivir a la UMI**
-  — estas 2 últimas sin cambio de agrupación, siguen siendo puertas
-  directas sin nivel intermedio, solo con el nuevo tratamiento visual.
+  (Hematología + Nefrología), **Fisiopatología UCI** (grupo combinado:
+  Cardiología + Neumología + Fisiopatología UCI — nombre confirmado
+  explícitamente por el usuario, sustituyendo el provisional
+  "Cardiorrespiratorio" con el que arrancó este menú; los ids/switcher
+  internos siguen llamándose `cardiorrespi*` a propósito, solo cambió el
+  texto visible en `index.html` y aquí), **UCI / Papers Tuiter** y
+  **Sobrevivir a la UMI** — estas 2 últimas sin cambio de agrupación,
+  siguen siendo puertas directas sin nivel intermedio, solo con el nuevo
+  tratamiento visual.
+  - **Colisión de nombre deliberada, a petición explícita del usuario**:
+    el grupo raíz "Fisiopatología UCI" contiene, como una de sus 3
+    tiles internas, la propia especialidad "Fisiopatología UCI" (el
+    bloque de capítulos de El Libro Azul) — el mismo nombre en 2 niveles
+    de navegación distintos. Se implementó tal cual se pidió, sin
+    "corregirlo" por criterio propio (p. ej. renombrando la tile interna).
+    Si en el futuro se reporta confusión real de navegación por esto,
+    la vía más simple es matizar solo la tile interna (p. ej. "Fisiopatología
+    UCI — El Libro Azul", ya insinuado en su `especialidad-tile-desc`),
+    nunca el nombre del grupo raíz sin que el usuario lo pida.
 - **2 switchers intermedios nuevos**, mismo patrón `createViewSwitcher()`
   ya usado por el resto de menús medios de la app (`nefroLevel`,
   `cardioLevel`...), pero esta vez viviendo dentro del propio `topLevel`
   de `home/index.js` en vez de en un `index.js` de especialidad aparte
-  (PIF/Cardiorrespiratorio no son especialidades con contenido propio,
+  (PIF/Fisiopatología UCI —grupo raíz— no son especialidades con contenido propio,
   son puro agrupamiento de navegación): `pifMenu`
   (`#pif-menu-view`, 2 tiles: Hematología/Nefrología) y
   `cardiorrespiMenu` (`#cardiorrespi-menu-view`, 3 tiles:
@@ -7923,13 +7935,13 @@ reagrupación de especialidades detallada abajo.
     (tile raíz de PIF en racimo, tile propia de Nefrología dentro de
     `#pif-menu-view`).
 - Verificado con Playwright (viewport 390×844): las 4 tiles de la raíz
-  navegan a su destino correcto (PIF/Cardiorrespiratorio a su menú
+  navegan a su destino correcto (PIF/Fisiopatología UCI a su menú
   intermedio, UCI Papers/Sobrevivir UMI directo a su vista, sin cambios);
   dentro de PIF, Hematología abre el Atlas y su "← VOLVER" regresa a PIF
   (no a la raíz); Nefrología abre el mapa del riñón y su "← VOLVER"
   también regresa a PIF; el "← VOLVER" de PIF regresa a la raíz; dentro
-  de Cardiorrespiratorio, las 3 especialidades abren correctamente y sus
-  3 "← VOLVER" respectivos regresan al menú Cardiorrespiratorio (no a la
+  del grupo Fisiopatología UCI, las 3 especialidades abren correctamente
+  y sus 3 "← VOLVER" respectivos regresan a ese menú combinado (no a la
   raíz); UCI/Papers Tuiter y Sobrevivir a la UMI siguen funcionando en
   ruta directa sin regresión; sin overflow horizontal a 390px en ninguna
   de las 3 pantallas nuevas/modificadas; sin errores de consola ni de
@@ -7937,13 +7949,19 @@ reagrupación de especialidades detallada abajo.
   inocuo). Bump de cache-busting a `?v=20260929-3` (cambian
   `css/components.css`, `index.html`, `js/main.js` vía el import de
   `home/index.js`).
-- **Pendiente**: confirmar con el usuario el nombre definitivo de
-  "Cardiorrespiratorio" (marcado como provisional desde el propio diseño
-  aprobado). La ampliación futura de Sobrevivir a la UMI con más
+- **Renombrado el grupo raíz de "Cardiorrespiratorio" (provisional) a
+  "Fisiopatología UCI"**, a petición explícita del usuario — solo texto
+  visible (`index.html`, 2 sitios: la tile raíz y la cabecera del menú
+  intermedio) y comentarios de `home/index.js`; los ids/switcher internos
+  (`btn-cardiorrespi`, `cardiorrespiMenu`, `#cardiorrespi-menu-view`,
+  `.btn-volver-cardiorrespi-menu`) se dejaron sin tocar a propósito —
+  son identificadores internos, renombrarlos no aporta nada y solo
+  arriesga romper algo. Ver la colisión de nombre deliberada documentada
+  más arriba. La ampliación futura de Sobrevivir a la UMI con más
   contenido del manual y cross-links reales hacia Merino (Cardiología/
   Neumología/Hematología) sigue explícitamente aplazada, tal y como pidió
-  el usuario — no se ha tocado en este rediseño, solo el tratamiento
-  visual de su tile en la raíz.
+  el usuario en su momento — hasta que se pida (ver el bloque de diseño
+  nuevo más abajo, donde sí se abordó).
 
 `modules/fuentes/` sigue siendo la excepción: es una categoría **solo de
 contenido**, sin `.js`, montada como acordeón (no como vista de pantalla
