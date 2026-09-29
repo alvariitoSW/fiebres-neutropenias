@@ -254,6 +254,131 @@ El Atlas sustituyó estos 4 botones grandes:
      lógica de clic ya delegaba correctamente en `.back-cta` vía
      `e.target.closest('.back-cta')`, el problema era puramente de
      tamaño/posición del área clicable, no de JS.
+   - **Rediseño completo del cuaderno de campo — sustituido el volteo 3D**,
+     a petición explícita del usuario ("en el móvil al darse la vuelta y
+     al clickar sigo teniendo problemas, creo que se puede rediseñar la
+     parte de las tarjetas para presentarla de otra manera") — el ajuste
+     táctil del `.back-cta` de arriba no fue suficiente: el problema real
+     era estructural, no solo de zona de toque. `.field-card` tenía un
+     alto FIJO de 236px en una rejilla de 2 columnas, con las dos caras en
+     `position:absolute;inset:0` volteadas en 3D (`rotateY(180deg)`,
+     `backface-visibility:hidden`) — cualquier hook/respuesta algo largo
+     se recortaba contra ese alto fijo, y el propio volteo 3D es frágil en
+     móvil (superposición de capas, safari con perspective). Antes de
+     tocar código se exploraron 3 direcciones visuales completas con el
+     tipo Artifact "Design" (canvas de prototipos `.dc.html` tocables,
+     recreando fielmente la paleta/tipografía reales de la app — nunca un
+     diseño genérico) y se presentaron para probar en el propio móvil: A)
+     lista expandible de una columna sin volteo, B) la misma estética de
+     ficha de campo (parchment/washi/ilustración) pero con un **cajón**
+     que se despliega debajo en vez de voltear, C) filas muy compactas que
+     abren una **hoja fija al pie de pantalla**. El usuario confirmó que
+     le gustaban las 3 — como `core/corkboard.js` es un único componente
+     compartido por las ~26 fichas de toda la app, se resolvió con
+     `AskUserQuestion` cómo combinarlas: **regla automática por tamaño del
+     cuaderno**, nunca a mano por módulo — B (cajón) en cuadernos
+     ≤12 fichas, C (hoja compacta) en cuadernos &gt;12 (Merino
+     Cardiología 24, Merino Neumología 23, Fisiología renal 18, Manual UMI
+     18, ERC 13, Inmunología 13...).
+     - **Sin tocar el HTML de ninguna ficha de la app** — la clave del
+       rediseño: el HTML `.field-card > .field-card-inner >
+       .card-face.front/.back` de siempre ya tenía exactamente la
+       separación semántica correcta (front = ilustración+título+pista,
+       back = respuesta+CTA), así que todo el cambio vive en
+       `core/corkboard.js` y `css/components.css` — mismo criterio ya
+       establecido en el proyecto para "Siguiente ficha →" y la marca de
+       "ya visto" (cambio centralizado, cero wiring por módulo).
+     - **`initCorkboard(boardId, panelId)`** cuenta las `.field-card` del
+       tablero al arrancar y añade `corkboard-cajon` o `corkboard-compacta`
+       al contenedor (`cards.length > 12` → compacta). El listener de
+       click ya no hace `classList.toggle('flipped')`: en modo cajón hace
+       `toggle('open')` (varias fichas pueden estar abiertas a la vez,
+       como un acordeón); en modo compacta es excluyente (`closeAll()`
+       antes de abrir la nueva, como cualquier hoja/bottom-sheet real) y
+       crea un único `.corkboard-backdrop` por tablero (fondo oscuro fijo
+       que cierra al tocar fuera). Tocar `.back-cta` sigue siendo el único
+       camino a `openCorkboardTopic()` (sin cambios en esa función, ni en
+       la marca de "ya visto" ni en "Siguiente ficha →", que siguen
+       leyendo `.field-card`/`data-tab` igual que siempre) y ahora además
+       llama a `closeAll()` — necesario en modo compacta, si no la hoja se
+       queda flotando por encima del contenido real recién revelado.
+     - **Título inyectado en la hoja compacta**: la cara trasera nunca
+       tuvo el título de la ficha (solo pista+botón, igual en el diseño
+       de siempre) — `asegurarTituloHoja()` lo toma la primera vez que se
+       abre, leyendo `.field-name` con el mismo helper `nombreFicha()` ya
+       usado por "Siguiente ficha →" (reutilizado, no duplicado), e
+       inserta un `<div class="corkboard-sheet-title">` como primer hijo
+       de `.card-face.back` — así la hoja no queda coja, sin tener que
+       tocar el HTML de ninguna ficha para añadir el título.
+     - **CSS**: `.corkboard` pasó de `grid grid-template-columns:1fr 1fr`
+       a `flex column` de una sola columna en ambos modos (ya no hace
+       falta 2 columnas si el alto es siempre automático). Modo cajón:
+       `.card-face.back{display:none}` → `.field-card.open
+       .card-face.back{display:block}`, en flujo normal, nunca 3D — el
+       propio `.field-card-inner` perdió `transform-style:preserve-3d`
+       por completo. De paso, aprovechando que ya no hay rejilla de 2
+       columnas estrecha, se agrandó la ilustración (88×64→108×76px) y el
+       texto (`.field-name` 0.86→0.98rem, `.field-hook` 0.64→0.72rem,
+       `.back-hook` 0.78→0.86rem, `.plate-label` 0.52→0.6rem) — el propio
+       síntoma de "texto ilegible" que motivó el pedido original. Modo
+       compacta: `.washi`/`.plate-label` ocultos, `.field-illust`
+       reposicionado absoluto a la izquierda (26×26px) con el texto
+       indentado (`padding-left:44px`), `.field-hook` truncado a una
+       línea (`white-space:nowrap;text-overflow:ellipsis`) — fila con
+       `min-height:52px`, bien por encima del mínimo táctil de 44px. La
+       hoja (`.field-card.open .card-face.back` en compacta) usa
+       `position:fixed;left:0;right:0;bottom:0` con `border-radius:16px
+       16px 0 0`, una animación de entrada (`corkboard-sheet-in`) y una
+       barra "agarradera" decorativa (`::before`). El `.back-cta` (botón
+       real hacia el contenido) es el mismo en los 3 sitios donde
+       aparece — cajón, compacta y el `.field-name`/checkmark de "ya
+       visto" tampoco se tocaron, ni su posicionamiento (`.card-face`
+       sigue siendo `position:relative`, ya no `position:absolute;inset:0`,
+       así que el checkmark ✓ y la esquina doblada `::after` se anclan
+       igual de bien a la propia caja en vez de a un contenedor volteado).
+     - Verificado con Playwright (viewport 390×844): recorrido estructural
+       de los 26 cuadernos de campo de la app confirmando que CADA uno
+       recibe el modo correcto según su nº real de fichas (cajón ≤12,
+       compacta &gt;12, incluido el caso límite de 12 fichas exacto en
+       `cardio-corkboard`/Fisiopatología UCI, que se queda en cajón) y que
+       abrir/cerrar la primera ficha de cada uno funciona sin excepción
+       JS; en cajón (Reconocimiento, 9 fichas): el cajón se despliega en
+       flujo normal sin recortar texto, toca `.back-cta` → navega al
+       contenido real Y cierra el cajón, la ficha queda marcada
+       `.visited`; en compacta (Fisiología renal, 18 fichas): la hoja se
+       abre con el backdrop activo, el título se inyecta correctamente
+       ("Anatomía funcional"), tocar el backdrop cierra la hoja, abrir una
+       2ª ficha cierra automáticamente la 1ª (exclusivo), tocar
+       `.back-cta` navega y cierra hoja+backdrop a la vez; sin overflow
+       horizontal a 390px en ningún cuaderno; capturas de pantalla
+       confirmando visualmente el resultado (cajón: parchment de ancho
+       completo con cajón desplegado y CTA de ancho completo bien visible;
+       compacta: filas delgadas escaneables de un vistazo, hoja inferior
+       con agarradera+título+respuesta+CTA de 44px, backdrop oscureciendo
+       el resto de la pantalla). Bump de cache-busting a `?v=20260929`
+       (cambiaron `css/components.css` y, por la regla del proyecto,
+       también `variables.css`/`base.css` aunque no cambiaran de
+       contenido, para mantener las 3 hojas de estilo con la misma fecha).
+     - **Pendiente, a decisión del usuario**: el rediseño del "formato de
+       presentación cuando te metes en una ficha" (la vista completa de
+       contenido tras tocar `.back-cta` — tablas, `kv-row`,
+       `micro-prof-item`, gauges) sigue en la fase de exploración visual
+       (mismo Artifact de diseño, quinto artboard "Dentro de una ficha")
+       usando el método de la skill `/dataviz` — pendiente de que el
+       usuario revise esa propuesta y confirme antes de implementarla en
+       código. La validación del `scripts/validate_palette.js` de esa
+       skill sobre los 5 acentos reales de la app (`--accent-green/red/
+       yellow/blue/purple`) confirmó, con cifras (no solo a ojo), el
+       "gotcha" ya documentado en varios puntos de este archivo de que
+       `--accent-blue`/`--accent-yellow` son casi indistinguibles (ΔE 5,7,
+       por debajo del suelo de 15 — ni siquiera con visión normal se
+       distinguen bien) — y añadió un hallazgo nuevo: `--accent-green`
+       tiene poca saturación sobre el fondo oscuro de la app (roza el
+       suelo de croma, "lee como gris"). Ninguno de los dos se ha tocado
+       todavía (cambiar un token de color afecta a decenas de sitios ya
+       verificados) — quedan documentados aquí como algo a tener en
+       cuenta si se rediseña el sistema de color, nunca a "corregir" sin
+       que el usuario lo pida explícitamente.
 3. **Síndromes Hematológicos Urgentes** (`modules/sindromes-urgentes/`) —
    una sola vista con 3 temas (CID / PTT / Síndrome de Lisis Tumoral),
    navegados desde un cuaderno de campo (`#sindromes-corkboard`, ver

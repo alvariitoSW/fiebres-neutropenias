@@ -436,34 +436,40 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 }
 .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border-color); }
 
-.corkboard { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 16px; margin-bottom: 22px; padding: 6px 4px 16px; }
+/* ================================================================
+   CUADERNO DE CAMPO — dos modos, elegidos en RUNTIME por
+   core/corkboard.js según el nº de fichas del tablero (nunca a mano por
+   módulo — el propio contenido decide, sin mantenimiento):
+   - .corkboard-cajon (≤12 fichas): la ficha conserva la estética de
+     tarjeta de campo (parchment, cinta washi, ilustración) en una sola
+     columna. Un toque despliega un CAJÓN debajo de la propia ficha, en
+     flujo normal —la ficha crece de alto—, nunca con transformación 3D.
+   - .corkboard-compacta (>12 fichas, cuadernos grandes tipo Merino
+     Cardiología o Fisiología renal): la ficha se aplana a una fila
+     delgada (icono + título + pista truncada a una línea). Un toque abre
+     una HOJA fija al pie de pantalla, con fondo oscuro que cierra al
+     tocar fuera.
+   Ambos modos reutilizan el mismo HTML .field-card > .field-card-inner >
+   .card-face.front/.back de siempre — nunca posición absoluta
+   superpuesta ni 3D, para que el contenido jamás se recorte en móvil
+   (el motivo real del rediseño: "en el móvil al darse la vuelta y al
+   clickar sigo teniendo problemas de tamaño"). ================ */
 
-.field-card {
-    position: relative; height: 236px; perspective: 1000px;
-    transform: rotate(var(--tilt, -1deg));
-    transition: transform 0.6s cubic-bezier(.3,.7,.2,1);
-    cursor: pointer;
-    touch-action: manipulation;
-}
-.corkboard .field-card:nth-child(4n+1) { --tilt: -1.6deg; --tape: var(--accent-blue); }
-.corkboard .field-card:nth-child(4n+2) { --tilt: 1.1deg; --tape: var(--accent-red); }
-.corkboard .field-card:nth-child(4n+3) { --tilt: 0.8deg; --tape: var(--accent-green); }
-.corkboard .field-card:nth-child(4n)   { --tilt: -1.3deg; --tape: var(--accent-purple); }
-.field-card-inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(.3,.7,.2,1); }
-.field-card.flipped .field-card-inner { transform: rotateY(180deg); }
-.field-card:active .field-card-inner { transform: scale(0.97); }
-.field-card.flipped:active .field-card-inner { transform: rotateY(180deg) scale(0.97); }
+.corkboard { display: flex; flex-direction: column; margin-bottom: 22px; }
+.corkboard-cajon { gap: 16px; padding: 8px 6px 16px; }
+.corkboard-compacta { gap: 0; padding: 4px 0 10px; }
 
-.card-face {
-    position: absolute; inset: 0; backface-visibility: hidden;
-    background: linear-gradient(165deg, #e9dcbc, #d7c599);
-    border-radius: 2px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.25) inset;
-    padding: 16px 11px 12px;
-    display: flex; flex-direction: column; align-items: center;
-    color: #362a1a;
-}
-.card-face.back { transform: rotateY(180deg); justify-content: center; text-align: center; padding: 18px 15px; }
+.field-card { position: relative; cursor: pointer; touch-action: manipulation; transition: transform 0.15s; }
+.field-card:active { transform: scale(0.99); }
+.field-card-inner { position: relative; width: 100%; }
+
+.corkboard-cajon .field-card { transform: rotate(var(--tilt, -1deg)); }
+.corkboard .field-card:nth-child(4n+1) { --tilt: -1.1deg; --tape: var(--accent-blue); }
+.corkboard .field-card:nth-child(4n+2) { --tilt: 0.9deg; --tape: var(--accent-red); }
+.corkboard .field-card:nth-child(4n+3) { --tilt: 0.6deg; --tape: var(--accent-green); }
+.corkboard .field-card:nth-child(4n)   { --tilt: -0.8deg; --tape: var(--accent-purple); }
+
+.card-face { position: relative; color: #362a1a; }
 .card-face::after {
     content: ''; position: absolute; bottom: 0; right: 0; width: 16px; height: 16px;
     background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.18) 50%);
@@ -479,7 +485,7 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 }
 
 .plate-label {
-    font-family: 'Courier New', ui-monospace, monospace; font-size: 0.52rem; letter-spacing: 1.5px;
+    font-family: 'Courier New', ui-monospace, monospace; font-size: 0.6rem; letter-spacing: 1.5px;
     color: #5c4c34; text-transform: uppercase; margin-bottom: 6px; align-self: flex-start;
 }
 .field-illust { width: 88px; height: 64px; margin: 4px 0 9px; }
@@ -491,22 +497,15 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 
 .back-hook { font-size: 0.78rem; line-height: 1.55; color: #362a1a; margin-bottom: 10px; }
 
-/* .back-cta es el ÚNICO camino al contenido real de la ficha. Antes era
-   solo texto centrado (0.6rem, sin min-height ni ancho propio: dentro de
-   un flex column con align-items:center se encoge al tamaño de su propio
-   texto) — su zona de toque real era una tira diminuta en el centro de la
-   cara trasera. En móvil, fallar ese toque no hacía nada: el toque caía
-   sobre el resto de la cara trasera, que vuelve a voltear la ficha en vez
-   de abrir el contenido — de ahí "no puedo clickar bien / no puedo
-   acceder al contenido". Ahora es una franja entera pegada al borde
-   inferior de la ficha (mismo ancho que la cara, min-height 44px — el
-   mínimo táctil recomendado), con fondo propio para que se vea como un
-   botón real y no como una línea de texto más. */
+/* .back-cta es el ÚNICO camino al contenido real de la ficha — franja
+   entera pegada al borde inferior (mismo ancho que la cara, min-height
+   44px, el mínimo táctil recomendado), con fondo propio para que se vea
+   como un botón real. */
 .back-cta {
     align-self: stretch;
     display: flex; align-items: center; justify-content: center; gap: 6px;
     min-height: 44px;
-    margin-top: auto; margin-left: -15px; margin-right: -15px; margin-bottom: -18px;
+    margin-top: 12px; margin-left: -15px; margin-right: -15px; margin-bottom: -14px;
     padding: 12px 15px;
     font-family: 'Courier New', monospace; font-size: 0.72rem; font-weight: 700;
     text-transform: uppercase; letter-spacing: 1px;
@@ -519,6 +518,85 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 }
 .back-cta:hover { background: rgba(212, 175, 55, 0.4); color: #1e1608; }
 .back-cta:active { background: rgba(212, 175, 55, 0.55); transform: scale(0.97); }
+
+/* ---- Modo cajón: tarjeta de campo con cajón desplegable debajo ---- */
+.corkboard-cajon .card-face.front {
+    background: linear-gradient(165deg, #e9dcbc, #d7c599);
+    border-radius: 4px;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.22) inset;
+    padding: 16px 15px 14px;
+    display: flex; flex-direction: column; align-items: center;
+}
+.corkboard-cajon .field-card.open .card-face.front { border-radius: 4px 4px 0 0; }
+.corkboard-cajon .card-face.back {
+    display: none;
+    background: linear-gradient(165deg, #e9dcbc, #d7c599);
+    border-top: 1px dashed rgba(54, 42, 26, 0.4);
+    border-radius: 0 0 4px 4px;
+    margin-top: -1px;
+    padding: 14px 15px 0;
+    text-align: center;
+}
+.corkboard-cajon .field-card.open .card-face.back { display: block; }
+.corkboard-cajon .field-illust { width: 108px; height: 76px; margin: 4px 0 10px; }
+.corkboard-cajon .field-name { font-size: 0.98rem; margin-bottom: 8px; }
+.corkboard-cajon .field-hook { font-size: 0.72rem; }
+.corkboard-cajon .back-hook { font-size: 0.86rem; }
+
+/* ---- Modo compacta: fila delgada, hoja fija al pie de pantalla ---- */
+.corkboard-compacta .field-card { border-bottom: 1px solid rgba(196, 154, 74, 0.22); }
+.corkboard-compacta .washi, .corkboard-compacta .plate-label { display: none; }
+.corkboard-compacta .card-face::after { display: none; }
+.corkboard-compacta .card-face.front {
+    padding: 12px 6px 12px 44px;
+    min-height: 52px;
+    color: var(--text-main);
+}
+.corkboard-compacta .field-illust {
+    position: absolute; top: 50%; left: 0; transform: translateY(-50%);
+    width: 26px; height: 26px; margin: 0;
+}
+.corkboard-compacta .field-name { font-size: 0.86rem; text-align: left; margin-bottom: 3px; color: var(--text-main); }
+.corkboard-compacta .field-hook {
+    font-family: Georgia, 'Times New Roman', Times, serif; font-style: normal; transform: none;
+    font-size: 0.72rem; color: var(--text-muted); text-align: left; padding: 0;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;
+}
+
+.corkboard-backdrop {
+    display: none;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 60;
+}
+.corkboard-backdrop.active { display: block; }
+
+.corkboard-compacta .card-face.back { display: none; }
+.corkboard-compacta .field-card.open .card-face.back {
+    display: block;
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 61;
+    max-width: 480px; margin: 0 auto;
+    background: linear-gradient(165deg, #e9dcbc, #d7c599);
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -12px 30px rgba(0,0,0,0.55);
+    padding: 22px 20px 26px;
+    text-align: center;
+    animation: corkboard-sheet-in 0.2s ease-out;
+}
+@keyframes corkboard-sheet-in {
+    from { transform: translateY(16px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+.corkboard-compacta .card-face.back::before {
+    content: ''; display: block; width: 36px; height: 4px; border-radius: 2px;
+    background: rgba(54, 42, 26, 0.3); margin: 0 auto 16px;
+}
+.corkboard-compacta .back-hook { font-size: 0.86rem; }
+.corkboard-compacta .back-cta { margin-top: 4px; margin-left: -20px; margin-right: -20px; margin-bottom: -26px; border-radius: 0 0 16px 16px; }
+
+/* Título inyectado por corkboard.js SOLO en modo compacta, la primera vez
+   que se abre cada ficha — la cara trasera nunca tuvo título propio (solo
+   pista + botón), así que la hoja lo toma del .field-name ya visible en
+   la fila antes de abrirla. */
+.corkboard-sheet-title { font-weight: bold; font-size: 1.04rem; margin-bottom: 10px; color: #362a1a; }
 
 /* Marca de "ya visto" — puesta por core/corkboard.js en cualquier ficha
    cuyo tema se haya abierto (aunque sea desde fuera, vía openCorkboardTopic).

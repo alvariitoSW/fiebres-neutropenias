@@ -1,14 +1,26 @@
 // Cuaderno de campo: tablero de fichas ilustradas (.field-card) que sustituye
-// una barra de pestañas de texto. Primer toque = voltea la ficha y muestra
-// una pista de repaso; toque en el botón .back-cta de la cara trasera = abre
-// el tema real (mismo .tab-content de siempre, contenido íntegro sin
-// resumir). El panel que contiene los .tab-content arranca oculto
-// (style="display:none" en el HTML) para no dejar una caja vacía entre el
-// tablero y lo que venga después, hasta que se elige el primer tema.
-// Abre un tema directamente por su id, sin pasar por el volteo de la
-// ficha — usado por el propio tablero (botón "Ver contenido completo") y
-// también desde fuera (p. ej. el Atlas Hematológico, para enlazar
-// directamente a un tema concreto de un cuaderno de campo).
+// una barra de pestañas de texto. Toque en el botón .back-cta de la cara
+// trasera (el "hook" de repaso ya revelado) = abre el tema real (mismo
+// .tab-content de siempre, contenido íntegro sin resumir). El panel que
+// contiene los .tab-content arranca oculto (style="display:none" en el
+// HTML) para no dejar una caja vacía entre el tablero y lo que venga
+// después, hasta que se elige el primer tema.
+//
+// Dos modos, elegidos en runtime por el nº de fichas del tablero (nunca a
+// mano por módulo, para que el propio contenido decida sin mantenimiento):
+// - "cajón" (≤12 fichas): la ficha conserva la estética de tarjeta de campo
+//   (parchment, cinta washi, ilustración) en una sola columna. Un toque
+//   despliega un cajón DEBAJO de la propia ficha, en flujo normal —la
+//   ficha crece de alto—, con la pista de repaso y el botón real.
+// - "compacta" (>12 fichas, cuadernos grandes tipo Merino Cardiología o
+//   Fisiología renal): la ficha se aplana a una fila delgada (icono +
+//   título + pista truncada a una línea). Un toque abre una hoja fija al
+//   pie de pantalla con la pista completa y el botón, cerrando cualquier
+//   otra hoja abierta (solo una a la vez) y con fondo oscuro que cierra al
+//   tocar fuera.
+// Ambos modos reutilizan el MISMO HTML de siempre (.field-card >
+// .field-card-inner > .card-face.front/.back) — todo el cambio vive aquí y
+// en components.css, nunca en el HTML de cada ficha.
 export function openCorkboardTopic(panelId, tabId) {
     const panel = document.getElementById(panelId);
     if (!panel) return;
@@ -21,9 +33,9 @@ export function openCorkboardTopic(panelId, tabId) {
     }
     // Marca la(s) ficha(s) que llevan a este tema como "ya visto" (checkmark
     // verde, ver .field-card.visited en components.css) — funciona tanto si
-    // se abre volteando la ficha como si se llega desde fuera (p. ej. el
-    // Atlas enlazando directo a un tema). Los data-tab son únicos en toda la
-    // app, así que no hace falta saber a qué tablero pertenece la ficha.
+    // se abre desde el propio cajón/hoja como si se llega desde fuera (p. ej.
+    // el Atlas enlazando directo a un tema). Los data-tab son únicos en toda
+    // la app, así que no hace falta saber a qué tablero pertenece la ficha.
     document.querySelectorAll(`.field-card[data-tab="${tabId}"]`).forEach(c => c.classList.add('visited'));
 }
 
@@ -41,13 +53,59 @@ export function initCorkboard(boardId, panelId) {
     const panel = document.getElementById(panelId);
     if (!board || !panel) return;
 
-    board.querySelectorAll('.field-card').forEach(card => {
+    const cards = Array.from(board.querySelectorAll('.field-card'));
+    const compacta = cards.length > 12;
+    board.classList.add(compacta ? 'corkboard-compacta' : 'corkboard-cajon');
+
+    // En modo compacta, la cara trasera se convierte en una hoja fija al pie
+    // de pantalla — necesita un fondo que la separe del resto del contenido
+    // y permita cerrarla tocando fuera. Un único fondo por tablero, no uno
+    // por ficha.
+    let backdrop = null;
+    if (compacta) {
+        backdrop = document.createElement('div');
+        backdrop.className = 'corkboard-backdrop';
+        board.appendChild(backdrop);
+        backdrop.addEventListener('click', closeAll);
+    }
+
+    function closeAll() {
+        cards.forEach(c => c.classList.remove('open'));
+        if (backdrop) backdrop.classList.remove('active');
+    }
+
+    // La hoja compacta no repite el título (la cara trasera nunca lo tuvo,
+    // solo la pista+botón) — se inyecta una vez, la primera vez que se abre
+    // esa ficha, leyendo el título ya visible en la cara delantera. Así la
+    // hoja dice de qué tema es antes de tocar el botón, sin duplicar el
+    // título en el HTML de cada ficha.
+    function asegurarTituloHoja(card) {
+        const back = card.querySelector('.card-face.back');
+        if (!back || back.querySelector('.corkboard-sheet-title')) return;
+        const titulo = document.createElement('div');
+        titulo.className = 'corkboard-sheet-title';
+        titulo.textContent = nombreFicha(card);
+        back.insertBefore(titulo, back.firstChild);
+    }
+
+    cards.forEach(card => {
         card.addEventListener('click', (e) => {
             if (e.target.closest('.back-cta')) {
                 openCorkboardTopic(panelId, card.dataset.tab);
+                closeAll();
                 return;
             }
-            card.classList.toggle('flipped');
+            const yaAbierta = card.classList.contains('open');
+            if (compacta) {
+                closeAll();
+                if (!yaAbierta) {
+                    asegurarTituloHoja(card);
+                    card.classList.add('open');
+                    backdrop.classList.add('active');
+                }
+            } else {
+                card.classList.toggle('open');
+            }
         });
     });
 
@@ -57,10 +115,9 @@ export function initCorkboard(boardId, panelId) {
     // La última ficha enlaza de vuelta a la primera (ciclo cerrado), para
     // que el botón exista siempre y el comportamiento sea uniforme en
     // TODOS los cuadernos de campo de la app sin excepciones por posición.
-    const tarjetas = Array.from(board.querySelectorAll('.field-card'));
-    if (tarjetas.length < 2) return;
-    tarjetas.forEach((card, i) => {
-        const siguienteCard = tarjetas[(i + 1) % tarjetas.length];
+    if (cards.length < 2) return;
+    cards.forEach((card, i) => {
+        const siguienteCard = cards[(i + 1) % cards.length];
         const contenido = document.getElementById(card.dataset.tab);
         if (!contenido) return;
         const boton = document.createElement('button');
