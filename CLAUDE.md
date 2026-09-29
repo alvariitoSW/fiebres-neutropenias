@@ -7804,20 +7804,146 @@ página impresa − 52).
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
-también `especialidades`, `nefrologia`, `uciPapers`, `fisioUci`,
-`cardiologia`, `neumologia` y `sobrevivirUmi` como vistas más del mismo
-switcher raíz —,
+también `especialidades`, `pifMenu`, `cardiorrespiMenu`, `nefrologia`,
+`uciPapers`, `fisioUci`, `cardiologia`, `neumologia` y `sobrevivirUmi` como
+vistas más del mismo switcher raíz —,
 submenú de
 Citopenias, submenú de
 Trasplante), inicializa el Atlas
 (`initAtlas()` de `modules/home/atlas.js`) y conecta los botones. Los
 botones "← VOLVER" usan una clase específica según a qué nivel deben
-volver: `.btn-volver-especialidades`, `.btn-volver-home`,
+volver: `.btn-volver-especialidades`, `.btn-volver-pif-menu`,
+`.btn-volver-cardiorrespi-menu`, `.btn-volver-home`,
 `.btn-volver-citopenias-menu`, `.btn-volver-trasplante-menu`,
 `.btn-volver-fuci-menu`. Las
 calculadoras en sí (Escalas Generales, Neutropenia Febril) no saben nada de
 estos niveles superiores ni del Atlas — siguen inicializándose igual que
 siempre, solo cambia qué contenedor está visible.
+
+## Rediseño del menú raíz: hero-tiles + 4 puertas de entrada (PIF, Cardiorrespiratorio, UCI/Papers Tuiter, Sobrevivir a la UMI)
+
+A petición explícita del usuario ("Quiero un rediseño del menú principal"),
+se rediseñó visualmente el menú de "Especialidades" y, en el mismo pedido,
+se reagrupó su información: de una lista plana de 7 botones
+(`.accordion-btn.nav-btn`, uno por especialidad) a **4 hero-tiles**, cada
+una una "puerta de entrada" que puede agrupar varias especialidades. Antes
+de tocar código se exploraron varias direcciones visuales completas con el
+tipo Artifact "Design" (`/design`/`/dataviz`, mismo método ya usado en
+otros rediseños de la app — ver el rediseño del cuaderno de campo más
+arriba): 3 direcciones iniciales (variaciones de "lista/gráfico con brillo
+HUD") fueron rechazadas explícitamente por el usuario ("No me gusta ninguno,
+reinventate"); una 2ª ronda con conceptos genuinamente distintos llevó a la
+aprobación de la dirección "Bento de mando" (rejilla de tarjetas grandes),
+de la que se generaron varias variantes; el usuario aprobó fusionar 2 de
+ellas — una más pulida (bordes finos, brillo de cristal, chevron de
+afordancia) con otra tipo póster (icono grande semi-opaco de protagonista,
+degradado de scrim, título superpuesto) — y en el mismo mensaje pidió la
+reagrupación de especialidades detallada abajo.
+
+- **Las 4 puertas raíz** (`#especialidades-view`, ahora con la clase nueva
+  `.especialidad-tile` en vez de `.accordion-btn.nav-btn`): **PIF**
+  (Hematología + Nefrología), **Cardiorrespiratorio** (Cardiología +
+  Neumología + Fisiopatología UCI — nombre provisional, elegido por
+  Claude al no haberlo fijado el usuario todavía; trivial de renombrar,
+  es solo texto en `index.html` y en este mismo `CLAUDE.md`, sin tocar
+  ningún id/switcher), **UCI / Papers Tuiter** y **Sobrevivir a la UMI**
+  — estas 2 últimas sin cambio de agrupación, siguen siendo puertas
+  directas sin nivel intermedio, solo con el nuevo tratamiento visual.
+- **2 switchers intermedios nuevos**, mismo patrón `createViewSwitcher()`
+  ya usado por el resto de menús medios de la app (`nefroLevel`,
+  `cardioLevel`...), pero esta vez viviendo dentro del propio `topLevel`
+  de `home/index.js` en vez de en un `index.js` de especialidad aparte
+  (PIF/Cardiorrespiratorio no son especialidades con contenido propio,
+  son puro agrupamiento de navegación): `pifMenu`
+  (`#pif-menu-view`, 2 tiles: Hematología/Nefrología) y
+  `cardiorrespiMenu` (`#cardiorrespi-menu-view`, 3 tiles:
+  Cardiología/Neumología/Fisiopatología UCI). `btn-pif`/`btn-cardiorrespi`
+  en la raíz solo hacen `topLevel.show('pifMenu'/'cardiorrespiMenu')` —
+  sin API que inyectar, a diferencia de los botones de especialidad real
+  (`btn-nefrologia`, etc.), que sí llaman a `nefrologiaApi?.volverAlMapa()`
+  y similares.
+- **Los botones de especialidad real no cambiaron de comportamiento**,
+  solo de posición: `btn-hematologia`/`btn-nefrologia` viven ahora dentro
+  de `#pif-menu-view` y `btn-cardiologia`/`btn-neumologia`/`btn-fisio-uci`
+  dentro de `#cardiorrespi-menu-view`, pero sus listeners en
+  `home/index.js` son exactamente los mismos de siempre (`goHome()`,
+  `nefrologiaApi?.volverAlMapa()`, etc.) — el cambio es solo de qué
+  contenedor los envuelve en `index.html`.
+- **2 clases de "← VOLVER" nuevas**, mismo patrón ya establecido de una
+  clase por nivel de vuelta: `.btn-volver-pif-menu` (en el propio
+  `#home-view` de Hematología y en `rinon-menu.html` de Nefrología —
+  antes ambos usaban `.btn-volver-especialidades` para volver directo a
+  la raíz; ahora vuelven a PIF) y `.btn-volver-cardiorrespi-menu` (en
+  `cardiologia-menu.html`, `neumologia-menu.html` y `fisio-uci-menu.html`,
+  mismo cambio). `uci-papers-menu.html` y `sobrevivir-umi-menu.html`
+  mantienen `.btn-volver-especialidades` sin cambios, porque sus
+  especialidades siguen siendo puertas directas. El buscador global
+  (`core/search.js`) y `.especialidad-link`/`irAResultadoBusqueda` **no
+  se tocaron** — un resultado de búsqueda sigue saltando directo a la
+  especialidad real (`topLevel.show('nefrologia')`, etc.), sin pasar por
+  el menú intermedio; solo el botón "← VOLVER" propio de esa especialidad
+  cambia adónde regresa.
+- **`.especialidad-tile`** (`css/components.css`): tarjeta tipo póster
+  con icono de tinta semi-opaco arriba, scrim degradado, y
+  título/eyebrow/descripción superpuestos abajo — sustituye a
+  `.accordion-btn.nav-btn` en las 3 pantallas nuevas/modificadas
+  (`#especialidades-view`, `#pif-menu-view`, `#cardiorrespi-menu-view`).
+  Cada tile fija su propio acento vía la custom property `--tile-accent`
+  (uno de los 5 colores de acento reales de la app, nunca uno nuevo),
+  reutilizado por el borde, el scrim de color, la eyebrow, el chevron y
+  el badge — mismo patrón `--orb-color`/`--item-color` ya usado por
+  `.region-btn` del Atlas y `.micro-prof-item`. Los iconos son SVG de
+  tinta dibujados a mano (gota para Hematología, riñón para Nefrología,
+  corazón con traza de ECG para Cardiología, pulmones para Neumología,
+  doble hélice/onda para Fisiopatología UCI, ave para UCI/Papers Tuiter,
+  portapapeles para Sobrevivir a la UMI) — nunca emoji, mismo criterio ya
+  aplicado al resto de iconografía "a mano" de la app.
+  - **Bug real encontrado y corregido durante la propia verificación con
+    Playwright, no presente aún en el mockup del canvas**: el icono de
+    riñón copiado literalmente del diseño aprobado (`M26 4 A20 20 0 1 0
+    26 44 A11 11 0 0 1 26 4 Z`) usa un segundo arco de radio 11 para la
+    distancia entre (26,4) y (26,44) — 40px, más del doble del diámetro
+    máximo alcanzable con radio 11 (22px). Un arco SVG con un radio
+    matemáticamente insuficiente para sus puntos de destino no es un
+    error silencioso: el navegador re-escala el radio hacia arriba lo
+    mínimo necesario para que exista solución, lo que en este caso
+    convertía el segundo arco en casi un espejo del primero — el riñón
+    se colapsaba en una fina "C" casi sin relleno visible, en vez de la
+    forma de alubia esperada. Invisible en la vista general del canvas de
+    diseño (icono pequeño, dentro de un racimo con otros 2 iconos
+    superpuestos), pero evidente al verificar con una captura real de
+    Playwright del icono aislado en la implementación de verdad —
+    precisamente el tipo de bug que este proyecto ya documenta que
+    `.click()` sintético/una revisión superficial pueden dejar pasar.
+    Sustituido por un contorno de alubia dibujado con curvas Bézier
+    cúbicas (`M27 6 C15 8 10 18 12 26 C14 34 20 42 30 40 C36 38.5 36 32
+    31 28 C27 25 27 21 31 18 C36 14 34 8 27 6 Z`), sin arcos — verificado
+    de forma aislada en una página de prueba antes de aplicarlo a
+    producción, y de nuevo con Playwright en las 2 ubicaciones reales
+    (tile raíz de PIF en racimo, tile propia de Nefrología dentro de
+    `#pif-menu-view`).
+- Verificado con Playwright (viewport 390×844): las 4 tiles de la raíz
+  navegan a su destino correcto (PIF/Cardiorrespiratorio a su menú
+  intermedio, UCI Papers/Sobrevivir UMI directo a su vista, sin cambios);
+  dentro de PIF, Hematología abre el Atlas y su "← VOLVER" regresa a PIF
+  (no a la raíz); Nefrología abre el mapa del riñón y su "← VOLVER"
+  también regresa a PIF; el "← VOLVER" de PIF regresa a la raíz; dentro
+  de Cardiorrespiratorio, las 3 especialidades abren correctamente y sus
+  3 "← VOLVER" respectivos regresan al menú Cardiorrespiratorio (no a la
+  raíz); UCI/Papers Tuiter y Sobrevivir a la UMI siguen funcionando en
+  ruta directa sin regresión; sin overflow horizontal a 390px en ninguna
+  de las 3 pantallas nuevas/modificadas; sin errores de consola ni de
+  página reales (el único 404 es el `favicon.ico`, ya documentado como
+  inocuo). Bump de cache-busting a `?v=20260929-3` (cambian
+  `css/components.css`, `index.html`, `js/main.js` vía el import de
+  `home/index.js`).
+- **Pendiente**: confirmar con el usuario el nombre definitivo de
+  "Cardiorrespiratorio" (marcado como provisional desde el propio diseño
+  aprobado). La ampliación futura de Sobrevivir a la UMI con más
+  contenido del manual y cross-links reales hacia Merino (Cardiología/
+  Neumología/Hematología) sigue explícitamente aplazada, tal y como pidió
+  el usuario — no se ha tocado en este rediseño, solo el tratamiento
+  visual de su tile en la raíz.
 
 `modules/fuentes/` sigue siendo la excepción: es una categoría **solo de
 contenido**, sin `.js`, montada como acordeón (no como vista de pantalla

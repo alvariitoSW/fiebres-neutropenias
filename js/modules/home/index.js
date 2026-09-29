@@ -87,6 +87,8 @@ export function onSobrevivirUmiListo(api) {
 export function init() {
     const topLevel = createViewSwitcher({
         especialidades: document.getElementById('especialidades-view'),
+        pifMenu: document.getElementById('pif-menu-view'),
+        cardiorrespiMenu: document.getElementById('cardiorrespi-menu-view'),
         home: document.getElementById('home-view'),
         escalas: document.getElementById('escalas-generales-view'),
         citopenias: document.getElementById('citopenias-view'),
@@ -106,6 +108,13 @@ export function init() {
         topLevel.show('home');
         atlas.reset();
     }
+
+    // Las 4 puertas de la raíz: PIF y Cardiorrespiratorio son menús
+    // combinados intermedios (ver index.html), sin API propia que
+    // inyectar — solo cambian de vista. UCI/Papers Tuiter y Sobrevivir a
+    // la UMI siguen siendo puertas directas, sin nivel intermedio.
+    document.getElementById('btn-pif').addEventListener('click', () => topLevel.show('pifMenu'));
+    document.getElementById('btn-cardiorrespi').addEventListener('click', () => topLevel.show('cardiorrespiMenu'));
 
     document.getElementById('btn-hematologia').addEventListener('click', goHome);
     document.getElementById('btn-nefrologia').addEventListener('click', () => {
@@ -133,6 +142,11 @@ export function init() {
         sobrevivirUmiApi?.volverAlMenu();
     });
     document.querySelectorAll('.btn-volver-especialidades').forEach(b => b.addEventListener('click', () => topLevel.show('especialidades')));
+    // Hematología/Nefrología viven ahora un nivel más abajo, dentro de PIF;
+    // Cardiología/Neumología/Fisiopatología UCI dentro de Cardiorrespiratorio
+    // — su "← VOLVER" propio regresa al menú combinado, no a la raíz.
+    document.querySelectorAll('.btn-volver-pif-menu').forEach(b => b.addEventListener('click', () => topLevel.show('pifMenu')));
+    document.querySelectorAll('.btn-volver-cardiorrespi-menu').forEach(b => b.addEventListener('click', () => topLevel.show('cardiorrespiMenu')));
 
     document.getElementById('btn-escalas-generales').addEventListener('click', () => topLevel.show('escalas'));
     document.querySelectorAll('.btn-volver-home').forEach(b => b.addEventListener('click', goHome));

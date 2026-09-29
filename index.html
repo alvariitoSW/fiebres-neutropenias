@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HUD Clínico UCI</title>
-<link rel="stylesheet" href="css/variables.css?v=20260929-2">
-<link rel="stylesheet" href="css/base.css?v=20260929-2">
-<link rel="stylesheet" href="css/components.css?v=20260929-2">
+<link rel="stylesheet" href="css/variables.css?v=20260929-3">
+<link rel="stylesheet" href="css/base.css?v=20260929-3">
+<link rel="stylesheet" href="css/components.css?v=20260929-3">
 </head>
 <body>
 
@@ -29,42 +29,148 @@
     <div id="especialidades-view">
         <div class="diag-header">
             <h2 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">Especialidades</h2>
-            <p>Selecciona un área clínica</p>
+            <p>4 puertas de entrada — cada una puede agrupar varias especialidades</p>
         </div>
 
-        <button class="accordion-btn nav-btn" id="btn-hematologia" style="border-left: 4px solid var(--accent-red);">
-            <span><span class="hemato-icon">🩸</span>HEMATOLOGÍA</span>
-            <span style="font-size: 0.8rem; color: var(--accent-red);">[ VER → ]</span>
+        <button class="especialidad-tile" id="btn-pif" style="--tile-accent: var(--accent-blue); min-height: 190px;">
+            <div class="especialidad-tile-icons">
+                <svg width="62" height="46" viewBox="0 0 64 48" style="transform: rotate(-6deg) translateX(4px); z-index: 2;"><path d="M32 4 C40 18 46 28 46 34 A14 14 0 1 1 18 34 C18 28 24 18 32 4 Z" fill="rgba(184,92,62,0.6)" stroke="#b85c3e" stroke-width="1.8"/></svg>
+                <svg width="62" height="46" viewBox="0 0 64 48" style="transform: rotate(5deg) translateX(-4px); margin-left: -20px; z-index: 1;"><path d="M27 6 C15 8 10 18 12 26 C14 34 20 42 30 40 C36 38.5 36 32 31 28 C27 25 27 21 31 18 C36 14 34 8 27 6 Z" fill="rgba(144,160,106,0.6)" stroke="#90a06a" stroke-width="1.8"/><line x1="34" y1="24" x2="44" y2="24" stroke="#90a06a" stroke-width="1.8"/></svg>
+            </div>
+            <div class="especialidad-tile-scrim"></div>
+            <div class="especialidad-tile-content">
+                <p class="especialidad-tile-eyebrow">Menú combinado · 2 especialidades</p>
+                <p class="especialidad-tile-title">PIF</p>
+                <p class="especialidad-tile-desc">Hematología · Nefrología — atlas y mapa del riñón</p>
+            </div>
+            <span class="especialidad-tile-chev">→</span>
         </button>
 
-        <button class="accordion-btn nav-btn" id="btn-nefrologia" style="border-left: 4px solid var(--accent-green);">
-            <span><span class="gral-icon" style="color: var(--accent-green); text-shadow: var(--glow-green);">🫘</span>NEFROLOGÍA</span>
-            <span style="font-size: 0.8rem; color: var(--accent-green);">[ VER → ]</span>
+        <button class="especialidad-tile" id="btn-cardiorrespi" style="--tile-accent: var(--accent-blue); min-height: 190px;">
+            <div class="especialidad-tile-icons">
+                <svg width="52" height="40" viewBox="0 0 64 48" style="transform: rotate(-8deg); z-index: 3;"><path d="M32 42 C8 26 8 8 22 8 C28 8 32 12 32 18 C32 12 36 8 42 8 C56 8 56 26 32 42 Z" fill="rgba(212,175,55,0.55)" stroke="#d4af37" stroke-width="1.8"/></svg>
+                <svg width="52" height="40" viewBox="0 0 64 48" style="transform: rotate(2deg); margin-left: -16px; z-index: 2;"><path d="M27 12 C18 14 13 26 15 34 C17 40 24 40 26 35 C28 28 28 18 27 12 Z" fill="rgba(144,160,106,0.55)" stroke="#90a06a" stroke-width="1.8"/><path d="M37 12 C46 14 51 26 49 34 C47 40 40 40 38 35 C36 28 36 18 37 12 Z" fill="rgba(144,160,106,0.55)" stroke="#90a06a" stroke-width="1.8"/></svg>
+                <svg width="52" height="40" viewBox="0 0 64 48" style="transform: rotate(9deg); margin-left: -16px; z-index: 1;"><path d="M20 4 C32 12 12 20 24 28 C36 36 16 40 22 44" fill="none" stroke="#cf9a3e" stroke-width="2.4"/><path d="M44 4 C32 12 52 20 40 28 C28 36 48 40 42 44" fill="none" stroke="#cf9a3e" stroke-width="2.4"/></svg>
+            </div>
+            <div class="especialidad-tile-scrim"></div>
+            <div class="especialidad-tile-content">
+                <p class="especialidad-tile-eyebrow">Menú combinado · 3 especialidades</p>
+                <p class="especialidad-tile-title">Cardiorrespiratorio</p>
+                <p class="especialidad-tile-desc">Cardiología · Neumología · Fisiopatología UCI (El Libro Azul)</p>
+            </div>
+            <span class="especialidad-tile-chev">→</span>
         </button>
 
-        <button class="accordion-btn nav-btn" id="btn-uci-papers" style="border-left: 4px solid var(--accent-purple);">
-            <span><span class="gral-icon" style="color: var(--accent-purple); text-shadow: var(--glow-purple);">🐦</span>UCI / PAPERS TUITER</span>
-            <span style="font-size: 0.8rem; color: var(--accent-purple);">[ VER → ]</span>
+        <button class="especialidad-tile" id="btn-uci-papers" style="--tile-accent: var(--accent-purple); min-height: 168px;">
+            <svg width="100" height="76" viewBox="0 0 64 48" style="position: absolute; top: 6%; left: 50%; transform: translateX(-50%);"><path d="M10 30 Q22 12 42 14 Q38 18 40 22 Q50 20 54 12 Q48 28 36 30 Q32 40 16 36 Q22 32 10 30 Z" fill="rgba(156,84,118,0.55)" stroke="#9c5476" stroke-width="1.8"/><circle cx="38" cy="17" r="1.6" fill="#9c5476"/></svg>
+            <div class="especialidad-tile-scrim"></div>
+            <div class="especialidad-tile-content">
+                <p class="especialidad-tile-eyebrow">6 papers resumidos</p>
+                <p class="especialidad-tile-title" style="font-size: 1.05rem;">UCI / Papers Tuiter</p>
+                <p class="especialidad-tile-desc">Shock séptico, VExUS, TRR, extubación...</p>
+                <span class="especialidad-tile-badge">🔍 Búsqueda interna por tema/autor</span>
+            </div>
+            <span class="especialidad-tile-chev">→</span>
         </button>
 
-        <button class="accordion-btn nav-btn" id="btn-fisio-uci" style="border-left: 4px solid var(--accent-yellow);">
-            <span><span class="gral-icon" style="color: var(--accent-yellow);">🧬</span>FISIOPATOLOGÍA UCI</span>
-            <span style="font-size: 0.8rem; color: var(--accent-yellow);">[ VER → ]</span>
+        <button class="especialidad-tile" id="btn-sobrevivir-umi" style="--tile-accent: var(--accent-purple); min-height: 150px;">
+            <svg width="76" height="58" viewBox="0 0 64 48" style="position: absolute; top: 8%; left: 50%; transform: translateX(-50%);">
+                <rect x="14" y="10" width="36" height="34" rx="3" fill="none" stroke="#9c5476" stroke-width="2.6"/>
+                <rect x="26" y="6" width="12" height="6" rx="2" fill="#9c5476"/>
+                <line x1="20" y1="20" x2="40" y2="20" stroke="#9c5476" stroke-width="2.4"/>
+                <line x1="20" y1="27" x2="36" y2="27" stroke="#9c5476" stroke-width="2.4"/>
+                <line x1="20" y1="34" x2="40" y2="34" stroke="#9c5476" stroke-width="2.4"/>
+            </svg>
+            <div class="especialidad-tile-scrim"></div>
+            <div class="especialidad-tile-content">
+                <p class="especialidad-tile-eyebrow">Manual de guardia</p>
+                <p class="especialidad-tile-title" style="font-size: 1rem;">Sobrevivir a la UMI</p>
+                <p class="especialidad-tile-desc">Manual completo del HUGCDN</p>
+            </div>
+            <span class="especialidad-tile-chev">→</span>
+        </button>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MENÚ PIF — HEMATOLOGÍA + NEFROLOGÍA         -->
+    <!-- ========================================== -->
+    <div id="pif-menu-view" style="display: none;">
+        <button class="back-btn btn-volver-especialidades">← VOLVER</button>
+        <div class="diag-header">
+            <h2 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">PIF</h2>
+            <p>Hematología · Nefrología</p>
+        </div>
+
+        <button class="especialidad-tile" id="btn-hematologia" style="--tile-accent: var(--accent-red); min-height: 205px; margin-bottom: 14px;">
+            <svg width="120" height="90" viewBox="0 0 64 48" style="position: absolute; top: 6%; left: 50%; transform: translateX(-50%);"><path d="M32 4 C40 18 46 28 46 34 A14 14 0 1 1 18 34 C18 28 24 18 32 4 Z" fill="rgba(184,92,62,0.6)" stroke="#b85c3e" stroke-width="1.8"/></svg>
+            <div class="especialidad-tile-scrim"></div>
+            <div class="especialidad-tile-content">
+                <p class="especialidad-tile-eyebrow">Atlas interactivo</p>
+                <p class="especialidad-tile-title" style="font-size: 1.35rem;">Hematología</p>
+                <p class="especialidad-tile-desc">Citopenias · síndromes urgentes · trasplante TPH · Merino HEMATO</p>
+            </div>
+            <span class="especialidad-tile-chev" style="font-size: 0.95rem;">→</span>
         </button>
 
-        <button class="accordion-btn nav-btn" id="btn-cardiologia" style="border-left: 4px solid var(--accent-blue);">
-            <span><span class="gral-icon" style="color: var(--accent-blue); text-shadow: var(--glow-blue);">🫀</span>CARDIOLOGÍA</span>
-            <span style="font-size: 0.8rem; color: var(--accent-blue);">[ VER → ]</span>
+        <button class="especialidad-tile" id="btn-nefrologia" style="--tile-accent: var(--accent-green); min-height: 205px;">
+            <svg width="105" height="95" viewBox="0 0 64 48" style="position: absolute; top: 6%; left: 50%; transform: translateX(-50%);"><path d="M27 6 C15 8 10 18 12 26 C14 34 20 42 30 40 C36 38.5 36 32 31 28 C27 25 27 21 31 18 C36 14 34 8 27 6 Z" fill="rgba(144,160,106,0.6)" stroke="#90a06a" stroke-width="1.8"/><line x1="34" y1="24" x2="44" y2="24" stroke="#90a06a" stroke-width="1.8"/></svg>
+            <div class="especialidad-tile-scrim"></div>
+            <div class="especialidad-tile-content">
+                <p class="especialidad-tile-eyebrow">Mapa del riñón</p>
+                <p class="especialidad-tile-title" style="font-size: 1.35rem;">Nefrología</p>
+                <p class="especialidad-tile-desc">Fisiología · HTA · ERC · FRA · TRR · fármacos</p>
+            </div>
+            <span class="especialidad-tile-chev" style="font-size: 0.95rem;">→</span>
+        </button>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MENÚ CARDIORRESPIRATORIO                    -->
+    <!-- ========================================== -->
+    <div id="cardiorrespi-menu-view" style="display: none;">
+        <button class="back-btn btn-volver-especialidades">← VOLVER</button>
+        <div class="diag-header">
+            <h2 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">Cardiorrespiratorio</h2>
+            <p>Cardiología · Neumología · Fisiopatología UCI</p>
+        </div>
+
+        <button class="especialidad-tile" id="btn-cardiologia" style="--tile-accent: var(--accent-blue); min-height: 155px; margin-bottom: 12px;">
+            <svg width="88" height="66" viewBox="0 0 64 48" style="position: absolute; top: 6%; left: 50%; transform: translateX(-50%);"><path d="M32 42 C8 26 8 8 22 8 C28 8 32 12 32 18 C32 12 36 8 42 8 C56 8 56 26 32 42 Z" fill="rgba(212,175,55,0.5)" stroke="#d4af37" stroke-width="1.8"/><path d="M12 24 L20 24 L24 12 L29 34 L34 16 L38 24 L52 24" fill="none" stroke="#17140f" stroke-width="1.4"/></svg>
+            <div class="especialidad-tile-scrim"></div>
+            <div class="especialidad-tile-content">
+                <p class="especialidad-tile-eyebrow" style="font-size: 0.56rem;">Guía ESC 2026</p>
+                <p class="especialidad-tile-title" style="font-size: 1.05rem;">Cardiología</p>
+                <p class="especialidad-tile-desc" style="font-size: 0.68rem;">Insuficiencia cardíaca · shock clínico Merino</p>
+            </div>
+            <span class="especialidad-tile-chev" style="font-size: 0.8rem;">→</span>
         </button>
 
-        <button class="accordion-btn nav-btn" id="btn-neumologia" style="border-left: 4px solid var(--accent-green);">
-            <span><span class="gral-icon" style="color: var(--accent-green);">🫁</span>NEUMOLOGÍA</span>
-            <span style="font-size: 0.8rem; color: var(--accent-green);">[ VER → ]</span>
+        <button class="especialidad-tile" id="btn-neumologia" style="--tile-accent: var(--accent-green); min-height: 155px; margin-bottom: 12px;">
+            <svg width="88" height="66" viewBox="0 0 64 48" style="position: absolute; top: 6%; left: 50%; transform: translateX(-50%);"><path d="M27 12 C18 14 13 26 15 34 C17 40 24 40 26 35 C28 28 28 18 27 12 Z" fill="rgba(144,160,106,0.5)" stroke="#90a06a" stroke-width="1.8"/><path d="M37 12 C46 14 51 26 49 34 C47 40 40 40 38 35 C36 28 36 18 37 12 Z" fill="rgba(144,160,106,0.5)" stroke="#90a06a" stroke-width="1.8"/><line x1="32" y1="4" x2="32" y2="14" stroke="#90a06a" stroke-width="1.8"/></svg>
+            <div class="especialidad-tile-scrim"></div>
+            <div class="especialidad-tile-content">
+                <p class="especialidad-tile-eyebrow" style="font-size: 0.56rem;">Merino Neumología</p>
+                <p class="especialidad-tile-title" style="font-size: 1.05rem;">Neumología</p>
+                <p class="especialidad-tile-desc" style="font-size: 0.68rem;">EP, asma/EPOC, SDRA, VM, destete</p>
+            </div>
+            <span class="especialidad-tile-chev" style="font-size: 0.8rem;">→</span>
         </button>
 
-        <button class="accordion-btn nav-btn" id="btn-sobrevivir-umi" style="border-left: 4px solid var(--accent-purple);">
-            <span><span class="gral-icon" style="color: var(--accent-purple); text-shadow: var(--glow-purple);">📋</span>SOBREVIVIR A LA UMI</span>
-            <span style="font-size: 0.8rem; color: var(--accent-purple);">[ VER → ]</span>
+        <button class="especialidad-tile" id="btn-fisio-uci" style="--tile-accent: var(--accent-yellow); min-height: 155px;">
+            <svg width="88" height="66" viewBox="0 0 64 48" style="position: absolute; top: 6%; left: 50%; transform: translateX(-50%);">
+                <path d="M20 4 C32 12 12 20 24 28 C36 36 16 40 22 44" fill="none" stroke="#cf9a3e" stroke-width="2.4"/>
+                <path d="M44 4 C32 12 52 20 40 28 C28 36 48 40 42 44" fill="none" stroke="#cf9a3e" stroke-width="2.4"/>
+                <line x1="22" y1="12" x2="42" y2="12" stroke="#cf9a3e" stroke-width="1.8"/>
+                <line x1="18" y1="24" x2="38" y2="24" stroke="#cf9a3e" stroke-width="1.8"/>
+                <line x1="24" y1="36" x2="44" y2="36" stroke="#cf9a3e" stroke-width="1.8"/>
+            </svg>
+            <div class="especialidad-tile-scrim"></div>
+            <div class="especialidad-tile-content">
+                <p class="especialidad-tile-eyebrow" style="font-size: 0.56rem;">El Libro Azul</p>
+                <p class="especialidad-tile-title" style="font-size: 1.05rem;">Fisiopatología UCI</p>
+                <p class="especialidad-tile-desc" style="font-size: 0.68rem;">Hemato, vías urinarias, cardio, inmuno — fisiopatología pura</p>
+            </div>
+            <span class="especialidad-tile-chev" style="font-size: 0.8rem;">→</span>
         </button>
     </div>
 
@@ -72,7 +178,7 @@
     <!-- MENÚ PRINCIPAL — HEMATOLOGÍA                -->
     <!-- ========================================== -->
     <div id="home-view" style="display: none;">
-        <button class="back-btn btn-volver-especialidades">← VOLVER</button>
+        <button class="back-btn btn-volver-pif-menu">← VOLVER</button>
 
         <!-- ===== ATLAS HEMATOLÓGICO: mapa interactivo de navegación ===== -->
         <div class="atlas-frame">
@@ -322,6 +428,6 @@
     <div data-include="js/modules/quiz/quiz.html"></div>
 </div>
 
-<script type="module" src="js/main.js?v=20260928-2"></script>
+<script type="module" src="js/main.js?v=20260929-3"></script>
 </body>
 </html>
