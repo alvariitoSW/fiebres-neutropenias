@@ -198,15 +198,18 @@ export function init() {
     // Neutropenia Febril saltando al buscador de ajuste de fármacos por
     // función renal de Nefrología); 2) `data-especialidad` +
     // `data-view`/`data-panel`/`data-tab` genérico, resuelto por
-    // `irAResultadoBusqueda` de arriba.
+    // `irAResultadoBusqueda` de arriba — `data-trasplante` opcional se
+    // reenvía tal cual (solo aplica con `data-especialidad="home"` y
+    // `data-view="trasplante"`, para saltar directo a una de las 3
+    // subvistas de Trasplante antes de abrir la ficha).
     document.querySelectorAll('.especialidad-link').forEach(btn => {
         btn.addEventListener('click', () => {
-            const { target, especialidad, view, panel, tab } = btn.dataset;
+            const { target, especialidad, view, panel, tab, trasplante } = btn.dataset;
             if (target === 'nefrotoxicidad') {
                 topLevel.show('nefrologia');
                 nefrologiaApi?.irANefrotoxicidad();
             } else if (especialidad) {
-                irAResultadoBusqueda({ especialidad, view, panel, tab });
+                irAResultadoBusqueda({ especialidad, view, panel, tab, trasplante });
             }
         });
     });

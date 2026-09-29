@@ -7801,6 +7801,45 @@ página impresa − 52).
       propias de la app (nombres, dosis, tablas ya trasladadas
       correctamente desde el manual), solo las 3 erratas ya presentes en
       la fuente original documentadas arriba.
+  - **4 cross-links bidireccionales nuevos** (8 botones), a petición
+    explícita del usuario ("croslinkea su contenido con el del resto de
+    la app que se pueda hacer" — deliberadamente solo donde existe
+    solapamiento real de contenido, nunca fabricado por cobertura:
+    endocarditis/Duke, SIR, control glucémico y rutinas de guardia se
+    investigaron explícitamente y se descartaron por no tener ninguna
+    ficha equivalente en el resto de la app). Los 4 pares, siempre
+    `.especialidad-link` (nunca `.tx-link`, mismo riesgo de colisión con
+    el listener global sin acotar de `nefrologia/index.js` ya documentado
+    varias veces en este archivo):
+    - `umi-nutricion` ↔ Trasplante/`tph-soporte` (Hematología) — la
+      calculadora general de peso/IMC/TEB/CED de este manual frente a la
+      nutrición específica del paciente de TPH ya desarrollada en
+      Trasplante.
+    - `umi-blue` ↔ 2 destinos: `ic-descompensada` (Cardiología, guía ESC
+      2026 de IC — líneas B como criterio de descongestión) y
+      `neumo-cuidado-barotrauma` (Merino Neumología — mismo hallazgo
+      ecográfico de neumotórax por barotrauma, ya descrito allí con más
+      detalle fisiopatológico).
+    - `umi-marcapasos` ↔ `ic-comorb-cv` (Cardiología, guía ESC 2026 de
+      IC) — el código NBG de 5 letras de este manual frente a la
+      indicación real de TRC vs. marcapasos convencional en HFrEF ya
+      citada en esa ficha.
+    - **Bug arquitectónico corregido de paso**: el listener genérico de
+      `.especialidad-link` en `home/index.js` leía `especialidad`/`view`/
+      `panel`/`tab` del `dataset` del botón pero nunca `trasplante` —
+      pese a que `irAResultadoBusqueda` ya soportaba ese parámetro desde
+      la integración de Vías Urinarias/otras especialidades. Sin ese
+      campo, el cross-link `umi-nutricion → tph-soporte` (que necesita
+      abrir específicamente la subvista `intro` de Trasplante) no podía
+      funcionar. Corregido añadiendo `trasplante` a la desestructuración
+      del `dataset` y reenviándolo a `irAResultadoBusqueda(...)` — arregla
+      también, de paso, cualquier `.especialidad-link` futuro que
+      necesite apuntar a una de las 3 subvistas de Trasplante.
+    - Verificado con Playwright (viewport 390×844) en las 2 direcciones
+      de los 4 pares (8 navegaciones en total): cada botón deja el
+      `.tab-content` de destino con `.active` real y `offsetParent !==
+      null` (visible de verdad, no solo con la clase puesta); sin errores
+      de consola ni de página en ningún punto del recorrido.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
