@@ -1544,3 +1544,77 @@ body.study-mode-on .pomodoro-fab { display: flex; }
     border: 1px solid var(--tile-accent, var(--accent-blue));
     background: color-mix(in srgb, var(--tile-accent, var(--accent-blue)) 15%, transparent);
 }
+
+/* ==========================================================
+   PIF — "dossier clínico" (manifiesto de rotación, ver
+   js/modules/home/pif-manifiesto.js). Deliberadamente sin
+   tarjetas redondeadas/glow/emoji: reglas rectas, tipografía
+   con peso real, estados como texto plano con color, nunca
+   como pastilla/badge — mismo criterio ya pedido para esta
+   pantalla en concreto, distinto del resto de la app.
+   ========================================================== */
+.pif-cap { letter-spacing: 0.1em; text-transform: uppercase; }
+
+.pif-header-rule { height: 3px; background: var(--accent-blue); margin: 12px 0 0; }
+.pif-header-rule-thin { height: 1px; background: var(--border-color); margin-bottom: 16px; }
+
+.pif-year-tabs { display: flex; border-bottom: 1px solid var(--border-color); margin-bottom: 18px; }
+.pif-ytab {
+    font-family: inherit; font-size: 0.82rem; font-weight: 700; padding: 8px 0; flex: 1;
+    text-align: center; background: none; border: none; border-bottom: 3px solid transparent;
+    cursor: pointer; letter-spacing: 0.04em; color: var(--text-muted);
+}
+.pif-ytab-activo { color: var(--text-main); border-bottom-color: var(--accent-blue); }
+
+.pif-progreso { margin-bottom: 18px; }
+.pif-progreso-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+.pif-progreso-head .pif-cap { margin: 0; font-size: 0.66rem; color: var(--text-muted); font-weight: 700; }
+.pif-progreso-cifra { margin: 0; font-size: 0.86rem; }
+.pif-progreso-cifra strong { color: var(--text-main); }
+.pif-progreso-cifra span { color: var(--text-muted); }
+.pif-ticks { display: flex; gap: 3px; }
+.pif-tick { flex: 1; height: 5px; background: rgba(196,154,74,0.18); }
+.pif-tick-ok { background: var(--accent-green); }
+.pif-tick-actual { background: var(--accent-yellow); }
+
+.pif-hoy { border-left: 3px solid var(--accent-yellow); padding: 9px 0 9px 12px; margin-bottom: 20px; }
+.pif-hoy-label { margin: 0 0 2px; font-size: 0.6rem; color: var(--accent-yellow); font-weight: 700; }
+.pif-hoy-nombre { margin: 0; font-size: 0.92rem; color: var(--text-main); font-weight: 700; }
+
+.pif-entry { padding: 14px 0; border-top: 1px solid var(--border-color); }
+.pif-entry-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.pif-entry-titulo { display: flex; align-items: baseline; gap: 9px; min-width: 0; }
+.pif-entry-idx { font-size: 0.82rem; color: var(--text-muted); font-weight: 700; flex-shrink: 0; }
+.pif-entry-nombre { font-size: 1.02rem; font-weight: 700; color: var(--text-main); letter-spacing: 0.02em; text-transform: uppercase; }
+.pif-entry-periodo { font-size: 0.74rem; color: var(--text-muted); white-space: nowrap; flex-shrink: 0; }
+
+.pif-entry-estado { margin: 4px 0 8px 26px; font-size: 0.78rem; }
+.pif-estado-label { color: var(--text-muted); font-weight: 700; letter-spacing: 0.1em; }
+.pif-estado-ok { color: var(--accent-green); }
+.pif-estado-actual { color: var(--accent-yellow); }
+.pif-estado-pendiente { color: var(--text-muted); }
+
+.pif-entry-body { margin-left: 26px; display: flex; flex-direction: column; gap: 3px; }
+.pif-obj { margin: 0; font-size: 0.82rem; color: var(--text-main); opacity: 0.88; line-height: 1.5; }
+
+.pif-abrir {
+    margin-top: 6px; align-self: flex-start; background: none; border: none; font-family: inherit;
+    font-size: 0.82rem; font-weight: 700; color: var(--accent-blue); text-decoration: underline;
+    text-underline-offset: 2px; cursor: pointer; padding: 0;
+}
+.pif-toggle {
+    margin-top: 6px; align-self: flex-start; background: none; border: none; font-family: inherit;
+    font-style: italic; font-size: 0.76rem; color: var(--text-muted); cursor: pointer; padding: 4px 0 0;
+    text-decoration: underline; text-underline-offset: 2px;
+}
+.pif-nota {
+    margin: 8px 0 0; padding-left: 10px; border-left: 2px solid var(--border-color);
+    font-size: 0.76rem; font-style: italic; color: var(--text-muted); line-height: 1.5;
+}
+.pif-sinfuente { margin: 8px 0 0; font-size: 0.74rem; color: var(--text-muted); opacity: 0.75; }
+
+.pif-nodata { padding: 56px 12px; text-align: center; border-top: 1px solid var(--border-color); }
+.pif-nodata .pif-cap { display: block; font-size: 0.72rem; color: var(--text-muted); font-weight: 700; margin: 0 0 8px; }
+.pif-nodata-title { margin: 0 0 10px; font-size: 1.6rem; font-weight: 700; color: var(--text-muted); opacity: 0.6; }
+.pif-nodata-rule { width: 60px; height: 2px; background: var(--border-color); margin: 0 auto 14px; }
+.pif-nodata-desc { margin: 0 auto; max-width: 270px; font-size: 0.84rem; color: var(--text-muted); line-height: 1.6; }

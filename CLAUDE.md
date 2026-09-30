@@ -8049,13 +8049,98 @@ reagrupación de especialidades detallada abajo.
       tiempo — no una app que solo cubre el temario formal de la
       residencia, sino una que crece con cualquier fuente clínica que el
       usuario aporte, PIF incluido como una fuente más entre otras.
+  - **`#pif-menu-view` rediseñado como "manifiesto de rotación" — dossier
+    clínico, no un mapa/atlas**, a petición explícita del usuario tras
+    pedir primero un `/dataviz` de las 9 rotaciones y un `/design` de todo
+    el flujo ("para yo saber que subir y a donde cuando esté en la
+    rotación, sin consultar mil veces el documento"). **3 rondas de
+    exploración visual con el tipo Artifact "Design"** antes de tocar
+    código — mismo método ya establecido en el proyecto —, las 2 primeras
+    rechazadas explícitamente por el usuario: v1 (nodos redondeados con
+    halo, iconos SVG orgánicos, mismo lenguaje que el Atlas/mapa del
+    riñón) "parece hecha por un niño"; v2, pedida como corrección hacia
+    "programador norcoreano" (tipografía monospace, bordes rectos, estados
+    en corchetes `[OK]`/`[HOY]`/`[----]`, sin color), rechazada con más
+    fuerza aún ("esto es mucho peor") — confirmado con `AskUserQuestion`
+    que el problema concreto eran los corchetes tipo log, y que la
+    dirección real era un **"dossier clínico serio"**: tipografía con peso
+    real (la misma serif de siempre, nunca monospace), alto contraste,
+    cero decoración — como una ficha hospitalaria impresa, autoritario
+    pero legible. v3 (aprobada) es la que se implementó.
+  - **Arquitectura pensada desde el principio para R2-R5**, la 2ª mitad
+    explícita del encargo ("¿y qué pasa cuando sea R2? ¿o R3?") — nunca
+    hardcodeada a las 9 rotaciones de R1. `js/data/pif-rotaciones.js`
+    exporta `rotacionesPif = { R1: [...9 rotaciones reales...], R2: [],
+    R3: [], R4: [], R5: [] }` — datos puros, sin DOM, mismo criterio que
+    el resto de `js/data/`. Cada rotación lleva `id`/`nombre`/`periodo`
+    (texto) + `inicio`/`fin` (fechas ISO reales, para calcular la
+    rotación "actual") + `objetivos` (array, extraídos literalmente del
+    documento PIF-R1-01) + `construido` (booleano, a mano, como el resto
+    de la app — nunca inferido) +, solo en las 2 construidas,
+    `destino.botonId` (el `id` real de `#btn-hematologia`/
+    `#btn-nefrologia`) +, en 2 pendientes con solapamiento real de
+    contenido (Cardiología/Neumología como rotación PIF), un `nota` de
+    texto señalando que ya existe contenido más amplio en otra
+    especialidad que no sustituye este objetivo concreto — nunca un link
+    clicable (para no arriesgar el mismo bug de `.tx-link` ya documentado
+    varias veces en este archivo).
+  - **`js/modules/home/pif-manifiesto.js`** (`initPifManifiesto()`) es el
+    único componente que sabe generar HTML a partir de esos datos —
+    pestañas `R1..R5` (`#pif-year-tabs`), y el contenido
+    (`#pif-manifiesto-contenido`): si `rotacionesPif[año]` está vacío
+    (R2-R5, hoy) pinta un estado **"Sin expediente"** genérico, sin ningún
+    caso especial por año; si tiene datos, pinta una barra de marcas (una
+    por rotación, verde=construida/dorado=actual/tenue=pendiente), el
+    aviso "Rotación actual" (o nada, si hoy cae fuera de cualquier rango
+    — no fuerza un resultado) y una entrada numerada por rotación
+    (nombre, periodo, "Estado: Construida/En curso (hoy)/Pendiente" en
+    texto plano coloreado — nunca una pastilla/badge — objetivos con
+    guion largo, y en las pendientes un botón "Ver N objetivos más" que
+    revela el resto con delegación de eventos). **La "rotación actual" se
+    calcula en cada carga comparando `new Date()` contra `inicio`/`fin`
+    de cada rotación** (`hoyEnRango()`) — nunca escrita a mano, así que
+    sigue siendo correcta sin tocar código mes a mes.
+  - **Truco de wiring para no duplicar botones ni reenviar clics**: las 2
+    rotaciones construidas renderizan su botón "Abrir X →" con el mismo
+    `id` que ya tenían las tiles antiguas (`id="btn-hematologia"`/
+    `id="btn-nefrologia"`) — como `initPifManifiesto()` se llama como
+    **primera línea** de `home/index.js`'s `init()`, antes de que esa
+    misma función haga
+    `document.getElementById('btn-hematologia').addEventListener(...)`,
+    el botón ya existe en el DOM con ese `id` en el momento en que se
+    engancha el listener real (`goHome()`/`nefrologiaApi?.volverAlMapa()`)
+    — lo hereda gratis, sin un segundo botón oculto ni un
+    `document.getElementById(...).click()` de reenvío.
+  - **La tile PIF de la raíz mantuvo su estilo póster** (`.especialidad-tile`,
+    icono/scrim/eyebrow, igual que sus 3 tiles hermanas) — deliberadamente
+    NO se le aplicó el rediseño de dossier plano, para no romper la
+    consistencia visual del grid de 4 puertas de entrada; solo ganó un
+    dato nuevo, un `.especialidad-tile-badge` (`#pif-tile-badge`, misma
+    clase ya usada por la tile de UCI/Papers Tuiter) que
+    `initPifManifiesto()` rellena con "N/9 rotaciones construidas · ahora:
+    <rotación>" — mismo cálculo `hoyEnRango()`, sin duplicar lógica.
+  - Verificado con Playwright: la tile PIF muestra el badge correcto
+    ("2/9 rotaciones construidas · ahora: Radiología — sección de
+    tórax"); dentro del manifiesto, R1 arranca activo con sus 9 entradas,
+    la barra de progreso dice "2 de 9", el aviso "Rotación actual" señala
+    Radiología-tórax (fecha real del test, sep 2026); el toggle "Ver 3
+    objetivos más" revela los objetivos ocultos y cambia a "Ocultar
+    objetivos"; "Abrir Hematología →" dentro del manifiesto deja
+    `#home-view` visible y "Abrir Nefrología →" deja `#nefrologia-view`
+    visible (mismo comportamiento de siempre, heredado sin duplicar
+    listener); la pestaña R2 muestra "Sin expediente" sin ningún error;
+    "← VOLVER" regresa a Especialidades; sin overflow horizontal a
+    390px; sin errores de consola. Bump de cache-busting a `?v=20260930`
+    por el cambio en `components.css`.
 - **2 switchers intermedios nuevos**, mismo patrón `createViewSwitcher()`
   ya usado por el resto de menús medios de la app (`nefroLevel`,
   `cardioLevel`...), pero esta vez viviendo dentro del propio `topLevel`
   de `home/index.js` en vez de en un `index.js` de especialidad aparte
   (PIF/Fisiopatología UCI —grupo raíz— no son especialidades con contenido propio,
   son puro agrupamiento de navegación): `pifMenu`
-  (`#pif-menu-view`, 2 tiles: Hematología/Nefrología) y
+  (`#pif-menu-view`, hoy el manifiesto de rotación — ver más arriba — con
+  los botones "Abrir Hematología/Nefrología →" embebidos en sus entradas)
+  y
   `cardiorrespiMenu` (`#cardiorrespi-menu-view`, 3 tiles:
   Cardiología/Neumología/Fisiopatología UCI). `btn-pif`/`btn-cardiorrespi`
   en la raíz solo hacen `topLevel.show('pifMenu'/'cardiorrespiMenu')` —

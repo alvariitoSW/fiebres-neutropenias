@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HUD Clínico UCI</title>
-<link rel="stylesheet" href="css/variables.css?v=20260929-4">
-<link rel="stylesheet" href="css/base.css?v=20260929-4">
-<link rel="stylesheet" href="css/components.css?v=20260929-4">
+<link rel="stylesheet" href="css/variables.css?v=20260930">
+<link rel="stylesheet" href="css/base.css?v=20260930">
+<link rel="stylesheet" href="css/components.css?v=20260930">
 </head>
 <body>
 
@@ -39,9 +39,10 @@
             </div>
             <div class="especialidad-tile-scrim"></div>
             <div class="especialidad-tile-content">
-                <p class="especialidad-tile-eyebrow">Menú combinado · 2 especialidades</p>
+                <p class="especialidad-tile-eyebrow">Plan Individualizado de Formación · R1</p>
                 <p class="especialidad-tile-title">PIF</p>
                 <p class="especialidad-tile-desc">Hematología · Nefrología — atlas y mapa del riñón</p>
+                <span class="especialidad-tile-badge" id="pif-tile-badge"></span>
             </div>
             <span class="especialidad-tile-chev">→</span>
         </button>
@@ -96,32 +97,15 @@
     <!-- ========================================== -->
     <div id="pif-menu-view" style="display: none;">
         <button class="back-btn btn-volver-especialidades">← VOLVER</button>
-        <div class="diag-header">
-            <h2 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">PIF</h2>
-            <p>Hematología · Nefrología</p>
-        </div>
 
-        <button class="especialidad-tile" id="btn-hematologia" style="--tile-accent: var(--accent-red); min-height: 205px; margin-bottom: 14px;">
-            <svg width="120" height="90" viewBox="0 0 64 48" style="position: absolute; top: 6%; left: 50%; transform: translateX(-50%);"><path d="M32 4 C40 18 46 28 46 34 A14 14 0 1 1 18 34 C18 28 24 18 32 4 Z" fill="rgba(184,92,62,0.6)" stroke="#b85c3e" stroke-width="1.8"/></svg>
-            <div class="especialidad-tile-scrim"></div>
-            <div class="especialidad-tile-content">
-                <p class="especialidad-tile-eyebrow">Atlas interactivo</p>
-                <p class="especialidad-tile-title" style="font-size: 1.35rem;">Hematología</p>
-                <p class="especialidad-tile-desc">Citopenias · síndromes urgentes · trasplante TPH · Merino HEMATO</p>
-            </div>
-            <span class="especialidad-tile-chev" style="font-size: 0.95rem;">→</span>
-        </button>
+        <p class="pif-cap" style="margin: 16px 0 4px; font-size: 0.62rem; color: var(--text-muted); font-weight: 700;">Medicina Intensiva — HUGCDN</p>
+        <h2 style="margin: 0; font-size: 1.7rem; font-weight: 700; color: var(--text-main);">Manifiesto de rotación</h2>
+        <p style="margin: 2px 0 0; font-size: 0.86rem; color: var(--text-muted);">Plan Individualizado de Formación</p>
+        <div class="pif-header-rule"></div>
+        <div class="pif-header-rule-thin"></div>
 
-        <button class="especialidad-tile" id="btn-nefrologia" style="--tile-accent: var(--accent-green); min-height: 205px;">
-            <svg width="105" height="95" viewBox="0 0 64 48" style="position: absolute; top: 6%; left: 50%; transform: translateX(-50%);"><path d="M27 6 C15 8 10 18 12 26 C14 34 20 42 30 40 C36 38.5 36 32 31 28 C27 25 27 21 31 18 C36 14 34 8 27 6 Z" fill="rgba(144,160,106,0.6)" stroke="#90a06a" stroke-width="1.8"/><line x1="34" y1="24" x2="44" y2="24" stroke="#90a06a" stroke-width="1.8"/></svg>
-            <div class="especialidad-tile-scrim"></div>
-            <div class="especialidad-tile-content">
-                <p class="especialidad-tile-eyebrow">Mapa del riñón</p>
-                <p class="especialidad-tile-title" style="font-size: 1.35rem;">Nefrología</p>
-                <p class="especialidad-tile-desc">Fisiología · HTA · ERC · FRA · TRR · fármacos</p>
-            </div>
-            <span class="especialidad-tile-chev" style="font-size: 0.95rem;">→</span>
-        </button>
+        <div class="pif-year-tabs" id="pif-year-tabs"></div>
+        <div id="pif-manifiesto-contenido"></div>
     </div>
 
     <!-- ========================================== -->
@@ -428,6 +412,6 @@
     <div data-include="js/modules/quiz/quiz.html"></div>
 </div>
 
-<script type="module" src="js/main.js?v=20260929-4"></script>
+<script type="module" src="js/main.js?v=20260930"></script>
 </body>
 </html>

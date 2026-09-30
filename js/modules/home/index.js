@@ -5,6 +5,7 @@
 import { createViewSwitcher } from '../../core/navigation.js';
 import { openCorkboardTopic } from '../../core/corkboard.js';
 import { initAtlas } from './atlas.js';
+import { initPifManifiesto } from './pif-manifiesto.js';
 import { preguntasNeutropeniaFebril, temasNeutropeniaFebril } from '../../data/neutropenia-febril-preguntas.js';
 import { preguntasReconocimiento, temasReconocimiento } from '../../data/reconocimiento-preguntas.js';
 import { preguntasSindromes, temasSindromes } from '../../data/sindromes-urgentes-preguntas.js';
@@ -85,6 +86,12 @@ export function onSobrevivirUmiListo(api) {
 }
 
 export function init() {
+    // Renderiza la tile PIF del menú raíz y el manifiesto de rotación de
+    // #pif-menu-view — incluye los botones #btn-hematologia/#btn-nefrologia,
+    // así que va ANTES de que este init() les enganche sus listeners más
+    // abajo (ver pif-manifiesto.js).
+    initPifManifiesto();
+
     const topLevel = createViewSwitcher({
         especialidades: document.getElementById('especialidades-view'),
         pifMenu: document.getElementById('pif-menu-view'),
