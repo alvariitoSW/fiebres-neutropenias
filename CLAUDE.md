@@ -8085,6 +8085,78 @@ página impresa − 52).
     `offsetParent !== null` real (no solo la clase) y la ficha
     `mc-paro-soporte` activa; sin errores de consola ni de página en
     ningún punto del recorrido.
+  - **Auditoría de qué añadir a Técnicas R1 y a Preguntas difíciles, y su
+    implementación**, a petición explícita del usuario ("haz una
+    auditoría del contenido a añadir en técnicas de umi y en preguntas
+    difíciles — aquí sobre todo tienen que estar pensadas como si fuera
+    el médico adjunto preguntando cosas de las diferentes partes de uci
+    para que responda el residente de 1° año"). Verificado con `grep`
+    contra todo `js/modules` (nunca de memoria) antes de proponer nada:
+    - **5 cross-links reales que faltaban** en `tecnicas-r1.html`
+      (contenido ya construido en otros módulos, nunca enlazado desde
+      aquí): traqueostomía percutánea/quirúrgica y cricotiroidotomía de
+      emergencia (Merino Neumología, `neumo-vias-artificiales`, Ficha
+      XVI) y VMNI — CPAP/BiPAP/PSV, selección de pacientes
+      (`neumo-vni-metodos`, Ficha XII), ambas añadidas a la categoría
+      "Vía aérea"; tubo torácico/neumotórax a tensión/descompresión con
+      aguja (`neumo-cuidado-barotrauma`, Ficha XVII) — ya cross-linkada
+      desde Manual UMI pero no desde este índice, añadida también a "Vía
+      aérea"; y cardioversión eléctrica sincronizada (TV/SVT) y no
+      sincronizada (`mc-otras-taqui`, Ficha XVIII) + cardioversión de FA
+      (`mc-fa-cardioversion`, Ficha XVII, ya linkada desde Manual UMI
+      pero no desde aquí), ambas añadidas a "Soporte vital y parada
+      cardiorrespiratoria". Las 5 usan `.especialidad-link` (nunca
+      `.tx-link`, mismo riesgo de colisión ya documentado varias veces en
+      este archivo), resueltas por el listener global ya existente en
+      `home/index.js` — cero JS nuevo.
+    - **Huecos de contenido genuinos, confirmados con `grep` (cero
+      resultados o solo menciones de refilón) y dejados fuera de esta
+      ronda** por no tener fuente propia: punción lumbar (ligado al
+      bloque neurocrítico, ya marcado como pendiente en el propio
+      Manual UMI), fibrobroncoscopia, suturas, canalización de línea
+      arterial — ninguno se puede resolver con un cross-link, necesitan
+      PNT/manual nuevo antes de escribir nada. Canalización venosa
+      periférica/PICC/sonda vesical/sonda nasogástrica confirmado que
+      siguen fuera **a propósito** (los 5 IT-4AI-E ya descartados
+      explícitamente por el usuario en una tanda anterior), no un hueco
+      nuevo que haya que llenar.
+    - **12 preguntas nuevas en `preguntas-mc-dificiles.js`**
+      (`umimc-q011`-`q022`, 8 opción múltiple + 4 de redactar — más peso
+      relativo en redactar que las 10 originales, 4/12 ≈ 33% frente a
+      2/10 = 20%; banco total: 16 opción múltiple + 6 redactar), cada una
+      releyendo primero
+      el `tab-content` real de su ficha de origen antes de escribirla,
+      mismo criterio de siempre. A diferencia de las 10 primeras (casi
+      todas ancladas solo a Manual UMI), estas cruzan deliberadamente a
+      Merino Neumología (SDRA/ventilación protectora con el protocolo de
+      reducción de volumen tidal por etapas; posición prono con la trampa
+      de que el vasopresor por sí solo NO es contraindicación si el
+      paciente está estable/mejorando), Nefrología (clasificador
+      ácido-base con Δ-ratio para detectar una acidosis hiperclorémica
+      iatrogénica por salino 0,9% superpuesta a una láctica; secuencia de
+      tratamiento de hiperpotasemia grave sintomática; síndrome de
+      realimentación), Trasplante de Hematología (antibioterapia empírica
+      dirigida a un germen KPC ya colonizante, en vez de escalada/
+      desescalada estándar; manejo simultáneo —no secuencial— de SLC
+      grado 2 + ICANS grado 2 en CAR-T), Merino Cardiología (problema de
+      poscarga del VI y "venteo" en VA-ECMO; por qué el patrón
+      hemodinámico de shock cardiogénico y obstructivo es idéntico por
+      Swan-Ganz y hace falta ecografía para distinguirlos; el umbral
+      correcto de "riesgo definido" del CHA₂DS₂-VASc en varones —2
+      puntos— frente al de mujeres —3—, la misma trampa que motivó el bug
+      ya corregido de esa calculadora), Fisiopatología UCI (CAM-UCI/
+      delirio con el cambio de sedación hacia dexmedetomidina + ventanas
+      diarias) y UCI Papers Tuiter (ratio T/iCa de citrato interpretado
+      junto a requerimientos de calcio/acidosis/lactato, nunca aislado).
+      El banco de "Preguntas difíciles" queda en 22 preguntas y el banco
+      combinado de toda la app en <strong>1841 preguntas</strong> (1829
+      previas + 12). Actualizados los recuentos en `preguntas-mc.html`
+      (22 / 15+7) y la etiqueta de `tecnicas-r1.html` en el
+      `.constellation` de `sobrevivir-umi-menu.html` ("conecta 4
+      especialidades", antes "6 módulos" — cifra que no se correspondía
+      con los módulos realmente enlazados). Sin cambios de CSS ni de
+      `quiz.js` — pura ampliación de datos + 5 botones nuevos reutilizando
+      clases/listeners ya existentes.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
