@@ -1618,3 +1618,81 @@ body.study-mode-on .pomodoro-fab { display: flex; }
 .pif-nodata-title { margin: 0 0 10px; font-size: 1.6rem; font-weight: 700; color: var(--text-muted); opacity: 0.6; }
 .pif-nodata-rule { width: 60px; height: 2px; background: var(--border-color); margin: 0 auto 14px; }
 .pif-nodata-desc { margin: 0 auto; max-width: 270px; font-size: 0.84rem; color: var(--text-muted); line-height: 1.6; }
+
+/* ===================================================== */
+/* SOBREVIVIR A LA UMI — 3 guías nuevas junto al Manual UMI  */
+/* Negrín, cada una con un patrón de interacción distinto    */
+/* porque no son "más fichas de estudio": Dudas de guardia   */
+/* (dudas-guardia.html) es una bitácora cronológica          */
+/* pregunta→respuesta vía <details> nativo (no el flip de    */
+/* core/corkboard.js — no encaja aquí, es un formato de      */
+/* lectura distinto); Preguntas MC (preguntas-mc.html) es la */
+/* portada de un banco de quiz "modo examen" ya resuelto por */
+/* quiz.js, sin UI propia más allá de la tarjeta de entrada;  */
+/* Técnicas R1 (tecnicas-r1.html) es un índice de solo        */
+/* navegación, sin contenido propio — conecta con fichas ya   */
+/* construidas en otros módulos. Explorado primero como       */
+/* canvas de prototipos con el CSS real de la app cargado tal  */
+/* cual (nunca una recreación aproximada) y aprobado por el    */
+/* usuario antes de escribir este bloque — ver CLAUDE.md.      */
+/* ===================================================== */
+
+/* --- Dudas de guardia: bitácora expandible --- */
+.duda-mes {
+    font-family: 'Courier New', monospace; font-size: 0.62rem; letter-spacing: 1.6px; text-transform: uppercase;
+    color: var(--accent-yellow); margin: 22px 0 10px; padding-bottom: 6px; border-bottom: 1px dashed rgba(207,154,62,0.3);
+}
+.duda-card {
+    background: var(--bg-card); border: 1px solid var(--border-color); border-left: 3px solid var(--accent-yellow);
+    border-radius: 4px; margin-bottom: 12px; overflow: hidden;
+}
+.duda-summary { list-style: none; padding: 12px 14px; cursor: pointer; display: flex; flex-direction: column; gap: 5px; }
+.duda-summary::-webkit-details-marker { display: none; }
+.duda-pregunta { font-weight: 700; font-size: 0.86rem; line-height: 1.35; color: var(--text-main); }
+.duda-meta { display: flex; gap: 8px; align-items: center; }
+.duda-tag {
+    font-family: 'Courier New', monospace; font-size: 0.56rem; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--accent-yellow); border: 1px solid rgba(207,154,62,0.4); border-radius: 3px; padding: 1px 6px;
+}
+.duda-toggle-hint { font-size: 0.64rem; color: var(--text-muted); margin-left: auto; }
+.duda-respuesta { padding: 0 14px 14px; font-size: 0.8rem; line-height: 1.5; color: var(--text-dim); border-top: 1px solid rgba(196,154,74,0.18); }
+.duda-respuesta p { margin: 10px 0 0; }
+.duda-fuente { display: inline-block; margin-top: 8px; font-size: 0.68rem; color: var(--accent-blue); }
+.duda-empty-card {
+    background: var(--bg-card); border: 1px dashed var(--border-color); border-radius: 6px;
+    padding: 16px; text-align: center; margin-top: 16px;
+}
+.duda-empty-card p { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; margin: 6px 0 0; }
+
+/* --- Preguntas MC difíciles: portada "modo examen" --- */
+.mc-intro { background: var(--bg-card); border: 1px solid var(--accent-red); border-radius: 6px; padding: 16px; margin: 4px 0 20px; }
+.mc-intro p { font-size: 0.8rem; line-height: 1.5; color: var(--text-main); margin: 8px 0 0; }
+.mc-stats { display: flex; gap: 10px; margin-top: 12px; }
+.mc-stat { flex: 1; text-align: center; background: rgba(0,0,0,0.3); border-radius: 4px; padding: 8px 4px; }
+.mc-stat-num { font-family: Georgia, serif; font-size: 1.3rem; font-weight: bold; color: var(--accent-red); }
+.mc-stat-label { font-size: 0.56rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-top: 2px; }
+.mc-empezar-btn {
+    display: block; width: 100%; margin-top: 14px; padding: 12px; border-radius: 4px; text-align: center;
+    background: rgba(184,92,62,0.18); border: 1px solid var(--accent-red); color: var(--accent-red);
+    font-family: inherit; font-size: 0.86rem; font-weight: 700; cursor: pointer;
+}
+.mc-empezar-btn:active { background: rgba(184,92,62,0.3); }
+
+/* --- Técnicas y conocimientos R1: índice de solo navegación --- */
+.tec-cat {
+    background: var(--bg-card); border: 1px solid var(--border-color); border-left: 3px solid var(--cat-color, var(--accent-green));
+    border-radius: 4px; padding: 14px; margin-bottom: 14px;
+}
+.tec-cat-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.tec-cat-icon { font-size: 1.3rem; }
+.tec-cat-title { font-weight: 700; font-size: 0.88rem; color: var(--cat-color, var(--accent-green)); }
+.tec-chips { display: flex; flex-direction: column; gap: 6px; }
+.tec-chip {
+    display: block; width: 100%; text-align: left; background: rgba(0,0,0,0.22); border: none;
+    border-radius: 4px; padding: 8px 10px; font-family: inherit; font-size: 0.76rem; color: var(--text-main); cursor: pointer;
+}
+.tec-chip-dest { display: block; margin-top: 3px; font-size: 0.6rem; color: var(--text-muted); font-family: 'Courier New', monospace; }
+.tec-chip-arrow { color: var(--cat-color, var(--accent-green)); font-weight: bold; margin-left: 4px; }
+.tec-pendiente { border-left-color: var(--text-muted); opacity: 0.85; }
+.tec-pendiente .tec-cat-title { color: var(--text-muted); }
+.tec-pendiente-note { font-size: 0.7rem; color: var(--text-muted); font-style: italic; margin-top: 2px; }

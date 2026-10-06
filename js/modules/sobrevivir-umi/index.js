@@ -2,34 +2,70 @@
 // de Medicina Intensiva (HUGCDN), protocolos prácticos de guardia
 // transversales a cualquier órgano — no ligados a una especialidad de
 // órgano concreta (a diferencia de Cardiología/Nefrología/Neumología).
-// Consolidado en una única guía con sus 18 fichas (ver manual-umi.html) —
-// mismo patrón de submenú que el resto de especialidades con switcher
-// medio propio, aunque hoy solo tenga una entrada.
+// Desde el rediseño (ver CLAUDE.md), ya no es una única guía: son 4,
+// conviviendo en el mismo .constellation del submenú — el Manual UMI
+// Negrín (18 fichas, manual-umi.html, sin cambios), más 3 guías nuevas
+// con un patrón de interacción distinto cada una porque no son "más
+// fichas de estudio": Dudas de guardia (bitácora estática, sin
+// calculadora ni quiz propio), Preguntas MC difíciles (portada de un
+// banco de quiz "modo examen", resuelto por quiz.js) y Técnicas R1
+// (índice de solo navegación, cero contenido propio — conecta con
+// fichas ya construidas en Manual UMI/Merino Cardiología/UCI Papers
+// Tuiter). Mismo patrón de submenú con switcher medio propio de siempre.
 import { createViewSwitcher } from '../../core/navigation.js';
 import { openCorkboardTopic } from '../../core/corkboard.js';
 import { preguntasManualUmi, temasManualUmi } from '../../data/manual-umi-preguntas.js';
+import { preguntasMcDificiles, temasMcDificiles } from '../../data/preguntas-mc-dificiles.js';
 import { init as initManualUmi } from './manual-umi.js';
 
 // El modal de repaso (#quiz-modal-overlay) es un único partial compartido
 // por TODA la app — solo puede existir una llamada activa a initQuiz() en
 // toda la página (ver quiz.js). Sobrevivir a la UMI expone aquí su
 // banco/temas para que main.js los fusione con el resto de especialidades.
-export const quizTriggerId = ['btn-manual-umi-repasar'];
-export const quizBanco = [...preguntasManualUmi];
+// 'Preguntas MC difíciles' es un bloque más dentro de la misma asignatura
+// (no un banco aparte): aparece en el selector de 3 niveles igual que
+// 'Manual UMI Negrín', pero su propio botón de entrada
+// (#btn-mc-dificiles-repasar, en preguntas-mc.html) lleva además
+// data-quiz-asignatura/data-quiz-bloque — quiz.js, con el cambio mínimo
+// descrito en su propio comentario, salta directo a ese bloque sin pasar
+// por la pantalla de "elige asignatura", porque la propia guía ya es
+// monotemática (no tendría sentido elegir asignatura solo para volver a
+// elegir el único bloque que hay).
+export const quizTriggerId = ['btn-manual-umi-repasar', 'btn-mc-dificiles-repasar'];
+export const quizBanco = [...preguntasManualUmi, ...preguntasMcDificiles];
 // Menú del quiz en 3 niveles (asignatura → bloque → ficha, ver quiz.js).
 const ASIGNATURA = 'Sobrevivir a la UMI';
 export const quizTemas = [
     ...temasManualUmi.map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'Manual UMI Negrín' })),
+    ...temasMcDificiles.map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'Preguntas MC difíciles' })),
 ];
 
 export function init() {
     const sobrevivirLevel = createViewSwitcher({
         menu: document.getElementById('sobrevivir-umi-menu-view'),
         manualUmi: document.getElementById('manual-umi-view'),
+        dudasGuardia: document.getElementById('dudas-guardia-view'),
+        preguntasMc: document.getElementById('preguntas-mc-view'),
+        tecnicasR1: document.getElementById('tecnicas-r1-view'),
     });
 
     document.getElementById('btn-manual-umi').addEventListener('click', () => sobrevivirLevel.show('manualUmi'));
+    document.getElementById('btn-dudas-guardia').addEventListener('click', () => sobrevivirLevel.show('dudasGuardia'));
+    document.getElementById('btn-preguntas-mc').addEventListener('click', () => sobrevivirLevel.show('preguntasMc'));
+    document.getElementById('btn-tecnicas-r1').addEventListener('click', () => sobrevivirLevel.show('tecnicasR1'));
     document.querySelectorAll('.btn-volver-sobrevivir-umi-menu').forEach(b => b.addEventListener('click', () => sobrevivirLevel.show('menu')));
+
+    // Enlaces internos de Técnicas R1 hacia fichas del Manual UMI (misma
+    // especialidad, guía→guía) — nunca .tx-link, que es un mecanismo
+    // interno de Nefrología con riesgo real de colisión si se reutiliza
+    // fuera de ese módulo (ver CLAUDE.md). Mismo patrón exacto ya usado
+    // por .neumo-internal-link/.paper-link en otros módulos.
+    document.querySelectorAll('.umi-internal-link').forEach(btn => {
+        btn.addEventListener('click', () => {
+            sobrevivirLevel.show('manualUmi');
+            openCorkboardTopic('panel-manual-umi-tabs', btn.dataset.tab);
+        });
+    });
 
     // Índice rápido por bloque temático (ver sobrevivir-umi-menu.html): cada
     // bloque salta a la primera ficha real de ese tema dentro del cuaderno

@@ -7911,6 +7911,180 @@ página impresa − 52).
       overflow horizontal a 390px (`scrollWidth === clientWidth`); sin
       errores de consola ni de página. Bump de cache-busting a
       `?v=20260929-4` (cambia `css/components.css`).
+  - **De 1 guía a 4 — auditoría de contenido + rediseño**, a petición
+    explícita del usuario ("revisa la bibliografía... hagas una revisión
+    sistemática de la información... y hagas un índice de contenido que
+    le falte, cosas que están mal etc y después `/design` una nueva forma
+    de presentar la información... habría que añadir varios apartados:
+    dudas planteadas en cada guardia, preguntas MC difíciles basadas en
+    clínica, y técnicas/conocimientos que debe saber un R1"). Proceso en 2
+    fases, mismo orden pedido:
+    1. **Auditoría con 2 agentes en paralelo**, mismo método ya establecido
+       en el proyecto (uno solo-app, otro solo-fuente, sin verse entre sí):
+       el agente "solo-app" releyó `manual-umi.html`/`manual-umi.js`/
+       `manual-umi-preguntas.js`/`sobrevivir-umi-menu.html` sin tocar
+       ningún PDF; el agente "solo-fuente" releyó los 2 PDF completos
+       (104 páginas, 46 bloques temáticos reconstruidos) sin ver ningún
+       archivo del repo. El cruce (hecho directamente, con `grep` sobre
+       `manual-umi.html` para confirmar cada sospecha antes de darla por
+       buena — descartó un falso positivo real, Urapidilo/Amiodarona SÍ
+       estaban en la tabla de sedantes pese a la sospecha inicial)
+       encontró: 1 error interno real (`calcDeficitK()`, Ficha II, usa una
+       fórmula de reposición de K⁺ distinta de la que el propio texto
+       declara, sin nota de fidelidad — a diferencia de otras 2
+       discrepancias similares del mismo archivo que sí la llevan), varios
+       🟡 de inconsistencia de estilo (ausencia total de `.hl-*` en el
+       módulo, profundidad visual desigual entre fichas, un bloque del
+       índice rápido —"Guardia y metabolismo"— que agrupa fichas no
+       contiguas en el tablero), y un índice de huecos de contenido
+       confirmados contra la fuente: el bloque **neurocrítico completo**
+       (10 secciones, ~21 páginas — TCE, PIC, hidrocefalia, fibrinolisis
+       intraventricular, anatomía de TC, Marshall, Fisher/Fisher
+       modificado/Hunt-Hess, Doppler transcraneal, ONSD, GOS/Rankin) y
+       **meningitis/ventriculitis** (Criterios de Lozier), ambos ya
+       anotados como "pendiente" en este mismo archivo; y 3 hallazgos
+       nuevos no anotados hasta ahora — **escalas de sedación RASS/Ramsay**
+       (0% en la app, confirmado por grep), **capnografía/EtCO₂** (0%) y
+       **estimación de peso/talla por antropometría** (0%, Ficha III) —,
+       más 2 de severidad menor (diagrama piramidal de cobertura
+       antibiótica, tabla M-mode extendida de FATE con gravedad por
+       parámetro, y 3 fármacos del bloque relajantes/sedantes —Pancuronio,
+       Neostigmina, Fisostigmina— ausentes de la tabla de 8 filas de la
+       Ficha VII). Ninguno de estos huecos se ha cerrado todavía en esta
+       ronda — quedan documentados aquí como índice para una ampliación
+       futura del propio Manual UMI, no implementados a la vez que el
+       rediseño.
+    2. **Rediseño con el tipo Artifact "Design"**: antes de tocar código,
+       se subieron como *assets* los 3 CSS reales de la app
+       (`variables.css`/`base.css`/`components.css` tal cual, sin
+       recrearlos) y se enlazaron directamente en 4 artboards `.dc.html`
+       de 390px (mismo ancho que el resto de verificaciones de la app) —
+       nunca una recreación aproximada de la paleta, el CSS real cargado
+       en el propio canvas de prototipos, mismo criterio ya establecido en
+       el proyecto para estas exploraciones. Aprobado por el usuario en la
+       primera ronda (sin iteraciones de dirección visual esta vez, a
+       diferencia del rediseño del menú raíz) y pasado a código tal cual.
+  - **Las 4 guías del `.constellation`**: el `.const-node` original
+    ("Manual UMI Negrín") se mantuvo con su `.const-tag` cambiado a
+    "Referencia · 18 fichas" (antes "Ver todo →") y su `.const-desc`
+    actualizada para avisar de la ampliación pendiente, y se añadieron 3
+    `.const-node` más — mismo patrón exacto ya usado por Cardiología
+    (varias guías en un único `.constellation`), sin inventar un
+    componente nuevo:
+    - **Dudas de guardia** (`dudas-guardia.html`, acento `--accent-yellow`,
+      📝): bitácora cronológica, **deliberadamente sin el patrón de
+      `core/corkboard.js`** — no es "una ficha de estudio más" (ni flip,
+      ni pregunta de repaso de gancho, ni `.tab-content` separado), es un
+      `<details>`/`<summary>` nativo por entrada (clases nuevas
+      `.duda-card`/`.duda-summary`/`.duda-respuesta` en `components.css`),
+      agrupadas por mes (`.duda-mes`). Decisión de arquitectura confirmada
+      con el usuario antes de diseñar nada (`AskUserQuestion`): **contenido
+      estático que el propio usuario manda después de cada guardia**, igual
+      que el resto de la app — nunca un campo de texto en el móvil ni una
+      3ª excepción de `localStorage` (las 2 únicas ya documentadas en este
+      archivo siguen siendo quiz y Modo Estudio). Lleva 3 entradas de
+      ejemplo, marcadas explícitamente como tal, construidas con contenido
+      YA real del Manual UMI (reposición de K⁺, cóctel de Marik, TEG de
+      cirugía cardiaca) — nunca inventado — y una tarjeta de cierre
+      (`.duda-empty-card`) explicando que la sección pasa a tener
+      contenido real en cuanto llegue la primera duda real. Sin preguntas
+      de quiz propias — el propio formato pregunta→respuesta ya cumple esa
+      función, añadir un quiz encima sería redundante (mismo criterio ya
+      aplicado a `tratamiento-ira-irc.html`/`nefrotoxicidad.html`).
+    - **Preguntas difíciles** (`preguntas-mc.html`, acento `--accent-red`,
+      🎯): portada "modo examen" (`.mc-intro`/`.mc-stats`, con una pregunta
+      de ejemplo estática debajo, fuera del motor de quiz) + un botón real
+      que SÍ dispara el quiz de verdad
+      (`#btn-mc-dificiles-repasar`). Banco nuevo,
+      `js/data/preguntas-mc-dificiles.js`
+      (`preguntasMcDificiles`/`temasMcDificiles`, 10 preguntas: 8 opción
+      múltiple + 2 redactar, mismo formato `{id, tema, enunciado,
+      opciones, correcta, explicacion}`/`{tipo:'redactar',
+      respuestaModelo}` de siempre) — **sin PDF fuente propio para el
+      banco en sí**, mismo criterio ya establecido en el proyecto para
+      contenido sin fuente propia pero clínicamente estándar (ver APACHE
+      II/Charlson), pero cada pregunta sí está anclada a cifras/algoritmos
+      reales ya verificados releyendo primero el `tab-content` exacto de
+      la ficha de origen del Manual UMI antes de escribirla (nunca de
+      memoria) — lo que las distingue del resto del quiz no es la fuente,
+      es que cada una integra datos de **más de una ficha a la vez** (p.
+      ej. elegir la fórmula correcta de colapsabilidad de VCI según el
+      contexto ventilatorio descrito, o decidir entre 3 opciones de
+      manejo de sangrado post-CCV cruzando umbral de débito + TEG +
+      corrección de hipotermia/hipocalcemia a la vez), nunca una pregunta
+      de recall de un solo dato. 2 de las redactar cruzan además con
+      Merino Cardiología (TRC vs. VVI por código NBG; elección de
+      vasoactivo por perfil FATE/PVC). Se añade como un **bloque más**
+      dentro de la misma asignatura "Sobrevivir a la UMI" en el selector
+      de 3 niveles del quiz (`quizTemas`, `bloque: 'Preguntas MC
+      difíciles'`), no un banco aparte — el banco combinado del quiz
+      queda en 100 preguntas para esta especialidad (90+10).
+      - **Arranque directo del quiz, sin pantalla de "elige asignatura"**
+        — mejora genérica añadida a `quiz.js`, no un hack local: el botón
+        `#btn-mc-dificiles-repasar` lleva
+        `data-quiz-asignatura="Sobrevivir a la UMI"
+        data-quiz-bloque="Preguntas MC difíciles"`, y el listener de cada
+        trigger ahora comprueba esos 2 `data-*` antes de abrir la pantalla
+        de 3 niveles — si están presentes, llama a `empezar(...)` ya
+        filtrado al bloque exacto, igual que si el usuario hubiera
+        navegado los 3 niveles a mano. Con degradación elegante total:
+        cualquier trigger SIN esos `data-*` (los 20+ ya existentes en el
+        resto de la app) sigue abriendo la pantalla de selección de
+        siempre, sin ningún cambio de comportamiento — pensado para
+        cualquier guía futura monotemática donde elegir asignatura sería
+        un paso redundante, no solo para esta.
+    - **Técnicas y conocimientos de un R1** (`tecnicas-r1.html`, acento
+      `--accent-green`, 🔧): **cero contenido clínico propio**, solo un
+      índice de navegación agrupado en 4 categorías por tipo de técnica
+      (vía aérea, accesos vasculares/monitorización invasiva, soporte
+      vital/PCR, ecografía a pie de cama) — decisión confirmada con el
+      usuario (`AskUserQuestion`, opción recomendada) antes de construir
+      nada: conectar lo que YA existe en vez de fabricar procedimientos
+      nuevos sin fuente (Seldinger, tubo torácico, punción lumbar...
+      quedan fuera, igual que el resto de la app nunca fabrica contenido
+      clínico sin fuente real). 12 enlaces (`.tec-chip`) repartidos entre:
+      - **`.umi-internal-link`** (clase nueva, 6 enlaces) hacia fichas del
+        propio Manual UMI (SIR→`umi-rsi`, extubación→`umi-extubacion`,
+        Swan-Ganz→`umi-hemodinamica`, marcapasos→`umi-marcapasos`,
+        rAPTT→`umi-cirugia-cardiaca`, posparada→`umi-posparada`,
+        FATE→`umi-fate`, BLUE→`umi-blue`) — **nunca `.tx-link`**, que es
+        un mecanismo interno de Nefrología con riesgo real de colisión si
+        se reutiliza fuera de ese módulo (mismo riesgo ya documentado y
+        evitado varias veces en este archivo) — con su propio listener en
+        `sobrevivir-umi/index.js` (`sobrevivirLevel.show('manualUmi')` +
+        `openCorkboardTopic('panel-manual-umi-tabs', tab)`), mismo patrón
+        exacto que `.neumo-internal-link`/`.paper-link` en otros módulos.
+      - **`.especialidad-link`** (3 enlaces) hacia Merino Cardiología
+        (ACLS completo →`mc-paro-soporte`, ETCO₂/ecografía durante RCP
+        →`mc-paro-monitorizacion`) y UCI/Papers Tuiter (guía PUMA de
+        extubación →`extub-algoritmo`, VExUS →`vexus-casos`) — resueltos
+        por el listener global ya existente en `home/index.js`, sin
+        wiring nuevo.
+      - Una 5ª categoría, **"🧠 Neurocrítico (pendiente)"**
+        (`.tec-pendiente`, acento atenuado a `--text-muted`), declarando
+        explícitamente que ese contenido existe en la fuente pero no en
+        ningún módulo todavía — en vez de omitir la categoría sin más o
+        fingir que ya está cubierta.
+  - CSS nuevo en `components.css` (`.duda-*`/`.mc-*`/`.tec-*`, bloque
+    "SOBREVIVIR A LA UMI — 3 guías nuevas") — bump de cache-busting a
+    `?v=20261006`. Verificado con Playwright (viewport 390×844): el
+    submenú muestra los 4 `.const-node`; Manual UMI sigue abriendo sin
+    regresión; las 3 entradas de ejemplo de Dudas de guardia expanden/
+    colapsan correctamente con `<details>` nativo; el botón de Preguntas
+    MC abre el quiz YA en la pregunta 1/10 (sin pasar por la pantalla de
+    asignatura), y un recorrido completo de las 10 preguntas (8 opción
+    múltiple + 2 redactar, mezcladas por el barajado aleatorio de
+    siempre) termina en "Terminar" sin ninguna excepción JS; el menú de 3
+    niveles normal del quiz (entrando por `#btn-manual-umi-repasar`, el
+    trigger SIN los `data-quiz-*` nuevos) sigue mostrando la pantalla de
+    selección de siempre, ahora con 2 bloques — "Manual UMI Negrín (90)" +
+    "Preguntas MC difíciles (10)", total 100 —, confirmando que el cambio
+    en `quiz.js` no rompe ningún trigger ya existente; en Técnicas R1, el
+    enlace interno a `umi-rsi` navega con la ficha real `.active`, y el
+    cross-link a Merino Cardiología dejó `cardiologia-view` con
+    `offsetParent !== null` real (no solo la clase) y la ficha
+    `mc-paro-soporte` activa; sin errores de consola ni de página en
+    ningún punto del recorrido.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

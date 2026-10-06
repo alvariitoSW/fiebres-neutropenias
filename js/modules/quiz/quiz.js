@@ -17,7 +17,13 @@
 // entero, y el nivel raíz conserva "Todos los temas" (banco completo).
 // Opcional y con degradación elegante: sin `temas`, el quiz arranca directo
 // como siempre; si algún tema no lleva `asignatura`/`bloque`, se agrupa bajo
-// una etiqueta genérica en vez de romper el árbol.
+// una etiqueta genérica en vez de romper el árbol. Un trigger concreto
+// puede además llevar data-quiz-asignatura/data-quiz-bloque en su propio
+// HTML para saltarse la pantalla de "elige asignatura" y empezar ya
+// filtrado a ese bloque (ver el propio listener de los triggers, más abajo)
+// — pensado para guías monotemáticas (p. ej. "Preguntas MC difíciles" de
+// Sobrevivir a la UMI) donde la asignatura/bloque de entrada ya se conoce
+// de antemano.
 // El modal (#quiz-modal-overlay y sus elementos internos) es un único
 // partial compartido por TODA la app — por eso solo debe existir UNA
 // llamada activa a initQuiz en toda la página, nunca una por especialidad.
@@ -267,7 +273,21 @@ export function initQuiz({ triggerId, banco, temas }) {
 
     triggers.forEach(trigger => trigger.addEventListener('click', () => {
         overlay.classList.add('active');
-        if (temas && temas.length > 0) {
+        // Entrada directa a un bloque concreto, saltándose la pantalla de
+        // "elige asignatura": un botón con data-quiz-asignatura +
+        // data-quiz-bloque (p. ej. #btn-mc-dificiles-repasar, en Sobrevivir
+        // a la UMI → Preguntas MC) empieza el quiz ya filtrado a ese bloque
+        // — pensado para guías monotemáticas donde elegir asignatura sería
+        // un paso redundante (solo hay un bloque real que elegir después).
+        // Degradación elegante: sin esos data-* el trigger se comporta
+        // exactamente igual que siempre (pantalla de 3 niveles, o banco
+        // completo si no hay `temas`).
+        const asigDirecta = trigger.dataset.quizAsignatura;
+        const bloqueDirecto = trigger.dataset.quizBloque;
+        if (temas && temas.length > 0 && asigDirecta && bloqueDirecto) {
+            const keys = temas.filter(t => (t.asignatura || ASIGNATURA_DEFECTO) === asigDirecta && (t.bloque || BLOQUE_DEFECTO) === bloqueDirecto).map(t => t.key);
+            empezar(banco.filter(p => keys.includes(p.tema)));
+        } else if (temas && temas.length > 0) {
             mostrarPantallaQuiz(false);
             renderNivelAsignaturas();
         } else {
