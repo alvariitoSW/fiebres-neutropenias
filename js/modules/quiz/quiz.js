@@ -137,6 +137,11 @@ export function initQuiz({ triggerId, banco, temas }) {
     // para resolver las opciones "Todos los temas de...".
     const ASIGNATURA_DEFECTO = 'Otros';
     const BLOQUE_DEFECTO = 'General';
+
+    function empezarPorBloque(asignatura, bloque) {
+        const keys = temas.filter(t => (t.asignatura || ASIGNATURA_DEFECTO) === asignatura && (t.bloque || BLOQUE_DEFECTO) === bloque).map(t => t.key);
+        empezar(banco.filter(p => keys.includes(p.tema)));
+    }
     let nivelAsignatura = null;
     let nivelBloque = null;
 
@@ -256,11 +261,7 @@ export function initQuiz({ triggerId, banco, temas }) {
             }
             if (accion === 'bloque') { renderNivelTemas(nivelAsignatura, valor); return; }
             if (accion === 'volver-bloques') { renderNivelBloques(nivelAsignatura); return; }
-            if (accion === 'todas-bloque') {
-                const keys = temas.filter(t => (t.asignatura || ASIGNATURA_DEFECTO) === nivelAsignatura && (t.bloque || BLOQUE_DEFECTO) === nivelBloque).map(t => t.key);
-                empezar(banco.filter(p => keys.includes(p.tema)));
-                return;
-            }
+            if (accion === 'todas-bloque') { empezarPorBloque(nivelAsignatura, nivelBloque); return; }
             if (accion === 'tema') { empezar(banco.filter(p => p.tema === valor)); return; }
         });
     }
@@ -285,8 +286,7 @@ export function initQuiz({ triggerId, banco, temas }) {
         const asigDirecta = trigger.dataset.quizAsignatura;
         const bloqueDirecto = trigger.dataset.quizBloque;
         if (temas && temas.length > 0 && asigDirecta && bloqueDirecto) {
-            const keys = temas.filter(t => (t.asignatura || ASIGNATURA_DEFECTO) === asigDirecta && (t.bloque || BLOQUE_DEFECTO) === bloqueDirecto).map(t => t.key);
-            empezar(banco.filter(p => keys.includes(p.tema)));
+            empezarPorBloque(asigDirecta, bloqueDirecto);
         } else if (temas && temas.length > 0) {
             mostrarPantallaQuiz(false);
             renderNivelAsignaturas();
