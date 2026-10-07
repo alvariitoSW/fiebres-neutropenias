@@ -6,8 +6,9 @@
 // conviviendo en el mismo .constellation del submenú — el Manual UMI
 // Negrín (18 fichas, manual-umi.html, sin cambios), más 3 guías nuevas
 // con un patrón de interacción distinto cada una porque no son "más
-// fichas de estudio": Dudas de guardia (bitácora estática, sin
-// calculadora ni quiz propio), Preguntas MC difíciles (portada de un
+// fichas de estudio": Dudas de guardia (bitácora agrupada por tema, con
+// un formulario real para añadir dudas nuevas desde el dispositivo — ver
+// dudas-guardia.js), Preguntas MC difíciles (portada de un
 // banco de quiz "modo examen", resuelto por quiz.js) y Técnicas R1
 // (índice de solo navegación, cero contenido propio — conecta con
 // fichas ya construidas en Manual UMI/Merino Cardiología/UCI Papers
@@ -17,6 +18,7 @@ import { openCorkboardTopic } from '../../core/corkboard.js';
 import { preguntasManualUmi, temasManualUmi } from '../../data/manual-umi-preguntas.js';
 import { preguntasMcDificiles, temasMcDificiles } from '../../data/preguntas-mc-dificiles.js';
 import { init as initManualUmi } from './manual-umi.js';
+import { init as initDudasGuardia } from './dudas-guardia.js';
 
 // El modal de repaso (#quiz-modal-overlay) es un único partial compartido
 // por TODA la app — solo puede existir una llamada activa a initQuiz() en
@@ -88,6 +90,7 @@ export function init() {
     });
 
     initManualUmi();
+    initDudasGuardia();
 
     sobrevivirLevel.show('menu');
 

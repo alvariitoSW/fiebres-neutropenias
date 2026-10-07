@@ -1637,8 +1637,11 @@ body.study-mode-on .pomodoro-fab { display: flex; }
 /* usuario antes de escribir este bloque — ver CLAUDE.md.      */
 /* ===================================================== */
 
-/* --- Dudas de guardia: bitácora expandible --- */
-.duda-mes {
+/* --- Dudas de guardia: bitácora expandible, agrupada por tema --- */
+/* .duda-grupo-label encabeza cada grupo de tema (antes agrupaba por mes,
+   de ahí el nombre previo .duda-mes — renombrado al pasar a agrupación
+   por tema, ver dudas-guardia.js). */
+.duda-grupo-label {
     font-family: 'Courier New', monospace; font-size: 0.62rem; letter-spacing: 1.6px; text-transform: uppercase;
     color: var(--accent-yellow); margin: 22px 0 10px; padding-bottom: 6px; border-bottom: 1px dashed rgba(207,154,62,0.3);
 }
@@ -1654,15 +1657,46 @@ body.study-mode-on .pomodoro-fab { display: flex; }
     font-family: 'Courier New', monospace; font-size: 0.56rem; letter-spacing: 1px; text-transform: uppercase;
     color: var(--accent-yellow); border: 1px solid rgba(207,154,62,0.4); border-radius: 3px; padding: 1px 6px;
 }
+.duda-fecha { font-size: 0.64rem; color: var(--text-muted); }
 .duda-toggle-hint { font-size: 0.64rem; color: var(--text-muted); margin-left: auto; }
 .duda-respuesta { padding: 0 14px 14px; font-size: 0.8rem; line-height: 1.5; color: var(--text-dim); border-top: 1px solid rgba(196,154,74,0.18); }
 .duda-respuesta p { margin: 10px 0 0; }
 .duda-fuente { display: inline-block; margin-top: 8px; font-size: 0.68rem; color: var(--accent-blue); }
+.duda-eliminar-btn {
+    display: inline-block; margin-top: 10px; margin-left: 10px; background: none; border: none;
+    color: var(--accent-red); font-family: inherit; font-size: 0.68rem; cursor: pointer; padding: 0;
+}
 .duda-empty-card {
     background: var(--bg-card); border: 1px dashed var(--border-color); border-radius: 6px;
     padding: 16px; text-align: center; margin-top: 16px;
 }
 .duda-empty-card p { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; margin: 6px 0 0; }
+
+/* Formulario "+ Añadir una duda nueva" — única excepción propia de este
+   módulo a "sin localStorage" (ver dudas-guardia.js y CLAUDE.md). */
+.duda-form-toggle {
+    display: block; width: 100%; margin: 4px 0 16px; padding: 10px; border-radius: 4px; text-align: center;
+    background: rgba(207,154,62,0.12); border: 1px solid var(--accent-yellow); color: var(--accent-yellow);
+    font-family: inherit; font-size: 0.8rem; font-weight: 700; cursor: pointer;
+}
+.duda-form-toggle:active { background: rgba(207,154,62,0.25); }
+.duda-form {
+    display: none; background: var(--bg-card); border: 1px solid var(--accent-yellow); border-radius: 6px;
+    padding: 14px 16px; margin-bottom: 20px;
+}
+.duda-form.active { display: block; }
+.duda-form textarea {
+    width: 100%; min-height: 56px; font-family: inherit; font-size: 0.82rem; color: var(--text-main);
+    background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 4px; padding: 10px;
+    resize: vertical; box-sizing: border-box;
+}
+.duda-form textarea:focus, .duda-form input:focus { outline: none; border-color: var(--accent-yellow); }
+.duda-guardar-btn {
+    display: block; width: 100%; margin-top: 4px; padding: 11px; border-radius: 4px; text-align: center;
+    background: rgba(207,154,62,0.18); border: 1px solid var(--accent-yellow); color: var(--accent-yellow);
+    font-family: inherit; font-size: 0.84rem; font-weight: 700; cursor: pointer;
+}
+.duda-guardar-btn:active { background: rgba(207,154,62,0.3); }
 
 /* --- Preguntas MC difíciles: portada "modo examen" --- */
 .mc-intro { background: var(--bg-card); border: 1px solid var(--accent-red); border-radius: 6px; padding: 16px; margin: 4px 0 20px; }

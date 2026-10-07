@@ -27,17 +27,22 @@ cama en el móvil.
 
 - **Sin backend, sin login, sin base de datos.** Es una calculadora estática:
   el usuario abre la página, rellena campos, ve un resultado. Nada se guarda.
-  **Dos excepciones, deliberadas y acotadas:** el quiz de repaso
+  **Tres excepciones, deliberadas y acotadas:** el quiz de repaso
   (`js/modules/quiz/`, ver "Sistema de estudio tipo Anki" más abajo) usa
   `localStorage` para recordar aciertos/fallos por pregunta en el
-  dispositivo del usuario; y el **Modo Estudio** (`js/core/pomodoro.js`,
+  dispositivo del usuario; el **Modo Estudio** (`js/core/pomodoro.js`,
   ver "Modo Estudio y reloj Pomodoro" más abajo) usa `localStorage` para
   recordar, también en el dispositivo del usuario, el nº de pomodoros
   completados, la duración de enfoque/descanso configurada, y el
-  progreso de estudio (pomodoros invertidos) por ficha. No añadas
-  `localStorage` (ni ningún otro tipo de persistencia) a ningún otro
-  módulo sin que sea, igual que estos dos, una decisión explícita — el
-  resto de la app sigue sin guardar nada.
+  progreso de estudio (pomodoros invertidos) por ficha; y **Dudas de
+  guardia** (`js/modules/sobrevivir-umi/dudas-guardia.js`, dentro de
+  Sobrevivir a la UMI, ver más abajo) usa `localStorage` para guardar las
+  dudas reales que el propio usuario escribe desde un formulario —
+  decisión que reemplazó explícitamente, a petición del usuario, un
+  diseño anterior sin ningún campo de texto. No añadas `localStorage`
+  (ni ningún otro tipo de persistencia) a ningún otro módulo sin que sea,
+  igual que estas tres, una decisión explícita — el resto de la app
+  sigue sin guardar nada.
 - **Sin build tool.** No hay npm/Vite/webpack. Todo es HTML/CSS/JS que el
   navegador ejecuta tal cual. Se despliega copiando el repo a GitHub Pages,
   sirviendo `index.html` desde la raíz.
@@ -7971,26 +7976,59 @@ página impresa − 52).
     `.const-node` más — mismo patrón exacto ya usado por Cardiología
     (varias guías en un único `.constellation`), sin inventar un
     componente nuevo:
-    - **Dudas de guardia** (`dudas-guardia.html`, acento `--accent-yellow`,
-      📝): bitácora cronológica, **deliberadamente sin el patrón de
+    - **Dudas de guardia** (`dudas-guardia.html`/`.js`, acento
+      `--accent-yellow`, 📝): bitácora **deliberadamente sin el patrón de
       `core/corkboard.js`** — no es "una ficha de estudio más" (ni flip,
       ni pregunta de repaso de gancho, ni `.tab-content` separado), es un
-      `<details>`/`<summary>` nativo por entrada (clases nuevas
-      `.duda-card`/`.duda-summary`/`.duda-respuesta` en `components.css`),
-      agrupadas por mes (`.duda-mes`). Decisión de arquitectura confirmada
-      con el usuario antes de diseñar nada (`AskUserQuestion`): **contenido
-      estático que el propio usuario manda después de cada guardia**, igual
-      que el resto de la app — nunca un campo de texto en el móvil ni una
-      3ª excepción de `localStorage` (las 2 únicas ya documentadas en este
-      archivo siguen siendo quiz y Modo Estudio). Lleva 3 entradas de
-      ejemplo, marcadas explícitamente como tal, construidas con contenido
-      YA real del Manual UMI (reposición de K⁺, cóctel de Marik, TEG de
-      cirugía cardiaca) — nunca inventado — y una tarjeta de cierre
-      (`.duda-empty-card`) explicando que la sección pasa a tener
-      contenido real en cuanto llegue la primera duda real. Sin preguntas
-      de quiz propias — el propio formato pregunta→respuesta ya cumple esa
-      función, añadir un quiz encima sería redundante (mismo criterio ya
-      aplicado a `tratamiento-ira-irc.html`/`nefrotoxicidad.html`).
+      `<details>`/`<summary>` nativo por entrada (clases
+      `.duda-card`/`.duda-summary`/`.duda-respuesta` en `components.css`).
+      El diseño original (confirmado con `AskUserQuestion`) era contenido
+      estático sin ningún campo de texto — **el usuario pidió
+      explícitamente revertir esa decisión** ("añade un apartado para
+      poder escribir... notas, y dividir las dudas x temas"), así que
+      ahora tiene 2 piezas nuevas:
+      - **Agrupación por tema, no por fecha** (`agruparPorTema()` en
+        `dudas-guardia.js`): el encabezado de grupo, que antes marcaba el
+        mes (`.duda-mes`), se renombró a `.duda-grupo-label` y ahora
+        agrupa por `tema` (orden alfabético; dentro de cada tema, la
+        duda más reciente primero) — cada tarjeta sigue mostrando su
+        propio `.duda-tag` (el tema) y una `.duda-fecha` nueva (mes/año,
+        formateada a mano con un array de abreviaturas en español, sin
+        librería de fechas) para no perder el contexto cronológico al
+        dejar de ser el criterio de agrupación.
+      - **Formulario real** (`#duda-form`, con `#btn-duda-nueva` como
+        toggle que alterna `.active` y el texto del propio botón — mismo
+        patrón `classList.toggle` ya usado por `core/accordion.js`, no
+        JS nuevo de apertura/cierre): tema (texto libre con `<datalist>`
+        autocompletado a partir de los temas ya usados, opcional —
+        por defecto "General"), pregunta y respuesta (`<textarea
+        required>`, validación nativa del navegador vía `<form>`/
+        `required`, sin JS de validación propio salvo un `trim()` de
+        respaldo por si se escriben solo espacios) y fuente (opcional).
+        Al guardar, la duda nueva se añade a `localStorage`
+        (`hud-dudas-guardia`, array de objetos `{id, tema, pregunta,
+        respuesta, fuente, fecha, ejemplo:false}`) y la lista se
+        re-renderiza entera — **nunca se edita el DOM de las 3 entradas
+        de ejemplo**, que viven en su propio archivo de datos puro
+        (`js/data/dudas-guardia-ejemplos.js`, `ejemplo:true`,
+        construido con contenido YA real del Manual UMI — reposición de
+        K⁺, cóctel de Marik, TEG de cirugía cardiaca — nunca inventado) y
+        se fusionan con las del usuario solo en memoria, en cada
+        `render()`. Solo las dudas propias del usuario (`ejemplo:false`)
+        llevan un botón `.duda-eliminar-btn` dentro de su propia
+        `.duda-respuesta` (con `e.stopPropagation()` para no disparar
+        también el toggle nativo del `<details>` padre) — las 3 de
+        ejemplo son fijas, nunca editables ni borrables desde la UI.
+        `escapeHtml()` escapa pregunta/respuesta/fuente/tema antes de
+        insertarlos vía `innerHTML` — a diferencia del resto de
+        contenido de la app (siempre texto de confianza escrito a mano
+        en los propios `.html`), aquí el texto viene directo del usuario
+        a través de un `<textarea>`, así que sí hace falta escaparlo
+        para que no se interprete como HTML.
+      Sin preguntas de quiz propias — el propio formato pregunta→respuesta
+      ya cumple esa función, añadir un quiz encima sería redundante
+      (mismo criterio ya aplicado a
+      `tratamiento-ira-irc.html`/`nefrotoxicidad.html`).
     - **Preguntas difíciles** (`preguntas-mc.html`, acento `--accent-red`,
       🎯): portada "modo examen" (`.mc-intro`/`.mc-stats`, con una pregunta
       de ejemplo estática debajo, fuera del motor de quiz) + un botón real

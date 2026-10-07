@@ -1,48 +1,33 @@
     <button class="back-btn btn-volver-sobrevivir-umi-menu">← VOLVER</button>
     <div class="diag-header">
         <h2 style="color: var(--accent-yellow); text-shadow: var(--glow-blue);">Dudas de guardia</h2>
-        <p>Preguntas reales que surgieron en guardia, con la respuesta que se encontró después — no son fichas de estudio, son la bitácora real de lo que se preguntó un residente a pie de cama</p>
+        <p>Preguntas reales que surgieron en guardia, con la respuesta que se encontró después — agrupadas por tema, no por fecha, para encontrarlas rápido la próxima vez que toque un caso parecido</p>
     </div>
 
     <p class="section-label">Cómo se alimenta</p>
-    <p style="font-size:0.78rem; color:var(--text-muted); line-height:1.5; margin:4px 0 18px;">Después de cada guardia, cuenta la duda (y lo que se averiguó) y se añade aquí como entrada fija — nunca se inventa contenido por adelantado, ni hay un campo de texto en el móvil que guarde nada en este primer rediseño.</p>
+    <p style="font-size:0.78rem; color:var(--text-muted); line-height:1.5; margin:4px 0 18px;">Después de cada guardia, escribe la duda (y lo que averiguaste) en el formulario de abajo — se guarda solo en este dispositivo, igual que el progreso del quiz o el Modo Estudio: nunca se sube a ningún sitio ni lo ve nadie más.</p>
 
-    <p class="duda-mes">Ejemplo de cómo se ve una entrada — octubre 2026</p>
+    <button class="duda-form-toggle" id="btn-duda-nueva">✏️ Añadir una duda nueva</button>
 
-    <details class="duda-card">
-        <summary class="duda-summary">
-            <span class="duda-pregunta">¿Por qué no se pueden pasar más de 3 mEq/h de K⁺ por vía periférica, aunque el paciente lo necesite rápido?</span>
-            <span class="duda-meta"><span class="duda-tag">Electrolitos</span><span class="duda-toggle-hint">toca para ver la respuesta ▾</span></span>
-        </summary>
-        <div class="duda-respuesta">
-            <p>El límite no es por la cantidad total de K⁺, es por la concentración e irritación venosa: a ese ritmo por vía periférica se produce flebitis química y dolor real, y el margen de seguridad frente a arritmia es menor si el bolo llega muy concentrado a una vena pequeña. Por vía central sí se admite hasta 20 mEq/h (salvo K&lt;2, donde el propio protocolo permite más) precisamente porque la dilución en un vaso de mayor calibre lo hace más seguro.</p>
-            <a class="duda-fuente">Fuente: Manual UMI — Ficha II, reposición de K⁺</a>
+    <form class="duda-form" id="duda-form">
+        <div class="form-group">
+            <label for="duda-input-tema">Tema (opcional, por si no hay ninguno que encaje)</label>
+            <input type="text" id="duda-input-tema" list="duda-temas-datalist" placeholder="p. ej. Electrolitos, Shock séptico, Vía aérea...">
+            <datalist id="duda-temas-datalist"></datalist>
         </div>
-    </details>
-
-    <details class="duda-card">
-        <summary class="duda-summary">
-            <span class="duda-pregunta">En el cóctel de Marik (vitamina C + tiamina + hidrocortisona), ¿importa el orden en que se pasan los 3 fármacos?</span>
-            <span class="duda-meta"><span class="duda-tag">Shock séptico</span><span class="duda-toggle-hint">toca para ver la respuesta ▾</span></span>
-        </summary>
-        <div class="duda-respuesta">
-            <p>No hay un orden obligatorio entre ellos, pero conviene dar la tiamina antes o junto con la vitamina C — la vitamina C en dosis alta puede favorecer la formación de oxalato, y la tiamina participa en su metabolismo, así que separarlos innecesariamente no aporta nada. Lo que sí importa es la duración: 4 días para vitamina C/tiamina, 7 para la hidrocortisona — no se acortan aunque el paciente mejore antes.</p>
-            <a class="duda-fuente">Fuente: Manual UMI — Ficha IV, shock séptico</a>
+        <div class="form-group">
+            <label for="duda-input-pregunta">¿Qué pregunta surgió?</label>
+            <textarea id="duda-input-pregunta" required placeholder="La pregunta exacta que te hiciste en el momento"></textarea>
         </div>
-    </details>
-
-    <details class="duda-card">
-        <summary class="duda-summary">
-            <span class="duda-pregunta">En sangrado post-cirugía cardiaca, ¿hay que esperar el fibrinógeno de laboratorio antes de pedir crioprecipitado, o me fío ya del TEG?</span>
-            <span class="duda-meta"><span class="duda-tag">Cirugía cardiaca</span><span class="duda-toggle-hint">toca para ver la respuesta ▾</span></span>
-        </summary>
-        <div class="duda-respuesta">
-            <p>El algoritmo guiado por TEG está pensado justo para no esperar — la amplitud máxima del tromboelastograma ya da la rama de decisión (&lt;45 → desmopresina; si además el fibrinógeno de laboratorio confirma &lt;150 mg/dl → crioprecipitado) sin esperar los 45-60 minutos típicos de un fibrinógeno convencional, tiempo que en un sangrado activo no siempre se tiene. El analítico sirve para confirmar después, no para bloquear la decisión en el momento agudo.</p>
-            <a class="duda-fuente">Fuente: Manual UMI — Ficha XII, cirugía cardiaca</a>
+        <div class="form-group">
+            <label for="duda-input-respuesta">¿Qué averiguaste después?</label>
+            <textarea id="duda-input-respuesta" required placeholder="La respuesta, con el razonamiento si lo tienes"></textarea>
         </div>
-    </details>
+        <div class="form-group">
+            <label for="duda-input-fuente">Fuente (opcional)</label>
+            <input type="text" id="duda-input-fuente" placeholder="p. ej. Manual UMI — Ficha II">
+        </div>
+        <button type="submit" class="duda-guardar-btn">Guardar duda</button>
+    </form>
 
-    <div class="duda-empty-card">
-        <p class="section-label" style="margin:0;">Aquí seguirán las dudas reales, mes a mes</p>
-        <p>En cuanto llegue la primera duda real de una guardia, esta sección pasa a tener contenido de verdad en vez de estos 3 ejemplos.</p>
-    </div>
+    <div id="dudas-lista"></div>
