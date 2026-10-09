@@ -8,7 +8,7 @@
 
 import { focoTxData } from '../../data/foco-data.js';
 import { irAlTexto } from '../../core/vista-visual.js';
-import { SILUETA_SVG, ORGANOS, posicion } from './silueta.js';
+import { SILUETA_SVG, ORGANOS, posicion } from '../../core/silueta.js';
 
 const $ = id => document.getElementById(id);
 

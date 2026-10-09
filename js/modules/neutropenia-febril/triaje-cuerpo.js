@@ -7,7 +7,7 @@
 import { triajeAutomaticas, triajeIdsa } from '../../data/triaje-data.js';
 import { hayRedFlags } from './triaje-mascc.js';
 import { irAlTexto } from '../../core/vista-visual.js';
-import { SILUETA_SVG, ORGANOS, posicion } from './silueta.js';
+import { SILUETA_SVG, ORGANOS, posicion } from '../../core/silueta.js';
 
 const $ = id => document.getElementById(id);
 let sel = null;

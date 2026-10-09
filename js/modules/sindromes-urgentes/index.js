@@ -5,10 +5,12 @@ import { initCorkboard } from '../../core/corkboard.js';
 import { init as initCid } from './cid.js';
 import { init as initPtt } from './ptt.js';
 import { init as initSlt } from './slt.js';
+import { init as initVisual } from './visual.js';
 
 export function init() {
     initCorkboard('sindromes-corkboard', 'panel-sindromes-tabs');
     initCid();
     initPtt();
     initSlt();
+    initVisual(); // después: las imágenes apuntan al contenido ya generado
 }

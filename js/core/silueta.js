@@ -1,5 +1,6 @@
 // Silueta corporal de tinta compartida por las imágenes de la vista Visual
-// que colocan marcadores sobre órganos (triaje y mapa de focos). viewBox
+// que colocan marcadores sobre órganos (Neutropenia Febril, kit de
+// core/visual-kit.js para el resto de Hematología). viewBox
 // 170×400; los marcadores se posicionan en % de esa caja con ORGANOS.
 export const SILUETA_SVG = `
 <svg class="silueta-svg" viewBox="0 0 170 400" aria-hidden="true">
@@ -21,7 +22,9 @@ export const ORGANOS = {
     cateter: [24, 128], pulmonDcho: [62, 120], pulmonIzdo: [108, 120],
     corazon: [85, 162], higado: [58, 198], rinon: [114, 206], abdomen: [85, 238],
     vejiga: [85, 278], perine: [85, 320], piel: [150, 190],
-    bocaDcha: [62, 60], bocaIzda: [108, 60], medula: [56, 320]
+    bocaDcha: [62, 60], bocaIzda: [108, 60], medula: [56, 320],
+    ojos: [62, 30], bazo: [118, 176], intestino: [62, 240], vasos: [144, 140],
+    piernaIzda: [114, 352], brazoDcho: [20, 172], ganglios: [116, 84]
 };
 
 // left/top en % de la caja de la silueta.
