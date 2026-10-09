@@ -1996,12 +1996,13 @@ body.study-mode-on .pomodoro-fab { display: flex; }
 .vk-leyenda { border: 0; padding: 4px 2px; min-height: 32px; font-size: 0.72rem; color: var(--text-muted); }
 .vk-leyenda.sel { color: var(--text-main); box-shadow: none; background: transparent; font-weight: bold; }
 .vk-nodo-marca.sel { background: var(--marca); color: var(--bg-main); }
-.vk-linea { position: relative; height: 112px; margin: 4px 6px; }
+.vk-linea { position: relative; height: 112px; margin: 4px 6px 22px; }
 .vk-linea-eje { position: absolute; left: 0; right: 0; top: 52px; height: 2px; background: var(--text-muted); }
 .vk-linea .eje-ticks { top: 62px; }
 .vk-linea-banda { position: absolute; top: 46px; height: 14px; border-radius: 7px; background: color-mix(in srgb, var(--vk) 30%, transparent); }
 .vk-linea-banda span { position: absolute; left: 0; top: -16px; font-size: 0.6rem; color: var(--vk); white-space: nowrap; }
-.vk-linea-unidad { position: absolute; right: 0; bottom: 0; font-size: 0.62rem; color: var(--text-muted); }
+.vk-linea-banda.fin span { left: auto; right: 0; }
+.vk-linea-unidad { position: absolute; right: 0; bottom: -18px; font-size: 0.62rem; color: var(--text-muted); }
 .vk-linea-leyenda { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
 .vk-linea-leyenda li { display: flex; gap: 6px; align-items: center; }
 .vk-linea-leyenda li b { min-width: 16px; }
@@ -2039,7 +2040,7 @@ body.study-mode-on .pomodoro-fab { display: flex; }
 .vk-barras-leyenda { display: flex; gap: 12px; flex-wrap: wrap; font-size: 0.68rem; margin-bottom: 6px; }
 .vk-barras-leyenda span::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--vk); margin-right: 4px; vertical-align: -1px; }
 .vk-matriz { display: grid; gap: 3px; align-items: stretch; font-size: 0.68rem; }
-.vk-matriz-cab { text-align: center; font-weight: bold; color: var(--accent-blue); padding: 2px 0; }
+.vk-matriz-cab { text-align: center; font-weight: bold; color: var(--accent-blue); padding: 2px 0; font-size: 0.62rem; line-height: 1.15; align-self: end; }
 .vk-matriz-fila { min-height: 34px; padding: 2px 6px; background: transparent; border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-main); font-family: inherit; font-size: 0.7rem; text-align: left; cursor: pointer; touch-action: manipulation; }
 .vk-matriz-fila.sel { box-shadow: 0 0 0 2px var(--text-main); }
 .vk-matriz-celda { display: flex; align-items: center; justify-content: center; text-align: center; border-radius: 6px; padding: 2px; line-height: 1.15; }
@@ -2059,3 +2060,11 @@ body.study-mode-on .pomodoro-fab { display: flex; }
 .vk-frec-pista i { position: absolute; top: -6px; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%; background: var(--vk); }
 .vk-tramos.apilado { flex-direction: column; }
 .vk-tramos.apilado .vk-tramo { flex-direction: row; justify-content: space-between; text-align: left; padding: 6px 10px; }
+
+/* grados: una columna de tabla de gradación por peldaño */
+.vk-grados .vk-escalon { align-items: stretch; }
+.vk-grados .vk-escalon-barra { align-self: center; }
+.vk-grado { display: flex; flex-direction: column; gap: 2px; }
+.vk-grado b { color: var(--vk); font-size: 0.8rem; }
+.vk-grado span { font-size: 0.7rem; color: var(--text-muted); }
+.vk-grado em { font-style: normal; color: var(--text-main); }

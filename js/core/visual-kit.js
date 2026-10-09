@@ -9,7 +9,8 @@
 //
 // Fuente de un nodo (`fuente`):
 //   - '#id' / '.clase' / '[attr]'  → selector CSS (dentro de la ficha, o del
-//     documento si empieza por '#').
+//     documento si empieza por '#'). 'css:<selector>' fuerza un selector
+//     cualquiera dentro de la ficha (p. ej. 'css:tbody tr:nth-child(5)').
 //   - cualquier otro texto         → el primer elemento candidato de la
 //     ficha cuyo texto EMPIEZA por ese texto (sin distinguir mayúsculas).
 // `etiqueta` es opcional: por defecto se toma del propio elemento.
@@ -19,7 +20,10 @@
 // 'selector' (opciones de un <select> real) y tres que DIBUJAN UNA TABLA
 // de la ficha leyendo sus celdas en tiempo de ejecución: 'barras' (cifras
 // de una o varias columnas), 'matriz' (celdas normal/alterado coloreadas) y
-// 'frecuencias' (cada "Nombre: 1:N" en una escala logarítmica). Los dos últimos no calculan:
+// 'frecuencias' (cada "Nombre: 1:N" en una escala logarítmica), más
+// 'grados' (cada COLUMNA de una tabla de gradación se vuelve un peldaño; al
+// tocarlo se ven todas sus filas, y "Ver en el texto" resalta esa columna
+// con el mismo gesto que la tabla ya tiene). 'puntos' y 'selector' no calculan:
 // escriben en los controles reales, disparan su evento y copian el
 // resultado que pinta la calculadora de siempre.
 //
@@ -34,6 +38,8 @@ const COLOR = {
 };
 const RAMPA = ['verde', 'amarillo', 'rojo', 'purpura'];
 const color = c => COLOR[c] || c || COLOR.dorado;
+// Color de la posición k de n en la rampa verde → amarillo → rojo → púrpura.
+const rampa = (k, n) => RAMPA[Math.min(RAMPA.length - 1, Math.round(k * (RAMPA.length - 1) / Math.max(1, n - 1)))];
 
 const CANDIDATOS = '.micro-prof-item, dl.kv-row, li, tr, p, .compare-box, .warning-box, .phenotype-row, .flow-node, .checkbox-label, h4';
 
@@ -44,6 +50,7 @@ const limpiar = s => s.replace(/\s+/g, ' ').replace(/\s*\+\s*$/, '').replace(/^[
 
 function resolver(raiz, fuente) {
     if (!fuente) return null;
+    if (fuente.startsWith('css:')) return raiz.querySelector(fuente.slice(4));
     if (fuente.startsWith('#')) return document.querySelector(fuente);
     if (/^[.[]/.test(fuente)) return raiz.querySelector(fuente);
     const buscado = norm(limpiar(fuente));
@@ -78,7 +85,7 @@ function detalleDe(el) {
     if (el.classList.contains('micro-prof-item')) { const b = el.querySelector('.micro-prof-body'); return b ? copiaLimpia(b) : ''; }
     if (el.tagName === 'TR') {
         const ths = [...(el.closest('table')?.querySelectorAll('thead th, tr:first-child th') || [])].map(th => th.textContent.trim());
-        return [...el.cells].map((c, i) => `<div><b>${ths[i] || ''}</b> ${copiaLimpia(c)}</div>`).join('');
+        return [...el.cells].map((c, i) => `<div>${ths[i] ? `<b>${ths[i]}</b> ` : ''}${copiaLimpia(c)}</div>`).join('');
     }
     return copiaLimpia(el);
 }
@@ -107,7 +114,7 @@ const RENDER = {
     escalera(p, nodos) {
         const lista = p.nodos.map(x => nodos[x.i]);
         return `<div class="vk-escalera">${lista.map((n, k) => {
-            const c = color(n.color || RAMPA[Math.min(RAMPA.length - 1, Math.round(k * (RAMPA.length - 1) / Math.max(1, lista.length - 1)))]);
+            const c = color(n.color || rampa(k, lista.length));
             return `<div class="vk-escalon" style="--vk:${c};--nivel:${((k + 1) / lista.length * 100).toFixed(0)}%">
                 <span class="vk-escalon-barra" aria-hidden="true"></span>${boton(n)}</div>`;
         }).join('')}</div>`;
@@ -139,7 +146,7 @@ const RENDER = {
         const lista = p.nodos.map(x => nodos[x.i]);
         const ticks = (p.ticks || [p.min, p.max]).map(t => `<span style="left:${pct(t)}">${t}</span>`).join('');
         return `<div class="vk-linea">
-            ${p.bandas ? p.bandas.map(b => `<div class="vk-linea-banda" style="left:${pct(b.desde)};width:calc(${pct(b.hasta)} - ${pct(b.desde)});--vk:${color(b.color)}"><span>${b.texto}</span></div>`).join('') : ''}
+            ${p.bandas ? p.bandas.map(b => `<div class="vk-linea-banda ${b.alinear === 'fin' ? 'fin' : ''}" style="left:${pct(b.desde)};width:calc(${pct(b.hasta)} - ${pct(b.desde)});--vk:${color(b.color)}"><span>${b.texto}</span></div>`).join('') : ''}
             <div class="vk-linea-eje"></div>
             <div class="eje-ticks">${ticks}</div>
             ${lista.map((n, k) => `<button type="button" class="regla-marca ${n.fila === 'abajo' ? 'abajo' : 'arriba'} vk-nodo-marca" data-nodo="${n.i}" style="left:${pct(n.en)};--marca:${color(n.color || p.color)}" aria-label="${n.texto}">${k + 1}</button>`).join('')}
@@ -184,16 +191,38 @@ RENDER.barras = (p, nodos) => {
         </button>`).join('')}</div>`;
 };
 
+// Cabeceras de columna estrecha: corte tras "/" y guion suave en las palabras
+// largas, entre vocal-consonante-vocal cerca de la mitad ("Equino-candinas").
+const VOCAL = /[aeiouáéíóú]/i;
+function partirCabecera(h) {
+    return h.replace(/\//g, '/<wbr>').replace(/[\p{L}]{11,}/gu, w => {
+        const m = Math.floor(w.length / 2);
+        for (const i of [m, m - 1, m + 1, m - 2, m + 2]) {
+            if (VOCAL.test(w[i - 1]) && !VOCAL.test(w[i]) && VOCAL.test(w[i + 1])) return w.slice(0, i) + '\u00AD' + w.slice(i);
+        }
+        return w;
+    });
+}
+
 RENDER.matriz = (p, nodos) => {
     const filas = p.nodos.map(x => nodos[x.i]);
     const cab = cabeceras(filas[0].el.closest('table'));
     const normal = t => (p.normales || ['normal']).includes(norm(t));
     return `<div class="vk-matriz" style="grid-template-columns:minmax(0,1.3fr) repeat(${cab.length - 1}, minmax(0,1fr))">
-        <span></span>${cab.slice(1).map(h => `<span class="vk-matriz-cab">${h}</span>`).join('')}
+        <span></span>${cab.slice(1).map(h => `<span class="vk-matriz-cab">${partirCabecera(h)}</span>`).join('')}
         ${filas.map(n => `<button type="button" class="vk-matriz-fila" data-nodo="${n.i}">${n.texto}</button>${[...n.el.cells].slice(1).map(c =>
             `<span class="vk-matriz-celda ${normal(c.textContent) ? 'normal' : 'alterado'}">${c.textContent.trim()}</span>`).join('')}`).join('')}
     </div>
-    <div class="vk-matriz-leyenda"><span class="normal">normal</span><span class="alterado">alterado</span></div>`;
+    <div class="vk-matriz-leyenda"><span class="normal">${p.leyenda?.[0] || 'normal'}</span><span class="alterado">${p.leyenda?.[1] || 'alterado'}</span></div>`;
+};
+
+RENDER.grados = (p, nodos) => {
+    const lista = p.nodos.map(x => nodos[x.i]);
+    return `<div class="vk-escalera vk-grados">${lista.map((n, k) => {
+        return `<div class="vk-escalon" style="--vk:${color(n.color)};--nivel:${((k + 1) / lista.length * 100).toFixed(0)}%">
+            <span class="vk-escalon-barra" aria-hidden="true"></span>
+            <button type="button" class="vk-nodo vk-grado" data-nodo="${n.i}"><b>${n.texto}</b>${n.resumen.map(r => `<span><em>${r.k}</em> ${r.v}</span>`).join('')}</button></div>`;
+    }).join('')}</div>`;
 };
 
 RENDER.frecuencias = (p, nodos) => {
@@ -272,7 +301,7 @@ function renderPuntos(p, estado) {
 function renderSelector(p) {
     const sel = document.querySelector(p.control);
     const ops = [...sel.options].map((o, k) => {
-        const c = color(p.colores ? p.colores[k] : RAMPA[Math.min(RAMPA.length - 1, Math.round(k * (RAMPA.length - 1) / Math.max(1, sel.options.length - 1)))]);
+        const c = color(p.colores ? p.colores[k] : rampa(k, sel.options.length));
         return `<button type="button" class="vk-opcion ${o.value === sel.value ? 'on' : ''} ${p.forma === 'chips' ? 'chip' : ''}" data-valor="${o.value}" style="--vk:${p.forma === 'chips' ? color(p.color) : c}"><span>${limpiar(o.textContent)}</span></button>`;
     }).join('');
     return `<div class="vk-opciones ${p.forma === 'chips' ? 'chips' : 'escalera'}">${ops}</div><div class="vk-resultado">${copiarResultados(p.resultado)}</div>`;
@@ -320,6 +349,18 @@ function construir(tab, texto, visual, receta) {
     const nodoTabla = (p) => {
         const tabla = typeof p.tabla === 'number' ? texto.querySelectorAll('table')[p.tabla] : resolver(texto, p.tabla);
         if (!tabla) { console.warn(`[visual-kit] ${tab.id}: tabla no encontrada →`, p.tabla); return []; }
+        if (p.tipo === 'grados') {
+            const filas = [...tabla.rows].slice(1);
+            const cols = [...tabla.rows[0].cells].slice(1);
+            return cols.map((th, j) => {
+                const celda = r => r.cells[j + 1]?.textContent.trim() || '';
+                const n = { i: nodos.length, el: th, texto: limpiar(th.textContent), color: rampa(j, cols.length),
+                    resumen: (p.filasResumen || []).map(f => ({ k: limpiar(filas[f].cells[0].textContent), v: celda(filas[f]) })),
+                    detalle: filas.map(r => `<div><b>${limpiar(r.cells[0].textContent)}</b> ${celda(r)}</div>`).join(''),
+                    alIr: () => { if (th.dataset.grado) th.click(); } };
+                nodos.push(n); return n;
+            });
+        }
         if (p.tipo !== 'frecuencias') {
             return filasDatos(tabla).filter(r => !p.excluir || !p.excluir.some(x => norm(r.cells[0].textContent).startsWith(norm(x))))
                 .map(r => { const n = { i: nodos.length, el: r, texto: limpiar(r.cells[0].textContent) }; nodos.push(n); return n; });
@@ -408,7 +449,7 @@ function construir(tab, texto, visual, receta) {
         }
         if (e.target.closest('[data-accion="fuente"]')) {
             const n = nodos[Number(panelEl.dataset.sel)];
-            if (n) { abrirContenedores(n.el); irAlTexto(tab, n.el); }
+            if (n) { abrirContenedores(n.el); irAlTexto(tab, n.el); n.alIr?.(); }
             return;
         }
         const b = e.target.closest('[data-nodo]');
@@ -420,7 +461,7 @@ function construir(tab, texto, visual, receta) {
         det.hidden = false;
         det.style.borderColor = color(n.color || p.color) ;
         det.innerHTML = `<div class="visual-detalle-titulo">${n.texto}</div>
-            <div class="vk-detalle-cuerpo">${n.columna ? `<p><b>${n.columna}</b></p>` : ''}${detalleDe(n.el)}</div>
+            <div class="vk-detalle-cuerpo">${n.columna ? `<p><b>${n.columna}</b></p>` : ''}${n.detalle ?? detalleDe(n.el)}</div>
             <button type="button" class="visual-link" data-accion="fuente">Ver en el texto ↓</button>`;
     });
 }
