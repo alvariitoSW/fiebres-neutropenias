@@ -1,3 +1,4 @@
+import { triajeAutomaticas, triajeIdsa } from '../../data/triaje-data.js';
 import { masccCarga, masccItems, MASCC_MAX, MASCC_CORTE } from '../../data/mascc-data.js';
 
 function calcTriage() {
@@ -41,6 +42,18 @@ export function puntuacionMascc() {
     let score = parseInt(document.getElementById(masccCarga.id).value, 10) || 0;
     masccItems.forEach(it => { if (document.getElementById(it.id).checked) score += it.pts; });
     return score;
+}
+
+// Genera las casillas de triaje de la vista Texto desde los datos (mismos id
+// y clases de siempre: .triage-input, y .idsa-check en los criterios IDSA).
+function renderCamposTriaje() {
+    const auto = document.getElementById('triaje-automaticas');
+    const idsa = document.getElementById('triaje-idsa');
+    if (!auto || !idsa) return;
+    auto.innerHTML = triajeAutomaticas.map(f =>
+        `<label class="checkbox-label puntuable"><input type="checkbox" id="${f.id}" class="triage-input"> <strong>${f.texto}</strong></label>`).join('');
+    idsa.innerHTML = triajeIdsa.map(f =>
+        `<label class="checkbox-label puntuable"><input type="checkbox" id="${f.id}" class="triage-input idsa-check"> ${f.texto.replace('<', '&lt;')}</label>`).join('');
 }
 
 // Genera el select de carga y las casillas de la vista Texto desde los datos.
@@ -110,6 +123,7 @@ function calcCISNE() {
 }
 
 export function init() {
+    renderCamposTriaje();
     renderCamposMascc();
     document.querySelectorAll('.triage-input').forEach(e => e.addEventListener('change', calcTriage));
     document.querySelectorAll('.mascc-input').forEach(e => e.addEventListener('change', calcMASCC));

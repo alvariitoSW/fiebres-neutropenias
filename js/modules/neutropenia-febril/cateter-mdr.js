@@ -1,8 +1,18 @@
 import { initTabs } from '../../core/tabs.js';
 
+// Decisión sobre el CVC con las casillas actuales: 'retirar' si hay cualquier
+// criterio de retirada; 'conservar' si no lo hay y el acceso periférico es
+// malo; si no, 'valorar'. La usan calcCVC() y la balanza de la vista Visual.
+export function decisionCVC() {
+    if (Array.from(document.querySelectorAll('.cvc-risk')).some(c => c.checked)) return 'retirar';
+    if (document.getElementById('cvc-poor-access').checked) return 'conservar';
+    return 'valorar';
+}
+
 function calcCVC() {
-    let risks = Array.from(document.querySelectorAll('.cvc-risk')).some(c => c.checked);
-    let poorAccess = document.getElementById('cvc-poor-access').checked;
+    const decision = decisionCVC();
+    const risks = decision === 'retirar';
+    const poorAccess = decision === 'conservar';
     let box = document.getElementById('cvc-result-box');
     let title = document.getElementById('cvc-result-text');
     let sub = document.getElementById('cvc-result-sub');

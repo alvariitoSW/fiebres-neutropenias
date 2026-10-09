@@ -4,8 +4,14 @@
         <p>Consenso SEIMC-SEHH 2020</p>
     </div>
 
+    <!-- Grupo A-C con un único interruptor Texto | Visual (core/vista-visual.js).
+         Visual = las primeras 48 h en carriles (diagnostico-linea.js), que
+         escribe en las calculadoras de estas tres tarjetas y muestra su resultado. -->
+    <div class="vista-grupo" id="diag-grupo" data-visual>
+        <p class="vista-grupo-titulo">Bloques A, B y C</p>
+        <div class="vista-texto">
     <!-- A. MICROBIOLOGÍA -->
-    <div class="card" style="border-top: 1px solid var(--accent-red);">
+    <div class="card" id="diag-card-micro" style="border-top: 1px solid var(--accent-red);">
         <h3 style="color: var(--accent-red); text-shadow: var(--glow-red);">A. Microbiología</h3>
         <div class="warning-box" style="border-left-color: var(--accent-red); background: rgba(255,51,102,0.08);">
             <strong style="color: var(--accent-red);">Regla de oro (Hemocultivos):</strong><br>
@@ -50,7 +56,7 @@
     </div>
 
     <!-- B. CRIBADO FÚNGICO -->
-    <div class="card" style="border-top: 1px solid var(--accent-green);">
+    <div class="card" id="diag-card-fungico" style="border-top: 1px solid var(--accent-green);">
         <h3 style="color: var(--accent-green); text-shadow: var(--glow-green);">B. Cribado Fúngico</h3>
         <label class="checkbox-label" style="margin: 4px 0 14px 0;">
             <input type="checkbox" id="gm-profilaxis-toggle">
@@ -89,7 +95,7 @@
     </div>
 
     <!-- C. BIOMARCADORES -->
-    <div class="card" style="border-top: 1px solid var(--accent-purple);">
+    <div class="card" id="diag-card-bio" style="border-top: 1px solid var(--accent-purple);">
         <h3 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">C. Biomarcadores</h3>
         <p class="subtitle">Cinética comparativa (escala 0-40h)</p>
 
@@ -111,6 +117,9 @@
             <div class="result-score" id="pcr-result-display" style="color: var(--accent-green); font-size: 1.3rem;">-- mg/dL</div>
             <div id="pcr-result-text" style="font-size: 0.85rem;">Introduce el valor</div>
         </div>
+    </div>
+        </div>
+        <div class="vista-visual"><div class="card" id="diag-linea"></div></div>
     </div>
 
     <button class="back-btn btn-volver-diagnostico">← VOLVER</button>

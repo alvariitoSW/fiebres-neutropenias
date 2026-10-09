@@ -1,33 +1,31 @@
 import { focoTxData } from '../../data/foco-data.js';
+import { escalonesSinFoco, PRIORIDAD_SIN_FOCO, notaCriticoConCr, sarmSinFoco, notaGramPositivoSinFoco } from '../../data/empirico-sin-foco-data.js';
+
+// Escalón de la escalera ECIL-10 que manda con las casillas actuales.
+export function escalonSinFocoActivo() {
+    const marcado = id => {
+        const e = escalonesSinFoco.find(x => x.id === id);
+        return e.checkbox === null || document.getElementById(e.checkbox).checked;
+    };
+    return escalonesSinFoco.find(e => e.id === PRIORIDAD_SIN_FOCO.find(marcado));
+}
 
 function calcTxEmpirico() {
-    let inestable = document.getElementById('tx-inestable').checked;
-    let mdr = document.getElementById('tx-mdr').checked;
-    let cr = document.getElementById('tx-cr').checked;
-    let sarm = document.getElementById('tx-sarm').checked;
+    const cr = document.getElementById('tx-cr').checked;
+    const sarm = document.getElementById('tx-sarm').checked;
+    const e = escalonSinFocoActivo();
+    const box = document.getElementById('tx-recomendacion');
 
-    let box = document.getElementById('tx-recomendacion');
-    let html = '';
-
-    if (inestable) {
-        html += `<strong style="color: var(--accent-red);">🚨 Paciente crítico</strong> <span class="grade-badge red">A-IIu</span><br>Carbapenem ± inhibidor de betalactamasa, o betalactámico antipseudomónico + aminoglucósido en combinación (mantenerla hasta descartar bacteriemia).`;
-        if (cr) html += ` Colonización/infección previa por BGN resistente a carbapenems: consulta la <strong>Matriz de Combate MDR</strong> (T. Dirigido) para elegir fármaco dirigido por tipo de resistencia.`;
-    } else if (cr) {
-        html += `<strong style="color: var(--accent-blue);">Colonización/infección previa por BGN resistente a carbapenems (sin inestabilidad):</strong><br>Consulta la <strong>Matriz de Combate MDR</strong> (T. Dirigido) — el fármaco depende del tipo de carbapenemasa (KPC/OXA-48/MBL), P. aeruginosa XDR, A. baumannii o S. maltophilia.`;
-    } else if (mdr) {
-        html += `<strong style="color: var(--accent-blue);">▼ Riesgo alto</strong> (BLEE u otros BGN resistentes a 1ª línea, sensibles a carbapenems) <span class="grade-badge">A-IIu</span><br>Carbapenem en monoterapia.`;
-    } else {
-        html += `<strong style="color: var(--accent-green);">▲ Riesgo bajo</strong> (baja prevalencia local, sin colonización/infección previa por BGN resistentes, estable) <span class="grade-badge">A-I</span><br>Monoterapia ahorradora de carbapenems: Piperacilina-tazobactam, Cefepime, Ceftazidima o Cefoperazona-sulbactam.`;
-    }
+    const badge = e.grado ? ` <span class="grade-badge${e.gradoClase ? ' ' + e.gradoClase : ''}">${e.grado}</span>` : '';
+    const contexto = e.id === 'cr' || e.id === 'inestable' ? '' : ` (${e.contexto})`;
+    let html = `<strong style="color: ${e.color};">${e.titulo}</strong>${contexto}${badge}<br>${e.regimen}`;
+    if (e.id === 'inestable' && cr) html += ` ${notaCriticoConCr}`;
 
     if (sarm) {
-        if (inestable) {
-            html += `<br><br><strong style="color: var(--accent-green);">Colonización SARM + inestabilidad/neumonía:</strong> <span class="grade-badge">A-IIt</span> añadir daptomicina (nunca si sospecha respiratoria) o vancomicina.`;
-        } else {
-            html += `<br><br><strong style="color: var(--accent-green);">Colonización SARM, estable:</strong> <span class="grade-badge">B-IIrt</span> considerar añadir daptomicina o vancomicina.`;
-        }
+        const s = sarmSinFoco[e.id === 'inestable' ? 'inestable' : 'estable'];
+        html += `<br><br><strong style="color: var(--accent-green);">${s.titulo}</strong> <span class="grade-badge">${s.grado}</span> ${s.texto}`;
     }
-    html += `<br><br><span style="font-size: 0.75rem; color: var(--text-muted);">Añadir cobertura anti-Gram+ también si hay sospecha de infección de catéter o piel/partes blandas (B-III), o sepsis/shock/neumonía independientemente de la colonización (C-III). Si se usa ceftazidima ± avibactam o cefiderocol (poca actividad Gram+) con mucositis grave, considerar cobertura antiestreptocócica (C-III). Fuera de estos casos, no añadir cobertura anti-Gram+ de rutina (D-IIru), y la fiebre persistente aislada, con paciente estable, no es motivo para escalar antibióticos.</span>`;
+    html += `<br><br><span style="font-size: 0.75rem; color: var(--text-muted);">${notaGramPositivoSinFoco}</span>`;
     box.innerHTML = html;
 }
 

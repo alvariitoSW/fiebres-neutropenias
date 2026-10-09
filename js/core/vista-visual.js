@@ -1,7 +1,9 @@
 // Interruptor "Texto | Visual" por tarjeta.
 //
-// Cualquier `.card[data-visual]` con dos hijos `.vista-texto` y `.vista-visual`
-// recibe un control segmentado justo debajo de su <h3>. La vista Texto es la
+// Cualquier elemento `[data-visual]` (una `.card`, o un `.vista-grupo` que
+// envuelve varias tarjetas) con dos hijos `.vista-texto` y `.vista-visual`
+// recibe un control segmentado justo debajo de su <h3> (o de su
+// `.vista-grupo-titulo`). La vista Texto es la
 // fuente primaria y la de por defecto; la Visual es otra forma de leer el
 // mismo bloque. Cambiar es por tarjeta (no global) y no se guarda nada.
 //
@@ -26,11 +28,8 @@ function setVista(card, vista) {
     card.dispatchEvent(new CustomEvent('vistachange', { detail: { vista } }));
 }
 
-// Vuelve a la vista Texto de la tarjeta y lleva la vista al elemento
-// `objetivo` (la línea de la fuente primaria), resaltándolo un momento.
-// Es el camino de "Ver en el texto" desde cualquier marcador de una imagen.
-export function irAlTexto(card, objetivo) {
-    setVista(card, 'texto');
+// Lleva la vista al elemento y lo resalta un momento.
+export function resaltar(objetivo) {
     if (!objetivo) return;
     objetivo.scrollIntoView({ behavior: 'smooth', block: 'center' });
     objetivo.classList.remove('vista-resaltado');
@@ -39,8 +38,18 @@ export function irAlTexto(card, objetivo) {
     setTimeout(() => objetivo.classList.remove('vista-resaltado'), 2200);
 }
 
+// Vuelve a la vista Texto del bloque y resalta `objetivo` (la línea de la
+// fuente primaria). Es el camino de "Ver en el texto" desde cualquier
+// marcador de una imagen. `card` puede ser null si la fuente vive fuera de
+// un bloque con interruptor (p. ej. en otra subvista ya mostrada).
+export function irAlTexto(card, objetivo) {
+    if (card) setVista(card, 'texto');
+    // Un frame para que el bloque recién mostrado tenga layout antes del scroll.
+    requestAnimationFrame(() => resaltar(objetivo));
+}
+
 export function initVistaVisual(root = document) {
-    root.querySelectorAll('.card[data-visual]').forEach(card => {
+    root.querySelectorAll('[data-visual]').forEach(card => {
         if (card.querySelector(':scope > .vista-toggle')) return;
         const toggle = document.createElement('div');
         toggle.className = 'vista-toggle';
@@ -49,8 +58,8 @@ export function initVistaVisual(root = document) {
         toggle.innerHTML =
             '<button type="button" data-vista="texto">Texto</button>' +
             '<button type="button" data-vista="visual">Visual</button>';
-        const h3 = card.querySelector(':scope > h3');
-        if (h3) h3.after(toggle); else card.prepend(toggle);
+        const cabecera = card.querySelector(':scope > h3, :scope > .vista-grupo-titulo');
+        if (cabecera) cabecera.after(toggle); else card.prepend(toggle);
         toggle.addEventListener('click', e => {
             const b = e.target.closest('button[data-vista]');
             if (b) setVista(card, b.dataset.vista);

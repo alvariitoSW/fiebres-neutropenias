@@ -11,17 +11,17 @@
         
         <div class="chip-grid" style="margin-bottom: 10px;">
             <div style="font-size: 0.75rem; color: var(--accent-red); font-weight: bold; grid-column: 1 / -1;">CLÍNICA Y MICROBIOLOGÍA:</div>
-            <label class="checkbox-label"><input type="checkbox" class="cvc-risk"> Sepsis / Shock</label>
-            <label class="checkbox-label"><input type="checkbox" class="cvc-risk"> Signos locales</label>
-            <label class="checkbox-label"><input type="checkbox" class="cvc-risk"> Bacteriemia >48h</label>
-            <label class="checkbox-label"><input type="checkbox" class="cvc-risk"> Endocarditis/Embol.</label>
-            <label class="checkbox-label"><input type="checkbox" class="cvc-risk"> <i>S. aureus / Candida</i></label>
-            <label class="checkbox-label"><input type="checkbox" class="cvc-risk"> BGN (<i>P. aeruginosa</i>)</label>
-            <label class="checkbox-label"><input type="checkbox" class="cvc-risk"> Enterococos / Micob.</label>
-            <label class="checkbox-label"><input type="checkbox" class="cvc-risk"> <i>Bacillus/Micrococcus</i></label>
+            <label class="checkbox-label puntuable"><input type="checkbox" class="cvc-risk"> Sepsis / Shock</label>
+            <label class="checkbox-label puntuable"><input type="checkbox" class="cvc-risk"> Signos locales</label>
+            <label class="checkbox-label puntuable"><input type="checkbox" class="cvc-risk"> Bacteriemia >48h</label>
+            <label class="checkbox-label puntuable"><input type="checkbox" class="cvc-risk"> Endocarditis/Embol.</label>
+            <label class="checkbox-label puntuable"><input type="checkbox" class="cvc-risk"> <i>S. aureus / Candida</i></label>
+            <label class="checkbox-label puntuable"><input type="checkbox" class="cvc-risk"> BGN (<i>P. aeruginosa</i>)</label>
+            <label class="checkbox-label puntuable"><input type="checkbox" class="cvc-risk"> Enterococos / Micob.</label>
+            <label class="checkbox-label puntuable"><input type="checkbox" class="cvc-risk"> <i>Bacillus/Micrococcus</i></label>
         </div>
         <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 15px 0;">
-        <label class="checkbox-label"><input type="checkbox" id="cvc-poor-access"> Mal acceso venoso periférico</label>
+        <label class="checkbox-label puntuable"><input type="checkbox" id="cvc-poor-access"> Mal acceso venoso periférico</label>
 
         <div class="result-box" id="cvc-result-box">
             <div id="cvc-result-text" style="font-weight: bold; font-size: 1rem;">Selecciona criterios...</div>
@@ -61,7 +61,7 @@
 
         <!-- Esta sección de resultados solo se muestra en las pestañas clínicas y micro -->
         <div id="suspension-result-area">
-            <label class="checkbox-label" style="margin-top: 10px;">
+            <label class="checkbox-label puntuable" style="margin-top: 10px;">
                 <input type="checkbox" class="susp-inputs" id="susp-neutro-persists"> ¿Persiste neutropenia profunda al suspender?
             </label>
             <div class="result-box">

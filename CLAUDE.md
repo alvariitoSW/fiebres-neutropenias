@@ -9314,10 +9314,86 @@ confirmadas por el usuario: **cambiar** (una vista u otra, no apiladas — en
   "Sin historia de EPOC (4 pts)"; desmarcar en Texto se refleja en la
   escalera; sepsis marcada → Invalidado; "Devolver todos" → 26; sin errores
   de consola ni overflow horizontal. Bump de cache-busting a `?v=20261010`.
-- **Siguiente**: las otras 5 imágenes de Neutropenia Febril ya prototipadas
-  (cuerpo con red flags → tarjeta 1; primeras 48 h → Diagnóstico; escalera
-  ECIL-10 y mapa de focos → Empírico; regla de 10 días → Evolución), con
-  este mismo molde, a confirmar por el usuario tras probar el piloto.
+- **Las otras 5 imágenes de Neutropenia Febril**, con el mismo molde (a
+  petición explícita del usuario tras probar el piloto). Todas siguen las dos
+  reglas: **ninguna calcula nada** (escriben en la calculadora que ya
+  existe, disparan su evento y copian su resultado) y **cada marcador lleva a
+  su línea de la fuente**. `core/vista-visual.js` se generalizó a cualquier
+  `[data-visual]` (no solo `.card`): un `.vista-grupo` con
+  `.vista-grupo-titulo` puede envolver varias tarjetas con un único
+  interruptor; y exporta `resaltar(el)` para fuentes que viven en otra
+  subvista (`irAlTexto(null, el)`).
+  - **Triaje → cuerpo** (`triaje-cuerpo.js`, tarjeta 1): las banderas IDSA
+    numeradas sobre su órgano y las 2 automáticas fuera del cuerpo. Datos en
+    `js/data/triaje-data.js`; `triaje-mascc.js` genera ahora también estas
+    casillas (`renderCamposTriaje()`, mismos `id`/clases) y exporta
+    `hayRedFlags()`. Silueta compartida con el mapa de focos en
+    `neutropenia-febril/silueta.js` (`SILUETA_SVG`, `ORGANOS` en
+    coordenadas del viewBox 170×400 separadas ≥36 unidades, `posicion()` en %).
+  - **Diagnóstico → las primeras 48 h** (`diagnostico-linea.js`, grupo
+    `#diag-grupo` sobre las tarjetas A, B y C): 4 carriles. Hemocultivos
+    (dos frascos en un eje de horas, deslizadores que escriben
+    `micro-cvc-time`/`micro-periph-time`, "Quitar" = no extraído);
+    biomarcadores (curvas cualitativas PCT ~8 h / PCR ~36 h en la escala
+    0-40 h de la propia tarjeta C, deslizador que escribe `pcr-value`, barra
+    con los cortes 20/30); técnicas rápidas en un eje de minutos con el
+    tiempo **leído del texto de `foco-data.js`** (las que no dan cifra van
+    aparte, "sin cifra", nunca con posición inventada); cribado fúngico
+    según `gm-profilaxis-toggle`, con los pasos copiados del HTML de la
+    tarjeta B.
+  - **Empírico sin foco → escalera ECIL-10** (`empirico-escalera.js`): los
+    textos pasaron a `js/data/empirico-sin-foco-data.js` y
+    `calcTxEmpirico()` se reconstruyó desde ahí con salida idéntica;
+    `escalonSinFocoActivo()` (exportada) aplica la prioridad real
+    crítico > resistente a carbapenem > BLEE > riesgo bajo, y la usan la
+    calculadora y la escalera. Barandilla SARM sobre `tx-sarm`.
+  - **Empírico según foco → mapa corporal** (`empirico-focos.js`): los 9
+    focos sobre su órgano, tocar = cambiar `foco-tx-select`. La letra
+    A/B/C/D **se deriva del propio texto del régimen** de `foco-data.js`
+    (`escalonDe()`: ampicilina/quinolonas → D; vanco/dapto → C; cefepime a
+    secas → A; resto → B), no es un dato nuevo; la guía de la imagen lo dice.
+  - **Evolución → regla de 10 días** (`evolucion-regla.js`, tarjeta 3):
+    arriba, cuándo parar el antibiótico (sin foco, clínica,
+    microbiológica); debajo, cuándo pensar en hongos (antifúngico 4-5 d,
+    TC >7 d con profilaxis, rescate >10 d). Según el tipo elegido escribe en
+    la calculadora sin foco del empírico (§3, traduciendo días a sus
+    casillas) o en el reloj del tratamiento dirigido (pulsa su pestaña
+    Clínica/Microbiológica y rellena sus días) y copia su veredicto. Las
+    marcas cuya fuente está en otra subvista navegan allí (`#btn-tratamiento`
+    / `#btn-diagnostico`) y la resaltan.
+  - **Catéter → balanza** (`cateter-balanza.js`, tarjeta 4): criterios de
+    retirada y mal acceso periférico son las casillas reales de la
+    calculadora de catéter del tratamiento dirigido (etiquetas leídas de
+    ahí); la inclinación la decide `decisionCVC()`, exportada de
+    `cateter-mdr.js` y usada también por `calcCVC()`.
+  - `.puntuable` extendida a todas las casillas de criterio presente que
+    escriben estas imágenes (triaje, `tx-*`, suspensión, catéter).
+  - Ids nuevos que sirven de fuente para "Ver en el texto": `#triaje-card`,
+    `#evolucion-card` (+ `#evol-defervescencia`/`-clinica`/`-micro`/
+    `-neutro`), `#cateter-card` (+ `#cat-retirada`/`#cat-conservar`),
+    `#diag-grupo` (+ `#diag-card-micro`/`-fungico`/`-bio`),
+    `#empirico-sinfoco-card`, `#empirico-foco-card`,
+    `#empirico-suspension-card`, `#empirico-antifungico-card`.
+  - Verificado con Playwright (390×844, toques reales): 7 interruptores en
+    Neutropenia Febril; triaje (bandera mental → casilla real, "ALTO RIESGO
+    AUTOMÁTICO" en ambas vistas, MASCC invalidado, vuelta al texto
+    resaltando la línea); regla sin foco (día 3 + 2 d afebril + estable → las
+    3 casillas del empírico marcadas y "✅ Se puede suspender") y
+    microbiológica (día 7 + 3 d afebril → pestaña Micro del dirigido con 7/3
+    y "LUZ VERDE"), marca 4 → navega a Tratamiento empírico y resalta la
+    tarjeta de antifúngico; balanza (Sepsis → "RETIRADA OBLIGATORIA" e
+    inclinación −9°; mal acceso → "CONSERVAR + SELLADO" y +9°); diagnóstico
+    (10 h / 13 h → 3,0 h "Sugiere bacteriemia por catéter" en ambas vistas;
+    gripe → select real; profilaxis → rama "con"; PCR 32 → "Rango asociado a
+    mayor mortalidad"); escalera (crítico + CR + SARM → nota de Matriz MDR y
+    grado A-IIt; riesgo bajo limpia las 3 casillas); mapa (neumonía → select
+    real y pauta con quinolonas; filtro C atenúa 7 de 9 focos). Sin errores
+    de consola ni overflow horizontal; capturas revisadas una a una (se
+    corrigieron etiquetas PCT/PCR montadas sobre sus curvas, el botón
+    "Texto ↓" partido en dos líneas y el cursor de la regla tapando una
+    marca). Bump de cache-busting a `?v=20261011`.
+- **Siguiente, a decidir por el usuario**: el mismo molde para el resto de
+  Hematología, y/o el botón global "todo en Visual" en la cabecera.
 
 ## Cómo probar cambios
 

@@ -6,30 +6,18 @@
         <span style="font-size: 0.8rem; color: var(--accent-yellow);">[ EMPEZAR → ]</span>
     </button>
 
-    <!-- BLOQUE 1: TRIAJE INICIAL -->
-    <div class="card" style="border-top: 1px solid var(--accent-red);">
+    <!-- BLOQUE 1: TRIAJE INICIAL
+         data-visual: vista Visual = cuerpo con las banderas sobre su órgano
+         (triaje-cuerpo.js). Casillas de ambas vistas desde js/data/triaje-data.js. -->
+    <div class="card" id="triaje-card" data-visual style="border-top: 1px solid var(--accent-red);">
         <h3 style="color: var(--accent-red); text-shadow: var(--glow-red);">1. TRIAJE INICIAL (< 60 min)</h3>
+        <div class="vista-texto">
         <p class="subtitle">Identificación de Red Flags</p>
-        <label class="checkbox-label" style="margin-top:10px;">
-            <input type="checkbox" id="triage-sepsis" class="triage-input">
-            <strong>Sepsis Grave / Shock Séptico</strong>
-        </label>
-        <label class="checkbox-label">
-            <input type="checkbox" id="triage-lma" class="triage-input">
-            <strong>Inducción de LMA o acondicionamiento pre-TPH</strong>
-        </label>
+        <!-- Casillas generadas desde triaje-data.js por triaje-mascc.js -->
+        <div id="triaje-automaticas" style="margin-top:10px;"></div>
 
         <p class="subtitle" style="margin-top:14px; border-bottom:none; padding-bottom:0;">Otros criterios IDSA de alto riesgo (con cualquiera basta)</p>
-        <label class="checkbox-label"><input type="checkbox" id="triage-anc" class="triage-input idsa-check"> ANC ≤100/mm³ con duración esperada ≥7 días</label>
-        <label class="checkbox-label"><input type="checkbox" id="triage-hemodinamica" class="triage-input idsa-check"> Inestabilidad hemodinámica</label>
-        <label class="checkbox-label"><input type="checkbox" id="triage-mucositis" class="triage-input idsa-check"> Mucositis que impide tragar, o diarrea grave</label>
-        <label class="checkbox-label"><input type="checkbox" id="triage-gi" class="triage-input idsa-check"> Síntomas GI significativos (dolor abdominal, náuseas/vómitos)</label>
-        <label class="checkbox-label"><input type="checkbox" id="triage-mental" class="triage-input idsa-check"> Alteración del estado mental de nueva aparición</label>
-        <label class="checkbox-label"><input type="checkbox" id="triage-cateter" class="triage-input idsa-check"> Infección de catéter intravascular</label>
-        <label class="checkbox-label"><input type="checkbox" id="triage-pulmonar" class="triage-input idsa-check"> Infiltrados pulmonares nuevos o hipoxia</label>
-        <label class="checkbox-label"><input type="checkbox" id="triage-epoc" class="triage-input idsa-check"> EPOC subyacente</label>
-        <label class="checkbox-label"><input type="checkbox" id="triage-hepatica" class="triage-input idsa-check"> Insuficiencia hepática (transaminasas ≥5x LSN)</label>
-        <label class="checkbox-label"><input type="checkbox" id="triage-renal" class="triage-input idsa-check"> Insuficiencia renal (ClCr &lt;30 ml/min)</label>
+        <div id="triaje-idsa"></div>
 
         <div class="result-box" id="triage-result-box" style="margin-top: 15px; background: rgba(0,240,255,0.05); border-color: var(--accent-blue);">
             <div id="triage-eval-text" style="color: var(--accent-blue); font-size: 1rem; font-weight: bold; text-shadow: var(--glow-blue);">Sin Criterios de Alto Riesgo Directo</div>
@@ -38,6 +26,8 @@
                 Evaluar riesgo de complicaciones con Índice MASCC.
             </div>
         </div>
+        </div>
+        <div class="vista-visual" id="triaje-cuerpo"></div>
     </div>
 
     <!-- BLOQUE 2: ÍNDICE MASCC
@@ -86,12 +76,16 @@
         </div>
     </div>
 
-    <!-- BLOQUE 3: EVOLUCIÓN Y SUSPENSIÓN (ORIGINAL RESTAURADO) -->
-    <div class="card">
+    <!-- BLOQUE 3: EVOLUCIÓN Y SUSPENSIÓN
+         data-visual: vista Visual = regla de 10 días (evolucion-regla.js), que
+         escribe en las calculadoras de suspensión (empírico §3 y reloj del
+         dirigido). Los id de las líneas son las fuentes de "Ver en el texto". -->
+    <div class="card" id="evolucion-card" data-visual>
         <h3 style="color: var(--accent-blue);">3. EVOLUCIÓN Y SUSPENSIÓN</h3>
+        <div class="vista-texto">
         <p class="subtitle">Control del tratamiento antibiótico</p>
         
-        <div class="warning-box">
+        <div class="warning-box" id="evol-defervescencia">
             <strong style="color: var(--accent-yellow);">¡ATENCIÓN! Curva de Defervescencia:</strong><br>
             El tiempo medio hasta la defervescencia en NF hematológica puede llegar a <strong>5 días</strong>. El ajuste se guía por clínica y microbiología, NO solo por la fiebre.
         </div>
@@ -108,16 +102,22 @@
             </ul>
             <strong style="color: var(--accent-red);">Criterios de Suspensión (Nodo 2):</strong>
             <ul>
-                <li><strong>Inf. Clínicamente documentada</strong> (sin aislamiento microbiológico): ≥72h afebril + resolución clínica.</li>
-                <li><strong>Inf. Microbiológicamente documentada:</strong> ≥72h afebril + mínimo 7 días de tratamiento + erradicación microbiológica (ECIL-10, 2025 — actualiza el criterio previo de ≥4 días afebril del consenso SEIMC-SEHH 2020).</li>
-                <li><em>Nota:</em> Si sigue neutropénico al suspender, observar 24-48h y valorar profilaxis antibacteriana.</li>
+                <li id="evol-clinica"><strong>Inf. Clínicamente documentada</strong> (sin aislamiento microbiológico): ≥72h afebril + resolución clínica.</li>
+                <li id="evol-micro"><strong>Inf. Microbiológicamente documentada:</strong> ≥72h afebril + mínimo 7 días de tratamiento + erradicación microbiológica (ECIL-10, 2025 — actualiza el criterio previo de ≥4 días afebril del consenso SEIMC-SEHH 2020).</li>
+                <li id="evol-neutro"><em>Nota:</em> Si sigue neutropénico al suspender, observar 24-48h y valorar profilaxis antibacteriana.</li>
             </ul>
         </div>
+        </div>
+        <div class="vista-visual" id="evolucion-regla"></div>
     </div>
 
-    <!-- BLOQUE 4: MANEJO DEL CATÉTER (ORIGINAL RESTAURADO) -->
-    <div class="card">
+    <!-- BLOQUE 4: MANEJO DEL CATÉTER
+         data-visual: vista Visual = balanza retirar / conservar
+         (cateter-balanza.js), que escribe en la calculadora de catéter del
+         tratamiento dirigido y muestra su decisión. -->
+    <div class="card" id="cateter-card" data-visual>
         <h3 style="color: var(--accent-blue);">4. MANEJO DEL CATÉTER (CVC)</h3>
+        <div class="vista-texto">
         <p class="subtitle">Decisión sobre reservorios y vías centrales</p>
         
         <div class="management-text" style="margin-top: 0; border-top: none; padding-top: 0; display:block;">
@@ -128,17 +128,19 @@
             </ul>
             
             <strong style="color: var(--accent-red);">RETIRADA OBLIGATORIA SI:</strong>
-            <ul>
+            <ul id="cat-retirada">
                 <li><strong>Clínica:</strong> Sepsis grave/shock, signos locales (supuración/tunelitis), bacteriemia persistente (48-72h), endocarditis/embolismo.</li>
                 <li><strong>Microorganismos:</strong> Hongos (<em>Candida spp.</em>), <em>S. aureus</em>, Enterococos, Bacilos Gram Negativos (<em>P. aeruginosa</em>), Micobacterias, <em>Bacillus spp.</em>, <em>Micrococcus spp.</em>, <em>Propionibacterium spp.</em></li>
             </ul>
 
             <strong style="color: var(--accent-green);">CONSERVAR SÓLO SI:</strong>
-            <ul>
+            <ul id="cat-conservar">
                 <li>Infección no complicada por gérmenes menos virulentos + mal acceso venoso periférico.</li>
                 <li><strong>Acción obligatoria:</strong> Añadir Sellado Antibiótico al tratamiento sistémico.</li>
             </ul>
         </div>
+        </div>
+        <div class="vista-visual" id="cateter-balanza"></div>
     </div>
 
     <!-- BOTONES DE NAVEGACIÓN -->

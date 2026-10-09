@@ -10,7 +10,7 @@
 
 import { masccCarga, masccItems, MASCC_MAX, MASCC_CORTE } from '../../data/mascc-data.js';
 import { hayRedFlags, puntuacionMascc } from './triaje-mascc.js';
-import { irAlTexto } from '../../core/vista-visual.js';
+import { irAlTexto, resaltar } from '../../core/vista-visual.js';
 
 const U = 15; // px por punto → pila de 26 × 15 = 390 px
 
@@ -174,7 +174,7 @@ export function initEscaleraMascc() {
             const b = BLOQUES.find(x => x.id === sel);
             if (b) irAlTexto(card, lineaFuente(b));
         } else if (accion === 'triaje') {
-            irAlTexto(card, $('triage-result-box'));
+            resaltar($('triaje-card'));
         }
     });
 

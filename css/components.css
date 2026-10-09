@@ -1740,9 +1740,11 @@ body.study-mode-on .pomodoro-fab { display: flex; }
 .vista-toggle button { min-height: 36px; min-width: 76px; padding: 0 14px; background: transparent; border: 0; color: var(--text-muted); font-family: inherit; font-size: 0.78rem; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; touch-action: manipulation; }
 .vista-toggle button + button { border-left: 1px solid var(--border-color); }
 .vista-toggle button.active { background: rgba(212, 175, 55, 0.16); color: var(--text-main); font-weight: bold; }
-.card[data-visual] > .vista-visual { display: none; }
-.card.modo-visual > .vista-visual { display: block; }
-.card.modo-visual > .vista-texto { display: none; }
+[data-visual] > .vista-visual { display: none; }
+[data-visual].modo-visual > .vista-visual { display: block; }
+[data-visual].modo-visual > .vista-texto { display: none; }
+/* Grupo de varias tarjetas con un único interruptor (p. ej. Diagnóstico A-C). */
+.vista-grupo-titulo { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 4px 0 0; }
 /* Línea de la fuente a la que se llega con "Ver en el texto". */
 .vista-resaltado { animation: vista-resaltado 2.2s ease-out; border-radius: 4px; }
 @keyframes vista-resaltado {
@@ -1750,9 +1752,10 @@ body.study-mode-on .pomodoro-fab { display: flex; }
     100% { background: transparent; box-shadow: 0 0 0 3px transparent; }
 }
 
-/* Casillas de puntuación (marcada = el paciente SUMA esos puntos). La regla
-   general .checkbox-label:has(input:checked) tacha la línea, pensada para
-   checklists de "hecho"; en una escala puntuable eso se lee como "descartado". */
+/* Casillas de puntuación o de criterio presente (marcada = el paciente SUMA
+   esos puntos / TIENE ese criterio). La regla general
+   .checkbox-label:has(input:checked) tacha la línea, pensada para checklists
+   de "hecho"; aquí eso se leería como "descartado". */
 .checkbox-label.puntuable:has(input:checked) { text-decoration: none; opacity: 1; color: var(--text-main); }
 
 /* Escalera MASCC (neutropenia-febril/mascc-escalera.js) */
@@ -1796,4 +1799,157 @@ body.study-mode-on .pomodoro-fab { display: flex; }
 @media (prefers-reduced-motion: reduce) {
     .mascc-bloque { transition: none; }
     .vista-resaltado { animation: none; outline: 2px solid var(--accent-blue); }
+}
+
+/* ==========================================================
+   VISTA VISUAL — piezas comunes y las 5 imágenes de Neutropenia
+   Febril (triaje-cuerpo, diagnostico-linea, empirico-escalera,
+   empirico-focos, evolucion-regla, cateter-balanza).
+   ========================================================== */
+.visual-guia { font-size: 0.75rem; color: var(--text-muted); margin: 0 0 12px; line-height: 1.4; }
+.visual-guia strong { color: var(--text-main); }
+.visual-veredicto { margin-top: 12px; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.78rem; line-height: 1.45; }
+.visual-veredicto strong { display: block; font-size: 0.85rem; margin-bottom: 2px; }
+.visual-detalle { margin-top: 12px; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; background: rgba(46, 38, 28, 0.5); display: flex; flex-direction: column; gap: 6px; }
+.visual-detalle[hidden] { display: none; }
+.visual-detalle-titulo { font-size: 0.85rem; font-weight: bold; }
+.visual-detalle-fuente { font-size: 0.75rem; color: var(--text-muted); line-height: 1.45; }
+.visual-link { align-self: flex-start; min-height: 44px; padding: 0 12px; background: transparent; border: 1px solid var(--accent-blue); border-radius: 8px; color: var(--accent-blue); font-family: inherit; font-size: 0.75rem; cursor: pointer; touch-action: manipulation; }
+.visual-mini { min-height: 36px; padding: 0 10px; background: transparent; border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-main); font-family: inherit; font-size: 0.72rem; cursor: pointer; touch-action: manipulation; }
+
+/* Silueta con marcadores (triaje y focos) */
+.cuerpo { display: flex; gap: 12px; align-items: flex-start; }
+.cuerpo-figura { position: relative; flex: 0 0 46%; aspect-ratio: 170 / 400; color: var(--text-muted); }
+.silueta-svg { width: 100%; height: 100%; display: block; }
+.cuerpo-marca {
+    position: absolute; transform: translate(-50%, -50%); width: 30px; height: 30px; padding: 0;
+    border-radius: 50%; border: 2px solid var(--marca, var(--accent-red)); background: var(--bg-main);
+    color: var(--text-main); font-family: inherit; font-size: 0.75rem; font-weight: bold; cursor: pointer; touch-action: manipulation;
+}
+.cuerpo-marca::before { content: ''; position: absolute; inset: -7px; } /* zona táctil de 44 px */
+.cuerpo-marca.on { background: var(--marca, var(--accent-red)); color: var(--bg-main); }
+.cuerpo-marca.sel { box-shadow: 0 0 0 3px var(--text-main); }
+.cuerpo-marca.atenuado, .cuerpo-leyenda li.atenuado { opacity: 0.25; }
+.cuerpo-leyenda { flex: 1 1 0; min-width: 0; list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 0.72rem; line-height: 1.3; color: var(--text-muted); }
+.cuerpo-leyenda li { display: flex; gap: 6px; }
+.cuerpo-leyenda li b { min-width: 14px; color: var(--accent-red); }
+.cuerpo-leyenda li.on { color: var(--text-main); font-weight: bold; }
+.triaje-autos { display: flex; gap: 8px; margin-bottom: 12px; }
+.triaje-auto { flex: 1; min-height: 44px; padding: 4px 8px; border: 1px solid var(--accent-red); border-radius: 8px; background: transparent; color: var(--text-main); font-family: inherit; font-size: 0.72rem; line-height: 1.25; cursor: pointer; touch-action: manipulation; }
+.triaje-auto.on { background: rgba(184, 92, 62, 0.3); font-weight: bold; }
+.triaje-auto.sel { box-shadow: 0 0 0 2px var(--text-main); }
+.esc-filtros { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-bottom: 12px; }
+.esc-filtro { min-height: 44px; padding: 4px; border: 1px solid var(--marca); border-radius: 8px; background: transparent; color: var(--text-main); font-family: inherit; font-size: 0.62rem; line-height: 1.2; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; touch-action: manipulation; }
+.esc-filtro b { color: var(--marca); font-size: 0.9rem; }
+.esc-filtro.on { background: rgba(236, 227, 204, 0.08); box-shadow: inset 0 0 0 1px var(--marca); }
+.esc-regimen { font-size: 0.85rem; font-weight: bold; line-height: 1.4; }
+.esc-extra { font-size: 0.75rem; line-height: 1.45; }
+.esc-extra.sarm { border-top: 1px dashed rgba(184, 92, 62, 0.6); padding-top: 6px; }
+
+/* Carriles del diagnóstico */
+.carril { border-top: 1px solid var(--border-color); padding: 12px 0 4px; }
+.carril-cab { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 0.72rem; letter-spacing: 1px; text-transform: uppercase; color: var(--carril); font-weight: bold; margin-bottom: 8px; }
+.carril-cab span { min-width: 0; }
+.carril-cab .visual-link { flex-shrink: 0; min-height: 36px; font-size: 0.68rem; text-transform: none; letter-spacing: 0; white-space: nowrap; }
+.carril-lectura { font-size: 0.75rem; line-height: 1.45; color: var(--text-muted); margin-top: 6px; }
+.carril-lectura b { color: var(--text-main); }
+.eje-ticks { position: absolute; left: 0; right: 0; top: 0; height: 14px; font-size: 0.6rem; color: var(--text-muted); }
+.eje-ticks span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+.eje-ticks span:first-child { transform: none; }
+.eje-ticks span:last-child { transform: translateX(-100%); }
+.eje-ticks.estatico { position: relative; margin-top: 2px; }
+.hemo-pista { position: relative; height: 62px; margin: 0 4px 8px; border-bottom: 1px solid rgba(165, 150, 124, 0.5); }
+.hemo-frasco { position: absolute; bottom: 0; width: 14px; height: 34px; margin-left: -7px; border-radius: 3px 3px 8px 8px; border: 2px solid; transition: left 0.25s; }
+.hemo-frasco.cvc { border-color: var(--accent-blue); background: rgba(212, 175, 55, 0.35); }
+.hemo-frasco.peri { border-color: var(--accent-red); background: rgba(184, 92, 62, 0.35); }
+.hemo-frasco[hidden], .hemo-tramo[hidden] { display: none; }
+.hemo-tramo { position: absolute; bottom: 40px; height: 0; border-top: 2px dashed var(--text-muted); transition: left 0.25s, width 0.25s; }
+.hemo-fila { display: grid; grid-template-columns: 64px 1fr 66px auto; align-items: center; gap: 6px; font-size: 0.72rem; }
+.hemo-nombre { color: var(--text-main); }
+.hemo-valor { color: var(--text-muted); text-align: right; }
+.hemo-fila input[type="range"] { width: 100%; height: 36px; accent-color: var(--accent-red); }
+.hemo-fila input.vacio { opacity: 0.35; }
+.bio-curvas { width: 100%; height: auto; display: block; color: var(--text-muted); }
+.pcr-fila { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 6px; }
+.bio-leyenda { display: flex; gap: 14px; flex-wrap: wrap; font-size: 0.7rem; margin-bottom: 4px; }
+.pcr-slider { width: 100%; height: 36px; margin: 0; accent-color: var(--accent-purple); }
+.pcr-zonas { position: relative; height: 6px; margin: 0 2px; background: rgba(144, 160, 106, 0.35); border-radius: 3px; }
+.pcr-zona { position: absolute; top: 0; height: 6px; opacity: 0.8; }
+.rapidas-pista { position: relative; margin: 0 4px; border-top: 1px solid rgba(165, 150, 124, 0.5); }
+.rapidas-pista .eje-ticks { top: 2px; }
+.rapida-chip { position: absolute; min-height: 30px; padding: 0 10px; border: 1px solid var(--carril, var(--accent-blue)); border-radius: 15px; background: var(--bg-main); color: var(--text-main); font-family: inherit; font-size: 0.68rem; white-space: nowrap; cursor: pointer; touch-action: manipulation; }
+.rapida-chip.izquierda { transform: translateX(-12px); }
+.rapida-chip.derecha { transform: translateX(-100%); }
+.rapida-chip.on { background: rgba(212, 175, 55, 0.22); font-weight: bold; }
+.rapida-chip.sin-tiempo { position: static; }
+.rapidas-sin-tiempo { margin-top: 8px; }
+.hongos-toggle { width: 100%; min-height: 44px; border: 1px solid var(--accent-green); border-radius: 8px; background: transparent; color: var(--text-main); font-family: inherit; font-size: 0.75rem; cursor: pointer; margin-bottom: 8px; touch-action: manipulation; }
+.hongos-toggle[aria-pressed="true"] { background: rgba(144, 160, 106, 0.2); }
+.hongos-rama { display: flex; flex-direction: column; gap: 4px; padding: 8px; border: 1px dashed var(--border-color); border-radius: 8px; margin-bottom: 6px; opacity: 0.35; }
+.hongos-rama.on { opacity: 1; border-style: solid; border-color: var(--accent-green); }
+.hongos-tag { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1px; color: var(--accent-green); }
+.hongos-pasos { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; font-size: 0.72rem; line-height: 1.35; }
+.hongos-paso { border: 1px solid var(--border-color); border-radius: 6px; padding: 4px 6px; }
+.hongos-flecha { color: var(--text-muted); }
+
+/* Escalera ECIL-10 */
+.escalera { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; align-items: start; }
+.peldano-col { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.peldano-pie { width: 14px; height: 14px; border-radius: 50%; background: transparent; }
+.peldano-col.activo .peldano-pie { background: var(--text-main); }
+.peldano { width: 100%; min-height: 64px; padding: 6px 4px; border: 1px solid var(--peldano); border-bottom-width: 4px; border-radius: 8px 8px 0 0; background: transparent; color: var(--text-main); font-family: inherit; font-size: 0.66rem; line-height: 1.2; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; touch-action: manipulation; }
+.peldano b { color: var(--peldano); font-size: 0.9rem; }
+.peldano.marcado { background: rgba(236, 227, 204, 0.08); }
+.peldano-col.activo .peldano { box-shadow: 0 0 0 2px var(--text-main); }
+.barandilla { width: 100%; min-height: 44px; margin-top: 12px; padding: 6px 10px; border: 1px dashed var(--accent-red); border-radius: 8px; background: transparent; color: var(--text-main); font-family: inherit; font-size: 0.75rem; text-align: left; cursor: pointer; touch-action: manipulation; }
+.barandilla b { color: var(--accent-red); }
+.barandilla.on { background: rgba(184, 92, 62, 0.18); border-style: solid; }
+
+/* Regla de 10 días */
+.regla { position: relative; height: 112px; margin: 4px 6px 4px; }
+.regla-banda { position: absolute; left: 0; top: 46px; height: 14px; border-radius: 7px; background: rgba(207, 154, 62, 0.25); }
+.regla-banda-texto { position: absolute; left: 0; top: 0; font-size: 0.62rem; color: var(--accent-yellow); }
+.regla-linea { position: absolute; left: 0; right: 0; top: 52px; height: 2px; background: var(--text-muted); }
+.regla .eje-ticks { top: 62px; }
+.regla-marca { position: absolute; z-index: 2; transform: translateX(-50%); width: 26px; height: 26px; padding: 0; border-radius: 50%; border: 2px solid var(--marca); background: var(--bg-main); color: var(--text-main); font-family: inherit; font-size: 0.7rem; font-weight: bold; cursor: pointer; touch-action: manipulation; }
+.regla-marca::before { content: ''; position: absolute; inset: -9px; }
+.regla-marca.arriba { top: 16px; }
+.regla-marca.abajo { top: 80px; }
+.regla-marca.sel { background: var(--marca); color: var(--bg-main); }
+.regla-cursor { position: absolute; z-index: 1; top: 10px; width: 2px; height: 96px; margin-left: -1px; background: var(--text-main); opacity: 0.7; pointer-events: none; transition: left 0.2s; }
+.regla-dia { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 6px; }
+.regla-dia b { color: var(--text-main); }
+#regla-dia { width: 100%; height: 36px; accent-color: var(--accent-purple); }
+.regla-mandos { display: flex; gap: 6px; margin-bottom: 8px; }
+.regla-mandos .visual-mini { flex: 1; }
+.regla-tipos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; margin-bottom: 8px; }
+.regla-tipos button { min-height: 40px; background: transparent; border: 0; color: var(--text-muted); font-family: inherit; font-size: 0.72rem; cursor: pointer; touch-action: manipulation; }
+.regla-tipos button + button { border-left: 1px solid var(--border-color); }
+.regla-tipos button.active { background: rgba(212, 175, 55, 0.16); color: var(--text-main); font-weight: bold; }
+.regla-check[hidden] { display: none; }
+.regla-sub { color: var(--text-muted); margin-top: 4px; }
+
+/* Balanza del catéter */
+.balanza { position: relative; height: 70px; margin: 4px 0 10px; }
+.balanza-brazo { position: absolute; left: 6%; right: 6%; top: 18px; height: 3px; background: var(--text-muted); transform-origin: 50% 50%; transition: transform 0.35s ease; }
+.balanza-plato { position: absolute; top: 3px; width: 34%; padding: 6px 0; border-radius: 0 0 14px 14px; text-align: center; font-size: 0.72rem; font-weight: bold; }
+.balanza-plato.izq { left: -4%; border: 1px solid var(--accent-red); color: var(--accent-red); }
+.balanza-plato.der { right: -4%; border: 1px solid var(--accent-green); color: var(--accent-green); }
+.balanza-pie { position: absolute; left: 50%; top: 18px; width: 0; height: 0; margin-left: -10px; border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 40px solid rgba(165, 150, 124, 0.5); }
+.balanza-columnas { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 10px; }
+.balanza-col { display: flex; flex-direction: column; gap: 6px; padding: 8px; border: 1px solid; border-radius: 8px; font-size: 0.72rem; line-height: 1.35; }
+.balanza-col.retirar { border-color: var(--accent-red); }
+.balanza-col.retirar > b { color: var(--accent-red); }
+.balanza-col.conservar { border-color: var(--accent-green); }
+.balanza-col.conservar > b { color: var(--accent-green); }
+.balanza-col p { margin: 0; color: var(--text-muted); }
+.balanza-col .visual-link { min-height: 36px; font-size: 0.68rem; }
+.balanza-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.balanza-chip { min-height: 32px; padding: 2px 8px; border: 1px solid var(--border-color); border-radius: 16px; background: transparent; color: var(--text-main); font-family: inherit; font-size: 0.68rem; text-align: left; cursor: pointer; touch-action: manipulation; }
+.balanza-col.retirar .balanza-chip.on { background: rgba(184, 92, 62, 0.3); border-color: var(--accent-red); }
+.balanza-col.conservar .balanza-chip.on { background: rgba(144, 160, 106, 0.3); border-color: var(--accent-green); }
+.balanza-obligatorio { color: var(--accent-green) !important; font-weight: bold; }
+
+@media (prefers-reduced-motion: reduce) {
+    .hemo-frasco, .hemo-tramo, .regla-cursor, .balanza-brazo { transition: none; }
 }
