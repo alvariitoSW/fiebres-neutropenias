@@ -89,7 +89,11 @@ js/
                                   un grupo y oculta el resto (menú de
                                   especialidades, menú principal de
                                   Hematología, submenú de Citopenias,
-                                  submenú de Trasplante)
+                                  submenú de Trasplante). Devuelve
+                                  { show, irAFicha } — irAFicha(view, panel,
+                                  tab) es lo que cada especialidad expone
+                                  para los enlaces cruzados (ver "Revisión
+                                  de código de octubre 2026")
     lightbox.js                  Click en cualquier imagen dentro de
                                   .article-figure para ampliarla a pantalla
                                   completa. Se inicializa una sola vez desde
@@ -102,6 +106,15 @@ js/
                                   sola vez desde main.js, ver "Modo Estudio
                                   y reloj Pomodoro" más abajo — no hace
                                   falta tocarlo al añadir fichas nuevas.
+    search.js                    Buscador global (ver "Rediseño
+                                  Constelación + buscador global").
+    ui.js                        Helpers compartidos por las calculadoras:
+                                  wireSelectExplicacion(), pintarGauge(),
+                                  clamp(), escapeHtml() — ver "Revisión de
+                                  código de octubre 2026" más abajo.
+    wizard.js                    initSiNoWizard(prefijo, pasos): asistente
+                                  paso a paso de respuestas Sí/No sobre un
+                                  árbol de decisión declarativo.
   data/                       Objetos de datos puros (tablas de dosis,
                                tratamientos por foco, etc.), sin DOM.
   modules/
@@ -9140,6 +9153,110 @@ queda como una Pull Request en borrador pendiente de su aprobación.
     todas las rondas de auditoría manuales de este proyecto.
   - `backend/README.md` actualizado para reflejar las 4 ampliaciones y
     el estado real de la primera prueba (arriba).
+
+## Revisión de código de octubre 2026 (`/code-review` + `/simplify`)
+
+A petición explícita del usuario ("Quiero que revises el código de la app
+/debug y simplifiques las partes que se puedan /code-review /simplify"),
+se revisó TODO el código de lógica de la app (`js/core`, `js/modules`,
+`js/main.js`, ~9.800 líneas; `js/data` excluido por ser datos puros) —
+primero con `/code-review` (bugs) y 4 agentes de `/simplify` (reuso,
+simplificación, eficiencia, altitud), y después aplicando las
+correcciones en 5 commits independientes, cada uno verificado con el
+driver de Playwright (`run-fiebres-neutropenias`, viewport 390×844)
+antes de pasar al siguiente. **Cambios de arquitectura que invalidan
+notas históricas anteriores de este mismo archivo** — si una nota de más
+arriba contradice lo de aquí, manda esta sección:
+
+- **Un único mecanismo de enlace cruzado para toda la app:
+  `[data-especialidad]`.** Antes convivían 8 mecanismos distintos
+  (`.tx-link` con un listener global sin acotar en `nefrologia/index.js`,
+  `.paper-link`, `.neumo-internal-link`, `.umi-internal-link`,
+  `.cardio-cross-link`, 6 botones por `id` en Merino Cardiología,
+  `#fuci-link-a-teg`, `data-target="nefrotoxicidad"`), cada uno con su
+  propio listener — y la "trampa" de `.tx-link` documentada decenas de
+  veces en este archivo (reutilizarlo fuera de Nefrología corrompía
+  `nefroLevel`) era real. Hoy `home/index.js` registra **un solo
+  listener delegado** en `document` sobre cualquier
+  `<button data-especialidad="X">` (con `data-view`/`data-panel`/
+  `data-tab` opcionales, y `data-trasplante` solo con
+  `data-especialidad="home"` para las 3 subvistas de Trasplante),
+  resuelto por `irAResultadoBusqueda` — el mismo router que ya usaba el
+  buscador global. Sirve tanto para saltar ENTRE especialidades como
+  DENTRO de una misma (p. ej. de una ficha de ERC a una de FRA, o entre
+  dos fichas del mismo cuaderno: basta con no poner `data-view`). Las
+  clases `.tx-link`/`.especialidad-link`/`.paper-link`/
+  `.neumo-internal-link` son hoy **puramente visuales** (comparten una
+  regla en `components.css`); `.umi-internal-link`/`.cardio-cross-link`
+  ya no tienen CSS ni JS propio. **Para añadir un enlace cruzado nuevo:
+  escribe el botón con sus `data-*` y ya está — nunca un listener nuevo
+  por módulo.** Las ~58 menciones anteriores de este archivo a "nunca
+  reutilizar `.tx-link` fuera de Nefrología" describen el estado previo a
+  esta revisión; la colisión ya no puede producirse porque ese listener
+  no existe. De paso quedaron corregidos 2 bugs latentes: los `.tx-link`
+  de la guía ESC de IC y de Trasplante renal solo funcionaban "por
+  accidente" a través del listener de Nefrología, y los botones
+  `data-atlas-route` de Fisiopatología UCI (que además llevaban la clase
+  `tx-link`) disparaban dos handlers por click.
+- **Registro de especialidades** (`home/index.js`): los 6 pares
+  `let xApi`/`onXListo()` desaparecen; `main.js` inicializa cada
+  especialidad con switcher medio propio en bucle y la registra con
+  `home.registrarEspecialidad(key, api)` bajo la **misma clave que su
+  vista raíz en `topLevel`** (`nefrologia`/`uciPapers`/`fisioUci`/
+  `cardiologia`/`neumologia`/`sobrevivirUmi`). Cada `init()` devuelve
+  `{ volverAlMenu, irAFicha }` — Nefrología renombró `volverAlMapa` a
+  `volverAlMenu` (el mapa del riñón es su menú) e `irANefrotoxicidad`
+  desapareció (es `data-especialidad="nefrologia"
+  data-view="nefrotoxicidad"`). `irAFicha` ya no se escribe a mano: es el
+  que devuelve `createViewSwitcher()` (`core/navigation.js`), con guard
+  `if (view)` para que un enlace sin vista no oculte todas las del
+  switcher. Los bancos/temas/triggers del quiz se fusionan con
+  `flatMap` sobre la misma lista de módulos. **Para añadir una
+  especialidad nueva con submenú**: su `index.js` devuelve
+  `{ volverAlMenu, irAFicha: xLevel.irAFicha }` + exporta
+  `quizTriggerId/quizBanco/quizTemas`, y en `main.js` se añade una
+  entrada al objeto `especialidades` y en `home/index.js` su vista a
+  `topLevel` + su botón a `BOTONES_ESPECIALIDAD` — nada más.
+- **Helpers compartidos nuevos** (`js/core/ui.js`, `js/core/wizard.js`):
+  `wireSelectExplicacion(selectId, boxId, datos, render = x => x)` (antes
+  copiado en `nefrologia/fisiologia.js` y `fisio-uci/hematologia.js`),
+  `pintarGauge(prefijo, valor, max, estado, texto)` para los gauges
+  `.kinetic-row` (antes 6 implementaciones; `prefijo` es el id sin el
+  sufijo `-fill`/`-num`/`-row`), `clamp()`, `escapeHtml()` (solo para
+  texto que viene del usuario, hoy Dudas de guardia y el buscador), e
+  `initSiNoWizard(prefijo, pasos)` (los 4 asistentes Sí/No de Cardiología
+  conservan solo su árbol de decisión declarativo). `core/corkboard.js`
+  exporta ahora `nombreFicha(card, porDefecto)`, reutilizado por
+  `core/search.js`. **Cualquier calculadora nueva con gauge/selector/
+  wizard debe usar estos helpers**, no copiar el patrón de un módulo
+  vecino.
+- **Arranque más ligero**: el índice del buscador global se construye la
+  primera vez que se abre el buscador (no al cargar); las estimaciones y
+  etiquetas 🍅 de Modo Estudio se calculan/inyectan al activar el modo por
+  primera vez; las 25 tablas/633 filas de Nefrotoxicidad se renderizan
+  cuando la vista se hace visible (`IntersectionObserver`) o al primer
+  uso de su buscador, y filtran por un `data-nombre` ya normalizado en
+  vez de normalizar 585 `textContent` por pulsación; el reloj Pomodoro
+  hace tick cada 1 s (no 250 ms) y guarda el contador en memoria; el
+  cronómetro puerta-balón no repinta mientras su ficha está oculta.
+- **Bugs corregidos**: `quiz.js` ya no revienta con un banco vacío
+  (`empezar([])`) y usa `temasDe()`/`bancoDe()` en vez de 6 bloques de
+  filtrado duplicados; el buscador global no indexaba las 18 fichas del
+  Manual UMI (faltaba en `PANEL_NAV`/`ESPECIALIDADES`);
+  `neutropenia-febril/navigation.js` enganchaba un `querySelectorAll
+  ('.back-btn')` GLOBAL (los ~45 "← VOLVER" de toda la app), ahora
+  acotado a sus 4 subvistas y sobre `createViewSwitcher`; Dudas de
+  guardia tolera un `localStorage` corrupto; los recuentos de la portada
+  de Preguntas MC se derivan del banco real en vez de estar escritos a
+  mano; la calculadora Overt DIC no revienta si el selector de dímero D
+  queda sin opción.
+- **Lección de verificación**: Chromium cachea los módulos ES importados
+  desde `main.js` entre navegaciones del mismo contexto de Playwright —
+  tras editar un `.js`, `nav /` puede seguir ejecutando el código viejo.
+  Para verificar un cambio de JS hay que cerrar y relanzar el navegador
+  del driver (`quit` + `launch`), no basta con recargar.
+- Bump de cache-busting a `?v=20261009` (cambió `js/main.js`; sin cambios
+  de CSS en esta ronda).
 
 ## Cómo probar cambios
 
