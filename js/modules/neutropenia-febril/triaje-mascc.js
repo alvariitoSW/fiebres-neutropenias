@@ -1,3 +1,5 @@
+import { masccCarga, masccItems, MASCC_MAX, MASCC_CORTE } from '../../data/mascc-data.js';
+
 function calcTriage() {
     let isSepsis = document.getElementById('triage-sepsis').checked;
     let isLMA = document.getElementById('triage-lma').checked;
@@ -27,27 +29,47 @@ function calcTriage() {
     calcCISNE();
 }
 
-function calcMASCC() {
-    let highRisk = document.getElementById('triage-sepsis').checked
+// Hay red flag del triaje: invalida MASCC y CISNE.
+export function hayRedFlags() {
+    return document.getElementById('triage-sepsis').checked
         || document.getElementById('triage-lma').checked
         || document.querySelectorAll('.idsa-check:checked').length > 0;
-    let score = parseInt(document.getElementById('mascc-carga').value);
-    if (document.getElementById('mascc-hipotension').checked) score += 5;
-    if (document.getElementById('mascc-epoc').checked) score += 4;
-    if (document.getElementById('mascc-tumor').checked) score += 4;
-    if (document.getElementById('mascc-deshidratacion').checked) score += 3;
-    if (document.getElementById('mascc-ambulatorio').checked) score += 3;
-    if (document.getElementById('mascc-edad').checked) score += 2;
+}
+
+// Suma del MASCC leída del DOM, con los puntos de mascc-data.js.
+export function puntuacionMascc() {
+    let score = parseInt(document.getElementById(masccCarga.id).value, 10) || 0;
+    masccItems.forEach(it => { if (document.getElementById(it.id).checked) score += it.pts; });
+    return score;
+}
+
+// Genera el select de carga y las casillas de la vista Texto desde los datos.
+function renderCamposMascc() {
+    const cont = document.getElementById('mascc-campos');
+    if (!cont) return;
+    const opciones = masccCarga.opciones
+        .map(o => `<option value="${o.pts}">${o.texto} (${o.pts} pts)</option>`).join('');
+    const casillas = masccItems.map(it =>
+        `<label class="checkbox-label puntuable"><input type="checkbox" id="${it.id}" class="mascc-input" checked> ${it.texto} (${it.pts} pts)</label>`).join('');
+    cont.innerHTML = `<div class="form-group">
+            <label for="${masccCarga.id}">${masccCarga.etiqueta}</label>
+            <select id="${masccCarga.id}" class="mascc-input">${opciones}</select>
+        </div>${casillas}`;
+}
+
+function calcMASCC() {
+    const highRisk = hayRedFlags();
+    const score = puntuacionMascc();
 
     let d = document.getElementById('mascc-score-display');
     let t = document.getElementById('mascc-eval-text');
     let m = document.getElementById('mascc-management');
 
-    d.innerText = `${score} / 26`;
+    d.innerText = `${score} / ${MASCC_MAX}`;
     if (highRisk) {
         d.style.color = 'var(--text-muted)'; t.innerText = 'INVALIDADO POR RED FLAGS'; t.style.color = 'var(--accent-red)';
         m.innerHTML = `Puntuación irrelevante. El paciente ya cumple criterios de <strong>ALTO RIESGO AUTOMÁTICO</strong>.`;
-    } else if (score >= 21) {
+    } else if (score >= MASCC_CORTE) {
         d.style.color = 'var(--accent-green)'; t.innerText = 'Bajo Riesgo'; t.style.color = 'var(--accent-green)';
         m.innerHTML = `<strong style="color: var(--accent-green);">Manejo:</strong><ul><li>Candidato a ABT oral y manejo ambulatorio. Control 48-72h.</li></ul>`;
     } else {
@@ -57,9 +79,7 @@ function calcMASCC() {
 }
 
 function calcCISNE() {
-    let highRisk = document.getElementById('triage-sepsis').checked
-        || document.getElementById('triage-lma').checked
-        || document.querySelectorAll('.idsa-check:checked').length > 0;
+    const highRisk = hayRedFlags();
 
     let score = 0;
     if (document.getElementById('cisne-ecog').checked) score += 2;
@@ -90,6 +110,7 @@ function calcCISNE() {
 }
 
 export function init() {
+    renderCamposMascc();
     document.querySelectorAll('.triage-input').forEach(e => e.addEventListener('change', calcTriage));
     document.querySelectorAll('.mascc-input').forEach(e => e.addEventListener('change', calcMASCC));
     document.querySelectorAll('.cisne-input').forEach(e => e.addEventListener('change', calcCISNE));

@@ -1730,3 +1730,70 @@ body.study-mode-on .pomodoro-fab { display: flex; }
 .tec-pendiente { border-left-color: var(--text-muted); opacity: 0.85; }
 .tec-pendiente .tec-cat-title { color: var(--text-muted); }
 .tec-pendiente-note { font-size: 0.7rem; color: var(--text-muted); font-style: italic; margin-top: 2px; }
+
+/* ==========================================================
+   VISTA VISUAL — interruptor "Texto | Visual" por tarjeta
+   (core/vista-visual.js). Texto es la fuente primaria y la
+   vista por defecto; cambiar oculta una y muestra la otra.
+   ========================================================== */
+.vista-toggle { display: inline-flex; margin: 6px 0 12px; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; }
+.vista-toggle button { min-height: 36px; min-width: 76px; padding: 0 14px; background: transparent; border: 0; color: var(--text-muted); font-family: inherit; font-size: 0.78rem; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; touch-action: manipulation; }
+.vista-toggle button + button { border-left: 1px solid var(--border-color); }
+.vista-toggle button.active { background: rgba(212, 175, 55, 0.16); color: var(--text-main); font-weight: bold; }
+.card[data-visual] > .vista-visual { display: none; }
+.card.modo-visual > .vista-visual { display: block; }
+.card.modo-visual > .vista-texto { display: none; }
+/* Línea de la fuente a la que se llega con "Ver en el texto". */
+.vista-resaltado { animation: vista-resaltado 2.2s ease-out; border-radius: 4px; }
+@keyframes vista-resaltado {
+    0%, 35% { background: rgba(212, 175, 55, 0.32); box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.32); }
+    100% { background: transparent; box-shadow: 0 0 0 3px transparent; }
+}
+
+/* Casillas de puntuación (marcada = el paciente SUMA esos puntos). La regla
+   general .checkbox-label:has(input:checked) tacha la línea, pensada para
+   checklists de "hecho"; en una escala puntuable eso se lee como "descartado". */
+.checkbox-label.puntuable:has(input:checked) { text-decoration: none; opacity: 1; color: var(--text-main); }
+
+/* Escalera MASCC (neutropenia-febril/mascc-escalera.js) */
+.mascc-esc-guia { font-size: 0.75rem; color: var(--text-muted); margin: 0 0 12px; line-height: 1.4; }
+.mascc-esc { display: flex; gap: 14px; align-items: flex-start; }
+.mascc-esc-pila { position: relative; flex: 1 1 0; min-width: 0; border-bottom: 2px solid var(--text-muted); }
+.mascc-bloque {
+    position: absolute; left: 0; right: 0; box-sizing: border-box;
+    display: flex; align-items: center; justify-content: space-between; gap: 6px;
+    padding: 0 8px; border-radius: 6px; cursor: pointer; touch-action: manipulation;
+    background: rgba(207, 154, 62, 0.24); border: 1px solid var(--accent-yellow);
+    color: var(--text-main); font-family: inherit; font-size: 0.7rem; line-height: 1.15; text-align: left;
+    overflow: hidden; transition: bottom 0.3s ease, height 0.3s ease, background 0.2s;
+}
+.mascc-bloque[hidden] { display: none; }
+.mascc-bloque span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mascc-bloque b { font-size: 0.85rem; flex-shrink: 0; }
+.mascc-bloque.mascc-hueco { background: transparent; border: 1px dashed rgba(184, 92, 62, 0.6); color: var(--text-muted); }
+.mascc-bloque.mascc-hueco b { color: var(--accent-red); }
+.mascc-bloque.sel { box-shadow: 0 0 0 2px var(--text-main); }
+.mascc-esc-corte { position: absolute; left: -6px; right: -6px; height: 0; border-top: 2px dashed var(--accent-red); pointer-events: none; z-index: 2; }
+.mascc-esc-corte span { position: absolute; right: 0; top: -9px; background: var(--bg-main); color: var(--accent-red); font-size: 0.72rem; font-weight: bold; padding: 0 4px; }
+.mascc-esc-invalidado { position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; justify-content: center; gap: 8px; padding: 14px; background: var(--bg-main); border: 1px solid var(--accent-red); border-radius: 8px; font-size: 0.8rem; line-height: 1.4; }
+.mascc-esc-invalidado[hidden] { display: none; }
+.mascc-esc-invalidado strong { color: var(--accent-red); text-transform: uppercase; letter-spacing: 1px; }
+.mascc-invalidado .mascc-esc-corte { display: none; }
+.mascc-invalidado .mascc-bloque.sel { box-shadow: none; }
+.mascc-esc-lectura { flex: 0 0 118px; display: flex; flex-direction: column; gap: 8px; }
+.mascc-esc-total { display: flex; align-items: baseline; gap: 4px; }
+.mascc-esc-total b { font-size: 2.2rem; line-height: 1; }
+.mascc-esc-total small { color: var(--text-muted); font-size: 0.75rem; }
+.mascc-esc-estado { font-size: 0.85rem; font-weight: bold; }
+.mascc-esc-margen, .mascc-esc-manejo { font-size: 0.75rem; line-height: 1.4; color: var(--text-muted); }
+.mascc-esc-manejo { color: var(--text-main); }
+.mascc-esc-reset, .mascc-esc-link { min-height: 44px; background: transparent; border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-main); font-family: inherit; font-size: 0.75rem; cursor: pointer; touch-action: manipulation; }
+.mascc-esc-link { color: var(--accent-blue); border-color: var(--accent-blue); padding: 0 12px; }
+.mascc-esc-detalle { margin-top: 14px; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; background: rgba(46, 38, 28, 0.5); display: flex; flex-direction: column; gap: 6px; }
+.mascc-esc-detalle[hidden] { display: none; }
+.mascc-esc-detalle-titulo { font-size: 0.85rem; font-weight: bold; }
+.mascc-esc-detalle-fuente { font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
+@media (prefers-reduced-motion: reduce) {
+    .mascc-bloque { transition: none; }
+    .vista-resaltado { animation: none; outline: 2px solid var(--accent-blue); }
+}

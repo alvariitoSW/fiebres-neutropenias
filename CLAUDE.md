@@ -9258,6 +9258,67 @@ arriba contradice lo de aquí, manda esta sección:
 - Bump de cache-busting a `?v=20261009` (cambió `js/main.js`; sin cambios
   de CSS en esta ronda).
 
+## Vista Visual por tarjeta (`core/vista-visual.js`) — piloto: escalera MASCC
+
+A petición explícita del usuario (tras explorar en el tipo Artifact "Design"
+cómo convertir el texto de Neutropenia Febril en imágenes de estudio, y
+aprobar la dirección "cada párrafo convertido en una imagen que se
+recuerda"), se añadió un **interruptor "Texto | Visual" por tarjeta**. La
+vista **Texto** es siempre la de por defecto y la **fuente primaria**; la
+Visual es otra forma de leer exactamente el mismo bloque. Decisiones
+confirmadas por el usuario: **cambiar** (una vista u otra, no apiladas — en
+390 px apilar duplica el scroll) y **por tarjeta**, no un botón global
+(posible más adelante, tras el piloto).
+
+- **Mecanismo genérico** (`js/core/vista-visual.js`, `initVistaVisual()`
+  llamado una vez desde `main.js`, mismo espíritu que `core/corkboard.js`):
+  cualquier `.card[data-visual]` con dos hijos `.vista-texto` y
+  `.vista-visual` recibe el control segmentado bajo su `<h3>`. El cambio es
+  una clase `.modo-visual` en la tarjeta; el CSS oculta una vista y muestra
+  la otra. No se guarda nada (sin `localStorage`). Exporta
+  `irAlTexto(card, elemento)`: vuelve a Texto, hace scroll a la línea de la
+  fuente y la resalta 2 s (`.vista-resaltado`) — es el botón "Ver en el
+  texto ↓" que debe llevar **todo** marcador de una imagen, para que la
+  fuente esté siempre a un toque. Añadir una imagen a otra tarjeta: el
+  atributo, los dos contenedores y su propio `.js` — nunca tocar el core.
+- **Regla de fidelidad: una sola fuente de datos.** Antes de dibujar un
+  bloque, sus ítems/cifras pasan a un archivo de `js/data/` del que leen el
+  texto, la calculadora y la imagen. Piloto: `js/data/mascc-data.js`
+  (ítems, puntos, corte 21, máximo 26). `triaje-mascc.js` genera ahora el
+  select y las casillas de la vista Texto desde ese archivo
+  (`renderCamposMascc()`, mismos `id` de siempre) y suma con
+  `puntuacionMascc()`; antes los puntos estaban escritos dos veces (etiqueta
+  HTML y suma JS).
+- **La imagen no tiene lógica propia.** `mascc-escalera.js` (arrancado desde
+  `neutropenia-febril/index.js` justo después de la calculadora, para evitar
+  un import circular) lee y escribe las mismas casillas/select y dispara su
+  `change`: `calcMASCC()` sigue siendo la única que decide el resultado. La
+  escalera: cada ítem es un bloque de altura = puntos (15 px/punto), los
+  presentes apilados desde el suelo, lo perdido como hueco discontinuo
+  encima; línea roja en 21; lectura de margen ("Margen: N puntos antes de
+  cruzar la línea" / "Faltan N"); la carga clínica (3 niveles) cicla
+  5→3→0 al tocarla y vuelve a 5 tocando su hueco. Con cualquier red flag
+  del triaje la pila se cubre con "Invalidado" + "Ver el triaje ↑".
+- **Bug preexistente corregido de paso**: las casillas del MASCC (marcadas
+  por defecto) salían **tachadas** por la regla general
+  `.checkbox-label:has(input:checked)` pensada para checklists — el mismo
+  problema ya documentado para la 4Ts de Merino HEMATO. En vez de pasar a
+  `<select>`, las casillas de escalas puntuables llevan ahora la clase
+  `.puntuable`, que anula el tachado. Usarla en cualquier escala futura con
+  casillas que suman puntos.
+- Verificado con Playwright (390×844, `hasTouch`, toques reales con
+  `touchscreen.tap`): el interruptor arranca en Texto; Visual oculta el
+  texto; quitar Edad/Ambulatorio/EPOC en la escalera desmarca las casillas
+  reales y ambas vistas dan 17/Alto riesgo; la carga cicla 5→3→0→5;
+  devolver EPOC → 21/Bajo riesgo; "Ver en el texto" vuelve a Texto y resalta
+  "Sin historia de EPOC (4 pts)"; desmarcar en Texto se refleja en la
+  escalera; sepsis marcada → Invalidado; "Devolver todos" → 26; sin errores
+  de consola ni overflow horizontal. Bump de cache-busting a `?v=20261010`.
+- **Siguiente**: las otras 5 imágenes de Neutropenia Febril ya prototipadas
+  (cuerpo con red flags → tarjeta 1; primeras 48 h → Diagnóstico; escalera
+  ECIL-10 y mapa de focos → Empírico; regla de 10 días → Evolución), con
+  este mismo molde, a confirmar por el usuario tras probar el piloto.
+
 ## Cómo probar cambios
 
 No hay build. Para ver la app:

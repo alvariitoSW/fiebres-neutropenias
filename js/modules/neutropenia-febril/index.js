@@ -2,6 +2,7 @@
 // tratamiento empírico, tratamiento dirigido/PK-PD y microorganismos, con
 // navegación entre esas 5 vistas. Cada pieza vive en su propio archivo.
 import { init as initTriajeMascc } from './triaje-mascc.js';
+import { initEscaleraMascc } from './mascc-escalera.js';
 import { init as initDiagnostico } from './diagnostico.js';
 import { init as initTratamientoEmpirico } from './tratamiento-empirico.js';
 import { init as initCateterMdr } from './cateter-mdr.js';
@@ -12,6 +13,7 @@ import { init as initNavigation } from './navigation.js';
 export function init() {
     initNavigation();
     initTriajeMascc();
+    initEscaleraMascc(); // después: necesita las casillas MASCC ya generadas
     initDiagnostico();
     initTratamientoEmpirico();
     initCateterMdr();
