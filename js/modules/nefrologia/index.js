@@ -62,40 +62,27 @@ export function init() {
     document.querySelectorAll('.btn-volver-nefro-kidney').forEach(b =>
         b.addEventListener('click', () => { nefroLevel.show('kidney'); nefrona.reset(); }));
 
-    // Categorías de contenido clínico de cada segmento de la nefrona. La
-    // mayoría abren directamente una ficha del cuaderno de campo de
-    // fisiología (mismo panel, no hace falta cambiar de vista porque
-    // fisio-corkboard vive en la misma página que la nefrona) — solo
-    // 'diureticos-asa' cambia de vista porque es una página aparte.
-    const categoriaDisponible = {
-        'diureticos-asa': () => nefroLevel.show('diureticosAsa'),
-        'fisio-filtracion': () => openCorkboardTopic('panel-fisio-tabs', 'fisio-filtracion'),
-        'fisio-regulacion': () => openCorkboardTopic('panel-fisio-tabs', 'fisio-regulacion'),
-        'fisio-tubular': () => openCorkboardTopic('panel-fisio-tabs', 'fisio-tubular'),
-        'fisio-agua-regulacion': () => openCorkboardTopic('panel-fisio-tabs', 'fisio-agua-regulacion'),
-        'fisio-potasio-regulacion': () => openCorkboardTopic('panel-fisio-tabs', 'fisio-potasio-regulacion'),
-        'fisio-hipopotasemia': () => openCorkboardTopic('panel-fisio-tabs', 'fisio-hipopotasemia'),
-        'fisio-hiponatremia': () => openCorkboardTopic('panel-fisio-tabs', 'fisio-hiponatremia'),
-        'fisio-hipernatremia': () => openCorkboardTopic('panel-fisio-tabs', 'fisio-hipernatremia'),
-        'fisio-hiperpotasemia': () => openCorkboardTopic('panel-fisio-tabs', 'fisio-hiperpotasemia'),
-    };
-
+    // Categorías de contenido clínico de cada segmento de la nefrona
+    // (nefrona-data.js). Las claves 'fisio-*' son directamente el id de una
+    // ficha del cuaderno de fisiología, que vive en la misma página que la
+    // nefrona (no hace falta cambiar de vista); solo 'diureticos-asa' es
+    // una página aparte. Cualquier otra clave: "en preparación".
     const nefrona = initNefrona({
-        onCategoria: (key) => categoriaDisponible[key]?.() ?? mostrarEnPreparacion(),
+        onCategoria: (key) => {
+            if (key === 'diureticos-asa') nefroLevel.show('diureticosAsa');
+            else if (key.startsWith('fisio-') && document.getElementById(key)) openCorkboardTopic('panel-fisio-tabs', key);
+            else mostrarEnPreparacion();
+        },
     });
 
-    const rutasRinon = {
-        fisiopatologia: () => nefroLevel.show('nefrona'),
-        hta: () => nefroLevel.show('hta'),
-        erc: () => nefroLevel.show('erc'),
-        fra: () => nefroLevel.show('fra'),
-        nefrotoxicidad: () => nefroLevel.show('nefrotoxicidad'),
-        tratamiento: () => nefroLevel.show('tratamiento'),
-        trr: () => nefroLevel.show('trr'),
-        trasplanteRenal: () => nefroLevel.show('trasplanteRenal'),
+    // Nodo del mapa del riñón → vista de este switcher. 'fisiopatologia'
+    // hace zoom a la nefrona ya construida; el resto abre su vista propia.
+    const vistaPorNodoRinon = {
+        fisiopatologia: 'nefrona', hta: 'hta', erc: 'erc', fra: 'fra', nefrotoxicidad: 'nefrotoxicidad',
+        tratamiento: 'tratamiento', trr: 'trr', trasplanteRenal: 'trasplanteRenal',
     };
     const rinon = initRinon({
-        onRoute: (key) => rutasRinon[key]?.(),
+        onRoute: (key) => { if (vistaPorNodoRinon[key]) nefroLevel.show(vistaPorNodoRinon[key]); },
     });
 
     initFisiologia();

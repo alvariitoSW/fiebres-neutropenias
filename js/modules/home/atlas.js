@@ -7,16 +7,15 @@ export function initAtlas({ onRoute, onCompass }) {
     const stage = document.getElementById('atlas-stage');
     if (!stage) return { reset: () => {} };
 
-    const visited = new Set();
-
     function showScreen(id) {
         stage.querySelectorAll('.atlas-screen').forEach(s => s.classList.remove('active'));
         const target = document.getElementById(id);
         if (target) target.classList.add('active');
     }
 
+    // Marca de "ya visitado" (puntito en el nodo): solo memoria de sesión,
+    // la propia clase CSS es el único estado — nada se guarda.
     function markVisited(key) {
-        visited.add(key);
         stage.querySelectorAll(`[data-zone="${key}"], [data-route="${key}"]`).forEach(b => b.classList.add('visited'));
     }
 

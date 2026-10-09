@@ -54,7 +54,7 @@ function calcDeficitK() {
     const diuresis = diuresisEl && diuresisEl.value !== '' ? Number(diuresisEl.value) : 0;
     if ([peso, kreal, diuresis].some(Number.isNaN) || peso <= 0) return;
     const deficitBase = Math.max(0, 3.5 - kreal) * peso;
-    const requerimientos = peso * 1;
+    const requerimientos = peso; // 1 mEq/kg/día
     const porDiuresis = 30 * diuresis;
     const total = deficitBase + requerimientos + porDiuresis;
     const estado = kreal < 2.5 ? 'danger' : (kreal < 3.5 ? 'warn' : 'ok');
@@ -364,70 +364,26 @@ function calcInsulinaDosis() {
     box.innerHTML = `Pauta móvil subcutánea: ${scTexto}<br>Perfusión IV, Algoritmo ${['I', 'II', 'III', 'IV', 'V', 'VI'][algIdx]}: <strong>${dosisIv !== null ? dosisIv + ' UI/h' : '—'}</strong>`;
 }
 
+// [ids de campos, evento, función de cálculo] de cada calculadora de la
+// guía — se enganchan en bucle y se pintan una vez al cargar.
+const CALCULADORAS = [
+    [['umi-ttkg-ko', 'umi-ttkg-oso', 'umi-ttkg-kp', 'umi-ttkg-osp'], 'input', calcTTKG],
+    [['umi-defk-peso', 'umi-defk-kreal', 'umi-defk-diuresis'], 'input', calcDeficitK],
+    [['umi-nut-sexo', 'umi-nut-altura', 'umi-nut-peso', 'umi-nut-edad', 'umi-nut-fa'], 'input', calcNutricion],
+    [['umi-vt-sexo', 'umi-vt-altura', 'umi-vt-mlkg'], 'input', calcPbwVt],
+    [['umi-ag-na', 'umi-ag-k', 'umi-ag-cl', 'umi-ag-hco3'], 'input', calcAnionGap],
+    [['umi-raptt-ratio'], 'input', calcRaptt],
+    [['umi-hemo-pas', 'umi-hemo-pad', 'umi-hemo-pvc', 'umi-hemo-gc', 'umi-hemo-sc', 'umi-hemo-hb', 'umi-hemo-sat', 'umi-hemo-satv', 'umi-hemo-pmap', 'umi-hemo-poap'], 'input', calcHemodinamica],
+    [['umi-fs-lvdd', 'umi-fs-lvsd'], 'input', calcFsFevi],
+    [['umi-vci-modo', 'umi-vci-dmax', 'umi-vci-dmin'], 'input', calcVciColapso],
+    [['umi-nbg-1', 'umi-nbg-2', 'umi-nbg-3', 'umi-nbg-4', 'umi-nbg-5'], 'change', actualizarNbg],
+    [['umi-ins-algoritmo', 'umi-ins-glucemia'], 'input', calcInsulinaDosis],
+];
+
 export function init() {
     initCorkboard('manual-umi-corkboard', 'panel-manual-umi-tabs');
-
-    ['umi-ttkg-ko', 'umi-ttkg-oso', 'umi-ttkg-kp', 'umi-ttkg-osp'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.addEventListener('input', calcTTKG);
+    CALCULADORAS.forEach(([ids, evento, calc]) => {
+        ids.forEach(id => document.getElementById(id)?.addEventListener(evento, calc));
+        calc();
     });
-    calcTTKG();
-
-    ['umi-defk-peso', 'umi-defk-kreal', 'umi-defk-diuresis'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.addEventListener('input', calcDeficitK);
-    });
-    calcDeficitK();
-
-    ['umi-nut-sexo', 'umi-nut-altura', 'umi-nut-peso', 'umi-nut-edad', 'umi-nut-fa'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.addEventListener('input', calcNutricion);
-    });
-    calcNutricion();
-
-    ['umi-vt-sexo', 'umi-vt-altura', 'umi-vt-mlkg'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.addEventListener('input', calcPbwVt);
-    });
-    calcPbwVt();
-
-    ['umi-ag-na', 'umi-ag-k', 'umi-ag-cl', 'umi-ag-hco3'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.addEventListener('input', calcAnionGap);
-    });
-    calcAnionGap();
-
-    const rapttEl = document.getElementById('umi-raptt-ratio');
-    if (rapttEl) rapttEl.addEventListener('input', calcRaptt);
-    calcRaptt();
-
-    ['umi-hemo-pas', 'umi-hemo-pad', 'umi-hemo-pvc', 'umi-hemo-gc', 'umi-hemo-sc', 'umi-hemo-hb', 'umi-hemo-sat', 'umi-hemo-satv', 'umi-hemo-pmap', 'umi-hemo-poap'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.addEventListener('input', calcHemodinamica);
-    });
-    calcHemodinamica();
-
-    ['umi-fs-lvdd', 'umi-fs-lvsd'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.addEventListener('input', calcFsFevi);
-    });
-    calcFsFevi();
-
-    ['umi-vci-modo', 'umi-vci-dmax', 'umi-vci-dmin'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.addEventListener('input', calcVciColapso);
-    });
-    calcVciColapso();
-
-    ['umi-nbg-1', 'umi-nbg-2', 'umi-nbg-3', 'umi-nbg-4', 'umi-nbg-5'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.addEventListener('change', actualizarNbg);
-    });
-    actualizarNbg();
-
-    ['umi-ins-algoritmo', 'umi-ins-glucemia'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.addEventListener('input', calcInsulinaDosis);
-    });
-    calcInsulinaDosis();
 }

@@ -58,10 +58,9 @@ function renderAcondicionamiento() {
         </div>
     `).join('');
 
-    const tabla = document.getElementById('tph-regimenes-tabla');
-    regimenesAcondicionamientoData.forEach(r => {
-        tabla.innerHTML += `<tr><td>${r.diagnostico}</td><td>${r.regimen}</td><td>${r.tipo}</td></tr>`;
-    });
+    document.getElementById('tph-regimenes-tabla').innerHTML = regimenesAcondicionamientoData
+        .map(r => `<tr><td>${r.diagnostico}</td><td>${r.regimen}</td><td>${r.tipo}</td></tr>`)
+        .join('');
 
     document.getElementById('tph-soporte-lista').innerHTML = soporteComunAcondicionamiento.map(s => `
         <div class="micro-prof-item">

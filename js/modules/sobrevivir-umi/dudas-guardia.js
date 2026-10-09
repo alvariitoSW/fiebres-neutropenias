@@ -9,6 +9,7 @@
 // nunca se editan ni se eliminan desde aquí — solo sirven para mostrar
 // el formato antes de que lleguen dudas reales.
 import { dudasEjemplo } from '../../data/dudas-guardia-ejemplos.js';
+import { escapeHtml } from '../../core/ui.js';
 
 const STORAGE_KEY = 'hud-dudas-guardia';
 const TEMA_DEFECTO = 'General';
@@ -28,12 +29,6 @@ function temaDe(duda) {
 function guardarDudasUsuario(dudas) {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(dudas)); }
     catch { /* localStorage no disponible */ }
-}
-
-function escapeHtml(str) {
-    return String(str)
-        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
 function formatearFecha(iso) {

@@ -13,6 +13,7 @@ import {
     cidSvgFenotipos,
     cidSvgAlgoritmo
 } from '../../data/sindromes-urgentes-data.js';
+import { pintarGauge } from '../../core/ui.js';
 
 const OVERT_DIC_MAX = 8;
 const SIC_MAX = 6;
@@ -20,16 +21,6 @@ const SIC_MAX = 6;
 function buscarPuntos(valor, tramos) {
     const tramo = tramos.find(t => valor >= t.min && valor <= t.max);
     return tramo ? tramo.puntos : 0;
-}
-
-function actualizarGauge(prefijo, total, max, cumple) {
-    const fill = document.getElementById(`${prefijo}-gauge-fill`);
-    const num = document.getElementById(`${prefijo}-gauge-num`);
-    if (!fill || !num) return;
-    fill.style.width = `${Math.min(100, (total / max) * 100)}%`;
-    fill.style.background = cumple ? 'var(--accent-red)' : 'var(--accent-green)';
-    fill.style.boxShadow = cumple ? 'var(--glow-red)' : 'var(--glow-green)';
-    num.textContent = `${total}/${max}`;
 }
 
 function calcOvertDic() {
@@ -42,8 +33,7 @@ function calcOvertDic() {
     if (plqEl.value === '' || ptEl.value === '' || fibEl.value === '') {
         box.innerHTML = 'Introduce plaquetas, prolongación de TP y fibrinógeno para calcular.';
         box.style.color = '';
-        actualizarGauge('cid-overt', 0, OVERT_DIC_MAX, false);
-        document.getElementById('cid-overt-gauge-num').textContent = '—';
+        pintarGauge('cid-overt-gauge', 0, OVERT_DIC_MAX, 'ok', '—');
         return;
     }
 
@@ -54,7 +44,7 @@ function calcOvertDic() {
     const pPlq = buscarPuntos(plaquetas, cidOvertDicItems.plaquetas);
     const pPt = buscarPuntos(pt, cidOvertDicItems.ptProlongado);
     const pFib = fibrinogeno < 100 ? 1 : 0;
-    const pDd = cidOvertDicItems.dimeroD.find(d => d.value === ddEl.value).puntos;
+    const pDd = cidOvertDicItems.dimeroD.find(d => d.value === ddEl.value)?.puntos ?? 0;
 
     const total = pPlq + pPt + pFib + pDd;
     const cumple = total >= cidOvertDicItems.corte;
@@ -64,7 +54,7 @@ function calcOvertDic() {
         <div style="margin-top: 6px; font-size: 0.85rem;">${cumple ? '✅ Compatible con CID franca (Overt DIC 2025)' : '⏳ No alcanza el corte de CID franca (≥5)'}</div>
     `;
     box.style.color = cumple ? 'var(--accent-red)' : 'var(--accent-green)';
-    actualizarGauge('cid-overt', total, OVERT_DIC_MAX, cumple);
+    pintarGauge('cid-overt-gauge', total, OVERT_DIC_MAX, cumple ? 'danger' : 'ok', `${total}/${OVERT_DIC_MAX}`);
 }
 
 function calcSic() {
@@ -76,8 +66,7 @@ function calcSic() {
     if (plqEl.value === '' || inrEl.value === '') {
         box.innerHTML = 'Introduce plaquetas e INR para calcular.';
         box.style.color = '';
-        actualizarGauge('cid-sic', 0, SIC_MAX, false);
-        document.getElementById('cid-sic-gauge-num').textContent = '—';
+        pintarGauge('cid-sic-gauge', 0, SIC_MAX, 'ok', '—');
         return;
     }
 
@@ -99,7 +88,7 @@ function calcSic() {
         <div style="margin-top: 4px; font-size: 0.7rem; color: var(--text-muted);">Subscore hemostático (plaquetas + INR): ${hemostasia} ${hemostasia > cidSicItems.corteHemostasia ? '(> 2, cumple)' : '(debe ser > 2)'}</div>
     `;
     box.style.color = cumple ? 'var(--accent-red)' : 'var(--accent-green)';
-    actualizarGauge('cid-sic', total, SIC_MAX, cumple);
+    pintarGauge('cid-sic-gauge', total, SIC_MAX, cumple ? 'danger' : 'ok', `${total}/${SIC_MAX}`);
 }
 
 function renderTerminologia() {

@@ -42,9 +42,9 @@ export function openCorkboardTopic(panelId, tabId) {
 // Nombre legible de una ficha a partir de su .field-name (que a menudo
 // lleva un <br> interno para partir el título en 2 líneas en la tarjeta) —
 // se sustituye por un espacio en vez de dejarlo concatenado sin separación.
-function nombreFicha(card) {
+export function nombreFicha(card, porDefecto = '') {
     const el = card.querySelector('.field-name');
-    if (!el) return 'Siguiente ficha';
+    if (!el) return porDefecto;
     return el.innerHTML.replace(/<br\s*\/?>/gi, ' ').replace(/<[^>]+>/g, '').trim().replace(/\s+/g, ' ');
 }
 
@@ -123,7 +123,7 @@ export function initCorkboard(boardId, panelId) {
         const boton = document.createElement('button');
         boton.className = 'siguiente-ficha-btn';
         boton.type = 'button';
-        boton.textContent = `Siguiente ficha: ${nombreFicha(siguienteCard)} →`;
+        boton.textContent = `Siguiente ficha: ${nombreFicha(siguienteCard, 'Siguiente ficha')} →`;
         boton.addEventListener('click', () => openCorkboardTopic(panelId, siguienteCard.dataset.tab));
         contenido.appendChild(boton);
     });

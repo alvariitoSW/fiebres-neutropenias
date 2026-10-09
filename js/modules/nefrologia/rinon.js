@@ -8,12 +8,9 @@ export function initRinon({ onRoute }) {
     const stage = document.getElementById('rinon-stage');
     if (!stage) return { reset: () => {} };
 
-    const visited = new Set();
-
     stage.addEventListener('click', (e) => {
         const btn = e.target.closest('.region-btn[data-route]');
         if (!btn) return;
-        visited.add(btn.dataset.route);
         btn.classList.add('visited');
         if (onRoute) onRoute(btn.dataset.route);
     });
@@ -22,7 +19,6 @@ export function initRinon({ onRoute }) {
         // Quita las marcas de "visitado". Se llama al reentrar en
         // Nefrología desde Especialidades, mismo espíritu que atlas.reset().
         reset: () => {
-            visited.clear();
             stage.querySelectorAll('.region-btn.visited').forEach(b => b.classList.remove('visited'));
         },
     };

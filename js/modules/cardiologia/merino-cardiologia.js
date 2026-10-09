@@ -3,6 +3,8 @@
 // campo). Fuente: Marik PE. Handbook of Evidence-Based Critical Care,
 // Cap. 14-17.
 import { initCorkboard } from '../../core/corkboard.js';
+import { initSiNoWizard } from '../../core/wizard.js';
+import { pintarGauge } from '../../core/ui.js';
 
 // Tabla 15.1 — clasificador de shock hemorrágico por % de volumen perdido.
 function calcClaseHemorragia() {
@@ -249,18 +251,12 @@ const MC_PAM_GAUGE_MAX = 120;
 function calcPamGauge() {
     const input = document.getElementById('mc-pam-actual');
     const row = document.getElementById('mc-pam-gauge-row');
-    const fill = document.getElementById('mc-pam-gauge-fill');
-    const num = document.getElementById('mc-pam-gauge-num');
-    if (!input || !row || !fill || !num) return;
+    if (!input || !row) return;
     if (input.value === '') { row.style.display = 'none'; return; }
     let pam = Number(input.value);
     if (pam < 0) { pam = 0; input.value = 0; }
     if (pam > 180) { pam = 180; input.value = 180; }
-    row.style.display = 'block';
-    fill.style.width = `${Math.max(0, Math.min(100, (pam / MC_PAM_GAUGE_MAX) * 100))}%`;
-    fill.style.background = pam >= 65 ? 'var(--accent-green)' : 'var(--accent-red)';
-    fill.style.boxShadow = pam >= 65 ? 'var(--glow-green)' : 'var(--glow-red)';
-    num.textContent = `${pam}`;
+    pintarGauge('mc-pam-gauge', pam, MC_PAM_GAUGE_MAX, pam >= 65 ? 'ok' : 'danger', `${pam}`);
 }
 function initPamGauge() {
     const input = document.getElementById('mc-pam-actual');
@@ -561,45 +557,6 @@ const MC_FUROSEMIDA_WIZARD = {
         no: { estado: 'tfg-estado-warn', final: 'Doblar la dosis IV (hasta un máximo de 200 mg) y reevaluar la diuresis a las 2h.' },
     },
 };
-function renderFurosemidaWizard(pasoKey) {
-    const preguntaEl = document.getElementById('mc-furosemida-wizard-pregunta');
-    const botonesEl = document.getElementById('mc-furosemida-wizard-botones');
-    const resultadoEl = document.getElementById('mc-furosemida-wizard-resultado');
-    const resetEl = document.getElementById('mc-furosemida-wizard-reset');
-    if (!preguntaEl) return;
-    const paso = MC_FUROSEMIDA_WIZARD[pasoKey];
-    preguntaEl.textContent = paso.pregunta;
-    resultadoEl.style.display = 'none';
-    resetEl.style.display = 'none';
-    botonesEl.innerHTML = '';
-    ['si', 'no'].forEach(resp => {
-        const btn = document.createElement('button');
-        btn.className = 'quiz-opcion';
-        btn.style.flex = '1';
-        btn.textContent = resp === 'si' ? 'Sí' : 'No';
-        btn.addEventListener('click', () => {
-            const next = paso[resp];
-            if (typeof next === 'string') {
-                renderFurosemidaWizard(next);
-            } else {
-                botonesEl.innerHTML = '';
-                resultadoEl.style.display = 'block';
-                resultadoEl.className = `result-box ${next.estado}`;
-                resultadoEl.style.textAlign = 'left';
-                resultadoEl.innerHTML = `<strong>${next.final}</strong>`;
-                resetEl.style.display = 'inline-block';
-            }
-        });
-        botonesEl.appendChild(btn);
-    });
-}
-function initFurosemidaWizard() {
-    const preguntaEl = document.getElementById('mc-furosemida-wizard-pregunta');
-    if (!preguntaEl) return;
-    renderFurosemidaWizard('inicio');
-    document.getElementById('mc-furosemida-wizard-reset').addEventListener('click', () => renderFurosemidaWizard('inicio'));
-}
-
 // Conversor de equivalencia de diuréticos de asa (Ficha XIV) — Tabla 18.4:
 // 40 mg furosemida = 1 mg bumetanida = 20 mg torsemida.
 function calcDiureticoEquiv() {
@@ -797,47 +754,8 @@ const MC_ACLS_WIZARD = {
         no: { estado: 'tfg-estado-warn', final: 'Continúa ciclos de RCP 2 min + epinefrina cada 3-5 min, reevaluando ritmo y causas reversibles cada 2 min. Si el esfuerzo ha sido adecuado y prolongado sin RCE, considera la terminación de la reanimación.' },
     },
 };
-function renderAclsWizard(pasoKey) {
-    const preguntaEl = document.getElementById('mc-acls-wizard-pregunta');
-    const botonesEl = document.getElementById('mc-acls-wizard-botones');
-    const resultadoEl = document.getElementById('mc-acls-wizard-resultado');
-    const resetEl = document.getElementById('mc-acls-wizard-reset');
-    if (!preguntaEl) return;
-    const paso = MC_ACLS_WIZARD[pasoKey];
-    preguntaEl.textContent = paso.pregunta;
-    resultadoEl.style.display = 'none';
-    resetEl.style.display = 'none';
-    botonesEl.innerHTML = '';
-    ['si', 'no'].forEach(resp => {
-        const btn = document.createElement('button');
-        btn.className = 'quiz-opcion';
-        btn.style.flex = '1';
-        btn.textContent = resp === 'si' ? 'Sí' : 'No';
-        btn.addEventListener('click', () => {
-            const next = paso[resp];
-            if (typeof next === 'string') {
-                renderAclsWizard(next);
-            } else {
-                botonesEl.innerHTML = '';
-                resultadoEl.style.display = 'block';
-                resultadoEl.className = `result-box ${next.estado}`;
-                resultadoEl.style.textAlign = 'left';
-                resultadoEl.innerHTML = `<strong>${next.final}</strong>`;
-                resetEl.style.display = 'inline-block';
-            }
-        });
-        botonesEl.appendChild(btn);
-    });
-}
-function initAclsWizard() {
-    const preguntaEl = document.getElementById('mc-acls-wizard-pregunta');
-    if (!preguntaEl) return;
-    renderAclsWizard('inicio');
-    document.getElementById('mc-acls-wizard-reset').addEventListener('click', () => renderAclsWizard('inicio'));
-}
-
 // Ficha XVIII — asistente paso a paso del manejo escalonado de la TAM
-// (mismo patrón Sí/No que renderAclsWizard).
+// (mismo componente Sí/No, core/wizard.js).
 const MC_MAT_WIZARD = {
     inicio: {
         pregunta: 'Corrige hipomagnesemia/hipopotasemia (magnesio antes que potasio si coexisten) e inicia magnesio empírico IV incluso con nivel sérico normal: 2 g MgSO₄ en 50 mL salino en 15 min, luego 6 g en 500 mL en 6h. ¿Persiste la TAM tras el magnesio?',
@@ -850,45 +768,6 @@ const MC_MAT_WIZARD = {
         no: { estado: 'tfg-estado-ok', final: 'Metoprolol (Tabla 19.1) — 80% de éxito de conversión a ritmo sinusal.' },
     },
 };
-function renderMatWizard(pasoKey) {
-    const preguntaEl = document.getElementById('mc-mat-wizard-pregunta');
-    const botonesEl = document.getElementById('mc-mat-wizard-botones');
-    const resultadoEl = document.getElementById('mc-mat-wizard-resultado');
-    const resetEl = document.getElementById('mc-mat-wizard-reset');
-    if (!preguntaEl) return;
-    const paso = MC_MAT_WIZARD[pasoKey];
-    preguntaEl.textContent = paso.pregunta;
-    resultadoEl.style.display = 'none';
-    resetEl.style.display = 'none';
-    botonesEl.innerHTML = '';
-    ['si', 'no'].forEach(resp => {
-        const btn = document.createElement('button');
-        btn.className = 'quiz-opcion';
-        btn.style.flex = '1';
-        btn.textContent = resp === 'si' ? 'Sí' : 'No';
-        btn.addEventListener('click', () => {
-            const next = paso[resp];
-            if (typeof next === 'string') {
-                renderMatWizard(next);
-            } else {
-                botonesEl.innerHTML = '';
-                resultadoEl.style.display = 'block';
-                resultadoEl.className = `result-box ${next.estado}`;
-                resultadoEl.style.textAlign = 'left';
-                resultadoEl.innerHTML = `<strong>${next.final}</strong>`;
-                resetEl.style.display = 'inline-block';
-            }
-        });
-        botonesEl.appendChild(btn);
-    });
-}
-function initMatWizard() {
-    const preguntaEl = document.getElementById('mc-mat-wizard-pregunta');
-    if (!preguntaEl) return;
-    renderMatWizard('inicio');
-    document.getElementById('mc-mat-wizard-reset').addEventListener('click', () => renderMatWizard('inicio'));
-}
-
 // Checklist puntuable de predictores de mal pronóstico (Ficha XXIV),
 // Tabla 21.5 — mismo patrón que el checklist DRESS de Fisiopatología UCI.
 function calcPronostico() {
@@ -972,9 +851,10 @@ function calcVolumenReanimacion() {
 function initVolumenReanimacion() {
     const resultado = document.getElementById('mc-vr-resultado');
     if (!resultado) return;
+    // 'input' también se dispara en los <select> (sexo/fluido), no hace
+    // falta engancharlo además a 'change'.
     ['mc-vr-peso', 'mc-vr-sexo', 'mc-vr-perdida', 'mc-vr-fluido'].forEach(id => {
         document.getElementById(id)?.addEventListener('input', calcVolumenReanimacion);
-        document.getElementById(id)?.addEventListener('change', calcVolumenReanimacion);
     });
     calcVolumenReanimacion();
 }
@@ -1055,17 +935,17 @@ export function init() {
     initVasopresorEscenario();
     initTss();
     initCardiogenicoPerfil();
-    initFurosemidaWizard();
+    initSiNoWizard('mc-furosemida-wizard', MC_FUROSEMIDA_WIZARD);
     initDiureticoEquiv();
     initTroponinaDelta();
     initPuertaBalon();
     initDiseccionFarmaco();
     initFaFarmaco();
-    initAclsWizard();
+    initSiNoWizard('mc-acls-wizard', MC_ACLS_WIZARD);
     initPronostico();
     initEtco2();
     initVolumenReanimacion();
     initObjetivosCardiogenico();
-    initMatWizard();
+    initSiNoWizard('mc-mat-wizard', MC_MAT_WIZARD);
     initTtmTemp();
 }

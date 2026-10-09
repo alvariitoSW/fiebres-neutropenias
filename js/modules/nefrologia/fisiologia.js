@@ -2,6 +2,7 @@
 // interactivo de autorregulación de la TFG. Fuente: Carracedo J, Ramírez R.
 // "Fisiología Renal". Nefrología al día (SEN), actualizado 5/10/2020.
 import { initCorkboard } from '../../core/corkboard.js';
+import { wireSelectExplicacion } from '../../core/ui.js';
 import {
     hiponatremiaPorVolemia, hipernatremiaDiagnosticoDiferencial,
     factoresDistribucionPotasio, sindromesHipopotasemicos, mecanismosHiperpotasemia,
@@ -298,21 +299,6 @@ function calcCorreccionSodio() {
 
     box.className = `tfg-estado tfg-estado-${estado}`;
     box.textContent = mensaje;
-}
-
-function wireSelectExplicacion(selectId, boxId, datos, render) {
-    const select = document.getElementById(selectId);
-    const box = document.getElementById(boxId);
-    if (!select || !box) return;
-    select.addEventListener('change', () => {
-        const item = datos[select.value];
-        if (!item) {
-            box.style.display = 'none';
-            return;
-        }
-        box.style.display = 'block';
-        box.innerHTML = render(item);
-    });
 }
 
 export function init() {

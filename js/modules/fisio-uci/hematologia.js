@@ -2,6 +2,7 @@
 // (cuaderno de campo). Fuente: El libro azul. Bases fisiopatológicas de la
 // medicina crítica. Sección II, capítulos 12-16.
 import { initCorkboard } from '../../core/corkboard.js';
+import { wireSelectExplicacion, pintarGauge } from '../../core/ui.js';
 
 // ---------------------------------------------------------------------
 // FICHA 1 — Simulador de secuestro de hierro por hepcidina
@@ -52,21 +53,6 @@ const PLT_ESCENARIOS = {
     pl: 'Punción lumbar: recomendación internacional ≥<strong>40.000/mm³</strong> (1C) — localmente ningún centro la realiza con &lt;100.000/mm³.',
     antiagregantes: 'Recuento normal pero con antiagregantes plaquetarios conocidos: idealmente medir el <strong>tiempo de sangría por método de Ivy</strong> antes de decidir.',
 };
-
-function wireSelectExplicacion(selectId, boxId, datos) {
-    const select = document.getElementById(selectId);
-    const box = document.getElementById(boxId);
-    if (!select || !box) return;
-    select.addEventListener('change', () => {
-        const item = datos[select.value];
-        if (!item) {
-            box.style.display = 'none';
-            return;
-        }
-        box.style.display = 'block';
-        box.innerHTML = item;
-    });
-}
 
 // ---------------------------------------------------------------------
 // FICHA 3 — Calculadora de Fick (DO2/VO2/EO2)
@@ -140,15 +126,7 @@ function calcFuciFick() {
     box.className = `tfg-estado tfg-estado-${estado}`;
     box.innerHTML = lineas.join('<br>') + `<br>${interpretacion}`;
 
-    if (gaugeRow) {
-        gaugeRow.style.display = 'block';
-        const fill = document.getElementById('fuci-fick-gauge-fill');
-        const num = document.getElementById('fuci-fick-gauge-num');
-        fill.style.width = `${Math.max(0, Math.min(100, (do2 / FICK_GAUGE_MAX) * 100))}%`;
-        const colores = { ok: 'var(--accent-green)', warn: 'var(--accent-yellow)', danger: 'var(--accent-red)' };
-        fill.style.background = colores[estado];
-        num.textContent = `${do2.toFixed(0)}`;
-    }
+    pintarGauge('fuci-fick-gauge', do2, FICK_GAUGE_MAX, estado, do2.toFixed(0));
 }
 
 // ---------------------------------------------------------------------

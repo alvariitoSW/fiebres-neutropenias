@@ -61,7 +61,7 @@ function renderEntrada(r, idx, actual) {
         const extra = restantesArr.map(o => `<p class="pif-obj pif-obj-extra" style="display:none;">— ${o}</p>`).join('');
         const restantes = restantesArr.length;
         const toggle = restantes > 0
-            ? `<button class="pif-toggle" data-restantes="${restantes}">Ver ${restantes} objetivo${restantes === 1 ? '' : 's'} más</button>`
+            ? `<button class="pif-toggle">Ver ${restantes} objetivo${restantes === 1 ? '' : 's'} más</button>`
             : '';
         const nota = r.nota ? `<p class="pif-nota">Nota — ${r.nota}</p>` : '';
         cuerpo = `
@@ -171,9 +171,8 @@ export function initPifManifiesto() {
             const extras = entry.querySelectorAll('.pif-obj-extra');
             const abierto = extras.length > 0 && extras[0].style.display !== 'none';
             extras.forEach(el => { el.style.display = abierto ? 'none' : ''; });
-            const restantes = toggleBtn.dataset.restantes;
             toggleBtn.textContent = abierto
-                ? `Ver ${restantes} objetivo${restantes === '1' ? '' : 's'} más`
+                ? `Ver ${extras.length} objetivo${extras.length === 1 ? '' : 's'} más`
                 : 'Ocultar objetivos';
         }
     });

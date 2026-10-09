@@ -1,4 +1,5 @@
 import { initCorkboard } from '../../core/corkboard.js';
+import { pintarGauge, clamp } from '../../core/ui.js';
 
 // ============================================================
 // ESTADO FISIOLÓGICO COMPARTIDO DEL CICLO CARDÍACO (Ficha 1)
@@ -86,7 +87,6 @@ function fsEdvToPrecarga(edv) { return ((edv - FS_EDV_MIN) / (FS_EDV_MAX - FS_ED
 const FC_MIN = 20, FC_MAX = 220;
 const PAM_MIN = 20, PAM_MAX = 180;
 const PAD_MIN = -5, PAD_MAX = 30;
-function clamp(val, min, max) { return Math.max(min, Math.min(max, val)); }
 
 // Lee y escribe directamente sobre CicloEstado.edv/contractilidad (el
 // panel de control y este simulador son, a todos los efectos, la misma
@@ -274,7 +274,6 @@ const WIGGERS_FASES = [
     { nombre: 'F — Llenado rápido', frac: 0.57 },
     { nombre: 'G — Diástasis', frac: 0.8225 },
 ];
-const WIGGERS_MULTIPLICADORES = { '1': 1, '2': 2, '4': 4, '8': 8 };
 function initCicloCardiacoAnimado() {
     const container = document.getElementById('cardio-wiggers-anim');
     if (!container) return;
@@ -292,14 +291,6 @@ function initCicloCardiacoAnimado() {
     const nodosAnimados = Array.from(container.querySelectorAll('*'));
 
     const btn = document.getElementById('cardio-wiggers-playpause');
-    if (btn) btn.setAttribute('aria-label', 'Pausar o reanudar la animación del ciclo cardíaco');
-    if (btn) {
-        btn.addEventListener('click', () => {
-            container.classList.toggle('paused');
-            if (fichaRoot) fichaRoot.classList.toggle('paused', container.classList.contains('paused'));
-            btn.textContent = container.classList.contains('paused') ? '▶ Reanudar' : '⏸ Pausar';
-        });
-    }
 
     const faseLabel = document.getElementById('cardio-wiggers-fase-actual');
     if (faseLabel) faseLabel.setAttribute('aria-live', 'polite');
@@ -315,7 +306,7 @@ function initCicloCardiacoAnimado() {
     let faseFijada = false;
 
     function duracionMs() {
-        const mult = speedSel ? (WIGGERS_MULTIPLICADORES[speedSel.value] || 1) : 1;
+        const mult = speedSel ? (Number(speedSel.value) || 1) : 1;
         return (60 / CicloEstado.fc) * 1000 * mult;
     }
     function aplicarFaseActual() {
@@ -356,11 +347,15 @@ function initCicloCardiacoAnimado() {
     const nextBtn = document.getElementById('cardio-wiggers-fase-next');
     if (prevBtn) { prevBtn.setAttribute('aria-label', 'Fase anterior del ciclo cardíaco'); prevBtn.addEventListener('click', () => irAFase(faseIdx - 1)); }
     if (nextBtn) { nextBtn.setAttribute('aria-label', 'Fase siguiente del ciclo cardíaco'); nextBtn.addEventListener('click', () => irAFase(faseIdx + 1)); }
-    // Al reanudar manualmente tras usar los saltos de fase, el indicador de
-    // texto deja de tener sentido (vuelve a estar "en marcha" libremente).
     if (btn) {
+        btn.setAttribute('aria-label', 'Pausar o reanudar la animación del ciclo cardíaco');
         btn.addEventListener('click', () => {
-            if (!container.classList.contains('paused')) {
+            const pausado = container.classList.toggle('paused');
+            if (fichaRoot) fichaRoot.classList.toggle('paused', pausado);
+            btn.textContent = pausado ? '▶ Reanudar' : '⏸ Pausar';
+            // Al reanudar tras usar los saltos de fase, el indicador de texto
+            // deja de tener sentido (vuelve a estar "en marcha" libremente).
+            if (!pausado) {
                 faseFijada = false;
                 if (faseLabel) faseLabel.textContent = 'Fase: en marcha';
             }
@@ -467,20 +462,21 @@ function calcFickTransporte() {
     const box = document.getElementById('cardio-fick-resultado');
     const interpretacionEl = document.getElementById('cardio-fick-interpretacion');
     if (els.some(e => !e) || !box) return;
-    if (els.some(e => e.value === '')) {
-        box.style.display = 'none';
-        const gaugeRow = document.getElementById('cardio-fick-gauge-row');
+    const gaugeRow = document.getElementById('cardio-fick-gauge-row');
+    const ocultarSecundarios = () => {
         if (gaugeRow) gaugeRow.style.display = 'none';
         if (interpretacionEl) interpretacionEl.style.display = 'none';
+    };
+    if (els.some(e => e.value === '')) {
+        box.style.display = 'none';
+        ocultarSecundarios();
         return;
     }
 
     const [hb, sao2, pao2, fc, vs, sc] = els.map(e => Number(e.value));
     if (sc === 0) {
         box.style.display = 'none';
-        const gaugeRow = document.getElementById('cardio-fick-gauge-row');
-        if (gaugeRow) gaugeRow.style.display = 'none';
-        if (interpretacionEl) interpretacionEl.style.display = 'none';
+        ocultarSecundarios();
         return;
     }
     // La saturación es un % de sitios de la Hb ocupados: no puede ser
@@ -490,9 +486,7 @@ function calcFickTransporte() {
         box.style.display = 'block';
         box.className = 'tfg-estado tfg-estado-danger';
         box.innerHTML = '<strong>⚠️ Valor no fisiológico</strong> — la SaO₂ es un porcentaje de saturación y no puede ser negativa ni superar el 100%. Revisa el dato.';
-        const gaugeRow = document.getElementById('cardio-fick-gauge-row');
-        if (gaugeRow) gaugeRow.style.display = 'none';
-        if (interpretacionEl) interpretacionEl.style.display = 'none';
+        ocultarSecundarios();
         return;
     }
     const gc = (fc * vs) / 1000;
@@ -561,18 +555,7 @@ function calcFickTransporte() {
 // .kinetic-marker ya usado en las calculadoras ISTH de Síndromes Urgentes.
 const DO2I_GAUGE_MAX = 800;
 function actualizarGaugeDO2I(do2i, estado) {
-    const row = document.getElementById('cardio-fick-gauge-row');
-    const fill = document.getElementById('cardio-fick-gauge-fill');
-    const num = document.getElementById('cardio-fick-gauge-num');
-    if (!row || !fill || !num) return;
-
-    row.style.display = 'block';
-    fill.style.width = `${Math.max(0, Math.min(100, (do2i / DO2I_GAUGE_MAX) * 100))}%`;
-    const colores = { ok: 'var(--accent-green)', warn: 'var(--accent-yellow)', danger: 'var(--accent-red)' };
-    const glows = { ok: 'var(--glow-green)', warn: 'none', danger: 'var(--glow-red)' };
-    fill.style.background = colores[estado] || colores.ok;
-    fill.style.boxShadow = glows[estado] || 'none';
-    num.textContent = `${do2i.toFixed(0)}`;
+    pintarGauge('cardio-fick-gauge', do2i, DO2I_GAUGE_MAX, estado, do2i.toFixed(0));
 }
 
 // Interpretación fisiopatológica de la RVS: qué significa cada zona, qué
@@ -686,30 +669,10 @@ function calcResistenciasVasculares() {
 const COSTO_DP_MAX = 15000;
 const COSTO_TP_MAX = 150000;
 function actualizarGaugeCosto(dp, tp) {
-    const dpRow = document.getElementById('cardio-costo-gauge-dp-row');
-    const dpFill = document.getElementById('cardio-costo-gauge-dp-fill');
-    const dpNum = document.getElementById('cardio-costo-gauge-dp-num');
-    const tpRow = document.getElementById('cardio-costo-gauge-tp-row');
-    const tpFill = document.getElementById('cardio-costo-gauge-tp-fill');
-    const tpNum = document.getElementById('cardio-costo-gauge-tp-num');
-    if (!dpRow || !dpFill || !dpNum || !tpRow || !tpFill || !tpNum) return;
-
-    const colores = { ok: 'var(--accent-green)', warn: 'var(--accent-yellow)', danger: 'var(--accent-red)' };
-    const glows = { ok: 'var(--glow-green)', warn: 'none', danger: 'var(--glow-red)' };
     const estadoDp = dp > 12000 ? 'danger' : (dp > 10200 ? 'warn' : 'ok');
     const estadoTp = tp > 120000 ? 'danger' : (tp > 102000 ? 'warn' : 'ok');
-
-    dpRow.style.display = 'block';
-    dpFill.style.width = `${Math.max(0, Math.min(100, (dp / COSTO_DP_MAX) * 100))}%`;
-    dpFill.style.background = colores[estadoDp];
-    dpFill.style.boxShadow = glows[estadoDp];
-    dpNum.textContent = dp.toLocaleString('es');
-
-    tpRow.style.display = 'block';
-    tpFill.style.width = `${Math.max(0, Math.min(100, (tp / COSTO_TP_MAX) * 100))}%`;
-    tpFill.style.background = colores[estadoTp];
-    tpFill.style.boxShadow = glows[estadoTp];
-    tpNum.textContent = tp.toLocaleString('es');
+    pintarGauge('cardio-costo-gauge-dp', dp, COSTO_DP_MAX, estadoDp, dp.toLocaleString('es'));
+    pintarGauge('cardio-costo-gauge-tp', tp, COSTO_TP_MAX, estadoTp, tp.toLocaleString('es'));
 }
 
 function calcCostoFuncionamiento() {
@@ -780,18 +743,7 @@ function calcCostoFuncionamiento() {
 // se lean con el mismo lenguaje visual.
 const IDO2_F2_GAUGE_MAX = 800;
 function actualizarGaugeIDO2Ficha2(ido2, estado) {
-    const row = document.getElementById('cardio-ido2-gauge-row');
-    const fill = document.getElementById('cardio-ido2-gauge-fill');
-    const num = document.getElementById('cardio-ido2-gauge-num');
-    if (!row || !fill || !num) return;
-
-    row.style.display = 'block';
-    fill.style.width = `${Math.max(0, Math.min(100, (ido2 / IDO2_F2_GAUGE_MAX) * 100))}%`;
-    const colores = { ok: 'var(--accent-green)', warn: 'var(--accent-yellow)', danger: 'var(--accent-red)' };
-    const glows = { ok: 'var(--glow-green)', warn: 'none', danger: 'var(--glow-red)' };
-    fill.style.background = colores[estado] || colores.ok;
-    fill.style.boxShadow = glows[estado] || 'none';
-    num.textContent = `${ido2.toFixed(0)}`;
+    pintarGauge('cardio-ido2-gauge', ido2, IDO2_F2_GAUGE_MAX, estado, ido2.toFixed(0));
 }
 
 // Índice de aporte de oxígeno (IDO2 = IC x CaO2), Ficha 2 — versión x10

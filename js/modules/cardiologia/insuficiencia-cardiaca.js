@@ -3,6 +3,7 @@
 // literalmente en la fuente. Fuente: 2026 ESC Guidelines for the
 // management of heart failure. Eur Heart J. 2026;00:1-112.
 import { initCorkboard } from '../../core/corkboard.js';
+import { initSiNoWizard } from '../../core/wizard.js';
 
 // Tabla 18 — CHA₂DS₂-VA (score aditivo simple, sin criterio de sexo,
 // a diferencia del CHA₂DS₂-VASc clásico).
@@ -205,45 +206,6 @@ const DIURETICOS_WIZARD = {
         no: { estado: 'tfg-estado-danger', final: 'Sin respuesta pese a escalada máxima. Considerar ultrafiltración.' },
     },
 };
-function renderDiureticosWizard(pasoKey) {
-    const preguntaEl = document.getElementById('diureticos-wizard-pregunta');
-    const botonesEl = document.getElementById('diureticos-wizard-botones');
-    const resultadoEl = document.getElementById('diureticos-wizard-resultado');
-    const resetEl = document.getElementById('diureticos-wizard-reset');
-    if (!preguntaEl) return;
-    const paso = DIURETICOS_WIZARD[pasoKey];
-    preguntaEl.textContent = paso.pregunta;
-    resultadoEl.style.display = 'none';
-    resetEl.style.display = 'none';
-    botonesEl.innerHTML = '';
-    ['si', 'no'].forEach(resp => {
-        const btn = document.createElement('button');
-        btn.className = 'quiz-opcion';
-        btn.style.flex = '1';
-        btn.textContent = resp === 'si' ? 'Sí' : 'No';
-        btn.addEventListener('click', () => {
-            const next = paso[resp];
-            if (typeof next === 'string') {
-                renderDiureticosWizard(next);
-            } else {
-                botonesEl.innerHTML = '';
-                resultadoEl.style.display = 'block';
-                resultadoEl.className = `result-box ${next.estado}`;
-                resultadoEl.style.textAlign = 'left';
-                resultadoEl.innerHTML = `<strong>${next.final}</strong>`;
-                resetEl.style.display = 'inline-block';
-            }
-        });
-        botonesEl.appendChild(btn);
-    });
-}
-function initDiureticosWizard() {
-    const preguntaEl = document.getElementById('diureticos-wizard-pregunta');
-    if (!preguntaEl) return;
-    renderDiureticosWizard('inicio');
-    document.getElementById('diureticos-wizard-reset').addEventListener('click', () => renderDiureticosWizard('inicio'));
-}
-
 // Checklist de descongestión pre-alta (Fig. 14) — mismo patrón "checklist
 // puntuable con veredicto global" ya usado para los 3 sistemas de
 // criterios DRESS en Hematología/Fisiopatología UCI.
@@ -313,7 +275,7 @@ export function init() {
     initTrc();
     initFeviLocator();
     initScai();
-    initDiureticosWizard();
+    initSiNoWizard('diureticos-wizard', DIURETICOS_WIZARD);
     initDescongestion();
     initDerivacion();
 }

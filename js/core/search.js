@@ -15,11 +15,8 @@
 // IRA/ERC) — ampliar el alcance a esas páginas es un paso aparte, no
 // simplemente añadir entradas a PANEL_NAV.
 
-function nombreFicha(card) {
-    const el = card.querySelector('.field-name');
-    if (!el) return '';
-    return el.innerHTML.replace(/<br\s*\/?>/gi, ' ').replace(/<[^>]+>/g, '').trim().replace(/\s+/g, ' ');
-}
+import { nombreFicha } from './corkboard.js';
+import { escapeHtml } from './ui.js';
 
 const ESPECIALIDADES = {
     home: { nombre: 'Hematología', icono: '🩸', color: 'var(--accent-red)' },
@@ -136,10 +133,6 @@ function agruparPorEspecialidad(resultados) {
     return ORDEN_ESPECIALIDADES
         .filter(key => grupos.has(key))
         .map(key => ({ especialidad: key, items: grupos.get(key) }));
-}
-
-function escapeHtml(str) {
-    return String(str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
 export function initSearch({ navegar }) {
