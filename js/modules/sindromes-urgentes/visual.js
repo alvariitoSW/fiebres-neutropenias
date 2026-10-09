@@ -61,7 +61,7 @@ export function init() {
                 { titulo: 'Cuidados', color: 'dorado', nodos: ['Monitorización.', 'Acceso venoso central.', 'Transfusión de plaquetas.', 'Profilaxis de tromboembolismo venoso.'] }
             ] },
             { tipo: 'comparar', titulo: 'Después del episodio', columnas: [
-                { titulo: 'Desencadenantes de recaída', color: 'rojo', nodos: ['Infecciones', 'Embarazo', 'Traumatismo mayor', 'Anticonceptivos orales', 'Cocaína', 'Fármacos:', 'Pancreatitis'] },
+                { titulo: 'Desencadenantes de recaída', color: 'rojo', nodos: ['Infecciones', { fuente: '.compare-box.blue li:nth-child(2)', etiqueta: 'Embarazo' }, 'Traumatismo mayor', 'Anticonceptivos orales', 'Cocaína', 'Fármacos:', 'Pancreatitis'] },
                 { titulo: 'Complicaciones a largo plazo', color: 'amarillo', nodos: ['Trastornos del estado de ánimo', 'Síntomas neurocognitivos', 'Hipertensión arterial de novo'] }
             ] }
         ]

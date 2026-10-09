@@ -15,8 +15,11 @@
 // `etiqueta` es opcional: por defecto se toma del propio elemento.
 //
 // Tipos de panel: 'flujo', 'escalera', 'comparar', 'racimos', 'mapa',
-// 'linea', 'puntos' (barras de puntuación conectadas a una calculadora) y
-// 'selector' (opciones de un <select> real). Los dos últimos no calculan:
+// 'linea', 'puntos' (barras de puntuación conectadas a una calculadora),
+// 'selector' (opciones de un <select> real) y tres que DIBUJAN UNA TABLA
+// de la ficha leyendo sus celdas en tiempo de ejecución: 'barras' (cifras
+// de una o varias columnas), 'matriz' (celdas normal/alterado coloreadas) y
+// 'frecuencias' (cada "Nombre: 1:N" en una escala logarítmica). Los dos últimos no calculan:
 // escriben en los controles reales, disparan su evento y copian el
 // resultado que pinta la calculadora de siempre.
 //
@@ -43,8 +46,13 @@ function resolver(raiz, fuente) {
     if (!fuente) return null;
     if (fuente.startsWith('#')) return document.querySelector(fuente);
     if (/^[.[]/.test(fuente)) return raiz.querySelector(fuente);
-    const buscado = norm(fuente);
-    return [...raiz.querySelectorAll(CANDIDATOS)].find(el => norm(textoPropio(el)).startsWith(buscado)) || null;
+    const buscado = norm(limpiar(fuente));
+    const coincide = el => norm(limpiar(textoPropio(el))).startsWith(buscado);
+    // Prioridad: acordeones y kv-row (bloques con título propio) antes que
+    // párrafos, filas o elementos de lista que empiecen igual.
+    return [...raiz.querySelectorAll('.micro-prof-item')].find(coincide)
+        || [...raiz.querySelectorAll('dl.kv-row')].find(coincide)
+        || [...raiz.querySelectorAll(CANDIDATOS)].find(coincide) || null;
 }
 
 function etiquetaDe(el) {
@@ -141,6 +149,67 @@ const RENDER = {
     }
 };
 
+// ---------- Paneles que dibujan una tabla de la ficha ----------
+
+// Primer número de una celda ("1,8", "12.000", "<0,01"); null si no hay.
+function numero(texto) {
+    const m = /(\d+(?:\.\d{3})*(?:,\d+)?|\d+(?:,\d+)?)/.exec(texto);
+    if (!m) return null;
+    const crudo = m[1];
+    return /\.\d{3}/.test(crudo) && !crudo.includes(',') ? Number(crudo.replace(/\./g, '')) : Number(crudo.replace(/\./g, '').replace(',', '.'));
+}
+
+// "1:1,9 millones" → 1900000; "1:12.000" → 12000
+function denominador(texto) {
+    const m = /1:\s*([\d.,]+)\s*(millones?)?/.exec(texto);
+    if (!m) return null;
+    return m[2] ? Number(m[1].replace(',', '.')) * 1e6 : Number(m[1].replace(/\./g, '').replace(',', '.'));
+}
+
+const filasDatos = tabla => [...tabla.rows].filter(r => r.cells[0]?.tagName === 'TD');
+const cabeceras = tabla => [...(tabla.tHead?.rows[0] || tabla.rows[0]).cells].map(c => c.textContent.trim());
+
+RENDER.barras = (p, nodos) => {
+    const filas = p.nodos.map(x => nodos[x.i]);
+    const valores = filas.map(n => p.series.map(se => numero(n.el.cells[se.col].textContent)));
+    const max = Math.max(...valores.flat().filter(v => v !== null), 0) || 1;
+    const leyenda = p.series.length > 1 ? `<div class="vk-barras-leyenda">${p.series.map(se => `<span style="--vk:${color(se.color)}">${se.nombre}</span>`).join('')}</div>` : '';
+    return `${leyenda}<div class="vk-barras">${filas.map((n, k) => `
+        <button type="button" class="vk-barra-fila" data-nodo="${n.i}">
+            <span class="vk-barra-etq">${n.texto}</span>
+            <span class="vk-barra-pistas">${p.series.map((se, j) => {
+                const v = valores[k][j];
+                return `<span class="vk-barra" style="--vk:${color(se.color)}"><i style="width:${v === null ? 0 : Math.max(1.5, v / max * 100)}%"></i><em>${v === null ? '—' : n.el.cells[se.col].textContent.trim()}</em></span>`;
+            }).join('')}</span>
+        </button>`).join('')}</div>`;
+};
+
+RENDER.matriz = (p, nodos) => {
+    const filas = p.nodos.map(x => nodos[x.i]);
+    const cab = cabeceras(filas[0].el.closest('table'));
+    const normal = t => (p.normales || ['normal']).includes(norm(t));
+    return `<div class="vk-matriz" style="grid-template-columns:minmax(0,1.3fr) repeat(${cab.length - 1}, minmax(0,1fr))">
+        <span></span>${cab.slice(1).map(h => `<span class="vk-matriz-cab">${h}</span>`).join('')}
+        ${filas.map(n => `<button type="button" class="vk-matriz-fila" data-nodo="${n.i}">${n.texto}</button>${[...n.el.cells].slice(1).map(c =>
+            `<span class="vk-matriz-celda ${normal(c.textContent) ? 'normal' : 'alterado'}">${c.textContent.trim()}</span>`).join('')}`).join('')}
+    </div>
+    <div class="vk-matriz-leyenda"><span class="normal">normal</span><span class="alterado">alterado</span></div>`;
+};
+
+RENDER.frecuencias = (p, nodos) => {
+    const lista = p.nodos.map(x => nodos[x.i]).sort((a, b) => a.n - b.n);
+    const [dmin, dmax] = [1, 7]; // de 1:10 a 1:10.000.000, escala log10
+    const pos = n => `${((Math.log10(n) - dmin) / (dmax - dmin) * 100).toFixed(1)}%`;
+    const ticks = [[10, '1:10'], [1e3, '1:1.000'], [1e5, '1:100.000']].map(([v, t]) => `<span style="left:${pos(v)}">${t}</span>`).join('');
+    return `<div class="vk-frec-eje"><div class="eje-ticks">${ticks}</div></div>
+    <div class="vk-frec">${lista.map(n => `
+        <button type="button" class="vk-frec-fila" data-nodo="${n.i}" style="--vk:${color(n.color)}">
+            <span class="vk-frec-etq">${n.texto}</span>
+            <span class="vk-frec-pista"><i style="left:${pos(n.n)}"></i></span>
+        </button>`).join('')}</div>
+    <div class="vk-matriz-leyenda">${(p.series || []).map(c => `<span style="--vk:${color(c.color)}" class="serie">${c.nombre}</span>`).join('')}<span>más frecuente ← → más raro (hasta 1:10 millones)</span></div>`;
+};
+
 // ---------- Paneles conectados a controles reales ----------
 
 function emitir(el) {
@@ -150,7 +219,9 @@ function emitir(el) {
 function copiarResultados(ids) {
     return ids.map(id => {
         const el = document.querySelector(id);
-        return el ? `<div class="vk-resultado-copia" style="color:${el.style.color || ''}">${el.innerHTML}</div>` : '';
+        if (!el) return '';
+        const estado = [...el.classList].filter(c => /^tfg-estado-/.test(c)).join(' ');
+        return `<div class="vk-resultado-copia ${estado}" style="color:${el.style.color || ''}">${el.innerHTML}</div>`;
     }).join('');
 }
 
@@ -169,7 +240,7 @@ function itemsDePuntos(p, raiz) {
         if (!control) { console.warn('[visual-kit] control no encontrado', it.control); return []; }
         if (control.tagName === 'SELECT') {
             return [{ tipo: 'select', control, etiqueta: it.etiqueta,
-                tramos: [...control.options].map(o => ({ label: it.corto ? it.corto(o) : limpiar(o.textContent), valor: o.value, pts: it.pts ? it.pts(o) : Number(o.value) })) }];
+                tramos: [...control.options].filter(o => o.value !== '').map(o => ({ label: it.corto ? it.corto(o) : limpiar(o.textContent), valor: o.value, pts: it.pts ? it.pts(o) : Number(o.value) })) }];
         }
         return [{ tipo: 'numero', control, etiqueta: it.etiqueta, tramos: it.tramos, unidad: it.unidad || '' }];
     });
@@ -192,7 +263,8 @@ function renderPuntos(p, estado) {
             : '';
         const segs = it.tramos.map((t, j) =>
             `<button type="button" class="vk-tramo ${j === actual ? 'on' : ''} ${it.tipo === 'numero' ? 'solo-lectura' : ''}" data-item="${k}" data-tramo="${j}" ${it.tipo === 'numero' ? 'tabindex="-1" aria-disabled="true"' : ''}><span>${t.label}</span><b>${t.pts}</b></button>`).join('');
-        return `<div class="vk-puntos-fila"><div class="vk-puntos-cab"><span>${it.etiqueta}</span>${campo}</div><div class="vk-tramos">${segs}</div></div>`;
+        const largo = it.tramos.some(t => String(t.label).length > 28);
+        return `<div class="vk-puntos-fila"><div class="vk-puntos-cab"><span>${it.etiqueta}</span>${campo}</div><div class="vk-tramos ${largo ? 'apilado' : ''}">${segs}</div></div>`;
     }).join('');
     return `${filas}<div class="vk-resultado">${copiarResultados(p.resultado)}</div>`;
 }
@@ -243,8 +315,26 @@ function construir(tab, texto, visual, receta) {
     };
     // Sustituye cada definición por su nodo registrado (descartando las no encontradas).
     const reg = lista => lista.map(x => Array.isArray(x) ? x.map(registrar).filter(Boolean) : registrar(x)).filter(x => x && (!Array.isArray(x) || x.length));
+    // Nodos a partir de una tabla: una fila por nodo (barras, matriz) o una
+    // entrada "Nombre: 1:N" por nodo (frecuencias, apuntando a su celda).
+    const nodoTabla = (p) => {
+        const tabla = typeof p.tabla === 'number' ? texto.querySelectorAll('table')[p.tabla] : resolver(texto, p.tabla);
+        if (!tabla) { console.warn(`[visual-kit] ${tab.id}: tabla no encontrada →`, p.tabla); return []; }
+        if (p.tipo !== 'frecuencias') {
+            return filasDatos(tabla).filter(r => !p.excluir || !p.excluir.some(x => norm(r.cells[0].textContent).startsWith(norm(x))))
+                .map(r => { const n = { i: nodos.length, el: r, texto: limpiar(r.cells[0].textContent) }; nodos.push(n); return n; });
+        }
+        const cab = cabeceras(tabla);
+        const ENTRADA = /([A-ZÁÉÍÓÚÑ][^:·]*?):\s*1:\s*([\d.,]+(?:\s*millones?)?)/g;
+        return filasDatos(tabla).flatMap(r => [...r.cells].flatMap((celda, j) =>
+            [...celda.textContent.replace(/\s+/g, ' ').matchAll(ENTRADA)].map(m => {
+                const n = { i: nodos.length, el: celda, texto: `${m[1].trim()} · 1:${m[2].trim()}`, n: denominador(`1:${m[2]}`), color: p.series?.[j]?.color, columna: cab[j] };
+                nodos.push(n); return n;
+            })));
+    };
     const paneles = receta.paneles.map(p => {
         const q = { ...p };
+        if (p.tabla !== undefined) q.nodos = nodoTabla(p);
         if (p.nodos) q.nodos = reg(p.nodos);
         if (p.columnas) q.columnas = p.columnas.map(c => ({ ...c, nodos: reg(c.nodos) }));
         if (p.grupos) q.grupos = p.grupos.map(g => ({ ...g, nodos: reg(g.nodos) }));
@@ -330,7 +420,7 @@ function construir(tab, texto, visual, receta) {
         det.hidden = false;
         det.style.borderColor = color(n.color || p.color) ;
         det.innerHTML = `<div class="visual-detalle-titulo">${n.texto}</div>
-            <div class="vk-detalle-cuerpo">${detalleDe(n.el)}</div>
+            <div class="vk-detalle-cuerpo">${n.columna ? `<p><b>${n.columna}</b></p>` : ''}${detalleDe(n.el)}</div>
             <button type="button" class="visual-link" data-accion="fuente">Ver en el texto ↓</button>`;
     });
 }

@@ -3,6 +3,7 @@
 // Blood Cell Transfusions" y "Platelets and Plasma", Marik PE. Handbook of
 // Evidence-Based Critical Care.
 import { initCorkboard } from '../../core/corkboard.js';
+import { init as initVisual } from './visual.js';
 
 // Escala 4Ts (riesgo de trombocitopenia inducida por heparina): 4 selects
 // (uno por criterio), puntuación 0-2 cada uno, suma 0-8.
@@ -44,4 +45,5 @@ function init4Ts() {
 export function init() {
     initCorkboard('merino-corkboard', 'panel-merino-tabs');
     init4Ts();
+    initVisual();
 }
