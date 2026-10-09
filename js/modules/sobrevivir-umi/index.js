@@ -57,18 +57,6 @@ export function init() {
     document.getElementById('btn-tecnicas-r1').addEventListener('click', () => sobrevivirLevel.show('tecnicasR1'));
     document.querySelectorAll('.btn-volver-sobrevivir-umi-menu').forEach(b => b.addEventListener('click', () => sobrevivirLevel.show('menu')));
 
-    // Enlaces internos de Técnicas R1 hacia fichas del Manual UMI (misma
-    // especialidad, guía→guía) — nunca .tx-link, que es un mecanismo
-    // interno de Nefrología con riesgo real de colisión si se reutiliza
-    // fuera de ese módulo (ver CLAUDE.md). Mismo patrón exacto ya usado
-    // por .neumo-internal-link/.paper-link en otros módulos.
-    document.querySelectorAll('.umi-internal-link').forEach(btn => {
-        btn.addEventListener('click', () => {
-            sobrevivirLevel.show('manualUmi');
-            openCorkboardTopic('panel-manual-umi-tabs', btn.dataset.tab);
-        });
-    });
-
     // Índice rápido por bloque temático (ver sobrevivir-umi-menu.html): cada
     // bloque salta a la primera ficha real de ese tema dentro del cuaderno
     // de campo único de 18 fichas — mismo patrón data-route→onRoute ya usado
@@ -107,11 +95,8 @@ export function init() {
     // cardiologia.volverAlMenu()/neumologia.volverAlMenu() ya dan.
     return {
         volverAlMenu: () => sobrevivirLevel.show('menu'),
-        // Salto genérico desde OTRAS especialidades, mismo patrón que
-        // irAFicha() ya exponen el resto de especialidades con submenú.
-        irAFicha: (view, panel, tab) => {
-            sobrevivirLevel.show(view);
-            if (panel && tab) openCorkboardTopic(panel, tab);
-        },
+        // Salto a una ficha concreta (enlaces `[data-especialidad="sobrevivirUmi"]`,
+        // incluidos los de Técnicas R1 hacia el Manual UMI).
+        irAFicha: sobrevivirLevel.irAFicha,
     };
 }

@@ -2,7 +2,7 @@
 // shock cardiogénico y síndromes de shock inflamatorio (cuaderno de
 // campo). Fuente: Marik PE. Handbook of Evidence-Based Critical Care,
 // Cap. 14-17.
-import { initCorkboard, openCorkboardTopic } from '../../core/corkboard.js';
+import { initCorkboard } from '../../core/corkboard.js';
 
 // Tabla 15.1 — clasificador de shock hemorrágico por % de volumen perdido.
 function calcClaseHemorragia() {
@@ -240,39 +240,6 @@ function initQtc() {
     if (!resultado) return;
     document.querySelectorAll('.mc-qtc-input').forEach(el => el.addEventListener('input', calcQtc));
     calcQtc();
-}
-
-// Enlace interno Ficha I → Ficha X (mismo panel, sin depender del
-// listener global .tx-link de nefrologia/index.js, que escanea todo el
-// DOM y no debe reutilizarse fuera de sus propias claves de vista).
-function initLinkASeptico() {
-    const btn = document.getElementById('mc-link-a-septico');
-    if (!btn) return;
-    btn.addEventListener('click', () => openCorkboardTopic('panel-merino-cardio-tabs', 'mc-shock-septico'));
-}
-
-// Enlace interno Ficha XXIV → Ficha XXII (Tabla 21.1, que sustenta la
-// cifra "1-7% de éxito" citada en el cierre "percepción vs. realidad").
-function initLinkATabla211() {
-    const btn = document.getElementById('mc-link-a-tabla211');
-    if (!btn) return;
-    btn.addEventListener('click', () => openCorkboardTopic('panel-merino-cardio-tabs', 'mc-paro-soporte'));
-}
-
-// Enlace interno Ficha VI (fallo del VD) → Ficha XIII (IC aguda: tipos y
-// consecuencias, donde vive el desarrollo completo del fallo del VD).
-function initLinkAIcTipos() {
-    const btn = document.getElementById('mc-link-a-ic-tipos');
-    if (!btn) return;
-    btn.addEventListener('click', () => openCorkboardTopic('panel-merino-cardio-tabs', 'mc-ic-tipos'));
-}
-
-// Enlace interno Ficha VII (soporte farmacológico) → Ficha XX (estrategias
-// de reperfusión completas del SCA).
-function initLinkAScaTratamiento() {
-    const btn = document.getElementById('mc-link-a-sca-tratamiento');
-    if (!btn) return;
-    btn.addEventListener('click', () => openCorkboardTopic('panel-merino-cardio-tabs', 'mc-sca-tratamiento'));
 }
 
 // Gauge visual del objetivo de PAM (Ficha I) — mismo patrón .kinetic-row/
@@ -1081,10 +1048,6 @@ export function init() {
     initClaseHemorragia();
     initTeg();
     initDispositivoSelector();
-    initLinkASeptico();
-    initLinkATabla211();
-    initLinkAIcTipos();
-    initLinkAScaTratamiento();
     initCha2ds2Vasc();
     initQtc();
     initPamGauge();

@@ -98,19 +98,6 @@ export function init() {
         onRoute: (key) => rutasRinon[key]?.(),
     });
 
-    // Enlaces internos de la guía transversal de tratamiento IRA/ERC:
-    // saltan a una vista distinta del propio switcher (ERC/FRA/TRR/
-    // Nefrotoxicidad) y, si llevan panel/tab, abren directamente esa
-    // ficha del cuaderno de campo destino — mismo patrón que usa el Atlas
-    // Hematológico para enlazar a Síndromes Urgentes desde otro módulo.
-    document.querySelectorAll('.tx-link').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const { view, panel, tab } = btn.dataset;
-            if (view) nefroLevel.show(view);
-            if (panel && tab) openCorkboardTopic(panel, tab);
-        });
-    });
-
     initFisiologia();
     initHta();
     initErc();
@@ -122,28 +109,18 @@ export function init() {
     nefroLevel.show('kidney');
 
     // Deja Nefrología lista para volver a mostrar siempre el mapa del riñón
-    // al reentrar desde Especialidades — mismo comportamiento que goHome()
-    // ya da al Atlas de Hematología. Lo usa home/index.js.
+    // (su "menú") al reentrar desde Especialidades — mismo comportamiento
+    // que goHome() ya da al Atlas de Hematología. Lo usa home/index.js.
     return {
-        volverAlMapa: () => {
+        volverAlMenu: () => {
             nefroLevel.show('kidney');
             rinon.reset();
             nefrona.reset();
         },
-        // Usado desde Hematología (home/index.js) para saltar directamente
-        // al buscador de ajuste de fármacos por función renal — p. ej.
-        // desde la Matriz de Combate MDR de Neutropenia Febril, cuyos
-        // antibióticos ya están en esa misma tabla.
-        irANefrotoxicidad: () => nefroLevel.show('nefrotoxicidad'),
-        // Versión genérica del mismo salto, usada por los botones
-        // `.especialidad-link[data-especialidad="nefrologia"]` de OTRAS
-        // especialidades (p. ej. Vías Urinarias en Fisiopatología UCI,
-        // saltando a una ficha concreta de FRA/ERC) — mismo patrón que
-        // `.tx-link` ya usa dentro de la propia Nefrología, aquí expuesto
-        // para poder llamarse desde fuera del módulo.
-        irAFicha: (view, panel, tab) => {
-            nefroLevel.show(view);
-            if (panel && tab) openCorkboardTopic(panel, tab);
-        },
+        // Salto a una ficha concreta (ERC/FRA/TRR/fisiología...) — lo usan
+        // los enlaces cruzados `[data-especialidad="nefrologia"]`, tanto
+        // desde otras especialidades como desde la propia Nefrología
+        // (guía transversal IRA/ERC, PNT del mapa del riñón).
+        irAFicha: nefroLevel.irAFicha,
     };
 }

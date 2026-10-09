@@ -1,7 +1,7 @@
 // Merino Neumología — embolia pulmonar, asma/EPOC, SDRA, oxigenoterapia y
 // ventilación no invasiva en el paciente crítico (cuaderno de campo).
 // Fuente: Marik PE. Handbook of Evidence-Based Critical Care, Cap. 22-26.
-import { initCorkboard, openCorkboardTopic } from '../../core/corkboard.js';
+import { initCorkboard } from '../../core/corkboard.js';
 
 // Ecuación 22.1 — peso ajustado para dosificación de heparina por peso en
 // obesidad mórbida (IMC≥40): IBW + 0,4×(peso real − peso ideal).
@@ -160,12 +160,6 @@ function initCao2() {
 // .tx-link (acoplado al listener global de nefrologia/index.js) — clase e
 // interruptor propios, mismo patrón ya usado por fisio-uci/hematologia.js
 // para su cross-link interno a la Ficha 4 de TEG/ROTEM.
-function initInternalLinks() {
-    document.querySelectorAll('.neumo-internal-link').forEach(btn => {
-        btn.addEventListener('click', () => openCorkboardTopic('panel-merino-neumo-tabs', btn.dataset.target));
-    });
-}
-
 // Tabla 25.2 — selector "¿qué sistema necesito según la FiO2 objetivo?".
 const SISTEMAS_O2 = [
     { nombre: 'O₂ nasal de bajo flujo', min: 24, max: 40, flujo: '1-6 L/min' },
@@ -624,7 +618,6 @@ function initVniRespuesta() {
 
 export function init() {
     initCorkboard('merino-neumo-corkboard', 'panel-merino-neumo-tabs');
-    initInternalLinks();
     initPesoAjustado();
     initPefr();
     initSdraSeveridad();

@@ -1,7 +1,7 @@
 // Repaso esquematizado de Hematología y Hemostasia en Cuidados Críticos
 // (cuaderno de campo). Fuente: El libro azul. Bases fisiopatológicas de la
 // medicina crítica. Sección II, capítulos 12-16.
-import { initCorkboard, openCorkboardTopic } from '../../core/corkboard.js';
+import { initCorkboard } from '../../core/corkboard.js';
 
 // ---------------------------------------------------------------------
 // FICHA 1 — Simulador de secuestro de hierro por hepcidina
@@ -382,8 +382,6 @@ export function init() {
 
     // Ficha 2
     wireSelectExplicacion('fuci-plt-select', 'fuci-plt-resultado', PLT_ESCENARIOS);
-    const linkATeg = document.getElementById('fuci-link-a-teg');
-    if (linkATeg) linkATeg.addEventListener('click', () => openCorkboardTopic('panel-fuci-hemato-tabs', 'fuci-teg'));
 
     // Ficha 3
     ['fuci-fick-gc', 'fuci-fick-hb', 'fuci-fick-sao2', 'fuci-fick-pao2', 'fuci-fick-svo2'].forEach(id => {

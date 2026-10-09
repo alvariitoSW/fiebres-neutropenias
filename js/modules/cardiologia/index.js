@@ -4,7 +4,7 @@
 // UCI/Papers Tuiter y Fisiopatología UCI: cada guía es una entrada de este
 // submenú con su propio cuaderno de campo.
 import { createViewSwitcher } from '../../core/navigation.js';
-import { initCorkboard, openCorkboardTopic } from '../../core/corkboard.js';
+import { initCorkboard } from '../../core/corkboard.js';
 import { preguntasInsuficienciaCardiaca, temasInsuficienciaCardiaca } from '../../data/insuficiencia-cardiaca-preguntas.js';
 import { init as initInsuficienciaCardiaca } from './insuficiencia-cardiaca.js';
 import { preguntasMerinoCardiologia, temasMerinoCardiologia } from '../../data/merino-cardiologia-preguntas.js';
@@ -39,31 +39,6 @@ export function init() {
     initInsuficienciaCardiaca();
     initMerinoCardiologia();
 
-    // Enlaces cruzados entre las 2 guías de Cardiología (misma especialidad,
-    // ambas ya colgando de este mismo cardioLevel) — shock cardiogénico se
-    // trata desde 2 ángulos: fisiopatología detallada en Merino Cardiología,
-    // recomendaciones graduadas en la guía ESC de IC. Nunca se usa .tx-link
-    // aquí (ese listener global vive en nefrologia/index.js y solo conoce
-    // las claves de nefroLevel) — cardioLevel.show() ya está en el cierre
-    // de este init(), así que basta un listener propio y local.
-    document.querySelectorAll('.cardio-cross-link').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const { view, tab } = btn.dataset;
-            cardioLevel.show(view);
-            openCorkboardTopic('panel-merino-cardio-tabs', tab);
-        });
-    });
-    const linkAScai = document.getElementById('mc-link-a-scai');
-    if (linkAScai) linkAScai.addEventListener('click', () => {
-        cardioLevel.show('insuficienciaCardiaca');
-        openCorkboardTopic('panel-cardio-ic-tabs', 'ic-descompensada');
-    });
-    const linkAMcsEsc = document.getElementById('mc-link-a-mcs-esc');
-    if (linkAMcsEsc) linkAMcsEsc.addEventListener('click', () => {
-        cardioLevel.show('insuficienciaCardiaca');
-        openCorkboardTopic('panel-cardio-ic-tabs', 'ic-descompensada');
-    });
-
     cardioLevel.show('menu');
 
     // Deja siempre el submenú de guías como pantalla de entrada al
@@ -72,11 +47,8 @@ export function init() {
     // especialidades.
     return {
         volverAlMenu: () => cardioLevel.show('menu'),
-        // Salto genérico desde OTRAS especialidades, mismo patrón que
-        // irAFicha() ya exponen nefrologia/fisio-uci/uci-papers.
-        irAFicha: (view, panel, tab) => {
-            cardioLevel.show(view);
-            if (panel && tab) openCorkboardTopic(panel, tab);
-        },
+        // Salto a una ficha concreta (enlaces `[data-especialidad="cardiologia"]`,
+        // incluidos los cruces entre las 2 guías de esta misma especialidad).
+        irAFicha: cardioLevel.irAFicha,
     };
 }

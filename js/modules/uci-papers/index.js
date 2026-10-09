@@ -4,7 +4,7 @@
 // de él, un cuaderno de campo con sus bloques temáticos — nunca se fabrica
 // contenido clínico sin una fuente real (ver CLAUDE.md).
 import { createViewSwitcher } from '../../core/navigation.js';
-import { initCorkboard, openCorkboardTopic } from '../../core/corkboard.js';
+import { initCorkboard } from '../../core/corkboard.js';
 import { preguntasShockSeptico, temasShockSeptico } from '../../data/shock-septico-preguntas.js';
 import { preguntasOxidoNitrico, temasOxidoNitrico } from '../../data/oxido-nitrico-preguntas.js';
 import { preguntasVdLra, temasVdLra } from '../../data/vd-lra-preguntas.js';
@@ -60,36 +60,16 @@ export function init() {
     initExtubacionPuma();
     initCitratoTrr();
 
-    // Enlaces entre papers de este mismo submenú (p. ej. VExUS ↔ VD y LRA
-    // postoperatoria, que ya se citaban mutuamente antes de que VExUS
-    // tuviera su propia ficha completa). Clase propia (`.paper-link`), NO
-    // `.tx-link`, para no colisionar con el listener global de `.tx-link`
-    // ya registrado por nefrologia/index.js (que trataría un `data-view`
-    // como "vdLra" como una clave inválida de SU PROPIO switcher y
-    // ocultaría todas sus vistas — mismo problema ya detectado y evitado
-    // con `.especialidad-link` entre especialidades).
-    document.querySelectorAll('.paper-link').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const { view, panel, tab } = btn.dataset;
-            if (view) uciLevel.show(view);
-            if (panel && tab) openCorkboardTopic(panel, tab);
-        });
-    });
-
     uciLevel.show('menu');
 
     // Deja siempre el submenú de papers como pantalla de entrada al
     // reentrar desde Especialidades — mismo comportamiento que
-    // nefrologia.volverAlMapa() y atlas.reset() ya dan a Nefrología y
+    // nefrologia.volverAlMenu() y atlas.reset() ya dan a Nefrología y
     // Hematología. Lo usa home/index.js.
     return {
         volverAlMenu: () => uciLevel.show('menu'),
-        // Salto genérico desde OTRAS especialidades (p. ej. FRA en
-        // Nefrología, enlazando a la ficha VExUS) — mismo patrón que
-        // `irAFicha` ya exponen nefrologia/index.js y fisio-uci/index.js.
-        irAFicha: (view, panel, tab) => {
-            uciLevel.show(view);
-            if (panel && tab) openCorkboardTopic(panel, tab);
-        },
+        // Salto a una ficha concreta (enlaces `[data-especialidad="uciPapers"]`,
+        // tanto desde otras especialidades como entre papers de este submenú).
+        irAFicha: uciLevel.irAFicha,
     };
 }

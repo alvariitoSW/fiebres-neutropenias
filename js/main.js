@@ -27,34 +27,24 @@ async function start() {
     initAccordions();
     initLightbox();
     const homeApi = home.init();
-    generales.init();
-    neutropeniaFebril.init();
-    reconocimiento.init();
-    sindromesUrgentes.init();
-    trasplante.init();
-    merinoHemato.init();
-    const nefrologiaApi = nefrologia.init();
-    home.onNefrologiaListo(nefrologiaApi);
-    const uciPapersApi = uciPapers.init();
-    home.onUciPapersListo(uciPapersApi);
-    const fisioUciApi = fisioUci.init();
-    home.onFisioUciListo(fisioUciApi);
-    const cardiologiaApi = cardiologia.init();
-    home.onCardiologiaListo(cardiologiaApi);
-    const neumologiaApi = neumologia.init();
-    home.onNeumologiaListo(neumologiaApi);
-    const sobrevivirUmiApi = sobrevivirUmi.init();
-    home.onSobrevivirUmiListo(sobrevivirUmiApi);
+    // Módulos de Hematología, que cuelgan del propio switcher raíz de home.
+    [generales, neutropeniaFebril, reconocimiento, sindromesUrgentes, trasplante, merinoHemato].forEach(m => m.init());
+    // Especialidades con switcher medio propio: cada init() devuelve
+    // { volverAlMenu, irAFicha }, que home registra bajo la misma clave que
+    // su vista raíz (ver registrarEspecialidad en home/index.js).
+    const especialidades = { nefrologia, uciPapers, fisioUci, cardiologia, neumologia, sobrevivirUmi };
+    Object.entries(especialidades).forEach(([key, mod]) => home.registrarEspecialidad(key, mod.init()));
 
     // Única llamada a initQuiz() de toda la app — el modal
     // (#quiz-modal-overlay) es un partial compartido, así que cada
     // especialidad expone su banco/temas ya combinados en vez de llamar
     // a initQuiz() cada una por su lado (ver comentario en quiz.js).
-    const quizBancoCompleto = [...home.quizBanco, ...nefrologia.quizBanco, ...uciPapers.quizBanco, ...fisioUci.quizBanco, ...cardiologia.quizBanco, ...neumologia.quizBanco, ...sobrevivirUmi.quizBanco];
+    const modulosQuiz = [home, ...Object.values(especialidades)];
+    const quizBancoCompleto = modulosQuiz.flatMap(m => m.quizBanco);
     initQuiz({
-        triggerId: [...home.quizTriggerId, ...nefrologia.quizTriggerId, ...uciPapers.quizTriggerId, ...fisioUci.quizTriggerId, ...cardiologia.quizTriggerId, ...neumologia.quizTriggerId, ...sobrevivirUmi.quizTriggerId],
+        triggerId: modulosQuiz.flatMap(m => m.quizTriggerId),
         banco: quizBancoCompleto,
-        temas: [...home.quizTemas, ...nefrologia.quizTemas, ...uciPapers.quizTemas, ...fisioUci.quizTemas, ...cardiologia.quizTemas, ...neumologia.quizTemas, ...sobrevivirUmi.quizTemas],
+        temas: modulosQuiz.flatMap(m => m.quizTemas),
     });
 
     // Modo Estudio: estimación de pomodoros por ficha (lectura + preguntas

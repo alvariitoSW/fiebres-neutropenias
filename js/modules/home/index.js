@@ -40,50 +40,25 @@ export const quizTemas = [
     ...temasMerino.map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'Merino HEMATO' })),
 ];
 
-// Referencia a la API que devuelve nefrologia.init() (ver
-// modules/nefrologia/index.js). nefrologia.init() se llama después de
-// home.init() en main.js, así que se inyecta aquí perezosamente en vez de
-// recibirla como parámetro — el listener de #btn-nefrologia la lee en el
-// momento del click, no en el momento de registrarse.
-let nefrologiaApi = null;
-export function onNefrologiaListo(api) {
-    nefrologiaApi = api;
+// APIs que devuelve el init() de cada especialidad con switcher medio
+// propio ({ volverAlMenu, irAFicha }, ver p. ej. modules/nefrologia/index.js).
+// Se registran desde main.js DESPUÉS de home.init() (cada especialidad se
+// inicializa después que home), así que los listeners de abajo las leen en
+// el momento del click, no al registrarse. La clave es la misma que la vista
+// raíz de esa especialidad en `topLevel`.
+const apis = {};
+export function registrarEspecialidad(key, api) {
+    apis[key] = api;
 }
-
-// Mismo patrón de inyección perezosa que nefrologiaApi, para la API que
-// devuelve uciPapers.init() (ver modules/uci-papers/index.js).
-let uciPapersApi = null;
-export function onUciPapersListo(api) {
-    uciPapersApi = api;
-}
-
-// Mismo patrón de inyección perezosa, para la API que devuelve
-// fisioUci.init() (ver modules/fisio-uci/index.js).
-let fisioUciApi = null;
-export function onFisioUciListo(api) {
-    fisioUciApi = api;
-}
-
-// Mismo patrón de inyección perezosa, para la API que devuelve
-// cardiologia.init() (ver modules/cardiologia/index.js).
-let cardiologiaApi = null;
-export function onCardiologiaListo(api) {
-    cardiologiaApi = api;
-}
-
-// Mismo patrón de inyección perezosa, para la API que devuelve
-// neumologia.init() (ver modules/neumologia/index.js).
-let neumologiaApi = null;
-export function onNeumologiaListo(api) {
-    neumologiaApi = api;
-}
-
-// Mismo patrón de inyección perezosa, para la API que devuelve
-// sobrevivirUmi.init() (ver modules/sobrevivir-umi/index.js).
-let sobrevivirUmiApi = null;
-export function onSobrevivirUmiListo(api) {
-    sobrevivirUmiApi = api;
-}
+// Botón del menú (raíz o intermedio) que entra en cada especialidad.
+const BOTONES_ESPECIALIDAD = {
+    nefrologia: 'btn-nefrologia',
+    uciPapers: 'btn-uci-papers',
+    fisioUci: 'btn-fisio-uci',
+    cardiologia: 'btn-cardiologia',
+    neumologia: 'btn-neumologia',
+    sobrevivirUmi: 'btn-sobrevivir-umi',
+};
 
 export function init() {
     // Renderiza la tile PIF del menú raíz y el manifiesto de rotación de
@@ -125,29 +100,13 @@ export function init() {
     document.getElementById('btn-cardiorrespi').addEventListener('click', () => topLevel.show('cardiorrespiMenu'));
 
     document.getElementById('btn-hematologia').addEventListener('click', goHome);
-    document.getElementById('btn-nefrologia').addEventListener('click', () => {
-        topLevel.show('nefrologia');
-        nefrologiaApi?.volverAlMapa();
-    });
-    document.getElementById('btn-uci-papers').addEventListener('click', () => {
-        topLevel.show('uciPapers');
-        uciPapersApi?.volverAlMenu();
-    });
-    document.getElementById('btn-fisio-uci').addEventListener('click', () => {
-        topLevel.show('fisioUci');
-        fisioUciApi?.volverAlMenu();
-    });
-    document.getElementById('btn-cardiologia').addEventListener('click', () => {
-        topLevel.show('cardiologia');
-        cardiologiaApi?.volverAlMenu();
-    });
-    document.getElementById('btn-neumologia').addEventListener('click', () => {
-        topLevel.show('neumologia');
-        neumologiaApi?.volverAlMenu();
-    });
-    document.getElementById('btn-sobrevivir-umi').addEventListener('click', () => {
-        topLevel.show('sobrevivirUmi');
-        sobrevivirUmiApi?.volverAlMenu();
+    // Entrar en una especialidad deja siempre su propio menú/mapa como
+    // pantalla de entrada (volverAlMenu), igual que goHome() resetea el Atlas.
+    Object.entries(BOTONES_ESPECIALIDAD).forEach(([key, btnId]) => {
+        document.getElementById(btnId).addEventListener('click', () => {
+            topLevel.show(key);
+            apis[key]?.volverAlMenu();
+        });
     });
     document.querySelectorAll('.btn-volver-especialidades').forEach(b => b.addEventListener('click', () => topLevel.show('especialidades')));
     // Hematología/Nefrología viven ahora un nivel más abajo, dentro de PIF;
@@ -160,65 +119,41 @@ export function init() {
     document.getElementById('btn-escalas-generales').addEventListener('click', () => topLevel.show('escalas'));
     document.querySelectorAll('.btn-volver-home').forEach(b => b.addEventListener('click', goHome));
 
-    // Router genérico de "ir a una ficha concreta de cualquier especialidad
-    // desde fuera" — usado por los botones `.especialidad-link` (ver más
-    // abajo) y también por el buscador global (core/search.js, inyectado
-    // como `navegar` desde main.js). Mismo patrón que ya usaban los
-    // `.especialidad-link` antes de extraerse a esta función: `especialidad`
-    // decide qué switcher raíz mostrar y, para las especialidades con
-    // switcher medio propio, delega en su `irAFicha(view, panel, tab)`
-    // (nefrologia/fisio-uci/uci-papers/cardiologia/neumologia). El caso
-    // 'home' es nuevo — antes nada apuntaba de vuelta a Hematología desde
-    // fuera — y usa el propio switcher raíz + `trasplanteLevel` para las 3
-    // subvistas de Trasplante, más `openCorkboardTopic` directo (nunca hacía
-    // falta pasar por `rutasAtlas`, que solo cubre 3 fichas fijas de
-    // Síndromes Urgentes, no cualquier ficha de Reconocimiento/Síndromes/
-    // Trasplante/Merino HEMATO).
+    // Router genérico de "ir a una ficha concreta de cualquier especialidad"
+    // — usado por los enlaces cruzados `[data-especialidad]` (ver más abajo)
+    // y por el buscador global (core/search.js, inyectado como `navegar`
+    // desde main.js). `especialidad` es la clave de la vista raíz en
+    // topLevel; para las especialidades con switcher medio propio se delega
+    // en su `irAFicha(view, panel, tab)` registrado. El caso 'home'
+    // (Hematología) usa el propio switcher raíz + `trasplanteLevel` para las
+    // 3 subvistas de Trasplante.
     function irAResultadoBusqueda({ especialidad, view, panel, tab, trasplante }) {
         if (especialidad === 'home') {
-            topLevel.show(view);
+            if (view) topLevel.show(view);
             if (trasplante) trasplanteLevel.show(trasplante);
             if (panel && tab) openCorkboardTopic(panel, tab);
-        } else if (especialidad === 'nefrologia') {
-            topLevel.show('nefrologia');
-            nefrologiaApi?.irAFicha(view, panel, tab);
-        } else if (especialidad === 'fisioUci') {
-            topLevel.show('fisioUci');
-            fisioUciApi?.irAFicha(view, panel, tab);
-        } else if (especialidad === 'uciPapers') {
-            topLevel.show('uciPapers');
-            uciPapersApi?.irAFicha(view, panel, tab);
-        } else if (especialidad === 'cardiologia') {
-            topLevel.show('cardiologia');
-            cardiologiaApi?.irAFicha(view, panel, tab);
-        } else if (especialidad === 'neumologia') {
-            topLevel.show('neumologia');
-            neumologiaApi?.irAFicha(view, panel, tab);
-        } else if (especialidad === 'sobrevivirUmi') {
-            topLevel.show('sobrevivirUmi');
-            sobrevivirUmiApi?.irAFicha(view, panel, tab);
+            return;
         }
+        const api = apis[especialidad];
+        if (!api) return; // clave desconocida: no tocar ningún switcher
+        topLevel.show(especialidad);
+        api.irAFicha(view, panel, tab);
     }
 
-    // Enlaces cruzados entre especialidades. Dos formas: 1) `data-target`
-    // fijo para atajos ya nombrados (p. ej. la Matriz de Combate MDR de
-    // Neutropenia Febril saltando al buscador de ajuste de fármacos por
-    // función renal de Nefrología); 2) `data-especialidad` +
-    // `data-view`/`data-panel`/`data-tab` genérico, resuelto por
-    // `irAResultadoBusqueda` de arriba — `data-trasplante` opcional se
-    // reenvía tal cual (solo aplica con `data-especialidad="home"` y
-    // `data-view="trasplante"`, para saltar directo a una de las 3
-    // subvistas de Trasplante antes de abrir la ficha).
-    document.querySelectorAll('.especialidad-link').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const { target, especialidad, view, panel, tab, trasplante } = btn.dataset;
-            if (target === 'nefrotoxicidad') {
-                topLevel.show('nefrologia');
-                nefrologiaApi?.irANefrotoxicidad();
-            } else if (especialidad) {
-                irAResultadoBusqueda({ especialidad, view, panel, tab, trasplante });
-            }
-        });
+    // ÚNICO mecanismo de enlace cruzado de toda la app — tanto entre
+    // especialidades como dentro de una misma especialidad (p. ej. de una
+    // ficha de ERC a otra de FRA, o entre dos fichas del mismo cuaderno):
+    // cualquier `<button data-especialidad="...">` con `data-view`/
+    // `data-panel`/`data-tab` (todos opcionales; `data-trasplante` solo con
+    // `data-especialidad="home"` para las 3 subvistas de Trasplante). Las
+    // clases `.tx-link`/`.especialidad-link`/`.paper-link`/... son hoy solo
+    // visuales. Delegado en document para cubrir también botones generados
+    // por JS después de arrancar.
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-especialidad]');
+        if (!btn) return;
+        const { especialidad, view, panel, tab, trasplante } = btn.dataset;
+        irAResultadoBusqueda({ especialidad, view, panel, tab, trasplante });
     });
 
     const citopeniasLevel = createViewSwitcher({

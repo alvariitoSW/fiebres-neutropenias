@@ -2,7 +2,6 @@
 // patrón de submenú de guías que Cardiología — hoy con una sola guía
 // (Merino Neumología), extensible si llegan más fuentes en el futuro.
 import { createViewSwitcher } from '../../core/navigation.js';
-import { openCorkboardTopic } from '../../core/corkboard.js';
 import { preguntasMerinoNeumologia, temasMerinoNeumologia } from '../../data/merino-neumologia-preguntas.js';
 import { init as initMerinoNeumologia } from './merino-neumologia.js';
 
@@ -36,11 +35,7 @@ export function init() {
     // cardiologia.volverAlMenu() da a Cardiología.
     return {
         volverAlMenu: () => neumoLevel.show('menu'),
-        // Salto genérico desde OTRAS especialidades, mismo patrón que
-        // irAFicha() ya exponen nefrologia/fisio-uci/uci-papers/cardiologia.
-        irAFicha: (view, panel, tab) => {
-            neumoLevel.show(view);
-            if (panel && tab) openCorkboardTopic(panel, tab);
-        },
+        // Salto a una ficha concreta (enlaces `[data-especialidad="neumologia"]`).
+        irAFicha: neumoLevel.irAFicha,
     };
 }
