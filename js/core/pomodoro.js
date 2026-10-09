@@ -33,8 +33,9 @@ const STORAGE_CONTADOR = 'hud-pomodoros-completados';
 const STORAGE_CONFIG = 'hud-pomodoro-config';
 const STORAGE_PROGRESO = 'hud-estudio-progreso';
 
-let estimaciones = new Map(); // tabId -> { minLectura, minPreguntas, minTotal, pomodoros, nPreguntas }
+let estimaciones = new Map(); // tabId -> { minLectura, minPreguntas, pomodoros }
 let progreso = {}; // tabId -> nº de pomodoros ya "invertidos" en esa ficha
+let contador = 0; // pomodoros completados (espejo en memoria de STORAGE_CONTADOR)
 
 function contarPalabras(texto) {
     const m = (texto || '').trim().match(/\S+/g);
@@ -63,7 +64,7 @@ function calcularEstimaciones(quizBanco) {
         const minTotal = minLectura + minPreguntas;
         const pomodoros = minTotal > 0 ? Math.max(1, Math.ceil(minTotal / ENFOQUE_DEFECTO)) : 0;
 
-        mapa.set(tab, { minLectura, minPreguntas, minTotal, pomodoros, nPreguntas: preguntas.length });
+        mapa.set(tab, { minLectura, minPreguntas, pomodoros });
     });
     return mapa;
 }
@@ -207,7 +208,7 @@ function inyectarBadges() {
 
 // ---------- Reloj Pomodoro ----------
 
-const estado = { fase: 'trabajo', finEn: null, corriendo: false, restanteMs: config.enfoque * 60000 };
+const estado = { fase: 'trabajo', finEn: null, corriendo: false, restanteMs: 0 };
 let intervalId = null;
 const el = {};
 
@@ -223,7 +224,7 @@ function actualizarUI() {
     el.tiempo.textContent = formatoTiempo(estado.restanteMs);
     el.fase.textContent = estado.fase === 'trabajo' ? 'Enfoque' : 'Descanso';
     el.panel.classList.toggle('pomo-descanso', estado.fase === 'descanso');
-    el.contador.textContent = leerContador();
+    el.contador.textContent = contador;
     el.btnStart.textContent = estado.corriendo ? '⏸ Pausar' : '▶ Iniciar';
 }
 
@@ -239,7 +240,8 @@ function actualizarResumenProgreso() {
 
 function cambiarFase() {
     if (estado.fase === 'trabajo') {
-        guardarContador(leerContador() + 1);
+        contador += 1;
+        guardarContador(contador);
         registrarProgresoFichaActiva();
         estado.fase = 'descanso';
         estado.restanteMs = config.descanso * 60000;
@@ -277,7 +279,7 @@ function iniciarPausar() {
     } else {
         estado.corriendo = true;
         estado.finEn = Date.now() + estado.restanteMs;
-        intervalId = setInterval(tick, 250);
+        intervalId = setInterval(tick, 1000);
     }
     actualizarUI();
 }
@@ -379,7 +381,23 @@ function construirWidget() {
     actualizarUI();
 }
 
+// Las estimaciones (textContent de ~300 fichas + recorrido del banco de
+// quiz) y la inyección de etiquetas se hacen la primera vez que se activa
+// Modo Estudio, no en el arranque — es trabajo que la mayoría de visitas
+// nunca llega a necesitar.
+let quizBancoPendiente = null;
+let preparado = false;
+function prepararEstudio() {
+    if (preparado) return;
+    preparado = true;
+    estimaciones = calcularEstimaciones(quizBancoPendiente);
+    quizBancoPendiente = null;
+    inyectarBadges();
+    actualizarResumenProgreso();
+}
+
 function toggleStudyMode() {
+    prepararEstudio();
     const on = document.body.classList.toggle('study-mode-on');
     const btn = document.getElementById('btn-modo-estudio');
     if (btn) btn.classList.toggle('active', on);
@@ -392,12 +410,11 @@ function toggleStudyMode() {
 }
 
 export function initStudyMode({ quizBanco } = {}) {
-    estimaciones = calcularEstimaciones(quizBanco);
+    quizBancoPendiente = quizBanco;
     progreso = leerProgreso();
+    contador = leerContador();
     estado.restanteMs = config.enfoque * 60000;
-    inyectarBadges();
     construirWidget();
-    actualizarResumenProgreso();
     const btn = document.getElementById('btn-modo-estudio');
     if (btn) btn.addEventListener('click', toggleStudyMode);
 }

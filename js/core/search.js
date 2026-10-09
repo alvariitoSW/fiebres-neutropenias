@@ -87,9 +87,11 @@ const MAX_RESULTADOS = 40;
 
 function construirIndice() {
     const indice = [];
+    const vistos = new Set();
     document.querySelectorAll('.field-card[data-tab]').forEach(card => {
         const tab = card.dataset.tab;
-        if (!tab || indice.some(i => i.tab === tab)) return;
+        if (!tab || vistos.has(tab)) return;
+        vistos.add(tab);
         const contenido = document.getElementById(tab);
         if (!contenido) return;
         const panelEl = contenido.closest('[id^="panel-"]');
@@ -144,7 +146,10 @@ export function initSearch({ navegar }) {
     const btnAbrir = document.getElementById('btn-buscar-global');
     if (!btnAbrir) return;
 
-    const indice = construirIndice();
+    // El índice (textContent de ~300 fichas) se construye la primera vez que
+    // se abre el buscador, no en el arranque — la mayoría de visitas nunca
+    // lo abren y no hay motivo para pagar ese recorrido del DOM al cargar.
+    let indice = null;
 
     const overlay = document.createElement('div');
     overlay.className = 'search-overlay';
@@ -216,6 +221,7 @@ export function initSearch({ navegar }) {
     }
 
     function abrir() {
+        if (!indice) indice = construirIndice();
         overlay.classList.add('active');
         input.value = '';
         render('');

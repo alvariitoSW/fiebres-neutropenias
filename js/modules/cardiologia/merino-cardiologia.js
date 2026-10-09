@@ -703,6 +703,10 @@ function actualizarPuertaBalon() {
     const resultado = document.getElementById('mc-puerta-balon-resultado');
     const modoEl = document.getElementById('mc-puerta-balon-modo');
     if (!resultado || !mcPuertaBalonInicio) return;
+    // El tiempo se calcula siempre desde el instante de inicio, así que no
+    // hace falta repintar cada segundo mientras la ficha no esté visible —
+    // al volver a ella, el siguiente tick ya muestra el valor correcto.
+    if (resultado.offsetParent === null && resultado.style.display === 'block') return;
     const segundos = Math.floor((Date.now() - mcPuertaBalonInicio) / 1000);
     const min = Math.floor(segundos / 60);
     const seg = segundos % 60;

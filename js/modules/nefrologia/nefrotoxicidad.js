@@ -20,7 +20,9 @@ function cabeceraTabla(cat) {
 
 function filaTabla(fila) {
     // fila: [nombre, dosisNormal, metodo, ...ccrValues, hd, hfvvc?]
-    return `<tr>${fila.map(v => `<td>${v}</td>`).join('')}</tr>`;
+    // El nombre normalizado se precalcula aquí una vez, para que el filtro
+    // no tenga que normalizar 585 textContent en cada pulsación de tecla.
+    return `<tr data-nombre="${normaliza(String(fila[0])).replace(/"/g, '&quot;')}">${fila.map(v => `<td>${v}</td>`).join('')}</tr>`;
 }
 
 function renderGrupo(grupo) {
@@ -60,8 +62,7 @@ function filtrarFarmacos(texto) {
     document.querySelectorAll('.farmaco-categoria').forEach(cat => {
         let algunaFilaVisible = false;
         cat.querySelectorAll('tbody tr').forEach(tr => {
-            const nombre = tr.querySelector('td');
-            const coincide = !q || (nombre && normaliza(nombre.textContent).includes(q));
+            const coincide = !q || (tr.dataset.nombre || '').includes(q);
             tr.style.display = coincide ? '' : 'none';
             if (coincide) algunaFilaVisible = true;
         });
@@ -78,18 +79,38 @@ function filtrarFarmacos(texto) {
     });
 }
 
-export function init() {
-    const cont = document.getElementById('farmacos-categorias');
-    if (!cont) return;
+function renderTabla(cont) {
     cont.innerHTML = categoriasFarmacos.map(renderCategoria).join('');
-
     cont.querySelectorAll('.micro-prof-head').forEach(head => {
         head.addEventListener('click', () => {
             head.classList.toggle('open');
             head.nextElementSibling.classList.toggle('active');
         });
     });
+}
+
+export function init() {
+    const cont = document.getElementById('farmacos-categorias');
+    if (!cont) return;
+
+    // 585 filas × 25 tablas es, con diferencia, el innerHTML más grande de
+    // la app — se genera la primera vez que la vista se hace visible (o al
+    // primer uso del buscador), no en el arranque de la página.
+    let renderizada = false;
+    const asegurarRender = () => {
+        if (renderizada) return;
+        renderizada = true;
+        renderTabla(cont);
+    };
+    if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(entries => {
+            if (entries.some(e => e.isIntersecting)) { asegurarRender(); io.disconnect(); }
+        });
+        io.observe(cont);
+    } else {
+        asegurarRender();
+    }
 
     const buscador = document.getElementById('farmaco-buscador');
-    if (buscador) buscador.addEventListener('input', () => filtrarFarmacos(buscador.value));
+    if (buscador) buscador.addEventListener('input', () => { asegurarRender(); filtrarFarmacos(buscador.value); });
 }
