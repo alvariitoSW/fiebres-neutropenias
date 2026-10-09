@@ -115,6 +115,13 @@ js/
     wizard.js                    initSiNoWizard(prefijo, pasos): asistente
                                   paso a paso de respuestas Sí/No sobre un
                                   árbol de decisión declarativo.
+    vista-visual.js              Interruptor Texto | Visual por tarjeta o
+                                  ficha ([data-visual]); irAlTexto()/resaltar().
+    visual-kit.js                montarVisual(tabId, receta): imágenes
+                                  declarativas cuyos nodos apuntan al texto
+                                  real de la ficha. silueta.js: la silueta
+                                  corporal compartida por los mapas. Ver
+                                  "Vista Visual por tarjeta" más abajo.
   data/                       Objetos de datos puros (tablas de dosis,
                                tratamientos por foco, etc.), sin DOM.
   modules/
@@ -9392,8 +9399,95 @@ confirmadas por el usuario: **cambiar** (una vista u otra, no apiladas — en
     corrigieron etiquetas PCT/PCR montadas sobre sus curvas, el botón
     "Texto ↓" partido en dos líneas y el cursor de la regla tapando una
     marca). Bump de cache-busting a `?v=20261011`.
-- **Siguiente, a decidir por el usuario**: el mismo molde para el resto de
-  Hematología, y/o el botón global "todo en Visual" en la cabecera.
+- **El resto de Hematología, a petición explícita del usuario** ("Haz lo
+  mismo con el resto de Hematología"): las **36 fichas** restantes
+  (Reconocimiento 9, Síndromes Urgentes 3, Trasplante 18 —Introducción 7,
+  CAR-T 5, Complicaciones 6—, Merino HEMATO 6) ganan su interruptor
+  Texto | Visual. Escribir 36 módulos a mano como los de Neutropenia Febril
+  no escalaba, así que se construyó un **kit genérico** y cada ficha es solo
+  una **receta declarativa**:
+  - **`js/core/visual-kit.js`** (`montarVisual(tabId, receta)`): envuelve en
+    tiempo de ejecución el `.tab-content` de una ficha del cuaderno de campo
+    en `.vista-texto` + `.vista-visual` (el `.siguiente-ficha-btn` queda
+    fuera de ambos), sin tocar el HTML de la ficha; la imagen se construye la
+    primera vez que se pasa a Visual. Una receta es
+    `{ guia, paneles: [...] }`; cada panel tiene `tipo`, `titulo`, `nota`
+    opcional y sus nodos.
+  - **Nodos que apuntan al texto, nunca copian contenido**: cada nodo tiene
+    una `fuente` — `'#id'` (documento), `'.clase'`/`'[attr]'` (dentro de la
+    ficha), `'css:<selector>'` (cualquier selector dentro de la ficha, para
+    fuentes ambiguas como dos filas que empiezan igual) o un **prefijo de
+    texto** (el primer elemento cuyo texto empieza así, ignorando emoji
+    iniciales). Prioridad al resolver un prefijo: `.micro-prof-item`, luego
+    `dl.kv-row`, luego `li`/`tr`/`p`/`.warning-box`/`.compare-box`/
+    `.checkbox-label`/`h4`. La etiqueta y el detalle se **leen del elemento
+    real** en ejecución (`copiaLimpia()` quita ids y controles); `etiqueta`
+    en la receta es solo un rótulo corto opcional. "Ver en el texto ↓" abre el
+    acordeón que lo contiene y resalta esa línea. Una fuente no encontrada
+    avisa por consola (`[visual-kit] … fuente no encontrada`) y se omite —
+    así una edición del texto nunca rompe la imagen en silencio.
+  - **Tipos de panel**: `flujo` (pasos con flecha; un array = rama paralela),
+    `escalera` (gravedad con rampa verde → amarillo → rojo → púrpura),
+    `comparar` (columnas), `racimos` (grupos de chips), `mapa` (silueta de
+    `core/silueta.js` con un `organo` por nodo), `linea` (eje con `min`/
+    `max`/`ticks`/`bandas` —`alinear:'fin'` mueve el rótulo de la banda— y
+    nodos con `en` y `fila:'abajo'`), y 4 que **dibujan una tabla de la
+    ficha leyendo sus celdas**: `barras` (columnas numéricas; **una sola
+    escala por panel** — dos magnitudes distintas van en dos paneles, nunca
+    en el mismo eje), `matriz` (celdas normal/alterado, con `normales` y
+    `leyenda` configurables), `frecuencias` ("Nombre: 1:N" en escala log) y
+    `grados` (cada **columna** de una tabla de gradación es un peldaño con
+    las `filasResumen` dentro; al tocarlo se ven todas sus filas, y "Ver en el
+    texto" además pulsa la cabecera `.grade-matrix-head` para resaltar la
+    columna con el gesto que la tabla de CAR-T ya tenía).
+  - **Paneles conectados a calculadoras, sin lógica propia**: `puntos`
+    (ítems `{checks:'.sel', pts}`, `{control:'#select'}` o
+    `{control:'#numero', tramos, unidad}`) y `selector`
+    (`{control, forma:'chips'|escalera, resultado:[ids]}`) escriben en el
+    control real, disparan su `input`/`change` y **copian** el resultado que
+    pinta la calculadora de siempre (conservando su clase
+    `tfg-estado-*`); se repintan si el control cambia desde la vista Texto.
+    Ambos llevan su propio "Ver en el texto ↓" hacia el control.
+  - Recetas: `js/modules/sindromes-urgentes/visual.js` (CID: terminología,
+    Overt DIC/SIC conectados, laboratorio y BCSH; PTT: PTTi vs PTTc,
+    French/PLASMIC conectados, manejo agudo; SLT: Cairo-Bishop conectado,
+    selector de riesgo, profilaxis y algoritmo), `js/modules/merino-hemato/
+    visual.js` (viscosidad por Hto en barras, regla de umbrales de Hb,
+    riesgos transfusionales en escala log, 4Ts conectada, matriz CID/PTT/SHU,
+    multidonante vs aféresis), `js/modules/trasplante/visual.js` (selectores
+    de donante/fallo de injerto/mucositis/dolor/EORTC/CMV/EICH/cistitis,
+    escalera de intensidad, calendario de linfodepleción-infusión-vigilancia,
+    grados de SLC e ICANS, ICE y criterios de alta conectados, matriz de
+    sensibilidad de Candida, mapa corporal de las complicaciones no
+    infecciosas) y `js/modules/reconocimiento/visual.js` (incidencia y tiempo
+    a UCI por neoplasia en dos paneles de barras, DIRECT en flujo, 10
+    principios agrupados, infección por defecto inmune, terapias dirigidas y
+    síntomas conectados). Cada `index.js` llama a su `init()` al final.
+  - **Agrupaciones honestas**: los títulos de grupo de un panel (p. ej.
+    "Qué pedir / Cómo interpretar / Procedimientos invasivos") solo
+    organizan nodos que ya existen en el texto; nunca añaden un dato clínico.
+    Las etiquetas cortas resumen su propia fuente, que se ve entera al tocar.
+  - **Bugs encontrados al verificar, ya corregidos**: emoji iniciales
+    impedían resolver cabeceras de acordeón (`limpiar()`); un prefijo
+    casaba con una fila de tabla antes que con su acordeón (prioridad de
+    resolución); el `HTML` copiado duplicaba ids; el resultado 4Ts perdía su
+    color; `numero()` leía "22.5%" como 22 (un punto con 1-2 cifras ahora es
+    decimal, con 3 es separador de miles); la marca del día 0 tapaba el
+    rótulo de la banda; "Equinocandinas" se partía a mitad de palabra en
+    columnas estrechas (`partirCabecera()`: guion suave entre vocal-
+    consonante-vocal cerca de la mitad y corte tras "/"); "S²" de Candida
+    se pintaba alterado siendo sensible (`normales` por receta).
+  - Verificado con Playwright (390×844, `hasTouch`): las 36 fichas abren su
+    vista Visual por toque real, cada nodo muestra un detalle no vacío, "Ver
+    en el texto" vuelve a la vista Texto con la línea resaltada, ninguna
+    fuente sin resolver, sin errores de consola ni overflow horizontal;
+    capturas revisadas a ojo (escalera de grados de SLC, calendario de
+    infusión, matriz de Candida, mapa de complicaciones, barras de
+    epidemiología, principios diagnósticos). Bump de cache-busting a
+    `?v=20261014`.
+- **Siguiente, a decidir por el usuario**: el mismo kit para Nefrología y
+  el resto de especialidades, y/o el botón global "todo en Visual" en la
+  cabecera.
 
 ## Cómo probar cambios
 

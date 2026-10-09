@@ -5,6 +5,7 @@
 // terapias dirigidas y checklist de síntomas.
 import { initCorkboard } from '../../core/corkboard.js';
 import { terapiasDirigidasData } from '../../data/terapias-dirigidas-data.js';
+import { init as initVisual } from './visual.js';
 
 function calcTerapiaDirigida() {
     const select = document.getElementById('rt-terapia-select');
@@ -48,4 +49,6 @@ export function init() {
         sintomaChecks.forEach(c => c.addEventListener('change', calcSintomas));
         calcSintomas();
     }
+
+    initVisual();
 }

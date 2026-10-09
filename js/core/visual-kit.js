@@ -158,9 +158,12 @@ const RENDER = {
 
 // ---------- Paneles que dibujan una tabla de la ficha ----------
 
-// Primer número de una celda ("1,8", "12.000", "<0,01"); null si no hay.
+// Primer número de una celda ("1,8", "22.5", "12.000", "<0,01"); null si no
+// hay. Un punto seguido de 1-2 cifras es decimal; de 3, separador de miles.
 function numero(texto) {
+    const dec = /(\d+)\.(\d{1,2})(?!\d)/.exec(texto);
     const m = /(\d+(?:\.\d{3})*(?:,\d+)?|\d+(?:,\d+)?)/.exec(texto);
+    if (dec && (!m || dec.index <= m.index)) return Number(`${dec[1]}.${dec[2]}`);
     if (!m) return null;
     const crudo = m[1];
     return /\.\d{3}/.test(crudo) && !crudo.includes(',') ? Number(crudo.replace(/\./g, '')) : Number(crudo.replace(/\./g, '').replace(',', '.'));
@@ -284,6 +287,9 @@ function tramoActual(item) {
     return item.tramos.findIndex(t => v >= t.min && v <= t.max);
 }
 
+// Los paneles conectados llevan a su calculadora en el texto.
+const LINK_CONTROL = '<button type="button" class="visual-link" data-accion="control">Ver en el texto ↓</button>';
+
 function renderPuntos(p, estado) {
     const filas = estado.items.map((it, k) => {
         const actual = tramoActual(it);
@@ -295,7 +301,7 @@ function renderPuntos(p, estado) {
         const largo = it.tramos.some(t => String(t.label).length > 28);
         return `<div class="vk-puntos-fila"><div class="vk-puntos-cab"><span>${it.etiqueta}</span>${campo}</div><div class="vk-tramos ${largo ? 'apilado' : ''}">${segs}</div></div>`;
     }).join('');
-    return `${filas}<div class="vk-resultado">${copiarResultados(p.resultado)}</div>`;
+    return `${filas}<div class="vk-resultado">${copiarResultados(p.resultado)}</div>${LINK_CONTROL}`;
 }
 
 function renderSelector(p) {
@@ -304,7 +310,7 @@ function renderSelector(p) {
         const c = color(p.colores ? p.colores[k] : rampa(k, sel.options.length));
         return `<button type="button" class="vk-opcion ${o.value === sel.value ? 'on' : ''} ${p.forma === 'chips' ? 'chip' : ''}" data-valor="${o.value}" style="--vk:${p.forma === 'chips' ? color(p.color) : c}"><span>${limpiar(o.textContent)}</span></button>`;
     }).join('');
-    return `<div class="vk-opciones ${p.forma === 'chips' ? 'chips' : 'escalera'}">${ops}</div><div class="vk-resultado">${copiarResultados(p.resultado)}</div>`;
+    return `<div class="vk-opciones ${p.forma === 'chips' ? 'chips' : 'escalera'}">${ops}</div><div class="vk-resultado">${copiarResultados(p.resultado)}</div>${LINK_CONTROL}`;
 }
 
 // ---------- Montaje ----------
@@ -445,6 +451,11 @@ function construir(tab, texto, visual, receta) {
             sel.value = opcion.dataset.valor;
             emitir(sel);
             pintar(k);
+            return;
+        }
+        if (e.target.closest('[data-accion="control"]')) {
+            const control = p.tipo === 'selector' ? document.querySelector(p.control) : estados[k].items[0]?.control;
+            if (control) { abrirContenedores(control); irAlTexto(tab, control.closest('.form-group, .checkbox-label') || control); }
             return;
         }
         if (e.target.closest('[data-accion="fuente"]')) {
