@@ -31,7 +31,10 @@ function setVista(card, vista) {
 // Lleva la vista al elemento y lo resalta un momento.
 export function resaltar(objetivo) {
     if (!objetivo) return;
-    objetivo.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Centrado si cabe en pantalla; si es más alto, desde su inicio, para no
+    // aterrizar a mitad de una tarjeta larga sin ver su título.
+    const alto = objetivo.getBoundingClientRect().height > window.innerHeight * 0.8;
+    objetivo.scrollIntoView({ behavior: 'smooth', block: alto ? 'start' : 'center' });
     objetivo.classList.remove('vista-resaltado');
     void objetivo.offsetWidth; // reinicia la animación si ya estaba resaltado
     objetivo.classList.add('vista-resaltado');
@@ -66,4 +69,17 @@ export function initVistaVisual(root = document) {
         });
         pintarToggle(card);
     });
+}
+
+// Texto de un bloque tal como lo lee la vista Texto: sin la imagen, sin el
+// interruptor y sin el botón "Siguiente ficha → …" (que lleva el nombre de
+// OTRA ficha). Lo usan el buscador global y las estimaciones de Modo
+// Estudio, para no contar dos veces lo que la imagen repite ni encontrar
+// una ficha por el título de la siguiente.
+const NO_FUENTE = '.vista-visual, .vista-toggle, .siguiente-ficha-btn';
+export function textoFuente(el) {
+    if (!el.querySelector(NO_FUENTE)) return el.textContent;
+    const copia = el.cloneNode(true);
+    copia.querySelectorAll(NO_FUENTE).forEach(n => n.remove());
+    return copia.textContent;
 }

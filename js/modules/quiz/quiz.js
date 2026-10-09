@@ -61,6 +61,18 @@ function registrarRespuesta(id, acierto) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(progreso));
 }
 
+// Texto de un banco de preguntas → HTML seguro: deja pasar solo <sub>/<sup>
+// y las entidades ya escritas (&lt;, &gt;), y escapa cualquier otro "<"
+// (p. ej. "S<D" en VExUS), para que el mismo texto se vea igual en
+// enunciado, opciones y explicación.
+function htmlPregunta(texto) {
+    return String(texto ?? '').replace(/<(?!\/?(sub|sup)>)/g, '&lt;');
+}
+
+// "Ninguna/Todas de las anteriores" solo tiene sentido al final: esas
+// opciones no se barajan.
+const OPCION_FIJA = /de las anteriores/i;
+
 function barajar(array) {
     const copia = [...array];
     for (let i = copia.length - 1; i > 0; i--) {
@@ -108,7 +120,7 @@ export function initQuiz({ triggerId, banco, temas }) {
     function renderPregunta() {
         const pregunta = orden[indice];
         progresoEl.textContent = `Pregunta ${indice + 1} / ${orden.length}`;
-        enunciadoEl.textContent = pregunta.enunciado;
+        enunciadoEl.innerHTML = htmlPregunta(pregunta.enunciado);
         explicacionEl.style.display = 'none';
         autoevalEl.style.display = 'none';
         siguienteBtn.style.display = 'none';
@@ -120,8 +132,14 @@ export function initQuiz({ triggerId, banco, temas }) {
         } else {
             redactarEl.style.display = 'none';
             opcionesEl.style.display = 'flex';
-            opcionesEl.innerHTML = pregunta.opciones.map((op, i) =>
-                `<button class="quiz-opcion" data-indice="${i}">${op}</button>`).join('');
+            // La opción correcta se escribe siempre la primera en los bancos:
+            // se baraja el orden en pantalla (data-indice sigue siendo el
+            // índice original, el que compara responder()).
+            const indices = pregunta.opciones.map((_, i) => i);
+            const fijas = indices.filter(i => OPCION_FIJA.test(pregunta.opciones[i]));
+            const vista = [...barajar(indices.filter(i => !fijas.includes(i))), ...fijas];
+            opcionesEl.innerHTML = vista.map(i =>
+                `<button class="quiz-opcion" data-indice="${i}">${htmlPregunta(pregunta.opciones[i])}</button>`).join('');
         }
     }
 
@@ -179,11 +197,13 @@ export function initQuiz({ triggerId, banco, temas }) {
         pintarBotones(botones);
     }
 
-    function renderNivelBloques(asignatura) {
+    // `prefijo` (opcional) deja solo los bloques que empiezan así — p. ej.
+    // "Trasplante" para los 3 bloques de Trasplante de Hematología.
+    function renderNivelBloques(asignatura, prefijo = '') {
         nivelAsignatura = asignatura;
         nivelBloque = null;
         if (temasTituloEl) temasTituloEl.textContent = `${asignatura} — ¿qué bloque quieres repasar?`;
-        const bloques = [...new Set(temasDe(asignatura).map(t => t.bloque || BLOQUE_DEFECTO))];
+        const bloques = [...new Set(temasDe(asignatura).map(t => t.bloque || BLOQUE_DEFECTO))].filter(b => b.startsWith(prefijo));
         const botones = [
             { etiqueta: '← Especialidades', accion: 'volver-asignaturas' },
             { etiqueta: `Todos los temas de ${asignatura} (${bancoDe(asignatura).length})`, accion: 'todas-asignatura' },
@@ -207,15 +227,16 @@ export function initQuiz({ triggerId, banco, temas }) {
         const pregunta = orden[indice];
         const botones = opcionesEl.querySelectorAll('.quiz-opcion');
         botones.forEach(b => b.disabled = true);
+        const boton = idx => opcionesEl.querySelector(`.quiz-opcion[data-indice="${idx}"]`);
 
         const acierto = i === pregunta.correcta;
-        botones[i].classList.add(acierto ? 'correcta' : 'incorrecta');
-        if (!acierto) botones[pregunta.correcta].classList.add('correcta');
+        boton(i).classList.add(acierto ? 'correcta' : 'incorrecta');
+        if (!acierto) boton(pregunta.correcta).classList.add('correcta');
 
         registrarRespuesta(pregunta.id, acierto);
 
         explicacionEl.style.display = 'block';
-        explicacionEl.textContent = pregunta.explicacion;
+        explicacionEl.innerHTML = htmlPregunta(pregunta.explicacion);
         siguienteBtn.style.display = 'inline-block';
         siguienteBtn.textContent = indice + 1 < orden.length ? 'Siguiente →' : 'Terminar';
     }
@@ -224,7 +245,7 @@ export function initQuiz({ triggerId, banco, temas }) {
         const pregunta = orden[indice];
         redactarEl.style.display = 'none';
         explicacionEl.style.display = 'block';
-        explicacionEl.textContent = pregunta.respuestaModelo;
+        explicacionEl.innerHTML = htmlPregunta(pregunta.respuestaModelo);
         autoevalEl.style.display = 'flex';
     }
 
@@ -282,9 +303,20 @@ export function initQuiz({ triggerId, banco, temas }) {
         // Degradación elegante: sin esos data-* el trigger se comporta
         // exactamente igual que siempre (pantalla de 3 niveles, o banco
         // completo si no hay `temas`).
+        // Con data-quiz-elegir, en vez de empezar ya se abre la lista de
+        // fichas de ese bloque (o, sin bloque, la de bloques de la
+        // asignatura, filtrable con data-quiz-prefijo-bloque): es lo que
+        // usan los botones "Repasar" de cada módulo,
+        // que así abren SU tema y no el menú de todas las especialidades.
         const asigDirecta = trigger.dataset.quizAsignatura;
         const bloqueDirecto = trigger.dataset.quizBloque;
-        if (temas && temas.length > 0 && asigDirecta && bloqueDirecto) {
+        const elegir = 'quizElegir' in trigger.dataset;
+        if (temas && temas.length > 0 && asigDirecta && elegir) {
+            mostrarPantallaQuiz(false);
+            const prefijo = trigger.dataset.quizPrefijoBloque;
+            if (bloqueDirecto) { nivelAsignatura = asigDirecta; renderNivelTemas(asigDirecta, bloqueDirecto); }
+            else renderNivelBloques(asigDirecta, prefijo);
+        } else if (temas && temas.length > 0 && asigDirecta && bloqueDirecto) {
             empezar(bancoDe(asigDirecta, bloqueDirecto));
         } else if (temas && temas.length > 0) {
             mostrarPantallaQuiz(false);

@@ -116,8 +116,18 @@ export function init() {
     document.querySelectorAll('.btn-volver-pif-menu').forEach(b => b.addEventListener('click', () => topLevel.show('pifMenu')));
     document.querySelectorAll('.btn-volver-cardiorrespi-menu').forEach(b => b.addEventListener('click', () => topLevel.show('cardiorrespiMenu')));
 
-    document.getElementById('btn-escalas-generales').addEventListener('click', () => topLevel.show('escalas'));
-    document.querySelectorAll('.btn-volver-home').forEach(b => b.addEventListener('click', goHome));
+    // Escalas Generales se abre desde la cabecera en cualquier pantalla: su
+    // "← VOLVER" regresa a donde estabas, no siempre a Hematología.
+    let antesDeEscalas = null;
+    function abrirEscalas() {
+        if (topLevel.actual() !== 'escalas') antesDeEscalas = topLevel.actual();
+        topLevel.show('escalas');
+    }
+    document.getElementById('btn-escalas-generales').addEventListener('click', abrirEscalas);
+    document.querySelectorAll('.btn-volver-home').forEach(b => b.addEventListener('click', () => {
+        if (topLevel.actual() === 'escalas' && antesDeEscalas && antesDeEscalas !== 'home') topLevel.show(antesDeEscalas);
+        else goHome();
+    }));
 
     // Router genérico de "ir a una ficha concreta de cualquier especialidad"
     // — usado por los enlaces cruzados `[data-especialidad]` (ver más abajo)
@@ -175,7 +185,7 @@ export function init() {
     document.querySelectorAll('.btn-volver-trasplante-menu').forEach(b => b.addEventListener('click', () => trasplanteLevel.show('menu')));
 
     const rutasAtlas = {
-        'citopenias-neutropenia': () => { topLevel.show('citopenias'); citopeniasLevel.show('neutropeniaFebril'); },
+        'citopenias-neutropenia': () => { topLevel.show('citopenias'); document.getElementById('btn-neutropenia-febril').click(); },
         reconocimiento: () => topLevel.show('reconocimiento'),
         'sindromes-cid': () => { topLevel.show('sindromes'); openCorkboardTopic('panel-sindromes-tabs', 'sind-cid'); },
         'sindromes-ptt': () => { topLevel.show('sindromes'); openCorkboardTopic('panel-sindromes-tabs', 'sind-ptt'); },
@@ -187,7 +197,7 @@ export function init() {
     };
     const atlas = initAtlas({
         onRoute: (key) => rutasAtlas[key]?.(),
-        onCompass: () => topLevel.show('escalas'),
+        onCompass: abrirEscalas,
     });
 
     // Enlaces cruzados entre módulos de Hematología fuera del propio Atlas

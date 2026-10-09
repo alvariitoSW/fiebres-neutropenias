@@ -14,6 +14,9 @@ export function init() {
     };
     const nivel = createViewSwitcher({ main: document.getElementById('hemato-main-view'), ...subvistas });
 
+    // Entrar en el módulo (menú de Citopenias, Atlas o buscador) siempre
+    // abre la vista principal, no la subvista donde se dejó la última vez.
+    document.getElementById('btn-neutropenia-febril').addEventListener('click', () => nivel.show('main'));
     document.getElementById('btn-diagnostico').addEventListener('click', () => nivel.show('diag'));
     document.getElementById('btn-tratamiento').addEventListener('click', () => nivel.show('trat'));
     document.getElementById('btn-dirigido').addEventListener('click', () => nivel.show('diri'));

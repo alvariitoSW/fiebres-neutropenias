@@ -669,9 +669,8 @@ pequeño y fijo arriba a la derecha de la cabecera (`#btn-escalas-generales`),
 fuera del flujo del menú principal, porque se consulta con mucha frecuencia
 y de forma independiente del resto. Es accesible desde cualquier pantalla
 (está fuera de los contenedores de vista en `index.html`) y su "← VOLVER"
-regresa al menú principal de Hematología (`.btn-volver-home`); si en el
-futuro se usa también desde Nefrología u otra especialidad, revisa si
-conviene que regrese en su lugar al menú de especialidades.
+regresa a la pantalla desde la que se abrió (ver "Auditoría de
+Hematología (octubre 2026)").
 
 - **APACHE II y el índice de comorbilidad de Charlson**, a petición
   explícita del usuario ("busca la escala apache II y charlson para
@@ -1298,7 +1297,10 @@ por encima que sí diera cabida a todos.
     fichas) se mostraban con la entidad sin decodificar en el quiz. Se
     corrigieron esas 21 preguntas en `nefrologia-preguntas.js` a `<`/`>`
     literales (válido en un string JS, y es lo que `textContent` necesita)
-    — nunca escribas `&lt;`/`&gt;` dentro de `js/data/*-preguntas.js`,
+    — (nota histórica: desde la auditoría de Hematología de octubre 2026
+    `quiz.js` pinta todos los campos con `htmlPregunta()`, que acepta
+    tanto `<` literal como `&lt;` y `<sub>`/`<sup>`; aun así, prefiere `<`
+    literal) — nunca escribas `&lt;`/`&gt;` dentro de `js/data/*-preguntas.js`,
     solo dentro de los `.html` de las fichas.
   - **Ampliación de Ficha 5 (HTA resistente) y Ficha 6 (HTA secundaria:
     causas renales) con los artículos monográficos dedicados**: las dos
@@ -9488,6 +9490,72 @@ confirmadas por el usuario: **cambiar** (una vista u otra, no apiladas — en
 - **Siguiente, a decidir por el usuario**: el mismo kit para Nefrología y
   el resto de especialidades, y/o el botón global "todo en Visual" en la
   cabecera.
+
+## Auditoría de Hematología (octubre 2026)
+
+A petición explícita del usuario ("revisa que esté todo correcto en
+hematología y revisa los fallos y las partes que están por mejorar"). Se
+revisaron con scripts (no a ojo) los 5 bancos de quiz, todas las vistas y
+las 36 fichas a 390 y 360 px, todas las calculadoras con valores vacíos/0/
+negativos/enormes, los enlaces y anclas `#page=N` de los PDF, la navegación
+(Atlas, "← VOLVER", botones de repaso) y el buscador. Fallos corregidos:
+
+- **La respuesta correcta era siempre la opción A** — en los 224 ítems de
+  Hematología y en 1259 de las 1619 preguntas de opción múltiple de toda la
+  app (los bancos se escriben con la correcta primero). Corregido en el
+  motor, no en los datos: `renderPregunta()` (`js/modules/quiz/quiz.js`)
+  baraja el orden en pantalla y `data-indice` conserva el índice original
+  que compara `responder()`; las opciones "… de las anteriores" se dejan
+  siempre al final. Verificado: en Merino HEMATO la correcta cae 16/11/10/11
+  veces en las posiciones 1-4.
+- **`&lt;` y `<sub>` visibles en el quiz**: enunciado/explicación/respuesta
+  modelo se pintaban con `textContent` (7 preguntas de Merino HEMATO, 12 de
+  Merino Neumología, 1 de Cardiología). Ahora todos los campos pasan por
+  `htmlPregunta()`, que deja pasar solo `<sub>`/`<sup>` y entidades y
+  escapa cualquier otro `<` (p. ej. "S<D" en VExUS).
+- **Los botones "🎯 Repasar" de Hematología abrían el menú general del
+  quiz** (todas las especialidades). Ahora llevan
+  `data-quiz-asignatura` + `data-quiz-bloque` + `data-quiz-elegir` y abren
+  la lista de fichas de su propio módulo; Trasplante usa
+  `data-quiz-prefijo-bloque="Trasplante"` para mostrar solo sus 3 bloques.
+  Sin `data-quiz-elegir`, `asignatura`+`bloque` sigue empezando directo
+  (Preguntas MC difíciles no cambia).
+- **El buscador global no encontraba nada de Neutropenia Febril ni de
+  Escalas Generales** (solo indexaba fichas de cuaderno de campo). Nueva
+  tabla `VISTAS_TARJETAS` en `core/search.js`: indexa cada `.card` de
+  primer nivel de esas vistas, y al elegirla pulsa los botones de
+  navegación que ya existen y resalta la tarjeta. Para otra vista sin
+  cuaderno de campo, basta una entrada más.
+- **El buscador y Modo Estudio contaban texto que no es de la ficha**: la
+  imagen ya construida, el interruptor y el botón "Siguiente ficha → X"
+  (que hacía aparecer una ficha al buscar el título de la siguiente).
+  Nuevo `textoFuente(el)` en `core/vista-visual.js`, usado por ambos.
+- **Entrar en Neutropenia Febril reabría la última subvista** (p. ej.
+  Diagnóstico) en vez de la principal. `#btn-neutropenia-febril` resetea
+  ahora el switcher interno a `main`, y la ruta del Atlas pasa por ese
+  mismo botón.
+- **"← VOLVER" de Escalas Generales siempre iba a Hematología**, aunque se
+  abriera desde Nefrología o la raíz. `createViewSwitcher()` expone
+  `actual()` y `home/index.js` recuerda la vista previa al abrir Escalas.
+- **Valores negativos aceptados**: diferencial de tiempo de hemocultivos
+  (−5 h daba "sugiere bacteriemia por catéter"), PCR y galactomanano ahora
+  avisan de dato no válido; el carril de hemocultivos de la imagen ya no
+  se sale del eje con horas negativas o mayores de 36.
+- **Desbordamiento a 360 px** en `.compare-box` de CID y PTT (palabras
+  largas como "antifibrinolítico" no dejaban encoger la columna):
+  `min-width:0; overflow-wrap:anywhere` en la regla común.
+- `resaltar()` alinea arriba (no al centro) un bloque más alto que la
+  pantalla, para no aterrizar a mitad de una tarjeta larga.
+
+Revisado y correcto, sin cambios: 36 fichas con vista Visual (nodos,
+detalles y "Ver en el texto"), ninguna NaN/Infinity/undefined en ninguna
+calculadora, imágenes y enlaces locales, anclas de página de los PDF, ids
+únicos dentro de Hematología, rutas del Atlas y botones "← VOLVER".
+**Pendiente**: los DOI externos de la bibliografía no se pueden comprobar
+desde el entorno remoto (proxy); un id `arrowY` duplicado fuera de
+Hematología (Fisiopatología UCI/Cardiología y Merino Neumología); y la
+auditoría de fidelidad de contenido contra las fuentes, que Hematología
+sigue sin tener (confirmar antes con el usuario qué documentos releer).
 
 ## Cómo probar cambios
 

@@ -3,7 +3,9 @@
 import { openCorkboardTopic } from './corkboard.js';
 
 export function createViewSwitcher(views) {
+    let actual = null;
     function show(key) {
+        actual = key;
         Object.keys(views).forEach(k => {
             views[k].style.display = (k === key) ? 'block' : 'none';
         });
@@ -16,5 +18,5 @@ export function createViewSwitcher(views) {
         if (view) show(view);
         if (panel && tab) openCorkboardTopic(panel, tab);
     }
-    return { show, irAFicha };
+    return { show, irAFicha, actual: () => actual };
 }

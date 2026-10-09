@@ -226,7 +226,7 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 .kinetic-marker-label { position: absolute; top: -16px; transform: translateX(-50%); font-size: 0.62rem; color: var(--accent-yellow); white-space: nowrap; }
 
 .compare-row { display: flex; gap: 8px; margin: 10px 0; }
-.compare-box { flex: 1; border-radius: 2px; padding: 10px; font-size: 0.78rem; line-height: 1.4; }
+.compare-box { flex: 1; min-width: 0; overflow-wrap: anywhere; border-radius: 2px; padding: 10px; font-size: 0.78rem; line-height: 1.4; }
 .compare-box.blue { background: rgba(212, 175, 55, 0.06); border: 1px solid var(--accent-blue); }
 .compare-box.yellow { background: rgba(207, 154, 62, 0.08); border: 1px solid var(--accent-yellow); }
 .compare-box.red { background: rgba(184, 92, 62, 0.08); border: 1px solid var(--accent-red); }

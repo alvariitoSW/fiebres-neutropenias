@@ -133,11 +133,11 @@ function renderHemo() {
         $(`linea-${k}-valor`).textContent = valores[k] === null ? 'no extraído' : `${valores[k]} h`;
         $(`linea-${k}-btn`).textContent = valores[k] === null ? 'Añadir' : 'Quitar';
         frasco.hidden = valores[k] === null;
-        if (valores[k] !== null) frasco.style.left = `${Math.min(valores[k], HORAS_HEMO) / HORAS_HEMO * 100}%`;
+        if (valores[k] !== null) frasco.style.left = `${Math.max(0, Math.min(valores[k], HORAS_HEMO)) / HORAS_HEMO * 100}%`;
     });
     const tramo = $('linea-tramo');
-    if (valores.cvc !== null && valores.peri !== null) {
-        const a = Math.min(valores.cvc, valores.peri), b = Math.max(valores.cvc, valores.peri);
+    if (valores.cvc !== null && valores.peri !== null && valores.cvc >= 0 && valores.peri >= 0) {
+        const a = Math.min(valores.cvc, valores.peri, HORAS_HEMO), b = Math.min(Math.max(valores.cvc, valores.peri), HORAS_HEMO);
         tramo.hidden = false;
         tramo.style.left = `${a / HORAS_HEMO * 100}%`;
         tramo.style.width = `${(b - a) / HORAS_HEMO * 100}%`;
@@ -155,7 +155,7 @@ function renderPcr() {
     const raw = $('pcr-value').value;
     const slider = $('linea-pcr');
     if (document.activeElement !== slider) slider.value = raw === '' ? 0 : raw;
-    $('linea-pcr-valor').textContent = raw === '' ? '—' : `${raw} mg/dL`;
+    $('linea-pcr-valor').textContent = raw === '' || Number(raw) < 0 ? '—' : `${raw} mg/dL`;
     const t = $('pcr-result-text');
     $('linea-pcr-texto').textContent = t.textContent;
     $('linea-pcr-texto').style.color = t.style.color;

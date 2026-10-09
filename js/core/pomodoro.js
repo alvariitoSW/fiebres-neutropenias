@@ -21,6 +21,8 @@
 // primera es el propio quiz, que ya recuerda aciertos/fallos por
 // pregunta en el dispositivo.
 
+import { textoFuente } from './vista-visual.js';
+
 const PALABRAS_POR_MINUTO = 180; // lectura técnica en español, estimación
 const MIN_POR_PREGUNTA_OPCION = 1.2;
 const MIN_POR_PREGUNTA_REDACTAR = 2.5;
@@ -57,7 +59,7 @@ function calcularEstimaciones(quizBanco) {
         const contenido = document.getElementById(tab);
         if (!contenido) return;
 
-        const minLectura = contarPalabras(contenido.textContent) / PALABRAS_POR_MINUTO;
+        const minLectura = contarPalabras(textoFuente(contenido)) / PALABRAS_POR_MINUTO;
         const preguntas = preguntasPorTema.get(tab) || [];
         const minPreguntas = preguntas.reduce((acc, p) =>
             acc + (p.tipo === 'redactar' ? MIN_POR_PREGUNTA_REDACTAR : MIN_POR_PREGUNTA_OPCION), 0);

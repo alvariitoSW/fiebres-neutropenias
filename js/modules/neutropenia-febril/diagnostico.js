@@ -26,6 +26,13 @@ function calcDiferencial() {
 
     let cvc = parseFloat(cvcRaw);
     let peri = parseFloat(periRaw);
+    if (cvc < 0 || peri < 0) {
+        d.innerText = '-- h';
+        d.style.color = 'var(--accent-yellow)';
+        t.innerText = 'Un tiempo de positividad no puede ser negativo: revisa los datos';
+        t.style.color = 'var(--accent-yellow)';
+        return;
+    }
     let diff = peri - cvc;
     d.innerText = `${diff.toFixed(1)} h`;
 
@@ -60,6 +67,10 @@ function interpretarGM() {
     if (isNaN(value)) {
         display.innerText = '—'; text.innerText = 'Selecciona muestra e introduce el valor'; return;
     }
+    if (value < 0) {
+        display.innerText = '—'; display.style.color = 'var(--accent-yellow)'; display.style.textShadow = 'none';
+        text.innerText = 'El índice de galactomanano no puede ser negativo: revisa el valor'; return;
+    }
 
     let threshold, label;
     if (sample === 'serum1') { threshold = 0.7; label = 'corte ECIL ≥0.7 (1 determinación)'; }
@@ -83,8 +94,12 @@ function interpretarPCR() {
     let display = document.getElementById('pcr-result-display');
     let text = document.getElementById('pcr-result-text');
 
-    if (isNaN(value)) { display.innerText = '-- mg/dL'; text.innerText = 'Introduce el valor'; return; }
-    
+    if (isNaN(value)) { display.innerText = '-- mg/dL'; text.style.color = 'var(--text-muted)'; text.innerText = 'Introduce el valor'; return; }
+    if (value < 0) {
+        display.innerText = '-- mg/dL'; display.style.color = 'var(--accent-yellow)'; display.style.textShadow = 'none';
+        text.innerText = 'La PCR no puede ser negativa: revisa el valor'; text.style.color = 'var(--accent-yellow)'; return;
+    }
+
     display.innerText = `${value} mg/dL`;
     if (value > 30) {
         display.style.color = 'var(--accent-red)'; display.style.textShadow = 'var(--glow-red)';

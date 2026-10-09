@@ -7,16 +7,16 @@
 // modules/home/index.js), inyectado aquí como callback en vez de
 // duplicarlo.
 //
-// Alcance v1, deliberado: solo fichas del patrón cuaderno de campo
-// (core/corkboard.js), que es donde vive la inmensa mayoría del contenido
-// teórico de la app. Quedan fuera las calculadoras/tablas de referencia
-// sueltas que no usan .field-card (Escalas Generales, Neutropenia Febril,
-// la tabla de 585 fármacos de Nefrotoxicidad, la guía transversal
-// IRA/ERC) — ampliar el alcance a esas páginas es un paso aparte, no
-// simplemente añadir entradas a PANEL_NAV.
+// Alcance: las fichas del patrón cuaderno de campo (core/corkboard.js),
+// donde vive la inmensa mayoría del contenido teórico, más las tarjetas de
+// las vistas listadas en VISTAS_TARJETAS (Neutropenia Febril y Escalas
+// Generales). Siguen fuera la tabla de 585 fármacos de Nefrotoxicidad y la
+// guía transversal IRA/ERC — para añadir otra vista de tarjetas basta una
+// entrada más en VISTAS_TARJETAS.
 
 import { nombreFicha } from './corkboard.js';
 import { escapeHtml } from './ui.js';
+import { textoFuente, resaltar } from './vista-visual.js';
 
 const ESPECIALIDADES = {
     home: { nombre: 'Hematología', icono: '🩸', color: 'var(--accent-red)' },
@@ -79,6 +79,18 @@ const PANEL_NAV = {
     'panel-manual-umi-tabs': { especialidad: 'sobrevivirUmi', view: 'manualUmi', bloque: 'Manual UMI Negrín' },
 };
 
+// Vistas sin cuaderno de campo cuyas tarjetas (.card de primer nivel con
+// su <h3>) también se indexan: cada una dice cómo llegar — especialidad +
+// vista raíz + los botones YA existentes que hay que pulsar, en orden —, y
+// al elegir el resultado se hace scroll a la tarjeta y se resalta.
+const VISTAS_TARJETAS = {
+    'hemato-main-view': { especialidad: 'home', view: 'citopenias', botones: ['btn-neutropenia-febril'], bloque: 'Neutropenia Febril' },
+    'hemato-diagnostico-view': { especialidad: 'home', view: 'citopenias', botones: ['btn-neutropenia-febril', 'btn-diagnostico'], bloque: 'Neutropenia Febril — Diagnóstico' },
+    'hemato-tratamiento-view': { especialidad: 'home', view: 'citopenias', botones: ['btn-neutropenia-febril', 'btn-tratamiento'], bloque: 'Neutropenia Febril — Tratamiento empírico' },
+    'hemato-dirigido-view': { especialidad: 'home', view: 'citopenias', botones: ['btn-neutropenia-febril', 'btn-dirigido'], bloque: 'Neutropenia Febril — Tratamiento dirigido' },
+    'escalas-generales-view': { especialidad: 'home', view: 'escalas', botones: [], bloque: 'Escalas Generales' },
+};
+
 const MIN_CHARS = 2;
 const MAX_RESULTADOS = 40;
 
@@ -97,12 +109,29 @@ function construirIndice() {
         const titulo = nombreFicha(card);
         if (!titulo) return;
         indice.push({
+            clave: tab,
             tab,
             titulo,
             panel: panelEl.id,
             nav,
             tituloBusqueda: titulo.toLowerCase(),
-            textoBusqueda: contenido.textContent.toLowerCase(),
+            textoBusqueda: textoFuente(contenido).toLowerCase(),
+        });
+    });
+    Object.entries(VISTAS_TARJETAS).forEach(([vistaId, nav]) => {
+        const vista = document.getElementById(vistaId);
+        if (!vista) return;
+        [...vista.querySelectorAll('.card')].filter(c => !c.parentElement.closest('.card')).forEach((card, k) => {
+            const titulo = (card.querySelector('h3, .vista-grupo-titulo')?.textContent || '').replace(/\s+/g, ' ').trim();
+            if (!titulo || /^fuentes$/i.test(titulo)) return;
+            indice.push({
+                clave: `${vistaId}#${k}`,
+                el: card,
+                titulo,
+                nav,
+                tituloBusqueda: titulo.toLowerCase(),
+                textoBusqueda: textoFuente(card).toLowerCase(),
+            });
         });
     });
     return indice;
@@ -180,7 +209,7 @@ export function initSearch({ navegar }) {
         resultsEl.innerHTML = grupos.map(g => {
             const esp = ESPECIALIDADES[g.especialidad];
             const filas = g.items.map(item => `
-                <button type="button" class="search-result-row" style="--srg-color: ${esp.color};" data-tab="${item.tab}">
+                <button type="button" class="search-result-row" style="--srg-color: ${esp.color};" data-clave="${escapeHtml(item.clave)}">
                     <span class="search-result-text">
                         <span class="search-result-title">${escapeHtml(item.titulo)}</span>
                         <span class="search-result-crumb">${escapeHtml(item.nav.bloque)}</span>
@@ -199,9 +228,15 @@ export function initSearch({ navegar }) {
 
         resultsEl.querySelectorAll('.search-result-row').forEach(btn => {
             btn.addEventListener('click', () => {
-                const item = indice.find(i => i.tab === btn.dataset.tab);
+                const item = indice.find(i => i.clave === btn.dataset.clave);
                 if (!item) return;
                 cerrar();
+                if (item.el) {
+                    navegar?.({ especialidad: item.nav.especialidad, view: item.nav.view });
+                    item.nav.botones.forEach(id => document.getElementById(id)?.click());
+                    requestAnimationFrame(() => resaltar(item.el));
+                    return;
+                }
                 navegar?.({
                     especialidad: item.nav.especialidad,
                     view: item.nav.view,
