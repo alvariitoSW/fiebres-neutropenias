@@ -15,8 +15,14 @@ const TEMA_DEFECTO = 'General';
 const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 
 function cargarDudasUsuario() {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) ?? []; }
-    catch { return []; }
+    try {
+        const datos = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        return Array.isArray(datos) ? datos : [];
+    } catch { return []; }
+}
+
+function temaDe(duda) {
+    return (duda.tema || '').trim() || TEMA_DEFECTO;
 }
 
 function guardarDudasUsuario(dudas) {
@@ -38,13 +44,13 @@ function formatearFecha(iso) {
 
 function dudaCardHtml(duda) {
     const eliminar = duda.ejemplo ? '' : `<button class="duda-eliminar-btn" data-eliminar="${duda.id}">🗑 Eliminar</button>`;
-    const fuente = duda.fuente ? `<a class="duda-fuente">Fuente: ${escapeHtml(duda.fuente)}</a>` : '';
+    const fuente = duda.fuente ? `<span class="duda-fuente">Fuente: ${escapeHtml(duda.fuente)}</span>` : '';
     return `
     <details class="duda-card">
         <summary class="duda-summary">
             <span class="duda-pregunta">${escapeHtml(duda.pregunta)}</span>
             <span class="duda-meta">
-                <span class="duda-tag">${escapeHtml(duda.tema)}</span>
+                <span class="duda-tag">${escapeHtml(temaDe(duda))}</span>
                 <span class="duda-fecha">${formatearFecha(duda.fecha)}</span>
                 <span class="duda-toggle-hint">toca para ver la respuesta ▾</span>
             </span>
@@ -60,7 +66,7 @@ function dudaCardHtml(duda) {
 function agruparPorTema(dudas) {
     const grupos = new Map();
     dudas.forEach(d => {
-        const tema = (d.tema || TEMA_DEFECTO).trim() || TEMA_DEFECTO;
+        const tema = temaDe(d);
         if (!grupos.has(tema)) grupos.set(tema, []);
         grupos.get(tema).push(d);
     });
@@ -89,7 +95,7 @@ function render() {
     // Datalist de temas ya usados, para autocompletar al escribir uno nuevo.
     const datalist = document.getElementById('duda-temas-datalist');
     if (datalist) {
-        const temasUnicos = [...new Set(todas.map(d => d.tema).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'es'));
+        const temasUnicos = [...new Set(todas.map(temaDe))].sort((a, b) => a.localeCompare(b, 'es'));
         datalist.innerHTML = temasUnicos.map(t => `<option value="${escapeHtml(t)}"></option>`).join('');
     }
 
@@ -108,14 +114,13 @@ export function init() {
 
     const form = document.getElementById('duda-form');
     const btnAbrir = document.getElementById('btn-duda-nueva');
-    if (!form || !btnAbrir) return;
-
     const campos = {
         tema: document.getElementById('duda-input-tema'),
         pregunta: document.getElementById('duda-input-pregunta'),
         respuesta: document.getElementById('duda-input-respuesta'),
         fuente: document.getElementById('duda-input-fuente'),
     };
+    if (!form || !btnAbrir || Object.values(campos).some(el => !el)) return;
     const TEXTO_ABRIR = '✏️ Añadir una duda nueva';
     const TEXTO_CERRAR = '✕ Cerrar formulario';
 

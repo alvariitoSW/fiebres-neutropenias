@@ -126,6 +126,14 @@ export function initQuiz({ triggerId, banco, temas }) {
     }
 
     function empezar(subBanco) {
+        if (!subBanco.length) {
+            // Un bloque/tema sin preguntas (p. ej. un data-quiz-bloque que no
+            // coincide con ningún tema) no debe reventar en orden[0]: se vuelve
+            // a la pantalla de selección en vez de pintar un banco vacío.
+            mostrarPantallaQuiz(false);
+            renderNivelAsignaturas();
+            return;
+        }
         orden = barajar(subBanco);
         indice = 0;
         mostrarPantallaQuiz(true);
@@ -137,13 +145,18 @@ export function initQuiz({ triggerId, banco, temas }) {
     // para resolver las opciones "Todos los temas de...".
     const ASIGNATURA_DEFECTO = 'Otros';
     const BLOQUE_DEFECTO = 'General';
-
-    function empezarPorBloque(asignatura, bloque) {
-        const keys = temas.filter(t => (t.asignatura || ASIGNATURA_DEFECTO) === asignatura && (t.bloque || BLOQUE_DEFECTO) === bloque).map(t => t.key);
-        empezar(banco.filter(p => keys.includes(p.tema)));
-    }
     let nivelAsignatura = null;
     let nivelBloque = null;
+
+    // Temas y preguntas de una asignatura (y, opcionalmente, de un bloque de ella).
+    function temasDe(asignatura, bloque) {
+        return temas.filter(t => (t.asignatura || ASIGNATURA_DEFECTO) === asignatura
+            && (bloque === undefined || (t.bloque || BLOQUE_DEFECTO) === bloque));
+    }
+    function bancoDe(asignatura, bloque) {
+        const keys = new Set(temasDe(asignatura, bloque).map(t => t.key));
+        return banco.filter(p => keys.has(p.tema));
+    }
 
     function contar(filtroFn) {
         return banco.filter(filtroFn).length;
@@ -161,10 +174,7 @@ export function initQuiz({ triggerId, banco, temas }) {
         const asignaturas = [...new Set(temas.map(t => t.asignatura || ASIGNATURA_DEFECTO))];
         const botones = [
             { etiqueta: `Todos los temas (${banco.length})`, accion: 'todas' },
-            ...asignaturas.map(a => {
-                const keys = temas.filter(t => (t.asignatura || ASIGNATURA_DEFECTO) === a).map(t => t.key);
-                return { etiqueta: `${a} (${contar(p => keys.includes(p.tema))})`, accion: 'asignatura', valor: a };
-            }),
+            ...asignaturas.map(a => ({ etiqueta: `${a} (${bancoDe(a).length})`, accion: 'asignatura', valor: a })),
         ];
         pintarBotones(botones);
     }
@@ -173,16 +183,11 @@ export function initQuiz({ triggerId, banco, temas }) {
         nivelAsignatura = asignatura;
         nivelBloque = null;
         if (temasTituloEl) temasTituloEl.textContent = `${asignatura} — ¿qué bloque quieres repasar?`;
-        const temasAsig = temas.filter(t => (t.asignatura || ASIGNATURA_DEFECTO) === asignatura);
-        const keysAsig = temasAsig.map(t => t.key);
-        const bloques = [...new Set(temasAsig.map(t => t.bloque || BLOQUE_DEFECTO))];
+        const bloques = [...new Set(temasDe(asignatura).map(t => t.bloque || BLOQUE_DEFECTO))];
         const botones = [
             { etiqueta: '← Especialidades', accion: 'volver-asignaturas' },
-            { etiqueta: `Todos los temas de ${asignatura} (${contar(p => keysAsig.includes(p.tema))})`, accion: 'todas-asignatura' },
-            ...bloques.map(b => {
-                const keys = temasAsig.filter(t => (t.bloque || BLOQUE_DEFECTO) === b).map(t => t.key);
-                return { etiqueta: `${b} (${contar(p => keys.includes(p.tema))})`, accion: 'bloque', valor: b };
-            }),
+            { etiqueta: `Todos los temas de ${asignatura} (${bancoDe(asignatura).length})`, accion: 'todas-asignatura' },
+            ...bloques.map(b => ({ etiqueta: `${b} (${bancoDe(asignatura, b).length})`, accion: 'bloque', valor: b })),
         ];
         pintarBotones(botones);
     }
@@ -190,12 +195,10 @@ export function initQuiz({ triggerId, banco, temas }) {
     function renderNivelTemas(asignatura, bloque) {
         nivelBloque = bloque;
         if (temasTituloEl) temasTituloEl.textContent = `${bloque} — ¿qué ficha quieres repasar?`;
-        const temasBloque = temas.filter(t => (t.asignatura || ASIGNATURA_DEFECTO) === asignatura && (t.bloque || BLOQUE_DEFECTO) === bloque);
-        const keysBloque = temasBloque.map(t => t.key);
         const botones = [
             { etiqueta: `← ${asignatura}`, accion: 'volver-bloques' },
-            { etiqueta: `Todos los temas de ${bloque} (${contar(p => keysBloque.includes(p.tema))})`, accion: 'todas-bloque' },
-            ...temasBloque.map(t => ({ etiqueta: `${t.etiqueta} (${contar(p => p.tema === t.key)})`, accion: 'tema', valor: t.key })),
+            { etiqueta: `Todos los temas de ${bloque} (${bancoDe(asignatura, bloque).length})`, accion: 'todas-bloque' },
+            ...temasDe(asignatura, bloque).map(t => ({ etiqueta: `${t.etiqueta} (${contar(p => p.tema === t.key)})`, accion: 'tema', valor: t.key })),
         ];
         pintarBotones(botones);
     }
@@ -254,14 +257,10 @@ export function initQuiz({ triggerId, banco, temas }) {
             if (accion === 'todas') { empezar(banco); return; }
             if (accion === 'asignatura') { renderNivelBloques(valor); return; }
             if (accion === 'volver-asignaturas') { renderNivelAsignaturas(); return; }
-            if (accion === 'todas-asignatura') {
-                const keys = temas.filter(t => (t.asignatura || ASIGNATURA_DEFECTO) === nivelAsignatura).map(t => t.key);
-                empezar(banco.filter(p => keys.includes(p.tema)));
-                return;
-            }
+            if (accion === 'todas-asignatura') { empezar(bancoDe(nivelAsignatura)); return; }
             if (accion === 'bloque') { renderNivelTemas(nivelAsignatura, valor); return; }
             if (accion === 'volver-bloques') { renderNivelBloques(nivelAsignatura); return; }
-            if (accion === 'todas-bloque') { empezarPorBloque(nivelAsignatura, nivelBloque); return; }
+            if (accion === 'todas-bloque') { empezar(bancoDe(nivelAsignatura, nivelBloque)); return; }
             if (accion === 'tema') { empezar(banco.filter(p => p.tema === valor)); return; }
         });
     }
@@ -286,7 +285,7 @@ export function initQuiz({ triggerId, banco, temas }) {
         const asigDirecta = trigger.dataset.quizAsignatura;
         const bloqueDirecto = trigger.dataset.quizBloque;
         if (temas && temas.length > 0 && asigDirecta && bloqueDirecto) {
-            empezarPorBloque(asigDirecta, bloqueDirecto);
+            empezar(bancoDe(asigDirecta, bloqueDirecto));
         } else if (temas && temas.length > 0) {
             mostrarPantallaQuiz(false);
             renderNivelAsignaturas();

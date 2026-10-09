@@ -92,6 +92,14 @@ export function init() {
     initManualUmi();
     initDudasGuardia();
 
+    // Recuentos de la portada de Preguntas MC derivados del banco real, para
+    // que no se queden desactualizados al añadir preguntas al archivo de datos.
+    const nRedactar = preguntasMcDificiles.filter(p => p.tipo === 'redactar').length;
+    const statTotal = document.getElementById('mc-stat-total');
+    const statTipos = document.getElementById('mc-stat-tipos');
+    if (statTotal) statTotal.textContent = preguntasMcDificiles.length;
+    if (statTipos) statTipos.textContent = `${preguntasMcDificiles.length - nRedactar}+${nRedactar}`;
+
     sobrevivirLevel.show('menu');
 
     // Deja siempre el submenú de guías como pantalla de entrada al
