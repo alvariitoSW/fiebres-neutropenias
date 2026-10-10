@@ -9969,6 +9969,16 @@ de `nefro-menu.html`.
   situaciones/fármacos de la nefrona, los 5 glomérulos con sus mandos, los
   2 accesos y su vuelta, 59 vistas Visual de Nefrología sin fuentes sin
   resolver, sin errores ni desborde. Cache-busting a `?v=20261018-8`.
+- **Reciclaje de K⁺ por ROMK en la rama gruesa**, a petición explícita del
+  usuario ("prefiero que metas el reciclaje x romk"), aunque ni la ficha ni
+  el PDF lo citan: va marcado como fisiología general en el campo
+  `general` del tramo. En `nefrona-data.js`, un canal nuevo con
+  `depende: 'NKCC2'` y `desdeCelula: true` (el K⁺ sale de la célula a la
+  luz, como el H⁺) y el paso de Ca²⁺/Mg²⁺ entre células con la misma
+  dependencia ("luz positiva"). Con furosemida (o cualquier fármaco que
+  bloquee el canal del que depende) la célula muestra ROMK sin K⁺ que
+  reciclar y el Ca²⁺/Mg²⁺ quedándose en la luz ("se pierden en la orina");
+  el panel del tramo lo dice también. `diana` de un canal es opcional.
 
 ## Auditoría de Hematología (octubre 2026)
 

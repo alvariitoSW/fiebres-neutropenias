@@ -73,9 +73,10 @@ export const segmentosNefrona = {
         epitelio: 'cubico', mito: 5, bomba: true,
         canales: [
             { nombre: 'NKCC2', funcion: 'Cotransporte de Na⁺/K⁺/2Cl⁻ desde la luz, activado por la ADH. Impermeable al agua: saca sal sin agua, el líquido sale más diluido y el intersticio se vuelve hipertónico. Hasta el 25% del Na⁺ filtrado se reabsorbe en la rama ascendente.', diana: 'Diuréticos de asa (furosemida, torasemida, bumetanida)', flujo: [['na', 'r'], ['k', 'r', 'Canal de K⁺'], ['cl', 'r', 'Canal de Cl⁻']] },
+            { nombre: 'ROMK (reciclaje de K⁺)', depende: 'NKCC2', desdeCelula: true, funcion: 'Casi todo el K⁺ que entra con NKCC2 vuelve a la luz por el canal ROMK. Así a NKCC2 nunca le falta K⁺ en la luz (hay mucho menos K⁺ que Na⁺ y Cl⁻), y la salida de cargas positivas deja la luz con carga positiva, que empuja el Ca²⁺ y el Mg²⁺ entre las células.', flujo: [['k', 's']] },
         ],
-        paracelular: { iones: ['ca'], etiqueta: 'Ca²⁺ y Mg²⁺ entre las células' },
-        general: 'Que el Ca²⁺ y el Mg²⁺ pasen entre las células es fisiología general: la ficha dice que se reabsorben en la rama ascendente, sin decir por qué vía.',
+        paracelular: { iones: ['ca'], etiqueta: 'Ca²⁺ y Mg²⁺ entre las células (luz positiva)', depende: 'NKCC2' },
+        general: 'El reciclaje de K⁺ por ROMK, la carga positiva de la luz y el paso del Ca²⁺ y el Mg²⁺ entre las células son fisiología general: la ficha dice que el Ca²⁺ y el Mg²⁺ se reabsorben en la rama ascendente, sin decir por qué vía. Por eso, al bloquear NKCC2, también se pierden Ca²⁺ y Mg²⁺ en la orina.',
         categorias: [
             { key: 'diureticos-asa', etiqueta: 'Diuréticos de asa' },
         ],

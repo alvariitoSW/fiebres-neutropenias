@@ -612,39 +612,43 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
             const y = f.y0 + 12;
             if (f.t === 'canal' || f.t === 'aqp') {
                 const cn = f.cn, bl = bloqueado(seg, cn.nombre);
+                // ROMK de la rama gruesa recicla el K⁺ que trae NKCC2: sin NKCC2, no hay qué reciclar.
+                const sinK = !bl && cn.depende && bloqueado(seg, cn.depende);
                 const esAqp2 = f.t === 'aqp', esUrea = cn.nombre === 'Transportador de urea';
                 let veces = 3, dur = 3.2;
                 if (cn.nombre === 'ROMK') { const fk = Math.sqrt(M.naTcd / 0.039) * (ahorr ? 0.3 : 1); veces = Math.max(1, Math.min(6, Math.round(3 * fk))); dur = 3.6 / clamp(fk, 0.6, 2); }
                 if (esAqp2) veces = Math.round(M.a * 5);
                 if (esUrea) veces = Math.round(M.a * 4);
-                const sinCanal = (esAqp2 || esUrea) && veces === 0, off = !!bl || danada || sinCanal;
+                const sinCanal = (esAqp2 || esUrea) && veces === 0, off = !!bl || danada || sinCanal || !!sinK;
                 const n = cn.flujo.length;
                 const yy = k => (esAqp2 ? y + 22 : y) + k * 18;
                 cn.flujo.forEach(([ion, dir, salida], k) => {
-                    const yk = yy(k), col = ION[ion][1];
-                    const ruta = dir === 'r' ? ida(yk) : ion === 'h' ? desdeCelula(yk) : vuelta(yk);
-                    const corta = dir === 'r' ? `M10 ${yk} L${xa - 6} ${yk}` : ion === 'h' ? `M${xm} ${yk + 14} L${xa + 8} ${yk}` : `M322 ${yk} L${xb + 6} ${yk}`;
+                    const yk = yy(k), col = ION[ion][1], desde = ion === 'h' || cn.desdeCelula;
+                    const ruta = dir === 'r' ? ida(yk) : desde ? desdeCelula(yk) : vuelta(yk);
+                    const corta = dir === 'r' ? `M10 ${yk} L${xa - 6} ${yk}` : desde ? `M${xm} ${yk + 14} L${xa + 8} ${yk}` : `M322 ${yk} L${xb + 6} ${yk}`;
                     capas += guia(ruta, col, off);
                     capas += flujoIones(off ? corta : ruta, ion, off ? 2 : Math.max(1, veces), off ? 1.6 : dur, off, k);
                     // Puerta basolateral: la bomba (verde) para el Na⁺; la suya propia para el resto.
                     if (dir === 'r' && !plano) capas += salida ? puerta(xb, yk, C.oro, 10) : `<circle cx="${xb}" cy="${yk}" r="5" fill="${C.verde}"/>`;
                     if (dir === 'r' && plano && salida) capas += puerta(xb, yk, C.oro, 10);
                     if (salida && !esUrea && salida !== cn.nombre) textos += rotuloPuerta(salida, yk);
-                    textos += ion === 'h' ? txt(xa - 6, yk - 6, 'H⁺', { size: 8, color: col, ancla: 'end' })
+                    textos += desde ? txt(xa - 6, yk - 6, ION[ion][0], { size: 8, color: col, ancla: 'end' })
                         : txt(dir === 's' ? 352 : 8, yk - 5, ION[ion][0], { size: 8, color: col, ancla: dir === 's' ? 'end' : 'start' });
                 });
                 // Puerta apical (con tantas acuaporinas como ADH haya).
                 if (esAqp2) for (let q = 0; q < veces; q++) capas += puerta(xa, y + q * 9, off ? '#5a4a3a' : C.oro, 7);
                 else if (cn.nombre !== 'Paso pasivo') capas += `<rect x="${xa - 6}" y="${y - 11}" width="12" height="${18 * (n - 1) + 22}" rx="5" fill="${off ? '#5a4a3a' : C.oro}" stroke="#17140f"/>`;
                 const yl = f.y0 + f.h - 4;
-                textos += txt(lblX, yl - (cn.intercalar || esAqp2 || cn.nombre === 'ROMK' || esUrea || bl || danada || sinCanal ? 11 : 0), `${cn.nombre}${esAqp2 && !sinCanal ? ` ×${veces} (ADH)` : ''}`, { size: plano ? 9 : 10, peso: 'bold' });
+                textos += txt(lblX, yl - (cn.intercalar || esAqp2 || cn.nombre === 'ROMK' || cn.depende || esUrea || bl || danada || sinCanal ? 11 : 0), `${cn.nombre}${esAqp2 && !sinCanal ? ` ×${veces} (ADH)` : ''}`, { size: plano ? 9 : 10, peso: 'bold' });
                 let nota = '';
                 if (danada) nota = 'Célula dañada (NTA): apenas reabsorbe';
                 else if (bl) nota = `Bloqueado: ${bl.nombre}${bl.receptor ? ' (receptor de aldosterona)' : ''}`;
+                else if (sinK) nota = `Sin K⁺ que reciclar: ${sinK.nombre} bloquea ${cn.depende}`;
+                else if (cn.depende) nota = `devuelve a la luz el K⁺ de ${cn.depende}`;
                 else if (sinCanal) nota = esAqp2 ? 'Sin ADH: no hay acuaporinas en la membrana' : 'Sin ADH: apenas sale urea';
                 else if (cn.nombre === 'ROMK') nota = veces > 3 ? 'más flujo distal: secreta más' : veces < 3 ? 'menos ENaC: secreta menos' : 'secreción basal';
                 else if (esUrea) nota = 'con ADH sale a la médula interna';
-                if (nota) textos += txt(lblX, yl, nota, { size: 8, color: danada || bl || sinCanal ? CLARO.rojo : C.suave });
+                if (nota) textos += txt(lblX, yl, nota, { size: 8, color: danada || bl || sinCanal || sinK ? CLARO.rojo : C.suave });
                 if (bl && !danada) capas += cruz(xa, y + 4);
             } else if (f.t === 'enzima') {
                 // H⁺ + HCO₃⁻ → CO₂ en la luz; el CO₂ entra y el HCO₃⁻ se regenera dentro y sale a la sangre.
@@ -669,12 +673,16 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
                 textos += txt(lblX, yl, off ? (danada ? 'Célula dañada (NTA)' : 'Bloqueada: el HCO₃⁻ se queda en la luz') : 'H⁺ + HCO₃⁻ → CO₂ + H₂O, y al revés dentro', { size: 8, color: off ? CLARO.rojo : C.suave });
             } else if (f.t === 'para') {
                 const yc = f.y0 + f.h / 2;
+                // Sin la carga positiva de la luz (NKCC2 bloqueado), el Ca²⁺ y el Mg²⁺ se quedan en la luz.
+                const sinVoltaje = d.paracelular.depende && bloqueado(seg, d.paracelular.depende);
+                const paraOff = danada || !!sinVoltaje;
                 d.paracelular.iones.forEach((ion, k) => {
                     const yk = yc - 3 + k * 6 - (d.paracelular.iones.length - 1) * 3, ruta = `M10 ${yk} L322 ${yk}`;
-                    capas += guia(ruta, ION[ion][1], danada) + flujoIones(ruta, ion, 3, 2.8, false, k);
+                    capas += guia(ruta, ION[ion][1], paraOff) + flujoIones(sinVoltaje ? `M10 ${yk} L${xa - 6} ${yk}` : ruta, ion, sinVoltaje ? 2 : 3, sinVoltaje ? 1.6 : 2.8, !!sinVoltaje, k);
                     textos += txt(8 + k * 26, yk - 7, ION[ion][0], { size: 8, color: ION[ion][1] });
                 });
                 textos += txt(xm, f.y0 + 4, d.paracelular.etiqueta, { size: 8.5, ancla: 'middle', peso: 'bold' });
+                if (sinVoltaje && !danada) textos += txt(xm, f.y0 + f.h, 'Sin luz positiva: se pierden en la orina', { size: 8, ancla: 'middle', color: CLARO.rojo });
             } else if (f.t === 'agua') {
                 const yk = f.y0 + 10;
                 capas += guia(ida(yk), ION.h2o[1], danada) + flujoIones(danada ? `M10 ${yk} L${xa - 6} ${yk}` : ida(yk), 'h2o', 4, 2.6, danada);
@@ -888,7 +896,9 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
         $('#nv-detalle').innerHTML = `<div class="nv-ficha">${copiaLinea(d.texto)}</div><div class="nv-botones">${enlaceTexto(d.texto)}</div>`
             + d.canales.map(cn => {
                 const bl = bloqueado(estado.seg, cn.nombre);
-                return `<div class="nv-canal${bl ? ' bloq' : ''}"><h4>${cn.nombre}${bl ? ` <span>· ${bl.danio ? 'célula dañada (NTA)' : `bloqueado por ${bl.nombre}`}</span>` : ''}</h4>${cn.funcion}<div class="nv-canal-diana">Diana: ${cn.diana}</div></div>`;
+                const sinK = !bl && cn.depende && bloqueado(estado.seg, cn.depende);
+                const estadoTxt = bl ? (bl.danio ? 'célula dañada (NTA)' : `bloqueado por ${bl.nombre}`) : sinK ? `sin K⁺ que reciclar (${sinK.nombre})` : '';
+                return `<div class="nv-canal${bl || sinK ? ' bloq' : ''}"><h4>${cn.nombre}${estadoTxt ? ` <span>· ${estadoTxt}</span>` : ''}</h4>${cn.funcion}${cn.diana ? `<div class="nv-canal-diana">Diana: ${cn.diana}</div>` : ''}</div>`;
             }).join('')
             + (d.general ? `<p class="nv-general">${d.general}</p>` : '');
         cats.innerHTML = d.categorias.map(cat =>
