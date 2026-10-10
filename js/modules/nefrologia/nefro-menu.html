@@ -512,7 +512,7 @@
                         <dl class="kv-row"><dt>Efecto</dt><dd>Natriurético y diurético: inhibe la reabsorción de Na⁺ en el colector, inhibe aldosterona y ADH, y dilata la arteriola aferente aumentando la TFG.</dd></dl>
                     </div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="nv-t-pth">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🦴 Hormona paratiroidea (PTH)</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">Aumenta la reabsorción de Ca²⁺ en el túbulo contorneado distal, además de estimular la formación de calcitriol en el túbulo proximal.</div>
                 </div>
@@ -1595,7 +1595,7 @@
             <h3 style="color: var(--accent-purple);">Hipocalcemia</h3>
             <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Rodelo-Haad C, Albalate Ramón M, de Sequera Ortíz P, Rodríguez Portillo M. Trastornos del Calcio, Fósforo y Magnesio. Nefrología al día (SEN), actualizado 1/10/2025.</p>
             <dl class="kv-row"><dt>Las 3 hormonas calciotropas</dt><dd><strong>PTH</strong>: se secreta ante ↓Ca (detectado por el receptor sensor de calcio, CaSR) y sube la calcemia por 3 vías: ↑resorción ósea, ↑absorción intestinal (vía CTR) y ↑reabsorción tubular distal. <strong>CTR</strong> (calcitriol, vitamina D activa): estimula absorción intestinal y renal de Ca/P, favorece la resorción ósea, e inhibe la síntesis de PTH. <strong>Calcitonina</strong>: inhibe la resorción ósea mediada por osteoclastos (poca influencia en humanos).</dd></dl>
-            <div class="article-figure">
+            <div class="article-figure" id="p-fgf23">
                 <img src="js/modules/nefrologia/img/cafomg-fig1-fgf23-klotho.png" alt="Acciones biológicas del complejo FGFR1-Klotho: el FGF23 actúa sobre el túbulo proximal renal reduciendo la reabsorción de fósforo y disminuyendo el calcitriol, y sobre la glándula paratiroidea reduciendo la PTH" loading="lazy">
                 <div class="article-figure-caption">Figura 1. FGF23 (fosfatonina osteocitaria, eje hueso-riñón): inhibe los cotransportadores NPT2a,c del túbulo proximal (fosfaturia), suprime el CTR (↓1α-hidroxilasa, ↑24-hidroxilasa) y suprime la PTH — todo con el resultado final de ↓P. Estimulada por ↑P, PTH, CTR y Ca; en la ERC está elevada de forma compensadora pero suprime el CTR, siendo central en la patogenia del hiperparatiroidismo secundario.</div>
             </div>
@@ -1734,7 +1734,7 @@
             </table>
             <p style="font-size: 0.75rem; color: var(--text-muted);">* Causas más frecuentes. ** La hipercalcemia por litio suele estar mediada por la PTH.</p>
             <div class="micro-profiles">
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="ca-hpt1">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🦴 Hiperparatiroidismo primario</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">El exceso de PTH activa osteoclastos (↑resorción ósea), ↓excreción renal de Ca y ↑CTR (↑absorción intestinal). Suele cursar con hipercalcemia ligera-moderada (&lt;11 mg/dl) o incluso en el límite alto de la normalidad con hipercalcemia intermitente; fosfatemia baja por la fosfaturia inducida por la PTH. Puede asociarse a MEN 1 (tumores pituitarios/pancreáticos) o MEN 2A (feocromocitoma, carcinoma medular de tiroides).</div>
                 </div>
@@ -1746,9 +1746,9 @@
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🫁 Enfermedades granulomatosas</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">Los macrófagos del granuloma contienen 1-hidroxilasa, que convierte 25(OH) vitamina D en CTR de forma no regulada, causando hipercalcemia. Sarcoidosis y tuberculosis son las más frecuentes.</div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="ca-hhf">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Hipercalcemia-hipocalciuria familiar</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">Autosómica dominante, mutación del CaSR renal y paratiroideo que "reconoce" la calcemia normal/alta como baja: ↑reabsorción tubular de Ca + defecto de inhibición de PTH. Ca urinario bajo con Ca plasmático alto-normal y PTH normal o moderadamente elevada — excreción fraccional de Ca mayor que en el hiperparatiroidismo 1º. La forma homocigota causa hiperparatiroidismo severo neonatal, que requiere paratiroidectomía.</div>
+                    <div class="micro-prof-body">Autosómica dominante, mutación del CaSR renal y paratiroideo que "reconoce" la calcemia normal/alta como baja: ↑reabsorción tubular de Ca + defecto de inhibición de PTH. Ca urinario bajo con Ca plasmático alto-normal y PTH normal o moderadamente elevada — excreción fraccional de Ca mayor que en el hiperparatiroidismo 1º. La forma homocigota causa hiperparatiroidismo severo neonatal, que requiere paratiroidectomía.<p style="font-size:0.78rem;color:var(--text-muted);margin-top:6px;"><strong>Nota de fidelidad:</strong> «excreción fraccional de Ca mayor» contradice el resto de esta misma ficha: la frase anterior (Ca urinario bajo), el algoritmo de la Figura 4 y la tabla de abajo (Cca/Cr &lt;0,01 en la hipercalcemia-hipocalciuria familiar frente a &gt;0,02 en el hiperparatiroidismo). Lo esperable es una excreción fraccional <em>menor</em>. El PDF de la fuente no está archivado en la app y no se ha podido comprobar si la errata es de la fuente o de la transcripción; la nefrona viva usa la tabla.</p></div>
                 </div>
             </div>
 
@@ -1775,12 +1775,12 @@
             <div style="overflow-x:auto;"><table class="data-table">
                 <thead><tr><th></th><th>PTH</th><th>Cap</th><th>Cao (24h)</th><th>Cca/Cr</th><th>25-vitD</th></tr></thead>
                 <tbody>
-                    <tr><td>Hiperparatiroidismo</td><td>N o ↑</td><td>↑</td><td>N o ↑</td><td>&gt;0,02</td><td>N o ↓</td></tr>
+                    <tr id="ca-t-hpt"><td>Hiperparatiroidismo</td><td>N o ↑</td><td>↑</td><td>N o ↑</td><td>&gt;0,02</td><td>N o ↓</td></tr>
                     <tr><td>Tumores</td><td>↓</td><td>↑</td><td>↑</td><td>—</td><td>Según tumor</td></tr>
-                    <tr><td>Hipercalcemia-hipocalciuria familiar</td><td>N o ↑</td><td>↑</td><td>↓</td><td>&lt;0,01</td><td>N</td></tr>
+                    <tr id="ca-t-hhf"><td>Hipercalcemia-hipocalciuria familiar</td><td>N o ↑</td><td>↑</td><td>↓</td><td>&lt;0,01</td><td>N</td></tr>
                 </tbody>
             </table></div>
-            <p style="font-size: 0.8rem; color: var(--text-muted);">Ca urinario: aumentado/normal en hiperparatiroidismo y tumoral; disminuido en síndrome leche-alcalinos, diuréticos tiazídicos, hipercalcemia-hipocalciuria familiar.</p>
+            <p id="ca-orina" style="font-size: 0.8rem; color: var(--text-muted);">Ca urinario: aumentado/normal en hiperparatiroidismo y tumoral; disminuido en síndrome leche-alcalinos, diuréticos tiazídicos, hipercalcemia-hipocalciuria familiar.</p>
 
             <p class="section-label" style="margin-top:16px;">Tratamiento</p>
             <table class="data-table">
@@ -1824,7 +1824,7 @@
                 <img src="js/modules/nefrologia/img/cafomg-fig5-manejo-fosforo.png" alt="Manejo del fósforo: ingesta diaria 0,6-2 g, absorción intestinal 0,5-1,4 g, intercambio con hueso 0,15-0,3 g, filtración y reabsorción renal 4-6 g y 3,5-4,6 g, excreción urinaria 0,5-1,4 g y fecal 0,2-0,6 g" loading="lazy">
                 <div class="article-figure-caption">Figura 5. Ingesta diaria 0,6-2 g (fuente principal) → intestino (absorción 0,5-1,4 g) → espacio extracelular ⇄ intracelular y hueso (0,15-0,3 g) → riñón (filtración 4-6 g, reabsorción 3,5-4,6 g) → excreción urinaria 0,5-1,4 g y fecal 0,2-0,6 g.</div>
             </div>
-            <p style="font-size: 0.8rem; color: var(--text-muted);">Regulación por las mismas hormonas calciotropas: PTH y FGF23 son fosfatúricos (↓reabsorción tubular proximal vía cotransportadores NPT2a,c); el CTR aumenta la absorción intestinal de P.</p>
+            <p id="p-regulacion" style="font-size: 0.8rem; color: var(--text-muted);">Regulación por las mismas hormonas calciotropas: PTH y FGF23 son fosfatúricos (↓reabsorción tubular proximal vía cotransportadores NPT2a,c); el CTR aumenta la absorción intestinal de P.</p>
 
             <p class="section-label" style="margin-top:16px;">Hipofosfatemia</p>
             <table class="data-table">
@@ -1854,7 +1854,7 @@
                     <tr><td><strong>Renal:</strong> ↓FG, hipercalciuria, hipermagnesiuria, bicarbonaturia, glucosuria</td></tr>
                 </tbody>
             </table>
-            <div class="article-figure">
+            <div class="article-figure" id="p-fig6">
                 <img src="js/modules/nefrologia/img/cafomg-fig6-algoritmo-hipofosfatemia.png" alt="Algoritmo diagnóstico de hipofosforemia: fósforo sérico menor de 2,5 mg/dl, evaluar reabsorción tubular de fósforo, y según sea mayor o menor del 90% valorar disminución de absorción intestinal, desplazamiento intracelular o pérdida renal" loading="lazy">
                 <div class="article-figure-caption">Figura 6. P sérico &lt;2,5 mg/dl → historia/clínica → si no explica → RTP (reabsorción tubular de fósforo). RTP &gt;90% → sin pérdida renal (↓absorción intestinal o desplazamiento intracelular). RTP &lt;90% → pérdida renal → calcemia/PTH/1,25vitD/FGF23 para distinguir hiperparatiroidismo de tubulopatías hereditarias (RHHH/HRLX/Fanconi vs RHLX/RHAD/osteomalacia oncogénica).</div>
             </div>
@@ -1903,7 +1903,7 @@
         <div id="fisio-magnesio" class="tab-content">
             <h3 style="color: var(--accent-blue);">Magnesio: hipomagnesemia e hipermagnesemia</h3>
             <dl class="kv-row"><dt>Magnesio corporal</dt><dd>~25.000 mg totales: ~53% en hueso (12.900 mg), ~27% en músculo (6.600 mg), ~20% en otros tejidos (4.900 mg) — solo una fracción mínima en sangre. Es cofactor de &gt;300 reacciones enzimáticas, incluida la Na⁺/K⁺-ATPasa.</dd></dl>
-            <div class="article-figure">
+            <div class="article-figure" id="mg-homeo">
                 <img src="js/modules/nefrologia/img/cafomg-fig8-homeostasis-magnesio.png" alt="Homeostasis del magnesio: ingesta diaria 360 mg, absorción intestinal 120 mg y secreción 20 mg, filtración renal 2400 mg y reabsorción 2300 mg, excreción urinaria 100 mg y fecal 260 mg, compartimentos de hueso músculo y otros tejidos" loading="lazy">
                 <div class="article-figure-caption">Figura 8. Ingesta diaria 360 mg → intestino (absorción 120 mg, secreción 20 mg) → compartimento sanguíneo ⇄ hueso (~12.900 mg), músculo (~6.600 mg), otros tejidos (~4.900 mg) → riñón (filtración 2.400 mg, reabsorción 2.300 mg) → excreción urinaria 100 mg y fecal 260 mg.</div>
             </div>

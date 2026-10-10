@@ -10018,6 +10018,50 @@ por cada `grupo`, tabla `GRUPOS`): **diarrea, ATR I (distal), ATR II
   (ATR II) muestran el fallo; acceso desde la ficha y "Texto ↓" a la fila
   de la tabla; sin errores ni desborde.
 
+### Calcio, fósforo y magnesio en la nefrona viva (octubre 2026)
+
+Misma petición ("sigue con lo que queda de nefrología").
+
+- **Partículas nuevas**: Ca²⁺ y Mg²⁺ (óvalos) y fosfato (triángulo
+  invertido), con su reabsorción por tramos en `mineralR()`. De las
+  fichas: el Mg²⁺ se reabsorbe ~96% (2.300 de 2.400 mg; el medidor de Mg²⁺
+  en situación normal lleva `ficha`), el fosfato sobre todo en el
+  proximal por NPT2a,c, la rama gruesa reabsorbe Ca²⁺ y Mg²⁺ y la PTH sube
+  la reabsorción distal de Ca²⁺. El reparto exacto por tramos es
+  ilustrativo. Medidores nuevos "Ca²⁺ en orina" y "Mg²⁺ en orina"
+  (×N respecto a lo normal): furosemida ×3 y ×5; tiazida baja el Ca²⁺
+  (×0,25) y sube el Mg²⁺, con avisos que citan dónde lo dice la ficha.
+- **Canales nuevos**: NPT2a,c en el proximal y "Canal de Ca²⁺" en el
+  distal (salida por el intercambiador Na⁺/Ca²⁺ de la ficha, con su nota
+  de fidelidad). Lo que no dice la ficha va en `general`. Para que el
+  proximal siga cabiendo con un transportador más, `filasCelula()` usa
+  filas más bajas y una célula más alta (`ALTO_C`) solo cuando no caben.
+- **3 situaciones** (`grupo: 'mineral'`): hiperparatiroidismo 1º,
+  hipercalcemia-hipocalciuria familiar y exceso de FGF23. Los medidores
+  son las filas de la tabla de la hipercalcemia y los algoritmos de la
+  ficha (`mineral.tabla`), más la RTP de la animación (ilustrativa).
+- **`efectos`** generaliza el `defecto` de las ATR: cada situación frena
+  (`tipo: 'bloquea'`, ✕ y nota en rojo) o estimula (`'activa'`, rótulo y
+  nota en verde, sin ✕) un canal — PTH frena NPT2a,c y estimula el canal
+  de Ca²⁺ del distal; el CaSR mutado estimula el paso entre células de la
+  rama gruesa (`canal: 'paracelular'`); el FGF23 frena NPT2a,c.
+  `efecto(seg, canal, tipo)` los busca.
+- **`copiaLinea()`** copia solo el pie de una `.article-figure` (Figura 1
+  del FGF23, Figura 6) en vez de la imagen entera.
+- **Nota de fidelidad nueva** en la ficha Hipercalcemia: la HHF dice
+  "excreción fraccional de Ca mayor que en el hiperparatiroidismo 1º",
+  que contradice la frase anterior, la Figura 4 y la tabla de la misma
+  ficha (Cca/Cr <0,01 frente a >0,02). El PDF de Ca-P-Mg no está en
+  `docs/`, así que no se ha podido saber si la errata es de la fuente.
+- Accesos (`panelNefronaViva`) desde las vistas Visual de Hipercalcemia,
+  Fósforo y Magnesio; ids nuevos `nv-t-pth`, `ca-hpt1`, `ca-hhf`,
+  `ca-t-hpt`, `ca-t-hhf`, `ca-orina`, `p-regulacion`, `p-fgf23`,
+  `p-fig6`, `mg-homeo`.
+- Verificado con Playwright (390×844): las 3 situaciones, furosemida y
+  tiazida; las células del proximal (NPT2a,c frenado por la PTH), del
+  distal (Ca²⁺ con tiazida) y de la rama gruesa (CaSR); los accesos y
+  "Texto ↓"; las ATR sin regresión; sin errores ni desborde.
+
 ## Auditoría de Hematología (octubre 2026)
 
 A petición explícita del usuario ("revisa que esté todo correcto en

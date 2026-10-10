@@ -244,7 +244,8 @@ export function initVisualFisiologia() {
             { tipo: 'racimos', titulo: 'Si no basta', grupos: [
                 { titulo: 'Fármacos', color: 'dorado', tabla: 5 },
                 { titulo: 'Otras vías', color: 'rojo', nodos: ['Inhibidores de la absorción intestinal', 'Depuración extrarrenal'] }
-            ] }
+            ] },
+            panelNefronaViva([['hiperpara', 'Hiperparatiroidismo 1º'], ['hhf', 'Hipercalcemia-hipocalciuria familiar'], ['normal|tiazida', 'Tiazida: Ca²⁺ bajo en orina']])
         ]
     });
 
@@ -265,7 +266,8 @@ export function initVisualFisiologia() {
                 { fuente: 'Ósea:', etiqueta: 'Ósea', organo: 'piernaIzda' }
             ] },
             { tipo: 'selector', titulo: 'Mecanismo de la alteración', control: '#p-select', colores: ['purpura', 'purpura', 'purpura', 'rojo', 'rojo'], resultado: ['#p-explicacion'] },
-            { tipo: 'racimos', titulo: 'Suplementos de fósforo (tabla)', tabla: 3, color: 'verde' }
+            { tipo: 'racimos', titulo: 'Suplementos de fósforo (tabla)', tabla: 3, color: 'verde' },
+            panelNefronaViva([['fgf23', 'Exceso de FGF23'], ['hiperpara', 'Hiperparatiroidismo 1º']])
         ]
     });
 
@@ -283,7 +285,8 @@ export function initVisualFisiologia() {
             { tipo: 'comparar', titulo: 'Tratamiento', columnas: [
                 { titulo: 'Hipomagnesemia', color: 'purpura', tabla: 2 },
                 { titulo: 'Hipermagnesemia', color: 'rojo', tabla: 3 }
-            ] }
+            ] },
+            panelNefronaViva([['normal|furosemida', 'Furosemida (asa)'], ['normal|tiazida', 'Tiazida (distal)']])
         ]
     });
 }

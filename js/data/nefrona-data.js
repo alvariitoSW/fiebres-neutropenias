@@ -36,11 +36,12 @@ export const segmentosNefrona = {
         canales: [
             { nombre: 'SGLT2', funcion: 'Cotransporta Na⁺ y glucosa desde la luz. El 90% de la glucosa se reabsorbe aquí y el 10% en el segmento recto (SGLT1); los transportadores de glucosa de la cara basolateral la sacan a la sangre.', diana: 'Inhibidores de SGLT2 (gliflozinas)', flujo: [['na', 'r'], ['glu', 'r', 'Transp. glucosa']] },
             { nombre: 'Intercambiador Na⁺/H⁺ (NHE3)', funcion: 'Mete Na⁺ y saca H⁺ a la luz, con lo que recupera el bicarbonato filtrado. Se inhibe con PTH y glucagón; se activa con angiotensina II.', diana: '—', flujo: [['na', 'r'], ['h', 's']] },
+            { nombre: 'NPT2a,c', funcion: 'Cotransportadores de Na⁺ y fosfato de la cara luminal: el proximal recupera aquí el fosfato filtrado. La PTH y el FGF23 los inhiben (fosfaturia).', diana: '— (los regulan la PTH y el FGF23)', flujo: [['na', 'r'], ['p', 'r', 'Salida de fosfato']] },
             { nombre: 'Anhidrasa carbónica', enzima: true, funcion: 'Enzima, no transportador: acelera H⁺ + HCO₃⁻ ⇄ CO₂ + H₂O en la luz y dentro de la célula. El HCO₃⁻ filtrado se une al H⁺ que saca NHE3, entra en forma de CO₂ y se regenera dentro para salir a la sangre.', diana: 'Acetazolamida' },
         ],
         paracelular: { iones: ['cl', 'na'], etiqueta: 'ClNa entre las células (parte final)' },
         agua: 'H₂O: 70% del filtrado, isotónica',
-        general: 'La reacción del CO₂ con la anhidrasa carbónica es fisiología general: la ficha solo dice que NHE3 recupera el bicarbonato filtrado.',
+        general: 'La reacción del CO₂ con la anhidrasa carbónica es fisiología general: la ficha solo dice que NHE3 recupera el bicarbonato filtrado. También lo es la salida basolateral del fosfato.',
         categorias: [
             { key: 'fisio-tubular', etiqueta: 'Reabsorción y secreción tubular' },
         ],
@@ -87,7 +88,9 @@ export const segmentosNefrona = {
         epitelio: 'cubico', mito: 4, bomba: true,
         canales: [
             { nombre: 'NCC', funcion: 'Cotransportador Na⁺/Cl⁻ de la cara luminal. Impermeable al agua: sigue diluyendo la orina.', diana: 'Tiazidas (hidroclorotiazida, clortalidona)', flujo: [['na', 'r'], ['cl', 'r', 'Canal de Cl⁻']] },
+            { nombre: 'Canal de Ca²⁺', funcion: 'El Ca²⁺ entra desde la luz y sale a la sangre por el intercambiador basolateral Na⁺/Ca²⁺ (ver la nota de fidelidad de la ficha). La PTH aumenta aquí la reabsorción de Ca²⁺.', diana: '— (lo regula la PTH)', flujo: [['ca2', 'r', 'Na⁺/Ca²⁺']] },
         ],
+        general: 'Que el Ca²⁺ entre por un canal propio de la cara luminal, y que con tiazida se reabsorba más Ca²⁺ aquí, es fisiología general; la ficha cita el intercambiador basolateral, la acción de la PTH y el Ca urinario bajo con tiazidas.',
         categorias: [
             { key: 'fisio-potasio-regulacion', etiqueta: 'Regulación del potasio corporal' },
             { key: 'fisio-hipopotasemia', etiqueta: 'Hipopotasemia (Gitelman, tiazidas)' },
@@ -184,6 +187,33 @@ export const situacionesNefrona = [
       aviso: 'Sin aldosterona, ENaC reabsorbe menos Na⁺ y ROMK secreta menos K⁺: hiperpotasemia, la marca de la ATR IV. El pH urinario baja de 5,5, pero sin NH₄⁺ (hiato aniónico urinario positivo).',
       general: 'Que la aldosterona active ENaC y ROMK está en la ficha (colector); que también estimule la secreción de H⁺, y que la hiperpotasemia frene la producción de NH₄⁺, es fisiología general.',
       ficha: { tabId: 'fisio-acidobase-acidosis', etiqueta: 'Ficha: Ácido-base · acidosis →' } },
+    // Calcio, fósforo y magnesio: los valores son los de la tabla de la
+    // hipercalcemia y los algoritmos de la ficha (en `mineral.tabla`); lo que
+    // mueve la animación (caSpawn, ca, pProx) es ilustrativo. `efectos`: lo
+    // que la situación frena ('bloquea', ✕) o estimula ('activa') en un canal.
+    { id: 'hiperpara', nombre: 'Hiperparatiroidismo 1º', grupo: 'mineral', adh: 0.4825, fuentes: ['ca-hpt1', 'ca-t-hpt', 'nv-t-pth', 'p-regulacion'],
+      mineral: { caSpawn: 1.5, ca: { tal: 0.6, tcd: 0.9 }, pProx: 0.6,
+        tabla: [['PTH', 'N o ↑', ''], ['Ca²⁺ en sangre', 'Alto (suele <11 mg/dl)', 'sube'], ['Ca²⁺ en orina (24 h)', 'N o ↑', ''], ['Cca/Cr', '>0,02', ''], ['Fosfato en sangre', 'Bajo (fosfaturia por la PTH)', 'baja'], ['25-vitamina D', 'N o ↓', '']] },
+      efectos: [
+        { segmento: 'tubulo-proximal', canal: 'NPT2a,c', tipo: 'bloquea', nombre: 'PTH', nota: 'PTH: frena NPT2 (fosfaturia)', etiqueta: 'PTH: fosfaturia', tramo: 'tp2', etiquetaEn: [222, 170] },
+        { segmento: 'tubulo-distal', canal: 'Canal de Ca²⁺', tipo: 'activa', nombre: 'PTH', nota: 'PTH: reabsorbe más Ca²⁺', etiqueta: 'PTH: ↑ Ca²⁺' },
+      ],
+      aviso: 'La PTH reabsorbe más Ca²⁺ en el distal, pero se filtra tanto Ca²⁺ (hipercalcemia) que el de la orina es normal o alto: Cca/Cr >0,02. Y frena NPT2a,c: el fosfato se pierde por la orina.',
+      general: 'Que la hipercalcemia reduzca la reabsorción de Ca²⁺ en la rama gruesa es fisiología general; la ficha da el resultado (Ca urinario normal o alto).',
+      ficha: { tabId: 'fisio-hipercalcemia', etiqueta: 'Ficha: Hipercalcemia →' } },
+    { id: 'hhf', nombre: 'Hipercalcemia-hipocalciuria familiar', grupo: 'mineral', adh: 0.4825, fuentes: ['ca-hhf', 'ca-t-hhf', 'ca-orina'],
+      mineral: { caSpawn: 1.15, ca: { tal: 0.88, tcd: 0.9 },
+        tabla: [['PTH', 'N o ↑', ''], ['Ca²⁺ en sangre', 'Alto (o alto-normal)', 'sube'], ['Ca²⁺ en orina (24 h)', 'Bajo', 'baja'], ['Cca/Cr', '<0,01', ''], ['25-vitamina D', 'N', '']] },
+      efectos: [{ segmento: 'asa-ascendente-gruesa', canal: 'paracelular', tipo: 'activa', nombre: 'CaSR', nota: 'CaSR mutado: reabsorbe más Ca²⁺', etiqueta: 'CaSR mutado: ↑ Ca²⁺' }],
+      aviso: 'El sensor de calcio (CaSR) del riñón "ve" la calcemia normal o alta como baja y sigue reabsorbiendo Ca²⁺: hipercalcemia con calcio urinario bajo (Cca/Cr <0,01), lo que la separa del hiperparatiroidismo.',
+      general: 'Dónde actúa el CaSR del riñón (sobre todo en la rama gruesa) es fisiología general; la ficha dice "↑reabsorción tubular de Ca".',
+      ficha: { tabId: 'fisio-hipercalcemia', etiqueta: 'Ficha: Hipercalcemia →' } },
+    { id: 'fgf23', nombre: 'Exceso de FGF23', grupo: 'mineral', adh: 0.4825, fuentes: ['p-fgf23', 'p-fig6'],
+      mineral: { pProx: 0.55,
+        tabla: [['Fosfato en sangre', '<2,5 mg/dl', 'baja'], ['RTP', '<90%: pérdida renal', ''], ['Calcitriol (CTR)', 'Bajo (el FGF23 lo suprime)', 'baja']] },
+      efectos: [{ segmento: 'tubulo-proximal', canal: 'NPT2a,c', tipo: 'bloquea', nombre: 'FGF23', nota: 'FGF23: frena NPT2 (fosfaturia)', etiqueta: 'FGF23: fosfaturia', tramo: 'tp2', etiquetaEn: [222, 170] }],
+      aviso: 'Con el fosfato bajo, un riñón sano lo recuperaría casi entero (RTP >90%). Aquí el FGF23 frena NPT2a,c y la RTP queda por debajo del 90%: la pérdida es renal (hipofosfatemia ligada a X, autosómica dominante, osteomalacia oncogénica).',
+      ficha: { tabId: 'fisio-fosforo', etiqueta: 'Ficha: Fósforo →' } },
 ];
 
 // `segmento`/`canal`: lo que bloquea (se marca con ✕ en la nefrona y en la célula).
