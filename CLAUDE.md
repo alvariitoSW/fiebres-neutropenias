@@ -9753,6 +9753,71 @@ líneas del texto), mismo escenario y mismas piezas de la app.
   de la simulación; la hiperpotasemia sigue igual; sin errores de consola
   ni desborde horizontal.
 
+### Vista Visual en el resto de Nefrología (octubre 2026)
+
+A petición explícita del usuario ("terminar toda la parte de nefro",
+avisando de que algún apartado no necesitaría esta vista). Con esto, las
+**59 fichas** de cuaderno de campo de Nefrología tienen Texto | Visual:
+las 2 simulaciones del potasio y **57 recetas del kit**, una por ficha.
+
+- **Archivos**: `js/modules/nefrologia/visual-fisiologia.js` (16 fichas
+  del cuaderno de fisiología, llamado desde `fisiologia.js`),
+  `visual-hta.js` (8), `visual-erc.js` (13), `visual-fra.js` (9),
+  `visual-trr.js` (6) y `visual-trasplante-renal.js` (5), cada uno llamado
+  desde el `init()` de su módulo justo después de `initCorkboard`.
+- **Sin vista Visual, a propósito**: `nefrotoxicidad.html` (tabla de
+  consulta de 585 fármacos con buscador), `tratamiento-ira-irc.html` (guía
+  de navegación hacia otras fichas, sin contenido propio),
+  `diureticos-asa.html` (página corta a la que se llega desde la nefrona
+  interactiva, que ya es la imagen), y el mapa del riñón y la nefrona
+  (son ya la navegación visual).
+- **Las calculadoras y simuladores de cada ficha se reutilizan**, nunca se
+  copian: el simulador de autorregulación de la TFG, el de osmorregulación,
+  Adrogué-Madias, el clasificador ácido-base, calcio corregido, FGe/CGA,
+  panel analítico de ERC, estadio KDIGO, FENa/IFR (panel `calculadora`),
+  Mehran (panel `puntos`) y todos los diferenciales con `<select>` (panel
+  `selector`).
+- **Mapa de calor G×A de ERC** (ficha 1, panel `propio` en
+  `visual-erc.js`): la matriz de riesgo KDIGO con la celda del paciente de
+  la calculadora marcada. Las funciones de CKD-EPI 2021, categorías G/A y
+  el mapa de riesgo pasaron de `erc.js` a `erc-cga.js`, que usan la
+  calculadora y la imagen (una sola fuente).
+- **Novedades del kit** (`core/visual-kit.js`), todas genéricas:
+  - panel `calculadora`: los campos reales de una calculadora o simulador
+    (número, deslizador con su unidad, desplegable) en versión compacta;
+    escribe en el control real, dispara su evento y copia lo que pinta la
+    calculadora. `resultado` acepta un `#id` (se copia su contenido con el
+    color de estado) o cualquier otro selector (se copia el bloque entero,
+    p. ej. las barras de un simulador). Las copias nunca llevan ids. Se
+    actualiza en su sitio, sin perder el foco ni el arrastre.
+  - panel `propio` (`render(cuerpo, { tab, texto })`): una pieza a medida
+    dentro de una receta.
+  - `matriz` con `flechas: true` (↑ sube, ↓ baja, N normal, variable) o
+    `calor: true` (intensidad según la cifra de cada celda).
+  - cualquier panel, grupo o columna puede tomar sus nodos de una tabla
+    (`tabla: n`, una fila por nodo).
+  - `tras`: busca la fuente solo después de otro elemento, para etiquetas
+    repetidas en una misma ficha ("Clínica", "Tratamiento" de cada
+    enfermedad).
+  - un `<dl class="kv-row">` con varios pares dt/dd se resuelve par a par.
+  - las etiquetas conservan ↑/↓ iniciales ("↓Ingesta") y quitan los
+    números en tecla ("1️⃣").
+  - `selector` ya no muestra la opción vacía "— Selecciona —"; `barras`
+    tolera filas con menos celdas y muestra solo la cifra de la celda.
+  - Bug previo corregido: escribir en un campo numérico de un panel
+    `puntos` lanzaba una excepción (`setSelectionRange` en `type=number`).
+- **Vista Texto**: 10 tablas que desbordaban a 390 px (fisiología, HTA,
+  ERC, TRR, trasplante renal) van ahora en `overflow-x:auto`.
+- Verificado con Playwright (390×844): las 57 vistas se construyen sin
+  fuentes sin resolver ni paneles vacíos; cada nodo se tocó y se comprobó
+  que su detalle es la línea correcta; las calculadoras conectadas
+  escriben en el control real y copian su resultado (TFG a 60 mmHg,
+  clasificador ácido-base, FGe 34 → G3bA2 marcado en el mapa, Mehran 7);
+  "Ver en el texto" vuelve al texto y resalta; las 33 vistas de
+  Hematología siguen igual; sin errores de consola ni desborde horizontal
+  en ninguna ficha de Nefrología, en Texto ni en Visual. Cache-busting a
+  `?v=20261018-5`.
+
 ## Auditoría de Hematología (octubre 2026)
 
 A petición explícita del usuario ("revisa que esté todo correcto en

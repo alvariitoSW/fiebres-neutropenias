@@ -4,7 +4,9 @@
 // 16/5/2022. Santamaría Olmo R, Gorostidi M. Hipertensión arterial
 // secundaria. Nefrología al día (SEN), actualizado 23/3/2024.
 import { initCorkboard } from '../../core/corkboard.js';
+import { initVisualHta } from './visual-hta.js';
 
 export function init() {
     initCorkboard('hta-corkboard', 'panel-hta-tabs');
+    initVisualHta();
 }

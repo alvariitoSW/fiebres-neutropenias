@@ -3,6 +3,7 @@
 // Rodríguez Benítez P, Ramos Terrades N, Poch E. Insuficiencia Renal
 // Aguda. Nefrología al día (SEN), actualizado 22/9/2025.
 import { initCorkboard } from '../../core/corkboard.js';
+import { initVisualFra } from './visual-fra.js';
 
 // Clasificador orientativo de estadio KDIGO (Tabla 1 de la fuente),
 // basado únicamente en el criterio de creatinina (delta absoluto o razón
@@ -88,6 +89,7 @@ function calcFenaIfr() {
 
 export function init() {
     initCorkboard('fra-corkboard', 'panel-fra-tabs');
+    initVisualFra();
 
     ['fra-cr-basal', 'fra-cr-actual'].forEach(id => {
         const el = document.getElementById(id);

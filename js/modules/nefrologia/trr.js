@@ -4,7 +4,9 @@
 // sustitutivo renal en el paciente crítico con fracaso renal agudo:
 // horizonte 2020. Nefrología. 2021;41(2):102-114.
 import { initCorkboard } from '../../core/corkboard.js';
+import { initVisualTrr } from './visual-trr.js';
 
 export function init() {
     initCorkboard('trr-corkboard', 'panel-trr-tabs');
+    initVisualTrr();
 }

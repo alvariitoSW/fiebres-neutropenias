@@ -19,6 +19,8 @@
 // Tipos de panel: 'flujo', 'escalera', 'comparar', 'racimos', 'mapa',
 // 'linea', 'puntos' (barras de puntuación conectadas a una calculadora),
 // 'requisitos' (casillas reales como candados o barreras),
+// 'propio' (`render(cuerpo, { tab, texto })`: una pieza a medida del
+// módulo, que se monta una vez y gestiona sus propias actualizaciones),
 // 'selector' (opciones de un <select> real), 'calculadora' (los campos de
 // una calculadora o simulador ya existente, conectados; `resultado` puede
 // incluir bloques enteros como las barras de un simulador) y tres que
@@ -26,7 +28,8 @@
 // de la ficha leyendo sus celdas en tiempo de ejecución: 'barras' (cifras
 // de una o varias columnas), 'matriz' (celdas normal/alterado coloreadas) y
 // 'frecuencias' (cada "Nombre: 1:N" en una escala logarítmica; con
-// `flechas: true` la matriz colorea ↑/↓/N en vez de normal/alterado), más
+// `flechas: true` la matriz colorea ↑/↓/N en vez de normal/alterado, y con
+// `calor: true` la intensidad del color sigue la cifra de cada celda), más
 // 'grados' (cada COLUMNA de una tabla de gradación se vuelve un peldaño; al
 // tocarlo se ven todas sus filas, y "Ver en el texto" resalta esa columna
 // con el mismo gesto que la tabla ya tiene). 'puntos' y 'selector' no calculan:
@@ -51,7 +54,7 @@ const color = c => COLOR[c] || c || COLOR.dorado;
 // Color de la posición k de n en la rampa verde → amarillo → rojo → púrpura.
 const rampa = (k, n) => RAMPA[Math.min(RAMPA.length - 1, Math.round(k * (RAMPA.length - 1) / Math.max(1, n - 1)))];
 
-const CANDIDATOS = '.micro-prof-item, dl.kv-row, li, tr, p, .compare-box, .warning-box, .phenotype-row, .flow-node, .checkbox-label, h4';
+const CANDIDATOS = '.micro-prof-item, dl.kv-row, dt, li, tr, p, .compare-box, .warning-box, .phenotype-row, .flow-node, .checkbox-label, h4';
 
 const norm = s => s.replace(/\s+/g, ' ').trim().toLowerCase();
 const cabeceraMpi = el => el.querySelector(':scope > .micro-prof-head');
@@ -59,7 +62,8 @@ const textoPropio = el => (el.classList.contains('micro-prof-item') ? cabeceraMp
 // Quita emoji y signos decorativos iniciales, pero no los que son contenido
 // (≥, ≤, <, >, ↑, ↓: "≥72h acumuladas" no puede quedarse en "72h", ni
 // "↓Ingesta" en "Ingesta").
-const limpiar = s => s.replace(/\s+/g, ' ').replace(/\s*\+\s*$/, '').replace(/^[^\p{L}\p{N}(¿¡≥≤<>↑↓]+/u, '').trim();
+// Los números en teclas ("1️⃣", "1️⃣1️⃣") también son decoración.
+const limpiar = s => s.replace(/\s+/g, ' ').replace(/\s*\+\s*$/, '').replace(/^\s*(?:\d\uFE0F?\u20E3\s*)+/u, '').replace(/^[^\p{L}\p{N}(¿¡≥≤<>↑↓]+/u, '').trim();
 
 // `tras`: elemento a partir del cual buscar (para etiquetas repetidas, como
 // "Clínica" o "Tratamiento" en cada enfermedad de una misma ficha).
@@ -74,7 +78,8 @@ function resolver(raiz, fuente, tras = null) {
     // Prioridad: acordeones y kv-row (bloques con título propio) antes que
     // párrafos, filas o elementos de lista que empiecen igual.
     return [...raiz.querySelectorAll('.micro-prof-item')].find(coincide)
-        || [...raiz.querySelectorAll('dl.kv-row')].find(coincide)
+        // Un <dl> con varios pares dt/dd se resuelve par a par (por su <dt>).
+        || [...raiz.querySelectorAll('dl.kv-row')].filter(d => d.querySelectorAll('dt').length === 1).find(coincide)
         || [...raiz.querySelectorAll(CANDIDATOS)].find(coincide) || null;
 }
 
@@ -98,6 +103,10 @@ function copiaLimpia(nodo) {
 }
 
 function detalleDe(el) {
+    if (el.tagName === 'DT') {
+        const dd = el.nextElementSibling?.tagName === 'DD' ? el.nextElementSibling : null;
+        return dd ? copiaLimpia(dd) : '';
+    }
     if (el.classList.contains('micro-prof-item')) { const b = el.querySelector('.micro-prof-body'); return b ? copiaLimpia(b) : ''; }
     if (el.tagName === 'TR') {
         const ths = [...(el.closest('table')?.querySelectorAll('thead th, tr:first-child th') || [])].map(th => th.textContent.trim());
@@ -188,7 +197,9 @@ const cabeceras = tabla => [...(tabla.tHead?.rows[0] || tabla.rows[0]).cells].ma
 
 RENDER.barras = (p, nodos) => {
     const filas = p.nodos.map(x => nodos[x.i]);
-    const valores = filas.map(n => p.series.map(se => numero(n.el.cells[se.col].textContent)));
+    // Solo la cifra de la celda, sin la explicación que la sigue ("~90% — la absorción…").
+    const celda = (n, se) => (n.el.cells[se.col]?.textContent.trim() ?? '').split(/\s+—\s+/)[0];
+    const valores = filas.map(n => p.series.map(se => numero(celda(n, se))));
     const max = Math.max(...valores.flat().filter(v => v !== null), 0) || 1;
     const leyenda = p.series.length > 1 ? `<div class="vk-barras-leyenda">${p.series.map(se => `<span style="--vk:${color(se.color)}">${se.nombre}</span>`).join('')}</div>` : '';
     return `${leyenda}<div class="vk-barras">${filas.map((n, k) => `
@@ -196,7 +207,7 @@ RENDER.barras = (p, nodos) => {
             <span class="vk-barra-etq">${n.texto}</span>
             <span class="vk-barra-pistas">${p.series.map((se, j) => {
                 const v = valores[k][j];
-                return `<span class="vk-barra" style="--vk:${color(se.color)}"><i style="width:${v === null ? 0 : Math.max(1.5, v / max * 100)}%"></i><em>${v === null ? '—' : n.el.cells[se.col].textContent.trim()}</em></span>`;
+                return `<span class="vk-barra" style="--vk:${color(se.color)}"><i style="width:${v === null ? 0 : Math.max(1.5, v / max * 100)}%"></i><em>${v === null ? '—' : celda(n, se)}</em></span>`;
             }).join('')}</span>
         </button>`).join('')}</div>`;
 };
@@ -218,14 +229,17 @@ RENDER.matriz = (p, nodos) => {
     const filas = p.nodos.map(x => nodos[x.i]);
     const cab = cabeceras(filas[0].el.closest('table'));
     const normal = t => (p.normales || ['normal']).includes(norm(t));
-    const clase = t => (p.flechas ? flecha(t) : normal(t) ? 'normal' : 'alterado');
-    const leyenda = p.flechas
+    // `calor`: intensidad proporcional a la cifra de la celda (mismo color).
+    const vmax = p.calor ? Math.max(1, ...filas.flatMap(n => [...n.el.cells].slice(1).map(c => numero(c.textContent) ?? 0))) : 1;
+    const clase = t => (p.calor ? 'calor' : p.flechas ? flecha(t) : normal(t) ? 'normal' : 'alterado');
+    const estilo = t => (p.calor ? ` style="--calor:${(0.08 + 0.62 * (numero(t) ?? 0) / vmax).toFixed(2)}"` : '');
+    const leyenda = p.calor ? `<span>${p.leyenda?.[0] || 'color tenue = menos'}</span><span>${p.leyenda?.[1] || 'color intenso = más'}</span>` : p.flechas
         ? '<span class="sube">↑ sube</span><span class="baja">↓ baja</span><span class="normal">N normal</span><span class="mixto">variable</span>'
         : `<span class="normal">${p.leyenda?.[0] || 'normal'}</span><span class="alterado">${p.leyenda?.[1] || 'alterado'}</span>`;
     return `<div class="vk-matriz" style="grid-template-columns:minmax(0,1.3fr) repeat(${cab.length - 1}, minmax(0,1fr))">
         <span></span>${cab.slice(1).map(h => `<span class="vk-matriz-cab">${partirCabecera(h)}</span>`).join('')}
         ${filas.map(n => `<button type="button" class="vk-matriz-fila" data-nodo="${n.i}">${n.texto}</button>${[...n.el.cells].slice(1).map(c =>
-            `<span class="vk-matriz-celda ${clase(c.textContent)}">${c.textContent.trim()}</span>`).join('')}`).join('')}
+            `<span class="vk-matriz-celda ${clase(c.textContent)}"${estilo(c.textContent)}>${c.textContent.trim()}</span>`).join('')}`).join('')}
     </div>
     <div class="vk-matriz-leyenda">${leyenda}</div>`;
 };
@@ -520,10 +534,16 @@ function construir(tab, texto, visual, receta) {
         if (p.tipo === 'puntos') {
             const foco = document.activeElement?.classList.contains('vk-numero') ? document.activeElement.dataset.item : null;
             cuerpo.innerHTML = renderPuntos(p, estados[k]);
-            if (foco !== null) { const f = cuerpo.querySelector(`.vk-numero[data-item="${foco}"]`); f?.focus(); f?.setSelectionRange?.(f.value.length, f.value.length); }
+            if (foco !== null) {
+                const f = cuerpo.querySelector(`.vk-numero[data-item="${foco}"]`);
+                f?.focus();
+                // Los <input type="number"> no admiten selección: lanza en vez de ignorarlo.
+                try { f?.setSelectionRange(f.value.length, f.value.length); } catch { /* sin cursor que mover */ }
+            }
         } else if (p.tipo === 'requisitos') cuerpo.innerHTML = renderRequisitos(p, estados[k]);
         else if (p.tipo === 'selector') cuerpo.innerHTML = renderSelector(p);
         else if (p.tipo === 'calculadora') pintarCalculadora(p, estados[k], cuerpo);
+        else if (p.tipo === 'propio') { if (!cuerpo.hasChildNodes()) p.render(cuerpo, { tab, texto }); }
         else cuerpo.innerHTML = RENDER[p.tipo](p, nodos);
     };
     paneles.forEach((_, k) => pintar(k));

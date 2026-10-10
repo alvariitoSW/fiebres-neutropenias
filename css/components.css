@@ -2035,7 +2035,7 @@ body.study-mode-on .pomodoro-fab { display: flex; }
 .vk-barras-leyenda span::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--vk); margin-right: 4px; vertical-align: -1px; }
 .vk-matriz { display: grid; gap: 3px; align-items: stretch; font-size: 0.68rem; }
 .vk-matriz-cab { text-align: center; font-weight: bold; color: var(--accent-blue); padding: 2px 0; font-size: 0.62rem; line-height: 1.15; align-self: end; }
-.vk-matriz-fila { min-height: 34px; padding: 2px 6px; background: transparent; border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-main); font-family: inherit; font-size: 0.7rem; text-align: left; cursor: pointer; touch-action: manipulation; }
+.vk-matriz-fila { min-width: 0; overflow-wrap: anywhere; hyphens: auto; min-height: 34px; padding: 2px 6px; background: transparent; border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-main); font-family: inherit; font-size: 0.7rem; text-align: left; cursor: pointer; touch-action: manipulation; }
 .vk-matriz-fila.sel { box-shadow: 0 0 0 2px var(--text-main); }
 .vk-matriz-celda { display: flex; align-items: center; justify-content: center; text-align: center; border-radius: 6px; padding: 2px; line-height: 1.15; }
 .vk-matriz-celda.normal { background: rgba(144,160,106,0.18); color: var(--accent-green); }
@@ -2048,6 +2048,7 @@ body.study-mode-on .pomodoro-fab { display: flex; }
 .vk-matriz-celda.sube { background: rgba(184,92,62,0.3); color: var(--text-main); font-weight: bold; }
 .vk-matriz-celda.baja { background: rgba(156,84,118,0.34); color: var(--text-main); font-weight: bold; }
 .vk-matriz-celda.mixto { background: rgba(207,154,62,0.2); color: var(--accent-yellow); }
+.vk-matriz-celda.calor { background: rgba(184,92,62,var(--calor)); color: var(--text-main); }
 .vk-matriz-celda.valor { background: rgba(255,255,255,0.04); color: var(--text-muted); }
 .vk-matriz-leyenda .sube::before, .vk-matriz-leyenda .baja::before, .vk-matriz-leyenda .mixto::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: -1px; }
 .vk-matriz-leyenda .sube::before { background: rgba(184,92,62,0.7); }
@@ -2229,3 +2230,14 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 .hp-perfusion { grid-column: 2 / -1; display: grid; gap: 4px; margin: 2px 0 0; }
 .hp-perfusion label { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 6px; align-items: center; font-size: 0.68rem; color: var(--text-muted); }
 .hp-perfusion select { width: 100%; margin: 0; min-height: 32px; font-size: 0.72rem; }
+
+/* Mapa de calor G × A de ERC (vista Visual, visual-erc.js). */
+.erc-calor { display: grid; grid-template-columns: 58px repeat(3, minmax(0, 1fr)); gap: 3px; }
+.erc-calor-esquina { font-size: 0.55rem; color: var(--text-muted); align-self: end; }
+.erc-calor-cab { display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; color: var(--accent-blue); font-size: 0.72rem; line-height: 1.1; }
+.erc-calor-cab.fila { align-items: flex-start; }
+.erc-calor-cab small { font-weight: normal; color: var(--text-muted); font-size: 0.6rem; }
+.erc-calor-celda { min-height: 30px; border-radius: 6px; background: color-mix(in srgb, var(--c) 80%, transparent); }
+.erc-calor-celda.on { background: var(--c); box-shadow: 0 0 0 3px var(--text-main); display: flex; align-items: center; justify-content: center; }
+.erc-calor-celda.on::after { content: '●'; color: var(--bg-main); font-size: 0.8rem; }
+.erc-calor-paciente { font-size: 0.78rem; margin: 8px 0 4px; }
