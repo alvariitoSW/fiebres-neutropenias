@@ -803,7 +803,7 @@ por encima que sí diera cabida a todos.
   (mapa general + pantallas de zona), aquí es **un solo
   nivel**: cada nodo va directo a su destino. `rinon.js` (`initRinon({ onRoute })`)
   no conoce el contenido real, delega en `onRoute(key)` igual que `atlas.js`
-  y `nefrona.js`. Uno de los 7 nodos (`fisiopatologia`) no abre una vista
+  y `nefrona-viva.js`. Uno de los 7 nodos (`fisiopatologia`) no abre una vista
   nueva: hace zoom a la nefrona ya construida — los otros 6 abren vistas de
   categoría propias (`hta.html`, `erc.html`, `fra.html`,
   `nefrotoxicidad.html`, `tratamiento-ira-irc.html`, `trr.html`).
@@ -1103,80 +1103,14 @@ por encima que sí diera cabida a todos.
     de esta sesión) para no introducir hechos no citados ni duplicar
     preguntas ya existentes. El banco de Nefrología queda en **255
     preguntas**.
-- **`nefro-menu.html`** (nivel 1, la nefrona) usa una **fotografía/ilustración anatómica real**
-  (`js/modules/nefrologia/img/nefrona-anatomia.jpg`, corte de tejido renal
-  con las dos nefronas — cortical de asa corta y yuxtamedular de asa larga
-  — que llegó como referencia del usuario) en vez de un dibujo hecho a mano:
-  un primer intento con SVG dibujado a mano quedó demasiado abstracto/poco
-  realista, así que se sustituyó por la imagen real. La interactividad se
-  consigue con **botones "hotspot" invisibles superpuestos por posición
-  porcentual** (`<button class="nefrona-hotspot" data-segmento="..."
-  style="left:X%; top:Y%;">`, mismo patrón de posicionamiento por `%` que
-  `.region-btn` del Atlas) dentro de un contenedor
-  `.nefrona-photo-wrap.article-figure` con `position:relative` — cada
-  hotspot se coloca a ojo sobre la zona correspondiente de la foto
-  (verificado visualmente con capturas de Playwright, ajustando el `%`
-  hasta que el punto cae sobre la estructura real) y no dibuja nada él
-  mismo, es solo una zona táctil con un aro de color encima
-  (`.nefrona-hotspot-dot`). Al llevar la clase `article-figure`, la imagen
-  hereda gratis el comportamiento de "toca para ampliar a pantalla
-  completa" de `core/lightbox.js` en cualquier zona sin hotspot encima —
-  útil porque la foto trae su propio texto pequeño en inglés que conviene
-  poder ampliar. Las claves `data-segmento` (`glomerulo`, `tubulo-proximal`,
-  `asa-descendente`, `asa-ascendente-delgada` — segmento de transporte
-  pasivo presente casi solo en el asa larga yuxtamedular, `asa-ascendente-gruesa`
-  — la del NKCC2, diana de los diuréticos de asa, `tubulo-distal`,
-  `colector`) se repiten una vez por cada nefrona (cortical a la izquierda
-  de la foto, yuxtamedular a la derecha) — `nefrona.js` ya resuelve esto sin
-  cambios, porque resalta y usa TODOS los hotspots que coincidan con la
-  clave tocada, no solo el primero. Debajo de la foto hay un panel de
-  detalle (`#nefro-panel-segmento`) y un selector de "modo interactivo"
-  (`#nefro-modo-select`) con diuréticos/patologías. Si se necesita más
-  contenido anatómico interactivo en el futuro (otro corte, otra vista),
-  repite este mismo patrón — foto real + hotspots por `%` — en vez de volver
-  a dibujar SVG a mano.
-- **`nefrona.js`** (`initNefrona({ onCategoria })`) es un componente
-  **bespoke nuevo, no una generalización de `atlas.js`**: su interacción es
-  distinta (pinta canales/transportadores Y tiene un modo por
-  fármaco/patología que el Atlas no necesita). Al tocar un segmento, pinta
-  sus canales (reutilizando el patrón `.micro-prof-item`/`.kv-row` ya
-  existente) y renderiza un botón por cada categoría de contenido clínico
-  de ese segmento; si el segmento aún no tiene categorías, muestra
-  "🚧 en preparación" sin navegar a ningún sitio roto. Nunca conoce el
-  contenido real — delega en `onCategoria(key)`, igual que `atlas.js`
-  delega en `onRoute(key)`.
-  - **Mini-diagrama de flujo de iones por canal**: cada canal de
-    `segmentosNefrona` puede llevar un array `flujo` (`{ ion, direccion }`,
-    `direccion` = `'reabsorcion'` o `'secrecion'`); `svgFlujo()` en
-    `nefrona.js` genera a partir de ahí un SVG inline de 3 columnas (LUZ /
-    CÉLULA / SANGRE) con una flecha por ion — verde hacia la sangre
-    (reabsorción), roja hacia la luz (secreción) — que se inyecta dentro del
-    `.micro-prof-body` de ese canal. No es una ilustración fija por canal:
-    es un generador genérico a partir de datos, así que añadir flujo a un
-    canal nuevo es solo añadir el array en `nefrona-data.js`, nunca tocar
-    SVG a mano. La leyenda de colores vive una sola vez, como texto fijo
-    encima de `#nefro-segmento-canales` en `nefro-menu.html` (no se repite
-    por canal). Este patrón nació aquí pero es genérico — si otro módulo
-    necesita "canal + iones que mueve", se puede reutilizar `svgFlujo()` tal
-    cual.
-  - **Enlace a la ficha completa desde el modo interactivo**: las entradas
-    de `modosInteractivos` de tipo patología pueden llevar un `link: {
-    panelId, tabId, etiqueta }`; si existe, `nefrona.js` pinta un botón bajo
-    la explicación breve que llama a `openCorkboardTopic(panelId, tabId)`
-    (la misma función que usa el Atlas para enlazar a Síndromes Urgentes) —
-    así "SIADH"/"Diabetes insípida"/"Hipopotasemia"/"Hiperpotasemia" en el
-    selector ya no se quedan en 2 líneas de texto, sino que llevan directo a
-    la ficha completa de Hiponatremia/Hipernatremia/Hipopotasemia/
-    Hiperpotasemia del cuaderno de campo de más abajo, en la misma página.
-    Los diuréticos no llevan `link` (ya tienen su propio flujo vía
-    `categorias`/`onCategoria` cuando aplica).
-- **`js/data/nefrona-data.js`** son los datos puros: `segmentosNefrona`
-  (canales por segmento — cada canal con `nombre`/`funcion`/`diana` y,
-  opcionalmente, `flujo` — + qué categorías de contenido cuelgan de ese
-  segmento — añadir/mover una categoría es solo tocar este objeto y el
-  switcher de `nefrologia/index.js`, nunca el SVG) y `modosInteractivos`
-  (qué segmento(s)/canal(es) resalta cada diurético o patología, con su
-  explicación y, en las patologías, el `link` de arriba).
+- **`nefro-menu.html`** (nivel 1, la nefrona): antes era una foto anatómica
+  con botones "hotspot" invisibles por `%` (`nefrona.js`, `svgFlujo`, selector
+  `#nefro-modo-select`). **Sustituida en octubre de 2026 por la "nefrona
+  viva"** (`nefrona-viva.js`), a petición explícita del usuario, que llamó a
+  la foto con puntos "una chusta": ver la sección "Nefrona viva (octubre
+  2026)" más abajo. `nefrona.js` ya no existe; `nefrona-data.js` sigue
+  siendo la fuente de los transportadores y de las fichas a las que lleva
+  cada tramo.
 - **Marca de "ya visto" en los cuadernos de campo**: `core/corkboard.js`
   añade la clase `.visited` a cualquier `.field-card` cuyo tema se haya
   abierto — tanto si se abre volteando la ficha como si se llega desde
@@ -1226,7 +1160,7 @@ por encima que sí diera cabida a todos.
   (mapa del riñón / nefrona / categoría): un único `nefroLevel`
   (`core/navigation.js`) con una entrada por vista (`kidney`, `nefrona`,
   `diureticosAsa`, `hta`, `erc`, `fra`, `nefrotoxicidad`, `tratamiento`,
-  `trr`), inicializa `rinon.js` y `nefrona.js`, e importa/llama los
+  `trr`), inicializa `rinon.js` y `nefrona-viva.js`, e importa/llama los
   `init()` de cada categoría. Dos clases de botón "← VOLVER" según el
   nivel: `.btn-volver-nefro-kidney` (nefrona y las 6 categorías nuevas →
   vuelven al mapa del riñón) y `.btn-volver-nefro-menu` (solo
@@ -9817,6 +9751,81 @@ las 2 simulaciones del potasio y **57 recetas del kit**, una por ficha.
   Hematología siguen igual; sin errores de consola ni desborde horizontal
   en ninguna ficha de Nefrología, en Texto ni en Visual. Cache-busting a
   `?v=20261018-5`.
+
+### Nefrona viva (octubre 2026)
+
+A petición explícita del usuario ("quiero poder replicar una nefrona... la
+nefrona con foto real y puntos táctiles es una chusta, habría que hacer como
+con la parte de potasio... un mix entre los 2"). Primero se hizo una maqueta
+en un Artifact; el usuario la aprobó tal cual ("esto es la perfección") y se
+pasó a la app sustituyendo la foto con puntos de la vista `nefrona`.
+
+- **Mezcla de foto real y dibujo, en 3 niveles de zoom** dentro del mismo
+  recuadro (`#nv-escenario`, con migas Corte real › Nefrona › Célula):
+  1. **Corte real**: la misma `img/nefrona-anatomia.jpg`, sin puntos, con la
+     nefrona yuxtamedular marcada. Tocarla hace zoom (CSS `transform`) hacia
+     ella y funde al dibujo.
+  2. **Nefrona** (`<canvas>`): dibujada con la orientación de la foto
+     (corteza arriba, colector a la izquierda, asa a la derecha): glomérulo
+     con arteriolas y hematíes que no se filtran, ribete en cepillo, células
+     de la pared, vasa recta, mácula densa, acuaporinas-2 según la ADH y ✕
+     sobre el tramo que bloquea el fármaco. El filtrado sale como partículas
+     (agua, Na⁺, K⁺, glucosa, HCO₃⁻, cada una con su forma) que se
+     reabsorben tramo a tramo; el K⁺ se secreta en el colector. **El color
+     de la luz y del intersticio es la osmolalidad** (escala 50 → 300 →
+     1200), y unas etiquetas dicen cuánto líquido queda: 180 → 54 → 18 L →
+     orina. Capa fija en un canvas aparte que solo se repinta al cambiar el
+     modelo; la animación solo corre con el escenario en pantalla y en este
+     nivel.
+  3. **Célula** (SVG): luz | célula | sangre del tramo tocado, con los
+     iones de cada transportador viajando (`animateMotion`), la
+     Na⁺/K⁺-ATPasa basolateral, mitocondrias y ribete donde toca, el paso
+     paracelular en la rama ascendente delgada, el número de acuaporinas-2
+     según la ADH, la secreción por ROMK según el flujo distal y el bloqueo
+     del fármaco (los iones rebotan). El glomérulo muestra la barrera de
+     filtración. Con `prefers-reduced-motion` todo queda quieto.
+- **Mandos**: situación (normal, deshidratación, beber mucha agua, SIADH,
+  diabetes insípida, hiperglucemia con deslizador de glucemia) y fármaco
+  (furosemida, tiazida, espironolactona, amilorida, acetazolamida,
+  iSGLT2), con `.visual-mini`. Debajo, la orina final (volumen,
+  osmolalidad, Na⁺ excretado, K⁺, glucosa, HCO₃⁻), cada cifra con su
+  etiqueta `ficha` o `ilustrativo`.
+- **Base del texto de la app**: `js/data/nefrona-data.js` ahora tiene
+  `segmentosNefrona` (canales con `flujo` en claves de ion, `texto` = id de
+  su línea en la ficha "Reabsorción y secreción", `categorias`),
+  `situacionesNefrona`, `farmacosNefrona` (explicaciones de siempre, ahora
+  con iSGLT2) y `cifrasNefrona`. `modosInteractivos` desapareció. Doce
+  líneas de las fichas de esta misma página llevan id `nv-t-*` (los 6
+  acordeones de tramo de `fisio-tubular`, su tabla, el dintel de
+  filtración, el Tm de la glucosa, el rango de osmolalidad urinaria, las 3
+  condiciones de la orina diluida y el acordeón de la ADH): el panel del
+  tramo y las situaciones sin texto propio **copian esa línea del DOM** (una
+  sola fuente) y "Texto ↓" abre la ficha, la pasa a Texto y la resalta.
+  SIADH/diabetes insípida enlazan a su ficha y furosemida a Diuréticos de
+  asa; las `categorias` de cada tramo siguen resolviéndose con
+  `onCategoria` (`initNefronaViva({ onCategoria })` devuelve `{ reset }`,
+  que vuelve a la foto en situación normal).
+- **Modelo**: de las fichas salen 180 L filtrados y 1,8 L de orina, 70% del
+  agua en el proximal, orina de 50 a 1.200 mOsm/kg y de 18 a 0,75 L/día con
+  900 mOsm/día, y el Tm de la glucosa (320 mg/min, umbral ~180 mg/dl).
+  Ilustrativo, y así lo dice la vista: el reparto del Na⁺/K⁺ por tramos (con
+  techo de reabsorción en el distal y el colector, para que lo que llega de
+  más se pierda), el efecto agudo de cada fármaco sin compensación, la
+  caída del gradiente medular con furosemida y el 40% de glucosuria con
+  iSGLT2.
+- **Bug previo corregido de paso**: el "← VOLVER" de Diuréticos de asa
+  (`.btn-volver-nefro-menu`) no tenía ningún listener y no hacía nada;
+  ahora vuelve a la nefrona.
+- CSS con prefijo `nv-` en `components.css` (sustituye a `.nefrona-*` y
+  `.canal-flujo-svg`, borrados). Cache-busting a `?v=20261018-6`.
+- Verificado con Playwright (390×844, toques reales): foto → nefrona →
+  célula y vuelta por las migas; deshidratación da 0,75 L y 1.200 mOsm/kg
+  y furosemida 23 L, 12% de Na⁺ y K⁺ ×3,6; tocar la rama ascendente gruesa
+  abre su célula con NKCC2 bloqueado; "Texto ↓" abre `fisio-tubular`, abre
+  el acordeón de la rama gruesa y lo resalta; la categoría lleva a
+  Diuréticos de asa y su "← VOLVER" regresa; el glomérulo copia el dintel
+  de filtración; SIADH abre Hiponatremia; volver al mapa del riñón deja la
+  nefrona en la foto; sin errores de consola, 404 ni desborde.
 
 ## Auditoría de Hematología (octubre 2026)
 

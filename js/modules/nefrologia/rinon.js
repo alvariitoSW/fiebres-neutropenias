@@ -3,7 +3,7 @@
 // mapa general + pantallas de zona) — los 7 objetivos de rotación van
 // directos a su destino, sin pasar por una pantalla intermedia. No conoce
 // el contenido real de cada destino — delega en onRoute(key), igual que
-// atlas.js delega en onRoute(key) y nefrona.js en onCategoria(key).
+// atlas.js delega en onRoute(key) y nefrona-viva.js en onCategoria(key).
 export function initRinon({ onRoute }) {
     const stage = document.getElementById('rinon-stage');
     if (!stage) return { reset: () => {} };

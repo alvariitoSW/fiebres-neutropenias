@@ -363,7 +363,7 @@
                 <li>Presión neta ≈ 10 mmHg</li>
             </ul>
             <dl class="kv-row"><dt>TFG normal</dt><dd>~125 mL/min en hombres, ~105 mL/min en mujeres — el plasma completo se filtra más de 60 veces al día.</dd></dl>
-            <dl class="kv-row"><dt>Dintel de filtración</dt><dd>Pasan moléculas &lt;3-4,5 nm (agua, glucosa, aminoácidos, desechos nitrogenados); proteínas y elementos con carga quedan retenidos.</dd></dl>
+            <dl class="kv-row" id="nv-t-dintel"><dt>Dintel de filtración</dt><dd>Pasan moléculas &lt;3-4,5 nm (agua, glucosa, aminoácidos, desechos nitrogenados); proteínas y elementos con carga quedan retenidos.</dd></dl>
             <dl class="kv-row"><dt>¿De qué depende la TFG?</dt><dd>De 3 factores: 1) la presión de filtración neta; 2) la superficie/extensión de la membrana de filtración; 3) su permeabilidad. En condiciones fisiológicas, la membrana apenas cambia de extensión o permeabilidad, así que en la práctica la TFG la regula casi por completo la presión neta.</dd></dl>
             <dl class="kv-row"><dt>Cómo se mide en la práctica</dt><dd>Aclaramiento de un marcador que se filtra libremente y no se reabsorbe ni secreta (inulina, el patrón oro). En clínica se usa la creatinina, que sí se secreta algo (10-15%) — un margen que compensa la sobrevaloración del método colorimétrico habitual.</dd></dl>
             <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">👉 Los podocitos no son solo estructurales: mantienen baja actividad mitótica pero sintetizan activamente colágeno IV, fibronectina, laminina y heparán sulfato, contribuyendo a la carga electronegativa de la barrera.</p>
@@ -427,7 +427,7 @@
                 <img src="js/modules/nefrologia/img/fisio-formacion-orina.jpg" alt="Formación de la orina: filtración en el glomérulo renal, reabsorción y secreción en los túbulos renales, excreción urinaria. Filtración menos reabsorción más secreción es igual a excreción" loading="lazy">
                 <div class="article-figure-caption">Figura 4. La ecuación maestra: Filtración − Reabsorción + Secreción = Excreción.</div>
             </div>
-            <div style="overflow-x:auto;"><table class="data-table">
+            <div style="overflow-x:auto;" id="nv-t-tabla"><table class="data-table">
                 <thead><tr><th>Sustancia</th><th>Filtrada/día</th><th>Reabsorbida</th><th>Excretada/día</th></tr></thead>
                 <tbody>
                     <tr><td>Agua</td><td>180 L</td><td>99%</td><td>1,8 L</td></tr>
@@ -438,11 +438,11 @@
             </table></div>
             <dl class="kv-row"><dt>Vía transcelular</dt><dd>Transportadores activos (primarios: Na⁺/K⁺-ATPasa; secundarios: cotransporte/contratransporte con Na⁺) y transporte facilitado — todos saturables.</dd></dl>
             <dl class="kv-row"><dt>Vía paracelular</dt><dd>Agua y solutos por arrastre de solvente, siguiendo el gradiente osmótico generado por el transporte activo de Na⁺.</dd></dl>
-            <dl class="kv-row"><dt>Transporte máximo (ejemplo: glucosa)</dt><dd>90% se reabsorbe por SGLT2 (túbulo proximal inicial) y 10% por SGLT1 (segmento recto). Tm ≈ 320 mg/min; por encima de un umbral plasmático ~180 mg/dL, el sistema se satura y aparece glucosuria — el mecanismo que bloquean los inhibidores de SGLT2.</dd></dl>
+            <dl class="kv-row" id="nv-t-tm"><dt>Transporte máximo (ejemplo: glucosa)</dt><dd>90% se reabsorbe por SGLT2 (túbulo proximal inicial) y 10% por SGLT1 (segmento recto). Tm ≈ 320 mg/min; por encima de un umbral plasmático ~180 mg/dL, el sistema se satura y aparece glucosuria — el mecanismo que bloquean los inhibidores de SGLT2.</dd></dl>
 
             <p class="section-label" style="margin-top:16px;">Mecanismo de transporte, segmento a segmento</p>
             <div class="micro-profiles">
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="nv-t-tp">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🟡 Túbulo proximal</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
                         <dl class="kv-row"><dt>Motor</dt><dd>Bombas Na⁺/K⁺ basolaterales; arrastran por cotransporte glucosa, aminoácidos, fosfato y sulfato hasta su transporte máximo (Tm) — superado el umbral, el exceso se excreta.</dd></dl>
@@ -452,23 +452,23 @@
                         <dl class="kv-row"><dt>Secreción</dt><dd>Todos los ácidos y bases orgánicas, toxinas y fármacos, más el excedente de productos que circulan en plasma.</dd></dl>
                     </div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="nv-t-desc">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🟢 Asa de Henle — rama descendente delgada</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">Alta permeabilidad al agua (vía acuaporinas) y nula reabsorción de ClNa; impermeable a la urea. El agua sale por gradiente osmótico hacia el intersticio medular.</div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="nv-t-ascd">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔵 Asa de Henle — rama ascendente delgada</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">Impermeable al agua; el ClNa sale por gradiente químico y la urea entra también por gradiente químico — el mecanismo pasivo que ayuda a concentrar el intersticio medular.</div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="nv-t-tal">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔴 Asa de Henle — rama ascendente gruesa</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">Impermeable al agua. Bombas basolaterales de Na⁺/K⁺ muy activas + cotransportador luminal Na⁺/K⁺/2Cl⁻ (NKCC2) que regula la ADH — diana de los diuréticos de asa. El líquido tubular sale aún más hipotónico.</div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="nv-t-tcd">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🟣 Túbulo contorneado distal</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">Cotransportador apical Na⁺/Cl⁻ + intercambiador basolateral 2Na⁺/Ca²⁺ (la reabsorción de Na⁺ implica secreción de Ca²⁺). Aquí está la mácula densa: analiza el Na⁺ tubular y, si aumenta, sus células liberan renina.</div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="nv-t-col">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚪ Túbulo conector y conducto colector</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">Todo regulado hormonalmente: canales de Na⁺ activados por aldosterona; canales de K⁺ activados por aldosterona e inhibidos por el H⁺ luminal; células intercalares tipo A con intercambiadores Na⁺/H⁺ y Cl⁻/HCO₃⁻; y acuaporinas bajo control de la ADH.</div>
                 </div>
@@ -490,7 +490,7 @@
         <div id="fisio-hormonal" class="tab-content">
             <h3 style="color: var(--accent-blue);">Regulación hormonal del túbulo distal y colector</h3>
             <div class="micro-profiles">
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="nv-t-adh">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💧 ADH (vasopresina)</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
                         <dl class="kv-row"><dt>Estímulo</dt><dd>↑Osmolaridad plasmática o ↓volumen circulante, detectados por osmorreceptores/mecanorreceptores.</dd></dl>
@@ -617,8 +617,8 @@
                 <img src="js/modules/nefrologia/img/agua-fig2-adh-v2-acuaporinas.jpg" alt="La vasopresina se une a los receptores V2 en la membrana basolateral y activa proteínas G que inician una cascada cAMP-PKA, insertando acuaporina 2 en la membrana apical" loading="lazy">
                 <div class="article-figure-caption">Figura 2. ADH → RV2 → cAMP/PKA → AQP2 apical (agua) + UT-A1 (urea); salida basolateral por AQP3/AQP4 y UT-A3.</div>
             </div>
-            <dl class="kv-row"><dt>Rango de la osmolalidad urinaria</dt><dd>50 mOsm/kg (sin ADH, máxima dilución) a 1200 mOsm/kg (ADH máxima). Con una carga osmolar habitual de 900 mOsm/día, el volumen de orina puede oscilar entre 18 L/día (dilución máxima) y 0,75 L/día (concentración máxima).</dd></dl>
-            <dl class="kv-row"><dt>3 condiciones para producir una orina diluida</dt><dd>1) Que llegue volumen suficiente al túbulo distal (depende del FG y de la reabsorción proximal — con VEC bajo llega poco volumen, favoreciendo hiponatremia incluso sin ADH). 2) Que se genere un líquido libre de electrolitos en el asa ascendente gruesa y el túbulo distal (impermeables al agua). 3) Que no exista ADH.</dd></dl>
+            <dl class="kv-row" id="nv-t-rango-osm"><dt>Rango de la osmolalidad urinaria</dt><dd>50 mOsm/kg (sin ADH, máxima dilución) a 1200 mOsm/kg (ADH máxima). Con una carga osmolar habitual de 900 mOsm/día, el volumen de orina puede oscilar entre 18 L/día (dilución máxima) y 0,75 L/día (concentración máxima).</dd></dl>
+            <dl class="kv-row" id="nv-t-3cond"><dt>3 condiciones para producir una orina diluida</dt><dd>1) Que llegue volumen suficiente al túbulo distal (depende del FG y de la reabsorción proximal — con VEC bajo llega poco volumen, favoreciendo hiponatremia incluso sin ADH). 2) Que se genere un líquido libre de electrolitos en el asa ascendente gruesa y el túbulo distal (impermeables al agua). 3) Que no exista ADH.</dd></dl>
 
             <p class="section-label" style="margin-top:16px;">Cuantificación de la excreción renal de agua</p>
             <dl class="kv-row"><dt>Aclaramiento de agua libre (CH₂O)</dt><dd>CH₂O = V × [1 − Osm(o)/Osm(p)]. Ej.: Osm(p) 280, Osm(o) 140, V 8 L/día → CH₂O = 4 L/día. Es la eliminación esperada tras una sobrecarga de agua; resulta <strong>inapropiada</strong> si se debe a un déficit de ADH o a resistencia a su efecto.</dd></dl>
@@ -1969,61 +1969,62 @@
         </div>
     </div>
 
-    <div class="nefrona-frame">
-        <div class="nefrona-photo-wrap article-figure" id="nefrona-photo-wrap">
-            <img class="nefrona-photo" src="js/modules/nefrologia/img/nefrona-anatomia.jpg" alt="Corte de tejido renal mostrando una nefrona cortical (izquierda) y una nefrona yuxtamedular (derecha)">
-
-            <!-- Nefrona cortical (izquierda de la imagen): asa corta -->
-            <button class="nefrona-hotspot" data-segmento="glomerulo" style="left:56%; top:19%;"><span class="nefrona-hotspot-dot"></span></button>
-            <button class="nefrona-hotspot" data-segmento="tubulo-proximal" style="left:51%; top:26%;"><span class="nefrona-hotspot-dot"></span></button>
-            <button class="nefrona-hotspot" data-segmento="asa-descendente" style="left:47%; top:40%;"><span class="nefrona-hotspot-dot"></span></button>
-            <button class="nefrona-hotspot" data-segmento="asa-ascendente-gruesa" style="left:49%; top:52%;"><span class="nefrona-hotspot-dot"></span></button>
-            <button class="nefrona-hotspot" data-segmento="tubulo-distal" style="left:45%; top:21%;"><span class="nefrona-hotspot-dot"></span></button>
-
-            <!-- Nefrona yuxtamedular (derecha de la imagen): asa larga hasta la papila -->
-            <button class="nefrona-hotspot" data-segmento="glomerulo" style="left:76%; top:20%;"><span class="nefrona-hotspot-dot"></span></button>
-            <button class="nefrona-hotspot" data-segmento="tubulo-proximal" style="left:80%; top:31%;"><span class="nefrona-hotspot-dot"></span></button>
-            <button class="nefrona-hotspot" data-segmento="tubulo-distal" style="left:77%; top:23%;"><span class="nefrona-hotspot-dot"></span></button>
-            <button class="nefrona-hotspot" data-segmento="asa-descendente" style="left:72%; top:47%;"><span class="nefrona-hotspot-dot"></span></button>
-            <button class="nefrona-hotspot" data-segmento="asa-ascendente-gruesa" style="left:69%; top:57%;"><span class="nefrona-hotspot-dot"></span></button>
-            <button class="nefrona-hotspot" data-segmento="asa-ascendente-delgada" style="left:64%; top:76%;"><span class="nefrona-hotspot-dot"></span></button>
-
-            <!-- Conducto colector: compartido por ambas nefronas, tronco central -->
-            <button class="nefrona-hotspot" data-segmento="colector" style="left:55%; top:82%;"><span class="nefrona-hotspot-dot"></span></button>
+    <div class="card nv" id="nefrona-viva">
+        <h3 style="color: var(--accent-green);">🔬 Nefrona viva</h3>
+        <p class="subtitle">Del corte real del riñón a una nefrona que filtra, reabsorbe y concentra. Toca cualquier tramo para entrar en su célula.</p>
+        <nav class="nv-migas" aria-label="Nivel de zoom">
+            <button type="button" class="nv-miga" data-nivel="foto" aria-current="true">Corte real</button>
+            <span aria-hidden="true">›</span>
+            <button type="button" class="nv-miga" data-nivel="nefrona">Nefrona</button>
+            <span aria-hidden="true">›</span>
+            <button type="button" class="nv-miga" data-nivel="celula" disabled>Célula</button>
+            <span class="nv-tiempo">
+                <button type="button" class="visual-mini" id="nv-pausa" aria-label="Pausar la animación">⏸</button>
+                <button type="button" class="visual-mini" id="nv-vel" aria-label="Cambiar la velocidad">×1</button>
+            </span>
+        </nav>
+        <div class="nv-escenario" id="nv-escenario">
+            <div class="nv-capa nv-foto" id="nv-foto">
+                <img src="js/modules/nefrologia/img/nefrona-anatomia.jpg" alt="Corte de tejido renal con una nefrona cortical y una yuxtamedular, corteza arriba y médula abajo">
+                <div class="nv-foto-marca"></div>
+                <div class="nv-foto-rotulo">Nefrona yuxtamedular · asa larga</div>
+                <button type="button" class="nv-entrar" id="nv-entrar">Entrar en la nefrona ▸</button>
+            </div>
+            <div class="nv-capa nv-nefrona" id="nv-nefrona">
+                <canvas id="nv-lienzo" aria-label="Nefrona animada: el filtrado recorre cada tramo y se reabsorbe"></canvas>
+            </div>
+            <div class="nv-capa nv-celula" id="nv-celula"></div>
         </div>
-        <p class="article-figure-caption">Corte de tejido renal: corteza (glomérulos, túbulos contorneados) y médula (asas de Henle, conducto colector), con una nefrona cortical de asa corta y una yuxtamedular de asa larga hasta la papila.</p>
-        <p class="atlas-hint">Toca glomérulo, túbulos, asa de Henle o colector</p>
-    </div>
+        <p class="nv-pista">Toca la foto para entrar. Dentro, toca cualquier tramo para ver su célula.</p>
 
-    <div class="card" id="nefro-panel-segmento" style="display: none;">
-        <h3 id="nefro-segmento-titulo" style="color: var(--accent-green);"></h3>
-        <p class="subtitle">🟢 Reabsorción (hacia la sangre) &nbsp;·&nbsp; 🔴 Secreción (hacia la luz tubular)</p>
-        <div id="nefro-segmento-canales" class="micro-profiles"></div>
-        <div id="nefro-segmento-categorias" style="margin-top: 10px;"></div>
-    </div>
+        <div class="section-label">Color del líquido: osmolalidad (mOsm/kg)</div>
+        <div class="nv-escala"></div>
+        <div class="nv-escala-ticks"><span>50</span><span>300</span><span>600</span><span>900</span><span>1200</span></div>
+        <div class="nv-especies" id="nv-especies"></div>
 
-    <div class="card">
-        <h3 style="color: var(--accent-yellow);">🔬 Modo interactivo</h3>
-        <p style="font-size: 0.8rem; color: var(--text-muted);">Elige un diurético o una patología para ver qué parte de la nefrona afecta.</p>
-        <div class="form-group">
-            <select id="nefro-modo-select">
-                <option value="">— Selecciona —</option>
-                <optgroup label="Diuréticos">
-                    <option value="furosemida">Furosemida (diurético de asa)</option>
-                    <option value="tiazida">Tiazida</option>
-                    <option value="espironolactona">Espironolactona</option>
-                    <option value="amiloride">Amiloride</option>
-                    <option value="acetazolamida">Acetazolamida</option>
-                </optgroup>
-                <optgroup label="Patologías">
-                    <option value="siadh">SIADH</option>
-                    <option value="diabetes-insipida">Diabetes insípida</option>
-                    <option value="hipopotasemia">Hipopotasemia</option>
-                    <option value="hiperpotasemia">Hiperpotasemia</option>
-                </optgroup>
-            </select>
+        <div class="section-label">Situación</div>
+        <div class="nv-chips" id="nv-situaciones"></div>
+        <div class="tfg-slider-row" id="nv-glucemia-box" hidden>
+            <label for="nv-glucemia">Glucemia</label>
+            <input type="range" id="nv-glucemia" min="80" max="500" step="10" value="350">
+            <span id="nv-glucemia-out">350 mg/dl</span>
         </div>
-        <div id="nefro-modo-explicacion" class="result-box" style="display: none;"></div>
+        <div class="section-label">Fármaco</div>
+        <div class="nv-chips" id="nv-farmacos"></div>
+
+        <div class="section-label">Orina final</div>
+        <div class="nv-medidores" id="nv-medidores"></div>
+
+        <div class="section-label" id="nv-explica-titulo">Qué está pasando</div>
+        <div class="nv-explica" id="nv-explica"></div>
+        <div class="hk-avisos" id="nv-avisos"></div>
+
+        <div class="section-label" id="nv-detalle-titulo">Tramo elegido</div>
+        <p class="nv-pista" id="nv-detalle-vacio">Toca un tramo de la nefrona para ver sus transportadores, qué fármaco los bloquea y lo que dice la ficha.</p>
+        <div id="nv-detalle"></div>
+        <div id="nefro-segmento-categorias"></div>
+
+        <p class="hk-aviso-modelo">Las cifras marcadas <span class="nv-fuente ficha">ficha</span> salen de las fichas de esta página: 180 L filtrados y 1,8 L de orina, 70% del agua en el túbulo proximal, orina de 50 a 1.200 mOsm/kg y de 18 a 0,75 L/día con 900 mOsm/día, y el Tm de la glucosa. Las marcadas <span class="nv-fuente">ilustrativo</span> son un modelo para ver el sentido del cambio: el reparto del Na⁺ y del K⁺ por tramos, el efecto agudo de cada fármaco sin compensación y la caída del gradiente medular con furosemida.</p>
     </div>
 
     <div class="card">

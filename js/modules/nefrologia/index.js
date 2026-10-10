@@ -1,12 +1,12 @@
 // Módulo "Nefrología". Nivel 0: mapa del riñón (rinon.js), con 7 nodos por
 // objetivo de rotación. Uno de ellos ("Fisiopatología renal") hace zoom a
-// la nefrona interactiva ya construida (nefrona.js); el resto abre vistas
+// la nefrona viva (nefrona-viva.js); el resto abre vistas
 // de categoría propias (placeholder + bibliografía hasta que tengan
 // contenido clínico). Este archivo solo orquesta el switcher de nivel
 // medio y resuelve qué vista abrir desde cada nodo/segmento.
 import { createViewSwitcher } from '../../core/navigation.js';
 import { openCorkboardTopic } from '../../core/corkboard.js';
-import { initNefrona } from './nefrona.js';
+import { initNefronaViva } from './nefrona-viva.js';
 import { initRinon } from './rinon.js';
 import { init as initFisiologia } from './fisiologia.js';
 import { init as initHta } from './hta.js';
@@ -61,13 +61,16 @@ export function init() {
 
     document.querySelectorAll('.btn-volver-nefro-kidney').forEach(b =>
         b.addEventListener('click', () => { nefroLevel.show('kidney'); nefrona.reset(); }));
+    // Diuréticos de asa cuelga de la nefrona: su "← VOLVER" vuelve a ella.
+    document.querySelectorAll('.btn-volver-nefro-menu').forEach(b =>
+        b.addEventListener('click', () => nefroLevel.show('nefrona')));
 
     // Categorías de contenido clínico de cada segmento de la nefrona
     // (nefrona-data.js). Las claves 'fisio-*' son directamente el id de una
     // ficha del cuaderno de fisiología, que vive en la misma página que la
     // nefrona (no hace falta cambiar de vista); solo 'diureticos-asa' es
     // una página aparte. Cualquier otra clave: "en preparación".
-    const nefrona = initNefrona({
+    const nefrona = initNefronaViva({
         onCategoria: (key) => {
             if (key === 'diureticos-asa') nefroLevel.show('diureticosAsa');
             else if (key.startsWith('fisio-') && document.getElementById(key)) openCorkboardTopic('panel-fisio-tabs', key);

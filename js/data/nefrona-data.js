@@ -1,20 +1,21 @@
-// Datos del diagrama interactivo de la nefrona (menú principal de
-// Nefrología). Por segmento anatómico: canales/transportadores relevantes y
-// las categorías de contenido clínico a las que da acceso ese segmento
-// (claves resueltas por `categoriaDisponible` en nefrologia/index.js — así
-// se puede añadir o mover una categoría sin tocar el SVG ni nefrona.js).
-// Cada canal lleva un array `flujo` (ion + dirección reabsorcion/secrecion)
-// que nefrona.js usa para pintar un mini-diagrama de flechas luz↔célula↔
-// sangre — la representación visual de "cómo reabsorbe/excreta iones" que
-// antes solo estaba descrita en texto.
-// `modosInteractivos` resalta uno o más segmentos/canales según el
-// diurético o la patología elegidos en el selector; las patologías pueden
-// llevar un `link` a la ficha completa del cuaderno de campo de
-// Fisiopatología renal (agua/potasio), en vez de quedarse solo en la
-// explicación breve de 2 líneas.
+// Datos de la nefrona viva (nefrona-viva.js, vista "nefrona" de Nefrología).
+// - segmentosNefrona: por tramo anatómico, sus canales/transportadores (con
+//   los iones que mueven: `flujo`, clave de ion + 'r' reabsorción o 's'
+//   secreción), el id de su línea en la ficha "Reabsorción y secreción"
+//   (`texto`, lo que se copia en el panel del tramo y adonde lleva
+//   "Texto ↓") y las fichas de contenido clínico a las que da acceso
+//   (`categorias`, resueltas por onCategoria en nefrologia/index.js).
+// - situacionesNefrona / farmacosNefrona: los mandos de la simulación.
+//   `fuentes` son ids de líneas de las fichas: si no hay `texto`, la
+//   explicación se lee de ahí (una sola fuente); `ficha` enlaza a la ficha
+//   clínica completa.
+// - cifrasNefrona: las cifras que el modelo toma de las fichas. El resto
+//   del modelo (reparto del Na⁺/K⁺ por tramos, efecto agudo de cada
+//   fármaco) es ilustrativo y vive en nefrona-viva.js.
 export const segmentosNefrona = {
     glomerulo: {
         nombre: 'Glomérulo (cápsula de Bowman)',
+        texto: 'nv-t-dintel',
         canales: [
             { nombre: 'Barrera de filtración', funcion: 'Endotelio fenestrado + membrana basal + podocitos: filtra agua y solutos pequeños, retiene células y proteínas grandes.', diana: '—' },
             { nombre: '2 tipos de nefrona según su posición', funcion: 'Nefronas corticales (~85%): glomérulo en la corteza externa, asa de Henle corta que apenas entra en la médula. Nefronas yuxtamedulares (~15%): glomérulo junto a la unión corticomedular, asa de Henle larga que llega hasta la papila — son las responsables de generar el gradiente que permite concentrar mucho la orina.', diana: '—' },
@@ -26,10 +27,11 @@ export const segmentosNefrona = {
     },
     'tubulo-proximal': {
         nombre: 'Túbulo contorneado proximal',
+        texto: 'nv-t-tp',
         canales: [
-            { nombre: 'SGLT2', funcion: 'Reabsorción de glucosa acoplada a Na⁺ en el segmento inicial.', diana: 'Inhibidores de SGLT2 (gliflozinas)', flujo: [{ ion: 'Na⁺', direccion: 'reabsorcion' }, { ion: 'Glucosa', direccion: 'reabsorcion' }] },
-            { nombre: 'Anhidrasa carbónica', funcion: 'Cataliza la hidratación de CO₂, clave en la reabsorción de bicarbonato.', diana: 'Acetazolamida', flujo: [{ ion: 'HCO₃⁻', direccion: 'reabsorcion' }, { ion: 'H⁺', direccion: 'secrecion' }] },
-            { nombre: 'Intercambiador Na⁺/H⁺ (NHE3)', funcion: 'Reabsorción de Na⁺ acoplada a secreción de H⁺.', diana: '—', flujo: [{ ion: 'Na⁺', direccion: 'reabsorcion' }, { ion: 'H⁺', direccion: 'secrecion' }] },
+            { nombre: 'SGLT2', funcion: 'Reabsorción de glucosa acoplada a Na⁺ en el segmento inicial.', diana: 'Inhibidores de SGLT2 (gliflozinas)', flujo: [['na', 'r'], ['glu', 'r']] },
+            { nombre: 'Anhidrasa carbónica', funcion: 'Cataliza la hidratación de CO₂, clave en la reabsorción de bicarbonato.', diana: 'Acetazolamida', flujo: [['hco3', 'r'], ['h', 's']] },
+            { nombre: 'Intercambiador Na⁺/H⁺ (NHE3)', funcion: 'Reabsorción de Na⁺ acoplada a secreción de H⁺.', diana: '—', flujo: [['na', 'r'], ['h', 's']] },
         ],
         categorias: [
             { key: 'fisio-tubular', etiqueta: 'Reabsorción y secreción tubular' },
@@ -37,8 +39,9 @@ export const segmentosNefrona = {
     },
     'asa-descendente': {
         nombre: 'Asa de Henle — rama descendente delgada',
+        texto: 'nv-t-desc',
         canales: [
-            { nombre: 'Acuaporina-1', funcion: 'Muy permeable al agua; concentra la orina en su trayecto hacia la médula. Es mucho más larga en las nefronas yuxtamedulares (llega hasta la papila) que en las corticales (apenas entra en la médula externa) — de esa diferencia depende la capacidad máxima de concentración de la orina.', diana: '—', flujo: [{ ion: 'H₂O', direccion: 'reabsorcion' }] },
+            { nombre: 'Acuaporina-1', funcion: 'Muy permeable al agua; concentra la orina en su trayecto hacia la médula. Es mucho más larga en las nefronas yuxtamedulares (llega hasta la papila) que en las corticales (apenas entra en la médula externa) — de esa diferencia depende la capacidad máxima de concentración de la orina.', diana: '—', flujo: [['h2o', 'r']] },
         ],
         categorias: [
             { key: 'fisio-agua-regulacion', etiqueta: 'Regulación del agua corporal' },
@@ -46,8 +49,9 @@ export const segmentosNefrona = {
     },
     'asa-ascendente-delgada': {
         nombre: 'Asa de Henle — rama ascendente delgada (segmento fino)',
+        texto: 'nv-t-ascd',
         canales: [
-            { nombre: 'Transporte pasivo paracelular', funcion: 'Reabsorbe Na⁺, Cl⁻, Ca²⁺ y Mg²⁺ de forma pasiva (sin bomba activa), a favor del gradiente generado por la médula hipertónica.', diana: 'No es diana de diuréticos — al ser transporte pasivo, no hay ningún canal que bloquear farmacológicamente.', flujo: [{ ion: 'Na⁺/Cl⁻', direccion: 'reabsorcion' }, { ion: 'Ca²⁺/Mg²⁺', direccion: 'reabsorcion' }] },
+            { nombre: 'Transporte pasivo paracelular', funcion: 'Reabsorbe Na⁺, Cl⁻, Ca²⁺ y Mg²⁺ de forma pasiva (sin bomba activa), a favor del gradiente generado por la médula hipertónica.', diana: 'No es diana de diuréticos — al ser transporte pasivo, no hay ningún canal que bloquear farmacológicamente.', flujo: [['na', 'r'], ['cl', 'r'], ['ca', 'r']], paracelular: true },
         ],
         // Sin categoría propia a propósito: es un segmento de transporte
         // puramente pasivo, sin diana farmacológica ni ficha clínica
@@ -56,8 +60,9 @@ export const segmentosNefrona = {
     },
     'asa-ascendente-gruesa': {
         nombre: 'Asa de Henle — rama ascendente gruesa',
+        texto: 'nv-t-tal',
         canales: [
-            { nombre: 'NKCC2', funcion: 'Cotransporte activo Na⁺/K⁺/2Cl⁻; impermeable al agua, genera el gradiente medular hipertónico.', diana: 'Diuréticos de asa (furosemida, torasemida, bumetanida)', flujo: [{ ion: 'Na⁺', direccion: 'reabsorcion' }, { ion: 'K⁺', direccion: 'reabsorcion' }, { ion: 'Cl⁻', direccion: 'reabsorcion' }] },
+            { nombre: 'NKCC2', funcion: 'Cotransporte activo Na⁺/K⁺/2Cl⁻; impermeable al agua, genera el gradiente medular hipertónico.', diana: 'Diuréticos de asa (furosemida, torasemida, bumetanida)', flujo: [['na', 'r'], ['k', 'r'], ['cl', 'r']] },
         ],
         categorias: [
             { key: 'diureticos-asa', etiqueta: 'Diuréticos de asa' },
@@ -65,8 +70,9 @@ export const segmentosNefrona = {
     },
     'tubulo-distal': {
         nombre: 'Túbulo contorneado distal',
+        texto: 'nv-t-tcd',
         canales: [
-            { nombre: 'NCC', funcion: 'Cotransportador Na⁺/Cl⁻ sensible a tiazidas.', diana: 'Tiazidas (hidroclorotiazida, clortalidona)', flujo: [{ ion: 'Na⁺', direccion: 'reabsorcion' }, { ion: 'Cl⁻', direccion: 'reabsorcion' }] },
+            { nombre: 'NCC', funcion: 'Cotransportador Na⁺/Cl⁻ sensible a tiazidas.', diana: 'Tiazidas (hidroclorotiazida, clortalidona)', flujo: [['na', 'r'], ['cl', 'r']] },
         ],
         categorias: [
             { key: 'fisio-potasio-regulacion', etiqueta: 'Regulación del potasio corporal' },
@@ -75,10 +81,11 @@ export const segmentosNefrona = {
     },
     colector: {
         nombre: 'Túbulo y conducto colector',
+        texto: 'nv-t-col',
         canales: [
-            { nombre: 'ENaC', funcion: 'Canal epitelial de Na⁺ en la célula principal, regulado por aldosterona.', diana: 'Diuréticos ahorradores de K⁺ (amilorida, triamtereno); antagonistas de mineralocorticoides (espironolactona, eplerenona)', flujo: [{ ion: 'Na⁺', direccion: 'reabsorcion' }] },
-            { nombre: 'Acuaporina-2', funcion: 'Canal de agua regulado por ADH en la membrana luminal.', diana: 'Antagonistas del receptor V2 de ADH (tolvaptán); relevante en diabetes insípida y SIADH', flujo: [{ ion: 'H₂O', direccion: 'reabsorcion' }] },
-            { nombre: 'ROMK', funcion: 'Canal de K⁺ que permite su secreción hacia la luz tubular.', diana: '—', flujo: [{ ion: 'K⁺', direccion: 'secrecion' }] },
+            { nombre: 'ENaC', funcion: 'Canal epitelial de Na⁺ en la célula principal, regulado por aldosterona.', diana: 'Diuréticos ahorradores de K⁺ (amilorida, triamtereno); antagonistas de mineralocorticoides (espironolactona, eplerenona)', flujo: [['na', 'r']] },
+            { nombre: 'Acuaporina-2', funcion: 'Canal de agua regulado por ADH en la membrana luminal.', diana: 'Antagonistas del receptor V2 de ADH (tolvaptán); relevante en diabetes insípida y SIADH', flujo: [['h2o', 'r']] },
+            { nombre: 'ROMK', funcion: 'Canal de K⁺ que permite su secreción hacia la luz tubular.', diana: '—', flujo: [['k', 's']] },
         ],
         categorias: [
             { key: 'fisio-hiponatremia', etiqueta: 'Hiponatremia (SIADH)' },
@@ -88,72 +95,46 @@ export const segmentosNefrona = {
     },
 };
 
-export const modosInteractivos = {
-    furosemida: {
-        tipo: 'diuretico',
-        etiqueta: 'Furosemida (diurético de asa)',
-        segmentos: ['asa-ascendente-gruesa'],
-        canales: ['NKCC2'],
-        explicacion: 'Inhibe el cotransportador NKCC2 en la rama ascendente gruesa del asa de Henle, bloqueando la reabsorción de Na⁺/K⁺/2Cl⁻. Es el diurético más potente porque actúa sobre el segmento que genera el gradiente osmótico medular necesario para concentrar la orina.',
-    },
-    tiazida: {
-        tipo: 'diuretico',
-        etiqueta: 'Tiazida (hidroclorotiazida)',
-        segmentos: ['tubulo-distal'],
-        canales: ['NCC'],
-        explicacion: 'Inhibe el cotransportador NCC en el túbulo contorneado distal. Efecto natriurético moderado (solo el 5-10% del Na⁺ filtrado se reabsorbe aquí), pero clínicamente relevante por su papel en la hipertensión y por el riesgo de hiponatremia e hipopotasemia.',
-    },
-    espironolactona: {
-        tipo: 'diuretico',
-        etiqueta: 'Espironolactona (ahorrador de K⁺)',
-        segmentos: ['colector'],
-        canales: ['ENaC'],
-        explicacion: 'Antagoniza el receptor de mineralocorticoides en la célula principal del colector, reduciendo la actividad de ENaC. Efecto diurético débil pero ahorrador de K⁺; base del bloqueo del eje renina-angiotensina-aldosterona en insuficiencia cardiaca.',
-    },
-    amiloride: {
-        tipo: 'diuretico',
-        etiqueta: 'Amiloride (ahorrador de K⁺)',
-        segmentos: ['colector'],
-        canales: ['ENaC'],
-        explicacion: 'A diferencia de la espironolactona, no bloquea el receptor de aldosterona: cierra directamente el canal ENaC, sea cual sea la actividad mineralocorticoide. Por eso funciona en el síndrome de Liddle (donde ENaC está permanentemente activo e independiente de la aldosterona) y no la espironolactona.',
-    },
-    acetazolamida: {
-        tipo: 'diuretico',
-        etiqueta: 'Acetazolamida (inhibidor de la anhidrasa carbónica)',
-        segmentos: ['tubulo-proximal'],
-        canales: ['Anhidrasa carbónica'],
-        explicacion: 'Inhibe la anhidrasa carbónica del túbulo proximal, reduciendo la reabsorción de bicarbonato. Diurético débil (el Na⁺ no reabsorbido aquí se recupera después en segmentos distales), usado sobre todo para alcalinizar la orina o tratar la alcalosis metabólica poscorrección.',
-    },
-    siadh: {
-        tipo: 'patologia',
-        etiqueta: 'SIADH',
-        segmentos: ['colector'],
-        canales: ['Acuaporina-2'],
-        explicacion: 'El exceso de ADH inserta acuaporinas-2 de forma mantenida en la membrana luminal del colector, aumentando la reabsorción de agua libre de forma inapropiada y produciendo hiponatremia dilucional con orina inadecuadamente concentrada.',
-        link: { panelId: 'panel-fisio-tabs', tabId: 'fisio-hiponatremia', etiqueta: 'Ver ficha completa: Hiponatremia →' },
-    },
-    'diabetes-insipida': {
-        tipo: 'patologia',
-        etiqueta: 'Diabetes insípida (central o nefrogénica)',
-        segmentos: ['colector'],
-        canales: ['Acuaporina-2'],
-        explicacion: 'Ausencia de ADH (central) o resistencia a su acción (nefrogénica) impide la inserción de acuaporinas-2 en el colector: no se reabsorbe agua libre y se pierde orina muy diluida en grandes volúmenes, con riesgo de hipernatremia.',
-        link: { panelId: 'panel-fisio-tabs', tabId: 'fisio-hipernatremia', etiqueta: 'Ver ficha completa: Hipernatremia →' },
-    },
-    hipopotasemia: {
-        tipo: 'patologia',
-        etiqueta: 'Hipopotasemia',
-        segmentos: ['colector'],
-        canales: ['ROMK'],
-        explicacion: 'La mayoría de causas renales de hipopotasemia (diuréticos, hiperaldosteronismo, Bartter/Gitelman, Liddle) actúan aumentando el flujo o la electronegatividad luminal en este segmento, lo que estimula la secreción de K⁺ por ROMK más allá de lo fisiológico.',
-        link: { panelId: 'panel-fisio-tabs', tabId: 'fisio-hipopotasemia', etiqueta: 'Ver ficha completa: Hipopotasemia →' },
-    },
-    hiperpotasemia: {
-        tipo: 'patologia',
-        etiqueta: 'Hiperpotasemia',
-        segmentos: ['colector'],
-        canales: ['ROMK'],
-        explicacion: 'El déficit de aldosterona, la insuficiencia renal o los fármacos que bloquean ENaC/ROMK (IECA, ARA2, ahorradores de K⁺) reducen la secreción distal de K⁺ por este segmento — el mecanismo final común de casi todas las hiperpotasemias por disminución de la eliminación renal.',
-        link: { panelId: 'panel-fisio-tabs', tabId: 'fisio-hiperpotasemia', etiqueta: 'Ver ficha completa: Hiperpotasemia →' },
-    },
+// `adh`: nivel de ADH 0-1 (0 = sin ADH, 1 = ADH máxima). El de "normal" es el
+// que da 1,8 L de orina con 900 mOsm/día (ilustrativo).
+export const situacionesNefrona = [
+    { id: 'normal', nombre: 'Normal', adh: 0.391, fuentes: ['nv-t-tabla'],
+      texto: 'De <strong>180 L</strong> de plasma filtrados al día se reabsorbe el 99% del agua y el 99,5% del sodio: quedan <strong>1,8 L</strong> de orina.' },
+    { id: 'deshidratacion', nombre: 'Deshidratación', adh: 1, fuentes: ['nv-t-rango-osm', 'nv-t-adh'] },
+    { id: 'agua', nombre: 'Bebe mucha agua', adh: 0, fuentes: ['nv-t-rango-osm', 'nv-t-3cond'] },
+    { id: 'siadh', nombre: 'SIADH', adh: 1, fuentes: ['nv-t-adh'],
+      texto: 'El exceso de ADH inserta acuaporinas-2 de forma mantenida en la membrana luminal del colector, aumentando la reabsorción de agua libre de forma inapropiada y produciendo hiponatremia dilucional con orina inadecuadamente concentrada.',
+      ficha: { tabId: 'fisio-hiponatremia', etiqueta: 'Ficha completa: Hiponatremia →' } },
+    { id: 'di', nombre: 'Diabetes insípida', adh: 0, fuentes: ['nv-t-adh'],
+      texto: 'Ausencia de ADH (central) o resistencia a su acción (nefrogénica) impide la inserción de acuaporinas-2 en el colector: no se reabsorbe agua libre y se pierde orina muy diluida en grandes volúmenes, con riesgo de hipernatremia.',
+      ficha: { tabId: 'fisio-hipernatremia', etiqueta: 'Ficha completa: Hipernatremia →' } },
+    { id: 'hiperglucemia', nombre: 'Hiperglucemia', adh: 0.391, fuentes: ['nv-t-tm'] },
+];
+
+// `segmento`/`canal`: lo que bloquea (se marca con ✕ en la nefrona y en la célula).
+export const farmacosNefrona = [
+    { id: 'ninguno', nombre: 'Ninguno' },
+    { id: 'furosemida', nombre: 'Furosemida', segmento: 'asa-ascendente-gruesa', canal: 'NKCC2', fuentes: ['nv-t-tal'], categoria: { key: 'diureticos-asa', etiqueta: 'Diuréticos de asa →' },
+      texto: 'Inhibe el cotransportador NKCC2 en la rama ascendente gruesa del asa de Henle, bloqueando la reabsorción de Na⁺/K⁺/2Cl⁻. Es el diurético más potente porque actúa sobre el segmento que genera el gradiente osmótico medular necesario para concentrar la orina.' },
+    { id: 'tiazida', nombre: 'Tiazida', segmento: 'tubulo-distal', canal: 'NCC', fuentes: ['nv-t-tcd'],
+      texto: 'Inhibe el cotransportador NCC en el túbulo contorneado distal. Efecto natriurético moderado (solo el 5-10% del Na⁺ filtrado se reabsorbe aquí), pero clínicamente relevante por su papel en la hipertensión y por el riesgo de hiponatremia e hipopotasemia.' },
+    { id: 'espironolactona', nombre: 'Espironolactona', segmento: 'colector', canal: 'ENaC', receptor: true, fuentes: ['nv-t-col'],
+      texto: 'Antagoniza el receptor de mineralocorticoides en la célula principal del colector, reduciendo la actividad de ENaC. Efecto diurético débil pero ahorrador de K⁺; base del bloqueo del eje renina-angiotensina-aldosterona en insuficiencia cardiaca.' },
+    { id: 'amilorida', nombre: 'Amilorida', segmento: 'colector', canal: 'ENaC', fuentes: ['nv-t-col'],
+      texto: 'A diferencia de la espironolactona, no bloquea el receptor de aldosterona: cierra directamente el canal ENaC, sea cual sea la actividad mineralocorticoide. Por eso funciona en el síndrome de Liddle (donde ENaC está permanentemente activo e independiente de la aldosterona) y no la espironolactona.' },
+    { id: 'acetazolamida', nombre: 'Acetazolamida', segmento: 'tubulo-proximal', canal: 'Anhidrasa carbónica', fuentes: ['nv-t-tp'],
+      texto: 'Inhibe la anhidrasa carbónica del túbulo proximal, reduciendo la reabsorción de bicarbonato. Diurético débil (el Na⁺ no reabsorbido aquí se recupera después en segmentos distales), usado sobre todo para alcalinizar la orina o tratar la alcalosis metabólica poscorrección.' },
+    { id: 'isglt2', nombre: 'iSGLT2 (gliflozina)', segmento: 'tubulo-proximal', canal: 'SGLT2', fuentes: ['nv-t-tm'] },
+];
+
+// Cifras de las fichas que usa el modelo.
+export const cifrasNefrona = {
+    filtradoL: 180,          // L/día de plasma filtrado (tabla de la ecuación maestra)
+    naFiltradoG: 630,        // g/día de Na⁺ filtrado (misma tabla)
+    aguaProximal: 0.70,      // fracción del agua filtrada que recupera el proximal
+    osmMin: 50,              // mOsm/kg sin ADH
+    osmMax: 1200,            // mOsm/kg con ADH máxima
+    cargaOsmolar: 900,       // mOsm/día habituales
+    glucosaTm: 320,          // mg/min
+    glucosaUmbral: 180,      // mg/dl
 };
