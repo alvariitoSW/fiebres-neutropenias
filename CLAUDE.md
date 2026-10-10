@@ -9980,6 +9980,44 @@ de `nefro-menu.html`.
   reciclar y el Ca²⁺/Mg²⁺ quedándose en la luz ("se pierden en la orina");
   el panel del tramo lo dice también. `diana` de un canal es opcional.
 
+### Acidosis tubulares en la nefrona viva (octubre 2026)
+
+A petición explícita del usuario ("sigue con lo que queda de nefrología").
+4 situaciones más en `situacionesNefrona` con `grupo: 'acido'` (rótulo
+"Acidosis hiperclorémica" en los chips — `chips()` pinta ahora un rótulo
+por cada `grupo`, tabla `GRUPOS`): **diarrea, ATR I (distal), ATR II
+(proximal) y ATR IV (hipoaldosteronismo)**.
+
+- **Lo que se ve es la tabla de la ficha**: `acido.tabla` copia la tabla
+  "Diarrea frente a las ATR" de Ácido-base: acidosis (HCO₃⁻ y K⁺ en
+  sangre, hiato aniónico urinario, pH urinario mínimo) y "NH₄⁺ en orina"
+  sale de la frase del hiato aniónico urinario (negativo = NH₄⁺ presente,
+  positivo = sin excreción). Todos los medidores llevan `ficha`. Con un
+  fármaco puesto se vuelven a ver los medidores normales, con un aviso.
+- **`defecto`** (`{segmento, canal, nombre, nota, etiqueta, tramo?,
+  etiquetaEn?}`): lo que falla, marcado con ✕ en el dibujo (en el lado
+  contrario al del fármaco) y en la célula con su `nota` — ATR I en la
+  célula intercalar tipo A, ATR II en la anhidrasa carbónica del
+  proximal, ATR IV en ENaC (y el colector se comporta como con un
+  ahorrador de K⁺: `ahorraK`). `bloqueado()` devuelve el fármaco o, si
+  no, el defecto.
+- **H⁺ y NH₄⁺ como partículas** (formas nuevas `cruz` y `pent`, tasa de
+  filtrado 0): los secreta el colector en todas las situaciones
+  (`secretar(esp)`, antes `secretarK`), con `M.hSec`/`M.nh4Sec`; el
+  HCO₃⁻ filtrado se escala con `M.hco3Spawn` (menos HCO₃⁻ en sangre).
+  Todo eso, `kMult` y `hco3Proximal` son ilustrativos.
+- **Fisiología general declarada** en el campo `general` de cada
+  situación (se pinta bajo la explicación, `.nv-general`): dónde falla
+  cada ATR, que la ATR I y II pierdan K⁺, que la aldosterona estimule la
+  secreción de H⁺ — la ficha no lo dice.
+- **Ficha**: ids `ab-hau`, `ab-t-diarrea/atr1/atr2/atr4`, `ab-gi`,
+  `ab-atr`, `ab-atr4` para los "Texto ↓"; la receta de la vista Visual
+  de la ficha gana `panelNefronaViva` con los 4 accesos.
+- Verificado con Playwright (390×844): las 4 situaciones con sus valores,
+  avisos y ✕; la célula del colector (ATR I y IV) y la del proximal
+  (ATR II) muestran el fallo; acceso desde la ficha y "Texto ↓" a la fila
+  de la tabla; sin errores ni desborde.
+
 ## Auditoría de Hematología (octubre 2026)
 
 A petición explícita del usuario ("revisa que esté todo correcto en

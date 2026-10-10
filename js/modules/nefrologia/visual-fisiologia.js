@@ -191,7 +191,8 @@ export function initVisualFisiologia() {
                 { titulo: 'Hiato elevado', color: 'rojo', nodos: ['Cetoacidosis diabética', 'Acidosis láctica', 'Intoxicación por alcoholes', 'Acidosis piroglutámica'] },
                 { titulo: 'Hiato normal', color: 'verde', nodos: ['Pérdidas gastrointestinales', 'Acidosis tubular renal', 'ATR tipo IV', 'Acidosis en la ERC', 'Suero salino 0,9%'] }
             ] },
-            { tipo: 'matriz', titulo: 'Diarrea frente a las ATR', tabla: 2, flechas: true }
+            { tipo: 'matriz', titulo: 'Diarrea frente a las ATR', tabla: 2, flechas: true },
+            panelNefronaViva([['diarrea', 'Diarrea'], ['atr1', 'ATR I (distal)'], ['atr2', 'ATR II (proximal)'], ['atr4', 'ATR IV']])
         ]
     });
 

@@ -1408,26 +1408,26 @@
             </div>
 
             <p class="section-label" style="margin-top:16px;">Causas con hiato aniónico normal (hiperclorémicas)</p>
-            <p style="font-size: 0.8rem; color: var(--text-muted);">El hiato aniónico urinario [(Nao+Ko) − Clo] distingue origen extrarrenal (negativo, mecanismo de acidificación intacto, NH₄⁺ presente) de renal (positivo, sin excreción de NH₄⁺).</p>
+            <p id="ab-hau" style="font-size: 0.8rem; color: var(--text-muted);">El hiato aniónico urinario [(Nao+Ko) − Clo] distingue origen extrarrenal (negativo, mecanismo de acidificación intacto, NH₄⁺ presente) de renal (positivo, sin excreción de NH₄⁺).</p>
             <table class="data-table">
                 <thead><tr><th></th><th>HCO₃⁻ suero</th><th>K⁺ suero</th><th>Hiato aniónico orina</th><th>pH urinario mínimo</th></tr></thead>
                 <tbody>
-                    <tr><td>Diarrea</td><td>&lt;24</td><td>↓</td><td>−20 a −50</td><td>&gt;5,5</td></tr>
-                    <tr><td>ATR I (distal)</td><td>10-20</td><td>↓</td><td>Positivo</td><td>&gt;5,5 (habitual &gt;6,5)</td></tr>
-                    <tr><td>ATR II (proximal)</td><td>12-18</td><td>↓</td><td>−20 a −50</td><td>&lt;5,5 (mecanismo intacto)</td></tr>
-                    <tr><td>ATR IV</td><td>16-22</td><td>↑</td><td>Positivo</td><td>&lt;5,5</td></tr>
+                    <tr id="ab-t-diarrea"><td>Diarrea</td><td>&lt;24</td><td>↓</td><td>−20 a −50</td><td>&gt;5,5</td></tr>
+                    <tr id="ab-t-atr1"><td>ATR I (distal)</td><td>10-20</td><td>↓</td><td>Positivo</td><td>&gt;5,5 (habitual &gt;6,5)</td></tr>
+                    <tr id="ab-t-atr2"><td>ATR II (proximal)</td><td>12-18</td><td>↓</td><td>−20 a −50</td><td>&lt;5,5 (mecanismo intacto)</td></tr>
+                    <tr id="ab-t-atr4"><td>ATR IV</td><td>16-22</td><td>↑</td><td>Positivo</td><td>&lt;5,5</td></tr>
                 </tbody>
             </table>
             <div class="micro-profiles">
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="ab-gi">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💧 Pérdidas gastrointestinales</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">Diarrea grave → acidosis hiperclorémica + deshidratación, con frecuente déficit grave de K⁺ que puede no evidenciarse hasta corregir la acidosis. Tratamiento: cristaloides + potasio; bicarbonato IV si pH &lt;7,2 (agudo) o bicarbonato oral si plasmático &lt;22 mmol/l (crónico).</div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="ab-atr">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Acidosis tubular renal (ATR)</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">Proximal (tipo II) necesita dosis altas de bicarbonato (3-15 mEq/kg/día); distal (tipo I) dosis bajas (~1 mEq/kg/día) — recomendable aportar parte como sal potásica para prevenir hipopotasemia. ADV7103 (citrato potásico + carbonato ácido de potasio) mejora la adherencia en la ATR distal.</div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="ab-atr4">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚡ ATR tipo IV (hipoaldosteronismo hiporreninémico)</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">La forma cuya incidencia más ha aumentado. Asociada a diabetes, edad avanzada, nefropatías intersticiales, uropatía obstructiva, trasplante renal, fármacos (AINE, iSRAA, heparina, ciclosporina). Cursa con acidosis hiperclorémica + <strong>hiperpotasemia</strong>, pH urinario &lt;5,5. Tratamiento: diuréticos, quelantes de K⁺, dietas ricas en bases; fludrocortisona si hipoaldosteronismo.</div>
                 </div>

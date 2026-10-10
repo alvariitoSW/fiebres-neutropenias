@@ -148,6 +148,42 @@ export const situacionesNefrona = [
       fra: { tfg: 0.15, rTp: 0.65, rTal: 0.6, M: 1200, uosm: null, V: 0.05, fena: null, obstruccion: true,
         tabla: { volumen: 'Anuria (<100 ml/día) si es completa', osm: '—', naOrina: '—', fena: '—', crocrs: '—', feurea: '—', sedimento: '—' } },
       ficha: { vista: 'fra', panel: 'panel-fra-tabs', tabId: 'fra-subfenotipos-2', etiqueta: 'Ficha: FRA · Obstructiva →' } },
+    // Acidosis hiperclorémicas: los valores de la orina y la sangre son los de
+    // la tabla "Diarrea frente a las ATR" de la ficha Ácido-base: acidosis (en
+    // `acido.tabla`); NH₄⁺ en orina sale de la frase del hiato aniónico
+    // urinario. `defecto` = qué falla y dónde (se marca con ✕ como un fármaco;
+    // `tramo`/`etiquetaEn` opcionales: tramo del dibujo y posición del rótulo).
+    // Lo que mueve la animación (hco3Spawn, hSec, nh4Sec, kMult, hco3Proximal)
+    // es ilustrativo.
+    { id: 'diarrea', nombre: 'Diarrea', grupo: 'acido', adh: 0.4825, fuentes: ['ab-gi', 'ab-hau'],
+      acido: { hco3Spawn: 0.6, hSec: 1.8, nh4Sec: 2.4, etiqueta: 'HCO₃⁻ perdido por el intestino',
+        tabla: { hco3: '<24 mEq/l', k: '↓', uag: '−20 a −50', ph: '>5,5', nh4: 'Presente' } },
+      aviso: 'Hiato aniónico urinario negativo: el riñón sí excreta NH₄⁺, el mecanismo de acidificación está intacto. La acidosis viene de fuera del riñón.',
+      general: 'Cómo acidifica el colector (H⁺ de la célula intercalar y NH₄⁺) es fisiología general; la ficha da el hiato aniónico urinario y la tabla.',
+      ficha: { tabId: 'fisio-acidobase-acidosis', etiqueta: 'Ficha: Ácido-base · acidosis →' } },
+    { id: 'atr1', nombre: 'ATR I (distal)', grupo: 'acido', adh: 0.4825, fuentes: ['ab-t-atr1', 'ab-hau', 'ab-atr'],
+      texto: 'La <strong>ATR I (distal)</strong> no consigue acidificar la orina: el pH urinario no baja de 5,5 (habitualmente &gt;6,5), no se excreta NH₄⁺ y el hiato aniónico urinario es positivo. HCO₃⁻ plasmático de 10-20 mEq/l, con K⁺ bajo. Se trata con dosis bajas de bicarbonato (~1 mEq/kg/día), parte como sal potásica.',
+      acido: { hco3Spawn: 0.6, hSec: 0.12, nh4Sec: 0.15, kMult: 1.6,
+        tabla: { hco3: '10-20 mEq/l', k: '↓', uag: 'Positivo', ph: '>5,5 (habitual >6,5)', nh4: 'Sin excreción' } },
+      defecto: { segmento: 'colector', canal: 'Célula intercalar tipo A', nombre: 'ATR I', nota: 'ATR I: no secreta H⁺', etiqueta: 'ATR I: no secreta H⁺' },
+      aviso: 'Hiato aniónico urinario positivo: no hay NH₄⁺ en la orina. La acidosis es de origen renal.',
+      general: 'Que el fallo esté en la secreción de H⁺ de la célula intercalar, y que por eso el colector pierda más K⁺, es fisiología general: la ficha da los valores de la tabla y la dosis de bicarbonato.',
+      ficha: { tabId: 'fisio-acidobase-acidosis', etiqueta: 'Ficha: Ácido-base · acidosis →' } },
+    { id: 'atr2', nombre: 'ATR II (proximal)', grupo: 'acido', adh: 0.4825, fuentes: ['ab-t-atr2', 'ab-hau', 'ab-atr'],
+      texto: 'En la <strong>ATR II (proximal)</strong> el túbulo proximal no recupera todo el HCO₃⁻ filtrado: lo pierde hasta que el HCO₃⁻ plasmático baja a 12-18 mEq/l. El mecanismo distal está intacto: el pH urinario baja de 5,5 y el hiato aniónico urinario es negativo. Necesita dosis altas de bicarbonato (3-15 mEq/kg/día).',
+      acido: { hco3Spawn: 0.65, hSec: 1, nh4Sec: 1, kMult: 1.4, hco3Proximal: 0.5,
+        tabla: { hco3: '12-18 mEq/l', k: '↓', uag: '−20 a −50', ph: '<5,5 (mecanismo intacto)', nh4: 'Presente' } },
+      defecto: { segmento: 'tubulo-proximal', canal: 'Anhidrasa carbónica', nombre: 'ATR II', nota: 'ATR II: recupera mal el HCO₃⁻', etiqueta: 'ATR II: pierde HCO₃⁻', tramo: 'tp2', etiquetaEn: [222, 170] },
+      aviso: 'El HCO₃⁻ que escapa del proximal lo recupera en parte el resto de la nefrona; con el HCO₃⁻ plasmático ya bajo se filtra menos y la orina puede acidificarse.',
+      general: 'Dónde falla exactamente el proximal (NHE3, la anhidrasa carbónica o la salida basolateral del HCO₃⁻) y que por eso se pierda K⁺ es fisiología general; la ficha solo dice "proximal".',
+      ficha: { tabId: 'fisio-acidobase-acidosis', etiqueta: 'Ficha: Ácido-base · acidosis →' } },
+    { id: 'atr4', nombre: 'ATR IV (hipoaldosteronismo)', grupo: 'acido', adh: 0.4825, fuentes: ['ab-atr4', 'ab-t-atr4', 'ab-hau'],
+      acido: { hco3Spawn: 0.8, hSec: 0.45, nh4Sec: 0.3, ahorraK: true,
+        tabla: { hco3: '16-22 mEq/l', k: '↑', uag: 'Positivo', ph: '<5,5', nh4: 'Sin excreción' } },
+      defecto: { segmento: 'colector', canal: 'ENaC', nombre: 'ATR IV', nota: 'Sin aldosterona (ATR IV)', etiqueta: 'Sin aldosterona' },
+      aviso: 'Sin aldosterona, ENaC reabsorbe menos Na⁺ y ROMK secreta menos K⁺: hiperpotasemia, la marca de la ATR IV. El pH urinario baja de 5,5, pero sin NH₄⁺ (hiato aniónico urinario positivo).',
+      general: 'Que la aldosterona active ENaC y ROMK está en la ficha (colector); que también estimule la secreción de H⁺, y que la hiperpotasemia frene la producción de NH₄⁺, es fisiología general.',
+      ficha: { tabId: 'fisio-acidobase-acidosis', etiqueta: 'Ficha: Ácido-base · acidosis →' } },
 ];
 
 // `segmento`/`canal`: lo que bloquea (se marca con ✕ en la nefrona y en la célula).

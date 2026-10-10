@@ -59,8 +59,9 @@ const rDescDe = M => CIF.aguaDescendente * Math.max(0, (M - 300) / (M_NORMAL - 3
 function modelo(sit, farm, glucemia) {
     const situacion = situacionesNefrona.find(x => x.id === sit);
     if (situacion.fra) return modeloFra(situacion, farm);
-    const a = situacion.adh;
-    const furo = farm === 'furosemida', tiaz = farm === 'tiazida', ahorr = farm === 'espironolactona' || farm === 'amilorida';
+    const a = situacion.adh, ac = situacion.acido || {};
+    // ATR IV: sin aldosterona el colector se comporta como con un ahorrador de K⁺.
+    const furo = farm === 'furosemida', tiaz = farm === 'tiazida', ahorr = farm === 'espironolactona' || farm === 'amilorida' || !!ac.ahorraK;
     const acet = farm === 'acetazolamida', sglt = farm === 'isglt2';
     // Gradiente medular (máximo del intersticio) y dilución mínima posible.
     const M = furo ? 380 : gradiente(a);
@@ -78,7 +79,7 @@ function modelo(sit, farm, glucemia) {
     const reCol = Math.min(na * (ahorr ? 0.50 : 0.87), 0.04); na -= reCol;
     const fena = na;
     // K⁺: casi todo se recupera antes del distal; la orina la decide la secreción del colector.
-    const kSec = 0.10 * Math.sqrt(naTcd / 0.039) * (ahorr ? 0.2 : 1);
+    const kSec = 0.10 * Math.sqrt(naTcd / 0.039) * (ahorr ? 0.2 : 1) * (ac.kMult ?? 1);
     const kRel = (0.35 * (1 - (furo ? 0.05 : 0.86)) + kSec) / (0.35 * 0.14 + 0.10);
     // Glucosa: SGLT2 (90%) + SGLT1 (10%) con su Tm.
     const gFilt = (sit === 'hiperglucemia' ? glucemia : 100) * 1.25; // mg/min con TFG 125 ml/min
@@ -95,10 +96,11 @@ function modelo(sit, farm, glucemia) {
         na: { tp1: 0.40, tp2: parte(rTp, 0.40), ascd: 0.30, tal: furo ? 0.05 : 0.60, tcd: reTcd / naTal, col: reCol / naTcd },
         k: { tp1: 0.40, tp2: parte(0.65, 0.40), tal: furo ? 0.05 : 0.86 },
         glu: sglt ? { tp1: 0, tp2: 0.60 } : gExc > 0 ? { tp1: 0.9 * (1 - gExc), tp2: parte(1 - gExc, 0.9 * (1 - gExc)) } : { tp1: 0.90, tp2: 1 },
-        hco3: { tp1: acet ? 0.15 : 0.5, tp2: parte(acet ? 0.30 : 0.80, acet ? 0.15 : 0.5), tal: 0.15, col: acet ? 0.55 : 0.97 },
+        hco3: hco3R(acet ? 0.30 : ac.hco3Proximal ?? 0.80, acet ? 0.55 : 0.97, ac.hco3Proximal ? 0.4 : 0.15),
         urea: ureaR(a),
     };
-    return { a, M, Umin, Uosm, V, aguaCol, rDesc, fena, naTcd, kSec, kRel, gGdia, hco3, r, gluSpawn: sit === 'hiperglucemia' ? glucemia / 100 : 1, tfg: 1 };
+    return { a, M, Umin, Uosm, V, aguaCol, rDesc, fena, naTcd, kSec, kRel, gGdia, hco3, r, gluSpawn: sit === 'hiperglucemia' ? glucemia / 100 : 1, tfg: 1,
+        hco3Spawn: ac.hco3Spawn ?? 1, hSec: ac.hSec ?? 1, nh4Sec: ac.nh4Sec ?? 1, acido: situacion.acido, defecto: situacion.defecto };
 }
 
 // Fracaso renal agudo: la orina es la de la Tabla 3 de la ficha (en `fra`),
@@ -116,13 +118,16 @@ function modeloFra(s, farm) {
         na: { tp1: f.rTp * 0.6, tp2: parte(f.rTp, f.rTp * 0.6), ascd: 0.30, tal: f.rTal, tcd: reTcd / naTal, col: rColNa },
         k: { tp1: 0.40, tp2: parte(0.65, 0.40), tal: f.nta ? 0.3 : 0.86 },
         glu: { tp1: 0.90, tp2: 1 },
-        hco3: { tp1: 0.5, tp2: parte(f.nta ? 0.5 : 0.80, 0.5), tal: 0.15, col: 0.97 },
+        hco3: hco3R(f.nta ? 0.5 : 0.80, 0.97),
         urea: ureaR(f.nta ? 0.3 : a),
     };
     return { a, M, Umin, Uosm: f.uosm ?? 300, V: f.V, aguaCol, rDesc, fena: f.fena ?? 0, naTcd, kSec: f.nta ? 0.04 : 0.08, kRel: 1, gGdia: 0, hco3: 0.005, r,
-        gluSpawn: 1, tfg: f.tfg, fra: f };
+        gluSpawn: 1, tfg: f.tfg, fra: f, hco3Spawn: 1, hSec: f.nta ? 0.4 : 1, nh4Sec: f.nta ? 0.4 : 1 };
 }
 const clamp01 = v => Math.max(0, Math.min(1, v));
+// HCO₃⁻: el proximal recupera `prox` del filtrado (la mitad en su primer tramo);
+// en la ATR II la rama gruesa recupera más de lo que le llega de más (ilustrativo).
+function hco3R(prox, col, tal = 0.15) { const t1 = prox === 0.80 ? 0.5 : prox / 2; return { tp1: t1, tp2: parte(prox, t1), tal, col }; }
 // Urea: el proximal recupera la mitad; el colector distal la deja salir a la médula según la ADH.
 function ureaR(a) { const t1 = CIF.ureaProximal / 2; return { tp1: t1, tp2: parte(CIF.ureaProximal, t1), col: 0.15 + 0.6 * a }; }
 
@@ -223,10 +228,13 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
         glu: { nombre: 'Glucosa', color: CLARO.verde, forma: 'rombo', tasa: 4 },
         hco3: { nombre: 'HCO₃⁻', color: CLARO.rojo, forma: 'triangulo', tasa: 4 },
         urea: { nombre: 'Urea', color: UREA, forma: 'hex', tasa: 3.5 },
+        // H⁺ y NH₄⁺ no se filtran: los secreta el colector (la acidificación de la orina).
+        h: { nombre: 'H⁺ (secretado)', color: '#f0e6c8', forma: 'cruz', tasa: 0 },
+        nh4: { nombre: 'NH₄⁺', color: '#b9a3d9', forma: 'pent', tasa: 0 },
         celula: { nombre: 'Célula desprendida (NTA)', color: '#9c7a52', forma: 'circulo', tasa: 0, r: 3.4 },
     };
     const ION = { na: ['Na⁺', CLARO.oro, 'circulo'], k: ['K⁺', CLARO.na, 'cuadrado'], glu: ['Glucosa', CLARO.verde, 'rombo'], hco3: ['HCO₃⁻', CLARO.rojo, 'triangulo'], h: ['H⁺', '#f0e6c8', 'anillo'], cl: ['Cl⁻', '#9fb2a4', 'circulo'], ca: ['Ca²⁺/Mg²⁺', C.oro, 'circulo'], h2o: ['H₂O', C.texto, 'punto'], urea: ['Urea', UREA, 'hex'], co2: ['CO₂', '#bdb2a0', 'anillo'] };
-    const RADIO = { punto: 1.5, circulo: 2.4, cuadrado: 2.1, rombo: 2.2, triangulo: 2.3, hex: 2.3 };
+    const RADIO = { punto: 1.5, circulo: 2.4, cuadrado: 2.1, rombo: 2.2, triangulo: 2.3, hex: 2.3, cruz: 2.4, pent: 2.4 };
 
     const estado = { sit: 'normal', farm: 'ninguno', glucemia: 350, nivel: 'foto', seg: null, pausa: false, vel: 1 };
     let M = modelo('normal', 'ninguno', 350);
@@ -244,6 +252,8 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
         if (f === 'punto' || f === 'circulo') c.arc(x, y, r, 0, Math.PI * 2);
         else if (f === 'cuadrado') c.rect(x - r, y - r, 2 * r, 2 * r);
         else if (f === 'rombo') { c.moveTo(x, y - r * 1.3); c.lineTo(x + r * 1.3, y); c.lineTo(x, y + r * 1.3); c.lineTo(x - r * 1.3, y); c.closePath(); }
+        else if (f === 'cruz') { c.rect(x - r, y - r * 0.35, 2 * r, r * 0.7); c.rect(x - r * 0.35, y - r, r * 0.7, 2 * r); }
+        else if (f === 'pent') { for (let i = 0; i < 5; i++) { const a = -Math.PI / 2 + i * 2 * Math.PI / 5; c[i ? 'lineTo' : 'moveTo'](x + Math.cos(a) * r * 1.25, y + Math.sin(a) * r * 1.25); } c.closePath(); }
         else if (f === 'hex') { for (let i = 0; i < 6; i++) { const a = i * Math.PI / 3; c[i ? 'lineTo' : 'moveTo'](x + Math.cos(a) * r * 1.2, y + Math.sin(a) * r * 1.2); } c.closePath(); }
         else { c.moveTo(x, y - r * 1.3); c.lineTo(x + r * 1.2, y + r); c.lineTo(x - r * 1.2, y + r); c.closePath(); }
     }
@@ -367,19 +377,23 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
             const p = enS(LIMITES.col[0] + 20 + (i + 0.5) * ((LIMITES.col[1] - LIMITES.col[0] - 40) / nAqp));
             for (const lado of [-1, 1]) c.fillRect(p.x + 7.5 * lado - 1, p.y - 1.5, 2, 3);
         }
-        // Bloqueo del fármaco
-        const f = farmacosNefrona.find(x => x.id === estado.farm);
-        if (f.segmento) {
-            const t = SEG_TRAMO[f.segmento], [a, b] = LIMITES[t];
-            const marcas = t === 'col' ? [0.22, 0.42] : t === 'tal' ? [0.25, 0.55, 0.8] : [0.35, 0.7];
+        // Bloqueo del fármaco y fallo de la situación (ATR): ✕ sobre el tramo.
+        // lado: 1 = el del fármaco; -1 = el contrario (para que no se pisen).
+        const marcar = (segmento, texto, marcas, lado = 1, tramo = SEG_TRAMO[segmento], en = null) => {
+            const t = tramo, [a, b] = LIMITES[t];
             c.strokeStyle = CLARO.rojo; c.lineWidth = 2.2;
             for (const u of marcas) {
-                const p = enS(a + (b - a) * u), x = p.x + p.nx * 11, y = p.y + p.ny * 11;
+                const p = enS(a + (b - a) * u), x = p.x + p.nx * 11 * lado, y = p.y + p.ny * 11 * lado;
                 c.beginPath(); c.moveTo(x - 4, y - 4); c.lineTo(x + 4, y + 4); c.moveTo(x + 4, y - 4); c.lineTo(x - 4, y + 4); c.stroke();
             }
-            const p = enS(a + (b - a) * marcas[0]);
-            etiqueta(c, f.nombre, p.x + p.nx * 18, p.y + p.ny * 18 - 8, CLARO.rojo);
-        }
+            if (en) { etiqueta(c, texto, en[0], en[1], CLARO.rojo); return; }
+            const p = enS(a + (b - a) * marcas[0]), dx = p.nx * lado;
+            etiqueta(c, texto, p.x + dx * 18, p.y + p.ny * lado * 18 - 8, CLARO.rojo, lado === 1 ? 'center' : dx > 0.5 ? 'left' : dx < -0.5 ? 'right' : 'center');
+        };
+        const f = farmacosNefrona.find(x => x.id === estado.farm);
+        if (f.segmento) { const t = SEG_TRAMO[f.segmento]; marcar(f.segmento, f.nombre, t === 'col' ? [0.22, 0.42] : t === 'tal' ? [0.25, 0.55, 0.8] : [0.35, 0.7]); }
+        if (M.defecto) { const d = M.defecto, t = d.tramo ?? SEG_TRAMO[d.segmento]; marcar(d.segmento, d.etiqueta, t === 'col' ? [0.6, 0.78] : [0.3, 0.7], -1, t, d.etiquetaEn); }
+        if (M.acido?.etiqueta) etiqueta(c, M.acido.etiqueta, 190, 250, CLARO.rojo);
         // FRA: cilindros en el colector, obstrucción y perfusión
         if (M.fra) {
             const hialino = !M.fra.nta && !M.fra.obstruccion;
@@ -418,9 +432,9 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
         const ang = Math.random() * Math.PI * 2, rr = Math.random() * 10;
         parts.push({ esp, s: 0, fin, salir, modo: 'nace', t: 0, ox: Math.cos(ang) * rr, oy: Math.sin(ang) * rr, lat: Math.random() - 0.5, vel: 62 + Math.random() * 22 });
     }
-    function secretarK() {
+    function secretar(esp) {
         const [a, b] = LIMITES.col;
-        parts.push({ esp: 'k', s: a + (b - a) * (0.08 + 0.8 * Math.random()), fin: LARGO, salir: false, modo: 'entra', t: 0, lado: Math.random() < 0.5 ? -1 : 1, lat: Math.random() - 0.5, vel: 62 + Math.random() * 20 });
+        parts.push({ esp, s: a + (b - a) * (0.08 + 0.8 * Math.random()), fin: LARGO, salir: false, modo: 'entra', t: 0, lado: Math.random() < 0.5 ? -1 : 1, lat: Math.random() - 0.5, vel: 62 + Math.random() * 20 });
     }
     // Urea que vuelve de la médula interna a la rama ascendente delgada (se recicla).
     function secretarUrea() {
@@ -430,13 +444,17 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
     }
     function paso(dt) {
         for (const esp in ESPECIES) {
-            acum[esp] = (acum[esp] || 0) + ESPECIES[esp].tasa * (esp === 'glu' ? M.gluSpawn : 1) * M.tfg * (reducido ? 0.5 : 1) * dt;
+            acum[esp] = (acum[esp] || 0) + ESPECIES[esp].tasa * (esp === 'glu' ? M.gluSpawn : esp === 'hco3' ? M.hco3Spawn : 1) * M.tfg * (reducido ? 0.5 : 1) * dt;
             while (acum[esp] >= 1) { acum[esp] -= 1; nacer(esp); }
         }
         acum.urea = (acum.urea || 0) + 4 * M.r.urea.col * M.tfg * dt;
         while (acum.urea >= 1) { acum.urea -= 1; secretarUrea(); }
         acum.ksec = (acum.ksec || 0) + 24 * M.kSec * dt;
-        while (acum.ksec >= 1) { acum.ksec -= 1; secretarK(); }
+        while (acum.ksec >= 1) { acum.ksec -= 1; secretar('k'); }
+        acum.hsec = (acum.hsec || 0) + 3 * M.hSec * dt;
+        while (acum.hsec >= 1) { acum.hsec -= 1; secretar('h'); }
+        acum.nh4 = (acum.nh4 || 0) + 2 * M.nh4Sec * dt;
+        while (acum.nh4 >= 1) { acum.nh4 -= 1; secretar('nh4'); }
         if (M.fra?.nta) {
             acum.cel = (acum.cel || 0) + 1.4 * dt;
             while (acum.cel >= 1) {
@@ -523,7 +541,9 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
     const bloqueado = (seg, canal) => {
         if (M.fra?.nta && (seg === 'tubulo-proximal' || seg === 'asa-ascendente-gruesa')) return { nombre: 'NTA', danio: true };
         const f = farmacosNefrona.find(x => x.id === estado.farm);
-        return f.segmento === seg && f.canal === canal ? f : null;
+        if (f.segmento === seg && f.canal === canal) return f;
+        const d = M.defecto; // lo que falla en la situación (ATR)
+        return d && d.segmento === seg && d.canal === canal ? d : null;
     };
     const txt = (x, y, t, { size = 8.5, color = C.texto, ancla = 'start', peso = '', fam = 'Georgia' } = {}) =>
         `<text x="${x}" y="${y}" text-anchor="${ancla}" font-size="${size}" fill="${color}" font-family="${fam}"${peso ? ` font-weight="${peso}"` : ''}>${t}</text>`;
@@ -561,7 +581,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
         const osmInt = medular ? Math.round(intersticio(yT, M)) : 300;
         const osmLuzSeg = medular ? Math.round(osmInt > 310 ? osmInt * 0.94 : 300)
             : { 'tubulo-proximal': 300, 'asa-ascendente-gruesa': M.Umin >= 280 ? 320 : 200, 'tubulo-distal': finTcd(M), colector: Math.round(M.Uosm) }[seg];
-        const ahorr = estado.farm === 'espironolactona' || estado.farm === 'amilorida';
+        const ahorr = estado.farm === 'espironolactona' || estado.farm === 'amilorida' || !!M.acido?.ahorraK;
         const filas = filasCelula(d);
         const lblX = plano ? xb + 8 : xa + 14;
         let fondo = '', capas = '', textos = '';
@@ -616,7 +636,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
                 const sinK = !bl && cn.depende && bloqueado(seg, cn.depende);
                 const esAqp2 = f.t === 'aqp', esUrea = cn.nombre === 'Transportador de urea';
                 let veces = 3, dur = 3.2;
-                if (cn.nombre === 'ROMK') { const fk = Math.sqrt(M.naTcd / 0.039) * (ahorr ? 0.3 : 1); veces = Math.max(1, Math.min(6, Math.round(3 * fk))); dur = 3.6 / clamp(fk, 0.6, 2); }
+                if (cn.nombre === 'ROMK') { const fk = Math.sqrt(M.naTcd / 0.039) * (ahorr ? 0.3 : 1) * (M.acido?.kMult ?? 1); veces = Math.max(1, Math.min(6, Math.round(3 * fk))); dur = 3.6 / clamp(fk, 0.6, 2); }
                 if (esAqp2) veces = Math.round(M.a * 5);
                 if (esUrea) veces = Math.round(M.a * 4);
                 const sinCanal = (esAqp2 || esUrea) && veces === 0, off = !!bl || danada || sinCanal || !!sinK;
@@ -642,10 +662,11 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
                 textos += txt(lblX, yl - (cn.intercalar || esAqp2 || cn.nombre === 'ROMK' || cn.depende || esUrea || bl || danada || sinCanal ? 11 : 0), `${cn.nombre}${esAqp2 && !sinCanal ? ` ×${veces} (ADH)` : ''}`, { size: plano ? 9 : 10, peso: 'bold' });
                 let nota = '';
                 if (danada) nota = 'Célula dañada (NTA): apenas reabsorbe';
-                else if (bl) nota = `Bloqueado: ${bl.nombre}${bl.receptor ? ' (receptor de aldosterona)' : ''}`;
+                else if (bl) nota = bl.nota ?? `Bloqueado: ${bl.nombre}${bl.receptor ? ' (receptor de aldosterona)' : ''}`;
                 else if (sinK) nota = `Sin K⁺ que reciclar: ${sinK.nombre} bloquea ${cn.depende}`;
                 else if (cn.depende) nota = `devuelve a la luz el K⁺ de ${cn.depende}`;
                 else if (sinCanal) nota = esAqp2 ? 'Sin ADH: no hay acuaporinas en la membrana' : 'Sin ADH: apenas sale urea';
+                else if (cn.nombre === 'ROMK' && M.acido?.kMult > 1) nota = 'secreta más K⁺: hipopotasemia (fisiología general)';
                 else if (cn.nombre === 'ROMK') nota = veces > 3 ? 'más flujo distal: secreta más' : veces < 3 ? 'menos ENaC: secreta menos' : 'secreción basal';
                 else if (esUrea) nota = 'con ADH sale a la médula interna';
                 if (nota) textos += txt(lblX, yl, nota, { size: 8, color: danada || bl || sinCanal || sinK ? CLARO.rojo : C.suave });
@@ -670,7 +691,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
                 }
                 const yl = f.y0 + f.h - 4;
                 textos += txt(lblX, yl - 11, 'Anhidrasa carbónica (enzima)', { size: 10, peso: 'bold' });
-                textos += txt(lblX, yl, off ? (danada ? 'Célula dañada (NTA)' : 'Bloqueada: el HCO₃⁻ se queda en la luz') : 'H⁺ + HCO₃⁻ → CO₂ + H₂O, y al revés dentro', { size: 8, color: off ? CLARO.rojo : C.suave });
+                textos += txt(lblX, yl, off ? (danada ? 'Célula dañada (NTA)' : bl.nota ?? 'Bloqueada: el HCO₃⁻ se queda en la luz') : 'H⁺ + HCO₃⁻ → CO₂ + H₂O, y al revés dentro', { size: 8, color: off ? CLARO.rojo : C.suave });
             } else if (f.t === 'para') {
                 const yc = f.y0 + f.h / 2;
                 // Sin la carga positiva de la luz (NKCC2 bloqueado), el Ca²⁺ y el Mg²⁺ se quedan en la luz.
@@ -838,6 +859,17 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
                 + medidor(['Filtrado', `${num(CIF.filtradoL * M.tfg)} L/día`, false, 'baja', `Normal: ${CIF.filtradoL} L/día`]).replace('class="nv-medidor-valor baja', 'class="nv-medidor-valor baja malo');
             return;
         }
+        if (M.acido && estado.farm === 'ninguno') {
+            const t = M.acido.tabla;
+            $('#nv-medidores').innerHTML = [
+                ['HCO₃⁻ en sangre', t.hco3, true, 'baja', 'Acidosis hiperclorémica (hiato aniónico normal)'],
+                ['K⁺ en sangre', t.k === '↑' ? 'Alto' : 'Bajo', true, t.k === '↑' ? 'sube' : 'baja', t.k === '↑' ? 'Hiperpotasemia' : 'Hipopotasemia'],
+                ['Hiato aniónico urinario', t.uag, true, '', '(Na⁺ + K⁺ − Cl⁻) en orina'],
+                ['NH₄⁺ en orina', t.nh4, true, t.nh4 === 'Presente' ? '' : 'baja', t.nh4 === 'Presente' ? 'Mecanismo de acidificación intacto' : 'Origen renal'],
+                ['pH urinario mínimo', t.ph, true, '', ''],
+            ].map(medidor).join('');
+            return;
+        }
         const sinFarm = estado.farm === 'ninguno';
         // "ficha" solo donde la cifra es de la ficha: lo normal y los dos extremos de la ADH.
         const extremo = sinFarm && (estado.sit === 'deshidratacion' || estado.sit === 'agua');
@@ -871,7 +903,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
             estado.sit === 'prerrenal' && f.id === 'ninguno' ? '<button type="button" class="visual-link" data-especialidad="nefrologia" data-view="nefrona" data-panel="panel-fisio-tabs" data-tab="fisio-regulacion" data-glomerulo="deplecion">En el glomérulo: depleción de volumen →</button>' : '',
             f.id === 'isglt2' ? '<button type="button" class="visual-link" data-especialidad="nefrologia" data-view="erc" data-panel="panel-erc-tabs" data-tab="erc-nefroproteccion" data-glomerulo="isglt2">Su efecto en el glomérulo →</button>' : '',
         ].join('');
-        $('#nv-explica').innerHTML = cuerpo + `<div class="nv-botones">${botones}</div>`;
+        $('#nv-explica').innerHTML = cuerpo + `<div class="nv-botones">${botones}</div>` + (fuente.general ? `<p class="nv-general">${fuente.general}</p>` : '');
         const av = [];
         if (f.id === 'furosemida') av.push('Sin NKCC2 el intersticio medular pierde su gradiente: la rama descendente casi no saca agua y el colector ya no puede concentrar aunque haya ADH.');
         if (f.id === 'furosemida' || f.id === 'tiazida') av.push('Llega más Na⁺ al colector, el flujo arrastra la secreción de K⁺ por ROMK y el K⁺ se pierde en la orina.');
@@ -884,6 +916,8 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
         if (estado.sit === 'prerrenal') av.push('Llega poca sangre: se filtra menos, pero el túbulo sano recupera casi todo el sodio y la ADH concentra la orina.');
         if (estado.sit === 'nta') av.push('Las células que se caen viajan con la orina y forman cilindros granulosos en el colector.');
         if (estado.sit === 'obstruccion') av.push('La orina no puede salir: se acumula en el colector y la presión sube hacia atrás hasta el glomérulo.');
+        if (s.aviso && f.id === 'ninguno') av.push(s.aviso);
+        if (M.acido && f.id !== 'ninguno') av.push('Con un fármaco puesto, las cifras de la orina son las del fármaco; quita el fármaco para ver las de la tabla de la ficha.');
         if (estado.sit === 'di') av.push('Mismo dibujo que al beber mucha agua, pero aquí la pérdida de agua no está justificada: si no bebe lo suficiente, sube el Na⁺ en la sangre.');
         $('#nv-avisos').innerHTML = av.map(t => `<div class="tfg-estado tfg-estado-warn">${t}</div>`).join('');
     }
@@ -897,7 +931,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
             + d.canales.map(cn => {
                 const bl = bloqueado(estado.seg, cn.nombre);
                 const sinK = !bl && cn.depende && bloqueado(estado.seg, cn.depende);
-                const estadoTxt = bl ? (bl.danio ? 'célula dañada (NTA)' : `bloqueado por ${bl.nombre}`) : sinK ? `sin K⁺ que reciclar (${sinK.nombre})` : '';
+                const estadoTxt = bl ? (bl.danio ? 'célula dañada (NTA)' : bl.nota ? bl.nota.toLowerCase() : `bloqueado por ${bl.nombre}`) : sinK ? `sin K⁺ que reciclar (${sinK.nombre})` : '';
                 return `<div class="nv-canal${bl || sinK ? ' bloq' : ''}"><h4>${cn.nombre}${estadoTxt ? ` <span>· ${estadoTxt}</span>` : ''}</h4>${cn.funcion}${cn.diana ? `<div class="nv-canal-diana">Diana: ${cn.diana}</div>` : ''}</div>`;
             }).join('')
             + (d.general ? `<p class="nv-general">${d.general}</p>` : '');
@@ -906,9 +940,10 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
                 <span>${cat.etiqueta}</span><span style="font-size: 0.8rem; color: var(--accent-green);">[ VER → ]</span>
             </button>`).join('');
     }
+    const GRUPOS = { fra: 'Fracaso renal agudo', acido: 'Acidosis hiperclorémica' };
     function chips(id, lista, clave) {
         const cont = $(id);
-        cont.innerHTML = lista.map((x, i) => (x.grupo === 'fra' && lista[i - 1]?.grupo !== 'fra' ? '<span class="nv-chips-grupo">Fracaso renal agudo</span>' : '')
+        cont.innerHTML = lista.map((x, i) => (x.grupo && lista[i - 1]?.grupo !== x.grupo ? `<span class="nv-chips-grupo">${GRUPOS[x.grupo]}</span>` : '')
             + `<button type="button" class="visual-mini" data-id="${x.id}" aria-pressed="${estado[clave] === x.id}">${x.nombre}</button>`).join('');
         cont.addEventListener('click', e => {
             const b = e.target.closest('.visual-mini');
