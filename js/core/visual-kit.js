@@ -93,15 +93,6 @@ function detalleDe(el) {
     return copiaLimpia(el);
 }
 
-// Abre el acordeón que contiene `el` (si lo hay) antes de llevar la vista allí.
-function abrirContenedores(el) {
-    const mpi = el.closest('.micro-prof-item');
-    if (mpi) {
-        cabeceraMpi(mpi)?.classList.add('open');
-        mpi.querySelector(':scope > .micro-prof-body')?.classList.add('active');
-    }
-}
-
 // ---------- Tipos de panel: cada uno devuelve HTML con botones data-nodo ----------
 
 const boton = (n, extra = '', estilo = '') =>
@@ -499,12 +490,12 @@ function construir(tab, texto, visual, receta) {
         }
         if (e.target.closest('[data-accion="control"]')) {
             const control = p.tipo === 'selector' ? document.querySelector(p.control) : estados[k].items[0]?.control;
-            if (control) { abrirContenedores(control); irAlTexto(tab, control.closest('.form-group, .checkbox-label') || control); }
+            if (control) { irAlTexto(tab, control.closest('.form-group, .checkbox-label') || control); }
             return;
         }
         if (e.target.closest('[data-accion="fuente"]')) {
             const n = nodos[Number(panelEl.dataset.sel)];
-            if (n) { abrirContenedores(n.el); irAlTexto(tab, n.el); n.alIr?.(); }
+            if (n) { irAlTexto(tab, n.el); n.alIr?.(); }
             return;
         }
         const b = e.target.closest('[data-nodo]');

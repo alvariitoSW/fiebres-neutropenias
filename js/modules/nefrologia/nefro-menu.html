@@ -1085,33 +1085,33 @@
 
         <div id="fisio-hipopotasemia" class="tab-content">
             <h3 style="color: var(--accent-green);">Hipopotasemia</h3>
-            <ul class="term-chips">
+            <ul class="term-chips" id="hp-cortes">
                 <li>K⁺ &lt; 3,5 mEq/l</li><li>Leve: 3-3,5</li><li>Moderada: 2,5-3</li><li>Grave: &lt;2,5</li><li>49,9% en urgencias tienen K⁺ &lt;4 mmol/l</li>
             </ul>
-            <dl class="kv-row"><dt>3 mecanismos</dt><dd>Redistribución hacia el espacio intracelular, pérdidas extrarrenales (sobre todo digestivas) o pérdidas renales. Con redistribución, la [K⁺] plasmática puede no reflejar el depósito corporal real (p. ej. cetoacidosis diabética: K⁺ normal/alto pero con depleción corporal verdadera).</dd></dl>
-            <dl class="kv-row"><dt>Pseudohipopotasemia</dt><dd>Descenso falso por leucocitosis extrema (&gt;100.000/mm³) o por retrasar el procesamiento de la muestra a temperatura ambiente — el calor estimula el metabolismo de la glucosa y la captación celular de K⁺ por los leucocitos. Se corrige separando pronto plasma/suero de las células.</dd></dl>
+            <dl class="kv-row" id="hp-mecanismos"><dt>3 mecanismos</dt><dd>Redistribución hacia el espacio intracelular, pérdidas extrarrenales (sobre todo digestivas) o pérdidas renales. Con redistribución, la [K⁺] plasmática puede no reflejar el depósito corporal real (p. ej. cetoacidosis diabética: K⁺ normal/alto pero con depleción corporal verdadera).</dd></dl>
+            <dl class="kv-row" id="hp-pseudo"><dt>Pseudohipopotasemia</dt><dd>Descenso falso por leucocitosis extrema (&gt;100.000/mm³) o por retrasar el procesamiento de la muestra a temperatura ambiente — el calor estimula el metabolismo de la glucosa y la captación celular de K⁺ por los leucocitos. Se corrige separando pronto plasma/suero de las células.</dd></dl>
 
-            <table class="data-table">
+            <div style="overflow-x:auto;"><table class="data-table">
                 <thead><tr><th>Mecanismo</th><th>Causa</th></tr></thead>
                 <tbody>
                     <tr><td>Falta de ingesta</td><td>Bajo contenido en la dieta (raro)</td></tr>
-                    <tr><td>Redistribución intracelular</td><td>Alcalosis metabólica*, β2-agonistas*/estrés, insulina*, parálisis periódica hipopotasémica, proliferación celular (leucemias, linfoma de Burkitt, tto de anemia megaloblástica), intoxicación por bario/tolueno/teofilina, intoxicación digitálica con Ac antidigoxina</td></tr>
-                    <tr><td>Pérdidas extrarrenales</td><td>Diarrea*, uso de laxantes, fístulas, pérdidas cutáneas (sudoración profusa, quemaduras)</td></tr>
-                    <tr><td>Pérdidas renales, TA normal</td><td>Diuréticos*, vómitos/aspiración nasogástrica, hipomagnesemia, aniones no reabsorbibles, trastornos tubulares (Bartter, Gitelman, ATR)</td></tr>
-                    <tr><td>Pérdidas renales, HTA + hiperactividad mineralocorticoidea</td><td>Renina baja: hiperaldosteronismo 1º, regaliz, esteroides tópicos. Renina alta/normal: estenosis arterial renal, HTA maligna, S. de Cushing*</td></tr>
+                    <tr id="hp-causa-redistribucion"><td>Redistribución intracelular</td><td>Alcalosis metabólica*, β2-agonistas*/estrés, insulina*, parálisis periódica hipopotasémica, proliferación celular (leucemias, linfoma de Burkitt, tto de anemia megaloblástica), intoxicación por bario/tolueno/teofilina, intoxicación digitálica con Ac antidigoxina</td></tr>
+                    <tr id="hp-causa-extrarrenal"><td>Pérdidas extrarrenales</td><td>Diarrea*, uso de laxantes, fístulas, pérdidas cutáneas (sudoración profusa, quemaduras)</td></tr>
+                    <tr id="hp-causa-renal"><td>Pérdidas renales, TA normal</td><td>Diuréticos*, vómitos/aspiración nasogástrica, hipomagnesemia, aniones no reabsorbibles, trastornos tubulares (Bartter, Gitelman, ATR)</td></tr>
+                    <tr id="hp-causa-hta"><td>Pérdidas renales, HTA + hiperactividad mineralocorticoidea</td><td>Renina baja: hiperaldosteronismo 1º, regaliz, esteroides tópicos. Renina alta/normal: estenosis arterial renal, HTA maligna, S. de Cushing*</td></tr>
                     <tr><td>Pérdidas renales, HTA sin hiperactividad mineralocorticoidea</td><td>S. de Liddle</td></tr>
-                    <tr><td>Otros</td><td>Cetoacidosis diabética*, poliuria postobstructiva</td></tr>
+                    <tr id="hp-causa-otros"><td>Otros</td><td>Cetoacidosis diabética*, poliuria postobstructiva</td></tr>
                 </tbody>
-            </table>
+            </table></div>
             <p style="font-size: 0.75rem; color: var(--text-muted);">* Causas más frecuentes.</p>
 
             <p class="section-label" style="margin-top:16px;">Causas destacadas</p>
             <div class="micro-profiles">
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="hp-paralisis">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚡ Parálisis periódica hipopotasémica</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">Enfermedad hereditaria rara: ataques recidivantes de 6-24h de parálisis flácida de tronco y extremidades por paso masivo de K⁺ al interior celular. Una forma se asocia a hipertiroidismo, sobre todo en raza asiática.</div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="hp-mg">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧲 Hipomagnesemia</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">Presente en &gt;40% de las hipopotasemias (diuréticos, diarrea, cisplatino, otros nuevos quimioterápicos). Altera la reabsorción tubular de K⁺ — la hipopotasemia es <strong>refractaria</strong> al tratamiento con sales de potasio hasta que no se corrige el magnesio.</div>
                 </div>
@@ -1119,11 +1119,11 @@
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Bartter y Gitelman</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">Tubulopatías hereditarias mendelianas con pérdida renal de sal, alcalosis metabólica hipopotasémica, renina/aldosterona altas y TA normal (por resistencia a la angiotensina II). Gitelman: síntomas más leves, con hipomagnesemia e hipocalciuria. Bartter: calciuria normal o elevada. Indistinguibles clínicamente de la ingesta subrepticia de diuréticos — el diagnóstico definitivo es la detección de diuréticos en orina.</div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="hp-liddle">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🌿 Liddle y regaliz</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">Ambos cursan con HTA y aldosterona suprimida (a diferencia de Bartter/Gitelman). Liddle: defecto genético que activa permanentemente el canal ENaC del colector — no responde a espironolactona, sí a triamtereno (bloquea ENaC directamente). Regaliz: el ácido glicirrínico potencia el efecto mineralocorticoide del cortisol endógeno.</div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="hp-farmacos">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Fármacos inductores</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">Grupos principales: β-miméticos (salbutamol, terbutalina), diuréticos (acetazolamida, tiazidas, furosemida, torasemida), efecto mineralocorticoide (fludrocortisona, hidrocortisona a dosis altas, regaliz), insulina, antifúngicos (anfotericina B), quimioterápicos/nefrotóxicos (cisplatino, aminoglucósidos), laxantes. Precaución especial en broncopatías tratadas con esteroides+teofilina (la administración aguda de β-adrenérgicos puede inducir hipopotasemia grave con hipoventilación) y en hepatopatía avanzada (la hipopotasemia puede precipitar encefalopatía hepática al aumentar la amoniogénesis renal). Tabla completa más abajo.</div>
                 </div>
@@ -1134,56 +1134,57 @@
             </div>
 
             <p class="section-label" style="margin-top:16px;">Tabla completa de fármacos inductores de hipopotasemia</p>
-            <table class="data-table">
+            <div style="overflow-x:auto;"><table class="data-table">
                 <thead><tr><th>Desplazamiento al interior de la célula</th><th>Eliminación renal de potasio</th><th>Aumento de pérdidas gastrointestinales</th></tr></thead>
                 <tbody>
                     <tr><td>Albuterol, terbutalina, isoproterenol, ritodrina; descongestionantes (pseudoefedrina, fenilpropanolamina); xantinas (teofilina, cafeína); catecolaminas (adrenalina, noradrenalina, dopamina, dobutamina); antagonistas del calcio/intoxicación por verapamilo, nifedipino, nitrendipino; insulina; anestésicos (tiopental sódico, lidocaína); inductores de proliferación celular (hidroxicobalamina, GM-CSF)</td><td>Diuréticos (acetazolamida, clortalidona, hidroclorotiazida, indapamida, metolazona, bumetanida, ácido etacrínico, furosemida, torasemida); fármacos con efecto mineralocorticoide (fludrocortisona, hidrocortisona, metilprednisolona, gosipol, carbenoxolona, mifepristona, regaliz); antifúngicos (anfotericina B, itraconazol, fluconazol); quimioterápicos/nefrotóxicos (cisplatino, tenofovir, foscarnet); antibióticos inductores de ATR (penicilina, oxacilina, nafcilina, piperacilina, meropenem, tetraciclina, neomicina, polimixina B, colistina, bacitracina, aminoglucósidos, capreomicina); inmunosupresores (metotrexate, sirolimus); bicarbonato; intoxicaciones (cloroquina, salicilatos, paracetamol, vitamina D, tiroxina, risperidona, quetiapina); infliximab, ibuprofeno, ondansetrón</td><td>Laxantes, fenolftaleína, enemas de fosfato, antibióticos inductores de diarrea</td></tr>
                 </tbody>
-            </table>
+            </table></div>
 
             <p class="section-label" style="margin-top:16px;">Clínica</p>
-            <p style="font-size: 0.8rem; color: var(--text-muted);">La gravedad se correlaciona con la concentración y la velocidad de instauración. La hipopotasemia moderada (3-3,5) suele ser asintomática.</p>
-            <table class="data-table">
+            <p id="hp-clinica" style="font-size: 0.8rem; color: var(--text-muted);">La gravedad se correlaciona con la concentración y la velocidad de instauración. La hipopotasemia moderada (3-3,5) suele ser asintomática.</p>
+            <p style="font-size: 0.75rem; color: var(--text-muted);"><em>Nota de fidelidad:</em> arriba, la ficha llama "leve" al tramo 3-3,5 y "moderada" al de 2,5-3; esta frase llama "moderada" a 3-3,5. La simulación de la vista Visual usa los cortes de arriba. El PDF original no está archivado en la app, así que no se ha podido comprobar cuál es la redacción de la fuente.</p>
+            <div style="overflow-x:auto;"><table class="data-table">
                 <thead><tr><th>Sistema</th><th>Manifestaciones</th></tr></thead>
                 <tbody>
-                    <tr><td>Cardíacas</td><td>Aplanamiento/inversión de onda T, onda U prominente, ↓ST, ↑QT y PR, arritmias auriculares y ventriculares, predisposición a toxicidad digitálica</td></tr>
+                    <tr id="hp-clinica-cardiaca"><td>Cardíacas</td><td>Aplanamiento/inversión de onda T, onda U prominente, ↓ST, ↑QT y PR, arritmias auriculares y ventriculares, predisposición a toxicidad digitálica</td></tr>
                     <tr><td>Neuromusculares</td><td>Debilidad, astenia, calambres, parestesias, parálisis respiratoria</td></tr>
                     <tr><td>Digestivas</td><td>Estreñimiento, íleo paralítico</td></tr>
                     <tr><td>Renales</td><td>↓FG y flujo plasmático renal, nefritis intersticial, diabetes insípida nefrogénica, alcalosis metabólica, ↑producción renal de NH₃ (riesgo de encefalopatía hepática), quistes renales (crónica)</td></tr>
                     <tr><td>Endocrino-metabólicas</td><td>↓aldosterona, ↑renina, ↓insulina e intolerancia a hidratos de carbono</td></tr>
                 </tbody>
-            </table>
-            <div class="article-figure">
+            </table></div>
+            <div class="article-figure" id="hp-fig4">
                 <img src="js/modules/nefrologia/img/k-fig4-onda-u.jpg" alt="Electrocardiograma mostrando la onda U prominente característica de la hipopotasemia" loading="lazy">
                 <div class="article-figure-caption">Figura 4. Onda U — hallazgo característico de la hipopotasemia, junto con aplanamiento de la onda T.</div>
             </div>
-            <p style="font-size: 0.8rem; color: var(--text-muted);">La hipopotasemia se asocia a mayor riesgo de fibrilación auricular; la infusión de potasio puede revertir la FA hipopotasémica a ritmo sinusal.</p>
+            <p id="hp-fa" style="font-size: 0.8rem; color: var(--text-muted);">La hipopotasemia se asocia a mayor riesgo de fibrilación auricular; la infusión de potasio puede revertir la FA hipopotasémica a ritmo sinusal.</p>
 
             <p class="section-label" style="margin-top:16px;">Diagnóstico</p>
-            <dl class="kv-row"><dt>K⁺ en orina</dt><dd>&lt;15-20 mmol/día (o 15 mmol/l en muestra aislada) → el riñón maneja correctamente el potasio (causa extrarrenal o remota). Si es inadecuadamente alto (&gt;15 mmol/l), pensar en exceso de mineralocorticoides, aniones anómalos en túbulo distal o tubulopatías.</dd></dl>
+            <dl class="kv-row" id="hp-dx-orina"><dt>K⁺ en orina</dt><dd>&lt;15-20 mmol/día (o 15 mmol/l en muestra aislada) → el riñón maneja correctamente el potasio (causa extrarrenal o remota). Si es inadecuadamente alto (&gt;15 mmol/l), pensar en exceso de mineralocorticoides, aniones anómalos en túbulo distal o tubulopatías.</dd></dl>
             <dl class="kv-row"><dt>TTKG (gradiente transtubular de potasio)</dt><dd>TTKG = [K(orina) × Osm(plasma)] / [K(plasma) × Osm(orina)]. &lt;4 → ausencia de actividad mineralocorticoide en el TCD; &gt;7 → presencia de actividad mineralocorticoide. Válido solo si Osm(orina) &gt; Osm(plasma) y Na(orina) &gt;25 mmol/l.</dd></dl>
             <dl class="kv-row"><dt>Otros índices en muestra simple</dt><dd>Cociente K/Creatinina &gt;2,5-3,5 mmol/mmol (&gt;25-35 mEq/g) sugiere origen renal. Excreción fraccional de potasio (FEK%) = (Ko × Crs)×100/(Ks × Cro).</dd></dl>
-            <dl class="kv-row"><dt>Gasometría</dt><dd>Diarrea → acidosis metabólica. Vómitos o diuréticos → alcalosis. El jugo gástrico solo tiene 5-10 mEq/l de K⁺; la hipopotasemia de los vómitos se debe sobre todo a la pérdida renal inducida por hipovolemia e hiperaldosteronismo secundario.</dd></dl>
+            <dl class="kv-row" id="hp-dx-gaso"><dt>Gasometría</dt><dd>Diarrea → acidosis metabólica. Vómitos o diuréticos → alcalosis. El jugo gástrico solo tiene 5-10 mEq/l de K⁺; la hipopotasemia de los vómitos se debe sobre todo a la pérdida renal inducida por hipovolemia e hiperaldosteronismo secundario.</dd></dl>
             <div class="article-figure">
                 <img src="js/modules/nefrologia/img/k-fig5-algoritmo-diagnostico-hipopotasemia.jpg" alt="Algoritmo diagnóstico de la hipopotasemia: potasio en orina bajo o alto, TTKG, volumen extracelular, tensión arterial, renina y aldosterona" loading="lazy">
                 <div class="article-figure-caption">Figura 5. K en orina bajo → aporte insuficiente/pérdidas extrarrenales/paso intracelular. K en orina alto → TTKG → flujo tubular distal (diuréticos) o VEC/TA/renina/aldosterona (hiperaldosteronismo, Bartter/Gitelman, Liddle, regaliz, estenosis arterial renal...).</div>
             </div>
 
             <p class="section-label" style="margin-top:16px;">Tratamiento</p>
-            <div class="article-figure">
+            <div class="article-figure" id="hp-fig6">
                 <img src="js/modules/nefrologia/img/k-fig6-algoritmo-tratamiento-hipopotasemia.jpg" alt="Algoritmo de tratamiento de la hipopotasemia: valorar gravedad y déficit, corregir hipomagnesemia, decidir vía intravenosa u oral" loading="lazy">
                 <div class="article-figure-caption">Figura 6. Criterios de gravedad (ECG, digoxina, cetoacidosis, debilidad) → ClK i.v. si graves o intolerancia oral; si no, potasio oral ± diuréticos ahorradores si hay tubulopatía.</div>
             </div>
-            <dl class="kv-row"><dt>Magnitud del déficit</dt><dd>Por cada descenso de 1 mEq/l en plasma, el déficit corporal ronda 200-400 mEq. Con K⁺ &lt;2 mEq/l, el déficit total puede superar 800-1.000 mEq.</dd></dl>
-            <dl class="kv-row"><dt>Vía intravenosa — indicaciones</dt><dd>Intolerancia oral, íleo paralítico, hipopotasemia grave (&lt;2,5 mEq/l), arritmia, IAM o digitalización.</dd></dl>
-            <dl class="kv-row"><dt>Precauciones del ClK i.v.</dt><dd>Concentración &lt;50 mEq/l, ritmo &lt;20 mEq/hora, máximo 200 mEq/día. En solución <strong>no glucosada</strong> (la glucosa estimula insulina y desplaza más K⁺ a la célula). Preferible vía central sin llegar a la aurícula (riesgo sobre el sistema de conducción).</dd></dl>
-            <table class="data-table">
+            <dl class="kv-row" id="hp-deficit"><dt>Magnitud del déficit</dt><dd>Por cada descenso de 1 mEq/l en plasma, el déficit corporal ronda 200-400 mEq. Con K⁺ &lt;2 mEq/l, el déficit total puede superar 800-1.000 mEq.</dd></dl>
+            <dl class="kv-row" id="hp-via-iv"><dt>Vía intravenosa — indicaciones</dt><dd>Intolerancia oral, íleo paralítico, hipopotasemia grave (&lt;2,5 mEq/l), arritmia, IAM o digitalización.</dd></dl>
+            <dl class="kv-row" id="hp-precauciones"><dt>Precauciones del ClK i.v.</dt><dd>Concentración &lt;50 mEq/l, ritmo &lt;20 mEq/hora, máximo 200 mEq/día. En solución <strong>no glucosada</strong> (la glucosa estimula insulina y desplaza más K⁺ a la célula). Preferible vía central sin llegar a la aurícula (riesgo sobre el sistema de conducción).</dd></dl>
+            <div style="overflow-x:auto;"><table class="data-table">
                 <thead><tr><th>Alimentos ricos en potasio</th></tr></thead>
                 <tbody>
                     <tr><td>Verduras de hoja verde, aguacate, brócoli, coles de Bruselas, tomate, legumbres, plátano, naranja, kiwi, frutos secos, chocolate/cacao, lácteos, patatas fritas, sustitutos de la sal, regaliz</td></tr>
                 </tbody>
-            </table>
-            <p style="font-size: 0.8rem; color: var(--text-muted);">Preparaciones orales: cloruro potásico (Potasión®, 8 mEq/comprimido), ascorbato de potasio (Boi-K®), citrato potásico (Acalka®). En pérdidas renales persistentes pueden precisarse diuréticos ahorradores de potasio (amiloride, triamtereno, espironolactona, eplerenona).</p>
+            </table></div>
+            <p id="hp-orales" style="font-size: 0.8rem; color: var(--text-muted);">Preparaciones orales: cloruro potásico (Potasión®, 8 mEq/comprimido), ascorbato de potasio (Boi-K®), citrato potásico (Acalka®). En pérdidas renales persistentes pueden precisarse diuréticos ahorradores de potasio (amiloride, triamtereno, espironolactona, eplerenona).</p>
 
             <p class="section-label" style="margin-top:16px;">🔀 Diferencial: síndromes hipopotasémicos por pérdidas en orina</p>
             <p style="font-size: 0.8rem; color: var(--text-muted);">Elige un síndrome para ver su patrón de herencia, inicio, tensión arterial, aldosterona y rasgos distintivos.</p>

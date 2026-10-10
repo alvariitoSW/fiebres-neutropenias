@@ -12,13 +12,16 @@
 // - La animación solo corre mientras la vista Visual está en pantalla.
 
 import { montarVisual } from '../../core/visual-kit.js';
-import { irAlTexto, marcar } from '../../core/vista-visual.js';
 import { clamp, pintarGauge } from '../../core/ui.js';
 import {
     tratamientoHiperpotasemia as TABLA, farmacosHiperpotasemia as FARMACOS,
     gruposHiperpotasemia as GRUPOS, causasHiperpotasemia as CAUSAS,
     magnitudesHiperpotasemia as MAG,
 } from '../../data/hiperpotasemia-data.js';
+import {
+    VASO, CEL, actividades, estadoDosis, enlazarTexto, crearPoner, animarMientrasVisible,
+    crearEscena, onda, azar, coma, fmtT, enlace, alfa, CLARO,
+} from './potasio-escena.js';
 
 const TAB_ID = 'fisio-hiperpotasemia';
 const POR_MEQ = 4, K_MIN = 3.5, T_MAX = 720;
@@ -26,15 +29,6 @@ const DESPLAZAN = FARMACOS.filter(f => f.grupo === 'desplaza');
 const ELIMINAN = FARMACOS.filter(f => f.grupo === 'elimina');
 const GRAVEDAD = [['Sin hiperpotasemia', ''], ['Ligera', ''], ['Moderada', 'yellow'], ['Grave', 'red']];
 const ESTADO_GAUGE = ['ok', 'ok', 'warn', 'danger'];
-// Tonos claros del dibujo, sin token propio en variables.css.
-const CLARO = { rojo: '#e08a6c', oro: '#f0cf5a', verde: '#a8b97c', na: '#c882aa' };
-
-const azar = (a, b) => a + Math.random() * (b - a);
-const coma = n => n.toFixed(1).replace('.', ',');
-const fmtT = m => { m = Math.round(m); return m < 60 ? `${m} min` : `${Math.floor(m / 60)} h ${String(m % 60).padStart(2, '0')} min`; };
-const enlace = id => ` <button type="button" class="visual-link" data-ver="${id}">Texto ↓</button>`;
-// Color de un token (#rrggbb) con transparencia.
-const alfa = (hex, a) => `rgba(${parseInt(hex.slice(1, 3), 16)},${parseInt(hex.slice(3, 5), 16)},${parseInt(hex.slice(5, 7), 16)},${a})`;
 
 // ---------- Vista Texto: la tabla de tratamiento, desde los datos ----------
 function renderTablaTratamiento() {
@@ -60,7 +54,7 @@ const MARCADO = `
 </div>
 <div class="hk-escena">
   <canvas id="hk-escena" aria-label="Simulación del potasio entre plasma, célula, corazón, analítica y vías de salida"></canvas>
-  <canvas id="hk-ecg" aria-label="Electrocardiograma"></canvas>
+  <canvas id="hk-ecg" class="hk-ecg" aria-label="Electrocardiograma"></canvas>
 </div>
 <div class="hk-marcador">
   <div class="hk-k" id="hk-k" aria-live="polite"></div>
@@ -81,7 +75,7 @@ const MARCADO = `
   <button type="button" class="visual-mini" id="hk-reiniciar">Reiniciar</button>
   <span class="hk-reloj" id="hk-reloj"></span>
 </div>
-<div id="hk-farmacos">${Object.entries(GRUPOS).map(([g, info]) =>
+<div id="hk-farmacos" class="hk-farmacos">${Object.entries(GRUPOS).map(([g, info]) =>
     `<p class="section-label">${info.rotulo}</p>` + FARMACOS.filter(f => f.grupo === g).map(f => `
   <div class="hk-farmaco"><span class="hk-tira" style="background:${info.color}"></span>
     <div><div class="hk-nombre">${f.nombre}</div>
@@ -93,37 +87,7 @@ const MARCADO = `
 </div>
 <p class="hk-aviso-modelo">Modelo didáctico. Los tiempos de inicio y duración salen de la tabla de la ficha; la ficha no dice cuántos mEq/l mueve cada medida ni a qué ritmo sale el K⁺ en cada causa, así que esas cantidades son ilustrativas. "Minutos/hora" (diálisis) y "horas" (diuréticos) no son cifras cerradas: en el modelo la diálisis empieza en unos minutos y ambos siguen mientras corre el reloj. Los puntos no están a escala: en la célula hay 150 mEq/l frente a 4 en el plasma.</p>`;
 
-// ---------- Geometría de la escena (coordenadas lógicas 360×320) ----------
-const W = 360, H = 320, EW = 360, EH = 74;
-const VASO = { x: 10, y: 22, w: 282, h: 50 };
-const CEL = { x: 10, y: 108, w: 228, h: 110 };
-const BOMBAS = [62, 124, 186];
-const ROTURAS = [93, 155];
-const CORAZON = { x: 302, y: 160 };
-const TUBO = { x: 326, y: 20 };
-const SALIDAS = { orina: { x: 62, rot: 'Orina' }, heces: { x: 180, rot: 'Heces' }, dial: { x: 298, rot: 'Diálisis' } };
-const CANAL_X = 252, Y_REPARTO = 236, Y_ICONO = 262;
-
 // ---------- Modelo (sin DOM) ----------
-function actividadDosis(f, u) {
-    const [a, b] = f.ini;
-    const subida = b > a ? b - a : Math.max(2, a * 0.3);
-    const ini0 = b > a ? a : a - subida;
-    if (u < ini0) return 0;
-    if (u < ini0 + subida) return (u - ini0) / subida;
-    if (!f.fin) return 1;
-    const [c, d] = f.fin;
-    if (u <= c) return 1;
-    if (u < d) return 1 - (u - c) / (d - c);
-    return 0;
-}
-// Actividad 0-1 de cada fármaco en el minuto t. Varias dosis no suman: cuenta
-// la que más actúa en ese momento.
-function actividades(S) {
-    const act = {};
-    for (const f of FARMACOS) act[f.id] = (S.dados[f.id] || []).reduce((m, td) => Math.max(m, S.t >= td ? actividadDosis(f, S.t - td) : 0), 0);
-    return act;
-}
 const actividadRuta = (act, ruta) => Math.max(...ELIMINAN.filter(f => f.ruta === ruta).map(f => act[f.id]));
 
 function modelo(S, act) {
@@ -151,7 +115,7 @@ function avanzar(S, dt) {
     if (c.acido) S.anadido.acido = Math.min(c.acido, S.anadido.acido + c.acido * dt / 4);
     if (c.aporte) S.anadido.aporte = Math.min(c.aporte, S.anadido.aporte + c.aporte * dt / 15);
     if (c.lisis) S.anadido.lisis += c.lisis * dt / 60;
-    const act = actividades(S), m = modelo(S, act);
+    const act = actividades(FARMACOS, S.dados, S.t), m = modelo(S, act);
     if (S.renal === 'ok') S.eliminado.orina += MAG.renalBasal * clamp((m.k - 4.5) / 0.5, 0, 1) * dt / 60;
     const freno = clamp((m.k - K_MIN) / 0.6, 0, 1);
     for (const f of ELIMINAN) {
@@ -198,18 +162,6 @@ function avisos(S, m, r, nivel) {
     return a.map(([e, x]) => `<div class="tfg-estado tfg-estado-${e}">${x}</div>`).join('');
 }
 
-function estadoTexto(S, f, act) {
-    const dosis = S.dados[f.id] || [];
-    if (!dosis.length) return '';
-    const td = dosis[dosis.length - 1], u = S.t - td, a = act[f.id];
-    const veces = dosis.length > 1 ? ` (${dosis.length}ª dosis)` : '';
-    const empieza = f.ini[0] >= 60 ? fmtT(f.ini[0]) : `${f.ini[0]}${f.ini[1] > f.ini[0] ? '-' + f.ini[1] : ''} min`;
-    if (u < f.ini[0] && a === 0) return `Dado a los ${fmtT(td)}${veces}. Empieza a los ${empieza}.`;
-    if (a === 0) return `Dado a los ${fmtT(td)}${veces}. Efecto terminado.`;
-    if (f.fin && u > f.fin[0]) return `Actuando, pero se está acabando (${Math.round(a * 100)}%).`;
-    return `Actuando (${Math.round(a * 100)}%)${veces}.`;
-}
-
 // ---------- Montaje de la vista ----------
 function montar(tab, texto, visual) {
     visual.innerHTML = MARCADO;
@@ -218,57 +170,33 @@ function montar(tab, texto, visual) {
     for (const id of ['hk-k', 'hk-gravedad', 'hk-k-real', 'hk-k-real-txt', 'hk-repetir', 'hk-ecg-texto', 'hk-riesgo-txt',
         'hk-riesgo-fill', 'hk-reparto', 'hk-avisos', 'hk-reloj', 'hk-play', 'hk-rapido', 'hk-causa', 'hk-renal', 'hk-ecg-modo', 'hk-causa-detalle']) E[id] = $(id);
     for (const f of FARMACOS) { E['estado-' + f.id] = $('hk-estado-' + f.id); E['dar-' + f.id] = $('hk-dar-' + f.id); }
-    // Escribe en el DOM solo si el valor ha cambiado (la vista se lee en cada fotograma).
-    const previo = new Map();
-    const poner = (clave, el, prop, v) => { if (previo.get(clave) !== v) { previo.set(clave, v); el[prop] = v; } };
-
-    const reducido = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const css = getComputedStyle(document.documentElement);
-    const C = Object.fromEntries(Object.entries({ ink: '--text-main', muted: '--text-muted', rojo: '--accent-red', oro: '--accent-blue', verde: '--accent-green' })
-        .map(([k, v]) => [k, css.getPropertyValue(v).trim()]));
+    const poner = crearPoner();
+    const esc = crearEscena(visual, { escena: 'hk-escena', ecg: 'hk-ecg' });
+    const { C, reducido, rotulo, puntos, anillos } = esc;
 
     // ---------- Estado ----------
-    let S;
-    let P = [], FONDO = [], NA = [], HPLUS = [], TUBO_K = [];
+    let S, rapido = false;
+    let P = [], FONDO = [], HPLUS = [], TUBO_K = [];
     const nacidos = { acido: 0, lisis: 0, aporte: 0 };
-    const trazo = new Float32Array(EW).fill(NaN);
-    let rapido = false;
 
     // ---------- Partículas ----------
-    const puntoPlasma = () => ({ x: azar(VASO.x + 18, VASO.x + VASO.w - 16), y: azar(VASO.y + 20, VASO.y + VASO.h - 7) });
-    const puntoCelula = () => ({ x: azar(CEL.x + 16, CEL.x + CEL.w - 16), y: azar(CEL.y + 44, CEL.y + CEL.h - 24) });
     const nuevaK = (pos, fuente) => ({ cat: 'plasma', x: pos.x, y: pos.y, ruta: [], vx: azar(0.15, 0.45), fuente });
-
     function crearParticulas() {
-        NA = []; HPLUS = [];
+        HPLUS = [];
         nacidos.acido = nacidos.lisis = nacidos.aporte = 0;
-        P = Array.from({ length: Math.round(S.c.base * POR_MEQ) }, () => nuevaK(puntoPlasma()));
-        FONDO = Array.from({ length: 70 }, () => ({ ...puntoCelula(), fase: Math.random() * 6.28 }));
-        TUBO_K = Array.from({ length: S.c.pseudo ? 10 : 0 }, () => ({ x: TUBO.x + azar(-4, 4), y: TUBO.y + azar(18, 42), fase: Math.random() * 6.28 }));
+        P = Array.from({ length: Math.round(S.c.base * POR_MEQ) }, () => nuevaK(esc.puntoPlasma()));
+        FONDO = Array.from({ length: 70 }, () => ({ ...esc.puntoCelula(), fase: Math.random() * 6.28 }));
+        TUBO_K = esc.puntosTubo(S.c.pseudo ? 10 : 0);
     }
-    function mover(p, cat) {
-        const desde = p.x;
-        p.cat = cat;
-        if (cat === 'celula') {
-            const bx = BOMBAS.reduce((m, b) => Math.abs(b - desde) < Math.abs(m - desde) ? b : m);
-            p.ruta = [{ x: bx, y: VASO.y + VASO.h + 4 }, { x: bx, y: CEL.y }, puntoCelula()];
-        } else if (cat === 'plasma') {
-            const gx = ROTURAS[Math.floor(Math.random() * ROTURAS.length)];
-            p.ruta = [{ x: gx, y: CEL.y + 4 }, { x: gx, y: VASO.y + VASO.h - 4 }, puntoPlasma()];
-        } else {
-            const x = SALIDAS[cat].x;
-            p.ruta = [{ x: CANAL_X, y: VASO.y + VASO.h }, { x: CANAL_X, y: Y_REPARTO }, { x, y: Y_REPARTO }, { x: x + azar(-22, 22), y: Y_ICONO + azar(18, 32) }];
-        }
-    }
+    const mover = (p, cat) => { p.cat = cat; p.ruta = esc.rutaHacia(p, cat); };
     // K⁺ nuevo de una causa: el aporte entra desde fuera; la acidosis y la
     // lisis lo sacan de la célula por la membrana.
     function nacer(fuente) {
         if (fuente === 'aporte') {
-            const p = nuevaK({ x: VASO.x + 30 + azar(-8, 8), y: 2 }, fuente);
-            p.ruta = [{ x: p.x, y: VASO.y + 10 }, puntoPlasma()];
-            P.push(p);
+            const { inicio, ruta } = esc.rutaEntrada('arriba');
+            P.push({ ...nuevaK(inicio, fuente), ruta });
         } else {
-            const p = nuevaK(puntoCelula(), fuente);
+            const p = nuevaK(esc.puntoCelula(), fuente);
             mover(p, 'plasma');
             P.push(p);
         }
@@ -293,79 +221,27 @@ function montar(tab, texto, visual) {
     }
 
     // ---------- Dibujo ----------
-    const cv = $('hk-escena'), ctx = cv.getContext('2d');
-    const ecv = $('hk-ecg'), ectx = ecv.getContext('2d');
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ecv.width = EW * dpr; ecv.height = EH * dpr; ectx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const rr = (x, y, w, h, r) => { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); };
-    let fuenteActual = '';
-    function rotulo(txt, x, y, color = C.muted, size = 9.5, align = 'left', peso = '') {
-        const f = `${peso} ${size}px Georgia, serif`;
-        if (f !== fuenteActual) { ctx.font = f; fuenteActual = f; }
-        ctx.fillStyle = color; ctx.textAlign = align; ctx.fillText(txt, x, y);
-    }
-    // Varios círculos del mismo color en un solo trazado.
-    function puntos(lista, color, radio, ox = 0, oy = 0) {
-        if (!lista.length) return;
-        ctx.fillStyle = color; ctx.beginPath();
-        for (const p of lista) { const x = p.x + (ox ? ox(p) : 0), y = p.y + (oy ? oy(p) : 0); ctx.moveTo(x + radio, y); ctx.arc(x, y, radio, 0, 6.29); }
-        ctx.fill();
-    }
-    let giroBomba = 0, reloj = 0, barrido = 0;
-
     function dibujar(m, act, nivel) {
-        const c = S.c;
-        ctx.clearRect(0, 0, W, H);
+        const c = S.c, reloj = esc.reloj;
+        esc.limpiar();
         if (c.aporte) {
             const entrando = S.anadido.aporte < c.aporte;
             rotulo(entrando ? 'Aporte oral/IV ↓' : 'Aporte oral/IV', VASO.x + 46, 13, entrando ? C.ink : C.muted);
         }
-        // plasma
-        rr(VASO.x, VASO.y, VASO.w, VASO.h, 24); ctx.fillStyle = alfa(C.rojo, 0.13); ctx.fill();
-        ctx.strokeStyle = alfa(C.rojo, 0.55); ctx.lineWidth = 1.2; ctx.stroke();
-        rotulo('PLASMA · ≈4 mEq/l normal · 2% del K⁺', VASO.x + 16, VASO.y + 14, C.muted, 9);
-        dibujarTubo(m);
-        // célula
-        rr(CEL.x, CEL.y, CEL.w, CEL.h, 16); ctx.fillStyle = alfa(C.oro, 0.06); ctx.fill();
-        ctx.strokeStyle = alfa(C.oro, 0.5); ctx.lineWidth = 2; ctx.stroke();
-        rotulo('CÉLULA · 150 mEq/l · 98% del K⁺', CEL.x + 12, CEL.y + CEL.h - 9, C.muted, 9);
-        if (c.lisis || c.acido) {
-            ctx.strokeStyle = CLARO.rojo; ctx.lineWidth = 2; ctx.beginPath();
-            for (const gx of ROTURAS) { ctx.moveTo(gx - 7, CEL.y - 3); ctx.lineTo(gx - 3, CEL.y + 3); ctx.lineTo(gx + 1, CEL.y - 3); ctx.lineTo(gx + 5, CEL.y + 3); }
-            ctx.stroke();
-        }
-        // canal y salidas
-        ctx.strokeStyle = alfa(C.verde, 0.3); ctx.lineWidth = 6; ctx.lineCap = 'round';
-        ctx.beginPath(); ctx.moveTo(CANAL_X, VASO.y + VASO.h - 2); ctx.lineTo(CANAL_X, Y_REPARTO);
-        ctx.moveTo(SALIDAS.orina.x, Y_REPARTO); ctx.lineTo(SALIDAS.dial.x, Y_REPARTO);
-        for (const s of Object.values(SALIDAS)) { ctx.moveTo(s.x, Y_REPARTO); ctx.lineTo(s.x, Y_ICONO - 12); }
-        ctx.stroke(); ctx.lineCap = 'butt';
+        esc.vaso('PLASMA · ≈4 mEq/l normal · 2% del K⁺');
+        const hemolisis = c.pseudo && !S.repetido;
+        esc.tubo(m.medido, hemolisis ? { texto: 'hemolizada', puntos: TUBO_K, color: CLARO.rojo } : null);
+        esc.celula('CÉLULA · 150 mEq/l · 98% del K⁺');
+        if (c.lisis || c.acido) esc.roturas();
         const ir = S.renal === 'ir';
-        dibujarRinon(SALIDAS.orina.x, Y_ICONO, Math.max(ir ? 0 : 0.5, act.diuretico * (ir ? MAG.diureticoEnIR : 1)), ir);
-        dibujarIntestino(SALIDAS.heces.x, Y_ICONO, actividadRuta(act, 'heces'));
-        dibujarDializador(SALIDAS.dial.x, Y_ICONO, actividadRuta(act, 'dial'));
-        for (const [r, s] of Object.entries(SALIDAS)) rotulo(r === 'orina' && ir ? 'Orina (IR grave)' : s.rot, s.x, 314, C.muted, 9.5, 'center');
+        esc.salidas([
+            { clave: 'orina', a: Math.max(ir ? 0 : 0.5, act.diuretico * (ir ? MAG.diureticoEnIR : 1)), cerrado: ir, rot: ir ? 'Orina (IR grave)' : 'Orina' },
+            { clave: 'heces', a: actividadRuta(act, 'heces') },
+            { clave: 'dial', a: actividadRuta(act, 'dial') },
+        ]);
         // K⁺ intracelular de fondo (el 98%)
         puntos(FONDO, alfa(C.oro, 0.3), 2, f => Math.sin(reloj * 0.6 + f.fase) * 1.2, f => Math.cos(reloj * 0.5 + f.fase) * 1.2);
-        // bombas Na⁺/K⁺
-        const activa = m.bomba > 0.05, vel = 0.4 + 3.2 * m.bomba;
-        if (!reducido) giroBomba += 0.03 * vel;
-        BOMBAS.forEach((bx, i) => {
-            ctx.save(); ctx.translate(bx, CEL.y);
-            if (activa) { ctx.shadowColor = C.oro; ctx.shadowBlur = 8 * m.bomba; }
-            rr(-9, -8, 18, 16, 5); ctx.fillStyle = alfa(C.oro, activa ? 0.35 : 0.12); ctx.fill();
-            ctx.strokeStyle = C.oro; ctx.lineWidth = 1; ctx.stroke(); ctx.shadowBlur = 0;
-            ctx.rotate(giroBomba + i); ctx.strokeStyle = C.ink; ctx.lineWidth = 1.4;
-            ctx.beginPath(); ctx.arc(0, 0, 4.5, 0, 4.4); ctx.stroke();
-            ctx.restore();
-            if (activa && !reducido && Math.random() < 0.03 * vel) NA.push({ x: bx + azar(-4, 4), y: CEL.y - 8, vy: -azar(0.4, 0.8), vida: 1 });
-        });
-        NA = NA.filter(n => (n.vida -= 0.02) > 0);
-        for (const n of NA) n.y += n.vy;
-        puntos(NA, alfa(CLARO.na, 0.7), 1.7);
-        if (activa) for (const bx of BOMBAS) rotulo('Na⁺↑', bx + 12, CEL.y - 12, CLARO.na, 8.5);
-        rotulo(activa ? 'Bomba Na⁺/K⁺ acelerada: salen 3 Na⁺, entran 2 K⁺' : 'Bomba Na⁺/K⁺ a ritmo basal', CEL.x + 12, CEL.y + 20, activa ? C.ink : C.muted);
+        esc.bombas(m.bomba);
         // acidosis y lisis
         if (c.acido) {
             const bicarb = act.bicarbonato;
@@ -374,121 +250,21 @@ function montar(tab, texto, visual) {
         }
         if (c.lisis) rotulo('Lisis: la célula rota suelta K⁺', CEL.x + 12, CEL.y + 34, CLARO.rojo);
         HPLUS = HPLUS.filter(h => (h.vida -= 0.012) > 0);
-        for (const h of HPLUS) { h.y += 0.7; ctx.globalAlpha = h.vida; rotulo('H⁺', h.x, h.y, CLARO.rojo, 8, 'center'); }
-        ctx.globalAlpha = 1;
+        for (const h of HPLUS) { h.y += 0.7; esc.ctx.globalAlpha = h.vida; rotulo('H⁺', h.x, h.y, CLARO.rojo, 8, 'center'); }
+        esc.ctx.globalAlpha = 1;
         // K⁺: mueve y agrupa por color para dibujar cada grupo en un trazado
+        esc.moverParticulas(P);
         const grupos = { plasma: [], nuevo: [], celula: [], fuera: [] };
-        for (const p of P) {
-            if (p.ruta.length) {
-                const d = p.ruta[0], dx = d.x - p.x, dy = d.y - p.y, dist = Math.hypot(dx, dy), v = reducido ? 999 : 2.2;
-                if (dist <= v) { p.x = d.x; p.y = d.y; p.ruta.shift(); } else { p.x += dx / dist * v; p.y += dy / dist * v; }
-            } else if (p.cat === 'plasma' && !reducido) {
-                p.x += p.vx; if (p.x > VASO.x + VASO.w - 14) p.x = VASO.x + 14;
-            }
-            grupos[p.cat === 'plasma' ? (p.fuente && p.ruta.length ? 'nuevo' : 'plasma') : p.cat === 'celula' ? 'celula' : 'fuera'].push(p);
-        }
+        for (const p of P) grupos[p.cat === 'plasma' ? (p.fuente && p.ruta.length ? 'nuevo' : 'plasma') : p.cat === 'celula' ? 'celula' : 'fuera'].push(p);
         puntos(grupos.plasma, C.ink, 2.8);
         puntos(grupos.nuevo, CLARO.rojo, 2.8);
         puntos(grupos.fuera, CLARO.verde, 2.4);
         puntos(grupos.celula, CLARO.oro, 3.2);
-        if (grupos.celula.length) {
-            ctx.strokeStyle = alfa(CLARO.oro, 0.45); ctx.lineWidth = 1; ctx.beginPath();
-            for (const p of grupos.celula) { ctx.moveTo(p.x + 5.5, p.y); ctx.arc(p.x, p.y, 5.5, 0, 6.29); }
-            ctx.stroke();
-        }
-        dibujarCorazon(m, nivel);
+        anillos(grupos.celula, alfa(CLARO.oro, 0.45), 5.5);
+        esc.corazon(nivel / 3, m.calcio);
     }
-    function dibujarTubo(m) {
-        const { x, y } = TUBO, hemolisis = S.c.pseudo && !S.repetido;
-        ctx.strokeStyle = C.muted; ctx.lineWidth = 1.2;
-        ctx.beginPath(); ctx.moveTo(x - 8, y); ctx.lineTo(x - 8, y + 40); ctx.arc(x, y + 40, 8, Math.PI, 0, true); ctx.lineTo(x + 8, y); ctx.stroke();
-        ctx.fillStyle = alfa(C.rojo, hemolisis ? 0.55 : 0.25);
-        ctx.beginPath(); ctx.moveTo(x - 7, y + 14); ctx.lineTo(x - 7, y + 40); ctx.arc(x, y + 40, 7, Math.PI, 0, true); ctx.lineTo(x + 7, y + 14); ctx.fill();
-        if (hemolisis) {
-            puntos(TUBO_K, CLARO.rojo, 1.8, k => Math.sin(reloj + k.fase));
-            rotulo('hemolizada', x, y + 62, CLARO.rojo, 8.5, 'center');
-        }
-        rotulo('Analítica', x, y + 74, C.muted, 9, 'center');
-        rotulo(coma(m.medido), x, y + 86, hemolisis ? CLARO.rojo : C.ink, 10, 'center', 'bold');
-    }
-    function dibujarCorazon(m, nivel) {
-        const { x, y } = CORAZON, latido = 1 + 0.05 * Math.max(0, Math.sin(reloj * 7));
-        ctx.save(); ctx.translate(x, y); ctx.scale(latido, latido);
-        ctx.beginPath(); ctx.moveTo(0, 24); ctx.bezierCurveTo(-32, 4, -24, -24, 0, -11); ctx.bezierCurveTo(24, -24, 32, 4, 0, 24);
-        ctx.fillStyle = alfa(C.rojo, 0.3 + 0.55 * (nivel / 3) * (1 - 0.6 * m.calcio)); ctx.fill();
-        ctx.strokeStyle = C.rojo; ctx.lineWidth = 1.5; ctx.stroke();
-        ctx.restore();
-        if (m.calcio > 0.02) {
-            ctx.save(); ctx.globalAlpha = m.calcio;
-            ctx.strokeStyle = C.ink; ctx.lineWidth = 2.5; ctx.setLineDash([5, 4]); ctx.lineDashOffset = -reloj * 8;
-            ctx.beginPath(); ctx.arc(x, y + 2, 36, 0, 6.29); ctx.stroke();
-            ctx.restore();
-            rotulo('Ca²⁺', x + 34, y - 30, C.ink, 9.5, 'center', 'bold');
-        }
-        rotulo('Corazón', x, y + 50, C.muted, 9.5, 'center');
-        if (m.calcio > 0.3) rotulo('membrana protegida', x, y + 62, C.ink, 9, 'center');
-    }
-    const brillo = a => { if (a > 0.05) { ctx.shadowColor = C.verde; ctx.shadowBlur = 10 * a; } };
-    function dibujarRinon(x, y, a, cerrado) {
-        ctx.save(); brillo(a);
-        ctx.beginPath(); ctx.moveTo(x + 2, y - 11);
-        ctx.bezierCurveTo(x - 18, y - 14, x - 18, y + 14, x + 2, y + 11);
-        ctx.bezierCurveTo(x + 8, y + 9, x + 4, y + 3, x + 7, y);
-        ctx.bezierCurveTo(x + 4, y - 3, x + 8, y - 9, x + 2, y - 11);
-        ctx.fillStyle = alfa(C.verde, a > 0.05 ? 0.75 : 0.3); ctx.fill();
-        ctx.restore();
-        if (cerrado) { ctx.strokeStyle = CLARO.rojo; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x - 8, y - 8); ctx.lineTo(x + 6, y + 8); ctx.moveTo(x + 6, y - 8); ctx.lineTo(x - 8, y + 8); ctx.stroke(); }
-    }
-    function dibujarIntestino(x, y, a) {
-        ctx.save(); brillo(a); ctx.strokeStyle = alfa(C.verde, a > 0.05 ? 1 : 0.35); ctx.lineWidth = 4; ctx.lineCap = 'round';
-        ctx.beginPath(); ctx.moveTo(x - 16, y - 6); ctx.bezierCurveTo(x - 4, y - 14, x + 4, y + 2, x + 16, y - 6);
-        ctx.moveTo(x - 16, y + 4); ctx.bezierCurveTo(x - 4, y - 4, x + 4, y + 12, x + 16, y + 4); ctx.stroke(); ctx.restore();
-    }
-    function dibujarDializador(x, y, a) {
-        ctx.save(); brillo(a);
-        rr(x - 8, y - 12, 16, 24, 5); ctx.fillStyle = alfa(C.verde, a > 0.05 ? 0.55 : 0.25); ctx.fill();
-        ctx.strokeStyle = C.verde; ctx.lineWidth = 1; ctx.stroke(); ctx.restore();
-        ctx.strokeStyle = alfa(C.ink, 0.4); ctx.lineWidth = 1; ctx.beginPath();
-        for (let i = -4; i <= 4; i += 4) { ctx.moveTo(x + i, y - 9); ctx.lineTo(x + i, y + 9); }
-        ctx.stroke();
-    }
-    const gauss = (u, c, w) => Math.exp(-((u - c) ** 2) / (2 * w * w));
-    function latido(u, r) {
-        if (r.fv) return 0.55 * Math.sin(u * 6.28 * 2.2) + 0.25 * Math.sin(u * 6.28 * 5.3 + 1);
-        const qrsW = r.qrs ? 2.2 : 1, q = 0.32 + (r.qrs ? 0.04 : 0);
-        return (r.qrs ? 0 : 0.13) * gauss(u, 0.16, 0.025) - 0.1 * gauss(u, q - 0.025 * qrsW, 0.008 * qrsW) + gauss(u, q, 0.011 * qrsW)
-            - 0.25 * gauss(u, q + 0.03 * qrsW, 0.01 * qrsW) + (r.t ? 0.8 : 0.26) * gauss(u, 0.62, r.t ? 0.026 : 0.055);
-    }
-    let ecgEstatico = '';
-    function dibujarECG(r) {
-        if (!reducido) {
-            for (let i = 0; i < 3; i++) {
-                const col = Math.floor(barrido) % EW;
-                trazo[col] = latido((barrido % 120) / 120, r);
-                for (let j = 1; j < 12; j++) trazo[(col + j) % EW] = NaN;
-                barrido += 1;
-            }
-        } else {
-            // Sin movimiento: el trazo solo se recalcula cuando cambian los rasgos.
-            const clave = `${r.t}${r.qrs}${r.fv}`;
-            if (clave === ecgEstatico) return;
-            ecgEstatico = clave;
-            for (let c = 0; c < EW; c++) trazo[c] = latido((c % 120) / 120, r);
-        }
-        ectx.clearRect(0, 0, EW, EH);
-        ectx.strokeStyle = alfa(C.verde, 0.12); ectx.lineWidth = 1; ectx.beginPath();
-        for (let x = 0; x < EW; x += 15) { ectx.moveTo(x, 0); ectx.lineTo(x, EH); }
-        ectx.stroke();
-        ectx.strokeStyle = CLARO.verde; ectx.lineWidth = 1.6; ectx.beginPath();
-        let abierto = false;
-        for (let c = 0; c < EW; c++) {
-            if (Number.isNaN(trazo[c])) { abierto = false; continue; }
-            const y = 50 - trazo[c] * 32;
-            if (abierto) ectx.lineTo(c, y); else { ectx.moveTo(c, y); abierto = true; }
-        }
-        ectx.stroke();
-        ectx.fillStyle = C.muted; ectx.font = '9px Georgia, serif'; ectx.textAlign = 'left'; ectx.fillText('ECG', 6, 12);
-    }
+    const latido = (u, r) => r.fv ? 0.55 * Math.sin(u * 6.28 * 2.2) + 0.25 * Math.sin(u * 6.28 * 5.3 + 1)
+        : onda(u, { sinP: r.qrs, qrs: r.qrs ? 2.2 : 1, tAmp: r.t ? 0.8 : 0.26, tAnch: r.t ? 0.026 : 0.055 });
 
     // ---------- Lecturas (solo se escribe lo que cambia) ----------
     function leer(m, r, nivel, act) {
@@ -504,9 +280,7 @@ function montar(tab, texto, visual) {
         }
         poner('ecg', E['hk-ecg-texto'], 'innerHTML', textoECG(S, r));
         const protegido = m.calcio > 0.3 && nivel > 0;
-        const claveRiesgo = `${nivel}${protegido}${pendiente}`;
-        if (previo.get('riesgo') !== claveRiesgo) {
-            previo.set('riesgo', claveRiesgo);
+        if (poner.cambio('riesgo', `${nivel}${protegido}${pendiente}`)) {
             pintarGauge('hk-riesgo', [8, 33, 66, 100][nivel], 100, ESTADO_GAUGE[nivel], pendiente ? 'sin confirmar' : protegido ? 'protegido' : nombre.toLowerCase());
             if (protegido) Object.assign(E['hk-riesgo-fill'].style, { background: `repeating-linear-gradient(135deg, ${C.ink} 0 4px, ${alfa(C.ink, 0.35)} 4px 8px)`, boxShadow: 'none' });
             E['hk-riesgo-txt'].innerHTML = pendiente ? 'Pendiente de confirmar: el K⁺ de la analítica puede ser falso.'
@@ -518,8 +292,8 @@ function montar(tab, texto, visual) {
         poner('avisos', E['hk-avisos'], 'innerHTML', avisos(S, m, r, nivel));
         poner('play', E['hk-play'], 'textContent', S.t >= T_MAX ? 'Fin del reloj (12 h)' : S.corriendo ? '❚❚ Pausar' : '▶ Correr el reloj');
         for (const f of FARMACOS) {
-            poner('est' + f.id, E['estado-' + f.id], 'textContent', estadoTexto(S, f, act));
             const dosis = S.dados[f.id] || [];
+            poner('est' + f.id, E['estado-' + f.id], 'textContent', estadoDosis(dosis, S.t, f, act[f.id]));
             const enCurso = act[f.id] > 0 || (dosis.length && S.t - dosis[dosis.length - 1] < f.ini[1]);
             const [txt, off] = !dosis.length ? ['Dar', false] : f.repetible && !enCurso ? ['Repetir', false] : ['Dado', true];
             poner('dar' + f.id, E['dar-' + f.id], 'textContent', txt);
@@ -529,21 +303,22 @@ function montar(tab, texto, visual) {
 
     // ---------- Un fotograma: avanza el reloj (si corre), recoloca, lee y dibuja ----------
     let ultimo = 0;
-    function paso(ahora = performance.now()) {
+    function paso(ahora = performance.now(), reanudar = false) {
+        if (reanudar) ultimo = 0;
         const dt = ultimo ? clamp((ahora - ultimo) / 1000, 0, 0.1) : 0;
         ultimo = ahora;
-        reloj += dt;
+        esc.tick(dt);
         if (S.corriendo) {
             const sub = (1.5 + S.t / 18) * (rapido ? 4 : 1) * dt / 4;
             for (let i = 0; i < 4 && S.t < T_MAX; i++) avanzar(S, sub);
             if (S.t >= T_MAX) { S.t = T_MAX; S.corriendo = false; }
         }
-        const act = actividades(S), m = modelo(S, act);
+        const act = actividades(FARMACOS, S.dados, S.t), m = modelo(S, act);
         cuadrar(m);
         const r = rasgosECG(S, m.k), nivel = nivelGravedad(m.k, r.t);
         leer(m, r, nivel, act);
         dibujar(m, act, nivel);
-        dibujarECG(r);
+        esc.pintarECG(r, latido, `${r.t}${r.qrs}${r.fv}`);
     }
 
     function reiniciar(desdeCausa) {
@@ -555,8 +330,7 @@ function montar(tab, texto, visual) {
         };
         E['hk-causa-detalle'].innerHTML = c.texto + enlace(c.fuente);
         crearParticulas();
-        trazo.fill(NaN);
-        ecgEstatico = '';
+        esc.reiniciarECG();
         paso();
     }
 
@@ -574,24 +348,10 @@ function montar(tab, texto, visual) {
     E['hk-repetir'].addEventListener('click', () => { S.repetido = true; paso(); });
     visual.addEventListener('click', e => {
         const dar = e.target.closest('[data-dar]');
-        if (dar && !dar.disabled) { (S.dados[dar.dataset.dar] ||= []).push(S.t); paso(); return; }
-        const ver = e.target.closest('[data-ver]');
-        if (!ver) return;
-        const [primero, ...otros] = ver.dataset.ver.split(',').map(id => texto.querySelector('#' + id)).filter(Boolean);
-        irAlTexto(tab, primero);
-        otros.forEach(marcar); // p. ej. la fila "Inicio de acción" de la tabla de quelantes
+        if (dar && !dar.disabled) { (S.dados[dar.dataset.dar] ||= []).push(S.t); paso(); }
     });
-
-    // La animación solo corre mientras alguna parte de la vista Visual está en
-    // pantalla (la ficha vive en el DOM aunque esté oculta, como todas las de
-    // la app). Se observa el bloque entero, no solo el dibujo: así el reloj
-    // sigue corriendo al bajar a pulsar los fármacos.
-    let visible = false, raf = 0;
-    const bucle = t => { paso(t); raf = visible ? requestAnimationFrame(bucle) : 0; };
-    new IntersectionObserver(([e]) => {
-        visible = e.isIntersecting;
-        if (visible && !raf) { ultimo = 0; raf = requestAnimationFrame(bucle); }
-    }).observe(visual);
+    enlazarTexto(visual, tab, texto);
+    animarMientrasVisible(visual, paso);
 
     reiniciar(true);
 }

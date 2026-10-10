@@ -59,6 +59,12 @@ export function marcar(el) {
 // un bloque con interruptor (p. ej. en otra subvista ya mostrada).
 export function irAlTexto(card, objetivo) {
     if (card) setVista(card, 'texto');
+    // Si la línea vive dentro de un acordeón .micro-prof-item, se abre antes.
+    const mpi = objetivo?.closest('.micro-prof-item');
+    if (mpi) {
+        mpi.querySelector(':scope > .micro-prof-head')?.classList.add('open');
+        mpi.querySelector(':scope > .micro-prof-body')?.classList.add('active');
+    }
     // Un frame para que el bloque recién mostrado tenga layout antes del scroll.
     requestAnimationFrame(() => resaltar(objetivo));
 }

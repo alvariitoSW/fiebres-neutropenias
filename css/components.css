@@ -2179,7 +2179,7 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 .hk-causa-detalle { font-size: 0.72rem; color: var(--text-muted); line-height: 1.45; margin: 0; }
 .hk-escena { border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-main); overflow: hidden; }
 .hk-escena canvas { display: block; width: 100%; height: auto; }
-#hk-ecg { border-top: 1px solid var(--border-color); background: rgba(0, 0, 0, 0.25); }
+.hk-ecg { border-top: 1px solid var(--border-color); background: rgba(0, 0, 0, 0.25); }
 .hk-marcador { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 10px; align-items: baseline; margin: 10px 2px 0; }
 .hk-marcador .grade-badge { justify-self: end; }
 .grade-badge.hk-pendiente { border-style: dashed; border-color: var(--text-muted); color: var(--text-muted); background: transparent; }
@@ -2196,7 +2196,7 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 .visual-mini[disabled] { opacity: 0.45; cursor: default; }
 .hk-controles { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0 6px; }
 .hk-reloj { margin-left: auto; font-size: 0.86rem; color: var(--text-main); font-variant-numeric: tabular-nums; }
-#hk-farmacos .section-label { margin: 12px 0 0; }
+.hk-farmacos .section-label { margin: 12px 0 0; }
 .hk-farmaco { display: grid; grid-template-columns: 4px minmax(0, 1fr) auto; gap: 4px 10px; align-items: center; padding: 8px 8px 8px 0; border-bottom: 1px solid var(--border-color); }
 .hk-tira { align-self: stretch; border-radius: 2px; }
 .hk-nombre { font-size: 0.8rem; color: var(--text-main); }
@@ -2210,3 +2210,7 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 .hk-acciones .visual-link, .hk-causa-detalle .visual-link, .hk-nota .visual-link, .hk-avisos .visual-link { min-height: 28px; padding: 0 8px; font-size: 0.66rem; vertical-align: middle; }
 .hk-causa-detalle .visual-link, .hk-nota .visual-link, .hk-avisos .visual-link { margin-left: 4px; }
 .hk-aviso-modelo { font-size: 0.7rem; color: var(--text-muted); line-height: 1.5; margin: 12px 0 0; padding: 8px 10px; border: 1px dashed var(--border-color); border-radius: 6px; }
+/* Hipopotasemia: controles de la perfusión de ClK dentro de su tarjeta. */
+.hp-perfusion { grid-column: 2 / -1; display: grid; gap: 4px; margin: 2px 0 0; }
+.hp-perfusion label { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 6px; align-items: center; font-size: 0.68rem; color: var(--text-muted); }
+.hp-perfusion select { width: 100%; margin: 0; min-height: 32px; font-size: 0.72rem; }

@@ -9676,6 +9676,83 @@ dibujan las líneas del texto, se simula el mecanismo que explican.
   fichas de Nefrología (hipopotasemia y regulación del potasio pueden
   reutilizar la misma escena de plasma/célula/salidas).
 
+### Vista Visual en Nefrología: simulación de la hipopotasemia (octubre 2026)
+
+Segunda simulación de Nefrología, a petición explícita del usuario
+("Continúa con nefro, parte por parte"), en la ficha `fisio-hipopotasemia`.
+Mismo enfoque que la hiperpotasemia (simular el mecanismo, no dibujar las
+líneas del texto), mismo escenario y mismas piezas de la app.
+
+- **Escenario común extraído** a `js/modules/nefrologia/potasio-escena.js`,
+  para no duplicar ~400 líneas entre las dos simulaciones: geometría
+  (plasma, célula, bombas, roturas, salidas, tubo, corazón), `crearEscena(
+  visual, { escena, ecg })` (canvas con DPR, colores de los tokens,
+  `rotulo`/`puntos`/`anillos`, `vaso`/`celula`/`roturas`/`bombas`/
+  `salidas(lista)`/`tubo(valor, marca)`/`corazon(intensidad, calcio)`,
+  rutas de partículas `rutaHacia(p, cat, fin)` y `rutaEntrada('arriba'|
+  'intestino')`, `moverParticulas`, y el motor de ECG `pintarECG(rasgos,
+  latido, clave)` con latidos irregulares si `rasgos.irregular`), más
+  `onda(u, opciones)` (P/QRS/T/ST/U parametrizables), `actividadDosis`/
+  `actividades`/`estadoDosis`, `enlazarTexto` (los "Texto ↓"),
+  `crearPoner` (escritura en el DOM solo si cambia) y
+  `animarMientrasVisible`. `hiperpotasemia-sim.js` se reescribió encima sin
+  cambiar su comportamiento (verificado de nuevo con Playwright). Una
+  tercera simulación de potasio (p. ej. la regulación) parte de aquí.
+- **`irAlTexto()` abre ahora el acordeón** `.micro-prof-item` que contiene
+  la línea antes de llevar la vista (antes solo lo hacía `visual-kit.js`
+  con su `abrirContenedores`, ya borrado): cualquier "Texto ↓" que apunte
+  dentro de un acordeón funciona sin código propio.
+- **La idea que enseña**: el K⁺ del plasma es una ventana pequeña a un
+  depósito grande. Cada hueco ○ de la célula son 20 mEq que faltan en el
+  cuerpo; el ClK entra (gotero arriba o, por vía oral, subiendo por el
+  canal desde el intestino) y va casi todo a rellenar huecos, por eso el
+  K⁺ sube despacio. Barra de "Déficit corporal estimado" con `pintarGauge`.
+- **Déficit ↔ K⁺**: la ficha da 200-400 mEq por cada 1 mEq/l y más de
+  800-1.000 con K⁺ &lt;2. El modelo usa 300 mEq/(mEq/l) entre 4 y 3 y 600
+  por debajo de 3, que cumple las dos cifras (K⁺ 2 → 900 mEq).
+- **Datos** en `js/data/hipopotasemia-data.js`: 8 causas (diarrea, vómitos
+  —el jugo gástrico solo lleva 5-10 mEq/l y se pierde sobre todo por
+  orina—, hiperaldosteronismo 1º, Liddle, hipomagnesemia, parálisis
+  periódica, cetoacidosis —K⁺ 5,0 con 600 mEq de déficit; la insulina lo
+  hace aflorar—, pseudohipopotasemia) con sus pistas diagnósticas de la
+  ficha (K⁺ en orina &lt;/&gt;15, gasometría, TA; null si la ficha no lo da),
+  las acciones (ClK i.v. en perfusión con ritmo/bolsa/suero, ClK oral de
+  8 mEq, corregir el magnesio, espironolactona, triamtereno, insulina y
+  salbutamol —estos dos leen tiempos y magnitud de los datos de la
+  hiperpotasemia, misma ficha de origen—), los límites del ClK i.v. (&lt;20
+  mEq/h, &lt;50 mEq/l, 200 mEq/día) y las magnitudes ilustrativas.
+- **Lo que se ve y avisa**: Liddle no responde a espironolactona (sí a
+  triamtereno); con el Mg bajo el 60% (ilustrativo) del ClK se va por la
+  orina hasta corregirlo; suero glucosado, ritmo o concentración por
+  encima del límite y más de 200 mEq/día; criterios de vía i.v. (K⁺ &lt;2,5,
+  cambios en el ECG o arritmia, digoxina, cetoacidosis, intolerancia oral
+  —que además desactiva el botón oral—); en la parálisis periódica el
+  depósito está lleno y el ataque se resuelve entre las 6 y las 12 h del
+  reloj (dentro de las 6-24 h de la ficha), así que el ClK de más acaba
+  sobrando; pseudohipopotasemia hasta "Repetir separando pronto el
+  plasma".
+- **ECG**: la ficha no da umbrales de K⁺ para cada cambio, así que son
+  ilustrativos y la vista lo dice: T aplanada + onda U por debajo de 3
+  (la ficha dice que 3-3,5 suele ser asintomática), ↓ST y ↑QT/PR por
+  debajo de 2,5, fibrilación auricular (latido irregular, sin P, línea de
+  base fibrilatoria) por debajo de 2. Modo "Sin cambios" disponible.
+- **Ficha**: 23 ids `hp-*` para los "Texto ↓"; las 4 tablas envueltas en
+  `overflow-x:auto` (desbordaban a 489 px); nota de fidelidad nueva: los
+  chips llaman "leve" a 3-3,5 y "moderada" a 2,5-3, pero la frase de la
+  clínica llama "moderada" a 3-3,5 — el PDF de potasio no está en `docs/`,
+  así que no se pudo comprobar la fuente; la simulación usa los chips.
+- `#hk-ecg`/`#hk-farmacos` pasaron a clases (`.hk-ecg`, `.hk-farmacos`)
+  para que las dos simulaciones compartan el CSS; `.hp-perfusion` es lo
+  único nuevo. Cache-busting a `?v=20261018-3`.
+- Verificado con Playwright (390×844, toques reales): las 8 causas
+  arrancan con su K⁺ y su déficit; la cetoacidosis pasa de 5,0 a 2,5 con
+  insulina; la pseudohipopotasemia de 2,5 a 4,0 al repetir; los avisos de
+  Liddle, magnesio, ritmo 40 mEq/h y glucosado aparecen; "Texto ↓" abre
+  el acordeón de la hipomagnesemia y resalta la línea; el ECG llega a FA;
+  el buscador global encuentra la ficha por su texto y no por los rótulos
+  de la simulación; la hiperpotasemia sigue igual; sin errores de consola
+  ni desborde horizontal.
+
 ## Auditoría de Hematología (octubre 2026)
 
 A petición explícita del usuario ("revisa que esté todo correcto en
