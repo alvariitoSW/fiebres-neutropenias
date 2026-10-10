@@ -234,16 +234,16 @@
                 tras el diagnóstico varía mucho según la enfermedad de base.
             </p>
             <table class="data-table">
-                <tr><th>Enfermedad</th><th>Incid. acum. 1 año</th><th>Tiempo medio a UCI</th></tr>
-                <tr><td>LMA</td><td>22.5%</td><td>27 d</td></tr>
-                <tr><td>LNH agresivo</td><td>17.7%</td><td>28 d</td></tr>
-                <tr><td>LLA</td><td>17.5%</td><td>24 d</td></tr>
-                <tr><td>Síndrome mielodisplásico</td><td>16.0%</td><td>59 d</td></tr>
-                <tr><td>Mieloma múltiple</td><td>15.0%</td><td>45 d</td></tr>
-                <tr><td>Neoplasia mieloproliferativa</td><td>12.6%</td><td>22 d</td></tr>
-                <tr><td>Linfoma de Hodgkin</td><td>9.7%</td><td>63 d</td></tr>
-                <tr><td>LLC</td><td>8.0%</td><td>35 d</td></tr>
-                <tr><td>LNH indolente</td><td>7.3%</td><td>71 d</td></tr>
+                <tr><th>Enfermedad</th><th>Incid. acum. 1 año</th><th>Mediana hasta UCI (RIC)</th></tr>
+                <tr><td>LMA</td><td>22.5%</td><td>27 d (3-101)</td></tr>
+                <tr><td>LNH agresivo</td><td>17.7%</td><td>28 d (5-110)</td></tr>
+                <tr><td>LLA</td><td>17.5%</td><td>24 d (6-128)</td></tr>
+                <tr><td>Síndrome mielodisplásico</td><td>16.0%</td><td>59 d (5-170)</td></tr>
+                <tr><td>Mieloma múltiple</td><td>15.0%</td><td>45 d (5-156)</td></tr>
+                <tr><td>Neoplasia mieloproliferativa</td><td>12.6%</td><td>22 d (0-137)</td></tr>
+                <tr><td>Linfoma de Hodgkin</td><td>9.7%</td><td>63 d (8-163)</td></tr>
+                <tr><td>LLC</td><td>8.0%</td><td>35 d (1-175)</td></tr>
+                <tr><td>LNH indolente</td><td>7.3%</td><td>71 d (6-186)</td></tr>
             </table>
             <p style="font-size: 0.7rem; color: var(--text-muted); margin: 4px 0 16px;">Ferreyro et al. Intensive Care Med 2021;47(10):1104-1114.</p>
 
@@ -269,7 +269,10 @@
                 <div class="stat-box"><div class="stat-num" style="color: var(--accent-blue);">31%</div><div class="stat-label">ventilación no invasiva</div></div>
             </div>
             <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px;">
-                Depuración extrarrenal: 26%. Quimioterapia administrada en UCI: 24%.
+                Depuración extrarrenal: 26%. Quimioterapia administrada en UCI: 24%. Otros motivos de
+                ingreso: coma (22%) y quimioterapia en pacientes de alto riesgo (7%). Sepsis y FRA son
+                los motivos más frecuentes en la mayoría de neoplasias; en el mieloma lo es el fracaso
+                renal agudo.
                 <span style="color: var(--text-muted);">Azoulay et al. J Clin Oncol. 2013;31(22):2810-8.</span>
             </p>
 
@@ -283,7 +286,10 @@
                         La de mayor riesgo de ingreso en UCI. En hiperleucocitosis con fallo de
                         órganos, la citorreducción con <strong>hidroxiurea antes de la inducción</strong>
                         reduce la mortalidad precoz. Añadir <strong>dexametasona</strong> durante la
-                        inducción puede reducir la necesidad de ventilación mecánica.
+                        inducción puede reducir la necesidad de ventilación mecánica y la mortalidad precoz.
+                Las nuevas opciones de tratamiento han cambiado las políticas de ingreso, sobre todo en
+                ancianos antes considerados paliativos, y se necesitan estudios sobre el uso precoz de
+                terapias dirigidas (p. ej. inhibidores de FLT3) para controlar la hiperleucocitosis en UCI.
                     </div>
                 </div>
                 <div class="micro-prof-item">
@@ -294,7 +300,14 @@
                         El <strong>síndrome de lisis tumoral</strong> puede aparecer hasta en 1/3 de los
                         pacientes de alto riesgo (linfoma B y Burkitt). Las masas mediastínicas
                         voluminosas pueden comprimir corazón, pulmones, grandes vasos o el sistema
-                        nervioso — diagnóstico rápido (TC/biopsia) y reducción tumoral urgente con QT.
+                        nervioso — diagnóstico rápido (TC/biopsia) y reducción tumoral urgente con QT, con
+                soporte de órganos como puente. Los linfomas motivan ingreso en UCI en ~18% de los
+                casos; el pronóstico a largo plazo es malo en los linfomas T y más favorable en el
+                linfoma B difuso de célula grande. Las infecciones son frecuentes (neutropenia por QT o
+                inmunodepresión por la propia enfermedad); hongos y <em>Pneumocystis</em> predominan en
+                los linfomas T. También pueden desencadenar síndrome hemofagocítico, anemia hemolítica
+                autoinmune o trombocitopenia, y las terapias inmunomoduladoras (CAR-T) causan CRS e
+                ICANS.
                     </div>
                 </div>
                 <div class="micro-prof-item">
@@ -677,7 +690,7 @@
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
                         <span>🦠 Déficit de células T</span> <span class="toggle-icon">+</span>
                     </div>
-                    <div class="micro-prof-body">Neoplasias linfoides, fludarabina. Riesgo de <strong>Pneumocystis jirovecii</strong> (hasta 12% de ingresos en UCI, mortalidad hasta 50%), Cryptococcus, CMV, VHS.</div>
+                    <div class="micro-prof-body">Neoplasias linfoides, fludarabina; también corticoides, tratamientos de la LLA y TPH. Riesgo de <strong>Pneumocystis jirovecii</strong> (hasta 12% de ingresos en UCI, mortalidad hasta 50%), Cryptococcus, CMV, VHS. Para las infecciones oportunistas, lo que más pesa es la exposición previa al microorganismo y la ausencia de profilaxis. El diagnóstico no invasivo de <em>Pneumocystis</em> (PCR cuantitativa positiva en esputo inducido con (1,3)-β-D-glucano sérico elevado) ha reducido la necesidad de broncoscopia.</div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
@@ -695,17 +708,24 @@
 
             <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Antibioterapia empírica en UCI (Azoulay et al., Blood Reviews 2025)</p>
             <p style="font-size: 0.85rem; line-height: 1.5;">
-                Primera elección: <strong>betalactámico con actividad antipseudomónica</strong>. Si
+                Empezar <strong>sin demora</strong>: en el paciente neutropénico, retrasar solo una hora el
+                antibiótico adecuado tras detectar la disfunción de órganos multiplica por diez la
+                mortalidad ajustada, y esta urgencia se mantiene aunque el cuadro pueda imitar una sepsis
+                (p. ej. CRS). Primera elección: <strong>betalactámico con actividad antipseudomónica</strong>. Si
                 sepsis o shock séptico, añadir cobertura anti-SARM (glucopéptido, daptomicina o
                 linezolid). El uso rutinario de aminoglucósido en combinación sigue siendo práctica
                 habitual en muchos centros, aunque su beneficio y tolerabilidad se debaten. Reevaluar
-                y desescalar rápido según clínica y microbiología: la cobertura anti-SARM puede
-                pasarse a segunda línea o suspenderse al 3<sup>er</sup> día sin evidencia de SARM o
+                y desescalar rápido según clínica y microbiología: fuera de la UCI, la cobertura anti-SARM
+                suele reservarse como segunda línea, y si se ha iniciado puede suspenderse al 3<sup>er</sup> día sin evidencia de SARM o
                 estreptococo betahemolítico; los aminoglucósidos se suspenden tras documentación
                 microbiológica o, en su ausencia, también al 3<sup>er</sup> día. Sin disfunción de
                 órganos ni infección documentada, valorar suspender el antibiótico tras 3 días de
                 apirexia mantenida — aunque esto no está bien probado específicamente en el paciente
-                crítico, donde suele mantenerse mientras dure la neutropenia.
+                crítico, donde suele mantenerse mientras dure la neutropenia. Desescalar el
+                betalactámico inicial es seguro cuando hay resultados microbiológicos que guíen el
+                tratamiento. Con infección documentada, el antibiótico se mantiene hasta completar la
+                duración habitual y resolverse la neutropenia; sin documentación, suele suspenderse el
+                segundo día tras la recuperación de la neutropenia.
             </p>
 
             <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 4px 0;">Infecciones oportunistas a vigilar</p>
@@ -726,7 +746,7 @@
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
                         <span>🦠 VHH-6 (herpesvirus humano 6)</span> <span class="toggle-icon">+</span>
                     </div>
-                    <div class="micro-prof-body">Sin profilaxis establecida. Es la <strong>primera causa de encefalitis</strong> en receptores de TPH alogénico y puede progresar a afectación multiorgánica.</div>
+                    <div class="micro-prof-body">Sin profilaxis establecida (tampoco para <strong>adenovirus</strong>). Es la <strong>primera causa de encefalitis</strong> en receptores de TPH alogénico y puede progresar a afectación multiorgánica.</div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
@@ -735,6 +755,20 @@
                     <div class="micro-prof-body"><strong>Toxoplasmosis</strong> y <strong>micobacterias</strong> (tuberculosas y no tuberculosas) son menos frecuentes pero plantean retos diagnósticos y terapéuticos adicionales por sus interacciones farmacológicas y la necesidad de tratamientos prolongados y complejos.</div>
                 </div>
             </div>
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 6px 0;">Infecciones fúngicas invasivas y uso prudente de antimicrobianos</p>
+            <p style="font-size: 0.85rem; line-height: 1.5;">
+                El uso excesivo de antibióticos altera la microbiota (disbiosis) y favorece infecciones
+                secundarias, entre ellas la <strong>candidemia por especies no <em>albicans</em></strong>, a menudo
+                resistentes a los antifúngicos convencionales. Los diagnósticos moleculares (secuenciación
+                masiva, PCR, panel T2Candida, β-D-glucano) permiten identificar antes el patógeno y
+                dirigir el tratamiento, limitando la exposición innecesaria a antimicrobianos; nuevos
+                azoles y equinocandinas, isavuconazol y anfotericina B liposomal amplían las opciones en
+                plena era de profilaxis anti-<em>Aspergillus</em> generalizada. En el inmunodeprimido, el
+                abuso de antibióticos de amplio espectro y de antifúngicos empíricos fomenta resistencias,
+                infecciones de brecha y toxicidad: el uso prudente exige un diagnóstico precoz y
+                agresivo y colaboración multidisciplinar.
+                <span style="color: var(--text-muted); font-size:0.75rem;">(Azoulay et al., Blood Reviews 2025)</span>
+            </p>
         </div>
 
         <!-- ===== TAB 3B: SÍNDROMES Y TOXICIDADES ===== -->
@@ -852,7 +886,8 @@
                         <span>🩹 Coagulopatía y refractariedad plaquetaria</span> <span class="toggle-icon">+</span>
                     </div>
                     <div class="micro-prof-body">
-                        La CID no es la única coagulopatía posible (también fibrinólisis primaria,
+                        El aumento de la fibrinólisis es el sello de la leucemia promielocítica aguda al debut, pero
+                también se ve en otras hemopatías (LMA, LLA, LNH...). La CID no es la única coagulopatía posible (también fibrinólisis primaria,
                         microangiopatía trombótica, déficit de antitrombina III...); puede ser
                         consecuencia directa del cáncer activo o desencadenarse por infecciones y
                         tratamientos (<strong>L-asparaginasa, inhibidores de proteasoma, inhibidores
@@ -931,7 +966,14 @@
                     antibioterapia adecuada). Se asocia a mejor supervivencia: albúmina sérica alta
                     (no la administración de albúmina), uso de aminoglucósidos, G-CSF. Se asocia a
                     peor supervivencia: fracaso respiratorio asociado, mayor gravedad, lactato
-                    elevado — <strong>la neutropenia por sí sola NO</strong> empeora el pronóstico.
+                    elevado — <strong>la neutropenia por sí sola NO</strong> empeora el pronóstico. También se
+                asocian a peor evolución necesitar ventilación mecánica, depuración extrarrenal o haber
+                recibido un TPH alogénico. La mortalidad ha bajado con los años pero sigue alta, sobre todo
+                con lactato elevado y criterios Sepsis-3, en un contexto de infecciones por
+                microorganismos multirresistentes cada vez más frecuentes. Lo que más ayuda: reconocerlo
+                pronto e ingresar precozmente en UCI, programas de mejora de la calidad, reanimación
+                hemodinámica individualizada y monitorización y diagnóstico modernos.
+                <span style="color: var(--text-muted); font-size:0.75rem;">(Azoulay et al., Blood Reviews 2025)</span>
                 </p>
             </div>
 
@@ -956,6 +998,17 @@
             </div>
 
             <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 4px 0;">Factores asociados a mayor mortalidad</p>
+            <p style="font-size: 0.8rem; line-height: 1.5; color: var(--text-muted);">
+                Los factores de mortalidad dependen del <strong>paciente</strong> (edad, comorbilidad, fragilidad,
+                gravedad, nivel de soporte acordado al ingreso), del <strong>equipo</strong> (familiaridad con el
+                paciente hematológico, hematólogo disponible, equipo multidisciplinar con farmacéutico
+                clínico o especialista en transfusión) y del <strong>entorno</strong> (sistema estructurado de
+                alerta precoz con equipos de respuesta rápida entrenados, disponibilidad de camas, ingreso
+                precoz con diagnóstico definitivo, telemedicina y conversaciones continuas sobre los
+                objetivos de cuidado). El objetivo no es solo la mortalidad a 30 días, sino curar la
+                neoplasia y la calidad de vida (p. ej. volver a casa).
+                <span style="font-size:0.75rem;">(Azoulay et al., Blood Reviews 2025)</span>
+            </p>
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
@@ -1154,7 +1207,7 @@
             doi:10.1016/j.blre.2025.101306
         </p>
         <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px;">
-            Fuente principal de: perfil de Mieloma múltiple, pestañas "Terapias Dirigidas" y
+            Fuente principal de: perfiles de LMA, Linfoma y Mieloma múltiple, pestañas "Terapias Dirigidas" y
             "Fin de Vida", antibioterapia empírica en UCI, infecciones oportunistas, coagulopatía/
             refractariedad plaquetaria, toxicidad cardiaca y umbrales transfusionales. Artículo de
             acceso restringido (suscripción); no se aloja copia en la app, el enlace lleva a la

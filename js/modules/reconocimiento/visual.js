@@ -66,7 +66,7 @@ export function init() {
             { tipo: 'racimos', titulo: 'Pruebas no invasivas', grupos: [
                 { titulo: 'Elegir según el compartimento', color: 'dorado', nodos: ['Biomarcadores', 'Antígenos en suero y orina', 'PCR en sangre',
                     'PCR respiratoria', 'PCR de tejido/líquido', 'Muestras poco invasivas'] },
-                { titulo: 'Tiempo', color: 'rojo', nodos: ['El tiempo hasta el antibiótico importa', { fuente: 'Primera elección: betalactámico', etiqueta: 'Antibioterapia empírica en UCI' }] }
+                { titulo: 'Tiempo', color: 'rojo', nodos: ['El tiempo hasta el antibiótico importa', { fuente: 'Empezar sin demora', etiqueta: 'Antibioterapia empírica en UCI' }] }
             ] },
             { tipo: 'comparar', titulo: 'Qué infección esperar según el defecto inmune', columnas: [
                 { titulo: 'Neutrófilos', color: 'amarillo', nodos: ['Neutropenia corta', 'Neutropenia prolongada'] },

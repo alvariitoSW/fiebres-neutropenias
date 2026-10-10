@@ -58,8 +58,8 @@ export const cidSicItems = {
 export const cidTerminologia = [
     {
         termino: 'CID franca (Overt DIC)',
-        definicion: 'Forma <strong>grave y clínicamente evidente</strong> de alteración hemostática, caracterizada por activación generalizada de la coagulación y fibrinólisis desregulada, manifestada por fallo orgánico y/o tendencia hemorrágica. Los mecanismos reguladores están <strong>sobrepasados</strong>, con consumo de factores de coagulación y plaquetas, hemorragia y/o disfunción orgánica.',
-        sinonimos: null,
+        definicion: 'Fase tardía de la CID. Forma <strong>grave y clínicamente evidente</strong> de alteración hemostática, caracterizada por activación generalizada de la coagulación y fibrinólisis desregulada, manifestada por fallo orgánico y/o tendencia hemorrágica. Los mecanismos reguladores están <strong>sobrepasados</strong>, con consumo de factores de coagulación y plaquetas, hemorragia y/o disfunción orgánica.',
+        sinonimos: 'CID descompensada. El tratamiento consiste sobre todo en reponer factores de coagulación y plaquetas.',
     },
     {
         termino: 'CID en fase precoz (Early-phase DIC)',
@@ -68,7 +68,7 @@ export const cidTerminologia = [
     },
     {
         termino: 'Pre-CID',
-        definicion: 'Fase <strong>más precoz</strong> de alteración de la coagulación. El paciente puede tener factores de riesgo para CID y las pruebas de laboratorio pueden mostrar alteraciones muy sutiles, pero la CID <strong>todavía no se ha desarrollado</strong>.',
+        definicion: 'Fase <strong>más precoz</strong> de alteración de la coagulación. El paciente puede tener factores de riesgo para CID y las pruebas de laboratorio pueden mostrar alteraciones muy sutiles, pero la CID <strong>todavía no se ha desarrollado</strong>. Antes se usaba de forma confusa para referirse a la fase previa a la CID franca; ahora que existe la "CID en fase precoz", pre-CID designa una coagulopatía menor que esta.',
         sinonimos: null,
     },
     {
@@ -84,10 +84,11 @@ export const cidTerminologia = [
 // original es un degradado de color puramente cualitativo, sin cifras; aquí
 // se traduce a 3 categorías genéricas (no son datos medidos del artículo,
 // solo una lectura aproximada del predominio visual de cada cuña de la
-// figura) para poder representarlo como barra.
+// figura) para poder representarlo como barra. En la figura, SIC, HIC y CIC
+// son cuñas azules (trombóticas) y OIC y TIC, rosas (hemorrágicas).
 export const cidEtiologias = [
     { sigla: 'SIC', nombre: 'Sepsis', predominio: 'tromb' },
-    { sigla: 'HIC', nombre: 'Golpe de calor (heatstroke)', predominio: 'mixto' },
+    { sigla: 'HIC', nombre: 'Golpe de calor (heatstroke)', predominio: 'tromb' },
     { sigla: 'OIC', nombre: 'Complicaciones obstétricas', predominio: 'hemo' },
     { sigla: 'TIC', nombre: 'Traumatismo', predominio: 'hemo' },
     { sigla: 'CIC', nombre: 'Cáncer', predominio: 'tromb' },
@@ -114,7 +115,7 @@ export const cidTratamientoFenotipo = {
         precoz: ['Ácido tranexámico (antifibrinolítico)'],
         tardia: ['Plasma fresco congelado', 'Fibrinógeno', 'Plaquetas'],
     },
-    nota: 'El tratamiento de la enfermedad de base es esencial y obligatorio en ambos fenotipos. La anticoagulación (heparina, antitrombina, trombomodulina) se dirige a la CID trombótica; el ácido tranexámico se reserva para la CID hemorrágica. En ambos fenotipos, la reposición con plasma fresco congelado, fibrinógeno y plaquetas se recomienda en la fase tardía descompensada.',
+    nota: 'El tratamiento de la enfermedad de base es esencial y obligatorio en ambos fenotipos. En la Figura 2, en la CID hemorrágica la reposición aparece junto al antifibrinolítico y no solo al final; el pie de figura la sitúa, para ambos fenotipos, en la fase tardía descompensada. La anticoagulación (heparina, antitrombina, trombomodulina) se dirige a la CID trombótica; el ácido tranexámico se reserva para la CID hemorrágica. En ambos fenotipos, la reposición con plasma fresco congelado, fibrinógeno y plaquetas se recomienda en la fase tardía descompensada.',
 };
 
 // Diagrama SVG original: fenotipos a nivel del vaso (microtrombosis vs.
@@ -245,7 +246,7 @@ export const cidHallazgosLaboratorio = [
     },
     {
         titulo: 'PDF y dímero-D',
-        texto: 'Los productos de degradación de la fibrina (PDF) y el dímero-D reflejan la actividad fibrinolítica, pero los PDF <strong>no discriminan</strong> entre degradación de fibrina reticulada y de fibrinógeno, lo que limita su especificidad. El dímero-D es <strong>más específico</strong> pero tampoco es un test aislado válido: otras situaciones (traumatismo, cirugía reciente, tromboembolismo venoso) también lo elevan. <strong>No existe un punto de corte estandarizado</strong> y universalmente aceptado para definir un aumento "moderado" o "fuerte", por lo que su interpretación depende del criterio clínico, el ensayo usado y el contexto.',
+        texto: 'Los productos de degradación de la fibrina (PDF) y el dímero-D reflejan la actividad fibrinolítica, pero los PDF <strong>no discriminan</strong> entre degradación de fibrina reticulada y de fibrinógeno, lo que limita su especificidad. El dímero-D es <strong>más específico</strong> pero tampoco es un test aislado válido: otras situaciones (traumatismo, cirugía reciente, tromboembolismo venoso) también lo elevan. <strong>No existe un punto de corte estandarizado</strong> y universalmente aceptado para definir un aumento "moderado" o "fuerte", por lo que su interpretación depende del criterio clínico, el ensayo usado y el contexto. <em>Actualización ISTH 2025:</em> la puntuación Overt DIC 2025 fija ya &gt;×3 y &gt;×7 el límite superior normal, cortes tomados de un análisis retrospectivo con curva ROC; aun así, el propio subcomité reconoce que el dímero-D sigue sin poder estandarizarse entre ensayos y que el corte adecuado puede variar según la enfermedad de base.',
     },
     {
         titulo: 'TP y TTPa',

@@ -9612,6 +9612,72 @@ auditarse cuando llegue. Tampoco tienen fuente las dosis de "infección
 grave" con ajuste renal de la calculadora PK/PD ni la elección
 "equinocandina / anfotericina liposomal" del antifúngico empírico.
 
+### Auditoría de fidelidad de Síndromes Urgentes y Reconocimiento (octubre 2026)
+
+Mismo método que Neutropenia Febril, con los 4 PDF que aportó el usuario:
+Iba 2025 (CID), Zheng 2025 (PTT), Chan 2025 (SLT) y Azoulay, Blood
+Reviews 2025 (Reconocimiento). **Los 4 son de suscripción (Elsevier/Wiley,
+"todos los derechos reservados") y no se archivan en `docs/`**: el repo se
+publica en GitHub Pages y la app ya había decidido no alojar copia de
+Blood Reviews. La bibliografía enlaza por DOI y lo indica. Si el usuario
+quiere archivarlos igualmente, es decisión suya.
+
+- **CID**: el golpe de calor (HIC) estaba como fenotipo "mixto" y en la
+  Figura 1 es trombótico (azul), igual que sepsis y cáncer — corregido.
+  Nota de fidelidad: la Tabla 1 rotula "Overt DIC 2021" una columna que el
+  texto presenta como los criterios de 2001 (probable errata, reproducida
+  tal cual). Añadido: fibrinólisis endógena en la CID hemorrágica y paso
+  posible a fase trombótica; criterios de fase precoz adaptados a cada
+  causa (solo la SIC existe, desde 2017; TIC; CID del cáncer crónica);
+  mortalidad casi doble de la CID en sepsis; condiciones que alteran la
+  puntuación; origen y límites de los cortes de dímero-D 2025 (reconciliado
+  con el "no hay corte estandarizado" de la BCSH 2009); terminología
+  (fase tardía/descompensada, nuevo sentido de pre-CID); nota sobre la
+  reposición en la CID hemorrágica de la Figura 2.
+- **PTT**: contenido fiel a las 12 recomendaciones y los 33 GPS. Añadido:
+  pruebas de hemólisis, >95% de PTTi con ADAMTS-13 <10, pauta de
+  plasma en PTTc, riesgos del catéter, transfusión de plaquetas antes del
+  diagnóstico, antiagregantes (GPS 19), sesgos de los datos de
+  caplacizumab y alta domiciliaria, objetivo primario del ensayo de
+  ADAMTS-13 recombinante (sin episodios en ningún brazo), su seguridad,
+  embarazo en PTTc (mortalidad materna 10%, pérdida fetal >50%, plasma
+  30-40 mL/kg/semana), lavado de rituximab, grupos de apoyo. Notas en las
+  recomendaciones 1, 2 y 5 ("nueva evidencia, misma dirección") y de
+  fidelidad en la 7 (la figura dice certeza "baja", la tabla "muy baja").
+  `ptt.js` pinta la nueva `nota` de cada recomendación.
+- **SLT**: Tabla 2 de riesgo idéntica. Corregido: la monitorización
+  cardíaca continua es "a considerar en algunos casos", no sistemática.
+  Nota de fidelidad: hidratación pediátrica 2,5-3 L/m² en el texto frente
+  a 2-3 L/m² en la recomendación. Añadido: SLT tras radioterapia o
+  intratecal, elección del uricosúrico y datos de febuxostat, pauta
+  completa de rasburicasa (3 mg en adultos, escalada si aparece SLT,
+  niños, reinicio de alopurinol, sin menos daño renal), dosis bajas no
+  recomendadas para tratar, cribado G6PDH real del 18%, escalado de
+  dosis como debulking, ingreso frente a ambulatorio, estrategias propias
+  de venetoclax.
+- **Reconocimiento**: la Tabla 1 decía "tiempo medio" y es mediana con
+  RIC — corregido con los rangos. La desescalada anti-SARM decía "pasar a
+  segunda línea" y la fuente lo limita a pacientes fuera de UCI —
+  corregido. Añadido: coma y QT de alto riesgo como motivos de ingreso;
+  LMA (mortalidad con dexametasona, cambio en ingreso de ancianos);
+  linfoma (~18% de ingresos, T frente a B difuso, infecciones, HLH,
+  CRS/ICANS); antibiótico (una hora de retraso multiplica por diez la
+  mortalidad, duración con y sin documentación); shock séptico (VM, TRR y
+  TPH alogénico, multirresistentes, medidas que ayudan); fibrinólisis en
+  otras hemopatías; adenovirus; factores de riesgo de oportunistas y
+  diagnóstico no invasivo de *Pneumocystis*; infección fúngica y
+  uso prudente de antimicrobianos; factores de mortalidad de paciente,
+  equipo y entorno. `visual.js` apunta ahora a "Empezar sin demora" (el
+  párrafo de antibioterapia cambió de inicio).
+- **Quiz**: 6 preguntas nuevas de Síndromes Urgentes
+  (`sind-q016`-`q021`) y 4 de Reconocimiento (`rt-q046`-`q049`).
+- Verificado con Playwright (390×844): las 12 fichas abren, la vista
+  Visual no deja fuentes sin resolver, la calculadora Overt DIC sigue
+  funcionando, los dos bancos se recorren enteros (21 y 49) sin entidades
+  ni `undefined`, sin overflow ni errores de consola.
+- **Pendiente**: la parte de CID que viene de la guía BCSH 2009 (Levi et
+  al.) sigue sin cotejar, porque ese PDF no se ha aportado.
+
 ## Cómo probar cambios
 
 No hay build. Para ver la app:

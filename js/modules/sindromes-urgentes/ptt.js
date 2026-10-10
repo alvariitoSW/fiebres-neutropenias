@@ -128,6 +128,7 @@ function renderRecomendaciones() {
             <strong style="color: var(--accent-blue);">Rec. ${r.num}.</strong> ${r.texto}
             <span class="grade-badge">${r.fuerza}, certeza ${r.certeza}</span>
             ${r.cambio ? `<div style="margin-top: 4px; font-size: 0.72rem; color: var(--accent-yellow);">🔄 ${r.cambioTexto}</div>` : ''}
+            ${!r.cambio && r.nota ? `<div style="margin-top: 4px; font-size: 0.72rem; color: var(--text-muted);">${r.nota}</div>` : ''}
         </div>
     `).join('');
 }
