@@ -9616,11 +9616,13 @@ grave" con ajuste renal de la calculadora PK/PD ni la elección
 
 Mismo método que Neutropenia Febril, con los 4 PDF que aportó el usuario:
 Iba 2025 (CID), Zheng 2025 (PTT), Chan 2025 (SLT) y Azoulay, Blood
-Reviews 2025 (Reconocimiento). **Los 4 son de suscripción (Elsevier/Wiley,
-"todos los derechos reservados") y no se archivan en `docs/`**: el repo se
-publica en GitHub Pages y la app ya había decidido no alojar copia de
-Blood Reviews. La bibliografía enlaza por DOI y lo indica. Si el usuario
-quiere archivarlos igualmente, es decisión suya.
+Reviews 2025 (Reconocimiento). Los 4 son artículos de suscripción
+(Elsevier/Wiley); tras avisarlo, el usuario pidió explícitamente
+archivarlos en `docs/` (`iba-2025-isth-cid-definicion.pdf`,
+`zheng-2025-isth-ptt-actualizacion.pdf` —versión en línea paginada 1-22—,
+`chan-2025-bsh-lisis-tumoral.pdf`,
+`azoulay-2025-blood-reviews-critico-hematologico.pdf`), y la bibliografía
+y "Fuentes y Evidencia" enlazan a ellos, con el DOI en la nota.
 
 - **CID**: el golpe de calor (HIC) estaba como fenotipo "mixto" y en la
   Figura 1 es trombótico (azul), igual que sepsis y cáncer — corregido.
