@@ -9557,6 +9557,61 @@ Hematología (Fisiopatología UCI/Cardiología y Merino Neumología); y la
 auditoría de fidelidad de contenido contra las fuentes, que Hematología
 sigue sin tener (confirmar antes con el usuario qué documentos releer).
 
+### Auditoría de fidelidad de Neutropenia Febril (octubre 2026)
+
+Primera auditoría de contenido de Hematología contra su fuente, a petición
+explícita del usuario ("empieza con neutropenia febril"; los PNT de
+Trasplante ya se habían auditado aparte). Releído el consenso SEIMC-SEHH
+completo (`docs/seimc-sehh-2020-neutropenia-febril.pdf`, versión en inglés,
+`pdftotext -layout`) y cruzado bloque a bloque con las 4 vistas, los datos
+de `js/data/` y el banco de quiz. Sin errores graves de transcripción en
+triaje/MASCC/IDSA, criterios de suspensión, vía oral, catéter ni BLEE/AmpC.
+Corregido:
+
+- **Calculadora PK/PD**: 4 dosis no coincidían con las Tablas 8-9 del
+  consenso, dos de ellas infradosificando en hemofiltración: cefepime en
+  TCRR (2 g/24 h → 1 g/8 h o 2 g/12 h), colistina en TCRR (2 MU/12 h →
+  2-3 MU/8 h o 4,5 MU/12 h), cefepime con ClCr 10-30 (→ 1 g/12 h),
+  pip-tazo con ClCr 10-30 (4,5 g/12 h → 4 g/8 h) y amoxi-clav con ClCr
+  &lt;30 (→ 0,5 g/12 h y 0,5-1 g/24 h de amoxicilina). Caspofungina y
+  voriconazol ganan el ajuste por Child-Pugh. Nota de fuente con enlace al
+  PDF (pág. 100) bajo la calculadora; pip-tazo en TCRR se dejó en 4,5 g/8 h
+  (la fila de la Tabla 9 es ambigua) y se declara en esa nota.
+- **Foco que faltaba**: senos paranasales (Tabla 5), con su marcador en el
+  mapa corporal (`senos` en `core/silueta.js`, escalón B).
+- **Comentarios por foco ampliados** con la Tabla 5: clindamicina en
+  partes blandas necrotizantes, absceso perianal, SARM/P. jirovecii/CMV en
+  neumonía, glucopéptido en ITU, aciclovir y criptococo en SNC.
+- **Diagnóstico**: GM con 2 determinaciones pasa a positivo solo si
+  &gt;0,5 (antes ≥0,5); la PCR 20-30 mg/dL ya no se presenta como "zona
+  límite", sino dentro del corte descrito de mortalidad (C-III); el
+  bloque C dice que los biomarcadores no guían el antibiótico (B-III/A-II);
+  el bloque B gana cuándo cribar (A-I) y los pasos que faltaban de ambas
+  ramas (las recoge solo la imagen, que copia los `.flow-node`); tiempos
+  reales de C. difficile y falsos negativos de la gripe &gt;48 h.
+- **Catéter**: recaída precoz/fracaso conservador (B-II), fiebre
+  persistente sin infección confirmada (B-II/C-III) y recambio sobre guía.
+- **Otros**: alternativas orales en alergia a betalactámicos (A-I/A-II);
+  aminoglucósido en dosis única diaria y anti-Candida en shock sin
+  profilaxis (notas SEIMC); infusión extendida en BLEE/AmpC (A-I);
+  diarrea en el criterio IDSA de síntomas GI; mortalidad por puntuación
+  MASCC y nota de fidelidad sobre la redacción del ítem "tumor sólido/
+  linfoma".
+- **Tachado**: las casillas de CISNE, vía oral, antifúngico, catéter y
+  matriz MDR salían tachadas al marcarlas; ahora llevan `.puntuable`.
+- **Quiz**: q002 (riesgo de infección, no de complicación), q020 (falta
+  la inestabilidad y el A-II) y 5 preguntas nuevas (`nf-q027`-`q031`).
+
+**Sin verificar por falta de fuente archivada**: todo lo que la app
+atribuye a ECIL-10 (escalera sin foco, suspensión ≥72 h en infección
+documentada, carbapenemasas, P. aeruginosa DTR, A. baumannii,
+S. maltophilia). El PDF de ECIL-10 no está en `docs/`; varias de esas
+pautas difieren del consenso SEIMC-SEHH 2020 (p. ej. cotrimoxazol en
+monoterapia 15 mg/kg/día frente a combinación 8-12 mg/kg/día) y deben
+auditarse cuando llegue. Tampoco tienen fuente las dosis de "infección
+grave" con ajuste renal de la calculadora PK/PD ni la elección
+"equinocandina / anfotericina liposomal" del antifúngico empírico.
+
 ## Cómo probar cambios
 
 No hay build. Para ver la app:

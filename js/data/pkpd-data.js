@@ -2,7 +2,7 @@
 export const pkpdData = {
     'piptazo': {
         doses: {
-            normal: { 'normal': '4.5g / 8h', 'mild': '4.5g / 8h', 'mod': '4.5g / 12h', 'sev': '4.5g / 12h', 'crrt': '4.5g / 8h' },
+            normal: { 'normal': '4.5g / 8h', 'mild': '4.5g / 8h', 'mod': '4g / 8h', 'sev': '4g / 12h', 'crrt': '4.5g / 8h' },
             severe: { 'normal': '4.5g / 6h (Inf. Extendida)', 'mild': '4.5g / 8h (Inf. Extendida)', 'mod': '4.5g / 8h', 'sev': '4.5g / 12h', 'crrt': '4.5g / 8h (Inf. Extendida)' }
         },
         inter: "Vancomicina (aumenta drásticamente riesgo de FRA), Metotrexato (disminuye aclaramiento).",
@@ -18,16 +18,16 @@ export const pkpdData = {
     },
     'cefepime': {
         doses: {
-            normal: { 'normal': '2g / 8h', 'mild': '2g / 12h', 'mod': '2g / 24h', 'sev': '1g / 24h', 'crrt': '2g / 24h' },
-            severe: { 'normal': '2g / 8h (Inf. Extendida)', 'mild': '2g / 12h', 'mod': '2g / 24h', 'sev': '1g / 24h', 'crrt': '2g / 24h' }
+            normal: { 'normal': '2g / 8h', 'mild': '2g / 12h', 'mod': '1g / 12h', 'sev': '1g / 24h', 'crrt': '1g / 8h ó 2g / 12h' },
+            severe: { 'normal': '2g / 8h (Inf. Extendida)', 'mild': '2g / 12h', 'mod': '1g / 12h', 'sev': '1g / 24h', 'crrt': '1g / 8h ó 2g / 12h' }
         },
         inter: "Furosemida y Aminoglucósidos (potencia nefrotoxicidad).",
         contra: "Encefalopatía previa o fallo renal sin ajustar dosis (riesgo altísimo de neurotoxicidad y mioclonías)."
     },
     'colistina': {
         doses: {
-            normal: { 'normal': 'Carga 9MU → Mant. 3MU/8h', 'mild': 'Carga 9MU → Mant. 6MU/24h', 'mod': 'Carga 9MU → Mant. 4.5-5.5MU/24h', 'sev': 'Carga 9MU → Mant. 3MU/24h', 'crrt': 'Carga 9MU → Mant. 2MU/12h' },
-            severe: { 'normal': 'Carga 9MU → Mant. 3MU/8h (Dosis Máx)', 'mild': 'Carga 9MU → Mant. 3MU/12h', 'mod': 'Carga 9MU → Mant. 2.75MU/12h', 'sev': 'Carga 9MU → Mant. 1.5MU/12h', 'crrt': 'Carga 9MU → Mant. 2MU/12h' }
+            normal: { 'normal': 'Carga 9MU → Mant. 3MU/8h', 'mild': 'Carga 9MU → Mant. 6MU/24h', 'mod': 'Carga 9MU → Mant. 4.5-5.5MU/24h', 'sev': 'Carga 9MU → Mant. 3MU/24h', 'crrt': 'Carga 9MU → Mant. 2-3MU/8h ó 4.5MU/12h' },
+            severe: { 'normal': 'Carga 9MU → Mant. 3MU/8h (Dosis Máx)', 'mild': 'Carga 9MU → Mant. 3MU/12h', 'mod': 'Carga 9MU → Mant. 2.75MU/12h', 'sev': 'Carga 9MU → Mant. 1.5MU/12h', 'crrt': 'Carga 9MU → Mant. 2-3MU/8h ó 4.5MU/12h' }
         },
         inter: "Nefrotóxicos concurrentes (AINEs, Aminoglucósidos). Prolonga el efecto de Bloqueantes Neuromusculares (Rocuronio).",
         contra: "Miastenia Gravis (produce bloqueo neuromuscular). Vigilar estrechamente en fracaso renal progresivo."
@@ -42,8 +42,8 @@ export const pkpdData = {
     },
     'amoxi': {
         doses: {
-            normal: { 'normal': '1.2g / 8h', 'mild': '1.2g / 8h', 'mod': '1.2g / 12h', 'sev': '1.2g / 24h', 'crrt': '1.2g / 12h' },
-            severe: { 'normal': '1.2g / 6h ó 2.2g / 8h', 'mild': '1.2g / 8h', 'mod': '1.2g / 12h', 'sev': '1.2g / 24h', 'crrt': '1.2g / 12h' }
+            normal: { 'normal': '1.2g / 8h', 'mild': '1.2g / 8h', 'mod': '0.5g / 12h (de amoxicilina)', 'sev': '0.5-1g / 24h (de amoxicilina)', 'crrt': '1.2g / 12h' },
+            severe: { 'normal': '1.2g / 6h ó 2.2g / 8h', 'mild': '1.2g / 8h', 'mod': '0.5g / 12h (de amoxicilina)', 'sev': '0.5-1g / 24h (de amoxicilina)', 'crrt': '1.2g / 12h' }
         },
         inter: "Alopurinol (rash cutáneo), Metotrexato.",
         contra: "Alergia a penicilinas. Historia de ictericia/fallo hepático por amoxi-clavulánico."
@@ -70,7 +70,7 @@ export const pkpdData = {
             severe: { 'normal': 'Carga 70mg → Mant. 70mg/24h (>80kg)', 'mild': 'Carga 70mg → 70mg/24h', 'mod': 'Carga 70mg → 70mg/24h', 'sev': 'Carga 70mg → 70mg/24h', 'crrt': 'Carga 70mg → 70mg/24h' }
         },
         inter: "Inductores enzimáticos (Rifampicina), Ciclosporina (aumenta transaminasas), Tacrolimus (caen niveles valle).",
-        contra: "Fallo hepático grave (Child-Pugh C) requiere ajuste de dosis. (No requiere ajuste por fallo renal)."
+        contra: "Child-Pugh B: mantenimiento 35 mg/24h. Child-Pugh C: evitar. (No requiere ajuste por fallo renal)."
     },
     'vori': {
         doses: {
@@ -78,6 +78,6 @@ export const pkpdData = {
             severe: { 'normal': 'IV: Carga 6mg/kg x2 → 4mg/kg/12h (Obj. Valle 2-6 mg/L)', 'mild': 'Pasar a Vía Oral', 'mod': 'Vía Oral o TCRR', 'sev': 'Vía Oral o TCRR', 'crrt': 'IV: Carga 6mg/kg → 4mg/kg/12h' }
         },
         inter: "¡Inhibidor potente CYP3A4! Multiplica drásticamente niveles de Tacrolimus y Sirolimus. Contraindicado con inductores potentes (Rifampicina, Carbamazepina).",
-        contra: "Precaución con prolongación del QTc. Evitar formulación IV si ClCr < 50 ml/min por acumulación de excipiente SBECD (nefrotóxico)."
+        contra: "Precaución con prolongación del QTc. Evitar formulación IV si ClCr < 50 ml/min por acumulación de excipiente SBECD (nefrotóxico). Child-Pugh B: mantenimiento 2 mg/kg/12h; Child-Pugh C: evitar."
     }
 };

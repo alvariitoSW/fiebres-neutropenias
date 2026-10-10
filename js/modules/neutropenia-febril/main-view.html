@@ -47,6 +47,10 @@
                 <div id="mascc-eval-text" style="color: var(--accent-green); font-size: 0.9rem;">Bajo Riesgo</div>
                 <div class="management-text" id="mascc-management" style="display:block;"></div>
             </div>
+            <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.45; margin: 10px 0 0 0;">
+                Riesgo de muerte según la puntuación: &lt;15 → 29%; 15-20 → 9%; ≥21 → 2%. Con ≥21 el riesgo de complicaciones es &lt;2%. Reclasificar como alto riesgo si hay "infección complicada" (sepsis, partes blandas &gt;5 cm o necrotizante, mucositis oral grado ≥2 de la OMS).
+                <br><strong>Nota de fidelidad:</strong> la Tabla 3 del consenso escribe el ítem como "tumor sólido/linfoma sin infección fúngica previa"; la app usa la redacción original del índice ("tumor sólido o neoplasia hematológica sin infección fúngica previa").
+            </p>
         </div>
         <div class="vista-visual" id="mascc-escalera"></div>
     </div>
@@ -62,12 +66,12 @@
             nunca como sustituto del MASCC ni del juicio clínico en este contexto.
         </div>
 
-        <label class="checkbox-label"><input type="checkbox" id="cisne-ecog" class="cisne-input"> ECOG ≥2 (2 pts)</label>
-        <label class="checkbox-label"><input type="checkbox" id="cisne-hipergluc" class="cisne-input"> Hiperglucemia de estrés, independiente de diabetes previa (2 pts)</label>
-        <label class="checkbox-label"><input type="checkbox" id="cisne-epoc" class="cisne-input"> EPOC (1 pt)</label>
-        <label class="checkbox-label"><input type="checkbox" id="cisne-cardio" class="cisne-input"> Enfermedad cardiovascular crónica (1 pt)</label>
-        <label class="checkbox-label"><input type="checkbox" id="cisne-mucositis" class="cisne-input"> Mucositis NCI grado ≥2 (1 pt)</label>
-        <label class="checkbox-label"><input type="checkbox" id="cisne-monocitos" class="cisne-input"> Monocitos &lt;200/mm³ (1 pt)</label>
+        <label class="checkbox-label puntuable"><input type="checkbox" id="cisne-ecog" class="cisne-input"> ECOG ≥2 (2 pts)</label>
+        <label class="checkbox-label puntuable"><input type="checkbox" id="cisne-hipergluc" class="cisne-input"> Hiperglucemia de estrés, independiente de diabetes previa (2 pts)</label>
+        <label class="checkbox-label puntuable"><input type="checkbox" id="cisne-epoc" class="cisne-input"> EPOC (1 pt)</label>
+        <label class="checkbox-label puntuable"><input type="checkbox" id="cisne-cardio" class="cisne-input"> Enfermedad cardiovascular crónica (1 pt)</label>
+        <label class="checkbox-label puntuable"><input type="checkbox" id="cisne-mucositis" class="cisne-input"> Mucositis NCI grado ≥2 (1 pt)</label>
+        <label class="checkbox-label puntuable"><input type="checkbox" id="cisne-monocitos" class="cisne-input"> Monocitos &lt;200/mm³ (1 pt)</label>
 
         <div class="result-box">
             <div class="result-score" id="cisne-score-display" style="color: var(--accent-green); text-shadow: var(--glow-green);">0 / 8</div>
@@ -131,12 +135,20 @@
             <ul id="cat-retirada">
                 <li><strong>Clínica:</strong> Sepsis grave/shock, signos locales (supuración/tunelitis), bacteriemia persistente (48-72h), endocarditis/embolismo.</li>
                 <li><strong>Microorganismos:</strong> Hongos (<em>Candida spp.</em>), <em>S. aureus</em>, Enterococos, Bacilos Gram Negativos (<em>P. aeruginosa</em>), Micobacterias, <em>Bacillus spp.</em>, <em>Micrococcus spp.</em>, <em>Propionibacterium spp.</em></li>
+                <li><strong>Evolución:</strong> recaída precoz por el mismo microorganismo tras completar el tratamiento, o fracaso del tratamiento conservador (B-II).</li>
             </ul>
 
             <strong style="color: var(--accent-green);">CONSERVAR SÓLO SI:</strong>
             <ul id="cat-conservar">
                 <li>Infección no complicada por gérmenes menos virulentos + mal acceso venoso periférico.</li>
                 <li><strong>Acción obligatoria:</strong> Añadir Sellado Antibiótico al tratamiento sistémico.</li>
+                <li>Si retirarlo es muy difícil: recambio sobre guía, con catéter impregnado de antibiótico.</li>
+            </ul>
+
+            <strong style="color: var(--accent-yellow);">FIEBRE PERSISTENTE CON CVC, SIN INFECCIÓN DE CATÉTER CONFIRMADA</strong> (descartados otros focos):
+            <ul>
+                <li>Valorar retirada si hay sepsis o eritema pericatéter (B-II), o si la fiebre persiste sin otra causa posible (C-III).</li>
+                <li>Bacteriemia con CVC que no es su origen (p. ej. germen colonizador cutáneo sin criterios de catéter): no se recomienda retirarlo, pero vigilar de cerca.</li>
             </ul>
         </div>
         </div>

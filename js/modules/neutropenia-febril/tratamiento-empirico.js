@@ -62,7 +62,7 @@ function updateOral() {
     } else {
         resultBox.innerHTML = '✅ Candidato a manejo ambulatorio';
         resultBox.style.color = 'var(--accent-green)';
-        regimenBox.innerHTML = `<strong style="color: var(--accent-blue);">Régimen (Grado A-I):</strong> Ciprofloxacino 750mg/12h VO + Amoxicilina-clavulánico 875mg/8h VO.<br><br>⚠️ No usar quinolona si ya se recibía como profilaxis.`;
+        regimenBox.innerHTML = `<strong style="color: var(--accent-blue);">Régimen (Grado A-I):</strong> Ciprofloxacino 750mg/12h VO + Amoxicilina-clavulánico 875mg/8h VO.<br><span style="font-size: 0.8rem;">Alergia a todos los betalactámicos: ciprofloxacino + clindamicina 300-600mg/8h VO (A-I). Alternativa: ciprofloxacino + cefixima o cefuroxima (A-II).</span><br><br>⚠️ No usar quinolona si ya se recibía como profilaxis (A-III). Reevaluar a las 48-72 h: si persiste la fiebre, ingreso.`;
     }
 }
 

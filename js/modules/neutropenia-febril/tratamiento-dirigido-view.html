@@ -111,16 +111,16 @@
             <div style="font-size: 0.75rem; color: var(--accent-purple); font-weight: bold; margin-bottom: 8px; text-transform: uppercase;">Condiciones del Paciente:</div>
 
             <div id="mdr-mod-sepsis" style="display:none;">
-                <label class="checkbox-label"><input type="checkbox" id="mdr-is-sepsis"> Paciente con Sepsis / Shock Séptico</label>
+                <label class="checkbox-label puntuable"><input type="checkbox" id="mdr-is-sepsis"> Paciente con Sepsis / Shock Séptico</label>
             </div>
             <div id="mdr-mod-inoculum" style="display:none;">
-                <label class="checkbox-label"><input type="checkbox" id="mdr-high-inoculum"> Infección de Alto Inóculo + CMI ≥4 mg/L</label>
+                <label class="checkbox-label puntuable"><input type="checkbox" id="mdr-high-inoculum"> Infección de Alto Inóculo + CMI ≥4 mg/L</label>
             </div>
             <div id="mdr-mod-cre" style="display:none;">
-                <label class="checkbox-label"><input type="checkbox" id="mdr-cmi-mero"> Crítico, foco no controlado, o CMI cerca del punto de corte (considerar terapia combinada)</label>
+                <label class="checkbox-label puntuable"><input type="checkbox" id="mdr-cmi-mero"> Crítico, foco no controlado, o CMI cerca del punto de corte (considerar terapia combinada)</label>
             </div>
             <div id="mdr-mod-borderline" style="display:none;">
-                <label class="checkbox-label"><input type="checkbox" id="mdr-borderline"> Crítico, foco no controlado, o CMI cerca del punto de corte (añadir 2º agente activo)</label>
+                <label class="checkbox-label puntuable"><input type="checkbox" id="mdr-borderline"> Crítico, foco no controlado, o CMI cerca del punto de corte (añadir 2º agente activo)</label>
             </div>
         </div>
 
@@ -147,7 +147,7 @@
             </select>
         </div>
 
-        <label class="checkbox-label" style="background: rgba(255,51,102,0.1); border: 1px solid var(--accent-red); padding: 10px; border-radius: 4px; margin-bottom: 10px;">
+        <label class="checkbox-label puntuable" style="background: rgba(255,51,102,0.1); border: 1px solid var(--accent-red); padding: 10px; border-radius: 4px; margin-bottom: 10px;">
             <input type="checkbox" id="pkpd-severe-toggle">
             <strong style="color: var(--accent-red);">Infección Grave / CMI Límite</strong>
         </label>
@@ -180,6 +180,10 @@
                 <div class="info-content" id="pkpd-contra">...</div>
             </div>
         </div>
+        <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.45; margin: 10px 0;">
+            Ajuste renal según las Tablas 8 (aclaramiento) y 9 (hemofiltración) del consenso SEIMC-SEHH 2020; dosis altas según su Tabla 6. Piperacilina-tazobactam en TCRR: la Tabla 9 da piperacilina 2 g/6-8 h; la app mantiene 4,5 g/8 h, más alta.
+            <a class="biblio-link" href="docs/seimc-sehh-2020-neutropenia-febril.pdf#page=100" target="_blank" rel="noopener">Ver Tablas 8 y 9 en el PDF</a>
+        </p>
         <button class="especialidad-link" data-especialidad="nefrologia" data-view="nefrotoxicidad">🔗 Ver tabla completa de ajuste renal (585 fármacos, Nefrología) →</button>
     </div>
 

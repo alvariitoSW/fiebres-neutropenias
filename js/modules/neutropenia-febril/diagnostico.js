@@ -77,7 +77,8 @@ function interpretarGM() {
     else if (sample === 'serum2') { threshold = 0.5; label = 'corte >0.5 (2 determinaciones)'; }
     else { threshold = 1; label = 'corte en BAL ≥1'; }
 
-    let isPositive = value >= threshold;
+    // Dos determinaciones: positivo si >0.5 (estricto); 1 determinación y BAL: ≥ corte.
+    let isPositive = sample === 'serum2' ? value > threshold : value >= threshold;
     display.innerText = isPositive ? 'POSITIVO' : 'NEGATIVO';
     display.style.color = isPositive ? 'var(--accent-red)' : 'var(--accent-green)';
     display.style.textShadow = isPositive ? 'var(--glow-red)' : 'var(--glow-green)';
@@ -106,7 +107,7 @@ function interpretarPCR() {
         text.innerText = 'Rango asociado a mayor mortalidad (Grado C-III)'; text.style.color = 'var(--accent-red)';
     } else if (value >= 20) {
         display.style.color = 'var(--accent-yellow)'; display.style.textShadow = 'none';
-        text.innerText = 'Zona límite (20-30 mg/dL): vigilar evolución'; text.style.color = 'var(--accent-yellow)';
+        text.innerText = 'Dentro del corte descrito (>20-30 mg/dL) asociado a mayor mortalidad (C-III); más claro cuanto más alta'; text.style.color = 'var(--accent-yellow)';
     } else {
         display.style.color = 'var(--accent-green)'; display.style.textShadow = 'var(--glow-green)';
         text.innerText = 'Sin correlación de mortalidad descrita a este nivel'; text.style.color = 'var(--text-muted)';

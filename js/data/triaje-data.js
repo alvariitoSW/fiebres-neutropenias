@@ -15,7 +15,7 @@ export const triajeIdsa = [
     { id: 'triage-anc', texto: 'ANC ≤100/mm³ con duración esperada ≥7 días', corto: 'ANC ≤100 y ≥7 días', organo: 'medula' },
     { id: 'triage-hemodinamica', texto: 'Inestabilidad hemodinámica', corto: 'Inestabilidad hemodinámica', organo: 'corazon' },
     { id: 'triage-mucositis', texto: 'Mucositis que impide tragar, o diarrea grave', corto: 'Mucositis que impide tragar / diarrea grave', organo: 'boca' },
-    { id: 'triage-gi', texto: 'Síntomas GI significativos (dolor abdominal, náuseas/vómitos)', corto: 'Síntomas GI significativos', organo: 'abdomen' },
+    { id: 'triage-gi', texto: 'Síntomas GI significativos (dolor abdominal, náuseas/vómitos o diarrea)', corto: 'Síntomas GI significativos', organo: 'abdomen' },
     { id: 'triage-mental', texto: 'Alteración del estado mental de nueva aparición', corto: 'Alteración mental nueva', organo: 'cabeza' },
     { id: 'triage-cateter', texto: 'Infección de catéter intravascular', corto: 'Infección de catéter', organo: 'cateter' },
     { id: 'triage-pulmonar', texto: 'Infiltrados pulmonares nuevos o hipoxia', corto: 'Infiltrados / hipoxia', organo: 'pulmonDcho' },

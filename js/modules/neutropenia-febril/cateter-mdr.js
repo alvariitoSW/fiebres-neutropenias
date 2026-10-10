@@ -92,6 +92,9 @@ function updateMDRUI() {
     calcMDR();
 }
 
+// Consenso SEIMC-SEHH 2020 (BLEE 1.1.3 y AmpC 1.2.4): infusión extendida.
+const INFUSION_EXTENDIDA = `<br><span style="font-size: 0.8rem; color: var(--text-muted);">PAUTA en <strong>infusión extendida</strong>: mejora el pronóstico en infecciones graves frente a la infusión corta <span class="grade-badge">A-I</span>.</span>`;
+
 function calcMDR() {
     let bug = document.getElementById('mdr-bug-select').value;
     let title = document.getElementById('mdr-result-title');
@@ -112,6 +115,7 @@ function calcMDR() {
         if (sepsis) { text.innerHTML = `<strong style="color:var(--accent-red);">Carbapenems</strong> <span class="grade-badge red">C-I</span>. El paciente está inestable.`; }
         else if (inoculum) { text.innerHTML = `Evitar Pip-Tazo <span class="grade-badge">B-II</span> (efecto inóculo, CMI ≥4). Usar <strong style="color:var(--accent-yellow);">Carbapenems</strong>.`; }
         else { text.innerHTML = `<strong style="color:var(--accent-green);">BLBLI (Pip-Tazo / Amoxi-Clav)</strong> <span class="grade-badge">B-II</span>. Opciones seguras en paciente estable, con sensibilidad in vitro confirmada.`; }
+        text.innerHTML += INFUSION_EXTENDIDA.replace('PAUTA', 'Pip-tazo y meropenem');
     }
     else if (bug === 'ampc') {
         title.style.color = 'var(--accent-yellow)'; title.innerText = "Grupo ESCPM (AmpC)";
@@ -119,6 +123,7 @@ function calcMDR() {
         if (sepsis) { text.innerHTML = base + `<strong style="color:var(--accent-red);">Carbapenems</strong> <span class="grade-badge red">C-I</span> al estar el paciente inestable, o sin otras opciones disponibles.`; }
         else if (inoculum) { text.innerHTML = base + `Evitar Pip-Tazo <span class="grade-badge">B-III</span> (efecto inóculo, CMI ≥4). Usar <strong style="color:var(--accent-yellow);">Carbapenems</strong>.`; }
         else { text.innerHTML = base + `<strong style="color:var(--accent-green);">Cefepime o Fluoroquinolonas</strong> <span class="grade-badge">B-II</span> (no son sustrato de AmpC). Pip-Tazo es opción válida si hay sensibilidad in vitro <span class="grade-badge">B-II</span>.`; }
+        text.innerHTML += INFUSION_EXTENDIDA.replace('PAUTA', 'Pip-tazo, cefepime y meropenem');
     }
     else if (bug === 'cre') {
         title.style.color = 'var(--accent-red)';

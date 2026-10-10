@@ -1,4 +1,4 @@
-// Vista Visual de "2. Según foco clínico": mapa corporal de los 9 focos.
+// Vista Visual de "2. Según foco clínico": mapa corporal de los 10 focos.
 // Cada foco va sobre su órgano con la letra de su escalón de antibiótico.
 // Tocar un foco cambia el <select> REAL y dispara su `change`; la pauta y el
 // comentario se copian de lo que pinta calcFocoTx() (foco-data.js).
@@ -15,7 +15,7 @@ const $ = id => document.getElementById(id);
 const ORGANO_DE_FOCO = {
     meningitis: 'cabeza', 'mucositis-leve': 'bocaDcha', 'mucositis-grave': 'bocaIzda',
     cateter: 'cateter', neumonia: 'pulmonDcho', enterocolitis: 'abdomen',
-    itu: 'vejiga', perianal: 'perine', piel: 'piel'
+    itu: 'vejiga', perianal: 'perine', piel: 'piel', sinusitis: 'senos'
 };
 
 const ESCALONES = {

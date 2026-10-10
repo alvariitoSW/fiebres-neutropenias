@@ -15,6 +15,7 @@
         <label class="checkbox-label puntuable" style="margin-bottom: 8px;"><input type="checkbox" id="tx-mdr"> Alta prevalencia local, colonización o infección previa por BGN resistentes a primera línea (BLEE u otros) pero sensibles a carbapenems</label>
         <label class="checkbox-label puntuable" style="margin-bottom: 8px;"><input type="checkbox" id="tx-cr"> Colonización o infección previa por BGN resistente a CARBAPENEMS</label>
         <label class="checkbox-label puntuable" style="margin-bottom: 8px;"><input type="checkbox" id="tx-sarm"> Colonización previa por SARM</label>
+        <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.45; margin: 4px 0 10px 0;">Consenso SEIMC-SEHH 2020: el aminoglucósido, en dosis única diaria (A-II), y reevaluar su necesidad a las 48-72 h. No añadir vancomicina solo porque persista la fiebre al 3.<sup>er</sup> día (A-I).</p>
         <div class="result-box" style="text-align: left;">
             <div id="tx-recomendacion" style="font-size: 0.85rem; line-height: 1.5;"></div>
         </div>
@@ -36,6 +37,7 @@
                 <option value="perianal">🍑 Infección perianal</option>
                 <option value="piel">🩹 Piel y partes blandas</option>
                 <option value="cateter">💉 Catéter intravascular</option>
+                <option value="sinusitis">👃 Senos paranasales</option>
                 <option value="neumonia">🫁 Neumonía</option>
                 <option value="itu">🚽 Infección urinaria</option>
                 <option value="meningitis">🧠 Meningitis / Meningoencefalitis</option>
@@ -71,14 +73,14 @@
     <div class="card" style="border-top: 1px solid var(--accent-blue);">
         <h3 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">4. Vía Oral y Ambulatoria</h3>
         <p class="subtitle">Solo bajo riesgo (MASCC) + entorno social garantizado</p>
-        <label class="checkbox-label" style="margin-bottom: 6px;"><input type="checkbox" class="tx-oral-exclusion"> TPH alogénico o quimioterapia intensiva (inducción LMA, ARA-C altas dosis, etc.)</label>
-        <label class="checkbox-label" style="margin-bottom: 6px;"><input type="checkbox" class="tx-oral-exclusion"> Disfunción orgánica aguda (síntomas GI relevantes, sangrado, oliguria, infiltrados/hipoxemia, síntomas neurológicos nuevos)</label>
-        <label class="checkbox-label" style="margin-bottom: 6px;"><input type="checkbox" class="tx-oral-exclusion"> Comorbilidad significativa (enfermedad pulmonar, disfunción hepática o renal)</label>
-        <label class="checkbox-label" style="margin-bottom: 6px;"><input type="checkbox" class="tx-oral-exclusion"> Celulitis clínicamente significativa</label>
-        <label class="checkbox-label" style="margin-bottom: 6px;"><input type="checkbox" class="tx-oral-exclusion"> Infección de catéter venoso central</label>
-        <label class="checkbox-label" style="margin-bottom: 6px;"><input type="checkbox" class="tx-oral-exclusion"> Colonización/infección previa por bacteria MDR</label>
-        <label class="checkbox-label" style="margin-bottom: 6px;"><input type="checkbox" class="tx-oral-exclusion"> Profilaxis con quinolona, o infección previa por BGN resistente a quinolonas/betalactámicos</label>
-        <label class="checkbox-label" style="margin-bottom: 6px;"><input type="checkbox" class="tx-oral-exclusion"> Ingreso reciente en UCI</label>
+        <label class="checkbox-label puntuable" style="margin-bottom: 6px;"><input type="checkbox" class="tx-oral-exclusion"> TPH alogénico o quimioterapia intensiva (inducción LMA, ARA-C altas dosis, etc.)</label>
+        <label class="checkbox-label puntuable" style="margin-bottom: 6px;"><input type="checkbox" class="tx-oral-exclusion"> Disfunción orgánica aguda (síntomas GI relevantes, sangrado, oliguria, infiltrados/hipoxemia, síntomas neurológicos nuevos)</label>
+        <label class="checkbox-label puntuable" style="margin-bottom: 6px;"><input type="checkbox" class="tx-oral-exclusion"> Comorbilidad significativa (enfermedad pulmonar, disfunción hepática o renal)</label>
+        <label class="checkbox-label puntuable" style="margin-bottom: 6px;"><input type="checkbox" class="tx-oral-exclusion"> Celulitis clínicamente significativa</label>
+        <label class="checkbox-label puntuable" style="margin-bottom: 6px;"><input type="checkbox" class="tx-oral-exclusion"> Infección de catéter venoso central</label>
+        <label class="checkbox-label puntuable" style="margin-bottom: 6px;"><input type="checkbox" class="tx-oral-exclusion"> Colonización/infección previa por bacteria MDR</label>
+        <label class="checkbox-label puntuable" style="margin-bottom: 6px;"><input type="checkbox" class="tx-oral-exclusion"> Profilaxis con quinolona, o infección previa por BGN resistente a quinolonas/betalactámicos</label>
+        <label class="checkbox-label puntuable" style="margin-bottom: 6px;"><input type="checkbox" class="tx-oral-exclusion"> Ingreso reciente en UCI</label>
         <div class="result-box" style="text-align: left;">
             <div id="oral-resultado" style="font-size: 0.9rem; font-weight: bold; text-align: center;"></div>
             <div id="oral-regimen" style="font-size: 0.8rem; margin-top: 8px; line-height: 1.4;"></div>
@@ -102,12 +104,13 @@
                 <div class="stat-label">incidencia real IFI alto riesgo</div>
             </div>
         </div>
-        <label class="checkbox-label" style="margin-bottom: 8px;"><input type="checkbox" id="tx-profilaxis-previa"> Paciente con profilaxis previa a filamentosos</label>
+        <label class="checkbox-label puntuable" style="margin-bottom: 8px;"><input type="checkbox" id="tx-profilaxis-previa"> Paciente con profilaxis previa a filamentosos</label>
         <div class="form-group">
             <label>Días de fiebre sin causa con ABT amplio espectro</label>
             <input type="number" id="tx-dias-fiebre" min="0" step="1" value="0">
         </div>
-        <label class="checkbox-label" style="margin-bottom: 8px;"><input type="checkbox" id="tx-inestable-fungico"> Inestabilidad hemodinámica</label>
+        <label class="checkbox-label puntuable" style="margin-bottom: 8px;"><input type="checkbox" id="tx-inestable-fungico"> Inestabilidad hemodinámica</label>
+        <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.45; margin: 4px 0 10px 0;">Consenso SEIMC-SEHH 2020: en el shock séptico sin profilaxis antifúngica, valorar cubrir <em>Candida</em> desde el régimen inicial (C-III). Alternativa al empírico: tratamiento guiado por GM o beta-D-glucano, que reduce antifúngicos sin aumentar la mortalidad (A-I).</p>
         <div class="result-box">
             <div id="antifungico-resultado" style="font-size: 0.85rem; line-height: 1.5; text-align: left;"></div>
         </div>

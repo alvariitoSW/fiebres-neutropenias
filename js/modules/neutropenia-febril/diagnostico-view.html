@@ -15,7 +15,8 @@
         <h3 style="color: var(--accent-red); text-shadow: var(--glow-red);">A. Microbiología</h3>
         <div class="warning-box" style="border-left-color: var(--accent-red); background: rgba(255,51,102,0.08);">
             <strong style="color: var(--accent-red);">Regla de oro (Hemocultivos):</strong><br>
-            2-3 sets en todo paciente con NF, de todos los accesos venosos (CVC) + venopunción periférica.
+            2-3 sets en todo paciente con NF, de todos los accesos venosos (CVC) + venopunción periférica (A-I).
+            <br><span style="font-size: 0.78rem; color: var(--text-muted);">Volumen recomendado: 10 ml por frasco en adultos (cada ml adicional sube el rendimiento un 3-5%). Si hay sospecha de foco extravascular, enviar también muestras del foco para técnicas rápidas (A-I).</span>
         </div>
 
         <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 16px 0 6px 0;">Diferencial de tiempo hasta positivización</p>
@@ -58,21 +59,31 @@
     <!-- B. CRIBADO FÚNGICO -->
     <div class="card" id="diag-card-fungico" style="border-top: 1px solid var(--accent-green);">
         <h3 style="color: var(--accent-green); text-shadow: var(--glow-green);">B. Cribado Fúngico</h3>
-        <label class="checkbox-label" style="margin: 4px 0 14px 0;">
+        <p style="font-size: 0.8rem; line-height: 1.45; margin: 0 0 10px 0;">
+            <strong>Cuándo cribar (A-I):</strong> fiebre que persiste 4-7 días con antibiótico de amplio espectro, neutropenia esperada &gt;7 días y clínica compatible (nuevos signos respiratorios, lesiones cutáneas metastásicas, alteración neurológica o dolor abdominal sin explicación).<br>
+            <strong>Levaduras (Candida):</strong> los hemocultivos son la prueba de elección (A-I).
+        </p>
+        <label class="checkbox-label puntuable" style="margin: 4px 0 14px 0;">
             <input type="checkbox" id="gm-profilaxis-toggle">
             ¿Paciente en profilaxis antifúngica frente a filamentosos?
         </label>
 
         <div class="flow-branch active" id="branch-sin">
             <div class="flow-branch-title" style="color: var(--accent-blue);">Sin profilaxis (alto riesgo)</div>
-            <div class="flow-node" style="width: 100%; margin-bottom: 6px;">GM sérico 2x/semana</div>
+            <div class="flow-node" style="width: 100%; margin-bottom: 6px;">GM sérico 2x/semana (paciente estable, A-I)</div>
             <div class="flow-arrow" style="margin: 2px 0;">↓</div>
-            <div class="flow-node" style="width: 100%;">TC de tórax (Positivo si GM >0.5x2 o ≥0.7x1)</div>
+            <div class="flow-node" style="width: 100%; margin-bottom: 6px;">GM positivo (&gt;0.5×2 o ≥0.7×1) → TC de tórax, aunque no haya clínica respiratoria</div>
+            <div class="flow-arrow" style="margin: 2px 0;">↓</div>
+            <div class="flow-node" style="width: 100%;">GM negativo pero clínica respiratoria → TC de tórax; si es compatible, broncoscopia con GM y PCR panfúngica en BAL (valorar TC de senos)</div>
         </div>
 
         <div class="flow-branch" id="branch-con">
             <div class="flow-branch-title" style="color: var(--accent-yellow);">Con profilaxis</div>
-            <div class="flow-node" style="width: 100%;">Fiebre >7 días sin causa → TC tórax directo<br>(⚠️ Técnicas séricas dan falsos +)</div>
+            <div class="flow-node" style="width: 100%; margin-bottom: 6px;">Fiebre &gt;7 días con ABT sin otra causa, o clínica compatible → TC tórax directo<br>(⚠️ GM/PCR séricos seriados dan falsos +)</div>
+            <div class="flow-arrow" style="margin: 2px 0;">↓</div>
+            <div class="flow-node" style="width: 100%; margin-bottom: 6px;">TC sugestivo → broncoscopia: GM (corte en BAL 1) y PCR panfúngica en BAL (B-II)</div>
+            <div class="flow-arrow" style="margin: 2px 0;">↓</div>
+            <div class="flow-node" style="width: 100%;">Ambos negativos → punción de la lesión (B-II)</div>
         </div>
         
         <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 4px 0;">Interpretador de Galactomanano</p>
@@ -98,6 +109,10 @@
     <div class="card" id="diag-card-bio" style="border-top: 1px solid var(--accent-purple);">
         <h3 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">C. Biomarcadores</h3>
         <p class="subtitle">Cinética comparativa (escala 0-40h)</p>
+        <div class="warning-box" style="border-left-color: var(--accent-purple); background: rgba(156,84,118,0.08); font-size: 0.8rem; line-height: 1.45;">
+            <strong style="color: var(--accent-purple);">No guían el antibiótico:</strong> no se recomienda usar biomarcadores para decidir el uso de antibiótico (B-III) ni su duración (A-II). La PCT, la PCR, la IL-6 y la presepsina son más altas en la bacteriemia (A-II), pero su impacto en el manejo está por aclarar.
+            <br>PCT: empieza ~4 h tras el estímulo, pico ~8 h. PCR: empieza a las 4-6 h, pico ~36 h.
+        </div>
 
         <div class="kinetic-row">
             <div class="kinetic-label"><strong>PCT</strong><span>Pico ~8h</span></div>
