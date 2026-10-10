@@ -2045,6 +2045,21 @@ body.study-mode-on .pomodoro-fab { display: flex; }
 .vk-matriz-leyenda .normal::before { background: rgba(144,160,106,0.5); }
 .vk-matriz-leyenda .alterado::before { background: rgba(184,92,62,0.7); }
 .vk-matriz-leyenda .serie::before { background: var(--vk); }
+.vk-matriz-celda.sube { background: rgba(184,92,62,0.3); color: var(--text-main); font-weight: bold; }
+.vk-matriz-celda.baja { background: rgba(156,84,118,0.34); color: var(--text-main); font-weight: bold; }
+.vk-matriz-celda.mixto { background: rgba(207,154,62,0.2); color: var(--accent-yellow); }
+.vk-matriz-celda.valor { background: rgba(255,255,255,0.04); color: var(--text-muted); }
+.vk-matriz-leyenda .sube::before, .vk-matriz-leyenda .baja::before, .vk-matriz-leyenda .mixto::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: -1px; }
+.vk-matriz-leyenda .sube::before { background: rgba(184,92,62,0.7); }
+.vk-matriz-leyenda .baja::before { background: rgba(156,84,118,0.75); }
+.vk-matriz-leyenda .mixto::before { background: rgba(207,154,62,0.5); }
+/* Panel 'calculadora' del kit: campos compactos de una calculadora existente. */
+.vk-campos { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin-bottom: 8px; }
+.vk-campo-fila { display: flex; flex-direction: column; gap: 3px; font-size: 0.7rem; color: var(--text-muted); min-width: 0; }
+.vk-campo-fila.rango { grid-column: 1 / -1; }
+.vk-campo-fila .vk-campo { width: 100%; min-height: 36px; font-size: 0.85rem; }
+.vk-campo-fila input[type="range"].vk-campo { min-height: 28px; padding: 0; accent-color: var(--accent-yellow); }
+.vk-campo-fila output { font-weight: bold; color: var(--text-main); font-size: 0.8rem; }
 .vk-frec-eje { position: relative; height: 16px; margin-left: 46%; }
 .vk-frec-eje .eje-ticks { top: 0; font-size: 0.56rem; }
 .vk-frec { display: flex; flex-direction: column; }

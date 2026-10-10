@@ -5,6 +5,7 @@ import { initCorkboard } from '../../core/corkboard.js';
 import { wireSelectExplicacion } from '../../core/ui.js';
 import { initHiperpotasemiaSim } from './hiperpotasemia-sim.js';
 import { initHipopotasemiaSim } from './hipopotasemia-sim.js';
+import { initVisualFisiologia } from './visual-fisiologia.js';
 import {
     hiponatremiaPorVolemia, hipernatremiaDiagnosticoDiferencial,
     factoresDistribucionPotasio, sindromesHipopotasemicos, mecanismosHiperpotasemia,
@@ -309,6 +310,7 @@ export function init() {
     // cuaderno, para que el botón "Siguiente ficha" ya exista y quede fuera).
     initHiperpotasemiaSim();
     initHipopotasemiaSim();
+    initVisualFisiologia();
 
     const slider = document.getElementById('tfg-pam');
     if (slider) {

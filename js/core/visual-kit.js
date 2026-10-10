@@ -13,20 +13,29 @@
 //     cualquiera dentro de la ficha (p. ej. 'css:tbody tr:nth-child(5)').
 //   - cualquier otro texto         → el primer elemento candidato de la
 //     ficha cuyo texto EMPIEZA por ese texto (sin distinguir mayúsculas).
-// `etiqueta` es opcional: por defecto se toma del propio elemento.
+// `etiqueta` es opcional: por defecto se toma del propio elemento. `tras`
+// (opcional, mismo formato) busca solo después de ese otro elemento.
 //
 // Tipos de panel: 'flujo', 'escalera', 'comparar', 'racimos', 'mapa',
 // 'linea', 'puntos' (barras de puntuación conectadas a una calculadora),
 // 'requisitos' (casillas reales como candados o barreras),
-// 'selector' (opciones de un <select> real) y tres que DIBUJAN UNA TABLA
+// 'selector' (opciones de un <select> real), 'calculadora' (los campos de
+// una calculadora o simulador ya existente, conectados; `resultado` puede
+// incluir bloques enteros como las barras de un simulador) y tres que
+// DIBUJAN UNA TABLA
 // de la ficha leyendo sus celdas en tiempo de ejecución: 'barras' (cifras
 // de una o varias columnas), 'matriz' (celdas normal/alterado coloreadas) y
-// 'frecuencias' (cada "Nombre: 1:N" en una escala logarítmica), más
+// 'frecuencias' (cada "Nombre: 1:N" en una escala logarítmica; con
+// `flechas: true` la matriz colorea ↑/↓/N en vez de normal/alterado), más
 // 'grados' (cada COLUMNA de una tabla de gradación se vuelve un peldaño; al
 // tocarlo se ven todas sus filas, y "Ver en el texto" resalta esa columna
 // con el mismo gesto que la tabla ya tiene). 'puntos' y 'selector' no calculan:
 // escriben en los controles reales, disparan su evento y copian el
 // resultado que pinta la calculadora de siempre.
+//
+// Cualquier panel de nodos (flujo, escalera, racimos…) o cualquier grupo/
+// columna puede tomar sus nodos de una tabla con `tabla: n` (una fila por
+// nodo) en vez de `nodos`.
 //
 // La imagen se construye la primera vez que se abre la vista Visual.
 
@@ -48,16 +57,20 @@ const norm = s => s.replace(/\s+/g, ' ').trim().toLowerCase();
 const cabeceraMpi = el => el.querySelector(':scope > .micro-prof-head');
 const textoPropio = el => (el.classList.contains('micro-prof-item') ? cabeceraMpi(el) : el).textContent;
 // Quita emoji y signos decorativos iniciales, pero no los que son contenido
-// (≥, ≤, <, >: "≥72h acumuladas" no puede quedarse en "72h").
-const limpiar = s => s.replace(/\s+/g, ' ').replace(/\s*\+\s*$/, '').replace(/^[^\p{L}\p{N}(¿¡≥≤<>]+/u, '').trim();
+// (≥, ≤, <, >, ↑, ↓: "≥72h acumuladas" no puede quedarse en "72h", ni
+// "↓Ingesta" en "Ingesta").
+const limpiar = s => s.replace(/\s+/g, ' ').replace(/\s*\+\s*$/, '').replace(/^[^\p{L}\p{N}(¿¡≥≤<>↑↓]+/u, '').trim();
 
-function resolver(raiz, fuente) {
+// `tras`: elemento a partir del cual buscar (para etiquetas repetidas, como
+// "Clínica" o "Tratamiento" en cada enfermedad de una misma ficha).
+function resolver(raiz, fuente, tras = null) {
     if (!fuente) return null;
     if (fuente.startsWith('css:')) return raiz.querySelector(fuente.slice(4));
     if (fuente.startsWith('#')) return document.querySelector(fuente);
     if (/^[.[]/.test(fuente)) return raiz.querySelector(fuente);
     const buscado = norm(limpiar(fuente));
-    const coincide = el => norm(limpiar(textoPropio(el))).startsWith(buscado);
+    const coincide = el => (!tras || (tras.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING))
+        && norm(limpiar(textoPropio(el))).startsWith(buscado);
     // Prioridad: acordeones y kv-row (bloques con título propio) antes que
     // párrafos, filas o elementos de lista que empiecen igual.
     return [...raiz.querySelectorAll('.micro-prof-item')].find(coincide)
@@ -205,13 +218,26 @@ RENDER.matriz = (p, nodos) => {
     const filas = p.nodos.map(x => nodos[x.i]);
     const cab = cabeceras(filas[0].el.closest('table'));
     const normal = t => (p.normales || ['normal']).includes(norm(t));
+    const clase = t => (p.flechas ? flecha(t) : normal(t) ? 'normal' : 'alterado');
+    const leyenda = p.flechas
+        ? '<span class="sube">↑ sube</span><span class="baja">↓ baja</span><span class="normal">N normal</span><span class="mixto">variable</span>'
+        : `<span class="normal">${p.leyenda?.[0] || 'normal'}</span><span class="alterado">${p.leyenda?.[1] || 'alterado'}</span>`;
     return `<div class="vk-matriz" style="grid-template-columns:minmax(0,1.3fr) repeat(${cab.length - 1}, minmax(0,1fr))">
         <span></span>${cab.slice(1).map(h => `<span class="vk-matriz-cab">${partirCabecera(h)}</span>`).join('')}
         ${filas.map(n => `<button type="button" class="vk-matriz-fila" data-nodo="${n.i}">${n.texto}</button>${[...n.el.cells].slice(1).map(c =>
-            `<span class="vk-matriz-celda ${normal(c.textContent) ? 'normal' : 'alterado'}">${c.textContent.trim()}</span>`).join('')}`).join('')}
+            `<span class="vk-matriz-celda ${clase(c.textContent)}">${c.textContent.trim()}</span>`).join('')}`).join('')}
     </div>
-    <div class="vk-matriz-leyenda"><span class="normal">${p.leyenda?.[0] || 'normal'}</span><span class="alterado">${p.leyenda?.[1] || 'alterado'}</span></div>`;
+    <div class="vk-matriz-leyenda">${leyenda}</div>`;
 };
+
+// Celda de una tabla de flechas ("↑", "N o ↓", "N, ↑ o ↓"): qué dirección marca.
+function flecha(t) {
+    const sube = t.includes('↑'), baja = t.includes('↓');
+    if (sube && baja) return 'mixto';
+    if (sube) return 'sube';
+    if (baja) return 'baja';
+    return /^\s*N\s*$/.test(t) ? 'normal' : 'valor';
+}
 
 RENDER.grados = (p, nodos) => {
     const lista = p.nodos.map(x => nodos[x.i]);
@@ -242,12 +268,18 @@ function emitir(el) {
     el.dispatchEvent(new Event(el.tagName === 'SELECT' || el.type === 'checkbox' ? 'change' : 'input', { bubbles: true }));
 }
 
+// `ids`: '#id' copia el contenido del resultado (con su color de estado);
+// cualquier otro selector copia el bloque entero (p. ej. las barras de un
+// simulador). La copia nunca lleva ids, para no duplicarlos.
 function copiarResultados(ids) {
-    return ids.map(id => {
-        const el = document.querySelector(id);
+    return ids.map(sel => {
+        const el = document.querySelector(sel);
         if (!el) return '';
-        const estado = [...el.classList].filter(c => /^tfg-estado-/.test(c)).join(' ');
-        return `<div class="vk-resultado-copia ${estado}" style="color:${el.style.color || ''}">${el.innerHTML}</div>`;
+        const c = el.cloneNode(true);
+        c.querySelectorAll('[id]').forEach(x => x.removeAttribute('id'));
+        if (!sel.startsWith('#') || sel.includes(' ')) { c.removeAttribute('id'); c.style.display = ''; return c.outerHTML; }
+        const estado = [...el.classList].filter(x => /^tfg-estado-/.test(x)).join(' ');
+        return `<div class="vk-resultado-copia ${estado}" style="color:${el.style.color || ''}">${c.innerHTML}</div>`;
     }).join('');
 }
 
@@ -320,11 +352,54 @@ function renderRequisitos(p, estado) {
 
 function renderSelector(p) {
     const sel = document.querySelector(p.control);
-    const ops = [...sel.options].map((o, k) => {
-        const c = color(p.colores ? p.colores[k] : rampa(k, sel.options.length));
+    const opciones = [...sel.options].filter(o => o.value !== '');
+    const ops = opciones.map((o, k) => {
+        const c = color(p.colores ? p.colores[k] : rampa(k, opciones.length));
         return `<button type="button" class="vk-opcion ${o.value === sel.value ? 'on' : ''} ${p.forma === 'chips' ? 'chip' : ''}" data-valor="${o.value}" style="--vk:${p.forma === 'chips' ? color(p.color) : c}"><span>${limpiar(o.textContent)}</span></button>`;
     }).join('');
     return `<div class="vk-opciones ${p.forma === 'chips' ? 'chips' : 'escalera'}">${ops}</div><div class="vk-resultado">${copiarResultados(p.resultado)}</div>${LINK_CONTROL}`;
+}
+
+// Calculadora o simulador ya existente en la ficha: sus campos reales
+// (número, deslizador o desplegable) en versión compacta. Escribe en el
+// control real, dispara su evento y copia lo que pinta la calculadora.
+function camposDe(p) {
+    return p.campos.map(sel => {
+        const control = document.querySelector(sel);
+        if (!control) { console.warn('[visual-kit] campo no encontrado', sel); return null; }
+        const lab = document.querySelector(`label[for="${control.id}"]`) || control.closest('.form-group, .tfg-slider-row')?.querySelector('label');
+        return { control, etiqueta: p.etiquetas?.[sel] || (lab ? limpiar(lab.textContent) : control.id) };
+    }).filter(Boolean);
+}
+
+function campoHTML(it, k) {
+    const c = it.control;
+    if (c.tagName === 'SELECT') {
+        return `<select class="vk-campo" data-item="${k}" aria-label="${it.etiqueta}">${[...c.options].map(o =>
+            `<option value="${o.value}" ${o.value === c.value ? 'selected' : ''}>${o.textContent}</option>`).join('')}</select>`;
+    }
+    const attrs = ['min', 'max', 'step', 'placeholder'].filter(a => c.hasAttribute(a)).map(a => `${a}="${c.getAttribute(a)}"`).join(' ');
+    return `<input class="vk-campo" data-item="${k}" type="${c.type}" ${attrs} value="${c.value}" ${c.type === 'number' ? 'inputmode="decimal"' : ''} aria-label="${it.etiqueta}">${c.type === 'range' ? `<output>${valorRango(c)}</output>` : ''}`;
+}
+
+// Valor de un deslizador con su unidad, tal como lo muestra la propia ficha.
+const valorRango = c => c.closest('.tfg-slider-row')?.querySelector('span')?.textContent || c.value;
+
+function pintarCalculadora(p, estado, cuerpo) {
+    if (!cuerpo.querySelector('.vk-campos')) {
+        cuerpo.innerHTML = `<div class="vk-campos">${estado.items.map((it, k) =>
+            `<label class="vk-campo-fila ${it.control.type === 'range' ? 'rango' : ''}"><span>${it.etiqueta}</span>${campoHTML(it, k)}</label>`).join('')}</div>
+            <div class="vk-resultado"></div>${LINK_CONTROL}`;
+    } else {
+        // En su sitio, sin rehacer los campos: no se pierde el foco ni el arrastre.
+        cuerpo.querySelectorAll('.vk-campo').forEach(f => {
+            const c = estado.items[Number(f.dataset.item)].control;
+            if (f !== document.activeElement && f.value !== c.value) f.value = c.value;
+            const out = f.parentElement.querySelector('output');
+            if (out) out.textContent = valorRango(c);
+        });
+    }
+    cuerpo.querySelector('.vk-resultado').innerHTML = copiarResultados(p.resultado);
 }
 
 // ---------- Montaje ----------
@@ -368,8 +443,9 @@ function construir(tab, texto, visual, receta) {
     const nodos = []; // registro plano: { i, el, texto, color, organo, en, fila }
     const registrar = def => {
         const d = typeof def === 'string' ? { fuente: def } : def;
-        const el = resolver(texto, d.fuente);
-        if (!el) { console.warn(`[visual-kit] ${tab.id}: fuente no encontrada →`, d.fuente); return null; }
+        const ancla = d.tras ? resolver(texto, d.tras) : null;
+        const el = (!d.tras || ancla) && resolver(texto, d.fuente, ancla);
+        if (!el) { console.warn(`[visual-kit] ${tab.id}: fuente no encontrada →`, d.fuente, d.tras || ''); return null; }
         const n = { ...d, i: nodos.length, el, texto: d.etiqueta || etiquetaDe(el) };
         nodos.push(n);
         return n;
@@ -378,9 +454,23 @@ function construir(tab, texto, visual, receta) {
     const reg = lista => lista.map(x => Array.isArray(x) ? x.map(registrar).filter(Boolean) : registrar(x)).filter(x => x && (!Array.isArray(x) || x.length));
     // Nodos a partir de una tabla: una fila por nodo (barras, matriz) o una
     // entrada "Nombre: 1:N" por nodo (frecuencias, apuntando a su celda).
+    const buscarTabla = ref => {
+        const tabla = typeof ref === 'number' ? texto.querySelectorAll('table')[ref] : resolver(texto, ref);
+        if (!tabla) console.warn(`[visual-kit] ${tab.id}: tabla no encontrada →`, ref);
+        return tabla;
+    };
+    // Una fila de datos por nodo (sirve para cualquier panel con `tabla`, o
+    // para un grupo/columna con `tabla`).
+    const filasNodo = (tabla, excluir) => filasDatos(tabla).filter(r => !excluir || !excluir.some(x => norm(r.cells[0].textContent).startsWith(norm(x))))
+        .map(r => { const n = { i: nodos.length, el: r, texto: limpiar(r.cells[0].textContent) }; nodos.push(n); return n; });
+    const nodosDe = g => {
+        if (g.tabla === undefined) return reg(g.nodos);
+        const tabla = buscarTabla(g.tabla);
+        return tabla ? filasNodo(tabla, g.excluir) : [];
+    };
     const nodoTabla = (p) => {
-        const tabla = typeof p.tabla === 'number' ? texto.querySelectorAll('table')[p.tabla] : resolver(texto, p.tabla);
-        if (!tabla) { console.warn(`[visual-kit] ${tab.id}: tabla no encontrada →`, p.tabla); return []; }
+        const tabla = buscarTabla(p.tabla);
+        if (!tabla) return [];
         if (p.tipo === 'grados') {
             const filas = [...tabla.rows].slice(1);
             const cols = [...tabla.rows[0].cells].slice(1);
@@ -393,10 +483,7 @@ function construir(tab, texto, visual, receta) {
                 nodos.push(n); return n;
             });
         }
-        if (p.tipo !== 'frecuencias') {
-            return filasDatos(tabla).filter(r => !p.excluir || !p.excluir.some(x => norm(r.cells[0].textContent).startsWith(norm(x))))
-                .map(r => { const n = { i: nodos.length, el: r, texto: limpiar(r.cells[0].textContent) }; nodos.push(n); return n; });
-        }
+        if (p.tipo !== 'frecuencias') return filasNodo(tabla, p.excluir);
         const cab = cabeceras(tabla);
         const ENTRADA = /([A-ZÁÉÍÓÚÑ][^:·]*?):\s*1:\s*([\d.,]+(?:\s*millones?)?)/g;
         return filasDatos(tabla).flatMap(r => [...r.cells].flatMap((celda, j) =>
@@ -407,10 +494,13 @@ function construir(tab, texto, visual, receta) {
     };
     const paneles = receta.paneles.map(p => {
         const q = { ...p };
-        if (p.tabla !== undefined) q.nodos = nodoTabla(p);
+        if (p.tabla !== undefined) {
+            if (p.tipo === 'racimos') q.grupos = [{ titulo: p.grupo || '', color: p.color, nodos: nodoTabla(p) }];
+            else q.nodos = nodoTabla(p);
+        }
         if (p.nodos) q.nodos = reg(p.nodos);
-        if (p.columnas) q.columnas = p.columnas.map(c => ({ ...c, nodos: reg(c.nodos) }));
-        if (p.grupos) q.grupos = p.grupos.map(g => ({ ...g, nodos: reg(g.nodos) }));
+        if (p.columnas) q.columnas = p.columnas.map(c => ({ ...c, nodos: nodosDe(c) }));
+        if (p.grupos) q.grupos = p.grupos.map(g => ({ ...g, nodos: nodosDe(g) }));
         return q;
     });
 
@@ -422,7 +512,8 @@ function construir(tab, texto, visual, receta) {
             <div class="visual-detalle vk-detalle" hidden></div>
         </section>`).join('')}`;
 
-    const estados = paneles.map(p => (p.tipo === 'puntos' || p.tipo === 'requisitos' ? { items: itemsDePuntos(p, texto) } : {}));
+    const estados = paneles.map(p => (p.tipo === 'puntos' || p.tipo === 'requisitos' ? { items: itemsDePuntos(p, texto) }
+        : p.tipo === 'calculadora' ? { items: camposDe(p) } : {}));
     const pintar = k => {
         const p = paneles[k];
         const cuerpo = visual.querySelector(`.vk-panel[data-panel="${k}"] .vk-panel-cuerpo`);
@@ -432,12 +523,13 @@ function construir(tab, texto, visual, receta) {
             if (foco !== null) { const f = cuerpo.querySelector(`.vk-numero[data-item="${foco}"]`); f?.focus(); f?.setSelectionRange?.(f.value.length, f.value.length); }
         } else if (p.tipo === 'requisitos') cuerpo.innerHTML = renderRequisitos(p, estados[k]);
         else if (p.tipo === 'selector') cuerpo.innerHTML = renderSelector(p);
+        else if (p.tipo === 'calculadora') pintarCalculadora(p, estados[k], cuerpo);
         else cuerpo.innerHTML = RENDER[p.tipo](p, nodos);
     };
     paneles.forEach((_, k) => pintar(k));
 
     // Repintar los paneles conectados cuando cambien sus controles (venga de donde venga).
-    const conectados = paneles.map((p, k) => ({ k, p })).filter(({ p }) => ['puntos', 'requisitos', 'selector'].includes(p.tipo));
+    const conectados = paneles.map((p, k) => ({ k, p })).filter(({ p }) => ['puntos', 'requisitos', 'selector', 'calculadora'].includes(p.tipo));
     if (conectados.length) {
         const controlesDe = ({ p, k }) => p.tipo === 'selector' ? [document.querySelector(p.control)] : estados[k].items.map(it => it.control);
         ['input', 'change'].forEach(tipo => document.addEventListener(tipo, e => {
@@ -446,7 +538,19 @@ function construir(tab, texto, visual, receta) {
         }));
     }
 
+    const alCampo = e => {
+        const f = e.target.closest('.vk-campo');
+        if (!f) return false;
+        const k = Number(f.closest('.vk-panel').dataset.panel);
+        const c = estados[k].items[Number(f.dataset.item)].control;
+        c.value = f.value;
+        emitir(c);
+        pintar(k);
+        return true;
+    };
+    visual.addEventListener('change', e => { if (e.target.matches('select.vk-campo')) alCampo(e); });
     visual.addEventListener('input', e => {
+        if (e.target.matches('input.vk-campo')) { alCampo(e); return; }
         const campo = e.target.closest('.vk-numero');
         if (!campo) return;
         const k = Number(campo.closest('.vk-panel').dataset.panel);
