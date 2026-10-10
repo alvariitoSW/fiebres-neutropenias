@@ -2174,3 +2174,57 @@ body.study-mode-on .pomodoro-fab { display: flex; }
 #btn-modo-visual { display: none; }
 body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 #btn-modo-visual.active { background: rgba(212, 175, 55, 0.2); border-color: var(--accent-blue); color: var(--text-main); font-weight: bold; }
+
+/* Vista Visual de la ficha Hiperpotasemia (Nefrología): simulación del K⁺
+   (js/modules/nefrologia/hiperpotasemia-sim.js). Todo con prefijo hk-. */
+.hk-escenario { display: grid; gap: 8px; margin-bottom: 10px; }
+.hk-campo { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 8px; align-items: center; font-size: 0.72rem; color: var(--text-muted); }
+.hk-campo select { width: 100%; margin: 0; min-height: 36px; font-size: 0.76rem; }
+.hk-causa-detalle { font-size: 0.72rem; color: var(--text-muted); line-height: 1.45; margin: 0; }
+.hk-escena { border: 1px solid var(--border-color); border-radius: 8px; background: #1b1711; overflow: hidden; }
+.hk-escena canvas { display: block; width: 100%; height: auto; }
+#hk-ecg { border-top: 1px solid var(--border-color); background: #13110d; }
+.hk-marcador { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 10px; align-items: baseline; margin: 10px 2px 0; }
+.hk-fila { grid-column: 1 / -1; }
+.hk-k { font-size: 1.6rem; color: var(--text-main); font-variant-numeric: tabular-nums; }
+.hk-k small { font-size: 0.72rem; color: var(--text-muted); }
+.hk-gravedad { justify-self: end; font-size: 0.68rem; letter-spacing: 1px; text-transform: uppercase; padding: 4px 8px; border-radius: 4px; border: 1px solid; }
+.hk-g-ok, .hk-g-ligera { color: var(--accent-green); border-color: var(--accent-green); }
+.hk-g-moderada { color: var(--accent-blue); border-color: var(--accent-blue); }
+.hk-g-grave { color: #e08a6c; border-color: var(--accent-red); background: rgba(184, 92, 62, 0.14); }
+.hk-g-pendiente { color: var(--text-muted); border-color: var(--text-muted); border-style: dashed; }
+.hk-k-real[hidden] { display: none; }
+.hk-k-real { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font-size: 0.74rem; color: var(--text-muted); }
+.hk-nota { font-size: 0.74rem; color: var(--text-muted); line-height: 1.45; }
+.hk-nota strong { color: var(--text-main); font-weight: normal; }
+.hk-riesgo { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 10px; align-items: center; font-size: 0.7rem; color: var(--text-muted); }
+.hk-riesgo-barra { height: 8px; border-radius: 4px; background: rgba(236, 227, 204, 0.08); overflow: hidden; }
+.hk-riesgo-barra i { display: block; height: 100%; border-radius: 4px; transition: width 0.4s ease; }
+.hk-riesgo-barra i.nivel-0, .hk-riesgo-barra i.nivel-1 { background: var(--accent-green); }
+.hk-riesgo-barra i.nivel-2 { background: var(--accent-blue); }
+.hk-riesgo-barra i.nivel-3 { background: var(--accent-red); }
+.hk-riesgo-barra i.protegido { background: repeating-linear-gradient(135deg, var(--text-main) 0 4px, rgba(236, 227, 204, 0.35) 4px 8px); }
+.hk-riesgo-txt { grid-column: 1 / -1; line-height: 1.4; }
+.hk-avisos { display: grid; gap: 6px; margin-top: 10px; }
+.hk-avisos:empty { display: none; }
+.hk-aviso { font-size: 0.74rem; line-height: 1.45; color: var(--text-main); padding: 7px 10px; border-left: 3px solid var(--accent-blue); background: rgba(212, 175, 55, 0.07); border-radius: 4px; }
+.hk-aviso.alarma { border-color: var(--accent-red); background: rgba(184, 92, 62, 0.1); }
+.hk-controles { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0 6px; }
+.hk-btn { min-height: 38px; padding: 0 12px; border-radius: 6px; border: 1px solid var(--border-color); background: transparent; color: var(--text-main); font-family: inherit; font-size: 0.78rem; cursor: pointer; touch-action: manipulation; }
+.hk-btn.hk-primario { background: rgba(212, 175, 55, 0.16); border-color: var(--accent-blue); }
+.hk-btn.hk-peq { min-height: 32px; padding: 0 10px; font-size: 0.72rem; }
+.hk-btn[disabled] { opacity: 0.45; cursor: default; }
+.hk-reloj { margin-left: auto; font-size: 0.86rem; color: var(--text-main); font-variant-numeric: tabular-nums; }
+.hk-grupo { font-size: 0.66rem; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-muted); margin: 10px 0 0; }
+.hk-farmaco { display: grid; grid-template-columns: 4px minmax(0, 1fr) auto; gap: 4px 10px; align-items: center; padding: 8px 8px 8px 0; border-bottom: 1px solid var(--border-color); }
+.hk-tira { align-self: stretch; border-radius: 2px; }
+.hk-nombre { font-size: 0.8rem; color: var(--text-main); }
+.hk-meta, .hk-estado { font-size: 0.68rem; line-height: 1.4; }
+.hk-meta { color: var(--text-muted); }
+.hk-estado { color: var(--text-main); }
+.hk-fidelidad { font-size: 0.66rem; color: var(--accent-blue); line-height: 1.4; }
+.hk-acciones { display: flex; gap: 4px; align-items: center; }
+.hk-dar { min-width: 72px; }
+.hk-link { background: none; border: 0; color: var(--accent-blue); font-family: inherit; font-size: 0.68rem; cursor: pointer; padding: 6px 2px; min-height: 32px; }
+.hk-causa-detalle .hk-link { min-height: 0; padding: 0 2px; }
+.hk-aviso-modelo { font-size: 0.7rem; color: var(--text-muted); line-height: 1.5; margin: 12px 0 0; padding: 8px 10px; border: 1px dashed var(--border-color); border-radius: 6px; }

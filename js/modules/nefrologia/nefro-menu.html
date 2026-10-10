@@ -1210,18 +1210,18 @@
             <dl class="kv-row"><dt>Epidemiología</dt><dd>Causa más frecuente de mortalidad: la disminución de la excreción renal (60% de los casos). Incidencia creciente, sobre todo en ancianos con fármacos que favorecen la hiperpotasemia (iSRAA, diuréticos ahorradores de K⁺) — el 76% de los pacientes hiperpotasémicos estaban con algún fármaco favorecedor, y el 54,8% de esos con ≥2 fármacos combinados. Es, por tanto, un trastorno frecuentemente <strong>iatrogénico y prevenible</strong>.</dd></dl>
             <div class="article-figure">
                 <img src="js/modules/nefrologia/img/k-fig7-gravedad-hiperpotasemia.jpg" alt="Clasificación de la gravedad de la hiperpotasemia aguda según la concentración de potasio y la presencia de alteraciones en el ECG" loading="lazy">
-                <div class="article-figure-caption">Figura 7. Gravedad = concentración de K⁺ × presencia de alteraciones ECG: 5-6 mEq/l ligera (moderada si hay ECG), 6,1-6,5 moderada (grave si hay ECG), &gt;6,5 siempre grave. Clase KDIGO 2020.</div>
+                <div class="article-figure-caption" id="hk-fig7">Figura 7. Gravedad = concentración de K⁺ × presencia de alteraciones ECG: 5-6 mEq/l ligera (moderada si hay ECG), 6,1-6,5 moderada (grave si hay ECG), &gt;6,5 siempre grave. Clase KDIGO 2020.</div>
             </div>
 
-            <table class="data-table">
+            <div style="overflow-x:auto;"><table class="data-table">
                 <thead><tr><th>Mecanismo</th><th>Causas</th></tr></thead>
                 <tbody>
-                    <tr><td>Pseudohiperpotasemia</td><td>Muestra hemolizada, leucocitosis &gt;200.000/mm³ o trombocitosis &gt;500.000/mm³, torniquete apretado con contracción muscular</td></tr>
-                    <tr><td>Aporte excesivo oral o IV</td><td>Solo relevante si coexiste insuficiencia renal</td></tr>
-                    <tr><td>↓Eliminación renal</td><td>IRA/ERC, enfermedad de Addison, hiperplasia adrenal congénita, hipoaldosteronismo hiporreninémico (ATR tipo IV), fármacos que interfieren con la aldosterona (IECA, ARA2, inhibidores de renina, heparina, ciclosporina, tacrolimus), fármacos que inhiben la secreción tubular (espironolactona, eplerenona, <strong>finerenona</strong>, triamtereno, amiloride, trimetoprim), disfunción tubular distal (mieloma, amiloidosis, lupus, trasplante renal)</td></tr>
-                    <tr><td>Paso de K⁺ al líquido extracelular</td><td>Acidosis, lisis celular (traumatismos, quemaduras, lisis tumoral, rabdomiólisis, hemólisis), parálisis periódica hiperpotasémica, déficit de insulina + hiperglucemia grave, fármacos (β-bloqueantes, digital, succinilcolina, agonistas adrenérgicos, arginina, soluciones hipertónicas)</td></tr>
+                    <tr id="hk-causa-pseudo"><td>Pseudohiperpotasemia</td><td>Muestra hemolizada, leucocitosis &gt;200.000/mm³ o trombocitosis &gt;500.000/mm³, torniquete apretado con contracción muscular</td></tr>
+                    <tr id="hk-causa-aporte"><td>Aporte excesivo oral o IV</td><td>Solo relevante si coexiste insuficiencia renal</td></tr>
+                    <tr id="hk-causa-renal"><td>↓Eliminación renal</td><td>IRA/ERC, enfermedad de Addison, hiperplasia adrenal congénita, hipoaldosteronismo hiporreninémico (ATR tipo IV), fármacos que interfieren con la aldosterona (IECA, ARA2, inhibidores de renina, heparina, ciclosporina, tacrolimus), fármacos que inhiben la secreción tubular (espironolactona, eplerenona, <strong>finerenona</strong>, triamtereno, amiloride, trimetoprim), disfunción tubular distal (mieloma, amiloidosis, lupus, trasplante renal)</td></tr>
+                    <tr id="hk-causa-salida"><td>Paso de K⁺ al líquido extracelular</td><td>Acidosis, lisis celular (traumatismos, quemaduras, lisis tumoral, rabdomiólisis, hemólisis), parálisis periódica hiperpotasémica, déficit de insulina + hiperglucemia grave, fármacos (β-bloqueantes, digital, succinilcolina, agonistas adrenérgicos, arginina, soluciones hipertónicas)</td></tr>
                 </tbody>
-            </table>
+            </table></div>
             <ul class="term-chips">
                 <li>ONTARGET: ↑IR e hiperpotasemia con telmisartán+ramipril combinados</li>
                 <li>ALTITUDE: interrumpido por ↑ictus/hiperpotasemia con aliskiren+IECA/ARA2</li>
@@ -1229,12 +1229,12 @@
             </ul>
 
             <p class="section-label" style="margin-top:16px;">Clínica</p>
-            <p style="font-size: 0.8rem; color: var(--text-muted);">Trastornos de la conducción cardíaca y de la función neuromuscular. El ECG tiene alta especificidad pero <strong>baja sensibilidad</strong> — puede haber arritmias fatales con cualquier grado de hiperpotasemia, y no siempre hay cambios típicos. Debilidad muscular <strong>proximal</strong>: síntoma clave que obliga a descartar hiperpotasemia.</p>
+            <p id="hk-ecg-sensibilidad" style="font-size: 0.8rem; color: var(--text-muted);">Trastornos de la conducción cardíaca y de la función neuromuscular. El ECG tiene alta especificidad pero <strong>baja sensibilidad</strong> — puede haber arritmias fatales con cualquier grado de hiperpotasemia, y no siempre hay cambios típicos. Debilidad muscular <strong>proximal</strong>: síntoma clave que obliga a descartar hiperpotasemia.</p>
             <div class="article-figure">
                 <img src="js/modules/nefrologia/img/k-fig9-ecg-cardiotoxicidad-hiperpotasemia.jpg" alt="Alteraciones en el ECG por cardiotoxicidad de la hiperpotasemia: ondas T picudas a 6.5 mEq/l, prolongación de PR y pérdida de onda P a 7 mEq/l, arritmias ventriculares a partir de 8 mEq/l" loading="lazy">
-                <div class="article-figure-caption">Figura 9. ≈6,5 mEq/l → ondas T picudas. &gt;7 mEq/l → ↑PR, se pierde la onda P, ↑QRS. &gt;8 mEq/l → arritmias ventriculares (taquicardia/fibrilación) → paro cardíaco. Clasificación académica: cualquier grado puede dar arritmias fatales.</div>
+                <div class="article-figure-caption" id="hk-fig9">Figura 9. ≈6,5 mEq/l → ondas T picudas. &gt;7 mEq/l → ↑PR, se pierde la onda P, ↑QRS. &gt;8 mEq/l → arritmias ventriculares (taquicardia/fibrilación) → paro cardíaco. Clasificación académica: cualquier grado puede dar arritmias fatales.</div>
             </div>
-            <p style="font-size: 0.8rem; color: var(--text-muted);">Monitorización electrocardiográfica indicada en <strong>todo</strong> paciente con K⁺ &gt;6 mmol/l, aunque no tenga cambios típicos en el ECG.</p>
+            <p id="hk-monitorizacion" style="font-size: 0.8rem; color: var(--text-muted);">Monitorización electrocardiográfica indicada en <strong>todo</strong> paciente con K⁺ &gt;6 mmol/l, aunque no tenga cambios típicos en el ECG.</p>
 
             <p class="section-label" style="margin-top:16px;">Diagnóstico</p>
             <dl class="kv-row"><dt>K⁺ en orina de 24h</dt><dd>Debe ser &gt;100 mEq/día si la respuesta renal es adecuada.</dd></dl>
@@ -1247,19 +1247,11 @@
 
             <p class="section-label" style="margin-top:16px;">Tratamiento — hiperpotasemia grave sintomática</p>
             <p style="font-size: 0.8rem; color: var(--text-muted);">Objetivo urgente: antagonizar el efecto cardíaco y desplazar el K⁺ al interior celular mientras se organiza su eliminación real del organismo.</p>
-            <table class="data-table">
+            <div style="overflow-x:auto;"><table class="data-table">
                 <thead><tr><th>Agente</th><th>Dosis</th><th>Inicio/duración</th><th>Mecanismo</th></tr></thead>
-                <tbody>
-                    <tr><td>Gluconato cálcico 10%</td><td>10-30 ml en 2-5 min IV</td><td>5-10 min / 30-60 min</td><td>Antagoniza el efecto cardíaco (no baja el K⁺ plasmático)</td></tr>
-                    <tr><td>Salbutamol nebulizado o IV</td><td>10-20 mg (2-4cc) en 10' inhalado, o 0,5 mg en 100 ml de glucosado 5% en 15' IV</td><td>30 min / 2-3h</td><td>Desplazamiento de K⁺ al interior celular</td></tr>
-                    <tr><td>Insulina + glucosa</td><td>10 U rápida en 500 ml glucosado 10% (o 50 ml glucosado 50%) IV</td><td>15 min / 6-8h</td><td>Desplazamiento de K⁺ al interior celular</td></tr>
-                    <tr><td>Bicarbonato sódico</td><td>Sobre todo si hay acidosis concomitante</td><td>30-60 min / 6-8h</td><td>Desplazamiento de K⁺ al interior celular</td></tr>
-                    <tr><td>Diuréticos de asa</td><td>Furosemida 40-200 mg IV / torasemida</td><td>30 min / horas</td><td>Eliminan K⁺ del organismo</td></tr>
-                    <tr><td>Captores de potasio (CSZ, patirómero)</td><td>CSZ 5-10 g/día; patirómero 8,4-25,2 g/día</td><td>1-2h / 7-24h</td><td>Eliminan K⁺ del organismo</td></tr>
-                    <tr><td>Diálisis</td><td>Hemodiálisis o diálisis peritoneal</td><td>Minutos/hora</td><td>Eliminan K⁺ del organismo</td></tr>
-                </tbody>
-            </table>
-            <p style="font-size: 0.8rem; color: var(--text-muted);">El gluconato cálcico es la <strong>primera medida</strong> ante cambios ECG. Salbutamol nebulizado e insulina-glucosa son de primera línea para bajar el K⁺; combinados son más eficaces que cualquiera por separado (la monoterapia con β-agonistas falla en 20-40% de los pacientes). El bicarbonato se reserva para acidosis metabólica concomitante. Hemodiálisis: el método más rápido y seguro en IR grave o si fallan las medidas previas — usar baños sin glucosa para no estimular la liberación de insulina.</p>
+                <tbody id="hk-tto-tabla"><!-- Filas generadas desde js/data/hiperpotasemia-data.js (hiperpotasemia-sim.js) --></tbody>
+            </table></div>
+            <p id="hk-tto-nota" style="font-size: 0.8rem; color: var(--text-muted);">El gluconato cálcico es la <strong>primera medida</strong> ante cambios ECG. Salbutamol nebulizado e insulina-glucosa son de primera línea para bajar el K⁺; combinados son más eficaces que cualquiera por separado (la monoterapia con β-agonistas falla en 20-40% de los pacientes). El bicarbonato se reserva para acidosis metabólica concomitante. Hemodiálisis: el método más rápido y seguro en IR grave o si fallan las medidas previas — usar baños sin glucosa para no estimular la liberación de insulina.</p>
             <div class="article-figure">
                 <img src="js/modules/nefrologia/img/k-fig10-algoritmo-tratamiento-hiperpotasemia.jpg" alt="Algoritmo de tratamiento de la hiperpotasemia: signos en el ECG, tratamiento urgente con sales de calcio, beta-agonistas, insulina y glucosa, diuréticos del asa y resinas, diálisis si insuficiencia renal grave" loading="lazy">
                 <div class="article-figure-caption">Figura 10. Signos ECG → tratamiento urgente (calcio + β-agonistas + insulina/glucosa + diurético de asa + resinas) → diálisis si IR severa o sin mejoría → evaluación etiológica y tratamiento a largo plazo.</div>
@@ -1274,15 +1266,15 @@
                 <li>Diuréticos de asa (furosemida/torasemida ± tiazida o acetazolamida)</li>
                 <li>Fludrocortisona en insuf. suprarrenal e hipoaldosteronismo hiporreninémico (50-200 mcg/día)</li>
             </ul>
-            <table class="data-table">
+            <div style="overflow-x:auto;"><table class="data-table">
                 <thead><tr><th></th><th>Poliestireno sulfonato Ca/Na</th><th>Patirómero (Veltassa®)</th><th>Ciclosilicato de zirconio (Lokelma®)</th></tr></thead>
                 <tbody>
                     <tr><td>Lugar de acción</td><td>Colon distal</td><td>Colon distal</td><td>Todo el tracto GI</td></tr>
-                    <tr><td>Inicio de acción</td><td>&gt;2 horas</td><td>7 horas</td><td>1 hora</td></tr>
+                    <tr id="hk-quel-inicio"><td>Inicio de acción</td><td>&gt;2 horas</td><td>7 horas</td><td>1 hora</td></tr>
                     <tr><td>Mecanismo</td><td>No específico, intercambia Ca por cationes</td><td>No específico, intercambio K por calcio</td><td>Específico, intercambio K por sodio</td></tr>
                     <tr><td>Efectos 2º frecuentes</td><td>Estreñimiento, náusea; riesgo de necrosis colónica descrito</td><td>Estreñimiento 7%, hipoMg 5-9%</td><td>Edema 4-16% (dosis-dependiente), HTA 7%</td></tr>
                 </tbody>
-            </table>
+            </table></div>
             <p style="font-size: 0.8rem; color: var(--text-muted);">Los quelantes de potasio no estaban indicados en la hiperpotasemia <strong>aguda</strong> (las resinas clásicas y diuréticos solo se usan en la crónica), pero guías recientes empiezan a recomendar patirómero/CSZ también en agudo — el CSZ mostró eficacia superior a placebo en el ensayo ENERGIZE, con menor tiempo de inicio de acción.</p>
 
             <p class="section-label" style="margin-top:16px;">Situaciones especiales</p>
@@ -1323,7 +1315,7 @@
             <div id="k-hiper-explicacion" class="result-box" style="display: none;"></div>
 
             <p class="section-label" style="margin-top:16px;">🏥 Protocolo hospitalario (PNT HUGCDN-NEF-PT-01)</p>
-            <p style="font-size: 0.83rem; color: var(--text-muted);">Fuente: Manejo de la Hiperpotasemia Aguda y Crónica. Servicio de Nefrología, HUGCDN. Ante cualquier hiperpotasemia, especialmente inesperada o aguda, el primer paso es <strong>confirmarla con un nuevo control analítico</strong> (evitar pseudohiperpotasemia) y completar el estudio con hemograma, gasometría venosa, bioquímica con el resto de iones, urea/función renal, y orina con iones y creatinina.</p>
+            <p id="hk-confirmar" style="font-size: 0.83rem; color: var(--text-muted);">Fuente: Manejo de la Hiperpotasemia Aguda y Crónica. Servicio de Nefrología, HUGCDN. Ante cualquier hiperpotasemia, especialmente inesperada o aguda, el primer paso es <strong>confirmarla con un nuevo control analítico</strong> (evitar pseudohiperpotasemia) y completar el estudio con hemograma, gasometría venosa, bioquímica con el resto de iones, urea/función renal, y orina con iones y creatinina.</p>
 
             <p class="section-label" style="margin-top:16px;">💊 Titulación de iSRAA/ARM/ARNi según el potasio</p>
             <dl class="kv-row"><dt>K⁺ &gt; 6,5 mEq/l</dt><dd>Suspender/reducir/no iniciar iSRAA, ARM o ARNi, e iniciar un agente reductor de potasio (el CSZ tiene aquí un papel específico en el momento agudo).</dd></dl>

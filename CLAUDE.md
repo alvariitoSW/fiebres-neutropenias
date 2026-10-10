@@ -9561,6 +9561,94 @@ confirmadas por el usuario: **cambiar** (una vista u otra, no apiladas — en
   volver a Texto sola; al desactivarlo, todas vuelven a Texto. Bump a
   `?v=20261017`.
 
+### Vista Visual en Nefrología: simulación de la hiperpotasemia (octubre 2026)
+
+Primera vista Visual fuera de Hematología, a petición explícita del usuario
+("vamos ahora con nefro"). Antes de tocar código se iteró una maqueta en
+un Artifact en 3 rondas: una gráfica de tiempos de cada fármaco (rechazada
+como insuficiente: "se podría mejorar si se intentara simular la
+biología"), una **simulación** (aprobada: "esto era a lo que me refería con
+estudiar de esta manera visual") y una 3ª versión que corrige los errores
+de una autoauditoría pedida por el usuario y añade las causas. **Este es el
+modelo de "vista Visual = simulación de la fisiología" para el resto de
+Nefrología**, distinto del kit de recetas de Hematología: aquí no se
+dibujan las líneas del texto, se simula el mecanismo que explican.
+
+- **Dónde**: ficha `fisio-hiperpotasemia` del cuaderno de fisiología
+  (`nefro-menu.html`). Toda la ficha gana el interruptor Texto | Visual
+  (`envolver()`, ahora exportada desde `core/visual-kit.js` para módulos a
+  medida); la vista Texto es la ficha de siempre.
+- **Módulo**: `js/modules/nefrologia/hiperpotasemia-sim.js`
+  (`initHiperpotasemiaSim()`, llamado desde `fisiologia.js` justo después de
+  `initCorkboard`, para que "Siguiente ficha" ya exista y quede fuera). La
+  escena se construye la primera vez que se abre la vista Visual. Dos
+  `<canvas>` (escena 360×320 y ECG 360×74, con `devicePixelRatio`).
+- **Una sola fuente de datos**: `js/data/hiperpotasemia-data.js`. La tabla
+  "Tratamiento — hiperpotasemia grave sintomática" de la vista Texto ya no
+  está escrita en el HTML: `<tbody id="hk-tto-tabla">` se rellena desde
+  `tratamientoHiperpotasemia` (mismo texto, fila a fila), y la simulación
+  lee de ahí los tiempos. También viven ahí los fármacos de la simulación,
+  las causas y las magnitudes.
+- **Qué simula**: el K⁺ como partículas entre plasma (2%), célula (98%) y
+  tres salidas (riñón, intestino, diálisis), más el corazón con su ECG y un
+  tubo de analítica. Cada fármaco actúa con su mecanismo y sus tiempos de
+  la tabla: la bomba Na⁺/K⁺ se acelera con insulina y salbutamol (3 Na⁺
+  fuera, 2 K⁺ dentro), el K⁺ desplazado **vuelve a salir** cuando se acaba
+  el efecto, solo riñón/intestino/diálisis lo sacan del cuerpo, el calcio
+  protege la membrana sin cambiar el K⁺. Las dosis se pueden repetir (no
+  suman: cuenta la que más actúa). Reloj de 12 h, ×4, pausa.
+- **Causas en la misma escena** (selector): ↓eliminación renal (7,2 u 8,3),
+  acidosis (entra H⁺, sale K⁺; el bicarbonato lo devuelve), lisis celular
+  (la membrana rota sigue soltando K⁺), aporte excesivo (con riñón
+  conservado se va por la orina; con IR grave se queda — "solo relevante si
+  coexiste insuficiencia renal") y **pseudohiperpotasemia** (el tubo marca
+  7,0 con la muestra hemolizada, el plasma real es normal, gravedad "sin
+  confirmar" hasta pulsar "Repetir la analítica", el primer paso del PNT).
+  Selector de función renal (IR grave cierra el riñón y deja el diurético al
+  20%) y selector de ECG.
+- **ECG independiente del K⁺**, a propósito: la ficha insiste en su baja
+  sensibilidad. Tres modos: cambios típicos de la Figura 9 (T picudas desde
+  6,2, P perdida/QRS ancho desde 7, arritmia ventricular desde 8), ECG
+  normal pese al K⁺ alto, o cambios ya con K⁺ moderado (≥5). La gravedad
+  sigue la Figura 7 cruzando K⁺ × "hay cambios en el ECG".
+- **Avisos**: frases de la propia ficha que aparecen según lo que se hace
+  (calcio como primera medida ante cambios ECG, su efecto de 30-60 min ya
+  pasado, rebote del K⁺ desplazado, monoterapia con β-agonistas, bicarbonato
+  sin acidosis, diurético en IR grave, baño sin glucosa en diálisis,
+  monitorización con K⁺ &gt;6, pseudohiperpotasemia).
+- **Fidelidad**: las cantidades (cuántos mEq/l mueve cada medida, a qué
+  ritmo sale el K⁺ en cada causa, la eliminación renal basal) son
+  **ilustrativas**, porque la ficha no las da, y la vista lo avisa. Lo
+  mismo con "Minutos/hora" (diálisis) y "horas" (diuréticos). Discrepancia
+  real de la ficha, declarada en la propia fila: la tabla de urgencia da
+  1-2 h para los captores juntos y la tabla de la forma crónica da 1 h al
+  CSZ y 7 h al patirómero; la simulación los separa con esas cifras.
+- **"Texto ↓"** en cada fármaco y causa lleva a su línea real con
+  `irAlTexto()`. Ids añadidos a la ficha: `hk-causa-pseudo/aporte/renal/
+  salida`, `hk-fig7`, `hk-fig9`, `hk-ecg-sensibilidad`, `hk-monitorizacion`,
+  `hk-tto-<id>` (generados), `hk-tto-nota`, `hk-quel-inicio`,
+  `hk-confirmar`.
+- **Rendimiento**: la animación solo corre mientras la vista Visual está en
+  pantalla (`IntersectionObserver` sobre el bloque Visual entero, no solo
+  el dibujo, para que el reloj siga al bajar a pulsar los fármacos).
+  Verificado: 0 fotogramas/s en la vista Texto o fuera de la ficha, ~50/s
+  con la simulación visible. Respeta `prefers-reduced-motion`.
+- CSS con prefijo `hk-` en `components.css`. Bug previo corregido de paso:
+  las 3 tablas de la ficha desbordaban a 390 px (432 px de ancho de
+  página); ahora van en `overflow-x:auto`.
+- Con esta ficha, el botón global "🖼️ Visual" de la cabecera aparece
+  también en Nefrología (lo decide solo la presencia de `[data-visual]`).
+- Verificado con Playwright (390×844, toques reales): navegación real
+  Especialidades → PIF → Nefrología → nefrona → ficha; la tabla de la vista
+  Texto tiene sus 7 filas; los 6 escenarios y los 8 fármacos funcionan; la
+  pseudohiperpotasemia pasa de 7,0 a 4,5 al repetir la analítica; "Texto ↓"
+  de los captores resalta su fila y la de "Inicio de acción"; el buscador
+  global encuentra la ficha por su texto (no por los rótulos de la
+  simulación); sin errores de consola ni desborde horizontal.
+- **Siguiente, a decidir por el usuario**: llevar el mismo enfoque a otras
+  fichas de Nefrología (hipopotasemia y regulación del potasio pueden
+  reutilizar la misma escena de plasma/célula/salidas).
+
 ## Auditoría de Hematología (octubre 2026)
 
 A petición explícita del usuario ("revisa que esté todo correcto en

@@ -338,7 +338,9 @@ function renderSelector(p) {
 
 // ---------- Montaje ----------
 
-function envolver(tab) {
+// Exportada para módulos Visual a medida (p. ej. la simulación de
+// hiperpotasemia de Nefrología) que no usan una receta del kit.
+export function envolver(tab) {
     const texto = document.createElement('div');
     texto.className = 'vista-texto';
     const visual = document.createElement('div');

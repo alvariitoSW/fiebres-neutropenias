@@ -3,6 +3,7 @@
 // "Fisiología Renal". Nefrología al día (SEN), actualizado 5/10/2020.
 import { initCorkboard } from '../../core/corkboard.js';
 import { wireSelectExplicacion } from '../../core/ui.js';
+import { initHiperpotasemiaSim } from './hiperpotasemia-sim.js';
 import {
     hiponatremiaPorVolemia, hipernatremiaDiagnosticoDiferencial,
     factoresDistribucionPotasio, sindromesHipopotasemicos, mecanismosHiperpotasemia,
@@ -303,6 +304,9 @@ function calcCorreccionSodio() {
 
 export function init() {
     initCorkboard('fisio-corkboard', 'panel-fisio-tabs');
+    // Vista Visual de la ficha Hiperpotasemia: simulación del K⁺ (tras el
+    // cuaderno, para que el botón "Siguiente ficha" ya exista y quede fuera).
+    initHiperpotasemiaSim();
 
     const slider = document.getElementById('tfg-pam');
     if (slider) {
