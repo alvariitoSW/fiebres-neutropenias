@@ -13,6 +13,12 @@
 
 const CLASE_VISUAL = 'modo-visual';
 
+// Modo global (botón "🖼️ Visual" de la cabecera): pone TODAS las tarjetas
+// en la misma vista de una vez, y las que se creen después (p. ej. la ficha
+// de un microorganismo) nacen ya en ese modo. Cada tarjeta conserva su
+// interruptor propio. Solo vive en memoria: no se guarda nada.
+let modoGlobal = 'texto';
+
 function pintarToggle(card) {
     const esVisual = card.classList.contains(CLASE_VISUAL);
     card.querySelectorAll(':scope > .vista-toggle button').forEach(b => {
@@ -68,8 +74,30 @@ export function initVistaVisual(root = document) {
             if (b) setVista(card, b.dataset.vista);
         });
         pintarToggle(card);
+        if (modoGlobal === 'visual') setVista(card, 'visual');
     });
 }
+
+export function setModoGlobal(vista) {
+    modoGlobal = vista;
+    document.querySelectorAll('[data-visual]').forEach(card => setVista(card, vista));
+}
+
+// Botón de la cabecera. Se muestra solo cuando la pantalla actual tiene algún
+// bloque con vista Visual (lo decide quien llama a hayVisualEn()).
+export function initBotonVisualGlobal(boton) {
+    if (!boton) return;
+    const pintar = () => {
+        const on = modoGlobal === 'visual';
+        boton.classList.toggle('active', on);
+        boton.setAttribute('aria-pressed', String(on));
+        boton.textContent = on ? '🖼️ Visual: ON' : '🖼️ Visual';
+    };
+    boton.addEventListener('click', () => { setModoGlobal(modoGlobal === 'visual' ? 'texto' : 'visual'); pintar(); });
+    pintar();
+}
+
+export const hayVisualEn = vista => !!vista?.querySelector('[data-visual]');
 
 // Texto de un bloque tal como lo lee la vista Texto: sin la imagen, sin el
 // interruptor y sin el botón "Siguiente ficha → …" (que lleva el nombre de

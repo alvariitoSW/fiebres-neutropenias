@@ -2,13 +2,15 @@
 // nivel de navegación de la app (menú principal, submenú de una categoría, etc.).
 import { openCorkboardTopic } from './corkboard.js';
 
-export function createViewSwitcher(views) {
+// `alMostrar(key, vista)` (opcional) se llama cada vez que cambia la vista.
+export function createViewSwitcher(views, alMostrar) {
     let actual = null;
     function show(key) {
         actual = key;
         Object.keys(views).forEach(k => {
             views[k].style.display = (k === key) ? 'block' : 'none';
         });
+        alMostrar?.(key, views[key]);
     }
     // Salto a una ficha concreta de un cuaderno de campo de este nivel:
     // cambia de vista (si se indica) y abre la ficha (si se indican panel y

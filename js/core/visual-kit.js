@@ -363,6 +363,9 @@ export function montarVisual(tabId, receta) {
     tab.addEventListener('vistachange', e => {
         if (e.detail.vista === 'visual' && !construido) { construido = true; construir(tab, texto, visual, receta); }
     });
+    // Si el modo Visual global ya estaba activo, la ficha nace en Visual
+    // antes de que exista este listener: construir ahora.
+    if (tab.classList.contains('modo-visual')) { construido = true; construir(tab, texto, visual, receta); }
 }
 
 function construir(tab, texto, visual, receta) {

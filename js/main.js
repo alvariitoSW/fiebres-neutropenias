@@ -7,7 +7,7 @@ import { initAccordions } from './core/accordion.js';
 import { initLightbox } from './core/lightbox.js';
 import { initStudyMode } from './core/pomodoro.js';
 import { initSearch } from './core/search.js';
-import { initVistaVisual } from './core/vista-visual.js';
+import { initVistaVisual, initBotonVisualGlobal } from './core/vista-visual.js';
 import * as home from './modules/home/index.js';
 import * as generales from './modules/generales/index.js';
 import * as neutropeniaFebril from './modules/neutropenia-febril/index.js';
@@ -29,6 +29,7 @@ async function start() {
     initLightbox();
     // Interruptor "Texto | Visual" en cada .card[data-visual] (core/vista-visual.js).
     initVistaVisual();
+    initBotonVisualGlobal(document.getElementById('btn-modo-visual'));
     const homeApi = home.init();
     // Módulos de Hematología, que cuelgan del propio switcher raíz de home.
     [generales, neutropeniaFebril, reconocimiento, sindromesUrgentes, trasplante, merinoHemato].forEach(m => m.init());

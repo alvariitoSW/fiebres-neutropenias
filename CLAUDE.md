@@ -9539,6 +9539,28 @@ confirmadas por el usuario: **cambiar** (una vista u otra, no apiladas — en
   el resto de especialidades, y/o el botón global "todo en Visual" en la
   cabecera.
 
+- **Botón global "🖼️ Visual"**, a petición explícita del usuario ("un botón
+  arriba del todo... para activar en todas las vista visual y no tener que
+  ir una por una"). Va en la barra de la cabecera, junto a Escalas, Estudio
+  y Buscar (`#btn-modo-visual`), y **solo se ve donde hay vistas Visual**:
+  `createViewSwitcher(views, alMostrar)` (`core/navigation.js`) acepta ahora
+  un callback opcional que `home/index.js` usa en `topLevel` para poner
+  `body.hay-vista-visual` si la vista mostrada contiene algún
+  `[data-visual]` o lleva `data-con-visual` (el Atlas de Hematología, que
+  es un menú). Hoy eso es solo Hematología; si otra especialidad gana
+  vistas Visual, el botón aparecerá allí sin tocar nada. Al pulsarlo,
+  `setModoGlobal()` (`core/vista-visual.js`) pone todas las tarjetas en
+  Visual (o todas en Texto al volver a pulsar), y las que se creen después
+  —la ficha de un microorganismo, una receta del kit— nacen ya en ese modo
+  (`montarVisual()` construye la imagen al momento si la ficha ya está en
+  Visual). Cada tarjeta conserva su interruptor propio. Solo en memoria,
+  sin `localStorage`. Verificado con Playwright: oculto en la raíz, en PIF
+  y en Nefrología; visible en el Atlas y en Reconocimiento; al activarlo
+  las 51 tarjetas pasan a Visual con todas las imágenes construidas; la
+  ficha de un germen abierta después nace en Visual; una tarjeta se puede
+  volver a Texto sola; al desactivarlo, todas vuelven a Texto. Bump a
+  `?v=20261017`.
+
 ## Auditoría de Hematología (octubre 2026)
 
 A petición explícita del usuario ("revisa que esté todo correcto en

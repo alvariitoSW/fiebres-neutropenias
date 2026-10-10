@@ -4,6 +4,7 @@
 // en su propio módulo; aquí solo se decide qué vista se ve en cada momento.
 import { createViewSwitcher } from '../../core/navigation.js';
 import { openCorkboardTopic } from '../../core/corkboard.js';
+import { hayVisualEn } from '../../core/vista-visual.js';
 import { initAtlas } from './atlas.js';
 import { initPifManifiesto } from './pif-manifiesto.js';
 import { preguntasNeutropeniaFebril, temasNeutropeniaFebril } from '../../data/neutropenia-febril-preguntas.js';
@@ -84,6 +85,10 @@ export function init() {
         cardiologia: document.getElementById('cardiologia-view'),
         neumologia: document.getElementById('neumologia-view'),
         sobrevivirUmi: document.getElementById('sobrevivir-umi-view'),
+    }, (key, vista) => {
+        // El botón "🖼️ Visual" de la cabecera solo aparece donde hay vistas
+        // Visual, o en el menú de un tema que lleva a ellas (data-con-visual).
+        document.body.classList.toggle('hay-vista-visual', hayVisualEn(vista) || !!vista?.hasAttribute('data-con-visual'));
     });
 
     function goHome() {

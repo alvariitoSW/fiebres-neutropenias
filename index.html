@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HUD Clínico UCI</title>
-<link rel="stylesheet" href="css/variables.css?v=20261016">
-<link rel="stylesheet" href="css/base.css?v=20261016">
-<link rel="stylesheet" href="css/components.css?v=20261016">
+<link rel="stylesheet" href="css/variables.css?v=20261017">
+<link rel="stylesheet" href="css/base.css?v=20261017">
+<link rel="stylesheet" href="css/components.css?v=20261017">
 </head>
 <body>
 
@@ -20,6 +20,7 @@
             <button class="accordion-btn nav-btn corner-btn" id="btn-escalas-generales">⚡ Escalas</button>
             <button class="accordion-btn nav-btn corner-btn" id="btn-modo-estudio" title="Modo Estudio: estimación de pomodoros por ficha + reloj Pomodoro">🍅 Estudio</button>
             <button class="accordion-btn nav-btn corner-btn" id="btn-buscar-global" title="Buscar en toda la app">🔍 Buscar</button>
+            <button class="accordion-btn nav-btn corner-btn" id="btn-modo-visual" title="Poner todas las tarjetas de este tema en vista Visual (o volver a Texto)" aria-pressed="false">🖼️ Visual</button>
         </div>
     </div>
 
@@ -161,7 +162,7 @@
     <!-- ========================================== -->
     <!-- MENÚ PRINCIPAL — HEMATOLOGÍA                -->
     <!-- ========================================== -->
-    <div id="home-view" style="display: none;">
+    <div id="home-view" data-con-visual style="display: none;">
         <button class="back-btn btn-volver-pif-menu">← VOLVER</button>
 
         <!-- ===== ATLAS HEMATOLÓGICO: mapa interactivo de navegación ===== -->
@@ -415,6 +416,6 @@
     <div data-include="js/modules/quiz/quiz.html"></div>
 </div>
 
-<script type="module" src="js/main.js?v=20261016"></script>
+<script type="module" src="js/main.js?v=20261017"></script>
 </body>
 </html>
