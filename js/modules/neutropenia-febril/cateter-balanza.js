@@ -1,16 +1,22 @@
-// Vista Visual de "4. Manejo del catéter": una balanza retirar / conservar.
+// Vista Visual del manejo del catéter: una balanza retirar / conservar.
 // Platillo izquierdo: los criterios de retirada; derecho: la única condición
 // para conservar (mal acceso periférico) y su obligación (sellado). Los
 // criterios y el mal acceso son las casillas REALES de la calculadora de
 // catéter del tratamiento dirigido (se leen sus etiquetas y se escriben sus
 // casillas); la inclinación la decide decisionCVC(), la misma función de
 // calcCVC(). Así la balanza nunca puede contradecir a la calculadora.
+//
+// Se monta en cada `.cateter-balanza` de la app (la tarjeta 4 de la vista
+// principal y la calculadora del tratamiento dirigido). Cada contenedor
+// indica con data-fuente-retirar / data-fuente-conservar a qué parte del
+// texto lleva su "Ver en el texto".
 
 import { decisionCVC } from './cateter-mdr.js';
 import { irAlTexto } from '../../core/vista-visual.js';
 
 const $ = id => document.getElementById(id);
 const riesgos = () => [...document.querySelectorAll('.cvc-risk')];
+const contenedores = () => [...document.querySelectorAll('.cateter-balanza')];
 
 function etiqueta(input) {
     const l = input.closest('label').cloneNode(true);
@@ -24,7 +30,7 @@ function construir(cont) {
     cont.innerHTML = `
         <p class="visual-guia">Un solo criterio de la izquierda inclina la balanza hacia retirar. Solo si no hay ninguno y el acceso periférico es malo, se conserva.</p>
         <div class="balanza">
-            <div class="balanza-brazo" id="balanza-brazo">
+            <div class="balanza-brazo">
                 <div class="balanza-plato izq">Retirar</div>
                 <div class="balanza-plato der">Conservar</div>
             </div>
@@ -34,36 +40,34 @@ function construir(cont) {
             <div class="balanza-col retirar">
                 <b>Retirada obligatoria si</b>
                 <div class="balanza-chips">${chips}</div>
-                <button type="button" class="visual-link" data-fuente="cat-retirada">Ver en el texto ↓</button>
+                <button type="button" class="visual-link" data-fuente="${cont.dataset.fuenteRetirar}">Ver en el texto ↓</button>
             </div>
             <div class="balanza-col conservar">
                 <b>Conservar solo si</b>
-                <button type="button" class="balanza-chip" id="balanza-acceso">${etiqueta($('cvc-poor-access'))}</button>
+                <button type="button" class="balanza-chip" data-acceso>${etiqueta($('cvc-poor-access'))}</button>
                 <p>e infección no complicada por germen poco virulento.</p>
                 <p class="balanza-obligatorio">Obligatorio: sellado antibiótico + tratamiento sistémico.</p>
-                <button type="button" class="visual-link" data-fuente="cat-conservar">Ver en el texto ↓</button>
+                <button type="button" class="visual-link" data-fuente="${cont.dataset.fuenteConservar}">Ver en el texto ↓</button>
             </div>
         </div>
-        <div class="visual-veredicto" id="balanza-veredicto"></div>`;
+        <div class="visual-veredicto" data-veredicto></div>`;
 }
 
 const INCLINACION = { retirar: -9, conservar: 9, valorar: 0 };
 
-function render() {
-    const cont = $('cateter-balanza');
-    if (!cont) return;
+function render(cont) {
     riesgos().forEach((r, i) => {
         const b = cont.querySelector(`[data-riesgo="${i}"]`);
         b.classList.toggle('on', r.checked);
         b.setAttribute('aria-pressed', String(r.checked));
     });
     const acceso = $('cvc-poor-access').checked;
-    $('balanza-acceso').classList.toggle('on', acceso);
-    $('balanza-acceso').setAttribute('aria-pressed', String(acceso));
+    const ba = cont.querySelector('[data-acceso]');
+    ba.classList.toggle('on', acceso);
+    ba.setAttribute('aria-pressed', String(acceso));
 
-    const decision = decisionCVC();
-    $('balanza-brazo').style.transform = `rotate(${INCLINACION[decision]}deg)`;
-    const v = $('balanza-veredicto');
+    cont.querySelector('.balanza-brazo').style.transform = `rotate(${INCLINACION[decisionCVC()]}deg)`;
+    const v = cont.querySelector('[data-veredicto]');
     const t = $('cvc-result-text');
     v.style.borderColor = t.style.color;
     v.style.color = t.style.color;
@@ -76,18 +80,18 @@ function alternar(input) {
 }
 
 export function initCateterBalanza() {
-    const cont = $('cateter-balanza');
-    if (!cont) return;
-    construir(cont);
-    cont.addEventListener('click', e => {
-        const r = e.target.closest('[data-riesgo]');
-        if (r) { alternar(riesgos()[Number(r.dataset.riesgo)]); return; }
-        if (e.target.closest('#balanza-acceso')) { alternar($('cvc-poor-access')); return; }
-        const f = e.target.closest('[data-fuente]');
-        if (f) irAlTexto($('cateter-card'), $(f.dataset.fuente));
+    contenedores().forEach(cont => {
+        construir(cont);
+        cont.addEventListener('click', e => {
+            const r = e.target.closest('[data-riesgo]');
+            if (r) { alternar(riesgos()[Number(r.dataset.riesgo)]); return; }
+            if (e.target.closest('[data-acceso]')) { alternar($('cvc-poor-access')); return; }
+            const f = e.target.closest('[data-fuente]');
+            if (f) irAlTexto(cont.closest('[data-visual]'), $(f.dataset.fuente));
+        });
+        render(cont);
     });
     document.addEventListener('change', e => {
-        if (e.target.matches?.('.cvc-risk, #cvc-poor-access')) render();
+        if (e.target.matches?.('.cvc-risk, #cvc-poor-access')) contenedores().forEach(render);
     });
-    render();
 }

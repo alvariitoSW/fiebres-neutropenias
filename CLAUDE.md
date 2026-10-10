@@ -9401,6 +9401,54 @@ confirmadas por el usuario: **cambiar** (una vista u otra, no apiladas — en
     corrigieron etiquetas PCT/PCR montadas sobre sus curvas, el botón
     "Texto ↓" partido en dos líneas y el cursor de la regla tapando una
     marca). Bump de cache-busting a `?v=20261011`.
+- **El resto de Neutropenia Febril, a petición explícita del usuario**
+  ("Empieza con lo pendiente"): todas las tarjetas de Neutropenia Febril
+  tienen ya Texto | Visual. **Escalas Generales y Fuentes y Evidencia se
+  dejan sin vista Visual a propósito**: las escalas son transversales a toda
+  la app, no de Hematología, y Fuentes es solo bibliografía. Mismas reglas
+  de siempre: ninguna imagen calcula, escriben en los controles reales y
+  copian el resultado de su calculadora.
+  - **Tratamiento dirigido**: la calculadora de catéter muestra la misma
+    balanza que la tarjeta 4 de la vista principal (`cateter-balanza.js`
+    ahora monta todo `.cateter-balanza`; cada contenedor dice con
+    `data-fuente-retirar`/`data-fuente-conservar` adónde lleva su "Ver en
+    el texto"); el reloj de seguridad son dos barras de días con su umbral
+    (≥3 afebril, ≥7 de antibiótico en la microbiológica) que cambian la
+    pestaña real (`reloj-visual.js`); la Matriz MDR es un árbol germen →
+    situación del paciente → pauta, leyendo las etiquetas de sus controles
+    (`mdr-visual.js`); la calculadora PK/PD es una escalera renal del
+    fármaco elegido con la dosis de cada tramo leída de `pkpd-data.js`, la
+    misma fuente que `calcPKPD()` (`pkpd-visual.js`). `pkpd.js` acota ahora
+    sus botones a `#pkpd-card .pkpd-btn[data-drug]` (la clase `.pkpd-btn`
+    también la usan enlaces de bibliografía).
+  - **Tratamiento empírico**: "¿Cuándo parar?" son tres candados y "Vía
+    oral" son barreras (una basta para ingresar), con el panel nuevo
+    `requisitos` del kit; el antifúngico empírico son dos carriles de días
+    (sin y con profilaxis frente a filamentosos) con los umbrales del texto
+    (`antifungico-visual.js`).
+  - **Vista principal**: CISNE con el panel `puntos` del kit. Las recetas de
+    CISNE, "¿Cuándo parar?" y "Vía oral" viven en `nf-tarjetas-visual.js`.
+  - **Microorganismos**: cada ficha de germen (9) tiene vista Visual — una
+    cadena epidemiología → mecanismo → clínica → diagnóstico (pista = la
+    primera frase real; al tocar, el texto entero y "Ver en el texto"), el
+    esquema de mecanismo y un semáforo de fármacos indicados / a evitar
+    leídos de `microorganismos-data.js` (`microorganismos.js`).
+  - **Kit (`core/visual-kit.js`)**: `montarVisual()` sirve ya también para
+    una tarjeta suelta (deja su `<h3>` fuera y el interruptor debajo), y hay
+    un panel nuevo `requisitos` (casillas reales como candados, modo
+    `todos`, o barreras, modo `ninguno`). Bug corregido de paso: `limpiar()`
+    quitaba un "≥", "≤", "<" o ">" inicial — "≥72h acumuladas" se mostraba
+    como "72h"; ahora esos signos se conservan.
+  - Verificado con Playwright (390×844, toques reales): cada imagen escribe
+    en su control y copia el veredicto correcto (CISNE 4/8 alto riesgo;
+    tres candados → "se puede suspender"; una barrera → ingreso; antifúngico
+    día 5 + inestable sin profilaxis → empírico, con profilaxis → no
+    indicado; catéter con sepsis → retirada en las dos balanzas; reloj
+    microbiológica 3/7 → luz verde; MDR CRE + MBL + crítico → ceftazidima-
+    avibactam + aztreonam con nota de combinación; PK/PD meropenem &lt;10
+    ml/min → 1 g/24 h y 500 mg/12 h si grave), las 9 fichas de germen
+    abren su vista Visual, las 36 fichas anteriores siguen sin fuentes sin
+    resolver, sin errores de consola ni overflow. Bump a `?v=20261016`.
 - **El resto de Hematología, a petición explícita del usuario** ("Haz lo
   mismo con el resto de Hematología"): las **36 fichas** restantes
   (Reconocimiento 9, Síndromes Urgentes 3, Trasplante 18 —Introducción 7,

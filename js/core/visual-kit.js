@@ -17,6 +17,7 @@
 //
 // Tipos de panel: 'flujo', 'escalera', 'comparar', 'racimos', 'mapa',
 // 'linea', 'puntos' (barras de puntuación conectadas a una calculadora),
+// 'requisitos' (casillas reales como candados o barreras),
 // 'selector' (opciones de un <select> real) y tres que DIBUJAN UNA TABLA
 // de la ficha leyendo sus celdas en tiempo de ejecución: 'barras' (cifras
 // de una o varias columnas), 'matriz' (celdas normal/alterado coloreadas) y
@@ -46,7 +47,9 @@ const CANDIDATOS = '.micro-prof-item, dl.kv-row, li, tr, p, .compare-box, .warni
 const norm = s => s.replace(/\s+/g, ' ').trim().toLowerCase();
 const cabeceraMpi = el => el.querySelector(':scope > .micro-prof-head');
 const textoPropio = el => (el.classList.contains('micro-prof-item') ? cabeceraMpi(el) : el).textContent;
-const limpiar = s => s.replace(/\s+/g, ' ').replace(/\s*\+\s*$/, '').replace(/^[^\p{L}\p{N}(¿¡]+/u, '').trim();
+// Quita emoji y signos decorativos iniciales, pero no los que son contenido
+// (≥, ≤, <, >: "≥72h acumuladas" no puede quedarse en "72h").
+const limpiar = s => s.replace(/\s+/g, ' ').replace(/\s*\+\s*$/, '').replace(/^[^\p{L}\p{N}(¿¡≥≤<>]+/u, '').trim();
 
 function resolver(raiz, fuente) {
     if (!fuente) return null;
@@ -304,6 +307,26 @@ function renderPuntos(p, estado) {
     return `${filas}<div class="vk-resultado">${copiarResultados(p.resultado)}</div>${LINK_CONTROL}`;
 }
 
+// Lista de criterios conectada a casillas reales. modo 'todos': candados
+// que deben abrirse todos (p. ej. criterios para suspender); modo 'ninguno':
+// barreras, basta una para cerrar el paso (p. ej. exclusiones de vía oral).
+// No decide nada: el veredicto se copia de `resultado`.
+function renderRequisitos(p, estado) {
+    const todos = p.modo !== 'ninguno';
+    const marcados = estado.items.filter(it => it.control.checked).length;
+    const total = estado.items.length;
+    const abierto = todos ? marcados === total : marcados === 0;
+    const items = estado.items.map((it, k) => {
+        const on = it.control.checked;
+        const icono = todos ? (on ? '🔓' : '🔒') : (on ? '⛔' : '○');
+        return `<button type="button" class="vk-req ${on ? 'on' : ''}" data-item="${k}" aria-pressed="${on}"><span class="vk-req-icono" aria-hidden="true">${icono}</span><span>${it.etiqueta}</span></button>`;
+    }).join('');
+    const cuenta = todos ? `${marcados}/${total} abiertos` : (marcados ? `${marcados} barrera${marcados > 1 ? 's' : ''}` : 'sin barreras');
+    return `<div class="vk-reqs ${todos ? 'todos' : 'ninguno'}">${items}</div>
+        <div class="vk-puerta ${abierto ? 'abierta' : 'cerrada'}"><span>${p.puerta || ''}</span><b>${cuenta}</b></div>
+        <div class="vk-resultado">${copiarResultados(p.resultado)}</div>${LINK_CONTROL}`;
+}
+
 function renderSelector(p) {
     const sel = document.querySelector(p.control);
     const ops = [...sel.options].map((o, k) => {
@@ -320,9 +343,13 @@ function envolver(tab) {
     texto.className = 'vista-texto';
     const visual = document.createElement('div');
     visual.className = 'vista-visual vk';
-    [...tab.childNodes].filter(n => !(n.classList && n.classList.contains('siguiente-ficha-btn'))).forEach(n => texto.appendChild(n));
+    // En una tarjeta suelta (no una ficha del cuaderno) el <h3> se queda
+    // fuera, visible en las dos vistas, y el interruptor va debajo.
+    const titulo = !tab.classList.contains('tab-content') && tab.firstElementChild?.tagName === 'H3' ? tab.firstElementChild : null;
+    [...tab.childNodes].filter(n => n !== titulo && !(n.classList && n.classList.contains('siguiente-ficha-btn'))).forEach(n => texto.appendChild(n));
     tab.prepend(visual);
     tab.prepend(texto);
+    if (titulo) tab.prepend(titulo);
     tab.setAttribute('data-visual', '');
     initVistaVisual(tab.parentElement);
     return { texto, visual };
@@ -396,7 +423,7 @@ function construir(tab, texto, visual, receta) {
             <div class="visual-detalle vk-detalle" hidden></div>
         </section>`).join('')}`;
 
-    const estados = paneles.map(p => (p.tipo === 'puntos' ? { items: itemsDePuntos(p, texto) } : {}));
+    const estados = paneles.map(p => (p.tipo === 'puntos' || p.tipo === 'requisitos' ? { items: itemsDePuntos(p, texto) } : {}));
     const pintar = k => {
         const p = paneles[k];
         const cuerpo = visual.querySelector(`.vk-panel[data-panel="${k}"] .vk-panel-cuerpo`);
@@ -404,13 +431,14 @@ function construir(tab, texto, visual, receta) {
             const foco = document.activeElement?.classList.contains('vk-numero') ? document.activeElement.dataset.item : null;
             cuerpo.innerHTML = renderPuntos(p, estados[k]);
             if (foco !== null) { const f = cuerpo.querySelector(`.vk-numero[data-item="${foco}"]`); f?.focus(); f?.setSelectionRange?.(f.value.length, f.value.length); }
-        } else if (p.tipo === 'selector') cuerpo.innerHTML = renderSelector(p);
+        } else if (p.tipo === 'requisitos') cuerpo.innerHTML = renderRequisitos(p, estados[k]);
+        else if (p.tipo === 'selector') cuerpo.innerHTML = renderSelector(p);
         else cuerpo.innerHTML = RENDER[p.tipo](p, nodos);
     };
     paneles.forEach((_, k) => pintar(k));
 
     // Repintar los paneles conectados cuando cambien sus controles (venga de donde venga).
-    const conectados = paneles.map((p, k) => ({ k, p })).filter(({ p }) => p.tipo === 'puntos' || p.tipo === 'selector');
+    const conectados = paneles.map((p, k) => ({ k, p })).filter(({ p }) => ['puntos', 'requisitos', 'selector'].includes(p.tipo));
     if (conectados.length) {
         const controlesDe = ({ p, k }) => p.tipo === 'selector' ? [document.querySelector(p.control)] : estados[k].items.map(it => it.control);
         ['input', 'change'].forEach(tipo => document.addEventListener(tipo, e => {
@@ -441,6 +469,14 @@ function construir(tab, texto, visual, receta) {
             const t = it.tramos[Number(tramo.dataset.tramo)];
             if (it.tipo === 'check') it.control.checked = t.pts > 0;
             else it.control.value = t.valor;
+            emitir(it.control);
+            pintar(k);
+            return;
+        }
+        const req = e.target.closest('.vk-req');
+        if (req) {
+            const it = estados[k].items[Number(req.dataset.item)];
+            it.control.checked = !it.control.checked;
             emitir(it.control);
             pintar(k);
             return;

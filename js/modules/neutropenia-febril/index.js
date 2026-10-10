@@ -9,6 +9,11 @@ import { initEmpiricoEscalera } from './empirico-escalera.js';
 import { initEmpiricoFocos } from './empirico-focos.js';
 import { initEvolucionRegla } from './evolucion-regla.js';
 import { initCateterBalanza } from './cateter-balanza.js';
+import { initTarjetasVisual } from './nf-tarjetas-visual.js';
+import { initAntifungicoVisual } from './antifungico-visual.js';
+import { initRelojVisual } from './reloj-visual.js';
+import { initMdrVisual } from './mdr-visual.js';
+import { initPkpdVisual } from './pkpd-visual.js';
 import { init as initDiagnostico } from './diagnostico.js';
 import { init as initTratamientoEmpirico } from './tratamiento-empirico.js';
 import { init as initCateterMdr } from './cateter-mdr.js';
@@ -31,6 +36,11 @@ export function init() {
     // Escriben en calculadoras del empírico y del dirigido: van después de ambas.
     initEvolucionRegla();
     initCateterBalanza();
+    initTarjetasVisual();
+    initAntifungicoVisual();
+    initRelojVisual();
+    initMdrVisual();
     initPkpd();
+    initPkpdVisual();
     initMicroorganismos();
 }

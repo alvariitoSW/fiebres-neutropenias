@@ -2068,3 +2068,103 @@ body.study-mode-on .pomodoro-fab { display: flex; }
 .vk-grado b { color: var(--vk); font-size: 0.8rem; }
 .vk-grado span { font-size: 0.7rem; color: var(--text-muted); }
 .vk-grado em { font-style: normal; color: var(--text-main); }
+
+/* ==========================================================
+   VISTA VISUAL — resto de Neutropenia Febril: requisitos del kit
+   (candados / barreras), antifúngico, reloj de seguridad, árbol
+   MDR, escalera PK/PD y fichas de microorganismos.
+   ========================================================== */
+.visual-mini.on { border-color: var(--accent-blue); background: rgba(212, 175, 55, 0.14); }
+
+/* Kit: panel 'requisitos' */
+.vk-reqs { display: flex; flex-direction: column; gap: 6px; }
+.vk-req { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 6px 10px; border: 1px solid var(--border-color); border-radius: 8px; background: transparent; color: var(--text-muted); font-family: inherit; font-size: 0.75rem; line-height: 1.35; text-align: left; cursor: pointer; touch-action: manipulation; }
+.vk-req-icono { flex: 0 0 22px; font-size: 1rem; text-align: center; }
+.vk-reqs.todos .vk-req.on { border-color: var(--accent-green); color: var(--text-main); background: rgba(144, 160, 106, 0.14); }
+.vk-reqs.ninguno .vk-req.on { border-color: var(--accent-red); color: var(--text-main); background: rgba(184, 92, 62, 0.16); }
+.vk-puerta { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 10px; padding: 10px 12px; border-radius: 8px; border: 2px dashed var(--accent-red); font-size: 0.78rem; }
+.vk-puerta b { white-space: nowrap; }
+.vk-puerta.cerrada { color: var(--accent-red); }
+.vk-puerta.abierta { border-style: solid; border-color: var(--accent-green); color: var(--accent-green); }
+
+/* Antifúngico empírico: dos carriles de días */
+.af-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+.af-stat { display: flex; flex-direction: column; padding: 6px 8px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.68rem; color: var(--text-muted); }
+.af-stat b { font-size: 1.05rem; }
+.af-carril { display: block; width: 100%; margin-bottom: 8px; padding: 6px 8px 8px; border: 1px solid var(--border-color); border-radius: 8px; background: transparent; color: var(--text-muted); font-family: inherit; text-align: left; cursor: pointer; touch-action: manipulation; opacity: 0.55; }
+.af-carril.on { opacity: 1; border-color: var(--accent-blue); color: var(--text-main); }
+.af-carril-titulo { display: block; font-size: 0.72rem; margin-bottom: 6px; font-weight: bold; }
+.af-pista { position: relative; display: block; height: 40px; }
+.af-pista i { position: absolute; top: 0; bottom: 0; border-radius: 4px; background: color-mix(in srgb, var(--z) 22%, transparent); border: 1px solid var(--z); overflow: hidden; }
+.af-pista em { display: block; padding: 2px 4px; font-style: normal; font-size: 0.6rem; line-height: 1.2; color: var(--text-main); }
+.af-cursor { position: absolute; top: -4px; bottom: -4px; width: 3px; margin-left: -1px; background: var(--text-main); border-radius: 2px; }
+.af-carril:not(.on) .af-cursor { display: none; }
+.af-ticks { position: relative; height: 16px; margin: 0 8px 4px; }
+#af-dia { width: 100%; }
+
+/* Reloj de seguridad: barras de días con umbral */
+.reloj-tipos { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: 10px; }
+.reloj-barra { margin-bottom: 10px; }
+.reloj-barra[hidden] { display: none; }
+.reloj-cab { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; }
+.reloj-cab b { color: var(--text-main); font-size: 0.9rem; }
+.reloj-pista { position: relative; height: 16px; border-radius: 8px; background: rgba(255, 255, 255, 0.06); border: 1px solid var(--border-color); margin-bottom: 6px; }
+.reloj-pista i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 8px; background: var(--accent-yellow); opacity: 0.7; transition: width 0.2s; }
+.reloj-pista i.ok { background: var(--accent-green); }
+.reloj-umbral { position: absolute; top: -4px; bottom: -4px; border-left: 2px dashed var(--accent-red); }
+.reloj-umbral em { position: absolute; top: -16px; left: -10px; font-style: normal; font-size: 0.62rem; color: var(--accent-red); font-weight: bold; }
+.reloj-neutro { width: 100%; }
+.reloj-oro { margin-top: 10px; }
+
+/* Matriz MDR: árbol germen → situación → pauta */
+.mdr-paso { display: flex; align-items: center; gap: 8px; margin: 4px 0 8px; font-size: 0.8rem; }
+.mdr-num { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--accent-purple); color: var(--accent-purple); font-weight: bold; font-size: 0.75rem; }
+.mdr-grupo { margin-bottom: 8px; padding-left: 8px; border-left: 3px solid var(--vk, var(--border-color)); }
+.mdr-grupo-titulo { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 6px; }
+.mdr-germenes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.mdr-germen, .mdr-chip { min-height: 44px; padding: 4px 8px; border: 1px solid var(--border-color); border-radius: 8px; background: transparent; color: var(--text-main); font-family: inherit; font-size: 0.7rem; line-height: 1.25; cursor: pointer; touch-action: manipulation; overflow-wrap: break-word; hyphens: auto; }
+.mdr-germen.on, .mdr-chip.on { border-color: var(--accent-purple); background: rgba(156, 84, 118, 0.22); font-weight: bold; }
+.mdr-condiciones { display: flex; flex-direction: column; gap: 6px; }
+.mdr-carba { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.mdr-cond { text-align: left; }
+.mdr-vacio { margin: 0; font-size: 0.75rem; color: var(--text-muted); }
+.mdr-pauta { margin-top: 0; }
+
+/* PK/PD: escalera renal de la dosis */
+.pkpd-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.pkpd-chip { min-height: 40px; padding: 4px 10px; border: 1px solid var(--accent-blue); border-radius: 20px; background: transparent; color: var(--text-main); font-family: inherit; font-size: 0.72rem; cursor: pointer; touch-action: manipulation; }
+.pkpd-chip.fungico { border-color: var(--accent-purple); }
+.pkpd-chip.on { background: rgba(212, 175, 55, 0.2); font-weight: bold; }
+.pkpd-chip.fungico.on { background: rgba(156, 84, 118, 0.25); }
+.pkpd-grave { width: 100%; margin-bottom: 10px; }
+.pkpd-grave.on { border-color: var(--accent-red); background: rgba(184, 92, 62, 0.16); }
+.pkpd-escalera { display: flex; flex-direction: column; gap: 6px; }
+.pkpd-escalon { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 8px; align-items: center; min-height: 48px; padding: 6px 8px; border: 1px solid var(--border-color); border-radius: 8px; background: transparent; color: var(--text-main); font-family: inherit; text-align: left; cursor: pointer; touch-action: manipulation; }
+.pkpd-escalon.on { border-color: var(--accent-blue); box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.35); }
+.pkpd-renal { position: relative; display: block; height: 30px; border-radius: 6px; background: rgba(255, 255, 255, 0.04); overflow: hidden; }
+.pkpd-renal i { position: absolute; left: 0; top: 0; bottom: 0; background: rgba(144, 160, 106, 0.3); }
+.pkpd-escalon.crrt .pkpd-renal i { background: repeating-linear-gradient(45deg, rgba(156, 84, 118, 0.3) 0 6px, transparent 6px 12px); }
+.pkpd-renal em { position: relative; display: block; padding: 0 6px; line-height: 30px; font-style: normal; font-size: 0.66rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pkpd-dosis b { display: block; font-size: 0.78rem; line-height: 1.25; }
+.pkpd-dosis small { font-size: 0.62rem; color: var(--text-muted); }
+.pkpd-avisos { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; font-size: 0.72rem; line-height: 1.4; color: var(--text-muted); }
+
+/* Microorganismos: cadena y semáforo de fármacos */
+.micro-cadena { display: flex; flex-direction: column; }
+.micro-eslabon { display: flex; flex-direction: column; gap: 2px; width: 100%; min-height: 44px; padding: 8px 10px; border: 1px solid var(--border-color); border-left: 4px solid var(--vk); border-radius: 8px; background: transparent; color: var(--text-main); font-family: inherit; text-align: left; cursor: pointer; touch-action: manipulation; }
+.micro-eslabon b { font-size: 0.75rem; color: var(--vk); text-transform: uppercase; letter-spacing: 0.5px; }
+.micro-eslabon span { font-size: 0.74rem; line-height: 1.35; color: var(--text-muted); }
+.micro-eslabon.sel { box-shadow: 0 0 0 2px var(--text-main); }
+.micro-eslabon.profilaxis { margin-top: 12px; }
+.micro-visual-svg { margin-top: 12px; }
+.micro-semaforo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; margin-top: 12px; }
+.micro-semaforo-col { padding: 8px; border: 1px solid var(--border-color); border-radius: 8px; }
+.micro-semaforo-col b { display: block; font-size: 0.72rem; margin-bottom: 6px; }
+.micro-semaforo-col.si { border-color: var(--accent-green); }
+.micro-semaforo-col.si b { color: var(--accent-green); }
+.micro-semaforo-col.no { border-color: var(--accent-red); }
+.micro-semaforo-col.no b { color: var(--accent-red); }
+.micro-semaforo-col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.micro-semaforo-col li { padding: 4px 6px; border-radius: 6px; font-size: 0.68rem; line-height: 1.3; overflow-wrap: anywhere; }
+.micro-semaforo-col li.si { background: rgba(144, 160, 106, 0.16); }
+.micro-semaforo-col li.no { background: rgba(184, 92, 62, 0.16); }

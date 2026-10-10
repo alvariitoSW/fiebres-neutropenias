@@ -1,8 +1,13 @@
 import { pkpdData } from '../../data/pkpd-data.js';
 
+// Solo los botones de fármaco de esta calculadora: la clase .pkpd-btn la
+// reutilizan también enlaces de bibliografía de otras vistas.
+const botonesFarmaco = () => document.querySelectorAll('#pkpd-card .pkpd-btn[data-drug]');
+const activo = () => document.querySelector('#pkpd-card .pkpd-btn[data-drug].active');
+
 function calcPKPD(btn) {
     if(!btn) return;
-    document.querySelectorAll('.pkpd-btn').forEach(b => b.classList.remove('active'));
+    botonesFarmaco().forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
 
     let drug = btn.getAttribute('data-drug');
@@ -27,15 +32,9 @@ function calcPKPD(btn) {
 }
 
 export function init() {
-    document.querySelectorAll('.pkpd-btn').forEach(btn => {
+    botonesFarmaco().forEach(btn => {
         btn.addEventListener('click', () => calcPKPD(btn));
     });
-    document.getElementById('pkpd-severe-toggle').addEventListener('change', () => {
-        const active = document.querySelector('.pkpd-btn.active');
-        if (active) calcPKPD(active);
-    });
-    document.getElementById('pkpd-renal').addEventListener('change', () => {
-        const active = document.querySelector('.pkpd-btn.active');
-        if (active) calcPKPD(active);
-    });
+    document.getElementById('pkpd-severe-toggle').addEventListener('change', () => calcPKPD(activo()));
+    document.getElementById('pkpd-renal').addEventListener('change', () => calcPKPD(activo()));
 }

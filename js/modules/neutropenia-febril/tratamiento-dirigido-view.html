@@ -5,11 +5,14 @@
     </div>
 
     <!-- PANEL 1: RETIRADA DE CATÉTER INTERACTIVA -->
-    <div class="card" style="border-top: 1px solid var(--accent-blue);">
+    <!-- data-visual: vista Visual = la misma balanza retirar / conservar de la
+         tarjeta 4 de la vista principal (cateter-balanza.js). -->
+    <div class="card" id="cvc-dirigido-card" data-visual style="border-top: 1px solid var(--accent-blue);">
         <h3 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">1. Calculadora de Catéter (CVC)</h3>
+        <div class="vista-texto">
         <p class="subtitle">Decisión de Retirada vs Conservación</p>
         
-        <div class="chip-grid" style="margin-bottom: 10px;">
+        <div class="chip-grid" id="cvc-dir-retirada" style="margin-bottom: 10px;">
             <div style="font-size: 0.75rem; color: var(--accent-red); font-weight: bold; grid-column: 1 / -1;">CLÍNICA Y MICROBIOLOGÍA:</div>
             <label class="checkbox-label puntuable"><input type="checkbox" class="cvc-risk"> Sepsis / Shock</label>
             <label class="checkbox-label puntuable"><input type="checkbox" class="cvc-risk"> Signos locales</label>
@@ -21,17 +24,22 @@
             <label class="checkbox-label puntuable"><input type="checkbox" class="cvc-risk"> <i>Bacillus/Micrococcus</i></label>
         </div>
         <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 15px 0;">
-        <label class="checkbox-label puntuable"><input type="checkbox" id="cvc-poor-access"> Mal acceso venoso periférico</label>
+        <label class="checkbox-label puntuable" id="cvc-dir-conservar"><input type="checkbox" id="cvc-poor-access"> Mal acceso venoso periférico</label>
 
         <div class="result-box" id="cvc-result-box">
             <div id="cvc-result-text" style="font-weight: bold; font-size: 1rem;">Selecciona criterios...</div>
             <div id="cvc-result-sub" style="font-size: 0.8rem; margin-top: 6px; color: var(--text-muted);"></div>
         </div>
+        </div>
+        <div class="vista-visual cateter-balanza" data-fuente-retirar="cvc-dir-retirada" data-fuente-conservar="cvc-dir-conservar"></div>
     </div>
 
     <!-- PANEL 2: RELOJ DE SUSPENSIÓN Y PERFILES -->
-    <div class="card" id="panel-suspension-perfiles" style="border-top: 1px solid var(--accent-green);">
+    <!-- data-visual: vista Visual = dos barras de días con su umbral
+         (reloj-visual.js), que escribe en estos campos y copia el resultado. -->
+    <div class="card" id="panel-suspension-perfiles" data-visual style="border-top: 1px solid var(--accent-green);">
         <h3 style="color: var(--accent-green); text-shadow: var(--glow-green);">2. Reloj de Seguridad y Patógenos</h3>
+        <div class="vista-texto">
         <p class="subtitle">Cuándo suspender y a qué te enfrentas — umbral de afebril actualizado con ECIL-10 (2025)</p>
         
         <div class="tabs">
@@ -72,12 +80,16 @@
                 <strong style="color: var(--accent-yellow);">Regla de Oro:</strong> NO exigir recuperación de neutrófilos para suspender si hay resolución clínica.
             </div>
         </div>
-
+        </div>
+        <div class="vista-visual" id="reloj-visual"></div>
     </div>
 
     <!-- PANEL 3: MATRIZ DE COMBATE MDR -->
-    <div class="card" style="border-top: 1px solid var(--accent-purple);">
+    <!-- data-visual: vista Visual = árbol germen → condición → pauta
+         (mdr-visual.js), que escribe en estos controles y copia la pauta. -->
+    <div class="card" id="mdr-card" data-visual style="border-top: 1px solid var(--accent-purple);">
         <h3 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">3. Matriz de Combate MDR</h3>
+        <div class="vista-texto">
         <p class="subtitle">Generador de Terapia de Rescate</p>
 
         <button class="btn-volver-sub" id="btn-jump-microorganismos" style="margin-bottom: 16px;">🧫 Ver fichas completas de cada microorganismo →</button>
@@ -129,11 +141,16 @@
             <div id="mdr-result-text" style="font-size: 0.85rem; line-height: 1.5;">Selecciona un microorganismo para generar la pauta.</div>
         </div>
         <button class="especialidad-link" data-especialidad="nefrologia" data-view="nefrotoxicidad">🔗 Buscar ajuste de dosis por función renal de estos antibióticos (Nefrología) →</button>
+        </div>
+        <div class="vista-visual" id="mdr-arbol"></div>
     </div>
 
     <!-- PANEL 4: CALCULADORA TÁCTICA PK/PD (CON FILTRADO RENAL) -->
-    <div class="card" style="border-top: 1px solid var(--accent-blue);">
+    <!-- data-visual: vista Visual = escalera renal de la dosis del fármaco
+         elegido (pkpd-visual.js), leída de pkpd-data.js. -->
+    <div class="card" id="pkpd-card" data-visual style="border-top: 1px solid var(--accent-blue);">
         <h3 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">4. Calculadora PK/PD (Ajuste Renal)</h3>
+        <div class="vista-texto">
         <p class="subtitle">Dosificación avanzada de UCI y Hematología</p>
         
         <div class="form-group">
@@ -185,6 +202,8 @@
             <a class="biblio-link" href="docs/seimc-sehh-2020-neutropenia-febril.pdf#page=100" target="_blank" rel="noopener">Ver Tablas 8 y 9 en el PDF</a>
         </p>
         <button class="especialidad-link" data-especialidad="nefrologia" data-view="nefrotoxicidad">🔗 Ver tabla completa de ajuste renal (585 fármacos, Nefrología) →</button>
+        </div>
+        <div class="vista-visual" id="pkpd-escalera"></div>
     </div>
 
     <div class="card" style="border-top: 1px solid var(--accent-green);">
