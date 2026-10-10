@@ -10062,6 +10062,55 @@ Misma petición ("sigue con lo que queda de nefrología").
   distal (Ca²⁺ con tiazida) y de la rama gruesa (CaSR); los accesos y
   "Texto ↓"; las ATR sin regresión; sin errores ni desborde.
 
+### Filtro vivo de la TRR (octubre 2026)
+
+Última pieza de "lo que queda de nefrología": `js/modules/nefrologia/
+filtro-vivo.js` (`montarFiltro(cuerpo, { tab }, opciones)`, mismo patrón
+que el glomérulo vivo: un panel `propio` de la vista Visual que elige sus
+mandos). Una fibra del filtro por dentro: la sangre entra por la
+izquierda y vuelve al paciente por la derecha, la membrana con poros, el
+compartimento del dializado/ultrafiltrado y el efluente. Partículas:
+hematíes y albúmina (nunca cruzan), urea y K⁺ (pequeñas), citoquinas
+(mayor tamaño), Ca²⁺, agua/reposición y el Ca²⁺ unido al citrato.
+
+- **Mandos** (`opciones.mandos`): `modo` (Difusión = HD intermitente /
+  Convección = TRR continua / Híbrida SLED-PIRRT), `dosis` (flujo del
+  efluente 15-70 ml/kg/h), `qb` (flujo sanguíneo), `reposicion`
+  (prefiltro/posfiltro) y `anticoag` (ninguna/heparina/citrato, con botón
+  "Cambiar el filtro"). Sin el mando `anticoag` el filtro no se coagula ni
+  se dibuja el citrato.
+- **De la ficha** (`trr.html`, Valdenebro et al.), con etiqueta `ficha`:
+  mecanismo y duración de cada técnica (Tabla 1), que la convección
+  arrastra moléculas de mayor tamaño, la dosis (>25 ml/kg/h solo en
+  observacionales, ningún ensayo con beneficio ni a 70 ml/kg/h,
+  "dialitrauma" y pérdida de citoquinas), las estrategias contra la
+  coagulación (subir el flujo, bajar la fracción de filtración, alternar
+  la reposición pre y posfiltro), heparina sistémica frente a citrato
+  regional (Ca²⁺ iónico en el circuito <0,35 mmol/l con citrato a 4-6
+  mmol/l, infusión de calcio para el paciente, el complejo que llega a la
+  sangre lo metaboliza el hígado a bicarbonato). Cada aviso lleva su
+  "Texto ↓" (ids nuevos en `trr.html`: `trr-t-hd`, `trr-t-cont`,
+  `trr-t-hib`, `trr-hd`, `trr-cont`, `trr-dosis-base`,
+  `trr-dosis-reciente`, `trr-coag-problema`, `trr-coag-estrategias`,
+  `trr-t-heparina`, `trr-t-citrato`, `trr-citrato-mec`, `trr-monitores`).
+- **Ilustrativo**, y lo dice la vista: la fracción de filtración (paciente
+  de 70 kg, hematocrito 30%; con reposición prefiltro la sangre llega
+  diluida, posfiltro se concentra y la fibra se oscurece), lo rápido que
+  se coagula el filtro (fibrina desde la salida) y cuántas partículas
+  cruzan la membrana.
+- Montado en 3 fichas de TRR (`visual-trr.js`, `TEXTOS` y `filtro()`):
+  Modalidad (solo el modo, arranca en HD), Dosis (dosis, reposición y
+  flujo) y Anticoagulación (arranca sin anticoagular, posfiltro y flujo
+  bajo, para ver coagularse el filtro).
+- Sin CSS nuevo: reutiliza `.gl-escenario`, `.gl-mandos`, `.nv-medidores`,
+  `.nv-especies` (leyenda bajo el dibujo), `.tfg-slider-row` y
+  `.hk-avisos`.
+- Verificado con Playwright (390×844): los 3 modos, dosis 60 (aviso de los
+  ensayos), sin anticoagular (el filtro se coagula), citrato (Ca²⁺
+  atrapado en el circuito y repuesto a la salida), "Texto ↓" y capturas
+  revisadas una a una (se movieron rótulos que se pisaban y la salida del
+  efluente para que no cruzara la fibra); sin errores ni desborde.
+
 ## Auditoría de Hematología (octubre 2026)
 
 A petición explícita del usuario ("revisa que esté todo correcto en
