@@ -90,6 +90,11 @@ export function initVistaVisual(root = document) {
     });
 }
 
+// Pasa un bloque a su vista Visual (la construye si aún no existe).
+export function irAlVisual(card) {
+    if (card?.matches('[data-visual]')) setVista(card, 'visual');
+}
+
 export function setModoGlobal(vista) {
     modoGlobal = vista;
     document.querySelectorAll('[data-visual]').forEach(card => setVista(card, vista));

@@ -2273,3 +2273,4 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 .nv-medidor-valor.bueno { color: #a8b97c; }
 .nv-chips-grupo { flex-basis: 100%; font-family: 'Courier New', monospace; font-size: 0.6rem; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; }
 .nv-medidor-valor.largo { font-size: 0.86rem; }
+.nv-general { margin: 8px 0 0; font-size: 0.74rem; color: var(--text-muted); font-style: italic; }

@@ -9894,6 +9894,82 @@ visual de la nefrona viva:
   Tabla 3, la célula del proximal en NTA sale dañada, y el botón de la
   explicación vuelve a la ficha; sin errores ni desborde.
 
+### Auditoría de la nefrona viva y sus correcciones (octubre 2026)
+
+A petición explícita del usuario se hizo primero un informe (Artifact
+"Auditoría de la nefrona viva", 30 hallazgos: E errores, T textos de las
+fichas, M modelo, D dibujo, I interactividad) y después, con el PDF fuente
+que aportó ("empieza desde lo más costoso"), se aplicó entero. El PDF de
+Fisiología Renal (Carracedo y Ramírez, Nefrología al día 2020) queda en
+`docs/carracedo-2020-fisiologia-renal.pdf`, enlazado desde la bibliografía
+de `nefro-menu.html`.
+
+- **Fichas (T1-T3) — errores de la propia fuente, no de transcripción**:
+  el PDF dice literalmente que en el túbulo distal "la reabsorción de sodio
+  supone secreción de calcio" (intercambiador 2Na/Ca) y que la mácula densa
+  "libera renina cuando aumenta" el Na⁺ (la misma fuente dice lo contrario
+  en su apartado de la renina), y sitúa un intercambiador Na⁺/H⁺ en la
+  célula intercalar tipo A. Se reprodujeron tal cual con **notas de
+  fidelidad** en `nv-t-tcd` y `nv-t-col`. Del PDF se añadieron a las fichas
+  (para que la nefrona solo enseñe lo que dice la app): bomba 3 Na⁺/2 K⁺ y
+  canales de escape de K⁺, salida basolateral de la glucosa, células finas
+  con pocas mitocondrias y ~20% del agua en la rama descendente, el 25% del
+  Na⁺ con Ca²⁺/Mg²⁺/HCO₃⁻ en la rama ascendente, y una línea nueva
+  `nv-t-urea` (reciclaje de la urea). T4: se quitaron de `nefrona-data.js`
+  los textos sin fuente (85/15% de nefronas, 5-10% de la tiazida, IC de la
+  espironolactona…).
+- **Vista de célula rehecha** (`svgCelula` + `filasCelula` en
+  `nefrona-viva.js`): una fila por transportador, más vía entre células,
+  agua y bomba. Cada célula tiene su forma (`epitelio` alto con ribete,
+  cúbico o plano —las ramas delgadas—), la Na⁺/K⁺-ATPasa es un elemento
+  propio que saca 3 Na⁺ y mete 2 K⁺, y cada ion sale por su propia puerta
+  (`flujo: [ion, 'r'|'s', salida]`; sin salida, el Na⁺ por la bomba). El
+  HCO₃⁻ ya no cruza un "canal": es la reacción con la anhidrasa carbónica
+  (marcada como fisiología general, igual que el paso de Ca²⁺/Mg²⁺ entre
+  células de la rama gruesa y la bomba de protones de la intercalar; el
+  campo `general` de cada tramo lo dice en el panel). El Ca²⁺/Mg²⁺ pasó de
+  la rama delgada a la gruesa; la delgada mueve ClNa y urea. El colector
+  tiene célula principal (ENaC, AQP2 según ADH con salida AQP3/AQP4, ROMK,
+  transportador de urea) e intercalar tipo A. Las ramas delgadas muestran
+  la osmolalidad a la profundidad tocada (`estado.tapY`).
+- **Nefrona**: la eferente continúa en capilares peritubulares y vasa recta
+  (fuente); nefrona cortical de asa corta en segundo plano que desemboca en
+  el mismo colector; urea como partícula (hexágono): el proximal recupera la
+  mitad, sale del colector profundo con ADH y vuelve a la rama delgada.
+  **El gradiente medular depende de la ADH** (`gradiente(a) = 780 + 420a`,
+  1.200 con ADH máxima) y la rama descendente recupera el 20% del agua que
+  le llega con el gradiente normal (`rDescDe`), así que el nivel de ADH
+  "normal" pasó de 0,391 a 0,4825 para seguir dando 1,8 L y 500 mOsm/kg.
+  La NTA dibuja huecos irregulares con la membrana basal desnuda.
+- **Medidores**: los diuréticos se leen en el **pico del efecto** (ml/min y
+  ml/h), no en L/día; "ficha" solo donde la cifra es de la ficha; medidor
+  nuevo de **plasma** por situación y Na⁺ en orina >40 mEq/l en el SIADH
+  (ADH 0,8, ya no idéntico a la deshidratación); notas de osmolalidad
+  diluida/isotónica (≤350)/concentrada; FRA con Cro/Crs y FE urea; la NTA
+  dice que la diuresis suele preservarse (ficha) y el sedimento lleva
+  "pigmentados"; la obstrucción cuenta sus 2 fases.
+- **Glomérulo vivo** (`modelo` en `glomerulo-vivo.js`): la estenosis baja
+  la presión un 15% (ficha: 10-20%). Dentro de 80-180 mmHg la presión
+  capilar se mantiene en 55, pero cuando hay renina una parte la sostienen
+  la angiotensina II (`A`) y las prostaglandinas (`P`): el IECA/ARA-II o el
+  AINE la quitan. Resultados de referencia: IECA solo −15%; depleción +
+  IECA −65%; + AINE −85%; estenosis + IECA −65%. Mando nuevo
+  `obstruccionMantenida` (segunda fase, arteriolas contraídas, −70%). Las
+  pastillas de presión ya no tapan el ovillo, se dibuja el asa capilar y la
+  estenosis.
+- **Accesos**: botón `[data-glomerulo="mando,…"]` junto a
+  `data-especialidad/view/panel/tab` abre una ficha en vista Visual con el
+  glomérulo ya configurado (`irAlVisual()` nuevo en `core/vista-visual.js`;
+  registro `montados` en `glomerulo-vivo.js`). Desde la IRA prerrenal se
+  abre el glomérulo de "Regulación del filtrado" con depleción (que ganó
+  los mandos depleción y AINE y un acceso de vuelta a la nefrona), y desde
+  el iSGLT2 el de ERC · Nefroprotección. Los dos canvas actualizan su
+  `aria-label` con la situación.
+- Verificado con Playwright (390×844): las 10 vistas de célula, 9
+  situaciones/fármacos de la nefrona, los 5 glomérulos con sus mandos, los
+  2 accesos y su vuelta, 59 vistas Visual de Nefrología sin fuentes sin
+  resolver, sin errores ni desborde. Cache-busting a `?v=20261018-8`.
+
 ## Auditoría de Hematología (octubre 2026)
 
 A petición explícita del usuario ("revisa que esté todo correcto en

@@ -49,7 +49,8 @@ export function initVisualFisiologia() {
         guia: 'Mueve la presión y mira cómo la arteriola aferente defiende la TFG.',
         paneles: [
             { tipo: 'propio', titulo: 'Glomérulo vivo: autorregulación', render: (c, x) => montarGlomerulo(c, x, {
-                mandos: ['pam'], textos: { pam: 'g-t-miogenico' } }) },
+                mandos: ['pam', 'deplecion', 'aine'], textos: { pam: 'g-t-miogenico', deplecion: 'g-t-sraa' } }) },
+            panelNefronaViva([['prerrenal', 'IRA prerrenal']]),
             { tipo: 'comparar', titulo: 'Quién la regula', columnas: [
                 { titulo: 'Intrínseco (el propio riñón)', color: 'verde', nodos: ['Mecanismo miogénico', 'Retroalimentación túbulo-glomerular'] },
                 { titulo: 'Extrínseco (sistémico)', color: 'purpura', nodos: ['Sistema renina-angiotensina-aldosterona'] }

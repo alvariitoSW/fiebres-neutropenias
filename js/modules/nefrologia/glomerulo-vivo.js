@@ -11,7 +11,7 @@
 // entre 80 y 180 mmHg de PAM): la parte de la autorregulación es la misma
 // que la del simulador de la ficha "Regulación del filtrado"; cuánto mueve
 // cada fármaco o situación la presión capilar es ilustrativo, y así se dice.
-import { irAlTexto } from '../../core/vista-visual.js';
+import { irAlTexto, irAlVisual } from '../../core/vista-visual.js';
 import { CLARO, alfa } from './potasio-escena.js';
 import { clamp } from '../../core/ui.js';
 
@@ -23,6 +23,25 @@ const DISTAL = [[-4, 150], [70, 149], [128, 147]];
 const PROXIMAL = [[300, 150], [322, 162], [344, 152], [364, 160]];
 const LOBULOS = [0, 1, 2, 3, 4, 5].map(i => { const a = i / 6 * Math.PI * 2 + 0.3; return { x: B.x + Math.cos(a) * 26, y: B.y + Math.sin(a) * 26 }; }).concat([{ x: B.x, y: B.y }]);
 
+// Glomérulos montados, por ficha: permite abrir uno con mandos ya puestos
+// desde otro sitio (botón con data-glomerulo="mando,mando" y la navegación de
+// data-especialidad/data-view/data-panel/data-tab).
+const montados = new Map();
+document.addEventListener('click', ev => {
+    const b = ev.target.closest('[data-glomerulo]');
+    if (!b) return;
+    // Después de que la navegación de data-especialidad haya abierto la ficha.
+    setTimeout(() => {
+        const tab = document.getElementById(b.dataset.tab);
+        if (!tab) return;
+        irAlVisual(tab);
+        const g = montados.get(tab.id);
+        if (!g) return;
+        g.poner(b.dataset.glomerulo.split(','));
+        requestAnimationFrame(() => g.lienzo.scrollIntoView({ behavior: 'smooth', block: 'center' }));
+    }, 60);
+});
+
 export const MANDOS = {
     ieca: 'IECA / ARA-II',
     isglt2: 'iSGLT2',
@@ -30,36 +49,43 @@ export const MANDOS = {
     aine: 'AINE',
     estenosis: 'Estenosis de arteria renal',
     obstruccion: 'Obstrucción urinaria',
+    obstruccionMantenida: 'Obstrucción mantenida',
     albuminuria: 'Albuminuria (barrera dañada)',
 };
 
 // Presión capilar glomerular y resto del glomérulo para un estado dado.
+// Entre 80 y 180 mmHg la autorregulación mantiene la presión capilar en 55.
+// Cuando hay renina (hipoperfusión, depleción, estenosis) parte de esos 55 los
+// sostiene la angiotensina II contrayendo la eferente (A) y parte las
+// prostaglandinas dilatando la aferente (P): quitarlas con un IECA/ARA-II o un
+// AINE hace caer la presión. Por debajo de 80 la autorregulación se agota.
 function modelo(e) {
-    let pa = e.pam - (e.deplecion ? 25 : 0);
-    if (e.estenosis) pa *= 0.7; // bilateral o riñón único: ilustrativo
-    // Autorregulación (mismo modelo que el simulador de la ficha).
+    let pa = e.pam - (e.deplecion ? 20 : 0);
+    if (e.estenosis) pa *= 0.85; // la ficha: la presión distal cae un 10-20%
+    const obstr = e.obstruccion || e.obstruccionMantenida;
+    const renina = pa < 90 || e.deplecion || e.estenosis || e.obstruccionMantenida;
+    const A = !renina ? 0 : e.estenosis ? 5 : e.deplecion ? 2.5 : e.obstruccionMantenida ? 2 : clamp((90 - pa) * 0.3, 0, 4);
+    const P = !renina ? 0 : e.deplecion ? 2 : e.estenosis || pa < 80 ? 3 : 1;
+    const perdido = (e.ieca ? A : 0) + (e.aine ? P : 0);
     let pcg, aferente;
-    if (pa >= 80 && pa <= 180) { pcg = 55; aferente = 70 - (pa - 80) / 100 * 30; }
-    else if (pa < 80) { pcg = 0.6875 * pa; aferente = Math.min(85, 70 + (80 - pa) * 0.5); }
-    else { pcg = 55 + (pa - 180) * 0.15; aferente = Math.max(20, 40 - (pa - 180) * 0.5); }
-    const renina = pa < 90 || e.deplecion;
-    let deficit = Math.max(0, 55 - pcg);
-    // Angiotensina II: contrae la eferente y sostiene la presión (si no hay IECA/ARA-II).
-    const angII = renina && !e.ieca;
-    if (angII) { const s = Math.min(4, deficit * 0.7); pcg += s; deficit -= s; }
-    // Prostaglandinas: dilatan la aferente cuando hay hipoperfusión (si no hay AINE).
-    const pg = renina && !e.aine;
-    if (pg) pcg += Math.min(3, deficit * 0.5);
+    if (pa >= 80 && pa <= 180) { pcg = 55 - perdido; aferente = 70 - (pa - 80) / 100 * 30; }
+    else if (pa < 80) { pcg = Math.min(55, 0.6875 * pa + A + P) - perdido; aferente = Math.min(85, 70 + (80 - pa) * 0.5); }
+    else { pcg = 55 + (pa - 180) * 0.15 - perdido; aferente = Math.max(20, 40 - (pa - 180) * 0.5); }
+    const angII = A > 0 && !e.ieca, pg = P > 0 && !e.aine;
     if (e.ieca) pcg -= 1.5;
     if (e.isglt2) pcg -= 1;
-    const pb = 15 + (e.obstruccion ? 8 : 0);
+    if (e.deplecion) pcg -= 2.5; // con poco volumen la compensación no es completa
+    // Obstrucción: primero sube la presión en Bowman; si se mantiene, las dos arteriolas se contraen.
+    if (e.obstruccionMantenida) pcg -= 4;
+    const pb = 15 + (e.obstruccionMantenida ? 3 : obstr ? 8 : 0);
     const pnf = Math.max(0, pcg - pb - 30);
     const tfg = 125 * pnf / 10;
-    const eferente = 45 * (angII ? 0.75 : 1) * (e.ieca ? 1.2 : 1);
+    let eferente = 45 * (angII ? 0.8 : 1) * (e.ieca ? 1.2 : 1);
     if (e.isglt2) aferente *= 0.85;
     if (pg && pa < 80) aferente = Math.min(90, aferente * 1.06);
+    if (e.obstruccionMantenida) { aferente *= 0.75; eferente *= 0.8; }
     const albumina = e.albuminuria ? Math.max(0, pcg - 45) / 10 : 0; // 1 = barrera dañada con presión normal
-    return { pa, pcg, pb, pnf, tfg, aferente, eferente, renina, angII, pg, albumina };
+    return { pa, pcg, pb, pnf, tfg, aferente, eferente, renina, angII, pg, albumina, A, P, obstr };
 }
 
 function camino(pts, paso = 3) {
@@ -81,7 +107,7 @@ export function montarGlomerulo(cuerpo, { tab }, opciones) {
     const css = getComputedStyle(document.documentElement);
     const tk = v => css.getPropertyValue(v).trim();
     const C = { texto: tk('--text-main'), suave: tk('--text-muted'), verde: tk('--accent-green'), rojo: tk('--accent-red'), amarillo: tk('--accent-yellow'), oro: tk('--accent-blue'), purpura: tk('--accent-purple') };
-    const e = { pam: 100, ieca: false, isglt2: false, deplecion: false, aine: false, estenosis: false, obstruccion: false, albuminuria: false, ...opciones.inicial };
+    const e = { pam: 100, ieca: false, isglt2: false, deplecion: false, aine: false, estenosis: false, obstruccion: false, obstruccionMantenida: false, albuminuria: false, ...opciones.inicial };
     const textos = opciones.textos || {};
     const enlace = clave => textos[clave] ? ` <button type="button" class="visual-link" data-gl-ver="${textos[clave]}">Texto ↓</button>` : '';
     const toggles = opciones.mandos.filter(m => m !== 'pam');
@@ -149,7 +175,10 @@ export function montarGlomerulo(cuerpo, { tab }, opciones) {
         // Túbulo proximal (y la obstrucción, si la hay)
         f.strokeStyle = '#c9a678'; f.lineWidth = 14; trazar(f, PROXIMAL);
         f.strokeStyle = alfa(C.amarillo, M.pb > 15 ? 0.9 : 0.7); f.lineWidth = 6; trazar(f, PROXIMAL);
-        if (e.obstruccion) { f.fillStyle = '#3b2a1c'; f.fillRect(346, 146, 14, 20); rotulo(f, 'obstrucción', 356, 182, CLARO.rojo, 'right', 8); }
+        if (M.obstr) { f.fillStyle = '#3b2a1c'; f.fillRect(346, 146, 14, 20); rotulo(f, e.obstruccionMantenida ? 'obstrucción mantenida' : 'obstrucción', 356, 182, CLARO.rojo, 'right', 8); }
+        // Asa capilar: de la aferente, por los lóbulos, a la eferente
+        f.strokeStyle = '#a23d28'; f.lineWidth = 3; f.lineCap = 'round';
+        trazar(f, [[176, 160], ...LOBULOS.slice(0, 6).sort((a, b) => Math.atan2(b.y - B.y, b.x - B.x) - Math.atan2(a.y - B.y, a.x - B.x)).map(l => [l.x, l.y]), [B.x, B.y], [176, 138]]);
         // Ovillo capilar
         for (const l of LOBULOS) {
             f.fillStyle = '#7d3020'; f.beginPath(); f.arc(l.x, l.y, 15, 0, 7); f.fill();
@@ -164,14 +193,19 @@ export function montarGlomerulo(cuerpo, { tab }, opciones) {
         rotulo(f, 'cápsula de Bowman', B.x, B.y - B.r - 8, C.suave, 'center');
         rotulo(f, 'túbulo proximal', 358, 126, C.suave, 'right', 7.5);
         if (M.renina) rotulo(f, 'renina', 150, 232, CLARO.na, 'left', 8.5);
-        if (M.angII) pastilla(f, 'Angiotensina II: contrae la eferente', 120, 22, CLARO.na);
+        if (e.estenosis) { // estrechamiento de la arteria antes de la aferente
+            f.fillStyle = '#2a1712'; f.beginPath(); f.ellipse(42, 220, 5, 7, -0.2, 0, 7); f.fill(); f.beginPath(); f.ellipse(44, 244, 5, 7, -0.2, 0, 7); f.fill();
+            pastilla(f, 'estenosis: −15% de presión', 64, 210, CLARO.rojo);
+        }
+        if (e.obstruccionMantenida) pastilla(f, 'SRAA y simpático: arteriolas contraídas', 120, 22, CLARO.rojo);
+        if (M.angII && !e.obstruccionMantenida) pastilla(f, 'Angiotensina II: contrae la eferente', 120, 22, CLARO.na);
         if (e.ieca) pastilla(f, 'IECA/ARA-II: eferente dilatada', 120, 22, C.verde);
         if (e.isglt2) pastilla(f, 'iSGLT2: aferente contraída', 104, 280, C.verde);
         else if (M.pg) pastilla(f, 'Prostaglandinas: aferente dilatada', 104, 280, C.amarillo);
         else if (e.aine && M.renina) pastilla(f, 'AINE: sin prostaglandinas', 104, 280, CLARO.rojo);
         // Presiones
-        pastilla(f, `Capilar ${Math.round(M.pcg)}`, B.x, B.y - 4, C.texto);
-        pastilla(f, `Bowman ${Math.round(M.pb)}`, B.x + 50, B.y + 62, C.texto);
+        pastilla(f, `Capilar ${Math.round(M.pcg)}`, B.x - 40, B.y + 64, C.texto);
+        pastilla(f, `Bowman ${Math.round(M.pb)}`, B.x + 42, B.y + 64, C.texto);
     }
 
     // ---------- Partículas ----------
@@ -189,7 +223,7 @@ export function montarGlomerulo(cuerpo, { tab }, opciones) {
             else if (s.fase === 1 && s.t > 1.2) { s.fase = 2; s.t = 0; }
         }
         sangre = sangre.filter(s => !(s.fase === 2 && s.t > 1.4));
-        const atasco = e.obstruccion;
+        const atasco = M.obstr;
         for (const p of filtrado) {
             p.t += dt;
             if (p.fase === 0 && p.t > 0.8) { p.fase = 1; p.t = 0; }
@@ -256,21 +290,32 @@ export function montarGlomerulo(cuerpo, { tab }, opciones) {
             else av.push(['danger', `Al iniciar el IECA/ARA-II el FG baja un ${Math.round(caida)}%: 30% o más, buscar depleción de volumen, AINE o estenosis de arteria renal antes de suspender.` + enlace('ieca-mas30')]);
         }
         if (e.isglt2) av.push(['ok', 'La retroalimentación tubuloglomerular contrae la aferente: baja la presión dentro del glomérulo.' + enlace('isglt2')]);
-        if (e.estenosis) av.push(['warn', e.ieca ? 'Sin angiotensina II la eferente se relaja y la presión que sostenía el filtrado se pierde.' + enlace('estenosis') : 'Detrás de la estenosis cae la presión; la renina sube y la angiotensina II contrae la eferente para sostener el filtrado.' + enlace('estenosis')]);
+        if (e.estenosis) av.push(['warn', e.ieca ? 'Sin angiotensina II la eferente se relaja y la presión que sostenía el filtrado se pierde.' + enlace('estenosis') : 'Detrás de la estenosis la presión cae un 10-20%; la renina sube y la angiotensina II contrae la eferente para sostener el filtrado.' + enlace('estenosis')]);
         if (e.deplecion && !e.ieca) av.push(['warn', e.aine ? 'Con AINE no hay prostaglandinas que dilaten la aferente: solo queda la angiotensina II para sostener el filtrado.' + enlace('aine') : 'Con poco volumen, la angiotensina II (eferente) y las prostaglandinas (aferente) sostienen el filtrado.' + enlace('deplecion')]);
-        if (e.obstruccion) av.push(['danger', 'La presión de la vía urinaria llega a la cápsula de Bowman: sube la presión que se opone a filtrar y la TFG cae.' + enlace('obstruccion')]);
+        if (e.obstruccionMantenida) av.push(['danger', 'Si la obstrucción se mantiene, la caída del filtrado se perpetúa porque el SRAA y el simpático contraen las arteriolas aferente y eferente.' + enlace('obstruccion')]);
+        else if (e.obstruccion) av.push(['danger', 'Al principio, la presión de la vía urinaria llega a la cápsula de Bowman: sube la presión que se opone a filtrar y la TFG cae.' + enlace('obstruccion')]);
         cuerpo.querySelector('.gl-avisos').innerHTML = av.map(([t, x]) => `<div class="tfg-estado tfg-estado-${t}">${x}</div>`).join('');
     }
     function actualizar() {
         M = modelo(e);
         cuerpo.querySelectorAll('[data-gl]').forEach(b => { b.classList.toggle('on', !!e[b.dataset.gl]); b.setAttribute('aria-pressed', !!e[b.dataset.gl]); });
+        lienzo.setAttribute('aria-label', `Glomérulo animado${toggles.filter(k => e[k]).map(k => ', ' + MANDOS[k]).join('')}. Presión capilar ${Math.round(M.pcg)} mmHg, TFG ${Math.round(M.tfg)} ml/min.`);
         pintarFondo(); pintarLecturas(); dibujar();
     }
     cuerpo.addEventListener('click', ev => {
         const b = ev.target.closest('[data-gl]');
-        if (b) { e[b.dataset.gl] = !e[b.dataset.gl]; actualizar(); return; }
+        if (b) {
+            const k = b.dataset.gl; e[k] = !e[k];
+            if (k === 'obstruccionMantenida' && e[k]) e.obstruccion = true;
+            if (k === 'obstruccion' && !e[k]) e.obstruccionMantenida = false;
+            actualizar(); return;
+        }
         const ver = ev.target.closest('[data-gl-ver]');
         if (ver) irAlTexto(tab, document.getElementById(ver.dataset.glVer));
+    });
+    montados.set(tab.id, {
+        lienzo,
+        poner: mandos => { for (const k of toggles) e[k] = mandos.includes(k); if (e.obstruccionMantenida) e.obstruccion = true; actualizar(); },
     });
     const pam = cuerpo.querySelector('.gl-pam');
     if (pam) pam.addEventListener('input', () => { e.pam = +pam.value; cuerpo.querySelector('.gl-pam-out').textContent = `${e.pam} mmHg`; actualizar(); });

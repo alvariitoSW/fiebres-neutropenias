@@ -48,7 +48,7 @@ export function initVisualFra() {
         paneles: [
             panelNefronaViva([['obstruccion', 'Obstrucción']]),
             { tipo: 'propio', titulo: 'Glomérulo vivo: la obstrucción', render: (c, x) => montarGlomerulo(c, x, {
-                mandos: ['obstruccion'], inicial: { obstruccion: true }, textos: { obstruccion: 'g-t-obstruccion' } }) },
+                mandos: ['obstruccion', 'obstruccionMantenida'], inicial: { obstruccion: true }, textos: { obstruccion: 'g-t-obstruccion' } }) },
             { tipo: 'mapa', titulo: 'Dónde empieza', nodos: [
                 { fuente: 'Definición', etiqueta: 'Corazón: síndrome cardiorrenal tipo 1', organo: 'corazon', color: 'rojo' },
                 { fuente: 'Incidencia', etiqueta: 'Hígado: cirrosis', organo: 'higado', color: 'amarillo' },
