@@ -71,6 +71,7 @@ export function init() {
     // nefrona (no hace falta cambiar de vista); solo 'diureticos-asa' es
     // una página aparte. Cualquier otra clave: "en preparación".
     const nefrona = initNefronaViva({
+        mostrarVista: () => nefroLevel.show('nefrona'),
         onCategoria: (key) => {
             if (key === 'diureticos-asa') nefroLevel.show('diureticosAsa');
             else if (key.startsWith('fisio-') && document.getElementById(key)) openCorkboardTopic('panel-fisio-tabs', key);

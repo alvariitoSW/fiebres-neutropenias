@@ -109,6 +109,24 @@ export const situacionesNefrona = [
       texto: 'Ausencia de ADH (central) o resistencia a su acción (nefrogénica) impide la inserción de acuaporinas-2 en el colector: no se reabsorbe agua libre y se pierde orina muy diluida en grandes volúmenes, con riesgo de hipernatremia.',
       ficha: { tabId: 'fisio-hipernatremia', etiqueta: 'Ficha completa: Hipernatremia →' } },
     { id: 'hiperglucemia', nombre: 'Hiperglucemia', adh: 0.391, fuentes: ['nv-t-tm'] },
+    // Fracaso renal agudo: los valores de la orina son los rangos de la Tabla 3
+    // y del volumen de diuresis de la ficha FRA · Diagnóstico; tfg/uosm/V/fena
+    // son un punto ilustrativo dentro de esos rangos para mover la animación.
+    { id: 'prerrenal', nombre: 'IRA prerrenal', grupo: 'fra', adh: 1, fuentes: [],
+      texto: 'Hipoperfusión: el túbulo está sano y retiene sodio y agua con avidez. En la IRA por hipoperfusión la diuresis suele estar reducida y la orina es concentrada y pobre en sodio.',
+      fra: { tfg: 0.4, rTp: 0.75, rTal: 0.6, M: 1200, uosm: 650, V: 0.6, fena: 0.003,
+        tabla: { volumen: 'Reducido', osm: '>450 mOsm/kg', naOrina: '<10 mmol/l', fena: '<1%', sedimento: 'Cilindros hialinos' } },
+      ficha: { vista: 'fra', panel: 'panel-fra-tabs', tabId: 'fra-diagnostico', etiqueta: 'Ficha: FRA · Diagnóstico →' } },
+    { id: 'nta', nombre: 'Necrosis tubular aguda', grupo: 'fra', adh: 1, fuentes: [],
+      texto: 'Las células del túbulo dañadas se desprenden y ya no reabsorben el sodio ni concentran la orina: más sodio en la orina, orina poco concentrada y cilindros granulosos. Suele haber oliguria (<400 ml/día).',
+      fra: { tfg: 0.25, rTp: 0.25, rTal: 0.2, M: 450, uosm: 320, V: 0.3, fena: 0.04, nta: true,
+        tabla: { volumen: '<400 ml/día', osm: '<350 mOsm/kg', naOrina: '>20 mmol/l', fena: '>2%', sedimento: 'Cilindros granulosos, células epiteliales' } },
+      ficha: { vista: 'fra', panel: 'panel-fra-tabs', tabId: 'fra-diagnostico', etiqueta: 'Ficha: FRA · Diagnóstico →' } },
+    { id: 'obstruccion', nombre: 'Obstrucción (posrenal)', grupo: 'fra', adh: 0.391, fuentes: [],
+      texto: 'El aumento de presión en la vía urinaria se transmite de forma retrógrada hacia el parénquima: disminuye el FG por el aumento de presión intratubular. En la uropatía obstructiva completa hay anuria (<100 ml/día).',
+      fra: { tfg: 0.15, rTp: 0.65, rTal: 0.6, M: 1200, uosm: null, V: 0.05, fena: null, obstruccion: true,
+        tabla: { volumen: '<100 ml/día (anuria si es completa)', osm: '—', naOrina: '—', fena: '—', sedimento: '—' } },
+      ficha: { vista: 'fra', panel: 'panel-fra-tabs', tabId: 'fra-subfenotipos-2', etiqueta: 'Ficha: FRA · Obstructiva →' } },
 ];
 
 // `segmento`/`canal`: lo que bloquea (se marca con ✕ en la nefrona y en la célula).

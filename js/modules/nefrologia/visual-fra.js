@@ -1,7 +1,9 @@
 // Vista Visual de Fracaso Renal Agudo (Nefrología): recetas para
 // core/visual-kit.js. Las dos calculadoras de la ficha (estadio KDIGO por
 // creatinina y FENa/IFR) se conectan con el panel 'calculadora'.
+import { panelNefronaViva } from './nefrona-viva.js';
 import { montarVisual } from '../../core/visual-kit.js';
+import { montarGlomerulo } from './glomerulo-vivo.js';
 
 export function initVisualFra() {
     montarVisual('fra-definicion', {
@@ -44,6 +46,9 @@ export function initVisualFra() {
     montarVisual('fra-subfenotipos-2', {
         guia: 'Cuatro órganos o situaciones que dañan el riñón de forma propia.',
         paneles: [
+            panelNefronaViva([['obstruccion', 'Obstrucción']]),
+            { tipo: 'propio', titulo: 'Glomérulo vivo: la obstrucción', render: (c, x) => montarGlomerulo(c, x, {
+                mandos: ['obstruccion'], inicial: { obstruccion: true }, textos: { obstruccion: 'g-t-obstruccion' } }) },
             { tipo: 'mapa', titulo: 'Dónde empieza', nodos: [
                 { fuente: 'Definición', etiqueta: 'Corazón: síndrome cardiorrenal tipo 1', organo: 'corazon', color: 'rojo' },
                 { fuente: 'Incidencia', etiqueta: 'Hígado: cirrosis', organo: 'higado', color: 'amarillo' },
@@ -62,6 +67,7 @@ export function initVisualFra() {
     montarVisual('fra-diagnostico', {
         guia: 'El algoritmo en cinco pasos, los índices urinarios y lo que dicen el sedimento y la imagen.',
         paneles: [
+            panelNefronaViva([['prerrenal', 'IRA prerrenal'], ['nta', 'Necrosis tubular aguda'], ['obstruccion', 'Obstrucción']]),
             { tipo: 'flujo', titulo: 'Algoritmo diagnóstico', nodos: [
                 { fuente: '1. Elevación de productos nitrogenados', color: 'amarillo' },
                 { fuente: '2. Datos de hipoperfusión', color: 'verde' },

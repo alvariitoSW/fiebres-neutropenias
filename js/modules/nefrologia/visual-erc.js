@@ -1,7 +1,9 @@
 // Vista Visual de Enfermedad Renal Crónica (KDIGO 2024): recetas para
 // core/visual-kit.js, más el mapa de calor G×A de la ficha 1 conectado a la
 // calculadora de FGe de la propia ficha (mismas funciones, erc-cga.js).
+import { panelNefronaViva } from './nefrona-viva.js';
 import { montarVisual } from '../../core/visual-kit.js';
+import { montarGlomerulo } from './glomerulo-vivo.js';
 import { irAlTexto } from '../../core/vista-visual.js';
 import { ckdEpi2021, categoriaG, categoriaA, MAPA_RIESGO, RIESGO_TEXTO } from './erc-cga.js';
 
@@ -108,6 +110,9 @@ export function initVisualErc() {
     montarVisual('erc-pa-raas', {
         guia: 'Objetivo de PA, cuándo bloquear el SRAA y qué hacer tras empezar.',
         paneles: [
+            { tipo: 'propio', titulo: 'Glomérulo vivo: qué hace el IECA/ARA-II', nota: 'Activa el IECA/ARA-II solo y después con depleción, AINE o estenosis.',
+              render: (c, x) => montarGlomerulo(c, x, { mandos: ['ieca', 'deplecion', 'aine', 'estenosis', 'albuminuria'], inicial: { albuminuria: true },
+                textos: { 'ieca-menos30': 'g-t-ieca-menos30', 'ieca-mas30': 'g-t-ieca-mas30', deplecion: 'g-t-ieca-mas30', aine: 'g-t-ieca-mas30', estenosis: 'g-t-ieca-mas30' } }) },
             { tipo: 'racimos', titulo: 'Objetivo de PA', grupos: [
                 { titulo: 'Objetivo', color: 'dorado', nodos: ['Recomendación principal', 'Por qué "medida estandarizada"'] },
                 { titulo: 'Excepciones (tabla)', color: 'amarillo', tabla: 0 }
@@ -127,6 +132,9 @@ export function initVisualErc() {
     montarVisual('erc-nefroproteccion', {
         guia: 'Los cuatro fármacos que protegen el riñón y a quién se dan.',
         paneles: [
+            panelNefronaViva([['normal|isglt2', 'iSGLT2: glucosuria']]),
+            { tipo: 'propio', titulo: 'Glomérulo vivo: iSGLT2 e IECA/ARA-II', nota: 'Uno contrae la aferente y el otro relaja la eferente: los dos bajan la presión dentro del glomérulo.',
+              render: (c, x) => montarGlomerulo(c, x, { mandos: ['isglt2', 'ieca', 'albuminuria'], inicial: { albuminuria: true }, textos: { isglt2: 'g-t-isglt2' } }) },
             { tipo: 'racimos', titulo: 'Las 4 clases (tabla resumen)', tabla: 2, color: 'verde' },
             { tipo: 'racimos', titulo: 'iSGLT2', grupos: [
                 { titulo: 'A quién (tabla)', color: 'dorado', tabla: 0 },

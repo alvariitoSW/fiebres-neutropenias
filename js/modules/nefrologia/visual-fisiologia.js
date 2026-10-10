@@ -5,7 +5,9 @@
 // 'calculadora' (escriben en sus campos reales y copian su resultado), y los
 // diferenciales con 'selector'. Ningún dato nuevo: cada nodo apunta a una
 // línea de la ficha.
+import { panelNefronaViva } from './nefrona-viva.js';
 import { montarVisual } from '../../core/visual-kit.js';
+import { montarGlomerulo } from './glomerulo-vivo.js';
 
 export function initVisualFisiologia() {
     montarVisual('fisio-anatomia', {
@@ -46,8 +48,8 @@ export function initVisualFisiologia() {
     montarVisual('fisio-regulacion', {
         guia: 'Mueve la presión y mira cómo la arteriola aferente defiende la TFG.',
         paneles: [
-            { tipo: 'calculadora', titulo: 'Autorregulación de la TFG (simulador de la ficha)', campos: ['#tfg-pam'],
-              resultado: ['#fisio-regulacion .tfg-vasos', '#fisio-regulacion .tfg-resultados', '#tfg-estado'] },
+            { tipo: 'propio', titulo: 'Glomérulo vivo: autorregulación', render: (c, x) => montarGlomerulo(c, x, {
+                mandos: ['pam'], textos: { pam: 'g-t-miogenico' } }) },
             { tipo: 'comparar', titulo: 'Quién la regula', columnas: [
                 { titulo: 'Intrínseco (el propio riñón)', color: 'verde', nodos: ['Mecanismo miogénico', 'Retroalimentación túbulo-glomerular'] },
                 { titulo: 'Extrínseco (sistémico)', color: 'purpura', nodos: ['Sistema renina-angiotensina-aldosterona'] }
@@ -59,6 +61,7 @@ export function initVisualFisiologia() {
     montarVisual('fisio-tubular', {
         guia: 'Se filtra muchísimo y se devuelve casi todo: cada tramo de la nefrona hace su parte.',
         paneles: [
+            panelNefronaViva([['normal', 'Filtrado normal'], ['normal|furosemida', 'Con furosemida'], ['normal|tiazida', 'Con tiazida']]),
             { tipo: 'barras', titulo: 'Cuánto se reabsorbe de lo filtrado', nota: 'Tabla de la ficha, dibujada.',
               tabla: 0, series: [{ col: 2, nombre: '% reabsorbido', color: 'verde' }] },
             { tipo: 'flujo', titulo: 'Tramo a tramo', nodos: [
@@ -79,6 +82,7 @@ export function initVisualFisiologia() {
     montarVisual('fisio-hormonal', {
         guia: 'Cuatro hormonas ajustan el final de la nefrona, cada una con su estímulo y su efecto.',
         paneles: [
+            panelNefronaViva([['deshidratacion', 'ADH máxima'], ['normal|espironolactona', 'Sin aldosterona: espironolactona']]),
             { tipo: 'comparar', titulo: 'Qué ajusta cada una', columnas: [
                 { titulo: 'Retienen agua o Na⁺', color: 'dorado', nodos: ['ADH (vasopresina)', 'Aldosterona'] },
                 { titulo: 'Elimina Na⁺', color: 'verde', nodos: ['Péptido natriurético atrial'] },
@@ -100,6 +104,7 @@ export function initVisualFisiologia() {
     montarVisual('fisio-agua-regulacion', {
         guia: 'Dónde está el agua, quién la regula y qué hace el riñón según la osmolalidad.',
         paneles: [
+            panelNefronaViva([['deshidratacion', 'Deshidratación'], ['agua', 'Bebe mucha agua']]),
             { tipo: 'barras', titulo: 'Dónde está el agua (% del peso)', tabla: 1, series: [{ col: 1, nombre: '% del peso corporal', color: 'dorado' }] },
             { tipo: 'calculadora', titulo: 'Osmorregulación (simulador de la ficha)', campos: ['#agua-osm'],
               resultado: ['#fisio-agua-regulacion .tfg-vasos', '#fisio-agua-regulacion .tfg-resultados', '#agua-estado'] },
@@ -117,6 +122,7 @@ export function initVisualFisiologia() {
     montarVisual('fisio-hiponatremia', {
         guia: 'Gravedad, causa por volemia, diagnóstico en tres pasos y corrección sin pasarse.',
         paneles: [
+            panelNefronaViva([['siadh', 'SIADH'], ['normal|tiazida', 'Tiazida']]),
             { tipo: 'escalera', titulo: 'Gravedad por síntomas', tabla: 1 },
             { tipo: 'comparar', titulo: 'Causas según la volemia', columnas: [
                 { titulo: 'Hipovolémica', color: 'amarillo', nodos: [{ fuente: 'Hipovolémica — diuréticos', etiqueta: 'Diuréticos' }, { fuente: 'Hipovolémica — síndrome pierde sal', etiqueta: 'Pierde sal renal' }] },
@@ -142,6 +148,7 @@ export function initVisualFisiologia() {
     montarVisual('fisio-hipernatremia', {
         guia: 'Falta agua, no sobra sodio: causas, el patrón de cada diabetes insípida y cómo tratar.',
         paneles: [
+            panelNefronaViva([['di', 'Diabetes insípida']]),
             { tipo: 'racimos', titulo: 'Causas por mecanismo', tabla: 0, color: 'rojo' },
             { tipo: 'matriz', titulo: 'Patrón de laboratorio en la poliuria', tabla: 2, flechas: true },
             { tipo: 'flujo', titulo: 'Cómo se diferencia', nodos: [

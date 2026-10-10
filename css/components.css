@@ -2260,3 +2260,16 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 .erc-calor-celda.on { background: var(--c); box-shadow: 0 0 0 3px var(--text-main); display: flex; align-items: center; justify-content: center; }
 .erc-calor-celda.on::after { content: '●'; color: var(--bg-main); font-size: 0.8rem; }
 .erc-calor-paciente { font-size: 0.78rem; margin: 8px 0 4px; }
+
+/* Glomérulo vivo (js/modules/nefrologia/glomerulo-vivo.js): panel 'propio' de
+   la vista Visual de varias fichas. Lecturas, mandos y avisos reutilizan
+   .nv-medidores, .nv-chips, .visual-mini, .tfg-slider-row y .tfg-estado. */
+.gl-escenario { width: 100%; aspect-ratio: 360 / 300; border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); background: #0f0d0a; }
+.gl-escenario canvas { width: 100%; height: 100%; display: block; }
+.gl-mandos { margin: 10px 0; }
+.gl-medidores { margin-top: 10px; }
+.tfg-estado .visual-link { min-height: 28px; padding: 0 8px; font-size: 0.66rem; margin-left: 4px; vertical-align: middle; }
+.nv-medidor-valor.malo { color: #e08a6c; }
+.nv-medidor-valor.bueno { color: #a8b97c; }
+.nv-chips-grupo { flex-basis: 100%; font-family: 'Courier New', monospace; font-size: 0.6rem; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; }
+.nv-medidor-valor.largo { font-size: 0.86rem; }

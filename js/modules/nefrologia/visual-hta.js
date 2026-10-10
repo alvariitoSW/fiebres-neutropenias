@@ -2,6 +2,7 @@
 // core/visual-kit.js. Cada nodo apunta a una línea de la ficha; las tablas se
 // dibujan leyendo sus celdas.
 import { montarVisual } from '../../core/visual-kit.js';
+import { montarGlomerulo } from './glomerulo-vivo.js';
 
 export function initVisualHta() {
     montarVisual('hta-definicion', {
@@ -104,6 +105,9 @@ export function initVisualHta() {
     montarVisual('hta-secundaria-renal', {
         guia: 'Cuánto pesa la causa secundaria por edad y cómo una estenosis renal sube la PA.',
         paneles: [
+            { tipo: 'propio', titulo: 'Glomérulo vivo: detrás de la estenosis', nota: 'Estenosis bilateral o sobre riñón único. Activa el IECA/ARA-II y mira qué pasa con el filtrado.',
+              render: (c, x) => montarGlomerulo(c, x, { mandos: ['estenosis', 'ieca'], inicial: { estenosis: true },
+                textos: { estenosis: 'g-t-volumen', 'ieca-menos30': 'g-t-volumen', 'ieca-mas30': 'g-t-volumen' } }) },
             { tipo: 'barras', titulo: 'HTA secundaria por grupo de edad', nota: 'Tabla de la ficha: barra = límite inferior del rango.',
               tabla: 0, series: [{ col: 1, nombre: 'Prevalencia', color: 'rojo' }] },
             { tipo: 'flujo', titulo: 'Cómo una estenosis renal sube la PA', nodos: [

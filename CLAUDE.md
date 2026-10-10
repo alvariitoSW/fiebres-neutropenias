@@ -9827,6 +9827,73 @@ pasó a la app sustituyendo la foto con puntos de la vista `nefrona`.
   de filtración; SIADH abre Hiponatremia; volver al mapa del riñón deja la
   nefrona en la foto; sin errores de consola, 404 ni desborde.
 
+### Glomérulo vivo y FRA en la nefrona viva (octubre 2026)
+
+A petición explícita del usuario ("como ya tenemos la nefrona montada, la
+podemos usar para otras fichas, o para la ERC... vamos a seguir con
+nefrología lo que quede"). Dos piezas que reutilizan el mismo lenguaje
+visual de la nefrona viva:
+
+- **Glomérulo vivo** (`js/modules/nefrologia/glomerulo-vivo.js`,
+  `montarGlomerulo(cuerpo, { tab }, opciones)`): arteriola aferente, ovillo
+  capilar dentro de la cápsula de Bowman, eferente, mácula densa y células
+  yuxtaglomerulares, con hematíes circulando, filtrado saliendo al túbulo
+  proximal, renina liberándose cuando hay hipoperfusión y albúmina
+  escapando si la barrera está dañada. El grosor de cada arteriola (y de su
+  anillo de músculo liso) sale del modelo. Se monta como panel `propio` de
+  la vista Visual; cada ficha elige sus mandos y a qué línea propia lleva
+  cada "Texto ↓" (ids `g-t-*`):
+  - `fisio-regulacion`: PAM 40-220 (sustituye en la vista Visual al panel
+    que copiaba el simulador de barras; el simulador sigue en Texto).
+  - `erc-pa-raas`: IECA/ARA-II, depleción de volumen, AINE, estenosis y
+    albuminuria — compara el FG con y sin IECA y aplica la regla de la
+    ficha (<30% aceptable; ≥30% buscar depleción, AINE o estenosis).
+  - `erc-nefroproteccion`: iSGLT2 (vasoconstricción aferente por
+    retroalimentación tubuloglomerular), IECA y albuminuria.
+  - `hta-secundaria-renal`: estenosis bilateral o sobre riñón único, con y
+    sin IECA (la angiotensina II sostiene el filtrado contrayendo la
+    eferente; sin ella el FG cae de golpe).
+  - `fra-subfenotipos-2`: obstrucción (sube la presión en Bowman).
+  - **Modelo**: presiones de la ficha "Filtración glomerular" (capilar 55,
+    Bowman 15, oncótica 30, neta 10 mmHg; TFG 125 ml/min) y la misma
+    autorregulación 80-180 mmHg que el simulador de "Regulación del
+    filtrado". Cuánto mueve cada factor la presión capilar (IECA −1,5,
+    iSGLT2 −1, angiotensina II y prostaglandinas compensando una parte del
+    déficit, estenosis al 70%, depleción −25 mmHg, obstrucción +8 en
+    Bowman) es ilustrativo y la vista lo dice.
+- **FRA en la nefrona viva**: 3 situaciones más (`grupo: 'fra'` en
+  `situacionesNefrona`, bajo un rótulo "Fracaso renal agudo"): IRA
+  prerrenal, necrosis tubular aguda y obstrucción. Los valores de la orina
+  que se muestran son los **rangos de la Tabla 3** y del volumen de
+  diuresis de la ficha FRA · Diagnóstico (FENa <1% / >2%, osmolalidad
+  >450 / <350, Na⁺ en orina <10 / >20, cilindros hialinos / granulosos,
+  <400 ml/día, anuria <100 ml/día), todos con la etiqueta `ficha`; el
+  filtrado (TFG) y los parámetros con los que se mueve la animación son
+  ilustrativos (`modeloFra()`). Dibujo: menos perfusión en la prerrenal;
+  huecos en la pared del proximal y de la rama gruesa, células
+  desprendidas viajando y cilindros granulosos en la NTA (y en la célula,
+  borde punteado sin ribete y "Célula dañada"); cálculo en la papila,
+  colector dilatado y orina acumulada en la obstrucción. El botón de la
+  explicación vuelve a la ficha de FRA (`data-especialidad`).
+- **Accesos a la nefrona viva desde las fichas**: cualquier botón
+  `[data-nefrona-viva="situacion|farmaco"]` cambia a la vista nefrona,
+  pone esa situación y ese fármaco y baja hasta el escenario
+  (`initNefronaViva({ onCategoria, mostrarVista })`; `index.js` pasa
+  `mostrarVista`). `panelNefronaViva([[valor, etiqueta], ...])` (exportado
+  de `nefrona-viva.js`) los pinta como panel de una receta; hoy en
+  `fisio-tubular`, `fisio-hormonal`, `fisio-agua-regulacion`,
+  `fisio-hiponatremia`, `fisio-hipernatremia`, `fra-diagnostico`,
+  `fra-subfenotipos-2` y `erc-nefroproteccion`.
+- CSS: `.gl-*`, `.nv-chips-grupo`, `.nv-medidor-valor.malo/.bueno/.largo`.
+  Cache-busting a `?v=20261018-7`.
+- Verificado con Playwright (390×844, toques reales): los 5 glomérulos
+  construyen y responden (IECA solo −15%; con depleción y AINE −44%, aviso
+  de ≥30%; iSGLT2 + IECA −25% y albúmina al 75%; estenosis + IECA −54%;
+  obstrucción −80%), "Texto ↓" lleva a la línea de la ficha; desde FRA ·
+  Diagnóstico, los 3 accesos abren la nefrona viva con su situación y la
+  Tabla 3, la célula del proximal en NTA sale dañada, y el botón de la
+  explicación vuelve a la ficha; sin errores ni desborde.
+
 ## Auditoría de Hematología (octubre 2026)
 
 A petición explícita del usuario ("revisa que esté todo correcto en
