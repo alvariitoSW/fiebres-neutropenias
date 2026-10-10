@@ -338,9 +338,7 @@ function renderSelector(p) {
 
 // ---------- Montaje ----------
 
-// Exportada para módulos Visual a medida (p. ej. la simulación de
-// hiperpotasemia de Nefrología) que no usan una receta del kit.
-export function envolver(tab) {
+function envolver(tab) {
     const texto = document.createElement('div');
     texto.className = 'vista-texto';
     const visual = document.createElement('div');
@@ -357,6 +355,10 @@ export function envolver(tab) {
     return { texto, visual };
 }
 
+// `receta` es una receta del kit o, para una vista a medida (p. ej. la
+// simulación de hiperpotasemia de Nefrología), una función
+// (tab, texto, visual) que construye la imagen ella misma. En ambos casos
+// se construye la primera vez que se abre la vista Visual.
 export function montarVisual(tabId, receta) {
     const tab = document.getElementById(tabId);
     if (!tab || tab.hasAttribute('data-visual')) return;
@@ -371,6 +373,7 @@ export function montarVisual(tabId, receta) {
 }
 
 function construir(tab, texto, visual, receta) {
+    if (typeof receta === 'function') return receta(tab, texto, visual);
     const nodos = []; // registro plano: { i, el, texto, color, organo, en, fila }
     const registrar = def => {
         const d = typeof def === 'string' ? { fuente: def } : def;

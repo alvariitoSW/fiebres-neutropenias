@@ -9575,14 +9575,32 @@ Nefrología**, distinto del kit de recetas de Hematología: aquí no se
 dibujan las líneas del texto, se simula el mecanismo que explican.
 
 - **Dónde**: ficha `fisio-hiperpotasemia` del cuaderno de fisiología
-  (`nefro-menu.html`). Toda la ficha gana el interruptor Texto | Visual
-  (`envolver()`, ahora exportada desde `core/visual-kit.js` para módulos a
-  medida); la vista Texto es la ficha de siempre.
+  (`nefro-menu.html`). Toda la ficha gana el interruptor Texto | Visual; la
+  vista Texto es la ficha de siempre. **Punto de extensión para vistas
+  Visual a medida**: `montarVisual(tabId, receta)` acepta, en vez de una
+  receta, una función `(tab, texto, visual)` que construye la imagen ella
+  misma, con la misma construcción diferida y el mismo caso del botón
+  global ya resueltos por el kit (`envolver()` sigue siendo privada).
 - **Módulo**: `js/modules/nefrologia/hiperpotasemia-sim.js`
   (`initHiperpotasemiaSim()`, llamado desde `fisiologia.js` justo después de
   `initCorkboard`, para que "Siguiente ficha" ya exista y quede fuera). La
   escena se construye la primera vez que se abre la vista Visual. Dos
   `<canvas>` (escena 360×320 y ECG 360×74, con `devicePixelRatio`).
+- **Reutiliza las piezas de la app** en vez de estilos propios: botones
+  `.visual-mini`, "Texto ↓" con `.visual-link` (variante compacta dentro de
+  `.hk-*`), avisos con `.tfg-estado-warn/danger`, barra de riesgo con
+  `.kinetic-*` + `pintarGauge()`, gravedad con `.grade-badge`, rótulos con
+  `.section-label`, `clamp()` de `core/ui.js`. Los colores del canvas salen
+  de los tokens de `variables.css` (con un `alfa()` para las
+  transparencias); solo 4 tonos claros del dibujo, sin token, viven en una
+  constante `CLARO`. En `js/data/` cada fármaco lleva su `magnitud` y su
+  `ruta` de salida, y el nombre sale de su fila de la tabla (solo CSZ y
+  patirómero, que comparten fila, declaran el suyo).
+- **Rendimiento por fotograma**: la actividad de cada fármaco y el modelo se
+  calculan una vez por paso; el DOM solo se escribe cuando un valor cambia
+  (`poner()` con caché); el canvas agrupa cada color de partículas en un
+  solo trazado; `cuadrar()` cuenta las partículas en una sola pasada; con
+  `prefers-reduced-motion` el ECG solo se recalcula si cambian sus rasgos.
 - **Una sola fuente de datos**: `js/data/hiperpotasemia-data.js`. La tabla
   "Tratamiento — hiperpotasemia grave sintomática" de la vista Texto ya no
   está escrita en el HTML: `<tbody id="hk-tto-tabla">` se rellena desde
@@ -9623,8 +9641,11 @@ dibujan las líneas del texto, se simula el mecanismo que explican.
   real de la ficha, declarada en la propia fila: la tabla de urgencia da
   1-2 h para los captores juntos y la tabla de la forma crónica da 1 h al
   CSZ y 7 h al patirómero; la simulación los separa con esas cifras.
-- **"Texto ↓"** en cada fármaco y causa lleva a su línea real con
-  `irAlTexto()`. Ids añadidos a la ficha: `hk-causa-pseudo/aporte/renal/
+- **"Texto ↓"** en cada fármaco, cada causa, el texto del ECG (Figura 9 o
+  la frase de baja sensibilidad), la gravedad (Figura 7) y los avisos que
+  citan la ficha lleva a su línea real con `irAlTexto()`; una segunda línea
+  relacionada se resalta sin mover la vista con `marcar()` (nuevo export de
+  `core/vista-visual.js`, el mismo resaltado que usa `resaltar()`). Ids añadidos a la ficha: `hk-causa-pseudo/aporte/renal/
   salida`, `hk-fig7`, `hk-fig9`, `hk-ecg-sensibilidad`, `hk-monitorizacion`,
   `hk-tto-<id>` (generados), `hk-tto-nota`, `hk-quel-inicio`,
   `hk-confirmar`.
@@ -9633,6 +9654,12 @@ dibujan las líneas del texto, se simula el mecanismo que explican.
   el dibujo, para que el reloj siga al bajar a pulsar los fármacos).
   Verificado: 0 fotogramas/s en la vista Texto o fuera de la ficha, ~50/s
   con la simulación visible. Respeta `prefers-reduced-motion`.
+- **`[hidden]` global**: `css/base.css` tiene ahora
+  `[hidden] { display: none !important; }`. Antes cada componente que
+  ocultaba con el atributo `hidden` necesitaba su propia regla
+  `.clase[hidden]` (había 8 copias, todas borradas), porque cualquier
+  `display` del autor anulaba el del navegador. Usa siempre el atributo
+  `hidden` para ocultar; no hace falta regla propia.
 - CSS con prefijo `hk-` en `components.css`. Bug previo corregido de paso:
   las 3 tablas de la ficha desbordaban a 390 px (432 px de ancho de
   página); ahora van en `overflow-x:auto`.

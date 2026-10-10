@@ -16,30 +16,36 @@ export const tratamientoHiperpotasemia = [
     { id: 'dialisis', agente: 'Diálisis', dosis: 'Hemodiálisis o diálisis peritoneal', tiempo: 'Minutos/hora', mecanismo: 'Eliminan K⁺ del organismo' },
 ];
 
-// Fármacos de la simulación. `fila` = id de la fila de la tabla de arriba;
-// `ini`/`fin` = rangos en minutos traducidos de su columna "Inicio/duración"
-// (fin null = la fuente no da una duración cerrada). `extra` = otra línea de
-// la ficha a resaltar con "Texto ↓".
+// Fármacos de la simulación. `ini`/`fin` = rangos en minutos traducidos de
+// su columna "Inicio/duración" (fin null = la fuente no da una duración
+// cerrada). Por defecto la fila de la tabla es la de su mismo `id` y el
+// nombre es el de esa fila; solo CSZ y patirómero (una sola fila para los
+// dos) los declaran. `extra` = otra línea de la ficha a resaltar con
+// "Texto ↓". `magnitud` (ILUSTRATIVA, la ficha no la da): mEq/l desplazados
+// al máximo efecto, o mEq/l por hora eliminados por `ruta`.
 export const farmacosHiperpotasemia = [
-    { id: 'calcio', grupo: 'protege', nombre: 'Gluconato cálcico 10%', fila: 'calcio', ini: [5, 10], fin: [30, 60], repetible: true },
-    { id: 'salbutamol', grupo: 'desplaza', nombre: 'Salbutamol nebulizado o IV', fila: 'salbutamol', ini: [30, 30], fin: [120, 180], repetible: true },
-    { id: 'insulina', grupo: 'desplaza', nombre: 'Insulina + glucosa', fila: 'insulina', ini: [15, 15], fin: [360, 480], repetible: true },
-    { id: 'bicarbonato', grupo: 'desplaza', nombre: 'Bicarbonato sódico', fila: 'bicarbonato', ini: [30, 60], fin: [360, 480], repetible: true },
-    { id: 'diuretico', grupo: 'elimina', nombre: 'Diuréticos de asa', fila: 'diuretico', ini: [30, 30], fin: null },
+    { id: 'calcio', grupo: 'protege', ini: [5, 10], fin: [30, 60], repetible: true },
+    { id: 'salbutamol', grupo: 'desplaza', ini: [30, 30], fin: [120, 180], repetible: true, magnitud: 0.7 },
+    { id: 'insulina', grupo: 'desplaza', ini: [15, 15], fin: [360, 480], repetible: true, magnitud: 0.8 },
+    { id: 'bicarbonato', grupo: 'desplaza', ini: [30, 60], fin: [360, 480], repetible: true, magnitud: { conAcidosis: 0.8, sinAcidosis: 0.25 } },
+    { id: 'diuretico', grupo: 'elimina', ini: [30, 30], fin: null, magnitud: 0.35, ruta: 'orina' },
     {
-        id: 'csz', grupo: 'elimina', nombre: 'Ciclosilicato de zirconio (CSZ)', fila: 'captores', extra: 'hk-quel-inicio',
-        ini: [60, 60], fin: [420, 1440], repetible: true,
+        id: 'csz', grupo: 'elimina', fila: 'captores', nombre: 'Ciclosilicato de zirconio (CSZ)', extra: 'hk-quel-inicio',
+        ini: [60, 60], fin: [420, 1440], repetible: true, magnitud: 0.3, ruta: 'heces',
         tiempo: 'Inicio 1 h (tabla de la forma crónica) · duración 7-24 h',
         fidelidad: 'La tabla de urgencia da 1-2 h / 7-24 h para los dos captores juntos; la tabla de la forma crónica, 1 h para el CSZ.',
     },
     {
-        id: 'patiromero', grupo: 'elimina', nombre: 'Patirómero', fila: 'captores', extra: 'hk-quel-inicio',
-        ini: [420, 420], fin: null,
+        id: 'patiromero', grupo: 'elimina', fila: 'captores', nombre: 'Patirómero', extra: 'hk-quel-inicio',
+        ini: [420, 420], fin: null, magnitud: 0.3, ruta: 'heces',
         tiempo: 'Inicio 7 h (tabla de la forma crónica)',
         fidelidad: 'La tabla de urgencia da 1-2 h para los dos captores; la tabla de la forma crónica, 7 h para el patirómero. El modelo usa 7 h y no da duración.',
     },
-    { id: 'dialisis', grupo: 'elimina', nombre: 'Diálisis', fila: 'dialisis', ini: [5, 30], fin: null },
-];
+    { id: 'dialisis', grupo: 'elimina', ini: [5, 30], fin: null, magnitud: 1.4, ruta: 'dial' },
+].map(f => {
+    const fila = f.fila || f.id;
+    return { ...f, fila, nombre: f.nombre || tratamientoHiperpotasemia.find(t => t.id === fila).agente };
+});
 
 export const gruposHiperpotasemia = {
     protege: { rotulo: 'Protege el corazón', color: 'var(--accent-red)' },
@@ -58,11 +64,8 @@ export const causasHiperpotasemia = {
     'pseudo': { etiqueta: 'Pseudohiperpotasemia', base: 4.5, renal: 'ok', pseudo: 2.5, fuente: 'hk-causa-pseudo', texto: 'Muestra hemolizada, leucocitosis o trombocitosis extremas, torniquete apretado: el K⁺ sube en el tubo, no en el paciente.' },
 };
 
-// Magnitudes ILUSTRATIVAS: la ficha no dice cuántos mEq/l mueve cada medida.
+// Otras cantidades ILUSTRATIVAS del modelo (la ficha no las da).
 export const magnitudesHiperpotasemia = {
-    desplaza: { insulina: 0.8, salbutamol: 0.7 },          // mEq/l al máximo efecto
-    bicarbonato: { conAcidosis: 0.8, sinAcidosis: 0.25 },  // mEq/l
-    elimina: { diuretico: 0.35, csz: 0.3, patiromero: 0.3, dialisis: 1.4 }, // mEq/l por hora
     renalBasal: 0.8,      // mEq/l por hora que saca un riñón conservado con el K⁺ alto
     diureticoEnIR: 0.2,   // fracción del efecto del diurético con IR grave
 };

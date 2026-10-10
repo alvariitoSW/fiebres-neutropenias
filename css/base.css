@@ -1,4 +1,6 @@
 * { box-sizing: border-box; font-family: Georgia, 'Times New Roman', Times, serif; }
+/* El atributo hidden siempre oculta, aunque la clase del elemento fije su display. */
+[hidden] { display: none !important; }
 
 body {
     background-color: var(--bg-main);

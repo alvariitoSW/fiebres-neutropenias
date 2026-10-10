@@ -41,10 +41,16 @@ export function resaltar(objetivo) {
     // aterrizar a mitad de una tarjeta larga sin ver su título.
     const alto = objetivo.getBoundingClientRect().height > window.innerHeight * 0.8;
     objetivo.scrollIntoView({ behavior: 'smooth', block: alto ? 'start' : 'center' });
-    objetivo.classList.remove('vista-resaltado');
-    void objetivo.offsetWidth; // reinicia la animación si ya estaba resaltado
-    objetivo.classList.add('vista-resaltado');
-    setTimeout(() => objetivo.classList.remove('vista-resaltado'), 2200);
+    marcar(objetivo);
+}
+
+// Resalta un elemento un momento, sin mover la vista.
+export function marcar(el) {
+    if (!el) return;
+    el.classList.remove('vista-resaltado');
+    void el.offsetWidth; // reinicia la animación si ya estaba resaltado
+    el.classList.add('vista-resaltado');
+    setTimeout(() => el.classList.remove('vista-resaltado'), 2200);
 }
 
 // Vuelve a la vista Texto del bloque y resalta `objetivo` (la línea de la
