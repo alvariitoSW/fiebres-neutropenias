@@ -1829,6 +1829,29 @@ por encima que sí diera cabida a todos.
     el único bloque de contenido real de Nefrología sin ninguna de las dos
     rondas. Cuando se pida, seguir el mismo método ya documentado arriba
     para HTA/ERC/FRA.
+    - **Primera mitad hecha (octubre 2026): revisión interna sin la
+      fuente.** El PDF de Valdenebro 2021 no está en `docs/` y la web de
+      la revista (`revistanefrologia.com`, `doi.org`) está bloqueada por el
+      proxy de esta sesión, así que solo se revisó la app contra sí misma.
+      Corregido: "felinefrina" → fenilefrina, "0,35 mmol" → mmol/l, una
+      frase duplicada ("equipo multidisciplinar por un equipo
+      multidisciplinar"), `trr-q005` (atribuía el 5-10% a "estudios
+      españoles"; la ficha atribuye a ellos el 42,4%/38%) y `trr-q032` (la
+      opción correcta hablaba de "FRA posquirúrgica" y el RENAL de la Tabla
+      4 es FRA oligúrico con edema pulmonar). **Pendiente de cotejar con el
+      PDF**, sin tocar: (1) Tabla 3 llama a ELAIN "único ensayo con
+      beneficio claro" pero 3 filas más (Bouman, Smith, Sugahara) muestran
+      beneficio, y `trr-q018` dice "uno de los pocos"; (2) RESCUE aparece
+      a la vez como estudio que "no resuelve la incertidumbre" y como
+      "subanálisis" con beneficio en quemados (`trr-q027`, gancho de la
+      Ficha 4, que además lo mete en la Cochrane 2016); (3) el 5-10% de
+      FRA que requiere TRR frente al 38% de los estudios españoles; (4)
+      `trr-q030` dice "se recomienda" alta dosis en hepatopatía/PIC y la
+      ficha dice "posible beneficio"; (5) Schoenfelder 2017 se presenta
+      como "actualización de la Cochrane"; (6) la Ficha 1 no reproduce
+      ninguna tabla de RCT de modalidad (las tablas de la app empiezan en
+      la 3), ¿faltan la 1 y la 2 de la fuente?; (7) en la Tabla 3, "Smith
+      2013 (STARRT-AKI piloto)" y el resultado positivo de Bouman 2002.
   - **`nefrotoxicidad.html`** (objetivo de rotación 5, "Nefrotoxicidad de
     fármacos") fue la 5ª categoría en pasar de placeholder a contenido
     real, y rompe deliberadamente con el patrón de cuaderno de campo — no

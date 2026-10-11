@@ -50,7 +50,7 @@ export const preguntasTRR = [
     {
         id: 'trr-q005',
         tema: 'trr-modalidad',
-        enunciado: 'Aproximadamente, ¿qué proporción de pacientes con FRA establecido en UCI requiere TRR durante su estancia, según estudios españoles?',
+        enunciado: 'Aproximadamente, ¿qué proporción de pacientes con FRA establecido en UCI requiere TRR durante su estancia?',
         opciones: ['5-10% de los pacientes con FRA', '50% de todos los ingresados en UCI', '90% de los pacientes con FRA', 'Ninguno, la TRR es excepcional'],
         correcta: 0,
         explicacion: 'Aproximadamente el 5-10% de los pacientes con FRA establecido requieren TRR durante su estancia en UCI. Estudios españoles estiman una prevalencia de FRA en UCI del 42,4%, con necesidad de TRR en el 38% de esos casos.',
@@ -273,7 +273,7 @@ export const preguntasTRR = [
         id: 'trr-q032',
         tema: 'trr-dosis',
         enunciado: 'En el ensayo Bellomo 2006 (RENAL, Australia-Nueva Zelanda), con 1.465 pacientes, ¿qué se encontró al comparar alta vs. baja intensidad de TRR?',
-        opciones: ['TRR continua intensiva no redujo significativamente el riesgo de muerte en FRA posquirúrgica', 'Reducción drástica de la mortalidad con dosis alta en todos los pacientes', 'La dosis baja fue superior en todos los desenlaces', 'No se pudo completar el ensayo'],
+        opciones: ['Sin diferencias en mortalidad ni en duración de la TRR o del fallo multiorgánico', 'Reducción drástica de la mortalidad con dosis alta en todos los pacientes', 'La dosis baja fue superior en todos los desenlaces', 'No se pudo completar el ensayo'],
         correcta: 0,
         explicacion: 'El estudio RENAL, uno de los más amplios (1.465 pacientes), no encontró diferencias significativas en mortalidad ni duración de TRR/FMO entre la estrategia de alta y baja intensidad, confirmando la falta de beneficio general de las dosis altas.',
     },
