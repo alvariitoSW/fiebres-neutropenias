@@ -130,15 +130,19 @@ function modeloFra(s, farm) {
 const clamp01 = v => Math.max(0, Math.min(1, v));
 // Lo que una situación frena ('bloquea') o estimula ('activa') en un canal.
 const efectosDe = s => s.efectos ?? (s.defecto ? [{ ...s.defecto, tipo: 'bloquea' }] : []);
-// Ca²⁺, Mg²⁺ y fosfato. De las fichas: el Mg²⁺ se reabsorbe ~96% (2.300 de
-// 2.400 mg), el fosfato sobre todo en el proximal (NPT2a,c), la rama gruesa
-// reabsorbe Ca²⁺ y Mg²⁺ y la PTH sube la reabsorción distal de Ca²⁺. El
-// reparto por tramos es ilustrativo (fisiología general).
+// Ca²⁺, Mg²⁺ y fosfato, con el reparto por tramos de las fichas (Rodelo-Haad
+// 2025): Ca²⁺ 70% proximal, 20-25% rama gruesa, 5-10% distal; Mg²⁺ 25%
+// proximal, 65% asa, 5% distal, ~5% excretado; fosfato con RTP >80% (FEP
+// 5-20%) en el proximal. Las tiazidas causan hipocalciuria porque la
+// contracción de volumen sube la reabsorción proximal de Ca²⁺; los diuréticos
+// de asa la pierden al quitar el gradiente de la rama gruesa. Cuánto cambia
+// cada tramo con un fármaco o una situación es ilustrativo.
 function mineralR({ furo, tiaz, nta, mi }) {
     const pp = mi.pProx ?? (nta ? 0.5 : 0.88);
+    const caTp = tiaz ? 0.80 : 0.70;
     return {
-        ca: { tp1: 0.35, tp2: parte(0.65, 0.35), tal: furo ? 0.1 : nta ? 0.3 : mi.ca?.tal ?? 0.71, tcd: tiaz ? 0.95 : mi.ca?.tcd ?? 0.8, col: 0.5 },
-        mg: { tp1: 0.08, tp2: parte(0.15, 0.08), tal: furo ? 0.1 : nta ? 0.3 : 0.82, tcd: tiaz ? 0.2 : 0.67 },
+        ca: { tp1: 0.40, tp2: parte(caTp, 0.40), tal: furo ? 0.1 : nta ? 0.3 : mi.ca?.tal ?? 0.75, tcd: mi.ca?.tcd ?? 0.86 },
+        mg: { tp1: 0.12, tp2: parte(0.25, 0.12), tal: furo ? 0.1 : nta ? 0.3 : 0.867, tcd: tiaz ? 0.2 : 0.5 },
         p: { tp1: pp * 0.6, tp2: parte(pp, pp * 0.6) },
     };
 }
@@ -665,7 +669,6 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
             const y = f.y0 + 12;
             if (f.t === 'canal' || f.t === 'aqp') {
                 const cn = f.cn, bl = bloqueado(seg, cn.nombre), act = efecto(seg, cn.nombre, 'activa');
-                const tiazCa = !bl && cn.nombre === 'Canal de Ca²⁺' && estado.farm === 'tiazida';
                 // ROMK de la rama gruesa recicla el K⁺ que trae NKCC2: sin NKCC2, no hay qué reciclar.
                 const sinK = !bl && cn.depende && bloqueado(seg, cn.depende);
                 const esAqp2 = f.t === 'aqp', esUrea = cn.nombre === 'Transportador de urea';
@@ -673,7 +676,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
                 if (cn.nombre === 'ROMK') { const fk = Math.sqrt(M.naTcd / 0.039) * (ahorr ? 0.3 : 1) * (M.acido?.kMult ?? 1); veces = Math.max(1, Math.min(6, Math.round(3 * fk))); dur = 3.6 / clamp(fk, 0.6, 2); }
                 if (esAqp2) veces = Math.round(M.a * 5);
                 if (esUrea) veces = Math.round(M.a * 4);
-                if (act || tiazCa) { veces = 5; dur = 2.4; }
+                if (act) { veces = 5; dur = 2.4; }
                 const sinCanal = (esAqp2 || esUrea) && veces === 0, off = !!bl || danada || sinCanal || !!sinK;
                 const n = cn.flujo.length;
                 const yy = k => (esAqp2 ? y + 22 : y) + k * 18;
@@ -694,19 +697,18 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
                 if (esAqp2) for (let q = 0; q < veces; q++) capas += puerta(xa, y + q * 9, off ? '#5a4a3a' : C.oro, 7);
                 else if (cn.nombre !== 'Paso pasivo') capas += `<rect x="${xa - 6}" y="${y - 11}" width="12" height="${18 * (n - 1) + 22}" rx="5" fill="${off ? '#5a4a3a' : C.oro}" stroke="#17140f"/>`;
                 const yl = f.y0 + f.h - 4;
-                textos += txt(lblX, yl - (cn.intercalar || esAqp2 || cn.nombre === 'ROMK' || cn.depende || esUrea || bl || danada || sinCanal || act || tiazCa ? 11 : 0), `${cn.nombre}${esAqp2 && !sinCanal ? ` ×${veces} (ADH)` : ''}`, { size: plano ? 9 : 10, peso: 'bold' });
+                textos += txt(lblX, yl - (cn.intercalar || esAqp2 || cn.nombre === 'ROMK' || cn.depende || esUrea || bl || danada || sinCanal || act ? 11 : 0), `${cn.nombre}${esAqp2 && !sinCanal ? ` ×${veces} (ADH)` : ''}`, { size: plano ? 9 : 10, peso: 'bold' });
                 let nota = '';
                 if (danada) nota = 'Célula dañada (NTA): apenas reabsorbe';
                 else if (bl) nota = bl.nota ?? `Bloqueado: ${bl.nombre}${bl.receptor ? ' (receptor de aldosterona)' : ''}`;
                 else if (sinK) nota = `Sin K⁺ que reciclar: ${sinK.nombre} bloquea ${cn.depende}`;
                 else if (act) nota = act.nota;
-                else if (tiazCa) nota = 'Tiazida: reabsorbe más Ca²⁺ (fisiología general)';
                 else if (cn.depende) nota = `devuelve a la luz el K⁺ de ${cn.depende}`;
                 else if (sinCanal) nota = esAqp2 ? 'Sin ADH: no hay acuaporinas en la membrana' : 'Sin ADH: apenas sale urea';
                 else if (cn.nombre === 'ROMK' && M.acido?.kMult > 1) nota = 'secreta más K⁺: hipopotasemia (fisiología general)';
                 else if (cn.nombre === 'ROMK') nota = veces > 3 ? 'más flujo distal: secreta más' : veces < 3 ? 'menos ENaC: secreta menos' : 'secreción basal';
                 else if (esUrea) nota = 'con ADH sale a la médula interna';
-                if (nota) textos += txt(lblX, yl, nota, { size: 8, color: danada || bl || sinCanal || sinK ? CLARO.rojo : act || tiazCa ? C.verde : C.suave });
+                if (nota) textos += txt(lblX, yl, nota, { size: 8, color: danada || bl || sinCanal || sinK ? CLARO.rojo  : act ? C.verde : C.suave });
                 if (bl && !danada) capas += cruz(xa, y + 4);
             } else if (f.t === 'enzima') {
                 // H⁺ + HCO₃⁻ → CO₂ en la luz; el CO₂ entra y el HCO₃⁻ se regenera dentro y sale a la sangre.
@@ -954,8 +956,8 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
         const av = [];
         if (f.id === 'furosemida') av.push('Sin NKCC2 el intersticio medular pierde su gradiente: la rama descendente casi no saca agua y el colector ya no puede concentrar aunque haya ADH.');
         if (f.id === 'furosemida' || f.id === 'tiazida') av.push('Llega más Na⁺ al colector, el flujo arrastra la secreción de K⁺ por ROMK y el K⁺ se pierde en la orina.');
-        if (f.id === 'furosemida') av.push('Sin la luz positiva de la rama gruesa, el Ca²⁺ y el Mg²⁺ no pasan entre las células y se pierden en la orina (la ficha cita la furosemida entre las causas de hipocalcemia y de hipomagnesemia).');
-        if (f.id === 'tiazida') av.push('Con tiazida baja el Ca²⁺ de la orina (la ficha la cita entre las causas de hipercalcemia y de Ca urinario disminuido), pero se pierde Mg²⁺ (causa de hipomagnesemia).');
+        if (f.id === 'furosemida') av.push('Sin NaCl ni reciclaje de K⁺ en la rama gruesa se pierde la carga positiva de la luz que empuja el Ca²⁺ y el Mg²⁺ entre las células: se pierden en la orina (ficha «El riñón y el calcio»).');
+        if (f.id === 'tiazida') av.push('Con tiazida baja el Ca²⁺ de la orina: la contracción de volumen aumenta la reabsorción de Na⁺ y Ca²⁺ en el túbulo proximal (ficha «El riñón y el calcio»). El Mg²⁺, en cambio, se pierde (ficha «El riñón y el magnesio»).');
         if (f.id === 'tiazida') av.push('El túbulo distal deja de diluir: con ADH presente se retiene agua libre, de ahí el riesgo de hiponatremia.');
         if (f.id === 'espironolactona' || f.id === 'amilorida') av.push('Menos Na⁺ reabsorbido por ENaC y menos K⁺ secretado por ROMK: ahorra K⁺.');
         if (f.id === 'acetazolamida') av.push('El HCO₃⁻ que no recupera el proximal sale por la orina; el Na⁺ que lo acompaña se recupera casi entero más adelante.');

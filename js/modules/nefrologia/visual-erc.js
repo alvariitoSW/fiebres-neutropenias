@@ -4,6 +4,7 @@
 import { panelNefronaViva } from './nefrona-viva.js';
 import { montarVisual } from '../../core/visual-kit.js';
 import { montarGlomerulo } from './glomerulo-vivo.js';
+import { montarNefronas } from './nefronas-vivas.js';
 import { irAlTexto } from '../../core/vista-visual.js';
 import { ckdEpi2021, categoriaG, categoriaA, MAPA_RIESGO, RIESGO_TEXTO } from './erc-cga.js';
 
@@ -151,6 +152,8 @@ export function initVisualErc() {
     montarVisual('erc-acidosis-k', {
         guia: 'Acidosis y potasio en la ERC: qué los causa y cómo se maneja, por escalones.',
         paneles: [
+            { tipo: 'propio', titulo: 'Nefronas que quedan', nota: 'Baja las nefronas que funcionan y mira cómo trabajan las que quedan; después prueba el IECA/ARA-II, el iSGLT2 y una dieta rica en potasio.',
+              render: (c, x) => montarNefronas(c, x) },
             { tipo: 'flujo', titulo: 'Acidosis metabólica', nodos: [
                 { fuente: 'Mecanismo', color: 'amarillo' },
                 { fuente: 'Consecuencias de la acidosis no corregida', color: 'rojo' },

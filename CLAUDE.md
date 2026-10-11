@@ -10111,6 +10111,69 @@ hematíes y albúmina (nunca cruzan), urea y K⁺ (pequeñas), citoquinas
   revisadas una a una (se movieron rótulos que se pisaban y la salida del
   efluente para que no cruzara la fibra); sin errores ni desborde.
 
+### PDF de Nefrología al día archivados y pérdida de nefronas (octubre 2026)
+
+A partir del informe «Pendientes de la nefrona viva», el usuario aportó los
+PDF que faltaban y pidió la pérdida de nefronas con la opción A o B.
+
+- **Archivados en `docs/`**: `de-sequera-2024-trastornos-potasio.pdf`,
+  `rodelo-haad-2025-calcio-fosforo-magnesio.pdf`, `alcazar-2025-acido-base.pdf`
+  y `nefrologia-al-dia-2021-potasio-enfermo-renal.pdf` (NC-075, antes
+  retirado de la bibliografía por no usarse; ahora es fuente de ERC). La
+  bibliografía de `nefro-menu.html` enlaza a los PDF, con la URL web en la
+  nota; el de Agua sigue sin archivar. Llegó también un artículo sobre
+  magnesio y presión arterial (Kuriyama, Hypertension Research 2026) que no
+  se ha usado ni archivado.
+- **Las dos erratas eran de la fuente**: «excreción fraccional de Ca mayor»
+  en la HHF (pág. 17 frente a la Figura 4 y la Tabla 5 de la pág. 20) y
+  «moderada (3-3,5)» en la hipopotasemia (pág. 10 frente a la definición de
+  la pág. 7). Las notas de fidelidad citan ahora la página con enlace
+  `#page=N`. A la tabla de la hipercalcemia le faltaban 3 filas de la
+  Tabla 5 (HPTH con déficit de vitamina D, HPTH secundario, HPTH
+  normocalcémico), añadidas.
+- **Reparto por tramos con fuente** (`ca-rinon`, `p-fep`, `mg-rinon` en
+  las fichas Hipocalcemia, Fósforo y Magnesio): Ca²⁺ 70% proximal, 20-25%
+  rama gruesa (paracelular, carga positiva de la luz; el CaSR reduce la
+  salida de K⁺), 5-10% distal (TRPV5/6); Mg²⁺ 25/65/5% con ~5% excretado;
+  RTP >80%, FEP 5-20%. `mineralR()` de `nefrona-viva.js` usa esas cifras.
+  **Corrección del modelo**: la fuente dice que las tiazidas causan
+  hipocalciuria porque la contracción de volumen sube la reabsorción
+  **proximal** de Ca²⁺; antes la nefrona viva lo dibujaba en el distal
+  (ya no). El texto `general` de la rama gruesa y del distal se rehízo: el
+  paso de Ca²⁺/Mg²⁺ entre células y su pérdida con furosemida ya tienen
+  fuente; solo el reciclaje de K⁺ por ROMK sigue siendo fisiología general.
+- **Nefronas que quedan** (`js/modules/nefrologia/nefronas-vivas.js`,
+  `montarNefronas`), panel `propio` de la vista Visual de ERC · Acidosis e
+  hiperpotasemia (Ficha 7). Es una mezcla de A y B: un riñón de 40 nefronas
+  con un deslizador de nefronas que funcionan y los mandos IECA/ARA-II,
+  iSGLT2 y dieta rica en K⁺.
+  - **De la ficha**: la sección nueva «Qué hacen las nefronas que quedan»
+    de la Ficha 7, ids `erc-n-compensa` (Carracedo, pág. 3), `erc-n-k` y
+    `erc-n-k-limite` (NC-075 pág. 5; de Sequera pág. 29), `erc-n-p`
+    (Rodelo-Haad pág. 24) y `erc-n-pig` (Gorostidi 2014 Tabla 5 y KDIGO).
+    Dice que la pérdida se compensa, que las nefronas restantes secretan
+    más K⁺ (hipertrofia, mitocondrias, Na⁺/K⁺-ATPasa) con un techo, que el
+    riesgo es sobre todo con FGe <15 y antes con inhibidores del SRAA o con
+    carga de K⁺, que la FEP llega al 50%, y que IECA/ARA-II e iSGLT2 bajan
+    la presión intraglomerular. Sin tablas nuevas: la receta de la Ficha 7
+    usa índices de tabla.
+  - **Fisiología general**: que el glomérulo de cada nefrona restante
+    filtre más con más presión (hiperfiltración). Va con rótulo propio en
+    los medidores (`.nv-fuente.general`, amarillo).
+  - **Ilustrativo**: el techo de secreción (`TECHO_K`, ajustado para que el
+    K⁺ suba con FGe ~15), su reducción con IECA (×0,4) y la carga de la
+    dieta (×2), el K⁺ en sangre y la curva de la FEP entre 12% y 50%.
+  - Los «Texto ↓» llevan a la línea aunque viva en otra ficha del mismo
+    cuaderno (`irA()`: `openCorkboardTopic` + `irAlTexto`).
+- Verificado con Playwright (390×844): 100% → FGe 100, K⁺ 4,2; 50% → FGe
+  70, cada nefrona ×2 K⁺ y K⁺ igual; 5% → FGe 9 y K⁺ 6,2; 20% con IECA →
+  caída del FGe del 18% y K⁺ que empieza a subir; con iSGLT2 no sube; la
+  nefrona viva sigue igual (hiperparatiroidismo, HHF, FGF23, furosemida y
+  tiazida con los avisos nuevos); las vistas Visual de Hipocalcemia,
+  Hipercalcemia, Fósforo, Magnesio, Hipopotasemia y Ficha 7 de ERC sin
+  avisos de fuente no encontrada; sin errores ni desborde. Cache-busting a
+  `?v=20261018-9`.
+
 ## Auditoría de Hematología (octubre 2026)
 
 A petición explícita del usuario ("revisa que esté todo correcto en

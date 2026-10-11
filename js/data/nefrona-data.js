@@ -77,7 +77,7 @@ export const segmentosNefrona = {
             { nombre: 'ROMK (reciclaje de K⁺)', depende: 'NKCC2', desdeCelula: true, funcion: 'Casi todo el K⁺ que entra con NKCC2 vuelve a la luz por el canal ROMK. Así a NKCC2 nunca le falta K⁺ en la luz (hay mucho menos K⁺ que Na⁺ y Cl⁻), y la salida de cargas positivas deja la luz con carga positiva, que empuja el Ca²⁺ y el Mg²⁺ entre las células.', flujo: [['k', 's']] },
         ],
         paracelular: { iones: ['ca'], etiqueta: 'Ca²⁺ y Mg²⁺ entre las células (luz positiva)', depende: 'NKCC2' },
-        general: 'El reciclaje de K⁺ por ROMK, la carga positiva de la luz y el paso del Ca²⁺ y el Mg²⁺ entre las células son fisiología general: la ficha dice que el Ca²⁺ y el Mg²⁺ se reabsorben en la rama ascendente, sin decir por qué vía. Por eso, al bloquear NKCC2, también se pierden Ca²⁺ y Mg²⁺ en la orina.',
+        general: 'Que casi todo el K⁺ que entra con NKCC2 vuelva a la luz por ROMK es fisiología general. Lo demás está en las fichas «El riñón y el calcio» y «El riñón y el magnesio»: el Ca²⁺ (20-25%) y el Mg²⁺ (65%) pasan entre las células empujados por la carga positiva de la luz, que depende del NaCl y del reciclaje de K⁺; por eso los diuréticos de asa los pierden en la orina',
         categorias: [
             { key: 'diureticos-asa', etiqueta: 'Diuréticos de asa' },
         ],
@@ -88,9 +88,9 @@ export const segmentosNefrona = {
         epitelio: 'cubico', mito: 4, bomba: true,
         canales: [
             { nombre: 'NCC', funcion: 'Cotransportador Na⁺/Cl⁻ de la cara luminal. Impermeable al agua: sigue diluyendo la orina.', diana: 'Tiazidas (hidroclorotiazida, clortalidona)', flujo: [['na', 'r'], ['cl', 'r', 'Canal de Cl⁻']] },
-            { nombre: 'Canal de Ca²⁺', funcion: 'El Ca²⁺ entra desde la luz y sale a la sangre por el intercambiador basolateral Na⁺/Ca²⁺ (ver la nota de fidelidad de la ficha). La PTH aumenta aquí la reabsorción de Ca²⁺.', diana: '— (lo regula la PTH)', flujo: [['ca2', 'r', 'Na⁺/Ca²⁺']] },
+            { nombre: 'Canal de Ca²⁺', funcion: 'El Ca²⁺ entra desde la luz por TRPV5/TRPV6 y sale a la sangre por el intercambiador basolateral Na⁺/Ca²⁺ (ver la nota de fidelidad de la ficha). La PTH aumenta aquí la reabsorción de Ca²⁺.', diana: '— (lo regula la PTH)', flujo: [['ca2', 'r', 'Na⁺/Ca²⁺']] },
         ],
-        general: 'Que el Ca²⁺ entre por un canal propio de la cara luminal, y que con tiazida se reabsorba más Ca²⁺ aquí, es fisiología general; la ficha cita el intercambiador basolateral, la acción de la PTH y el Ca urinario bajo con tiazidas.',
+        general: 'La ficha «El riñón y el calcio» da el canal luminal (TRPV5 y TRPV6), el 5-10% del Ca²⁺ que se reabsorbe aquí y su regulación por la PTH. La hipocalciuria de las tiazidas no ocurre aquí: es la contracción de volumen la que sube la reabsorción proximal de Ca²⁺',
         categorias: [
             { key: 'fisio-potasio-regulacion', etiqueta: 'Regulación del potasio corporal' },
             { key: 'fisio-hipopotasemia', etiqueta: 'Hipopotasemia (Gitelman, tiazidas)' },

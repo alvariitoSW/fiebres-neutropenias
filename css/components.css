@@ -834,6 +834,7 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 .nv-medidor-nota { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; line-height: 1.3; }
 .nv-fuente { font-family: 'Courier New', monospace; font-size: 0.52rem; letter-spacing: 0.6px; padding: 1px 4px; border-radius: 3px; border: 1px solid var(--text-muted); color: var(--text-muted); text-transform: uppercase; align-self: flex-start; white-space: nowrap; }
 .nv-fuente.ficha { color: var(--accent-green); border-color: var(--accent-green); }
+.nv-fuente.general { color: var(--accent-yellow); border-color: var(--accent-yellow); }
 .nv-explica, .nv-ficha { border-left: 3px solid var(--accent-green); padding: 6px 10px; background: rgba(144, 160, 106, 0.08); border-radius: 0 6px 6px 0; font-size: 0.84rem; line-height: 1.5; }
 .nv-explica p { margin: 0 0 6px; }
 .nv-ficha .kv-row { margin: 4px 0; }
@@ -2266,6 +2267,7 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
    .nv-medidores, .nv-chips, .visual-mini, .tfg-slider-row y .tfg-estado. */
 .gl-escenario { width: 100%; aspect-ratio: 360 / 300; border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); background: #0f0d0a; }
 .gl-escenario canvas { width: 100%; height: 100%; display: block; }
+.nf-escenario { aspect-ratio: 360 / 290; }
 .gl-mandos { margin: 10px 0; }
 .gl-medidores { margin-top: 10px; }
 .tfg-estado .visual-link { min-height: 28px; padding: 0 8px; font-size: 0.66rem; margin-left: 4px; vertical-align: middle; }
