@@ -286,6 +286,12 @@ export function initVisualFisiologia() {
                 { titulo: 'Hipomagnesemia', color: 'purpura', tabla: 2 },
                 { titulo: 'Hipermagnesemia', color: 'rojo', tabla: 3 }
             ] },
+            { tipo: 'racimos', titulo: 'Magnesio y presión arterial (Kuriyama 2026)', grupos: [
+                { titulo: 'Mecanismos propuestos', color: 'dorado', nodos: ['Músculo liso vascular', 'Endotelio', 'Sistema nervioso simpático', 'Sistema renina-angiotensina-aldosterona', 'Inflamación y estrés oxidativo'] },
+                { titulo: 'El riñón', color: 'purpura', nodos: [{ fuente: '#mg-pa-rinon', etiqueta: 'Reabsorción por tramos' }, { fuente: '#mg-pa-sal', etiqueta: 'Eje Mg-Na-K y sal' }, { fuente: '#mg-pa-isglt2', etiqueta: 'iSGLT2 suben el Mg' }] },
+                { titulo: 'Evidencia', color: 'verde', nodos: [{ fuente: '#mg-pa-quien', etiqueta: 'A quién le baja la PA' }, { fuente: '#mg-pa-eventos', etiqueta: 'Sin beneficio demostrado en eventos' }] }
+            ] },
+            { tipo: 'racimos', titulo: 'Metaanálisis de suplementos de Mg (tabla)', tabla: 4, color: 'verde' },
             panelNefronaViva([['normal|furosemida', 'Furosemida (asa)'], ['normal|tiazida', 'Tiazida (distal)']])
         ]
     });

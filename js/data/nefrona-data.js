@@ -89,8 +89,9 @@ export const segmentosNefrona = {
         canales: [
             { nombre: 'NCC', funcion: 'Cotransportador Na⁺/Cl⁻ de la cara luminal. Impermeable al agua: sigue diluyendo la orina.', diana: 'Tiazidas (hidroclorotiazida, clortalidona)', flujo: [['na', 'r'], ['cl', 'r', 'Canal de Cl⁻']] },
             { nombre: 'Canal de Ca²⁺', funcion: 'El Ca²⁺ entra desde la luz por TRPV5/TRPV6 y sale a la sangre por el intercambiador basolateral Na⁺/Ca²⁺ (ver la nota de fidelidad de la ficha). La PTH aumenta aquí la reabsorción de Ca²⁺.', diana: '— (lo regula la PTH)', flujo: [['ca2', 'r', 'Na⁺/Ca²⁺']] },
+            { nombre: 'TRPM6/7', funcion: 'El Mg²⁺ entra desde la luz por los canales TRPM6 y TRPM7 (a través de la célula). Es solo el 5-10% del Mg²⁺ filtrado, pero está muy regulado: con la rama gruesa decide cuánto Mg²⁺ sale en la orina. Lo estimulan la insulina, la PTH, el EGF y los estrógenos; mucha sal en la dieta lo frena.', diana: '— (lo regulan insulina, PTH, EGF)', flujo: [['mg2', 'r', 'Salida a la sangre']] },
         ],
-        general: 'La ficha «El riñón y el calcio» da el canal luminal (TRPV5 y TRPV6), el 5-10% del Ca²⁺ que se reabsorbe aquí y su regulación por la PTH. La hipocalciuria de las tiazidas no ocurre aquí: es la contracción de volumen la que sube la reabsorción proximal de Ca²⁺',
+        general: 'La ficha «El riñón y el calcio» da el canal luminal (TRPV5 y TRPV6), el 5-10% del Ca²⁺ que se reabsorbe aquí y su regulación por la PTH. La hipocalciuria de las tiazidas no ocurre aquí: es la contracción de volumen la que sube la reabsorción proximal de Ca²⁺. El canal TRPM6/7 del Mg²⁺ y su regulación están en «Magnesio y presión arterial» (Kuriyama 2026); por dónde sale el Mg²⁺ a la sangre no lo dice ninguna de las dos fuentes',
         categorias: [
             { key: 'fisio-potasio-regulacion', etiqueta: 'Regulación del potasio corporal' },
             { key: 'fisio-hipopotasemia', etiqueta: 'Hipopotasemia (Gitelman, tiazidas)' },
@@ -197,6 +198,7 @@ export const situacionesNefrona = [
       efectos: [
         { segmento: 'tubulo-proximal', canal: 'NPT2a,c', tipo: 'bloquea', nombre: 'PTH', nota: 'PTH: frena NPT2 (fosfaturia)', etiqueta: 'PTH: fosfaturia', tramo: 'tp2', etiquetaEn: [222, 170] },
         { segmento: 'tubulo-distal', canal: 'Canal de Ca²⁺', tipo: 'activa', nombre: 'PTH', nota: 'PTH: reabsorbe más Ca²⁺', etiqueta: 'PTH: ↑ Ca²⁺' },
+        { segmento: 'tubulo-distal', canal: 'TRPM6/7', tipo: 'activa', nombre: 'PTH', nota: 'PTH: estimula TRPM6/7 (Kuriyama 2026)' },
       ],
       aviso: 'La PTH reabsorbe más Ca²⁺ en el distal, pero se filtra tanto Ca²⁺ (hipercalcemia) que el de la orina es normal o alto: Cca/Cr >0,02. Y frena NPT2a,c: el fosfato se pierde por la orina.',
       general: 'Que la hipercalcemia reduzca la reabsorción de Ca²⁺ en la rama gruesa es fisiología general; la ficha da el resultado (Ca urinario normal o alto).',

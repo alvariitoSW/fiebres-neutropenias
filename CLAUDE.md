@@ -10121,9 +10121,8 @@ PDF que faltaban y pidió la pérdida de nefronas con la opción A o B.
   y `nefrologia-al-dia-2021-potasio-enfermo-renal.pdf` (NC-075, antes
   retirado de la bibliografía por no usarse; ahora es fuente de ERC). La
   bibliografía de `nefro-menu.html` enlaza a los PDF, con la URL web en la
-  nota; el de Agua sigue sin archivar. Llegó también un artículo sobre
-  magnesio y presión arterial (Kuriyama, Hypertension Research 2026) que no
-  se ha usado ni archivado.
+  nota. El de Agua y el de Kuriyama se archivaron después (ver la sección
+  siguiente).
 - **Las dos erratas eran de la fuente**: «excreción fraccional de Ca mayor»
   en la HHF (pág. 17 frente a la Figura 4 y la Tabla 5 de la pág. 20) y
   «moderada (3-3,5)» en la hipopotasemia (pág. 10 frente a la definición de
@@ -10173,6 +10172,58 @@ PDF que faltaban y pidió la pérdida de nefronas con la opción A o B.
   Hipercalcemia, Fósforo, Magnesio, Hipopotasemia y Ficha 7 de ERC sin
   avisos de fuente no encontrada; sin errores ni desborde. Cache-busting a
   `?v=20261018-9`.
+
+### PDF de agua y magnesio-presión arterial (octubre 2026)
+
+A petición explícita del usuario («Aquí tienes el pdf del agua y lo que te
+he mandado de kuriyama metelo también, creo que puede encajar en la parte
+de nefro»).
+
+- **Agua**: `docs/martin-navarro-2025-trastornos-agua.pdf` (Martín Navarro
+  et al., Nefrología al día, 4/8/2025, 41 págs.), enlazado desde la
+  bibliografía de `nefro-menu.html` con la URL web en la nota. Cotejado:
+  las cifras de la nefrona viva (50-1.200, 18-0,75 L con 900 mOsm/día,
+  pág. 6), los límites de corrección de la hiponatremia (10 y 8 mEq/l,
+  18 en 48 h, pág. 22) y los cortes del test de deprivación (Tabla 11,
+  pág. 30: normal &gt;800, DIC parcial 300-800, DIN 300-500) coinciden; la
+  nota de fidelidad de la hipernatremia cita ahora esa página. Errata de
+  la fuente con nota nueva en el kv-row «Poliuria» de Hipernatremia: la
+  pág. 29 dice que la poliuria con Osmo *inferior* a 300 es osmótica, y su
+  propia Figura 7 la lleva a Osmo &gt;250; la ficha usa «&gt;300».
+- **Kuriyama S. Magnesium and blood pressure regulation: systemic and renal
+  mechanisms. Hypertension Research 2026**
+  (`docs/kuriyama-2026-magnesio-presion-arterial.pdf`, revisión narrativa
+  de un solo autor, 10 págs.). Va en 3 sitios, siempre marcado como
+  revisión narrativa:
+  - Ficha **Magnesio** (`fisio-magnesio`), bloque nuevo «Magnesio y
+    presión arterial» al final (antes del enlace a Sobrevivir a la UMI,
+    para no cambiar los índices de tabla de la receta): distribución y
+    formas del Mg, absorción intestinal, reabsorción por tramos con
+    claudinas y TRPM6/7, iSGLT2 que suben el Mg, hipomagnesemias
+    hereditarias, 5 mecanismos sistémicos en acordeón (músculo liso,
+    endotelio, simpático, SRAA —controvertido—, inflamación), el «eje
+    renal Mg-Na-K» con sal (hipótesis, sobre todo animal), la Tabla 1 de
+    metaanálisis (`#mg-pa-tabla`, índice 4), a quién le baja la presión y
+    que no hay ensayos con beneficio en eventos. Nota de fidelidad: el
+    gradiente «−1,2 mV» del proximal es la misma cifra que la revisión da
+    para el intestino y no se usa. Ids `mg-pa-*`. La receta de la vista
+    Visual gana 2 paneles `racimos`.
+  - HTA Ficha 3 (`hta-tratamiento-general`): kv-row `hta-magnesio` debajo
+    de la tabla de estilo de vida (que no se toca, es de otra fuente) con
+    el enlace al bloque de la ficha Magnesio, y entrada en la bibliografía
+    de `hta.html`.
+  - Nefrona viva: canal nuevo **TRPM6/7** en el túbulo distal (ion `mg2`
+    en la célula) y la PTH lo estimula en el hiperparatiroidismo (efecto
+    `activa` sin rótulo en la nefrona: `etiqueta` de un efecto es ahora
+    opcional). Por dónde sale el Mg²⁺ a la sangre no lo dice ninguna
+    fuente; la célula pone «Salida a la sangre».
+- 5 preguntas nuevas (`nefro-q256`-`q260`, 4 opción múltiple + 1 de
+  redactar). Fisio-magnesio queda en 30.
+- Verificado con Playwright (390×844): la vista Visual de Magnesio sin
+  fuentes sin resolver; el enlace HTA → Magnesio abre la ficha; célula
+  del distal con TRPM6/7 (y con la nota de la PTH en el
+  hiperparatiroidismo); accesos de Calcio/Fósforo/Magnesio a la nefrona
+  viva sin regresión; sin errores ni desborde.
 
 ## Auditoría de Hematología (octubre 2026)
 

@@ -914,7 +914,7 @@
                 <img src="js/modules/nefrologia/img/agua-fig7-diagnostico-hipernatremia.jpg" alt="Algoritmo de diagnóstico de hipernatremia: valorar ingesta de sal y soluciones salinas hipertónicas, distinguir hipernatremia por pérdida de agua de hipernatremia por ganancia de sodio, y estudiar la poliuria" loading="lazy">
                 <div class="article-figure-caption">Figura 7. ¿Ingesta/aporte de sal? No → pérdida de agua (eu/hipovolemia); Sí → ganancia de sodio (hipervolemia). Con poliuria: Osmo &lt;250 → diabetes insípida vs. polidipsia 1ª (según Nap y respuesta a vasopresina/desmopresina); Osmo &gt;250 → diuresis osmótica.</div>
             </div>
-            <dl class="kv-row"><dt>Poliuria</dt><dd>Volumen urinario &gt;2,5-3 l/día. Indica origen renal de la pérdida de agua. Diuresis <strong>acuosa</strong> (Osmo &lt;300, densidad &lt;1010): DI central o nefrogénica grave. Diuresis <strong>osmótica</strong> (Osmo &gt;300): glucosuria, urea, manitol.</dd></dl>
+            <dl class="kv-row"><dt>Poliuria</dt><dd>Volumen urinario &gt;2,5-3 l/día. Indica origen renal de la pérdida de agua. Diuresis <strong>acuosa</strong> (Osmo &lt;300, densidad &lt;1010): DI central o nefrogénica grave. Diuresis <strong>osmótica</strong> (Osmo &gt;300): glucosuria, urea, manitol.<span style="display:block;font-size:0.78rem;color:var(--text-muted);margin-top:4px;"><strong>Nota de fidelidad:</strong> la fuente dice literalmente «si hay poliuria con una osmolalidad urinaria <em>inferior</em> a 300 mOsm/kg se trata de una diuresis osmótica» (<a class="biblio-link" href="docs/martin-navarro-2025-trastornos-agua.pdf#page=29" target="_blank" rel="noopener">Martín Navarro et al. 2025, pág. 29</a>), justo después de decir que la diuresis acuosa es la de Osmo &lt;300. Su propia Figura 7 (pág. 30) lleva la diuresis osmótica a Osmo &gt;250: es una errata de la fuente y aquí se usa «&gt;300».</span></dd></dl>
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧪 Test de deprivación hídrica</span> <span class="toggle-icon">+</span></div>
@@ -983,7 +983,7 @@
                 </tbody>
             </table>
             </div>
-            <p style="font-size: 0.78rem; color: var(--text-muted);">⚠️ Nota de fidelidad: los cortes de esta tabla (PNT-NEF-06, protocolo hospitalario) no coinciden exactamente con los ya citados arriba en "Test de deprivación hídrica" (p. ej. Osm-u &gt;800 vs. &gt;750 para "normal", o el rango de DIN 300-500 vs. &lt;300 aquí) — son 2 fuentes distintas (artículo de Nefrología al día vs. protocolo interno del Servicio) y se reproducen ambas tal cual, sin forzar un único corte.</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">⚠️ Nota de fidelidad: los cortes de esta tabla (PNT-NEF-06, protocolo hospitalario) no coinciden exactamente con los ya citados arriba en "Test de deprivación hídrica" (p. ej. Osm-u &gt;800 vs. &gt;750 para "normal", o el rango de DIN 300-500 vs. &lt;300 aquí) — son 2 fuentes distintas (artículo de Nefrología al día —Tabla 11, <a class="biblio-link" href="docs/martin-navarro-2025-trastornos-agua.pdf#page=30" target="_blank" rel="noopener">pág. 30</a>: normal &gt;800, DIC parcial 300-800, DIN 300-500— vs. protocolo interno del Servicio) y se reproducen ambas tal cual, sin forzar un único corte.</p>
 
             <p style="font-size: 0.8rem; color: var(--text-muted);">📈 Diagrama del test: Osm-u ≥300 mOsm/l tras fase 1 → DDAVP → sube 15-50% (DIC parcial) o &gt;50% (DIC total). Osm-u &gt;500-750 mOsm/l tras fase 1, sin necesitar DDAVP → polidipsia primaria. Osm-u &lt;300 mOsm/l tras fase 1 → DDAVP → nula elevación (DIN total), sube &lt;45% (DIN parcial) o sube &gt;50% (DIC total, si la deprivación no fue suficiente).</p>
 
@@ -1971,6 +1971,88 @@
                 </select>
             </div>
             <div id="mg-explicacion" class="result-box" style="display: none;"></div>
+            <p class="section-label" style="margin-top:18px;">🩺 Magnesio y presión arterial</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Fuente de este bloque: Kuriyama S. Magnesium and blood pressure regulation: systemic and renal mechanisms. <a class="biblio-link" href="docs/kuriyama-2026-magnesio-presion-arterial.pdf" target="_blank" rel="noopener">Hypertension Research, 2026</a>. Es una <strong>revisión narrativa</strong> de un solo autor: buena parte de los mecanismos viene de estudios en animales y el propio autor los da como probables o controvertidos.</p>
+            <dl class="kv-row" id="mg-pa-distribucion"><dt>Dónde está</dt><dd>El cuerpo tiene 20-28 g de Mg: 50-60% en hueso y dientes, 34-39% en tejidos blandos (músculo, vísceras) y solo 1-2% en sangre y líquido extracelular. En el suero, 55-70% está ionizado, 20-30% unido a proteínas y 5-15% unido a fosfato o carbonato; lo normal es <strong>0,7-1,0 mmol/l</strong>. Como fuera de las células hay ~1% del total, <span class="hl-rojo">un descenso pequeño del Mg sérico puede reflejar una depleción importante</span> del Mg corporal.</dd></dl>
+            <dl class="kv-row" id="mg-pa-intestino"><dt>Absorción intestinal</dt><dd>Se absorbe el <strong>30-50%</strong> del Mg ingerido, y hasta el <strong>80%</strong> si hay déficit. En el intestino delgado ~90% pasa entre las células (claudinas 2, 7 y 12); en el colon pasa a través de ellas: entra por TRPM6/7 y sale a la sangre por CNNM4, que lo intercambia por Na⁺. La PTH y el FGF23 frenan CNNM4 (menos absorción); la vitamina D la aumenta.</dd></dl>
+            <dl class="kv-row" id="mg-pa-rinon"><dt>El riñón, según esta revisión</dt><dd>Se filtran ~2.400 mg/día y se reabsorbe ~95%:
+                <ul class="term-chips">
+                    <li>Túbulo proximal 20-30%: entre las células (claudinas 2 y 12); poco papel regulador</li>
+                    <li>Rama gruesa 50-70%: entre las células (claudinas 16 y 19 lo facilitan, la 14 lo frena), empujado por la carga positiva de la luz (~+10 mV)</li>
+                    <li>Túbulo distal 5-10%: a través de la célula por TRPM6/7</li>
+                </ul>
+                La carga positiva de la luz en la rama gruesa la crean NKCC2, la Na⁺/K⁺-ATPasa, ROMK, Kir4.1/5.1 y ClC-Kb; el propio Mg es cofactor de la Na⁺/K⁺-ATPasa. El túbulo distal reabsorbe poco, pero está muy regulado (insulina, PTH, EGF y estrógenos estimulan TRPM6/7) y, con la rama gruesa, decide cuánto Mg sale en la orina. Allí CNNM2 y SLC41A3 unen el manejo del Mg con el del Na⁺. El reparto coincide con el de la ficha (25/65/5%, arriba).
+                <span style="display:block;font-size:0.78rem;color:var(--text-muted);margin-top:4px;"><strong>Nota de fidelidad:</strong> la revisión atribuye la reabsorción proximal a un gradiente transepitelial <em>negativo</em> de ~−1,2 mV, la misma cifra que da para el intestino (<a class="biblio-link" href="docs/kuriyama-2026-magnesio-presion-arterial.pdf#page=5" target="_blank" rel="noopener">Figuras 1 y 2, págs. 5-6</a>). Rodelo-Haad et al. dicen que el mecanismo proximal es poco conocido; aquí no se usa esa cifra.</span></dd></dl>
+            <dl class="kv-row" id="mg-pa-isglt2"><dt>iSGLT2 y magnesio</dt><dd>Varios metaanálisis muestran que los iSGLT2 <strong>suben el Mg sérico</strong>. La explicación propuesta: el proximal reabsorbe menos Na⁺, llega más Na⁺ a la rama gruesa, NKCC2 trabaja más, sube la carga positiva de la luz y se reabsorbe más Mg entre las células. La mejora de la hiperinsulinemia también reduce la excreción fraccional de Mg.</dd></dl>
+            <dl class="kv-row" id="mg-pa-genetica"><dt>Hipomagnesemias hereditarias</dt><dd>En la rama gruesa: CLDN16, CLDN19, RRAGD y CARS (fallo del paso entre células). En el distal: TRPM6 o TRPM7, a menudo con hipocalcemia. Tubulopatías como el Gitelman (SLC12A3, CLCNKB, KCNJ10, KCNJ16, ATP1A1, FXYD2, HNF1B, PCBD1) dan hipomagnesemia, hipopotasemia y alcalosis metabólica. Estos pacientes tienden a tener la presión baja, pero no se sabe bien por qué.</dd></dl>
+
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top:10px;">El déficit de Mg se asocia a presión arterial más alta y los suplementos la bajan un poco. La revisión propone estos mecanismos:</p>
+            <div class="micro-profiles">
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
+                        <span>💪 Músculo liso vascular</span> <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="micro-prof-body">El Mg frena la entrada de Ca²⁺ por los canales de tipo L, frena la salida de Ca²⁺ del retículo sarcoplásmico y facilita su recaptación por la Ca²⁺-ATPasa. Con <strong>déficit de Mg</strong> sube el Ca²⁺ dentro de la célula y el vaso se contrae más: contribuye a que la HTA aparezca y se mantenga.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
+                        <span>🩸 Endotelio</span> <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="micro-prof-body">El Mg aumenta la actividad de la eNOS y la producción de <strong>óxido nítrico</strong>; en ratones, la vasodilatación por Mg desaparece al bloquear la eNOS. En pacientes con enfermedad coronaria, el Mg oral mejora la dilatación mediada por flujo de la arteria braquial y la tolerancia al ejercicio. También aumenta la prostaciclina y frena la endotelina-1. El déficit se asocia a disfunción endotelial y estrés oxidativo.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
+                        <span>⚡ Sistema nervioso simpático</span> <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="micro-prof-body">El déficit de Mg activa el simpático (más actividad del receptor NMDA y más liberación de catecolaminas). El Mg frena los canales de Ca²⁺ de tipo N de las terminaciones simpáticas. En humanos, el <strong>Mg intravenoso atenúa la subida de presión</strong> por la descarga de catecolaminas de la intubación traqueal.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
+                        <span>🧪 Sistema renina-angiotensina-aldosterona</span> <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="micro-prof-body"><strong>Controvertido.</strong> En animales con dieta pobre en Mg la aldosterona sube en unos estudios y no en otros; en adultos sanos el Mg intravenoso bajó la aldosterona sin cambiar el péptido natriurético auricular (no era por expansión de volumen). Con Mg oral los resultados son contradictorios. Conclusión del autor: el déficit de Mg puede subir algo la aldosterona, mientras que la renina y la angiotensina II parecen no cambiar.</div>
+                </div>
+                <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
+                        <span>🔥 Inflamación y estrés oxidativo</span> <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="micro-prof-body">La sal sube la presión también por inflamación: estrés oxidativo en las células presentadoras de antígeno y activación del <strong>inflamasoma NLRP3</strong> en la médula renal (IL-1β, IL-18). En animales, el déficit de Mg produce leucocitosis y sube la IL-1β; el Mg oral baja la PCR en humanos. Si esto causa HTA en humanos está por demostrar.</div>
+                </div>
+            </div>
+
+            <dl class="kv-row" id="mg-pa-sal"><dt>Mg, sal y potasio: el «eje renal Mg-Na-K»</dt><dd>
+                <ul class="term-chips">
+                    <li>Mucha sal → más Mg en la orina: frena NKCC2 (menos carga positiva de la luz) y baja TRPM6 en el distal → balance negativo de Mg</li>
+                    <li>Mg intravenoso → menos reabsorción de Na⁺ en la rama gruesa vía el CaSR, como un diurético de asa (ratas)</li>
+                    <li>Déficit de Mg → déficit de K⁺ (más pérdida renal, por ROMK y la aldosterona)</li>
+                    <li>Déficit de K⁺ → más NHE3 en el proximal y más NCC en el distal → retención de Na⁺</li>
+                </ul>
+                Juntando todo, el autor propone que el déficit de Mg retiene Na⁺ por el NCC y <span class="hl-azul">desplaza a la derecha la curva presión-natriuresis</span>: hace falta más presión para eliminar la misma sal (HTA sensible a la sal). En ratones sin TRPM6 en el túbulo distal, el aparato yuxtaglomerular vecino libera menos renina y se pierde la variación circadiana de la presión. Es una <strong>hipótesis</strong> basada sobre todo en animales. La HTA se asocia además a más Mg en la orina, con un déficit relativo.</dd></dl>
+
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="mg-pa-tabla">
+                <thead><tr><th>Metaanálisis</th><th>Ensayos (n)</th><th>Dosis de Mg</th><th>Efecto</th></tr></thead>
+                <tbody>
+                    <tr><td>Zhang 2016</td><td>34 (2.028)</td><td>368 mg/día (media)</td><td>PAS −2 · PAD −1,78 mmHg</td></tr>
+                    <tr><td>Dibaba 2017</td><td>11 (538)</td><td>365-450 mg/día</td><td>PAS −4,18 · PAD −2,27 mmHg</td></tr>
+                    <tr><td>Argeros 2025</td><td>28 (2.709)</td><td>82-637 mg/día (media 365)</td><td>PAS −2,8 · PAD −2,05 mmHg (eficaz si hay hipomagnesemia)</td></tr>
+                    <tr><td>Rosanoff 2021</td><td>49</td><td>120-972 mg/día</td><td>Bajó la PA en 0/17 normotensos, 0/1 bien controlados, 5/21 sin tratar, 10/10 mal controlados</td></tr>
+                    <tr><td>Asbaghi 2021 (diabetes tipo 2)</td><td>7 (333)</td><td>&gt;300 mg/día</td><td>PAS −5,78 · PAD −2,5 mmHg</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Tabla 1 de la revisión (<a class="biblio-link" href="docs/kuriyama-2026-magnesio-presion-arterial.pdf#page=4" target="_blank" rel="noopener">pág. 4</a>).</p>
+            <dl class="kv-row" id="mg-pa-quien"><dt>A quién le baja la presión</dt><dd>
+                <ul class="term-chips">
+                    <li>Depende de la dosis: eficaz con ~240-600 mg/día</li>
+                    <li>Más si hay déficit de Mg</li>
+                    <li>Más en la HTA mal controlada (con o sin tratamiento) y en la no tratada</li>
+                    <li>No baja la presión en normotensos</li>
+                    <li>Parece más eficaz en diabéticos</li>
+                </ul></dd></dl>
+            <dl class="kv-row" id="mg-pa-eventos"><dt>Lo que no está demostrado</dt><dd><span class="hl-rojo">Ningún ensayo grande ha demostrado que los suplementos de Mg reduzcan la mortalidad, los eventos cardiovasculares mayores ni la progresión a enfermedad renal terminal.</span> Bajar la presión no equivale a mejorar el pronóstico. Tampoco hay pruebas suficientes de que mejoren el sueño, los calambres o la ansiedad en personas sanas (232-439 mg/día).</dd></dl>
+            <p><button class="especialidad-link" data-especialidad="nefrologia" data-view="hta" data-panel="panel-hta-tabs" data-tab="hta-tratamiento-general">🔗 Medidas no farmacológicas en la HTA →</button></p>
+
             <p style="font-size:0.85rem; color:var(--text-dim); margin-top:12px;">Las tablas de reposición práctica de magnesio de guardia ya están en Sobrevivir a la UMI:</p>
             <p><button class="especialidad-link" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-electrolitos">🔗 Ver dosis de reposición de guardia (Sobrevivir a la UMI) →</button></p>
         </div>
@@ -2039,9 +2121,10 @@
         <p class="subtitle">Objetivo de rotación 1 · Nefrología al día (SEN)</p>
         <ul class="biblio-list">
             <li><a class="biblio-link" href="https://www.nefrologiaaldia.org/es-articulo-fisiologia-renal-335" target="_blank" rel="noopener">Fisiología Renal</a> <span class="biblio-nota">Carracedo J, Ramírez R. Nefrología al día, 2020. <a class="biblio-link" href="docs/carracedo-2020-fisiologia-renal.pdf" target="_blank" rel="noopener">PDF archivado</a> (fuente de las fichas de fisiología y de la nefrona viva).</span></li>
-            <li><a class="biblio-link" href="https://nefrologiaaldia.org/es-articulo-trastornos-del-agua-disnatremias-684" target="_blank" rel="noopener">Trastornos del Agua. Disnatremias</a></li>
+            <li><a class="biblio-link" href="docs/martin-navarro-2025-trastornos-agua.pdf" target="_blank" rel="noopener">Trastornos del Agua. Disnatremias</a> <span class="biblio-nota">Martín Navarro JA, Albalate Ramón M, Alcázar Arroyo R, de Sequera Ortíz P. Nefrología al día, 2025 (<a href="https://nefrologiaaldia.org/es-articulo-trastornos-del-agua-disnatremias-684" target="_blank" rel="noopener">versión web</a>).</span></li>
             <li><a class="biblio-link" href="docs/de-sequera-2024-trastornos-potasio.pdf" target="_blank" rel="noopener">Trastornos del Potasio. Hipopotasemia e Hiperpotasemia</a> <span class="biblio-nota">de Sequera Ortíz P, Alcázar Arroyo R, Albalate Ramón M. Nefrología al día, 2024 (<a href="https://nefrologiaaldia.org/es-articulo-trastornos-del-potasio-hipopotasemia-e-hiperpotasemia-613" target="_blank" rel="noopener">versión web</a>).</span></li>
             <li><a class="biblio-link" href="docs/rodelo-haad-2025-calcio-fosforo-magnesio.pdf" target="_blank" rel="noopener">Trastornos del Calcio, Fósforo y Magnesio</a> <span class="biblio-nota">Rodelo-Haad C, Albalate Ramón M, de Sequera Ortíz P, Rodríguez Portillo M. Nefrología al día, 2025 (<a href="https://nefrologiaaldia.org/es-articulo-trastornos-del-calcio-fosforo-y-magnesio-687" target="_blank" rel="noopener">versión web</a>).</span></li>
             <li><a class="biblio-link" href="docs/alcazar-2025-acido-base.pdf" target="_blank" rel="noopener">Alteraciones del Metabolismo Ácido Base</a> <span class="biblio-nota">Alcázar Arroyo R, Albalate Ramón M, de Sequera Ortíz P. Nefrología al día, 2025 (<a href="https://nefrologiaaldia.org/es-articulo-alteraciones-del-metabolismo-acido-base-673" target="_blank" rel="noopener">versión web</a>).</span></li>
+            <li><a class="biblio-link" href="docs/kuriyama-2026-magnesio-presion-arterial.pdf" target="_blank" rel="noopener">Magnesium and blood pressure regulation: systemic and renal mechanisms</a> <span class="biblio-nota">Kuriyama S. Hypertension Research, 2026 (doi:10.1038/s41440-026-02768-5). Revisión narrativa; fuente del bloque «Magnesio y presión arterial» de la ficha Magnesio y del canal TRPM6/7 de la nefrona viva.</span></li>
         </ul>
     </div>

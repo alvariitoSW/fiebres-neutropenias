@@ -259,7 +259,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
         p: { nombre: 'Fosfato', color: '#9ad0e6', forma: 'trinv', tasa: 2.5 },
         celula: { nombre: 'Célula desprendida (NTA)', color: '#9c7a52', forma: 'circulo', tasa: 0, r: 3.4 },
     };
-    const ION = { ca2: ['Ca²⁺', '#ece4cf', 'circulo'], p: ['Fosfato', '#9ad0e6', 'triangulo'], na: ['Na⁺', CLARO.oro, 'circulo'], k: ['K⁺', CLARO.na, 'cuadrado'], glu: ['Glucosa', CLARO.verde, 'rombo'], hco3: ['HCO₃⁻', CLARO.rojo, 'triangulo'], h: ['H⁺', '#f0e6c8', 'anillo'], cl: ['Cl⁻', '#9fb2a4', 'circulo'], ca: ['Ca²⁺/Mg²⁺', C.oro, 'circulo'], h2o: ['H₂O', C.texto, 'punto'], urea: ['Urea', UREA, 'hex'], co2: ['CO₂', '#bdb2a0', 'anillo'] };
+    const ION = { ca2: ['Ca²⁺', '#ece4cf', 'circulo'], mg2: ['Mg²⁺', '#7fc8a9', 'circulo'], p: ['Fosfato', '#9ad0e6', 'triangulo'], na: ['Na⁺', CLARO.oro, 'circulo'], k: ['K⁺', CLARO.na, 'cuadrado'], glu: ['Glucosa', CLARO.verde, 'rombo'], hco3: ['HCO₃⁻', CLARO.rojo, 'triangulo'], h: ['H⁺', '#f0e6c8', 'anillo'], cl: ['Cl⁻', '#9fb2a4', 'circulo'], ca: ['Ca²⁺/Mg²⁺', C.oro, 'circulo'], h2o: ['H₂O', C.texto, 'punto'], urea: ['Urea', UREA, 'hex'], co2: ['CO₂', '#bdb2a0', 'anillo'] };
     const RADIO = { punto: 1.5, circulo: 2.4, cuadrado: 2.1, rombo: 2.2, triangulo: 2.3, hex: 2.3, cruz: 2.4, pent: 2.4, oval: 2.3, trinv: 2.3 };
 
     const estado = { sit: 'normal', farm: 'ninguno', glucemia: 350, nivel: 'foto', seg: null, pausa: false, vel: 1 };
@@ -424,7 +424,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
             const t = d.tramo ?? SEG_TRAMO[d.segmento];
             if (d.tipo === 'bloquea') { marcar(d.segmento, d.etiqueta, t === 'col' ? [0.6, 0.78] : [0.3, 0.7], -1, t, d.etiquetaEn); continue; }
             const [a, b] = LIMITES[t], p = enS(a + (b - a) * 0.5); // estimula: rótulo verde, sin ✕
-            etiqueta(c, d.etiqueta, d.etiquetaEn?.[0] ?? p.x - p.nx * 18, d.etiquetaEn?.[1] ?? p.y - p.ny * 18, C.verde);
+            if (d.etiqueta) etiqueta(c, d.etiqueta, d.etiquetaEn?.[0] ?? p.x - p.nx * 18, d.etiquetaEn?.[1] ?? p.y - p.ny * 18, C.verde);
         }
         if (M.acido?.etiqueta) etiqueta(c, M.acido.etiqueta, 190, 250, CLARO.rojo);
         // FRA: cilindros en el colector, obstrucción y perfusión
