@@ -9,7 +9,7 @@ import { ESCENARIOS } from '../escenarios.mjs';
 
 const m = crearMotor(); m.correr(12);
 const OP = { pericardio: true, detalle: true };
-const extra = () => ({ vviTd: m.ultimo.edv, liquidoPeri: m.p.liquidoPeri });
+const extra = () => ({ vviTd: m.ultimo.edv, vvdTd: m.ultimo.edvD, liquidoPeri: m.p.liquidoPeri });
 const tabla = crearTablaFormas();
 tabla.pedir(m.onda, m.ultimo, OP, extra()); while (tabla.construyendo) tabla.trabajar();
 

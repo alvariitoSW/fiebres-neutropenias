@@ -13,10 +13,34 @@
     <div id="cv-contenido" hidden>
         <div class="card cv-tarjeta" id="cv-tarjeta-eco">
             <div class="cv-chips" id="cv-vistas" role="group" aria-label="Vista ecográfica"></div>
+            <div class="cv-fila cv-modos" role="group" aria-label="Modo de imagen">
+                <button type="button" class="cv-mini on" data-modo="B">Modo B</button>
+                <button type="button" class="cv-mini" data-modo="M">Modo M</button>
+            </div>
             <div class="cv-eco">
                 <canvas id="cv-eco" width="360" height="288" aria-label="Imagen ecográfica modo B del corte elegido, en el instante del corazón"></canvas>
                 <div class="cv-eco-titulo" id="cv-eco-titulo"></div>
                 <div class="cv-eco-fase" id="cv-eco-fase"></div>
+            </div>
+            <div id="cv-m-zona" hidden>
+                <div class="cv-m">
+                    <canvas id="cv-m" width="360" height="198" aria-label="Modo M: la línea elegida a lo largo del tiempo"></canvas>
+                    <canvas id="cv-m-capa" class="cv-m-capa" width="360" height="198" aria-label="Calibres del modo M: toca dos puntos para medir"></canvas>
+                </div>
+                <div class="cv-chips cv-medir" id="cv-medir" role="group" aria-label="Qué medir">
+                    <button type="button" class="cv-mini on" data-medir="libre">Libre</button>
+                    <button type="button" class="cv-mini" data-medir="tapse">TAPSE (A4C)</button>
+                    <button type="button" class="cv-mini" data-medir="vi">Diámetros del VI (PLAX)</button>
+                </div>
+                <p class="cv-muted" id="cv-m-guia"></p>
+                <div class="tfg-estado" id="cv-m-resultado"></div>
+                <div class="cv-fila" id="cv-m-vi" hidden>
+                    <button type="button" class="cv-mini" id="cv-m-lvdd">Guardar como LVDd</button>
+                    <button type="button" class="cv-mini" id="cv-m-lvsd">Guardar como LVSd</button>
+                    <button type="button" class="cv-mini" id="cv-m-borrar">Borrar calibres</button>
+                </div>
+                <div id="cv-m-enlaces"></div>
+                <p class="cv-muted">La VCI se mide en la ventana subcostal, que el simulador todavía no tiene (llegará con la vista subcostal).</p>
             </div>
             <p class="cv-muted" id="cv-eco-nombre"></p>
             <div class="cv-ciclo" id="cv-ciclo" aria-label="Ciclo cardíaco: toca una fase para ir a ella"></div>

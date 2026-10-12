@@ -201,3 +201,32 @@ test('la página del latido calcula en vivo y ninguna cifra queda fuera de su re
   assert.deepEqual(errores, []);
   await pg.close();
 });
+
+test('modo M: cada columna sale de la imagen B del mismo instante, la pausa congela el trazado y los calibres miden', { skip: omitir }, async () => {
+  const { pg, errores } = await abrir('js/modules/eco/laboratorio.html');
+  await pg.evaluate(() => document.querySelectorAll('#cv-sim details').forEach(d => { d.open = false; }));
+  await pg.locator('[data-modo="M"]').tap(); await pg.locator('[data-medir="tapse"]').tap();
+  await pg.waitForFunction(() => window.__eco.modoM.estado.tEscrito != null, null, { timeout: 20000 });
+  // la última columna escrita es la del instante de la última imagen B
+  for (let i = 0; i < 3; i++) {
+    const d = await pg.evaluate(() => new Promise(r => requestAnimationFrame(() => r({ t: window.__eco.info().tMotor, m: window.__eco.modoM.estado.tEscrito, vista: window.__eco.info().vista }))));
+    assert.equal(d.vista, 'a4c'); assert.equal(d.m, d.t, 'el modo M va en otro instante que la imagen B');
+    await pg.waitForTimeout(200);
+  }
+  await pg.click('#cv-pausa'); await pg.waitForTimeout(200);
+  const t0 = await pg.evaluate(() => window.__eco.modoM.estado.tEscrito); await pg.waitForTimeout(500);
+  assert.equal(await pg.evaluate(() => window.__eco.modoM.estado.tEscrito), t0, 'en pausa el trazado sigue escribiéndose');
+  // calibres: 10 % de la altura del trazado = 17 mm de profundidad en el 4 cámaras (170 mm)
+  await pg.evaluate(() => window.__eco.modoM.ponerCalibres({ x: 0.3, y: 0.5 }, { x: 0.4, y: 0.6 }));
+  assert.match(await pg.textContent('#cv-m-resultado'), /TAPSE medido: 17,0 mm/);
+  // diámetros del VI: cambia al eje largo y, con LVDd y LVSd guardados, aparece el paso a la calculadora de FS
+  await pg.locator('[data-medir="vi"]').tap();
+  await pg.click('#cv-pausa'); await pg.waitForFunction(() => window.__eco.info()?.vista === 'plax', null, { timeout: 10000 }); await pg.click('#cv-pausa');
+  await pg.evaluate(() => window.__eco.modoM.ponerCalibres({ x: 0.2, y: 0.4 }, { x: 0.2, y: 0.7 })); await pg.click('#cv-m-lvdd');
+  await pg.evaluate(() => window.__eco.modoM.ponerCalibres({ x: 0.3, y: 0.45 }, { x: 0.3, y: 0.6 })); await pg.click('#cv-m-lvsd');
+  assert.match(await pg.textContent('#cv-m-resultado'), /FS \d+%/);
+  assert.equal(await pg.locator('#cv-m-a-fs').count(), 1);
+  assert.ok(!(await pg.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)), 'desborda en horizontal');
+  assert.deepEqual(errores, []);
+  await pg.close();
+});

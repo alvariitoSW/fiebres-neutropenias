@@ -9,14 +9,15 @@
 // mientras corre, o una muestra del último latido al revisar) y con ese objeto se construye la geometría y se
 // dibujan la eco, el cursor del Wiggers, el punto del asa, la barra A-G y las cifras.
 import { crearMotor, FASES } from './motor.mjs';
-import { construirCorazon, LIMITES } from './corazon-geo.mjs';
+import { construirCorazon, LIMITES, TAPSE_POR_ML } from './corazon-geo.mjs';
 import { crearCamara, m4, MODELO } from './mat.mjs';
 import { crearWebGL } from './render-webgl.mjs';
 import { ESCENARIOS } from './escenarios.mjs';
 import { crearFlujo } from './flujo-sangre.mjs';
 import { COLOR_FASE, segmentosFase, estadoRevision, crearDiagramas } from './diagramas.mjs';
-import { VALVULAS, apertura, estadoGeo, crearTablaFormas, semejantes } from './formas.mjs';
-import { VISTAS, planoVista, enPlano, crearEcografo, abanicoVista } from './ecografia.mjs';
+import { VALVULAS, apertura, estadoGeo, crearTablaFormas, semejantes, extraDeMotor } from './formas.mjs';
+import { VISTAS, planoVista, enPlano, crearEcografo, abanicoVista, direccionHaz, anguloHacia } from './ecografia.mjs';
+import { crearModoM } from './modo-m.mjs';
 
 export const NOMBRE_VISTA = { a4c: 'A4C', a2c: 'A2C', a3c: 'A3C', plax: 'PLAX', psaxAo: 'PSAX Ao', psaxMv: 'PSAX mitral', psaxPm: 'PSAX papilares' };
 // orden de los chips: apicales, paraesternal largo, ejes cortos de la base al ápex
@@ -55,8 +56,8 @@ export function montarSimulador(raiz, opc = {}) {
     if (!n || w.width === n) return;
     w.width = n; w.height = Math.round(n * 0.62); p.width = n; p.height = Math.round(n * 0.7); diag.invalidar();
   }
-  const ro = new ResizeObserver(() => { ajustarLienzo(); ajustarDiagramas(); ajustarEco(); });
-  ro.observe(escena); ro.observe($('#cv-wig')); ro.observe($('#cv-eco'));
+  const ro = new ResizeObserver(() => { ajustarLienzo(); ajustarDiagramas(); ajustarEco(); if (modoM.ajustar()) ultimoTM = null; });
+  ro.observe(escena); ro.observe($('#cv-wig')); ro.observe($('#cv-eco')); ro.observe($('#cv-m'));
   const abierto = (id) => $(id).open;
   $('#cv-plegable-diag').addEventListener('toggle', () => { ajustarDiagramas(); diag.invalidar(); });
 
@@ -113,7 +114,7 @@ export function montarSimulador(raiz, opc = {}) {
 
   // ---- Formas precalculadas (formas.mjs): con el latido estable se mezclan en la tarjeta gráfica
   const tabla = crearTablaFormas(); let usarFormas = true, latidoVisto = -1, ondaPrevia = null, estable = false, modoGeo = 'exacta';
-  const extraGeo = () => ({ vviTd: motor.ultimo?.edv, liquidoPeri: motor.p.liquidoPeri });
+  const extraGeo = () => extraDeMotor(motor);
   const opcionesGeo = () => ({ ...opciones, calidad });
   function olvidarFormas() { if (rgl) rgl.liberar('f' + tabla.olvidar() + ':'); ensuciar(); }
   function gestionarFormas() {
@@ -127,13 +128,15 @@ export function montarSimulador(raiz, opc = {}) {
 
   // ---- Ecografía (ecografia.mjs): el plano corta las MISMAS piezas que dibuja el corazón en este fotograma
   const ecoC = $('#cv-eco'), ecoCtx = ecoC.getContext('2d');
-  let vistaEco = 'a4c', ecografo = null, ecoImg = null, planoEco = null, claveTd = '', refEco = null, claveRef = '', fanEco = null;
+  let vistaEco = 'a4c', ecografo = null, ecoImg = null, planoEco = null, claveTd = '', refEco = null, refGeoTd = null, claveRef = '', fanEco = null;
   let ecoVisible = true, ultimoEco = -1e9, ecoInfo = null, ecoPendiente = true, ecoMs = 0;
   $('#cv-vistas').innerHTML = ORDEN_VISTAS.filter(k => VISTAS[k]).map(k => `<button type="button" class="cv-mini${k === vistaEco ? ' on' : ''}" data-eco="${k}" title="${VISTAS[k].nombre}">${NOMBRE_VISTA[k]}</button>`).join('');
   function elegirVista(k) {
     if (!VISTAS[k]) return;
     vistaEco = k; claveTd = ''; ecoPendiente = true;
     $$('[data-eco]').forEach(b => b.classList.toggle('on', b.dataset.eco === k));
+    if (MEDIDAS[medir].vista && MEDIDAS[medir].vista !== k) elegirMedida('libre', false);
+    else colocarLineaM();
     opc.onVista?.(k);
   }
   $('#cv-vistas').addEventListener('click', (e) => { const b = e.target.closest('[data-eco]'); if (b) elegirVista(b.dataset.eco); });
@@ -142,6 +145,86 @@ export function montarSimulador(raiz, opc = {}) {
     if (!w || (ecografo && ecoC.width === w)) return;
     ecoC.width = w; ecoC.height = h; ecografo = crearEcografo({ ancho: w, alto: h }); ecoImg = ecoCtx.createImageData(w, h); ecoPendiente = true;
   }
+  // ---- Modo M (modo-m.mjs): una línea del modo B a lo largo del tiempo, con calibres
+  let modoEco = 'B', thetaM = 0, medir = 'libre', ultimoTM = null, ecoGeom = null;
+  const guardado = { lvdd: null, lvsd: null };
+  const MEDIDAS = {
+    libre: { vista: null, guia: 'Mueve la línea M arrastrando en horizontal sobre la imagen. Pulsa ⏸ Pausa para congelar el trazado y toca dos puntos sobre él: la distancia vertical son mm de profundidad y la horizontal, ms.' },
+    tapse: { vista: 'a4c', guia: 'Línea M sobre el anillo tricuspídeo lateral (apical 4 cámaras). Pulsa ⏸ Pausa, pon un calibre en el punto más alto del anillo (telediástole) y otro en el más bajo (telesístole): la distancia vertical es el TAPSE.' },
+    vi: { vista: 'plax', guia: 'Línea M por el VI en el eje largo paraesternal, a la altura de las cuerdas. Pulsa ⏸ Pausa y mide del endocardio del tabique al de la pared posterior: con el VI más grande (telediástole), «Guardar como LVDd»; con el más pequeño (telesístole), «Guardar como LVSd».' },
+  };
+  const modoM = crearModoM($('#cv-m'), $('#cv-m-capa'), { onMedida: pintarMedida });
+  const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+  function colocarLineaM() {
+    ultimoTM = null; modoM.limpiar(); ecoPendiente = true;
+    if (medir === 'libre' || !prepararPlanoEco()) return;
+    const p = medir === 'tapse' ? refGeoTd.anilloTricLateral : refGeoTd.flujo.transformar([0, 0, -0.3 * refGeoTd.vi.L]);
+    thetaM = clamp(anguloHacia(planoEco, p), -planoEco.mitad + 0.02, planoEco.mitad - 0.02);
+  }
+  function elegirModo(m) {
+    modoEco = m; $$('[data-modo]').forEach(b => b.classList.toggle('on', b.dataset.modo === m));
+    $('#cv-m-zona').hidden = m !== 'M';
+    if (m === 'M') { modoM.ajustar(); colocarLineaM(); pintarGuia(); }
+    ecoPendiente = true;
+  }
+  function elegirMedida(k, cambiarVista = true) {
+    medir = k; $$('[data-medir]').forEach(b => b.classList.toggle('on', b.dataset.medir === k));
+    $('#cv-m-vi').hidden = k !== 'vi';
+    const v = MEDIDAS[k].vista;
+    if (cambiarVista && v && v !== vistaEco) elegirVista(v); else colocarLineaM();
+    modoM.borrarCalibres(); pintarGuia();
+  }
+  function pintarGuia() { $('#cv-m-guia').textContent = MEDIDAS[medir].guia; pintarMedida(modoM.medida()); }
+  const enlace = (texto, tab, resaltar, panel = 'panel-cardio-tabs', esp = 'fisioUci', view = 'cardiologia') =>
+    `<button type="button" class="especialidad-link" data-especialidad="${esp}" data-view="${view}" data-panel="${panel}" data-tab="${tab}" data-resaltar="${resaltar}">${texto} →</button>`;
+  const f1 = (x) => x.toFixed(1).replace('.', ',');
+  function pintarMedida(m) {
+    const box = $('#cv-m-resultado'), enl = $('#cv-m-enlaces');
+    const poner = (estado, html) => { box.className = 'tfg-estado' + (estado ? ' tfg-estado-' + estado : ''); box.innerHTML = html; };
+    enl.innerHTML = '';
+    if (medir === 'tapse') enl.innerHTML = enlace('TAPSE en la Ficha 5', 'cardio-monitorizacion-hemodinamica', '#cardio-eco-tapse') + enlace('VD en la Ficha 11', 'cardio-interaccion-corazon-pulmon', '#cardio-eco-vd');
+    if (medir === 'vi') enl.innerHTML = enlace('Dimensiones normales (FATE)', 'umi-fate', '#umi-fate-dimensiones', 'panel-manual-umi-tabs', 'sobrevivirUmi', 'manualUmi')
+      + (guardado.lvdd && guardado.lvsd ? `<button type="button" class="especialidad-link" id="cv-m-a-fs" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-fate" data-resaltar="#umi-fs-resultado">Llevar LVDd y LVSd a la calculadora de FS (FATE) →</button>` : '');
+    if (!m) { poner('', medir === 'vi' ? textoVi() : 'Sin medida: toca dos puntos sobre el trazado.'); return; }
+    if (medir === 'libre') { poner('', `Δ profundidad <b>${f1(m.mm)} mm</b> · Δ tiempo <b>${Math.round(m.ms)} ms</b>`); return; }
+    if (medir === 'vi') { poner('', `Medida: <b>${f1(m.mm)} mm</b> (${f1(m.mm / 10)} cm) · Δ tiempo ${Math.round(m.ms)} ms<br>` + textoVi()); return; }
+    // TAPSE: las dos cifras de normalidad que cita la app; y lo que hace el modelo en este latido
+    const t = m.mm, u = motor.ultimo, dir = planoEco ? direccionHaz(planoEco, thetaM) : [0, 0, 1];
+    const exc = u ? Math.min(35, TAPSE_POR_ML * (u.edvD - u.esvD)) : 0;
+    const lectura = t > 17 ? ['ok', 'por encima de las dos cifras de normalidad que cita la app (&gt;16 mm, Ficha 5; &gt;17 mm, Ficha 11).']
+      : t > 16 ? ['warn', 'entre las dos cifras de la app: normal según la Ficha 5 (&gt;16 mm), no según la Ficha 11 (&gt;17 mm).']
+      : ['danger', 'por debajo de las dos cifras de normalidad que cita la app (&gt;16 mm, Ficha 5; &gt;17 mm, Ficha 11).'];
+    poner(lectura[0], `TAPSE medido: <b>${f1(t)} mm</b> — ${lectura[1]}<br><span class="cv-muted">En el modelo, el anillo lateral recorre ${f1(exc)} mm en este latido (${f1(exc * Math.abs(dir[2]))} mm a lo largo de esta línea). Su TAPSE sale de lo que se vacía el VD, así que también baja si baja la precarga (hemorragia, vasoplejía): el simulador aún no tiene un escenario de fallo del VD. Ilustrativo.</span>`);
+  }
+  function textoVi() {
+    const d = guardado.lvdd, sv = guardado.lvsd, cm = (x) => x == null ? '—' : f1(x / 10) + ' cm';
+    let t = `LVDd ${cm(d)} · LVSd ${cm(sv)}`;
+    if (d && sv) { const fs = (d - sv) / d * 100; t += ` · <b>FS ${Math.round(fs)}%</b> (FA normal 28-41%, Teichholz, Ficha 5 de Fisiopatología UCI · Cardiología; en FATE, FEVI ≈ 2 × FS)`; }
+    return t;
+  }
+  function guardarVi(k) { const m = modoM.medida(); if (!m) return; guardado[k] = m.mm; modoM.borrarCalibres(); pintarMedida(null); }
+  $('#cv-m-lvdd').addEventListener('click', () => guardarVi('lvdd'));
+  $('#cv-m-lvsd').addEventListener('click', () => guardarVi('lvsd'));
+  $('#cv-m-borrar').addEventListener('click', () => modoM.borrarCalibres());
+  // antes de que el enlace navegue (lo hace el listener de [data-especialidad] de home, en document), se
+  // escriben los diámetros en la calculadora de FS de FATE y se recalcula
+  $('#cv-m-enlaces').addEventListener('click', (e) => {
+    if (!e.target.closest('#cv-m-a-fs')) return;
+    const a = document.getElementById('umi-fs-lvdd'), b = document.getElementById('umi-fs-lvsd'); if (!a || !b) return;
+    a.value = (guardado.lvdd / 10).toFixed(1); b.value = (guardado.lvsd / 10).toFixed(1);
+    a.dispatchEvent(new Event('input', { bubbles: true })); b.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+  $$('[data-modo]').forEach(b => b.addEventListener('click', () => elegirModo(b.dataset.modo)));
+  $('#cv-medir').addEventListener('click', (e) => { const b = e.target.closest('[data-medir]'); if (b) elegirMedida(b.dataset.medir); });
+  // arrastrar en horizontal sobre la imagen B mueve la línea M (en vertical, la página se desplaza)
+  ecoC.style.touchAction = 'pan-y';
+  let moviendoM = false;
+  const thetaDe = (ev) => { const r = ecoC.getBoundingClientRect(), px = ecoC.width / r.width, x = (ev.clientX - r.left) * px, y = (ev.clientY - r.top) * px;
+    return clamp(Math.atan2(x - ecoGeom.cx, Math.max(1, y - ecoGeom.arriba)), -planoEco.mitad + 0.02, planoEco.mitad - 0.02); };
+  ecoC.addEventListener('pointerdown', (ev) => { if (modoEco !== 'M' || !ecoGeom || !planoEco) return; moviendoM = true; ecoC.setPointerCapture?.(ev.pointerId); thetaM = thetaDe(ev); ultimoTM = null; modoM.limpiar(); ecoPendiente = true; });
+  ecoC.addEventListener('pointermove', (ev) => { if (!moviendoM) return; thetaM = thetaDe(ev); ultimoTM = null; modoM.limpiar(); ecoPendiente = true; });
+  for (const t of ['pointerup', 'pointercancel', 'lostpointercapture']) ecoC.addEventListener(t, () => { moviendoM = false; });
+
   const io = new IntersectionObserver((e) => { ecoVisible = e[0].isIntersecting; if (ecoVisible) ecoPendiente = true; });
   io.observe($('#cv-tarjeta-eco'));
   $('#cv-eco-rotulos').addEventListener('change', () => { ecoPendiente = true; });
@@ -149,21 +232,30 @@ export function montarSimulador(raiz, opc = {}) {
   function prepararPlanoEco() {
     if (!motor.onda.length) return null;
     const td = muestraTd(), clave = vistaEco + '|' + Math.round(td.vvi / 3) + '|' + Math.round(td.vvd / 3);
-    if (clave !== claveTd) { planoEco = planoVista(vistaEco, td); claveTd = clave; fanEco = abanicoVista(planoEco); }
+    if (clave !== claveTd) { planoEco = planoVista(vistaEco, td); claveTd = clave; fanEco = abanicoVista(planoEco); modoM.setProf(planoEco.prof); }
     // forma de referencia para que el moteado siga al tejido: la telediastólica, con las mismas opciones
     const cr = [Math.round(td.vvi), Math.round(td.vvd), opciones.pericardio, opciones.detalle, calidad, motor.p.liquidoPeri].join('|');
-    if (cr !== claveRef) { refEco = construirCorazon(estadoGeo(td, extraGeo()), { pericardio: opciones.pericardio, detalle: opciones.detalle, calidad }).partes; claveRef = cr; }
+    if (cr !== claveRef) { refGeoTd = construirCorazon(estadoGeo(td, extraGeo()), { pericardio: opciones.pericardio, detalle: opciones.detalle, calidad }); refEco = refGeoTd.partes; claveRef = cr; }
     return td;
   }
   function pintarEco(s, g, est) {
     if (!ecoVisible || !ecografo || !g) return;
     const ahora = performance.now(), propia = !!(opciones.corte || opciones.vistaBase);
     // hasta ~30 imágenes por segundo (~12 con una geometría propia); en pausa, solo si algo cambió
-    if (!ecoPendiente || ahora - ultimoEco < (propia ? 80 : 30)) return;
+    if (!ecoPendiente || ahora - ultimoEco < (propia ? 80 : modoEco === 'M' ? 20 : 30)) return;
     if (!prepararPlanoEco()) return;
     const geoEco = propia ? construirCorazon(est, { pericardio: opciones.pericardio, detalle: opciones.detalle, calidad }) : g;
     const im = ecografo.formar(geoEco.partes, planoEco, { ref: refEco, t: s.t ?? 0 });
     ecoImg.data.set(im.pix); ecoCtx.putImageData(ecoImg, 0, 0);
+    ecoGeom = { cx: im.cx, arriba: im.arriba, k: im.escala };
+    if (modoEco === 'M') {
+      // la columna del modo M sale de esta misma imagen; al revisar un instante pasado no se escribe (el trazado
+      // vive en el tiempo del motor)
+      if (!revision && s === motor.s && ultimoTM !== s.t) { modoM.anadir(s.t, (f) => im.columna(thetaM, f)); ultimoTM = s.t; }
+      const pxm = ecoC.width / ecoC.clientWidth, L = planoEco.prof * im.escala;
+      ecoCtx.save(); ecoCtx.strokeStyle = 'rgba(241,201,74,.9)'; ecoCtx.lineWidth = 1.5 * pxm; ecoCtx.setLineDash([5 * pxm, 4 * pxm]);
+      ecoCtx.beginPath(); ecoCtx.moveTo(im.cx, im.arriba); ecoCtx.lineTo(im.cx + Math.sin(thetaM) * L, im.arriba + Math.cos(thetaM) * L); ecoCtx.stroke(); ecoCtx.restore();
+    }
     ecoMs = 0.8 * ecoMs + 0.2 * im.tiempos.total; ultimoEco = ahora; ecoPendiente = false;
     const P = planoEco, k = im.escala, X = (u) => im.cx + u * k, Y = (v) => im.arriba + v * k, px = ecoC.width / ecoC.clientWidth;
     ecoCtx.font = `${Math.round(11 * px)}px system-ui,sans-serif`; ecoCtx.textAlign = 'center'; ecoCtx.textBaseline = 'middle';
@@ -192,7 +284,7 @@ export function montarSimulador(raiz, opc = {}) {
     ecoC.setAttribute('aria-label', `Ecografía reconstruida, ${VISTAS[vistaEco].nombre}, fase ${s.fase}`);
     $('#cv-eco-fase').textContent = `${s.fase} · ${FASES[s.fase]}`;
     $('#cv-eco-nombre').textContent = VISTAS[vistaEco].nombre;
-    ecoInfo = { t: s.tLatido, vista: vistaEco, rotulos: rot, propia, abiertos: im.abiertos };
+    ecoInfo = { t: s.tLatido, tMotor: s.t, vista: vistaEco, rotulos: rot, propia, abiertos: im.abiertos, modo: modoEco, theta: thetaM };
   }
 
   // ---- Dibujo de un fotograma
@@ -302,7 +394,7 @@ export function montarSimulador(raiz, opc = {}) {
     motor = crearMotor({ barorreflejo: $('#cv-baro').checked }); motor.correr(12); ESCENARIOS[k].aplicar(motor);
     if (k !== 'normal') motor.correr(10);          // que se vea ya el efecto (y el barorreflejo respondiendo)
     if (opc.depuracion) window.__motor = motor;
-    revision = null; ponerPausa(false); sangre.reiniciar(); latidoTexto = -1; claveTd = ''; ensuciar();
+    revision = null; ponerPausa(false); sangre.reiniciar(); latidoTexto = -1; claveTd = ''; ensuciar(); colocarLineaM();
     $$('[data-c]').forEach(x => x.classList.toggle('on', x.dataset.c === k));
     opc.onEscenario?.(k);
   }
@@ -326,12 +418,14 @@ export function montarSimulador(raiz, opc = {}) {
 
   if (opc.depuracion) {
     window.__revisar = (t) => revisar(estadoRevision(motor.onda, t)); window.__estado = () => estadoMostrado();
-    window.__eco = { info: () => ecoInfo, vista: elegirVista, plano: () => planoEco };
+    window.__eco = { info: () => ecoInfo, vista: elegirVista, plano: () => planoEco, modo: elegirModo, medir: elegirMedida, modoM };
     window.__ensuciar = ensuciar; window.__sangre = sangre; window.__motor = motor; window.__cam = cam; window.__tabla = tabla;
   }
 
   return {
     vista: elegirVista,
+    modo: elegirModo,
+    medir: elegirMedida,
     escenario: elegirEscenario,
     activo: setActivo,
     get vistaActual() { return vistaEco; },

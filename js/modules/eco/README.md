@@ -18,7 +18,7 @@ en `lab/circulacion/`), como la especialidad «Eco cardíaca»: ver «En la app�
 node --test 'js/modules/eco/pruebas/*.test.mjs'
 ```
 
-Tarda ~100 s (91 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta. Las de navegador
+Tarda ~100 s (94 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta. Las de navegador
 sirven el repositorio con un servidor propio y abren `laboratorio.html`.
 
 - `motor.test.mjs` — cada cifra del latido normal frente a su referencia (`referencias.mjs`), el volumen
@@ -65,6 +65,7 @@ cumplirse, una prueba avisa para quitar la marca.
 | `index.js` | Módulo de la app: carga `simulador.mjs` la primera vez que la vista se ve, lo anima solo mientras se ve, aplica los accesos `data-eco-vista`/`data-eco-escenario` y pinta «Qué mirar» |
 | `eco.html` | Marcado de la vista (ids con prefijo `cv-`, porque todos los partials de la app conviven en el DOM) |
 | `simulador.mjs` | `montarSimulador(raiz, opciones)`: todo el pegamento de la página (bucle, eco, ciclo, diagramas, controles, escenarios). Lo usan la app y el laboratorio |
+| `modo-m.mjs` | Modo M: barrido en el tiempo de una línea del modo B (una columna por imagen B, colocada según el tiempo del motor) y los dos calibres |
 | `que-mirar.js` | Qué líneas de otras fichas se copian en «Qué mirar» para cada vista |
 | `laboratorio.html`, `latido.html` | Páginas de laboratorio (no se enlazan desde la app) |
 | `motor.mjs` | Motor del latido en el tiempo (sin DOM): 4 cámaras, válvulas por gradiente, aórtica con inercia, pericardio, tabique, lechos sistémico y pulmonar, barorreflejo |
@@ -210,6 +211,33 @@ de anatomía de GitHub** en vez de modelarlos desde cero; se estudiará antes de
 - **Colores de los diagramas:** `diagramas.mjs` los lee del propio lienzo; `.cv-sim` (en `components.css`) define los
   nombres cortos (`--g`, `--r`…) a partir de los tokens de la app.
 
+## Modo M (fase 2)
+
+- **De dónde sale cada columna:** de la imagen B de ese fotograma (`im.columna(theta, filas)` en `ecografia.mjs`,
+  misma rejilla y mismos grises). No hay un segundo cálculo del corazón: el modo M nunca va en otro instante que la
+  imagen B (prueba de navegador). La columna se coloca según el tiempo del motor (`BARRIDO` = 2 s en pantalla), así
+  que con pocas imágenes por segundo cada una ocupa más ancho, pero el eje de tiempo sigue siendo real. Al revisar
+  un instante pasado no se escribe (el trazado vive en el tiempo del motor). En modo M la imagen B se forma hasta
+  cada 20 ms (30 en modo B).
+- **Línea M:** se arrastra en horizontal sobre la imagen B. Dos medidas la colocan solas, desde la geometría
+  telediastólica del propio corazón: **TAPSE** (A4C, por el anillo tricuspídeo lateral, `anilloTricLateral` de
+  `construirCorazon`) y **diámetros del VI** (PLAX, por el eje del VI a la altura de la sonda, ~30% de su longitud
+  desde la base, a la altura de las cuerdas).
+- **Calibres:** ⏸ Pausa congela el trazado; un toque pone el primer calibre, otro el segundo, arrastrar mueve el más
+  cercano y un tercer toque vuelve a empezar. Medida vertical en mm de profundidad, horizontal en ms.
+- **TAPSE:** se compara con las dos cifras de la app (>16 mm, Ficha 5; >17 mm, Ficha 11), sin elegir una, y se da
+  lo que recorre el anillo en el modelo en ese latido. **Diámetros del VI:** «Guardar como LVDd/LVSd» y la FS; el
+  enlace a FATE escribe los dos diámetros en su calculadora de FS (`#umi-fs-lvdd/-lvsd`) antes de navegar.
+- **VCI:** no se puede medir todavía (sin ventana subcostal ni VCI; fase 5). La tarjeta lo dice.
+- **Cambio en la geometría para que el TAPSE tenga sentido (fase 2a):** antes todo el plano AV bajaba lo mismo
+  (13 mm), así que TAPSE = MAPSE y un corazón normal daba un TAPSE «patológico». Ahora la pared libre del VD baja,
+  además, lo que le corresponde por lo que se vacía el VD: `TAPSE_POR_ML` × (VTD − volumen actual del VD), calibrado
+  a ~21 mm con el VS del VD normal del motor (~74 mL). El exceso sobre el descenso común se reparte con un peso:
+  máximo en la pared libre junto al anillo tricuspídeo, nulo en el tabique, el VI, el infundíbulo y el ápex del VD.
+  Hace falta el VTD del VD del último latido (`vvdTd`, en `extraDeMotor()` de `formas.mjs`, que también lo vigila
+  al mezclar formas). Normal: TAPSE 21,2 mm y MAPSE 13,3 mm. Como sale del volumen sistólico del VD, también baja
+  con la precarga (hemorragia 11,5 mm, vasoplejía 10,2 mm); falta un escenario de fallo del VD.
+
 ## Rendimiento medido
 
 En un móvil Android real (octubre 2026, pantalla de 90 Hz, calidad alta, sangre activada), **antes de las formas
@@ -233,7 +261,7 @@ arco y las vistas ecográficas cortadas del propio corazón. Si algo de esto se 
   (cap. 5, pág. 70 del PDF de la parte 1; cap. 10, Figura 2, pág. 33 de la parte 2) dan RVS «↑» o «N/↑»
   en el shock distributivo, y la del cap. 10 da ScvO₂ «↑» en el hipovolémico. Las fichas 5 y 10 las
   reproducen tal cual. Las pruebas usan la Tabla 14.1 de Merino (cap. 14), que no tiene ese problema.
-- Más ideas de *The Heart by Ultrasound* por reconstruir: modo M y Doppler color sobre estos mismos planos, más
+- Más ideas de *The Heart by Ultrasound* por reconstruir: Doppler color sobre estos mismos planos, más
   vistas (subcostal, supraesternal), sonda libre (inclinar y girar el plano), formas de enfermedad movidas por los
   escenarios (choca con «anatomía congelada»: hace falta decidirlo) y que una cifra mostrada nunca contradiga su grado.
 - Ecografía en un *worker* si en el móvil baja de fps.

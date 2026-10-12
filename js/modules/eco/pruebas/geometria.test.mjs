@@ -114,7 +114,7 @@ test('el corazón queda dentro del saco pericárdico (y el derrame, entre los do
   const m = crearMotor(); m.correr(12);
   const est = [...m.onda.filter((_, i) => i % 120 === 0), ...ESTADOS.map(e => ({ ...m.onda[0], ...e }))];
   for (const liquidoPeri of [0, 10, 150]) for (const s of est) {
-    const g = construirCorazon({ ...s, vviTd: m.ultimo.edv, liquidoPeri }, { pericardio: true, detalle: true });
+    const g = construirCorazon({ ...s, vviTd: m.ultimo.edv, vvdTd: m.ultimo.edvD, liquidoPeri }, { pericardio: true, detalle: true });
     const saco = g.partes.find(p => p.nombre === 'Pericardio'), derrame = g.partes.find(p => p.nombre === 'Derrame');
     const enSaco = dentroDeMalla(saco), enDerrame = derrame && dentroDeMalla(derrame);
     for (const p of g.partes) {
@@ -127,4 +127,27 @@ test('el corazón queda dentro del saco pericárdico (y el derrame, entre los do
     }
     if (derrame) for (let i = 0; i < derrame.pos.length; i += 3 * 7) { const q = [derrame.pos[i], derrame.pos[i + 1], derrame.pos[i + 2]]; assert.ok(enSaco(q), `el derrame se sale del saco (${q.map(x => x.toFixed(1))}) vvi ${s.vvi.toFixed(0)}`); }
   }
+});
+
+// TAPSE: el anillo tricuspídeo lateral baja más que el plano AV común (MAPSE) y su excursión sale de lo que se vacía
+// el VD. Referencia de la app: TAPSE normal >16 mm (Fisiopatología UCI · Cardiología, Ficha 5) y >17 mm (Ficha 11).
+// El valor exacto del modelo es ilustrativo (calibrado ~21 mm); se exige que el normal pase las dos referencias,
+// que supere al MAPSE y que caiga cuando el VD expulsa menos.
+test('TAPSE: normal por encima de 17 mm y mayor que el MAPSE; cae cuando cae el volumen sistólico del VD', async () => {
+  const { estadoGeo, extraDeMotor } = await import('../formas.mjs');
+  const { ESCENARIOS } = await import('../escenarios.mjs');
+  const medir = (k) => {
+    const m = crearMotor(); m.correr(12); ESCENARIOS[k].aplicar(m); m.correr(14);
+    const ex = extraDeMotor(m); let zMin = Infinity, zMax = -Infinity, dMin = Infinity, dMax = -Infinity;
+    for (const s of m.onda) { if (Math.round(s.t * 1000) % 10) continue;
+      const g = construirCorazon(estadoGeo(s, ex), { pericardio: false, detalle: false, calidad: 0.5 });
+      zMin = Math.min(zMin, g.anilloTricLateral[2]); zMax = Math.max(zMax, g.anilloTricLateral[2]);
+      dMin = Math.min(dMin, g.descenso); dMax = Math.max(dMax, g.descenso); }
+    return { tapse: zMax - zMin, mapse: dMax - dMin, vsD: m.ultimo.vsD };
+  };
+  const n = medir('normal');
+  assert.ok(n.tapse > 17 && n.tapse < 26, `TAPSE normal ${n.tapse.toFixed(1)} mm`);
+  assert.ok(n.tapse > n.mapse + 4, `TAPSE ${n.tapse.toFixed(1)} frente a MAPSE ${n.mapse.toFixed(1)}`);
+  for (const k of ['hemorragia', 'derrame']) { const r = medir(k);
+    assert.ok(r.vsD < n.vsD && r.tapse < n.tapse - 4, `${k}: TAPSE ${r.tapse.toFixed(1)} mm con VS del VD ${r.vsD.toFixed(0)} mL`); }
 });

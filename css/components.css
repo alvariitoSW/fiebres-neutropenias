@@ -2349,3 +2349,11 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 .cv-qm-cuerpo .algo-flow, .cv-qm-cuerpo .kv-row, .cv-qm-cuerpo .micro-prof-item { margin: 0; }
 .cv-qm-pendiente { font-style: italic; }
 .cv-qm-ir { margin-top: 6px; }
+/* Modo M: el trazado y, encima, la capa de los calibres (toca dos puntos; arrastrar mueve el más cercano) */
+.cv-m { position: relative; margin-top: 8px; border-radius: 6px; overflow: hidden; background: #000; border: 1px solid var(--border-color); }
+.cv-m canvas { display: block; width: 100%; height: auto; }
+.cv-m .cv-m-capa { position: absolute; inset: 0; height: 100%; touch-action: none; cursor: crosshair; }
+.cv-medir { margin-top: 8px; }
+#cv-m-resultado { margin-top: 8px; font-size: 0.8rem; }
+#cv-m-resultado .cv-muted { display: block; margin-top: 4px; }
+.cv-modos { margin-top: 8px; }

@@ -8,7 +8,7 @@ import { estadoGeo } from '../formas.mjs';
 import { VISTAS, planoVista, enPlano, cortarPieza, elementosDelCorte, crearEcografo, ajusteAfin, campoDesplazamiento, desplazar, abanicoVista } from '../ecografia.mjs';
 
 const m = crearMotor(); m.correr(12);
-const o = m.onda, extra = { vviTd: m.ultimo.edv, liquidoPeri: 0 }, OP = { pericardio: true, detalle: true };
+const o = m.onda, extra = { vviTd: m.ultimo.edv, vvdTd: m.ultimo.edvD, liquidoPeri: 0 }, OP = { pericardio: true, detalle: true };
 const td = o.reduce((a, b) => (b.vvi > a.vvi ? b : a)), ts = o.reduce((a, b) => (b.vvi < a.vvi ? b : a));
 const geo = (s) => construirCorazon(estadoGeo(s, extra), OP);
 const gTd = geo(td), gTs = geo(ts);
@@ -117,4 +117,32 @@ test('la imagen es determinista para un mismo estado y la sangre cambia con el t
   for (let q = 0; q < a.length; q++) { const d = Math.abs(im.db[q] - a[q]); if (im.tag[q] === vi) { dT += d; nT++; } else if (im.tag[q] === 255) { dS += d; nS++; } }
   assert.ok(dT / nT < 1, `el moteado del miocardio cambia sin moverse (${(dT / nT).toFixed(1)} dB)`);
   assert.ok(dS / nS > 3, `el ruido de la sangre no cambia con el tiempo (${(dS / nS).toFixed(1)} dB)`);
+});
+
+// Modo M: la columna es la misma imagen a lo largo de un haz (mismos grises que la imagen B) y, sobre el anillo
+// tricuspídeo lateral en el 4 cámaras, el borde brillante del anillo sube hacia el transductor en sístole lo que
+// recorre el anillo a lo largo de ese haz.
+test('modo M: la columna repite la imagen B a lo largo del haz y sigue al anillo tricuspídeo', async () => {
+  const { anguloHacia, direccionHaz } = await import('../ecografia.mjs');
+  const P = planoVista('a4c', td);
+  const im = ec.formar(gTd.partes, P, { ref: gTd.partes, t: 0 });
+  // haz central: cada fila de la columna, frente al píxel de la imagen en el mismo punto
+  const filas = 120, col = im.columna(0, filas); let dif = 0, n = 0;
+  for (let y = 10; y < filas - 2; y += 4) {
+    const r = (y + 0.5) / filas * P.prof, px = Math.round(im.cx), py = Math.round(im.arriba + r * im.escala);
+    if (py >= im.alto) continue;
+    dif += Math.abs(col[3 * y] - im.pix[4 * (py * im.ancho + px)]); n++;
+  }
+  assert.ok(dif / n < 12, `la columna se aparta de la imagen (${(dif / n).toFixed(1)} niveles de gris de media)`);
+  // anillo tricuspídeo lateral: profundidad del punto más brillante cerca del anillo, en telediástole y telesístole
+  const th = anguloHacia(P, gTd.anilloTricLateral), dir = direccionHaz(P, th);
+  const prof = (g, s) => { const im2 = ec.formar(g.partes, P, { ref: gTd.partes, t: 0 }), c = im2.columna(th, 850);
+    // el primer tejido brillante que encuentra el haz desde 30 mm por encima del anillo telediastólico
+    const r0 = enPlano(P, gTd.anilloTricLateral)[1];
+    for (let y = 0; y < 850; y++) { const r = (y + 0.5) / 850 * P.prof; if (r > r0 - 30 && c[3 * y] > 90) return r; }
+    return NaN; };
+  const exc = Math.abs(gTd.anilloTricLateral[2] - gTs.anilloTricLateral[2]) * Math.abs(dir[2]);
+  const medido = prof(gTd, td) - prof(gTs, ts);
+  assert.ok(medido > 0, 'el anillo no se acerca al transductor en sístole');
+  assert.ok(Math.abs(medido - exc) < 5, `excursión en el modo M ${medido.toFixed(1)} mm frente a ${exc.toFixed(1)} mm de la geometría`);
 });

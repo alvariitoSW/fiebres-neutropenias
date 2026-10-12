@@ -10539,7 +10539,7 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
     en pantalla y lo para (`activo(false)`) fuera de ella o con la pestaña oculta; verificado: 0 fotogramas fuera
     de la vista. Sin banco de quiz propio (exporta arrays vacíos para `main.js`).
   - **Una sola copia del pegamento**: `montarSimulador(raiz)` (antes un script dentro de `corazon-3d.html`) lo usan
-    la app y `laboratorio.html`; las 91 pruebas siguen en `js/modules/eco/pruebas/` y las de navegador abren
+    la app y `laboratorio.html`; las pruebas (94 desde la fase 2) siguen en `js/modules/eco/pruebas/` y las de navegador abren
     `laboratorio.html` sirviendo el repo entero (carga el CSS de la app).
   - **Accesos** `data-especialidad="eco"` + `data-eco-vista` / `data-eco-escenario` desde Manual UMI · FATE,
     Técnicas R1, Fisiopatología UCI · Cardiología (Fichas 1, 5, 10 y 11) y Merino Cardiología (Tabla 14.1 con los 4
@@ -10549,6 +10549,23 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
     `[data-especialidad]` puede llevar `data-resaltar="#id"` para llevar a esa línea y resaltarla tras navegar.
   - CSS con prefijo `cv-` en `components.css`; `.cv-sim` traduce los tokens de la app a los nombres cortos que
     leen los diagramas (que ahora toman el color de su propio lienzo, no de `:root`). Cache-busting `?v=20261018-10`.
+- **Fase 2: modo M con calibres**, a petición explícita del usuario («sigue con la fase 2, el modo M»). Detalle en
+  `js/modules/eco/README.md` («Modo M»). Lo esencial:
+  - **Antes de medir nada se corrigió el modelo**: todo el plano AV bajaba lo mismo (13 mm), así que el TAPSE
+    medido coincidía con el MAPSE y un corazón normal salía «por debajo de lo normal» (la app cita >16 mm en la
+    Ficha 5 y >17 mm en la Ficha 11). Ahora la pared libre del VD baja además según lo que se vacía el VD
+    (`TAPSE_POR_ML` en `corazon-geo.mjs`, calibrado a ~21 mm, ilustrativo). Nueva prueba: TAPSE normal >17 mm y
+    mayor que el MAPSE, y que cae con la hemorragia y el derrame. Al salir del volumen sistólico del VD, el TAPSE
+    del modelo también baja con la precarga; la tarjeta lo dice. Falta un escenario de fallo del VD.
+  - **Cada columna del modo M sale de la imagen B del mismo fotograma** (`im.columna()`), nunca de un segundo
+    cálculo: el modo M y la imagen B van siempre en el mismo instante (prueba de navegador). Pausa congela el
+    trazado; dos calibres miden mm y ms.
+  - **Medidas guiadas:** TAPSE (A4C, la línea se coloca sola por el anillo tricuspídeo lateral) y diámetros del VI
+    (PLAX); con LVDd y LVSd guardados, un enlace los escribe en la calculadora de FS de FATE y lleva a ella. Accesos
+    directos `data-eco-medir="tapse"|"vi"` desde la Ficha 5 (TAPSE) y desde la calculadora de FS de FATE.
+  - **VCI pendiente**: necesita la ventana subcostal y la propia VCI (fase 5, con repositorios de anatomía).
+  - Llegar al simulador desde una ficha deja ahora la página arriba (`irAFicha` del módulo): antes se quedaba
+    desplazada y la eco fuera de pantalla no se redibujaba.
 
 ## Cómo probar cambios
 

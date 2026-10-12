@@ -29,6 +29,10 @@ export const VALVULAS = [
 export const apertura = (v, s) => s[v.q] > 0 ? Math.min(1, Math.pow(s[v.q] / v.qRef, 0.35)) : 0;
 export const carga = (v, s) => s[v.q] > 0 ? 0 : clamp((s[v.abajo] - s[v.arriba]) / v.pRef, 0, 1);
 // Estado que necesita la geometría a partir de un estado del motor (o de una muestra de motor.onda)
+// Lo que la geometría necesita del último latido además del estado del instante: los volúmenes telediastólicos
+// (fijan cuánto ha bajado la base y la pared libre del VD) y el derrame.
+export const extraDeMotor = (motor) => ({ vviTd: motor.ultimo?.edv, vvdTd: motor.ultimo?.edvD, liquidoPeri: motor.p.liquidoPeri });
+
 export function estadoGeo(s, extra = {}) {
   const e = { vvi: s.vvi, vvd: s.vvd, vai: s.vai, vad: s.vad, ...extra };
   for (const v of VALVULAS) { e[v.n] = apertura(v, s); e['carga_' + v.n] = carga(v, s); }
@@ -140,6 +144,7 @@ export function crearTablaFormas({ construir = construirCorazon, porFotograma = 
       for (const v of VALVULAS) if (Math.abs(mix(A.est[v.n], B.est[v.n], w) - objetivo[v.n]) > TOLERANCIA.apertura) return null;
       if ((extra?.liquidoPeri || 0) !== (A.est.liquidoPeri || 0)) return null;
       if (Math.abs((extra?.vviTd ?? 0) - (A.est.vviTd ?? 0)) > TOLERANCIA.volumen) return null;   // fija el descenso de la base
+      if (Math.abs((extra?.vvdTd ?? 0) - (A.est.vvdTd ?? 0)) > TOLERANCIA.volumen) return null;   // fija el descenso del VD
       const pa = A.geo.partes, pb = B.geo.partes, partes = new Array(pa.length);
       for (let j = 0; j < pa.length; j++) {
         const a = pa[j], b = pb[j];

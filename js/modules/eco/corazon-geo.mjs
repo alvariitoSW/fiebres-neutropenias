@@ -17,6 +17,8 @@ import { earcut } from './earcut.mjs';
 const TAU = Math.PI * 2;
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const mix = (a, b, t) => a + (b - a) * t;
+// mm de excursión del anillo tricuspídeo lateral por mL vaciado del VD (ver «TAPSE» en mover)
+export const TAPSE_POR_ML = 0.285;
 const paso = (e0, e1, x) => { const t = clamp((x - e0) / (e1 - e0), 0, 1); return t * t * (3 - 2 * t); };
 const sum = (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
 const res = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
@@ -527,12 +529,28 @@ export function construirCorazon(estado, opciones = {}) {
   const LeTd = estado.vviTd ? geomVi(estado.vviTd).Le : LE_REF;
   const descenso = clamp(vi.Le - LeTd, -18, 6);
   const contr = clamp((REF.vVi - estado.vvi) / 75, 0, 1.15), tau = 0.12 * contr;   // ~7° al final de la sístole
+  // La pared libre del VD (y el anillo tricuspídeo lateral, donde se mide el TAPSE) baja más que el plano AV
+  // común: el VD se vacía sobre todo acortándose. Su excursión sale de lo que se ha vaciado el VD desde su
+  // telediástole (estado.vvdTd), así que cae si cae el volumen sistólico del VD. TAPSE_POR_ML está calibrado
+  // para ~21 mm con el VS del VD normal del motor (~74 mL); ilustrativo (la app cita TAPSE normal >16 mm en la
+  // Ficha 5 y >17 mm en la Ficha 11 de Fisiopatología UCI · Cardiología). El exceso sobre el descenso común se
+  // reparte con un peso: máximo en la pared libre junto al anillo tricuspídeo, nulo en el tabique, el resto del
+  // VI, el infundíbulo y el ápex del VD.
+  const excVd = clamp(TAPSE_POR_ML * ((estado.vvdTd ?? REF.vVd) - estado.vvd), 0, 35);
+  const extraVd = clamp(-excVd - descenso, -25, 6);
+  const angTric = Math.atan2(geo.ct[1], geo.ct[0]), ReBase = geo.ReB;
+  const pesoVd = (x, y, z) => {
+    if (!extraVd) return 0;
+    let da = Math.abs(Math.atan2(y, x) - angTric); if (da > Math.PI) da = 2 * Math.PI - da;
+    const w = (1 - paso(0.7, 1.3, da)) * paso(ReBase + 2, ReBase + 18, Math.hypot(x, y));
+    return w * (z < 0 ? clamp(1 + z / Lvd, 0, 1) : 1 - paso(0, 45, z));
+  };
   const mover = (pos) => {
     for (let i = 0; i < pos.length; i += 3) {
       const x = pos[i], y = pos[i + 1], z = pos[i + 2];
       const ang = tau * (1.4 * Math.max(0, -z) / vi.Le - 0.4) * (1 - paso(0, 15, z));     // ápex +, base −
       const c = Math.cos(ang), s = Math.sin(ang);
-      pos[i] = c * x - s * y; pos[i + 1] = s * x + c * y; pos[i + 2] = z + descenso * (1 - paso(0, 45, z));
+      pos[i] = c * x - s * y; pos[i + 1] = s * x + c * y; pos[i + 2] = z + descenso * (1 - paso(0, 45, z)) + extraVd * pesoVd(x, y, z);
     }
   };
   for (const pz of partes) { if (pz.pos) { if (!pz.propia) pz.pos = new Float32Array(pz.pos); mover(pz.pos); } if (pz.lineas) mover(pz.lineas); }
@@ -561,7 +579,10 @@ export function construirCorazon(estado, opciones = {}) {
     transformar: (p) => { const a = [p[0], p[1], p[2]]; mover(a); return a; },
     visible: (p) => !corte || corte.nx * p[0] + corte.ny * p[1] >= 0,
   };
-  return { partes, vi, A, Lvd, geo, descenso, flujo };
+  // el anillo tricuspídeo lateral (el punto más alejado del VI), ya movido: es donde se mide el TAPSE
+  const tl = Math.hypot(geo.ct[0], geo.ct[1]), anilloTricLateral = [geo.ct[0] * (1 + geo.rT / tl), geo.ct[1] * (1 + geo.rT / tl), 0];
+  mover(anilloTricLateral);
+  return { partes, vi, A, Lvd, geo, descenso, descensoVd: -excVd, anilloTricLateral, flujo };
 }
 
 // ---- Dimensiones de la base y funciones de superficie -------------------------

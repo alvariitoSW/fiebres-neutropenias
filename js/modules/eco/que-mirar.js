@@ -11,7 +11,7 @@ export const QUE_MIRAR = {
         { fuente: '#umi-fate-a4c', ...FATE },
         { fuente: '#cardio-eco-vd', ...CORAZON_PULMON },
         { fuente: '#cardio-eco-simpson', ...MONITORIZACION },
-        { fuente: '#cardio-eco-tapse', ...MONITORIZACION, pendiente: 'El TAPSE se mide en modo M: llegará al simulador en la siguiente fase.' },
+        { fuente: '#cardio-eco-tapse', ...MONITORIZACION, pendiente: 'Mídelo aquí: «Modo M» → «TAPSE (A4C)».' },
     ],
     a2c: [
         { fuente: '#umi-fate-extendido', ...FATE },
@@ -24,7 +24,7 @@ export const QUE_MIRAR = {
     plax: [
         { fuente: '#umi-fate-plax', ...FATE },
         { fuente: '#umi-fate-dimensiones', ...FATE },
-        { fuente: '#umi-fate-fs', ...FATE, pendiente: 'Con el modo M (siguiente fase) se podrán medir los diámetros sobre la imagen y llevarlos a la calculadora de FS de esta ficha.' },
+        { fuente: '#umi-fate-fs', ...FATE, pendiente: 'Mide los diámetros aquí («Modo M» → «Diámetros del VI (PLAX)») y llévalos a la calculadora de FS de esta ficha.' },
         { fuente: '#umi-fate-estimacion', ...FATE },
         { fuente: '#cardio-eco-teichholz', ...MONITORIZACION },
     ],

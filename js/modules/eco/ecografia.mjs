@@ -496,7 +496,22 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
     }
     reloj.push(performance.now());
     const tiempos = { corte: reloj[1] - reloj[0], raster: reloj[2] - reloj[1], moteado: reloj[3] - reloj[2], haz: reloj[4] - reloj[3], envolvente: reloj[5] - reloj[4], pantalla: reloj[6] - reloj[5], total: reloj[6] - reloj[0] };
-    return { tiempos, tag: TAG, etiquetas: etiqueta, campos: campo, x: X, y: Y, pix, ancho, alto, escala: G.k, cx: G.cx, arriba: G.top, db: E, nb, ns, dth: G.dth, dr: G.dr, abiertos, elementos: els };
+    /**
+     * Modo M: la columna de ESTA imagen a lo largo del haz de ángulo theta (rad, 0 = centro del sector, + a la
+     * derecha), de 0 a P.prof mm en `filas` filas, con la misma escala de grises que la imagen. RGB por fila.
+     * Una columna por imagen: el modo M sale del mismo corte y del mismo instante que el modo B.
+     */
+    const columna = (theta, filas) => {
+      const out = new Uint8ClampedArray(filas * 3), fb = clamp((theta + P.mitad) / G.dth - 0.5, 0, nb - 1.001), b = fb | 0, tb = fb - b;
+      for (let y = 0; y < filas; y++) {
+        const fs = clamp(((y + 0.5) / filas * P.prof) / G.dr - 0.5, 0, ns - 1.001), sj = fs | 0, ts = fs - sj, q = sj * nb + b;
+        const e0 = E[q] + (E[q + 1] - E[q]) * tb, e1 = E[q + nb] + (E[q + nb + 1] - E[q + nb]) * tb;
+        const kk = clamp(((e0 + (e1 - e0) * ts - lo) * esc) | 0, 0, 1023) * 3;
+        out[3 * y] = LUT[kk]; out[3 * y + 1] = LUT[kk + 1]; out[3 * y + 2] = LUT[kk + 2];
+      }
+      return out;
+    };
+    return { tiempos, columna, tag: TAG, etiquetas: etiqueta, campos: campo, x: X, y: Y, pix, ancho, alto, escala: G.k, cx: G.cx, arriba: G.top, db: E, nb, ns, dth: G.dth, dr: G.dr, abiertos, elementos: els };
   }
   // desenfoque lateral: dos medias móviles por fila (semiancho HB[j]) sobre F, usando T de apoyo
   function desenfocar(F) {
@@ -517,6 +532,11 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
   }
   return { formar, rejilla: (P) => geometria(P) };
 }
+
+/** Dirección (en el corazón) del haz de ángulo theta de un plano: d·cos θ + r·sin θ. */
+export function direccionHaz(P, theta) { return nrm(sum(esc(P.d, Math.cos(theta)), esc(P.r, Math.sin(theta)))); }
+/** Ángulo del haz que pasa por un punto del corazón (para colocar la línea M sobre una estructura). */
+export function anguloHacia(P, p) { const [u, v] = enPlano(P, p); return Math.atan2(u, Math.max(1e-3, v)); }
 
 /** El abanico del plano para el dibujo 3D: triángulos desde el transductor hasta la profundidad del sector. */
 export function abanicoVista(P, n = 24) {

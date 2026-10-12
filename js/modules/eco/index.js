@@ -3,12 +3,10 @@
 // - El simulador (WebGL, motor del latido, ecografía, formas precalculadas) es lo más pesado de la app: se importa
 //   la primera vez que la vista se ve en pantalla, nunca al arrancar.
 // - Solo anima mientras la vista está en pantalla y la pestaña visible.
-// - Cualquier botón con data-eco-vista / data-eco-escenario (junto a data-especialidad="eco", que hace la
-//   navegación en home/index.js) deja el simulador en esa vista y ese escenario.
+// - Cualquier botón con data-eco-vista / data-eco-escenario / data-eco-medir (junto a data-especialidad="eco", que
+//   hace la navegación en home/index.js) deja el simulador en esa vista, ese escenario o esa medida del modo M.
 // - "Qué mirar en esta vista" copia líneas reales de otras fichas (que-mirar.js).
 import { QUE_MIRAR, ESCENARIO_TIPO } from './que-mirar.js';
-
-const vista = () => document.getElementById('eco-view');
 
 // Sin banco de repaso propio todavía (main.js fusiona los de todas las especialidades).
 export const quizTriggerId = [];
@@ -25,6 +23,7 @@ export function init() {
         if (!sim) return;
         if (pendiente.escenario && pendiente.escenario !== sim.escenarioActual) sim.escenario(pendiente.escenario);
         if (pendiente.vista && pendiente.vista !== sim.vistaActual) sim.vista(pendiente.vista);
+        if (pendiente.medir) { sim.modo('M'); sim.medir(pendiente.medir); }
         pendiente = {};
     }
     function actualizarActivo() { sim?.activo(visible && !document.hidden); }
@@ -58,9 +57,9 @@ export function init() {
 
     // Enlaces desde otras fichas: la navegación la hace el listener de [data-especialidad] de home.
     document.addEventListener('click', (e) => {
-        const b = e.target.closest('[data-eco-vista], [data-eco-escenario]');
+        const b = e.target.closest('[data-eco-vista], [data-eco-escenario], [data-eco-medir]');
         if (!b) return;
-        pendiente = { vista: b.dataset.ecoVista, escenario: b.dataset.ecoEscenario };
+        pendiente = { vista: b.dataset.ecoVista, escenario: b.dataset.ecoEscenario, medir: b.dataset.ecoMedir };
         aplicarPendiente();
     });
 
@@ -108,7 +107,8 @@ export function init() {
 
     return {
         // entrar desde un menú: arriba del todo, sin tocar la vista ni el escenario elegidos
-        volverAlMenu() { if (vista()) window.scrollTo(0, 0); },
-        irAFicha() {},
+        volverAlMenu() { window.scrollTo(0, 0); },
+        // llegar desde un enlace de otra ficha: arriba del todo (la página venía desplazada de la ficha de origen)
+        irAFicha() { window.scrollTo(0, 0); },
     };
 }
