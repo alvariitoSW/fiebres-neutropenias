@@ -94,6 +94,28 @@ function indicesRejilla(ni, nj, inv) {
     INDICES.set(clave, idx); }
   return idx;
 }
+// Envolvente del saco pericárdico (ver construirCorazon): cada punto empuja los vértices del saco cercanos hasta
+// su radio, con peso en rampa. Fuera de construirCorazon para que el compilador optimice este bucle caliente.
+const rampa = (d, w, n) => d <= n ? 1 : d >= w ? 0 : (w - d) / (w - n);
+// centro de cada fila del saco: sobre el eje a la altura de los ventrículos; corrido hacia las aurículas en la cúpula
+const centroSaco = (z) => { const k = paso(0, 22, z); return [-6 * k, -4 * k]; };
+function rellenarEnvolvente(env, piezas, { zTop, zBot0, dz, df, wZ, wF, NF, NP }) {
+  const wj = new Float64Array(8);
+  for (const pz of piezas) { const Q = pz.pos;
+    for (let i = 0; i < Q.length; i += 3) {
+      const z = Q[i + 2]; if (z < zBot0) continue;
+      const c = centroSaco(z), x = Q[i] - c[0], y = Q[i + 1] - c[1];
+      const r = Math.sqrt(x * x + y * y), f = Math.atan2(y, x);
+      const i0 = Math.max(1, Math.ceil((zTop - z - wZ) / dz)), i1 = Math.min(NF - 1, Math.floor((zTop - z + wZ) / dz));
+      const j0 = Math.ceil((f - wF) / df), nj = Math.floor((f + wF) / df) - j0 + 1;
+      for (let a = 0; a < nj; a++) wj[a] = r * rampa(Math.abs((j0 + a) * df - f), wF, df);
+      for (let fi = i0; fi <= i1; fi++) { const wz = rampa(Math.abs(zTop - fi * dz - z), wZ, dz); if (wz === 0) continue;
+        const fila = fi * NP;
+        for (let a = 0, j = ((j0 % NP) + NP) % NP; a < nj; a++, j = j + 1 === NP ? 0 : j + 1) { const v = wz * wj[a]; if (v > env[fila + j]) env[fila + j] = v; } }
+    }
+  }
+}
+
 function rejilla(ni, nj, fn) {
   const pos = new Float32Array((ni + 1) * (nj + 1) * 3);
   let k = 0;
@@ -463,21 +485,39 @@ export function construirCorazon(estado, opciones = {}) {
   }
 
   if (opciones.pericardio && !opciones.vistaBase) {
-    // Saco: sigue a los ventrículos con holgura y cierra una cúpula sobre las aurículas y las raíces
+    // Saco: sigue a los ventrículos con holgura y cierra una cúpula sobre las aurículas y las raíces. El centro
+    // de la cúpula se corre hacia las aurículas (la AD llega lejos a la derecha); a la altura de los ventrículos,
+    // no (centroSaco): corrido también ahí, el saco se metía ~4 mm dentro de la pared lateral del VI.
     const h = 3 + 0.06 * (estado.liquidoPeri || 0);
-    const zTop = 56;
     const rVentr = (z, f) => Math.hypot(...((ventana(f) > 0.001 && z > -Lvd) ? epiVd(z, f) : epiVi(Math.max(z, -vi.Le * 0.999), f)).slice(0, 2));
-    const saco = (hh) => rejilla(NZ + 10, NP, (u, v) => {
-      const f = v * TAU; const zBot = -vi.Le - hh; const z = zTop - (zTop - zBot) * u;
+    // Envolvente de lo demás que va dentro del saco (los ventrículos ya los sigue rVentr): coronarias y grasa de
+    // los surcos, aurículas, orejuelas, infundíbulo y raíz aórtica. Cada punto empuja los vértices del saco que
+    // tiene a menos de una celda de altura y de ángulo hasta su propio radio (así la malla no lo corta entre dos
+    // vértices), con bordes en rampa para que el saco no salte cuando un punto entra o sale de esa ventana al latir.
+    const dentroSaco = partes.filter(pz => pz.pos && /^(VD borde|Base V|AI$|AD$|Orejuela|Infundíbulo|Raíz aórtica|Grasa|Coronaria|Seno coronario)/.test(pz.nombre));
+    // la cúpula sube lo que haga falta para tapar la aurícula más alta (con volúmenes muy grandes pasan de 56 mm)
+    let zMax = 0; for (const pz of dentroSaco) for (let i = 2; i < pz.pos.length; i += 3) zMax = Math.max(zMax, pz.pos[i]);
+    const NF = NZ + 10, zTop = Math.max(56, zMax + 10), zBot0 = -vi.Le - h;
+    const dz = (zTop - zBot0) / NF, df = TAU / NP, wZ = 1.5 * dz, wF = 1.5 * df;   // núcleo de una celda, rampa de media
+    const env = new Float32Array((NF + 1) * NP);
+    rellenarEnvolvente(env, dentroSaco, { zTop, zBot0, dz, df, wZ, wF, NF, NP });
+    // hacia: cuánto se mete hacia dentro (0 el saco; el derrame, 1,5 mm por dentro a las mismas alturas, así
+    // queda dentro fila a fila; solo sus dos polos se mueven hacia dentro)
+    const saco = (hacia) => rejilla(NF, NP, (u, v, fi, j) => {
+      const f = v * TAU; let z = zTop - dz * fi;
+      if (u === 0) z -= hacia; else if (u === 1) z += hacia;
       const cupula = 56 * Math.sqrt(Math.max(0, 1 - Math.pow(Math.max(z, 0) / zTop, 2))) * (1 - paso(0, 22, -z));
       let r;
-      if (z <= -vi.Le) r = Math.sqrt(Math.max(0, hh * hh - (z + vi.Le) * (z + vi.Le)));
-      else if (z >= 0) r = Math.max(cupula, (rVentr(0, f) + hh) * Math.sqrt(Math.max(0, 1 - Math.pow(z / zTop, 2))));
-      else r = Math.max(rVentr(z, f) + hh, cupula);
-      return [r * Math.cos(f) - 6, r * Math.sin(f) - 4, z];
+      if (z <= -vi.Le) r = Math.sqrt(Math.max(0, h * h - (z + vi.Le) * (z + vi.Le)));
+      else if (z >= 0) r = Math.max(cupula, (rVentr(0, f) + h) * Math.sqrt(Math.max(0, 1 - Math.pow(z / zTop, 2))));
+      else r = Math.max(rVentr(z, f) + h, cupula);
+      const e = env[fi * NP + j % NP]; if (e > 0) r = Math.max(r, e + h - 1.5);
+      r = (u === 0 || u === 1) ? 0 : Math.max(0, r - hacia);   // los dos polos cierran el saco
+      const c = centroSaco(z);
+      return [r * Math.cos(f) + c[0], r * Math.sin(f) + c[1], z];
     });
-    anadirR('Pericardio', saco(h), COLORES.pericardio, { alfa: 0.15, dobleCara: true });
-    if (estado.liquidoPeri > 0) anadirR('Derrame', saco(h - 1.5), [0.85, 0.75, 0.3], { alfa: 0.3, dobleCara: true });
+    anadirR('Pericardio', saco(0), COLORES.pericardio, { alfa: 0.15, dobleCara: true });
+    if (estado.liquidoPeri > 0) anadirR('Derrame', saco(1.5), [0.85, 0.75, 0.3], { alfa: 0.3, dobleCara: true });
   }
   // --- La base baja hacia un ápex casi fijo (MAPSE) y el VI se retuerce (ilustrativo) ---
   // Todo lo que está por debajo del plano AV baja entero; las aurículas y las raíces se estiran

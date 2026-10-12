@@ -10458,7 +10458,7 @@ recoge solo las decisiones.
   convive con eso daría un tercer Wiggers con cifras distintas.
 - **Cimientos (hechos):** código en el repositorio (antes solo en una carpeta temporal del contenedor),
   sin los scripts sueltos; **pruebas automáticas con un comando**
-  (`node --test 'lab/circulacion/pruebas/*.test.mjs'`, ~95 s, 90 pruebas: motor, diagramas, geometría,
+  (`node --test 'lab/circulacion/pruebas/*.test.mjs'`, ~100 s, 91 pruebas: motor, diagramas, geometría,
   formas, ecografía y navegador);
   las cifras del latido y su referencia en un solo archivo (`referencias.mjs`) que usan a la vez las
   pruebas y la página del latido (antes la tabla tenía ✓ escritos a mano, uno de ellos siempre verdadero);
@@ -10505,8 +10505,15 @@ recoge solo las decisiones.
   corta las mismas piezas del fotograma (un estado por fotograma). Como nuestra malla son superficies abiertas, las
   paredes se cierran uniendo extremos sueltos y se rellenan por paridad. El moteado sigue al tejido con un campo de
   desplazamiento frente a la forma telediastólica. Rótulos de cavidades, escala de profundidad y el abanico del
-  plano en el 3D. Pruebas nuevas en `ecografia.test.mjs` y una más en el navegador (90 pruebas, ~95 s). Hallazgo: el
-  saco pericárdico está desplazado y entra en la pared lateral del VI (pendiente, anatomía congelada).
+  plano en el 3D. Pruebas nuevas en `ecografia.test.mjs` y una más en el navegador. Hallazgo: el saco pericárdico
+  entraba ~4 mm en la pared lateral del VI.
+- **Pericardio corregido**, a petición explícita del usuario («aunque sea tocar la anatomía»; la anatomía sigue
+  congelada para todo lo demás): el corrimiento (−6, −4) del saco solo en la cúpula (`centroSaco()`), una envolvente
+  continua (`rellenarEnvolvente()`) que mete dentro coronarias, grasa, aurículas, orejuelas, infundíbulo y raíz
+  aórtica, cúpula que sube con las aurículas en volúmenes extremos y derrame siempre dentro. Prueba nueva en
+  `geometria.test.mjs` (cada vértice dentro del saco por paridad de un rayo, en todo el latido, extremos y con
+  derrame); detectaba el fallo antiguo en la pared lateral. Se quitó el parche de la ecografía que evitaba pintar el
+  pericardio sobre la pared. 91 pruebas, ~100 s. Detalle en `lab/circulacion/README.md` («Pericardio»).
 - **Pendiente:** calibrar RVS y contracción isovolumétrica (referencia candidata: Alhakak 2025, ~40 ms, pendiente
   del PDF); erratas de El Libro Azul en las tablas de patrones de shock (RVS en el distributivo) que las fichas 5 y
   10 reproducen sin nota; saltos de hasta ~8 mm de la geometría exacta en la huella de las aurículas (rayos

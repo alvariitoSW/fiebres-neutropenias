@@ -222,7 +222,7 @@ export function elementosDelCorte(partes, P, ref = null) {
     if (!c.seg.length) return;
     const el = { seg: c.seg, segRef: c.segRef, claves: c.claves, nombre: p.nombre };
     if (t.clase === 'pared') { if (!grupos.has(t.grupo)) grupos.set(t.grupo, { db: t.db, trozos: [] }); grupos.get(t.grupo).trozos.push(el); }
-    else if (t.clase === 'pericardio') { mascara.seg.push(...c.seg); peri.push({ tipo: 'linea', seg: c.seg, segRef: c.segRef, db: t.db, ancho: t.ancho, grupo: 'Pericardio', noSobrePared: true }); }
+    else if (t.clase === 'pericardio') { mascara.seg.push(...c.seg); peri.push({ tipo: 'linea', seg: c.seg, segRef: c.segRef, db: t.db, ancho: t.ancho, grupo: 'Pericardio' }); }
     else if (t.clase === 'tubo') tubos.push({ ...el, t });
     else (t.clase === 'valva' ? valvas : lineas).push({ tipo: 'linea', seg: c.seg, segRef: c.segRef, db: t.db, ancho: t.ancho, grupo: p.nombre });
   });
@@ -403,7 +403,7 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
       for (let q = 0; q + 1 < f.length; q += 2) { const i0 = Math.max(0, Math.ceil(f[q])), i1 = Math.min(nb - 1, Math.floor(f[q + 1])); for (let i = i0; i <= i1; i++) fn(j * nb + i); } }
   }
   /** Línea gruesa: cada segmento como una cápsula, con el borde suavizado (~0,35 mm). */
-  function trazar(P, seg, ancho, dbBase, espec, tag, evitar = null) {
+  function trazar(P, seg, ancho, dbBase, espec, tag) {
     const { A, TAG, X, Y, dth, dr } = G, h = ancho / 2;
     for (let i = 0; i < seg.length; i += 4) {
       const ax = seg[i], ay = seg[i + 1], bx = seg[i + 2], by = seg[i + 3];
@@ -420,7 +420,7 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
       const j0 = Math.max(0, Math.floor((Math.min(ra, rb) - h) / dr - 1)), j1 = Math.min(ns - 1, Math.ceil((Math.max(ra, rb) + h) / dr));
       const ux = bx - ax, uy = by - ay, l2 = ux * ux + uy * uy || 1e-9;
       for (let j = j0; j <= j1; j++) for (let ii = i0; ii <= i1; ii++) {
-        const q = j * nb + ii; if (evitar && evitar[TAG[q]]) continue;       // el pericardio del modelo entra en la pared en algún punto
+        const q = j * nb + ii;
         const px = X[q] - ax, py = Y[q] - ay;
         const t = clamp((px * ux + py * uy) / l2, 0, 1), dx = px - t * ux, dy = py - t * uy, dd = Math.sqrt(dx * dx + dy * dy);
         if (dd >= h + 0.35) continue;
@@ -450,13 +450,13 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
     }
     // estructuras: cada grupo con su etiqueta y su ajuste de movimiento
     const mov = [null]; const etiqueta = new Map();
-    const campo = [null], pared = new Uint8Array(256);
+    const campo = [null];
     const tagDe = (el) => { if (!etiqueta.has(el.grupo)) { etiqueta.set(el.grupo, mov.length); mov.push(ajusteAfin(el.seg, el.segRef)); campo.push(campoDesplazamiento(el.seg, el.segRef)); } return etiqueta.get(el.grupo); };
     let abiertos = 0;
     for (const el of els.slice(1)) {
       const tag = Math.min(254, tagDe(el));
-      if (el.tipo === 'relleno') { abiertos += el.abiertos; pared[tag] = 1; const a = amp(el.db); rellenar(P, el.seg, (q) => { A[q] = a; TAG[q] = tag; }); }
-      else trazar(P, el.seg, el.ancho, el.db, el.especular, tag, el.noSobrePared ? pared : null);
+      if (el.tipo === 'relleno') { abiertos += el.abiertos; const a = amp(el.db); rellenar(P, el.seg, (q) => { A[q] = a; TAG[q] = tag; }); }
+      else trazar(P, el.seg, el.ancho, el.db, el.especular, tag);
     }
     reloj.push(performance.now());
     // dispersores: tejido con los suyos (siguen al tejido), sangre y pared torácica aparte

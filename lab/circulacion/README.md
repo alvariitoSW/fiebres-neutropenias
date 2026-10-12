@@ -20,7 +20,7 @@ cd lab/circulacion && python3 -m http.server 8000
 node --test 'lab/circulacion/pruebas/*.test.mjs'
 ```
 
-Tarda ~95 s (90 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta.
+Tarda ~100 s (91 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta.
 
 - `motor.test.mjs` — cada cifra del latido normal frente a su referencia (`referencias.mjs`), el volumen
   de sangre se conserva, las 7 fases salen en orden, nunca hay dos válvulas del mismo lado abiertas, las
@@ -31,7 +31,10 @@ Tarda ~95 s (90 pruebas). Si Playwright no está instalado, las pruebas de naveg
   las escalas contienen todas las curvas; y la esquina telesistólica del asa cae sobre la ESPVR que se dibuja.
 - `geometria.test.mjs` — los orificios valvulares caben en la base en todo el rango de volúmenes, ninguna
   pieza tiene coordenadas no finitas ni con volúmenes absurdos, la sangre de cada cavidad sigue a su
-  volumen, y **la valva gira sobre su bisagra sin encogerse** (el borde libre recorre un arco al abrir).
+  volumen, **la valva gira sobre su bisagra sin encogerse** (el borde libre recorre un arco al abrir) y **el
+  corazón queda dentro del saco pericárdico** (ventrículos, aurículas, orejuelas, infundíbulo, raíz aórtica,
+  surcos con su grasa y coronarias; cada vértice por paridad de un rayo) en todo el latido, con volúmenes
+  extremos y con derrame, que queda entre los dos. Los grandes vasos sí salen por arriba, como en el cuerpo.
 - `formas.test.mjs` — los instantes de las formas precalculadas cubren el latido con error acotado y son más
   densos donde todo cambia deprisa; en el instante de una forma la mezcla es exactamente esa forma; en el
   latido siguiente la mezcla se usa en más del 95% de los fotogramas y el 99% de los vértices queda a menos de
@@ -147,9 +150,28 @@ Idea tomada de *The Heart by Ultrasound* (ver «Créditos»), estudiada a fondo 
 - **Coste:** ~14 ms por imagen en Node (192 haces × 448 muestras); hasta ~30 imágenes por segundo y solo con la
   tarjeta en pantalla. Candidata a un *worker* (el módulo es puro).
 - **Ilustrativo:** ecogenicidades (dB frente al miocardio), resolución, ganancia y la pared torácica.
-- **Defecto de la geometría encontrado al hacerlo:** el saco pericárdico se desplaza (−6, −4) mm y en la pared
-  lateral del VI queda **dentro del miocardio** (en 3D lo oculta la transparencia). No se ha tocado (anatomía
-  congelada): en la ecografía el pericardio no se pinta sobre una pared.
+- **Defecto de la geometría encontrado al hacerlo, ya corregido** (tocando la anatomía, con permiso explícito del
+  usuario): ver «Pericardio» más abajo.
+
+## Pericardio
+
+Corregido a petición explícita del usuario, aunque fuera tocar la anatomía congelada. El saco seguía a los
+ventrículos con 3 mm de holgura, pero estaba entero corrido (−6, −4) mm para centrar la cúpula sobre las
+aurículas; en la pared lateral del VI quedaba ~4 mm **dentro del miocardio** (en 3D lo tapaba la transparencia;
+en la ecografía, la línea del pericardio cortaba la pared). Ahora:
+
+- **El corrimiento solo en la cúpula** (`centroSaco()`): nada a la altura de los ventrículos, entero a partir de
+  22 mm sobre el plano AV.
+- **Envolvente de lo demás** (`rellenarEnvolvente()`): coronarias y grasa de los surcos, aurículas, orejuelas,
+  infundíbulo y raíz aórtica empujan el saco hasta su radio + 1,5 mm (antes sobresalían hasta ~5 mm). Cada punto
+  empuja los vértices del saco a menos de una celda de distancia, con bordes en rampa: así la malla no lo corta
+  entre dos vértices y el saco no salta al latir (la prueba de las formas precalculadas lo vigila).
+- **La cúpula sube** hasta 10 mm por encima de la aurícula más alta (con volúmenes extremos pasaban de los 56 mm
+  de antes y el saco quedaba abierto por arriba).
+- **El derrame**, a las mismas alturas que el saco y 1,5 mm por dentro, así queda dentro fila a fila.
+- La ecografía ya no necesita evitar pintar el pericardio sobre una pared (se quitó ese parche).
+- Coste: ~2 ms más por fotograma con geometría exacta (los fotogramas con formas precalculadas no lo pagan).
+- La holgura (3 mm más ~0,06 mm por mL de derrame) sigue siendo ilustrativa.
 
 ## Rendimiento medido
 
@@ -178,7 +200,6 @@ arco y las vistas ecográficas cortadas del propio corazón. Si algo de esto se 
 - Más ideas de *The Heart by Ultrasound* por reconstruir: modo M y Doppler color sobre estos mismos planos, más
   vistas (subcostal, supraesternal), sonda libre (inclinar y girar el plano), formas de enfermedad movidas por los
   escenarios (choca con «anatomía congelada»: hace falta decidirlo) y que una cifra mostrada nunca contradiga su grado.
-- **Pericardio desplazado** dentro de la pared lateral del VI (ver «Ecografía»): corregirlo es tocar la anatomía.
 - Ecografía en un *worker* si en el móvil baja de fps.
 - **Saltos de la geometría exacta:** la huella de las aurículas (y la grasa periaórtica) se calcula con rayos que
   se paran al tocar la raíz aórtica; un rayo casi tangente pasa de pararse a no pararse y un vértice salta hasta

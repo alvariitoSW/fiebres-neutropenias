@@ -85,3 +85,46 @@ test('la valva gira sobre su bisagra sin encogerse: el borde libre recorre un ar
     assert.ok(Math.abs(angPrev - th) < 1e-6, 'abierta del todo no llega a su ángulo');
   }
 });
+
+// ¿p queda dentro de la malla cerrada? Paridad de los cortes de un rayo en una dirección cualquiera; los
+// triángulos se reparten en una rejilla sobre el plano perpendicular al rayo, para no probarlos todos.
+const dentroDeMalla = (pz) => {
+  const D = [0.5773, 0.5774, 0.5773], E1 = [0.7071, -0.7071, 0], E2 = [D[1] * E1[2] - D[2] * E1[1], D[2] * E1[0] - D[0] * E1[2], D[0] * E1[1] - D[1] * E1[0]];
+  const pr = (p) => [p[0] * E1[0] + p[1] * E1[1] + p[2] * E1[2], p[0] * E2[0] + p[1] * E2[1] + p[2] * E2[2]], C = 4, rej = new Map();
+  const tri = []; for (let k = 0; k < pz.idx.length; k += 3) tri.push([0, 1, 2].map(j => [0, 1, 2].map(c => pz.pos[3 * pz.idx[k + j] + c])));
+  tri.forEach((t, n) => { const q = t.map(pr), [x0, x1] = [Math.min(...q.map(a => a[0])), Math.max(...q.map(a => a[0]))], [y0, y1] = [Math.min(...q.map(a => a[1])), Math.max(...q.map(a => a[1]))];
+    for (let i = Math.floor(x0 / C); i <= Math.floor(x1 / C); i++) for (let j = Math.floor(y0 / C); j <= Math.floor(y1 / C); j++) { const k = i + ',' + j; if (!rej.has(k)) rej.set(k, []); rej.get(k).push(n); } });
+  return (p) => { let n = 0; const q = pr(p);
+    for (const i of rej.get(Math.floor(q[0] / C) + ',' + Math.floor(q[1] / C)) || []) {
+      const [a, b, c] = tri[i], e1 = [b[0] - a[0], b[1] - a[1], b[2] - a[2]], e2 = [c[0] - a[0], c[1] - a[1], c[2] - a[2]];
+      const h = [D[1] * e2[2] - D[2] * e2[1], D[2] * e2[0] - D[0] * e2[2], D[0] * e2[1] - D[1] * e2[0]], det = e1[0] * h[0] + e1[1] * h[1] + e1[2] * h[2];
+      if (Math.abs(det) < 1e-12) continue;
+      const s = [p[0] - a[0], p[1] - a[1], p[2] - a[2]], u = (s[0] * h[0] + s[1] * h[1] + s[2] * h[2]) / det; if (u < 0 || u > 1) continue;
+      const w = [s[1] * e1[2] - s[2] * e1[1], s[2] * e1[0] - s[0] * e1[2], s[0] * e1[1] - s[1] * e1[0]], v = (D[0] * w[0] + D[1] * w[1] + D[2] * w[2]) / det;
+      if (v < 0 || u + v > 1) continue;
+      if ((e2[0] * w[0] + e2[1] * w[1] + e2[2] * w[2]) / det > 1e-9) n++;
+    }
+    return n % 2 === 1; };
+};
+
+test('el corazón queda dentro del saco pericárdico (y el derrame, entre los dos), en todo el latido y con volúmenes extremos', () => {
+  // dentro del saco: ventrículos, aurículas, orejuelas, infundíbulo, raíz aórtica, surcos con su grasa y coronarias;
+  // los grandes vasos salen por arriba (ahí se refleja el pericardio)
+  const dentro = /^(VI |VD |Infundíbulo|AI$|AD$|Orejuela|Base V|Raíz aórtica|Papilar|Banda|Grasa|Coronaria|Seno coronario)/;
+  const m = crearMotor(); m.correr(12);
+  const est = [...m.onda.filter((_, i) => i % 120 === 0), ...ESTADOS.map(e => ({ ...m.onda[0], ...e }))];
+  for (const liquidoPeri of [0, 10, 150]) for (const s of est) {
+    const g = construirCorazon({ ...s, vviTd: m.ultimo.edv, liquidoPeri }, { pericardio: true, detalle: true });
+    const saco = g.partes.find(p => p.nombre === 'Pericardio'), derrame = g.partes.find(p => p.nombre === 'Derrame');
+    const enSaco = dentroDeMalla(saco), enDerrame = derrame && dentroDeMalla(derrame);
+    for (const p of g.partes) {
+      if (!p.pos || !dentro.test(p.nombre)) continue;
+      for (let i = 0; i < p.pos.length; i += 3) {
+        const q = [p.pos[i], p.pos[i + 1], p.pos[i + 2]], donde = `${p.nombre} (${q.map(x => x.toFixed(0))}) vvi ${s.vvi.toFixed(0)} derrame ${liquidoPeri}`;
+        assert.ok(enSaco(q), `fuera del saco: ${donde}`);
+        if (enDerrame) assert.ok(enDerrame(q), `fuera del derrame: ${donde}`);
+      }
+    }
+    if (derrame) for (let i = 0; i < derrame.pos.length; i += 3 * 7) { const q = [derrame.pos[i], derrame.pos[i + 1], derrame.pos[i + 2]]; assert.ok(enSaco(q), `el derrame se sale del saco (${q.map(x => x.toFixed(1))}) vvi ${s.vvi.toFixed(0)}`); }
+  }
+});
