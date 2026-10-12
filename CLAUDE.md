@@ -10572,6 +10572,27 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
   plano estándar en gris junto al movido en el 3D, y un **reto** (recuperar la vista desde una sonda desordenada o
   pasar a otra vista de la misma ventana; se cumple por debajo de 7° y 6 mm). Las pistas del reto hablan de las
   maniobras del simulador (p. ej. del eje largo al corto, rotar ~90°), sin cifras clínicas nuevas. Pruebas: 96.
+- **Abdomen bajo el corazón (hígado, diafragma, VCI que late)**, a petición explícita del usuario tras estudiar
+  fuentes de anatomía en abierto ("encaja con nuestro corazón los 3 puntos... sobre las licencias, habría que citarlas
+  en los créditos"; lo de un paciente real con TotalSegmentator queda para más adelante). Detalle en
+  `js/modules/eco/README.md` («Abdomen»). Hígado, diafragma y xifoides de **Z-Anatomy (CC BY-SA 4.0, derivado de
+  BodyParts3D, © DBCLS)**, la única fuente descargable desde este entorno (paquete npm de terceros), simplificados
+  y registrados bajo nuestro corazón en `abdomen-data.mjs` (generado por `herramientas/abdomen-z-anatomy.mjs`, que no
+  forma parte de la app). **Excepción ya decidida a «anatomía congelada»**. La VCI (su boca sigue a la AD; bajo el
+  hiato, quieta), las tres suprahepáticas y la porta se dibujan como tubos (las de Z-Anatomy eran muñones). Calibre de
+  la VCI ilustrativo, elegido para caer en las bandas de la tabla de FATE (Manual UMI): PVC 0-5 → <21 mm y colapso
+  >50 %; 10-20 → >21 mm y <50 %, con un reloj respiratorio propio (el motor no respira). Casilla «Hígado y VCI» en el
+  3D; en la eco va siempre. **Créditos visibles en la propia página** (CC BY-SA exige la atribución donde se muestra) y
+  en el README. `construirCorazon` ya no dibuja la VCI: solo deja su vía hacia el hiato para la sangre.
+- **Fase 4: Doppler**, a petición explícita del usuario. Detalle en `js/modules/eco/README.md` («Doppler»). Módulo
+  puro `doppler.mjs`: v = Q del motor / área del anillo de la geometría (chorros en las válvulas, tracto de salida como
+  tubo, venas con el retorno venoso del motor). **Doppler pulsado** con volumen de muestra (tocar la imagen o
+  «Mitral/TSVI/Tricúspide/Pulmonar»), espectro en el mismo barrido que el modo M (`crearModoM` con `eje: 'vel'`) y
+  calibres; **medidas del último latido del motor** (cada 2 ms, no por fotograma): E/A y TDE (Ficha 5), ITV del TSVI y GC
+  (Ficha 11), S/D/A y pulsatilidad (VExUS), con enlaces a esas líneas (ids nuevos `cardio-eco-diastolica`,
+  `cardio-eco-itv`, `vexus-onda-hepatica`, `vexus-onda-porta`). **Doppler color** con aliasing (escala ±40/60/90).
+  El modelo da E/A 1,34 e ITV 22 cm (normales); **sin calibrar**: TDE ~100 ms y pico de eyección ~2,2 m/s (forma de la
+  eyección del motor), anotados como pendientes, sin tocar el motor. Pruebas: 109 (3 *todo*).
 
 ## Cómo probar cambios
 

@@ -16,6 +16,13 @@
             <div class="cv-fila cv-modos" role="group" aria-label="Modo de imagen">
                 <button type="button" class="cv-mini on" data-modo="B">Modo B</button>
                 <button type="button" class="cv-mini" data-modo="M">Modo M</button>
+                <button type="button" class="cv-mini" data-modo="D">Doppler pulsado</button>
+                <label class="cv-mini"><input type="checkbox" id="cv-color"> Color</label>
+                <select class="cv-mini" id="cv-nyquist" aria-label="Escala del Doppler color (límite de Nyquist)" hidden>
+                    <option value="40">Color ±40 cm/s</option>
+                    <option value="60" selected>Color ±60 cm/s</option>
+                    <option value="90">Color ±90 cm/s</option>
+                </select>
             </div>
             <div class="cv-eco">
                 <canvas id="cv-eco" width="360" height="288" aria-label="Imagen ecográfica modo B del corte elegido, en el instante del corazón"></canvas>
@@ -57,6 +64,31 @@
                 </div>
                 <div id="cv-m-enlaces"></div>
                 <p class="cv-muted">La VCI se mide en la ventana subcostal, que el simulador todavía no tiene (llegará con la vista subcostal).</p>
+            </div>
+            <div id="cv-d-zona" hidden>
+                <div class="cv-m">
+                    <canvas id="cv-d" width="360" height="198" aria-label="Doppler pulsado: espectro de velocidades en el volumen de muestra a lo largo del tiempo"></canvas>
+                    <canvas id="cv-d-capa" class="cv-m-capa" width="360" height="198" aria-label="Calibres del Doppler: toca dos puntos para medir velocidades y tiempo"></canvas>
+                </div>
+                <div class="cv-fila">
+                    <span class="cv-muted">Muestra en</span>
+                    <div class="cv-chips cv-medir" id="cv-d-presets" role="group" aria-label="Dónde poner la muestra">
+                        <button type="button" class="cv-mini" data-muestra="mitral">Mitral (A4C)</button>
+                        <button type="button" class="cv-mini" data-muestra="tsvi">TSVI (A3C)</button>
+                        <button type="button" class="cv-mini" data-muestra="tricus">Tricúspide (A4C)</button>
+                        <button type="button" class="cv-mini" data-muestra="pulmonar">Pulmonar (PSAX Ao)</button>
+                    </div>
+                    <select class="cv-mini" id="cv-d-escala" aria-label="Escala del espectro">
+                        <option value="60">±60 cm/s</option>
+                        <option value="100">±100 cm/s</option>
+                        <option value="150" selected>±150 cm/s</option>
+                        <option value="250">±250 cm/s</option>
+                    </select>
+                </div>
+                <p class="cv-muted" id="cv-d-guia">Toca la imagen para poner el volumen de muestra (o elige dónde arriba). Arriba de la línea de base, flujo hacia la sonda; abajo, alejándose.</p>
+                <div class="tfg-estado" id="cv-d-resultado"></div>
+                <div class="tfg-estado" id="cv-d-calibres" hidden></div>
+                <div id="cv-d-enlaces"></div>
             </div>
             <p class="cv-muted" id="cv-eco-nombre"></p>
             <div class="cv-ciclo" id="cv-ciclo" aria-label="Ciclo cardíaco: toca una fase para ir a ella"></div>
@@ -110,6 +142,7 @@
                 <label class="cv-mini"><input type="checkbox" id="cv-eco-plano" checked> Plano en el corazón</label>
                 <label class="cv-mini"><input type="checkbox" id="cv-eco-rotulos" checked> Rótulos en la eco</label>
                 <label class="cv-mini"><input type="checkbox" id="cv-sangre" checked> Sangre en movimiento</label>
+                <label class="cv-mini"><input type="checkbox" id="cv-abdomen" checked> Hígado y VCI</label>
             </div>
         </details>
 
@@ -162,5 +195,6 @@
         </details>
 
         <p class="cv-muted cv-nota">Imagen <b>reconstruida</b>, no una ecografía real: el plano de cada vista es fijo en el cuerpo y el corazón lo cruza al latir (por eso en el eje corto mitral, en sístole, la base baja y el corte pasa a cruzar las aurículas). El tejido lleva su moteado consigo; la sangre casi no devuelve eco; los bordes brillan más donde el haz les da de frente (la pared lateral en el apical, paralela al haz, se ve más débil). Geometría, ecogenicidades, resolución y ganancia son ilustrativas; los valores normales que se citan en «Qué mirar» salen de las fichas de la app. Idea de <i>The Heart by Ultrasound</i> (D. Ouyang), reconstruida sobre el motor de la app, sin copiar su código.</p>
+        <p class="cv-muted cv-nota"><b>Doppler</b>: velocidades del flujo del motor entre el área de cada anillo (chorros en las válvulas; en las venas, el retorno venoso del motor); las referencias (E/A, TDE, ITV, ondas venosas) son las de las fichas de la app, y lo demás es ilustrativo. <b>Hígado, diafragma y apófisis xifoides</b>: mallas de <a href="https://www.z-anatomy.com" target="_blank" rel="noopener">Z-Anatomy</a> (CC BY-SA 4.0), derivadas de <a href="https://lifesciencedb.jp/bp3d/" target="_blank" rel="noopener">BodyParts3D</a> (© DBCLS), simplificadas y colocadas bajo este corazón; la VCI, las suprahepáticas y la porta se dibujan aquí, con un calibre de la VCI ilustrativo que respeta las bandas de la tabla de FATE.</p>
     </div>
 </div>

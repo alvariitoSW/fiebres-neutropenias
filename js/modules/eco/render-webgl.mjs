@@ -8,7 +8,7 @@ out vec3 vN; out vec3 vP; out vec3 vO; out float vAO;
 // mezcla de dos formas precalculadas (formas.mjs): con mezcla = 0 solo cuenta la primera
 void main(){ vec3 q = mix(p, p2, mezcla); gl_Position = MVP * vec4(q,1.0); vN = NM * mix(n, n2, mezcla); vP = (MV * vec4(q,1.0)).xyz; vO = q; vAO = mix(ao, ao2, mezcla); }`;
 // Materiales (ilustrativos): 1 miocardio con fibras helicoidales, 2 endocardio liso y claro,
-// 3 grasa lobulada, 4 valva, 5 vaso brillante, 6 sangre, 7 pericardio.
+// 3 grasa lobulada, 4 valva, 5 vaso brillante, 6 sangre, 7 pericardio, 8 víscera (hígado, diafragma), 9 hueso.
 // Luz: principal cálida, relleno frío desde abajo, ambiente de hemisferio, brillo "húmedo" en dos lóbulos.
 const FS = `#version 300 es
 precision mediump float; in vec3 vN; in vec3 vP; in vec3 vO; in float vAO;
@@ -28,6 +28,8 @@ void main(){
   else if (mat == 4) { brillo = 0.18; duro = 20.0; }
   else if (mat == 5) { brillo = 0.45; duro = 70.0; }
   else if (mat == 6) { brillo = 0.1; }
+  else if (mat == 8) { base *= 0.92 + 0.12 * lobulos(vO * 0.35); brillo = 0.32; duro = 34.0; }
+  else if (mat == 9) { base *= 0.94 + 0.08 * lobulos(vO * 1.4); brillo = 0.12; duro = 16.0; }
   float d1 = max(dot(N, L1), 0.0), d2 = max(dot(N, L2), 0.0);
   vec3 cielo = vec3(0.34, 0.31, 0.32), suelo = vec3(0.13, 0.10, 0.12);
   vec3 amb = mix(suelo, cielo, 0.5 + 0.5 * N.y);

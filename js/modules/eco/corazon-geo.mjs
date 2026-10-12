@@ -13,6 +13,7 @@
 // Todo ilustrativo: proporciones de anatomía general, no medidas de una fuente.
 
 import { earcut } from './earcut.mjs';
+import { ABDOMEN } from './abdomen-data.mjs';
 
 const TAU = Math.PI * 2;
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
@@ -128,7 +129,7 @@ function invertir(m) {
   if (m.ni !== undefined) { m.idx = indicesRejilla(m.ni, m.nj, true); return m; }
   const idx = m.idx; for (let i = 0; i < idx.length; i += 3) { const t = idx[i + 1]; idx[i + 1] = idx[i + 2]; idx[i + 2] = t; } return m;
 }
-function tubo(puntos, radio, nSeg = 10, radioFn = null) {
+export function tubo(puntos, radio, nSeg = 10, radioFn = null) {
   const n = puntos.length - 1;
   // marco por transporte paralelo (sin giros bruscos en las curvas)
   const T = [], A = [], B = [];
@@ -140,7 +141,7 @@ function tubo(puntos, radio, nSeg = 10, radioFn = null) {
     return sum(p, sum(esc(A[i], r * Math.cos(th)), esc(B[i], r * Math.sin(th))));
   });
 }
-function suave(pts, k = 6) {
+export function suave(pts, k = 6) {
   const out = [];
   for (let i = 0; i < pts.length - 1; i++) {
     const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(pts.length - 1, i + 2)];
@@ -356,8 +357,11 @@ export function construirCorazon(estado, opciones = {}) {
   // cavas a la AD: superior por el techo, inferior por detrás y abajo
   { const p = enAd(0.88, 0.3), eje = suave([[p[0], p[1], p[2] - 6], p, [p[0], p[1] + 2, p[2] + 24], [p[0] + 2, p[1] + 4, p[2] + 48]]);
     anadirR('Vena cava superior', tubo(eje, 8.5, 14), COLORES.vena); vias.vcs = eje.slice().reverse(); }
-  { const psi = -1.75, p = enAd(0.18, psi), d = salida(psi, 0), eje = vasoDesde(p, d, [[12, -5], [30, -16]]);
-    anadirR('Vena cava inferior', tubo(eje, 9.5, 14), COLORES.vena); vias.vci = eje.slice().reverse(); }
+  // la inferior sale de la AD hacia el hiato del diafragma (abdomen-data.mjs). Aquí solo su primer tramo, como vía
+  // de la sangre: la malla (calibre que cambia con la PVC y la respiración) la dibuja abdomen.mjs, porque por debajo
+  // del diafragma la vena está fija al cuerpo y no puede moverse con el latido
+  { const p = enAd(0.18, -1.75), d = norm(res(ABDOMEN.hiato, p));
+    vias.vci = [sum(p, esc(d, 14)), sum(p, esc(d, 7)), p, res(p, esc(d, 4))]; }
 
   // --- Raíz aórtica con 3 senos de Valsalva, aorta ---
   const zST = 20;

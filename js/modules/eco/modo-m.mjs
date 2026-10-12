@@ -7,13 +7,16 @@
 //
 // Dos lienzos superpuestos: `lienzo` guarda el trazado (solo se pintan las columnas nuevas) y `capa` lleva lo que
 // cambia sin tocar el trazado (escala, cursor de escritura, calibres).
+//
+// El mismo barrido sirve para el espectro del Doppler pulsado (doppler.mjs): con { eje: 'vel' } el eje vertical son
+// velocidades (cm/s, positivas hacia la sonda, arriba de la línea de base) y los calibres miden velocidad y tiempo.
 
 export const BARRIDO = 2;          // s de tiempo del motor que caben en la pantalla
 const HUECO = 0.04;                // fracción borrada delante del cursor, como en los monitores
 
-export function crearModoM(lienzo, capa, { onMedida } = {}) {
+export function crearModoM(lienzo, capa, { onMedida, eje = 'prof' } = {}) {
   const ctx = lienzo.getContext('2d'), cc = capa.getContext('2d');
-  let prof = 160, img = null, W = 0, H = 0, xPrev = null, tPrev = null, tEscrito = null;
+  let prof = 160, vmax = 100, img = null, W = 0, H = 0, xPrev = null, tPrev = null, tEscrito = null;
   let A = null, B = null, activo = null;           // calibres en fracciones del lienzo { x, y }
 
   function ajustar() {
@@ -28,6 +31,9 @@ export function crearModoM(lienzo, capa, { onMedida } = {}) {
     xPrev = null; tPrev = null; tEscrito = null; dibujarCapa();
   }
   function setProf(p) { if (p !== prof) { prof = p; limpiar(); } }
+  // Doppler: escala de ±vmax cm/s con la línea de base en el centro
+  function setEscala(v) { if (v !== vmax) { vmax = v; limpiar(); } }
+  const velDeY = (y) => vmax * (1 - 2 * y), yDeVel = (v) => (1 - v / vmax) / 2;
 
   // pinta la columna en las x de [x0, x1] (con vuelta al principio) y borra un hueco por delante
   function pintarTramo(x0, x1, col) {
@@ -59,7 +65,13 @@ export function crearModoM(lienzo, capa, { onMedida } = {}) {
     const k = W / (capa.clientWidth || W);
     cc.clearRect(0, 0, W, H);
     cc.fillStyle = 'rgba(220,214,196,.75)'; cc.font = `${Math.round(10 * k)}px system-ui,sans-serif`; cc.textAlign = 'right'; cc.textBaseline = 'middle';
-    for (let cm = 1; cm * 10 < prof; cm++) { const y = cm * 10 / prof * H; cc.fillRect(W - (cm % 5 ? 4 : 8) * k, y - 0.5 * k, (cm % 5 ? 4 : 8) * k, 1 * k);
+    if (eje === 'vel') {
+      // línea de base y marcas cada 20 cm/s (cifra cada 40 si la escala es grande)
+      const paso = vmax > 120 ? 40 : 20;
+      cc.fillRect(0, yDeVel(0) * H - 0.5 * k, W, 1 * k);
+      for (let v = paso; v < vmax; v += paso) for (const sg of [1, -1]) { const y = yDeVel(sg * v) * H; cc.fillRect(W - 6 * k, y - 0.5 * k, 6 * k, 1 * k); cc.fillText((sg * v) + '', W - 9 * k, y); }
+      cc.textAlign = 'left'; cc.fillText('cm/s', 4 * k, 9 * k);
+    } else for (let cm = 1; cm * 10 < prof; cm++) { const y = cm * 10 / prof * H; cc.fillRect(W - (cm % 5 ? 4 : 8) * k, y - 0.5 * k, (cm % 5 ? 4 : 8) * k, 1 * k);
       if (cm % 5 === 0) cc.fillText(cm + ' cm', W - 10 * k, y); }
     cc.textAlign = 'center'; cc.textBaseline = 'bottom';
     for (let i = 1; i < BARRIDO / 0.1; i++) { const x = i * 0.1 / BARRIDO * W, largo = i % 5 === 0;
@@ -78,8 +90,10 @@ export function crearModoM(lienzo, capa, { onMedida } = {}) {
     cc.strokeStyle = '#f1c94a'; cc.lineWidth = 1.6 * k; cc.beginPath(); cc.moveTo(x - r, y); cc.lineTo(x + r, y); cc.moveTo(x, y - r); cc.lineTo(x, y + r); cc.stroke();
   }
 
-  /** La medida entre los dos calibres: { mm (vertical), ms (horizontal) } o null. */
-  const medida = () => (A && B ? { mm: Math.abs(A.y - B.y) * prof, ms: Math.abs(A.x - B.x) * BARRIDO * 1000 } : null);
+  /** La medida entre los dos calibres: { mm (vertical), ms (horizontal) } o null; en Doppler, { va, vb (cm/s), ms }. */
+  const medida = () => (!(A && B) ? null : eje === 'vel'
+    ? { va: velDeY(A.y), vb: velDeY(B.y), ms: Math.abs(A.x - B.x) * BARRIDO * 1000 }
+    : { mm: Math.abs(A.y - B.y) * prof, ms: Math.abs(A.x - B.x) * BARRIDO * 1000 });
 
   // ---- tocar: el primer toque pone A, el segundo B; tocar cerca de uno lo arrastra; un tercero vuelve a empezar
   const punto = (ev) => { const r = capa.getBoundingClientRect(); return { x: Math.min(1, Math.max(0, (ev.clientX - r.left) / r.width)), y: Math.min(1, Math.max(0, (ev.clientY - r.top) / r.height)) }; };
@@ -95,8 +109,8 @@ export function crearModoM(lienzo, capa, { onMedida } = {}) {
   for (const t of ['pointerup', 'pointercancel', 'lostpointercapture']) capa.addEventListener(t, () => { activo = null; });
 
   function borrarCalibres() { A = B = null; dibujarCapa(); onMedida?.(null); }
-  return { ajustar, limpiar, setProf, anadir, medida, borrarCalibres, dibujarCapa,
+  return { ajustar, limpiar, setProf, setEscala, anadir, medida, borrarCalibres, dibujarCapa,
     // para las pruebas: poner los calibres en coordenadas del lienzo (0-1)
     ponerCalibres(a, b) { A = a; B = b; dibujarCapa(); onMedida?.(medida()); },
-    get estado() { return { W, H, prof, tEscrito, columnas: xPrev } }, };
+    get estado() { return { W, H, prof, vmax, tEscrito, columnas: xPrev } }, };
 }

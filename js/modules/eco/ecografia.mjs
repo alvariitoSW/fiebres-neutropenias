@@ -139,6 +139,14 @@ const TIPOS = [
   [/^(AI|AD|Orejuela)/, { clase: 'linea', db: -1, ancho: 2.6 }],
   [/^Base V[ID]$/, { clase: 'linea', db: 0, ancho: 2 }],
   [/^(Raíz aórtica|Aorta|Tronco pulmonar|AP )/, { clase: 'linea', db: 6, ancho: 2.2 }],
+  // abdomen (abdomen.mjs): hígado y diafragma se rellenan como una pared (el diafragma, una banda muy ecogénica);
+  // los vasos de dentro, luz con sangre y una pared fina (brillante en la porta, por su vaina fibrosa)
+  [/^Hígado$/, { grupo: 'Hígado', clase: 'pared', db: 1 }],
+  [/^Diafragma$/, { grupo: 'Diafragma', clase: 'pared', db: 9 }],
+  [/^Apófisis xifoides$/, { grupo: 'Xifoides', clase: 'pared', db: 12 }],
+  [/^Vena cava inferior$/, { clase: 'vaso', db: 1, ancho: 1.2 }],
+  [/^Vena suprahepática/, { clase: 'vaso', db: -2, ancho: 0.8 }],
+  [/^(Vena porta|Rama portal)/, { clase: 'vaso', db: 9, ancho: 1.3 }],
   [/^(Vena|Seno coronario)/, { clase: 'linea', db: -3, ancho: 1.3 }],
   [/^Grasa/, { clase: 'linea', db: 3, ancho: 3.5 }],
   [/^Coronaria/, { clase: 'linea', db: 5, ancho: 1.4 }],
@@ -265,7 +273,7 @@ export function elementosDelCorte(partes, P, ref = null) {
     const el = { seg: c.seg, segRef: c.segRef, claves: c.claves, nombre: p.nombre };
     if (t.clase === 'pared') { if (!grupos.has(t.grupo)) grupos.set(t.grupo, { db: t.db, trozos: [] }); grupos.get(t.grupo).trozos.push(el); }
     else if (t.clase === 'pericardio') { mascara.seg.push(...c.seg); peri.push({ tipo: 'linea', seg: c.seg, segRef: c.segRef, db: t.db, ancho: t.ancho, grupo: 'Pericardio' }); }
-    else if (t.clase === 'tubo') tubos.push({ ...el, t });
+    else if (t.clase === 'tubo' || t.clase === 'vaso') tubos.push({ ...el, t });
     else (t.clase === 'valva' ? valvas : lineas).push({ tipo: 'linea', seg: c.seg, segRef: c.segRef, db: t.db, ancho: t.ancho, grupo: p.nombre });
   });
   const out = [mascara];
@@ -281,6 +289,12 @@ export function elementosDelCorte(partes, P, ref = null) {
   for (const x of tubos) {
     // cerrado: cada extremo suelto tiene otro en el mismo sitio (la costura de la rejilla del tubo)
     const cerrado = cerrarExtremos([x], 0.6).abiertos === 0;
+    if (x.t.clase === 'vaso') {
+      // vaso: luz con sangre (si el corte cierra) y la pared encima
+      if (cerrado) out.push({ tipo: 'relleno', seg: x.seg, segRef: null, db: DB.sangre, sangre: true, grupo: x.nombre, abiertos: 0 });
+      out.push({ tipo: 'linea', seg: x.seg, segRef: x.segRef, db: x.t.db, ancho: x.t.ancho, grupo: x.nombre });
+      continue;
+    }
     out.push(cerrado ? { tipo: 'relleno', seg: x.seg, segRef: x.segRef, db: x.t.db, grupo: x.nombre, abiertos: 0 }
       : { tipo: 'linea', seg: x.seg, segRef: x.segRef, db: x.t.db, ancho: x.t.ancho, grupo: x.nombre });
   }
@@ -497,7 +511,8 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
     let abiertos = 0;
     for (const el of els.slice(1)) {
       const tag = Math.min(254, tagDe(el));
-      if (el.tipo === 'relleno') { abiertos += el.abiertos; const a = amp(el.db); rellenar(P, el.seg, (q) => { A[q] = a; TAG[q] = tag; }); }
+      if (el.tipo === 'relleno' && el.sangre) { const a = amp(el.db); rellenar(P, el.seg, (q) => { A[q] = a; TAG[q] = 255; }); }
+      else if (el.tipo === 'relleno') { abiertos += el.abiertos; const a = amp(el.db); rellenar(P, el.seg, (q) => { A[q] = a; TAG[q] = tag; }); }
       else trazar(P, el.seg, el.ancho, el.db, el.especular, tag);
     }
     reloj.push(performance.now());
@@ -572,7 +587,21 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
       }
     }
   }
-  return { formar, rejilla: (P) => geometria(P) };
+  /**
+   * Doppler color sobre la última imagen: vel[q] = velocidad hacia la sonda (cm/s) de cada celda, NaN sin color.
+   * Rojo-amarillo hacia la sonda, azul-cian alejándose; por encima de ±nyq la velocidad se "enrolla" al color
+   * contrario (aliasing). Por debajo de 4 cm/s no se pinta (filtro de pared).
+   */
+  function colorear(vel, nyq) {
+    const { PIX, FB, FS, pix } = G;
+    for (let m = 0; m < PIX.length; m++) {
+      const u = vel[Math.round(FS[m]) * nb + Math.round(FB[m])]; if (!(Math.abs(u) >= 4)) continue;
+      const w = ((u + nyq) % (2 * nyq) + 2 * nyq) % (2 * nyq) - nyq, f = Math.min(1, Math.abs(w) / nyq), o4 = 4 * PIX[m];
+      const fuerte = 70 + 185 * Math.min(1, f * 1.5), claro = 235 * Math.max(0, (f - 0.55) / 0.45);
+      if (w > 0) { pix[o4] = fuerte; pix[o4 + 1] = claro; pix[o4 + 2] = 12; } else { pix[o4] = 12; pix[o4 + 1] = claro * 0.9; pix[o4 + 2] = fuerte; }
+    }
+  }
+  return { formar, colorear, rejilla: (P) => geometria(P) };
 }
 
 /** Dirección (en el corazón) del haz de ángulo theta de un plano: d·cos θ + r·sin θ. */

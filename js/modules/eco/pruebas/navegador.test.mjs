@@ -255,3 +255,31 @@ test('sonda libre: los mandos mueven el corte, se reconoce la vista y el reto se
   assert.deepEqual(errores, []);
   await pg.close();
 });
+
+test('Doppler: la muestra en la mitral escribe el espectro y da E/A; el color pinta píxeles; el abdomen se oculta y vuelve', { skip: omitir }, async () => {
+  const { pg, errores } = await abrir('js/modules/eco/laboratorio.html');
+  await pg.locator('[data-modo="D"]').tap(); await pg.waitForTimeout(300);
+  assert.equal(await pg.locator('#cv-d-zona').isVisible(), true);
+  await pg.locator('[data-muestra="mitral"]').tap(); await pg.waitForTimeout(3500);
+  const info = await pg.evaluate(() => window.__eco.info());
+  assert.equal(info.fuente, 'Mitral'); assert.equal(info.medidas.tipo, 'llenado');
+  assert.match(await pg.textContent('#cv-d-resultado'), /E\/A/);
+  // el espectro tiene columnas escritas (píxeles claros)
+  const claros = await pg.evaluate(() => { const c = document.getElementById('cv-d'), d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data; let n = 0; for (let i = 0; i < d.length; i += 4) if (d[i] > 150) n++; return n; });
+  assert.ok(claros > 200, `espectro casi vacío (${claros})`);
+  // TSVI: cambia a A3C y da el ITV
+  await pg.locator('[data-muestra="tsvi"]').tap(); await pg.waitForTimeout(3000);
+  assert.equal(await pg.evaluate(() => window.__eco.info().vista), 'a3c');
+  assert.match(await pg.textContent('#cv-d-resultado'), /ITV/);
+  // color en diástole, en A4C: hay píxeles rojos (hacia la sonda)
+  await pg.locator('#cv-color').check(); await pg.evaluate(() => { window.__eco.vista('a4c'); window.__revisar(0.6); }); await pg.waitForTimeout(1200);
+  const rojos = await pg.evaluate(() => { const c = document.getElementById('cv-eco'), d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data; let n = 0; for (let i = 0; i < d.length; i += 4) if (d[i] > 150 && d[i + 2] < 40 && d[i + 1] < 120) n++; return n; });
+  assert.ok(rojos > 300, `sin color (${rojos})`);
+  // abdomen: en el HUD con la VCI; al quitarlo desaparece
+  assert.match(await pg.textContent('#cv-hud'), /VCI \d+ mm/);
+  await pg.locator('#cv-abdomen').uncheck(); await pg.waitForTimeout(400);
+  assert.doesNotMatch(await pg.textContent('#cv-hud'), /VCI/);
+  assert.ok(!(await pg.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)), 'desborda en horizontal');
+  assert.deepEqual(errores, []);
+  await pg.close();
+});

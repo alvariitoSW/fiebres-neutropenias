@@ -18,7 +18,7 @@ en `lab/circulacion/`), como la especialidad «Eco cardíaca»: ver «En la app�
 node --test 'js/modules/eco/pruebas/*.test.mjs'
 ```
 
-Tarda ~100 s (96 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta. Las de navegador
+Tarda ~2 min (109 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta. Las de navegador
 sirven el repositorio con un servidor propio y abren `laboratorio.html`.
 
 - `motor.test.mjs` — cada cifra del latido normal frente a su referencia (`referencias.mjs`), el volumen
@@ -34,6 +34,14 @@ sirven el repositorio con un servidor propio y abren `laboratorio.html`.
   corazón queda dentro del saco pericárdico** (ventrículos, aurículas, orejuelas, infundíbulo, raíz aórtica,
   surcos con su grasa y coronarias; cada vértice por paridad de un rayo) en todo el latido, con volúmenes
   extremos y con derrame, que queda entre los dos. Los grandes vasos sí salen por arriba, como en el cuerpo.
+- `abdomen.test.mjs` — el calibre de la VCI cae en las bandas de FATE y va del máximo al mínimo con la respiración;
+  en la hemorragia queda fina y colapsable y en el derrame no colapsa un 50 %; casi ningún vértice del corazón cae
+  dentro del hígado; la VCI sale de la AD (se mueve arriba) y bajo el hiato está quieta; suprahepáticas dentro del
+  hígado; las mallas fijas son las mismas entre fotogramas.
+- `doppler.test.mjs` — E/A mitral en el rango de la Ficha 5 (el TDE, *todo*: pendiente de calibrar); ITV del TSVI en
+  el de la Ficha 11 y GC por Doppler a menos del 15 % del motor (y baja en la hemorragia); entrada hacia la sonda y
+  salida alejándose; aliasing y filtro de pared del espectro; suprahepáticas con S y D hacia el corazón y A retrógrada;
+  porta ~20 cm/s, más pulsátil con la PVC alta.
 - `formas.test.mjs` — los instantes de las formas precalculadas cubren el latido con error acotado y son más
   densos donde todo cambia deprisa; en el instante de una forma la mezcla es exactamente esa forma; en el
   latido siguiente la mezcla se usa en más del 95% de los fotogramas y el 99% de los vértices queda a menos de
@@ -65,7 +73,11 @@ cumplirse, una prueba avisa para quitar la marca.
 | `index.js` | Módulo de la app: carga `simulador.mjs` la primera vez que la vista se ve, lo anima solo mientras se ve, aplica los accesos `data-eco-vista`/`data-eco-escenario` y pinta «Qué mirar» |
 | `eco.html` | Marcado de la vista (ids con prefijo `cv-`, porque todos los partials de la app conviven en el DOM) |
 | `simulador.mjs` | `montarSimulador(raiz, opciones)`: todo el pegamento de la página (bucle, eco, ciclo, diagramas, controles, escenarios). Lo usan la app y el laboratorio |
-| `modo-m.mjs` | Modo M: barrido en el tiempo de una línea del modo B (una columna por imagen B, colocada según el tiempo del motor) y los dos calibres |
+| `modo-m.mjs` | Modo M: barrido en el tiempo de una línea del modo B (una columna por imagen B, colocada según el tiempo del motor) y los dos calibres. Con `{ eje: 'vel' }`, el mismo barrido es el espectro del Doppler pulsado |
+| `doppler.mjs` | Doppler (sin DOM): velocidades a partir de los flujos del motor, volumen de muestra, columna del espectro, mapa de color y medidas del último latido (E/A, TDE, ITV, ondas venosas) |
+| `abdomen.mjs` | Hígado, diafragma y xifoides (fijos al cuerpo) y, cada fotograma, la VCI (calibre según PVC y respiración), las suprahepáticas y la porta |
+| `abdomen-data.mjs` | Mallas de Z-Anatomy ya colocadas bajo el corazón (generado: no se edita a mano) |
+| `herramientas/abdomen-z-anatomy.mjs` | Genera `abdomen-data.mjs` (lee los GLB de Z-Anatomy, registra, simplifica). No forma parte de la app |
 | `que-mirar.js` | Qué líneas de otras fichas se copian en «Qué mirar» para cada vista |
 | `laboratorio.html`, `latido.html` | Páginas de laboratorio (no se enlazan desde la app) |
 | `motor.mjs` | Motor del latido en el tiempo (sin DOM): 4 cámaras, válvulas por gradiente, aórtica con inercia, pericardio, tabique, lechos sistémico y pulmonar, barorreflejo |
@@ -85,7 +97,8 @@ cumplirse, una prueba avisa para quitar la marca.
   general` o ilustrativa. Una referencia nueva se añade en `referencias.mjs`, nunca escrita a mano en una página.
 - **Un escenario nuevo** va en `escenarios.mjs` con su `tipo`; las pruebas comprueban solas su patrón.
 - **Solo WebGL.** Sin WebGL, imagen fija con aviso. (Canvas 2D se quitó: duplicaba cada novedad.)
-- **Anatomía congelada.** No se añaden piezas anatómicas salvo que sirvan a una ficha concreta.
+- **Anatomía congelada.** No se añaden piezas anatómicas salvo que sirvan a una ficha concreta. Excepción ya
+  decidida: hígado, diafragma, xifoides, VCI, suprahepáticas y porta, para la VCI de FATE y el Doppler de VExUS.
 - Tras cualquier cambio: `node --test 'js/modules/eco/pruebas/*.test.mjs'` en verde antes de subir.
 - **Una sola copia del pegamento:** la app y el laboratorio montan el mismo `simulador.mjs` sobre el mismo
   `eco.html`. Nunca una página con su propio script.
@@ -259,6 +272,51 @@ de anatomía de GitHub** en vez de modelarlos desde cero; se estudiará antes de
 - Cambiar de vista con los botones vuelve a la vista estándar y cancela el reto. El modo M sigue funcionando sobre
   el plano movido (el trazado se borra al mover la sonda).
 
+## Abdomen: hígado, diafragma y VCI (`abdomen.mjs`)
+
+A petición del usuario, tras estudiar fuentes de anatomía en abierto (la única que se pudo descargar en este entorno
+es Z-Anatomy, en el paquete npm `@authorod/svitylo-3d-anatomy-data` 1.1.0; HRA y otras están bloqueadas por el proxy).
+
+- **Mallas fijas**: hígado (2.400 triángulos), diafragma (2.800) y apófisis xifoides (218), simplificadas con
+  meshoptimizer y guardadas en `abdomen-data.mjs` (Int16 en décimas de mm, en base64; ~69 KB). La herramienta
+  `herramientas/abdomen-z-anatomy.mjs` las regenera (instrucciones en su cabecera).
+- **Registro**: Z-Anatomy (x izquierda, y arriba, z delante) → RAS → traslación para que su aurícula derecha caiga en
+  la nuestra → 13 mm más abajo, para que el diafragma no corte los ventrículos → inversa de `MODELO`. Escala 1 (las
+  aurículas miden lo mismo). Del eje de la VCI de Z-Anatomy salen el hiato (donde cruza el diafragma) y el tramo bajo él.
+- **Lo que se dibuja aquí**: la VCI sale de la AD (su boca se mueve con el latido, vía `flujo.transformar`) y por
+  debajo del hiato está quieta; el tubo se construye de abajo arriba para que lo quieto quede idéntico entre fotogramas.
+  Las suprahepáticas (derecha, media, izquierda) y la porta (tronco y dos ramas) son tubos con direcciones anatómicas
+  aproximadas, recortados para quedar dentro del hígado: las de Z-Anatomy son muñones de pocos milímetros.
+- **Calibre de la VCI** (ilustrativo): diámetro en espiración = 11 + PVC mm (7-28) y colapso inspiratorio =
+  0,75 − 0,045 × PVC (5-75 %), con un reloj respiratorio propio de 4 s (el motor no respira) y ±2 % con la onda de la AD.
+  Elegido para caer en las bandas de la tabla de FATE (Manual UMI): PVC 0-5 → <21 mm y >50 %; 10-20 → >21 mm y <50 %.
+  El HUD lo muestra. Las suprahepáticas siguen a la PVC con la mitad de colapso.
+- En el 3D, casilla «Hígado y VCI» (no se dibuja con el corte ni con la vista de la base). En la ecografía, el
+  abdomen va siempre (es anatomía): el hígado se rellena como una pared, el diafragma como una banda muy ecogénica y los
+  vasos con luz de sangre y pared (brillante en la porta). La vista subcostal que lo aprovecha es la fase 5.
+
+## Doppler (fase 4, `doppler.mjs`)
+
+- **De dónde salen las velocidades**: en cada válvula abierta, v = Q / área (Q del motor, área del anillo de la
+  geometría × su apertura). Aguas abajo, un chorro que se ensancha y se frena (en las sigmoideas, un tubo corto por la
+  raíz); aguas arriba, convergencia hacia el orificio en las AV y, en las sigmoideas, el tracto de salida como un tubo
+  (Q / área del anillo, sin la apertura: por eso el ITV del TSVI = VS / área). En las venas: VCI 2/3 del retorno venoso
+  del motor ((Pven − PAD) / R), cada suprahepática 1/15, porta hepatópeta ~20 cm/s (VExUS) que se vuelve pulsátil con
+  la PVC; perfil casi plano. Lo que mide la muestra es v · cos θ (θ, ángulo entre el haz y el flujo, se muestra).
+- **Doppler pulsado** («Doppler pulsado»): se toca la imagen para poner el volumen de muestra (3 mm), o se elige
+  «Mitral (A4C)», «TSVI (A3C)», «Tricúspide (A4C)» o «Pulmonar (PSAX Ao)». El espectro corre en el mismo barrido que el
+  modo M (una columna por imagen, colocada según el tiempo del motor) con aliasing al pasar la escala y filtro de pared
+  (<4 cm/s); dos calibres miden velocidades y tiempo. Las **medidas automáticas** salen de las muestras del último latido
+  (cada 2 ms), no de los fotogramas: E, A, E/A y TDE en la mitral (Ficha 5: 1-1,5 y 140-250 ms), ITV del TSVI y el GC
+  que da (Ficha 11: 18-22 cm), S/D/A en las suprahepáticas y media/pulsatilidad en porta y VCI (VExUS).
+- **Doppler color** (casilla «Color», escala ±40/60/90 cm/s): velocidad hacia la sonda en cada celda de sangre de la
+  misma imagen B, en rojo-amarillo (hacia la sonda) o azul-cian (alejándose), con aliasing por encima de la escala.
+  Se calcula en una rejilla gruesa y solo con las fuentes que tocan el plano.
+- **Lo que dice el modelo**: E/A mitral 1,34 (normal) e ITV del TSVI 22 cm (normal; GC por Doppler 4,8 frente a
+  5,2 L/min del motor). **No calibrado**: el TDE (~100 ms; normal 140-250) y el pico de eyección (~2,2 m/s en el TSVI:
+  la eyección del motor tiene el pico a los ~40 ms y es demasiado afilada); en las suprahepáticas, en reposo S ≈ D
+  (lo normal es S > D). Con escala de color de 60 cm/s el TSVI se ve con aliasing por ese pico.
+
 ## Rendimiento medido
 
 En un móvil Android real (octubre 2026, pantalla de 90 Hz, calidad alta, sangre activada), **antes de las formas
@@ -274,6 +332,12 @@ dio permiso para usar su trabajo. Aun así **se reconstruyen sobre nuestro motor
 un estado por fotograma, las formas precalculadas que solo se mezclan, las valvas con tres formas a lo largo de un
 arco y las vistas ecográficas cortadas del propio corazón. Si algo de esto se publica, el autor agradece (sin exigirla) una cita.
 
+**Hígado, diafragma y apófisis xifoides**: mallas de **Z-Anatomy** (https://www.z-anatomy.com), licencia
+**CC BY-SA 4.0**, derivadas de **BodyParts3D** (© Database Center for Life Science, DBCLS), obtenidas del paquete npm `@authorod/svitylo-3d-anatomy-data` 1.1.0 (canal de prueba). Se han simplificado,
+cuantizado y colocado bajo nuestro corazón; `abdomen-data.mjs` es una obra derivada y se distribuye bajo la misma
+licencia CC BY-SA 4.0 (el resto del simulador no). La cita también se muestra en la propia página del simulador.
+**meshoptimizer** (MIT, A. Kapoulkine) se usa solo en la herramienta que genera ese archivo, no en la app.
+
 ## Pendiente
 
 - **Calibrar** la RVS (el motor da ~1.450; la Ficha 5 dice 900-1200) y la contracción isovolumétrica
@@ -282,8 +346,13 @@ arco y las vistas ecográficas cortadas del propio corazón. Si algo de esto se 
   (cap. 5, pág. 70 del PDF de la parte 1; cap. 10, Figura 2, pág. 33 de la parte 2) dan RVS «↑» o «N/↑»
   en el shock distributivo, y la del cap. 10 da ScvO₂ «↑» en el hipovolémico. Las fichas 5 y 10 las
   reproducen tal cual. Las pruebas usan la Tabla 14.1 de Merino (cap. 14), que no tiene ese problema.
-- Más ideas de *The Heart by Ultrasound* por reconstruir: Doppler color sobre estos mismos planos, más
-  vistas (subcostal, supraesternal), formas de enfermedad movidas por los
+- **Doppler**: calibrar el TDE y la forma de la eyección del motor (ver «Doppler»); S > D en las suprahepáticas en
+  reposo; Doppler tisular (e', E/e' de la Ficha 5) y Doppler continuo; insuficiencias valvulares (el motor no tiene flujo
+  retrógrado por las válvulas).
+- **Abdomen**: ventilación mecánica (índice de distensibilidad de FATE) en el reloj respiratorio; el derrame del motor
+  solo llega a PVC ~7,5, así que su VCI no sale «dilatada» (>21 mm) aunque ya no colapse un 50 %.
+- Más ideas de *The Heart by Ultrasound* por reconstruir: más
+  vistas (subcostal —ya hay hígado y VCI para ella—, supraesternal), formas de enfermedad movidas por los
   escenarios (choca con «anatomía congelada»: hace falta decidirlo) y que una cifra mostrada nunca contradiga su grado.
 - Ecografía en un *worker* si en el móvil baja de fps.
 - **Saltos de la geometría exacta:** la huella de las aurículas (y la grasa periaórtica) se calcula con rayos que
