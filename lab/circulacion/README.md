@@ -56,6 +56,14 @@ cumplirse, una prueba avisa para quitar la marca.
 - **Anatomía congelada.** No se añaden piezas anatómicas salvo que sirvan a una ficha concreta.
 - Tras cualquier cambio: `node --test 'lab/circulacion/pruebas/*.test.mjs'` en verde antes de subir.
 
+## Rendimiento medido
+
+En un móvil Android real (octubre 2026, pantalla de 90 Hz, calidad alta, sangre activada): **57-90 fps**.
+90 es el tope de esa pantalla; las bajadas coinciden con el desplazamiento de la página y, probablemente,
+con el recolector de memoria (la geometría crea arrays nuevos en cada fotograma). Es fluido. Para la
+integración: limitar a 60 fps (ahorra batería sin que se note), animar solo cuando se ve en pantalla y,
+si hiciera falta, reutilizar los arrays de la geometría.
+
 ## Pendiente
 
 - **Calibrar** la RVS (el motor da ~1.450; la Ficha 5 dice 900-1200) y la contracción isovolumétrica
