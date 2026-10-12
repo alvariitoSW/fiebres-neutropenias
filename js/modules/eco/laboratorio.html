@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eco cardíaca · laboratorio</title>
+<meta name="description" content="El simulador de eco cardíaca de la app, solo, con los ganchos de depuración que usan las pruebas de navegador">
+<link rel="stylesheet" href="../../../css/variables.css">
+<link rel="stylesheet" href="../../../css/base.css">
+<link rel="stylesheet" href="../../../css/components.css">
+</head>
+<body>
+<!-- Laboratorio: el mismo marcado (eco.html) y el mismo simulador (simulador.mjs) que la app, sin el resto de la
+     app, con todos los plegables abiertos y los ganchos window.__* de las pruebas. Página del latido: latido.html -->
+<div class="app-container" id="eco-view" data-include="eco.html"></div>
+<script type="module">
+import { includeAll } from '../../core/include.js';
+await includeAll();
+document.getElementById('btn-volver-eco').hidden = true;
+document.getElementById('cv-contenido').hidden = false;
+document.getElementById('cv-cargando').hidden = true;
+document.querySelectorAll('#cv-sim details').forEach(d => { d.open = true; });
+const { montarSimulador } = await import('./simulador.mjs');
+const sim = montarSimulador(document.getElementById('cv-sim'), { depuracion: true });
+sim.activo(true);
+window.__sim = sim;
+</script>
+</body>
+</html>

@@ -1150,13 +1150,16 @@
             <table class="data-table">
                 <thead><tr><th>Posición</th><th>Nombre</th><th>Qué muestra</th></tr></thead>
                 <tbody>
-                    <tr><td>Pos 1</td><td>Subcostal 4 cámaras</td><td>RA-RV-LA-LV en un único plano; buena para derrame pericárdico.</td></tr>
-                    <tr><td>Pos 2</td><td>Apical 4 cámaras</td><td>Comparación de tamaño VD/VI, función global de ambos ventrículos.</td></tr>
-                    <tr><td>Pos 3</td><td>Paraesternal eje largo</td><td>LA-AO-LV-RV; permite valorar aurícula/aorta/ventrículo izquierdo en un solo corte.</td></tr>
-                    <tr><td>Pos 3'</td><td>Paraesternal eje corto de VI</td><td>Corte transversal del VI — función global y regional, comparación con el VD adyacente.</td></tr>
+                    <tr id="umi-fate-subcostal"><td>Pos 1</td><td>Subcostal 4 cámaras</td><td>RA-RV-LA-LV en un único plano; buena para derrame pericárdico.</td></tr>
+                    <tr id="umi-fate-a4c"><td>Pos 2</td><td>Apical 4 cámaras</td><td>Comparación de tamaño VD/VI, función global de ambos ventrículos.</td></tr>
+                    <tr id="umi-fate-plax"><td>Pos 3</td><td>Paraesternal eje largo</td><td>LA-AO-LV-RV; permite valorar aurícula/aorta/ventrículo izquierdo en un solo corte.</td></tr>
+                    <tr id="umi-fate-psax"><td>Pos 3'</td><td>Paraesternal eje corto de VI</td><td>Corte transversal del VI — función global y regional, comparación con el VD adyacente.</td></tr>
                     <tr><td>Pos 4</td><td>Escaneo pleural</td><td>Explora derrame pleural sobre el diafragma, con el hígado/bazo como ventana acústica.</td></tr>
                 </tbody>
             </table>
+
+            <p><button type="button" class="especialidad-link" data-especialidad="eco" data-eco-vista="a4c">🫀 Ver las ventanas en el simulador de eco →</button></p>
+            <p style="font-size:0.75rem; color:var(--text-muted); margin-top:-4px;">El simulador tiene hoy las vistas apicales y paraesternales; la subcostal y el escaneo pleural llegarán más adelante.</p>
 
             <p class="section-label" style="margin-top:14px;">Las 6 preguntas del examen sistemático</p>
             <div class="algo-flow">
@@ -1165,11 +1168,11 @@
                 <div class="algo-step"><span class="algo-num">3</span><div class="algo-text">Evaluar la función biventricular.</div></div>
                 <div class="algo-step"><span class="algo-num">4</span><div class="algo-text">Explorar pleura en ambos lados.</div></div>
                 <div class="algo-step"><span class="algo-num">5</span><div class="algo-text">Relacionar los hallazgos con el contexto clínico.</div></div>
-                <div class="algo-step"><span class="algo-num">6</span><div class="algo-text">Aplicar ecografía adicional si hace falta (extended FATE: VCI, eje corto de la mitral, aorta paraesternal, apical 5-cámaras/2-cámaras).</div></div>
+                <div class="algo-step" id="umi-fate-extendido"><span class="algo-num">6</span><div class="algo-text">Aplicar ecografía adicional si hace falta (extended FATE: VCI, eje corto de la mitral, aorta paraesternal, apical 5-cámaras/2-cámaras).</div></div>
             </div>
 
             <p class="section-label" style="margin-top:14px;">Dimensiones y contractilidad normales (eje largo paraesternal)</p>
-            <table class="data-table">
+            <table class="data-table" id="umi-fate-dimensiones">
                 <thead><tr><th>Estructura</th><th>Valor normal</th></tr></thead>
                 <tbody>
                     <tr><td>Pared VD</td><td>~5 mm</td></tr>
@@ -1181,7 +1184,9 @@
                     <tr><td>Aorta / aurícula izquierda</td><td>~2,5 cm ambas</td></tr>
                 </tbody>
             </table>
-            <dl class="kv-row"><dt>Fracción de acortamiento (FS)</dt><dd>FS = (LVDd−LVSd)/LVDd. La fracción de eyección se estima ≈ 2 × FS.</dd></dl>
+            <dl class="kv-row" id="umi-fate-fs"><dt>Fracción de acortamiento (FS)</dt><dd>FS = (LVDd−LVSd)/LVDd. La fracción de eyección se estima ≈ 2 × FS.</dd></dl>
+
+            <p><button type="button" class="especialidad-link" data-especialidad="eco" data-eco-vista="plax">🫀 Ver el eje largo paraesternal en el simulador →</button></p>
 
             <p class="section-label" style="margin-top:14px;">🧮 Calculadora: FS y FEVI estimada</p>
             <div class="tfg-simulador">
@@ -1191,7 +1196,7 @@
             </div>
 
             <p class="section-label" style="margin-top:14px;">Estimación visual de la función sistólica del VI (eje largo paraesternal)</p>
-            <div class="algo-flow">
+            <div class="algo-flow" id="umi-fate-estimacion">
                 <div class="algo-step"><span class="algo-num">1</span><div class="algo-text"><strong>Movimiento endocárdico</strong> — normal si es simétrico.</div></div>
                 <div class="algo-step"><span class="algo-num">2</span><div class="algo-text"><strong>Engrosamiento del miocardio</strong> — normal si es de al menos el 40% en todos los segmentos del VI.</div></div>
                 <div class="algo-step"><span class="algo-num">3</span><div class="algo-text"><strong>Movimiento de la válvula mitral</strong> — si se acerca al septo a menos de 1cm, se puede estimar FEVI &gt;40%.</div></div>

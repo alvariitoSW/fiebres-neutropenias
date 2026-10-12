@@ -75,7 +75,6 @@ export function escalas(onda, lado, periodo) {
   };
 }
 
-const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 
 /**
  * Dibujos del Wiggers (canvas cw) y del asa P-V (canvas cp).
@@ -83,6 +82,8 @@ const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n
  * para que las pruebas comprueben que el cursor está en el mismo instante que el corazón.
  */
 export function crearDiagramas(cw, cp) {
+  // colores del tema: se leen del propio lienzo, así la página que lo aloja puede definirlos en un contenedor
+  const css = (n) => getComputedStyle(cw).getPropertyValue(n).trim();
   let claveFondo = '', esc = null, ultimaClave = '', motorFondo = null;
   // márgenes del Wiggers en px del lienzo (se escalan con la densidad)
   const caja = () => {

@@ -456,6 +456,9 @@
             </table>
             <p style="font-size:0.8rem; color:var(--text-muted);">% = frecuencia relativa de aparición. 3 de los 4 síndromes cursan con gasto bajo y RVS alta — la vasoconstricción compensadora (activación simpática + sistema renina-angiotensina-aldosterona) limita la caída de presión arterial en el estado de bajo flujo. Nótese que cardiogénico y obstructivo comparten exactamente el mismo patrón (PVC alta/GC bajo/RVS alta) — el patrón hemodinámico por sí solo no los distingue.</p>
 
+            <p class="section-label" style="margin-top:12px;">🫀 Cada patrón en el simulador de eco</p>
+            <p style="font-size:0.8rem; color:var(--text-muted);">El modelo del simulador reproduce la dirección de PVC, gasto y RVS de esta tabla para cada tipo (lo comprueban sus pruebas automáticas); las magnitudes son ilustrativas.<br><button type="button" class="especialidad-link" data-especialidad="eco" data-eco-vista="a4c" data-eco-escenario="hemorragia">🫀 Hipovolémico →</button> <button type="button" class="especialidad-link" data-especialidad="eco" data-eco-vista="a4c" data-eco-escenario="fallo">🫀 Cardiogénico →</button> <button type="button" class="especialidad-link" data-especialidad="eco" data-eco-vista="a4c" data-eco-escenario="derrame">🫀 Obstructivo (taponamiento) →</button> <button type="button" class="especialidad-link" data-especialidad="eco" data-eco-vista="a4c" data-eco-escenario="vasoplejia">🫀 Vasodilatador →</button></p>
+
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩸 Shock hipovolémico</span> <span class="toggle-icon">+</span></div>
@@ -803,6 +806,7 @@
         <div id="mc-hemorragico-clasificacion" class="tab-content">
             <h3 style="color: var(--accent-red);">Shock hemorrágico: fisiología y clasificación</h3>
             <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Marik PE. <em>Handbook of Evidence-Based Critical Care</em>, Cap. 15 "Hemorrhagic Shock".</p>
+            <p><button type="button" class="especialidad-link" data-especialidad="eco" data-eco-vista="a4c" data-eco-escenario="hemorragia">🫀 Ver una hemorragia de 1 L en el simulador de eco →</button></p>
 
             <p style="font-size:0.85rem; color:var(--text-dim);">El trauma es la principal causa de muerte a nivel mundial en el grupo de 25-49 años, y la causa más tratable de muerte en estos casos es el shock hemorrágico.</p>
 
@@ -1088,6 +1092,7 @@
         <div id="mc-cardiogenico-fisio" class="tab-content">
             <h3 style="color: var(--accent-red);">Shock cardiogénico: fisiopatología</h3>
             <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Marik PE. <em>Handbook of Evidence-Based Critical Care</em>, Cap. 16 "Cardiogenic Shock".</p>
+            <p><button type="button" class="especialidad-link" data-especialidad="eco" data-eco-vista="a4c" data-eco-escenario="fallo">🫀 Ver el fallo del VI en el simulador de eco →</button></p>
 
             <dl class="kv-row"><dt>Definición</dt><dd>Fallo de la bomba cardíaca que resulta en un aporte de O₂ a los tejidos inadecuado y metabolismo oxidativo alterado — su culminación es fallo multiorgánico y desenlace fatal. El reto real: la mitad de los pacientes no sobreviven pese al mejor manejo posible.</dd></dl>
 
@@ -1405,6 +1410,7 @@
         <div id="mc-shock-septico" class="tab-content">
             <h3 style="color: var(--accent-red);">Shock séptico: definiciones y manejo</h3>
             <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Marik PE. <em>Handbook of Evidence-Based Critical Care</em>, Cap. 17.</p>
+            <p><button type="button" class="especialidad-link" data-especialidad="eco" data-eco-vista="a4c" data-eco-escenario="vasoplejia">🫀 Ver la vasoplejía en el simulador de eco →</button></p>
 
             <p style="font-size:0.85rem; color:var(--text-dim);">La sepsis es responsable de 1 de cada 2-3 muertes intrahospitalarias en EE. UU., y de 1 de cada 5 muertes a nivel mundial. La mortalidad varía por edad y localización geográfica: en EE. UU., ~30% cuando el shock séptico está presente al ingreso, y ~50% cuando se desarrolla tras el ingreso. Pese a que se presume que la sepsis es infección, <span class="hl-rojo">la mortalidad en sepsis NO se relaciona con el organismo causal</span>, incluidos los microorganismos multirresistentes — observación consistente con la noción de que el problema principal en sepsis no es la infección en sí, sino la respuesta del huésped a la infección.</p>
 

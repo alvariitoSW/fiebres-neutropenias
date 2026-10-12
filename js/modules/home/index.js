@@ -4,7 +4,7 @@
 // en su propio módulo; aquí solo se decide qué vista se ve en cada momento.
 import { createViewSwitcher } from '../../core/navigation.js';
 import { openCorkboardTopic } from '../../core/corkboard.js';
-import { hayVisualEn } from '../../core/vista-visual.js';
+import { hayVisualEn, irAlTexto } from '../../core/vista-visual.js';
 import { initAtlas } from './atlas.js';
 import { initPifManifiesto } from './pif-manifiesto.js';
 import { preguntasNeutropeniaFebril, temasNeutropeniaFebril } from '../../data/neutropenia-febril-preguntas.js';
@@ -51,8 +51,10 @@ const apis = {};
 export function registrarEspecialidad(key, api) {
     apis[key] = api;
 }
-// Botón del menú (raíz o intermedio) que entra en cada especialidad.
+// Botón (o botones) del menú, raíz o intermedio, que entra en cada especialidad.
+// Eco cardíaca tiene dos puertas: la 5ª de la raíz y su tarjeta en el grupo Fisiopatología UCI.
 const BOTONES_ESPECIALIDAD = {
+    eco: ['btn-eco', 'btn-eco-fuci'],
     nefrologia: 'btn-nefrologia',
     uciPapers: 'btn-uci-papers',
     fisioUci: 'btn-fisio-uci',
@@ -68,6 +70,7 @@ export function init() {
     // abajo (ver pif-manifiesto.js).
     initPifManifiesto();
 
+    let vistaPrevia = null, origenEco = null;
     const topLevel = createViewSwitcher({
         especialidades: document.getElementById('especialidades-view'),
         pifMenu: document.getElementById('pif-menu-view'),
@@ -85,7 +88,12 @@ export function init() {
         cardiologia: document.getElementById('cardiologia-view'),
         neumologia: document.getElementById('neumologia-view'),
         sobrevivirUmi: document.getElementById('sobrevivir-umi-view'),
+        eco: document.getElementById('eco-view'),
     }, (key, vista) => {
+        // Eco cardíaca tiene dos puertas y muchos accesos desde fichas: su "← VOLVER" regresa a la pantalla
+        // desde la que se entró, como Escalas Generales.
+        if (key === 'eco' && vistaPrevia !== 'eco') origenEco = vistaPrevia;
+        vistaPrevia = key;
         // El botón "🖼️ Visual" de la cabecera solo aparece donde hay vistas
         // Visual, o en el menú de un tema que lleva a ellas (data-con-visual).
         document.body.classList.toggle('hay-vista-visual', hayVisualEn(vista) || !!vista?.hasAttribute('data-con-visual'));
@@ -107,12 +115,13 @@ export function init() {
     document.getElementById('btn-hematologia').addEventListener('click', goHome);
     // Entrar en una especialidad deja siempre su propio menú/mapa como
     // pantalla de entrada (volverAlMenu), igual que goHome() resetea el Atlas.
-    Object.entries(BOTONES_ESPECIALIDAD).forEach(([key, btnId]) => {
-        document.getElementById(btnId).addEventListener('click', () => {
+    Object.entries(BOTONES_ESPECIALIDAD).forEach(([key, ids]) => {
+        [].concat(ids).forEach(btnId => document.getElementById(btnId).addEventListener('click', () => {
             topLevel.show(key);
             apis[key]?.volverAlMenu();
-        });
+        }));
     });
+    document.getElementById('btn-volver-eco').addEventListener('click', () => topLevel.show(origenEco || 'especialidades'));
     document.querySelectorAll('.btn-volver-especialidades').forEach(b => b.addEventListener('click', () => topLevel.show('especialidades')));
     // Hematología/Nefrología viven ahora un nivel más abajo, dentro de PIF;
     // Cardiología/Neumología/Fisiopatología UCI dentro del grupo
@@ -167,8 +176,11 @@ export function init() {
     document.addEventListener('click', (e) => {
         const btn = e.target.closest('[data-especialidad]');
         if (!btn) return;
-        const { especialidad, view, panel, tab, trasplante } = btn.dataset;
+        const { especialidad, view, panel, tab, trasplante, resaltar } = btn.dataset;
         irAResultadoBusqueda({ especialidad, view, panel, tab, trasplante });
+        // data-resaltar: además de abrir la ficha, lleva a esa línea y la resalta (pasa a Texto si hace falta)
+        const linea = resaltar && document.querySelector(resaltar);
+        if (linea) irAlTexto(linea.closest('[data-visual]'), linea);
     });
 
     const citopeniasLevel = createViewSwitcher({

@@ -1,26 +1,25 @@
-# Circulación viva (laboratorio)
+# Eco cardíaca (circulación viva)
 
-Corazón 3D movido en cada instante por un motor del latido. **Está en laboratorio:** la app no carga
-nada de esta carpeta (no hay ningún `data-include` ni `import` hacia aquí). Su destino es la vista Visual
-de Fisiopatología UCI · Cardiología, empezando por la ficha del ciclo cardíaco.
+Corazón 3D movido en cada instante por un motor del latido, con la ecografía modo B cortada de ese mismo corazón,
+la barra del ciclo A-G, el Wiggers y el asa presión-volumen. **Está en la app** desde octubre de 2026 (antes vivía
+en `lab/circulacion/`), como la especialidad «Eco cardíaca»: ver «En la app» más abajo.
 
 ## Abrir
 
-```
-cd lab/circulacion && python3 -m http.server 8000
-```
-
-- `corazon-3d.html` — el corazón: sangre en movimiento, barra del ciclo A-G, **Wiggers y asa presión-volumen en el
-  mismo instante**, cortes y pruebas de shock.
-- `latido.html` — curvas de Wiggers, asas presión-volumen y la tabla de cifras frente a su referencia.
+- **En la app**: 5.ª puerta de la pantalla inicial, o la tarjeta «Eco cardíaca» dentro del grupo Fisiopatología UCI.
+- **Laboratorio** (el mismo simulador, solo, con los plegables abiertos y los ganchos `window.__*` de las pruebas),
+  desde la raíz del repo: `python3 -m http.server 8000` y abrir
+  - `js/modules/eco/laboratorio.html` — el simulador;
+  - `js/modules/eco/latido.html` — curvas de Wiggers, asas presión-volumen y la tabla de cifras frente a su referencia.
 
 ## Pruebas (un solo comando, desde la raíz del repo)
 
 ```
-node --test 'lab/circulacion/pruebas/*.test.mjs'
+node --test 'js/modules/eco/pruebas/*.test.mjs'
 ```
 
-Tarda ~100 s (91 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta.
+Tarda ~100 s (91 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta. Las de navegador
+sirven el repositorio con un servidor propio y abren `laboratorio.html`.
 
 - `motor.test.mjs` — cada cifra del latido normal frente a su referencia (`referencias.mjs`), el volumen
   de sangre se conserva, las 7 fases salen en orden, nunca hay dos válvulas del mismo lado abiertas, las
@@ -63,6 +62,11 @@ cumplirse, una prueba avisa para quitar la marca.
 
 | Archivo | Qué es |
 |---|---|
+| `index.js` | Módulo de la app: carga `simulador.mjs` la primera vez que la vista se ve, lo anima solo mientras se ve, aplica los accesos `data-eco-vista`/`data-eco-escenario` y pinta «Qué mirar» |
+| `eco.html` | Marcado de la vista (ids con prefijo `cv-`, porque todos los partials de la app conviven en el DOM) |
+| `simulador.mjs` | `montarSimulador(raiz, opciones)`: todo el pegamento de la página (bucle, eco, ciclo, diagramas, controles, escenarios). Lo usan la app y el laboratorio |
+| `que-mirar.js` | Qué líneas de otras fichas se copian en «Qué mirar» para cada vista |
+| `laboratorio.html`, `latido.html` | Páginas de laboratorio (no se enlazan desde la app) |
 | `motor.mjs` | Motor del latido en el tiempo (sin DOM): 4 cámaras, válvulas por gradiente, aórtica con inercia, pericardio, tabique, lechos sistémico y pulmonar, barorreflejo |
 | `escenarios.mjs` | Escenarios de shock (los usa la página y los comprueban las pruebas) y el patrón de cada tipo según la fuente |
 | `referencias.mjs` | Cifras del latido normal con su referencia y su origen (ficha de la app o fisiología general) |
@@ -81,11 +85,13 @@ cumplirse, una prueba avisa para quitar la marca.
 - **Un escenario nuevo** va en `escenarios.mjs` con su `tipo`; las pruebas comprueban solas su patrón.
 - **Solo WebGL.** Sin WebGL, imagen fija con aviso. (Canvas 2D se quitó: duplicaba cada novedad.)
 - **Anatomía congelada.** No se añaden piezas anatómicas salvo que sirvan a una ficha concreta.
-- Tras cualquier cambio: `node --test 'lab/circulacion/pruebas/*.test.mjs'` en verde antes de subir.
+- Tras cualquier cambio: `node --test 'js/modules/eco/pruebas/*.test.mjs'` en verde antes de subir.
+- **Una sola copia del pegamento:** la app y el laboratorio montan el mismo `simulador.mjs` sobre el mismo
+  `eco.html`. Nunca una página con su propio script.
 
 ## Sincronización: un estado por fotograma
 
-Idea tomada de *The Heart by Ultrasound* (ver «Créditos»): no hay dos relojes que mantener a la par. En cada fotograma, `corazon-3d.html` decide **un** estado
+Idea tomada de *The Heart by Ultrasound* (ver «Créditos»): no hay dos relojes que mantener a la par. En cada fotograma, `simulador.mjs` decide **un** estado
 (`estadoMostrado()`): el del motor mientras corre, o una muestra del último latido si se revisa un instante a mano.
 Con ese mismo objeto se construye la geometría del corazón y se dibujan el cursor del Wiggers, el punto del asa, la
 barra A-G, el HUD y las cifras. Diferencia con echodemo: su ciclo es una función pura del tiempo (curvas escritas a
@@ -173,6 +179,37 @@ en la ecografía, la línea del pericardio cortaba la pared). Ahora:
 - Coste: ~2 ms más por fotograma con geometría exacta (los fotogramas con formas precalculadas no lo pagan).
 - La holgura (3 mm más ~0,06 mm por mL de derrame) sigue siendo ilustrativa.
 
+## En la app
+
+Decisiones del usuario (octubre 2026): el simulador va **en dos sitios** —la 5.ª puerta de la pantalla inicial y una
+tarjeta dentro del grupo Fisiopatología UCI—, se construye **por fases** (1: lo que ya existía; 2: modo M con
+calibres, TAPSE y VCI, conectado a sus calculadoras; 3: sonda libre; 4: Doppler; 5: vistas subcostal/supraesternal y
+formas de enfermedad), y de momento usa **las fuentes que ya están en la app** (más adelante llegarán documentos de
+ecocardiografía). Para la VCI y el hígado que piden la vista subcostal, el usuario propuso **partir de repositorios
+de anatomía de GitHub** en vez de modelarlos desde cero; se estudiará antes de la fase 5.
+
+- **Carga diferida:** `index.js` importa `simulador.mjs` (y con él WebGL, el motor y la ecografía) solo cuando la
+  vista entra en pantalla. El latido inicial (`motor.correr(12)`) bloquea un momento: se pinta «Cargando…» antes.
+- **Solo anima cuando se ve:** `simulador.activo(bool)`; `index.js` lo apaga si la vista sale de pantalla o la
+  pestaña se oculta (0 fotogramas fuera de la vista, comprobado). Los plegables cerrados no se dibujan (3D,
+  Wiggers/asa, cifras); la eco y la barra del ciclo, sí.
+- **«← VOLVER»** regresa a la pantalla desde la que se entró (raíz, Fisiopatología UCI o la ficha del acceso), como
+  Escalas Generales (`origenEco` en `home/index.js`).
+- **Accesos desde fichas:** un botón con `data-especialidad="eco"` (la navegación, como cualquier enlace cruzado)
+  y `data-eco-vista` / `data-eco-escenario`. Hoy desde: Manual UMI · FATE (A4C y PLAX), Técnicas R1, Fisiopatología
+  UCI · Cardiología (Ficha 1 ciclo, Ficha 5 eco, Ficha 10 los 4 patrones de shock, Ficha 11 VD y derrame) y Merino
+  Cardiología (Tabla 14.1 con los 4 escenarios, hemorrágico, cardiogénico y séptico). VExUS no: necesita Doppler
+  venoso y la VCI/hígado.
+- **Un escenario elegido ya se ve hecho:** a diferencia del laboratorio antiguo, `escenario(k)` corre 10 s más el
+  motor, para que un acceso desde una ficha de shock muestre el efecto (y el barorreflejo) al llegar.
+- **«Qué mirar en esta vista»** (`que-mirar.js`): copia del DOM líneas reales de Manual UMI · FATE y de
+  Fisiopatología UCI · Cardiología (Fichas 5 y 11), con un botón a cada una (`data-resaltar`, que `home/index.js`
+  usa para llevar a la línea y resaltarla). Sin texto propio: si la app no tiene nada de una vista (PSAX aórtico),
+  lo dice. Ids añadidos en las fichas: `umi-fate-subcostal/-a4c/-plax/-psax/-extendido/-dimensiones/-fs/-estimacion`,
+  `cardio-eco-teichholz/-simpson/-17seg/-tapse/-vd`.
+- **Colores de los diagramas:** `diagramas.mjs` los lee del propio lienzo; `.cv-sim` (en `components.css`) define los
+  nombres cortos (`--g`, `--r`…) a partir de los tokens de la app.
+
 ## Rendimiento medido
 
 En un móvil Android real (octubre 2026, pantalla de 90 Hz, calidad alta, sangre activada), **antes de las formas
@@ -196,7 +233,6 @@ arco y las vistas ecográficas cortadas del propio corazón. Si algo de esto se 
   (cap. 5, pág. 70 del PDF de la parte 1; cap. 10, Figura 2, pág. 33 de la parte 2) dan RVS «↑» o «N/↑»
   en el shock distributivo, y la del cap. 10 da ScvO₂ «↑» en el hipovolémico. Las fichas 5 y 10 las
   reproducen tal cual. Las pruebas usan la Tabla 14.1 de Merino (cap. 14), que no tiene ese problema.
-- Integración en la app (una sola ficha, animando solo cuando se ve) y escenarios enlazados a las fichas.
 - Más ideas de *The Heart by Ultrasound* por reconstruir: modo M y Doppler color sobre estos mismos planos, más
   vistas (subcostal, supraesternal), sonda libre (inclinar y girar el plano), formas de enfermedad movidas por los
   escenarios (choca con «anatomía congelada»: hace falta decidirlo) y que una cifra mostrada nunca contradiga su grado.

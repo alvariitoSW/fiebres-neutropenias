@@ -1,0 +1,49 @@
+// "Qué mirar en esta vista": líneas reales de otras fichas de la app, una sola fuente. index.js copia cada
+// línea del DOM (todas las fichas están cargadas desde el arranque) y añade un botón que lleva a ella.
+// Nunca se escribe aquí texto clínico propio: si la app no tiene nada de una vista, se dice.
+
+const FATE = { especialidad: 'sobrevivirUmi', view: 'manualUmi', panel: 'panel-manual-umi-tabs', tab: 'umi-fate', ficha: 'Manual UMI · FATE' };
+const MONITORIZACION = { especialidad: 'fisioUci', view: 'cardiologia', panel: 'panel-cardio-tabs', tab: 'cardio-monitorizacion-hemodinamica', ficha: 'Fisiopatología UCI · Cardiología · Ficha 5' };
+const CORAZON_PULMON = { especialidad: 'fisioUci', view: 'cardiologia', panel: 'panel-cardio-tabs', tab: 'cardio-interaccion-corazon-pulmon', ficha: 'Fisiopatología UCI · Cardiología · Ficha 11' };
+
+export const QUE_MIRAR = {
+    a4c: [
+        { fuente: '#umi-fate-a4c', ...FATE },
+        { fuente: '#cardio-eco-vd', ...CORAZON_PULMON },
+        { fuente: '#cardio-eco-simpson', ...MONITORIZACION },
+        { fuente: '#cardio-eco-tapse', ...MONITORIZACION, pendiente: 'El TAPSE se mide en modo M: llegará al simulador en la siguiente fase.' },
+    ],
+    a2c: [
+        { fuente: '#umi-fate-extendido', ...FATE },
+        { fuente: '#cardio-eco-simpson', ...MONITORIZACION },
+        { fuente: '#cardio-eco-17seg', ...MONITORIZACION },
+    ],
+    a3c: [
+        { fuente: '#cardio-eco-17seg', ...MONITORIZACION },
+    ],
+    plax: [
+        { fuente: '#umi-fate-plax', ...FATE },
+        { fuente: '#umi-fate-dimensiones', ...FATE },
+        { fuente: '#umi-fate-fs', ...FATE, pendiente: 'Con el modo M (siguiente fase) se podrán medir los diámetros sobre la imagen y llevarlos a la calculadora de FS de esta ficha.' },
+        { fuente: '#umi-fate-estimacion', ...FATE },
+        { fuente: '#cardio-eco-teichholz', ...MONITORIZACION },
+    ],
+    psaxAo: [],
+    psaxMv: [
+        { fuente: '#umi-fate-extendido', ...FATE },
+        { fuente: '#cardio-eco-17seg', ...MONITORIZACION },
+    ],
+    psaxPm: [
+        { fuente: '#umi-fate-psax', ...FATE },
+        { fuente: '#cardio-eco-17seg', ...MONITORIZACION },
+    ],
+};
+
+// Escenarios del simulador frente al tipo de shock de la Tabla 14.1 de Merino (el que comprueban las pruebas).
+export const ESCENARIO_TIPO = {
+    normal: null,
+    hemorragia: 'hipovolémico',
+    fallo: 'cardiogénico',
+    derrame: 'obstructivo (taponamiento)',
+    vasoplejia: 'vasodilatador',
+};

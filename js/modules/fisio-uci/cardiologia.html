@@ -418,6 +418,8 @@
                 <div class="article-figure-caption">Ciclo cardíaco (diagrama de Wiggers) y ciclo de Lewis.</div>
             </div>
 
+            <p><button type="button" class="especialidad-link" data-especialidad="eco" data-eco-vista="a4c">🫀 Ver este ciclo en el corazón 3D y la eco del simulador →</button></p>
+
             <p class="section-label" style="margin-top:16px;">▶ Versión dinámica del ciclo cardíaco</p>
             <p style="font-size: 0.8rem; color: var(--text-muted);">Animación ilustrativa de las 7 fases sobre el ciclo de 800 ms de la Figura 4 (FC ≈75 lpm) — las duraciones de cada fase son aproximaciones fisiológicas estándar para reconstruir la animación; la fuente solo da la duración total del ciclo, no un desglose exacto en milisegundos por fase. Usa ◀▶ para saltar y quedarte parado en cada fase concreta en vez de depender de pausar a ciegas en marcha. Fusiona en un único panel lo que en la Figura 4 estática aparece repartido en 2 gráficos: la <strong style="color:var(--accent-purple);">presión auricular</strong> (línea discontinua, misma onda a-c-x-v-y que la PVY de abajo pero reescalada al rango de presión del panel superior — <span style="font-size:0.85em;">nota de fidelidad: la PVY es en rigor la aurícula derecha, no la izquierda que acompaña aquí a la ventricular/aórtica; se reutiliza como aproximación porque la morfología a-c-x-v-y es análoga en ambos lados, no porque sea la misma medición</span>) y los 2 puntos de <strong>cruzamiento</strong> con la presión ventricular: uno al inicio (se abre la aórtica, empieza C) y otro al final (se abre la mitral, empieza F), cada uno marcado con su propia válvula en miniatura.</p>
             <div class="wiggers-anim" id="cardio-wiggers-anim" style="--ciclo-duracion:0.8s;">
@@ -1719,17 +1721,19 @@
             <dl class="kv-row"><dt>Vena cava inferior — ventilación espontánea</dt><dd>Índice de colapsabilidad = (Dmáx.−Dmin.)/Dmáx. × 100 (diámetro máximo en espiración, mínimo en inspiración). Respondedores a fluidos: &gt;38% (sensibilidad 70%, especificidad 80%).</dd></dl>
             <dl class="kv-row"><dt>Vena cava inferior — ventilación mecánica</dt><dd>Índice de distensibilidad = (Dmáx.−Dmin.)/Dmin. × 100 (diámetro máximo en inspiración, mínimo en espiración). Respondedores a volumen: &gt;18% (sensibilidad y especificidad del 90%).</dd></dl>
 
+            <p><button type="button" class="especialidad-link" data-especialidad="eco" data-eco-vista="a4c">🫀 Ver las vistas apicales y paraesternales en el simulador de eco →</button></p>
+
             <p class="section-label" style="margin-top:16px;">Evaluación de la contractilidad global (Teichholz y Simpson)</p>
-            <dl class="kv-row"><dt>Fracción de acortamiento (FA), método de Teichholz</dt><dd>FA = (Dtd−Dts)/Dtd × 100, con diámetros de fin de diástole/sístole del VI en plano paraesternal largo, modo M. Normal: <strong>28%-41%</strong>.</dd></dl>
+            <dl class="kv-row" id="cardio-eco-teichholz"><dt>Fracción de acortamiento (FA), método de Teichholz</dt><dd>FA = (Dtd−Dts)/Dtd × 100, con diámetros de fin de diástole/sístole del VI en plano paraesternal largo, modo M. Normal: <strong>28%-41%</strong>.</dd></dl>
             <dl class="kv-row"><dt>Fracción de eyección (FEy), método de Teichholz</dt><dd>FEy = (Vtd−Vts)/Vtd × 100. Método más usado, pero pierde fiabilidad en bloqueo de rama izquierda del haz de His o sobrecarga del VD con motilidad anormal del tabique.</dd></dl>
-            <dl class="kv-row"><dt>Fracción de eyección (FEy), método de Simpson</dt><dd>En plano apical se delimita la circunferencia endocárdica en diástole y sístole; el software divide el área en discos y calcula/integra los volúmenes — más fiable ante alteraciones de la geometría ventricular que el método de Teichholz.</dd></dl>
+            <dl class="kv-row" id="cardio-eco-simpson"><dt>Fracción de eyección (FEy), método de Simpson</dt><dd>En plano apical se delimita la circunferencia endocárdica en diástole y sístole; el software divide el área en discos y calcula/integra los volúmenes — más fiable ante alteraciones de la geometría ventricular que el método de Teichholz.</dd></dl>
 
             <div class="micro-profiles">
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="cardio-eco-17seg">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📐 Contractilidad segmentaria y 17 segmentos del VI</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">Según la American Society of Echocardiography, se evalúan 17 segmentos (basal, cavidad media, apical, más el ápex) — la hipocontractilidad de un área concreta orienta sobre el territorio coronario afectado. Durante la sístole el miocardio normal se engruesa &gt;40%; en <strong>hipoquinesia</strong> el engrosamiento es del 30%; en <strong>aquinesia</strong>, &lt;10%; en <strong>discinesia</strong>, el desplazamiento ocurre en sentido contrario al de la cavidad endocárdica.</div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="cardio-eco-tapse">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📏 Función sistólica del VD: TAPSE y TAPSV</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body"><strong>TAPSE</strong> (Tricuspid Anular Plane Systolic Excursion): desplazamiento del anillo tricuspídeo hacia el ápex en sístole, corte apical de 4 cámaras en modo M sobre la porción lateral del anillo. Valor normal &gt;16 mm (este capítulo; la <strong>Ficha 11</strong>, capítulo de interacción corazón-pulmón, cita &gt;17 mm para el mismo parámetro — ambas cifras se reproducen tal como las da cada fuente, ver la nota de esa ficha). <strong>TAPSV</strong> (Tricuspid Anular Plane Systolic Velocity): velocidad sistólica máxima de la pared del VD por Doppler pulsado, misma localización. Valor normal &gt;10 cm/s.</div>
                 </div>
@@ -2452,6 +2456,7 @@
             </div>
 
             <p class="section-label" style="margin-top:16px;">Precarga, contractilidad y poscarga por tipo de choque</p>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Cada patrón, en el corazón 3D y la eco del simulador (modelo ilustrativo; la dirección de PVC, gasto y RVS la comprueban sus pruebas contra la Tabla 14.1 de Merino):<br><button type="button" class="especialidad-link" data-especialidad="eco" data-eco-vista="a4c" data-eco-escenario="hemorragia">🫀 Hipovolémico →</button> <button type="button" class="especialidad-link" data-especialidad="eco" data-eco-vista="a4c" data-eco-escenario="fallo">🫀 Cardiogénico →</button> <button type="button" class="especialidad-link" data-especialidad="eco" data-eco-vista="a4c" data-eco-escenario="derrame">🫀 Obstructivo →</button> <button type="button" class="especialidad-link" data-especialidad="eco" data-eco-vista="a4c" data-eco-escenario="vasoplejia">🫀 Distributivo →</button></p>
             <table class="data-table">
                 <thead><tr><th>Tipo</th><th>Precarga</th><th>Contractilidad</th><th>Poscarga</th></tr></thead>
                 <tbody>
@@ -2728,12 +2733,13 @@
             </p>
 
             <p class="section-label" style="margin-top:16px;">Ecocardiografía en la interacción cardiopulmonar</p>
+            <p><button type="button" class="especialidad-link" data-especialidad="eco" data-eco-vista="a4c">🫀 Ver el VD y el VI en el simulador de eco →</button> <button type="button" class="especialidad-link" data-especialidad="eco" data-eco-vista="a4c" data-eco-escenario="derrame">🫀 Derrame pericárdico en el simulador →</button></p>
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩻 Vena cava inferior: limitaciones</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">La medición estática de la VCI (estructura extratorácica e intraabdominal) tiene poca relevancia clínica aislada, por el efecto de la presión transmural. En respiración espontánea, la inspiración colapsa la AD/VCI (efecto de succión); en VM con presión positiva, la inspiración la ingurgita — un cambio del 12-18% del diámetro basal (estudios de Feissel y Barbier) puede inferir respuesta a volumen, pero solo en un grupo escaso de pacientes bajo ventilación controlada estricta.</div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="cardio-eco-vd">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📐 Evaluación del VD por ecocardiografía</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">Relación VD/VI (normal &lt;1) en ventana apical; TAPSE normal &gt;17 mm (este capítulo cita &gt;17 mm; el capítulo de Monitorización hemodinámica, Ficha 5, cita &gt;16 mm — ambas cifras se reproducen tal como las da cada fuente, sin forzar una única cifra); cambio de área fraccional &lt;35% como signo de disfunción; Doppler tisular de la pared libre (normal &gt;9,5 cm/s). El diagnóstico de insuficiencia del VD permite anticipar interdependencia ventricular — hipotensión sistémica y movimiento septal anormal (plano o paradójico).</div>
                 </div>

@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HUD Clínico UCI</title>
-<link rel="stylesheet" href="css/variables.css?v=20261018-9">
-<link rel="stylesheet" href="css/base.css?v=20261018-9">
-<link rel="stylesheet" href="css/components.css?v=20261018-9">
+<link rel="stylesheet" href="css/variables.css?v=20261018-10">
+<link rel="stylesheet" href="css/base.css?v=20261018-10">
+<link rel="stylesheet" href="css/components.css?v=20261018-10">
 </head>
 <body>
 
@@ -30,7 +30,7 @@
     <div id="especialidades-view">
         <div class="diag-header">
             <h2 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">Especialidades</h2>
-            <p>4 puertas de entrada — cada una puede agrupar varias especialidades</p>
+            <p>5 puertas de entrada — cada una puede agrupar varias especialidades</p>
         </div>
 
         <button class="especialidad-tile" id="btn-pif" style="--tile-accent: var(--accent-blue); min-height: 190px;">
@@ -88,6 +88,21 @@
                 <p class="especialidad-tile-eyebrow">Manual de guardia</p>
                 <p class="especialidad-tile-title" style="font-size: 1rem;">Sobrevivir a la UMI</p>
                 <p class="especialidad-tile-desc">Manual completo del HUGCDN</p>
+            </div>
+            <span class="especialidad-tile-chev">→</span>
+        </button>
+
+        <button class="especialidad-tile" id="btn-eco" style="--tile-accent: var(--accent-blue); min-height: 172px;">
+            <svg width="84" height="56" viewBox="0 0 96 64" style="position: absolute; top: 7%; left: 50%; transform: translateX(-50%);">
+                <path d="M48 6 L12 58 A62 62 0 0 0 84 58 Z" fill="rgba(212,175,55,0.10)" stroke="#d4af37" stroke-width="1.6"/>
+                <path d="M48 52 C30 42 30 26 40 26 C44 26 48 30 48 34 C48 30 52 26 56 26 C66 26 66 42 48 52 Z" fill="rgba(184,92,62,0.5)" stroke="#b85c3e" stroke-width="1.6"/>
+                <circle cx="48" cy="6" r="2.4" fill="#d4af37"/>
+            </svg>
+            <div class="especialidad-tile-scrim"></div>
+            <div class="especialidad-tile-content">
+                <p class="especialidad-tile-eyebrow">Simulador · acceso directo</p>
+                <p class="especialidad-tile-title" style="font-size: 1.05rem;">Eco cardíaca</p>
+                <p class="especialidad-tile-desc">El corte ecográfico del mismo corazón que late: 7 vistas, escenarios de shock</p>
             </div>
             <span class="especialidad-tile-chev">→</span>
         </button>
@@ -154,6 +169,21 @@
                 <p class="especialidad-tile-eyebrow" style="font-size: 0.56rem;">El Libro Azul</p>
                 <p class="especialidad-tile-title" style="font-size: 1.05rem;">Fisiopatología UCI</p>
                 <p class="especialidad-tile-desc" style="font-size: 0.68rem;">Hemato, vías urinarias, cardio, inmuno — fisiopatología pura</p>
+            </div>
+            <span class="especialidad-tile-chev" style="font-size: 0.8rem;">→</span>
+        </button>
+
+        <button class="especialidad-tile" id="btn-eco-fuci" style="--tile-accent: var(--accent-blue); min-height: 165px; margin-top: 12px;">
+            <svg width="84" height="56" viewBox="0 0 96 64" style="position: absolute; top: 7%; left: 50%; transform: translateX(-50%);">
+                <path d="M48 6 L12 58 A62 62 0 0 0 84 58 Z" fill="rgba(212,175,55,0.10)" stroke="#d4af37" stroke-width="1.6"/>
+                <path d="M48 52 C30 42 30 26 40 26 C44 26 48 30 48 34 C48 30 52 26 56 26 C66 26 66 42 48 52 Z" fill="rgba(184,92,62,0.5)" stroke="#b85c3e" stroke-width="1.6"/>
+                <circle cx="48" cy="6" r="2.4" fill="#d4af37"/>
+            </svg>
+            <div class="especialidad-tile-scrim"></div>
+            <div class="especialidad-tile-content">
+                <p class="especialidad-tile-eyebrow" style="font-size: 0.56rem;">Simulador</p>
+                <p class="especialidad-tile-title" style="font-size: 1.05rem;">Eco cardíaca</p>
+                <p class="especialidad-tile-desc" style="font-size: 0.68rem;">Corazón 3D, corte ecográfico y Wiggers en el mismo instante</p>
             </div>
             <span class="especialidad-tile-chev" style="font-size: 0.8rem;">→</span>
         </button>
@@ -413,9 +443,14 @@
         <div id="tecnicas-r1-view" style="display: none;" data-include="js/modules/sobrevivir-umi/tecnicas-r1.html"></div>
     </div>
 
+    <!-- ========================================== -->
+    <!-- ECO CARDÍACA (simulador, se carga al abrirse) -->
+    <!-- ========================================== -->
+    <div id="eco-view" style="display: none;" data-include="js/modules/eco/eco.html"></div>
+
     <div data-include="js/modules/quiz/quiz.html"></div>
 </div>
 
-<script type="module" src="js/main.js?v=20261018-9"></script>
+<script type="module" src="js/main.js?v=20261018-10"></script>
 </body>
 </html>

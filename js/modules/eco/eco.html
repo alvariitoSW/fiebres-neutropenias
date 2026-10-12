@@ -1,0 +1,126 @@
+<!-- Eco cardíaca: el simulador (simulador.mjs) se carga la primera vez que esta vista se ve en pantalla.
+     Todo lo de dentro de #cv-sim lo maneja simulador.mjs; "Qué mirar" lo rellena index.js con líneas reales de
+     otras fichas de la app. Los ids llevan el prefijo cv- (circulación viva): todos los partials conviven en el DOM. -->
+<button class="back-btn" id="btn-volver-eco">← VOLVER</button>
+<div class="diag-header">
+    <h2 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">Eco cardíaca</h2>
+    <p>Simulador: el corte ecográfico sale del mismo corazón que late, en el mismo instante</p>
+</div>
+
+<div class="cv-sim" id="cv-sim">
+    <p class="cv-cargando" id="cv-cargando">Cargando el simulador…</p>
+
+    <div id="cv-contenido" hidden>
+        <div class="card cv-tarjeta" id="cv-tarjeta-eco">
+            <div class="cv-chips" id="cv-vistas" role="group" aria-label="Vista ecográfica"></div>
+            <div class="cv-eco">
+                <canvas id="cv-eco" width="360" height="288" aria-label="Imagen ecográfica modo B del corte elegido, en el instante del corazón"></canvas>
+                <div class="cv-eco-titulo" id="cv-eco-titulo"></div>
+                <div class="cv-eco-fase" id="cv-eco-fase"></div>
+            </div>
+            <p class="cv-muted" id="cv-eco-nombre"></p>
+            <div class="cv-ciclo" id="cv-ciclo" aria-label="Ciclo cardíaco: toca una fase para ir a ella"></div>
+            <div class="cv-ciclo-pie" id="cv-ciclo-pie"></div>
+            <div class="cv-fila">
+                <button type="button" class="cv-mini" id="cv-pausa">⏸ Pausa</button>
+                <button type="button" class="cv-mini" id="cv-fase">⏭ Siguiente fase</button>
+                <select class="cv-mini" id="cv-vel" aria-label="Velocidad">
+                    <option value="1">Tiempo real</option>
+                    <option value="0.25" selected>×¼</option>
+                    <option value="0.1">×1/10</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="card cv-tarjeta">
+            <p class="cv-titulo">Escenario</p>
+            <div class="cv-chips" id="cv-escenarios"></div>
+            <p class="cv-muted" id="cv-escenario-nota"></p>
+            <div class="cv-fila">
+                <button type="button" class="cv-mini" id="cv-avanzar">⏩ Avanzar 10 s</button>
+                <label class="cv-mini"><input type="checkbox" id="cv-baro" checked> Barorreflejo</label>
+            </div>
+            <p class="cv-muted" id="cv-baro-txt"></p>
+        </div>
+
+        <div class="card cv-tarjeta" id="cv-que-mirar-card" hidden>
+            <p class="cv-titulo">Qué mirar en esta vista</p>
+            <div id="cv-que-mirar"></div>
+        </div>
+
+        <details class="card cv-tarjeta cv-plegable" id="cv-plegable-3d" open>
+            <summary>Corazón 3D y el plano del corte</summary>
+            <div class="cv-escena">
+                <canvas id="cv-gl" width="390" height="390"></canvas>
+                <img id="cv-estatico" alt="Corazón en vista frontal, imagen fija" width="712" height="712" hidden>
+                <div class="cv-sinwebgl" id="cv-sinwebgl" hidden>Tu navegador no tiene WebGL: se muestra una imagen fija del corazón. La ecografía necesita WebGL y no se dibuja; las cifras y la barra del ciclo siguen funcionando.</div>
+                <div class="cv-hud" id="cv-hud"></div>
+                <div class="cv-orienta" id="cv-orienta" hidden>Desde las aurículas · <b>anterior ↑</b> · derecha del paciente →</div>
+            </div>
+            <p class="cv-muted"><b>Gira</b> deslizando en horizontal (en vertical se mueve la página); con <b>dos dedos</b> acercas e inclinas. Con ratón: arrastrar gira y la rueda acerca. El abanico azul es el plano de la vista elegida.</p>
+            <div class="cv-fila">
+                <button type="button" class="cv-mini" data-v="frontal">Frontal</button>
+                <button type="button" class="cv-mini" data-v="izq">Desde la izquierda</button>
+                <button type="button" class="cv-mini" data-v="arriba">Desde arriba</button>
+                <button type="button" class="cv-mini" data-v="valvulas">Válvulas desde arriba</button>
+                <button type="button" class="cv-mini" data-v="4c">Corte: 4 cámaras</button>
+                <button type="button" class="cv-mini" data-v="largo">Corte: eje largo</button>
+            </div>
+            <div class="cv-fila">
+                <label class="cv-mini"><input type="checkbox" id="cv-eco-plano" checked> Plano en el corazón</label>
+                <label class="cv-mini"><input type="checkbox" id="cv-eco-rotulos" checked> Rótulos en la eco</label>
+                <label class="cv-mini"><input type="checkbox" id="cv-sangre" checked> Sangre en movimiento</label>
+            </div>
+        </details>
+
+        <details class="card cv-tarjeta cv-plegable cv-diag" id="cv-plegable-diag">
+            <summary>Wiggers y asa presión-volumen</summary>
+            <div class="cv-fila">
+                <button type="button" class="cv-mini on" data-lado="izquierdo">Izquierdo</button>
+                <button type="button" class="cv-mini" data-lado="derecho">Derecho</button>
+            </div>
+            <p class="cv-muted">Mismo instante que el corazón y la eco. <b>Desliza en horizontal</b> sobre el Wiggers o <b>toca el asa</b> para revisar cualquier instante del último latido; ▶ Reanudar vuelve al tiempo real.</p>
+            <canvas id="cv-wig" width="760" height="460" aria-label="Diagrama de Wiggers del último latido con el cursor en el instante del corazón"></canvas>
+            <canvas id="cv-pvc" width="760" height="530" aria-label="Asa presión-volumen del último latido con el punto del instante del corazón"></canvas>
+            <p class="cv-muted">Tenue: el último latido completo; fuerte: el latido en curso, que termina en el cursor. Rayas: ESPVR (pendiente = Ees efectiva del modelo, con el barorreflejo) y EDPVR (rigidez diastólica), sin tabique ni pericardio. Ilustrativo.</p>
+        </details>
+
+        <details class="card cv-tarjeta cv-plegable" id="cv-plegable-cifras">
+            <summary>Cifras del latido y válvulas</summary>
+            <div class="cv-lect">
+                <div class="cv-ancho">Fase<b id="cv-l-fase">—</b></div>
+                <div class="cv-ancho">Último latido<b id="cv-l-lat">—</b></div>
+                <div>VI<b id="cv-l-vi">—</b></div>
+                <div>VD<b id="cv-l-vd">—</b></div>
+                <div>Aorta<b id="cv-l-ao">—</b></div>
+                <div>Aurículas<b id="cv-l-au">—</b></div>
+            </div>
+            <div class="cv-valv">
+                <span id="cv-v-mitral">Mitral</span><span id="cv-v-aortica">Aórtica</span><span id="cv-v-tricus">Tricúspide</span><span id="cv-v-pulmonar">Pulmonar</span>
+            </div>
+            <p class="cv-muted">Cifras del modelo, ilustrativas. Las que tienen referencia se comparan con ella en la página del latido del laboratorio.</p>
+        </details>
+
+        <details class="card cv-tarjeta cv-plegable" id="cv-plegable-opciones">
+            <summary>Opciones avanzadas</summary>
+            <div class="cv-fila">
+                <label class="cv-mini"><input type="checkbox" id="cv-corte"> Corte</label>
+                <label class="cv-mini"><input type="checkbox" id="cv-peri" checked> Pericardio</label>
+                <label class="cv-mini"><input type="checkbox" id="cv-det" checked> Papilares, cuerdas y coronarias</label>
+                <label class="cv-mini"><input type="checkbox" id="cv-formas" checked> Formas precalculadas</label>
+            </div>
+            <div class="cv-fila" id="cv-fila-corte" hidden><span class="cv-muted">Ángulo del corte</span><input type="range" id="cv-phi" min="0" max="628" value="260" aria-label="Ángulo del corte"></div>
+            <div class="cv-fila">
+                <select class="cv-mini" id="cv-cal" aria-label="Calidad">
+                    <option value="1">Calidad alta</option>
+                    <option value="0.7">Calidad media</option>
+                    <option value="0.5">Calidad baja</option>
+                </select>
+                <span class="cv-muted" id="cv-fps"></span>
+                <span class="cv-muted" id="cv-eco-tiempo"></span>
+            </div>
+        </details>
+
+        <p class="cv-muted cv-nota">Imagen <b>reconstruida</b>, no una ecografía real: el plano de cada vista es fijo en el cuerpo y el corazón lo cruza al latir (por eso en el eje corto mitral, en sístole, la base baja y el corte pasa a cruzar las aurículas). El tejido lleva su moteado consigo; la sangre casi no devuelve eco; los bordes brillan más donde el haz les da de frente (la pared lateral en el apical, paralela al haz, se ve más débil). Geometría, ecogenicidades, resolución y ganancia son ilustrativas; los valores normales que se citan en «Qué mirar» salen de las fichas de la app. Idea de <i>The Heart by Ultrasound</i> (D. Ouyang), reconstruida sobre el motor de la app, sin copiar su código.</p>
+    </div>
+</div>

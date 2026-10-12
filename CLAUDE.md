@@ -8195,6 +8195,9 @@ siempre, solo cambia qué contenedor está visible.
 
 ## Rediseño del menú raíz: hero-tiles + 4 puertas de entrada (PIF, Fisiopatología UCI, UCI/Papers Tuiter, Sobrevivir a la UMI)
 
+> Desde octubre de 2026 hay una **5.ª puerta, «Eco cardíaca»** (acceso directo al simulador, que también vive
+> dentro del grupo Fisiopatología UCI): ver «Circulación viva y Eco cardíaca» más abajo.
+
 A petición explícita del usuario ("Quiero un rediseño del menú principal"),
 se rediseñó visualmente el menú de "Especialidades" y, en el mismo pedido,
 se reagrupó su información: de una lista plana de 7 botones
@@ -10437,15 +10440,16 @@ y "Fuentes y Evidencia" enlazan a ellos, con el DOI en la nota.
 - **Pendiente**: la parte de CID que viene de la guía BCSH 2009 (Levi et
   al.) sigue sin cotejar, porque ese PDF no se ha aportado.
 
-## Circulación viva: corazón 3D en laboratorio (`lab/circulacion/`)
+## Circulación viva y Eco cardíaca (`js/modules/eco/`)
 
 Corazón 3D movido en cada instante por un motor del latido, construido como maqueta a petición explícita
 del usuario (Cardiología, «fase 0» de una circulación viva), en rondas revisadas por él: motor del latido,
 corazón procedural, pulido (tiempo real, nitidez, scroll del dedo, volúmenes extremos, rendimiento),
-barorreflejo e incisura aórtica, y sangre en movimiento con barra del ciclo A-G. **Vive en
-`lab/circulacion/` y la app no carga nada de ahí**: está en laboratorio hasta su integración. Los detalles
-(archivos, cómo abrirlo, pruebas, reglas y pendientes) están en `lab/circulacion/README.md`; esta sección
-recoge solo las decisiones.
+barorreflejo e incisura aórtica, y sangre en movimiento con barra del ciclo A-G. Nació en `lab/circulacion/`;
+**desde octubre de 2026 vive en `js/modules/eco/` y está en la app como «Eco cardíaca»** (ver el último punto).
+Los detalles (archivos, cómo abrirlo, pruebas, reglas y pendientes) están en `js/modules/eco/README.md`; esta
+sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase `js/modules/eco/`, y la antigua
+`corazon-3d.html` es hoy `simulador.mjs` + `eco.html` (con `laboratorio.html` para las pruebas).
 
 - **Decisiones del usuario tras una revisión explícita para no construir «un gigante con pies de barro»**
   (después del bloque 3): 1) **destino**, la vista Visual de Fisiopatología UCI · Cardiología, empezando
@@ -10519,7 +10523,32 @@ recoge solo las decisiones.
   10 reproducen sin nota; saltos de hasta ~8 mm de la geometría exacta en la huella de las aurículas (rayos
   tangentes a la raíz aórtica); volver a medir los fps en el móvil (también con la ecografía); más ideas de
   echodemo (modo M, Doppler color, sonda libre, formas de enfermedad —choca con la anatomía congelada—, cifra
-  coherente con su grado); integración; escenarios enlazados a las fichas.
+  coherente con su grado).
+- **Eco cardíaca en la app (fase 1)**, a petición explícita del usuario («si quiero tener un apartado igual al de
+  echodemo, ¿cómo lo ponemos?»), que eligió: **dos entradas** (5.ª puerta de la pantalla inicial —el subtítulo
+  de Especialidades dice ahora «5 puertas»— y una tarjeta dentro del grupo raíz Fisiopatología UCI, junto a
+  Cardiología, Neumología y Fisiopatología UCI); el **orden por fases** propuesto (1 lo que ya existía, 2 modo M
+  con calibres conectado a las calculadoras de TAPSE/VCI/FS, 3 sonda libre, 4 Doppler, 5 vistas subcostal y
+  supraesternal y formas de enfermedad); **las fuentes que ya están en la app** hasta que aporte documentos de
+  ecocardiografía; y, para la VCI y el hígado que necesita la subcostal (no existen), **partir de repositorios de
+  anatomía de GitHub** antes de modelar nada (aunque sea atrezzo al principio) — estudiarlo antes de la fase 5.
+  - Es una especialidad más del registro (`registrarEspecialidad('eco', …)`; `BOTONES_ESPECIALIDAD.eco` acepta ahora
+    un array de botones: `btn-eco` y `btn-eco-fuci`). Su «← VOLVER» (`#btn-volver-eco`) regresa a la pantalla
+    desde la que se entró (`origenEco`, calculado en el callback de `topLevel`).
+  - **Carga diferida y animación solo visible**: `index.js` importa `simulador.mjs` la primera vez que la vista entra
+    en pantalla y lo para (`activo(false)`) fuera de ella o con la pestaña oculta; verificado: 0 fotogramas fuera
+    de la vista. Sin banco de quiz propio (exporta arrays vacíos para `main.js`).
+  - **Una sola copia del pegamento**: `montarSimulador(raiz)` (antes un script dentro de `corazon-3d.html`) lo usan
+    la app y `laboratorio.html`; las 91 pruebas siguen en `js/modules/eco/pruebas/` y las de navegador abren
+    `laboratorio.html` sirviendo el repo entero (carga el CSS de la app).
+  - **Accesos** `data-especialidad="eco"` + `data-eco-vista` / `data-eco-escenario` desde Manual UMI · FATE,
+    Técnicas R1, Fisiopatología UCI · Cardiología (Fichas 1, 5, 10 y 11) y Merino Cardiología (Tabla 14.1 con los 4
+    escenarios, y las fichas de shock hemorrágico, cardiogénico y séptico).
+  - **«Qué mirar en esta vista»** copia del DOM líneas reales de FATE y de las Fichas 5 y 11 (ids nuevos
+    `umi-fate-*`, `cardio-eco-*`) con un botón a cada una. Nuevo y genérico en `home/index.js`: cualquier
+    `[data-especialidad]` puede llevar `data-resaltar="#id"` para llevar a esa línea y resaltarla tras navegar.
+  - CSS con prefijo `cv-` en `components.css`; `.cv-sim` traduce los tokens de la app a los nombres cortos que
+    leen los diagramas (que ahora toman el color de su propio lienzo, no de `:root`). Cache-busting `?v=20261018-10`.
 
 ## Cómo probar cambios
 

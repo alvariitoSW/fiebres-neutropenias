@@ -1,4 +1,4 @@
-// Pruebas del motor del latido. Se ejecutan con:  node --test lab/circulacion/pruebas/
+// Pruebas del motor del latido. Se ejecutan con:  node --test 'js/modules/eco/pruebas/*.test.mjs'
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { crearMotor, BASE } from '../motor.mjs';
