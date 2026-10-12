@@ -230,3 +230,28 @@ test('modo M: cada columna sale de la imagen B del mismo instante, la pausa cong
   assert.deepEqual(errores, []);
   await pg.close();
 });
+
+test('sonda libre: los mandos mueven el corte, se reconoce la vista y el reto se cumple al llegar', { skip: omitir }, async () => {
+  const { pg, errores } = await abrir('js/modules/eco/laboratorio.html');
+  await pg.evaluate(() => document.querySelectorAll('#cv-sim details').forEach(d => { d.open = false; }));
+  await pg.click('#cv-sonda-toggle'); assert.equal(await pg.locator('#cv-sonda').isVisible(), true);
+  const plano = () => pg.evaluate(() => new Promise(r => setTimeout(() => r(window.__eco.info()), 400)));
+  const p0 = await plano();
+  // un deslizador real: rotar
+  await pg.locator('#cv-sonda-rot').fill('76'); await pg.locator('#cv-sonda-incl').fill('12');
+  const p1 = await plano();
+  assert.equal(p1.sonda.rot, 76); assert.ok(Math.abs(p1.plano.n[0] - p0.plano.n[0]) + Math.abs(p1.plano.n[1] - p0.plano.n[1]) > 0.3, 'el plano no se ha movido');
+  assert.match(await pg.textContent('#cv-sonda-estado'), /se parece más a A2C/);
+  assert.match(await pg.textContent('#cv-eco-titulo'), /sonda libre/);
+  // reto de pasar del 4 al 2 cámaras: con la sonda en su sitio se cumple
+  await pg.evaluate(() => { window.__eco.sonda({}); window.__eco.reto({ objetivo: 'a2c', desde: 'a4c' }); });
+  await pg.waitForTimeout(400); assert.match(await pg.textContent('#cv-sonda-reto-txt'), /Te faltan/);
+  await pg.evaluate(() => window.__eco.sonda({ rot: 76, incl: 12 })); await pg.waitForTimeout(400);
+  assert.match(await pg.textContent('#cv-sonda-reto-txt'), /Encontrada/);
+  // cambiar de vista vuelve a la estándar y cancela el reto
+  await pg.click('[data-eco="plax"]'); await pg.waitForTimeout(400);
+  assert.equal(await pg.inputValue('#cv-sonda-rot'), '0'); assert.equal(await pg.locator('#cv-sonda-reto-txt').isVisible(), false);
+  assert.ok(!(await pg.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)), 'desborda en horizontal');
+  assert.deepEqual(errores, []);
+  await pg.close();
+});

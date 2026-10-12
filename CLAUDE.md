@@ -10539,7 +10539,7 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
     en pantalla y lo para (`activo(false)`) fuera de ella o con la pestaña oculta; verificado: 0 fotogramas fuera
     de la vista. Sin banco de quiz propio (exporta arrays vacíos para `main.js`).
   - **Una sola copia del pegamento**: `montarSimulador(raiz)` (antes un script dentro de `corazon-3d.html`) lo usan
-    la app y `laboratorio.html`; las pruebas (94 desde la fase 2) siguen en `js/modules/eco/pruebas/` y las de navegador abren
+    la app y `laboratorio.html`; las pruebas (96 desde la fase 3) siguen en `js/modules/eco/pruebas/` y las de navegador abren
     `laboratorio.html` sirviendo el repo entero (carga el CSS de la app).
   - **Accesos** `data-especialidad="eco"` + `data-eco-vista` / `data-eco-escenario` desde Manual UMI · FATE,
     Técnicas R1, Fisiopatología UCI · Cardiología (Fichas 1, 5, 10 y 11) y Merino Cardiología (Tabla 14.1 con los 4
@@ -10566,6 +10566,12 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
   - **VCI pendiente**: necesita la ventana subcostal y la propia VCI (fase 5, con repositorios de anatomía).
   - Llegar al simulador desde una ficha deja ahora la página arriba (`irAFicha` del módulo): antes se quedaba
     desplazada y la eco fuera de pantalla no se redibujaba.
+- **Fase 3: sonda libre**, a petición explícita del usuario. Detalle en `js/modules/eco/README.md` («Sonda
+  libre»). Cuatro mandos sobre la vista elegida (rotar, inclinar en abanico, balancear, deslizar; `planoLibre()` en
+  `ecografia.mjs`), una línea que dice a qué vista estándar de la misma ventana se parece el corte (grados y mm), el
+  plano estándar en gris junto al movido en el 3D, y un **reto** (recuperar la vista desde una sonda desordenada o
+  pasar a otra vista de la misma ventana; se cumple por debajo de 7° y 6 mm). Las pistas del reto hablan de las
+  maniobras del simulador (p. ej. del eje largo al corto, rotar ~90°), sin cifras clínicas nuevas. Pruebas: 96.
 
 ## Cómo probar cambios
 

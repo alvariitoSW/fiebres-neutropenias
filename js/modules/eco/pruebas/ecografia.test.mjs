@@ -146,3 +146,25 @@ test('modo M: la columna repite la imagen B a lo largo del haz y sigue al anillo
   assert.ok(medido > 0, 'el anillo no se acerca al transductor en sístole');
   assert.ok(Math.abs(medido - exc) < 5, `excursión en el modo M ${medido.toFixed(1)} mm frente a ${exc.toFixed(1)} mm de la geometría`);
 });
+
+// Sonda libre: sin movimiento, el mismo plano; los movimientos lo mantienen ortonormal y con el transductor en su
+// sitio (salvo el deslizamiento, perpendicular al plano); y las maniobras de siempre llevan de una vista a otra.
+test('sonda libre: plano ortonormal y maniobras que pasan de una vista estándar a otra', async () => {
+  const { planoLibre, SONDA_CERO, desviacion, vistaMasParecida, sondaMovida } = await import('../ecografia.mjs');
+  const A4 = planoVista('a4c', td), igual = planoLibre(A4, SONDA_CERO);
+  for (const k of ['O', 'd', 'r', 'n']) for (let i = 0; i < 3; i++) assert.ok(Math.abs(igual[k][i] - A4[k][i]) < 1e-9, `sin mover, ${k} cambia`);
+  assert.equal(sondaMovida(SONDA_CERO), false);
+  const L = planoLibre(A4, { rot: 33, incl: -17, bal: 9, desl: 12 });
+  assert.ok(sondaMovida(L.sonda));
+  assert.ok(Math.abs(dot(L.d, L.r)) < 1e-9 && Math.abs(dot(L.d, L.n)) < 1e-9 && Math.abs(dot(L.r, L.n)) < 1e-9, 'deja de ser ortonormal');
+  // el deslizamiento mueve el transductor 12 mm, perpendicular al plano
+  assert.ok(Math.abs(Math.hypot(L.O[0] - A4.O[0], L.O[1] - A4.O[1], L.O[2] - A4.O[2]) - 12) < 1e-6);
+  // cada vista estándar se reconoce a sí misma
+  for (const k of Object.keys(VISTAS)) { const v = vistaMasParecida(planoVista(k, td), td, VISTAS[k].ventana); assert.equal(v.clave, k); assert.ok(v.grados < 1e-3 && v.mm < 1e-3); }
+  // maniobras: 4 cámaras → 2 y 3 cámaras rotando la sonda; eje largo → eje corto rotando 90° y deslizando
+  for (const [de, s, a] of [['a4c', { rot: 76, incl: 12 }, 'a2c'], ['a4c', { rot: -50, incl: -10 }, 'a3c'], ['plax', { rot: -90, desl: 10 }, 'psaxPm'], ['plax', { rot: -90, desl: -30 }, 'psaxAo']]) {
+    const P = planoLibre(planoVista(de, td), s), v = vistaMasParecida(P, td, VISTAS[de].ventana), dv = desviacion(P, planoVista(a, td));
+    assert.equal(v.clave, a, `${de} ${JSON.stringify(s)} se parece más a ${v.clave}`);
+    assert.ok(dv.grados < 7 && dv.mm < 6, `${de} → ${a}: ${dv.grados.toFixed(1)}°, ${dv.mm.toFixed(1)} mm`);
+  }
+});

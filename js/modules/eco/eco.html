@@ -22,6 +22,22 @@
                 <div class="cv-eco-titulo" id="cv-eco-titulo"></div>
                 <div class="cv-eco-fase" id="cv-eco-fase"></div>
             </div>
+            <div class="cv-fila">
+                <button type="button" class="cv-mini" id="cv-sonda-toggle" aria-expanded="false" aria-controls="cv-sonda">🎛 Sonda libre</button>
+                <span class="cv-muted" id="cv-sonda-estado">Vista estándar</span>
+            </div>
+            <div class="cv-sonda" id="cv-sonda" hidden>
+                <p class="cv-muted">Mueve la sonda a partir de la vista elegida, como con un transductor real. El abanico azul del corazón 3D sigue al plano; el gris es el de la vista estándar.</p>
+                <label class="cv-sonda-fila"><span>Rotar</span><input type="range" id="cv-sonda-rot" min="-180" max="180" step="1" value="0"><b id="cv-sonda-rot-v">0°</b></label>
+                <label class="cv-sonda-fila"><span>Inclinar (abanico)</span><input type="range" id="cv-sonda-incl" min="-45" max="45" step="1" value="0"><b id="cv-sonda-incl-v">0°</b></label>
+                <label class="cv-sonda-fila"><span>Balancear</span><input type="range" id="cv-sonda-bal" min="-30" max="30" step="1" value="0"><b id="cv-sonda-bal-v">0°</b></label>
+                <label class="cv-sonda-fila"><span>Deslizar</span><input type="range" id="cv-sonda-desl" min="-40" max="40" step="1" value="0"><b id="cv-sonda-desl-v">0 mm</b></label>
+                <div class="cv-fila">
+                    <button type="button" class="cv-mini" id="cv-sonda-cero">↺ Vista estándar</button>
+                    <button type="button" class="cv-mini" id="cv-sonda-reto">🎯 Reto: encuentra la vista</button>
+                </div>
+                <div class="tfg-estado" id="cv-sonda-reto-txt" hidden></div>
+            </div>
             <div id="cv-m-zona" hidden>
                 <div class="cv-m">
                     <canvas id="cv-m" width="360" height="198" aria-label="Modo M: la línea elegida a lo largo del tiempo"></canvas>

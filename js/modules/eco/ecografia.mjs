@@ -82,6 +82,48 @@ export function planoVista(clave, est) {
   return { clave, nombre: v.nombre, corto: v.corto, O, d, r, n: nrm(cruz(r, d)), prof: v.prof, mitad: v.angulo / 2 * Math.PI / 180 };
 }
 
+// ---------------------------------------------------------------------------- sonda libre
+// La sonda se mueve a partir de la vista estándar, con los movimientos que se enseñan con un transductor real
+// (en grados y mm, desde la vista estándar; todos con el transductor como pivote salvo el deslizamiento):
+//   rot  · rotar: girar la sonda sobre su eje (el haz central); el plano gira alrededor del haz
+//   incl · inclinar en abanico: el plano barre perpendicular a sí mismo (p. ej. de la base al ápex)
+//   bal  · balancear: inclinar dentro del propio plano (lo que se ve se desplaza a un lado de la imagen)
+//   desl · deslizar: mover la sonda sobre la piel, perpendicular al plano
+export const SONDA_CERO = Object.freeze({ rot: 0, incl: 0, bal: 0, desl: 0 });
+const rotarEje = (v, k, a) => { const c = Math.cos(a), s = Math.sin(a), kv = cruz(k, v), kd = dot(k, v) * (1 - c);
+  return [v[0] * c + kv[0] * s + k[0] * kd, v[1] * c + kv[1] * s + k[1] * kd, v[2] * c + kv[2] * s + k[2] * kd]; };
+/** El plano de una vista con la sonda movida (rot, incl, bal en grados; desl en mm). Sin movimiento, el mismo plano. */
+export function planoLibre(P, s = SONDA_CERO) {
+  const g = Math.PI / 180; let { O, d, r, n } = P;
+  if (s.rot) { r = rotarEje(r, d, s.rot * g); n = rotarEje(n, d, s.rot * g); }
+  if (s.incl) { d = rotarEje(d, r, s.incl * g); n = rotarEje(n, r, s.incl * g); }
+  if (s.bal) { d = rotarEje(d, n, s.bal * g); r = rotarEje(r, n, s.bal * g); }
+  if (s.desl) O = sum(O, esc(n, s.desl));
+  return { ...P, O, d: nrm(d), r: nrm(r), n: nrm(n), sonda: { ...SONDA_CERO, ...s } };
+}
+export const sondaMovida = (s) => !!s && [s.rot, s.incl, s.bal, s.desl].some(x => x);
+/**
+ * Cuánto se aparta el corte P de la vista Q: grados (el mayor entre el giro del plano y el del haz central) y mm (a
+ * qué distancia del corte queda el centro de la imagen de Q, a 6 cm del transductor). Lo que importa es si la
+ * imagen muestra lo mismo, no por dónde entra la sonda.
+ */
+export function desviacion(P, Q) {
+  const deg = (x) => Math.acos(clamp(x, -1, 1)) * 180 / Math.PI;
+  const grados = Math.max(deg(Math.abs(dot(P.n, Q.n))), deg(dot(P.d, Q.d)));
+  const centro = sum(Q.O, esc(Q.d, 60));
+  return { grados, mm: Math.abs(enPlano(P, centro)[2]) };
+}
+/** La vista estándar de la misma ventana (apical o paraesternal) a la que más se parece el corte P. */
+export function vistaMasParecida(P, est, ventana) {
+  let mejor = null;
+  for (const k of Object.keys(VISTAS)) {
+    if (ventana && VISTAS[k].ventana !== ventana) continue;
+    const dv = desviacion(P, planoVista(k, est)), total = dv.grados + dv.mm;
+    if (!mejor || total < mejor.total) mejor = { clave: k, ...dv, total };
+  }
+  return mejor;
+}
+
 /** Un punto del corazón en el plano: [u, v, distancia al plano]. */
 export function enPlano(P, p) { const q = res(p, P.O); return [dot(q, P.r), dot(q, P.d), dot(q, P.n)]; }
 

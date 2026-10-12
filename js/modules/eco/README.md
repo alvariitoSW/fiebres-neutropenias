@@ -18,7 +18,7 @@ en `lab/circulacion/`), como la especialidad «Eco cardíaca»: ver «En la app�
 node --test 'js/modules/eco/pruebas/*.test.mjs'
 ```
 
-Tarda ~100 s (94 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta. Las de navegador
+Tarda ~100 s (96 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta. Las de navegador
 sirven el repositorio con un servidor propio y abren `laboratorio.html`.
 
 - `motor.test.mjs` — cada cifra del latido normal frente a su referencia (`referencias.mjs`), el volumen
@@ -238,6 +238,27 @@ de anatomía de GitHub** en vez de modelarlos desde cero; se estudiará antes de
   al mezclar formas). Normal: TAPSE 21,2 mm y MAPSE 13,3 mm. Como sale del volumen sistólico del VD, también baja
   con la precarga (hemorragia 11,5 mm, vasoplejía 10,2 mm); falta un escenario de fallo del VD.
 
+## Sonda libre (fase 3)
+
+- **Cuatro movimientos a partir de la vista estándar** (`planoLibre()` en `ecografia.mjs`), los que se enseñan con
+  un transductor real: **rotar** (el plano gira alrededor del haz central), **inclinar en abanico** (el plano barre
+  perpendicular a sí mismo), **balancear** (se inclina dentro del propio plano) y **deslizar** (la sonda se mueve
+  sobre la piel, perpendicular al plano). Los tres giros pivotan en el transductor. Sin movimiento, el plano es
+  exactamente el de la vista (prueba).
+- **Qué vista se ve:** `vistaMasParecida()` compara el corte con las vistas estándar de la misma ventana (apical o
+  paraesternal) con `desviacion()`: grados (el mayor entre el giro del plano y el del haz) y mm (a qué distancia del
+  corte queda el centro de la imagen de la vista, a 6 cm del transductor). Lo que importa es si la imagen muestra lo
+  mismo, no por dónde entra la sonda. Se calcula al cambiar el plano, no en cada fotograma.
+- **En el 3D:** el abanico azul sigue al plano movido; el gris es el de la vista estándar.
+- **Reto:** o volver a la vista desde una sonda desordenada (rotar ±20-50°, inclinar ±8-20°, balancear ±5-12°,
+  deslizar hasta ±10 mm), o pasar a otra vista de la misma ventana. Se cumple por debajo de 7° y 6 mm. Maniobras
+  comprobadas en las pruebas: 4 cámaras → 2 cámaras rotando ~76° (e inclinando ~12°), → 3 cámaras rotando ~−50°;
+  eje largo → eje corto de papilares rotando −90° y deslizando 10 mm, → aórtico deslizando −30 mm. En el
+  simulador, los ejes cortos (a distintas alturas) se alcanzan sobre todo deslizando, porque las vistas estándar de
+  eje corto están definidas como planos paralelos; en el paciente también se llega inclinando.
+- Cambiar de vista con los botones vuelve a la vista estándar y cancela el reto. El modo M sigue funcionando sobre
+  el plano movido (el trazado se borra al mover la sonda).
+
 ## Rendimiento medido
 
 En un móvil Android real (octubre 2026, pantalla de 90 Hz, calidad alta, sangre activada), **antes de las formas
@@ -262,7 +283,7 @@ arco y las vistas ecográficas cortadas del propio corazón. Si algo de esto se 
   en el shock distributivo, y la del cap. 10 da ScvO₂ «↑» en el hipovolémico. Las fichas 5 y 10 las
   reproducen tal cual. Las pruebas usan la Tabla 14.1 de Merino (cap. 14), que no tiene ese problema.
 - Más ideas de *The Heart by Ultrasound* por reconstruir: Doppler color sobre estos mismos planos, más
-  vistas (subcostal, supraesternal), sonda libre (inclinar y girar el plano), formas de enfermedad movidas por los
+  vistas (subcostal, supraesternal), formas de enfermedad movidas por los
   escenarios (choca con «anatomía congelada»: hace falta decidirlo) y que una cifra mostrada nunca contradiga su grado.
 - Ecografía en un *worker* si en el móvil baja de fps.
 - **Saltos de la geometría exacta:** la huella de las aurículas (y la grasa periaórtica) se calcula con rayos que

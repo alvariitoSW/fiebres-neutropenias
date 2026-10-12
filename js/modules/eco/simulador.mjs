@@ -16,7 +16,7 @@ import { ESCENARIOS } from './escenarios.mjs';
 import { crearFlujo } from './flujo-sangre.mjs';
 import { COLOR_FASE, segmentosFase, estadoRevision, crearDiagramas } from './diagramas.mjs';
 import { VALVULAS, apertura, estadoGeo, crearTablaFormas, semejantes, extraDeMotor } from './formas.mjs';
-import { VISTAS, planoVista, enPlano, crearEcografo, abanicoVista, direccionHaz, anguloHacia } from './ecografia.mjs';
+import { VISTAS, planoVista, enPlano, crearEcografo, abanicoVista, direccionHaz, anguloHacia, planoLibre, SONDA_CERO, sondaMovida, desviacion, vistaMasParecida } from './ecografia.mjs';
 import { crearModoM } from './modo-m.mjs';
 
 export const NOMBRE_VISTA = { a4c: 'A4C', a2c: 'A2C', a3c: 'A3C', plax: 'PLAX', psaxAo: 'PSAX Ao', psaxMv: 'PSAX mitral', psaxPm: 'PSAX papilares' };
@@ -128,13 +128,16 @@ export function montarSimulador(raiz, opc = {}) {
 
   // ---- Ecografía (ecografia.mjs): el plano corta las MISMAS piezas que dibuja el corazón en este fotograma
   const ecoC = $('#cv-eco'), ecoCtx = ecoC.getContext('2d');
-  let vistaEco = 'a4c', ecografo = null, ecoImg = null, planoEco = null, claveTd = '', refEco = null, refGeoTd = null, claveRef = '', fanEco = null;
+  let vistaEco = 'a4c', ecografo = null, ecoImg = null, planoEco = null, planoBase = null, claveTd = '', refEco = null, refGeoTd = null, claveRef = '', fanEco = null, fanBase = null;
+  const sonda = { ...SONDA_CERO };
+  let reto = null;
   let ecoVisible = true, ultimoEco = -1e9, ecoInfo = null, ecoPendiente = true, ecoMs = 0;
   $('#cv-vistas').innerHTML = ORDEN_VISTAS.filter(k => VISTAS[k]).map(k => `<button type="button" class="cv-mini${k === vistaEco ? ' on' : ''}" data-eco="${k}" title="${VISTAS[k].nombre}">${NOMBRE_VISTA[k]}</button>`).join('');
   function elegirVista(k) {
     if (!VISTAS[k]) return;
     vistaEco = k; claveTd = ''; ecoPendiente = true;
     $$('[data-eco]').forEach(b => b.classList.toggle('on', b.dataset.eco === k));
+    reto = null; ponerSonda(SONDA_CERO);
     if (MEDIDAS[medir].vista && MEDIDAS[medir].vista !== k) elegirMedida('libre', false);
     else colocarLineaM();
     opc.onVista?.(k);
@@ -225,14 +228,60 @@ export function montarSimulador(raiz, opc = {}) {
   ecoC.addEventListener('pointermove', (ev) => { if (!moviendoM) return; thetaM = thetaDe(ev); ultimoTM = null; modoM.limpiar(); ecoPendiente = true; });
   for (const t of ['pointerup', 'pointercancel', 'lostpointercapture']) ecoC.addEventListener(t, () => { moviendoM = false; });
 
+  // ---- Sonda libre (planoLibre de ecografia.mjs): cuatro movimientos a partir de la vista estándar
+  const MOVS = { rot: '°', incl: '°', bal: '°', desl: ' mm' };
+  function ponerSonda(nueva) {
+    Object.assign(sonda, SONDA_CERO, nueva);
+    for (const [k, u] of Object.entries(MOVS)) { $('#cv-sonda-' + k).value = sonda[k]; $('#cv-sonda-' + k + '-v').textContent = sonda[k] + u; }
+    claveTd = ''; ultimoTM = null; modoM.limpiar(); ecoPendiente = true;
+  }
+  for (const k of Object.keys(MOVS)) $('#cv-sonda-' + k).addEventListener('input', (e) => {
+    sonda[k] = +e.target.value; $('#cv-sonda-' + k + '-v').textContent = sonda[k] + MOVS[k];
+    ultimoTM = null; modoM.limpiar(); ecoPendiente = true;
+  });
+  $('#cv-sonda-toggle').addEventListener('click', () => { const p = $('#cv-sonda'); p.hidden = !p.hidden; $('#cv-sonda-toggle').setAttribute('aria-expanded', String(!p.hidden)); });
+  $('#cv-sonda-cero').addEventListener('click', () => { reto = null; ponerSonda(SONDA_CERO); });
+  // Reto: o volver a la vista estándar desde una sonda desordenada, o pasar a otra vista de la misma ventana
+  function iniciarReto() {
+    const ventana = VISTAS[vistaEco].ventana, otras = ORDEN_VISTAS.filter(k => VISTAS[k].ventana === ventana && k !== vistaEco);
+    const azar = (a, b) => Math.round((a + Math.random() * (b - a)) * (Math.random() < 0.5 ? -1 : 1));
+    if (otras.length && Math.random() < 0.5) { reto = { objetivo: otras[Math.floor(Math.random() * otras.length)], desde: vistaEco }; ponerSonda(SONDA_CERO); }
+    else { reto = { objetivo: vistaEco, desde: vistaEco }; ponerSonda({ rot: azar(20, 50), incl: azar(8, 20), bal: azar(5, 12), desl: azar(0, 10) }); }
+    $('#cv-sonda').hidden = false; $('#cv-sonda-toggle').setAttribute('aria-expanded', 'true');
+  }
+  $('#cv-sonda-reto').addEventListener('click', iniciarReto);
+  const PISTA = {
+    apical: 'Pista: desde el ápex, el 2 y el 3 cámaras se consiguen sobre todo rotando la sonda.',
+    paraesternal: 'Pista: desde el eje largo, los ejes cortos se consiguen rotando la sonda unos 90° y llevando el corte hacia la base o el ápex (deslizar o inclinar).',
+  };
+  // qué vista se ve y, en un reto, cuánto falta; se calcula al cambiar el plano (no en cada fotograma)
+  function estadoSonda(td) {
+    const movida = sondaMovida(sonda), ventana = VISTAS[vistaEco].ventana;
+    if (!movida) $('#cv-sonda-estado').textContent = 'Vista estándar';
+    else { const vp = vistaMasParecida(planoEco, td, ventana);
+      $('#cv-sonda-estado').textContent = `Sonda movida · se parece más a ${NOMBRE_VISTA[vp.clave]} (${Math.round(vp.grados)}°, ${Math.round(vp.mm)} mm)`; }
+    const box = $('#cv-sonda-reto-txt'); box.hidden = !reto; if (!reto) return;
+    const dv = desviacion(planoEco, planoVista(reto.objetivo, td)), hecho = dv.grados < 7 && dv.mm < 6;
+    const objetivo = `<b>${NOMBRE_VISTA[reto.objetivo]}</b> (${VISTAS[reto.objetivo].nombre})`;
+    box.className = 'tfg-estado tfg-estado-' + (hecho ? 'ok' : 'warn');
+    box.innerHTML = hecho
+      ? `🎯 ¡Encontrada! Estás en ${objetivo}: ${Math.round(dv.grados)}° y ${Math.round(dv.mm)} mm de la vista estándar.`
+      : `Objetivo: ${objetivo}${reto.objetivo === reto.desde ? ', partiendo de una sonda desordenada' : ', desde ' + NOMBRE_VISTA[reto.desde]}. Te faltan <b>${Math.round(dv.grados)}°</b> y <b>${Math.round(dv.mm)} mm</b> (hay que bajar de 7° y 6 mm).` + (reto.objetivo !== reto.desde ? `<br><span class="cv-muted">${PISTA[ventana]}</span>` : '');
+  }
+
   const io = new IntersectionObserver((e) => { ecoVisible = e[0].isIntersecting; if (ecoVisible) ecoPendiente = true; });
   io.observe($('#cv-tarjeta-eco'));
   $('#cv-eco-rotulos').addEventListener('change', () => { ecoPendiente = true; });
   const muestraTd = () => motor.onda.reduce((a, b) => (b.vvi > a.vvi ? b : a), motor.onda[0]);
   function prepararPlanoEco() {
     if (!motor.onda.length) return null;
-    const td = muestraTd(), clave = vistaEco + '|' + Math.round(td.vvi / 3) + '|' + Math.round(td.vvd / 3);
-    if (clave !== claveTd) { planoEco = planoVista(vistaEco, td); claveTd = clave; fanEco = abanicoVista(planoEco); modoM.setProf(planoEco.prof); }
+    const td = muestraTd(), clave = [vistaEco, Math.round(td.vvi / 3), Math.round(td.vvd / 3), sonda.rot, sonda.incl, sonda.bal, sonda.desl].join('|');
+    if (clave !== claveTd) {
+      // el plano de la vista estándar y, encima, el movimiento de la sonda (sonda libre)
+      planoBase = planoVista(vistaEco, td); planoEco = planoLibre(planoBase, sonda); claveTd = clave;
+      fanEco = abanicoVista(planoEco); fanBase = sondaMovida(sonda) ? abanicoVista(planoBase) : null;
+      modoM.setProf(planoEco.prof); estadoSonda(td);
+    }
     // forma de referencia para que el moteado siga al tejido: la telediastólica, con las mismas opciones
     const cr = [Math.round(td.vvi), Math.round(td.vvd), opciones.pericardio, opciones.detalle, calidad, motor.p.liquidoPeri].join('|');
     if (cr !== claveRef) { refGeoTd = construirCorazon(estadoGeo(td, extraGeo()), { pericardio: opciones.pericardio, detalle: opciones.detalle, calidad }); refEco = refGeoTd.partes; claveRef = cr; }
@@ -280,11 +329,11 @@ export function montarSimulador(raiz, opc = {}) {
         rot.push(n); ecoCtx.fillStyle = 'rgba(0,0,0,.55)'; ecoCtx.fillRect(X(u) - 12 * px, Y(v) - 8 * px, 24 * px, 16 * px);
         ecoCtx.fillStyle = '#e8e3d5'; ecoCtx.fillText(n, X(u), Y(v)); }
     }
-    $('#cv-eco-titulo').textContent = NOMBRE_VISTA[vistaEco];
+    $('#cv-eco-titulo').textContent = NOMBRE_VISTA[vistaEco] + (sondaMovida(sonda) ? ' · sonda libre' : '');
     ecoC.setAttribute('aria-label', `Ecografía reconstruida, ${VISTAS[vistaEco].nombre}, fase ${s.fase}`);
     $('#cv-eco-fase').textContent = `${s.fase} · ${FASES[s.fase]}`;
     $('#cv-eco-nombre').textContent = VISTAS[vistaEco].nombre;
-    ecoInfo = { t: s.tLatido, tMotor: s.t, vista: vistaEco, rotulos: rot, propia, abiertos: im.abiertos, modo: modoEco, theta: thetaM };
+    ecoInfo = { t: s.tLatido, tMotor: s.t, vista: vistaEco, rotulos: rot, propia, abiertos: im.abiertos, modo: modoEco, theta: thetaM, sonda: { ...sonda }, plano: planoEco };
   }
 
   // ---- Dibujo de un fotograma
@@ -303,7 +352,11 @@ export function montarSimulador(raiz, opc = {}) {
       // al revisar un instante pasado, la sangre (que vive en el tiempo del motor) no se dibuja
       const puntos = verSangre && !revision ? sangre.puntos(g.flujo, { vistaBase: opciones.vistaBase }) : null;
       const partes = verSangre ? g.partes.filter(p => !p.nombre.endsWith('sangre')) : g.partes;
-      const conPlano = $('#cv-eco-plano').checked && fanEco ? partes.concat([{ nombre: 'Plano eco', pos: fanEco.pos, idx: fanEco.idx, color: [0.35, 0.78, 0.95], alfa: 0.22, dobleCara: true }]) : partes;
+      let conPlano = partes;
+      if ($('#cv-eco-plano').checked && fanEco) {
+        conPlano = partes.concat([{ nombre: 'Plano eco', pos: fanEco.pos, idx: fanEco.idx, color: [0.35, 0.78, 0.95], alfa: 0.22, dobleCara: true }]);
+        if (fanBase) conPlano.push({ nombre: 'Plano estándar', pos: fanBase.pos, idx: fanBase.idx, color: [0.7, 0.7, 0.7], alfa: 0.1, dobleCara: true });
+      }
       rgl.dibujar(conPlano, cam, undefined, puntos);
     }
     if (sucioEco) { ecoPendiente = true; sucioEco = false; }
@@ -418,13 +471,14 @@ export function montarSimulador(raiz, opc = {}) {
 
   if (opc.depuracion) {
     window.__revisar = (t) => revisar(estadoRevision(motor.onda, t)); window.__estado = () => estadoMostrado();
-    window.__eco = { info: () => ecoInfo, vista: elegirVista, plano: () => planoEco, modo: elegirModo, medir: elegirMedida, modoM };
+    window.__eco = { info: () => ecoInfo, vista: elegirVista, plano: () => planoEco, modo: elegirModo, medir: elegirMedida, modoM, sonda: ponerSonda, reto: (r) => { reto = r ?? null; claveTd = ''; ecoPendiente = true; } };
     window.__ensuciar = ensuciar; window.__sangre = sangre; window.__motor = motor; window.__cam = cam; window.__tabla = tabla;
   }
 
   return {
     vista: elegirVista,
     modo: elegirModo,
+    sonda: ponerSonda,
     medir: elegirMedida,
     escenario: elegirEscenario,
     activo: setActivo,

@@ -2357,3 +2357,10 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 #cv-m-resultado { margin-top: 8px; font-size: 0.8rem; }
 #cv-m-resultado .cv-muted { display: block; margin-top: 4px; }
 .cv-modos { margin-top: 8px; }
+/* Sonda libre: un mando por movimiento (rótulo · deslizador · valor) */
+.cv-sonda { margin-top: 6px; padding: 8px 10px; border: 1px solid var(--border-color); border-radius: 6px; background: rgba(0,0,0,.18); }
+.cv-sonda-fila { display: grid; grid-template-columns: 7.5em 1fr 3.6em; gap: 8px; align-items: center; margin: 6px 0; font-size: 0.78rem; color: var(--text-muted); }
+.cv-sonda-fila input[type=range] { width: 100%; margin: 0; }
+.cv-sonda-fila b { color: var(--accent-blue); font-size: 0.78rem; text-align: right; }
+#cv-sonda-reto-txt { margin-top: 8px; }
+.cv-sonda-fila input[type=range] { accent-color: var(--accent-blue); }
