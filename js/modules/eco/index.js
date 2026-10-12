@@ -96,7 +96,8 @@ export function init() {
         }
         caja.innerHTML = items.map(({ it, el }) => {
             const contenido = copiaLinea(el);
-            const cuerpo = el.tagName === 'TR' ? `<p>${contenido}</p>` : contenido;
+            // una tabla copiada sin el contenedor que la deja desplazarse desbordaría la página en el móvil
+            const cuerpo = el.tagName === 'TR' ? `<p>${contenido}</p>` : el.tagName === 'TABLE' ? `<div style="overflow-x:auto;">${contenido}</div>` : contenido;
             return `<div class="cv-qm-item">
                 <div class="cv-qm-cuerpo">${cuerpo}</div>
                 ${it.pendiente ? `<p class="cv-muted cv-qm-pendiente">${it.pendiente}</p>` : ''}

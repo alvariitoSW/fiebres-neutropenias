@@ -1158,7 +1158,7 @@
                 </tbody>
             </table>
 
-            <p><button type="button" class="especialidad-link" data-especialidad="eco" data-eco-vista="a4c">🫀 Ver las ventanas en el simulador de eco →</button></p>
+            <p><button type="button" class="especialidad-link" data-especialidad="eco" data-eco-vista="a4c">🫀 Ver las ventanas en el simulador de eco →</button> <button type="button" class="especialidad-link" data-especialidad="eco" data-eco-vista="sc4c">🫀 Subcostal 4 cámaras en el simulador →</button></p>
             <p style="font-size:0.75rem; color:var(--text-muted); margin-top:-4px;">El simulador tiene hoy las vistas apicales y paraesternales; la subcostal y el escaneo pleural llegarán más adelante.</p>
 
             <p class="section-label" style="margin-top:14px;">Las 6 preguntas del examen sistemático</p>
@@ -1205,7 +1205,7 @@
 
             <p class="section-label" style="margin-top:14px;">Índice de colapsabilidad de la vena cava inferior (VCI)</p>
             <div style="overflow-x:auto;">
-            <table class="data-table">
+            <table class="data-table" id="umi-fate-vci">
                 <thead><tr><th>Contexto</th><th>Fórmula</th><th>Respondedor a volumen si</th></tr></thead>
                 <tbody>
                     <tr><td>Ventilación espontánea</td><td>(Dmáx−Dmín)/Dmáx × 100</td><td>&gt;40%</td></tr>
@@ -1215,7 +1215,7 @@
             </table>
             </div>
             <div style="overflow-x:auto;">
-            <table class="data-table">
+            <table class="data-table" id="umi-fate-vci-pvc">
                 <thead><tr><th></th><th>Normal (0-5 mmHg)</th><th>Intermedio (5-10 mmHg)</th><th>Alto (10-20 mmHg)</th></tr></thead>
                 <tbody>
                     <tr><td>Diámetro VCI</td><td>&lt;2,1 cm</td><td>&lt;2,1 → &gt;2,1 cm</td><td>&gt;2,1 cm</td></tr>
@@ -1238,6 +1238,7 @@
                 <div class="form-group"><label for="umi-vci-dmin">Diámetro mínimo (cm)</label><input type="number" id="umi-vci-dmin" step="0.1" min="0" max="4" value="1.4"></div>
                 <div id="umi-vci-resultado" class="tfg-estado tfg-estado-ok"></div>
             </div>
+            <p><button type="button" class="especialidad-link" data-especialidad="eco" data-eco-medir="vci">🫀 Medir el Dmáx y el Dmín de la VCI en el modo M del simulador (subcostal) →</button></p>
             <p style="font-size:0.85rem; color:var(--text-dim);">Este índice estima la respuesta a volumen; el objetivo clínico de PVC/PCP (0-20 mmHg) con el que se guía la corrección de la precarga ya está disponible como gauge interactivo en Fisiopatología UCI:</p>
 <p><button class="especialidad-link" data-especialidad="fisioUci" data-view="viasUrinarias" data-panel="panel-vu-tabs" data-tab="vu-fisiologia-renal">🔗 Ver objetivo de PVC/PCP (Fisiopatología UCI, Vías Urinarias) →</button></p>
 

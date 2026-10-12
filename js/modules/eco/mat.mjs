@@ -24,6 +24,10 @@ export const nrm = (a) => { const l = Math.hypot(a[0], a[1], a[2]) || 1; return 
 // Después: ápex hacia la izquierda del paciente (−x), delante (+y) y abajo.
 export const ESPEJO = [-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
 export const MODELO = m4.mul(m4.mul(m4.rotX(0.3), m4.rotY(0.5)), ESPEJO);
+// Del cuerpo (RAS: derecha del paciente, delante, arriba) al sistema del corazón: la traspuesta de MODELO (es ortogonal).
+const MODELO_INV = [MODELO[0], MODELO[4], MODELO[8], 0, MODELO[1], MODELO[5], MODELO[9], 0, MODELO[2], MODELO[6], MODELO[10], 0, 0, 0, 0, 1];
+export const dirCuerpo = (ras) => nrm(m4.apply3(MODELO_INV, ras));
+export const ARRIBA = dirCuerpo([0, 0, 1]), DELANTE = dirCuerpo([0, 1, 0]), DERECHA = dirCuerpo([1, 0, 0]);
 // determinante de la parte 3×3: negativo = la transformación invierte el sentido de giro de los triángulos
 export const det3 = (m) => m[0] * (m[5] * m[10] - m[9] * m[6]) - m[4] * (m[1] * m[10] - m[9] * m[2]) + m[8] * (m[1] * m[6] - m[5] * m[2]);
 

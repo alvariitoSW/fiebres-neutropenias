@@ -12,7 +12,7 @@
 // tubos, con direcciones anatómicas aproximadas, recortados para quedar dentro del hígado.
 import { ABDOMEN } from './abdomen-data.mjs';
 import { PUNTOS_ABDOMEN as PA } from './abdomen-puntos.mjs';
-import { MODELO, m4, nrm, dot, cruz } from './mat.mjs';
+import { dot, cruz, dirCuerpo, ARRIBA } from './mat.mjs';
 import { tubo, suave } from './corazon-geo.mjs';
 
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
@@ -26,10 +26,7 @@ export const COLORES_ABD = {
   vena: [0.38, 0.30, 0.60], porta: [0.50, 0.36, 0.62],
 };
 
-// del cuerpo (RAS: derecha, delante, arriba) al sistema del corazón: la traspuesta de MODELO (es ortogonal)
-const Mi = [MODELO[0], MODELO[4], MODELO[8], 0, MODELO[1], MODELO[5], MODELO[9], 0, MODELO[2], MODELO[6], MODELO[10], 0, 0, 0, 0, 1];
-export const dirCuerpo = (ras) => nrm(m4.apply3(Mi, ras));
-export const ARRIBA = dirCuerpo([0, 0, 1]);
+export { dirCuerpo, ARRIBA };      // (viven en mat.mjs: la ecografía también los usa para colocar las sondas)
 
 // ---- calibre de la VCI (ilustrativo; ver la cabecera)
 /** Diámetro en espiración (mm), colapso inspiratorio (fracción) y diámetro en inspiración, para una PVC (mmHg). */

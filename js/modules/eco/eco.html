@@ -54,6 +54,7 @@
                     <button type="button" class="cv-mini on" data-medir="libre">Libre</button>
                     <button type="button" class="cv-mini" data-medir="tapse">TAPSE (A4C)</button>
                     <button type="button" class="cv-mini" data-medir="vi">Diámetros del VI (PLAX)</button>
+                    <button type="button" class="cv-mini" data-medir="vci">VCI (subcostal)</button>
                 </div>
                 <p class="cv-muted" id="cv-m-guia"></p>
                 <div class="tfg-estado" id="cv-m-resultado"></div>
@@ -62,8 +63,12 @@
                     <button type="button" class="cv-mini" id="cv-m-lvsd">Guardar como LVSd</button>
                     <button type="button" class="cv-mini" id="cv-m-borrar">Borrar calibres</button>
                 </div>
+                <div class="cv-fila" id="cv-m-vci" hidden>
+                    <button type="button" class="cv-mini" id="cv-m-dmax">Guardar como Dmáx</button>
+                    <button type="button" class="cv-mini" id="cv-m-dmin">Guardar como Dmín</button>
+                    <button type="button" class="cv-mini" id="cv-m-borrar-vci">Borrar calibres</button>
+                </div>
                 <div id="cv-m-enlaces"></div>
-                <p class="cv-muted">La VCI se mide en la ventana subcostal, que el simulador todavía no tiene (llegará con la vista subcostal).</p>
             </div>
             <div id="cv-d-zona" hidden>
                 <div class="cv-m">
@@ -77,6 +82,8 @@
                         <button type="button" class="cv-mini" data-muestra="tsvi">TSVI (A3C)</button>
                         <button type="button" class="cv-mini" data-muestra="tricus">Tricúspide (A4C)</button>
                         <button type="button" class="cv-mini" data-muestra="pulmonar">Pulmonar (PSAX Ao)</button>
+                        <button type="button" class="cv-mini" data-muestra="suprahep">Suprahepática (SC VCI)</button>
+                        <button type="button" class="cv-mini" data-muestra="vci">VCI (SC VCI)</button>
                     </div>
                     <select class="cv-mini" id="cv-d-escala" aria-label="Escala del espectro">
                         <option value="60">±60 cm/s</option>

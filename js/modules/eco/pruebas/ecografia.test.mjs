@@ -6,6 +6,8 @@ import { crearMotor } from '../motor.mjs';
 import { construirCorazon, baseGeometrica, REF } from '../corazon-geo.mjs';
 import { estadoGeo } from '../formas.mjs';
 import { VISTAS, planoVista, enPlano, cortarPieza, elementosDelCorte, crearEcografo, ajusteAfin, campoDesplazamiento, desplazar, abanicoVista } from '../ecografia.mjs';
+import { construirAbdomen, anatomiaAbdomen, dentroMalla, ARRIBA } from '../abdomen.mjs';
+import { ESCENARIOS } from '../escenarios.mjs';
 
 const m = crearMotor(); m.correr(12);
 const o = m.onda, extra = { vviTd: m.ultimo.edv, vvdTd: m.ultimo.edvD, liquidoPeri: 0 }, OP = { pericardio: true, detalle: true };
@@ -166,5 +168,55 @@ test('sonda libre: plano ortonormal y maniobras que pasan de una vista estándar
     const P = planoLibre(planoVista(de, td), s), v = vistaMasParecida(P, td, VISTAS[de].ventana), dv = desviacion(P, planoVista(a, td));
     assert.equal(v.clave, a, `${de} ${JSON.stringify(s)} se parece más a ${v.clave}`);
     assert.ok(dv.grados < 7 && dv.mm < 6, `${de} → ${a}: ${dv.grados.toFixed(1)}°, ${dv.mm.toFixed(1)} mm`);
+  }
+});
+
+// ---- fase 5: subcostal (4 cámaras y VCI) y supraesternal
+const AB = anatomiaAbdomen(), altoH = (p) => dot([p[0] - AB.hiato[0], p[1] - AB.hiato[1], p[2] - AB.hiato[2]], ARRIBA);
+const ejeVci = (alto) => AB.ejeVci.reduce((a, p) => (Math.abs(altoH(p) - alto) < Math.abs(altoH(a) - alto) ? p : a));
+
+test('subcostal 4 cámaras: corta el ápex, las dos AV y las aurículas, con el ápex a la derecha y el hígado delante', () => {
+  const g = baseGeometrica(td), P = planoVista('sc4c', td), en = (p) => enPlano(P, p);
+  const apex = [0, 0, -g.vi.Le], mit = [g.mc[0], g.mc[1], 0], tri = [g.ct[0], g.ct[1], 0];
+  for (const p of [apex, mit, tri]) assert.ok(Math.abs(en(p)[2]) < 10, `fuera del plano ${en(p)[2].toFixed(0)} mm`);
+  assert.ok(en(apex)[0] > en(tri)[0] + 30, 'el ápex (izquierda del paciente) a la derecha de la imagen');
+  let h = 0; for (let v = 0; v < 90; v += 5) if (dentroMalla(AB.higado, [0, 1, 2].map(i => P.O[i] + P.d[i] * v))) h++;
+  assert.ok(h >= 6, `el haz central apenas cruza el hígado (${h * 5} mm)`);
+});
+
+test('subcostal VCI: la VCI va a lo largo del corte, casi en horizontal, y entra en la AD a la derecha', () => {
+  const g = baseGeometrica(td), P = planoVista('scVci', td), en = (p) => enPlano(P, p);
+  const tramo = AB.ejeVci.filter(p => altoH(p) < -5 && altoH(p) > -60);
+  for (const p of tramo) assert.ok(Math.abs(en(p)[2]) < 4, `la VCI se sale del corte ${en(p)[2].toFixed(1)} mm`);
+  const a = en(ejeVci(-55)), b = en(ejeVci(-5));
+  assert.ok(b[0] - a[0] > 35, 'hacia la AD, a la derecha');
+  assert.ok(Math.abs(b[1] - a[1]) < 0.5 * (b[0] - a[0]), 'casi horizontal (cruza la imagen, no va hacia la sonda)');
+  assert.ok(en([g.ct[0] - 5, g.ct[1], 16])[0] > b[0], 'la AD, todavía más a la derecha');
+});
+
+test('supraesternal: el arco en el corte, ascendente a la izquierda y descendente a la derecha, y el techo arriba', () => {
+  const g = baseGeometrica(td), P = planoVista('sse', td), en = (p) => enPlano(P, p);
+  const asc = [g.ac[0] - 1, g.ac[1] - 4, 62], techo = [14, -34, 72], desc = [21, -54, 50];
+  for (const p of [asc, techo, desc]) assert.ok(Math.abs(en(p)[2]) < 8, `fuera del corte ${en(p)[2].toFixed(0)} mm`);
+  assert.ok(en(asc)[0] < 0 && en(desc)[0] > 0, 'ascendente a la izquierda, descendente a la derecha');
+  assert.ok(en(techo)[1] < en(desc)[1] && en(techo)[1] < en(asc)[1] + 20, 'el arco, lo más cerca de la sonda');
+});
+
+test('fase 5: la VCI cortada a lo largo y el arco se ven como sangre; el hígado, como tejido', () => {
+  const ab = construirAbdomen(gTd, { pvc: m.ultimo.pvc, pad: m.ultimo.pvc, t: 0 }), partes = gTd.partes.concat(ab.partes);
+  const P1 = planoVista('scVci', td), im1 = ec.formar(partes, P1);
+  for (const alto of [-20, -30, -40]) assert.equal(tagMuestra(im1, P1, ejeVci(alto)), 255, `VCI a ${alto} mm del hiato`);
+  assert.equal(tagMuestra(im1, P1, [0, 1, 2].map(i => P1.O[i] + P1.d[i] * 50)), im1.etiquetas.get('Hígado'), 'a 5 cm, hígado');
+  const g = baseGeometrica(td), P2 = planoVista('sse', td), im2 = ec.formar(partes, P2);
+  for (const p of [[g.ac[0] - 1, g.ac[1] - 4, 62], [14, -34, 72], [21, -54, 50]]) assert.equal(tagMuestra(im2, P2, p), 255, 'luz de la aorta');
+});
+
+test('fase 5: las paredes quedan cerradas en las vistas nuevas también en los escenarios de shock', () => {
+  for (const esc of Object.keys(ESCENARIOS)) {
+    const mm = crearMotor(); mm.correr(12); ESCENARIOS[esc].aplicar(mm); if (esc !== 'normal') mm.correr(10);
+    const oo = mm.onda, ex = { vviTd: mm.ultimo.edv, vvdTd: mm.ultimo.edvD, liquidoPeri: mm.p.liquidoPeri || 0 }, t0 = oo.reduce((a, b) => (b.vvi > a.vvi ? b : a));
+    for (const k of ['sc4c', 'scVci', 'sse']) { const P = planoVista(k, t0);
+      for (let i = 0; i < oo.length; i += 80) for (const e of elementosDelCorte(construirCorazon(estadoGeo(oo[i], ex), OP).partes, P))
+        if (e.tipo === 'relleno') assert.equal(e.abiertos, 0, `${esc} · ${k}: ${e.grupo} sin cerrar`); }
   }
 });

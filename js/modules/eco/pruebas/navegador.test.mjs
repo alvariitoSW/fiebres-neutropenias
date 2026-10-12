@@ -329,3 +329,28 @@ test('revisión, corte, cambio de vista y escala: VCI quieta al revisar, VCI rec
   assert.deepEqual(errores, []);
   await pg.close();
 });
+
+test('fase 5: vistas subcostales y supraesternal, la VCI medida en modo M y la suprahepática en el Doppler', { skip: omitir }, async () => {
+  const { pg, errores } = await abrir('js/modules/eco/laboratorio.html');
+  for (const k of ['sc4c', 'scVci', 'sse']) assert.equal(await pg.locator(`[data-eco="${k}"]`).count(), 1, k);
+  await pg.locator('[data-eco="sse"]').tap(); await pg.waitForTimeout(500);
+  assert.ok((await pg.evaluate(() => window.__eco.info().rotulos)).includes('Arco'));
+  // VCI: la medida guiada pasa a la subcostal VCI con un barrido de 6 s
+  await pg.locator('[data-modo="M"]').tap(); await pg.locator('[data-medir="vci"]').tap(); await pg.waitForTimeout(500);
+  assert.equal(await pg.evaluate(() => window.__eco.info().vista), 'scVci');
+  assert.equal(await pg.evaluate(() => window.__eco.modoM.estado.barrido), 6);
+  assert.equal(await pg.locator('#cv-m-vci').isVisible(), true);
+  // 10 % y 8 % de la altura del trazado = 17 y 13,6 mm de profundidad (170 mm): colapso del 20 %
+  await pg.evaluate(() => window.__eco.modoM.ponerCalibres({ x: 0.2, y: 0.5 }, { x: 0.2, y: 0.6 })); await pg.click('#cv-m-dmax');
+  await pg.evaluate(() => window.__eco.modoM.ponerCalibres({ x: 0.5, y: 0.5 }, { x: 0.5, y: 0.58 })); await pg.click('#cv-m-dmin');
+  const txt = await pg.textContent('#cv-m-resultado');
+  assert.match(txt, /colapso 20%/); assert.match(txt, /En el modelo, con PVC/);
+  assert.equal(await pg.locator('#cv-m-a-vci').count(), 1);
+  // Doppler: la suprahepática da S, D y A
+  await pg.locator('[data-modo="D"]').tap(); await pg.locator('[data-muestra="suprahep"]').tap(); await pg.waitForTimeout(3000);
+  const info = await pg.evaluate(() => window.__eco.info());
+  assert.match(info.fuente, /suprahepática/); assert.equal(info.medidas.tipo, 'hepatica');
+  assert.ok(!(await pg.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)), 'desborda en horizontal');
+  assert.deepEqual(errores, []);
+  await pg.close();
+});

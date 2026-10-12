@@ -4,6 +4,7 @@
 
 const FATE = { especialidad: 'sobrevivirUmi', view: 'manualUmi', panel: 'panel-manual-umi-tabs', tab: 'umi-fate', ficha: 'Manual UMI · FATE' };
 const MONITORIZACION = { especialidad: 'fisioUci', view: 'cardiologia', panel: 'panel-cardio-tabs', tab: 'cardio-monitorizacion-hemodinamica', ficha: 'Fisiopatología UCI · Cardiología · Ficha 5' };
+const VEXUS = { especialidad: 'uciPapers', view: 'vexus', panel: 'panel-vexus-tabs', tab: 'vexus-fisiologia-doppler', ficha: 'UCI · Papers Tuiter · VExUS' };
 const CORAZON_PULMON = { especialidad: 'fisioUci', view: 'cardiologia', panel: 'panel-cardio-tabs', tab: 'cardio-interaccion-corazon-pulmon', ficha: 'Fisiopatología UCI · Cardiología · Ficha 11' };
 
 export const QUE_MIRAR = {
@@ -37,6 +38,15 @@ export const QUE_MIRAR = {
         { fuente: '#umi-fate-psax', ...FATE },
         { fuente: '#cardio-eco-17seg', ...MONITORIZACION },
     ],
+    sc4c: [
+        { fuente: '#umi-fate-subcostal', ...FATE },
+    ],
+    scVci: [
+        { fuente: '#umi-fate-vci-pvc', ...FATE, pendiente: 'Mídelo aquí: «Modo M» → «VCI (subcostal)».' },
+        { fuente: '#umi-fate-vci', ...FATE },
+        { fuente: '#vexus-onda-hepatica', ...VEXUS, pendiente: 'Mírala aquí: «Doppler pulsado» → «Suprahepática (SC VCI)».' },
+    ],
+    sse: [],
 };
 
 // Escenarios del simulador frente al tipo de shock de la Tabla 14.1 de Merino (el que comprueban las pruebas).

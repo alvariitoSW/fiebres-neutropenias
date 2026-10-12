@@ -18,7 +18,7 @@ en `lab/circulacion/`), como la especialidad «Eco cardíaca»: ver «En la app�
 node --test 'js/modules/eco/pruebas/*.test.mjs'
 ```
 
-Tarda ~2 min (113 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta. Las de navegador
+Tarda ~2 min (119 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta. Las de navegador
 sirven el repositorio con un servidor propio y abren `laboratorio.html`.
 
 - `motor.test.mjs` — cada cifra del latido normal frente a su referencia (`referencias.mjs`), el volumen
@@ -50,7 +50,7 @@ sirven el repositorio con un servidor propio y abren `laboratorio.html`.
 - `ecografia.test.mjs` — cada vista es un plano bien formado que pasa por sus puntos (el 4 cámaras por la mitral y
   la tricúspide, con el VI a la derecha; el eje largo por el eje del VI y las dos válvulas; los ejes cortos
   perpendiculares al eje, con la pared lateral a la derecha); un triángulo paralelo al plano no deja borrón; **las
-  paredes cortadas quedan cerradas en las 7 vistas a lo largo de todo el latido** (sin rayas); en el eje corto de
+  paredes cortadas quedan cerradas en las 10 vistas a lo largo de todo el latido** (sin rayas); en el eje corto de
   papilares el **área de la pared del VI es la de la geometría (±3%)** y crece en sístole; la cavidad del VI y la AI
   son sangre; el miocardio brilla >25 dB más que la sangre y el pericardio más que el miocardio; el **campo de
   desplazamiento predice dónde estaba el tejido** (puntos que no ha visto, error <1 mm, menos de la mitad que un
@@ -155,7 +155,7 @@ Idea tomada de *The Heart by Ultrasound* (ver «Créditos»), estudiada a fondo 
 
 | *The Heart by Ultrasound* | Aquí |
 |---|---|
-| Plano por vista desde puntos anatómicos de su malla | `planoVista()`: desde nuestros centros valvulares, el eje del VI y los surcos (A4C, A2C, A3C, PLAX, PSAX a nivel aórtico, mitral y de papilares) |
+| Plano por vista desde puntos anatómicos de su malla | `planoVista()`: desde nuestros centros valvulares, el eje del VI y los surcos (A4C, A2C, A3C, PLAX, PSAX a nivel aórtico, mitral y de papilares), y desde el xifoides, el hiato, el eje de la VCI y el arco aórtico (subcostales y supraesternal, fase 5) |
 | Malla cerrada de miocardio: el corte da lazos que se rellenan | Nuestras paredes son **superficies abiertas** (endo y epi por separado, aurículas de una capa): `cerrarExtremos()` une cada extremo suelto con el más cercano y se rellena por paridad sobre la sopa de segmentos; las paredes de una capa y las valvas van como líneas con grosor |
 | Moteado que viaja con cada estructura (ajuste afín frente a una forma de referencia) | El punto material del corte en la forma telediastólica (misma arista, mismo parámetro) y un **campo de desplazamiento** en retícula de 3 mm, que sigue también a la pared que engorda; afín de reserva |
 | Borde brillante donde el haz incide de frente; desenfoque del haz que crece con la profundidad; compresión log | Igual de idea, con implementación propia: borde especular cos⁴, dos medias móviles por fila (varianza de una gaussiana de σ ≈ 0,0085·r) y gaussiana axial, envolvente en dB |
@@ -242,7 +242,10 @@ de anatomía de GitHub** en vez de modelarlos desde cero; se estudiará antes de
 - **TAPSE:** se compara con las dos cifras de la app (>16 mm, Ficha 5; >17 mm, Ficha 11), sin elegir una, y se da
   lo que recorre el anillo en el modelo en ese latido. **Diámetros del VI:** «Guardar como LVDd/LVSd» y la FS; el
   enlace a FATE escribe los dos diámetros en su calculadora de FS (`#umi-fs-lvdd/-lvsd`) antes de navegar.
-- **VCI:** no se puede medir todavía (sin ventana subcostal ni VCI; fase 5). La tarjeta lo dice.
+- **VCI** (fase 5): «VCI (subcostal)» pasa a la subcostal VCI con un barrido de 6 s (una respiración del modelo dura
+  4 s) y la línea cruzando la VCI ~2 cm por debajo del hiato, donde ya no llegan las suprahepáticas. «Guardar como
+  Dmáx/Dmín» da el colapso, la banda de la PAD y el índice de colapsabilidad en ventilación espontánea de FATE; el
+  enlace escribe Dmáx, Dmín y el contexto en su calculadora (`#umi-vci-modo/-dmax/-dmin`) antes de navegar.
 - **Cambio en la geometría para que el TAPSE tenga sentido (fase 2a):** antes todo el plano AV bajaba lo mismo
   (13 mm), así que TAPSE = MAPSE y un corazón normal daba un TAPSE «patológico». Ahora la pared libre del VD baja,
   además, lo que le corresponde por lo que se vacía el VD: `TAPSE_POR_ML` × (VTD − volumen actual del VD), calibrado
@@ -326,6 +329,29 @@ es Z-Anatomy, en el paquete npm `@authorod/svitylo-3d-anatomy-data` 1.1.0; HRA y
   la eyección del motor tiene el pico a los ~40 ms y es demasiado afilada); en las suprahepáticas, en reposo S ≈ D
   (lo normal es S > D). Con escala de color de 60 cm/s el TSVI se ve con aliasing por ese pico.
 
+## Vistas subcostales y supraesternal (fase 5)
+
+- **Subcostal 4 cámaras** (`sc4c`): la sonda sobre la piel 40 mm por debajo de la punta del xifoides, 8 mm por
+  delante del borde del hígado y 20 mm a su derecha; el plano es el que mejor pasa (mínimos cuadrados con el plano
+  obligado a pasar por la sonda) por el ápex, las dos válvulas AV y las dos aurículas, con el ápex a la derecha. El
+  haz atraviesa ~5 cm de lóbulo izquierdo del hígado antes del corazón.
+- **Subcostal VCI** (`scVci`): la sonda más vertical, delante del tramo que se mira, y el plano por el eje de la VCI
+  (de 45 mm bajo el hiato a la AD): la vena cruza la imagen casi en horizontal y entra en la AD a la derecha, con las
+  suprahepáticas en el hígado. Es la ventana de la medida de la VCI (modo M) y de la suprahepática del Doppler
+  (preajustes «Suprahepática (SC VCI)» y «VCI (SC VCI)»).
+- **Supraesternal** (`sse`): la sonda en la escotadura yugular (35 mm por encima del techo del arco y 15 mm por
+  delante, en la línea media que marca el xifoides), el plano por la aorta ascendente (izquierda) y la descendente
+  (derecha): el arco arriba, la AP derecha en círculo debajo y la AI más abajo.
+- **Vasos cortados a lo largo**: la aorta, el tronco pulmonar y las AP pasan a ser `vaso` (luz con sangre aunque
+  salgan del pericardio). Un vaso cortado a lo largo deja dos líneas abiertas: se cierran uniendo sus extremos (hasta
+  45 mm), como las paredes.
+- **Paredes que rozan la base**: estas vistas cortan a veces solo el epicardio cerca del borde de la base y dejan sus
+  dos extremos a 31-34 mm. El tope para unir extremos de una pared sube de 30 a 40 mm; como los puentes van de menor a
+  mayor distancia, solo cambian los cortes que antes quedaban abiertos (una prueba lo comprueba en los cinco
+  escenarios).
+- `dirCuerpo`/`ARRIBA`/`DELANTE`/`DERECHA` (direcciones del cuerpo en el sistema del corazón) viven ahora en
+  `mat.mjs`; `abdomen.mjs` las reexporta.
+
 ## Rendimiento medido
 
 En un móvil Android real (octubre 2026, pantalla de 90 Hz, calidad alta, sangre activada), **antes de las formas
@@ -360,9 +386,12 @@ licencia CC BY-SA 4.0 (el resto del simulador no). La cita también se muestra e
   retrógrado por las válvulas).
 - **Abdomen**: ventilación mecánica (índice de distensibilidad de FATE) en el reloj respiratorio; el derrame del motor
   solo llega a PVC ~7,5, así que su VCI no sale «dilatada» (>21 mm) aunque ya no colapse un 50 %.
-- Más ideas de *The Heart by Ultrasound* por reconstruir: más
-  vistas (subcostal —ya hay hígado y VCI para ella—, supraesternal), formas de enfermedad movidas por los
-  escenarios (choca con «anatomía congelada»: hace falta decidirlo) y que una cifra mostrada nunca contradiga su grado.
+- Más ideas de *The Heart by Ultrasound* por reconstruir: formas de enfermedad movidas por los escenarios (choca con
+  «anatomía congelada»: hace falta decidirlo) y que una cifra mostrada nunca contradiga su grado.
+- **Vistas de la fase 5**: en la subcostal 4 cámaras el VD queda solo algo más cerca del hígado que el VI (con
+  nuestra anatomía, menos que en un paciente); la subcostal no tiene reto de paso entre vistas (la de la VCI pone la
+  sonda en otro sitio de la piel); la supraesternal no tiene troncos supraaórticos ni Doppler del arco (el motor no
+  da flujo más allá de la raíz).
 - Ecografía en un *worker* si en el móvil baja de fps.
 - **Saltos de la geometría exacta:** la huella de las aurículas (y la grasa periaórtica) se calcula con rayos que
   se paran al tocar la raíz aórtica; un rayo casi tangente pasa de pararse a no pararse y un vértice salta hasta

@@ -10,7 +10,7 @@
 // dibujan la eco, el cursor del Wiggers, el punto del asa, la barra A-G y las cifras.
 import { crearMotor, FASES } from './motor.mjs';
 import { construirCorazon, LIMITES, TAPSE_POR_ML, recortar, planoCorte } from './corazon-geo.mjs';
-import { construirAbdomen } from './abdomen.mjs';
+import { construirAbdomen, anatomiaAbdomen, modeloVci, ARRIBA } from './abdomen.mjs';
 import { crearCamara, m4, MODELO, nrm } from './mat.mjs';
 import { crearWebGL } from './render-webgl.mjs';
 import { ESCENARIOS } from './escenarios.mjs';
@@ -21,9 +21,9 @@ import { VISTAS, planoVista, enPlano, crearEcografo, abanicoVista, direccionHaz,
 import { crearModoM } from './modo-m.mjs';
 import { areasAnillo, fuentesFlujo, fuenteEnMuestra, curvaLatido, medidasLatido, puntosMuestra, velocidadesMuestra, columnaEspectro, mapaColor } from './doppler.mjs';
 
-export const NOMBRE_VISTA = { a4c: 'A4C', a2c: 'A2C', a3c: 'A3C', plax: 'PLAX', psaxAo: 'PSAX Ao', psaxMv: 'PSAX mitral', psaxPm: 'PSAX papilares' };
+export const NOMBRE_VISTA = { a4c: 'A4C', a2c: 'A2C', a3c: 'A3C', plax: 'PLAX', psaxAo: 'PSAX Ao', psaxMv: 'PSAX mitral', psaxPm: 'PSAX papilares', sc4c: 'SC 4C', scVci: 'SC VCI', sse: 'Supraesternal' };
 // orden de los chips: apicales, paraesternal largo, ejes cortos de la base al ápex
-const ORDEN_VISTAS = ['a4c', 'a2c', 'a3c', 'plax', 'psaxAo', 'psaxMv', 'psaxPm'];
+const ORDEN_VISTAS = ['a4c', 'a2c', 'a3c', 'plax', 'psaxAo', 'psaxMv', 'psaxPm', 'sc4c', 'scVci', 'sse'];
 export { VISTAS, ESCENARIOS };
 
 /**
@@ -166,18 +166,22 @@ export function montarSimulador(raiz, opc = {}) {
   }
   // ---- Modo M (modo-m.mjs): una línea del modo B a lo largo del tiempo, con calibres
   let modoEco = 'B', thetaM = 0, medir = 'libre', ultimoTM = null, ecoGeom = null;
-  const guardado = { lvdd: null, lvsd: null };
+  const guardado = { lvdd: null, lvsd: null, dmax: null, dmin: null };
   const MEDIDAS = {
     libre: { vista: null, guia: 'Mueve la línea M arrastrando en horizontal sobre la imagen. Pulsa ⏸ Pausa para congelar el trazado y toca dos puntos sobre él: la distancia vertical son mm de profundidad y la horizontal, ms.' },
     tapse: { vista: 'a4c', guia: 'Línea M sobre el anillo tricuspídeo lateral (apical 4 cámaras). Pulsa ⏸ Pausa, pon un calibre en el punto más alto del anillo (telediástole) y otro en el más bajo (telesístole): la distancia vertical es el TAPSE.' },
     vi: { vista: 'plax', guia: 'Línea M por el VI en el eje largo paraesternal, a la altura de las cuerdas. Pulsa ⏸ Pausa y mide del endocardio del tabique al de la pared posterior: con el VI más grande (telediástole), «Guardar como LVDd»; con el más pequeño (telesístole), «Guardar como LVSd».' },
+    vci: { vista: 'scVci', guia: 'Línea M cruzando la VCI unos 2 cm por debajo del diafragma, donde ya no le llegan las suprahepáticas (subcostal VCI). El barrido abarca 6 s, más de una respiración. Pulsa ⏸ Pausa y mide de pared a pared: con la vena más ancha (espiración), «Guardar como Dmáx»; con la más estrecha (final de la inspiración), «Guardar como Dmín».' },
   };
   const modoM = crearModoM($('#cv-m'), $('#cv-m-capa'), { onMedida: pintarMedida });
   const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+  // un punto del eje de la VCI a `alto` mm del hiato (negativo: por debajo); el eje es fijo al cuerpo
+  const puntoVci = (alto) => { const A = anatomiaAbdomen(), H = A.hiato, h = (p) => (p[0] - H[0]) * ARRIBA[0] + (p[1] - H[1]) * ARRIBA[1] + (p[2] - H[2]) * ARRIBA[2];
+    return A.ejeVci.reduce((a, p) => (Math.abs(h(p) - alto) < Math.abs(h(a) - alto) ? p : a)); };
   function colocarLineaM() {
     ultimoTM = null; modoM.limpiar(); ecoPendiente = true;
     if (medir === 'libre' || !prepararPlanoEco()) return;
-    const p = medir === 'tapse' ? refGeoTd.anilloTricLateral : refGeoTd.flujo.transformar([0, 0, -0.3 * refGeoTd.vi.L]);
+    const p = medir === 'tapse' ? refGeoTd.anilloTricLateral : medir === 'vci' ? puntoVci(-20) : refGeoTd.flujo.transformar([0, 0, -0.3 * refGeoTd.vi.L]);
     thetaM = clamp(anguloHacia(planoEco, p), -planoEco.mitad + 0.02, planoEco.mitad - 0.02);
   }
   function elegirModo(m) {
@@ -189,7 +193,8 @@ export function montarSimulador(raiz, opc = {}) {
   }
   function elegirMedida(k, cambiarVista = true) {
     medir = k; $$('[data-medir]').forEach(b => b.classList.toggle('on', b.dataset.medir === k));
-    $('#cv-m-vi').hidden = k !== 'vi';
+    $('#cv-m-vi').hidden = k !== 'vi'; $('#cv-m-vci').hidden = k !== 'vci';
+    modoM.setBarrido(k === 'vci' ? 6 : 2);
     const v = MEDIDAS[k].vista;
     if (cambiarVista && v && v !== vistaEco) elegirVista(v); else colocarLineaM();
     modoM.borrarCalibres(); pintarGuia();
@@ -205,7 +210,10 @@ export function montarSimulador(raiz, opc = {}) {
     if (medir === 'tapse') enl.innerHTML = enlace('TAPSE en la Ficha 5', 'cardio-monitorizacion-hemodinamica', '#cardio-eco-tapse') + enlace('VD en la Ficha 11', 'cardio-interaccion-corazon-pulmon', '#cardio-eco-vd');
     if (medir === 'vi') enl.innerHTML = enlace('Dimensiones normales (FATE)', 'umi-fate', '#umi-fate-dimensiones', 'panel-manual-umi-tabs', 'sobrevivirUmi', 'manualUmi')
       + (guardado.lvdd && guardado.lvsd ? `<button type="button" class="especialidad-link" id="cv-m-a-fs" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-fate" data-resaltar="#umi-fs-resultado">Llevar LVDd y LVSd a la calculadora de FS (FATE) →</button>` : '');
-    if (!m) { poner('', medir === 'vi' ? textoVi() : 'Sin medida: toca dos puntos sobre el trazado.'); return; }
+    if (medir === 'vci') enl.innerHTML = enlace('Colapsabilidad de la VCI (FATE)', 'umi-fate', '#umi-fate-vci', 'panel-manual-umi-tabs', 'sobrevivirUmi', 'manualUmi')
+      + (guardado.dmax && guardado.dmin ? `<button type="button" class="especialidad-link" id="cv-m-a-vci" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-fate" data-resaltar="#umi-vci-resultado">Llevar Dmáx y Dmín a la calculadora de la VCI (FATE) →</button>` : '');
+    if (!m) { poner('', medir === 'vi' ? textoVi() : medir === 'vci' ? textoVci()[1] : 'Sin medida: toca dos puntos sobre el trazado.'); return; }
+    if (medir === 'vci') { const [estado, txt] = textoVci(); poner(estado, `Medida: <b>${f1(m.mm)} mm</b> (${f1(m.mm / 10)} cm) · Δ tiempo ${Math.round(m.ms)} ms<br>` + txt); return; }
     if (medir === 'libre') { poner('', `Δ profundidad <b>${f1(m.mm)} mm</b> · Δ tiempo <b>${Math.round(m.ms)} ms</b>`); return; }
     if (medir === 'vi') { poner('', `Medida: <b>${f1(m.mm)} mm</b> (${f1(m.mm / 10)} cm) · Δ tiempo ${Math.round(m.ms)} ms<br>` + textoVi()); return; }
     // TAPSE: las dos cifras de normalidad que cita la app; y lo que hace el modelo en este latido
@@ -222,6 +230,26 @@ export function montarSimulador(raiz, opc = {}) {
     if (d && sv) { const fs = (d - sv) / d * 100; t += ` · <b>FS ${Math.round(fs)}%</b> (FA normal 28-41%, Teichholz, Ficha 5 de Fisiopatología UCI · Cardiología; en FATE, FEVI ≈ 2 × FS)`; }
     return t;
   }
+  // VCI: las dos tablas de FATE (Manual UMI): banda de la PAD por diámetro y colapso, y el índice de colapsabilidad
+  // en ventilación espontánea (el modelo respira solo); y lo que hace el modelo con su PVC
+  function textoVci() {
+    const a = guardado.dmax, b = guardado.dmin, cm = (x) => x == null ? '—' : f1(x / 10) + ' cm';
+    let t = `Dmáx ${cm(a)} · Dmín ${cm(b)}`, estado = '';
+    if (a && b && a > b) {
+      const col = (a - b) / a * 100, ancha = a > 21, colapsa = col > 50;
+      const banda = !ancha && colapsa ? 'normal (0-5 mmHg; PAD ≈ 3)' : ancha && !colapsa ? 'alta (10-20 mmHg; PAD ≈ 15)' : 'intermedia (5-10 mmHg; PAD ≈ 8)';
+      estado = !ancha && colapsa ? 'ok' : ancha && !colapsa ? 'danger' : 'warn';
+      t += ` · <b>colapso ${Math.round(col)}%</b> → banda ${banda} (FATE: diámetro &lt;2,1 / &gt;2,1 cm y colapso &gt;50 / &lt;50%)`
+        + `<br>Índice de colapsabilidad en ventilación espontánea ${Math.round(col)}%: ${col > 40 ? 'por encima' : 'por debajo'} del 40% con el que FATE considera al paciente respondedor a volumen.`;
+    } else if (a && b) t += ' · Dmín tiene que ser menor que Dmáx.';
+    const u = motor.ultimo; if (u) { const v = modeloVci(u.pvc);
+      t += `<br><span class="cv-muted">En el modelo, con PVC ${f1(u.pvc)} mmHg: Dmáx ${f1(v.dmax)} mm y colapso ${Math.round(v.colapso * 100)}% (calibre ilustrativo, elegido para caer en las bandas de FATE).</span>`; }
+    return [estado, t];
+  }
+  function guardarVci(k) { const m = modoM.medida(); if (!m) return; guardado[k] = m.mm; modoM.borrarCalibres(); pintarMedida(null); }
+  $('#cv-m-dmax').addEventListener('click', () => guardarVci('dmax'));
+  $('#cv-m-dmin').addEventListener('click', () => guardarVci('dmin'));
+  $('#cv-m-borrar-vci').addEventListener('click', () => modoM.borrarCalibres());
   function guardarVi(k) { const m = modoM.medida(); if (!m) return; guardado[k] = m.mm; modoM.borrarCalibres(); pintarMedida(null); }
   $('#cv-m-lvdd').addEventListener('click', () => guardarVi('lvdd'));
   $('#cv-m-lvsd').addEventListener('click', () => guardarVi('lvsd'));
@@ -229,6 +257,12 @@ export function montarSimulador(raiz, opc = {}) {
   // antes de que el enlace navegue (lo hace el listener de [data-especialidad] de home, en document), se
   // escriben los diámetros en la calculadora de FS de FATE y se recalcula
   $('#cv-m-enlaces').addEventListener('click', (e) => {
+    if (e.target.closest('#cv-m-a-vci')) {
+      const modo = document.getElementById('umi-vci-modo'), a = document.getElementById('umi-vci-dmax'), b = document.getElementById('umi-vci-dmin'); if (!modo || !a || !b) return;
+      modo.value = 'espontanea'; a.value = (guardado.dmax / 10).toFixed(1); b.value = (guardado.dmin / 10).toFixed(1);
+      for (const el of [modo, a, b]) el.dispatchEvent(new Event('input', { bubbles: true }));
+      return;
+    }
     if (!e.target.closest('#cv-m-a-fs')) return;
     const a = document.getElementById('umi-fs-lvdd'), b = document.getElementById('umi-fs-lvsd'); if (!a || !b) return;
     a.value = (guardado.lvdd / 10).toFixed(1); b.value = (guardado.lvsd / 10).toFixed(1);
@@ -256,8 +290,21 @@ export function montarSimulador(raiz, opc = {}) {
   const areasD = () => areasAnillo(refGeoTd.geo);
   // dónde va la muestra en cada caso: justo pasadas las valvas en las AV; justo por debajo en las sigmoideas
   const PRESETS = { mitral: { vista: 'a4c', n: 'mitral', off: 8 }, tsvi: { vista: 'a3c', n: 'aortica', off: -7 },
-    tricus: { vista: 'a4c', n: 'tricus', off: 8 }, pulmonar: { vista: 'psaxAo', n: 'pulmonar', off: -6 } };
-  const PRESET_VISTA = { a4c: 'mitral', a3c: 'tsvi', psaxAo: 'pulmonar' };
+    tricus: { vista: 'a4c', n: 'tricus', off: 8 }, pulmonar: { vista: 'psaxAo', n: 'pulmonar', off: -6 },
+    // subcostal VCI: la VCI 3 cm por debajo del hiato y la suprahepática que mejor cae en el corte (VExUS)
+    vci: { vista: 'scVci', vaso: 'vci' }, suprahep: { vista: 'scVci', vaso: 'hepatica' } };
+  const PRESET_VISTA = { a4c: 'mitral', a3c: 'tsvi', psaxAo: 'pulmonar', scVci: 'suprahep' };
+  // un punto de un vaso del abdomen dentro del corte: en la suprahepática, el más alejado de la VCI de los que
+  // quedan a menos de 2,5 mm del plano (lejos de la confluencia, donde la muestra cogería la VCI)
+  function puntoVaso(tipo) {
+    if (tipo === 'vci') return puntoVci(-30);
+    const A = anatomiaAbdomen(), lejos = (p) => Math.hypot(p[0] - A.J[0], p[1] - A.J[1], p[2] - A.J[2]);
+    let mejor = null, cerca = null;
+    for (const v of A.suprahepaticas) for (const p of v.eje) { const dd = Math.abs(enPlano(planoEco, p)[2]);
+      if (dd < 2.5 && (!mejor || lejos(p) > lejos(mejor))) mejor = p;
+      if (!cerca || dd < cerca.dd) cerca = { p, dd }; }
+    return mejor && lejos(mejor) > 12 ? mejor : cerca.p;
+  }
   // nueva muestra, vista o sonda: el espectro empieza de cero y las medidas se rehacen (con el último latido) en el
   // fotograma siguiente
   function reiniciarD() {
@@ -274,8 +321,10 @@ export function montarSimulador(raiz, opc = {}) {
     const pr = PRESETS[k]; if (!pr) return;
     if (vistaEco !== pr.vista) elegirVista(pr.vista);
     if (!prepararPlanoEco()) return;
-    const F = fuentesFlujo(refGeoTd.flujo, muestraTd(), areasD(), [], datosFlujo()), j = F.geom.find(x => x.n === pr.n);
-    const [u, v] = enPlano(planoEco, sumV(j.c, escV(j.dir, pr.off)));
+    let p;
+    if (pr.vaso) p = puntoVaso(pr.vaso);
+    else { const F = fuentesFlujo(refGeoTd.flujo, muestraTd(), areasD(), [], datosFlujo()), j = F.geom.find(x => x.n === pr.n); p = sumV(j.c, escV(j.dir, pr.off)); }
+    const [u, v] = enPlano(planoEco, p);
     gate = { u, v }; reiniciarD(); marcarPreset(k);
   }
   $('#cv-d-presets').addEventListener('click', (e) => { const b = e.target.closest('[data-muestra]'); if (b) ponerMuestra(b.dataset.muestra); });
@@ -350,9 +399,11 @@ export function montarSimulador(raiz, opc = {}) {
   function sondaMovidaD() { if (!gate) return; marcarPreset(null); reiniciarD(); }
   $('#cv-sonda-toggle').addEventListener('click', () => { const p = $('#cv-sonda'); p.hidden = !p.hidden; $('#cv-sonda-toggle').setAttribute('aria-expanded', String(!p.hidden)); });
   $('#cv-sonda-cero').addEventListener('click', () => { reto = null; ponerSonda(SONDA_CERO); });
-  // Reto: o volver a la vista estándar desde una sonda desordenada, o pasar a otra vista de la misma ventana
+  // Reto: o volver a la vista estándar desde una sonda desordenada, o pasar a otra vista de la misma ventana. En la
+  // subcostal no hay paso entre vistas: la de la VCI pone la sonda en otro sitio de la piel (más abajo y vertical),
+  // y eso no se alcanza solo girando e inclinando
   function iniciarReto() {
-    const ventana = VISTAS[vistaEco].ventana, otras = ORDEN_VISTAS.filter(k => VISTAS[k].ventana === ventana && k !== vistaEco);
+    const ventana = VISTAS[vistaEco].ventana, otras = ventana === 'subcostal' ? [] : ORDEN_VISTAS.filter(k => VISTAS[k].ventana === ventana && k !== vistaEco);
     const azar = (a, b) => Math.round((a + Math.random() * (b - a)) * (Math.random() < 0.5 ? -1 : 1));
     if (otras.length && Math.random() < 0.5) { reto = { objetivo: otras[Math.floor(Math.random() * otras.length)], desde: vistaEco }; ponerSonda(SONDA_CERO); }
     else { reto = { objetivo: vistaEco, desde: vistaEco }; ponerSonda({ rot: azar(20, 50), incl: azar(8, 20), bal: azar(5, 12), desl: azar(0, 10) }); }
@@ -451,10 +502,14 @@ export function montarSimulador(raiz, opc = {}) {
       const alto = [0.1, 0.25, 0.4, 0.55, 0.7, 0.85];
       const marcas = [['VI', cerca(alto.map(u => f.enCamara.vi([u, 0, 0])))], ['VD', cerca(alto.flatMap(u => [0.15, 0.4, 0.65, 0.9].map(fv => f.enCamara.vd([u, fv, 0.55]))))],
         ['AI', cerca(alto.map(u => f.enCamara.ai([u, 0, 0])))], ['AD', cerca(alto.map(u => f.enCamara.ad([u, 0, 0])))],
-        ['Ao', T([f.valvulas.aortica[0], f.valvulas.aortica[1], f.valvulas.aortica[2] + 14])]];
+        ['Ao', T([f.valvulas.aortica[0], f.valvulas.aortica[1], f.valvulas.aortica[2] + 14])],
+        // fuera del corazón, solo en su ventana: la VCI bajo el diafragma (fija al cuerpo) en la subcostal; el arco
+        // aórtico y la AP derecha bajo él en la supraesternal
+        ...(VISTAS[vistaEco].ventana === 'subcostal' ? [['VCI', puntoVci(-25)]] : []),
+        ...(VISTAS[vistaEco].ventana === 'supraesternal' ? [['Arco', T([0, -14, 75])], ['APD', T([-12, -15, 56])]] : [])];
       for (const [n, p] of marcas) { const [u, v, dd] = enPlano(P, p), r = Math.hypot(u, v);
         if (Math.abs(dd) > 14 || r > P.prof - 5 || Math.abs(Math.atan2(u, v)) > P.mitad - 0.04) continue;
-        rot.push(n); ecoCtx.fillStyle = 'rgba(0,0,0,.55)'; ecoCtx.fillRect(X(u) - 12 * px, Y(v) - 8 * px, 24 * px, 16 * px);
+        rot.push(n); const w = (n.length > 2 ? 34 : 24) * px; ecoCtx.fillStyle = 'rgba(0,0,0,.55)'; ecoCtx.fillRect(X(u) - w / 2, Y(v) - 8 * px, w, 16 * px);
         ecoCtx.fillStyle = '#e8e3d5'; ecoCtx.fillText(n, X(u), Y(v)); }
     }
     $('#cv-eco-titulo').textContent = NOMBRE_VISTA[vistaEco] + (sondaMovida(sonda) ? ' · sonda libre' : '');

@@ -16,6 +16,8 @@
 // Valores de ecogenicidad, resolución y ganancia: ilustrativos (física general de la ecografía), no de
 // una fuente concreta.
 import { baseGeometrica, REF } from './corazon-geo.mjs';
+import { PUNTOS_ABDOMEN } from './abdomen-puntos.mjs';
+import { ARRIBA, DELANTE, DERECHA } from './mat.mjs';
 
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
@@ -25,6 +27,16 @@ const esc = (a, k) => [a[0] * k, a[1] * k, a[2] * k];
 const cruz = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
 const nrm = (a) => { const l = Math.hypot(a[0], a[1], a[2]) || 1; return [a[0] / l, a[1] / l, a[2] / l]; };
 const perp = (a, b) => nrm(res(a, esc(b, dot(a, b))));        // a sin su componente en b (b unitario)
+const perpV = (a, b) => res(a, esc(b, dot(a, b)));             // lo mismo sin normalizar
+// normal del plano que pasa por o y mejor ajusta los puntos: el autovector menor de Σ (p − o)(p − o)ᵀ
+function normalAjustada(o, pts) {
+  const M = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+  for (const p of pts) { const q = res(p, o); for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) M[i][j] += q[i] * q[j]; }
+  const tr = M[0][0] + M[1][1] + M[2][2], N = M.map((f, i) => f.map((x, j) => (i === j ? tr : 0) - x));     // el menor de M es el mayor de tr·I − M
+  let v = nrm(cruz(res(pts[0], o), res(pts[pts.length - 1], o)));
+  for (let k = 0; k < 60; k++) v = nrm([0, 1, 2].map(i => N[i][0] * v[0] + N[i][1] * v[1] + N[i][2] * v[2]));
+  return v;
+}
 const amp = (db) => Math.pow(10, db / 20);
 
 // ---------------------------------------------------------------------------- vistas
@@ -38,6 +50,11 @@ export const VISTAS = {
   a4c: { corto: 'A4C', nombre: 'Apical 4 cámaras', ventana: 'apical', prof: 170, angulo: 80 },
   a2c: { corto: 'A2C', nombre: 'Apical 2 cámaras', ventana: 'apical', prof: 170, angulo: 80 },
   a3c: { corto: 'A3C', nombre: 'Apical 3 cámaras (eje largo)', ventana: 'apical', prof: 170, angulo: 80 },
+  // subcostal: la sonda bajo la apófisis xifoides, el haz hacia arriba y a la izquierda a través del hígado
+  sc4c: { corto: 'SC4C', nombre: 'Subcostal 4 cámaras', ventana: 'subcostal', prof: 230, angulo: 80 },
+  scVci: { corto: 'SC VCI', nombre: 'Subcostal · vena cava inferior', ventana: 'subcostal', prof: 170, angulo: 70 },
+  // supraesternal: la sonda en la escotadura yugular, el haz hacia abajo, por el plano del arco aórtico
+  sse: { corto: 'SSN', nombre: 'Supraesternal · arco aórtico', ventana: 'supraesternal', prof: 130, angulo: 75 },
 };
 
 // Grosor de la pared torácica bajo el transductor (mm) y separación hasta el pericardio: así el corazón
@@ -57,7 +74,38 @@ export function planoVista(clave, est) {
   let O, d, r;
   // apical: el transductor sobre el ápex, en el eje, apuntando a la base
   const apical = (T, r0) => { O = [0, 0, -vi.Le - HUECO]; d = nrm(res(T, O)); r = perp(r0, d); };
-  if (v.ventana === 'apical') {
+  // plano por el transductor o que mejor pasa por los puntos pts (mínimos cuadrados con el plano obligado a pasar
+  // por o), con el haz hacia c y hacia la derecha de la imagen lo que señala q (desde c)
+  const ajustado = (o, pts, c, q) => { O = o; const n0 = normalAjustada(o, pts);
+    d = nrm(perpV(res(c, o), n0)); r = perp(perpV(res(q, c), n0), d); };
+  const porTres = (o, p, q, c) => { O = o; d = nrm(res(c, O)); r = perp(res(q, p), d); };
+  if (v.ventana === 'subcostal') {
+    // sobre la piel (la pared abdominal, ~8 mm por delante del borde del hígado), 40 mm por debajo de la punta del
+    // xifoides y 20 mm a su derecha: el haz sube hacia la izquierda atravesando el lóbulo izquierdo del hígado, y el
+    // VD queda algo más cerca del hígado que el VI (con nuestra anatomía, no tanto como en un paciente)
+    const X = PUNTOS_ABDOMEN.xifoides_punta, piel = sum(sum(sum(X, esc(DELANTE, 8)), esc(ARRIBA, -40)), esc(DERECHA, 20));
+    const apex = [0, 0, -vi.Le], mit = A(g.mc, 0), tri = A(g.ct, 0), ai = [g.mc[0], g.mc[1] - 10, 18], ad = [g.ct[0] - 5, g.ct[1], 16];
+    if (clave === 'sc4c') {
+      // el plano que mejor pasa por el ápex, las dos válvulas AV y las dos aurículas; el ápex a la derecha
+      const pts = [apex, mit, tri, ai, ad], c = esc(pts.reduce(sum), 1 / pts.length);
+      ajustado(piel, pts, c, apex);
+    } else {
+      // por el eje de la VCI, de 45 mm bajo el hiato (izquierda de la imagen) a la AD (derecha). La sonda, más
+      // vertical: sobre la piel delante del tramo de la VCI que se mira (a la altura del xifoides en profundidad,
+      // 8 mm por delante del hígado), con el haz hacia atrás, para que la vena cruce la imagen casi en horizontal
+      const V = PUNTOS_ABDOMEN.vci.map(x => x.slice(0, 3)), H = PUNTOS_ABDOMEN.hiato, alto = (p) => dot(res(p, H), ARRIBA);
+      const abajo = V.reduce((a, p) => (Math.abs(alto(p) + 45) < Math.abs(alto(a) + 45) ? p : a)), medio = sum(esc(abajo, 0.5), esc(ad, 0.5));
+      const sonda = sum(sum(medio, esc(ARRIBA, -25)), esc(DELANTE, dot(res(X, medio), DELANTE) + 8));
+      ajustado(sonda, [abajo, H, ad], medio, ad);
+    }
+  } else if (v.ventana === 'supraesternal') {
+    // la escotadura yugular: 35 mm por encima del techo del arco y 15 mm por delante, en la línea media (el plano
+    // sagital que pasa por el xifoides); corte por la aorta ascendente (izquierda) y la descendente (derecha)
+    const techo = [0, -14, 75], asc = [g.ac[0] - 1, g.ac[1] - 4, 65], desc = [21, -54, 50];
+    let o = sum(sum(techo, esc(ARRIBA, 35)), esc(DELANTE, 15));
+    o = res(o, esc(DERECHA, dot(res(o, PUNTOS_ABDOMEN.xifoides_punta), DERECHA)));
+    porTres(o, asc, desc, sum(esc(asc, 0.5), esc(desc, 0.5)));
+  } else if (v.ventana === 'apical') {
     if (clave === 'a4c') apical(A(mix2(g.ct, g.mc, 0.55), 8), [g.mc[0] - g.ct[0], g.mc[1] - g.ct[1], 0]);      // VI a la derecha
     else if (clave === 'a3c') apical(A(mix2(g.mc, g.ac, 0.5), 8), [g.ac[0] - g.mc[0], g.ac[1] - g.mc[1], 0]);  // aorta a la derecha
     else {
@@ -138,7 +186,10 @@ const TIPOS = [
   [/^(Papilar|Banda moderadora)/, { clase: 'tubo', db: 1, ancho: 3.5 }],
   [/^(AI|AD|Orejuela)/, { clase: 'linea', db: -1, ancho: 2.6 }],
   [/^Base V[ID]$/, { clase: 'linea', db: 0, ancho: 2 }],
-  [/^(Raíz aórtica|Aorta|Tronco pulmonar|AP )/, { clase: 'linea', db: 6, ancho: 2.2 }],
+  [/^Raíz aórtica$/, { clase: 'linea', db: 6, ancho: 2.2 }],
+  // grandes vasos: luz con sangre aunque salgan del pericardio (el arco en la supraesternal, la aorta descendente
+  // detrás de la AI en el eje largo)
+  [/^(Aorta|Tronco pulmonar|AP )/, { clase: 'vaso', db: 6, ancho: 2.2 }],
   // abdomen (abdomen.mjs): hígado y diafragma se rellenan como una pared (el diafragma, una banda muy ecogénica);
   // los vasos de dentro, luz con sangre y una pared fina (brillante en la porta, por su vaina fibrosa)
   [/^Hígado$/, { grupo: 'Hígado', clase: 'pared', db: 1 }],
@@ -278,7 +329,10 @@ export function elementosDelCorte(partes, P, ref = null) {
   });
   const out = [mascara];
   for (const [g, { db, trozos }] of grupos) {
-    const { puentes, puentesRef, abiertos } = cerrarExtremos(trozos);
+    // hasta 40 mm: las vistas que rozan la base (supraesternal, subcostal) dejan el epicardio abierto con sus dos
+    // extremos en el borde de la base a 30-35 mm. Los puentes van de menor a mayor distancia, así que subir el tope
+    // no cambia los que ya se cerraban: solo cierra los que antes quedaban abiertos
+    const { puentes, puentesRef, abiertos } = cerrarExtremos(trozos, 40);
     const seg = trozos.flatMap(x => x.seg).concat(puentes);
     const conRef = trozos.every(x => x.segRef);
     const segRef = conRef ? trozos.flatMap(x => x.segRef).concat(puentesRef) : null;
@@ -290,8 +344,10 @@ export function elementosDelCorte(partes, P, ref = null) {
     // cerrado: cada extremo suelto tiene otro en el mismo sitio (la costura de la rejilla del tubo)
     const cerrado = cerrarExtremos([x], 0.6).abiertos === 0;
     if (x.t.clase === 'vaso') {
-      // vaso: luz con sangre (si el corte cierra) y la pared encima
-      if (cerrado) out.push({ tipo: 'relleno', seg: x.seg, segRef: null, db: DB.sangre, sangre: true, grupo: x.nombre, abiertos: 0 });
+      // vaso: luz con sangre y la pared encima. Cortado a lo largo (la VCI en la subcostal) el contorno son dos
+      // líneas que acaban donde acaba el tubo: se cierran uniendo sus extremos, como las paredes
+      const c = cerrado ? null : cerrarExtremos([x], 45);
+      if (cerrado || c.abiertos === 0) out.push({ tipo: 'relleno', seg: cerrado ? x.seg : x.seg.concat(c.puentes), segRef: null, db: DB.sangre, sangre: true, grupo: x.nombre, abiertos: 0 });
       out.push({ tipo: 'linea', seg: x.seg, segRef: x.segRef, db: x.t.db, ancho: x.t.ancho, grupo: x.nombre });
       continue;
     }

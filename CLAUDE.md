@@ -10604,6 +10604,28 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
   espectro y medidas; 6) el latido de la VCI es de verdad ±2 % y no la saca de su banda de FATE; 7) borrar el trazado
   (o cambiar la escala) borra los calibres; 8) una sola fórmula de velocidad de los vasos (`velVaso`); 9) los puntos
   del abdomen van en `abdomen-puntos.mjs` y `corazon-geo` ya no carga las mallas. Pruebas: 113 (3 *todo*).
+- **Fase 5: vistas subcostales y supraesternal**, a petición explícita del usuario («sigue con la fase 5 de la eco»).
+  Detalle en `js/modules/eco/README.md` («Vistas subcostales y supraesternal»). Tres vistas nuevas en `planoVista()`
+  (`ecografia.mjs`), colocadas con puntos anatómicos (xifoides, hiato, eje de la VCI, arco aórtico) y las direcciones
+  del cuerpo (`ARRIBA/DELANTE/DERECHA`, ahora en `mat.mjs`):
+  - **Subcostal 4 cámaras**: la sonda bajo el xifoides y el plano que mejor pasa (mínimos cuadrados) por ápex, válvulas
+    AV y aurículas; hígado arriba, ápex a la derecha.
+  - **Subcostal VCI**: la sonda más vertical y el plano por el eje de la VCI; la vena cruza la imagen y entra en la AD a
+    la derecha.
+  - **Supraesternal**: la sonda en la escotadura yugular; se ven el arco, la AP derecha debajo y la AI.
+  - **Medida de la VCI en el modo M** («VCI (subcostal)», barrido de 6 s): Dmáx/Dmín → colapso, banda de la PAD e índice
+    de colapsabilidad de FATE. El enlace escribe los valores en la calculadora de FATE (`#umi-vci-modo/-dmax/-dmin`), con
+    ids nuevos `umi-fate-vci` y `umi-fate-vci-pvc` en `manual-umi.html`.
+  - **Doppler**: puntos predefinidos «Suprahepática (SC VCI)» y «VCI (SC VCI)».
+  - **Accesos** desde FATE (subcostal 4 cámaras y medir la VCI) y desde VExUS (la subcostal VCI).
+  - **«Qué mirar»** para las 3 vistas. Arreglo de paso: una tabla copiada ahí ya no desborda la página.
+  - **Cambios del motor de imagen**:
+    - aorta, tronco y AP pasan a ser `vaso` (luz con sangre fuera del pericardio);
+    - un vaso cortado a lo largo se cierra uniendo sus extremos;
+    - el tope para cerrar paredes sube de 30 a 40 mm. Solo cambia cortes que antes quedaban abiertos; una prueba nueva
+      comprueba las 10 vistas en los 5 escenarios.
+  - **Formas de enfermedad**: siguen sin hacer. Chocan con «anatomía congelada» y hace falta que el usuario lo decida.
+  - Pruebas: 119 (3 *todo*).
 
 ## Cómo probar cambios
 
