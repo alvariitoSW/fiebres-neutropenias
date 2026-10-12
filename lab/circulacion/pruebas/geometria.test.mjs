@@ -1,7 +1,7 @@
 // Pruebas de la geometría del corazón y del flujo de sangre (sin navegador).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { baseGeometrica, construirCorazon, LIMITES } from '../corazon-geo.mjs';
+import { baseGeometrica, construirCorazon, LIMITES, puntoValva } from '../corazon-geo.mjs';
 import { crearMotor } from '../motor.mjs';
 import { crearFlujo, VOL_PARTICULA } from '../flujo-sangre.mjs';
 
@@ -68,4 +68,20 @@ test('la sangre de cada cavidad sigue a su volumen y entra y sale por las válvu
   assert.ok(salidasAorta > 40, `por la aorta salieron ${salidasAorta} partículas en 3 s`);
   const pts = fl.puntos(g.flujo);
   for (let i = 0; i < pts.pos.length; i++) assert.ok(Number.isFinite(pts.pos[i]), 'posición de partícula no finita');
+});
+
+test('la valva gira sobre su bisagra sin encogerse: el borde libre recorre un arco al abrir', () => {
+  // valva de prueba: bisagra en (10, 0, 0), coaptación en el centro, flujo hacia −z, abre 1,2 rad
+  for (const th of [1.2, 1.35]) {
+    const v = { anillo: () => [10, 0, 0], psi: () => 0, cierre: () => [0, 0, 0], n: [0, 0, -1], prof: 0, pot: 1, hundir: 0, abomba: 0, carga: 0, thAbierta: th };
+    let min = Infinity, max = 0, angPrev = -1;
+    for (let i = 0; i <= 20; i++) {
+      const p = puntoValva({ ...v, apertura: i / 20 }, 0, 1), d = Math.hypot(p[0] - 10, p[1], p[2]);
+      min = Math.min(min, d); max = Math.max(max, d);
+      const ang = Math.atan2(-p[2], 10 - p[0]);            // ángulo girado hacia el flujo
+      assert.ok(ang >= angPrev - 1e-9, `el giro retrocede en apertura ${i / 20}`); angPrev = ang;
+    }
+    assert.ok(min > 9.6 && max < 10.8, `longitud del borde libre entre ${min.toFixed(2)} y ${max.toFixed(2)} mm (cerrada 10)`);
+    assert.ok(Math.abs(angPrev - th) < 1e-6, 'abierta del todo no llega a su ángulo');
+  }
 });

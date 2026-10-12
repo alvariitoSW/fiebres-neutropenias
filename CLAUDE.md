@@ -10458,8 +10458,8 @@ recoge solo las decisiones.
   convive con eso daría un tercer Wiggers con cifras distintas.
 - **Cimientos (hechos):** código en el repositorio (antes solo en una carpeta temporal del contenedor),
   sin los scripts sueltos; **pruebas automáticas con un comando**
-  (`node --test 'lab/circulacion/pruebas/*.test.mjs'`, ~70 s, 74 pruebas: motor, diagramas, geometría y
-  navegador);
+  (`node --test 'lab/circulacion/pruebas/*.test.mjs'`, ~100 s, 81 pruebas: motor, diagramas, geometría,
+  formas y navegador);
   las cifras del latido y su referencia en un solo archivo (`referencias.mjs`) que usan a la vez las
   pruebas y la página del latido (antes la tabla tenía ✓ escritos a mano, uno de ellos siempre verdadero);
   escenarios en `escenarios.mjs`, y cada uno se comprueba contra el patrón de su tipo de shock en la
@@ -10470,7 +10470,7 @@ recoge solo las decisiones.
   en verde. Las cifras aún fuera de su referencia van marcadas `pendiente` (salen como *todo*, no fallan).
 - **Wiggers y asa P-V sincronizados con el corazón** (`diagramas.mjs`), a petición explícita del usuario
   tras estudiar con él cómo lo hace *The Heart by Ultrasound* (`douyang/echodemo`, leído y analizado
-  también con la herramienta de ingeniería inversa `rea`; **sin licencia, así que no se copió nada**: solo
+  también con la herramienta de ingeniería inversa `rea`; **no se copió nada** (después el autor dio permiso; ver más abajo): solo
   la idea). Regla: **un estado por fotograma**. `corazon-3d.html` decide en cada fotograma un único estado
   (`estadoMostrado()`: el motor mientras corre, o una muestra del último latido al revisar) y con ese mismo
   objeto construye la geometría y dibuja el cursor del Wiggers, el punto del asa, la barra A-G y las cifras;
@@ -10485,10 +10485,25 @@ recoge solo las decisiones.
   cursor leen el mismo instante. Verificado con capturas a 390 px en los dos temas: se corrigieron la letra
   (escalada a la densidad, no a un ancho fijo), el fondo atenuado entero (ahora 2 capas: ejes nítidos y
   curvas atenuadas) y rótulos pisados por las curvas (halo del color de fondo).
-- **Pendiente:** calibrar RVS y contracción isovolumétrica (referencia candidata: Alhakak 2025, ~40 ms,
-  pendiente del PDF); erratas de El Libro Azul en las tablas de patrones de shock (RVS en el distributivo)
-  que las fichas 5 y 10 reproducen sin nota; integración; escenarios enlazados a las fichas; formas
-  precalculadas que solo se mezclan en cada fotograma (idea de echodemo para bajar el coste).
+- **Permiso del autor y reconstrucción:** David Ouyang (autor de *The Heart by Ultrasound*) dio permiso para usar su
+  trabajo; aun así, a petición explícita del usuario, **se reconstruye sobre nuestro motor sin copiar código ni
+  modelos**, y se le da el crédito en `lab/circulacion/README.md` («Créditos»). Primeras dos ideas reconstruidas:
+  - **Valvas con tres formas** (`puntoValva()`, exportada de `corazon-geo.mjs`): cerrada, a medio abrir y abierta,
+    interpoladas con la parábola que pasa por las tres; la valva gira sobre su bisagra y no se encoge a mitad de
+    camino (en línea recta perdía ~15% de longitud). Prueba en `geometria.test.mjs`.
+  - **Formas precalculadas mezcladas en la tarjeta gráfica** (`formas.mjs`): con el latido estable se calculan
+    ~36-40 formas del último latido (instantes elegidos con error acotado: más densos en las válvulas y la
+    contracción auricular) y cada fotograma solo las mezcla (posiciones, normales y oclusión, en el sombreador). Se
+    usan solo si representan al estado mostrado (±2 mL, ±0,2 de apertura); si no, o con corte, geometría exacta.
+    Por fotograma pasa de ~16 ms a ~0,07 ms de procesador; cuesta ~20 MB. La apertura de las válvulas es ahora
+    función pura del estado (`estadoGeo()`), sin suavizado en el tiempo. Pruebas en `formas.test.mjs` y en el
+    navegador (81 pruebas, ~100 s).
+- **Pendiente:** calibrar RVS y contracción isovolumétrica (referencia candidata: Alhakak 2025, ~40 ms, pendiente
+  del PDF); erratas de El Libro Azul en las tablas de patrones de shock (RVS en el distributivo) que las fichas 5 y
+  10 reproducen sin nota; saltos de hasta ~8 mm de la geometría exacta en la huella de las aurículas (rayos
+  tangentes a la raíz aórtica); volver a medir los fps en el móvil; más ideas de echodemo (vistas en modo B
+  cortadas de nuestro corazón, formas de enfermedad —choca con la anatomía congelada—, cifra coherente con su
+  grado); integración; escenarios enlazados a las fichas.
 
 ## Cómo probar cambios
 

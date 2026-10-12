@@ -2,9 +2,11 @@
 // transparencias ordenadas. Consume las piezas de corazon-geo.
 import { m4, MODELO, det3 } from './mat.mjs';
 const VS = `#version 300 es
-in vec3 p; in vec3 n; in float ao; uniform mat4 MVP; uniform mat4 MV; uniform mat3 NM;
+in vec3 p; in vec3 n; in float ao; in vec3 p2; in vec3 n2; in float ao2; uniform float mezcla;
+uniform mat4 MVP; uniform mat4 MV; uniform mat3 NM;
 out vec3 vN; out vec3 vP; out vec3 vO; out float vAO;
-void main(){ gl_Position = MVP * vec4(p,1.0); vN = NM * n; vP = (MV * vec4(p,1.0)).xyz; vO = p; vAO = ao; }`;
+// mezcla de dos formas precalculadas (formas.mjs): con mezcla = 0 solo cuenta la primera
+void main(){ vec3 q = mix(p, p2, mezcla); gl_Position = MVP * vec4(q,1.0); vN = NM * mix(n, n2, mezcla); vP = (MV * vec4(q,1.0)).xyz; vO = q; vAO = mix(ao, ao2, mezcla); }`;
 // Materiales (ilustrativos): 1 miocardio con fibras helicoidales, 2 endocardio liso y claro,
 // 3 grasa lobulada, 4 valva, 5 vaso brillante, 6 sangre, 7 pericardio.
 // Luz: principal cálida, relleno frío desde abajo, ambiente de hemisferio, brillo "húmedo" en dos lóbulos.
@@ -73,19 +75,24 @@ export function crearWebGL(canvas) {
   if (!gl) return null;
   const pr = programa(gl, VS, FS), prL = programa(gl, VSL, FSL), prP = programa(gl, VSP, FSP);
   const U = (p, n) => gl.getUniformLocation(p, n);
-  const u = { MVP: U(pr, 'MVP'), MV: U(pr, 'MV'), NM: U(pr, 'NM'), color: U(pr, 'color'), alfa: U(pr, 'alfa'), luz: U(pr, 'luz'), luz2: U(pr, 'luz2'), mat: U(pr, 'mat') };
+  const u = { MVP: U(pr, 'MVP'), MV: U(pr, 'MV'), NM: U(pr, 'NM'), color: U(pr, 'color'), alfa: U(pr, 'alfa'), luz: U(pr, 'luz'), luz2: U(pr, 'luz2'), mat: U(pr, 'mat'), mezcla: U(pr, 'mezcla') };
   const uL = { MVP: U(prL, 'MVP'), color: U(prL, 'color') };
   const uP = { MVP: U(prP, 'MVP'), MV: U(prP, 'MV'), escala: U(prP, 'escala'), alfa: U(prP, 'alfa') };
   const bufP = { p: gl.createBuffer(), t: gl.createBuffer() };
   const bufs = new Map();   // por nombre de pieza (se reutilizan)
   const buf = (clave) => { if (!bufs.has(clave)) bufs.set(clave, { p: gl.createBuffer(), n: gl.createBuffer(), i: gl.createBuffer(), a: gl.createBuffer() }); return bufs.get(clave); };
-  const loc = { p: gl.getAttribLocation(pr, 'p'), n: gl.getAttribLocation(pr, 'n'), ao: gl.getAttribLocation(pr, 'ao'), pL: gl.getAttribLocation(prL, 'p'),
+  const loc = { p: gl.getAttribLocation(pr, 'p'), n: gl.getAttribLocation(pr, 'n'), ao: gl.getAttribLocation(pr, 'ao'),
+    p2: gl.getAttribLocation(pr, 'p2'), n2: gl.getAttribLocation(pr, 'n2'), ao2: gl.getAttribLocation(pr, 'ao2'), pL: gl.getAttribLocation(prL, 'p'),
     pP: gl.getAttribLocation(prP, 'p'), tP: gl.getAttribLocation(prP, 'tipo') };
   // sube un array al búfer solo si ha cambiado (los índices de las rejillas se comparten entre fotogramas)
   const subir = (b, campo, tipo, datos) => { if (b[campo + 'Ref'] === datos) return; gl.bindBuffer(tipo, b[campo]); gl.bufferData(tipo, datos, gl.DYNAMIC_DRAW); b[campo + 'Ref'] = datos; };
   gl.enable(gl.DEPTH_TEST);
   return {
     gl,
+    // borra de la tarjeta gráfica los búferes cuya clave empieza por este prefijo (formas de una tabla antigua)
+    liberar(prefijo) {
+      for (const [clave, b] of bufs) if (clave.startsWith(prefijo)) { for (const x of [b.p, b.n, b.i, b.a]) gl.deleteBuffer(x); bufs.delete(clave); }
+    },
     dibujar(partes, cam, fondo = [0.07, 0.07, 0.09], puntos = null) {
       const w = canvas.width, h = canvas.height; gl.viewport(0, 0, w, h);
       gl.clearColor(fondo[0], fondo[1], fondo[2], 1); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -99,25 +106,38 @@ export function crearWebGL(canvas) {
       const opacas = [], trans = [];
       partes.forEach((pz, k) => { if (pz.lineas) return; (pz.alfa && pz.alfa < 1 ? trans : opacas).push([pz, k]); });
       // transparentes de atrás hacia delante (por el centro de la pieza)
-      const prof = ([pz]) => { let cx = 0, cy = 0, cz = 0; const n = pz.pos.length / 3; for (let i = 0; i < pz.pos.length; i += 3) { cx += pz.pos[i]; cy += pz.pos[i + 1]; cz += pz.pos[i + 2]; } return m4.apply(MV, [cx / n, cy / n, cz / n])[2]; };
+      const prof = ([pz]) => { if (pz.centro) return m4.apply(MV, pz.centro)[2]; let cx = 0, cy = 0, cz = 0; const n = pz.pos.length / 3; for (let i = 0; i < pz.pos.length; i += 3) { cx += pz.pos[i]; cy += pz.pos[i + 1]; cz += pz.pos[i + 2]; } return m4.apply(MV, [cx / n, cy / n, cz / n])[2]; };
       trans.sort((a, b) => prof(a) - prof(b));
+      // atributo de vértice desde un búfer (o un valor fijo si la pieza no lo trae)
+      const atributo = (b, campo, l, n, datos, fijo) => {
+        if (l < 0) return;
+        if (datos) { subir(b, campo, gl.ARRAY_BUFFER, datos); gl.bindBuffer(gl.ARRAY_BUFFER, b[campo]); gl.enableVertexAttribArray(l); gl.vertexAttribPointer(l, n, gl.FLOAT, false, 0, 0); }
+        else { gl.disableVertexAttribArray(l); fijo?.(); }
+      };
       const dib = ([pz, k]) => {
-        const b = buf(pz.nombre + '#' + k);
-        subir(b, 'p', gl.ARRAY_BUFFER, pz.pos); gl.bindBuffer(gl.ARRAY_BUFFER, b.p);
-        gl.enableVertexAttribArray(loc.p); gl.vertexAttribPointer(loc.p, 3, gl.FLOAT, false, 0, 0);
-        subir(b, 'n', gl.ARRAY_BUFFER, pz.normales || (pz.normales = normalesSuaves(pz.pos, pz.idx))); gl.bindBuffer(gl.ARRAY_BUFFER, b.n);
-        gl.enableVertexAttribArray(loc.n); gl.vertexAttribPointer(loc.n, 3, gl.FLOAT, false, 0, 0);
-        subir(b, 'i', gl.ELEMENT_ARRAY_BUFFER, pz.idx); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, b.i);
-        if (pz.ao) { subir(b, 'a', gl.ARRAY_BUFFER, pz.ao); gl.bindBuffer(gl.ARRAY_BUFFER, b.a); gl.enableVertexAttribArray(loc.ao); gl.vertexAttribPointer(loc.ao, 1, gl.FLOAT, false, 0, 0); }
-        else { gl.disableVertexAttribArray(loc.ao); gl.vertexAttrib1f(loc.ao, 1.0); }
+        // pieza normal: un juego de búferes por pieza, que se rehacen cada fotograma; pieza mezclada (formas.mjs):
+        // dos formas precalculadas con sus propios búferes (se suben una vez) y la mezcla la hace el sombreador
+        const b = buf(pz.clave || (pz.nombre + '#' + k)), b2 = pz.pos2 ? buf(pz.clave2) : null;
+        atributo(b, 'p', loc.p, 3, pz.pos);
+        atributo(b, 'n', loc.n, 3, pz.normales || (pz.normales = normalesSuaves(pz.pos, pz.idx)));
+        atributo(b, 'a', loc.ao, 1, pz.ao, () => gl.vertexAttrib1f(loc.ao, 1.0));
+        if (b2) {
+          atributo(b2, 'p', loc.p2, 3, pz.pos2); atributo(b2, 'n', loc.n2, 3, pz.normales2);
+          atributo(b2, 'a', loc.ao2, 1, pz.ao2, () => gl.vertexAttrib1f(loc.ao2, 1.0));
+        } else for (const l of [loc.p2, loc.n2, loc.ao2]) if (l >= 0) gl.disableVertexAttribArray(l);
+        gl.uniform1f(u.mezcla, b2 ? pz.mezcla : 0);
+        const bi = pz.claveIdx ? buf(pz.claveIdx) : b;
+        subir(bi, 'i', gl.ELEMENT_ARRAY_BUFFER, pz.idx); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, bi.i);
         gl.uniform3fv(u.color, pz.color); gl.uniform1f(u.alfa, pz.alfa ?? 1); gl.uniform1i(u.mat, pz.mat || 1);
         if (pz.dobleCara) gl.disable(gl.CULL_FACE); else { gl.enable(gl.CULL_FACE); gl.cullFace(gl.BACK); }
         gl.drawElements(gl.TRIANGLES, pz.idx.length, gl.UNSIGNED_INT, 0);
       };
+      // sin VAO, los atributos activados siguen activos al cambiar de programa: se apagan los de la malla
+      const apagarMalla = () => { for (const l of [loc.n, loc.ao, loc.p2, loc.n2, loc.ao2]) if (l >= 0) gl.disableVertexAttribArray(l); };
       gl.disable(gl.BLEND); gl.depthMask(true); opacas.forEach(dib);
       // sangre: primero lo que se ve (con profundidad) y luego, tenue, lo que queda tras las paredes
       if (puntos && puntos.pos.length) {
-        gl.useProgram(prP); gl.disableVertexAttribArray(loc.n); gl.disableVertexAttribArray(loc.ao);
+        gl.useProgram(prP); apagarMalla();
         gl.uniformMatrix4fv(uP.MVP, false, MVP); gl.uniformMatrix4fv(uP.MV, false, MV);
         gl.uniform1f(uP.escala, 4.2 * P[5] * h / 2);                           // ~4 mm de diámetro (borde incluido)
         gl.bindBuffer(gl.ARRAY_BUFFER, bufP.p); gl.bufferData(gl.ARRAY_BUFFER, puntos.pos, gl.DYNAMIC_DRAW);
@@ -133,7 +153,7 @@ export function crearWebGL(canvas) {
       gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); gl.depthMask(false); trans.forEach(dib); gl.depthMask(true); gl.disable(gl.BLEND);
       // líneas (cuerdas tendinosas)
       gl.useProgram(prL); gl.uniformMatrix4fv(uL.MVP, false, MVP);
-      gl.disableVertexAttribArray(loc.n); gl.disableVertexAttribArray(loc.ao);
+      apagarMalla();
       partes.forEach((pz, k) => { if (!pz.lineas) return; const b = buf(pz.nombre + '#' + k);
         subir(b, 'p', gl.ARRAY_BUFFER, pz.lineas); gl.bindBuffer(gl.ARRAY_BUFFER, b.p);
         gl.enableVertexAttribArray(loc.pL); gl.vertexAttribPointer(loc.pL, 3, gl.FLOAT, false, 0, 0);

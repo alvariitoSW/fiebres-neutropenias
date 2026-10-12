@@ -167,6 +167,28 @@ function recortar(m, corte) {
   return { pos: pos.slice(0, nP * 3), idx: idx.slice(0, nI), ao: ao ? ao.slice(0, nP) : undefined };
 }
 
+// ---- Valvas: tres formas a lo largo de un arco -----------------------------------
+// Idea tomada de The Heart by Ultrasound (D. Ouyang, douyang/echodemo; reconstruida, no copiada): la valva no pasa de
+// cerrada a abierta en línea recta, sino por tres formas (cerrada, a medio abrir y abierta) que la hacen girar sobre su
+// bisagra en el anillo. Cerrada llega a la línea de coaptación K (se junta con la vecina) y se abomba contra el flujo
+// (−n) con la carga; a medio abrir y abierta es una lámina de la misma longitud girada θ/2 y θ hacia n (sentido del
+// flujo). Entre las tres se interpola con la parábola que pasa por ellas (Lagrange en 0, ½ y 1), así que el borde libre
+// recorre casi un arco y la valva no se encoge a mitad de camino (en línea recta perdía ~15% de su longitud).
+// v: { anillo(psi), psi(uu), cierre(uu), n, prof, pot, hundir, abomba, carga, thAbierta, apertura }
+export function puntoValva(v, uu, vv) {
+  const B = v.anillo(v.psi(uu)), K = v.cierre(uu);
+  const BK = res(K, B), l = largo(BK);
+  const cerr = sum(lerp(B, K, vv), esc(v.n, v.prof * Math.pow(vv, v.pot) - (v.hundir + v.abomba * v.carga) * Math.sin(Math.PI * vv)));
+  const a = clamp(v.apertura, 0, 1);
+  if (a === 0) return cerr;
+  let w = res(BK, esc(v.n, pto(BK, v.n))); w = esc(w, 1 / (largo(w) || 1));
+  const la = l * 1.05 * vv;
+  const girada = (th) => sum(B, sum(esc(w, la * Math.cos(th)), esc(v.n, la * Math.sin(th))));
+  const media = girada(v.thAbierta / 2), abie = girada(v.thAbierta);
+  const k0 = (1 - a) * (1 - 2 * a), k1 = 4 * a * (1 - a), k2 = a * (2 * a - 1);
+  return [0, 1, 2].map(c => k0 * cerr[c] + k1 * media[c] + k2 * abie[c]);
+}
+
 // ---- Construcción --------------------------------------------------------------
 // estado: { vvi, vvd, vai, vad, mitral, tricus, aortica, pulmonar (0..1), liquidoPeri }
 // opciones: { corte: null | { phi }, detalle, pericardio, calidad }
@@ -343,17 +365,6 @@ export function construirCorazon(estado, opciones = {}) {
   // --- Válvulas: cierran en una línea de coaptación y se abomban con la presión que soportan ---
   // estado.mitral… = apertura (0 cerrada, 1 abierta); estado.carga_mitral… = gradiente inverso con la válvula cerrada (0-1)
   const ap = (k) => clamp(estado[k] ?? 0, 0, 1), cg = (k) => clamp(estado['carga_' + k] ?? 0, 0, 1);
-  // Valva: borde fijo en el anillo; cerrada llega a la línea de coaptación K (se juntan con la vecina);
-  // abierta se pliega hacia n (sentido del flujo). La carga la abomba contra el flujo (−n).
-  const puntoValva = (v, uu, vv) => {
-    const B = v.anillo(v.psi(uu)), K = v.cierre(uu);
-    const BK = res(K, B), l = largo(BK);
-    const cerr = sum(lerp(B, K, vv), esc(v.n, v.prof * Math.pow(vv, v.pot) - (v.hundir + v.abomba * v.carga) * Math.sin(Math.PI * vv)));
-    let w = res(BK, esc(v.n, pto(BK, v.n))); w = esc(w, 1 / (largo(w) || 1));
-    const la = l * 1.05 * vv;
-    const abie = sum(B, sum(esc(w, la * Math.cos(v.thAbierta)), esc(v.n, la * Math.sin(v.thAbierta))));
-    return lerp(cerr, abie, v.apertura);
-  };
   const valva = (v) => rejilla(12, 7, (uu, vv) => puntoValva(v, uu, vv));
   const abajo = [0, 0, -1], arriba = [0, 0, 1];
   const u3 = [Math.cos(U), Math.sin(U), 0], uP3 = [-Math.sin(U), Math.cos(U), 0];

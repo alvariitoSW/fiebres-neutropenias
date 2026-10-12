@@ -48,6 +48,7 @@ input[type=range]{width:100%}
   <label class="mini"><input type="checkbox" id="peri" checked> Pericardio</label>
   <label class="mini"><input type="checkbox" id="det" checked> Papilares, cuerdas y coronarias</label>
   <label class="mini"><input type="checkbox" id="sangre" checked> Sangre en movimiento</label>
+  <label class="mini"><input type="checkbox" id="formas" checked> Formas precalculadas</label>
 </div>
 <div class="fila" id="filaCorte" style="display:none"><span class="muted">Ángulo del corte</span><input type="range" id="phi" min="0" max="628" value="260"></div>
 <div class="fila">
@@ -71,6 +72,7 @@ import { crearWebGL } from './render-webgl.mjs';
 import { ESCENARIOS } from './escenarios.mjs';
 import { crearFlujo } from './flujo-sangre.mjs';
 import { COLOR_FASE, segmentosFase, estadoRevision, crearDiagramas } from './diagramas.mjs';
+import { VALVULAS, apertura, estadoGeo, crearTablaFormas, semejantes } from './formas.mjs';
 const $ = (s) => document.querySelector(s);
 let motor = crearMotor(); motor.correr(12);           // hasta régimen estable
 const cam = crearCamara();
@@ -94,23 +96,6 @@ function ajustarDiagramas() {
 }
 ajustarDiagramas(); new ResizeObserver(ajustarDiagramas).observe($('.diag'));
 matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => diag.invalidar());   // los colores salen del tema
-// Apertura según el flujo que pasa (raíz: a poco flujo ya se separan las valvas) y carga según el
-// gradiente inverso cuando está cerrada (la válvula soporta la presión y se abomba). Ilustrativo.
-const VALVULAS = [
-  { n: 'mitral', abierta: 'vMit', q: 'qMit', arriba: 'pai', abajo: 'pvi', qRef: 600, pRef: 100, nombre: 'Mitral' },
-  { n: 'tricus', abierta: 'vTri', q: 'qTri', arriba: 'pad', abajo: 'pvd', qRef: 600, pRef: 20, nombre: 'Tricúspide' },
-  { n: 'aortica', abierta: 'vAo', q: 'qAo', arriba: 'pvi', abajo: 'pao', qRef: 500, pRef: 100, nombre: 'Aórtica' },
-  { n: 'pulmonar', abierta: 'vPul', q: 'qPul', arriba: 'pvd', abajo: 'pap', qRef: 350, pRef: 20, nombre: 'Pulmonar' },
-];
-const ap = { mitral: 0.5, tricus: 0.5, aortica: 0, pulmonar: 0 }, carga = { mitral: 0, tricus: 0, aortica: 0, pulmonar: 0 };
-function valvulas(dtSim, instantaneo = false, s = motor.s) {
-  for (const v of VALVULAS) {
-    const q = s[v.q], objetivo = q > 0 ? Math.min(1, Math.pow(q / v.qRef, 0.35)) : 0;
-    const tau = objetivo > ap[v.n] ? 0.015 : 0.02;
-    ap[v.n] = instantaneo ? objetivo : ap[v.n] + (objetivo - ap[v.n]) * Math.min(1, dtSim / tau);
-    carga[v.n] = q > 0 ? 0 : Math.max(0, Math.min(1, (s[v.abajo] - s[v.arriba]) / v.pRef));
-  }
-}
 let vel = 0.25, calidad = 1, pausa = false, tPrev = performance.now(), frames = 0, tFps = tPrev, simAcum = 0, realAcum = 0;
 const opciones = { corte: null, pericardio: true, detalle: true };
 // La geometría solo se reconstruye si ha cambiado algo (la simulación avanzó o una opción); girar la cámara
@@ -128,7 +113,7 @@ function sim(dtReal) {
   // sin tope por fotograma: a 1× el reloj simulado sigue al real aunque haya pocos fotogramas por segundo
   const dtSim = dtReal * vel, n = Math.round(dtSim / 0.0001);
   avanzar(n);
-  valvulas(dtSim); simAcum += n * 0.0001; realAcum += dtReal; sucio = true;
+  simAcum += n * 0.0001; realAcum += dtReal; sucio = true;
 }
 // Barra del ciclo: fases A-G del último latido, con su duración real, y un cursor en el instante actual
 // colores opacos de cada fase: en diagramas.mjs (los comparten la barra, el Wiggers y el asa)
@@ -157,9 +142,9 @@ const estadoMostrado = () => revision || motor.s;
 function revisar(e) {
   if (!e) return;
   revision = e; pausa = true; $('#pausa').textContent = '▶ Reanudar';
-  valvulas(0, true, e); ensuciar();
+  ensuciar();
 }
-function volverAlMotor() { if (!revision) return; revision = null; valvulas(0, true); ensuciar(); }
+function volverAlMotor() { if (!revision) return; revision = null; ensuciar(); }
 // Lleva al centro de la fase pedida (o de la siguiente a la que se ve) en el último latido completo,
 // sin hacer correr el motor: es una revisión, como el cursor del Wiggers.
 function irAFase(objetivo) {
@@ -168,13 +153,30 @@ function irAFase(objetivo) {
   const g = objetivo ? cicloSeg.find(x => x.f === objetivo) : cicloSeg[(i + 1) % cicloSeg.length];
   if (g) revisar(estadoRevision(motor.onda, (g.t0 + g.t1) / 2));
 }
+// ---- Formas precalculadas (formas.mjs) ----
+// Con el latido estable (dos latidos seguidos casi iguales) se calculan unas formas del corazón a lo largo del
+// último latido, unas pocas por fotograma; después cada fotograma solo las mezcla en la tarjeta gráfica. Si la
+// mezcla no representa al estado mostrado (el latido cambia, hay corte), se construye entero como siempre.
+const tabla = crearTablaFormas(); let usarFormas = true, latidoVisto = -1, ondaPrevia = null, estable = false, modoGeo = 'exacta';
+const extraGeo = () => ({ vviTd: motor.ultimo?.edv, liquidoPeri: motor.p.liquidoPeri });
+const opcionesGeo = () => ({ ...opciones, calidad });
+function olvidarFormas() { if (rgl) rgl.liberar('f' + tabla.olvidar() + ':'); ensuciar(); }
+function gestionarFormas() {
+  if (!rgl || !usarFormas || opciones.corte) { if (tabla.lista || tabla.construyendo) olvidarFormas(); return; }
+  if (motor.s.nLatido !== latidoVisto) {
+    latidoVisto = motor.s.nLatido; estable = semejantes(ondaPrevia, motor.onda); ondaPrevia = motor.onda;
+    if (estable && !tabla.construyendo && tabla.caduca(motor.onda)) tabla.pedir(motor.onda, motor.ultimo, opcionesGeo(), extraGeo());
+  } else if (estable && !tabla.lista && !tabla.construyendo) tabla.pedir(motor.onda, motor.ultimo, opcionesGeo(), extraGeo());
+  const vieja = tabla.trabajar(); if (vieja != null) { rgl.liberar('f' + vieja + ':'); ensuciar(); }
+}
 let estGeo = null;
 function dibujar() {
   const s = estadoMostrado();          // EL estado de este fotograma: todo lo de abajo lee este objeto
   if (rgl && (sucio || !geo)) {
-    const est = { vvi: s.vvi, vvd: s.vvd, vai: s.vai, vad: s.vad, vviTd: motor.ultimo?.edv, ...ap, liquidoPeri: motor.p.liquidoPeri };
-    for (const v of VALVULAS) est['carga_' + v.n] = carga[v.n];
-    geo = construirCorazon(est, { ...opciones, calidad }); sucio = false; estGeo = est;
+    const extra = extraGeo(), est = estadoGeo(s, extra);
+    const mz = usarFormas && !opciones.corte ? tabla.mezclar(s, extra) : null;
+    geo = mz ? { partes: mz.partes, flujo: mz.flujo, descenso: mz.descenso } : construirCorazon(est, opcionesGeo());
+    modoGeo = mz ? 'mezcla' : 'exacta'; sucio = false; estGeo = est;
   }
   const g = geo;
   if (rgl) {
@@ -186,7 +188,7 @@ function dibujar() {
   }
   pintarCiclo(s);
   const cursor = diag.pintar(s, motor, lado);
-  window.__ultimoDibujo = { estado: s, est: estGeo, cursor };
+  window.__ultimoDibujo = { estado: s, est: estGeo, cursor, modo: modoGeo };
   const fase = `${s.fase} · ${FASES[s.fase]}`;
   const fuera = s.vvi < LIMITES.vi[0] || s.vvi > LIMITES.vi[1] || s.vvd < LIMITES.vd[0] || s.vvd > LIMITES.vd[1] || Math.min(s.vai, s.vad) < LIMITES.au[0] || Math.max(s.vai, s.vad) > LIMITES.au[1];
   $('#hud').innerHTML = (revision ? '<span class="revisando">⏸ revisando el último latido</span><br>' : '') + `t = ${s.tLatido.toFixed(2)} s · FC ${Math.round(revision ? motor.ultimo.fc : s.fc)} · <b>${fase}</b>` + (g ? `<br>base ${g.descenso >= 0 ? '+' : ''}${g.descenso.toFixed(0)} mm` : '') + (fuera ? '<br><span style="color:#cf9a3e">⚠ volumen fuera del rango del dibujo: se muestra en su límite</span>' : '');
@@ -204,15 +206,16 @@ function dibujar() {
   for (const v of VALVULAS) {
     const el = document.getElementById('v-' + v.n), abierta = s[v.abierta];
     el.classList.toggle('ab', abierta);
-    el.innerHTML = `${v.nombre}<small>${abierta ? 'abierta ' + Math.round(ap[v.n] * 100) + '%' : 'cerrada · ' + Math.max(0, s[v.abajo] - s[v.arriba]).toFixed(0) + ' mmHg'}</small>`;
+    el.innerHTML = `${v.nombre}<small>${abierta ? 'abierta ' + Math.round(apertura(v, s) * 100) + '%' : 'cerrada · ' + Math.max(0, s[v.abajo] - s[v.arriba]).toFixed(0) + ' mmHg'}</small>`;
   }
 }
 function bucle(t) {
   const dt = Math.min(0.25, (t - tPrev) / 1000); tPrev = t;   // tras volver de otra pestaña no salta segundos
   if (!pausa) sim(dt);
-  dibujar(); frames++;
+  gestionarFormas(); dibujar(); frames++;
   if (t - tFps > 1000) { const ritmo = realAcum > 0 ? simAcum / realAcum : 0;
-    $('#fps').textContent = `${frames} fps` + (pausa ? '' : ` · reloj ×${ritmo.toFixed(2).replace('.', ',')}`); frames = 0; tFps = t; simAcum = 0; realAcum = 0; }
+    const formas = !usarFormas ? 'sin formas' : tabla.construyendo ? 'calculando formas' : tabla.lista ? `${tabla.numero} formas · ${modoGeo}` : 'geometría exacta';
+    $('#fps').textContent = `${frames} fps` + (pausa ? '' : ` · reloj ×${ritmo.toFixed(2).replace('.', ',')}`) + ` · ${formas}`; frames = 0; tFps = t; simAcum = 0; realAcum = 0; }
   requestAnimationFrame(bucle);
 }
 requestAnimationFrame(bucle);
@@ -228,25 +231,26 @@ document.querySelectorAll('[data-v]').forEach(b => b.onclick = () => { const v =
   opciones.vistaBase = !!v.base; cam.dist = v.dist || 330; $('#orienta').hidden = !v.base;
   if (v.desde) { const d = m4.apply3(MODELO, v.desde), l = Math.hypot(...d); cam.yaw = Math.atan2(d[0] / l, d[1] / l); cam.pitch = Math.asin(d[2] / l); cam.centro = [0, 0, 6]; cam.arriba = m4.apply3(MODELO, [0, 1, 0]); } else { cam.centro = [0, 0, -22]; cam.arriba = null; }
   if (v.corte) { $('#phi').value = Math.round(v.phi * 100); alzarCorte = v.alzar; camaraHaciaCorte(v.phi, v.alzar); } else if (!v.desde) { cam.yaw = v.yaw; cam.pitch = v.pitch; }
-  actCorte(); ensuciar(); });
+  actCorte(); olvidarFormas(); });
 let alzarCorte = 0.15;
 function actCorte() { ensuciar(); const on = $('#corte').checked; $('#filaCorte').style.display = on ? '' : 'none'; opciones.corte = on ? { phi: $('#phi').value / 100 } : null; }
 $('#corte').onchange = () => { actCorte(); if ($('#corte').checked) camaraHaciaCorte($('#phi').value / 100, alzarCorte); };
 // al mover el ángulo del corte la cámara lo acompaña, para mirar siempre a la cara cortada
 $('#phi').oninput = () => { actCorte(); camaraHaciaCorte($('#phi').value / 100, alzarCorte); };
 $('#sangre').onchange = () => { verSangre = $('#sangre').checked; };
-$('#peri').onchange = () => { opciones.pericardio = $('#peri').checked; ensuciar(); }; $('#det').onchange = () => { opciones.detalle = $('#det').checked; ensuciar(); };
-$('#vel').onchange = () => vel = +$('#vel').value; $('#cal').onchange = () => { calidad = +$('#cal').value; ensuciar(); };
+$('#peri').onchange = () => { opciones.pericardio = $('#peri').checked; olvidarFormas(); }; $('#det').onchange = () => { opciones.detalle = $('#det').checked; olvidarFormas(); };
+$('#formas').onchange = () => { usarFormas = $('#formas').checked; olvidarFormas(); };
+$('#vel').onchange = () => vel = +$('#vel').value; $('#cal').onchange = () => { calidad = +$('#cal').value; olvidarFormas(); };
 $('#pausa').onclick = () => { pausa = !pausa; $('#pausa').textContent = pausa ? '▶ Reanudar' : '⏸ Pausa'; if (!pausa) volverAlMotor(); };
 $('#fase').onclick = () => irAFase(null);
 // Pruebas: parten siempre del estado normal estable (escenarios.mjs, los mismos que comprueban las pruebas)
 $('#escenarios').innerHTML = Object.entries(ESCENARIOS).map(([k, e]) => `<button class="mini${k === 'normal' ? ' on' : ''}" data-c="${k}">${e.nombre}</button>`).join('');
 document.querySelectorAll('[data-c]').forEach(b => b.onclick = () => {
   motor = crearMotor({ barorreflejo: $('#baro').checked }); motor.correr(12); ESCENARIOS[b.dataset.c].aplicar(motor);
-  window.__motor = motor; revision = null; sangre.reiniciar(); valvulas(0, true); ensuciar();
+  window.__motor = motor; revision = null; sangre.reiniciar(); ensuciar();
   document.querySelectorAll('[data-c]').forEach(x => x.classList.toggle('on', x === b)); });
 $('#baro').onchange = () => { motor.p.barorreflejo = $('#baro').checked; };
-$('#avanzar').onclick = () => { revision = null; motor.correr(10); sangre.reiniciar(); valvulas(0, true); ensuciar(); };
+$('#avanzar').onclick = () => { revision = null; motor.correr(10); sangre.reiniciar(); ensuciar(); };
 // Wiggers y asa: deslizar o tocar elige un instante del último latido
 $$('[data-lado]').forEach(b => b.onclick = () => { lado = b.dataset.lado; $$('[data-lado]').forEach(x => x.classList.toggle('on', x === b)); });
 function arrastre(el, alElegir) {
@@ -259,5 +263,5 @@ function arrastre(el, alElegir) {
 arrastre($('#wig'), (x) => revisar(estadoRevision(motor.onda, diag.tiempoEnX(x))));
 arrastre($('#pvc'), (x, y) => revisar(diag.muestraEnPV(motor, lado, x, y)));
 window.__revisar = (t) => revisar(estadoRevision(motor.onda, t)); window.__estado = () => estadoMostrado();
-window.__ensuciar = ensuciar; window.__sangre = sangre; window.__motor = motor; window.__cam = cam; window.__ap = ap; window.__carga = carga;
+window.__ensuciar = ensuciar; window.__sangre = sangre; window.__motor = motor; window.__cam = cam; window.__tabla = tabla;
 </script></body></html>

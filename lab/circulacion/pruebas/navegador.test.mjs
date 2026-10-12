@@ -136,6 +136,21 @@ test('tocar el asa revisa el instante más cercano; el lado derecho también se 
   await pg.close();
 });
 
+test('con el latido estable se usan las formas precalculadas, sin perder la sincronía; con corte o sin ellas, geometría exacta', { skip: omitir }, async () => {
+  const { pg, errores } = await abrir('corazon-3d.html');
+  await pg.waitForFunction(() => window.__tabla.lista && window.__ultimoDibujo?.modo === 'mezcla', null, { timeout: 40000 });
+  for (let i = 0; i < 3; i++) { const d = await ultimoDibujo(pg); assert.equal(d.estVvi, d.vvi); assert.equal(d.cur.t, d.t); }
+  assert.match(await pg.textContent('#fps'), /formas/);
+  const modo = () => pg.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(() => r(window.__ultimoDibujo.modo)))));
+  // revisar un instante del último latido también usa la mezcla
+  await pg.evaluate(() => window.__revisar(0.3)); assert.equal(await modo(), 'mezcla');
+  await pg.click('#formas'); assert.equal(await modo(), 'exacta');
+  await pg.click('#formas'); await pg.waitForFunction(() => window.__tabla.lista, null, { timeout: 40000 }); assert.equal(await modo(), 'mezcla');
+  await pg.click('[data-v="4c"]'); assert.equal(await modo(), 'exacta', 'con corte cambia la topología');
+  assert.deepEqual(errores, []);
+  await pg.close();
+});
+
 test('sin WebGL se ve la imagen fija con su aviso y las cifras siguen vivas', { skip: omitir }, async () => {
   const sinGL = await pw.chromium.launch({ args: ['--disable-webgl', '--disable-3d-apis'] });
   const { pg, errores } = await abrir('corazon-3d.html', {}, sinGL);
