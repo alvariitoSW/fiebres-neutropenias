@@ -80,6 +80,62 @@ test('un escenario de la página cambia la circulación (hemorragia: sube la FC)
   await pg.close();
 });
 
+// La regla de la sincronización: en cada fotograma, el corazón, el cursor del Wiggers y el punto del asa
+// salen del mismo estado (window.__ultimoDibujo lo guarda al dibujar).
+const ultimoDibujo = (pg) => pg.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(() => {
+  const d = window.__ultimoDibujo; r({ t: d.estado.tLatido, vvi: d.estado.vvi, fase: d.estado.fase, rev: !!d.estado.revisando, estVvi: d.est?.vvi, cur: d.cursor }); }))));
+
+test('Wiggers y asa: en tiempo real el corazón y el cursor leen el mismo instante en cada fotograma', { skip: omitir }, async () => {
+  const { pg, errores } = await abrir('corazon-3d.html');
+  for (const id of ['#wig', '#pvc']) { const img = await pg.locator(id).screenshot(); assert.ok(img.length > 15000, `${id} parece vacío (${img.length} bytes)`); }
+  for (let i = 0; i < 5; i++) {
+    const d = await ultimoDibujo(pg);
+    assert.equal(d.rev, false);
+    assert.equal(d.estVvi, d.vvi, 'el corazón y el diagrama leen volúmenes distintos');
+    assert.equal(d.cur.t, d.t); assert.equal(d.cur.v, d.vvi);
+  }
+  assert.ok(!(await pg.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)), 'desborda en horizontal');
+  assert.deepEqual(errores, []);
+  await pg.close();
+});
+
+test('deslizar sobre el Wiggers revisa ese instante del último latido: corazón, cursor, fase y cifras a la vez', { skip: omitir }, async () => {
+  const { pg, errores } = await abrir('corazon-3d.html');
+  await pg.locator('#wig').scrollIntoViewIfNeeded();
+  const b = await pg.locator('#wig').boundingBox();
+  await pg.mouse.move(b.x + b.width * 0.2, b.y + b.height * 0.5); await pg.mouse.down();
+  await pg.mouse.move(b.x + b.width * 0.6, b.y + b.height * 0.5, { steps: 6 }); await pg.mouse.up();
+  const d = await ultimoDibujo(pg), T = await pg.evaluate(() => window.__motor.ultimo.periodo);
+  assert.equal(d.rev, true, 'no ha entrado en revisión');
+  assert.ok(d.t > 0.45 * T && d.t < 0.65 * T, `t revisado ${d.t.toFixed(3)} de ${T.toFixed(3)}`);
+  assert.equal(d.estVvi, d.vvi, 'el corazón no muestra el instante revisado');
+  assert.equal(d.cur.t, d.t);
+  assert.ok((await pg.textContent('#lFase')).startsWith(d.fase));
+  assert.match(await pg.textContent('#hud'), /revisando/);
+  // en revisión el motor no avanza
+  const t0 = await pg.evaluate(() => window.__motor.s.t); await pg.waitForTimeout(300);
+  assert.equal(await pg.evaluate(() => window.__motor.s.t), t0);
+  // Reanudar vuelve al tiempo real
+  await pg.click('#pausa'); const d2 = await ultimoDibujo(pg);
+  assert.equal(d2.rev, false); assert.equal(d2.estVvi, d2.vvi);
+  assert.deepEqual(errores, []);
+  await pg.close();
+});
+
+test('tocar el asa revisa el instante más cercano; el lado derecho también se dibuja', { skip: omitir }, async () => {
+  const { pg, errores } = await abrir('corazon-3d.html');
+  await pg.locator('#pvc').scrollIntoViewIfNeeded();
+  const b = await pg.locator('#pvc').boundingBox();
+  await pg.mouse.click(b.x + b.width * 0.5, b.y + b.height * 0.3);
+  const d = await ultimoDibujo(pg);
+  assert.equal(d.rev, true); assert.equal(d.estVvi, d.vvi);
+  await pg.click('[data-lado="derecho"]');
+  const v = await pg.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(() => r(window.__ultimoDibujo)))));
+  assert.equal(v.cursor.v, v.estado.vvd, 'el lado derecho no sigue al VD');
+  assert.deepEqual(errores, []);
+  await pg.close();
+});
+
 test('sin WebGL se ve la imagen fija con su aviso y las cifras siguen vivas', { skip: omitir }, async () => {
   const sinGL = await pw.chromium.launch({ args: ['--disable-webgl', '--disable-3d-apis'] });
   const { pg, errores } = await abrir('corazon-3d.html', {}, sinGL);

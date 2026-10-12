@@ -1,6 +1,6 @@
 <!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Corazón vivo</title>
-<meta name="description" content="Paso 2 de la circulación viva: corazón 3D procedural movido por el motor del latido, con dos renderizadores (WebGL y Canvas 2D)">
+<meta name="description" content="Circulación viva: corazón 3D movido por el motor del latido, con el Wiggers y el asa presión-volumen en el mismo instante">
 <style>
 :root{--bg:#0f0f14;--card:#1a1a24;--line:#2a2a3a;--text:#e8e3d5;--muted:#9a9480;--g:#8aa37b;--r:#c9534a;--y:#cf9a3e;--b:#d4af37;--p:#9b7bb8}
 @media (prefers-color-scheme:light){:root:not([data-theme=dark]){--bg:#f4f1ea;--card:#fff;--line:#ddd7c8;--text:#1d1b16;--muted:#6b665a}}
@@ -26,11 +26,20 @@ input[type=range]{width:100%}
 .ciclo .cur{position:absolute;top:0;bottom:0;width:3px;margin-left:-1px;background:var(--text);box-shadow:0 0 4px rgba(0,0,0,.6);pointer-events:none}
 .ciclo-pie{position:relative;height:18px;font-size:.7rem;color:var(--muted);margin-bottom:6px}
 .ciclo-pie span{position:absolute;top:2px;white-space:nowrap}
+.diag canvas{border-radius:8px;background:var(--bg);border:1px solid var(--line);margin-top:6px}
+#wig{touch-action:pan-y;cursor:ew-resize}#pvc{touch-action:pan-y;cursor:pointer}
+.revisando{color:var(--y)}
 </style></head><body>
 <h1>Circulación viva · el corazón</h1>
 <p class="muted">Geometría procedural: VI con pared de volumen constante, VD en media luna, <b>plano AV cerrado</b> con los 4 anillos valvulares, aurículas que apoyan hasta el surco AV (orejuelas, cavas, 4 venas pulmonares), infundíbulo del VD con el tronco pulmonar cruzando delante de la aorta, raíz aórtica con 3 senos de Valsalva y las coronarias saliendo de ellos, grasa del surco AV e interventricular, seno coronario, papilares y cuerdas, pericardio, movida en cada instante por el <b>mismo motor del latido del paso 1</b>. Todo ilustrativo. <b>Gira</b> deslizando en horizontal (en vertical se mueve la página); con <b>dos dedos</b> acercas e inclinas. Con ratón: arrastrar gira y la rueda acerca.</p>
 <div class="escena"><canvas id="gl" width="390" height="390"></canvas><img id="estatico" src="img/corazon-estatico.jpg" alt="Corazón en vista frontal, imagen fija" width="712" height="712" hidden><div class="sinwebgl" id="sinwebgl" hidden>Tu navegador no tiene WebGL: se muestra una imagen fija del corazón. Las cifras, la barra del ciclo y las pruebas siguen funcionando.</div><div class="hud" id="hud"></div><div class="orienta" id="orienta" hidden>Desde las aurículas · <b>anterior ↑</b> · derecha del paciente →</div></div>
 <div class="ciclo" id="ciclo" aria-label="Ciclo cardíaco: toca una fase para ir a ella"></div><div class="ciclo-pie" id="cicloPie"></div>
+<div class="card diag"><div class="fila" style="margin:0"><b>Wiggers y asa presión-volumen</b>
+  <button class="mini on" data-lado="izquierdo">Izquierdo</button><button class="mini" data-lado="derecho">Derecho</button></div>
+  <div class="muted" id="diagTxt">Mismo instante que el corazón. <b>Desliza en horizontal</b> sobre el Wiggers o <b>toca el asa</b> para revisar cualquier instante del último latido; ▶ Reanudar vuelve al tiempo real.</div>
+  <canvas id="wig" width="760" height="460" aria-label="Diagrama de Wiggers del último latido con el cursor en el instante del corazón"></canvas>
+  <canvas id="pvc" width="760" height="530" aria-label="Asa presión-volumen del último latido con el punto del instante del corazón"></canvas>
+  <div class="muted">Tenue: el último latido completo; fuerte: el latido en curso, que termina en el cursor. Rayas: ESPVR (pendiente = Ees efectiva del modelo, con el barorreflejo) y EDPVR (rigidez diastólica), sin tabique ni pericardio. Ilustrativo.</div></div>
 <div class="fila">
   <button class="mini" data-v="frontal">Frontal</button><button class="mini" data-v="izq">Desde la izquierda</button><button class="mini" data-v="arriba">Desde arriba (base)</button><button class="mini" data-v="valvulas">Válvulas desde arriba</button><button class="mini" data-v="4c">Corte: 4 cámaras</button><button class="mini" data-v="largo">Corte: eje largo</button>
 </div>
@@ -61,6 +70,7 @@ import { crearCamara, m4, MODELO } from './mat.mjs';
 import { crearWebGL } from './render-webgl.mjs';
 import { ESCENARIOS } from './escenarios.mjs';
 import { crearFlujo } from './flujo-sangre.mjs';
+import { COLOR_FASE, segmentosFase, estadoRevision, crearDiagramas } from './diagramas.mjs';
 const $ = (s) => document.querySelector(s);
 let motor = crearMotor(); motor.correr(12);           // hasta régimen estable
 const cam = crearCamara();
@@ -75,6 +85,15 @@ function ajustarLienzo() {
   const n = Math.round(ancho * Math.min(dpr, 2)); if (glC.width !== n) { glC.width = n; glC.height = n; }
 }
 ajustarLienzo(); new ResizeObserver(ajustarLienzo).observe($('.escena'));
+const $$ = (q) => document.querySelectorAll(q);
+const diag = crearDiagramas($('#wig'), $('#pvc'));
+function ajustarDiagramas() {
+  const ancho = $('#wig').clientWidth, dpr = Math.min(window.devicePixelRatio || 1, 2), n = Math.round(ancho * dpr);
+  if (!n || $('#wig').width === n) return;
+  $('#wig').width = n; $('#wig').height = Math.round(n * 0.62); $('#pvc').width = n; $('#pvc').height = Math.round(n * 0.7); diag.invalidar();
+}
+ajustarDiagramas(); new ResizeObserver(ajustarDiagramas).observe($('.diag'));
+matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => diag.invalidar());   // los colores salen del tema
 // Apertura según el flujo que pasa (raíz: a poco flujo ya se separan las valvas) y carga según el
 // gradiente inverso cuando está cerrada (la válvula soporta la presión y se abomba). Ilustrativo.
 const VALVULAS = [
@@ -84,8 +103,7 @@ const VALVULAS = [
   { n: 'pulmonar', abierta: 'vPul', q: 'qPul', arriba: 'pvd', abajo: 'pap', qRef: 350, pRef: 20, nombre: 'Pulmonar' },
 ];
 const ap = { mitral: 0.5, tricus: 0.5, aortica: 0, pulmonar: 0 }, carga = { mitral: 0, tricus: 0, aortica: 0, pulmonar: 0 };
-function valvulas(dtSim, instantaneo = false) {
-  const s = motor.s;
+function valvulas(dtSim, instantaneo = false, s = motor.s) {
   for (const v of VALVULAS) {
     const q = s[v.q], objetivo = q > 0 ? Math.min(1, Math.pow(q / v.qRef, 0.35)) : 0;
     const tau = objetivo > ap[v.n] ? 0.015 : 0.02;
@@ -113,14 +131,12 @@ function sim(dtReal) {
   valvulas(dtSim); simAcum += n * 0.0001; realAcum += dtReal; sucio = true;
 }
 // Barra del ciclo: fases A-G del último latido, con su duración real, y un cursor en el instante actual
-// colores opacos (con transparencia se embarraban sobre el fondo oscuro): el tono claro es la segunda mitad de cada etapa
-const COLOR_FASE = { A: '#8aa37b', B: '#cf9a3e', C: '#c9534a', D: '#e0958e', E: '#e6c483', F: '#9b7bb8', G: '#cbb8dd' };
-let cicloLatido = -1, cicloPeriodo = 0.857;
+// colores opacos de cada fase: en diagramas.mjs (los comparten la barra, el Wiggers y el asa)
+let cicloLatido = -1, cicloPeriodo = 0.857, cicloSeg = [];
 function construirCiclo() {
   const o = motor.onda, u = motor.ultimo; if (!o.length || !u) return;
   cicloLatido = motor.s.nLatido; cicloPeriodo = u.periodo;
-  const seg = []; for (const x of o) { if (!seg.length || seg[seg.length - 1].f !== x.fase) seg.push({ f: x.fase, t0: x.t }); }
-  seg.forEach((g, i) => g.t1 = i + 1 < seg.length ? seg[i + 1].t0 : cicloPeriodo);
+  const seg = segmentosFase(o, cicloPeriodo); cicloSeg = seg;
   const pc = (t) => (t / cicloPeriodo * 100).toFixed(2) + '%';
   $('#ciclo').innerHTML = seg.map(g => `<button data-fase="${g.f}" style="width:${pc(g.t1 - g.t0)};background:${COLOR_FASE[g.f]}" title="${g.f} · ${FASES[g.f]}" aria-label="Ir a ${g.f}: ${FASES[g.f]}">${(g.t1 - g.t0) / cicloPeriodo > 0.045 ? g.f : ''}</button>`).join('') + '<div class="cur" id="cicloCur"></div>';
   const tB = seg.find(g => g.f === 'B')?.t0, tE = seg.find(g => g.f === 'E')?.t0;
@@ -128,37 +144,52 @@ function construirCiclo() {
     ? `<span style="left:${pc(tB)}">▲S1</span><span style="left:calc(${pc((tB + tE) / 2)} - 2.2em)">sístole</span><span style="left:${pc(tE)}">▲S2</span><span style="left:calc(${pc((tE + cicloPeriodo) / 2)} - 2.4em)">diástole</span>` : '';
   document.querySelectorAll('#ciclo button').forEach(b => b.onclick = () => irAFase(b.dataset.fase));
 }
-function pintarCiclo() {
+function pintarCiclo(e) {
   if (motor.s.nLatido !== cicloLatido) construirCiclo();
-  const cur = $('#cicloCur'); if (cur) cur.style.left = Math.min(100, motor.s.tLatido / cicloPeriodo * 100) + '%';
-  document.querySelectorAll('#ciclo button').forEach(b => b.classList.toggle('on', b.dataset.fase === motor.s.fase));
+  const cur = $('#cicloCur'); if (cur) cur.style.left = Math.min(100, e.tLatido / cicloPeriodo * 100) + '%';
+  document.querySelectorAll('#ciclo button').forEach(b => b.classList.toggle('on', b.dataset.fase === e.fase));
 }
-// Pausa y avanza hasta el principio de la fase pedida (o la siguiente distinta si no se pide ninguna)
+// ---- Un solo estado por fotograma ----
+// revision: un instante del último latido elegido a mano (Wiggers, asa o barra del ciclo); null = el motor.
+// Todo lo que se dibuja en un fotograma (corazón, Wiggers, asa, barra, cifras) lee el mismo objeto.
+let revision = null, lado = 'izquierdo';
+const estadoMostrado = () => revision || motor.s;
+function revisar(e) {
+  if (!e) return;
+  revision = e; pausa = true; $('#pausa').textContent = '▶ Reanudar';
+  valvulas(0, true, e); ensuciar();
+}
+function volverAlMotor() { if (!revision) return; revision = null; valvulas(0, true); ensuciar(); }
+// Lleva al centro de la fase pedida (o de la siguiente a la que se ve) en el último latido completo,
+// sin hacer correr el motor: es una revisión, como el cursor del Wiggers.
 function irAFase(objetivo) {
-  pausa = true; $('#pausa').textContent = '▶ Reanudar'; const s = motor.s, antes = s.fase;
-  let n = 0; while (n < 25000 && (objetivo ? s.fase === objetivo : s.fase === antes)) { avanzar(10); n += 10; }   // salir de la fase actual
-  if (objetivo) while (n < 40000 && s.fase !== objetivo) { avanzar(10); n += 10; }
-  avanzar(120);                                                               // un poco dentro de la fase nueva
-  valvulas(0, true); ensuciar();
+  if (!cicloSeg.length) construirCiclo();
+  const e = estadoMostrado(), i = cicloSeg.findIndex(g => g.f === e.fase);
+  const g = objetivo ? cicloSeg.find(x => x.f === objetivo) : cicloSeg[(i + 1) % cicloSeg.length];
+  if (g) revisar(estadoRevision(motor.onda, (g.t0 + g.t1) / 2));
 }
+let estGeo = null;
 function dibujar() {
-  const s = motor.s;
+  const s = estadoMostrado();          // EL estado de este fotograma: todo lo de abajo lee este objeto
   if (rgl && (sucio || !geo)) {
     const est = { vvi: s.vvi, vvd: s.vvd, vai: s.vai, vad: s.vad, vviTd: motor.ultimo?.edv, ...ap, liquidoPeri: motor.p.liquidoPeri };
     for (const v of VALVULAS) est['carga_' + v.n] = carga[v.n];
-    geo = construirCorazon(est, { ...opciones, calidad }); sucio = false;
+    geo = construirCorazon(est, { ...opciones, calidad }); sucio = false; estGeo = est;
   }
   const g = geo;
   if (rgl) {
-    const puntos = verSangre ? sangre.puntos(g.flujo, { vistaBase: opciones.vistaBase }) : null;
+    // al revisar un instante pasado, la sangre (que vive en el tiempo del motor) no se dibuja
+    const puntos = verSangre && !revision ? sangre.puntos(g.flujo, { vistaBase: opciones.vistaBase }) : null;
     // con la sangre en movimiento sobran los planos translúcidos de sangre del corte (la tapaban)
     const partes = verSangre ? g.partes.filter(p => !p.nombre.endsWith('sangre')) : g.partes;
     rgl.dibujar(partes, cam, undefined, puntos);
   }
-  pintarCiclo();
+  pintarCiclo(s);
+  const cursor = diag.pintar(s, motor, lado);
+  window.__ultimoDibujo = { estado: s, est: estGeo, cursor };
   const fase = `${s.fase} · ${FASES[s.fase]}`;
   const fuera = s.vvi < LIMITES.vi[0] || s.vvi > LIMITES.vi[1] || s.vvd < LIMITES.vd[0] || s.vvd > LIMITES.vd[1] || Math.min(s.vai, s.vad) < LIMITES.au[0] || Math.max(s.vai, s.vad) > LIMITES.au[1];
-  $('#hud').innerHTML = `t = ${s.tLatido.toFixed(2)} s · FC ${Math.round(s.fc)} · <b>${fase}</b>` + (g ? `<br>base ${g.descenso >= 0 ? '+' : ''}${g.descenso.toFixed(0)} mm` : '') + (fuera ? '<br><span style="color:#cf9a3e">⚠ volumen fuera del rango del dibujo: se muestra en su límite</span>' : '');
+  $('#hud').innerHTML = (revision ? '<span class="revisando">⏸ revisando el último latido</span><br>' : '') + `t = ${s.tLatido.toFixed(2)} s · FC ${Math.round(revision ? motor.ultimo.fc : s.fc)} · <b>${fase}</b>` + (g ? `<br>base ${g.descenso >= 0 ? '+' : ''}${g.descenso.toFixed(0)} mm` : '') + (fuera ? '<br><span style="color:#cf9a3e">⚠ volumen fuera del rango del dibujo: se muestra en su límite</span>' : '');
   $('#lFase').textContent = fase;
   $('#lVi').textContent = `${s.vvi.toFixed(0)} mL · ${s.pvi.toFixed(0)} mmHg`;
   $('#lVd').textContent = `${s.vvd.toFixed(0)} mL · ${s.pvd.toFixed(0)} mmHg`;
@@ -206,15 +237,27 @@ $('#phi').oninput = () => { actCorte(); camaraHaciaCorte($('#phi').value / 100, 
 $('#sangre').onchange = () => { verSangre = $('#sangre').checked; };
 $('#peri').onchange = () => { opciones.pericardio = $('#peri').checked; ensuciar(); }; $('#det').onchange = () => { opciones.detalle = $('#det').checked; ensuciar(); };
 $('#vel').onchange = () => vel = +$('#vel').value; $('#cal').onchange = () => { calidad = +$('#cal').value; ensuciar(); };
-$('#pausa').onclick = () => { pausa = !pausa; $('#pausa').textContent = pausa ? '▶ Reanudar' : '⏸ Pausa'; };
+$('#pausa').onclick = () => { pausa = !pausa; $('#pausa').textContent = pausa ? '▶ Reanudar' : '⏸ Pausa'; if (!pausa) volverAlMotor(); };
 $('#fase').onclick = () => irAFase(null);
 // Pruebas: parten siempre del estado normal estable (escenarios.mjs, los mismos que comprueban las pruebas)
 $('#escenarios').innerHTML = Object.entries(ESCENARIOS).map(([k, e]) => `<button class="mini${k === 'normal' ? ' on' : ''}" data-c="${k}">${e.nombre}</button>`).join('');
 document.querySelectorAll('[data-c]').forEach(b => b.onclick = () => {
   motor = crearMotor({ barorreflejo: $('#baro').checked }); motor.correr(12); ESCENARIOS[b.dataset.c].aplicar(motor);
-  window.__motor = motor; sangre.reiniciar(); valvulas(0, true); ensuciar();
+  window.__motor = motor; revision = null; sangre.reiniciar(); valvulas(0, true); ensuciar();
   document.querySelectorAll('[data-c]').forEach(x => x.classList.toggle('on', x === b)); });
 $('#baro').onchange = () => { motor.p.barorreflejo = $('#baro').checked; };
-$('#avanzar').onclick = () => { motor.correr(10); sangre.reiniciar(); valvulas(0, true); ensuciar(); };
+$('#avanzar').onclick = () => { revision = null; motor.correr(10); sangre.reiniciar(); valvulas(0, true); ensuciar(); };
+// Wiggers y asa: deslizar o tocar elige un instante del último latido
+$$('[data-lado]').forEach(b => b.onclick = () => { lado = b.dataset.lado; $$('[data-lado]').forEach(x => x.classList.toggle('on', x === b)); });
+function arrastre(el, alElegir) {
+  let activo = false;
+  const elegir = (ev) => { const r = el.getBoundingClientRect(); alElegir(ev.clientX - r.left, ev.clientY - r.top); };
+  el.addEventListener('pointerdown', (ev) => { activo = true; el.setPointerCapture?.(ev.pointerId); elegir(ev); });
+  el.addEventListener('pointermove', (ev) => { if (activo) elegir(ev); });
+  for (const t of ['pointerup', 'pointercancel', 'lostpointercapture']) el.addEventListener(t, () => { activo = false; });
+}
+arrastre($('#wig'), (x) => revisar(estadoRevision(motor.onda, diag.tiempoEnX(x))));
+arrastre($('#pvc'), (x, y) => revisar(diag.muestraEnPV(motor, lado, x, y)));
+window.__revisar = (t) => revisar(estadoRevision(motor.onda, t)); window.__estado = () => estadoMostrado();
 window.__ensuciar = ensuciar; window.__sangre = sangre; window.__motor = motor; window.__cam = cam; window.__ap = ap; window.__carga = carga;
 </script></body></html>

@@ -10458,7 +10458,8 @@ recoge solo las decisiones.
   convive con eso daría un tercer Wiggers con cifras distintas.
 - **Cimientos (hechos):** código en el repositorio (antes solo en una carpeta temporal del contenedor),
   sin los scripts sueltos; **pruebas automáticas con un comando**
-  (`node --test 'lab/circulacion/pruebas/*.test.mjs'`, ~35 s, 64 pruebas: motor, geometría y navegador);
+  (`node --test 'lab/circulacion/pruebas/*.test.mjs'`, ~70 s, 74 pruebas: motor, diagramas, geometría y
+  navegador);
   las cifras del latido y su referencia en un solo archivo (`referencias.mjs`) que usan a la vez las
   pruebas y la página del latido (antes la tabla tenía ✓ escritos a mano, uno de ellos siempre verdadero);
   escenarios en `escenarios.mjs`, y cada uno se comprueba contra el patrón de su tipo de shock en la
@@ -10467,9 +10468,27 @@ recoge solo las decisiones.
   vasodilatación «de arterias y venas»).
 - **Antes de tocar el motor, la geometría o la página**, ejecuta las pruebas; tras el cambio, deben seguir
   en verde. Las cifras aún fuera de su referencia van marcadas `pendiente` (salen como *todo*, no fallan).
-- **Pendiente:** calibrar RVS y contracción isovolumétrica; erratas de El Libro Azul en las tablas de
-  patrones de shock (RVS en el distributivo) que las fichas 5 y 10 reproducen sin nota; integración;
-  Wiggers y asa P-V sincronizados; escenarios enlazados a las fichas.
+- **Wiggers y asa P-V sincronizados con el corazón** (`diagramas.mjs`), a petición explícita del usuario
+  tras estudiar con él cómo lo hace *The Heart by Ultrasound* (`douyang/echodemo`, leído y analizado
+  también con la herramienta de ingeniería inversa `rea`; **sin licencia, así que no se copió nada**: solo
+  la idea). Regla: **un estado por fotograma**. `corazon-3d.html` decide en cada fotograma un único estado
+  (`estadoMostrado()`: el motor mientras corre, o una muestra del último latido al revisar) y con ese mismo
+  objeto construye la geometría y dibuja el cursor del Wiggers, el punto del asa, la barra A-G y las cifras;
+  nunca hay dos relojes que mantener a la par (el problema que en la Ficha 1 de Fisiopatología UCI obliga a
+  `sincronizarMiniCiclosConMaestro()`). Fondo: el último latido completo (`motor.onda`), tenue; encima, el
+  latido en curso (`motor.ondaActual`, getter nuevo del motor, igual que `periodo`), que termina en el
+  cursor. Deslizar sobre el Wiggers, tocar el asa o tocar una fase de la barra **revisa** ese instante:
+  pausa sin hacer correr el motor, y corazón, válvulas y cifras pasan a esa muestra (la sangre se oculta,
+  vive en el tiempo del motor). Lado izquierdo/derecho. ESPVR y EDPVR salen de los parámetros del motor
+  (con una prueba de que la esquina telesistólica cae sobre la ESPVR). Pruebas nuevas en
+  `diagramas.test.mjs` y 3 en el navegador que comprueban que, en un mismo fotograma, el corazón y el
+  cursor leen el mismo instante. Verificado con capturas a 390 px en los dos temas: se corrigieron la letra
+  (escalada a la densidad, no a un ancho fijo), el fondo atenuado entero (ahora 2 capas: ejes nítidos y
+  curvas atenuadas) y rótulos pisados por las curvas (halo del color de fondo).
+- **Pendiente:** calibrar RVS y contracción isovolumétrica (referencia candidata: Alhakak 2025, ~40 ms,
+  pendiente del PDF); erratas de El Libro Azul en las tablas de patrones de shock (RVS en el distributivo)
+  que las fichas 5 y 10 reproducen sin nota; integración; escenarios enlazados a las fichas; formas
+  precalculadas que solo se mezclan en cada fotograma (idea de echodemo para bajar el coste).
 
 ## Cómo probar cambios
 

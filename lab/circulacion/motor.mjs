@@ -284,5 +284,8 @@ export function crearMotor(ajustes = {}) {
     return ultimo;
   }
 
-  return { p, s, ef, paso, correr, get ultimo() { return ultimo; }, get onda() { return ondaUltima; } };
+  // onda: el último latido completo; ondaActual: el latido en curso (crece hasta cerrarse);
+  // periodo: la duración del latido en curso
+  return { p, s, ef, paso, correr, get ultimo() { return ultimo; }, get onda() { return ondaUltima; },
+    get ondaActual() { return onda; }, get periodo() { return periodo; } };
 }
