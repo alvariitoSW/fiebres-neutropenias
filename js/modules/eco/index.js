@@ -6,7 +6,7 @@
 // - Cualquier botón con data-eco-vista / data-eco-escenario / data-eco-medir (junto a data-especialidad="eco", que
 //   hace la navegación en home/index.js) deja el simulador en esa vista, ese escenario o esa medida del modo M.
 // - "Qué mirar en esta vista" copia líneas reales de otras fichas (que-mirar.js).
-import { QUE_MIRAR, ESCENARIO_TIPO } from './que-mirar.js';
+import { QUE_MIRAR, ESCENARIO_TIPO, FORMA_NOTA } from './que-mirar.js';
 
 // Sin banco de repaso propio todavía (main.js fusiona los de todas las especialidades).
 export const quizTriggerId = [];
@@ -66,7 +66,8 @@ export function init() {
     function pintarEscenario(k) {
         const nota = document.getElementById('cv-escenario-nota');
         const tipo = ESCENARIO_TIPO[k];
-        nota.innerHTML = tipo
+        nota.innerHTML = FORMA_NOTA[k] ? `${FORMA_NOTA[k]} Mira cómo cambian el corazón, la eco y las cifras; debajo, cada medida frente a su ficha.`
+            : tipo
             ? `Patrón de shock <b>${tipo}</b>: el modelo reproduce la dirección de PVC, gasto y RVS de la Tabla 14.1 de Merino (lo comprueban sus pruebas automáticas). Las magnitudes son ilustrativas. ` +
               `<button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-definiciones">Ver la Tabla 14.1 →</button>`
             : 'Latido normal en reposo. Elige un escenario para ver cómo cambian el corazón, la eco y las cifras.';

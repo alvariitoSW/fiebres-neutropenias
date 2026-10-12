@@ -10624,8 +10624,49 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
     - un vaso cortado a lo largo se cierra uniendo sus extremos;
     - el tope para cerrar paredes sube de 30 a 40 mm. Solo cambia cortes que antes quedaban abiertos; una prueba nueva
       comprueba las 10 vistas en los 5 escenarios.
-  - **Formas de enfermedad**: siguen sin hacer. Chocan con «anatomía congelada» y hace falta que el usuario lo decida.
+  - **Formas de enfermedad**: hechas después; ver el punto siguiente.
   - Pruebas: 119 (3 *todo*).
+- **Formas de enfermedad**, a petición explícita del usuario («hazlas según la bibliografía de la aplicación»). Es una
+  segunda excepción a «anatomía congelada». Detalle en `js/modules/eco/README.md` («Formas de enfermedad»).
+  - **Tres escenarios** con `forma: true` en `escenarios.mjs`, en su propia fila de botones: hipertrofia del VI, miocardiopatía dilatada y TEP masivo.
+  - **Qué se exige**: las cifras de `CRITERIOS_FORMA`. Todas son de fichas de la app, y cada criterio lleva un botón a su
+    línea exacta. Ids nuevos para esos botones: `ic-hfpef-hvi`, `mc-tabla-18-1`, `mc-hfpef`, `mc-ic-derecha`, `mc-vd-septo`,
+    `mc-fig-18-2` y `cardio-cor-pulmonale`.
+    - **Hipertrofia del VI**:
+      - pared >10 mm (FATE);
+      - grosor relativo >0,42 y masa ≥115 g/m² (guía ESC);
+      - FEVI ≥50 % (Merino, Tabla 18.1);
+      - caen el VTD y el VS (Merino, HFpEF).
+    - **Miocardiopatía dilatada**:
+      - LVDd >5,5 cm (FATE);
+      - FEVI ≤40 % (Merino);
+      - pared normal 6-10 mm (FATE).
+    - **TEP masivo**:
+      - área VD/VI >0,6 en A4C (Ficha 11);
+      - VD >3,0 cm (FATE);
+      - el VI se achica (Merino);
+      - tabique aplanado en diástole (Merino, Fig. 18.2);
+      - TAPSE <17 mm (Ficha 11);
+      - sube el VTD del VD (Merino).
+  - **Qué es ilustrativo**: los parámetros del modelo que producen cada forma (masa, rigidez, contractilidad,
+    resistencias, volumen retenido).
+  - **Cómo se ve**: el simulador lo mide en la telediástole (`medidasCorazon`) y lo muestra bajo los botones. Las formas
+    corren 40 s al elegirlas (`ASENTAR_FORMA`), porque son estados ya establecidos.
+  - **Geometría** (`baseGeometrica`):
+    - `mioVi` (`motor.p.mioVi`, que viaja en `extraDeMotor`) multiplica la masa del VI.
+    - `septo` (`aplanamientoSeptal` en `formas.mjs`) sale en cada instante del gradiente VI−VD: empieza a +1 mmHg y es
+      completo a −2 mmHg, umbrales ilustrativos.
+    - El tabique se corta en «D» por una cuerda que conserva el grosor de la pared. Lo que pierde la cavidad se devuelve
+      al radio, así que el volumen sigue al motor.
+    - `septo` entra en las formas precalculadas.
+  - **Calibración**: el miocardio de referencia baja de 140 a 130 mL, para que el corazón normal quede en los 6-10 mm de
+    FATE.
+  - **Ecografía**: el tope para cerrar paredes en la ecografía sube a 50 mm (la supraesternal roza la base gruesa).
+  - **Discrepancia entre fuentes, señalada en el propio criterio**: la Ficha 11 llama cor pulmonale a un área VD/VI
+    >0,6, y Merino da como normal un VD de ~2/3 del VI.
+  - **Accesos** `data-eco-escenario` desde la Ficha 3 y las fichas del VD de Fisiopatología UCI, desde Merino
+    Cardiología (IC aguda) y desde Merino Neumología (EP).
+  - **Pruebas**: `enfermedad.test.mjs`; en total, 127 (3 *todo*).
 
 ## Cómo probar cambios
 

@@ -18,7 +18,7 @@ en `lab/circulacion/`), como la especialidad «Eco cardíaca»: ver «En la app�
 node --test 'js/modules/eco/pruebas/*.test.mjs'
 ```
 
-Tarda ~2 min (119 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta. Las de navegador
+Tarda ~2 min (127 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta. Las de navegador
 sirven el repositorio con un servidor propio y abren `laboratorio.html`.
 
 - `motor.test.mjs` — cada cifra del latido normal frente a su referencia (`referencias.mjs`), el volumen
@@ -55,6 +55,12 @@ sirven el repositorio con un servidor propio y abren `laboratorio.html`.
   son sangre; el miocardio brilla >25 dB más que la sangre y el pericardio más que el miocardio; el **campo de
   desplazamiento predice dónde estaba el tejido** (puntos que no ha visto, error <1 mm, menos de la mitad que un
   ajuste afín); y la imagen es determinista, con el moteado del tejido fijo y el ruido de la sangre cambiante.
+- `enfermedad.test.mjs` — el corazón normal cae dentro de los rangos normales de FATE y de la guía ESC (pared, LVDd,
+  VD, grosor relativo, masa, VD/VI) y su tabique nunca se aplana; **cada forma de enfermedad cumple sus criterios de las
+  fichas** (`CRITERIOS_FORMA`); el normal no cumple todos los de ninguna; en el TEP el tabique se aplana en diástole y
+  se curva en sístole, con corte en «D» y la pared con su grosor; la cavidad dibujada con el tabique aplanado conserva
+  el volumen del motor (±4 %); y las formas se construyen sin valores no finitos y se precalculan y mezclan (nunca con
+  otra masa del VI).
 - `navegador.test.mjs` — el corazón se dibuja, la barra del ciclo lleva a cada fase, el dedo desplaza la
   página en vertical y gira en horizontal, un escenario cambia la circulación, sin WebGL se ve la imagen
   fija, la página del latido no deja ninguna cifra fuera de rango sin marcar, y **en cada fotograma el corazón,
@@ -96,10 +102,13 @@ cumplirse, una prueba avisa para quitar la marca.
 
 - **Toda cifra visible tiene origen**: `ficha` (se cita la ficha de la app y su PDF en `docs/`), `fisiología
   general` o ilustrativa. Una referencia nueva se añade en `referencias.mjs`, nunca escrita a mano en una página.
-- **Un escenario nuevo** va en `escenarios.mjs` con su `tipo`; las pruebas comprueban solas su patrón.
+- **Un escenario nuevo** va en `escenarios.mjs` con su `tipo` (shock) o con `forma: true` y sus criterios en
+  `CRITERIOS_FORMA` (forma de enfermedad); las pruebas comprueban solas su patrón o sus criterios.
 - **Solo WebGL.** Sin WebGL, imagen fija con aviso. (Canvas 2D se quitó: duplicaba cada novedad.)
-- **Anatomía congelada.** No se añaden piezas anatómicas salvo que sirvan a una ficha concreta. Excepción ya
-  decidida: hígado, diafragma, xifoides, VCI, suprahepáticas y porta, para la VCI de FATE y el Doppler de VExUS.
+- **Anatomía congelada.** No se añaden piezas anatómicas salvo que sirvan a una ficha concreta. Excepciones ya
+  decididas: hígado, diafragma, xifoides, VCI, suprahepáticas y porta, para la VCI de FATE y el Doppler de VExUS; y
+  las **formas de enfermedad** (masa del VI y tabique aplanado), a petición explícita del usuario («hazlas según la
+  bibliografía de la aplicación»), cada una cotejada con las fichas.
 - Tras cualquier cambio: `node --test 'js/modules/eco/pruebas/*.test.mjs'` en verde antes de subir.
 - **Una sola copia del pegamento:** la app y el laboratorio montan el mismo `simulador.mjs` sobre el mismo
   `eco.html`. Nunca una página con su propio script.
@@ -346,11 +355,46 @@ es Z-Anatomy, en el paquete npm `@authorod/svitylo-3d-anatomy-data` 1.1.0; HRA y
   salgan del pericardio). Un vaso cortado a lo largo deja dos líneas abiertas: se cierran uniendo sus extremos (hasta
   45 mm), como las paredes.
 - **Paredes que rozan la base**: estas vistas cortan a veces solo el epicardio cerca del borde de la base y dejan sus
-  dos extremos a 31-34 mm. El tope para unir extremos de una pared sube de 30 a 40 mm; como los puentes van de menor a
+  dos extremos a 31-34 mm (hasta ~46 mm con la pared gruesa de la hipertrofia del VI). El tope para unir extremos de
+  una pared sube de 30 a 50 mm; como los puentes van de menor a
   mayor distancia, solo cambian los cortes que antes quedaban abiertos (una prueba lo comprueba en los cinco
-  escenarios).
+  escenarios, también las formas de enfermedad).
 - `dirCuerpo`/`ARRIBA`/`DELANTE`/`DERECHA` (direcciones del cuerpo en el sistema del corazón) viven ahora en
   `mat.mjs`; `abdomen.mjs` las reexporta.
+
+## Formas de enfermedad (`escenarios.mjs`, `CRITERIOS_FORMA`)
+
+Tres escenarios más, en su propia fila («Formas de enfermedad»), que cambian la anatomía además del latido. Las
+**cifras** que se exigen son de fichas de la app y las comprueban las pruebas; los **parámetros del modelo** que las
+producen son ilustrativos. Bajo los botones, el simulador muestra cada criterio con lo que mide el modelo en la
+telediástole (`medidasCorazon` en `ecografia.mjs`) y un botón a la línea de la ficha.
+
+| Forma | Qué cambia en el modelo (ilustrativo) | Criterios (fuente en la app) |
+|---|---|---|
+| **Hipertrofia del VI** (sobrecarga de presión, FE preservada) | masa del VI ×1,6, rigidez diastólica ×2,2, resistencias ×1,25 | pared posterior >10 mm (FATE: 6-10); grosor relativo >0,42 y masa ≥115 g/m² (guía ESC de IC, tabla de HFpEF); FEVI ≥50 % (Merino, Tabla 18.1); caen el VTD y el VS (Merino, HFpEF) |
+| **Miocardiopatía dilatada** (FE reducida) | contractilidad ~1/3, V0 60 mL, 700 mL retenidos, masa ×1,4 | VI en diástole >5,5 cm (FATE: 3,5-5,5); FEVI ≤40 % (Merino, Tabla 18.1); pared normal 6-10 mm (FATE) |
+| **TEP masivo** (sobrecarga aguda del VD) | resistencia pulmonar ×8, contractilidad del VD ×0,65 | área VD/VI >0,6 en apical 4 cámaras (Ficha 11, cor pulmonale agudo); VD >3,0 cm (FATE); el VI se hace más pequeño (Merino, IC derecha); tabique aplanado en diástole (Merino, Fig. 18.2); TAPSE <17 mm (Ficha 11); sube el VTD del VD (Merino) |
+
+- Son estados ya establecidos: al elegirlas, el motor corre `ASENTAR_FORMA` (40 s) para que se asienten (los
+  escenarios de shock, 10 s); las pruebas usan el mismo tiempo.
+- **Masa del VI** (`mioVi`, `motor.p.mioVi`, viaja en `extraDeMotor`): el volumen de miocardio del VI se multiplica y la
+  pared se engrosa; el descenso de la base se mide con la misma masa. Para que el corazón normal quedara dentro de los
+  6-10 mm de FATE, el volumen de miocardio de referencia bajó de 140 a 130 mL (pared telediastólica 9,6 mm, masa
+  ~74 g/m² con 1,05 g/mL, fisiología general).
+- **Tabique aplanado** (`septo`, `aplanamientoSeptal` en `formas.mjs`): en cada instante sale del gradiente de presión
+  VI−VD (empieza a +1 mmHg y es completo a −2 mmHg, ilustrativo; que lo decida el gradiente es fisiología general). En
+  la zona media del VI, el tabique se corta por una cuerda (medio ángulo máximo 55°): corte en «D», con la pared
+  conservando su grosor. Lo que la cuerda quita a la cavidad se devuelve al radio, así que el volumen dibujado sigue
+  al motor. Un corazón normal no baja de +1 mmHg; en el TEP el VD supera al VI en diástole (tabique plano) y en sístole
+  el tabique vuelve a curvarse.
+- `septo` entra en las formas precalculadas (instantes clave y tolerancia 0,15) y la masa del VI debe coincidir para
+  mezclar.
+- **Discrepancia entre fuentes de la app**, señalada en el propio criterio: la Ficha 11 llama cor pulmonale a un área
+  VD/VI >0,6, y Merino da como normal un VD de ~2/3 del tamaño del VI (sin decir si es área o diámetro). El modelo
+  normal da 0,43.
+- El TAPSE del modelo sale del vaciado del VD, así que también baja en la hipertrofia (el VS del VD cae con el del VI).
+- **Accesos** `data-eco-escenario="hipertrofia|dilatada|tep"` desde Fisiopatología UCI · Cardiología (Ficha 3 y las del
+  VD), Merino Cardiología (IC aguda) y Merino Neumología (ecocardiografía en la EP).
 
 ## Rendimiento medido
 
@@ -386,8 +430,10 @@ licencia CC BY-SA 4.0 (el resto del simulador no). La cita también se muestra e
   retrógrado por las válvulas).
 - **Abdomen**: ventilación mecánica (índice de distensibilidad de FATE) en el reloj respiratorio; el derrame del motor
   solo llega a PVC ~7,5, así que su VCI no sale «dilatada» (>21 mm) aunque ya no colapse un 50 %.
-- Más ideas de *The Heart by Ultrasound* por reconstruir: formas de enfermedad movidas por los escenarios (choca con
-  «anatomía congelada»: hace falta decidirlo) y que una cifra mostrada nunca contradiga su grado.
+- Más ideas de *The Heart by Ultrasound* por reconstruir: que una cifra mostrada nunca contradiga su grado.
+- **Formas de enfermedad** por añadir si llegan fuentes: hipertrofia del VD e hipertensión pulmonar crónica (FATE
+  solo da pared del VD ~5 mm), amiloidosis (pared del VI y del VD engrosadas, guía ESC), dilatación auricular (ESC:
+  volumen de la AI >34 mL/m²; el modelo no mide aún el volumen auricular indexado), insuficiencias valvulares.
 - **Vistas de la fase 5**: en la subcostal 4 cámaras el VD queda solo algo más cerca del hígado que el VI (con
   nuestra anatomía, menos que en un paciente); la subcostal no tiene reto de paso entre vistas (la de la VCI pone la
   sonda en otro sitio de la piel); la supraesternal no tiene troncos supraaórticos ni Doppler del arco (el motor no

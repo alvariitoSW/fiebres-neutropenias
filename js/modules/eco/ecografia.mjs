@@ -130,6 +130,33 @@ export function planoVista(clave, est) {
   return { clave, nombre: v.nombre, corto: v.corto, O, d, r, n: nrm(cruz(r, d)), prof: v.prof, mitad: v.angulo / 2 * Math.PI / 180 };
 }
 
+// ---------------------------------------------------------------------------- medidas del corazón
+/**
+ * Lo que mediría un ecografista en la forma de este estado (normalmente el telediastólico), para cotejar las formas de
+ * enfermedad (escenarios.mjs) con las cifras de las fichas. Todo en mm salvo lo indicado.
+ * - tabique, paredPost, lvdd, vdDiam: en el eje largo paraesternal, a un 30% de la longitud del VI desde la base (el
+ *   mismo nivel que la vista PLAX), igual que la tabla de dimensiones de FATE.
+ * - rwt: grosor relativo de pared = 2 × pared posterior / LVDd (la guía ESC de IC lo usa con corte >0,42).
+ * - masaIndice (g/m²): volumen de miocardio del VI × 1,05 g/mL (densidad del miocardio: fisiología general) / superficie.
+ * - areaVdVi: área de la cavidad del VD sobre la del VI en el plano apical de 4 cámaras (Ficha 11: relación VD/VI).
+ */
+export function medidasCorazon(est, sc = 1.85) {
+  const g = baseGeometrica(est), vi = g.vi, z = -0.3 * vi.L, U = g.U, Up = U + Math.PI;
+  const pared = (f) => g.rEpiVi(z, f) - g.rEndoVi(z, f);
+  const lvdd = g.rEndoVi(z, U) + g.rEndoVi(z, Up), paredPost = pared(Up);
+  // áreas en el plano A4C: se cuenta qué puntos del plano caen en cada cavidad (bajo el plano AV)
+  const P = planoVista('a4c', est), h = 0.6; let nVi = 0, nVd = 0;
+  for (let u = -70; u <= 70; u += h) for (let v = 0; v <= P.prof; v += h) {
+    const p = sum(P.O, sum(esc(P.r, u), esc(P.d, v))), zp = p[2];
+    if (zp >= 0) continue;
+    const rho = Math.hypot(p[0], p[1]), f = Math.atan2(p[1], p[0]);
+    if (zp > -vi.L && rho < g.rEndoVi(zp, f)) { nVi++; continue; }
+    if (zp > -g.Lvd && g.ventana(f) > 0) { const re = g.rEpiVi(zp, f); if (rho > re && rho < re + g.wRV(zp, f)) nVd++; }
+  }
+  return { tabique: pared(U), paredPost, lvdd, vdDiam: g.wRV(z, U), rwt: 2 * paredPost / lvdd,
+    masaIndice: REF.vMioVi * g.mio * 1.05 / sc, areaVdVi: nVi ? nVd / nVi : 0, septo: g.septo };
+}
+
 // ---------------------------------------------------------------------------- sonda libre
 // La sonda se mueve a partir de la vista estándar, con los movimientos que se enseñan con un transductor real
 // (en grados y mm, desde la vista estándar; todos con el transductor como pivote salvo el deslizamiento):
@@ -329,10 +356,11 @@ export function elementosDelCorte(partes, P, ref = null) {
   });
   const out = [mascara];
   for (const [g, { db, trozos }] of grupos) {
-    // hasta 40 mm: las vistas que rozan la base (supraesternal, subcostal) dejan el epicardio abierto con sus dos
-    // extremos en el borde de la base a 30-35 mm. Los puentes van de menor a mayor distancia, así que subir el tope
-    // no cambia los que ya se cerraban: solo cierra los que antes quedaban abiertos
-    const { puentes, puentesRef, abiertos } = cerrarExtremos(trozos, 40);
+    // hasta 50 mm: las vistas que rozan la base (supraesternal, subcostal) dejan el epicardio abierto con sus dos
+    // extremos en el borde de la base a 30-35 mm (hasta ~46 mm con la pared gruesa de la hipertrofia del VI). Los
+    // puentes van de menor a mayor distancia, así que subir el tope no cambia los que ya se cerraban: solo cierra
+    // los que antes quedaban abiertos
+    const { puentes, puentesRef, abiertos } = cerrarExtremos(trozos, 50);
     const seg = trozos.flatMap(x => x.seg).concat(puentes);
     const conRef = trozos.every(x => x.segRef);
     const segRef = conRef ? trozos.flatMap(x => x.segRef).concat(puentesRef) : null;

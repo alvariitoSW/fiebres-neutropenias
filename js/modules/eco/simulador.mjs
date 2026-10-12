@@ -13,11 +13,11 @@ import { construirCorazon, LIMITES, TAPSE_POR_ML, recortar, planoCorte } from '.
 import { construirAbdomen, anatomiaAbdomen, modeloVci, ARRIBA } from './abdomen.mjs';
 import { crearCamara, m4, MODELO, nrm } from './mat.mjs';
 import { crearWebGL } from './render-webgl.mjs';
-import { ESCENARIOS } from './escenarios.mjs';
+import { ESCENARIOS, evaluarForma, ASENTAR_FORMA } from './escenarios.mjs';
 import { crearFlujo } from './flujo-sangre.mjs';
 import { COLOR_FASE, segmentosFase, estadoRevision, crearDiagramas } from './diagramas.mjs';
 import { VALVULAS, apertura, estadoGeo, crearTablaFormas, semejantes, extraDeMotor } from './formas.mjs';
-import { VISTAS, planoVista, enPlano, crearEcografo, abanicoVista, direccionHaz, anguloHacia, planoLibre, SONDA_CERO, sondaMovida, desviacion, vistaMasParecida } from './ecografia.mjs';
+import { VISTAS, planoVista, medidasCorazon, enPlano, crearEcografo, abanicoVista, direccionHaz, anguloHacia, planoLibre, SONDA_CERO, sondaMovida, desviacion, vistaMasParecida } from './ecografia.mjs';
 import { crearModoM } from './modo-m.mjs';
 import { areasAnillo, fuentesFlujo, fuenteEnMuestra, curvaLatido, medidasLatido, puntosMuestra, velocidadesMuestra, columnaEspectro, mapaColor } from './doppler.mjs';
 
@@ -435,7 +435,9 @@ export function montarSimulador(raiz, opc = {}) {
   const muestraTd = () => motor.onda.reduce((a, b) => (b.vvi > a.vvi ? b : a), motor.onda[0]);
   function prepararPlanoEco() {
     if (!motor.onda.length) return null;
-    const td = muestraTd(), clave = [vistaEco, Math.round(td.vvi / 3), Math.round(td.vvd / 3), sonda.rot, sonda.incl, sonda.bal, sonda.desl].join('|');
+    // la muestra telediastólica, con la masa del VI de la forma de enfermedad (fija la posición del ápex)
+    const mioVi = motor.p.mioVi ?? 1, td = { ...muestraTd(), mioVi };
+    const clave = [vistaEco, Math.round(td.vvi / 3), Math.round(td.vvd / 3), mioVi, sonda.rot, sonda.incl, sonda.bal, sonda.desl].join('|');
     if (clave !== claveTd) {
       // el plano de la vista estándar y, encima, el movimiento de la sonda (sonda libre)
       planoBase = planoVista(vistaEco, td); planoEco = planoLibre(planoBase, sonda); claveTd = clave;
@@ -443,7 +445,7 @@ export function montarSimulador(raiz, opc = {}) {
       modoM.setProf(planoEco.prof); estadoSonda(td);
     }
     // forma de referencia para que el moteado siga al tejido: la telediastólica, con las mismas opciones
-    const cr = [Math.round(td.vvi), Math.round(td.vvd), opciones.pericardio, opciones.detalle, calidad, motor.p.liquidoPeri].join('|');
+    const cr = [Math.round(td.vvi), Math.round(td.vvd), opciones.pericardio, opciones.detalle, calidad, motor.p.liquidoPeri, mioVi].join('|');
     if (cr !== claveRef) { refGeoTd = construirCorazon(estadoGeo(td, extraGeo()), { pericardio: opciones.pericardio, detalle: opciones.detalle, calidad }); claveRef = cr;
       // el abdomen de referencia: en espiración (la VCI en su diámetro máximo), con la misma topología
       const pvc = motor.ultimo ? motor.ultimo.pvc : td.pad; refEco = refGeoTd.partes.concat(construirAbdomen(refGeoTd, { pvc, pad: pvc, t: 0 }).partes); }
@@ -576,6 +578,23 @@ export function montarSimulador(raiz, opc = {}) {
     $('#cv-baro-txt').innerHTML = motor.p.barorreflejo
       ? `PA ${u.pas.toFixed(0)}/${u.pad_.toFixed(0)} · FC ${u.fc.toFixed(0)} · GC ${u.gc.toFixed(1)} L/min · PVC ${u.pvc.toFixed(0)}. Barorreflejo (PAM que siente ${b.sensor.toFixed(0)} mmHg, consigna ${motor.p.pamConsigna}): FC <b>${pc(b.fc)}</b> · resistencias <b>${pc(b.r)}</b> · venoconstricción <b>${pc(b.vu)}</b> · contractilidad <b>${pc(b.ees)}</b>. Ilustrativo.`
       : `PA ${u.pas.toFixed(0)}/${u.pad_.toFixed(0)} · FC ${u.fc.toFixed(0)} · GC ${u.gc.toFixed(1)} L/min · PVC ${u.pvc.toFixed(0)}. Barorreflejo apagado: nada compensa los cambios.`;
+    pintarForma(u);
+  }
+  // Formas de enfermedad: sus cifras (las del último latido y las que mediría un ecografista en la telediástole)
+  // frente a los criterios de las fichas (escenarios.mjs, CRITERIOS_FORMA). La referencia normal se calcula una vez.
+  let normalRef = null;
+  const medidasDe = (m) => medidasCorazon(estadoGeo(m.onda.reduce((a, b) => (b.vvi > a.vvi ? b : a), m.onda[0]), extraDeMotor(m)), m.p.sc);
+  function pintarForma(u) {
+    const caja = $('#cv-forma-medidas');
+    if (!ESCENARIOS[escenario]?.forma) { caja.hidden = true; return; }
+    if (!normalRef) { const m0 = crearMotor({ barorreflejo: motor.p.barorreflejo }); m0.correr(12); normalRef = { u: m0.ultimo, md: medidasDe(m0) }; }
+    const res = evaluarForma(escenario, u, medidasDe(motor), normalRef.u, normalRef.md);
+    caja.hidden = false;
+    caja.innerHTML = `<p class="cv-titulo">Lo que mide el modelo frente a las fichas</p>` + res.map(r =>
+      `<div class="cv-criterio${r.ok ? ' ok' : ''}"><span class="cv-criterio-marca">${r.ok ? '✅' : '⚠️'}</span>
+        <span class="cv-criterio-txt">${r.texto}: <b>${r.v}</b>${r.nota ? `<br><span class="cv-muted">${r.nota}</span>` : ''}</span>
+        <button type="button" class="especialidad-link cv-criterio-ir" data-especialidad="${r.fuente.especialidad}" data-view="${r.fuente.view}" data-panel="${r.fuente.panel}" data-tab="${r.fuente.tab}" data-resaltar="${r.fuente.sel}">${r.fuente.ficha} →</button></div>`).join('') +
+      `<p class="cv-muted">Las cifras se cotejan con las fichas; los parámetros del modelo que producen la forma (masa, rigidez, contractilidad, resistencias, volumen retenido) son ilustrativos.</p>`;
   }
 
   // ---- Bucle: solo corre mientras está activo (la app lo para cuando la vista no se ve o la pestaña se oculta)
@@ -628,18 +647,21 @@ export function montarSimulador(raiz, opc = {}) {
 
   // Escenarios: parten siempre del estado normal estable (escenarios.mjs, los mismos que comprueban las pruebas)
   let escenario = 'normal';
-  $('#cv-escenarios').innerHTML = Object.entries(ESCENARIOS).map(([k, e]) => `<button type="button" class="cv-mini${k === 'normal' ? ' on' : ''}" data-c="${k}">${e.nombre}</button>`).join('');
+  const chipEsc = ([k, e]) => `<button type="button" class="cv-mini${k === 'normal' ? ' on' : ''}" data-c="${k}">${e.nombre}</button>`;
+  $('#cv-escenarios').innerHTML = Object.entries(ESCENARIOS).filter(([, e]) => !e.forma).map(chipEsc).join('');
+  $('#cv-enfermedad').innerHTML = Object.entries(ESCENARIOS).filter(([, e]) => e.forma).map(chipEsc).join('');
   function elegirEscenario(k) {
     if (!ESCENARIOS[k]) return;
     escenario = k;
     motor = crearMotor({ barorreflejo: $('#cv-baro').checked }); motor.correr(12); ESCENARIOS[k].aplicar(motor);
-    if (k !== 'normal') motor.correr(10);          // que se vea ya el efecto (y el barorreflejo respondiendo)
+    // que se vea ya el efecto (y el barorreflejo respondiendo); una forma de enfermedad, ya asentada
+    if (k !== 'normal') motor.correr(ESCENARIOS[k].forma ? ASENTAR_FORMA : 10);
     if (opc.depuracion) window.__motor = motor;
     revision = null; ponerPausa(false); sangre.reiniciar(); latidoTexto = -1; claveTd = ''; ensuciar(); colocarLineaM(); reiniciarD();
     $$('[data-c]').forEach(x => x.classList.toggle('on', x.dataset.c === k));
     opc.onEscenario?.(k);
   }
-  $('#cv-escenarios').addEventListener('click', (e) => { const b = e.target.closest('[data-c]'); if (b) elegirEscenario(b.dataset.c); });
+  for (const id of ['#cv-escenarios', '#cv-enfermedad']) $(id).addEventListener('click', (e) => { const b = e.target.closest('[data-c]'); if (b) elegirEscenario(b.dataset.c); });
   $('#cv-baro').addEventListener('change', () => { motor.p.barorreflejo = $('#cv-baro').checked; });
   $('#cv-avanzar').addEventListener('click', () => { revision = null; motor.correr(10); sangre.reiniciar(); latidoTexto = -1; ensuciar(); });
 

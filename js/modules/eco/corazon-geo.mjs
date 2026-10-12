@@ -42,7 +42,7 @@ export const COLORES = {
 };
 
 export const REF = {
-  vVi: 120, lVi: 78, vMioVi: 140,
+  vVi: 120, lVi: 78, vMioVi: 130,
   vVd: 140, phiA: 1.15, phiB: 4.45, lVdRel: 0.82, paredVd: 4.0,
   vAi: 40, vAd: 35,
 };
@@ -68,18 +68,24 @@ const volPerfil = (Rb, Rm, L) => Math.PI * L / N_VOL / 1000 * (Rb * Rb * S00 + 2
 // Escala de los anillos: se contraen ~20% de diástole a sístole (ilustrativo)
 const escalaAnillo = (v, v0, v1) => 0.8 + 0.2 * clamp((v - v0) / (v1 - v0), 0, 1.75);
 
+// Tabique aplanado (formas de enfermedad): centro de la media luna del VD y medio ángulo máximo del arco que se
+// aplana (~55°, ilustrativo)
+const PHI_SEPTO = (REF.phiA + REF.phiB) / 2, ALFA_SEPTO = 0.95;
 // Límites de la geometría: fuera de ellos el dibujo deja de seguir al motor (se avisa en la página).
 export const LIMITES = { vi: [35, 320], vd: [45, 330], au: [15, 140] };
-export function geomVi(vMotor) {
-  const v = clamp(vMotor, LIMITES.vi[0], LIMITES.vi[1]);
+// mio: masa del VI respecto a la normal (formas de enfermedad, escenarios.mjs); extra: volumen que se añade al
+// radio (no a la longitud) para compensar lo que el tabique aplanado le quita a la cavidad (baseGeometrica)
+export function geomVi(vMotor, mio = 1, extra = 0) {
+  const v = clamp(vMotor, LIMITES.vi[0], LIMITES.vi[1]), vc = v + extra;
   const L = REF.lVi * Math.pow(v / REF.vVi, 0.27);
   const Rb = 25.5 * (0.88 + 0.12 * clamp((v - 40) / 80, 0, 2));
   // Rm: raíz positiva de la cuadrática del volumen
-  const k = Math.PI * L / N_VOL / 1000, a = k * S11, b = 2 * k * Rb * S01, c = k * Rb * Rb * S00 - v;
+  const k = Math.PI * L / N_VOL / 1000, a = k * S11, b = 2 * k * Rb * S01, c = k * Rb * Rb * S00 - vc;
   const Rm = Math.max(1, (-b + Math.sqrt(Math.max(0, b * b - 4 * a * c))) / (2 * a));
   // pared de volumen constante: epicardio = perfil (Rb+t, Rm+t, L+t)
+  const vMio = REF.vMioVi * mio;
   let tl = 1.5, th = 30;
-  for (let i = 0; i < 30; i++) { const t = (tl + th) / 2; (volPerfil(Rb + t, Rm + t, L + t) - v) > REF.vMioVi ? th = t : tl = t; }
+  for (let i = 0; i < 30; i++) { const t = (tl + th) / 2; (volPerfil(Rb + t, Rm + t, L + t) - vc) > vMio ? th = t : tl = t; }
   const t = (tl + th) / 2;
   return { L, Rb, Rm, t, Le: L + t, ReB: Rb + t, Rme: Rm + t, R: Rm, Re: Rm + t };
 }
@@ -246,10 +252,10 @@ export function construirCorazon(estado, opciones = {}) {
   // en los dos tercios apicales (la entrada y el ápex son trabeculados; el infundíbulo es liso)
   const cresta = (a, b) => { const x = Math.max(0, Math.sin(a)), y = Math.max(0, Math.sin(b)); return x * x * x + 0.6 * y * y * y; };
   const trabVi = (z, f) => { const s = f * rEndoVi(z); return 1.0 * paso(0.45, 0.85, -z / vi.L) * cresta(0.55 * s + 0.12 * z, 0.34 * s - 0.25 * z); };
-  const trabVd = (z, f) => { const s = f * (rEpiVi(z) + wRV(z, f)); return 1.8 * paso(0.2, 0.55, -z / Lvd) * cresta(0.42 * s + 0.15 * z, 0.26 * s - 0.3 * z + 1.3); };
+  const trabVd = (z, f) => { const s = f * (rEpiVi(z, f) + wRV(z, f)); return 1.8 * paso(0.2, 0.55, -z / Lvd) * cresta(0.42 * s + 0.15 * z, 0.26 * s - 0.3 * z + 1.3); };
   // cerca del ápex la cavidad se cierra: las trabéculas se desvanecen con el radio (si no, quedaba una "aguja")
-  const endoViT = (z, f) => { const re = rEndoVi(z), r = Math.max(0, re - trabVi(z, f) * Math.pow(clamp(re / 7, 0, 1), 2)); return [r * Math.cos(f), r * Math.sin(f), z]; };
-  const endoVdT = (z, f) => { const re = rEpiVi(z), w = wRV(z, f); const r = re + Math.max(0.3 * w, w - trabVd(z, f) * clamp(w / 6, 0, 1)); return [r * Math.cos(f), r * Math.sin(f), z]; };
+  const endoViT = (z, f) => { const re = rEndoVi(z, f), r = Math.max(0, re - trabVi(z, f) * Math.pow(clamp(re / 7, 0, 1), 2)); return [r * Math.cos(f), r * Math.sin(f), z]; };
+  const endoVdT = (z, f) => { const re = rEpiVi(z, f), w = wRV(z, f); const r = re + Math.max(0.3 * w, w - trabVd(z, f) * clamp(w / 6, 0, 1)); return [r * Math.cos(f), r * Math.sin(f), z]; };
   const NZe = corte ? Math.round(44 * q) : NZ, NPe = corte ? Math.round(110 * q) : NP, NPVe = corte ? Math.round(84 * q) : NPV;
   // oclusión: la cavidad se oscurece hacia el ápex; el epicardio, en los surcos interventriculares
   const aoEndoVi = (x, y, z) => 0.55 + 0.45 * Math.pow(1 - clamp(-z / vi.L, 0, 1), 0.7);
@@ -531,7 +537,7 @@ export function construirCorazon(estado, opciones = {}) {
   // (el estiramiento auricular es el que las llena en la sístole ventricular); los vasos de arriba no se mueven.
   // El descenso se mide desde el telediástole del propio corazón (estado.vviTd, el del último latido): un
   // corazón pequeño no queda con la base hundida, sino entero más corto. Acotado por si acaso.
-  const LeTd = estado.vviTd ? geomVi(estado.vviTd).Le : LE_REF;
+  const LeTd = estado.vviTd ? geomVi(estado.vviTd, geo.mio).Le : geo.mio === 1 ? LE_REF : geomVi(REF.vVi, geo.mio).Le;
   const descenso = clamp(vi.Le - LeTd, -18, 6);
   const contr = clamp((REF.vVi - estado.vvi) / 75, 0, 1.15), tau = 0.12 * contr;   // ~7° al final de la sístole
   // La pared libre del VD (y el anillo tricuspídeo lateral, donde se mide el TAPSE) baja más que el plano AV
@@ -565,8 +571,8 @@ export function construirCorazon(estado, opciones = {}) {
   const ejeAur = (c, H, inclin, a) => { const sa = Math.sin(a); return [c[0] + inclin[0] * sa, c[1] + inclin[1] * sa, 0.3 + H * Math.pow(sa, 0.85)]; };
   const enAur = (c, rho, H, inclin, bulto, [u, f, r]) => { const a = 0.15 + u * 1.15; return lerp(ejeAur(c, H, inclin, a), cupulaPunto(c, rho, H, inclin, bulto, a, f * TAU), 0.8 * r); };
   const enCamara = {
-    vi: ([u, f, r]) => { const z = -vi.L * (0.05 + 0.8 * u), rr = 0.85 * r * rEndoVi(z); return [rr * Math.cos(f * TAU), rr * Math.sin(f * TAU), z]; },
-    vd: ([u, f, r]) => { const z = -Lvd * (0.05 + 0.75 * u), ph = REF.phiA + (0.1 + 0.8 * f) * (REF.phiB - REF.phiA); const rr = rEpiVi(z) + wRV(z, ph) * (0.2 + 0.6 * r); return [rr * Math.cos(ph), rr * Math.sin(ph), z]; },
+    vi: ([u, f, r]) => { const z = -vi.L * (0.05 + 0.8 * u), ph = f * TAU, rr = 0.85 * r * rEndoVi(z, ph); return [rr * Math.cos(f * TAU), rr * Math.sin(f * TAU), z]; },
+    vd: ([u, f, r]) => { const z = -Lvd * (0.05 + 0.75 * u), ph = REF.phiA + (0.1 + 0.8 * f) * (REF.phiB - REF.phiA); const rr = rEpiVi(z, ph) + wRV(z, ph) * (0.2 + 0.6 * r); return [rr * Math.cos(ph), rr * Math.sin(ph), z]; },
     ai: (n) => enAur(mc, rhoAi, HAi, incAi, bAi, n),
     ad: (n) => enAur(ct, rhoAd, HAd, incAd, bAd, n),
   };
@@ -592,13 +598,31 @@ export function construirCorazon(estado, opciones = {}) {
 
 // ---- Dimensiones de la base y funciones de superficie -------------------------
 export function baseGeometrica(estado) {
-  const vi = geomVi(estado.vvi);
+  // Formas de enfermedad (escenarios.mjs): mioVi = masa del VI respecto a la normal; septo (0-1) = cuánto se aplana
+  // el tabique en este instante (formas.mjs, aplanamientoSeptal: sale del gradiente de presión VI−VD)
+  const mio = estado.mioVi ?? 1, septo = clamp(estado.septo ?? 0, 0, 1);
+  // Tabique aplanado: en la zona media del VI, la parte del tabique se corta por una cuerda (corte en «D»). La pared
+  // conserva su grosor (el epicardio se corta por una cuerda paralela). α: medio ángulo del arco aplanado (ilustrativo)
+  const alfa = (z, L) => { const sv = -z / L; return ALFA_SEPTO * septo * paso(0, 0.2, sv) * (1 - paso(0.7, 0.95, sv)); };
+  let vi = geomVi(estado.vvi, mio);
+  if (septo > 0) {            // lo que la cuerda le quita a la cavidad se devuelve al radio, para que el volumen siga al motor
+    let quitado = 0; const dz = vi.L / N_VOL;
+    for (let i = 0; i < N_VOL; i++) { const z = -(i + 0.5) * dz, r = perfil(z, vi.Rb, vi.Rm, vi.L), a = alfa(z, vi.L);
+      quitado += r * r * (a - Math.sin(a) * Math.cos(a)) * dz; }
+    vi = geomVi(estado.vvi, mio, quitado / 1000);
+  }
   const vvd = clamp(estado.vvd, LIMITES.vd[0], LIMITES.vd[1]);
   // se piden muchas veces con el mismo z o el mismo ángulo (filas y columnas de las rejillas)
-  const rEndoVi = memo((z) => perfil(z, vi.Rb, vi.Rm, vi.L));
-  const rEpiVi = memo((z) => perfil(Math.max(z, -vi.Le), vi.ReB, vi.Rme, vi.Le));
-  const endoVi = (z, f) => { const r = rEndoVi(z); return [r * Math.cos(f), r * Math.sin(f), z]; };
-  const epiVi = (z, f) => { const r = rEpiVi(z); return [r * Math.cos(f), r * Math.sin(f), z]; };
+  const rEndoViC = memo((z) => perfil(z, vi.Rb, vi.Rm, vi.L));
+  const rEpiViC = memo((z) => perfil(Math.max(z, -vi.Le), vi.ReB, vi.Rme, vi.Le));
+  const alfaZ = memo((z) => alfa(z, vi.L));
+  // radio del VI en (z, ángulo), con el tabique aplanado si toca
+  const rEndoVi = (z, f) => { const r = rEndoViC(z); if (f === undefined) return r; const a = alfaZ(z); if (a <= 0) return r;
+    const c = Math.cos(f - PHI_SEPTO); return c > 0 ? Math.min(r, r * Math.cos(a) / c) : r; };
+  const rEpiVi = (z, f) => { const r = rEpiViC(z); if (f === undefined) return r; const a = alfaZ(z); if (a <= 0) return r;
+    const c = Math.cos(f - PHI_SEPTO); return c > 0 ? Math.min(r, (r - rEndoViC(z) * (1 - Math.cos(a))) / c) : r; };
+  const endoVi = (z, f) => { const r = rEndoVi(z, f); return [r * Math.cos(f), r * Math.sin(f), z]; };
+  const epiVi = (z, f) => { const r = rEpiVi(z, f); return [r * Math.cos(f), r * Math.sin(f), z]; };
   const ReB = vi.ReB;
 
   // Anillos del VI: aórtico (fijo) delante-derecha, mitral (se contrae) detrás-izquierda, con 1,5 mm de continuidad mitroaórtica
@@ -621,16 +645,16 @@ export function baseGeometrica(estado) {
   // volumen del VD = C0 + C1·A + C2·A² (cuadrática exacta en A)
   let C0 = 0, C1 = 0, C2 = 0;
   { const nz = 20, nf = 40, span = REF.phiB - REF.phiA, df = span / nf, dz = Lvd / nz;
-    for (let i = 0; i < nz; i++) { const z = -Lvd * (i + 0.5) / nz, re = rEpiVi(z), w = wz(z), pz = perfilZ(z);
-      for (let j = 0; j < nf; j++) { const f = REF.phiA + span * (j + 0.5) / nf; const a = (1 - w) * Wb(f), b = w * ventana(f) * pz;
+    for (let i = 0; i < nz; i++) { const z = -Lvd * (i + 0.5) / nz, w = wz(z), pz = perfilZ(z);
+      for (let j = 0; j < nf; j++) { const f = REF.phiA + span * (j + 0.5) / nf, re = rEpiVi(z, f); const a = (1 - w) * Wb(f), b = w * ventana(f) * pz;
         C0 += (re * a + 0.5 * a * a) * df * dz; C1 += (re * b + a * b) * df * dz; C2 += 0.5 * b * b * df * dz; } } }
   const V = vvd * 1000;
   const A = C0 >= V ? 1 : Math.max(1, (-C1 + Math.sqrt(C1 * C1 - 4 * C2 * (C0 - V))) / (2 * C2));
   const tVd = REF.paredVd * Math.pow(REF.vVd / Math.max(40, vvd), 0.33);
   const tvdW = (w) => tVd * paso(0, 8, w);
   const wRV = (z, f) => mix(Wb(f), A * ventana(f) * perfilZ(z), wz(z));
-  const endoVd = (z, f) => { const r = rEpiVi(z) + wRV(z, f); return [r * Math.cos(f), r * Math.sin(f), z]; };
-  const epiVd = (z, f) => { const w = wRV(z, f); const r = rEpiVi(z) + w + tvdW(w); return [r * Math.cos(f), r * Math.sin(f), z]; };
+  const endoVd = (z, f) => { const r = rEpiVi(z, f) + wRV(z, f); return [r * Math.cos(f), r * Math.sin(f), z]; };
+  const epiVd = (z, f) => { const w = wRV(z, f); const r = rEpiVi(z, f) + w + tvdW(w); return [r * Math.cos(f), r * Math.sin(f), z]; };
   const rimRV = (f) => { const w = Wb(f); return ReB + w + tvdW(w); };
   // anillo tricúspide y orificio de salida (infundíbulo) dentro de la media luna
   const phiT = 3.23, rT = 12 * kT, dT = ReB + 2 + rT, ct = [dT * Math.cos(phiT), dT * Math.sin(phiT)];
@@ -638,7 +662,7 @@ export function baseGeometrica(estado) {
   const phiR = 1.72, aR = 7.5 * kT, bR = 10.5 * kT, dR = ReB + 2 + aR, cR = [dR * Math.cos(phiR), dR * Math.sin(phiR)];
   const e1R = [Math.cos(phiR), Math.sin(phiR)], e2R = [-Math.sin(phiR), Math.cos(phiR)];
   const anilloRVOT = (psi) => [cR[0] + aR * Math.cos(psi) * e1R[0] + bR * Math.sin(psi) * e2R[0], cR[1] + aR * Math.cos(psi) * e1R[1] + bR * Math.sin(psi) * e2R[1], 0];
-  return { vi, rEndoVi, rEpiVi, endoVi, epiVi, ReB, Lvd, A, C0, ventana, Wb, wRV, tvdW, endoVd, epiVd, rimRV, kM, kT,
+  return { vi, mio, septo, rEndoVi, rEpiVi, endoVi, epiVi, ReB, Lvd, A, C0, ventana, Wb, wRV, tvdW, endoVd, epiVd, rimRV, kM, kT,
     U, anilloMitral, mc, aM, bM, anilloAortico, ac, rA, anilloTricus, ct, rT, anilloRVOT, cR, aR, bR, phiR, e1R, e2R };
 }
 

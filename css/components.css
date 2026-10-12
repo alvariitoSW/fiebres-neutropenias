@@ -2349,6 +2349,12 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 .cv-qm-cuerpo .algo-flow, .cv-qm-cuerpo .kv-row, .cv-qm-cuerpo .micro-prof-item { margin: 0; }
 .cv-qm-pendiente { font-style: italic; }
 .cv-qm-ir { margin-top: 6px; }
+/* Formas de enfermedad: criterio de una ficha frente a lo que mide el modelo */
+#cv-forma-medidas { margin-top: 10px; }
+.cv-criterio { display: grid; grid-template-columns: auto 1fr; gap: 2px 8px; align-items: start; border-left: 2px solid var(--accent-yellow); padding: 2px 0 6px 8px; margin-bottom: 8px; font-size: 0.8rem; }
+.cv-criterio.ok { border-left-color: var(--accent-green); }
+.cv-criterio-txt { min-width: 0; overflow-wrap: anywhere; }
+.cv-criterio-ir { grid-column: 2; justify-self: start; }
 /* Modo M: el trazado y, encima, la capa de los calibres (toca dos puntos; arrastrar mueve el más cercano) */
 .cv-m { position: relative; margin-top: 8px; border-radius: 6px; overflow: hidden; background: #000; border: 1px solid var(--border-color); }
 .cv-m canvas { display: block; width: 100%; height: auto; }

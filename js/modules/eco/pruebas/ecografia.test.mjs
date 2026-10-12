@@ -4,7 +4,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { crearMotor } from '../motor.mjs';
 import { construirCorazon, baseGeometrica, REF } from '../corazon-geo.mjs';
-import { estadoGeo } from '../formas.mjs';
+import { estadoGeo, extraDeMotor } from '../formas.mjs';
 import { VISTAS, planoVista, enPlano, cortarPieza, elementosDelCorte, crearEcografo, ajusteAfin, campoDesplazamiento, desplazar, abanicoVista } from '../ecografia.mjs';
 import { construirAbdomen, anatomiaAbdomen, dentroMalla, ARRIBA } from '../abdomen.mjs';
 import { ESCENARIOS } from '../escenarios.mjs';
@@ -214,7 +214,7 @@ test('fase 5: la VCI cortada a lo largo y el arco se ven como sangre; el hígado
 test('fase 5: las paredes quedan cerradas en las vistas nuevas también en los escenarios de shock', () => {
   for (const esc of Object.keys(ESCENARIOS)) {
     const mm = crearMotor(); mm.correr(12); ESCENARIOS[esc].aplicar(mm); if (esc !== 'normal') mm.correr(10);
-    const oo = mm.onda, ex = { vviTd: mm.ultimo.edv, vvdTd: mm.ultimo.edvD, liquidoPeri: mm.p.liquidoPeri || 0 }, t0 = oo.reduce((a, b) => (b.vvi > a.vvi ? b : a));
+    const oo = mm.onda, ex = extraDeMotor(mm), t0 = { ...oo.reduce((a, b) => (b.vvi > a.vvi ? b : a)), mioVi: ex.mioVi };
     for (const k of ['sc4c', 'scVci', 'sse']) { const P = planoVista(k, t0);
       for (let i = 0; i < oo.length; i += 80) for (const e of elementosDelCorte(construirCorazon(estadoGeo(oo[i], ex), OP).partes, P))
         if (e.tipo === 'relleno') assert.equal(e.abiertos, 0, `${esc} · ${k}: ${e.grupo} sin cerrar`); }

@@ -56,4 +56,12 @@ export const ESCENARIO_TIPO = {
     fallo: 'cardiogénico',
     derrame: 'obstructivo (taponamiento)',
     vasoplejia: 'vasodilatador',
+    hipertrofia: null, dilatada: null, tep: null,
+};
+
+// Formas de enfermedad: de qué trata cada una (la cotejan, cifra a cifra, los criterios de escenarios.mjs)
+export const FORMA_NOTA = {
+    hipertrofia: 'Hipertrofia concéntrica del VI por sobrecarga de presión (HTA): pared gruesa y ventrículo rígido que se llena mal — insuficiencia cardíaca con FE preservada.',
+    dilatada: 'Miocardiopatía dilatada: contractilidad baja, VI grande con pared normal o fina y FE reducida.',
+    tep: 'TEP masivo: la resistencia pulmonar sube de golpe y el VD se dilata, se vacía mal y aplana el tabique en diástole (cor pulmonale agudo).',
 };

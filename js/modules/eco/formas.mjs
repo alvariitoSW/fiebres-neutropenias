@@ -31,16 +31,28 @@ export const carga = (v, s) => s[v.q] > 0 ? 0 : clamp((s[v.abajo] - s[v.arriba])
 // Estado que necesita la geometría a partir de un estado del motor (o de una muestra de motor.onda)
 // Lo que la geometría necesita del último latido además del estado del instante: los volúmenes telediastólicos
 // (fijan cuánto ha bajado la base y la pared libre del VD) y el derrame.
-export const extraDeMotor = (motor) => ({ vviTd: motor.ultimo?.edv, vvdTd: motor.ultimo?.edvD, liquidoPeri: motor.p.liquidoPeri });
+// mioVi: masa del VI de la forma de enfermedad elegida (escenarios.mjs; 1 = normal).
+export const extraDeMotor = (motor) => ({ vviTd: motor.ultimo?.edv, vvdTd: motor.ultimo?.edvD, liquidoPeri: motor.p.liquidoPeri, mioVi: motor.p.mioVi ?? 1 });
+
+// Cuánto se aplana el tabique (0-1) según el gradiente de presión transeptal VI−VD de este instante. Fuente de lo
+// que se ve (que el tabique se aplana cuando el VD se sobrecarga): Merino, Fig. 18.2 (septo aplanado en diástole) y
+// Fisiopatología UCI · Cardiología, Ficha 11 (movimiento septal plano o paradójico). Que lo decida el gradiente es
+// fisiología general, y los umbrales (empieza a +1 mmHg, del todo a −2 mmHg) son ilustrativos: un corazón normal
+// nunca baja de ~+1 mmHg en el modelo; con el VD sobrecargado, el VD supera al VI en diástole.
+export function aplanamientoSeptal(s) {
+  if (s.pvi == null || s.pvd == null) return 0;
+  const t = clamp((1 - (s.pvi - s.pvd)) / 3, 0, 1);
+  return t * t * (3 - 2 * t);
+}
 
 export function estadoGeo(s, extra = {}) {
-  const e = { vvi: s.vvi, vvd: s.vvd, vai: s.vai, vad: s.vad, ...extra };
+  const e = { vvi: s.vvi, vvd: s.vvd, vai: s.vai, vad: s.vad, septo: aplanamientoSeptal(s), ...extra };
   for (const v of VALVULAS) { e[v.n] = apertura(v, s); e['carga_' + v.n] = carga(v, s); }
   return e;
 }
 
 // Tolerancia de la mezcla frente al estado mostrado
-export const TOLERANCIA = { volumen: 2, apertura: 0.2 };
+export const TOLERANCIA = { volumen: 2, apertura: 0.2, septo: 0.15 };
 const VOLS = ['vvi', 'vvd', 'vai', 'vad'];
 
 // Valor de una muestra del latido en el instante t, interpolando entre las dos muestras vecinas (cada 2 ms)
@@ -56,8 +68,8 @@ export function valorEn(onda, t, k) {
 // menos de la mitad de la tolerancia. Así hay pocas formas en la diástole lenta y muchas donde todo cambia deprisa
 // (contracción auricular, apertura y cierre de las válvulas). Tope de separación: 60 ms.
 export function instantesClave(onda, { maxSeparacion = 0.06 } = {}) {
-  const vals = onda.map(m => { const e = estadoGeo(m); return [...VOLS.map(k => e[k]), ...VALVULAS.map(v => e[v.n])]; });
-  const tol = [...VOLS.map(() => TOLERANCIA.volumen / 2), ...VALVULAS.map(() => TOLERANCIA.apertura / 2)];
+  const vals = onda.map(m => { const e = estadoGeo(m); return [...VOLS.map(k => e[k]), ...VALVULAS.map(v => e[v.n]), e.septo]; });
+  const tol = [...VOLS.map(() => TOLERANCIA.volumen / 2), ...VALVULAS.map(() => TOLERANCIA.apertura / 2), TOLERANCIA.septo / 2];
   const cabe = (i, j) => {
     if (onda[j].t - onda[i].t > maxSeparacion) return false;
     for (let k = i + 1; k < j; k++) { const w = (onda[k].t - onda[i].t) / (onda[j].t - onda[i].t);
@@ -142,7 +154,9 @@ export function crearTablaFormas({ construir = construirCorazon, porFotograma = 
       const objetivo = estadoGeo(s, extra);
       for (const k of VOLS) if (Math.abs(mix(A.est[k], B.est[k], w) - objetivo[k]) > TOLERANCIA.volumen) return null;
       for (const v of VALVULAS) if (Math.abs(mix(A.est[v.n], B.est[v.n], w) - objetivo[v.n]) > TOLERANCIA.apertura) return null;
+      if (Math.abs(mix(A.est.septo, B.est.septo, w) - objetivo.septo) > TOLERANCIA.septo) return null;
       if ((extra?.liquidoPeri || 0) !== (A.est.liquidoPeri || 0)) return null;
+      if ((extra?.mioVi ?? 1) !== (A.est.mioVi ?? 1)) return null;          // otra forma de enfermedad
       if (Math.abs((extra?.vviTd ?? 0) - (A.est.vviTd ?? 0)) > TOLERANCIA.volumen) return null;   // fija el descenso de la base
       if (Math.abs((extra?.vvdTd ?? 0) - (A.est.vvdTd ?? 0)) > TOLERANCIA.volumen) return null;   // fija el descenso del VD
       const pa = A.geo.partes, pb = B.geo.partes, partes = new Array(pa.length);
