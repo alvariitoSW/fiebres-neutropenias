@@ -1,0 +1,57 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Latido normal</title>
+<meta name="description" content="Curvas del latido normal calculadas en vivo por el motor de la circulación viva">
+<style>
+:root{--bg:#0f0f14;--card:#1a1a24;--line:#2a2a3a;--text:#e8e3d5;--muted:#9a9480;--g:#8aa37b;--r:#c9534a;--y:#cf9a3e;--b:#d4af37;--p:#9b7bb8}
+@media (prefers-color-scheme:light){:root:not([data-theme=dark]){--bg:#f4f1ea;--card:#fff;--line:#ddd7c8;--text:#1d1b16;--muted:#6b665a}}
+:root[data-theme=dark]{--bg:#0f0f14;--card:#1a1a24;--line:#2a2a3a;--text:#e8e3d5;--muted:#9a9480}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 Georgia,serif;padding:16px;max-width:900px;margin:0 auto}
+h1{font-size:1.3rem;margin:0 0 4px}h2{font-size:1rem;margin:18px 0 6px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0}
+canvas{width:100%;height:auto;display:block}
+table{width:100%;border-collapse:collapse;font-size:.9rem}.fuente{display:block;font-size:.72rem;color:var(--muted)}.pend{color:var(--y)}td,th{padding:4px 6px;border-bottom:1px solid var(--line);text-align:left}
+.ok{color:var(--g)}.warn{color:var(--y)}.bad{color:var(--r)}.muted{color:var(--muted);font-size:.85rem}
+.leg span{display:inline-block;margin-right:12px;font-size:.85rem}.leg i{display:inline-block;width:18px;height:3px;vertical-align:middle;margin-right:5px}
+</style></head><body>
+<h1>Circulación viva · el latido normal</h1>
+<p class="muted">El motor se calcula en tu navegador al abrir la página (40 s de latido hasta régimen estable, con el barorreflejo ya asentado). Cada cifra se compara con su referencia: las marcadas <b>ficha</b> salen de una ficha de la app (se dice cuál); las demás, de fisiología general de texto. Las mismas referencias las comprueban las pruebas automáticas (<code>lab/circulacion/referencias.mjs</code>). <span class="pend">Pendiente</span> = el motor aún no la cumple y se calibrará. El modelo es ilustrativo: 4 cámaras con elastancia variable, válvulas que abren por gradiente (la aórtica con inercia, de ahí la incisura), pericardio, tabique, lechos sistémico y pulmonar y barorreflejo.</p><div class="card"><h2>Cifras del latido</h2><table id="tabla"></table></div>
+<div class="card"><h2>Wiggers · lado izquierdo</h2><div class="leg"><span><i style="background:var(--r)"></i>Aorta</span><span><i style="background:var(--b)"></i>Ventrículo izq.</span><span><i style="background:var(--p)"></i>Aurícula izq.</span><span><i style="background:var(--g)"></i>Volumen VI</span></div><canvas id="wi" width="1700" height="1100"></canvas></div>
+<div class="card"><h2>Wiggers · lado derecho</h2><div class="leg"><span><i style="background:var(--r)"></i>Art. pulmonar</span><span><i style="background:var(--b)"></i>Ventrículo der.</span><span><i style="background:var(--p)"></i>Aurícula der.</span><span><i style="background:var(--g)"></i>Volumen VD</span></div><canvas id="wd" width="1700" height="1100"></canvas></div>
+<div class="card"><h2>Curvas presión-volumen</h2><canvas id="pv" width="1700" height="800"></canvas></div>
+<div class="card"><h2>Flujos por las válvulas</h2><div class="leg"><span><i style="background:var(--r)"></i>Aórtico</span><span><i style="background:var(--p)"></i>Mitral</span><span><i style="background:var(--y)"></i>Pulmonar</span><span><i style="background:var(--g)"></i>Tricúspide</span></div><canvas id="fl" width="1700" height="600"></canvas></div>
+<script type="module">
+import { crearMotor } from './motor.mjs';
+import { evaluar } from './referencias.mjs';
+const m = crearMotor(); m.correr(40);
+const o = m.onda, u = m.ultimo;
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const f=(x,d=0)=>x==null?'—':(+x).toFixed(d).replace('.',',');
+document.getElementById('tabla').innerHTML='<tr><th>Variable</th><th>Modelo</th><th>Referencia</th></tr>'+evaluar(u,o).map(r=>
+ '<tr><td>'+r.nombre+'</td><td class="'+(r.ok?'ok':(r.pendiente?'pend':'bad'))+'">'+f(r.v,r.dec??0)+' '+r.unidad+(r.ok?' ✓':r.pendiente?' · pendiente':' ✗')+'</td><td class="muted">'+r.texto+'<span class="fuente">'+(r.origen==='ficha'?'ficha · '+r.fuente:'fisiología general')+'</span></td></tr>').join('');
+const T=u.periodo;
+function ejes(c,x0,y0,w,h,xmax,ymin,ymax,ylab,xlab){c.strokeStyle=css('--line');c.lineWidth=2;c.strokeRect(x0,y0,w,h);c.fillStyle=css('--muted');c.font='28px Georgia';
+ for(let v=ymin;v<=ymax;v+=(ymax-ymin)/5){const y=y0+h-(v-ymin)/(ymax-ymin)*h;c.fillText(f(v),x0-70,y+10);c.beginPath();c.moveTo(x0,y);c.lineTo(x0+w,y);c.strokeStyle=css('--line');c.globalAlpha=.4;c.stroke();c.globalAlpha=1}
+ c.fillText(ylab,x0,y0-12);c.fillText(xlab,x0+w-220,y0+h+40)}
+function traza(c,x0,y0,w,h,xmax,ymin,ymax,key,color,lw=4){c.beginPath();o.forEach((m,i)=>{const x=x0+m.t/xmax*w,y=y0+h-(m[key]-ymin)/(ymax-ymin)*h;i?c.lineTo(x,y):c.moveTo(x,y)});c.strokeStyle=color;c.lineWidth=lw;c.stroke()}
+function marcas(c,x0,y0,w,h,xmax,lista){c.font='26px Georgia';for(const [t,txt,col] of lista){if(t==null)continue;const x=x0+t/xmax*w;c.strokeStyle=col;c.setLineDash([8,8]);c.lineWidth=2;c.beginPath();c.moveTo(x,y0);c.lineTo(x,y0+h);c.stroke();c.setLineDash([]);c.fillStyle=col;c.fillText(txt,x+6,y0+30)}}
+function wiggers(id,pres,vol,pmax,vmin,vmax,vk,vkA){const c=document.getElementById(id).getContext('2d');c.clearRect(0,0,1700,1100);
+ ejes(c,110,40,1550,520,T,0,pmax,'mmHg','s');
+ for(const [k,col] of pres)traza(c,110,40,1550,520,T,0,pmax,k,css(col));
+ marcas(c,110,40,1550,520,T,[[u.tS1,'S1',css('--text')],[u.tAoAbre,'abre '+(id=='wi'?'Ao':'Pul'),css('--r')],[u.tS2,'S2',css('--text')],[u.tMitAbre,'abre '+(id=='wi'?'mitral':'tricúspide'),css('--p')]]);
+ ejes(c,110,620,1550,300,T,vmin,vmax,'mL','s');traza(c,110,620,1550,300,T,vmin,vmax,vol,css('--g'));
+ // válvulas y activación
+ c.font='26px Georgia';c.fillStyle=css('--muted');c.fillText('válvulas abiertas:',110,980);
+ o.forEach(m=>{const x=110+m.t/T*1550;if(m[vk]){c.fillStyle=css('--r');c.fillRect(x,990,4,20)}if(m[vkA]){c.fillStyle=css('--p');c.fillRect(x,1020,4,20)}});
+ c.fillStyle=css('--r');c.fillText(id=='wi'?'aórtica':'pulmonar',1380,1008);c.fillStyle=css('--p');c.fillText(id=='wi'?'mitral':'tricúspide',1380,1038);
+ c.beginPath();o.forEach((m,i)=>{const x=110+m.t/T*1550,y=1090-m.eVen*40;i?c.lineTo(x,y):c.moveTo(x,y)});c.strokeStyle=css('--y');c.lineWidth=3;c.stroke();
+ c.beginPath();o.forEach((m,i)=>{const x=110+m.t/T*1550,y=1090-m.eAur*40;i?c.lineTo(x,y):c.moveTo(x,y)});c.strokeStyle=css('--p');c.stroke();c.fillStyle=css('--muted');c.fillText('activación (aurícula / ventrículo)',1200,1085)}
+wiggers('wi',[['pao','--r'],['pvi','--b'],['pai','--p']],'vvi',140,40,160,'vAo','vMit');
+wiggers('wd',[['pap','--r'],['pvd','--b'],['pad','--p']],'vvd',30,40,160,'vPul','vTri');
+(function(){const c=document.getElementById('pv').getContext('2d');c.clearRect(0,0,1700,800);
+ function bucle(x0,vk,pk,pmax,col,tit){ejes(c,x0,60,700,680,1,0,pmax,'mmHg','');c.fillStyle=css('--text');c.font='30px Georgia';c.fillText(tit,x0,40);
+  c.font='26px Georgia';c.fillStyle=css('--muted');for(let v=0;v<=200;v+=50){const x=x0+v/200*700;c.fillText(v,x-10,770)}c.fillText('mL',x0+660,770);
+  c.beginPath();o.forEach((m,i)=>{const x=x0+m[vk]/200*700,y=740-m[pk]/pmax*680;i?c.lineTo(x,y):c.moveTo(x,y)});c.closePath();c.strokeStyle=css(col);c.lineWidth=5;c.stroke()}
+ bucle(110,'vvi','pvi',140,'--b','Ventrículo izquierdo');bucle(950,'vvd','pvd',40,'--b','Ventrículo derecho')})();
+(function(){const c=document.getElementById('fl').getContext('2d');c.clearRect(0,0,1700,600);ejes(c,110,40,1550,500,T,0,600,'mL/s','s');
+ for(const [k,col] of [['qAo','--r'],['qMit','--p'],['qPul','--y'],['qTri','--g']])traza(c,110,40,1550,500,T,0,600,k,css(col),3)})();
+</script></body></html>

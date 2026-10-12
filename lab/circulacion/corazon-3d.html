@@ -1,0 +1,220 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Corazón vivo</title>
+<meta name="description" content="Paso 2 de la circulación viva: corazón 3D procedural movido por el motor del latido, con dos renderizadores (WebGL y Canvas 2D)">
+<style>
+:root{--bg:#0f0f14;--card:#1a1a24;--line:#2a2a3a;--text:#e8e3d5;--muted:#9a9480;--g:#8aa37b;--r:#c9534a;--y:#cf9a3e;--b:#d4af37;--p:#9b7bb8}
+@media (prefers-color-scheme:light){:root:not([data-theme=dark]){--bg:#f4f1ea;--card:#fff;--line:#ddd7c8;--text:#1d1b16;--muted:#6b665a}}
+:root[data-theme=dark]{--bg:#0f0f14;--card:#1a1a24;--line:#2a2a3a;--text:#e8e3d5;--muted:#9a9480}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.4 Georgia,serif;padding:12px 16px;max-width:760px;margin:0 auto}
+h1{font-size:1.2rem;margin:0 0 6px}.muted{color:var(--muted);font-size:.85rem}
+.escena{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#121218}
+canvas,.escena img{display:block;width:100%;height:auto}
+.sinwebgl{position:absolute;left:8px;right:8px;bottom:8px;font-size:.8rem;color:#e8e3d5;background:rgba(0,0,0,.6);padding:6px 8px;border-radius:8px}
+.hud{position:absolute;left:8px;top:8px;font-size:.78rem;color:#e8e3d5;background:rgba(0,0,0,.45);padding:4px 8px;border-radius:8px;pointer-events:none}
+.hud b{color:var(--b)}
+.orienta{position:absolute;left:8px;bottom:8px;font-size:.75rem;color:#e8e3d5;background:rgba(0,0,0,.45);padding:4px 8px;border-radius:8px;pointer-events:none}.orienta b{color:var(--g)}[hidden]{display:none!important}
+.fila{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0;align-items:center}
+.mini{padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--text);font:inherit;font-size:.82rem;cursor:pointer}.mini.on{border-color:var(--g);color:var(--g)}
+label.mini{display:inline-flex;gap:6px;align-items:center}
+.lect{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin:8px 0}.lect .ancho{grid-column:1/-1}.lect div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 8px;font-size:.8rem}.lect b{display:block;font-size:1rem;color:var(--b)}
+.valv{display:flex;gap:6px}.valv span{flex:1;text-align:center;padding:4px;border-radius:8px;font-size:.78rem;border:1px solid var(--line);color:var(--muted)}.valv span.ab{border-color:var(--g);color:var(--g)}.valv small{display:block;font-size:.7rem;opacity:.85}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:10px 0}
+input[type=range]{width:100%}
+.ciclo{position:relative;display:flex;height:30px;border-radius:8px;overflow:hidden;margin:10px 0 0;border:1px solid var(--line);background:var(--card)}
+.ciclo button{border:0;flex:none;font:inherit;font-size:.78rem;font-weight:bold;color:#1d1b16;cursor:pointer;padding:0;min-width:0;overflow:hidden;touch-action:manipulation}
+.ciclo button.on{box-shadow:inset 0 0 0 2px #fff}
+.ciclo .cur{position:absolute;top:0;bottom:0;width:3px;margin-left:-1px;background:var(--text);box-shadow:0 0 4px rgba(0,0,0,.6);pointer-events:none}
+.ciclo-pie{position:relative;height:18px;font-size:.7rem;color:var(--muted);margin-bottom:6px}
+.ciclo-pie span{position:absolute;top:2px;white-space:nowrap}
+</style></head><body>
+<h1>Circulación viva · el corazón</h1>
+<p class="muted">Geometría procedural: VI con pared de volumen constante, VD en media luna, <b>plano AV cerrado</b> con los 4 anillos valvulares, aurículas que apoyan hasta el surco AV (orejuelas, cavas, 4 venas pulmonares), infundíbulo del VD con el tronco pulmonar cruzando delante de la aorta, raíz aórtica con 3 senos de Valsalva y las coronarias saliendo de ellos, grasa del surco AV e interventricular, seno coronario, papilares y cuerdas, pericardio, movida en cada instante por el <b>mismo motor del latido del paso 1</b>. Todo ilustrativo. <b>Gira</b> deslizando en horizontal (en vertical se mueve la página); con <b>dos dedos</b> acercas e inclinas. Con ratón: arrastrar gira y la rueda acerca.</p>
+<div class="escena"><canvas id="gl" width="390" height="390"></canvas><img id="estatico" src="img/corazon-estatico.jpg" alt="Corazón en vista frontal, imagen fija" width="712" height="712" hidden><div class="sinwebgl" id="sinwebgl" hidden>Tu navegador no tiene WebGL: se muestra una imagen fija del corazón. Las cifras, la barra del ciclo y las pruebas siguen funcionando.</div><div class="hud" id="hud"></div><div class="orienta" id="orienta" hidden>Desde las aurículas · <b>anterior ↑</b> · derecha del paciente →</div></div>
+<div class="ciclo" id="ciclo" aria-label="Ciclo cardíaco: toca una fase para ir a ella"></div><div class="ciclo-pie" id="cicloPie"></div>
+<div class="fila">
+  <button class="mini" data-v="frontal">Frontal</button><button class="mini" data-v="izq">Desde la izquierda</button><button class="mini" data-v="arriba">Desde arriba (base)</button><button class="mini" data-v="valvulas">Válvulas desde arriba</button><button class="mini" data-v="4c">Corte: 4 cámaras</button><button class="mini" data-v="largo">Corte: eje largo</button>
+</div>
+<div class="fila">
+  <label class="mini"><input type="checkbox" id="corte"> Corte</label>
+  <label class="mini"><input type="checkbox" id="peri" checked> Pericardio</label>
+  <label class="mini"><input type="checkbox" id="det" checked> Papilares, cuerdas y coronarias</label>
+  <label class="mini"><input type="checkbox" id="sangre" checked> Sangre en movimiento</label>
+</div>
+<div class="fila" id="filaCorte" style="display:none"><span class="muted">Ángulo del corte</span><input type="range" id="phi" min="0" max="628" value="260"></div>
+<div class="fila">
+  <select class="mini" id="cal"><option value="1">Calidad alta</option><option value="0.7">Calidad media</option><option value="0.5">Calidad baja</option></select>
+  <select class="mini" id="vel"><option value="1">Tiempo real</option><option value="0.25" selected>×¼</option><option value="0.1">×1/10</option></select>
+  <button class="mini" id="pausa">⏸ Pausa</button><button class="mini" id="fase">⏭ Siguiente fase (A-G)</button>
+  <span class="muted" id="fps"></span>
+</div>
+<div class="card"><b>Pruebas del barorreflejo</b> <span class="muted">· cambia algo y mira cómo responde la circulación (tarda segundos: usa «Avanzar 10 s»)</span>
+  <div class="fila" id="escenarios"></div>
+  <div class="fila"><label class="mini"><input type="checkbox" id="baro" checked> Barorreflejo</label><button class="mini" id="avanzar">⏩ Avanzar 10 s</button></div>
+  <div class="muted" id="baroTxt"></div></div>
+<div class="lect"><div class="ancho">Fase<b id="lFase">—</b></div><div class="ancho">Último latido<b id="lLat">—</b></div><div>VI<b id="lVi">—</b></div><div>VD<b id="lVd">—</b></div><div>Aorta<b id="lAo">—</b></div><div>Aurículas<b id="lAu">—</b></div></div>
+<div class="valv"><span id="v-mitral">Mitral</span><span id="v-aortica">Aórtica</span><span id="v-tricus">Tricúspide</span><span id="v-pulmonar">Pulmonar</span></div>
+<div class="card muted">Lo que debe verse: la <b>base baja hacia el ápex</b> en sístole (~13 mm; el ápex casi no se mueve) y el VI se retuerce un poco; la pared del VI engorda al vaciarse. Las válvulas <b>abren según el flujo</b> que pasa y, cerradas, <b>se juntan en su línea de coaptación</b> y se abomban más cuanto mayor es la presión que soportan (mitral en sístole, aórtica en diástole). Las aurículas se vacían con su contracción (onda a) y se llenan mientras baja la base. La fase sale del motor (A-G de Wiggers). Al final de la eyección la aórtica cierra con un breve reflujo (la incisura de la curva aórtica). El <b>barorreflejo</b> sube la FC, las resistencias, el volumen que las venas devuelven y la contractilidad cuando baja la PAM (y al revés); en reposo no actúa. La <b>sangre</b> (roja, oxigenada; violeta, venosa) entra por las venas, cruza cada válvula cuando el motor dice que pasa flujo (cada punto son 2,5 mL) y sale por la aorta y la pulmonar; tras las paredes se ve tenue. La <b>barra del ciclo</b> tiene la duración real de cada fase del último latido: tócala para ir a esa fase. Todo ilustrativo.</div>
+<script type="module">
+import { crearMotor, FASES } from './motor.mjs';
+import { construirCorazon, LIMITES } from './corazon-geo.mjs';
+import { crearCamara, m4, MODELO } from './mat.mjs';
+import { crearWebGL } from './render-webgl.mjs';
+import { ESCENARIOS } from './escenarios.mjs';
+import { crearFlujo } from './flujo-sangre.mjs';
+const $ = (s) => document.querySelector(s);
+let motor = crearMotor(); motor.correr(12);           // hasta régimen estable
+const cam = crearCamara();
+const glC = $('#gl');
+// Solo WebGL. Sin WebGL (raro en móviles actuales) se ve una imagen fija y no se construye geometría.
+const rgl = crearWebGL(glC);
+if (!rgl) { glC.hidden = true; $('#estatico').hidden = false; $('#sinwebgl').hidden = false; }
+cam.enganchar($('.escena'));
+// Resolución real del lienzo: ancho en CSS × densidad de píxeles (hasta 2×)
+function ajustarLienzo() {
+  const ancho = $('.escena').clientWidth, dpr = window.devicePixelRatio || 1;
+  const n = Math.round(ancho * Math.min(dpr, 2)); if (glC.width !== n) { glC.width = n; glC.height = n; }
+}
+ajustarLienzo(); new ResizeObserver(ajustarLienzo).observe($('.escena'));
+// Apertura según el flujo que pasa (raíz: a poco flujo ya se separan las valvas) y carga según el
+// gradiente inverso cuando está cerrada (la válvula soporta la presión y se abomba). Ilustrativo.
+const VALVULAS = [
+  { n: 'mitral', abierta: 'vMit', q: 'qMit', arriba: 'pai', abajo: 'pvi', qRef: 600, pRef: 100, nombre: 'Mitral' },
+  { n: 'tricus', abierta: 'vTri', q: 'qTri', arriba: 'pad', abajo: 'pvd', qRef: 600, pRef: 20, nombre: 'Tricúspide' },
+  { n: 'aortica', abierta: 'vAo', q: 'qAo', arriba: 'pvi', abajo: 'pao', qRef: 500, pRef: 100, nombre: 'Aórtica' },
+  { n: 'pulmonar', abierta: 'vPul', q: 'qPul', arriba: 'pvd', abajo: 'pap', qRef: 350, pRef: 20, nombre: 'Pulmonar' },
+];
+const ap = { mitral: 0.5, tricus: 0.5, aortica: 0, pulmonar: 0 }, carga = { mitral: 0, tricus: 0, aortica: 0, pulmonar: 0 };
+function valvulas(dtSim, instantaneo = false) {
+  const s = motor.s;
+  for (const v of VALVULAS) {
+    const q = s[v.q], objetivo = q > 0 ? Math.min(1, Math.pow(q / v.qRef, 0.35)) : 0;
+    const tau = objetivo > ap[v.n] ? 0.015 : 0.02;
+    ap[v.n] = instantaneo ? objetivo : ap[v.n] + (objetivo - ap[v.n]) * Math.min(1, dtSim / tau);
+    carga[v.n] = q > 0 ? 0 : Math.max(0, Math.min(1, (s[v.abajo] - s[v.arriba]) / v.pRef));
+  }
+}
+let vel = 0.25, calidad = 1, pausa = false, tPrev = performance.now(), frames = 0, tFps = tPrev, simAcum = 0, realAcum = 0;
+const opciones = { corte: null, pericardio: true, detalle: true };
+// La geometría solo se reconstruye si ha cambiado algo (la simulación avanzó o una opción); girar la cámara
+// con la animación en pausa solo vuelve a dibujar.
+let sucio = true, geo = null; const ensuciar = () => { sucio = true; };
+const sangre = crearFlujo(); let verSangre = true;
+// avanza el motor n pasos de 0,1 ms sumando los mL que pasan por cada válvula y vena, y mueve la sangre
+const FLUJOS = ['qMit', 'qTri', 'qAo', 'qPul', 'qVp', 'qRet'];
+function avanzar(n) {
+  const pasado = { qMit: 0, qTri: 0, qAo: 0, qPul: 0, qVp: 0, qRet: 0 }, s = motor.s;
+  for (let i = 0; i < n; i++) { motor.paso(0.0001); for (const k of FLUJOS) if (s[k] > 0) pasado[k] += s[k] * 0.0001; }
+  if (geo) sangre.actualizar(n * 0.0001, s, geo.flujo, pasado);
+}
+function sim(dtReal) {
+  // sin tope por fotograma: a 1× el reloj simulado sigue al real aunque haya pocos fotogramas por segundo
+  const dtSim = dtReal * vel, n = Math.round(dtSim / 0.0001);
+  avanzar(n);
+  valvulas(dtSim); simAcum += n * 0.0001; realAcum += dtReal; sucio = true;
+}
+// Barra del ciclo: fases A-G del último latido, con su duración real, y un cursor en el instante actual
+// colores opacos (con transparencia se embarraban sobre el fondo oscuro): el tono claro es la segunda mitad de cada etapa
+const COLOR_FASE = { A: '#8aa37b', B: '#cf9a3e', C: '#c9534a', D: '#e0958e', E: '#e6c483', F: '#9b7bb8', G: '#cbb8dd' };
+let cicloLatido = -1, cicloPeriodo = 0.857;
+function construirCiclo() {
+  const o = motor.onda, u = motor.ultimo; if (!o.length || !u) return;
+  cicloLatido = motor.s.nLatido; cicloPeriodo = u.periodo;
+  const seg = []; for (const x of o) { if (!seg.length || seg[seg.length - 1].f !== x.fase) seg.push({ f: x.fase, t0: x.t }); }
+  seg.forEach((g, i) => g.t1 = i + 1 < seg.length ? seg[i + 1].t0 : cicloPeriodo);
+  const pc = (t) => (t / cicloPeriodo * 100).toFixed(2) + '%';
+  $('#ciclo').innerHTML = seg.map(g => `<button data-fase="${g.f}" style="width:${pc(g.t1 - g.t0)};background:${COLOR_FASE[g.f]}" title="${g.f} · ${FASES[g.f]}" aria-label="Ir a ${g.f}: ${FASES[g.f]}">${(g.t1 - g.t0) / cicloPeriodo > 0.045 ? g.f : ''}</button>`).join('') + '<div class="cur" id="cicloCur"></div>';
+  const tB = seg.find(g => g.f === 'B')?.t0, tE = seg.find(g => g.f === 'E')?.t0;
+  $('#cicloPie').innerHTML = (tB != null && tE != null)
+    ? `<span style="left:${pc(tB)}">▲S1</span><span style="left:calc(${pc((tB + tE) / 2)} - 2.2em)">sístole</span><span style="left:${pc(tE)}">▲S2</span><span style="left:calc(${pc((tE + cicloPeriodo) / 2)} - 2.4em)">diástole</span>` : '';
+  document.querySelectorAll('#ciclo button').forEach(b => b.onclick = () => irAFase(b.dataset.fase));
+}
+function pintarCiclo() {
+  if (motor.s.nLatido !== cicloLatido) construirCiclo();
+  const cur = $('#cicloCur'); if (cur) cur.style.left = Math.min(100, motor.s.tLatido / cicloPeriodo * 100) + '%';
+  document.querySelectorAll('#ciclo button').forEach(b => b.classList.toggle('on', b.dataset.fase === motor.s.fase));
+}
+// Pausa y avanza hasta el principio de la fase pedida (o la siguiente distinta si no se pide ninguna)
+function irAFase(objetivo) {
+  pausa = true; $('#pausa').textContent = '▶ Reanudar'; const s = motor.s, antes = s.fase;
+  let n = 0; while (n < 25000 && (objetivo ? s.fase === objetivo : s.fase === antes)) { avanzar(10); n += 10; }   // salir de la fase actual
+  if (objetivo) while (n < 40000 && s.fase !== objetivo) { avanzar(10); n += 10; }
+  avanzar(120);                                                               // un poco dentro de la fase nueva
+  valvulas(0, true); ensuciar();
+}
+function dibujar() {
+  const s = motor.s;
+  if (rgl && (sucio || !geo)) {
+    const est = { vvi: s.vvi, vvd: s.vvd, vai: s.vai, vad: s.vad, vviTd: motor.ultimo?.edv, ...ap, liquidoPeri: motor.p.liquidoPeri };
+    for (const v of VALVULAS) est['carga_' + v.n] = carga[v.n];
+    geo = construirCorazon(est, { ...opciones, calidad }); sucio = false;
+  }
+  const g = geo;
+  if (rgl) {
+    const puntos = verSangre ? sangre.puntos(g.flujo, { vistaBase: opciones.vistaBase }) : null;
+    // con la sangre en movimiento sobran los planos translúcidos de sangre del corte (la tapaban)
+    const partes = verSangre ? g.partes.filter(p => !p.nombre.endsWith('sangre')) : g.partes;
+    rgl.dibujar(partes, cam, undefined, puntos);
+  }
+  pintarCiclo();
+  const fase = `${s.fase} · ${FASES[s.fase]}`;
+  const fuera = s.vvi < LIMITES.vi[0] || s.vvi > LIMITES.vi[1] || s.vvd < LIMITES.vd[0] || s.vvd > LIMITES.vd[1] || Math.min(s.vai, s.vad) < LIMITES.au[0] || Math.max(s.vai, s.vad) > LIMITES.au[1];
+  $('#hud').innerHTML = `t = ${s.tLatido.toFixed(2)} s · FC ${Math.round(s.fc)} · <b>${fase}</b>` + (g ? `<br>base ${g.descenso >= 0 ? '+' : ''}${g.descenso.toFixed(0)} mm` : '') + (fuera ? '<br><span style="color:#cf9a3e">⚠ volumen fuera del rango del dibujo: se muestra en su límite</span>' : '');
+  $('#lFase').textContent = fase;
+  $('#lVi').textContent = `${s.vvi.toFixed(0)} mL · ${s.pvi.toFixed(0)} mmHg`;
+  $('#lVd').textContent = `${s.vvd.toFixed(0)} mL · ${s.pvd.toFixed(0)} mmHg`;
+  $('#lAo').textContent = `${s.pao.toFixed(0)} mmHg · AP ${s.pap.toFixed(0)}`;
+  $('#lAu').textContent = `AI ${s.vai.toFixed(0)} · AD ${s.vad.toFixed(0)} mL`;
+  const u = motor.ultimo;
+  if (u) { $('#lLat').textContent = `PA ${u.pas.toFixed(0)}/${u.pad_.toFixed(0)} (PAM ${u.pam.toFixed(0)}) · FC ${u.fc.toFixed(0)} · GC ${u.gc.toFixed(1)} L/min · PVC ${u.pvc.toFixed(0)}`;
+    const pc = (x) => (x >= 0 ? '+' : '−') + Math.abs(Math.round(x * 100)) + '%', b = u.baro;
+    $('#baroTxt').innerHTML = motor.p.barorreflejo
+      ? `Barorreflejo (PAM que siente ${b.sensor.toFixed(0)} mmHg, consigna ${motor.p.pamConsigna}): FC <b>${pc(b.fc)}</b> · resistencias <b>${pc(b.r)}</b> · venoconstricción (volumen movilizado) <b>${pc(b.vu)}</b> · contractilidad <b>${pc(b.ees)}</b>. Ilustrativo.`
+      : 'Barorreflejo apagado: nada compensa los cambios.'; }
+  for (const v of VALVULAS) {
+    const el = document.getElementById('v-' + v.n), abierta = s[v.abierta];
+    el.classList.toggle('ab', abierta);
+    el.innerHTML = `${v.nombre}<small>${abierta ? 'abierta ' + Math.round(ap[v.n] * 100) + '%' : 'cerrada · ' + Math.max(0, s[v.abajo] - s[v.arriba]).toFixed(0) + ' mmHg'}</small>`;
+  }
+}
+function bucle(t) {
+  const dt = Math.min(0.25, (t - tPrev) / 1000); tPrev = t;   // tras volver de otra pestaña no salta segundos
+  if (!pausa) sim(dt);
+  dibujar(); frames++;
+  if (t - tFps > 1000) { const ritmo = realAcum > 0 ? simAcum / realAcum : 0;
+    $('#fps').textContent = `${frames} fps` + (pausa ? '' : ` · reloj ×${ritmo.toFixed(2).replace('.', ',')}`); frames = 0; tFps = t; simAcum = 0; realAcum = 0; }
+  requestAnimationFrame(bucle);
+}
+requestAnimationFrame(bucle);
+// controles
+const vistas = { frontal: { yaw: 0, pitch: 0.12, corte: false }, izq: { yaw: -1.4, pitch: 0.1, corte: false }, arriba: { yaw: 0.2, pitch: 1.3, corte: false }, valvulas: { corte: false, base: true, dist: 245, desde: [0, -0.15, 1] }, '4c': { corte: true, phi: 2.6, alzar: 0.15 }, largo: { corte: true, phi: 2.234 + Math.PI, alzar: 0.2 } };
+// En las vistas de corte, la cámara se pone de frente a la cara cortada (lado que se quita del plano)
+function camaraHaciaCorte(phi, alzar) {
+  const n = [-Math.sin(phi), Math.cos(phi), 0];                       // normal del lado que se conserva
+  const d = m4.apply3(MODELO, [-n[0], -n[1], alzar]);                 // la cámara mira desde el lado quitado
+  const l = Math.hypot(...d); cam.yaw = Math.atan2(d[0] / l, d[1] / l); cam.pitch = Math.asin(d[2] / l);
+}
+document.querySelectorAll('[data-v]').forEach(b => b.onclick = () => { const v = vistas[b.dataset.v]; $('#corte').checked = v.corte;
+  opciones.vistaBase = !!v.base; cam.dist = v.dist || 330; $('#orienta').hidden = !v.base;
+  if (v.desde) { const d = m4.apply3(MODELO, v.desde), l = Math.hypot(...d); cam.yaw = Math.atan2(d[0] / l, d[1] / l); cam.pitch = Math.asin(d[2] / l); cam.centro = [0, 0, 6]; cam.arriba = m4.apply3(MODELO, [0, 1, 0]); } else { cam.centro = [0, 0, -22]; cam.arriba = null; }
+  if (v.corte) { $('#phi').value = Math.round(v.phi * 100); alzarCorte = v.alzar; camaraHaciaCorte(v.phi, v.alzar); } else if (!v.desde) { cam.yaw = v.yaw; cam.pitch = v.pitch; }
+  actCorte(); ensuciar(); });
+let alzarCorte = 0.15;
+function actCorte() { ensuciar(); const on = $('#corte').checked; $('#filaCorte').style.display = on ? '' : 'none'; opciones.corte = on ? { phi: $('#phi').value / 100 } : null; }
+$('#corte').onchange = () => { actCorte(); if ($('#corte').checked) camaraHaciaCorte($('#phi').value / 100, alzarCorte); };
+// al mover el ángulo del corte la cámara lo acompaña, para mirar siempre a la cara cortada
+$('#phi').oninput = () => { actCorte(); camaraHaciaCorte($('#phi').value / 100, alzarCorte); };
+$('#sangre').onchange = () => { verSangre = $('#sangre').checked; };
+$('#peri').onchange = () => { opciones.pericardio = $('#peri').checked; ensuciar(); }; $('#det').onchange = () => { opciones.detalle = $('#det').checked; ensuciar(); };
+$('#vel').onchange = () => vel = +$('#vel').value; $('#cal').onchange = () => { calidad = +$('#cal').value; ensuciar(); };
+$('#pausa').onclick = () => { pausa = !pausa; $('#pausa').textContent = pausa ? '▶ Reanudar' : '⏸ Pausa'; };
+$('#fase').onclick = () => irAFase(null);
+// Pruebas: parten siempre del estado normal estable (escenarios.mjs, los mismos que comprueban las pruebas)
+$('#escenarios').innerHTML = Object.entries(ESCENARIOS).map(([k, e]) => `<button class="mini${k === 'normal' ? ' on' : ''}" data-c="${k}">${e.nombre}</button>`).join('');
+document.querySelectorAll('[data-c]').forEach(b => b.onclick = () => {
+  motor = crearMotor({ barorreflejo: $('#baro').checked }); motor.correr(12); ESCENARIOS[b.dataset.c].aplicar(motor);
+  window.__motor = motor; sangre.reiniciar(); valvulas(0, true); ensuciar();
+  document.querySelectorAll('[data-c]').forEach(x => x.classList.toggle('on', x === b)); });
+$('#baro').onchange = () => { motor.p.barorreflejo = $('#baro').checked; };
+$('#avanzar').onclick = () => { motor.correr(10); sangre.reiniciar(); valvulas(0, true); ensuciar(); };
+window.__ensuciar = ensuciar; window.__sangre = sangre; window.__motor = motor; window.__cam = cam; window.__ap = ap; window.__carga = carga;
+</script></body></html>

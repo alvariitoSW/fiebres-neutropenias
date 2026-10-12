@@ -10437,6 +10437,40 @@ y "Fuentes y Evidencia" enlazan a ellos, con el DOI en la nota.
 - **Pendiente**: la parte de CID que viene de la guía BCSH 2009 (Levi et
   al.) sigue sin cotejar, porque ese PDF no se ha aportado.
 
+## Circulación viva: corazón 3D en laboratorio (`lab/circulacion/`)
+
+Corazón 3D movido en cada instante por un motor del latido, construido como maqueta a petición explícita
+del usuario (Cardiología, «fase 0» de una circulación viva), en rondas revisadas por él: motor del latido,
+corazón procedural, pulido (tiempo real, nitidez, scroll del dedo, volúmenes extremos, rendimiento),
+barorreflejo e incisura aórtica, y sangre en movimiento con barra del ciclo A-G. **Vive en
+`lab/circulacion/` y la app no carga nada de ahí**: está en laboratorio hasta su integración. Los detalles
+(archivos, cómo abrirlo, pruebas, reglas y pendientes) están en `lab/circulacion/README.md`; esta sección
+recoge solo las decisiones.
+
+- **Decisiones del usuario tras una revisión explícita para no construir «un gigante con pies de barro»**
+  (después del bloque 3): 1) **destino**, la vista Visual de Fisiopatología UCI · Cardiología, empezando
+  por la ficha del ciclo cardíaco, con accesos desde los shocks de Merino Cardiología (como la nefrona
+  viva); 2) **solo WebGL** (Canvas 2D quitado: duplicaba cada novedad; sin WebGL, imagen fija con aviso);
+  3) **anatomía congelada** (el bloque de anatomía A1-A6 descartado, salvo valvas mitrales visibles, que
+  sirven al ciclo); 4) **primero los cimientos** y luego las cifras, antes de integrar nada.
+- **Por qué no se integra todavía:** la Ficha 1 de Fisiopatología UCI · Cardiología ya tiene un Wiggers
+  animado, Frank-Starling y un panel de estado (y la Ficha 3 el asa P-V). Integrar sin decidir cómo
+  convive con eso daría un tercer Wiggers con cifras distintas.
+- **Cimientos (hechos):** código en el repositorio (antes solo en una carpeta temporal del contenedor),
+  sin los scripts sueltos; **pruebas automáticas con un comando**
+  (`node --test 'lab/circulacion/pruebas/*.test.mjs'`, ~35 s, 64 pruebas: motor, geometría y navegador);
+  las cifras del latido y su referencia en un solo archivo (`referencias.mjs`) que usan a la vez las
+  pruebas y la página del latido (antes la tabla tenía ✓ escritos a mano, uno de ellos siempre verdadero);
+  escenarios en `escenarios.mjs`, y cada uno se comprueba contra el patrón de su tipo de shock en la
+  Tabla 14.1 de Merino (PVC, GC, RVS) y la Figura 2 del cap. 10 de El Libro Azul (PCP). **Esa prueba cazó
+  un fallo real al estrenarla**: la vasoplejía subía la PVC; ahora incluye venodilatación (Marik, cap. 14:
+  vasodilatación «de arterias y venas»).
+- **Antes de tocar el motor, la geometría o la página**, ejecuta las pruebas; tras el cambio, deben seguir
+  en verde. Las cifras aún fuera de su referencia van marcadas `pendiente` (salen como *todo*, no fallan).
+- **Pendiente:** calibrar RVS y contracción isovolumétrica; erratas de El Libro Azul en las tablas de
+  patrones de shock (RVS en el distributivo) que las fichas 5 y 10 reproducen sin nota; integración;
+  Wiggers y asa P-V sincronizados; escenarios enlazados a las fichas.
+
 ## Cómo probar cambios
 
 No hay build. Para ver la app:
