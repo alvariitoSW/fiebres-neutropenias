@@ -18,7 +18,7 @@ en `lab/circulacion/`), como la especialidad «Eco cardíaca»: ver «En la app�
 node --test 'js/modules/eco/pruebas/*.test.mjs'
 ```
 
-Tarda ~2 min (109 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta. Las de navegador
+Tarda ~2 min (113 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta. Las de navegador
 sirven el repositorio con un servidor propio y abren `laboratorio.html`.
 
 - `motor.test.mjs` — cada cifra del latido normal frente a su referencia (`referencias.mjs`), el volumen
@@ -77,7 +77,8 @@ cumplirse, una prueba avisa para quitar la marca.
 | `doppler.mjs` | Doppler (sin DOM): velocidades a partir de los flujos del motor, volumen de muestra, columna del espectro, mapa de color y medidas del último latido (E/A, TDE, ITV, ondas venosas) |
 | `abdomen.mjs` | Hígado, diafragma y xifoides (fijos al cuerpo) y, cada fotograma, la VCI (calibre según PVC y respiración), las suprahepáticas y la porta |
 | `abdomen-data.mjs` | Mallas de Z-Anatomy ya colocadas bajo el corazón (generado: no se edita a mano) |
-| `herramientas/abdomen-z-anatomy.mjs` | Genera `abdomen-data.mjs` (lee los GLB de Z-Anatomy, registra, simplifica). No forma parte de la app |
+| `abdomen-puntos.mjs` | Puntos de Z-Anatomy (eje de la VCI, hiato, porta, xifoides), aparte para que `corazon-geo` no cargue las mallas (generado) |
+| `herramientas/abdomen-z-anatomy.mjs` | Genera `abdomen-data.mjs` y `abdomen-puntos.mjs` (lee los GLB de Z-Anatomy, registra, simplifica). No forma parte de la app |
 | `que-mirar.js` | Qué líneas de otras fichas se copian en «Qué mirar» para cada vista |
 | `laboratorio.html`, `latido.html` | Páginas de laboratorio (no se enlazan desde la app) |
 | `motor.mjs` | Motor del latido en el tiempo (sin DOM): 4 cámaras, válvulas por gradiente, aórtica con inercia, pericardio, tabique, lechos sistémico y pulmonar, barorreflejo |
@@ -288,10 +289,13 @@ es Z-Anatomy, en el paquete npm `@authorod/svitylo-3d-anatomy-data` 1.1.0; HRA y
   Las suprahepáticas (derecha, media, izquierda) y la porta (tronco y dos ramas) son tubos con direcciones anatómicas
   aproximadas, recortados para quedar dentro del hígado: las de Z-Anatomy son muñones de pocos milímetros.
 - **Calibre de la VCI** (ilustrativo): diámetro en espiración = 11 + PVC mm (7-28) y colapso inspiratorio =
-  0,75 − 0,045 × PVC (5-75 %), con un reloj respiratorio propio de 4 s (el motor no respira) y ±2 % con la onda de la AD.
+  0,75 − 0,045 × PVC (5-75 %), con un reloj respiratorio propio de 4 s (el motor no respira; al revisar un latido en
+  pausa la VCI se queda en su punto del ciclo respiratorio) y como mucho ±2 % con la onda de la AD (sin saltar de banda).
   Elegido para caer en las bandas de la tabla de FATE (Manual UMI): PVC 0-5 → <21 mm y >50 %; 10-20 → >21 mm y <50 %.
   El HUD lo muestra. Las suprahepáticas siguen a la PVC con la mitad de colapso.
-- En el 3D, casilla «Hígado y VCI» (no se dibuja con el corte ni con la vista de la base). En la ecografía, el
+- En el 3D, casilla «Hígado y diafragma» (hígado, diafragma, xifoides, suprahepáticas y porta; no van con el corte).
+  La VCI se dibuja siempre, también con el corte (recortada como el corazón): es la entrada de la AD y sin ella la
+  sangre de las cavas saldría de la nada. Solo la vista de la base la retira, con los grandes vasos. En la ecografía, el
   abdomen va siempre (es anatomía): el hígado se rellena como una pared, el diafragma como una banda muy ecogénica y los
   vasos con luz de sangre y pared (brillante en la porta). La vista subcostal que lo aprovecha es la fase 5.
 
@@ -309,6 +313,11 @@ es Z-Anatomy, en el paquete npm `@authorod/svitylo-3d-anatomy-data` 1.1.0; HRA y
   (<4 cm/s); dos calibres miden velocidades y tiempo. Las **medidas automáticas** salen de las muestras del último latido
   (cada 2 ms), no de los fotogramas: E, A, E/A y TDE en la mitral (Ficha 5: 1-1,5 y 140-250 ms), ITV del TSVI y el GC
   que da (Ficha 11: 18-22 cm), S/D/A en las suprahepáticas y media/pulsatilidad en porta y VCI (VExUS).
+  El sentido «hacia el corazón» (o hepatópeta, en la porta) es el del propio vaso, no el de la onda más alta: en la
+  congestión la A retrógrada puede ser la mayor y S/D siguen midiéndose bien. La velocidad de cada vaso tiene una sola
+  fórmula (`velVaso`), la misma para el espectro, el color y las medidas. Cambiar de vista quita la muestra (en modo D
+  va al preajuste de la nueva vista); mover la sonda la deja en su sitio del haz pero reinicia espectro y medidas; y
+  cambiar la escala (o borrar el trazado) borra los calibres, que medían sobre lo anterior.
 - **Doppler color** (casilla «Color», escala ±40/60/90 cm/s): velocidad hacia la sonda en cada celda de sangre de la
   misma imagen B, en rojo-amarillo (hacia la sonda) o azul-cian (alejándose), con aliasing por encima de la escala.
   Se calcula en una rejilla gruesa y solo con las fuentes que tocan el plano.

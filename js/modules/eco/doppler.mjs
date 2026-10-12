@@ -60,11 +60,19 @@ export function fuentesFlujo(flujo, s, areas, vasos = [], m = {}) {
     valvulas.push({ n, c, dir, a: Math.sqrt(areas[n] * ap / Math.PI), aTubo: Math.sqrt(areas[n] / Math.PI), v0, vTubo: velTubo(n, s, areas), salida: !!SALIDA[n] });
   }
   // vasos: velocidad media a lo largo del eje (signo: en el sentido de sus puntos)
-  const qRet = m.rRetorno ? (s.pven - s.pad) / m.rRetorno : 0, pvc = m.pvc ?? s.pad;
-  const area = (r) => Math.PI * (r / 10) * (r / 10);
-  const P = clamp((pvc - 6) / 8, 0, 1.3), psi = clamp((s.pad - pvc) / 4, -1, 1);
-  const vs = vasos.map(x => ({ ...x, vm: x.tipo === 'vci' ? 0.67 * qRet / area(x.r) : x.tipo === 'hepatica' ? qRet / 15 / area(x.r) : 20 * (1 - P * psi) }));
-  return { valvulas, vasos: vs, geom };
+  return { valvulas, vasos: vasos.map(x => ({ ...x, vm: velVaso(x.tipo, x.r, s, m) })), geom };
+}
+
+/**
+ * Velocidad media (cm/s) de un vaso del abdomen en una muestra del motor, en el sentido de sus puntos (VCI y
+ * suprahepáticas, hacia el corazón; porta, hepatópeta). tipo: 'vci' | 'hepatica' | 'porta'; r: radio (mm);
+ * m: { rRetorno, pvc }. Una sola copia para el espectro, el color y las medidas del latido.
+ */
+export function velVaso(tipo, r, s, m = {}) {
+  const pvc = m.pvc ?? s.pad, q = m.rRetorno ? (s.pven - s.pad) / m.rRetorno : 0, area = Math.PI * (r / 10) * (r / 10);
+  if (tipo === 'vci') return 0.67 * q / area;
+  if (tipo === 'hepatica') return q / 15 / area;
+  return 20 * (1 - clamp((pvc - 6) / 8, 0, 1.3) * clamp((s.pad - pvc) / 4, -1, 1));
 }
 
 /** Velocidad de la sangre (vector, cm/s) en el punto p. */
@@ -157,11 +165,7 @@ export function mapaColor(P, im, F) {
  */
 export function curvaLatido(onda, fuente, factor, areas, m) {
   if (fuente.tipo === 'valvula') return onda.map(s => ({ t: s.t, fase: s.fase, v: factor * (fuente.tubo ? velTubo(fuente.n, s, areas) : velOrificio(fuente.n, s, areas)) }));
-  const area = Math.PI * (fuente.r / 10) * (fuente.r / 10);
-  return onda.map(s => { const q = (s.pven - s.pad) / m.rRetorno;
-    const vm = fuente.vasoTipo === 'vci' ? 0.67 * q / area : fuente.vasoTipo === 'hepatica' ? q / 15 / area
-      : 20 * (1 - clamp((m.pvc - 6) / 8, 0, 1.3) * clamp((s.pad - m.pvc) / 4, -1, 1));
-    return { t: s.t, fase: s.fase, v: factor * vm }; });
+  return onda.map(s => ({ t: s.t, fase: s.fase, v: factor * velVaso(fuente.vasoTipo, fuente.r, s, m) }));
 }
 
 /** Qué fuente domina en la muestra y con qué factor (velocidad medida / velocidad de la fuente). */
@@ -184,7 +188,10 @@ export function fuenteEnMuestra(pts, haz, F) {
  */
 export function medidasLatido(curva, fuente) {
   if (!curva.length) return null;
-  const sg = Math.sign(curva.reduce((a, c) => (Math.abs(c.v) > Math.abs(a) ? c.v : a), 0)) || 1;   // sentido del flujo principal
+  // sentido del flujo (+ = hacia la sonda): el de la propia fuente, que factor ya trae (los puntos de un vaso van en
+  // el sentido de su flujo: hacia el corazón o hepatópeta; un chorro, en el de su dirección). No se deduce de la onda
+  // más alta, que en la congestión puede ser la retrógrada.
+  const sg = Math.sign(fuente.factor || 0) || Math.sign(curva.reduce((a, c) => (Math.abs(c.v) > Math.abs(a) ? c.v : a), 0)) || 1;
   const en = (fs) => curva.filter(c => fs.includes(c.fase));
   const pico = (xs) => xs.reduce((a, c) => (sg * c.v > sg * a.v ? c : a), { v: 0, t: 0 });
   if (fuente.tipo === 'valvula' && !SALIDA[fuente.n]) {

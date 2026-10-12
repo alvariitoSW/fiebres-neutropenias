@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { construirCorazon } from '../corazon-geo.mjs';
 import { construirAbdomen, anatomiaAbdomen, dentroMalla, modeloVci, respiracion, ARRIBA } from '../abdomen.mjs';
-import { ABDOMEN } from '../abdomen-data.mjs';
+import { PUNTOS_ABDOMEN } from '../abdomen-puntos.mjs';
 import { crearMotor } from '../motor.mjs';
 import { ESCENARIOS } from '../escenarios.mjs';
 import { dot } from '../mat.mjs';
@@ -41,7 +41,7 @@ test('el hígado y el diafragma quedan bajo el corazón: casi ningún vértice d
   for (const p of g.partes) if (p.pos) for (let i = 0; i < p.pos.length; i += 45) { total++; if (dentroMalla(A.higado, [p.pos[i], p.pos[i + 1], p.pos[i + 2]])) dentro++; }
   assert.ok(dentro / total < 0.02, `${dentro} de ${total}`);
   // el hiato está por debajo de la AD y el hígado, por debajo del hiato
-  assert.ok(dot(res(ABDOMEN.hiato, g.flujo.enCamara.ad([0.5, 0, 0])), ARRIBA) < 0);
+  assert.ok(dot(res(PUNTOS_ABDOMEN.hiato, g.flujo.enCamara.ad([0.5, 0, 0])), ARRIBA) < 0);
 });
 
 test('la VCI sale de la AD (se mueve con el latido arriba) y por debajo del hiato está quieta', () => {
@@ -66,4 +66,16 @@ test('suprahepáticas y ramas portales van por dentro del hígado; las piezas fi
   const x = construirAbdomen(g, { pvc: 5, pad: 5, t: 0 }), y = construirAbdomen(g, { pvc: 9, pad: 9, t: 1 });
   for (const n of ['Hígado', 'Diafragma', 'Apófisis xifoides', 'Vena porta']) assert.equal(x.partes.find(p => p.nombre === n).pos, y.partes.find(p => p.nombre === n).pos);
   for (const p of x.partes) { for (const v of p.pos) assert.ok(Number.isFinite(v)); const nv = p.pos.length / 3; for (const k of p.idx) assert.ok(k < nv, p.nombre); }
+});
+
+test('VCI: el latido la mueve como mucho un ±2% y no la saca de su banda de FATE dentro de un latido', () => {
+  const g = construirCorazon(NORMAL, { detalle: true });
+  for (const pvc of [4, 11, 15]) {
+    const { dmax } = modeloVci(pvc);
+    for (const dp of [-8, -4, 0, 4, 8]) {
+      const d = construirAbdomen(g, { pvc, pad: pvc + dp, t: 0 }).vci.d;           // t = 0: espiración (diámetro máximo)
+      assert.ok(Math.abs(d / dmax - 1) <= 0.02 + 1e-9, `PVC ${pvc}, pad ${pvc + dp}: ${d} frente a ${dmax}`);
+      assert.equal(d < 21, dmax < 21, `PVC ${pvc}, pad ${pvc + dp}: ${d.toFixed(1)} mm cambia de banda`);
+    }
+  }
 });

@@ -13,7 +13,7 @@
 // Todo ilustrativo: proporciones de anatomía general, no medidas de una fuente.
 
 import { earcut } from './earcut.mjs';
-import { ABDOMEN } from './abdomen-data.mjs';
+import { PUNTOS_ABDOMEN } from './abdomen-puntos.mjs';
 
 const TAU = Math.PI * 2;
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
@@ -163,8 +163,10 @@ function tapa(exterior, agujeros, z = 0) {
   for (let i = 0; i < d.length / 2; i++) { pos[i * 3] = d[i * 2]; pos[i * 3 + 1] = d[i * 2 + 1]; pos[i * 3 + 2] = z; }
   return { pos, idx: new Uint32Array(idx) };
 }
+/** El plano del corte ({ phi } de las opciones) con su normal (nx, ny) y d; null sin corte. */
+export const planoCorte = (c) => c ? { phi: c.phi, nx: -Math.sin(c.phi), ny: Math.cos(c.phi), d: 0 } : null;
 // Recorte por el plano del corte (se conserva nx·x + ny·y ≥ d)
-function recortar(m, corte) {
+export function recortar(m, corte) {
   if (!corte) return m;
   const { nx, ny, d } = corte;
   const nv = m.pos.length / 3, nt = m.idx.length / 3;
@@ -220,8 +222,7 @@ export function puntoValva(v, uu, vv) {
 export function construirCorazon(estado, opciones = {}) {
   const partes = [];
   const q = opciones.calidad || 1;
-  const corte = opciones.corte ? { phi: opciones.corte.phi } : null;
-  if (corte) { corte.nx = -Math.sin(corte.phi); corte.ny = Math.cos(corte.phi); corte.d = 0; }
+  const corte = planoCorte(opciones.corte);
   // material: 1 miocardio, 2 endocardio, 3 grasa, 4 valva, 5 vaso, 6 sangre, 7 pericardio (lo usa el renderizador)
   const MAT = new Map([[COLORES.miocardio, 1], [COLORES.auricula, 1], [COLORES.tapa, 1], [COLORES.papilar, 1], [COLORES.endocardio, 2], [COLORES.grasa, 3], [COLORES.valva, 4],
     [COLORES.arteria, 5], [COLORES.vena, 5], [COLORES.coronaria, 5], [COLORES.venaCoronaria, 5], [COLORES.sangreOx, 6], [COLORES.sangreVen, 6], [COLORES.pericardio, 7]]);
@@ -357,10 +358,10 @@ export function construirCorazon(estado, opciones = {}) {
   // cavas a la AD: superior por el techo, inferior por detrás y abajo
   { const p = enAd(0.88, 0.3), eje = suave([[p[0], p[1], p[2] - 6], p, [p[0], p[1] + 2, p[2] + 24], [p[0] + 2, p[1] + 4, p[2] + 48]]);
     anadirR('Vena cava superior', tubo(eje, 8.5, 14), COLORES.vena); vias.vcs = eje.slice().reverse(); }
-  // la inferior sale de la AD hacia el hiato del diafragma (abdomen-data.mjs). Aquí solo su primer tramo, como vía
+  // la inferior sale de la AD hacia el hiato del diafragma (abdomen-puntos.mjs). Aquí solo su primer tramo, como vía
   // de la sangre: la malla (calibre que cambia con la PVC y la respiración) la dibuja abdomen.mjs, porque por debajo
   // del diafragma la vena está fija al cuerpo y no puede moverse con el latido
-  { const p = enAd(0.18, -1.75), d = norm(res(ABDOMEN.hiato, p));
+  { const p = enAd(0.18, -1.75), d = norm(res(PUNTOS_ABDOMEN.hiato, p));
     vias.vci = [sum(p, esc(d, 14)), sum(p, esc(d, 7)), p, res(p, esc(d, 4))]; }
 
   // --- Raíz aórtica con 3 senos de Valsalva, aorta ---

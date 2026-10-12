@@ -510,9 +510,10 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
     const tagDe = (el) => { if (!etiqueta.has(el.grupo)) { etiqueta.set(el.grupo, mov.length); mov.push(ajusteAfin(el.seg, el.segRef)); campo.push(campoDesplazamiento(el.seg, el.segRef)); } return etiqueta.get(el.grupo); };
     let abiertos = 0;
     for (const el of els.slice(1)) {
+      // la luz de un vaso es sangre (etiqueta 255): no registra el movimiento de su grupo, que lo da su pared
+      if (el.tipo === 'relleno' && el.sangre) { const a = amp(el.db); rellenar(P, el.seg, (q) => { A[q] = a; TAG[q] = 255; }); continue; }
       const tag = Math.min(254, tagDe(el));
-      if (el.tipo === 'relleno' && el.sangre) { const a = amp(el.db); rellenar(P, el.seg, (q) => { A[q] = a; TAG[q] = 255; }); }
-      else if (el.tipo === 'relleno') { abiertos += el.abiertos; const a = amp(el.db); rellenar(P, el.seg, (q) => { A[q] = a; TAG[q] = tag; }); }
+      if (el.tipo === 'relleno') { abiertos += el.abiertos; const a = amp(el.db); rellenar(P, el.seg, (q) => { A[q] = a; TAG[q] = tag; }); }
       else trazar(P, el.seg, el.ancho, el.db, el.especular, tag);
     }
     reloj.push(performance.now());

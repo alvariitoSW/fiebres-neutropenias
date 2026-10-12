@@ -1,4 +1,4 @@
-// Genera abdomen-data.mjs: hígado, diafragma y apófisis xifoides de Z-Anatomy, más el eje de la VCI y el tronco
+// Genera abdomen-data.mjs (mallas) y abdomen-puntos.mjs (puntos): hígado, diafragma y apófisis xifoides de Z-Anatomy, más el eje de la VCI y el tronco
 // portal, ya colocados bajo NUESTRO corazón. No forma parte de la app (no hay build): se ejecuta a mano y su salida
 // se guarda en el repositorio.
 //
@@ -89,18 +89,28 @@ const portaPts = ras(za.porta.pos), zP = portaPts.map(p => p[2]);
 const portaArriba = centro(portaPts.filter(p => p[2] > Math.max(...zP) - 6)), portaAbajo = centro(portaPts.filter(p => p[2] < Math.min(...zP) + 6));
 const xif = ras(za.xifoides.pos), puntaXif = xif.reduce((a, p) => (p[2] - 0.3 * p[1] < a[2] - 0.3 * a[1] ? p : a));
 const f1 = (p) => p.map(v => +v.toFixed(1));
-const datos = {
-  higado: malla(za.higado, 2400), diafragma: malla(za.diafragma, 2800), xifoides: malla(za.xifoides, 220),
+const datos = { higado: malla(za.higado, 2400), diafragma: malla(za.diafragma, 2800), xifoides: malla(za.xifoides, 220) };
+const puntos = {
   vci: vci.map(({ c, r }) => [...f1(local(c)), +r.toFixed(1)]),
   hiato: f1(local(hiato)), porta: [f1(local(portaAbajo)), f1(local(portaArriba))], xifoides_punta: f1(local(puntaXif)),
 };
+const json = (d) => JSON.stringify(d, null, 1).replace(/\n\s+(-?[\d.]+,?)/g, ' $1').replace(/\n\s+\]/g, ' ]');
+// dos archivos: las mallas (grandes) y los puntos (pequeños; corazon-geo solo necesita el hiato y no debe cargar el hígado)
 const texto = `// Generado por herramientas/abdomen-z-anatomy.mjs: no editar a mano.
 // Hígado, diafragma y apófisis xifoides de Z-Anatomy (CC BY-SA 4.0, https://www.z-anatomy.com), derivado de
 // BodyParts3D (© DBCLS), simplificados y colocados bajo nuestro corazón (sistema propio del corazón, mm).
-// pos: Int16 en décimas de mm; idx: Uint16; los dos en base64 (little-endian).
+// pos: Int16 en décimas de mm; idx: Uint16; los dos en base64 (little-endian). Los puntos (VCI, hiato, porta,
+// xifoides) van en abdomen-puntos.mjs.
+export const ABDOMEN = ${json(datos)};
+`;
+const textoPuntos = `// Generado por herramientas/abdomen-z-anatomy.mjs: no editar a mano.
+// Puntos del abdomen de Z-Anatomy (CC BY-SA 4.0, https://www.z-anatomy.com; derivado de BodyParts3D, © DBCLS), en el
+// sistema propio del corazón (mm). Aparte de las mallas (abdomen-data.mjs) para que corazon-geo, que solo necesita el
+// hiato, no cargue el hígado.
 // vci: eje de la vena cava inferior de arriba abajo [x, y, z, radio de Z-Anatomy]; hiato: donde cruza el diafragma;
 // porta: tronco portal [abajo, arriba (hilio)]; xifoides_punta: donde se apoya la sonda subcostal.
-export const ABDOMEN = ${JSON.stringify(datos, null, 1).replace(/\n\s+(-?[\d.]+,?)/g, ' $1').replace(/\n\s+\]/g, ' ]')};
+export const PUNTOS_ABDOMEN = ${json(puntos)};
 `;
 writeFileSync(new URL('../abdomen-data.mjs', import.meta.url), texto);
-console.log('T', f1(T), 'hígado', datos.higado.triangulos, 'diafragma', datos.diafragma.triangulos, 'xifoides', datos.xifoides.triangulos, 'bytes', texto.length, 'hiato', datos.hiato, 'distancia hiato-diafragma', mejor.toFixed(1));
+writeFileSync(new URL('../abdomen-puntos.mjs', import.meta.url), textoPuntos);
+console.log('T', f1(T), 'hígado', datos.higado.triangulos, 'diafragma', datos.diafragma.triangulos, 'xifoides', datos.xifoides.triangulos, 'bytes', texto.length, 'hiato', puntos.hiato, 'distancia hiato-diafragma', mejor.toFixed(1));

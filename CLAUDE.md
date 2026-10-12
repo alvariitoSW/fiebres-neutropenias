@@ -10581,7 +10581,7 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
   forma parte de la app). **Excepción ya decidida a «anatomía congelada»**. La VCI (su boca sigue a la AD; bajo el
   hiato, quieta), las tres suprahepáticas y la porta se dibujan como tubos (las de Z-Anatomy eran muñones). Calibre de
   la VCI ilustrativo, elegido para caer en las bandas de la tabla de FATE (Manual UMI): PVC 0-5 → <21 mm y colapso
-  >50 %; 10-20 → >21 mm y <50 %, con un reloj respiratorio propio (el motor no respira). Casilla «Hígado y VCI» en el
+  >50 %; 10-20 → >21 mm y <50 %, con un reloj respiratorio propio (el motor no respira). Casilla «Hígado y diafragma» (antes «Hígado y VCI») en el
   3D; en la eco va siempre. **Créditos visibles en la propia página** (CC BY-SA exige la atribución donde se muestra) y
   en el README. `construirCorazon` ya no dibuja la VCI: solo deja su vía hacia el hiato para la sangre.
 - **Fase 4: Doppler**, a petición explícita del usuario. Detalle en `js/modules/eco/README.md` («Doppler»). Módulo
@@ -10593,6 +10593,17 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
   `cardio-eco-itv`, `vexus-onda-hepatica`, `vexus-onda-porta`). **Doppler color** con aliasing (escala ±40/60/90).
   El modelo da E/A 1,34 e ITV 22 cm (normales); **sin calibrar**: TDE ~100 ms y pico de eyección ~2,2 m/s (forma de la
   eyección del motor), anotados como pendientes, sin tocar el motor. Pruebas: 109 (3 *todo*).
+- **Revisión de código del módulo (`/code-review`)**, a petición explícita del usuario, con sus 9 hallazgos corregidos:
+  1) las medidas S/D/A de las suprahepáticas (y la media de porta/VCI) toman el sentido del propio vaso
+  (`fuente.factor`), no el de la onda más alta, que en la congestión puede ser la A retrógrada e invertía VExUS;
+  2) al revisar el último latido, la VCI usa el reloj del motor (antes, el tiempo dentro del latido, y saltaba);
+  3) la VCI se dibuja siempre en el 3D (también con el corte, recortada con `recortar`/`planoCorte`, ahora exportadas
+  de `corazon-geo.mjs`): la sangre de las cavas ya no sale de la nada; la casilla pasa a «Hígado y diafragma»;
+  4) en la eco, la luz de un vaso (sangre) ya no fija el movimiento de su grupo y la pared vuelve a seguir al tejido;
+  5) cambiar de vista quita la muestra Doppler (en modo D va al preajuste de la nueva) y mover la sonda reinicia
+  espectro y medidas; 6) el latido de la VCI es de verdad ±2 % y no la saca de su banda de FATE; 7) borrar el trazado
+  (o cambiar la escala) borra los calibres; 8) una sola fórmula de velocidad de los vasos (`velVaso`); 9) los puntos
+  del abdomen van en `abdomen-puntos.mjs` y `corazon-geo` ya no carga las mallas. Pruebas: 113 (3 *todo*).
 
 ## Cómo probar cambios
 

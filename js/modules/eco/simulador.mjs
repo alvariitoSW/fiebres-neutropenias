@@ -9,9 +9,9 @@
 // mientras corre, o una muestra del último latido al revisar) y con ese objeto se construye la geometría y se
 // dibujan la eco, el cursor del Wiggers, el punto del asa, la barra A-G y las cifras.
 import { crearMotor, FASES } from './motor.mjs';
-import { construirCorazon, LIMITES, TAPSE_POR_ML } from './corazon-geo.mjs';
+import { construirCorazon, LIMITES, TAPSE_POR_ML, recortar, planoCorte } from './corazon-geo.mjs';
 import { construirAbdomen } from './abdomen.mjs';
-import { crearCamara, m4, MODELO } from './mat.mjs';
+import { crearCamara, m4, MODELO, nrm } from './mat.mjs';
 import { crearWebGL } from './render-webgl.mjs';
 import { ESCENARIOS } from './escenarios.mjs';
 import { crearFlujo } from './flujo-sangre.mjs';
@@ -67,9 +67,19 @@ export function montarSimulador(raiz, opc = {}) {
   const opciones = { corte: null, pericardio: true, detalle: true };
   // La geometría solo se reconstruye si ha cambiado algo (la simulación avanzó o una opción).
   let sucio = true, geo = null; const ensuciar = () => { sucio = true; };
-  const sangre = crearFlujo(); let verSangre = true, verAbdomen = true, abd = null;
-  // presión de la AD para la VCI: la media del último latido (PVC) y la instantánea (la onda que llega a la vena)
-  const datosVci = (s) => ({ pvc: motor.ultimo ? motor.ultimo.pvc : s.pad, pad: s.pad, t: s.t ?? 0 });
+  const sangre = crearFlujo(); let verSangre = true, verAbdomen = true, abd = null, abd3d = [];
+  // presión de la AD para la VCI: la media del último latido (PVC) y la instantánea (la onda que llega a la vena).
+  // La respiración va con el reloj del motor: al revisar el último latido (s es una muestra, con t dentro del latido)
+  // el motor está en pausa y la VCI se queda quieta en su punto del ciclo respiratorio.
+  const datosVci = (s) => ({ pvc: motor.ultimo ? motor.ultimo.pvc : s.pad, pad: s.pad, t: motor.s.t });
+  // en el 3D, el abdomen entero con «Hígado y diafragma» marcado y sin corte; si no, solo la VCI (es la entrada de
+  // la AD: sin ella, la sangre de las cavas saldría de la nada), recortada como el corazón cuando hay corte
+  const partesAbd3d = (a) => {
+    if (!a) return [];
+    if (verAbdomen && !opciones.corte) return a.partes;
+    const vci = a.partes.filter(p => p.clave === 'abd:vci'), c = planoCorte(opciones.corte);
+    return c ? vci.map(p => ({ ...p, ...recortar(p, c), normales: undefined })).filter(p => p.idx.length) : vci;
+  };
   // avanza el motor n pasos de 0,1 ms sumando los mL que pasan por cada válvula y vena, y mueve la sangre
   const FLUJOS = ['qMit', 'qTri', 'qAo', 'qPul', 'qVp', 'qRet'];
   function avanzar(n) {
@@ -141,7 +151,9 @@ export function montarSimulador(raiz, opc = {}) {
     if (!VISTAS[k]) return;
     vistaEco = k; claveTd = ''; ecoPendiente = true;
     $$('[data-eco]').forEach(b => b.classList.toggle('on', b.dataset.eco === k));
-    reto = null; ponerSonda(SONDA_CERO); reiniciarD();
+    // la muestra Doppler estaba en el plano de la vista anterior: se quita y, en modo D, va a la de esta vista
+    reto = null; gate = null; marcarPreset(null); ponerSonda(SONDA_CERO);
+    if (modoEco === 'D') muestraPorDefecto();
     if (MEDIDAS[medir].vista && MEDIDAS[medir].vista !== k) elegirMedida('libre', false);
     else colocarLineaM();
     opc.onVista?.(k);
@@ -172,7 +184,7 @@ export function montarSimulador(raiz, opc = {}) {
     modoEco = m; $$('[data-modo]').forEach(b => b.classList.toggle('on', b.dataset.modo === m));
     $('#cv-m-zona').hidden = m !== 'M'; $('#cv-d-zona').hidden = m !== 'D';
     if (m === 'M') { modoM.ajustar(); colocarLineaM(); pintarGuia(); }
-    if (m === 'D') { espectro.ajustar(); if (!gate) { if (PRESET_VISTA[vistaEco]) ponerMuestra(PRESET_VISTA[vistaEco]); else if (planoEco) { gate = { u: 0, v: planoEco.prof * 0.5 }; reiniciarD(); } } else reiniciarD(); }
+    if (m === 'D') { espectro.ajustar(); if (!gate) muestraPorDefecto(); else reiniciarD(); }
     ecoPendiente = true;
   }
   function elegirMedida(k, cambiarVista = true) {
@@ -237,7 +249,6 @@ export function montarSimulador(raiz, opc = {}) {
   // color sobre la imagen B. Las velocidades salen del flujo del motor en ese instante; las medidas (E/A, TDE, ITV…),
   // de las muestras del último latido.
   const sumV = (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]], escV = (a, k) => [a[0] * k, a[1] * k, a[2] * k];
-  const nrmV = (a) => { const l = Math.hypot(a[0], a[1], a[2]) || 1; return [a[0] / l, a[1] / l, a[2] / l]; };
   let colorOn = false, nyq = 60, gate = null, ultimoTD = null, fuenteD = null, medD = null, latidoD = -1, frameD = 0, angD = null;
   const espectro = crearModoM($('#cv-d'), $('#cv-d-capa'), { eje: 'vel', onMedida: pintarCalibresD });
   espectro.setEscala(+$('#cv-d-escala').value);
@@ -247,15 +258,25 @@ export function montarSimulador(raiz, opc = {}) {
   const PRESETS = { mitral: { vista: 'a4c', n: 'mitral', off: 8 }, tsvi: { vista: 'a3c', n: 'aortica', off: -7 },
     tricus: { vista: 'a4c', n: 'tricus', off: 8 }, pulmonar: { vista: 'psaxAo', n: 'pulmonar', off: -6 } };
   const PRESET_VISTA = { a4c: 'mitral', a3c: 'tsvi', psaxAo: 'pulmonar' };
-  function reiniciarD() { ultimoTD = null; espectro.limpiar(); latidoD = -1; fuenteD = null; medD = null; ecoPendiente = true; }
+  // nueva muestra, vista o sonda: el espectro empieza de cero y las medidas se rehacen (con el último latido) en el
+  // fotograma siguiente
+  function reiniciarD() {
+    ultimoTD = null; espectro.limpiar(); latidoD = -1; fuenteD = null; medD = null; ecoPendiente = true;
+    const box = $('#cv-d-resultado'); box.className = 'tfg-estado'; box.textContent = 'Midiendo…'; $('#cv-d-enlaces').innerHTML = '';
+  }
+  function marcarPreset(k) { $$('[data-muestra]').forEach(b => b.classList.toggle('on', b.dataset.muestra === k)); }
+  // la muestra de partida de cada vista: su preajuste si lo tiene; si no, en el centro del haz, a media profundidad
+  function muestraPorDefecto() {
+    if (PRESET_VISTA[vistaEco]) { ponerMuestra(PRESET_VISTA[vistaEco]); return; }
+    if (prepararPlanoEco()) { gate = { u: 0, v: planoEco.prof * 0.5 }; reiniciarD(); }
+  }
   function ponerMuestra(k) {
     const pr = PRESETS[k]; if (!pr) return;
     if (vistaEco !== pr.vista) elegirVista(pr.vista);
     if (!prepararPlanoEco()) return;
     const F = fuentesFlujo(refGeoTd.flujo, muestraTd(), areasD(), [], datosFlujo()), j = F.geom.find(x => x.n === pr.n);
     const [u, v] = enPlano(planoEco, sumV(j.c, escV(j.dir, pr.off)));
-    gate = { u, v }; reiniciarD();
-    $$('[data-muestra]').forEach(b => b.classList.toggle('on', b.dataset.muestra === k));
+    gate = { u, v }; reiniciarD(); marcarPreset(k);
   }
   $('#cv-d-presets').addEventListener('click', (e) => { const b = e.target.closest('[data-muestra]'); if (b) ponerMuestra(b.dataset.muestra); });
   $('#cv-d-escala').addEventListener('change', () => { espectro.setEscala(+$('#cv-d-escala').value); ultimoTD = null; });
@@ -266,7 +287,7 @@ export function montarSimulador(raiz, opc = {}) {
     let u = (x - ecoGeom.cx) / ecoGeom.k, v = (y - ecoGeom.arriba) / ecoGeom.k; const th = clamp(Math.atan2(u, Math.max(1, v)), -planoEco.mitad + 0.02, planoEco.mitad - 0.02);
     const rr = clamp(Math.hypot(u, v), 8, planoEco.prof - 4); return { u: rr * Math.sin(th), v: rr * Math.cos(th) }; };
   let moviendoD = false;
-  ecoC.addEventListener('pointerdown', (ev) => { if (modoEco !== 'D' || !ecoGeom || !planoEco) return; moviendoD = true; ecoC.setPointerCapture?.(ev.pointerId); gate = muestraDe(ev); $$('[data-muestra]').forEach(b => b.classList.remove('on')); reiniciarD(); });
+  ecoC.addEventListener('pointerdown', (ev) => { if (modoEco !== 'D' || !ecoGeom || !planoEco) return; moviendoD = true; ecoC.setPointerCapture?.(ev.pointerId); gate = muestraDe(ev); marcarPreset(null); reiniciarD(); });
   ecoC.addEventListener('pointermove', (ev) => { if (!moviendoD) return; gate = muestraDe(ev); reiniciarD(); });
   for (const t of ['pointerup', 'pointercancel', 'lostpointercapture']) ecoC.addEventListener(t, () => { moviendoD = false; });
   const fx = (x, d = 0) => x == null ? '—' : x.toFixed(d).replace('.', ',');
@@ -318,12 +339,15 @@ export function montarSimulador(raiz, opc = {}) {
   function ponerSonda(nueva) {
     Object.assign(sonda, SONDA_CERO, nueva);
     for (const [k, u] of Object.entries(MOVS)) { $('#cv-sonda-' + k).value = sonda[k]; $('#cv-sonda-' + k + '-v').textContent = sonda[k] + u; }
-    claveTd = ''; ultimoTM = null; modoM.limpiar(); ecoPendiente = true;
+    claveTd = ''; ultimoTM = null; modoM.limpiar(); ecoPendiente = true; sondaMovidaD();
   }
   for (const k of Object.keys(MOVS)) $('#cv-sonda-' + k).addEventListener('input', (e) => {
     sonda[k] = +e.target.value; $('#cv-sonda-' + k + '-v').textContent = sonda[k] + MOVS[k];
-    ultimoTM = null; modoM.limpiar(); ecoPendiente = true;
+    ultimoTM = null; modoM.limpiar(); ecoPendiente = true; sondaMovidaD();
   });
+  // la muestra Doppler va con la sonda (misma posición en el haz), pero ya mira a otro sitio: espectro y medidas
+  // nuevos, y el preajuste deja de estar marcado (ya no está en su sitio)
+  function sondaMovidaD() { if (!gate) return; marcarPreset(null); reiniciarD(); }
   $('#cv-sonda-toggle').addEventListener('click', () => { const p = $('#cv-sonda'); p.hidden = !p.hidden; $('#cv-sonda-toggle').setAttribute('aria-expanded', String(!p.hidden)); });
   $('#cv-sonda-cero').addEventListener('click', () => { reto = null; ponerSonda(SONDA_CERO); });
   // Reto: o volver a la vista estándar desde una sonda desordenada, o pasar a otra vista de la misma ventana
@@ -398,7 +422,7 @@ export function montarSimulador(raiz, opc = {}) {
       ecoCtx.beginPath(); ecoCtx.moveTo(im.cx, im.arriba); ecoCtx.lineTo(im.cx + Math.sin(thetaM) * L, im.arriba + Math.cos(thetaM) * L); ecoCtx.stroke(); ecoCtx.restore();
     }
     if (modoEco === 'D' && gate) {
-      const P = planoEco, g = sumV(P.O, sumV(escV(P.r, gate.u), escV(P.d, gate.v))), haz = nrmV(sumV(escV(P.r, gate.u), escV(P.d, gate.v)));
+      const P = planoEco, g = sumV(P.O, sumV(escV(P.r, gate.u), escV(P.d, gate.v))), haz = nrm(sumV(escV(P.r, gate.u), escV(P.d, gate.v)));
       const pts = puntosMuestra(P, g, haz), us = velocidadesMuestra(pts, haz, Fd);
       if (!revision && s === motor.s && ultimoTD !== s.t) { espectro.anadir(s.t, (f) => columnaEspectro(us, f, espectro.estado.vmax, ++frameD)); ultimoTD = s.t; }
       if (motor.s.nLatido !== latidoD) actualizarMedidasD(pts, haz, Fd);
@@ -451,15 +475,15 @@ export function montarSimulador(raiz, opc = {}) {
       const mz = usarFormas && !opciones.corte ? tabla.mezclar(s, extra) : null;
       geo = mz ? { partes: mz.partes, flujo: mz.flujo, descenso: mz.descenso } : construirCorazon(est, opcionesGeo());
       modoGeo = mz ? 'mezcla' : 'exacta'; sucio = false; estGeo = est; sucioEco = true;
-      // el abdomen (fijo al cuerpo, con la VCI que late) no va con el corte ni con la vista de la base
-      abd = verAbdomen && !opciones.corte && !opciones.vistaBase ? construirAbdomen(geo, datosVci(s)) : null;
+      // el abdomen (fijo al cuerpo, con la VCI que late) no va con la vista de la base, que retira los grandes vasos
+      abd = !opciones.vistaBase ? construirAbdomen(geo, datosVci(s)) : null; abd3d = partesAbd3d(abd);
     }
     const g = geo;
     if (rgl && abierto('#cv-plegable-3d')) {
       // al revisar un instante pasado, la sangre (que vive en el tiempo del motor) no se dibuja
       const puntos = verSangre && !revision ? sangre.puntos(g.flujo, { vistaBase: opciones.vistaBase }) : null;
       let partes = verSangre ? g.partes.filter(p => !p.nombre.endsWith('sangre')) : g.partes;
-      if (abd) partes = partes.concat(abd.partes);
+      if (abd3d.length) partes = partes.concat(abd3d);
       let conPlano = partes;
       if ($('#cv-eco-plano').checked && fanEco) {
         conPlano = partes.concat([{ nombre: 'Plano eco', pos: fanEco.pos, idx: fanEco.idx, color: [0.35, 0.78, 0.95], alfa: 0.22, dobleCara: true }]);
@@ -471,7 +495,7 @@ export function montarSimulador(raiz, opc = {}) {
     pintarEco(s, g, estGeo);
     pintarCiclo(s);
     const cursor = abierto('#cv-plegable-diag') ? diag.pintar(s, motor, lado) : null;
-    ultimo = { estado: s, est: estGeo, cursor, modo: modoGeo, eco: ecoInfo, vci: abd ? abd.vci : null };
+    ultimo = { estado: s, est: estGeo, cursor, modo: modoGeo, eco: ecoInfo, vci: abd ? abd.vci : null, abdomen3d: abd3d.map(p => [p.nombre, p.idx.length / 3]) };
     if (opc.depuracion) window.__ultimoDibujo = ultimo;
     const fase = `${s.fase} · ${FASES[s.fase]}`;
     const fuera = s.vvi < LIMITES.vi[0] || s.vvi > LIMITES.vi[1] || s.vvd < LIMITES.vd[0] || s.vvd > LIMITES.vd[1] || Math.min(s.vai, s.vad) < LIMITES.au[0] || Math.max(s.vai, s.vad) > LIMITES.au[1];

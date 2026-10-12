@@ -11,6 +11,7 @@
 // igual. Las venas suprahepáticas y la porta de Z-Anatomy son muñones de pocos milímetros; por eso se dibujan como
 // tubos, con direcciones anatómicas aproximadas, recortados para quedar dentro del hígado.
 import { ABDOMEN } from './abdomen-data.mjs';
+import { PUNTOS_ABDOMEN as PA } from './abdomen-puntos.mjs';
 import { MODELO, m4, nrm, dot, cruz } from './mat.mjs';
 import { tubo, suave } from './corazon-geo.mjs';
 
@@ -72,8 +73,8 @@ function fijo() {
   const higado = malla(ABDOMEN.higado), diafragma = malla(ABDOMEN.diafragma), xifoides = malla(ABDOMEN.xifoides);
   const pieza = (nombre, m, color, mat, alfa) => ({ nombre, pos: m.pos, idx: m.idx, color, mat, alfa, dobleCara: true, clave: 'abd:' + nombre, centro: centroDe(m.pos), fijo: true });
   // eje de la VCI por debajo del hiato (hasta 120 mm), en el sentido del flujo invertido: de arriba abajo
-  const H = ABDOMEN.hiato, alto = (p) => dot(res(p, H), ARRIBA);
-  const ejeVci = [H, ...ABDOMEN.vci.map(v => v.slice(0, 3)).filter(p => alto(p) < -6 && alto(p) > -120)];
+  const H = PA.hiato, alto = (p) => dot(res(p, H), ARRIBA);
+  const ejeVci = [H, ...PA.vci.map(v => v.slice(0, 3)).filter(p => alto(p) < -6 && alto(p) > -120)];
   // venas suprahepáticas: desembocan en la VCI justo bajo el diafragma; van hacia delante y abajo, abriéndose
   const J = sum(H, esc(ARRIBA, -14));
   const dentro = (p) => dentroMalla(higado, p);
@@ -89,7 +90,7 @@ function fijo() {
   };
   const suprahepaticas = [['derecha', [1, -0.25, -0.35], 95], ['media', [0.35, 0.85, -0.4], 85], ['izquierda', [-0.8, 0.5, -0.2], 75]]
     .map(([n, d, max]) => ({ nombre: 'Vena suprahepática ' + n, eje: rama(J, d, max) }));
-  const [P0, P1] = ABDOMEN.porta;
+  const [P0, P1] = PA.porta;
   const portal = [{ nombre: 'Vena porta', eje: suave([P0, sum(P0, esc(res(P1, P0), 0.5)), P1], 4), r: 6 },
     { nombre: 'Rama portal derecha', eje: rama(P1, [1, -0.1, 0.15], 60, 0), r: 4.2 },
     { nombre: 'Rama portal izquierda', eje: rama(P1, [-0.85, 0.45, 0.1], 55, 0), r: 3.8 }];
@@ -109,8 +110,9 @@ function fijo() {
  */
 export function construirAbdomen(geo, m) {
   const F = fijo(), mod = modeloVci(m.pvc), insp = respiracion(m.t || 0);
-  // latido: la onda de presión de la AD pasa un poco a la vena (±2%)
-  const latido = 1 + 0.02 * clamp((m.pad ?? m.pvc) - m.pvc, -5, 5);
+  // latido: la onda de presión de la AD pasa un poco a la vena (como mucho ±2%, con ±5 mmHg alrededor de la PVC),
+  // poco para que el diámetro no salte de una banda de FATE a otra dentro de un latido
+  const latido = 1 + 0.02 * clamp(((m.pad ?? m.pvc) - m.pvc) / 5, -1, 1);
   const d = mod.dmax * (1 - mod.colapso * insp) * latido, r = d / 2;
   // tramo de arriba: desde dentro de la AD hasta 14 mm fuera, movido con el corazón
   const f = geo.flujo, arriba = [1, 0.66, 0.33, 0].map(t => f.transformar(f.enVia('vci', t)));
@@ -128,4 +130,4 @@ export function construirAbdomen(geo, m) {
 }
 
 /** Datos fijos (para pruebas y para la vista subcostal): hígado, hiato, desembocadura de las suprahepáticas, xifoides. */
-export function anatomiaAbdomen() { const F = fijo(); return { higado: F.higado, hiato: ABDOMEN.hiato, J: F.J, xifoides: ABDOMEN.xifoides_punta, ejeVci: F.ejeVci, suprahepaticas: F.suprahepaticas }; }
+export function anatomiaAbdomen() { const F = fijo(); return { higado: F.higado, hiato: PA.hiato, J: F.J, xifoides: PA.xifoides_punta, ejeVci: F.ejeVci, suprahepaticas: F.suprahepaticas }; }

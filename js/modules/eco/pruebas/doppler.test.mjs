@@ -78,3 +78,26 @@ test('venas: suprahepáticas con S y D hacia el corazón y A retrógrada; porta 
   assert.ok(pn.med.media > 15 && pn.med.media < 25, `porta ${pn.med.media}`);
   assert.ok(pa.med.pulsatilidad > pn.med.pulsatilidad + 0.2, `${pn.med.pulsatilidad} → ${pa.med.pulsatilidad}`);
 });
+
+test('VExUS: el sentido hacia el corazón sale de la fuente, no de la onda más alta (congestión con A retrógrada dominante)', () => {
+  // una suprahepática congestiva: S y D hacia el corazón y una A retrógrada más alta que las dos
+  const onda = [['B', 20], ['C', 18], ['D', 10], ['E', 6], ['F', 15], ['G', 8], ['A', -50]].map(([fase, v], i) => ({ t: i * 0.1, fase, v }));
+  for (const signo of [1, -1]) {          // con la sonda viendo el flujo hacia el corazón como + o como −
+    const curva = onda.map(c => ({ ...c, v: signo * c.v }));
+    const m = D.medidasLatido(curva, { tipo: 'vaso', vasoTipo: 'hepatica', factor: 0.8 * signo });
+    assert.deepEqual([m.S, m.D, m.A], [20, 15, 50], `signo ${signo}: ${JSON.stringify(m)}`);
+  }
+  // una porta con flujo invertido en parte del latido: la media sigue midiéndose hepatópeta
+  const porta = D.medidasLatido([{ t: 0, fase: 'A', v: -30 }, { t: 0.1, fase: 'B', v: 10 }], { tipo: 'vaso', vasoTipo: 'porta', factor: 1 });
+  assert.equal(porta.media, -10);
+});
+
+test('velVaso: una sola fórmula para el espectro (fuentesFlujo) y para las medidas del latido (curvaLatido)', () => {
+  const s = { pven: 12, pad: 6 }, m = { rRetorno: 0.04, pvc: 8 };
+  const g = construirCorazon({ vvi: 120, vvd: 140, vai: 40, vad: 35, mitral: 0, tricus: 0, aortica: 0, pulmonar: 0 });
+  const F = D.fuentesFlujo(g.flujo, s, D.areasAnillo(g.geo), [{ tipo: 'porta', r: 6, pts: [] }, { tipo: 'vci', r: 10, pts: [] }], m);
+  assert.equal(F.vasos[0].vm, D.velVaso('porta', 6, s, m));
+  assert.equal(F.vasos[1].vm, D.velVaso('vci', 10, s, m));
+  const c = D.curvaLatido([{ t: 0, fase: 'A', ...s }], { tipo: 'vaso', vasoTipo: 'vci', r: 10 }, 0.5, {}, m);
+  assert.equal(c[0].v, 0.5 * D.velVaso('vci', 10, s, m));
+});

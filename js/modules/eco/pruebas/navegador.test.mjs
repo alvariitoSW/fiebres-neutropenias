@@ -275,11 +275,57 @@ test('Doppler: la muestra en la mitral escribe el espectro y da E/A; el color pi
   await pg.locator('#cv-color').check(); await pg.evaluate(() => { window.__eco.vista('a4c'); window.__revisar(0.6); }); await pg.waitForTimeout(1200);
   const rojos = await pg.evaluate(() => { const c = document.getElementById('cv-eco'), d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data; let n = 0; for (let i = 0; i < d.length; i += 4) if (d[i] > 150 && d[i + 2] < 40 && d[i + 1] < 120) n++; return n; });
   assert.ok(rojos > 300, `sin color (${rojos})`);
-  // abdomen: en el HUD con la VCI; al quitarlo desaparece
+  // abdomen: en el HUD con la VCI; al quitar «Hígado y diafragma» la VCI sigue (es la entrada de la AD)
   assert.match(await pg.textContent('#cv-hud'), /VCI \d+ mm/);
+  const nombres = () => pg.evaluate(() => window.__ultimoDibujo.abdomen3d.map(x => x[0]));
+  assert.ok((await nombres()).includes('Hígado'));
   await pg.locator('#cv-abdomen').uncheck(); await pg.waitForTimeout(400);
-  assert.doesNotMatch(await pg.textContent('#cv-hud'), /VCI/);
+  assert.match(await pg.textContent('#cv-hud'), /VCI \d+ mm/);
+  assert.deepEqual(await nombres(), ['Vena cava inferior']);
   assert.ok(!(await pg.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)), 'desborda en horizontal');
+  assert.deepEqual(errores, []);
+  await pg.close();
+});
+
+test('revisión, corte, cambio de vista y escala: VCI quieta al revisar, VCI recortada, muestra y calibres que se reinician', { skip: omitir }, async () => {
+  const { pg, errores } = await abrir('js/modules/eco/laboratorio.html');
+  // revisar el último latido no mueve la respiración: misma VCI en dos instantes del latido
+  const insp = async (t) => { await pg.evaluate((t) => window.__revisar(t), t); await pg.waitForTimeout(250); return pg.evaluate(() => window.__ultimoDibujo.vci); };
+  const a = await insp(0.05), b = await insp(0.6);
+  assert.equal(a.inspiracion, b.inspiracion, `${a.inspiracion} frente a ${b.inspiracion}`);
+  // con el corte, en el 3D queda solo la VCI, recortada como el corazón (menos triángulos que entera)
+  const entera = (await pg.evaluate(() => window.__ultimoDibujo.abdomen3d)).find(x => x[0] === 'Vena cava inferior')[1];
+  await pg.locator('#cv-corte').check(); await pg.waitForTimeout(500);
+  const conCorte = await pg.evaluate(() => window.__ultimoDibujo.abdomen3d);
+  assert.equal(conCorte.length, 1); assert.equal(conCorte[0][0], 'Vena cava inferior');
+  // girando el corte: según el ángulo la VCI se queda entera, se recorta (el plano la atraviesa) o se va con la AD
+  const tris = [];
+  for (let phi = 0; phi <= 620; phi += 20) {
+    await pg.evaluate((v) => { const r = document.getElementById('cv-phi'); r.value = v; r.dispatchEvent(new Event('input', { bubbles: true })); }, phi);
+    await pg.waitForTimeout(150); tris.push(await pg.evaluate(() => (window.__ultimoDibujo.abdomen3d.find(x => x[0] === 'Vena cava inferior') || [0, 0])[1]));
+  }
+  assert.ok(tris.some(n => n > 0 && n < entera), `${tris} frente a ${entera}`);
+  await pg.locator('#cv-corte').uncheck();
+  // Doppler: la muestra de la mitral no se queda en otra vista; en A3C va al TSVI
+  await pg.evaluate(() => window.__eco.modo('D')); await pg.locator('[data-muestra="mitral"]').tap(); await pg.waitForTimeout(300);
+  const enA4c = await pg.evaluate(() => window.__eco.info().muestra);
+  await pg.evaluate(() => window.__eco.vista('plax')); await pg.waitForTimeout(300);
+  assert.notDeepEqual(await pg.evaluate(() => window.__eco.info().muestra), enA4c);
+  assert.equal(await pg.locator('[data-muestra].on').count(), 0);
+  await pg.evaluate(() => window.__eco.vista('a3c')); await pg.waitForTimeout(300);
+  assert.equal(await pg.locator('[data-muestra="tsvi"].on').count(), 1);
+  // mover la sonda: el preajuste deja de estar marcado y las medidas vuelven a empezar
+  await pg.waitForTimeout(2500); const antes = await pg.textContent('#cv-d-resultado');
+  await pg.evaluate(() => window.__eco.sonda({ rot: 20 })); await pg.waitForTimeout(300);
+  assert.equal(await pg.locator('[data-muestra].on').count(), 0);
+  assert.notEqual(await pg.textContent('#cv-d-resultado'), antes);   // medidas rehechas con la sonda nueva
+  // calibres del espectro: cambiar la escala los borra (medían con la anterior)
+  await pg.evaluate(() => window.__eco.doppler.espectro.ponerCalibres({ x: 0.2, y: 0.3 }, { x: 0.4, y: 0.4 }));
+  assert.equal(await pg.locator('#cv-d-calibres').isVisible(), true);
+  await pg.selectOption('#cv-d-escala', '60'); await pg.waitForTimeout(100);
+  assert.equal(await pg.evaluate(() => window.__eco.doppler.espectro.estado.vmax), 60);
+  assert.equal(await pg.locator('#cv-d-calibres').isVisible(), false);
+  assert.equal(await pg.evaluate(() => window.__eco.doppler.espectro.medida()), null);
   assert.deepEqual(errores, []);
   await pg.close();
 });

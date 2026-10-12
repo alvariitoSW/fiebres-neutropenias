@@ -26,9 +26,12 @@ export function crearModoM(lienzo, capa, { onMedida, eje = 'prof' } = {}) {
     for (const c of [lienzo, capa]) { c.width = W; c.height = H; }
     img = ctx.createImageData(W, H); limpiar(); return true;
   }
+  // borra el trazado y, con él, los calibres: medían sobre lo borrado (y con otra escala o profundidad, si cambió)
   function limpiar() {
     if (img) { img.data.fill(0); for (let i = 3; i < img.data.length; i += 4) img.data[i] = 255; ctx.putImageData(img, 0, 0); }
+    const habia = A || B; A = B = null; activo = null;
     xPrev = null; tPrev = null; tEscrito = null; dibujarCapa();
+    if (habia) onMedida?.(null);
   }
   function setProf(p) { if (p !== prof) { prof = p; limpiar(); } }
   // Doppler: escala de ±vmax cm/s con la línea de base en el centro
