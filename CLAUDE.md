@@ -10458,8 +10458,8 @@ recoge solo las decisiones.
   convive con eso daría un tercer Wiggers con cifras distintas.
 - **Cimientos (hechos):** código en el repositorio (antes solo en una carpeta temporal del contenedor),
   sin los scripts sueltos; **pruebas automáticas con un comando**
-  (`node --test 'lab/circulacion/pruebas/*.test.mjs'`, ~100 s, 81 pruebas: motor, diagramas, geometría,
-  formas y navegador);
+  (`node --test 'lab/circulacion/pruebas/*.test.mjs'`, ~95 s, 90 pruebas: motor, diagramas, geometría,
+  formas, ecografía y navegador);
   las cifras del latido y su referencia en un solo archivo (`referencias.mjs`) que usan a la vez las
   pruebas y la página del latido (antes la tabla tenía ✓ escritos a mano, uno de ellos siempre verdadero);
   escenarios en `escenarios.mjs`, y cada uno se comprueba contra el patrón de su tipo de shock en la
@@ -10498,12 +10498,21 @@ recoge solo las decisiones.
     Por fotograma pasa de ~16 ms a ~0,07 ms de procesador; cuesta ~20 MB. La apertura de las válvulas es ahora
     función pura del estado (`estadoGeo()`), sin suavizado en el tiempo. Pruebas en `formas.test.mjs` y en el
     navegador (81 pruebas, ~100 s).
+- **Vistas ecográficas** (`ecografia.mjs`, tarjeta «Ecografía» de `corazon-3d.html`), a petición explícita del
+  usuario («continúa con las vistas ecográficas, haciendo ingeniería reversa»): estudiados `bmode.js`, `echo.js` y
+  `views.js` de echodemo y reconstruido sin copiar código. 7 vistas (A4C, A2C, A3C, PLAX, PSAX aórtico, mitral y
+  papilares) con planos fijos en el cuerpo, definidos solo con puntos anatómicos de nuestra geometría. La imagen
+  corta las mismas piezas del fotograma (un estado por fotograma). Como nuestra malla son superficies abiertas, las
+  paredes se cierran uniendo extremos sueltos y se rellenan por paridad. El moteado sigue al tejido con un campo de
+  desplazamiento frente a la forma telediastólica. Rótulos de cavidades, escala de profundidad y el abanico del
+  plano en el 3D. Pruebas nuevas en `ecografia.test.mjs` y una más en el navegador (90 pruebas, ~95 s). Hallazgo: el
+  saco pericárdico está desplazado y entra en la pared lateral del VI (pendiente, anatomía congelada).
 - **Pendiente:** calibrar RVS y contracción isovolumétrica (referencia candidata: Alhakak 2025, ~40 ms, pendiente
   del PDF); erratas de El Libro Azul en las tablas de patrones de shock (RVS en el distributivo) que las fichas 5 y
   10 reproducen sin nota; saltos de hasta ~8 mm de la geometría exacta en la huella de las aurículas (rayos
-  tangentes a la raíz aórtica); volver a medir los fps en el móvil; más ideas de echodemo (vistas en modo B
-  cortadas de nuestro corazón, formas de enfermedad —choca con la anatomía congelada—, cifra coherente con su
-  grado); integración; escenarios enlazados a las fichas.
+  tangentes a la raíz aórtica); volver a medir los fps en el móvil (también con la ecografía); más ideas de
+  echodemo (modo M, Doppler color, sonda libre, formas de enfermedad —choca con la anatomía congelada—, cifra
+  coherente con su grado); integración; escenarios enlazados a las fichas.
 
 ## Cómo probar cambios
 

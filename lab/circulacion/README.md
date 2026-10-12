@@ -20,7 +20,7 @@ cd lab/circulacion && python3 -m http.server 8000
 node --test 'lab/circulacion/pruebas/*.test.mjs'
 ```
 
-Tarda ~100 s. Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta.
+Tarda ~95 s (90 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta.
 
 - `motor.test.mjs` — cada cifra del latido normal frente a su referencia (`referencias.mjs`), el volumen
   de sangre se conserva, las 7 fases salen en orden, nunca hay dos válvulas del mismo lado abiertas, las
@@ -37,12 +37,21 @@ Tarda ~100 s. Si Playwright no está instalado, las pruebas de navegador se omit
   latido siguiente la mezcla se usa en más del 95% de los fotogramas y el 99% de los vértices queda a menos de
   0,5 mm de la geometría exacta; si la mezcla no representa al estado mostrado (volumen, válvulas, derrame,
   corte), no se usa; y tras una hemorragia la tabla caduca.
+- `ecografia.test.mjs` — cada vista es un plano bien formado que pasa por sus puntos (el 4 cámaras por la mitral y
+  la tricúspide, con el VI a la derecha; el eje largo por el eje del VI y las dos válvulas; los ejes cortos
+  perpendiculares al eje, con la pared lateral a la derecha); un triángulo paralelo al plano no deja borrón; **las
+  paredes cortadas quedan cerradas en las 7 vistas a lo largo de todo el latido** (sin rayas); en el eje corto de
+  papilares el **área de la pared del VI es la de la geometría (±3%)** y crece en sístole; la cavidad del VI y la AI
+  son sangre; el miocardio brilla >25 dB más que la sangre y el pericardio más que el miocardio; el **campo de
+  desplazamiento predice dónde estaba el tejido** (puntos que no ha visto, error <1 mm, menos de la mitad que un
+  ajuste afín); y la imagen es determinista, con el moteado del tejido fijo y el ruido de la sangre cambiante.
 - `navegador.test.mjs` — el corazón se dibuja, la barra del ciclo lleva a cada fase, el dedo desplaza la
   página en vertical y gira en horizontal, un escenario cambia la circulación, sin WebGL se ve la imagen
   fija, la página del latido no deja ninguna cifra fuera de rango sin marcar, y **en cada fotograma el corazón,
   el cursor del Wiggers y el punto del asa leen el mismo instante** (en tiempo real, al deslizar sobre el
   Wiggers y al tocar el asa), y **con el latido estable se usan las formas precalculadas sin perder esa sincronía**
-  (con corte o con la casilla apagada, geometría exacta).
+  (con corte o con la casilla apagada, geometría exacta), y **la ecografía corta el corazón en el mismo instante**
+  en cada vista, también al revisar y con corte (entonces con su propia geometría completa).
 
 Las cifras marcadas `pendiente` en `referencias.mjs` salen como *todo*: no fallan, pero si un día pasan a
 cumplirse, una prueba avisa para quitar la marca.
@@ -57,6 +66,7 @@ cumplirse, una prueba avisa para quitar la marca.
 | `corazon-geo.mjs` | Geometría procedural del corazón a partir de los volúmenes del motor, y el interior para la sangre |
 | `diagramas.mjs` | Wiggers y asa P-V que siguen al corazón: fases, muestras del último latido, escalas y dibujo |
 | `formas.mjs` | Estado de la geometría a partir del motor (volúmenes, apertura y carga de las válvulas) y las formas precalculadas a lo largo del último latido, que se mezclan en cada fotograma |
+| `ecografia.mjs` | Ecografía modo B: plano de cada vista, corte de la malla, cierre de las paredes, moteado que sigue al tejido y formación de la imagen (sin DOM) |
 | `flujo-sangre.mjs` | Partículas de sangre: cuántas cruzan cada válvula sale del flujo del motor |
 | `render-webgl.mjs`, `mat.mjs`, `earcut.mjs` | Renderizador WebGL propio, matrices y cámara, triangulación |
 | `img/corazon-estatico.jpg` | Imagen fija para navegadores sin WebGL |
@@ -114,6 +124,33 @@ nuevos que subir a la tarjeta gráfica). Ahora:
 - **Coste:** ~20 MB de memoria (y otro tanto en la tarjeta gráfica) para las formas de un latido. Se liberan al
   cambiar de opciones o de latido.
 
+## Ecografía (`ecografia.mjs`)
+
+Idea tomada de *The Heart by Ultrasound* (ver «Créditos»), estudiada a fondo (su `bmode.js`, `echo.js` y
+`views.js`) y reconstruida sobre nuestra geometría, **sin copiar código**. Lo que se aprendió de su diseño:
+
+| *The Heart by Ultrasound* | Aquí |
+|---|---|
+| Plano por vista desde puntos anatómicos de su malla | `planoVista()`: desde nuestros centros valvulares, el eje del VI y los surcos (A4C, A2C, A3C, PLAX, PSAX a nivel aórtico, mitral y de papilares) |
+| Malla cerrada de miocardio: el corte da lazos que se rellenan | Nuestras paredes son **superficies abiertas** (endo y epi por separado, aurículas de una capa): `cerrarExtremos()` une cada extremo suelto con el más cercano y se rellena por paridad sobre la sopa de segmentos; las paredes de una capa y las valvas van como líneas con grosor |
+| Moteado que viaja con cada estructura (ajuste afín frente a una forma de referencia) | El punto material del corte en la forma telediastólica (misma arista, mismo parámetro) y un **campo de desplazamiento** en retícula de 3 mm, que sigue también a la pared que engorda; afín de reserva |
+| Borde brillante donde el haz incide de frente; desenfoque del haz que crece con la profundidad; compresión log | Igual de idea, con implementación propia: borde especular cos⁴, dos medias móviles por fila (varianza de una gaussiana de σ ≈ 0,0085·r) y gaussiana axial, envolvente en dB |
+
+- **Un estado por fotograma:** la imagen corta las **mismas piezas** que dibuja el corazón (exactas o mezcladas).
+  Con corte o vista de la base, una geometría completa del mismo estado. La prueba de navegador lo comprueba.
+- **El plano es fijo en el cuerpo:** se calcula con los volúmenes telediastólicos del último latido y solo se
+  recoloca si cambian más de 3 mL. El corazón lo cruza al latir: en el eje corto mitral, en sístole, la base baja y
+  el corte pasa a las aurículas, como en un paciente.
+- **Lo que se ve sin buscarlo:** la pared que engorda en sístole, la pared lateral del apical más débil (paralela
+  al haz), las valvas abiertas hacia el VI en el llenado, el derrame (el hueco entre epicardio y pericardio crece
+  con el líquido).
+- **Coste:** ~14 ms por imagen en Node (192 haces × 448 muestras); hasta ~30 imágenes por segundo y solo con la
+  tarjeta en pantalla. Candidata a un *worker* (el módulo es puro).
+- **Ilustrativo:** ecogenicidades (dB frente al miocardio), resolución, ganancia y la pared torácica.
+- **Defecto de la geometría encontrado al hacerlo:** el saco pericárdico se desplaza (−6, −4) mm y en la pared
+  lateral del VI queda **dentro del miocardio** (en 3D lo oculta la transparencia). No se ha tocado (anatomía
+  congelada): en la ecografía el pericardio no se pinta sobre una pared.
+
 ## Rendimiento medido
 
 En un móvil Android real (octubre 2026, pantalla de 90 Hz, calidad alta, sangre activada), **antes de las formas
@@ -126,8 +163,8 @@ integración: limitar a 60 fps (ahorra batería sin que se note) y animar solo c
 
 Varias ideas vienen de ***The Heart by Ultrasound***, de **David Ouyang** (`douyang/echodemo`, grupo EchoNet), que
 dio permiso para usar su trabajo. Aun así **se reconstruyen sobre nuestro motor, sin copiar código ni modelos**:
-un estado por fotograma, las formas precalculadas que solo se mezclan y las valvas con tres formas a lo largo de un
-arco. Si algo de esto se publica, el autor agradece (sin exigirla) una cita.
+un estado por fotograma, las formas precalculadas que solo se mezclan, las valvas con tres formas a lo largo de un
+arco y las vistas ecográficas cortadas del propio corazón. Si algo de esto se publica, el autor agradece (sin exigirla) una cita.
 
 ## Pendiente
 
@@ -138,9 +175,11 @@ arco. Si algo de esto se publica, el autor agradece (sin exigirla) una cita.
   en el shock distributivo, y la del cap. 10 da ScvO₂ «↑» en el hipovolémico. Las fichas 5 y 10 las
   reproducen tal cual. Las pruebas usan la Tabla 14.1 de Merino (cap. 14), que no tiene ese problema.
 - Integración en la app (una sola ficha, animando solo cuando se ve) y escenarios enlazados a las fichas.
-- Más ideas de *The Heart by Ultrasound* por reconstruir: vistas ecográficas en modo B cortadas de nuestro propio
-  corazón; formas de enfermedad movidas por los escenarios (choca con «anatomía congelada»: hace falta decidirlo);
-  y que una cifra mostrada nunca contradiga su grado.
+- Más ideas de *The Heart by Ultrasound* por reconstruir: modo M y Doppler color sobre estos mismos planos, más
+  vistas (subcostal, supraesternal), sonda libre (inclinar y girar el plano), formas de enfermedad movidas por los
+  escenarios (choca con «anatomía congelada»: hace falta decidirlo) y que una cifra mostrada nunca contradiga su grado.
+- **Pericardio desplazado** dentro de la pared lateral del VI (ver «Ecografía»): corregirlo es tocar la anatomía.
+- Ecografía en un *worker* si en el móvil baja de fps.
 - **Saltos de la geometría exacta:** la huella de las aurículas (y la grasa periaórtica) se calcula con rayos que
   se paran al tocar la raíz aórtica; un rayo casi tangente pasa de pararse a no pararse y un vértice salta hasta
   ~8 mm entre dos fotogramas. La mezcla lo suaviza (lo convierte en un cambio gradual entre dos formas), pero

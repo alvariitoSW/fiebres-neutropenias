@@ -29,11 +29,22 @@ input[type=range]{width:100%}
 .diag canvas{border-radius:8px;background:var(--bg);border:1px solid var(--line);margin-top:6px}
 #wig{touch-action:pan-y;cursor:ew-resize}#pvc{touch-action:pan-y;cursor:pointer}
 .revisando{color:var(--y)}
+.eco{position:relative;margin-top:6px;border-radius:10px;overflow:hidden;background:#050507;border:1px solid var(--line)}
+.eco canvas{display:block;width:100%;height:auto}
+.eco .eco-titulo{position:absolute;left:8px;bottom:6px;font:.72rem/1.2 system-ui,sans-serif;color:#cfc8b4;pointer-events:none}
+.eco .eco-fase{position:absolute;right:8px;bottom:6px;font:.72rem/1.2 system-ui,sans-serif;color:#cfc8b4;pointer-events:none;text-align:right}
+#vistasEco{gap:5px}#vistasEco .mini{padding:5px 8px;font-size:.78rem}
 </style></head><body>
 <h1>Circulación viva · el corazón</h1>
 <p class="muted">Geometría procedural: VI con pared de volumen constante, VD en media luna, <b>plano AV cerrado</b> con los 4 anillos valvulares, aurículas que apoyan hasta el surco AV (orejuelas, cavas, 4 venas pulmonares), infundíbulo del VD con el tronco pulmonar cruzando delante de la aorta, raíz aórtica con 3 senos de Valsalva y las coronarias saliendo de ellos, grasa del surco AV e interventricular, seno coronario, papilares y cuerdas, pericardio, movida en cada instante por el <b>mismo motor del latido del paso 1</b>. Todo ilustrativo. <b>Gira</b> deslizando en horizontal (en vertical se mueve la página); con <b>dos dedos</b> acercas e inclinas. Con ratón: arrastrar gira y la rueda acerca.</p>
 <div class="escena"><canvas id="gl" width="390" height="390"></canvas><img id="estatico" src="img/corazon-estatico.jpg" alt="Corazón en vista frontal, imagen fija" width="712" height="712" hidden><div class="sinwebgl" id="sinwebgl" hidden>Tu navegador no tiene WebGL: se muestra una imagen fija del corazón. Las cifras, la barra del ciclo y las pruebas siguen funcionando.</div><div class="hud" id="hud"></div><div class="orienta" id="orienta" hidden>Desde las aurículas · <b>anterior ↑</b> · derecha del paciente →</div></div>
 <div class="ciclo" id="ciclo" aria-label="Ciclo cardíaco: toca una fase para ir a ella"></div><div class="ciclo-pie" id="cicloPie"></div>
+<div class="card" id="tarjetaEco"><div class="fila" style="margin:0"><b>Ecografía</b> <span class="muted">· corte del mismo corazón, en el mismo instante</span></div>
+  <div class="fila" id="vistasEco"></div>
+  <div class="eco"><canvas id="eco" width="360" height="300" aria-label="Imagen ecográfica modo B del corte elegido, en el instante del corazón"></canvas><div class="eco-titulo" id="ecoTitulo"></div><div class="eco-fase" id="ecoFase"></div></div>
+  <div class="muted" id="ecoNombre" style="margin-top:4px"></div>
+  <div class="fila"><label class="mini"><input type="checkbox" id="ecoPlano" checked> Plano en el corazón</label><label class="mini"><input type="checkbox" id="ecoRotulos" checked> Rótulos</label><span class="muted" id="ecoTiempo"></span></div>
+  <div class="muted">Imagen <b>reconstruida</b>, no una ecografía real: el plano de cada vista es fijo en el cuerpo y el corazón lo cruza al latir (por eso en el eje corto mitral, en sístole, la base baja y el corte pasa a cruzar las aurículas). El tejido lleva su moteado consigo; la sangre casi no devuelve eco; los bordes brillan más donde el haz les da de frente (la pared lateral en el apical, paralela al haz, se ve más débil). Ecogenicidades, resolución y ganancia ilustrativas. Idea de <i>The Heart by Ultrasound</i> (D. Ouyang), reconstruida sobre este motor.</div></div>
 <div class="card diag"><div class="fila" style="margin:0"><b>Wiggers y asa presión-volumen</b>
   <button class="mini on" data-lado="izquierdo">Izquierdo</button><button class="mini" data-lado="derecho">Derecho</button></div>
   <div class="muted" id="diagTxt">Mismo instante que el corazón. <b>Desliza en horizontal</b> sobre el Wiggers o <b>toca el asa</b> para revisar cualquier instante del último latido; ▶ Reanudar vuelve al tiempo real.</div>
@@ -73,6 +84,7 @@ import { ESCENARIOS } from './escenarios.mjs';
 import { crearFlujo } from './flujo-sangre.mjs';
 import { COLOR_FASE, segmentosFase, estadoRevision, crearDiagramas } from './diagramas.mjs';
 import { VALVULAS, apertura, estadoGeo, crearTablaFormas, semejantes } from './formas.mjs';
+import { VISTAS, planoVista, enPlano, crearEcografo, abanicoVista } from './ecografia.mjs';
 const $ = (s) => document.querySelector(s);
 let motor = crearMotor(); motor.correr(12);           // hasta régimen estable
 const cam = crearCamara();
@@ -80,6 +92,8 @@ const glC = $('#gl');
 // Solo WebGL. Sin WebGL (raro en móviles actuales) se ve una imagen fija y no se construye geometría.
 const rgl = crearWebGL(glC);
 if (!rgl) { glC.hidden = true; $('#estatico').hidden = false; $('#sinwebgl').hidden = false; }
+// la ecografía corta la misma geometría que dibuja WebGL: sin WebGL no se construye, y su tarjeta no se muestra
+if (!rgl) document.querySelector('#tarjetaEco').hidden = true;
 cam.enganchar($('.escena'));
 // Resolución real del lienzo: ancho en CSS × densidad de píxeles (hasta 2×)
 function ajustarLienzo() {
@@ -169,14 +183,84 @@ function gestionarFormas() {
   } else if (estable && !tabla.lista && !tabla.construyendo) tabla.pedir(motor.onda, motor.ultimo, opcionesGeo(), extraGeo());
   const vieja = tabla.trabajar(); if (vieja != null) { rgl.liberar('f' + vieja + ':'); ensuciar(); }
 }
-let estGeo = null;
+// ---- Ecografía (ecografia.mjs) ----
+// El plano de la vista elegida corta las MISMAS piezas que dibuja el corazón en este fotograma (o, con corte o
+// vista de la base, una geometría completa del mismo estado). El plano es fijo en el cuerpo: se calcula con los
+// volúmenes telediastólicos del último latido y solo se recoloca si cambian más de 3 mL (otro escenario).
+const ecoC = $('#eco'), ecoCtx = ecoC.getContext('2d');
+const BOTON_ECO = { plax: 'PLAX', psaxAo: 'PSAX Ao', psaxMv: 'PSAX mitral', psaxPm: 'PSAX papilares', a4c: 'A4C', a2c: 'A2C', a3c: 'A3C' };
+let vistaEco = 'a4c', ecografo = null, ecoImg = null, planoEco = null, claveTd = '', refEco = null, claveRef = '', fanEco = null;
+let ecoVisible = true, ultimoEco = -1e9, ecoInfo = null, ecoPendiente = true, ecoMs = 0;
+$('#vistasEco').innerHTML = Object.keys(VISTAS).map(k => `<button class="mini${k === vistaEco ? ' on' : ''}" data-eco="${k}" title="${VISTAS[k].nombre}">${BOTON_ECO[k]}</button>`).join('');
+function elegirVistaEco(k) { vistaEco = k; claveTd = ''; ecoPendiente = true; $$('[data-eco]').forEach(b => b.classList.toggle('on', b.dataset.eco === k)); }
+$$('[data-eco]').forEach(b => b.onclick = () => elegirVistaEco(b.dataset.eco));
+function ajustarEco() {
+  const w = Math.round(ecoC.clientWidth * Math.min(window.devicePixelRatio || 1, 1.5)), h = Math.round(w * 0.8);
+  if (!w || (ecografo && ecoC.width === w)) return;
+  ecoC.width = w; ecoC.height = h; ecografo = crearEcografo({ ancho: w, alto: h }); ecoImg = ecoCtx.createImageData(w, h); ecoPendiente = true;
+}
+ajustarEco(); new ResizeObserver(ajustarEco).observe(ecoC);
+new IntersectionObserver((e) => { ecoVisible = e[0].isIntersecting; if (ecoVisible) ecoPendiente = true; }).observe($('#tarjetaEco'));
+$('#ecoRotulos').onchange = () => { ecoPendiente = true; };
+const muestraTd = () => motor.onda.reduce((a, b) => (b.vvi > a.vvi ? b : a), motor.onda[0]);
+function prepararPlanoEco() {
+  if (!motor.onda.length) return null;
+  const td = muestraTd(), clave = vistaEco + '|' + Math.round(td.vvi / 3) + '|' + Math.round(td.vvd / 3);
+  if (clave !== claveTd) { planoEco = planoVista(vistaEco, td); claveTd = clave; fanEco = abanicoVista(planoEco); }
+  // forma de referencia para que el moteado siga al tejido: la telediastólica, con las mismas opciones
+  const cr = [Math.round(td.vvi), Math.round(td.vvd), opciones.pericardio, opciones.detalle, calidad, motor.p.liquidoPeri].join('|');
+  if (cr !== claveRef) { refEco = construirCorazon(estadoGeo(td, extraGeo()), { pericardio: opciones.pericardio, detalle: opciones.detalle, calidad }).partes; claveRef = cr; }
+  return td;
+}
+function pintarEco(s, g, est) {
+  if (!ecoVisible || !ecografo || !g) return;
+  const ahora = performance.now(), propia = !!(opciones.corte || opciones.vistaBase);
+  // hasta ~30 imágenes por segundo (~12 con una geometría propia); en pausa, solo si algo cambió
+  if (!ecoPendiente || ahora - ultimoEco < (propia ? 80 : 30)) return;
+  if (!prepararPlanoEco()) return;
+  const geoEco = propia ? construirCorazon(est, { pericardio: opciones.pericardio, detalle: opciones.detalle, calidad }) : g;
+  const im = ecografo.formar(geoEco.partes, planoEco, { ref: refEco, t: s.t ?? 0 });
+  ecoImg.data.set(im.pix); ecoCtx.putImageData(ecoImg, 0, 0);
+  ecoMs = 0.8 * ecoMs + 0.2 * im.tiempos.total; ultimoEco = ahora; ecoPendiente = false;
+  const P = planoEco, k = im.escala, X = (u) => im.cx + u * k, Y = (v) => im.arriba + v * k, px = ecoC.width / ecoC.clientWidth;
+  ecoCtx.font = `${Math.round(11 * px)}px system-ui,sans-serif`; ecoCtx.textAlign = 'center'; ecoCtx.textBaseline = 'middle';
+  // escala de profundidad: un punto por centímetro junto al borde derecho del sector; cifra cada 5 cm
+  const dx = Math.sin(P.mitad), dy = Math.cos(P.mitad);
+  for (let cm = 1; cm * 10 < P.prof; cm++) { const r = cm * 10, x = X(r * dx) + 6 * px, y = Y(r * dy);
+    ecoCtx.fillStyle = 'rgba(220,214,196,.8)'; ecoCtx.fillRect(x - 1, y - 1, cm % 5 ? 2 : 4, 2);
+    if (cm % 5 === 0) { const dentro = x + 20 * px < ecoC.width; ecoCtx.textAlign = dentro ? 'left' : 'right'; ecoCtx.fillText(cm + '', dentro ? x + 6 * px : x - 4 * px, y - (dentro ? 0 : 9 * px)); ecoCtx.textAlign = 'center'; } }
+  // marca de orientación (el lado de la muesca del transductor) a la derecha del vértice
+  ecoCtx.fillStyle = '#d4af37'; ecoCtx.beginPath(); ecoCtx.arc(im.cx + 18 * px, im.arriba + 8 * px, 3 * px, 0, Math.PI * 2); ecoCtx.fill();
+  // rótulos de las cavidades que el plano corta (centros que se mueven con las paredes)
+  const rot = [];
+  if ($('#ecoRotulos').checked && geoEco.flujo) {
+    const f = geoEco.flujo, T = (p) => f.transformar(p);
+    // de cada cavidad, el punto de su interior más cercano al plano (a lo largo de su eje; en el VD, también a lo
+    // ancho de la media luna)
+    const cerca = (pts) => pts.map(T).reduce((a, b) => (Math.abs(enPlano(P, b)[2]) < Math.abs(enPlano(P, a)[2]) ? b : a));
+    const alto = [0.1, 0.25, 0.4, 0.55, 0.7, 0.85];
+    const marcas = [['VI', cerca(alto.map(u => f.enCamara.vi([u, 0, 0])))], ['VD', cerca(alto.flatMap(u => [0.15, 0.4, 0.65, 0.9].map(fv => f.enCamara.vd([u, fv, 0.55]))))],
+      ['AI', cerca(alto.map(u => f.enCamara.ai([u, 0, 0])))], ['AD', cerca(alto.map(u => f.enCamara.ad([u, 0, 0])))],
+      ['Ao', T([f.valvulas.aortica[0], f.valvulas.aortica[1], f.valvulas.aortica[2] + 14])]];
+    for (const [n, p] of marcas) { const [u, v, dd] = enPlano(P, p), r = Math.hypot(u, v);
+      if (Math.abs(dd) > 14 || r > P.prof - 5 || Math.abs(Math.atan2(u, v)) > P.mitad - 0.04) continue;
+      rot.push(n); ecoCtx.fillStyle = 'rgba(0,0,0,.55)'; ecoCtx.fillRect(X(u) - 12 * px, Y(v) - 8 * px, 24 * px, 16 * px);
+      ecoCtx.fillStyle = '#e8e3d5'; ecoCtx.fillText(n, X(u), Y(v)); }
+  }
+  $('#ecoTitulo').textContent = BOTON_ECO[vistaEco];
+  ecoC.setAttribute('aria-label', `Ecografía reconstruida, ${VISTAS[vistaEco].nombre}, fase ${s.fase}`);
+  $('#ecoFase').textContent = `${s.fase} · ${FASES[s.fase]}`;
+  $('#ecoNombre').textContent = VISTAS[vistaEco].nombre;
+  ecoInfo = { t: s.tLatido, vista: vistaEco, rotulos: rot, propia, abiertos: im.abiertos };
+}
+let estGeo = null, sucioEco = false;
 function dibujar() {
   const s = estadoMostrado();          // EL estado de este fotograma: todo lo de abajo lee este objeto
   if (rgl && (sucio || !geo)) {
     const extra = extraGeo(), est = estadoGeo(s, extra);
     const mz = usarFormas && !opciones.corte ? tabla.mezclar(s, extra) : null;
     geo = mz ? { partes: mz.partes, flujo: mz.flujo, descenso: mz.descenso } : construirCorazon(est, opcionesGeo());
-    modoGeo = mz ? 'mezcla' : 'exacta'; sucio = false; estGeo = est;
+    modoGeo = mz ? 'mezcla' : 'exacta'; sucio = false; estGeo = est; sucioEco = true;
   }
   const g = geo;
   if (rgl) {
@@ -184,11 +268,14 @@ function dibujar() {
     const puntos = verSangre && !revision ? sangre.puntos(g.flujo, { vistaBase: opciones.vistaBase }) : null;
     // con la sangre en movimiento sobran los planos translúcidos de sangre del corte (la tapaban)
     const partes = verSangre ? g.partes.filter(p => !p.nombre.endsWith('sangre')) : g.partes;
-    rgl.dibujar(partes, cam, undefined, puntos);
+    const conPlano = $('#ecoPlano').checked && fanEco ? partes.concat([{ nombre: 'Plano eco', pos: fanEco.pos, idx: fanEco.idx, color: [0.35, 0.78, 0.95], alfa: 0.22, dobleCara: true }]) : partes;
+    rgl.dibujar(conPlano, cam, undefined, puntos);
   }
+  if (sucioEco) { ecoPendiente = true; sucioEco = false; }
+  pintarEco(s, g, estGeo);
   pintarCiclo(s);
   const cursor = diag.pintar(s, motor, lado);
-  window.__ultimoDibujo = { estado: s, est: estGeo, cursor, modo: modoGeo };
+  window.__ultimoDibujo = { estado: s, est: estGeo, cursor, modo: modoGeo, eco: ecoInfo };
   const fase = `${s.fase} · ${FASES[s.fase]}`;
   const fuera = s.vvi < LIMITES.vi[0] || s.vvi > LIMITES.vi[1] || s.vvd < LIMITES.vd[0] || s.vvd > LIMITES.vd[1] || Math.min(s.vai, s.vad) < LIMITES.au[0] || Math.max(s.vai, s.vad) > LIMITES.au[1];
   $('#hud').innerHTML = (revision ? '<span class="revisando">⏸ revisando el último latido</span><br>' : '') + `t = ${s.tLatido.toFixed(2)} s · FC ${Math.round(revision ? motor.ultimo.fc : s.fc)} · <b>${fase}</b>` + (g ? `<br>base ${g.descenso >= 0 ? '+' : ''}${g.descenso.toFixed(0)} mm` : '') + (fuera ? '<br><span style="color:#cf9a3e">⚠ volumen fuera del rango del dibujo: se muestra en su límite</span>' : '');
@@ -215,6 +302,7 @@ function bucle(t) {
   gestionarFormas(); dibujar(); frames++;
   if (t - tFps > 1000) { const ritmo = realAcum > 0 ? simAcum / realAcum : 0;
     const formas = !usarFormas ? 'sin formas' : tabla.construyendo ? 'calculando formas' : tabla.lista ? `${tabla.numero} formas · ${modoGeo}` : 'geometría exacta';
+    $('#ecoTiempo').textContent = ecoVisible && ecoMs ? `imagen en ${ecoMs.toFixed(0)} ms` : '';
     $('#fps').textContent = `${frames} fps` + (pausa ? '' : ` · reloj ×${ritmo.toFixed(2).replace('.', ',')}`) + ` · ${formas}`; frames = 0; tFps = t; simAcum = 0; realAcum = 0; }
   requestAnimationFrame(bucle);
 }
@@ -263,5 +351,6 @@ function arrastre(el, alElegir) {
 arrastre($('#wig'), (x) => revisar(estadoRevision(motor.onda, diag.tiempoEnX(x))));
 arrastre($('#pvc'), (x, y) => revisar(diag.muestraEnPV(motor, lado, x, y)));
 window.__revisar = (t) => revisar(estadoRevision(motor.onda, t)); window.__estado = () => estadoMostrado();
+window.__eco = { info: () => ecoInfo, vista: elegirVistaEco, plano: () => planoEco };
 window.__ensuciar = ensuciar; window.__sangre = sangre; window.__motor = motor; window.__cam = cam; window.__tabla = tabla;
 </script></body></html>

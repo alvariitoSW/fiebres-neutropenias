@@ -151,6 +151,31 @@ test('con el latido estable se usan las formas precalculadas, sin perder la sinc
   await pg.close();
 });
 
+test('la ecografía corta el corazón en el mismo instante, en cada vista, y sigue la revisión', { skip: omitir }, async () => {
+  const { pg, errores } = await abrir('corazon-3d.html');
+  await pg.waitForFunction(() => window.__ultimoDibujo?.eco, null, { timeout: 30000 });
+  const tras = (fn) => pg.evaluate(fn => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(() => r(eval(fn))))), fn);
+  // en pausa (sin throttle que espere), la imagen y el corazón leen el mismo estado
+  for (const v of ['a4c', 'plax', 'psaxMv', 'a2c']) {
+    await pg.evaluate((v) => { window.__eco.vista(v); window.__revisar(0.2 + Math.random() * 0.4); }, v);
+    await pg.waitForTimeout(150);
+    const d = await tras('({ t: window.__ultimoDibujo.estado.tLatido, eco: window.__eco.info() })');
+    assert.equal(d.eco.vista, v); assert.equal(d.eco.t, d.t, `${v}: la ecografía va en otro instante`);
+    assert.equal(d.eco.abiertos, 0, `${v}: pared sin cerrar`);
+    // en el eje corto mitral, en sístole, la base baja por debajo del corte y puede no haber VI
+    if (v !== 'psaxMv') assert.ok(d.eco.rotulos.includes('VI'), `${v}: no se rotula el VI`); else assert.ok(d.eco.rotulos.length, `${v}: sin rótulos`);
+  }
+  const img = await pg.locator('#eco').screenshot(); assert.ok(img.length > 30000, `la imagen parece vacía (${img.length} bytes)`);
+  // con corte, la ecografía usa su propia geometría completa (el corte no la recorta)
+  // (fuera de la pantalla no se calcula: el clic baja la página, así que se vuelve a la ecografía)
+  await pg.click('[data-v="4c"]'); await pg.locator('#eco').scrollIntoViewIfNeeded(); await pg.evaluate(() => window.__revisar(0.35)); await pg.waitForTimeout(400);
+  const c = await tras('({ ...window.__eco.info(), tCorazon: window.__ultimoDibujo.estado.tLatido })');
+  assert.equal(c.propia, true); assert.equal(c.t, c.tCorazon); assert.ok(Math.abs(c.t - 0.35) < 0.003); assert.equal(c.abiertos, 0);
+  assert.ok(!(await pg.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)), 'desborda en horizontal');
+  assert.deepEqual(errores, []);
+  await pg.close();
+});
+
 test('sin WebGL se ve la imagen fija con su aviso y las cifras siguen vivas', { skip: omitir }, async () => {
   const sinGL = await pw.chromium.launch({ args: ['--disable-webgl', '--disable-3d-apis'] });
   const { pg, errores } = await abrir('corazon-3d.html', {}, sinGL);
@@ -160,6 +185,7 @@ test('sin WebGL se ve la imagen fija con su aviso y las cifras siguen vivas', { 
   const t0 = await pg.evaluate(() => window.__motor.s.t); await pg.waitForTimeout(600);
   assert.ok(await pg.evaluate(() => window.__motor.s.t) > t0, 'el motor no avanza');
   assert.equal(await pg.locator('#ciclo button').count(), 7);
+  assert.equal(await pg.locator('#tarjetaEco').isVisible(), false, 'sin WebGL no hay ecografía');
   assert.deepEqual(errores, []);
   await sinGL.close();
 });
