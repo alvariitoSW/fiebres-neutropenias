@@ -304,6 +304,8 @@ function copiarResultados(ids) {
         const c = el.cloneNode(true);
         c.querySelectorAll('[id]').forEach(x => x.removeAttribute('id'));
         if (!sel.startsWith('#') || sel.includes(' ')) { c.removeAttribute('id'); c.style.display = ''; return c.outerHTML; }
+        // Un resultado oculto o vacío (calculadora aún sin datos) no deja una franja vacía.
+        if (el.style.display === 'none' || el.hidden || !el.textContent.trim()) return '';
         const estado = [...el.classList].filter(x => /^tfg-estado-/.test(x)).join(' ');
         return `<div class="vk-resultado-copia ${estado}" style="color:${el.style.color || ''}">${c.innerHTML}</div>`;
     }).join('');

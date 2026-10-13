@@ -80,6 +80,9 @@ const PANEL_NAV = {
     'panel-marino-fund-tabs': { especialidad: 'libros', view: 'marinoFundamentos', bloque: 'Marino · Fundamentos (caps. 1-11)' },
     'panel-marino-renal-tabs': { especialidad: 'libros', view: 'marinoRenal', bloque: 'Marino · Ácido-base, renal y electrolitos (caps. 31-38)' },
     'panel-marino-abd-tabs': { especialidad: 'libros', view: 'marinoAbdomen', bloque: 'Marino · Abdomen y temperatura (caps. 39-44)' },
+    'panel-marino-neuro-tabs': { especialidad: 'libros', view: 'marinoNeuro', bloque: 'Marino · Neurología (caps. 45-47)' },
+    'panel-marino-nutri-tabs': { especialidad: 'libros', view: 'marinoNutricion', bloque: 'Marino · Nutrición y endocrino (caps. 48-51)' },
+    'panel-marino-tox-tabs': { especialidad: 'libros', view: 'marinoToxicos', bloque: 'Marino · Tóxicos y apéndices (caps. 52-53)' },
 
     // Sobrevivir a la UMI
     'panel-manual-umi-tabs': { especialidad: 'sobrevivirUmi', view: 'manualUmi', bloque: 'Manual UMI Negrín' },

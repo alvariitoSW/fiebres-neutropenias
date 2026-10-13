@@ -19,7 +19,7 @@ Cardiología de Fisiopatología UCI, que es fisiopatología pura, no
 manejo), y **Neumología** con Merino Neumología (embolia pulmonar, asma/
 EPOC, SDRA, oxigenoterapia/VNI, ventilación mecánica, vía aérea
 artificial, NAV y destete), más **Libros**, un índice central de los libros de texto
-(*The ICU Book* de Marino y El Libro Azul) que además aloja los caps. 1-11 y 31-44 de Marino. Está pensada para ir creciendo con más
+(*The ICU Book* de Marino y El Libro Azul) que además aloja los caps. 1-11 y 31-53 de Marino y sus apéndices. Está pensada para ir creciendo con más
 especialidades (radiología, etc.) según se vaya aportando contenido. Es
 una herramienta de apoyo para médicos, pensada para consultarse a pie de
 cama en el móvil.
@@ -50,8 +50,8 @@ cama en el móvil.
 >
 > **Orden de trabajo pedido después por el usuario (octubre 2026)**, por
 > delante de los pendientes de arriba y de la ecografía: 1) terminar de
-> subir Merino (los capítulos del *The ICU Book* (5.ª ed.) de Marino que aún no están: **hechos los caps. 1-11 y 31-44** en la
-> sección Libros, octubre 2026; hoy están en la app los caps. 1-44, faltan del 45 en adelante, sin PDF);
+> subir Merino (*The ICU Book* (5.ª ed.) de Marino): **hecho, octubre 2026** — el libro entero está en la app
+> (caps. 1-53 y los 3 apéndices; los caps. 1-11 y 31-53 en la sección Libros);
 > 2) terminar El Libro Azul (hoy hay las secciones I, II, III y VII);
 > 3) el contenido del PIF de R1 (las 7 rotaciones sin contenido:
 > Radiología de tórax, Neurorradiología, Cardiología, Medicina Interna,
@@ -8472,6 +8472,70 @@ lleva a ellos. Mismo patrón de dos niveles que el resto (`librosLevel` en `js/m
     1.er grado; 3 bolos de 2 mEq/L en 1 h → aviso de >5 en 2 h; VS 55→70 → responde; semáforo con Pseudomonas →
     pip-tazo y meropenem en verde); los accesos a la nefrona viva abren la situación desde Libros; sin desbordamiento.
     Cache-busting `?v=20261023`.
+
+- **Marino · caps. 45-53 y apéndices (octubre 2026)**, a petición explícita del usuario («Esto es lo que nos queda del
+  merino»). Con esto, *The ICU Book* entero está en la app. Tres bloques más de Libros, con el mismo patrón que
+  31-44 (vista propia en `librosLevel`, botón en el `.constellation` de `libros-menu.html`, cuaderno de campo con
+  rótulos por capítulo, vista Visual, calculadoras y quiz). Las fichas se generan desde fragmentos con un script de
+  montaje fuera del repo; si se retocan a mano, editar el `.html` del bloque directamente.
+  - **Marino · Neurología (caps. 45-47)** (`marino-neuro.html`/`.js`, vista `#marino-neuro-view`, clave
+    `marinoNeuro`, panel `panel-marino-neuro-tabs`, prefijo `mn-`): 14 fichas — consciencia alterada, delirio,
+    abstinencia alcohólica, coma y su exploración, muerte encefálica (45); convulsiones, estado epiléptico, miastenia,
+    Guillain-Barré y neuromiopatía crítica, bloqueo neuromuscular y su reversión (46); ictus isquémico (medidas
+    generales; antitrombóticos y complicaciones), hemorragia intracerebral y subaracnoidea (47).
+  - **Marino · Nutrición y endocrino (caps. 48-51)** (`marino-nutricion.html`/`.js`, `#marino-nutri-view`,
+    `marinoNutricion`, `panel-marino-nutri-tabs`, `mu-`): 14 fichas — gasto energético, sustratos y balance
+    nitrogenado, tiamina, vitaminas y oligoelementos (48); nutrición enteral: indicaciones, fórmulas, pauta y sonda,
+    complicaciones (49); NPT: soluciones, paso a paso, complicaciones y realimentación (50); CIRCI, tiroides y
+    tirotoxicosis, hipotiroidismo y coma mixedematoso (51).
+  - **Marino · Tóxicos y apéndices (caps. 52-53)** (`marino-toxicos.html`/`.js`, `#marino-tox-view`,
+    `marinoToxicos`, `panel-marino-tox-tabs`, `mt-`): 11 fichas (modo cajón, ≤12) — paracetamol y nomograma,
+    NAC y hemodiálisis, benzodiacepinas y betabloqueantes, opioides, salicilatos (52); CO, cianuro, etilenglicol y
+    metanol (53); Apéndice 1 (unidades y conversiones), 2 (valores de referencia) y 3 (el cuerpo fantástico).
+  - **PDF** en `docs/`: `marino-2024-neurologia-caps45-47.pdf`, `-nutricion-endocrino-caps48-51.pdf` y
+    `-toxicologia-caps52-53-apendices.pdf` (página del PDF = `#page=N`). **31 imágenes** reales
+    (`mar-fig45…51-*.jpg`, `mar-apx*.jpg`); las tablas, recreadas como tablas.
+  - **~50 calculadoras y 2 asistentes** (`initSiNoWizard`: estado epiléptico `mn-se-wizard`, naloxona IV
+    `mt-nal-wizard`), con el guard `.value === ''`. Entre ellas: CAM-ICU, GCS, test de apnea, estado epiléptico por
+    peso, reversión de anticoagulantes (andexanet: pauta alta si se cumple cualquier criterio de la Tabla 47.5), PPC,
+    GER/CR/balance nitrogenado, pauta enteral y NPT paso a paso (restan el propofol), cortisol/ACTH, equivalencia de
+    corticoides, patrón tiroideo, nomograma de Rumack-Matthew (rectas en escala log entre los extremos del texto),
+    NAC IV, salicilatos, COHb (semividas 74/320 min), simulador de la PO₂ venosa con COHb (Figura 53.1, ilustrativo),
+    cianuro, fomepizol, conversiones de unidades, French/gauge, radiación, IMC (bandas de la OMS: el apéndice no da
+    cifras), PEF de Leiner y volemia. Ningún semáforo con cortes sin fuente (PEF y radiación, neutros salvo el límite
+    de la EPA).
+  - **Notas de fidelidad/interpretación/fuentes** (plegables): "GCS ≤6 frente a ≤5", lorazepam y levetiracetam
+    texto frente a Tabla 46.3, rocuronio 50-70 frente a 30-70 min, idarucizumab "2,5 mg" (son g) y desmopresina
+    "3 µg/kg" (0,3), solapamiento de la Tabla 47.5, "7% de 696.000" (676.000), convulsiones tras ictus 2-5% (Tabla 46.1)
+    frente a ~20% (Cap. 47), CAM-ICU frente al de El Libro Azul, Ecuación 48.1 sin unidades, lípidos 1,5 (Cap. 48)
+    frente a 2,5 g/kg/día (Tabla 50.2), proteínas 1,2-1,6 (Tabla 49.4) frente a 1,2-2,0, D5 "70 kcal/L", 9 aminoácidos
+    esenciales con 8 nombrados, Clinolipid® y los "triglicéridos de cadena media", unidades del Multi-Trace, Tabla
+    50.5/49.6 descolocada, TSH en mU/mL o mU/dL, propranolol IV 60-80 mg (es la oral), Ecuación 53.2 (Fe²⁺), erratas
+    del Apéndice 1, tablas de PEF desplazadas 5 pulgadas (la calculadora usa las ecuaciones), 16 G con 0,040″, y
+    "Hiraguchi". Ferritina: cortes <18 / >100 µg/L sacados del Cap. 48.
+  - **Vista Visual** de las 39 fichas en `visual-marino-caps45-53.js` (`initVisualMarinoCaps45a53()`): figuras
+    primero, calculadoras conectadas, los dos asistentes dentro de la vista (`asistenteVisual`).
+  - **Enlaces cruzados** (38, `[data-especialidad]`) hacia Manual UMI (neurocrítico), Fisiopatología UCI, Merino
+    Neumología/Cardiología, Nefrología, Eco cardíaca (`data-eco-vista="a4c"`) y los bloques 1-44 de Libros; de vuelta,
+    del hiato aniónico (Cap. 31) a etilenglicol/metanol y salicilatos.
+  - **Índice y buscador**: secciones XIV (Nervous System Disorders), XV (Nutrition & Metabolism), XVI (Overdoses &
+    Poisons) y XVII (Appendices; capítulos `A1`-`A3`) en `libros-indice.js`. Solo la sección V de Marino sigue sin
+    título comprobado. `PANEL_NAV` del buscador con los tres paneles. Repaso "Marino entero": 9 bloques.
+  - **Quiz**: `marino-neuro-preguntas.js` (84, `mn-q001`-`q084`), `marino-nutricion-preguntas.js` (84, `mu-`) y
+    `marino-toxicos-preguntas.js` (66, `mt-`), 6 por ficha (5 de opción múltiple + 1 de redactar). Banco total de la
+    app: **2549**.
+  - **Kit Visual**: `copiarResultados()` ya no copia un resultado oculto o vacío (antes dejaba una franja vacía en
+    selectores y calculadoras aún sin datos; afecta a todas las vistas Visual).
+  - **Bug corregido al verificar**: 3 ids duplicados (`mt-co-cohb`, `mt-nac-hd`, `mu-ti-tsh` en un `<dl>` y en su
+    control) hacían que la copia de la calculadora en la vista Visual escribiera "undefined" (el texto del `<dl>` pasa
+    a `*-txt`). Mismo fallo que `mr-osm-medida` en Cap. 35: **comprueba ids duplicados en cada bloque nuevo**.
+  - Verificado con Playwright (390 y 360 px): las 39 fichas abren con su panel activo, las imágenes cargan, las vistas
+    Visual sin fuentes sin resolver; calculadoras con valores esperados (nomograma 100 µg/mL a las 8 h → sobre la línea
+    de tratamiento de 76; NAC 70 kg → 10.500/3.500/7.000 mg; COHb 12% fumador → alta; 8 mg/dL de Ca → 4 mEq/L; PEF
+    varón 40 a/175 cm → 586 L/min); ningún NaN/undefined con todos los campos rellenos; los 2 asistentes llegan a su
+    resultado; los 39 botones del índice y los 38 enlaces cruzados llegan a su destino; los tres bancos se recorren
+    enteros sin entidades; el buscador encuentra las fichas nuevas; sin desbordamiento ni errores. Cache-busting
+    `?v=20261024-2`.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
