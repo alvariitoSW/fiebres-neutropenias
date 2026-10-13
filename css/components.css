@@ -2309,6 +2309,50 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 .cv-atlas-lista a b { color: var(--accent-blue); }
 .cv-atlas-lista span { display: block; font-size: 0.75rem; color: var(--text-muted); }
 .cv-atlas-aqui:empty { display: none; }
+/* Atlas de ecocardiografía (js/modules/eco/atlas/): secciones de Eco cardíaca, índice, lector de capítulo y figuras */
+.cv-secciones { margin: 4px 0 12px; }
+.cv-secciones .cv-mini { flex: 1 1 140px; justify-content: center; font-weight: 700; }
+.cv-atlas-lista li.at-en-app { border-left-color: var(--accent-green); }
+.cv-atlas-lista li.at-en-app button { background: none; border: 0; padding: 0; font: inherit; color: var(--text-main); text-align: left; cursor: pointer; min-height: 28px; touch-action: manipulation; }
+.cv-atlas-lista li.at-en-app button b { color: var(--accent-green); }
+.cv-atlas-lista span i { color: var(--text-muted); font-style: italic; }
+.at-cabecera { display: flex; gap: 12px; align-items: center; margin: 10px 0 8px; }
+.at-num { font: 700 1.5rem Georgia, serif; color: var(--accent-blue); min-width: 2.2em; text-align: center; border: 1px solid var(--border-color); border-radius: 8px; padding: 4px 6px; }
+.at-cabecera h3 { margin: 0; }
+.at-cabecera p { margin: 2px 0 0; font-size: 0.75rem; color: var(--text-muted); }
+.at-entradilla { font-size: 0.92rem; line-height: 1.5; margin: 0 0 12px; }
+.at-figura { padding: 12px; margin-bottom: 14px; }
+.at-mandos { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+.at-mando label, .at-etq { display: flex; justify-content: space-between; gap: 8px; font-size: 0.8rem; color: var(--text-main); }
+.at-mando output { color: var(--accent-blue); font-weight: 700; }
+.at-mando input[type="range"] { width: 100%; accent-color: var(--accent-blue); margin: 4px 0 0; }
+.at-marcas { display: flex; justify-content: space-between; gap: 4px; font-size: 0.66rem; color: var(--text-muted); }
+.at-seg { margin-top: 4px; }
+.at-casilla { align-self: flex-start; }
+.at-lienzo { display: block; width: 100%; height: auto; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-main); }
+.at-diag { display: flex; flex-direction: column; gap: 8px; }
+.at-lecturas { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; margin: 10px 0 0; }
+.at-lectura { border: 1px solid var(--border-color); border-radius: 6px; padding: 5px 8px; min-width: 0; }
+.at-lectura dt { font-size: 0.66rem; letter-spacing: 0.03em; text-transform: uppercase; color: var(--text-muted); }
+.at-lectura dd { margin: 2px 0 0; font-weight: 700; overflow-wrap: anywhere; }
+.at-lectura dd small { font-weight: 400; color: var(--text-muted); }
+.at-lectura.aviso { border-color: var(--accent-yellow); }
+.at-lectura.aviso dd { color: var(--accent-yellow); }
+.at-fuente-lectura { display: block; font-size: 0.62rem; font-weight: 400; color: var(--text-muted); font-style: italic; }
+.at-vivo { font-size: 0.82rem; line-height: 1.5; margin: 10px 0 0; }
+.at-texto { font-size: 0.88rem; line-height: 1.55; }
+.at-texto h4 { margin: 18px 0 6px; color: var(--accent-blue); }
+.at-texto ul { padding-left: 1.2em; }
+.at-ecuacion { font-family: Georgia, serif; text-align: center; padding: 8px; border: 1px dashed var(--border-color); border-radius: 6px; overflow-wrap: anywhere; }
+.at-cita { font-size: 0.68em; line-height: 0; }
+.at-cita a { color: var(--accent-blue); text-decoration: none; }
+.at-clave { border: 1px solid var(--accent-green); border-radius: 8px; padding: 6px 12px; margin: 16px 0 6px; }
+.at-clave h4 { color: var(--accent-green); margin-top: 6px; }
+.at-biblio { font-size: 0.75rem; line-height: 1.45; padding-left: 1.4em; overflow-wrap: anywhere; }
+.at-biblio li { margin-bottom: 4px; }
+.at-acciones, .at-navegar { margin: 12px 0; }
+.at-navegar { justify-content: space-between; }
+
 .cv-atlas-aqui { margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--border-color); }
 .cv-mini.on { border-color: var(--accent-green); color: var(--accent-green); box-shadow: var(--glow-green); }
 .cv-sim select.cv-mini { width: auto; padding: 6px 8px; margin: 0; }

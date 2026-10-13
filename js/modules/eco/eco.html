@@ -7,18 +7,47 @@
     <p>Simulador: el corte ecográfico sale del mismo corazón que late, en el mismo instante</p>
 </div>
 
-<div class="card cv-tarjeta cv-atlas" id="cv-atlas">
-    <h3>📖 The Heart by Ultrasound</h3>
-    <p class="cv-muted">Atlas interactivo de ecocardiografía de <b>David Ouyang</b> (grupo EchoNet): 24 capítulos en diez partes, en el orden de las guías ASE, y 6 capítulos extra. Todas las imágenes son simuladas, cortadas de un corazón 3D, y cada valor de las guías lleva su fuente. Varias ideas de este simulador vienen de ahí (con permiso del autor), reconstruidas sobre el motor de la app.</p>
-    <div class="cv-fila">
-        <a class="cv-mini cv-atlas-abrir" id="cv-atlas-abrir" target="_blank" rel="noopener">Abrir el atlas ↗</a>
-        <a class="cv-mini" id="cv-atlas-repo" target="_blank" rel="noopener">Código en GitHub ↗</a>
+<div class="cv-fila cv-secciones" role="tablist" aria-label="Eco cardíaca">
+    <button type="button" class="cv-mini on" data-seccion="sim" role="tab" aria-selected="true" aria-controls="cv-sim">🫀 Simulador</button>
+    <button type="button" class="cv-mini" data-seccion="atlas" role="tab" aria-selected="false" aria-controls="cv-seccion-atlas">📖 Atlas de ecocardiografía</button>
+</div>
+
+<!-- Atlas: The Heart by Ultrasound en español. Lo maneja atlas/atlas.js; los capítulos son atlas/cap-*.html. -->
+<div class="cv-sim at-atlas" id="cv-seccion-atlas" hidden>
+    <div id="at-indice">
+        <div class="card cv-tarjeta cv-atlas">
+            <h3>📖 Atlas de ecocardiografía</h3>
+            <p class="cv-muted">Basado en <i>The Heart by Ultrasound</i>, el atlas interactivo de <b>David Ouyang</b> (grupo EchoNet), con su permiso: 24 capítulos en diez partes, en el orden de las guías ASE, y 6 extra. Aquí cada capítulo está <b>traducido al español</b>, con su bibliografía, y su figura está <b>reconstruida sobre los motores de la app</b> (el mismo latido que el simulador), sin copiar el código del original.</p>
+            <p class="cv-muted"><b id="at-cuenta"></b>. Los marcados ↗ todavía solo están en el original, en inglés, en otra pestaña.</p>
+            <div class="cv-fila">
+                <a class="cv-mini cv-atlas-abrir" id="cv-atlas-abrir" target="_blank" rel="noopener">Original en inglés ↗</a>
+                <a class="cv-mini" id="cv-atlas-repo" target="_blank" rel="noopener">Código en GitHub ↗</a>
+                <button type="button" class="cv-mini" id="btn-eco-atlas-repasar-todo" data-quiz-asignatura="Eco cardíaca" data-quiz-bloque="Atlas de ecocardiografía" data-quiz-elegir>🎯 Repasar el atlas</button>
+            </div>
+            <div id="cv-atlas-lista"></div>
+        </div>
     </div>
-    <details class="cv-atlas-indice">
-        <summary>Sus 30 capítulos</summary>
-        <div id="cv-atlas-lista"></div>
-    </details>
-    <p class="cv-muted">Web externa, en inglés: se abre en otra pestaña y necesita conexión. Cada capítulo se abre directamente por su enlace.</p>
+    <div id="at-capitulo" hidden>
+        <button type="button" class="back-btn" id="at-volver-indice">← ÍNDICE DEL ATLAS</button>
+        <div class="at-cabecera">
+            <span class="at-num" id="at-num"></span>
+            <div><h3 id="at-titulo"></h3><p id="at-subtitulo"></p></div>
+        </div>
+        <div id="at-cuerpo"></div>
+        <div class="cv-fila at-acciones">
+            <button type="button" class="cv-mini" id="btn-eco-atlas-repasar">🎯 Repasar este capítulo</button>
+            <a class="cv-mini" id="at-original" target="_blank" rel="noopener">Original en inglés ↗</a>
+        </div>
+        <div class="card cv-tarjeta">
+            <p class="cv-titulo">Bibliografía del capítulo</p>
+            <ol class="at-biblio" id="at-biblio"></ol>
+            <p class="cv-muted">Texto traducido de <i>The Heart by Ultrasound</i> (D. Ouyang, <a href="https://github.com/douyang/echodemo" target="_blank" rel="noopener">github.com/douyang/echodemo</a>), con permiso del autor; las fuentes son las suyas. Las figuras son de la app.</p>
+        </div>
+        <div class="cv-fila at-navegar">
+            <button type="button" class="cv-mini" id="at-anterior" hidden></button>
+            <button type="button" class="cv-mini" id="at-siguiente" hidden></button>
+        </div>
+    </div>
 </div>
 
 <div class="cv-sim" id="cv-sim">

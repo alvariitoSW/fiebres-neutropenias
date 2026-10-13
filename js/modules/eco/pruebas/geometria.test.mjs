@@ -139,7 +139,7 @@ test('TAPSE: normal por encima de 17 mm y mayor que el MAPSE; cae cuando cae el 
   const medir = (k) => {
     const m = crearMotor(); m.correr(12); ESCENARIOS[k].aplicar(m); m.correr(14);
     const ex = extraDeMotor(m); let zMin = Infinity, zMax = -Infinity, dMin = Infinity, dMax = -Infinity;
-    for (const s of m.onda) { if (Math.round(s.t * 1000) % 10) continue;
+    for (const [i, s] of m.onda.entries()) { if (i % 5) continue;
       const g = construirCorazon(estadoGeo(s, ex), { pericardio: false, detalle: false, calidad: 0.5 });
       zMin = Math.min(zMin, g.anilloTricLateral[2]); zMax = Math.max(zMax, g.anilloTricLateral[2]);
       dMin = Math.min(dMin, g.descenso); dMax = Math.max(dMax, g.descenso); }

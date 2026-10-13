@@ -28,17 +28,20 @@ export const FASES = {
 export const BASE = {
   fc: 70,
   // cámaras: Ees sistólica (mmHg/mL), V0, A y B de la curva diastólica
-  vi: { ees: 3.2,  v0: 10, a: 1.8, b: 0.017 },
+  vi: { ees: 2.9,  v0: 10, a: 1.8, b: 0.017 },
   vd: { ees: 0.40, v0: 25, a: 2.0, b: 0.012 },
   ai: { ees: 0.70, v0: 5,  a: 0.20, b: 0.090 },
   ad: { ees: 0.70, v0: 5,  a: 0.15, b: 0.090 },
   // tiempos de activación (s). Las sístoles escalan con √(periodo).
-  pr: 0.16, tsAur: 0.10, tsVen: 0.45,
+  pr: 0.16, tsAur: 0.10, tsVen: 0.45, fSubida: 0.62, qSubida: 0.55,
   // pericardio: P = kPeri·exp((Vcorazón − v0Peri)/phiPeri); liquido = derrame extra
   kPeri: 0.1, v0Peri: 300, phiPeri: 40, liquidoPeri: 0,
   tabique: 0.05,            // fracción de la presión del otro ventrículo que se transmite
   // válvulas (mmHg·s/mL)
   rMitral: 0.005, rTricus: 0.005, rAortica: 0.004, rPulmonar: 0.004,
+  // insuficiencia mitral: orificio regurgitante efectivo (cm²). 0 = válvula competente. El chorro sigue la
+  // ecuación del orificio con Bernoulli simplificado: v (m/s) = √(ΔP/4) → Q (mL/s) = EROA · 50 · √ΔP
+  eroaMitral: 0,
   // lecho sistémico (cAo/vuAo: aorta y grandes arterias, distal a la raíz)
   cAo: 1.5, vuAo: 700, rSis: 1.05, cVen: 160, vuVen: 2210, rRetorno: 0.02,
   // aorta proximal: impedancia característica (mmHg·s/mL), inercia del tracto de salida (mmHg·s²/mL)
@@ -59,9 +62,9 @@ export const BASE = {
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 
 // Activación en doble coseno: sube en t1, baja en t2 (0 fuera).
-function activacion(t, t1, t2) {
+function activacion(t, t1, t2, q = 1) {
   if (t < 0) return 0;
-  if (t < t1) return 0.5 * (1 - Math.cos(Math.PI * t / t1));
+  if (t < t1) return (0.5 * (1 - Math.cos(Math.PI * t / t1))) ** q;
   if (t < t1 + t2) return 0.5 * (1 + Math.cos(Math.PI * (t - t1) / t2));
   return 0;
 }
@@ -77,7 +80,7 @@ export function crearMotor(ajustes = {}) {
     vad: 43, vvd: 110, vai: 46, vvi: 105,
     vao: 837, vven: 3294, vap: 151, vvp: 265, reflujoAo: 0,
     pad: 0, pvd: 0, pai: 0, pvi: 0, pao: 0, pven: 0, pap: 0, pvp: 0, pperi: 0,
-    qMit: 0, qTri: 0, qAo: 0, qPul: 0, qSis: 0, qRet: 0, qPulm: 0, qVp: 0,
+    qMit: 0, qMitReg: 0, qTri: 0, qAo: 0, qPul: 0, qSis: 0, qRet: 0, qPulm: 0, qVp: 0,
     vMit: false, vTri: false, vAo: false, vPul: false,
     nLatido: 0, fase: 'G', _aoAbrio: false, _aoCerro: false, _mitAbrio: false, _pviPrev: 0,
     // barorreflejo: PAM que "siente" el seno carotídeo y efecto de cada brazo (0 = sin cambio)
@@ -108,7 +111,7 @@ export function crearMotor(ajustes = {}) {
     const T = periodo, k = Math.sqrt(T / (60 / 70));
     const tl = s.tLatido;
     const eAur = activacion(tl, 0.5 * p.tsAur * k, 0.5 * p.tsAur * k);
-    const eVen = activacion(tl - p.pr, 0.75 * p.tsVen * k, 0.25 * p.tsVen * k);
+    const eVen = activacion(tl - p.pr, p.fSubida * p.tsVen * k, (1 - p.fSubida) * p.tsVen * k, p.qSubida);
     s.eAur = eAur; s.eVen = eVen;
     const vCor = s.vad + s.vvd + s.vai + s.vvi + p.liquidoPeri;
     s.pperi = p.kPeri * Math.exp((vCor - p.v0Peri) / p.phiPeri);
@@ -132,6 +135,9 @@ export function crearMotor(ajustes = {}) {
     s.qTri = s.pad > s.pvd ? (s.pad - s.pvd) / p.rTricus : 0;
     s.qPul = s.pvd > s.pap ? (s.pvd - s.pap) / p.rPulmonar : 0;
     s.qMit = s.pai > s.pvi ? (s.pai - s.pvi) / p.rMitral : 0;
+    // reflujo VI → AI por el orificio regurgitante (raíz suavizada cerca de 0 para no romper Euler)
+    const dpReg = s.pvi - s.pai;
+    s.qMitReg = p.eroaMitral > 0 && dpReg > 0 ? p.eroaMitral * 50 * dpReg / Math.sqrt(dpReg + 0.25) : 0;
     // aórtica: abre por gradiente; abierta, el flujo tiene inercia y puede invertirse un instante;
     // cierra cuando el reflujo acumulado llega al volumen de cierre
     if (!s.vAo) { if (s.pvi > s.paoDist) { s.vAo = true; s.reflujoAo = 0; } }
@@ -169,8 +175,8 @@ export function crearMotor(ajustes = {}) {
     s.vvd += (s.qTri - s.qPul) * dt;
     s.vap += (s.qPul - s.qPulm) * dt;
     s.vvp += (s.qPulm - s.qVp) * dt;
-    s.vai += (s.qVp - s.qMit) * dt;
-    s.vvi += (s.qMit - s.qAo) * dt;
+    s.vai += (s.qVp - s.qMit + s.qMitReg) * dt;
+    s.vvi += (s.qMit - s.qAo - s.qMitReg) * dt;
     s.vao += (s.qAo - s.qSis) * dt;
     s.vven += (s.qSis - s.qRet) * dt;
     s.t += dt; s.tLatido += dt;
@@ -207,14 +213,14 @@ export function crearMotor(ajustes = {}) {
     return {
       t: +s.tLatido.toFixed(4), pvi: s.pvi, pai: s.pai, pao: s.pao, vvi: s.vvi,
       pvd: s.pvd, pad: s.pad, pap: s.pap, vvd: s.vvd, vai: s.vai, vad: s.vad,
-      qAo: s.qAo, qMit: s.qMit, qPul: s.qPul, qTri: s.qTri, pven: s.pven, pvp: s.pvp,
+      qAo: s.qAo, qMit: s.qMit, qMitReg: s.qMitReg, qPul: s.qPul, qTri: s.qTri, pven: s.pven, pvp: s.pvp,
       pperi: s.pperi, eVen: s.eVen, eAur: s.eAur, fase: s.fase,
       vMit: s.vMit, vAo: s.vAo, vTri: s.vTri, vPul: s.vPul,
     };
   }
 
   function nuevoAcum() {
-    return { dt: 0, pao: 0, pad: 0, pai: 0, pap: 0, pven: 0, pvp: 0, qAo: 0, qPul: 0,
+    return { dt: 0, pao: 0, pad: 0, pai: 0, pap: 0, pven: 0, pvp: 0, qAo: 0, qPul: 0, qReg: 0,
       paoMax: -1, paoMin: 1e9, papMax: -1, papMin: 1e9, pviMax: -1, pvdMax: -1,
       vviMax: -1, vviMin: 1e9, vvdMax: -1, vvdMin: 1e9, padMax: -1, paiMax: -1,
       pviEnMitralCierre: null, ultimoMit: false, ultimoAo: false, ultimoPul: false, ultimoTri: false,
@@ -224,7 +230,7 @@ export function crearMotor(ajustes = {}) {
   function acumular(dt) {
     const a = acum;
     a.dt += dt; a.pao += s.pao * dt; a.pad += s.pad * dt; a.pai += s.pai * dt; a.pap += s.pap * dt;
-    a.pven += s.pven * dt; a.pvp += s.pvp * dt; a.qAo += s.qAo * dt; a.qPul += s.qPul * dt; a.pperi += s.pperi * dt;
+    a.pven += s.pven * dt; a.pvp += s.pvp * dt; a.qAo += s.qAo * dt; a.qReg += s.qMitReg * dt; a.qPul += s.qPul * dt; a.pperi += s.pperi * dt;
     a.paoMax = Math.max(a.paoMax, s.pao); a.paoMin = Math.min(a.paoMin, s.pao);
     a.papMax = Math.max(a.papMax, s.pap); a.papMin = Math.min(a.papMin, s.pap);
     a.pviMax = Math.max(a.pviMax, s.pvi); a.pvdMax = Math.max(a.pvdMax, s.pvd);
@@ -253,6 +259,9 @@ export function crearMotor(ajustes = {}) {
       paps: a.papMax, papd: a.papMin, papm: a.pap / T,
       pvi_max: a.pviMax, pvd_max: a.pvdMax,
       edv: a.vviMax, esv: a.vviMin, vs, fe: vs / a.vviMax,
+      // insuficiencia mitral: volumen y fracción regurgitantes; vs es el volumen anterógrado (aorta) y la FE
+      // total cuenta lo que sale por las dos vías (sin insuficiencia, ≈ fe)
+      vReg: a.qReg, fr: a.qReg / Math.max(1e-6, a.qReg + vs), feTotal: (a.vviMax - a.vviMin) / a.vviMax,
       edvD: a.vvdMax, esvD: a.vvdMin, vsD, feD: vsD / a.vvdMax,
       ptdvi: a.pviEnMitralCierre,       // presión al cerrar la mitral ≈ PTDVI
       gc, ic: gc / p.sc,

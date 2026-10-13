@@ -27,7 +27,7 @@ const o = m.onda, u = m.ultimo;
 const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const f=(x,d=0)=>x==null?'—':(+x).toFixed(d).replace('.',',');
 document.getElementById('tabla').innerHTML='<tr><th>Variable</th><th>Modelo</th><th>Referencia</th></tr>'+evaluar(u,o).map(r=>
- '<tr><td>'+r.nombre+'</td><td class="'+(r.ok?'ok':(r.pendiente?'pend':'bad'))+'">'+f(r.v,r.dec??0)+' '+r.unidad+(r.ok?' ✓':r.pendiente?' · pendiente':' ✗')+'</td><td class="muted">'+r.texto+'<span class="fuente">'+(r.origen==='ficha'?'ficha · '+r.fuente:'fisiología general')+'</span></td></tr>').join('');
+ '<tr><td>'+r.nombre+'</td><td class="'+(r.ok?'ok':(r.pendiente?'pend':'bad'))+'">'+f(r.v,r.dec??0)+' '+r.unidad+(r.ok?' ✓':r.pendiente?' · pendiente':' ✗')+'</td><td class="muted">'+r.texto+'<span class="fuente">'+(r.origen==='ficha'?'ficha · '+r.fuente:r.origen==='atlas'?r.fuente:'fisiología general')+'</span></td></tr>').join('');
 const T=u.periodo;
 function ejes(c,x0,y0,w,h,xmax,ymin,ymax,ylab,xlab){c.strokeStyle=css('--line');c.lineWidth=2;c.strokeRect(x0,y0,w,h);c.fillStyle=css('--muted');c.font='28px Georgia';
  for(let v=ymin;v<=ymax;v+=(ymax-ymin)/5){const y=y0+h-(v-ymin)/(ymax-ymin)*h;c.fillText(f(v),x0-70,y+10);c.beginPath();c.moveTo(x0,y);c.lineTo(x0+w,y);c.strokeStyle=css('--line');c.globalAlpha=.4;c.stroke();c.globalAlpha=1}

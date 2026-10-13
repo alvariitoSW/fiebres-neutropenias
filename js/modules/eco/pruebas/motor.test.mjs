@@ -11,7 +11,7 @@ const u = normal.ultimo, o = normal.onda;
 
 // --- Cifras del latido normal frente a su referencia (ficha de la app o fisiología general) ---
 for (const r of evaluar(u, o)) {
-  const nombre = `latido normal · ${r.nombre}: ${r.v.toFixed(r.dec ?? 0)} ${r.unidad} (ref. ${r.texto}, ${r.origen === 'ficha' ? r.fuente : 'fisiología general'})`;
+  const nombre = `latido normal · ${r.nombre}: ${r.v.toFixed(r.dec ?? 0)} ${r.unidad} (ref. ${r.texto}, ${r.fuente ?? 'fisiología general'})`;
   if (r.pendiente) {
     test(nombre, { todo: 'pendiente de calibrar: ' + r.pendiente }, () => {
       assert.ok(r.ok, 'fuera de rango (ya se sabía)');

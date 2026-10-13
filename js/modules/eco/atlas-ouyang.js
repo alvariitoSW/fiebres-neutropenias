@@ -87,6 +87,7 @@ export const ATLAS_ESCENARIO = {
     hipertrofia: [enlace('fill'), enlace('loop')],
     dilatada: [enlace('eject'), enlace('loop')],
     tep: [enlace('rv')],
+    normal: [enlace('cycle'), enlace('loop')],
 };
 // Para cada modo o medida, su capítulo.
 export const ATLAS_MODO = {

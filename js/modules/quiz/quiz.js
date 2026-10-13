@@ -332,7 +332,11 @@ export function initQuiz({ triggerId, banco, temas }) {
         const bloqueDirecto = trigger.dataset.quizBloque;
         const elegir = 'quizElegir' in trigger.dataset;
         listaBloques = null;
-        if (temas && temas.length > 0 && trigger.dataset.quizBloques) {
+        // data-quiz-tema: empieza ya con las preguntas de un solo tema (el botón puede cambiarlo antes del clic,
+        // como el "Repasar este capítulo" del Atlas de ecocardiografía, que lo fija al abrir cada capítulo)
+        if (trigger.dataset.quizTema) {
+            empezar(banco.filter(p => p.tema === trigger.dataset.quizTema));
+        } else if (temas && temas.length > 0 && trigger.dataset.quizBloques) {
             mostrarPantallaQuiz(false);
             renderNivelLista(trigger.dataset.quizBloques.split('|'), trigger.dataset.quizTitulo || 'Repaso');
         } else if (temas && temas.length > 0 && asigDirecta && elegir) {

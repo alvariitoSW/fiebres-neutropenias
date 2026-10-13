@@ -1,0 +1,34 @@
+<p class="at-entradilla">Cada línea de una imagen ecocardiográfica sale de un pulso corto de ultrasonido y de los ecos que vuelven desde las interfaces de los tejidos. El ecógrafo mide cuándo llega cada eco y lo convierte en profundidad.</p>
+<div class="card at-figura" data-figura="pulso"></div>
+<div class="at-texto">
+    <h4>Tiempo de llegada del eco y profundidad</h4>
+    <p>El ecógrafo supone que el sonido viaja a <b>1.540 m/s</b> en todo el tejido blando<sup class="at-cita" data-ref="iaea2014"></sup>. Calcula la profundidad como velocidad × tiempo ÷ 2, porque el pulso va hasta el reflector y vuelve<sup class="at-cita" data-ref="iaea2014"></sup>. El viaje de ida y vuelta tarda <span class="hl">unos 13 µs por cada centímetro</span> de profundidad, así que el eco de un reflector a 10 cm llega a los ~130 µs<sup class="at-cita" data-ref="efrimescu2024"></sup>.</p>
+    <h4>Longitud de onda y resolución axial</h4>
+    <p class="at-ecuacion">longitud de onda = velocidad ÷ frecuencia · resolución axial = ciclos × longitud de onda ÷ 2</p>
+    <p>A 7 MHz la longitud de onda es de unos 0,22 mm<sup class="at-cita" data-ref="openstax2022"></sup>. La resolución axial es la mitad de la longitud espacial del pulso, porque el eco hace un viaje de ida y vuelta<sup class="at-cita" data-ref="iaea2014"></sup>. Una frecuencia más alta o menos ciclos por pulso acortan el pulso, y así dos reflectores más juntos a lo largo del haz se ven como dos ecos separados (el zoom de la figura).</p>
+    <h4>Impedancia acústica y reflexión</h4>
+    <p>La impedancia acústica es el producto de la densidad del tejido por la velocidad del sonido<sup class="at-cita" data-ref="iaea2014"></sup>. En cada interfaz, la fracción reflejada de la intensidad incidente es ((Z2 − Z1) ÷ (Z2 + Z1))². Una interfaz grasa-músculo refleja alrededor del 1,4% de la intensidad<sup class="at-cita" data-ref="openstax2022"></sup>. Una interfaz entre tejido blando y aire refleja casi toda la intensidad, así que <span class="hl-rojo">el pulmón bloquea el haz</span> y detrás de él no se forma imagen.</p>
+    <details class="nota-plegable">
+        <summary>Nota de fidelidad: 1,4% o 1,1%</summary>
+        <p>El 1,4% sale de la tabla de OpenStax (grasa 1,34 MRayl). La figura usa la tabla del IAEA (grasa 1,38, músculo 1,70 MRayl), con la que la misma interfaz refleja ((1,70 − 1,38) ÷ 3,08)² ≈ <b>1,1%</b>. Son dos tablas de libro distintas; ninguna está mal. El atlas original mezcla las dos sin decirlo.</p>
+    </details>
+    <h4>Atenuación y profundidad de penetración</h4>
+    <p>La absorción y la dispersión en los tejidos atenúan el pulso, y la atenuación aumenta aproximadamente en proporción a la frecuencia<sup class="at-cita" data-ref="iaea2014"></sup>. El coeficiente medio de libro para el tejido blando es de <b>0,5 dB por cm y por MHz</b>; en la sangre es mucho menor (0,17 dB/cm a 1 MHz) y en el músculo mayor (1,2 dB/cm)<sup class="at-cita" data-ref="iaea2014"></sup>. En la figura, la atenuación se suma capa a capa a lo largo del haz.</p>
+    <ul>
+        <li>Los estudios transtorácicos del adulto usan frecuencias de emisión de <b>2,0 a 5,0 MHz</b><sup class="at-cita" data-ref="mitchell2019"></sup>.</li>
+        <li>La ASE recomienda la frecuencia más alta que aún penetre hasta la profundidad de interés<sup class="at-cita" data-ref="mitchell2019"></sup>.</li>
+        <li>La compensación de ganancia en profundidad (TGC) amplifica los ecos tardíos de las estructuras profundas para compensar la atenuación<sup class="at-cita" data-ref="mitchell2019"></sup>. También amplifica el ruido.</li>
+    </ul>
+    <details class="nota-plegable">
+        <summary>Qué es de la fuente y qué es del modelo</summary>
+        <p>Las capas del corazón son las del corazón del simulador en telediástole (tabique y pared posterior de 9,5 mm, VI de 53 mm), así que este pulso atraviesa el mismo corazón que late en la pestaña Simulador. El grosor de la pared torácica, el moteado del músculo y el suelo de ruido (−80 dB, del que sale la «profundidad útil») son ilustrativos.</p>
+    </details>
+    <div class="at-clave">
+        <h4>Puntos clave</h4>
+        <ol>
+            <li>La profundidad se calcula con el tiempo de llegada del eco: el viaje de ida y vuelta tarda unos 13 µs por centímetro.</li>
+            <li>Una frecuencia más alta mejora la resolución axial y reduce la penetración.</li>
+            <li>Las grandes diferencias de impedancia en una interfaz dan ecos brillantes. El aire y el hueso bloquean el haz.</li>
+        </ol>
+    </div>
+</div>

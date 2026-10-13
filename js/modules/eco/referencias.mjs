@@ -2,10 +2,12 @@
 // de la página del latido (latido.html): ninguna marca ✓ está escrita a mano.
 //
 // origen: 'ficha'  → la referencia está en una ficha de la app (se cita cuál y su PDF en docs/)
+//         'atlas'  → la cita un capítulo del Atlas de ecocardiografía de la app (con su fuente original)
 //         'general' → fisiología general de texto, sin ficha propia en la app todavía
 // pendiente: el motor todavía no cumple esa referencia; se calibrará en la fase de cifras. Las pruebas lo
 //            muestran como "pendiente" (no fallan), pero si un día pasa a cumplirse, avisan para quitar la marca.
 const F5 = 'Fisiopatología UCI · Cardiología, Ficha 5 (El Libro Azul, cap. 5)';
+const ALH = 'Alhakak 2025 (1.969 adultos sanos, Copenhagen City Heart Study; media ± 2 DE), en Atlas · Ciclo cardíaco';
 const F10 = 'Fisiopatología UCI · Cardiología, Ficha 10 (El Libro Azul, cap. 10, tabla de macrohemodinamia)';
 
 const extremos = (o, k) => [Math.min(...o.map(x => x[k])), Math.max(...o.map(x => x[k]))];
@@ -26,16 +28,15 @@ export const REFERENCIAS = [
   { id: 'pad', nombre: 'Presión arterial diastólica', unidad: 'mmHg', valor: (u) => u.pad_, min: 65, max: 85, texto: '~80', origen: 'general' },
   { id: 'pam', nombre: 'PAM', unidad: 'mmHg', valor: (u) => u.pam, min: 70, max: 105, texto: '70-105', origen: 'general' },
   { id: 'edv', nombre: 'VI: volumen telediastólico', unidad: 'mL', valor: (u) => u.edv, min: 100, max: 150, texto: '100-150', origen: 'general' },
-  { id: 'vs', nombre: 'VI: volumen sistólico', unidad: 'mL', valor: (u) => u.vs, min: 60, max: 100, texto: '60-100', origen: 'general' },
+  { id: 'vs', nombre: 'VI: volumen sistólico', unidad: 'mL', valor: (u) => u.vs, min: 58, max: 134, texto: '96 ± 19', origen: 'atlas', fuente: ALH },
   { id: 'fe', nombre: 'Fracción de eyección VI', unidad: '%', valor: (u) => u.fe * 100, min: 55, max: 70, texto: '55-70', origen: 'general' },
   { id: 'ptdvi', nombre: 'PTDVI', unidad: 'mmHg', valor: (u) => u.ptdvi, min: 5, max: 12, texto: '5-12', origen: 'general', dec: 1 },
   { id: 'fed', nombre: 'Fracción de eyección VD', unidad: '%', valor: (u) => u.feD * 100, min: 45, max: 62, texto: '45-60', origen: 'general' },
   { id: 'pmls', nombre: 'Presión media de llenado sistémico', unidad: 'mmHg', valor: (u) => u.pmls, min: 5, max: 10, texto: '~7', origen: 'general', dec: 1 },
   { id: 'ppc', nombre: 'Presión de perfusión coronaria', unidad: 'mmHg', valor: (u) => u.ppc, min: 50, max: Infinity, texto: '>50', origen: 'general' },
-  { id: 'tcivol', nombre: 'Contracción isovolumétrica', unidad: 'ms', valor: (u) => (u.tAoAbre - u.tS1) * 1000, min: 50, max: 90, texto: '50-90', origen: 'general',
-    pendiente: 'el motor da ~99 ms: la presión del VI sube algo despacio' },
-  { id: 'teyec', nombre: 'Eyección', unidad: 'ms', valor: (u) => (u.tS2 - u.tAoAbre) * 1000, min: 250, max: 300, texto: '250-300', origen: 'general' },
-  { id: 'trivol', nombre: 'Relajación isovolumétrica', unidad: 'ms', valor: (u) => (u.tMitAbre - u.tS2) * 1000, min: 60, max: 100, texto: '60-100', origen: 'general' },
+  { id: 'tcivol', nombre: 'Contracción isovolumétrica', unidad: 'ms', valor: (u) => (u.tAoAbre - u.tS1) * 1000, min: 20, max: 60, texto: '40 ± 10', origen: 'atlas', fuente: ALH },
+  { id: 'teyec', nombre: 'Eyección', unidad: 'ms', valor: (u) => (u.tS2 - u.tAoAbre) * 1000, min: 246, max: 338, texto: '292 ± 23', origen: 'atlas', fuente: ALH },
+  { id: 'trivol', nombre: 'Relajación isovolumétrica', unidad: 'ms', valor: (u) => (u.tMitAbre - u.tS2) * 1000, min: 58, max: 134, texto: '96 ± 19', origen: 'atlas', fuente: ALH },
   { id: 'aimin', nombre: 'Aurícula izquierda (mínimo)', unidad: 'mL', valor: (u, o) => extremos(o, 'vai')[0], min: 15, max: 35, texto: '~20-30', origen: 'general' },
   { id: 'aimax', nombre: 'Aurícula izquierda (máximo)', unidad: 'mL', valor: (u, o) => extremos(o, 'vai')[1], min: 40, max: 65, texto: '~50-60', origen: 'general' },
   { id: 'admin', nombre: 'Aurícula derecha (mínimo)', unidad: 'mL', valor: (u, o) => extremos(o, 'vad')[0], min: 10, max: 30, texto: '~15-25', origen: 'general' },

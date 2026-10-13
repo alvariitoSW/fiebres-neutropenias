@@ -7,25 +7,38 @@
 //   hace la navegación en home/index.js) deja el simulador en esa vista, ese escenario o esa medida del modo M.
 // - "Qué mirar en esta vista" copia líneas reales de otras fichas (que-mirar.js).
 import { QUE_MIRAR, ESCENARIO_TIPO, FORMA_NOTA } from './que-mirar.js';
-import { ATLAS_URL, ATLAS_REPO, ATLAS_PARTES, ATLAS_VISTA, ATLAS_ESCENARIO, ATLAS_MODO, atlasUrl } from './atlas-ouyang.js';
+import { ATLAS_VISTA, ATLAS_ESCENARIO, ATLAS_MODO, atlasUrl } from './atlas-ouyang.js';
+import { initAtlas, enApp } from './atlas/atlas.js';
+import { preguntasAtlasEco, temasAtlasEco } from '../../data/eco-atlas-preguntas.js';
 
-// Sin banco de repaso propio todavía (main.js fusiona los de todas las especialidades).
-export const quizTriggerId = [];
-export const quizBanco = [];
-export const quizTemas = [];
+// Repaso del Atlas de ecocardiografía (main.js fusiona los de todas las especialidades).
+export const quizTriggerId = ['btn-eco-atlas-repasar', 'btn-eco-atlas-repasar-todo'];
+export const quizBanco = preguntasAtlasEco;
+export const quizTemas = temasAtlasEco.map(t => ({ ...t, asignatura: 'Eco cardíaca', bloque: 'Atlas de ecocardiografía' }));
 
 export function init() {
     const raiz = document.getElementById('cv-sim');
     if (!raiz) return { volverAlMenu() {}, irAFicha() {} };
-    pintarAtlas();
     let sim = null, carga = null, visible = false;
     let pendiente = {};
+
+    // ---- Dos secciones: el simulador y el Atlas de ecocardiografía (atlas/atlas.js) ----
+    const secAtlas = document.getElementById('cv-seccion-atlas');
+    const atlas = initAtlas({ alAbrirSimulador: (modo) => { seccion('sim'); pendiente = { modo }; cargar(); aplicarPendiente(); raiz.scrollIntoView({ block: 'start' }); } });
+    function seccion(k) {
+        const enAtlas = k === 'atlas';
+        raiz.hidden = enAtlas; secAtlas.hidden = !enAtlas;
+        document.querySelectorAll('.cv-secciones [data-seccion]').forEach(b => { const on = b.dataset.seccion === k; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+        enAtlas ? atlas.mostrar() : atlas.ocultar();
+    }
+    document.querySelector('.cv-secciones').addEventListener('click', (e) => { const b = e.target.closest('[data-seccion]'); if (b) seccion(b.dataset.seccion); });
 
     function aplicarPendiente() {
         if (!sim) return;
         if (pendiente.escenario && pendiente.escenario !== sim.escenarioActual) sim.escenario(pendiente.escenario);
         if (pendiente.vista && pendiente.vista !== sim.vistaActual) sim.vista(pendiente.vista);
         if (pendiente.medir) { sim.modo('M'); sim.medir(pendiente.medir); }
+        if (pendiente.modo) sim.modo(pendiente.modo);
         pendiente = {};
         pintarAtlasAqui();
     }
@@ -60,22 +73,15 @@ export function init() {
 
     // Enlaces desde otras fichas: la navegación la hace el listener de [data-especialidad] de home.
     document.addEventListener('click', (e) => {
+        const a = e.target.closest('[data-eco-atlas]');
+        if (a) { seccion('atlas'); a.dataset.ecoAtlas ? atlas.abrir(a.dataset.ecoAtlas) : atlas.verIndice(); return; }
         const b = e.target.closest('[data-eco-vista], [data-eco-escenario], [data-eco-medir]');
         if (!b) return;
+        seccion('sim');
         pendiente = { vista: b.dataset.ecoVista, escenario: b.dataset.ecoEscenario, medir: b.dataset.ecoMedir };
         aplicarPendiente();
     });
 
-    // ---- The Heart by Ultrasound (atlas-ouyang.js): solo enlaces a su web ----
-    function pintarAtlas() {
-        document.getElementById('cv-atlas-abrir').href = ATLAS_URL;
-        document.getElementById('cv-atlas-repo').href = ATLAS_REPO;
-        document.getElementById('cv-atlas-lista').innerHTML = ATLAS_PARTES.map(p => `
-            <p class="cv-atlas-parte">${p.parte}</p>
-            <ul class="cv-atlas-lista">${p.caps.map(([clave, n, titulo, resumen]) => `
-                <li><a href="${atlasUrl(clave)}" target="_blank" rel="noopener"><b>${n}</b> ${titulo} ↗</a><span>${resumen}</span></li>`).join('')}
-            </ul>`).join('');
-    }
     // "En el atlas": los capítulos de lo que se ve ahora (vista, escenario, modo o medida), sin repetir.
     function pintarAtlasAqui() {
         const caja = document.getElementById('cv-atlas-aqui');
@@ -86,8 +92,10 @@ export function init() {
             ...(ATLAS_MODO[medir] || ATLAS_MODO[modo] || [])];
         const vistos = new Set();
         const enlaces = lista.filter(e => !vistos.has(e.clave) && vistos.add(e.clave));
-        caja.innerHTML = enlaces.length ? `<p class="cv-muted">En <i>The Heart by Ultrasound</i> (en inglés):</p>
-            <div class="cv-fila">${enlaces.map(e => `<a class="cv-mini" href="${atlasUrl(e.clave)}" target="_blank" rel="noopener">${e.titulo} ↗</a>`).join('')}</div>` : '';
+        caja.innerHTML = enlaces.length ? `<p class="cv-muted">En el Atlas de ecocardiografía (los marcados ↗, aún solo en el original en inglés):</p>
+            <div class="cv-fila">${enlaces.map(e => enApp(e.clave)
+                ? `<button type="button" class="cv-mini" data-eco-atlas="${e.clave}">📖 ${e.titulo}</button>`
+                : `<a class="cv-mini" href="${atlasUrl(e.clave)}" target="_blank" rel="noopener">${e.titulo} ↗</a>`).join('')}</div>` : '';
     }
     raiz.addEventListener('click', (e) => { if (e.target.closest('[data-modo], [data-medir]')) requestAnimationFrame(pintarAtlasAqui); });
 

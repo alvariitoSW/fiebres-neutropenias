@@ -18,7 +18,7 @@ en `lab/circulacion/`), como la especialidad «Eco cardíaca»: ver «En la app�
 node --test 'js/modules/eco/pruebas/*.test.mjs'
 ```
 
-Tarda ~2 min (127 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta. Las de navegador
+Tarda ~2 min (132 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta. Las de navegador
 sirven el repositorio con un servidor propio y abren `laboratorio.html`.
 
 - `motor.test.mjs` — cada cifra del latido normal frente a su referencia (`referencias.mjs`), el volumen
@@ -61,6 +61,9 @@ sirven el repositorio con un servidor propio y abren `laboratorio.html`.
   se curva en sístole, con corte en «D» y la pared con su grosor; la cavidad dibujada con el tabique aplanado conserva
   el volumen del motor (±4 %); y las formas se construyen sin valores no finitos y se precalculan y mezclan (nunca con
   otra masa del VI).
+- `atlas.test.mjs` — la física de los capítulos 01-03 (13 µs/cm, λ, resolución axial, frecuencia de imagen, cos θ,
+  Nyquist, aliasing) y que el ciclo y el asa del motor cumplen su texto (Alhakak 2025; dirección de cada corazón;
+  la IM sin contracción isovolumétrica); toda cita de un capítulo existe en la bibliografía.
 - `navegador.test.mjs` — el corazón se dibuja, la barra del ciclo lleva a cada fase, el dedo desplaza la
   página en vertical y gira en horizontal, un escenario cambia la circulación, sin WebGL se ve la imagen
   fija, la página del latido no deja ninguna cifra fuera de rango sin marcar, y **en cada fotograma el corazón,
@@ -396,6 +399,66 @@ telediástole (`medidasCorazon` en `ecografia.mjs`) y un botón a la línea de l
 - **Accesos** `data-eco-escenario="hipertrofia|dilatada|tep"` desde Fisiopatología UCI · Cardiología (Ficha 3 y las del
   VD), Merino Cardiología (IC aguda) y Merino Neumología (ecocardiografía en la EP).
 
+## Atlas de ecocardiografía (`atlas/`, octubre 2026)
+
+A petición explícita del usuario («haz ingeniería reversa para conseguir unificar ambos proyectos y ponerlo en
+español, pero manteniendo y siendo fiel a la fisiología»). Eco cardíaca tiene dos secciones (`.cv-secciones`):
+**Simulador** y **Atlas**. El atlas es *The Heart by Ultrasound* en español: su índice de 30 capítulos, en su orden;
+los que ya están en la app se abren aquí, los demás siguen enlazando al original en inglés.
+
+- **Qué se trae y qué no.** El texto se traduce (con el permiso del autor, citado en cada capítulo) y la bibliografía
+  es la suya (`atlas/referencias.js`: las 199 referencias de su `src/refs.js`, con DOI y PMID). El código no se copia:
+  cada figura se reconstruye sobre los motores de la app. Así hay **una sola fisiología**: el ciclo y el asa salen del
+  mismo motor del latido que mueve el corazón del simulador, y lo que el atlas dice de ella se comprueba en pruebas.
+- **Unificar exigió corregir el motor**, no el texto:
+  - **Contracción isovolumétrica.** El capítulo del ciclo cita a Alhakak 2025 (1.969 adultos: 40 ± 10, 292 ± 23 y
+    96 ± 19 ms). El motor daba ~99 ms. Se cambió la forma de la activación ventricular (`fSubida` 0,62, la parte
+    de subida, y `qSubida` 0,55, un exponente que la hace más rápida al principio). Hoy da ~42/275/100 ms.
+    `referencias.mjs` lleva las tres cifras con `origen: 'atlas'`.
+  - **Ees del VI de 3,2 a 2,9.** Con la nueva activación el ITV del TSVI se salía por poco de la Ficha 11.
+  - **Insuficiencia mitral.** El motor la gana como orificio regurgitante (`eroaMitral`, cm²). El flujo sigue la
+    ecuación del orificio con Bernoulli: v = √(ΔP/4), y Q = EROA · 50 · √ΔP mL/s. Con 0,4 cm² da ~70 mL de volumen
+    regurgitante. `ultimo` da `vReg`, `fr` y `feTotal`. Con 0 no cambia nada.
+  - **Una prueba de TAPSE** muestreaba por el redondeo del tiempo y se quedaba sin muestras: ahora va por índice.
+- **Archivos.**
+
+  | Archivo | Qué es |
+  |---|---|
+  | `atlas.js` | Controlador: pinta el índice, abre los capítulos y numera las citas |
+  | `cap-*.html` | Texto de cada capítulo. Se piden al abrirlo, no al arrancar |
+  | `figura.mjs` | Piezas comunes: lienzo, mandos, lecturas y animación solo en pantalla |
+  | `pulso.mjs` | Figura del 01 Pulso |
+  | `imagen.mjs` | Figura del 02 Imagen |
+  | `efecto-doppler.mjs` | Figura del 03 Doppler |
+  | `ciclo.mjs` | Figura del 06 Ciclo cardíaco |
+  | `asa.mjs` | Figura del 07 Asa presión-volumen |
+
+  Cada figura exporta `montar(contenedor)` → `{ parar() }`. La lógica pura (`fisica`, `frecuenciaImagen`, `doppler`,
+  `duraciones`, `asentar`, `medidasAsa`) se exporta y la prueba `pruebas/atlas.test.mjs`.
+- **Capítulos en la app.**
+  - **01 Pulso.** La línea paraesternal atraviesa el corazón del simulador en telediástole: tabique 9,5 mm, VI 53 mm.
+    Muestra el modo A, un zoom de la resolución axial con dos reflectores a 0,4 mm, la TGC y la profundidad útil.
+    Nota de fidelidad: la reflexión grasa-músculo da 1,1% con la tabla del IAEA y 1,4% con la de OpenStax.
+  - **02 Imagen.** Un maniquí sectorial construido línea a línea, con su frecuencia de imagen exacta y cuatro
+    artefactos.
+  - **03 Doppler.** Ecuación Doppler, cos θ, Nyquist = c²/(8·prof·f0), pulsado, continuo y color con aliasing.
+  - **06 Ciclo cardíaco.** El Wiggers y el asa del motor (`crearDiagramas`), con un cursor de tiempo tras la onda R
+    y las duraciones del motor frente a Alhakak.
+  - **07 Asa presión-volumen.** Cinco corazones y cuatro mandos. Cada uno cambia un parámetro del motor (Ees, curva
+    diastólica, resistencia sistémica, volumen) y el motor corre hasta asentarse, sin barorreflejo. Pinta la recta
+    de Ea y compara la FE de la fórmula (V0 = 0) con la del motor. La IM usa el orificio regurgitante.
+- **Navegación.**
+  - `data-eco-atlas="clave"`, junto a `data-especialidad="eco"`, abre un capítulo desde cualquier ficha. Hoy hay
+    accesos en Fisiopatología UCI · Cardiología, Fichas 1 y 3.
+  - En «Qué mirar» del simulador, los capítulos que ya están en la app se abren aquí.
+  - `[data-at-sim="M"|"D"]` dentro de un capítulo lleva al simulador en ese modo.
+  - «Repasar este capítulo» usa `data-quiz-tema`, un atributo nuevo y genérico de `quiz.js`.
+  - Banco: `js/data/eco-atlas-preguntas.js`, 26 preguntas, asignatura Eco cardíaca.
+- **Siguiente, por orden.** 08 Hemodinámica por Doppler (continuidad, Bernoulli, PSVD, PAD por la VCI: el simulador
+  ya tiene casi todo); 09-10 función sistólica y diastólica; 14 VD; las válvulas, empezando por la IM (el motor ya la
+  tiene); pericardio. Las vistas (04) y la ETE (05) chocan con la anatomía congelada y la sonda libre ya existe, así
+  que van al final. Los capítulos de enfermedad necesitan la forma de enfermedad correspondiente en el corazón.
+
 ## Rendimiento medido
 
 En un móvil Android real (octubre 2026, pantalla de 90 Hz, calidad alta, sangre activada), **antes de las formas
@@ -439,15 +502,15 @@ licencia CC BY-SA 4.0 (el resto del simulador no). La cita también se muestra e
 
 ## Pendiente
 
-- **Calibrar** la RVS (el motor da ~1.450; la Ficha 5 dice 900-1200) y la contracción isovolumétrica
-  (~99 ms; fisiología general 50-90).
+- **Calibrar** la RVS (el motor da ~1.450; la Ficha 5 dice 900-1200). Choca con el ITV del TSVI (Ficha 11, 18-22 cm,
+  hoy ~21,9): subir el gasto para bajar la RVS sube el ITV, salvo que el TSVI del modelo sea algo más ancho.
 - **Erratas de la fuente sin nota en la app:** las dos tablas de patrones de shock de El Libro Azul
   (cap. 5, pág. 70 del PDF de la parte 1; cap. 10, Figura 2, pág. 33 de la parte 2) dan RVS «↑» o «N/↑»
   en el shock distributivo, y la del cap. 10 da ScvO₂ «↑» en el hipovolémico. Las fichas 5 y 10 las
   reproducen tal cual. Las pruebas usan la Tabla 14.1 de Merino (cap. 14), que no tiene ese problema.
-- **Doppler**: calibrar el TDE y la forma de la eyección del motor (ver «Doppler»); S > D en las suprahepáticas en
-  reposo; Doppler tisular (e', E/e' de la Ficha 5) y Doppler continuo; insuficiencias valvulares (el motor no tiene flujo
-  retrógrado por las válvulas).
+- **Doppler**: calibrar el TDE (~120 ms desde la calibración de la activación; Ficha 5, 140-250) y la forma de la eyección del motor (ver «Doppler»); S > D en las suprahepáticas en
+  reposo; Doppler tisular (e', E/e' de la Ficha 5) y Doppler continuo; insuficiencias valvulares en el simulador (el motor ya
+  tiene la mitral, `eroaMitral`, que usa el Atlas; falta el chorro en la eco y las otras válvulas).
 - **Abdomen**: ventilación mecánica (índice de distensibilidad de FATE) en el reloj respiratorio; el derrame del motor
   solo llega a PVC ~7,5, así que su VCI no sale «dilatada» (>21 mm) aunque ya no colapse un 50 %.
 - Más ideas de *The Heart by Ultrasound* por reconstruir: que una cifra mostrada nunca contradiga su grado.
@@ -463,5 +526,4 @@ licencia CC BY-SA 4.0 (el resto del simulador no). La cita también se muestra e
   se paran al tocar la raíz aórtica; un rayo casi tangente pasa de pararse a no pararse y un vértice salta hasta
   ~8 mm entre dos fotogramas. La mezcla lo suaviza (lo convierte en un cambio gradual entre dos formas), pero
   la geometría exacta (con corte o sin formas) lo sigue teniendo.
-- Referencia candidata para la contracción isovolumétrica: Alhakak AS et al. Clin Res Cardiol 2025;114:430-442
-  (doi 10.1007/s00392-023-02269-2), ~40 ms en adultos sanos; pendiente de tener el PDF para citarla.
+- **Atlas de ecocardiografía**: quedan 25 capítulos por pasar a la app (ver «Atlas de ecocardiografía»).

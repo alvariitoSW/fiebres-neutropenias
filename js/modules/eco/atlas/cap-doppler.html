@@ -1,0 +1,30 @@
+<p class="at-entradilla">El Doppler mide la velocidad de la sangre a partir del cambio de frecuencia de los ecos que vuelven. El ángulo entre el haz y el flujo, junto con el límite de Nyquist, decide qué velocidad puede dar el ecógrafo.</p>
+<div class="card at-figura" data-figura="doppler"></div>
+<div class="at-texto">
+    <h4>La ecuación Doppler</h4>
+    <p class="at-ecuacion">Δf = 2 × f0 × v × cos θ ÷ c</p>
+    <p>El flujo que se acerca al transductor produce un desplazamiento positivo de la frecuencia, y el que se aleja, uno negativo<sup class="at-cita" data-ref="quinones2002"></sup>. La velocidad del sonido en la ecuación es c = 1.540 m/s<sup class="at-cita" data-ref="quinones2002"></sup>. Para una velocidad de la sangre de ~1 m/s y frecuencias de varios MHz, el desplazamiento es de unos pocos kHz, dentro del rango audible<sup class="at-cita" data-ref="iaea2014"></sup>.</p>
+    <h4>El ángulo del haz con el flujo</h4>
+    <p>La medida Doppler cardíaca supone que el haz es paralelo al flujo (θ = 0)<sup class="at-cita" data-ref="quinones2002"></sup>. Un ángulo de 20° solo infraestima la velocidad un ~6%<sup class="at-cita" data-ref="mitchell2019"></sup>. A 60° el ecógrafo da la mitad de la velocidad real (por cálculo, cos 60° = 0,5). La ASE no recomienda la corrección de ángulo: hay que alinear el haz con el flujo, usar varias ventanas e informar la velocidad más alta<sup class="at-cita" data-ref="mitchell2019,quinones2002"></sup>.</p>
+    <h4>Doppler pulsado y límite de Nyquist</h4>
+    <p>El Doppler pulsado (PW) mide la velocidad a una sola profundidad, pero el eco de cada pulso tiene que volver antes de emitir el siguiente. La profundidad de la muestra decide la frecuencia de repetición de pulsos (PRF), y la velocidad más alta que se mide sin aliasing es <b>c² ÷ (8 × profundidad × f0)</b><sup class="at-cita" data-ref="iaea2014"></sup>. El límite de Nyquist es la mitad de la PRF; un flujo más rápido se enrolla al otro lado de la línea de base<sup class="at-cita" data-ref="quinones2002"></sup>.</p>
+    <ul>
+        <li>Una muestra más cerca del transductor o una frecuencia Doppler más baja suben el límite de Nyquist.</li>
+        <li>El Doppler pulsado de PRF alta añade volúmenes de muestra para subir el límite, pero introduce ambigüedad de profundidad<sup class="at-cita" data-ref="mitchell2019"></sup>.</li>
+        <li>El <b>Doppler continuo</b> (CW) no tiene límite de Nyquist, pero tampoco información de profundidad<sup class="at-cita" data-ref="mitchell2019"></sup>.</li>
+    </ul>
+    <h4>Doppler color</h4>
+    <p>El Doppler color muestra la velocidad media en muchos volúmenes de muestra<sup class="at-cita" data-ref="iaea2014"></sup>, con el flujo que se acerca en rojo y el que se aleja en azul<sup class="at-cita" data-ref="mitchell2019"></sup>. Como es una técnica pulsada, también tiene aliasing. La ASE sugiere una escala de 50 a 70 cm/s para el color de rutina y de unos 30 cm/s para flujos lentos<sup class="at-cita" data-ref="mitchell2019"></sup>. Una caja de color pequeña y superficial mantiene alta la frecuencia de imagen<sup class="at-cita" data-ref="mitchell2019"></sup>.</p>
+    <p>El ensanchamiento espectral no siempre indica flujo turbulento: un volumen de muestra grande o una ganancia alta también ensanchan el espectro<sup class="at-cita" data-ref="paeng2025,mitchell2019"></sup>.</p>
+    <h4>Doppler tisular</h4>
+    <p>El Doppler tisular mide la velocidad del miocardio y de los anillos mitral y tricuspídeo. El tejido se mueve despacio, por debajo de 20 cm/s, pero devuelve ecos fuertes, así que usa sus propios filtros y una escala por debajo de 25 cm/s<sup class="at-cita" data-ref="mitchell2019"></sup>. Desde la ventana apical registra las velocidades sistólica (s′), diastólica precoz (e′) y tardía (a′) del anillo<sup class="at-cita" data-ref="mitchell2019"></sup>; la e′ mitral sirve para la función diastólica y la S′ tricuspídea para la función del VD.</p>
+    <div class="cv-fila"><button type="button" class="cv-mini" data-at-sim="D">Probar el Doppler pulsado y el color en el simulador →</button></div>
+    <div class="at-clave">
+        <h4>Puntos clave</h4>
+        <ol>
+            <li>La velocidad medida es la velocidad real × cos θ, siendo θ el ángulo entre el haz y el flujo.</li>
+            <li>Una muestra más profunda o una frecuencia Doppler más alta bajan el límite de Nyquist.</li>
+            <li>Las velocidades altas se miden con Doppler continuo.</li>
+        </ol>
+    </div>
+</div>

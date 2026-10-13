@@ -10925,8 +10925,8 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
   `geometria.test.mjs` (cada vértice dentro del saco por paridad de un rayo, en todo el latido, extremos y con
   derrame); detectaba el fallo antiguo en la pared lateral. Se quitó el parche de la ecografía que evitaba pintar el
   pericardio sobre la pared. 91 pruebas, ~100 s. Detalle en `lab/circulacion/README.md` («Pericardio»).
-- **Pendiente:** calibrar RVS y contracción isovolumétrica (referencia candidata: Alhakak 2025, ~40 ms, pendiente
-  del PDF); erratas de El Libro Azul en las tablas de patrones de shock (RVS en el distributivo) que las fichas 5 y
+- **Pendiente:** calibrar la RVS (choca con el ITV del TSVI de la Ficha 11; ver el README); la contracción
+  isovolumétrica ya está calibrada (ver «Atlas de ecocardiografía» más abajo); erratas de El Libro Azul en las tablas de patrones de shock (RVS en el distributivo) que las fichas 5 y
   10 reproducen sin nota; saltos de hasta ~8 mm de la geometría exacta en la huella de las aurículas (rayos
   tangentes a la raíz aórtica); volver a medir los fps en el móvil (también con la ecografía); más ideas de
   echodemo (modo M, Doppler color, sonda libre, formas de enfermedad —choca con la anatomía congelada—, cifra
@@ -11084,6 +11084,30 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
   - **Accesos** `data-eco-escenario` desde la Ficha 3 y las fichas del VD de Fisiopatología UCI, desde Merino
     Cardiología (IC aguda) y desde Merino Neumología (EP).
   - **Pruebas**: `enfermedad.test.mjs`; en total, 127 (3 *todo*).
+
+- **Atlas de ecocardiografía (unificación con echodemo, octubre 2026)**, a petición explícita del usuario («haz
+  ingeniería reversa para conseguir unificar ambos proyectos y ponerlo en español, pero manteniendo y siendo fiel a la
+  fisiología»). Detalle en `js/modules/eco/README.md` («Atlas de ecocardiografía»).
+  - Eco cardíaca tiene ahora dos secciones: **Simulador** y **Atlas**.
+  - El atlas es *The Heart by Ultrasound* en español, con su índice de 30 capítulos. Los que ya están en la app se
+    abren dentro (hoy 5: 01 Pulso, 02 Imagen, 03 Doppler, 06 Ciclo cardíaco y 07 Asa P-V); los demás enlazan al
+    original en inglés.
+  - El texto se traduce, con permiso del autor, y la bibliografía es la suya (`atlas/referencias.js`). **El código no
+    se copia**: cada figura se reconstruye sobre los motores de la app.
+  - Hay **una sola fisiología**: el ciclo y el asa salen del motor del latido del simulador. Donde el texto y el motor
+    discrepaban, se corrigió el motor:
+    - contracción isovolumétrica calibrada con Alhakak 2025: de ~99 a ~42 ms (forma de la activación,
+      `fSubida`/`qSubida`);
+    - Ees del VI de 3,2 a 2,9, para que el ITV del TSVI siga en la Ficha 11;
+    - insuficiencia mitral nueva en el motor (`eroaMitral`, con la ecuación del orificio y Bernoulli). Vale 0 por
+      defecto.
+  - **Archivos**: `js/modules/eco/atlas/`; preguntas en `js/data/eco-atlas-preguntas.js` (26, asignatura Eco
+    cardíaca).
+  - **Accesos**: `data-eco-atlas="clave"` junto a `data-especialidad="eco"`. Por ejemplo, desde Fisiopatología UCI ·
+    Cardiología, Fichas 1 y 3.
+  - **Nuevo en `quiz.js`** (genérico): un trigger con `data-quiz-tema` empieza solo con ese tema.
+  - **Pruebas**: 132 (`pruebas/atlas.test.mjs` nueva).
+  - **Siguiente**: 08 Hemodinámica por Doppler, 09-10 Función, 14 VD y las válvulas.
 
 ## Cómo probar cambios
 
