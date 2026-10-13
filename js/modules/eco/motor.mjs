@@ -28,7 +28,7 @@ export const FASES = {
 export const BASE = {
   fc: 70,
   // cámaras: Ees sistólica (mmHg/mL), V0, A y B de la curva diastólica
-  vi: { ees: 2.9,  v0: 10, a: 1.8, b: 0.017 },
+  vi: { ees: 3.1,  v0: 10, a: 1.8, b: 0.017 },
   vd: { ees: 0.40, v0: 25, a: 2.0, b: 0.012 },
   ai: { ees: 0.70, v0: 5,  a: 0.20, b: 0.090 },
   ad: { ees: 0.70, v0: 5,  a: 0.15, b: 0.090 },
@@ -42,11 +42,19 @@ export const BASE = {
   // insuficiencia mitral: orificio regurgitante efectivo (cm²). 0 = válvula competente. El chorro sigue la
   // ecuación del orificio con Bernoulli simplificado: v (m/s) = √(ΔP/4) → Q (mL/s) = EROA · 50 · √ΔP
   eroaMitral: 0,
+  // estenosis aórtica: área efectiva del orificio (cm²; 0 = válvula normal, sin término de Bernoulli) y diámetro de
+  // la aorta ascendente (cm), del que depende la recuperación de presión. En la vena contracta cae 4v² (v = Q ÷ área);
+  // pasado el orificio, el chorro frena y recupera 4v² · 2r(1 − r), con r = área ÷ área de la aorta (Baumgartner 2017)
+  areaAortica: 0, dAorta: 3.0,
   // lecho sistémico (cAo/vuAo: aorta y grandes arterias, distal a la raíz)
   cAo: 1.5, vuAo: 700, rSis: 1.05, cVen: 160, vuVen: 2210, rRetorno: 0.02,
   // aorta proximal: impedancia característica (mmHg·s/mL), inercia del tracto de salida (mmHg·s²/mL)
   // y volumen de reflujo que cierra la válvula (mL)
   zAo: 0.03, lAo: 0.00025, vCierreAo: 1.5,
+  // efecto de la eyección (s/mL): resistencia interna del VI proporcional a su presión (Shroff), fisiología general.
+  // Con 0 el flujo aórtico pica a los ~40 ms con ~850 mL/s; con 0,001, a ~90 ms con ~400 mL/s (tiempo de
+  // aceleración y cociente pico/media ~1,6 de un tracto de salida normal). Valor ilustrativo, calibrado a eso
+  kEyec: 0.001,
   // barorreflejo: consigna de PAM, constantes de tiempo (s) y ganancias máximas (fracción; + al bajar la PAM)
   barorreflejo: true, pamConsigna: 100, tauSensor: 2.0,
   baro: { fc: { tau: 1.5, sube: 0.9, baja: 0.35 }, r: { tau: 6, sube: 0.6, baja: 0.35 },
@@ -80,7 +88,7 @@ export function crearMotor(ajustes = {}) {
     vad: 43, vvd: 110, vai: 46, vvi: 105,
     vao: 837, vven: 3294, vap: 151, vvp: 265, reflujoAo: 0,
     pad: 0, pvd: 0, pai: 0, pvi: 0, pao: 0, pven: 0, pap: 0, pvp: 0, pperi: 0,
-    qMit: 0, qMitReg: 0, qTri: 0, qAo: 0, qPul: 0, qSis: 0, qRet: 0, qPulm: 0, qVp: 0,
+    qMit: 0, qMitReg: 0, qTri: 0, qAo: 0, dpVc: 0, dpNeto: 0, qPul: 0, qSis: 0, qRet: 0, qPulm: 0, qVp: 0,
     vMit: false, vTri: false, vAo: false, vPul: false,
     nLatido: 0, fase: 'G', _aoAbrio: false, _aoCerro: false, _mitAbrio: false, _pviPrev: 0,
     // barorreflejo: PAM que "siente" el seno carotídeo y efecto de cada brazo (0 = sin cambio)
@@ -115,7 +123,9 @@ export function crearMotor(ajustes = {}) {
     s.eAur = eAur; s.eVen = eVen;
     const vCor = s.vad + s.vvd + s.vai + s.vvi + p.liquidoPeri;
     s.pperi = p.kPeri * Math.exp((vCor - p.v0Peri) / p.phiPeri);
-    const pviLibre = presionCamara(p.vi, s.vvi, eVen, 0, ef.eesVi);
+    // efecto de la eyección (resistencia interna del VI): mientras expulsa, la presión del VI cae una fracción
+    // proporcional al flujo; redondea la onda de flujo y retrasa su pico, como en el ventrículo real
+    const pviLibre = presionCamara(p.vi, s.vvi, eVen, 0, ef.eesVi) * (1 - p.kEyec * Math.max(0, s.qAo));
     const pvdLibre = presionCamara(p.vd, s.vvd, eVen, 0, ef.eesVd);
     // tabique: cada ventrículo "siente" una fracción de la presión del otro
     s.pvi = pviLibre + p.tabique * pvdLibre + s.pperi;
@@ -141,8 +151,13 @@ export function crearMotor(ajustes = {}) {
     // aórtica: abre por gradiente; abierta, el flujo tiene inercia y puede invertirse un instante;
     // cierra cuando el reflujo acumulado llega al volumen de cierre
     if (!s.vAo) { if (s.pvi > s.paoDist) { s.vAo = true; s.reflujoAo = 0; } }
+    s.dpVc = 0; s.dpNeto = 0;
+    if (s.vAo && p.areaAortica > 0 && s.qAo > 0) {
+      const v = s.qAo / (100 * p.areaAortica), r = Math.min(1, p.areaAortica / (Math.PI * (p.dAorta / 2) ** 2));
+      s.dpVc = 4 * v * v; s.dpNeto = s.dpVc * (1 - 2 * r * (1 - r));
+    }
     if (s.vAo) {
-      s.qAo += (s.pvi - s.paoDist - (p.rAortica + p.zAo) * s.qAo) / p.lAo * dt;
+      s.qAo += (s.pvi - s.paoDist - (p.rAortica + p.zAo) * s.qAo - s.dpNeto) / p.lAo * dt;
       if (s.qAo < 0) { s.reflujoAo -= s.qAo * dt; if (s.reflujoAo > p.vCierreAo) { s.vAo = false; s.qAo = 0; } }
     }
     s.pao = s.paoDist + p.zAo * s.qAo;
@@ -213,7 +228,7 @@ export function crearMotor(ajustes = {}) {
     return {
       t: +s.tLatido.toFixed(4), pvi: s.pvi, pai: s.pai, pao: s.pao, vvi: s.vvi,
       pvd: s.pvd, pad: s.pad, pap: s.pap, vvd: s.vvd, vai: s.vai, vad: s.vad,
-      qAo: s.qAo, qMit: s.qMit, qMitReg: s.qMitReg, qPul: s.qPul, qTri: s.qTri, pven: s.pven, pvp: s.pvp,
+      qAo: s.qAo, dpVc: s.dpVc, qMit: s.qMit, qMitReg: s.qMitReg, qPul: s.qPul, qTri: s.qTri, pven: s.pven, pvp: s.pvp,
       pperi: s.pperi, eVen: s.eVen, eAur: s.eAur, fase: s.fase,
       vMit: s.vMit, vAo: s.vAo, vTri: s.vTri, vPul: s.vPul,
     };

@@ -7,7 +7,7 @@
 //   · insuficiencia mitral: orificio regurgitante del motor (eroaMitral), con la remodelación crónica del VI
 // Las magnitudes de cada ajuste son ilustrativas; las direcciones son las del texto del capítulo.
 import { crearMotor, BASE } from '../motor.mjs';
-import { crearDiagramas, estadoRevision, escalas } from '../diagramas.mjs';
+import { crearDiagramas, estadoRevision, escalas, eesLatido, LADOS } from '../diagramas.mjs';
 import { deslizador, segmentos, lecturas, enVivo, animar, reducirMovimiento, coma } from './figura.mjs';
 
 export const PRESETS = {
@@ -31,7 +31,9 @@ export function asentar(a, segundos = 14) {
 export function medidasAsa(m) {
   const u = m.ultimo, o = m.onda;
   const ts = o.reduce((a, b) => (Math.abs(b.t - u.tS2) < Math.abs(a.t - u.tS2) ? b : a));     // telesístole: cierre aórtico
-  const vsTotal = u.edv - u.esv, pts = ts.pvi, ea = pts / vsTotal, ees = m.p.vi.ees;
+  // Ees: la de un latido (desde V0 hasta la esquina telesistólica, como la ESPVR que se dibuja); el parámetro del
+  // motor es la elastancia máxima, algo mayor por el efecto de la eyección
+  const vsTotal = u.edv - u.esv, pts = ts.pvi, ea = pts / vsTotal, ees = eesLatido(o, LADOS.izquierdo, m.p.vi.v0) ?? m.p.vi.ees;
   let area = 0;                                                                         // trabajo sistólico (área del asa)
   for (let i = 0; i < o.length; i++) { const a = o[i], b = o[(i + 1) % o.length]; area += (a.vvi * b.pvi - b.vvi * a.pvi) / 2; }
   // contracción isovolumétrica: cuánto volumen pierde el VI entre el cierre mitral y la apertura aórtica
@@ -86,7 +88,7 @@ export function montar(el) {
       { k: 'Volumen sistólico', v: coma(med.vsTotal, 0), u: im ? `mL (a la aorta, ${coma(med.vsAorta, 0)})` : 'mL' },
       { k: 'Fracción de eyección', v: coma(med.fe * 100, 0), u: '%' },
       { k: 'PTDVI', v: coma(med.ptd, 1), u: 'mmHg' },
-      { k: 'Ees (contractilidad)', v: coma(med.ees, 1), u: 'mmHg/mL', fuente: 'parámetro del motor' },
+      { k: 'Ees (contractilidad)', v: coma(med.ees, 1), u: `mmHg/mL · máxima del motor ${coma(m.p.vi.ees, 1)}`, fuente: 'de un latido' },
       { k: 'Ea = Pts ÷ VS', v: coma(med.ea, 2), u: `mmHg/mL (Pts ${coma(med.pts, 0)})` },
       { k: 'Ea/Ees', v: coma(med.acoplamiento, 2), u: 'ref. ~0,5-1,0', aviso: med.acoplamiento > 1.3 },
       { k: 'FE = Ees ÷ (Ees + Ea)', v: coma(med.feTeorica * 100, 0), u: '% (V0 = 0)', fuente: 'fórmula' },

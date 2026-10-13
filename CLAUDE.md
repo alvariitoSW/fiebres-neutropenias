@@ -11090,24 +11090,38 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
   fisiología»). Detalle en `js/modules/eco/README.md` («Atlas de ecocardiografía»).
   - Eco cardíaca tiene ahora dos secciones: **Simulador** y **Atlas**.
   - El atlas es *The Heart by Ultrasound* en español, con su índice de 30 capítulos. Los que ya están en la app se
-    abren dentro (hoy 5: 01 Pulso, 02 Imagen, 03 Doppler, 06 Ciclo cardíaco y 07 Asa P-V); los demás enlazan al
-    original en inglés.
+    abren dentro (hoy 6: 01 Pulso, 02 Imagen, 03 Doppler, 06 Ciclo cardíaco, 07 Asa P-V y 08 Hemodinámica por
+    Doppler); los demás enlazan al original en inglés.
   - El texto se traduce, con permiso del autor, y la bibliografía es la suya (`atlas/referencias.js`). **El código no
     se copia**: cada figura se reconstruye sobre los motores de la app.
   - Hay **una sola fisiología**: el ciclo y el asa salen del motor del latido del simulador. Donde el texto y el motor
     discrepaban, se corrigió el motor:
     - contracción isovolumétrica calibrada con Alhakak 2025: de ~99 a ~42 ms (forma de la activación,
       `fSubida`/`qSubida`);
-    - Ees del VI de 3,2 a 2,9, para que el ITV del TSVI siga en la Ficha 11;
     - insuficiencia mitral nueva en el motor (`eroaMitral`, con la ecuación del orificio y Bernoulli). Vale 0 por
       defecto.
-  - **Archivos**: `js/modules/eco/atlas/`; preguntas en `js/data/eco-atlas-preguntas.js` (26, asignatura Eco
+    - **forma de la eyección** (para el cap. 08, a petición del usuario: «vamos a seguir»): el flujo aórtico picaba a
+      los ~40 ms con ~850 mL/s (2,7 m/s en el TSVI). Nuevo **efecto de la eyección** (`kEyec` 0,001: mientras el VI
+      expulsa, su presión cae en proporción al flujo; resistencia interna de Shroff, fisiología general, valor
+      ilustrativo): pico a ~90 ms con ~400 mL/s (1,2 m/s en el TSVI del simulador, ITV 21,9 cm). La Ees del VI pasó
+      de 3,2 a 2,9 y luego a **3,1** (con la eyección más lenta la PTDVI y la FE de la hipertrofia se salían). Como en
+      los latidos reales, la esquina telesistólica queda algo por debajo de la elastancia máxima: el asa dibuja la
+      **Ees de un latido** (`eesLatido()` en `diagramas.mjs`, de V0 a la esquina) y el cap. 07 lo explica.
+    - **estenosis aórtica** (`areaAortica`, cm², y `dAorta`): 4v² en la vena contracta y recuperación
+      4v² · 2r(1 − r) pasado el orificio (Baumgartner 2017). Vale 0 por defecto.
+  - **08 Hemodinámica por Doppler** (`cap-hemodinamica.html` + `hemodinamica.mjs`): flujo y presión con la estenosis
+    del motor (continuidad, cociente de velocidades, error del TSVI al cuadrado, gradiente medio frente a 4·v media²,
+    recuperación de presión frente al catéter) y PSVD/VCI con 5 corazones del motor (la velocidad de un chorro de IT
+    sale del gradiente VD-AD, solo en sístole ventricular; la VCI, del modelo del simulador; la PAD, con las 3
+    categorías de la ASE 2025). Nota de fuentes con la VCI de FATE. Las vistas SC VCI y la medida de la VCI de «Qué
+    mirar» abren este capítulo.
+  - **Archivos**: `js/modules/eco/atlas/`; preguntas en `js/data/eco-atlas-preguntas.js` (33, asignatura Eco
     cardíaca).
   - **Accesos**: `data-eco-atlas="clave"` junto a `data-especialidad="eco"`. Por ejemplo, desde Fisiopatología UCI ·
     Cardiología, Fichas 1 y 3.
   - **Nuevo en `quiz.js`** (genérico): un trigger con `data-quiz-tema` empieza solo con ese tema.
-  - **Pruebas**: 132 (`pruebas/atlas.test.mjs` nueva).
-  - **Siguiente**: 08 Hemodinámica por Doppler, 09-10 Función, 14 VD y las válvulas.
+  - **Pruebas**: 136 (`pruebas/atlas.test.mjs`).
+  - **Siguiente**: 09-10 Función sistólica y diastólica, 14 VD, las válvulas (IM primero), pericardio.
 
 ## Cómo probar cambios
 

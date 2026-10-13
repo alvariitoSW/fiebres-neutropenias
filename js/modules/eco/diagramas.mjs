@@ -169,17 +169,17 @@ export function crearDiagramas(cw, cp) {
     h.textAlign = 'center'; for (let v = 0; v <= esc.pvVMax; v += 50) h.fillText(String(v), xV(v), cpb.y1 + 14 * kp);
     h.fillText('Volumen (mL)', (cpb.x0 + cpb.x1) / 2, cpb.y1 + 30 * kp); h.textAlign = 'left'; h.fillText('mmHg', 2 * kp, cpb.y0 + 4 * kp);
     h.strokeStyle = linea; h.strokeRect(cpb.x0, cpb.y0, cpb.x1 - cpb.x0, cpb.y1 - cpb.y0);
-    const cam = motor.p[L.camara], ees = motor.ef[L.ees];
+    const cam = motor.p[L.camara], ees = eesLatido(o, L, cam.v0) ?? motor.ef[L.ees];
     h.save(); h.beginPath(); h.rect(cpb.x0, cpb.y0, cpb.x1 - cpb.x0, cpb.y1 - cpb.y0); h.clip();
     h.setLineDash([5 * kp, 4 * kp]); h.lineWidth = 1.5 * kp;
-    // ESPVR: P = Ees·(V − V0); EDPVR: P = A·(e^(B·(V − V0)) − 1). Sin tabique ni pericardio.
+    // ESPVR: P = Ees·(V − V0), con la Ees de un latido (por su esquina telesistólica); EDPVR: P = A·(e^(B·(V − V0)) − 1). Sin tabique ni pericardio.
     h.strokeStyle = css('--r'); h.beginPath(); h.moveTo(xV(cam.v0), yPp(0)); h.lineTo(xV(cam.v0 + esc.pvPMax / ees), yPp(esc.pvPMax)); h.stroke();
     h.strokeStyle = css('--p'); h.beginPath();
     for (let v = cam.v0; v <= esc.pvVMax; v += 2) { const p = cam.a * (Math.exp(cam.b * (v - cam.v0)) - 1); v === cam.v0 ? h.moveTo(xV(v), yPp(p)) : h.lineTo(xV(v), yPp(p)); if (p > esc.pvPMax) break; }
     h.stroke(); h.setLineDash([]); h.restore();
     // leyenda arriba a la derecha (el asa no llega ahí)
     h.font = `${10 * kp}px Georgia`; h.textAlign = 'right';
-    h.fillStyle = css('--r'); h.fillText('ESPVR · Ees del modelo', cpb.x1 - 6 * kp, cpb.y0 + 14 * kp);
+    h.fillStyle = css('--r'); h.fillText('ESPVR · Ees del latido', cpb.x1 - 6 * kp, cpb.y0 + 14 * kp);
     h.fillStyle = css('--p'); h.fillText('EDPVR · rigidez diastólica', cpb.x1 - 6 * kp, cpb.y0 + 28 * kp);
     trazo(capas.trazasP.getContext('2d'), o, (m) => xV(m[L.vol]), (m) => yPp(m[L.pv]), css('--b'), 2 * kp, true);
   }
@@ -239,4 +239,15 @@ export function crearDiagramas(cw, cp) {
   /** Fuerza a redibujar el fondo (cambio de tamaño o de tema). */
   function invalidar() { claveFondo = ''; ultimaClave = ''; }
   return { pintar, tiempoEnX, muestraEnPV, invalidar };
+}
+
+/** Ees de un latido (método de un solo latido): la recta desde V0 hasta la esquina telesistólica (volumen mínimo).
+ *  Con el efecto de la eyección del motor, la esquina de un latido que expulsa queda algo por debajo de la elastancia
+ *  máxima del parámetro (como en el corazón real: los latidos que expulsan dan menos presión telesistólica que los
+ *  isovolumétricos). L: lado de LADOS (o { vol, pv }). */
+export function eesLatido(onda, L, v0) {
+  if (!onda?.length) return null;
+  const es = onda.reduce((a, x) => (x[L.vol] < a[L.vol] ? x : a));
+  const dv = es[L.vol] - v0;
+  return dv > 1 ? es[L.pv] / dv : null;
 }

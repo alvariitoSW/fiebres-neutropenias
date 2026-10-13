@@ -8,6 +8,8 @@ import { doppler, enrollar } from '../atlas/efecto-doppler.mjs';
 import { crearMotor } from '../motor.mjs';
 import { duraciones } from '../atlas/ciclo.mjs';
 import { PRESETS, asentar, medidasAsa } from '../atlas/asa.mjs';
+import { motorFlujo, analizarFlujo, estimarPad, analizarDerechas, motorEscenario } from '../atlas/hemodinamica.mjs';
+import { modeloVci } from '../abdomen.mjs';
 import { REFERENCIAS } from '../atlas/referencias.js';
 import { CAPITULOS } from '../atlas/atlas.js';
 import { readFileSync } from 'node:fs';
@@ -71,6 +73,44 @@ test('07 Asa: cada corazón va en la dirección del texto', () => {
   assert.ok(im.vReg >= 60 && im.vsAorta < im.vsTotal * 0.6, `IM ${im.vReg} ${im.vsAorta}`);
   // FE = Ees/(Ees+Ea): la fórmula y la del motor van en la misma dirección
   assert.ok(pres.feTeorica < n.feTeorica && hfref.feTeorica < n.feTeorica);
+});
+
+test('Motor: la eyección normal pica a ~90 ms con un cociente pico/media de flujo <2 (efecto de la eyección)', () => {
+  const m = crearMotor(); m.correr(14);
+  const u = m.ultimo, ej = m.onda.filter(x => x.t >= u.tAoAbre && x.t <= u.tS2);
+  const pico = ej.reduce((a, b) => (b.qAo > a.qAo ? b : a)), media = u.vs / ((u.tS2 - u.tAoAbre));
+  const tPico = (pico.t - u.tAoAbre) * 1000;
+  assert.ok(tPico > 65 && tPico < 130, `pico a ${tPico} ms de la apertura`);
+  assert.ok(pico.qAo / media < 2, `pico/media ${pico.qAo / media}`);
+});
+
+test('08 Hemodinámica: continuidad, cociente de velocidades, error del TSVI al cuadrado y gradiente medio ≠ 4·(v media)²', () => {
+  const n = analizarFlujo(motorFlujo({ area: 3.0 }));
+  assert.ok(n.cociente > 0.85 && n.vMaxA < 2, `normal: cociente ${n.cociente}, v ${n.vMaxA}`);
+  const e = analizarFlujo(motorFlujo({ area: 0.8 }), { dReal: 2.0, dMedido: 2.0 });
+  assert.ok(cerca(e.avaCont, 0.8, 0.02), `AVA por continuidad ${e.avaCont}`);
+  assert.ok(e.vMaxA > 3.5 && e.cociente <= 0.27, `v ${e.vMaxA}, cociente ${e.cociente}`);
+  assert.ok(e.gradMedio > e.gradDeVelMedia, 'la media de 4v² es mayor que 4·(v media)²');
+  const err = analizarFlujo(motorFlujo({ area: 0.8 }), { dReal: 2.0, dMedido: 2.2 });
+  assert.ok(cerca(err.vsDoppler / e.vsDoppler, 1.21, 0.01), '2 mm de error → ~21%');
+});
+
+test('08 Hemodinámica: la recuperación de presión es mayor con una aorta pequeña (Doppler > catéter)', () => {
+  const p = analizarFlujo(motorFlujo({ area: 0.8, dAorta: 2.4 })), g = analizarFlujo(motorFlujo({ area: 0.8, dAorta: 4.0 }));
+  assert.ok(p.recuperacion > g.recuperacion && p.cateter < g.cateter, `catéter ${p.cateter} vs ${g.cateter}`);
+  assert.ok(p.gradMax > p.cateter, 'el Doppler supera a la caída neta');
+});
+
+test('08 Hemodinámica: PAD por la VCI (ASE 2025) y PSVD = 4v² + PAD cerca de la del motor', () => {
+  assert.equal(estimarPad(18, 0.6).pad, 3); assert.equal(estimarPad(24, 0.3).pad, 15);
+  assert.equal(estimarPad(24, 0.6).pad, 8); assert.equal(estimarPad(18, 0.3).pad, 8);
+  assert.equal(estimarPad(18, 0.25, 'tranquila').pad, 3); assert.equal(estimarPad(18, 0.5, 'vm').pad, null);
+  for (const k of ['normal', 'tep']) {
+    const r = analizarDerechas(motorEscenario(k)), v = modeloVci(r.pvc), est = estimarPad(v.dmax, v.colapso).pad;
+    assert.ok(Math.abs(r.gradTr + est - r.pvdMax) < 7, `${k}: ${r.gradTr} + ${est} frente a ${r.pvdMax}`);
+    if (k === 'tep') assert.ok(r.vTr >= 2.8, `TEP: v IT ${r.vTr}`);
+    else assert.ok(r.vTr < 2.8, `normal: v IT ${r.vTr}`);
+  }
 });
 
 test('Atlas: cada cita de los capítulos de la app está en la bibliografía, y cada capítulo tiene su fragmento', () => {

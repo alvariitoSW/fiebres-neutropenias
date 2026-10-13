@@ -77,7 +77,7 @@ export const ATLAS_VISTA = {
     psaxMv: [enlace('windows'), enlace('ms')],
     psaxPm: [enlace('windows'), enlace('segments')],
     sc4c: [enlace('windows'), enlace('peri')],
-    scVci: [enlace('ivc', '08 Hemodinámica por Doppler: la PAD por la VCI')],
+    scVci: [enlace('pressure', '08 Hemodinámica por Doppler: la PAD por la VCI')],
     sse: [enlace('windows'), enlace('aorta')],
 };
 // Para cada escenario del simulador, el capítulo que trata lo mismo (los de shock no tienen capítulo).
@@ -95,5 +95,5 @@ export const ATLAS_MODO = {
     D: [enlace('shift'), enlace('pressure')],
     tapse: [enlace('rv')],
     vi: [enlace('eject')],
-    vci: [enlace('ivc', '08 Hemodinámica por Doppler: la PAD por la VCI')],
+    vci: [enlace('pressure', '08 Hemodinámica por Doppler: la PAD por la VCI')],
 };

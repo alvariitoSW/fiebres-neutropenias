@@ -9,6 +9,7 @@ export const temasAtlasEco = [
     { key: 'atlas-shift', etiqueta: '03 Doppler' },
     { key: 'atlas-cycle', etiqueta: '06 Ciclo cardíaco' },
     { key: 'atlas-loop', etiqueta: '07 Asa presión-volumen' },
+    { key: 'atlas-pressure', etiqueta: '08 Hemodinámica por Doppler' },
 ];
 
 export const preguntasAtlasEco = [
@@ -90,4 +91,25 @@ export const preguntasAtlasEco = [
         explicacion: 'Ea = presión telesistólica ÷ volumen sistólico = 110 ÷ 80 ≈ 1,4 mmHg/mL (app, con la fórmula del capítulo).' },
     { id: 'eat-q026', tema: 'atlas-loop', tipo: 'redactar', enunciado: 'Un paciente con hipertensión grave tiene una FE del 45% que mejora al 55% al controlar la presión, sin cambiar de tratamiento inotrópico. Explícalo con el asa presión-volumen.',
         respuestaModelo: 'La FE depende del ventrículo (Ees) y de su carga (Ea): FE = Ees ÷ (Ees + Ea). Con la hipertensión la Ea era alta, el asa subía a presiones altas y se estrechaba, y la FE bajaba sin que la contractilidad hubiera cambiado. Al bajar la poscarga baja la Ea y la FE sube con la misma Ees: la FE no es una medida pura de la contractilidad.' },
+    // 08 Hemodinámica por Doppler
+    { id: 'eat-q027', tema: 'atlas-pressure', enunciado: 'El área del TSVI es 3,1 cm², la velocidad máxima del TSVI 1,0 m/s y la velocidad aórtica máxima 4,0 m/s. ¿Cuál es el área valvular aórtica?',
+        opciones: ['0,78 cm²', '1,2 cm²', '0,25 cm²'], correcta: 0,
+        explicacion: 'El mismo flujo pasa por los dos niveles: 3,1 cm² × 1,0 m/s = AVA × 4,0 m/s, así que el AVA es 3,1 ÷ 4 = 0,78 cm². El cociente de velocidades, 1,0 ÷ 4,0 = 0,25, también sugiere estenosis grave.' },
+    { id: 'eat-q028', tema: 'atlas-pressure', enunciado: 'Dos pacientes tienen la misma válvula aórtica y la misma velocidad aórtica máxima. ¿En cuál es más probable que el gradiente Doppler supere al del catéter del VI a la aorta?',
+        opciones: ['Aorta ascendente de 2,4 cm', 'Aorta ascendente de 4,0 cm', 'No hay diferencia'], correcta: 0,
+        explicacion: 'Pasada la válvula, parte de la presión vuelve cuando el chorro frena (recuperación de presión). La recuperación es mayor con una aorta pequeña, y hay que tenerla en cuenta cuando la aorta ascendente mide menos de 30 mm.' },
+    { id: 'eat-q029', tema: 'atlas-pressure', enunciado: 'La velocidad máxima de la IT es 3,0 m/s. La VCI mide 2,4 cm al final de la espiración y colapsa un 30% con el sniff. ¿Cuál es la PSVD estimada?',
+        opciones: ['39 mmHg', '51 mmHg', '44 mmHg'], correcta: 1,
+        explicacion: 'El gradiente VD-AD es 4 × 3,0² = 36 mmHg. Una VCI de más de 2,1 cm que colapsa menos del 50% con el sniff da una PAD de 15 mmHg, así que la PSVD es 36 + 15 = 51 mmHg.' },
+    { id: 'eat-q030', tema: 'atlas-pressure', enunciado: '¿Cuándo hay que incluir la velocidad proximal a una estenosis en la ecuación de Bernoulli?',
+        opciones: ['Cuando supera 1,5 m/s', 'Siempre', 'Nunca'], correcta: 0,
+        explicacion: 'La ecuación simplificada desprecia la velocidad proximal; por encima de 1,5 m/s es demasiado grande para despreciarla.' },
+    { id: 'eat-q031', tema: 'atlas-pressure', enunciado: 'Se mide un TSVI de 2,2 cm cuando en realidad mide 2,0 cm. ¿Cómo cambia el volumen sistólico calculado?',
+        opciones: ['Sale un ~20% mayor', 'Sale un ~10% mayor', 'No cambia: la ITV es la misma'], correcta: 0,
+        explicacion: 'El área del TSVI va con el diámetro al cuadrado: (2,2 ÷ 2,0)² = 1,21. Un error de 2 mm cambia el volumen sistólico en torno a un 20% (app, con la fórmula del capítulo).' },
+    { id: 'eat-q032', tema: 'atlas-pressure', enunciado: 'Un paciente con ventilación con presión positiva tiene una VCI de 1,6 cm que apenas colapsa. ¿Qué PAD se estima?',
+        opciones: ['El colapso no estima la PAD: medida invasiva si importa, u 8 mmHg si persiste la duda', '15 mmHg', '3 mmHg'], correcta: 0,
+        explicacion: 'Con ventilación con presión positiva el colapso de la VCI no estima la PAD. Los signos secundarios pueden ayudar; si la duda persiste, la guía ASE 2025 usa 8 mmHg.' },
+    { id: 'eat-q033', tema: 'atlas-pressure', tipo: 'redactar', enunciado: 'En una estenosis aórtica con una velocidad máxima de 4,2 m/s, el gradiente medio del catéter sale bastante menor que el Doppler. Explica las razones posibles.',
+        respuestaModelo: 'El Doppler mide la caída del VI a la vena contracta (4v² ≈ 71 mmHg de máximo), y el catéter mide la caída neta del VI a la aorta. Pasado el orificio, el chorro frena y parte de la presión se recupera; la recuperación es mayor con una aorta ascendente pequeña (de menos de 30 mm), así que el Doppler puede superar al neto. Además, el gradiente medio es la media de los gradientes instantáneos, no se calcula con la velocidad media, y un haz no alineado infraestimaría el Doppler, no lo aumentaría.' },
 ];

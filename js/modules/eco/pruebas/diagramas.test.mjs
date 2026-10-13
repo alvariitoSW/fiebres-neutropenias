@@ -2,7 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { crearMotor } from '../motor.mjs';
-import { segmentosFase, muestraEn, estadoRevision, muestraCercanaPV, escalas, LADOS } from '../diagramas.mjs';
+import { segmentosFase, muestraEn, estadoRevision, muestraCercanaPV, escalas, LADOS, eesLatido } from '../diagramas.mjs';
 
 const m = crearMotor(); m.correr(20);
 const o = m.onda, T = m.ultimo.periodo;
@@ -54,8 +54,11 @@ test('el motor expone el latido en curso, que crece hasta cerrarse', () => {
   assert.ok(mm.periodo > 0.3 && mm.periodo < 2);
 });
 
-test('la esquina telesistólica del asa cae sobre la ESPVR que se dibuja (Ees efectiva del motor)', () => {
+test('la ESPVR que se dibuja pasa por la esquina telesistólica (Ees de un latido) y queda cerca de la Ees del motor', () => {
   const es = o.reduce((a, x) => (x.vvi < a.vvi ? x : a));
-  const espvr = m.ef.eesVi * (es.vvi - m.p.vi.v0);
-  assert.ok(Math.abs(es.pvi - espvr) / espvr < 0.05, `P telesistólica ${es.pvi.toFixed(1)} frente a ESPVR ${espvr.toFixed(1)} mmHg`);
+  const ees = eesLatido(o, LADOS.izquierdo, m.p.vi.v0);
+  assert.ok(Math.abs(es.pvi - ees * (es.vvi - m.p.vi.v0)) < 1e-9);
+  // el efecto de la eyección deja la esquina de un latido que expulsa algo por debajo de la elastancia máxima
+  const r = ees / m.ef.eesVi;
+  assert.ok(r > 0.8 && r <= 1.02, `Ees del latido ÷ Ees del motor = ${r.toFixed(3)}`);
 });

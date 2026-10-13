@@ -18,7 +18,7 @@ en `lab/circulacion/`), como la especialidad «Eco cardíaca»: ver «En la app�
 node --test 'js/modules/eco/pruebas/*.test.mjs'
 ```
 
-Tarda ~2 min (132 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta. Las de navegador
+Tarda ~2 min (136 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta. Las de navegador
 sirven el repositorio con un servidor propio y abren `laboratorio.html`.
 
 - `motor.test.mjs` — cada cifra del latido normal frente a su referencia (`referencias.mjs`), el volumen
@@ -336,10 +336,10 @@ es Z-Anatomy, en el paquete npm `@authorod/svitylo-3d-anatomy-data` 1.1.0; HRA y
 - **Doppler color** (casilla «Color», escala ±40/60/90 cm/s): velocidad hacia la sonda en cada celda de sangre de la
   misma imagen B, en rojo-amarillo (hacia la sonda) o azul-cian (alejándose), con aliasing por encima de la escala.
   Se calcula en una rejilla gruesa y solo con las fuentes que tocan el plano.
-- **Lo que dice el modelo**: E/A mitral 1,34 (normal) e ITV del TSVI 22 cm (normal; GC por Doppler 4,8 frente a
-  5,2 L/min del motor). **No calibrado**: el TDE (~100 ms; normal 140-250) y el pico de eyección (~2,2 m/s en el TSVI:
-  la eyección del motor tiene el pico a los ~40 ms y es demasiado afilada); en las suprahepáticas, en reposo S ≈ D
-  (lo normal es S > D). Con escala de color de 60 cm/s el TSVI se ve con aliasing por ese pico.
+- **Lo que dice el modelo**: E/A mitral 1,34 (normal) e ITV del TSVI 21,9 cm (normal; GC por Doppler 4,8 frente a
+  5,2 L/min del motor). El pico del TSVI es ~1,2 m/s, a ~90 ms de la apertura, desde el efecto de la eyección del
+  motor (octubre de 2026, ver «Atlas»; antes ~2,2 m/s a los ~40 ms). **No calibrado**: el TDE (~120 ms; normal
+  140-250); en las suprahepáticas, en reposo S ≈ D (lo normal es S > D).
 
 ## Vistas subcostales y supraesternal (fase 5)
 
@@ -420,6 +420,17 @@ los que ya están en la app se abren aquí, los demás siguen enlazando al origi
     ecuación del orificio con Bernoulli: v = √(ΔP/4), y Q = EROA · 50 · √ΔP mL/s. Con 0,4 cm² da ~70 mL de volumen
     regurgitante. `ultimo` da `vReg`, `fr` y `feTotal`. Con 0 no cambia nada.
   - **Una prueba de TAPSE** muestreaba por el redondeo del tiempo y se quedaba sin muestras: ahora va por índice.
+  - **Forma de la eyección (cap. 08).** El flujo aórtico picaba a los ~40 ms con ~850 mL/s (2,7 m/s en un TSVI de
+    2 cm), y el capítulo 08 trabaja con velocidades y gradientes. El motor gana un **efecto de la eyección**
+    (`kEyec` 0,001 s/mL: mientras el VI expulsa, su presión cae una fracción proporcional al flujo; resistencia interna
+    de Shroff, fisiología general): el flujo pica a ~90 ms con ~400 mL/s (cociente pico/media ~1,6). Las duraciones de
+    Alhakak siguen en rango (~40/292/~90 ms). La Ees del VI sube de 2,9 a 3,1 (con la eyección más lenta la FE y la
+    PTDVI se salían: 57% y 12,3 mmHg; la hipertrofia daba FE 49%). Como en el corazón real, la esquina telesistólica
+    de un latido que expulsa queda algo por debajo de la elastancia máxima (~0,9): el asa dibuja la **Ees de un
+    latido** (`eesLatido()` de `diagramas.mjs`, de V0 a la esquina) y la lectura muestra las dos.
+  - **Estenosis aórtica.** `areaAortica` (cm²; 0 = válvula normal) y `dAorta` (cm): en la vena contracta cae 4v²
+    (v = Q ÷ área) y pasado el orificio se recupera 4v² · 2r(1 − r) (r = área ÷ área de la aorta, Baumgartner 2017).
+    La muestra lleva `dpVc`. Con 0 no cambia nada.
 - **Archivos.**
 
   | Archivo | Qué es |
@@ -432,9 +443,10 @@ los que ya están en la app se abren aquí, los demás siguen enlazando al origi
   | `efecto-doppler.mjs` | Figura del 03 Doppler |
   | `ciclo.mjs` | Figura del 06 Ciclo cardíaco |
   | `asa.mjs` | Figura del 07 Asa presión-volumen |
+  | `hemodinamica.mjs` | Figura del 08 Hemodinámica por Doppler |
 
   Cada figura exporta `montar(contenedor)` → `{ parar() }`. La lógica pura (`fisica`, `frecuenciaImagen`, `doppler`,
-  `duraciones`, `asentar`, `medidasAsa`) se exporta y la prueba `pruebas/atlas.test.mjs`.
+  `duraciones`, `asentar`, `medidasAsa`, `motorFlujo`, `analizarFlujo`, `estimarPad`, `analizarDerechas`) se exporta y la prueba `pruebas/atlas.test.mjs`.
 - **Capítulos en la app.**
   - **01 Pulso.** La línea paraesternal atraviesa el corazón del simulador en telediástole: tabique 9,5 mm, VI 53 mm.
     Muestra el modo A, un zoom de la resolución axial con dos reflectores a 0,4 mm, la TGC y la profundidad útil.
@@ -447,15 +459,22 @@ los que ya están en la app se abren aquí, los demás siguen enlazando al origi
   - **07 Asa presión-volumen.** Cinco corazones y cuatro mandos. Cada uno cambia un parámetro del motor (Ees, curva
     diastólica, resistencia sistémica, volumen) y el motor corre hasta asentarse, sin barorreflejo. Pinta la recta
     de Ea y compara la FE de la fórmula (V0 = 0) con la del motor. La IM usa el orificio regurgitante.
+  - **08 Hemodinámica por Doppler.** Dos modos. *Flujo y presión*: el motor con estenosis aórtica (área del orificio,
+    aorta ascendente, volemia) y el TSVI con su diámetro real y un error de medida; dibuja el tracto de salida con la
+    sangre a la velocidad local y la presión a lo largo del eje (VI, vena contracta, aorta), y el espectro CW aórtico
+    y PW del TSVI. Lecturas: gradiente máximo y medio (frente a 4·v media²), caída neta del catéter y recuperación,
+    ITV, VS por Doppler frente al real, área por continuidad y cociente de velocidades. *PSVD y VCI*: cinco
+    corazones del motor (normal, hemorragia, fallo del VI, derrame, TEP), con la velocidad de un chorro de IT sacada
+    del gradiente VD-AD (el motor no tiene IT), la VCI en modo M con sniff, respiración tranquila o ventilación, la
+    PAD por las tres categorías de la ASE 2025 y la PSVD estimada frente a la real. Nota de fuentes con FATE.
 - **Navegación.**
   - `data-eco-atlas="clave"`, junto a `data-especialidad="eco"`, abre un capítulo desde cualquier ficha. Hoy hay
-    accesos en Fisiopatología UCI · Cardiología, Fichas 1 y 3.
+    accesos en Fisiopatología UCI · Cardiología, Fichas 1 y 3. La subcostal VCI y la medida de la VCI llevan al 08.
   - En «Qué mirar» del simulador, los capítulos que ya están en la app se abren aquí.
   - `[data-at-sim="M"|"D"]` dentro de un capítulo lleva al simulador en ese modo.
   - «Repasar este capítulo» usa `data-quiz-tema`, un atributo nuevo y genérico de `quiz.js`.
-  - Banco: `js/data/eco-atlas-preguntas.js`, 26 preguntas, asignatura Eco cardíaca.
-- **Siguiente, por orden.** 08 Hemodinámica por Doppler (continuidad, Bernoulli, PSVD, PAD por la VCI: el simulador
-  ya tiene casi todo); 09-10 función sistólica y diastólica; 14 VD; las válvulas, empezando por la IM (el motor ya la
+  - Banco: `js/data/eco-atlas-preguntas.js`, 33 preguntas, asignatura Eco cardíaca.
+- **Siguiente, por orden.** 09-10 función sistólica y diastólica; 14 VD; las válvulas, empezando por la IM (el motor ya la
   tiene); pericardio. Las vistas (04) y la ETE (05) chocan con la anatomía congelada y la sonda libre ya existe, así
   que van al final. Los capítulos de enfermedad necesitan la forma de enfermedad correspondiente en el corazón.
 
@@ -508,7 +527,7 @@ licencia CC BY-SA 4.0 (el resto del simulador no). La cita también se muestra e
   (cap. 5, pág. 70 del PDF de la parte 1; cap. 10, Figura 2, pág. 33 de la parte 2) dan RVS «↑» o «N/↑»
   en el shock distributivo, y la del cap. 10 da ScvO₂ «↑» en el hipovolémico. Las fichas 5 y 10 las
   reproducen tal cual. Las pruebas usan la Tabla 14.1 de Merino (cap. 14), que no tiene ese problema.
-- **Doppler**: calibrar el TDE (~120 ms desde la calibración de la activación; Ficha 5, 140-250) y la forma de la eyección del motor (ver «Doppler»); S > D en las suprahepáticas en
+- **Doppler**: calibrar el TDE (~120 ms desde la calibración de la activación; Ficha 5, 140-250); S > D en las suprahepáticas en
   reposo; Doppler tisular (e', E/e' de la Ficha 5) y Doppler continuo; insuficiencias valvulares en el simulador (el motor ya
   tiene la mitral, `eroaMitral`, que usa el Atlas; falta el chorro en la eco y las otras válvulas).
 - **Abdomen**: ventilación mecánica (índice de distensibilidad de FATE) en el reloj respiratorio; el derrame del motor
