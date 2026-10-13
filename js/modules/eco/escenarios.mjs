@@ -20,7 +20,7 @@ export const ESCENARIOS = {
   vasoplejia: {
     nombre: 'Vasoplejía', tipo: 'vasodilatador',
     // Resistencias al 40 % y venodilatación (más volumen venoso "sin tensión", que deja de volver al
-    // corazón): Marik, cap. 14, pág. 4 — el shock vasodilatador es una vasodilatación difusa «de arterias y venas»
+    // corazón): Marino, cap. 14, pág. 4 — el shock vasodilatador es una vasodilatación difusa «de arterias y venas»
     aplicar: (m) => { m.p.rSis *= 0.4; m.p.vuVen *= 1.5; },
   },
   // --- Formas de enfermedad: cambian la anatomía además del latido (excepción a «anatomía congelada», a petición
@@ -92,8 +92,8 @@ export const CRITERIOS_FORMA = {
 };
 
 // Patrón de cada tipo de shock frente al estado normal.
-// PVC, GC y RVS: Merino Cardiología, Tabla 14.1 (Marik, Handbook of Evidence-Based Critical Care, cap. 14),
-// docs/marik-2024-shock-caps14-17.pdf, pág. 3 (en el libro, «Low/High»: aquí ↓/↑). PCP: Fisiopatología UCI · Cardiología, Ficha 10 (El Libro Azul,
+// PVC, GC y RVS: Merino Cardiología, Tabla 14.1 (Marino, The ICU Book, 5.ª ed., cap. 14),
+// docs/marino-2024-shock-caps14-17.pdf, pág. 3 (en el libro, «Low/High»: aquí ↓/↑). PCP: Fisiopatología UCI · Cardiología, Ficha 10 (El Libro Azul,
 // cap. 10, Figura 2), docs/libro-azul-seccion-i-cardiovascular-parte2.pdf, pág. 33; no se exige en el
 // vasodilatador porque esa figura da «N/↑» y la Tabla 14.1 no la recoge.
 // '↑' sube, '↓' baja, 'N/↑' no baja.

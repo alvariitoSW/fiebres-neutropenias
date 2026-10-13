@@ -1,6 +1,6 @@
 // Merino Neumología — embolia pulmonar, asma/EPOC, SDRA, oxigenoterapia y
 // ventilación no invasiva en el paciente crítico (cuaderno de campo).
-// Fuente: Marik PE. Handbook of Evidence-Based Critical Care, Cap. 22-26.
+// Fuente: Marino PL. The ICU Book, 5.ª ed., Cap. 22-26.
 import { initCorkboard } from '../../core/corkboard.js';
 
 // Ecuación 22.1 — peso ajustado para dosificación de heparina por peso en

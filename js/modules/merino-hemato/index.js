@@ -1,7 +1,7 @@
 // Merino HEMATO — anemia, transfusión de hemoderivados y hemostasia en el
 // paciente crítico (cuaderno de campo). Fuente: capítulos "Anemia and Red
-// Blood Cell Transfusions" y "Platelets and Plasma", Marik PE. Handbook of
-// Evidence-Based Critical Care.
+// Blood Cell Transfusions" y "Platelets and Plasma", Marino PL. The ICU
+// Book, 5.ª ed.
 import { initCorkboard } from '../../core/corkboard.js';
 import { init as initVisual } from './visual.js';
 

@@ -49,8 +49,7 @@ cama en el móvil.
 >
 > **Orden de trabajo pedido después por el usuario (octubre 2026)**, por
 > delante de los pendientes de arriba y de la ecografía: 1) terminar de
-> subir Merino (los capítulos del *Handbook of Evidence-Based Critical
-> Care* de Marik que aún no están: hoy hay en `docs/` los caps. 12-30);
+> subir Merino (los capítulos del *The ICU Book* (5.ª ed.) de Marino que aún no están: hoy hay en `docs/` los caps. 12-30);
 > 2) terminar El Libro Azul (hoy hay las secciones I, II, III y VII);
 > 3) el contenido del PIF de R1 (las 7 rotaciones sin contenido:
 > Radiología de tórax, Neurorradiología, Cardiología, Medicina Interna,
@@ -595,9 +594,8 @@ El Atlas sustituyó estos 4 botones grandes:
    propio `.vessel-line` al nodo de Trasplante TPH), a petición explícita
    del usuario ("abre una nueva sección llamada Merino HEMATO"). Fuente:
    capítulos "Anemia and Red Blood Cell Transfusions" (Cap. 12) y
-   "Platelets and Plasma" (Cap. 13) de Marik PE, *Handbook of
-   Evidence-Based Critical Care* — PDF archivado en
-   `docs/marik-2024-anemia-transfusion-hemostasia-uci.pdf`. A diferencia
+   "Platelets and Plasma" (Cap. 13) de Marino PL, *The ICU Book* (5.ª ed.) — PDF archivado en
+   `docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf`. A diferencia
    del resto de módulos de Hematología (todos con submenú o subvistas
    propias), este es un módulo plano de una sola vista con cuaderno de
    campo de **6 fichas**, mismo patrón `initCorkboard()` que el resto:
@@ -6254,12 +6252,11 @@ dentro de `#cardiologia-view` y en el switcher `cardioLevel` de
   `cardiologia-menu.html` (`#btn-merino-cardio`), con `cardioLevel` (en
   `cardiologia/index.js`) ganando una segunda entrada
   (`merinoCardiologia`) — mismo patrón exacto, sin cambios de
-  arquitectura. Fuente: Marik PE. *Handbook of Evidence-Based Critical
-  Care*, Sección VI "Shock Syndromes", Cap. 14-17 (70 páginas) — **el
+  arquitectura. Fuente: Marino PL, *The ICU Book* (5.ª ed.), Sección VI "Shock Syndromes", Cap. 14-17 (70 páginas) — **el
   mismo libro que Merino HEMATO** (Cap. 12-13, Hematología), confirmado
   por el formato/marca de agua idénticos ("A L G r a w a n y") y el
   estilo de cita — pero un archivo distinto, subido para esta sección de
-  Cardiología. PDF archivado en `docs/marik-2024-shock-caps14-17.pdf`
+  Cardiología. PDF archivado en `docs/marino-2024-shock-caps14-17.pdf`
   (páginas del PDF = página impresa del capítulo, sin offset: Cap.
   14→pág. 1, Cap. 15→pág. 21, Cap. 16→pág. 37, Cap. 17→pág. 52 —
   confirmado con `pdftotext` página a página, no a ojo). El usuario avisó
@@ -6467,20 +6464,19 @@ dentro de `#cardiologia-view` y en el switcher `cardioLevel` de
     anunciado explícitamente ("guarda esa información para hacerlo en
     un futuro no lejano") llegó con el pedido "vamos a completar
     cardiología merino con la 2° parte que faltaba". Cubre la **Sección
-    VII "Cardiac Disorders"** del mismo libro (Marik PE. *Handbook of
-    Evidence-Based Critical Care*) — distinta de la Sección VI "Shock
+    VII "Cardiac Disorders"** del mismo libro (Marino PL, *The ICU Book* (5.ª ed.)) — distinta de la Sección VI "Shock
     Syndromes" (Cap. 14-17) ya incorporada: PDF archivado en
-    `docs/marik-2024-cardiac-disorders-caps18-21.pdf` (72 páginas, sin
+    `docs/marino-2024-cardiac-disorders-caps18-21.pdf` (72 páginas, sin
     offset — página del PDF = página impresa del capítulo: Cap. 18→pág.
     1, Cap. 19→pág. 18, Cap. 20→pág. 38, Cap. 21→pág. 55, verificado con
     `pdftotext -f N -l N` en las páginas de inicio de cada capítulo).
     **Detalle de nomenclatura corregido durante el propio proceso**: el
     archivo se archivó en un primer momento como
-    `marik-2024-shock-caps18-21.pdf` (arrastrando el nombre del bloque
+    `marino-2024-shock-caps18-21.pdf` (arrastrando el nombre del bloque
     anterior) — al leer el contenido real se confirmó que los Cap. 18-21
     NO son de shock, sino de trastornos cardíacos (IC, arritmias, SCA,
     paro), así que se renombró a
-    `marik-2024-cardiac-disorders-caps18-21.pdf` antes de que el nombre
+    `marino-2024-cardiac-disorders-caps18-21.pdf` antes de que el nombre
     incorrecto se propagara a ningún enlace de bibliografía.
     - Ampliado el cuaderno de campo de 12 a **24 fichas**
       (`#merino-cardio-corkboard`/`#panel-merino-cardio-tabs`, mismo
@@ -6946,7 +6942,7 @@ dentro de `#cardiologia-view` y en el switcher `cardioLevel` de
     1. **Diagrama SVG estático** de mecanismo (α₁→Gq→IP₃/DAG/Ca²⁺→
        vasoconstricción; β₁→Gs→AMPc/PKA→↑FC/↑contractilidad; β₂→Gs→AMPc→
        vasodilatación), con una nota explícita de que es
-       <strong>farmacología general</strong> complementaria a Marik Cap.
+       <strong>farmacología general</strong> complementaria a Marino Cap.
        14, no un diagrama del propio capítulo — mismo criterio de
        transparencia fuente-vs-genérico ya aplicado en el resto del
        proyecto (p. ej. la ley de Hagen-Poiseuille/ecuación de Fick en
@@ -7009,7 +7005,7 @@ dentro de `#cardiologia-view` y en el switcher `cardioLevel` de
     hallazgos de la auditoria"). Publicado primero como Artifact
     (severidad por categoría: precisión farmacológica/huecos de
     contenido/diseño visual/interactividad), verificado contra el texto
-    exacto del PDF (`docs/marik-2024-shock-caps14-17.pdf`) antes de
+    exacto del PDF (`docs/marino-2024-shock-caps14-17.pdf`) antes de
     reportar nada — mismo estándar del resto de auditorías del
     proyecto —, y aplicado íntegro a continuación:
     - **F1 (precisión)**: el nivel α₁ de epinefrina estaba en "Intenso"
@@ -7124,17 +7120,16 @@ de entrada. Añadir una guía nueva en el futuro: 1) botón nuevo en
 `#neumologia-view` y en el switcher `neumoLevel` de `neumologia/index.js`.
 
 - **Primera guía: "Merino Neumología"**
-  (`js/modules/neumologia/merino-neumologia.html`). Fuente: Marik PE.
-  *Handbook of Evidence-Based Critical Care*, Cap. 22-26 (Acute Pulmonary
+  (`js/modules/neumologia/merino-neumologia.html`). Fuente: Marino PL, *The ICU Book* (5.ª ed.), Cap. 22-26 (Acute Pulmonary
   Embolism, Asthma and COPD in the ICU, Acute Respiratory Distress
   Syndrome, Oxygen Inhalation, Noninvasive Ventilation — 90 páginas) — el
   mismo libro que Merino HEMATO (Cap. 12-13) y Merino Cardiología (Cap.
-  14-21), pero un archivo distinto (`docs/marik-2024-respiratory-management-caps22-26.pdf`,
+  14-21), pero un archivo distinto (`docs/marino-2024-respiratory-management-caps22-26.pdf`,
   sin offset: página del PDF = página impresa del capítulo, verificado con
   `pdftotext -f N -l N` en el inicio de cada capítulo — Cap22→pág.1,
   Cap23→pág.15, Cap24→pág.32, Cap25→pág.56, Cap26→pág.76). El usuario avisó
   explícitamente que es solo **"la primera parte"** — hay más contenido de
-  Marik pendiente de envío en el futuro, que ampliará este mismo módulo
+  Marino pendiente de envío en el futuro, que ampliará este mismo módulo
   (mismo patrón ya visto en Merino Cardiología Parte 1/Parte 2).
   - **Cuaderno de campo de 13 fichas** (`#merino-neumo-corkboard`/
     `#panel-merino-neumo-tabs`, mismo `core/corkboard.js` de siempre),
@@ -7219,7 +7214,7 @@ de entrada. Añadir una guía nueva en el futuro: 1) botón nuevo en
     patrón de "Ficha N dedicada a bibliografía dentro del corkboard" que
     solo se aplicó a Cardiología tras un pedido explícito posterior),
     con 5 entradas (una por capítulo) enlazando a
-    `docs/marik-2024-respiratory-management-caps22-26.pdf#page=N`.
+    `docs/marino-2024-respiratory-management-caps22-26.pdf#page=N`.
   - **104 preguntas de quiz** (`js/data/merino-neumologia-preguntas.js`,
     `neumo-q001`-`q104`, 8 por ficha × 13 fichas — 6 de opción múltiple + 2
     de tipo `redactar` por ficha, mismo formato ya establecido en el resto
@@ -7234,7 +7229,7 @@ de entrada. Añadir una guía nueva en el futuro: 1) botón nuevo en
     anunciado en la Parte 1. Cubre Conventional Mechanical Ventilation,
     The Ventilator-Dependent Patient, Ventilator-Associated Pneumonia, y
     Discontinuing Mechanical Ventilation (62 páginas) — un archivo
-    distinto (`docs/marik-2024-respiratory-management-caps27-30.pdf`, sin
+    distinto (`docs/marino-2024-respiratory-management-caps27-30.pdf`, sin
     offset, verificado con `pdftotext -f N -l N` en el inicio de cada
     capítulo — Cap27→pág.1, Cap28→pág.17, Cap29→pág.35, Cap30→pág.50; la
     página 63 del PDF ya es la "Section X — Acid-Base Disorders" del
@@ -7361,7 +7356,7 @@ de entrada. Añadir una guía nueva en el futuro: 1) botón nuevo en
     (1555 previas + 80 de esta Parte 2).
   - **Bibliografía**: ampliada de 5 a 10 entradas (misma tarjeta única, sin
     cambiar de patrón), con las 5 nuevas enlazando a
-    `docs/marik-2024-respiratory-management-caps27-30.pdf#page=N`. El
+    `docs/marino-2024-respiratory-management-caps27-30.pdf#page=N`. El
     encabezado del módulo se actualizó para reflejar el rango completo
     (Cap. 22-30) en vez de solo Cap. 22-26.
   - Verificado con Playwright: las 23 fichas abren/voltean sin error de
@@ -7420,7 +7415,7 @@ de entrada. Añadir una guía nueva en el futuro: 1) botón nuevo en
       XXII (`neumo-sbt`, prueba de respiración espontánea). Otras 3
       referencias similares ("Capítulo 8"/"Capítulo 17"×2/"Capítulo 52")
       se dejaron sin tocar a propósito — confirmado que esos capítulos
-      pertenecen a otras secciones del mismo *Handbook* de Marik, fuera del
+      pertenecen a otras secciones del mismo *ICU Book* de Marino, fuera del
       alcance de los 2 PDF de Neumología, así que siguen correctamente
       "no incluidos".
     - **13 piezas de interactividad/mejora**: selector de sistema de O₂ por
@@ -10554,7 +10549,7 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
   pruebas y la página del latido (antes la tabla tenía ✓ escritos a mano, uno de ellos siempre verdadero);
   escenarios en `escenarios.mjs`, y cada uno se comprueba contra el patrón de su tipo de shock en la
   Tabla 14.1 de Merino (PVC, GC, RVS) y la Figura 2 del cap. 10 de El Libro Azul (PCP). **Esa prueba cazó
-  un fallo real al estrenarla**: la vasoplejía subía la PVC; ahora incluye venodilatación (Marik, cap. 14:
+  un fallo real al estrenarla**: la vasoplejía subía la PVC; ahora incluye venodilatación (Marino, cap. 14:
   vasodilatación «de arterias y venas»).
 - **Antes de tocar el motor, la geometría o la página**, ejecuta las pruebas; tras el cambio, deben seguir
   en verde. Las cifras aún fuera de su referencia van marcadas `pendiente` (salen como *todo*, no fallan).

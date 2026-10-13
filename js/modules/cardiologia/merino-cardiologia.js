@@ -1,6 +1,6 @@
 // Merino Cardiología — enfoque general del shock, shock hemorrágico,
 // shock cardiogénico y síndromes de shock inflamatorio (cuaderno de
-// campo). Fuente: Marik PE. Handbook of Evidence-Based Critical Care,
+// campo). Fuente: Marino PL. The ICU Book, 5.ª ed.,
 // Cap. 14-17.
 import { initCorkboard } from '../../core/corkboard.js';
 import { initSiNoWizard } from '../../core/wizard.js';

@@ -3,7 +3,7 @@
 // invasiva, ventilación mecánica convencional, vía aérea artificial,
 // neumonía asociada a ventilación y destete de la ventilación). 8
 // preguntas por ficha (6 opción múltiple + 2 de redactar) × 23 fichas.
-// Fuente: Marik PE. Handbook of Evidence-Based Critical Care, Cap. 22-30
+// Fuente: Marino PL. The ICU Book, 5.ª ed., Cap. 22-30
 // (Cap. 22-26: Parte 1; Cap. 27-30: Parte 2).
 export const temasMerinoNeumologia = [
     { key: 'neumo-ep-diagnostico', etiqueta: 'Embolia pulmonar: evaluación y diagnóstico' },

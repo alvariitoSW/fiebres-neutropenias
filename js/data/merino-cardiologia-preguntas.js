@@ -2,7 +2,7 @@
 // enfoque general, hemorrágico, cardiogénico e inflamatorio [Cap. 14-17],
 // más IC aguda, taquiarritmias, SCA/disección aórtica y paro cardíaco
 // [Cap. 18-21]). 8 preguntas por ficha (6 opción múltiple + 2 de redactar)
-// × 24 fichas. Fuente: Marik PE. Handbook of Evidence-Based Critical Care.
+// × 24 fichas. Fuente: Marino PL. The ICU Book, 5.ª ed..
 export const temasMerinoCardiologia = [
     { key: 'mc-definiciones', etiqueta: 'Shock: definiciones y monitorización' },
     { key: 'mc-vasopresores', etiqueta: 'Vasopresores y dosis' },

@@ -1,7 +1,7 @@
 // Banco de preguntas de repaso — Merino HEMATO (anemia, transfusión de
 // hemoderivados y hemostasia en el paciente crítico). Fuente: capítulos
-// "Anemia and Red Blood Cell Transfusions" y "Platelets and Plasma", Marik
-// PE. Handbook of Evidence-Based Critical Care. Mismo formato que
+// "Anemia and Red Blood Cell Transfusions" y "Platelets and Plasma", Marino
+// PL. The ICU Book, 5.ª ed. Mismo formato que
 // trr-preguntas.js / sindromes-urgentes-preguntas.js.
 export const temasMerino = [
     { key: 'merino-anemia', etiqueta: 'Anemia en el paciente crítico' },
