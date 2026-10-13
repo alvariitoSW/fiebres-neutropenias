@@ -32,6 +32,22 @@ cama en el móvil.
 > isovolumétrica, más formas de enfermedad, medir fps en el móvil — ver
 > `js/modules/eco/README.md`). Borra este recordatorio cuando se lo hayas
 > dicho.
+>
+> **Contenido teórico pendiente, guardado a petición del usuario para
+> retomarlo más adelante (octubre 2026):**
+> - Con la fuente ya en `docs/` (Manual UMI, `hugcdn-umi-manual-guardia-
+>   parte1/2.pdf`): capnografía/EtCO₂, estimación de peso y talla por
+>   antropometría (Ficha III), pirámide antibiótica, tabla M-mode
+>   extendida de FATE, pancuronio/neostigmina/fisostigmina en la tabla de
+>   relajantes y sedantes (Ficha VII), la incoherencia de `calcDeficitK`
+>   (Ficha II: la fórmula del código no es la que dice el texto) y las
+>   fórmulas de HFVVC (págs. 100-102), candidatas a ampliar `trr.html`.
+> - PDF: **solo interesa Valdenebro 2021** (auditoría de `trr.html`, con
+>   las 7 dudas anotadas en la sección de TRR), y solo si el usuario lo
+>   manda. ECIL-10, BCSH 2009 (CID), las rotaciones del PIF sin contenido
+>   y las citopenias distintas de la neutropenia febril **quedan
+>   descartadas**: el usuario dijo que ya le dan igual; no las vuelvas a
+>   proponer como pendientes.
 
 ## Decisiones de arquitectura (ya tomadas, no las reabras sin preguntar)
 
