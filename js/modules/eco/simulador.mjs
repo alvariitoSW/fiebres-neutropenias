@@ -357,7 +357,7 @@ export function montarSimulador(raiz, opc = {}) {
         enl.innerHTML = enlace('E/A y TDE en la Ficha 5', 'cardio-monitorizacion-hemodinamica', '#cardio-eco-diastolica');
         const okEA = medD.ea >= 1 && medD.ea <= 1.5, okT = medD.tde >= 140 && medD.tde <= 250;
         poner(okEA && okT ? 'ok' : 'warn', cab + `E ${fx(medD.E)} cm/s · A ${fx(medD.A)} cm/s · <b>E/A ${fx(medD.ea, 2)}</b> (normal 1-1,5) · TDE ${fx(medD.tde)} ms (normal 140-250)`
-          + `<br><span class="cv-muted">Referencias de la Ficha 5 de Fisiopatología UCI · Cardiología. Las velocidades son del modelo (flujo del motor entre el área del anillo); el TDE del motor es más corto de lo normal (pendiente de calibrar).</span>`);
+          + `<br><span class="cv-muted">Referencias de la Ficha 5 de Fisiopatología UCI · Cardiología. Las velocidades son del modelo (flujo del motor entre el área del anillo); el TDE sale de la inercia de la sangre que cruza la mitral (calibrada en el motor).</span>`);
       } else poner('', cab + `E ${fx(medD.E)} cm/s · A ${fx(medD.A)} cm/s · E/A ${fx(medD.ea, 2)}<br><span class="cv-muted">La app no tiene todavía cifras de referencia del llenado tricuspídeo. Ilustrativo.</span>`);
       return;
     }

@@ -11000,7 +11000,7 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
   `cardio-eco-itv`, `vexus-onda-hepatica`, `vexus-onda-porta`). **Doppler color** con aliasing (escala ±40/60/90).
   El modelo da E/A 1,34 e ITV 22 cm (normales); **sin calibrar**: TDE ~100 ms y pico de eyección ~2,2 m/s (forma de la
   eyección del motor), anotados como pendientes, sin tocar el motor. Pruebas: 109 (3 *todo*). (El pico de eyección se
-  corrigió después, con el cap. 08 del Atlas: hoy ~1,2 m/s; ver «Atlas de ecocardiografía».)
+  corrigió después, con el cap. 08 del Atlas: hoy ~1,2 m/s; y el TDE, con la inercia mitral del cap. 10: hoy ~170 ms; ver «Atlas de ecocardiografía».)
 - **Revisión de código del módulo (`/code-review`)**, a petición explícita del usuario, con sus 9 hallazgos corregidos:
   1) las medidas S/D/A de las suprahepáticas (y la media de porta/VCI) toman el sentido del propio vaso
   (`fuente.factor`), no el de la onda más alta, que en la congestión puede ser la A retrógrada e invertía VExUS;
@@ -11091,8 +11091,8 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
   fisiología»). Detalle en `js/modules/eco/README.md` («Atlas de ecocardiografía»).
   - Eco cardíaca tiene ahora dos secciones: **Simulador** y **Atlas**.
   - El atlas es *The Heart by Ultrasound* en español, con su índice de 30 capítulos. Los que ya están en la app se
-    abren dentro (hoy 6: 01 Pulso, 02 Imagen, 03 Doppler, 06 Ciclo cardíaco, 07 Asa P-V y 08 Hemodinámica por
-    Doppler); los demás enlazan al original en inglés.
+    abren dentro (hoy 8: 01 Pulso, 02 Imagen, 03 Doppler, 06 Ciclo cardíaco, 07 Asa P-V, 08 Hemodinámica por
+    Doppler, 09 Función sistólica y 10 Función diastólica); los demás enlazan al original en inglés.
   - El texto se traduce, con permiso del autor, y la bibliografía es la suya (`atlas/referencias.js`). **El código no
     se copia**: cada figura se reconstruye sobre los motores de la app.
   - Hay **una sola fisiología**: el ciclo y el asa salen del motor del latido del simulador. Donde el texto y el motor
@@ -11110,19 +11110,39 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
       **Ees de un latido** (`eesLatido()` en `diagramas.mjs`, de V0 a la esquina) y el cap. 07 lo explica.
     - **estenosis aórtica** (`areaAortica`, cm², y `dAorta`): 4v² en la vena contracta y recuperación
       4v² · 2r(1 − r) pasado el orificio (Baumgartner 2017). Vale 0 por defecto.
+    - **inercia mitral** (`lMit` 0,0005, para el cap. 10, a petición del usuario: «Si»): el TDE salía de ~115 ms; ahora
+      un corazón normal da E/A ~1,25 y TDE ~170 ms (Ficha 5). Cierra el pendiente del TDE.
+    - **relajación del VI** (`relajacion`, 1 por defecto): desde el 70% de su caída la activación del VI sigue una cola
+      exponencial (`activacionVi`, τ ≈ 28 ms) y `relajacion` la alarga. Con 2,8 sale el patrón de relajación lenta
+      (E/A ≤0,8, TRIV y TDE largos) sin tocar nada más.
+    - Un efecto pistón del plano AV sobre la AI (onda S de las venas pulmonares) se probó y se descartó: movía media
+      docena de referencias. El cap. 10 no calcula S/D y lo dice.
   - **08 Hemodinámica por Doppler** (`cap-hemodinamica.html` + `hemodinamica.mjs`): flujo y presión con la estenosis
     del motor (continuidad, cociente de velocidades, error del TSVI al cuadrado, gradiente medio frente a 4·v media²,
     recuperación de presión frente al catéter) y PSVD/VCI con 5 corazones del motor (la velocidad de un chorro de IT
     sale del gradiente VD-AD, solo en sístole ventricular; la VCI, del modelo del simulador; la PAD, con las 3
     categorías de la ASE 2025). Nota de fuentes con la VCI de FATE. Las vistas SC VCI y la medida de la VCI de «Qué
     mirar» abren este capítulo.
-  - **Archivos**: `js/modules/eco/atlas/`; preguntas en `js/data/eco-atlas-preguntas.js` (33, asignatura Eco
+  - **09 Función sistólica** (`cap-sistolica.html` + `sistolica.mjs`): método biplano de discos sobre cortes apicales
+    4C y 2C del corazón de la app movido por el motor (trazado, L y 20 discos calculados sobre el corte; biplano 120
+    frente a 126 mL reales). Cuatro corazones (normal, fallo, dilatada, hipertrofia) y el acortamiento del ápex como un
+    transductor fuera del ápex que apunta a la base: infraestima los volúmenes, más el telesistólico. Bandas de Lang
+    2015 por sexo, categoría de IC y un «acortamiento del borde» del 4C como aproximación al strain (ilustrativo).
+    Nota de fuentes: Teichholz en la Ficha 5 frente a Lang 2015.
+  - **10 Función diastólica** (`cap-diastolica.html` + `diastolica.mjs`): un deslizador con cuatro corazones del motor
+    (relajación, rigidez, volumen y remodelado de la AI) que caen en normal, grado 1, 2 y 3 con el propio algoritmo
+    ASE 2025, pintado paso a paso y comparado con la presión media de la AI del motor. E, A, TDE, TRIV, IT y AI son del
+    motor; e′ (de la relajación), la forma del Doppler tisular y el strain de la AI son ilustrativos. Sin S/D (el paso
+    3 usa el TRIV, alternativa de la guía). `doppler.mjs` exporta `tdeDe()`, que extrapola desde el 75% si la E se
+    funde con la A.
+  - **Archivos**: `js/modules/eco/atlas/`; preguntas en `js/data/eco-atlas-preguntas.js` (44, asignatura Eco
     cardíaca).
   - **Accesos**: `data-eco-atlas="clave"` junto a `data-especialidad="eco"`. Por ejemplo, desde Fisiopatología UCI ·
     Cardiología, Fichas 1 y 3.
   - **Nuevo en `quiz.js`** (genérico): un trigger con `data-quiz-tema` empieza solo con ese tema.
-  - **Pruebas**: 136 (`pruebas/atlas.test.mjs`).
-  - **Siguiente**: 09-10 Función sistólica y diastólica, 14 VD, las válvulas (IM primero), pericardio.
+  - **Pruebas**: 139 (`pruebas/atlas.test.mjs`; 1 *todo*, la RVS). La prueba del modo M del anillo tricuspídeo compara
+    ahora con lo que el anillo recorre a lo largo del haz.
+  - **Siguiente**: 14 VD, las válvulas (IM primero), pericardio.
 
 ## Cómo probar cambios
 

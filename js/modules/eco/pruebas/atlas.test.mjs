@@ -10,6 +10,8 @@ import { duraciones } from '../atlas/ciclo.mjs';
 import { PRESETS, asentar, medidasAsa } from '../atlas/asa.mjs';
 import { motorFlujo, analizarFlujo, estimarPad, analizarDerechas, motorEscenario } from '../atlas/hemodinamica.mjs';
 import { modeloVci } from '../abdomen.mjs';
+import { motorLlenado, medirLlenado, algoritmoAse } from '../atlas/diastolica.mjs';
+import { motorSistolico, medirSistolica, bandaFe } from '../atlas/sistolica.mjs';
 import { REFERENCIAS } from '../atlas/referencias.js';
 import { CAPITULOS } from '../atlas/atlas.js';
 import { readFileSync } from 'node:fs';
@@ -111,6 +113,42 @@ test('08 Hemodinámica: PAD por la VCI (ASE 2025) y PSVD = 4v² + PAD cerca de l
     if (k === 'tep') assert.ok(r.vTr >= 2.8, `TEP: v IT ${r.vTr}`);
     else assert.ok(r.vTr < 2.8, `normal: v IT ${r.vTr}`);
   }
+});
+
+// 10 Función diastólica: los cuatro corazones de referencia caen en su patrón con el algoritmo de la guía, y su
+// presión de la AI (la del motor, como un catéter) coincide con lo que dice el algoritmo
+test('10 Diastólica: normal, grado 1, 2 y 3 con el algoritmo ASE 2025, y la PAI del motor coincide', () => {
+  const v = [0, 1, 2, 3].map(f => medirLlenado(motorLlenado(f))), r = v.map(algoritmoAse);
+  assert.deepEqual(r.map(x => x.grado), [0, 1, 2, 3], JSON.stringify(r.map(x => [x.rama, x.pai, x.grado])));
+  assert.ok(v[0].ea >= 1 && v[0].ea <= 1.5 && v[0].tde >= 140 && v[0].tde <= 250, `normal E/A ${v[0].ea} TDE ${v[0].tde}`);
+  assert.ok(v[1].ea <= 0.8 && v[1].triv > v[0].triv && v[1].tde > v[0].tde, 'relajación lenta: E/A ≤0,8, TRIV y TDE más largos');
+  assert.ok(v[2].ea > 0.8 && v[2].ea < 2, `seudonormal E/A ${v[2].ea}`);
+  assert.ok(v[3].ea >= 2 && v[3].tde < 160 && v[3].triv <= 70, `restrictivo E/A ${v[3].ea} TDE ${v[3].tde} TRIV ${v[3].triv}`);
+  for (let i = 0; i < 4; i++) assert.equal(r[i].pai === 'elevada', v[i].pai > 12, `corazón ${i}: PAI del motor ${v[i].pai}`);
+  for (const x of v) assert.ok(x.fe >= 0.5, 'la FEVI se mantiene preservada');
+});
+
+test('10 Diastólica: el algoritmo con los casos del texto (grado 1, grado 3, sin grado)', () => {
+  const base = { sep: 5, lat: 6.5, avg: 5.75, eeSep: 10, eeLat: 8, eeAvg: 9, vTr: 2.3, lars: 35, lavi: 28, triv: 110 };
+  assert.equal(algoritmoAse({ ...base, ea: 0.7 }).grado, 1);
+  assert.deepEqual([algoritmoAse({ ...base, ea: 1.1 }).pai, algoritmoAse({ ...base, ea: 1.1 }).grado], ['normal', null]);
+  const tres = { ...base, eeSep: 20, eeLat: 15, eeAvg: 17, vTr: 3.1, ea: 2.5 };
+  assert.deepEqual([algoritmoAse(tres).pai, algoritmoAse(tres).grado], ['elevada', 3]);
+  assert.equal(algoritmoAse({ ...base, ea: 1.1, lavi: 40 }).grado, 2);
+});
+
+// 09 Función sistólica: el biplano sobre la geometría de la app se acerca al volumen real del motor, el acortamiento del
+// ápex infraestima los dos volúmenes, y las bandas de FEVI y el acortamiento del borde van en el sentido de cada corazón
+test('09 Sistólica: biplano ≈ volumen del motor, el ápex acortado infraestima, y FEVI y strain por corazón', () => {
+  const n = motorSistolico('normal'), a = medirSistolica(n, 0), b = medirSistolica(n, 16);
+  assert.ok(Math.abs(a.D.biplano - a.D.real) / a.D.real < 0.1 && Math.abs(a.S.biplano - a.S.real) / a.S.real < 0.12, `${a.D.biplano}/${a.D.real} ${a.S.biplano}/${a.S.real}`);
+  assert.ok(Math.abs(a.feBiplano - a.feReal) < 0.04);
+  assert.ok(b.D.biplano < a.D.biplano - 10 && b.S.biplano < a.S.biplano - 5 && b.D.t4.L < a.D.t4.L, 'acortado: menos volumen y L más corta');
+  assert.equal(bandaFe(a.feBiplano).banda, 'normal');
+  assert.ok(a.gls < -18, `strain del borde normal ${a.gls}`);
+  const d = medirSistolica(motorSistolico('dilatada'), 0), h = medirSistolica(motorSistolico('hipertrofia'), 0);
+  assert.ok(d.feBiplano <= 0.4 && d.edvi > 74, `dilatada FE ${d.feBiplano} VTDi ${d.edvi}`);
+  assert.ok(h.feBiplano >= 0.5 && h.gls > -16, `HVI FE ${h.feBiplano} strain ${h.gls}`);
 });
 
 test('Atlas: cada cita de los capítulos de la app está en la bibliografía, y cada capítulo tiene su fragmento', () => {

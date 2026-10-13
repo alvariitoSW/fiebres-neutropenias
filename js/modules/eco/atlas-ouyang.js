@@ -84,7 +84,7 @@ export const ATLAS_VISTA = {
 export const ATLAS_ESCENARIO = {
     derrame: [enlace('peri')],
     fallo: [enlace('eject'), enlace('loop')],
-    hipertrofia: [enlace('fill'), enlace('loop')],
+    hipertrofia: [enlace('fill'), enlace('eject'), enlace('loop')],
     dilatada: [enlace('eject'), enlace('loop')],
     tep: [enlace('rv')],
     normal: [enlace('cycle'), enlace('loop')],
@@ -92,7 +92,7 @@ export const ATLAS_ESCENARIO = {
 // Para cada modo o medida, su capítulo.
 export const ATLAS_MODO = {
     M: [enlace('image')],
-    D: [enlace('shift'), enlace('pressure')],
+    D: [enlace('shift'), enlace('pressure'), enlace('fill')],
     tapse: [enlace('rv')],
     vi: [enlace('eject')],
     vci: [enlace('pressure', '08 Hemodinámica por Doppler: la PAD por la VCI')],

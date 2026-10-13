@@ -19,6 +19,8 @@ export const CAPITULOS = {
   cycle: { html: 'cap-ciclo.html', figura: () => import('./ciclo.mjs'), sub: 'El ciclo cardíaco, con el motor de la app' },
   loop: { html: 'cap-asa.html', figura: () => import('./asa.mjs'), sub: 'Análisis presión-volumen del VI, con el motor de la app' },
   pressure: { html: 'cap-hemodinamica.html', figura: () => import('./hemodinamica.mjs'), sub: 'Flujo, presión y la VCI, con el motor de la app' },
+  eject: { html: 'cap-sistolica.html', figura: () => import('./sistolica.mjs'), sub: 'Volúmenes del VI por discos sobre el corazón de la app' },
+  fill: { html: 'cap-diastolica.html', figura: () => import('./diastolica.mjs'), sub: 'Del llenado normal al restrictivo, con el motor de la app' },
 };
 const ORDEN = ATLAS_PARTES.flatMap(p => p.caps.map(c => c[0]));
 const EN_APP = ORDEN.filter(k => CAPITULOS[k]);

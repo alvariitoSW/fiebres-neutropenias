@@ -143,7 +143,8 @@ test('modo M: la columna repite la imagen B a lo largo del haz y sigue al anillo
     const r0 = enPlano(P, gTd.anilloTricLateral)[1];
     for (let y = 0; y < 850; y++) { const r = (y + 0.5) / 850 * P.prof; if (r > r0 - 30 && c[3 * y] > 90) return r; }
     return NaN; };
-  const exc = Math.abs(gTd.anilloTricLateral[2] - gTs.anilloTricLateral[2]) * Math.abs(dir[2]);
+  // lo que recorre el anillo a lo largo del haz (el modo M mide el movimiento en la dirección del haz, no solo el vertical)
+  const exc = Math.abs(dot([0, 1, 2].map(i => gTd.anilloTricLateral[i] - gTs.anilloTricLateral[i]), dir));
   const medido = prof(gTd, td) - prof(gTs, ts);
   assert.ok(medido > 0, 'el anillo no se acerca al transductor en sístole');
   assert.ok(Math.abs(medido - exc) < 5, `excursión en el modo M ${medido.toFixed(1)} mm frente a ${exc.toFixed(1)} mm de la geometría`);

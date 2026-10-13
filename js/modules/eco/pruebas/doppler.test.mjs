@@ -29,7 +29,7 @@ test('mitral (A4C): E/A del modelo en el rango normal de la Ficha 5 (1-1,5); la 
   assert.ok(med.E > 0 && med.A > 0 && med.E > med.A);
 });
 
-test('mitral: TDE en el rango de la Ficha 5 (140-250 ms)', { todo: 'el motor desacelera el llenado rápido demasiado deprisa (~120 ms): pendiente de calibrar' }, () => {
+test('mitral: TDE en el rango de la Ficha 5 (140-250 ms) (inercia mitral del motor)', () => {
   const { med } = enMuestra(motorEn(), 'a4c', 'mitral', 8);
   assert.ok(med.tde >= 140 && med.tde <= 250, `TDE ${med.tde}`);
 });

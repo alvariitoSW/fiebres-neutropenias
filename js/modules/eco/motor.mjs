@@ -34,11 +34,18 @@ export const BASE = {
   ad: { ees: 0.70, v0: 5,  a: 0.15, b: 0.090 },
   // tiempos de activación (s). Las sístoles escalan con √(periodo).
   pr: 0.16, tsAur: 0.10, tsVen: 0.45, fSubida: 0.62, qSubida: 0.55,
+  // relajación del VI: multiplica la constante de tiempo de la cola exponencial de su activación (1 = normal; >1 =
+  // relajación lenta, como en la disfunción diastólica). Ver activacionVi
+  relajacion: 1,
   // pericardio: P = kPeri·exp((Vcorazón − v0Peri)/phiPeri); liquido = derrame extra
   kPeri: 0.1, v0Peri: 300, phiPeri: 40, liquidoPeri: 0,
   tabique: 0.05,            // fracción de la presión del otro ventrículo que se transmite
   // válvulas (mmHg·s/mL)
   rMitral: 0.005, rTricus: 0.005, rAortica: 0.004, rPulmonar: 0.004,
+  // inercia de la sangre que cruza la mitral (mmHg·s²/mL; 0 = sin inercia). Sin ella, el flujo seguía al gradiente al
+  // instante y la onda E se cortaba en ~115 ms (TDE corto); con ella la E decelera como en el corazón real (Thomas y
+  // Weyman: el TDE depende de la inercia y de la rigidez del VI). Valor ilustrativo, calibrado a E/A 1-1,5 y TDE 140-250
+  lMit: 0.0005,
   // insuficiencia mitral: orificio regurgitante efectivo (cm²). 0 = válvula competente. El chorro sigue la
   // ecuación del orificio con Bernoulli simplificado: v (m/s) = √(ΔP/4) → Q (mL/s) = EROA · 50 · √ΔP
   eroaMitral: 0,
@@ -75,6 +82,13 @@ function activacion(t, t1, t2, q = 1) {
   if (t < t1) return (0.5 * (1 - Math.cos(Math.PI * t / t1))) ** q;
   if (t < t1 + t2) return 0.5 * (1 + Math.cos(Math.PI * (t - t1) / t2));
   return 0;
+}
+// Activación del VI: igual que la de arriba hasta el 70% de la caída; desde ahí sigue una exponencial con la misma
+// pendiente logarítmica en ese punto (τ = 0,162·t2), multiplicada por r (relajación lenta)
+const U_COLA = 0.7, E_COLA = 0.5 * (1 + Math.cos(Math.PI * U_COLA)), K_COLA = E_COLA / (0.5 * Math.PI * Math.sin(Math.PI * U_COLA));
+function activacionVi(t, t1, t2, q, r) {
+  if (t < t1 + U_COLA * t2) return activacion(t, t1, t2, q);
+  return E_COLA * Math.exp(-(t - t1 - U_COLA * t2) / (K_COLA * t2 * r));
 }
 
 export function crearMotor(ajustes = {}) {
@@ -120,12 +134,14 @@ export function crearMotor(ajustes = {}) {
     const tl = s.tLatido;
     const eAur = activacion(tl, 0.5 * p.tsAur * k, 0.5 * p.tsAur * k);
     const eVen = activacion(tl - p.pr, p.fSubida * p.tsVen * k, (1 - p.fSubida) * p.tsVen * k, p.qSubida);
+    // el VI puede relajarse más despacio que el VD (relajacion): solo se alarga la caída de su activación
+    s.eVi = activacionVi(tl - p.pr, p.fSubida * p.tsVen * k, (1 - p.fSubida) * p.tsVen * k, p.qSubida, p.relajacion);
     s.eAur = eAur; s.eVen = eVen;
     const vCor = s.vad + s.vvd + s.vai + s.vvi + p.liquidoPeri;
     s.pperi = p.kPeri * Math.exp((vCor - p.v0Peri) / p.phiPeri);
     // efecto de la eyección (resistencia interna del VI): mientras expulsa, la presión del VI cae una fracción
     // proporcional al flujo; redondea la onda de flujo y retrasa su pico, como en el ventrículo real
-    const pviLibre = presionCamara(p.vi, s.vvi, eVen, 0, ef.eesVi) * (1 - p.kEyec * Math.max(0, s.qAo));
+    const pviLibre = presionCamara(p.vi, s.vvi, s.eVi, 0, ef.eesVi) * (1 - p.kEyec * Math.max(0, s.qAo));
     const pvdLibre = presionCamara(p.vd, s.vvd, eVen, 0, ef.eesVd);
     // tabique: cada ventrículo "siente" una fracción de la presión del otro
     s.pvi = pviLibre + p.tabique * pvdLibre + s.pperi;
@@ -144,7 +160,12 @@ export function crearMotor(ajustes = {}) {
     // válvulas: diodo por gradiente
     s.qTri = s.pad > s.pvd ? (s.pad - s.pvd) / p.rTricus : 0;
     s.qPul = s.pvd > s.pap ? (s.pvd - s.pap) / p.rPulmonar : 0;
-    s.qMit = s.pai > s.pvi ? (s.pai - s.pvi) / p.rMitral : 0;
+    if (p.lMit > 0) {
+      // con inercia, la sangre que entra sigue entrando un momento aunque el gradiente ya se haya invertido (por eso la
+      // onda E decelera en vez de cortarse), y la válvula cierra cuando el flujo llega a 0
+      if (!s.vMit && s.pai > s.pvi) s.vMit = true;
+      if (s.vMit) { s.qMit += (s.pai - s.pvi - p.rMitral * s.qMit) / p.lMit * dt; if (s.qMit <= 0) { s.qMit = 0; s.vMit = false; } }
+    } else s.qMit = s.pai > s.pvi ? (s.pai - s.pvi) / p.rMitral : 0;
     // reflujo VI → AI por el orificio regurgitante (raíz suavizada cerca de 0 para no romper Euler)
     const dpReg = s.pvi - s.pai;
     s.qMitReg = p.eroaMitral > 0 && dpReg > 0 ? p.eroaMitral * 50 * dpReg / Math.sqrt(dpReg + 0.25) : 0;
@@ -229,7 +250,7 @@ export function crearMotor(ajustes = {}) {
       t: +s.tLatido.toFixed(4), pvi: s.pvi, pai: s.pai, pao: s.pao, vvi: s.vvi,
       pvd: s.pvd, pad: s.pad, pap: s.pap, vvd: s.vvd, vai: s.vai, vad: s.vad,
       qAo: s.qAo, dpVc: s.dpVc, qMit: s.qMit, qMitReg: s.qMitReg, qPul: s.qPul, qTri: s.qTri, pven: s.pven, pvp: s.pvp,
-      pperi: s.pperi, eVen: s.eVen, eAur: s.eAur, fase: s.fase,
+      pperi: s.pperi, eVen: s.eVen, eVi: s.eVi, eAur: s.eAur, fase: s.fase, qVp: s.qVp,
       vMit: s.vMit, vAo: s.vAo, vTri: s.vTri, vPul: s.vPul,
     };
   }

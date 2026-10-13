@@ -181,6 +181,23 @@ export function fuenteEnMuestra(pts, haz, F) {
 }
 
 /**
+ * Tiempo de desaceleración de la onda E (ms): la pendiente desde su pico hasta la mitad, extrapolada a cero (2 × el
+ * tiempo hasta la mitad). Si la E se funde con la A antes de caer a la mitad (relajación lenta, frecuencia alta), la
+ * pendiente se toma hasta el 75% (4 × ese tiempo). null si no cae ni eso antes de la A.
+ */
+export function tdeDe(curva, iE, sg = 1) {
+  const E = iE >= 0 ? sg * curva[iE].v : 0; if (!(E > 0)) return null;
+  let t75 = null;
+  for (let i = iE + 1; i < curva.length; i++) {
+    if (curva[i].fase === 'A') break;
+    const v = sg * curva[i].v;
+    if (t75 == null && v <= 0.75 * E) t75 = curva[i].t;
+    if (v <= E / 2) return 2 * (curva[i].t - curva[iE].t) * 1000;
+  }
+  return t75 == null ? null : 4 * (t75 - curva[iE].t) * 1000;
+}
+
+/**
  * Medidas del último latido según la fuente. Llenado AV (mitral, tricúspide): E (pico en F-G), A (pico en A), E/A
  * y tiempo de desaceleración (TDE: la pendiente de E desde su pico hasta la mitad, extrapolada a cero).
  * Eyección (aórtica, pulmonar): pico e integral velocidad-tiempo (ITV). Venas hepáticas: S (sístole, B-D),
@@ -196,9 +213,7 @@ export function medidasLatido(curva, fuente) {
   const pico = (xs) => xs.reduce((a, c) => (sg * c.v > sg * a.v ? c : a), { v: 0, t: 0 });
   if (fuente.tipo === 'valvula' && !SALIDA[fuente.n]) {
     const E = pico(en('FG')), A = pico(en('A'));
-    let tde = null; const iE = curva.indexOf(E);
-    if (iE >= 0 && E.v) for (let i = iE + 1; i < curva.length; i++) if (sg * curva[i].v <= sg * E.v / 2) { tde = 2 * (curva[i].t - E.t) * 1000; break; }
-    return { tipo: 'llenado', E: Math.abs(E.v), A: Math.abs(A.v), ea: A.v ? Math.abs(E.v / A.v) : null, tde };
+    return { tipo: 'llenado', E: Math.abs(E.v), A: Math.abs(A.v), ea: A.v ? Math.abs(E.v / A.v) : null, tde: tdeDe(curva, curva.indexOf(E), sg) };
   }
   if (fuente.tipo === 'valvula') {
     let itv = 0; for (let i = 1; i < curva.length; i++) { const v = sg * curva[i].v; if (v > 0) itv += v * (curva[i].t - curva[i - 1].t); }

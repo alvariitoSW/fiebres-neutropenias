@@ -1,0 +1,42 @@
+<p class="at-entradilla">La FEVI es la fracción del volumen telediastólico que expulsa el VI. Se mide a partir de los volúmenes del VI trazados en las vistas apicales de cuatro y dos cámaras.</p>
+<div class="card at-figura" data-figura="sistolica"></div>
+<div class="at-texto">
+    <p>En la figura, las dos vistas son cortes del corazón de la app (las mismas vistas apicales del simulador), movido por el motor del latido: el trazado, L y los 20 discos se calculan sobre ese corte, y el volumen que dan se compara con el volumen real del motor. El acortamiento del ápex mueve el transductor fuera del ápex verdadero sin dejar de apuntar a la base.</p>
+    <h4>El método biplano de discos</h4>
+    <p class="at-ecuacion">V = π/4 × Σ aᵢ · bᵢ × L/20</p>
+    <p>El método biplano de discos (regla de Simpson modificada) es el método 2D recomendado; cuando la ecocardiografía 3D está disponible y la imagen es buena, debe usarse<sup class="at-cita" data-ref="lang2015"></sup>. El VI se traza en telediástole y en telesístole, los cuadros que define el <button type="button" class="tx-link" data-at-cap="cycle">capítulo 06</button>, en las vistas apicales de cuatro y dos cámaras. El programa divide el VI en una pila de discos finos y suma sus volúmenes: cada disco es una elipse con un diámetro de cada vista (aᵢ y bᵢ). <span class="hl-rojo">Los volúmenes del VI no deben calcularse a partir de dimensiones lineales</span><sup class="at-cita" data-ref="lang2015"></sup>.</p>
+    <p>El borde se traza en la interfaz entre el miocardio compacto y la cavidad, y se cierra con una línea recta a través del anillo mitral. La longitud del VI, L, se mide desde el punto medio de esa línea hasta el punto más lejano del borde, y se usa la mayor L de las dos vistas<sup class="at-cita" data-ref="lang2015"></sup>. En la figura, cada vista muestra su trazado, L y los 20 discos.</p>
+    <p>El <b>acortamiento</b> de las vistas apicales (en inglés, <i>foreshortening</i>: el plano no pasa por el ápex verdadero) hace que se infraestimen los volúmenes del VI<sup class="at-cita" data-ref="lang2015"></sup>. Una profundidad de imagen ajustada al VI reduce la probabilidad de acortarlo<sup class="at-cita" data-ref="lang2015"></sup>. En una vista acortada, el ápex tiene un contorno más redondeado<sup class="at-cita" data-ref="mitchell2019"></sup>. En la figura, el corte acortado pierde la punta del VI: L baja, los dos volúmenes caen y, como la cavidad telesistólica es más pequeña, pierde una fracción mayor de su volumen, así que en esta geometría la FEVI sale algo más alta de lo real.</p>
+    <h4>Valores normales</h4>
+    <ul>
+        <li>La FEVI normal es del <b>52-72% en varones y del 54-74% en mujeres</b>. Está levemente reducida entre el 41-51% en varones y el 41-53% en mujeres, moderadamente entre el 30-40% y gravemente por debajo del 30%<sup class="at-cita" data-ref="lang2015"></sup>.</li>
+        <li>El volumen telediastólico indexado es normal entre 34-74 mL/m² en varones y 29-61 mL/m² en mujeres, y el telesistólico indexado, entre 11-31 mL/m² en varones y 8-24 mL/m² en mujeres<sup class="at-cita" data-ref="lang2015"></sup>.</li>
+        <li>Las categorías de insuficiencia cardíaca por FEVI son reducida (<span class="hl-rojo">≤40%</span>), levemente reducida (41-49%) y preservada (≥50%)<sup class="at-cita" data-ref="heidenreich2022"></sup>.</li>
+        <li>Los capítulos de válvulas definen la disfunción del VI con otros cortes de FEVI: menos del 50% en la estenosis aórtica, 55% o menos en la insuficiencia aórtica y 60% o menos en la insuficiencia mitral<sup class="at-cita" data-ref="otto2020"></sup>.</li>
+        <li>El strain longitudinal global es normal si es más negativo que <b>−18%</b>, dudoso entre −16% y −18% y anómalo si es menos negativo que −16%<sup class="at-cita" data-ref="thomas2025"></sup>. Varía entre fabricantes y versiones del programa, así que los estudios seriados de un paciente deben usar el mismo equipo y el mismo programa<sup class="at-cita" data-ref="lang2015"></sup>.</li>
+    </ul>
+    <p>La guía de informes de la ASE describe la función sistólica global del VI como normal, hiperdinámica o reducida, con un grado de la reducción<sup class="at-cita" data-ref="taub2025"></sup>. Debe informarse una sola FEVI, junto con el método de medida<sup class="at-cita" data-ref="taub2025"></sup>. En estudios 2D seriados de pacientes estables, la FE varió más de 10 puntos porcentuales; con ecocardiografía 3D sin contraste, varió unos 6 puntos<sup class="at-cita" data-ref="thavendiranathan2013"></sup>.</p>
+    <p>La función sistólica del VD (TAPSE, S′ y el cambio fraccional de área) está en el capítulo 14 (aún en el original); el TAPSE puede medirse en el modo M del simulador.</p>
+    <details class="nota-plegable">
+        <summary>Nota de fuentes: Teichholz en Fisiopatología UCI</summary>
+        <p>La Ficha 5 de Fisiopatología UCI · Cardiología (El Libro Azul, cap. 5) presenta el método de Teichholz (volúmenes a partir de diámetros en modo M) como el más usado, y el de Simpson como más fiable cuando la geometría del VI está alterada. La guía de cuantificación de 2015 de este capítulo va más allá: los volúmenes del VI no deben calcularse a partir de dimensiones lineales.</p>
+        <div class="cv-fila"><button type="button" class="especialidad-link" data-especialidad="fisioUci" data-view="cardiologia" data-panel="panel-cardio-tabs" data-tab="cardio-monitorizacion-hemodinamica" data-resaltar="#cardio-eco-simpson">Simpson y Teichholz en la Ficha 5 →</button></div>
+    </details>
+    <details class="nota-plegable">
+        <summary>Cómo hace la figura la geometría de la app</summary>
+        <p>El VI es el de la geometría del corazón 3D de la app, con exactamente el volumen del motor en cada instante (por eso el volumen «real» es el del motor). Las vistas son las apicales de cuatro y dos cámaras del simulador; la base baja hacia el ápex durante la sístole igual que en el 3D. El trazado es el borde de la cavidad en el corte (no hay trabéculas ni músculos papilares, así que no hay que decidir qué se deja dentro), cerrado justo bajo el plano del anillo. L va del punto medio del anillo al punto más lejano del borde, y los discos se cortan perpendiculares a L.</p>
+        <p>Con los dos planos por el eje, el biplano queda un ~5% por debajo del volumen real: el trazado se cierra justo bajo el anillo y la geometría no es exactamente un cuerpo de elipses. El acortamiento del ápex mueve el transductor hasta 24 mm fuera del ápex, perpendicular al plano, y el haz sigue apuntando al mismo punto de la base.</p>
+        <p>El «acortamiento del borde» es cuánto se acorta en telesístole la longitud del borde endocárdico trazado en el cuatro cámaras: una aproximación geométrica al strain longitudinal (que en la clínica se mide por seguimiento del moteado del miocardio), ilustrativa.</p>
+    </details>
+    <div class="cv-fila">
+        <button type="button" class="tx-link" data-at-sim="M">Medir diámetros del VI en el modo M del simulador →</button>
+    </div>
+    <div class="at-clave">
+        <h4>Puntos clave</h4>
+        <ol>
+            <li>Los volúmenes del VI se miden con el método biplano de discos en las vistas apicales de cuatro y dos cámaras, y hay que evitar acortar el ápex.</li>
+            <li>El límite inferior normal de la FEVI es el 52% en varones y el 54% en mujeres.</li>
+            <li>El strain longitudinal global es anómalo cuando es menos negativo que −16%<sup class="at-cita" data-ref="thomas2025"></sup>.</li>
+        </ol>
+    </div>
+</div>
