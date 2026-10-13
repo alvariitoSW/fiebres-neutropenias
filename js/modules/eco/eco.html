@@ -7,6 +7,20 @@
     <p>Simulador: el corte ecográfico sale del mismo corazón que late, en el mismo instante</p>
 </div>
 
+<div class="card cv-tarjeta cv-atlas" id="cv-atlas">
+    <h3>📖 The Heart by Ultrasound</h3>
+    <p class="cv-muted">Atlas interactivo de ecocardiografía de <b>David Ouyang</b> (grupo EchoNet): 24 capítulos en diez partes, en el orden de las guías ASE, y 6 capítulos extra. Todas las imágenes son simuladas, cortadas de un corazón 3D, y cada valor de las guías lleva su fuente. Varias ideas de este simulador vienen de ahí (con permiso del autor), reconstruidas sobre el motor de la app.</p>
+    <div class="cv-fila">
+        <a class="cv-mini cv-atlas-abrir" id="cv-atlas-abrir" target="_blank" rel="noopener">Abrir el atlas ↗</a>
+        <a class="cv-mini" id="cv-atlas-repo" target="_blank" rel="noopener">Código en GitHub ↗</a>
+    </div>
+    <details class="cv-atlas-indice">
+        <summary>Sus 30 capítulos</summary>
+        <div id="cv-atlas-lista"></div>
+    </details>
+    <p class="cv-muted">Web externa, en inglés: se abre en otra pestaña y necesita conexión. Cada capítulo se abre directamente por su enlace.</p>
+</div>
+
 <div class="cv-sim" id="cv-sim">
     <p class="cv-cargando" id="cv-cargando">Cargando el simulador…</p>
 
@@ -128,6 +142,7 @@
         <div class="card cv-tarjeta" id="cv-que-mirar-card" hidden>
             <p class="cv-titulo">Qué mirar en esta vista</p>
             <div id="cv-que-mirar"></div>
+            <div class="cv-atlas-aqui" id="cv-atlas-aqui"></div>
         </div>
 
         <details class="card cv-tarjeta cv-plegable" id="cv-plegable-3d" open>

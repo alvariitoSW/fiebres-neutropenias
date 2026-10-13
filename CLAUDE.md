@@ -11011,6 +11011,16 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
   espectro y medidas; 6) el latido de la VCI es de verdad ±2 % y no la saca de su banda de FATE; 7) borrar el trazado
   (o cambiar la escala) borra los calibres; 8) una sola fórmula de velocidad de los vasos (`velVaso`); 9) los puntos
   del abdomen van en `abdomen-puntos.mjs` y `corazon-geo` ya no carga las mallas. Pruebas: 113 (3 *todo*).
+- **The Heart by Ultrasound, enlazado desde Eco cardíaca (octubre 2026)**, a petición explícita del usuario
+  («revisa el repositorio douyang/echodemo… y en el apartado de eco pon otro apartado u otro link que lleve al
+  contenido generado en ese repositorio»). Se releyó el repositorio (relectura en `js/modules/eco/README.md`,
+  «The Heart by Ultrasound en la app») y se añadió, **solo con enlaces** a su web <https://intro2echo.com> (en
+  inglés, otra pestaña): una tarjeta arriba de la vista con el atlas, el código en GitHub y su índice de 30
+  capítulos (cada uno por su `#clave`), y en «Qué mirar» la línea «En The Heart by Ultrasound» con los capítulos de
+  la vista, el escenario, el modo y la medida que se están viendo. Datos en `js/modules/eco/atlas-ouyang.js`. CSS
+  `cv-atlas-*`. Verificado con Playwright (390 y 360 px): 30 enlaces, contexto que cambia con la vista (A4C), el
+  Doppler, el TEP y la VCI, sin desbordamiento ni errores. La web no se pudo abrir desde el entorno (el proxy la
+  bloquea): las claves salen del código del repositorio. Cache-busting `?v=20261025-2`.
 - **Fase 5: vistas subcostales y supraesternal**, a petición explícita del usuario («sigue con la fase 5 de la eco»).
   Detalle en `js/modules/eco/README.md` («Vistas subcostales y supraesternal»). Tres vistas nuevas en `planoVista()`
   (`ecografia.mjs`), colocadas con puntos anatómicos (xifoides, hiato, eje de la VCI, arco aórtico) y las direcciones

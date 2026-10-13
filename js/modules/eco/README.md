@@ -411,6 +411,26 @@ dio permiso para usar su trabajo. Aun así **se reconstruyen sobre nuestro motor
 un estado por fotograma, las formas precalculadas que solo se mezclan, las valvas con tres formas a lo largo de un
 arco y las vistas ecográficas cortadas del propio corazón. Si algo de esto se publica, el autor agradece (sin exigirla) una cita.
 
+### The Heart by Ultrasound en la app (octubre 2026)
+
+A petición explícita del usuario, la vista Eco cardíaca tiene un apartado con **enlaces** al atlas (no su contenido):
+la web <https://intro2echo.com> (donde despliega `main` del repositorio, en Cloudflare Pages) y el código
+(<https://github.com/douyang/echodemo>). `atlas-ouyang.js` guarda, como datos puros, sus 24 capítulos y 6 extra con
+la clave con la que cada uno se abre en la dirección (`#as`, `#tee`… de `src/order.js`; `#ivc` es un alias que abre
+el 08 en el modo de la VCI), y qué capítulo enlazar desde cada vista, escenario, modo y medida del simulador.
+`index.js` pinta el índice y, en «Qué mirar», la línea «En The Heart by Ultrasound» con los capítulos de lo que se ve.
+
+Cómo está hecho (relectura del repositorio en octubre de 2026, commit `9b337e6`): sin paso de compilación, módulos
+ES, `three.js` para el 3D y rough.js para los dibujos; **un solo corazón** (`assets/heart.json`, 2,3 MB), un juego
+de planos de vista, un renderizador de eco (`src/bmode.js`: ecogenicidad por estructura, superficie especular,
+sombra del calcio, moteado que se mueve con la pared, desenfoque del haz, compresión logarítmica) y un modelo del
+ciclo sirven a todos los capítulos; cada enfermedad es un *shape target* de la malla con un peso calibrado para que
+la imagen mida lo que dice el texto (tablas `src/*cal.js`); las páginas de gravedad mueven un solo deslizador dentro
+de las bandas de las guías y redondean antes de graduar, para que una cifra no contradiga su grado (`src/sev.js`);
+un solo almacén de estado (`src/state.js`); unas 115 peticiones y 7,9 MB por capítulo, con la malla guardada en
+IndexedDB entre visitas. Las ideas que ya tomamos (un estado por fotograma, formas precalculadas, valvas en arco,
+eco cortada del corazón) siguen reconstruidas sobre nuestro motor.
+
 **Hígado, diafragma y apófisis xifoides**: mallas de **Z-Anatomy** (https://www.z-anatomy.com), licencia
 **CC BY-SA 4.0**, derivadas de **BodyParts3D** (© Database Center for Life Science, DBCLS), obtenidas del paquete npm `@authorod/svitylo-3d-anatomy-data` 1.1.0 (canal de prueba). Se han simplificado,
 cuantizado y colocado bajo nuestro corazón; `abdomen-data.mjs` es una obra derivada y se distribuye bajo la misma

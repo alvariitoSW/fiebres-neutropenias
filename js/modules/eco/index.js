@@ -7,6 +7,7 @@
 //   hace la navegación en home/index.js) deja el simulador en esa vista, ese escenario o esa medida del modo M.
 // - "Qué mirar en esta vista" copia líneas reales de otras fichas (que-mirar.js).
 import { QUE_MIRAR, ESCENARIO_TIPO, FORMA_NOTA } from './que-mirar.js';
+import { ATLAS_URL, ATLAS_REPO, ATLAS_PARTES, ATLAS_VISTA, ATLAS_ESCENARIO, ATLAS_MODO, atlasUrl } from './atlas-ouyang.js';
 
 // Sin banco de repaso propio todavía (main.js fusiona los de todas las especialidades).
 export const quizTriggerId = [];
@@ -16,6 +17,7 @@ export const quizTemas = [];
 export function init() {
     const raiz = document.getElementById('cv-sim');
     if (!raiz) return { volverAlMenu() {}, irAFicha() {} };
+    pintarAtlas();
     let sim = null, carga = null, visible = false;
     let pendiente = {};
 
@@ -25,6 +27,7 @@ export function init() {
         if (pendiente.vista && pendiente.vista !== sim.vistaActual) sim.vista(pendiente.vista);
         if (pendiente.medir) { sim.modo('M'); sim.medir(pendiente.medir); }
         pendiente = {};
+        pintarAtlasAqui();
     }
     function actualizarActivo() { sim?.activo(visible && !document.hidden); }
 
@@ -34,9 +37,9 @@ export function init() {
             // un fotograma para que se vea "Cargando…" antes de calcular el latido inicial (bloquea un momento)
             return new Promise(r => requestAnimationFrame(() => setTimeout(r, 0))).then(() => {
                 document.getElementById('cv-contenido').hidden = false;
-                sim = montarSimulador(raiz, { onVista: pintarQueMirar, onEscenario: pintarEscenario });
+                sim = montarSimulador(raiz, { onVista: (k) => { pintarQueMirar(k); pintarAtlasAqui(); }, onEscenario: (k) => { pintarEscenario(k); pintarAtlasAqui(); } });
                 document.getElementById('cv-cargando').hidden = true;
-                pintarQueMirar(sim.vistaActual); pintarEscenario(sim.escenarioActual);
+                pintarQueMirar(sim.vistaActual); pintarEscenario(sim.escenarioActual); pintarAtlasAqui();
                 aplicarPendiente(); actualizarActivo();
             });
         }).catch(err => {
@@ -62,6 +65,31 @@ export function init() {
         pendiente = { vista: b.dataset.ecoVista, escenario: b.dataset.ecoEscenario, medir: b.dataset.ecoMedir };
         aplicarPendiente();
     });
+
+    // ---- The Heart by Ultrasound (atlas-ouyang.js): solo enlaces a su web ----
+    function pintarAtlas() {
+        document.getElementById('cv-atlas-abrir').href = ATLAS_URL;
+        document.getElementById('cv-atlas-repo').href = ATLAS_REPO;
+        document.getElementById('cv-atlas-lista').innerHTML = ATLAS_PARTES.map(p => `
+            <p class="cv-atlas-parte">${p.parte}</p>
+            <ul class="cv-atlas-lista">${p.caps.map(([clave, n, titulo, resumen]) => `
+                <li><a href="${atlasUrl(clave)}" target="_blank" rel="noopener"><b>${n}</b> ${titulo} ↗</a><span>${resumen}</span></li>`).join('')}
+            </ul>`).join('');
+    }
+    // "En el atlas": los capítulos de lo que se ve ahora (vista, escenario, modo o medida), sin repetir.
+    function pintarAtlasAqui() {
+        const caja = document.getElementById('cv-atlas-aqui');
+        if (!caja || !sim) return;
+        const modo = raiz.querySelector('[data-modo].on')?.dataset.modo;
+        const medir = modo === 'M' ? raiz.querySelector('[data-medir].on')?.dataset.medir : null;
+        const lista = [...(ATLAS_VISTA[sim.vistaActual] || []), ...(ATLAS_ESCENARIO[sim.escenarioActual] || []),
+            ...(ATLAS_MODO[medir] || ATLAS_MODO[modo] || [])];
+        const vistos = new Set();
+        const enlaces = lista.filter(e => !vistos.has(e.clave) && vistos.add(e.clave));
+        caja.innerHTML = enlaces.length ? `<p class="cv-muted">En <i>The Heart by Ultrasound</i> (en inglés):</p>
+            <div class="cv-fila">${enlaces.map(e => `<a class="cv-mini" href="${atlasUrl(e.clave)}" target="_blank" rel="noopener">${e.titulo} ↗</a>`).join('')}</div>` : '';
+    }
+    raiz.addEventListener('click', (e) => { if (e.target.closest('[data-modo], [data-medir]')) requestAnimationFrame(pintarAtlasAqui); });
 
     function pintarEscenario(k) {
         const nota = document.getElementById('cv-escenario-nota');
