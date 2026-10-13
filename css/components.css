@@ -2370,3 +2370,45 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 .cv-sonda-fila b { color: var(--accent-blue); font-size: 0.78rem; text-align: right; }
 #cv-sonda-reto-txt { margin-top: 8px; }
 .cv-sonda-fila input[type=range] { accent-color: var(--accent-blue); }
+
+/* ===================== LIBROS (índice central y Marino · Fundamentos) ===================== */
+/* Línea de fuente al principio y al final de cada ficha de un libro. */
+.fuente-ficha { font-size: 0.74rem; color: var(--text-muted); margin: 0 0 10px; }
+.fuente-ficha .biblio-link { font-size: inherit; }
+
+/* Pestañas de libro */
+.lib-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+.lib-tab { display: flex; flex-direction: column; gap: 2px; text-align: left; padding: 10px 12px; min-height: 52px; border-radius: 10px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); color: var(--text-main); cursor: pointer; font-family: inherit; }
+.lib-tab.active { border-color: var(--lib-color); background: color-mix(in srgb, var(--lib-color) 14%, transparent); }
+.lib-tab-titulo { font-weight: bold; font-size: 0.9rem; color: var(--lib-color); }
+.lib-tab-autor { font-size: 0.7rem; color: var(--text-muted); }
+
+.lib-nota { font-size: 0.8rem; color: var(--text-muted); margin: 4px 0 6px; }
+.lib-resumen { font-size: 0.82rem; margin: 0 0 8px; }
+.lib-vacio { font-size: 0.82rem; color: var(--text-muted); }
+
+/* Tira de capítulos: un cuadrado por capítulo, coloreado por dónde vive */
+.lib-tira { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0 6px; }
+.lib-tira-cap { min-width: 30px; height: 30px; padding: 0 4px; border-radius: 6px; border: 1px solid var(--lib-color); background: color-mix(in srgb, var(--lib-color) 22%, transparent); color: var(--text-main); font-size: 0.72rem; font-weight: bold; cursor: pointer; font-family: inherit; touch-action: manipulation; }
+.lib-tira-pend { display: inline-flex; align-items: center; justify-content: center; min-width: 30px; height: 30px; padding: 0 6px; border-radius: 6px; border: 1px dashed var(--border-color); color: var(--text-muted); font-size: 0.68rem; }
+.lib-leyenda { display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: 0.7rem; color: var(--text-muted); margin-bottom: 12px; }
+.lib-leyenda span { border-left: 3px solid var(--lib-color, var(--border-color)); padding-left: 5px; }
+.lib-leyenda .lib-leyenda-pend { border-left-style: dashed; }
+
+/* Secciones y capítulos */
+.lib-seccion { margin-bottom: 14px; }
+.lib-seccion-titulo { font-size: 0.72rem; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border-color); padding-bottom: 4px; margin: 0 0 8px; }
+.lib-pendiente { font-size: 0.8rem; color: var(--text-muted); font-style: italic; margin: 0; }
+.lib-cap { border: 1px solid var(--border-color); border-left: 4px solid var(--lib-color); border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; background: rgba(255,255,255,0.02); transition: box-shadow 0.3s; }
+.lib-cap-resaltado { box-shadow: 0 0 0 2px var(--lib-color); }
+.lib-cap-head { display: flex; gap: 10px; align-items: flex-start; }
+.lib-cap-num { flex: 0 0 auto; min-width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: color-mix(in srgb, var(--lib-color) 25%, transparent); color: var(--text-main); font-weight: bold; font-size: 0.8rem; }
+.lib-cap-titulo { margin: 0; font-weight: bold; font-size: 0.9rem; }
+.lib-cap-original { margin: 2px 0 0; font-size: 0.72rem; color: var(--text-muted); font-style: italic; }
+.lib-cap-donde { font-size: 0.74rem; color: var(--text-muted); margin: 6px 0; }
+.lib-fichas { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+.lib-ficha { border: 1px solid var(--lib-color); background: transparent; color: var(--text-main); border-radius: 14px; padding: 6px 10px; min-height: 32px; font-size: 0.74rem; cursor: pointer; font-family: inherit; text-align: left; touch-action: manipulation; }
+.lib-ficha:active { background: color-mix(in srgb, var(--lib-color) 18%, transparent); }
+.lib-pdf { font-size: 0.74rem; }
+/* Deslizadores dentro de un .form-group (simuladores de Libros): ancho completo y color de la app. */
+.form-group input[type="range"] { width: 100%; min-height: 28px; accent-color: var(--accent-yellow); }

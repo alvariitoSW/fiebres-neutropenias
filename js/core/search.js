@@ -26,8 +26,9 @@ const ESPECIALIDADES = {
     cardiologia: { nombre: 'Cardiología', icono: '🫀', color: 'var(--accent-blue)' },
     neumologia: { nombre: 'Neumología', icono: '🫁', color: 'var(--accent-green)' },
     sobrevivirUmi: { nombre: 'Sobrevivir a la UMI', icono: '📋', color: 'var(--accent-purple)' },
+    libros: { nombre: 'Libros', icono: '📚', color: 'var(--accent-purple)' },
 };
-const ORDEN_ESPECIALIDADES = ['home', 'nefrologia', 'uciPapers', 'fisioUci', 'cardiologia', 'neumologia', 'sobrevivirUmi'];
+const ORDEN_ESPECIALIDADES = ['home', 'nefrologia', 'uciPapers', 'fisioUci', 'cardiologia', 'neumologia', 'sobrevivirUmi', 'libros'];
 
 // panelId (el mismo que ya recibe openCorkboardTopic) → cómo llegar hasta
 // él: especialidad + clave de vista de su switcher medio (y, solo para
@@ -74,6 +75,9 @@ const PANEL_NAV = {
 
     // Neumología
     'panel-merino-neumo-tabs': { especialidad: 'neumologia', view: 'merinoNeumologia', bloque: 'Merino Neumología' },
+
+    // Libros
+    'panel-marino-fund-tabs': { especialidad: 'libros', view: 'marinoFundamentos', bloque: 'Marino · Fundamentos (caps. 1-11)' },
 
     // Sobrevivir a la UMI
     'panel-manual-umi-tabs': { especialidad: 'sobrevivirUmi', view: 'manualUmi', bloque: 'Manual UMI Negrín' },

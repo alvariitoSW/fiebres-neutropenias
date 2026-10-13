@@ -18,7 +18,8 @@ y Merino Cardiología, sobre shock clínico — a diferencia del bloque de
 Cardiología de Fisiopatología UCI, que es fisiopatología pura, no
 manejo), y **Neumología** con Merino Neumología (embolia pulmonar, asma/
 EPOC, SDRA, oxigenoterapia/VNI, ventilación mecánica, vía aérea
-artificial, NAV y destete). Está pensada para ir creciendo con más
+artificial, NAV y destete), más **Libros**, un índice central de los libros de texto
+(*The ICU Book* de Marino y El Libro Azul) que además aloja los caps. 1-11 de Marino. Está pensada para ir creciendo con más
 especialidades (radiología, etc.) según se vaya aportando contenido. Es
 una herramienta de apoyo para médicos, pensada para consultarse a pie de
 cama en el móvil.
@@ -49,7 +50,8 @@ cama en el móvil.
 >
 > **Orden de trabajo pedido después por el usuario (octubre 2026)**, por
 > delante de los pendientes de arriba y de la ecografía: 1) terminar de
-> subir Merino (los capítulos del *The ICU Book* (5.ª ed.) de Marino que aún no están: hoy hay en `docs/` los caps. 12-30);
+> subir Merino (los capítulos del *The ICU Book* (5.ª ed.) de Marino que aún no están: **hechos los caps. 1-11** en la
+> sección Libros, octubre 2026; hoy están en la app los caps. 1-30, faltan del 31 en adelante, sin PDF);
 > 2) terminar El Libro Azul (hoy hay las secciones I, II, III y VII);
 > 3) el contenido del PIF de R1 (las 7 rotaciones sin contenido:
 > Radiología de tórax, Neurorradiología, Cardiología, Medicina Interna,
@@ -8256,10 +8258,74 @@ página impresa − 52).
       `quiz.js` — pura ampliación de datos + 5 botones nuevos reutilizando
       clases/listeners ya existentes.
 
+### Libros
+
+Sexta puerta de la raíz (`#btn-libros`), a petición explícita del usuario ("como tengo el merino dividido en varios
+bloques... habría que crear una sección nueva llamada libros, y ahí tener el libro azul y luego el marino. Mantener
+como está todo pero... generar un sitio centralizado para buscar las partes de esos libros y ya después subir el
+contenido, sobre todo mostrándolo de manera visual"). **No mueve nada**: los capítulos ya construidos siguen en su
+especialidad (Merino HEMATO, Merino Cardiología, Merino Neumología, Fisiopatología UCI); Libros solo los indexa y
+lleva a ellos. Mismo patrón de dos niveles que el resto (`librosLevel` en `js/modules/libros/index.js`, con
+`{ menu, marinoFundamentos }`; registrada en `main.js` y en `topLevel`/`BOTONES_ESPECIALIDAD` de `home/index.js`).
+
+- **Corrección de atribución, ya aplicada antes de esta sección**: el libro que la app llamaba "Marik, *Handbook of
+  Evidence-Based Critical Care*" es en realidad **Marino PL, *The ICU Book*, 5.ª ed.** Se renombraron los PDF de
+  `docs/` (`marino-2024-*.pdf`) y se corrigieron las citas de Merino HEMATO/Cardiología/Neumología. Los nombres de
+  módulo "Merino …" se dejan tal cual (son nombres internos que el usuario ya usa); las menciones históricas a
+  "Marik" que quedan en este archivo describen el estado anterior a la corrección.
+- **Índice central** (`libros-menu.html` + `indice.js`, datos puros en `js/data/libros-indice.js`): una pestaña por
+  libro, un buscador de capítulos (por título en español o inglés, sección o nombre de ficha), una **tira de
+  capítulos** coloreada por dónde vive cada uno (con leyenda; las secciones sin PDF salen como "⏳"), y la lista por
+  secciones: cada capítulo con su título original, dónde vive, un botón por ficha (`[data-especialidad]` normal,
+  resuelto por el listener único de `home/index.js`) y un enlace al PDF con `#page=N`. Para añadir un capítulo o un
+  libro nuevo, solo se toca `libros-indice.js` (`fichas` usa las mismas claves que cualquier enlace cruzado). Los
+  títulos de las secciones V, VIII y IX de Marino no se han podido comprobar en los PDF y se dejan en blanco.
+- **Marino · Fundamentos (caps. 1-11)** (`marino-fundamentos.html`/`.js`), el único contenido propio de Libros,
+  porque no encaja en ninguna especialidad: 3 PDF nuevos en `docs/` (`marino-2024-acceso-vascular-practicas-caps1-4`,
+  `-practicas-monitorizacion-caps5-9`, `-fluidoterapia-caps10-11`). Cuaderno de campo de **23 fichas** (modo
+  compacto, >12), dos o tres por capítulo: catéteres y flujo, periféricos y centrales, ecoguiada e intraósea (Cap.
+  1); CVC: indicaciones y sitio, complicaciones inmediatas y punta (Cap. 2); el catéter permanente, bacteriemia por
+  catéter (Cap. 3); microbioma y descontaminación, úlcera de estrés (Cap. 4); tromboprofilaxis: riesgo y fármacos,
+  mecánica y por escenario (Cap. 5); analgesia, sedación (Cap. 6); oximetría, capnografía (Cap. 7); catéter de
+  arteria pulmonar, termodilución y parámetros (Cap. 8); transporte de O₂, extracción y lactato (Cap. 9);
+  cristaloides, coloides (Cap. 10); retorno venoso y sobrecarga, hipoperfusión y respuesta a fluidos (Cap. 11).
+  - **39 imágenes reales** (`js/modules/libros/img/mar-fig*.jpg`): fotos, ecografías, radiografías, microscopía y los
+    esquemas que no se pueden tabular. Los gráficos de barras/líneas se recrearon como tabla (con "lectura
+    aproximada" cuando la fuente no imprime la cifra).
+  - **14 calculadoras** (`marino-fundamentos.js`, guard `.value === ''`): French→mm (Tabla 1.1), ¿profilaxis de
+    úlcera de estrés? (Tabla 4.2), dosis de tromboprofilaxis por fármaco/ClCr/IMC (Tablas 5.2-5.3, avisa en el tramo
+    en que la tabla y el texto discrepan para el fondaparinux), BPS, RASS objetivo, propofol (µg/kg/min, umbrales del
+    síndrome de infusión y kcal/día), oximetría dual, índices del catéter de arteria pulmonar (Tabla 8.1, con avisos
+    de combinación no fisiológica), CaO₂, extracción (Tabla 9.4), cristaloide necesario para reponer un déficit de
+    plasma (40/36 mL/kg, 20% en plasma), ScvO₂ + gap de PCO₂ (Tabla 11.2), VVS, y respuesta a fluidos (EPP ≥10% /
+    sobrecarga >10%, con los avisos de dolor y presión intraabdominal).
+  - **3 simuladores** (SVG): aporte-consumo de O₂ (Figura 9.3; el VO₂ de 130 mL/min/m² y la SaO₂ de 98% son
+    ilustrativos), adónde va lo que se infunde (Figura 10.1, escalado en proporción al volumen) y la curva de retorno
+    venoso (Figura 11.2, Rv constante y Pms normal de 7 mmHg, con la que 1 mmHg de PAD quita 1/7 ≈ 14%, como dice la
+    fuente). En la vista Visual de la Ficha I hay además un Hagen-Poiseuille (r⁴/L).
+  - **Notas de fidelidad** (erratas de la fuente, reproducidas tal cual): IO en fémur/tibia, columnas de la Tabla
+    2.2, unidad de la CMI de vancomicina, cortes renales del fondaparinux, "Tabla 5.3" por 5.2, ketamina µg/h,
+    haloperidol (tabla frente a texto), rangos de DO₂/VO₂/SvO₂ entre capítulos, P50 27 (Marino) frente a 22,5 (El
+    Libro Azul), "metabolismo aerobio" donde debe ser anaerobio y la Ecuación 11.3/11.4 (Cap. 11). La VCI: Marino la
+    da por poco fiable y el Manual UMI (FATE) la usa — nota de fuentes con enlace.
+  - **Enlaces cruzados** (12) hacia Manual UMI, Merino Cardiología/Neumología, Fisiopatología UCI y VExUS.
+  - **Vista Visual** de las 23 fichas (`visual-marino.js`, recetas del kit, casi todos los nodos por `#id`; las
+    calculadoras y los simuladores se conectan, nunca se copian).
+  - **138 preguntas** (`js/data/marino-fundamentos-preguntas.js`, 5 de opción múltiple + 1 de redactar por ficha),
+    asignatura "Libros"; el botón "🎯 Repasar" abre directamente la lista de fichas del bloque. Banco total de la
+    app: 2069.
+- CSS con prefijo `lib-` y `.fuente-ficha`; regla genérica nueva `.form-group input[type="range"]` (ancho completo y
+  color de la app). El buscador global indexa Libros (`PANEL_NAV['panel-marino-fund-tabs']`).
+- Verificado con Playwright (390 y 360 px): las 23 fichas abren con su panel activo, las 39 imágenes cargan, las 23
+  vistas Visual se construyen sin fuentes sin resolver, las calculadoras dan los valores esperados (p. ej. 5 Fr →
+  1,65 mm; enoxaparina con IMC 45 → 40 mg/12 h; propofol 40 mL/h en 70 kg y 60 h → 95 µg/kg/min, riesgo), los 12
+  enlaces cruzados y los botones del índice (muestra de 6 especialidades) abren su ficha, el quiz recorre las 138
+  preguntas sin errores, y no hay desbordamiento horizontal. Cache-busting `?v=20261020`.
+
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye
 también `especialidades`, `pifMenu`, `cardiorrespiMenu`, `nefrologia`,
-`uciPapers`, `fisioUci`, `cardiologia`, `neumologia` y `sobrevivirUmi` como
+`uciPapers`, `fisioUci`, `cardiologia`, `neumologia`, `sobrevivirUmi`, `eco` y `libros` como
 vistas más del mismo switcher raíz —,
 submenú de
 Citopenias, submenú de
@@ -8278,6 +8344,7 @@ siempre, solo cambia qué contenedor está visible.
 
 > Desde octubre de 2026 hay una **5.ª puerta, «Eco cardíaca»** (acceso directo al simulador, que también vive
 > dentro del grupo Fisiopatología UCI): ver «Circulación viva y Eco cardíaca» más abajo.
+> Y una **6.ª puerta, «Libros»** (índice central de los libros de texto): ver «Libros» más arriba.
 
 A petición explícita del usuario ("Quiero un rediseño del menú principal"),
 se rediseñó visualmente el menú de "Especialidades" y, en el mismo pedido,

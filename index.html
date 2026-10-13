@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HUD Clínico UCI</title>
-<link rel="stylesheet" href="css/variables.css?v=20261019">
-<link rel="stylesheet" href="css/base.css?v=20261019">
-<link rel="stylesheet" href="css/components.css?v=20261019">
+<link rel="stylesheet" href="css/variables.css?v=20261020">
+<link rel="stylesheet" href="css/base.css?v=20261020">
+<link rel="stylesheet" href="css/components.css?v=20261020">
 </head>
 <body>
 
@@ -30,7 +30,7 @@
     <div id="especialidades-view">
         <div class="diag-header">
             <h2 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">Especialidades</h2>
-            <p>5 puertas de entrada — cada una puede agrupar varias especialidades</p>
+            <p>6 puertas de entrada — cada una puede agrupar varias especialidades</p>
         </div>
 
         <button class="especialidad-tile" id="btn-pif" style="--tile-accent: var(--accent-blue); min-height: 190px;">
@@ -103,6 +103,22 @@
                 <p class="especialidad-tile-eyebrow">Simulador · acceso directo</p>
                 <p class="especialidad-tile-title" style="font-size: 1.05rem;">Eco cardíaca</p>
                 <p class="especialidad-tile-desc">El corte ecográfico del mismo corazón que late: 10 vistas (apicales, paraesternales, subcostales y supraesternal), Doppler y escenarios de shock</p>
+            </div>
+            <span class="especialidad-tile-chev">→</span>
+        </button>
+
+        <button class="especialidad-tile" id="btn-libros" style="--tile-accent: var(--accent-blue); min-height: 160px;">
+            <svg width="86" height="58" viewBox="0 0 96 64" style="position: absolute; top: 8%; left: 50%; transform: translateX(-50%);">
+                <path d="M48 14 C38 8 22 8 12 12 L12 54 C22 50 38 50 48 56 Z" fill="rgba(212,175,55,0.14)" stroke="#d4af37" stroke-width="1.8"/>
+                <path d="M48 14 C58 8 74 8 84 12 L84 54 C74 50 58 50 48 56 Z" fill="rgba(207,154,62,0.14)" stroke="#cf9a3e" stroke-width="1.8"/>
+                <line x1="20" y1="22" x2="40" y2="20" stroke="#d4af37" stroke-width="1.4"/><line x1="20" y1="30" x2="40" y2="28" stroke="#d4af37" stroke-width="1.4"/>
+                <line x1="56" y1="20" x2="76" y2="22" stroke="#cf9a3e" stroke-width="1.4"/><line x1="56" y1="28" x2="76" y2="30" stroke="#cf9a3e" stroke-width="1.4"/>
+            </svg>
+            <div class="especialidad-tile-scrim"></div>
+            <div class="especialidad-tile-content">
+                <p class="especialidad-tile-eyebrow">Índice central · 2 libros</p>
+                <p class="especialidad-tile-title" style="font-size: 1.05rem;">Libros</p>
+                <p class="especialidad-tile-desc">The ICU Book (Marino) y El Libro Azul: cada capítulo, su PDF y la ficha donde vive</p>
             </div>
             <span class="especialidad-tile-chev">→</span>
         </button>
@@ -448,9 +464,17 @@
     <!-- ========================================== -->
     <div id="eco-view" style="display: none;" data-include="js/modules/eco/eco.html"></div>
 
+    <!-- ========================================== -->
+    <!-- VISTA: LIBROS                               -->
+    <!-- ========================================== -->
+    <div id="libros-view" style="display: none;">
+        <div id="libros-menu-view" data-include="js/modules/libros/libros-menu.html"></div>
+        <div id="marino-fund-view" style="display: none;" data-include="js/modules/libros/marino-fundamentos.html"></div>
+    </div>
+
     <div data-include="js/modules/quiz/quiz.html"></div>
 </div>
 
-<script type="module" src="js/main.js?v=20261019"></script>
+<script type="module" src="js/main.js?v=20261020"></script>
 </body>
 </html>

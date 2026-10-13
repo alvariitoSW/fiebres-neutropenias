@@ -61,6 +61,7 @@ const BOTONES_ESPECIALIDAD = {
     cardiologia: 'btn-cardiologia',
     neumologia: 'btn-neumologia',
     sobrevivirUmi: 'btn-sobrevivir-umi',
+    libros: 'btn-libros',
 };
 
 export function init() {
@@ -89,6 +90,7 @@ export function init() {
         neumologia: document.getElementById('neumologia-view'),
         sobrevivirUmi: document.getElementById('sobrevivir-umi-view'),
         eco: document.getElementById('eco-view'),
+        libros: document.getElementById('libros-view'),
     }, (key, vista) => {
         // Eco cardíaca tiene dos puertas y muchos accesos desde fichas: su "← VOLVER" regresa a la pantalla
         // desde la que se entró, como Escalas Generales.
