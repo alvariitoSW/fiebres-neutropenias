@@ -368,6 +368,7 @@
             <div class="agua-simulador" id="mar-french-calc">
                 <h4 style="color: var(--accent-blue);">🧮 Del French al milímetro</h4>
                 <p class="subtitle">Ecuación 1.1: French × 0,33 = diámetro externo en mm. El gauge equivalente sale de la Tabla 1.1 (solo para los tamaños que da la tabla).</p>
+                <p class="fuente-ficha" id="mar-french-nota">Nota de fidelidad: la ecuación y la Tabla 1.1 no dan exactamente lo mismo (9 Fr: 2,97 mm con la ecuación, 3,2 mm en la tabla; 7 Fr: 2,31 frente a 2,4). La tabla recoge catéteres reales y la ecuación es una aproximación; aquí se dan las dos.</p>
                 <div class="form-group">
                     <label for="mar-french-input">Tamaño (French)</label>
                     <input type="number" id="mar-french-input" min="1" max="30" step="0.5" value="7" inputmode="decimal">
@@ -377,10 +378,16 @@
 
             <p class="section-label">El flujo: la ecuación de Hagen-Poiseuille</p>
             <p id="mar-poiseuille">Descrita a mediados del siglo XIX por un ingeniero alemán (Gotthilf Hagen) y un médico francés (Jean Marie Poiseuille), por separado: <span class="hl-azul">Q = ΔP × (π r⁴ / 8 µ L)</span>. El flujo laminar en un tubo rígido (Q) es <strong>directamente proporcional</strong> al gradiente de presión (ΔP = P<sub>entrada</sub> − P<sub>salida</sub>) y a la <strong>cuarta potencia del radio</strong> (r⁴), e <strong>inversamente proporcional</strong> a la longitud (L) y a la viscosidad del líquido (µ). El término entre paréntesis es el inverso de la resistencia: R = 8µL / πr⁴.</p>
+            <p><button type="button" class="especialidad-link" data-especialidad="fisioUci" data-view="cardiologia" data-panel="panel-cardio-tabs" data-tab="cardio-fisiologia-aplicada">🔬 Hagen-Poiseuille y las resistencias vasculares (El Libro Azul, Fisiopatología UCI · Cardiología) →</button></p>
+            <p><button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-hemorragico-fluidos">🩸 Catéteres de infusión rápida en el shock hemorrágico (Merino Cardiología) →</button></p>
             <div class="warning-box" id="mar-flujo-cateter">
                 <strong>La velocidad de infusión la marca el catéter, no la vena.</strong> El ritmo de infusión depende de las dimensiones del catéter colocado, no del tamaño de la vena canalizada.
             </div>
 
+            <div class="article-figure" id="mar-img-1-1">
+                <img src="js/modules/libros/img/mar-fig1-1-flujo-calibre-longitud.jpg" alt="Gráficas de flujo de agua por gravedad: a la izquierda según el calibre (16, 18 y 20 G), a la derecha según la longitud (2, 6 y 12 pulgadas)" loading="lazy">
+                <p class="article-figure-caption">Figura 1.1 — Influencia del diámetro (izquierda) y de la longitud (derecha) del catéter sobre el flujo.</p>
+            </div>
             <p class="section-label">Figura 1.1 — Flujo de agua por gravedad según el calibre (catéteres de 1,2 pulgadas)</p>
             <table class="data-table" id="mar-fig-1-1-calibre">
                 <thead><tr><th>Calibre</th><th>Flujo (mL/min)</th></tr></thead>
@@ -878,6 +885,8 @@
                 <p class="article-figure-caption">Figura 3.4 — Septicemia por catéter: crecimiento mucho más denso en la sangre extraída por el catéter que en la periférica.</p>
             </div>
             <p id="mar-bac-metodo">Ninguno es claramente mejor: el cuantitativo es algo más exacto (94% frente a 91%), quizá sin compensar su coste. En la práctica, hay poco entusiasmo por ambos y el diagnóstico suele basarse en el mismo germen en sangre del catéter y periférica sin otro foco aparente.</p>
+            <p><button type="button" class="especialidad-link" data-especialidad="home" data-view="citopenias" data-pulsar="btn-neutropenia-febril btn-dirigido" data-resaltar="#cvc-dirigido-card">🩸 La calculadora de catéter del neutropénico (Hematología · Neutropenia Febril) →</button></p>
+            <p><button type="button" class="especialidad-link" data-especialidad="home" data-view="trasplante" data-trasplante="complicaciones" data-panel="panel-tph-comp-tabs" data-tab="comp-cateter">🧬 La infección de catéter tras el trasplante (Hematología · Trasplante) →</button></p>
             <div class="warning-box" id="mar-bac-luces">
                 <strong>¿Cuántas luces cultivar?</strong> Se recomienda cultivar una sola luz, pero en un estudio <span class="hl-rojo">un cultivo de una sola luz habría pasado por alto el 38%</span> de las infecciones por catéter, y mezclar sangre de todas las luces no es tan sensible. La evidencia disponible apoya <strong>cultivar cada luz</strong>.
             </div>
@@ -935,6 +944,24 @@
                     <tr><td>Enterococos o bacilos gramnegativos</td><td>7-14 días, se cambie o no el catéter</td></tr>
                 </tbody>
             </table>
+            <div class="agua-simulador" id="mar-hemocultivos-calc">
+    <h4 style="color: var(--accent-red);">🧮 Hemocultivos pareados y duración del antibiótico (Tabla 3.4 y texto)</h4>
+    <p class="subtitle">Primero, ¿el catéter es la fuente? Después, ¿cuántos días? Solo los criterios y las duraciones que da el capítulo.</p>
+    <div class="form-group"><label for="mar-hc-mismo">¿El mismo germen en la sangre del catéter y en la periférica?</label><select id="mar-hc-mismo"><option value="">— elige —</option><option value="si">Sí</option><option value="no">No</option></select></div>
+    <div class="form-group"><label for="mar-hc-metodo">Método</label><select id="mar-hc-metodo"><option value="tiempo" selected>Tiempo diferencial hasta la positividad</option><option value="cuant">Hemocultivos cuantitativos</option></select></div>
+    <div class="form-group" id="mar-hc-tiempo-grupo"><label for="mar-hc-horas">¿Cuántas horas antes crece la sangre del catéter?</label><input type="number" id="mar-hc-horas" min="-48" max="72" step="0.5" inputmode="decimal" placeholder="p. ej. 3"></div>
+    <div class="form-group" id="mar-hc-cuant-grupo" hidden><label for="mar-hc-razon">Colonias del catéter ÷ colonias periféricas</label><input type="number" id="mar-hc-razon" min="0" step="0.5" inputmode="decimal" placeholder="p. ej. 5"></div>
+    <div class="tfg-estado tfg-estado-ok" id="mar-hc-resultado" style="display:none;"></div>
+    <div class="form-group" style="margin-top:12px;"><label for="mar-hc-germen">Germen confirmado</label><select id="mar-hc-germen"><option value="">— elige —</option><option value="scn">Estafilococo coagulasa negativo (poco patógeno)</option><option value="sa">Staphylococcus aureus</option><option value="ent">Enterococo o bacilo gramnegativo</option><option value="trombo">Tromboflebitis supurada (cualquier germen)</option></select></div>
+    <div id="mar-hc-scn" hidden><label class="checkbox-label puntuable"><input type="checkbox" id="mar-hc-respuesta"> Buena respuesta en 72 h</label></div>
+    <div id="mar-hc-sa" hidden>
+        <label class="checkbox-label puntuable"><input type="checkbox" id="mar-hc-endo"> Endocarditis en la ecografía transesofágica</label>
+        <label class="checkbox-label puntuable"><input type="checkbox" id="mar-hc-retirado"> Catéter retirado</label>
+        <label class="checkbox-label puntuable"><input type="checkbox" id="mar-hc-inmuno"> Inmunodepresión</label>
+        <label class="checkbox-label puntuable"><input type="checkbox" id="mar-hc-protesis"> Prótesis intravascular</label>
+    </div>
+    <div class="tfg-estado tfg-estado-ok" id="mar-hc-duracion" style="display:none;"></div>
+</div>
 
             <p class="section-label">Sepsis persistente (&gt;72 h de antibiótico)</p>
             <div class="micro-profiles">
@@ -1000,6 +1027,10 @@
                     <tr><td>2</td><td>Erradicada por completo en 1 hora</td></tr>
                 </tbody>
             </table>
+            <div class="article-figure" id="mar-img-4-3">
+                <img src="js/modules/libros/img/mar-fig4-3-ph-gastrico-bacterias.jpg" alt="Curvas de supervivencia de Salmonella typhimurium en 2 horas a pH 2, 3 y 4" loading="lazy">
+                <p class="article-figure-caption">Figura 4.3 — Efecto del pH gástrico sobre el crecimiento de <em>Salmonella typhimurium</em>, causa frecuente de enteritis infecciosa.</p>
+            </div>
             <p>El pH del jugo gástrico es de 1-2, así que es muy eficaz. Prueba de su papel: suprimir el ácido (anti-H2, IBP) aumenta las gastroenteritis por <em>Salmonella</em> y <em>Campylobacter</em> y las infecciones por <em>Clostridioides difficile</em>.</p>
 
             <p class="section-label">Descontaminación oral</p>
@@ -1016,6 +1047,10 @@
                 </tbody>
             </table>
             <p class="fuente-ficha">Cifras leídas a ojo de la gráfica de barras de la fuente, sin número impreso: son aproximadas.</p>
+            <div class="article-figure" id="mar-img-4-4">
+                <img src="js/modules/libros/img/mar-fig4-4-colonizacion-orofaringe.jpg" alt="Barras de prevalencia de bacilos gramnegativos aerobios en la orofaringe: adultos sanos, alcohólicos, empleados del hospital, pacientes de planta y de UCI" loading="lazy">
+                <p class="article-figure-caption">Figura 4.4 — Prevalencia de bacilos gramnegativos aerobios (BGNA) en los cultivos de la cavidad oral según el grupo.</p>
+            </div>
 
             <p class="section-label">Tabla 4.1 — Métodos de descontaminación oral (paciente intubado)</p>
             <table class="data-table" id="mar-tabla-4-1">
@@ -1061,6 +1096,10 @@
                     <tr><td>SDD</td><td>1,4</td><td>1,9%</td><td>2.667</td></tr>
                 </tbody>
             </table>
+            <div class="article-figure" id="mar-img-4-5">
+                <img src="js/modules/libros/img/mar-fig4-5-descontaminacion-sdd.jpg" alt="Barras de bacteriemias por gramnegativos con descontaminación oral, digestiva y en el grupo control" loading="lazy">
+                <p class="article-figure-caption">Figura 4.5 — Bacteriemia por gramnegativos con descontaminación oral selectiva (SOD), digestiva selectiva (SDD) o cuidados habituales (control): a la izquierda, bacteriemias por 1.000 días; a la derecha, % de pacientes con bacteriemia. N = pacientes de cada grupo.</p>
+            </div>
 
             <dl class="kv-row" id="mar-probioticos"><dt>Probióticos</dt><dd>Habitantes normales e inocuos del intestino (sobre todo <em>Lactobacillus</em> y <em>Bifidobacterium</em>, resistentes al ácido y a las sales biliares; también el hongo <em>Saccharomyces</em>). No confundir con los <strong>prebióticos</strong> (fibras que favorecen la flora normal); juntos son "simbióticos". Uso principal en la UCI: prevenir <em>C. difficile</em> durante el antibiótico, pero <span class="hl-rojo">solo si se empiezan en los 2 primeros días</span> de antibiótico (19 estudios). También reducen la encefalopatía hepática y la neumonía asociada al ventilador.</dd></dl>
             <p><button type="button" class="especialidad-link" data-especialidad="neumologia" data-view="merinoNeumologia" data-panel="panel-merino-neumo-tabs" data-tab="neumo-nav-prevencion">🫁 La prevención de la neumonía asociada al ventilador (Merino Neumología) →</button></p>
@@ -1137,6 +1176,10 @@
                     <div class="micro-prof-body">
                         <p>Profármacos que se activan en la célula parietal y bloquean de forma irreversible la bomba que segrega H⁺: inhibición completa del ácido. Se consideran equivalentes (no se ha estudiado); el <strong>pantoprazol</strong> es el más usado en UCI por su vía IV. No requieren ajuste renal.</p>
                         <dl class="kv-row"><dt>Figura 4.6</dt><dd>En 3.298 pacientes de alto riesgo (6 países), pantoprazol 40 mg IV al día: sangrado significativo <strong>4,2% con placebo frente a 2,5%</strong> (un efecto de solo 1,7%). Sumando sangrado + neumonía + infección por <em>C. difficile</em> + isquemia miocárdica: <strong>21,9% con pantoprazol frente a 22,6% con placebo</strong>. <span class="hl-purpura">Sin beneficio neto</span>.</dd></dl>
+                        <div class="article-figure" id="mar-img-4-6">
+                            <img src="js/modules/libros/img/mar-fig4-6-pantoprazol.jpg" alt="Barras de sangrado digestivo y de sangrado más neumonía, C. difficile e isquemia miocárdica con pantoprazol y placebo" loading="lazy">
+                            <p class="article-figure-caption">Figura 4.6 — Profilaxis con pantoprazol (40 mg IV al día): a la izquierda, sangrado digestivo significativo; a la derecha, la suma del sangrado y de los riesgos del fármaco (neumonía, infección por <em>C. difficile</em> e isquemia miocárdica). 3.298 pacientes de UCI de alto riesgo.</p>
+                        </div>
                         <dl class="kv-row"><dt>Clopidogrel</dt><dd>Comparten la vía del citocromo P-450 hepático: los IBP pueden frenar la activación del clopidogrel. Se ha implicado en recurrencias de síndrome coronario tras intervencionismo, con pruebas inconsistentes; hoy <strong>no se recomienda evitarlos</strong> con clopidogrel.</dd></dl>
                     </div>
                 </div>
@@ -1233,12 +1276,17 @@
                 </tbody>
             </table>
             <p class="fuente-ficha">Rangos leídos a ojo de las barras de la figura, sin cifras impresas: son aproximados.</p>
+            <div class="article-figure" id="mar-img-5-1">
+                <img src="js/modules/libros/img/mar-fig5-1-prevalencia-etv.jpg" alt="Barras horizontales del riesgo de enfermedad tromboembólica sin profilaxis por grupo de pacientes" loading="lazy">
+                <p class="article-figure-caption">Figura 5.1 — Riesgo de enfermedad tromboembólica venosa sin profilaxis en distintos grupos (casos sintomáticos y asintomáticos).</p>
+            </div>
 
             <p class="section-label">Antes de anticoagular</p>
             <dl class="kv-row" id="mar-tev-contra-absolutas"><dt>Contraindicaciones absolutas</dt><dd>Hemorragia intracraneal y sangrado "clínicamente importante" (caída de la sistólica ≥20 mmHg, caída de la Hb ≥2 g/dL o necesidad de ≥2 concentrados de hematíes).</dd></dl>
             <dl class="kv-row" id="mar-tev-contra-relativas"><dt>Contraindicaciones relativas</dt><dd>Traumatismo craneal o medular, sangrado digestivo recurrente y coagulopatía grave (p. ej., plaquetas &lt;50.000). <span class="hl-verde">La menstruación no es contraindicación.</span></dd></dl>
 
             <p class="section-label">Tabla 5.2 — Profilaxis parenteral (subcutánea)</p>
+            <div style="overflow-x:auto;">
             <table class="data-table" id="mar-tabla-5-2">
                 <thead><tr><th>Fármaco</th><th>Estándar</th><th>Obesidad (IMC ≥40)</th><th>Insuficiencia renal</th></tr></thead>
                 <tbody>
@@ -1248,6 +1296,7 @@
                     <tr><td>Fondaparinux</td><td>2,5 mg al día</td><td>Sin recomendaciones</td><td>ClCr 35-50: 1,5 mg al día; no usar con ClCr &lt;30</td></tr>
                 </tbody>
             </table>
+            </div>
 
             <div class="agua-simulador" id="mar-profilaxis-calc">
                 <h4 style="color: var(--accent-red);">🧮 ¿Qué dosis le toca? (Tablas 5.2 y 5.3)</h4>
@@ -1321,6 +1370,7 @@
             </div>
 
             <p class="section-label">Tabla 5.3 — Profilaxis oral</p>
+            <div style="overflow-x:auto;">
             <table class="data-table" id="mar-tabla-5-3">
                 <thead><tr><th>Fármaco</th><th>Estándar</th><th>Obesidad</th><th>Insuficiencia renal</th></tr></thead>
                 <tbody>
@@ -1330,6 +1380,7 @@
                     <tr><td>Warfarina</td><td>2,5-5 mg al día, ajustando a INR 1,5-2,5</td><td>Sin ajuste conocido</td><td>Sin ajuste</td></tr>
                 </tbody>
             </table>
+            </div>
             <p class="fuente-ficha">El texto del capítulo remite a la "Tabla 5.3" para las dosis de las HBPM, pero esas dosis están en la Tabla 5.2: la 5.3 es la de los fármacos orales (errata de la fuente).</p>
             <ol id="mar-acod-puntos">
                 <li>La warfarina ya no se prefiere (tarda 5-7 días, muchas interacciones, controles de INR). Los <strong>ACOD</strong> (dabigatrán, inhibidor directo de la trombina; rivaroxabán, apixabán y edoxabán, del Xa) actúan en 1-4 h sin controles. Hoy solo se recomiendan en profilaxis para <strong>prótesis de cadera y rodilla</strong> (edoxabán no tiene dosis aprobada de profilaxis).</li>
@@ -1341,6 +1392,7 @@
             </ol>
             <dl class="kv-row" id="mar-aspirina"><dt>Aspirina</dt><dd>La guía de la American Society of Hematology la acepta (recomendación condicional) como alternativa en cadera y rodilla; la mayoría de estudios usó dosis bajas (81 mg). Pero a menudo iba combinada (anticoagulante al principio y aspirina tras el alta): <strong>como único fármaco tras una artroplastia no parece justificada</strong>.</dd></dl>
             <dl class="kv-row" id="mar-neuroeje"><dt>Punciones y catéteres neuroaxiales</dt><dd>Riesgo de hematoma espinal y parálisis. Esperar tras la última dosis: <strong>HNF SC ≥12 h</strong>; <strong>enoxaparina una vez al día ≥24 h</strong>; con función renal normal o algo reducida, <strong>dabigatrán y rivaroxabán ≥48 h</strong> y <strong>apixabán ≥24 h</strong> (más tiempo si la insuficiencia renal es más grave).</dd></dl>
+            <p><button type="button" class="especialidad-link" data-especialidad="neumologia" data-view="merinoNeumologia" data-panel="panel-merino-neumo-tabs" data-tab="neumo-ep-manejo">🫁 Cuando la profilaxis no basta: el tratamiento de la embolia pulmonar (Merino Neumología) →</button></p>
 
             <p class="fuente-ficha" style="margin-top:12px;">📚 Fuente completa: <a class="biblio-link" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=1" target="_blank" rel="noopener">Marino PL. The ICU Book, 5.ª ed., Cap. 5 "Venous Thromboprophylaxis" →</a></p>
         </div>
@@ -1433,6 +1485,10 @@
                     <tr><td>Enfermeras de UCI</td><td>~43%</td></tr>
                 </tbody>
             </table>
+            <div class="article-figure" id="mar-img-6-1">
+                <img src="js/modules/libros/img/mar-fig6-1-diazepam-dolor.jpg" alt="Barras del porcentaje de médicos residentes y enfermeras de UCI que respondieron mal" loading="lazy">
+                <p class="article-figure-caption">Figura 6.1 — Porcentaje de médicos residentes y de enfermeras de UCI que respondieron mal a la pregunta de si el diazepam alivia el dolor.</p>
+            </div>
 
             <p class="section-label">El dolor en el crítico</p>
             <ol id="mar-hipernocicepcion">
@@ -1549,6 +1605,15 @@
                     <tr><td>Ketamina</td><td><strong>60-120 µg/kg/h</strong> con un opioide (efecto ahorrador), sin efectos psicomiméticos llamativos a esas dosis.</td></tr>
                 </tbody>
             </table>
+            <div class="agua-simulador" id="mar-analgesico-calc">
+                <h4 style="color: var(--accent-green);">🧮 Analgésicos sin opioides: la dosis (Tabla 6.3)</h4>
+                <p class="subtitle">Paracetamol y ketorolaco con el ajuste que da la tabla.</p>
+                <div class="form-group"><label for="mar-anal-farmaco">Fármaco</label><select id="mar-anal-farmaco"><option value="paracetamol">Paracetamol IV</option><option value="ketorolaco">Ketorolaco IV</option></select></div>
+                <div class="form-group"><label for="mar-anal-edad">Edad (años)</label><input type="number" id="mar-anal-edad" min="16" max="110" step="1" inputmode="numeric" value="60"></div>
+                <div class="form-group"><label for="mar-anal-peso">Peso (kg)</label><input type="number" id="mar-anal-peso" min="20" max="250" step="1" inputmode="numeric" value="70"></div>
+                <label class="checkbox-label puntuable"><input type="checkbox" id="mar-anal-renal"> Insuficiencia renal</label>
+                <div class="tfg-estado tfg-estado-ok" id="mar-anal-resultado" style="display:none;"></div>
+            </div>
             <div class="warning-box" id="mar-ketamina-errata"><strong>Nota de fidelidad.</strong> La Tabla 6.3 de la fuente escribe la ketamina como "60-120 µg/h", pero el texto del capítulo da "60-120 µg/kg/h". Se sigue el texto: 60-120 µg/h sería una dosis total irrisoria para un adulto.</div>
             <dl class="kv-row" id="mar-ketamina"><dt>Ketamina</dt><dd>Derivado de la fenciclidina, anestésica y analgésica, con efectos psicomiméticos (reacciones disociativas, alucinaciones, delirio al suspenderla). Además sube la presión y la frecuencia (útil en el shock), broncodilata (útil en el asma), da náuseas e hipersalivación, aunque estos efectos se atenúan a dosis analgésicas. <strong>No se aconseja en la isquemia miocárdica.</strong></dd></dl>
             <dl class="kv-row" id="mar-neuropatico"><dt>Dolor neuropático</dt><dd>Suele necesitar analgesia no opioide: <strong>gabapentina 600 mg cada 8 h</strong> o <strong>carbamazepina 100 mg cada 6 h</strong>, por vía enteral (las dosis eficaces varían).</dd></dl>
@@ -1609,6 +1674,7 @@
 
             <p class="section-label">Benzodiacepinas</p>
             <p id="mar-bzd-intro">Las clásicas, pero en retroceso por la acumulación y por más delirio. En vena se prefieren <strong>midazolam</strong> y <strong>lorazepam</strong>; el diazepam se evita (vida media de 90 h y metabolitos activos).</p>
+            <p class="section-label">Tabla 6.5 — Sedación con benzodiacepinas IV</p>
             <table class="data-table" id="mar-tabla-6-5">
                 <thead><tr><th></th><th>Midazolam</th><th>Lorazepam</th></tr></thead>
                 <tbody>
@@ -1709,6 +1775,13 @@
             </ol>
             <div class="warning-box" style="border-color: var(--accent-red);" id="mar-haloperidol-qtc"><strong>No usar si el QTc es &gt;500 ms.</strong> La prolongación del QT puede desencadenar una <em>torsade de pointes</em> (3-4% de quienes lo reciben IV), sobre todo con QTc &gt;500 ms o más de 35 mg al día. Las reacciones extrapiramidales son poco frecuentes por vía IV. Ojo con el <strong>síndrome neuroléptico maligno</strong> (hiperpirexia, rigidez intensa, rabdomiólisis), descrito con haloperidol IV y potencialmente mortal si pasa desapercibido.</div>
             <p class="fuente-ficha">Nota de fidelidad: la Tabla 6.8 y el texto del capítulo no coinciden en tres cifras (midazolam 1 mg frente a 1-2 mg, esperar 15 frente a 20 minutos, mantenimiento cada 6 frente a cada 4-6 h). Se dan las dos.</p>
+            <div class="card" id="mar-halo-wizard" style="padding:14px 16px;">
+                <p class="section-label" style="margin-top:0;">🧭 Haloperidol paso a paso (Tabla 6.8)</p>
+                <div id="mar-halo-wizard-pregunta" style="font-size:0.88rem; margin-bottom:10px;"></div>
+                <div id="mar-halo-wizard-botones" style="display:flex; gap:10px;"></div>
+                <div class="result-box" id="mar-halo-wizard-resultado" style="display:none; text-align:left; margin-top:12px;"></div>
+                <button class="siguiente-ficha-btn" id="mar-halo-wizard-reset" style="display:none; margin-top:10px;">↺ Reiniciar</button>
+            </div>
 
             <p class="section-label">De la opiofobia a la opiofilia, y vuelta (reflexión final)</p>
             <p id="mar-opiofobia">En los ochenta se acuñó "opiofobia" para la reticencia a prescribir opioides por miedo a la adicción. Para corregirla se nombró al dolor "quinta constante vital" y se citó un único estudio de 11.000 pacientes con solo 4 adicciones (en realidad, una carta al director). En 2010 se llegó a <strong>81 recetas de opioides por cada 100 estadounidenses</strong> ("opiofilia"), y entre 1999 y 2019 hubo unas <strong>500.000 muertes por sobredosis</strong>; la prescripción ha bajado, pero las muertes siguen subiendo. Hoy se intenta frenar su uso clínico… otra vez por miedo a la adicción: opiofobia de nuevo.</p>
@@ -1725,8 +1798,16 @@
 
             <p class="section-label">Cómo funciona</p>
             <dl class="kv-row" id="mar-oxi-absorcion"><dt>La luz que absorbe la hemoglobina</dt><dd>Cada forma de hemoglobina absorbe la luz de una manera (Figura 7.1). En el <strong>rojo (660 nm)</strong>, la oxihemoglobina absorbe menos que la desoxihemoglobina (por eso la sangre oxigenada es más roja); en el <strong>infrarrojo (940 nm)</strong> ocurre al revés. Con esas dos longitudes de onda se distinguen ambas.</dd></dl>
+            <div class="article-figure" id="mar-img-7-1">
+                <img src="js/modules/libros/img/mar-fig7-1-espectro-hemoglobina.jpg" alt="Curvas de absorción de la luz de la oxihemoglobina, desoxihemoglobina, carboxihemoglobina y metahemoglobina entre 600 y 1.000 nm" loading="lazy">
+                <p class="article-figure-caption">Figura 7.1 — Absorción de la luz por la hemoglobina oxigenada (HbO₂), desoxigenada (Hb), la carboxihemoglobina (COHb) y la metahemoglobina (metHb). Las líneas verticales son las dos longitudes de onda del pulsioxímetro (660 y 940 nm).</p>
+            </div>
             <dl class="kv-row" id="mar-oxi-historia"><dt>Oximetría antigua</dt><dd>Nació en los años cuarenta para detectar la hipoxemia de los pilotos de combate, con luz a través del lóbulo de la oreja. Fallaba por dos motivos: la luz dependía de otras cosas (pigmento de la piel, grosor) y no distinguía arterias de venas. No cuajó hasta la pulsioximetría de los setenta.</dd></dl>
             <dl class="kv-row" id="mar-pulsioximetria"><dt>Pulsioximetría</dt><dd>Al pasar la luz por una arteria que late, el aumento de volumen arterial en sístole <strong>reduce la luz transmitida</strong> (fotopletismograma, Figura 7.2). Analizar solo la fracción sistólica (A/B) centra el análisis en la sangre <strong>arterial</strong> y elimina lo que no late (p. ej., la hemoglobina de las venas).</dd></dl>
+            <div class="article-figure" id="mar-img-7-2">
+                <img src="js/modules/libros/img/mar-fig7-2-fotopletismograma.jpg" alt="Trazado del fotopletismograma con la amplitud sistólica A y la transmisión basal B" loading="lazy">
+                <p class="article-figure-caption">Figura 7.2 — Fotopletismograma: cambios en la luz transmitida por la variación pulsátil del volumen arterial. A = amplitud sistólica; B = transmisión basal.</p>
+            </div>
             <div class="article-figure">
                 <img src="js/modules/libros/img/mar-fig7-3-pulsioximetro-dedo.jpg" alt="Sensor de pulsioximetría de dedo con los diodos de 660 y 940 nm y el fotodetector, y la onda de pulso debajo" loading="lazy">
                 <p class="article-figure-caption">Figura 7.3 — Sensor de dedo: dos diodos (660 y 940 nm) a un lado y el fotodetector al otro; abajo, el fotopletismograma (invertido para parecerse a una onda de presión arterial).</p>
@@ -1811,6 +1892,10 @@
             <dl class="kv-row" id="mar-capno-sedacion"><dt>Sedación para procedimientos</dt><dd>La sedación puede causar hipoventilación (más en ancianos, obesos, apnea del sueño o retención crónica de CO₂). La P<sub>ET</sub>CO₂ sube <strong>antes</strong> de que baje la SpO₂: la capnografía es superior a la oximetría para detectarla y se recomienda <strong>siempre</strong> que se seda para un procedimiento.</dd></dl>
             <dl class="kv-row" id="mar-capno-intubacion"><dt>Intubación</dt><dd>Confirmar con CO₂ espirado (colorimétrico o infrarrojo) es "estándar de cuidado": la intubación esofágica no reconocida (puede ser mortal) ocurre en <span class="hl-rojo">1 de cada 18 intubaciones urgentes</span> en el crítico, y auscultar no siempre la distingue. Puede no haber CO₂ pese a estar en la tráquea en la <strong>parada cardíaca</strong> (sin retorno venoso que lleve CO₂ al alvéolo); el broncoespasmo grave se ha propuesto, sin buena confirmación.</dd></dl>
             <dl class="kv-row" id="mar-capno-gasto"><dt>Cambios del gasto cardíaco</dt><dd>Los cambios de P<sub>ET</sub>CO₂ se correlacionan con los del gasto (r = 0,87 en posoperados, Figura 7.8): predicen la respuesta a volumen en ventilados, pero no en sanos en respiración espontánea. Merece más estudio.</dd></dl>
+            <div class="article-figure" id="mar-img-7-8">
+                <img src="js/modules/libros/img/mar-fig7-8-etco2-gasto.jpg" alt="Nube de puntos de los cambios de CO2 espirado frente a los cambios del gasto cardíaco, con r = 0,87" loading="lazy">
+                <p class="article-figure-caption">Figura 7.8 — Relación entre los cambios de P<sub>ET</sub>CO₂ y los del gasto cardíaco en pacientes posoperados (r = coeficiente de correlación).</p>
+            </div>
             <dl class="kv-row" id="mar-capno-rcp"><dt>Reanimación</dt><dd>Es improbable recuperar la circulación espontánea si la P<sub>ET</sub>CO₂ es <strong>≤10 mmHg tras 20 minutos</strong> de RCP.</dd></dl>
             <p><button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-paro-monitorizacion">💓 ETCO₂ durante la RCP (Merino Cardiología, Cap. 21) →</button></p>
 
@@ -1869,6 +1954,10 @@
                 <p class="article-figure-caption">Figura 8.4 — Base de la medida: sin flujo (Q = 0), P<sub>W</sub> = P<sub>C</sub> = P<sub>LA</sub>, siempre que la presión capilar supere a la alveolar (P<sub>C</sub> &gt; P<sub>A</sub>).</p>
             </div>
             <dl class="kv-row" id="mar-enclavamiento-respiracion"><dt>Variación respiratoria</dt><dd>Solo refleja la aurícula izquierda si la presión capilar supera a la alveolar; si no, refleja la alveolar (es lo que ocurre cuando el trazado oscila con la respiración). La presión intratorácica se transmite a los vasos de baja presión y hace oscilar la presión medida sin que cambie la <strong>transmural</strong> (la que importa). Por eso se mide <strong>al final de la espiración</strong> (presión intratorácica cero): en ventilación con presión positiva es el <strong>punto más bajo</strong> de cada oscilación; en respiración espontánea, el <strong>más alto</strong>.</dd></dl>
+            <div class="article-figure" id="mar-img-8-5">
+                <img src="js/modules/libros/img/mar-fig8-5-pvc-ventilacion.jpg" alt="Trazado real de presión venosa central que oscila con cada respiración del ventilador" loading="lazy">
+                <p class="article-figure-caption">Figura 8.5 — Variación respiratoria de la PVC en ventilación mecánica. Se mide al final de la espiración, que corresponde a los puntos más bajos de las oscilaciones.</p>
+            </div>
             <dl class="kv-row" id="mar-enclavamiento-peep"><dt>PEEP</dt><dd>La PEEP eleva falsamente el enclavamiento (y la PVC) al final de la espiración, porque la presión intratorácica no es cero. Se puede desconectar brevemente al paciente del ventilador para medirla. Con PEEP intrínseca (vaciado incompleto) la medida es difícil.</dd></dl>
             <dl class="kv-row" id="mar-enclavamiento-variabilidad"><dt>Variación espontánea</dt><dd>≤4 mmHg en el 60% de los pacientes, pero hasta 7 mmHg: un cambio <strong>&gt;4 mmHg</strong> se considera clínicamente significativo.</dd></dl>
             <div class="warning-box" id="mar-enclavamiento-hidrostatica">
@@ -2013,6 +2102,7 @@
             <dl class="kv-row" id="mar-curva-forma"><dt>Por qué la forma de S ayuda</dt><dd>1) La PaO₂ normal está en la parte <strong>plana</strong>: puede caer hasta 60 mmHg con poco cambio de saturación. 2) La PO₂ venosa (≈40 mmHg) está en la parte <strong>empinada</strong>, lo que facilita la captación de O₂ en el pulmón.</dd></dl>
             <dl class="kv-row" id="mar-curva-desplazamientos"><dt>Desplazamientos</dt><dd><strong>A la derecha</strong> (acidemia, temperatura alta, más CO₂, más 2,3-DPG): libera más O₂ en los tejidos. <strong>A la izquierda</strong> (alcalosis, hipotermia, menos CO₂, menos 2,3-DPG): lo libera peor. Su posición la marca la <strong>P50</strong> (PO₂ con saturación del 50%), normalmente <strong>unos 27 mmHg</strong>. En sangre conservada 3 semanas en ácido-citrato-dextrosa baja a 15 mmHg por falta de 2,3-DPG. Como el desplazamiento tiene efectos opuestos en el pulmón y en los tejidos, su importancia neta no está clara.</dd></dl>
             <p class="fuente-ficha">La P50 que da esta fuente (27 mmHg) no coincide con la de El Libro Azul (22,5 mmHg, en Fisiopatología UCI · Hematología): son fuentes distintas y se reproduce cada una tal cual.</p>
+            <p><button type="button" class="especialidad-link" data-especialidad="fisioUci" data-view="hematologia" data-panel="panel-fuci-hemato-tabs" data-tab="fuci-transfusion" data-resaltar="#fuci-hbcurva-select">📈 La curva de disociación interactiva (El Libro Azul, Fisiopatología UCI · Hematología) →</button></p>
 
             <p class="section-label">El contenido de O₂</p>
             <dl class="kv-row" id="mar-hb-o2"><dt>Unido a la Hb</dt><dd><span class="hl-azul">HbO₂ = 1,34 × Hb × SO₂</span> (mL/dL; SO₂ en decimales). 1,34 mL de O₂ por gramo de Hb.</dd></dl>
@@ -2022,6 +2112,10 @@
             <dl class="kv-row" id="mar-o2-simplificada"><dt>Simplificada</dt><dd>Como el disuelto es tan poco, suele omitirse: <strong>contenido de O₂ = 1,34 × Hb × SO₂</strong>.</dd></dl>
 
             <div class="warning-box" id="mar-anemia-hipoxemia"><strong>Anemia frente a hipoxemia (Figura 9.2).</strong> Bajar la Hb a la mitad (15 → 7,5 g/dL) baja el CaO₂ a la mitad (20 → 10 mL/dL). Bajar la PaO₂ a la mitad (90 → 45 mmHg, SaO₂ 98 → 78%) solo lo baja un <strong>20%</strong> (20 → 16 mL/dL). <span class="hl-rojo">La anemia pesa mucho más que la hipoxemia</span> en el oxígeno arterial.</div>
+            <div class="article-figure" id="mar-img-9-2">
+                <img src="js/modules/libros/img/mar-fig9-2-anemia-hipoxemia.jpg" alt="Barras de contenido arterial de oxígeno: normal 20, hipoxemia 17 y anemia 10 mL/dL" loading="lazy">
+                <p class="article-figure-caption">Figura 9.2 — Efecto de grados proporcionales de anemia y de hipoxemia sobre el contenido arterial de O₂ (CaO₂).</p>
+            </div>
             <div class="agua-simulador" id="mar-cao2-calc">
                 <h4 style="color: var(--accent-red);">🧮 Contenido arterial de O₂</h4>
                 <p class="subtitle">Ecuación 9.3. Prueba a bajar la Hb a la mitad y luego la PaO₂ a la mitad (con su SaO₂) para ver la Figura 9.2.</p>
@@ -2072,6 +2166,10 @@
 
             <p class="section-label">Cómo se defiende el consumo (Figura 9.3)</p>
             <p id="mar-extraccion-curva">El sistema mantiene el VO₂ constante cuando cae el aporte subiendo la extracción: <span class="hl-azul">VO₂ = DO₂ × O₂ER</span>. Al bajar el DO₂, primero el VO₂ no cambia (la extracción, medida como SaO₂ − SvO₂, compensa); pero cuando la diferencia ha pasado del <strong>25% al 50%</strong>, el VO₂ empieza a caer con el aporte: se vuelve <strong>dependiente del aporte</strong>. Ese punto es el umbral del <span class="hl-rojo">metabolismo limitado por el oxígeno</span>.</p>
+            <div class="article-figure" id="mar-img-9-3">
+                <img src="js/modules/libros/img/mar-fig9-3-aporte-consumo.jpg" alt="Curva de consumo frente a aporte de oxígeno: meseta mientras sube la extracción y caída por debajo del aporte crítico" loading="lazy">
+                <p class="article-figure-caption">Figura 9.3 — Relación entre el aporte (DO₂) y el consumo de O₂ (VO₂). La extracción se representa por la diferencia SaO₂ − SvO₂.</p>
+            </div>
             <div id="mar-do2-vo2-sim"></div>
 
             <p class="section-label">Tabla 9.4 — Medidas sustitutas de la extracción</p>
@@ -2116,6 +2214,10 @@
                     <tr><td>Normaliza en 48-96 h</td><td>43%</td></tr>
                 </tbody>
             </table>
+            <div class="article-figure" id="mar-img-9-4">
+                <img src="js/modules/libros/img/mar-fig9-4-lactato-mortalidad.jpg" alt="Barras de mortalidad según el lactato inicial y según el tiempo hasta normalizarlo" loading="lazy">
+                <p class="article-figure-caption">Figura 9.4 — Lactato y mortalidad hospitalaria en el crítico: a la izquierda, según el lactato inicial; a la derecha, según el tiempo que tarda en normalizarse (aclaramiento del lactato).</p>
+            </div>
             <div class="warning-box" id="mar-lactato-circular"><strong>Un razonamiento circular.</strong> Que el lactato se relacione con la muerte se toma como prueba de que marca hipoxia celular porque se cree que la falta de O₂ es la causa universal de muerte celular… una idea que a su vez se apoya sobre todo en esa misma relación lactato-supervivencia.</div>
             <dl class="kv-row" id="mar-lactato-contra"><dt>Pruebas en contra</dt><dd>No hay pruebas de que la muerte celular del crítico se deba a falta de O₂. En animales con un marcador de hipoxia celular (¹⁸F-fluoromisonidazol) no se vio hipoxia en ningún órgano en el shock séptico, y en humanos la PO₂ del músculo está <strong>aumentada</strong> en el shock séptico. La PO₂ intracelular del músculo es de unos 5 mmHg (puede ser &lt;1) y la del miocardio de 0,2-2,4: las células viven normalmente con muy poco O₂ (lo que además limita el daño oxidativo).</dd></dl>
             <div class="article-figure">
@@ -2127,6 +2229,12 @@
             <div class="compare-row" id="mar-tabla-9-5">
                 <div class="compare-box blue"><strong>Situaciones</strong><br>Asma grave · Cetoacidosis · Disfunción hepática · Convulsiones · Sepsis · Estrés · Déficit de tiamina · Tumores</div>
                 <div class="compare-box yellow"><strong>Fármacos y tóxicos</strong><br>β-agonistas · Catecolaminas · Cianuro · Metformina · Propofol · Propilenglicol · Salicilatos · Alcoholes tóxicos</div>
+            </div>
+            <div class="agua-simulador" id="mar-lactato-calc">
+                <h4 style="color: var(--accent-purple);">🧮 ¿Por qué está alto el lactato? (Tabla 9.5)</h4>
+                <p class="subtitle">Marca lo que tiene el paciente: cada una produce lactato con oxígeno (aerobio).</p>
+                <div class="mar-lact-chips" id="mar-lact-chips"></div>
+                <div class="tfg-estado tfg-estado-ok" id="mar-lact-resultado" style="display:none;"></div>
             </div>
             <div class="micro-profiles">
                 <div class="micro-prof-item">
@@ -2203,6 +2311,11 @@
                         <dl class="kv-row"><dt>No es "normal"</dt><dd>Ni químicamente (una solución 1 N de NaCl tiene 58 g/L; la de 0,9%, solo 9 g/L) ni fisiológicamente: frente al plasma tiene <strong>más sodio</strong> (154 frente a 140), <strong>mucho más cloro</strong> (154 frente a 103), más osmolalidad (308 frente a 290 ± 5) y menor pH (5,7 frente a 7,4). Lo que más importa es el <strong>cloro</strong>.</dd></dl>
                         <dl class="kv-row"><dt>Adónde va</dt><dd>El sodio se reparte por todo el extracelular, y el plasma es solo el 20%: <span class="hl-rojo">1 L de salino añade 825 mL al intersticio y solo 275 mL al plasma</span> (Figura 10.1). El total (1.100 mL) supera lo infundido porque es algo hipertónico y saca agua de las células.</dd></dl>
                         <dl class="kv-row"><dt>Los males del cloro</dt><dd>1) <strong>Acidosis metabólica hiperclorémica</strong>, con infusiones rápidas o prolongadas: en cirugía ginecológica a 30 mL/kg/h el pH bajó de 7,41 a 7,28 con salino y no cambió con Ringer lactato (Figura 10.2); por eso ha perdido popularidad, por ejemplo en la cetoacidosis diabética. 2) <strong>Lesión renal</strong> por vasoconstricción renal mediada por cloro: las estrategias restrictivas en cloro (Ringer, Plasma-Lyte) tienen menos fracaso renal agudo, aunque el del salino suele ser leve y no requiere diálisis.</dd></dl>
+                        <p><button type="button" class="especialidad-link" data-especialidad="nefrologia" data-view="nefrona" data-panel="panel-fisio-tabs" data-tab="fisio-acidobase-acidosis">🧪 La acidosis hiperclorémica y el clasificador ácido-base (Nefrología) →</button></p>
+                        <div class="article-figure" id="mar-img-10-2">
+                            <img src="js/modules/libros/img/mar-fig10-2-ph-salino-ringer.jpg" alt="Curvas de pH de la sangre durante 2 horas de infusión de salino isotónico y de Ringer lactato" loading="lazy">
+                            <p class="article-figure-caption">Figura 10.2 — Efecto acumulado del salino isotónico (Cl 154 mEq/L) y del Ringer lactato (Cl 109 mEq/L) sobre el pH, infundidos al mismo ritmo (30 mL/kg/h).</p>
+                        </div>
                     </div>
                 </div>
                 <div class="micro-prof-item" id="mar-ringer">
@@ -2225,6 +2338,10 @@
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💎 Salino hipertónico</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
                         <p>Expande mucho más el volumen extracelular: 250 mL de NaCl al 7,5% (2.567 mOsm/L, 9 veces el plasma) añaden <strong>1.235 mL</strong>, unas 5 veces lo infundido, sacando agua de las células. En animales con hemorragia mantuvo el gasto con <strong>1/5 del volumen</strong> que el salino isotónico (Figura 10.3), pero en el trauma <strong>no ha mostrado mejor supervivencia</strong>.</p>
+                        <div class="article-figure" id="mar-img-10-3">
+                            <img src="js/modules/libros/img/mar-fig10-3-salino-hipertonico.jpg" alt="Curvas del volumen acumulado necesario de salino isotónico, dextrano-70 y salino hipertónico" loading="lazy">
+                            <p class="article-figure-caption">Figura 10.3 — Volumen acumulado de tres fluidos necesario para mantener el flujo aórtico en un modelo animal de shock hemorrágico.</p>
+                        </div>
                         <dl class="kv-row"><dt>TCE</dt><dd>Su uso principal: bajar la presión intracraneal. Equivale al manitol en bajar la PIC, mantiene mejor la presión de perfusión cerebral y evita el daño renal del manitol. Se usa del 3% al 25%; el 10% es popular: <strong>0,6 mL/kg equivalen a 2 mL/kg de manitol al 20%</strong>. Bolos cada 6-8 h para mantener la PIC &lt;20 mmHg mientras la osmolalidad sea <strong>&lt;320</strong>. Ni el salino hipertónico ni el manitol han mejorado la supervivencia del TCE.</dd></dl>
                         <p><button type="button" class="especialidad-link" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-tce-manejo">🧠 El manejo del TCE de guardia (Manual UMI) →</button></p>
                     </div>
@@ -2251,6 +2368,10 @@
             <dl class="kv-row" id="mar-glucosado-calorias"><dt>Ahorro de proteínas</dt><dd>La dextrosa da 3,4 kcal/g: un glucosado al 5% (50 g/L) aporta <strong>170 kcal/L</strong>, y 3 L al día, 510 kcal, suficientes para ahorrar proteínas. Ya no hace falta: quien no come recibe nutrición completa.</dd></dl>
             <dl class="kv-row" id="mar-glucosado-volumen"><dt>Adónde va</dt><dd>El glucosado al 5% tiene 278 mOsm/L, cerca del plasma, pero la glucosa entra en las células y se metaboliza: el agua la sigue. De 1 L, solo unos <strong>350 mL</strong> quedan fuera de las células; <span class="hl-rojo">dos tercios acaban dentro</span> (edema celular). Al revés, el glucosalino (D5 en salino 0,9%, 560 mOsm/L) puede <strong>deshidratar</strong> las células si no se usa bien la glucosa.</dd></dl>
             <dl class="kv-row" id="mar-glucosado-lactato"><dt>Más lactato</dt><dd>En el sano solo el 5% de una carga de glucosa acaba en lactato; en el paciente con compromiso hemodinámico, hasta el <strong>85%</strong>. En cirugía de aneurisma con pinzamiento aórtico, con glucosado el lactato subió de forma significativa y siguió alto (Figura 10.4).</dd></dl>
+            <div class="article-figure" id="mar-img-10-4">
+                <img src="js/modules/libros/img/mar-fig10-4-lactato-glucosado.jpg" alt="Curvas del lactato en sangre con glucosado al 5% y con Ringer durante la cirugía de aneurisma de aorta" loading="lazy">
+                <p class="article-figure-caption">Figura 10.4 — Lactato en sangre con fluidos con y sin glucosa en la cirugía de aneurisma de aorta abdominal. Cada punto es la media de 10 pacientes; entre paréntesis, el volumen medio infundido.</p>
+            </div>
             <dl class="kv-row" id="mar-glucosado-hiperglucemia"><dt>Hiperglucemia</dt><dd>Un 20% de los ingresados en UCI son diabéticos y hasta un 90% tiene hiperglucemia en algún momento: inmunosupresión e infección, peor daño cerebral isquémico y más mortalidad. Parece razonable evitar los sueros con dextrosa siempre que se pueda.</dd></dl>
 
             <p class="fuente-ficha" style="margin-top:12px;">📚 Fuente completa: <a class="biblio-link" href="docs/marino-2024-fluidoterapia-caps10-11.pdf#page=2" target="_blank" rel="noopener">Marino PL. The ICU Book, 5.ª ed., Cap. 10 "Intravenous Fluids" →</a></p>
@@ -2297,6 +2418,7 @@
                         <p>Polímeros ramificados de glucosa con radicales hidroxilo que resisten la degradación. La amilasa los va cortando hasta que, a <strong>50 kD</strong>, el riñón los elimina.</p>
                         <dl class="kv-row"><dt>Peso molecular</dt><dd>Alto (450 kD), medio (200 kD) y bajo (70 kD); los de alto peso duran más (sus fragmentos siguen siendo osmóticamente activos).</dd></dl>
                         <dl class="kv-row"><dt>Sustitución molar</dt><dd>Hidroxilos por glucosa (0 a 1): 0,7 hetastarch, 0,6 hexastarch, 0,5 pentastarch, 0,4 tetrastarch. Más sustitución = más duración, pero también <strong>más efectos adversos</strong>.</dd></dl>
+                        <p class="section-label">Tabla 10.5 — Hidroxietilalmidones</p>
                         <table class="data-table" id="mar-tabla-10-5">
                             <thead><tr><th>Nombre</th><th>Concentración</th><th>Peso molecular</th><th>Sustitución</th></tr></thead>
                             <tbody>
@@ -2367,6 +2489,10 @@
 
             <p class="section-label">La PVC frena el retorno (Figura 11.2)</p>
             <p id="mar-rv-pvc">Subir la PVC ha sido un objetivo clásico de la reposición, pero la ecuación dice lo contrario: si sube la PAD sin cambiar el volumen, el retorno venoso cae de forma constante — <span class="hl-rojo">cada 1 mmHg de PAD reduce el retorno venoso un 14% de media</span>. Cuando el retorno llega a cero, la PAD iguala a la Pms y no queda gradiente. La hipovolemia y la hipervolemia mueven la Pms en el mismo sentido: la Pms <strong>depende del volumen</strong>.</p>
+            <div class="article-figure" id="mar-img-11-2">
+                <img src="js/modules/libros/img/mar-fig11-2-curva-retorno.jpg" alt="Curva de retorno venoso frente a presión en la aurícula derecha, con las curvas de hipovolemia e hipervolemia" loading="lazy">
+                <p class="article-figure-caption">Figura 11.2 — Efecto de la presión en la aurícula derecha sobre el retorno venoso. Línea continua: curva normal. Con retorno cero, la presión de la aurícula derecha iguala la presión sistémica media (Pms).</p>
+            </div>
             <div id="mar-retorno-sim"></div>
 
             <div class="micro-profiles">
@@ -2425,14 +2551,29 @@
                                 <tr><td>Volumen plasmático</td><td><span class="hl-rojo">+37%</span></td></tr>
                             </tbody>
                         </table>
-                        <p class="fuente-ficha">Medias leídas de la figura (aproximadas). Corroboran la sobrecarga iatrogénica del crítico.</p>
+                        <div class="article-figure" id="mar-img-11-3">
+                            <img src="js/modules/libros/img/mar-fig11-3-volumen-shock-septico.jpg" alt="Barras de desviación respecto a lo normal: volemia +29%, hematíes −8% y plasma +37%" loading="lazy">
+                            <p class="article-figure-caption">Figura 11.3 — Volumen plasmático, masa de hematíes y volemia en 50 pacientes con shock séptico: prueba de la sobrecarga iatrogénica. Las barras son medias.</p>
+                        </div>
+                        <p class="fuente-ficha">Medias impresas en la propia figura. Corroboran la sobrecarga iatrogénica del crítico.</p>
                     </div>
                 </div>
             </div>
 
             <p class="section-label">Evaluar la volemia: "una comedia de errores"</p>
             <dl class="kv-row" id="mar-constantes-volemia"><dt>Constantes vitales</dt><dd>1) La <strong>taquicardia en decúbito</strong> no aparece en la mayoría de las hemorragias agudas, ni con déficits del 25%; la <strong>bradicardia</strong> puede ser incluso más frecuente. 2) La <strong>hipotensión en decúbito</strong> no aparece hasta déficits &gt;<strong>30%</strong>. 3) El <span class="hl-verde">aumento ortostático de la FC ≥30 lpm</span> es el marcador más sensible (aparece con un 15% de déficit), pero en UCI muchos pacientes no pueden ponerse de pie.</dd></dl>
+            <div class="agua-simulador" id="mar-volemia-sim">
+                <h4 style="color: var(--accent-red);">🩸 ¿Qué signo esperar con cada déficit?</h4>
+                <p class="subtitle">Mueve el déficit de volemia: las cifras son las del texto del capítulo.</p>
+                <div class="form-group"><label for="mar-vol-def">Déficit de volemia: <strong id="mar-vol-def-val"></strong></label><input type="range" id="mar-vol-def" min="0" max="40" step="1" value="10"></div>
+                <div id="mar-vol-signos"></div>
+                <p class="fuente-ficha" style="margin-top:8px;">Por eso la taquicardia y la hipotensión en decúbito son marcadores poco sensibles; el ortostatismo vale poco en UCI porque muchos pacientes no pueden ponerse de pie.</p>
+            </div>
             <dl class="kv-row" id="mar-pvc-volemia"><dt>La PVC</dt><dd>Ni marcador de volemia ni objetivo de la reposición: en 112 pares de medidas en postoperados no hubo relación entre PVC y volemia (Figura 11.4, <strong>r = 0,17</strong>; p = 0,07). Dos factores la confunden: la <strong>distensibilidad del VD</strong> (si baja, la PVC sube) y la <strong>presión intratorácica positiva</strong> de la ventilación (se minimiza midiendo al final de la espiración, pero la PEEP sigue influyendo). <span class="hl-rojo">La PVC nunca debe usarse para decidir la fluidoterapia.</span></dd></dl>
+            <div class="article-figure" id="mar-img-11-4">
+                <img src="js/modules/libros/img/mar-fig11-4-pvc-volemia.jpg" alt="Nube de 112 puntos de PVC frente a volemia sin relación entre ambas, r = 0,17" loading="lazy">
+                <p class="article-figure-caption">Figura 11.4 — 112 pares de medidas de volemia (CBV) y PVC en postoperados. El coeficiente de correlación y la p confirman que no hay relación.</p>
+            </div>
             <dl class="kv-row" id="mar-vci-volemia"><dt>La vena cava inferior</dt><dd>Las variaciones respiratorias de su diámetro por ecografía tuvieron un breve periodo de popularidad, pero resultaron poco fiables.</dd></dl>
             <div class="warning-box" id="mar-vci-discrepancia"><strong>Nota de fuentes:</strong> el Manual UMI (FATE) sí usa el diámetro y la colapsabilidad de la VCI para estimar la presión de la aurícula derecha. Son dos fuentes que no coinciden; aquí se reproduce lo que dice Marino.
                 <p style="margin:8px 0 0;"><button type="button" class="especialidad-link" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-fate">🫀 La VCI en la ecografía FATE (Manual UMI) →</button></p>

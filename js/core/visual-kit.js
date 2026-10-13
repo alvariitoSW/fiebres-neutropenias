@@ -16,7 +16,8 @@
 // `etiqueta` es opcional: por defecto se toma del propio elemento. `tras`
 // (opcional, mismo formato) busca solo después de ese otro elemento.
 //
-// Tipos de panel: 'flujo', 'escalera', 'comparar', 'racimos', 'mapa',
+// Tipos de panel: 'figuras' (las figuras reales de la ficha en una tira;
+// `todas: true` o `nodos` con sus ids), 'flujo', 'escalera', 'comparar', 'racimos', 'mapa',
 // 'linea', 'puntos' (barras de puntuación conectadas a una calculadora),
 // 'requisitos' (casillas reales como candados o barreras),
 // 'propio' (`render(cuerpo, { tab, texto })`: una pieza a medida del
@@ -121,6 +122,17 @@ const boton = (n, extra = '', estilo = '') =>
     `<button type="button" class="vk-nodo ${extra}" data-nodo="${n.i}" style="${estilo}">${n.texto}</button>`;
 
 const RENDER = {
+    // Las figuras reales de la ficha, en una tira que se desliza: cada una se
+    // amplía al tocarla (core/lightbox.js) y lleva a su sitio en el texto.
+    figuras(p) {
+        return `<div class="vk-figuras">${p.nodos.map(n => {
+            const img = n.el.querySelector('img');
+            const pie = n.el.querySelector('.article-figure-caption')?.textContent.trim() || '';
+            const [num, ...resto] = pie.split(' — ');
+            return `<div class="vk-figura"><div class="article-figure"><img src="${img.getAttribute('src')}" alt="${(img.alt || '').replace(/"/g, '&quot;')}" loading="lazy"></div>
+                <div class="vk-figura-pie"><span><b>${num}</b>${resto.length ? ` · ${resto.join(' — ')}` : ''}</span><button type="button" class="visual-link" data-fig="${n.i}">Texto ↓</button></div></div>`;
+        }).join('')}</div>`;
+    },
     flujo(p, nodos) {
         return `<div class="vk-flujo">${p.nodos.map(paso => {
             const grupo = (Array.isArray(paso) ? paso : [paso]).map(x => nodos[x.i]);
@@ -512,11 +524,17 @@ function construir(tab, texto, visual, receta) {
             if (p.tipo === 'racimos') q.grupos = [{ titulo: p.grupo || '', color: p.color, nodos: nodoTabla(p) }];
             else q.nodos = nodoTabla(p);
         }
+        if (p.tipo === 'figuras') {
+            // `todas: true` → todas las figuras de la ficha; si no, `nodos` con sus ids.
+            const figs = p.todas ? [...texto.querySelectorAll('.article-figure')] : p.nodos.map(f => resolver(texto, f)).filter(Boolean);
+            q.nodos = figs.filter(f => f.querySelector('img')).map(el => { const n = { i: nodos.length, el, texto: '' }; nodos.push(n); return n; });
+            return q;
+        }
         if (p.nodos) q.nodos = reg(p.nodos);
         if (p.columnas) q.columnas = p.columnas.map(c => ({ ...c, nodos: nodosDe(c) }));
         if (p.grupos) q.grupos = p.grupos.map(g => ({ ...g, nodos: nodosDe(g) }));
         return q;
-    });
+    }).filter(q => q.tipo !== 'figuras' || q.nodos.length);
 
     visual.innerHTML = `${receta.guia ? `<p class="visual-guia">${receta.guia}</p>` : ''}${paneles.map((p, k) => `
         <section class="vk-panel" data-panel="${k}">
@@ -622,6 +640,8 @@ function construir(tab, texto, visual, receta) {
             if (n) { irAlTexto(tab, n.el); n.alIr?.(); }
             return;
         }
+        const fig = e.target.closest('[data-fig]');
+        if (fig) { irAlTexto(tab, nodos[Number(fig.dataset.fig)].el); return; }
         const b = e.target.closest('[data-nodo]');
         if (!b) return;
         const n = nodos[Number(b.dataset.nodo)];

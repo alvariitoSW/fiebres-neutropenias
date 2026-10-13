@@ -171,15 +171,18 @@ export function init() {
     // ficha de ERC a otra de FRA, o entre dos fichas del mismo cuaderno):
     // cualquier `<button data-especialidad="...">` con `data-view`/
     // `data-panel`/`data-tab` (todos opcionales; `data-trasplante` solo con
-    // `data-especialidad="home"` para las 3 subvistas de Trasplante). Las
+    // `data-especialidad="home"` para las 3 subvistas de Trasplante;
+    // `data-pulsar="id1 id2"` pulsa además esos botones de navegación, en
+    // orden, para vistas sin cuaderno de campo como Neutropenia Febril). Las
     // clases `.tx-link`/`.especialidad-link`/`.paper-link`/... son hoy solo
     // visuales. Delegado en document para cubrir también botones generados
     // por JS después de arrancar.
     document.addEventListener('click', (e) => {
         const btn = e.target.closest('[data-especialidad]');
         if (!btn) return;
-        const { especialidad, view, panel, tab, trasplante, resaltar } = btn.dataset;
+        const { especialidad, view, panel, tab, trasplante, resaltar, pulsar } = btn.dataset;
         irAResultadoBusqueda({ especialidad, view, panel, tab, trasplante });
+        pulsar?.split(/\s+/).forEach(id => document.getElementById(id)?.click());
         // data-resaltar: además de abrir la ficha, lleva a esa línea y la resalta (pasa a Texto si hace falta)
         const linea = resaltar && document.querySelector(resaltar);
         if (linea) irAlTexto(linea.closest('[data-visual]'), linea);

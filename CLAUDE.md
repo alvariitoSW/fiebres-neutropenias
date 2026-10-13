@@ -8321,6 +8321,47 @@ lleva a ellos. Mismo patrón de dos niveles que el resto (`librosLevel` en `js/m
   1,65 mm; enoxaparina con IMC 45 → 40 mg/12 h; propofol 40 mL/h en 70 kg y 60 h → 95 µg/kg/min, riesgo), los 12
   enlaces cruzados y los botones del índice (muestra de 6 especialidades) abren su ficha, el quiz recorre las 138
   preguntas sin errores, y no hay desbordamiento horizontal. Cache-busting `?v=20261020`.
+- **Auditoría y mejoras (octubre 2026)**, a petición explícita del usuario: primero un informe (Artifact
+  «Auditoría Marino Fundamentos»: 4 errores, 5 faltas de contenido, 5 problemas y 8 mejoras, cotejando los 3 PDF
+  con las fichas) y después «aplica las mejoras… pon todas las fotos que hay en los documentos y mejora el apartado
+  visual». Las fichas se generan desde fragmentos con un script de montaje que vive fuera del repo; si se retocan a
+  mano, editar `marino-fundamentos.html` directamente.
+  - **Todas las figuras**: 20 más extraídas (`pdfimages -png`, imagen única por página), 59 en total, cada una con
+    id `mar-img-N-M` junto a su texto. Solo quedan fuera dos tablas impresas como imagen (Tablas 3.3 y 10.2), ya
+    recreadas como tabla.
+  - **Vista Visual**: tipo de panel nuevo en el kit, `figuras` (`todas: true` o `nodos` con ids): las figuras de la
+    ficha en una tira deslizable, ampliables (lightbox) y con «Texto ↓». Va primero en las 23 recetas
+    (`FIGURAS` en `visual-marino.js`); un panel sin figuras no se pinta. En el kit, un resultado copiado con color de
+    estado ya no lleva un segundo marco (afecta a todas las vistas Visual de la app).
+  - **Errores corregidos**: la úlcera de estrés ya no muestra puntos inventados (panel propio `ulceraNiveles`: los 4
+    niveles de la Tabla 4.2, con sus casillas reales y la línea de la profilaxis); la Figura 11.3 ya no se presenta
+    como leída a ojo; nota de fidelidad French (ecuación frente a Tabla 1.1); el buscador del índice busca también
+    en el texto de las fichas (desde 3 letras, marca la ficha que coincide) y, sin resultados, ofrece el buscador
+    global con la misma consulta.
+  - **Índice**: títulos de sección en español con el original al lado (la VIII, «Respiratory Disorders», sale de la
+    última página del PDF de los caps. 18-21; V y IX siguen sin título); pestañas con `aria-selected`/
+    `aria-controls`; **botón «Repasar … entero»** por libro (Marino: 562 preguntas en 4 bloques; El Libro Azul: 301);
+    **progreso de Modo Estudio** por capítulo (punto en la tira, pomodoros por capítulo), leído con
+    `progresoEstudio()`, export nuevo de `core/pomodoro.js`, que además emite `estudio-progreso` al guardar. Sin
+    persistencia nueva.
+  - **Quiz**: `data-quiz-bloques="Asignatura::Bloque|…"` (+ `data-quiz-titulo`) abre una lista de bloques de varias
+    asignaturas a la vez; los bloques de cada libro están en `quiz` de `libros-indice.js`.
+  - **Enlaces**: `data-pulsar="id1 id2"` en el enlazador único (`home/index.js`) pulsa botones de navegación tras
+    saltar (para vistas sin cuaderno de campo; hoy, la calculadora de catéter de Neutropenia Febril). Enlaces de ida
+    nuevos (Hagen-Poiseuille, bacteriemia por catéter, tromboprofilaxis → embolia pulmonar, P50 → curva interactiva
+    de El Libro Azul, salino → ácido-base) y **de vuelta** desde Técnicas R1 (6), Neutropenia Febril, Trasplante,
+    Manual UMI (sedación), Merino Neumología, Merino Cardiología y Fisiopatología UCI (Hematología y Cardiología).
+  - **Calculadoras**: el catéter de arteria pulmonar evalúa también PVC, enclavamiento y SvO₂; notas cruzadas entre
+    las dos calculadoras de extracción (cortes del Cap. 7 y del Cap. 9); el CaO₂ ya no usa un semáforo sin fuente
+    (clase nueva `tfg-estado-neutro`). Nuevas: hemocultivos pareados y duración del antibiótico (Cap. 3), dosis de
+    paracetamol y ketorolaco (Tabla 6.3), haloperidol paso a paso (`initSiNoWizard`, Tabla 6.8), «¿por qué está alto
+    el lactato?» (Tabla 9.5; mecanismo solo donde el capítulo lo da) y déficit de volemia frente a signos (Cap. 11).
+  - **Buscador global**: una ficha con muchas apariciones del término puntúa más que una mención de pasada, y los
+    grupos de especialidad se ordenan por su mejor resultado.
+  - Verificado con Playwright (390 y 360 px): 59 imágenes cargan, 23 vistas Visual sin fuentes sin resolver, 56
+    enlaces que entran o salen de Marino llegan a su ficha, las calculadoras dan lo esperado, el repaso por libro
+    recorre preguntas sin errores; sin desbordamiento (se envolvieron las Tablas 5.2 y 5.3). Cache-busting
+    `?v=20261021`.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

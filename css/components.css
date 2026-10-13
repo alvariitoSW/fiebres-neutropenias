@@ -879,6 +879,7 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus { border-colo
 .tfg-estado-ok { background: rgba(144,160,106,0.12); border-color: var(--accent-green); color: var(--text-main); }
 .tfg-estado-warn { background: rgba(207,154,62,0.14); border-color: var(--accent-yellow); color: var(--text-main); }
 .tfg-estado-danger { background: rgba(184,92,62,0.16); border-color: var(--accent-red); color: var(--text-main); }
+.tfg-estado-neutro { background: rgba(212,175,55,0.08); border-color: var(--border-color); color: var(--text-main); }
 
 /* Rejilla compacta de 2 columnas para los inputs numéricos de una       */
 /* calculadora con muchos campos (Fick, resistencias vasculares) — evita */
@@ -2412,3 +2413,44 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 .lib-pdf { font-size: 0.74rem; }
 /* Deslizadores dentro de un .form-group (simuladores de Libros): ancho completo y color de la app. */
 .form-group input[type="range"] { width: 100%; min-height: 28px; accent-color: var(--accent-yellow); }
+
+/* Kit: panel 'figuras' — las figuras reales de la ficha en una tira que se desliza. */
+.vk-figuras { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; -webkit-overflow-scrolling: touch; }
+.vk-figura { flex: 0 0 82%; max-width: 340px; scroll-snap-align: start; display: flex; flex-direction: column; border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; background: rgba(0, 0, 0, 0.18); }
+.vk-figuras .vk-figura:only-child { flex-basis: 100%; max-width: none; }
+.vk-figura .article-figure { margin: 0; border: 0; border-radius: 0; display: flex; align-items: center; justify-content: center; height: 190px; }
+.vk-figura .article-figure img { width: 100%; height: 100%; object-fit: contain; }
+.vk-figura-pie { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; padding: 8px 10px; font-size: 0.72rem; line-height: 1.35; color: var(--text-muted); }
+.vk-figura-pie b { color: var(--text-main); }
+.vk-figura-pie span { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; min-width: 0; }
+.vk-figura-pie .visual-link { flex: 0 0 auto; margin: 0; }
+
+/* Úlcera de estrés: niveles de riesgo de la Tabla 4.2 con la línea de la profilaxis. */
+.mar-niveles { display: flex; flex-direction: column; gap: 6px; }
+.mar-nivel { border: 1px solid var(--border-color); border-left: 4px solid var(--nv); border-radius: 8px; padding: 8px 10px; }
+.mar-nivel-cab { display: flex; justify-content: space-between; gap: 8px; font-size: 0.78rem; font-weight: bold; color: var(--nv); margin-bottom: 6px; }
+.mar-nivel-cab span:last-child { font-weight: normal; color: var(--text-muted); white-space: nowrap; }
+.mar-nivel-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.mar-nivel-chip { border: 1px solid var(--border-color); background: transparent; color: var(--text-muted); border-radius: 14px; padding: 6px 10px; min-height: 34px; font-family: inherit; font-size: 0.74rem; text-align: left; cursor: pointer; touch-action: manipulation; }
+.mar-nivel-chip.on { border-color: var(--nv); color: var(--text-main); background: color-mix(in srgb, var(--nv) 18%, transparent); }
+.mar-corte { display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--accent-red); text-transform: uppercase; letter-spacing: 1px; }
+.mar-corte::before, .mar-corte::after { content: ''; flex: 1; border-top: 2px dashed var(--accent-red); }
+
+/* Libros · índice: original de la sección, coincidencias en el texto, progreso de estudio y repaso del libro. */
+.lib-seccion-original { text-transform: none; letter-spacing: 0; font-style: italic; opacity: 0.75; }
+.lib-cap-progreso { font-size: 0.74rem; color: var(--accent-green); margin: 0 0 6px; }
+.lib-cap-coincide { font-size: 0.74rem; color: var(--accent-yellow); margin: 0 0 4px; }
+.lib-ficha.coincide { background: color-mix(in srgb, var(--accent-yellow) 18%, transparent); border-color: var(--accent-yellow); }
+.lib-tira-cap { position: relative; }
+.lib-tira-cap.estudiado::after { content: ''; position: absolute; top: 3px; right: 3px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-green); }
+.lib-leyenda-estudio { border-left: 0 !important; padding-left: 0 !important; color: var(--accent-green); }
+.lib-repaso { margin: 4px 0 10px; }
+.lib-vacio .especialidad-link { margin-top: 6px; }
+
+/* Kit: un resultado copiado de una calculadora se ve como su caja original
+   (barra de color a la izquierda), sin un segundo marco alrededor. */
+.vk-resultado-copia[class*="tfg-estado-"] { padding: 8px 10px; border-left: 3px solid; border-radius: 6px; }
+.vk-resultado:has(> .vk-resultado-copia:only-child[class*="tfg-estado-"]) { border: 0; padding: 0; }
+.vk-resultado-copia[class*="tfg-estado-"] + .vk-resultado-copia { border-top: 0; margin-top: 6px; }
+/* Lactato: chips de la Tabla 9.5 (mismo estilo que los niveles de la úlcera). */
+.mar-lact-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; --nv: var(--accent-purple); }

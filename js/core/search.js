@@ -148,7 +148,12 @@ function buscar(indice, query) {
         .map(item => {
             let score = 0;
             if (item.tituloBusqueda.includes(q)) score += 2;
-            if (item.textoBusqueda.includes(q)) score += 1;
+            if (item.textoBusqueda.includes(q)) {
+                // Una ficha que trata el tema (muchas apariciones) va por
+                // delante de otra que solo lo nombra de pasada.
+                const veces = item.textoBusqueda.split(q).length - 1;
+                score += 1 + Math.min(veces - 1, 9) * 0.15;
+            }
             return score > 0 ? { ...item, score } : null;
         })
         .filter(Boolean)
@@ -163,9 +168,13 @@ function agruparPorEspecialidad(resultados) {
         if (!grupos.has(key)) grupos.set(key, []);
         grupos.get(key).push(r);
     });
+    // Primero la especialidad con el mejor resultado (los resultados ya
+    // vienen ordenados por puntuación, así que es el primero de cada grupo);
+    // a igualdad, el orden del menú raíz.
     return ORDEN_ESPECIALIDADES
         .filter(key => grupos.has(key))
-        .map(key => ({ especialidad: key, items: grupos.get(key) }));
+        .map(key => ({ especialidad: key, items: grupos.get(key) }))
+        .sort((a, b) => b.items[0].score - a.items[0].score);
 }
 
 export function initSearch({ navegar }) {

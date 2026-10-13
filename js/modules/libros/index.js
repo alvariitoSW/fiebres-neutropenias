@@ -7,11 +7,12 @@ import { createViewSwitcher } from '../../core/navigation.js';
 import { preguntasMarinoFundamentos, temasMarinoFundamentos } from '../../data/marino-fundamentos-preguntas.js';
 import { init as initMarinoFundamentos } from './marino-fundamentos.js';
 import { initVisualMarino } from './visual-marino.js';
-import { initIndice } from './indice.js';
+import { initIndice, idRepaso } from './indice.js';
+import { librosIndice } from '../../data/libros-indice.js';
 
 // Mismo patrón que el resto de especialidades: main.js fusiona banco, temas
 // y botones en la única llamada a initQuiz().
-export const quizTriggerId = ['btn-marino-fund-repasar'];
+export const quizTriggerId = ['btn-marino-fund-repasar', ...librosIndice.filter(l => l.quiz?.length).map(idRepaso)];
 export const quizBanco = [...preguntasMarinoFundamentos];
 export const quizTemas = temasMarinoFundamentos.map(t => ({ ...t, asignatura: 'Libros', bloque: 'Marino · Fundamentos (caps. 1-11)' }));
 

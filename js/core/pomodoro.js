@@ -106,6 +106,14 @@ function leerProgreso() {
 }
 function guardarProgreso() {
     try { localStorage.setItem(STORAGE_PROGRESO, JSON.stringify(progreso)); } catch { /* localStorage no disponible */ }
+    document.dispatchEvent(new CustomEvent('estudio-progreso'));
+}
+
+// Pomodoros invertidos en cada ficha ({ [data-tab]: n }), para quien quiera
+// mostrarlos (p. ej. el índice de Libros). Solo lectura: el mismo dato que ya
+// guarda Modo Estudio, sin persistencia nueva.
+export function progresoEstudio() {
+    return { ...leerProgreso() };
 }
 
 let config = leerConfig();

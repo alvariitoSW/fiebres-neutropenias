@@ -165,6 +165,7 @@ export function initQuiz({ triggerId, banco, temas }) {
     const BLOQUE_DEFECTO = 'General';
     let nivelAsignatura = null;
     let nivelBloque = null;
+    let listaBloques = null; // { lista, titulo } si se entró por data-quiz-bloques
 
     // Temas y preguntas de una asignatura (y, opcionalmente, de un bloque de ella).
     function temasDe(asignatura, bloque) {
@@ -188,6 +189,7 @@ export function initQuiz({ triggerId, banco, temas }) {
     function renderNivelAsignaturas() {
         nivelAsignatura = null;
         nivelBloque = null;
+        listaBloques = null;
         if (temasTituloEl) temasTituloEl.textContent = '¿Qué quieres repasar?';
         const asignaturas = [...new Set(temas.map(t => t.asignatura || ASIGNATURA_DEFECTO))];
         const botones = [
@@ -212,11 +214,26 @@ export function initQuiz({ triggerId, banco, temas }) {
         pintarBotones(botones);
     }
 
+    // Bloques de varias asignaturas a la vez (p. ej. todos los de un mismo
+    // libro, repartidos por especialidad): `data-quiz-bloques="Asignatura::Bloque|…"`.
+    const parteBloque = e => { const [a, b] = e.split('::'); return { asignatura: a, bloque: b }; };
+    const bancoDeBloques = lista => lista.map(parteBloque).flatMap(x => bancoDe(x.asignatura, x.bloque));
+    function renderNivelLista(lista, titulo) {
+        listaBloques = { lista, titulo };
+        nivelAsignatura = null;
+        nivelBloque = null;
+        if (temasTituloEl) temasTituloEl.textContent = `${titulo} — ¿qué quieres repasar?`;
+        pintarBotones([
+            { etiqueta: `Todo (${bancoDeBloques(lista).length})`, accion: 'todas-lista' },
+            ...lista.map(e => { const x = parteBloque(e); return { etiqueta: `${x.bloque} (${bancoDe(x.asignatura, x.bloque).length})`, accion: 'bloque-lista', valor: e }; }),
+        ]);
+    }
+
     function renderNivelTemas(asignatura, bloque) {
         nivelBloque = bloque;
         if (temasTituloEl) temasTituloEl.textContent = `${bloque} — ¿qué ficha quieres repasar?`;
         const botones = [
-            { etiqueta: `← ${asignatura}`, accion: 'volver-bloques' },
+            listaBloques ? { etiqueta: `← ${listaBloques.titulo}`, accion: 'volver-lista' } : { etiqueta: `← ${asignatura}`, accion: 'volver-bloques' },
             { etiqueta: `Todos los temas de ${bloque} (${bancoDe(asignatura, bloque).length})`, accion: 'todas-bloque' },
             ...temasDe(asignatura, bloque).map(t => ({ etiqueta: `${t.etiqueta} (${contar(p => p.tema === t.key)})`, accion: 'tema', valor: t.key })),
         ];
@@ -276,6 +293,9 @@ export function initQuiz({ triggerId, banco, temas }) {
             const accion = btn.dataset.accion;
             const valor = btn.dataset.valor;
             if (accion === 'todas') { empezar(banco); return; }
+            if (accion === 'todas-lista') { empezar(bancoDeBloques(listaBloques.lista)); return; }
+            if (accion === 'bloque-lista') { const x = parteBloque(valor); nivelAsignatura = x.asignatura; renderNivelTemas(x.asignatura, x.bloque); return; }
+            if (accion === 'volver-lista') { renderNivelLista(listaBloques.lista, listaBloques.titulo); return; }
             if (accion === 'asignatura') { renderNivelBloques(valor); return; }
             if (accion === 'volver-asignaturas') { renderNivelAsignaturas(); return; }
             if (accion === 'todas-asignatura') { empezar(bancoDe(nivelAsignatura)); return; }
@@ -311,7 +331,11 @@ export function initQuiz({ triggerId, banco, temas }) {
         const asigDirecta = trigger.dataset.quizAsignatura;
         const bloqueDirecto = trigger.dataset.quizBloque;
         const elegir = 'quizElegir' in trigger.dataset;
-        if (temas && temas.length > 0 && asigDirecta && elegir) {
+        listaBloques = null;
+        if (temas && temas.length > 0 && trigger.dataset.quizBloques) {
+            mostrarPantallaQuiz(false);
+            renderNivelLista(trigger.dataset.quizBloques.split('|'), trigger.dataset.quizTitulo || 'Repaso');
+        } else if (temas && temas.length > 0 && asigDirecta && elegir) {
             mostrarPantallaQuiz(false);
             const prefijo = trigger.dataset.quizPrefijoBloque;
             if (bloqueDirecto) { nivelAsignatura = asigDirecta; renderNivelTemas(asigDirecta, bloqueDirecto); }

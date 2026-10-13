@@ -31,8 +31,10 @@ export const librosIndice = [
         edicion: '5.ª ed.',
         color: 'var(--accent-blue)',
         nota: 'Repartido en la app por especialidad: los caps. 1-11 viven aquí, en Libros; los caps. 12-30, en Merino HEMATO, Merino Cardiología y Merino Neumología.',
+        // Bloques del quiz con las preguntas de este libro, en el orden de sus capítulos ("Asignatura::Bloque").
+        quiz: ['Libros::Marino · Fundamentos (caps. 1-11)', 'Hematología::Merino HEMATO', 'Cardiología::Merino Cardiología', 'Neumología::Merino Neumología'],
         secciones: [
-            { numero: 'I', titulo: 'Vascular Access', capitulos: [
+            { numero: 'I', titulo: 'Acceso vascular', original: 'Vascular Access', capitulos: [
                 { n: 1, titulo: 'Vascular Access Primer', es: 'Acceso vascular: lo básico', pdf: MARINO_PDF.acceso, pagina: 2, donde: 'Libros · Marino Fundamentos',
                   fichas: fund([['mar-cateteres-flujo', 'Catéteres y flujo'], ['mar-tipos-cateter', 'Periféricos y centrales'], ['mar-eco-intraosea', 'Ecoguiada e intraósea']]) },
                 { n: 2, titulo: 'Central Venous Access', es: 'Acceso venoso central', pdf: MARINO_PDF.acceso, pagina: 23, donde: 'Libros · Marino Fundamentos',
@@ -40,7 +42,7 @@ export const librosIndice = [
                 { n: 3, titulo: 'The Indwelling Vascular Catheter', es: 'El catéter vascular permanente', pdf: MARINO_PDF.acceso, pagina: 40, donde: 'Libros · Marino Fundamentos',
                   fichas: fund([['mar-cateter-cuidados', 'Cuidados, oclusión y trombosis'], ['mar-bacteriemia-cateter', 'Bacteriemia por catéter']]) },
             ] },
-            { numero: 'II', titulo: 'Common Practices', capitulos: [
+            { numero: 'II', titulo: 'Prácticas habituales', original: 'Common Practices', capitulos: [
                 { n: 4, titulo: 'Alimentary Prophylaxis', es: 'Profilaxis del tubo digestivo', pdf: MARINO_PDF.acceso, pagina: 58, donde: 'Libros · Marino Fundamentos',
                   fichas: fund([['mar-microbioma', 'Microbioma y descontaminación'], ['mar-ulcera-estres', 'Úlcera de estrés']]) },
                 { n: 5, titulo: 'Venous Thromboprophylaxis', es: 'Tromboprofilaxis venosa', pdf: MARINO_PDF.monitorizacion, pagina: 1, donde: 'Libros · Marino Fundamentos',
@@ -48,7 +50,7 @@ export const librosIndice = [
                 { n: 6, titulo: 'Analgesia and Sedation in the ICU', es: 'Analgesia y sedación', pdf: MARINO_PDF.monitorizacion, pagina: 16, donde: 'Libros · Marino Fundamentos',
                   fichas: fund([['mar-analgesia', 'Analgesia'], ['mar-sedacion', 'Sedación']]) },
             ] },
-            { numero: 'III', titulo: 'Physiological Monitoring', capitulos: [
+            { numero: 'III', titulo: 'Monitorización fisiológica', original: 'Physiological Monitoring', capitulos: [
                 { n: 7, titulo: 'Oximetry and Capnography', es: 'Oximetría y capnografía', pdf: MARINO_PDF.monitorizacion, pagina: 36, donde: 'Libros · Marino Fundamentos',
                   fichas: fund([['mar-oximetria', 'Oximetría'], ['mar-capnografia', 'Capnografía']]) },
                 { n: 8, titulo: 'The Pulmonary Artery Catheter', es: 'El catéter de arteria pulmonar', pdf: MARINO_PDF.monitorizacion, pagina: 50, donde: 'Libros · Marino Fundamentos',
@@ -56,7 +58,7 @@ export const librosIndice = [
                 { n: 9, titulo: 'Systemic Oxygenation', es: 'Oxigenación sistémica', pdf: MARINO_PDF.monitorizacion, pagina: 67, donde: 'Libros · Marino Fundamentos',
                   fichas: fund([['mar-transporte-o2', 'Oxígeno en sangre y transporte'], ['mar-extraccion-lactato', 'Extracción de O₂ y lactato']]) },
             ] },
-            { numero: 'IV', titulo: 'Intravenous Fluid Therapy', capitulos: [
+            { numero: 'IV', titulo: 'Fluidoterapia intravenosa', original: 'Intravenous Fluid Therapy', capitulos: [
                 { n: 10, titulo: 'Intravenous Fluids', es: 'Fluidos intravenosos', pdf: MARINO_PDF.fluidos, pagina: 2, donde: 'Libros · Marino Fundamentos',
                   fichas: fund([['mar-cristaloides', 'Cristaloides y dextrosa'], ['mar-coloides', 'Coloides']]) },
                 { n: 11, titulo: 'Fluid Management', es: 'Manejo de fluidos', pdf: MARINO_PDF.fluidos, pagina: 21, donde: 'Libros · Marino Fundamentos',
@@ -68,7 +70,7 @@ export const librosIndice = [
                 { n: 13, titulo: 'Platelets and Plasma', es: 'Plaquetas y plasma', pdf: MARINO_PDF.hemato, pagina: 20, donde: 'PIF · Hematología · Merino HEMATO',
                   fichas: mh([['merino-trombocitopenia', 'Trombocitopenia y HIT'], ['merino-microangiopatias', 'Microangiopatías trombóticas'], ['merino-plaquetas-plasma', 'Plaquetas y plasma']]) },
             ] },
-            { numero: 'VI', titulo: 'Shock Syndromes', capitulos: [
+            { numero: 'VI', titulo: 'Síndromes de shock', original: 'Shock Syndromes', capitulos: [
                 { n: 14, titulo: 'Approaches to Clinical Shock', es: 'Abordaje del shock', pdf: MARINO_PDF.shock, pagina: 1, donde: 'Fisiopatología UCI · Cardiología · Merino Cardiología',
                   fichas: mc([['mc-definiciones', 'Definiciones y monitorización'], ['mc-vasopresores', 'Vasopresores']]) },
                 { n: 15, titulo: 'Hemorrhagic Shock', es: 'Shock hemorrágico', pdf: MARINO_PDF.shock, pagina: 21, donde: 'Merino Cardiología',
@@ -78,7 +80,7 @@ export const librosIndice = [
                 { n: 17, titulo: 'Inflammatory Shock Syndromes', es: 'Shock inflamatorio', pdf: MARINO_PDF.shock, pagina: 52, donde: 'Merino Cardiología',
                   fichas: mc([['mc-inflamacion-ros', 'Inflamación'], ['mc-shock-septico', 'Shock séptico'], ['mc-shock-toxico', 'Shock tóxico'], ['mc-anafilaxia', 'Anafilaxia']]) },
             ] },
-            { numero: 'VII', titulo: 'Cardiac Disorders', capitulos: [
+            { numero: 'VII', titulo: 'Trastornos cardíacos', original: 'Cardiac Disorders', capitulos: [
                 { n: 18, titulo: 'Acute Heart Failure(s)', es: 'Insuficiencia cardíaca aguda', pdf: MARINO_PDF.cardio, pagina: 1, donde: 'Merino Cardiología',
                   fichas: mc([['mc-ic-tipos', 'Tipos'], ['mc-ic-manejo', 'Manejo']]) },
                 { n: 19, titulo: 'Tachyarrhythmias', es: 'Taquiarritmias', pdf: MARINO_PDF.cardio, pagina: 18, donde: 'Merino Cardiología',
@@ -88,7 +90,7 @@ export const librosIndice = [
                 { n: 21, titulo: 'Cardiac Arrest', es: 'Parada cardíaca', pdf: MARINO_PDF.cardio, pagina: 55, donde: 'Merino Cardiología',
                   fichas: mc([['mc-paro-soporte', 'Soporte vital'], ['mc-paro-monitorizacion', 'Monitorización'], ['mc-posresucitacion', 'Posparada']]) },
             ] },
-            { numero: 'VIII', titulo: '', capitulos: [
+            { numero: 'VIII', titulo: 'Trastornos respiratorios', original: 'Respiratory Disorders', capitulos: [
                 { n: 22, titulo: 'Acute Pulmonary Embolism', es: 'Embolia pulmonar aguda', pdf: MARINO_PDF.resp1, pagina: 1, donde: 'Fisiopatología UCI · Neumología · Merino Neumología',
                   fichas: mn([['neumo-ep-diagnostico', 'Diagnóstico'], ['neumo-ep-manejo', 'Manejo']]) },
                 { n: 23, titulo: 'Asthma and COPD in the ICU', es: 'Asma y EPOC en la UCI', pdf: MARINO_PDF.resp1, pagina: 15, donde: 'Merino Neumología',
@@ -110,7 +112,7 @@ export const librosIndice = [
                 { n: 30, titulo: 'Discontinuing Mechanical Ventilation', es: 'Retirada de la ventilación', pdf: MARINO_PDF.resp2, pagina: 50, donde: 'Merino Neumología',
                   fichas: mn([['neumo-sbt', 'Prueba de respiración espontánea'], ['neumo-weaning-extubacion', 'Destete y extubación']]) },
             ] },
-            { numero: 'X →', titulo: 'Acid-Base Disorders y siguientes', pendiente: 'Caps. 31 en adelante: sin PDF todavía.', capitulos: [] },
+            { numero: 'X →', titulo: 'Trastornos ácido-base y siguientes', original: 'Acid-Base Disorders', pendiente: 'Caps. 31 en adelante: sin PDF todavía.', capitulos: [] },
         ]
     },
     {
@@ -120,6 +122,7 @@ export const librosIndice = [
         edicion: '',
         color: 'var(--accent-yellow)',
         nota: 'Vive en Fisiopatología UCI (grupo raíz Fisiopatología UCI → tarjeta Fisiopatología UCI). Hoy están las secciones I, II, III y VII.',
+        quiz: ['Fisiopatología UCI::Cardiología', 'Fisiopatología UCI::Hematología y Hemostasia', 'Fisiopatología UCI::Inmunología', 'Fisiopatología UCI::Vías Urinarias'],
         secciones: [
             { numero: 'I', titulo: 'Aparato cardiovascular', capitulos: [
                 ...[

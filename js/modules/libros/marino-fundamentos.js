@@ -6,6 +6,7 @@
 // simulador de la Figura 9.3) se marca como ilustrativo en la propia UI.
 import { initCorkboard } from '../../core/corkboard.js';
 import { clamp } from '../../core/ui.js';
+import { initSiNoWizard } from '../../core/wizard.js';
 
 const $ = id => document.getElementById(id);
 const num = el => (el && el.value !== '' ? Number(el.value) : null);
@@ -132,11 +133,13 @@ function calcDual() {
     let estado = 'ok', txt = 'Sin aumento de la extracción de O₂.';
     if (d >= 50) { estado = 'danger'; txt = 'Amenaza para el metabolismo aerobio.'; }
     else if (d > 25) { estado = 'warn'; txt = 'Aporte reducido respecto al consumo, sin comprometer todavía el metabolismo aerobio.'; }
-    pintar(box, estado, `<strong>SpO₂ − SvO₂ = ${fmt(d, 0)}%</strong> (≈ extracción de O₂). ${txt}`);
+    pintar(box, estado, `<strong>SpO₂ − SvO₂ = ${fmt(d, 0)}%</strong> (≈ extracción de O₂). ${txt}` +
+        (d > 25 && d <= 30 ? '<br><span style="color:var(--text-muted);">Ojo: el Cap. 9 (Tabla 9.4) da 20-30% como normal; este capítulo marca el aumento desde el 25%.</span>' : ''));
 }
 
 // ---- Cap. 8 — índices del catéter de arteria pulmonar (Tabla 8.1) ------
 const RANGO_8_1 = {
+    pvc: [0, 5, 'mmHg', 'PVC'], pawp: [6, 12, 'mmHg', 'Enclavamiento'], svo2: [70, 75, '%', 'SvO₂ (65-75% en el Cap. 9)'],
     ic: [2.4, 4.0, 'L/min/m²', 'Índice cardíaco'], is: [20, 40, 'mL/m²', 'Índice sistólico'],
     irvs: [25, 30, 'U Wood', 'IRVS'], irvp: [1, 2, 'U Wood', 'IRVP'],
     do2: [520, 570, 'mL/min/m²', 'Índice de aporte de O₂'], vo2: [110, 160, 'mL/min/m²', 'Índice de consumo de O₂'],
@@ -151,7 +154,11 @@ function calcHemo() {
     const sc = (talla + peso - 60) / 100;
     if (sc <= 0) return pintar(box, 'danger', 'Superficie corporal no válida.');
     const ic = gc / sc;
-    const res = { ic };
+    const res = {};
+    if (pvc !== null) res.pvc = pvc;
+    if (pawp !== null) res.pawp = pawp;
+    if (svo2 !== null) res.svo2 = svo2;
+    res.ic = ic;
     if (fc) res.is = ic / fc * 1000;
     if (pam !== null && pvc !== null) res.irvs = (pam - pvc) / ic;
     if (pap !== null && pawp !== null) res.irvp = (pap - pawp) / ic;
@@ -165,7 +172,7 @@ function calcHemo() {
         const [lo, hi, u, nombre] = RANGO_8_1[k];
         const fuera = val < lo || val > hi;
         if (fuera) peor = 'warn';
-        const d = k === 'o2er' ? 2 : (k === 'ic' ? 2 : (val >= 100 ? 0 : 1));
+        const d = k === 'o2er' || k === 'ic' ? 2 : (['pvc', 'pawp', 'svo2'].includes(k) || val >= 100 ? 0 : 1);
         return `<li>${nombre}: <strong>${fmt(val, d)}${u ? ' ' + u : ''}</strong> ${fuera ? '⚠️' : '✅'} <span style="color:var(--text-muted);">(${fmt(lo, k === 'o2er' || k === 'ic' ? 1 : 0)}-${fmt(hi, k === 'o2er' || k === 'ic' ? 1 : 0)})</span></li>`;
     });
     const avisos = [];
@@ -181,7 +188,7 @@ function calcCao2() {
     if (hb === null || sao2 === null || pao2 === null) return ocultar(box);
     const unido = 1.34 * hb * sao2 / 100, disuelto = 0.003 * pao2, total = unido + disuelto;
     const pct = total / 20 * 100;
-    pintar(box, pct < 75 ? 'danger' : pct < 90 ? 'warn' : 'ok',
+    pintar(box, 'neutro',
         `<strong>CaO₂ = ${fmt(total, 1)} mL/dL</strong> (unido a la Hb ${fmt(unido, 1)} + disuelto ${fmt(disuelto, 2)}; el disuelto es el ${fmt(disuelto / total * 100, 1)}%). Frente a los 20 mL/dL normales: <strong>${fmt(pct, 0)}%</strong>.`);
 }
 
@@ -195,7 +202,8 @@ function calcExtraccion() {
     else if (d > 30) { estado = 'warn'; txt = 'Extracción aumentada: el aporte ha bajado respecto al consumo, pero aún compensa.'; }
     else if (d >= 20) { estado = 'ok'; txt = 'Normal (20-30%).'; }
     else { estado = 'warn'; txt = 'Por debajo del 20%: sugiere un defecto de utilización del O₂ (p. ej. en la sepsis).'; }
-    pintar(box, estado, `<strong>SaO₂ − SvO₂ = ${fmt(d, 0)}%</strong>. ${txt}`);
+    pintar(box, estado, `<strong>SaO₂ − SvO₂ = ${fmt(d, 0)}%</strong>. ${txt}` +
+        (d > 25 && d <= 30 ? '<br><span style="color:var(--text-muted);">Ojo: la oximetría dual del Cap. 7 ya considera aumentada una diferencia &gt;25%.</span>' : ''));
 }
 
 // ---- Cap. 11 — déficit de plasma, perfusión, VVS y respuesta -----------
@@ -253,6 +261,114 @@ function calcRespuesta() {
     if (epp && !responde && $('mar-resp-pia')?.checked) html += ' Con presión intraabdominal alta, los <strong>falsos negativos</strong> son frecuentes.';
     if (!epp) html += ' El efecto se disipa a los 10 min.';
     pintar(box, estado, html);
+}
+
+
+// ---- Cap. 3 — hemocultivos pareados (Tabla 3.4) y duración (texto) -------
+function calcHemocultivos() {
+    const metodo = $('mar-hc-metodo')?.value;
+    $('mar-hc-tiempo-grupo').hidden = metodo !== 'tiempo';
+    $('mar-hc-cuant-grupo').hidden = metodo !== 'cuant';
+    const mismo = $('mar-hc-mismo').value, box = $('mar-hc-resultado');
+    const valor = num(metodo === 'tiempo' ? $('mar-hc-horas') : $('mar-hc-razon'));
+    if (!mismo) return ocultar(box);
+    if (mismo === 'no') return pintar(box, 'warn', '<strong>No confirma</strong> que el catéter sea la fuente: los dos criterios exigen el mismo germen en ambas muestras.');
+    if (valor === null) return ocultar(box);
+    if (metodo === 'cuant' && valor < 0) return pintar(box, 'danger', '⚠️ Un cociente de colonias no puede ser negativo.');
+    const ok = metodo === 'tiempo' ? valor >= 2 : valor >= 3;
+    pintar(box, ok ? 'danger' : 'ok', ok
+        ? `<strong>Confirma bacteriemia relacionada con el catéter</strong> (${metodo === 'tiempo' ? 'crece ≥2 h antes en la sangre del catéter; exactitud 91%' : 'colonias del catéter ≥3 veces las periféricas; exactitud 94%'}).`
+        : `<strong>No cumple el criterio</strong> (${metodo === 'tiempo' ? 'hacen falta al menos 2 horas de ventaja' : 'hace falta un cociente ≥3'}): el catéter no queda confirmado como fuente.`);
+}
+
+function calcDuracion() {
+    const g = $('mar-hc-germen').value, box = $('mar-hc-duracion');
+    $('mar-hc-scn').hidden = g !== 'scn';
+    $('mar-hc-sa').hidden = g !== 'sa';
+    if (!g) return ocultar(box);
+    if (g === 'trombo') return pintar(box, 'danger', '<strong>4-6 semanas</strong> de antibiótico y retirar el catéter; la cirugía del trombo solo si la septicemia es refractaria.');
+    if (g === 'ent') return pintar(box, 'warn', '<strong>7-14 días</strong>, se cambie o no el catéter.');
+    if (g === 'scn') return $('mar-hc-respuesta').checked
+        ? pintar(box, 'ok', '<strong>No más de 7 días</strong> (germen poco patógeno con buena respuesta en 72 h).')
+        : pintar(box, 'warn', 'Los 7 días valen solo con buena respuesta en 72 h. Sin ella, busca la causa de la <strong>sepsis persistente</strong> (tromboflebitis supurada, endocarditis…), más abajo.');
+    if ($('mar-hc-endo').checked) return pintar(box, 'danger', '<strong>4-6 semanas</strong> e interconsulta a Infecciosas (endocarditis).');
+    const faltan = [!$('mar-hc-retirado').checked && 'retirar el catéter', $('mar-hc-inmuno').checked && 'sin inmunodepresión', $('mar-hc-protesis').checked && 'sin prótesis intravascular'].filter(Boolean);
+    if (!faltan.length) return pintar(box, 'warn', '<strong>14 días</strong> (sin endocarditis en la ecografía transesofágica, catéter retirado, sin inmunodepresión ni prótesis).');
+    pintar(box, 'danger', `Los 14 días exigen: ${faltan.join(', ')}. Si no se cumple, la fuente no da otra duración: valóralo con Infecciosas.`);
+}
+
+// ---- Cap. 6 — paracetamol y ketorolaco (Tabla 6.3) ----------------------
+function calcAnalgesico() {
+    const f = $('mar-anal-farmaco').value, edad = num($('mar-anal-edad')), peso = num($('mar-anal-peso')), box = $('mar-anal-resultado');
+    if (f === 'paracetamol') return pintar(box, 'ok', '<strong>1 g IV cada 6 h</strong>; no pasar de <strong>4 g al día</strong>. No tiene acción antiinflamatoria.');
+    if (edad === null || peso === null) return ocultar(box);
+    const motivos = [$('mar-anal-renal').checked && 'insuficiencia renal', edad >= 65 && '≥65 años', peso < 50 && 'peso <50 kg'].filter(Boolean);
+    pintar(box, motivos.length ? 'warn' : 'ok', motivos.length
+        ? `<strong>15 mg IV cada 6 h</strong> (dosis reducida un 50% por ${motivos.join(', ')}).`
+        : '<strong>30 mg IV cada 6 h</strong>. Las complicaciones graves (p. ej., renales) son raras en tandas cortas.');
+}
+
+// ---- Cap. 6 — haloperidol paso a paso (Tabla 6.8) -----------------------
+const MANTENER = dosis => `Respuesta satisfactoria: mantener con el 25% de la dosis eficaz (${fmt(dosis * 0.25, 2)} mg) cada 6 h (el texto dice cada 4-6 h).`;
+function pasosHaloperidol(conMidazolam) {
+    const extra = conMidazolam ? ' + midazolam 1 mg (el texto dice 1-2 mg)' : '';
+    return {
+        primera: { pregunta: `Da 5 mg de haloperidol IV${extra} y espera 15 minutos (el texto dice 20). ¿Ha respondido?`, si: { estado: 'tfg-estado-ok', final: MANTENER(5) }, no: conMidazolam ? 'segundaM' : 'segunda' },
+    };
+}
+const HALO_WIZARD = {
+    inicio: { pregunta: '¿El QTc es >500 ms?', si: { estado: 'tfg-estado-danger', final: 'No uses haloperidol IV: el QTc >500 ms es una contraindicación (riesgo de torsade de pointes).' }, no: 'agitado' },
+    agitado: { pregunta: '¿Está muy agitado o alterado?', si: 'primeraM', no: 'primera' },
+    primera: pasosHaloperidol(false).primera,
+    primeraM: pasosHaloperidol(true).primera,
+    segunda: { pregunta: 'Dobla la dosis: 10 mg IV. ¿Ha respondido?', si: { estado: 'tfg-estado-ok', final: MANTENER(10) }, no: { estado: 'tfg-estado-warn', final: 'No responde a la segunda dosis: cambia a otro fármaco.' } },
+};
+HALO_WIZARD.segundaM = HALO_WIZARD.segunda;
+
+// ---- Cap. 9 — ¿por qué está alto el lactato? (Tabla 9.5) ----------------
+const LACTATO_9_5 = [
+    ['Sepsis', 'Endotoxina y citocinas inhiben la piruvato deshidrogenasa (el piruvato no entra en la mitocondria) y las catecolaminas aceleran la glucólisis.'],
+    ['Estrés fisiológico', 'Más transportadores de glucosa en la membrana y catecolaminas: la glucólisis aerobia sube un 40-50%.'],
+    ['Déficit de tiamina', 'La tiamina (pirofosfato) es el cofactor de la piruvato deshidrogenasa: sin ella, el piruvato se desvía a lactato. Frecuente y poco reconocido en el crítico.'],
+    ['Catecolaminas', 'Aceleran la glucólisis (lo describe el capítulo dentro de la sepsis y el estrés).'],
+    ['β-agonistas', null], ['Asma grave', null], ['Cetoacidosis', null], ['Disfunción hepática', null], ['Convulsiones', null], ['Tumores', null],
+    ['Propofol', 'Ver el síndrome de infusión del propofol en la ficha de sedación (Cap. 6).'],
+    ['Propilenglicol', 'El disolvente del lorazepam IV se convierte en ácido láctico (ficha de sedación, Cap. 6).'],
+    ['Cianuro', null], ['Metformina', null], ['Salicilatos', null], ['Alcoholes tóxicos', null],
+];
+function initLactato() {
+    const cont = $('mar-lact-chips');
+    if (!cont) return;
+    cont.innerHTML = LACTATO_9_5.map(([n], i) => `<button type="button" class="mar-nivel-chip" data-i="${i}" aria-pressed="false">${n}</button>`).join('');
+    cont.addEventListener('click', e => {
+        const b = e.target.closest('.mar-nivel-chip');
+        if (!b) return;
+        b.classList.toggle('on');
+        b.setAttribute('aria-pressed', String(b.classList.contains('on')));
+        const marcados = [...cont.querySelectorAll('.on')].map(x => LACTATO_9_5[Number(x.dataset.i)]);
+        const box = $('mar-lact-resultado');
+        if (!marcados.length) return ocultar(box);
+        pintar(box, 'warn', `<p style="margin:0 0 6px;"><strong>${marcados.length === 1 ? 'Una fuente' : `${marcados.length} fuentes`} de lactato aerobio:</strong> un lactato alto no prueba aquí hipoxia tisular.</p>` +
+            marcados.map(([n, m]) => `<p style="margin:2px 0;">• <strong>${n}</strong>: ${m || 'en la Tabla 9.5, sin mecanismo desarrollado en el capítulo.'}</p>`).join('') +
+            '<p style="margin:6px 0 0;">Para saber si hay hipoperfusión, mira la ScvO₂ y el gap de PCO₂ (Ficha XXIII).</p>');
+    });
+}
+
+// ---- Cap. 11 — déficit de volemia y signos (texto del capítulo) ---------
+function simVolemia() {
+    const r = $('mar-vol-def');
+    if (!r) return;
+    const upd = () => {
+        const d = Number(r.value);
+        $('mar-vol-def-val').textContent = `${d}%`;
+        const fila = (txt, aparece, nota) => `<div class="tfg-estado tfg-estado-${aparece ? 'danger' : 'neutro'}" style="margin-top:6px;"><strong>${aparece ? '✔' : '—'} ${txt}</strong><br><span style="color:var(--text-muted);">${nota}</span></div>`;
+        $('mar-vol-signos').innerHTML =
+            fila('Aumento ortostático de la FC ≥30 lpm', d >= 15, 'El marcador más sensible: aparece con un déficit del 15%.') +
+            fila('Taquicardia en decúbito', false, d <= 25 ? 'No aparece en la mayoría de las hemorragias agudas, ni con un 25% de déficit; la bradicardia puede ser incluso más frecuente.' : 'El capítulo no da su umbral: solo que falta en la mayoría aun con un 25% de déficit.') +
+            fila('Hipotensión en decúbito', d > 30, 'No aparece hasta un déficit >30%.');
+    };
+    r.addEventListener('input', upd);
+    upd();
 }
 
 // ---- Simuladores (gráficos SVG) -----------------------------------------
@@ -387,6 +503,12 @@ export function init() {
     enlazar(['mar-perf-scvo2', 'mar-perf-pvco2', 'mar-perf-paco2', 'mar-perf-contexto'], calcPerfusion);
     enlazar(['mar-vvs-max', 'mar-vvs-min', 'mar-vvs-media', 'mar-vvs-limites'], calcVvs);
     enlazar(['mar-resp-prueba', 'mar-resp-vs0', 'mar-resp-vs1', 'mar-resp-taqui', 'mar-resp-pia'], calcRespuesta);
+    enlazar(['mar-hc-mismo', 'mar-hc-metodo', 'mar-hc-horas', 'mar-hc-razon'], calcHemocultivos);
+    enlazar(['mar-hc-germen', 'mar-hc-respuesta', 'mar-hc-endo', 'mar-hc-retirado', 'mar-hc-inmuno', 'mar-hc-protesis'], calcDuracion);
+    enlazar(['mar-anal-farmaco', 'mar-anal-edad', 'mar-anal-peso', 'mar-anal-renal'], calcAnalgesico);
+    initSiNoWizard('mar-halo-wizard', HALO_WIZARD);
+    initLactato();
+    simVolemia();
     simDo2Vo2();
     simFluidos();
     simRetorno();

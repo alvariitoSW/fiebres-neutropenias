@@ -4,6 +4,8 @@
 // y las calculadoras y simuladores de la ficha se conectan, nunca se copian.
 import { montarVisual } from '../../core/visual-kit.js';
 
+// Las figuras reales de la ficha, primero: es lo más visual que tiene cada una.
+const FIGURAS = { tipo: 'figuras', titulo: 'Las figuras del libro', nota: 'Desliza para verlas; tócalas para ampliarlas.', todas: true };
 const calc = (titulo, campos, resultado, nota) => ({ tipo: 'calculadora', titulo, campos, resultado, ...(nota ? { nota } : {}) });
 
 // Hagen-Poiseuille: el flujo relativo con la ecuación de la propia ficha
@@ -33,11 +35,43 @@ function poiseuille(cuerpo) {
     upd();
 }
 
+// Úlcera de estrés: los cuatro niveles de la Tabla 4.2 (leídos de la propia
+// tabla) con sus casillas reales y la línea de la profilaxis entre alto y
+// moderado. Sin puntos: la tabla clasifica, no puntúa. El veredicto se copia
+// de la calculadora de la ficha.
+const NIVELES_4_2 = [['maximo', 'var(--accent-purple)'], ['alto', 'var(--accent-red)'], ['moderado', 'var(--accent-yellow)'], ['bajo', 'var(--accent-green)']];
+function ulceraNiveles(cuerpo, { texto }) {
+    const filas = [...texto.querySelectorAll('#mar-tabla-4-2 tbody tr')];
+    const checks = nivel => [...texto.querySelectorAll(`.mar-ulcera-check[data-nivel="${nivel}"]`)];
+    const pintar = () => {
+        const res = document.getElementById('mar-ulcera-resultado');
+        cuerpo.innerHTML = `<div class="mar-niveles">${NIVELES_4_2.map(([nivel, c], k) => `
+            ${k === 2 ? '<div class="mar-corte">↑ profilaxis · sin profilaxis ↓</div>' : ''}
+            <div class="mar-nivel" style="--nv:${c}">
+                <div class="mar-nivel-cab"><span>${filas[k]?.cells[0].textContent.trim() || nivel}</span><span>${filas[k]?.cells[1].textContent.trim() || ''}</span></div>
+                <div class="mar-nivel-chips">${checks(nivel).map(ch => `<button type="button" class="mar-nivel-chip ${ch.checked ? 'on' : ''}" data-valor="${ch.value}" aria-pressed="${ch.checked}">${ch.closest('label').textContent.trim()}</button>`).join('')}</div>
+            </div>`).join('')}</div>
+            <div class="${res.className}" style="margin-top:10px;">${res.innerHTML}</div>
+            <p class="vk-panel-nota" style="margin-top:6px;">Dos factores moderados cuentan como riesgo alto (fila "Alto" de la tabla).</p>`;
+    };
+    cuerpo.addEventListener('click', e => {
+        const b = e.target.closest('.mar-nivel-chip');
+        if (!b) return;
+        const ch = texto.querySelector(`.mar-ulcera-check[value="${b.dataset.valor}"]`);
+        ch.checked = !ch.checked;
+        ch.dispatchEvent(new Event('change', { bubbles: true }));
+        pintar();
+    });
+    texto.addEventListener('change', e => { if (e.target.matches('.mar-ulcera-check')) pintar(); });
+    pintar();
+}
+
 export function initVisualMarino() {
     // ---- Cap. 1 ----
     montarVisual('mar-cateteres-flujo', {
         guia: 'El catéter, no la vena, marca la velocidad: radio a la cuarta y longitud.',
         paneles: [
+            FIGURAS,
             { tipo: 'propio', titulo: 'La ecuación de Hagen-Poiseuille, en marcha', nota: 'Flujo relativo según la ecuación de la ficha (presión y viscosidad fijas).', render: poiseuille },
             { tipo: 'barras', titulo: 'Flujo por gravedad según el calibre (Figura 1.1)', tabla: '#mar-fig-1-1-calibre', series: [{ col: 1, nombre: 'mL/min', color: 'dorado' }] },
             { tipo: 'barras', titulo: 'Flujo según la longitud (Figura 1.1, 16 G)', tabla: '#mar-fig-1-1-longitud', series: [{ col: 1, nombre: 'mL/min', color: 'verde' }] },
@@ -55,6 +89,7 @@ export function initVisualMarino() {
     montarVisual('mar-tipos-cateter', {
         guia: 'Del más corto al más largo: más duración, menos flujo.',
         paneles: [
+            FIGURAS,
             { tipo: 'escalera', titulo: 'De periférico a central', nodos: [
                 { fuente: 'Periférico corto', color: 'verde' }, { fuente: 'Periférico largo', color: 'verde' },
                 { fuente: 'Línea media', color: 'amarillo' }, { fuente: 'PICC', color: 'rojo' }, { fuente: 'Catéter venoso central', color: 'purpura' }
@@ -68,6 +103,7 @@ export function initVisualMarino() {
     montarVisual('mar-eco-intraosea', {
         guia: 'Eco para no fallar la vena; intraósea cuando no hay vena.',
         paneles: [
+            FIGURAS,
             { tipo: 'comparar', titulo: 'Eje corto frente a eje largo', columnas: [
                 { titulo: 'Para localizar', color: 'amarillo', nodos: [{ fuente: 'Eje corto', etiqueta: 'Eje corto' }] },
                 { titulo: 'Para confirmar', color: 'verde', nodos: [{ fuente: 'Eje largo', etiqueta: 'Eje largo' }] }
@@ -90,6 +126,7 @@ export function initVisualMarino() {
     montarVisual('mar-cvc-sitios', {
         guia: 'Tres sitios, cada uno con su riesgo propio.',
         paneles: [
+            FIGURAS,
             { tipo: 'comparar', titulo: 'Los tres sitios', columnas: [
                 { titulo: 'Yugular interna', color: 'purpura', nodos: [{ fuente: '#mar-yugular', etiqueta: 'La más usada; mejor la derecha' }] },
                 { titulo: 'Subclavia', color: 'dorado', nodos: [{ fuente: '#mar-subclavia', etiqueta: 'Estenosis 15-50% tras retirarla' }] },
@@ -104,6 +141,7 @@ export function initVisualMarino() {
     montarVisual('mar-cvc-complicaciones', {
         guia: 'Aire, neumotórax y punta: qué mirar después de poner el catéter.',
         paneles: [
+            FIGURAS,
             { tipo: 'flujo', titulo: 'Embolia gaseosa', nodos: [
                 { fuente: 'Por qué ocurre', color: 'rojo' }, { fuente: 'Prevención', color: 'verde' },
                 { fuente: 'Clínica', color: 'amarillo' }, { fuente: '#mar-aire-manejo', etiqueta: 'Manejo', color: 'purpura' }
@@ -124,6 +162,7 @@ export function initVisualMarino() {
     montarVisual('mar-cateter-cuidados', {
         guia: 'El catéter que se queda: apósitos, oclusiones, trombosis y perforación.',
         paneles: [
+            FIGURAS,
             { tipo: 'comparar', titulo: 'Apósitos', columnas: [
                 { titulo: 'Gasa', color: 'amarillo', nodos: ['Gasa estéril'] },
                 { titulo: 'Transparente', color: 'dorado', nodos: ['Transparente de poliuretano'] },
@@ -144,6 +183,7 @@ export function initVisualMarino() {
     montarVisual('mar-bacteriemia-cateter', {
         guia: 'De dónde viene, cómo se diagnostica y cuándo retirar el catéter.',
         paneles: [
+            FIGURAS,
             { tipo: 'barras', titulo: 'Los diez gérmenes (Tabla 3.5, %)', tabla: '#mar-tabla-3-5', series: [{ col: 1, nombre: '% de aislamientos', color: 'rojo' }] },
             { tipo: 'comparar', titulo: 'Diagnóstico (Tabla 3.4)', columnas: [
                 { titulo: 'Cuantitativo', color: 'dorado', nodos: [{ fuente: 'css:#mar-tabla-3-4 tbody tr:nth-child(1)', etiqueta: '≥3 veces más colonias (94%)' }] },
@@ -154,7 +194,9 @@ export function initVisualMarino() {
                 [{ fuente: 'Recambio sobre guía', color: 'amarillo' }, { fuente: 'Sellado antibiótico', color: 'verde' }]
             ] },
             { tipo: 'racimos', titulo: 'Antibiótico empírico (Tabla 3.6)', tabla: '#mar-tabla-3-6', color: 'purpura' },
-            { tipo: 'escalera', titulo: 'Duración del tratamiento', tabla: '#mar-bac-duracion' }
+            { tipo: 'escalera', titulo: 'Duración del tratamiento', tabla: '#mar-bac-duracion' },
+            calc('¿El catéter es la fuente? (calculadora de la ficha)', ['#mar-hc-mismo', '#mar-hc-metodo', '#mar-hc-horas', '#mar-hc-razon'], ['#mar-hc-resultado']),
+            calc('¿Cuántos días? (calculadora de la ficha)', ['#mar-hc-germen'], ['#mar-hc-duracion'], 'Las condiciones de S. aureus se marcan en la vista Texto.')
         ]
     });
 
@@ -162,6 +204,7 @@ export function initVisualMarino() {
     montarVisual('mar-microbioma', {
         guia: 'La "piel interna": microbioma, ácido gástrico y descontaminación.',
         paneles: [
+            FIGURAS,
             { tipo: 'flujo', titulo: 'El intestino como motor del fallo multiorgánico', nodos: [
                 { fuente: '#mar-microbioma-proteccion', etiqueta: 'Cómo protege el microbioma', color: 'verde' },
                 { fuente: 'Disbiosis y translocación', color: 'amarillo' },
@@ -181,11 +224,8 @@ export function initVisualMarino() {
     montarVisual('mar-ulcera-estres', {
         guia: 'Pocos la necesitan: la regla de la Tabla 4.2 y los riesgos de suprimir el ácido.',
         paneles: [
-            { tipo: 'escalera', titulo: 'Riesgo de sangrado significativo (Tabla 4.2)', tabla: '#mar-tabla-4-2' },
-            { tipo: 'puntos', titulo: '¿Necesita profilaxis? (calculadora de la ficha)', resultado: ['#mar-ulcera-resultado'], items: [
-                { checks: '.mar-ulcera-check[data-nivel="maximo"]', pts: 3 }, { checks: '.mar-ulcera-check[data-nivel="alto"]', pts: 2 },
-                { checks: '.mar-ulcera-check[data-nivel="moderado"]', pts: 1 }
-            ] },
+            FIGURAS,
+            { tipo: 'propio', titulo: 'Riesgo de sangrado (Tabla 4.2): ¿necesita profilaxis?', nota: 'Toca lo que tiene el paciente.', render: ulceraNiveles },
             { tipo: 'comparar', titulo: 'Fármacos', columnas: [
                 { titulo: 'Anti-H2', color: 'amarillo', nodos: ['Anti-H2'] },
                 { titulo: 'IBP', color: 'dorado', nodos: ['Inhibidores de la bomba'] },
@@ -201,6 +241,7 @@ export function initVisualMarino() {
     montarVisual('mar-tromboprofilaxis-farmacos', {
         guia: 'Quién está en riesgo y qué dosis toca según el riñón y el peso.',
         paneles: [
+            FIGURAS,
             { tipo: 'barras', titulo: 'ETV sin profilaxis (Figura 5.1, aproximado, límite inferior del rango)', tabla: '#mar-fig-5-1', series: [{ col: 1, nombre: '%', color: 'rojo' }] },
             calc('¿Qué dosis le toca? (calculadora de la ficha)', ['#mar-profilaxis-farmaco', '#mar-profilaxis-clcr', '#mar-profilaxis-imc'], ['#mar-profilaxis-resultado']),
             { tipo: 'comparar', titulo: 'HNF frente a HBPM', columnas: [
@@ -218,6 +259,7 @@ export function initVisualMarino() {
     montarVisual('mar-tromboprofilaxis-escenarios', {
         guia: 'Mecánica o farmacológica, y qué pauta para cada paciente.',
         paneles: [
+            FIGURAS,
             { tipo: 'escalera', titulo: 'Métodos mecánicos, de menos a más eficaz', nodos: [
                 { fuente: 'Medias de compresión gradual', color: 'amarillo' },
                 { fuente: 'Compresión neumática intermitente', color: 'verde' }
@@ -236,6 +278,7 @@ export function initVisualMarino() {
     montarVisual('mar-analgesia', {
         guia: 'Medir el dolor y elegir el analgésico.',
         paneles: [
+            FIGURAS,
             { tipo: 'puntos', titulo: 'Escala conductual del dolor (calculadora de la ficha)', resultado: ['#mar-bps-resultado'], items: [
                 { control: '#mar-bps-cara', etiqueta: 'Expresión facial' }, { control: '#mar-bps-brazos', etiqueta: 'Miembros superiores' },
                 { control: '#mar-bps-ventilador', etiqueta: 'Adaptación al ventilador' }
@@ -249,13 +292,15 @@ export function initVisualMarino() {
                 { titulo: 'Opioides', color: 'rojo', nodos: ['Depresión respiratoria', 'Cardiovasculares', 'Motilidad intestinal', 'Náuseas y vómitos'] },
                 { titulo: 'Evitar', color: 'purpura', nodos: ['Meperidina'] }
             ] },
-            { tipo: 'racimos', titulo: 'Sin opioides (Tabla 6.3)', tabla: '#mar-tabla-6-3', color: 'verde' }
+            { tipo: 'racimos', titulo: 'Sin opioides (Tabla 6.3)', tabla: '#mar-tabla-6-3', color: 'verde' },
+            calc('Paracetamol y ketorolaco: la dosis (calculadora de la ficha)', ['#mar-anal-farmaco', '#mar-anal-edad', '#mar-anal-peso'], ['#mar-anal-resultado'])
         ]
     });
 
     montarVisual('mar-sedacion', {
         guia: 'Sedación ligera, titulada con una escala.',
         paneles: [
+            FIGURAS,
             { tipo: 'escalera', titulo: 'Escala RASS (Tabla 6.4)', tabla: '#mar-tabla-6-4' },
             { tipo: 'selector', titulo: '¿Dónde está y dónde debería estar?', control: '#mar-rass-select', forma: 'escalera', resultado: ['#mar-rass-resultado'] },
             { tipo: 'comparar', titulo: 'Sedantes de despertar rápido', columnas: [
@@ -272,6 +317,7 @@ export function initVisualMarino() {
     montarVisual('mar-oximetria', {
         guia: 'Qué mide la SpO₂, qué no ve, y la oximetría dual.',
         paneles: [
+            FIGURAS,
             { tipo: 'flujo', titulo: 'Cómo funciona', nodos: [
                 { fuente: 'La luz que absorbe', color: 'rojo' }, { fuente: 'Pulsioximetría', color: 'dorado' }, { fuente: '#mar-spo2-formula', etiqueta: 'SpO₂ = HbO₂ / (Hb + HbO₂)', color: 'verde' }
             ] },
@@ -290,6 +336,7 @@ export function initVisualMarino() {
     montarVisual('mar-capnografia', {
         guia: 'El capnograma y para qué sirve el CO₂ espirado.',
         paneles: [
+            FIGURAS,
             { tipo: 'flujo', titulo: 'Las 4 fases del capnograma', nodos: [
                 { fuente: 'Fase I', color: 'gris' }, { fuente: 'Fase II', color: 'amarillo' }, { fuente: 'Fase III', color: 'verde' }, { fuente: 'Fase IV', color: 'dorado' }
             ] },
@@ -307,6 +354,7 @@ export function initVisualMarino() {
     montarVisual('mar-cateter-ap', {
         guia: 'Las ondas guían el avance; el enclavamiento es la aurícula izquierda… sin flujo.',
         paneles: [
+            FIGURAS,
             { tipo: 'flujo', titulo: 'Avance del catéter (Figura 8.2)', nodos: [
                 { fuente: 'css:#mar-cap-pasos > li:nth-child(1)', etiqueta: 'Aurícula derecha', color: 'verde' },
                 { fuente: 'css:#mar-cap-pasos > li:nth-child(2)', etiqueta: 'Ventrículo derecho', color: 'amarillo' },
@@ -323,6 +371,7 @@ export function initVisualMarino() {
     montarVisual('mar-termodilucion', {
         guia: 'Del bolo frío a los 10 parámetros.',
         paneles: [
+            FIGURAS,
             { tipo: 'flujo', titulo: 'Termodilución', nodos: [
                 { fuente: 'El método', color: 'dorado' }, { fuente: '¿Cuántas medidas?', color: 'verde' }, { fuente: '#mar-termo-errores', etiqueta: 'Fuentes de error', color: 'rojo' }
             ] },
@@ -335,6 +384,7 @@ export function initVisualMarino() {
     montarVisual('mar-transporte-o2', {
         guia: 'Cuánto O₂ lleva la sangre y cuánto llega a los tejidos.',
         paneles: [
+            FIGURAS,
             calc('Contenido arterial de O₂ (calculadora de la ficha)', ['#mar-cao2-hb', '#mar-cao2-sao2', '#mar-cao2-pao2'], ['#mar-cao2-resultado'], 'Prueba a bajar la Hb a la mitad y luego la PaO₂ a la mitad.'),
             { tipo: 'comparar', titulo: 'Anemia frente a hipoxemia (Figura 9.2)', columnas: [
                 { titulo: 'Hb a la mitad', color: 'rojo', nodos: [{ fuente: '#mar-anemia-hipoxemia', etiqueta: 'CaO₂ 20 → 10 mL/dL' }] },
@@ -343,13 +393,17 @@ export function initVisualMarino() {
             { tipo: 'flujo', titulo: 'El transporte de O₂', nodos: [
                 { fuente: 'Aporte (DO₂)', color: 'verde' }, { fuente: 'Consumo (VO₂)', color: 'amarillo' }, { fuente: 'Extracción (O₂ER)', color: 'rojo' }
             ] },
-            { tipo: 'racimos', titulo: 'La curva de disociación', grupos: [{ titulo: 'Curva', color: 'dorado', nodos: ['Por qué la forma de S ayuda', 'Desplazamientos'] }] }
+            { tipo: 'racimos', titulo: 'La curva de disociación', grupos: [{ titulo: 'Curva', color: 'dorado', nodos: ['Por qué la forma de S ayuda', 'Desplazamientos'] }] },
+            { tipo: 'propio', titulo: 'La curva, en marcha', nota: 'La curva interactiva de El Libro Azul (normal, desplazada a la derecha o a la izquierda). Su P50 es otra: 22,5 mmHg frente a los 27 de Marino.', render: c => {
+                c.innerHTML = '<button type="button" class="especialidad-link" data-especialidad="fisioUci" data-view="hematologia" data-panel="panel-fuci-hemato-tabs" data-tab="fuci-transfusion" data-resaltar="#fuci-hbcurva-select">📈 Abrir la curva de disociación interactiva →</button>';
+            } }
         ]
     });
 
     montarVisual('mar-extraccion-lactato', {
         guia: 'Cuando la extracción llega al 50%, el consumo depende del aporte; y el lactato no es solo hipoxia.',
         paneles: [
+            FIGURAS,
             calc('Aporte y consumo de O₂ (simulador de la ficha)', ['#mar-dv-do2'], ['#mar-do2-vo2-sim svg', '#mar-dv-resultado']),
             calc('¿Qué dice esta saturación venosa? (calculadora de la ficha)', ['#mar-ext-sao2', '#mar-ext-svo2'], ['#mar-ext-resultado']),
             { tipo: 'barras', titulo: 'Mortalidad según el lactato (Figura 9.4)', tabla: '#mar-fig-9-4', series: [{ col: 1, nombre: 'Mortalidad %', color: 'rojo' }] },
@@ -364,6 +418,7 @@ export function initVisualMarino() {
     montarVisual('mar-cristaloides', {
         guia: 'Adónde va lo que se infunde y por qué el salino no es "normal".',
         paneles: [
+            FIGURAS,
             calc('¿Adónde va lo que infundo? (simulador de la ficha)', ['#mar-fs-fluido', '#mar-fs-vol'], ['#mar-fs-barras', '#mar-fs-resultado']),
             { tipo: 'barras', titulo: 'Cloro de cada cristaloide (Tabla 10.2, mEq/L)', tabla: '#mar-tabla-10-2', series: [{ col: 2, nombre: 'Cl', color: 'rojo' }] },
             { tipo: 'comparar', titulo: 'Los cristaloides', columnas: [
@@ -378,6 +433,7 @@ export function initVisualMarino() {
     montarVisual('mar-coloides', {
         guia: 'Los coloides expanden más el plasma; el fluido se elige según el problema.',
         paneles: [
+            FIGURAS,
             { tipo: 'barras', titulo: 'Expansión del plasma por volumen infundido (Tabla 10.3, límite inferior)', tabla: '#mar-tabla-10-3', series: [{ col: 2, nombre: 'Δ plasma / volumen', color: 'dorado' }] },
             { tipo: 'comparar', titulo: 'Los coloides', columnas: [
                 { titulo: 'Albúmina', color: 'verde', nodos: ['Albúmina'] },
@@ -392,7 +448,9 @@ export function initVisualMarino() {
     montarVisual('mar-retorno-venoso', {
         guia: 'El retorno venoso lo mueve la Pms, no la presión arterial; y la PVC lo frena.',
         paneles: [
+            FIGURAS,
             calc('La curva de retorno venoso (simulador de la ficha)', ['#mar-rs-pms', '#mar-rs-pad'], ['#mar-retorno-sim svg', '#mar-rs-resultado']),
+            calc('¿Qué signo esperar con cada déficit? (simulador de la ficha)', ['#mar-vol-def'], ['#mar-vol-signos']),
             calc('¿Cuánto cristaloide para reponer el plasma? (calculadora de la ficha)', ['#mar-def-peso', '#mar-def-sexo', '#mar-def-pct'], ['#mar-def-resultado']),
             { tipo: 'flujo', titulo: 'Volemia: lo que no sirve y lo que sí', nodos: [
                 [{ fuente: '#mar-pvc-volemia', etiqueta: 'La PVC: no', color: 'rojo' }, { fuente: '#mar-vci-volemia', etiqueta: 'La VCI: poco fiable', color: 'amarillo' }],
@@ -405,6 +463,7 @@ export function initVisualMarino() {
     montarVisual('mar-respuesta-fluidos', {
         guia: 'Antes del bolo: ¿hay hipoperfusión y va a responder?',
         paneles: [
+            FIGURAS,
             calc('ScvO₂ + gap de PCO₂ (calculadora de la ficha)', ['#mar-perf-scvo2', '#mar-perf-pvco2', '#mar-perf-paco2', '#mar-perf-contexto'], ['#mar-perf-resultado']),
             { tipo: 'comparar', titulo: 'Los dos marcadores', columnas: [
                 { titulo: 'ScvO₂', color: 'dorado', nodos: ['#mar-scvo2-pautas'] },
