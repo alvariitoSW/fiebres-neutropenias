@@ -368,3 +368,6 @@ export const asistenteVisual = (titulo, prefijo, pasos, idTexto) => ({
         engancharTexto(cuerpo, tab);
     }
 });
+
+// Ayudantes compartidos con las piezas de los caps. 45-53.
+export { $, num, fmt, C, coma, SVG, aTexto, engancharTexto, alCambiar, escribir, copiar, filas };

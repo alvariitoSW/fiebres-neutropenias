@@ -30,7 +30,7 @@ const pesoValido = id => { const p = num($(id)); return p !== null && p > 0 ? p 
 export const lineaNomograma = (t, inicio, fin) => inicio * Math.pow(fin / inicio, (t - 4) / 20);
 function calcNomograma() {
     const t = num($('mt-nomo-horas')), nivel = num($('mt-nomo-nivel')), tipo = $('mt-nomo-tipo').value, box = $('mt-nomo-resultado');
-    if (tipo === 'repetida') return pintar(box, 'warn', '<strong>Dosis supraterapéuticas repetidas</strong>: el nomograma no sirve y el nivel no predice el riesgo. NAC si hay transaminasas altas o posible hepatotoxicidad.');
+    if (tipo === 'repetida') return pintar(box, 'warn', '<strong>Dosis supraterapéuticas repetidas</strong>: el nomograma no sirve y el nivel no predice el riesgo. NAC si hay posible hepatotoxicidad con las transaminasas altas.');
     if (t === null || nivel === null) return ocultar(box);
     if (t < 4) return pintar(box, 'warn', `A las ${fmt(t, 1)} h: el nomograma empieza a las 4 h. Mide el nivel a partir de entonces.`);
     if (t > 24) return pintar(box, 'warn', 'Más de 24 h: fuera del nomograma. Guíate por las transaminasas.');
@@ -64,11 +64,19 @@ function calcGlucagon() {
     if (r === 'si') return pintar(box, 'ok', '<strong>Perfusión de 5 mg/h</strong>: el bolo dura solo 5 min. Por encima de 5 mg/h, náuseas y vómitos resistentes al ondansetrón.');
     pintar(box, 'danger', `<strong>Segundo bolo de ${fmt(b2, 1)} mg</strong> (0,07 mg/kg; o 5 mg). Si no responde, la milrinona se reserva para entonces. Recuerda que no revierte el bloqueo AV ni la neurotoxicidad.`);
 }
+// Al acabar el asistente con una dosis eficaz conocida, se la pasa a la
+// calculadora de la perfusión (dos tercios por hora) y se añade el ritmo.
+const conPerfusion = dosis => resultadoEl => {
+    const campo = $('mt-nal-eficaz');
+    if (campo) { campo.value = dosis; campo.dispatchEvent(new Event('input', { bubbles: true })); }
+    const h = dosis * 2 / 3;
+    resultadoEl.insertAdjacentHTML('beforeend', `<br>Con ${fmt(dosis, 0)} mg: <strong>${fmt(h, 2)} mg/h</strong> (${fmt(h * 6, 1)} mg para 6 h).`);
+};
 export const NAL_WIZARD = {
     inicio: { pregunta: '¿Hay depresión respiratoria?', si: 'dosis2', no: 'conciencia' },
     conciencia: { pregunta: 'Consciencia deprimida sin depresión respiratoria: 0,4 mg IV, repetible a los 2 min. ¿Ha respondido con ≤0,8 mg?', si: { estado: 'tfg-estado-ok', final: 'Responde: perfusión de dos tercios de la dosis eficaz por hora (en 6 h). El efecto opioide vuelve a la 1-2 h.' }, no: { estado: 'tfg-estado-warn', final: '0,8 mg en total deberían bastar si la causa es un opioide: busca otra causa.' } },
-    dosis2: { pregunta: '2 mg IV en bolo. ¿Responde en 2-3 min?', si: { estado: 'tfg-estado-ok', final: 'Responde con 2 mg: perfusión de dos tercios de la dosis eficaz por hora (en 6 h).' }, no: 'dosis4' },
-    dosis4: { pregunta: '4 mg IV. ¿Responde?', si: { estado: 'tfg-estado-ok', final: 'Responde con 4 mg: perfusión de dos tercios de la dosis eficaz por hora.' }, no: 'dosis15' },
+    dosis2: { pregunta: '2 mg IV en bolo. ¿Responde en 2-3 min?', si: { estado: 'tfg-estado-ok', final: 'Responde con 2 mg: perfusión de dos tercios de la dosis eficaz por hora (en 6 h).', alFinal: conPerfusion(2) }, no: 'dosis4' },
+    dosis4: { pregunta: '4 mg IV. ¿Responde?', si: { estado: 'tfg-estado-ok', final: 'Responde con 4 mg: perfusión de dos tercios de la dosis eficaz por hora.', alFinal: conPerfusion(4) }, no: 'dosis15' },
     dosis15: { pregunta: 'Seguir subiendo hasta 15 mg. ¿Responde?', si: { estado: 'tfg-estado-warn', final: 'Responde a dosis altas: perfusión de dos tercios de la dosis eficaz por hora. Vigila el edema pulmonar con dosis altas.' }, no: { estado: 'tfg-estado-danger', final: 'Con 15 mg sin respuesta, no son los opioides: busca otra causa y asegura la vía aérea.' } },
 };
 function calcNaloxonaPerfusion() {
@@ -85,7 +93,9 @@ function calcSalicilatos() {
     if (mgdl > 90) motivos.push('nivel &gt;90 mg/dL');
     else if (mgdl > 80 && renal) motivos.push('&gt;80 mg/dL con función renal alterada');
     if (grave) motivos.push('intoxicación que amenaza la vida');
-    let html = `Salicilato ${fmt(mgdl, 1)} mg/dL (${fmt(mmol, 2)} mmol/L).`;
+    const banda = mgdl > 75 ? 'amenaza la vida (&gt;75 mg/dL)' : mgdl > 40 ? 'tóxico (&gt;40 mg/dL)' : mgdl >= 10 && mgdl <= 30 ? 'rango terapéutico (10-30 mg/dL)' : mgdl < 10 ? 'por debajo del rango terapéutico' : 'por encima del terapéutico, sin llegar a tóxico';
+    let html = `Salicilato ${fmt(mgdl, 1)} mg/dL (${fmt(mmol, 2)} mmol/L): ${banda}.`;
+    if (mgdl <= 30 && !motivos.length) return pintar(box, 'ok', `${html} La alcalinización se mantiene hasta que el nivel cae al rango terapéutico: con este nivel ya no hace falta.`);
     const alc = p !== null ? ` Alcalinizar: carga de <strong>${fmt(p, 0)}-${fmt(2 * p, 0)} mEq</strong> de bicarbonato y la solución a <strong>${fmt(2 * p, 0)}-${fmt(3 * p, 0)} mL/h</strong> (pH urinario ≥7,5). Carbón activado ${fmt(Math.min(p, 100), 0)} g cada 4 h.` : '';
     if (motivos.length) return pintar(box, 'danger', `${html} <strong>Hemodiálisis</strong>: ${motivos.join('; ')}.${alc}`);
     pintar(box, 'warn', `${html} Sin criterio de hemodiálisis por ahora.${alc}`);
@@ -139,7 +149,7 @@ function calcCianuro() {
 function calcFomepizol() {
     const tox = $('mt-fome-toxico').value, p = pesoValido('mt-fome-peso'), ph = num($('mt-fome-ph')), organo = $('mt-fome-organo').value === 'si', vision = $('mt-fome-vision').value === 'si', box = $('mt-fome-resultado');
     if (p === null) return ocultar(box);
-    let html = `<strong>Fomepizol</strong>: carga de <strong>${fmt(15 * p, 0)} mg</strong> IV (15 mg/kg); luego ${fmt(10 * p, 0)} mg cada 12 h, 4 dosis; después ${fmt(15 * p, 0)} mg cada 12 h si el alcohol sigue &gt;20 mg/dL (y cada 4 h durante la diálisis).`;
+    let html = `<strong>Fomepizol</strong>: carga de <strong>${fmt(15 * p, 0)} mg</strong> IV (15 mg/kg); luego ${fmt(10 * p, 0)} mg cada 12 h, 4 dosis; después ${fmt(15 * p, 0)} mg cada 12 h si el alcohol sigue &gt;20 mg/dL (y, si hace falta más de una sesión de hemodiálisis, cada 4 h durante la diálisis).`;
     html += tox === 'eg' ? '<br>Coadyuvantes: tiamina 100 mg IV/día y piridoxina 100 mg IV/día.' : `<br>Coadyuvante: ácido folínico <strong>${fmt(Math.min(p, 50), 0)} mg</strong> IV cada 4 h (1 mg/kg, máx. 50).`;
     const motivos = [];
     if (ph !== null && ph < 7.1) motivos.push(`pH ${fmt(ph, 2)} (&lt;7,1)`);
@@ -208,6 +218,29 @@ function calcVolemia() {
     pintar(box, 'ok', `Sangre <strong>${fmt(sa * p / 1000, 2)} L</strong> (${sa} mL/kg) · hematíes ${fmt(he * p / 1000, 2)} L (${he} mL/kg) · plasma ${fmt(pl * p / 1000, 2)} L (${pl} mL/kg).`);
 }
 
+// Apéndices como página de consulta: filtra las filas de las tablas y las
+// líneas de la ficha por el texto escrito; abre los acordeones con coincidencias.
+function filtroApendice(tabId) {
+    const input = $(`${tabId}-buscar`), tab = $(tabId), cuenta = $(`${tabId}-buscar-n`);
+    if (!input || !tab) return;
+    const norm = t => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const filasT = [...tab.querySelectorAll('tbody tr')], lineas = [...tab.querySelectorAll('dl.kv-row')];
+    filasT.concat(lineas).forEach(el => { el.dataset.busca = norm(el.textContent); });
+    input.addEventListener('input', () => {
+        const q = norm(input.value.trim());
+        let n = 0;
+        filasT.concat(lineas).forEach(el => {
+            const ok = !q || el.dataset.busca.includes(q);
+            el.hidden = !ok;
+            if (ok && q) {
+                n++;
+                const item = el.closest('.micro-prof-item');
+                if (item) { item.querySelector('.micro-prof-head')?.classList.add('open'); item.querySelector('.micro-prof-body')?.classList.add('active'); }
+            }
+        });
+        cuenta.textContent = q ? (n ? ` ${n} coincidencia${n === 1 ? '' : 's'}` : ' Sin coincidencias') : '';
+    });
+}
 export function init() {
     initCorkboard('marino-tox-corkboard', 'panel-marino-tox-tabs');
     enlazar(['mt-nomo-horas', 'mt-nomo-nivel', 'mt-nomo-unidad', 'mt-nomo-tipo'], calcNomograma);
@@ -215,6 +248,8 @@ export function init() {
     enlazar(idsDe('.mt-parar-check', 'mt-parar-c'), calcParar);
     enlazar(['mt-glucagon-peso', 'mt-glucagon-respuesta'], calcGlucagon);
     initSiNoWizard('mt-nal-wizard', NAL_WIZARD);
+    filtroApendice('mt-unidades');
+    filtroApendice('mt-referencias');
     enlazar(['mt-nal-eficaz'], calcNaloxonaPerfusion);
     enlazar(['mt-sal-nivel', 'mt-sal-unidad', 'mt-sal-renal', 'mt-sal-grave', 'mt-sal-peso'], calcSalicilatos);
     enlazar(['mt-co-sim-cohb'], dibujarCo);

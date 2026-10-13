@@ -15,7 +15,7 @@
 .form-group { margin-bottom: 14px; }
 .form-group label { display: block; font-size: 0.85rem; margin-bottom: 6px; color: #d3c4a3; font-weight: 600;}
 
-select, .checkbox-label, input[type="number"], input[type="text"] {
+select, .checkbox-label, input[type="number"], input[type="text"], input[type="search"] {
     width: 100%;
     background-color: rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255,255,255,0.1);
@@ -26,7 +26,7 @@ select, .checkbox-label, input[type="number"], input[type="text"] {
     font-family: inherit;
     transition: border-color 0.2s;
 }
-select:focus, input[type="number"]:focus, input[type="text"]:focus { border-color: var(--accent-blue); outline: none; }
+select:focus, input[type="number"]:focus, input[type="text"]:focus, input[type="search"]:focus { border-color: var(--accent-blue); outline: none; }
 
 .checkbox-label {
     display: flex;
@@ -2034,6 +2034,7 @@ body.study-mode-on .pomodoro-fab { display: flex; }
 .vk-tramo.on { border-color: var(--accent-yellow); background: rgba(207, 154, 62, 0.22); color: var(--text-main); }
 .vk-tramo.solo-lectura { cursor: default; }
 .vk-resultado { margin-top: 8px; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.8rem; line-height: 1.45; }
+.vk-resultado:empty { display: none; }
 .vk-resultado-copia + .vk-resultado-copia { margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border-color); }
 
 /* selector */
@@ -2486,6 +2487,7 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 .mrp-pie { font-size: 0.75rem; color: var(--text-muted); margin: 2px 0 6px; }
 .mrp-leyenda { display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.7rem; }
 .mrp-ley { border: 1px solid var(--c); border-left: 4px solid var(--c); background: transparent; color: var(--text-main); border-radius: 6px; padding: 5px 8px; font-family: inherit; font-size: 0.7rem; cursor: pointer; min-height: 32px; touch-action: manipulation; }
+.mrp-ley.on { background: color-mix(in srgb, var(--c) 22%, transparent); font-weight: 700; }
 .mrp-ley-normal { color: var(--text-muted); align-self: center; }
 .mrp-escalera { display: flex; flex-direction: column; gap: 3px; margin: 4px 0 6px; }
 .mrp-esc-fila { display: grid; grid-template-columns: 34px 1fr 62px; align-items: center; gap: 6px; font-size: 0.72rem; }

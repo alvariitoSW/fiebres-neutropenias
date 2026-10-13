@@ -146,10 +146,10 @@
                 <div class="plate-label">Ficha X</div>
                 <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-yellow)" stroke-width="1.6"><path d="M14,38 L50,14 L56,22 L20,46 Z" stroke-opacity="0.7"/><path d="M50,14 L62,6 M60,10 L66,16 M8,48 L16,42" stroke-width="1.4"/></svg>
                 <div class="field-name">Bloqueo neuromuscular<br>y su reversión</div>
-                <div class="field-hook">"¿qué dosis de sugammadex revierte un bloqueo profundo por rocuronio de inmediato?"</div>
+                <div class="field-hook">"¿qué dosis de sugammadex revierte el rocuronio justo después de intubar?"</div>
             </div>
             <div class="card-face back">
-                <div class="back-hook">16 mg/kg. Y la neostigmina, si se usa, nunca por encima de 70 µg/kg.</div>
+                <div class="back-hook">16 mg/kg (el bloqueo profundo, 4 mg/kg). Y la neostigmina, si se usa, nunca por encima de 70 µg/kg.</div>
                 <div class="back-cta">Ver contenido completo →</div>
             </div>
         </div></div>
@@ -325,9 +325,24 @@
                 <tbody>
                     <tr><td><strong>Dexmedetomidina</strong> (preferida)</td><td>Carga opcional 1 µg/kg IV en 10 min; luego 0,2-1,5 µg/kg/h</td><td>Bradicardia e hipotensión; se ha descrito abstinencia con hiperexcitabilidad</td></tr>
                     <tr><td><strong>Haloperidol</strong></td><td>5 mg IV en bolo; si no hay efecto a los 15 min, doblar (10 mg) o cambiar de fármaco. Mantenimiento: 25% de la dosis eficaz cada 6 h</td><td>Inicio relativamente lento; no si QTc &gt;500 ms. Popular en el delirio hiperactivo</td></tr>
-                    <tr><td><strong>Ziprasidona</strong></td><td>10 mg IM cada 2 h o 20 mg IM cada 4 h, hasta 40 mg/día</td><td>Antipsicótico atípico solo IM: útil si no hay vía IV en el muy agitado</td></tr>
+                    <tr><td><strong>Ziprasidona</strong></td><td>10 mg IM cada 2 h o 20 mg IM cada 4 h, hasta 40 mg/día</td><td>Antipsicótico atípico; aquí, por vía IM: útil si no hay vía IV en el muy agitado</td></tr>
                 </tbody>
             </table>
+            </div>
+            <details class="nota-plegable"><summary>📝 Nota de interpretación</summary><p class="fuente-ficha">Nota de interpretación: la fuente dice que la ziprasidona "solo se puede dar por vía intramuscular". También existe por vía oral; lo que se quiere decir es que, de los fármacos de la tabla, es el que no se da por vía IV, y eso es lo útil cuando no hay acceso venoso.</p></details>
+            <div class="compare-box blue" style="margin-top:12px;" id="mn-comparativa-delirio">
+                <p><strong>🔗 Comparativa de fuentes: el delirio en la app</strong></p>
+                <div style="overflow-x:auto;"><table class="data-table comparativa-fuentes">
+                    <thead><tr><th>Punto</th><th>Marino, Cap. 45 (esta ficha)</th><th>Marino, Cap. 6 (Fundamentos)</th><th>El Libro Azul (encefalopatía séptica)</th></tr></thead>
+                    <tbody>
+                        <tr><td>Fármaco de elección</td><td>Dexmedetomidina</td><td>Dexmedetomidina (menos delirio que benzodiacepinas o propofol)</td><td>Dexmedetomidina sobre benzodiacepinas y opioides</td></tr>
+                        <tr><td>Haloperidol</td><td>5 mg IV; si a los 15 min no hay efecto, 10 mg; mantener con el 25% cada 6 h</td><td>Igual en la Tabla 6.8 (el texto: 20 min y cada 4-6 h; midazolam 1-2 mg si está muy agitado)</td><td>—</td></tr>
+                        <tr><td>Antipsicótico sin vía IV</td><td>Ziprasidona IM</td><td>El haloperidol es el único que se da IV</td><td>—</td></tr>
+                        <tr><td>Cribado</td><td>CAM-ICU del Apéndice 2 (inatención con 5 objetos)</td><td>—</td><td>CAM-UCI e ICDSC</td></tr>
+                        <tr><td>Sedación</td><td>—</td><td>La dexmedetomidina evita las vacaciones de sedación</td><td>Ventanas de sedación diarias</td></tr>
+                    </tbody>
+                </table></div>
+                <p style="display:flex;flex-wrap:wrap;gap:6px;"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoFundamentos" data-panel="panel-marino-fund-tabs" data-tab="mar-sedacion">💊 Sedación (Cap. 6) →</button> <button type="button" class="especialidad-link" data-especialidad="fisioUci" data-view="inmunologia" data-panel="panel-inmuno-tabs" data-tab="inmuno-encefalopatia-diagnostico">🧠 Encefalopatía séptica (El Libro Azul) →</button></p>
             </div>
             <p class="fuente-ficha">Tabla 45.2 — Fármacos para la agitación grave en el delirio de la UCI.</p>
             <div class="agua-simulador" id="mn-dex-calc">
@@ -454,14 +469,16 @@
                     <tr id="mn-pup-medias-r"><td><img src="js/modules/libros/img/mar-tab45-4-pupilas-4.png" alt="Pupilas medias reactivas" width="72" height="50" loading="lazy"><br>Medias, reactivas</td><td>Encefalopatía tóxica o metabólica, sobredosis de sedantes o bloqueo neuromuscular</td></tr>
                     <tr id="mn-pup-medias-nr"><td><img src="js/modules/libros/img/mar-tab45-4-pupilas-5.png" alt="Pupilas medias no reactivas" width="72" height="50" loading="lazy"><br>Medias, no reactivas</td><td>Fallo hepático agudo, encefalopatía postanóxica o muerte encefálica</td></tr>
                     <tr id="mn-pup-horner"><td><img src="js/modules/libros/img/mar-tab45-4-pupilas-6.png" alt="Una pupila más pequeña que la otra" width="72" height="50" loading="lazy"><br>Una pequeña</td><td>Síndrome de Horner</td></tr>
-                    <tr id="mn-pup-puntiformes"><td><img src="js/modules/libros/img/mar-tab45-4-pupilas-7.png" alt="Pupilas puntiformes" width="72" height="50" loading="lazy"><br>Pequeñas o puntiformes</td><td>Sobredosis de opiáceos (reactivas), encefalopatía tóxica o metabólica (reactivas), hipercapnia o lesión pontina (no reactivas)</td></tr>
+                    <tr id="mn-pup-puntiformes"><td><img src="js/modules/libros/img/mar-tab45-4-pupilas-7.png" alt="Pupilas puntiformes" width="72" height="50" loading="lazy"><br>Pequeñas o puntiformes</td><td>Sobredosis de opiáceos, encefalopatía tóxica o metabólica, hipercapnia o lesión pontina</td></tr>
                 </tbody>
             </table>
             </div>
             <p class="fuente-ficha">Tabla 45.4 — Situaciones que alteran el tamaño y la reactividad pupilar (+ reactiva, − no reactiva).</p>
+            <dl class="kv-row" id="mn-pup-pequenas"><dt>Pequeñas o puntiformes</dt><dd>El resumen del capítulo las separa: <strong>pequeñas y reactivas</strong> en la encefalopatía metabólica; <strong>puntiformes</strong> en la sobredosis de opiáceos (reactivas) o en la lesión pontina (no reactivas).</dd></dl>
+            <details class="nota-plegable"><summary>📝 Nota de interpretación</summary><p class="fuente-ficha">Nota de interpretación: la Tabla 45.4 pone en la misma fila opiáceos, encefalopatía tóxica o metabólica, hipercapnia y lesión pontina, sin decir la reactividad de cada una. El texto da la reactividad de los opiáceos, de la lesión pontina y de la encefalopatía metabólica (pupilas pequeñas, no puntiformes), y no dice nada de la hipercapnia. El selector sigue el texto; la hipercapnia sale sin reactividad.</p></details>
             <div class="agua-simulador" id="mn-pup-calc">
                 <h4 style="color: var(--accent-purple);">👁️ ¿Qué pupilas tengo delante? (Tabla 45.4)</h4>
-                <div class="form-group"><label for="mn-pup-select">Patrón</label><select id="mn-pup-select"><option value="">— Elige —</option><option value="dilR">Dilatadas, reactivas</option><option value="dilNR">Dilatadas, no reactivas</option><option value="uni">Una dilatada y fija</option><option value="medR">Medias, reactivas</option><option value="medNR">Medias, no reactivas</option><option value="horner">Una más pequeña (miosis unilateral)</option><option value="puntR">Puntiformes, reactivas</option><option value="puntNR">Puntiformes, no reactivas</option></select></div>
+                <div class="form-group"><label for="mn-pup-select">Patrón</label><select id="mn-pup-select"><option value="">— Elige —</option><option value="dilR">Dilatadas, reactivas</option><option value="dilNR">Dilatadas, no reactivas</option><option value="uni">Una dilatada y fija</option><option value="medR">Medias, reactivas</option><option value="medNR">Medias, no reactivas</option><option value="horner">Una más pequeña (miosis unilateral)</option><option value="pequeR">Pequeñas, reactivas</option><option value="puntR">Puntiformes, reactivas</option><option value="puntNR">Puntiformes, no reactivas</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="mn-pup-resultado" style="display:none"></div>
             </div>
 
@@ -807,6 +824,7 @@
             <dl class="kv-row" id="mn-pnc-clinica"><dt>Clínica</dt><dd>Parálisis <strong>flácida</strong> de miembros y tronco con hiporreflexia o arreflexia.</dd></dl>
             <dl class="kv-row" id="mn-pnc-manejo"><dt>Tratamiento y pronóstico</dt><dd><strong>No hay tratamiento.</strong> Se han propuesto medidas (movilización precoz, mejor nutrición), ninguna validada ni dirigida a la inflamación. Recuperación completa en la <strong>mitad</strong>, a lo largo de meses.</dd></dl>
             <div class="warning-box" id="mn-pnc-final"><strong>La inflamación ataca de nuevo.</strong> Una idea central del libro: la inflamación sistémica grave daña el pulmón (SDRA), el riñón (fracaso renal agudo) y causa el fallo multiorgánico del shock séptico y de la post-parada. Este capítulo añade el nervio periférico y el músculo. Para el autor, la inflamación es <span class="hl-rojo">la fuerza más letal</span> que te encontrarás en la UCI.</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;"><button type="button" class="especialidad-link" data-especialidad="neumologia" data-view="merinoNeumologia" data-panel="panel-merino-neumo-tabs" data-tab="neumo-sdra-diagnostico">🫁 SDRA (Cap. 24) →</button> <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoRenal" data-panel="panel-marino-renal-tabs" data-tab="mr-fra-causas">🩺 Fracaso renal agudo (Cap. 34) →</button> <button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-shock-septico">🦠 Shock séptico (Cap. 17) →</button> <button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-posresucitacion">💓 Post-parada (Cap. 21) →</button></div>
         </div>
 
         <!-- ===== FICHA X: RELAJANTES NEUROMUSCULARES (Cap. 46) ===== -->
@@ -1008,7 +1026,7 @@
         <!-- ===== FICHA XIII: HEMORRAGIA INTRACEREBRAL (Cap. 47) ===== -->
         <div id="mn-hic" class="tab-content">
             <h3 style="color: var(--accent-red);">Hemorragia intracerebral espontánea</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 47; guías AHA/ASA 2022 de la hemorragia intracerebral.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 47; guía AHA/ASA 2015 de la hemorragia intracerebral (Hemphill et al.).</p>
 
             <dl class="kv-row" id="mn-hic-datos"><dt>Qué pesa</dt><dd>El <strong>10-15%</strong> de los ictus; predisponen la hipertensión y la anticoagulación. Peor pronóstico que el isquémico: la <strong>mitad</strong> no sobrevive 30 días y dos tercios de los supervivientes quedan con secuelas importantes.</dd></dl>
             <div class="article-figure" id="mar-img-47-3">
@@ -1170,6 +1188,6 @@
         <h3>📚 Bibliografía</h3>
         <p class="fuente-ficha">Marino PL. <em>The ICU Book</em>. 5.ª ed. Wolters Kluwer; 2024. Los PDF de los capítulos se guardan en el repositorio.</p>
         <ul class="biblio-list">
-            <li><a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=2" target="_blank" rel="noopener">Capítulos 45-47 — Neurologic Disorders</a> <span class="biblio-nota">Trastornos de la consciencia (Cap. 45, pág. 2), trastornos del movimiento (Cap. 46, pág. 19) e ictus en la UCI (Cap. 47, pág. 34).</span></li>
+            <li><a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=2" target="_blank" rel="noopener">Capítulos 45-47 — Nervous System Disorders</a> <span class="biblio-nota">Trastornos de la consciencia (Cap. 45, pág. 2), trastornos del movimiento (Cap. 46, pág. 19) e ictus en la UCI (Cap. 47, pág. 34).</span></li>
         </ul>
     </div>

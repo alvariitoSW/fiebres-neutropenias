@@ -50,7 +50,7 @@
                 <div class="field-hook">"un lactato alto sin causa clara, ¿qué déficit hay que sospechar?"</div>
             </div>
             <div class="card-face back">
-                <div class="back-hook">La tiamina. Las dosis de las vitaminas de la nutrición no bastan para corregir el déficit.</div>
+                <div class="back-hook">La tiamina. Los 100 mg/día que se suelen dar a los pacientes de riesgo no bastan: hace falta la pauta IV de la Tabla 48.4.</div>
                 <div class="back-cta">Ver contenido completo →</div>
             </div>
         </div></div>
@@ -302,7 +302,8 @@
             <dl class="kv-row" id="mu-linoleico"><dt>Ácido linoleico</dt><dd>El único ácido graso esencial de la dieta (poliinsaturado de cadena larga). Su déficit da <strong>dermopatía escamosa, disfunción cardíaca y más infecciones</strong>; se evita con un <strong>0,5%</strong> de los ácidos grasos como linoleico (casi siempre de aceite de soja).</dd></dl>
             <dl class="kv-row" id="mu-propofol"><dt>Propofol</dt><dd>Va en una emulsión lipídica al 10% que aporta <strong>1,1 kcal/mL</strong>: hay que contar sus calorías como no proteicas. Puede dar <strong>hipertrigliceridemia</strong>: vigilar los triglicéridos en perfusiones largas.</dd></dl>
             <dl class="kv-row" id="mu-lipidos-exceso"><dt>Exceso</dt><dd>Sobre todo de poliinsaturados (muy oxidables): daño oxidativo, sobre todo en el pulmón, y peor inmunidad. Máximo: <span class="hl-rojo">1,5 g/kg/día</span>.</dd></dl>
-            <details class="nota-plegable"><summary>📝 Nota de fuentes</summary><p class="fuente-ficha">Nota de fuentes: este capítulo pone el máximo de lípidos en 1,5 g/kg/día; la Tabla 50.2 (nutrición parenteral, Cap. 50) da 2,5 g/kg/día como dosis máxima del Intralipid®. Se reproducen las dos.</p></details>
+            <details class="nota-plegable" id="mu-nota-lipidos"><summary>📝 Nota de fuentes</summary><p class="fuente-ficha">Nota de fuentes: 1) Máximo de lípidos: este capítulo lo pone en 1,5 g/kg/día; la Tabla 50.2 (nutrición parenteral, Cap. 50) da 2,5 g/kg/día como dosis máxima del Intralipid®. 2) Ácidos grasos esenciales: este capítulo dice que el linoleico es el único esencial y que basta con que sea el 0,5% de los ácidos grasos de la dieta; el Cap. 50 dice que son esenciales el linoleico y el linolénico (como la propia Tabla 50.2, que marca el α-linolénico ω-3 como esencial) y que el déficit se evita si las emulsiones aportan el 3-4% de las calorías. Se reproducen las dos versiones, cada una en su ficha.</p></details>
+            <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoNutricion" data-panel="panel-marino-nutri-tabs" data-tab="mu-npt-soluciones" data-resaltar="#mu-npt-lipidos">💧 Emulsiones lipídicas de la NPT (Cap. 50) →</button>
 
             <p class="section-label">Proteínas</p>
             <dl class="kv-row" id="mu-proteinas"><dt>Cuánto</dt><dd>0,8-1,0 g/kg/día en el sano; en el crítico, por el hipercatabolismo, <span class="hl-verde">1,2-2,0 g/kg/día</span>.</dd></dl>
@@ -402,7 +403,7 @@
                 <label class="checkbox-label puntuable"><input type="checkbox" class="mu-tia-man"> Insuficiencia cardíaca de gasto alto</label>
                 <label class="checkbox-label puntuable"><input type="checkbox" class="mu-tia-man"> Encefalopatía (somnolencia, confusión, nistagmo, ataxia)</label>
                 <label class="checkbox-label puntuable"><input type="checkbox" class="mu-tia-man"> Acidosis láctica</label>
-                <label class="checkbox-label puntuable"><input type="checkbox" class="mu-tia-man"> Neuropatía periférica</label>
+                <label class="checkbox-label puntuable"><input type="checkbox" class="mu-tia-man" value="neuropatia"> Neuropatía periférica</label>
                 <div class="tfg-estado tfg-estado-ok" id="mu-tia-resultado"></div>
             </div>
             <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoNeuro" data-panel="panel-marino-neuro-tabs" data-tab="mn-abstinencia">🍷 Wernicke y la abstinencia alcohólica (Cap. 45) →</button></p>
@@ -461,7 +462,7 @@
             <p class="fuente-ficha">Tabla 48.5 — Oligoelementos esenciales, adultos de 51-70 años. †Sin embarazo ni lactancia. Oligoelemento: menos de 50 µg por gramo de tejido; los siete de la tabla tienen síndromes de déficit.</p>
 
             <dl class="kv-row" id="mu-hierro"><dt>Hierro</dt><dd>Unos <strong>4,5 g</strong> en el adulto, casi nada libre: unido a la hemoglobina, a la ferritina tisular y a la transferrina (saturada solo al <strong>30%</strong>, así que cualquier hierro de más se une enseguida). Esa escasez de hierro libre tiene valor de supervivencia.</dd></dl>
-            <dl class="kv-row" id="mu-hierro-oxidativo"><dt>Hierro y daño oxidativo</dt><dd>1) El hierro reducido (Fe²⁺) es necesario para formar <strong>radicales hidroxilo</strong>, los más destructivos. 2) La peroxidación lipídica por hierro causa <strong>ferroptosis</strong>, una muerte celular regulada que dispara la inflamación. Por eso la hipoferremia es frecuente en la inflamación sistémica, y por eso <span class="hl-rojo">no dar hierro al crítico</span> salvo déficit tisular con anemia.</dd></dl>
+            <dl class="kv-row" id="mu-hierro-oxidativo"><dt>Hierro y daño oxidativo</dt><dd>1) El hierro reducido (Fe²⁺) es necesario para formar <strong>radicales hidroxilo</strong>, los más destructivos. 2) La peroxidación lipídica por hierro causa <strong>ferroptosis</strong>, una muerte celular regulada que <strong>desencadena la inflamación</strong> y que tiene un papel principal en el daño tisular inflamatorio. Por el riesgo del hierro libre, la hipoferremia es frecuente en la inflamación sistémica, y por eso la hipoferremia es frecuente en la inflamación sistémica <span class="hl-rojo">no se da hierro al crítico</span> salvo déficit tisular con anemia.</dd></dl>
             <dl class="kv-row" id="mu-ferritina-cortes"><dt>Reservas de hierro</dt><dd>Se valoran con la <strong>ferritina plasmática</strong>: &lt;18 µg/L indica un déficit probable de hierro, y &gt;100 µg/L lo hace improbable.</dd></dl>
             <div class="agua-simulador" id="mu-ferritina-calc">
                 <h4 style="color: var(--accent-green);">🧮 ¿Faltan reservas de hierro? (ferritina)</h4>
@@ -553,9 +554,10 @@
             </table>
             </div>
             <p class="fuente-ficha">Tabla 49.2 — Fórmulas representativas. §Elemental, con proteínas hidrolizadas y triglicéridos de cadena media para facilitar la absorción.</p>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el texto y la nota de la Tabla 49.2 llaman <strong>elemental</strong> a Vital 1.0, pero la misma nota dice que lleva proteínas hidrolizadas (péptidos). Con la clasificación del propio capítulo (elementales = aminoácidos libres; semielementales = péptidos pequeños), es una fórmula <strong>semielemental</strong>. Se reproduce el término de la fuente.</p></details>
 
             <dl class="kv-row" id="mu-for-densidad"><dt>Densidad calórica</dt><dd>1, 1,2, 1,5 y 2 kcal/mL. Se usan las de <strong>1-1,2 kcal/mL</strong>: las más densas son más osmolares y dan diarrea. Las de 1,5-2 solo si hay que restringir líquidos.</dd></dl>
-            <dl class="kv-row" id="mu-for-proteina"><dt>Proteína</dt><dd><strong>35-65 g/L</strong> en las estándar (un paciente de UCI necesita unos 1,5 g/kg, 100 g/día en 70 kg). Las "HN" (<em>high nitrogen</em>) llevan un 20% más. <strong>Poliméricas</strong>: proteína entera; <strong>semielementales</strong>: péptidos pequeños; <strong>elementales</strong>: aminoácidos (Vital 1.0). Las predigeridas también favorecen la reabsorción de agua: útiles en la diarrea rebelde.</dd></dl>
+            <dl class="kv-row" id="mu-for-proteina"><dt>Proteína</dt><dd><strong>35-65 g/L</strong> en las estándar (un paciente de UCI necesita unos 1,5 g/kg, 100 g/día en 70 kg). Las "HN" (<em>high nitrogen</em>) llevan un 20% más. <strong>Poliméricas</strong>: proteína entera; <strong>semielementales</strong>: péptidos pequeños; <strong>elementales</strong>: aminoácidos. La fuente llama elemental a Vital 1.0. Las predigeridas también favorecen la reabsorción de agua: útiles en la diarrea rebelde.</dd></dl>
             <dl class="kv-row" id="mu-for-hc"><dt>Hidratos</dt><dd>Polisacáridos; hasta el <strong>70%</strong> de las calorías.</dd></dl>
             <dl class="kv-row" id="mu-for-fibra"><dt>Fibra</dt><dd>Polisacáridos vegetales no digeribles. La <strong>fermentable</strong> la convierten las bacterias en ácidos grasos de cadena corta (sobre todo <strong>butirato</strong>), combustible del colonocito, y favorece los gérmenes no patógenos: cuida microbioma y barrera del colon. La <strong>no fermentable</strong> retiene agua en la luz y ablanda las heces. Las fórmulas llevan una mezcla; la más rica es <strong>Jevity</strong>.</dd></dl>
             <dl class="kv-row" id="mu-for-lipidos"><dt>Lípidos</dt><dd>Poliinsaturados de aceites vegetales; un <strong>30%</strong> de las calorías.</dd></dl>
@@ -579,7 +581,7 @@
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Arginina</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="mu-for-arginina"><p>Sustrato preferido del músculo lesionado y precursora del óxido nítrico (clave del flujo periférico). Se agota en el politraumatismo. Al menos 8 fórmulas la llevan (<strong>8-19 g/L</strong>); dosis óptima desconocida. Beneficio documentado: <strong>menos infecciones</strong> en el perioperatorio de la cirugía mayor.</p><dl class="kv-row"><dt>Recomendación</dt><dd>"A considerar" en el <strong>traumatismo craneoencefálico</strong> y el paciente quirúrgico perioperatorio. <span class="hl-rojo">No en la UCI médica, sobre todo en la sepsis grave</span>: el óxido nítrico que genera puede dar hipotensión.</dd></dl></div>
+                    <div class="micro-prof-body" id="mu-for-arginina"><p>Sustrato preferido del músculo lesionado y precursora del óxido nítrico (clave del flujo periférico). Se agota en el politraumatismo. Al menos 8 fórmulas la llevan (<strong>8-19 g/L</strong>); dosis óptima desconocida. Beneficio documentado: <strong>menos infecciones</strong> en el perioperatorio de la cirugía mayor.</p><p class="fuente-ficha">Nota de fidelidad: el texto da 8-19 g/L para las fórmulas con arginina, pero la Tabla 49.3 da a Optimental 6 g/L.</p><dl class="kv-row"><dt>Recomendación</dt><dd>"A considerar" en el <strong>traumatismo craneoencefálico</strong> y el paciente quirúrgico perioperatorio. <span class="hl-rojo">No en la UCI médica, sobre todo en la sepsis grave</span>: el óxido nítrico que genera puede dar hipotensión.</dd></dl></div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Glutamina</span> <span class="toggle-icon">+</span></div>
@@ -587,7 +589,7 @@
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Carnitina</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="mu-for-carnitina"><p>Lleva los ácidos grasos de cadena larga a la mitocondria. El déficit (genético, desnutrición, hipercatabolismo, fallo hepático) da <strong>hipoglucemia y miocardiopatía</strong>; se sospecha con carnitina plasmática &lt;20 mmol/L. Dosis diaria recomendada: <strong>20-30 mg/kg</strong>. La llevan Glucerna, Isocal HN, Jevity y Peptamen.</p></div>
+                    <div class="micro-prof-body" id="mu-for-carnitina"><p>Lleva los ácidos grasos de cadena larga a la mitocondria. El déficit (genético, desnutrición, hipercatabolismo, fallo hepático) da <strong>hipoglucemia y miocardiopatía</strong>; se sospecha con carnitina plasmática &lt;20 µmol/L. Dosis diaria recomendada: <strong>20-30 mg/kg</strong>. La llevan Glucerna, Isocal HN, Jevity y Peptamen.</p><p class="fuente-ficha">Nota de fidelidad: la fuente da el umbral en mmol/L; la carnitina plasmática normal ronda unas decenas de µmol/L, así que 20 mmol/L sería unas mil veces lo normal. La unidad es µmol/L.</p></div>
                 </div>
             </div>
             <div class="agua-simulador" id="mu-glut-calc">
@@ -613,6 +615,7 @@
                 <li><strong>Paso 4. Ajustar las proteínas</strong>: proteína aportada (g/día) = volumen (L/día) × proteína de la fórmula (g/L). Si se queda corta, añadir <strong>proteína en polvo</strong>.</li>
             </ol>
             <details class="nota-plegable"><summary>📝 Nota de fuentes</summary><p class="fuente-ficha">Nota de fuentes: la Tabla 49.4 da 1,2-1,6 g/kg/día de proteínas, mientras que el texto del capítulo (y el Cap. 48) dice 1,2-2,0 g/kg/día, con 1,6 g/kg/día como valor medio adecuado. La calculadora parte de 1,6 y deja elegir.</p></details>
+            <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoNutricion" data-panel="panel-marino-nutri-tabs" data-tab="mu-sustratos" data-resaltar="#mu-proteinas">🥩 Necesidades de proteínas (Cap. 48) →</button>
             <dl class="kv-row" id="mu-pauta-propofol"><dt>Propofol</dt><dd>Su emulsión aporta <strong>1,1 kcal/mL</strong>: restar sus calorías al GER. Como da ~1 kcal/mL, <span class="hl-azul">los mL/h de propofol son las kcal/h</span>.</dd></dl>
             <dl class="kv-row" id="mu-pauta-inicio"><dt>Los primeros días</dt><dd>Empezar por debajo del GER (ver Cap. 48): con calorimetría, no más del <strong>70%</strong> los 3 primeros días y subir al 100% en la primera semana; con ecuaciones, no más del <strong>70%</strong> los 7 primeros días.</dd></dl>
             <div class="agua-simulador" id="mu-pauta-calc">
@@ -723,6 +726,7 @@
             <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoAbdomen" data-panel="panel-marino-abd-tabs" data-tab="ma-cdifficile">🦠 Clostridioides difficile (Cap. 41) →</button></p>
 
             <div class="warning-box" id="mu-ent-final"><strong>Comer como defensa antimicrobiana.</strong> El intestino es la gran fuente de sepsis e inflamación, y su defensa principal es la barrera de la mucosa (el tubo digestivo está "fuera" del cuerpo, como el agujero de un dónut). Lo que la mantiene es el contenido de nutrientes en la luz: la nutrición enteral protege frente a la invasión microbiana además de nutrir. Comer, como mecanismo de defensa.</div>
+            <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoFundamentos" data-panel="panel-marino-fund-tabs" data-tab="mar-microbioma">🦠 El intestino como fuente de sepsis: microbioma y descontaminación (Cap. 4) →</button>
         </div>
 
         <!-- ===== FICHA IX: NPT, SOLUCIONES Y ADITIVOS (Cap. 50) ===== -->
@@ -769,7 +773,8 @@
                 </tbody>
             </table>
             </div>
-            <p class="fuente-ficha">Tabla 50.2 — Emulsiones lipídicas de soja. El Cap. 48 pone el máximo de lípidos en 1,5 g/kg/día.</p>
+            <p class="fuente-ficha">Tabla 50.2 — Emulsiones lipídicas de soja. El Cap. 48 da otras cifras para el máximo de lípidos y los ácidos grasos esenciales: ver la nota de fuentes de Sustratos.</p>
+            <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoNutricion" data-panel="panel-marino-nutri-tabs" data-tab="mu-sustratos" data-resaltar="#mu-nota-lipidos">⚖️ Nota de fuentes en Sustratos (Cap. 48) →</button>
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🫒 Clinolipid®</span> <span class="toggle-icon">+</span></div>
@@ -777,7 +782,7 @@
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🐟 Smoflipid®</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="mu-npt-smoflipid"><p>30% soja, 30% triglicéridos de cadena media, 20% oliva y 15% pescado: los omega-3 del pescado inflaman menos.</p></div>
+                    <div class="micro-prof-body" id="mu-npt-smoflipid"><p>30% soja, 30% triglicéridos de cadena media, 20% oliva y 15% pescado: los omega-3 del pescado inflaman menos.</p><p class="fuente-ficha">Nota de fidelidad: las cifras de la fuente suman el 95%; la composición del preparado es 30/30/25/15 (25% oliva).</p></div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🐟 Omegaven®</span> <span class="toggle-icon">+</span></div>
@@ -823,6 +828,7 @@
             <div class="agua-simulador" id="mu-npt-calc">
                 <h4 style="color: var(--accent-blue);">🧮 Construir la NPT (pasos 1-4)</h4>
                 <div class="form-group"><label for="mu-npt-peso">Peso (kg; el ajustado si supera el 125% del ideal)</label><input type="number" id="mu-npt-peso" min="20" max="250" step="1" value="70" inputmode="decimal"></div>
+                <p style="margin:0 0 8px;"><button type="button" class="siguiente-ficha-btn" id="mu-npt-desde-ger" style="margin:0;">↙ Usar el peso de la calculadora de energía (Cap. 48)</button> <span class="fuente-ficha" id="mu-npt-desde-ger-msg"></span></p>
                 <div class="form-group"><label for="mu-npt-prot">Proteína (g/kg/día)</label><input type="number" id="mu-npt-prot" min="0.8" max="2.5" step="0.1" value="1.4" inputmode="decimal"></div>
                 <div class="form-group"><label for="mu-npt-lip">Lípidos al 20% (mL/día)</label><input type="number" id="mu-npt-lip" min="0" max="1000" step="25" value="250" inputmode="decimal"></div>
                 <div class="form-group"><label for="mu-npt-propofol">Propofol (mL/h)</label><input type="number" id="mu-npt-propofol" min="0" max="100" step="1" value="0" inputmode="decimal"></div>
@@ -860,6 +866,17 @@
             </table>
             </div>
             <p class="fuente-ficha">Tabla 50.4 — Preparados de insulina. *Inicio tras la inyección subcutánea.</p>
+            <div class="compare-box blue" style="margin-top:12px;" id="mu-comparativa-glucemia">
+                <p><strong>🔗 Comparativa de fuentes: hiperglucemia</strong></p>
+                <div style="overflow-x:auto;"><table class="data-table comparativa-fuentes">
+                    <thead><tr><th>Punto</th><th>Marino, Cap. 50 (esta ficha)</th><th>Manual UMI</th></tr></thead>
+                    <tbody>
+                        <tr><td>Objetivo</td><td>140-180 mg/dL; no el control estricto</td><td>140-180 mg/dl (100-180 tras la parada)</td></tr>
+                        <tr><td>Cuándo la perfusión</td><td>Insulina regular en perfusión continua en el crítico</td><td>Perfusión IV si cumple criterios y la glucemia es ≥180 mg/dl; empieza en el Algoritmo II con NPT</td></tr>
+                        <tr><td>Vía subcutánea</td><td>Lispro según glucemia; estable, la mitad de la necesidad diaria como glargina</td><td>Pauta móvil solo con perfusión periférica normal (no en shock ni con catecolaminas)</td></tr>
+                    </tbody>
+                </table></div>
+            </div>
             <p><button type="button" class="especialidad-link" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-glucemia">💉 Algoritmos de insulina y pauta móvil (Manual UMI) →</button></p>
             <dl class="kv-row" id="mu-npt-fosfato"><dt>Hipofosfatemia</dt><dd>El fosfato entra en la célula con la glucosa (para cofactores como el pirofosfato de tiamina): hipofosfatemia progresiva, componente principal de la realimentación. Vigilar el fosfato al empezar la NPT.</dd></dl>
             <dl class="kv-row" id="mu-npt-potasio"><dt>Hipopotasemia</dt><dd>La glucosa mete también K⁺ en la célula (base de la glucosa con insulina en la hiperpotasemia). Suele ser transitorio, pero la carga continua puede dar hipopotasemia persistente: otro componente de la realimentación.</dd></dl>
@@ -891,6 +908,7 @@
             </table>
             </div>
             <p class="fuente-ficha">Tabla 50.5 — Síndrome de realimentación (de la ASPEN).</p>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;"><button type="button" class="especialidad-link" data-especialidad="nefrologia" data-view="nefrona" data-panel="panel-fisio-tabs" data-tab="fisio-fosforo">🦴 Hipofosfatemia (Nefrología) →</button> <button type="button" class="especialidad-link" data-especialidad="nefrologia" data-view="nefrona" data-panel="panel-fisio-tabs" data-tab="fisio-magnesio">🧲 Hipomagnesemia (Nefrología) →</button> <button type="button" class="especialidad-link" data-especialidad="nefrologia" data-view="nefrona" data-panel="panel-fisio-tabs" data-tab="fisio-hipopotasemia">🔋 Hipopotasemia (Nefrología) →</button></div>
             <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: "Hidroxizina" y "Multivitaminas" en la columna de mecanismos parecen un error de maquetación (son dos filas de la Tabla 49.6, de fármacos líquidos que dan diarrea). Se reproduce la tabla tal cual; los mecanismos reales, según el texto, son los otros cinco.</p></details>
             <dl class="kv-row" id="mu-real-clinica"><dt>Clínica</dt><dd>Debilidad (fosfato), alteración mental y acidosis láctica (tiamina), taquiarritmias (K⁺ y Mg²⁺) y edema pulmonar (sodio).</dd></dl>
             <div class="agua-simulador" id="mu-real-calc">
@@ -1039,7 +1057,7 @@
             <dl class="kv-row" id="mu-ti-tormenta-extra"><dt>Además, en la tormenta</dt><dd>1) <strong>Volumen</strong> agresivo (vómitos, diarrea, pérdidas insensibles). 2) La tormenta acelera el metabolismo de los glucocorticoides: <strong>hidrocortisona</strong> 300 mg IV y 100 mg cada 8 h. Y tratar el desencadenante.</dd></dl>
             <div class="agua-simulador" id="mu-tormenta-calc">
                 <h4 style="color: var(--accent-red);">🧮 Plan para la tirotoxicosis o la tormenta (Tablas 51.3 y 51.4)</h4>
-                <div class="form-group"><label for="mu-tor-tipo">Situación</label><select id="mu-tor-tipo"><option value="toxicosis">Tirotoxicosis</option><option value="tormenta">Tormenta tiroidea</option></select></div>
+                <div class="form-group"><label for="mu-tor-tipo">Situación</label><select id="mu-tor-tipo"><option value="toxicosis">Tirotoxicosis</option><option value="grave">Hipertiroidismo grave</option><option value="tormenta">Tormenta tiroidea</option></select></div>
                 <div class="form-group"><label for="mu-tor-icasma">¿Insuficiencia cardíaca sistólica o asma?</label><select id="mu-tor-icasma"><option value="no">No</option><option value="si">Sí</option><option value="crisis">Crisis asmática ahora</option></select></div>
                 <div class="form-group"><label for="mu-tor-alergia">¿Alergia al yodo?</label><select id="mu-tor-alergia"><option value="no">No</option><option value="si">Sí</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="mu-tor-resultado"></div>

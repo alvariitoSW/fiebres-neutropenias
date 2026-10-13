@@ -32,6 +32,15 @@ function selector(selectId, boxId, datos) {
 const pesoValido = id => { const p = num($(id)); return p !== null && p > 0 ? p : null; };
 
 // ---- Cap. 45 — consciencia --------------------------------------------
+// El CAM-ICU paso a paso (Apéndice 2), para la vista Visual: misma regla que calcCam().
+const CAM_NEG = { estado: 'tfg-estado-ok', final: 'CAM-ICU negativo: no hay delirio.' };
+const CAM_POS = { estado: 'tfg-estado-danger', final: 'CAM-ICU positivo: delirio (I + II + III o IV).' };
+export const CAM_WIZARD = {
+    inicio: { pregunta: 'I. ¿Comienzo agudo o curso fluctuante en las últimas 24 h?', si: 'ii', no: { ...CAM_NEG, final: 'CAM-ICU negativo: hace falta el criterio I.' } },
+    ii: { pregunta: 'II. ¿Inatención? (recordar 5 objetos sencillos seguidos)', si: 'iii', no: { ...CAM_NEG, final: 'CAM-ICU negativo: hace falta el criterio II.' } },
+    iii: { pregunta: 'III. ¿Pensamiento desorganizado? (falla 3 o más de las 4 preguntas y le cuesta seguir órdenes)', si: CAM_POS, no: 'iv' },
+    iv: { pregunta: 'IV. ¿Nivel de consciencia distinto de alerta (hiperalerta o letárgico)?', si: CAM_POS, no: { ...CAM_NEG, final: 'CAM-ICU negativo: con I y II hace falta además III o IV.' } },
+};
 function calcCam() {
     const v = [1, 2, 3, 4].map(i => $(`mn-cam-${i}`)?.value), box = $('mn-cam-resultado');
     if (v.every(x => !x)) return ocultar(box);
@@ -80,8 +89,9 @@ const PUPILAS = {
     medR: ['warn', '<strong>Medias, reactivas</strong>: encefalopatía tóxica o metabólica, sobredosis de sedantes o bloqueo neuromuscular.'],
     medNR: ['danger', '<strong>Medias, no reactivas</strong>: fallo hepático agudo, encefalopatía postanóxica o muerte encefálica.'],
     horner: ['warn', '<strong>Una más pequeña</strong>: síndrome de Horner.'],
-    puntR: ['warn', '<strong>Puntiformes, reactivas</strong>: sobredosis de opiáceos o encefalopatía tóxica o metabólica.'],
-    puntNR: ['danger', '<strong>Puntiformes, no reactivas</strong>: hipercapnia o lesión pontina.'],
+    pequeR: ['warn', '<strong>Pequeñas, reactivas</strong>: encefalopatía metabólica. La hipercapnia también da pupilas pequeñas (Tabla 45.4); el capítulo no dice su reactividad.'],
+    puntR: ['warn', '<strong>Puntiformes, reactivas</strong>: sobredosis de opiáceos.'],
+    puntNR: ['danger', '<strong>Puntiformes, no reactivas</strong>: lesión pontina.'],
 };
 function calcGcs() {
     const o = Number($('mn-gcs-o').value), vv = $('mn-gcs-v').value, m = Number($('mn-gcs-m').value), box = $('mn-gcs-resultado');
@@ -182,7 +192,7 @@ function calcPaIctus() {
         if (s > 220 || d > 120 || ic) return pintar(box, 'warn', `${pa}: <strong>bajarla</strong>${ic ? ' (hay otra indicación)' : ' (&gt;220/120)'}, sin pasar del <strong>15%</strong> en 24 h: hasta ~${fmt(s * 0.85, 0)}/${fmt(d * 0.85, 0)}. Labetalol, nicardipina o clevidipina (Tabla 47.2).`);
         return pintar(box, 'ok', `${pa}: <strong>no bajarla</strong>. Mantiene el flujo de la penumbra (solo si &gt;220/120 las primeras 72 h).`);
     }
-    const sobre = s > 180 || d > 105;
+    const sobre = s >= 180 || d >= 105;
     const extra = e === 'trombectomia' ? ' Tras trombectomía no hay acuerdo: la guía pide &lt;180/105 y otros protocolos &lt;140/90.' : '';
     pintar(box, sobre ? 'danger' : 'ok', `${pa}: objetivo <strong>&lt;180/105 durante 24 h</strong>. ${sobre ? 'Por encima: bajarla.' : 'En objetivo.'}${extra}`);
 }

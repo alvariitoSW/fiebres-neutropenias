@@ -71,11 +71,12 @@ function calcBalanceN() {
     pintar(box, bMin >= 4 ? 'ok' : bMax > 0 ? 'warn' : 'danger', html);
 }
 function calcTiamina() {
-    const pre = marcados('.mu-tia-pre').length, man = marcados('.mu-tia-man').length, box = $('mu-tia-resultado');
-    if (!pre && !man) return pintar(box, 'ok', 'Marca lo que tenga el paciente (Tabla 48.4).');
+    const pre = marcados('.mu-tia-pre').length, mans = marcados('.mu-tia-man'), man = mans.filter(c => c.value !== 'neuropatia').length, box = $('mu-tia-resultado');
+    if (!pre && !mans.length) return pintar(box, 'ok', 'Marca lo que tenga el paciente (Tabla 48.4).');
+    const neuro = mans.length > man ? ' La neuropatía periférica sola no es uno de los 3 signos con los que el capítulo pide sospecharlo (insuficiencia cardíaca, encefalopatía o acidosis láctica sin causa aparente).' : '';
     const pauta = '1) 500 mg IV cada 8 h, 2-3 días; 2) 250 mg IV al día, 3-5 días; 3) 100 mg orales cada 8 h, 1-2 semanas; 4) 100 mg orales al día. Y corregir el magnesio.';
-    if (man) return pintar(box, 'danger', `<strong>Sospecha de déficit de tiamina</strong>${pre ? ` (${pre} predisponente${pre > 1 ? 's' : ''} y ${man} manifestación${man > 1 ? 'es' : ''})` : ''}. Pauta de la Tabla 48.4, IV al principio: ${pauta}`);
-    pintar(box, 'warn', `<strong>Paciente de riesgo</strong> (${pre} predisponente${pre > 1 ? 's' : ''}). Se suelen dar 100 mg/día, que no bastan para corregir un déficit: si aparece una manifestación sin causa aparente, la pauta completa.`);
+    if (man) return pintar(box, 'danger', `<strong>Sospecha de déficit de tiamina</strong>${pre ? ` (${pre} predisponente${pre > 1 ? 's' : ''} y ${man} manifestación${man > 1 ? 'es' : ''})` : ''}. Pauta de la Tabla 48.4, IV al principio: ${pauta}${neuro}`);
+    pintar(box, 'warn', `${pre ? `<strong>Paciente de riesgo</strong> (${pre} predisponente${pre === 1 ? '' : 's'})` : '<strong>Sin predisponentes marcados</strong>'}. Se suelen dar 100 mg/día, que no bastan para corregir un déficit: si aparece una manifestación sin causa aparente, la pauta completa.${neuro}`);
 }
 function calcFerritina() {
     const f = num($('mu-ferritina')), box = $('mu-ferritina-resultado');
@@ -122,12 +123,17 @@ function calcResiduo() {
 }
 
 // ---- Cap. 50 — nutrición parenteral -----------------------------------
-function calcNpt() {
-    const p = pesoValido('mu-npt-peso'), gkg = num($('mu-npt-prot')), lip = num($('mu-npt-lip')) ?? 0, prop = num($('mu-npt-propofol')) ?? 0, riesgo = $('mu-npt-riesgo').value === 'si', box = $('mu-npt-resultado');
-    if (p === null || gkg === null) return ocultar(box);
+// La bolsa de NPT paso a paso (Cap. 50): la usan la calculadora y la vista Visual.
+export function bolsaNpt(p, gkg, lip, prop) {
     const ger = 25 * p, propKcal = prop * 24, kcal = Math.max(0, ger - propKcal), prot = gkg * p, aaMl = prot / 100 * 1000;
     const lipKcal = lip * 2, d50Kcal = kcal - lipKcal, d50Ml = Math.max(0, d50Kcal / 1.7), total = aaMl + lip + d50Ml + 30, ritmo = total / 24;
     const glucosa = d50Ml * 0.5, mgkgmin = glucosa * 1000 / p / 1440;
+    return { ger, propKcal, kcal, prot, aaMl, lipKcal, d50Kcal, d50Ml, total, ritmo, mgkgmin };
+}
+function calcNpt() {
+    const p = pesoValido('mu-npt-peso'), gkg = num($('mu-npt-prot')), lip = num($('mu-npt-lip')) ?? 0, prop = num($('mu-npt-propofol')) ?? 0, riesgo = $('mu-npt-riesgo').value === 'si', box = $('mu-npt-resultado');
+    if (p === null || gkg === null) return ocultar(box);
+    const { ger, propKcal, kcal, prot, aaMl, lipKcal, d50Kcal, d50Ml, total, ritmo, mgkgmin } = bolsaNpt(p, gkg, lip, prop);
     let html = `Paso 1 · ${fmt(ger, 0)} kcal/día${prop ? ` − propofol ${fmt(propKcal, 0)} (~1 kcal/mL)` : ''} = <strong>${fmt(kcal, 0)} kcal</strong>; proteínas <strong>${fmt(prot, 0)} g</strong>.`;
     html += `<br>Paso 2 · Aminoácidos al 10%: <strong>${fmt(aaMl, 0)} mL</strong>.`;
     if (d50Kcal < 0) return pintar(box, 'danger', html + `<br>Paso 3 · Los lípidos (${fmt(lipKcal, 0)} kcal) ya superan las calorías: reduce los lípidos.`);
@@ -185,11 +191,11 @@ function calcTormenta() {
     else if (ica === 'si') lineas.push('<strong>Betabloqueante</strong>: metoprolol 25-50 mg orales 2-3 veces al día (β1-selectivo), o esmolol 50-100 µg/kg/min IV');
     else lineas.push(`<strong>Betabloqueante</strong>: propranolol ${tormenta ? '60-80 mg cada 4 h' : '10-40 mg orales 3-4 veces al día'}`);
     lineas.push(tormenta ? '<strong>Antitiroideo</strong>: propiltiouracilo, carga de 500-1.000 mg y 250 mg cada 4 h (preferido en la tormenta)' : '<strong>Antitiroideo</strong>: metimazol 10-20 mg orales al día (preferido en la tirotoxicosis)');
+    if (tormenta || tipo === 'grave') lineas.push(alergia ? '<strong>Alergia al yodo</strong>: litio 300 mg orales cada 8 h' : '<strong>Yodo</strong>: 5 gotas de Lugol cada 6 h, siempre con el antitiroideo');
     if (tormenta) {
-        lineas.push(alergia ? '<strong>Alergia al yodo</strong>: litio 300 mg orales cada 8 h' : '<strong>Yodo</strong>: 5 gotas de Lugol cada 6 h, siempre con el antitiroideo');
         lineas.push('<strong>Hidrocortisona</strong> 300 mg IV y 100 mg cada 8 h; volumen agresivo; tratar el desencadenante');
     }
-    pintar(box, tormenta || ica === 'crisis' ? 'danger' : 'warn', lineas.join('<br>'));
+    pintar(box, tormenta || tipo === 'grave' || ica === 'crisis' ? 'danger' : 'warn', lineas.join('<br>'));
 }
 function calcLevotiroxina() {
     const s = $('mu-levo-situacion').value, p = pesoValido('mu-levo-peso'), box = $('mu-levo-resultado');
@@ -210,6 +216,15 @@ export function init() {
     enlazar(['mu-pauta-peso', 'mu-pauta-formula', 'mu-pauta-prot', 'mu-pauta-propofol-ml', 'mu-pauta-fase'], calcPauta);
     enlazar(['mu-grv-ml', 'mu-grv-persiste', 'mu-grv-opiaceos'], calcResiduo);
     enlazar(['mu-npt-peso', 'mu-npt-prot', 'mu-npt-lip', 'mu-npt-propofol', 'mu-npt-riesgo'], calcNpt);
+    // NPT encadenada: el peso de cálculo (real, o ajustado si supera el 125% del ideal) de la calculadora de energía.
+    $('mu-npt-desde-ger')?.addEventListener('click', () => {
+        const real = pesoValido('mu-ger-peso'), msg = $('mu-npt-desde-ger-msg');
+        if (real === null) { msg.textContent = 'Rellena antes el peso en la calculadora de energía.'; return; }
+        const { peso, ajustado } = pesoParaCalculo(real, num($('mu-ger-ideal')));
+        $('mu-npt-peso').value = Math.round(peso * 10) / 10;
+        $('mu-npt-peso').dispatchEvent(new Event('input', { bubbles: true }));
+        msg.textContent = ajustado ? `Peso ajustado: ${fmt(peso, 1)} kg.` : `Peso real: ${fmt(peso, 0)} kg.`;
+    });
     enlazar([...idsDe('.mu-real-check', 'mu-real-c'), 'mu-real-peso'], calcRealimentacion);
     enlazar(['mu-cortisol-shock', 'mu-cortisol-basal', 'mu-cortisol-60'], calcCortisol);
     enlazar(['mu-equiv-de', 'mu-equiv-dosis'], calcEquivalencia);

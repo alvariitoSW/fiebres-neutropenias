@@ -5,7 +5,9 @@
 // copiadas.
 import { montarVisual } from '../../core/visual-kit.js';
 import { asistenteVisual } from './visual-marino-piezas.js';
-import { SE_WIZARD } from './marino-neuro.js';
+import { caraGlasgow, bolsaVisual, escaleraTiamina, nomogramaVivo, alcalinizacion, caidaCohb, lineaFomepizol, matrizAntidotos } from './visual-marino-piezas-45-53.js';
+import { panelNefronaViva } from '../nefrologia/nefrona-viva.js';
+import { SE_WIZARD, CAM_WIZARD } from './marino-neuro.js';
 import { NAL_WIZARD } from './marino-toxicos.js';
 
 const FIGURAS = { tipo: 'figuras', titulo: 'Las figuras del libro', nota: 'Desliza para verlas; tócalas para ampliarlas.', todas: true };
@@ -31,6 +33,7 @@ function neuro() {
         guia: 'Detectarlo con el CAM-ICU, evitar lo que lo provoca y elegir el fármaco.',
         paneles: [
             FIGURAS,
+            asistenteVisual('CAM-ICU paso a paso (Apéndice 2)', 'mn-cam-wiz', CAM_WIZARD, 'mn-cam-calc'),
             calc('CAM-ICU (calculadora de la ficha)', ['#mn-cam-1', '#mn-cam-2', '#mn-cam-3', '#mn-cam-4'], ['#mn-cam-resultado'], 'Delirio = I + II + (III o IV).'),
             { tipo: 'comparar', titulo: 'No confundirlo', columnas: [
                 { titulo: 'Delirio', color: 'rojo', nodos: [n('#mn-del-tipos', 'Hiperactivo, hipoactivo, mixto'), n('#mn-del-causas', 'Causas')] },
@@ -60,7 +63,7 @@ function neuro() {
         guia: 'Pupilas, reflejos del tronco y Glasgow.',
         paneles: [
             FIGURAS,
-            { tipo: 'selector', titulo: 'Pupilas (Tabla 45.4)', control: '#mn-pup-select', forma: 'chips', color: 'dorado', resultado: ['#mn-pup-resultado'] },
+            caraGlasgow,
             calc('Glasgow (calculadora de la ficha)', ['#mn-gcs-o', '#mn-gcs-v', '#mn-gcs-m', '#mn-gcs-contexto'], ['#mn-gcs-resultado']),
             { tipo: 'comparar', titulo: 'Reflejos del tronco', columnas: [
                 { titulo: 'Oculocefálico', color: 'amarillo', nodos: [n('#mn-coma-oculocefalico', 'Ojos de muñeca')] },
@@ -141,6 +144,14 @@ function neuro() {
         guia: 'Antitrombóticos, ecocardiograma y las complicaciones del ictus.',
         paneles: [
             FIGURAS,
+            { tipo: 'linea', titulo: 'La primera semana del ictus isquémico', min: 0, max: 7, unidad: 'día', ticks: [0, 1, 2, 3, 5, 7],
+                bandas: [{ desde: 0, hasta: 1, texto: 'Tras trombólisis: 24 h en UCI', color: 'rojo' }],
+                nodos: [
+                    { fuente: '#mn-isq-hemorragia', etiqueta: 'Hemorragia tras trombólisis: se retrasan 24 h anticoagulantes y antiagregantes', en: 0.3, color: 'rojo', fila: 'abajo' },
+                    { fuente: '#mn-isq-tvp', etiqueta: 'Compresión neumática las primeras 24 h tras trombólisis', en: 0.8, color: 'purpura' },
+                    { fuente: '#mn-isq-aspirina', etiqueta: 'Aspirina 325 mg: desde el ingreso, o el día 2 tras trombólisis', en: 1.5, color: 'verde', fila: 'abajo' },
+                    { fuente: '#mn-isq-convulsiones', etiqueta: 'Crisis en la primera semana (20%)', en: 5, color: 'amarillo' }
+                ] },
             { tipo: 'racimos', titulo: 'Tras el ingreso', grupos: [racimo('Prevenir', 'verde', [n('#mn-isq-tvp', 'Tromboprofilaxis'), n('#mn-isq-aspirina', 'Aspirina')]), racimo('Buscar', 'dorado', [n('#mn-isq-eco', 'Ecocardiograma'), n('#mn-isq-fop', 'Foramen oval')])] },
             { tipo: 'comparar', titulo: 'Complicaciones', columnas: [
                 { titulo: 'Hemorragia', color: 'rojo', nodos: [n('#mn-isq-hemorragia', 'Riesgo'), n('#mn-isq-hemorragia-tto', 'Tratamiento')] },
@@ -200,6 +211,7 @@ function nutricion() {
         paneles: [
             FIGURAS,
             { tipo: 'requisitos', modo: 'ninguno', titulo: '¿Sospecho déficit? (Tabla 48.4)', puerta: 'Sin datos de déficit', items: [{ checks: '.mu-tia-pre' }, { checks: '.mu-tia-man' }], resultado: ['#mu-tia-resultado'] },
+            escaleraTiamina,
             { tipo: 'racimos', titulo: 'Manifestaciones', grupos: [racimo('Clínica', 'rojo', [n('#mu-tia-corazon', 'Beriberi húmedo'), n('#mu-tia-wernicke', 'Wernicke'), n('#mu-tia-lactato', 'Acidosis láctica'), n('#mu-tia-neuropatia', 'Neuropatía')]), racimo('Diagnóstico y tratamiento', 'verde', [n('#mu-tia-lab', 'Laboratorio'), n('#mu-tia-rm', 'Resonancia'), n('#mu-tia-tto', 'La dosis importa')])] }
         ]
     });
@@ -254,6 +266,7 @@ function nutricion() {
         guia: 'Construir la NPT en cuatro pasos.',
         paneles: [
             calc('Construir la NPT (calculadora de la ficha)', ['#mu-npt-peso', '#mu-npt-prot', '#mu-npt-lip', '#mu-npt-propofol', '#mu-npt-riesgo'], ['#mu-npt-resultado']),
+            bolsaVisual,
             { tipo: 'flujo', titulo: 'Los cuatro pasos', nodos: [n('#mu-npt-paso1', 'Calorías y proteínas', 'dorado'), n('#mu-npt-paso2', 'Aminoácidos', 'verde'), n('#mu-npt-paso3', 'Lípidos y glucosa', 'amarillo'), n('#mu-npt-paso4', 'Ritmo', 'purpura')] },
             { tipo: 'racimos', titulo: 'Nutrición parenteral periférica', grupos: [racimo('NPP', 'verde', [n('#mu-npp-que', 'Qué es'), n('#mu-npp-limite', 'Límite de la vena'), n('#mu-npp-pauta', 'Pauta')])] }
         ]
@@ -262,6 +275,7 @@ function nutricion() {
         guia: 'Complicaciones metabólicas y el síndrome de realimentación.',
         paneles: [
             { tipo: 'requisitos', modo: 'ninguno', titulo: '¿Alto riesgo de realimentación? (ASPEN)', puerta: 'Sin criterios de alto riesgo', items: [{ checks: '.mu-real-check' }], resultado: ['#mu-real-resultado'] },
+            panelNefronaViva([['normal', 'Fosfato y Mg²⁺ en la orina normal'], ['fgf23', 'Pérdida renal de fosfato (FGF23), para comparar']]),
             { tipo: 'racimos', titulo: 'Complicaciones', grupos: [racimo('De los hidratos', 'amarillo', [n('#mu-npt-hiperglucemia', 'Hiperglucemia'), n('#mu-npt-fosfato', 'Hipofosfatemia'), n('#mu-npt-potasio', 'Hipopotasemia'), n('#mu-npt-co2', 'Hipercapnia')]), racimo('De los lípidos', 'dorado', [n('#mu-npt-inflamacion', 'Inflamación'), n('#mu-npt-sobrecarga', 'Sobrecarga lipídica')]), racimo('Hígado', 'rojo', [n('#mu-npt-esteatosis', 'Esteatosis'), n('#mu-npt-colestasis', 'Colestasis')])] }
         ]
     });
@@ -280,6 +294,7 @@ function nutricion() {
         guia: 'Leer la T4 libre y la TSH; tratar la tormenta.',
         paneles: [
             calc('¿Qué patrón tiroideo es? (calculadora de la ficha)', ['#mu-ti-t4', '#mu-ti-tsh'], ['#mu-ti-resultado']),
+            { tipo: 'matriz', titulo: 'Patrones tiroideos (Tabla 51.2)', tabla: '#mu-tabla-51-2', flechas: true, excluir: ['Rango normal'] },
             calc('Plan para la tirotoxicosis o la tormenta (calculadora de la ficha)', ['#mu-tor-tipo', '#mu-tor-icasma', '#mu-tor-alergia'], ['#mu-tor-resultado']),
             { tipo: 'racimos', titulo: 'Tirotoxicosis', grupos: [racimo('Clínica', 'rojo', [n('#mu-ti-clinica', 'Clínica'), n('#mu-ti-tormenta', 'Tormenta')]), racimo('Diagnóstico', 'dorado', [n('#mu-ti-dx', 'TSH'), n('#mu-ti-t3tox', 'T3-toxicosis'), n('#mu-ti-hipertiroxinemia', 'Hipertiroxinemia eutiroidea')])] }
         ]
@@ -304,6 +319,7 @@ function toxicos() {
         paneles: [
             FIGURAS,
             calc('Nomograma (calculadora de la ficha)', ['#mt-nomo-horas', '#mt-nomo-nivel', '#mt-nomo-unidad', '#mt-nomo-tipo'], ['#mt-nomo-resultado']),
+            nomogramaVivo,
             { tipo: 'flujo', titulo: 'Del paracetamol al hígado', nodos: [n('#mt-para-mecanismo', 'Cómo daña', 'dorado'), n('#mt-para-dosis', 'Dosis tóxica', 'amarillo'), n('#mt-para-riesgo', 'Más riesgo', 'rojo'), n('#mt-para-fases', 'Las fases', 'purpura')] }
         ]
     });
@@ -320,6 +336,7 @@ function toxicos() {
         paneles: [
             FIGURAS,
             calc('Glucagón (calculadora de la ficha)', ['#mt-glucagon-peso', '#mt-glucagon-respuesta'], ['#mt-glucagon-resultado']),
+            { tipo: 'barras', titulo: 'Efectos adversos: flumazenil frente a placebo (Tabla 52.2)', tabla: '#mt-tabla-52-2', excluir: ['Pacientes'], series: [{ col: 1, nombre: 'Flumazenil', color: 'rojo' }, { col: 2, nombre: 'Placebo', color: 'verde' }] },
             { tipo: 'comparar', titulo: 'Dos intoxicaciones', columnas: [
                 { titulo: 'Benzodiacepinas', color: 'purpura', nodos: [n('#mt-bzd-clinica', 'Clínica'), n('#mt-flumazenil', 'Flumazenil')] },
                 { titulo: 'Betabloqueantes', color: 'rojo', nodos: [n('#mt-bb-clinica', 'Manifestaciones'), n('#mt-bb-membrana', 'Membrana'), n('#mt-glucagon-uso', 'Glucagón')] }
@@ -346,6 +363,7 @@ function toxicos() {
                 { titulo: 'Alcalosis respiratoria', color: 'verde', nodos: [n('#mt-sal-alcalosis', 'Centro respiratorio')] },
                 { titulo: 'Acidosis metabólica', color: 'rojo', nodos: [n('#mt-sal-acidosis', 'Hiato elevado')] }
             ] },
+            alcalinizacion,
             { tipo: 'escalera', titulo: 'Tratamiento', nodos: [n('#mt-sal-carbon', 'Carbón activado', 'verde'), n('#mt-sal-alcalinizar', 'Alcalinizar la orina', 'amarillo'), n('#mt-sal-hd', 'Hemodiálisis', 'rojo')] }
         ]
     });
@@ -357,6 +375,7 @@ function toxicos() {
             FIGURAS,
             calc('Simulador: el CO y la PO₂ venosa (de la ficha)', ['#mt-co-sim-cohb'], ['svg#mt-co-sim-svg', '#mt-co-sim-resultado'], 'Ilustrativo, como en la Figura 53.1.'),
             calc('COHb: ¿alta? y cuánto tarda en bajar (calculadora de la ficha)', ['#mt-co-cohb', '#mt-co-fumador', '#mt-co-grave'], ['#mt-co-resultado']),
+            caidaCohb,
             { tipo: 'flujo', titulo: 'Del diagnóstico al tratamiento', nodos: [n('#mt-co-umbral', 'Cooxímetro', 'dorado'), n('#mt-co-o2', 'O₂ al 100%', 'verde'), [n('#mt-co-hiperbarico', 'Hiperbárico', 'purpura'), n('#mt-co-corazon', 'El corazón', 'rojo'), n('#mt-co-cianuro', '¿Y el cianuro?', 'rojo')]] }
         ]
     });
@@ -373,11 +392,13 @@ function toxicos() {
         paneles: [
             FIGURAS,
             calc('Fomepizol y coadyuvantes (calculadora de la ficha)', ['#mt-fome-toxico', '#mt-fome-peso', '#mt-fome-ph', '#mt-fome-organo', '#mt-fome-vision'], ['#mt-fome-resultado']),
+            lineaFomepizol,
             { tipo: 'comparar', titulo: 'Dos alcoholes', columnas: [
                 { titulo: 'Etilenglicol', color: 'amarillo', nodos: [n('#mt-eg-mecanismo', 'Mecanismo'), n('#mt-eg-clinica', 'Clínica'), n('#mt-eg-cristales', 'Cristaluria')] },
                 { titulo: 'Metanol', color: 'purpura', nodos: [n('#mt-met-mecanismo', 'Mecanismo'), n('#mt-met-clinica', 'Clínica'), n('#mt-met-lab', 'Laboratorio')] }
             ] },
-            { tipo: 'flujo', titulo: 'Tratamiento', nodos: [n('#mt-alc-fomepizol', 'Fomepizol', 'verde'), n('#mt-alc-hd', 'Hemodiálisis', 'rojo'), n('#mt-alc-coadyuvantes', 'Coadyuvantes', 'dorado')] }
+            { tipo: 'flujo', titulo: 'Tratamiento', nodos: [n('#mt-alc-fomepizol', 'Fomepizol', 'verde'), n('#mt-alc-hd', 'Hemodiálisis', 'rojo'), n('#mt-alc-coadyuvantes', 'Coadyuvantes', 'dorado')] },
+            matrizAntidotos
         ]
     });
 

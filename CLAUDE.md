@@ -8523,7 +8523,7 @@ lleva a ellos. Mismo patrón de dos niveles que el resto (`librosLevel` en `js/m
     título comprobado. `PANEL_NAV` del buscador con los tres paneles. Repaso "Marino entero": 9 bloques.
   - **Quiz**: `marino-neuro-preguntas.js` (84, `mn-q001`-`q084`), `marino-nutricion-preguntas.js` (84, `mu-`) y
     `marino-toxicos-preguntas.js` (66, `mt-`), 6 por ficha (5 de opción múltiple + 1 de redactar). Banco total de la
-    app: **2549**.
+    app: **2549** (2561 tras la revisión).
   - **Kit Visual**: `copiarResultados()` ya no copia un resultado oculto o vacío (antes dejaba una franja vacía en
     selectores y calculadoras aún sin datos; afecta a todas las vistas Visual).
   - **Bug corregido al verificar**: 3 ids duplicados (`mt-co-cohb`, `mt-nac-hd`, `mu-ti-tsh` en un `<dl>` y en su
@@ -8536,6 +8536,50 @@ lleva a ellos. Mismo patrón de dos niveles que el resto (`librosLevel` en `js/m
     resultado; los 39 botones del índice y los 38 enlaces cruzados llegan a su destino; los tres bancos se recorren
     enteros sin entidades; el buscador encuentra las fichas nuevas; sin desbordamiento ni errores. Cache-busting
     `?v=20261024-2`.
+- **Revisión de Marino 45-53 aplicada (octubre 2026)**, a petición explícita del usuario («Si, aplícalo»; informe:
+  Artifact «Revisión Marino 45-53»).
+  - **Relectura independiente**: 3 lectores (uno por PDF) cotejaron fuente y fichas; cada hallazgo se comprobó contra el
+    texto antes de tocar nada.
+  - **Correcciones de la app**:
+    - la ferroptosis la desencadena la inflamación (no al revés);
+    - pupilas (Tabla 45.4): la fila ya no inventa reactividades; el selector separa «pequeñas, reactivas» (encefalopatía
+      metabólica), puntiformes reactivas (opiáceos) y no reactivas (lesión pontina), con nota de interpretación;
+    - gancho del sugammadex (16 mg/kg es justo tras intubar; el bloqueo profundo, 4 mg/kg);
+    - la cita de la HIC es la guía AHA/ASA 2015 (Hemphill); el objetivo de PA tras trombólisis usa ≥180/105;
+    - nomograma con dosis repetidas: NAC si hay hepatotoxicidad con transaminasas altas (las dos cosas);
+    - salicilatos: la calculadora clasifica el nivel (terapéutico/tóxico/amenaza la vida) y no propone alcalinizar en
+      rango terapéutico;
+    - metanol: el lactato sube por el mismo mecanismo y por el fórmico (no «más que con el etilenglicol»);
+    - fomepizol cada 4 h solo si hace falta más de una sesión de diálisis; «&gt;4 g/día» de paracetamol;
+    - tiamina: el gancho habla de los 100 mg/día habituales; la neuropatía sola no es uno de los 3 signos de sospecha;
+    - tormenta tiroidea: el yodo también en el hipertiroidismo grave (opción nueva en la calculadora).
+  - **Notas nuevas** (erratas o interpretación de la fuente): carnitina en µmol/L, glutatión con glutamato, Vital 1.0
+    semielemental, ácidos grasos esenciales y máximo de lípidos (una sola nota de fuentes en Sustratos, enlazada desde
+    la NPT), ziprasidona «solo IM», «6 variables» del latido, hora y media de O₂ frente a la semivida, lactato ≥10/&gt;10
+    en el cianuro, Smoflipid que suma 95%, arginina de Optimental. Matiz del flumazenil (eventos mayores raros, p
+    &lt;0,05).
+  - **Enlaces**: CO → gafas nasales de alto flujo (Merino Neumología), radicales libres (Merino Cardiología),
+    cooximetría (Fundamentos) y curva de la Hb (El Libro Azul); la «palabra final» de neurología → SDRA, FRA, shock
+    séptico y post-parada; la de nutrición → microbioma (Fundamentos); realimentación → hipofosfatemia,
+    hipomagnesemia e hipopotasemia de Nefrología. **Comparativas de fuentes** del delirio (Cap. 45, Cap. 6 y El Libro
+    Azul) y de la hiperglucemia (Cap. 50 y Manual UMI).
+  - **Vista Visual**: piezas nuevas en `visual-marino-piezas-45-53.js` (los ayudantes se exportan de
+    `visual-marino-piezas.js`): cara con Glasgow y pupilas (escribe en la calculadora y en el selector), nomograma de
+    Rumack-Matthew con el paciente (tocar el gráfico coloca horas y nivel), caída de la COHb con aire y O₂, bolsa de NPT
+    (`bolsaNpt()`, exportada de `marino-nutricion.js` y compartida con la calculadora), escalera de la tiamina (lee la
+    Tabla 48.4), alcalinización de la orina (fisiología general, pKa ≈3, marcada), pauta del fomepizol en el tiempo y
+    matriz de antídotos de los caps. 52-53. Con el kit: línea de la primera semana del ictus, matriz con flechas de la
+    Tabla 51.2, barras de la Tabla 52.2, CAM-ICU paso a paso (`CAM_WIZARD`) y accesos a la nefrona viva desde la
+    realimentación. Kit: `.vk-resultado:empty` ya no deja un marco vacío (toda la app).
+  - **Interactivo**: la NPT toma el peso de cálculo (real o ajustado) de la calculadora de energía; el asistente de la
+    naloxona pasa la dosis eficaz a la perfusión (`alFinal` opcional en los nodos finales de `core/wizard.js`);
+    buscador en los apéndices 1 y 2 (filtra filas y líneas). La reversión de la HIC ya usaba un solo peso e INR.
+  - **Quiz**: 12 preguntas que cruzan capítulos (`mn-q085`-`q088`, `mu-q085`-`q088`, `mt-q067`-`q070`) y respuestas
+    corregidas (glutamato, pupilas, ferroptosis, «más de 4 g»). Banco total: **2561**.
+  - Bug corregido al verificar: el id `mrp-ph` ya lo usaba la curva de pH de 31-44 (ahora `mrp-alc-ph`).
+  - Verificado con Playwright (390 y 360 px): las 39 vistas Visual sin fuentes sin resolver, NaN ni desbordamiento; cara
+    de Glasgow, CAM-ICU, nomograma tocado (8 h, 90 µg/mL → por encima de 76), salicilatos 25 y 60 mg/dL, naloxona 4 mg →
+    2,67 mg/h, NPT con 120/70 kg → 82,5 kg ajustado, antídotos → ficha y línea resaltada. Cache-busting `?v=20261025`.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

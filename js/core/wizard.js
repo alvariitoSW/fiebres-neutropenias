@@ -6,7 +6,8 @@
 // `pasos` es un objeto { clave: { pregunta, si, no } } con una entrada
 // 'inicio'; `si`/`no` son o bien la clave del siguiente paso (string), o
 // bien un resultado final { estado, final } (estado = clase
-// tfg-estado-ok/warn/danger). El HTML debe tener 4 elementos con ids
+// tfg-estado-ok/warn/danger) y, opcional, `alFinal(resultadoEl)`, que se
+// llama al llegar a él (p. ej. para pasar una dosis a una calculadora). El HTML debe tener 4 elementos con ids
 // `${prefijo}-pregunta`, `${prefijo}-botones`, `${prefijo}-resultado` y
 // `${prefijo}-reset` — si falta el primero, no se engancha nada.
 export function initSiNoWizard(prefijo, pasos) {
@@ -39,6 +40,7 @@ export function initSiNoWizard(prefijo, pasos) {
                 resultadoEl.style.textAlign = 'left';
                 resultadoEl.innerHTML = `<strong>${next.final}</strong>`;
                 resetEl.style.display = 'inline-block';
+                next.alFinal?.(resultadoEl);
             });
             botonesEl.appendChild(btn);
         });
