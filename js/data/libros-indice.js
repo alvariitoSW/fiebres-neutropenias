@@ -15,12 +15,17 @@ const MARINO_PDF = {
     cardio: 'docs/marino-2024-cardiac-disorders-caps18-21.pdf',
     resp1: 'docs/marino-2024-respiratory-management-caps22-26.pdf',
     resp2: 'docs/marino-2024-respiratory-management-caps27-30.pdf',
+    acidoRenal: 'docs/marino-2024-acido-base-renal-caps31-34.pdf',
+    electrolitos: 'docs/marino-2024-electrolitos-caps35-38.pdf',
+    abdomen: 'docs/marino-2024-abdomen-temperatura-caps39-44.pdf',
 };
 
 // Fichas de cada capítulo: [tab, nombre corto].
 const fund = (fichas) => fichas.map(([tab, nombre]) => ({ especialidad: 'libros', view: 'marinoFundamentos', panel: 'panel-marino-fund-tabs', tab, nombre }));
 const mh = (fichas) => fichas.map(([tab, nombre]) => ({ especialidad: 'home', view: 'merinoHemato', panel: 'panel-merino-tabs', tab, nombre }));
 const mc = (fichas) => fichas.map(([tab, nombre]) => ({ especialidad: 'cardiologia', view: 'merinoCardiologia', panel: 'panel-merino-cardio-tabs', tab, nombre }));
+const mr = (fichas) => fichas.map(([tab, nombre]) => ({ especialidad: 'libros', view: 'marinoRenal', panel: 'panel-marino-renal-tabs', tab, nombre }));
+const ma = (fichas) => fichas.map(([tab, nombre]) => ({ especialidad: 'libros', view: 'marinoAbdomen', panel: 'panel-marino-abd-tabs', tab, nombre }));
 const mn = (fichas) => fichas.map(([tab, nombre]) => ({ especialidad: 'neumologia', view: 'merinoNeumologia', panel: 'panel-merino-neumo-tabs', tab, nombre }));
 
 export const librosIndice = [
@@ -30,9 +35,9 @@ export const librosIndice = [
         autor: 'Marino PL',
         edicion: '5.ª ed.',
         color: 'var(--accent-blue)',
-        nota: 'Repartido en la app por especialidad: los caps. 1-11 viven aquí, en Libros; los caps. 12-30, en Merino HEMATO, Merino Cardiología y Merino Neumología.',
+        nota: 'Repartido en la app por especialidad: los caps. 1-11 y 31-44 viven aquí, en Libros; los caps. 12-30, en Merino HEMATO, Merino Cardiología y Merino Neumología.',
         // Bloques del quiz con las preguntas de este libro, en el orden de sus capítulos ("Asignatura::Bloque").
-        quiz: ['Libros::Marino · Fundamentos (caps. 1-11)', 'Hematología::Merino HEMATO', 'Cardiología::Merino Cardiología', 'Neumología::Merino Neumología'],
+        quiz: ['Libros::Marino · Fundamentos (caps. 1-11)', 'Hematología::Merino HEMATO', 'Cardiología::Merino Cardiología', 'Neumología::Merino Neumología', 'Libros::Marino · Ácido-base, renal y electrolitos (caps. 31-38)', 'Libros::Marino · Abdomen y temperatura (caps. 39-44)'],
         secciones: [
             { numero: 'I', titulo: 'Acceso vascular', original: 'Vascular Access', capitulos: [
                 { n: 1, titulo: 'Vascular Access Primer', es: 'Acceso vascular: lo básico', pdf: MARINO_PDF.acceso, pagina: 2, donde: 'Libros · Marino Fundamentos',
@@ -112,7 +117,43 @@ export const librosIndice = [
                 { n: 30, titulo: 'Discontinuing Mechanical Ventilation', es: 'Retirada de la ventilación', pdf: MARINO_PDF.resp2, pagina: 50, donde: 'Merino Neumología',
                   fichas: mn([['neumo-sbt', 'Prueba de respiración espontánea'], ['neumo-weaning-extubacion', 'Destete y extubación']]) },
             ] },
-            { numero: 'X →', titulo: 'Trastornos ácido-base y siguientes', original: 'Acid-Base Disorders', pendiente: 'Caps. 31 en adelante: sin PDF todavía.', capitulos: [] },
+            { numero: 'X', titulo: 'Trastornos ácido-base', original: 'Acid-Base Disorders', capitulos: [
+                { n: 31, titulo: 'Acid-Base Analysis', es: 'Análisis ácido-base', pdf: MARINO_PDF.acidoRenal, pagina: 2, donde: 'Libros · Marino Ácido-base y renal',
+                  fichas: mr([['mr-acidobase-analisis', 'pH y compensaciones'], ['mr-acidobase-gaps', 'Los "gaps"']]) },
+                { n: 32, titulo: 'Lactic Acidosis and Ketoacidosis', es: 'Acidosis láctica y cetoacidosis', pdf: MARINO_PDF.acidoRenal, pagina: 16, donde: 'Libros · Marino Ácido-base y renal',
+                  fichas: mr([['mr-lactato-bicarbonato', 'Lactato y bicarbonato'], ['mr-cetoacidosis', 'Cetoacidosis']]) },
+                { n: 33, titulo: 'Metabolic Alkalosis', es: 'Alcalosis metabólica', pdf: MARINO_PDF.acidoRenal, pagina: 32, donde: 'Libros · Marino Ácido-base y renal',
+                  fichas: mr([['mr-alcalosis-mecanismos', 'Mecanismos'], ['mr-alcalosis-tratamiento', 'Tratamiento']]) },
+            ] },
+            { numero: 'XI', titulo: 'Trastornos renales y electrolíticos', original: 'Renal & Electrolyte Disorders', capitulos: [
+                { n: 34, titulo: 'Acute Kidney Injury', es: 'Fracaso renal agudo', pdf: MARINO_PDF.acidoRenal, pagina: 44, donde: 'Libros · Marino Ácido-base y renal',
+                  fichas: mr([['mr-fra-criterios', 'Criterios'], ['mr-fra-causas', 'Causas y presiones'], ['mr-fra-nefrotoxicos', 'Nefrotóxicos'], ['mr-fra-indices', 'Índices urinarios'], ['mr-trr', 'Reemplazo renal']]) },
+                { n: 35, titulo: 'Sodium', es: 'Sodio', pdf: MARINO_PDF.electrolitos, pagina: 1, donde: 'Libros · Marino Ácido-base y renal',
+                  fichas: mr([['mr-osmolalidad', 'Osmolalidad'], ['mr-hipernatremia', 'Hipernatremia'], ['mr-hiponatremia-dx', 'Hiponatremia: diagnóstico'], ['mr-hiponatremia-tto', 'Hiponatremia: tratamiento']]) },
+                { n: 36, titulo: 'Potassium', es: 'Potasio', pdf: MARINO_PDF.electrolitos, pagina: 18, donde: 'Libros · Marino Ácido-base y renal',
+                  fichas: mr([['mr-hipopotasemia', 'Hipopotasemia'], ['mr-hiperk-causas', 'Hiperpotasemia: causas'], ['mr-hiperk-tratamiento', 'Hiperpotasemia: tratamiento']]) },
+                { n: 37, titulo: 'Magnesium', es: 'Magnesio', pdf: MARINO_PDF.electrolitos, pagina: 31, donde: 'Libros · Marino Ácido-base y renal',
+                  fichas: mr([['mr-magnesio-deficit', 'Déficit'], ['mr-magnesio-reposicion', 'Reposición e hipermagnesemia']]) },
+                { n: 38, titulo: 'Calcium and Phosphorus', es: 'Calcio y fósforo', pdf: MARINO_PDF.electrolitos, pagina: 42, donde: 'Libros · Marino Ácido-base y renal',
+                  fichas: mr([['mr-calcio-hipoca', 'Calcio e hipocalcemia'], ['mr-hipercalcemia', 'Hipercalcemia'], ['mr-fosforo', 'Fósforo']]) },
+            ] },
+            { numero: 'XII', titulo: 'Abdomen y pelvis', original: 'The Abdomen & Pelvis', capitulos: [
+                { n: 39, titulo: 'Liver Failure', es: 'Insuficiencia hepática', pdf: MARINO_PDF.abdomen, pagina: 2, donde: 'Libros · Marino Abdomen y temperatura',
+                  fichas: ma([['ma-fallo-hepatico-agudo', 'Fallo hepático agudo'], ['ma-encefalopatia-hepatica', 'Encefalopatía'], ['ma-varices', 'Varices'], ['ma-pbe-shr', 'PBE y hepatorrenal']]) },
+                { n: 40, titulo: 'Acute Pancreatitis', es: 'Pancreatitis aguda', pdf: MARINO_PDF.abdomen, pagina: 16, donde: 'Libros · Marino Abdomen y temperatura',
+                  fichas: ma([['ma-pancreatitis-dx', 'Diagnóstico y gravedad'], ['ma-pancreatitis-tto', 'Tratamiento']]) },
+                { n: 41, titulo: 'Abdominal Infections in the ICU', es: 'Infecciones abdominales', pdf: MARINO_PDF.abdomen, pagina: 25, donde: 'Libros · Marino Abdomen y temperatura',
+                  fichas: ma([['ma-colecistitis', 'Colecistitis alitiásica'], ['ma-cdifficile', 'C. difficile'], ['ma-infeccion-abdominal', 'Infección intraabdominal']]) },
+                { n: 42, titulo: 'Urinary Tract Infections in the ICU', es: 'Infecciones urinarias', pdf: MARINO_PDF.abdomen, pagina: 38, donde: 'Libros · Marino Abdomen y temperatura',
+                  fichas: ma([['ma-itu-sonda', 'Asociada a sonda'], ['ma-candiduria', 'Candiduria']]) },
+            ] },
+            { numero: 'XIII', titulo: 'Temperatura corporal alterada', original: 'Altered Body Temperature', capitulos: [
+                { n: 43, titulo: 'Thermoregulatory Disorders', es: 'Trastornos de la termorregulación', pdf: MARINO_PDF.abdomen, pagina: 45, donde: 'Libros · Marino Abdomen y temperatura',
+                  fichas: ma([['ma-calor', 'Calor'], ['ma-hipertermia-farmacos', 'Hipertermias por fármacos'], ['ma-hipotermia', 'Hipotermia']]) },
+                { n: 44, titulo: 'Fever in the ICU', es: 'Fiebre en la UCI', pdf: MARINO_PDF.abdomen, pagina: 59, donde: 'Libros · Marino Abdomen y temperatura',
+                  fichas: ma([['ma-fiebre-basicos', 'Bases y no infecciosas'], ['ma-infecciones-nosocomiales', 'Infecciones y hemocultivos'], ['ma-antipireticos', 'Antipiréticos']]) },
+            ] },
+            { numero: 'XIV →', titulo: 'Secciones siguientes', pendiente: 'Caps. 45 en adelante: sin PDF todavía.', capitulos: [] },
         ]
     },
     {

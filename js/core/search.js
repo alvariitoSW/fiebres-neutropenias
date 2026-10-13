@@ -78,6 +78,8 @@ const PANEL_NAV = {
 
     // Libros
     'panel-marino-fund-tabs': { especialidad: 'libros', view: 'marinoFundamentos', bloque: 'Marino · Fundamentos (caps. 1-11)' },
+    'panel-marino-renal-tabs': { especialidad: 'libros', view: 'marinoRenal', bloque: 'Marino · Ácido-base, renal y electrolitos (caps. 31-38)' },
+    'panel-marino-abd-tabs': { especialidad: 'libros', view: 'marinoAbdomen', bloque: 'Marino · Abdomen y temperatura (caps. 39-44)' },
 
     // Sobrevivir a la UMI
     'panel-manual-umi-tabs': { especialidad: 'sobrevivirUmi', view: 'manualUmi', bloque: 'Manual UMI Negrín' },

@@ -19,7 +19,7 @@ Cardiología de Fisiopatología UCI, que es fisiopatología pura, no
 manejo), y **Neumología** con Merino Neumología (embolia pulmonar, asma/
 EPOC, SDRA, oxigenoterapia/VNI, ventilación mecánica, vía aérea
 artificial, NAV y destete), más **Libros**, un índice central de los libros de texto
-(*The ICU Book* de Marino y El Libro Azul) que además aloja los caps. 1-11 de Marino. Está pensada para ir creciendo con más
+(*The ICU Book* de Marino y El Libro Azul) que además aloja los caps. 1-11 y 31-44 de Marino. Está pensada para ir creciendo con más
 especialidades (radiología, etc.) según se vaya aportando contenido. Es
 una herramienta de apoyo para médicos, pensada para consultarse a pie de
 cama en el móvil.
@@ -50,8 +50,8 @@ cama en el móvil.
 >
 > **Orden de trabajo pedido después por el usuario (octubre 2026)**, por
 > delante de los pendientes de arriba y de la ecografía: 1) terminar de
-> subir Merino (los capítulos del *The ICU Book* (5.ª ed.) de Marino que aún no están: **hechos los caps. 1-11** en la
-> sección Libros, octubre 2026; hoy están en la app los caps. 1-30, faltan del 31 en adelante, sin PDF);
+> subir Merino (los capítulos del *The ICU Book* (5.ª ed.) de Marino que aún no están: **hechos los caps. 1-11 y 31-44** en la
+> sección Libros, octubre 2026; hoy están en la app los caps. 1-44, faltan del 45 en adelante, sin PDF);
 > 2) terminar El Libro Azul (hoy hay las secciones I, II, III y VII);
 > 3) el contenido del PIF de R1 (las 7 rotaciones sin contenido:
 > Radiología de tórax, Neurorradiología, Cardiología, Medicina Interna,
@@ -8362,6 +8362,56 @@ lleva a ellos. Mismo patrón de dos niveles que el resto (`librosLevel` en `js/m
     enlaces que entran o salen de Marino llegan a su ficha, las calculadoras dan lo esperado, el repaso por libro
     recorre preguntas sin errores; sin desbordamiento (se envolvieron las Tablas 5.2 y 5.3). Cache-busting
     `?v=20261021`.
+
+- **Marino · caps. 31-44** (octubre 2026), a petición explícita del usuario («vamos a continuar con los siguientes
+  capítulos en el apartado de merino, y que se incluyan todas las imágenes»). Dos bloques más de Libros, junto a
+  Fundamentos y con el mismo patrón (vista propia en `librosLevel`, botón en el `.constellation` de
+  `libros-menu.html`, cuaderno de campo en modo compacto, vista Visual, calculadoras y quiz):
+  - **Marino · Ácido-base, renal y electrolitos (caps. 31-38)** (`marino-renal.html`/`.js`, vista
+    `#marino-renal-view`, clave `marinoRenal`, panel `panel-marino-renal-tabs`, prefijo de ids `mr-`): 23 fichas —
+    análisis ácido-base y gaps (Cap. 31), lactato/bicarbonato y cetoacidosis (32), alcalosis metabólica (33), fracaso
+    renal agudo y TRR (34), osmolalidad, hiper e hiponatremia (35), potasio (36), magnesio (37), calcio y fósforo (38).
+  - **Marino · Abdomen y temperatura (caps. 39-44)** (`marino-abdomen.html`/`.js`, vista `#marino-abd-view`, clave
+    `marinoAbdomen`, panel `panel-marino-abd-tabs`, prefijo `ma-`): 17 fichas — fallo hepático agudo, encefalopatía,
+    varices, PBE y síndrome hepatorrenal (39), pancreatitis (40), colecistitis alitiásica, *C. difficile* e infección
+    intraabdominal (41), ITU por sonda y candiduria (42), calor, hipertermias por fármacos e hipotermia (43), fiebre en
+    la UCI, infecciones nosocomiales/hemocultivos y antipiréticos (44).
+  - **PDF** en `docs/`: `marino-2024-acido-base-renal-caps31-34.pdf`, `-electrolitos-caps35-38.pdf` y
+    `-abdomen-temperatura-caps39-44.pdf` (página del PDF = página citada en `#page=N`). **44 imágenes** reales
+    (`js/modules/libros/img/mar-fig31…44-*.jpg`, ids `mar-img-NN-M`). Las tablas, recreadas como tablas; la Tabla 39.1
+    se comprobó contra la imagen de la página (el orden de `pdftotext` engaña en tablas de dos columnas).
+  - **~45 calculadoras y 3 asistentes** (`initSiNoWizard`: tipo de diabetes insípida, PBE, *C. difficile*), con el
+    guard `.value === ''`; las de checkboxes (hiperpotasemia ficticia, paquete de varices, criterios de SHR) se
+    conectan en la vista Visual como panel `requisitos`. Fórmulas y cortes, los de la fuente.
+  - **Notas de fidelidad/interpretación** (erratas de la fuente reproducidas tal cual, todas en la propia ficha): EFNa
+    ">12%" de la Tabla 34.4 (el texto dice >2%; la calculadora usa el texto), hematíes 0,7% de la Tabla 37.1, rango
+    "0,5-1 mmol/L" de la hipomagnesemia leve, calcio iónico "<1,7 mmol/L" y ">3,0/3,5 mmol/L", "Na 4,0 mEq/L" del
+    fosfato (mEq/mL), pamidronato tabla frente a texto, "sevelamer gluconato", NaCl 3% "153", tiazidas e
+    "hypernatremia", ceftriaxona 1 frente a 2 g, el TIPS "transesofágico no invasivo", presión intraabdominal en
+    cmH₂O (Caps. 39-40) frente a mmHg (Cap. 34), mortalidad global de la pancreatitis, "respiradone"/"Amantidine",
+    fentanilo/linezolid "SNM", "hipertermia moderada", hipotensión 20% frente a 18%, referencia 21/22 de la Tabla
+    44.4, paracetamol 3 g (Cap. 44) frente a 4 g (Cap. 6), "fidaxomycin", "Warner-Jauregg". **Comparativas de fuentes**
+    con Nefrología (Δ-ratio, FENa/IFR, calcio corregido, hiponatremia), Manual UMI (reposición de Mg y P por peso) y
+    Neutropenia Febril (tiempo diferencial).
+  - **Vista Visual** de las 40 fichas en `visual-marino-caps31-44.js` (`initVisualMarinoCaps31a44()`): figuras
+    primero, calculadoras conectadas, matriz de espectro de la Tabla 41.3, barras de las Tablas 35.1/37.1/44.4.
+    Los asistentes no se duplican: un panel `propio` lleva a ellos en la vista Texto.
+  - **Enlaces cruzados** (55, todos `[data-especialidad]`) hacia Nefrología, Merino HEMATO/Cardiología, Manual UMI,
+    Fisiopatología UCI, Hematología (lisis tumoral, antifúngicos), UCI Papers (citrato, VExUS) y Fundamentos.
+  - **Índice y buscador**: secciones X-XIII de Marino en `libros-indice.js` (XIV en adelante, pendiente);
+    `PANEL_NAV` del buscador ampliado con los dos paneles.
+  - **Quiz**: `js/data/marino-renal-preguntas.js` (138, `mr-q001`-`q138`) y `marino-abdomen-preguntas.js` (102,
+    `ma-q001`-`q102`), 6 por ficha (5 de opción múltiple + 1 de redactar), bloques "Marino · Ácido-base, renal y
+    electrolitos (caps. 31-38)" y "Marino · Abdomen y temperatura (caps. 39-44)" de la asignatura Libros (+240 al banco
+    total). Repaso "Marino entero" desde el índice: 6 bloques.
+  - Bug corregido al verificar: un id duplicado (`mr-osm-medida` en el `<dl>` y en el `<input>`) dejaba la
+    calculadora de osmolalidad sin leer la osmolalidad medida.
+  - Verificado con Playwright (390 y 360 px): las 40 fichas abren con su panel activo, las 44 imágenes cargan, las 40
+    vistas Visual se construyen sin fuentes sin resolver, ~40 calculadoras dan los valores esperados (p. ej. hiato
+    corregido 32,3; déficit de cloro 280 mEq → 1,8 L; EFNa 0,14%; Na corregido 142), los 3 asistentes llegan a su
+    resultado, los 40 botones del índice y los 55 enlaces cruzados llegan a su ficha, los dos bancos se recorren
+    enteros (138 y 102) sin entidades ni `undefined`, el buscador encuentra las fichas nuevas, sin desbordamiento ni
+    errores de consola. Cache-busting `?v=20261022`.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

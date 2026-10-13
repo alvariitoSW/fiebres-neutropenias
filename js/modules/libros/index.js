@@ -2,32 +2,50 @@
 // (The ICU Book de Marino y El Libro Azul). La pantalla de entrada es un
 // índice de capítulos que lleva a la ficha donde vive cada uno (casi todos
 // siguen en su especialidad); los caps. 1-11 de Marino, que no encajan en
-// ninguna especialidad, viven aquí mismo (Marino · Fundamentos).
+// ninguna especialidad, viven aquí mismo (Marino · Fundamentos), igual que los
+// caps. 31-44 (ácido-base, renal y electrolitos; abdomen y temperatura).
 import { createViewSwitcher } from '../../core/navigation.js';
 import { preguntasMarinoFundamentos, temasMarinoFundamentos } from '../../data/marino-fundamentos-preguntas.js';
+import { preguntasMarinoRenal, temasMarinoRenal } from '../../data/marino-renal-preguntas.js';
+import { preguntasMarinoAbdomen, temasMarinoAbdomen } from '../../data/marino-abdomen-preguntas.js';
 import { init as initMarinoFundamentos } from './marino-fundamentos.js';
+import { init as initMarinoRenal } from './marino-renal.js';
+import { init as initMarinoAbdomen } from './marino-abdomen.js';
+import { initVisualMarinoCaps31a44 } from './visual-marino-caps31-44.js';
 import { initVisualMarino } from './visual-marino.js';
 import { initIndice, idRepaso } from './indice.js';
 import { librosIndice } from '../../data/libros-indice.js';
 
 // Mismo patrón que el resto de especialidades: main.js fusiona banco, temas
 // y botones en la única llamada a initQuiz().
-export const quizTriggerId = ['btn-marino-fund-repasar', ...librosIndice.filter(l => l.quiz?.length).map(idRepaso)];
-export const quizBanco = [...preguntasMarinoFundamentos];
-export const quizTemas = temasMarinoFundamentos.map(t => ({ ...t, asignatura: 'Libros', bloque: 'Marino · Fundamentos (caps. 1-11)' }));
+export const quizTriggerId = ['btn-marino-fund-repasar', 'btn-marino-renal-repasar', 'btn-marino-abd-repasar', ...librosIndice.filter(l => l.quiz?.length).map(idRepaso)];
+export const quizBanco = [...preguntasMarinoFundamentos, ...preguntasMarinoRenal, ...preguntasMarinoAbdomen];
+const enBloque = (temas, bloque) => temas.map(t => ({ ...t, asignatura: 'Libros', bloque }));
+export const quizTemas = [
+    ...enBloque(temasMarinoFundamentos, 'Marino · Fundamentos (caps. 1-11)'),
+    ...enBloque(temasMarinoRenal, 'Marino · Ácido-base, renal y electrolitos (caps. 31-38)'),
+    ...enBloque(temasMarinoAbdomen, 'Marino · Abdomen y temperatura (caps. 39-44)'),
+];
 
 export function init() {
     const librosLevel = createViewSwitcher({
         menu: document.getElementById('libros-menu-view'),
         marinoFundamentos: document.getElementById('marino-fund-view'),
+        marinoRenal: document.getElementById('marino-renal-view'),
+        marinoAbdomen: document.getElementById('marino-abd-view'),
     });
 
     document.getElementById('btn-marino-fund').addEventListener('click', () => librosLevel.show('marinoFundamentos'));
+    document.getElementById('btn-marino-renal').addEventListener('click', () => librosLevel.show('marinoRenal'));
+    document.getElementById('btn-marino-abd').addEventListener('click', () => librosLevel.show('marinoAbdomen'));
     document.querySelectorAll('.btn-volver-libros-menu').forEach(b => b.addEventListener('click', () => librosLevel.show('menu')));
 
     initIndice();
     initMarinoFundamentos();
     initVisualMarino();
+    initMarinoRenal();
+    initMarinoAbdomen();
+    initVisualMarinoCaps31a44();
 
     librosLevel.show('menu');
 
