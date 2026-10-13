@@ -2454,3 +2454,53 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 .vk-resultado-copia[class*="tfg-estado-"] + .vk-resultado-copia { border-top: 0; margin-top: 6px; }
 /* Lactato: chips de la Tabla 9.5 (mismo estilo que los niveles de la úlcera). */
 .mar-lact-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; --nv: var(--accent-purple); }
+
+/* ====== Marino 31-44 (revisión): notas plegables, rótulos de capítulo en el cuaderno, comparativas ====== */
+/* Notas de fidelidad/interpretación: plegadas por defecto para no cortar la lectura;
+   irAlTexto() (core/vista-visual.js) las despliega si se llega a una línea de dentro. */
+.nota-plegable { margin: 4px 0 10px; border-left: 2px dashed var(--border-color); padding-left: 8px; }
+.nota-plegable > summary { cursor: pointer; font-size: 0.72rem; color: var(--text-muted); list-style: none; padding: 4px 0; touch-action: manipulation; }
+.nota-plegable > summary::-webkit-details-marker { display: none; }
+.nota-plegable > summary::after { content: ' +'; }
+.nota-plegable[open] > summary::after { content: ' −'; }
+.nota-plegable > .fuente-ficha { margin-top: 2px; }
+/* Rótulo de capítulo entre las filas de un cuaderno de campo (cualquier modo). */
+.corkboard-grupo { font-family: 'Courier New', monospace; font-size: 0.66rem; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin: 14px 2px 4px; padding-bottom: 3px; border-bottom: 1px solid var(--border-color); }
+.corkboard-grupo:first-child { margin-top: 2px; }
+.compare-box.green { background: rgba(144, 160, 106, 0.08); border: 1px solid var(--accent-green); }
+.comparativa-fuentes td:first-child { font-weight: bold; }
+/* Piezas a medida de la vista Visual de Marino 31-44 (visual-marino-piezas.js). */
+.mrp-svg { width: 100%; height: auto; display: block; font-size: 9px; fill: var(--text-muted); margin: 4px 0; }
+.mrp-svg .mrp-rejilla { stroke: var(--border-color); stroke-width: 0.6; }
+.mrp-svg .mrp-guia { stroke: var(--text-muted); stroke-dasharray: 3 3; }
+.mrp-svg .mrp-eje { fill: var(--text-main); font-size: 9.5px; }
+.mrp-svg .mrp-pq { font-size: 8px; fill: var(--text-main); }
+.mrp-svg .mrp-marco { fill: none; stroke: var(--border-color); }
+.mrp-svg .mrp-normal { fill: rgba(144, 160, 106, 0.18); stroke: var(--accent-green); stroke-dasharray: 3 2; }
+.mrp-svg .mrp-iso { stroke: var(--text-muted); stroke-width: 0.7; stroke-dasharray: 2 3; fill: none; }
+.mrp-svg .mrp-iso-t { font-size: 7.5px; }
+.mrp-svg .mrp-agua { stroke: var(--accent-blue); stroke-width: 1.2; stroke-dasharray: 6 4; }
+.mrp-svg .mrp-bloque { fill: var(--accent-purple); opacity: 0.8; }
+.mrp-svg .mrp-hueco { fill: none; stroke: var(--accent-red); stroke-dasharray: 3 2; stroke-width: 1.2; }
+.mrp-texto { min-height: 36px; font-size: 0.7rem; margin: 6px 6px 0 0; }
+.mrp-pie { font-size: 0.75rem; color: var(--text-muted); margin: 2px 0 6px; }
+.mrp-leyenda { display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.7rem; }
+.mrp-ley { border: 1px solid var(--c); border-left: 4px solid var(--c); background: transparent; color: var(--text-main); border-radius: 6px; padding: 5px 8px; font-family: inherit; font-size: 0.7rem; cursor: pointer; min-height: 32px; touch-action: manipulation; }
+.mrp-ley-normal { color: var(--text-muted); align-self: center; }
+.mrp-escalera { display: flex; flex-direction: column; gap: 3px; margin: 4px 0 6px; }
+.mrp-esc-fila { display: grid; grid-template-columns: 34px 1fr 62px; align-items: center; gap: 6px; font-size: 0.72rem; }
+.mrp-esc-fila i { display: block; height: 10px; background: var(--accent-purple); border-radius: 2px; opacity: 0.55; }
+.mrp-esc-fila em { font-style: normal; color: var(--text-muted); text-align: right; }
+.mrp-esc-fila.sel i { opacity: 1; background: var(--accent-red); }
+.mrp-esc-fila.sel span, .mrp-esc-fila.sel em { color: var(--text-main); font-weight: bold; }
+.mrp-semaforo { display: flex; flex-direction: column; gap: 4px; margin: 8px 0; }
+.mrp-semaforo-fila { display: grid; grid-template-columns: 14px minmax(0, 0.9fr) minmax(0, 1.4fr); gap: 8px; align-items: center; font-size: 0.74rem; padding: 4px 6px; border-left: 3px solid var(--c); background: rgba(255,255,255,0.02); border-radius: 4px; }
+.mrp-semaforo-fila i { width: 12px; height: 12px; border-radius: 50%; background: var(--c); }
+.mrp-semaforo-fila span { color: var(--text-muted); overflow-wrap: anywhere; }
+.mrp-germen { min-height: 34px; padding: 0 12px; border-radius: 17px; border: 1px dashed var(--border-color); background: transparent; color: var(--text-muted); font-family: inherit; font-size: 0.72rem; cursor: pointer; touch-action: manipulation; }
+.mrp-germen.sel { background: color-mix(in srgb, var(--accent-blue) 22%, transparent); border: 1px solid var(--accent-blue); color: var(--text-main); }
+.mrp-botones { margin: 6px 0; }
+.mrp-wiz-pregunta { font-size: 0.86rem; margin-bottom: 10px; }
+.fuentes-fiebre { font-size: 0.82rem; margin: 4px 0 10px; padding-left: 22px; }
+.mrp-umbrales { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 0.72rem; margin: 2px 0 6px; }
+.mrp-umbrales span { border-left: 3px solid var(--c); padding-left: 5px; }

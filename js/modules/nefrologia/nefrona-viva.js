@@ -226,9 +226,12 @@ function osmLuz(p, m) {
 
 // Panel de una receta de la vista Visual con botones que abren la nefrona viva
 // con una situación (y un fármaco) ya puestos: [valor 'situacion|farmaco', etiqueta].
+// Llevan también data-especialidad/data-view para que funcionen desde
+// cualquier especialidad (el enlazador único de home/index.js cambia a
+// Nefrología; este módulo pone la situación).
 export const panelNefronaViva = botones => ({
     tipo: 'propio', titulo: 'En la nefrona viva', nota: 'Abre la simulación de la nefrona con esta situación ya puesta.',
-    render: c => { c.innerHTML = `<div class="nv-chips">${botones.map(([v, et]) => `<button type="button" class="visual-link" data-nefrona-viva="${v}">${et} →</button>`).join('')}</div>`; },
+    render: c => { c.innerHTML = `<div class="nv-chips">${botones.map(([v, et]) => `<button type="button" class="visual-link" data-especialidad="nefrologia" data-view="nefrona" data-nefrona-viva="${v}">${et} →</button>`).join('')}</div>`; },
 });
 
 const num = v => v >= 10 ? String(Math.round(v)) : v.toFixed(v >= 1 ? 1 : 2).replace('.', ',');

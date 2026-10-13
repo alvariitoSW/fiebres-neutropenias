@@ -140,13 +140,17 @@ function calcCad() {
         estado = 'danger';
         lineas.push(`<strong>K⁺ &lt;3,3: no empieces la insulina.</strong> Da 40 mEq/h de K⁺ IV hasta K⁺ &gt;3,3 (Tabla 32.4).`);
     } else {
-        const ritmo = glu <= 250 ? 0.05 : 0.1;
-        lineas.push(glu <= 250
-            ? `Glucosa ≤250: insulina a <strong>${fmt(0.05 * peso, 1)} U/h</strong> (0,05 U/kg/h) para mantener 150-200 mg/dL, y cambia a glucosado 5% en salino 0,45% a 150-200 mL/h.`
-            : `Insulina regular: bolo de <strong>${fmt(0.1 * peso, 1)} U</strong> (0,1 U/kg) y perfusión a <strong>${fmt(0.1 * peso, 1)} U/h</strong>; que la glucosa baje unos 100 mg/dL por hora.`);
+        const inicio = `Insulina regular: bolo de <strong>${fmt(0.1 * peso, 1)} U</strong> (0,1 U/kg) y perfusión a <strong>${fmt(0.1 * peso, 1)} U/h</strong>; que la glucosa baje unos 100 mg/dL por hora.`;
+        if (glu <= 250) {
+            lineas.push(`<strong>Si ya estás tratando y la glucosa ha bajado a ≤250</strong>: insulina a <strong>${fmt(0.05 * peso, 1)} U/h</strong> (0,05 U/kg/h) para mantener 150-200 mg/dL, y glucosado 5% en salino 0,45% a 150-200 mL/h.`);
+            lineas.push(`<strong>Si es el ingreso (CAD euglucémica)</strong>: ${inicio} La fuente solo añade: glucosado al 5% en todos los fluidos.`);
+        } else lineas.push(inicio);
+        // Tabla 32.4: reposición de K⁺ por tramos.
         if (k > 5.5) lineas.push('K⁺ &gt;5,5: control del K⁺ cada 2 h (Tabla 32.4).');
-        else { lineas.push('K⁺ 3,3-5,5: K⁺ cada 1-2 h las primeras 6 h; la ficha no da la pauta de reposición en este tramo.'); if (estado === 'ok') estado = 'warn'; }
-        void ritmo;
+        else {
+            lineas.push(`K⁺ ${k <= 4 ? '3,3-4,0' : '4,0-5,5'}: da <strong>${k <= 4 ? 20 : 10} mEq/h de K⁺ IV</strong> (Tabla 32.4) y mide el K⁺ cada 1-2 h las primeras 6 h.`);
+            if (estado === 'ok') estado = 'warn';
+        }
     }
     lineas.push(`Fluidos: cristaloide balanceado a <strong>${fmt(15 * peso / 1000, 1)}-${fmt(20 * peso / 1000, 1)} L/h</strong> (15-20 mL/kg/h, o 1 L/h) unas horas; luego 250 mL/h.`);
     if (na !== null) {
@@ -160,7 +164,7 @@ function calcCad() {
 const ALC_TIPO = {
     bajo: 'Vómitos, aspiración nasogástrica, efecto residual de diuréticos o abuso de laxantes: <strong>responde al cloro</strong> (salino isotónico + cloruro potásico).',
     alto: 'Hiperaldosteronismo primario, mineralocorticoides exógenos o regaliz: no responde al cloro. Poco probable en la UCI.',
-    variable: 'Depleción de potasio o de magnesio: repón el K⁺ y, si se resiste, el magnesio.',
+    variable: 'Depleción de potasio o de magnesio. Si toma diuréticos, <strong>mide el magnesio antes de reponer el K⁺</strong>: con déficit de Mg la hipopotasemia se resiste a la reposición.',
     diuretico: 'Con un diurético en curso el cloro urinario sigue alto aunque falte cloro: valóralo cuando pase su efecto (después se comporta como "volumen bajo, cloro &lt;20").',
 };
 function calcAlcalosis() {
@@ -268,7 +272,7 @@ function calcOsm() {
 
 // ---- Cap. 35 — hipernatremia -------------------------------------------
 const HIPERNA_VEC = {
-    bajo: '<strong>Hipovolémica</strong>: pérdida de líquido hipotónico (vómitos, diarrea, diuréticos, glucosuria). Primero salino isotónico para la hipotensión; después corrige el agua libre.',
+    bajo: '<strong>Hipovolémica</strong>: pérdida de líquido hipotónico (vómitos, diarrea, diuréticos, glucosuria) con la sed alterada. Primero salino isotónico para la hipotensión; después corrige el agua libre.',
     normal: '<strong>Normovolémica</strong>: pérdida de agua libre (reposición con líquido más hipertónico que el perdido, diabetes insípida). Glucosado al 5% o agua por sonda; el autor prefiere salino 0,45%.',
     alto: '<strong>Hipervolémica</strong>: exceso de sodio (bicarbonato, salino). Furosemida con glucosado al 5%: la orina con furosemida lleva menos Na⁺ (~80) que el plasma.',
 };
@@ -279,7 +283,7 @@ function calcHiperna() {
     const h = (na - obj) / 0.5;
     pintar(box, 'warn', `Bajar de ${fmt(na, 0)} a ${fmt(obj, 0)} a ≤0,5 mEq/L/h lleva <strong>al menos ${fmt(h, 0)} h</strong> (${fmt(h / 24, 1)} días). Es el ritmo tradicional; el óptimo no se conoce.`);
 }
-const DI_WIZARD = {
+export const DI_WIZARD = {
     inicio: { pregunta: '¿Orina diluida con plasma hipertónico (hipernatremia)?', si: 'restriccion', no: { estado: 'tfg-estado-ok', final: 'Sin orina diluida con plasma hipertónico, no es el patrón de la diabetes insípida.' } },
     restriccion: { pregunta: 'Con restricción hídrica completa, ¿la osmolaridad urinaria sube más de 30 mOsm/L en unas horas?', si: { estado: 'tfg-estado-ok', final: 'Sube: no es diabetes insípida (el riñón concentra).' }, no: 'vasopresina' },
     vasopresina: { pregunta: 'Es diabetes insípida. Tras vasopresina, ¿la osmolaridad urinaria sube ≥50%?', si: { estado: 'tfg-estado-warn', final: 'DI central. Desmopresina 1 µg SC o 2 µg IV cada 12 h (la vía oral solo absorbe un 5%).' }, no: { estado: 'tfg-estado-danger', final: 'DI nefrogénica: busca fármacos (anfotericina, aminoglucósidos, dopamina, litio), hipopotasemia o recuperación de una necrosis tubular.' } },
@@ -294,7 +298,7 @@ function calcNaCorr() {
 }
 function calcHiponaClasif() {
     const osm = $('mr-hc-osm')?.value, vec = $('mr-hc-vec')?.value, nau = $('mr-hc-nau')?.value, osmu = $('mr-hc-osmu')?.value, diur = $('mr-hc-diur')?.value === 'si', box = $('mr-hipona-clasif-resultado');
-    if (osm === 'normal') return pintar(box, 'ok', '<strong>Pseudohiponatremia</strong> (osmolalidad normal, 285-295): proteínas o lípidos muy altos. No hay que corregir el Na⁺.');
+    if (osm === 'normal') return pintar(box, 'ok', '<strong>Pseudohiponatremia</strong> (osmolalidad normal, 285-295): proteínas o lípidos muy altos: la hiponatremia no es real.');
     if (!vec) return ocultar(box);
     let html = osm === 'nd' ? '<small>Sin osmolalidad no se puede descartar una pseudohiponatremia.</small><br>' : '';
     let estado = 'warn';
@@ -349,11 +353,17 @@ function calcKperdida() {
     if (clu > 25) return pintar(box, 'warn', 'K⁺ &gt;30 y Cl⁻ &gt;25: <strong>diuréticos o depleción de magnesio</strong>.');
     pintar(box, 'warn', 'Cl⁻ urinario entre 15 y 25: la Figura 36.3 no clasifica ese tramo.');
 }
+// Tabla 36.1: 50 mEq/kg de peso magro; se pierde un 10% del total por cada
+// 1 mEq/L por debajo de 3,5. La usan la calculadora y el iceberg de la vista Visual.
+export function deficitK(k, peso) {
+    const total = 50 * peso;
+    return { total, def: Math.max(0, total * 0.1 * (3.5 - k)) };
+}
 function calcKdeficit() {
     const k = num($('mr-kdef-k')), peso = num($('mr-kdef-peso')), ritmo = num($('mr-kdef-ritmo')), box = $('mr-kdef-resultado');
     if (k === null || peso === null || peso <= 0) return ocultar(box);
     if (k >= 3.5) return pintar(box, 'ok', 'Con K⁺ ≥3,5 no hay hipopotasemia.');
-    const total = 50 * peso, def = total * 0.1 * (3.5 - k);
+    const { total, def } = deficitK(k, peso);
     let html = `Déficit ≈ 10% de ${fmt(total, 0)} mEq por cada mEq/L por debajo de 3,5 = <strong>${fmt(def, 0)} mEq</strong>.`;
     if (Math.abs(peso - 70) < 0.5) html += ' (Coincide con la Tabla 36.1.)';
     html += ` A ${fmt(ritmo, 0)} mEq/h: unas <strong>${fmt(def / ritmo, 1)} h</strong> de reposición.`;
@@ -366,7 +376,7 @@ function calcFicticia() {
     const marcados = [...document.querySelectorAll('.mr-ficticia:checked')].map(c => c.value);
     if (!marcados.length) return pintar(box, 'ok', 'Sin factores de hiperpotasemia ficticia: trátala como real.');
     const fuerte = marcados.includes('hemolisis') || marcados.includes('plaquetas');
-    pintar(box, fuerte ? 'danger' : 'warn', `<strong>${marcados.length} factor${marcados.length > 1 ? 'es' : ''}</strong> de hiperpotasemia ficticia. ${fuerte ? 'La hemólisis (o la trombocitosis/leucocitosis grave) es la causa habitual: ' : ''}repite la muestra bien extraída antes de tratar, salvo que haya cambios en el ECG.`);
+    pintar(box, fuerte ? 'danger' : 'warn', `<strong>${marcados.length} factor${marcados.length > 1 ? 'es' : ''}</strong> de hiperpotasemia ficticia. ${fuerte ? 'La hemólisis (o la trombocitosis/leucocitosis grave) es la causa habitual: ' : ''}sospéchala si no hay motivo aparente y <strong>saca tú la muestra</strong>, evitando estos factores (el laboratorio a menudo no la detecta).`);
 }
 function calcHiperk() {
     const k = num($('mr-hk-k')), ecg = $('mr-hk-ecg')?.value === 'si', colapso = $('mr-hk-colapso')?.value === 'si', box = $('mr-hk-resultado');
@@ -377,7 +387,7 @@ function calcHiperk() {
     if (colapso) pasos.push('<strong>Cloruro cálcico al 10%</strong> (tres veces más calcio que el gluconato): está indicado en el colapso circulatorio o la parada.');
     else if (grave) pasos.push(`<strong>Gluconato cálcico al 10%, 10 mL IV en 3 min</strong>; repetir a los 5 min si hace falta${ecg ? '' : ' (indicado por K⁺ &gt;6,5; el autor lo reservaría para cuando hay cambios en el ECG)'}. Dura 30-60 min.`);
     pasos.push('<strong>Insulina regular 10 U IV + 50 mL de glucosa al 50%</strong> (baja ≥0,6 mEq/L, pico a los 30-60 min) ± salbutamol 20 mg en aerosol (nunca solo). Bicarbonato no.');
-    pasos.push('<strong>Ciclosilicato de sodio y zirconio 10 g cada 8 h 48 h</strong>; <strong>hemodiálisis</strong> si es grave o no responde (baja 1 mEq/L en 1 h).');
+    pasos.push('<strong>Ciclosilicato de sodio y zirconio 10 g cada 8 h 48 h</strong>; la <strong>hemodiálisis</strong> es el método más eficaz (baja 1 mEq/L en 1 h y 2 en 3 h).');
     pintar(box, grave ? 'danger' : 'warn', `${grave ? '<strong>Hiperpotasemia grave</strong>' : 'Hiperpotasemia no grave (K⁺ ≤6,5 sin ECG)'}:<br>${pasos.map((p, i) => `${i + 1}. ${p}`).join('<br>')}`);
 }
 function calcCalcioMl() {
@@ -402,18 +412,21 @@ function calcMgReposicion() {
     const f = ir ? 0.5 : 1;
     const nota = ir ? '<br><strong>Insuficiencia renal</strong>: no más del 50% de lo de abajo (ya aplicado) y vigila el Mg de cerca.' : '';
     let html, estado;
+    // Los protocolos de la fuente son para la hipomagnesemia (<1,4 mEq/L).
+    if (mg >= 1.4) {
+        const arr = clin === 'vital' ? '<br>Con arritmias ventriculares refractarias, el Mg IV puede abolirlas aun con Mg normal (efecto estabilizador de membrana), pero la ficha no da una pauta para ese caso.' : '';
+        return pintar(box, 'ok', 'Mg ≥1,4 mEq/L: no hay hipomagnesemia, así que no aplican los protocolos de reposición (aunque puede haber déficit con Mg normal: piensa en la prueba de retención).' + arr);
+    }
     if (clin === 'vital') {
         estado = 'danger';
         html = `<strong>Amenaza vital</strong>: ${fmt(2 * f, 1)} g de MgSO₄ (${fmt(16 * f, 0)} mEq) IV en 2-5 min; después ${fmt(5 * f, 1)} g en 6 h y ${fmt(5 * f, 1)} g cada 12 h en perfusión 5 días.`;
     } else if (mg < 1 || clin === 'otros') {
         estado = 'warn';
         html = `<strong>Moderada${mg >= 1 ? ' (por otros trastornos electrolíticos)' : ''}</strong>: ${fmt(6 * f, 1)} g de MgSO₄ (${fmt(48 * f, 0)} mEq) en 3 h; después ${fmt(5 * f, 1)} g en 6 h y ${fmt(5 * f, 1)} g cada 12 h en perfusión 5 días.`;
-    } else if (mg < 1.4) {
+    } else {
         estado = 'warn';
         const d1 = peso * f, dia = 0.5 * peso * f;
-        html = `<strong>Leve y asintomática</strong>: déficit supuesto ${fmt(peso, 0)}-${fmt(2 * peso, 0)} mEq (1-2 mEq/kg). Día 1: <strong>${fmt(d1, 0)} mEq</strong> (≈${fmt(d1 / 8, 1)} g de MgSO₄); días 2-5: <strong>${fmt(dia, 0)} mEq/día</strong> (≈${fmt(dia / 8, 1)} g/día).`;
-    } else {
-        return pintar(box, 'ok', 'Mg ≥1,4 mEq/L sin clínica: no hay hipomagnesemia (aunque puede haber déficit con Mg normal: piensa en la prueba de retención).');
+        html = `<strong>Leve y asintomática</strong>: déficit supuesto ${fmt(peso, 0)}-${fmt(2 * peso, 0)} mEq (1-2 mEq/kg). Día 1: <strong>${fmt(d1, 0)} mEq</strong> (≈${fmt(d1 / 8, 1)} g de MgSO₄); los 3-5 días siguientes: <strong>${fmt(dia, 0)} mEq/día</strong> (≈${fmt(dia / 8, 1)} g/día).`;
     }
     pintar(box, estado, html + nota + '<br><small>Sigue al bolo con perfusión: el Mg empieza a bajar a los 15 min.</small>');
 }
@@ -448,7 +461,7 @@ function calcCaConv() {
     if (mgdl < lo) { estado = 'warn'; lect = 'por debajo del rango'; }
     if (mgdl > hi) { estado = 'warn'; lect = 'por encima del rango'; }
     if (p === 'ionico' && mmol < 0.65) { estado = 'danger'; lect = 'hipocalcemia iónica extrema (&lt;0,65 mmol/L): solo aquí se describen hipotensión, bajo gasto y ectopia'; }
-    else if (p === 'ionico' && mmol < 0.9) { estado = 'danger'; lect = 'hipocalcemia iónica grave (&lt;0,9 mmol/L)'; }
+    else if (p === 'ionico' && mmol < 0.9) { estado = 'danger'; lect = 'hipocalcemia iónica &lt;0,9 mmol/L (la cifra que la ficha llama grave en la transfusión masiva)'; }
     if (p === 'fosforo' && mgdl < 1) { estado = 'danger'; lect = 'hipofosfatemia grave (&lt;1 mg/dL): fosfato IV'; }
     else if (p === 'total' && mgdl > 14) { estado = 'danger'; lect = 'hipercalcemia &gt;14 mg/dL: tratar'; }
     pintar(box, estado, `${nombre}: <strong>${fmt(mgdl, 2)} mg/dL = ${fmt(mmol, 2)} mmol/L</strong>, ${lect} (${fmt(lo, 1)}-${fmt(hi, 1)} mg/dL).`);
@@ -497,6 +510,13 @@ export function init() {
     initCorkboard('marino-renal-corkboard', 'panel-marino-renal-tabs');
     enlazar(['mr-ab-ph', 'mr-ab-pco2', 'mr-ab-hco3'], calcAcidoBase);
     enlazar(['mr-gap-na', 'mr-gap-cl', 'mr-gap-hco3', 'mr-gap-alb'], calcGaps);
+    // Gasometría encadenada: el HCO₃⁻ de la primera calculadora pasa a la de los hiatos.
+    $('mr-ab-hco3')?.addEventListener('input', () => {
+        const de = $('mr-ab-hco3'), a = $('mr-gap-hco3');
+        if (!a || de.value === '' || a.value === de.value) return;
+        a.value = de.value;
+        a.dispatchEvent(new Event('input', { bubbles: true }));
+    });
     enlazar(['mr-bicarb-peso', 'mr-bicarb-hco3'], calcBicarbonato);
     enlazar(['mr-cad-peso', 'mr-cad-k', 'mr-cad-glucosa', 'mr-cad-na'], calcCad);
     enlazar(['mr-alc-hco3', 'mr-alc-paco2'], calcAlcalosis);

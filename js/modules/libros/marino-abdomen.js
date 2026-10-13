@@ -55,7 +55,7 @@ function calcVarices() {
     if (!falta.length) return pintar(box, 'ok', '<strong>Checklist completo</strong> (Tabla 39.3). Si sigue sangrando pese a todo (20%), valora el TIPS.');
     pintar(box, falta.length > 3 ? 'danger' : 'warn', `<strong>${hechos.length - falta.length}/${hechos.length}</strong>. Falta: ${falta.join(' · ')}.`);
 }
-const PBE_WIZARD = {
+export const PBE_WIZARD = {
     inicio: { pregunta: '¿Neutrófilos en el líquido ascítico >250/mm³?', si: 'origen', no: { estado: 'tfg-estado-ok', final: 'No es una PBE (un cultivo positivo sin ese recuento no basta: repite la paracentesis).' } },
     origen: { pregunta: '¿Es comunitaria (sin contacto sanitario en los últimos 90 días)?', si: { estado: 'tfg-estado-warn', final: 'Cefalosporina de 3.ª generación (cefotaxima o ceftriaxona), al menos 7 días. Albúmina 1,5 g/kg el día 1 y 1 g/kg el día 3.' }, no: 'resistentes' },
     resistentes: { pregunta: 'Asociada a cuidados o nosocomial: ¿hay muchos gérmenes resistentes en tu UCI?', si: { estado: 'tfg-estado-danger', final: 'Carbapenémico (meropenem 1 g cada 8 h) ± vancomicina (SARM) o daptomicina (enterococo resistente a vancomicina). Al menos 7 días + albúmina.' }, no: { estado: 'tfg-estado-warn', final: 'Piperacilina-tazobactam, al menos 7 días + albúmina.' } },
@@ -67,7 +67,7 @@ function calcPmn() {
     let estado = ini > 250 ? 'danger' : 'ok';
     if (ini > 250 && d48 !== null) {
         const caida = (ini - d48) / ini * 100;
-        html += `<br>A las 48 h: ${fmt(d48, 0)}/mm³, un <strong>${fmt(caida, 0)}%</strong> ${caida >= 0 ? 'menos' : 'más'}. ${caida >= 25 ? '<strong>Respuesta favorable</strong> (≥25%).' : '<strong>Respuesta insuficiente</strong> (&lt;25%): revisa el antibiótico y busca una peritonitis secundaria.'}`;
+        html += `<br>A las 48 h: ${fmt(d48, 0)}/mm³, un <strong>${fmt(caida, 0)}%</strong> ${caida >= 0 ? 'menos' : 'más'}. ${caida >= 25 ? '<strong>Respuesta favorable</strong> (≥25%).' : '<strong>Respuesta insuficiente</strong> (&lt;25%). La ficha solo define la respuesta favorable; no dice qué hacer después.'}`;
         estado = caida >= 25 ? 'ok' : 'danger';
     }
     pintar(box, estado, html);
@@ -97,16 +97,16 @@ function calcAtlanta() {
 function calcRingerLactato() {
     const peso = num($('ma-rl-peso')), hipo = $('ma-rl-hipovolemia')?.value === 'si', ca = $('ma-rl-calcio')?.value === 'si', box = $('ma-rl-resultado');
     if (peso === null || peso <= 0) return ocultar(box);
-    const fluido = ca ? 'un cristaloide <strong>sin calcio</strong> (el Ringer lactato no se usa en la pancreatitis por hipercalcemia)' : '<strong>Ringer lactato</strong>';
+    const fluido = ca ? 'un cristaloide que no sea Ringer lactato (no se usa en la pancreatitis por hipercalcemia; la fuente no dice cuál usar)' : '<strong>Ringer lactato</strong>';
     const bolo = hipo ? `bolo de <strong>${fmt(10 * peso, 0)} mL</strong> (10 mL/kg) y después ` : 'sin bolo (no hay hipovolemia) y ';
     pintar(box, ca ? 'warn' : 'ok', `Con ${fluido}: ${bolo}<strong>${fmt(1.5 * peso, 0)} mL/h</strong> (1,5 mL/kg/h). Objetivo: PAM ≥65 mmHg y diuresis ≥${fmt(0.5 * peso, 0)} mL/h. No subas a 20 mL/kg y 3 mL/kg/h: sobrecarga sin mejorar el pronóstico.`);
 }
 function calcTrigliceridos() {
     const peso = num($('ma-tg-peso')), tg = num($('ma-tg-valor')), box = $('ma-tg-resultado');
     if (peso === null || tg === null || peso <= 0) return ocultar(box);
-    const causa = tg > 1000 ? 'Triglicéridos &gt;1.000 mg/dL: pueden ser la causa de la pancreatitis. ' : 'Por debajo de 1.000 mg/dL los triglicéridos no explican la pancreatitis según la ficha. ';
+    const causa = tg > 1000 ? 'Triglicéridos &gt;1.000 mg/dL: hipertrigliceridemia grave, que puede ser la causa de la pancreatitis. ' : 'La ficha atribuye la pancreatitis a la hipertrigliceridemia grave (&gt;1.000 mg/dL); por debajo no dice que la descarte, pero tampoco da la pauta. ';
     const pasos = `Insulina IV a <strong>${fmt(0.1 * peso, 1)}-${fmt(0.4 * peso, 1)} U/h</strong> (0,1-0,4 U/kg/h) con ayuno y glucosado al 5-10%, vigilando la glucemia. Con ayuno baja los triglicéridos un 85-90% en 24 h: de ${fmt(tg, 0)} a unos <strong>${fmt(tg * 0.1, 0)}-${fmt(tg * 0.15, 0)} mg/dL</strong>. Objetivo &lt;500 mg/dL.`;
-    pintar(box, tg > 1000 ? 'danger' : tg > 500 ? 'warn' : 'ok', causa + (tg > 500 ? pasos : 'Ya por debajo del objetivo (&lt;500 mg/dL).'));
+    pintar(box, tg > 1000 ? 'danger' : tg > 500 ? 'warn' : 'ok', causa + (tg > 1000 ? pasos : tg > 500 ? 'Si se trata como pancreatitis por hipertrigliceridemia, el objetivo es &lt;500 mg/dL.' : 'Ya por debajo del objetivo del tratamiento (&lt;500 mg/dL).'));
 }
 
 // ---- Cap. 41 — infecciones abdominales ---------------------------------
@@ -117,7 +117,7 @@ function calcBilis() {
     if (s.value === 'buena') pintar(box, 'ok', `<strong>${nombre}</strong>: buena penetración en la bilis (Tabla 41.1).`);
     else pintar(box, 'warn', `<strong>${nombre}</strong>: mala penetración en la bilis (Tabla 41.1). Valora otra opción que cubra los gramnegativos entéricos.`);
 }
-const CDI_WIZARD = {
+export const CDI_WIZARD = {
     inicio: { pregunta: '¿La PCR del gen de la toxina B en heces es positiva?', si: 'elisa', no: { estado: 'tfg-estado-ok', final: 'PCR negativa: descarta la infección por C. difficile (no hay C. difficile toxigénico).' } },
     elisa: { pregunta: 'PCR positiva = toxigénico, pero puede ser colonización. ¿El ELISA de toxinas A y B es positivo?', si: { estado: 'tfg-estado-danger', final: 'Infección confirmada: vancomicina 125 mg VO cada 6 h o fidaxomicina 200 mg cada 12 h, 10 días.' }, no: 'sospecha' },
     sospecha: { pregunta: 'ELISA negativo (pierde un 20%). ¿La sospecha clínica sigue siendo alta?', si: { estado: 'tfg-estado-warn', final: 'Colonoscopia: las pseudomembranas confirman el diagnóstico.' }, no: { estado: 'tfg-estado-ok', final: 'PCR positiva sin toxinas: la mayoría evoluciona bien sin tratamiento. No trates solo por la PCR.' } },
@@ -179,11 +179,13 @@ const CANDIDURIA = {
 function calcCalor() {
     const t = num($('ma-calor-temp')), snc = $('ma-calor-snc')?.value === 'si', hemo = $('ma-calor-hemo')?.value === 'si', box = $('ma-calor-resultado');
     if (t === null) return ocultar(box);
-    if (t >= 41 || snc || hemo) {
-        const min = t > 38 ? (t - 38) / 0.3 : 0;
-        return pintar(box, 'danger', `<strong>Golpe de calor</strong>${t < 41 ? ' (por la clínica, aunque la temperatura sea &lt;41 °C)' : ''}: volumen y enfriamiento activo hasta 38 °C. Con enfriamiento evaporativo (0,3 °C/min) bajar de ${fmt(t, 1)} a 38 °C lleva unos <strong>${fmt(min, 0)} min</strong>. Vigila el escalofrío.`);
+    if (t >= 41) {
+        const min = (t - 38) / 0.3;
+        return pintar(box, 'danger', `<strong>Golpe de calor</strong> (≥41 °C${snc || hemo ? ', con afectación neurológica o hemodinámica' : ''}): volumen y enfriamiento activo hasta 38 °C. Con enfriamiento evaporativo (0,3 °C/min) bajar de ${fmt(t, 1)} a 38 °C lleva unos <strong>${fmt(min, 0)} min</strong>. Vigila el escalofrío.`);
     }
-    if (t >= 38) return pintar(box, 'warn', '<strong>Agotamiento por calor</strong>: deshidratación sin compromiso hemodinámico ni del SNC. Volumen y medidas generales; no hace falta enfriar de forma activa.');
+    if (snc || hemo) return pintar(box, 'danger', `Disfunción ${snc ? 'neurológica' : 'hemodinámica'} con ${fmt(t, 1)} °C: grave, pero la Tabla 43.1 define el golpe de calor con ≥41 °C y la ficha no clasifica este caso.`);
+    if (t >= 38 && t <= 39) return pintar(box, 'warn', '<strong>Agotamiento por calor</strong> (38-39 °C): deshidratación sin compromiso hemodinámico ni del SNC. Volumen y medidas generales; no hace falta enfriar de forma activa.');
+    if (t > 39) return pintar(box, 'warn', `${fmt(t, 1)} °C sin disfunción neurológica ni hemodinámica: entre el agotamiento (38-39 °C) y el golpe de calor (≥41 °C); la Tabla 43.1 no asigna este tramo.`);
     pintar(box, 'ok', 'Temperatura &lt;38 °C sin disfunción del SNC ni hemodinámica: no es un síndrome mayor por calor.');
 }
 function calcDiferencial() {
@@ -196,7 +198,7 @@ function calcDiferencial() {
     else html = '<strong>Síndrome neuroléptico maligno</strong>: retira el fármaco; bromocriptina 10 mg cada 8 h o dantroleno en los graves; profilaxis tromboembólica obligatoria.';
     if (f === 'sero' && etco2) html += '<br><small>Aviso: la subida del CO₂ espirado orienta a hipertermia maligna; revisa si hubo anestésico.</small>';
     if ((f === 'antidopa' || f === 'retirada') && clonus) html += '<br><small>El clonus apunta a síndrome serotoninérgico: revisa los fármacos (comparten algunos).</small>';
-    if (ck) html += '<br>CK &gt;1.000 U/L: típica del SNM (en la distonía solo sube algo); vigila la rabdomiólisis y el riñón.';
+    if (ck) html += '<br>CK &gt;1.000 U/L: en la ficha, este corte distingue el SNM de una <strong>distonía</strong> (en la que solo sube algo), no de los otros dos síndromes. Vigila la rabdomiólisis y el riñón.';
     pintar(box, estado, html);
 }
 function calcDantroleno() {
@@ -210,11 +212,11 @@ function calcHipotermia() {
     if (t === null) return ocultar(box);
     if (t >= 35) return pintar(box, 'ok', 'Temperatura ≥35 °C: no hay hipotermia.');
     let grado, estado, rec;
-    if (t >= 32) { grado = 'leve (32-35 °C)'; estado = 'warn'; rec = 'recalentamiento externo (pasivo o activo)'; }
-    else if (t >= 28) { grado = 'moderada (28-31,9 °C)'; estado = 'danger'; rec = 'recalentamiento externo activo; arritmias y bradicardia resistente a atropina por debajo de 32 °C'; }
+    if (t >= 32) { grado = 'leve (32-35 °C)'; estado = 'warn'; rec = 'recalentamiento externo, que basta en la mayoría'; }
+    else if (t >= 28) { grado = 'moderada (28-31,9 °C)'; estado = 'danger'; rec = 'recalentamiento externo, que basta en la mayoría; arritmias y bradicardia resistente a atropina por debajo de 32 °C'; }
     else { grado = t < 24 ? 'grave, en rango mortal (&lt;24 °C: apnea y asistolia)' : 'grave (&lt;28 °C)'; estado = 'danger'; rec = 'si el externo activo no basta, recalentamiento interno; riesgo de fibrilación ventricular; ECMO venoarterial en la parada'; }
     let html = `Hipotermia <strong>${grado}</strong>: ${rec}. Fluidos calentados.`;
-    if (iot && t < 32) html += ` Gases inspirados a 40-45 °C: +2,5 °C/h → unas <strong>${fmt((32 - t) / 2.5, 1)} h</strong> hasta 32 °C y ${fmt((35 - t) / 2.5, 1)} h hasta 35 °C (solo con este método).`;
+    if (iot && t < 32) html += ` Gases inspirados a 40-45 °C: +2,5 °C/h → unas <strong>${fmt((32 - t) / 2.5, 1)} h</strong> hasta 32 °C y ${fmt((35 - t) / 2.5, 1)} h hasta 35 °C (extrapolación lineal de esa tasa, solo con este método).`;
     if (t < 28) html += '<br>No declares la muerte sin recalentar antes.';
     pintar(box, estado, html);
 }

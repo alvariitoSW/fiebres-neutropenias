@@ -65,6 +65,8 @@ export function irAlTexto(card, objetivo) {
         mpi.querySelector(':scope > .micro-prof-head')?.classList.add('open');
         mpi.querySelector(':scope > .micro-prof-body')?.classList.add('active');
     }
+    // Y si vive dentro de un <details> cerrado (p. ej., una nota plegable), se despliega.
+    for (let d = objetivo?.closest('details'); d; d = d.parentElement?.closest('details')) d.open = true;
     // Un frame para que el bloque recién mostrado tenga layout antes del scroll.
     requestAnimationFrame(() => resaltar(objetivo));
 }

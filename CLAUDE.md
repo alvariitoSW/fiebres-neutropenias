@@ -8412,6 +8412,66 @@ lleva a ellos. Mismo patrón de dos niveles que el resto (`librosLevel` en `js/m
     resultado, los 40 botones del índice y los 55 enlaces cruzados llegan a su ficha, los dos bancos se recorren
     enteros (138 y 102) sin entidades ni `undefined`, el buscador encuentra las fichas nuevas, sin desbordamiento ni
     errores de consola. Cache-busting `?v=20261022`.
+- **Revisión de Marino 31-44 aplicada (octubre 2026)**, a petición explícita del usuario («aplica todo lo indicado en
+  la última revisión de marino 31-44»; informe: Artifact «Revisión Marino 31-44»).
+  - **Relectura independiente**: 3 lectores (uno por PDF) compararon frase a frase fuente y fichas; cada hallazgo se
+    comprobó contra el PDF antes de tocar nada. Dos hallazgos de los lectores resultaron falsos y **no** se aplicaron:
+    el «punto 4» de la Tabla 32.3 sí está en la fuente, y la nota de las Ecuaciones 31.7/31.8 era la que estaba mal
+    (se quitó: los rótulos de la fuente son correctos). Corregido:
+    - la Tabla 36.3 (el cloruro cálcico va en «Estabilizar el corazón») y la Tabla 44.2 (ictus isquémico entre las
+      más frecuentes; 8 y 8);
+    - calculadoras:
+      - CAD: la pauta de K⁺ de la Tabla 32.4 (20 o 10 mEq/h) y, con glucosa ≤250, la diferencia entre el ingreso
+        (euglucémica) y la fase de descenso;
+      - reposición de Mg: sin protocolos con Mg ≥1,4;
+      - selector de alcalosis: mide el Mg antes del K⁺;
+      - golpe de calor: solo con ≥41 °C, y el tramo 39-41 °C queda sin asignar;
+    - frases de calculadora sin fuente (peritonitis secundaria, umbral de triglicéridos, «cristaloide sin calcio»,
+      ECG en la ficticia, gravedad del calcio iónico, recalentamiento por grados) reescritas o marcadas;
+    - unos 25 huecos menores añadidos, entre ellos:
+      - Cl⁻ urinario <15/>25;
+      - conducta ante la hiperpotasemia ficticia;
+      - rabdomiólisis como causa de salida de K⁺;
+      - vigilar el fosfato en la nutrición parenteral;
+      - ejemplos de las Reglas 3 y 4;
+      - 275.000 ingresos por pancreatitis;
+      - nota de fuentes sobre la candiduria (caps. 42 frente a 44);
+      - plazos de la Fig. 42.2 (sus cifras vienen impresas: ya no es «lectura aproximada»).
+  - **Textos**:
+    - las 35 notas de fidelidad/interpretación son ahora `<details class="nota-plegable">` (plegadas;
+      `irAlTexto()` de `core/vista-visual.js` despliega cualquier `<details>` que contenga la línea de destino);
+    - las referencias «Ficha N» pasan a nombres o botones;
+    - las «comparativas de fuentes» de hiponatremia, hiperpotasemia, calcio e índices del FRA son tablas
+      (`.comparativa-fuentes`, Marino frente a Nefrología);
+    - nuevos: enlace de los biomarcadores a FRA · Predicción y una tabla resumen en «Alcalosis: tratamiento»;
+    - rótulos de capítulo entre las filas del cuaderno de campo (`.corkboard-grupo`, generados por `build2.py`,
+      genéricos para cualquier cuaderno);
+    - índice: la sección IX es «Respiratory Management» (comprobado en la pág. 55 del PDF de los caps. 22-26); la V
+      sigue sin título.
+  - **Vista Visual**:
+    - piezas a medida en `js/modules/libros/visual-marino-piezas.js` (paneles `propio`): curva pH-[H⁺], mapa de la
+      gasometría con las líneas de compensación de la ficha, iceberg del potasio con la Tabla 36.1 (usa
+      `deficitK()`, exportada de `marino-renal.js` y compartida con la calculadora), escala de la hipermagnesemia,
+      lipasa frente a amilasa;
+    - con el kit (nuevas tablas en el texto para que la imagen las lea): regla de temperatura (`linea`, en 3 fichas),
+      fuentes de fiebre sobre la silueta (`mapa`; órgano nuevo `esternon` en `core/silueta.js`), barras de las
+      Figuras 44.3 y 44.5, matriz de rasgos de las hipertermias por fármacos;
+    - la Tabla 37.1 se dibuja sin «Total» (`excluir`).
+  - **Interactivo**:
+    - gasometría encadenada: el HCO₃⁻ de la primera calculadora pasa a la del hiato aniónico;
+    - los 3 asistentes Sí/No dentro de la vista Visual (otra instancia de `initSiNoWizard` con el mismo árbol
+      exportado);
+    - simulador de bolos de salino al 3% frente a los límites (las subidas son ilustrativas);
+    - reto de volumen que escribe en la calculadora de respuesta a fluidos de Fundamentos;
+    - semáforo de antibióticos que lee la Tabla 41.3 y marca las casillas reales;
+    - accesos a la nefrona viva (ATR, diarrea, diuréticos, FRA, hiperparatiroidismo). `panelNefronaViva()` lleva ahora
+      `data-especialidad="nefrologia"` y funciona desde cualquier especialidad.
+  - **Quiz**: 6 preguntas que cruzan capítulos (`mr-q139`-`q141`, `ma-q103`-`q105`).
+  - Verificado con Playwright (390 y 360 px): las 40 fichas y sus vistas Visual sin fuentes sin resolver ni errores;
+    cada pieza nueva responde (p. ej. K⁺ 3,0 en 70 kg → 175 mEq y 2 bloques huecos; Mg 6 → marca y bloqueo AV de
+    1.er grado; 3 bolos de 2 mEq/L en 1 h → aviso de >5 en 2 h; VS 55→70 → responde; semáforo con Pseudomonas →
+    pip-tazo y meropenem en verde); los accesos a la nefrona viva abren la situación desde Libros; sin desbordamiento.
+    Cache-busting `?v=20261023`.
 
 Toda esta navegación la orquesta `modules/home/index.js`, que crea tres
 `createViewSwitcher()` independientes (nivel principal — que ahora incluye

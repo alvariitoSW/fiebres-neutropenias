@@ -103,7 +103,7 @@ export const librosIndice = [
                 { n: 24, titulo: 'Acute Respiratory Distress Syndrome', es: 'SDRA', pdf: MARINO_PDF.resp1, pagina: 32, donde: 'Merino Neumología',
                   fichas: mn([['neumo-sdra-diagnostico', 'Diagnóstico'], ['neumo-sdra-no-ventilatorio', 'Manejo no ventilatorio'], ['neumo-sdra-ventilacion', 'Ventilación']]) },
             ] },
-            { numero: 'IX', titulo: '', capitulos: [
+            { numero: 'IX', titulo: 'Manejo respiratorio', original: 'Respiratory Management', capitulos: [
                 { n: 25, titulo: 'Oxygen Inhalation', es: 'Oxigenoterapia', pdf: MARINO_PDF.resp1, pagina: 56, donde: 'Merino Neumología',
                   fichas: mn([['neumo-o2-indicaciones', 'Indicaciones'], ['neumo-o2-sistemas', 'Sistemas'], ['neumo-o2-toxicidad', 'Toxicidad']]) },
                 { n: 26, titulo: 'Noninvasive Ventilation', es: 'Ventilación no invasiva', pdf: MARINO_PDF.resp1, pagina: 76, donde: 'Merino Neumología',

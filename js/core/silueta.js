@@ -25,7 +25,7 @@ export const ORGANOS = {
     bocaDcha: [62, 60], bocaIzda: [108, 60], medula: [56, 320],
     ojos: [62, 30], bazo: [118, 176], intestino: [62, 240], vasos: [144, 140],
     piernaIzda: [114, 352], brazoDcho: [20, 172], ganglios: [116, 84],
-    senos: [134, 34]
+    senos: [134, 34], esternon: [86, 136]
 };
 
 // left/top en % de la caja de la silueta.

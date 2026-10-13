@@ -4,18 +4,23 @@
 // la ficha (por su id), las tablas se dibujan leyendo sus celdas y las
 // calculadoras de la ficha se conectan, nunca se copian.
 import { montarVisual } from '../../core/visual-kit.js';
-import { irAlTexto } from '../../core/vista-visual.js';
+import { panelNefronaViva } from '../nefrologia/nefrona-viva.js';
+import { curvaPh, mapaGasometria, icebergK, escalaHiperMg, cineticaEnzimas, semaforoAntibioticos, simuladorSalino, retoVolumen, asistenteVisual } from './visual-marino-piezas.js';
+import { DI_WIZARD } from './marino-renal.js';
+import { PBE_WIZARD, CDI_WIZARD } from './marino-abdomen.js';
 
 const FIGURAS = { tipo: 'figuras', titulo: 'Las figuras del libro', nota: 'Desliza para verlas; tócalas para ampliarlas.', todas: true };
 const calc = (titulo, campos, resultado, nota) => ({ tipo: 'calculadora', titulo, campos, resultado, ...(nota ? { nota } : {}) });
 const n = (fuente, etiqueta, color) => ({ fuente, etiqueta, ...(color ? { color } : {}) });
 
-// Los asistentes Sí/No viven en la vista Texto (sus botones son los reales):
-// la imagen lleva a ellos en vez de duplicarlos.
-const asistente = (titulo, id, texto) => ({ tipo: 'propio', titulo, render: (cuerpo, { tab }) => {
-    cuerpo.innerHTML = `<p class="vk-panel-nota">${texto}</p><button type="button" class="siguiente-ficha-btn">Abrir el asistente paso a paso ↓</button>`;
-    cuerpo.querySelector('button').addEventListener('click', () => irAlTexto(tab, document.getElementById(id)));
-} });
+
+// Regla de temperatura común a las fichas de calor, hipotermia y fiebre:
+// grados de la Tabla 43.6, fiebre ≥38,3 °C (Cap. 44); los nodos son de cada ficha.
+const reglaTemperatura = (titulo, nodos) => ({ tipo: 'linea', titulo, min: 22, max: 44, unidad: '°C', ticks: [24, 28, 32, 35, 38, 41, 44],
+    bandas: [{ desde: 22, hasta: 24, texto: 'Mortal', color: 'purpura' }, { desde: 24, hasta: 28, texto: 'Grave', color: 'rojo' },
+        { desde: 28, hasta: 32, texto: 'Moder.', color: 'amarillo' }, { desde: 32, hasta: 35, texto: 'Leve', color: 'dorado' },
+        { desde: 38.3, hasta: 44, texto: 'Fiebre ≥38,3', color: 'rojo', alinear: 'fin' }],
+    nodos });
 
 function renal() {
     // ---- Cap. 31 ----
@@ -24,6 +29,8 @@ function renal() {
         paneles: [
             FIGURAS,
             calc('Lee una gasometría (calculadora de la ficha)', ['#mr-ab-ph', '#mr-ab-pco2', '#mr-ab-hco3'], ['#mr-ab-resultado']),
+            mapaGasometria,
+            curvaPh,
             { tipo: 'flujo', titulo: 'El método paso a paso', nodos: [
                 n('#mr-regla-1', 'Regla 1: ¿PCO₂ y pH en sentido contrario o igual?', 'dorado'),
                 n('#mr-regla-2', 'Regla 2: ¿cuál es el primario?', 'amarillo'),
@@ -47,6 +54,7 @@ function renal() {
                 { titulo: 'Hiato elevado', color: 'rojo', nodos: [n('#mr-ag-alto', 'Hiato elevado')] },
                 { titulo: 'Hiato normal', color: 'verde', nodos: [n('#mr-ag-normal', 'Hiato normal')] }
             ] },
+            panelNefronaViva([['diarrea', 'Diarrea'], ['atr1', 'ATR I (distal)'], ['atr2', 'ATR II (proximal)'], ['atr4', 'ATR IV']]),
             { tipo: 'escalera', titulo: 'El delta: ¿hay otro trastorno?', nodos: [
                 n('#mr-delta-menor', 'Delta <1: acidosis hiperclorémica añadida', 'verde'),
                 n('#mr-delta-cad', 'Delta ~1 (CAD: 1)', 'amarillo'),
@@ -99,7 +107,8 @@ function renal() {
             ] },
             { tipo: 'selector', titulo: '¿Sensible o resistente al cloro? (Tabla 33.1)', control: '#mr-alc-tipo', forma: 'chips', color: 'dorado', resultado: ['#mr-alc-tipo-resultado'] },
             calc('¿Hipoventila lo esperado? (calculadora de la ficha)', ['#mr-alc-hco3', '#mr-alc-paco2'], ['#mr-alc-paco2-resultado']),
-            { tipo: 'racimos', titulo: 'Clínica', grupos: [{ titulo: 'Efectos', color: 'purpura', nodos: [n('#mr-alc-neuro', 'Neurológicos'), n('#mr-alc-hipoventilacion', 'Hipoventilación'), n('#mr-alc-bohr', 'Efecto Bohr')] }] }
+            { tipo: 'racimos', titulo: 'Clínica', grupos: [{ titulo: 'Efectos', color: 'purpura', nodos: [n('#mr-alc-neuro', 'Neurológicos'), n('#mr-alc-hipoventilacion', 'Hipoventilación'), n('#mr-alc-bohr', 'Efecto Bohr')] }] },
+            panelNefronaViva([['normal|furosemida', 'Furosemida'], ['normal|tiazida', 'Tiazida']])
         ]
     });
     montarVisual('mr-alcalosis-tratamiento', {
@@ -157,6 +166,8 @@ function renal() {
                 { titulo: 'EF de urea', color: 'verde', nodos: [n('#mr-efu', 'EFU (con diuréticos)')] }
             ] },
             calc('Índices urinarios (calculadora de la ficha)', ['#mr-ind-nau', '#mr-ind-nap', '#mr-ind-cru', '#mr-ind-crp', '#mr-ind-ureau', '#mr-ind-ureap', '#mr-ind-diur'], ['#mr-indices-resultado']),
+            panelNefronaViva([['prerrenal', 'IRA prerrenal'], ['nta', 'Necrosis tubular aguda'], ['obstruccion', 'Obstrucción']]),
+            retoVolumen,
             { tipo: 'racimos', titulo: 'Qué hacer', grupos: [{ titulo: 'Manejo', color: 'purpura', nodos: [n('#mr-reto-volumen', 'Reto de volumen'), n('#mr-furosemida-fra', 'Furosemida'), n('#mr-dopamina-baja', 'Dopamina a dosis baja')] }] }
         ]
     });
@@ -194,7 +205,7 @@ function renal() {
                 { titulo: 'Central', color: 'verde', nodos: [n('#mr-di-central', 'Central')] },
                 { titulo: 'Nefrogénica', color: 'rojo', nodos: [n('#mr-di-nefro', 'Nefrogénica')] }
             ] },
-            asistente('¿Qué tipo de diabetes insípida? (asistente de la ficha)', 'mr-di-wizard', 'Diagnóstico por osmolalidad urinaria y respuesta a la desmopresina, paso a paso.')
+            asistenteVisual('¿Qué tipo de diabetes insípida? (asistente paso a paso)', 'mr-di-wizard', DI_WIZARD, 'mr-di-wizard')
         ]
     });
     montarVisual('mr-hiponatremia-dx', {
@@ -215,6 +226,7 @@ function renal() {
         guia: 'Salino al 3% en bolos y nunca pasarse: el síndrome de desmielinización.',
         paneles: [
             calc('Salino al 3% (calculadora de la ficha)', ['#mr-sal3-peso', '#mr-sal3-na0', '#mr-sal3-na1', '#mr-sal3-horas', '#mr-sal3-dia'], ['#mr-sal3-resultado']),
+            simuladorSalino,
             { tipo: 'flujo', titulo: 'Encefalopatía y sobrecorrección', nodos: [n('#mr-encefalopatia-hipona', 'Encefalopatía hiponatrémica', 'rojo'), n('#mr-tabla-35-3', 'Bolos de salino 3%', 'amarillo'), n('#mr-sdo', 'Desmielinización osmótica', 'purpura'), n('#mr-sobrecorreccion', 'Revertir la sobrecorrección', 'verde')] },
             { tipo: 'comparar', titulo: 'Asintomática', columnas: [
                 { titulo: 'Hipovolémica', color: 'amarillo', nodos: [n('#mr-asinto-hipo', 'Salino')] },
@@ -230,6 +242,7 @@ function renal() {
         paneles: [
             FIGURAS,
             calc('Déficit de K⁺ (calculadora de la ficha)', ['#mr-kdef-k', '#mr-kdef-peso', '#mr-kdef-ritmo'], ['#mr-kdef-resultado']),
+            icebergK,
             calc('¿Pérdida renal o extrarrenal? (calculadora de la ficha)', ['#mr-kperd-ku', '#mr-kperd-clu'], ['#mr-kperd-resultado']),
             { tipo: 'racimos', titulo: 'Causas', grupos: [
                 { titulo: 'Redistribución', color: 'amarillo', nodos: [n('#mr-hipok-redistribucion', 'Hacia la célula')] },
@@ -265,7 +278,7 @@ function renal() {
         guia: 'El Mg sérico no ve el déficit: quién está en riesgo y qué produce.',
         paneles: [
             FIGURAS,
-            { tipo: 'barras', titulo: 'Dónde está el magnesio (Tabla 37.1, mEq)', tabla: '#mr-tabla-37-1', series: [{ col: 1, nombre: 'mEq', color: 'dorado' }] },
+            { tipo: 'barras', titulo: 'Dónde está el magnesio (Tabla 37.1, mEq)', tabla: '#mr-tabla-37-1', excluir: ['Total'], series: [{ col: 1, nombre: 'mEq', color: 'dorado' }] },
             calc('Conversor de unidades (calculadora de la ficha)', ['#mr-mgconv-valor', '#mr-mgconv-unidad'], ['#mr-mgconv-resultado']),
             { tipo: 'racimos', titulo: 'Quién tiene déficit (Tabla 37.3)', grupos: [
                 { titulo: 'Fármacos', color: 'amarillo', nodos: [n('#mr-mg-farmacos', 'Fármacos')] },
@@ -280,8 +293,8 @@ function renal() {
             { tipo: 'escalera', titulo: 'Pautas por gravedad', nodos: [n('#mr-mg-leve', 'Leve', 'verde'), n('#mr-mg-moderada', 'Moderada', 'amarillo'), n('#mr-mg-grave', 'Grave', 'rojo'), n('#mr-mg-renal', 'Con insuficiencia renal', 'purpura')] },
             calc('Reposición de Mg (calculadora de la ficha)', ['#mr-mgrep-mg', '#mr-mgrep-peso', '#mr-mgrep-clinica', '#mr-mgrep-renal'], ['#mr-mgrep-resultado']),
             calc('Prueba de retención (calculadora de la ficha)', ['#mr-mgret-orina', '#mr-mgret-unidad', '#mr-mgret-renal'], ['#mr-mgret-resultado']),
-            { tipo: 'escalera', titulo: 'Hipermagnesemia', tabla: '#mr-hipermg-umbral' },
-            calc('¿Qué espero con este Mg? (calculadora de la ficha)', ['#mr-hipermg-valor'], ['#mr-hipermg-resultado'])
+            calc('¿Qué espero con este Mg? (calculadora de la ficha)', ['#mr-hipermg-valor'], ['#mr-hipermg-resultado']),
+            escalaHiperMg
         ]
     });
 
@@ -311,7 +324,8 @@ function renal() {
                 [n('#mr-hiperca-calcitonina', 'Calcitonina (rápida)', 'amarillo'), n('#mr-hiperca-bisfosfonatos', 'Bisfosfonatos (lentos)', 'dorado')],
                 n('#mr-hiperca-corticoides', 'Corticoides en casos concretos', 'purpura')
             ] },
-            { tipo: 'racimos', titulo: 'Clínica', grupos: [{ titulo: 'Hipercalcemia', color: 'rojo', nodos: [n('#mr-hiperca-causas', 'Causas'), n('#mr-hiperca-clinica', 'Clínica'), n('#mr-hiperca-umbral', 'Cuándo tratar')] }] }
+            { tipo: 'racimos', titulo: 'Clínica', grupos: [{ titulo: 'Hipercalcemia', color: 'rojo', nodos: [n('#mr-hiperca-causas', 'Causas'), n('#mr-hiperca-clinica', 'Clínica'), n('#mr-hiperca-umbral', 'Cuándo tratar')] }] },
+            panelNefronaViva([['hiperpara', 'Hiperparatiroidismo 1º'], ['hhf', 'Hipercalcemia-hipocalciuria familiar']])
         ]
     });
     montarVisual('mr-fosforo', {
@@ -361,7 +375,7 @@ function abdomen() {
         guia: 'Peritonitis bacteriana espontánea y síndrome hepatorrenal.',
         paneles: [
             FIGURAS,
-            asistente('¿Es una PBE? (asistente de la ficha)', 'ma-pbe-calc', 'Recuento de neutrófilos en el líquido ascítico, cultivo y tratamiento, paso a paso.'),
+            asistenteVisual('¿Es una PBE? (asistente paso a paso)', 'ma-pbe', PBE_WIZARD, 'ma-pbe-calc'),
             calc('Respuesta a las 48 h (calculadora de la ficha)', ['#ma-pmn-inicial', '#ma-pmn-48'], ['#ma-pmn-resultado']),
             calc('Albúmina en la PBE (calculadora de la ficha)', ['#ma-alb-peso'], ['#ma-alb-resultado']),
             { tipo: 'requisitos', modo: 'todos', titulo: 'Criterios de síndrome hepatorrenal (Tabla 39.4)', puerta: 'SHR', items: [{ checks: '.ma-shr-check' }], resultado: ['#ma-shr-resultado'] },
@@ -376,6 +390,7 @@ function abdomen() {
             FIGURAS,
             { tipo: 'racimos', titulo: 'Causas (Tabla 40.1)', tabla: '#ma-tabla-40-1', color: 'rojo' },
             calc('Gravedad de Atlanta (calculadora de la ficha)', ['#ma-atl-fallo', '#ma-atl-compl'], ['#ma-atl-resultado']),
+            cineticaEnzimas,
             { tipo: 'racimos', titulo: 'Diagnóstico', grupos: [{ titulo: 'Claves', color: 'dorado', nodos: [n('#ma-panc-lipasa', 'Lipasa'), n('#ma-panc-morfologia', 'Morfología'), n('#ma-panc-imagen', 'Imagen'), n('#ma-panc-gravedad', 'Gravedad')] }] }
         ]
     });
@@ -411,7 +426,7 @@ function abdomen() {
         paneles: [
             FIGURAS,
             { tipo: 'flujo', titulo: 'C. difficile', nodos: [n('#ma-cdi-patogenia', 'Patogenia', 'dorado'), n('#ma-cdi-clinica', 'Clínica', 'amarillo'), n('#ma-cdi-pruebas', 'Pruebas', 'verde')] },
-            asistente('¿Qué prueba pido y qué significa? (asistente de la ficha)', 'ma-cdi-calc', 'Prueba de detección, toxina y PCR, paso a paso.'),
+            asistenteVisual('¿Qué prueba pido y qué significa? (asistente paso a paso)', 'ma-cdi', CDI_WIZARD, 'ma-cdi-calc'),
             { tipo: 'selector', titulo: 'Tratamiento por situación (Tabla 41.2)', control: '#ma-cditto-situacion', forma: 'chips', color: 'rojo', resultado: ['#ma-cditto-resultado'] },
             { tipo: 'racimos', titulo: 'Después', grupos: [{ titulo: 'Recaídas y prevención', color: 'purpura', nodos: [n('#ma-cdi-recaidas', 'Recaídas'), n('#ma-cdi-prevencion', 'Prevención')] }] }
         ]
@@ -421,7 +436,8 @@ function abdomen() {
         paneles: [
             FIGURAS,
             { tipo: 'matriz', titulo: 'Espectro (Tabla 41.3)', tabla: '#ma-tabla-41-3', normales: ['+'], leyenda: ['cubre (+)', 'no cubre o dudoso (−, +/−)'] },
-            calc('¿Qué combinación cubre todo? (calculadora de la ficha)', ['#ma-cob-shock'], ['#ma-cob-resultado'], 'Los antibióticos se marcan en la vista Texto.'),
+            semaforoAntibioticos,
+            calc('Shock séptico (calculadora de la ficha)', ['#ma-cob-shock'], ['#ma-cob-resultado']),
             { tipo: 'racimos', titulo: 'Pautas', grupos: [
                 { titulo: 'Empírica', color: 'verde', nodos: [n('#ma-iia-sin-resistentes', 'Sin resistentes'), n('#ma-iia-blee', 'BLEE'), n('#ma-iia-alergia', 'Alergia'), n('#ma-iia-candida', 'Candida')] },
                 { titulo: 'Situaciones', color: 'rojo', nodos: [n('#ma-iia-neumoperitoneo', 'Neumoperitoneo'), n('#ma-iia-postop', 'Posoperatoria'), n('#ma-iia-absceso', 'Absceso')] }
@@ -458,6 +474,7 @@ function abdomen() {
                 { titulo: 'Agotamiento', color: 'amarillo', nodos: [n('#ma-calor-agotamiento', '38-39 °C, SNC normal, suda')] },
                 { titulo: 'Golpe de calor', color: 'rojo', nodos: [n('#ma-calor-golpe', '≥41 °C, SNC alterado, no suda')] }
             ] },
+            reglaTemperatura('Dónde caen en la escala de temperatura', [{ fuente: '#ma-calor-agotamiento', etiqueta: 'Agotamiento por calor (38-39 °C)', en: 38.5, color: 'amarillo', fila: 'abajo' }, { fuente: '#ma-calor-golpe', etiqueta: 'Golpe de calor (≥41 °C)', en: 41, color: 'rojo', fila: 'abajo' }]),
             calc('¿Golpe de calor? (calculadora de la ficha)', ['#ma-calor-temp', '#ma-calor-snc', '#ma-calor-hemo'], ['#ma-calor-resultado']),
             { tipo: 'comparar', titulo: 'Enfriar', columnas: [
                 { titulo: 'Externo', color: 'verde', nodos: [n('#ma-calor-externo', 'Externo')] },
@@ -468,6 +485,7 @@ function abdomen() {
     montarVisual('ma-hipertermia-farmacos', {
         guia: 'Hipertermia maligna, síndrome neuroléptico maligno y serotoninérgico.',
         paneles: [
+            { tipo: 'matriz', titulo: 'Rasgo a rasgo', tabla: '#ma-tabla-rasgos-hipertermias', excluir: ['Desencadenante', 'Inicio', 'Primer signo', 'Tratamiento clave'], normales: ['no los cita', 'no (lo distingue del ss)'], leyenda: ['ausente o no lo cita', 'presente'] },
             { tipo: 'comparar', titulo: 'Los tres síndromes', columnas: [
                 { titulo: 'Hipertermia maligna', color: 'rojo', nodos: [n('#ma-hm-clinica', 'Clínica'), n('#ma-hm-tto', 'Dantroleno')] },
                 { titulo: 'Neuroléptico maligno', color: 'amarillo', nodos: [n('#ma-snm-clinica', 'Clínica'), n('#ma-snm-tto', 'Tratamiento')] },
@@ -486,6 +504,11 @@ function abdomen() {
         paneles: [
             FIGURAS,
             { tipo: 'escalera', titulo: 'Gravedad (Tabla 43.6)', tabla: '#ma-tabla-43-6' },
+            reglaTemperatura('La hipotermia en la escala de temperatura', [
+                { fuente: 'css:#ma-tabla-43-6 tbody tr:nth-child(1)', etiqueta: 'Leve (32-35 °C)', en: 33.5, color: 'dorado', fila: 'abajo' },
+                { fuente: 'css:#ma-tabla-43-6 tbody tr:nth-child(2)', etiqueta: 'Moderada (28-31,9 °C)', en: 30, color: 'amarillo', fila: 'abajo' },
+                { fuente: 'css:#ma-tabla-43-6 tbody tr:nth-child(3)', etiqueta: 'Grave (<28 °C)', en: 26, color: 'rojo', fila: 'abajo' },
+                { fuente: 'css:#ma-tabla-43-6 tbody tr:nth-child(4)', etiqueta: 'Mortal (<24 °C): apnea y asistolia', en: 23, color: 'purpura', fila: 'abajo' }]),
             calc('¿Cómo recalentar? (calculadora de la ficha)', ['#ma-hipo-t', '#ma-hipo-iot'], ['#ma-hipo-resultado']),
             { tipo: 'racimos', titulo: 'Qué mirar', grupos: [
                 { titulo: 'Diagnóstico', color: 'dorado', nodos: [n('#ma-hipo-temp', 'Temperatura'), n('#ma-hipo-lab', 'Laboratorio'), n('#ma-hipo-osborn', 'Onda de Osborn'), n('#ma-hipo-arritmias', 'Arritmias')] },
@@ -500,6 +523,17 @@ function abdomen() {
         paneles: [
             FIGURAS,
             calc('¿Es fiebre? (calculadora de la ficha)', ['#ma-tconv-valor', '#ma-tconv-unidad', '#ma-tconv-neutro'], ['#ma-tconv-resultado']),
+            reglaTemperatura('La fiebre en la escala de temperatura', [{ fuente: '#ma-fiebre-def', etiqueta: 'Fiebre: una medida ≥38,3 °C (neutropenia: 38,0 °C 1 h)', en: 38.3, color: 'rojo', fila: 'abajo' }]),
+            { tipo: 'mapa', titulo: 'Fuentes de fiebre nueva en la UCI (Figura 44.1)', nodos: [
+                { fuente: '#ma-ff-1', etiqueta: 'Ictus', organo: 'cabeza' },
+                { fuente: '#ma-ff-2', etiqueta: 'Transfusiones, catéter, fármacos', organo: 'cateter', color: 'amarillo' },
+                { fuente: '#ma-ff-3', etiqueta: 'Herida quirúrgica (esternotomía)', organo: 'esternon', color: 'dorado' },
+                { fuente: '#ma-ff-4', etiqueta: 'Neumonía y embolia pulmonar', organo: 'pulmonDcho' },
+                { fuente: '#ma-ff-5', etiqueta: 'Infarto y endocarditis', organo: 'corazon' },
+                { fuente: '#ma-ff-6', etiqueta: 'Colecistitis alitiásica', organo: 'higado', color: 'amarillo' },
+                { fuente: '#ma-ff-7', etiqueta: 'Intestino y C. difficile', organo: 'intestino', color: 'purpura' },
+                { fuente: '#ma-ff-8', etiqueta: 'Infección urinaria', organo: 'vejiga', color: 'dorado' },
+                { fuente: '#ma-ff-9', etiqueta: 'Trombosis venosa profunda', organo: 'piernaIzda', color: 'purpura' }] },
             { tipo: 'comparar', titulo: 'Causas no infecciosas (Tabla 44.2)', columnas: [
                 { titulo: 'Más frecuentes', color: 'amarillo', nodos: [n('#ma-fiebre-postop', 'Posoperatoria'), n('#ma-fiebre-tev-transfusion', 'TEV y transfusión'), n('#ma-fiebre-farmacos', 'Fármacos')] },
                 { titulo: 'Otras', color: 'purpura', nodos: [n('#ma-fiebre-otras', 'Otras')] }
@@ -512,6 +546,7 @@ function abdomen() {
         paneles: [
             FIGURAS,
             { tipo: 'barras', titulo: 'Infecciones hospitalarias en EE. UU. (Tabla 44.4)', tabla: '#ma-tabla-44-4', series: [{ col: 1, nombre: 'Total', color: 'dorado' }, { col: 2, nombre: 'En UCI', color: 'rojo' }] },
+            { tipo: 'barras', titulo: 'Bacteriemias detectadas según los hemocultivos (Figura 44.3, %)', tabla: '#ma-tabla-fig44-3', series: [{ col: 1, nombre: 'Endocarditis', color: 'rojo' }, { col: 2, nombre: 'Otras infecciones', color: 'dorado' }] },
             calc('¿Cuántos hemocultivos? (calculadora de la ficha)', ['#ma-hemoc-n', '#ma-hemoc-tipo'], ['#ma-hemoc-resultado']),
             calc('Tiempo diferencial (calculadora de la ficha)', ['#ma-dtp-cvc', '#ma-dtp-per'], ['#ma-dtp-resultado']),
             { tipo: 'racimos', titulo: 'Infecciones', grupos: [{ titulo: 'Focos', color: 'purpura', nodos: [n('#ma-iso-que', 'Herida quirúrgica'), n('#ma-iso-necrotizante', 'Necrotizante'), n('#ma-endocarditis', 'Endocarditis'), n('#ma-candidiasis', 'Candidiasis')] }] }
@@ -522,6 +557,7 @@ function abdomen() {
         paneles: [
             FIGURAS,
             { tipo: 'flujo', titulo: '¿Bajar la fiebre?', nodos: [n('#ma-antip-defensa', 'La fiebre defiende', 'verde'), n('#ma-antip-clinica', 'Lo que dicen los ensayos', 'amarillo'), n('#ma-antip-guias', 'Las guías', 'dorado')] },
+            { tipo: 'barras', titulo: 'Mortalidad según la temperatura inicial en la sepsis (Figura 44.5, %)', nota: 'Lectura aproximada de las categorías en °F.', tabla: '#ma-tabla-fig44-5', series: [{ col: 1, nombre: 'Mortalidad', color: 'rojo' }] },
             calc('¿Antipirético? (calculadora de la ficha)', ['#ma-antip-peso', '#ma-antip-cerebro', '#ma-antip-higado'], ['#ma-antip-resultado']),
             { tipo: 'comparar', titulo: 'Con qué', columnas: [
                 { titulo: 'Paracetamol', color: 'verde', nodos: [n('#ma-antip-paracetamol', 'Paracetamol')] },
