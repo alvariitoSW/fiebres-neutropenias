@@ -23,6 +23,16 @@ especialidades (radiología, etc.) según se vaya aportando contenido. Es
 una herramienta de apoyo para médicos, pensada para consultarse a pie de
 cama en el móvil.
 
+> **Recordatorio pedido por el usuario (octubre 2026):** ahora se está
+> terminando de subir el **contenido teórico** de la app (bloque
+> neurocrítico y meningitis del Manual UMI — hecho —, huecos que quedan
+> del mismo manual, y lo que llegue con PDF nuevo). **En cuanto el contenido teórico esté
+> terminado, recuérdale al usuario que toca volver al apartado de
+> ecografía** (Eco cardíaca: calibrar TDE/eyección/RVS/contracción
+> isovolumétrica, más formas de enfermedad, medir fps en el móvil — ver
+> `js/modules/eco/README.md`). Borra este recordatorio cuando se lo hayas
+> dicho.
+
 ## Decisiones de arquitectura (ya tomadas, no las reabras sin preguntar)
 
 - **Sin backend, sin login, sin base de datos.** Es una calculadora estática:
@@ -7670,21 +7680,73 @@ página impresa − 52).
     de preguntas de opción múltiple y de redactar no generó ninguna
     excepción JS; los totales de Cardiología (286) y Neumología (184)
     confirmados de vuelta a sus cifras previas a la fragmentación.
-  - **Pendiente**: el bloque neurocrítico (TCE, PIC, hidrocefalia,
-    fibrinolisis intraventricular, escalas de HSA — Marshall/Fisher/
-    Fisher modificado/Hunt-Hess —, Doppler transcraneal/vasoespasmo,
-    ecografía de la vaina del nervio óptico, GOS, Rankin modificado,
-    neuroanatomía TC/vascular) y meningitis/ventriculitis (algoritmo
-    diagnóstico, criterios de Lozier, profilaxis antibiótica) del mismo
-    manual UMI quedan pendientes de ampliar esta misma guía con fichas
-    nuevas (nunca una especialidad "Neurocrítico" aparte, según la
-    corrección de rumbo de arriba) — confirmado con el usuario que existe
-    este contenido, aplazado a una tanda futura por su volumen (~18
-    páginas de guías completas). Las "ampliaciones rápidas" identificadas
-    en el análisis inicial (ácido-base — considerado redundante con el
-    clasificador ya existente de Nefrología, descartado —, HFVVC/fórmulas
-    de TRR → ampliación de `trr.html` en Nefrología) también quedan
-    pendientes de una tanda futura.
+  - **Bloque neurocrítico y meningitis (octubre 2026, ya hecho)**: 12
+    fichas nuevas, XIX-XXX, dentro de la misma guía (nunca una
+    especialidad aparte), a petición del usuario de "terminar de subir el
+    contenido teórico". Fuente: `hugcdn-umi-manual-guardia-parte2.pdf`
+    págs. 77-99 (página del PDF = página impresa − 52) y
+    `...-parte1.pdf` págs. 30-32 (página del PDF = impresa + 1); los dos
+    PDF son escaneos, así que se leyeron como imagen página a página
+    (rasterizadas con `pdftoppm` y giradas las que vienen apaisadas).
+    Fichas: Sedación RASS/Ramsay (`umi-sedacion`), TCE clasificación,
+    pronóstico y diagnóstico (`umi-tce-dx`), TCE manejo escalonado, PIC y
+    cirugía (`umi-tce-manejo`), ondas de PIC (`umi-pic-onda`), hidrocefalia
+    y LCR por causa (`umi-hidrocefalia`), fibrinolisis intraventricular
+    (`umi-fibrinolisis-iv`), neuroanatomía en la TAC y territorios
+    (`umi-neuroanatomia`), Marshall (`umi-marshall`), HSA con Fisher,
+    Hunt-Hess y Doppler transcraneal (`umi-hsa`), vaina del nervio óptico
+    y fuerza muscular (`umi-onsd`), Rankin y GOS
+    (`umi-escalas-pronostico`) y meningitis/ventriculitis con Lozier
+    (`umi-meningitis`). El tablero pasa de 18 a 30 fichas.
+    - **12 calculadoras nuevas** en `manual-umi.js` (mismo patrón
+      `CALCULADORAS`, con `leerNumero()` que nunca convierte un campo
+      vacío en 0): asistente RASS en los 3 pasos del manual, indicación de
+      sensor de PIC en el TCE grave, PPC (= PAM − PIC, marcada como
+      fisiología general: el manual solo da los umbrales), onda de PIC
+      que pasa de distensible a rígida (dibujo ilustrativo entre las 2
+      ondas de la figura), índice de Evans, volumen de t-PA, Marshall,
+      Lindegaard con los cortes del algoritmo, vaina del nervio óptico,
+      Rankin y GOS (preguntados por separado: ayuda que necesita, vida
+      independiente y trabajo; nunca se deduce una escala de la otra),
+      Lozier (las combinaciones que la tabla no describe se dicen como
+      tales) y ajuste de antibiótico intraventricular por débito del DVE.
+    - **5 imágenes reales** en `js/modules/sobrevivir-umi/img/`: 4 cortes
+      de TAC rotulados (págs. 87-90) y la tira de 6 TAC de Marshall (pág.
+      94). No se reproducen, por sus derechos, la figura de territorios
+      (Simon, Greenberg y Aminoff, *Neurología clínica*, McGraw-Hill), la
+      ilustración del drenaje (Hadenfeldt-Muller) ni las de áreas
+      funcionales: se recrean como tablas. Esquemas propios en SVG para
+      la onda de PIC, el índice de Evans y la vaina del nervio óptico.
+    - **Notas de fidelidad (erratas de la fuente, nunca corregidas en
+      silencio)**: manitol "0,25-1 mg/kg" (se entiende g/kg); Marshall
+      tipo IV con "línea media desviada 20 mm" (la clasificación original
+      y la propia lista pronóstica del manual usan &gt;5 mm, verificado con
+      `WebSearch`; la calculadora usa &gt;5 mm); P2 "refleja el
+      compartimiento venoso, P2 = 80% de P1" frente a la figura que rotula
+      P3 como venosa; Lindegaard 3-6 "indeterminado" en el algoritmo
+      frente a 3-5/&gt;6 en la tabla; "aneurisma no aislada"; "10/mg/kg"
+      de rifampicina; el hematoma subdural repetido; la angiografía y la
+      ventriculografía con aire listadas como pruebas de antes de la TAC.
+    - **Quiz**: 60 preguntas nuevas (`umi-q091`-`q150`, 5 por ficha: 4 de
+      opción múltiple + 1 de redactar). Manual UMI queda en 150 y la
+      asignatura Sobrevivir a la UMI en 172.
+    - **Enlaces**: Sedación → delirio/CAM-UCI de Fisiopatología UCI ·
+      Inmunología; TCE manejo → Ficha XVIII (glucemia 140-180); Meningitis
+      → Ficha XXIII (LCR). Técnicas R1 cambia la categoría "Neurocrítico
+      (pendiente)" por 7 accesos reales (la clase `.tec-pendiente` queda
+      en el CSS sin uso). El índice rápido del submenú gana un 5.º bloque,
+      "Neurocrítico" (`neurocritico` → `umi-sedacion` en
+      `rutasCategoria`).
+    - **Hallazgo de paso, sin tocar**: la variable `--text-dim` no existe
+      en `variables.css` y se usa en 8 archivos (63 veces solo en
+      `manual-umi.html`); en `color:` cae al color heredado y no se nota,
+      pero en un `fill` de SVG pinta negro (por eso los SVG nuevos usan
+      `--text-muted`).
+    - **Sigue pendiente del mismo manual**: escalas que faltan (capnografía/
+      EtCO₂, antropometría de peso y talla), pirámide antibiótica y tabla
+      M-mode de FATE, pancuronio/neostigmina/fisostigmina, la incoherencia
+      de `calcDeficitK` (Ficha II) y las fórmulas de HFVVC/TRR (págs.
+      100-102, candidatas a ampliar `trr.html` en Nefrología).
   - **Auditoría de contenido + interactividad y sus correcciones**, a
     petición explícita del usuario ("revisa que está todo correctamente,
     comprueba que falta, que está mal escrito... comprueba que partes se

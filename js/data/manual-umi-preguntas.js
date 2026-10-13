@@ -1,7 +1,7 @@
 // Banco de preguntas de repaso — "Manual UMI Negrín" (manual de orientación
 // interno de la Unidad de Medicina Intensiva, HUGCDN), consolidado en una
-// única guía con sus 18 fichas (ver manual-umi.html). 5 preguntas por
-// ficha (4 opción múltiple + 1 de redactar) × 18 fichas = 90 preguntas —
+// única guía con sus 30 fichas (ver manual-umi.html). 5 preguntas por
+// ficha (4 opción múltiple + 1 de redactar) × 30 fichas = 150 preguntas —
 // formato reducido, mismo criterio ya usado en los bloques prácticos más
 // recientes de la app.
 export const temasManualUmi = [
@@ -23,6 +23,18 @@ export const temasManualUmi = [
     { key: 'umi-posparada', etiqueta: 'Síndrome posparada cardíaca' },
     { key: 'umi-fa-anticoagulacion', etiqueta: 'Fibrilación auricular: algoritmo de anticoagulación' },
     { key: 'umi-glucemia', etiqueta: 'Control glucémico: algoritmos y pauta móvil' },
+    { key: 'umi-sedacion', etiqueta: 'Sedación: escalas RASS y Ramsay' },
+    { key: 'umi-tce-dx', etiqueta: 'TCE: clasificación, pronóstico y diagnóstico' },
+    { key: 'umi-tce-manejo', etiqueta: 'TCE: manejo escalonado, PIC y cirugía' },
+    { key: 'umi-pic-onda', etiqueta: 'Ondas de la PIC: P1, P2 y P3' },
+    { key: 'umi-hidrocefalia', etiqueta: 'Hidrocefalia en la TAC y LCR según la causa' },
+    { key: 'umi-fibrinolisis-iv', etiqueta: 'Fibrinolisis intraventricular' },
+    { key: 'umi-neuroanatomia', etiqueta: 'Neuroanatomía en la TAC y territorios vasculares' },
+    { key: 'umi-marshall', etiqueta: 'Clasificación de Marshall por TAC' },
+    { key: 'umi-hsa', etiqueta: 'HSA: Fisher, Hunt-Hess y vasoespasmo por Doppler' },
+    { key: 'umi-onsd', etiqueta: 'Vaina del nervio óptico y fuerza muscular' },
+    { key: 'umi-escalas-pronostico', etiqueta: 'Escalas de resultado: Rankin modificada y GOS' },
+    { key: 'umi-meningitis', etiqueta: 'Meningitis y ventriculitis' },
 ];
 
 export const preguntasManualUmi = [
@@ -657,5 +669,425 @@ export const preguntasManualUmi = [
         id: 'umi-q090', tema: 'umi-glucemia', tipo: 'redactar',
         enunciado: 'Explica la lógica de tener 6 algoritmos distintos (I-VI) en vez de un único protocolo de perfusión de insulina para todos los pacientes.',
         respuestaModelo: 'Los 6 algoritmos representan 6 niveles de intensidad creciente de dosificación de insulina para el mismo rango de glucemia — el Algoritmo I da las dosis más bajas por tramo, y el VI las más altas (p. ej. ante una glucemia de 210-239 mg/dl, el Algoritmo I indica 1,5 UI mientras que el VI indica 12 UI para la misma cifra). Esto existe porque la sensibilidad a la insulina varía enormemente entre pacientes y a lo largo del ingreso de un mismo paciente: alguien con tratamiento corticoideo, en shock con catecolaminas, o con nutrición parenteral, típicamente tiene una resistencia a la insulina mucho mayor que un paciente sin esos factores, y necesitaría dosis mucho más altas para el mismo objetivo de glucemia si se usara siempre el mismo algoritmo — de ahí que esos 4 grupos arranquen directamente en el Algoritmo II. El sistema de "subir" o "bajar" de algoritmo según la respuesta real a las 2h (en vez de fijar uno solo desde el ingreso hasta el alta) permite que el protocolo se adapte de forma dinámica a los cambios de sensibilidad a la insulina que ocurren durante la propia evolución del paciente crítico — por ejemplo, al retirar corticoides o catecolaminas, sin que el equipo tenga que rediseñar el protocolo de insulina desde cero cada vez.',
+    },
+
+    // ---- Ficha XIX: Sedación (RASS y Ramsay) ----
+    {
+        id: 'umi-q091', tema: 'umi-sedacion',
+        enunciado: 'Un paciente no está despierto. Al llamarle por su nombre abre los ojos y te mira, pero aparta la mirada a los 5 segundos. ¿Qué RASS tiene?',
+        opciones: ['−2 (sedación ligera)', '−1 (adormilado)', '−3 (sedación moderada)', '−4 (sedación profunda)'],
+        correcta: 0,
+        explicacion: 'Despierta con la voz y mantiene el contacto visual menos de 10 s: −2. Más de 10 s sería −1; abrir los ojos sin dirigir la mirada, −3.',
+    },
+    {
+        id: 'umi-q092', tema: 'umi-sedacion',
+        enunciado: 'Según el procedimiento del manual, ¿cuándo se estimula físicamente al paciente (palmadas en el hombro o frotar el esternón) para puntuar la RASS?',
+        opciones: ['Solo si no responde a la llamada por su nombre', 'Siempre, como primer paso', 'Solo si está agitado', 'Antes de observarle, para despertarle'],
+        correcta: 0,
+        explicacion: 'Los 3 pasos van en orden: observar (0 a +4), llamar por el nombre (−1 a −3) y, si no responde, estimular (−4 o −5).',
+    },
+    {
+        id: 'umi-q093', tema: 'umi-sedacion',
+        enunciado: '¿Qué describe una RASS +3?',
+        opciones: ['Muy agitado: agresivo, se retira tubos y catéteres', 'Combativo: violento', 'Agitado: lucha con el respirador', 'Ansioso: inquieto sin violencia'],
+        correcta: 0,
+        explicacion: '+4 combativo, +3 muy agitado (se retira tubos y catéteres), +2 agitado (lucha con el respirador), +1 ansioso.',
+    },
+    {
+        id: 'umi-q094', tema: 'umi-sedacion',
+        enunciado: 'En la escala de Ramsay, ¿qué nivel corresponde a "respuesta perezosa a la presión glabelar o a estímulos dolorosos"?',
+        opciones: ['V', 'IV', 'III', 'VI'],
+        correcta: 0,
+        explicacion: 'IV es la respuesta rápida a la presión glabelar o al dolor, V la respuesta perezosa y VI la ausencia de respuesta.',
+    },
+    {
+        id: 'umi-q095', tema: 'umi-sedacion', tipo: 'redactar',
+        enunciado: 'Explica cómo puntuarías la RASS de un paciente intubado que parece dormido, siguiendo los pasos del manual, y por qué el orden importa.',
+        respuestaModelo: 'Primero se observa sin tocarle: si estuviera despierto, inquieto o agitado se puntuaría de 0 a +4. Como parece dormido, se le llama por su nombre y se le pide que abra los ojos y mire al examinador: si abre los ojos y mantiene el contacto visual más de 10 s es −1, menos de 10 s −2, y si solo se mueve o abre los ojos sin dirigir la mirada −3. Solo si no responde a la voz se le estimula con palmadas en el hombro o frotándole el esternón: si abre los ojos o se mueve es −4, y si no responde −5. El orden importa porque cada paso es un estímulo más intenso; si se estimula físicamente desde el principio, un paciente que habría respondido a la voz (−1 a −3) se puntuaría mal y se sobreestimaría o se perdería el nivel real de sedación.',
+    },
+
+    // ---- Ficha XX: TCE — clasificación, pronóstico y diagnóstico ----
+    {
+        id: 'umi-q096', tema: 'umi-tce-dx',
+        enunciado: 'Un TCE con Glasgow 11 se clasifica como…',
+        opciones: ['Moderado (GCS 9-13)', 'Leve (GCS 14-15)', 'Grave (GCS 3-8)', 'Moderado-grave (GCS 8-12)'],
+        correcta: 0,
+        explicacion: 'Leve 14-15, moderado 9-13, grave 3-8.',
+    },
+    {
+        id: 'umi-q097', tema: 'umi-tce-dx',
+        enunciado: 'Según los factores pronósticos del manual, ¿qué pronóstico tiene la midriasis bilateral arreactiva?',
+        opciones: ['Fatal en el 90%', 'Fatal en el 50%', 'Sin valor pronóstico por sí sola', 'Fatal en el 100% desde el primer momento'],
+        correcta: 0,
+        explicacion: 'Midriasis bilateral arreactiva: pronóstico fatal del 90%. El 100% lo da la respuesta pupilar ausente mantenida 24 h junto con oculocefálicos ausentes.',
+    },
+    {
+        id: 'umi-q098', tema: 'umi-tce-dx',
+        enunciado: '¿Cuál de estos hallazgos de la TAC NO está entre los factores de mal pronóstico del manual?',
+        opciones: ['Fractura lineal de la bóveda sin otra lesión', 'Ausencia de cisternas basales', 'Desplazamiento de la línea media >5 mm', 'Hematoma intracraneal >15 cc'],
+        correcta: 0,
+        explicacion: 'Los factores de la TAC son: lesiones profundas (tronco, ganglios de la base), hematomas >15 cc, ausencia de cisternas basales y desplazamiento de la línea media >5 mm.',
+    },
+    {
+        id: 'umi-q099', tema: 'umi-tce-dx',
+        enunciado: '¿Cuándo aporta la RNM más que la TAC en el TCE, según el manual?',
+        opciones: ['En las lesiones subagudas o crónicas de más de 72 h', 'En las primeras horas del traumatismo', 'Para valorar fracturas craneales', 'Nunca: la TAC siempre es superior'],
+        correcta: 0,
+        explicacion: 'La TAC es la prueba de referencia; la RNM tiene mayor sensibilidad en lesiones de más de 72 h, y lesiones extensas hemisféricas o del tronco en la RNM empeoran el pronóstico aunque la TAC y la PIC sean normales.',
+    },
+    {
+        id: 'umi-q100', tema: 'umi-tce-dx', tipo: 'redactar',
+        enunciado: 'Un TCE grave llega con TAS de 80 mmHg y PaO₂ de 55 mmHg. ¿Por qué el manual los cuenta como factores pronósticos y qué implica para el manejo inicial?',
+        respuestaModelo: 'La hipotensión (TAS <90 mmHg, nivel I) y la hipoxia (PaO₂ ≤60 mmHg) están entre los factores de peor pronóstico del manual, y en la hipotensión el peso es proporcional al número de episodios. Son lesiones secundarias: un cerebro ya lesionado tolera mal la falta de flujo y de oxígeno. Por eso el manejo inicial busca corregirlas cuanto antes y no repetirlas: evitar la hipotensión con normovolemia (fluidos isotónicos y noradrenalina), SatO₂ >95% y PaO₂ >100 mmHg, y mantener la PPC (por debajo de 70 mmHg empeora el pronóstico y por debajo de 50 debe evitarse).',
+    },
+
+    // ---- Ficha XXI: TCE — manejo escalonado ----
+    {
+        id: 'umi-q101', tema: 'umi-tce-manejo',
+        enunciado: '¿Qué PaCO₂ busca la hiperventilación de primer nivel en el TCE?',
+        opciones: ['30-35 mmHg, de forma moderada y transitoria', '25-30 mmHg mantenida', '<25 mmHg desde el ingreso', '40-45 mmHg'],
+        correcta: 0,
+        explicacion: 'Hiperventilación moderada y transitoria a 30-35 mmHg (nivel III), evitándola las primeras 24 h y sin uso profiláctico (nivel II).',
+    },
+    {
+        id: 'umi-q102', tema: 'umi-tce-manejo',
+        enunciado: 'TCE grave, TAC normal, 52 años y TAS 85 mmHg al ingreso, sin focalidad. ¿Está indicado monitorizar la PIC según el manual?',
+        opciones: ['Sí: TAC normal con 2 criterios (>40 años y TAS <90)', 'No: con TAC normal nunca está indicada', 'Solo si además hay focalidad motora', 'Solo si el Glasgow es 3'],
+        correcta: 0,
+        explicacion: 'Con TAC normal hacen falta 2 o más de: >40 años, focalidad motora uni o bilateral, TAS <90 mmHg (nivel III).',
+    },
+    {
+        id: 'umi-q103', tema: 'umi-tce-manejo',
+        enunciado: '¿Cuál de estas medidas es de segundo nivel en la hipertensión intracraneal?',
+        opciones: ['Barbitúricos a altas dosis', 'Drenaje ventricular externo', 'Terapia hiperosmolar', 'Hiperventilación moderada'],
+        correcta: 0,
+        explicacion: 'Segundo nivel: craniectomía descompresiva, hipotermia y barbitúricos a altas dosis (con estabilidad hemodinámica antes y durante). Las otras tres son de primer nivel.',
+    },
+    {
+        id: 'umi-q104', tema: 'umi-tce-manejo',
+        enunciado: '¿Qué hematoma extradural agudo requiere cirugía según el manual?',
+        opciones: ['El de más de 30 cc medido por TAC', 'Cualquiera, sea cual sea su volumen', 'El de más de 50 cc', 'Solo si hay midriasis'],
+        correcta: 0,
+        explicacion: 'Extradural agudo >30 cc por TAC. El volumen de 50 ml es el de las contusiones frontales o temporales.',
+    },
+    {
+        id: 'umi-q105', tema: 'umi-tce-manejo', tipo: 'redactar',
+        enunciado: 'Explica por qué el manual limita la hiperventilación en el TCE (cuánto, cuándo y con qué vigilancia).',
+        respuestaModelo: 'La hiperventilación baja la PaCO₂, lo que contrae los vasos cerebrales, reduce el volumen de sangre intracraneal y baja la PIC; pero esa misma vasoconstricción reduce el flujo y puede producir isquemia en un cerebro lesionado. Por eso el manual la deja como medida de primer nivel moderada y transitoria (PaCO₂ 30-35 mmHg, nivel III), la evita las primeras 24 h (nivel III), desaconseja su uso profiláctico (nivel II) y, si se usa, pide monitorizar el aporte de O₂ cerebral (nivel III). Fuera de esa indicación, el objetivo general es la normocapnia.',
+    },
+
+    // ---- Ficha XXII: Ondas de PIC ----
+    {
+        id: 'umi-q106', tema: 'umi-pic-onda',
+        enunciado: '¿Qué componente de la onda de PIC refleja sobre todo la distensibilidad (complianza) del cerebro?',
+        opciones: ['P2, la onda tidal o de rebote', 'P1, la onda de percusión', 'P3, la onda dicrótica', 'Ninguno: la onda no informa de la distensibilidad'],
+        correcta: 0,
+        explicacion: 'P2 refleja la complianza cerebral, la parálisis vasomotora, la hinchazón o el edema.',
+    },
+    {
+        id: 'umi-q107', tema: 'umi-pic-onda',
+        enunciado: 'En la onda de PIC, P2 supera a P1. ¿Qué indica?',
+        opciones: ['Cráneo con baja distensibilidad (onda de alta presión)', 'Onda normal con buena distensibilidad', 'Artefacto del transductor', 'Cierre precoz de la válvula aórtica'],
+        correcta: 0,
+        explicacion: 'Con buena distensibilidad P1 es el pico mayor; la onda de alta presión, con baja distensibilidad, tiene P2 por encima de P1.',
+    },
+    {
+        id: 'umi-q108', tema: 'umi-pic-onda',
+        enunciado: 'Según el texto del manual, ¿a qué corresponde la P3?',
+        opciones: ['A la onda dicrótica, por el cierre de la válvula aórtica', 'A la sístole arterial', 'Al rebote del cráneo', 'A la respiración'],
+        correcta: 0,
+        explicacion: 'P1 percusión (sistólica), P2 tidal o rebote, P3 dicrótica (cierre de la válvula aórtica). La figura del manual rotula la P3 como "venoso", una discrepancia señalada en la ficha.',
+    },
+    {
+        id: 'umi-q109', tema: 'umi-pic-onda',
+        enunciado: '¿Con qué inclinación de la cabecera muestra la figura del manual al paciente con drenaje ventricular?',
+        opciones: ['30°', '0° (plano)', '45°', '90°'],
+        correcta: 0,
+        explicacion: 'Cabecera a 30°, la misma posición que piden las medidas generales del TCE.',
+    },
+    {
+        id: 'umi-q110', tema: 'umi-pic-onda', tipo: 'redactar',
+        enunciado: 'La PIC de un paciente está en 18 mmHg, pero la morfología de la onda ha cambiado y P2 ya supera a P1. ¿Qué te dice eso y por qué importa aunque la cifra no pase de 20?',
+        respuestaModelo: 'Que el cráneo ha perdido distensibilidad: con buena distensibilidad P1 (percusión arterial) es el pico mayor, y cuando P2 (onda tidal, que refleja la complianza, el edema o la hinchazón) la supera, la onda es de alta presión. Importa porque la cifra media todavía es aceptable, pero el sistema está al límite: un pequeño aumento de volumen (sangre, edema, LCR) producirá una subida mucho mayor de la PIC. La forma de la onda avisa antes que el número.',
+    },
+
+    // ---- Ficha XXIII: Hidrocefalia y LCR ----
+    {
+        id: 'umi-q111', tema: 'umi-hidrocefalia',
+        enunciado: 'Cuernos frontales de 40 mm y diámetro biparietal máximo de 120 mm. ¿Qué índice de Evans es y qué significa?',
+        opciones: ['0,33: hidrocefalia (>0,3)', '0,33: normal', '3,0: hidrocefalia', '0,25: normal'],
+        correcta: 0,
+        explicacion: 'Evans = cuernos frontales / diámetro biparietal máximo = 40/120 = 0,33. Por encima de 0,3, hidrocefalia.',
+    },
+    {
+        id: 'umi-q112', tema: 'umi-hidrocefalia',
+        enunciado: 'Relación cuerno frontal / diámetro interno del 45%. ¿Cómo la clasifica el manual?',
+        opciones: ['Límite (borderline)', 'Normal', 'Hidrocefalia', 'No es un criterio de hidrocefalia'],
+        correcta: 0,
+        explicacion: '<40% normal, 40-50% límite, >50% hidrocefalia.',
+    },
+    {
+        id: 'umi-q113', tema: 'umi-hidrocefalia',
+        enunciado: 'LCR con linfocitos altos, glucosa baja y proteínas altas. ¿Qué causas infecciosas sugiere la tabla del manual?',
+        opciones: ['TBC, hongos, leptospira, brucella, sífilis, algunos virus, listeria', 'Meningitis bacteriana aguda típica', 'Meningitis vírica con glucosa normal', 'Encefalomielitis postinfecciosa'],
+        correcta: 0,
+        explicacion: 'Linfocitos altos con glucosa baja: TBC, hongos, leptospira, brucella, sífilis, algunos virus y listeria. La bacteriana típica da PMN altos, y la vírica, glucosa normal.',
+    },
+    {
+        id: 'umi-q114', tema: 'umi-hidrocefalia',
+        enunciado: '¿Qué hallazgo de la TAC aparece en el manual como criterio de hidrocefalia junto a los cuernos temporales dilatados?',
+        opciones: ['Hipodensidad periventricular', 'Hiperdensidad de los ganglios de la base', 'Desviación de la línea media', 'Calcificación del plexo coroideo'],
+        correcta: 0,
+        explicacion: 'Cuernos temporales de 2 mm sin surcos ni cisuras visibles, cuerno frontal / diámetro interno >0,5 e hipodensidad periventricular.',
+    },
+    {
+        id: 'umi-q115', tema: 'umi-hidrocefalia', tipo: 'redactar',
+        enunciado: 'Un paciente con fiebre tiene un LCR con linfocitos altos, glucosa normal y proteínas elevadas. Según la tabla del manual, ¿qué causas infecciosas y no infecciosas debes considerar?',
+        respuestaModelo: 'Linfocitos altos con glucosa normal y proteínas elevadas: entre las infecciosas, meningitis o encefalitis vírica, infecciones parameníngeas (otitis, mastoiditis) y parásitos (toxoplasmosis, cisticercosis, triquinosis); entre las no infecciosas, encefalomielitis postinfecciosa y enfermedades desmielinizantes. La glucosa normal lo separa del grupo con glucosa baja (TBC, hongos, listeria, sífilis…), y el predominio linfocitario lo separa de la bacteriana, que da PMN altos con glucosa baja (aunque la bacteriana, la TBC o la vírica en fase precoz también pueden dar PMN).',
+    },
+
+    // ---- Ficha XXIV: Fibrinolisis intraventricular ----
+    {
+        id: 'umi-q116', tema: 'umi-fibrinolisis-iv',
+        enunciado: '¿Cuál de estos es un criterio de exclusión para la fibrinolisis intraventricular?',
+        opciones: ['Malformación arteriovenosa', 'Hemorragia intraventricular de 24 h', 'PIC de 18 mmHg', 'DVE bien colocado'],
+        correcta: 0,
+        explicacion: 'Exclusiones: aneurisma no aislado (no tratado), MAV y coagulopatía.',
+    },
+    {
+        id: 'umi-q117', tema: 'umi-fibrinolisis-iv',
+        enunciado: '¿Qué dosis de t-PA es la habitual por el DVE?',
+        opciones: ['3-5 mg (máximo 8 mg si están ocupados todos los ventrículos)', '10-20 mg', '0,9 mg/kg', '1 mg'],
+        correcta: 0,
+        explicacion: 'Rango 3-8 mg, habitual 3-5 mg, máximo 8 mg con todos los ventrículos ocupados; concentración máxima 4 mg/ml.',
+    },
+    {
+        id: 'umi-q118', tema: 'umi-fibrinolisis-iv',
+        enunciado: 'Tras inyectar el t-PA se clampa el DVE 2 h. ¿Cuándo se abre antes?',
+        opciones: ['Si la PIC supera 25 mmHg, dejando drenar 1-2 ml de LCR', 'Si la PIC supera 15 mmHg', 'A los 30 minutos siempre', 'Nunca antes de las 2 h'],
+        correcta: 0,
+        explicacion: 'Se clampa 2 h y se abre si la PIC >25 mmHg, dejando drenar 1-2 ml.',
+    },
+    {
+        id: 'umi-q119', tema: 'umi-fibrinolisis-iv',
+        enunciado: '¿Cuándo se suspende la fibrinolisis intraventricular?',
+        opciones: ['Si aumenta el sangrado, si se aclaran el III y el IV ventrículo, o a los 7 días', 'Tras la primera dosis siempre', 'Cuando la PIC baja de 20 mmHg', 'A las 72 h'],
+        correcta: 0,
+        explicacion: 'Suspender si aumenta el sangrado intraparenquimatoso o intraventricular, si se aclaran el III y IV ventrículo, o tras un máximo de 7 días. Interrumpir si el DVE está mal colocado.',
+    },
+    {
+        id: 'umi-q120', tema: 'umi-fibrinolisis-iv', tipo: 'redactar',
+        enunciado: 'Antes de inyectar t-PA por un drenaje ventricular, ¿qué compruebas y por qué retiras LCR antes de inyectar?',
+        respuestaModelo: 'Antes de empezar: que no haya criterios de exclusión (aneurisma no tratado, MAV, coagulopatía) y una TAC que confirme que el DVE está bien colocado y que el sangrado no tiene más de 72 h; con el DVE mal colocado se interrumpe. Durante el procedimiento se monitoriza la PIC de forma continua. Se retira un volumen de LCR igual al del fármaco para no añadir volumen dentro de un cráneo con poca reserva: inyectar sin retirar subiría la PIC. Después se lava con 1-1,5 ml de salino, se clampa 2 h (abriendo si la PIC >25 mmHg) y se controla con TAC cada 12-24 h.',
+    },
+
+    // ---- Ficha XXV: Neuroanatomía ----
+    {
+        id: 'umi-q121', tema: 'umi-neuroanatomia',
+        enunciado: 'Ictus con debilidad de la pierna mucho mayor que del brazo y la cara. ¿Qué territorio arterial sugiere la figura del manual?',
+        opciones: ['Arteria cerebral anterior', 'Arteria cerebral media', 'Arteria cerebral posterior', 'Arteria basilar'],
+        correcta: 0,
+        explicacion: 'La cerebral anterior riega la cara medial del homúnculo motor y sensitivo: pierna, pie y genitales. La media riega la convexidad lateral: tórax, brazo, mano, rostro y lengua.',
+    },
+    {
+        id: 'umi-q122', tema: 'umi-neuroanatomia',
+        enunciado: 'Según las áreas funcionales del manual, ¿qué función se atribuye al área de Wernicke?',
+        opciones: ['Comprensión del lenguaje', 'Control del habla', 'Visión', 'Coordinación del movimiento'],
+        correcta: 0,
+        explicacion: 'Wernicke, comprensión del lenguaje; Broca, control del habla; occipital, visión; cerebelo, postura, balance y coordinación.',
+    },
+    {
+        id: 'umi-q123', tema: 'umi-neuroanatomia',
+        enunciado: 'En el corte de TAC a nivel de la protuberancia del manual, ¿qué cisterna se ve delante del tronco?',
+        opciones: ['Cisterna supraselar', 'Cisterna magna', 'Cisterna cuadrigémina', 'Cisterna del ángulo pontocerebeloso'],
+        correcta: 0,
+        explicacion: 'Ese corte rotula la cisterna supraselar, las arterias cerebrales anterior, media y posterior, la basilar, la protuberancia y el IV ventrículo.',
+    },
+    {
+        id: 'umi-q124', tema: 'umi-neuroanatomia',
+        enunciado: '¿Qué estructura une las dos arterias cerebrales anteriores en el polígono de Willis?',
+        opciones: ['Arteria comunicante anterior', 'Arteria comunicante posterior', 'Arteria basilar', 'Arteria coroidea anterior'],
+        correcta: 0,
+        explicacion: 'La comunicante anterior une las dos cerebrales anteriores; las comunicantes posteriores unen la circulación carotídea con las cerebrales posteriores.',
+    },
+    {
+        id: 'umi-q125', tema: 'umi-neuroanatomia', tipo: 'redactar',
+        enunciado: 'Un paciente tiene hemiparesia derecha de predominio braquiofacial y dificultad para hablar con comprensión conservada. Razona qué territorio y qué área están afectados usando las tablas de la ficha.',
+        respuestaModelo: 'Debilidad de predominio en brazo y cara: territorio de la arteria cerebral media, que en el homúnculo riega la convexidad lateral (tórax, brazo, mano, rostro y lengua), a diferencia de la anterior (pierna, pie y genitales). Hablar mal con la comprensión conservada apunta al área de Broca (control del habla) y no a la de Wernicke (comprensión). La hemiparesia derecha indica hemisferio izquierdo. Todo encaja con un infarto de la cerebral media izquierda que afecta a la corteza motora lateral y al área de Broca.',
+    },
+
+    // ---- Ficha XXVI: Marshall ----
+    {
+        id: 'umi-q126', tema: 'umi-marshall',
+        enunciado: 'Swelling bilateral con cisternas de la base ausentes, sin masa y con la línea media desviada 3 mm. ¿Qué tipo de Marshall es?',
+        opciones: ['Lesión difusa III', 'Lesión difusa II', 'Lesión difusa IV', 'Masa no evacuada'],
+        correcta: 0,
+        explicacion: 'Tipo III: swelling con cisternas comprimidas o ausentes y desviación de 0-5 mm. Por encima de 5 mm sería tipo IV.',
+    },
+    {
+        id: 'umi-q127', tema: 'umi-marshall',
+        enunciado: '¿Qué incidencia de hipertensión intracraneal da el manual para la lesión difusa tipo IV?',
+        opciones: ['100%', '63,2%', '84,6%', '28,6%'],
+        correcta: 0,
+        explicacion: 'Tipo II 28,6%, III 63,2%, IV 100%, masa evacuada 65,2%, masa no evacuada 84,6%.',
+    },
+    {
+        id: 'umi-q128', tema: 'umi-marshall',
+        enunciado: '¿Qué define a la "masa no evacuada" en Marshall?',
+        opciones: ['Lesión de más de 25 cc no evacuada', 'Cualquier lesión evacuada', 'Lesión de más de 50 cc', 'Swelling unilateral'],
+        correcta: 0,
+        explicacion: 'Masa no evacuada: lesión >25 cc sin evacuar (84,6% de HTIC). Masa evacuada: cualquier lesión evacuada.',
+    },
+    {
+        id: 'umi-q129', tema: 'umi-marshall',
+        enunciado: 'El manual pone "línea media desviada 20 mm" en el tipo IV. ¿Qué corte usa la clasificación original y la calculadora de la ficha?',
+        opciones: ['>5 mm', '>10 mm', '>20 mm', '>15 mm'],
+        correcta: 0,
+        explicacion: 'En la clasificación original de Marshall el tipo IV es una desviación >5 mm sin lesión >25 cc; la propia lista de factores pronósticos del manual usa también >5 mm.',
+    },
+    {
+        id: 'umi-q130', tema: 'umi-marshall', tipo: 'redactar',
+        enunciado: 'Explica por qué un tipo II y un tipo IV de Marshall, ambos "lesión difusa", tienen un riesgo tan distinto de hipertensión intracraneal.',
+        respuestaModelo: 'El tipo II tiene lesiones pequeñas con la línea media centrada y las cisternas visibles: todavía hay espacio de reserva (las cisternas y el LCR pueden desplazarse) y el manual le da un 28,6% de HTIC. El tipo IV tiene swelling con desviación de la línea media (>5 mm en la clasificación original): el cerebro ya ha desplazado estructuras porque ha agotado esa reserva, y el manual le da un 100% de HTIC. El tipo III, con cisternas ausentes pero sin desviación, queda en medio (63,2%). La TAC describe cuánta reserva de volumen queda, y por eso predice la PIC.',
+    },
+
+    // ---- Ficha XXVII: HSA ----
+    {
+        id: 'umi-q131', tema: 'umi-hsa',
+        enunciado: 'HSA gruesa sin sangre en los ventrículos laterales. ¿Qué grado de Fisher modificado es?',
+        opciones: ['III', 'II', 'IV', 'I'],
+        correcta: 0,
+        explicacion: 'I fina sin ventrículos, II fina con ventrículos, III gruesa sin ventrículos, IV gruesa con ventrículos.',
+    },
+    {
+        id: 'umi-q132', tema: 'umi-hsa',
+        enunciado: 'Paciente con HSA, letárgico y con un déficit focal leve. ¿Qué grado de Hunt y Hess y qué mortalidad periquirúrgica da el manual?',
+        opciones: ['Grado 3, 10-15%', 'Grado 2, 2-10%', 'Grado 4, 60-70%', 'Grado 1, 0-5%'],
+        correcta: 0,
+        explicacion: 'Grado 3: letargia o confusión con déficit focal leve, mortalidad periquirúrgica del 10-15%.',
+    },
+    {
+        id: 'umi-q133', tema: 'umi-hsa',
+        enunciado: 'Fvm de la ACM de 170 cm/s y de la ACI extracraneal de 85 cm/s. ¿Qué indica el algoritmo del manual?',
+        opciones: ['Lindegaard 2: baja probabilidad de vasoespasmo (orienta a hiperemia)', 'Alta probabilidad de vasoespasmo por velocidad >120', 'Lindegaard 7: alta probabilidad', 'Probabilidad indeterminada'],
+        correcta: 0,
+        explicacion: 'Con Fvm de 121-200 cm/s se calcula el Lindegaard (ACM/ACI): 170/85 = 2. Por debajo de 3, baja probabilidad de vasoespasmo: la velocidad alta se explica por hiperemia.',
+    },
+    {
+        id: 'umi-q134', tema: 'umi-hsa',
+        enunciado: 'En el Doppler transcraneal, un índice de pulsatilidad de 1,8 orienta a…',
+        opciones: ['HTIC intensa', 'Normalidad', 'Hiperemia', 'Asistolia cerebral'],
+        correcta: 0,
+        explicacion: '0,6-1,1 normal; 1,2-1,6 microangiopatía o HTIC moderada; 1,7-1,9 HTIC intensa; >2 asistolia cerebral.',
+    },
+    {
+        id: 'umi-q135', tema: 'umi-hsa', tipo: 'redactar',
+        enunciado: 'Explica por qué la velocidad de la ACM sola no basta para diagnosticar vasoespasmo y qué aporta el índice de Lindegaard.',
+        respuestaModelo: 'La velocidad sube cuando la luz de la arteria se estrecha (vasoespasmo), pero también cuando llega más flujo (hiperemia, circulación hiperdinámica, ↑PaCO₂, anemia, MAV…), así que una velocidad alta por sí sola es ambigua. El índice de Lindegaard divide la velocidad de la ACM entre la de la carótida interna extracraneal del mismo lado: si todo el flujo ha aumentado, las dos suben a la vez y el cociente queda bajo (<3, hiperemia); si el aumento es solo intracraneal, el cociente sube (>6, vasoespasmo). Por eso el manual lo usa en la zona gris de 121-200 cm/s; por debajo de 120 la probabilidad es baja y por encima de 200, alta.',
+    },
+
+    // ---- Ficha XXVIII: Vaina del nervio óptico y fuerza ----
+    {
+        id: 'umi-q136', tema: 'umi-onsd',
+        enunciado: '¿A qué distancia del globo ocular se mide el diámetro de la vaina del nervio óptico?',
+        opciones: ['3 mm por detrás del globo', '5 mm por detrás del globo', 'Justo en la papila', '10 mm por detrás del globo'],
+        correcta: 0,
+        explicacion: 'Se mide 3 mm por detrás del globo; 5 mm es el umbral del diámetro, no la distancia.',
+    },
+    {
+        id: 'umi-q137', tema: 'umi-onsd',
+        enunciado: 'DVNO de 6 mm. ¿Qué sugiere según el manual?',
+        opciones: ['PIC >20 mmHg', 'PIC normal', 'Papiledema crónico sin HTIC', 'Nada: no tiene valor'],
+        correcta: 0,
+        explicacion: 'DVNO >5 mm sugiere PIC >20 mmHg.',
+    },
+    {
+        id: 'umi-q138', tema: 'umi-onsd',
+        enunciado: 'Un paciente levanta el brazo contra la gravedad pero no vence ninguna resistencia. ¿Qué grado de fuerza tiene?',
+        opciones: ['3 (50% de lo normal)', '2 (25%)', '4 (75%)', '1 (10%)'],
+        correcta: 0,
+        explicacion: '2 movimiento sin gravedad, 3 movimiento con gravedad, 4 resistencia moderada, 5 resistencia normal.',
+    },
+    {
+        id: 'umi-q139', tema: 'umi-onsd',
+        enunciado: 'Grado 1 en la escala de fuerza muscular significa…',
+        opciones: ['Contractilidad sin movimiento', 'Sin contractilidad', 'Movimiento sin gravedad', 'Resistencia moderada'],
+        correcta: 0,
+        explicacion: '0 sin contractilidad, 1 contractilidad sin movimiento (10%).',
+    },
+    {
+        id: 'umi-q140', tema: 'umi-onsd', tipo: 'redactar',
+        enunciado: 'Tienes un TCE sin sensor de PIC y sospechas hipertensión intracraneal. ¿Cómo usarías la ecografía de la vaina del nervio óptico y qué no te puede decir?',
+        respuestaModelo: 'Con ecografía ocular se identifica el nervio óptico detrás del globo y se mide el diámetro de su vaina 3 mm por detrás del globo. Si supera 5 mm, sugiere una PIC mayor de 20 mmHg (la vaina se distiende al transmitirse la presión del LCR). Es una estimación no invasiva y rápida que ayuda a decidir, pero no da una cifra de PIC ni sustituye la monitorización invasiva cuando está indicada; tampoco informa de la perfusión cerebral (PPC).',
+    },
+
+    // ---- Ficha XXIX: Rankin y GOS ----
+    {
+        id: 'umi-q141', tema: 'umi-escalas-pronostico',
+        enunciado: 'Un paciente necesita algo de ayuda en su día a día pero camina sin asistencia. ¿Qué Rankin modificado tiene?',
+        opciones: ['3', '2', '4', '1'],
+        correcta: 0,
+        explicacion: 'Rankin 3: discapacidad moderada, requiere alguna ayuda pero camina sin asistencia. El 4 ya no camina sin asistencia.',
+    },
+    {
+        id: 'umi-q142', tema: 'umi-escalas-pronostico',
+        enunciado: 'En la Glasgow Outcome Scale, ¿qué significa un grado 1?',
+        opciones: ['Muerte', 'Buena recuperación', 'Estado vegetativo', 'Discapacidad grave'],
+        correcta: 0,
+        explicacion: 'La GOS va de 1 (muerte) a 5 (buena recuperación), al revés que Rankin (0 sin síntomas, 6 muerte).',
+    },
+    {
+        id: 'umi-q143', tema: 'umi-escalas-pronostico',
+        enunciado: 'Vive de forma independiente pero no ha podido volver al trabajo. ¿Qué GOS tiene?',
+        opciones: ['4, discapacidad moderada', '5, buena recuperación', '3, discapacidad grave', '2, estado vegetativo'],
+        correcta: 0,
+        explicacion: 'GOS 4: capaz de vivir de forma independiente, pero no de volver al trabajo o a la escuela.',
+    },
+    {
+        id: 'umi-q144', tema: 'umi-escalas-pronostico',
+        enunciado: 'Rankin modificada 5 corresponde a…',
+        opciones: ['Discapacidad grave: encamado, incontinente, con atención constante', 'Muerte', 'Discapacidad moderadamente grave', 'Sin síntomas'],
+        correcta: 0,
+        explicacion: 'Rankin 5: incapaz de levantarse de la cama, incontinente, requiere atención y asistencia sanitaria constantes. 6 es la muerte.',
+    },
+    {
+        id: 'umi-q145', tema: 'umi-escalas-pronostico', tipo: 'redactar',
+        enunciado: 'Explica la diferencia de enfoque entre la escala de Rankin modificada y la Glasgow Outcome Scale, y el error más frecuente al usarlas juntas.',
+        respuestaModelo: 'Rankin mide la discapacidad por la ayuda que necesita el paciente (de 0, sin síntomas, a 5, encamado con atención constante, y 6 muerte); la GOS mide el resultado global por la vida independiente y la vuelta al trabajo o la escuela (de 1, muerte, a 5, buena recuperación), e incluye el estado vegetativo como grado propio (2). El error típico es que van en sentido contrario: en Rankin un número alto es peor y en la GOS mejor, así que un "5" significa casi lo opuesto en una y otra.',
+    },
+
+    // ---- Ficha XXX: Meningitis y ventriculitis ----
+    {
+        id: 'umi-q146', tema: 'umi-meningitis',
+        enunciado: 'Sospecha de meningitis con indicación de TAC craneal. Según el algoritmo del manual, ¿cuál es el orden?',
+        opciones: ['Hemocultivos, antibiótico empírico y después TAC', 'TAC, punción lumbar y después antibiótico', 'Punción lumbar y TAC antes del antibiótico', 'Esperar a la TAC para extraer hemocultivos'],
+        correcta: 0,
+        explicacion: 'Con indicación de TAC: hemocultivos → antibiótico empírico → TAC. Si la TAC es normal, punción lumbar; si no, tratamiento antibiótico.',
+    },
+    {
+        id: 'umi-q147', tema: 'umi-meningitis',
+        enunciado: 'Meningitis por S. pneumoniae. ¿Qué profilaxis necesitan los contactos?',
+        opciones: ['Ninguna: no precisa profilaxis', 'Rifampicina 600 mg cada 12 h 2 días', 'Ciprofloxacino 500 mg en dosis única', 'Ceftriaxona 250 mg IM'],
+        correcta: 0,
+        explicacion: 'S. pneumoniae no precisa profilaxis. Sí N. meningitidis y H. influenzae (rifampicina, ciprofloxacino o ceftriaxona).',
+    },
+    {
+        id: 'umi-q148', tema: 'umi-meningitis',
+        enunciado: 'Varias muestras de LCR del DVE positivas para el mismo germen, con glucosa, leucocitos y proteínas normales, y solo fiebre. Según Lozier es…',
+        opciones: ['Colonización del DVE', 'Contaminación del DVE', 'Ventriculitis', 'Infección relacionada con el DVE'],
+        correcta: 0,
+        explicacion: 'Colonización: varias muestras positivas para el mismo germen, sin alteración bioquímica y sin clínica salvo fiebre. Una única muestra sin clínica sería contaminación.',
+    },
+    {
+        id: 'umi-q149', tema: 'umi-meningitis',
+        enunciado: 'Vancomicina intraventricular con un débito del DVE de 80 ml/día. ¿Cada cuánto se administra según el manual?',
+        opciones: ['Cada 48 h', 'Cada 24 h', 'Cada 72 h', 'Cada 12 h'],
+        correcta: 0,
+        explicacion: '<50 ml/día cada 72 h; 50-100 cada 48 h; 100-150 cada 24 h; por encima se aumenta la dosis diaria.',
+    },
+    {
+        id: 'umi-q150', tema: 'umi-meningitis', tipo: 'redactar',
+        enunciado: 'Paciente con DVE y LCR con glucosa que baja y leucocitos y proteínas que suben, Gram y cultivo negativos, sin fiebre alta. Clasifícalo según Lozier y explica qué haría falta para hablar de ventriculitis.',
+        respuestaModelo: 'Es una sospecha de infección relacionada con el DVE: el descenso progresivo de la glucosa con aumento progresivo de leucocitos y proteínas basta, aunque el Gram y el cultivo sean negativos. Si se añadiera un Gram o un cultivo positivo y algún síntoma distinto de la fiebre, sería infección relacionada con la derivación. Para hablar de ventriculitis hacen falta esas alteraciones bioquímicas y microbiológicas más fiebre alta y signos de meningitis (rigidez de nuca, fotofobia, bajo nivel de conciencia, crisis comiciales o aspecto de enfermedad grave). Lo que separa la colonización de la infección es la bioquímica del LCR, no solo el cultivo.',
     },
 ];

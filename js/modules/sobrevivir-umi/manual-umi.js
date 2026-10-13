@@ -1,6 +1,7 @@
 // Manual UMI Negrín: manual de orientación interno de la Unidad de
 // Medicina Intensiva (Hospital Universitario de Gran Canaria Dr. Negrín),
-// consolidado en una única guía con sus 18 fichas. Los enlaces cruzados
+// consolidado en una única guía con sus 30 fichas (las 12 últimas, XIX-XXX,
+// son el bloque neurocrítico y la meningitis). Los enlaces cruzados
 // hacia otras especialidades (.especialidad-link) los engancha el listener
 // genérico ya existente en home/index.js, no hace falta wiring aquí.
 //
@@ -364,6 +365,268 @@ function calcInsulinaDosis() {
     box.innerHTML = `Pauta móvil subcutánea: ${scTexto}<br>Perfusión IV, Algoritmo ${['I', 'II', 'III', 'IV', 'V', 'VI'][algIdx]}: <strong>${dosisIv !== null ? dosisIv + ' UI/h' : '—'}</strong>`;
 }
 
+// ---------------------------------------------------------------------
+// Bloque neurocrítico (Fichas XIX-XXX)
+// ---------------------------------------------------------------------
+function pintar(box, estado, html) {
+    box.className = `tfg-estado tfg-estado-${estado}`;
+    box.innerHTML = html;
+}
+
+// Lee un campo numérico; null si está vacío o no es un número (nunca 0 por un campo vacío).
+function leerNumero(id) {
+    const el = document.getElementById(id);
+    if (!el || el.value === '') return null;
+    const n = Number(el.value);
+    return Number.isNaN(n) ? null : n;
+}
+
+const RASS_TEXTO = {
+    4: 'Combativo', 3: 'Muy agitado', 2: 'Agitado', 1: 'Ansioso', 0: 'Alerta y tranquilo',
+    '-1': 'Adormilado', '-2': 'Sedación ligera', '-3': 'Sedación moderada',
+    '-4': 'Sedación profunda', '-5': 'Sedación muy profunda',
+};
+
+// Ficha XIX — la RASS en los 3 pasos del manual: cada paso solo aparece
+// si el anterior no ha dado ya la puntuación.
+function calcRass() {
+    const p1 = document.getElementById('umi-rass-paso1');
+    const p2 = document.getElementById('umi-rass-paso2');
+    const p3 = document.getElementById('umi-rass-paso3');
+    const g2 = document.getElementById('umi-rass-grupo2');
+    const g3 = document.getElementById('umi-rass-grupo3');
+    const box = document.getElementById('umi-rass-resultado');
+    if (!p1 || !p2 || !p3 || !g2 || !g3 || !box) return;
+    g2.hidden = p1.value !== 'no';
+    g3.hidden = g2.hidden || p2.value !== 'no';
+    let valor = null;
+    if (p1.value !== '' && p1.value !== 'no') valor = p1.value;
+    else if (!g2.hidden && p2.value !== '' && p2.value !== 'no') valor = p2.value;
+    else if (!g3.hidden && p3.value !== '') valor = p3.value;
+    if (valor === null) {
+        const paso = g2.hidden ? 'qué ves al observarle' : (g3.hidden ? 'qué hace al llamarle' : 'qué hace al estimularle');
+        pintar(box, 'ok', `Elige ${paso}.`);
+        return;
+    }
+    const n = Number(valor);
+    const estado = n >= 2 || n <= -4 ? 'danger' : (n === 0 ? 'ok' : 'warn');
+    const signo = n > 0 ? `+${n}` : `${n}`;
+    pintar(box, estado, `RASS <strong>${signo}</strong> — ${RASS_TEXTO[valor]}.`);
+}
+
+// Ficha XXI — indicación de monitorizar la PIC en el TCE grave.
+function calcIndicacionPic() {
+    const tac = document.getElementById('umi-pic-tac');
+    const crit = document.getElementById('umi-pic-criterios');
+    const box = document.getElementById('umi-pic-resultado');
+    if (!tac || !crit || !box) return;
+    crit.hidden = tac.value !== 'normal';
+    if (tac.value !== 'normal') {
+        pintar(box, 'danger', '<strong>Monitorizar la PIC</strong>: TCE grave con TAC patológica (nivel II).');
+        return;
+    }
+    const n = ['umi-pic-edad', 'umi-pic-focal', 'umi-pic-tas'].filter(id => document.getElementById(id)?.checked).length;
+    if (n >= 2) pintar(box, 'warn', `<strong>Monitorizar la PIC</strong>: TAC normal con ${n} de 3 criterios al ingreso (nivel III).`);
+    else pintar(box, 'ok', `TAC normal con ${n} de 3 criterios: por este motivo no está indicada (hacen falta 2). Revisa las otras indicaciones de la lista.`);
+}
+
+// Ficha XXI — PPC = PAM − PIC (fisiología general) contra los umbrales del manual.
+function calcPpc() {
+    const pam = leerNumero('umi-ppc-pam');
+    const pic = leerNumero('umi-ppc-pic');
+    const box = document.getElementById('umi-ppc-resultado');
+    if (!box || pam === null || pic === null) return;
+    const ppc = pam - pic;
+    const avisos = [];
+    if (pic > 20) avisos.push('PIC &gt;20 mmHg (factor de mal pronóstico)');
+    let estado = 'ok';
+    if (ppc < 50) { estado = 'danger'; avisos.unshift('PPC &lt;50 mmHg: el manual pide evitarla (nivel III)'); }
+    else if (ppc < 70) { estado = 'warn'; avisos.unshift('PPC &lt;70 mmHg (factor de mal pronóstico)'); }
+    if (pic > 20 && estado === 'ok') estado = 'warn';
+    pintar(box, estado, `PPC = <strong>${ppc} mmHg</strong>.${avisos.length ? '<br>' + avisos.join('<br>') : ''}`);
+}
+
+// Ficha XXII — la onda de PIC entre las 2 de la figura del manual: P2 pasa
+// de ser menor que P1 (cráneo distensible) a dominar la onda (cráneo rígido).
+// x del dibujo: los picos se definen en 36-190 y se estiran al ancho del eje (36-290).
+const xPic = x => 36 + (x - 36) * 1.65;
+
+function curvaPic(t) {
+    // t = 1 buena distensibilidad, 0 baja. Altura de cada pico.
+    const h1 = 95, h2 = 52 + (1 - t) * 58, h3 = 42 + (1 - t) * 26;
+    const pts = [
+        [36, 128], [56, 128 - h1 * 0.55], [64, 128 - h1],
+        [74, 128 - Math.min(h1, h2) * 0.78], [86, 128 - h2], [96, 128 - (h2 + h3) / 2 * 0.92],
+        [110, 128 - h3], [140, 128 - h3 * 0.45], [170, 126], [190, 128],
+    ].map(([x, y]) => [xPic(x), y]);
+    let d = `M${pts[0][0]},${pts[0][1]}`;
+    for (let i = 1; i < pts.length; i++) {
+        const [x0, y0] = pts[i - 1], [x1, y1] = pts[i];
+        const cx = ((x0 + x1) / 2).toFixed(1);
+        d += ` C${cx},${y0.toFixed(1)} ${cx},${y1.toFixed(1)} ${x1.toFixed(1)},${y1.toFixed(1)}`;
+    }
+    return { d, picos: [[64, 128 - h1], [86, 128 - h2], [110, 128 - h3]], p2p1: h2 / h1 };
+}
+
+function calcOndaPic() {
+    const slider = document.getElementById('umi-pic-dist');
+    const path = document.getElementById('umi-pic-path');
+    const box = document.getElementById('umi-pic-onda-resultado');
+    if (!slider || !path || !box) return;
+    const t = Number(slider.value) / 100;
+    const c = curvaPic(t);
+    path.setAttribute('d', c.d);
+    c.picos.forEach(([x, y], i) => {
+        const l = document.getElementById(`umi-pic-l${i + 1}`);
+        if (l) { l.setAttribute('x', (xPic(x) - 6).toFixed(1)); l.setAttribute('y', (y - 6).toFixed(1)); }
+    });
+    const valor = document.getElementById('umi-pic-dist-valor');
+    if (valor) valor.textContent = t > 0.66 ? 'Buena' : (t > 0.33 ? 'Disminuyendo' : 'Baja');
+    if (c.p2p1 < 0.85) pintar(box, 'ok', 'P1 domina la onda: cráneo con <strong>buena distensibilidad</strong> (onda de presión normal).');
+    else if (c.p2p1 <= 1) pintar(box, 'warn', 'P2 se acerca a P1: la distensibilidad está bajando.');
+    else pintar(box, 'danger', 'P2 supera a P1: cráneo con <strong>baja distensibilidad</strong> (onda de alta presión).');
+}
+
+// Ficha XXIII — índice de Evans.
+function calcEvans() {
+    const a = leerNumero('umi-evans-a');
+    const b = leerNumero('umi-evans-b');
+    const box = document.getElementById('umi-evans-resultado');
+    if (!box || a === null || b === null || b <= 0) return;
+    if (a >= b) {
+        pintar(box, 'warn', '⚠️ Los cuernos frontales no pueden medir más que el diámetro biparietal: revisa los datos.');
+        return;
+    }
+    const ie = a / b;
+    if (ie > 0.3) pintar(box, 'danger', `Índice de Evans <strong>${ie.toFixed(2)}</strong> — &gt;0,3: hidrocefalia.`);
+    else pintar(box, 'ok', `Índice de Evans <strong>${ie.toFixed(2)}</strong> — ≤0,3: no cumple el criterio de hidrocefalia.`);
+}
+
+// Ficha XXIV — volumen de cada dosis de t-PA intraventricular.
+function calcFibrinolisis() {
+    const dosis = leerNumero('umi-fiv-dosis');
+    const conc = leerNumero('umi-fiv-conc');
+    const box = document.getElementById('umi-fiv-resultado');
+    if (!box || dosis === null || conc === null || conc <= 0 || dosis <= 0) return;
+    const vol = dosis / conc;
+    const avisos = [];
+    let estado = 'ok';
+    if (conc > 4) { estado = 'danger'; avisos.push('la concentración máxima es 4 mg/ml'); }
+    if (dosis > 8) { estado = 'danger'; avisos.push('la dosis máxima es 8 mg (todos los ventrículos ocupados)'); }
+    else if (dosis > 5 && estado === 'ok') { estado = 'warn'; avisos.push('por encima de la dosis habitual de 3-5 mg'); }
+    else if (dosis < 3 && estado === 'ok') { estado = 'warn'; avisos.push('por debajo del rango de 3-8 mg'); }
+    pintar(box, estado, `Volumen a inyectar: <strong>${vol.toFixed(1)} ml</strong> — retira antes el mismo volumen de LCR.${avisos.length ? '<br>⚠️ ' + avisos.join('; ') + '.' : ''}`);
+}
+
+// Ficha XXVI — Marshall con los cortes originales (>5 mm, 25 cc).
+const MARSHALL = {
+    I: ['Lesión difusa I', 'sin incidencia citada', 'ok'],
+    II: ['Lesión difusa II', '28,6%', 'ok'],
+    III: ['Lesión difusa III (swelling)', '63,2%', 'warn'],
+    IV: ['Lesión difusa IV (desviación)', '100%', 'danger'],
+    evacuada: ['Masa evacuada', '65,2%', 'warn'],
+    noEvacuada: ['Masa no evacuada', '84,6%', 'danger'],
+};
+
+function calcMarshall() {
+    const v = id => document.getElementById(id)?.value;
+    const box = document.getElementById('umi-mar-resultado');
+    if (!box) return;
+    let tipo;
+    if (v('umi-mar-evacuada') === 'si') tipo = 'evacuada';
+    else if (v('umi-mar-masa') === 'si') tipo = 'noEvacuada';
+    else if (v('umi-mar-desv') === '5') tipo = 'IV';
+    else if (v('umi-mar-cisternas') === 'ausentes') tipo = 'III';
+    else if (v('umi-mar-lesiones') === 'si') tipo = 'II';
+    else tipo = 'I';
+    const [nombre, htic, estado] = MARSHALL[tipo];
+    pintar(box, estado, `<strong>${nombre}</strong> — incidencia de HTIC: ${htic}.`);
+}
+
+// Ficha XXVII — índice de Lindegaard con los cortes del algoritmo del manual.
+function calcLindegaard() {
+    const acm = leerNumero('umi-lin-acm');
+    const aci = leerNumero('umi-lin-aci');
+    const box = document.getElementById('umi-lin-resultado');
+    if (!box || acm === null || aci === null || aci <= 0) return;
+    const li = acm / aci;
+    let estado, texto;
+    if (acm < 120) { estado = 'ok'; texto = 'Fvm de la ACM &lt;120 cm/s: baja probabilidad de vasoespasmo.'; }
+    else if (acm > 200) { estado = 'danger'; texto = 'Fvm de la ACM &gt;200 cm/s: alta probabilidad de vasoespasmo.'; }
+    else if (li < 3) { estado = 'ok'; texto = 'Lindegaard &lt;3: baja probabilidad de vasoespasmo (la velocidad alta orienta a hiperemia).'; }
+    else if (li <= 6) { estado = 'warn'; texto = 'Lindegaard 3-6: probabilidad de vasoespasmo indeterminada.'; }
+    else { estado = 'danger'; texto = 'Lindegaard &gt;6: alta probabilidad de vasoespasmo.'; }
+    pintar(box, estado, `Lindegaard = <strong>${li.toFixed(1)}</strong>.<br>${texto}`);
+}
+
+// Ficha XXVIII — vaina del nervio óptico.
+function calcOnsd() {
+    const mm = leerNumero('umi-onsd-mm');
+    const box = document.getElementById('umi-onsd-resultado');
+    if (!box || mm === null) return;
+    if (mm > 5) pintar(box, 'danger', `DVNO <strong>${mm.toFixed(1)} mm</strong> — &gt;5 mm: sugiere PIC &gt;20 mmHg.`);
+    else pintar(box, 'ok', `DVNO <strong>${mm.toFixed(1)} mm</strong> — ≤5 mm: no cumple el criterio de PIC &gt;20 mmHg.`);
+}
+
+// Ficha XXIX — Rankin sale de la ayuda que necesita; la GOS, de la vida
+// independiente y la vuelta al trabajo (se preguntan aparte, sin deducir una de otra).
+const RANKIN = { r0: 0, r1: 1, r2: 2, r3: 3, r4: 4, r5: 5, veg: 5, muerte: 6 };
+
+function calcResultado() {
+    const sit = document.getElementById('umi-res-situacion')?.value;
+    const indep = document.getElementById('umi-res-indep')?.value;
+    const trabajo = document.getElementById('umi-res-trabajo')?.value;
+    const box = document.getElementById('umi-res-resultado');
+    if (!box) return;
+    if (!sit) { pintar(box, 'ok', 'Elige cómo está el paciente.'); return; }
+    const rankin = RANKIN[sit];
+    let gos;
+    if (sit === 'muerte') gos = 1;
+    else if (sit === 'veg') gos = 2;
+    else if (indep === 'no') gos = 3;
+    else gos = trabajo === 'si' ? 5 : 4;
+    const estado = rankin >= 4 ? 'danger' : (rankin === 3 ? 'warn' : 'ok');
+    const nota = sit === 'veg'
+        ? '<br><span style="font-size:0.75rem;">Rankin no tiene un grado propio de estado vegetativo; su grado 5 (encamado, atención constante) es el más cercano.</span>'
+        : '';
+    pintar(box, estado, `Rankin modificada <strong>${rankin}</strong> · GOS <strong>${gos}</strong>${nota}`);
+}
+
+// Ficha XXX — criterios de Lozier.
+function calcLozier() {
+    const micro = document.getElementById('umi-loz-micro')?.value;
+    const bioq = document.getElementById('umi-loz-bioq')?.value;
+    const clin = document.getElementById('umi-loz-clinica')?.value;
+    const box = document.getElementById('umi-loz-resultado');
+    if (!box) return;
+    const pos = micro !== 'neg';
+    if (bioq === 'alterada') {
+        if (clin === 'meningitis') return pintar(box, 'danger', '<strong>Ventriculitis</strong>: alteraciones bioquímicas y microbiológicas con fiebre alta y signos de meningitis.');
+        if (pos && clin === 'otro') return pintar(box, 'danger', '<strong>Infección relacionada con la derivación</strong>: bioquímica alterada, Gram o cultivo positivo y un síntoma distinto de la fiebre.');
+        return pintar(box, 'warn', `<strong>Sospecha de infección relacionada con el DVE</strong>: glucosa que baja y leucocitos y proteínas que suben${pos ? '' : ', aunque el Gram y el cultivo sean negativos'}.`);
+    }
+    if (micro === 'una' && clin === 'no') return pintar(box, 'ok', '<strong>Contaminación del DVE</strong>: una única muestra positiva, bioquímica normal y sin clínica.');
+    if (micro === 'varias' && (clin === 'no' || clin === 'fiebre')) return pintar(box, 'warn', '<strong>Colonización del DVE</strong>: varias muestras positivas para el mismo germen, bioquímica normal, sin clínica salvo fiebre.');
+    if (micro === 'neg' && clin === 'no') return pintar(box, 'ok', 'Microbiología, bioquímica y clínica normales: ningún criterio de Lozier.');
+    pintar(box, 'warn', 'Esta combinación no está descrita en la tabla del manual: revisa la evolución del LCR (la bioquímica es la que separa colonización de infección).');
+}
+
+// Ficha XXX — ajuste de vancomicina y gentamicina intraventriculares por débito del DVE.
+function calcDebitoDve() {
+    const ml = leerNumero('umi-debito-ml');
+    const box = document.getElementById('umi-debito-resultado');
+    if (!box || ml === null) return;
+    if (ml < 0) return;
+    let texto, estado = 'ok';
+    if (ml < 50) texto = 'Cada <strong>72 h</strong>.';
+    else if (ml < 100) texto = 'Cada <strong>48 h</strong>.';
+    else if (ml < 150) texto = 'Cada <strong>24 h</strong>.';
+    else if (ml < 200) { texto = 'Cada 24 h, <strong>+5 mg de vancomicina o +1 mg de gentamicina</strong>.'; estado = 'warn'; }
+    else if (ml <= 250) { texto = 'Cada 24 h, <strong>+10 mg de vancomicina o +2 mg de gentamicina</strong>.'; estado = 'warn'; }
+    else { texto = 'El manual no da pauta por encima de 250 ml/día.'; estado = 'danger'; }
+    pintar(box, estado, `Débito ${ml} ml/día: ${texto}`);
+}
+
 // [ids de campos, evento, función de cálculo] de cada calculadora de la
 // guía — se enganchan en bucle y se pintan una vez al cargar.
 const CALCULADORAS = [
@@ -378,6 +641,18 @@ const CALCULADORAS = [
     [['umi-vci-modo', 'umi-vci-dmax', 'umi-vci-dmin'], 'input', calcVciColapso],
     [['umi-nbg-1', 'umi-nbg-2', 'umi-nbg-3', 'umi-nbg-4', 'umi-nbg-5'], 'change', actualizarNbg],
     [['umi-ins-algoritmo', 'umi-ins-glucemia'], 'input', calcInsulinaDosis],
+    [['umi-rass-paso1', 'umi-rass-paso2', 'umi-rass-paso3'], 'change', calcRass],
+    [['umi-pic-tac', 'umi-pic-edad', 'umi-pic-focal', 'umi-pic-tas'], 'change', calcIndicacionPic],
+    [['umi-ppc-pam', 'umi-ppc-pic'], 'input', calcPpc],
+    [['umi-pic-dist'], 'input', calcOndaPic],
+    [['umi-evans-a', 'umi-evans-b'], 'input', calcEvans],
+    [['umi-fiv-dosis', 'umi-fiv-conc'], 'input', calcFibrinolisis],
+    [['umi-mar-evacuada', 'umi-mar-masa', 'umi-mar-desv', 'umi-mar-cisternas', 'umi-mar-lesiones'], 'change', calcMarshall],
+    [['umi-lin-acm', 'umi-lin-aci'], 'input', calcLindegaard],
+    [['umi-onsd-mm'], 'input', calcOnsd],
+    [['umi-res-situacion', 'umi-res-indep', 'umi-res-trabajo'], 'change', calcResultado],
+    [['umi-loz-micro', 'umi-loz-bioq', 'umi-loz-clinica'], 'change', calcLozier],
+    [['umi-debito-ml'], 'input', calcDebitoDve],
 ];
 
 export function init() {

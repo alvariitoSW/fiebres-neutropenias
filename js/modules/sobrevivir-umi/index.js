@@ -4,7 +4,7 @@
 // órgano concreta (a diferencia de Cardiología/Nefrología/Neumología).
 // Desde el rediseño (ver CLAUDE.md), ya no es una única guía: son 4,
 // conviviendo en el mismo .constellation del submenú — el Manual UMI
-// Negrín (18 fichas, manual-umi.html, sin cambios), más 3 guías nuevas
+// Negrín (30 fichas, manual-umi.html), más 3 guías nuevas
 // con un patrón de interacción distinto cada una porque no son "más
 // fichas de estudio": Dudas de guardia (bitácora agrupada por tema, con
 // un formulario real para añadir dudas nuevas desde el dispositivo — ver
@@ -59,7 +59,7 @@ export function init() {
 
     // Índice rápido por bloque temático (ver sobrevivir-umi-menu.html): cada
     // bloque salta a la primera ficha real de ese tema dentro del cuaderno
-    // de campo único de 18 fichas — mismo patrón data-route→onRoute ya usado
+    // de campo único de 30 fichas — mismo patrón data-route→onRoute ya usado
     // por el Atlas Hematológico (rutasAtlas), aquí sin pantalla de zona
     // intermedia porque todos los bloques comparten el mismo destino
     // (manual-umi-view), solo cambia la ficha de entrada.
@@ -68,6 +68,7 @@ export function init() {
         shock: 'umi-shock-septico',
         respiratorio: 'umi-rsi',
         cardiovascular: 'umi-cirugia-cardiaca',
+        neurocritico: 'umi-sedacion',
     };
     document.querySelectorAll('[data-categoria-route]').forEach(btn => {
         btn.addEventListener('click', () => {
