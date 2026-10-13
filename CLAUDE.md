@@ -10999,7 +10999,8 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
   (Ficha 11), S/D/A y pulsatilidad (VExUS), con enlaces a esas líneas (ids nuevos `cardio-eco-diastolica`,
   `cardio-eco-itv`, `vexus-onda-hepatica`, `vexus-onda-porta`). **Doppler color** con aliasing (escala ±40/60/90).
   El modelo da E/A 1,34 e ITV 22 cm (normales); **sin calibrar**: TDE ~100 ms y pico de eyección ~2,2 m/s (forma de la
-  eyección del motor), anotados como pendientes, sin tocar el motor. Pruebas: 109 (3 *todo*).
+  eyección del motor), anotados como pendientes, sin tocar el motor. Pruebas: 109 (3 *todo*). (El pico de eyección se
+  corrigió después, con el cap. 08 del Atlas: hoy ~1,2 m/s; ver «Atlas de ecocardiografía».)
 - **Revisión de código del módulo (`/code-review`)**, a petición explícita del usuario, con sus 9 hallazgos corregidos:
   1) las medidas S/D/A de las suprahepáticas (y la media de porta/VCI) toman el sentido del propio vaso
   (`fuente.factor`), no el de la onda más alta, que en la congestión puede ser la A retrógrada e invertía VExUS;
