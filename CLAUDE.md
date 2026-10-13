@@ -42,12 +42,20 @@ cama en el móvil.
 >   relajantes y sedantes (Ficha VII), la incoherencia de `calcDeficitK`
 >   (Ficha II: la fórmula del código no es la que dice el texto) y las
 >   fórmulas de HFVVC (págs. 100-102), candidatas a ampliar `trr.html`.
-> - PDF: **solo interesa Valdenebro 2021** (auditoría de `trr.html`, con
->   las 7 dudas anotadas en la sección de TRR), y solo si el usuario lo
->   manda. ECIL-10, BCSH 2009 (CID), las rotaciones del PIF sin contenido
->   y las citopenias distintas de la neutropenia febril **quedan
->   descartadas**: el usuario dijo que ya le dan igual; no las vuelvas a
->   proponer como pendientes.
+> - PDF: Valdenebro 2021 (auditoría de `trr.html`, con las 7 dudas
+>   anotadas en la sección de TRR), solo si el usuario lo manda. ECIL-10,
+>   BCSH 2009 (CID) y las citopenias distintas de la neutropenia febril
+>   **quedan descartadas** (el usuario dijo que ya le dan igual).
+>
+> **Orden de trabajo pedido después por el usuario (octubre 2026)**, por
+> delante de los pendientes de arriba y de la ecografía: 1) terminar de
+> subir Merino (los capítulos del *Handbook of Evidence-Based Critical
+> Care* de Marik que aún no están: hoy hay en `docs/` los caps. 12-30);
+> 2) terminar El Libro Azul (hoy hay las secciones I, II, III y VII);
+> 3) el contenido del PIF de R1 (las 7 rotaciones sin contenido:
+> Radiología de tórax, Neurorradiología, Cardiología, Medicina Interna,
+> Infecciosas, Neurología y Neumología — esto **sí** vuelve a estar
+> pedido). Todo depende de que el usuario mande los PDF.
 
 ## Decisiones de arquitectura (ya tomadas, no las reabras sin preguntar)
 
