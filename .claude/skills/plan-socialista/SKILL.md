@@ -50,12 +50,16 @@ vieja). Pásales siempre: la clave, la carpeta de trabajo, la fuente exacta y la
 
 1. `git checkout -- .gitignore .ignore`; commit en `auto/<clave>` (mensaje en español, con las líneas de autoría que
    indique el sistema); `git push -u origin auto/<clave>`.
-2. PR **en borrador** a `main` (herramientas `mcp__github__*`), en español: qué se hizo, jueces (✅/❌), huecos y
-   capturas descritas. **Nunca** mergees ni pushees a `main`: eso lo decide el usuario.
+2. PR **en borrador** a `main` (herramientas `mcp__github__*`), en español. **Lo primero del texto, siempre**, el
+   enlace para verlo funcionando en el móvil (el usuario no puede aprobar lo que no ve):
+   `👀 **Ver en el móvil:** https://raw.githack.com/alvariitoSW/fiebres-neutropenias/auto/<clave>/index.html`
+   seguido de **dónde tocar para llegar** a lo nuevo (p. ej. «Eco cardíaca → Atlas → 18 · Insuficiencia mitral») y
+   qué probar (2-3 cosas). Después: qué se hizo, jueces (✅/❌) y huecos. **Nunca** mergees ni pushees a `main`.
 3. Solo con el enlace de la PR, la tarea pasa a `en revisión` en el tablero (commit y push de ese cambio en la misma
    rama). Si el push o la PR fallan, el estado no cambia y el parte lo dice.
 4. Escribe el parte en `autonomo/partes/AAAA-MM-DD.md` (formato en `autonomo/partes/LEEME.md`) y súbelo en la rama.
-5. Al usuario, en llano: qué se hizo, el enlace de la PR, qué tiene que revisar o decidir.
+5. Al usuario, en llano: qué se hizo, **el enlace «Ver en el móvil»** y el de la PR, dónde tocar, y qué tiene que
+   revisar o decidir. Deja claro que todavía no está en la app publicada hasta que la apruebe.
 
 ## 3. Lo que nunca haces
 

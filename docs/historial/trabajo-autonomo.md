@@ -56,3 +56,8 @@ habían creado**. El usuario eligió el nombre **plan socialista** y se montó:
   usuario: regla «paciente posible» (`REGLAS.md` §1.7), paso nuevo del verificador, línea en `CLAUDE.md` §12, y la
   sección «Cómo crecen estas reglas» (`REGLAS.md` §6): cada fallo que se cuele se convierte en propuesta de regla en
   el parte y el usuario decide.
+- **Enlace «Ver en el móvil» en cada propuesta** (a petición del usuario: «si no lo veo, ¿cómo le voy a dar el visto
+  bueno?»). La app publicada (GitHub Pages) solo sirve `main`, así que la rama `auto/<clave>` no se veía en el móvil.
+  Como el repositorio es público, cada PR lleva arriba un enlace a raw.githack.com, que sirve la rama como página web,
+  y dónde tocar para llegar. Si un día falla, la alternativa propia es desplegar las ramas con una acción de GitHub
+  (necesita cambiar el origen de Pages en los ajustes del repositorio).

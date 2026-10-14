@@ -25,9 +25,11 @@ basta con saber qué pedir y revisar lo que entrega.
    - `/plan-socialista estado`: te resume el tablero y el último parte, sin trabajar.
 3. **Mira cómo trabaja.** El director te va contando en qué vuelta está. Puedes interrumpirle cuando quieras con un
    mensaje: «para», «sáltate esa», «explícame por qué».
-4. **Revisa la propuesta.** Al terminar, el director deja una rama `auto/<tarea>` y una propuesta de cambio (PR) en
-   GitHub, en borrador. Desde el móvil, en GitHub: lees el resumen, miras las capturas y la apruebas (*merge*) o
-   escribes qué cambiar. **Nada llega a la app publicada sin que tú lo apruebes.**
+4. **Prueba y revisa la propuesta.** Al terminar, el director deja una propuesta de cambio (PR) en GitHub, en
+   borrador. Arriba del todo lleva **«👀 Ver en el móvil»**: un enlace a una copia de la app con lo nuevo ya puesto,
+   y dónde tocar para llegar. Lo pruebas en el móvil como si fuera la app. Si te convence, en la misma PR pulsas
+   **«Ready for review»** y luego **«Merge pull request»** (o se lo dices al director); si no, escribes qué cambiar.
+   **Nada llega a la app publicada sin que tú lo apruebes**, y la copia de prueba no toca la app real.
 
 ## Cómo darle órdenes sin escribir código
 
