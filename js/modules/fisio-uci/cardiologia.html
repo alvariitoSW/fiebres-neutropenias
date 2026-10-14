@@ -1022,13 +1022,13 @@
                     <circle cx="115" cy="50" r="4" fill="var(--accent-blue)" fill-opacity="0.7"/>
                     <circle cx="165" cy="68" r="4" fill="var(--accent-blue)" fill-opacity="0.7"/>
                     <circle cx="230" cy="105" r="5" fill="var(--accent-red)"/>
-                    <line x1="20" y1="40" x2="60" y2="40" stroke="var(--accent-yellow)" stroke-width="2" marker-end="url(#arrowY)"/>
+                    <line x1="20" y1="40" x2="60" y2="40" stroke="var(--accent-yellow)" stroke-width="2" marker-end="url(#arrowY-fuci)"/>
                     <text x="20" y="30" class="micro-svg-label" style="fill:var(--accent-yellow);font-weight:bold;">Evento índice</text>
                     <text x="120" y="35" class="micro-svg-label" style="fill:var(--accent-blue);">Mecanismos compensatorios</text>
                     <text x="235" y="130" class="micro-svg-label" style="fill:var(--accent-red);font-weight:bold;">Daño secundario</text>
                     <text x="90" y="176" text-anchor="middle" class="micro-svg-label">Asintomático</text>
                     <text x="260" y="176" text-anchor="middle" class="micro-svg-label">Sintomático</text>
-                    <defs><marker id="arrowY" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="var(--accent-yellow)"/></marker></defs>
+                    <defs><marker id="arrowY-fuci" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="var(--accent-yellow)"/></marker></defs>
                 </svg>
                 <div class="article-figure-caption">Patogénesis de la falla cardíaca: inicia después de un evento índice y produce una declinación en la capacidad de bombear del corazón, inicialmente enmascarada por mecanismos compensatorios.</div>
             </div>
@@ -1548,6 +1548,10 @@
                     <tr><td>Cardiogénico</td><td>↑</td><td>↑</td><td>↓</td><td>↑</td><td>↓</td></tr>
                 </tbody>
             </table>
+            <details class="nota-plegable"><summary>Nota de fidelidad: la RVS del shock distributivo en esta tabla</summary>
+                <p style="font-size:0.82rem; color:var(--text-muted);">La tabla del capítulo (pág. 70 del PDF de la parte 1) da la RVS «↑» en el shock distributivo, igual que en los otros tres. Es casi con certeza una errata: el shock distributivo es el de la vasodilatación, con RVS baja, como dicen el capítulo 10 del mismo libro («↓↓ vasoplejía», Ficha 10) y la Tabla 14.1 de Merino. Los «No↓»/«No↑» de la misma fila se leen «N o ↓» y «N o ↑». Se reproduce la tabla tal cual.</p>
+                <p><button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-definiciones">🔗 Tabla 14.1 de Merino (patrones del shock) →</button></p>
+            </details>
 
             <p class="section-label" style="margin-top:16px;">Cuadrantes de Forrester</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
@@ -2451,6 +2455,10 @@
                     <tr><td>Distributivo</td><td>N/↓</td><td>N/↑</td><td>N/↑</td><td>N/↑</td><td>N/↓</td><td>N/↑</td><td>N/↑</td></tr>
                 </tbody>
             </table>
+            <details class="nota-plegable"><summary>Nota de fidelidad: RVS del distributivo y ScvO₂ del hipovolémico</summary>
+                <p style="font-size:0.82rem; color:var(--text-muted);">Esta tabla (Figura 2 del capítulo 10, pág. 33 del PDF de la parte 2) da la RVS «N/↑» en el shock distributivo y la ScvO₂ «↑» en el hipovolémico. Las dos van al revés de la fisiología que explica el propio capítulo y de la Tabla 14.1 de Merino: en el distributivo la RVS cae (vasoplejía) y en el hipovolémico, con gasto bajo, la extracción sube y la ScvO₂ baja. Se reproduce tal cual, sin corregir.</p>
+                <p><button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-definiciones">🔗 Tabla 14.1 de Merino (patrones del shock) →</button></p>
+            </details>
             <p style="font-size: 0.75rem; color: var(--text-muted);">GC: gasto cardíaco; RVS: resistencia vascular sistémica; PVC: presión venosa central; PCP: presión capilar pulmonar; VSTI: volumen de sangre intratorácico; ScVO₂: saturación venosa central de oxígeno.</p>
 
             <div class="article-figure">

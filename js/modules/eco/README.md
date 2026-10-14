@@ -18,7 +18,7 @@ en `lab/circulacion/`), como la especialidad «Eco cardíaca»: ver «En la app�
 node --test 'js/modules/eco/pruebas/*.test.mjs'
 ```
 
-Tarda ~3 min (140 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta. Las de navegador
+Tarda ~3 min (141 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta. Las de navegador
 sirven el repositorio con un servidor propio y abren `laboratorio.html`.
 
 - `motor.test.mjs` — cada cifra del latido normal frente a su referencia (`referencias.mjs`), el volumen
@@ -205,6 +205,15 @@ en la ecografía, la línea del pericardio cortaba la pared). Ahora:
 - La ecografía ya no necesita evitar pintar el pericardio sobre una pared (se quitó ese parche).
 - Coste: ~2 ms más por fotograma con geometría exacta (los fotogramas con formas precalculadas no lo pagan).
 - La holgura (3 mm más ~0,06 mm por mL de derrame) sigue siendo ilustrativa.
+
+## Huella de las aurículas sin saltos
+
+Las aurículas son cúpulas sobre una «huella» en el plano AV, que se mide lanzando rayos desde el centro del anillo
+hasta el primer obstáculo. Con un corte de sí o no, un rayo casi tangente a la raíz aórtica (AI) o al círculo del VI
+(AD) pasaba de pararse a no pararse entre dos fotogramas y la huella saltaba hasta ~8 mm. Ahora esos dos obstáculos
+cortan de forma continua (`cortarRayo`): un rayo que pasa a menos de R del centro se para en el borde; uno que pasa
+entre R y R + 5 mm llega más lejos poco a poco. Salto máximo en un latido: AI 8,0 → 0,7 mm, AD 5,7 → 1,1 mm (prueba
+en `geometria.test.mjs`, umbral 2 mm).
 
 ## En la app
 
@@ -579,10 +588,6 @@ licencia CC BY-SA 4.0 (el resto del simulador no). La cita también se muestra e
 
 - **Calibrar** la RVS (el motor da ~1.450; la Ficha 5 dice 900-1200). Choca con el ITV del TSVI (Ficha 11, 18-22 cm,
   hoy ~21,9): subir el gasto para bajar la RVS sube el ITV, salvo que el TSVI del modelo sea algo más ancho.
-- **Erratas de la fuente sin nota en la app:** las dos tablas de patrones de shock de El Libro Azul
-  (cap. 5, pág. 70 del PDF de la parte 1; cap. 10, Figura 2, pág. 33 de la parte 2) dan RVS «↑» o «N/↑»
-  en el shock distributivo, y la del cap. 10 da ScvO₂ «↑» en el hipovolémico. Las fichas 5 y 10 las
-  reproducen tal cual. Las pruebas usan la Tabla 14.1 de Merino (cap. 14), que no tiene ese problema.
 - **Doppler**: S > D en las suprahepáticas en
   reposo; S/D de las venas pulmonares (necesita el efecto pistón del plano AV); Doppler tisular en el simulador (e′, E/e′ de la Ficha 5) y Doppler continuo; insuficiencias valvulares en el simulador (el motor ya
   tiene la mitral, `eroaMitral`, que usa el Atlas; falta el chorro en la eco y las otras válvulas).
@@ -597,8 +602,4 @@ licencia CC BY-SA 4.0 (el resto del simulador no). La cita también se muestra e
   sonda en otro sitio de la piel); la supraesternal no tiene troncos supraaórticos ni Doppler del arco (el motor no
   da flujo más allá de la raíz).
 - Ecografía en un *worker* si en el móvil baja de fps.
-- **Saltos de la geometría exacta:** la huella de las aurículas (y la grasa periaórtica) se calcula con rayos que
-  se paran al tocar la raíz aórtica; un rayo casi tangente pasa de pararse a no pararse y un vértice salta hasta
-  ~8 mm entre dos fotogramas. La mezcla lo suaviza (lo convierte en un cambio gradual entre dos formas), pero
-  la geometría exacta (con corte o sin formas) lo sigue teniendo.
 - **Atlas de ecocardiografía**: quedan 21 capítulos por pasar a la app (9 de 30 ya están) (ver «Atlas de ecocardiografía»).

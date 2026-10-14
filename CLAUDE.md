@@ -6220,11 +6220,9 @@ dentro de `#cardiologia-view` y en el switcher `cardioLevel` de
       "Revisión de la proporción de estimulación del VD" (Ficha III) y
       "IC inducida por estimulación del VD" (Ficha V) — mismo tema,
       antes sin enlazar entre sí.
-    - **Punto explícitamente no tocado**: la inconsistencia de la Fig.
-      21 (ver arriba) sigue pendiente de decisión del usuario, no se
-      resolvió por cuenta propia al aplicar "todas las mejoras del
-      informe" porque estaba marcada como "a revisar contigo", no como
-      hallazgo accionable.
+    - **Fig. 21**: estuvo pendiente de decisión del usuario («a revisar
+      contigo»); en octubre de 2026 decidió que se queda (ver «Arreglos de
+      código (octubre 2026)»).
     - Verificado con Playwright: las 11 fichas siguen abriendo/volteando
       sin error de consola ni 404 real; recuento de `.grade-badge` por
       ficha confirmado exacto contra lo esperado tras cada bloque de
@@ -7745,11 +7743,9 @@ página impresa − 52).
       en el CSS sin uso). El índice rápido del submenú gana un 5.º bloque,
       "Neurocrítico" (`neurocritico` → `umi-sedacion` en
       `rutasCategoria`).
-    - **Hallazgo de paso, sin tocar**: la variable `--text-dim` no existe
-      en `variables.css` y se usa en 8 archivos (63 veces solo en
-      `manual-umi.html`); en `color:` cae al color heredado y no se nota,
-      pero en un `fill` de SVG pinta negro (por eso los SVG nuevos usan
-      `--text-muted`).
+    - **Hallazgo de paso**: la variable `--text-dim` no existía en
+      `variables.css` (en `fill` de SVG pintaba negro). Arreglado después:
+      ver «Arreglos de código (octubre 2026)».
     - Lo que quedaba pendiente del mismo manual se cerró después: ver
       «Huecos del manual cerrados» más abajo.
   - **Auditoría de contenido + interactividad y sus correcciones**, a
@@ -10894,6 +10890,27 @@ y "Fuentes y Evidencia" enlazan a ellos, con el DOI en la nota.
 - **Pendiente**: la parte de CID que viene de la guía BCSH 2009 (Levi et
   al.) sigue sin cotejar, porque ese PDF no se ha aportado.
 
+## Arreglos de código (octubre 2026)
+
+A petición explícita del usuario («los arreglos de código que me has dicho, arréglalo lo mejor que puedas»):
+
+- **`--text-dim` definida** en `css/variables.css` (`#c9bda4`, entre `--text-main` y `--text-muted`). Se usaba en
+  ~670 sitios sin existir: en `color:` heredaba el color del padre y no se notaba, pero en los `fill` de SVG pintaba
+  negro sobre el fondo oscuro. Las 15 etiquetas afectadas (mecanismos del diagrama de receptores de Merino
+  Cardiología y la cascada de radicales libres de Merino Neumología) ya se ven. Cambió `variables.css`: cache-busting
+  `?v=20261026-3`.
+- **Id `arrowY` duplicado**: el marcador de flecha existía en Fisiopatología UCI · Cardiología y en Merino Neumología,
+  con distinto `refX`; como todas las vistas están en el DOM a la vez, `url(#arrowY)` cogía el primero. Ahora son
+  `arrowY-fuci` y `arrowY-neumo`. Comprobado con un script: ningún otro id se repite entre los partials (el de
+  `eco/laboratorio.html` es otra página).
+- **Figura 21 de la guía ESC de IC (HF Team)**: el usuario decidió que se queda (era el punto «a revisar contigo» de la
+  auditoría de imágenes de Cardiología). Ya estaba en la Ficha X; comprobado que carga.
+- **Erratas de El Libro Azul en las tablas de shock**: notas de fidelidad plegables en las dos tablas de
+  Fisiopatología UCI · Cardiología (Ficha 5: RVS «↑» en el distributivo; Ficha 10: RVS «N/↑» en el distributivo y
+  ScvO₂ «↑» en el hipovolémico), con enlace a la Tabla 14.1 de Merino. No se cambió ninguna cifra.
+- **Saltos de la huella de las aurículas** en el corazón 3D: ver `js/modules/eco/README.md` («Huella de las aurículas
+  sin saltos»). AI 8,0 → 0,7 mm y AD 5,7 → 1,1 mm entre dos fotogramas; prueba nueva.
+
 ## Circulación viva y Eco cardíaca (`js/modules/eco/`)
 
 Corazón 3D movido en cada instante por un motor del latido, construido como maqueta a petición explícita
@@ -10973,9 +10990,8 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
   derrame); detectaba el fallo antiguo en la pared lateral. Se quitó el parche de la ecografía que evitaba pintar el
   pericardio sobre la pared. 91 pruebas, ~100 s. Detalle en `lab/circulacion/README.md` («Pericardio»).
 - **Pendiente:** calibrar la RVS (choca con el ITV del TSVI de la Ficha 11; ver el README); la contracción
-  isovolumétrica ya está calibrada (ver «Atlas de ecocardiografía» más abajo); erratas de El Libro Azul en las tablas de patrones de shock (RVS en el distributivo) que las fichas 5 y
-  10 reproducen sin nota; saltos de hasta ~8 mm de la geometría exacta en la huella de las aurículas (rayos
-  tangentes a la raíz aórtica); volver a medir los fps en el móvil (también con la ecografía); más ideas de
+  isovolumétrica ya está calibrada (ver «Atlas de ecocardiografía» más abajo); las erratas de El Libro Azul en las tablas de shock ya tienen nota y los saltos de la huella de las
+  aurículas están arreglados (ver «Arreglos de código (octubre 2026)»); volver a medir los fps en el móvil (también con la ecografía); más ideas de
   echodemo (modo M, Doppler color, sonda libre, formas de enfermedad —choca con la anatomía congelada—, cifra
   coherente con su grado).
 - **Eco cardíaca en la app (fase 1)**, a petición explícita del usuario («si quiero tener un apartado igual al de

@@ -305,10 +305,25 @@ export function construirCorazon(estado, opciones = {}) {
   for (let k = NI - 1; k >= 1; k--) { const f = REF.phiA + spanVd * k / NI; contornoVd.push([ReB * Math.cos(f), ReB * Math.sin(f)]); }
   anadirR('Base VD', tapa(contornoVd, [anillo2d(anilloTricus), anillo2d(anilloRVOT)]), COLORES.miocardio, { dobleCara: true, mat: 2 });
 
-  const huella = (c, ok, rMin) => {
+  // Obstáculos circulares (la raíz aórtica) con un corte continuo: un rayo que pasa a menos de R del
+  // centro se para en el borde; uno que pasa entre R y R + ANCHO_ROCE llega más lejos poco a poco. Con
+  // un corte de sí o no, un rayo casi tangente pasaba de pararse a no pararse y la huella saltaba ~8 mm.
+  const ANCHO_ROCE = 5;
+  const cortarRayo = (c, d, t, obst) => {
+    for (const [o, R] of obst) {
+      const ox = o[0] - c[0], oy = o[1] - c[1], tc = ox * d[0] + oy * d[1];
+      if (tc <= 0) continue;
+      const b = Math.abs(ox * d[1] - oy * d[0]);
+      if (b < R) t = Math.min(t, tc - Math.sqrt(R * R - b * b));
+      else if (b < R + ANCHO_ROCE) t = Math.min(t, tc + (t - tc) * paso(R, R + ANCHO_ROCE, b));
+    }
+    return t;
+  };
+  const huella = (c, ok, rMin, obst = []) => {
     let rho = [];
     for (let k = 0; k < NR; k++) { const psi = k / NR * TAU, d = [Math.cos(psi), Math.sin(psi)]; let t = rMin(d);
-      while (t < 70 && ok([c[0] + (t + 0.5) * d[0], c[1] + (t + 0.5) * d[1]])) t += 0.5; rho.push(t); }
+      while (t < 70 && ok([c[0] + (t + 0.5) * d[0], c[1] + (t + 0.5) * d[1]])) t += 0.5;
+      rho.push(Math.max(rMin(d), cortarRayo(c, d, t, obst))); }
     for (let pasada = 0; pasada < 3; pasada++) rho = rho.map((r, k) => 0.25 * rho[(k + NR - 1) % NR] + 0.5 * r + 0.25 * rho[(k + 1) % NR]);
     return rho.map((r, k) => { const psi = k / NR * TAU; return Math.max(r, rMin([Math.cos(psi), Math.sin(psi)])); });
   };
@@ -334,13 +349,14 @@ export function construirCorazon(estado, opciones = {}) {
   const salida = (psi, subir = 0.25) => norm([Math.cos(psi), Math.sin(psi), subir]);
   // AI: sobre la tapa del VI, detrás; se para a 2 mm de la raíz aórtica
   const elipseM = (d) => 1 / Math.sqrt(Math.pow(d[0] * Math.cos(U) + d[1] * Math.sin(U), 2) / (aM * aM) + Math.pow(-d[0] * Math.sin(U) + d[1] * Math.cos(U), 2) / (bM * bM));
-  const okAi = (p) => Math.hypot(p[0], p[1]) < ReB - 2 && Math.hypot(p[0] - ac[0], p[1] - ac[1]) > rA + 2;
-  const rhoAi = huella(mc, okAi, (d) => elipseM(d) + 1);
+  const okAi = (p) => Math.hypot(p[0], p[1]) < ReB - 2;
+  const rhoAi = huella(mc, okAi, (d) => elipseM(d) + 1, [[ac, rA + 2]]);
   const HAi = 30 * kAi, incAi = [0, -8], bAi = 0.14 + 0.5 * (kAi - 1);
   // AD: sobre la tapa del VD, a la derecha; se para antes del tabique, del borde y de la salida del VD
   const okAd = (p) => { const r = Math.hypot(p[0], p[1]), f = Math.atan2(p[1], p[0]);
-    return ventana(f) > 0.05 && r > ReB + 0.5 && r < rimRV(f) - 2 && !dentroHuella(cR, rhoInf, p, 2) && Math.hypot(p[0] - ac[0], p[1] - ac[1]) > rA + 3; };
-  const rhoAd = huella(ct, okAd, () => rT + 1.5);
+    return ventana(f) > 0.05 && r < rimRV(f) - 2 && !dentroHuella(cR, rhoInf, p, 2); };
+  // el tabique (el círculo del VI) y la raíz aórtica, con corte continuo
+  const rhoAd = huella(ct, okAd, () => rT + 1.5, [[[0, 0], ReB + 0.5], [ac, rA + 3]]);
   const HAd = 32 * kAd, incAd = [-4, 0], bAd = 0.14 + 0.5 * (kAd - 1);
   const aoAur = (x, y, z) => 0.72 + 0.28 * paso(0, 9, z);
   anadirR('AI', conAO(cupula(mc, rhoAi, HAi, incAi, bAi), aoAur), COLORES.auricula, { dobleCara: true });

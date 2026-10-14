@@ -151,3 +151,17 @@ test('TAPSE: normal por encima de 17 mm y mayor que el MAPSE; cae cuando cae el 
   for (const k of ['hemorragia', 'derrame']) { const r = medir(k);
     assert.ok(r.vsD < n.vsD && r.tapse < n.tapse - 4, `${k}: TAPSE ${r.tapse.toFixed(1)} mm con VS del VD ${r.vsD.toFixed(0)} mL`); }
 });
+
+test('las aurículas no saltan entre dos fotogramas seguidos (rayos casi tangentes a la aorta y al tabique)', () => {
+  const m = crearMotor(); m.correr(8);
+  const T = m.periodo || 0.85; let prev = null, peor = 0;
+  for (let i = 0; i < 300; i++) {
+    m.correr(T / 300); const s = m.s;
+    const g = construirCorazon({ vvi: s.vvi, vvd: s.vvd, vai: s.vai, vad: s.vad }, { detalle: false });
+    const cur = Object.fromEntries(g.partes.filter(p => p.nombre === 'AI' || p.nombre === 'AD').map(p => [p.nombre, p.pos]));
+    if (prev) for (const n of ['AI', 'AD']) { const a = cur[n], b = prev[n];
+      for (let k = 0; k < a.length; k += 3) peor = Math.max(peor, Math.hypot(a[k] - b[k], a[k + 1] - b[k + 1], a[k + 2] - b[k + 2])); }
+    prev = cur;
+  }
+  assert.ok(peor < 2, `salto máximo ${peor.toFixed(2)} mm`);
+});

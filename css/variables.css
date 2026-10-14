@@ -4,6 +4,9 @@
     --border-color: rgba(196, 154, 74, 0.35);
     --text-main: #ece3cc;
     --text-muted: #a5967c;
+    /* texto secundario: entre --text-main y --text-muted. Se usaba en ~670 sitios
+       sin estar definida (en color: heredaba el color; en fill de SVG pintaba negro) */
+    --text-dim: #c9bda4;
     --accent-green: #90a06a;
     --accent-red: #b85c3e;
     --accent-yellow: #cf9a3e;
