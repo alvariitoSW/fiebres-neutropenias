@@ -9,7 +9,8 @@ Este archivo son **las reglas vigentes**, cortas a propósito:
   Se cargan solos al trabajar en ellas.
 - La historia de cómo se hizo cada parte (decisiones, fuentes, auditorías, cifras) está en `docs/historial/`
   (índice al final). **No la leas entera**: busca con grep lo que necesites.
-- Lo pendiente vive en `autonomo/TABLERO.md`, no aquí.
+- Lo pendiente vive en `autonomo/BITACORA.md` (sin aprobar; skill `/bitacora`) y `autonomo/TABLERO.md` (aprobado,
+  lo trabaja `/plan-socialista`), no aquí.
 
 ## 1. Cómo trabaja el usuario
 
@@ -52,8 +53,8 @@ js/core/                piezas genéricas (ver §5)
 js/data/                datos puros sin DOM: tablas y bancos de preguntas (*-preguntas.js)
 js/modules/<módulo>/    index.js (arranca el módulo) + <vista>.html + <vista>.js
 docs/                   PDF de las fuentes · docs/historial/ (la historia)
-autonomo/               plan socialista (trabajo por equipos en bucle): guía, reglas, tablero, partes y
-                        jueces.mjs (el comprobador automático)
+autonomo/               plan socialista (trabajo por equipos en bucle): guía, reglas, bitácora, tablero,
+                        partes, modelos aprobados y jueces.mjs (el comprobador automático)
 backend/ admin/         panel de subida de contenido (aparte de la app)
 ```
 
@@ -214,7 +215,7 @@ como las conoce un médico, no como están hechas por dentro. Los botones dicen 
 - [ ] Ningún id duplicado; ningún `<img>` sin archivo; ningún tema de quiz sin preguntas.
 - [ ] Si cambió un `.css` o `js/main.js`: fecha `?v=` subida en `index.html`.
 - [ ] La historia del trabajo, añadida al archivo de `docs/historial/` que toque (no aquí). Este archivo, solo si
-      cambia una regla. Si hay algo pendiente nuevo, va a `autonomo/TABLERO.md`.
+      cambia una regla. Si hay algo pendiente nuevo, va a `autonomo/BITACORA.md` (el tablero, solo lo aprobado).
 - [ ] `git checkout -- .gitignore .ignore` (las herramientas los ensucian), commit, push y merge a `main` (§10).
 - [ ] Al usuario, en llano: qué se hizo, qué se comprobó y qué queda para él.
 
@@ -237,4 +238,5 @@ como las conoce un médico, no como están hechas por dentro. Los botones dicen 
 | `revisiones-de-codigo.md` | Revisión de código de octubre 2026 y arreglos posteriores |
 | `panel-subida.md` | `backend/` y `admin/` |
 | `eco.md` | Decisiones de Circulación viva y Eco cardíaca (el detalle técnico, en `js/modules/eco/README.md`) |
+| `bitacora.md` | Lo que sale de la bitácora: lo hecho hace más de 7 días y lo descartado |
 | `trabajo-autonomo.md` | Por qué y cómo se reorganizó `CLAUDE.md`, el plan socialista (`autonomo/`, la skill y los agentes) y sus pruebas |

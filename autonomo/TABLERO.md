@@ -1,6 +1,7 @@
 # Tablero del plan socialista
 
-Lo edita el usuario (orden, notas, límites) y el director (estados). Una tarea por línea, en orden de prioridad.
+Lo edita el usuario (orden, notas, límites), la bitácora (`/bitacora`: mete las tareas que el usuario aprueba y las
+marca `hecha` al fusionarse su PR) y el director del plan (estados). Una tarea por línea, en orden de prioridad.
 
 - **Límite por sesión:** 1 tarea
 - **Vueltas máximas por tarea:** 3 (constructor ↔ jueces)
@@ -159,37 +160,8 @@ Marcador: capítulos con estado `hecha`.
 
 ---
 
-## Otros pendientes (fuera del bucle por ahora)
+## Lo que aún no está aprobado
 
-Decididos con el usuario. Casi todos dependen de que mande una fuente.
-
-- **Reconvertir las preguntas que ya hay** al formato de estudio (REGLAS §8): **esperar a que el usuario lo pida**,
-  cuando la skill esté afinada (lo dijo el 14/10/2026). Se hará por bloques, con tareas `estudio`.
-
-- **Después del piloto `mr` (pedido por el usuario)**: 1) analizar los tiempos reales (lector ~5 min, constructor
-  67 min en la vuelta 1 y 19 en la 2, verificador ~6, auditor ~3) y proponer cómo acelerar; 2) cómo dejar varias
-  tareas en cola que se hagan solas sin que el usuario entre en Claude (rutina programada en la nube, tareas en
-  paralelo en ramas distintas). Necesita que el usuario fije el límite de gasto y cuántas tareas a la vez.
-  **Hecho el análisis** (parte `autonomo/partes/2026-10-14.md` en la rama `auto/mr`). Propuestas: dos constructores a
-  la vez (texto+quiz / figura+pruebas), pruebas largas solo al final, los tres jueces a la vez desde la 1.ª vuelta
-  (estimado: de ~2 h 45 a ~1-1 h 15 por capítulo). **Decisión del usuario (14/10/2026): todavía no**; primero
-  revisar la PR #2. Rutina nocturna: **no montarla aún**; cuando se monte, de madrugada (~3:00, hora de Canarias)
-  con aviso al móvil.
-- **Prueba intermitente del simulador de eco**: `navegador.test.mjs`, «la barra del ciclo tiene las 7 fases», falla
-  a veces cuando el ordenador va cargado (1 de 3 en el piloto). Endurecerla.
-- **Orden de trabajo pedido**: 1) Marino completo (hecho, octubre 2026); 2) terminar El Libro Azul (hay secciones
-  I, II, III y VII); 3) el PIF de R1: las 7 rotaciones sin contenido (Radiología de tórax, Neurorradiología,
-  Cardiología, Medicina Interna, Infecciosas, Neurología, Neumología). Necesitan los PDF.
-- **TRR (Nefrología)**: cotejar con el PDF de Valdenebro 2021 las 7 dudas anotadas en `docs/historial/nefrologia.md`,
-  si el usuario lo manda. ECIL-10, BCSH 2009 y las citopenias distintas de la neutropenia febril: descartadas.
-- **Eco cardíaca (fuera del atlas)**: calibrar la RVS, medir fps en el móvil, más formas de enfermedad
-  (`js/modules/eco/README.md`, «Pendiente»).
-- **Panel de subida**: falta la clave de la API y desplegar el Worker (`backend/README.md`).
-- **Simulador de arritmias (idea de RitmoLab, de Farmacotips)**: reconstruirlo sin copiar su código, sobre el motor
-  de ECG de `nefrologia/potasio-escena.js`. Decidido con el usuario: **puerta propia en la raíz** («Arritmias»),
-  enlazada también desde la rotación de Cardiología del PIF («EKG y arritmias»). 17 ritmos de RitmoLab: 11 con fuente
-  en la app (Marino caps. 19 y 21); bradicardia sinusal, BAV completo, Mobitz I y II, taquicardia sinusal y
-  extrasístoles, con los **algoritmos AHA 2025** (bradicardia, taquicardia, parada): **esperando que el usuario mande
-  los PDF**, porque heart.org está bloqueado desde el entorno. Fases: 1) monitor + 17 ritmos + modo Estudio (ruta de
-  manejo con enlaces a sus fichas); 2) modo Simulación con casos; 3) 12 derivaciones y calibres. Antes de construir,
-  maqueta visual para que elija. Lo que se sabe de RitmoLab está en `docs/historial/cardiologia.md`.
+Vive en `autonomo/BITACORA.md` (skill `/bitacora`): lo apuntado que espera el visto bueno del usuario, lo que espera
+un PDF o una decisión suya y las mejoras de lo que ya existe. **Una tarea entra en este tablero solo cuando el
+usuario la aprueba** (con `/bitacora aprueba B-00N` o escribiéndola él aquí).

@@ -12,7 +12,8 @@ basta con saber qué pedir y revisar lo que entrega.
 | **Los modelos** | `autonomo/modelos/` | Maquetas que tú aprobaste y que el equipo copia. La primera: las preguntas para estudiar. |
 | **Los jueces** | `autonomo/jueces.mjs` | Comprobador automático: imágenes, quiz, caché y la app en el navegador a 390 y 360 px. Sirve también fuera del plan: `node autonomo/jueces.mjs`. |
 | **Las reglas** | `autonomo/REGLAS.md` | Lo que nadie del equipo puede saltarse (no inventar, fidelidad a la fuente, móvil de 390 px…) y la **rúbrica «Sirve para estudiar»** (§7) con tus modelos «así sí». Es corto a propósito: los agentes lo leen en cada vuelta. |
-| **El tablero** | `autonomo/TABLERO.md` | El objetivo, la lista de tareas en orden y qué significa «hecho». Es la memoria del equipo. **Es lo que tú editas.** |
+| **La bitácora** | `autonomo/BITACORA.md` + skill `/bitacora` | Tu cuaderno de navegación: le cuentas lo que hay que hacer, lo convierte en tareas que esperan tu visto bueno y te dice «a dónde nos dirigimos». No toca la app. |
+| **El tablero** | `autonomo/TABLERO.md` | Las tareas **aprobadas**, en orden, y qué significa «hecho». Es lo único que trabaja el plan. La bitácora mete aquí lo que apruebas. |
 | **Los partes** | `autonomo/partes/AAAA-MM-DD.md` | Uno por sesión: qué se hizo, qué falló, qué no pudo leer y qué te deja para revisar. Es lo que lees por la mañana. |
 
 ## Cómo se usa
@@ -73,6 +74,19 @@ algo fiel pero que no te sirve:
 - **Si dejas campos en blanco**, el director los rellena con su criterio y te lo dice en la PR (no se para a
   preguntar). Cuanto más concreta sea la línea «Lo visual que espero», más se parecerá a lo que tienes en la cabeza.
 - Ejemplo completo: el encargo de `mr` en el tablero.
+
+## La bitácora: apuntar, aprobar y no olvidar nada
+
+La bitácora (`/bitacora`) y el plan socialista (`/plan-socialista`) van separados pero juntos: la bitácora decide
+**qué** se hace; el plan lo **hace**.
+
+- **Apuntar**: «/bitacora apunta: hay que hacer X, Y y Z» (o cuéntaselo sin más). Lo convierte en tareas con número
+  (`B-001`…) y su encargo, y te dice cómo lo ha entendido. Puedes ir apuntando durante días.
+- **Aprobar**: «/bitacora aprueba B-003». Solo entonces pasa al tablero y el plan puede hacerla.
+- **Rumbo**: «/bitacora» o «¿a dónde nos dirigimos?». Te dice lo que está en marcha, lo que espera tu visto bueno,
+  lo que espera algo tuyo (un PDF, una decisión), las mejoras pendientes de lo que ya existe, lo que propondría ella
+  (aparte y marcado con 💡) y lo hecho esta semana.
+- Lo hecho desaparece de la lista a los **7 días**, pero queda guardado en `docs/historial/bitacora.md`.
 
 ## Cómo darle órdenes sin escribir código
 

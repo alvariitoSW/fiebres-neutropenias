@@ -119,3 +119,26 @@ cómo optimizar su estudio.
   ninguna tarea puede entregar las preguntas nuevas.
 - Reconvertir las preguntas viejas: cuando lo pida el usuario.
 - `CLAUDE.md` §8: no se escriben más preguntas de redactar.
+
+## La bitácora: apuntar, aprobar y el rumbo (octubre 2026)
+
+A petición del usuario: una skill solo informativa, separada del plan socialista pero que funcione con él. Durante
+uno o dos días el usuario le cuenta lo que hay que hacer; ella lo interpreta como tareas, que esperan a que diga
+«esta sí». Lleva el seguimiento de lo hecho y de lo que queda, y responde «¿a dónde nos dirigimos?», también con las
+mejoras pendientes de lo que ya existe (como reconvertir las preguntas), para que no se quede nada en el tintero.
+
+- Elecciones del usuario: nombre **`/bitacora`**; lo hecho sale de la lista a los **7 días** (queda en
+  `docs/historial/bitacora.md`); la bitácora puede **proponer mejoras propias**, aparte y marcadas con 💡, que nunca
+  se hacen sin su visto bueno.
+- `.claude/skills/bitacora/SKILL.md`: apuntar (entradas `B-00N` con la ficha de encargo, lo supuesto marcado
+  «(supongo)», dependencias, tamaño y dudas), aprobar (pasa al tablero con su encargo), descartar, rumbo y una
+  sincronización previa:
+  - PR fusionada → la tarea pasa a `hecha` con la fecha;
+  - los partes del plan (también en las ramas `auto/*`) alimentan «Esperando algo tuyo» y las mejoras;
+  - limpieza de los 7 días.
+
+  No toca la app.
+- `autonomo/BITACORA.md`: apuntado, en marcha, esperando algo tuyo, mejoras de lo que ya existe, propuestas 💡 y
+  hecho esta semana. Los «Otros pendientes» del tablero se mudaron aquí; el tablero queda solo con lo aprobado.
+- El plan socialista solo trabaja tareas del tablero, y las tareas solo entran ahí con la aprobación del usuario.
+  La tarea `preguntas` entró antes de existir la bitácora: queda pendiente de que el usuario la confirme.

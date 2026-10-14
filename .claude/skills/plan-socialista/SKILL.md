@@ -17,18 +17,20 @@ tablero y el último parte, sin trabajar.
 
 1. Lee desde el disco: `CLAUDE.md`, `autonomo/REGLAS.md`, `autonomo/TABLERO.md` (límites, objetivo, «hecho»,
    tareas, notas del usuario) y el último parte de `autonomo/partes/`.
-2. Respeta los límites del tablero (tareas por sesión, vueltas máximas, parar si…, gasto). Si no queda ninguna
+2. **Solo trabajas tareas del tablero**: ahí están las que el usuario aprobó (con `/bitacora` o escribiéndolas él). Lo
+   que está en `autonomo/BITACORA.md` sin aprobar no se toca, aunque parezca urgente.
+3. Respeta los límites del tablero (tareas por sesión, vueltas máximas, parar si…, gasto). Si no queda ninguna
    tarea `pendiente`, escribe el parte «sin tareas» y termina: no es un fallo.
-3. Rama: `git fetch origin main && git checkout -B auto/<clave> origin/main`. Carpeta de trabajo:
+4. Rama: `git fetch origin main && git checkout -B auto/<clave> origin/main`. Carpeta de trabajo:
    `/tmp/plan-socialista/<clave>/` (borrador: no va al repositorio).
-4. Prepara la fuente (si es el atlas: `git clone --depth 1 https://github.com/douyang/echodemo /tmp/echodemo`).
+5. Prepara la fuente (si es el atlas: `git clone --depth 1 https://github.com/douyang/echodemo /tmp/echodemo`).
    **Si una fuente no se puede abrir, la tarea pasa a `necesita humano`**, con lo que falta; no se improvisa.
-5. **El encargo.** Mira el tipo de la tarea (`visual`, `estudio`, `auditoria`, `arreglo`; tabla «Tipos de tarea» del
+6. **El encargo.** Mira el tipo de la tarea (`visual`, `estudio`, `auditoria`, `arreglo`; tabla «Tipos de tarea» del
    tablero) y su **ficha de encargo** (sección «Encargos»). Su «hecho» es el del objetivo **más** el del tipo. Si no
    hay ficha o le falta un campo, rellénala tú con tu mejor criterio a partir de los modelos «así sí» de
    `autonomo/REGLAS.md` §7, escríbela en `/tmp/plan-socialista/<clave>/encargo.md` y cópiala al parte. **No pares a
    preguntar**: el usuario eligió trabajar sin frenos; lo revisará en la PR.
-6. Marca la tarea `en curso` en el tablero y cuéntale al usuario, en 2 líneas, qué vas a hacer y qué se va a ver.
+7. Marca la tarea `en curso` en el tablero y cuéntale al usuario, en 2 líneas, qué vas a hacer y qué se va a ver.
 
 ## 1. El ciclo
 
@@ -98,9 +100,10 @@ Se salta en las tareas `estudio` (el contenido ya está en la app y ya es fiel; 
    qué probar (2-3 cosas, incluido un caso clínico entero si hay preguntas). Después: qué se hizo, el encargo (y lo
    que rellenaste tú), jueces (✅/❌), las notas del profesor, los modelos nuevos que propone (para que decidas) y
    huecos. **Nunca** mergees ni pushees a `main`.
-3. Solo con el enlace de la PR, la tarea pasa a `en revisión` en el tablero (commit y push de ese cambio en la misma
+3. Solo con el enlace de la PR, la tarea pasa a `en revisión (AAAA-MM-DD)` en el tablero (commit y push de ese cambio en la misma
    rama). Si el push o la PR fallan, el estado no cambia y el parte lo dice.
 4. Escribe el parte en `autonomo/partes/AAAA-MM-DD.md` (formato en `autonomo/partes/LEEME.md`) y súbelo en la rama.
+   Lo que necesites del usuario y las propuestas de regla, bien visibles: la bitácora los recoge de ahí.
 5. Al usuario, en llano: qué se hizo, **el enlace «Ver en el móvil»** y el de la PR, dónde tocar, y qué tiene que
    revisar o decidir. Deja claro que todavía no está en la app publicada hasta que la apruebe.
 
