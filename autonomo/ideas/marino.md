@@ -70,3 +70,26 @@ Coinciden los tres revisores:
   piruvato → PDH bloqueada por la sepsis o el déficit de tiamina → lactato con O₂. Cierra con un capnograma animado
   con espacio muerto.
 - **Flujo de decisión de la respuesta a fluidos**: ScvO₂ + gap de PCO₂ + EPP/VVS.
+
+### R3 · Caps. 12-13 (Merino HEMATO: anemia, transfusión, plaquetas y plasma) · 2026-10-14
+
+- **Modelo «sangre y oxígeno»** (fichas 1 y 2), con el hematocrito y la volemia como mandos:
+  - la cadena viscosidad → gasto en el motor del latido → DO₂ → extracción hasta el techo del 50 % → lactato, que es
+    la Fig. 12.3 viva (hoy no está en la app);
+  - «transfundir 1 unidad»: sube el DO₂, el VO₂ queda plano y cae la extracción (Fig. 12.4);
+  - «bolo de salino»: la caída falsa del Hto (Fig. 12.1).
+- **Hemostasia animada con Motion**: de la lesión al tapón (GPIIb/IIIa, FvW, fibrina), con 4 estados de un clic:
+  - HIT (FP4-heparina + IgG);
+  - PTT (ADAMTS-13 y el FvW sin cortar);
+  - CID (factor tisular y consumo);
+  - PFC, como balanza pro/anticoagulante: el INR baja mientras la antitrombina sube.
+  
+  La Tabla 13.3 cambia en directo. Encaja con el tablero de coagulación de R1 (anticoagulantes): podría ser el mismo
+  modelo.
+- **Ecógrafo para TRALI o TACO**: el TACO con VCI plétora, líneas B y corazón dilatado; el TRALI con líneas B, VCI y
+  corazón normales.
+- **Asistentes Sí/No**: «¿TRALI o TACO?» y 4Ts → ELISA → anticoagular o reiniciar la heparina.
+- **Casos clínicos**:
+  - HIT posoperatoria cardíaca: la 4Ts sube con una trombosis;
+  - «encuentra el error»: warfarina en la HIT aguda o plaquetas en una PTT;
+  - «piensa y destapa»: «INR 1,8 → 1,4 tras el PFC: ¿coagula mejor?».

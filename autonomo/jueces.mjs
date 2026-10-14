@@ -22,6 +22,7 @@ import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { execSync, spawn } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
+import { createServer } from 'node:net';
 
 const RAIZ = resolve(dirname(new URL(import.meta.url).pathname), '..');
 const args = process.argv.slice(2);
@@ -101,7 +102,10 @@ try {
 
 // ---- 4. Navegador
 if (!pide('--sin-navegador')) {
-    const PUERTO = 8765;
+    // Puerto libre (antes fijo en 8765: dos tareas a la vez chocaban). Se pide uno al sistema y se libera al momento.
+    const PUERTO = await new Promise((ok, ko) => {
+        const s = createServer().listen(0, () => { const p = s.address().port; s.close(() => ok(p)); }).on('error', ko);
+    });
     const servidor = spawn('python3', ['-m', 'http.server', String(PUERTO)], { cwd: RAIZ, stdio: 'ignore' });
     const base = `http://localhost:${PUERTO}/`;
     try {
@@ -127,6 +131,8 @@ if (!pide('--sin-navegador')) {
                 document.body.appendChild(b); b.click(); b.remove();
             }, datos);
             const imagenes = async (sel) => {
+                // Las imágenes lazy dentro de un desplegable cerrado no se descargan nunca: se piden ya (eager).
+                await pag.evaluate((s) => document.querySelectorAll(`${s} img[loading="lazy"]`).forEach(i => { i.loading = 'eager'; }), sel);
                 const n = await pag.evaluate((s) => document.querySelectorAll(`${s} img`).length, sel);
                 for (let i = 0; i < n; i++) await pag.evaluate(([s, j]) => document.querySelectorAll(`${s} img`)[j].scrollIntoView(), [sel, i]);
                 await pag.waitForTimeout(n ? 1200 : 0);

@@ -164,3 +164,17 @@ A propósito de Marino, el usuario pidió:
   sin fusionar, trabaja sobre su rama.
 - Bitácora B-003 reescrita como «Plan Marino», en cinco fases: 13 revisiones, mapa, preguntas, modelos por partes y
   estudio por bloques. El usuario no aprueba nada todavía.
+
+## Primera sesión del plan Marino: revisiones R1-R3 (octubre 2026)
+
+Tres revisiones sin construir (29 fichas). Lo que enseñaron:
+- **Revisar paga**: el bloque modelo de la app (Merino HEMATO) tenía 7 graves de contenido, entre ellos TRALI/TACO al
+  revés en una tarjeta y la proporción PFC:hematíes. Los revisores coinciden mucho entre sí: lo grave lo ven los tres.
+- **Los simuladores son lo más frágil**: dos daban pacientes imposibles (3 L de salino al 7,5 %, un «paro» llamado
+  volemia normal). La regla de paciente posible funciona cuando el verificador mueve los mandos a los extremos.
+- Los correctores comprueban el PDF antes de cambiar. Dos veces corrigieron al director: el salino 0,9 % sí saca
+  algo de agua de las células (pág. 5) y el TRALI «sin agente identificado».
+- Paralelo: R2 y R3 a la vez, R3 en un `git worktree`. Chocaba el puerto fijo del comprobador. El usuario aprobó
+  las cuatro propuestas de regla: puerto libre y carga de imágenes en `jueces.mjs`, recetas Visual por id, primero
+  los archivos modelo, y worktree para el paralelo.
+- El usuario aprobó las tres PR. Tiempo: unas 2 h 30 para las tres, con agentes en paralelo.

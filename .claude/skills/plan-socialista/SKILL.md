@@ -103,12 +103,19 @@ Decide: lo **grave** lo corrige el constructor (modelo barato, solo eso) y se re
 al parte (si son 3 o menos y baratos, se corrigen en la misma vuelta). Siempre hay PR en borrador, aunque solo lleve
 el parte y las ideas: así llegan a `main` cuando el usuario la aprueba.
 
+**Orden dentro de una serie de revisiones**: primero los **archivos modelo** de la app (`CLAUDE.md` §6). Sus fallos
+se copian a otras fichas (Merino HEMATO, modelo de fichas con calculadora, tenía 7 graves).
+
 ### Entregas sin esperar (el usuario revisa mientras tú sigues)
 
 En bucle (`/loop /plan-socialista`), cada tarea acaba en su propia PR pequeña. **No esperes a que el usuario la
 apruebe**: avísale en el chat con el enlace «Ver en el móvil», dónde tocar y 2-3 cosas que mirar, y sigue con la
 siguiente tarea. Si la siguiente depende de una PR aún sin fusionar, trabaja sobre la rama de esa PR y di en la nueva
 «va encima de #N». Si el usuario contesta con cambios, se atienden en la vuelta siguiente de esa misma PR.
+
+**Dos tareas a la vez**: la segunda trabaja en una carpeta aparte (`git worktree add /tmp/wt-<clave> -B auto/<clave>
+origin/main`), con su propio servidor en otro puerto; así no se pisan los archivos. Al cerrarla,
+`git worktree remove /tmp/wt-<clave>`. `jueces.mjs` elige solo un puerto libre, así que se puede pasar en las dos.
 
 ### Cierre del ciclo
 

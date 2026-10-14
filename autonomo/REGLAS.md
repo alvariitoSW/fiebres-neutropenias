@@ -84,6 +84,12 @@ vez:
 - §1.7 (paciente posible): capítulo 18 del atlas, `mr` (octubre 2026). Con el EROA máximo la figura daba PAS 73 mmHg
   y un chorro de 3,4 m/s; los dos jueces la aprobaron porque las cifras iban «en la dirección del texto». Lo vio el
   director en una captura. Entró en el verificador y en `CLAUDE.md` §12.
+- Revisiones de Marino R1-R3 (octubre 2026), aprobadas por el usuario:
+  - `jueces.mjs` daba falsas alarmas con las imágenes de los desplegables cerrados y chocaba con un puerto fijo.
+    Arreglado: carga las imágenes en el momento y elige un puerto libre.
+  - Recetas Visual por id (`CLAUDE.md` §5): «Fase I» encontraba la «Fase II».
+  - En una serie de revisiones, primero los archivos modelo (Merino HEMATO tenía 7 graves).
+  - Dos tareas a la vez en carpetas aparte (`git worktree`, skill del plan).
 
 ## 7. Sirve para estudiar (rúbrica; manda tanto como la fidelidad)
 

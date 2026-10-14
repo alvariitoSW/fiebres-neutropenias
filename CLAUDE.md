@@ -95,6 +95,8 @@ backend/ admin/         panel de subida de contenido (aparte de la app)
   `montarVisual(tabId, receta)` con paneles cuyos nodos apuntan al texto real; o una función para una simulación
   propia. La imagen **no calcula**: escribe en la calculadora real y copia su resultado. Todo marcador lleva «Ver en
   el texto». Si una imagen y una calculadora comparten datos, esos datos van **una sola vez** en `js/data/`.
+  En las recetas, cada nodo apunta a su texto **por id** (`fuente: '#id'`), no por cómo empieza: «Fase I» encontró
+  la «Fase II» (revisión de Marino, octubre 2026).
 - **Acordeón `.micro-prof-item`**: dentro, `<dl class="kv-row">` para campos con etiqueta, `<ul class="term-chips">`
   para términos sueltos, prosa con `<strong>` solo en lo clave.
 - **Estados y resaltes**: `.tfg-estado-ok/warn/danger/neutro`; rotulador `.hl` y `.hl-verde/rojo/azul/purpura`
