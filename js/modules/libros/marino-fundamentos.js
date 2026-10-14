@@ -19,6 +19,17 @@ function pintar(box, estado, html) {
     box.innerHTML = html;
 }
 function ocultar(box) { if (box) box.style.display = 'none'; }
+// Lee un campo numérico y lo acota a los min/max de su propio <input>. Vacío = null
+// (nunca 0). Si lo escrito queda fuera, devuelve el aviso «combinación no fisiológica».
+function leerAcotado(id, nombre) {
+    const el = $(id), raw = num(el);
+    if (raw === null) return { v: null, aviso: '' };
+    const min = el.min !== '' ? Number(el.min) : -Infinity, max = el.max !== '' ? Number(el.max) : Infinity;
+    const v = clamp(raw, min, max);
+    if (v === raw) return { v, aviso: '' };
+    return { v, aviso: `<p>⚠️ <strong>Combinación no fisiológica</strong>: ${nombre} ${fmt(raw, raw % 1 ? 1 : 0)} está fuera del rango de la calculadora (${fmt(min, 0)}-${fmt(max, 0)}). Revisa los datos; se calcula con ${fmt(v, v % 1 ? 1 : 0)}.</p>` };
+}
+const subeAviso = (estado, avisos) => (avisos && estado === 'ok' ? 'warn' : estado);
 function enlazar(ids, fn) {
     ids.forEach(id => { const el = $(id); el?.addEventListener(el.tagName === 'SELECT' || el.type === 'checkbox' ? 'change' : 'input', fn); });
     fn();
@@ -27,10 +38,11 @@ function enlazar(ids, fn) {
 // ---- Cap. 1 — French (Ecuación 1.1 y Tabla 1.1) -------------------------
 const TABLA_1_1 = { 1: ['27 G', '0,4'], 3: ['20 G', '0,9'], 4: ['18 G', '1,2'], 5: ['16 G', '1,7'], 7: ['13 G', '2,4'], 9: ['11 G', '3,2'] };
 function calcFrench() {
-    const fr = num($('mar-french-input')), box = $('mar-french-resultado');
-    if (fr === null || fr <= 0) return ocultar(box);
+    const box = $('mar-french-resultado');
+    const { v: fr, aviso } = leerAcotado('mar-french-input', 'El tamaño');
+    if (fr === null) return ocultar(box);
     const g = TABLA_1_1[fr];
-    pintar(box, 'ok', `<strong>${fmt(fr, fr % 1 ? 1 : 0)} Fr ≈ ${fmt(fr * 0.33, 2)} mm</strong> de diámetro externo.` +
+    pintar(box, subeAviso('ok', aviso), `${aviso}<strong>${fmt(fr, fr % 1 ? 1 : 0)} Fr ≈ ${fmt(fr * 0.33, 2)} mm</strong> de diámetro externo.` +
         (g ? ` La Tabla 1.1 lo da como <strong>${g[0]}</strong> y ${g[1]} mm.` : ' La Tabla 1.1 no da su gauge equivalente.'));
 }
 
@@ -50,8 +62,9 @@ function calcUlcera() {
 
 // ---- Cap. 5 — dosis de tromboprofilaxis (Tablas 5.2 y 5.3) -------------
 function calcProfilaxis() {
-    const f = $('mar-profilaxis-farmaco')?.value, clcr = num($('mar-profilaxis-clcr')), imc = num($('mar-profilaxis-imc'));
-    const box = $('mar-profilaxis-resultado');
+    const f = $('mar-profilaxis-farmaco')?.value, box = $('mar-profilaxis-resultado');
+    const { v: clcr, aviso: avClcr } = leerAcotado('mar-profilaxis-clcr', 'El aclaramiento de creatinina');
+    const { v: imc, aviso: avImc } = leerAcotado('mar-profilaxis-imc', 'El IMC');
     if (!f || clcr === null || imc === null) return ocultar(box);
     const obeso = imc >= 40;
     let estado = 'ok', txt = '';
@@ -88,7 +101,11 @@ function calcProfilaxis() {
             break;
         case 'warfarina': txt = '<strong>2,5-5 mg al día</strong>, ajustando a un INR de 1,5-2,5. Sin ajuste renal ni ajuste conocido en la obesidad.'; break;
     }
-    pintar(box, estado, txt);
+    // Contradicción de la fuente: Tabla 5.2 y pág. 7 dicen dalteparina «sin ajuste renal»; la pág. 11 limita a HNF o warfarina con ClCr <15.
+    const aviso15 = clcr < 15
+        ? '<p>El capítulo (pág. 11) dice que con ClCr &lt;15 solo se pueden usar HNF o warfarina.</p>' : '';
+    if (aviso15 && estado === 'ok') estado = 'warn';
+    pintar(box, subeAviso(estado, avClcr + avImc), `${avClcr}${avImc}${txt}${aviso15}`);
 }
 
 // ---- Cap. 6 — BPS, RASS y propofol --------------------------------------
@@ -103,15 +120,17 @@ function calcRass() {
     let estado, txt;
     if (v === 0) { estado = 'ok'; txt = 'Es el objetivo óptimo.'; }
     else if (v < 0 && v >= -2) { estado = 'ok'; txt = 'Sedación ligera: el objetivo si está en perfusión de sedantes.'; }
-    else if (v < -2) { estado = v <= -4 ? 'danger' : 'warn'; txt = 'Más profundo de lo recomendado: bajar la sedación hasta −1 a −2.'; }
-    else { estado = v >= 3 ? 'danger' : 'warn'; txt = 'Agitación: buscar y tratar la causa (dolor, delirio) antes de sedar más.'; }
+    else if (v < -2) { estado = v <= -4 ? 'danger' : 'warn'; txt = 'Más profundo que la sedación ligera (−1 a −2) que el capítulo propone como objetivo en perfusión de sedantes.'; }
+    else { estado = v >= 3 ? 'danger' : 'warn'; txt = 'Agitación (puntuaciones +1 a +4). El objetivo óptimo es 0.'; }
     pintar($('mar-rass-resultado'), estado, `<strong>RASS ${v > 0 ? '+' : v < 0 ? '−' : ''}${Math.abs(v)}</strong> — ${txt}`);
 }
 
 function calcPropofol() {
-    const mlh = num($('mar-propofol-mlh')), peso = num($('mar-propofol-peso')), horas = num($('mar-propofol-horas'));
     const box = $('mar-propofol-resultado');
-    if (mlh === null || peso === null || peso <= 0) return ocultar(box);
+    const { v: mlh, aviso: a1 } = leerAcotado('mar-propofol-mlh', 'La velocidad');
+    const { v: peso, aviso: a2 } = leerAcotado('mar-propofol-peso', 'El peso');
+    const { v: horas, aviso: a3 } = leerAcotado('mar-propofol-horas', 'La duración');
+    if (mlh === null || peso === null) return ocultar(box);
     const mgkgh = mlh * 10 / peso;            // propofol al 1% = 10 mg/mL
     const ugkgmin = mgkgh * 1000 / 60;
     const kcal = mlh * 24;                     // 1 kcal/mL
@@ -121,19 +140,23 @@ function calcPropofol() {
     if (alta && largo) { estado = 'danger'; aviso = 'Dosis alta durante más de 48 h: es el contexto típico del síndrome de infusión de propofol.'; }
     else if (alta) { estado = 'warn'; aviso = 'Dosis alta (&gt;80 µg/kg/min o &gt;5 mg/kg/h); el riesgo típico aparece si se mantiene más de 48 h.'; }
     else if (ugkgmin >= 36) { estado = 'warn'; aviso = 'Por debajo de los umbrales típicos, pero se ha descrito el síndrome con 36 µg/kg/min.'; }
-    pintar(box, estado, `<strong>${fmt(ugkgmin, 0)} µg/kg/min</strong> (${fmt(mgkgh, 1)} mg/kg/h). ${aviso}<br>Aporta unas <strong>${fmt(kcal, 0)} kcal/día</strong> (1 kcal/mL), que cuentan en la nutrición.`);
+    // Más de 3 veces el umbral de 80 µg/kg/min del capítulo: no es una dosis de un paciente (umbral de esta calculadora, no del capítulo).
+    let avisoRango = a1 + a2 + a3;
+    if (ugkgmin > 240) { estado = 'danger'; avisoRango += '<p>⚠️ <strong>Combinación no fisiológica</strong>: más de 3 veces el umbral de 80 µg/kg/min que cita el capítulo. Revisa la velocidad y el peso. <em>El límite de 240 es de esta calculadora, no del capítulo: ver la nota «El límite de 240 µg/kg/min» debajo.</em></p>'; }
+    pintar(box, subeAviso(estado, avisoRango), `${avisoRango}<strong>${fmt(ugkgmin, 0)} µg/kg/min</strong> (${fmt(mgkgh, 1)} mg/kg/h). ${aviso}<br>Aporta unas <strong>${fmt(kcal, 0)} kcal/día</strong> (1 kcal/mL), que cuentan en la nutrición.`);
 }
 
 // ---- Cap. 7 — oximetría dual -------------------------------------------
 function calcDual() {
-    const spo2 = num($('mar-dual-spo2')), svo2 = num($('mar-dual-svo2')), box = $('mar-dual-resultado');
+    const { v: spo2, aviso: a1 } = leerAcotado('mar-dual-spo2', 'La SpO₂'), { v: svo2, aviso: a2 } = leerAcotado('mar-dual-svo2', 'La SvO₂');
+    const box = $('mar-dual-resultado'), avisos = a1 + a2;
     if (spo2 === null || svo2 === null) return ocultar(box);
-    if (svo2 > spo2) return pintar(box, 'danger', '⚠️ La saturación venosa no puede ser mayor que la arterial: revisa los datos.');
+    if (svo2 > spo2) return pintar(box, 'danger', `${avisos}⚠️ La saturación venosa no puede ser mayor que la arterial: revisa los datos.`);
     const d = spo2 - svo2;
     let estado = 'ok', txt = 'Sin aumento de la extracción de O₂.';
     if (d >= 50) { estado = 'danger'; txt = 'Amenaza para el metabolismo aerobio.'; }
     else if (d > 25) { estado = 'warn'; txt = 'Aporte reducido respecto al consumo, sin comprometer todavía el metabolismo aerobio.'; }
-    pintar(box, estado, `<strong>SpO₂ − SvO₂ = ${fmt(d, 0)}%</strong> (≈ extracción de O₂). ${txt}` +
+    pintar(box, subeAviso(estado, avisos), `${avisos}<strong>SpO₂ − SvO₂ = ${fmt(d, 0)}%</strong> (≈ extracción de O₂). ${txt}` +
         (d > 25 && d <= 30 ? '<br><span style="color:var(--text-muted);">Ojo: el Cap. 9 (Tabla 9.4) da 20-30% como normal; este capítulo marca el aumento desde el 25%.</span>' : ''));
 }
 
@@ -146,20 +169,22 @@ const RANGO_8_1 = {
     o2er: [0.2, 0.3, '', 'Extracción de O₂'],
 };
 function calcHemo() {
-    const v = id => num($(`mar-hemo-${id}`));
+    let avRango = '';
+    const v = (id, nombre) => { const r = leerAcotado(`mar-hemo-${id}`, nombre); avRango += r.aviso; return r.v; };
     const box = $('mar-hemo-resultado');
-    const talla = v('talla'), peso = v('peso'), gc = v('gc'), fc = v('fc'), pam = v('pam'), pvc = v('pvc');
-    const pap = v('pap'), pawp = v('pawp'), hb = v('hb'), sao2 = v('sao2'), svo2 = v('svo2');
-    if (talla === null || peso === null || gc === null) return pintar(box, 'warn', 'Rellena al menos talla, peso y gasto cardíaco.');
+    const talla = v('talla', 'La talla'), peso = v('peso', 'El peso'), gc = v('gc', 'El gasto cardíaco'), fc = v('fc', 'La frecuencia cardíaca');
+    const pam = v('pam', 'La PAM'), pvc = v('pvc', 'La PVC'), pap = v('pap', 'La PAP media'), pawp = v('pawp', 'El enclavamiento');
+    const hb = v('hb', 'La hemoglobina'), sao2 = v('sao2', 'La SaO₂'), svo2 = v('svo2', 'La SvO₂');
+    if (talla === null || peso === null || gc === null) return pintar(box, 'warn', `${avRango}Rellena al menos talla, peso y gasto cardíaco.`);
     const sc = (talla + peso - 60) / 100;
-    if (sc <= 0) return pintar(box, 'danger', 'Superficie corporal no válida.');
+    if (sc <= 0) return pintar(box, 'danger', `${avRango}Superficie corporal no válida.`);
     const ic = gc / sc;
     const res = {};
     if (pvc !== null) res.pvc = pvc;
     if (pawp !== null) res.pawp = pawp;
     if (svo2 !== null) res.svo2 = svo2;
     res.ic = ic;
-    if (fc) res.is = ic / fc * 1000;
+    if (fc !== null) res.is = ic / fc * 1000;
     if (pam !== null && pvc !== null) res.irvs = (pam - pvc) / ic;
     if (pap !== null && pawp !== null) res.irvp = (pap - pawp) / ic;
     if (hb !== null && sao2 !== null) res.do2 = ic * 1.34 * hb * (sao2 / 100) * 10;
@@ -179,45 +204,49 @@ function calcHemo() {
     if (pam !== null && pvc !== null && pvc >= pam) { peor = 'danger'; avisos.push('PVC ≥ PAM: combinación no fisiológica.'); }
     if (pap !== null && pawp !== null && pawp >= pap) { peor = 'danger'; avisos.push('Enclavamiento ≥ PAP media: combinación no fisiológica.'); }
     if (sao2 !== null && svo2 !== null && svo2 > sao2) { peor = 'danger'; avisos.push('SvO₂ &gt; SaO₂: no es posible.'); }
-    pintar(box, peor, `${avisos.length ? `<p>⚠️ ${avisos.join(' ')}</p>` : ''}<p>Superficie corporal <strong>${fmt(sc, 2)} m²</strong></p><ul style="margin:6px 0 0; padding-left:18px;">${filas.join('')}</ul>`);
+    pintar(box, subeAviso(peor, avRango), `${avRango}${avisos.length ? `<p>⚠️ ${avisos.join(' ')}</p>` : ''}<p>Superficie corporal <strong>${fmt(sc, 2)} m²</strong></p><ul style="margin:6px 0 0; padding-left:18px;">${filas.join('')}</ul>`);
 }
 
 // ---- Cap. 9 — CaO₂ y extracción -----------------------------------------
 function calcCao2() {
-    const hb = num($('mar-cao2-hb')), sao2 = num($('mar-cao2-sao2')), pao2 = num($('mar-cao2-pao2')), box = $('mar-cao2-resultado');
+    const { v: hb, aviso: a1 } = leerAcotado('mar-cao2-hb', 'La hemoglobina'), { v: sao2, aviso: a2 } = leerAcotado('mar-cao2-sao2', 'La SaO₂');
+    const { v: pao2, aviso: a3 } = leerAcotado('mar-cao2-pao2', 'La PaO₂'), box = $('mar-cao2-resultado'), avisos = a1 + a2 + a3;
     if (hb === null || sao2 === null || pao2 === null) return ocultar(box);
     const unido = 1.34 * hb * sao2 / 100, disuelto = 0.003 * pao2, total = unido + disuelto;
     const pct = total / 20 * 100;
-    pintar(box, 'neutro',
-        `<strong>CaO₂ = ${fmt(total, 1)} mL/dL</strong> (unido a la Hb ${fmt(unido, 1)} + disuelto ${fmt(disuelto, 2)}; el disuelto es el ${fmt(disuelto / total * 100, 1)}%). Frente a los 20 mL/dL normales: <strong>${fmt(pct, 0)}%</strong>.`);
+    pintar(box, avisos ? 'warn' : 'neutro',
+        `${avisos}<strong>CaO₂ = ${fmt(total, 1)} mL/dL</strong> (unido a la Hb ${fmt(unido, 1)} + disuelto ${fmt(disuelto, 2)}; el disuelto es el ${fmt(disuelto / total * 100, 1)}%). Frente a los 20 mL/dL normales: <strong>${fmt(pct, 0)}%</strong>.`);
 }
 
 function calcExtraccion() {
-    const sao2 = num($('mar-ext-sao2')), svo2 = num($('mar-ext-svo2')), box = $('mar-ext-resultado');
+    const { v: sao2, aviso: a1 } = leerAcotado('mar-ext-sao2', 'La SaO₂'), { v: svo2, aviso: a2 } = leerAcotado('mar-ext-svo2', 'La SvO₂');
+    const box = $('mar-ext-resultado'), avisos = a1 + a2;
     if (sao2 === null || svo2 === null) return ocultar(box);
-    if (svo2 > sao2) return pintar(box, 'danger', '⚠️ La SvO₂ no puede ser mayor que la SaO₂: revisa los datos.');
+    if (svo2 > sao2) return pintar(box, 'danger', `${avisos}⚠️ La SvO₂ no puede ser mayor que la SaO₂: revisa los datos.`);
     const d = sao2 - svo2;
     let estado, txt;
     if (d >= 50) { estado = 'danger'; txt = 'Oxigenación tisular amenazada (≥50%).'; }
     else if (d > 30) { estado = 'warn'; txt = 'Extracción aumentada: el aporte ha bajado respecto al consumo, pero aún compensa.'; }
     else if (d >= 20) { estado = 'ok'; txt = 'Normal (20-30%).'; }
     else { estado = 'warn'; txt = 'Por debajo del 20%: sugiere un defecto de utilización del O₂ (p. ej. en la sepsis).'; }
-    pintar(box, estado, `<strong>SaO₂ − SvO₂ = ${fmt(d, 0)}%</strong>. ${txt}` +
+    pintar(box, subeAviso(estado, avisos), `${avisos}<strong>SaO₂ − SvO₂ = ${fmt(d, 0)}%</strong>. ${txt}` +
         (d > 25 && d <= 30 ? '<br><span style="color:var(--text-muted);">Ojo: la oximetría dual del Cap. 7 ya considera aumentada una diferencia &gt;25%.</span>' : ''));
 }
 
 // ---- Cap. 11 — déficit de plasma, perfusión, VVS y respuesta -----------
 function calcDeficit() {
-    const peso = num($('mar-def-peso')), pct = num($('mar-def-pct')), box = $('mar-def-resultado');
-    if (peso === null || pct === null || peso <= 0) return ocultar(box);
+    const { v: peso, aviso: a1 } = leerAcotado('mar-def-peso', 'El peso magro'), { v: pct, aviso: a2 } = leerAcotado('mar-def-pct', 'El déficit');
+    const box = $('mar-def-resultado'), avisos = a1 + a2;
+    if (peso === null || pct === null) return ocultar(box);
     const mlkg = $('mar-def-sexo')?.value === 'm' ? 36 : 40;
     const plasma = peso * mlkg, deficit = plasma * pct / 100;
     const cristaloide = deficit / 0.2, intersticio = cristaloide * 0.8;
-    pintar(box, 'warn', `Volumen plasmático ≈ <strong>${fmt(plasma / 1000, 2)} L</strong>; déficit del ${pct}% = <strong>${fmt(deficit, 0)} mL</strong>.<br>Con cristaloide (20% en plasma): <strong>${fmt(cristaloide / 1000, 2)} L</strong>, de los que <strong>${fmt(intersticio / 1000, 2)} L van al intersticio</strong>.<br><span style="color:var(--text-muted);">Con albúmina al 5% (700 mL de plasma por litro, Figura 10.1) bastarían unos ${fmt(deficit / 0.7, 0)} mL.</span>`);
+    pintar(box, 'warn', `${avisos}Volumen plasmático ≈ <strong>${fmt(plasma / 1000, 2)} L</strong>; déficit del ${pct}% = <strong>${fmt(deficit, 0)} mL</strong>.<br>Con cristaloide (20% en plasma): <strong>${fmt(cristaloide / 1000, 2)} L</strong>, de los que <strong>${fmt(intersticio / 1000, 2)} L van al intersticio</strong>.<br><span style="color:var(--text-muted);">Con albúmina al 5% (700 mL de plasma por litro, Figura 10.1) bastarían unos ${fmt(deficit / 0.7, 0)} mL.</span>`);
 }
 
 function calcPerfusion() {
-    const scv = num($('mar-perf-scvo2')), pv = num($('mar-perf-pvco2')), pa = num($('mar-perf-paco2'));
+    const { v: scv, aviso: a1 } = leerAcotado('mar-perf-scvo2', 'La ScvO₂'), { v: pv, aviso: a2 } = leerAcotado('mar-perf-pvco2', 'La PCO₂ venosa');
+    const { v: pa, aviso: a3 } = leerAcotado('mar-perf-paco2', 'La PaCO₂'), avisos = a1 + a2 + a3;
     const ctx = $('mar-perf-contexto')?.value, box = $('mar-perf-resultado');
     const partes = [];
     let estado = 'ok';
@@ -237,26 +266,30 @@ function calcPerfusion() {
         else partes.push(`Gap de PCO₂ ${fmt(gap, 0)} mmHg: normal (2-5). Recuerda que no descarta una oxigenación tisular alterada.`);
     }
     if (!partes.length) return ocultar(box);
-    pintar(box, estado, partes.map(p => `<p style="margin:4px 0;">${p}</p>`).join(''));
+    pintar(box, subeAviso(estado, avisos), avisos + partes.map(p => `<p style="margin:4px 0;">${p}</p>`).join(''));
 }
 
 function calcVvs() {
-    const max = num($('mar-vvs-max')), min = num($('mar-vvs-min')), media = num($('mar-vvs-media')), box = $('mar-vvs-resultado');
-    if (max === null || min === null || media === null || media <= 0) return ocultar(box);
-    if (min > max) return pintar(box, 'danger', '⚠️ El VS mínimo no puede ser mayor que el máximo.');
+    const { v: max, aviso: a1 } = leerAcotado('mar-vvs-max', 'El VS máximo'), { v: min, aviso: a2 } = leerAcotado('mar-vvs-min', 'El VS mínimo');
+    const { v: media, aviso: a3 } = leerAcotado('mar-vvs-media', 'El VS medio'), box = $('mar-vvs-resultado');
+    let avisos = a1 + a2 + a3;
+    if (max === null || min === null || media === null) return ocultar(box);
+    if (min > max) return pintar(box, 'danger', `${avisos}⚠️ El VS mínimo no puede ser mayor que el máximo.`);
+    if (media < min || media > max) avisos += '<p>⚠️ <strong>Combinación no fisiológica</strong>: el VS medio debe estar entre el mínimo y el máximo. Revisa los datos.</p>';
     const vvs = (max - min) / media * 100;
-    if ($('mar-vvs-limites')?.checked) return pintar(box, 'warn', `VVS ${fmt(vvs, 0)}%, pero <strong>no es valorable</strong>: exige ausencia de esfuerzos respiratorios y de arritmias.`);
-    pintar(box, vvs >= 15 ? 'ok' : 'warn', `<strong>VVS = ${fmt(vvs, 0)}%</strong> — ${vvs >= 15 ? 'probable respuesta a fluidos (≥15% la identifica en el 80%).' : 'por debajo del 15%: no predice respuesta.'}`);
+    if ($('mar-vvs-limites')?.checked) return pintar(box, 'warn', `${avisos}VVS ${fmt(vvs, 0)}%, pero <strong>no es valorable</strong>: exige ausencia de esfuerzos respiratorios y de arritmias.`);
+    pintar(box, vvs >= 15 && !avisos ? 'ok' : 'warn', `${avisos}<strong>VVS = ${fmt(vvs, 0)}%</strong> — ${vvs >= 15 ? 'probable respuesta a fluidos (≥15% la identifica en el 80%).' : 'por debajo del 15%: no predice respuesta.'}`);
 }
 
 function calcRespuesta() {
-    const vs0 = num($('mar-resp-vs0')), vs1 = num($('mar-resp-vs1')), box = $('mar-resp-resultado');
-    if (vs0 === null || vs1 === null || vs0 <= 0) return ocultar(box);
+    const { v: vs0, aviso: a1 } = leerAcotado('mar-resp-vs0', 'El VS basal'), { v: vs1, aviso: a2 } = leerAcotado('mar-resp-vs1', 'El VS tras la prueba');
+    const box = $('mar-resp-resultado'), avisos = a1 + a2;
+    if (vs0 === null || vs1 === null) return ocultar(box);
     const epp = $('mar-resp-prueba')?.value === 'epp';
     const cambio = (vs1 - vs0) / vs0 * 100;
     const responde = epp ? cambio >= 10 : cambio > 10;
-    let html = `<strong>VS ${cambio >= 0 ? '+' : ''}${fmt(cambio, 0)}%</strong> — ${responde ? 'responde a fluidos' : 'no responde'} (${epp ? '≥10% tras la EPP' : '&gt;10% tras la sobrecarga'}).`;
-    let estado = responde ? 'ok' : 'warn';
+    let html = `${avisos}<strong>VS ${cambio >= 0 ? '+' : ''}${fmt(cambio, 0)}%</strong> — ${responde ? 'responde a fluidos' : 'no responde'} (${epp ? '≥10% tras la EPP' : '&gt;10% tras la sobrecarga'}).`;
+    let estado = responde && !avisos ? 'ok' : 'warn';
     if (epp && responde && $('mar-resp-taqui')?.checked) { estado = 'warn'; html += ' Pero con taquicardia, sospecha <strong>dolor</strong>: la EPP no debe causarla.'; }
     if (epp && !responde && $('mar-resp-pia')?.checked) html += ' Con presión intraabdominal alta, los <strong>falsos negativos</strong> son frecuentes.';
     if (!epp) html += ' El efecto se disipa a los 10 min.';
@@ -299,13 +332,16 @@ function calcDuracion() {
 
 // ---- Cap. 6 — paracetamol y ketorolaco (Tabla 6.3) ----------------------
 function calcAnalgesico() {
-    const f = $('mar-anal-farmaco').value, edad = num($('mar-anal-edad')), peso = num($('mar-anal-peso')), box = $('mar-anal-resultado');
+    const f = $('mar-anal-farmaco').value, box = $('mar-anal-resultado');
     if (f === 'paracetamol') return pintar(box, 'ok', '<strong>1 g IV cada 6 h</strong>; no pasar de <strong>4 g al día</strong>. No tiene acción antiinflamatoria.');
+    const { v: edad, aviso: aEdad } = leerAcotado('mar-anal-edad', 'La edad');
+    const { v: peso, aviso: aPeso } = leerAcotado('mar-anal-peso', 'El peso');
     if (edad === null || peso === null) return ocultar(box);
+    const aviso = aEdad + aPeso;
     const motivos = [$('mar-anal-renal').checked && 'insuficiencia renal', edad >= 65 && '≥65 años', peso < 50 && 'peso <50 kg'].filter(Boolean);
-    pintar(box, motivos.length ? 'warn' : 'ok', motivos.length
+    pintar(box, motivos.length || aviso ? 'warn' : 'ok', aviso + (motivos.length
         ? `<strong>15 mg IV cada 6 h</strong> (dosis reducida un 50% por ${motivos.join(', ')}).`
-        : '<strong>30 mg IV cada 6 h</strong>. Las complicaciones graves (p. ej., renales) son raras en tandas cortas.');
+        : '<strong>30 mg IV cada 6 h</strong>. Las complicaciones graves (p. ej., renales) son raras en tandas cortas.'));
 }
 
 // ---- Cap. 6 — haloperidol paso a paso (Tabla 6.8) -----------------------
@@ -402,16 +438,17 @@ function simDo2Vo2() {
             <text x="12" y="${(Y0 + Y1) / 2}" font-size="10" fill="var(--text-muted)" transform="rotate(-90 12 ${(Y0 + Y1) / 2})" text-anchor="middle">Consumo</text>
             ${[0, 200, 400, 600, 800].map(d => `<text x="${x(d)}" y="${Y0 + 12}" font-size="8" text-anchor="middle" fill="var(--text-muted)">${d}</text>`).join('')}
         </svg>
-        <div class="form-group"><label for="mar-dv-do2">Aporte de O₂: <strong id="mar-dv-do2-val"></strong> mL/min/m²</label><input type="range" id="mar-dv-do2" min="100" max="800" step="10" value="550"></div>
+        <div class="form-group"><label for="mar-dv-do2">Aporte de O₂: <strong id="mar-dv-do2-val"></strong> mL/min/m²</label><input type="range" id="mar-dv-do2" min="200" max="800" step="10" value="550"></div>
         <div class="tfg-estado tfg-estado-ok" id="mar-dv-resultado"></div>`);
     const upd = () => {
         const d = Number($('mar-dv-do2').value), v = vo2De(d), er = v / d, svo2 = SAO2 - er * 100;
         $('mar-dv-do2-val').textContent = d;
         const p = $('mar-dv-punto'); p.setAttribute('cx', x(d)); p.setAttribute('cy', y(v));
         const dep = d < crit;
-        pintar($('mar-dv-resultado'), dep ? 'danger' : er > 0.3 ? 'warn' : 'ok',
+        const bajo = !dep && er < 0.2;
+        pintar($('mar-dv-resultado'), dep ? 'danger' : er > 0.3 || bajo ? 'warn' : 'ok',
             `Consumo <strong>${fmt(v, 0)}</strong> mL/min/m² · extracción <strong>${fmt(er * 100, 0)}%</strong> · SvO₂ ≈ <strong>${fmt(svo2, 0)}%</strong>. ` +
-            (dep ? 'El consumo ya <strong>depende del aporte</strong>: metabolismo limitado por el oxígeno.' : er > 0.3 ? 'La extracción sube para mantener el consumo.' : 'Extracción normal (20-30%).'));
+            (dep ? 'El consumo ya <strong>depende del aporte</strong>: metabolismo limitado por el oxígeno.' : er > 0.3 ? 'La extracción sube para mantener el consumo.' : bajo ? 'Extracción por debajo del rango normal (20-30%); la Tabla 9.4 lo asocia a un defecto de utilización del O₂ (págs. 76-77).' : 'Extracción normal (20-30%).'));
     };
     $('mar-dv-do2').addEventListener('input', upd);
     upd();
@@ -419,22 +456,29 @@ function simDo2Vo2() {
 
 // Figura 10.1: cuánto de cada fluido queda en el plasma y en el intersticio
 // (lo que falta de 1 L de glucosado entra en las células). Se escala en
-// proporción al volumen infundido — una simplificación (ilustrativa).
+// proporción al volumen infundido — una simplificación (ilustrativa). Los
+// topes del mando (max) son de la calculadora, no de la fuente: con el salino
+// al 7,5% (250 mL en la figura) la escala lineal a 3 L daría un plasma imposible.
 const FLUIDOS_10_1 = {
-    glucosado: { nombre: 'Glucosado al 5%', base: 1000, plasma: 100, inter: 250 },
-    salino: { nombre: 'Salino al 0,9%', base: 1000, plasma: 275, inter: 825 },
-    albumina: { nombre: 'Albúmina al 5%', base: 1000, plasma: 700, inter: 300 },
-    hipertonico: { nombre: 'Salino al 7,5%', base: 250, plasma: 535, inter: 700 },
+    glucosado: { nombre: 'Glucosado al 5%', base: 1000, plasma: 100, inter: 250, max: 3000 },
+    salino: { nombre: 'Salino al 0,9%', base: 1000, plasma: 275, inter: 825, max: 3000 },
+    albumina: { nombre: 'Albúmina al 5%', base: 1000, plasma: 700, inter: 300, max: 1500 },
+    hipertonico: { nombre: 'Salino al 7,5%', base: 250, plasma: 535, inter: 700, max: 500 },
 };
 function simFluidos() {
     const cont = $('mar-fluido-sim');
     if (!cont) return;
-    simBase(cont, '💧 ¿Adónde va lo que infundo?', 'Las cifras de la Figura 10.1, escaladas en proporción al volumen (una simplificación).');
+    simBase(cont, '💧 ¿Adónde va lo que infundo?', 'Reparto de la Figura 10.1 (ficha): 1 L de cada fluido, 250 mL el salino al 7,5%. Lejos de ese volumen, la escala lineal es solo aproximada. Los topes del mando son de la calculadora (ilustrativo).');
     cont.insertAdjacentHTML('beforeend', `
         <div class="form-group"><label for="mar-fs-fluido">Fluido</label><select id="mar-fs-fluido">${Object.entries(FLUIDOS_10_1).map(([k, f]) => `<option value="${k}"${k === 'salino' ? ' selected' : ''}>${f.nombre}</option>`).join('')}</select></div>
         <div class="form-group"><label for="mar-fs-vol">Volumen infundido: <strong id="mar-fs-vol-val"></strong> mL</label><input type="range" id="mar-fs-vol" min="250" max="3000" step="250" value="1000"></div>
         <div id="mar-fs-barras"></div>
         <div class="tfg-estado tfg-estado-ok" id="mar-fs-resultado"></div>`);
+    // Al cambiar de fluido, el mando se ajusta a su rango y vuelve al volumen de la figura.
+    const ajustarRango = () => {
+        const f = FLUIDOS_10_1[$('mar-fs-fluido').value], r = $('mar-fs-vol');
+        r.min = 250; r.max = f.max; r.value = f.base;
+    };
     const upd = () => {
         const f = FLUIDOS_10_1[$('mar-fs-fluido').value], vol = Number($('mar-fs-vol').value), k = vol / f.base;
         const pl = f.plasma * k, it = f.inter * k, cel = Math.max(0, vol - pl - it);
@@ -442,20 +486,33 @@ function simFluidos() {
         const max = Math.max(pl, it, cel, 1);
         const barra = (nombre, val, color) => `<div class="kinetic-row" style="display:block;"><div class="kinetic-label"><span>${nombre}</span><span>${fmt(val, 0)} mL</span></div><div class="kinetic-track"><div class="kinetic-fill" style="width:${clamp(val / max * 100, 0, 100)}%; background:${color};"></div></div></div>`;
         $('mar-fs-barras').innerHTML = barra('Plasma', pl, 'var(--accent-red)') + barra('Intersticio', it, 'var(--accent-blue)') + (cel > 0 ? barra('Dentro de las células', cel, 'var(--accent-purple)') : '');
-        const extra = pl + it > vol ? ` Suma más de lo infundido (${fmt(pl + it, 0)} mL): saca agua de las células.` : '';
-        pintar($('mar-fs-resultado'), pl / vol >= 0.5 ? 'ok' : 'warn', `De ${vol} mL, quedan <strong>${fmt(pl, 0)} mL en el plasma</strong> (${fmt(pl / vol * 100, 0)}%).${extra}`);
+        // Texto de la ficha (Cap. 10, «Volume Effects» y «Hypertonic Saline»): el salino al 0,9% es algo
+        // hipertónico y el al 7,5% mucho más; en ambos el exceso sobre lo infundido sale de las células.
+        const ext = pl + it, sale = ext > vol;
+        let frase;
+        if (f === FLUIDOS_10_1.hipertonico) {
+            frase = `De ${vol} mL, el plasma gana <strong>${fmt(pl, 0)} mL</strong>: ${fmt(pl / vol, 1)} veces lo infundido. Con el intersticio, el extracelular gana ${fmt(ext, 0)} mL (${fmt(ext / vol, 1)} veces lo infundido): el agua extra sale de las células.`;
+        } else {
+            frase = `De ${vol} mL, quedan <strong>${fmt(pl, 0)} mL en el plasma</strong> (${fmt(pl / vol * 100, 0)}%).` +
+                (sale ? ` Plasma + intersticio suman ${fmt(ext, 0)} mL, algo más de lo infundido: la ficha explica que el salino al 0,9% es ligeramente hipertónico y mueve algo de agua desde las células.` : '');
+        }
+        pintar($('mar-fs-resultado'), pl / vol >= 0.5 ? 'ok' : 'warn', frase);
     };
-    ['mar-fs-fluido', 'mar-fs-vol'].forEach(id => ['input', 'change'].forEach(ev => $(id).addEventListener(ev, upd)));
+    $('mar-fs-fluido').addEventListener('change', () => { ajustarRango(); upd(); });
+    $('mar-fs-vol').addEventListener('input', upd);
+    ajustarRango();
     upd();
 }
 
-// Figura 11.2: retorno venoso = (Pms − PAD)/Rv con Rv constante. La normal
-// usa la Pms de 7 mmHg de los estudios en animales (con ella, +1 mmHg de PAD
-// quita 1/7 ≈ 14% del retorno, como dice la fuente); la escala es relativa.
+// Figura 11.2: retorno venoso = (Pms − PAD)/Rv con Rv constante. Se da en %
+// de un gradiente de referencia de 7 mmHg (la curva normal de la figura, con la
+// Pms de 7 mmHg de los estudios en animales; con ella, +1 mmHg de PAD quita
+// 1/7 ≈ 14% del retorno, como dice la fuente). La Pms NO se traduce en
+// «más» o «menos» volumen: en humanos se han medido 14-20 mmHg (Cap. 11, pág. 23).
 function simRetorno() {
     const cont = $('mar-retorno-sim');
     if (!cont) return;
-    simBase(cont, '🚰 La curva de retorno venoso (Figura 11.2)', 'Rv constante y Pms normal de 7 mmHg (la de los estudios en animales). El retorno se da en % del normal con PAD 0. Ilustrativo.');
+    simBase(cont, '🚰 La curva de retorno venoso (Figura 11.2)', 'Rv constante. El retorno se da en % del que habría con un gradiente de referencia de 7 mmHg (Pms 7 y PAD 0 de la curva normal de la figura). Origen: ilustrativo.');
     const X0 = 40, X1 = 320, Y0 = 150, Y1 = 20, MAXP = 14, MAXR = 200;
     const x = p => X0 + p / MAXP * (X1 - X0), y = r => Y0 - r / MAXR * (Y0 - Y1);
     const rv = (pms, pad) => Math.max(0, (pms - pad) / 7 * 100);
@@ -470,7 +527,7 @@ function simRetorno() {
             <text x="12" y="${(Y0 + Y1) / 2}" font-size="10" fill="var(--text-muted)" transform="rotate(-90 12 ${(Y0 + Y1) / 2})" text-anchor="middle">Retorno venoso</text>
             ${[0, 2, 4, 6, 8, 10, 12, 14].map(p => `<text x="${x(p)}" y="${Y0 + 12}" font-size="8" text-anchor="middle" fill="var(--text-muted)">${p}</text>`).join('')}
         </svg>
-        <div class="form-group"><label for="mar-rs-pms">Pms (volemia): <strong id="mar-rs-pms-val"></strong> mmHg</label><input type="range" id="mar-rs-pms" min="3" max="14" step="0.5" value="7"></div>
+        <div class="form-group"><label for="mar-rs-pms">Pms (presión sistémica media): <strong id="mar-rs-pms-val"></strong> mmHg</label><input type="range" id="mar-rs-pms" min="3" max="14" step="0.5" value="7"></div>
         <div class="form-group"><label for="mar-rs-pad">PAD / PVC: <strong id="mar-rs-pad-val"></strong> mmHg</label><input type="range" id="mar-rs-pad" min="0" max="14" step="0.5" value="0"></div>
         <div class="tfg-estado tfg-estado-ok" id="mar-rs-resultado"></div>`);
     const upd = () => {
@@ -478,10 +535,12 @@ function simRetorno() {
         $('mar-rs-pms-val').textContent = fmt(pms, 1); $('mar-rs-pad-val').textContent = fmt(pad, 1);
         $('mar-rs-curva').innerHTML = curva(pms, 'var(--accent-blue)');
         const p = $('mar-rs-punto'); p.setAttribute('cx', x(Math.min(pad, pms))); p.setAttribute('cy', y(r));
-        const vol = pms < 7 ? 'hipovolemia (Pms baja)' : pms > 7 ? 'más volumen (Pms alta)' : 'volemia normal';
-        pintar($('mar-rs-resultado'), r === 0 ? 'danger' : r < 60 ? 'warn' : 'ok',
-            `Gradiente Pms − PAD = <strong>${fmt(Math.max(0, pms - pad), 1)} mmHg</strong> → retorno <strong>${fmt(r, 0)}%</strong> del normal (${vol}).` +
-            (r === 0 ? ' La PAD iguala a la Pms: <strong>no hay retorno venoso</strong>.' : ' Subir la PAD sin subir la Pms solo lo reduce.'));
+        const grad = pms - pad;
+        const nota = '<br><span style="color:var(--text-muted);">7-8 mmHg es la Pms de los estudios en animales; en humanos se han medido 14-20 mmHg (Cap. 11, pág. 23). Por eso la Pms sola no dice si hay poco o mucho volumen.</span>';
+        pintar($('mar-rs-resultado'), grad <= 0 ? 'danger' : r < 60 ? 'warn' : 'neutro',
+            `Gradiente Pms − PAD = <strong>${fmt(grad, 1)} mmHg</strong> → ` + (grad <= 0
+                ? '<strong>sin gradiente: no hay retorno venoso</strong>.'
+                : `retorno <strong>${fmt(r, 0)}%</strong> del de referencia (gradiente de 7 mmHg). Subir la PAD sin subir la Pms solo lo reduce.`) + nota);
     };
     ['mar-rs-pms', 'mar-rs-pad'].forEach(id => $(id).addEventListener('input', upd));
     upd();

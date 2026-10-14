@@ -338,7 +338,7 @@ export function initVisualMarino() {
         paneles: [
             FIGURAS,
             { tipo: 'flujo', titulo: 'Las 4 fases del capnograma', nodos: [
-                { fuente: 'Fase I', color: 'gris' }, { fuente: 'Fase II', color: 'amarillo' }, { fuente: 'Fase III', color: 'verde' }, { fuente: 'Fase IV', color: 'dorado' }
+                { fuente: '#mar-capno-f1', etiqueta: 'Fase I', color: 'gris' }, { fuente: '#mar-capno-f2', etiqueta: 'Fase II', color: 'amarillo' }, { fuente: '#mar-capno-f3', etiqueta: 'Fase III', color: 'verde' }, { fuente: '#mar-capno-f4', etiqueta: 'Fase IV', color: 'dorado' }
             ] },
             { tipo: 'racimos', titulo: 'Para qué sirve', grupos: [
                 { titulo: 'Usos', color: 'verde', nodos: ['Sedación para procedimientos', 'Intubación', 'Cambios del gasto cardíaco', 'Reanimación'] }
