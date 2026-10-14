@@ -15,14 +15,14 @@ Estados: `pendiente` · `en curso` · `en revisión` (PR abierta) · `hecha` (PR
 
 ## Objetivo 1 · Terminar el atlas de Eco cardíaca
 
-*The Heart by Ultrasound* (David Ouyang) en español, dentro de Eco cardíaca → Atlas. Hoy hay **9 de 30** capítulos.
+*The Heart by Ultrasound* (David Ouyang) en español, dentro de Eco cardíaca → Atlas. Hoy hay **10 de 30** (con `mr` en revisión) capítulos.
 Marcador: capítulos con estado `hecha`.
 
 ### Fuente
 
 - Texto, preguntas y bibliografía: <https://github.com/douyang/echodemo> (clonar en `/tmp/echodemo`). Uso del texto
   con permiso del autor; el código no se copia.
-- Patrón a seguir: los 9 capítulos ya hechos (`js/modules/eco/atlas/`) y la sección «Atlas de ecocardiografía» de
+- Patrón a seguir: los capítulos ya hechos (`js/modules/eco/atlas/`) y la sección «Atlas de ecocardiografía» de
   `js/modules/eco/README.md`.
 
 ### Qué es «hecho» para un capítulo (todos los puntos)
@@ -50,7 +50,7 @@ Marcador: capítulos con estado `hecha`.
 
 | # | Clave | Capítulo | Estado | Notas |
 |---|---|---|---|---|
-| 1 | `mr` | 18 Insuficiencia mitral | en curso | El motor ya tiene `eroaMitral` (orificio + Bernoulli). Nota del usuario: es el piloto del plan socialista, supervisado. |
+| 1 | `mr` | 18 Insuficiencia mitral | en revisión | El motor ya tiene `eroaMitral` (orificio + Bernoulli). Nota del usuario: es el piloto del plan socialista, supervisado. PR: https://github.com/alvariitoSW/fiebres-neutropenias/pull/2 |
 | 2 | `as` | 15 Estenosis aórtica | pendiente | El motor ya tiene `areaAortica` y la recuperación de presión. |
 | 3 | `tr` | 19 Insuficiencia tricuspídea | pendiente | El motor ya tiene `eroaTricus`. |
 | 4 | `peri` | 21 Enfermedad pericárdica | pendiente | El simulador ya tiene derrame; el taponamiento y la constricción, no. |
