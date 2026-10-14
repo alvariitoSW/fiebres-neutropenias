@@ -142,7 +142,7 @@ function calcPropofol() {
     else if (ugkgmin >= 36) { estado = 'warn'; aviso = 'Por debajo de los umbrales típicos, pero se ha descrito el síndrome con 36 µg/kg/min.'; }
     // Más de 3 veces el umbral de 80 µg/kg/min del capítulo: no es una dosis de un paciente (umbral de esta calculadora, no del capítulo).
     let avisoRango = a1 + a2 + a3;
-    if (ugkgmin > 240) { estado = 'danger'; avisoRango += '<p>⚠️ <strong>Combinación no fisiológica</strong>: más de 3 veces el umbral de 80 µg/kg/min que cita el capítulo. Revisa la velocidad y el peso (el límite de 240 es de esta calculadora, no del capítulo).</p>'; }
+    if (ugkgmin > 240) { estado = 'danger'; avisoRango += '<p>⚠️ <strong>Combinación no fisiológica</strong>: más de 3 veces el umbral de 80 µg/kg/min que cita el capítulo. Revisa la velocidad y el peso. <em>El límite de 240 es de esta calculadora, no del capítulo: ver la nota «El límite de 240 µg/kg/min» debajo.</em></p>'; }
     pintar(box, subeAviso(estado, avisoRango), `${avisoRango}<strong>${fmt(ugkgmin, 0)} µg/kg/min</strong> (${fmt(mgkgh, 1)} mg/kg/h). ${aviso}<br>Aporta unas <strong>${fmt(kcal, 0)} kcal/día</strong> (1 kcal/mL), que cuentan en la nutrición.`);
 }
 
