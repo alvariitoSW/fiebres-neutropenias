@@ -69,3 +69,18 @@ Marcador: capítulos con estado `hecha`.
 | 19 | `lvad` | B1 Asistencias ventriculares | pendiente | Probablemente `necesita humano`: el motor no tiene bomba. |
 | 20 | `tee` | 05 Ecocardiografía transesofágica | pendiente | Probablemente `necesita humano`: no hay sonda esofágica. |
 | 21 | `ai` | 24 Interpretación con IA | pendiente | Probablemente `necesita humano`: decidir antes qué se enseña sin modelo. |
+
+---
+
+## Otros pendientes (fuera del bucle por ahora)
+
+Decididos con el usuario. Casi todos dependen de que mande una fuente.
+
+- **Orden de trabajo pedido**: 1) Marino completo (hecho, octubre 2026); 2) terminar El Libro Azul (hay secciones
+  I, II, III y VII); 3) el PIF de R1: las 7 rotaciones sin contenido (Radiología de tórax, Neurorradiología,
+  Cardiología, Medicina Interna, Infecciosas, Neurología, Neumología). Necesitan los PDF.
+- **TRR (Nefrología)**: cotejar con el PDF de Valdenebro 2021 las 7 dudas anotadas en `docs/historial/nefrologia.md`,
+  si el usuario lo manda. ECIL-10, BCSH 2009 y las citopenias distintas de la neutropenia febril: descartadas.
+- **Eco cardíaca (fuera del atlas)**: calibrar la RVS, medir fps en el móvil, más formas de enfermedad
+  (`js/modules/eco/README.md`, «Pendiente»).
+- **Panel de subida**: falta la clave de la API y desplegar el Worker (`backend/README.md`).

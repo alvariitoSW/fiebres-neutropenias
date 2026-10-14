@@ -4,162 +4,198 @@ App web estática de apoyo a la decisión y de estudio para Medicina Intensiva, 
 cama **en el móvil**. Contenido organizado por especialidad. Todo el contenido clínico sale de fuentes reales
 (PDF en `docs/`, guías, protocolos del hospital) y es trazable a ellas.
 
-Este archivo son **las reglas vigentes**, corto a propósito. La historia de cómo se construyó cada parte
-(decisiones, fuentes, auditorías, verificaciones, cifras) está en `docs/historial/` (índice al final). **No leas el
-historial entero**: busca con grep la sección que necesites. Cada módulo grande tiene además su propio
-`README.md` (p. ej. `js/modules/eco/README.md`).
+Este archivo son **las reglas vigentes**, cortas a propósito:
+- Las carpetas con reglas propias tienen su `CLAUDE.md` (eco, nefrología, libros, sobrevivir-umi, uci-papers).
+  Se cargan solos al trabajar en ellas.
+- La historia de cómo se hizo cada parte (decisiones, fuentes, auditorías, cifras) está en `docs/historial/`
+  (índice al final). **No la leas entera**: busca con grep lo que necesites.
+- Lo pendiente vive en `autonomo/TABLERO.md`, no aquí.
 
-## 1. Decisiones de arquitectura (no las reabras sin preguntar)
+## 1. Cómo trabaja el usuario
+
+- Es médico residente de Medicina Intensiva (R1), no programador. **Explícale en lenguaje llano**, sin jerga técnica.
+  Si un término técnico hace falta, explícalo en una frase.
+- Usa la app en el móvil: piensa siempre en 390 px de ancho.
+- **Para trabajos grandes, primero un informe o una propuesta** (a menudo una página tipo Artifact): qué se va a
+  hacer, qué falla, qué falta. Después, él dice «aplica todo» o elige. Para rediseños visuales, primero opciones
+  visuales para elegir.
+- **Pregunta antes de una decisión grande o difícil de deshacer** (fusionar módulos, cambiar arquitectura, quitar
+  contenido). Lo pequeño y obvio, hazlo.
+- Manda las fuentes en PDF (a veces en varias partes) y espera que no se resuma por debajo de la fuente.
+- Si pide algo que contradice una regla de aquí, avísale y que decida él.
+
+## 2. Decisiones de arquitectura (no las reabras sin preguntar)
 
 - **Sin backend, sin login, sin base de datos.** Nada se guarda, con tres excepciones de `localStorage`,
-  deliberadas y en el dispositivo del usuario: el quiz (aciertos/fallos por pregunta), el Modo Estudio (pomodoros,
-  duración y progreso por ficha) y Dudas de guardia (las dudas que escribe el usuario). Ninguna persistencia más
-  sin que el usuario la pida.
-- **Sin build tool.** Sin npm/Vite/webpack: HTML/CSS/JS que el navegador ejecuta tal cual. Se despliega en GitHub
-  Pages sirviendo `index.html`. Sin dependencias nuevas.
-- **Cada calculadora es código específico**, no un motor genérico. Se acepta algo de repetición a cambio de
-  legibilidad.
-- **HTML modular vía `fetch()`**: `index.html` es el esqueleto; cada vista/calculadora es un partial cargado con
-  `data-include="ruta.html"` (`js/core/include.js`). Todos los partials se cargan al arrancar, aunque estén ocultos.
-- **Excepción aparte**: `backend/` + `admin/` (panel de subida de contenido con GitHub Actions y el Agent SDK). Es
-  una pieza separada; la app sigue siendo estática. Ver `docs/historial/panel-subida.md`.
+  deliberadas y en el dispositivo del usuario: el quiz (aciertos/fallos), el Modo Estudio (pomodoros, duración y
+  progreso por ficha) y Dudas de guardia (las dudas que escribe el usuario). Ninguna persistencia más sin que la pida.
+- **Sin build tool ni dependencias.** HTML/CSS/JS que el navegador ejecuta tal cual. GitHub Pages sirve `index.html`.
+- **Cada calculadora es código específico**, no un motor genérico.
+- **HTML modular vía `fetch()`**: `index.html` es el esqueleto; cada vista es un partial con
+  `data-include="ruta.html"` (`js/core/include.js`). **Todos los partials se cargan al arrancar**, aunque estén ocultos.
+- **Nunca se fusiona contenido de fuentes distintas**: se conectan con enlaces cruzados. Un manual o una guía no se
+  trocea por especialidades (p. ej. el Manual UMI vive entero en Sobrevivir a la UMI).
+- Aparte: `backend/` + `admin/` (panel de subida de contenido). La app sigue siendo estática.
 
-## 2. Estructura
+## 3. Estructura
 
 ```
 index.html              esqueleto: cabecera, botones, contenedores data-include. Sin lógica
-css/variables.css       paleta y tokens (:root) · base.css (reset, layout) · components.css (componentes)
-js/main.js              arranque: carga partials, inicializa especialidades, la única llamada a initQuiz()
-js/core/                infraestructura genérica (ver §4)
-js/data/                datos puros sin DOM: tablas, bancos de preguntas (*-preguntas.js)
+css/variables.css       paleta y tokens · base.css (reset, layout) · components.css (componentes)
+js/main.js              arranque: partials, especialidades, la única llamada a initQuiz()
+js/core/                piezas genéricas (ver §5)
+js/data/                datos puros sin DOM: tablas y bancos de preguntas (*-preguntas.js)
 js/modules/<módulo>/    index.js (arranca el módulo) + <vista>.html + <vista>.js
-docs/                   PDF de las fuentes (enlazados con #page=N) · docs/historial/ (la historia)
-autonomo/               trabajo autónomo en bucle: guía, reglas y tablero (ver §9)
+docs/                   PDF de las fuentes · docs/historial/ (la historia)
+autonomo/               trabajo autónomo en bucle: guía, reglas, tablero y bitácora
 backend/ admin/         panel de subida de contenido (aparte de la app)
 ```
 
-Módulos: `home` (raíz y Hematología: Atlas, citopenias, PIF), `neutropenia-febril`, `reconocimiento`,
-`sindromes-urgentes`, `trasplante`, `merino-hemato`, `generales` (Escalas Generales), `fuentes`, `nefrologia`,
-`uci-papers`, `fisio-uci`, `cardiologia`, `neumologia`, `sobrevivir-umi`, `libros`, `eco`, `quiz`.
+## 4. Navegación
 
-## 3. Navegación
-
-- **Raíz** (`#especialidades-view`): 6 puertas — PIF (Hematología + Nefrología), Fisiopatología UCI (Cardiología,
-  Neumología, Fisiopatología UCI), UCI / Papers Tuiter, Sobrevivir a la UMI, Eco cardíaca y Libros.
-- `js/modules/home/index.js` tiene el switcher raíz (`topLevel`, `createViewSwitcher()` de
-  `core/navigation.js`). Cada especialidad con submenú tiene su propio switcher medio en su `index.js`.
-- **Añadir una especialidad con submenú**: su `index.js` devuelve `{ volverAlMenu, irAFicha: xLevel.irAFicha }` y
-  exporta `quizTriggerId/quizBanco/quizTemas`; en `main.js`, una entrada en el objeto `especialidades`; en
-  `home/index.js`, su vista en `topLevel` y su botón en `BOTONES_ESPECIALIDAD`. Nada más.
-- **Añadir una guía/bloque dentro de una especialidad**: botón en su `*-menu.html`, su `<vista>.html` con el botón
-  «← VOLVER» de su clase, registro en `index.html` y en el switcher medio del módulo.
-- Los «← VOLVER» usan una clase por nivel de destino (`.btn-volver-especialidades`, `.btn-volver-pif-menu`,
+- La raíz (`#especialidades-view` en `index.html`) tiene las puertas: PIF (Hematología, Nefrología), Fisiopatología
+  UCI (Cardiología, Neumología, Fisiopatología UCI), UCI / Papers Tuiter, Sobrevivir a la UMI, Eco cardíaca y Libros.
+- `js/modules/home/index.js` tiene el switcher raíz (`topLevel`, `createViewSwitcher()` de `core/navigation.js`).
+  Cada especialidad con submenú tiene su switcher medio en su `index.js`.
+- **Especialidad nueva con submenú**: su `index.js` devuelve `{ volverAlMenu, irAFicha: xLevel.irAFicha }` y exporta
+  `quizTriggerId/quizBanco/quizTemas`; en `main.js`, una entrada en el objeto `especialidades`; en `home/index.js`,
+  su vista en `topLevel` y su botón en `BOTONES_ESPECIALIDAD`. Nada más.
+- **Guía o bloque nuevo dentro de una especialidad**: botón en su `*-menu.html`, su `<vista>.html` con el «← VOLVER»
+  de su nivel, registro en `index.html` y en el switcher medio del módulo.
+- Los «← VOLVER» usan una clase por destino (`.btn-volver-especialidades`, `.btn-volver-pif-menu`,
   `.btn-volver-cardiorrespi-menu`, `.btn-volver-home`, `.btn-volver-nefro-kidney`, `.btn-volver-fuci-menu`…).
+- Una categoría solo de contenido (índice, bibliografía) va como acordeón `.accordion-btn` (`core/accordion.js` la
+  detecta sola), no como vista ni nodo de un mapa.
 
-## 4. Piezas compartidas: úsalas, no las copies
+## 5. Piezas compartidas: úsalas, no las copies
 
 - **Enlace cruzado (el único mecanismo)**: `<button data-especialidad="X" data-view data-panel data-tab>`. Lo
-  resuelve un listener delegado en `home/index.js` (`irAResultadoBusqueda`). Sirve entre especialidades y dentro
-  de una (sin `data-view`). Extras: `data-trasplante` (subvista de Trasplante, con `especialidad="home"`),
-  `data-resaltar="#id"`, `data-pulsar="id1 id2"`, `data-en-visual`, `data-eco-vista/escenario/medir/atlas`,
-  `data-nefrona-viva`, `data-glomerulo`. **Nunca un listener nuevo por módulo.** Las clases `.tx-link`,
-  `.especialidad-link`, `.paper-link`, `.neumo-internal-link` son solo visuales.
-- **Cuaderno de campo** (`core/corkboard.js`): `initCorkboard(boardId, panelId)`; cada `.field-card[data-tab]`
-  abre su `.tab-content`. Modo cajón (≤12 fichas) o compacto con hoja fija (>12). «Siguiente ficha», marca de visto
-  y `openCorkboardTopic(panel, tab)` salen solos. Patrón para cualquier contenido teórico.
-- **`js/core/ui.js`**: `wireSelectExplicacion()` (select → explicación), `pintarGauge()` (gauges `.kinetic-*`),
-  `clamp()`, `escapeHtml()` (solo texto del usuario). **`core/wizard.js`**: `initSiNoWizard()` (asistentes Sí/No).
-- **Vista Visual** (`core/vista-visual.js`, `core/visual-kit.js`): interruptor Texto | Visual por tarjeta/ficha.
-  `montarVisual(tabId, receta)` con paneles declarativos cuyos nodos apuntan al texto real (`fuente`); o una función
-  para una simulación propia. La imagen **no calcula**: escribe en la calculadora real y copia su resultado. Cada
-  marcador lleva «Ver en el texto». Detalle en `docs/historial/vista-visual.md`.
+  resuelve un listener delegado en `home/index.js`. Sirve entre especialidades y dentro de una (sin `data-view`).
+  Extras: `data-trasplante` (con `especialidad="home"`), `data-resaltar="#id"`, `data-pulsar="id1 id2"`,
+  `data-en-visual`, `data-eco-vista/escenario/medir/atlas`, `data-nefrona-viva`, `data-glomerulo`. **Nunca un
+  listener nuevo por módulo.** `.tx-link`, `.especialidad-link`, `.paper-link`, `.neumo-internal-link` son solo
+  estilo.
+- **Cuaderno de campo** (`core/corkboard.js`): `initCorkboard(boardId, panelId)`; cada `.field-card[data-tab]` abre
+  su `.tab-content`. Cajón (≤12 fichas) u hoja fija abajo (>12). «Siguiente ficha», marca de visto y
+  `openCorkboardTopic(panel, tab)` salen solos. Es el patrón para todo contenido teórico.
+  Un cuaderno nuevo necesita su entrada en `PANEL_NAV` de `core/search.js`, o el buscador global no lo encuentra.
+- **`core/ui.js`**: `wireSelectExplicacion()`, `pintarGauge()` (gauges `.kinetic-*`), `clamp()`, `escapeHtml()`
+  (solo para texto que escribe el usuario). **`core/wizard.js`**: `initSiNoWizard()`.
+- **Pestañas** (`core/tabs.js`, ya casi sin uso): `initTabs(contenedor)` siempre acotado a su contenedor, nunca
+  `document`; si no, los grupos de pestañas de módulos distintos se pisan.
+- **Vista Visual** (`core/vista-visual.js`, `core/visual-kit.js`): interruptor Texto | Visual.
+  `montarVisual(tabId, receta)` con paneles cuyos nodos apuntan al texto real; o una función para una simulación
+  propia. La imagen **no calcula**: escribe en la calculadora real y copia su resultado. Todo marcador lleva «Ver en
+  el texto». Si una imagen y una calculadora comparten datos, esos datos van **una sola vez** en `js/data/`.
 - **Acordeón `.micro-prof-item`**: dentro, `<dl class="kv-row">` para campos con etiqueta, `<ul class="term-chips">`
   para términos sueltos, prosa con `<strong>` solo en lo clave.
 - **Estados y resaltes**: `.tfg-estado-ok/warn/danger/neutro`; rotulador `.hl` y `.hl-verde/rojo/azul/purpura`
   (rojo alarma, verde normal, azul mecanismo, púrpura definición); `.grade-badge` (Clase I verde, IIa/IIb
   `.yellow`, III `.red`); notas de fidelidad en `<details class="nota-plegable">`; `.comparativa-fuentes`.
+- **Bibliografía**: `.biblio-link` + `.biblio-nota`. Nunca `.pkpd-btn` (está atado a la calculadora PK/PD).
 - **Figuras**: `<div class="article-figure"><img loading="lazy">` + `.article-figure-caption` (lightbox gratis).
-- **Ocultar** con el atributo `hidden` (hay una regla global `[hidden]{display:none!important}`).
+  Nunca un `<img>` que apunte a un archivo que no se llegó a extraer.
+- **Ocultar** con el atributo `hidden` (regla global `[hidden]{display:none!important}`).
+- **Color**: solo los tokens de `css/variables.css`, nunca colores nuevos. Ojo: `--accent-blue` es en realidad un
+  dorado casi igual a `--accent-yellow` (no los uses juntos para distinguir cosas) y `--accent-green` se ve apagado
+  sobre el fondo oscuro. La identidad nunca va solo por color: añade icono, texto o forma.
 
-## 5. Contenido clínico
+## 6. Archivos modelo: copia su estructura
+
+| Para hacer… | Mira |
+|---|---|
+| Fichas de cuaderno de campo con figuras y una calculadora | `js/modules/merino-hemato/merino-hemato.html` + `index.js` (escala 4Ts) |
+| Vista Visual con receta del kit | `js/modules/merino-hemato/visual.js` |
+| Simulación propia en la vista Visual | `js/modules/nefrologia/hiperpotasemia-sim.js` (+ `potasio-escena.js`) |
+| Asistente paso a paso Sí/No | `js/modules/cardiologia/insuficiencia-cardiaca.js` (`initSiNoWizard`) |
+| Escala puntuable con `<select>` | `js/modules/generales/charlson.js` |
+| Banco de preguntas | `js/data/merino-hemato-preguntas.js` |
+| Especialidad con submenú (el `index.js` más simple) | `js/modules/neumologia/index.js` |
+| Enlace cruzado | `js/modules/fisio-uci/vias-urinarias.html` (botones `.especialidad-link`) |
+| Capítulo del atlas de eco | `js/modules/eco/atlas/cap-sistolica.html` + `sistolica.mjs` |
+
+## 7. Contenido clínico
 
 1. **Nunca inventes.** Toda cifra, dosis o afirmación sale de una fuente que se puede abrir. Si no está, se anota
    como hueco; no se rellena con conocimiento general sin decirlo.
-2. **Fuentes**: el PDF va a `docs/` y se enlaza con `.biblio-link` + `#page=N` (calcula el desplazamiento de
-   página del PDF y compruébalo). Para webs: solo URLs verificadas (que aparezcan literalmente en los resultados de
-   búsqueda); nunca un buscador genérico como sustituto de un artículo. Si no se encuentra, se omite.
-3. **Origen visible** en simuladores y calculadoras: `ficha`, `fisiología general` o `ilustrativo`.
-4. **Erratas de la fuente**: se reproducen tal cual con nota de fidelidad. **Fuentes que discrepan**: se muestran
-   las dos con una nota de fuentes; nunca se elige una ganadora por criterio propio.
-5. **No resumas por debajo de la fuente**: cifras, fármacos, mecanismos y tablas completas.
-6. **Tablas** de la fuente → `.data-table` nativas (envueltas en `overflow-x:auto` si son anchas). **Imágenes**:
-   solo fotos y registros reales (eco, Rx, TC, histología, ECG); los gráficos y flujogramas se recrean. Extracción
-   con `pdfimages`; si la figura está fragmentada (InDesign), rasterizar la página y recortar.
-7. **PNT y manuales internos del hospital**: nunca reproducir el documento ni los nombres del personal; extraer el
-   contenido clínico y reescribirlo; citar de forma genérica. Los puramente administrativos se descartan.
-8. **Código ajeno** (echodemo, ATRIA): ideas y texto (con permiso) sí, código no; se reconstruye sobre los motores de
-   la app. Nada de imágenes de pacientes con licencia restrictiva.
-9. **Calculadoras**: `calcX()` + `init()`; nunca tratar un campo vacío como 0 (`el.value === ''`); clamp de rangos;
-   avisos de «combinación no fisiológica»; scores aditivos sí, regresiones complejas sin verificar (p. ej. KFRE) no.
-   Casillas de una escala que suma puntos: clase `.puntuable` o `<select>` (la regla general tacha lo marcado).
-10. **Si el usuario pide convenciones que no están aquí, pregunta** antes de asumir que vienen de otro proyecto.
+2. **Fuentes**: el PDF va a `docs/` y se enlaza con `#page=N` (calcula el desplazamiento entre página impresa y
+   página del PDF, y compruébalo). Webs: solo URLs verificadas (que salgan literalmente en los resultados de
+   búsqueda), nunca un buscador genérico en lugar del artículo; si no se encuentra, se omite.
+3. **Leer un PDF largo**: en lotes de 6-8 páginas. Si un lote devuelve menos páginas de las pedidas, relee las que
+   faltan; no las des por leídas.
+4. **Origen visible** en simuladores y calculadoras: `ficha`, `fisiología general` o `ilustrativo`.
+5. **Erratas de la fuente**: se reproducen tal cual con nota de fidelidad. **Fuentes que discrepan**: se muestran las
+   dos con una nota de fuentes; nunca se elige una ganadora por criterio propio.
+6. **No resumas por debajo de la fuente**: cifras, fármacos, mecanismos y tablas completas.
+7. **Tablas** de la fuente → `.data-table` nativas (en `overflow-x:auto` si son anchas). **Imágenes**: solo fotos y
+   registros reales (eco, Rx, TC, histología, ECG); gráficos y flujogramas se recrean. Extracción con `pdfimages`; si
+   la figura está fragmentada en muchos trozos, rasterizar la página y recortar.
+8. **PNT y manuales internos del hospital**: nunca reproducir el documento ni los nombres del personal; extraer el
+   contenido clínico, reescribirlo y citarlo de forma genérica. Los puramente administrativos se descartan.
+9. **Código ajeno** (echodemo, ATRIA): ideas y texto (con permiso) sí; código no, se reconstruye sobre los motores de
+   la app. Nada de imágenes de pacientes con licencia restrictiva (CAMUS, EchoNet).
+10. **Calculadoras**: `calcX()` + `init()`; un campo vacío nunca es 0 (`el.value === ''`); clamp de rangos; aviso de
+    «combinación no fisiológica»; scores aditivos sí, regresiones complejas sin verificar (p. ej. KFRE) no. Casillas
+    que suman puntos: clase `.puntuable` o `<select>` (la regla general tacha lo marcado).
+11. **Texto de las fichas**: en el gancho de una ficha, no unas 3 o más palabras con «/» sin espacios
+    («α1/α2/β1»): no parte la línea y desborda en el móvil.
+12. **Si el usuario pide convenciones que no están aquí, pregunta** antes de asumir que vienen de otro proyecto.
 
-## 6. Quiz
+## 8. Quiz
 
 - **Una sola llamada a `initQuiz()`**, en `main.js`. Cada especialidad exporta `quizTriggerId/quizBanco/quizTemas`
   (con `asignatura` y `bloque` para el menú de 3 niveles).
 - Pregunta: `{ id, tema, enunciado, opciones, correcta, explicacion }` o `{ tipo: 'redactar', enunciado,
-  respuestaModelo }`. Escribe `<`/`>` literales en los bancos, nunca `&lt;`. Las opciones se barajan solas.
-- **Nunca un tema sin preguntas** (rompe el quiz). Ritmo habitual: ~8 por ficha (6 + 2 de redactar); papers de UCI
-  Tuiter, formato reducido (8-10 + 3-4 de redactar).
+  respuestaModelo }`. En los bancos, `<` y `>` literales, nunca `&lt;`. Las opciones se barajan solas.
+- **Nunca un tema sin preguntas** (rompe el quiz). Ritmo habitual: ~8 por ficha (6 + 2 de redactar).
 - Botones «Repasar» con `data-quiz-asignatura` + `data-quiz-bloque` (+ `data-quiz-elegir`, `data-quiz-tema`,
   `data-quiz-bloques`) para abrir directamente su parte.
 
-## 7. Cómo probar
+## 9. Cómo probar
 
-- Servir con `python3 -m http.server 8000` (con `file://` no funciona). Para conducirla, la skill
+- Servir con `python3 -m http.server 8000` (con `file://` no funciona). Para conducir la app: skill
   `run-fiebres-neutropenias` (Playwright, móvil 390×844).
-- **Comprueba siempre a 390 y 360 px**: sin desbordamiento horizontal, sin errores de consola, ficha abierta de
-  verdad (`.active` y visible), calculadoras con valores concretos.
-- Trampas conocidas: el DOM tiene todas las vistas a la vez (usa `#id` precisos, no selectores de texto);
-  `.click()` no ejercita `:active` (usa `mouse.down/up`); Chromium cachea los módulos ES (relanza el navegador tras
-  editar un `.js`); comprueba ids duplicados en cada bloque nuevo.
-- Simulador de eco: `node --test 'js/modules/eco/pruebas/*.test.mjs'` en verde antes de subir.
+- **Comprueba a 390 y 360 px**: sin desbordamiento horizontal, sin errores de consola, la ficha abierta de verdad
+  (`.active` y visible), calculadoras con valores concretos, imágenes cargadas (`naturalWidth > 0`).
+- **Trampas conocidas**:
+  - El DOM tiene todas las vistas a la vez: usa `#id` precisos, nunca selectores de texto ni `.tab-content.active`
+    sin acotar.
+  - Abrir una ficha son dos toques (abrir la tarjeta y su botón): las imágenes `lazy` no cargan hasta entonces.
+  - `.click()` no ejercita `:active`: usa `mouse.down/up`. Si una ficha «no abre» en una prueba, prueba un click
+    directo en el DOM antes de dar por roto el código.
+  - Chromium cachea los módulos ES: tras editar un `.js`, relanza el navegador.
+  - Ningún `:active`/`:hover` con `transform`, `filter`, `perspective` ni `backdrop-filter` sobre algo que contenga un
+    elemento `position:fixed` (encierra la hoja fija y la hace intocable en el móvil).
+  - Comprueba ids duplicados en cada bloque nuevo (todas las vistas comparten el DOM).
 - **Cache-busting**: si cambia un `.css` o `js/main.js`, sube la fecha `?v=AAAAMMDD` de `index.html` (con sufijo
   `-2`, `-3` si es el segundo despliegue del día).
 
-## 8. Git
+## 10. Git
 
 - Rama de trabajo `claude/medical-app-restructure-5xv3qn`. Tras cada tanda: commit, push y merge a `main`
   (`git checkout main && git merge --ff-only origin/<rama> && git push origin main`, y volver a la rama). Si el
   fast-forward falla, avisa al usuario; no reescribas historia.
-- **Antes de cada commit**: `git checkout -- .gitignore .ignore` (herramientas como graft los ensucian).
-- **Excepción**: el trabajo autónomo en bucle (§9) va a ramas `auto/<tarea>` con PR en borrador; solo el usuario
-  la aprueba.
+- **Excepción**: el trabajo autónomo en bucle va a ramas `auto/<tarea>` con PR en borrador; solo el usuario la
+  aprueba (ver `autonomo/`).
 
-## 9. Trabajo autónomo
-
-`autonomo/` tiene la guía para el usuario (`LEEME.md`), el listón de calidad del bucle (`REGLAS.md`) y el tablero
-de tareas (`TABLERO.md`). En modo bucle: una tarea acotada, máximo de vueltas, verificación objetiva en cada vuelta
-y resultado en PR.
-
-## 10. Redacción e idioma
+## 11. Redacción e idioma
 
 Todo en español: contenido, interfaz y comentarios. Frases cortas, voz activa, sin muletillas. Nombra las cosas
 como las conoce un médico, no como están hechas por dentro. Los botones dicen lo que hacen.
 
-## 11. Pendiente (decidido con el usuario)
+## 12. Antes de dar un trabajo por terminado
 
-- **Orden de trabajo pedido**: 1) Marino completo (hecho, octubre 2026); 2) terminar El Libro Azul (hay secciones
-  I, II, III y VII); 3) el PIF de R1: las 7 rotaciones sin contenido (Radiología de tórax, Neurorradiología,
-  Cardiología, Medicina Interna, Infecciosas, Neurología, Neumología). Todo depende de que el usuario mande los PDF.
-- **TRR (Nefrología)**: cotejar con el PDF de Valdenebro 2021 las 7 dudas anotadas (`docs/historial/nefrologia.md`)
-  si el usuario lo manda. ECIL-10, BCSH 2009 y las citopenias distintas de la neutropenia febril: descartadas.
-- **Eco cardíaca**: 21 capítulos del atlas (ver `autonomo/TABLERO.md`), calibrar la RVS, medir fps en el móvil, más
-  formas de enfermedad (`js/modules/eco/README.md`, «Pendiente»).
-- **Panel de subida**: falta la clave de la API y desplegar el Worker (`backend/README.md`).
+- [ ] Probado en el navegador a 390 y 360 px: sin desbordamiento, sin errores de consola, todo abre y calcula (§9).
+- [ ] Si tocaste el simulador de eco: `node --test 'js/modules/eco/pruebas/*.test.mjs'` en verde.
+- [ ] Toda cifra nueva tiene su fuente y su página; las erratas y discrepancias, con su nota.
+- [ ] Ningún id duplicado; ningún `<img>` sin archivo; ningún tema de quiz sin preguntas.
+- [ ] Si cambió un `.css` o `js/main.js`: fecha `?v=` subida en `index.html`.
+- [ ] La historia del trabajo, añadida al archivo de `docs/historial/` que toque (no aquí). Este archivo, solo si
+      cambia una regla. Si hay algo pendiente nuevo, va a `autonomo/TABLERO.md`.
+- [ ] `git checkout -- .gitignore .ignore` (las herramientas los ensucian), commit, push y merge a `main` (§10).
+- [ ] Al usuario, en llano: qué se hizo, qué se comprobó y qué queda para él.
 
-## 12. Índice del historial (`docs/historial/`)
+## 13. Índice del historial (`docs/historial/`)
 
 | Archivo | Qué cuenta |
 |---|---|
@@ -178,6 +214,3 @@ como las conoce un médico, no como están hechas por dentro. Los botones dicen 
 | `revisiones-de-codigo.md` | Revisión de código de octubre 2026 y arreglos posteriores |
 | `panel-subida.md` | `backend/` y `admin/` |
 | `eco.md` | Decisiones de Circulación viva y Eco cardíaca (el detalle técnico, en `js/modules/eco/README.md`) |
-
-**Cuando termines un trabajo**, añade su historia al archivo de `docs/historial/` que corresponda (no a este) y,
-solo si cambia una regla vigente, actualiza la sección de este archivo.
