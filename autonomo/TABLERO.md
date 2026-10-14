@@ -78,6 +78,12 @@ Marcador: capítulos con estado `hecha`.
 
 Decididos con el usuario. Casi todos dependen de que mande una fuente.
 
+- **Después del piloto `mr` (pedido por el usuario)**: 1) analizar los tiempos reales (lector ~5 min, constructor
+  67 min en la vuelta 1 y 19 en la 2, verificador ~6, auditor ~3) y proponer cómo acelerar; 2) cómo dejar varias
+  tareas en cola que se hagan solas sin que el usuario entre en Claude (rutina programada en la nube, tareas en
+  paralelo en ramas distintas). Necesita que el usuario fije el límite de gasto y cuántas tareas a la vez.
+- **Prueba intermitente del simulador de eco**: `navegador.test.mjs`, «la barra del ciclo tiene las 7 fases», falla
+  a veces cuando el ordenador va cargado (1 de 3 en el piloto). Endurecerla.
 - **Orden de trabajo pedido**: 1) Marino completo (hecho, octubre 2026); 2) terminar El Libro Azul (hay secciones
   I, II, III y VII); 3) el PIF de R1: las 7 rotaciones sin contenido (Radiología de tórax, Neurorradiología,
   Cardiología, Medicina Interna, Infecciosas, Neurología, Neumología). Necesitan los PDF.
