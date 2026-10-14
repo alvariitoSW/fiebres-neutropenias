@@ -829,3 +829,18 @@ Hecho por el agente de prueba del nuevo `CLAUDE.md` (ver `trabajo-autonomo.md`):
 trombóticas» de Merino HEMATO enlaza a las fichas de CID y PTT de Síndromes Urgentes, y las dos devuelven a ella
 (`data-especialidad="home"`). Pregunta de redactar `merino-q049` (CID frente a PTT/SHU por laboratorio), sacada
 solo de la tabla de la ficha. Verificado a 390 px en las dos direcciones, sin errores.
+
+## Merino HEMATO: revisión R3 del plan Marino (octubre 2026)
+
+`marino-r3` (revisión sin construir), 2 vueltas. Graves corregidos:
+- TRALI/TACO del derecho en la tarjeta;
+- fuera «la ausencia de fiebre apoya TACO»;
+- PFC:hematíes 1:1-2;
+- TACO por receptor;
+- fuera el «10/30»;
+- las tres casillas de «Momento» de la 4Ts (Tabla 13.2), con su origen visible;
+- las ramas del manejo de la HIT con el ELISA.
+
+Notas de fuentes y erratas añadidas. Completado lo que se resumía por debajo de Marino: hipersensibilidad, TRALI y
+TACO, fiebre no hemolítica, efectos adversos de plaquetas y plasma, hemostasia, LDH/haptoglobina/dímero-D, HIT tardía.
+Parte: `autonomo/partes/2026-10-14-marino-r3.md`.
