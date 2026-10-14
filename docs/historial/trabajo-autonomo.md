@@ -51,3 +51,8 @@ habían creado**. El usuario eligió el nombre **plan socialista** y se montó:
   ids repetidos, errores, desbordamiento y que cada ficha o capítulo pedido abra con sus imágenes; `--eco` pasa las
   pruebas del simulador). Unos 16 s. En su estreno cazó 3 bancos de preguntas con `&lt;` (20 entidades), corregidos.
 - `autonomo/sesiones/` pasa a `autonomo/partes/` (partes de sesión).
+- **Primera regla nacida de un fallo** (piloto del capítulo 18, `mr`): los dos jueces aprobaron una figura que con el
+  EROA máximo daba PAS 73 mmHg y un chorro de 3,4 m/s. Lo vio el director en una captura. Con la aprobación del
+  usuario: regla «paciente posible» (`REGLAS.md` §1.7), paso nuevo del verificador, línea en `CLAUDE.md` §12, y la
+  sección «Cómo crecen estas reglas» (`REGLAS.md` §6): cada fallo que se cuele se convierte en propuesta de regla en
+  el parte y el usuario decide.

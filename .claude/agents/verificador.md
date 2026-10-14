@@ -15,7 +15,11 @@ Antes de nada lee, desde el disco: `CLAUDE.md` (sobre todo §9 «Cómo probar»)
 2. Probar a mano lo que los jueces no ven, con Playwright (390×844 y 360×780, móvil y táctil): que cada mando de la
    figura o calculadora responde y da valores con sentido; que las cifras cambian en la dirección que dice el texto;
    que los enlaces cruzados llegan a su ficha. Haz capturas en `/tmp/plan-socialista/<clave>/` y **míralas** (Read).
-3. Escribir `/tmp/plan-socialista/<clave>/verificacion.md`: cada comprobación con ✅/❌, el valor concreto probado y,
+3. **Paciente posible** (`autonomo/REGLAS.md` §1.7): en cada mando de un simulador, mira los extremos y el punto
+   medio y pregúntate si esas constantes son las de un paciente posible en ese estado (PA, FC, presiones,
+   velocidades, gasto). Que las cifras vayan «en la dirección del texto» no basta. Si algo no es fisiológico y el
+   texto no lo describe (p. ej. un shock), es ❌. Pon en el informe la tabla de valores que has mirado.
+4. Escribir `/tmp/plan-socialista/<clave>/verificacion.md`: cada comprobación con ✅/❌, el valor concreto probado y,
    en los ❌, cómo reproducirlo.
 
 **No puedes:** editar archivos de la app. Si algo falla, lo describes; lo arregla el constructor.

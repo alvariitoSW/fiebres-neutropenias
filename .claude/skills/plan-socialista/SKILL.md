@@ -42,7 +42,9 @@ vieja). Pásales siempre: la clave, la carpeta de trabajo, la fuente exacta y la
    parte. Si tras las vueltas máximas sigue fallando → `necesita humano`.
 5. **Revisor** (`revisor`) → `revision.md`. Objeciones de redacción o reglas: una última vuelta corta del constructor.
 6. **Comprueba tú** el punto 9 de «hecho» (auditoría sin graves) y vuelve a pasar `jueces.mjs`. Mira tú mismo al
-   menos una captura del verificador.
+   menos una captura del verificador, con ojos de médico (¿es un paciente posible?).
+7. **Si ves un fallo que ningún juez cazó**, arréglalo en la vuelta siguiente **y** anótalo en el parte como
+   propuesta de regla (`autonomo/REGLAS.md` §6). Las reglas crecen así, con la aprobación del usuario.
 
 ## 2. Cerrar
 
