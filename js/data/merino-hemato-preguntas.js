@@ -84,9 +84,9 @@ export const preguntasMerino = [
         id: 'merino-q009',
         tema: 'merino-transfusion',
         enunciado: '¿Qué umbral de Hb se recomendó en 1942 y se mantuvo como estándar durante 60 años?',
-        opciones: ['Hb ≤10 g/dl ("10/30")', 'Hb ≤7 g/dl', 'Hb ≤12 g/dl', 'Hb ≤5 g/dl'],
+        opciones: ['Hb ≤10 g/dl', 'Hb ≤7 g/dl', 'Hb ≤12 g/dl', 'Hb ≤5 g/dl'],
         correcta: 0,
-        explicacion: 'El umbral "10/30" (Hb 10 g/dl, Hto 30%) propuesto en 1942 fue el estándar hasta que estudios de los años 90-2000 mostraron que tolerar Hb hasta 7 g/dl no empeoraba los resultados clínicos.',
+        explicacion: 'En 1942 se recomendó una Hb ≤10 g/dl como indicación de transfusión, y fue el estándar durante 60 años, hasta que la preocupación por los riesgos de la transfusión llevó a estudios que mostraron que los resultados no empeoraban si se dejaba bajar la Hb hasta 7 g/dl.',
     },
     {
         id: 'merino-q010',
@@ -250,7 +250,7 @@ export const preguntasMerino = [
         enunciado: '¿Cuál es la complicación temida de la trombocitopenia inducida por heparina (HIT)?',
         opciones: ['La trombosis (arterial o venosa), no el sangrado', 'El sangrado espontáneo grave', 'La anemia hemolítica secundaria', 'La insuficiencia renal aguda'],
         correcta: 0,
-        explicacion: 'La HIT se asocia a trombosis potencialmente mortal en el 25-70% de los casos — el sangrado es raro pese a la trombocitopenia.',
+        explicacion: 'La complicación temida en la HIT es la trombosis, no el sangrado: se asocia a trombosis potencialmente mortal (arterial o venosa) en el 25-70% de los casos. Sin tratamiento, el 17-55% desarrolla tromboembolia venosa y el 1-3% trombosis arterial.',
     },
     {
         id: 'merino-q030',
@@ -272,9 +272,9 @@ export const preguntasMerino = [
         id: 'merino-q032',
         tema: 'merino-trombocitopenia',
         enunciado: '¿Qué anticoagulante está absolutamente contraindicado en la fase aguda de la HIT?',
-        opciones: ['La warfarina, por riesgo de gangrena de miembros y necrosis cutánea', 'El argatrobán', 'La bivalrudina', 'El fondaparinux'],
+        opciones: ['La warfarina, por riesgo de gangrena de miembros y necrosis cutánea', 'El argatrobán', 'La bivalirudina', 'El fondaparinux'],
         correcta: 0,
-        explicacion: 'El efecto protrombótico inicial de la warfarina (antes de que baje la proteína C) puede producir gangrena de miembros y necrosis cutánea en el contexto de HIT aguda.',
+        explicacion: 'La warfarina está absolutamente contraindicada en la HIT aguda por su efecto protrombótico, que puede producir gangrena de miembros y necrosis cutánea. Si el paciente la recibía en los días previos al diagnóstico, se revierte con vitamina K.',
     },
 
     // ---- Microangiopatías trombóticas ----
@@ -404,9 +404,9 @@ export const preguntasMerino = [
         id: 'merino-q048',
         tema: 'merino-plaquetas-plasma',
         enunciado: '¿Cuándo está indicado el crioprecipitado como fuente de fibrinógeno en el sangrado masivo?',
-        opciones: ['Cuando el fibrinógeno cae por debajo de 150-200 mg/dl', 'Solo si el recuento de plaquetas es normal', 'Nunca, se ha sustituido por completo por el PFC', 'Únicamente en la reversión de warfarina'],
+        opciones: ['Cuando el fibrinógeno cae a 150-200 mg/dl', 'Solo si el recuento de plaquetas es normal', 'Nunca, se ha sustituido por completo por el PFC', 'Únicamente en la reversión de warfarina'],
         correcta: 0,
-        explicacion: 'El fibrinógeno es el primer factor en agotarse en el sangrado masivo (y el más sensible a la dilución por fluidoterapia) — el crioprecipitado se usa cuando cae por debajo de 150-200 mg/dl.',
+        explicacion: 'El fibrinógeno es el primer factor en agotarse en el sangrado masivo (y el más sensible a la dilución por fluidoterapia) — el crioprecipitado se recomienda cuando cae a 150-200 mg/dl.',
     },
 
     // ---- De redactar ----
