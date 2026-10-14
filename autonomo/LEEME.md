@@ -11,7 +11,7 @@ basta con saber qué pedir y revisar lo que entrega.
 | **Los 5 trabajadores** | `.claude/agents/*.md` | Agentes más baratos, cada uno con un solo papel: lector de fuente, constructor, verificador, auditor ciego y revisor. |
 | **Las reglas** | `autonomo/REGLAS.md` | Lo que nadie del equipo puede saltarse (no inventar, fidelidad a la fuente, móvil de 390 px…). Es corto a propósito: los agentes lo leen en cada vuelta. |
 | **El tablero** | `autonomo/TABLERO.md` | El objetivo, la lista de tareas en orden y qué significa «hecho». Es la memoria del equipo. **Es lo que tú editas.** |
-| **La bitácora** | `autonomo/BITACORA.md` | Lo que pasó en cada sesión: qué se hizo, qué falló y por qué. La escribe el director. |
+| **Los informes** | `autonomo/sesiones/AAAA-MM-DD.md` | Uno por sesión: qué se hizo, qué falló, qué no pudo leer y qué te deja para revisar. Es lo que lees por la mañana. |
 
 ## Cómo se usa
 
@@ -56,3 +56,11 @@ También puedes decírselo al director en el chat; él actualiza el tablero.
   error que se repite, añade una regla en `REGLAS.md` y no volverá a pasar.
 - **Cuando no puede**, no lo inventa: marca la tarea como «necesita humano» y te dice qué le falta (un PDF, una
   decisión tuya…).
+
+## Antes de la primera sesión (lecciones de la prueba)
+
+- **Abre una sesión nueva después de cambiar `CLAUDE.md`.** Una sesión lee las reglas al empezar y sus ayudantes
+  heredan esa lectura: en la prueba, un agente lanzado desde una sesión antigua trabajó con el `CLAUDE.md` viejo.
+- **La rutina nocturna se crea en pausa.** Primero una sesión supervisada; después una nocturna que revisas a la
+  mañana siguiente; y solo entonces se deja activada. Necesita un límite de gasto fijado en el tablero.
+- **El aviso por la mañana**: al terminar, la rutina puede mandarte una notificación o un correo con el informe.

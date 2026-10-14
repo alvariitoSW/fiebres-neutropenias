@@ -72,7 +72,8 @@ backend/ admin/         panel de subida de contenido (aparte de la app)
 - **Enlace cruzado (el único mecanismo)**: `<button data-especialidad="X" data-view data-panel data-tab>`. Lo
   resuelve un listener delegado en `home/index.js`. Sirve entre especialidades y dentro de una (sin `data-view`).
   Extras: `data-trasplante` (con `especialidad="home"`), `data-resaltar="#id"`, `data-pulsar="id1 id2"`,
-  `data-en-visual`, `data-eco-vista/escenario/medir/atlas`, `data-nefrona-viva`, `data-glomerulo`. **Nunca un
+  `data-en-visual`, `data-eco-vista/escenario/medir/atlas`, `data-nefrona-viva`, `data-glomerulo`. Las claves de
+  vista y panel de cada cuaderno están en `PANEL_NAV` de `core/search.js` (Hematología usa `especialidad="home"`). **Nunca un
   listener nuevo por módulo.** `.tx-link`, `.especialidad-link`, `.paper-link`, `.neumo-internal-link` son solo
   estilo.
 - **Cuaderno de campo** (`core/corkboard.js`): `initCorkboard(boardId, panelId)`; cada `.field-card[data-tab]` abre
@@ -214,3 +215,4 @@ como las conoce un médico, no como están hechas por dentro. Los botones dicen 
 | `revisiones-de-codigo.md` | Revisión de código de octubre 2026 y arreglos posteriores |
 | `panel-subida.md` | `backend/` y `admin/` |
 | `eco.md` | Decisiones de Circulación viva y Eco cardíaca (el detalle técnico, en `js/modules/eco/README.md`) |
+| `trabajo-autonomo.md` | Por qué y cómo se reorganizó `CLAUDE.md`, la carpeta `autonomo/` y la prueba con un agente nuevo |

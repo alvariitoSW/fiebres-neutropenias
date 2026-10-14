@@ -821,3 +821,11 @@ y "Fuentes y Evidencia" enlazan a ellos, con el DOI en la nota.
 - **Pendiente**: la parte de CID que viene de la guía BCSH 2009 (Levi et
   al.) sigue sin cotejar, porque ese PDF no se ha aportado.
 
+
+
+### Enlaces Merino HEMATO ↔ Síndromes Urgentes (octubre 2026)
+
+Hecho por el agente de prueba del nuevo `CLAUDE.md` (ver `trabajo-autonomo.md`): la ficha «Microangiopatías
+trombóticas» de Merino HEMATO enlaza a las fichas de CID y PTT de Síndromes Urgentes, y las dos devuelven a ella
+(`data-especialidad="home"`). Pregunta de redactar `merino-q049` (CID frente a PTT/SHU por laboratorio), sacada
+solo de la tabla de la ficha. Verificado a 390 px en las dos direcciones, sin errores.

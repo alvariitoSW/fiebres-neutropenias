@@ -5,7 +5,9 @@ Lo edita el usuario (orden, notas, límites) y el director (estados). Una tarea 
 - **Límite por sesión:** 1 tarea
 - **Vueltas máximas por tarea:** 3 (constructor ↔ jueces)
 - **Parar si:** 2 tareas seguidas fallan o quedan bloqueadas
+- **Límite de gasto por sesión:** el que fije el usuario (sin fijar todavía: no se programa una rutina nocturna sin él)
 - **Modo git:** rama `auto/<clave>` + PR en borrador (nunca directo a `main`)
+- **Una tarea solo pasa a `en revisión`** con el enlace de su PR anotado; sin enlace, no avanza
 
 Estados: `pendiente` · `en curso` · `en revisión` (PR abierta) · `hecha` (PR aprobada) · `necesita humano` · `aparcada`
 

@@ -40,10 +40,22 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
 
 ## 4. Trabajo y git
 
-1. **Solo la tarea encargada.** Si ves otro problema, anótalo en la bitácora; no lo arregles de paso.
+1. **Solo la tarea encargada.** Si ves otro problema, anótalo en el informe de la sesión; no lo arregles de paso.
 2. **Nada se da por hecho sin pasar los jueces** del tablero.
 3. **El trabajo autónomo nunca va directo a `main`**: va en una rama `auto/<tarea>` con una propuesta (PR) en
    borrador. Solo el usuario la aprueba. (La regla de `CLAUDE.md` de «mergear siempre a main» es para las
    conversaciones normales, no para este modo.)
 4. **Antes de cada commit**: `git checkout -- .gitignore .ignore` (las herramientas los ensucian).
 5. **El contenedor se borra**: lo que no está en una rama subida a GitHub se pierde.
+
+## 5. Lo que el agente puede y no puede tocar
+
+1. **Las reglas son de solo lectura** para el agente: nunca edita `autonomo/REGLAS.md`, `CLAUDE.md` (ni los de los
+   módulos) ni sus propias instrucciones. Si cree que una regla falla, lo propone en su informe y el usuario decide.
+2. **El estado sí lo escribe**: los estados de `autonomo/TABLERO.md` y su informe en `autonomo/sesiones/`.
+3. **No avanzar sin prueba**: una tarea solo pasa a `en revisión` cuando la PR existe en GitHub (con su enlace en el
+   informe). Si el push o la PR fallan o no está claro que salieron, el estado no cambia y el informe lo dice.
+4. **Lo que no se pudo leer es un hueco, no un hecho**: si una fuente no se abre (web bloqueada, PDF ilegible), la
+   tarea no se marca hecha ni se salta en silencio; el informe dice qué faltó.
+5. **«No había nada que hacer» no es un fallo**: si no queda tarea pendiente, el informe lo dice así.
+6. **Límite de gasto**: si la sesión llega al límite del tablero, se para y deja el estado como está.

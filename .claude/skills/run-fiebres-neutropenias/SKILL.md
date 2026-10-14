@@ -82,6 +82,24 @@ Open `http://localhost:8000/` in a real browser. Opening `index.html`
 directly via `file://` does **not** work — `fetch()` of the HTML partials
 (`data-include`) requires `http(s)`. Ctrl-C to stop.
 
+## Reaching a ficha quickly
+
+Fastest: let the app's own cross-link router take you there. Every view/panel key is in `PANEL_NAV` of
+`js/core/search.js` (Hematología modules use `especialidad: "home"`). From the REPL:
+
+```
+eval (() => { const b = document.createElement('button'); Object.assign(b.dataset, { especialidad: 'home', view: 'merinoHemato', panel: 'panel-merino-tabs', tab: 'merino-microangiopatias' }); document.body.appendChild(b); b.click(); b.remove(); return document.getElementById('merino-microangiopatias').offsetParent !== null; })()
+```
+
+By hand, the root doors are `#btn-pif` (then `#btn-hematologia` / `#btn-nefrologia`, rendered at runtime by
+`pif-manifiesto.js`), `#btn-cardiorrespi` (then `#btn-cardiologia` / `#btn-neumologia` / `#btn-fisio-uci`),
+`#btn-uci-papers`, `#btn-sobrevivir-umi`, `#btn-eco` and `#btn-libros`. Inside Hematología, the Atlas nodes carry
+`data-route`; inside Nefrología, the kidney map nodes too. A field card opens in two taps: the `.field-card`, then
+its `.back-cta`.
+
+For multi-step checks, put the whole script in one `eval (async () => { ... })()` line: the REPL takes one line
+per command.
+
 ## Test
 
 No test suite — this project has none (verification is always "launch it
@@ -134,6 +152,9 @@ and look," per `CLAUDE.md` §7 «Cómo probar»).
   edits to re-verify.
 
 ## Troubleshooting
+
+- **Inside a git worktree the sandbox may reject compound shell commands** (`for` loops with tmux, long `&&`
+  chains, several `-m` in `git commit`). Run them as separate commands and use `git commit -F <file>`.
 
 - **`EADDRINUSE` on `:8000`**: a previous server is still up —
   `lsof -ti:8000 -sTCP:LISTEN | xargs -r kill` before restarting.
