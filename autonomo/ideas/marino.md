@@ -142,3 +142,16 @@ Coinciden los tres revisores:
   - weaning el día 7: SBT fallido con la SvO₂ que cae; fuga <110 mL;
   - «encuentra el error»: clorhexidina + SOD;
   - «piensa y destapa»: ¿ansiedad o fracaso en el SBT?; extubar sube el trabajo respiratorio (Fig. 30.2).
+
+### R8 · Caps. 31-35 (Marino Renal: ácido-base, CAD, alcalosis, FRA, sodio) · 2026-10-14
+
+- **Ácido-base vivo**: el mapa de la gasometría que se mueve con la compensación respiratoria y renal, y el pH a la
+  par. Caso de 3 gasometrías encadenadas. Balanza de aniones (HCO₃⁻ que se vacía y Cl⁻ o lactato que llena).
+- **`mr-trr` con el filtro vivo** (`filtro-vivo.js`), que ya existe, y **`mr-fra-indices` con la nefrona viva**
+  (prerrenal, NTA, obstrucción) junto a los índices urinarios.
+- **Cap. 35 con la nefrona viva**: SIADH, DI, deshidratación e hiperglucemia ya existen como estados.
+- **Glomérulo vivo**: faltan la presión venosa renal alta (congestión) y la PIA (Pā − 2·PIA).
+- **Casos**:
+  - CAD → salino → delta, con K⁺ 3,1 al ingreso;
+  - hiponatremia con salino al 3 % → diuresis acuosa → sobrecorrección → desmopresina;
+  - FRA por sepsis con furosemida (la EFNa engaña, la EFU decide).

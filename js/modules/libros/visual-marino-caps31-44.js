@@ -33,7 +33,7 @@ function renal() {
             curvaPh,
             { tipo: 'flujo', titulo: 'El método paso a paso', nodos: [
                 n('#mr-regla-1', 'Regla 1: ¿PCO₂ y pH en sentido contrario o igual?', 'dorado'),
-                n('#mr-regla-2', 'Regla 2: ¿cuál es el primario?', 'amarillo'),
+                n('#mr-regla-2', 'Regla 2: PaCO₂ anormal con pH normal → mixto', 'amarillo'),
                 n('#mr-regla-3', 'Regla 3: ¿la compensación es la esperada?', 'verde'),
                 n('#mr-regla-4', 'Regla 4: aguda o crónica', 'purpura'),
                 n('#mr-etapa-3', 'Hiato aniónico y delta', 'rojo')
@@ -58,7 +58,7 @@ function renal() {
             { tipo: 'escalera', titulo: 'El delta: ¿hay otro trastorno?', nodos: [
                 n('#mr-delta-menor', 'Delta <1: acidosis hiperclorémica añadida', 'verde'),
                 n('#mr-delta-cad', 'Delta ~1 (CAD: 1)', 'amarillo'),
-                n('#mr-delta-mayor', 'Delta >2: alcalosis metabólica añadida', 'rojo')
+                n('#mr-delta-mayor', 'Delta >1: alcalosis metabólica añadida', 'rojo')
             ] },
             { tipo: 'racimos', titulo: 'Fórmulas', grupos: [{ titulo: 'Hiatos', color: 'dorado', nodos: [n('#mr-ag-formula', 'Hiato aniónico'), n('#mr-ag-albumina', 'Corrección por albúmina'), n('#mr-delta-gap', 'Delta'), n('#mr-osm-gap', 'Hiato osmolar')] }] }
         ]
@@ -70,7 +70,7 @@ function renal() {
         paneles: [
             FIGURAS,
             { tipo: 'racimos', titulo: 'Por qué sube el lactato', grupos: [
-                { titulo: 'Shock', color: 'rojo', nodos: [n('#mr-lact-septico', 'Shock séptico'), n('#mr-lact-estres', 'Estrés (adrenalina)')] },
+                { titulo: 'Shock', color: 'rojo', nodos: [n('#mr-lact-septico', 'Shock séptico'), n('#mr-lact-estres', 'Hiperlactatemia de estrés')] },
                 { titulo: 'Fármacos', color: 'amarillo', nodos: [n('#mr-lact-metformina', 'Metformina'), n('#mr-lact-linezolid', 'Linezolid'), n('#mr-lact-propilenglicol', 'Propilenglicol')] },
                 { titulo: 'Otras', color: 'purpura', nodos: [n('#mr-lact-tiamina', 'Déficit de tiamina'), n('#mr-lact-convulsiones', 'Convulsiones'), n('#mr-d-lactico', 'D-láctico')] }
             ] },
@@ -130,9 +130,9 @@ function renal() {
         guia: 'KDIGO: creatinina o diuresis; y por qué la creatinina engaña en la UCI.',
         paneles: [
             FIGURAS,
-            calc('Estadio KDIGO (calculadora de la ficha)', ['#mr-kdigo-basal', '#mr-kdigo-actual', '#mr-kdigo-tiempo', '#mr-kdigo-diuresis'], ['#mr-kdigo-resultado']),
+            calc('¿Cumple criterios de FRA? (Tabla 34.1)', ['#mr-kdigo-basal', '#mr-kdigo-actual', '#mr-kdigo-tiempo', '#mr-kdigo-diuresis'], ['#mr-kdigo-resultado']),
             calc('Filtrado estimado (calculadora de la ficha)', ['#mr-fg-edad', '#mr-fg-peso', '#mr-fg-cr', '#mr-fg-sexo'], ['#mr-fg-resultado']),
-            { tipo: 'racimos', titulo: 'Los límites de la creatinina', grupos: [{ titulo: 'Creatinina', color: 'rojo', nodos: [n('#mr-creatinina-limites', 'Por qué llega tarde'), n('#mr-creatinina-critico', 'En el crítico'), n('#mr-cistatina', 'Cistatina C')] }] }
+            { tipo: 'racimos', titulo: 'Los límites de la creatinina', grupos: [{ titulo: 'Creatinina', color: 'rojo', nodos: [n('#mr-creatinina-limites', 'Tres límites de la creatinina'), n('#mr-creatinina-critico', 'En el crítico'), n('#mr-cistatina', 'Cistatina C')] }] }
         ]
     });
     montarVisual('mr-fra-causas', {

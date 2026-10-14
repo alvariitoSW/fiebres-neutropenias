@@ -78,6 +78,8 @@ export const curvaPh = {
             r.innerHTML = `[H⁺] = <strong>${fmt(h, 0)} nEq/L</strong> (${d40 >= 0 ? '+' : ''}${fmt(d40, 0)} respecto a pH 7,40, ${fmt(h / H(7.4), 1)} veces la normal).`;
         };
         sl.addEventListener('input', pintar);
+        // Sigue al pH de la calculadora, como el mapa de la gasometría.
+        alCambiar(['mr-ab-ph'], () => { const v = num($('mr-ab-ph')); if (v !== null && v >= 6.8 && v <= 7.8) { sl.value = v; pintar(); } });
         pintar();
         engancharTexto(cuerpo, tab);
     }
@@ -258,17 +260,22 @@ export const semaforoAntibioticos = {
 };
 
 // ---------- Cap. 35: simulador de los bolos de salino al 3% ----------
-// Límites, dosis del bolo y "hasta 2 mEq/L por bolo" son de la ficha; lo que
-// sube cada bolo y la diuresis acuosa espontánea son ilustrativos.
+// De la ficha (Tabla 35.3): el bolo (2 mL/kg o 150 mL), «hasta 2 mEq/L por
+// bolo», repetirlos «cada pocas horas», los límites 5 en 2 h, 10 en 5 h, 10 el
+// primer día, 8 los siguientes y el tope de 130. Ilustrativo: lo que sube cada
+// bolo dentro de ese «hasta 2» y la diuresis acuosa espontánea.
+const SAL_TOPE = 130;          // Tabla 35.3, 4c
+const SAL_NA_NORMAL = 140;     // ilustrativo: hacia aquí se frena la diuresis acuosa
+const SAL_NA_POR_DEFECTO = 118; // ilustrativo, si la calculadora no tiene Na⁺ inicial
 export const simuladorSalino = {
     tipo: 'propio', titulo: 'Simulador: bolos de salino al 3% frente a los límites',
-    nota: 'Ilustrativo: cada bolo sube el Na⁺ lo que elijas (la ficha dice "hasta 2 mEq/L"); la diuresis acuosa espontánea, que causa la sobrecorrección, sube 1 mEq/L por hora mientras no se frene.',
+    nota: 'Origen: ficha = dosis del bolo (2 mL/kg o 150 mL), «hasta 2 mEq/L» por bolo, bolos «cada pocas horas», límites 5/2 h, 10/5 h, 10 y 8 al día y tope de 130. Ilustrativo = lo que sube cada bolo y la diuresis acuosa (1 mEq/L por hora, que se frena al acercarse a 140).',
     render(cuerpo, { tab }) {
-        let t = 0, na0 = num($('mr-sal3-na0')) ?? 118, na = na0, puntos = [[0, na0]], diuresis = false, ddavp = false, bolos = 0;
+        let t, na0, na, puntos, diuresis, ddavp, bolos, valido, tUltimoBolo, seguidos;
         cuerpo.innerHTML = `<div id="mrp-sal-graf"></div>
             <div class="tfg-slider-row"><label for="mrp-sal-sube">Sube por bolo</label><input type="range" id="mrp-sal-sube" min="0.5" max="2" step="0.5" value="2"><span class="tfg-slider-valor" id="mrp-sal-sube-v"></span></div>
             <div class="nv-chips mrp-botones">
-                <button type="button" class="visual-mini" data-acc="bolo">💉 Bolo de 2 mL/kg</button>
+                <button type="button" class="visual-mini" data-acc="bolo">💉 Bolo de 2 mL/kg (o 150 mL)</button>
                 <button type="button" class="visual-mini" data-acc="hora">⏱ +1 hora</button>
                 <button type="button" class="visual-mini" data-acc="diuresis">🚽 Diuresis acuosa</button>
                 <button type="button" class="visual-mini" data-acc="ddavp">💊 Desmopresina 2 μg SC</button>
@@ -277,77 +284,117 @@ export const simuladorSalino = {
             <div class="tfg-estado" id="mrp-sal-res"></div>
             ${aTexto('mr-tabla-35-3', 'Límites (Tabla 35.3) ↓')} ${aTexto('mr-sobrecorreccion', 'Sobrecorrección y desmopresina ↓')}`;
         const sube = cuerpo.querySelector('#mrp-sal-sube');
-        const avanzar = horas => { for (let i = 0; i < horas; i++) { t += 1; if (diuresis && !ddavp) na += 1; puntos.push([t, na]); } };
+        const empezar = () => {
+            const v = num($('mr-sal3-na0'));
+            na0 = v === null ? SAL_NA_POR_DEFECTO : v;
+            // Una hiponatremia con encefalopatía: <135 (definición) y no por debajo de lo que admite la calculadora.
+            valido = na0 >= 90 && na0 < 135;
+            t = 0; na = na0; puntos = [[0, na0]]; diuresis = ddavp = seguidos = false; bolos = 0; tUltimoBolo = null;
+        };
+        // Na⁺ en la última medida hecha a las h horas o antes.
+        const naEn = h => puntos.filter(p => p[0] <= h).pop()[1];
+        // La diuresis acuosa real se frena cuando el Na⁺ se normaliza: la subida se aplana hacia 140.
+        const ritmoDiuresis = () => Math.max(0, Math.min(1, (SAL_NA_NORMAL - na) / 10));
+        const avanzar = horas => { seguidos = false; for (let i = 0; i < horas; i++) { t += 1; if (diuresis && !ddavp) na += ritmoDiuresis(); puntos.push([t, na]); } };
         const pintar = () => {
+            const res = cuerpo.querySelector('#mrp-sal-res');
             cuerpo.querySelector('#mrp-sal-sube-v').textContent = `${fmt(Number(sube.value))} mEq/L`;
-            const H = Math.max(8, t + 1), X = h => 36 + h / H * 274, Y = v => 150 - (v - (na0 - 2)) / 16 * 140;
+            cuerpo.querySelectorAll('[data-acc]').forEach(b => { b.disabled = !valido && b.dataset.acc !== 'reset'; });
+            if (!valido) {
+                cuerpo.querySelector('#mrp-sal-graf').innerHTML = '';
+                res.className = 'tfg-estado tfg-estado-warn';
+                res.innerHTML = `<strong>No se simula</strong>: el Na⁺ inicial de la calculadora (${fmt(na0, 0)} mEq/L) no es una hiponatremia con encefalopatía posible (90–134 mEq/L; rango de fisiología general, no de la ficha). Corrígelo en la calculadora y pulsa «Empezar».`;
+                return;
+            }
+            const vals = puntos.map(p => p[1]);
+            // Eje Y a la medida de la curva: la sobrecorrección no se sale y el tope de 130 se ve siempre.
+            const lo = Math.floor(Math.min(128, na0 - 2, Math.min(...vals) - 2)), hi = Math.ceil(Math.max(SAL_TOPE + 2, na0 + 12, Math.max(...vals) + 2));
+            const H = Math.max(8, t + 1), X = h => 36 + h / H * 274, Y = v => 150 - (v - lo) / (hi - lo) * 140;
             const lim = [[2, na0 + 5, '+5 en 2 h'], [5, na0 + 10, '+10 en 5 h']];
             const d = puntos.map(([h, v], i) => `${i ? 'L' : 'M'}${X(h).toFixed(1)},${Y(v).toFixed(1)}`).join('');
-            const g = [0, 4, 8, 12, 16].map(k => `<text x="30" y="${Y(na0 - 2 + k) + 3}" text-anchor="end">${na0 - 2 + k}</text>`).join('')
+            const g = [0, 1, 2, 3, 4].map(k => { const v = Math.round(lo + (hi - lo) * k / 4); return `<text x="30" y="${Y(v) + 3}" text-anchor="end">${v}</text>`; }).join('')
                 + [0, Math.round(H / 2), H].map(h => `<text x="${X(h)}" y="164" text-anchor="middle">${h} h</text>`).join('');
             const limites = lim.map(([h, v, txt]) => `<line x1="${X(0)}" x2="${X(h)}" y1="${Y(v)}" y2="${Y(v)}" stroke="${C('red')}" stroke-dasharray="4 3"/><circle cx="${X(h)}" cy="${Y(v)}" r="3" fill="${C('red')}"/><text x="${X(h) + 4}" y="${Y(v) - 3}" class="mrp-pq" fill="${C('red')}">${txt}</text>`).join('');
-            const tope = na0 + 16 >= 130 ? `<line x1="36" x2="310" y1="${Y(130)}" y2="${Y(130)}" stroke="${C('purple')}" stroke-dasharray="2 3"/><text x="308" y="${Y(130) - 3}" text-anchor="end" class="mrp-pq">130: Na⁺ final máximo</text>` : '';
+            const tope = `<line x1="36" x2="310" y1="${Y(SAL_TOPE)}" y2="${Y(SAL_TOPE)}" stroke="${C('purple')}" stroke-dasharray="2 3"/><text x="308" y="${Y(SAL_TOPE) - 3}" text-anchor="end" class="mrp-pq">130: Na⁺ final máximo</text>`;
             cuerpo.querySelector('#mrp-sal-graf').innerHTML = SVG('0 0 320 170', `${g}${limites}${tope}<path d="${d}" fill="none" stroke="${C('blue')}" stroke-width="2.2"/><circle cx="${X(t)}" cy="${Y(na)}" r="4" fill="${C('yellow')}"/>`, 'Sodio frente a horas de tratamiento');
-            const subida = na - na0, en2 = (puntos.find(p => p[0] === 2) || [0, na])[1] - na0, en5 = (puntos.find(p => p[0] === 5) || [0, na])[1] - na0;
+            const subida = na - na0;
             const avisos = [];
-            if ((t <= 2 && subida > 5) || en2 > 5) avisos.push('Más de <strong>5 mEq/L en 2 h</strong>');
-            if ((t <= 5 && subida > 10) || en5 > 10) avisos.push('Más de <strong>10 mEq/L en 5 h</strong>');
-            if (t <= 24 && subida > 10) avisos.push('Más de <strong>10 mEq/L el primer día</strong>');
-            if (na > 130) avisos.push('Na⁺ por encima de <strong>130 mEq/L</strong>');
-            const r = cuerpo.querySelector('#mrp-sal-res');
-            r.className = `tfg-estado tfg-estado-${avisos.length ? 'danger' : subida >= 5 ? 'ok' : 'warn'}`;
-            r.innerHTML = `${t} h · ${bolos} bolo${bolos === 1 ? '' : 's'} · Na⁺ ${fmt(na)} mEq/L (${subida >= 0 ? '+' : ''}${fmt(subida)}).`
+            if (naEn(Math.min(t, 2)) - na0 > 5) avisos.push('Más de <strong>5 mEq/L en 2 h</strong>');
+            if (naEn(Math.min(t, 5)) - na0 > 10) avisos.push('Más de <strong>10 mEq/L en 5 h</strong>');
+            if (naEn(Math.min(t, 24)) - na0 > 10) avisos.push('Más de <strong>10 mEq/L el primer día</strong>');
+            if (t > 24 && na - naEn(t - 24) > 8) avisos.push('Más de <strong>8 mEq/L en 24 h</strong> (a partir del segundo día)');
+            if (na > SAL_TOPE) avisos.push('Na⁺ por encima de <strong>130 mEq/L</strong>');
+            res.className = `tfg-estado tfg-estado-${avisos.length ? 'danger' : subida >= 5 ? 'ok' : 'warn'}`;
+            res.innerHTML = `${t} h · ${bolos} bolo${bolos === 1 ? '' : 's'} · Na⁺ ${fmt(na)} mEq/L (${subida >= 0 ? '+' : ''}${fmt(subida)}).`
                 + (avisos.length ? `<br>⚠️ ${avisos.join(' · ')}: riesgo de desmielinización osmótica. ${ddavp ? 'Desmopresina puesta.' : 'Indicación de <strong>desmopresina</strong> (Tabla 35.4).'}`
+                    : na >= SAL_TOPE ? '<br>Na⁺ en el tope de 130: no se dan más bolos.'
                     : subida >= 5 ? '<br>Ha subido 5 mEq/L: valora los síntomas; si no mejoran, busca otra causa.' : '<br>Repite bolos hasta que cedan los síntomas.')
-                + (diuresis && !ddavp ? '<br>Diuresis acuosa en marcha: el Na⁺ sigue subiendo solo.' : '');
+                + (seguidos ? '<br>La ficha repite los bolos «cada pocas horas»: dos bolos sin pasar tiempo no es la pauta; pulsa «+1 hora».' : '')
+                + (diuresis && !ddavp ? (ritmoDiuresis() < 0.05 ? '<br>La diuresis acuosa se ha frenado al normalizarse el Na⁺ (ilustrativo).' : '<br>Diuresis acuosa en marcha: el Na⁺ sigue subiendo solo (ilustrativo).') : '');
+            if (na >= SAL_TOPE) cuerpo.querySelector('[data-acc="bolo"]').disabled = true;
         };
         cuerpo.addEventListener('click', e => {
             const b = e.target.closest('[data-acc]');
-            if (!b) return;
+            if (!b || b.disabled) return;
             const a = b.dataset.acc;
-            if (a === 'bolo') { na += Number(sube.value); bolos += 1; puntos.push([t, na]); }
+            if (a === 'bolo' && na < SAL_TOPE) { seguidos = tUltimoBolo === t; tUltimoBolo = t; na += Number(sube.value); bolos += 1; puntos.push([t, na]); }
             if (a === 'hora') avanzar(1);
             if (a === 'diuresis') diuresis = true;
             if (a === 'ddavp') ddavp = true;
-            if (a === 'reset') { t = 0; na0 = num($('mr-sal3-na0')) ?? 118; na = na0; puntos = [[0, na0]]; diuresis = ddavp = false; bolos = 0; }
+            if (a === 'reset') empezar();
             pintar();
         });
         sube.addEventListener('input', pintar);
+        // Si cambia el Na⁺ inicial en la calculadora, la simulación empieza de nuevo.
+        alCambiar(['mr-sal3-na0'], () => { empezar(); pintar(); });
+        empezar();
         pintar();
         engancharTexto(cuerpo, tab);
     }
 };
 
 // ---------- Cap. 34: el reto de volumen con la calculadora de respuesta a fluidos (Cap. 11) ----------
+// Origen: la regla de parar es de la ficha (Cap. 34); el umbral de >10% de
+// subida del VS es el de la calculadora de Fundamentos. Los valores de VS que
+// se escriben son ilustrativos y el rango 20-150 mL es fisiología general.
+const RV_MIN = 20, RV_MAX = 150;
 export const retoVolumen = {
     tipo: 'propio', titulo: 'Reto de volumen: 500 mL en 10-15 min',
     nota: 'Escribe en la calculadora de respuesta a fluidos de Marino · Fundamentos (sobrecarga de volumen) y añade la regla del Cap. 34: parar si no responden ni el volumen sistólico ni la diuresis.',
     render(cuerpo, { tab }) {
         cuerpo.innerHTML = `<div class="vk-calc">
-                <div class="form-group"><label for="mrp-rv-vs0">VS antes (mL)</label><input type="number" id="mrp-rv-vs0" min="5" max="250" value="55" inputmode="decimal"></div>
-                <div class="form-group"><label for="mrp-rv-vs1">VS después (mL)</label><input type="number" id="mrp-rv-vs1" min="5" max="250" value="58" inputmode="decimal"></div>
+                <div class="form-group"><label for="mrp-rv-vs0">VS antes (mL)</label><input type="number" id="mrp-rv-vs0" min="${RV_MIN}" max="${RV_MAX}" value="55" inputmode="decimal"></div>
+                <div class="form-group"><label for="mrp-rv-vs1">VS después (mL)</label><input type="number" id="mrp-rv-vs1" min="${RV_MIN}" max="${RV_MAX}" value="58" inputmode="decimal"></div>
                 <div class="form-group"><label for="mrp-rv-diur">¿Ha subido la diuresis?</label><select id="mrp-rv-diur"><option value="no">No</option><option value="si">Sí</option></select></div>
             </div>
-            <div class="tfg-estado" id="mrp-rv-vs" hidden></div><div class="tfg-estado" id="mrp-rv-res"></div>
+            <p class="fuente-ficha">Origen: los VS son <strong>ilustrativos</strong> (rango ${RV_MIN}-${RV_MAX} mL: fisiología general, no de la ficha); la regla de parar es de la ficha y el umbral de &gt;10% es el de la calculadora de Fundamentos. Cambia un valor para ver el resultado.</p>
+            <div class="tfg-estado" id="mrp-rv-vs" hidden></div><div class="tfg-estado" id="mrp-rv-res" hidden></div>
             ${aTexto('mr-reto-volumen', 'Reto de volumen ↓')}
             <button type="button" class="visual-link" data-especialidad="libros" data-view="marinoFundamentos" data-panel="panel-marino-fund-tabs" data-tab="mar-respuesta-fluidos">Calculadora de Fundamentos →</button>`;
-        // Al construirse no escribe en Fundamentos: solo cuando se toca un campo.
-        const pintar = (escribe = true) => {
+        // No se muestra nada (ni se escribe en Fundamentos) hasta que alguien toca un campo.
+        let tocado = false;
+        const pintar = () => {
+            const r = cuerpo.querySelector('#mrp-rv-res'), vsBox = cuerpo.querySelector('#mrp-rv-vs');
             const vs0 = num(cuerpo.querySelector('#mrp-rv-vs0')), vs1 = num(cuerpo.querySelector('#mrp-rv-vs1'));
-            if (vs0 === null || vs1 === null) return;
-            if (escribe) {
-                escribir('mar-resp-prueba', 'bolo'); escribir('mar-resp-vs0', vs0); escribir('mar-resp-vs1', vs1);
-                copiar(cuerpo.querySelector('#mrp-rv-vs'), 'mar-resp-resultado');
+            vsBox.hidden = true;
+            if (!tocado || vs0 === null || vs1 === null) { r.hidden = true; return; }
+            r.hidden = false;
+            if ([vs0, vs1].some(v => v < RV_MIN || v > RV_MAX)) {
+                r.className = 'tfg-estado tfg-estado-warn';
+                r.innerHTML = `<strong>Fuera de rango</strong> (${RV_MIN}–${RV_MAX} mL): ¿unidades? Es un rango de fisiología general, no de la ficha. No se calcula.`;
+                return;
             }
-            const responde = vs0 > 0 && (vs1 - vs0) / vs0 * 100 > 10, diur = cuerpo.querySelector('#mrp-rv-diur').value === 'si';
-            const r = cuerpo.querySelector('#mrp-rv-res');
+            escribir('mar-resp-prueba', 'bolo'); escribir('mar-resp-vs0', vs0); escribir('mar-resp-vs1', vs1);
+            copiar(vsBox, 'mar-resp-resultado');
+            const responde = (vs1 - vs0) / vs0 * 100 > 10, diur = cuerpo.querySelector('#mrp-rv-diur').value === 'si';
             r.className = `tfg-estado tfg-estado-${responde || diur ? 'ok' : 'danger'}`;
             r.innerHTML = responde || diur ? `Responde${responde ? ' el volumen sistólico' : ''}${responde && diur ? ' y' : ''}${diur ? ' la diuresis' : ''}: la hipoperfusión contribuía; puedes repetir el reto.`
                 : '<strong>Ni el volumen sistólico ni la diuresis responden: parar</strong> los fluidos. Más volumen solo acumula líquido.';
         };
-        cuerpo.addEventListener('input', () => pintar());
-        cuerpo.addEventListener('change', () => pintar());
-        pintar(false);
+        const tocar = () => { tocado = true; pintar(); };
+        cuerpo.addEventListener('input', tocar);
+        cuerpo.addEventListener('change', tocar);
+        pintar();
         engancharTexto(cuerpo, tab);
     }
 };

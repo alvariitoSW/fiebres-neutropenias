@@ -372,3 +372,16 @@ Lo demás va al parte `autonomo/partes/2026-10-14-marino-r1.md` y a `autonomo/id
 - capnografía `#page=44`.
 
 Parte: `autonomo/partes/2026-10-14-marino-r2.md`.
+
+## Marino Renal: revisión R8 del plan Marino, caps. 31-35 (octubre 2026)
+
+`marino-r8` (revisión sin construir), 1 vuelta, 15 fichas. Corregido:
+- la KDIGO, que fallaba por redondeo (2,0 → 2,3);
+- etiquetas de la vista Visual (delta >1, Regla 2, KDIGO);
+- límites genéricos en `enlazar()` para todas las calculadoras de Marino Renal;
+- el simulador de salino al 3 %, con techo fisiológico y eje adaptable;
+- la hipernatremia normovolémica, la Regla 4 y el delta con HA corregido;
+- el reto de volumen;
+- notas de fidelidad y huecos de las págs. 26 y 46 y del cap. 35.
+
+Parte: `autonomo/partes/2026-10-14-marino-r8.md`.
