@@ -20,7 +20,7 @@ Cada tarea tiene un tipo. El «hecho» de un tipo **se suma** al del objetivo (p
 | Tipo | Qué es | «Hecho» propio | Modelo del constructor |
 |---|---|---|---|
 | `visual` | contenido nuevo o rehecho: fase A (fiel) + fase B (visual y preguntas) | fidelidad + **rúbrica de estudio ≥4 en todo** (REGLAS §7 y §8, juez `profesor`) + paciente posible si hay simulador | potente (opus) |
-| `estudio` | solo la fase B sobre contenido que **ya está** en la app y ya es fiel: el profesor diseña lo visual (modelos grandes), el recorrido de preguntas y los casos | rúbrica ≥4 en §7 y §8 + auditor sin graves en preguntas, casos y figuras | potente (opus) |
+| `estudio` | contenido que **ya está** en la app: fase A ligera (comprobación de fuentes: cifras, páginas y bibliografía contra el PDF; lo grave se corrige, lo bueno no se reescribe) + fase B (el profesor diseña lo visual con los modelos grandes, el recorrido de preguntas y los casos) | comprobación sin graves + rúbrica ≥4 en §7 y §8 + auditor sin graves en preguntas, casos y figuras | barato en la fase A, potente (opus) en la B |
 | `auditoria` | cotejar fichas existentes con su fuente | informe de graves/huecos/menores y los graves corregidos | barato (sonnet) |
 | `arreglo` | un fallo concreto | el fallo ya no se reproduce y nada se rompe (jueces) | barato |
 
@@ -52,7 +52,7 @@ Va primero: sin el botón «Preguntas» y sus formatos, ninguna tarea puede entr
 
 | # | Clave | Qué | Estado | Notas |
 |---|---|---|---|---|
-| 1 | `preguntas` | Botón «Preguntas» en el interruptor de las fichas, los tres formatos y el caso clínico, con la ficha de HIT como primera | pendiente | Encargo debajo. Maqueta aprobada por el usuario el 14/10/2026. |
+| 1 | `preguntas` | Botón «Preguntas» en el interruptor de las fichas, los tres formatos y el caso clínico, con la ficha de HIT como primera | aparcada | Espera su aprobación en la bitácora (B-001). Encargo debajo. Maqueta aprobada por el usuario el 14/10/2026. |
 
 **Encargo `preguntas`** · tipo: visual
 - Qué quiero: que la maqueta aprobada funcione dentro de la app, empezando por la ficha de trombocitopenia y HIT de
@@ -115,34 +115,37 @@ Marcador: capítulos con estado `hecha`.
 
 ### Tareas
 
+Aparcadas hasta que el usuario apruebe la entrada B-006 de la bitácora (método nuevo: fase A + fase B).
+
 | # | Clave | Capítulo | Estado | Notas |
 |---|---|---|---|---|
-| 1 | `mr` | 18 Insuficiencia mitral | pendiente | **Rehacer.** El piloto (PR #2) dejó el texto fiel pero una figura pobre y un bloque de texto: el usuario lo rechazó. Usar la PR #2 como base del texto. Encargo debajo. |
-| 2 | `as` | 15 Estenosis aórtica | pendiente | El motor ya tiene `areaAortica` y la recuperación de presión. |
-| 3 | `tr` | 19 Insuficiencia tricuspídea | pendiente | El motor ya tiene `eroaTricus`. |
-| 4 | `peri` | 21 Enfermedad pericárdica | pendiente | El simulador ya tiene derrame; el taponamiento y la constricción, no. |
-| 5 | `ar` | 16 Insuficiencia aórtica | pendiente | El motor no la tiene: habrá que añadirla con pruebas. |
-| 6 | `ms` | 17 Estenosis mitral | pendiente | El motor no la tiene. |
-| 7 | `segments` | 11 Contractilidad segmentaria | pendiente | Necesita contractilidad por segmento en la geometría. |
-| 8 | `strain` | 13 Strain | pendiente | Hay una aproximación en el cap. 09 («acortamiento del borde»). |
-| 9 | `stress` | 12 Eco de estrés | pendiente | Depende de `segments`. |
-| 10 | `hcm` | 22 Miocardiopatía hipertrófica | pendiente | Ya hay forma «hipertrofia del VI»; falta la obstrucción del TSVI. |
-| 11 | `amyloid` | 23 Amiloidosis cardíaca | pendiente | |
-| 12 | `aorta` | 20 Enfermedades de la aorta | pendiente | |
-| 13 | `windows` | 04 Vistas transtorácicas | pendiente | El simulador ya tiene 10 vistas y sonda libre. |
-| 14 | `shunts` | B4 Cortocircuitos | pendiente | |
-| 15 | `masses` | B5 Masas y trombos | pendiente | |
-| 16 | `mi` | B6 Complicaciones del infarto | pendiente | |
-| 17 | `endocarditis` | B3 Endocarditis infecciosa | pendiente | |
-| 18 | `prosthetic` | B2 Prótesis valvulares | pendiente | |
-| 19 | `lvad` | B1 Asistencias ventriculares | pendiente | Probablemente `necesita humano`: el motor no tiene bomba. |
-| 20 | `tee` | 05 Ecocardiografía transesofágica | pendiente | Probablemente `necesita humano`: no hay sonda esofágica. |
-| 21 | `ai` | 24 Interpretación con IA | pendiente | Probablemente `necesita humano`: decidir antes qué se enseña sin modelo. |
+| 1 | `mr` | 18 Insuficiencia mitral | aparcada | Espera su aprobación en la bitácora (B-002). **Solo falta la fase B**: el usuario da por bueno el texto del piloto (PR #2, fase A hecha y auditada). Se trabaja **sobre la rama `auto/mr`** y completa la misma PR. Encargo debajo. |
+| 2 | `as` | 15 Estenosis aórtica | aparcada | El motor ya tiene `areaAortica` y la recuperación de presión. |
+| 3 | `tr` | 19 Insuficiencia tricuspídea | aparcada | El motor ya tiene `eroaTricus`. |
+| 4 | `peri` | 21 Enfermedad pericárdica | aparcada | El simulador ya tiene derrame; el taponamiento y la constricción, no. |
+| 5 | `ar` | 16 Insuficiencia aórtica | aparcada | El motor no la tiene: habrá que añadirla con pruebas. |
+| 6 | `ms` | 17 Estenosis mitral | aparcada | El motor no la tiene. |
+| 7 | `segments` | 11 Contractilidad segmentaria | aparcada | Necesita contractilidad por segmento en la geometría. |
+| 8 | `strain` | 13 Strain | aparcada | Hay una aproximación en el cap. 09 («acortamiento del borde»). |
+| 9 | `stress` | 12 Eco de estrés | aparcada | Depende de `segments`. |
+| 10 | `hcm` | 22 Miocardiopatía hipertrófica | aparcada | Ya hay forma «hipertrofia del VI»; falta la obstrucción del TSVI. |
+| 11 | `amyloid` | 23 Amiloidosis cardíaca | aparcada | |
+| 12 | `aorta` | 20 Enfermedades de la aorta | aparcada | |
+| 13 | `windows` | 04 Vistas transtorácicas | aparcada | El simulador ya tiene 10 vistas y sonda libre. |
+| 14 | `shunts` | B4 Cortocircuitos | aparcada | |
+| 15 | `masses` | B5 Masas y trombos | aparcada | |
+| 16 | `mi` | B6 Complicaciones del infarto | aparcada | |
+| 17 | `endocarditis` | B3 Endocarditis infecciosa | aparcada | |
+| 18 | `prosthetic` | B2 Prótesis valvulares | aparcada | |
+| 19 | `lvad` | B1 Asistencias ventriculares | aparcada | Probablemente `necesita humano`: el motor no tiene bomba. |
+| 20 | `tee` | 05 Ecocardiografía transesofágica | aparcada | Probablemente `necesita humano`: no hay sonda esofágica. |
+| 21 | `ai` | 24 Interpretación con IA | aparcada | Probablemente `necesita humano`: decidir antes qué se enseña sin modelo. |
 
 ### Encargos
 
-**Encargo `mr`** · tipo: visual
-- Qué quiero: el capítulo 18 rehecho para estudiar la insuficiencia mitral de un vistazo.
+**Encargo `mr`** · tipo: estudio (solo fase B, sobre la rama `auto/mr`; el texto del piloto se queda)
+- Qué quiero: el capítulo 18 convertido en algo para estudiar la insuficiencia mitral de un vistazo, sin rehacer su
+  texto (ya fiel): figura nueva en el ecógrafo, texto reorganizado para estudiar y preguntas rehechas.
 - Para qué: estudiar.
 - Modelo «así sí»: capítulo 14 (VD) y receptores animados; la nefrona viva como nivel de «se ve lo que pasa».
 - Lo visual que espero: en el **ecógrafo de la app**, la 4C (o 3C) con el **chorro en color** hacia la AI, la

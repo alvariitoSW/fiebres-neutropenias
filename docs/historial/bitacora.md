@@ -7,3 +7,6 @@ Formato: `AAAA-MM-DD · hecho|descartado · qué · PR o motivo`
 
 - 2026-10-14 · creada la bitácora (skill `/bitacora`), a petición del usuario. Los «Otros pendientes» del tablero
   pasan a ella.
+- 2026-10-14 · reorganizado · El usuario fija el plan: preguntas primero. El cap. 18 conserva su texto y le falta
+  la fase de estudio. Después Marino, El Libro Azul, el PIF y el atlas, cada uno con una comprobación de fuentes y la
+  fase de estudio. Apuntado como B-001 a B-006. Todo el tablero, `aparcada` hasta su aprobación.

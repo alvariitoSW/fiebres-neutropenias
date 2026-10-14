@@ -74,7 +74,8 @@ El usuario puede contar varias cosas, en uno o varios días. Para cada una:
 ### Aprobar
 
 Solo con una orden clara del usuario («apruebo la B-003», «vale, esa sí, así»):
-1. Pasa la tarea al tablero: elige una clave corta, ponla en la tabla del objetivo que le toque (o crea un objetivo
+1. Si la tarea ya está en el tablero como `aparcada` (su nota dice qué entrada de la bitácora espera), pásala a
+   `pendiente`. Si no, pásala al tablero: elige una clave corta, ponla en la tabla del objetivo que le toque (o crea un objetivo
    nuevo si no encaja), en el sitio de la cola que diga el usuario (por defecto, al final), con estado `pendiente`
    y su **Encargo** debajo, copiado de la bitácora.
 2. En la bitácora, la entrada sale de «Apuntado» y queda una línea en «En marcha» con la clave del tablero y la

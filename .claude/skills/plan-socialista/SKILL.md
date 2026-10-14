@@ -21,7 +21,9 @@ tablero y el último parte, sin trabajar.
    que está en `autonomo/BITACORA.md` sin aprobar no se toca, aunque parezca urgente.
 3. Respeta los límites del tablero (tareas por sesión, vueltas máximas, parar si…, gasto). Si no queda ninguna
    tarea `pendiente`, escribe el parte «sin tareas» y termina: no es un fallo.
-4. Rama: `git fetch origin main && git checkout -B auto/<clave> origin/main`. Carpeta de trabajo:
+4. Rama: `git fetch origin main && git checkout -B auto/<clave> origin/main`. **Si la tarea continúa una PR sin
+   fusionar** (lo dice su fila del tablero), se trabaja sobre esa rama (`git fetch origin auto/<clave> && git
+   checkout auto/<clave>`, fusionando antes `origin/main` si va por detrás) y se completa la misma PR. Carpeta de trabajo:
    `/tmp/plan-socialista/<clave>/` (borrador: no va al repositorio).
 5. Prepara la fuente (si es el atlas: `git clone --depth 1 https://github.com/douyang/echodemo /tmp/echodemo`).
    **Si una fuente no se puede abrir, la tarea pasa a `necesita humano`**, con lo que falta; no se improvisa.
@@ -49,7 +51,10 @@ hecho, y algo bonito que no es fiel tampoco.
 
 ### Fase A · Fiel (el contenido y su fuente)
 
-Se salta en las tareas `estudio` (el contenido ya está en la app y ya es fiel; pasa directo a la fase B).
+En las tareas `estudio` (el contenido ya está en la app) es **ligera**: solo el paso 3, la comprobación de fuentes
+sobre lo que ya hay (cifras, páginas, bibliografía y enlaces `#page=` contra el PDF), con el auditor y el constructor
+en el modelo barato. Lo grave se corrige antes de la fase B; lo que está bien no se reescribe. Si la tarea dice que
+su fase A ya está hecha (p. ej. la continuación de un piloto), se salta.
 
 1. **Lector de fuente** (`lector-fuente`) → `fuente.md`. Léelo tú: si tiene huecos graves, para y avisa.
 2. **Constructor** (`constructor`) → el texto en la app, completo y con sus fuentes, siguiendo los archivos modelo.
