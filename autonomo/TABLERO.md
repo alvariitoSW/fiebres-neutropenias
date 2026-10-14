@@ -50,7 +50,7 @@ Marcador: capítulos con estado `hecha`.
 
 | # | Clave | Capítulo | Estado | Notas |
 |---|---|---|---|---|
-| 1 | `mr` | 18 Insuficiencia mitral | pendiente | El motor ya tiene `eroaMitral` (orificio + Bernoulli). Nota del usuario: es el piloto del plan socialista, supervisado. |
+| 1 | `mr` | 18 Insuficiencia mitral | en curso | El motor ya tiene `eroaMitral` (orificio + Bernoulli). Nota del usuario: es el piloto del plan socialista, supervisado. |
 | 2 | `as` | 15 Estenosis aórtica | pendiente | El motor ya tiene `areaAortica` y la recuperación de presión. |
 | 3 | `tr` | 19 Insuficiencia tricuspídea | pendiente | El motor ya tiene `eroaTricus`. |
 | 4 | `peri` | 21 Enfermedad pericárdica | pendiente | El simulador ya tiene derrame; el taponamiento y la constricción, no. |
