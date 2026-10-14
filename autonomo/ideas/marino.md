@@ -33,3 +33,22 @@ Coinciden los tres revisores (fuente, código y móvil):
 - Para la fase de estudio: varios gráficos y esquemas del libro (Figs. 1.1, 3.2, 4.1-4.6, 5.1, 5.2, 6.1) están como
   lámina escaneada; deberían recrearse (CLAUDE.md §7.7). Primeras pantallas con la figura muy abajo (Forssmann antes
   de la figura en la ficha I; figuras a 1.700-3.200 px en otras) y párrafos de 7-10 líneas en sedación y escenarios.
+
+### R2 · Caps. 7-11 (oximetría y capnografía, catéter de AP, oxigenación, fluidos) · 2026-10-14
+
+Coinciden los tres revisores:
+- **Motor del latido con la curva de retorno venoso de Guyton cruzada con la función cardíaca (Frank-Starling)**: con
+  Pms, PVC y resistencia venosa, el bolo y la elevación pasiva de piernas mueven la curva; la PAD **sale del corazón**
+  en vez de ser un mando suelto (así desaparece el fallo del simulador de retorno). Se ve por qué subir la PVC no es el
+  objetivo, y la VVS y la EPP aparecen en el volumen sistólico de cada latido. La elevación de piernas se mediría con
+  el VTI subaórtico en el ecógrafo (respuesta si VS ≥10 %).
+- **El catéter de arteria pulmonar avanzando por el corazón** con Motion (AD → VD → AP → enclavamiento), con la onda
+  de presión en vivo, el globo que se infla y la onda v de la insuficiencia mitral.
+- **Un cuerpo con compartimentos vivos** (al estilo de la nefrona viva): plasma, intersticio y células de un adulto
+  de 75 kg (Tabla 10.1). Cada fluido (salino, glucosado, albúmina 5 % y 25 %, salino 7,5 %) mueve el agua entre ellos
+  con límites reales y se ve el edema de la sobrecarga. Sustituye al simulador de barras.
+- **La cascada del O₂ animada**: Hb → CaO₂ → DO₂ → extracción → SvO₂ sobre la curva de disociación, con anemia frente
+  a hipoxemia lado a lado; al cruzar el aporte crítico el VO₂ cae y se abre la mitocondria (Fig. 9.5): glucólisis →
+  piruvato → PDH bloqueada por la sepsis o el déficit de tiamina → lactato con O₂. Cierra con un capnograma animado
+  con espacio muerto.
+- **Flujo de decisión de la respuesta a fluidos**: ScvO₂ + gap de PCO₂ + EPP/VVS.
