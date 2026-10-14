@@ -5,7 +5,7 @@ aprobado**, lo que espera algo del usuario y lo hecho en la última semana. Lo a
 lo único que trabaja el plan socialista. Lo hecho hace más de 7 días y lo descartado pasan a
 `docs/historial/bitacora.md`.
 
-Última sincronización: 2026-10-14.
+Última sincronización: 2026-10-14 (tras las revisiones R1-R3).
 
 ---
 
@@ -150,12 +150,22 @@ esta sección.
 
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
-| `marino-r1` … `marino-r13` | Plan Marino, fase 1: revisar las 155 fichas en 13 trozos | pendiente | 2026-10-14 | Aprobada por el usuario (solo la fase 1 de B-003). 3 por sesión. |
+| `marino-r1` | Marino caps. 1-6 (revisión) | en revisión · [PR #3](https://github.com/alvariitoSW/fiebres-neutropenias/pull/3) | 2026-10-14 | 2 graves y 5 medianos corregidos; propofol: aviso a 240 con nota de fuentes externas (decidido). |
+| `marino-r2` | Marino caps. 7-11 (revisión) | en revisión · [PR #4](https://github.com/alvariitoSW/fiebres-neutropenias/pull/4) | 2026-10-14 | Va encima de #3. Simuladores de fluidos y retorno venoso que daban pacientes imposibles. |
+| `marino-r3` | Merino HEMATO, caps. 12-13 (revisión) | en revisión · [PR #5](https://github.com/alvariitoSW/fiebres-neutropenias/pull/5) | 2026-10-14 | 7 graves corregidos (TRALI/TACO, PFC:hematíes, 4Ts, HIT) y lo que faltaba de la fuente. |
+| `marino-r4` … `marino-r13` | Plan Marino, fase 1: los 10 trozos que quedan | pendiente | 2026-10-14 | Aprobada (solo la fase 1 de B-003). 3 por sesión. |
 
 El resto del tablero sigue `aparcada` hasta que apruebes la entrada de la bitácora que le toca.
 
 ## 3. Esperando algo tuyo
 
+- **Revisar y aprobar las PR #3, #4 (va encima de la #3) y #5** del plan Marino.
+- **Propuestas de regla de las revisiones R1-R3** (en sus partes):
+  1. `autonomo/jueces.mjs` da falsas alarmas con las imágenes de los desplegables cerrados y usa un puerto fijo que
+     choca si dos tareas lo pasan a la vez: arreglar el comprobador.
+  2. Recetas Visual: buscar el texto siempre por id (el «empieza por» confundió la Fase I con la Fase II).
+  3. Los archivos modelo de la app (`CLAUDE.md` §6) se revisan antes que el resto: el de Merino HEMATO tenía 7 graves.
+  4. Trabajar dos tareas a la vez en carpetas aparte (`git worktree`), como se hizo con R3.
 - **Aprobar B-001, B-002, B-004, B-005, B-006 y las fases 2-5 de B-003** (o cambiar el orden).
 
 - **Simulador de arritmias (idea de RitmoLab)**: los PDF de los algoritmos **AHA 2025** (bradicardia, taquicardia,
@@ -184,6 +194,8 @@ El resto del tablero sigue `aparcada` hasta que apruebes la entrada de la bitác
 
 ## 5. 💡 Lo que yo propondría (no lo has pedido tú)
 
+- **Para el mapa visual de Marino**, ya hay ideas de los revisores de R1-R3 y una tuya («agua de río y de mar» para
+  los fluidos) en `autonomo/ideas/marino.md` (llega a `main` con las PR #3 y #4; las de R3, en su parte).
 - **Inventario de estudio**: una tabla de qué fichas tienen vista Visual, cuáles tienen un modelo grande que las
   explique y cuáles tienen solo preguntas viejas. Por qué: sirve para ordenar las tareas `estudio` por lo que más
   ayuda. Es una tarea pequeña de solo lectura.
