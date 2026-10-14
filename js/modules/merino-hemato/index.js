@@ -26,10 +26,10 @@ function calc4Ts() {
         texto = `<strong>${puntos} puntos — riesgo bajo (&lt;1%).</strong> No se necesita más estudio ni retirar la heparina.`;
     } else if (puntos <= 5) {
         estado = 'tfg-estado-warn';
-        texto = `<strong>${puntos} puntos — riesgo intermedio (~10%).</strong> Retirar heparina, iniciar anticoagulante no heparínico y solicitar ELISA anti-FP4/heparina.`;
+        texto = `<strong>${puntos} puntos — riesgo intermedio (~10%).</strong> Retirar heparina, iniciar anticoagulante no heparínico y solicitar ELISA anti-FP4/heparina.<br>ELISA negativo: suspender el anticoagulante no heparínico; se puede reiniciar la heparina.<br>ELISA positivo (así se diagnostica la HIT en la práctica): anticoagulante no heparínico a dosis plenas aunque no haya trombosis (la trombosis es 10 veces mayor si se retrasa); sin trombosis clínica, ecografía venosa de las piernas (y de los brazos si hay catéter venoso central).`;
     } else {
         estado = 'tfg-estado-danger';
-        texto = `<strong>${puntos} puntos — riesgo alto (~50%).</strong> Retirar heparina e iniciar anticoagulante no heparínico a dosis terapéuticas plenas.`;
+        texto = `<strong>${puntos} puntos — riesgo alto (~50%).</strong> Retirar heparina e iniciar anticoagulante no heparínico a dosis terapéuticas plenas.<br>ELISA negativo: también se puede suspender el anticoagulante no heparínico.<br>ELISA positivo (así se diagnostica la HIT en la práctica): mantenerlo a dosis plenas aunque no haya trombosis (la trombosis es 10 veces mayor si se retrasa); sin trombosis clínica, ecografía venosa de las piernas (y de los brazos si hay catéter venoso central).`;
     }
     resultado.className = `result-box ${estado}`;
     resultado.innerHTML = texto;

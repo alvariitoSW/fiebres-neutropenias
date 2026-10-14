@@ -63,9 +63,9 @@ cada trozo salen de `js/data/libros-indice.js` (capítulos y su `tab`); el PDF y
 
 | # | Clave | Capítulos | Estado | Notas |
 |---|---|---|---|---|
-| 1 | `marino-r1` | 1-6 (acceso vascular y prácticas habituales) | en revisión (2026-10-14) · PR #3 | 13 fichas · Libros |
-| 2 | `marino-r2` | 7-11 (monitorización y fluidoterapia) | en revisión (2026-10-14) · PR #4 · va encima de #3 | 10 fichas · Libros |
-| 3 | `marino-r3` | 12-13 (anemia, transfusión, plaquetas y plasma) | pendiente | 6 fichas · Merino HEMATO |
+| 1 | `marino-r1` | 1-6 (acceso vascular y prácticas habituales) | hecha (2026-10-14) · PR #3 | 13 fichas · Libros |
+| 2 | `marino-r2` | 7-11 (monitorización y fluidoterapia) | hecha (2026-10-14) · PR #4 | 10 fichas · Libros |
+| 3 | `marino-r3` | 12-13 (anemia, transfusión, plaquetas y plasma) | hecha (2026-10-14) · PR #5 | 6 fichas · Merino HEMATO |
 | 4 | `marino-r4` | 14-17 (shock) | pendiente | 12 fichas · Merino Cardiología |
 | 5 | `marino-r5` | 18-21 (trastornos cardíacos) | pendiente | 12 fichas · Merino Cardiología |
 | 6 | `marino-r6` | 22-26 | pendiente | 13 fichas · Merino Neumología |

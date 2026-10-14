@@ -25,10 +25,10 @@ export function init() {
     montarVisual('merino-transfusion', {
         guia: 'Dónde está cada umbral de transfusión y por qué la Hb no basta.',
         paneles: [
-            { tipo: 'linea', titulo: 'Umbrales de Hb en una regla', min: 5, max: 11, ticks: [5, 6, 7, 8, 9, 10, 11], unidad: 'Hb, g/dl', nodos: [
+            { tipo: 'linea', titulo: 'Umbrales de Hb en una regla', nota: 'La cirugía cardíaca figura en los dos umbrales de la fuente (<7 poscirugía cardíaca; <8 cirugía cardíaca u ortopédica): ver la nota de fidelidad en el texto.', min: 5, max: 11, ticks: [5, 6, 7, 8, 9, 10, 11], unidad: 'Hb, g/dl', nodos: [
                 { fuente: 'Hb <7 g/dl', etiqueta: 'Hb <7: crítico estable', en: 7, color: 'verde' },
                 { fuente: 'Hb <8 g/dl', etiqueta: 'Hb <8: cardiopatía isquémica, cirugía cardíaca/ortopédica', en: 8, color: 'amarillo' },
-                { fuente: 'En 1942', etiqueta: 'Hb 10 (el "10/30" histórico)', en: 10, fila: 'abajo', color: 'gris' }
+                { fuente: 'En 1942', etiqueta: 'Hb ≤10: recomendada en 1942', en: 10, fila: 'abajo', color: 'gris' }
             ] },
             { tipo: 'comparar', titulo: 'El disparador', columnas: [
                 { titulo: 'Problema', color: 'rojo', nodos: ['2 problemas del umbral por Hb'] },
@@ -48,7 +48,7 @@ export function init() {
     montarVisual('merino-riesgos', {
         guia: 'Cada riesgo de la tabla, colocado según lo frecuente que es.',
         paneles: [
-            { tipo: 'frecuencias', titulo: 'Frecuencia por unidad transfundida', tabla: 0,
+            { tipo: 'frecuencias', titulo: 'Frecuencia de cada reacción', nota: 'Por unidad transfundida, salvo la sobrecarga circulatoria (TACO)†: su 1:100 es por receptor, no por unidad (nota † de la Tabla 12.5).', tabla: 0,
               series: [{ nombre: 'Relacionados con inmunidad', color: 'purpura' }, { nombre: 'Otros', color: 'dorado' }] },
             { tipo: 'comparar', titulo: 'Las reacciones, una a una', columnas: [
                 { titulo: 'Inmunológicas', color: 'purpura', nodos: ['Reacción hemolítica aguda', 'Fiebre no hemolítica', 'Hipersensibilidad', 'TRALI'] },
