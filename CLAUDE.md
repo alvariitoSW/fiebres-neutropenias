@@ -30,6 +30,11 @@ Este archivo son **las reglas vigentes**, cortas a propósito:
   deliberadas y en el dispositivo del usuario: el quiz (aciertos/fallos), el Modo Estudio (pomodoros, duración y
   progreso por ficha) y Dudas de guardia (las dudas que escribe el usuario). Ninguna persistencia más sin que la pida.
 - **Sin build tool ni dependencias.** HTML/CSS/JS que el navegador ejecuta tal cual. GitHub Pages sirve `index.html`.
+- **Una sola librería externa, a petición del usuario: Motion 11.18.2** (animaciones), copiada en
+  `js/vendor/motion.js` (MIT; ver `js/vendor/README.md`) y cargada solo cuando hace falta con `cargarMotion()` de
+  `js/core/motion.js`. Con «reducir movimiento» se muestra el estado final. Ninguna otra librería sin que el usuario
+  la elija. Gotcha: en SVG, Motion escribe la opacidad como **atributo** (no fijes `style.opacity`, que manda sobre
+  él) y no aplica escalas ni desplazamientos a un `<g>`: anímalos con un número de 0 a 1 y el atributo `transform`.
 - **Cada calculadora es código específico**, no un motor genérico.
 - **HTML modular vía `fetch()`**: `index.html` es el esqueleto; cada vista es un partial con
   `data-include="ruta.html"` (`js/core/include.js`). **Todos los partials se cargan al arrancar**, aunque estén ocultos.
@@ -114,6 +119,7 @@ backend/ admin/         panel de subida de contenido (aparte de la app)
 | Especialidad con submenú (el `index.js` más simple) | `js/modules/neumologia/index.js` |
 | Enlace cruzado | `js/modules/fisio-uci/vias-urinarias.html` (botones `.especialidad-link`) |
 | Capítulo del atlas de eco | `js/modules/eco/atlas/cap-sistolica.html` + `sistolica.mjs` |
+| Mecanismo animado paso a paso (Motion) | `js/modules/cardiologia/receptores-animados.js` |
 
 ## 7. Contenido clínico
 

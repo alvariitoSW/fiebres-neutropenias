@@ -5,6 +5,7 @@
 import { initCorkboard } from '../../core/corkboard.js';
 import { initSiNoWizard } from '../../core/wizard.js';
 import { pintarGauge } from '../../core/ui.js';
+import { crearEscenaReceptores } from './receptores-animados.js';
 
 // Tabla 15.1 — clasificador de shock hemorrágico por % de volumen perdido.
 function calcClaseHemorragia() {
@@ -339,11 +340,13 @@ const RECEPTORES_FARMACO = {
     vasopresina: {
         nombre: 'Vasopresina',
         noAdrenergico: true,
+        receptorNoAdr: 'Receptor V1 del músculo liso vascular: vasoconstricción por otra vía',
         efecto: 'Actúa sobre 3 receptores no adrenérgicos distintos: <strong>V1</strong> (músculo liso vascular) — el responsable del efecto vasoconstrictor de esta ficha, mismo resultado final que α₁ pero por una vía molecular completamente aparte; <strong>V2</strong> (túbulo colector renal) — reabsorción de agua libre, el mismo receptor que media el efecto antidiurético fisiológico de la hormona; y <strong>V3</strong> (hipófisis anterior) — estimula la liberación de ACTH. Solo el efecto V1 es relevante para su uso como vasopresor en shock.',
     },
     angio2: {
         nombre: 'Angiotensina II',
         noAdrenergico: true,
+        receptorNoAdr: 'Receptor AT1 del músculo liso vascular: vasoconstricción por otra vía',
         efecto: 'Actúa sobre receptores AT1 de angiotensina (músculo liso vascular) — vasoconstricción por una vía ajena a la adrenérgica, más la liberación estimulada de vasopresina desde la hipófisis posterior.',
     },
 };
@@ -365,27 +368,8 @@ function pintarBarrasReceptor(activacion) {
     });
 }
 
-// Opacidad de cada columna del SVG estático según el nivel de activación
-// (0-3) del fármaco elegido: Nulo casi apagado, Intenso a plena opacidad —
-// así el propio diagrama "reacciona" a la selección, en vez de quedarse
-// siempre igual de coloreado sin importar qué fármaco se elija.
-const RECEPTOR_OPACIDAD_NIVEL = [0.15, 0.45, 0.7, 1];
-
-function resaltarDiagramaReceptores(activacion) {
-    const grupos = {
-        a1: document.getElementById('mc-recep-g-a1'),
-        b1: document.getElementById('mc-recep-g-b1'),
-        b2: document.getElementById('mc-recep-g-b2'),
-    };
-    Object.entries(grupos).forEach(([clave, g]) => {
-        if (!g) return;
-        if (!activacion) {
-            g.style.opacity = '1';
-            return;
-        }
-        g.style.opacity = String(RECEPTOR_OPACIDAD_NIVEL[activacion[clave]] ?? 1);
-    });
-}
+// El diagrama animado (receptores-animados.js) se crea en initReceptorFarmaco().
+let escenaReceptores = null;
 
 function mostrarResultadoReceptor(nombre, datos) {
     const barras = document.getElementById('mc-receptor-barras');
@@ -397,13 +381,13 @@ function mostrarResultadoReceptor(nombre, datos) {
 
     if (datos.noAdrenergico) {
         if (barras) barras.style.display = 'none';
-        resaltarDiagramaReceptores({ a1: 0, b1: 0, b2: 0 });
+        escenaReceptores?.mostrar({ nombre, activacion: { a1: 0, b1: 0, b2: 0 }, receptorNoAdr: datos.receptorNoAdr });
         resultado.innerHTML = `<p style="font-size:0.85rem;"><strong>${nombre}</strong> — ${datos.efecto}</p>`;
         return;
     }
 
     pintarBarrasReceptor(datos.activacion);
-    resaltarDiagramaReceptores(datos.activacion);
+    escenaReceptores?.mostrar({ nombre, activacion: datos.activacion, receptor: datos.receptor });
     let html = `<p style="font-size:0.85rem;"><strong>${nombre}${datos.receptor ? ` — ${datos.receptor}` : ''}</strong>${datos.efecto ? `: ${datos.efecto}` : ''}</p>`;
     if (datos.nota) html += `<p style="font-size:0.7rem; color:var(--text-muted); margin-top:6px;">${datos.nota}</p>`;
     resultado.innerHTML = html;
@@ -422,7 +406,7 @@ function actualizarReceptorFarmaco() {
         dosisWrap.style.display = 'none';
         if (barras) barras.style.display = 'none';
         resultado.style.display = 'none';
-        resaltarDiagramaReceptores(null);
+        escenaReceptores?.mostrar(null);
         return;
     }
 
@@ -438,7 +422,7 @@ function actualizarReceptorFarmaco() {
         if (!tramo) {
             if (barras) barras.style.display = 'none';
             resultado.style.display = 'none';
-            resaltarDiagramaReceptores(null);
+            escenaReceptores?.mostrar(null);
             return;
         }
         mostrarResultadoReceptor(farmaco.nombre, tramo);
@@ -452,6 +436,8 @@ function initReceptorFarmaco() {
     const select = document.getElementById('mc-receptor-farmaco');
     const dosisSelect = document.getElementById('mc-receptor-dosis');
     if (!select || !dosisSelect) return;
+    const raiz = document.getElementById('mc-recep-anim');
+    if (raiz) { escenaReceptores = crearEscenaReceptores(raiz); escenaReceptores.mostrar(null); }
     select.addEventListener('change', actualizarReceptorFarmaco);
     dosisSelect.addEventListener('change', actualizarReceptorFarmaco);
 }

@@ -21,7 +21,8 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
 
 ## 2. La app
 
-1. **Sin backend, sin build, sin dependencias nuevas.** HTML/CSS/JS que el navegador ejecuta tal cual.
+1. **Sin backend, sin build, sin dependencias nuevas.** HTML/CSS/JS que el navegador ejecuta tal cual. La única
+   librería es Motion (`js/vendor/`), elegida por el usuario; otra, solo si él la pide.
 2. **Móvil primero**: nada desborda a 390 ni a 360 px de ancho; toques de al menos 44 px.
 3. **Reutiliza antes de crear**: enlaces cruzados con `[data-especialidad]`; ayudas de `js/core/ui.js` y
    `js/core/wizard.js`; clases ya existentes de `css/components.css`. Una clase o un componente nuevos solo si no hay

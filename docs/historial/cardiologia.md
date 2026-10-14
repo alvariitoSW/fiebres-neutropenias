@@ -1413,3 +1413,28 @@ dentro de `#cardiologia-view` y en el switcher `cardioLevel` de
       a 390px. Sin cambios de CSS, así que no hizo falta bump de
       cache-busting.
 
+
+### Receptores adrenérgicos animados con Motion (octubre 2026)
+
+A petición explícita del usuario. Primero evaluó una lista de librerías (three.js, Motion, fabric.js,
+ffmpeg.wasm, deck.gl, canvas-confetti, drei, cobe, twgl.js, rive) y, tras ver una maqueta en un Artifact
+(«Esto es una pasada… ayuda muchísimo a entender la fisiología»), pidió llevarla a la app.
+
+- **Motion 11.18.2** (MIT) es la primera y única librería externa de la app: copiada en `js/vendor/motion.js`
+  (build UMD, `window.Motion`), con su licencia y un `README.md` de librerías copiadas. `js/core/motion.js`
+  (`cargarMotion()`, `sinMovimiento()`) la carga solo la primera vez que se elige un fármaco.
+- **Ficha II (Vasopresores) de Merino Cardiología**: el diagrama SVG estático de los receptores α₁/β₁/β₂ se
+  sustituye por `js/modules/cardiologia/receptores-animados.js` (`crearEscenaReceptores(raiz)` →
+  `{ mostrar(datos|null) }`). Cuenta el mecanismo en 5 pasos (llega el fármaco, se une, proteína G, segundos
+  mensajeros, efecto) con botones Reproducir / ◀ / ▶. Cuántas moléculas se unen a cada receptor es el nivel
+  0-3 de `RECEPTORES_FARMACO` (la misma fuente que las barras); el contenido de cada columna es el del diagrama
+  anterior (farmacología general, complementaria a Marino Cap. 14). Vasopresina, angiotensina II y la dopamina a
+  dosis bajas: las moléculas rebotan y un recuadro dice cuál es su receptor (`receptorNoAdr`). Sin fármaco, el
+  diagrama completo quieto. Con «reducir movimiento» o sin Motion, el estado final directamente.
+- **Bugs encontrados al verificar**: Motion escribe la opacidad de los elementos SVG como atributo, así que fijarla
+  con `style.opacity` la tapaba (la cascada nunca se encendía); y no aplica escalas ni desplazamientos a un `<g>`
+  (se animan como número de 0 a 1 que escribe el atributo `transform`). Pulsar ◀ dos veces seguidas dejaba
+  terminar la animación anterior sobre el paso nuevo: ahora se paran las animaciones en curso (`parar()`).
+- Verificado con Playwright (390 y 360 px): las 8 opciones y los tramos de dosis, el paso a paso hacia atrás y
+  adelante con y sin «reducir movimiento», sin ids duplicados, sin desbordamiento ni errores. Cache-busting
+  `?v=20261027`.
