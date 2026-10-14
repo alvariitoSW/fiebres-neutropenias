@@ -358,3 +358,17 @@ completa, cifras y figuras correctas. Arreglado:
   encima de 240 µg/kg/min, un límite propio de la calculadora y no del libro.
 
 Lo demás va al parte `autonomo/partes/2026-10-14-marino-r1.md` y a `autonomo/ideas/marino.md`.
+
+## Plan Marino, fase 1: revisión R2 (caps. 7-11), octubre 2026
+
+`marino-r2`, encima de R1. Arreglado:
+- simulador de fluidos con topes por fluido (antes daba plasma +214 % con 3 L de salino al 7,5 %);
+- retorno venoso sin etiquetas de volemia derivadas de la Pms (animal 7-8, humano 14-20);
+- Fase II de la capnografía en la vista Visual;
+- Tabla 10.5 deslizable en el móvil;
+- aviso de extracción <20 % en aporte y consumo de O₂ (mando desde 200);
+- límites con aviso en 8 calculadoras;
+- notas de las Ecs. 7.1 y 8.3 y de la duración de la albúmina;
+- capnografía `#page=44`.
+
+Parte: `autonomo/partes/2026-10-14-marino-r2.md`.
