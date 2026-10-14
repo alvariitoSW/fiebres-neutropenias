@@ -22,6 +22,7 @@ export const CAPITULOS = {
   eject: { html: 'cap-sistolica.html', figura: () => import('./sistolica.mjs'), sub: 'Volúmenes del VI por discos sobre el corazón de la app' },
   fill: { html: 'cap-diastolica.html', figura: () => import('./diastolica.mjs'), sub: 'Del llenado normal al restrictivo, con el motor de la app' },
   rv: { html: 'cap-vd.html', figura: () => import('./vd.mjs'), sub: 'Sobrecarga de presión, de volumen y TEP agudo, con el motor de la app' },
+  mr: { html: 'cap-mr.html', figura: () => import('./insuficiencia-mitral.mjs'), sub: 'Del orificio regurgitante al grado, con el motor de la app' },
 };
 const ORDEN = ATLAS_PARTES.flatMap(p => p.caps.map(c => c[0]));
 const EN_APP = ORDEN.filter(k => CAPITULOS[k]);

@@ -246,9 +246,9 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
   fisiología»). Detalle en `js/modules/eco/README.md` («Atlas de ecocardiografía»).
   - Eco cardíaca tiene ahora dos secciones: **Simulador** y **Atlas**.
   - El atlas es *The Heart by Ultrasound* en español, con su índice de 30 capítulos. Los que ya están en la app se
-    abren dentro (hoy 9: 01 Pulso, 02 Imagen, 03 Doppler, 06 Ciclo cardíaco, 07 Asa P-V, 08 Hemodinámica por
-    Doppler, 09 Función sistólica, 10 Función diastólica y 14 Ventrículo derecho); los demás enlazan al original en
-    inglés.
+    abren dentro (hoy 10: 01 Pulso, 02 Imagen, 03 Doppler, 06 Ciclo cardíaco, 07 Asa P-V, 08 Hemodinámica por
+    Doppler, 09 Función sistólica, 10 Función diastólica, 14 Ventrículo derecho y 18 Insuficiencia mitral); los demás
+    enlazan al original en inglés.
   - El texto se traduce, con permiso del autor, y la bibliografía es la suya (`atlas/referencias.js`). **El código no
     se copia**: cada figura se reconstruye sobre los motores de la app.
   - Hay **una sola fisiología**: el ciclo y el asa salen del motor del latido del simulador. Donde el texto y el motor

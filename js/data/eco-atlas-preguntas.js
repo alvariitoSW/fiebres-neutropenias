@@ -13,6 +13,7 @@ export const temasAtlasEco = [
     { key: 'atlas-eject', etiqueta: '09 Función sistólica' },
     { key: 'atlas-fill', etiqueta: '10 Función diastólica' },
     { key: 'atlas-rv', etiqueta: '14 Ventrículo derecho' },
+    { key: 'atlas-mr', etiqueta: '18 Insuficiencia mitral' },
 ];
 
 export const preguntasAtlasEco = [
@@ -172,4 +173,21 @@ export const preguntasAtlasEco = [
         explicacion: 'Con un orificio regurgitante grande, la AD recibe el chorro y su presión sube durante la sístole, así que la diferencia VD-AD (y la velocidad) es pequeña: la PSVD por la IT puede infraestimarse (Mukherjee 2025).' },
     { id: 'eat-q052', tema: 'atlas-rv', tipo: 'redactar', enunciado: 'Explica por qué el tabique se aplana en telesístole en la sobrecarga de presión del VD y solo en telediástole en la de volumen.',
         respuestaModelo: 'La forma del tabique depende del gradiente de presión entre los dos ventrículos. En la sobrecarga de presión, el VD genera una presión alta y su sístole se prolonga: al final de la sístole, cuando el VI ya se relaja, la presión del VD lo supera y el tabique se aplana o se desplaza hacia el VI. En la sobrecarga de volumen la presión sistólica del VD es casi normal, así que en sístole el VI domina y el tabique es redondo; pero al final de la diástole el VD lleno (y más rígido) llega a superar la presión del VI, y el tabique se aplana entonces. Con presión y volumen a la vez, se aplana en los dos tiempos.' },
+    // 18 Insuficiencia mitral
+    { id: 'eat-q053', tema: 'atlas-mr', enunciado: 'A un flujo regurgitante constante, la velocidad de aliasing se baja de 40 a 30 cm/s. ¿Cómo cambian el radio PISA y el EROA?',
+        opciones: ['El radio aumenta; el EROA no cambia', 'El radio disminuye', 'El radio aumenta; el EROA aumenta'], correcta: 0,
+        explicacion: 'El flujo, 2πr² × Va, es constante, así que r² aumenta cuando Va disminuye; el EROA, flujo ÷ velocidad pico, no cambia.' },
+    { id: 'eat-q054', tema: 'atlas-mr', enunciado: 'En una insuficiencia mitral, el EROA es 0,45 cm² y el volumen regurgitante 68 mL. ¿Cuál es el grado?',
+        opciones: ['Moderada', 'Grave', 'Leve'], correcta: 1,
+        explicacion: 'Un EROA ≥0,40 cm² y un volumen regurgitante ≥60 mL cumplen los criterios de insuficiencia grave.' },
+    { id: 'eat-q055', tema: 'atlas-mr', enunciado: 'Un paciente con IM primaria grave no tiene síntomas, una FEVI del 58% y un diámetro telesistólico del VI de 36 mm. ¿Cuál es el estadio ACC/AHA?',
+        opciones: ['C1', 'C2', 'D'], correcta: 1,
+        explicacion: 'El estadio C2 se define por una FEVI ≤60% o un diámetro telesistólico del VI ≥40 mm. Una FEVI del 58% basta por sí sola.' },
+    { id: 'eat-q056', tema: 'atlas-mr', enunciado: 'En la figura, con un EROA de 0,60 cm², la IM es grave y el VI está dilatado. ¿Qué cumple para el estadio C2 de la ACC/AHA?',
+        opciones: ['El DTSVI llega a 40 mm, o la FEVI baja a 60% o menos: basta uno de los dos', 'Hace falta que cumpla a la vez una FEVI ≤60% y un DTSVI ≥40 mm', 'Hace falta que el EROA supere 0,65 cm²'], correcta: 0,
+        explicacion: 'La disfunción del VI se define por una FEVI ≤60% o por un diámetro telesistólico del VI ≥40 mm (Otto 2020): con uno basta. En la figura, el DTSVI llega a 40 mm antes de que la FEVI baje a 60%.' },
+    { id: 'eat-q057', tema: 'atlas-mr', tipo: 'redactar', enunciado: 'Explica por qué, en la insuficiencia mitral, el área del jet en color no sirve para graduar la gravedad y se prefiere medir el radio de la convergencia de flujo (PISA).',
+        respuestaModelo: 'El área del jet en color sirve para descartar una IM, pero no es fiable para graduar su gravedad: depende de los ajustes del equipo, y la escala de color debe estar a 50-70 cm/s. La PISA, en cambio, mide el flujo que converge sobre el orificio: a la velocidad de aliasing (Va), la superficie isovelocidad es un hemisferio de radio r y el flujo es 2πr² × Va. Dividido por la velocidad pico de la IM da el EROA, y el EROA por el VTI del jet da el volumen regurgitante, que son las medidas con cortes de gravedad (≥0,40 cm² y ≥60 mL). Con una Va de 30-40 cm/s, un radio ≥1,0 cm es específico de IM grave. Como el radio se eleva al cuadrado, un error pequeño de medida se amplifica (errores del 10 al 25% son frecuentes).' },
+    { id: 'eat-q058', tema: 'atlas-mr', tipo: 'redactar', enunciado: 'Explica cómo cambia el VI en una insuficiencia mitral crónica y por qué la disfunción sistólica aparece tarde.',
+        respuestaModelo: 'Durante cada sístole, parte del volumen sistólico del VI refluye a la AI, una cámara de presión baja. El VI y la AI se dilatan para acomodar el volumen adicional (sobrecarga de volumen). Mientras el orificio regurgitante es moderado, el VI vacía con facilidad y su función sistólica se mantiene; la disfunción del VI aparece tarde, cuando el orificio es grande y el VI ya no compensa. Por eso, en una IM grave, una FEVI ≤60% o un diámetro telesistólico ≥40 mm marcan el estadio C2: no hay que esperar a una FEVI muy baja. En la figura, al subir el EROA suben el volumen y la fracción regurgitantes y el VI y la AI se dilatan; con el orificio muy grande, la contractilidad del modelo cae y la FEVI baja.' },
 ];
