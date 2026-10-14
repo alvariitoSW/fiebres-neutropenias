@@ -86,3 +86,11 @@ Decididos con el usuario. Casi todos dependen de que mande una fuente.
 - **Eco cardíaca (fuera del atlas)**: calibrar la RVS, medir fps en el móvil, más formas de enfermedad
   (`js/modules/eco/README.md`, «Pendiente»).
 - **Panel de subida**: falta la clave de la API y desplegar el Worker (`backend/README.md`).
+- **Simulador de arritmias (idea de RitmoLab, de Farmacotips)**: reconstruirlo sin copiar su código, sobre el motor
+  de ECG de `nefrologia/potasio-escena.js`. Decidido con el usuario: **puerta propia en la raíz** («Arritmias»),
+  enlazada también desde la rotación de Cardiología del PIF («EKG y arritmias»). 17 ritmos de RitmoLab: 11 con fuente
+  en la app (Marino caps. 19 y 21); bradicardia sinusal, BAV completo, Mobitz I y II, taquicardia sinusal y
+  extrasístoles, con los **algoritmos AHA 2025** (bradicardia, taquicardia, parada): **esperando que el usuario mande
+  los PDF**, porque heart.org está bloqueado desde el entorno. Fases: 1) monitor + 17 ritmos + modo Estudio (ruta de
+  manejo con enlaces a sus fichas); 2) modo Simulación con casos; 3) 12 derivaciones y calibres. Antes de construir,
+  maqueta visual para que elija. Lo que se sabe de RitmoLab está en `docs/historial/cardiologia.md`.

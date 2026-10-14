@@ -1438,3 +1438,23 @@ ffmpeg.wasm, deck.gl, canvas-confetti, drei, cobe, twgl.js, rive) y, tras ver un
 - Verificado con Playwright (390 y 360 px): las 8 opciones y los tramos de dosis, el paso a paso hacia atrás y
   adelante con y sin «reducir movimiento», sin ids duplicados, sin desbordamiento ni errores. Cache-busting
   `?v=20261027`.
+
+### RitmoLab (Farmacotips): estudio para un simulador de arritmias (octubre 2026)
+
+A petición del usuario («ver si con ingeniería reversa pudiéramos replicar el siguiente simulador de arritmias… y
+además incluirlo, porque en el PIF de cardiología hay que estudiar arritmias y electrocardiogramas»). La web
+(`farmacotips-ritmolab.farmacotips.chatgpt.site`) está bloqueada desde el entorno; el usuario mandó la página
+guardada, que solo trae el HTML del servidor (los programas van aparte y no se guardaron). Se ve:
+
+- 17 escenarios: TSV por reentrada nodal, FA respuesta rápida, flutter 2:1, FA preexcitada (WPW), TV monomórfica
+  estable e inestable, torsades, FV, TV sin pulso, bradicardia sinusal, BAV completo, Mobitz II, Mobitz I,
+  asistolia, AESP, taquicardia sinusal y extrasístoles ventriculares.
+- Modos Estudio y Simulación. Por caso: paciente (nombre, edad, frase, conciencia/pulso/perfusión, un 3D), monitor
+  multiparámetro (ECG II, FC, SpO₂, PA, pletismografía, FR, EtCO₂, temperatura), ECG de 12 derivaciones con «lectura
+  guiada» y ajustes de velocidad y ganancia, acciones (acceso IV, O₂, parches, RCP, ECG, laboratorio, imagen,
+  fármacos, terapia eléctrica), «ruta de manejo» en pasos con su referencia, registro de eventos y revisión final.
+- Fuentes que cita: algoritmo ACLS de taquicardia de la AHA 2025 y guía ACC/AHA/HRS 2015 de TSV. Avisa de que los
+  pacientes y ECG son sintéticos y sin validación clínica.
+
+Decisiones del usuario: puerta propia en la raíz y algoritmos AHA 2025 como fuente de lo que no cubre Marino
+(pendiente de que mande los PDF). Plan en `autonomo/TABLERO.md`.
