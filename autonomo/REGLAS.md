@@ -1,8 +1,8 @@
 # Reglas del equipo autónomo
 
-Corto a propósito: todos los agentes lo leen en cada vuelta. `CLAUDE.md` es la historia completa del proyecto;
-**no lo leas entero**: busca en él solo la sección que necesites (con grep), y lee el `README.md` del módulo
-que toques (p. ej. `js/modules/eco/README.md`).
+Corto a propósito: todos los agentes lo leen en cada vuelta, junto con `CLAUDE.md` (las reglas del proyecto,
+también cortas). La historia de cada parte está en `docs/historial/`: **no la leas entera**, busca con grep la
+sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/modules/eco/README.md`).
 
 ## 1. Contenido clínico
 

@@ -9,8 +9,10 @@ resumen final en vez de detenerte a preguntar.
 
 ## Lo primero que debes hacer
 
-Lee **`CLAUDE.md`** en la raíz del repo, completo, antes de tocar nada.
-Ahí está todo lo que necesitas: la arquitectura del proyecto, el patrón
+Lee **`CLAUDE.md`** en la raíz del repo, completo, antes de tocar nada
+(son las reglas vigentes, cortas). La historia de cada módulo está en
+`docs/historial/`: busca ahí con grep lo que necesites, sin leerlo entero.
+Entre las reglas y el historial tienes todo lo que necesitas: la arquitectura del proyecto, el patrón
 de "cuaderno de campo" (`core/corkboard.js`), el formato del quiz (opción
 múltiple + tipo `redactar`), el criterio de extracción de imágenes reales
 (`pdfimages`/`pdftoppm`+Pillow vs. recrear como `.data-table`/`kv-row`
@@ -33,7 +35,7 @@ en el resumen). Tu trabajo:
 
 1. **Decide dónde encaja** — ¿amplía una ficha ya existente? ¿es un nodo
    nuevo dentro de una especialidad ya existente? ¿justifica una
-   especialidad nueva? Busca en el propio `CLAUDE.md` y en el código
+   especialidad nueva? Busca en `docs/historial/` y en el código
    real antes de decidir, siguiendo el mismo criterio ya usado en
    decenas de casos similares documentados ahí.
 2. **Construye el contenido real**: fichas del cuaderno de campo, datos
@@ -55,7 +57,7 @@ en el resumen). Tu trabajo:
      — nunca a una URL externa que pueda dejar de estar viva. Si el
      offset de página impresa→PDF no es 1:1, calcúlalo y verifícalo
      igual que se ha hecho en el resto del proyecto (ver los ejemplos ya
-     documentados en `CLAUDE.md`).
+     documentados en `docs/historial/`).
    - Si la fuente es un link (no un PDF), enlázalo directamente como
      entrada de bibliografía, sin descargarlo ni archivarlo.
 4. **Verifica con Playwright** (ya instalado, Chromium disponible): abre
@@ -68,7 +70,7 @@ en el resumen). Tu trabajo:
    proyecto.
 5. **Audita tu propio trabajo contra la fuente** antes de terminar —
    releyendo la fuente completa (no solo por encima), en dos direcciones,
-   igual que las auditorías ya documentadas en `CLAUDE.md` para el resto
+   igual que las auditorías ya documentadas en `docs/historial/` para el resto
    de módulos:
    - **Fabricación**: comprueba que no has escrito ningún dato, cifra o
      recomendación que no esté en la fuente.
@@ -84,7 +86,7 @@ en el resumen). Tu trabajo:
    vez el contenido base está construido y verificado, revisa lo que
    acabas de añadir con la misma mirada que las auditorías de
    "fallos/huecos/interactividad/mejoras" ya hechas a mano en el resto
-   del proyecto (búscalas en `CLAUDE.md` para ver el formato) y anota
+   del proyecto (búscalas en `docs/historial/` para ver el formato) y anota
    candidatos concretos — nunca genéricos — a: piezas interactivas
    (calculadora/selector/simulador) que la propia fuente permitiría
    construir de forma verificable, tablas que podrían recrearse con más
@@ -94,10 +96,10 @@ en el resumen). Tu trabajo:
    ya verificada y proponer el resto para una ronda futura explícita,
    igual que se hace en el resto del proyecto (primero informe, después
    "aplica todo" si el usuario lo pide).
-7. **Actualiza `CLAUDE.md`** documentando lo añadido, con el mismo nivel
-   de detalle exhaustivo que ya tiene el resto del archivo (fuente
-   citada, ruta del PDF archivado, qué fichas/preguntas se crearon, qué
-   se verificó).
+7. **Documenta lo añadido en `docs/historial/`**, en el archivo de la
+   especialidad (fuente citada, ruta del PDF archivado, qué fichas/
+   preguntas se crearon, qué se verificó). Toca `CLAUDE.md` solo si
+   cambia una regla vigente.
 8. Si tocaste cualquier `.css` o `js/main.js`, **actualiza el parámetro
    `?v=` de cache-busting** en `index.html` a la fecha de hoy (o con un
    sufijo `-2`, `-3`... si ya se desplegó algo hoy).

@@ -40,7 +40,7 @@ Marcador: capítulos con estado `hecha`.
    sin desbordar a 390 ni a 360 px.
 7. **Enlaces**: si el capítulo tiene una ficha hermana en la app (p. ej. Merino Cardiología, Fisiopatología UCI),
    un botón `[data-especialidad]` en cada dirección.
-8. **Documentación**: párrafo nuevo en la sección del atlas de `js/modules/eco/README.md` y, en `CLAUDE.md`, la
+8. **Documentación**: párrafo nuevo en la sección del atlas de `js/modules/eco/README.md` y, en `docs/historial/eco.md`, la
    cuenta de capítulos actualizada en la sección del atlas (una línea, no un relato).
 9. **Auditoría ciega** sin hallazgos graves pendientes.
 

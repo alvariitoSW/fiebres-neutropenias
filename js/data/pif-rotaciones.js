@@ -1,5 +1,5 @@
 // Datos puros del PIF (Plan Individualizado de Formación) de Medicina
-// Intensiva, HUGCDN — ver "De dónde sale el nombre 'PIF'" en CLAUDE.md
+// Intensiva, HUGCDN — ver "De dónde sale el nombre 'PIF'" en docs/historial/menu-y-buscador.md
 // para el contexto completo. Un array de rotaciones por año de residencia
 // (R1-R5); hoy solo R1 tiene datos reales, extraídos del documento
 // PFI-UMI-R1-01 (Rev. 1, junio 2016). R2-R5 quedan como arrays vacíos

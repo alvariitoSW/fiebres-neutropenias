@@ -65,7 +65,7 @@ ${sourceDescription}
 Notas del usuario sobre esta fuente:
 ${USER_NOTES}
 
-Empieza leyendo CLAUDE.md completo (herramienta Read), y sigue el resto de
+Empieza leyendo CLAUDE.md completo (herramienta Read; son las reglas, cortas), y sigue el resto de
 instrucciones que ya tienes en tu prompt de sistema.
 `.trim();
 

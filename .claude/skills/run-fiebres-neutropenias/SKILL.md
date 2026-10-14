@@ -85,7 +85,7 @@ directly via `file://` does **not** work — `fetch()` of the HTML partials
 ## Test
 
 No test suite — this project has none (verification is always "launch it
-and look," per `CLAUDE.md`'s own `## Cómo probar cambios`).
+and look," per `CLAUDE.md` §7 «Cómo probar»).
 
 ---
 
@@ -100,7 +100,7 @@ and look," per `CLAUDE.md`'s own `## Cómo probar cambios`).
 
 - **Every specialty's HTML is loaded into the DOM at once, even when
   hidden** (`data-include` fetches all partials on startup — see
-  `js/core/include.js` / `CLAUDE.md`'s own warning on `core/tabs.js`
+  `js/core/include.js` / the warning on `core/tabs.js` in `docs/historial/general.md`
   about unscoped `.tab-content.active` queries). This means **text-based
   or `.tab-content.active`-based selectors can silently match the wrong
   element** in a totally different, invisible specialty panel that
@@ -128,8 +128,7 @@ and look," per `CLAUDE.md`'s own `## Cómo probar cambios`).
 - **Cache-busting query strings on CSS/JS** (`?v=YYYYMMDD[-N]` in
   `index.html`) mean a *second* http.server run on the same port after
   editing `css/*.css` or `js/main.js` needs that date bumped in
-  `index.html`, same rule as production deploys (`CLAUDE.md`'s
-  `### Cache-busting de CSS/JS`) — otherwise you may be screenshotting a
+  `index.html`, same rule as production deploys (`CLAUDE.md` §7) — otherwise you may be screenshotting a
   browser-cached old stylesheet, not your edit. Irrelevant for a single
   one-off server start, but matters if you restart the server across
   edits to re-verify.
