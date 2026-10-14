@@ -97,11 +97,9 @@ esta sección.
   la apunto en «Hecho».
 - **Depende de**: las fases 1 y 2, de nada. La 5, de B-001 y de los modelos que elijas.
 - **Tamaño**: grande. La fase 1 es barata y rápida; lo caro es la 4.
-- **Dudas**:
-  1. **Centralizar**: hoy Libros → Marino ya reúne todos los temas y lleva a cada ficha. ¿Te basta así, o quieres que
-     las fichas de los caps. 12-30 se **muden físicamente** a Libros (y Cardiología, Neumología y Hematología se
-     queden con un enlace)? Mudarlas es una decisión grande: cambia dónde está cada cosa.
-  2. Al aprobarla, cuántas tareas por sesión: para las revisiones propongo hasta 4 seguidas.
+- **Decidido (14/10)**: las fichas **se quedan donde están**; basta con que Libros → Marino las reúna. **3 tareas
+  por sesión**; hasta 3 vueltas por tarea (una 4.ª solo si quedan más de 3 fallos). **Fase 1 aprobada** (en el
+  tablero como Objetivo M); las fases 2-5 esperan.
 
 ### B-004 · El Libro Azul (Fisiopatología UCI): comprobar, estudio y completar · apuntado 2026-10-14
 - **Lo que dijiste**: «y del libro azul de fisiopatología a la UCI, que me faltaría además subir el temario».
@@ -150,13 +148,15 @@ esta sección.
 
 ## 2. En marcha (ya en el tablero)
 
-*(Nada: todo lo anterior espera tu visto bueno. Las tareas del tablero están `aparcada` hasta que apruebes la
-entrada de la bitácora que les toca.)*
+| Clave | Qué | Estado | Desde | Nota |
+|---|---|---|---|---|
+| `marino-r1` … `marino-r13` | Plan Marino, fase 1: revisar las 155 fichas en 13 trozos | pendiente | 2026-10-14 | Aprobada por el usuario (solo la fase 1 de B-003). 3 por sesión. |
+
+El resto del tablero sigue `aparcada` hasta que apruebes la entrada de la bitácora que le toca.
 
 ## 3. Esperando algo tuyo
 
-- **Aprobar las entradas B-001 a B-006** (o cambiar el orden). Tu decisión del 14/10: **todavía ninguna**.
-- **Marino centralizado**: ¿basta el índice de Libros → Marino o se mudan las fichas de los caps. 12-30? (B-003)
+- **Aprobar B-001, B-002, B-004, B-005, B-006 y las fases 2-5 de B-003** (o cambiar el orden).
 
 - **Simulador de arritmias (idea de RitmoLab)**: los PDF de los algoritmos **AHA 2025** (bradicardia, taquicardia,
   parada y la guía completa); heart.org está bloqueado desde el entorno. Decidido: puerta propia en la raíz

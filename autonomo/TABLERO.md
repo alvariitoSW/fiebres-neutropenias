@@ -3,8 +3,9 @@
 Lo edita el usuario (orden, notas, límites), la bitácora (`/bitacora`: mete las tareas que el usuario aprueba y las
 marca `hecha` al fusionarse su PR) y el director del plan (estados). Una tarea por línea, en orden de prioridad.
 
-- **Límite por sesión:** 1 tarea
-- **Vueltas máximas por tarea:** 3 (constructor ↔ jueces)
+- **Límite por sesión:** 3 tareas (decisión del usuario, 14/10/2026, para las revisiones de Marino)
+- **Vueltas máximas por tarea:** 3 (constructor ↔ jueces). Una 4.ª solo si tras la 2.ª quedan **más de 3 fallos**
+  (sumando graves, medianos y pequeños); nunca más de 4.
 - **Parar si:** 2 tareas seguidas fallan o quedan bloqueadas
 - **Límite de gasto por sesión:** el que fije el usuario (sin fijar todavía: no se programa una rutina nocturna sin él)
 - **Modo git:** rama `auto/<clave>` + PR en borrador (nunca directo a `main`)
@@ -45,6 +46,36 @@ escrito en el parte (no se para a preguntar: el usuario eligió trabajar sin fre
 - Lo que NO quiero.
 - Fuente.
 ```
+
+---
+
+## Objetivo M · Plan Marino, fase 1: revisar lo ya construido
+
+Aprobado por el usuario el 14/10/2026 (bitácora B-003, solo la fase 1). Tipo `revision`: no se construye nada. Libros →
+Marino ya centraliza todos los temas y **las fichas se quedan donde están** (decisión del usuario). Las fichas de
+cada trozo salen de `js/data/libros-indice.js` (capítulos y su `tab`); el PDF y la página, también.
+
+«Hecho» de cada trozo:
+1. Auditor ciego, revisor de código y verificador pasados; lo grave corregido y verificado.
+2. Lo menor, anotado en el parte; si hay 3 o menos y son baratos, se corrigen en la misma vuelta.
+3. «Ideas para la parte de estudio» de los tres revisores añadidas a `autonomo/ideas/marino.md`.
+4. PR en borrador (aunque solo lleve el parte y las ideas), con «Ver en el móvil» si hubo cambios en la app.
+
+| # | Clave | Capítulos | Estado | Notas |
+|---|---|---|---|---|
+| 1 | `marino-r1` | 1-6 (acceso vascular y prácticas habituales) | pendiente | 13 fichas · Libros |
+| 2 | `marino-r2` | 7-11 (monitorización y fluidoterapia) | pendiente | 10 fichas · Libros |
+| 3 | `marino-r3` | 12-13 (anemia, transfusión, plaquetas y plasma) | pendiente | 6 fichas · Merino HEMATO |
+| 4 | `marino-r4` | 14-17 (shock) | pendiente | 12 fichas · Merino Cardiología |
+| 5 | `marino-r5` | 18-21 (trastornos cardíacos) | pendiente | 12 fichas · Merino Cardiología |
+| 6 | `marino-r6` | 22-26 | pendiente | 13 fichas · Merino Neumología |
+| 7 | `marino-r7` | 27-30 | pendiente | 10 fichas · Merino Neumología |
+| 8 | `marino-r8` | 31-35 | pendiente | 15 fichas · Libros |
+| 9 | `marino-r9` | 36-38 | pendiente | 8 fichas · Libros |
+| 10 | `marino-r10` | 39-44 | pendiente | 17 fichas · Libros |
+| 11 | `marino-r11` | 45-47 | pendiente | 14 fichas · Libros |
+| 12 | `marino-r12` | 48-51 | pendiente | 14 fichas · Libros |
+| 13 | `marino-r13` | 52-53 y apéndices | pendiente | 11 fichas · Libros |
 
 ---
 

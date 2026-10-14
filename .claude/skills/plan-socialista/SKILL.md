@@ -100,7 +100,8 @@ A los tres pídeles, además, **«Ideas para la parte de estudio»**: 2-3 línea
 ayudaría a estudiar lo que han visto. Tú las añades a `autonomo/ideas/<libro>.md` (las usa el profesor en modo mapa).
 
 Decide: lo **grave** lo corrige el constructor (modelo barato, solo eso) y se repite el verificador; lo menor va
-al parte. Si no hubo que corregir nada, no hay PR: el resultado es el parte y las ideas.
+al parte (si son 3 o menos y baratos, se corrigen en la misma vuelta). Siempre hay PR en borrador, aunque solo lleve
+el parte y las ideas: así llegan a `main` cuando el usuario la aprueba.
 
 ### Entregas sin esperar (el usuario revisa mientras tú sigues)
 
