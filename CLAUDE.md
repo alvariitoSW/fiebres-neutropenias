@@ -201,6 +201,9 @@ como las conoce un médico, no como están hechas por dentro. Los botones dicen 
       posible (PA, FC, presiones, volúmenes, velocidades). El límite es la fisiología humana: una cifra imposible o
       muy alejada de la realidad no se recorta, se busca dónde está el error y se corrige en su origen.
 - [ ] Toda cifra nueva tiene su fuente y su página; las erratas y discrepancias, con su nota.
+- [ ] Contenido nuevo o rehecho: **sirve para estudiar** (`autonomo/REGLAS.md` §7): arriba la idea y la figura, nada
+      de muros de texto, 1-3 cosas resaltadas por bloque y el mecanismo visible con las piezas de la app, al nivel de
+      los modelos (receptores animados, atlas 14 y 10, nefrona viva, vista Visual).
 - [ ] Ningún id duplicado; ningún `<img>` sin archivo; ningún tema de quiz sin preguntas.
 - [ ] Si cambió un `.css` o `js/main.js`: fecha `?v=` subida en `index.html`.
 - [ ] La historia del trabajo, añadida al archivo de `docs/historial/` que toque (no aquí). Este archivo, solo si

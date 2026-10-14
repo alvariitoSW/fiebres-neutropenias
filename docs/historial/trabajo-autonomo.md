@@ -61,3 +61,27 @@ habían creado**. El usuario eligió el nombre **plan socialista** y se montó:
   Como el repositorio es público, cada PR lleva arriba un enlace a raw.githack.com, que sirve la rama como página web,
   y dónde tocar para llegar. Si un día falla, la alternativa propia es desplegar las ramas con una acción de GitHub
   (necesita cambiar el origen de Pages en los ajustes del repositorio).
+
+## Revisión tras el piloto rechazado: encargos, tipos y el profesor (octubre 2026)
+
+El usuario rechazó el piloto del capítulo 18 (`mr`, PR #2): el texto era fiel y los jueces lo aprobaron, pero era
+«un bloque de puro texto sin apenas resaltar lo importante» con una figura pobre (tarjetas de números y un esquema),
+tras 2 h 15 de trabajo. Diagnóstico: el plan medía **fidelidad y que funcione**, nunca **si sirve para estudiar**; el
+«hecho» del atlas pedía «una figura que se mueva», no qué tenía que enseñar; y el constructor era un modelo barato.
+Lo decidido con el usuario (modelos «así sí»: los cuatro; «todo, sin frenos»; constructor potente en lo visual):
+
+- `REGLAS.md` §7, **rúbrica «Sirve para estudiar»**, que manda tanto como la fidelidad: primera vista con idea y
+  figura, nada de párrafos largos, resaltado 1-3 por bloque según significado, el mecanismo se ve con las piezas de
+  la app (ecógrafo con Doppler color, motor, nefrona, kit Visual), mandos con frase viva, vista Visual y móvil. Con
+  los modelos del usuario: receptores animados, nefrona viva y simulaciones, atlas 14 y 10, recetas Visual.
+- Agente nuevo **`profesor`** (opus): capturas a 390 px de lo nuevo al lado de un modelo, nota del 1 al 5 por punto
+  y qué falta en concreto. Por debajo de 4 en algo, la tarea vuelve a construirse.
+- `TABLERO.md`: **tipos de tarea** (`visual`, `auditoria`, `quiz`, `arreglo`) con su «hecho» y el modelo del
+  constructor (opus en las visuales); **ficha de encargo** de seis líneas por tarea (qué, para qué, modelo, lo visual
+  que espero, lo que no, fuente); puntos 10-11 del «hecho» del atlas; `mr` vuelve a `pendiente` para rehacerlo con
+  su encargo (el chorro en color, la PISA y las venas pulmonares en el ecógrafo, que aún no las pinta).
+- La skill: el director lee el encargo (y si falta, lo rellena y lo dice en la PR, sin parar), escribe un **plan de
+  diseño** antes de construir (qué concepto se ve con qué pieza, comparado con el modelo), lanza el constructor con
+  opus en las visuales y al profesor junto a los otros jueces; plan B si un agente no está cargado; los jueces que no
+  pueden escribir devuelven el informe en la respuesta. `LEEME.md` explica al usuario cómo escribir un encargo.
+- `CLAUDE.md` §12: línea «sirve para estudiar» en la lista de antes de terminar.

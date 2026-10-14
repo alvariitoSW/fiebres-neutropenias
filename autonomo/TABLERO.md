@@ -11,6 +11,33 @@ Lo edita el usuario (orden, notas, límites) y el director (estados). Una tarea 
 
 Estados: `pendiente` · `en curso` · `en revisión` (PR abierta) · `hecha` (PR aprobada) · `necesita humano` · `aparcada`
 
+## Tipos de tarea y su «hecho»
+
+Cada tarea tiene un tipo. El «hecho» de un tipo **se suma** al del objetivo (p. ej. un capítulo del atlas es tipo
+*visual* y además cumple los puntos del Objetivo 1).
+
+| Tipo | Qué es | «Hecho» propio | Modelo del constructor |
+|---|---|---|---|
+| `visual` | contenido nuevo o rehecho con figura, simulación o vista Visual | fidelidad + **rúbrica de estudio ≥4 en todo** (REGLAS §7, juez `profesor`) + paciente posible si hay simulador | potente (opus) |
+| `auditoria` | cotejar fichas existentes con su fuente | informe de graves/huecos/menores y los graves corregidos | barato (sonnet) |
+| `quiz` | preguntas nuevas o completar temas | ~8 por ficha (6 + 2 de redactar), ancladas al texto, sin temas vacíos | barato |
+| `arreglo` | un fallo concreto | el fallo ya no se reproduce y nada se rompe (jueces) | barato |
+
+## Ficha de encargo (una por tarea, debajo de su fila)
+
+Si falta algún campo, el director lo rellena con su mejor criterio a partir de los modelos «así sí» y lo deja
+escrito en el parte (no se para a preguntar: el usuario eligió trabajar sin frenos).
+
+```
+**Encargo `<clave>`** · tipo: visual | auditoria | quiz | arreglo
+- Qué quiero: una frase.
+- Para qué: estudiar | consultar a pie de cama.
+- Modelo «así sí»: qué pieza de la app debe igualar (REGLAS §7).
+- Lo visual que espero: qué concepto se ve con qué pieza (p. ej. «el chorro en color en la 4C del ecógrafo»).
+- Lo que NO quiero.
+- Fuente.
+```
+
 ---
 
 ## Objetivo 1 · Terminar el atlas de Eco cardíaca
@@ -45,12 +72,18 @@ Marcador: capítulos con estado `hecha`.
 8. **Documentación**: párrafo nuevo en la sección del atlas de `js/modules/eco/README.md` y, en `docs/historial/eco.md`, la
    cuenta de capítulos actualizada en la sección del atlas (una línea, no un relato).
 9. **Auditoría ciega** sin hallazgos graves pendientes.
+10. **Sirve para estudiar** (tipo `visual`): el juez `profesor` da ≥4 en todos los puntos de REGLAS §7 comparando
+    con el capítulo 14 o el 10. La figura enseña **lo que el capítulo enseña, en la imagen que lo muestra en la
+    clínica**: si es eco, en el ecógrafo de la app (vistas, Doppler color, espectros, modo M); si es hemodinámica,
+    con el motor (asa, presiones) a la vez. Al menos igual de didáctica que la figura del original de echodemo.
+11. **Texto para estudiar**: arriba la idea central y la figura; el resto en bloques cortos, tablas y resaltado
+    (REGLAS §7.1-3). Nunca la traducción como un muro de párrafos.
 
 ### Tareas
 
 | # | Clave | Capítulo | Estado | Notas |
 |---|---|---|---|---|
-| 1 | `mr` | 18 Insuficiencia mitral | pendiente | El motor ya tiene `eroaMitral` (orificio + Bernoulli). Nota del usuario: es el piloto del plan socialista, supervisado. |
+| 1 | `mr` | 18 Insuficiencia mitral | pendiente | **Rehacer.** El piloto (PR #2) dejó el texto fiel pero una figura pobre y un bloque de texto: el usuario lo rechazó. Usar la PR #2 como base del texto. Encargo debajo. |
 | 2 | `as` | 15 Estenosis aórtica | pendiente | El motor ya tiene `areaAortica` y la recuperación de presión. |
 | 3 | `tr` | 19 Insuficiencia tricuspídea | pendiente | El motor ya tiene `eroaTricus`. |
 | 4 | `peri` | 21 Enfermedad pericárdica | pendiente | El simulador ya tiene derrame; el taponamiento y la constricción, no. |
@@ -71,6 +104,22 @@ Marcador: capítulos con estado `hecha`.
 | 19 | `lvad` | B1 Asistencias ventriculares | pendiente | Probablemente `necesita humano`: el motor no tiene bomba. |
 | 20 | `tee` | 05 Ecocardiografía transesofágica | pendiente | Probablemente `necesita humano`: no hay sonda esofágica. |
 | 21 | `ai` | 24 Interpretación con IA | pendiente | Probablemente `necesita humano`: decidir antes qué se enseña sin modelo. |
+
+### Encargos
+
+**Encargo `mr`** · tipo: visual
+- Qué quiero: el capítulo 18 rehecho para estudiar la insuficiencia mitral de un vistazo.
+- Para qué: estudiar.
+- Modelo «así sí»: capítulo 14 (VD) y receptores animados; la nefrona viva como nivel de «se ve lo que pasa».
+- Lo visual que espero: en el **ecógrafo de la app**, la 4C (o 3C) con el **chorro en color** hacia la AI, la
+  **convergencia PISA** sobre la válvula y su radio, el **Doppler continuo** del chorro y el **Doppler pulsado de la
+  vena pulmonar** (S que se aplana e invierte) moviéndose con el mando de gravedad; a la vez el VI y la AI que se
+  dilatan. El cálculo PISA paso a paso como animación (los 4 pasos del texto). La tabla de grados con la posición del
+  paciente marcada.
+  Ojo: el ecógrafo de la app aún no pinta el chorro regurgitante ni el flujo de venas pulmonares con IM; el motor ya
+  tiene `eroaMitral`. Hay que añadirlo al simulador (con sus pruebas; `js/modules/eco/CLAUDE.md`), no esquivarlo.
+- Lo que NO quiero: tarjetas de números como figura principal; párrafos largos; un esquema de círculos.
+- Fuente: echodemo (`src/ch/mr.js`, `index.html` #ch-mr), extracto en la PR #2.
 
 ---
 

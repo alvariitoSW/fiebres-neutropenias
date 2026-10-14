@@ -84,3 +84,33 @@ vez:
 - §1.7 (paciente posible): capítulo 18 del atlas, `mr` (octubre 2026). Con el EROA máximo la figura daba PAS 73 mmHg
   y un chorro de 3,4 m/s; los dos jueces la aprobaron porque las cifras iban «en la dirección del texto». Lo vio el
   director en una captura. Entró en el verificador y en `CLAUDE.md` §12.
+
+## 7. Sirve para estudiar (rúbrica; manda tanto como la fidelidad)
+
+Nació del piloto `mr` (capítulo 18): el texto era fiel y todo funcionaba, pero era un bloque de texto con una figura
+pobre que no ayudaba a estudiar. Al usuario le importa **tanto que se entienda y se estudie bien como que sea fiel**.
+
+**Los modelos «así sí» del usuario** (compara siempre con ellos, con capturas):
+- Mecanismo animado paso a paso: `js/modules/cardiologia/receptores-animados.js` (Merino Cardiología, vasopresores).
+- Simulación de la fisiología que se mueve: la nefrona viva (`js/modules/nefrologia/nefrona-viva.js`), el glomérulo,
+  el potasio (`hiperpotasemia-sim.js`) y el filtro de la TRR.
+- Capítulos del atlas ya hechos con el ecógrafo y el motor: 14 (`cap-vd.html` + `vd.mjs`) y 10 (`cap-diastolica.html`
+  + `diastolica.mjs`).
+- Vista Visual de las fichas: las recetas de `js/modules/merino-hemato/visual.js` y `js/modules/nefrologia/visual-*.js`.
+
+**Cada pantalla de contenido cumple esto:**
+1. **Primera vista**: arriba, la idea central en 1-2 frases y la figura. Nunca un muro de texto antes de la imagen.
+2. **Nada de párrafos largos**: más de ~6 líneas en el móvil sin estructura es un fallo. Lo enumerable va en tablas
+   (`.data-table`), campos con etiqueta (`kv-row`), chips, acordeones o un flujo de pasos.
+3. **Resaltado**: en cada bloque, 1-3 conceptos o cifras clave resaltados con el color de su significado (`.hl-rojo`
+   alarma, `.hl-verde` normal, `.hl-azul` mecanismo, `.hl-purpura` definición) o `<strong>`. Ni nada resaltado ni todo.
+4. **Lo que el tema enseña se ve**: el mecanismo central del capítulo o la ficha tiene su imagen viva, al nivel de
+   los modelos. Si existe la pieza en la app (ecógrafo con Doppler color, motor del latido, nefrona, kit Visual),
+   **se usa**: p. ej. en una valvulopatía, el chorro en color en la vista ecográfica real, no un esquema de círculos.
+5. **Interactivo que enseña**: los mandos cambian lo que el texto explica y una frase viva lo traduce a clínica.
+   Números sueltos en tarjetas no cuentan como figura.
+6. **Vista Visual** (Texto | Visual) en las fichas de cuaderno de campo.
+7. **Móvil**: se lee bien a 390 px; nada se pisa ni queda diminuto.
+
+**Cómo se juzga**: el agente `profesor` puntúa del 1 al 5 cada punto mirando capturas al lado de un modelo. Si
+alguno queda por debajo de 4, la tarea vuelve al constructor con lo que falta.
