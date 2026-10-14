@@ -408,4 +408,13 @@ export const preguntasMerino = [
         correcta: 0,
         explicacion: 'El fibrinógeno es el primer factor en agotarse en el sangrado masivo (y el más sensible a la dilución por fluidoterapia) — el crioprecipitado se usa cuando cae por debajo de 150-200 mg/dl.',
     },
+
+    // ---- De redactar ----
+    {
+        id: 'merino-q049',
+        tema: 'merino-microangiopatias',
+        tipo: 'redactar',
+        enunciado: 'Una paciente ingresa con trombocitopenia y esquistocitos en el frotis. Explica con el perfil de laboratorio cómo distinguirías una CID de una PTT o un SHU, y qué hallazgo separa a estas dos últimas entre sí.',
+        respuestaModelo: 'Las tres entidades comparten trombocitopenia consuntiva, trombosis microvascular con disfunción orgánica y anemia hemolítica microangiopática (esquistocitos), así que ni las plaquetas bajas ni los esquistocitos las distinguen. Lo que separa la CID es el consumo de factores de coagulación: INR y aPTT prolongados, fibrinógeno bajo y dímero-D elevado. En la PTT y el SHU el perfil de coagulación es normal (INR, aPTT, fibrinógeno y dímero-D normales). Entre PTT y SHU, la diferencia clínica es la función renal: la PTT cursa con insuficiencia renal habitualmente leve (creatinina <2 mg/dl) y el SHU con una insuficiencia renal habitualmente más grave; además, en la PTT la actividad de ADAMTS-13 está muy reducida (patognomónico, aunque poco disponible).',
+    },
 ];
