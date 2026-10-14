@@ -25,6 +25,19 @@ ordena el profesor en el «Mapa visual» (modo mapa). Nada de aquí se construye
   - El símil es **ilustrativo** y lo dice en pantalla; las cifras que muestre, las de la Fig. 10.1 y la Tabla 10.1.
   - Se apoya en la idea de los revisores de R2 (cuerpo con compartimentos vivos) y la sustituye en lo visual.
 
+- **Ácido-base: la mejor herramienta visual de la app** (14/10/2026, sobre los caps. 31-33). El usuario pide que
+  en la fase 2 la parte de ácido-base le **sorprenda infinitamente a nivel artístico**: que sea de las mejores
+  herramientas visuales para estudiar de toda la app.
+  - **Un proyecto propio**, no una ficha más. Integra el **riñón que ya funciona en PIF → Nefrología** (nefrona viva,
+    glomérulo vivo, sus estados de ATR, diarrea, diuréticos, alcalosis) y lo **mejora con el contenido de Marino**:
+    las reglas de la gasometría, los hiatos y el delta, el lactato, la cetoacidosis y la alcalosis por cloro.
+  - Aprovecha las herramientas de la propia app antes de inventar otras (REGLAS §7.8: un modelo grande, muchas
+    fichas). Lo que le falte al riñón para Marino (pendrina del colector, compensación respiratoria, el pulmón que
+    sopla CO₂) se construye sobre él.
+  - Ideas de los revisores que encajan aquí (R8): el mapa de la gasometría que se mueve con la compensación, la
+    balanza de aniones (HCO₃⁻ que se vacía, Cl⁻ o lactato que llena) y los casos de gasometrías encadenadas.
+  - Decisión grande: el profesor propone, el usuario elige con una **maqueta visual** antes de construir.
+
 ## Ideas de los revisores, por bloque
 
 *(Se añaden aquí tras cada revisión.)*
