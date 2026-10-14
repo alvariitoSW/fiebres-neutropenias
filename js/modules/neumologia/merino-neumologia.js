@@ -2,6 +2,25 @@
 // ventilación no invasiva en el paciente crítico (cuaderno de campo).
 // Fuente: Marino PL. The ICU Book, 5.ª ed., Cap. 22-26.
 import { initCorkboard } from '../../core/corkboard.js';
+import { clamp } from '../../core/ui.js';
+
+// Número con coma decimal (es-ES) y sin separador de miles. Si el valor
+// redondeado es 0 sale «0», nunca «−0,0».
+function fmt(n, dec = 0) {
+    const r = Number(n.toFixed(dec));
+    if (r === 0) return '0';
+    return r.toLocaleString('es-ES', { maximumFractionDigits: dec, useGrouping: false });
+}
+
+// Aviso común de las calculadoras de los caps. 22-26 cuando un dato queda fuera
+// de lo posible en un paciente: no se calcula nada. Los límites de entrada son
+// de plausibilidad (fisiología general), no cifras de la ficha.
+function avisoNoFisiologico(resultado, detalle) {
+    resultado.style.display = 'block';
+    resultado.className = 'result-box tfg-estado-danger';
+    resultado.style.textAlign = 'left';
+    resultado.innerHTML = `<strong>⚠️ Combinación no fisiológica</strong><p style="font-size:0.85rem; margin-top:6px;">${detalle}</p>`;
+}
 
 // Ecuación 22.1 — peso ajustado para dosificación de heparina por peso en
 // obesidad mórbida (IMC≥40): IBW + 0,4×(peso real − peso ideal).
@@ -13,13 +32,14 @@ function calcPesoAjustado() {
     if (idealEl.value === '' || realEl.value === '') { resultado.style.display = 'none'; return; }
     const ideal = Number(idealEl.value);
     const real = Number(realEl.value);
-    if (ideal < 0 || real < 0) { resultado.style.display = 'none'; return; }
+    if (!(ideal >= 20 && ideal <= 150)) { avisoNoFisiologico(resultado, 'El peso ideal debe estar entre 20 y 150 kg — revisa el dato.'); return; }
+    if (!(real >= 20 && real <= 400)) { avisoNoFisiologico(resultado, 'El peso real debe estar entre 20 y 400 kg — revisa el dato.'); return; }
 
     const ajustado = ideal + 0.4 * (real - ideal);
     resultado.style.display = 'block';
     resultado.className = 'result-box';
     resultado.style.textAlign = 'left';
-    resultado.innerHTML = `<strong>Peso ajustado ≈ ${ajustado.toFixed(1)} kg</strong><p style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">Úsalo en vez del peso real para el régimen de heparina por peso (Tabla 22.3) cuando el IMC sea ≥40 kg/m² — sobreestimar el peso con el régimen estándar promueve anticoagulación excesiva.</p>`;
+    resultado.innerHTML = `<strong>Peso ajustado ≈ ${fmt(ajustado, 1)} kg</strong><p style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">Úsalo en vez del peso real para el régimen de heparina por peso (Tabla 22.3) cuando el IMC sea ≥40 kg/m² — sobreestimar el peso con el régimen estándar promueve anticoagulación excesiva.</p>`;
 }
 function initPesoAjustado() {
     const resultado = document.getElementById('neumo-peso-ajustado-resultado');
@@ -35,8 +55,8 @@ function calcPefr() {
     const resultado = document.getElementById('neumo-pefr-resultado');
     if (!input || !resultado) return;
     if (input.value === '') { resultado.style.display = 'none'; return; }
-    let pct = Number(input.value);
-    if (pct < 0) { pct = 0; input.value = 0; }
+    const pct = Number(input.value);
+    if (!(pct >= 0 && pct <= 150)) { avisoNoFisiologico(resultado, 'El PEFR debe estar entre 0 y 150 % del predicho — revisa el dato.'); return; }
 
     let estado, texto;
     if (pct >= 70) {
@@ -52,7 +72,7 @@ function calcPefr() {
     resultado.style.display = 'block';
     resultado.className = `result-box ${estado}`;
     resultado.style.textAlign = 'left';
-    resultado.innerHTML = `<strong>${pct}% predicho</strong><p style="font-size:0.85rem; margin-top:6px;">${texto}</p>`;
+    resultado.innerHTML = `<strong>${fmt(pct, 1)}% predicho</strong><p style="font-size:0.85rem; margin-top:6px;">${texto}</p>`;
 }
 function initPefr() {
     const input = document.getElementById('neumo-pefr-input');
@@ -67,8 +87,8 @@ function calcSdraSeveridad() {
     const resultado = document.getElementById('neumo-sdra-severidad-resultado');
     if (!input || !resultado) return;
     if (input.value === '') { resultado.style.display = 'none'; return; }
-    let ratio = Number(input.value);
-    if (ratio < 0) { ratio = 0; input.value = 0; }
+    const ratio = Number(input.value);
+    if (!(ratio >= 30 && ratio <= 700)) { avisoNoFisiologico(resultado, 'El cociente PaO₂/FiO₂ debe estar entre 30 y 700 mmHg — revisa PaO₂ y FiO₂ (la FiO₂ va en fracción, de 0,21 a 1).'); return; }
 
     let estado, texto;
     if (ratio > 300) {
@@ -87,7 +107,7 @@ function calcSdraSeveridad() {
     resultado.style.display = 'block';
     resultado.className = `result-box ${estado}`;
     resultado.style.textAlign = 'left';
-    resultado.innerHTML = `<strong>PaO₂/FiO₂ = ${ratio} mmHg</strong><p style="font-size:0.85rem; margin-top:6px;">${texto}</p>`;
+    resultado.innerHTML = `<strong>PaO₂/FiO₂ = ${fmt(ratio, 1)} mmHg</strong><p style="font-size:0.85rem; margin-top:6px;">${texto}</p>`;
 }
 function initSdraSeveridad() {
     const input = document.getElementById('neumo-sdra-pao2fio2');
@@ -104,21 +124,20 @@ function calcPbw() {
     const resultado = document.getElementById('neumo-pbw-resultado');
     if (!alturaEl || !sexoEl || !resultado) return;
     if (alturaEl.value === '' || sexoEl.value === '') { resultado.style.display = 'none'; return; }
-    let alturaCm = Number(alturaEl.value);
-    if (alturaCm < 0) { alturaCm = 0; alturaEl.value = 0; }
+    const alturaCm = Number(alturaEl.value);
+    if (!(alturaCm >= 120 && alturaCm <= 230)) { avisoNoFisiologico(resultado, 'La altura debe estar entre 120 y 230 cm — revisa el dato (va en centímetros).'); return; }
     const alturaPulgadas = alturaCm / 2.54;
 
     const pbw = sexoEl.value === 'hombre'
         ? 50 + 2.3 * (alturaPulgadas - 60)
         : 45.5 + 2.3 * (alturaPulgadas - 60);
-    const pbwClamp = Math.max(pbw, 0);
-    const vtInicial = pbwClamp * 8;
-    const vtObjetivo = pbwClamp * 6;
+    const vtInicial = pbw * 8;
+    const vtObjetivo = pbw * 6;
 
     resultado.style.display = 'block';
     resultado.className = 'result-box';
     resultado.style.textAlign = 'left';
-    resultado.innerHTML = `<strong>Peso corporal predicho ≈ ${pbwClamp.toFixed(1)} kg</strong><p style="font-size:0.85rem; margin-top:6px;">Volumen tidal inicial (8 mL/kg): ≈${vtInicial.toFixed(0)} mL · Volumen tidal objetivo (6 mL/kg): ≈${vtObjetivo.toFixed(0)} mL. Reducir 1 mL/kg cada 2h hasta el objetivo, luego ajustar por la presión meseta (≤30 cmH₂O) y el pH (Tabla 24.5).</p>`;
+    resultado.innerHTML = `<strong>Peso corporal predicho ≈ ${fmt(pbw, 1)} kg</strong><p style="font-size:0.85rem; margin-top:6px;">Volumen tidal inicial (8 mL/kg): ≈${fmt(vtInicial)} mL · Volumen tidal objetivo (6 mL/kg): ≈${fmt(vtObjetivo)} mL. Reducir 1 mL/kg cada 2h hasta el objetivo, luego ajustar por la presión meseta y el pH (Tabla 24.5, págs. 48-49). La meseta objetivo aparece como «≤30 cmH₂O» en el texto y en los objetivos óptimos, y como «&lt;30» en la 2ª etapa: ver la nota de fuentes bajo la tabla.</p>`;
 }
 function initPbw() {
     const resultado = document.getElementById('neumo-pbw-resultado');
@@ -135,17 +154,16 @@ function calcCao2() {
     const resultado = document.getElementById('neumo-cao2-resultado');
     if (!hbEl || !sao2El || !resultado) return;
     if (hbEl.value === '' || sao2El.value === '') { resultado.style.display = 'none'; return; }
-    let hb = Number(hbEl.value);
-    let sao2 = Number(sao2El.value);
-    if (hb < 0) { hb = 0; hbEl.value = 0; }
-    if (sao2 < 0) { sao2 = 0; sao2El.value = 0; }
-    if (sao2 > 100) { sao2 = 100; sao2El.value = 100; }
+    const hb = Number(hbEl.value);
+    const sao2 = Number(sao2El.value);
+    if (!(hb >= 1 && hb <= 25)) { avisoNoFisiologico(resultado, 'La hemoglobina debe estar entre 1 y 25 g/dL — revisa el dato.'); return; }
+    if (!(sao2 >= 1 && sao2 <= 100)) { avisoNoFisiologico(resultado, 'La SaO₂ debe estar entre 1 y 100 % — revisa el dato.'); return; }
 
     const cao2 = 1.34 * hb * (sao2 / 100) * 10;
     resultado.style.display = 'block';
     resultado.className = 'result-box';
     resultado.style.textAlign = 'left';
-    resultado.innerHTML = `<strong>CaO₂ ≈ ${cao2.toFixed(0)} mL/L</strong><p style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">Referencias de la propia ficha: normal (Hb 15, SaO₂ 98%) ≈197 mL/L · umbral clásico de O₂ (SaO₂ 90%) ≈181 mL/L (−8%) · umbral transfusional (Hb 7, SaO₂ 98%) ≈92 mL/L (−64%).</p>`;
+    resultado.innerHTML = `<strong>CaO₂ ≈ ${fmt(cao2)} mL/L</strong><p style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">Referencias de la propia ficha: normal (Hb 15, SaO₂ 98%) ≈197 mL/L · umbral clásico de O₂ (SaO₂ 90%) ≈181 mL/L (−8%) · umbral transfusional (Hb 7, SaO₂ 98%) ≈92 mL/L (−64%).</p>`;
 }
 function initCao2() {
     const resultado = document.getElementById('neumo-cao2-resultado');
@@ -169,30 +187,39 @@ const SISTEMAS_O2 = [
     { nombre: 'OxyMask™', min: 24, max: 90, flujo: '1-≥15 L/min' },
     { nombre: 'O₂ nasal de alto flujo', min: 24, max: 100, flujo: '1-60 L/min' },
 ];
-function calcSistemaO2() {
+function calcSistemaO2(evento) {
     const input = document.getElementById('neumo-o2-fio2-objetivo');
     const resultado = document.getElementById('neumo-o2-sistema-resultado');
     if (!input || !resultado) return;
     if (input.value === '') { resultado.style.display = 'none'; return; }
-    let fio2 = Number(input.value);
-    if (fio2 < 21) { fio2 = 21; input.value = 21; }
-    if (fio2 > 100) { fio2 = 100; input.value = 100; }
+    const tecleado = Number(input.value);
+    if (!Number.isFinite(tecleado)) { resultado.style.display = 'none'; return; }
+    // Mientras se teclea («4» antes de «45») no se avisa de <21 %: solo al salir
+    // del campo (change) o cuando ya hay 2 cifras.
+    const alSalir = evento?.type === 'change';
+    if (tecleado < 21 && !alSalir && input.value.replace(/\D/g, '').length < 2) { resultado.style.display = 'none'; return; }
+    // No se reescribe el campo: se calcula con el valor acotado y se avisa.
+    const fio2 = clamp(tecleado, 21, 100);
+    const aviso = (tecleado < 21 || tecleado > 100)
+        ? `<p style="font-size:0.85rem; margin-top:6px;"><strong>⚠️ Combinación no fisiológica:</strong> la FiO₂ debe estar entre 21 y 100 % (has escrito ${fmt(tecleado, 1)} %). Se calcula con ${fmt(fio2)} %.</p>`
+        : '';
 
     const candidatos = SISTEMAS_O2.filter(s => fio2 >= s.min && fio2 <= s.max);
     resultado.style.display = 'block';
-    resultado.className = 'result-box';
+    resultado.className = tecleado < 21 || tecleado > 100 ? 'result-box tfg-estado-danger' : 'result-box';
     resultado.style.textAlign = 'left';
     if (candidatos.length === 0) {
-        resultado.innerHTML = `<strong>FiO₂ objetivo: ${fio2}%</strong><p style="font-size:0.85rem; margin-top:6px;">Ningún sistema de la Tabla 25.2 cubre por sí solo esta FiO₂ con fiabilidad — considera O₂ nasal de alto flujo o valorar ventilación no invasiva.</p>`;
+        resultado.innerHTML = `<strong>FiO₂ objetivo: ${fmt(fio2, 1)}%</strong>${aviso}<p style="font-size:0.85rem; margin-top:6px;">Por debajo del mínimo de la Tabla 25.2 (24%): ningún sistema de la tabla tiene un rango que empiece por debajo de 24%.</p>`;
     } else {
         const lista = candidatos.map(s => `<li><strong>${s.nombre}</strong> — ${s.flujo}, rango ${s.min}-${s.max}%</li>`).join('');
-        resultado.innerHTML = `<strong>FiO₂ objetivo: ${fio2}%</strong><p style="font-size:0.85rem; margin-top:6px;">Sistemas que cubren este objetivo:</p><ul style="margin:4px 0 0; padding-left:18px; font-size:0.85rem;">${lista}</ul>`;
+        resultado.innerHTML = `<strong>FiO₂ objetivo: ${fmt(fio2, 1)}%</strong>${aviso}<p style="font-size:0.85rem; margin-top:6px;">Sistemas que cubren este objetivo:</p><ul style="margin:4px 0 0; padding-left:18px; font-size:0.85rem;">${lista}</ul>`;
     }
 }
 function initSistemaO2() {
     const input = document.getElementById('neumo-o2-fio2-objetivo');
     if (!input) return;
     input.addEventListener('input', calcSistemaO2);
+    input.addEventListener('change', calcSistemaO2);
     calcSistemaO2();
 }
 
@@ -432,18 +459,22 @@ function calcEpRiesgo() {
     if (marcados === 0) { resultado.style.display = 'none'; return; }
     resultado.style.display = 'block';
     resultado.style.textAlign = 'left';
-    if (hemo.checked) {
+    const sinDefinir = (titulo, detalle) => {
+        resultado.className = 'result-box tfg-estado-warn';
+        resultado.innerHTML = `<strong>🟡 ${titulo}</strong><p style="font-size:0.85rem; margin-top:6px;">${detalle} <strong>La fuente no define esta categoría</strong> (Cap. 22, pág. 7): esta calculadora no la asigna a ninguna de las tres.</p>`;
+    };
+    if (hemo.checked && vd.checked && tropo.checked) {
         resultado.className = 'result-box tfg-estado-danger';
-        resultado.innerHTML = `<strong>🔴 EP de alto riesgo (masiva)</strong><p style="font-size:0.85rem; margin-top:6px;">Inestabilidad hemodinámica — trombolisis + heparina no fraccionada por peso (Tabla 22.3).</p>`;
+        resultado.innerHTML = `<strong>🔴 EP de alto riesgo (masiva)</strong><p style="font-size:0.85rem; margin-top:6px;">Disfunción del VD + troponina elevada (sobrecarga del corazón derecho) con inestabilidad hemodinámica — heparina no fraccionada por peso y trombolisis (Tabla 22.3).</p>`;
+    } else if (hemo.checked) {
+        sinDefinir('Inestabilidad hemodinámica sin el perfil de alto riesgo', 'El alto riesgo exige disfunción del VD y troponina elevada juntas, además de la inestabilidad; el riesgo intermedio exige que no haya inestabilidad.');
     } else if (vd.checked) {
         resultado.className = 'result-box tfg-estado-warn';
-        resultado.innerHTML = `<strong>🟡 EP de riesgo intermedio (submasiva)</strong><p style="font-size:0.85rem; margin-top:6px;">Disfunción del VD${tropo.checked ? ' + troponina elevada (sobrecarga del corazón derecho)' : ''} sin inestabilidad hemodinámica — enoxaparina 1 mg/kg/12h y observación 24-48h.</p>`;
-    } else if (comorb.checked) {
-        resultado.className = 'result-box tfg-estado-warn';
-        resultado.innerHTML = `<strong>🟡 No cumple estrictamente los criterios de bajo riesgo</strong><p style="font-size:0.85rem; margin-top:6px;">Comorbilidad significativa sin disfunción del VD ni inestabilidad hemodinámica — la fuente no define una categoría específica para este escenario; valorar manejo individualizado (posible alta diferida).</p>`;
+        resultado.innerHTML = `<strong>🟡 EP de riesgo intermedio (submasiva)</strong><p style="font-size:0.85rem; margin-top:6px;">Disfunción del VD${tropo.checked ? ' + troponina elevada (sobrecarga del corazón derecho)' : ' (con o sin troponina elevada)'} sin inestabilidad hemodinámica — enoxaparina 1 mg/kg SC cada 12 h; si no hay deterioro a las 24-48 h, pasar a anticoagulación oral (Tabla 22.3).</p>`;
+    } else if (tropo.checked) {
+        sinDefinir('Troponina elevada sin disfunción del VD', 'No hay disfunción del VD ni inestabilidad hemodinámica.');
     } else {
-        resultado.className = 'result-box tfg-estado-ok';
-        resultado.innerHTML = `<strong>🟢 EP de bajo riesgo</strong><p style="font-size:0.85rem; margin-top:6px;">Sin disfunción del VD, inestabilidad hemodinámica ni comorbilidades significativas — anticoagulación oral y alta precoz (Tabla 22.3).</p>`;
+        sinDefinir('Comorbilidad significativa sin disfunción del VD ni inestabilidad', 'El bajo riesgo exige que tampoco haya comorbilidades significativas.');
     }
 }
 function initEpRiesgo() {
@@ -452,6 +483,9 @@ function initEpRiesgo() {
     boxes.forEach(b => b.addEventListener('change', calcEpRiesgo));
     calcEpRiesgo();
 }
+
+// La fuente cuestiona el requisito de PEEP de la definición (Cap. 24, pág. 35).
+const NOTA_PEEP_CRITERIO = `<p style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">La fuente cuestiona el requisito de PEEP de la definición: exige intubación y ventilación mecánica, lo que deja fuera los casos de SDRA que no la necesitan (Cap. 24, pág. 35).</p>`;
 
 // Ficha VI — checklist de los 5 criterios diagnósticos de SDRA (Berlín).
 function calcSdraCriterio() {
@@ -464,10 +498,10 @@ function calcSdraCriterio() {
     resultado.style.textAlign = 'left';
     if (checks.length === total) {
         resultado.className = 'result-box tfg-estado-danger';
-        resultado.innerHTML = `<strong>Compatible con SDRA (${checks.length}/${total} criterios)</strong><p style="font-size:0.85rem; margin-top:6px;">Se cumplen los 5 criterios de la Tabla 24.2 — clasifica la gravedad con el cociente PaO₂/FiO₂ justo debajo.</p>`;
+        resultado.innerHTML = `<strong>Compatible con SDRA (${checks.length}/${total} criterios)</strong><p style="font-size:0.85rem; margin-top:6px;">Se cumplen los 5 criterios de la Tabla 24.2 — clasifica la gravedad con el cociente PaO₂/FiO₂ justo debajo.</p>${NOTA_PEEP_CRITERIO}`;
     } else {
         resultado.className = 'result-box tfg-estado-warn';
-        resultado.innerHTML = `<strong>No compatible con SDRA por definición formal (${checks.length}/${total} criterios)</strong><p style="font-size:0.85rem; margin-top:6px;">Faltan criterios de la Tabla 24.2 — considera diagnósticos alternativos (edema pulmonar cardiogénico, neumonía, etc.).</p>`;
+        resultado.innerHTML = `<strong>No compatible con SDRA por definición formal (${checks.length}/${total} criterios)</strong><p style="font-size:0.85rem; margin-top:6px;">Faltan criterios de la Tabla 24.2 — considera diagnósticos alternativos (edema pulmonar cardiogénico, neumonía, etc.).</p>${NOTA_PEEP_CRITERIO}`;
     }
 }
 function initSdraCriterio() {
@@ -577,7 +611,11 @@ function calcVniRespuesta() {
     if (tipoEl.value === '' || basalEl.value === '' || h1El.value === '') { resultado.style.display = 'none'; return; }
     const basal = Number(basalEl.value);
     const h1 = Number(h1El.value);
-    if (basal <= 0) { resultado.style.display = 'none'; return; }
+    const [minV, maxV, nombreV] = tipoEl.value === 'hipercapnico' ? [10, 200, 'La PaCO₂'] : [30, 700, 'El cociente PaO₂/FiO₂'];
+    if (!(basal >= minV && basal <= maxV && h1 >= minV && h1 <= maxV)) {
+        avisoNoFisiologico(resultado, `${nombreV} debe estar entre ${minV} y ${maxV} mmHg, tanto el basal como el de la 1ª hora — revisa los datos.`);
+        return;
+    }
 
     resultado.style.display = 'block';
     resultado.style.textAlign = 'left';
@@ -585,11 +623,11 @@ function calcVniRespuesta() {
         const deltaPct = ((basal - h1) / basal) * 100;
         const favorable = deltaPct >= 10;
         resultado.className = `result-box tfg-estado-${favorable ? 'ok' : 'danger'}`;
-        resultado.innerHTML = `<strong>PaCO₂: ${deltaPct >= 0 ? '−' : '+'}${Math.abs(deltaPct).toFixed(1)}% respecto al basal</strong><p style="font-size:0.85rem; margin-top:6px;">${favorable ? '✅ Descenso ≥10% — respuesta favorable a la VNI.' : '⚠️ Fracaso en disminuir la PaCO₂ ≥10% tras 1h — evidencia de respuesta pobre (fracaso de la VNI); considerar intubación.'}</p>`;
+        resultado.innerHTML = `<strong>PaCO₂: ${Number(deltaPct.toFixed(1)) === 0 ? '' : (deltaPct > 0 ? '−' : '+')}${fmt(Math.abs(deltaPct), 1)}% respecto al basal</strong><p style="font-size:0.85rem; margin-top:6px;">${favorable ? '✅ Descenso ≥10% — respuesta favorable a la VNI.' : '⚠️ Fracaso en disminuir la PaCO₂ ≥10% tras 1h — evidencia de respuesta pobre (fracaso de la VNI); considerar intubación.'}</p>`;
     } else {
         const favorable = h1 > basal;
         resultado.className = `result-box tfg-estado-${favorable ? 'ok' : 'danger'}`;
-        resultado.innerHTML = `<strong>PaO₂/FiO₂: ${basal.toFixed(0)} → ${h1.toFixed(0)} mmHg</strong><p style="font-size:0.85rem; margin-top:6px;">${favorable ? '✅ El cociente ha aumentado — respuesta favorable a la VNI.' : '⚠️ Fracaso en aumentar el cociente tras 1h — evidencia de respuesta pobre (fracaso de la VNI); considerar intubación si la hipoxemia es grave o la enfermedad subyacente tiene alta tasa de fracaso (Figura 26.5).'}</p>`;
+        resultado.innerHTML = `<strong>PaO₂/FiO₂: ${fmt(basal)} → ${fmt(h1)} mmHg</strong><p style="font-size:0.85rem; margin-top:6px;">${favorable ? '✅ El cociente ha aumentado — respuesta favorable a la VNI.' : '⚠️ Fracaso en aumentar el cociente tras 1h — evidencia de respuesta pobre (fracaso de la VNI); considerar intubación si la hipoxemia es grave o la enfermedad subyacente tiene alta tasa de fracaso (Figura 26.5).'}</p>`;
     }
 }
 function initVniRespuesta() {

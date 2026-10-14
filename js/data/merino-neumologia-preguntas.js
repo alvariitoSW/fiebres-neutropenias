@@ -348,7 +348,7 @@ export const preguntasMerinoNeumologia = [
     {
         id: 'neumo-q047', tema: 'neumo-sdra-diagnostico', tipo: 'redactar',
         enunciado: 'Lista los 5 criterios diagnósticos del SDRA (Tabla 24.2) y explica por qué el criterio de PEEP se ha cuestionado.',
-        respuestaModelo: 'Los 5 criterios son: (1) inicio agudo dentro de 7 días, (2) infiltrados alveolares bilaterales en radiografía de tórax, (3) PaO₂/FiO₂≤300 mmHg con PEEP≥5 cmH₂O, (4) sin evidencia de fallo cardíaco izquierdo o sobrecarga de fluidos, (5) presencia de una condición predisponente. El criterio de PEEP se ha cuestionado porque su aplicación requiere intubación y ventilación mecánica, lo que excluye por definición los casos de SDRA que no requieren ventilación mecánica — un sesgo estructural de la propia definición.',
+        respuestaModelo: 'Los 5 criterios son: (1) inicio agudo dentro de 7 días, (2) infiltrados alveolares bilaterales en radiografía de tórax, (3) PaO₂/FiO₂≤300 mmHg con PEEP≥5 (la fuente escribe cmH₂O en el texto y mmHg en la Tabla 24.2: ver la nota de fidelidad de la ficha), (4) sin evidencia de fallo cardíaco izquierdo o sobrecarga de fluidos, (5) presencia de una condición predisponente. El criterio de PEEP se ha cuestionado porque su aplicación requiere intubación y ventilación mecánica, lo que excluye por definición los casos de SDRA que no requieren ventilación mecánica — un sesgo estructural de la propia definición.',
     },
     {
         id: 'neumo-q048', tema: 'neumo-sdra-diagnostico', tipo: 'redactar',
@@ -387,15 +387,15 @@ export const preguntasMerinoNeumologia = [
     },
     {
         id: 'neumo-q053', tema: 'neumo-sdra-no-ventilatorio',
-        enunciado: '¿Cuál es el efecto más feared (temido) de la terapia con corticoides en dosis altas para SDRA cuando se combina con bloqueantes neuromusculares?',
-        opciones: ['Miopatía aguda', 'Osteoporosis', 'Cataratas', 'Insuficiencia suprarrenal'],
+        enunciado: '¿Cuál es la complicación más temida de la terapia con corticoides en dosis altas para SDRA cuando se combina con bloqueantes neuromusculares?',
+        opciones: ['Miopatía aguda', 'Hiperglucemia', 'Hipopotasemia', 'Insuficiencia suprarrenal'],
         correcta: 0,
         explicacion: 'La complicación más temida es una miopatía aguda, típicamente asociada al uso combinado de esteroides en dosis altas y bloqueantes neuromusculares, aunque es rara.',
     },
     {
         id: 'neumo-q054', tema: 'neumo-sdra-no-ventilatorio',
         enunciado: 'Según la fuente, ¿cuál es la lista de terapias farmacológicas que han FRACASADO en mejorar la supervivencia en el SDRA?',
-        opciones: ['Surfactante (adultos), NO inhalado, prostaciclinas inhaladas, estatinas, bloqueantes neuromusculares, agonistas β, interferón β-1a, factor estimulante de colonias', 'Solo los corticoides han fracasado, el resto tiene beneficio probado', 'La posición prono y el ECMO', 'Ningún fármaco ha sido estudiado en SDRA'],
+        opciones: ['Surfactante (adultos), NO inhalado, prostaciclinas inhaladas, estatinas, bloqueantes neuromusculares, agonistas β, interferón β-1a, factor estimulante de colonias', 'Solo el surfactante y el óxido nítrico inhalado han fracasado; el resto de fármacos tiene beneficio probado', 'La posición prono y el ECMO', 'Los corticoides, el surfactante y el interferón β-1a han mejorado la supervivencia en todos los pacientes'],
         correcta: 0,
         explicacion: 'Las terapias fracasadas incluyen surfactante en adultos, óxido nítrico inhalado, prostaciclinas inhaladas, estatinas, bloqueantes neuromusculares, agonistas β, interferón β-1a, y factor estimulante de colonias de granulocitos.',
     },
@@ -474,10 +474,10 @@ export const preguntasMerinoNeumologia = [
     },
     {
         id: 'neumo-q066', tema: 'neumo-o2-indicaciones',
-        enunciado: '¿Qué hizo Reinhold Messner en 1978 que desafió el dogma sobre la hipoxemia grave?',
+        enunciado: 'Según la fuente, ¿qué prueba hizo Reinhold Messner, antes de su ascenso al Everest de 1978 sin oxígeno suplementario, para comprobar el dogma sobre la hipoxemia grave?',
         opciones: ['Fue volado hasta la cumbre del Everest en una cabina despresurizada respirando aire ambiente, sin efectos adversos', 'Escaló el Everest usando oxígeno suplementario de alto flujo', 'Realizó el primer trasplante de pulmón en altitud', 'Demostró que el mal de altura era psicosomático'],
         correcta: 0,
-        explicacion: 'Messner (el primero en escalar el Everest sin O₂ suplementario, 1978) fue volado en avión hasta la cumbre con cabina despresurizada respirando aire ambiente, y no experimentó efectos adversos pese a las advertencias de los expertos.',
+        explicacion: 'Según la fuente, Messner (el primero en escalar el Everest sin O₂ suplementario, en 1978, junto con Peter Habeler) ideó antes del ascenso una prueba sencilla: fue volado en un avión con la cabina despresurizada hasta la cumbre del Everest, respirando aire ambiente, y no tuvo efectos adversos al pasar de los 26.000 pies (la «zona de la muerte»), pese a las advertencias de los expertos.',
     },
     {
         id: 'neumo-q067', tema: 'neumo-o2-indicaciones',
@@ -557,9 +557,9 @@ export const preguntasMerinoNeumologia = [
     {
         id: 'neumo-q078', tema: 'neumo-o2-sistemas',
         enunciado: '¿Por qué han caído en desuso las mascarillas de arrastre de aire para pacientes con retención crónica de CO₂?',
-        opciones: ['La pulsioximetría continua es un elemento disuasorio de la oxigenación excesiva, mientras que estas mascarillas pueden aumentar inadvertidamente la FiO₂', 'Porque son más caras que el HFNO', 'Porque nunca lograron una FiO₂ estable', 'Porque están contraindicadas en cualquier paciente con EPOC'],
+        opciones: ['La monitorización continua de la saturación con pulsioximetría es un elemento disuasorio de la oxigenación excesiva en estos pacientes', 'Porque son más caras que el HFNO', 'Porque nunca lograron una FiO₂ estable', 'Porque están contraindicadas en cualquier paciente con EPOC'],
         correcta: 0,
-        explicacion: 'Su popularidad se ha reducido porque la monitorización continua de la SpO₂ con pulsioximetría es un elemento disuasorio de la oxigenación excesiva en pacientes con retención de CO₂, y estas mascarillas pueden llevar a un aumento inadvertido de la FiO₂.',
+        explicacion: 'Se usaban en la retención crónica de CO₂, donde un aumento inadvertido de la FiO₂ puede subir aún más la PaCO₂. Su popularidad se ha reducido porque la monitorización continua de la saturación arterial con pulsioximetría es un elemento disuasorio de la oxigenación excesiva en pacientes con retención de CO₂.',
     },
     {
         id: 'neumo-q079', tema: 'neumo-o2-sistemas', tipo: 'redactar',
@@ -583,7 +583,7 @@ export const preguntasMerinoNeumologia = [
     {
         id: 'neumo-q082', tema: 'neumo-o2-toxicidad',
         enunciado: '¿Qué porcentaje del metabolismo del O₂ genera ROS dañinas en condiciones normales?',
-        opciones: ['~3%, ya que al menos el 95% se reduce por completo a agua', '~50%', '~90%', '~1000 ppm, un valor fijo'],
+        opciones: ['~3%, ya que al menos el 95% se reduce por completo a agua', '~10%', '~25%', '~50%'],
         correcta: 0,
         explicacion: 'Normalmente al menos el 95% del O₂ se reduce por completo a agua, y solo una fracción muy pequeña (~3%) del metabolismo del O₂ genera ROS dañinas.',
     },
@@ -618,7 +618,7 @@ export const preguntasMerinoNeumologia = [
     {
         id: 'neumo-q087', tema: 'neumo-o2-toxicidad', tipo: 'redactar',
         enunciado: 'Describe la secuencia de reducción química del O₂ a agua (Figura 25.6), nombrando los 3 intermediarios y qué enzima/cofactor interviene en cada paso.',
-        respuestaModelo: 'El O₂ acepta electrones de uno en uno: O₂ + e⁻ → radical superóxido (O₂•). El superóxido, con la enzima superóxido dismutasa (SOD) y 2H⁺, se convierte en peróxido de hidrógeno (H₂O₂). El peróxido, con un electrón adicional y catalizado por hierro (Fe²⁺/Fe³⁺), se convierte en ion hidroxilo (OH⁻) + radical hidroxilo (OH•). Finalmente, con 2H⁺ y un electrón más, se forma agua (2 H₂O). Los radicales superóxido e hidroxilo son radicales libres verdaderos (electrón desapareado); el peróxido de hidrógeno no lo es, pero es un oxidante potente que atraviesa membranas.',
+        respuestaModelo: 'El O₂ acepta electrones de uno en uno: O₂ + e⁻ → radical superóxido (O₂•). El superóxido, con la enzima superóxido dismutasa (SOD), un electrón más y 2H⁺, se convierte en peróxido de hidrógeno (H₂O₂). El peróxido, con un electrón adicional y catalizado por hierro (Fe²⁺/Fe³⁺), se convierte en ion hidroxilo (OH⁻) + radical hidroxilo (OH•). Finalmente, con 2H⁺ y un electrón más, se forma agua (2 H₂O). Los radicales superóxido e hidroxilo son radicales libres verdaderos (electrón desapareado); el peróxido de hidrógeno no lo es, pero es un oxidante potente que atraviesa membranas.',
     },
     {
         id: 'neumo-q088', tema: 'neumo-o2-toxicidad', tipo: 'redactar',
@@ -693,7 +693,7 @@ export const preguntasMerinoNeumologia = [
         enunciado: '¿Cuál es el signo temprano de fracaso de la VNI en el fallo respiratorio hipercápnico?',
         opciones: ['Fracaso de la PaCO₂ en disminuir significativamente (≥10%) tras 1 hora', 'Cualquier grado de somnolencia, incluso transitoria', 'Aumento de la frecuencia cardíaca en 5 lpm', 'Sudoración facial bajo la mascarilla'],
         correcta: 0,
-        explicacion: 'El fracaso de la PaCO₂ en disminuir significativamente (al menos un 10%) tras 1 hora de VNI es evidencia de una respuesta pobre; la alteración mental puede tardar más en resolverse y no debería usarse como indicador temprano.',
+        explicacion: 'El fracaso de la PaCO₂ en disminuir significativamente (al menos un 10%) tras 1 hora de VNI es evidencia de una respuesta pobre; la alteración mental puede tardar más en resolverse y no debería usarse como indicador temprano. Es la cifra del Cap. 26 (pág. 81); el Cap. 23 (pág. 26) da 10 mmHg en vez de 10% (ver la nota de fuentes de la ficha).',
     },
     {
         id: 'neumo-q099', tema: 'neumo-vni-uso',

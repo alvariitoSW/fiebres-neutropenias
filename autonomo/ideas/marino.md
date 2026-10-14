@@ -93,3 +93,13 @@ Coinciden los tres revisores:
   - HIT posoperatoria cardíaca: la 4Ts sube con una trombosis;
   - «encuentra el error»: warfarina en la HIT aguda o plaquetas en una PTT;
   - «piensa y destapa»: «INR 1,8 → 1,4 tras el PFC: ¿coagula mejor?».
+
+### R6 · Caps. 22-26 (Merino Neumología: EP, asma/EPOC, SDRA, O₂, VNI) · 2026-10-14
+
+- **Pulmón con respirador / «presión positiva en el tórax»** (Vt/PBW, FR, PEEP, I:E, resistencia y compliance;
+  curvas de presión, flujo y volumen): auto-PEEP, VILI y precarga/poscarga de la VNI. Lo piden los tres revisores y
+  serviría también para los caps. 27-30. Es una decisión grande (maqueta para el usuario).
+- **EP con el eco `tep`** en el estado del paciente de alto riesgo.
+- **Casos**: EP intermedia-alta; EPOC en VNI con PaCO₂ 80 → 73; asma con PaCO₂ «normal»; SDRA con PBW y prono.
+- **«Encuentra el error»**: Vt con peso real; O₂ al 100 % en el retenedor; 10 % frente a 10 mmHg; wedge normal que
+  «descarta» edema.
