@@ -70,7 +70,10 @@ const escalaAnillo = (v, v0, v1) => 0.8 + 0.2 * clamp((v - v0) / (v1 - v0), 0, 1
 
 // Tabique aplanado (formas de enfermedad): centro de la media luna del VD y medio ángulo máximo del arco que se
 // aplana (~55°, ilustrativo)
-const PHI_SEPTO = (REF.phiA + REF.phiB) / 2, ALFA_SEPTO = 0.95;
+export const PHI_SEPTO = (REF.phiA + REF.phiB) / 2;
+// medio ángulo del tabique aplanado del todo (rad): con 1,1, el índice de excentricidad del VI llega a ~1,4 (Ryan 1985:
+// 1,44 ± 0,16 en telesístole en la sobrecarga de presión; Atlas · 14). Ilustrativo
+const ALFA_SEPTO = 1.1;
 // Límites de la geometría: fuera de ellos el dibujo deja de seguir al motor (se avisa en la página).
 export const LIMITES = { vi: [35, 320], vd: [45, 330], au: [15, 140] };
 // mio: masa del VI respecto a la normal (formas de enfermedad, escenarios.mjs); extra: volumen que se añade al
@@ -638,7 +641,10 @@ export function baseGeometrica(estado) {
   const ventana = memo((phi) => { const f = anguloNorm(phi); if (f < REF.phiA || f > REF.phiB) return 0; const a = (f - REF.phiA) / (REF.phiB - REF.phiA);
     return Math.pow(Math.sin(Math.PI * a), 0.7) * paso(0, 0.12, a) * paso(0, 0.12, 1 - a); });
   const gauss = (f, c, s) => Math.exp(-Math.pow((anguloNorm(f) - c) / s, 2));
-  const kT = 0.62 + 0.38 * clamp((vvd - 30) / 110, 0, 1.5);   // el anillo y la base del VD se contraen con el volumen
+  // el anillo y la base del VD se contraen con el volumen. Por encima del volumen normal, la base crece más deprisa que la
+  // raíz cúbica del volumen: el VD dilatado pasa de semiluna a esfera y el anillo tricuspídeo se dilata (Mukherjee 2025,
+  // en Atlas · 14). El ritmo (0,9 por cada 110 mL) es ilustrativo
+  const kT = 0.62 + 0.38 * clamp((vvd - 30) / 110, 0, 1) + 0.9 * Math.max(0, vvd - 140) / 110;
   const Wb = memo((f) => kT * Math.sqrt(ventana(f)) * (18 + 13 * gauss(f, 3.23, 0.66) + 10 * gauss(f, 1.72, 0.38)));
   const perfilZ = memo((z) => Math.pow(Math.max(0, 1 - Math.pow(-z / Lvd, 2.2)), 0.6));
   const SBR = 0.40, wz = (z) => paso(0, SBR, -z / Lvd);
@@ -650,7 +656,8 @@ export function baseGeometrica(estado) {
         C0 += (re * a + 0.5 * a * a) * df * dz; C1 += (re * b + a * b) * df * dz; C2 += 0.5 * b * b * df * dz; } } }
   const V = vvd * 1000;
   const A = C0 >= V ? 1 : Math.max(1, (-C1 + Math.sqrt(C1 * C1 - 4 * C2 * (C0 - V))) / (2 * C2));
-  const tVd = REF.paredVd * Math.pow(REF.vVd / Math.max(40, vvd), 0.33);
+  // pared libre del VD: más fina al dilatarse; mioVd la engrosa (hipertrofia del VD por sobrecarga de presión, Atlas · 14)
+  const tVd = REF.paredVd * Math.pow(REF.vVd / Math.max(40, vvd), 0.33) * (estado.mioVd ?? 1);
   const tvdW = (w) => tVd * paso(0, 8, w);
   const wRV = (z, f) => mix(Wb(f), A * ventana(f) * perfilZ(z), wz(z));
   const endoVd = (z, f) => { const r = rEpiVi(z, f) + wRV(z, f); return [r * Math.cos(f), r * Math.sin(f), z]; };
@@ -659,7 +666,10 @@ export function baseGeometrica(estado) {
   // anillo tricúspide y orificio de salida (infundíbulo) dentro de la media luna
   const phiT = 3.23, rT = 12 * kT, dT = ReB + 2 + rT, ct = [dT * Math.cos(phiT), dT * Math.sin(phiT)];
   const anilloTricus = (psi) => [ct[0] + rT * Math.cos(psi), ct[1] + rT * Math.sin(psi), 0];
-  const phiR = 1.72, aR = 7.5 * kT, bR = 10.5 * kT, dR = ReB + 2 + aR, cR = [dR * Math.cos(phiR), dR * Math.sin(phiR)];
+  // el infundíbulo crece menos que la base: su ventana angular es estrecha y,
+  // con el VD muy dilatado, un orificio que creciera con kT se saldría de ella
+  const kR = Math.min(kT, 1.3);
+  const phiR = 1.72, aR = 7.5 * kR, bR = 10.5 * kR, dR = ReB + 2 + aR, cR = [dR * Math.cos(phiR), dR * Math.sin(phiR)];
   const e1R = [Math.cos(phiR), Math.sin(phiR)], e2R = [-Math.sin(phiR), Math.cos(phiR)];
   const anilloRVOT = (psi) => [cR[0] + aR * Math.cos(psi) * e1R[0] + bR * Math.sin(psi) * e2R[0], cR[1] + aR * Math.cos(psi) * e1R[1] + bR * Math.sin(psi) * e2R[1], 0];
   return { vi, mio, septo, rEndoVi, rEpiVi, endoVi, epiVi, ReB, Lvd, A, C0, ventana, Wb, wRV, tvdW, endoVd, epiVd, rimRV, kM, kT,

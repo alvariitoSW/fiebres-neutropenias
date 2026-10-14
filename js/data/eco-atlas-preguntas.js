@@ -12,6 +12,7 @@ export const temasAtlasEco = [
     { key: 'atlas-pressure', etiqueta: '08 Hemodinámica por Doppler' },
     { key: 'atlas-eject', etiqueta: '09 Función sistólica' },
     { key: 'atlas-fill', etiqueta: '10 Función diastólica' },
+    { key: 'atlas-rv', etiqueta: '14 Ventrículo derecho' },
 ];
 
 export const preguntasAtlasEco = [
@@ -147,4 +148,28 @@ export const preguntasAtlasEco = [
         explicacion: 'Con la presión de la AI alta, la mitral se abre antes y el TRIV se acorta; la Figura 3 de la guía da el TRIV ≤70 ms como variable alternativa del paso 3.' },
     { id: 'eat-q044', tema: 'atlas-fill', tipo: 'redactar', enunciado: 'Explica por qué la relajación lenta del VI baja la onda E y sube la A, aunque la presión de la AI sea normal.',
         respuestaModelo: 'Con la relajación lenta, la presión del VI tarda más en caer tras el cierre aórtico: la mitral se abre más tarde (TRIV largo) y, al abrirse, el VI todavía no se ha relajado del todo, así que el gradiente AI-VI del llenado rápido es menor y la E baja y decelera despacio (TDE largo). Queda más sangre en la AI para el final de la diástole, y la contracción auricular aporta una parte mayor del llenado: la A sube y E/A cae a 0,8 o menos. La presión media de la AI todavía es normal, por eso es el grado 1.' },
+    // 14 Ventrículo derecho
+    { id: 'eat-q045', tema: 'atlas-rv', enunciado: '¿Qué medida de la función sistólica del VD sale del área entera del VD en un plano?',
+        opciones: ['El cambio fraccional de área (FAC)', 'El TAPSE', 'La S′'], correcta: 0,
+        explicacion: 'El TAPSE y la S′ miden el movimiento de un solo punto del anillo tricuspídeo; la FAC compara las áreas del VD en telediástole y telesístole, así que incluye el movimiento radial de la pared libre y del tabique.' },
+    { id: 'eat-q046', tema: 'atlas-rv', enunciado: 'En el eje corto a la altura de los papilares, el índice de excentricidad del VI es 1,3 en telediástole y 1,0 en telesístole. ¿Qué patrón sugiere?',
+        opciones: ['Sobrecarga de volumen del VD', 'Sobrecarga de presión del VD', 'Un tabique normal'], correcta: 0,
+        explicacion: 'Un tabique plano solo en telediástole sugiere sobrecarga de volumen del VD; plano en telesístole, sobrecarga de presión.' },
+    { id: 'eat-q047', tema: 'atlas-rv', enunciado: 'Un paciente con hipertensión pulmonar tiene un TAPSE de 19 mm y una FAC del 30%. ¿Qué explica la diferencia?',
+        opciones: ['La base de un VD con sobrecarga de presión que falla puede conservar su movimiento', 'El TAPSE se mide en el momento equivocado', 'La FAC siempre es menor que el TAPSE'], correcta: 0,
+        explicacion: 'El TAPSE mide el movimiento longitudinal del anillo lateral. En un VD que deja de adaptarse, la base suele conservar su movimiento, así que el TAPSE puede sobrestimar la función; la FAC recoge también el movimiento radial.' },
+    { id: 'eat-q048', tema: 'atlas-rv', enunciado: 'El diámetro basal del VD en 4 cámaras es de 4,6 cm. ¿Cómo se clasifica según la guía ASE 2025?',
+        opciones: ['Moderadamente dilatado', 'Normal', 'Gravemente dilatado'], correcta: 0,
+        explicacion: 'Normal por debajo de 4,1 cm, leve 4,1-4,4, moderado 4,5-4,9 y grave por encima de 4,9 cm.' },
+    { id: 'eat-q049', tema: 'atlas-rv', enunciado: '¿Qué es el signo 60/60 en el TEP agudo?',
+        opciones: ['Un tiempo de aceleración del TSVD <60 ms con un gradiente de IT <60 mmHg', 'Una PSVD >60 mmHg con un TAPSE <60%', 'Una FC >60 lpm con una PAS <60 mmHg'], correcta: 0,
+        explicacion: 'El signo 60/60 combina un tiempo de aceleración de la eyección pulmonar, medido en el TSVD, por debajo de 60 ms con un gradiente sistólico máximo de la IT por debajo de 60 mmHg (ESC 2019). Es específico pero poco sensible.' },
+    { id: 'eat-q050', tema: 'atlas-rv', enunciado: 'Un paciente con sospecha de TEP tiene una IT de 4,2 m/s y la pared libre del VD de 9 mm. ¿Qué sugiere?',
+        opciones: ['Algo más que una sobrecarga aguda: hipertensión pulmonar crónica, tromboembólica u otra', 'Un TEP agudo típico', 'Una sobrecarga de volumen'], correcta: 0,
+        explicacion: 'Una IT por encima de 3,8 m/s o una pared del VD gruesa van más allá de lo que produce una sobrecarga aguda sobre un VD sin hipertrofia (ESC 2019).' },
+    { id: 'eat-q051', tema: 'atlas-rv', enunciado: 'En la IT grave de la figura, la velocidad de la IT cae a ~1 m/s con las cavidades derechas dilatadas. ¿Qué enseña?',
+        opciones: ['En la IT grave la velocidad puede infraestimar el gradiente VD-AD', 'La presión pulmonar está muy alta', 'El VD está gravemente deprimido'], correcta: 0,
+        explicacion: 'Con un orificio regurgitante grande, la AD recibe el chorro y su presión sube durante la sístole, así que la diferencia VD-AD (y la velocidad) es pequeña: la PSVD por la IT puede infraestimarse (Mukherjee 2025).' },
+    { id: 'eat-q052', tema: 'atlas-rv', tipo: 'redactar', enunciado: 'Explica por qué el tabique se aplana en telesístole en la sobrecarga de presión del VD y solo en telediástole en la de volumen.',
+        respuestaModelo: 'La forma del tabique depende del gradiente de presión entre los dos ventrículos. En la sobrecarga de presión, el VD genera una presión alta y su sístole se prolonga: al final de la sístole, cuando el VI ya se relaja, la presión del VD lo supera y el tabique se aplana o se desplaza hacia el VI. En la sobrecarga de volumen la presión sistólica del VD es casi normal, así que en sístole el VI domina y el tabique es redondo; pero al final de la diástole el VD lleno (y más rígido) llega a superar la presión del VI, y el tabique se aplana entonces. Con presión y volumen a la vez, se aplana en los dos tiempos.' },
 ];

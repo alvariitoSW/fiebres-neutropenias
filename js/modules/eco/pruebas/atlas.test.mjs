@@ -12,6 +12,7 @@ import { motorFlujo, analizarFlujo, estimarPad, analizarDerechas, motorEscenario
 import { modeloVci } from '../abdomen.mjs';
 import { motorLlenado, medirLlenado, algoritmoAse } from '../atlas/diastolica.mjs';
 import { motorSistolico, medirSistolica, bandaFe } from '../atlas/sistolica.mjs';
+import { motorVd, medirVd } from '../atlas/vd.mjs';
 import { REFERENCIAS } from '../atlas/referencias.js';
 import { CAPITULOS } from '../atlas/atlas.js';
 import { readFileSync } from 'node:fs';
@@ -107,12 +108,16 @@ test('08 Hemodinámica: PAD por la VCI (ASE 2025) y PSVD = 4v² + PAD cerca de l
   assert.equal(estimarPad(18, 0.6).pad, 3); assert.equal(estimarPad(24, 0.3).pad, 15);
   assert.equal(estimarPad(24, 0.6).pad, 8); assert.equal(estimarPad(18, 0.3).pad, 8);
   assert.equal(estimarPad(18, 0.25, 'tranquila').pad, 3); assert.equal(estimarPad(18, 0.5, 'vm').pad, null);
+  const vt = {};
   for (const k of ['normal', 'tep']) {
     const r = analizarDerechas(motorEscenario(k)), v = modeloVci(r.pvc), est = estimarPad(v.dmax, v.colapso).pad;
     assert.ok(Math.abs(r.gradTr + est - r.pvdMax) < 7, `${k}: ${r.gradTr} + ${est} frente a ${r.pvdMax}`);
-    if (k === 'tep') assert.ok(r.vTr >= 2.8, `TEP: v IT ${r.vTr}`);
-    else assert.ok(r.vTr < 2.8, `normal: v IT ${r.vTr}`);
+    vt[k] = r.vTr;
   }
+  // normal <2,8 m/s; en el TEP la IT sube, pero poco: una sobrecarga aguda sobre un VD fino no pasa de 3,8 m/s
+  // (Konstantinides 2019, en Atlas · 14)
+  assert.ok(vt.normal < 2.8, `normal: v IT ${vt.normal}`);
+  assert.ok(vt.tep > vt.normal + 0.5 && vt.tep < 3.8, `TEP: v IT ${vt.tep}`);
 });
 
 // 10 Función diastólica: los cuatro corazones de referencia caen en su patrón con el algoritmo de la guía, y su
@@ -159,4 +164,29 @@ test('Atlas: cada cita de los capítulos de la app está en la bibliografía, y 
     for (const r of refs) assert.ok(REFERENCIAS[r.trim()], `${k}: cita sin referencia ${r}`);
     assert.ok(html.includes('class="card at-figura"'), `${k} sin figura`);
   }
+});
+
+// 14 Ventrículo derecho: el corazón normal cae en las bandas normales de la guía ASE 2025, y cada sobrecarga del motor
+// produce lo que describe el texto (Mukherjee 2025, Konstantinides 2019)
+test('14 VD: normal, sobrecarga de presión, de volumen y TEP agudo van en el sentido del texto', () => {
+  const n = medirVd(motorVd('presion', 0));
+  assert.ok(n.dVd < 4.1 && n.fac > 35 && n.tapse > 17 && n.pared < 5 && n.vTr < 2.8 && n.act > 105, JSON.stringify([n.dVd, n.fac, n.tapse, n.pared, n.vTr, n.act]));
+  assert.equal(n.patron, 'ninguno');
+  assert.ok(n.ratio < 0.67, `el VD normal no pasa de 2/3 del VI (${n.ratio})`);
+  // presión: primero se adapta (pared gruesa, TAPSE conservado), el tabique se aplana en telesístole antes que en
+  // telediástole, el tiempo de aceleración se acorta y al final el VD se dilata y su función cae
+  const p1 = medirVd(motorVd('presion', 0.25)), p2 = medirVd(motorVd('presion', 0.3)), p3 = medirVd(motorVd('presion', 0.75)), p4 = medirVd(motorVd('presion', 1));
+  assert.ok(p1.pared > 5 && p1.tapse > 17 && p1.act < n.act, `adaptada: pared ${p1.pared}, TAPSE ${p1.tapse}, TA ${p1.act}`);
+  assert.equal(p2.patron, 'presion');
+  assert.ok(p3.pared > 7 && p3.vTr >= 3.6 && p3.act < 80 && p3.patron === 'ambos', JSON.stringify([p3.pared, p3.vTr, p3.act, p3.patron]));
+  assert.ok(p4.dVd > p1.dVd + 1 && p4.fac < 23 && p4.tapse < p1.tapse, `falla: VD ${p4.dVd}, FAC ${p4.fac}, TAPSE ${p4.tapse}`);
+  // volumen: dilatación con la presión casi normal, función conservada, tabique plano solo en telediástole y la
+  // velocidad de la IT por debajo de la normal (infraestima el gradiente)
+  const v = medirVd(motorVd('volumen', 1));
+  assert.equal(v.patron, 'volumen');
+  assert.ok(v.dVd > n.dVd + 0.8 && v.fac > 35 && v.tapse > 17 && v.vTr < n.vTr && v.frT > 0.25, JSON.stringify([v.dVd, v.fac, v.tapse, v.vTr, v.frT]));
+  // TEP: VD dilatado con la pared fina y la IT modesta (≤3,8 m/s, gradiente <60 mmHg); VD/VI ≥1 con TAPSE <16
+  const t = medirVd(motorVd('tep', 1));
+  assert.ok(t.pared < 5 && t.vTr < 3.8 && t.gradTr < 60 && t.ratio >= 1 && t.tapse < 16 && t.dVd > 4, JSON.stringify([t.pared, t.vTr, t.gradTr, t.ratio, t.tapse, t.dVd]));
+  assert.ok(t.eiD > 1.1, 'tabique aplanado en el TEP');
 });

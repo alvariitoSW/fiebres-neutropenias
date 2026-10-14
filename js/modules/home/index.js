@@ -4,7 +4,7 @@
 // en su propio módulo; aquí solo se decide qué vista se ve en cada momento.
 import { createViewSwitcher } from '../../core/navigation.js';
 import { openCorkboardTopic } from '../../core/corkboard.js';
-import { hayVisualEn, irAlTexto } from '../../core/vista-visual.js';
+import { hayVisualEn, irAlTexto, irAlVisual } from '../../core/vista-visual.js';
 import { initAtlas } from './atlas.js';
 import { initPifManifiesto } from './pif-manifiesto.js';
 import { preguntasNeutropeniaFebril, temasNeutropeniaFebril } from '../../data/neutropenia-febril-preguntas.js';
@@ -176,12 +176,15 @@ export function init() {
     // orden, para vistas sin cuaderno de campo como Neutropenia Febril). Las
     // clases `.tx-link`/`.especialidad-link`/`.paper-link`/... son hoy solo
     // visuales. Delegado en document para cubrir también botones generados
-    // por JS después de arrancar.
+    // por JS después de arrancar. `data-en-visual` abre la ficha de destino
+    // en su vista Visual (si la tiene).
     document.addEventListener('click', (e) => {
         const btn = e.target.closest('[data-especialidad]');
         if (!btn) return;
-        const { especialidad, view, panel, tab, trasplante, resaltar, pulsar } = btn.dataset;
+        const { especialidad, view, panel, tab, trasplante, resaltar, pulsar, enVisual } = btn.dataset;
         irAResultadoBusqueda({ especialidad, view, panel, tab, trasplante });
+        // data-en-visual: abre la ficha de destino directamente en su vista Visual
+        if (enVisual !== undefined && tab) irAlVisual(document.getElementById(tab));
         pulsar?.split(/\s+/).forEach(id => document.getElementById(id)?.click());
         // data-resaltar: además de abrir la ficha, lleva a esa línea y la resalta (pasa a Texto si hace falta)
         const linea = resaltar && document.querySelector(resaltar);

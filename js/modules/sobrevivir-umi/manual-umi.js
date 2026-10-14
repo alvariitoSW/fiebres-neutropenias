@@ -1,7 +1,7 @@
 // Manual UMI Negrín: manual de orientación interno de la Unidad de
 // Medicina Intensiva (Hospital Universitario de Gran Canaria Dr. Negrín),
-// consolidado en una única guía con sus 30 fichas (las 12 últimas, XIX-XXX,
-// son el bloque neurocrítico y la meningitis). Los enlaces cruzados
+// consolidado en una única guía con sus 31 fichas (XIX-XXX son el bloque
+// neurocrítico y la meningitis; XXXI, la HFVVC). Los enlaces cruzados
 // hacia otras especialidades (.especialidad-link) los engancha el listener
 // genérico ya existente en home/index.js, no hace falta wiring aquí.
 //
@@ -44,23 +44,39 @@ function calcTTKG() {
     box.innerHTML = `TTKG ≈ <strong>${ttkg.toFixed(1)}</strong> — ${interpretacion}.<br><span style="font-size:0.75rem;">Cortes &lt;2 / &gt;4 de referencia general para hipopotasemia (no citados explícitamente por el manual, que solo da la fórmula).</span>`;
 }
 
+// El manual da dos fórmulas distintas para el mismo déficit, y no casan:
+// la tabla de la pág. 9 (50 mEq × kg × % de déficit, con el % por tramo de
+// K⁺) y la pág. 10 ("K real − K esperado (3,5) × peso + requerimientos +
+// 30 mEq/l de diuresis", que con el orden escrito sale negativa). La
+// calculadora enseña las dos, sin elegir una.
+function porcentajeDeficitK(k, phBajo) {
+    if (k < 2 || (k < 2.5 && phBajo)) return { pct: 20, texto: '&gt;20%', mas: true };
+    if (k < 2.5) return { pct: 20, texto: '20%' };
+    if (k < 3) return { pct: 15, texto: '15%' };
+    if (k <= 3.5) return { pct: 10, texto: '10%' };
+    return { pct: 0, texto: '&lt;10%' };
+}
+
 function calcDeficitK() {
-    const pesoEl = document.getElementById('umi-defk-peso');
-    const krealEl = document.getElementById('umi-defk-kreal');
-    const diuresisEl = document.getElementById('umi-defk-diuresis');
+    const peso = leerNumero('umi-defk-peso');
+    const kreal = leerNumero('umi-defk-kreal');
     const box = document.getElementById('umi-defk-resultado');
-    if (!pesoEl || !krealEl || !box) return;
-    if (pesoEl.value === '' || krealEl.value === '') return;
-    const peso = Number(pesoEl.value), kreal = Number(krealEl.value);
-    const diuresis = diuresisEl && diuresisEl.value !== '' ? Number(diuresisEl.value) : 0;
-    if ([peso, kreal, diuresis].some(Number.isNaN) || peso <= 0) return;
+    if (!box || peso === null || kreal === null || peso <= 0 || kreal <= 0) return;
+    const diuresis = leerNumero('umi-defk-diuresis') ?? 0;
+    const phBajo = document.getElementById('umi-defk-ph')?.value === 'si';
+    const tramo = porcentajeDeficitK(kreal, phBajo);
+    const tabla = 50 * peso * tramo.pct / 100;
     const deficitBase = Math.max(0, 3.5 - kreal) * peso;
     const requerimientos = peso; // 1 mEq/kg/día
-    const porDiuresis = 30 * diuresis;
-    const total = deficitBase + requerimientos + porDiuresis;
+    const porDiuresis = 30 * Math.max(0, diuresis);
+    const pag10 = deficitBase + requerimientos + porDiuresis;
     const estado = kreal < 2.5 ? 'danger' : (kreal < 3.5 ? 'warn' : 'ok');
-    box.className = `tfg-estado tfg-estado-${estado}`;
-    box.innerHTML = `Reposición de K⁺ estimada en 24h: <strong>${total.toFixed(0)} mEq</strong> (déficit ${deficitBase.toFixed(0)} + requerimientos diarios ${requerimientos.toFixed(0)}${diuresis ? ` + ${porDiuresis.toFixed(0)} por diuresis` : ''}) — repartir sin superar 200 mEq/día ni los límites de velocidad de infusión de la tabla de arriba.`;
+    const lineaTabla = tramo.pct
+        ? `<strong>${tabla.toFixed(0)} mEq</strong>${tramo.mas ? ' o más' : ''} (50 × ${peso} kg × ${tramo.texto})`
+        : 'déficit &lt;10%: la tabla no da una cifra; reposición de mantenimiento a 1-2 mEq/h';
+    pintar(box, estado, `<strong>Tabla del manual (pág. 9)</strong>: déficit ${tramo.texto} → ${lineaTabla}.<br>
+<strong>Fórmula de la pág. 10</strong>: <strong>${pag10.toFixed(0)} mEq en 24 h</strong> (déficit ${deficitBase.toFixed(0)} + requerimientos ${requerimientos.toFixed(0)}${porDiuresis ? ` + ${porDiuresis.toFixed(0)} por diuresis` : ''}).<br>
+<span style="font-size:0.78rem;">Las dos no coinciden (ver la nota de fidelidad de abajo). En los dos casos, sin pasar de 200 mEq/día ni de los ritmos de la tabla, y con controles seriados.</span>`);
 }
 
 // ---------------------------------------------------------------------
@@ -95,6 +111,102 @@ function calcNutricion() {
     else imcTexto = 'obesidad III';
     box.className = `tfg-estado ${imc >= 30 ? 'tfg-estado-warn' : 'tfg-estado-ok'}`;
     box.innerHTML = `Peso ideal: <strong>${pesoIdeal.toFixed(1)} kg</strong> · Peso ajustado: <strong>${pesoAjustado.toFixed(1)} kg</strong> · IMC: <strong>${imc.toFixed(1)}</strong> (${imcTexto})<br>TEB (Harris-Benedict, con el peso introducido): <strong>${teb.toFixed(0)} kcal/día</strong> · CED = TEB×FA: <strong>${ced.toFixed(0)} kcal/día</strong>${imc >= 30 ? ' — en obesidad, usa el peso ajustado (no el real) en el campo "peso" para un cálculo más fiel.' : ''}`;
+}
+
+// Ficha III — estimación de peso y talla (Rabito y Chumlea, con las
+// constantes originales; ver la nota de fidelidad de la ficha).
+let antropoUltimo = null;
+
+function calcAntropometria() {
+    const box = document.getElementById('umi-ant-resultado');
+    if (!box) return;
+    const esHombre = document.getElementById('umi-ant-sexo')?.value !== 'm';
+    const S = esHombre ? 1 : 2;
+    const edad = leerNumero('umi-ant-edad');
+    const cmb = leerNumero('umi-ant-cmb'), cab = leerNumero('umi-ant-cab'), cp = leerNumero('umi-ant-cp');
+    const brazada = leerNumero('umi-ant-brazada'), brazo = leerNumero('umi-ant-brazo'), rodilla = leerNumero('umi-ant-rodilla');
+    const lineas = [];
+    let peso = null, talla = null;
+    if (cmb !== null && cab !== null && cp !== null) {
+        peso = 0.5759 * cmb + 0.5263 * cab + 1.2452 * cp - 4.8689 * S - 32.9241;
+        lineas.push(`Peso estimado: <strong>${peso.toFixed(1)} kg</strong>`);
+    }
+    if (brazada !== null && edad !== null) {
+        const t = 63.525 - 3.237 * S - 0.06904 * edad + 1.293 * brazada;
+        talla ??= t;
+        lineas.push(`Talla por la media brazada: <strong>${t.toFixed(0)} cm</strong>`);
+    }
+    if (brazo !== null) {
+        const t = esHombre ? 1.40 * brazo + 57.8 : 1.35 * brazo + 60.1;
+        talla ??= t;
+        lineas.push(`Talla por la longitud del brazo: <strong>${t.toFixed(0)} cm</strong>`);
+    }
+    if (rodilla !== null && edad !== null) {
+        const t = esHombre ? 64.19 - 0.04 * edad + 2.02 * rodilla : 84.88 - 0.24 * edad + 1.83 * rodilla;
+        talla ??= t;
+        lineas.push(`Talla por la altura de la rodilla: <strong>${t.toFixed(0)} cm</strong>`);
+    }
+    antropoUltimo = { peso, talla };
+    if (!lineas.length) {
+        pintar(box, 'warn', 'Rellena los 3 perímetros para el peso, y la edad con al menos una longitud para la talla.');
+        return;
+    }
+    pintar(box, 'ok', lineas.join('<br>'));
+}
+
+function usarAntropometria() {
+    if (!antropoUltimo) return;
+    const { peso, talla } = antropoUltimo;
+    const poner = (id, v) => {
+        const el = document.getElementById(id);
+        if (!el || v === null) return;
+        el.value = Math.round(v);
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+    };
+    poner('umi-nut-peso', peso);
+    poner('umi-nut-altura', talla);
+    const sexo = document.getElementById('umi-nut-sexo');
+    if (sexo) { sexo.value = document.getElementById('umi-ant-sexo')?.value || 'h'; sexo.dispatchEvent(new Event('input', { bubbles: true })); }
+    const edad = leerNumero('umi-ant-edad');
+    if (edad !== null) poner('umi-nut-edad', edad);
+    document.getElementById('umi-nut-resultado')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// Ficha VI — pirámide de cobertura: resalta la zona elegida y la lee.
+const PIRAMIDE = {
+    anaerobios: 'Arriba, fuera del cuerpo de la pirámide: el metronidazol cubre <strong>anaerobios</strong> y no Gram positivos ni negativos.',
+    amplio: 'En el centro: los de <strong>espectro más amplio</strong> del esquema, con anaerobios, Gram positivos y Gram negativos.',
+    clinda: 'En el lado izquierdo, de la base Gram + a los anaerobios: <strong>Gram positivos y anaerobios</strong>, no Gram negativos.',
+    pipera: 'En el lado derecho, de la base Gram − a los anaerobios: <strong>Gram negativos y anaerobios</strong>.',
+    gpos: 'En la base, a la izquierda: <strong>Gram positivos</strong>.',
+    mixto: 'En la base, en el centro: <strong>Gram positivos y Gram negativos</strong>, sin anaerobios.',
+    gneg: 'En la base, a la derecha: <strong>Gram negativos</strong>.',
+};
+
+function actualizarPiramide() {
+    const sel = document.getElementById('umi-piramide-sel');
+    const box = document.getElementById('umi-piramide-resultado');
+    if (!sel || !box) return;
+    const zona = sel.value;
+    document.querySelectorAll('.umi-piramide-svg [data-zona]').forEach(g => {
+        g.style.opacity = !zona || g.dataset.zona === zona ? '1' : '0.25';
+    });
+    box.hidden = !zona;
+    if (zona) pintar(box, 'ok', PIRAMIDE[zona]);
+}
+
+// Ficha IX — capnografía: lista la columna de la tabla del manual.
+function actualizarEtco2() {
+    const sel = document.getElementById('umi-etco2-sel');
+    const box = document.getElementById('umi-etco2-resultado');
+    if (!sel || !box) return;
+    box.hidden = sel.value === '';
+    if (sel.value === '') return;
+    const col = Number(sel.value);
+    const causas = [...document.querySelectorAll('#umi-etco2-tabla tbody tr')]
+        .map(tr => tr.children[col]?.textContent.trim()).filter(t => t && t !== '—');
+    const titulo = ['Si sube, piensa en', 'Si baja, piensa en', 'Si desaparece, piensa en'][col];
+    pintar(box, col === 2 ? 'danger' : 'warn', `${titulo}:<ul style="margin:6px 0 0 18px;">${causas.map(c => `<li>${c}</li>`).join('')}</ul>`);
 }
 
 // ---------------------------------------------------------------------
@@ -627,17 +739,105 @@ function calcDebitoDve() {
     pintar(box, estado, `Débito ${ml} ml/día: ${texto}`);
 }
 
+// Ficha XIV — grado de función sistólica de la tarjeta del FATE extendido.
+// Cada tramo: [grado, mínimo incluido, máximo incluido]; se devuelven
+// todos los grados en los que cae (la MSS normal y leve se solapan).
+const FATE_EXT = [
+    ['umi-fx-fe', 'FE del VI', '%', [['normal', 55, Infinity], ['leve', 45, 54], ['moderada', 30, 44], ['grave', -Infinity, 29.9]]],
+    ['umi-fx-fs', 'FS del VI', '%', [['normal', 25, Infinity], ['leve', 20, 24], ['moderada', 15, 19], ['grave', -Infinity, 14.9]]],
+    ['umi-fx-mss', 'MSS', 'mm', [['normal', -Infinity, 9.9], ['leve', 7, 12], ['moderada', 13, 24], ['grave', 24.1, Infinity]]],
+    ['umi-fx-mapse', 'MAPSE', 'mm', [['normal', 11, Infinity], ['leve', 9, 10], ['moderada', 6, 8], ['grave', -Infinity, 5.9]]],
+    ['umi-fx-tapse', 'TAPSE', 'mm', [['normal', 16, 20], ['leve', 11, 15], ['moderada', 6, 10], ['grave', -Infinity, 5.9]]],
+];
+const GRADO_ESTADO = { normal: 'ok', leve: 'warn', moderada: 'warn', grave: 'danger' };
+
+function calcFateExtendido() {
+    const box = document.getElementById('umi-fx-resultado');
+    if (!box) return;
+    const lineas = [];
+    let peor = 'ok';
+    const orden = ['ok', 'warn', 'danger'];
+    for (const [id, nombre, unidad, tramos] of FATE_EXT) {
+        const v = leerNumero(id);
+        if (v === null) continue;
+        const grados = tramos.filter(([, a, b]) => v >= a && v <= b).map(([g]) => g);
+        let txt;
+        if (!grados.length) {
+            txt = id === 'umi-fx-tapse' && v > 20 ? 'por encima del rango «normal» de la tarjeta (16-20): no es un hallazgo patológico' : 'entre dos tramos de la tarjeta';
+        } else {
+            txt = grados.length > 1 ? `${grados.join(' o ')} (los dos tramos se solapan en la tarjeta)` : grados[0];
+            const e = GRADO_ESTADO[grados[grados.length - 1]];
+            if (orden.indexOf(e) > orden.indexOf(peor)) peor = e;
+        }
+        lineas.push(`${nombre} ${v} ${unidad}: <strong>${txt}</strong>`);
+    }
+    if (!lineas.length) {
+        pintar(box, 'ok', 'Introduce cualquiera de las medidas: se gradúa cada una por separado.');
+        return;
+    }
+    pintar(box, peor, lineas.join('<br>'));
+}
+
+// Ficha XXXI — HFVVC: pauta genérica de la unidad y fracción de filtración,
+// todo en ml/h (ver la nota de fidelidad de la ficha sobre las unidades).
+function calcHfvvc() {
+    const box = document.getElementById('umi-hf-resultado');
+    const peso = leerNumero('umi-hf-peso'), pre = leerNumero('umi-hf-pre'), hto = leerNumero('umi-hf-hto');
+    if (!box || peso === null || pre === null || hto === null || peso <= 0 || hto >= 100) return;
+    const perdida = Math.max(0, leerNumero('umi-hf-perdida') ?? 0);
+    const fr = 35 * peso;                       // ml/h
+    const frPre = fr * Math.min(100, Math.max(0, pre)) / 100, frPost = fr - frPre;
+    const qbManual = fr * 5 / 60;               // ml/min
+    const qb = leerNumero('umi-hf-qb') ?? qbManual;
+    if (qb <= 0) return;
+    const fp = qb * (1 - hto / 100) * 60;       // ml/h
+    const fuf = fr + perdida;                   // ml/h
+    const ff = 100 * fuf / (fp + frPre);
+    const ffPost = 100 * fuf / fp;
+    const estado = ff > 25 ? 'danger' : (ff > 20 ? 'warn' : 'ok');
+    const lectura = ff > 20
+        ? 'por encima del ideal del manual (15-20%): hemoconcentración en el filtro y más riesgo de coagulación. Se baja con más reposición prefiltro o más flujo de bomba.'
+        : (ff < 15 ? 'por debajo del ideal (15-20%).' : 'dentro del ideal del manual (15-20%).');
+    pintar(box, estado, `Reposición: <strong>${fr.toFixed(0)} ml/h</strong> (prefiltro ${frPre.toFixed(0)} · posfiltro ${frPost.toFixed(0)}) · flujo de bomba del manual: <strong>${qbManual.toFixed(0)} ml/min</strong>${leerNumero('umi-hf-qb') !== null ? ` (usas ${qb} ml/min)` : ''}.<br>
+Ultrafiltrado: ${fuf.toFixed(0)} ml/h · flujo plasmático: ${(fp / 60).toFixed(0)} ml/min.<br>
+Fracción de filtración: <strong>${ff.toFixed(1)}%</strong> — ${lectura}<br>
+<span style="font-size:0.78rem;">Con toda la reposición posfiltro sería ${ffPost.toFixed(1)}%. Dosis de efluente ≈ ${(fuf / peso).toFixed(0)} ml/kg/h.</span>`);
+}
+
+// Ficha XXXI — recirculación del acceso: (P − A) / (P − V) × 100.
+function calcRecirculacion() {
+    const box = document.getElementById('umi-rec-resultado');
+    const P = leerNumero('umi-rec-p'), A = leerNumero('umi-rec-a'), V = leerNumero('umi-rec-v');
+    if (!box || P === null || A === null || V === null) return;
+    if (P - V <= 0) {
+        pintar(box, 'warn', '⚠️ La muestra venosa (V) tiene que ser menor que la periférica (P): la sangre que vuelve del filtro está depurada. Revisa las muestras.');
+        return;
+    }
+    const r = 100 * (P - A) / (P - V);
+    let estado, texto;
+    if (r < 0) { estado = 'warn'; texto = 'negativa: la arterial está más alta que la periférica, revisa las muestras'; }
+    else if (r === 0) { estado = 'ok'; texto = 'ideal (0%)'; }
+    else if (r < 20) { estado = 'ok'; texto = 'por debajo del tramo «aceptable» del manual (que no da nombre al 0-20%)'; }
+    else if (r <= 30) { estado = 'warn'; texto = 'aceptable (20-30%)'; }
+    else { estado = 'danger'; texto = 'inadecuado (&gt;30%): parte de la sangre ya depurada vuelve a entrar en el filtro'; }
+    pintar(box, estado, `Recirculación: <strong>${r.toFixed(1)}%</strong> — ${texto}.`);
+}
+
 // [ids de campos, evento, función de cálculo] de cada calculadora de la
 // guía — se enganchan en bucle y se pintan una vez al cargar.
 const CALCULADORAS = [
     [['umi-ttkg-ko', 'umi-ttkg-oso', 'umi-ttkg-kp', 'umi-ttkg-osp'], 'input', calcTTKG],
-    [['umi-defk-peso', 'umi-defk-kreal', 'umi-defk-diuresis'], 'input', calcDeficitK],
+    [['umi-defk-peso', 'umi-defk-kreal', 'umi-defk-diuresis', 'umi-defk-ph'], 'input', calcDeficitK],
     [['umi-nut-sexo', 'umi-nut-altura', 'umi-nut-peso', 'umi-nut-edad', 'umi-nut-fa'], 'input', calcNutricion],
+    [['umi-ant-sexo', 'umi-ant-edad', 'umi-ant-cmb', 'umi-ant-cab', 'umi-ant-cp', 'umi-ant-brazada', 'umi-ant-brazo', 'umi-ant-rodilla'], 'input', calcAntropometria],
+    [['umi-piramide-sel'], 'change', actualizarPiramide],
+    [['umi-etco2-sel'], 'change', actualizarEtco2],
     [['umi-vt-sexo', 'umi-vt-altura', 'umi-vt-mlkg'], 'input', calcPbwVt],
     [['umi-ag-na', 'umi-ag-k', 'umi-ag-cl', 'umi-ag-hco3'], 'input', calcAnionGap],
     [['umi-raptt-ratio'], 'input', calcRaptt],
     [['umi-hemo-pas', 'umi-hemo-pad', 'umi-hemo-pvc', 'umi-hemo-gc', 'umi-hemo-sc', 'umi-hemo-hb', 'umi-hemo-sat', 'umi-hemo-satv', 'umi-hemo-pmap', 'umi-hemo-poap'], 'input', calcHemodinamica],
     [['umi-fs-lvdd', 'umi-fs-lvsd'], 'input', calcFsFevi],
+    [['umi-fx-fe', 'umi-fx-fs', 'umi-fx-mss', 'umi-fx-mapse', 'umi-fx-tapse'], 'input', calcFateExtendido],
     [['umi-vci-modo', 'umi-vci-dmax', 'umi-vci-dmin'], 'input', calcVciColapso],
     [['umi-nbg-1', 'umi-nbg-2', 'umi-nbg-3', 'umi-nbg-4', 'umi-nbg-5'], 'change', actualizarNbg],
     [['umi-ins-algoritmo', 'umi-ins-glucemia'], 'input', calcInsulinaDosis],
@@ -653,6 +853,8 @@ const CALCULADORAS = [
     [['umi-res-situacion', 'umi-res-indep', 'umi-res-trabajo'], 'change', calcResultado],
     [['umi-loz-micro', 'umi-loz-bioq', 'umi-loz-clinica'], 'change', calcLozier],
     [['umi-debito-ml'], 'input', calcDebitoDve],
+    [['umi-hf-peso', 'umi-hf-pre', 'umi-hf-hto', 'umi-hf-perdida', 'umi-hf-qb'], 'input', calcHfvvc],
+    [['umi-rec-p', 'umi-rec-a', 'umi-rec-v'], 'input', calcRecirculacion],
 ];
 
 export function init() {
@@ -661,4 +863,5 @@ export function init() {
         ids.forEach(id => document.getElementById(id)?.addEventListener(evento, calc));
         calc();
     });
+    document.getElementById('umi-ant-usar')?.addEventListener('click', usarAntropometria);
 }

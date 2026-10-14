@@ -18,7 +18,7 @@ en `lab/circulacion/`), como la especialidad «Eco cardíaca»: ver «En la app�
 node --test 'js/modules/eco/pruebas/*.test.mjs'
 ```
 
-Tarda ~2 min (139 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta. Las de navegador
+Tarda ~3 min (140 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta. Las de navegador
 sirven el repositorio con un servidor propio y abren `laboratorio.html`.
 
 - `motor.test.mjs` — cada cifra del latido normal frente a su referencia (`referencias.mjs`), el volumen
@@ -440,6 +440,20 @@ los que ya están en la app se abren aquí, los demás siguen enlazando al origi
     sigue una cola exponencial con la misma pendiente (`activacionVi`; constante τ ≈ 28 ms a 70 lpm). `relajacion`
     multiplica esa τ: con 2,8, τ ≈ 78 ms y el llenado pasa a relajación lenta (E/A ≤0,8, TRIV y TDE largos). El VD no
     cambia. La muestra lleva `eVi` y `qVp`.
+  - **Válvula pulmonar y VD (cap. 14).** El flujo pulmonar picaba a los ~20 ms con ~660 mL/s. Como en la mitral y la
+    aórtica, la pulmonar gana **inercia** (`lPul` 0,002 mmHg·s²/mL: se abre cuando la presión del VD supera la de la AP
+    y cierra cuando el flujo llega a 0) y el VD un **efecto de la eyección** (`kEyecVd` 0,002 s/mL). Para que la
+    presión sistólica del VD siga en 20-25 mmHg (Ficha 5), la Ees del VD sube de 0,40 a 0,50. Hoy: PAPs ~22,
+    tiempo de aceleración en el TSVD ~142 ms, FE del VD ~54%. Dos parámetros nuevos, neutros por defecto:
+    `durVd` (multiplica la duración de la sístole del VD; >1 en la sobrecarga de presión, que es lo que aplana el
+    tabique en telesístole) y `eroaTricus` (insuficiencia tricuspídea, misma ecuación del orificio que la mitral;
+    `ultimo` da `vRegT` y `frT`). La muestra lleva `qTriReg` y `eVd`.
+  - **Geometría del VD (cap. 14).** La base del VD se ensancha más deprisa que la raíz cúbica del volumen (`kT`: de
+    media luna a esfera cuando se dilata), la pared libre del VD engrosa con `mioVd` (`motor.p.mioVd`, viaja en
+    `extraDeMotor`) y el tabique se aplana con `ALFA_SEPTO` 1,1 (Ryan 1985). El infundíbulo crece menos que la base
+    (`kR = min(kT, 1,3)`), porque su ventana angular es estrecha y con el VD muy dilatado se salía de ella.
+  - **Grado 3 diastólico de referencia** (`CORAZONES_LLENADO[3]` de `diastolica.mjs`): con la nueva válvula pulmonar
+    pasa a relajación 2,8, rigidez 2,6, volumen 1.000 mL y V0 de la AI 30 mL, para seguir dando E/A ≥2.
   - **Lo que no se hizo:** un efecto pistón del plano AV sobre la AI (para dar la onda S de las venas pulmonares)
     desestabilizaba la AI y movía media docena de referencias; el cap. 10 no calcula S/D y lo dice.
 - **Archivos.**
@@ -457,9 +471,10 @@ los que ya están en la app se abren aquí, los demás siguen enlazando al origi
   | `hemodinamica.mjs` | Figura del 08 Hemodinámica por Doppler |
   | `sistolica.mjs` | Figura del 09 Función sistólica (biplano de discos sobre la geometría) |
   | `diastolica.mjs` | Figura del 10 Función diastólica (corazones del motor y algoritmo ASE 2025) |
+  | `vd.mjs` | Figura del 14 Ventrículo derecho (sobrecarga de presión, de volumen y TEP agudo) |
 
   Cada figura exporta `montar(contenedor)` → `{ parar() }`. La lógica pura (`fisica`, `frecuenciaImagen`, `doppler`,
-  `duraciones`, `asentar`, `medidasAsa`, `motorFlujo`, `analizarFlujo`, `estimarPad`, `analizarDerechas`, `medirSistolica`, `trazarVi`, `volumenBiplano`, `motorLlenado`, `medirLlenado`, `algoritmoAse`) se exporta y la prueba `pruebas/atlas.test.mjs`.
+  `duraciones`, `asentar`, `medidasAsa`, `motorFlujo`, `analizarFlujo`, `estimarPad`, `analizarDerechas`, `medirSistolica`, `trazarVi`, `volumenBiplano`, `motorLlenado`, `medirLlenado`, `algoritmoAse`, `ajustesVd`, `motorVd`, `medirVd`, `indiceExcentricidad`, `patronSepto`, `signosTep`) se exporta y la prueba `pruebas/atlas.test.mjs`.
 - **Capítulos en la app.**
   - **01 Pulso.** La línea paraesternal atraviesa el corazón del simulador en telediástole: tabique 9,5 mm, VI 53 mm.
     Muestra el modo A, un zoom de la resolución axial con dos reflectores a 0,4 mm, la TGC y la profundidad útil.
@@ -496,14 +511,26 @@ los que ya están en la app se abren aquí, los demás siguen enlazando al origi
     (el cambio de longitud del VI) y el strain de reservorio de la AI (por volumen). Sin S/D: el paso 3 usa el strain,
     el volumen de la AI y el TRIV, alternativa de la guía. En el grado 3 aparece una onda de mitad de diástole que
     sale sola de la inercia.
+  - **14 Ventrículo derecho.** Un selector de carga (normal, sobrecarga de presión, de volumen, TEP agudo) con un
+    deslizador de gravedad, que cambia parámetros del motor (`ajustesVd`): en la presión, la resistencia pulmonar
+    sube y la distensibilidad de la AP baja con ella (constante de tiempo RC: por eso cae el tiempo de aceleración), la
+    sístole del VD se alarga, la pared engrosa y, al final, el VD se dilata y su contractilidad cae; en la de volumen,
+    insuficiencia tricuspídea, más volemia y un VD más distensible; en el TEP, la resistencia sube de golpe sobre un VD
+    sin hipertrofia. Imágenes reales del ecógrafo de la app (A4C y eje corto a nivel de los papilares) en cine,
+    telediástole o telesístole, con el diámetro basal del VD y el índice de excentricidad (D2/D1, aplanado >1,1); el
+    Doppler continuo de la IT y el pulsado del TSVD con el tiempo de aceleración; lecturas con las bandas de Mukherjee
+    2025 (Tabla 1) y, en el TEP, los signos de la ESC 2019. El patrón del tabique (aplanado en diástole, en sístole o
+    en las dos) sale de la geometría, no se escribe. Normal: VD 3,0 cm, FAC 47%, TAPSE 21, IE 1,00, AcT 142 ms;
+    presión 0,75: pared 8,9 mm, IT 3,9 m/s, AcT 78 ms, aplanado en los dos tiempos; volumen 1: VD 4,1 cm, IT 1 m/s,
+    aplanado solo en diástole; TEP 1: VD/VI 1,05, TAPSE 5 mm. Nota de fuentes con FATE, la Ficha 11 y Merino.
 - **Navegación.**
   - `data-eco-atlas="clave"`, junto a `data-especialidad="eco"`, abre un capítulo desde cualquier ficha. Hoy hay
     accesos en Fisiopatología UCI · Cardiología, Fichas 1 y 3. La subcostal VCI y la medida de la VCI llevan al 08.
   - En «Qué mirar» del simulador, los capítulos que ya están en la app se abren aquí.
   - `[data-at-sim="M"|"D"]` dentro de un capítulo lleva al simulador en ese modo.
   - «Repasar este capítulo» usa `data-quiz-tema`, un atributo nuevo y genérico de `quiz.js`.
-  - Banco: `js/data/eco-atlas-preguntas.js`, 44 preguntas, asignatura Eco cardíaca.
-- **Siguiente, por orden.** 14 VD; las válvulas, empezando por la IM (el motor ya la
+  - Banco: `js/data/eco-atlas-preguntas.js`, 52 preguntas, asignatura Eco cardíaca.
+- **Siguiente, por orden.** Las válvulas, empezando por la IM (el motor ya la
   tiene); pericardio. Las vistas (04) y la ETE (05) chocan con la anatomía congelada y la sonda libre ya existe, así
   que van al final. Los capítulos de enfermedad necesitan la forma de enfermedad correspondiente en el corazón.
 
@@ -574,4 +601,4 @@ licencia CC BY-SA 4.0 (el resto del simulador no). La cita también se muestra e
   se paran al tocar la raíz aórtica; un rayo casi tangente pasa de pararse a no pararse y un vértice salta hasta
   ~8 mm entre dos fotogramas. La mezcla lo suaviza (lo convierte en un cambio gradual entre dos formas), pero
   la geometría exacta (con corte o sin formas) lo sigue teniendo.
-- **Atlas de ecocardiografía**: quedan 25 capítulos por pasar a la app (ver «Atlas de ecocardiografía»).
+- **Atlas de ecocardiografía**: quedan 21 capítulos por pasar a la app (9 de 30 ya están) (ver «Atlas de ecocardiografía»).

@@ -24,29 +24,16 @@ especialidades (radiología, etc.) según se vaya aportando contenido. Es
 una herramienta de apoyo para médicos, pensada para consultarse a pie de
 cama en el móvil.
 
-> **Recordatorio pedido por el usuario (octubre 2026):** ahora se está
-> terminando de subir el **contenido teórico** de la app (bloque
-> neurocrítico y meningitis del Manual UMI — hecho —, huecos que quedan
-> del mismo manual, y lo que llegue con PDF nuevo). **En cuanto el contenido teórico esté
-> terminado, recuérdale al usuario que toca volver al apartado de
-> ecografía** (Eco cardíaca: calibrar TDE/eyección/RVS/contracción
-> isovolumétrica, más formas de enfermedad, medir fps en el móvil — ver
-> `js/modules/eco/README.md`). Borra este recordatorio cuando se lo hayas
-> dicho.
->
 > **Contenido teórico pendiente, guardado a petición del usuario para
-> retomarlo más adelante (octubre 2026):**
-> - Con la fuente ya en `docs/` (Manual UMI, `hugcdn-umi-manual-guardia-
->   parte1/2.pdf`): capnografía/EtCO₂, estimación de peso y talla por
->   antropometría (Ficha III), pirámide antibiótica, tabla M-mode
->   extendida de FATE, pancuronio/neostigmina/fisostigmina en la tabla de
->   relajantes y sedantes (Ficha VII), la incoherencia de `calcDeficitK`
->   (Ficha II: la fórmula del código no es la que dice el texto) y las
->   fórmulas de HFVVC (págs. 100-102), candidatas a ampliar `trr.html`.
-> - PDF: Valdenebro 2021 (auditoría de `trr.html`, con las 7 dudas
->   anotadas en la sección de TRR), solo si el usuario lo manda. ECIL-10,
->   BCSH 2009 (CID) y las citopenias distintas de la neutropenia febril
->   **quedan descartadas** (el usuario dijo que ya le dan igual).
+> retomarlo más adelante (octubre 2026):** los huecos del Manual UMI están
+> cerrados (octubre 2026, ver «Huecos del manual cerrados» en Sobrevivir a
+> la UMI). Queda solo lo que necesita PDF: Valdenebro 2021 (auditoría de
+> `trr.html`, con las 7 dudas anotadas en la sección de TRR), solo si el
+> usuario lo manda. ECIL-10, BCSH 2009 (CID) y las citopenias distintas de
+> la neutropenia febril **quedan descartadas** (el usuario dijo que ya le
+> dan igual). Con los huecos cerrados se le recordó al usuario que toca
+> volver a la ecografía (RVS sin calibrar, fps en el móvil, más formas de
+> enfermedad; ver `js/modules/eco/README.md`).
 >
 > **Orden de trabajo pedido después por el usuario (octubre 2026)**, por
 > delante de los pendientes de arriba y de la ecografía: 1) terminar de
@@ -7763,11 +7750,8 @@ página impresa − 52).
       `manual-umi.html`); en `color:` cae al color heredado y no se nota,
       pero en un `fill` de SVG pinta negro (por eso los SVG nuevos usan
       `--text-muted`).
-    - **Sigue pendiente del mismo manual**: escalas que faltan (capnografía/
-      EtCO₂, antropometría de peso y talla), pirámide antibiótica y tabla
-      M-mode de FATE, pancuronio/neostigmina/fisostigmina, la incoherencia
-      de `calcDeficitK` (Ficha II) y las fórmulas de HFVVC/TRR (págs.
-      100-102, candidatas a ampliar `trr.html` en Nefrología).
+    - Lo que quedaba pendiente del mismo manual se cerró después: ver
+      «Huecos del manual cerrados» más abajo.
   - **Auditoría de contenido + interactividad y sus correcciones**, a
     petición explícita del usuario ("revisa que está todo correctamente,
     comprueba que falta, que está mal escrito... comprueba que partes se
@@ -8257,6 +8241,69 @@ página impresa − 52).
       con los módulos realmente enlazados). Sin cambios de CSS ni de
       `quiz.js` — pura ampliación de datos + 5 botones nuevos reutilizando
       clases/listeners ya existentes.
+
+  - **Huecos del manual cerrados (octubre 2026)**, a petición explícita
+    del usuario («cierra después los huecos del manual umi»). Leídas como
+    imagen las páginas del PDF (escaneado) y cotejadas con las fichas:
+    - **Ficha II, `calcDeficitK`**: el manual da dos fórmulas que no casan
+      (pág. 9: 50 mEq × kg × % de déficit, con el % del tramo de K⁺;
+      pág. 10: «K real − K esperado (3,5) × peso + 1 mEq/kg + 30 mEq/l de
+      diuresis», que escrita así sale negativa). La calculadora muestra
+      las dos (con selector de pH &lt;7,2 para el tramo &gt;20%) y una nota
+      de fidelidad plegable; con 70 kg y K⁺ 2,8, 525 frente a ~120 mEq.
+    - **Ficha III, antropometría**: peso (Rabito: CMB, CAb, CP, sexo) y
+      talla por media brazada, longitud del brazo y altura de la rodilla,
+      con calculadora y botón que pasa peso, talla, sexo y edad a la
+      calculadora de nutrición. Erratas de la fuente con nota: «6,525»
+      por 63,525 (Rabito) y sumas por productos en la fórmula de la
+      rodilla (Chumlea).
+    - **Ficha VI, pirámide de cobertura**: SVG propio (metronidazol arriba,
+      espectro amplio en el centro, clindamicina y piperacilina en los
+      lados, Gram + / mixto / Gram − en la base) con selector que resalta
+      la zona y la lee; sin inventar espectro por germen.
+    - **Ficha VII**: pancuronio, neostigmina y fisostigmina en la tabla de
+      relajantes, más las perfusiones de cisatracurio/rocuronio/
+      succinilcolina y la dilución de la succinilcolina. Nota: el manual
+      da las perfusiones en «mg/kg/min» o «cg/kg/min» (casi seguro µg), y
+      pone la fisostigmina para revertir los no despolarizantes (su uso
+      habitual es el síndrome anticolinérgico). La tabla completa de
+      perfusiones continuas y extendidas (Sanford 2015: meropenem,
+      pip-tazo, cefepime, ceftazidima, imipenem, vancomicina) sustituye al
+      resumen de una línea; enlace a la calculadora PK/PD.
+    - **Ficha IX, capnografía**: tabla aumento/disminución/ausencia de
+      EtCO₂ (`#umi-etco2-tabla`) con selector que lista la columna. Nota:
+      la tabla viene de un texto de anestesia veterinaria («animales de
+      pequeño tamaño», figuras que no existen); se quitaron esas
+      referencias. Enlaces a Marino Cap. 7 y a la EtCO₂ de la RCP.
+    - **Ficha XIV, FATE extendido**: tabla de función sistólica (FE, FS,
+      MSS, MAPSE, TAPSE por grados), valores Doppler de la tarjeta, y
+      calculadora que gradúa cada medida (avisa del solapamiento de la MSS
+      normal/leve y de que un TAPSE &gt;20 no es patológico pese al techo
+      de la tarjeta).
+    - **Ficha XXXI nueva, HFVVC** (`umi-hfvvc`): indicaciones con niveles
+      de evidencia, las 4 variantes técnicas, la pauta genérica (35 ml/kg/h,
+      60-75% prefiltro, bomba = reposición × 5/60), anticoagulación del
+      circuito, las fórmulas tal cual y dos calculadoras: pauta + fracción
+      de filtración (todo en ml/h; ver nota de fidelidad sobre unidades
+      mezcladas y el signo del balance) y recirculación del Shaldon. Con la
+      pauta del propio manual y Hto 30% la FF sale ~25%, por encima de su
+      ideal de 15-20%; la ficha lo dice. **No se fragmentó en `trr.html`**:
+      el manual vive entero en Sobrevivir a la UMI, con enlaces en las dos
+      direcciones (TRR · Dosis → Ficha XXXI; Ficha XXXI → modalidad,
+      anticoagulación y citrato) y notas de fuentes donde chocan
+      (evidencia 1a de la mortalidad frente a Valdenebro; sin citrato).
+      Entra en el bloque «Guardia y metabolismo» del índice rápido y en
+      Técnicas R1. El cuaderno pasa a 31 fichas.
+    - **Nuevo y genérico en `home/index.js`**: `data-en-visual` en un
+      `[data-especialidad]` abre la ficha de destino en su vista Visual
+      (usado para ir al filtro vivo de TRR).
+    - 11 preguntas nuevas (`umi-q151`-`q161`): 5 de HFVVC y 1 por cada
+      hueco. Manual UMI queda en 161.
+    - Verificado con Playwright (390 px): las calculadoras dan lo esperado
+      (K⁺ 2,8 → 525/119 mEq; 74 kg y 166 cm; MAPSE 7 → moderada; HFVVC
+      25,1%/29,7%; recirculación 15%), la pirámide resalta la zona, los
+      enlaces llegan en las dos direcciones (el de TRR, en Visual), sin
+      desbordamiento ni errores.
 
 ### Libros
 
@@ -11091,8 +11138,9 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
   fisiología»). Detalle en `js/modules/eco/README.md` («Atlas de ecocardiografía»).
   - Eco cardíaca tiene ahora dos secciones: **Simulador** y **Atlas**.
   - El atlas es *The Heart by Ultrasound* en español, con su índice de 30 capítulos. Los que ya están en la app se
-    abren dentro (hoy 8: 01 Pulso, 02 Imagen, 03 Doppler, 06 Ciclo cardíaco, 07 Asa P-V, 08 Hemodinámica por
-    Doppler, 09 Función sistólica y 10 Función diastólica); los demás enlazan al original en inglés.
+    abren dentro (hoy 9: 01 Pulso, 02 Imagen, 03 Doppler, 06 Ciclo cardíaco, 07 Asa P-V, 08 Hemodinámica por
+    Doppler, 09 Función sistólica, 10 Función diastólica y 14 Ventrículo derecho); los demás enlazan al original en
+    inglés.
   - El texto se traduce, con permiso del autor, y la bibliografía es la suya (`atlas/referencias.js`). **El código no
     se copia**: cada figura se reconstruye sobre los motores de la app.
   - Hay **una sola fisiología**: el ciclo y el asa salen del motor del latido del simulador. Donde el texto y el motor
@@ -11117,6 +11165,16 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
       (E/A ≤0,8, TRIV y TDE largos) sin tocar nada más.
     - Un efecto pistón del plano AV sobre la AI (onda S de las venas pulmonares) se probó y se descartó: movía media
       docena de referencias. El cap. 10 no calcula S/D y lo dice.
+    - **válvula pulmonar y VD** (para el cap. 14, a petición del usuario: «Continúa con el capítulo 14»): el flujo
+      pulmonar picaba a los ~20 ms con ~660 mL/s. La pulmonar gana inercia (`lPul` 0,002) y el VD efecto de la
+      eyección (`kEyecVd` 0,002); la Ees del VD sube de 0,40 a 0,50 para que la presión sistólica del VD siga en
+      20-25 mmHg (Ficha 5). Hoy: PAPs ~22, tiempo de aceleración del TSVD ~142 ms, FE del VD ~54%. Dos parámetros
+      nuevos, neutros por defecto: `durVd` (alarga la sístole del VD) y `eroaTricus` (insuficiencia tricuspídea, misma
+      ecuación que la mitral; `ultimo` da `vRegT` y `frT`).
+    - geometría del VD: la base se ensancha más que la raíz cúbica del volumen (`kT`, de media luna a esfera), la pared
+      libre engrosa con `mioVd` (viaja en `extraDeMotor`), el tabique se aplana con `ALFA_SEPTO` 1,1 (Ryan 1985) y el
+      infundíbulo crece menos que la base (`kR = min(kT, 1,3)`), para no salirse de su ventana. El grado 3 diastólico
+      de referencia del cap. 10 pasa a relajación 2,8, rigidez 2,6, volumen 1.000 y V0 de la AI 30.
   - **08 Hemodinámica por Doppler** (`cap-hemodinamica.html` + `hemodinamica.mjs`): flujo y presión con la estenosis
     del motor (continuidad, cociente de velocidades, error del TSVI al cuadrado, gradiente medio frente a 4·v media²,
     recuperación de presión frente al catéter) y PSVD/VCI con 5 corazones del motor (la velocidad de un chorro de IT
@@ -11135,14 +11193,23 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
     motor; e′ (de la relajación), la forma del Doppler tisular y el strain de la AI son ilustrativos. Sin S/D (el paso
     3 usa el TRIV, alternativa de la guía). `doppler.mjs` exporta `tdeDe()`, que extrapola desde el 75% si la E se
     funde con la A.
-  - **Archivos**: `js/modules/eco/atlas/`; preguntas en `js/data/eco-atlas-preguntas.js` (44, asignatura Eco
+  - **14 Ventrículo derecho** (`cap-vd.html` + `vd.mjs`): un selector de carga (normal, sobrecarga de presión, de
+    volumen y TEP agudo) con deslizador de gravedad que cambia parámetros del motor (`ajustesVd`: en la presión, la
+    resistencia pulmonar sube y la distensibilidad de la AP baja con ella —constante de tiempo RC, por eso cae el
+    tiempo de aceleración—, la sístole del VD se alarga, la pared engrosa y al final el VD se dilata; en la de volumen,
+    IT, más volemia y VD más distensible; el TEP, resistencia de golpe sobre un VD sin hipertrofia). Imágenes reales
+    del ecógrafo de la app (A4C y eje corto) en cine, telediástole o telesístole con el diámetro basal y el índice de
+    excentricidad (aplanado >1,1), Doppler continuo de la IT y pulsado del TSVD, bandas de Mukherjee 2025 y, en el TEP,
+    signos de la ESC 2019. El patrón del tabique (aplanado en diástole, en sístole o en ambas) sale de la geometría.
+    Nota de fuentes con FATE, la Ficha 11 y Merino; accesos al TAPSE y al TEP del simulador.
+  - **Archivos**: `js/modules/eco/atlas/`; preguntas en `js/data/eco-atlas-preguntas.js` (52, asignatura Eco
     cardíaca).
   - **Accesos**: `data-eco-atlas="clave"` junto a `data-especialidad="eco"`. Por ejemplo, desde Fisiopatología UCI ·
     Cardiología, Fichas 1 y 3.
   - **Nuevo en `quiz.js`** (genérico): un trigger con `data-quiz-tema` empieza solo con ese tema.
-  - **Pruebas**: 139 (`pruebas/atlas.test.mjs`; 1 *todo*, la RVS). La prueba del modo M del anillo tricuspídeo compara
+  - **Pruebas**: 140 (`pruebas/atlas.test.mjs`; 1 *todo*, la RVS). La prueba del modo M del anillo tricuspídeo compara
     ahora con lo que el anillo recorre a lo largo del haz.
-  - **Siguiente**: 14 VD, las válvulas (IM primero), pericardio.
+  - **Siguiente**: las válvulas (IM primero), pericardio.
 
 ## Cómo probar cambios
 

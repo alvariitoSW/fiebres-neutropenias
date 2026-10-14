@@ -527,6 +527,24 @@
                 <div class="back-cta">Ver contenido completo →</div>
             </div>
         </div></div>
+
+<div class="field-card" data-tab="umi-hfvvc"><div class="field-card-inner">
+            <div class="card-face front">
+                <div class="washi"></div>
+                <div class="plate-label">Ficha XXXI</div>
+                <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-blue)" stroke-width="1.6">
+                    <rect x="30" y="6" width="20" height="44" rx="6"/>
+                    <path d="M36,12 L36,44 M40,12 L40,44 M44,12 L44,44" stroke-width="1"/>
+                    <path d="M10,10 L30,14 M50,42 L70,46 M50,20 L66,20" />
+                </svg>
+                <div class="field-name">HFVVC: pauta<br>y fórmulas</div>
+                <div class="field-hook">"Paciente de 80 kg en HFVVC con toda la reposición posfiltro: el filtro se coagula cada pocas horas. ¿Qué fracción de filtración lleva?"</div>
+            </div>
+            <div class="card-face back">
+                <div class="back-hook">Indicaciones con su nivel de evidencia, las 4 variantes técnicas, la pauta genérica de la unidad (35 ml/kg/h), la anticoagulación del circuito, las fórmulas de la fracción de filtración y el test de recirculación del catéter.</div>
+                <div class="back-cta">Ver contenido completo →</div>
+            </div>
+        </div></div>
     </div>
 
     <div class="card" id="panel-manual-umi-tabs" style="display:none;">
@@ -628,10 +646,15 @@
             <div class="tfg-simulador">
                 <div class="form-group"><label for="umi-defk-peso">Peso (kg)</label><input type="number" id="umi-defk-peso" step="1" min="1" max="300" value="70"></div>
                 <div class="form-group"><label for="umi-defk-kreal">K⁺ real (mEq/l)</label><input type="number" id="umi-defk-kreal" step="0.1" min="0.1" max="6" value="2.8"></div>
+                <div class="form-group"><label for="umi-defk-ph">¿pH &lt;7,2?</label><select id="umi-defk-ph"><option value="no">No</option><option value="si">Sí</option></select></div>
                 <div class="form-group"><label for="umi-defk-diuresis">Diuresis (l/24h, opcional)</label><input type="number" id="umi-defk-diuresis" step="0.1" min="0" max="15"></div>
                 <div id="umi-defk-resultado" class="tfg-estado tfg-estado-ok"></div>
-                <p style="font-size: 0.72rem; color: var(--text-muted); margin-top:8px;">(K esperado[3,5] − K real) × peso + requerimientos diarios (1 mEq/kg) + 30 mEq por litro de diuresis.</p>
+                <p style="font-size: 0.72rem; color: var(--text-muted); margin-top:8px;">Pág. 9: déficit = 50 mEq × kg × % de déficit (el % sale del tramo de K⁺ de la tabla). Pág. 10: (K esperado 3,5 − K real) × peso + requerimientos diarios (1 mEq/kg) + 30 mEq por litro de diuresis.</p>
             </div>
+            <details class="nota-plegable" id="umi-defk-nota"><summary>Nota de fidelidad: las dos fórmulas del manual no coinciden</summary>
+                <p style="font-size:0.82rem; color:var(--text-muted);">El manual da dos cálculos para lo mismo. La tabla de la pág. 9 dice «Déficit de K = 50 mEq × kg × % déficit» (50 mEq/kg es el potasio corporal total que suele citarse; el % sale del tramo de K⁺). La pág. 10 dice «K REAL − K ESPERADO (3,5) × PESO + requerimientos diarios (1 mEq/kg)», y añade 30 mEq por litro de diuresis, «llegando a utilizar reposiciones desde 200-350 mEq en 24 h». Escrita así, con K real menor que 3,5, sale negativa; la calculadora le da la vuelta (3,5 − K real), que es lo que la fórmula pretende. Aun así, las dos no casan: con 70 kg y K⁺ 2,8, la tabla da 525 mEq de déficit y la pág. 10 da ~120 mEq. Nefrología (de Sequera 2024) da 200-400 mEq por cada mEq/l de descenso, más cerca de la tabla. Ninguna de las dos se ha cambiado: se muestran juntas para que se vea la diferencia.</p>
+                <p><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte1.pdf#page=10" target="_blank" rel="noopener">Manual UMI, págs. 9-10 (PDF)</a></p>
+            </details>
 
             <p class="section-label" style="margin-top:14px;">Hiperpotasemia</p>
             <table class="data-table">
@@ -737,6 +760,32 @@
                     </select>
                 </div>
                 <div id="umi-nut-resultado" class="tfg-estado tfg-estado-ok"></div>
+            </div>
+
+            <p class="section-label" style="margin-top:14px;" id="umi-antropo">Estimación de peso y talla sin poder pesar ni tallar</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Para el paciente encamado o intubado al que no se puede pesar ni medir de pie, el manual da estimaciones con perímetros y longitudes de los miembros:</p>
+            <dl class="kv-row" id="umi-antropo-peso"><dt>Peso (kg)</dt><dd>0,5759 × CMB + 0,5263 × CAb + 1,2452 × CP − 4,8689 × S − 32,9241. CMB = circunferencia media del brazo, CAb = circunferencia abdominal, CP = circunferencia de la pantorrilla (cm); S = sexo (1 hombre, 2 mujer).</dd></dl>
+            <dl class="kv-row" id="umi-antropo-brazada"><dt>Talla por la media brazada (cm)</dt><dd>63,525 − 3,237 × S − 0,06904 × edad + 1,293 × media brazada. Media brazada = distancia del punto medio del esternón a la punta del dedo medio (cm).</dd></dl>
+            <dl class="kv-row" id="umi-antropo-brazo"><dt>Talla por la longitud del brazo (cm)</dt><dd>Mujer: 1,35 × longitud del brazo + 60,1 · Hombre: 1,40 × longitud del brazo + 57,8.</dd></dl>
+            <dl class="kv-row" id="umi-antropo-rodilla"><dt>Talla por la altura de la rodilla (cm)</dt><dd>Mujer: 84,88 − 0,24 × edad + 1,83 × altura de la rodilla · Hombre: 64,19 − 0,04 × edad + 2,02 × altura de la rodilla.</dd></dl>
+            <details class="nota-plegable"><summary>Nota de fidelidad: dos erratas del manual en las fórmulas de talla</summary>
+                <p style="font-size:0.82rem; color:var(--text-muted);">El manual (pág. 13) escribe la constante de la media brazada como «6,525» y las de la altura de la rodilla con sumas, «(0,24 + edad) + (1,83 + altura de la rodilla)». Así escritas dan tallas imposibles: un hombre de 60 años con 85 cm de media brazada saldría con ~109 cm, y la fórmula de la rodilla restaría la edad entera. Las ecuaciones originales (Rabito 2006 para la media brazada y Chumlea para la rodilla, las mismas cifras que cita el manual) llevan 63,525 y multiplican: así se reproducen aquí y así calcula la calculadora. La fórmula del peso es la de Rabito tal cual.</p>
+                <p><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte1.pdf#page=14" target="_blank" rel="noopener">Manual UMI, pág. 13 (PDF)</a></p>
+            </details>
+
+            <p class="section-label" style="margin-top:14px;">🧮 Calculadora: peso y talla estimados</p>
+            <div class="tfg-simulador">
+                <div class="form-group"><label for="umi-ant-sexo">Sexo</label><select id="umi-ant-sexo"><option value="h">Hombre</option><option value="m">Mujer</option></select></div>
+                <div class="form-group"><label for="umi-ant-edad">Edad (años)</label><input type="number" id="umi-ant-edad" step="1" min="14" max="110" value="60"></div>
+                <div class="form-group"><label for="umi-ant-cmb">Circunferencia media del brazo (cm)</label><input type="number" id="umi-ant-cmb" step="0.5" min="10" max="60" value="30"></div>
+                <div class="form-group"><label for="umi-ant-cab">Circunferencia abdominal (cm)</label><input type="number" id="umi-ant-cab" step="0.5" min="40" max="200" value="95"></div>
+                <div class="form-group"><label for="umi-ant-cp">Circunferencia de la pantorrilla (cm)</label><input type="number" id="umi-ant-cp" step="0.5" min="15" max="70" value="36"></div>
+                <div class="form-group"><label for="umi-ant-brazada">Media brazada (cm, opcional)</label><input type="number" id="umi-ant-brazada" step="0.5" min="50" max="120" value="85"></div>
+                <div class="form-group"><label for="umi-ant-brazo">Longitud del brazo (cm, opcional)</label><input type="number" id="umi-ant-brazo" step="0.5" min="40" max="120"></div>
+                <div class="form-group"><label for="umi-ant-rodilla">Altura de la rodilla (cm, opcional)</label><input type="number" id="umi-ant-rodilla" step="0.5" min="30" max="75"></div>
+                <div id="umi-ant-resultado" class="tfg-estado tfg-estado-ok"></div>
+                <p><button type="button" class="visual-mini" id="umi-ant-usar">↑ Usar este peso y esta talla en la calculadora de nutrición</button></p>
+                <p style="font-size: 0.72rem; color: var(--text-muted); margin-top:8px;">Si se rellenan varias medidas de talla, se muestran todas: son estimaciones distintas, no se promedian.</p>
             </div>
 
             <p class="section-label" style="margin-top:14px;">Ecuación de Ireton-Jones (alternativa específica de UCI)</p>
@@ -910,6 +959,44 @@
                     <tr><td>Otros</td><td>Colistina</td></tr>
                 </tbody>
             </table>
+            <p class="section-label" style="margin-top:14px;" id="umi-piramide">Pirámide de cobertura antibiótica</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">El esquema del manual coloca cada antibiótico según lo que cubre: arriba los anaerobios, abajo a la izquierda los Gram positivos y a la derecha los Gram negativos. Cuanto más al centro, más amplio.</p>
+            <svg viewBox="0 0 360 250" class="umi-piramide-svg" role="img" aria-label="Pirámide de cobertura antibiótica del manual" style="width:100%; max-width:420px; display:block; margin:6px auto;">
+                <g data-zona="anaerobios"><rect x="135" y="4" width="90" height="20" rx="3" fill="var(--bg-card)" stroke="var(--text-muted)"/><text x="180" y="18" text-anchor="middle" font-size="11" fill="var(--text-main)">Metronidazol</text></g>
+                <polygon points="120,30 240,30 330,190 30,190" fill="var(--accent-blue)" fill-opacity="0.18" stroke="var(--accent-blue)"/>
+                <text x="180" y="46" text-anchor="middle" font-size="11" font-weight="bold" fill="var(--text-main)">ANAEROBIOS</text>
+                <g data-zona="amplio"><rect x="118" y="62" width="124" height="86" rx="5" fill="var(--bg-card)" stroke="var(--text-muted)"/>
+                    <text x="180" y="80" text-anchor="middle" font-size="10.5" fill="var(--text-main)">Amoxi-clavulánico</text>
+                    <text x="180" y="96" text-anchor="middle" font-size="10.5" fill="var(--text-main)">Piperacilina-tazobactam</text>
+                    <text x="180" y="112" text-anchor="middle" font-size="10.5" fill="var(--text-main)">Imipenem</text>
+                    <text x="180" y="128" text-anchor="middle" font-size="10.5" fill="var(--text-main)">Moxifloxacino</text>
+                    <text x="180" y="144" text-anchor="middle" font-size="10.5" fill="var(--text-main)">Tigeciclina</text></g>
+                <g data-zona="clinda"><text x="62" y="110" text-anchor="middle" font-size="10.5" fill="var(--accent-purple)" transform="rotate(-60 62 110)">Clindamicina</text></g>
+                <g data-zona="pipera"><text x="298" y="110" text-anchor="middle" font-size="10.5" fill="var(--accent-yellow)" transform="rotate(60 298 110)">Piperacilina</text></g>
+                <text x="56" y="184" font-size="11" font-weight="bold" fill="var(--text-main)">Gram +</text>
+                <text x="304" y="184" text-anchor="end" font-size="11" font-weight="bold" fill="var(--text-main)">Gram −</text>
+                <g data-zona="gpos"><rect x="4" y="198" width="112" height="48" rx="4" fill="var(--accent-green)" fill-opacity="0.25" stroke="var(--accent-green)"/>
+                    <text x="60" y="214" text-anchor="middle" font-size="9.5" fill="var(--text-main)">Cloxa, vanco,</text><text x="60" y="226" text-anchor="middle" font-size="9.5" fill="var(--text-main)">teico, linezolid</text><text x="60" y="238" text-anchor="middle" font-size="9.5" fill="var(--text-main)">y daptomicina</text></g>
+                <g data-zona="mixto"><rect x="124" y="198" width="112" height="48" rx="4" fill="var(--accent-yellow)" fill-opacity="0.22" stroke="var(--accent-yellow)"/>
+                    <text x="180" y="214" text-anchor="middle" font-size="9.5" fill="var(--text-main)">Cefalosporinas 3.ª</text><text x="180" y="226" text-anchor="middle" font-size="9.5" fill="var(--text-main)">Cefalosporinas 4.ª</text><text x="180" y="238" text-anchor="middle" font-size="9.5" fill="var(--text-main)">Quinolonas</text></g>
+                <g data-zona="gneg"><rect x="244" y="198" width="112" height="48" rx="4" fill="var(--accent-red)" fill-opacity="0.22" stroke="var(--accent-red)"/>
+                    <text x="300" y="214" text-anchor="middle" font-size="9.5" fill="var(--text-main)">Aminoglucósidos</text><text x="300" y="226" text-anchor="middle" font-size="9.5" fill="var(--text-main)">Aztreonam</text><text x="300" y="238" text-anchor="middle" font-size="9.5" fill="var(--text-main)">Colistina</text></g>
+            </svg>
+            <div class="form-group"><label for="umi-piramide-sel">¿Dónde está en la pirámide?</label>
+                <select id="umi-piramide-sel">
+                    <option value="">— Elige un grupo —</option>
+                    <option value="anaerobios">Metronidazol</option>
+                    <option value="amplio">Amoxi-clavulánico, pip-tazo, imipenem, moxifloxacino, tigeciclina</option>
+                    <option value="clinda">Clindamicina</option>
+                    <option value="pipera">Piperacilina</option>
+                    <option value="gpos">Cloxacilina, vancomicina, teicoplanina, linezolid, daptomicina</option>
+                    <option value="mixto">Cefalosporinas de 3.ª y 4.ª, quinolonas</option>
+                    <option value="gneg">Aminoglucósidos, aztreonam, colistina</option>
+                </select>
+            </div>
+            <div id="umi-piramide-resultado" class="tfg-estado tfg-estado-ok"></div>
+            <p style="font-size:0.75rem; color:var(--text-muted);">El manual solo da el dibujo: la lectura de cada zona (qué queda dentro y qué fuera) es la que se deduce de dónde está colocado, sin espectro detallado por germen. La pirámide no dice nada de resistencias locales ni de la Pseudomonas: para eso, la tabla de antipseudomónicos de arriba.</p>
+
             <p style="font-size:0.85rem; color:var(--text-dim);">Este protocolo de DDS/aislamiento es complementario, no redundante, con el "paquete del ventilador" y la prevención de NAV ya desarrollados en Merino Neumología:</p>
 <p><button class="especialidad-link" data-especialidad="neumologia" data-view="merinoNeumologia" data-panel="panel-merino-neumo-tabs" data-tab="neumo-nav-prevencion">🔗 Ver prevención de NAV (Merino Neumología) →</button></p>
         </div>
@@ -983,14 +1070,37 @@
                     <tr><td>Propofol 2% (20mg/ml)</td><td>Sedación inicial 0,5-1 mg/kg en 1-5 min · mantenimiento 1,5-4,5 mg/kg/h (bolos IV 10-20 mg)</td><td>Hipotensión, apnea transitoria, movimientos epileptiformes, EAP, asistolia, bradicardia, fiebre posquirúrgica</td></tr>
                     <tr><td>Amiodarona (150mg/3ml)</td><td>Bolo 300 mg · PC 900 mg en 24h</td><td>[ ] &gt;2 mg/ml produce flebitis</td></tr>
                     <tr><td>Urapidilo (50mg/10ml)</td><td>25 mg en 20seg, repetir 25 mg a los 2 min y 50 mg a los 2 min si necesario · perfusión 60-180 mg/h</td><td>Vasodilatador — ↓RVS sin ↓GC</td></tr>
-                    <tr><td>Cisatracurio "Nimbex" (no despolarizante)</td><td>Intubación 0,15 mg/kg · mantenimiento 0,03-0,6 mg/kg/h</td><td>Menos efectos hemodinámicos que atracurio</td></tr>
-                    <tr><td>Rocuronio "Esmeron" (no despolarizante)</td><td>Intubación 0,6-0,9 mg/kg · mantenimiento 0,15 mg/kg</td><td>Antídoto: sugammadex "Bridion" 4 mg/kg (reversión inmediata 16 mg/kg)</td></tr>
-                    <tr><td>Succinilcolina "Mioflex" (despolarizante)</td><td>Intubación 1-1,5 mg/kg · bolo 0,04-0,07 mg/kg cada 5-10 min</td><td>↑PIC, ↑K⁺ y presión gástrica; efecto en 1-3 min</td></tr>
+                    <tr><td>Cisatracurio "Nimbex" (2 mg/ml, no despolarizante)</td><td>Intubación 0,15 mg/kg · mantenimiento 0,03-0,6 mg/kg/h · infusión: inicio 3, luego 1-2 (el manual pone «mg/kg/min»; ver nota)</td><td>Menos efectos hemodinámicos que atracurio</td></tr>
+                    <tr id="umi-pancuronio"><td>Pancuronio (4 mg/ml, no despolarizante)</td><td>0,1 mg/kg (0,04-0,15 mg/kg)</td><td>HTA, taquicardia, salivación, rash</td></tr>
+                    <tr><td>Rocuronio "Esmeron" (no despolarizante)</td><td>Intubación 0,6-0,9 mg/kg · mantenimiento 0,15 mg/kg · perfusión 5-10 (el manual pone «mg/kg/min»; ver nota)</td><td>Antídoto: sugammadex "Bridion" (100 mg/ml) 4 mg/kg (reversión inmediata del rocuronio 16 mg/kg); revierte rocuronio y vecuronio</td></tr>
+                    <tr><td>Succinilcolina "Mioflex" (100 mg/ml, despolarizante)</td><td>Intubación 1-1,5 mg/kg · bolo 0,04-0,07 mg/kg cada 5-10 min · perfusión IV 10-100 (el manual pone «cg/kg/min»; ver nota)</td><td>Dilución: 1 ampolla en 9 cc de SF = 10 mg/ml. ↑PIC, ↑K⁺ y presión gástrica; efecto en 1-3 min</td></tr>
+                    <tr id="umi-neostigmina"><td>Neostigmina (0,5 mg/ml)</td><td>IV lenta (1 mg/min): adultos 1-3 mg, máx. 5 mg</td><td>Revierte el bloqueo neuromuscular de los <strong>no despolarizantes</strong></td></tr>
+                    <tr id="umi-fisostigmina"><td>Fisostigmina (1 mg/ml y 2 mg en 5 ml)</td><td>0,5-1 mg IV</td><td>El manual la pone también para revertir el bloqueo de los no despolarizantes (ver nota)</td></tr>
                 </tbody>
             </table>
 
-            <p class="section-label" style="margin-top:14px;">Antibióticos en perfusión continua o extendida</p>
-            <p style="font-size:0.85rem; color:var(--text-dim);">Vancomicina, imipenem-cilastina, ceftazidima, cefepime, piperacilina-tazobactam y meropenem admiten pauta en perfusión continua o extendida (frente al bolo intermitente clásico) para mantener la concentración por encima de la CMI más tiempo — cada uno con su propia estabilidad en solución (2-8h según fármaco) y ajuste de dosis por función renal.</p>
+            <details class="nota-plegable" id="umi-relajantes-nota"><summary>Nota de fidelidad: unidades de las perfusiones y la fisostigmina</summary>
+                <p style="font-size:0.82rem; color:var(--text-muted);">La tabla de relajantes del manual (pág. 42) da las perfusiones de cisatracurio (3 y luego 1-2), rocuronio (5-10) y succinilcolina (10-100) en «mg/kg/min» o «cg/kg/min». En mg/kg/min serían cientos de veces la dosis de intubación por minuto: casi con certeza son µg/kg/min. Se reproducen las cifras sin unidad propia y con este aviso, sin cambiarlas. La misma tabla pone la fisostigmina para «revertir el bloqueo neuromuscular de los no despolarizantes», igual que la neostigmina; la fisostigmina atraviesa la barrera hematoencefálica y su uso habitual es el síndrome anticolinérgico central, no la reversión del bloqueo (Marino, Cap. 46, revierte con neostigmina o con sugammadex). Se deja como lo escribe la fuente.</p>
+                <p><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte1.pdf#page=43" target="_blank" rel="noopener">Manual UMI, pág. 42 (PDF)</a> <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoNeuro" data-panel="panel-marino-neuro-tabs" data-tab="mn-relajantes">🔗 Bloqueo neuromuscular y su reversión (Marino, Cap. 46) →</button></p>
+            </details>
+
+            <p class="section-label" style="margin-top:14px;" id="umi-perfusiones">Antibióticos en perfusión continua o extendida</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Para mantener la concentración por encima de la CMI más tiempo que con el bolo intermitente. Tabla del manual, tomada y modificada de The Sanford Guide to Antimicrobial Therapy 2015 (IP = infusión prolongada; IC = infusión continua; ajuste por aclaramiento en ml/min):</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table">
+                <thead><tr><th>Antibiótico</th><th>Estabilidad</th><th>Tipo</th><th>Dosis</th><th>Ajuste renal</th><th>Observaciones</th></tr></thead>
+                <tbody>
+                    <tr><td>Meropenem</td><td>25-37 °C ~4 h · 4 °C 24 h</td><td>IP 3 h en SF</td><td>Carga 1 g · máx. 2 g c/8 h</td><td>&gt;50: 2 g c/8 h · 30-50: 1 g c/8 h · 10-30: 1 g c/12 h</td><td>1 g c/8 h es razonable</td></tr>
+                    <tr><td>Piperacilina-tazobactam</td><td>25-37 °C ~24 h</td><td>IP 4 h en SF o G5% · o IC en SF o G5%</td><td>IP: carga 4,5 g en 30 min y a las 6 h, 4,5 g c/6-8 h · IC: 20,25 g IV en 24 h</td><td>&gt;40: 4,5 g c/6-8 h · 20-40: 3,75 g c/6-8 h · 10-30: «1 c/12 h» (sic)</td><td>Si &gt;120 kg, podría subir a 6,75-9 g en IP de 4 h c/8 h</td></tr>
+                    <tr><td>Cefepime</td><td>37 °C 8 h · 25 °C 21 h · 4 °C &gt;24 h</td><td>IC en SF o G5% · IP 3-4 h</td><td>Carga 2 g IV en 30 min · mantenimiento 6 g en 24 h</td><td>&gt;50: 2 g c/8 h · 30-50: 4 g c/24 h · 10-30: 2 g c/24 h · &lt;10: contraindicado</td><td>—</td></tr>
+                    <tr><td>Ceftazidima</td><td>37 °C 8 h · 25 °C 24 h · 4 °C &gt;24 h</td><td>IC en SF o G5%</td><td>Bolo 15 mg/kg IV en 40 min y luego 6 g IV c/24 h</td><td>—</td><td>Cambiar la solución c/8 h</td></tr>
+                    <tr><td>Imipenem-cilastatina</td><td>25 °C 4 h</td><td>IP 2-3 h en SF o G5%</td><td>1 g c/6-8 h</td><td>No usar con aclaramiento &lt;5 ml/min ni peso &lt;30 kg</td><td>—</td></tr>
+                    <tr><td>Vancomicina</td><td>23 °C, 4 mg/ml: 14-21 días</td><td>IC en SF o G5%</td><td>Carga 15-20 mg/kg en 30-60 min · mantenimiento 30 mg/kg/día</td><td>20-50: 15-20 mg/kg/día</td><td>—</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p style="font-size:0.75rem; color:var(--text-muted);">En la fila de piperacilina-tazobactam el manual escribe «1030 1 c12h» para el tramo 10-30, sin unidad: se reproduce como «1 c/12 h (sic)». Las dosis de la tabla de perfusiones del consenso SEIMC-SEHH (calculadora PK/PD de Neutropenia Febril) no siempre coinciden con estas: son fuentes distintas.</p>
+            <p><button type="button" class="especialidad-link" data-especialidad="home" data-view="citopenias" data-pulsar="btn-neutropenia-febril btn-dirigido" data-resaltar="#pkpd-card">🔗 Calculadora PK/PD (Neutropenia Febril) →</button></p>
             <p style="font-size:0.85rem; color:var(--text-dim);">El selector interactivo de mecanismo receptor por fármaco (con el diagrama de receptores α1/α2/β1/β2/β3) ya está disponible en Merino Cardiología:</p>
 <p><button class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-vasopresores">🔗 Abrir el selector de vasopresores (Merino Cardiología) →</button></p>
         </div>
@@ -1093,6 +1203,37 @@
                 <tbody><tr><th>PEEP</th><td>5</td><td>8</td><td>10</td><td>10</td><td>12</td><td>14</td><td>16</td><td>18</td><td>18</td><td>20</td><td>20</td><td>20</td><td>20</td><td>22</td><td>22</td><td>22</td><td>24</td></tr></tbody>
             </table>
             </div>
+
+            <p class="section-label" style="margin-top:14px;" id="umi-etco2">Capnografía: por qué sube, baja o desaparece la EtCO₂</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="umi-etco2-tabla">
+                <thead><tr><th>Aumento de la EtCO₂</th><th>Disminución de la EtCO₂</th><th>Ausencia de EtCO₂</th></tr></thead>
+                <tbody>
+                    <tr><td>Hipoventilación (menor ventilación alveolar)</td><td>Hiperventilación</td><td>Intubación esofágica</td></tr>
+                    <tr><td>Aumento del metabolismo (hipertermia maligna y no maligna, sepsis, actividad muscular)</td><td>Disminución del metabolismo (hipotermia, hipotiroidismo)</td><td>Desconexión del sistema respiratorio</td></tr>
+                    <tr><td>Aumento del gasto cardíaco</td><td>Disminución del gasto cardíaco: hipovolemia, hipotensión, hipoperfusión</td><td>Pérdidas de gas alrededor del tubo orotraqueal</td></tr>
+                    <tr><td>Reinhalación de CO₂: cal sodada agotada o válvula espiratoria defectuosa (sistemas circulares), gas fresco insuficiente (sistemas lineales)</td><td>Embolismo pulmonar</td><td>Obstrucción completa de la vía aérea o del tubo</td></tr>
+                    <tr><td>Laparoscopia con CO₂</td><td>Efecto dilución (mucho gas fresco)</td><td>Parada respiratoria</td></tr>
+                    <tr><td>—</td><td>Fugas de gas alrededor del tubo</td><td>Paro cardíaco</td></tr>
+                    <tr><td>—</td><td>Ventilación del espacio muerto (ventilación muy superficial, que no llega a las vías profundas)</td><td>Calentamiento del capnógrafo</td></tr>
+                    <tr><td>—</td><td>Atelectasia: no todo el pulmón intercambia gas, la EtCO₂ sale falsamente baja y la PaCO₂ es más alta</td><td>Calibración del capnógrafo</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <div class="form-group"><label for="umi-etco2-sel">La EtCO₂ de tu paciente…</label>
+                <select id="umi-etco2-sel">
+                    <option value="">— Elige —</option>
+                    <option value="0">ha subido</option>
+                    <option value="1">ha bajado</option>
+                    <option value="2">ha desaparecido</option>
+                </select>
+            </div>
+            <div id="umi-etco2-resultado" class="tfg-estado tfg-estado-ok" hidden></div>
+            <details class="nota-plegable"><summary>Nota de fidelidad: la tabla viene de un texto de anestesia veterinaria</summary>
+                <p style="font-size:0.82rem; color:var(--text-muted);">La tabla del manual (pág. 56) habla de «animales de pequeño tamaño» en el efecto dilución y de que «el animal no ventila adecuadamente» en la ventilación del espacio muerto, y remite a figuras (Fig. 2, 5, 7, 8 y 9) que no están en el manual: está copiada de un texto de anestesia veterinaria. El contenido fisiológico vale igual; aquí se ha quitado la referencia a animales y a figuras que no existen.</p>
+                <p><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=4" target="_blank" rel="noopener">Manual UMI, pág. 56 (PDF)</a></p>
+            </details>
+            <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoFundamentos" data-panel="panel-marino-fund-tabs" data-tab="mar-capnografia">🔗 Capnografía y gradiente PaCO₂-EtCO₂ (Marino, Cap. 7) →</button> <button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-paro-monitorizacion">🔗 EtCO₂ durante la RCP (Merino Cardiología) →</button></p>
 
             <p class="section-label" style="margin-top:14px;">Checklist del respirador antes de conectar al paciente</p>
             <ul class="term-chips">
@@ -1410,6 +1551,38 @@
                 <div class="algo-step"><span class="algo-num">1</span><div class="algo-text"><strong>Movimiento endocárdico</strong> — normal si es simétrico.</div></div>
                 <div class="algo-step"><span class="algo-num">2</span><div class="algo-text"><strong>Engrosamiento del miocardio</strong> — normal si es de al menos el 40% en todos los segmentos del VI.</div></div>
                 <div class="algo-step"><span class="algo-num">3</span><div class="algo-text"><strong>Movimiento de la válvula mitral</strong> — si se acerca al septo a menos de 1cm, se puede estimar FEVI &gt;40%.</div></div>
+            </div>
+
+            <p class="section-label" style="margin-top:14px;" id="umi-fate-ext">FATE extendido: función sistólica por medidas</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">La tarjeta del FATE extendido (pág. 68 del manual) gradúa la función sistólica con medidas en modo M o 2D. Para los dos ventrículos, además, mirar a ojo en todas las vistas.</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="umi-fate-ext-tabla">
+                <thead><tr><th>Medida</th><th>Normal</th><th>Leve ↓</th><th>Mod. ↓</th><th>Grave ↓</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>FE (%)</strong><br><span style="font-size:0.72rem;">VI · Pos 3, PS largo</span></td><td>≥55</td><td>45-54</td><td>30-44</td><td>&lt;30</td></tr>
+                    <tr><td><strong>FS (%)</strong><br><span style="font-size:0.72rem;">VI · Pos 3, PS largo</span></td><td>≥25</td><td>20-24</td><td>15-19</td><td>&lt;15</td></tr>
+                    <tr><td><strong>MSS (mm)</strong><br><span style="font-size:0.72rem;">VI · Pos 3, PS largo</span></td><td>&lt;10</td><td>7-12</td><td>13-24</td><td>&gt;24</td></tr>
+                    <tr><td><strong>MAPSE (mm)</strong><br><span style="font-size:0.72rem;">VI · Pos 2, A4C</span></td><td>≥11</td><td>9-10</td><td>6-8</td><td>&lt;6</td></tr>
+                    <tr><td><strong>TAPSE (mm)</strong><br><span style="font-size:0.72rem;">VD · Pos 2, A4C</span></td><td>16-20</td><td>11-15</td><td>6-10</td><td>&lt;6</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <dl class="kv-row" id="umi-fate-ext-doppler"><dt>Valores Doppler de la tarjeta</dt><dd>CW: presión pico = 4 × V²; aorta &lt;2 m/s, pulmonar &lt;1 m/s, insuficiencia tricuspídea &lt;2,5 m/s. PW del llenado mitral: tiempo de desaceleración 140-240 ms, E máxima &lt;1,2 m/s, E/A &gt;1 (depende de la edad). Doppler tisular: E/e′ &lt;8-10. VCI &lt;20 mm, con colapso del 50% en inspiración, es normal.</dd></dl>
+            <p style="font-size:0.75rem; color:var(--text-muted);">MSS = separación septal del punto E de la mitral. Las vistas extendidas son la subcostal de la VCI, la apical de 2 y 5 cámaras y los ejes cortos paraesternales del plano mitral y de la aorta.</p>
+            <details class="nota-plegable"><summary>Nota de fidelidad: tramos que se solapan y un TAPSE normal con techo</summary>
+                <p style="font-size:0.82rem; color:var(--text-muted);">En la tarjeta, la MSS «normal» es &lt;10 mm y la «leve» 7-12 mm, que se solapan entre 7 y 10. El TAPSE normal se da como 16-20 mm, con techo, cuando un TAPSE &gt;20 mm no es patológico. En la app hay además otros cortes del TAPSE: &gt;16 mm (Fisiopatología UCI, Ficha 5) y &gt;17 mm (Ficha 11). Se reproducen tal cual, sin unificar; la calculadora lo avisa cuando el valor cae en un solapamiento.</p>
+                <p><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=16" target="_blank" rel="noopener">Manual UMI, pág. 68 (PDF)</a></p>
+            </details>
+
+            <p class="section-label" style="margin-top:14px;">🧮 Calculadora: grado de función sistólica (FATE extendido)</p>
+            <div class="tfg-simulador">
+                <div class="form-group"><label for="umi-fx-fe">FE del VI (%)</label><input type="number" id="umi-fx-fe" step="1" min="5" max="90"></div>
+                <div class="form-group"><label for="umi-fx-fs">FS del VI (%)</label><input type="number" id="umi-fx-fs" step="1" min="1" max="60"></div>
+                <div class="form-group"><label for="umi-fx-mss">MSS (mm)</label><input type="number" id="umi-fx-mss" step="1" min="0" max="50"></div>
+                <div class="form-group"><label for="umi-fx-mapse">MAPSE (mm)</label><input type="number" id="umi-fx-mapse" step="1" min="0" max="30"></div>
+                <div class="form-group"><label for="umi-fx-tapse">TAPSE (mm)</label><input type="number" id="umi-fx-tapse" step="1" min="0" max="40"></div>
+                <div id="umi-fx-resultado" class="tfg-estado tfg-estado-ok"></div>
+                <p><button type="button" class="especialidad-link" data-especialidad="eco" data-eco-medir="tapse">🫀 Medir el TAPSE en el simulador →</button></p>
             </div>
 
             <p class="section-label" style="margin-top:14px;">Índice de colapsabilidad de la vena cava inferior (VCI)</p>
@@ -2442,6 +2615,105 @@
             <p style="font-size:0.85rem; color:var(--text-dim);">El LCR orientado por la causa (bacteriana, TBC, vírica, no infecciosa) está en la Ficha XXIII, y los antipseudomónicos en la Ficha VI.</p>
             <p><button class="tx-link" data-especialidad="sobrevivirUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-hidrocefalia">🔗 LCR según la causa (Ficha XXIII) →</button></p>
         </div>
+
+        <!-- ===== FICHA XXXI: UMI-HFVVC ===== -->
+        <div id="umi-hfvvc" class="tab-content">
+            <h3 style="color: var(--accent-blue);">HFVVC: indicaciones, pauta y fórmulas</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Manual de orientación de la UMI, HUGCDN, págs. 100-102. La elección de modalidad, el momento de inicio, la dosis y la anticoagulación con la evidencia de los ensayos están en Nefrología (Valdenebro 2021).</p>
+
+            <p class="section-label">Indicaciones de HFVVC (entre paréntesis, nivel de evidencia del manual)</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="umi-hfvvc-indicaciones">
+                <thead><tr><th>Situación</th><th>Indicación</th></tr></thead>
+                <tbody>
+                    <tr><td>FRA</td><td>Oliguria: diuresis &lt;200 ml/12 h · anuria: diuresis &lt;50 ml/12 h · creatinina &gt;9-10 mg/dl · K⁺ &gt;6,5 mEq/l · urea &gt;100 mg/dl · sobrecarga hídrica refractaria</td></tr>
+                    <tr><td>SDMO + FRA</td><td>Mejorar el aclaramiento, el balance hídrico, la hemodinámica y la mortalidad (1a)</td></tr>
+                    <tr><td>Sin FRA</td><td>ICC y cirugía cardíaca (2a) · fallo hepático (3c) · intoxicación por litio, N-acetilprocainamida o fenformina (2b) · acidosis láctica con pH &lt;7,1 (3b) · K⁺ &gt;6,5 mEq/l, Na⁺ &lt;115 o &gt;160 mEq/l (1a) · tratamiento de la hipertermia o la hipotermia (2a) · rabdomiólisis o síndrome de aplastamiento (3b) · grandes quemados (2a)</td></tr>
+                    <tr><td>SDMO sin FRA</td><td>Mejoría de la PaO₂/FiO₂ (1b) · mortalidad (2b) · «mortalidad hemodinámica» (2b) · reducción de mediadores (2a)</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <details class="nota-plegable" id="umi-hfvvc-nota-indicaciones"><summary>Nota de fuentes: estas indicaciones frente a los ensayos de Nefrología</summary>
+                <p style="font-size:0.82rem; color:var(--text-muted);">El manual da nivel 1a a la HFVVC para mejorar la mortalidad en el SDMO con FRA y nivel 2a a la «reducción de mediadores». La revisión de Valdenebro 2021 que usa la ficha de TRR de Nefrología concluye que ningún ensayo ni metaanálisis demuestra que una modalidad sea mejor que otra en supervivencia, y que ni flujos muy altos (hasta 70 ml/kg/h) la mejoran. Son fuentes de época distinta; se reproducen las dos, sin elegir. El manual escribe «N-acetil oricainamida» (se lee N-acetilprocainamida) y «mortalidad hemodinámica» (posiblemente estabilidad hemodinámica): se deja la segunda como está.</p>
+                <p><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=48" target="_blank" rel="noopener">Manual UMI, pág. 100 (PDF)</a> <button type="button" class="especialidad-link" data-especialidad="nefrologia" data-view="trr" data-panel="panel-trr-tabs" data-tab="trr-modalidad">🔗 Selección de modalidad (Nefrología · TRR) →</button></p>
+            </details>
+
+            <p class="section-label" style="margin-top:14px;">Variantes técnicas (VVC = venovenosa continua; UF = ultrafiltración)</p>
+            <table class="data-table" id="umi-hfvvc-variantes">
+                <thead><tr><th>Técnica</th><th>Membrana y mecanismo</th><th>Reposición</th></tr></thead>
+                <tbody>
+                    <tr><td>SCUF</td><td>Ultrafiltración lenta continua: convección, solo UF</td><td>No</td></tr>
+                    <tr><td>HFVVC</td><td>Hemofiltración: membrana de alta permeabilidad, UF por convección</td><td>Sí</td></tr>
+                    <tr><td>HDVVC</td><td>Hemodiálisis: membrana de baja permeabilidad, UF baja + difusión</td><td>No</td></tr>
+                    <tr><td>HDFVVC</td><td>Hemodiafiltración: membrana de alta permeabilidad, difusión + UF</td><td>Sí</td></tr>
+                </tbody>
+            </table>
+            <p><button type="button" class="especialidad-link" data-especialidad="nefrologia" data-view="trr" data-panel="panel-trr-tabs" data-tab="trr-modalidad" data-en-visual>🔬 Difusión frente a convección en el filtro vivo (Nefrología · TRR) →</button></p>
+
+            <p class="section-label" style="margin-top:14px;">Pauta genérica de la unidad</p>
+            <dl class="kv-row" id="umi-hfvvc-pauta"><dt>Flujo de reposición</dt><dd>35 × peso (kg) = ml/h, repartido en prefiltro 60-75% y posfiltro 25-40%.</dd></dl>
+            <dl class="kv-row"><dt>Flujo de bomba (sangre)</dt><dd>Flujo de reposición × 5 / 60 = ml/min.</dd></dl>
+            <dl class="kv-row"><dt>Filtros y líquido</dt><dd>Filtros de 1,9 m² o 0,7 m². Líquido de reposición: Priosol.</dd></dl>
+
+            <p class="section-label" style="margin-top:14px;" id="umi-hfvvc-coag">Anticoagulación del circuito</p>
+            <table class="data-table">
+                <thead><tr><th>Situación</th><th>Pauta</th></tr></thead>
+                <tbody>
+                    <tr><td>No precisa anticoagulación si</td><td>Plaquetas &lt;70.000, TTPA &gt;65 s o INR &gt;2</td></tr>
+                    <tr><td>Coagulación normal</td><td>Heparina sódica 5-10 UI/kg/h + bolo de 2.000 UI; objetivo de TTPA 1-1,4 veces el control (35-45 s)</td></tr>
+                    <tr><td>Riesgo de sangrado</td><td>Heparinización regional: la heparina sódica de la coagulación normal + protamina 1 mg por cada 100 UI de heparina</td></tr>
+                    <tr><td>Trombopenia inducida por heparina</td><td>Fondaparinux 10 mg/24 h</td></tr>
+                </tbody>
+            </table>
+            <details class="nota-plegable"><summary>Nota de fuentes: el manual no menciona el citrato</summary>
+                <p style="font-size:0.82rem; color:var(--text-muted);">La pauta del manual es heparina sistémica o regional con protamina. La ficha de anticoagulación de TRR de Nefrología (Valdenebro 2021) dice que la anticoagulación regional con citrato se ha estandarizado como técnica de elección, y el paper de citrato de UCI/Papers Tuiter desarrolla su toxicidad. El fondaparinux, además, se elimina por el riñón y se acumula en el fracaso renal (Marino, Cap. 5); el manual no lo comenta.</p>
+                <p><button type="button" class="especialidad-link" data-especialidad="nefrologia" data-view="trr" data-panel="panel-trr-tabs" data-tab="trr-anticoagulacion">🔗 Anticoagulación de la TRR (Nefrología) →</button> <button type="button" class="especialidad-link" data-especialidad="uciPapers" data-view="citratoTrr" data-panel="panel-citrato-tabs" data-tab="citrato-diagnostico">🔗 Toxicidad por citrato (UCI · Papers Tuiter) →</button></p>
+            </details>
+
+            <p class="section-label" style="margin-top:14px;" id="umi-hfvvc-formulas">Fórmulas del manual</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table">
+                <thead><tr><th>Magnitud</th><th>Fórmula (tal cual en el manual)</th></tr></thead>
+                <tbody>
+                    <tr><td>Fracción de filtración (FF, %)</td><td>FF = (FUF / FP) × 100 · FF ideal entre 15 y 20%</td></tr>
+                    <tr><td>FF con reposición prefiltro</td><td>FF = [FUF / (FP + FR) × 100]</td></tr>
+                    <tr><td>Flujo de ultrafiltrado (FUF)</td><td>FUF = FR + (−BH)</td></tr>
+                    <tr><td>Flujo plasmático (FP, ml/min)</td><td>FP = FS × [(100 − Hto%) / 100] · agua plasmática = 100 − Hto</td></tr>
+                    <tr><td>Flujo sanguíneo (FS, ml/min)</td><td>FS = [(FR + BH) / FF − FR] / 60</td></tr>
+                    <tr><td>Flujo de reposición (FR, ml/h)</td><td>FR = (100 × BH − FF × FP) / (FF − 100)</td></tr>
+                    <tr><td>Versión de la pág. 101</td><td>FF = Qvf / Qst = (Qrep − Balance) / [Qbomba × (1 − Hb)] + Qprf</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <details class="nota-plegable" id="umi-hfvvc-nota-formulas"><summary>Nota de fidelidad: unidades mezcladas y el signo del balance</summary>
+                <p style="font-size:0.82rem; color:var(--text-muted);">El manual pone el FUF y la reposición en ml/h y el flujo plasmático en ml/min, y las divide sin convertir: hay que pasar todo a la misma unidad (aquí, ml/h). El balance hídrico (BH) entra con un signo en FUF = FR + (−BH) y con el contrario en las fórmulas de FS y FR, que además usan la FF como fracción y no como %. La versión de la pág. 101 escribe «(1 − Hb)» por (1 − Hto) y deja el flujo prefiltro fuera del paréntesis. Las fórmulas se reproducen tal cual; la calculadora usa una sola versión coherente: FUF = reposición + pérdida neta horaria, FP = flujo de bomba × (1 − Hto) × 60, y FF = FUF / (FP + reposición prefiltro). Con toda la reposición posfiltro es la primera fórmula del manual; con toda prefiltro, la segunda; con el reparto de la unidad, la proporción que se elija (eso último, fisiología general).</p>
+                <p><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=49" target="_blank" rel="noopener">Manual UMI, págs. 101-102 (PDF)</a></p>
+            </details>
+
+            <p class="section-label" style="margin-top:14px;">🧮 Calculadora: pauta y fracción de filtración</p>
+            <div class="tfg-simulador">
+                <div class="form-group"><label for="umi-hf-peso">Peso (kg)</label><input type="number" id="umi-hf-peso" step="1" min="20" max="250" value="70"></div>
+                <div class="form-group"><label for="umi-hf-pre">Reposición prefiltro (%)</label><input type="number" id="umi-hf-pre" step="5" min="0" max="100" value="65"></div>
+                <div class="form-group"><label for="umi-hf-hto">Hematocrito (%)</label><input type="number" id="umi-hf-hto" step="1" min="10" max="65" value="30"></div>
+                <div class="form-group"><label for="umi-hf-perdida">Pérdida neta buscada (ml/h)</label><input type="number" id="umi-hf-perdida" step="10" min="0" max="500" value="100"></div>
+                <div class="form-group"><label for="umi-hf-qb">Flujo de bomba (ml/min, opcional: si se deja vacío, el del manual)</label><input type="number" id="umi-hf-qb" step="10" min="50" max="400"></div>
+                <div id="umi-hf-resultado" class="tfg-estado tfg-estado-ok"></div>
+                <p style="font-size: 0.72rem; color: var(--text-muted); margin-top:8px;">Con los valores de partida (70 kg, 65% prefiltro, hematocrito 30%, 100 ml/h de pérdida), la pauta genérica da una FF de ~25%, por encima del 15-20% que pide el mismo manual: con esa reposición, la bomba tendría que ir a unos 265 ml/min para quedarse en el 20%. Es un cálculo con las fórmulas del propio manual, no una recomendación nueva.</p>
+            </div>
+
+            <p class="section-label" style="margin-top:14px;" id="umi-hfvvc-recirculacion">Test de recirculación del catéter (Shaldon o fístula)</p>
+            <dl class="kv-row"><dt>Muestras</dt><dd>P = sangre periférica · A = luz arterial del Shaldon o línea arterial de la fístula · V = luz venosa del Shaldon o línea venosa de la fístula.</dd></dl>
+            <dl class="kv-row"><dt>Recirculación</dt><dd>(P − A) / (P − V) × 100. Ideal = 0% · aceptable entre 20% y 30% · inadecuado &gt;30%.</dd></dl>
+            <div class="tfg-simulador">
+                <div class="form-group"><label for="umi-rec-p">P — periférica</label><input type="number" id="umi-rec-p" step="1" min="0" value="80"></div>
+                <div class="form-group"><label for="umi-rec-a">A — arterial</label><input type="number" id="umi-rec-a" step="1" min="0" value="74"></div>
+                <div class="form-group"><label for="umi-rec-v">V — venosa</label><input type="number" id="umi-rec-v" step="1" min="0" value="40"></div>
+                <div id="umi-rec-resultado" class="tfg-estado tfg-estado-ok"></div>
+                <p style="font-size: 0.72rem; color: var(--text-muted); margin-top:8px;">El manual no dice qué se mide en las tres muestras; lo habitual es la urea (fisiología general). Las tres tienen que ser de la misma sustancia, en las mismas unidades. Entre 0 y 20% el manual no da nombre: queda mejor que su tramo «aceptable».</p>
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Para el aporte calórico en HFVVC (30-35 kcal/kg/día), la Ficha III.</p>
+            <p><button class="tx-link" data-especialidad="sobrevivirUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-nutricion">🔗 Nutrición (Ficha III) →</button></p>
+        </div>
     </div>
 
     <div class="card">
@@ -2477,5 +2749,6 @@
             <li><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=46" target="_blank" rel="noopener">Vaina del nervio óptico y fuerza muscular</a> <span class="biblio-nota">Manual UMI, pág. 98</span></li>
             <li><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=47" target="_blank" rel="noopener">Rankin modificada y Glasgow Outcome Scale</a> <span class="biblio-nota">Manual UMI, pág. 99</span></li>
             <li><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte1.pdf#page=31" target="_blank" rel="noopener">Meningitis: algoritmo, profilaxis, antimicrobianos intraventriculares y criterios de Lozier</a> <span class="biblio-nota">Manual UMI, págs. 30-32</span></li>
+            <li><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=48" target="_blank" rel="noopener">HFVVC: indicaciones, pauta genérica, anticoagulación, fórmulas y recirculación</a> <span class="biblio-nota">Manual UMI, págs. 100-102</span></li>
         </ul>
     </div>

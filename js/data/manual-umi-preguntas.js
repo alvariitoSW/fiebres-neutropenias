@@ -1,7 +1,8 @@
 // Banco de preguntas de repaso — "Manual UMI Negrín" (manual de orientación
 // interno de la Unidad de Medicina Intensiva, HUGCDN), consolidado en una
-// única guía con sus 30 fichas (ver manual-umi.html). 5 preguntas por
-// ficha (4 opción múltiple + 1 de redactar) × 30 fichas = 150 preguntas —
+// única guía con sus 31 fichas (ver manual-umi.html). 5 preguntas por
+// ficha (4 opción múltiple + 1 de redactar) × 31 fichas, más 6 de los
+// huecos cerrados en octubre de 2026 = 161 preguntas —
 // formato reducido, mismo criterio ya usado en los bloques prácticos más
 // recientes de la app.
 export const temasManualUmi = [
@@ -35,6 +36,7 @@ export const temasManualUmi = [
     { key: 'umi-onsd', etiqueta: 'Vaina del nervio óptico y fuerza muscular' },
     { key: 'umi-escalas-pronostico', etiqueta: 'Escalas de resultado: Rankin modificada y GOS' },
     { key: 'umi-meningitis', etiqueta: 'Meningitis y ventriculitis' },
+    { key: 'umi-hfvvc', etiqueta: 'HFVVC: indicaciones, pauta y fórmulas' },
 ];
 
 export const preguntasManualUmi = [
@@ -1089,5 +1091,80 @@ export const preguntasManualUmi = [
         id: 'umi-q150', tema: 'umi-meningitis', tipo: 'redactar',
         enunciado: 'Paciente con DVE y LCR con glucosa que baja y leucocitos y proteínas que suben, Gram y cultivo negativos, sin fiebre alta. Clasifícalo según Lozier y explica qué haría falta para hablar de ventriculitis.',
         respuestaModelo: 'Es una sospecha de infección relacionada con el DVE: el descenso progresivo de la glucosa con aumento progresivo de leucocitos y proteínas basta, aunque el Gram y el cultivo sean negativos. Si se añadiera un Gram o un cultivo positivo y algún síntoma distinto de la fiebre, sería infección relacionada con la derivación. Para hablar de ventriculitis hacen falta esas alteraciones bioquímicas y microbiológicas más fiebre alta y signos de meningitis (rigidez de nuca, fotofobia, bajo nivel de conciencia, crisis comiciales o aspecto de enfermedad grave). Lo que separa la colonización de la infección es la bioquímica del LCR, no solo el cultivo.',
+    },
+    {
+        id: 'umi-q151', tema: 'umi-hfvvc',
+        enunciado: 'Pauta genérica de HFVVC de la unidad para un paciente de 80 kg. ¿Qué flujo de reposición y de bomba indica el manual?',
+        opciones: ['2.800 ml/h de reposición y unos 233 ml/min de bomba', '2.000 ml/h y 150 ml/min', '2.800 ml/h y 120 ml/min', '3.500 ml/h y 290 ml/min'],
+        correcta: 0,
+        explicacion: 'Reposición = 35 × peso = 2.800 ml/h, repartida 60-75% prefiltro y 25-40% posfiltro. Bomba = reposición × 5 / 60 ≈ 233 ml/min.',
+    },
+    {
+        id: 'umi-q152', tema: 'umi-hfvvc',
+        enunciado: '¿Cuál es la fracción de filtración ideal según el manual, y qué la baja?',
+        opciones: ['15-20%; más reposición prefiltro o más flujo de bomba', '30-40%; más reposición posfiltro', '5-10%; menos flujo de bomba', '15-20%; más reposición posfiltro'],
+        correcta: 0,
+        explicacion: 'FF = ultrafiltrado / flujo plasmático (con la reposición prefiltro sumada al denominador). Ideal 15-20%. La reposición prefiltro diluye la sangre antes del filtro y un flujo de bomba mayor sube el flujo plasmático: las dos bajan la FF y la hemoconcentración que coagula el filtro.',
+    },
+    {
+        id: 'umi-q153', tema: 'umi-hfvvc',
+        enunciado: 'Paciente en HFVVC con plaquetas 55.000/µl. ¿Qué dice el manual de la anticoagulación del circuito?',
+        opciones: ['No precisa anticoagulación', 'Heparina sódica 5-10 UI/kg/h con bolo de 2.000 UI', 'Heparinización regional con protamina', 'Fondaparinux 10 mg/24 h'],
+        correcta: 0,
+        explicacion: 'No precisa anticoagulación con plaquetas <70.000, TTPA >65 s o INR >2. Con coagulación normal, heparina sódica; con riesgo de sangrado, heparinización regional (protamina 1 mg/100 UI); en la TIH, fondaparinux.',
+    },
+    {
+        id: 'umi-q154', tema: 'umi-hfvvc',
+        enunciado: 'Test de recirculación del Shaldon: P = 80, A = 68, V = 40 (urea). ¿Cuánto recircula y cómo se clasifica?',
+        opciones: ['30%: en el límite del tramo aceptable (20-30%)', '15%: ideal', '50%: inadecuado', '12%: inadecuado'],
+        correcta: 0,
+        explicacion: '(P − A) / (P − V) × 100 = 12 / 40 × 100 = 30%. Ideal 0%, aceptable 20-30%, inadecuado >30%.',
+    },
+    {
+        id: 'umi-q155', tema: 'umi-hfvvc', tipo: 'redactar',
+        enunciado: 'Diferencia las 4 variantes técnicas de terapia continua del manual (SCUF, HFVVC, HDVVC, HDFVVC) por membrana, mecanismo y reposición.',
+        respuestaModelo: 'SCUF: ultrafiltración lenta continua, solo convección para quitar agua, sin reposición. HFVVC: hemofiltración con membrana de alta permeabilidad; depura por convección y necesita reposición. HDVVC: hemodiálisis con membrana de baja permeabilidad; poca ultrafiltración más difusión con líquido de diálisis, sin reposición. HDFVVC: hemodiafiltración con membrana de alta permeabilidad; difusión más ultrafiltración, con reposición. La convección arrastra moléculas de mayor tamaño; la difusión limpia sobre todo las pequeñas.',
+    },
+    {
+        id: 'umi-q156', tema: 'umi-electrolitos',
+        enunciado: 'Paciente de 70 kg con K⁺ 2,8 mEq/l. Con la tabla de la pág. 9 del manual (déficit = 50 mEq × kg × % de déficit), ¿cuánto falta?',
+        opciones: ['Unos 525 mEq (déficit del 15%)', 'Unos 49 mEq', 'Unos 120 mEq', 'Unos 1.750 mEq'],
+        correcta: 0,
+        explicacion: 'K⁺ 2,5-3 es un déficit del 15%: 50 × 70 × 0,15 = 525 mEq. La fórmula de la pág. 10 ((3,5 − K) × peso + 1 mEq/kg) da ~120 mEq: las dos fórmulas del manual no coinciden, y la ficha lo avisa. En ningún caso se pasa de 200 mEq/día.',
+    },
+    {
+        id: 'umi-q157', tema: 'umi-nutricion',
+        enunciado: 'Paciente intubado que no se puede tallar. ¿Qué medida usa el manual para estimar la talla además de la longitud del brazo y la altura de la rodilla?',
+        opciones: ['La media brazada: del punto medio del esternón a la punta del dedo medio', 'La circunferencia de la pantorrilla', 'La circunferencia abdominal', 'La longitud del fémur por ecografía'],
+        correcta: 0,
+        explicacion: 'Talla = 63,525 − 3,237 × sexo − 0,06904 × edad + 1,293 × media brazada (el manual escribe 6,525, una errata). Las circunferencias del brazo, el abdomen y la pantorrilla sirven para estimar el peso.',
+    },
+    {
+        id: 'umi-q158', tema: 'umi-dds-aislamiento',
+        enunciado: 'En la pirámide de cobertura del manual, ¿dónde están las cefalosporinas de 3.ª y 4.ª y las quinolonas?',
+        opciones: ['En la base, en el centro: Gram positivos y negativos, sin anaerobios', 'Arriba, con los anaerobios', 'En el centro de la pirámide, con todo el espectro', 'En la base, a la derecha: solo Gram negativos'],
+        correcta: 0,
+        explicacion: 'Arriba (anaerobios) está el metronidazol; en el centro, el espectro más amplio (amoxi-clavulánico, pip-tazo, imipenem, moxifloxacino, tigeciclina); en la base, Gram + a la izquierda (cloxa, vanco, teico, linezolid, dapto), cefalosporinas de 3.ª-4.ª y quinolonas en el centro, y aminoglucósidos, aztreonam y colistina a la derecha.',
+    },
+    {
+        id: 'umi-q159', tema: 'umi-respirador',
+        enunciado: 'Paciente intubado y bien ventilado en el que la EtCO₂ desaparece de golpe. ¿Qué causa NO está entre las de ausencia de EtCO₂ del manual?',
+        opciones: ['Embolismo pulmonar', 'Desconexión del sistema respiratorio', 'Obstrucción completa del tubo', 'Paro cardíaco'],
+        correcta: 0,
+        explicacion: 'El embolismo pulmonar la disminuye (más espacio muerto), no la hace desaparecer. La ausencia: intubación esofágica, desconexión, fugas alrededor del tubo, obstrucción completa, parada respiratoria, paro cardíaco, calentamiento o calibración del capnógrafo.',
+    },
+    {
+        id: 'umi-q160', tema: 'umi-fate',
+        enunciado: 'Según la tarjeta del FATE extendido, un MAPSE de 7 mm indica una disfunción sistólica del VI…',
+        opciones: ['Moderada (6-8 mm)', 'Leve (9-10 mm)', 'Grave (<6 mm)', 'Normal (≥11 mm)'],
+        correcta: 0,
+        explicacion: 'MAPSE: normal ≥11, leve 9-10, moderada 6-8, grave <6 mm. TAPSE: normal 16-20, leve 11-15, moderada 6-10, grave <6 mm.',
+    },
+    {
+        id: 'umi-q161', tema: 'umi-vasoactivos',
+        enunciado: '¿Cuál de estos fármacos revierte el bloqueo de los relajantes no despolarizantes en la tabla del manual, a 1 mg/min IV lenta, 1-3 mg y hasta 5 mg?',
+        opciones: ['Neostigmina', 'Pancuronio', 'Succinilcolina', 'Cisatracurio'],
+        correcta: 0,
+        explicacion: 'Neostigmina 0,5 mg/ml: 1-3 mg IV lenta, máx. 5 mg. El pancuronio y el cisatracurio son relajantes no despolarizantes y la succinilcolina es despolarizante. El sugammadex revierte rocuronio y vecuronio.',
     },
 ];

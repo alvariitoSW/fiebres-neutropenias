@@ -27,7 +27,7 @@ export const CORAZONES_LLENADO = [
   { relajacion: 1.0, rigidez: 1.0, volumen: 0, aiV0: 5 },
   { relajacion: 2.8, rigidez: 1.0, volumen: 0, aiV0: 5 },
   { relajacion: 2.8, rigidez: 1.6, volumen: 500, aiV0: 18 },
-  { relajacion: 2.8, rigidez: 2.3, volumen: 850, aiV0: 28 },
+  { relajacion: 2.8, rigidez: 2.6, volumen: 1000, aiV0: 30 },
 ];
 
 /** Parámetros del motor en el punto f (0-3) del deslizador. */

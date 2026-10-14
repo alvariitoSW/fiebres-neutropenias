@@ -29,7 +29,7 @@ export const BASE = {
   fc: 70,
   // cámaras: Ees sistólica (mmHg/mL), V0, A y B de la curva diastólica
   vi: { ees: 3.1,  v0: 10, a: 1.8, b: 0.017 },
-  vd: { ees: 0.40, v0: 25, a: 2.0, b: 0.012 },
+  vd: { ees: 0.50, v0: 25, a: 2.0, b: 0.012 },
   ai: { ees: 0.70, v0: 5,  a: 0.20, b: 0.090 },
   ad: { ees: 0.70, v0: 5,  a: 0.15, b: 0.090 },
   // tiempos de activación (s). Las sístoles escalan con √(periodo).
@@ -62,6 +62,18 @@ export const BASE = {
   // Con 0 el flujo aórtico pica a los ~40 ms con ~850 mL/s; con 0,001, a ~90 ms con ~400 mL/s (tiempo de
   // aceleración y cociente pico/media ~1,6 de un tracto de salida normal). Valor ilustrativo, calibrado a eso
   kEyec: 0.001,
+  // tracto de salida del VD: el mismo efecto de la eyección (kEyecVd) e inercia de la sangre que cruza la pulmonar
+  // (lPul, mmHg·s²/mL). Sin ellos, el flujo pulmonar picaba a los ~20 ms con ~660 mL/s; con ellos, a ~140 ms con
+  // ~320 mL/s, en una eyección de ~340 ms (tiempo de aceleración normal del TSVD >105 ms: Mukherjee 2025, en Atlas · 14).
+  // Con ellos el VD pierde algo de presión, así que su Ees sube de 0,40 a 0,50 para seguir en 20-25 mmHg (Ficha 5).
+  // Valores ilustrativos, calibrados a eso
+  kEyecVd: 0.002, lPul: 0.002,
+  // duración de la sístole del VD respecto a la del VI (1 = igual). En la sobrecarga de presión crónica el VD se
+  // contrae más tiempo que el VI (asincronía interventricular; fisiología general): su presión sigue alta cuando el VI
+  // ya se relaja y el tabique se aplana al final de la sístole. Ver Atlas · 14
+  durVd: 1,
+  // insuficiencia tricuspídea: orificio regurgitante efectivo (cm²), igual que eroaMitral. 0 = competente
+  eroaTricus: 0,
   // barorreflejo: consigna de PAM, constantes de tiempo (s) y ganancias máximas (fracción; + al bajar la PAM)
   barorreflejo: true, pamConsigna: 100, tauSensor: 2.0,
   baro: { fc: { tau: 1.5, sube: 0.9, baja: 0.35 }, r: { tau: 6, sube: 0.6, baja: 0.35 },
@@ -102,7 +114,7 @@ export function crearMotor(ajustes = {}) {
     vad: 43, vvd: 110, vai: 46, vvi: 105,
     vao: 837, vven: 3294, vap: 151, vvp: 265, reflujoAo: 0,
     pad: 0, pvd: 0, pai: 0, pvi: 0, pao: 0, pven: 0, pap: 0, pvp: 0, pperi: 0,
-    qMit: 0, qMitReg: 0, qTri: 0, qAo: 0, dpVc: 0, dpNeto: 0, qPul: 0, qSis: 0, qRet: 0, qPulm: 0, qVp: 0,
+    qMit: 0, qMitReg: 0, qTri: 0, qTriReg: 0, qAo: 0, dpVc: 0, dpNeto: 0, qPul: 0, qSis: 0, qRet: 0, qPulm: 0, qVp: 0,
     vMit: false, vTri: false, vAo: false, vPul: false,
     nLatido: 0, fase: 'G', _aoAbrio: false, _aoCerro: false, _mitAbrio: false, _pviPrev: 0,
     // barorreflejo: PAM que "siente" el seno carotídeo y efecto de cada brazo (0 = sin cambio)
@@ -136,13 +148,15 @@ export function crearMotor(ajustes = {}) {
     const eVen = activacion(tl - p.pr, p.fSubida * p.tsVen * k, (1 - p.fSubida) * p.tsVen * k, p.qSubida);
     // el VI puede relajarse más despacio que el VD (relajacion): solo se alarga la caída de su activación
     s.eVi = activacionVi(tl - p.pr, p.fSubida * p.tsVen * k, (1 - p.fSubida) * p.tsVen * k, p.qSubida, p.relajacion);
-    s.eAur = eAur; s.eVen = eVen;
+    // activación del VD: la del VI salvo que su sístole dure más (durVd)
+    const eVd = p.durVd === 1 ? eVen : activacion(tl - p.pr, p.fSubida * p.tsVen * k * p.durVd, (1 - p.fSubida) * p.tsVen * k * p.durVd, p.qSubida);
+    s.eAur = eAur; s.eVen = eVen; s.eVd = eVd;
     const vCor = s.vad + s.vvd + s.vai + s.vvi + p.liquidoPeri;
     s.pperi = p.kPeri * Math.exp((vCor - p.v0Peri) / p.phiPeri);
     // efecto de la eyección (resistencia interna del VI): mientras expulsa, la presión del VI cae una fracción
     // proporcional al flujo; redondea la onda de flujo y retrasa su pico, como en el ventrículo real
     const pviLibre = presionCamara(p.vi, s.vvi, s.eVi, 0, ef.eesVi) * (1 - p.kEyec * Math.max(0, s.qAo));
-    const pvdLibre = presionCamara(p.vd, s.vvd, eVen, 0, ef.eesVd);
+    const pvdLibre = presionCamara(p.vd, s.vvd, eVd, 0, ef.eesVd) * (1 - p.kEyecVd * Math.max(0, s.qPul));
     // tabique: cada ventrículo "siente" una fracción de la presión del otro
     s.pvi = pviLibre + p.tabique * pvdLibre + s.pperi;
     s.pvd = pvdLibre + p.tabique * pviLibre + s.pperi;
@@ -159,7 +173,11 @@ export function crearMotor(ajustes = {}) {
   function flujos(dt) {
     // válvulas: diodo por gradiente
     s.qTri = s.pad > s.pvd ? (s.pad - s.pvd) / p.rTricus : 0;
-    s.qPul = s.pvd > s.pap ? (s.pvd - s.pap) / p.rPulmonar : 0;
+    if (p.lPul > 0) {
+      // pulmonar con inercia, como la mitral: abre por gradiente y cierra cuando el flujo llega a 0
+      if (!s.vPul && s.pvd > s.pap) s.vPul = true;
+      if (s.vPul) { s.qPul += (s.pvd - s.pap - p.rPulmonar * s.qPul) / p.lPul * dt; if (s.qPul <= 0) { s.qPul = 0; s.vPul = false; } }
+    } else s.qPul = s.pvd > s.pap ? (s.pvd - s.pap) / p.rPulmonar : 0;
     if (p.lMit > 0) {
       // con inercia, la sangre que entra sigue entrando un momento aunque el gradiente ya se haya invertido (por eso la
       // onda E decelera en vez de cortarse), y la válvula cierra cuando el flujo llega a 0
@@ -169,6 +187,8 @@ export function crearMotor(ajustes = {}) {
     // reflujo VI → AI por el orificio regurgitante (raíz suavizada cerca de 0 para no romper Euler)
     const dpReg = s.pvi - s.pai;
     s.qMitReg = p.eroaMitral > 0 && dpReg > 0 ? p.eroaMitral * 50 * dpReg / Math.sqrt(dpReg + 0.25) : 0;
+    const dpTri = s.pvd - s.pad;
+    s.qTriReg = p.eroaTricus > 0 && dpTri > 0 ? p.eroaTricus * 50 * dpTri / Math.sqrt(dpTri + 0.25) : 0;
     // aórtica: abre por gradiente; abierta, el flujo tiene inercia y puede invertirse un instante;
     // cierra cuando el reflujo acumulado llega al volumen de cierre
     if (!s.vAo) { if (s.pvi > s.paoDist) { s.vAo = true; s.reflujoAo = 0; } }
@@ -207,8 +227,8 @@ export function crearMotor(ajustes = {}) {
     barorreflejo(dt);
     presiones();
     flujos(dt);       // el flujo aórtico (con inercia) se actualiza antes que los volúmenes: Euler semiimplícito
-    s.vad += (s.qRet - s.qTri) * dt;
-    s.vvd += (s.qTri - s.qPul) * dt;
+    s.vad += (s.qRet - s.qTri + s.qTriReg) * dt;
+    s.vvd += (s.qTri - s.qPul - s.qTriReg) * dt;
     s.vap += (s.qPul - s.qPulm) * dt;
     s.vvp += (s.qPulm - s.qVp) * dt;
     s.vai += (s.qVp - s.qMit + s.qMitReg) * dt;
@@ -249,14 +269,14 @@ export function crearMotor(ajustes = {}) {
     return {
       t: +s.tLatido.toFixed(4), pvi: s.pvi, pai: s.pai, pao: s.pao, vvi: s.vvi,
       pvd: s.pvd, pad: s.pad, pap: s.pap, vvd: s.vvd, vai: s.vai, vad: s.vad,
-      qAo: s.qAo, dpVc: s.dpVc, qMit: s.qMit, qMitReg: s.qMitReg, qPul: s.qPul, qTri: s.qTri, pven: s.pven, pvp: s.pvp,
-      pperi: s.pperi, eVen: s.eVen, eVi: s.eVi, eAur: s.eAur, fase: s.fase, qVp: s.qVp,
+      qAo: s.qAo, dpVc: s.dpVc, qMit: s.qMit, qMitReg: s.qMitReg, qPul: s.qPul, qTri: s.qTri, qTriReg: s.qTriReg, pven: s.pven, pvp: s.pvp,
+      pperi: s.pperi, eVen: s.eVen, eVd: s.eVd, eVi: s.eVi, eAur: s.eAur, fase: s.fase, qVp: s.qVp,
       vMit: s.vMit, vAo: s.vAo, vTri: s.vTri, vPul: s.vPul,
     };
   }
 
   function nuevoAcum() {
-    return { dt: 0, pao: 0, pad: 0, pai: 0, pap: 0, pven: 0, pvp: 0, qAo: 0, qPul: 0, qReg: 0,
+    return { dt: 0, pao: 0, pad: 0, pai: 0, pap: 0, pven: 0, pvp: 0, qAo: 0, qPul: 0, qReg: 0, qRegT: 0,
       paoMax: -1, paoMin: 1e9, papMax: -1, papMin: 1e9, pviMax: -1, pvdMax: -1,
       vviMax: -1, vviMin: 1e9, vvdMax: -1, vvdMin: 1e9, padMax: -1, paiMax: -1,
       pviEnMitralCierre: null, ultimoMit: false, ultimoAo: false, ultimoPul: false, ultimoTri: false,
@@ -266,7 +286,7 @@ export function crearMotor(ajustes = {}) {
   function acumular(dt) {
     const a = acum;
     a.dt += dt; a.pao += s.pao * dt; a.pad += s.pad * dt; a.pai += s.pai * dt; a.pap += s.pap * dt;
-    a.pven += s.pven * dt; a.pvp += s.pvp * dt; a.qAo += s.qAo * dt; a.qReg += s.qMitReg * dt; a.qPul += s.qPul * dt; a.pperi += s.pperi * dt;
+    a.pven += s.pven * dt; a.pvp += s.pvp * dt; a.qAo += s.qAo * dt; a.qReg += s.qMitReg * dt; a.qRegT += s.qTriReg * dt; a.qPul += s.qPul * dt; a.pperi += s.pperi * dt;
     a.paoMax = Math.max(a.paoMax, s.pao); a.paoMin = Math.min(a.paoMin, s.pao);
     a.papMax = Math.max(a.papMax, s.pap); a.papMin = Math.min(a.papMin, s.pap);
     a.pviMax = Math.max(a.pviMax, s.pvi); a.pvdMax = Math.max(a.pvdMax, s.pvd);
@@ -299,6 +319,8 @@ export function crearMotor(ajustes = {}) {
       // total cuenta lo que sale por las dos vías (sin insuficiencia, ≈ fe)
       vReg: a.qReg, fr: a.qReg / Math.max(1e-6, a.qReg + vs), feTotal: (a.vviMax - a.vviMin) / a.vviMax,
       edvD: a.vvdMax, esvD: a.vvdMin, vsD, feD: vsD / a.vvdMax,
+      // insuficiencia tricuspídea: volumen y fracción regurgitantes (vsD es el anterógrado, por la pulmonar)
+      vRegT: a.qRegT, frT: a.qRegT / Math.max(1e-6, a.qRegT + vsD),
       ptdvi: a.pviEnMitralCierre,       // presión al cerrar la mitral ≈ PTDVI
       gc, ic: gc / p.sc,
       rvs: (a.pao / T - a.pad / T) / gc * 80,     // dyn·s·cm⁻⁵
