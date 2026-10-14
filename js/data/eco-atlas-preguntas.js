@@ -13,6 +13,7 @@ export const temasAtlasEco = [
     { key: 'atlas-eject', etiqueta: '09 Función sistólica' },
     { key: 'atlas-fill', etiqueta: '10 Función diastólica' },
     { key: 'atlas-rv', etiqueta: '14 Ventrículo derecho' },
+    { key: 'atlas-mr', etiqueta: '18 Insuficiencia mitral' },
 ];
 
 export const preguntasAtlasEco = [
@@ -172,4 +173,27 @@ export const preguntasAtlasEco = [
         explicacion: 'Con un orificio regurgitante grande, la AD recibe el chorro y su presión sube durante la sístole, así que la diferencia VD-AD (y la velocidad) es pequeña: la PSVD por la IT puede infraestimarse (Mukherjee 2025).' },
     { id: 'eat-q052', tema: 'atlas-rv', tipo: 'redactar', enunciado: 'Explica por qué el tabique se aplana en telesístole en la sobrecarga de presión del VD y solo en telediástole en la de volumen.',
         respuestaModelo: 'La forma del tabique depende del gradiente de presión entre los dos ventrículos. En la sobrecarga de presión, el VD genera una presión alta y su sístole se prolonga: al final de la sístole, cuando el VI ya se relaja, la presión del VD lo supera y el tabique se aplana o se desplaza hacia el VI. En la sobrecarga de volumen la presión sistólica del VD es casi normal, así que en sístole el VI domina y el tabique es redondo; pero al final de la diástole el VD lleno (y más rígido) llega a superar la presión del VI, y el tabique se aplana entonces. Con presión y volumen a la vez, se aplana en los dos tiempos.' },
+    // 18 Insuficiencia mitral
+    { id: 'eat-q053', tema: 'atlas-mr', enunciado: 'A un flujo regurgitante constante, la velocidad de aliasing se baja de 40 a 30 cm/s. ¿Cómo cambian el radio PISA y el EROA?',
+        opciones: ['El radio aumenta; el EROA no cambia', 'El radio disminuye', 'El radio aumenta; el EROA aumenta'], correcta: 0,
+        explicacion: 'El flujo, 2πr² × Va, es constante, así que r² aumenta cuando Va disminuye; el EROA, flujo ÷ velocidad pico, no cambia.' },
+    { id: 'eat-q054', tema: 'atlas-mr', enunciado: 'En una insuficiencia mitral, el EROA es 0,45 cm² y el volumen regurgitante 68 mL. ¿Cuál es el grado?',
+        opciones: ['Moderada', 'Grave', 'Leve'], correcta: 1,
+        explicacion: 'Un EROA ≥0,40 cm² y un volumen regurgitante ≥60 mL cumplen los criterios de insuficiencia grave.' },
+    { id: 'eat-q055', tema: 'atlas-mr', enunciado: 'Un paciente con IM primaria grave no tiene síntomas, una FEVI del 58% y un diámetro telesistólico del VI de 36 mm. ¿Cuál es el estadio ACC/AHA?',
+        opciones: ['C1', 'C2', 'D'], correcta: 1,
+        explicacion: 'El estadio C2 se define por una FEVI ≤60% o un diámetro telesistólico del VI ≥40 mm. Una FEVI del 58% basta por sí sola.' },
+    { id: 'eat-q056', tema: 'atlas-mr', enunciado: 'En la figura, con un EROA de 0,60 cm², la IM es grave y el VI está dilatado. ¿Qué cumple para el estadio C2 de la ACC/AHA?',
+        opciones: ['Basta uno de los dos: DTSVI ≥40 mm o FEVI ≤60%', 'Hace falta que cumpla a la vez una FEVI ≤60% y un DTSVI ≥40 mm', 'Hace falta que el EROA llegue a 0,70 cm²'], correcta: 0,
+        explicacion: 'La disfunción del VI se define por una FEVI ≤60% o por un diámetro telesistólico del VI ≥40 mm (Otto 2020): con uno basta. En la figura, el DTSVI llega a 40 mm con la FEVI aún por encima del 60%.' },
+    { id: 'eat-q057', tema: 'atlas-mr', tipo: 'redactar', enunciado: 'Según el capítulo, ¿para qué sirve el área del jet en color en la insuficiencia mitral y qué se mide en su lugar para graduar la gravedad?',
+        respuestaModelo: 'El área del jet en color sirve para descartar una IM, pero no es fiable para graduar su gravedad; para evaluar los jets regurgitantes, la escala de color debe ajustarse a 50-70 cm/s. Para graduar se usa la PISA: a la velocidad de aliasing (Va), la superficie isovelocidad es un hemisferio de radio r y el flujo es 2πr² × Va. Dividido por la velocidad pico de la IM da el EROA, y el EROA por el VTI del jet da el volumen regurgitante, que son las medidas con cortes de gravedad (≥0,40 cm² y ≥60 mL). Con una Va de 30-40 cm/s, un radio ≥1,0 cm es específico de IM grave. Como el radio se eleva al cuadrado, un error pequeño de medida se amplifica (errores del 10 al 25% son frecuentes).' },
+    { id: 'eat-q058', tema: 'atlas-mr', tipo: 'redactar', enunciado: 'Describe cómo cambian el VI y la AI en una insuficiencia mitral crónica, cuándo aparece la disfunción sistólica del VI y qué criterios la definen en la IM grave.',
+        respuestaModelo: 'Durante la sístole, parte del volumen sistólico del VI refluye a la AI a través de la válvula mitral incompetente. El VI y la AI se dilatan para acomodar el volumen adicional, y la disfunción sistólica del VI aparece tarde en la evolución. En la IM grave, la ACC/AHA define la disfunción del VI (estadio C2) por una FEVI ≤60% o un diámetro telesistólico del VI ≥40 mm; el estadio C1 tiene una FEVI >60% y un diámetro telesistólico <40 mm. En la figura, al subir el EROA suben el volumen y la fracción regurgitantes y el VI y la AI se dilatan; la FEVI sube al principio, porque parte del volumen sale a la AI, y baja después, cuando la contractilidad del modelo cae (ilustrativo); con el orificio muy grande, el DTSVI supera los 40 mm.' },
+    { id: 'eat-q059', tema: 'atlas-mr', enunciado: 'En la IM, ¿qué significa que la inversión del flujo sistólico en las venas pulmonares sea específica de insuficiencia grave pero no sensible?',
+        opciones: ['Si está invertido apoya una IM grave, pero que no lo esté no la descarta', 'Si no está invertido, la IM es leve', 'Está invertido en casi todas las IM graves y también en las leves'], correcta: 0,
+        explicacion: 'La inversión sistólica apoya el grado grave cuando aparece (específica), pero falta en muchas IM graves (poco sensible), así que su ausencia no excluye la gravedad (Zoghbi 2017).' },
+    { id: 'eat-q060', tema: 'atlas-mr', enunciado: 'En el método PISA, ¿por qué un error pequeño al medir el radio produce un error mayor en el EROA?',
+        opciones: ['Porque el radio se eleva al cuadrado en la ecuación del flujo', 'Porque el EROA se calcula dividiendo el flujo por el radio', 'Porque la velocidad de aliasing cambia con el radio'], correcta: 0,
+        explicacion: 'El flujo es 2πr² × Va: el error del radio se duplica en el flujo, y de ahí pasa al EROA. Por eso los errores del 10 al 25% son frecuentes, incluso entre expertos (Zoghbi 2017).' },
 ];

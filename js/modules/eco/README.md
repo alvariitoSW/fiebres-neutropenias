@@ -481,9 +481,10 @@ los que ya están en la app se abren aquí, los demás siguen enlazando al origi
   | `sistolica.mjs` | Figura del 09 Función sistólica (biplano de discos sobre la geometría) |
   | `diastolica.mjs` | Figura del 10 Función diastólica (corazones del motor y algoritmo ASE 2025) |
   | `vd.mjs` | Figura del 14 Ventrículo derecho (sobrecarga de presión, de volumen y TEP agudo) |
+  | `insuficiencia-mitral.mjs` | Figura del 18 Insuficiencia mitral (orificio regurgitante del motor, remodelado crónico, PISA y grados de la ASE) |
 
   Cada figura exporta `montar(contenedor)` → `{ parar() }`. La lógica pura (`fisica`, `frecuenciaImagen`, `doppler`,
-  `duraciones`, `asentar`, `medidasAsa`, `motorFlujo`, `analizarFlujo`, `estimarPad`, `analizarDerechas`, `medirSistolica`, `trazarVi`, `volumenBiplano`, `motorLlenado`, `medirLlenado`, `algoritmoAse`, `ajustesVd`, `motorVd`, `medirVd`, `indiceExcentricidad`, `patronSepto`, `signosTep`) se exporta y la prueba `pruebas/atlas.test.mjs`.
+  `duraciones`, `asentar`, `medidasAsa`, `motorFlujo`, `analizarFlujo`, `estimarPad`, `analizarDerechas`, `medirSistolica`, `trazarVi`, `volumenBiplano`, `motorLlenado`, `medirLlenado`, `algoritmoAse`, `ajustesVd`, `motorVd`, `medirVd`, `indiceExcentricidad`, `patronSepto`, `signosTep`, `pisa`, `eroaDeRadio`, `grado`, `gradoCuantitativo`, `criterios`, `resultado`, `ajustesMr`, `motorMr`, `chorro`, `medirMr`) se exporta y la prueba `pruebas/atlas.test.mjs`.
 - **Capítulos en la app.**
   - **01 Pulso.** La línea paraesternal atraviesa el corazón del simulador en telediástole: tabique 9,5 mm, VI 53 mm.
     Muestra el modo A, un zoom de la resolución axial con dos reflectores a 0,4 mm, la TGC y la profundidad útil.
@@ -532,15 +533,27 @@ los que ya están en la app se abren aquí, los demás siguen enlazando al origi
     en las dos) sale de la geometría, no se escribe. Normal: VD 3,0 cm, FAC 47%, TAPSE 21, IE 1,00, AcT 142 ms;
     presión 0,75: pared 8,9 mm, IT 3,9 m/s, AcT 78 ms, aplanado en los dos tiempos; volumen 1: VD 4,1 cm, IT 1 m/s,
     aplanado solo en diástole; TEP 1: VD/VI 1,05, TAPSE 5 mm. Nota de fuentes con FATE, la Ficha 11 y Merino.
+  - **18 Insuficiencia mitral.** Un deslizador del EROA (0-0,70 cm², pasos de 0,05) mueve el `eroaMitral` del motor,
+    con el remodelado crónico del VI y de la AI (`ajustesMr`, ilustrativo: +150 mL de volemia, V0 y curva diastólica
+    más blandos, Ees −20% y otro −20% desde ~0,4 cm²; sin tocar la resistencia sistémica). Es un paciente posible en
+    todo el recorrido (prueba: IC ≥2,2, SvO₂ ≥65%, PCP ≤22, PAS ≥95, pico ≥4,0 m/s): con 0,70 cm², IC 2,3, SvO₂ 66%,
+    PCP 17, PAS 108, FEVI 65% y DTSVI 45 mm (C2 por el DTSVI); la FEVI sube hasta ~74% (0,40) y baja. Del motor salen
+    VReg, FR, el chorro (su velocidad es el flujo del orificio ÷ EROA: EROA × VTI = VReg), la onda v, el IVAI, la FEVI
+    total y el GC · IC; los diámetros, de `medidasCorazon`; el radio PISA, de `pisa` (Va 32 cm/s). VReg + VS supera a
+    VTD − VTS hasta ~5%: el orificio regurgitante coincide con el llenado por inercia (nota del capítulo). Grados:
+    cortes de Zoghbi 2017 y el intermedio de los tres (regla del original). Criterios calculables: 3 de 6 por conjunto
+    (más la valva flácida), así que decide el cuantitativo; C1/C2 con FEVI ≤60% o DTSVI ≥40 mm. Enlaces: ficha de IC de
+    la ESC 2026 (9.3) y el asa del 07, que usa otro remodelado (sin barorreflejo). Cuatro notas plegables: cifras del
+    original que Zoghbi no da, incoherencias del original, IM secundaria (ASE frente a EACVI) y cómo hace la figura el motor.
 - **Navegación.**
   - `data-eco-atlas="clave"`, junto a `data-especialidad="eco"`, abre un capítulo desde cualquier ficha. Hoy hay
     accesos en Fisiopatología UCI · Cardiología, Fichas 1 y 3. La subcostal VCI y la medida de la VCI llevan al 08.
   - En «Qué mirar» del simulador, los capítulos que ya están en la app se abren aquí.
   - `[data-at-sim="M"|"D"]` dentro de un capítulo lleva al simulador en ese modo.
   - «Repasar este capítulo» usa `data-quiz-tema`, un atributo nuevo y genérico de `quiz.js`.
-  - Banco: `js/data/eco-atlas-preguntas.js`, 52 preguntas, asignatura Eco cardíaca.
-- **Siguiente, por orden.** Las válvulas, empezando por la IM (el motor ya la
-  tiene); pericardio. Las vistas (04) y la ETE (05) chocan con la anatomía congelada y la sonda libre ya existe, así
+  - Banco: `js/data/eco-atlas-preguntas.js`, 58 preguntas, asignatura Eco cardíaca.
+- **Siguiente, por orden.** Las demás válvulas (la IM ya está; el motor ya tiene la
+  estenosis aórtica y la IT); pericardio. Las vistas (04) y la ETE (05) chocan con la anatomía congelada y la sonda libre ya existe, así
   que van al final. Los capítulos de enfermedad necesitan la forma de enfermedad correspondiente en el corazón.
 
 ## Rendimiento medido
@@ -602,4 +615,4 @@ licencia CC BY-SA 4.0 (el resto del simulador no). La cita también se muestra e
   sonda en otro sitio de la piel); la supraesternal no tiene troncos supraaórticos ni Doppler del arco (el motor no
   da flujo más allá de la raíz).
 - Ecografía en un *worker* si en el móvil baja de fps.
-- **Atlas de ecocardiografía**: quedan 21 capítulos por pasar a la app (9 de 30 ya están) (ver «Atlas de ecocardiografía»).
+- **Atlas de ecocardiografía**: quedan 20 capítulos por pasar a la app (10 de 30 ya están) (ver «Atlas de ecocardiografía»).

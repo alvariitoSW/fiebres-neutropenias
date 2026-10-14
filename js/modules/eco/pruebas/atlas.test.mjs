@@ -13,6 +13,7 @@ import { modeloVci } from '../abdomen.mjs';
 import { motorLlenado, medirLlenado, algoritmoAse } from '../atlas/diastolica.mjs';
 import { motorSistolico, medirSistolica, bandaFe } from '../atlas/sistolica.mjs';
 import { motorVd, medirVd } from '../atlas/vd.mjs';
+import { pisa, eroaDeRadio, grado, gradoCuantitativo, resultado, criterios, motorMr, medirMr, disfuncionVi } from '../atlas/insuficiencia-mitral.mjs';
 import { REFERENCIAS } from '../atlas/referencias.js';
 import { CAPITULOS } from '../atlas/atlas.js';
 import { readFileSync } from 'node:fs';
@@ -189,4 +190,93 @@ test('14 VD: normal, sobrecarga de presión, de volumen y TEP agudo van en el se
   const t = medirVd(motorVd('tep', 1));
   assert.ok(t.pared < 5 && t.vTr < 3.8 && t.gradTr < 60 && t.ratio >= 1 && t.tapse < 16 && t.dVd > 4, JSON.stringify([t.pared, t.vTr, t.gradTr, t.ratio, t.tapse, t.dVd]));
   assert.ok(t.eiD > 1.1, 'tabique aplanado en el TEP');
+});
+
+// 18 Insuficiencia mitral: el ejemplo del texto con la función que usa la figura, los cortes de los grados, y el motor
+// (orificio y remodelado crónico) en el sentido del texto
+test('18 IM: el ejemplo del texto (EROA 0,40, 5,0 m/s, Va 32 → r 1,00 cm, 200 mL/s, VReg 60 mL) y el segundo (0,10 → 0,50 cm)', () => {
+  const e = pisa({ eroa: 0.40, vmax: 5.0, va: 32, vti: 150 });
+  assert.ok(cerca(e.flujo, 200, 1e-9), `flujo ${e.flujo}`);
+  assert.ok(cerca(e.r, 1.00, 0.005), `radio ${e.r}`);
+  assert.ok(cerca(e.vReg, 60, 1e-9), `VReg ${e.vReg}`);
+  const d = pisa({ eroa: 0.10, vmax: 5.0, va: 32 });
+  assert.ok(cerca(d.flujo, 50, 1e-9) && cerca(d.r, 0.50, 0.005) && d.r > 0.3, `EROA 0,10: ${d.flujo} ${d.r}`);
+  // la pregunta del quiz: a flujo constante, bajar la Va de 40 a 30 cm/s aumenta el radio y no cambia el EROA
+  const flujo = 200, r40 = Math.sqrt(flujo / (2 * Math.PI * 40)), r30 = Math.sqrt(flujo / (2 * Math.PI * 30));
+  assert.ok(r30 > r40 && cerca(eroaDeRadio(r30, 5, 30), eroaDeRadio(r40, 5, 40), 1e-9));
+  assert.ok(cerca(eroaDeRadio(1.0, 5.0, 32), 0.402, 0.001), 'la inversa');
+});
+
+test('18 IM: los grados caen en los cortes de la ASE 2017 y el intermedio de los tres decide', () => {
+  assert.deepEqual([0.19, 0.20, 0.29, 0.30, 0.39, 0.40].map(x => grado('eroa', x)), [1, 2, 2, 3, 3, 4]);
+  assert.deepEqual([29, 30, 44, 45, 59, 60].map(x => grado('vreg', x)), [1, 2, 2, 3, 3, 4]);
+  assert.deepEqual([29, 30, 39, 40, 49, 50].map(x => grado('freg', x)), [1, 2, 2, 3, 3, 4]);
+  assert.equal(gradoCuantitativo(4, 2, 3), 3);       // medidas discordantes: el grado intermedio (regla del sitio)
+  assert.equal(gradoCuantitativo(1, 1, 4), 1);
+  const base = { eroa: 0.45, vReg: 68, fr: 55, fevi: 70, dtd: 56, dts: 34, ivai: 38, r: 1.05 };    // el quiz: EROA 0,45 y VReg 68
+  assert.equal(resultado(base).tipo, 'grave');
+  assert.equal(resultado({ ...base, eroa: 0.15, vReg: 20, fr: 20, r: 0.4 }).tipo, 'leve');
+  assert.equal(resultado({ ...base, eroa: 0.25, vReg: 35, fr: 35, r: 0.7 }).tipo, 'moderada');
+  assert.equal(resultado({ ...base, eroa: 0, vReg: 0, fr: 0, r: 0 }).tipo, 'ninguna');
+  // el grado III es moderado, salvo con 3 criterios específicos de IM grave (valva flácida, radio ≥1,0 cm, VI grande con FEVI normal)
+  const tres = { eroa: 0.35, vReg: 50, fr: 45, fevi: 65, dtd: 60, dts: 38, ivai: 40, r: 1.1 };
+  assert.equal(resultado({ ...tres, r: 0.9 }, true).tipo, 'moderada');
+  assert.equal(criterios(tres, true).nGraves, 3);
+  assert.equal(resultado(tres, true).tipo, 'grave');
+  assert.equal(resultado(tres, false).tipo, 'moderada');
+  // estadio ACC/AHA: FEVI ≤60% o DTSVI ≥40 mm → C2 (el quiz: FEVI 58% con DTSVI 36 mm)
+  assert.ok(disfuncionVi(58, 36) && disfuncionVi(65, 40) && !disfuncionVi(61, 39));
+  assert.equal(resultado({ ...base, fevi: 58, dts: 36 }).estadio, 'C2');
+  assert.equal(resultado({ ...base, fevi: 62, dts: 36 }).estadio, 'C1');
+  assert.equal(resultado({ ...base, eroa: 0.25, vReg: 35, fr: 35, r: 0.7, fevi: 50 }).estadio, null);
+});
+
+test('18 IM: al subir el EROA suben el volumen y la fracción regurgitantes; el VI y la AI se dilatan y la FEVI sube y acaba bajando', () => {
+  const med = [0, 0.1, 0.3, 0.4, 0.5, 0.6, 0.65, 0.7].map(e => medirMr(motorMr(e)));
+  const [m0, m1, m3, m4, m5, m6, m65, m70] = med;
+  assert.equal(m0.vReg, 0);
+  assert.ok(m1.vReg > 5 && m3.vReg > m1.vReg + 15 && m5.vReg > m3.vReg + 10, `VReg ${med.map(x => x.vReg.toFixed(0))}`);
+  assert.ok(m1.fr > 10 && m3.fr > m1.fr + 15 && m5.fr > m3.fr + 8, `FR ${med.map(x => x.fr.toFixed(0))}`);
+  // el volumen regurgitante es EROA × VTI del chorro del motor (la ecuación del capítulo): la misma cifra, no dos
+  for (const x of med.slice(1)) assert.ok(cerca(x.vReg, x.eroa * x.vti, x.vReg * 0.005), `VReg ${x.vReg} frente a EROA × VTI ${x.eroa * x.vti}`);
+  // la velocidad del chorro sale de la diferencia de presión VI-AI: ~4-5 m/s (gradiente ~60-100 mmHg) con orificio pequeño
+  assert.ok(m3.vmax > 4 && m3.vmax < 5.5 && cerca(m3.vmax, Math.sqrt(m3.dpMax / 4), 1e-9), `v ${m3.vmax}`);
+  // con 0,40 cm² el motor da un IM grave por los tres cortes (el texto: EROA ≥0,40, VReg ≥60, FReg ≥50)
+  assert.ok(m4.vReg >= 60 && m4.fr >= 50, `0,40: VReg ${m4.vReg} FR ${m4.fr}`);
+  assert.equal(resultado(m4).tipo, 'grave');
+  // remodelado: el VI y la AI se dilatan; la FEVI sube al principio (el volumen sale a la AI, sin pasar del techo
+  // fisiológico de la IM compensada, ~75%) y después baja: la contractilidad cae
+  assert.ok(m5.vtd > m0.vtd + 25 && m5.dtd > m0.dtd + 3 && m5.ivai > m0.ivai + 8, `VTD ${m0.vtd}→${m5.vtd} DTD ${m0.dtd}→${m5.dtd} IVAI ${m0.ivai}→${m5.ivai}`);
+  assert.ok(m3.fevi > m0.fevi + 5 && m3.fevi <= 75 && m4.fevi <= 75, `FEVI ${m0.fevi} → ${m3.fevi} → ${m4.fevi}`);
+  assert.ok(m70.fevi < m4.fevi - 5, `FEVI ${m4.fevi} → ${m70.fevi}`);
+  // al final del recorrido, C2 (FEVI ≤60% o DTSVI ≥40 mm) y las cifras son monótonas desde 0,50
+  assert.ok(m70.fevi <= 60 || m70.dts >= 40, `0,70: FEVI ${m70.fevi}, DTSVI ${m70.dts}`);
+  assert.ok(m5.fevi > m6.fevi && m6.fevi > m65.fevi && m65.fevi > m70.fevi, `FEVI ${m5.fevi} ${m6.fevi} ${m65.fevi} ${m70.fevi}`);
+  assert.ok(m6.dts > m5.dts && m65.dts > m6.dts && m70.dts > m65.dts, `DTSVI ${m5.dts} ${m6.dts} ${m65.dts} ${m70.dts}`);
+  assert.ok(m6.vmax < m5.vmax && m65.vmax < m6.vmax && m70.vmax < m65.vmax && m70.r > m65.r && m65.r > m6.r, 'pico en bajada y radio PISA en subida');
+  // estadios: grave sin disfunción (C1) con 0,50 cm² y con disfunción (C2) con 0,60, 0,65 y 0,70
+  assert.equal(resultado(m5).estadio, 'C1');
+  assert.equal(resultado(m6).estadio, 'C2');
+  assert.equal(resultado(m65).estadio, 'C2');
+  assert.equal(resultado(m70).estadio, 'C2');
+  assert.equal(resultado(m70).texto, 'Insuficiencia mitral grave con disfunción del VI');
+  // sin orificio, el corazón es el normal de siempre (el motor no cambia con 0)
+  assert.ok(m0.fevi > 55 && m0.fevi < 66 && m0.dtd < 58 && m0.ivai <= 34, JSON.stringify([m0.fevi, m0.dtd, m0.ivai]));
+});
+
+test('18 IM: en todo el recorrido del mando es un paciente posible (gasto conservado, sin shock, sin edema pulmonar)', () => {
+  // la figura no puede mostrar un estado que el texto no describe: con el orificio grande el barorreflejo sostiene la PAS,
+  // pero el gasto, la saturación venosa y la presión de enclavamiento cuentan si el paciente está en shock cardiogénico
+  for (let e = 0; e <= 0.7 + 1e-9; e += 0.05) {
+    const m = motorMr(e), x = medirMr(m), u = m.ultimo;
+    const t = `EROA ${e.toFixed(2)}: PAS ${x.pas.toFixed(0)} FC ${x.fc.toFixed(0)} IC ${x.ic.toFixed(2)} PCP ${x.pcp.toFixed(0)} PTDVI ${x.ptd.toFixed(0)} SvO2 ${x.svo2.toFixed(0)} pico ${x.vmax.toFixed(2)}`;
+    assert.ok(x.ic >= 2.2 && x.svo2 >= 65 && x.pcp <= 22 && x.ptd <= 25 && x.pas >= 95 && x.fc >= 60 && x.fc <= 100, t);
+    assert.ok(cerca(x.gc, x.ic * m.p.sc, 1e-9) && cerca(u.gc, x.gc, 1e-9), 'GC e IC de la misma medida');
+    if (e > 0) assert.ok(x.vmax >= 4.0, t);
+    // la resistencia sistémica no se hunde ni se duplica (el barorreflejo la sube algo)
+    assert.ok(u.rvs > 1000 && u.rvs < 1900, `RVS ${u.rvs} · ${t}`);
+    // el flujo regurgitante que coincide con el llenado (la válvula se abre y se cierra por inercia) cuenta en el VReg pero
+    // no está entre el VTD y el VTS: VReg + VS supera a VTD − VTS, pero como mucho un 6%
+    assert.ok((x.vReg + x.vsAorta) / (x.vtd - x.vts) < 1.06, `VReg + VS frente a VTD − VTS: ${t}`);
+  }
 });

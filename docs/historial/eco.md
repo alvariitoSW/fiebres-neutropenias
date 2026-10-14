@@ -246,9 +246,9 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
   fisiología»). Detalle en `js/modules/eco/README.md` («Atlas de ecocardiografía»).
   - Eco cardíaca tiene ahora dos secciones: **Simulador** y **Atlas**.
   - El atlas es *The Heart by Ultrasound* en español, con su índice de 30 capítulos. Los que ya están en la app se
-    abren dentro (hoy 9: 01 Pulso, 02 Imagen, 03 Doppler, 06 Ciclo cardíaco, 07 Asa P-V, 08 Hemodinámica por
-    Doppler, 09 Función sistólica, 10 Función diastólica y 14 Ventrículo derecho); los demás enlazan al original en
-    inglés.
+    abren dentro (hoy 10: 01 Pulso, 02 Imagen, 03 Doppler, 06 Ciclo cardíaco, 07 Asa P-V, 08 Hemodinámica por
+    Doppler, 09 Función sistólica, 10 Función diastólica, 14 Ventrículo derecho y 18 Insuficiencia mitral); los demás
+    enlazan al original en inglés.
   - El texto se traduce, con permiso del autor, y la bibliografía es la suya (`atlas/referencias.js`). **El código no
     se copia**: cada figura se reconstruye sobre los motores de la app.
   - Hay **una sola fisiología**: el ciclo y el asa salen del motor del latido del simulador. Donde el texto y el motor
@@ -310,6 +310,13 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
     excentricidad (aplanado >1,1), Doppler continuo de la IT y pulsado del TSVD, bandas de Mukherjee 2025 y, en el TEP,
     signos de la ESC 2019. El patrón del tabique (aplanado en diástole, en sístole o en ambas) sale de la geometría.
     Nota de fuentes con FATE, la Ficha 11 y Merino; accesos al TAPSE y al TEP del simulador.
+  - **18 Insuficiencia mitral** (`cap-mr.html` + `insuficiencia-mitral.mjs`): deslizador del EROA (0-0,70 cm²) sobre
+    `eroaMitral` del motor, con remodelado crónico ilustrativo (`ajustesMr`), PISA y los grados de Zoghbi 2017. Regla
+    del plan socialista («un simulador es un paciente posible en todo el recorrido»): una primera versión dejaba
+    EROA 0,65-0,70 en shock cardiogénico normotenso (IC 1,6, SvO₂ 50%, PCP 27) escondido por el barorreflejo; se
+    corrigió el origen (curva diastólica del VI más blanda, AI más distensible, fallo suave, sin subir la resistencia
+    sistémica) y la prueba exige en todo el recorrido IC ≥2,2, SvO₂ ≥65%, PCP ≤22, PAS ≥95. La figura muestra GC · IC.
+    Detalle en `js/modules/eco/README.md`.
   - **Archivos**: `js/modules/eco/atlas/`; preguntas en `js/data/eco-atlas-preguntas.js` (52, asignatura Eco
     cardíaca).
   - **Accesos**: `data-eco-atlas="clave"` junto a `data-especialidad="eco"`. Por ejemplo, desde Fisiopatología UCI ·
