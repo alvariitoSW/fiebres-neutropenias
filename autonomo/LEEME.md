@@ -1,0 +1,58 @@
+# Trabajo autónomo: guía para el usuario
+
+Esta carpeta monta un equipo de agentes que mejora la app en bucle. No hace falta saber programar para usarlo:
+basta con saber qué pedir y revisar lo que entrega.
+
+## Las piezas, en una frase cada una
+
+| Pieza | Dónde está | Qué es |
+|---|---|---|
+| **El director** | `.claude/skills/mejora/SKILL.md` | El manual de instrucciones del modelo superior. Se activa al escribir `/mejora`. No escribe contenido: elige la tarea, reparte el trabajo, juzga y decide. |
+| **Los 5 trabajadores** | `.claude/agents/*.md` | Agentes más baratos, cada uno con un solo papel: lector de fuente, constructor, verificador, auditor ciego y revisor. |
+| **Las reglas** | `autonomo/REGLAS.md` | Lo que nadie del equipo puede saltarse (no inventar, fidelidad a la fuente, móvil de 390 px…). Es corto a propósito: los agentes lo leen en cada vuelta. |
+| **El tablero** | `autonomo/TABLERO.md` | El objetivo, la lista de tareas en orden y qué significa «hecho». Es la memoria del equipo. **Es lo que tú editas.** |
+| **La bitácora** | `autonomo/BITACORA.md` | Lo que pasó en cada sesión: qué se hizo, qué falló y por qué. La escribe el director. |
+
+## Cómo se usa
+
+1. **Elige el modelo del director.** Al empezar una sesión de Claude Code, escribe `/model` y elige Opus (o Fable
+   si lo tienes). Los trabajadores ya tienen su modelo fijado en su archivo.
+2. **Lánzalo:**
+   - `/mejora`: coge la siguiente tarea pendiente del tablero.
+   - `/mejora mr`: hace una tarea concreta (aquí, el capítulo 18 del atlas, «Insuficiencia mitral»).
+   - `/mejora auditar`: no construye nada; repasa una tarea ya hecha y te dice qué encuentra.
+3. **Mira cómo trabaja.** El director te va contando en qué vuelta está. Puedes interrumpirle cuando quieras con un
+   mensaje: «para», «sáltate esa», «explícame por qué».
+4. **Revisa la propuesta.** Al terminar, el director deja una rama `auto/<tarea>` y una propuesta de cambio (PR) en
+   GitHub, en borrador. Desde el móvil, en GitHub: lees el resumen, miras las capturas y la apruebas (*merge*) o
+   escribes qué cambiar. **Nada llega a la app publicada sin que tú lo apruebes.**
+
+## Cómo darle órdenes sin escribir código
+
+Todo se controla editando el tablero (`autonomo/TABLERO.md`), que es texto normal:
+
+- **Cambiar el orden**: mueve las líneas de la lista.
+- **Saltarse una tarea**: cambia su estado a `aparcada` y escribe por qué.
+- **Dar contexto**: añade una línea `Nota del usuario:` debajo de la tarea («el PDF de X está en docs/…»,
+  «prioriza el Doppler», «esta figura no me gusta así»).
+- **Cambiar el límite**: la línea «Límite por sesión» del principio.
+
+También puedes decírselo al director en el chat; él actualiza el tablero.
+
+## Los tres niveles de autonomía
+
+1. **Supervisado (ahora).** Tú lanzas `/mejora` y miras. Así aprendes cómo trabaja y ajustamos las reglas.
+2. **En bucle.** `/loop /mejora`: repite tareas hasta llegar al límite del tablero. Úsalo cuando el nivel 1 te
+   convenza.
+3. **Solo, cada noche.** Una rutina programada abre una sesión en la nube cada noche, ejecuta `/mejora` y te deja la
+   propuesta para revisar por la mañana. Se monta cuando los niveles 1 y 2 funcionen bien.
+
+## Qué esperar (y qué no)
+
+- **Va más lento que una conversación normal**, porque cada cosa la hacen y la revisan varios. Un capítulo del atlas
+  puede llevar una hora larga de trabajo de agentes.
+- **Gasta más**: varios modelos a la vez. Por eso los trabajadores son modelos baratos y hay un límite por sesión.
+- **Se va a equivocar.** Para eso están los jueces automáticos, el auditor ciego y tu revisión final. Si ves un
+  error que se repite, añade una regla en `REGLAS.md` y no volverá a pasar.
+- **Cuando no puede**, no lo inventa: marca la tarea como «necesita humano» y te dice qué le falta (un PDF, una
+  decisión tuya…).
