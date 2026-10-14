@@ -1488,3 +1488,8 @@ Parte: `autonomo/partes/2026-10-14-marino-r4.md`.
 - remisiones «Ficha N» → botones.
 
 Va encima de R4. Parte: `autonomo/partes/2026-10-14-marino-r5.md`.
+
+Tras aprobar R4, el usuario pidió reponer el escenario «Hipotensión con bradicardia» del selector de vasopresores con
+el texto del libro. Marino no da un vasopresor para ese escenario. El texto nuevo lo dice y recoge lo que sí da la
+fuente: la dopamina a 3-10 μg/kg/min estimula los receptores β y su riesgo es la taquicardia (pág. 14); la
+fenilefrina puede acompañarse de bradicardia (pág. 15).
