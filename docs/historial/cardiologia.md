@@ -1458,3 +1458,17 @@ guardada, que solo trae el HTML del servidor (los programas van aparte y no se g
 
 Decisiones del usuario: puerta propia en la raíz y algoritmos AHA 2025 como fuente de lo que no cubre Marino
 (pendiente de que mande los PDF). Plan en `autonomo/TABLERO.md`.
+
+## Merino Cardiología: revisión R4 del plan Marino, caps. 14-17 (octubre 2026)
+
+`marino-r4` (revisión sin construir), 2 vueltas, 12 fichas de shock. Corregido:
+- vasopresina en U/min con la nota de la errata «U/h» del libro;
+- 3.er vasopresor del shock séptico = epinefrina (no angiotensina II);
+- fuera justificaciones que no son de Marino (escenario de bradicardia quitado del selector);
+- tabla de la Fig. 15.3 releída;
+- Fig. 15.6 con Hb ≥7-9 y la errata TEG anotada;
+- notas de fuentes: epinefrina 2.ª/3.ª línea, NA ≥0,2, PCP 18-20/19-20, catéter de AP, rangos TEG;
+- límites y aviso en las calculadoras de volumen y de objetivos del shock cardiogénico;
+- remisiones «Ficha N» en texto plano → botones con el nombre de la ficha.
+
+Parte: `autonomo/partes/2026-10-14-marino-r4.md`.

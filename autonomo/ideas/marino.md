@@ -93,3 +93,15 @@ Coinciden los tres revisores:
   - HIT posoperatoria cardíaca: la 4Ts sube con una trombosis;
   - «encuentra el error»: warfarina en la HIT aguda o plaquetas en una PTT;
   - «piensa y destapa»: «INR 1,8 → 1,4 tras el PFC: ¿coagula mejor?».
+
+### R4 · Caps. 14-17 (Merino Cardiología: shock) · 2026-10-14
+
+- **Un solo «modelo de shock»** sobre el motor del latido y el eco, con 4 mandos (volumen, contractilidad,
+  resistencias, taponamiento). Se ven PA, GC, PVC, RVS y lactato con frase viva: la Tabla 14.1 en directo. Cada ficha
+  (I, III, VI, X, XII) lo abre en su estado. Antes hay que arreglar los escenarios del eco, que hoy no llegan a shock:
+  fallo `ees=0.9`, derrame `liquidoPeri=260`, vasoplejía con un GC por debajo del basal.
+- **Motion paso a paso**, como los receptores:
+  - la Tabla 15.1 como barra de sangre que se vacía de la Clase I a la IV;
+  - la cascada de neutrófilos y ROS (Fig. 17.1);
+  - el IABP inflando y desinflando con su onda (sustituye a la imagen en inglés).
+- **Casos**: shock hemorrágico que evoluciona a mixto; anafilaxia con betabloqueante.

@@ -4,7 +4,7 @@
 // Cap. 14-17.
 import { initCorkboard } from '../../core/corkboard.js';
 import { initSiNoWizard } from '../../core/wizard.js';
-import { pintarGauge } from '../../core/ui.js';
+import { pintarGauge, clamp } from '../../core/ui.js';
 import { crearEscenaReceptores } from './receptores-animados.js';
 
 // Tabla 15.1 — clasificador de shock hemorrágico por % de volumen perdido.
@@ -137,13 +137,13 @@ function calcTipoShock() {
     let estado, texto;
     if (pvc === 'baja' && gc === 'bajo' && rvs === 'alta') {
         estado = 'tfg-estado-warn';
-        texto = '<strong>Patrón compatible con shock hipovolémico.</strong> Ver Ficha III (fisiología y clasificación).';
+        texto = '<strong>Patrón compatible con shock hipovolémico.</strong> Ver <button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-hemorragico-clasificacion" style="margin:0; padding:0; font:inherit; text-align:left; text-decoration:underline;">Shock hemorrágico: fisiología y clasificación</button>.';
     } else if (pvc === 'alta' && gc === 'bajo' && rvs === 'alta') {
         estado = 'tfg-estado-danger';
-        texto = '<strong>Patrón compatible con shock cardiogénico u obstructivo</strong> — la Tabla 14.1 no los distingue entre sí con estas 3 variables: ambos comparten exactamente el mismo patrón. Se necesita evaluación adicional (ecocardiograma para función del VI, descartar taponamiento/embolia pulmonar/neumotórax a tensión). Ver Fichas VI-VIII (cardiogénico).';
+        texto = '<strong>Patrón compatible con shock cardiogénico u obstructivo</strong> — la Tabla 14.1 no los distingue entre sí con estas 3 variables: ambos comparten exactamente el mismo patrón. Se necesita evaluación adicional (ecocardiograma para función del VI, descartar taponamiento/embolia pulmonar/neumotórax a tensión). Ver <button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-cardiogenico-fisio" style="margin:0; padding:0; font:inherit; text-align:left; text-decoration:underline;">Shock cardiogénico: fisiopatología</button>, <button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-cardiogenico-farmaco" style="margin:0; padding:0; font:inherit; text-align:left; text-decoration:underline;">Shock cardiogénico: soporte farmacológico</button> y <button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-soporte-mecanico" style="margin:0; padding:0; font:inherit; text-align:left; text-decoration:underline;">Soporte circulatorio mecánico</button>.';
     } else if (pvc === 'baja' && gc === 'normal-alto' && rvs === 'baja') {
         estado = 'tfg-estado-ok';
-        texto = '<strong>Patrón compatible con shock vasodilatador (distributivo).</strong> El más frecuente con diferencia — el shock séptico explica la mayoría de los casos. Ver Ficha X (séptico) o Ficha XII (anafiláctico).';
+        texto = '<strong>Patrón compatible con shock vasodilatador (distributivo).</strong> El más frecuente con diferencia — el shock séptico explica la mayoría de los casos. Ver <button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-shock-septico" style="margin:0; padding:0; font:inherit; text-align:left; text-decoration:underline;">Shock séptico: definiciones y manejo</button> o <button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-anafilaxia" style="margin:0; padding:0; font:inherit; text-align:left; text-decoration:underline;">Anafilaxia y shock anafiláctico</button>.';
     } else {
         estado = 'tfg-estado-warn';
         texto = 'Combinación no descrita en la Tabla 14.1 — puede tratarse de un patrón mixto, una fase de transición entre 2 tipos de shock, o un dato aislado poco fiable. Reevaluar con el cuadro clínico completo.';
@@ -270,11 +270,10 @@ function initPamGauge() {
 // Tabla 14.4 y en los perfiles de cada fármaco ya desarrollados en la ficha.
 const VASOPRESOR_ESCENARIO = {
     'septico-inicial': { estado: 'tfg-estado-ok', texto: '<strong>Norepinefrina</strong> — vasopresor inicial de elección en shock séptico. Infusión continua sin dosis de carga, iniciar a 5-10 μg/min y titular al alza según respuesta (rango 5-40 μg/min).' },
-    'septico-2': { estado: 'tfg-estado-warn', texto: '<strong>Vasopresina</strong> — 2º agente si la hipotensión persiste pese a norepinefrina. Infusión continua 0,01-0,04 U/h, dosis no titulable (a diferencia de los catecolaminérgicos).' },
-    'septico-3': { estado: 'tfg-estado-danger', texto: '<strong>Angiotensina II</strong> — 3er agente en resistencia a norepinefrina + vasopresina. Inicio 20 ng/kg/min, hasta 80 ng/kg/min en las primeras 3h, mantenimiento ≤40 ng/kg/min. Riesgo mayor: trombosis venosa (13% vs. 5% con placebo en un ensayo). No hay evidencia convincente de que un 3er vasopresor mejore la supervivencia en shock séptico.' },
-    anafilactico: { estado: 'tfg-estado-danger', texto: '<strong>Epinefrina</strong> — elección en shock anafiláctico (ver Ficha XII para dosis IM/IV). En otros contextos es 2ª línea en séptico (produce lactato, dificultando su uso como marcador de perfusión).' },
-    bradicardia: { estado: 'tfg-estado-warn', texto: '<strong>Dopamina</strong> — estimulación cardíaca (cronotrópica) más marcada que otros vasopresores, útil si coexiste bradicardia con hipotensión, aunque hoy limitada en la mayoría de los demás contextos por esa misma estimulación indeseada.' },
-    anestesia: { estado: 'tfg-estado-ok', texto: '<strong>Fenilefrina</strong> — agonista α puro, sobre todo para la hipotensión inducida por anestesia (sin componente cronotrópico que complique procedimientos breves).' },
+    'septico-2': { estado: 'tfg-estado-warn', texto: '<strong>Vasopresina</strong> — 2º agente si la hipotensión persiste pese a norepinefrina (resistencia: habitualmente norepinefrina ≥0,2 μg/kg/min sin PA adecuada, pág. 15). Infusión continua 0,01-0,04 U/min (Tabla 14.4; el texto de la pág. 16 da 0,03-0,04), dosis no titulable (a diferencia de los catecolaminérgicos). El libro imprime «U/h»: ver la nota bajo la Tabla 14.4.' },
+    'septico-3': { estado: 'tfg-estado-danger', texto: '<strong>Epinefrina</strong> — 3er vasopresor si la hipotensión es refractaria a norepinefrina y vasopresina (Cap. 17, págs. 60-61). Infusión continua sin dosis de carga, desde 0,1 μg/kg/min, titulando hasta un máximo de 0,5 μg/kg/min (pág. 14). Aumenta el lactato, lo que dificulta usarlo como marcador de perfusión. <strong>Angiotensina II</strong>: alternativa en resistencia a la norepinefrina (pág. 16), con riesgo de trombosis venosa. No hay evidencia convincente de que un 3er vasopresor mejore la supervivencia en shock séptico (pág. 61).' },
+    anafilactico: { estado: 'tfg-estado-danger', texto: '<strong>Epinefrina</strong> — elección en shock anafiláctico (ver <button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-anafilaxia" style="margin:0; padding:0; font:inherit; text-align:left; text-decoration:underline;">Anafilaxia y shock anafiláctico</button> para dosis IM/IV). En el séptico es de 2ª línea según el Cap. 14 y de 3ª según el Cap. 17 (ver la nota de fuentes bajo el selector); produce lactato, dificultando su uso como marcador de perfusión.' },
+    anestesia: { estado: 'tfg-estado-ok', texto: '<strong>Fenilefrina</strong> — agonista α puro, sobre todo para la hipotensión inducida por anestesia (raquídea o general), donde a menudo se da en bolos (pág. 15).' },
 };
 function initVasopresorEscenario() {
     const select = document.getElementById('mc-vasopresor-escenario');
@@ -335,7 +334,7 @@ const RECEPTORES_FARMACO = {
     dobuta: {
         nombre: 'Dobutamina',
         activacion: { a1: 0, b1: 3, b2: 1 },
-        efecto: 'Predominio β₁ (↑volumen sistólico y FC) con un componente β₂ vasodilatador leve — el efecto vasodilatador queda enmascarado porque el aumento del volumen sistólico compensa la caída de resistencia, así que la PA no suele bajar. Desarrollo completo en Ficha VII (shock cardiogénico).',
+        efecto: 'Predominio β₁ (↑volumen sistólico y FC) con un componente β₂ vasodilatador leve — el efecto vasodilatador queda enmascarado porque el aumento del volumen sistólico compensa la caída de resistencia, así que la PA no suele bajar. Desarrollo completo en <button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-cardiogenico-farmaco" style="margin:0; padding:0; font:inherit; text-align:left; text-decoration:underline;">Shock cardiogénico: soporte farmacológico</button>.',
     },
     vasopresina: {
         nombre: 'Vasopresina',
@@ -489,9 +488,9 @@ function initTss() {
 // Selector de perfil hemodinámico en shock cardiogénico (Ficha VI) — VI,
 // VD, obstrucción dinámica del TSVI e inflamación sistémica sobreañadida.
 const CARDIOGENICO_PERFIL_INFO = {
-    vi: { estado: 'tfg-estado-danger', texto: 'Fallo del <strong>ventrículo izquierdo</strong> — la causa más frecuente de shock cardiogénico (síndrome coronario agudo ~50% de los casos según el Cap. 14; ~2/3 según el Cap. 16, ver nota de fidelidad en Ficha I). Manejo dirigido a la perfusión tisular y la revascularización — ver Ficha VII.' },
+    vi: { estado: 'tfg-estado-danger', texto: 'Fallo del <strong>ventrículo izquierdo</strong> — la causa más frecuente de shock cardiogénico (síndrome coronario agudo ~50% de los casos según el Cap. 14; ~2/3 según el Cap. 16, ver nota de fidelidad en <button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-definiciones" style="margin:0; padding:0; font:inherit; text-align:left; text-decoration:underline;">Shock: definiciones y monitorización</button>). Manejo dirigido a la perfusión tisular y la revascularización — ver <button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-cardiogenico-farmaco" style="margin:0; padding:0; font:inherit; text-align:left; text-decoration:underline;">Shock cardiogénico: soporte farmacológico</button>.' },
     vd: { estado: 'tfg-estado-warn', texto: 'Fallo del <strong>ventrículo derecho</strong> — mismas similitudes fisiopatológicas que el fallo del VI, pero con menor mortalidad. La dilatación grave del VD puede desplazar el septo interventricular hacia el VI, comprometiendo también su llenado (interdependencia ventricular).' },
-    tsvi: { estado: 'tfg-estado-warn', texto: '<strong>Obstrucción dinámica del tracto de salida del VI</strong> (miocardiopatía hipertrófica) — se trata de forma distinta al resto: el objetivo es enlentecer la FC y aumentar el llenado diastólico con betabloqueantes no vasodilatadores (metoprolol, nadolol), NO con inotrópicos ni reducción de precarga, que empeoran la obstrucción.' },
+    tsvi: { estado: 'tfg-estado-warn', texto: '<strong>Obstrucción dinámica del tracto de salida del VI</strong> (miocardiopatía hipertrófica) — se trata de forma distinta al resto: el objetivo es enlentecer la FC y aumentar el llenado diastólico con betabloqueantes no vasodilatadores (metoprolol, nadolol) (pág. 39); los inotrópicos están contraindicados y, si hace falta un vasopresor, es más apropiado uno puro como la fenilefrina (págs. 42-43).' },
     inflamatorio: { estado: 'tfg-estado-warn', texto: '<strong>Shock cardiogénico con inflamación sistémica sobreañadida</strong> (20-40% de los casos post-IAM) — las RVS pueden NO estar elevadas pese al bajo gasto (vasodilatación por óxido nítrico), y la mortalidad es mayor. Se relaciona con la disfunción microcirculatoria del shock cardiogénico.' },
 };
 function initCardiogenicoPerfil() {
@@ -819,10 +818,19 @@ function calcVolumenReanimacion() {
     if (!pesoEl || !sexoEl || !perdidaEl || !fluidoEl || !resultado) return;
     if (pesoEl.value === '' || sexoEl.value === '' || perdidaEl.value === '' || fluidoEl.value === '') { resultado.style.display = 'none'; return; }
     const peso = Number(pesoEl.value);
-    let perdida = Number(perdidaEl.value);
-    if (peso <= 0) { resultado.style.display = 'none'; return; }
-    if (perdida < 0) { perdida = 0; perdidaEl.value = 0; }
-    if (perdida > 100) { perdida = 100; perdidaEl.value = 100; }
+    const perdida = Number(perdidaEl.value);
+    // Límites de seguridad de la calculadora (no son datos de la fuente): fuera
+    // de ellos la combinación no es posible en un adulto y no se calcula.
+    const fuera = [];
+    if (clamp(peso, 20, 300) !== peso) fuera.push(`peso ${peso} kg (admitido 20-300)`);
+    if (clamp(perdida, 0, 100) !== perdida) fuera.push(`pérdida ${perdida}% (admitido 0-100)`);
+    if (fuera.length) {
+        resultado.style.display = 'block';
+        resultado.className = 'result-box tfg-estado-danger';
+        resultado.style.textAlign = 'left';
+        resultado.innerHTML = `<strong>⚠️ Combinación no fisiológica</strong><p style="font-size:0.85rem; margin-top:6px;">Revisa los datos: ${fuera.join('; ')}. No se calcula hasta corregirlo.</p>`;
+        return;
+    }
 
     const vp = peso * (sexoEl.value === 'hombre' ? 40 : 36);
     const dvp = vp * (perdida / 100);
@@ -832,7 +840,10 @@ function calcVolumenReanimacion() {
     resultado.style.display = 'block';
     resultado.className = 'result-box';
     resultado.style.textAlign = 'left';
-    resultado.innerHTML = `<strong>Volumen de reanimación ≈ ${vr.toFixed(0)} mL</strong><p style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">VP ≈ ${vp.toFixed(0)} mL · DVP ≈ ${dvp.toFixed(0)} mL · factor ×${factor} (${fluidoEl.value}).</p>`;
+    const aviso = (perdida < 15 || perdida > 30)
+        ? '<p style="font-size:0.8rem; margin-top:6px;"><strong>⚠️ La Tabla 15.4 es para la Clase II (pérdida del 15-30%).</strong> Con este porcentaje la cifra no está respaldada por la fuente: en pérdidas mayores se sigue la estrategia del shock hemorrágico (<button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-damage-control" style="margin:0; padding:0; font:inherit; text-align:left; text-decoration:underline;">Damage control: hipotensión, TIC y TEG</button>).</p>'
+        : '';
+    resultado.innerHTML = `<strong>Volumen de reanimación ≈ ${vr.toFixed(0)} mL</strong><p style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">VP ≈ ${vp.toFixed(0)} mL · DVP ≈ ${dvp.toFixed(0)} mL · factor ×${factor} (${fluidoEl.value}).</p>${aviso}`;
 }
 function initVolumenReanimacion() {
     const resultado = document.getElementById('mc-vr-resultado');
@@ -847,31 +858,48 @@ function initVolumenReanimacion() {
 
 // Ficha VII — semáforo "¿estoy en objetivo?" contra la Tabla 16.2.
 function calcObjetivosCardiogenico() {
+    // min/max: límites de seguridad de la calculadora (no son datos de la fuente).
+    // Fuera de ellos la combinación no es fisiológica y no se evalúa.
     const campos = [
-        { id: 'mc-obj-pcp', nombre: 'PCP', unidad: 'mmHg', ok: v => v >= 19 && v <= 20 },
-        { id: 'mc-obj-ic', nombre: 'Índice cardíaco', unidad: 'L/min/m²', ok: v => v >= 2.5 },
-        { id: 'mc-obj-irvs', nombre: 'IRVS', unidad: 'unidades Wood', ok: v => v >= 25 && v <= 30 },
-        { id: 'mc-obj-pam', nombre: 'PAM', unidad: 'mmHg', ok: v => v >= 65 },
-        { id: 'mc-obj-gap', nombre: 'Gap de PCO₂', unidad: 'mmHg', ok: v => v < 6 },
-        { id: 'mc-obj-diuresis', nombre: 'Diuresis', unidad: 'mL/kg/h', ok: v => v > 0.5 },
-        { id: 'mc-obj-svo2', nombre: 'SvO₂', unidad: '%', ok: v => v > 50 },
-        { id: 'mc-obj-lactato', nombre: 'Lactato', unidad: 'mmol/l', ok: v => v < 2 },
+        // La Tabla 16.2 da 19-20 y el texto (pág. 42) 18-20: se da por buena 18-20.
+        { id: 'mc-obj-pcp', nombre: 'PCP', unidad: 'mmHg', min: 0, max: 60, ok: v => v >= 18 && v <= 20 },
+        { id: 'mc-obj-ic', nombre: 'Índice cardíaco', unidad: 'L/min/m²', min: 0, max: 10, ok: v => v >= 2.5 },
+        { id: 'mc-obj-irvs', nombre: 'IRVS', unidad: 'unidades Wood', min: 0, max: 100, ok: v => v >= 25 && v <= 30 },
+        { id: 'mc-obj-pam', nombre: 'PAM', unidad: 'mmHg', min: 20, max: 200, ok: v => v >= 65 },
+        { id: 'mc-obj-gap', nombre: 'Gap de PCO₂', unidad: 'mmHg', min: 0, max: 30, ok: v => v < 6 },
+        { id: 'mc-obj-diuresis', nombre: 'Diuresis', unidad: 'mL/kg/h', min: 0, max: 10, ok: v => v > 0.5 },
+        { id: 'mc-obj-svo2', nombre: 'SvO₂', unidad: '%', min: 0, max: 100, ok: v => v > 50 },
+        { id: 'mc-obj-lactato', nombre: 'Lactato', unidad: 'mmol/l', min: 0, max: 30, ok: v => v < 2 },
     ];
     const resultado = document.getElementById('mc-objetivos-resultado');
     if (!resultado) return;
     const rellenos = campos.filter(c => document.getElementById(c.id)?.value !== '');
     if (rellenos.length === 0) { resultado.style.display = 'none'; return; }
 
+    const fuera = rellenos.filter(c => {
+        const v = Number(document.getElementById(c.id).value);
+        return clamp(v, c.min, c.max) !== v;
+    });
+    if (fuera.length) {
+        resultado.style.display = 'block';
+        resultado.className = 'result-box tfg-estado-danger';
+        resultado.style.textAlign = 'left';
+        resultado.innerHTML = `<strong>⚠️ Combinación no fisiológica</strong><p style="font-size:0.85rem; margin-top:6px;">Revisa los datos: ${fuera.map(c => `${c.nombre} ${document.getElementById(c.id).value} ${c.unidad} (admitido ${c.min}-${c.max})`).join('; ')}. No se evalúa hasta corregirlo.</p>`;
+        return;
+    }
     const evaluados = rellenos.map(c => {
         const valor = Number(document.getElementById(c.id).value);
         return { ...c, valor, ok: c.ok(valor) };
     });
     const enObjetivo = evaluados.filter(c => c.ok).length;
+    const notaPcp = evaluados.some(c => c.id === 'mc-obj-pcp')
+        ? '<p style="font-size:0.75rem; color:var(--text-muted); margin-top:6px;">PCP: la Tabla 16.2 da 19-20 mmHg y el texto (pág. 42) 18-20; aquí se da por buena 18-20 (ver la nota de fuentes).</p>'
+        : '';
     const nivel = enObjetivo === evaluados.length ? 'ok' : enObjetivo === 0 ? 'danger' : 'warn';
     resultado.style.display = 'block';
     resultado.className = `result-box tfg-estado-${nivel}`;
     resultado.style.textAlign = 'left';
-    resultado.innerHTML = `<strong>${enObjetivo}/${evaluados.length} objetivos alcanzados</strong><ul style="margin:6px 0 0; padding-left:18px; font-size:0.85rem;">${evaluados.map(c => `<li>${c.ok ? '✅' : '❌'} ${c.nombre}: ${c.valor} ${c.unidad}</li>`).join('')}</ul>`;
+    resultado.innerHTML = `<strong>${enObjetivo}/${evaluados.length} objetivos alcanzados</strong><ul style="margin:6px 0 0; padding-left:18px; font-size:0.85rem;">${evaluados.map(c => `<li>${c.ok ? '✅' : '❌'} ${c.nombre}: ${c.valor} ${c.unidad}</li>`).join('')}</ul>${notaPcp}`;
 }
 function initObjetivosCardiogenico() {
     const resultado = document.getElementById('mc-objetivos-resultado');

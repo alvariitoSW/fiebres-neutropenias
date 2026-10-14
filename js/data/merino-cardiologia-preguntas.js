@@ -77,12 +77,12 @@ export const preguntasMerinoCardiologia = [
     {
         id: 'mc-q007', tema: 'mc-definiciones', tipo: 'redactar',
         enunciado: 'Explica el argumento de "A Final Word" de este capítulo sobre por qué la hipotensión podría ser una consecuencia del shock, y no su causa.',
-        respuestaModelo: 'El shock se define como una alteración de la utilización celular de O₂, no de la PA. Aliviar la hipotensión ha sido el foco del manejo del shock durante más de 70 años, y aun así la mortalidad sigue siendo alta, sin beneficio de supervivencia al usar 2-3 vasopresores. Además, existen presiones bajas sin shock (neuropatías autonómicas, insuficiencia suprarrenal, 5% de adultos sanos) sin lesión orgánica ni lactato elevado, y presiones bajas incluso demuestran ser beneficiosas en heridas penetrantes. Una explicación posible: el shock causa disfunción multiorgánica, y uno de los órganos disfuncionales podría ser el propio vaso sanguíneo — si es así, corregir la PA no corregiría el shock ni mejoraría la supervivencia, igual que la hemodiálisis no corrige el shock en el fallo renal relacionado con shock.',
+        respuestaModelo: 'El shock se define como una alteración de la utilización celular de O₂, no de la PA. Aliviar la hipotensión ha sido el foco del manejo del shock durante más de 70 años, y aun así la mortalidad sigue siendo alta, sin beneficio de supervivencia al usar 2-3 vasopresores. Además, existen presiones bajas sin shock (neuropatías autonómicas, insuficiencia suprarrenal, 5% de adultos sanos) sin lesión orgánica ni lactato elevado, y presiones bajas incluso demuestran ser beneficiosas en heridas penetrantes. (Nota de fidelidad: el libro imprime «do produce» en ese punto; es una errata evidente por «do not produce» — ver la nota de la Ficha I.) Una explicación posible: el shock causa disfunción multiorgánica, y uno de los órganos disfuncionales podría ser el propio vaso sanguíneo — si es así, corregir la PA no corregiría el shock ni mejoraría la supervivencia, igual que la hemodiálisis no corrige el shock en el fallo renal relacionado con shock.',
     },
     {
         id: 'mc-q008', tema: 'mc-definiciones', tipo: 'redactar',
         enunciado: 'Un paciente séptico tiene ScvO₂ elevada y lactato alto. Explica por qué el shock séptico rompe la regla de que un DO₂ inadecuado es la causa del shock, y qué objetivos de reanimación cambian por ello.',
-        respuestaModelo: 'El shock séptico NO es el resultado de un aporte inadecuado de O₂, sino de un defecto en la fosforilación oxidativa mitocondrial ("hipoxia citopática"), que puede asociarse a un defecto en la extracción de O₂ de la sangre capilar. Por eso los objetivos cambian: en lugar de DO₂>300/VO₂>110/IC>2,5 (los otros 3 tipos de shock), en séptico el objetivo es extracción de O₂ <80% y VO₂ >110 mL/min/m² — y si no se monitorizan, simplemente un lactato plasmático normal, ya que la ScvO₂ puede no ser fiable en sepsis.',
+        respuestaModelo: 'El shock séptico NO es el resultado de un aporte inadecuado de O₂, sino de un defecto en la fosforilación oxidativa mitocondrial ("hipoxia citopática"), que puede asociarse a un defecto en la extracción de O₂ de la sangre capilar. Por eso los objetivos cambian: en lugar de DO₂>300/VO₂>110/IC>2,5 (los otros 3 tipos de shock), en séptico el objetivo es extracción de O₂ <80% (cifra de la pág. 18; la Tabla 14.3 marca como inadecuada una extracción <20%: ver la nota de la Ficha I) y VO₂ >110 mL/min/m² — y si no se monitorizan, simplemente un lactato plasmático normal, ya que la ScvO₂ puede no ser fiable en sepsis.',
     },
 
     // ---- Ficha II: Vasopresores y dosis ----
@@ -96,9 +96,9 @@ export const preguntasMerinoCardiologia = [
     {
         id: 'mc-q010', tema: 'mc-vasopresores',
         enunciado: '¿Cómo se dosifica la vasopresina en shock séptico?',
-        opciones: ['Infusión continua fija de 0,03-0,04 U/h, no titulable', 'Bolo inicial de 5 U, luego titulable cada 5 min', 'Infusión de 0,5-2 U/h, titulable a la PAM', '1 U IV cada 6 horas'],
+        opciones: ['Infusión continua fija de 0,03-0,04 U/min, no titulable', 'Bolo inicial de 5 U, luego titulable cada 5 min', 'Infusión de 0,5-2 U/h, titulable a la PAM', '1 U IV cada 6 horas'],
         correcta: 0,
-        explicacion: 'La vasopresina se da como infusión continua fija de 0,03-0,04 U/h — a diferencia de los vasopresores catecolaminérgicos, esta dosis no se titula.',
+        explicacion: 'La vasopresina se da como infusión continua fija de 0,03-0,04 U/min (pág. 16; la Tabla 14.4 da 0,01-0,04) — a diferencia de los vasopresores catecolaminérgicos, esta dosis no se titula. Nota de fidelidad: el libro imprime «U/h»; la dosis de vasopresina en el shock se expresa en U/min (conocimiento general: compruébalo en la ficha técnica).',
     },
     {
         id: 'mc-q011', tema: 'mc-vasopresores',
@@ -123,10 +123,10 @@ export const preguntasMerinoCardiologia = [
     },
     {
         id: 'mc-q014', tema: 'mc-vasopresores',
-        enunciado: 'La norepinefrina es el vasopresor de primera línea en la mayoría de los tipos de shock. ¿En qué escenario se prefiere fenilefrina en su lugar?',
-        opciones: ['Shock cardiogénico por obstrucción dinámica del tracto de salida del VI', 'Shock hemorrágico Clase IV', 'Shock anafiláctico con betabloqueante previo', 'Shock séptico refractario'],
+        enunciado: 'En el shock cardiogénico, el vasopresor de elección es la norepinefrina. ¿En qué tipo de shock cardiogénico se prefiere un vasoconstrictor puro como la fenilefrina?',
+        opciones: ['Shock cardiogénico por obstrucción dinámica del TSVI', 'Shock cardiogénico por infarto extenso del VI', 'Shock cardiogénico por infarto del VD', 'Shock cardiogénico por rotura del músculo papilar'],
         correcta: 0,
-        explicacion: 'En la obstrucción dinámica del tracto de salida del VI (miocardiopatía hipertrófica), un vasoconstrictor puro como fenilefrina es más apropiado que norepinefrina, que puede desencadenar bradicardia refleja indeseada en este contexto.',
+        explicacion: 'En el shock cardiogénico se elige la norepinefrina porque produce menos taquicardia y arritmias problemáticas que la epinefrina y la dopamina, y se asocia a menos muertes (pág. 43). La excepción es la obstrucción dinámica del TSVI (miocardiopatía hipertrófica), donde es más apropiado un vasoconstrictor puro como la fenilefrina, que puede desencadenar bradicardia refleja (pág. 42); en ese cuadro los inotrópicos están contraindicados (pág. 43).',
     },
     {
         id: 'mc-q015', tema: 'mc-vasopresores', tipo: 'redactar',
@@ -368,7 +368,7 @@ export const preguntasMerinoCardiologia = [
         enunciado: '¿Cuál se considera la presión de llenado (cuña) óptima del VI en shock cardiogénico?',
         opciones: ['18-20 mmHg', '5-8 mmHg', '30-35 mmHg', '10-12 mmHg'],
         correcta: 0,
-        explicacion: 'La presión de llenado del VI (presión de cuña) óptima se considera 18-20 mmHg — la más alta que aumente el gasto cardíaco sin producir edema pulmonar, dado que la COP plasmática suele ser subnormal (20-25 mmHg) en críticos.',
+        explicacion: 'La presión de llenado del VI (presión de cuña) óptima se considera 18-20 mmHg (pág. 42) — la más alta que aumente el gasto cardíaco sin producir edema pulmonar, dado que la COP plasmática suele ser subnormal (20-25 mmHg) en críticos. Nota de fuentes: la Tabla 16.2 de la misma página da 19-20 mmHg.',
     },
     {
         id: 'mc-q051', tema: 'mc-cardiogenico-farmaco',
@@ -502,9 +502,9 @@ export const preguntasMerinoCardiologia = [
     {
         id: 'mc-q070', tema: 'mc-inflamacion-ros',
         enunciado: 'Según la Figura 17.2, ¿cuál es aproximadamente la mortalidad cuando fallan ≥4 órganos por inflamación?',
-        opciones: ['74-85%', '20-25%', '40-45%', '~10%'],
+        opciones: ['~75-85%', '20-25%', '40-45%', '~10%'],
         correcta: 0,
-        explicacion: 'La mortalidad relacionada con la inflamación aumenta directamente con el número de órganos fallados: de ~22-24% con 1 órgano a 74-85% con ≥4 órganos, en encuestas tanto de EE.UU. como de Europa.',
+        explicacion: 'La mortalidad relacionada con la inflamación aumenta directamente con el número de órganos fallados: de ~23% (EE.UU.) y ~24% (Europa) con 1 órgano a ~75% (EE.UU.) y ~85% (Europa) con ≥4 órganos (cifras leídas de la Fig. 17.2, pág. 56 del PDF).',
     },
     {
         id: 'mc-q071', tema: 'mc-inflamacion-ros', tipo: 'redactar',
@@ -659,7 +659,7 @@ export const preguntasMerinoCardiologia = [
         enunciado: '¿Hasta qué porcentaje del volumen intravascular puede perderse a través de capilares permeables en shock anafiláctico?',
         opciones: ['Hasta el 35%', 'Hasta el 5%', 'Hasta el 90%', 'No hay pérdida capilar significativa'],
         correcta: 0,
-        explicacion: 'Hasta el 35% del volumen intravascular puede perderse a través de capilares permeables en anafilaxia — suficiente para producir shock hipovolémico por sí solo (equivalente a una hemorragia Clase II-III).',
+        explicacion: 'Hasta el 35% del volumen intravascular puede perderse a través de capilares permeables en anafilaxia — suficiente para producir shock hipovolémico por sí solo (equivalente a una hemorragia Clase III, de 31-40%; Tabla 15.1).',
     },
     {
         id: 'mc-q094', tema: 'mc-anafilaxia',
