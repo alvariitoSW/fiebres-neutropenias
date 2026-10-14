@@ -66,10 +66,10 @@ cada trozo salen de `js/data/libros-indice.js` (capítulos y su `tab`); el PDF y
 | 1 | `marino-r1` | 1-6 (acceso vascular y prácticas habituales) | hecha (2026-10-14) · PR #3 | 13 fichas · Libros |
 | 2 | `marino-r2` | 7-11 (monitorización y fluidoterapia) | hecha (2026-10-14) · PR #4 | 10 fichas · Libros |
 | 3 | `marino-r3` | 12-13 (anemia, transfusión, plaquetas y plasma) | hecha (2026-10-14) · PR #5 | 6 fichas · Merino HEMATO |
-| 4 | `marino-r4` | 14-17 (shock) | en revisión (2026-10-14) · PR #6 | 12 fichas · Merino Cardiología |
-| 5 | `marino-r5` | 18-21 (trastornos cardíacos) | en revisión (2026-10-14) · PR #7 (encima de #6) | 12 fichas · Merino Cardiología |
-| 6 | `marino-r6` | 22-26 | pendiente | 13 fichas · Merino Neumología |
-| 7 | `marino-r7` | 27-30 | pendiente | 10 fichas · Merino Neumología |
+| 4 | `marino-r4` | 14-17 (shock) | hecha (2026-10-14) · PR #6 | 12 fichas · Merino Cardiología |
+| 5 | `marino-r5` | 18-21 (trastornos cardíacos) | hecha (2026-10-14) · PR #7 | 12 fichas · Merino Cardiología |
+| 6 | `marino-r6` | 22-26 | hecha (2026-10-14) · PR #8 | 13 fichas · Merino Neumología |
+| 7 | `marino-r7` | 27-30 | hecha (2026-10-14) · PR #9 | 10 fichas · Merino Neumología |
 | 8 | `marino-r8` | 31-35 | pendiente | 15 fichas · Libros |
 | 9 | `marino-r9` | 36-38 | pendiente | 8 fichas · Libros |
 | 10 | `marino-r10` | 39-44 | pendiente | 17 fichas · Libros |

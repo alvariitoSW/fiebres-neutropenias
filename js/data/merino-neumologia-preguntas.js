@@ -348,7 +348,7 @@ export const preguntasMerinoNeumologia = [
     {
         id: 'neumo-q047', tema: 'neumo-sdra-diagnostico', tipo: 'redactar',
         enunciado: 'Lista los 5 criterios diagnósticos del SDRA (Tabla 24.2) y explica por qué el criterio de PEEP se ha cuestionado.',
-        respuestaModelo: 'Los 5 criterios son: (1) inicio agudo dentro de 7 días, (2) infiltrados alveolares bilaterales en radiografía de tórax, (3) PaO₂/FiO₂≤300 mmHg con PEEP≥5 cmH₂O, (4) sin evidencia de fallo cardíaco izquierdo o sobrecarga de fluidos, (5) presencia de una condición predisponente. El criterio de PEEP se ha cuestionado porque su aplicación requiere intubación y ventilación mecánica, lo que excluye por definición los casos de SDRA que no requieren ventilación mecánica — un sesgo estructural de la propia definición.',
+        respuestaModelo: 'Los 5 criterios son: (1) inicio agudo dentro de 7 días, (2) infiltrados alveolares bilaterales en radiografía de tórax, (3) PaO₂/FiO₂≤300 mmHg con PEEP≥5 (la fuente escribe cmH₂O en el texto y mmHg en la Tabla 24.2: ver la nota de fidelidad de la ficha), (4) sin evidencia de fallo cardíaco izquierdo o sobrecarga de fluidos, (5) presencia de una condición predisponente. El criterio de PEEP se ha cuestionado porque su aplicación requiere intubación y ventilación mecánica, lo que excluye por definición los casos de SDRA que no requieren ventilación mecánica — un sesgo estructural de la propia definición.',
     },
     {
         id: 'neumo-q048', tema: 'neumo-sdra-diagnostico', tipo: 'redactar',
@@ -387,15 +387,15 @@ export const preguntasMerinoNeumologia = [
     },
     {
         id: 'neumo-q053', tema: 'neumo-sdra-no-ventilatorio',
-        enunciado: '¿Cuál es el efecto más feared (temido) de la terapia con corticoides en dosis altas para SDRA cuando se combina con bloqueantes neuromusculares?',
-        opciones: ['Miopatía aguda', 'Osteoporosis', 'Cataratas', 'Insuficiencia suprarrenal'],
+        enunciado: '¿Cuál es la complicación más temida de la terapia con corticoides en dosis altas para SDRA cuando se combina con bloqueantes neuromusculares?',
+        opciones: ['Miopatía aguda', 'Hiperglucemia', 'Hipopotasemia', 'Insuficiencia suprarrenal'],
         correcta: 0,
         explicacion: 'La complicación más temida es una miopatía aguda, típicamente asociada al uso combinado de esteroides en dosis altas y bloqueantes neuromusculares, aunque es rara.',
     },
     {
         id: 'neumo-q054', tema: 'neumo-sdra-no-ventilatorio',
         enunciado: 'Según la fuente, ¿cuál es la lista de terapias farmacológicas que han FRACASADO en mejorar la supervivencia en el SDRA?',
-        opciones: ['Surfactante (adultos), NO inhalado, prostaciclinas inhaladas, estatinas, bloqueantes neuromusculares, agonistas β, interferón β-1a, factor estimulante de colonias', 'Solo los corticoides han fracasado, el resto tiene beneficio probado', 'La posición prono y el ECMO', 'Ningún fármaco ha sido estudiado en SDRA'],
+        opciones: ['Surfactante (adultos), NO inhalado, prostaciclinas inhaladas, estatinas, bloqueantes neuromusculares, agonistas β, interferón β-1a, factor estimulante de colonias', 'Solo el surfactante y el óxido nítrico inhalado han fracasado; el resto de fármacos tiene beneficio probado', 'La posición prono y el ECMO', 'Los corticoides, el surfactante y el interferón β-1a han mejorado la supervivencia en todos los pacientes'],
         correcta: 0,
         explicacion: 'Las terapias fracasadas incluyen surfactante en adultos, óxido nítrico inhalado, prostaciclinas inhaladas, estatinas, bloqueantes neuromusculares, agonistas β, interferón β-1a, y factor estimulante de colonias de granulocitos.',
     },
@@ -474,10 +474,10 @@ export const preguntasMerinoNeumologia = [
     },
     {
         id: 'neumo-q066', tema: 'neumo-o2-indicaciones',
-        enunciado: '¿Qué hizo Reinhold Messner en 1978 que desafió el dogma sobre la hipoxemia grave?',
+        enunciado: 'Según la fuente, ¿qué prueba hizo Reinhold Messner, antes de su ascenso al Everest de 1978 sin oxígeno suplementario, para comprobar el dogma sobre la hipoxemia grave?',
         opciones: ['Fue volado hasta la cumbre del Everest en una cabina despresurizada respirando aire ambiente, sin efectos adversos', 'Escaló el Everest usando oxígeno suplementario de alto flujo', 'Realizó el primer trasplante de pulmón en altitud', 'Demostró que el mal de altura era psicosomático'],
         correcta: 0,
-        explicacion: 'Messner (el primero en escalar el Everest sin O₂ suplementario, 1978) fue volado en avión hasta la cumbre con cabina despresurizada respirando aire ambiente, y no experimentó efectos adversos pese a las advertencias de los expertos.',
+        explicacion: 'Según la fuente, Messner (el primero en escalar el Everest sin O₂ suplementario, en 1978, junto con Peter Habeler) ideó antes del ascenso una prueba sencilla: fue volado en un avión con la cabina despresurizada hasta la cumbre del Everest, respirando aire ambiente, y no tuvo efectos adversos al pasar de los 26.000 pies (la «zona de la muerte»), pese a las advertencias de los expertos.',
     },
     {
         id: 'neumo-q067', tema: 'neumo-o2-indicaciones',
@@ -557,9 +557,9 @@ export const preguntasMerinoNeumologia = [
     {
         id: 'neumo-q078', tema: 'neumo-o2-sistemas',
         enunciado: '¿Por qué han caído en desuso las mascarillas de arrastre de aire para pacientes con retención crónica de CO₂?',
-        opciones: ['La pulsioximetría continua es un elemento disuasorio de la oxigenación excesiva, mientras que estas mascarillas pueden aumentar inadvertidamente la FiO₂', 'Porque son más caras que el HFNO', 'Porque nunca lograron una FiO₂ estable', 'Porque están contraindicadas en cualquier paciente con EPOC'],
+        opciones: ['La monitorización continua de la saturación con pulsioximetría es un elemento disuasorio de la oxigenación excesiva en estos pacientes', 'Porque son más caras que el HFNO', 'Porque nunca lograron una FiO₂ estable', 'Porque están contraindicadas en cualquier paciente con EPOC'],
         correcta: 0,
-        explicacion: 'Su popularidad se ha reducido porque la monitorización continua de la SpO₂ con pulsioximetría es un elemento disuasorio de la oxigenación excesiva en pacientes con retención de CO₂, y estas mascarillas pueden llevar a un aumento inadvertido de la FiO₂.',
+        explicacion: 'Se usaban en la retención crónica de CO₂, donde un aumento inadvertido de la FiO₂ puede subir aún más la PaCO₂. Su popularidad se ha reducido porque la monitorización continua de la saturación arterial con pulsioximetría es un elemento disuasorio de la oxigenación excesiva en pacientes con retención de CO₂.',
     },
     {
         id: 'neumo-q079', tema: 'neumo-o2-sistemas', tipo: 'redactar',
@@ -583,7 +583,7 @@ export const preguntasMerinoNeumologia = [
     {
         id: 'neumo-q082', tema: 'neumo-o2-toxicidad',
         enunciado: '¿Qué porcentaje del metabolismo del O₂ genera ROS dañinas en condiciones normales?',
-        opciones: ['~3%, ya que al menos el 95% se reduce por completo a agua', '~50%', '~90%', '~1000 ppm, un valor fijo'],
+        opciones: ['~3%, ya que al menos el 95% se reduce por completo a agua', '~10%', '~25%', '~50%'],
         correcta: 0,
         explicacion: 'Normalmente al menos el 95% del O₂ se reduce por completo a agua, y solo una fracción muy pequeña (~3%) del metabolismo del O₂ genera ROS dañinas.',
     },
@@ -618,7 +618,7 @@ export const preguntasMerinoNeumologia = [
     {
         id: 'neumo-q087', tema: 'neumo-o2-toxicidad', tipo: 'redactar',
         enunciado: 'Describe la secuencia de reducción química del O₂ a agua (Figura 25.6), nombrando los 3 intermediarios y qué enzima/cofactor interviene en cada paso.',
-        respuestaModelo: 'El O₂ acepta electrones de uno en uno: O₂ + e⁻ → radical superóxido (O₂•). El superóxido, con la enzima superóxido dismutasa (SOD) y 2H⁺, se convierte en peróxido de hidrógeno (H₂O₂). El peróxido, con un electrón adicional y catalizado por hierro (Fe²⁺/Fe³⁺), se convierte en ion hidroxilo (OH⁻) + radical hidroxilo (OH•). Finalmente, con 2H⁺ y un electrón más, se forma agua (2 H₂O). Los radicales superóxido e hidroxilo son radicales libres verdaderos (electrón desapareado); el peróxido de hidrógeno no lo es, pero es un oxidante potente que atraviesa membranas.',
+        respuestaModelo: 'El O₂ acepta electrones de uno en uno: O₂ + e⁻ → radical superóxido (O₂•). El superóxido, con la enzima superóxido dismutasa (SOD), un electrón más y 2H⁺, se convierte en peróxido de hidrógeno (H₂O₂). El peróxido, con un electrón adicional y catalizado por hierro (Fe²⁺/Fe³⁺), se convierte en ion hidroxilo (OH⁻) + radical hidroxilo (OH•). Finalmente, con 2H⁺ y un electrón más, se forma agua (2 H₂O). Los radicales superóxido e hidroxilo son radicales libres verdaderos (electrón desapareado); el peróxido de hidrógeno no lo es, pero es un oxidante potente que atraviesa membranas.',
     },
     {
         id: 'neumo-q088', tema: 'neumo-o2-toxicidad', tipo: 'redactar',
@@ -693,7 +693,7 @@ export const preguntasMerinoNeumologia = [
         enunciado: '¿Cuál es el signo temprano de fracaso de la VNI en el fallo respiratorio hipercápnico?',
         opciones: ['Fracaso de la PaCO₂ en disminuir significativamente (≥10%) tras 1 hora', 'Cualquier grado de somnolencia, incluso transitoria', 'Aumento de la frecuencia cardíaca en 5 lpm', 'Sudoración facial bajo la mascarilla'],
         correcta: 0,
-        explicacion: 'El fracaso de la PaCO₂ en disminuir significativamente (al menos un 10%) tras 1 hora de VNI es evidencia de una respuesta pobre; la alteración mental puede tardar más en resolverse y no debería usarse como indicador temprano.',
+        explicacion: 'El fracaso de la PaCO₂ en disminuir significativamente (al menos un 10%) tras 1 hora de VNI es evidencia de una respuesta pobre; la alteración mental puede tardar más en resolverse y no debería usarse como indicador temprano. Es la cifra del Cap. 26 (pág. 81); el Cap. 23 (pág. 26) da 10 mmHg en vez de 10% (ver la nota de fuentes de la ficha).',
     },
     {
         id: 'neumo-q099', tema: 'neumo-vni-uso',
@@ -806,11 +806,11 @@ export const preguntasMerinoNeumologia = [
         explicacion: 'Las fugas del sistema crean cambios de flujo que pueden disparar respiraciones no deseadas del ventilador — el problema principal del disparo por flujo.',
     },
     {
-        id: 'neumo-q115', tema: 'neumo-vm-ajuste',
+        id: 'neumo-q115', tema: 'neumo-sbt',
         enunciado: 'Según el estudio animal citado, ¿cuánto se redujo la fuerza de las contracciones diafragmáticas tras 3 días de ventilación controlada (sin esfuerzos de disparo)?',
         opciones: ['~50%, en cada frecuencia de estimulación probada', '~10%', 'No hubo reducción medible', '~90%'],
         correcta: 0,
-        explicacion: 'La ventilación controlada durante 3 días se asoció a una reducción de cerca del 50% en la fuerza de las contracciones diafragmáticas, comparada con respiración espontánea o ventilación asistida.',
+        explicacion: 'La ventilación controlada durante 3 días se asoció a una reducción de cerca del 50% en la fuerza de las contracciones diafragmáticas, respecto a la respiración espontánea.',
     },
     {
         id: 'neumo-q116', tema: 'neumo-vm-ajuste',
@@ -828,7 +828,7 @@ export const preguntasMerinoNeumologia = [
     },
     {
         id: 'neumo-q118', tema: 'neumo-vm-ajuste',
-        enunciado: 'Según el protocolo de ventilación protectora (Tabla 27.1), ¿cuáles son los objetivos finales de la 3ª etapa?',
+        enunciado: 'Según el protocolo de ventilación protectora (Tabla 27.1), ¿cuáles son los objetivos finales del protocolo (fila «Optimal Goals», que va aparte de las tres etapas)?',
         opciones: ['V<sub>T</sub>=6 mL/kg, Pmeseta ≤30 cmH₂O, SpO₂ 88-95%, pH 7,30-7,45', 'V<sub>T</sub>=8 mL/kg, Pmeseta ≤40 cmH₂O, SpO₂ >95%', 'V<sub>T</sub>=4 mL/kg siempre, sin importar el pH', 'PEEP=20 cmH₂O fijo'],
         correcta: 0,
         explicacion: 'Los objetivos finales del protocolo de ventilación protectora son V<sub>T</sub>=6 mL/kg PBW, presión meseta ≤30 cmH₂O, SpO₂ 88-95%, y pH 7,30-7,45.',
@@ -878,7 +878,7 @@ export const preguntasMerinoNeumologia = [
         enunciado: '¿Qué presión NO debe exceder el manguito (cuff) de un tubo endotraqueal o de traqueostomía, y por qué?',
         opciones: ['25 mmHg, porque presiones mayores pueden comprimir los capilares de la mucosa traqueal y producir lesión isquémica', '50 mmHg, porque menos presión no sella bien la vía aérea', '10 mmHg, para evitar cualquier daño', 'No hay límite establecido'],
         correcta: 0,
-        explicacion: 'La presión del manguito no debe exceder 25 mmHg, basado en la asunción de que la presión hidrostática capilar de la pared traqueal es 25 mmHg — presiones mayores pueden comprimir capilares y producir isquemia mucosa.',
+        explicacion: 'La presión del manguito no debe exceder 25 mmHg, basado en la asunción de que la presión hidrostática capilar de la pared traqueal es 25 mmHg — presiones mayores pueden comprimir capilares y producir isquemia mucosa. Ojo: la fuente da 25 mmHg en el apartado del manguito (pág. 21) y 25 cmH₂O en la solución de problemas (pág. 22); no son lo mismo (25 mmHg ≈ 34 cmH₂O) y la app muestra las dos tal cual.',
     },
     {
         id: 'neumo-q126', tema: 'neumo-vias-artificiales',
@@ -949,7 +949,7 @@ export const preguntasMerinoNeumologia = [
     {
         id: 'neumo-q136', tema: 'neumo-cuidado-barotrauma', tipo: 'redactar',
         enunciado: 'Distingue el volutrauma del barotrauma, y explica cómo se relacionan ambos conceptos con el escape de gas alveolar y sus posibles presentaciones clínicas.',
-        respuestaModelo: 'El volutrauma es una expresión de la TENSIÓN (el grado de deformación) sobre los alveolos por sobredistensión en regiones pulmonares normales; el barotrauma es una expresión del ESTRÉS (las fuerzas que producen esa deformación, es decir, la presión transpulmonar) impuesto sobre los alveolos. El volutrauma rompe la interfaz alveolo-capilar, permitiendo el escape de gas de los espacios aéreos distales — esto es el barotrauma pulmonar en su sentido clínico, que puede manifestarse como enfisema intersticial pulmonar (gas disecando planos tisulares), neumomediastino (gas hacia el mediastino), enfisema subcutáneo (gas mediastínico hacia el cuello), neumoperitoneo (gas bajo el diafragma), o neumotórax (si la rotura involucra la pleura visceral) — cada uno puede ocurrir solo o combinado con los demás.',
+        respuestaModelo: 'El volutrauma es una expresión de la TENSIÓN (el grado de deformación) sobre los alveolos por sobredistensión en regiones pulmonares normales; el barotrauma es una expresión del ESTRÉS (las fuerzas que producen esa deformación, es decir, la presión transpulmonar) impuesto sobre los alveolos. El volutrauma rompe la interfaz alveolo-capilar y produce un infiltrado inflamatorio parecido al SDRA. Otra consecuencia de la rotura alveolar es el escape de gas de los espacios aéreos distales, que se llama barotrauma pulmonar y que puede manifestarse como enfisema intersticial pulmonar (gas disecando planos tisulares), neumomediastino (gas hacia el mediastino), enfisema subcutáneo (gas mediastínico hacia el cuello), neumoperitoneo (gas bajo el diafragma), o neumotórax (si la rotura involucra la pleura visceral) — cada uno puede ocurrir solo o combinado con los demás.',
     },
 
     // ---- Ficha XVIII: PEEP oculta (intrínseca) ----
@@ -1024,16 +1024,16 @@ export const preguntasMerinoNeumologia = [
     {
         id: 'neumo-q147', tema: 'neumo-nav-prevencion',
         enunciado: '¿Qué método de descontaminación oral es el preferido según la fuente, y cuál es su objetivo?',
-        opciones: ['Descontaminación digestiva selectiva (SDD) con antibióticos no absorbibles, para eliminar patógenos selectivamente mientras se retiene el ambiente microbiano normal', 'Cepillado dental mecánico exclusivamente', 'Enjuagues con agua estéril únicamente', 'Antibióticos sistémicos profilácticos'],
+        opciones: ['Descontaminación oral selectiva (SOD) con antibióticos no absorbibles, para eliminar patógenos selectivamente mientras se retiene el ambiente microbiano normal', 'Cepillado dental mecánico exclusivamente', 'Enjuagues con agua estéril únicamente', 'Antibióticos sistémicos profilácticos'],
         correcta: 0,
-        explicacion: 'La SDD usa antibióticos no absorbibles aplicados sobre la mucosa oral, buscando eliminar "selectivamente" los patógenos mientras se retiene el ambiente microbiano normal de la boca.',
+        explicacion: 'La SOD usa antibióticos no absorbibles aplicados sobre la mucosa oral, buscando eliminar "selectivamente" los patógenos mientras se retiene el ambiente microbiano normal de la boca.',
     },
     {
         id: 'neumo-q148', tema: 'neumo-nav-prevencion',
-        enunciado: 'En el estudio real citado, ¿qué efecto tuvo la SDD sobre la colonización traqueal y la neumonía?',
+        enunciado: 'En el estudio real citado, ¿qué efecto tuvo la SOD sobre la colonización traqueal y la neumonía?',
         opciones: ['Colonización traqueal del 52% al 22%; neumonía del 31% al 10% (ambos p≤0,01)', 'No hubo diferencia significativa en ningún desenlace', 'Aumentó la colonización traqueal', 'Solo redujo la neumonía, no la colonización'],
         correcta: 0,
-        explicacion: 'La SDD se asoció a un descenso significativo tanto en la colonización traqueal (52%→22%) como en la neumonía (31%→10%), ambos con p≤0,01.',
+        explicacion: 'La SOD se asoció a un descenso significativo tanto en la colonización traqueal (52%→22%) como en la neumonía (31%→10%), ambos con p≤0,01.',
     },
     {
         id: 'neumo-q149', tema: 'neumo-nav-prevencion',
@@ -1214,7 +1214,7 @@ export const preguntasMerinoNeumologia = [
     {
         id: 'neumo-q175', tema: 'neumo-sbt', tipo: 'redactar',
         enunciado: 'Explica por qué permitir al paciente disparar las respiraciones del ventilador (en vez de ventilación puramente controlada) ayuda a preservar la fuerza del diafragma, citando el hallazgo experimental relevante.',
-        respuestaModelo: 'El diafragma es un músculo involuntario que se contrae mientras exista impulso central para respirar. La ventilación controlada (donde el paciente no dispara ninguna respiración) puede promover la "disfunción diafragmática inducida por el ventilador" por desuso del músculo. En un estudio animal real, 3 días de ventilación controlada se asociaron a una reducción de cerca del 50% en la fuerza de las contracciones diafragmáticas (en cada frecuencia de estimulación probada), comparada con respiración espontánea o ventilación asistida (donde cada respiración es iniciada por un esfuerzo inspiratorio del paciente). Por eso, evitar la parálisis neuromuscular o la sedación profunda —permitiendo al paciente disparar respiraciones— ayuda a preservar la fuerza diafragmática y facilita la transición del soporte ventilatorio a la respiración espontánea.',
+        respuestaModelo: 'El diafragma es un músculo involuntario que se contrae mientras exista impulso central para respirar. La ventilación controlada (donde el paciente no dispara ninguna respiración) puede promover la "disfunción diafragmática inducida por el ventilador". En un estudio animal real, 3 días de ventilación controlada se asociaron a una reducción de cerca del 50% en la fuerza de las contracciones diafragmáticas (en cada frecuencia de estimulación probada), respecto a la respiración espontánea (la ventilación asistida, donde cada respiración la inicia un esfuerzo inspiratorio del paciente, queda algo por debajo de la espontánea en la Figura 30.1). Por eso, evitar la parálisis neuromuscular o la sedación profunda —permitiendo al paciente disparar respiraciones— ayuda a preservar la fuerza diafragmática y facilita la transición del soporte ventilatorio a la respiración espontánea.',
     },
     {
         id: 'neumo-q176', tema: 'neumo-sbt', tipo: 'redactar',
@@ -1228,14 +1228,14 @@ export const preguntasMerinoNeumologia = [
         enunciado: '¿En qué porcentaje de pruebas fallidas de destete se ha identificado disfunción cardíaca?',
         opciones: ['40%', '5%', '95%', '15%'],
         correcta: 0,
-        explicacion: 'La disfunción cardíaca se ha identificado en el 40% de las pruebas de destete fallidas — un factor a menudo pasado por alto.',
+        explicacion: 'La disfunción cardíaca se ha identificado en el 40% de las pruebas de destete fallidas.',
     },
     {
         id: 'neumo-q178', tema: 'neumo-weaning-extubacion',
         enunciado: 'En un estudio real comparando SvO₂ durante trials exitosos y fallidos de respiración espontánea, ¿qué se observó en los trials FALLIDOS?',
         opciones: ['Un descenso progresivo de la SvO₂ (de ~61% a ~51%), sugiriendo un descenso del gasto cardíaco', 'La SvO₂ se mantuvo estable en ambos grupos', 'La SvO₂ aumentó en los trials fallidos', 'No se pudo medir la SvO₂ en ningún caso'],
         correcta: 0,
-        explicacion: 'La SvO₂ se mantuvo estable (~65-68%) durante los ensayos exitosos, pero descendió progresivamente (~61% a ~51%) durante los fallidos, sugiriendo un descenso del gasto cardíaco como causa del fracaso.',
+        explicacion: 'La SvO₂ se mantuvo estable (~65-66%) durante los ensayos exitosos, pero descendió progresivamente (~61% a ~51%) durante los fallidos, sugiriendo un descenso del gasto cardíaco como causa del fracaso.',
     },
     {
         id: 'neumo-q179', tema: 'neumo-weaning-extubacion',

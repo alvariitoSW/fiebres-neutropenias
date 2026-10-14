@@ -431,3 +431,39 @@ de entrada. Añadir una guía nueva en el futuro: 1) botón nuevo en
       no aparecen; sin overflow horizontal ni errores de consola reales
       (el único 404 es el `favicon.ico`, ya documentado como inocuo).
 
+
+## Merino Neumología: revisión R6 del plan Marino, caps. 22-26 (octubre 2026)
+
+`marino-r6` (revisión sin construir), 2 vueltas, 13 fichas. Corregido:
+- esteroides del SDRA 14 días;
+- clasificador de riesgo de la EP según la pág. 7, con ámbar para lo que la fuente no define;
+- tarjeta del albuterol;
+- FiO₂ sin reescribir el campo;
+- límites, aviso y origen visible en las calculadoras;
+- Figs. 24.4 y 25.6 rehechas y legibles;
+- notas de fuentes y erratas;
+- `.puntuable` en los clasificadores;
+- remisiones «Ficha N» → botones;
+- decimales con coma;
+- levalbuterol;
+- distractores de q053, q054 y q082.
+
+Parte: `autonomo/partes/2026-10-14-marino-r6.md`.
+
+## Merino Neumología: revisión R7 del plan Marino, caps. 27-30 (octubre 2026)
+
+`marino-r7` (revisión sin construir), 1 vuelta, 10 fichas. Corregido:
+- PRVC (flujo, no volumen);
+- Ecuación 27.2 con Pmeseta;
+- SOD en lugar de SDD;
+- notas del manguito (mmHg/cmH₂O) y de la PImax;
+- `.puntuable` en los checklists;
+- clasificador del derrame sin conducta en los casos que la fuente no define;
+- límites, aviso y origen visible en las calculadoras;
+- tubo ET por tramos exactos;
+- gauge de la DOR neutro;
+- huecos de PEEP;
+- remisiones «Ficha N» → botones;
+- preguntas q115-q178.
+
+Va encima de R6. Parte: `autonomo/partes/2026-10-14-marino-r7.md`.

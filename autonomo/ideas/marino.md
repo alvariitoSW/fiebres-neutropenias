@@ -114,3 +114,31 @@ Coinciden los tres revisores:
 - **ACLS paso a paso**: cronómetro de ciclos con choque, epinefrina y amiodarona; ETCO₂ de la Fig. 21.4 que se separa
   entre RCE y no RCE.
 - **Casos**: FA con WPW y «encuentra el error» (diltiazem); paro con ETCO₂ que sube → RCE → TTM.
+### R6 · Caps. 22-26 (Merino Neumología: EP, asma/EPOC, SDRA, O₂, VNI) · 2026-10-14
+
+- **Pulmón con respirador / «presión positiva en el tórax»** (Vt/PBW, FR, PEEP, I:E, resistencia y compliance;
+  curvas de presión, flujo y volumen): auto-PEEP, VILI y precarga/poscarga de la VNI. Lo piden los tres revisores y
+  serviría también para los caps. 27-30. Es una decisión grande (maqueta para el usuario).
+- **EP con el eco `tep`** en el estado del paciente de alto riesgo.
+- **Casos**: EP intermedia-alta; EPOC en VNI con PaCO₂ 80 → 73; asma con PaCO₂ «normal»; SDRA con PBW y prono.
+- **«Encuentra el error»**: Vt con peso real; O₂ al 100 % en el retenedor; 10 % frente a 10 mmHg; wedge normal que
+  «descarta» edema.
+
+### R7 · Caps. 27-30 (Merino Neumología: ventilación, NAV, weaning) · 2026-10-14
+
+- **Pulmón con respirador**, el mismo que en R6:
+  - curvas vivas de presión, flujo y volumen;
+  - VCV | PCV y pausa inspiratoria (Figs. 27.1-27.2);
+  - PEEP con compliance, presión de conducción y la mejor PEEP (Fig. 27.5), y la DO₂ (Fig. 27.6);
+  - FR e I:E con la PEEP oculta (Figs. 27.3 y 28.9);
+  - la SBT con el RSBI.
+
+  Explicaría los caps. 23-30.
+- **Piezas pequeñas**: drenaje pleural de tres cámaras con Motion; Rx con tubo ET arrastrable hasta la carina;
+  neumotórax a tensión.
+- **Asistentes Sí/No**: NAV de bajo o alto riesgo → régimen (Tabla 29.6); ¿listo para el SBT? → predictores →
+  extubar → fuga → esteroides y VNI.
+- **Casos**:
+  - weaning el día 7: SBT fallido con la SvO₂ que cae; fuga <110 mL;
+  - «encuentra el error»: clorhexidina + SOD;
+  - «piensa y destapa»: ¿ansiedad o fracaso en el SBT?; extubar sube el trabajo respiratorio (Fig. 30.2).
