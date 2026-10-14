@@ -7,6 +7,24 @@ ordena el profesor en el «Mapa visual» (modo mapa). Nada de aquí se construye
 
 *(Lo escribe el profesor en la tarea `mapa` de Marino.)*
 
+## Ideas del usuario (mandan sobre las demás)
+
+- **Fluidos como agua de río y agua de mar** (14/10/2026, sobre los caps. 10-11): un símil visual para la vista
+  Visual de los fluidos. Recrear el agua (el mar, un río, lo que funcione) para que se **vea** adónde va cada
+  fluido. El usuario pide expresamente **un buen trabajo artístico** del profesor: nada de barras.
+  Para que el profesor lo desarrolle (propuesta del director, a confirmar con una maqueta):
+  - Los tres compartimentos de la Tabla 10.1 (plasma, intersticio y células) como masas de agua conectadas: un río
+    (el plasma, que corre), una marisma o estuario (el intersticio) y el mar o un lago interior (las células).
+  - Cada fluido «desemboca» y se reparte como en la Fig. 10.1:
+    - el **glucosado 5 %** es agua dulce que acaba repartida por todo, sobre todo en las células;
+    - el **salino 0,9 %** se queda en el río y la marisma (y arrastra un poco de agua de las células, pág. 5);
+    - el **salino al 7,5 %**, como agua muy salada, tira del agua de las células hacia fuera (×2,1 en el plasma,
+      ×4,9 en el extracelular);
+    - la **albúmina** retiene el agua en el río.
+  - La osmolalidad, como la salinidad del agua; el edema de la sobrecarga, como la marisma que se desborda.
+  - El símil es **ilustrativo** y lo dice en pantalla; las cifras que muestre, las de la Fig. 10.1 y la Tabla 10.1.
+  - Se apoya en la idea de los revisores de R2 (cuerpo con compartimentos vivos) y la sustituye en lo visual.
+
 ## Ideas de los revisores, por bloque
 
 *(Se añaden aquí tras cada revisión.)*
