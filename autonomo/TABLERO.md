@@ -18,10 +18,13 @@ Cada tarea tiene un tipo. El «hecho» de un tipo **se suma** al del objetivo (p
 
 | Tipo | Qué es | «Hecho» propio | Modelo del constructor |
 |---|---|---|---|
-| `visual` | contenido nuevo o rehecho con figura, simulación o vista Visual | fidelidad + **rúbrica de estudio ≥4 en todo** (REGLAS §7, juez `profesor`) + paciente posible si hay simulador | potente (opus) |
+| `visual` | contenido nuevo o rehecho: fase A (fiel) + fase B (visual y preguntas) | fidelidad + **rúbrica de estudio ≥4 en todo** (REGLAS §7 y §8, juez `profesor`) + paciente posible si hay simulador | potente (opus) |
+| `estudio` | solo la fase B sobre contenido que **ya está** en la app y ya es fiel: el profesor diseña lo visual (modelos grandes), el recorrido de preguntas y los casos | rúbrica ≥4 en §7 y §8 + auditor sin graves en preguntas, casos y figuras | potente (opus) |
 | `auditoria` | cotejar fichas existentes con su fuente | informe de graves/huecos/menores y los graves corregidos | barato (sonnet) |
-| `quiz` | preguntas nuevas o completar temas | ~8 por ficha (6 + 2 de redactar), ancladas al texto, sin temas vacíos | barato |
 | `arreglo` | un fallo concreto | el fallo ya no se reproduce y nada se rompe (jueces) | barato |
+
+Las preguntas ya no son un tipo aparte: van dentro de la fase B, con el formato de REGLAS §8 (modelo:
+`autonomo/modelos/preguntas-para-estudiar.html`).
 
 ## Ficha de encargo (una por tarea, debajo de su fila)
 
@@ -29,14 +32,44 @@ Si falta algún campo, el director lo rellena con su mejor criterio a partir de 
 escrito en el parte (no se para a preguntar: el usuario eligió trabajar sin frenos).
 
 ```
-**Encargo `<clave>`** · tipo: visual | auditoria | quiz | arreglo
+**Encargo `<clave>`** · tipo: visual | estudio | auditoria | arreglo
 - Qué quiero: una frase.
 - Para qué: estudiar | consultar a pie de cama.
 - Modelo «así sí»: qué pieza de la app debe igualar (REGLAS §7).
 - Lo visual que espero: qué concepto se ve con qué pieza (p. ej. «el chorro en color en la 4C del ecógrafo»).
+- Modelo grande que usar: nefrona, glomérulo, ecógrafo, motor… y en qué estado (REGLAS §7.8).
+- Preguntas que espero: el recorrido y qué casos (p. ej. «un caso de shock séptico que evoluciona a FRA»).
 - Lo que NO quiero.
 - Fuente.
 ```
+
+---
+
+## Objetivo 0 · Preguntas para estudiar en la app
+
+Va primero: sin el botón «Preguntas» y sus formatos, ninguna tarea puede entregar preguntas como las de §8.
+
+| # | Clave | Qué | Estado | Notas |
+|---|---|---|---|---|
+| 1 | `preguntas` | Botón «Preguntas» en el interruptor de las fichas, los tres formatos y el caso clínico, con la ficha de HIT como primera | pendiente | Encargo debajo. Maqueta aprobada por el usuario el 14/10/2026. |
+
+**Encargo `preguntas`** · tipo: visual
+- Qué quiero: que la maqueta aprobada funcione dentro de la app, empezando por la ficha de trombocitopenia y HIT de
+  Merino HEMATO.
+- Para qué: estudiar.
+- Modelo «así sí»: `autonomo/modelos/preguntas-para-estudiar.html`, tal cual (aspecto, textos de los botones, orden).
+- Lo visual que espero: el interruptor **Texto | Visual | Preguntas** en cada ficha que tenga preguntas; dentro, el
+  recorrido en el orden del texto, el repaso de lo fallado y el caso clínico; los tres formatos de REGLAS §8 (test
+  con «piensa antes», piensa y destapa con puntos, encuentra el error con 0-2 errores); el caso con la ficha del
+  paciente que se rellena, el botón que abre la calculadora de la ficha (la 4Ts) y «Lo que te llevas».
+- Lo que NO quiero: un segundo quiz ni mucho código nuevo (el usuario lo pidió así): se amplía
+  `js/modules/quiz/quiz.js` y los bancos de `js/data/`, sin tocar la única llamada a `initQuiz()`. Nada de redactar,
+  huecos ni emparejar. Las preguntas viejas no se tocan.
+- También: `autonomo/jueces.mjs` comprueba los formatos nuevos (destapa con 2-4 puntos; error con 0-2 falsas y su
+  corrección; caso con pasos, giro y «Lo que te llevas»), y `CLAUDE.md` §8 y §6 se actualizan (las cambia el
+  usuario o una conversación normal, no el plan: el director lo propone en el parte).
+- Fuente: la ficha de HIT de la app (Marino, The ICU Book), ya cotejada; las preguntas y el caso de la maqueta
+  salen de ella.
 
 ---
 
@@ -63,8 +96,8 @@ Marcador: capítulos con estado `hecha`.
 4. **Pruebas**: al menos una prueba nueva en `js/modules/eco/pruebas/atlas.test.mjs` que compruebe que la figura va
    en el sentido del texto (como las de los capítulos 07, 08, 10 y 14). Todas las pruebas en verde:
    `node --test 'js/modules/eco/pruebas/*.test.mjs'`.
-5. **Quiz**: preguntas del capítulo en `js/data/eco-atlas-preguntas.js` (tema `atlas-<clave>`): las suyas
-   traducidas y al menos 1 de redactar propia; su entrada en `temasAtlasEco`.
+5. **Preguntas**: en `js/data/eco-atlas-preguntas.js` (tema `atlas-<clave>`, con su entrada en `temasAtlasEco`):
+   las del original traducidas y el recorrido y el caso del profesor, con el formato de REGLAS §8 (sin redactar).
 6. **Móvil**: el capítulo abre desde el índice, la figura se monta y responde a sus mandos, sin errores de consola y
    sin desbordar a 390 ni a 360 px.
 7. **Enlaces**: si el capítulo tiene una ficha hermana en la app (p. ej. Merino Cardiología, Fisiopatología UCI),
@@ -118,6 +151,9 @@ Marcador: capítulos con estado `hecha`.
   paciente marcada.
   Ojo: el ecógrafo de la app aún no pinta el chorro regurgitante ni el flujo de venas pulmonares con IM; el motor ya
   tiene `eroaMitral`. Hay que añadirlo al simulador (con sus pruebas; `js/modules/eco/CLAUDE.md`), no esquivarlo.
+- Modelo grande que usar: el ecógrafo y el motor del latido (`eroaMitral`).
+- Preguntas que espero: el recorrido del capítulo (PISA, Doppler de venas pulmonares, grados) y un caso de IM aguda
+  frente a crónica que evoluciona.
 - Lo que NO quiero: tarjetas de números como figura principal; párrafos largos; un esquema de círculos.
 - Fuente: echodemo (`src/ch/mr.js`, `index.html` #ch-mr), extracto en la PR #2.
 
@@ -126,6 +162,9 @@ Marcador: capítulos con estado `hecha`.
 ## Otros pendientes (fuera del bucle por ahora)
 
 Decididos con el usuario. Casi todos dependen de que mande una fuente.
+
+- **Reconvertir las preguntas que ya hay** al formato de estudio (REGLAS §8): **esperar a que el usuario lo pida**,
+  cuando la skill esté afinada (lo dijo el 14/10/2026). Se hará por bloques, con tareas `estudio`.
 
 - **Después del piloto `mr` (pedido por el usuario)**: 1) analizar los tiempos reales (lector ~5 min, constructor
   67 min en la vuelta 1 y 19 en la 2, verificador ~6, auditor ~3) y proponer cómo acelerar; 2) cómo dejar varias

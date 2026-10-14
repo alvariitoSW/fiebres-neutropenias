@@ -117,6 +117,7 @@ backend/ admin/         panel de subida de contenido (aparte de la app)
 | Asistente paso a paso Sí/No | `js/modules/cardiologia/insuficiencia-cardiaca.js` (`initSiNoWizard`) |
 | Escala puntuable con `<select>` | `js/modules/generales/charlson.js` |
 | Banco de preguntas | `js/data/merino-hemato-preguntas.js` |
+| Preguntas para estudiar (recorrido, formatos y caso clínico) | `autonomo/modelos/preguntas-para-estudiar.html` (maqueta aprobada) |
 | Especialidad con submenú (el `index.js` más simple) | `js/modules/neumologia/index.js` |
 | Enlace cruzado | `js/modules/fisio-uci/vias-urinarias.html` (botones `.especialidad-link`) |
 | Capítulo del atlas de eco | `js/modules/eco/atlas/cap-sistolica.html` + `sistolica.mjs` |
@@ -149,13 +150,19 @@ backend/ admin/         panel de subida de contenido (aparte de la app)
     («α1/α2/β1»): no parte la línea y desborda en el móvil.
 12. **Si el usuario pide convenciones que no están aquí, pregunta** antes de asumir que vienen de otro proyecto.
 
-## 8. Quiz
+## 8. Quiz y preguntas para estudiar
 
+- **Las preguntas nuevas siguen `autonomo/REGLAS.md` §8** (aprobado por el usuario el 14/10/2026; modelo
+  `autonomo/modelos/preguntas-para-estudiar.html`): botón **Texto | Visual | Preguntas** en la ficha, recorrido en el
+  orden del texto, repaso de lo fallado y caso clínico que evoluciona; solo test con «piensa antes», «piensa y
+  destapa» y «encuentra el error». **No se escriben más de redactar**, ni huecos ni emparejar. Las preguntas viejas
+  se quedan como están hasta que el usuario pida reconvertirlas. Mientras la tarea `preguntas` del tablero no esté
+  hecha, las nuevas van en el formato de test actual con ese estilo (razonamiento, distractores verosímiles).
 - **Una sola llamada a `initQuiz()`**, en `main.js`. Cada especialidad exporta `quizTriggerId/quizBanco/quizTemas`
   (con `asignatura` y `bloque` para el menú de 3 niveles).
-- Pregunta: `{ id, tema, enunciado, opciones, correcta, explicacion }` o `{ tipo: 'redactar', enunciado,
-  respuestaModelo }`. En los bancos, `<` y `>` literales, nunca `&lt;`. Las opciones se barajan solas.
-- **Nunca un tema sin preguntas** (rompe el quiz). Ritmo habitual: ~8 por ficha (6 + 2 de redactar).
+- Pregunta: `{ id, tema, enunciado, opciones, correcta, explicacion }` (las viejas de `{ tipo: 'redactar' }`
+  siguen funcionando). En los bancos, `<` y `>` literales, nunca `&lt;`. Las opciones se barajan solas.
+- **Nunca un tema sin preguntas** (rompe el quiz). Cuántas: una por idea importante de la ficha, más el caso.
 - Botones «Repasar» con `data-quiz-asignatura` + `data-quiz-bloque` (+ `data-quiz-elegir`, `data-quiz-tema`,
   `data-quiz-bloques`) para abrir directamente su parte.
 
@@ -203,7 +210,7 @@ como las conoce un médico, no como están hechas por dentro. Los botones dicen 
 - [ ] Toda cifra nueva tiene su fuente y su página; las erratas y discrepancias, con su nota.
 - [ ] Contenido nuevo o rehecho: **sirve para estudiar** (`autonomo/REGLAS.md` §7): arriba la idea y la figura, nada
       de muros de texto, 1-3 cosas resaltadas por bloque y el mecanismo visible con las piezas de la app, al nivel de
-      los modelos (receptores animados, atlas 14 y 10, nefrona viva, vista Visual).
+      los modelos (receptores animados, atlas 14 y 10, nefrona viva, vista Visual). Preguntas nuevas: REGLAS §8.
 - [ ] Ningún id duplicado; ningún `<img>` sin archivo; ningún tema de quiz sin preguntas.
 - [ ] Si cambió un `.css` o `js/main.js`: fecha `?v=` subida en `index.html`.
 - [ ] La historia del trabajo, añadida al archivo de `docs/historial/` que toque (no aquí). Este archivo, solo si

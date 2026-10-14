@@ -111,6 +111,63 @@ pobre que no ayudaba a estudiar. Al usuario le importa **tanto que se entienda y
    Números sueltos en tarjetas no cuentan como figura.
 6. **Vista Visual** (Texto | Visual) en las fichas de cuaderno de campo.
 7. **Móvil**: se lee bien a 390 px; nada se pisa ni queda diminuto.
+8. **Un modelo grande, muchas fichas.** Antes que un gráfico nuevo para cada ficha, se usa (o se amplía) un modelo
+   grande que ya explique mucho: la nefrona viva, el glomérulo, el corazón y el ecógrafo, el motor del latido. La
+   ficha abre el modelo **en el estado de su tema** (p. ej. la nefrona con un diurético de asa actuando). Un número
+   en una barra o en un indicador no es una figura. Si ningún modelo sirve y uno nuevo explicaría muchos temas (p. ej.
+   un pulmón con respirador para toda la ventilación mecánica), se propone al usuario: es una decisión grande.
 
-**Cómo se juzga**: el agente `profesor` puntúa del 1 al 5 cada punto mirando capturas al lado de un modelo. Si
-alguno queda por debajo de 4, la tarea vuelve al constructor con lo que falta.
+**Cómo se juzga**: el agente `profesor` puntúa del 1 al 5 cada punto (y los de §8 si hay preguntas) mirando
+capturas al lado de un modelo. Si alguno queda por debajo de 4, la tarea vuelve al constructor con lo que falta.
+
+## 8. Preguntas para estudiar
+
+Aprobado por el usuario el 14/10/2026 sobre una maqueta. **El modelo es `autonomo/modelos/preguntas-para-estudiar.html`**
+(ábrelo con el servidor de la app y míralo antes de escribir una sola pregunta). Las preguntas no son un examen
+suelto: son **otra forma de estudiar el mismo contenido**, para cuando no apetece leer la ficha entera, y para
+aprender casos que mañana aparecerán en la guardia.
+
+**Dónde**: el interruptor de cada ficha pasa a ser **Texto | Visual | Preguntas**. «Preguntas» abre, sin salir de
+la ficha, tres partes seguidas:
+1. **El recorrido de la ficha**: una pregunta por cada idea importante, **en el orden del texto** (no se barajan),
+   de lo básico a lo fino. Al acabarlo, has repasado la ficha entera.
+2. **Otra vez lo que fallaste** o sabías a medias, solo eso.
+3. **El caso clínico** (uno o varios).
+
+**Los formatos (solo estos tres):**
+- **Test con «piensa antes»**: el enunciado sale solo; las opciones aparecen al pulsar «Ya lo tengo: ver opciones».
+  En los casos, siempre así. Cada opción falsa explica **qué le habría pasado al paciente** o por qué no.
+- **Piensa y destapa**: pregunta de razonamiento («cómo lo harías y por qué», «qué cambia si…», «qué le contestas al
+  adjunto»), nunca de definición. Dice cuántas cosas tiene la respuesta («son cuatro cosas»). La respuesta sale en
+  2-4 puntos con su resaltado y el usuario marca **uno a uno** los que tenía. Si falta alguno, vuelve en la parte 2.
+- **Encuentra el error**: un texto que suena real (nota de evolución, plan del residente de guardia, informe), de
+  4-6 frases. **Puede haber 0, 1 o 2 errores**, y el enunciado lo dice. Marcar una verdadera también es fallo. Los
+  errores son **confusiones reales** que la fuente aclara: una cifra cambiada, un sentido al revés (sube/baja,
+  sensible/específico), un fármaco o una dosis del caso equivocado, un «siempre» o un «nunca» que la fuente niega.
+  Nunca una frase absurda. Tras corregir, cada error pide pensar la frase buena antes de verla.
+
+**Fuera**: las de redactar (nadie escribe en el móvil), completar huecos, emparejar y «explícaselo a otro».
+
+**Dificultad**: las opciones falsas son verosímiles y salen de la propia ficha (lo que se confunde de verdad); la
+correcta no es siempre la más larga. Si una pregunta se acierta sin haber estudiado, está mal hecha.
+
+**El caso clínico** (el usuario lo quiere especialmente):
+- Un paciente que **evoluciona** en 5-8 pasos, con día o momento («Día 7», «Alta de la UCI»). Su ficha (edad,
+  motivo, fármacos, analítica) **se va rellenando** y lo nuevo de cada paso se marca en rojo.
+- Hay que **interpretar los datos**: calcular (una caída en %, un balance), puntuar con la escala o la calculadora
+  de la app que exista, abriéndola desde el caso, y decidir.
+- **Mezcla los tres formatos**: incluye al menos un «encuentra el error» con el plan de otro residente y un «piensa y
+  destapa».
+- El cuadro tiene un giro que cambia la decisión (en el modelo, la trombosis que sube la 4Ts de 5 a 7).
+- Termina con **«Lo que te llevas»** (3 puntos) y el camino de vuelta: a la ficha y, si lo hay, al modelo visual en el
+  estado del paciente (la nefrona, el ecógrafo).
+- **El paciente se inventa; la medicina, no.** Edad, día y cifras del paciente son del caso, y deben ser las de un
+  paciente posible (§1.7). Toda conducta, dosis, umbral o mecanismo sale de la fuente, y el auditor lo coteja igual
+  que el texto.
+- Varios casos por ficha si la ficha da para ello.
+
+**Cuántas**: el recorrido, una por idea importante (no un número fijo); al menos un caso por ficha o por bloque de
+fichas cortas. Cada pregunta enlaza su sitio en el texto («Ver en el texto»).
+
+**Las preguntas que ya hay** en la app (test sueltos y de redactar) se reconvierten más adelante, en una tarea que
+pedirá el usuario. Hasta entonces no se tocan.

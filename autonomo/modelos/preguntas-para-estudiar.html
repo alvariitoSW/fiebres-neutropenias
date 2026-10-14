@@ -1,0 +1,371 @@
+<!-- MODELO APROBADO POR EL USUARIO (14/10/2026) para las preguntas de estudio. No es parte de la app: es la maqueta
+     de referencia del plan socialista (autonomo/REGLAS.md §8). Ábrela con el servidor de la app:
+     http://localhost:8000/autonomo/modelos/preguntas-para-estudiar.html
+     Datos: ficha de trombocitopenia y HIT de Merino HEMATO (Marino, The ICU Book). -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estudiar con preguntas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Maqueta con el aspecto de la app (oscuro, dorado, Georgia): una sola apariencia, a propósito. */
+:root {
+  color-scheme: dark;
+  --bg: #17140f; --card: #241e16; --card2: #2e261c; --line: rgba(196,154,74,.35);
+  --fg: #ece3cc; --dim: #c9bda4; --muted: #a5967c;
+  --oro: #cf9a3e; --rojo: #b85c3e; --verde: #90a06a; --purpura: #9c5476;
+  --serif: Georgia, 'Times New Roman', serif;
+  --sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 var(--serif);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px 48px; }
+main { max-width: 720px; margin: 0 auto; display: grid; gap: 36px; }
+h1 { font-size: 1.7rem; margin: 0; text-wrap: balance; color: var(--oro); }
+h2 { font-size: 1.25rem; margin: 0 0 6px; text-wrap: balance; }
+h3 { font-size: 1.02rem; margin: 0; }
+p { margin: 0; }
+.lead { color: var(--dim); }
+.eyebrow { font: 600 .72rem var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+section { display: grid; gap: 14px; }
+.nota { font: .85rem/1.45 var(--sans); color: var(--muted); border-left: 2px solid var(--line); padding-left: 10px; }
+.hl-r { background: rgba(184,92,62,.28); padding: 0 3px; border-radius: 2px; }
+.hl-v { background: rgba(144,160,106,.25); padding: 0 3px; border-radius: 2px; }
+.hl-p { background: rgba(156,84,118,.3); padding: 0 3px; border-radius: 2px; }
+.hl-a { background: rgba(207,154,62,.22); padding: 0 3px; border-radius: 2px; }
+
+.movil { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 14px; display: grid; gap: 10px; }
+.ficha-tit { font-size: 1.05rem; color: var(--oro); }
+.interruptor { display: flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; width: fit-content; font: .82rem var(--sans); }
+.interruptor span { padding: 5px 12px; color: var(--muted); }
+.interruptor span.on { background: var(--oro); color: var(--bg); font-weight: 600; }
+.ruta { font: .85rem/1.5 var(--sans); color: var(--dim); display: grid; gap: 4px; }
+.ruta b { color: var(--fg); }
+
+.formato, .caso { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 12px; min-width: 0; }
+.formato header { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.num { font: 700 .78rem var(--sans); color: var(--oro); border: 1px solid var(--oro); border-radius: 6px; padding: 1px 7px; }
+.para { font: .82rem/1.45 var(--sans); color: var(--muted); }
+.pregunta { font-size: 1.02rem; }
+.cambios { font: .85rem/1.45 var(--sans); color: var(--dim); margin: 0; padding-left: 18px; display: grid; gap: 3px; }
+button.b { font: 600 .88rem var(--sans); background: var(--card2); color: var(--fg); border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; cursor: pointer; text-align: left; }
+button.b:disabled { cursor: default; opacity: .75; }
+button.b.prim { background: var(--oro); color: var(--bg); border-color: var(--oro); }
+button.b.link { background: transparent; color: var(--oro); border-style: dashed; }
+button:focus-visible, label:focus-within { outline: 2px solid var(--oro); outline-offset: 2px; }
+.fila { display: flex; gap: 8px; flex-wrap: wrap; }
+.op { display: grid; gap: 8px; }
+.respuesta { background: var(--card2); border-radius: 10px; padding: 12px; display: grid; gap: 8px; }
+.ok { color: var(--verde); font: 600 .9rem var(--sans); }
+.mal { color: var(--rojo); font: 600 .9rem var(--sans); }
+.punto { display: flex; gap: 10px; align-items: flex-start; font: .95rem/1.45 var(--serif); cursor: pointer; }
+.punto input { margin-top: 4px; width: 18px; height: 18px; accent-color: var(--verde); flex: none; }
+.frase { display: flex; gap: 10px; width: 100%; font: .98rem/1.45 var(--serif); background: transparent; color: var(--fg); border: 1px solid var(--card2); border-radius: 8px; padding: 8px 10px; text-align: left; cursor: pointer; }
+.frase .n { font: 700 .78rem var(--sans); color: var(--muted); padding-top: 3px; }
+.frase.marcada { border-color: var(--oro); background: rgba(207,154,62,.1); }
+.frase.acierto { border-color: var(--verde); }
+.frase.fallo { border-color: var(--rojo); background: rgba(184,92,62,.12); }
+.correccion { font: .9rem/1.45 var(--sans); color: var(--dim); padding: 4px 0 0 26px; }
+.correccion[hidden] { display: none; }
+
+.pasos { display: flex; gap: 6px; }
+.pasos i { flex: 1; height: 5px; border-radius: 3px; background: var(--card2); }
+.pasos i.on { background: var(--oro); }
+.dia { font: 700 .78rem var(--sans); color: var(--oro); letter-spacing: .06em; text-transform: uppercase; }
+.paciente { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; background: var(--card2); border-radius: 10px; padding: 12px; font: .86rem/1.4 var(--sans); }
+.paciente dt { color: var(--muted); }
+.paciente dd { margin: 0; font-variant-numeric: tabular-nums; min-width: 0; }
+.paciente dd.cambia { color: var(--rojo); font-weight: 600; }
+.lleva { display: grid; gap: 6px; }
+.lleva li { font: .95rem/1.45 var(--serif); }
+.elige { border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: grid; gap: 10px; }
+@media (prefers-reduced-motion: no-preference) { .entra { animation: entra .25s ease-out; } }
+@keyframes entra { from { opacity: .4; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+</style>
+</head><body>
+
+<main>
+  <header style="display:grid;gap:8px">
+    <span class="eyebrow">Modelo aprobado · 14/10/2026</span>
+    <h1>Estudiar con preguntas</h1>
+    <p class="lead">Con lo que elegiste: el botón en el interruptor de la ficha, solo «piensa y destapa» y «encuentra el error», ahora más difíciles, y un caso clínico más largo. Todo se puede tocar.</p>
+    <p class="nota">Todo sale de la ficha de trombocitopenia y HIT de Merino HEMATO (Marino, The ICU Book), incluida la escala 4Ts. En el caso, el paciente es inventado; la medicina, no.</p>
+  </header>
+
+  <section>
+    <div>
+      <span class="eyebrow">Dónde se pulsa (elegiste la A)</span>
+      <h2>Texto | Visual | Preguntas</h2>
+    </div>
+    <div class="movil">
+      <span class="ficha-tit">Trombocitopenia y HIT</span>
+      <div class="interruptor"><span>Texto</span><span>Visual</span><span class="on">Preguntas</span></div>
+      <div class="ruta">
+        <span><b>1.</b> Recorrido de la ficha: 12 preguntas, en el orden del texto.</span>
+        <span><b>2.</b> Lo que fallaste o sabías a medias, otra vez.</span>
+        <span><b>3.</b> Caso clínico: 7 pasos.</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div>
+      <span class="eyebrow">Formato 1</span>
+      <h2>Piensa y destapa, más difícil</h2>
+      <ul class="cambios">
+        <li>Ya no pregunta qué es algo: pregunta cómo lo harías y por qué.</li>
+        <li>La respuesta viene en puntos y marcas <b>uno a uno</b> los que recordabas. Se acabó el «lo sabía» a ojo.</li>
+        <li>Si no llegas a todos, vuelve al final del recorrido.</li>
+      </ul>
+    </div>
+    <article class="formato" id="d1">
+      <p class="pregunta">Tu paciente con HIT tiene además insuficiencia hepática y fracaso renal. Vas a usar argatrobán. ¿Qué dosis, cómo lo controlas, qué cambia por cada órgano y hasta cuándo lo mantienes?</p>
+      <p class="para">Contesta en la cabeza: son cuatro cosas. Luego destápalo.</p>
+      <div class="fila"><button class="b prim" type="button" id="d1-ver">Ya lo tengo: destapar</button></div>
+      <div class="respuesta entra" id="d1-resp" hidden>
+        <p class="para">Marca lo que tenías:</p>
+        <label class="punto"><input type="checkbox"> <span>Infusión continua de <span class="hl-a">1-2 µg/kg/min</span>, pero <span class="hl-r">0,5 µg/kg/min</span> por la insuficiencia hepática.</span></label>
+        <label class="punto"><input type="checkbox"> <span>Se ajusta a un <span class="hl-a">aPTT de 1,5-3 veces</span> el normal.</span></label>
+        <label class="punto"><input type="checkbox"> <span>El fracaso renal <span class="hl-v">no cambia nada</span>: sin ajuste por función renal.</span></label>
+        <label class="punto"><input type="checkbox"> <span>Anticoagulación plena hasta que las plaquetas superen <span class="hl-a">150.000/µl</span>.</span></label>
+        <div class="fila"><button class="b" type="button" id="d1-hecho">Hecho</button></div>
+        <p id="d1-res" hidden></p>
+      </div>
+    </article>
+  </section>
+
+  <section>
+    <div>
+      <span class="eyebrow">Formato 2</span>
+      <h2>Encuentra el error, más difícil</h2>
+      <ul class="cambios">
+        <li>No son tres frases sueltas: es una nota de evolución, y todas suenan bien.</li>
+        <li><b>Puede haber cero, uno o dos errores.</b> Hay que juzgar cada frase, y marcar una verdadera también cuenta como fallo.</li>
+        <li>Los errores son las confusiones que se cometen de verdad: una cifra, un sentido al revés, un fármaco cambiado.</li>
+        <li>Al corregir, piensas cómo sería la frase buena antes de verla.</li>
+      </ul>
+    </div>
+    <article class="formato" id="d2">
+      <p class="pregunta">Nota del R1, día 7 de heparina no fraccionada. Toca las frases que creas falsas.</p>
+      <div class="op" id="d2-frases"></div>
+      <div class="fila"><button class="b prim" type="button" id="d2-corregir">Corregir</button></div>
+      <p id="d2-res" hidden></p>
+    </article>
+  </section>
+
+  <section>
+    <div>
+      <span class="eyebrow">Caso clínico</span>
+      <h2>Un paciente, siete pasos</h2>
+      <ul class="cambios">
+        <li>Los datos hay que interpretarlos: calculas tú la caída de plaquetas y la escala 4Ts, que se abre desde el caso.</li>
+        <li>Mezcla los dos formatos y, en las de test, <b>piensas antes de ver las opciones</b>.</li>
+        <li>Si fallas, te dice qué habría pasado con el paciente.</li>
+        <li>Al final, «Lo que te llevas» y el camino de vuelta a la ficha.</li>
+      </ul>
+    </div>
+    <div class="caso" id="caso">
+      <div class="pasos" id="caso-pasos"></div>
+      <span class="dia" id="caso-dia"></span>
+      <dl class="paciente" id="caso-pac"></dl>
+      <div id="caso-paso" class="entra"></div>
+    </div>
+  </section>
+
+  <section class="elige">
+    <span class="eyebrow">Para decidir</span>
+    <h2>¿Así está bien de difícil?</h2>
+    <p class="lead">Dime si esta dificultad te sirve o si lo subo más, y qué le falta al caso. Con eso lo escribo en las reglas del plan socialista.</p>
+  </section>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+
+// ---- Formato 1: piensa y destapa con puntos
+$('d1-ver').addEventListener('click', () => { $('d1-resp').hidden = false; $('d1-ver').hidden = true; });
+$('d1-hecho').addEventListener('click', () => {
+  const n = $('d1-resp').querySelectorAll('input:checked').length;
+  const r = $('d1-res'); r.hidden = false;
+  r.className = n === 4 ? 'ok' : 'mal';
+  r.textContent = n === 4 ? '✓ Las cuatro. Esta no vuelve.' : `${n} de 4. Vuelve al final del recorrido, solo con lo que te faltó.`;
+});
+
+// ---- Formato 2: encuentra el error (0-2 errores)
+const NOTA = [
+  { t: 'Plaquetas 210.000 al ingreso y 92.000 hoy, confirmadas en tubo con citrato: no es una pseudotrombocitopenia.', mal: false },
+  { t: 'La HIT aparece típicamente 5-10 días tras la primera exposición a la heparina, así que el momento encaja.', mal: false },
+  { t: 'Lo esperable en la HIT es que las plaquetas caigan por debajo de 20.000/µl.', mal: true,
+    c: 'Las plaquetas caen hasta un 50 % y <span class="hl-r">raramente por debajo de 20.000/µl</span>.' },
+  { t: 'No hay trombosis, y en la HIT la trombosis siempre aparece después de la trombocitopenia.', mal: true,
+    c: 'En <span class="hl-r">hasta el 25 %</span> de los casos la trombosis precede a la trombocitopenia.' },
+  { t: 'Con heparina no fraccionada el riesgo de HIT es 2-10 veces mayor que con heparina de bajo peso molecular.', mal: false },
+];
+$('d2-frases').innerHTML = NOTA.map((f, i) =>
+  `<button class="frase" type="button" data-i="${i}"><span class="n">${i + 1}</span><span>${f.t}</span></button>` +
+  (f.mal ? `<div class="correccion" id="d2-c${i}" hidden></div>` : '')).join('');
+let corregido = false;
+$('d2-frases').addEventListener('click', e => {
+  const b = e.target.closest('.frase'); if (!b || corregido) return;
+  b.classList.toggle('marcada');
+});
+$('d2-corregir').addEventListener('click', () => {
+  if (corregido) return; corregido = true;
+  let bien = 0;
+  document.querySelectorAll('#d2-frases .frase').forEach(b => {
+    const f = NOTA[b.dataset.i], marcada = b.classList.contains('marcada');
+    const acierto = marcada === f.mal; if (acierto) bien++;
+    b.classList.remove('marcada'); b.classList.add(acierto ? 'acierto' : 'fallo');
+    if (f.mal) {
+      const c = $('d2-c' + b.dataset.i); c.hidden = false;
+      c.innerHTML = `<b>Era falsa.</b> ¿Cómo sería la frase buena? <button class="b link" type="button" data-c="${b.dataset.i}">Pensado: ver</button>`;
+    }
+  });
+  const r = $('d2-res'); r.hidden = false;
+  r.className = bien === NOTA.length ? 'ok' : 'mal';
+  r.textContent = bien === NOTA.length ? '✓ Las cinco bien juzgadas: había dos errores.' : `${bien} de 5 bien juzgadas. Había dos errores: la 3 y la 4.`;
+  $('d2-corregir').disabled = true;
+});
+$('d2-frases').addEventListener('click', e => {
+  const b = e.target.closest('[data-c]'); if (!b) return;
+  b.parentElement.innerHTML = '<b>Corrección:</b> ' + NOTA[b.dataset.c].c;
+});
+
+// ---- Caso clínico en 7 pasos
+// tipo 'test': opciones ocultas hasta «ver opciones»; 'destapa': puntos; 'error': frases.
+const CASO = [
+  { dia: 'Día 1 · ingreso', pac: { Edad: '67 años', Motivo: 'Shock séptico de origen urinario, sin cirugía', Heparina: 'No fraccionada, profiláctica, desde hoy (sin exposición previa)', Plaquetas: '210.000/µl' }, nuevo: 'Plaquetas',
+    tipo: 'info', txt: 'Guarda la cifra de plaquetas del ingreso: la necesitarás.' },
+  { dia: 'Día 7', pac: { Plaquetas: '95.000/µl (analizador)' }, nuevo: 'Plaquetas',
+    tipo: 'test', q: 'Las plaquetas han caído. ¿Qué es lo primero que haces?',
+    ops: [['Repetir el recuento en un tubo con citrato o heparina', 1, ''],
+          ['Pedir ya el ELISA anti-FP4', 0, 'Pedirías una prueba de HIT sin saber si la caída es real: los anticuerpos anti-EDTA pueden agregar plaquetas en el tubo.'],
+          ['Suspender la heparina', 0, 'Si fuera una pseudotrombocitopenia, dejarías sin profilaxis a un paciente séptico encamado sin motivo.']],
+    exp: 'Primero descartas la <span class="hl-p">pseudotrombocitopenia</span>: anticuerpos anti-EDTA que agregan plaquetas en el tubo, y el contador las confunde con leucocitos.' },
+  { dia: 'Día 7', pac: { Plaquetas: '92.000/µl en tubo con citrato' }, nuevo: 'Plaquetas',
+    tipo: 'test', q: 'Es real. Calcula la caída desde el ingreso y puntúa los dos primeros apartados de la 4Ts: trombocitopenia y momento de aparición.',
+    abrir4ts: true,
+    ops: [['Caída ~56 %: trombocitopenia 2 + momento 2', 1, ''],
+          ['Caída ~44 %: trombocitopenia 1 + momento 2', 0, 'Cuenta otra vez: de 210.000 a 92.000 baja 118.000, el 56 %. Pasa del 50 % y el nadir es ≥20.000.'],
+          ['Caída ~56 %: trombocitopenia 2 + momento 1', 0, 'Día 7 tras la primera exposición está dentro de los 5-10 días: son 2 puntos.']],
+    exp: 'Caída <span class="hl-a">&gt;50 %</span> con nadir ≥20.000 y sin cirugía: 2 puntos. Día 7, dentro de los <span class="hl-a">5-10 días</span>: 2 puntos.' },
+  { dia: 'Día 7', pac: { '4Ts': 'Trombocitopenia 2 · Momento 2 · Trombosis 0 · Otras causas ?' }, nuevo: '4Ts',
+    tipo: 'test', q: 'Sin trombosis. Tiene sepsis. ¿Cuántos puntos suma la 4Ts y qué haces?',
+    ops: [['5, riesgo intermedio: retirar heparina, anticoagulante no heparínico y pedir ELISA', 1, ''],
+          ['6, riesgo alto: retirar heparina y anticoagular a dosis plenas', 0, 'La sepsis es otra causa posible: «Otras causas» da 1, no 2. Suma 5.'],
+          ['3, riesgo bajo: seguir con la heparina', 0, 'Con 5 puntos (~10 % de probabilidad), seguir con heparina expone al paciente a una trombosis.']],
+    exp: 'La <span class="hl-v">sepsis</span> es la causa no farmacológica más frecuente: «otra causa posible», 1 punto. Total <span class="hl-a">5, riesgo intermedio (~10 %)</span>.' },
+  { dia: 'Día 8', pac: { 'ELISA anti-FP4': 'Positivo', Anticoagulación: 'Argatrobán' }, nuevo: 'ELISA anti-FP4',
+    tipo: 'destapa', q: 'El adjunto pregunta: «¿Tiene HIT, sí o no?». ¿Qué le contestas?',
+    puntos: ['Un ELISA positivo <span class="hl-r">no confirma</span> la HIT: es sensible pero poco específico.',
+             'Un ELISA negativo sí la habría <span class="hl-v">excluido</span>.',
+             'Lo confirmaría el ensayo de liberación de serotonina (SRA), poco disponible.'] },
+  { dia: 'Día 9', pac: { Exploración: 'Pierna izquierda edematosa: trombosis venosa confirmada' }, nuevo: 'Exploración',
+    tipo: 'test', q: 'Aparece una trombosis venosa confirmada. ¿Qué cambia?',
+    ops: [['La 4Ts sube a 7, riesgo alto (~50 %): anticoagulante no heparínico a dosis terapéuticas plenas', 1, ''],
+          ['Nada: ya se había retirado la heparina', 0, 'La trombosis suma 2 puntos y cambia el riesgo a alto: hay que pasar a dosis plenas.'],
+          ['Se añade warfarina para tratar la trombosis', 0, 'En la fase aguda, la warfarina puede producir gangrena de miembros y necrosis cutánea.']],
+    exp: 'Trombosis nueva confirmada: <span class="hl-r">2 puntos</span>. Total 7, <span class="hl-r">riesgo alto (~50 %)</span>: dosis terapéuticas plenas.' },
+  { dia: 'Día 9', pac: { Función: 'Creatinina en ascenso; hígado normal' }, nuevo: 'Función',
+    tipo: 'error', q: 'Plan que deja escrito el R1 de guardia. Toca las frases falsas (puede haber 0, 1 o 2).',
+    frases: [
+      { t: 'Argatrobán en infusión continua de 1-2 µg/kg/min, ajustado a un aPTT de 1,5-3 veces el normal.', mal: false },
+      { t: 'Como sube la creatinina, reducimos la dosis de argatrobán a 0,5 µg/kg/min.', mal: true,
+        c: 'El argatrobán <span class="hl-v">no se ajusta por función renal</span>; los 0,5 µg/kg/min son para la insuficiencia hepática.' },
+      { t: 'Empezamos ya warfarina solapada para el tratamiento a largo plazo.', mal: true,
+        c: 'La warfarina está <span class="hl-r">contraindicada en la fase aguda</span>: gangrena de miembros y necrosis cutánea.' },
+      { t: 'Mantener la anticoagulación plena hasta que las plaquetas superen 150.000/µl.', mal: false },
+    ] },
+  { dia: 'Alta de la UCI', pac: { Plaquetas: '168.000/µl' }, nuevo: 'Plaquetas',
+    tipo: 'destapa', q: 'Se va a planta. ¿Qué tres cosas tiene que llevar escritas en el informe sobre la HIT?',
+    puntos: ['Tratamiento durante <span class="hl-a">1-3 meses</span>.',
+             'Brazalete de alerta médica durante ese tiempo.',
+             '<span class="hl-r">Evitar la heparina de por vida</span>.'],
+    fin: true },
+];
+const LLEVA = [
+  'Antes de pensar en HIT, confirma que la caída es real (tubo con citrato o heparina).',
+  'La 4Ts decide qué haces; la trombosis la cambia de intermedio a alto.',
+  'ELISA positivo no confirma; warfarina nunca en la fase aguda; argatrobán sin ajuste renal.',
+];
+let paso = 0; const ficha = {};
+function pintarPaso() {
+  const p = CASO[paso];
+  if (paso === 0) for (const k in ficha) delete ficha[k];
+  Object.assign(ficha, p.pac);
+  $('caso-pasos').innerHTML = CASO.map((_, i) => `<i class="${i <= paso ? 'on' : ''}"></i>`).join('');
+  $('caso-dia').textContent = p.dia;
+  $('caso-pac').innerHTML = Object.entries(ficha).map(([k, v]) => `<dt>${k}</dt><dd class="${k === p.nuevo ? 'cambia' : ''}">${v}</dd>`).join('');
+  const c = $('caso-paso'); let h = '';
+  if (p.tipo === 'info') h = `<p class="pregunta">${p.txt}</p>` + botonSig();
+  if (p.tipo === 'test') {
+    h = `<p class="pregunta">${p.q}</p>` +
+      (p.abrir4ts ? `<div class="fila" style="margin-top:8px"><button class="b link" type="button" data-accion="4ts">🧮 Abrir la escala 4Ts de la ficha</button></div>` : '') +
+      `<p class="para" style="margin-top:8px">Piénsalo antes de ver las opciones.</p>
+       <div class="fila" style="margin-top:6px"><button class="b prim" type="button" data-accion="ops">Ya lo tengo: ver opciones</button></div>
+       <div class="op" id="ops" hidden style="margin-top:8px">${p.ops.map(([t], i) => `<button class="b" type="button" data-op="${i}">${t}</button>`).join('')}</div>
+       <div id="caso-res"></div>`;
+  }
+  if (p.tipo === 'destapa') {
+    h = `<p class="pregunta">${p.q}</p>
+       <div class="fila" style="margin-top:8px"><button class="b prim" type="button" data-accion="destapa">Ya lo tengo: destapar</button></div>
+       <div class="respuesta" id="pts" hidden style="margin-top:8px"><p class="para">Marca lo que tenías:</p>
+       ${p.puntos.map(t => `<label class="punto"><input type="checkbox"> <span>${t}</span></label>`).join('')}
+       <div class="fila"><button class="b" type="button" data-accion="puntos">Hecho</button></div></div><div id="caso-res"></div>`;
+  }
+  if (p.tipo === 'error') {
+    h = `<p class="pregunta">${p.q}</p><div class="op" style="margin-top:8px">${p.frases.map((f, i) =>
+      `<button class="frase" type="button" data-fr="${i}"><span class="n">${i + 1}</span><span>${f.t}</span></button>` +
+      (f.mal ? `<div class="correccion" id="cfr${i}" hidden></div>` : '')).join('')}</div>
+      <div class="fila" style="margin-top:8px"><button class="b prim" type="button" data-accion="corregir">Corregir</button></div><div id="caso-res"></div>`;
+  }
+  c.innerHTML = h;
+  c.classList.remove('entra'); void c.offsetWidth; c.classList.add('entra');
+}
+function botonSig() {
+  const fin = CASO[paso].fin;
+  return `<div class="fila" style="margin-top:10px"><button class="b prim" type="button" data-accion="sig">${fin ? 'Ver lo que te llevas' : 'Siguiente: el paciente evoluciona →'}</button></div>`;
+}
+function resultado(html) { $('caso-res').innerHTML = `<div class="respuesta entra" style="margin-top:10px">${html}${botonSig()}</div>`; }
+$('caso-paso').addEventListener('click', e => {
+  const p = CASO[paso];
+  const a = e.target.closest('[data-accion]')?.dataset.accion;
+  if (a === 'ops') { $('ops').hidden = false; e.target.closest('.fila').remove(); return; }
+  if (a === '4ts') { e.target.closest('button').textContent = '🧮 En la app abriría la escala 4Ts de la ficha y volvería aquí'; return; }
+  if (a === 'destapa') { $('pts').hidden = false; e.target.closest('.fila').remove(); return; }
+  if (a === 'puntos') {
+    const n = $('pts').querySelectorAll('input:checked').length, t = p.puntos.length;
+    e.target.closest('button').disabled = true;
+    resultado(`<span class="${n === t ? 'ok' : 'mal'}">${n === t ? '✓ Todo' : `${n} de ${t}: vuelve al final`}</span>`); return;
+  }
+  if (a === 'corregir') {
+    let bien = 0;
+    document.querySelectorAll('#caso-paso .frase').forEach(b => {
+      const f = p.frases[b.dataset.fr], m = b.classList.contains('marcada'), ok = m === f.mal; if (ok) bien++;
+      b.classList.remove('marcada'); b.classList.add(ok ? 'acierto' : 'fallo'); b.disabled = true;
+      if (f.mal) { const c = $('cfr' + b.dataset.fr); c.hidden = false; c.innerHTML = '<b>Corrección:</b> ' + f.c; }
+    });
+    e.target.closest('button').disabled = true;
+    resultado(`<span class="${bien === p.frases.length ? 'ok' : 'mal'}">${bien} de ${p.frases.length} bien juzgadas (había dos errores)</span>`); return;
+  }
+  if (a === 'sig') {
+    if (p.fin) {
+      $('caso-paso').innerHTML = `<div class="respuesta entra"><span class="eyebrow">Lo que te llevas</span><ol class="lleva" style="margin:0;padding-left:20px">${LLEVA.map(t => `<li>${t}</li>`).join('')}</ol>
+        <div class="fila"><button class="b link" type="button">📖 Repasar en la ficha: HIT</button><button class="b" type="button" data-accion="reinicio">Volver a empezar</button></div></div>`;
+      return;
+    }
+    paso++; pintarPaso(); return;
+  }
+  if (a === 'reinicio') { paso = 0; pintarPaso(); return; }
+  const fr = e.target.closest('[data-fr]');
+  if (fr && !fr.disabled) { fr.classList.toggle('marcada'); return; }
+  const op = e.target.closest('[data-op]');
+  if (op && !op.disabled) {
+    const [, ok, porque] = p.ops[op.dataset.op];
+    $('ops').querySelectorAll('button').forEach(b => b.disabled = true);
+    op.style.borderColor = ok ? 'var(--verde)' : 'var(--rojo)';
+    resultado(`<span class="${ok ? 'ok' : 'mal'}">${ok ? '✓ Bien' : '✗ Qué habría pasado'}</span>${ok ? '' : `<p>${porque}</p>`}<p>${p.exp}</p>`);
+  }
+});
+pintarPaso();
+</script>
+</body></html>

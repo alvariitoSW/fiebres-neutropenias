@@ -85,3 +85,37 @@ Lo decidido con el usuario (modelos «así sí»: los cuatro; «todo, sin frenos
   opus en las visuales y al profesor junto a los otros jueces; plan B si un agente no está cargado; los jueces que no
   pueden escribir devuelven el informe en la respuesta. `LEEME.md` explica al usuario cómo escribir un encargo.
 - `CLAUDE.md` §12: línea «sirve para estudiar» en la lista de antes de terminar.
+
+## Preguntas para estudiar y el profesor que dirige (octubre 2026)
+
+El usuario aclaró qué quiere de la capa de estudio: el texto fiel con sus fuentes es la base y se queda, pero
+encima tiene que haber **otra forma de estudiarlo**. Por un lado, preguntas que te enseñan el tema si no te apetece
+leerlo, y casos clínicos para aprender a actuar. Por otro, lo visual con los **modelos grandes** de la app (la
+nefrona, el ecógrafo), no gráficos de números. Y un agente potente que, sobre lo que ya está en la app, diseñe
+cómo optimizar su estudio.
+
+- **Maqueta con dos versiones** (Artifact privado; copia en `autonomo/modelos/preguntas-para-estudiar.html`, con datos
+  de la ficha de HIT de Merino HEMATO). Elecciones del usuario:
+  - el botón como tercera opción del interruptor, **Texto | Visual | Preguntas** (frente a un botón propio);
+  - de cinco sustitutos de las preguntas de redactar, **«piensa y destapa»** y **«encuentra el error»**, más
+    difíciles (descartados: completar huecos, emparejar y «explícaselo a otro», «un poco caca» y «meh»);
+  - el **caso clínico que evoluciona**: «top».
+  
+  En la versión 2:
+  - destapa pregunta por razonamiento y se marca punto a punto;
+  - el error va en una nota de evolución con 0-2 errores;
+  - el caso tiene 7 pasos con la escala 4Ts, opciones ocultas hasta pensar, «qué habría pasado» y «Lo que te llevas».
+  
+  Respuesta del usuario: «Me encanta, esto sí que es lo que quiero a partir de ahora».
+- `REGLAS.md` §8 «Preguntas para estudiar» y §7.8 «Un modelo grande, muchas fichas».
+- El agente `profesor` pasa de solo juzgar a **diseñar y juzgar**:
+  - en modo diseñar, escribe el plan de estudio (ideas de fondo, lo visual con qué modelo y en qué estado, primera
+    pantalla, recorrido de preguntas con su origen, casos y huecos);
+  - en modo juzgar, recorre las preguntas y el caso en el móvil y puntúa §7 y §8.
+- La skill divide cada tarea en **fase A (fiel)** y **fase B (para estudiar)**. Tipo nuevo **`estudio`** (solo la
+  fase B, para lo que ya está en la app; `/plan-socialista estudio <clave>`). El tipo `quiz` desaparece.
+- Tablero: **Objetivo 0, tarea `preguntas`**: llevar la maqueta a la app, empezando por la ficha de HIT, ampliando
+  `quiz.js` sin un segundo quiz (el usuario no quiere «mucho más código»). Es lo primero, porque sin ese botón
+  ninguna tarea puede entregar las preguntas nuevas.
+- Reconvertir las preguntas viejas: cuando lo pida el usuario.
+- `CLAUDE.md` §8: no se escriben más preguntas de redactar.
