@@ -449,3 +449,21 @@ de entrada. Añadir una guía nueva en el futuro: 1) botón nuevo en
 - distractores de q053, q054 y q082.
 
 Parte: `autonomo/partes/2026-10-14-marino-r6.md`.
+
+## Merino Neumología: revisión R7 del plan Marino, caps. 27-30 (octubre 2026)
+
+`marino-r7` (revisión sin construir), 1 vuelta, 10 fichas. Corregido:
+- PRVC (flujo, no volumen);
+- Ecuación 27.2 con Pmeseta;
+- SOD en lugar de SDD;
+- notas del manguito (mmHg/cmH₂O) y de la PImax;
+- `.puntuable` en los checklists;
+- clasificador del derrame sin conducta en los casos que la fuente no define;
+- límites, aviso y origen visible en las calculadoras;
+- tubo ET por tramos exactos;
+- gauge de la DOR neutro;
+- huecos de PEEP;
+- remisiones «Ficha N» → botones;
+- preguntas q115-q178.
+
+Va encima de R6. Parte: `autonomo/partes/2026-10-14-marino-r7.md`.

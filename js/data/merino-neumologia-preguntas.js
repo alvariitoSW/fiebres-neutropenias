@@ -806,11 +806,11 @@ export const preguntasMerinoNeumologia = [
         explicacion: 'Las fugas del sistema crean cambios de flujo que pueden disparar respiraciones no deseadas del ventilador — el problema principal del disparo por flujo.',
     },
     {
-        id: 'neumo-q115', tema: 'neumo-vm-ajuste',
+        id: 'neumo-q115', tema: 'neumo-sbt',
         enunciado: 'Según el estudio animal citado, ¿cuánto se redujo la fuerza de las contracciones diafragmáticas tras 3 días de ventilación controlada (sin esfuerzos de disparo)?',
         opciones: ['~50%, en cada frecuencia de estimulación probada', '~10%', 'No hubo reducción medible', '~90%'],
         correcta: 0,
-        explicacion: 'La ventilación controlada durante 3 días se asoció a una reducción de cerca del 50% en la fuerza de las contracciones diafragmáticas, comparada con respiración espontánea o ventilación asistida.',
+        explicacion: 'La ventilación controlada durante 3 días se asoció a una reducción de cerca del 50% en la fuerza de las contracciones diafragmáticas, respecto a la respiración espontánea.',
     },
     {
         id: 'neumo-q116', tema: 'neumo-vm-ajuste',
@@ -828,7 +828,7 @@ export const preguntasMerinoNeumologia = [
     },
     {
         id: 'neumo-q118', tema: 'neumo-vm-ajuste',
-        enunciado: 'Según el protocolo de ventilación protectora (Tabla 27.1), ¿cuáles son los objetivos finales de la 3ª etapa?',
+        enunciado: 'Según el protocolo de ventilación protectora (Tabla 27.1), ¿cuáles son los objetivos finales del protocolo (fila «Optimal Goals», que va aparte de las tres etapas)?',
         opciones: ['V<sub>T</sub>=6 mL/kg, Pmeseta ≤30 cmH₂O, SpO₂ 88-95%, pH 7,30-7,45', 'V<sub>T</sub>=8 mL/kg, Pmeseta ≤40 cmH₂O, SpO₂ >95%', 'V<sub>T</sub>=4 mL/kg siempre, sin importar el pH', 'PEEP=20 cmH₂O fijo'],
         correcta: 0,
         explicacion: 'Los objetivos finales del protocolo de ventilación protectora son V<sub>T</sub>=6 mL/kg PBW, presión meseta ≤30 cmH₂O, SpO₂ 88-95%, y pH 7,30-7,45.',
@@ -878,7 +878,7 @@ export const preguntasMerinoNeumologia = [
         enunciado: '¿Qué presión NO debe exceder el manguito (cuff) de un tubo endotraqueal o de traqueostomía, y por qué?',
         opciones: ['25 mmHg, porque presiones mayores pueden comprimir los capilares de la mucosa traqueal y producir lesión isquémica', '50 mmHg, porque menos presión no sella bien la vía aérea', '10 mmHg, para evitar cualquier daño', 'No hay límite establecido'],
         correcta: 0,
-        explicacion: 'La presión del manguito no debe exceder 25 mmHg, basado en la asunción de que la presión hidrostática capilar de la pared traqueal es 25 mmHg — presiones mayores pueden comprimir capilares y producir isquemia mucosa.',
+        explicacion: 'La presión del manguito no debe exceder 25 mmHg, basado en la asunción de que la presión hidrostática capilar de la pared traqueal es 25 mmHg — presiones mayores pueden comprimir capilares y producir isquemia mucosa. Ojo: la fuente da 25 mmHg en el apartado del manguito (pág. 21) y 25 cmH₂O en la solución de problemas (pág. 22); no son lo mismo (25 mmHg ≈ 34 cmH₂O) y la app muestra las dos tal cual.',
     },
     {
         id: 'neumo-q126', tema: 'neumo-vias-artificiales',
@@ -949,7 +949,7 @@ export const preguntasMerinoNeumologia = [
     {
         id: 'neumo-q136', tema: 'neumo-cuidado-barotrauma', tipo: 'redactar',
         enunciado: 'Distingue el volutrauma del barotrauma, y explica cómo se relacionan ambos conceptos con el escape de gas alveolar y sus posibles presentaciones clínicas.',
-        respuestaModelo: 'El volutrauma es una expresión de la TENSIÓN (el grado de deformación) sobre los alveolos por sobredistensión en regiones pulmonares normales; el barotrauma es una expresión del ESTRÉS (las fuerzas que producen esa deformación, es decir, la presión transpulmonar) impuesto sobre los alveolos. El volutrauma rompe la interfaz alveolo-capilar, permitiendo el escape de gas de los espacios aéreos distales — esto es el barotrauma pulmonar en su sentido clínico, que puede manifestarse como enfisema intersticial pulmonar (gas disecando planos tisulares), neumomediastino (gas hacia el mediastino), enfisema subcutáneo (gas mediastínico hacia el cuello), neumoperitoneo (gas bajo el diafragma), o neumotórax (si la rotura involucra la pleura visceral) — cada uno puede ocurrir solo o combinado con los demás.',
+        respuestaModelo: 'El volutrauma es una expresión de la TENSIÓN (el grado de deformación) sobre los alveolos por sobredistensión en regiones pulmonares normales; el barotrauma es una expresión del ESTRÉS (las fuerzas que producen esa deformación, es decir, la presión transpulmonar) impuesto sobre los alveolos. El volutrauma rompe la interfaz alveolo-capilar y produce un infiltrado inflamatorio parecido al SDRA. Otra consecuencia de la rotura alveolar es el escape de gas de los espacios aéreos distales, que se llama barotrauma pulmonar y que puede manifestarse como enfisema intersticial pulmonar (gas disecando planos tisulares), neumomediastino (gas hacia el mediastino), enfisema subcutáneo (gas mediastínico hacia el cuello), neumoperitoneo (gas bajo el diafragma), o neumotórax (si la rotura involucra la pleura visceral) — cada uno puede ocurrir solo o combinado con los demás.',
     },
 
     // ---- Ficha XVIII: PEEP oculta (intrínseca) ----
@@ -1024,16 +1024,16 @@ export const preguntasMerinoNeumologia = [
     {
         id: 'neumo-q147', tema: 'neumo-nav-prevencion',
         enunciado: '¿Qué método de descontaminación oral es el preferido según la fuente, y cuál es su objetivo?',
-        opciones: ['Descontaminación digestiva selectiva (SDD) con antibióticos no absorbibles, para eliminar patógenos selectivamente mientras se retiene el ambiente microbiano normal', 'Cepillado dental mecánico exclusivamente', 'Enjuagues con agua estéril únicamente', 'Antibióticos sistémicos profilácticos'],
+        opciones: ['Descontaminación oral selectiva (SOD) con antibióticos no absorbibles, para eliminar patógenos selectivamente mientras se retiene el ambiente microbiano normal', 'Cepillado dental mecánico exclusivamente', 'Enjuagues con agua estéril únicamente', 'Antibióticos sistémicos profilácticos'],
         correcta: 0,
-        explicacion: 'La SDD usa antibióticos no absorbibles aplicados sobre la mucosa oral, buscando eliminar "selectivamente" los patógenos mientras se retiene el ambiente microbiano normal de la boca.',
+        explicacion: 'La SOD usa antibióticos no absorbibles aplicados sobre la mucosa oral, buscando eliminar "selectivamente" los patógenos mientras se retiene el ambiente microbiano normal de la boca.',
     },
     {
         id: 'neumo-q148', tema: 'neumo-nav-prevencion',
-        enunciado: 'En el estudio real citado, ¿qué efecto tuvo la SDD sobre la colonización traqueal y la neumonía?',
+        enunciado: 'En el estudio real citado, ¿qué efecto tuvo la SOD sobre la colonización traqueal y la neumonía?',
         opciones: ['Colonización traqueal del 52% al 22%; neumonía del 31% al 10% (ambos p≤0,01)', 'No hubo diferencia significativa en ningún desenlace', 'Aumentó la colonización traqueal', 'Solo redujo la neumonía, no la colonización'],
         correcta: 0,
-        explicacion: 'La SDD se asoció a un descenso significativo tanto en la colonización traqueal (52%→22%) como en la neumonía (31%→10%), ambos con p≤0,01.',
+        explicacion: 'La SOD se asoció a un descenso significativo tanto en la colonización traqueal (52%→22%) como en la neumonía (31%→10%), ambos con p≤0,01.',
     },
     {
         id: 'neumo-q149', tema: 'neumo-nav-prevencion',
@@ -1214,7 +1214,7 @@ export const preguntasMerinoNeumologia = [
     {
         id: 'neumo-q175', tema: 'neumo-sbt', tipo: 'redactar',
         enunciado: 'Explica por qué permitir al paciente disparar las respiraciones del ventilador (en vez de ventilación puramente controlada) ayuda a preservar la fuerza del diafragma, citando el hallazgo experimental relevante.',
-        respuestaModelo: 'El diafragma es un músculo involuntario que se contrae mientras exista impulso central para respirar. La ventilación controlada (donde el paciente no dispara ninguna respiración) puede promover la "disfunción diafragmática inducida por el ventilador" por desuso del músculo. En un estudio animal real, 3 días de ventilación controlada se asociaron a una reducción de cerca del 50% en la fuerza de las contracciones diafragmáticas (en cada frecuencia de estimulación probada), comparada con respiración espontánea o ventilación asistida (donde cada respiración es iniciada por un esfuerzo inspiratorio del paciente). Por eso, evitar la parálisis neuromuscular o la sedación profunda —permitiendo al paciente disparar respiraciones— ayuda a preservar la fuerza diafragmática y facilita la transición del soporte ventilatorio a la respiración espontánea.',
+        respuestaModelo: 'El diafragma es un músculo involuntario que se contrae mientras exista impulso central para respirar. La ventilación controlada (donde el paciente no dispara ninguna respiración) puede promover la "disfunción diafragmática inducida por el ventilador". En un estudio animal real, 3 días de ventilación controlada se asociaron a una reducción de cerca del 50% en la fuerza de las contracciones diafragmáticas (en cada frecuencia de estimulación probada), respecto a la respiración espontánea (la ventilación asistida, donde cada respiración la inicia un esfuerzo inspiratorio del paciente, queda algo por debajo de la espontánea en la Figura 30.1). Por eso, evitar la parálisis neuromuscular o la sedación profunda —permitiendo al paciente disparar respiraciones— ayuda a preservar la fuerza diafragmática y facilita la transición del soporte ventilatorio a la respiración espontánea.',
     },
     {
         id: 'neumo-q176', tema: 'neumo-sbt', tipo: 'redactar',
@@ -1228,14 +1228,14 @@ export const preguntasMerinoNeumologia = [
         enunciado: '¿En qué porcentaje de pruebas fallidas de destete se ha identificado disfunción cardíaca?',
         opciones: ['40%', '5%', '95%', '15%'],
         correcta: 0,
-        explicacion: 'La disfunción cardíaca se ha identificado en el 40% de las pruebas de destete fallidas — un factor a menudo pasado por alto.',
+        explicacion: 'La disfunción cardíaca se ha identificado en el 40% de las pruebas de destete fallidas.',
     },
     {
         id: 'neumo-q178', tema: 'neumo-weaning-extubacion',
         enunciado: 'En un estudio real comparando SvO₂ durante trials exitosos y fallidos de respiración espontánea, ¿qué se observó en los trials FALLIDOS?',
         opciones: ['Un descenso progresivo de la SvO₂ (de ~61% a ~51%), sugiriendo un descenso del gasto cardíaco', 'La SvO₂ se mantuvo estable en ambos grupos', 'La SvO₂ aumentó en los trials fallidos', 'No se pudo medir la SvO₂ en ningún caso'],
         correcta: 0,
-        explicacion: 'La SvO₂ se mantuvo estable (~65-68%) durante los ensayos exitosos, pero descendió progresivamente (~61% a ~51%) durante los fallidos, sugiriendo un descenso del gasto cardíaco como causa del fracaso.',
+        explicacion: 'La SvO₂ se mantuvo estable (~65-66%) durante los ensayos exitosos, pero descendió progresivamente (~61% a ~51%) durante los fallidos, sugiriendo un descenso del gasto cardíaco como causa del fracaso.',
     },
     {
         id: 'neumo-q179', tema: 'neumo-weaning-extubacion',

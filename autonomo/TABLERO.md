@@ -69,7 +69,7 @@ cada trozo salen de `js/data/libros-indice.js` (capítulos y su `tab`); el PDF y
 | 4 | `marino-r4` | 14-17 (shock) | pendiente | 12 fichas · Merino Cardiología |
 | 5 | `marino-r5` | 18-21 (trastornos cardíacos) | pendiente | 12 fichas · Merino Cardiología |
 | 6 | `marino-r6` | 22-26 | en revisión (2026-10-14) · PR #8 | 13 fichas · Merino Neumología |
-| 7 | `marino-r7` | 27-30 | pendiente | 10 fichas · Merino Neumología |
+| 7 | `marino-r7` | 27-30 | en revisión (2026-10-14) | 10 fichas · Merino Neumología |
 | 8 | `marino-r8` | 31-35 | pendiente | 15 fichas · Libros |
 | 9 | `marino-r9` | 36-38 | pendiente | 8 fichas · Libros |
 | 10 | `marino-r10` | 39-44 | pendiente | 17 fichas · Libros |

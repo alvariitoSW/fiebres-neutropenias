@@ -223,6 +223,19 @@ function initSistemaO2() {
     calcSistemaO2();
 }
 
+// Caps. 27-30 — avisos comunes de las calculadoras de esta parte. Los límites de
+// entrada son de fisiología general, no de la ficha (cada calculadora lo dice).
+function avisoDatos(resultado, titulo, texto) {
+    resultado.style.display = 'block';
+    resultado.className = 'result-box tfg-estado-danger';
+    resultado.style.textAlign = 'left';
+    resultado.innerHTML = `<strong>⚠️ ${titulo}</strong><p style="font-size:0.85rem; margin-top:6px;">${texto}</p>`;
+}
+// Número con coma decimal, como en las tablas de las fichas.
+function numEs(n, dec) {
+    return n.toFixed(dec).replace('.', ',');
+}
+
 // Ecuaciones 27.4/27.5 — calculadora de compliance estática (Cstat).
 function calcCstat() {
     const vtEl = document.getElementById('neumo-cstat-vt');
@@ -231,24 +244,31 @@ function calcCstat() {
     const resultado = document.getElementById('neumo-cstat-resultado');
     if (!vtEl || !presionEl || !peepEl || !resultado) return;
     if (vtEl.value === '' || presionEl.value === '' || peepEl.value === '') { resultado.style.display = 'none'; return; }
-    let vt = Number(vtEl.value);
-    let presion = Number(presionEl.value);
-    let peep = Number(peepEl.value);
-    if (vt < 0) { vt = 0; vtEl.value = 0; }
-    if (presion < 0) { presion = 0; presionEl.value = 0; }
-    if (peep < 0) { peep = 0; peepEl.value = 0; }
+    const vt = Number(vtEl.value);
+    const presion = Number(presionEl.value);
+    const peep = Number(peepEl.value);
+
+    // Límites de fisiología general (no de la ficha).
+    const fuera = [];
+    if (!(vt >= 50 && vt <= 2000)) fuera.push('volumen tidal 50-2000 mL');
+    if (!(presion >= 0 && presion <= 80)) fuera.push('presión meseta 0-80 cmH₂O');
+    if (!(peep >= 0 && peep <= 30)) fuera.push('PEEP 0-30 cmH₂O');
+    if (fuera.length) {
+        avisoDatos(resultado, 'Combinación no fisiológica', `Revisa los datos: fuera de ${fuera.join(', ')} (rangos de fisiología general, no de la ficha). No se calcula la compliance.`);
+        return;
+    }
 
     const driving = presion - peep;
-    resultado.style.display = 'block';
-    resultado.style.textAlign = 'left';
     if (driving <= 0) {
-        resultado.className = 'result-box tfg-estado-danger';
-        resultado.innerHTML = `<strong>⚠️ Combinación no fisiológica</strong><p style="font-size:0.85rem; margin-top:6px;">La presión meseta (o Paw fin-insp) debe ser mayor que la PEEP total — revisa los datos.</p>`;
+        avisoDatos(resultado, 'Combinación no fisiológica', 'La presión meseta (o Paw fin-insp) debe ser mayor que la PEEP total — revisa los datos.');
         return;
     }
     const cstat = vt / driving;
     let estado, texto;
-    if (cstat >= 50) {
+    if (cstat > 80) {
+        estado = 'tfg-estado-warn';
+        texto = 'Por encima del rango normal de la ficha (50-80 mL/cmH₂O): la ficha no da un nombre a este tramo; revisa el volumen y las presiones.';
+    } else if (cstat >= 50) {
         estado = 'tfg-estado-ok';
         texto = 'Dentro del rango normal (50-80 mL/cmH₂O).';
     } else if (cstat >= 25) {
@@ -258,8 +278,10 @@ function calcCstat() {
         estado = 'tfg-estado-danger';
         texto = 'Compatible con enfermedad pulmonar infiltrativa (&lt;25 mL/cmH₂O) — p. ej., edema pulmonar o SDRA.';
     }
+    resultado.style.display = 'block';
+    resultado.style.textAlign = 'left';
     resultado.className = `result-box ${estado}`;
-    resultado.innerHTML = `<strong>Cstat ≈ ${cstat.toFixed(1)} mL/cmH₂O</strong><p style="font-size:0.85rem; margin-top:6px;">${texto}</p>`;
+    resultado.innerHTML = `<strong>Cstat ≈ ${numEs(cstat, 1)} mL/cmH₂O</strong><p style="font-size:0.85rem; margin-top:6px;">${texto}</p>`;
 }
 function initCstat() {
     const resultado = document.getElementById('neumo-cstat-resultado');
@@ -300,7 +322,7 @@ function calcImvChecklist() {
     resultado.style.display = 'block';
     resultado.className = 'result-box tfg-estado-danger';
     resultado.style.textAlign = 'left';
-    resultado.innerHTML = `<strong>⚠️ IMV no recomendada</strong><p style="font-size:0.85rem; margin-top:6px;">Con ${motivos}, la IMV puede aumentar el trabajo respiratorio y/o comprometer el gasto cardíaco — considera otro modo (p. ej., asisto-control con disparo por flujo).</p>`;
+    resultado.innerHTML = `<strong>⚠️ IMV no recomendada</strong><p style="font-size:0.85rem; margin-top:6px;">Con ${motivos}, la fuente no aconseja la IMV: puede aumentar el trabajo respiratorio y/o comprometer el gasto cardíaco.</p>`;
 }
 function initImvChecklist() {
     const boxes = document.querySelectorAll('.neumo-imv-check');
@@ -327,13 +349,14 @@ function initCultivoSelect() {
         if (!select.value) { resultado.style.display = 'none'; gaugeRow.style.display = 'none'; return; }
         const info = CULTIVO_INFO[select.value];
         gaugeRow.style.display = 'block';
-        gaugeValor.textContent = info.dor.toFixed(1);
-        gaugeFill.style.width = `${Math.min(100, (info.dor / 10) * 100)}%`;
-        gaugeFill.style.background = info.dor >= 8 ? 'var(--accent-green)' : info.dor >= 6 ? 'var(--accent-yellow)' : 'var(--accent-red)';
+        gaugeValor.textContent = numEs(info.dor, 1);
+        // Escala 0-12 para que la línea del 10 (umbral de la fuente) quede dentro; un solo color neutro.
+        gaugeFill.style.width = `${Math.min(100, (info.dor / 12) * 100)}%`;
+        gaugeFill.style.background = '';
         resultado.style.display = 'block';
         resultado.className = 'result-box';
         resultado.style.textAlign = 'left';
-        resultado.innerHTML = `<strong>${info.nombre}</strong><p style="font-size:0.85rem; margin-top:6px;">Umbral: ${info.umbral} · Sensibilidad: ${info.sens} · Especificidad: ${info.esp} · Razón de probabilidades diagnóstica: ${info.dor.toFixed(1)}${info.dor === 9.6 ? ' — el método más fiable disponible.' : '.'}</p>`;
+        resultado.innerHTML = `<strong>${info.nombre}</strong><p style="font-size:0.85rem; margin-top:6px;">Umbral: ${info.umbral} · Sensibilidad: ${info.sens} · Especificidad: ${info.esp} · Razón de probabilidades diagnóstica: ${numEs(info.dor, 1)}. La fuente dice que una prueba fiable tiene una razón de 10 o más${info.dor === 9.6 ? '; el BAL es el más fiable de los tres, pero queda por debajo de 10 y su sensibilidad y especificidad están lejos de ser ideales' : ''}.</p>`;
     });
 }
 
@@ -345,6 +368,13 @@ function mostrarDerrame(resultado, categoria, motivo, nivel) {
     const tubo = categoria >= 3 ? 'Sí' : 'No';
     resultado.innerHTML = `<strong>Categoría ${categoria}</strong><p style="font-size:0.85rem; margin-top:6px;">${motivo}</p><p style="font-size:0.85rem; margin-top:4px;"><strong>Tubo torácico:</strong> ${tubo}.</p>`;
 }
+// Casos que la Tabla 29.5 no define (loculado sin infección, o infección sin loculación).
+function mostrarDerrameSinClasificar(resultado, motivo) {
+    resultado.style.display = 'block';
+    resultado.className = 'result-box tfg-estado-warn';
+    resultado.style.textAlign = 'left';
+    resultado.innerHTML = `<strong>La fuente no clasifica este caso</strong><p style="font-size:0.85rem; margin-top:6px;">${motivo} La Tabla 29.5 pone en la categoría 3 «loculado o &gt;50% del hemitórax» <em>y</em> análisis con infección: valorar individualmente.</p>`;
+}
 function calcDerrame() {
     const purulentoEl = document.getElementById('neumo-derrame-purulento');
     const grosorEl = document.getElementById('neumo-derrame-grosor');
@@ -354,15 +384,20 @@ function calcDerrame() {
     const gramEl = document.getElementById('neumo-derrame-gram');
     const resultado = document.getElementById('neumo-derrame-resultado');
     if (!purulentoEl || !grosorEl || !loculadoEl || !phEl || !glucosaEl || !gramEl || !resultado) return;
-    if (purulentoEl.value === '' || grosorEl.value === '') { resultado.style.display = 'none'; return; }
+    if (purulentoEl.value === '') { resultado.style.display = 'none'; return; }
 
+    // Purulento a simple vista: categoría 4 ya, sin pedir más datos (la tabla no los exige).
     if (purulentoEl.value === 'si') {
-        mostrarDerrame(resultado, 4, 'Purulento a simple vista.', 'danger');
+        mostrarDerrame(resultado, 4, 'Purulento a simple vista (empiema): drenaje pleural inmediato.', 'danger');
         return;
     }
 
-    let grosor = Number(grosorEl.value);
-    if (grosor < 0) { grosor = 0; grosorEl.value = 0; }
+    if (grosorEl.value === '') { resultado.style.display = 'none'; return; }
+    const grosor = Number(grosorEl.value);
+    if (grosor < 0) {
+        avisoDatos(resultado, 'Dato no fisiológico', 'El grosor del derrame no puede ser negativo — revisa los datos.');
+        return;
+    }
     if (grosor < 10) {
         mostrarDerrame(resultado, 1, '&lt;10 mm de grosor. Toracocentesis no necesaria, salvo deterioro clínico o aumento de tamaño del derrame.', 'ok');
         return;
@@ -373,14 +408,38 @@ function calcDerrame() {
 
     const ph = phEl.value === '' ? null : Number(phEl.value);
     const glucosa = glucosaEl.value === '' ? null : Number(glucosaEl.value);
-    const infectado = loculadoEl.value === 'si' || (ph !== null && ph < 7.20) || (glucosa !== null && glucosa < 60) || gramEl.value === 'si';
-
-    if (infectado) {
-        mostrarDerrame(resultado, 3, 'Loculado, rellena &gt;50% del hemitórax, o el análisis del líquido pleural muestra evidencia de infección (pH &lt;7,20 / glucosa &lt;60 mg/dl / Gram o cultivo positivos). Requiere drenaje con tubo torácico de pequeño calibre (8,5-14 French).', 'warn');
+    // pH de fisiología general (no de la ficha): 6,5-7,8.
+    if (ph !== null && !(ph >= 6.5 && ph <= 7.8)) {
+        avisoDatos(resultado, 'Dato no fisiológico', 'El pH del líquido pleural debe estar entre 6,5 y 7,8 (rango de fisiología general, no de la ficha) — revisa los datos.');
+        return;
+    }
+    if (glucosa !== null && glucosa < 0) {
+        avisoDatos(resultado, 'Dato no fisiológico', 'La glucosa del líquido pleural no puede ser negativa — revisa los datos.');
         return;
     }
 
-    mostrarDerrame(resultado, 2, 'De flujo libre, &lt;50% del hemitórax, sin evidencia de infección en el análisis del líquido pleural. No se necesita ninguna otra intervención.', 'ok');
+    const loculado = loculadoEl.value === 'si';
+    const infeccion = (ph !== null && ph < 7.20) || (glucosa !== null && glucosa < 60) || gramEl.value === 'si';
+    const faltan = [ph === null ? 'pH' : null, glucosa === null ? 'glucosa' : null].filter(Boolean);
+
+    if (loculado && infeccion) {
+        mostrarDerrame(resultado, 3, 'Loculado o &gt;50% del hemitórax, y el análisis del líquido pleural muestra evidencia de infección (pH &lt;7,20 / glucosa &lt;60 mg/dl / Gram o cultivo positivos). Requiere drenaje con tubo torácico de pequeño calibre (8,5-14 French).', 'warn');
+        return;
+    }
+    if (loculado) {
+        mostrarDerrameSinClasificar(resultado, `Loculado o &gt;50% del hemitórax, pero sin evidencia de infección en los datos puestos${faltan.length ? ` (faltan ${faltan.join(' y ')}: si salen de infección, sería categoría 3)` : ''}.`);
+        return;
+    }
+    if (infeccion) {
+        mostrarDerrameSinClasificar(resultado, 'De flujo libre y &lt;50% del hemitórax, pero con evidencia de infección en el análisis del líquido pleural (pH &lt;7,20 / glucosa &lt;60 mg/dl / Gram o cultivo positivos).');
+        return;
+    }
+
+    if (faltan.length) {
+        mostrarDerrame(resultado, 2, `<strong>Categoría 2 provisional: faltan ${faltan.join(' y ')}.</strong> De flujo libre y &lt;50% del hemitórax, con Gram y cultivo negativos, pero la categoría 2 exige también pH &gt;7,20 y glucosa &gt;60 mg/dl, y no se han medido todos.`, 'warn');
+        return;
+    }
+    mostrarDerrame(resultado, 2, 'De flujo libre, &lt;50% del hemitórax, sin evidencia de infección en el análisis del líquido pleural (pH &gt;7,20, glucosa &gt;60 mg/dl, Gram y cultivo negativos). No se necesita ninguna otra intervención.', 'ok');
 }
 function initDerrame() {
     const resultado = document.getElementById('neumo-derrame-resultado');
@@ -398,16 +457,23 @@ function calcFugaManguito() {
     const resultado = document.getElementById('neumo-fuga-resultado');
     if (!input || !resultado) return;
     if (input.value === '') { resultado.style.display = 'none'; return; }
-    let vol = Number(input.value);
-    if (vol < 0) { vol = 0; input.value = 0; }
+    const vol = Number(input.value);
+    // Límite de fisiología general (no de la ficha): la fuga no puede superar un volumen tidal.
+    if (!(vol >= 0 && vol <= 2000)) {
+        avisoDatos(resultado, 'Combinación no fisiológica', 'El volumen de fuga debe estar entre 0 y 2000 mL (no puede superar un volumen tidal; rango de fisiología general, no de la ficha) — revisa los datos.');
+        return;
+    }
 
     let estado, texto;
     if (vol > 110) {
         estado = 'tfg-estado-ok';
         texto = 'Elimina el riesgo de edema laríngeo post-extubación con ~95% de certeza — nada más es necesario antes de la extubación.';
-    } else {
+    } else if (vol < 110) {
         estado = 'tfg-estado-danger';
         texto = 'Aumenta el riesgo de edema laríngeo post-extubación ×7. Considera pretratamiento con esteroides (empezando horas antes de la extubación) y colocar VNI inmediatamente tras extubar.';
+    } else {
+        estado = 'tfg-estado-warn';
+        texto = 'La fuente da «&gt;110 mL» y «&lt;110 mL»: el valor exacto de 110 mL queda sin definir. Valóralo individualmente.';
     }
     resultado.style.display = 'block';
     resultado.className = `result-box ${estado}`;
@@ -512,24 +578,41 @@ function initSdraCriterio() {
 }
 
 // Ficha XVI — tamaño de tubo ET recomendado según la altura (cm), a partir
-// de los cortes en pulgadas de la fuente (≤5'2" / 5'3"-5'10" / ≥5'11").
+// de los tramos en pies y pulgadas de la fuente (≤5'2" / 5'3"-5'10" / ≥5'11").
+// La fuente no da tamaño entre 5'2" y 5'3" ni entre 5'10" y 5'11": se avisa.
 function calcEtTubo() {
     const alturaEl = document.getElementById('neumo-et-altura');
     const resultado = document.getElementById('neumo-et-resultado');
     if (!alturaEl || !resultado) return;
     if (alturaEl.value === '') { resultado.style.display = 'none'; return; }
-    let altura = Number(alturaEl.value);
-    if (altura < 0) { altura = 0; alturaEl.value = 0; }
+    const altura = Number(alturaEl.value);
+    // Límite de fisiología general (no de la ficha): 100-230 cm.
+    if (!(altura >= 100 && altura <= 230)) {
+        avisoDatos(resultado, 'Altura no fisiológica', 'La altura debe estar entre 100 y 230 cm (rango de fisiología general, no de la ficha) — revisa los datos.');
+        return;
+    }
 
-    let tamano;
-    if (altura <= 157) tamano = '7';
-    else if (altura < 180) tamano = '7,5';
-    else tamano = '8';
+    // Redondeo a 0,1" (lo que se muestra), para que 160 cm = 5'3,0" caiga en el tramo de 5'3".
+    const pulgadas = Math.round((altura / 2.54) * 10) / 10;
+    const pies = Math.floor(pulgadas / 12);
+    const resto = pulgadas - pies * 12;
+    const altTxt = `${altura} cm = ${pies}'${numEs(resto, 1)}"`;
+
+    let titulo, nota = '';
+    if (pulgadas <= 62) titulo = 'Tamaño de tubo ET sugerido: 7';
+    else if (pulgadas < 63) {
+        titulo = 'Hueco de la fuente: sin tamaño para esta altura';
+        nota = 'La fuente da tamaño 7 hasta 5\'2" (157,5 cm) y 7,5 desde 5\'3" (160,0 cm). Esta altura cae entre las dos.';
+    } else if (pulgadas <= 70) titulo = 'Tamaño de tubo ET sugerido: 7,5';
+    else if (pulgadas < 71) {
+        titulo = 'Hueco de la fuente: sin tamaño para esta altura';
+        nota = 'La fuente da tamaño 7,5 hasta 5\'10" (177,8 cm) y 8 desde 5\'11" (180,3 cm). Esta altura cae entre las dos.';
+    } else titulo = 'Tamaño de tubo ET sugerido: 8';
 
     resultado.style.display = 'block';
-    resultado.className = 'result-box';
+    resultado.className = nota ? 'result-box tfg-estado-warn' : 'result-box';
     resultado.style.textAlign = 'left';
-    resultado.innerHTML = `<strong>Tamaño de tubo ET sugerido: ${tamano}</strong><p style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">Orientativo por altura corporal — la fuente recuerda que no hay evidencia de que el tamaño del tubo ET afecte los resultados clínicos.</p>`;
+    resultado.innerHTML = `<strong>${titulo}</strong><p style="font-size:0.85rem; margin-top:6px;">${altTxt}${nota ? '. ' + nota : ''}</p><p style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">Orientativo por altura corporal — la fuente recuerda que no hay evidencia de que el tamaño del tubo ET afecte los resultados clínicos.</p>`;
 }
 function initEtTubo() {
     const input = document.getElementById('neumo-et-altura');
@@ -574,22 +657,42 @@ function calcSbtPredictores() {
     const pbw = Number(pbwEl.value);
     const rr = Number(rrEl.value);
     const pimax = Number(pimaxEl.value);
-    if (vt <= 0 || pbw <= 0 || rr <= 0) { resultado.style.display = 'none'; return; }
+    if (pbw <= 0) { resultado.style.display = 'none'; return; }
+
+    // Límites de fisiología general (no de la ficha).
+    const fuera = [];
+    if (!(vt >= 50 && vt <= 3000)) fuera.push('volumen tidal 50-3000 mL');
+    if (!(rr >= 1 && rr <= 80)) fuera.push('frecuencia respiratoria 1-80 /min');
+    if (fuera.length) {
+        avisoDatos(resultado, 'Combinación no fisiológica', `Revisa los datos: fuera de ${fuera.join(', ')} (rangos de fisiología general, no de la ficha).`);
+        return;
+    }
+    if (pimax > 0) {
+        avisoDatos(resultado, 'La PImax es negativa', `¿Querías escribir −${pimax}? La presión inspiratoria máxima se mide como presión negativa (−20, −30…).`);
+        return;
+    }
+    if (pimax < -200) {
+        avisoDatos(resultado, 'Combinación no fisiológica', 'Una PImax más negativa que −200 cmH₂O queda fuera de lo fisiológico (rango de fisiología general, no de la ficha; la fuente cita medias de −120 y −84 en adultos sanos) — revisa los datos.');
+        return;
+    }
 
     const vtPorKg = vt / pbw;
     const rsbi = rr / (vt / 1000);
+    // «ok» = dentro del rango que da la Tabla 30.1. Fuera de él no se marca como fallo:
+    // la fuente solo da el rango de éxito y no dice qué pasa fuera.
     const criterios = [
-        { nombre: 'V<sub>T</sub> 4-6 mL/kg PBW', valor: `${vtPorKg.toFixed(1)} mL/kg`, ok: vtPorKg >= 4 && vtPorKg <= 6 },
+        { nombre: 'V<sub>T</sub> 4-6 mL/kg PBW', valor: `${numEs(vtPorKg, 1)} mL/kg`, ok: vtPorKg >= 4 && vtPorKg <= 6 },
         { nombre: 'RR &lt;40/min', valor: `${rr} /min`, ok: rr < 40 },
-        { nombre: 'RR/V<sub>T</sub> 60-105 rpm/L', valor: `${rsbi.toFixed(0)} rpm/L`, ok: rsbi >= 60 && rsbi <= 105 },
-        { nombre: 'PI<sub>max</sub> más negativa que −20 cmH₂O', valor: `${pimax} cmH₂O`, ok: pimax <= -20 },
+        { nombre: 'RR/V<sub>T</sub> 60-105 rpm/L', valor: `${numEs(rsbi, 0)} rpm/L`, ok: rsbi >= 60 && rsbi <= 105 },
+        { nombre: 'PI<sub>max</sub> ≤ −20 cmH₂O (interpretación de la app; la tabla pone «&gt;−20», ver nota)', valor: `${pimax} cmH₂O`, ok: pimax <= -20 },
     ];
-    const favorables = criterios.filter(c => c.ok).length;
-    const nivel = favorables === 4 ? 'ok' : favorables >= 2 ? 'warn' : 'danger';
+    const dentro = criterios.filter(c => c.ok).length;
+    // El color es un criterio de la app: la fuente solo dice «tomados en conjunto».
+    const nivel = dentro === 4 ? 'ok' : dentro >= 2 ? 'warn' : 'danger';
     resultado.style.display = 'block';
     resultado.className = `result-box tfg-estado-${nivel}`;
     resultado.style.textAlign = 'left';
-    resultado.innerHTML = `<strong>${favorables}/4 predictores favorables</strong><ul style="margin:6px 0 0; padding-left:18px; font-size:0.85rem;">${criterios.map(c => `<li>${c.ok ? '✅' : '❌'} ${c.nombre}: ${c.valor}</li>`).join('')}</ul><p style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">Cada predictor por separado es poco fiable — tomados en conjunto, y con su evolución seriada, orientan mejor el pronóstico de la SBT.</p>`;
+    resultado.innerHTML = `<strong>${dentro}/4 predictores dentro del rango de éxito de la tabla</strong><ul style="margin:6px 0 0; padding-left:18px; font-size:0.85rem;">${criterios.map(c => `<li>${c.ok ? '✅ dentro del rango' : '➖ fuera del rango que da la fuente'} — ${c.nombre}: ${c.valor}</li>`).join('')}</ul><p style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">Los rangos son los que da la fuente; no dice qué significa estar fuera de ellos. El color (verde 4/4, ámbar 2-3, rojo 0-1) es un criterio de la app: la fuente solo dice que cada predictor por separado es poco fiable y que, tomados en conjunto y con su evolución seriada, orientan mejor el pronóstico.</p>`;
 }
 function initSbtPredictores() {
     const resultado = document.getElementById('neumo-sbt-predictores-resultado');
