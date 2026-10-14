@@ -310,6 +310,13 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
     excentricidad (aplanado >1,1), Doppler continuo de la IT y pulsado del TSVD, bandas de Mukherjee 2025 y, en el TEP,
     signos de la ESC 2019. El patrón del tabique (aplanado en diástole, en sístole o en ambas) sale de la geometría.
     Nota de fuentes con FATE, la Ficha 11 y Merino; accesos al TAPSE y al TEP del simulador.
+  - **18 Insuficiencia mitral** (`cap-mr.html` + `insuficiencia-mitral.mjs`): deslizador del EROA (0-0,70 cm²) sobre
+    `eroaMitral` del motor, con remodelado crónico ilustrativo (`ajustesMr`), PISA y los grados de Zoghbi 2017. Regla
+    del plan socialista («un simulador es un paciente posible en todo el recorrido»): una primera versión dejaba
+    EROA 0,65-0,70 en shock cardiogénico normotenso (IC 1,6, SvO₂ 50%, PCP 27) escondido por el barorreflejo; se
+    corrigió el origen (curva diastólica del VI más blanda, AI más distensible, fallo suave, sin subir la resistencia
+    sistémica) y la prueba exige en todo el recorrido IC ≥2,2, SvO₂ ≥65%, PCP ≤22, PAS ≥95. La figura muestra GC · IC.
+    Detalle en `js/modules/eco/README.md`.
   - **Archivos**: `js/modules/eco/atlas/`; preguntas en `js/data/eco-atlas-preguntas.js` (52, asignatura Eco
     cardíaca).
   - **Accesos**: `data-eco-atlas="clave"` junto a `data-especialidad="eco"`. Por ejemplo, desde Fisiopatología UCI ·

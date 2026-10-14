@@ -533,28 +533,18 @@ los que ya están en la app se abren aquí, los demás siguen enlazando al origi
     en las dos) sale de la geometría, no se escribe. Normal: VD 3,0 cm, FAC 47%, TAPSE 21, IE 1,00, AcT 142 ms;
     presión 0,75: pared 8,9 mm, IT 3,9 m/s, AcT 78 ms, aplanado en los dos tiempos; volumen 1: VD 4,1 cm, IT 1 m/s,
     aplanado solo en diástole; TEP 1: VD/VI 1,05, TAPSE 5 mm. Nota de fuentes con FATE, la Ficha 11 y Merino.
-  - **18 Insuficiencia mitral.** Un deslizador del EROA (0-0,70 cm², pasos de 0,05) mueve el `eroaMitral` del motor
-    del latido, con el remodelado crónico del VI y de la AI (`ajustesMr`, ilustrativo: hasta +100 mL de volemia, V0 y
-    curva diastólica del VI y de la AI, +20% de resistencia sistémica y, desde ~0,4 cm², una Ees que cae hasta el
-    68%: el VI se dilata y la FEVI acaba cayendo). Del motor salen el volumen y la fracción regurgitantes
-    (`ultimo.vReg`, `ultimo.fr`), el chorro (4v² = ΔP VI-AI, su VTI: el VReg es EROA × VTI), la onda v, el índice de
-    volumen de la AI y la FEVI total; los diámetros del VI, de la geometría de la app (`medidasCorazon`, eje largo
-    paraesternal); el radio PISA, de la ecuación del capítulo con la velocidad pico del motor (`pisa`, Va 32 cm/s).
-    Los grados son los cortes de Zoghbi 2017 (EROA 0,20/0,30/0,40; VReg 30/45/60; FReg 30/40/50) y el grado
-    intermedio de los tres (regla del sitio del original; la Figura 18 no da ninguna). De los 6 criterios específicos
-    de cada conjunto solo se calculan 3 (radio PISA, VReg <30 como jet CW suave, tamaño del VI y de la AI; las cifras
-    que la figura de Zoghbi no da y rellena el original van marcadas «del sitio») más la valva flácida, un mando: no
-    se llega a los 4 que definen el grado, así que decide el cuantitativo (el III con 3 criterios graves es grave).
-    Estadio C1/C2 con FEVI ≤60% o DTSVI ≥40 mm. Cuatro paneles: esquema de la AI y el VI con el hemisferio, zoom de la
-    PISA frente a 0,3 y 1,0 cm, presiones VI-AI con la onda v y CW del chorro (la densidad sigue la regla del original;
-    el hemisferio, el orificio y el chorro son dibujo ilustrativo). Con 0,40 cm² el motor da ~67 mL, ~53%, ~4,7 m/s
-    (VTI ~170 cm) y r ~0,97 cm; el ejemplo del texto (5,0 m/s y VTI 150 → r 1,00, 60 mL) se comprueba con la misma
-    función `pisa`. EROA 0,50: C1 (FEVI 74%, DTSVI 34 mm); 0,60: C2 por el DTSVI (40 mm, FEVI 66%); 0,65: FEVI 59%,
-    DTSVI 44 mm, PAS ~73 mmHg (sin barorreflejo). No da: vena contracta, área del jet, venas pulmonares, E y A, forma
-    triangular del CW, prolapso con fuga tardía ni orificio elíptico. Enlaces: ficha de IC de la ESC 2026 (9.3
-    Valvulopatía) en las dos direcciones. Notas de fidelidad: cifras que rellena el sitio, número del capítulo en el
-    original (15 frente a 18), «<0,3» frente a «≤0,3», criterios que el texto da y el algoritmo no cuenta, y nota de
-    fuentes de la IM secundaria (ASE frente a EACVI).
+  - **18 Insuficiencia mitral.** Un deslizador del EROA (0-0,70 cm², pasos de 0,05) mueve el `eroaMitral` del motor,
+    con el remodelado crónico del VI y de la AI (`ajustesMr`, ilustrativo: +150 mL de volemia, V0 y curva diastólica
+    más blandos, Ees −20% y otro −20% desde ~0,4 cm²; sin tocar la resistencia sistémica). Es un paciente posible en
+    todo el recorrido (prueba: IC ≥2,2, SvO₂ ≥65%, PCP ≤22, PAS ≥95, pico ≥4,0 m/s): con 0,70 cm², IC 2,3, SvO₂ 66%,
+    PCP 17, PAS 108, FEVI 65% y DTSVI 45 mm (C2 por el DTSVI); la FEVI sube hasta ~74% (0,40) y baja. Del motor salen
+    VReg, FR, el chorro (su velocidad es el flujo del orificio ÷ EROA: EROA × VTI = VReg), la onda v, el IVAI, la FEVI
+    total y el GC · IC; los diámetros, de `medidasCorazon`; el radio PISA, de `pisa` (Va 32 cm/s). VReg + VS supera a
+    VTD − VTS hasta ~5%: el orificio regurgitante coincide con el llenado por inercia (nota del capítulo). Grados:
+    cortes de Zoghbi 2017 y el intermedio de los tres (regla del original). Criterios calculables: 3 de 6 por conjunto
+    (más la valva flácida), así que decide el cuantitativo; C1/C2 con FEVI ≤60% o DTSVI ≥40 mm. Enlaces: ficha de IC de
+    la ESC 2026 (9.3) y el asa del 07, que usa otro remodelado (sin barorreflejo). Cuatro notas plegables: cifras del
+    original que Zoghbi no da, incoherencias del original, IM secundaria (ASE frente a EACVI) y cómo hace la figura el motor.
 - **Navegación.**
   - `data-eco-atlas="clave"`, junto a `data-especialidad="eco"`, abre un capítulo desde cualquier ficha. Hoy hay
     accesos en Fisiopatología UCI · Cardiología, Fichas 1 y 3. La subcostal VCI y la medida de la VCI llevan al 08.

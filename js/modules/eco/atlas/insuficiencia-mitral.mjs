@@ -7,12 +7,13 @@
 //     de él salen el volumen y la fracción regurgitantes (ultimo.vReg, ultimo.fr), la velocidad pico del chorro (la
 //     mayor diferencia de presión VI-AI) y su VTI. El volumen regurgitante es EROA × VTI del chorro del motor.
 //   · Remodelado crónico (ilustrativo, fisiología general): con el orificio, el VI se vuelve más distensible y se
-//     dilata (más volumen, V0 mayor y curva diastólica más blanda), la AI también, y las resistencias sistémicas suben
-//     algo; con el orificio grande, la contractilidad (Ees) cae y la FEVI acaba cayendo.
+//     dilata (más volumen, V0 mayor y curva diastólica más blanda), la AI también, y la contractilidad (Ees) cae algo y,
+//     con el orificio grande, más; la FEVI sube al principio y acaba bajando. En todo el recorrido el gasto cardíaco se
+//     conserva (IC ≥2,2), así que el paciente es posible; el barorreflejo del motor sostiene la presión.
 //   · PISA (capítulo): flujo = EROA × velocidad pico; r = √(flujo ÷ (2π·Va)); VReg = EROA × VTI. La velocidad pico es la
 //     del motor; Va = 32 cm/s es la del ejemplo del capítulo (la ASE aconseja 30-40).
 //   · Grados (Zoghbi 2017, Figura 18): cortes de EROA, volumen y fracción regurgitantes; el grado intermedio de los tres
-//     es una regla del sitio del original (la figura no da ninguna), y los criterios específicos que se pueden calcular
+//     es una regla del original (la figura no da ninguna), y los criterios específicos que se pueden calcular
 //     con el motor, que son solo una parte de los seis de cada conjunto.
 //   · Diámetros del VI: los de la geometría de la app (medidasCorazon: eje largo paraesternal, como la tabla de FATE).
 // Lo que NO da el motor: vena contracta, área del chorro de color, flujo de las venas pulmonares, ondas E y A, y el
@@ -46,7 +47,7 @@ export const eroaDeRadio = (r, vmax, va = VA) => 2 * Math.PI * r * r * va / (vma
 export const CORTES = { eroa: [0.2, 0.3, 0.4], vreg: [30, 45, 60], freg: [30, 40, 50] };
 /** Grado (1 a 4) de una medida: 1 + los cortes que alcanza. */
 export const grado = (clave, x) => 1 + CORTES[clave].filter(c => x >= c).length;
-/** Grado cuantitativo global: el intermedio de los tres. Regla del sitio del original: la Figura 18 no da ninguna. */
+/** Grado cuantitativo global: el intermedio de los tres. Regla del original: la Figura 18 no da ninguna. */
 export const gradoCuantitativo = (e, v, f) => [e, v, f].sort((a, b) => a - b)[1];
 export const ROMANO = ['', 'I', 'II', 'III', 'IV'];
 
@@ -61,23 +62,23 @@ export function redondear(med) {
 
 /**
  * Criterios específicos (Zoghbi 2017, Figura 18) que se pueden calcular con el motor. Cada uno: true, false o null (el
- * motor no lo da). Las cifras que la figura de Zoghbi no da y rellena el sitio: VReg <30 mL (chorro CW suave), VI y AI
+ * motor no lo da). Las cifras que la figura de Zoghbi no da y rellena el original: VReg <30 mL (chorro CW suave), VI y AI
  * normales (DTDVI ≤58 mm e IVAI ≤34 mL/m², Lang 2015) y FEVI >60 % (función normal).
  */
 export function criterios(x, flail = false) {
   const leves = [
-    { t: 'Jet central pequeño, estrecho (<20% de la AI)', ok: null, sitio: true },
+    { t: 'Chorro central pequeño, estrecho (<20% de la AI)', ok: null, sitio: true },
     { t: 'Vena contracta ≤0,3 cm', ok: null },
     { t: 'Radio PISA ausente o ≤0,3 cm', ok: x.r <= 0.3 },
     { t: 'Influjo mitral con onda A dominante', ok: null },
-    { t: 'Jet CW suave o incompleto (VReg <30 mL)', ok: x.vReg < 30, sitio: true },
+    { t: 'Chorro CW suave o incompleto (VReg <30 mL)', ok: x.vReg < 30, sitio: true },
     { t: 'VI y AI de tamaño normal (DTDVI ≤58 mm e IVAI ≤34 mL/m²)', ok: x.dtd <= 58 && x.ivai <= 34, sitio: true },
   ];
   const graves = [
     { t: 'Valva flácida (flail)', ok: flail },
     { t: 'Vena contracta ≥0,7 cm', ok: null },
     { t: 'Radio PISA ≥1,0 cm', ok: x.r >= 1.0 },
-    { t: 'Jet central grande (>50% de la AI)', ok: null },
+    { t: 'Chorro central grande (>50% de la AI)', ok: null },
     { t: 'Inversión sistólica del flujo de las venas pulmonares', ok: null },
     { t: 'VI agrandado con función normal (DTDVI >58 mm y FEVI >60%)', ok: x.dtd > 58 && x.fevi > 60, sitio: true },
   ];
@@ -106,14 +107,17 @@ export function resultado(med, flail = false) {
 /**
  * Ajustes del motor para un EROA: el orificio y el remodelado crónico. f = EROA ÷ 0,70 (0 a 1); g, la fase de fallo
  * (desde f = 0,6, EROA 0,42). Magnitudes ilustrativas, elegidas para que la IM crónica recorra lo que dice el texto: VI y
- * AI se dilatan y la FEVI acaba cayendo, sin que la presión arterial se hunda. Las direcciones son fisiología general.
- * En la fase de fallo, la Ees cae (−60%) y el VI se dilata aún más (V0 +30 mL).
+ * AI se dilatan y se vuelven más distensibles, y la FEVI sube al principio y acaba bajando, y todo el recorrido es un
+ * paciente posible: gasto cardíaco conservado (IC ≥2,2), SvO₂ ≥65 %, PCP ≤22 mmHg y presión arterial sin hundirse. Las
+ * direcciones son fisiología general. Contractilidad (Ees): −20% con f y otro −20% en la fase de fallo; la curva
+ * diastólica del VI, −32% (b); V0 del VI, +20 mL con f y +25 mL con g; la AI, V0 +25 mL y b −30%; y +150 mL de volemia.
+ * La resistencia sistémica no se toca: solo la sube el barorreflejo del motor.
  */
 export function ajustesMr(eroa) {
   const f = clamp(eroa / EROA_REMODELADO, 0, 1), g = clamp((f - 0.6) / 0.4, 0, 1);
-  return { volumen: 100 * f, motor: { barorreflejo: true, eroaMitral: eroa, rSis: BASE.rSis * (1 + 0.2 * f),
-    vi: { ees: BASE.vi.ees * (1 - 0.6 * g), b: BASE.vi.b * (1 - 0.08 * f), v0: BASE.vi.v0 + 8 * f + 30 * g },
-    ai: { v0: BASE.ai.v0 + 10 * f, b: BASE.ai.b * (1 - 0.15 * f) } } };
+  return { volumen: 150 * f, motor: { barorreflejo: true, eroaMitral: eroa,
+    vi: { ees: BASE.vi.ees * (1 - 0.2 * f - 0.2 * g), b: BASE.vi.b * (1 - 0.32 * f), v0: BASE.vi.v0 + 20 * f + 25 * g },
+    ai: { v0: BASE.ai.v0 + 25 * f, b: BASE.ai.b * (1 - 0.3 * f) } } };
 }
 
 /** Motor asentado con un EROA (con el barorreflejo del motor, que sostiene la presión). Puro: lo usan la figura y las pruebas. */
@@ -123,11 +127,15 @@ export function motorMr(eroa, segundos = 14) {
   return m;
 }
 
-/** El chorro del último latido: velocidad (m/s) a cada instante a partir de la diferencia de presión VI-AI (4v² = ΔP). */
-export function chorro(o) {
+/**
+ * El chorro del último latido. El pico sale de la mayor diferencia de presión VI-AI (4v² = ΔP). La velocidad a cada
+ * instante (la curva y el VTI) sale del flujo del orificio del motor ÷ el EROA, así que EROA × VTI es el volumen
+ * regurgitante del motor y no una segunda cifra (el motor suaviza la raíz cerca de 0, y esa velocidad lo refleja).
+ */
+export function chorro(o, eroa) {
   let dpMax = 0, tPico = 0, vti = 0, t0 = null, t1 = null; const curva = [];
   for (let i = 0; i < o.length; i++) {
-    const x = o[i], dp = x.qMitReg > 0 ? Math.max(0, x.pvi - x.pai) : 0, v = Math.sqrt(dp / 4);
+    const x = o[i], dp = x.qMitReg > 0 ? Math.max(0, x.pvi - x.pai) : 0, v = eroa > 0 ? x.qMitReg / (eroa * 100) : 0;
     const dt = i < o.length - 1 ? o[i + 1].t - x.t : x.t - o[i - 1].t;
     curva.push({ t: x.t, v });
     if (v > 0) { vti += v * 100 * dt; if (t0 == null) t0 = x.t; t1 = x.t; }
@@ -141,12 +149,12 @@ export function medirMr(m) {
   const u = m.ultimo, o = m.onda, extra = extraDeMotor(m), eroa = m.p.eroaMitral;
   const td = o.reduce((a, x) => (x.vvi > a.vvi ? x : a)), ts = o.reduce((a, x) => (x.vvi < a.vvi ? x : a));
   const dtd = medidasCorazon(estadoGeo(td, extra), m.p.sc).lvdd, dts = medidasCorazon(estadoGeo(ts, extra), m.p.sc).lvdd;
-  const j = chorro(o), p = pisa({ eroa, vmax: j.vmax, vti: j.vti });
+  const j = chorro(o, eroa), p = pisa({ eroa, vmax: j.vmax, vti: j.vti });
   const sist = o.filter(x => x.fase === 'C' || x.fase === 'D' || x.fase === 'E');
   const v = sist.reduce((a, x) => (x.pai > a.pai ? x : a), sist[0] || o[0]);
   return { eroa, vReg: u.vReg, fr: u.fr * 100, fevi: u.feTotal * 100, vtd: u.edv, vts: u.esv, vsAorta: u.vs, dtd, dts,
     ivai: Math.max(...o.map(x => x.vai)) / m.p.sc, vmax: j.vmax, dpMax: j.dpMax, vti: j.vti, flujo: p.flujo, r: p.r,
-    pas: u.pas, ptd: u.ptdvi, pcp: u.pcp, ondaV: v.pai, tOndaV: v.t, chorro: j, periodo: u.periodo };
+    pas: u.pas, fc: u.fc, gc: u.gc, ic: u.ic, svo2: u.svo2 * 100, ptd: u.ptdvi, pcp: u.pcp, ondaV: v.pai, tOndaV: v.t, chorro: j, periodo: u.periodo };
 }
 
 // ---------------------------------------------------------------------------------------------------- figura
@@ -207,8 +215,6 @@ export function montar(el) {
     // límites: 0,3 cm (convergencia pequeña de la IM leve) y 1,0 cm (IM grave)
     const arco = (r, color, dash) => { ctx.save(); ctx.setLineDash(dash ? [4 * k, 3 * k] : []); ctx.strokeStyle = color; ctx.lineWidth = 1.2 * k; ctx.beginPath(); ctx.arc(xc, yP, r * s, 0, Math.PI); ctx.stroke(); ctx.restore(); };
     arco(1.0, c.r, true); arco(0.3, c.g, true);
-    texto(ctx, '1,0 cm', xc + 1.0 * s + 3 * k, yP + 11 * k, c.r, k, { tam: 8.5, alinear: 'left' });
-    texto(ctx, '0,3', xc + 0.3 * s + 3 * k, yP + 11 * k, c.g, k, { tam: 8.5 });
     if (med.eroa > 0) {
       ctx.save(); ctx.beginPath(); ctx.arc(xc, yP, med.r * s, 0, Math.PI); ctx.closePath(); ctx.globalAlpha = 0.35; ctx.fillStyle = c.y; ctx.fill(); ctx.globalAlpha = 1;
       ctx.strokeStyle = c.y; ctx.lineWidth = 2 * k; ctx.stroke(); ctx.restore();
@@ -218,6 +224,9 @@ export function montar(el) {
       ctx.save(); ctx.strokeStyle = c.y; ctx.lineWidth = 1.4 * k; ctx.beginPath(); ctx.moveTo(xc, yP); ctx.lineTo(xc, yP + med.r * s); ctx.stroke(); ctx.restore();
       texto(ctx, `r ${coma(med.r, 2)} cm`, xc + 4 * k, yP + med.r * s * 0.5 + 3 * k, c.y, k, { tam: 9, peso: 'bold', halo: c.bg });
     }
+    // rótulos de los límites, sobre el plano (el hemisferio amarillo pasa por debajo y no los corta)
+    texto(ctx, '1,0 cm', xc + 1.0 * s, yP - 8 * k, c.r, k, { tam: 8.5, alinear: 'right', halo: c.bg });
+    texto(ctx, '0,3', xc + 0.3 * s + 3 * k, yP + 11 * k, c.g, k, { tam: 8.5, halo: c.bg });
     // plano mitral con el orificio (círculo equivalente al EROA)
     ctx.save(); ctx.strokeStyle = c.text; ctx.lineWidth = 2.2 * k; ctx.lineCap = 'round'; ctx.beginPath();
     ctx.moveTo(4 * k, yP); ctx.lineTo(xc - w * s / 2, yP); ctx.moveTo(xc + w * s / 2, yP); ctx.lineTo(W - 4 * k, yP); ctx.stroke();
@@ -278,16 +287,17 @@ export function montar(el) {
     const av = (cond) => !!cond;
     return [
       { k: 'EROA (el orificio, mando)', v: coma(med.eroa, 2), u: `cm²${res.ge ? ` · grado ${ROMANO[res.ge]}` : ''} · grave ≥0,40`, fuente: 'mando del motor · cortes: ficha (Zoghbi 2017)', aviso: av(x.eroa >= 0.4) },
-      { k: 'Volumen regurgitante', v: coma(med.vReg, 0), u: `mL${res.gv ? G(res.gv) : ''} · grave ≥60`, fuente: 'motor (ultimo.vReg) · cortes: ficha', aviso: av(x.vReg >= 60) },
-      { k: 'Fracción regurgitante', v: coma(med.fr, 0), u: `%${res.gf ? G(res.gf) : ''} · grave ≥50`, fuente: 'motor (ultimo.fr) · cortes: ficha', aviso: av(x.fr >= 50) },
-      { k: 'Grado cuantitativo', v: res.q ? ROMANO[res.q] : '—', u: 'el intermedio de los tres', fuente: 'regla del sitio del original (Zoghbi no da ninguna)', aviso: res.q === 4 },
+      { k: 'Volumen regurgitante', v: coma(med.vReg, 0), u: `mL${res.gv ? G(res.gv) : ''} · grave ≥60`, fuente: 'motor · cortes: ficha', aviso: av(x.vReg >= 60) },
+      { k: 'Fracción regurgitante', v: coma(med.fr, 0), u: `%${res.gf ? G(res.gf) : ''} · grave ≥50`, fuente: 'motor · cortes: ficha', aviso: av(x.fr >= 50) },
+      { k: 'Grado cuantitativo', v: res.q ? ROMANO[res.q] : '—', u: 'el intermedio de los tres', fuente: 'regla del original (Zoghbi no da ninguna)', aviso: res.q === 4 },
       { k: 'Velocidad pico del chorro', v: coma(med.vmax, 2), u: `m/s · ΔP ${coma(med.dpMax, 0)} mmHg`, fuente: 'motor (4v² = ΔP VI-AI) · el capítulo usa 5,0' },
-      { k: 'VTI del chorro', v: coma(med.vti, 0), u: `cm · VReg = EROA × VTI = ${coma(med.eroa * med.vti, 0)} mL`, fuente: 'motor · el capítulo usa 150 (holosistólico)' },
+      { k: 'VTI del chorro', v: coma(med.vti, 0), u: `cm · EROA × VTI = ${coma(med.eroa * med.vti, 0)} mL, el volumen regurgitante`, fuente: 'motor · el capítulo usa 150 (holosistólico)' },
       { k: 'Flujo en la PISA', v: coma(med.flujo, 0), u: 'mL/s = EROA × velocidad × 100', fuente: 'fórmula del capítulo (ficha)' },
       { k: `Radio PISA a ${VA} cm/s`, v: coma(med.r, 2), u: 'cm = √(flujo ÷ 2π·Va) · ≥1,0 grave', fuente: 'fórmula del capítulo (ficha) · Va del ejemplo', aviso: av(x.r >= 1.0) },
       { k: 'VTD / VTS · FEVI', v: `${coma(med.vtd, 0)} / ${coma(med.vts, 0)} · ${coma(med.fevi, 0)}`, u: 'mL · %', fuente: 'motor (FE total: la fracción que sale por las dos vías)', aviso: av(res.grave && x.fevi <= 60) },
       { k: 'DTDVI · DTSVI', v: `${coma(med.dtd, 0)} · ${coma(med.dts, 0)}`, u: 'mm · C2 si DTSVI ≥40', fuente: 'geometría de la app (eje largo paraesternal)', aviso: av(res.grave && x.dts >= 40) },
       { k: 'Índice de volumen de la AI', v: coma(med.ivai, 0), u: 'mL/m² · normal ≤34 (Lang 2015, varones)', fuente: 'motor (volumen máximo de la AI ÷ 1,85 m²)', aviso: av(x.ivai > 34) },
+      { k: 'Gasto cardíaco · IC', v: `${coma(med.gc, 1)} · ${coma(med.ic, 1)}`, u: 'L/min · L/min/m² (1,85 m²)', fuente: 'motor', aviso: av(med.ic < 2.2) },
       { k: 'PAS · PTDVI', v: `${coma(med.pas, 0)} · ${coma(med.ptd, 0)}`, u: 'mmHg', fuente: 'motor (con su barorreflejo)' },
       { k: 'Estadio ACC/AHA', v: res.estadio ?? '—', u: res.grave ? (res.lvd ? 'FEVI ≤60% o DTSVI ≥40 mm' : 'sin síntomas · FEVI >60% y DTSVI <40 mm') : 'solo en la IM grave', fuente: 'umbrales: ficha (Otto 2020)', aviso: res.estadio === 'C2' },
     ];
@@ -295,7 +305,7 @@ export function montar(el) {
 
   function pintarCriterios(res) {
     const cr = res.cr, est = (ok) => (ok === null ? '<span class="at-gris">el motor no lo da</span>' : ok ? '<b class="at-mal">sí</b>' : '<span class="at-bien">no</span>');
-    const lista = (l) => `<ul>${l.map(c => `<li>${c.t}${c.sitio ? ' <i>(cifra del sitio)</i>' : ''}: ${est(c.ok)}</li>`).join('')}</ul>`;
+    const lista = (l) => `<ul>${l.map(c => `<li>${c.t}${c.sitio ? ' <i>(cifra del original, no es de Zoghbi)</i>' : ''}: ${est(c.ok)}</li>`).join('')}</ul>`;
     crit.innerHTML = `<h4>Criterios específicos (algoritmo de la ASE)</h4>
       <div class="at-paso on"><b>De IM leve</b> · ${cr.nLeves} de los ${cr.calculables} que se pueden calcular (son 6) ${lista(cr.leves)}</div>
       <div class="at-paso on"><b>De IM grave</b> · ${cr.nGraves} de los ${cr.calculables} que se pueden calcular (son 6) ${lista(cr.graves)}</div>
