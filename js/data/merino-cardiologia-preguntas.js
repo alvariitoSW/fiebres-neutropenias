@@ -976,7 +976,7 @@ export const preguntasMerinoCardiologia = [
         enunciado: '¿Qué 2 hallazgos del ECG confirman taquicardia ventricular en una taquicardia de QRS ancho?',
         opciones: ['Disociación AV y latidos de fusión', 'PR corto y ondas delta', 'Ondas Q patológicas y QT prolongado', 'Bloqueo de rama derecha aislado'],
         correcta: 0,
-        explicacion: 'La disociación AV (sin relación fija entre ondas P y QRS) y los latidos de fusión (colisión de un impulso ectópico ventricular con uno supraventricular) son evidencia directa de TV.',
+        explicacion: 'La disociación AV (sin relación fija entre ondas P y QRS) y los latidos de fusión (colisión de un impulso ectópico ventricular con uno supraventricular) identifican la TV como causa de una taquicardia de QRS ancho. Según el libro (pág. 32), la disociación AV es el hallazgo que la identifica, y los latidos de fusión son evidencia indirecta de actividad ectópica ventricular.',
     },
     {
         id: 'mc-q141', tema: 'mc-otras-taqui',
@@ -1162,7 +1162,7 @@ export const preguntasMerinoCardiologia = [
     {
         id: 'mc-q168', tema: 'mc-diseccion-aortica', tipo: 'redactar',
         enunciado: 'Explica por qué la disección aórtica debe estar siempre en el diagnóstico diferencial de un dolor torácico agudo, incluso si el ECG sugiere un SCA.',
-        respuestaModelo: 'La presentación clínica de la disección aórtica puede simular o coexistir con un síndrome coronario agudo: el ECG puede mostrar cambios isquémicos hasta en el 15% de los casos de disección (por ejemplo, si la disección compromete el ostium de una arteria coronaria, causando isquemia real), y la clínica de dolor torácico agudo intenso es compartida por ambas entidades. Confundir una disección con un SCA puro tiene consecuencias graves: los tratamientos estándar del SCA (anticoagulación agresiva, antiagregación, e incluso trombólisis) están relativamente contraindicados o son directamente peligrosos en la disección, porque pueden precipitar una hemorragia catastrófica o acelerar la propagación/rotura de la disección. Por eso, ante hallazgos atípicos (dolor descrito como desgarrador, irradiación a la espalda, pulsos asimétricos, ensanchamiento mediastínico) hay que mantener un umbral bajo para solicitar imagen específica de aorta (TC con contraste o ecografía transesofágica) antes de comprometerse con el tratamiento estándar del SCA.',
+        respuestaModelo: 'Porque la presentación clínica de la disección aórtica puede simular o incluir un SCA, y una de cada tres disecciones se pasa por alto. El ECG muestra cambios isquémicos en el 15% de los casos de disección (y es normal en el 30%); además, en una disección tipo A la propagación retrógrada puede ocluir una coronaria. El dolor puede remitir espontáneamente durante horas o días, y esa remisión es una fuente importante de diagnósticos perdidos. Como los hallazgos clínicos tienen una sensibilidad limitada, el diagnóstico exige imagen: resonancia, ecocardiografía transesofágica, TC con contraste o aortografía (la resonancia es la más sensible y específica, pero la angio-TC también es aceptable). Importa porque es una emergencia quirúrgica: alrededor del 60% de los pacientes fallecen sin cirugía inmediata.',
     },
 
     // ---- Ficha XXII: Paro cardíaco — SVB y SVCA ----
@@ -1189,10 +1189,10 @@ export const preguntasMerinoCardiologia = [
     },
     {
         id: 'mc-q172', tema: 'mc-paro-soporte',
-        enunciado: '¿Cuáles son las "T" de causas reversibles de AESP/asistolia?',
+        enunciado: '¿Cuáles son las "T" de causas reversibles de AESP/asistolia, según el texto del capítulo?',
         opciones: ['neumoTórax a tensión, Taponamiento, Tromboembolismo venoso, oclusión Trombótica coronaria', 'Taquicardia, Torsade, Trombopenia, Toxicidad', 'Traumatismo, Temperatura, Toxinas, Tirotoxicosis exclusivamente', 'No existe ninguna nemotecnia con "T" en este capítulo'],
         correcta: 0,
-        explicacion: 'Las causas reversibles de AESP identificables por la letra "T": neumoTórax a tensión, Taponamiento pericárdico, Tromboembolismo venoso, y oclusión Trombótica de las coronarias.',
+        explicacion: 'Las causas reversibles de AESP identificables por la letra "T": neumoTórax a tensión, Taponamiento pericárdico, Tromboembolismo venoso, y oclusión Trombótica de las coronarias. (El algoritmo de la Fig. 21.2 añade una quinta, Tóxicos: el libro da cuatro en el texto y cinco en la figura.)',
     },
     {
         id: 'mc-q173', tema: 'mc-paro-soporte',

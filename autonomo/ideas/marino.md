@@ -105,3 +105,12 @@ Coinciden los tres revisores:
   - la cascada de neutrófilos y ROS (Fig. 17.1);
   - el IABP inflando y desinflando con su onda (sustituye a la imagen en inglés).
 - **Casos**: shock hemorrágico que evoluciona a mixto; anafilaxia con betabloqueante.
+
+### R5 · Caps. 18-21 (Merino Cardiología: IC, arritmias, SCA, paro) · 2026-10-14
+
+- **Motor del latido + eco**: IC con FE reducida frente a conservada; taponamiento; SCA con zona akinética; disección
+  con flap en la supraesternal.
+- **Fig. 19.5 viva con Motion**: la FC de la FA bajando con diltiazem, amiodarona y digoxina.
+- **ACLS paso a paso**: cronómetro de ciclos con choque, epinefrina y amiodarona; ETCO₂ de la Fig. 21.4 que se separa
+  entre RCE y no RCE.
+- **Casos**: FA con WPW y «encuentra el error» (diltiazem); paro con ETCO₂ que sube → RCE → TTM.

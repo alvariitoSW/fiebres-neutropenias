@@ -1472,3 +1472,19 @@ Decisiones del usuario: puerta propia en la raíz y algoritmos AHA 2025 como fue
 - remisiones «Ficha N» en texto plano → botones con el nombre de la ficha.
 
 Parte: `autonomo/partes/2026-10-14-marino-r4.md`.
+
+## Merino Cardiología: revisión R5 del plan Marino, caps. 18-21 (octubre 2026)
+
+`marino-r5` (revisión sin construir), 2 vueltas, 12 fichas. Corregido:
+- erratas de dosis con nota: dabigatrán 150 mg y HNF 60 U/kg;
+- TV hasta 200 J;
+- selectores de WPW y disección según la fuente;
+- 737 casos; Fig. 19.5 releída;
+- `.puntuable` en CHA₂DS₂-VASc y pronóstico posparo;
+- límites en QTc, TTM, ETCO₂ y furosemida;
+- notas de fuentes (T de la AESP 4/5, verapamilo, metoprolol, Fig. 20.2);
+- huecos de amiodarona IV y warfarina;
+- tablas que se salían a 360 px;
+- remisiones «Ficha N» → botones.
+
+Va encima de R4. Parte: `autonomo/partes/2026-10-14-marino-r5.md`.

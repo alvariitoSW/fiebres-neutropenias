@@ -190,13 +190,20 @@ function calcCha2ds2Vasc() {
     }
     resultado.className = `result-box ${estado}`;
     resultado.style.textAlign = 'left';
-    resultado.innerHTML = `<strong>CHA₂DS₂-VASc = ${puntos} puntos</strong><p style="font-size:0.85rem; margin-top:6px;">${texto}</p><p style="font-size:0.75rem; color:var(--text-muted); margin-top:6px;">No aplica a FA valvular (estenosis mitral significativa o cualquier prótesis valvular), que siempre requiere anticoagulación con warfarina.</p>`;
+    resultado.innerHTML = `<strong>CHA₂DS₂-VASc = ${puntos} ${puntos === 1 ? 'punto' : 'puntos'}</strong><p style="font-size:0.85rem; margin-top:6px;">${texto}</p><p style="font-size:0.75rem; color:var(--text-muted); margin-top:6px;">No aplica a FA valvular (estenosis mitral significativa o cualquier prótesis valvular), que siempre requiere anticoagulación con warfarina.</p>`;
 }
 
 function initCha2ds2Vasc() {
     const resultado = document.getElementById('mc-cha2ds2-resultado');
     if (!resultado) return;
-    document.querySelectorAll('.mc-cha2ds2-check').forEach(c => c.addEventListener('change', calcCha2ds2Vasc));
+    // «Edad >75» y «Edad 65-74» son excluyentes: al marcar una se desmarca la otra.
+    const edad75 = document.getElementById('mc-cha-age75');
+    const edad65 = document.getElementById('mc-cha-age65');
+    document.querySelectorAll('.mc-cha2ds2-check').forEach(c => c.addEventListener('change', () => {
+        if (c.checked && c === edad75 && edad65) edad65.checked = false;
+        if (c.checked && c === edad65 && edad75) edad75.checked = false;
+        calcCha2ds2Vasc();
+    }));
     calcCha2ds2Vasc();
 }
 
@@ -212,10 +219,15 @@ function calcQtc() {
         resultado.innerHTML = '<span style="color:var(--text-muted);">Introduce el QT medido (ms) y la frecuencia cardíaca (lpm).</span>';
         return;
     }
-    let qtMs = Number(qtEl.value);
-    let fc = Number(fcEl.value);
-    if (qtMs < 0) { qtMs = 0; qtEl.value = 0; }
-    if (fc <= 0) { fc = 1; fcEl.value = 1; }
+    const qtMs = Number(qtEl.value);
+    const fc = Number(fcEl.value);
+    // Límites fisiológicos: QT >0 y FC entre 20 y 300 lpm; fuera de ahí no se calcula.
+    if (!(qtMs > 0) || !(fc >= 20 && fc <= 300)) {
+        resultado.className = 'result-box tfg-estado-warn';
+        resultado.style.textAlign = 'left';
+        resultado.innerHTML = '<strong>Combinación no fisiológica</strong><p style="font-size:0.85rem; margin-top:6px;">El QT debe ser mayor de 0 ms y la frecuencia cardíaca estar entre 20 y 300 lpm (límites de fisiología general, no de la ficha). Revisa los datos; no se calcula el QTc.</p>';
+        return;
+    }
 
     const rrSeg = 60 / fc;
     const qtSeg = qtMs / 1000;
@@ -538,7 +550,7 @@ const MC_FUROSEMIDA_WIZARD = {
     },
     dosisMax: {
         pregunta: '¿La dosis IV actual ya alcanza 200 mg?',
-        si: { estado: 'tfg-estado-danger', final: 'Resistencia a furosemida confirmada (sin respuesta a 200 mg IV). Considerar bumetanida/torsemida, metolazona adyuvante, infusión continua, o ultrafiltración — ver Tabla 18.4 y el micro-perfil "Resistencia a la furosemida" de esta misma ficha.' },
+        si: { estado: 'tfg-estado-danger', final: 'Resistencia a furosemida confirmada (sin respuesta a 200 mg IV). Considerar bumetanida/torsemida, metolazona adyuvante o infusión continua — ver Tabla 18.4 y el micro-perfil "Resistencia a la furosemida" de esta misma ficha.' },
         no: { estado: 'tfg-estado-warn', final: 'Doblar la dosis IV (hasta un máximo de 200 mg) y reevaluar la diuresis a las 2h.' },
     },
 };
@@ -549,8 +561,15 @@ function calcDiureticoEquiv() {
     const resultado = document.getElementById('mc-diuretico-equiv-resultado');
     if (!input || !resultado) return;
     if (input.value === '') { resultado.style.display = 'none'; return; }
-    let mg = Number(input.value);
-    if (mg < 0) { mg = 0; input.value = 0; }
+    const mg = Number(input.value);
+    // Rango de cálculo propio de la app (no es de la ficha ni de la fuente): 0 < dosis ≤ 1000 mg.
+    if (!(mg > 0 && mg <= 1000)) {
+        resultado.style.display = 'block';
+        resultado.className = 'result-box tfg-estado-warn';
+        resultado.style.textAlign = 'left';
+        resultado.innerHTML = '<strong>Combinación no fisiológica</strong><p style="font-size:0.85rem; margin-top:6px;">La dosis debe ser mayor de 0 mg y no pasar de 1000 mg (rango de cálculo propio de la app, no de la ficha). Revisa el dato; no se convierte.</p>';
+        return;
+    }
     const bumetanida = mg / 40;
     const torsemida = mg / 2;
     resultado.style.display = 'block';
@@ -660,10 +679,10 @@ function initPuertaBalon() {
 // Selector de antihipertensivo en disección aórtica (Ficha XXI), Tabla 20.5.
 const DISECCION_FARMACO_INFO = {
     'titulacion-rapida': { estado: 'tfg-estado-ok', texto: '<strong>Esmolol</strong> — betabloqueante ultrarrápido (semivida ~9 min), preferido cuando se necesita ajustar la dosis con rapidez. 500 μg/kg bolo, luego 50 μg/kg/min, incrementos de 25 hasta 200 μg/kg/min máx. Evitar en IC aguda.' },
-    monoterapia: { estado: 'tfg-estado-ok', texto: '<strong>Labetalol</strong> — α y β bloqueante combinado, la única opción de la tabla que puede usarse en monoterapia (cubre control de FC y PA a la vez). 20 mg IV en 2 min, luego 20-40 mg cada 10 min o infusión 1-2 mg/min (máx. 300 mg acumulados). Evitar en IC aguda.' },
-    'oral-mantenimiento': { estado: 'tfg-estado-ok', texto: '<strong>Metoprolol</strong> — adecuado para el betabloqueo inicial junto a un vasodilatador, con dosificación intermitente. 5 mg bolo, repetible ×2 en 5 min, luego 5-10 mg cada 4-6h.' },
+    monoterapia: { estado: 'tfg-estado-ok', texto: '<strong>Labetalol</strong> — α y β bloqueante combinado, que se usa en monoterapia (Tabla 20.5). 20 mg IV en 2 min, luego 20-40 mg cada 10 min o infusión 1-2 mg/min (máx. 300 mg acumulados). Evitar en IC aguda.' },
+    'betabloqueo-inicial': { estado: 'tfg-estado-ok', texto: '<strong>Metoprolol</strong> — el más indicado para el betabloqueo inicial cuando se usan vasodilatadores (Tabla 20.5). Dosificación intermitente: 5 mg IV en bolo, repetible a los 5 min ×2 si hace falta; luego 5-10 mg IV cada 4-6 h, según necesidad.' },
     'vasodilatador-asociado': { estado: 'tfg-estado-warn', texto: '<strong>Nicardipino</strong> (o nitroprusiato) — SIEMPRE combinado con betabloqueante, nunca en monoterapia (la taquicardia refleja y el aumento del gasto cardíaco de un vasodilatador solo, sin betabloqueo, aumentan las fuerzas de cizalla). Nicardipino: infusión 5 mg/h, +2,5 mg/h cada 5 min hasta 15 mg/h máx.' },
-    'ic-aguda': { estado: 'tfg-estado-danger', texto: 'Esmolol, labetalol y metoprolol son betabloqueantes — usar con cautela o evitarlos si coexiste IC aguda descompensada. Considerar nitroprusiato + betabloqueo con vigilancia hemodinámica estrecha, y valorar el manejo combinado con la Ficha XIV (IC aguda: manejo).' },
+    'ic-aguda': { estado: 'tfg-estado-danger', texto: 'Según la Tabla 20.5: <strong>esmolol</strong> («no aconsejado en presencia de insuficiencia cardíaca aguda») y <strong>labetalol</strong> («evitar en la IC aguda») se evitan. El <strong>nicardipino</strong> y el <strong>nitroprusiato</strong> se usan siempre junto a un betabloqueante, y el nitroprusiato no se usa con isquemia coronaria ni con fallo renal o hepático. <strong>La fuente no da una alternativa para la IC aguda</strong>: es un hueco del libro, no una pauta de la app.' },
 };
 function initDiseccionFarmaco() {
     const select = document.getElementById('mc-diseccion-farmaco-select');
@@ -679,15 +698,22 @@ function initDiseccionFarmaco() {
     });
 }
 
+// Botones de enlace cruzado a otras fichas de este cuaderno (mecanismo único de
+// CLAUDE.md §5: lo resuelve el listener delegado de home/index.js). Solo se usan
+// dentro de textos que se pintan con innerHTML.
+const MC_BTN_FA_CARDIOV = '<button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-fa-cardioversion">Fibrilación auricular: cardioversión e ictus</button>';
+const MC_BTN_POSRES = '<button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-posresucitacion">Período posresucitación: pronóstico</button>';
+const MC_BTN_MONITORIZ = '<button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-paro-monitorizacion">Monitorización de la reanimación</button>';
+
 // Selector de fármaco de control de frecuencia en FA por comorbilidad
 // (Ficha XVI), Tabla 19.1.
 const FA_FARMACO_INFO = {
-    general: { estado: 'tfg-estado-ok', texto: '<strong>Diltiazem</strong> — el más popular y eficaz en las primeras horas (cruza el objetivo de 100 lpm a las ~2,3h). 0,25 mg/kg IV en 2 min, luego infusión 5-15 mg/h. Limitado por hipotensión (20-30%) y efecto inotrópico negativo.' },
+    general: { estado: 'tfg-estado-ok', texto: '<strong>Diltiazem</strong> — el más popular y el más eficaz en las primeras horas (Fig. 19.5: cruza 100 lpm a las ~2,3 h, lectura del gráfico). 0,25 mg/kg IV en 2 min, luego infusión 5-15 mg/h. Limitado por hipotensión (20-30%) y efecto inotrópico negativo.' },
     hfref: { estado: 'tfg-estado-warn', texto: '<strong>Amiodarona</strong> — preferida en HFrEF (menos inotropismo negativo que diltiazem/betabloqueantes), y puede además convertir a ritmo sinusal. 150 mg IV en 10 min (repetible), luego 1 mg/min×6h y 0,5 mg/min×18h (máx. 2,2 g/24h).' },
-    hiperadrenergico: { estado: 'tfg-estado-ok', texto: '<strong>Betabloqueante</strong> (metoprolol o esmolol) — más eficaz en estados hiperadrenérgicos (dolor, ansiedad, sepsis) que diltiazem. Éxito en ~70% de los casos.' },
+    hiperadrenergico: { estado: 'tfg-estado-ok', texto: '<strong>Betabloqueante</strong> (metoprolol o esmolol) — los más eficaces en la FA de estados hiperadrenérgicos (Tabla 19.1). Los betabloqueantes logran control exitoso en ~70% de las FA rápidas.' },
     'titulacion-rapida': { estado: 'tfg-estado-ok', texto: '<strong>Esmolol</strong> — betabloqueante ultra-corto (semivida 9 min), permite titulación rápida y reversible. 500 μg/kg IV bolo, luego 50 μg/kg/min, incrementos de 25 μg/kg/min cada 5 min hasta 200 μg/kg/min máx.' },
-    'control-cronico': { estado: 'tfg-estado-warn', texto: '<strong>Digoxina</strong> — acción lenta, NO debe usarse sola para control agudo (apenas alcanza el objetivo &lt;100 lpm a las 6h), pero es una opción de control a largo plazo, sobre todo en HFrEF. 0,25 mg IV cada 2h hasta 1,5 mg total, luego 0,125-0,375 mg IV/día.' },
-    wpw: { estado: 'tfg-estado-danger', texto: '<span class="hl-rojo">Ninguno de los fármacos de la Tabla 19.1 debe usarse</span> si la FA se origina de una vía accesoria en el nodo AV (WPW, ver Ficha XVII) — el bloqueo selectivo del nodo AV puede precipitar fibrilación ventricular. Requiere manejo especializado distinto.' },
+    'control-cronico': { estado: 'tfg-estado-warn', texto: '<strong>Digoxina</strong> — acción lenta, NO debe usarse sola para control agudo (en la Fig. 19.5 no llega a &lt;100 lpm en 6 h), pero es una opción de control a largo plazo, sobre todo en HFrEF. 0,25 mg IV cada 2h hasta 1,5 mg total, luego 0,125-0,375 mg IV/día.' },
+    wpw: { estado: 'tfg-estado-danger', texto: '<span class="hl-rojo">No usar diltiazem, betabloqueantes ni digoxina</span> si la FA se origina de una vía accesoria (WPW, ver ' + MC_BTN_FA_CARDIOV + '): bloquean el nodo AV pero no la vía accesoria, y el bloqueo selectivo del nodo AV puede precipitar fibrilación ventricular. Preferido: <strong>cardioversión eléctrica</strong>, o cardioversión farmacológica con <strong>amiodarona</strong> o <strong>procainamida</strong>.' },
 };
 function initFaFarmaco() {
     const select = document.getElementById('mc-fa-farmaco-select');
@@ -716,27 +742,27 @@ const MC_ACLS_WIZARD = {
     desfib1: {
         pregunta: 'Desfibrila (choque bifásico 120-200 J) y reanuda RCP 2 min sin interrupción. Tras 2 min, ¿persiste ritmo desfibrilable?',
         si: 'epi1',
-        no: { estado: 'tfg-estado-ok', final: 'Ritmo cambia. Comprueba pulso — si organizado y con pulso, posible RCE (ver cuidados posparo, Ficha XXIV). Si sigue sin pulso pero ya no desfibrilable, pasa a la vía de asistolia/AESP (epinefrina cada 3-5 min + buscar causas reversibles).' },
+        no: { estado: 'tfg-estado-ok', final: 'Ritmo cambia. Comprueba pulso — si organizado y con pulso, posible RCE (ver cuidados posparo: ' + MC_BTN_POSRES + '). Si sigue sin pulso pero ya no desfibrilable, pasa a la vía de asistolia/AESP (epinefrina cada 3-5 min + buscar causas reversibles).' },
     },
     epi1: {
-        pregunta: 'Epinefrina 1 mg IV/IO (repetir cada 3-5 min durante toda la reanimación) + 2º choque. Tras el 2º choque y 2 min de RCP, ¿persiste FV/TV?',
+        pregunta: 'Epinefrina 1 mg IV/IO (repetir cada 3-5 min durante toda la reanimación) + 2º choque. Tras el 2º choque y 2 min de RCP, ¿persiste FV/TV (si persiste, toca el 3.er choque)?',
         si: 'antiarritmico',
-        no: { estado: 'tfg-estado-ok', final: 'Ritmo cambia tras el 2º choque + epinefrina. Comprueba pulso — posible RCE (ver Ficha XXIV) o transición a la vía de asistolia/AESP si sigue sin pulso.' },
+        no: { estado: 'tfg-estado-ok', final: 'Ritmo cambia tras el 2º choque + epinefrina. Comprueba pulso — posible RCE (ver ' + MC_BTN_POSRES + ') o transición a la vía de asistolia/AESP si sigue sin pulso.' },
     },
     antiarritmico: {
-        pregunta: 'Tras el 3er choque sin respuesta: amiodarona 300 mg IV/IO (2ª dosis 150 mg si es necesario; si no hay amiodarona, lidocaína 1-1,5 mg/kg). ¿Persiste FV/TV pese a 3 choques + epinefrina + antiarrítmico?',
-        si: { estado: 'tfg-estado-danger', final: 'Mal pronóstico tras el fallo de 3 desfibrilaciones (~5% de resultado satisfactorio). Busca activamente causas reversibles ("las H y las T": hipovolemia, hipoxia, hidrogenión-acidosis, hipo/hiperpotasemia, hipotermia, neumoTórax a tensión, Taponamiento, Tóxicos, Tromboembolismo pulmonar, oclusión Trombótica coronaria) y considera ECMO emergente si está disponible en 24h.' },
-        no: { estado: 'tfg-estado-ok', final: 'Ritmo cambia. Comprueba pulso — posible RCE (ver Ficha XXIV) o transición a la vía de asistolia/AESP si sigue sin pulso.' },
+        pregunta: 'Si persiste FV/TV, da el 3.er choque y administra amiodarona 300 mg IV/IO (2ª dosis 150 mg si es necesario; si no hay amiodarona, lidocaína 1-1,5 mg/kg). ¿Persiste FV/TV pese a 3 choques + epinefrina + antiarrítmico?',
+        si: { estado: 'tfg-estado-danger', final: 'Mal pronóstico tras el fallo de 3 desfibrilaciones (~5% de resultado satisfactorio). Busca activamente causas reversibles (según la Fig. 21.2, "las H y las T": hipovolemia, hipoxia, hidrogenión-acidosis, hipo/hiperpotasemia, hipotermia, neumoTórax a tensión, Taponamiento, Tóxicos, Tromboembolismo pulmonar, oclusión Trombótica coronaria) y considera ECMO emergente si está disponible en 24h.' },
+        no: { estado: 'tfg-estado-ok', final: 'Ritmo cambia. Comprueba pulso — posible RCE (ver ' + MC_BTN_POSRES + ') o transición a la vía de asistolia/AESP si sigue sin pulso.' },
     },
     noDesfib1: {
-        pregunta: 'Ritmo no desfibrilable (asistolia/AESP). RCP 2 min + epinefrina 1 mg IV/IO cada 3-5 min, buscando causas reversibles ("las T": neumoTórax a tensión, Taponamiento pericárdico, Tóxicos, Tromboembolismo pulmonar, oclusión Trombótica coronaria). Al reevaluar a los 2 min, ¿cambia a ritmo desfibrilable?',
+        pregunta: 'Ritmo no desfibrilable (asistolia/AESP). RCP 2 min + epinefrina 1 mg IV/IO cada 3-5 min, buscando causas reversibles (según la Fig. 21.2, "las T": neumoTórax a tensión, Taponamiento pericárdico, Tóxicos, Tromboembolismo pulmonar, oclusión Trombótica coronaria). Al reevaluar a los 2 min, ¿cambia a ritmo desfibrilable?',
         si: 'desfib1',
         no: 'noDesfib2',
     },
     noDesfib2: {
-        pregunta: 'Sigue en asistolia/AESP. ¿Hay retorno de circulación espontánea (pulso palpable o ETCO₂ en ascenso, ver Ficha XXIII)?',
-        si: { estado: 'tfg-estado-ok', final: 'RCE — inicia cuidados posparo cardíaco de inmediato (control de temperatura, hemodinámica, pronóstico neurológico: ver Ficha XXIV).' },
-        no: { estado: 'tfg-estado-warn', final: 'Continúa ciclos de RCP 2 min + epinefrina cada 3-5 min, reevaluando ritmo y causas reversibles cada 2 min. Si el esfuerzo ha sido adecuado y prolongado sin RCE, considera la terminación de la reanimación.' },
+        pregunta: 'Sigue en asistolia/AESP. ¿Hay retorno de circulación espontánea (pulso palpable o ETCO₂ en ascenso)?',
+        si: { estado: 'tfg-estado-ok', final: 'RCE — inicia cuidados posparo cardíaco de inmediato (control de temperatura, hemodinámica, pronóstico neurológico: ver ' + MC_BTN_POSRES + ').' },
+        no: { estado: 'tfg-estado-warn', final: 'Continúa ciclos de RCP 2 min + epinefrina cada 3-5 min, reevaluando ritmo y causas reversibles cada 2 min. Si el esfuerzo ha sido adecuado y prolongado sin RCE, considera la terminación de la reanimación. Para valorar el ETCO₂ durante la reanimación, ver ' + MC_BTN_MONITORIZ + '.' },
     },
 };
 // Ficha XVIII — asistente paso a paso del manejo escalonado de la TAM
@@ -749,7 +775,7 @@ const MC_MAT_WIZARD = {
     },
     farmaco: {
         pregunta: 'TAM persiste tras el magnesio empírico. ¿Tiene el paciente EPOC?',
-        si: { estado: 'tfg-estado-warn', final: 'Verapamilo 0,25-5 mg IV en 2 min, repetible cada 15-30 min hasta 20 mg total — &lt;50% de éxito de conversión, pero puede frenar la frecuencia ventricular. Inotrópico negativo potente, no recomendado en HFrEF.' },
+        si: { estado: 'tfg-estado-warn', final: 'Verapamilo 0,25-5 mg IV en 2 min, repetible cada 15-30 min hasta 20 mg total — &lt;50% de éxito de conversión, pero puede frenar la frecuencia ventricular. Inotrópico negativo potente, no recomendado en HFrEF. <em>Nota de fidelidad: el libro imprime «0,25-5 mg» (pág. 28); probable errata de 2,5 mg, no corregida.</em>' },
         no: { estado: 'tfg-estado-ok', final: 'Metoprolol (Tabla 19.1) — 80% de éxito de conversión a ritmo sinusal.' },
     },
 };
@@ -782,8 +808,15 @@ function calcEtco2() {
     const resultado = document.getElementById('mc-etco2-resultado');
     if (!input || !resultado) return;
     if (input.value === '') { resultado.style.display = 'none'; return; }
-    let etco2 = Number(input.value);
-    if (etco2 < 0) { etco2 = 0; input.value = 0; }
+    const etco2 = Number(input.value);
+    // Rango plausible en capnografía (fisiología general): 0-100 mmHg.
+    if (etco2 < 0 || etco2 > 100) {
+        resultado.style.display = 'block';
+        resultado.className = 'result-box tfg-estado-warn';
+        resultado.style.textAlign = 'left';
+        resultado.innerHTML = '<strong>Valor no plausible</strong><p style="font-size:0.85rem; margin-top:6px;">El ETCO₂ debe estar entre 0 y 100 mmHg (rango de fisiología general, no de la ficha). Revisa la medición.</p>';
+        return;
+    }
 
     let estado, texto;
     if (etco2 < 10) {
@@ -794,7 +827,7 @@ function calcEtco2() {
         texto = 'Zona límite (10-15 mmHg) — la fuente cita ambos umbrales (15 mmHg en un estudio, 10 mmHg en otro) sin un único corte consensuado. Valora la trayectoria (¿sube o baja?, ver Fig. 21.4) junto al resto del cuadro.';
     } else {
         estado = 'tfg-estado-ok';
-        texto = 'Por encima de 15 mmHg — compatible con RCE probable/reanimación con más opciones. Continuar la reanimación hasta 1½ horas se ha asociado a resultados favorables cuando el ETCO₂ se mantiene por encima de este nivel.';
+        texto = 'Por encima de 15 mmHg — la fuente solo dice que la reanimación exitosa es improbable si el ETCO₂ no supera 10-15 mmHg a los 20 min; no da este valor como predictor de RCE. Continuar la reanimación hasta 1½ horas se ha asociado a resultados favorables cuando el ETCO₂ se mantiene por encima de ese nivel.';
     }
     resultado.style.display = 'block';
     resultado.className = `result-box ${estado}`;
@@ -918,10 +951,20 @@ function calcTtmTemp() {
     if (input.value === '') { resultado.style.display = 'none'; return; }
     const temp = Number(input.value);
 
+    // Rango plausible de temperatura central en un superviviente de paro
+    // (fisiología general): 25-43 °C.
+    if (temp < 25 || temp > 43) {
+        resultado.style.display = 'block';
+        resultado.className = 'result-box tfg-estado-warn';
+        resultado.style.textAlign = 'left';
+        resultado.innerHTML = '<strong>Valor no plausible</strong><p style="font-size:0.85rem; margin-top:6px;">La temperatura central debe estar entre 25 y 43 °C (rango de fisiología general, no de la ficha). Revisa la medición.</p>';
+        return;
+    }
+
     let estado, mensaje;
     if (temp > 37.7) { estado = 'danger'; mensaje = 'Por encima de 37,7°C — iniciar enfriamiento activo, objetivo 37,5°C.'; }
     else if (temp > 37.5) { estado = 'warn'; mensaje = 'Entre 37,5 y 37,7°C — reforzar medidas (paracetamol, reducir temperatura ambiente) antes de llegar al disparo de enfriamiento activo.'; }
-    else if (temp < 32) { estado = 'warn'; mensaje = 'Por debajo de 32°C — hipotermia más profunda de lo recomendado; considerar recalentamiento controlado.'; }
+    else if (temp < 32) { estado = 'warn'; mensaje = 'Por debajo de 32°C — fuera del rango de hipotermia leve (32-36°C) que describe la Tabla 21.3. La fuente no da una pauta para este caso.'; }
     else { estado = 'ok'; mensaje = temp < 36 ? 'Hipotermia leve espontánea (32-36°C) — no recalentar activamente.' : 'Dentro del objetivo (≤37,5°C).'; }
 
     resultado.style.display = 'block';
