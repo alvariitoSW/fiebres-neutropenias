@@ -198,7 +198,8 @@ como las conoce un médico, no como están hechas por dentro. Los botones dicen 
 - [ ] Probado en el navegador a 390 y 360 px: sin desbordamiento, sin errores de consola, todo abre y calcula (§9).
 - [ ] Si tocaste el simulador de eco: `node --test 'js/modules/eco/pruebas/*.test.mjs'` en verde.
 - [ ] Si hay un simulador: en los extremos y el punto medio de cada mando, las constantes son las de un paciente
-      posible (PA, FC, presiones, velocidades). Si el modelo lleva a algo que el texto no dice, se ajusta o se dice.
+      posible (PA, FC, presiones, volúmenes, velocidades). El límite es la fisiología humana: una cifra imposible o
+      muy alejada de la realidad no se recorta, se busca dónde está el error y se corrige en su origen.
 - [ ] Toda cifra nueva tiene su fuente y su página; las erratas y discrepancias, con su nota.
 - [ ] Ningún id duplicado; ningún `<img>` sin archivo; ningún tema de quiz sin preguntas.
 - [ ] Si cambió un `.css` o `js/main.js`: fecha `?v=` subida en `index.html`.

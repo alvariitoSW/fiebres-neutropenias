@@ -19,8 +19,13 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
    código nunca se copia: cada figura se reconstruye sobre los motores de la app. Nada de imágenes de pacientes con
    licencia restrictiva (CAMUS, EchoNet).
 7. **Lo que muestra un simulador es un paciente posible** en todo el recorrido de sus mandos (extremos y punto
-   medio): presión arterial, frecuencias, presiones y velocidades dentro de lo fisiológico para ese estado. Si el
-   modelo lleva a algo que el texto no describe (p. ej. un shock), se ajusta el modelo o se dice en pantalla.
+   medio): presión arterial, frecuencias, presiones, volúmenes y velocidades dentro de lo fisiológico para ese
+   estado. **El límite es la propia fisiología humana.** Si una cifra no existe en un ser humano, está fuera de lo
+   compatible con la vida o se aleja mucho de la realidad (p. ej. FEVI del 95 %, PAS de 300, un chorro de 12 m/s, un
+   volumen negativo), **no basta con taparla ni con recortarla**: hay que comprobarla y **buscar dónde está el
+   error** (el modelo, una unidad, una fórmula, un parámetro mal ajustado) y corregirlo en su origen. Si el modelo
+   lleva a un estado posible pero que el texto no describe (p. ej. un shock), se ajusta el modelo o se dice en
+   pantalla.
 
 ## 2. La app
 

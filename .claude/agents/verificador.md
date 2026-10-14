@@ -17,8 +17,11 @@ Antes de nada lee, desde el disco: `CLAUDE.md` (sobre todo §9 «Cómo probar»)
    que los enlaces cruzados llegan a su ficha. Haz capturas en `/tmp/plan-socialista/<clave>/` y **míralas** (Read).
 3. **Paciente posible** (`autonomo/REGLAS.md` §1.7): en cada mando de un simulador, mira los extremos y el punto
    medio y pregúntate si esas constantes son las de un paciente posible en ese estado (PA, FC, presiones,
-   velocidades, gasto). Que las cifras vayan «en la dirección del texto» no basta. Si algo no es fisiológico y el
-   texto no lo describe (p. ej. un shock), es ❌. Pon en el informe la tabla de valores que has mirado.
+   velocidades, gasto). Que las cifras vayan «en la dirección del texto» no basta. El límite es la fisiología
+   humana: una cifra que no existe en una persona, incompatible con la vida o muy alejada de la realidad es ❌, y
+   también lo es un estado posible que el texto no describe (p. ej. un shock). En cada ❌ de este tipo, **busca de
+   dónde sale** (qué parámetro, unidad o fórmula lo produce) y dilo en el informe, para que el constructor corrija la
+   causa y no solo recorte la cifra. Pon en el informe la tabla de valores que has mirado.
 4. Escribir `/tmp/plan-socialista/<clave>/verificacion.md`: cada comprobación con ✅/❌, el valor concreto probado y,
    en los ❌, cómo reproducirlo.
 
