@@ -66,7 +66,7 @@ export function redondear(med) {
  */
 export function criterios(x, flail = false) {
   const leves = [
-    { t: 'Jet central pequeño, estrecho (<20% de la AI)', ok: null },
+    { t: 'Jet central pequeño, estrecho (<20% de la AI)', ok: null, sitio: true },
     { t: 'Vena contracta ≤0,3 cm', ok: null },
     { t: 'Radio PISA ausente o ≤0,3 cm', ok: x.r <= 0.3 },
     { t: 'Influjo mitral con onda A dominante', ok: null },
@@ -286,7 +286,7 @@ export function montar(el) {
       { k: `Radio PISA a ${VA} cm/s`, v: coma(med.r, 2), u: 'cm = √(flujo ÷ 2π·Va) · ≥1,0 grave', fuente: 'fórmula del capítulo (ficha) · Va del ejemplo', aviso: av(x.r >= 1.0) },
       { k: 'VTD / VTS · FEVI', v: `${coma(med.vtd, 0)} / ${coma(med.vts, 0)} · ${coma(med.fevi, 0)}`, u: 'mL · %', fuente: 'motor (FE total: la fracción que sale por las dos vías)', aviso: av(res.grave && x.fevi <= 60) },
       { k: 'DTDVI · DTSVI', v: `${coma(med.dtd, 0)} · ${coma(med.dts, 0)}`, u: 'mm · C2 si DTSVI ≥40', fuente: 'geometría de la app (eje largo paraesternal)', aviso: av(res.grave && x.dts >= 40) },
-      { k: 'Índice de volumen de la AI', v: coma(med.ivai, 0), u: 'mL/m² · normal ≤34', fuente: 'motor (volumen máximo de la AI ÷ 1,85 m²)', aviso: av(x.ivai > 34) },
+      { k: 'Índice de volumen de la AI', v: coma(med.ivai, 0), u: 'mL/m² · normal ≤34 (Lang 2015, varones)', fuente: 'motor (volumen máximo de la AI ÷ 1,85 m²)', aviso: av(x.ivai > 34) },
       { k: 'PAS · PTDVI', v: `${coma(med.pas, 0)} · ${coma(med.ptd, 0)}`, u: 'mmHg', fuente: 'motor (sin barorreflejo)' },
       { k: 'Estadio ACC/AHA', v: res.estadio ?? '—', u: res.grave ? (res.lvd ? 'FEVI ≤60% o DTSVI ≥40 mm' : 'sin síntomas · FEVI >60% y DTSVI <40 mm') : 'solo en la IM grave', fuente: 'umbrales: ficha (Otto 2020)', aviso: res.estadio === 'C2' },
     ];
