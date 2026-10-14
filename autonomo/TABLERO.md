@@ -82,6 +82,11 @@ Decididos con el usuario. Casi todos dependen de que mande una fuente.
   67 min en la vuelta 1 y 19 en la 2, verificador ~6, auditor ~3) y proponer cómo acelerar; 2) cómo dejar varias
   tareas en cola que se hagan solas sin que el usuario entre en Claude (rutina programada en la nube, tareas en
   paralelo en ramas distintas). Necesita que el usuario fije el límite de gasto y cuántas tareas a la vez.
+  **Hecho el análisis** (parte `autonomo/partes/2026-10-14.md` en la rama `auto/mr`). Propuestas: dos constructores a
+  la vez (texto+quiz / figura+pruebas), pruebas largas solo al final, los tres jueces a la vez desde la 1.ª vuelta
+  (estimado: de ~2 h 45 a ~1-1 h 15 por capítulo). **Decisión del usuario (14/10/2026): todavía no**; primero
+  revisar la PR #2. Rutina nocturna: **no montarla aún**; cuando se monte, de madrugada (~3:00, hora de Canarias)
+  con aviso al móvil.
 - **Prueba intermitente del simulador de eco**: `navegador.test.mjs`, «la barra del ciclo tiene las 7 fases», falla
   a veces cuando el ordenador va cargado (1 de 3 en el piloto). Endurecerla.
 - **Orden de trabajo pedido**: 1) Marino completo (hecho, octubre 2026); 2) terminar El Libro Azul (hay secciones
