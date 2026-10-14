@@ -19,6 +19,17 @@ function pintar(box, estado, html) {
     box.innerHTML = html;
 }
 function ocultar(box) { if (box) box.style.display = 'none'; }
+// Lee un campo numérico y lo acota a los min/max de su propio <input>. Vacío = null
+// (nunca 0). Si lo escrito queda fuera, devuelve el aviso «combinación no fisiológica».
+function leerAcotado(id, nombre) {
+    const el = $(id), raw = num(el);
+    if (raw === null) return { v: null, aviso: '' };
+    const min = el.min !== '' ? Number(el.min) : -Infinity, max = el.max !== '' ? Number(el.max) : Infinity;
+    const v = clamp(raw, min, max);
+    if (v === raw) return { v, aviso: '' };
+    return { v, aviso: `<p>⚠️ <strong>Combinación no fisiológica</strong>: ${nombre} ${fmt(raw, raw % 1 ? 1 : 0)} está fuera del rango de la calculadora (${fmt(min, 0)}-${fmt(max, 0)}). Revisa los datos; se calcula con ${fmt(v, v % 1 ? 1 : 0)}.</p>` };
+}
+const subeAviso = (estado, avisos) => (avisos && estado === 'ok' ? 'warn' : estado);
 function enlazar(ids, fn) {
     ids.forEach(id => { const el = $(id); el?.addEventListener(el.tagName === 'SELECT' || el.type === 'checkbox' ? 'change' : 'input', fn); });
     fn();
@@ -27,10 +38,11 @@ function enlazar(ids, fn) {
 // ---- Cap. 1 — French (Ecuación 1.1 y Tabla 1.1) -------------------------
 const TABLA_1_1 = { 1: ['27 G', '0,4'], 3: ['20 G', '0,9'], 4: ['18 G', '1,2'], 5: ['16 G', '1,7'], 7: ['13 G', '2,4'], 9: ['11 G', '3,2'] };
 function calcFrench() {
-    const fr = num($('mar-french-input')), box = $('mar-french-resultado');
-    if (fr === null || fr <= 0) return ocultar(box);
+    const box = $('mar-french-resultado');
+    const { v: fr, aviso } = leerAcotado('mar-french-input', 'El tamaño');
+    if (fr === null) return ocultar(box);
     const g = TABLA_1_1[fr];
-    pintar(box, 'ok', `<strong>${fmt(fr, fr % 1 ? 1 : 0)} Fr ≈ ${fmt(fr * 0.33, 2)} mm</strong> de diámetro externo.` +
+    pintar(box, subeAviso('ok', aviso), `${aviso}<strong>${fmt(fr, fr % 1 ? 1 : 0)} Fr ≈ ${fmt(fr * 0.33, 2)} mm</strong> de diámetro externo.` +
         (g ? ` La Tabla 1.1 lo da como <strong>${g[0]}</strong> y ${g[1]} mm.` : ' La Tabla 1.1 no da su gauge equivalente.'));
 }
 
@@ -50,8 +62,9 @@ function calcUlcera() {
 
 // ---- Cap. 5 — dosis de tromboprofilaxis (Tablas 5.2 y 5.3) -------------
 function calcProfilaxis() {
-    const f = $('mar-profilaxis-farmaco')?.value, clcr = num($('mar-profilaxis-clcr')), imc = num($('mar-profilaxis-imc'));
-    const box = $('mar-profilaxis-resultado');
+    const f = $('mar-profilaxis-farmaco')?.value, box = $('mar-profilaxis-resultado');
+    const { v: clcr, aviso: avClcr } = leerAcotado('mar-profilaxis-clcr', 'El aclaramiento de creatinina');
+    const { v: imc, aviso: avImc } = leerAcotado('mar-profilaxis-imc', 'El IMC');
     if (!f || clcr === null || imc === null) return ocultar(box);
     const obeso = imc >= 40;
     let estado = 'ok', txt = '';
@@ -88,7 +101,11 @@ function calcProfilaxis() {
             break;
         case 'warfarina': txt = '<strong>2,5-5 mg al día</strong>, ajustando a un INR de 1,5-2,5. Sin ajuste renal ni ajuste conocido en la obesidad.'; break;
     }
-    pintar(box, estado, txt);
+    // Contradicción de la fuente: Tabla 5.2 y pág. 7 dicen dalteparina «sin ajuste renal»; la pág. 11 limita a HNF o warfarina con ClCr <15.
+    const aviso15 = clcr < 15
+        ? '<p>El capítulo (pág. 11) dice que con ClCr &lt;15 solo se pueden usar HNF o warfarina.</p>' : '';
+    if (aviso15 && estado === 'ok') estado = 'warn';
+    pintar(box, subeAviso(estado, avClcr + avImc), `${avClcr}${avImc}${txt}${aviso15}`);
 }
 
 // ---- Cap. 6 — BPS, RASS y propofol --------------------------------------
@@ -103,15 +120,17 @@ function calcRass() {
     let estado, txt;
     if (v === 0) { estado = 'ok'; txt = 'Es el objetivo óptimo.'; }
     else if (v < 0 && v >= -2) { estado = 'ok'; txt = 'Sedación ligera: el objetivo si está en perfusión de sedantes.'; }
-    else if (v < -2) { estado = v <= -4 ? 'danger' : 'warn'; txt = 'Más profundo de lo recomendado: bajar la sedación hasta −1 a −2.'; }
-    else { estado = v >= 3 ? 'danger' : 'warn'; txt = 'Agitación: buscar y tratar la causa (dolor, delirio) antes de sedar más.'; }
+    else if (v < -2) { estado = v <= -4 ? 'danger' : 'warn'; txt = 'Más profundo que la sedación ligera (−1 a −2) que el capítulo propone como objetivo en perfusión de sedantes.'; }
+    else { estado = v >= 3 ? 'danger' : 'warn'; txt = 'Agitación (puntuaciones +1 a +4). El objetivo óptimo es 0.'; }
     pintar($('mar-rass-resultado'), estado, `<strong>RASS ${v > 0 ? '+' : v < 0 ? '−' : ''}${Math.abs(v)}</strong> — ${txt}`);
 }
 
 function calcPropofol() {
-    const mlh = num($('mar-propofol-mlh')), peso = num($('mar-propofol-peso')), horas = num($('mar-propofol-horas'));
     const box = $('mar-propofol-resultado');
-    if (mlh === null || peso === null || peso <= 0) return ocultar(box);
+    const { v: mlh, aviso: a1 } = leerAcotado('mar-propofol-mlh', 'La velocidad');
+    const { v: peso, aviso: a2 } = leerAcotado('mar-propofol-peso', 'El peso');
+    const { v: horas, aviso: a3 } = leerAcotado('mar-propofol-horas', 'La duración');
+    if (mlh === null || peso === null) return ocultar(box);
     const mgkgh = mlh * 10 / peso;            // propofol al 1% = 10 mg/mL
     const ugkgmin = mgkgh * 1000 / 60;
     const kcal = mlh * 24;                     // 1 kcal/mL
@@ -121,7 +140,10 @@ function calcPropofol() {
     if (alta && largo) { estado = 'danger'; aviso = 'Dosis alta durante más de 48 h: es el contexto típico del síndrome de infusión de propofol.'; }
     else if (alta) { estado = 'warn'; aviso = 'Dosis alta (&gt;80 µg/kg/min o &gt;5 mg/kg/h); el riesgo típico aparece si se mantiene más de 48 h.'; }
     else if (ugkgmin >= 36) { estado = 'warn'; aviso = 'Por debajo de los umbrales típicos, pero se ha descrito el síndrome con 36 µg/kg/min.'; }
-    pintar(box, estado, `<strong>${fmt(ugkgmin, 0)} µg/kg/min</strong> (${fmt(mgkgh, 1)} mg/kg/h). ${aviso}<br>Aporta unas <strong>${fmt(kcal, 0)} kcal/día</strong> (1 kcal/mL), que cuentan en la nutrición.`);
+    // Más de 3 veces el umbral de 80 µg/kg/min del capítulo: no es una dosis de un paciente (umbral de esta calculadora, no del capítulo).
+    let avisoRango = a1 + a2 + a3;
+    if (ugkgmin > 240) { estado = 'danger'; avisoRango += '<p>⚠️ <strong>Combinación no fisiológica</strong>: más de 3 veces el umbral de 80 µg/kg/min que cita el capítulo. Revisa la velocidad y el peso (el límite de 240 es de esta calculadora, no del capítulo).</p>'; }
+    pintar(box, subeAviso(estado, avisoRango), `${avisoRango}<strong>${fmt(ugkgmin, 0)} µg/kg/min</strong> (${fmt(mgkgh, 1)} mg/kg/h). ${aviso}<br>Aporta unas <strong>${fmt(kcal, 0)} kcal/día</strong> (1 kcal/mL), que cuentan en la nutrición.`);
 }
 
 // ---- Cap. 7 — oximetría dual -------------------------------------------
@@ -299,13 +321,16 @@ function calcDuracion() {
 
 // ---- Cap. 6 — paracetamol y ketorolaco (Tabla 6.3) ----------------------
 function calcAnalgesico() {
-    const f = $('mar-anal-farmaco').value, edad = num($('mar-anal-edad')), peso = num($('mar-anal-peso')), box = $('mar-anal-resultado');
+    const f = $('mar-anal-farmaco').value, box = $('mar-anal-resultado');
     if (f === 'paracetamol') return pintar(box, 'ok', '<strong>1 g IV cada 6 h</strong>; no pasar de <strong>4 g al día</strong>. No tiene acción antiinflamatoria.');
+    const { v: edad, aviso: aEdad } = leerAcotado('mar-anal-edad', 'La edad');
+    const { v: peso, aviso: aPeso } = leerAcotado('mar-anal-peso', 'El peso');
     if (edad === null || peso === null) return ocultar(box);
+    const aviso = aEdad + aPeso;
     const motivos = [$('mar-anal-renal').checked && 'insuficiencia renal', edad >= 65 && '≥65 años', peso < 50 && 'peso <50 kg'].filter(Boolean);
-    pintar(box, motivos.length ? 'warn' : 'ok', motivos.length
+    pintar(box, motivos.length || aviso ? 'warn' : 'ok', aviso + (motivos.length
         ? `<strong>15 mg IV cada 6 h</strong> (dosis reducida un 50% por ${motivos.join(', ')}).`
-        : '<strong>30 mg IV cada 6 h</strong>. Las complicaciones graves (p. ej., renales) son raras en tandas cortas.');
+        : '<strong>30 mg IV cada 6 h</strong>. Las complicaciones graves (p. ej., renales) son raras en tandas cortas.'));
 }
 
 // ---- Cap. 6 — haloperidol paso a paso (Tabla 6.8) -----------------------

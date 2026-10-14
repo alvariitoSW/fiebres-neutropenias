@@ -344,3 +344,17 @@ calculadoras en sí (Escalas Generales, Neutropenia Febril) no saben nada de
 estos niveles superiores ni del Atlas — siguen inicializándose igual que
 siempre, solo cambia qué contenedor está visible.
 
+
+## Plan Marino, fase 1: revisión R1 (caps. 1-6), octubre 2026
+
+Revisión sin construir del plan socialista (`marino-r1`). Auditor ciego, revisor de código y verificador: cobertura
+completa, cifras y figuras correctas. Arreglado:
+- el signo de la RASS en la vista Visual (`limpiar()` de `core/visual-kit.js`);
+- dos `#page=`: úlcera de estrés → 67 y complicaciones del CVC → 33;
+- la nota de la errata de NaOH de la Tabla 3.3;
+- dos frases sin fuente en la calculadora RASS;
+- la nota de fuentes de la dalteparina con ClCr <15, con su aviso en la calculadora;
+- límites con aviso en French, tromboprofilaxis, propofol y ketorolaco (`leerAcotado()`). El propofol avisa por
+  encima de 240 µg/kg/min, un límite propio de la calculadora y no del libro.
+
+Lo demás va al parte `autonomo/partes/2026-10-14-marino-r1.md` y a `autonomo/ideas/marino.md`.

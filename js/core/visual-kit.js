@@ -64,7 +64,7 @@ const textoPropio = el => (el.classList.contains('micro-prof-item') ? cabeceraMp
 // (≥, ≤, <, >, ↑, ↓: "≥72h acumuladas" no puede quedarse en "72h", ni
 // "↓Ingesta" en "Ingesta").
 // Los números en teclas ("1️⃣", "1️⃣1️⃣") también son decoración.
-const limpiar = s => s.replace(/\s+/g, ' ').replace(/\s*\+\s*$/, '').replace(/^\s*(?:\d\uFE0F?\u20E3\s*)+/u, '').replace(/^[^\p{L}\p{N}(¿¡≥≤<>↑↓]+/u, '').trim();
+const limpiar = s => s.replace(/\s+/g, ' ').replace(/\s*\+\s*$/, '').replace(/^\s*(?:\d\uFE0F?\u20E3\s*)+/u, '').replace(/^(?![+−-]\d)[^\p{L}\p{N}(¿¡≥≤<>↑↓]+/u, '').trim();
 
 // `tras`: elemento a partir del cual buscar (para etiquetas repetidas, como
 // "Clínica" o "Tratamiento" en cada enfermedad de una misma ficha).
