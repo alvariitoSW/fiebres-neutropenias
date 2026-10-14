@@ -13,7 +13,28 @@ Antes de nada lee, desde el disco: `CLAUDE.md`, `autonomo/REGLAS.md` (sobre todo
 `.claude/skills/run-fiebres-neutropenias/SKILL.md` (cómo abrir la app con Playwright) y **el modelo de preguntas**
 `autonomo/modelos/preguntas-para-estudiar.html` (ábrelo en el navegador y recórrelo: es lo que el usuario aprobó).
 
-El director te dice el modo: **diseñar** o **juzgar**.
+El director te dice el modo: **mapa**, **diseñar** o **juzgar**.
+
+## Modo mapa (director de arte de un libro o de un bloque grande)
+
+Antes de trabajar ficha a ficha, miras el conjunto con ojos de diseñador gráfico y de profesor: ¿qué **pocos modelos
+grandes, vivos y biológicos** explicarían la mayor parte de este libro? Un modelo bueno sirve para decenas de fichas;
+cien gráficos de números no enseñan nada.
+1. Recorre el índice del libro (`js/data/libros-indice.js`), abre sus fichas en el móvil y mira **sus figuras e
+   imágenes reales** (las del PDF ya están en la app). Lee las ideas que dejaron los revisores en
+   `autonomo/ideas/<libro>.md`.
+2. Mira los modelos que ya existen y lo que saben hacer: el corazón y el **ecógrafo** con su **atlas** (vistas,
+   Doppler, modo M, formas de enfermedad), el motor del latido (presiones, asa P-V, barorreflejo), la nefrona viva y
+   el glomérulo, el potasio, el filtro de la TRR, los receptores animados con Motion.
+3. Escribe el **mapa visual** (en `autonomo/ideas/<libro>.md`, sección «Mapa visual»):
+   - **Modelos que ya existen y cómo ampliarlos**: qué capítulos explica cada uno y qué le falta (p. ej. «el motor
+     del latido + el ecógrafo explican el shock, caps. 14-17: falta la vasoplejía y la VCI que responde a fluidos»).
+   - **Modelos nuevos que propones** (p. ej. un pulmón con respirador para los caps. 22-30): qué se vería, qué mandos
+     tendría, qué capítulos y fichas explicaría y cómo se apoyaría en las imágenes reales del libro. Es una decisión
+     grande: **el usuario elige con una maqueta visual** antes de construir nada.
+   - **El orden de los bloques**: trozos pequeños (unas 6 fichas), empezando por el que más se beneficia de un modelo
+     que ya existe.
+   - Lo que no merece modelo (contenido de consulta): basta con texto para estudiar y preguntas.
 
 ## Modo diseñar (antes de construir)
 

@@ -40,29 +40,68 @@ esta sección.
 - **Tamaño**: mediana. El ecógrafo aún no pinta el chorro regurgitante: hay que añadirlo al simulador, con pruebas.
 - **Dudas**: la PR #2 se queda abierta y esta tarea la completa; no se abre otra.
 
-### B-003 · Marino (The ICU Book): comprobar y pasar a estudio · apuntado 2026-10-14
-- **Lo que dijiste**: «revisar la parte de los libros del Merino, que estaría completo […] simplemente hacer otra
-  comprobación […] de las fuentes […] y faltaría la parte del profesor».
-- **Cómo lo entiendo**: tipo `estudio`, por bloques. En cada bloque:
-  1. **Comprobación de fuentes** (rápida, modelo barato): el auditor coteja las fichas con el PDF y con su página
-     (cifras, bibliografía, enlaces `#page=`); lo grave se corrige. No se reescribe nada que esté bien.
-  2. **Fase B** (profesor y constructor potentes): lo visual con los modelos grandes y las preguntas nuevas con
-     sus casos.
+### B-003 · Plan Marino (The ICU Book): revisar, mapa visual y estudio · apuntado 2026-10-14
+- **Lo que dijiste**: «como ya está subida la fuente […] no haría falta construir nada […] el director que compruebe
+  el contenido […] que contenga las imágenes […] trabajadores revisores en vez de constructores […] que revise un
+  poco el código, cosas graves […] y el profesor, ese arte creativo […] montar algún modelo biológico […] apoyarse en
+  la ecografía cardíaca […] ir por partes […] tú me vas pasando cosas y yo las reviso mientras sigues».
+- **Comprobado ya (14/10)**: Marino **está centralizado en Libros → Marino**. El índice muestra las 17 secciones, los
+  53 capítulos y los 3 apéndices (**ninguno falta**, 155 fichas), con su PDF y su página. Los capítulos 12-30 se
+  abren desde ahí pero viven en otros sitios:
+  - 12-13 en Merino HEMATO;
+  - 14-21 en Merino Cardiología;
+  - 22-30 en Merino Neumología.
   
-  Lo visual, según el tema:
-  - **ecógrafo y motor del latido** para shock, corazón y fluidos (Cardiología, caps. 14-21);
-  - **nefrona viva y glomérulo** para ácido-base, riñón y electrolitos (caps. 31-38);
-  - Motion paso a paso para mecanismos (como los receptores);
-  - nunca gráficos de números.
-- **Tamaño**: grande. Trozos de ~6 fichas, cada uno una tarea:
-  - **Merino HEMATO** (6 fichas): el piloto de `estudio`, porque es la ficha de la maqueta;
-  - Merino Cardiología (~24 fichas, 4 trozos);
-  - Merino Neumología (~23, 4 trozos);
-  - Libros Marino: fundamentos 1-11 (~23, 4), renal 31-38 (~23, 4), abdomen y temperatura 39-44 (~17, 3),
-    neurología 45-47 (~14, 2), nutrición y endocrino 48-51 (~14, 2), tóxicos 52-53 (~11, 2).
-  
-  En total, unas 26 tareas.
-- **Depende de**: B-001.
+  El resto vive en Libros. Ver la duda de abajo.
+- **Cómo lo entiendo**: cinco fases, por partes pequeñas.
+  1. **Revisar (tipo `revision`)**: no se construye nada. Tres revisores baratos a la vez:
+     - **fuente**: ¿están todos los temas del capítulo, las cifras, las imágenes del PDF (y cargan), la bibliografía
+       y las páginas?;
+     - **código**: solo fallos graves y, como mucho, 3 simplificaciones seguras;
+     - **móvil**.
+     
+     Se corrige solo lo grave. Cada revisor deja **ideas para la parte de estudio** en `autonomo/ideas/marino.md`.
+     Son 13 trozos (155 fichas):
+
+     | Trozo | Capítulos | Fichas |
+     |---|---|---|
+     | R1 | 1-6 | 13 |
+     | R2 | 7-11 | 10 |
+     | R3 | 12-13 | 6 |
+     | R4 | 14-17 | 12 |
+     | R5 | 18-21 | 12 |
+     | R6 | 22-26 | 13 |
+     | R7 | 27-30 | 10 |
+     | R8 | 31-35 | 15 |
+     | R9 | 36-38 | 8 |
+     | R10 | 39-44 | 17 |
+     | R11 | 45-47 | 14 |
+     | R12 | 48-51 | 14 |
+     | R13 | 52-53 y apéndices | 11 |
+  2. **Mapa visual (tipo `mapa`, una tarea, profesor potente)**: con las ideas de los revisores y las imágenes del
+     libro, el profesor hace de **director de arte**. Propone los **pocos modelos grandes** que explicarían casi todo
+     Marino, en vez de una gráfica por ficha (supongo, a falta de su mapa):
+     - el corazón, el ecógrafo y su atlas, más el motor del latido, para shock, corazón, fluidos y monitorización;
+     - la nefrona viva para ácido-base, riñón y electrolitos;
+     - quizá un modelo nuevo de pulmón con respirador para los caps. 22-30;
+     - quizá uno de la coagulación para los caps. 12-13.
+     
+     Cada modelo nuevo te llega **como maqueta para que elijas**.
+  3. **Preguntas en la app** (B-001): hace falta antes de la fase 5.
+  4. **Construir los modelos elegidos**, por partes (son «algo tocho»): cada parte, su tarea y su propuesta.
+  5. **Estudio por bloques de ~6 fichas** (tipo `estudio`): cada bloque usa su modelo grande, con texto para estudiar
+     y preguntas nuevas con casos. Unas 26 tareas.
+- **Cómo te llega**: en bucle, cada trozo acaba en su propia propuesta pequeña con «Ver en el móvil». Te aviso en el
+  chat y **sigo con el siguiente sin esperarte**; tú lo miras cuando puedas y me dices «ok» o qué cambiar. Las
+  revisiones sin nada grave no generan propuesta: solo el parte, con el resumen y las ideas. Al terminar cada fase,
+  la apunto en «Hecho».
+- **Depende de**: las fases 1 y 2, de nada. La 5, de B-001 y de los modelos que elijas.
+- **Tamaño**: grande. La fase 1 es barata y rápida; lo caro es la 4.
+- **Dudas**:
+  1. **Centralizar**: hoy Libros → Marino ya reúne todos los temas y lleva a cada ficha. ¿Te basta así, o quieres que
+     las fichas de los caps. 12-30 se **muden físicamente** a Libros (y Cardiología, Neumología y Hematología se
+     queden con un enlace)? Mudarlas es una decisión grande: cambia dónde está cada cosa.
+  2. Al aprobarla, cuántas tareas por sesión: para las revisiones propongo hasta 4 seguidas.
 
 ### B-004 · El Libro Azul (Fisiopatología UCI): comprobar, estudio y completar · apuntado 2026-10-14
 - **Lo que dijiste**: «y del libro azul de fisiopatología a la UCI, que me faltaría además subir el temario».
@@ -98,6 +137,8 @@ esta sección.
 |---|---|---|---|
 | A completa (contenido nuevo) | lector de fuente → constructor → auditor ciego | el texto entero, fiel y con sus páginas | barato |
 | A ligera (lo que ya está) | auditor ciego → (si hay algo grave) constructor | comprobar fuentes, cifras y bibliografía | barato |
+| R (revisar lo ya construido) | auditor ciego + revisor de código + verificador, a la vez → (si hay algo grave) constructor | fuente, imágenes, código grave y móvil; ideas para el estudio | barato |
+| Mapa (un libro entero) | profesor como director de arte | los pocos modelos grandes que lo explican; maquetas para que elijas | potente |
 | B (estudio) | **profesor diseña** → constructor → verificador + auditor + **profesor juzga** | visual con los modelos grandes, texto para estudiar, recorrido de preguntas y casos | potente |
 | Cierre | revisor → rama propia y propuesta (PR) en borrador con «Ver en el móvil» | que lo pruebes y apruebes | — |
 
@@ -114,7 +155,8 @@ entrada de la bitácora que les toca.)*
 
 ## 3. Esperando algo tuyo
 
-- **Aprobar las entradas B-001 a B-006** (o cambiar el orden).
+- **Aprobar las entradas B-001 a B-006** (o cambiar el orden). Tu decisión del 14/10: **todavía ninguna**.
+- **Marino centralizado**: ¿basta el índice de Libros → Marino o se mudan las fichas de los caps. 12-30? (B-003)
 
 - **Simulador de arritmias (idea de RitmoLab)**: los PDF de los algoritmos **AHA 2025** (bradicardia, taquicardia,
   parada y la guía completa); heart.org está bloqueado desde el entorno. Decidido: puerta propia en la raíz

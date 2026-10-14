@@ -1,6 +1,6 @@
 ---
 name: plan-socialista
-description: Trabajo por equipos en bucle sobre el tablero de autonomo/ (el «plan socialista» del usuario). El modelo de la sesión dirige; 6 agentes leen la fuente, construyen, verifican, auditan a ciegas, diseñan y juzgan la parte de estudio (profesor: visual con los modelos grandes, preguntas guiadas y casos clínicos) y revisan; el resultado va a una rama auto/<clave> con PR en borrador y un parte de sesión. Úsalo cuando el usuario escriba /plan-socialista, «plan socialista», o pida trabajar una tarea del tablero en bucle o de noche.
+description: Trabajo por equipos en bucle sobre el tablero de autonomo/ (el «plan socialista» del usuario). El modelo de la sesión dirige; 7 agentes leen la fuente, construyen o revisan lo ya construido (fuente, imágenes y código grave), verifican, auditan a ciegas, diseñan y juzgan la parte de estudio (profesor: mapa visual de un libro, modelos grandes, preguntas guiadas y casos clínicos) y revisan; el resultado va a una rama auto/<clave> con PR en borrador y un parte de sesión. Úsalo cuando el usuario escriba /plan-socialista, «plan socialista», o pida trabajar una tarea del tablero en bucle o de noche.
 ---
 
 # Plan socialista
@@ -9,8 +9,9 @@ Eres el **director**. No escribes contenido: eliges la tarea, encargas el trabaj
 decides. Habla con el usuario en español llano (es médico residente, no programador).
 
 **Argumentos:** sin nada → la primera tarea `pendiente` del tablero · una clave (p. ej. `mr`) → esa tarea ·
-`estudio <clave>` → solo la fase B (visual y preguntas) sobre algo que ya está en la app · `auditar <clave>` → solo
-verificador + auditor + profesor (modo juzgar) + revisor sobre algo ya hecho, sin construir · `estado` → resume el
+`estudio <clave>` → fase A ligera y fase B sobre algo que ya está en la app · `revisar <clave>` → **fase R**
+(revisar sin construir, abajo) · `mapa <libro>` → el profesor en modo mapa sobre un libro entero · `auditar <clave>` →
+solo verificador + auditor + profesor (modo juzgar) + revisor sobre algo ya hecho, sin construir · `estado` → resume el
 tablero y el último parte, sin trabajar.
 
 ## 0. Antes de empezar
@@ -84,6 +85,29 @@ su fase A ya está hecha (p. ej. la continuación de un piloto), se salta.
    profesor por debajo de 4**: vuelve al paso 5 con la lista exacta (máximo las vueltas del tablero). Los huecos y
    menores se arreglan si es barato; si no, van al parte. Si tras las vueltas máximas sigue fallando →
    `necesita humano`.
+
+### Fase R · Revisar lo ya construido (tareas `revision`)
+
+Para lo que ya está en la app y ya tiene su fuente: **no se construye nada, se revisa**. Trabajadores revisores,
+todos en el modelo barato, lanzados a la vez:
+- **Auditor ciego** (`auditor-ciego`) → `auditoria.md`: cada ficha del bloque frente a su PDF y su página. ¿Están
+  **todos los temas** del capítulo? ¿Las cifras? ¿Las **figuras e imágenes** del PDF que tocan, y cargan?
+  ¿Bibliografía y enlaces `#page=` correctos?
+- **Revisor de código** (`revisor-codigo`) → `codigo.md`: solo graves y, como mucho, 3 simplificaciones seguras.
+- **Verificador** (`verificador`) → `verificacion.md`, con `jueces.mjs --ficha …` de cada ficha del bloque.
+
+A los tres pídeles, además, **«Ideas para la parte de estudio»**: 2-3 líneas de qué imagen, mecanismo o modelo grande
+ayudaría a estudiar lo que han visto. Tú las añades a `autonomo/ideas/<libro>.md` (las usa el profesor en modo mapa).
+
+Decide: lo **grave** lo corrige el constructor (modelo barato, solo eso) y se repite el verificador; lo menor va
+al parte. Si no hubo que corregir nada, no hay PR: el resultado es el parte y las ideas.
+
+### Entregas sin esperar (el usuario revisa mientras tú sigues)
+
+En bucle (`/loop /plan-socialista`), cada tarea acaba en su propia PR pequeña. **No esperes a que el usuario la
+apruebe**: avísale en el chat con el enlace «Ver en el móvil», dónde tocar y 2-3 cosas que mirar, y sigue con la
+siguiente tarea. Si la siguiente depende de una PR aún sin fusionar, trabaja sobre la rama de esa PR y di en la nueva
+«va encima de #N». Si el usuario contesta con cambios, se atienden en la vuelta siguiente de esa misma PR.
 
 ### Cierre del ciclo
 

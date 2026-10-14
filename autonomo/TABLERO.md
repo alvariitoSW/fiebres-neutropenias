@@ -21,6 +21,8 @@ Cada tarea tiene un tipo. El «hecho» de un tipo **se suma** al del objetivo (p
 |---|---|---|---|
 | `visual` | contenido nuevo o rehecho: fase A (fiel) + fase B (visual y preguntas) | fidelidad + **rúbrica de estudio ≥4 en todo** (REGLAS §7 y §8, juez `profesor`) + paciente posible si hay simulador | potente (opus) |
 | `estudio` | contenido que **ya está** en la app: fase A ligera (comprobación de fuentes: cifras, páginas y bibliografía contra el PDF; lo grave se corrige, lo bueno no se reescribe) + fase B (el profesor diseña lo visual con los modelos grandes, el recorrido de preguntas y los casos) | comprobación sin graves + rúbrica ≥4 en §7 y §8 + auditor sin graves en preguntas, casos y figuras | barato en la fase A, potente (opus) en la B |
+| `revision` | **revisar** algo ya construido, sin construir: fidelidad a la fuente (temas completos, cifras, figuras e imágenes, bibliografía y páginas), código (solo graves) y móvil; los revisores dejan ideas para la parte de estudio | graves corregidos; informe de menores; ideas anotadas en `autonomo/ideas/<libro>.md` | barato (sonnet) |
+| `mapa` | el profesor, como director de arte, mira un libro entero y propone los pocos modelos grandes que lo explicarían, el orden de los bloques y las maquetas que el usuario debe elegir | «Mapa visual» en `autonomo/ideas/<libro>.md` + maqueta de cada modelo nuevo para que el usuario elija | potente (opus) |
 | `auditoria` | cotejar fichas existentes con su fuente | informe de graves/huecos/menores y los graves corregidos | barato (sonnet) |
 | `arreglo` | un fallo concreto | el fallo ya no se reproduce y nada se rompe (jueces) | barato |
 

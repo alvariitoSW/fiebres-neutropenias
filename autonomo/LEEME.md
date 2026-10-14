@@ -8,7 +8,7 @@ basta con saber qué pedir y revisar lo que entrega.
 | Pieza | Dónde está | Qué es |
 |---|---|---|
 | **El director** | `.claude/skills/plan-socialista/SKILL.md` | El manual de instrucciones del modelo superior. Se activa al escribir `/plan-socialista`. No escribe contenido: elige la tarea, reparte el trabajo, juzga y decide. |
-| **Los 6 trabajadores** | `.claude/agents/*.md` | Agentes, cada uno con un solo papel: lector de fuente, constructor, verificador, auditor ciego, **profesor** y revisor. El profesor (el modelo más potente) diseña cómo se estudia cada tema y luego lo juzga. |
+| **Los 7 trabajadores** | `.claude/agents/*.md` | Agentes, cada uno con un solo papel: lector de fuente, constructor, verificador, auditor ciego, revisor de código, **profesor** y revisor. El profesor (el modelo más potente) diseña cómo se estudia cada tema y luego lo juzga. |
 | **Los modelos** | `autonomo/modelos/` | Maquetas que tú aprobaste y que el equipo copia. La primera: las preguntas para estudiar. |
 | **Los jueces** | `autonomo/jueces.mjs` | Comprobador automático: imágenes, quiz, caché y la app en el navegador a 390 y 360 px. Sirve también fuera del plan: `node autonomo/jueces.mjs`. |
 | **Las reglas** | `autonomo/REGLAS.md` | Lo que nadie del equipo puede saltarse (no inventar, fidelidad a la fuente, móvil de 390 px…) y la **rúbrica «Sirve para estudiar»** (§7) con tus modelos «así sí». Es corto a propósito: los agentes lo leen en cada vuelta. |
@@ -47,8 +47,16 @@ basta con saber qué pedir y revisar lo que entrega.
    Después lo construye un constructor potente, el auditor comprueba que preguntas y casos no se inventan la
    medicina (el paciente sí es inventado) y el profesor lo juzga. Con un 3 en algo, vuelve a construirse.
 
-Para mejorar lo que **ya está en la app** sin rehacer el texto: tarea de tipo `estudio` (solo la fase 2), o
-`/plan-socialista estudio <clave>`.
+Para lo que **ya está en la app**:
+- **Revisar** (`/plan-socialista revisar <clave>`, tipo `revision`): no se construye nada. Unos revisores baratos
+  comprueban la fuente (temas, cifras, imágenes, páginas), el código (solo fallos graves) y el móvil. Se corrige
+  solo lo grave, y dejan ideas para la parte de estudio.
+- **Mapa** (`/plan-socialista mapa <libro>`): el profesor, como director de arte, mira el libro entero y propone
+  los pocos modelos grandes que lo explicarían. Los modelos nuevos te llegan como maqueta para que elijas.
+- **Estudio** (`/plan-socialista estudio <clave>`): la parte de estudio de un bloque, con el modelo elegido.
+
+En bucle, cada bloque te llega en su propia propuesta con «Ver en el móvil» **mientras el equipo sigue con el
+siguiente**: tú revisas a tu ritmo.
 
 ## Cómo pedir una tarea: la ficha de encargo
 

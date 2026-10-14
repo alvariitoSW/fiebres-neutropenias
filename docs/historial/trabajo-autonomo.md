@@ -142,3 +142,25 @@ mejoras pendientes de lo que ya existe (como reconvertir las preguntas), para qu
   hecho esta semana. Los «Otros pendientes» del tablero se mudaron aquí; el tablero queda solo con lo aprobado.
 - El plan socialista solo trabaja tareas del tablero, y las tareas solo entran ahí con la aprobación del usuario.
   La tarea `preguntas` entró antes de existir la bitácora: queda pendiente de que el usuario la confirme.
+
+## Revisar sin construir, el mapa visual y las entregas sin esperar (octubre 2026)
+
+A propósito de Marino, el usuario pidió:
+- que lo ya construido no se reconstruya, sino que lo **revisen trabajadores revisores**: fuente, imágenes y una
+  mirada al código, solo para lo grave;
+- que el profesor haga de **director de arte**: pocos modelos biológicos grandes apoyados en el ecógrafo y su atlas,
+  en vez de una gráfica por ficha;
+- trabajar por partes, recibiendo cada parte para revisarla mientras el equipo sigue.
+
+- Comprobado: Libros → Marino ya centraliza los 53 capítulos y 3 apéndices (155 fichas). Los caps. 12-30 viven en
+  Merino HEMATO, Cardiología y Neumología. Si mudarlos, queda como duda en la bitácora.
+- Agente nuevo `revisor-codigo` (sonnet): solo graves (consola, calculadoras mal, campo vacío como 0, ids, enlaces,
+  imágenes, decisiones de `CLAUDE.md` §2 y §5) y, como mucho, 3 simplificaciones seguras.
+- Tipo `revision` (fase R en la skill): auditor, revisor de código y verificador a la vez, sin constructor salvo
+  para lo grave, más «Ideas para la parte de estudio» en `autonomo/ideas/<libro>.md`.
+- Tipo `mapa`, nuevo modo del profesor: el mapa visual de un libro, con modelos que ya existen y cómo ampliarlos,
+  modelos nuevos con maqueta para que elija el usuario, y el orden de los bloques.
+- «Entregas sin esperar»: en bucle, cada tarea abre su PR, avisa con «Ver en el móvil» y sigue. Si depende de una PR
+  sin fusionar, trabaja sobre su rama.
+- Bitácora B-003 reescrita como «Plan Marino», en cinco fases: 13 revisiones, mapa, preguntas, modelos por partes y
+  estudio por bloques. El usuario no aprueba nada todavía.
