@@ -253,7 +253,7 @@ export function montar(el) {
     texto(ctx, 'VI', xT(pk.t), Math.max(yP(pk.pvi) - 5 * k, 26 * k), c.r, k, { tam: 9, peso: 'bold', alinear: 'center', halo: c.bg });
     texto(ctx, 'AI', x0 + 6 * k, yP(o[0].pai) - 6 * k, c.p, k, { tam: 9, peso: 'bold', halo: c.bg });
     if (med.eroa > 0) {
-      texto(ctx, `onda v ${coma(med.ondaV, 0)}`, clamp(xT(med.tOndaV), x0 + 40 * k, x1 - 10 * k), yP(med.ondaV) - 11 * k, c.p, k, { tam: 9, peso: 'bold', alinear: 'center', halo: c.bg });
+      texto(ctx, `onda v ${coma(med.ondaV, 0)}`, clamp(xT(med.tOndaV), x0 + 40 * k, x1 - 10 * k), yP(med.ondaV) - 15 * k, c.p, k, { tam: 9, peso: 'bold', alinear: 'center', halo: c.bg });
       const mp = o.reduce((a, x) => (Math.abs(x.t - med.chorro.tPico) < Math.abs(a.t - med.chorro.tPico) ? x : a), o[0]);
       texto(ctx, `ΔP máx. ${coma(med.dpMax, 0)}`, xT(mp.t), yP((mp.pvi + mp.pai) / 2) + 3 * k, c.text, k, { tam: 9, peso: 'bold', alinear: 'center', halo: c.bg });
     }

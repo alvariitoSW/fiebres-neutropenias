@@ -232,8 +232,8 @@ test('18 IM: los grados caen en los cortes de la ASE 2017 y el intermedio de los
 });
 
 test('18 IM: al subir el EROA suben el volumen y la fracción regurgitantes; el VI y la AI se dilatan y la FEVI acaba cayendo', () => {
-  const med = [0, 0.1, 0.3, 0.5, 0.6, 0.65].map(e => medirMr(motorMr(e)));
-  const [m0, m1, m3, m5, m6, m65] = med;
+  const med = [0, 0.1, 0.3, 0.5, 0.6, 0.65, 0.7].map(e => medirMr(motorMr(e)));
+  const [m0, m1, m3, m5, m6, m65, m70] = med;
   assert.equal(m0.vReg, 0);
   assert.ok(m1.vReg > 5 && m3.vReg > m1.vReg + 15 && m5.vReg > m3.vReg + 10, `VReg ${med.map(x => x.vReg.toFixed(0))}`);
   assert.ok(m1.fr > 10 && m3.fr > m1.fr + 15 && m5.fr > m3.fr + 8, `FR ${med.map(x => x.fr.toFixed(0))}`);
@@ -248,11 +248,18 @@ test('18 IM: al subir el EROA suben el volumen y la fracción regurgitantes; el 
   // remodelado: el VI y la AI se dilatan; la FEVI sube al principio (el volumen sale a la AI) y acaba cayendo
   assert.ok(m5.vtd > m0.vtd + 25 && m5.dtd > m0.dtd + 3 && m5.ivai > m0.ivai + 8, `VTD ${m0.vtd}→${m5.vtd} DTD ${m0.dtd}→${m5.dtd} IVAI ${m0.ivai}→${m5.ivai}`);
   assert.ok(m3.fevi > m0.fevi + 5, `FEVI ${m0.fevi} → ${m3.fevi}`);
-  assert.ok(m65.fevi < m5.fevi - 8 && m65.fevi <= 60 && m65.dts >= 40, `FEVI ${m5.fevi} → ${m65.fevi}, DTSVI ${m65.dts}`);
-  // estadios: grave sin disfunción (C1) con 0,50 cm² y con disfunción (C2) con 0,60 y 0,65
+  assert.ok(m65.fevi < m5.fevi - 8 && m65.dts >= 40, `FEVI ${m5.fevi} → ${m65.fevi}, DTSVI ${m65.dts}`);
+  assert.ok(m70.fevi <= 60 && m70.dts >= 40, `0,70: FEVI ${m70.fevi}, DTSVI ${m70.dts}`);
+  // al final del recorrido el chorro y la presión se sostienen (el barorreflejo del motor), y las cifras son monótonas hasta 0,70
+  for (const x of med.slice(1)) assert.ok(x.pas >= 95 && x.vmax >= 4.0, `EROA ${x.eroa}: PAS ${x.pas}, pico ${x.vmax}`);
+  assert.ok(m6.fevi < m5.fevi && m65.fevi < m6.fevi && m70.fevi < m65.fevi, `FEVI ${m5.fevi} ${m6.fevi} ${m65.fevi} ${m70.fevi}`);
+  assert.ok(m6.dts > m5.dts && m65.dts > m6.dts && m70.dts > m65.dts, `DTSVI ${m5.dts} ${m6.dts} ${m65.dts} ${m70.dts}`);
+  assert.ok(m6.vmax < m5.vmax && m65.vmax < m6.vmax && m70.vmax < m65.vmax && m70.r > m65.r && m65.r > m6.r, 'pico en bajada y radio PISA en subida');
+  // estadios: grave sin disfunción (C1) con 0,50 cm² y con disfunción (C2) con 0,60, 0,65 y 0,70
   assert.equal(resultado(m5).estadio, 'C1');
   assert.equal(resultado(m6).estadio, 'C2');
   assert.equal(resultado(m65).estadio, 'C2');
+  assert.equal(resultado(m70).estadio, 'C2');
   assert.equal(resultado(m65).texto, 'Insuficiencia mitral grave con disfunción del VI');
   // sin orificio, el corazón es el normal de siempre (el motor no cambia con 0)
   assert.ok(m0.fevi > 55 && m0.fevi < 66 && m0.dtd < 58 && m0.ivai <= 34, JSON.stringify([m0.fevi, m0.dtd, m0.ivai]));
