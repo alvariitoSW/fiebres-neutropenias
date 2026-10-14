@@ -27,8 +27,8 @@ const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 
 /** Velocidad de aliasing del ejemplo del capítulo (cm/s). La ASE aconseja bajarla a unos 30-40. */
 export const VA = 32;
-/** EROA máximo del mando (cm²) y paso (cm²). El remodelado llega a su máximo con 0,65. */
-export const EROA_MAX = 0.7, PASO = 0.05, EROA_REMODELADO = 0.65;
+/** EROA máximo del mando (cm²) y paso (cm²). El remodelado llega a su máximo con el EROA máximo. */
+export const EROA_MAX = 0.7, PASO = 0.05, EROA_REMODELADO = 0.7;
 
 // ---------------------------------------------------------------------------------------------------- PISA y grados
 /**
@@ -104,18 +104,19 @@ export function resultado(med, flail = false) {
 
 // ---------------------------------------------------------------------------------------------------- motor
 /**
- * Ajustes del motor para un EROA: el orificio y el remodelado crónico. f = EROA ÷ 0,65 (0 a 1); g, la fase de fallo
- * (desde f = 0,6). Magnitudes ilustrativas, elegidas para que la IM crónica recorra lo que dice el texto: VI y AI se
- * dilatan y la FEVI acaba cayendo. Las direcciones son fisiología general.
+ * Ajustes del motor para un EROA: el orificio y el remodelado crónico. f = EROA ÷ 0,70 (0 a 1); g, la fase de fallo
+ * (desde f = 0,6, EROA 0,42). Magnitudes ilustrativas, elegidas para que la IM crónica recorra lo que dice el texto: VI y
+ * AI se dilatan y la FEVI acaba cayendo, sin que la presión arterial se hunda. Las direcciones son fisiología general.
+ * En la fase de fallo, la Ees cae (−60%) y el VI se dilata aún más (V0 +30 mL).
  */
 export function ajustesMr(eroa) {
   const f = clamp(eroa / EROA_REMODELADO, 0, 1), g = clamp((f - 0.6) / 0.4, 0, 1);
-  return { volumen: 100 * f, motor: { barorreflejo: false, eroaMitral: eroa, rSis: BASE.rSis * (1 + 0.2 * f),
-    vi: { ees: BASE.vi.ees * (1 - 0.68 * g), b: BASE.vi.b * (1 - 0.08 * f), v0: BASE.vi.v0 + 8 * f },
+  return { volumen: 100 * f, motor: { barorreflejo: true, eroaMitral: eroa, rSis: BASE.rSis * (1 + 0.2 * f),
+    vi: { ees: BASE.vi.ees * (1 - 0.6 * g), b: BASE.vi.b * (1 - 0.08 * f), v0: BASE.vi.v0 + 8 * f + 30 * g },
     ai: { v0: BASE.ai.v0 + 10 * f, b: BASE.ai.b * (1 - 0.15 * f) } } };
 }
 
-/** Motor asentado con un EROA (sin barorreflejo, para ver el efecto puro). Puro: lo usan la figura y las pruebas. */
+/** Motor asentado con un EROA (con el barorreflejo del motor, que sostiene la presión). Puro: lo usan la figura y las pruebas. */
 export function motorMr(eroa, segundos = 14) {
   const a = ajustesMr(eroa), m = crearMotor(a.motor);
   m.s.vven += a.volumen; m.correr(segundos);
@@ -231,11 +232,14 @@ export function montar(el) {
   function dibujarTiempo(med, m) {
     LT.ajustar(); const c = colores(el), { ctx, W, H, k } = LT; ctx.clearRect(0, 0, W, H);
     const o = m.onda, T = med.periodo, x0 = 34 * k, x1 = W - 8 * k, xT = (t) => x0 + clamp(t / T, 0, 1) * (x1 - x0);
-    const pMax = Math.max(40, Math.ceil(Math.max(...o.map(x => x.pvi)) / 40) * 40), mid = H * 0.5;
+    const pMax = Math.max(40, Math.ceil(Math.max(...o.map(x => x.pvi)) * 1.15 / 40) * 40), mid = H * 0.5;
     // panel 1: presiones
     const yA = 16 * k, yB = mid - 12 * k, yP = (p) => yB - p / pMax * (yB - yA);
     ctx.strokeStyle = c.line; ctx.lineWidth = 1 * k; ctx.beginPath(); ctx.moveTo(x0, yA); ctx.lineTo(x0, yB); ctx.lineTo(x1, yB); ctx.stroke();
-    texto(ctx, 'Presión del VI y de la AI (mmHg)', x0 + 4 * k, 11 * k, c.text, k, { tam: 10, peso: 'bold' });
+    // cursor del latido (la línea va debajo de todo; los rótulos llevan halo y la tapan)
+    const tc = (st.t % 1) * T, xc = xT(tc), cur = o.reduce((a, x) => (Math.abs(x.t - tc) < Math.abs(a.t - tc) ? x : a), o[0]);
+    ctx.save(); ctx.strokeStyle = c.muted; ctx.lineWidth = 1 * k; ctx.setLineDash([3 * k, 3 * k]); ctx.beginPath(); ctx.moveTo(xc, yA); ctx.lineTo(xc, H - 6 * k); ctx.stroke(); ctx.restore();
+    texto(ctx, 'Presión del VI y de la AI (mmHg)', x0 + 4 * k, 11 * k, c.text, k, { tam: 10, peso: 'bold', halo: c.bg });
     for (let p = 0; p <= pMax; p += pMax / 2) texto(ctx, String(p), x0 - 4 * k, yP(p) + 3 * k, c.muted, k, { tam: 8, alinear: 'right' });
     if (med.eroa > 0) {                                  // la diferencia de presión VI-AI es la que mueve el chorro
       const ini = o.filter(x => x.pvi > x.pai && x.qMitReg > 0);
@@ -246,16 +250,16 @@ export function montar(el) {
     const traza = (clave, color) => { ctx.strokeStyle = color; ctx.lineWidth = 1.8 * k; ctx.beginPath(); o.forEach((x, i) => (i ? ctx.lineTo(xT(x.t), yP(x[clave])) : ctx.moveTo(xT(x.t), yP(x[clave])))); ctx.stroke(); };
     traza('pvi', c.r); traza('pai', c.p);
     const pk = o.reduce((a, x) => (x.pvi > a.pvi ? x : a), o[0]);
-    texto(ctx, 'VI', xT(pk.t), yP(pk.pvi) - 5 * k, c.r, k, { tam: 9, peso: 'bold', alinear: 'center' });
-    texto(ctx, 'AI', x0 + 6 * k, yP(o[0].pai) - 6 * k, c.p, k, { tam: 9, peso: 'bold' });
+    texto(ctx, 'VI', xT(pk.t), Math.max(yP(pk.pvi) - 5 * k, 26 * k), c.r, k, { tam: 9, peso: 'bold', alinear: 'center', halo: c.bg });
+    texto(ctx, 'AI', x0 + 6 * k, yP(o[0].pai) - 6 * k, c.p, k, { tam: 9, peso: 'bold', halo: c.bg });
     if (med.eroa > 0) {
-      texto(ctx, `onda v ${coma(med.ondaV, 0)}`, clamp(xT(med.tOndaV), x0 + 40 * k, x1 - 10 * k), yP(med.ondaV) - 5 * k, c.p, k, { tam: 9, peso: 'bold', alinear: 'center', halo: c.bg });
+      texto(ctx, `onda v ${coma(med.ondaV, 0)}`, clamp(xT(med.tOndaV), x0 + 40 * k, x1 - 10 * k), yP(med.ondaV) - 11 * k, c.p, k, { tam: 9, peso: 'bold', alinear: 'center', halo: c.bg });
       const mp = o.reduce((a, x) => (Math.abs(x.t - med.chorro.tPico) < Math.abs(a.t - med.chorro.tPico) ? x : a), o[0]);
       texto(ctx, `ΔP máx. ${coma(med.dpMax, 0)}`, xT(mp.t), yP((mp.pvi + mp.pai) / 2) + 3 * k, c.text, k, { tam: 9, peso: 'bold', alinear: 'center', halo: c.bg });
     }
     // panel 2: Doppler continuo (el chorro se aleja de la sonda apical: hacia abajo)
-    const yC0 = mid + 22 * k, yC1 = H - 6 * k, vTop = 6, yV = (v) => yC0 + v / vTop * (yC1 - yC0);
-    texto(ctx, 'Doppler continuo del chorro de IM (m/s)', x0 + 4 * k, mid + 11 * k, c.text, k, { tam: 10, peso: 'bold' });
+    const yC0 = mid + 34 * k, yC1 = H - 6 * k, vTop = 6, yV = (v) => yC0 + v / vTop * (yC1 - yC0);
+    texto(ctx, 'Doppler continuo del chorro de IM (m/s)', x0 + 4 * k, mid + 11 * k, c.text, k, { tam: 10, peso: 'bold', halo: c.bg });
     ctx.strokeStyle = c.line; ctx.lineWidth = 1 * k; ctx.beginPath(); ctx.moveTo(x0, yC0); ctx.lineTo(x1, yC0); ctx.moveTo(x0, yC0); ctx.lineTo(x0, yC1); ctx.stroke();
     for (const v of [0, 2, 4, 6]) texto(ctx, v ? `−${v}` : '0', x0 - 4 * k, yV(v) + 3 * k, c.muted, k, { tam: 8, alinear: 'right' });
     if (med.eroa > 0) {
@@ -263,12 +267,9 @@ export function montar(el) {
       ctx.save(); ctx.globalAlpha = 0.15 + 0.5 * dens; ctx.fillStyle = c.g; ctx.beginPath(); ctx.moveTo(xT(j.curva[0].t), yC0);
       for (const p of j.curva) ctx.lineTo(xT(p.t), yV(Math.min(vTop, p.v))); ctx.lineTo(xT(j.curva[j.curva.length - 1].t), yC0); ctx.closePath(); ctx.fill(); ctx.restore();
       ctx.strokeStyle = c.g; ctx.lineWidth = 1.5 * k; ctx.beginPath(); j.curva.forEach((p, i) => (i ? ctx.lineTo(xT(p.t), yV(Math.min(vTop, p.v))) : ctx.moveTo(xT(p.t), yV(Math.min(vTop, p.v))))); ctx.stroke();
-      texto(ctx, `pico ${coma(j.vmax, 1)} m/s`, x1 - 4 * k, yC0 + 14 * k, c.g, k, { tam: 9, peso: 'bold', alinear: 'right', halo: c.bg });
-      texto(ctx, `VTI ${coma(j.vti, 0)} cm`, x1 - 4 * k, yC0 + 26 * k, c.g, k, { tam: 9, peso: 'bold', alinear: 'right', halo: c.bg });
+      texto(ctx, `pico ${coma(j.vmax, 1)} m/s · VTI ${coma(j.vti, 0)} cm`, x0 + 4 * k, mid + 24 * k, c.g, k, { tam: 9, peso: 'bold', halo: c.bg });
     } else texto(ctx, 'sin regurgitación', (x0 + x1) / 2, yV(2), c.muted, k, { tam: 10, alinear: 'center' });
-    // cursor del latido
-    const tc = (st.t % 1) * T, xc = xT(tc), cur = o.reduce((a, x) => (Math.abs(x.t - tc) < Math.abs(a.t - tc) ? x : a), o[0]);
-    ctx.save(); ctx.strokeStyle = c.muted; ctx.lineWidth = 1 * k; ctx.setLineDash([3 * k, 3 * k]); ctx.beginPath(); ctx.moveTo(xc, yA); ctx.lineTo(xc, yC1); ctx.stroke(); ctx.restore();
+    // puntos del cursor sobre las dos presiones
     for (const [cl, col] of [['pvi', c.r], ['pai', c.p]]) { ctx.fillStyle = col; ctx.beginPath(); ctx.arc(xc, yP(cur[cl]), 3 * k, 0, 2 * Math.PI); ctx.fill(); }
   }
 
@@ -287,7 +288,7 @@ export function montar(el) {
       { k: 'VTD / VTS · FEVI', v: `${coma(med.vtd, 0)} / ${coma(med.vts, 0)} · ${coma(med.fevi, 0)}`, u: 'mL · %', fuente: 'motor (FE total: la fracción que sale por las dos vías)', aviso: av(res.grave && x.fevi <= 60) },
       { k: 'DTDVI · DTSVI', v: `${coma(med.dtd, 0)} · ${coma(med.dts, 0)}`, u: 'mm · C2 si DTSVI ≥40', fuente: 'geometría de la app (eje largo paraesternal)', aviso: av(res.grave && x.dts >= 40) },
       { k: 'Índice de volumen de la AI', v: coma(med.ivai, 0), u: 'mL/m² · normal ≤34 (Lang 2015, varones)', fuente: 'motor (volumen máximo de la AI ÷ 1,85 m²)', aviso: av(x.ivai > 34) },
-      { k: 'PAS · PTDVI', v: `${coma(med.pas, 0)} · ${coma(med.ptd, 0)}`, u: 'mmHg', fuente: 'motor (sin barorreflejo)' },
+      { k: 'PAS · PTDVI', v: `${coma(med.pas, 0)} · ${coma(med.ptd, 0)}`, u: 'mmHg', fuente: 'motor (con su barorreflejo)' },
       { k: 'Estadio ACC/AHA', v: res.estadio ?? '—', u: res.grave ? (res.lvd ? 'FEVI ≤60% o DTSVI ≥40 mm' : 'sin síntomas · FEVI >60% y DTSVI <40 mm') : 'solo en la IM grave', fuente: 'umbrales: ficha (Otto 2020)', aviso: res.estadio === 'C2' },
     ];
   }
@@ -307,7 +308,8 @@ export function montar(el) {
     t += `El chorro sale a ${coma(med.vmax, 1)} m/s (ΔP VI-AI ${coma(med.dpMax, 0)} mmHg); con ese pico y Va ${VA} cm/s, la PISA da un radio de ${coma(med.r, 2)} cm. `;
     t += `La AI recibe el volumen regurgitante en sístole: su índice de volumen es ${coma(med.ivai, 0)} mL/m² y la onda v llega a ${coma(med.ondaV, 0)} mmHg. `;
     if (res.grave) t += res.lvd ? `<span class="at-mal">FEVI ${coma(med.fevi, 0)}% y DTSVI ${coma(med.dts, 0)} mm: cumple al menos un criterio del estadio C2 (FEVI ≤60% o DTSVI ≥40 mm).</span> ` : `FEVI ${coma(med.fevi, 0)}% y DTSVI ${coma(med.dts, 0)} mm: estadio C1 en ausencia de síntomas. `;
-    if (med.eroa >= 0.4) t += 'Con el orificio grande, el modelo hace caer la contractilidad del VI (ilustrativo): la disfunción sistólica aparece tarde. ';
+    if (med.eroa >= 0.4) { const f0 = motorEn(0).med.fevi;              // solo si la FEVI ya está por debajo de la que tiene sin IM
+      if (med.fevi < f0) t += `La FEVI ha bajado de ${coma(f0, 0)}% (sin IM) a ${coma(med.fevi, 0)}%: con el orificio grande, el modelo hace caer la contractilidad del VI (ilustrativo), y la disfunción sistólica aparece tarde. `; }
     return t;
   }
 
