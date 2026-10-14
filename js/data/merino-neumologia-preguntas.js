@@ -768,9 +768,9 @@ export const preguntasMerinoNeumologia = [
     {
         id: 'neumo-q109', tema: 'neumo-vm-modos',
         enunciado: 'En pacientes con pulmones normales, ¿cuál es el rango típico de compliance estática torácica (Cstat)?',
-        opciones: ['50-80 mL/cmH₂O', '5-10 mL/cmH₂O', '150-200 mL/cmH₂O', '&lt;25 mL/cmH₂O'],
+        opciones: ['50-80 mL/cmH₂O', '5-10 mL/cmH₂O', '150-200 mL/cmH₂O', '<25 mL/cmH₂O'],
         correcta: 0,
-        explicacion: 'La Cstat normal es 50-80 mL/cmH₂O; en enfermedades infiltrativas (edema pulmonar, SDRA) es típicamente &lt;25 mL/cmH₂O.',
+        explicacion: 'La Cstat normal es 50-80 mL/cmH₂O; en enfermedades infiltrativas (edema pulmonar, SDRA) es típicamente <25 mL/cmH₂O.',
     },
     {
         id: 'neumo-q110', tema: 'neumo-vm-modos',
@@ -829,7 +829,7 @@ export const preguntasMerinoNeumologia = [
     {
         id: 'neumo-q118', tema: 'neumo-vm-ajuste',
         enunciado: 'Según el protocolo de ventilación protectora (Tabla 27.1), ¿cuáles son los objetivos finales de la 3ª etapa?',
-        opciones: ['V<sub>T</sub>=6 mL/kg, Pmeseta ≤30 cmH₂O, SpO₂ 88-95%, pH 7,30-7,45', 'V<sub>T</sub>=8 mL/kg, Pmeseta ≤40 cmH₂O, SpO₂ &gt;95%', 'V<sub>T</sub>=4 mL/kg siempre, sin importar el pH', 'PEEP=20 cmH₂O fijo'],
+        opciones: ['V<sub>T</sub>=6 mL/kg, Pmeseta ≤30 cmH₂O, SpO₂ 88-95%, pH 7,30-7,45', 'V<sub>T</sub>=8 mL/kg, Pmeseta ≤40 cmH₂O, SpO₂ >95%', 'V<sub>T</sub>=4 mL/kg siempre, sin importar el pH', 'PEEP=20 cmH₂O fijo'],
         correcta: 0,
         explicacion: 'Los objetivos finales del protocolo de ventilación protectora son V<sub>T</sub>=6 mL/kg PBW, presión meseta ≤30 cmH₂O, SpO₂ 88-95%, y pH 7,30-7,45.',
     },
@@ -993,7 +993,7 @@ export const preguntasMerinoNeumologia = [
         enunciado: '¿Qué relación de presiones caracteriza a la PEEP oculta al final de la espiración?',
         opciones: ['La presión alveolar (Palv) es mayor que la presión proximal de la vía aérea (Pprox)', 'La presión proximal es mayor que la alveolar', 'Ambas presiones son siempre iguales a cero', 'La presión alveolar es siempre negativa'],
         correcta: 0,
-        explicacion: 'Si hay flujo aéreo al final de la espiración, hay una caída de presión desde el alveolo hasta la vía aérea proximal, de modo que Palv&gt;Pprox — la presión proximal vuelve a cero mientras la alveolar sigue positiva, de ahí "oculta".',
+        explicacion: 'Si hay flujo aéreo al final de la espiración, hay una caída de presión desde el alveolo hasta la vía aérea proximal, de modo que Palv>Pprox — la presión proximal vuelve a cero mientras la alveolar sigue positiva, de ahí "oculta".',
     },
     {
         id: 'neumo-q143', tema: 'neumo-peep-oculta', tipo: 'redactar',
@@ -1064,7 +1064,7 @@ export const preguntasMerinoNeumologia = [
     {
         id: 'neumo-q153', tema: 'neumo-nav-diagnostico',
         enunciado: 'Verificados contra biopsia pulmonar, ¿qué tienen en común los 4 criterios clínicos tradicionales de NAV (fiebre, leucocitosis, secreciones purulentas, infiltrado radiográfico)?',
-        opciones: ['Ninguno es sensible ni específico, y todos tienen una razón de probabilidades diagnóstica pobre (&lt;3)', 'Todos son altamente específicos', 'Solo la fiebre tiene buen rendimiento diagnóstico', 'Juntos alcanzan un 100% de precisión diagnóstica'],
+        opciones: ['Ninguno es sensible ni específico, y todos tienen una razón de probabilidades diagnóstica pobre (<3)', 'Todos son altamente específicos', 'Solo la fiebre tiene buen rendimiento diagnóstico', 'Juntos alcanzan un 100% de precisión diagnóstica'],
         correcta: 0,
         explicacion: 'La Tabla 29.3 muestra que ninguno de los 4 criterios clínicos es sensible ni específico, con razones de probabilidades diagnósticas pobres — indicando que el diagnóstico de NAV no es posible usando solo criterios clínicos.',
     },
@@ -1087,7 +1087,7 @@ export const preguntasMerinoNeumologia = [
         enunciado: 'Para cultivos rutinarios (cualitativos) de aspirados traqueales, ¿qué se puede concluir de un cultivo negativo frente a uno positivo?',
         opciones: ['Un cultivo negativo excluye infección tratable; un cultivo positivo NO es evidencia fiable del organismo culpable', 'Ambos son igual de fiables', 'Un cultivo positivo siempre identifica el patógeno correcto', 'Un cultivo negativo no aporta ninguna información'],
         correcta: 0,
-        explicacion: 'Los cultivos cualitativos tienen alta sensibilidad (&gt;90%) pero baja especificidad (15-40%) — un negativo excluye infección tratable, pero un positivo no es fiable por contaminación con secreciones de la boca.',
+        explicacion: 'Los cultivos cualitativos tienen alta sensibilidad (>90%) pero baja especificidad (15-40%) — un negativo excluye infección tratable, pero un positivo no es fiable por contaminación con secreciones de la boca.',
     },
     {
         id: 'neumo-q157', tema: 'neumo-nav-diagnostico',
@@ -1118,14 +1118,14 @@ export const preguntasMerinoNeumologia = [
     {
         id: 'neumo-q161', tema: 'neumo-derrame-antimicrobiano',
         enunciado: '¿Qué caracteriza a un derrame paraneumónico de Categoría 3 (complicado)?',
-        opciones: ['Está loculado o rellena más del 50% del hemitórax, con pH &lt;7,20, glucosa &lt;60 mg/dl, y Gram/cultivo positivos', 'Es &lt;10 mm de grosor, sin necesidad de toracocentesis', 'Es de flujo libre con pH &gt;7,20 y cultivo negativo', 'Es siempre purulento a simple vista'],
+        opciones: ['Está loculado o rellena más del 50% del hemitórax, con pH <7,20, glucosa <60 mg/dl, y Gram/cultivo positivos', 'Es <10 mm de grosor, sin necesidad de toracocentesis', 'Es de flujo libre con pH >7,20 y cultivo negativo', 'Es siempre purulento a simple vista'],
         correcta: 0,
-        explicacion: 'La Categoría 3 (derrames complicados) está loculada o rellena &gt;50% del hemitórax, con evidencia de infección en el análisis del líquido pleural — requiere drenaje con tubo torácico.',
+        explicacion: 'La Categoría 3 (derrames complicados) está loculada o rellena >50% del hemitórax, con evidencia de infección en el análisis del líquido pleural — requiere drenaje con tubo torácico.',
     },
     {
         id: 'neumo-q162', tema: 'neumo-derrame-antimicrobiano',
         enunciado: '¿Qué tamaño de tubo torácico logra un drenaje equivalente en un empiema franco (Categoría 4), según la fuente?',
-        opciones: ['Los tubos de calibre pequeño (8,5-14 French) logran un drenaje equivalente a los tubos grandes (28-36 French)', 'Solo los tubos grandes (28-36 French) funcionan', 'Se necesitan siempre tubos &gt;40 French', 'No se recomienda ningún tubo torácico en empiema'],
+        opciones: ['Los tubos de calibre pequeño (8,5-14 French) logran un drenaje equivalente a los tubos grandes (28-36 French)', 'Solo los tubos grandes (28-36 French) funcionan', 'Se necesitan siempre tubos >40 French', 'No se recomienda ningún tubo torácico en empiema'],
         correcta: 0,
         explicacion: 'Aunque algunos prefieren tubos grandes para drenar pus, los tubos de calibre pequeño (8,5-14 French) logran un drenaje equivalente al de los tubos más grandes.',
     },
@@ -1254,14 +1254,14 @@ export const preguntasMerinoNeumologia = [
     {
         id: 'neumo-q181', tema: 'neumo-weaning-extubacion',
         enunciado: 'Según el estudio real citado sobre la prueba de fuga del manguito (cuff-leak), ¿qué volumen de fuga elimina el riesgo de edema laríngeo post-extubación con ~95% de certeza?',
-        opciones: ['&gt;110 mL', '&lt;10 mL', '&gt;500 mL', 'Cualquier fuga audible, sin importar el volumen'],
+        opciones: ['>110 mL', '<10 mL', '>500 mL', 'Cualquier fuga audible, sin importar el volumen'],
         correcta: 0,
-        explicacion: 'Un volumen de fuga &gt;110 mL elimina el riesgo de edema laríngeo post-extubación con cerca del 95% de certeza; &lt;110 mL aumenta el riesgo 7 veces.',
+        explicacion: 'Un volumen de fuga >110 mL elimina el riesgo de edema laríngeo post-extubación con cerca del 95% de certeza; <110 mL aumenta el riesgo 7 veces.',
     },
     {
         id: 'neumo-q182', tema: 'neumo-weaning-extubacion',
         enunciado: 'En el estudio multicéntrico real sobre pretratamiento con metilprednisolona (20 mg IV cada 4h, empezando 12h antes de la extubación), ¿qué efecto tuvo sobre el edema laríngeo y la reintubación?',
-        opciones: ['Edema laríngeo del 22% al 3% (p&lt;0,001); reintubación del 8% al 4% (p=0,02)', 'No tuvo ningún efecto medible', 'Aumentó ambas tasas', 'Solo redujo la reintubación, no el edema'],
+        opciones: ['Edema laríngeo del 22% al 3% (p<0,001); reintubación del 8% al 4% (p=0,02)', 'No tuvo ningún efecto medible', 'Aumentó ambas tasas', 'Solo redujo la reintubación, no el edema'],
         correcta: 0,
         explicacion: 'El pretratamiento con esteroides redujo el edema laríngeo del 22% (placebo) al 3% (esteroide) — una caída 7 veces —, y la reintubación del 8% al 4%, una caída del 50%.',
     },

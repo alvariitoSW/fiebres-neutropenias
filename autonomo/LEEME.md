@@ -1,26 +1,28 @@
-# Trabajo autónomo: guía para el usuario
+# Plan socialista: guía para el usuario
 
-Esta carpeta monta un equipo de agentes que mejora la app en bucle. No hace falta saber programar para usarlo:
+Esta carpeta monta el **plan socialista**: un equipo de agentes que mejora la app en bucle. No hace falta saber programar para usarlo:
 basta con saber qué pedir y revisar lo que entrega.
 
 ## Las piezas, en una frase cada una
 
 | Pieza | Dónde está | Qué es |
 |---|---|---|
-| **El director** | `.claude/skills/mejora/SKILL.md` | El manual de instrucciones del modelo superior. Se activa al escribir `/mejora`. No escribe contenido: elige la tarea, reparte el trabajo, juzga y decide. |
+| **El director** | `.claude/skills/plan-socialista/SKILL.md` | El manual de instrucciones del modelo superior. Se activa al escribir `/plan-socialista`. No escribe contenido: elige la tarea, reparte el trabajo, juzga y decide. |
 | **Los 5 trabajadores** | `.claude/agents/*.md` | Agentes más baratos, cada uno con un solo papel: lector de fuente, constructor, verificador, auditor ciego y revisor. |
+| **Los jueces** | `autonomo/jueces.mjs` | Comprobador automático: imágenes, quiz, caché y la app en el navegador a 390 y 360 px. Sirve también fuera del plan: `node autonomo/jueces.mjs`. |
 | **Las reglas** | `autonomo/REGLAS.md` | Lo que nadie del equipo puede saltarse (no inventar, fidelidad a la fuente, móvil de 390 px…). Es corto a propósito: los agentes lo leen en cada vuelta. |
 | **El tablero** | `autonomo/TABLERO.md` | El objetivo, la lista de tareas en orden y qué significa «hecho». Es la memoria del equipo. **Es lo que tú editas.** |
-| **Los informes** | `autonomo/sesiones/AAAA-MM-DD.md` | Uno por sesión: qué se hizo, qué falló, qué no pudo leer y qué te deja para revisar. Es lo que lees por la mañana. |
+| **Los partes** | `autonomo/partes/AAAA-MM-DD.md` | Uno por sesión: qué se hizo, qué falló, qué no pudo leer y qué te deja para revisar. Es lo que lees por la mañana. |
 
 ## Cómo se usa
 
 1. **Elige el modelo del director.** Al empezar una sesión de Claude Code, escribe `/model` y elige Opus (o Fable
    si lo tienes). Los trabajadores ya tienen su modelo fijado en su archivo.
 2. **Lánzalo:**
-   - `/mejora`: coge la siguiente tarea pendiente del tablero.
-   - `/mejora mr`: hace una tarea concreta (aquí, el capítulo 18 del atlas, «Insuficiencia mitral»).
-   - `/mejora auditar`: no construye nada; repasa una tarea ya hecha y te dice qué encuentra.
+   - `/plan-socialista`: coge la siguiente tarea pendiente del tablero.
+   - `/plan-socialista mr`: hace una tarea concreta (aquí, el capítulo 18 del atlas, «Insuficiencia mitral»).
+   - `/plan-socialista auditar mr`: no construye nada; repasa una tarea ya hecha y te dice qué encuentra.
+   - `/plan-socialista estado`: te resume el tablero y el último parte, sin trabajar.
 3. **Mira cómo trabaja.** El director te va contando en qué vuelta está. Puedes interrumpirle cuando quieras con un
    mensaje: «para», «sáltate esa», «explícame por qué».
 4. **Revisa la propuesta.** Al terminar, el director deja una rama `auto/<tarea>` y una propuesta de cambio (PR) en
@@ -41,10 +43,10 @@ También puedes decírselo al director en el chat; él actualiza el tablero.
 
 ## Los tres niveles de autonomía
 
-1. **Supervisado (ahora).** Tú lanzas `/mejora` y miras. Así aprendes cómo trabaja y ajustamos las reglas.
-2. **En bucle.** `/loop /mejora`: repite tareas hasta llegar al límite del tablero. Úsalo cuando el nivel 1 te
+1. **Supervisado (ahora).** Tú lanzas `/plan-socialista` y miras. Así aprendes cómo trabaja y ajustamos las reglas.
+2. **En bucle.** `/loop /plan-socialista`: repite tareas hasta llegar al límite del tablero. Úsalo cuando el nivel 1 te
    convenza.
-3. **Solo, cada noche.** Una rutina programada abre una sesión en la nube cada noche, ejecuta `/mejora` y te deja la
+3. **Solo, cada noche.** Una rutina programada abre una sesión en la nube cada noche, ejecuta `/plan-socialista` y te deja la
    propuesta para revisar por la mañana. Se monta cuando los niveles 1 y 2 funcionen bien.
 
 ## Qué esperar (y qué no)

@@ -18,7 +18,7 @@ informe por ejecución, no avanzar sin confirmación, límite de gasto, ejecuci�
   - lo pendiente pasó a `autonomo/TABLERO.md`;
   - `CLAUDE.md` propios en eco, nefrología, libros, sobrevivir-umi y uci-papers, que se cargan al trabajar en ellos.
 - **`autonomo/`**: guía para el usuario (`LEEME.md`), listón de calidad (`REGLAS.md`), tablero de tareas
-  (`TABLERO.md`, objetivo 1: los 21 capítulos del atlas de eco) e informes por sesión (`sesiones/`).
+  (`TABLERO.md`, objetivo 1: los 21 capítulos del atlas de eco) e informes por sesión (`sesiones/`, hoy `partes/`).
 
 ## La prueba (examen del CLAUDE.md)
 
@@ -34,3 +34,20 @@ verificado (se incorporó al proyecto). Lo que enseñó:
   temporal con `data-especialidad` que usa el propio enrutador), con el truco de `eval (async () => …)()`.
 - En un worktree, el entorno rechaza comandos de shell compuestos: anotado en la skill.
 - Una corrección propia previa: `nefrologia/CLAUDE.md` citaba `rutasRinon`, que no existe (es `vistaPorNodoRinon`).
+
+## El plan socialista: la skill, los agentes y los jueces (octubre 2026)
+
+A petición del usuario («con el formato de trabajo que hemos comentado… nombrarlo de alguna manera para tener como esa
+skill»). Al revisarlo apareció que la guía de `autonomo/` hablaba de una skill `/mejora` y de 5 agentes que **nunca se
+habían creado**. El usuario eligió el nombre **plan socialista** y se montó:
+
+- `.claude/skills/plan-socialista/SKILL.md`: el director (el modelo de la sesión). Argumentos: nada (siguiente tarea),
+  una clave, `auditar <clave>`, `estado`. Ciclo: lector de fuente → constructor → jueces (verificador y auditor ciego
+  en paralelo) → vueltas → revisor → rama `auto/<clave>`, PR en borrador y parte.
+- `.claude/agents/`: `lector-fuente`, `constructor`, `verificador`, `auditor-ciego`, `revisor` (modelo sonnet). Cada
+  encargo les recuerda leer las reglas desde el disco (lección de la prueba anterior).
+- `autonomo/jueces.mjs`: la lista de «antes de terminar» hecha máquina (imágenes con archivo, quiz sin temas vacíos
+  ni entidades ni respuestas fuera de rango, ids de pregunta únicos, `?v=` de caché, y en el navegador a 390 y 360 px:
+  ids repetidos, errores, desbordamiento y que cada ficha o capítulo pedido abra con sus imágenes; `--eco` pasa las
+  pruebas del simulador). Unos 16 s. En su estreno cazó 3 bancos de preguntas con `&lt;` (20 entidades), corregidos.
+- `autonomo/sesiones/` pasa a `autonomo/partes/` (partes de sesión).

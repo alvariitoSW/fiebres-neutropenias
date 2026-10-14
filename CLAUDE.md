@@ -52,7 +52,8 @@ js/core/                piezas genéricas (ver §5)
 js/data/                datos puros sin DOM: tablas y bancos de preguntas (*-preguntas.js)
 js/modules/<módulo>/    index.js (arranca el módulo) + <vista>.html + <vista>.js
 docs/                   PDF de las fuentes · docs/historial/ (la historia)
-autonomo/               trabajo autónomo en bucle: guía, reglas, tablero y bitácora
+autonomo/               plan socialista (trabajo por equipos en bucle): guía, reglas, tablero, partes y
+                        jueces.mjs (el comprobador automático)
 backend/ admin/         panel de subida de contenido (aparte de la app)
 ```
 
@@ -182,8 +183,8 @@ backend/ admin/         panel de subida de contenido (aparte de la app)
 - Rama de trabajo `claude/medical-app-restructure-5xv3qn`. Tras cada tanda: commit, push y merge a `main`
   (`git checkout main && git merge --ff-only origin/<rama> && git push origin main`, y volver a la rama). Si el
   fast-forward falla, avisa al usuario; no reescribas historia.
-- **Excepción**: el trabajo autónomo en bucle va a ramas `auto/<tarea>` con PR en borrador; solo el usuario la
-  aprueba (ver `autonomo/`).
+- **Excepción**: el plan socialista (`/plan-socialista`, trabajo por equipos en bucle) va a ramas `auto/<tarea>` con
+  PR en borrador; solo el usuario la aprueba (ver `autonomo/`).
 
 ## 11. Redacción e idioma
 
@@ -192,6 +193,8 @@ como las conoce un médico, no como están hechas por dentro. Los botones dicen 
 
 ## 12. Antes de dar un trabajo por terminado
 
+- [ ] `node autonomo/jueces.mjs` en verde (añade `--eco`, `--atlas <clave>` o `--ficha esp:vista:panel:pestaña`
+      según lo que tocaste): imágenes, quiz, caché, ids, errores y desbordamiento a 390 y 360 px.
 - [ ] Probado en el navegador a 390 y 360 px: sin desbordamiento, sin errores de consola, todo abre y calcula (§9).
 - [ ] Si tocaste el simulador de eco: `node --test 'js/modules/eco/pruebas/*.test.mjs'` en verde.
 - [ ] Toda cifra nueva tiene su fuente y su página; las erratas y discrepancias, con su nota.
@@ -221,4 +224,4 @@ como las conoce un médico, no como están hechas por dentro. Los botones dicen 
 | `revisiones-de-codigo.md` | Revisión de código de octubre 2026 y arreglos posteriores |
 | `panel-subida.md` | `backend/` y `admin/` |
 | `eco.md` | Decisiones de Circulación viva y Eco cardíaca (el detalle técnico, en `js/modules/eco/README.md`) |
-| `trabajo-autonomo.md` | Por qué y cómo se reorganizó `CLAUDE.md`, la carpeta `autonomo/` y la prueba con un agente nuevo |
+| `trabajo-autonomo.md` | Por qué y cómo se reorganizó `CLAUDE.md`, el plan socialista (`autonomo/`, la skill y los agentes) y sus pruebas |

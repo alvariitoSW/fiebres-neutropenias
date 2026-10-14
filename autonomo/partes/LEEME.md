@@ -1,6 +1,6 @@
-# Informes de sesión
+# Partes de sesión
 
-Uno por sesión del trabajo autónomo: `AAAA-MM-DD.md` (si hay dos el mismo día, `AAAA-MM-DD-2.md`). Lo escribe el
+Uno por sesión del plan socialista: `AAAA-MM-DD.md` (si hay dos el mismo día, `AAAA-MM-DD-2.md`). Lo escribe el
 director al terminar, aunque la sesión falle o no haya nada que hacer. Formato:
 
 ```

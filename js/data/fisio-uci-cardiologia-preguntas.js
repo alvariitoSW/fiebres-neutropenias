@@ -1375,7 +1375,7 @@ export const preguntasCardiologia = [
             'Una pérdida real de volumen sanguíneo circulante causada por el PEEP',
             'Un estado hemodinámico indistinguible de la hipovolemia real (por caída del retorno venoso), aunque la volemia total del paciente no haya cambiado',
             'Un efecto exclusivo de la ventilación espontánea, nunca de la VM',
-            'Un fenómeno que solo ocurre con PEEP muy bajo (&lt;5 cmH₂O)',
+            'Un fenómeno que solo ocurre con PEEP muy bajo (<5 cmH₂O)',
         ],
         correcta: 1,
         explicacion: 'El PEEP eleva la presión pleural y, con ella, la presión de la AD, reduciendo el gradiente de retorno venoso — el resultado hemodinámico es indistinguible de una hipovolemia real desde el punto de vista del llenado ventricular, aunque la volemia total no haya cambiado. Es la base fisiológica de los índices dinámicos VPP/VVS.',

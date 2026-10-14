@@ -1,4 +1,4 @@
-# Reglas del equipo autónomo
+# Reglas del plan socialista (equipo autónomo)
 
 Corto a propósito: todos los agentes lo leen en cada vuelta, junto con `CLAUDE.md` (las reglas del proyecto,
 también cortas). La historia de cada parte está en `docs/historial/`: **no la leas entera**, busca con grep la
@@ -42,7 +42,8 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
 ## 4. Trabajo y git
 
 1. **Solo la tarea encargada.** Si ves otro problema, anótalo en el informe de la sesión; no lo arregles de paso.
-2. **Nada se da por hecho sin pasar los jueces** del tablero.
+2. **Nada se da por hecho sin pasar los jueces**: `node autonomo/jueces.mjs` en verde (con `--eco`, `--atlas` o
+   `--ficha` según la tarea) y los puntos de «hecho» del tablero.
 3. **El trabajo autónomo nunca va directo a `main`**: va en una rama `auto/<tarea>` con una propuesta (PR) en
    borrador. Solo el usuario la aprueba. (La regla de `CLAUDE.md` de «mergear siempre a main» es para las
    conversaciones normales, no para este modo.)
@@ -53,7 +54,7 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
 
 1. **Las reglas son de solo lectura** para el agente: nunca edita `autonomo/REGLAS.md`, `CLAUDE.md` (ni los de los
    módulos) ni sus propias instrucciones. Si cree que una regla falla, lo propone en su informe y el usuario decide.
-2. **El estado sí lo escribe**: los estados de `autonomo/TABLERO.md` y su informe en `autonomo/sesiones/`.
+2. **El estado sí lo escribe**: los estados de `autonomo/TABLERO.md` y su parte en `autonomo/partes/`.
 3. **No avanzar sin prueba**: una tarea solo pasa a `en revisión` cuando la PR existe en GitHub (con su enlace en el
    informe). Si el push o la PR fallan o no está claro que salieron, el estado no cambia y el informe lo dice.
 4. **Lo que no se pudo leer es un hueco, no un hecho**: si una fuente no se abre (web bloqueada, PDF ilegible), la
