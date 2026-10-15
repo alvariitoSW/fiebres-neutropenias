@@ -7,7 +7,7 @@ import { $, num, fmt, C, coma, SVG, aTexto, engancharTexto, alCambiar, escribir,
 import { irAlTexto } from '../../core/vista-visual.js';
 import { openCorkboardTopic } from '../../core/corkboard.js';
 import { lineaNomograma } from './marino-toxicos.js';
-import { bolsaNpt } from './marino-nutricion.js';
+import { bolsaNpt, rangoValido } from './marino-nutricion.js';
 
 // Caja donde se copia el resultado de una calculadora.
 const caja = id => `<div id="${id}" hidden></div>`;
@@ -71,7 +71,11 @@ export const bolsaVisual = {
             const lip = num($('mu-npt-lip')) ?? 0, prop = num($('mu-npt-propofol')) ?? 0;
             const destino = cuerpo.querySelector('#mrp-npt');
             if (!p || p <= 0 || gkg === null) { destino.innerHTML = ''; return; }
+            const aviso = t => { destino.innerHTML = `<p class="fuente-ficha">${t}</p>`; };
+            if (!rangoValido(['mu-npt-peso', 'mu-npt-prot', 'mu-npt-lip', 'mu-npt-propofol'])) return aviso('La calculadora avisa de un valor fuera de rango: no se dibuja la bolsa.');
             const b = bolsaNpt(p, gkg, lip, prop);
+            // Misma regla que la calculadora: si el propofol y los lípidos superan el GER, no hay bolsa posible.
+            if (Math.round(b.propKcal) + Math.round(b.lipKcal) > Math.round(b.ger)) return aviso('La calculadora avisa: el propofol y los lípidos suman más calorías que el GER. No se dibuja la bolsa.');
             const barra = (partes, total, alto, y) => {
                 let x = 10, out = '';
                 partes.forEach(([v, col, etq]) => {

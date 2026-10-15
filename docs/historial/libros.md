@@ -372,3 +372,18 @@ Lo demás va al parte `autonomo/partes/2026-10-14-marino-r1.md` y a `autonomo/id
 - capnografía `#page=44`.
 
 Parte: `autonomo/partes/2026-10-14-marino-r2.md`.
+
+## Marino Nutrición y endocrino: revisión R12 del plan Marino, caps. 48-51 (octubre 2026)
+
+`marino-r12` (revisión sin construir), 2 vueltas, 14 fichas. Corregido:
+- ferroptosis;
+- propranolol VO con nota de las dosis IV (web);
+- notas de Clinolipid y Smoflipid con fuente;
+- cortisol con basal ≥35;
+- umbrales redondeados y límites;
+- avisos de propofol y lípidos;
+- erratas con nota (Tabla 48.2, IgA, 16,5 g, carnitina, Lugol/SSKI);
+- vista Visual sin el panel FGF23, con requisitos coherentes (`sinPuerta` en el kit) y la bolsa de NPT que no se
+  dibuja con error.
+
+Parte: `autonomo/partes/2026-10-15-marino-r12.md`.

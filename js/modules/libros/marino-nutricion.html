@@ -64,7 +64,7 @@
                 <div class="field-hook">"¿se da hierro al crítico con hipoferremia?"</div>
             </div>
             <div class="card-face back">
-                <div class="back-hook">No, salvo déficit tisular demostrado: el hierro favorece los radicales hidroxilo y la ferroptosis, y la hipoferremia es una defensa de la inflamación.</div>
+                <div class="back-hook">No, salvo déficit tisular demostrado: el hierro favorece los radicales hidroxilo y la ferroptosis; el riesgo del hierro libre explicaría por qué la hipoferremia es frecuente en la inflamación.</div>
                 <div class="back-cta">Ver contenido completo →</div>
             </div>
         </div></div>
@@ -164,7 +164,7 @@
                 <div class="field-hook">"¿qué electrolito cae en el síndrome de realimentación?"</div>
             </div>
             <div class="card-face back">
-                <div class="back-hook">El fosfato, sobre todo: entra en las células con la glucosa. Con riesgo, empezar con la mitad de las calorías.</div>
+                <div class="back-hook">El fosfato es un componente importante: entra en las células con la glucosa (también bajan el K⁺ y el Mg²⁺). Con riesgo, empezar con la mitad de las calorías.</div>
                 <div class="back-cta">Ver contenido completo →</div>
             </div>
         </div></div>
@@ -193,7 +193,7 @@
                 <div class="field-hook">"¿qué betabloqueante y a qué dosis en la tormenta tiroidea?"</div>
             </div>
             <div class="card-face back">
-                <div class="back-hook">Propranolol: 60-80 mg cada 4 h (frente a 10-40 mg 3-4 veces al día en la tirotoxicosis sin tormenta).</div>
+                <div class="back-hook">Propranolol: 60-80 mg orales cada 4 h (frente a 10-40 mg orales 3-4 veces al día en la tirotoxicosis sin tormenta). Ver la nota de la dosis IV.</div>
                 <div class="back-cta">Ver contenido completo →</div>
             </div>
         </div></div>
@@ -218,7 +218,7 @@
         <!-- ===== FICHA I: GASTO ENERGÉTICO (Cap. 48) ===== -->
         <div id="mu-gasto-energetico" class="tab-content">
             <h3 style="color: var(--accent-green);">Gasto energético diario</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 48 "Nutritional Requirements"; guías ASPEN 2022, SCCM/ASPEN 2016 y ESPEN.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 48 "Nutritional Requirements"; guías ASPEN 2022, SCCM/ASPEN 2016 y ESPEN. <a class="biblio-link" href="docs/marino-2024-nutricion-endocrino-caps48-51.pdf#page=3" target="_blank" rel="noopener">Ver en el PDF (págs. 3-4)</a></p>
 
             <p>El objetivo de la nutrición es cubrir las necesidades de nutrientes y energía. Pero hay que decirlo de entrada: <strong>no se pueden conocer con exactitud</strong> en el crítico, ni siquiera saber si debemos alimentarlo (la idea de que alimentar al crítico puede dañar cierra el capítulo).</p>
 
@@ -238,14 +238,14 @@
             <dl class="kv-row" id="mu-cr"><dt>Cociente respiratorio</dt><dd>Máximo con los hidratos (<strong>1,0</strong>) y mínimo con los lípidos (<strong>0,7</strong>). El CR de todo el cuerpo dice qué combustible predomina: 1,0 = sobre todo hidratos.</dd></dl>
             <div class="agua-simulador" id="mu-cr-calc">
                 <h4 style="color: var(--accent-green);">🧮 Cociente respiratorio (Tabla 48.1)</h4>
-                <div class="form-group"><label for="mu-cr-vo2">VO₂ (mL/min)</label><input type="number" id="mu-cr-vo2" min="50" max="1000" step="5" value="250" inputmode="decimal"></div>
-                <div class="form-group"><label for="mu-cr-vco2">VCO₂ (mL/min)</label><input type="number" id="mu-cr-vco2" min="50" max="1000" step="5" value="200" inputmode="decimal"></div>
+                <div class="form-group"><label for="mu-cr-vo2">VO₂ (mL/min)</label><input type="number" id="mu-cr-vo2" min="100" max="1000" step="5" value="250" inputmode="decimal"></div>
+                <div class="form-group"><label for="mu-cr-vco2">VCO₂ (mL/min)</label><input type="number" id="mu-cr-vco2" min="100" max="1000" step="5" value="200" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="mu-cr-resultado"></div>
             </div>
 
             <p class="section-label">Calorimetría indirecta</p>
             <dl class="kv-row" id="mu-calorimetria"><dt>Principio</dt><dd>No se puede medir el calor directamente, pero sí calcular el <strong>gasto energético en reposo (GER)</strong> a partir del VO₂ y el VCO₂ de todo el cuerpo (Ecuación 48.1).</dd></dl>
-            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la Ecuación 48.1 se imprime como GER (kcal/min) = (3,6 × VO₂) + (1,1 × VCO₂) − 61, sin unidades para el VO₂ y el VCO₂. Con litros por minuto el resultado sale negativo y con mililitros por minuto no son kcal/min. La forma abreviada de Weir que se usa habitualmente es GER (kcal/min) = 3,94 × VO₂ + 1,11 × VCO₂, con los gases en L/min. Por eso no hay calculadora del GER medido.</p></details>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la Ecuación 48.1 se imprime como GER (kcal/min) = (3,6 × VO₂) + (1,1 × VCO₂) − 61 (pág. 3), sin unidades para el VO₂ y el VCO₂. Con litros por minuto el resultado sale negativo y con mililitros por minuto no son kcal/min. Por eso no hay calculadora del GER medido.</p><p class="fuente-ficha"><em>Conocimiento general, no de la fuente:</em> la forma abreviada de Weir que se usa habitualmente es GER (kcal/min) = 3,94 × VO₂ + 1,11 × VCO₂, con los gases en L/min.</p></details>
             <dl class="kv-row" id="mu-carro"><dt>Cómo se hace</dt><dd>Con "carros metabólicos" que miden el O₂ y el CO₂ inspirado y espirado, en respiración espontánea (con una campana sobre la cabeza) o en ventilación mecánica (sensores en la tubuladura). Se mide en equilibrio <strong>15-30 min</strong> y el GER (kcal/min) se multiplica por <strong>1.440</strong> (minutos del día); 30 min extrapolados equivalen a medir 24 h.</dd></dl>
             <dl class="kv-row" id="mu-fio2"><dt>Límite de FiO₂</dt><dd>Los sensores nuevos son precisos hasta una FiO₂ del <strong>70%</strong> (antes, 60%): por encima, la calorimetría puede no ser fiable.</dd></dl>
             <p>Todas las guías la recomiendan, pero no está en todas partes (equipo caro y personal entrenado). Si no hay, se estima.</p>
@@ -266,9 +266,9 @@
                 <h4 style="color: var(--accent-green);">🧮 Calorías y proteínas del día (Ecuaciones 48.2 y 48.3)</h4>
                 <div class="form-group"><label for="mu-ger-peso">Peso real (kg)</label><input type="number" id="mu-ger-peso" min="30" max="300" step="1" value="70" inputmode="decimal"></div>
                 <div class="form-group"><label for="mu-ger-ideal">Peso ideal (kg, de las tablas del Apéndice 2)</label><input type="number" id="mu-ger-ideal" min="30" max="120" step="1" value="70" inputmode="decimal"></div>
-                <div class="form-group"><label for="mu-ger-metodo">Cómo se conoce el GER</label><select id="mu-ger-metodo"><option value="ecuacion">Ecuación (25 kcal/kg)</option><option value="calorimetria">Calorimetría indirecta</option></select></div>
+                <div class="form-group"><label for="mu-ger-metodo">Cómo se conoce el GER (ecuación: 25 kcal/kg)</label><select id="mu-ger-metodo"><option value="ecuacion">Ecuación</option><option value="calorimetria">Calorimetría</option></select></div>
                 <div class="form-group"><label for="mu-ger-dia">Día de soporte nutricional</label><input type="number" id="mu-ger-dia" min="1" max="30" step="1" value="2" inputmode="decimal"></div>
-                <div class="form-group"><label for="mu-ger-na">Noradrenalina (µg/kg/min)</label><input type="number" id="mu-ger-na" min="0" max="5" step="0.01" value="0" inputmode="decimal"></div>
+                <div class="form-group"><label for="mu-ger-na">Noradrenalina (µg/kg/min)</label><input type="number" id="mu-ger-na" min="0" max="1" step="0.01" value="0" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="mu-ger-resultado"></div>
             </div>
             <p><button type="button" class="especialidad-link" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-nutricion">🥣 Nutrición en el Manual UMI (Harris-Benedict, NRS-2002) →</button></p>
@@ -277,7 +277,7 @@
         <!-- ===== FICHA II: SUSTRATOS Y BALANCE NITROGENADO (Cap. 48) ===== -->
         <div id="mu-sustratos" class="tab-content">
             <h3 style="color: var(--accent-green);">Sustratos: hidratos, lípidos, proteínas y balance nitrogenado</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 48.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 48. <a class="biblio-link" href="docs/marino-2024-nutricion-endocrino-caps48-51.pdf#page=4" target="_blank" rel="noopener">Ver en el PDF (págs. 4-7)</a></p>
 
             <p>La energía la ponen las calorías <strong>no proteicas</strong> (hidratos y lípidos); las proteínas se dan para mantener las proteínas enzimáticas y estructurales.</p>
             <div style="overflow-x:auto;">
@@ -292,6 +292,7 @@
             </table>
             </div>
             <p class="fuente-ficha">Tabla 48.2 — Reservas de combustible del adulto sano (Cahill, 1970).</p>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: las tres filas suman 165.900 kcal (141.000 + 24.000 + 900), pero la tabla imprime «Total: 165,000» (pág. 5). Se reproduce el total impreso.</p></details>
 
             <p class="section-label">Hidratos de carbono</p>
             <dl class="kv-row" id="mu-hc"><dt>Cuánto</dt><dd>Aportan un <strong>70%</strong> de las calorías no proteicas. Las reservas son escasas y el SNC gasta <strong>100-120 g de glucosa al día</strong>: se aconsejan <strong>al menos 130 g/día</strong>.</dd></dl>
@@ -300,7 +301,8 @@
             <p class="section-label">Lípidos</p>
             <dl class="kv-row" id="mu-lipidos"><dt>Cuánto</dt><dd>Un <strong>30%</strong> de la energía diaria. Son el combustible más energético y la mayor reserva del cuerpo.</dd></dl>
             <dl class="kv-row" id="mu-linoleico"><dt>Ácido linoleico</dt><dd>El único ácido graso esencial de la dieta (poliinsaturado de cadena larga). Su déficit da <strong>dermopatía escamosa, disfunción cardíaca y más infecciones</strong>; se evita con un <strong>0,5%</strong> de los ácidos grasos como linoleico (casi siempre de aceite de soja).</dd></dl>
-            <dl class="kv-row" id="mu-propofol"><dt>Propofol</dt><dd>Va en una emulsión lipídica al 10% que aporta <strong>1,1 kcal/mL</strong>: hay que contar sus calorías como no proteicas. Puede dar <strong>hipertrigliceridemia</strong>: vigilar los triglicéridos en perfusiones largas.</dd></dl>
+            <dl class="kv-row" id="mu-propofol"><dt>Propofol</dt><dd>Va en una emulsión lipídica al 10% que aporta <strong>1,1 kcal/mL</strong> (pág. 5): hay que contar sus calorías como no proteicas. Puede dar <strong>hipertrigliceridemia</strong>: vigilar los triglicéridos en perfusiones largas.</dd></dl>
+            <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoNutricion" data-panel="panel-marino-nutri-tabs" data-tab="mu-pauta-enteral" data-resaltar="#mu-nota-propofol">⚖️ 1,1 o 1 kcal/mL: nota de fuentes del propofol →</button>
             <dl class="kv-row" id="mu-lipidos-exceso"><dt>Exceso</dt><dd>Sobre todo de poliinsaturados (muy oxidables): daño oxidativo, sobre todo en el pulmón, y peor inmunidad. Máximo: <span class="hl-rojo">1,5 g/kg/día</span>.</dd></dl>
             <details class="nota-plegable" id="mu-nota-lipidos"><summary>📝 Nota de fuentes</summary><p class="fuente-ficha">Nota de fuentes: 1) Máximo de lípidos: este capítulo lo pone en 1,5 g/kg/día; la Tabla 50.2 (nutrición parenteral, Cap. 50) da 2,5 g/kg/día como dosis máxima del Intralipid®. 2) Ácidos grasos esenciales: este capítulo dice que el linoleico es el único esencial y que basta con que sea el 0,5% de los ácidos grasos de la dieta; el Cap. 50 dice que son esenciales el linoleico y el linolénico (como la propia Tabla 50.2, que marca el α-linolénico ω-3 como esencial) y que el déficit se evita si las emulsiones aportan el 3-4% de las calorías. Se reproducen las dos versiones, cada una en su ficha.</p></details>
             <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoNutricion" data-panel="panel-marino-nutri-tabs" data-tab="mu-npt-soluciones" data-resaltar="#mu-npt-lipidos">💧 Emulsiones lipídicas de la NPT (Cap. 50) →</button>
@@ -333,7 +335,7 @@
         <!-- ===== FICHA III: DÉFICIT DE TIAMINA (Cap. 48) ===== -->
         <div id="mu-tiamina" class="tab-content">
             <h3 style="color: var(--accent-green);">Déficit de tiamina</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 48.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 48. <a class="biblio-link" href="docs/marino-2024-nutricion-endocrino-caps48-51.pdf#page=8" target="_blank" rel="noopener">Ver en el PDF (págs. 8-11)</a></p>
 
             <dl class="kv-row" id="mu-tia-funcion"><dt>Para qué sirve</dt><dd>La tiamina (vitamina B1) se convierte en <strong>pirofosfato de tiamina</strong>, cofactor de la piruvato deshidrogenasa, que deja entrar el piruvato en la mitocondria para producir ATP. Su déficit crea un <strong>déficit de energía</strong> por mal metabolismo de la glucosa.</dd></dl>
             <dl class="kv-row" id="mu-tia-reservas"><dt>Reservas</dt><dd>Escasas: unos <strong>30 mg</strong>, que se agotan en <strong>2-3 semanas</strong> sin aporte. Necesidad normal: ~1 mg/día.</dd></dl>
@@ -412,7 +414,7 @@
         <!-- ===== FICHA IV: VITAMINAS Y OLIGOELEMENTOS (Cap. 48) ===== -->
         <div id="mu-vitaminas-oligo" class="tab-content">
             <h3 style="color: var(--accent-green);">Vitaminas, oligoelementos y el riesgo de alimentar</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 48. Necesidades diarias de la Oficina de Suplementos Dietéticos de los NIH (consulta de julio de 2024).</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 48. Necesidades diarias de la Oficina de Suplementos Dietéticos de los NIH (consulta de julio de 2024). <a class="biblio-link" href="docs/marino-2024-nutricion-endocrino-caps48-51.pdf#page=7" target="_blank" rel="noopener">Ver en el PDF (págs. 7-13)</a></p>
 
             <div style="overflow-x:auto;">
             <table class="data-table" id="mu-tabla-48-3">
@@ -434,7 +436,7 @@
                 </tbody>
             </table>
             </div>
-            <p class="fuente-ficha">Tabla 48.3 — Necesidades diarias de vitaminas, adultos de 51-70 años. *Sin embarazo ni lactancia. En el crítico probablemente son mayores y varían.</p>
+            <p class="fuente-ficha">Tabla 48.3 — Necesidades diarias de las 13 vitaminas que se consideran esenciales en la dieta, adultos de 51-70 años. *Sin embarazo ni lactancia. En el crítico probablemente son mayores y varían entre pacientes.</p>
 
             <p class="section-label">Vitamina D</p>
             <dl class="kv-row" id="mu-vitd"><dt>Déficit</dt><dd>En el <strong>40-100%</strong> de los pacientes de UCI: se necesitan 600 UI/día (seguramente más en el crítico) y la nutrición enteral o parenteral da solo <strong>200-400 UI/día</strong>.</dd></dl>
@@ -462,14 +464,14 @@
             <p class="fuente-ficha">Tabla 48.5 — Oligoelementos esenciales, adultos de 51-70 años. †Sin embarazo ni lactancia. Oligoelemento: menos de 50 µg por gramo de tejido; los siete de la tabla tienen síndromes de déficit.</p>
 
             <dl class="kv-row" id="mu-hierro"><dt>Hierro</dt><dd>Unos <strong>4,5 g</strong> en el adulto, casi nada libre: unido a la hemoglobina, a la ferritina tisular y a la transferrina (saturada solo al <strong>30%</strong>, así que cualquier hierro de más se une enseguida). Esa escasez de hierro libre tiene valor de supervivencia.</dd></dl>
-            <dl class="kv-row" id="mu-hierro-oxidativo"><dt>Hierro y daño oxidativo</dt><dd>1) El hierro reducido (Fe²⁺) es necesario para formar <strong>radicales hidroxilo</strong>, los más destructivos. 2) La peroxidación lipídica por hierro causa <strong>ferroptosis</strong>, una muerte celular regulada que <strong>desencadena la inflamación</strong> y que tiene un papel principal en el daño tisular inflamatorio. Por el riesgo del hierro libre, la hipoferremia es frecuente en la inflamación sistémica, y por eso la hipoferremia es frecuente en la inflamación sistémica <span class="hl-rojo">no se da hierro al crítico</span> salvo déficit tisular con anemia.</dd></dl>
+            <dl class="kv-row" id="mu-hierro-oxidativo"><dt>Hierro y daño oxidativo</dt><dd>1) El hierro reducido (Fe²⁺) es necesario para formar <strong>radicales hidroxilo</strong>, los más destructivos. 2) La peroxidación lipídica por hierro puede producir <strong>ferroptosis</strong>, una muerte celular regulada que <strong>la desencadena la inflamación</strong> y que tiene un papel principal en el daño tisular inflamatorio. El riesgo del hierro libre explicaría por qué la hipoferremia es frecuente en la inflamación sistémica; y es también la razón para <span class="hl-rojo">no dar hierro al crítico</span> salvo déficit tisular con anemia.</dd></dl>
             <dl class="kv-row" id="mu-ferritina-cortes"><dt>Reservas de hierro</dt><dd>Se valoran con la <strong>ferritina plasmática</strong>: &lt;18 µg/L indica un déficit probable de hierro, y &gt;100 µg/L lo hace improbable.</dd></dl>
             <div class="agua-simulador" id="mu-ferritina-calc">
                 <h4 style="color: var(--accent-green);">🧮 ¿Faltan reservas de hierro? (ferritina)</h4>
                 <div class="form-group"><label for="mu-ferritina">Ferritina plasmática (µg/L)</label><input type="number" id="mu-ferritina" min="0" max="5000" step="1" value="60" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="mu-ferritina-resultado"></div>
             </div>
-            <dl class="kv-row" id="mu-selenio"><dt>Selenio</dt><dd>Cofactor de la <strong>glutatión peroxidasa</strong>, gran fuente de actividad antioxidante intracelular. Se gasta más en la enfermedad aguda y su déficit es frecuente. Niveles <strong>&lt;100 µg/L</strong> se asocian a menos actividad de la glutatión peroxidasa. Se suplementa IV como selenito sódico; dosis máxima segura <strong>225 µg/día</strong>.</dd></dl>
+            <dl class="kv-row" id="mu-selenio"><dt>Selenio</dt><dd>Cofactor de la <strong>glutatión peroxidasa</strong>, gran fuente de actividad antioxidante intracelular. Se gasta más en la enfermedad aguda y su déficit es frecuente. Se puede vigilar el selenio plasmático en quien tiene riesgo de estrés oxidativo (p. ej., inflamación sistémica): niveles <strong>&lt;100 µg/L</strong> se asocian a menos actividad de la glutatión peroxidasa. Se suplementa IV como selenito sódico; dosis máxima segura <strong>225 µg/día</strong>.</dd></dl>
 
             <p class="section-label">Una mosca en la sopa</p>
             <p>La nutrición se justifica para evitar la desnutrición. Vale si la causa es <strong>comer poco</strong> (inanición), pero la desnutrición del crítico es un <strong>procesamiento anómalo</strong> de los nutrientes: darlos no la corrige hasta que se resuelve la enfermedad, y puede hacer daño.</p>
@@ -484,17 +486,18 @@
         <!-- ===== FICHA V: NUTRICIÓN ENTERAL, INDICACIONES (Cap. 49) ===== -->
         <div id="mu-enteral-indicaciones" class="tab-content">
             <h3 style="color: var(--accent-yellow);">Nutrición enteral: por qué, cuándo y cuándo no</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 49 "Enteral Nutrition".</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 49 "Enteral Nutrition". <a class="biblio-link" href="docs/marino-2024-nutricion-endocrino-caps48-51.pdf#page=18" target="_blank" rel="noopener">Ver en el PDF (págs. 18-19)</a></p>
 
             <p>Si el paciente no puede comer, la vía preferida es infundir fórmulas líquidas en el estómago o el intestino. No solo da energía: también es una <strong>medida de control de la infección</strong>, porque mantiene la barrera de la mucosa intestinal.</p>
 
             <p class="section-label">El intestino, "el motor del fallo multiorgánico"</p>
             <ol id="mu-ent-trofismo">
                 <li>El contenido de nutrientes en la luz tiene un efecto <strong>trófico</strong> sobre la mucosa: conserva su estructura y su función de barrera frente a la <strong>translocación</strong> de gérmenes entéricos.</li>
-                <li>El trofismo incluye las defensas inmunes de la pared, como la producción de <strong>IgA</strong>, que impide que los gérmenes se peguen a la mucosa.</li>
+                <li>El trofismo incluye las defensas inmunes de la pared, como la producción de <strong>IgA</strong> «por monocitos de la pared intestinal» (así lo imprime el libro, pág. 18), que impide que los gérmenes se peguen a la mucosa.</li>
                 <li>Lo que hace falta es <strong>volumen</strong> de nutrientes, no los combustibles en sí: dar por boca las soluciones parenterales no tiene ese efecto. La <strong>glutamina</strong>, principal combustible del enterocito, podría participar.</li>
                 <li>Con el intestino en reposo se pierde el trofismo: la mucosa se atrofia y aumenta el riesgo de invasión bacteriana.</li>
             </ol>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el libro (pág. 18) dice que la IgA la producen «monocitos» de la pared intestinal. <em>Conocimiento general, no de la fuente:</em> la IgA la producen las células plasmáticas, no los monocitos. Se reproduce el texto del libro.</p></details>
             <div class="warning-box" id="mu-ent-infeccion"><strong>Enteral sí, parenteral no, para las defensas.</strong> Las defensas antimicrobianas del intestino se mantienen con la nutrición enteral y no con la parenteral. Empezarla pronto (en <strong>48 h</strong>) se asocia a menos infecciones.</div>
             <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoFundamentos" data-panel="panel-marino-fund-tabs" data-tab="mar-microbioma">🦠 El intestino como fuente de sepsis (Cap. 4) →</button></p>
 
@@ -529,7 +532,7 @@
                 <label class="checkbox-label puntuable"><input type="checkbox" class="mu-ent-ci" value="fístula de alto débito"> Fístula intestinal de alto débito</label>
                 <label class="checkbox-label puntuable"><input type="checkbox" class="mu-ent-ci" value="síndrome compartimental abdominal"> Síndrome compartimental abdominal</label>
                 <label class="checkbox-label puntuable"><input type="checkbox" class="mu-ent-ci" value="residuo &gt;500 mL en 6 h"> Residuo gástrico &gt;500 mL en 6 h</label>
-                <div class="form-group"><label for="mu-ent-na">Noradrenalina estable o en descenso (µg/kg/min)</label><input type="number" id="mu-ent-na" min="0" max="5" step="0.01" value="0" inputmode="decimal"></div>
+                <div class="form-group"><label for="mu-ent-na">Noradrenalina estable o en descenso (µg/kg/min)</label><input type="number" id="mu-ent-na" min="0" max="1" step="0.01" value="0" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="mu-ent-resultado"></div>
             </div>
         </div>
@@ -537,7 +540,7 @@
         <!-- ===== FICHA VI: FÓRMULAS ENTERALES (Cap. 49) ===== -->
         <div id="mu-formulas" class="tab-content">
             <h3 style="color: var(--accent-yellow);">Fórmulas enterales</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 49. Fórmulas de la guía de productos de Abbott Nutrition, salvo Isocal.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 49. Fórmulas de la guía de productos de Abbott Nutrition, salvo Isocal. <a class="biblio-link" href="docs/marino-2024-nutricion-endocrino-caps48-51.pdf#page=20" target="_blank" rel="noopener">Ver en el PDF (págs. 20-23)</a></p>
 
             <p>Hay multitud de fórmulas (Abbott, la principal en EE. UU., tiene 92), pero se usan pocas.</p>
             <div style="overflow-x:auto;">
@@ -581,7 +584,7 @@
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Arginina</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="mu-for-arginina"><p>Sustrato preferido del músculo lesionado y precursora del óxido nítrico (clave del flujo periférico). Se agota en el politraumatismo. Al menos 8 fórmulas la llevan (<strong>8-19 g/L</strong>); dosis óptima desconocida. Beneficio documentado: <strong>menos infecciones</strong> en el perioperatorio de la cirugía mayor.</p><p class="fuente-ficha">Nota de fidelidad: el texto da 8-19 g/L para las fórmulas con arginina, pero la Tabla 49.3 da a Optimental 6 g/L.</p><dl class="kv-row"><dt>Recomendación</dt><dd>"A considerar" en el <strong>traumatismo craneoencefálico</strong> y el paciente quirúrgico perioperatorio. <span class="hl-rojo">No en la UCI médica, sobre todo en la sepsis grave</span>: el óxido nítrico que genera puede dar hipotensión.</dd></dl></div>
+                    <div class="micro-prof-body" id="mu-for-arginina"><p>Sustrato preferido del músculo lesionado y precursora del óxido nítrico (clave del flujo periférico). Se agota en el politraumatismo. Al menos 8 fórmulas la llevan (<strong>8-19 g/L</strong>); dosis óptima desconocida. Beneficio documentado: <strong>menos infecciones</strong> en el perioperatorio de la cirugía mayor.</p><details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el texto da 8-19 g/L para las fórmulas con arginina, pero la Tabla 49.3 da a Optimental 6 g/L.</p></details><dl class="kv-row"><dt>Recomendación</dt><dd>"A considerar" en el <strong>traumatismo craneoencefálico</strong> y el paciente quirúrgico perioperatorio. <span class="hl-rojo">No en la UCI médica, sobre todo en la sepsis grave</span>: el óxido nítrico que genera puede dar hipotensión.</dd></dl></div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Glutamina</span> <span class="toggle-icon">+</span></div>
@@ -589,12 +592,12 @@
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Carnitina</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="mu-for-carnitina"><p>Lleva los ácidos grasos de cadena larga a la mitocondria. El déficit (genético, desnutrición, hipercatabolismo, fallo hepático) da <strong>hipoglucemia y miocardiopatía</strong>; se sospecha con carnitina plasmática &lt;20 µmol/L. Dosis diaria recomendada: <strong>20-30 mg/kg</strong>. La llevan Glucerna, Isocal HN, Jevity y Peptamen.</p><p class="fuente-ficha">Nota de fidelidad: la fuente da el umbral en mmol/L; la carnitina plasmática normal ronda unas decenas de µmol/L, así que 20 mmol/L sería unas mil veces lo normal. La unidad es µmol/L.</p></div>
+                    <div class="micro-prof-body" id="mu-for-carnitina"><p>Lleva los ácidos grasos de cadena larga a la mitocondria. El déficit (genético, desnutrición, hipercatabolismo, fallo hepático) da <strong>hipoglucemia y miocardiopatía</strong>; se sospecha con carnitina plasmática &lt;<strong>20 mmol/L</strong> (como imprime el libro). Dosis diaria recomendada: <strong>20-30 mg/kg</strong>. La llevan Glucerna, Isocal HN, Jevity y Peptamen.</p><details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el libro da el umbral en mmol/L (pág. 23). <em>Conocimiento general, no de la fuente:</em> la carnitina plasmática se mide en µmol/L y su valor normal ronda unas decenas de µmol/L, así que 20 mmol/L sería unas mil veces lo normal; lo probable es que la unidad sea µmol/L. Se reproduce la cifra del libro.</p></details></div>
                 </div>
             </div>
             <div class="agua-simulador" id="mu-glut-calc">
                 <h4 style="color: var(--accent-yellow);">🧮 ¿Glutamina extra? (Cap. 49)</h4>
-                <div class="form-group"><label for="mu-glut-situacion">Situación</label><select id="mu-glut-situacion"><option value="trauma">Traumatismo crítico</option><option value="quemado">Quemado &gt;20% de superficie</option><option value="otro">Otra</option></select></div>
+                <div class="form-group"><label for="mu-glut-situacion">Situación</label><select id="mu-glut-situacion"><option value="trauma">Trauma crítico</option><option value="quemado">Quemado &gt;20%</option><option value="otro">Otra</option></select></div>
                 <div class="form-group"><label for="mu-glut-peso">Peso (kg)</label><input type="number" id="mu-glut-peso" min="20" max="200" step="1" value="70" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="mu-glut-resultado"></div>
             </div>
@@ -604,7 +607,7 @@
         <!-- ===== FICHA VII: PAUTA ENTERAL Y SONDAS (Cap. 49) ===== -->
         <div id="mu-pauta-enteral" class="tab-content">
             <h3 style="color: var(--accent-yellow);">Crear la pauta enteral y colocar la sonda</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 49.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 49. <a class="biblio-link" href="docs/marino-2024-nutricion-endocrino-caps48-51.pdf#page=23" target="_blank" rel="noopener">Ver en el PDF (págs. 23-29)</a></p>
 
             <p class="section-label">Tabla 49.4 — Cuatro pasos</p>
             <ol id="mu-tabla-49-4">
@@ -616,15 +619,16 @@
             </ol>
             <details class="nota-plegable"><summary>📝 Nota de fuentes</summary><p class="fuente-ficha">Nota de fuentes: la Tabla 49.4 da 1,2-1,6 g/kg/día de proteínas, mientras que el texto del capítulo (y el Cap. 48) dice 1,2-2,0 g/kg/día, con 1,6 g/kg/día como valor medio adecuado. La calculadora parte de 1,6 y deja elegir.</p></details>
             <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoNutricion" data-panel="panel-marino-nutri-tabs" data-tab="mu-sustratos" data-resaltar="#mu-proteinas">🥩 Necesidades de proteínas (Cap. 48) →</button>
-            <dl class="kv-row" id="mu-pauta-propofol"><dt>Propofol</dt><dd>Su emulsión aporta <strong>1,1 kcal/mL</strong>: restar sus calorías al GER. Como da ~1 kcal/mL, <span class="hl-azul">los mL/h de propofol son las kcal/h</span>.</dd></dl>
+            <dl class="kv-row" id="mu-pauta-propofol"><dt>Propofol</dt><dd>Su emulsión aporta <strong>1,1 kcal/mL</strong> (y, en el mismo párrafo, el libro dice «1 kcal/mL»): restar sus calorías al GER. <span class="hl-azul">Los mL/h de propofol son, a efectos prácticos, las kcal/h</span>. Esta calculadora cuenta 1,1 kcal/mL.</dd></dl>
+            <details class="nota-plegable" id="mu-nota-propofol"><summary>📝 Nota de fuentes</summary><p class="fuente-ficha">Nota de fuentes: el libro da dos cifras para las calorías del propofol. <strong>1,1 kcal/mL</strong>: Cap. 48 (pág. 5) y Cap. 49 (pág. 25, «caloric density of 1.1 kcal/mL»). <strong>1 kcal/mL</strong>: Cap. 49 (pág. 25, dos líneas más abajo: «Since propofol provides 1 kcal/mL») y Cap. 50 (pág. 40, «equivalente a Intralipid al 10%»). No se elige una: la calculadora de la pauta enteral usa 1,1 kcal/mL y la de la NPT usa 1 kcal/mL, y cada una lo dice en su resultado. Con 15 mL/h la diferencia es de 36 kcal/día (396 frente a 360).</p></details>
             <dl class="kv-row" id="mu-pauta-inicio"><dt>Los primeros días</dt><dd>Empezar por debajo del GER (ver Cap. 48): con calorimetría, no más del <strong>70%</strong> los 3 primeros días y subir al 100% en la primera semana; con ecuaciones, no más del <strong>70%</strong> los 7 primeros días.</dd></dl>
             <div class="agua-simulador" id="mu-pauta-calc">
                 <h4 style="color: var(--accent-yellow);">🧮 Crear la pauta enteral (Tabla 49.4)</h4>
                 <div class="form-group"><label for="mu-pauta-peso">Peso (kg; el ajustado si supera el 125% del ideal)</label><input type="number" id="mu-pauta-peso" min="20" max="250" step="1" value="70" inputmode="decimal"></div>
-                <div class="form-group"><label for="mu-pauta-formula">Fórmula (Tabla 49.2)</label><select id="mu-pauta-formula"><option value="isocal">Isocal · 1,0 kcal/mL · 35 g/L</option><option value="vital">Vital 1.0 · 1,0 kcal/mL · 40 g/L</option><option value="osm12" selected>Osmolite 1.2 · 1,2 kcal/mL · 56 g/L</option><option value="osm15">Osmolite 1.5 · 1,5 kcal/mL · 63 g/L</option><option value="jevity">Jevity 1.2 · 1,2 kcal/mL · 56 g/L</option><option value="twocal">Twocal HN · 2,0 kcal/mL · 84 g/L</option></select></div>
+                <div class="form-group"><label for="mu-pauta-formula">Fórmula (kcal/mL y proteína: Tabla 49.2)</label><select id="mu-pauta-formula"><option value="isocal">Isocal</option><option value="vital">Vital 1.0</option><option value="osm12" selected>Osmolite 1.2</option><option value="osm15">Osmolite 1.5</option><option value="jevity">Jevity 1.2</option><option value="twocal">Twocal HN</option></select></div>
                 <div class="form-group"><label for="mu-pauta-prot">Proteína objetivo (g/kg/día)</label><input type="number" id="mu-pauta-prot" min="0.8" max="2.5" step="0.1" value="1.6" inputmode="decimal"></div>
                 <div class="form-group"><label for="mu-pauta-propofol-ml">Propofol (mL/h)</label><input type="number" id="mu-pauta-propofol-ml" min="0" max="100" step="1" value="0" inputmode="decimal"></div>
-                <div class="form-group"><label for="mu-pauta-fase">Fase</label><select id="mu-pauta-fase"><option value="inicio">Primera semana (≤70% del GER)</option><option value="completa">Objetivo completo (100%)</option></select></div>
+                <div class="form-group"><label for="mu-pauta-fase">Fase (GER por ecuación: 70% los 7 primeros días)</label><select id="mu-pauta-fase"><option value="inicio">Inicio (70%)</option><option value="completa">Completa (100%)</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="mu-pauta-resultado"></div>
             </div>
 
@@ -656,7 +660,7 @@
         <!-- ===== FICHA VIII: COMPLICACIONES DE LA ENTERAL (Cap. 49) ===== -->
         <div id="mu-complicaciones-enteral" class="tab-content">
             <h3 style="color: var(--accent-yellow);">Complicaciones de la nutrición enteral</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 49.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 49. <a class="biblio-link" href="docs/marino-2024-nutricion-endocrino-caps48-51.pdf#page=30" target="_blank" rel="noopener">Ver en el PDF (págs. 30-35)</a></p>
 
             <p>Las más citadas: oclusión de la sonda, regurgitación y aspiración, diarrea, y nutrición insuficiente por las interrupciones.</p>
 
@@ -679,7 +683,7 @@
             <div class="agua-simulador" id="mu-grv-calc">
                 <h4 style="color: var(--accent-yellow);">🧮 Residuo gástrico: ¿qué hago?</h4>
                 <div class="form-group"><label for="mu-grv-ml">Residuo gástrico en 6 h (mL)</label><input type="number" id="mu-grv-ml" min="0" max="3000" step="10" value="300" inputmode="decimal"></div>
-                <div class="form-group"><label for="mu-grv-persiste">¿Persiste al reanudar tras procinéticos?</label><select id="mu-grv-persiste"><option value="no">No / todavía no</option><option value="si">Sí</option></select></div>
+                <div class="form-group"><label for="mu-grv-persiste">¿Persiste al reanudar tras procinéticos?</label><select id="mu-grv-persiste"><option value="no">No</option><option value="si">Sí</option></select></div>
                 <div class="form-group"><label for="mu-grv-opiaceos">¿La dismotilidad se atribuye a opiáceos?</label><select id="mu-grv-opiaceos"><option value="no">No</option><option value="si">Sí</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="mu-grv-resultado"></div>
             </div>
@@ -732,7 +736,7 @@
         <!-- ===== FICHA IX: NPT, SOLUCIONES Y ADITIVOS (Cap. 50) ===== -->
         <div id="mu-npt-soluciones" class="tab-content">
             <h3 style="color: var(--accent-blue);">Nutrición parenteral: soluciones y aditivos</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 50 "Parenteral Nutrition".</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 50 "Parenteral Nutrition". <a class="biblio-link" href="docs/marino-2024-nutricion-endocrino-caps48-51.pdf#page=36" target="_blank" rel="noopener">Ver en el PDF (págs. 36-39)</a></p>
 
             <p>La vía IV se usa cuando la enteral no es posible o no basta.</p>
 
@@ -754,8 +758,8 @@
             <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: con 3,4 kcal/g, la glucosa al 5% daría 170 kcal/L, no las 70 de la tabla (el resto de filas sí cuadra). Y las 3,4 kcal/g de la glucosa hidratada son distintas de las 3,7 kcal/g de la Tabla 48.1 (hidratos en general). Se reproducen tal cual.</p></details>
 
             <p class="section-label">Aminoácidos</p>
-            <dl class="kv-row" id="mu-npt-aa"><dt>Soluciones</dt><dd>Mezclas de aminoácidos esenciales y no esenciales al 50% (Travasol®). Una solución al <strong>10%</strong> da <strong>100 g de proteína por litro</strong> (16,5 g de nitrógeno). Se mezclan con la glucosa y los lípidos.</dd></dl>
-            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la fuente dice que los aminoácidos esenciales son 9 y enumera 8 (histidina, isoleucina, leucina, lisina, metionina, treonina, triptófano y valina); falta la fenilalanina.</p></details>
+            <dl class="kv-row" id="mu-npt-aa"><dt>Soluciones</dt><dd>Mezclas de aminoácidos esenciales y no esenciales al 50% (Travasol®). El ser humano sintetiza 11 de los 20 aminoácidos proteicos; los otros <strong>9</strong> son los esenciales y hay que darlos. Una solución al <strong>10%</strong> da <strong>100 g de proteína por litro</strong> (16,5 g de nitrógeno, según el libro). Se mezclan con la glucosa y los lípidos.</dd></dl>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la fuente dice que los aminoácidos esenciales son 9 y enumera 8 (histidina, isoleucina, leucina, lisina, metionina, treonina, triptófano y valina); falta la fenilalanina.</p><p class="fuente-ficha">Nota de fidelidad: el libro imprime 16,5 g de nitrógeno por litro (pág. 37), pero el Cap. 48 (pág. 6) dice que la proteína es un 16% nitrógeno: 100 g de proteína / 6,25 = 16 g. Se reproduce la cifra impresa.</p></details>
             <dl class="kv-row" id="mu-npt-ramificados"><dt>Ramificados</dt><dd>Enriquecidas en isoleucina, leucina y valina (Aminosyn II®). Teoría: 1) en el fallo hepático compiten con los aromáticos (fenilalanina, triptófano, tirosina) para cruzar la barrera hematoencefálica y reducirían la encefalopatía; 2) se metabolizan en el músculo y facilitarían un balance nitrogenado positivo en el estrés. <span class="hl-rojo">No han mejorado el pronóstico</span> en ninguna de esas situaciones.</dd></dl>
 
             <p class="section-label">Emulsiones lipídicas</p>
@@ -782,7 +786,7 @@
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🐟 Smoflipid®</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="mu-npt-smoflipid"><p>30% soja, 30% triglicéridos de cadena media, 20% oliva y 15% pescado: los omega-3 del pescado inflaman menos.</p><p class="fuente-ficha">Nota de fidelidad: las cifras de la fuente suman el 95%; la composición del preparado es 30/30/25/15 (25% oliva).</p></div>
+                    <div class="micro-prof-body" id="mu-npt-smoflipid"><p>30% soja, 30% triglicéridos de cadena media, 20% oliva y 15% pescado: los omega-3 del pescado inflaman menos.</p><details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: las cifras del libro (pág. 38) suman el 95% (30/30/20/15). El fabricante da 30% soja, 30% triglicéridos de cadena media, 25% oliva y 15% pescado (<a class="biblio-link" href="https://www.fresenius-kabi.com/in/products/smoflipid" target="_blank" rel="noopener">Fresenius Kabi</a>; <a class="biblio-link" href="https://medsafe.govt.nz/profs/Datasheet/s/smoflipidinf.pdf" target="_blank" rel="noopener">ficha técnica de Medsafe</a>). Se reproduce el 20% de oliva del libro, que parece una errata.</p></details></div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🐟 Omegaven®</span> <span class="toggle-icon">+</span></div>
@@ -790,7 +794,7 @@
                 </div>
             </div>
             <p>La experiencia con estas emulsiones es todavía limitada.</p>
-            <details class="nota-plegable"><summary>📝 Nota de interpretación</summary><p class="fuente-ficha">Nota de interpretación: el aceite de oliva es rico en ácido oleico (ω-9), un ácido graso de cadena larga, no en triglicéridos de cadena media; Clinolipid® no lleva triglicéridos de cadena media. Se deja la frase de la fuente con este aviso.</p></details>
+            <details class="nota-plegable"><summary>📝 Nota de fuentes</summary><p class="fuente-ficha">Nota de fuentes: el libro (pág. 38) dice que el aceite de oliva contiene triglicéridos de cadena media. La ficha de Clinolipid® (<a class="biblio-link" href="https://www.rxlist.com/clinolipid-drug.htm" target="_blank" rel="noopener">RxList</a>) lo describe como una mezcla de aceite de oliva refinado y de soja en proporción 4:1 (unos 16 g de oliva y 4 g de soja por 100 mL) y no incluye triglicéridos de cadena media en su composición. Se muestran las dos versiones.</p></details>
 
             <p class="section-label">Aditivos</p>
             <dl class="kv-row" id="mu-npt-electrolitos"><dt>Electrolitos</dt><dd>Mezclas comerciales, casi todas de 20 mL con sodio, cloro, potasio y magnesio: mira cuál usa tu hospital por si hay que añadir más (suele haber hoja de petición).</dd></dl>
@@ -810,20 +814,21 @@
             </table>
             </div>
             <p class="fuente-ficha">Tabla 50.3 — Un preparado de oligoelementos frente a las necesidades: <strong>5 de los 7</strong> quedan cortos, con consecuencias desconocidas.</p>
-            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el cobre del preparado aparece como "1 µg" (probablemente 1 mg) y el selenio y el zinc sin unidades (60 y 5). Se reproducen tal cual.</p></details>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el cobre del preparado aparece como "1 µg" y el selenio y el zinc sin unidades (60 y 5). Se reproducen tal cual. <em>Deducción de la app, no del libro:</em> el cobre sería 1 mg, no 1 µg; con 1 mg quedarían cortos cinco de los siete (cromo, yodo, hierro, manganeso y zinc), como dice el texto de la pág. 39 («5 of the 7»), y con 1 µg serían seis.</p></details>
         </div>
 
         <!-- ===== FICHA X: CREAR UNA NPT (Cap. 50) ===== -->
         <div id="mu-npt-pauta" class="tab-content">
             <h3 style="color: var(--accent-blue);">Crear una nutrición parenteral, paso a paso</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 50. Ejemplo: adulto de 70 kg, no desnutrido y sin restricción de volumen.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 50. Ejemplo: adulto de 70 kg, no desnutrido y sin restricción de volumen. <a class="biblio-link" href="docs/marino-2024-nutricion-endocrino-caps48-51.pdf#page=39" target="_blank" rel="noopener">Ver en el PDF (págs. 39-41 y 46)</a></p>
 
             <ol id="mu-npt-pasos">
-                <li id="mu-npt-paso1"><strong>Paso 1 · Calorías y proteínas.</strong> GER medido o estimado (<strong>25 × peso</strong>); proteínas <strong>1,2-2,0 g/kg</strong> (peso real salvo &gt;125% del ideal: entonces el ajustado). Con 1,4 g/kg: <span class="hl-purpura">calorías 25 × 70 = 1.750 kcal/día; proteínas 1,4 × 70 = 98 g/día</span>. Si va propofol, restar sus calorías (emulsión al 10%, ~1 kcal/mL: los mL/h son las kcal/h).</li>
+                <li id="mu-npt-paso1"><strong>Paso 1 · Calorías y proteínas.</strong> GER medido o estimado (<strong>25 × peso</strong>); proteínas <strong>1,2-2,0 g/kg</strong> (peso real salvo &gt;125% del ideal: entonces el ajustado). Con 1,4 g/kg: <span class="hl-purpura">calorías 25 × 70 = 1.750 kcal/día; proteínas 1,4 × 70 = 98 g/día</span>. Si va propofol, restar sus calorías (emulsión al 10%, 1 kcal/mL según el Cap. 50, pág. 40: los mL/h son las kcal/h).</li>
                 <li id="mu-npt-paso2"><strong>Paso 2 · Aminoácidos.</strong> La solución al 10% lleva 100 g/L: <strong>1 L</strong> cubre los 98 g.</li>
                 <li id="mu-npt-paso3"><strong>Paso 3 · Calorías no proteicas.</strong> Primero los lípidos: <strong>250 mL al 20%</strong> = 500 kcal. Quedan 1.750 − 500 = <strong>1.250 kcal</strong> de glucosa. La D50 da 1,7 kcal/mL: 1.250/1,7 = <strong>735 mL de D50</strong>.</li>
                 <li id="mu-npt-paso4"><strong>Paso 4 · Ritmo.</strong> 1 L de aminoácidos + 250 mL de lípidos + 735 mL de D50 + 30 mL de vitaminas, electrolitos y oligoelementos = <strong>2.015 mL</strong> en 24 h → <strong>84 mL/h</strong>. Con riesgo de realimentación, la ASPEN aconseja empezar al <strong>40-50%</strong> (aquí, 42 mL/h) y subir según el fosfato, el potasio y el magnesio (en 4-7 días).</li>
             </ol>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el libro redondea los 98 g de proteína a 1 L de aminoácidos (pág. 40) y llega a 2.015 mL y 84 mL/h. La calculadora no redondea: 98 g ÷ 100 g/L = 980 mL, total 1.995 mL y 83 mL/h (con realimentación, 33-42 mL/h). Es la misma cuenta; solo cambia ese redondeo.</p></details>
 
             <div class="agua-simulador" id="mu-npt-calc">
                 <h4 style="color: var(--accent-blue);">🧮 Construir la NPT (pasos 1-4)</h4>
@@ -835,6 +840,8 @@
                 <div class="form-group"><label for="mu-npt-riesgo">¿Riesgo de síndrome de realimentación?</label><select id="mu-npt-riesgo"><option value="no">No</option><option value="si">Sí</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="mu-npt-resultado"></div>
             </div>
+            <p class="fuente-ficha">Esta calculadora cuenta el propofol a 1 kcal/mL (Cap. 50, pág. 40); la pauta enteral lo cuenta a 1,1 kcal/mL (Caps. 48 y 49).</p>
+            <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoNutricion" data-panel="panel-marino-nutri-tabs" data-tab="mu-pauta-enteral" data-resaltar="#mu-nota-propofol">⚖️ 1,1 o 1 kcal/mL: nota de fuentes del propofol →</button>
 
             <p class="section-label">Nutrición parenteral periférica (NPP)</p>
             <dl class="kv-row" id="mu-npp-que"><dt>Qué es</dt><dd>Una NPT recortada para dar calorías no proteicas que <strong>ahorren proteína</strong>. Complemento de la enteral o para periodos cortos de nutrición insuficiente; <span class="hl-rojo">no para el hipercatabólico ni el desnutrido</span>, que necesitan nutrición completa.</dd></dl>
@@ -847,7 +854,7 @@
         <!-- ===== FICHA XI: COMPLICACIONES DE LA NPT Y REALIMENTACIÓN (Cap. 50) ===== -->
         <div id="mu-npt-complicaciones" class="tab-content">
             <h3 style="color: var(--accent-blue);">Complicaciones de la NPT y síndrome de realimentación</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 50. Las del catéter venoso central están en los Caps. 2 y 3.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 50. Las del catéter venoso central están en los Caps. 2 y 3. <a class="biblio-link" href="docs/marino-2024-nutricion-endocrino-caps48-51.pdf#page=41" target="_blank" rel="noopener">Ver en el PDF (págs. 41-45)</a></p>
 
             <p class="section-label">De los hidratos de carbono</p>
             <dl class="kv-row" id="mu-npt-hiperglucemia"><dt>Hiperglucemia</dt><dd>Frecuente: glucemias &gt;200 mg/dL en el <strong>45%</strong> en una serie. No se recomienda el control estricto (la hipoglucemia es peor); objetivo hospitalario <strong>140-180 mg/dL</strong>.</dd></dl>
@@ -869,16 +876,16 @@
             <div class="compare-box blue" style="margin-top:12px;" id="mu-comparativa-glucemia">
                 <p><strong>🔗 Comparativa de fuentes: hiperglucemia</strong></p>
                 <div style="overflow-x:auto;"><table class="data-table comparativa-fuentes">
-                    <thead><tr><th>Punto</th><th>Marino, Cap. 50 (esta ficha)</th><th>Manual UMI</th></tr></thead>
+                    <thead><tr><th style="min-width:104px;">Punto</th><th>Marino, Cap. 50 (esta ficha)</th><th>Manual UMI</th></tr></thead>
                     <tbody>
-                        <tr><td>Objetivo</td><td>140-180 mg/dL; no el control estricto</td><td>140-180 mg/dl (100-180 tras la parada)</td></tr>
-                        <tr><td>Cuándo la perfusión</td><td>Insulina regular en perfusión continua en el crítico</td><td>Perfusión IV si cumple criterios y la glucemia es ≥180 mg/dl; empieza en el Algoritmo II con NPT</td></tr>
-                        <tr><td>Vía subcutánea</td><td>Lispro según glucemia; estable, la mitad de la necesidad diaria como glargina</td><td>Pauta móvil solo con perfusión periférica normal (no en shock ni con catecolaminas)</td></tr>
+                        <tr><td style="word-break:normal;overflow-wrap:normal;">Objetivo</td><td>140-180 mg/dL; no el control estricto</td><td>140-180 mg/dl (100-180 tras la parada)</td></tr>
+                        <tr><td style="word-break:normal;overflow-wrap:normal;">Cuándo la perfusión</td><td>Insulina regular en perfusión continua en el crítico</td><td>Perfusión IV si cumple criterios y la glucemia es ≥180 mg/dl; empieza en el Algoritmo II con NPT</td></tr>
+                        <tr><td style="word-break:normal;overflow-wrap:normal;">Vía subcutánea</td><td>Lispro según glucemia; estable, la mitad de la necesidad diaria como glargina</td><td>Pauta móvil solo con perfusión periférica normal (no en shock ni con catecolaminas)</td></tr>
                     </tbody>
                 </table></div>
             </div>
             <p><button type="button" class="especialidad-link" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-glucemia">💉 Algoritmos de insulina y pauta móvil (Manual UMI) →</button></p>
-            <dl class="kv-row" id="mu-npt-fosfato"><dt>Hipofosfatemia</dt><dd>El fosfato entra en la célula con la glucosa (para cofactores como el pirofosfato de tiamina): hipofosfatemia progresiva, componente principal de la realimentación. Vigilar el fosfato al empezar la NPT.</dd></dl>
+            <dl class="kv-row" id="mu-npt-fosfato"><dt>Hipofosfatemia</dt><dd>El fosfato entra en la célula con la glucosa (para cofactores como el pirofosfato de tiamina): hipofosfatemia progresiva, un componente importante de la realimentación. Vigilar el fosfato al empezar la NPT.</dd></dl>
             <dl class="kv-row" id="mu-npt-potasio"><dt>Hipopotasemia</dt><dd>La glucosa mete también K⁺ en la célula (base de la glucosa con insulina en la hiperpotasemia). Suele ser transitorio, pero la carga continua puede dar hipopotasemia persistente: otro componente de la realimentación.</dd></dl>
             <dl class="kv-row" id="mu-npt-co2"><dt>Hipercapnia</dt><dd>La sobrealimentación retiene CO₂ si hay insuficiencia respiratoria. Se atribuyó a la glucosa (CR más alto), pero es la <strong>sobrealimentación</strong> en sí, no solo la de hidratos.</dd></dl>
             <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoRenal" data-panel="panel-marino-renal-tabs" data-tab="mr-fosforo">🧪 Hipofosfatemia y su reposición (Cap. 38) →</button></p>
@@ -931,18 +938,18 @@
         <!-- ===== FICHA XII: INSUFICIENCIA SUPRARRENAL (Cap. 51) ===== -->
         <div id="mu-suprarrenal" class="tab-content">
             <h3 style="color: var(--accent-red);">Supresión suprarrenal en el crítico (CIRCI)</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 51 "Adrenal and Thyroid Dysfunction"; guía SCCM/ESICM de la CIRCI.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 51 "Adrenal and Thyroid Dysfunction"; guía SCCM/ESICM de la CIRCI. <a class="biblio-link" href="docs/marino-2024-nutricion-endocrino-caps48-51.pdf#page=47" target="_blank" rel="noopener">Ver en el PDF (págs. 47-52)</a></p>
 
             <p>Suprarrenal y tiroides rara vez son el motivo de ingreso, pero la enfermedad crítica los altera, y preocupa que eso empeore el pronóstico.</p>
             <dl class="kv-row" id="mu-sr-papel"><dt>Papel</dt><dd>La corteza libera glucocorticoides y mineralocorticoides (glucosa disponible, volumen extracelular) y la médula, catecolaminas (circulación). Perder esa respuesta da <strong>inestabilidad hemodinámica, depleción de volumen y mal metabolismo energético</strong>. La insuficiencia puede estar silente hasta que llega el estrés: entonces es un catalizador oculto.</dd></dl>
             <dl class="kv-row" id="mu-sr-eje"><dt>El eje</dt><dd>Hipotálamo (CRH) → hipófisis anterior (ACTH) → suprarrenal. La supresión puede ser del eje hipotálamo-hipofisario o de la propia glándula.</dd></dl>
-            <dl class="kv-row" id="mu-sr-cortisol"><dt>Cortisol</dt><dd>Producción normal <strong>15-25 mg/día</strong>; hasta <strong>350 mg/día</strong> con el estrés máximo. Un 90% va unido a la globulina transportadora (CBG) y a la albúmina; el 10% libre es el activo. El análisis mide el <strong>total</strong>, engañoso en el enfermo agudo (la CBG cae hasta un 50%); como el libre no está disponible, se recomienda el total.</dd></dl>
+            <dl class="kv-row" id="mu-sr-cortisol"><dt>Cortisol</dt><dd>Producción normal <strong>15-25 mg/día</strong>; hasta <strong>350 mg/día</strong> con el estrés máximo. Un 90% va unido a la globulina transportadora (CBG) y a la albúmina; el 10% libre es el activo. El análisis mide el <strong>total</strong>, engañoso en el enfermo agudo (la CBG cae hasta un 50%); los estudios que comparan el cortisol libre y el total en el crítico dan resultados inconsistentes, y como el libre no está disponible, se recomienda el total.</dd></dl>
 
             <div class="article-figure" id="mar-img-51-1">
                 <img src="js/modules/libros/img/mar-fig51-1-supresion-suprarrenal.jpg" alt="Esquema del eje hipotálamo-hipófisis-suprarrenal con los puntos de bloqueo: corticoides exógenos y citocinas en el hipotálamo, toxinas bacterianas y citocinas sobre la ACTH, VIH y hemorragia, etomidato y ketoconazol en la glándula, y citocinas sobre la respuesta del órgano" loading="lazy">
                 <p class="article-figure-caption">Figura 51.1 — Mecanismos de supresión suprarrenal en la UCI: corticoides exógenos y citocinas inflamatorias (hipotálamo); toxinas bacterianas y citocinas (acción de la ACTH); infección por VIH, hemorragia, etomidato y ketoconazol (glándula); y citocinas sobre la respuesta del órgano diana.</p>
             </div>
-            <dl class="kv-row" id="mu-sr-incidencia"><dt>Frecuencia</dt><dd><strong>10-20%</strong> de los críticos; hasta el <strong>60%</strong> en la sepsis grave y el shock séptico. Suele ser reversible: <span class="hl-purpura">insuficiencia de corticoides relacionada con la enfermedad crítica (CIRCI)</span>. La inflamación sistémica pesa mucho, y la supresión hipotálamo-hipofisaria explica hasta el <strong>75%</strong> en el shock séptico.</dd></dl>
+            <dl class="kv-row" id="mu-sr-incidencia"><dt>Frecuencia</dt><dd><strong>10-20%</strong> de los críticos; hasta el <strong>60%</strong> en la sepsis grave y el shock séptico. Suele ser reversible: <span class="hl-purpura">insuficiencia de corticoides relacionada con la enfermedad crítica (CIRCI)</span>. La inflamación sistémica pesa mucho, y la supresión hipotálamo-hipofisaria explica hasta el <strong>75%</strong> de los casos de supresión suprarrenal en la sepsis grave y el shock séptico.</dd></dl>
             <dl class="kv-row" id="mu-sr-causas"><dt>Causas</dt><dd><strong>Infecciosas</strong>: sobre todo sepsis; también VIH, infecciones fúngicas sistémicas y meningococemia (hemorragia suprarrenal). <strong>No infecciosas</strong>: retirada brusca de corticoides crónicos; hemorragia suprarrenal por CID o anticoagulación; fármacos que inhiben la síntesis (<strong>etomidato, ketoconazol</strong>) o aceleran el metabolismo del cortisol (<strong>fenitoína, rifampicina</strong>).</dd></dl>
             <dl class="kv-row" id="mu-sr-clinica"><dt>Clínica</dt><dd>La principal: <span class="hl-rojo">hipotensión que no responde a volumen</span>. La hiponatremia y la hiperpotasemia de la insuficiencia crónica son raras aquí.</dd></dl>
 
@@ -980,7 +987,7 @@
             <div class="agua-simulador" id="mu-equiv-calc">
                 <h4 style="color: var(--accent-red);">🧮 Equivalencia de corticoides (Tabla 51.1)</h4>
                 <div class="form-group"><label for="mu-equiv-de">Corticoide</label><select id="mu-equiv-de"><option value="hidro">Hidrocortisona</option><option value="pred">Prednisona</option><option value="metil">Metilprednisolona</option><option value="dexa">Dexametasona</option></select></div>
-                <div class="form-group"><label for="mu-equiv-dosis">Dosis (mg)</label><input type="number" id="mu-equiv-dosis" min="0" max="2000" step="0.25" value="300" inputmode="decimal"></div>
+                <div class="form-group"><label for="mu-equiv-dosis">Dosis (mg)</label><input type="number" id="mu-equiv-dosis" min="0.25" max="2000" step="0.25" value="300" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="mu-equiv-resultado"></div>
             </div>
             <dl class="kv-row" id="mu-sr-antiinflamatorio"><dt>Como antiinflamatorios</dt><dd>Se usan mucho (shock séptico, SDRA, autoinmunes, neumonías, meningitis), y casi siempre la <strong>metilprednisolona</strong>, aunque el más potente es la <strong>dexametasona</strong>. No está claro por qué.</dd></dl>
@@ -990,10 +997,10 @@
         <!-- ===== FICHA XIII: PRUEBAS TIROIDEAS Y TIROTOXICOSIS (Cap. 51) ===== -->
         <div id="mu-tiroides" class="tab-content">
             <h3 style="color: var(--accent-red);">Pruebas tiroideas y tirotoxicosis</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 51; guía de la American Thyroid Association.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 51; guía de la American Thyroid Association. <a class="biblio-link" href="docs/marino-2024-nutricion-endocrino-caps48-51.pdf#page=52" target="_blank" rel="noopener">Ver en el PDF (págs. 52-55)</a></p>
 
             <p>Las pruebas tiroideas salen alteradas hasta en el <strong>90%</strong> de los críticos, casi siempre por la enfermedad sistémica y no por una enfermedad del tiroides.</p>
-            <dl class="kv-row" id="mu-ti-t4t3"><dt>T4 y T3</dt><dd>La T4 es la hormona que se segrega; la activa es la <strong>T3</strong>, que se forma por desyodación fuera del tiroides. Las dos van unidas a proteínas en más de un 99%; las libres (&lt;1%) son las activas y las fiables en la UCI. La T3 libre no suele estar disponible: se usa la <strong>T4 libre</strong>.</dd></dl>
+            <dl class="kv-row" id="mu-ti-t4t3"><dt>T4 y T3</dt><dd>La T4 es la hormona que se segrega; la activa es la <strong>T3</strong>, que se forma por desyodación fuera del tiroides. Las dos van unidas a proteínas en más de un 99% (sobre todo a la globulina transportadora de tiroxina); las libres (&lt;1%) son las activas y las fiables en la UCI. La T3 libre no suele estar disponible: se usa la <strong>T4 libre</strong>.</dd></dl>
             <dl class="kv-row" id="mu-ti-tsh-txt"><dt>TSH</dt><dd>La prueba más fiable: distingue lo primario de lo secundario y detecta lo no tiroideo. 1) <strong>Primario</strong>: la TSH va en sentido contrario a las hormonas. <strong>Secundario</strong> (hipotálamo-hipófisis): en el mismo sentido. 2) Influencias no tiroideas: TSH casi siempre <strong>normal</strong>.</dd></dl>
             <div style="overflow-x:auto;">
             <table class="data-table" id="mu-tabla-51-2">
@@ -1010,7 +1017,7 @@
             </table>
             </div>
             <p class="fuente-ficha">Tabla 51.2 — Patrones de las pruebas tiroideas alteradas. N = normal.</p>
-            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la TSH aparece en mU/mL en la tabla y en mU/dL en el texto (&lt;0,01 en el hipertiroidismo, &gt;10 en el hipotiroidismo); la unidad habitual es mU/L. Se reproducen las cifras con las unidades de la fuente.</p></details>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la TSH aparece en mU/mL en la tabla y en mU/dL en el texto (&lt;0,01 en el hipertiroidismo, &gt;10 en el hipotiroidismo); <em>conocimiento general, no de la fuente:</em> la unidad habitual es mU/L. Se reproducen las cifras con las unidades de la fuente.</p></details>
             <div class="agua-simulador" id="mu-ti-calc">
                 <h4 style="color: var(--accent-red);">🧮 ¿Qué patrón tiroideo es? (Tabla 51.2)</h4>
                 <div class="form-group"><label for="mu-ti-t4">T4 libre</label><select id="mu-ti-t4"><option value="">—</option><option value="alta">Alta</option><option value="normal">Normal</option><option value="baja">Baja</option></select></div>
@@ -1020,7 +1027,7 @@
 
             <p class="section-label">Tirotoxicosis</p>
             <dl class="kv-row" id="mu-ti-causa"><dt>Causa</dt><dd>Casi siempre hipertiroidismo primario; la más frecuente, la tiroiditis autoinmune (<strong>enfermedad de Graves</strong>).</dd></dl>
-            <dl class="kv-row" id="mu-ti-clinica"><dt>Clínica</dt><dd>Agitación, intolerancia al calor, taquicardia (incluida la FA) y temblor fino. El anciano puede estar <strong>letárgico</strong>: tirotoxicosis apática; letargia con FA es la presentación típica.</dd></dl>
+            <dl class="kv-row" id="mu-ti-clinica"><dt>Clínica</dt><dd>Agitación, intolerancia al calor, taquicardia (incluida la FA) y temblor fino. El anciano puede estar <strong>letárgico</strong>: tirotoxicosis apática; la letargia con FA es una presentación citada a menudo.</dd></dl>
             <dl class="kv-row" id="mu-ti-tormenta"><dt>Tormenta tiroidea</dt><dd>Forma grave y rara que desencadenan una enfermedad aguda o una cirugía: <strong>hiperpirexia</strong> (puede pasar de 40 °C), agitación intensa o delirio, y taquicardia grave con insuficiencia cardíaca de gasto alto. En los casos avanzados, obnubilación o coma, convulsiones e inestabilidad hemodinámica. Mortalidad hasta el <span class="hl-rojo">25%</span> pese al tratamiento.</dd></dl>
             <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoAbdomen" data-panel="panel-marino-abd-tabs" data-tab="ma-calor">🌡️ Hipertermia y golpe de calor (Cap. 43) →</button></p>
             <dl class="kv-row" id="mu-ti-dx"><dt>Diagnóstico</dt><dd>La <strong>TSH</strong>, la más sensible y específica y la de cribado: casi indetectable en el primario, y una TSH normal lo descarta. La T4 libre suele estar alta en el franco.</dd></dl>
@@ -1032,14 +1039,14 @@
             <table class="data-table" id="mu-tabla-51-3">
                 <thead><tr><th>Betabloqueante</th><th>Dosis</th><th>Comentario</th></tr></thead>
                 <tbody>
-                    <tr><td>Propranolol</td><td>10-40 mg orales 3-4 veces al día (tirotoxicosis); 60-80 mg IV u orales cada 4 h (tormenta)</td><td>El preferido: a dosis altas bloquea el paso de T4 a T3. No selectivo</td></tr>
+                    <tr><td>Propranolol</td><td>10-40 mg orales 3-4 veces al día (tirotoxicosis); 60-80 mg VO cada 4 h (tormenta)</td><td>El preferido: a dosis altas bloquea el paso de T4 a T3. No selectivo</td></tr>
                     <tr><td>Metoprolol</td><td>25-50 mg orales 2-3 veces al día</td><td>Relativamente β1-selectivo: insuficiencia cardíaca o asma†</td></tr>
                     <tr><td>Esmolol</td><td>50-100 µg/kg/min IV en perfusión</td><td>Ultracorto: ajuste rápido</td></tr>
                 </tbody>
             </table>
             </div>
             <p class="fuente-ficha">Tabla 51.3 — Betabloqueantes. †Todos están contraindicados en la crisis asmática.</p>
-            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el propranolol IV a 60-80 mg cada 4 h es la dosis oral; por vía IV se usan dosis mucho menores (1-2 mg). Se reproduce la tabla tal cual; la dosis de 60-80 mg es la oral.</p></details>
+            <details class="nota-plegable" id="mu-nota-propranolol"><summary>📝 Nota de fidelidad: propranolol IV</summary><p class="fuente-ficha">Nota de fidelidad: la Tabla 51.3 (pág. 54) imprime «60–80 mg IV or PO every 4 hrs» para la tormenta. La app muestra la dosis oral, que es la de las guías de la ATA (<a class="biblio-link" href="https://eguideline.guidelinecentral.com/i/751899/10" target="_blank" rel="noopener">guía ATA</a>; <a class="biblio-link" href="https://scholarblogs.emory.edu/curbsideconsult/?p=456" target="_blank" rel="noopener">Emory</a>). Por vía IV, las fuentes consultadas dan dosis mucho menores y no coinciden entre sí: 1 mg IV cada 15 min (Emory) y 1-2 mg IV en 10 min, repetible (<a class="biblio-link" href="https://wikem.org/wiki/Propranolol" target="_blank" rel="noopener">WikEM</a>). No se elige una.</p></details>
             <div style="overflow-x:auto;">
             <table class="data-table" id="mu-tabla-51-4">
                 <thead><tr><th>Fármaco</th><th>Dosis</th><th>Comentario</th></tr></thead>
@@ -1052,13 +1059,14 @@
             </table>
             </div>
             <p class="fuente-ficha">Tabla 51.4 — Antitiroideos.</p>
+            <details class="nota-plegable" id="mu-nota-yodo"><summary>📝 Nota de fidelidad: yodo</summary><p class="fuente-ficha">Nota de fidelidad: la Tabla 51.4 (pág. 55) dice «5 gotas de solución saturada de yoduro potásico (Lugol) (250 mg de yodo) cada 6 h». Se reproduce la dosis del libro. Según <a class="biblio-link" href="https://inpharmd.com/inquiries/8124" target="_blank" rel="noopener">InpharmD</a>, la solución saturada de yoduro potásico (SSKI) lleva unos 50 mg de yoduro por gota (5 gotas ≈ 250 mg) y la solución de Lugol unos 8 mg por gota: no son equivalentes gota a gota, y los 250 mg en 5 gotas corresponden al SSKI. La app escribe «solución saturada de yoduro potásico» y deja «Lugol» como lo llama el libro.</p></details>
             <dl class="kv-row" id="mu-ti-antitiroideos"><dt>Efectos graves</dt><dd>Metimazol: ictericia colestásica. Propiltiouracilo: <strong>necrosis hepática fulminante y agranulocitosis</strong>.</dd></dl>
             <dl class="kv-row" id="mu-ti-yodo"><dt>Yodo</dt><dd>En los casos graves, añadido al antitiroideo. Si hay alergia al yodo: <strong>litio 300 mg orales cada 8 h</strong>.</dd></dl>
             <dl class="kv-row" id="mu-ti-tormenta-extra"><dt>Además, en la tormenta</dt><dd>1) <strong>Volumen</strong> agresivo (vómitos, diarrea, pérdidas insensibles). 2) La tormenta acelera el metabolismo de los glucocorticoides: <strong>hidrocortisona</strong> 300 mg IV y 100 mg cada 8 h. Y tratar el desencadenante.</dd></dl>
             <div class="agua-simulador" id="mu-tormenta-calc">
                 <h4 style="color: var(--accent-red);">🧮 Plan para la tirotoxicosis o la tormenta (Tablas 51.3 y 51.4)</h4>
-                <div class="form-group"><label for="mu-tor-tipo">Situación</label><select id="mu-tor-tipo"><option value="toxicosis">Tirotoxicosis</option><option value="grave">Hipertiroidismo grave</option><option value="tormenta">Tormenta tiroidea</option></select></div>
-                <div class="form-group"><label for="mu-tor-icasma">¿Insuficiencia cardíaca sistólica o asma?</label><select id="mu-tor-icasma"><option value="no">No</option><option value="si">Sí</option><option value="crisis">Crisis asmática ahora</option></select></div>
+                <div class="form-group"><label for="mu-tor-tipo">Situación (hiper. = hipertiroidismo)</label><select id="mu-tor-tipo"><option value="toxicosis">Tirotoxicosis</option><option value="grave">Hiper. grave</option><option value="tormenta">Tormenta tiroidea</option></select></div>
+                <div class="form-group"><label for="mu-tor-icasma">¿Insuficiencia cardíaca sistólica o asma?</label><select id="mu-tor-icasma"><option value="no">No</option><option value="si">Sí</option><option value="crisis">Crisis asmática</option></select></div>
                 <div class="form-group"><label for="mu-tor-alergia">¿Alergia al yodo?</label><select id="mu-tor-alergia"><option value="no">No</option><option value="si">Sí</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="mu-tor-resultado"></div>
             </div>
@@ -1067,7 +1075,7 @@
         <!-- ===== FICHA XIV: HIPOTIROIDISMO (Cap. 51) ===== -->
         <div id="mu-hipotiroidismo" class="tab-content">
             <h3 style="color: var(--accent-red);">Hipotiroidismo, coma mixedematoso y eutiroideo enfermo</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 51.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 51. <a class="biblio-link" href="docs/marino-2024-nutricion-endocrino-caps48-51.pdf#page=55" target="_blank" rel="noopener">Ver en el PDF (págs. 55-58)</a></p>
 
             <dl class="kv-row" id="mu-hipo-causas"><dt>Causas</dt><dd>Sintomático en el <strong>3-7%</strong> de la población de EE. UU. Casi siempre tiroiditis crónica autoinmune (<strong>Hashimoto</strong>); menos, el radioyodo o la cirugía del hipertiroidismo, el fallo hipotálamo-hipofisario (tumores, <strong>síndrome de Sheehan</strong>) y fármacos (<strong>litio, amiodarona, tetraciclinas, antineoplásicos</strong>).</dd></dl>
             <dl class="kv-row" id="mu-hipo-clinica"><dt>Clínica</dt><dd>Sutil: piel seca, cansancio, calambres, estreñimiento. <span class="hl-azul">La obesidad no es consecuencia del hipotiroidismo</span>. En los avanzados: hiponatremia y miopatía con CPK alta y <strong>creatinina alta sin fallo renal</strong> (por la creatina del músculo).</dd></dl>
@@ -1087,7 +1095,7 @@
             <p>Hay que tratarlo ya: mortalidad hasta el <span class="hl-rojo">60%</span> incluso con tratamiento.</p>
             <div class="agua-simulador" id="mu-levo-calc">
                 <h4 style="color: var(--accent-red);">🧮 Levotiroxina: dosis de inicio</h4>
-                <div class="form-group"><label for="mu-levo-situacion">Situación</label><select id="mu-levo-situacion"><option value="leve">Hipotiroidismo leve-moderado</option><option value="coma">Coma mixedematoso</option></select></div>
+                <div class="form-group"><label for="mu-levo-situacion">Situación</label><select id="mu-levo-situacion"><option value="leve">Leve-moderado</option><option value="coma">Coma mixedem.</option></select></div>
                 <div class="form-group"><label for="mu-levo-peso">Peso (kg)</label><input type="number" id="mu-levo-peso" min="20" max="200" step="1" value="70" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="mu-levo-resultado"></div>
             </div>

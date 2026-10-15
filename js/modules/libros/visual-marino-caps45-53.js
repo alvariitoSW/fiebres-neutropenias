@@ -6,7 +6,6 @@
 import { montarVisual } from '../../core/visual-kit.js';
 import { asistenteVisual } from './visual-marino-piezas.js';
 import { caraGlasgow, bolsaVisual, escaleraTiamina, nomogramaVivo, alcalinizacion, caidaCohb, lineaFomepizol, matrizAntidotos } from './visual-marino-piezas-45-53.js';
-import { panelNefronaViva } from '../nefrologia/nefrona-viva.js';
 import { SE_WIZARD, CAM_WIZARD } from './marino-neuro.js';
 import { NAL_WIZARD } from './marino-toxicos.js';
 
@@ -195,7 +194,7 @@ function nutricion() {
         paneles: [
             calc('Calorías y proteínas del día (calculadora de la ficha)', ['#mu-ger-peso', '#mu-ger-ideal', '#mu-ger-metodo', '#mu-ger-dia', '#mu-ger-na'], ['#mu-ger-resultado']),
             calc('Cociente respiratorio (calculadora de la ficha)', ['#mu-cr-vo2', '#mu-cr-vco2'], ['#mu-cr-resultado']),
-            { tipo: 'flujo', titulo: 'Cómo se calcula', nodos: [n('#mu-calorimetria', 'Calorimetría', 'verde'), n('#mu-formula', '25 kcal/kg', 'amarillo'), n('#mu-peso-ajustado', 'Qué peso', 'dorado'), n('#mu-espen', 'Empezar por debajo', 'rojo')] }
+            { tipo: 'flujo', titulo: 'Cómo se calcula', nodos: [[n('#mu-calorimetria', 'Medirlo: calorimetría', 'verde'), n('#mu-formula', 'Estimarlo: 25 kcal/kg', 'amarillo')], n('#mu-peso-ajustado', 'Si estimas: qué peso', 'dorado'), n('#mu-espen', 'Empezar por debajo', 'rojo')] }
         ]
     });
     montarVisual('mu-sustratos', {
@@ -210,7 +209,7 @@ function nutricion() {
         guia: 'Quién está en riesgo, cómo se manifiesta y la pauta.',
         paneles: [
             FIGURAS,
-            { tipo: 'requisitos', modo: 'ninguno', titulo: '¿Sospecho déficit? (Tabla 48.4)', puerta: 'Sin datos de déficit', items: [{ checks: '.mu-tia-pre' }, { checks: '.mu-tia-man' }], resultado: ['#mu-tia-resultado'] },
+            { tipo: 'requisitos', modo: 'ninguno', sinPuerta: true, iconoMarcado: '☑', titulo: '¿Sospecho déficit? (Tabla 48.4)', items: [{ checks: '.mu-tia-pre' }, { checks: '.mu-tia-man' }], resultado: ['#mu-tia-resultado'] },
             escaleraTiamina,
             { tipo: 'racimos', titulo: 'Manifestaciones', grupos: [racimo('Clínica', 'rojo', [n('#mu-tia-corazon', 'Beriberi húmedo'), n('#mu-tia-wernicke', 'Wernicke'), n('#mu-tia-lactato', 'Acidosis láctica'), n('#mu-tia-neuropatia', 'Neuropatía')]), racimo('Diagnóstico y tratamiento', 'verde', [n('#mu-tia-lab', 'Laboratorio'), n('#mu-tia-rm', 'Resonancia'), n('#mu-tia-tto', 'La dosis importa')])] }
         ]
@@ -228,7 +227,7 @@ function nutricion() {
     montarVisual('mu-enteral-indicaciones', {
         guia: 'La vía enteral protege el intestino; las contraindicaciones son pocas.',
         paneles: [
-            { tipo: 'requisitos', modo: 'ninguno', titulo: '¿Puedo empezar la enteral? (Tabla 49.1)', puerta: 'Se puede empezar', items: [{ checks: '.mu-ent-ci' }], resultado: ['#mu-ent-resultado'] },
+            { tipo: 'requisitos', modo: 'ninguno', sinPuerta: true, titulo: '¿Puedo empezar la enteral? (Tabla 49.1)', items: [{ checks: '.mu-ent-ci' }], resultado: ['#mu-ent-resultado'] },
             { tipo: 'flujo', titulo: 'Por qué y cuándo', nodos: [n('#mu-ent-trofismo', 'Trofismo intestinal', 'verde'), n('#mu-ent-cuando', 'En 48 h', 'amarillo'), n('#mu-ent-vasopresor', 'Con vasopresores', 'rojo')] }
         ]
     });
@@ -274,8 +273,7 @@ function nutricion() {
     montarVisual('mu-npt-complicaciones', {
         guia: 'Complicaciones metabólicas y el síndrome de realimentación.',
         paneles: [
-            { tipo: 'requisitos', modo: 'ninguno', titulo: '¿Alto riesgo de realimentación? (ASPEN)', puerta: 'Sin criterios de alto riesgo', items: [{ checks: '.mu-real-check' }], resultado: ['#mu-real-resultado'] },
-            panelNefronaViva([['normal', 'Fosfato y Mg²⁺ en la orina normal'], ['fgf23', 'Pérdida renal de fosfato (FGF23), para comparar']]),
+            { tipo: 'requisitos', modo: 'ninguno', sinPuerta: true, iconoMarcado: '☑', titulo: '¿Alto riesgo de realimentación? (ASPEN)', items: [{ checks: '.mu-real-check' }], resultado: ['#mu-real-resultado'] },
             { tipo: 'racimos', titulo: 'Complicaciones', grupos: [racimo('De los hidratos', 'amarillo', [n('#mu-npt-hiperglucemia', 'Hiperglucemia'), n('#mu-npt-fosfato', 'Hipofosfatemia'), n('#mu-npt-potasio', 'Hipopotasemia'), n('#mu-npt-co2', 'Hipercapnia')]), racimo('De los lípidos', 'dorado', [n('#mu-npt-inflamacion', 'Inflamación'), n('#mu-npt-sobrecarga', 'Sobrecarga lipídica')]), racimo('Hígado', 'rojo', [n('#mu-npt-esteatosis', 'Esteatosis'), n('#mu-npt-colestasis', 'Colestasis')])] }
         ]
     });

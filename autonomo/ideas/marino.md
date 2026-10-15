@@ -155,3 +155,15 @@ Coinciden los tres revisores:
   - weaning el día 7: SBT fallido con la SvO₂ que cae; fuga <110 mL;
   - «encuentra el error»: clorhexidina + SOD;
   - «piensa y destapa»: ¿ansiedad o fracaso en el SBT?; extubar sube el trabajo respiratorio (Fig. 30.2).
+
+### R12 · Caps. 48-51 (Marino Nutrición y endocrino) · 2026-10-15
+
+- **El intestino como defensa**: la mucosa con y sin nutrientes en la luz (trofismo, IgA, translocación) frente a la
+  NPT.
+- **Realimentación con la escena del potasio** (`potasio-escena.js`): la glucosa y la insulina meten K⁺, fosfato y
+  Mg²⁺ en la célula, y la tiamina se agota.
+- **Eje hipotálamo-hipófisis-tiroides y suprarrenal** con T4 libre y TSH como mandos (Tabla 51.2, Fig. 51.1).
+- **Casos**:
+  - el alcohólico desnutrido con NPT y noradrenalina;
+  - el coma mixedematoso;
+  - la tormenta tiroidea en un asmático.
