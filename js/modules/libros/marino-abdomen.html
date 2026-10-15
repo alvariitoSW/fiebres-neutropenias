@@ -280,7 +280,7 @@
                         <dl class="kv-row"><dt>Peso</dt><dd>Primera causa en EE. UU. (<strong>46%</strong>) y Reino Unido (<strong>64%</strong>).</dd></dl>
                         <dl class="kv-row"><dt>Mecanismo</dt><dd>Se agota el glutatión hepático (el principal antioxidante intracelular) y un metabolito del paracetamol produce daño oxidativo. Empieza ya a las <strong>12 h</strong> y es máximo a los <strong>3-5 días</strong>; ALT muy alta con bilirrubina poco elevada.</dd></dl>
                         <dl class="kv-row"><dt>Dos trampas</dt><dd>1) La mitad de las sobredosis son <strong>involuntarias</strong> (para aliviar dolor; el paracetamol está en más de 600 productos sin receta). 2) En la mitad de los casos con daño hepático el paracetamol es <span class="hl-rojo">indetectable en plasma</span>: riesgo de no diagnosticar algo tratable.</dd></dl>
-                        <dl class="kv-row"><dt>N-acetilcisteína</dt><dd>Antídoto: sustituye al glutatión. Se da IV en cuanto se confirma o sospecha la sobredosis; es más eficaz en las primeras <strong>10 h</strong>, pero se empieza a cualquier hora y se mantiene hasta que mejore la función hepática. El <strong>75%</strong> se resuelve sin trasplante. En el fallo hepático agudo de causa desconocida, darla de forma empírica se considera razonable, aunque no hay pruebas convincentes de beneficio.</dd></dl>
+                        <dl class="kv-row"><dt>N-acetilcisteína</dt><dd>Antídoto: sustituye al glutatión. Se da IV (la pauta, en el Cap. 52: enlace al final de la ficha) en cuanto se confirma o sospecha la sobredosis; es más eficaz en las primeras <strong>10 h</strong>, pero se empieza a cualquier hora y se mantiene hasta que mejore la función hepática. El <strong>75%</strong> se resuelve sin trasplante. En el fallo hepático agudo de causa desconocida, darla de forma empírica se considera razonable, aunque no hay pruebas convincentes de beneficio.</dd></dl>
                     </div>
                 </div>
                 <div class="micro-prof-item">
@@ -338,8 +338,9 @@
             <dl class="kv-row" id="ma-fha-trasplante"><dt>Trasplante</dt><dd>Tratamiento definitivo: ha bajado la mortalidad del <strong>80% al 33%</strong>. Hay escalas para decidir a quién, pero es terreno del especialista en trasplante: consulta en todo fallo hepático agudo con encefalopatía progresiva.</dd></dl>
 
             <div class="compare-box blue" style="margin-top:12px;">
-                <p><strong>🔗 En otras partes de la app.</strong> La albúmina al 5% y su reparto, en Fundamentos (Cap. 10).</p>
+                <p><strong>🔗 En otras partes de la app.</strong> La albúmina al 5% y su reparto, en Fundamentos (Cap. 10); la pauta de la N-acetilcisteína IV, que Marino remite al Cap. 52, en Tóxicos.</p>
                 <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoFundamentos" data-panel="panel-marino-fund-tabs" data-tab="mar-coloides">🧪 Coloides (Marino · Fundamentos) →</button></p>
+                <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoToxicos" data-panel="panel-marino-tox-tabs" data-tab="mt-nac">💊 N-acetilcisteína: pauta (Marino · Tóxicos) →</button></p>
             </div>
 
             <p class="fuente-ficha" style="margin-top:12px;">📚 Fuente completa: <a class="biblio-link" href="docs/marino-2024-abdomen-temperatura-caps39-44.pdf#page=2" target="_blank" rel="noopener">Marino PL. The ICU Book, 5.ª ed., Cap. 39 "Liver Failure" →</a></p>
@@ -391,7 +392,7 @@
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Rifaximina</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="ma-eh-rifaximina"><p>Antibiótico no absorbible de amplio espectro: <strong>400 mg cada 8 h al menos 10 días</strong>. Eficaz sola, pero suele combinarse con lactulosa.</p></div>
+                    <div class="micro-prof-body" id="ma-eh-rifaximina"><p>Antibiótico no absorbible de amplio espectro: <strong>400 mg 3 veces al día al menos 10 días</strong>. Eficaz sola, pero suele combinarse con lactulosa.</p></div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩸 Hemofiltración (CVVH)</span> <span class="toggle-icon">+</span></div>
@@ -400,7 +401,7 @@
             </div>
             <div class="agua-simulador" id="ma-cvvh-calc">
                 <h4 style="color: var(--accent-yellow);">🧮 Fallo hepático agudo con encefalopatía: ¿hemofiltración?</h4>
-                <div class="form-group"><label for="ma-cvvh-nh3">Amonio arterial (µmol/L)</label><input type="number" id="ma-cvvh-nh3" min="0" max="1000" step="1" value="170" inputmode="decimal"></div>
+                <div class="form-group"><label for="ma-cvvh-nh3">Amonio arterial (µmol/L)</label><input type="number" id="ma-cvvh-nh3" min="0" max="1000" step="1" value="50" inputmode="decimal"></div>
                 <div class="form-group"><label for="ma-cvvh-oliguria">Oliguria persistente</label><select id="ma-cvvh-oliguria"><option value="no">No</option><option value="si">Sí</option></select></div>
                 <div class="form-group"><label for="ma-cvvh-edema">Edema cerebral</label><select id="ma-cvvh-edema"><option value="no">No</option><option value="si">Sí</option></select></div>
                 <div class="form-group"><label for="ma-cvvh-wh">Grado de West Haven</label><select id="ma-cvvh-wh"><option value="0">Sin encefalopatía</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></div>
@@ -442,7 +443,7 @@
             <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la tabla dice ceftriaxona 1 g/día y el texto, "2 g al día, recomendado en la mayoría de las guías". Se reproducen las dos.</p></details>
             <dl class="kv-row" id="ma-var-endoscopia"><dt>Endoscopia</dt><dd>Identifica el origen (tiene valor pronóstico) y permite poner clips o ligar la variz. Puede hacer falta intubar si hay alteración mental.</dd></dl>
             <dl class="kv-row" id="ma-var-diferencias"><dt>Diferencias con el shock hemorrágico</dt><dd>1) <strong>Albúmina</strong> como fluido, sobre todo si &lt;3 g/dL. 2) <strong>Nada de hipotónicos</strong> como el Ringer lactato, por el riesgo de edema cerebral. 3) El <span class="hl-rojo">INR no mide bien el riesgo de sangrado</span> en el cirrótico: guía la hemostasia con tromboelastografía.</dd></dl>
-            <details class="nota-plegable"><summary>📝 Nota de interpretación</summary><p class="fuente-ficha">Nota de interpretación: el texto atribuye la encefalopatía hepática al edema cerebral; en la cirrosis la encefalopatía rara vez se acompaña de edema cerebral, que es propio del fallo hepático agudo (ficha «Encefalopatía hepática y amonio»).</p></details>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el texto pone el Ringer lactato como ejemplo de fluido «hipotónico» y explica que se evita por el riesgo de edema cerebral, «responsable de la encefalopatía hepática» (pág. 9). Se reproduce tal cual. Fuera de Marino, las fuentes no se ponen de acuerdo en la etiqueta: el Ringer lactato tiene unos 273 mOsm/L, algo por debajo del plasma (275-295). Por eso unas lo llaman <strong>ligeramente hipotónico</strong> (<a class="biblio-link" href="https://wikem.org/wiki/Lactated_Ringer%27s" target="_blank" rel="noopener">WikEM, «Lactated Ringer's»</a>) y otras <strong>isotónico</strong> (<a class="biblio-link" href="https://ncbi.nlm.nih.gov/books/NBK500033" target="_blank" rel="noopener">StatPearls, NCBI</a>). La de Marino no es una errata: es la lectura estricta. En la ficha de fallo hepático agudo, Marino lo desaconseja por la hiponatremia, que empeora el edema cerebral.</p></details>
             <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoAbdomen" data-panel="panel-marino-abd-tabs" data-tab="ma-encefalopatia-hepatica">🧠 Encefalopatía hepática y amonio →</button></p>
             <dl class="kv-row" id="ma-var-octreotido"><dt>Octreótido y antibiótico</dt><dd>El octreótido (análogo de la somatostatina, vasoconstrictor esplácnico) y la profilaxis antibiótica se empiezan <strong>cuanto antes</strong>. La ceftriaxona asume que los gérmenes resistentes no abundan en tu UCI.</dd></dl>
             <dl class="kv-row" id="ma-var-tips"><dt>Hemorragia refractaria</dt><dd>En un <strong>20%</strong> la hemorragia no cede con endoscopia y tratamiento óptimo: valorar el <strong>TIPS</strong> (derivación portosistémica entre la porta y las venas hepáticas). Cambia un problema por otro: al saltarse el hígado, <span class="hl-rojo">aumenta la encefalopatía</span>.</dd></dl>
@@ -480,7 +481,7 @@
                 <img src="js/modules/libros/img/mar-fig39-4-pbe-algoritmo.jpg" alt="Algoritmo del antibiótico empírico de la peritonitis bacteriana espontánea según el origen y la prevalencia de resistentes" loading="lazy">
                 <p class="article-figure-caption">Figura 39.4 — Antibiótico empírico de la PBE: comunitaria → cefalosporina de 3.ª generación; asociada a cuidados o nosocomial → con muchos resistentes, carbapenémico ± vancomicina o daptomicina; sin ellos, piperacilina-tazobactam.</p>
             </div>
-            <dl class="kv-row" id="ma-pbe-resistentes"><dt>Si caben resistentes</dt><dd>Carbapenémico (p. ej. <strong>meropenem 1 g cada 8 h</strong>), más vancomicina si puede haber SARM o daptomicina si se sospecha enterococo resistente a vancomicina. Nosocomial: aparece tras 48 h de ingreso; asociada a cuidados: en las primeras 48 h en alguien con contacto sanitario en los 90 días previos.</dd></dl>
+            <dl class="kv-row" id="ma-pbe-resistentes"><dt>Si caben resistentes</dt><dd>Gradación: en la PBE <strong>comunitaria</strong> son improbables; se aíslan típicamente en la <strong>nosocomial</strong> y con menos frecuencia en la asociada a cuidados. Pauta: carbapenémico (p. ej. <strong>meropenem 1 g cada 8 h</strong>), más vancomicina si puede haber SARM o daptomicina si se sospecha enterococo resistente a vancomicina. Nosocomial: aparece tras 48 h de ingreso; asociada a cuidados: en las primeras 48 h en alguien con contacto sanitario en los 90 días previos.</dd></dl>
             <div class="agua-simulador" id="ma-pbe-calc">
                 <h4 style="color: var(--accent-yellow);">🧭 Antibiótico empírico de la PBE (Figura 39.4)</h4>
                 <div id="ma-pbe-pregunta" style="font-size:0.88rem; margin-bottom:10px;"></div>
@@ -497,7 +498,7 @@
             <dl class="kv-row" id="ma-pbe-albumina"><dt>Albúmina</dt><dd>Mejora la supervivencia en la PBE. Se atribuyó a la función renal (fracaso renal en el <strong>30%</strong> de las PBE, que empeora mucho el pronóstico), pero el beneficio es independiente de la creatinina. Pauta: <strong>1,5 g/kg el día 1 y 1 g/kg el día 3</strong>, con albúmina al 25% (25 g/100 mL) para limitar el volumen.</dd></dl>
             <div class="agua-simulador" id="ma-alb-calc">
                 <h4 style="color: var(--accent-yellow);">🧮 Albúmina en la PBE</h4>
-                <div class="form-group"><label for="ma-alb-peso">Peso (kg)</label><input type="number" id="ma-alb-peso" min="30" max="200" step="1" value="70" inputmode="decimal"></div>
+                <div class="form-group"><label for="ma-alb-peso">Peso (kg)</label><input type="number" id="ma-alb-peso" min="20" max="300" step="1" value="70" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="ma-alb-resultado"></div>
             </div>
 
@@ -510,7 +511,7 @@
                 <tbody>
                     <tr><td><strong>Criterios</strong></td><td>1) Cirrosis con ascitis. 2) Creatinina +0,3 mg/dL en 48 h o ≥1,5 veces la basal. 3) Sin respuesta a retirar diuréticos y a 2 días de albúmina (1 g/kg/día). 4) Sin shock ni nefrotóxicos recientes. 5) Sin daño renal estructural: proteinuria &gt;500 mg/día, hematuria &gt;50 hematíes por campo o ecografía renal anormal.</td></tr>
                     <tr><td><strong>Albúmina</strong></td><td>Al 25%: 20-40 g al día</td></tr>
-                    <tr><td><strong>Vasoconstricción esplácnica</strong></td><td>Terlipresina 1 mg IV cada 4-6 h o en perfusión a 84 µg/h (2 mg/día) · o noradrenalina 5-40 µg/min · o octreótido 100-200 µg SC + midodrina 7,5-15 mg VO, cada 8 h</td></tr>
+                    <tr><td><strong>Vasoconstricción esplácnica</strong></td><td>Terlipresina 1 mg IV cada 4-6 h o en perfusión a 84 µg/h (2 mg/día) · o noradrenalina 5-40 µg/min · o octreótido 100-200 µg SC + midodrina 7,5-15 mg VO, 3 veces al día</td></tr>
                 </tbody>
             </table>
             </div>
@@ -523,7 +524,7 @@
                 <label class="checkbox-label puntuable"><input type="checkbox" class="ma-shr-check"> Sin proteinuria &gt;500 mg/día, sin hematuria &gt;50/campo y ecografía renal normal</label>
                 <div class="tfg-estado tfg-estado-ok" id="ma-shr-resultado"></div>
             </div>
-            <dl class="kv-row" id="ma-shr-tto"><dt>Tratamiento</dt><dd>Albúmina diaria (además de volumen, es antioxidante e inmunomoduladora). El pilar es la <strong>vasoconstricción esplácnica</strong>: de elección la <strong>terlipresina</strong> (análogo de la vasopresina; aprobada en EE. UU. en 2022), que mejora la función renal pero <span class="hl-rojo">no la supervivencia</span> ni la necesidad de trasplante. Efectos adversos: dolor abdominal, diarrea, edema pulmonar e isquemia. La noradrenalina ha sido equivalente (con poca experiencia); midodrina + octreótido es inferior y queda para donde no hay terlipresina.</dd></dl>
+            <dl class="kv-row" id="ma-shr-tto"><dt>Tratamiento</dt><dd>Albúmina diaria (además de volumen, es antioxidante e inmunomoduladora). El pilar es la <strong>vasoconstricción esplácnica</strong>: de elección la <strong>terlipresina</strong> (análogo de la vasopresina; aprobada en EE. UU. en 2022), que mejora la función renal pero <span class="hl-rojo">no la supervivencia</span> ni la necesidad de trasplante. Efectos adversos: dolor abdominal, diarrea, edema pulmonar (hidrostático) e isquemia. La noradrenalina ha sido equivalente (con poca experiencia); midodrina + octreótido es inferior y queda para donde no hay terlipresina.</dd></dl>
             <dl class="kv-row" id="ma-shr-pia"><dt>Presión intraabdominal</dt><dd>Causa olvidada de fracaso renal que quizá contribuya al SHR: la paracentesis evacuadora (≥4 L) mejoró la función renal con ascitis a tensión. Medir la presión intraabdominal en el SHR con ascitis a tensión y evacuar si supera <strong>12 cmH₂O</strong>, vigilando la hemodinámica después. Trasplante: consulta en todo SHR.</dd></dl>
             <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el umbral de 12 aparece en cmH₂O, mientras que en el Cap. 34 la hipertensión intraabdominal se define en mmHg (≥12 mmHg). La conversión no es trivial (12 mmHg ≈ 16 cmH₂O).</p></details>
 
@@ -533,7 +534,6 @@
                 <p><strong>🔗 Comparativa de fuentes.</strong> La ficha de FRA de Nefrología recoge los criterios del ICA con "proteinuria &gt;500 mg/dl" y una nota que sospechaba errata; Marino escribe <strong>mg/día</strong>, lo que confirma esa nota. La presión intraabdominal y el síndrome compartimental, en la ficha «FRA: sepsis, congestión y presión abdominal» del bloque renal.</p>
                 <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoRenal" data-panel="panel-marino-renal-tabs" data-tab="mr-fra-causas">🫃 FRA: presión intraabdominal →</button></p>
                 <p><button type="button" class="especialidad-link" data-especialidad="nefrologia" data-view="fra" data-panel="panel-fra-tabs" data-tab="fra-subfenotipos-2">🫘 SHR en FRA (Nefrología) →</button></p>
-                <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoRenal" data-panel="panel-marino-renal-tabs" data-tab="mr-fra-causas">📏 Presión intraabdominal (Marino · renal) →</button></p>
             </div>
 
             <p class="fuente-ficha" style="margin-top:12px;">📚 Fuente completa: <a class="biblio-link" href="docs/marino-2024-abdomen-temperatura-caps39-44.pdf#page=10" target="_blank" rel="noopener">Marino PL. The ICU Book, 5.ª ed., Cap. 39 "Liver Failure" →</a></p>
@@ -549,6 +549,7 @@
 
             <p class="section-label">Causas (Tabla 40.1)</p>
             <p>Unas <strong>tres cuartas partes</strong> son por litiasis biliar, alcohol o idiopáticas.</p>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el texto dice «about three-quarters» para esas tres causas juntas, pero los rangos de la Tabla 40.1 suman entre el 47% (21+16+10) y el 75% (33+27+15). Se reproduce la frase tal cual.</p></details>
             <div style="overflow-x:auto;">
             <table class="data-table" id="ma-tabla-40-1">
                 <thead><tr><th>Más frecuentes (prevalencia)</th><th>Menos frecuentes</th></tr></thead>
@@ -591,6 +592,7 @@
             </div>
             <dl class="kv-row" id="ma-panc-morfologia"><dt>Morfología</dt><dd><strong>Edematosa</strong>: inflamación difusa sin necrosis; la más frecuente, leve y autolimitada. <strong>Necrotizante</strong>: áreas de necrosis que pueden extenderse alrededor; se complica con infección y daño extrapancreático; entre el 5% y el 40% según las series.</dd></dl>
             <dl class="kv-row" id="ma-panc-lipasa"><dt>Lipasa mejor que amilasa</dt><dd>1) Más específica a 3 veces lo normal. 2) Sube antes (<strong>4-8 h</strong> frente a 6-12 h) y dura mucho más (<strong>8-14 días</strong> frente a 3-5). 3) Medir solo la lipasa diagnostica igual que medir las dos. Dolor + enzimas diagnostican el 75-80%; la imagen añade valor.</dd></dl>
+            <div style="overflow-x:auto;">
             <table class="data-table" id="ma-enzimas-cinetica">
                 <thead><tr><th>Enzima</th><th>Empieza a subir</th><th>Sigue alta</th></tr></thead>
                 <tbody>
@@ -598,6 +600,7 @@
                     <tr><td>Amilasa</td><td>6-12 h</td><td>3-5 días</td></tr>
                 </tbody>
             </table>
+            </div>
             <div class="agua-simulador" id="ma-atl-calc">
                 <h4 style="color: var(--accent-red);">🧮 Atlanta revisada: ¿pancreatitis y de qué gravedad?</h4>
                 <label class="checkbox-label puntuable"><input type="checkbox" class="ma-atl-dx" checked> Dolor abdominal característico</label>
@@ -640,7 +643,7 @@
             </ol>
             <div class="agua-simulador" id="ma-rl-calc">
                 <h4 style="color: var(--accent-red);">🧮 Ringer lactato en la pancreatitis</h4>
-                <div class="form-group"><label for="ma-rl-peso">Peso (kg)</label><input type="number" id="ma-rl-peso" min="30" max="200" step="1" value="70" inputmode="decimal"></div>
+                <div class="form-group"><label for="ma-rl-peso">Peso (kg)</label><input type="number" id="ma-rl-peso" min="20" max="300" step="1" value="70" inputmode="decimal"></div>
                 <div class="form-group"><label for="ma-rl-hipovolemia">Hipovolemia</label><select id="ma-rl-hipovolemia"><option value="si">Sí</option><option value="no">No</option></select></div>
                 <div class="form-group"><label for="ma-rl-calcio">Causa: hipercalcemia</label><select id="ma-rl-calcio"><option value="no">No</option><option value="si">Sí</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="ma-rl-resultado"></div>
@@ -651,6 +654,7 @@
             <dl class="kv-row" id="ma-panc-nutricion"><dt>Precoz y enteral</dt><dd>En las primeras <strong>48 h</strong>, oral si se tolera o por sonda; parenteral solo si no se tolera la enteral (p. ej. íleo). La enteral nutre la mucosa y reduce la traslocación bacteriana, principal fuente de infección pancreática: menos infecciones, menos fallo multiorgánico y <strong>menos mortalidad</strong> que la parenteral. No está claro si gástrica o yeyunal; la nasogástrica no parece dañar, así que es razonable empezar por ella, con fórmulas <strong>elementales</strong> (pobres en grasa).</dd></dl>
 
             <p class="section-label">Complicaciones abdominales</p>
+            <dl class="kv-row" id="ma-panc-locales"><dt>Locales</dt><dd>Infección, <strong>pseudoquiste</strong> y síndrome compartimental abdominal. Marino solo nombra el pseudoquiste; desarrolla la infección y el síndrome compartimental.</dd></dl>
             <dl class="kv-row" id="ma-panc-infeccion"><dt>Infección de la necrosis</dt><dd>En un tercio de las necrotizantes, típicamente a los <strong>7-10 días</strong>. Fiebre y leucocitosis persistentes o recurrentes la sugieren, pero también existen sin infección; la TC con contraste muestra <strong>burbujas de gas</strong>. Si se sospecha, antibiótico frente a enterobacterias. Los antibióticos profilácticos <span class="hl-rojo">no reducen las infecciones y no se recomiendan</span>. Responden mal al antibiótico: drenaje guiado por TC (mejor precoz que tardío) y, si falla, necrosectomía.</dd></dl>
             <div class="article-figure" id="mar-img-40-3">
                 <img src="js/modules/libros/img/mar-fig40-3-necrosis-infectada.jpg" alt="TC con contraste con necrosis pancreática extensa y numerosas burbujas de gas" loading="lazy">
@@ -663,8 +667,8 @@
             <dl class="kv-row" id="ma-panc-tg-tto"><dt>Hipertrigliceridemia</dt><dd>Insulina IV (<strong>0,1-0,4 U/kg/h</strong>), que activa la lipoproteína lipasa: con ayuno baja los triglicéridos un <strong>85-90% en 24 h</strong>. Objetivo: <strong>&lt;500 mg/dL</strong>. Con glucosado al 5-10% y glucemias estrechas. Después pueden hacer falta gemfibrozilo o ácido fenofíbrico.</dd></dl>
             <div class="agua-simulador" id="ma-tg-calc">
                 <h4 style="color: var(--accent-red);">🧮 Insulina en la pancreatitis por hipertrigliceridemia</h4>
-                <div class="form-group"><label for="ma-tg-peso">Peso (kg)</label><input type="number" id="ma-tg-peso" min="30" max="200" step="1" value="80" inputmode="decimal"></div>
-                <div class="form-group"><label for="ma-tg-valor">Triglicéridos (mg/dL)</label><input type="number" id="ma-tg-valor" min="0" max="20000" step="10" value="2500" inputmode="decimal"></div>
+                <div class="form-group"><label for="ma-tg-peso">Peso (kg)</label><input type="number" id="ma-tg-peso" min="20" max="300" step="1" value="80" inputmode="decimal"></div>
+                <div class="form-group"><label for="ma-tg-valor">Triglicéridos (mg/dL)</label><input type="number" id="ma-tg-valor" min="0" max="20000" step="10" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="ma-tg-resultado"></div>
             </div>
             <dl class="kv-row" id="ma-panc-biliar"><dt>Litiasis biliar</dt><dd><strong>CPRE con esfinterotomía</strong> si hay obstrucción biliar (p. ej. en la ecografía). Colecistectomía en el mismo ingreso si fue leve; diferida <strong>4-6 semanas</strong> si fue grave.</dd></dl>
@@ -745,7 +749,7 @@
             <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 41 "Abdominal Infections in the ICU".</p>
 
             <p>El microbioma impide que colonicen gérmenes indeseables; su alteración (<strong>disbiosis</strong>) abre la puerta a infecciones, y la más destacada es la enterocolitis por <em>C. difficile</em>, considerada la <strong>infección asociada a cuidados sanitarios más frecuente</strong>. (Hoy se llama <em>Clostridioides difficile</em>.)</p>
-            <dl class="kv-row" id="ma-cdi-patogenia"><dt>Patogenia</dt><dd>Bacilo grampositivo anaerobio formador de esporas, raro en el intestino sano, que prolifera cuando la flora cambia. Riesgo: <strong>edad avanzada, contacto sanitario y antibióticos</strong>. Transmisión fecal-oral (a veces en aves, pescado y carne). No invade: libera las <strong>toxinas A y B</strong>, que dañan la mucosa; la inflamación grave forma <strong>pseudomembranas</strong> (colitis pseudomembranosa = enfermedad grave).</dd></dl>
+            <dl class="kv-row" id="ma-cdi-patogenia"><dt>Patogenia</dt><dd>Bacilo grampositivo anaerobio formador de esporas, raro en el intestino sano, que prolifera cuando la flora cambia. Riesgo: <strong>edad avanzada, contacto sanitario y antibióticos</strong>. Transmisión fecal-oral (a veces en aves, pescado y carne roja). No invade: libera las <strong>toxinas A y B</strong>, que dañan la mucosa; la inflamación grave forma <strong>pseudomembranas</strong> (colitis pseudomembranosa = enfermedad grave).</dd></dl>
             <dl class="kv-row" id="ma-cdi-epi"><dt>Dónde se adquiere</dt><dd>Sobre todo nosocomial (tras 48 h de ingreso), de paciente a paciente por las manos del personal; pero la comunitaria ha subido mucho: ya es el <strong>34-48%</strong>.</dd></dl>
             <dl class="kv-row" id="ma-cdi-ibp"><dt>Supresión ácida</dt><dd>Los <strong>inhibidores de la bomba de protones</strong> se asocian a más infección por <em>C. difficile</em>, coherente con el papel antibacteriano del ácido gástrico; un argumento contra su uso excesivo como profilaxis de úlcera de estrés.</dd></dl>
 
@@ -757,7 +761,7 @@
             </div>
 
             <p class="section-label">Diagnóstico (en heces)</p>
-            <dl class="kv-row" id="ma-cdi-pruebas"><dt>Dos pruebas</dt><dd><strong>PCR del gen de la toxina B</strong>: muy sensible; confirma <em>C. difficile</em> toxigénico pero <strong>no distingue colonización de infección</strong>. <strong>ELISA de las toxinas A y B</strong>: si es positivo, confirma la infección; pero es poco sensible y pierde un <strong>20%</strong>.</dd></dl>
+            <dl class="kv-row" id="ma-cdi-pruebas"><dt>Dos pruebas</dt><dd><strong>PCR del gen de la toxina B</strong>: muy sensible; confirma <em>C. difficile</em> toxigénico pero <strong>no distingue colonización de infección</strong>; una <strong>PCR negativa descarta</strong> la infección (no hay <em>C. difficile</em> toxigénico). <strong>ELISA de las toxinas A y B</strong>: si es positivo, confirma la infección; pero es poco sensible y pierde un <strong>20%</strong>.</dd></dl>
             <div class="article-figure" id="mar-img-41-3">
                 <img src="js/modules/libros/img/mar-fig41-3-cdifficile-algoritmo.jpg" alt="Diagrama de flujo del diagnóstico de la infección por C. difficile: PCR, y si es positiva, ELISA de toxinas" loading="lazy">
                 <p class="article-figure-caption">Figura 41.3 — Diagnóstico de la infección por <em>C. difficile</em>.</p>
@@ -776,9 +780,9 @@
             <table class="data-table" id="ma-tabla-41-2">
                 <thead><tr><th>Situación</th><th>Pauta</th></tr></thead>
                 <tbody>
-                    <tr><td>Primer episodio</td><td>Vancomicina <strong>125 mg VO cada 6 h</strong> 10 días, <em>o</em> fidaxomicina <strong>200 mg VO cada 12 h</strong> 10 días</td></tr>
+                    <tr><td>Primer episodio</td><td>Vancomicina <strong>125 mg VO 4 veces al día</strong> 10 días, <em>o</em> fidaxomicina <strong>200 mg VO 2 veces al día</strong> 10 días</td></tr>
                     <tr><td>Fulminante</td><td>Vancomicina <strong>500 mg cada 6 h</strong> VO, por sonda o en enema, <strong>más</strong> metronidazol <strong>500 mg IV cada 8 h</strong></td></tr>
-                    <tr><td>1.ª recurrencia</td><td>Vancomicina 125 mg cada 6 h 10-14 días, luego cada 12 h 7 días, luego cada 24 h 7 días, luego cada 2-3 días 2-8 semanas, <em>o</em> fidaxomicina 200 mg cada 12 h 10 días (solo si el primer episodio se trató con vancomicina)</td></tr>
+                    <tr><td>1.ª recurrencia</td><td>Vancomicina 125 mg 4 veces al día 10-14 días, luego 2 veces al día 7 días, luego 1 vez al día 7 días, luego cada 2-3 días 2-8 semanas, <em>o</em> fidaxomicina 200 mg 2 veces al día 10 días (solo si el primer episodio se trató con vancomicina)</td></tr>
                     <tr><td>2.ª recurrencia</td><td>Trasplante de microbiota fecal</td></tr>
                 </tbody>
             </table>
@@ -791,7 +795,7 @@
                 <div class="tfg-estado tfg-estado-ok" id="ma-cditto-resultado"></div>
             </div>
             <dl class="kv-row" id="ma-cdi-prevencion"><dt>Prevención</dt><dd>Guantes y bata para todo contacto e higiene de manos antes y después (IDSA); no eliminará la transmisión porque los <strong>portadores asintomáticos</strong> también contagian. Los <strong>probióticos</strong> se usan mucho, pero el American College of Gastroenterology <span class="hl-rojo">no los recomienda</span>: resultados no concluyentes y pueden dificultar la recolonización del colon tras el antibiótico.</dd></dl>
-            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el texto escribe "fidaxomycin" en un punto (errata de fidaxomicina).</p></details>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el texto escribe "fidaxomycin" en un punto (errata de fidaxomicina) y "diffcile" en la introducción del capítulo (errata de <em>difficile</em>).</p></details>
 
             <div class="compare-box blue" style="margin-top:12px;">
                 <p><strong>🔗 Comparativa de fuentes.</strong> El protocolo del hospital (trasplante renal, Nefrología) usa un algoritmo GDH + toxina + PCR y una clasificación de gravedad propia; Marino empieza por la PCR y confirma con ELISA. La úlcera de estrés y los IBP, en Fundamentos.</p>
@@ -857,7 +861,6 @@
                     <div class="micro-prof-body" id="ma-iia-candida"><p>Abunda en el intestino, sobre todo tras antibióticos, y la perforación del tubo digestivo <strong>alto</strong> es un factor de riesgo importante de peritonitis por <em>Candida</em>. Si preocupa: una <strong>equinocandina</strong> (micafungina, anidulafungina o caspofungina), que cubre todas las especies.</p></div>
                 </div>
             </div>
-            <details class="nota-plegable"><summary>📝 Nota de interpretación</summary><p class="fuente-ficha">Nota de interpretación: el texto no dice qué añadir a la ceftazidima-avibactam; por su Tabla 41.3, sin actividad frente a anaerobios ni enterococos, en una infección intraabdominal necesita un antianaerobio (habitualmente metronidazol).</p></details>
             <div class="agua-simulador" id="ma-cob-calc">
                 <h4 style="color: var(--accent-green);">🧮 ¿Qué antibiótico cubre todo lo que necesito? (Tabla 41.3)</h4>
                 <p class="subtitle">Marca lo que tienes que cubrir; "+/−" no cuenta como cobertura.</p>
@@ -882,6 +885,7 @@
 
             <div class="compare-box blue" style="margin-top:12px;">
                 <p><strong>🔗 En otras partes de la app.</strong> Las enterobacterias BLEE y carbapenemasas, en la Matriz MDR de Neutropenia Febril; el microbioma y la barrera intestinal, en Fundamentos.</p>
+                <p><button type="button" class="especialidad-link" data-especialidad="home" data-view="citopenias" data-pulsar="btn-neutropenia-febril btn-dirigido" data-resaltar="#mdr-card">🧫 Matriz MDR (Neutropenia Febril) →</button></p>
                 <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoFundamentos" data-panel="panel-marino-fund-tabs" data-tab="mar-microbioma">🦠 Microbioma (Marino · Fundamentos) →</button></p>
             </div>
 
@@ -919,13 +923,13 @@
                 <li>Urocultivo con <strong>no más de dos especies</strong>, al menos una bacteria con <strong>&gt;10⁵ UFC/mL</strong>.</li>
             </ol>
             <dl class="kv-row" id="ma-itu-fiebre"><dt>La fiebre</dt><dd>Criterio problemático: hay muchas causas de fiebre en la UCI, y en un estudio la fiebre fue igual de frecuente con y sin infección asociada a sonda.</dd></dl>
-            <dl class="kv-row" id="ma-itu-piuria"><dt>Piuria</dt><dd>&gt;10 leucocitos por campo: no diagnostica (hay causas inflamatorias no infecciosas), pero su <strong>ausencia va en contra</strong>.</dd></dl>
+            <dl class="kv-row" id="ma-itu-piuria"><dt>Piuria</dt><dd>&gt;10 leucocitos por campo de gran aumento en orina centrifugada: no diagnostica (hay causas inflamatorias no infecciosas), pero su <strong>ausencia va en contra</strong>.</dd></dl>
             <dl class="kv-row" id="ma-itu-abuti"><dt>Bacteriemia</dt><dd>Un 20% de las bacteriemias del hospitalizado vienen de la sonda, aunque no es criterio. El NHSN define la <strong>infección urinaria bacteriémica asintomática</strong>: con o sin sonda, sin síntomas, bacteriuria &gt;10⁵ UFC/mL con el <strong>mismo germen en hemocultivos</strong> = infección urinaria, haya o no síntomas (no aplica a <em>Candida</em>).</dd></dl>
             <dl class="kv-row" id="ma-itu-asintomatica"><dt>Bacteriuria asintomática</dt><dd>Una sola bacteria &gt;10⁵ UFC/mL, hemocultivos sin ese germen y sin síntomas urinarios. <span class="hl-rojo">No se trata</span>, salvo antes de un procedimiento urológico que haga sangrar la mucosa.</dd></dl>
             <div class="agua-simulador" id="ma-nhsn-calc">
                 <h4 style="color: var(--accent-blue);">🧮 ¿Infección asociada a sonda o bacteriuria asintomática?</h4>
                 <div class="form-group"><label for="ma-nhsn-sonda">Sonda ≥2 días seguidos (puesta o retirada ayer)</label><select id="ma-nhsn-sonda"><option value="si">Sí</option><option value="no">No</option></select></div>
-                <label class="checkbox-label puntuable"><input type="checkbox" class="ma-nhsn-sintoma" checked> Fiebre &gt;38 °C</label>
+                <label class="checkbox-label puntuable"><input type="checkbox" class="ma-nhsn-sintoma"> Fiebre &gt;38 °C</label>
                 <label class="checkbox-label puntuable"><input type="checkbox" class="ma-nhsn-sintoma"> Dolor suprapúbico a la presión</label>
                 <label class="checkbox-label puntuable"><input type="checkbox" class="ma-nhsn-sintoma"> Dolor costovertebral</label>
                 <div class="form-group"><label for="ma-nhsn-cultivo">Urocultivo: ≤2 especies y una bacteria &gt;10⁵ UFC/mL</label><select id="ma-nhsn-cultivo"><option value="si">Sí</option><option value="no">No</option></select></div>
@@ -974,7 +978,6 @@
                 </select></div>
                 <div class="tfg-estado tfg-estado-ok" id="ma-cand-resultado"></div>
             </div>
-            <details class="nota-plegable"><summary>📝 Nota de interpretación</summary><p class="fuente-ficha">Nota de interpretación: el capítulo trata a <em>C. glabrata</em> como resistente a fluconazol sin matices; en la práctica muchas cepas tienen sensibilidad dependiente de la dosis, y <em>C. krusei</em> es la de resistencia intrínseca. Además, en el neutropénico con candiduria lo que suele recomendarse es tratarla como una candidemia, no "profilaxis".</p></details>
 
             <div class="warning-box" id="ma-cand-final"><strong>Adherencia bacteriana.</strong> En boca, intestino y vía urinaria la clave de la infección nosocomial es <em>quién se pega</em> al epitelio, no cuántos hay. <em>E. coli</em> usa sus <strong>pili</strong> para unirse a glucoproteínas de la vejiga, y azúcares como la <strong>manosa</strong> pueden bloquear esa unión: una vía para prevenir infecciones <span class="hl-azul">sin antibióticos profilácticos</span> (y sin seleccionar resistentes).</div>
 
@@ -1014,6 +1017,7 @@
             </table>
             </div>
             <dl class="kv-row" id="ma-calor-agotamiento"><dt>Agotamiento por calor</dt><dd>Cuadro pseudogripal: temperatura moderada, calambres, náuseas y malestar. Lo característico: <strong>deshidratación sin compromiso hemodinámico</strong>, con hiper- o hiponatremia (si el sudor se repone con agua); mentalmente bien. Tratamiento: volumen y medidas generales (habitación con aire acondicionado); <strong>no hace falta enfriar</strong> de forma activa.</dd></dl>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el texto escribe «&lt;38-39 °C» para la temperatura del agotamiento por calor, mientras que la Tabla 43.1 da «38-39 °C». La ficha usa 38-39 °C, el de la tabla.</p></details>
             <dl class="kv-row" id="ma-calor-golpe"><dt>Golpe de calor</dt><dd>Amenaza vital: <strong>≥41 °C</strong>, disfunción neurológica grave (delirio, coma, convulsiones), depleción grave de volumen con hipotensión y afectación multiorgánica (rabdomiólisis, fracaso renal, CID, transaminasas muy altas por "hepatitis isquémica"). La anhidrosis es típica, no constante. <strong>Clásico</strong> (por el ambiente) o <strong>de esfuerzo</strong>, que suele ser más grave.</dd></dl>
 
             <p class="section-label">Enfriamiento del golpe de calor</p>
@@ -1023,9 +1027,9 @@
             <dl class="kv-row" id="ma-calor-rabdo"><dt>Rabdomiólisis</dt><dd>Complicación frecuente de las hipertermias. Se mide con la CK, sin un corte estándar (se ha propuesto ≥5 veces lo normal). Consecuencias: debilidad y <strong>fracaso renal</strong> por la mioglobina.</dd></dl>
             <div class="agua-simulador" id="ma-calor-calc">
                 <h4 style="color: var(--accent-red);">🧮 ¿Agotamiento o golpe de calor? (Tabla 43.1)</h4>
-                <div class="form-group"><label for="ma-calor-temp">Temperatura central (°C)</label><input type="number" id="ma-calor-temp" min="35" max="45" step="0.1" value="41.5" inputmode="decimal"></div>
-                <div class="form-group"><label for="ma-calor-snc">Disfunción del SNC (delirio, coma, convulsiones)</label><select id="ma-calor-snc"><option value="si">Sí</option><option value="no">No</option></select></div>
-                <div class="form-group"><label for="ma-calor-hemo">Hipotensión o inestabilidad hemodinámica</label><select id="ma-calor-hemo"><option value="si">Sí</option><option value="no">No</option></select></div>
+                <div class="form-group"><label for="ma-calor-temp">Temperatura central (°C)</label><input type="number" id="ma-calor-temp" min="25" max="44" step="0.1" value="37" inputmode="decimal"></div>
+                <div class="form-group"><label for="ma-calor-snc">Disfunción del SNC (delirio, coma, convulsiones)</label><select id="ma-calor-snc"><option value="no">No</option><option value="si">Sí</option></select></div>
+                <div class="form-group"><label for="ma-calor-hemo">Hipotensión o inestabilidad hemodinámica</label><select id="ma-calor-hemo"><option value="no">No</option><option value="si">Sí</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="ma-calor-resultado"></div>
             </div>
 
@@ -1075,7 +1079,7 @@
             </table>
             </div>
             <dl class="kv-row" id="ma-snm-clinica"><dt>Clínica</dt><dd>Empieza a las <strong>24-72 h</strong> de iniciar el fármaco y casi siempre en las 2 primeras semanas; inicio gradual con <strong>rigidez</strong> y agitación o confusión. La fiebre puede retrasarse <strong>8-10 h</strong> tras la rigidez. Hiperactividad autonómica (taquicardia, sudoración). Graves: rigidez en "tubo de plomo", rabdomiólisis y depresión de conciencia. Para distinguirlo de una <strong>distonía</strong>: la CK es solo algo alta en la distonía y suele superar <strong>1.000 U/L</strong> en el SNM.</dd></dl>
-            <dl class="kv-row" id="ma-snm-tto"><dt>Tratamiento</dt><dd>Lo más importante: <strong>retirar el fármaco</strong> (o, si fue una retirada, <strong>reiniciarlo</strong> ya y bajarlo despacio después). Fluidos si hay rabdomiólisis o hipotensión; enfriamiento externo si hace falta (el control de la rigidez suele bastar); <strong>profilaxis tromboembólica obligatoria</strong>; benzodiacepinas si hay agitación. Para la rigidez: <strong>bromocriptina 10 mg VO cada 8 h</strong> (mejora en horas, respuesta completa en días; hipotensión y alucinaciones) o, en los graves, <strong>dantroleno 1 mg/kg IV cada 8 h</strong> hasta resolución o 10 mg/kg acumulados, y luego 50-200 mg/día VO en 3-4 dosis (resultados inconsistentes). Mantener unos <strong>10 días</strong> tras la resolución, y <strong>2-3 semanas</strong> si fue un depot.</dd></dl>
+            <dl class="kv-row" id="ma-snm-tto"><dt>Tratamiento</dt><dd>Lo más importante: <strong>retirar el fármaco</strong> (o, si fue una retirada, <strong>reiniciarlo</strong> ya y bajarlo despacio después). Fluidos si hay rabdomiólisis o hipotensión; enfriamiento externo si hace falta (el control de la rigidez suele bastar); <strong>profilaxis tromboembólica obligatoria</strong>; benzodiacepinas si hay agitación. Para la rigidez: <strong>bromocriptina 10 mg VO 3 veces al día</strong> (mejora en horas, respuesta completa en días; hipotensión y alucinaciones) o, en los graves, <strong>dantroleno 1 mg/kg IV cada 8 h</strong> hasta resolución o 10 mg/kg acumulados, y luego 50-200 mg/día VO en 3-4 dosis (resultados inconsistentes). Mantener unos <strong>10 días</strong> tras la resolución, y <strong>2-3 semanas</strong> si fue un depot.</dd></dl>
             <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la Tabla 43.3 escribe "respiradone" y "Amantidine" (risperidona y amantadina).</p></details>
 
             <p class="section-label">Síndrome serotoninérgico (SS)</p>
@@ -1092,7 +1096,7 @@
             </table>
             </div>
             <p>Suele aparecer al <strong>combinar dos serotoninérgicos</strong>. El fentanilo y el linezolid, dos fármacos de la UCI, pueden causarlo.</p>
-            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el texto dice que el fentanilo y el linezolid pueden causar "SNM"; por el contexto (están en la Tabla 43.4 del síndrome serotoninérgico) es una errata por SS.</p></details>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el texto dice que el fentanilo y el linezolid pueden causar "SNM"; por el contexto (están en la Tabla 43.4 del síndrome serotoninérgico) es una errata por SS. La Tabla 43.4 también escribe "sumitriptan" (sumatriptán).</p></details>
             <div style="overflow-x:auto;">
             <table class="data-table" id="ma-tabla-43-5">
                 <thead><tr><th>Categoría (Tabla 43.5)</th><th>Manifestaciones (frecuencia)</th></tr></thead>
@@ -1138,7 +1142,7 @@
             </div>
             <div class="agua-simulador" id="ma-dant-calc">
                 <h4 style="color: var(--accent-red);">🧮 Dosis de dantroleno</h4>
-                <div class="form-group"><label for="ma-dant-peso">Peso (kg)</label><input type="number" id="ma-dant-peso" min="20" max="200" step="1" value="70" inputmode="decimal"></div>
+                <div class="form-group"><label for="ma-dant-peso">Peso (kg)</label><input type="number" id="ma-dant-peso" min="20" max="300" step="1" value="70" inputmode="decimal"></div>
                 <div class="form-group"><label for="ma-dant-sindrome">Síndrome</label><select id="ma-dant-sindrome"><option value="hm">Hipertermia maligna</option><option value="snm">Síndrome neuroléptico maligno grave</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="ma-dant-resultado"></div>
             </div>
@@ -1192,7 +1196,7 @@
             <p class="section-label">Recalentamiento</p>
             <dl class="kv-row" id="ma-hipo-externo"><dt>Externo</dt><dd>Basta en la mayoría. <strong>Pasivo</strong> (quitar la ropa mojada, mantas): evita perder calor y deja recalentar al cuerpo. <strong>Activo</strong> (mantas térmicas, sistemas automáticos): además acelera.</dd></dl>
             <dl class="kv-row" id="ma-hipo-interno"><dt>Interno</dt><dd>Para la grave en la que falla el externo activo. Intubados: gases inspirados a <strong>40-45 °C</strong> suben la central <strong>2,5 °C/h</strong>. Los fluidos calientes evitan enfriar más pero <strong>no recalientan</strong>. No se recomiendan los lavados gástricos (aspiración) ni vesicales (ineficaces). En la parada por hipotermia: <strong>ECMO venoarterial</strong>.</dd></dl>
-            <dl class="kv-row" id="ma-hipo-volumen"><dt>Volumen</dt><dd>La moderada-grave suele estar depleccionada (diuresis por frío), y la vasodilatación al recalentar da hipotensión: fluidos <strong>calentados</strong> (a temperatura ambiente, 21 °C, enfrían más). Si no responde, valorar ECMO venoarterial.</dd></dl>
+            <dl class="kv-row" id="ma-hipo-volumen"><dt>Volumen</dt><dd>La hipotermia moderada-grave suele cursar con depleción de volumen (diuresis por frío), y la vasodilatación al recalentar da hipotensión: fluidos <strong>calentados</strong> (a temperatura ambiente, 21 °C, enfrían más). Si no responde, valorar ECMO venoarterial.</dd></dl>
             <div class="agua-simulador" id="ma-hipo-calc">
                 <h4 style="color: var(--accent-blue);">🧮 Gravedad y recalentamiento (Tabla 43.6)</h4>
                 <div class="form-group"><label for="ma-hipo-t">Temperatura central (°C)</label><input type="number" id="ma-hipo-t" min="15" max="37" step="0.1" value="29" inputmode="decimal"></div>
@@ -1225,11 +1229,24 @@
             <div class="agua-simulador" id="ma-tconv-calc">
                 <h4 style="color: var(--accent-red);">🧮 Conversor °C ↔ °F y ¿es fiebre? (Tabla 44.1)</h4>
                 <p class="subtitle">°F = (9/5 × °C) + 32 · °C = 5/9 × (°F − 32)</p>
-                <div class="form-group"><label for="ma-tconv-valor">Temperatura</label><input type="number" id="ma-tconv-valor" min="20" max="115" step="0.1" value="38.3" inputmode="decimal"></div>
+                <div class="form-group"><label for="ma-tconv-valor">Temperatura</label><input type="number" id="ma-tconv-valor" min="25" max="44" step="0.1" value="38.3" inputmode="decimal"></div>
                 <div class="form-group"><label for="ma-tconv-unidad">Unidad</label><select id="ma-tconv-unidad"><option value="c">°C</option><option value="f">°F</option></select></div>
                 <div class="form-group"><label for="ma-tconv-neutro">Neutropenia</label><select id="ma-tconv-neutro"><option value="no">No</option><option value="si">Sí, mantenida ≥1 h</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="ma-tconv-resultado"></div>
             </div>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="ma-tabla-44-1">
+                <thead><tr><th>°C</th><th>°F</th><th>°C</th><th>°F</th></tr></thead>
+                <tbody>
+                    <tr><td>100</td><td>212</td><td>36</td><td>96,8</td></tr>
+                    <tr><td>40</td><td>104</td><td>35</td><td>95</td></tr>
+                    <tr><td>39</td><td>102,2</td><td>34</td><td>93,2</td></tr>
+                    <tr><td>38</td><td>100,4</td><td>33</td><td>91,4</td></tr>
+                    <tr><td>37</td><td>98,6</td><td>0</td><td>32</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p class="fuente-ficha">Tabla 44.1 — Equivalencias de Marino. Parten de 0 °C = 32 °F y de que el tramo entre congelación y ebullición del agua es Δ100 °C = Δ180 °F, es decir, Δ5 °C = Δ9 °F; de ahí salen las fórmulas.</p>
             <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la Tabla 44.1 escribe las fórmulas como "0° F = (9/5° C) + 32°" y "0° C = 5/9 (° F − 32°)"; aquí se dan en su forma correcta. También señala que "grados centígrados" es en rigor una unidad de los ángulos de la brújula.</p></details>
 
             <p class="section-label">La fiebre es inflamación, no infección</p>
@@ -1292,16 +1309,32 @@
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Fiebre por fármacos</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body" id="ma-fiebre-farmacos">
+                        <p class="fuente-ficha">Tabla 44.3 — son <strong>dos listas independientes</strong>: los fármacos no se corresponden fila a fila con los hallazgos.</p>
                         <div style="overflow-x:auto;">
-                        <table class="data-table" id="ma-tabla-44-3">
-                            <thead><tr><th>Los más implicados (Tabla 44.3)</th><th>Hallazgos clínicos</th></tr></thead>
+                        <table class="data-table" id="ma-tabla-44-3-farmacos">
+                            <thead><tr><th>Fármacos más implicados (lista no completa; ver la ref. 18 de Marino)</th></tr></thead>
                             <tbody>
-                                <tr><td>Anfotericina</td><td>Escalofríos (53%)</td></tr>
-                                <tr><td>Carbamazepina</td><td>Mialgias (25%)</td></tr>
-                                <tr><td>Cefalosporinas</td><td>Leucocitosis (22%)</td></tr>
-                                <tr><td>Heparinas</td><td>Eosinofilia (22%)</td></tr>
-                                <tr><td>Penicilinas</td><td>Exantema (18%)</td></tr>
-                                <tr><td>Fenitoína · procainamida · quinidina</td><td>Hipotensión (18%)</td></tr>
+                                <tr><td>Anfotericina</td></tr>
+                                <tr><td>Carbamazepina</td></tr>
+                                <tr><td>Cefalosporinas</td></tr>
+                                <tr><td>Heparinas</td></tr>
+                                <tr><td>Penicilinas</td></tr>
+                                <tr><td>Fenitoína</td></tr>
+                                <tr><td>Procainamida</td></tr>
+                                <tr><td>Quinidina</td></tr>
+                            </tbody>
+                        </table>
+                        </div>
+                        <div style="overflow-x:auto;">
+                        <table class="data-table" id="ma-tabla-44-3-hallazgos">
+                            <thead><tr><th>Hallazgos clínicos, % de los pacientes con fiebre por fármacos (ref. 20)</th></tr></thead>
+                            <tbody>
+                                <tr><td>Escalofríos (53%)</td></tr>
+                                <tr><td>Mialgias (25%)</td></tr>
+                                <tr><td>Leucocitosis (22%)</td></tr>
+                                <tr><td>Eosinofilia (22%)</td></tr>
+                                <tr><td>Exantema (18%)</td></tr>
+                                <tr><td>Hipotensión (18%)</td></tr>
                             </tbody>
                         </table>
                         </div>
@@ -1355,15 +1388,15 @@
             <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el pie de tabla atribuye los datos a la referencia 21, pero el texto los cita como referencia 22.</p></details>
 
             <p class="section-label">Infección de herida quirúrgica</p>
-            <dl class="kv-row" id="ma-iso-que"><dt>Cuándo y cuánto</dt><dd>Típicamente a los <strong>5-7 días</strong>, pero cuenta cualquiera en los <strong>30 días</strong> tras la cirugía: inflamación local y drenaje purulento o maloliente; las superficiales dan menos fiebre que las profundas. Incidencia del <strong>1-2%</strong> en cirugía limpia y del <strong>4-5%</strong> en la contaminada. Limpia: <em>S. aureus</em>; contaminada: bacilos gramnegativos aerobios.</dd></dl>
+            <dl class="kv-row" id="ma-iso-que"><dt>Cuándo y cuánto</dt><dd>Típicamente a los <strong>5-7 días</strong>, pero cuenta cualquiera en los <strong>30 días</strong> tras la cirugía: inflamación local y drenaje purulento o maloliente; las superficiales dan menos fiebre que las profundas. Incidencia del <strong>1-2%</strong> en cirugía limpia (no se abre el tórax ni el abdomen) y del <strong>4-5%</strong> en la contaminada (p. ej. perforación intestinal con contaminación del peritoneo). Limpia: <em>S. aureus</em>; contaminada: bacilos gramnegativos aerobios.</dd></dl>
             <dl class="kv-row" id="ma-iso-tto"><dt>Tratamiento</dt><dd>Desbridamiento y antibiótico si hay fiebre: <strong>vancomicina</strong> si se sospecha <em>S. aureus</em>; en cirugía contaminada (abdominal), <strong>piperacilina-tazobactam</strong> o cefalosporina de 3.ª + metronidazol.</dd></dl>
             <dl class="kv-row" id="ma-iso-necrotizante"><dt>Necrotizante</dt><dd>En los primeros días: eritema y edema marcados con <strong>dolor desproporcionado</strong> a la piel (lesión nerviosa isquémica); después crepitación y ampollas; se extiende rápido (rabdomiólisis) con exudado lechoso o maloliente. Monomicrobiana (estreptococo β-hemolítico o <em>Clostridium</em>) o polimicrobiana (casi siempre gramnegativos entéricos con anaerobios). <span class="hl-rojo">Desbridamiento urgente y amplio</span>, con Gram para elegir: penicilina + clindamicina si estreptococo o clostridio; carbapenémico si la cirugía fue profunda en abdomen o tórax.</dd></dl>
 
             <p class="section-label">Otras a considerar</p>
             <dl class="kv-row" id="ma-endocarditis"><dt>Endocarditis</dt><dd>Estudiarla en toda bacteriemia por estreptococo, estafilococo o enterococo con válvula anormal o protésica, y en <strong>todo hemocultivo con <em>S. aureus</em></strong>. ETT primero (sensibilidad 60-70% en válvula nativa y 50% en protésica); si es negativa, <strong>ETE</strong> (≥90%). Tratamiento largo y con complicaciones: mejor guiado por Infecciosas.</dd></dl>
             <dl class="kv-row" id="ma-peritonitis"><dt>Peritoneo</dt><dd>Peritonitis o absceso tras cirugía abdominal extensa o contaminada con fiebre persistente o tardía (≥1 semana); PBE en el cirrótico con ascitis y fiebre sin explicación.</dd></dl>
-            <dl class="kv-row" id="ma-candidiasis"><dt>Candidiasis diseminada</dt><dd>Factores de riesgo (vía central, cirugía abdominal reciente, antibióticos de amplio espectro) que casi todos tienen: pensarla en la <strong>fiebre persistente sin causa</strong> y en la infección urinaria por <em>Candida</em>. Los hemocultivos detectan solo el <strong>20%</strong>; hay una PCR comercial con sensibilidad y especificidad &gt;90%. La mitad no son <em>C. albicans</em>: <span class="hl-rojo">el fluconazol no sirve como empírico</span>; equinocandina o anfotericina si está grave. La candiduria persistente o la infección urinaria por <em>Candida</em> suele ser <strong>consecuencia de la candidiasis diseminada</strong>: un signo valioso de enfermedad invasiva.</dd></dl>
-            <details class="nota-plegable"><summary>📝 Nota de fuentes</summary><p class="fuente-ficha">Nota de fuentes: el Cap. 42 dice que la <em>Candida</em> en orina con sonda "suele ser colonización" y que los hemocultivos son negativos en más del 50% de las candidiasis diseminadas; este capítulo, que la candiduria persistente "suele ser consecuencia de la candidiasis diseminada" y que la sensibilidad de los hemocultivos llega a ser solo del 20%. Encajan si se lee así: colonización cuando es aislada y con sonda; sospecha de diseminación cuando es persistente o hay infección urinaria por <em>Candida</em>.</p></details>
+            <dl class="kv-row" id="ma-candidiasis"><dt>Candidiasis diseminada</dt><dd>Factores de riesgo (vía central, cirugía abdominal reciente, antibióticos de amplio espectro) que casi todos tienen: pensarla en la <strong>fiebre persistente sin causa</strong> y en la infección urinaria por <em>Candida</em>. La sensibilidad de los hemocultivos para la candidiasis invasiva <strong>puede ser tan baja como el 20%</strong>; hay una PCR comercial con sensibilidad y especificidad &gt;90%. La mitad no son <em>C. albicans</em>: <span class="hl-rojo">el fluconazol no sirve como empírico</span>; equinocandina o anfotericina si está grave. La candiduria persistente o la infección urinaria por <em>Candida</em> suele ser <strong>consecuencia de la candidiasis diseminada</strong>: un signo valioso de enfermedad invasiva.</dd></dl>
+            <details class="nota-plegable"><summary>📝 Nota de fuentes</summary><p class="fuente-ficha">Nota de fuentes: el Cap. 42 dice que la <em>Candida</em> en orina con sonda "suele ser colonización" y que los hemocultivos son negativos en más del 50% de las candidiasis diseminadas; este capítulo, que la candiduria persistente "suele ser consecuencia de la candidiasis diseminada" y que la sensibilidad de los hemocultivos puede ser "tan baja como el 20%". Se reproducen las dos citas.</p></details>
 
             <p class="section-label">Hemocultivos</p>
             <dl class="kv-row" id="ma-hemoc-volumen"><dt>Volumen</dt><dd>Lo óptimo: <strong>20-30 mL por punción</strong>. Lo habitual son 20 mL (10 en el frasco aerobio y 10 en el anaerobio); pasar a 30 mL sube el rendimiento un <strong>10%</strong>, poniendo los 10 mL extra en el aerobio.</dd></dl>
@@ -1371,6 +1404,7 @@
                 <img src="js/modules/libros/img/mar-fig44-3-hemocultivos.jpg" alt="Curvas del porcentaje de bacteriemias detectadas según el número de hemocultivos: endocarditis 89, 94, 94 y 100%; otras infecciones 65, 80, 96 y 100%" loading="lazy">
                 <p class="article-figure-caption">Figura 44.3 — Bacteriemias detectadas según el número de hemocultivos en 24 h (20 mL cada uno): endocarditis 89%, 94%, 94% y 100%; otras infecciones 65%, 80%, 96% y 100%.</p>
             </div>
+            <div style="overflow-x:auto;">
             <table class="data-table" id="ma-tabla-fig44-3">
                 <thead><tr><th>Hemocultivos en 24 h</th><th>Endocarditis (%)</th><th>Otras infecciones (%)</th></tr></thead>
                 <tbody>
@@ -1380,10 +1414,12 @@
                     <tr><td>4</td><td>100</td><td>100</td></tr>
                 </tbody>
             </table>
-            <p class="fuente-ficha">Figura 44.3 en números: bacteriemias detectadas (acumulado).</p>
+            </div>
+            <p class="fuente-ficha">Figura 44.3 en números: bacteriemias detectadas (acumulado). Es de un estudio de pacientes con bacteriemia documentada por <strong>4 o más hemocultivos</strong> en 24 h (cada hemocultivo es una punción): por construcción, con 4 se llega al 100%.</p>
             <dl class="kv-row" id="ma-hemoc-numero"><dt>Cuántos</dt><dd><strong>3-4 hemocultivos en 24 h</strong> para detectar bien la bacteriemia; en la endocarditis bastan <strong>2</strong> (la bacteriemia es continua).</dd></dl>
             <dl class="kv-row" id="ma-hemoc-multilumen"><dt>Catéter multilumen</dt><dd>Cultivos de <strong>dos luces</strong> más uno periférico: una sola luz puede perder hasta el <strong>40%</strong>. Lo óptimo sería cultivar todas. Si crece el mismo germen y el de la vía crece <strong>≥2 h antes</strong> que el periférico: sepsis por catéter.</dd></dl>
             <dl class="kv-row" id="ma-hemoc-molecular"><dt>Pruebas moleculares</dt><dd>El crecimiento en los hemocultivos tarda a menudo <strong>48 h o más</strong>: retrasa el antibiótico adecuado si son positivos y alarga los innecesarios si son negativos. Un panel comercial detecta 6 bacterias (<em>E. coli</em>, <em>P. aeruginosa</em>, <em>K. pneumoniae</em>, <em>S. aureus</em>, <em>E. faecium</em> y <em>A. baumannii</em>) con un 90% de sensibilidad y especificidad en 3-5 h; su valor es dudoso, porque un positivo necesita igualmente el antibiograma y un negativo no descarta otros gérmenes.</dd></dl>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el texto escribe "A. baumannni" (errata de <em>A. baumannii</em>).</p></details>
             <div class="agua-simulador" id="ma-hemoc-calc">
                 <h4 style="color: var(--accent-red);">🧮 ¿Cuántas bacteriemias detecto? (Figura 44.3)</h4>
                 <div class="form-group"><label for="ma-hemoc-n">Hemocultivos en 24 h</label><select id="ma-hemoc-n"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option></select></div>
@@ -1393,7 +1429,7 @@
             <div class="agua-simulador" id="ma-dtp-calc">
                 <h4 style="color: var(--accent-red);">🧮 Tiempo hasta la positividad (catéter frente a periférico)</h4>
                 <div class="form-group"><label for="ma-dtp-cvc">Horas hasta crecer — sangre del catéter</label><input type="number" id="ma-dtp-cvc" min="0" max="120" step="0.5" value="10" inputmode="decimal"></div>
-                <div class="form-group"><label for="ma-dtp-per">Horas hasta crecer — sangre periférica</label><input type="number" id="ma-dtp-per" min="0" max="120" step="0.5" value="13" inputmode="decimal"></div>
+                <div class="form-group"><label for="ma-dtp-per">Horas hasta crecer — sangre periférica</label><input type="number" id="ma-dtp-per" min="0" max="120" step="0.5" value="11" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="ma-dtp-resultado"></div>
             </div>
 
@@ -1429,18 +1465,20 @@
             <dl class="kv-row" id="ma-antip-clinica"><dt>En pacientes</dt><dd>En la sepsis grave y el shock séptico, <strong>más temperatura, menos mortalidad</strong>; un estudio encontró más mortalidad en los sépticos que recibieron antipiréticos. En sépticos afebriles, calentarlos externamente 1,5 °C redujo la mortalidad.</dd></dl>
             <div class="article-figure" id="mar-img-44-5">
                 <img src="js/modules/libros/img/mar-fig44-5-temperatura-mortalidad.jpg" alt="Barras de mortalidad hospitalaria por temperatura inicial en 2.225 sépticos: a más temperatura, menos mortalidad" loading="lazy">
-                <p class="article-figure-caption">Figura 44.5 — Temperatura inicial y mortalidad hospitalaria en 2.225 pacientes con sepsis grave o shock séptico (p&lt;0,001): &gt;39,4 °C 16%; 38,3-39,4 °C 20%; 37-38,2 °C 25%; &lt;37 °C 36% (lectura de las categorías en °F de la figura).</p>
+                <p class="article-figure-caption">Figura 44.5 — Temperatura inicial y mortalidad hospitalaria en 2.225 pacientes con sepsis grave o shock séptico (p&lt;0,001): &gt;39,4 °C (&gt;103 °F) 16%; 38,3-39,4 °C (101-103 °F) 20%; 37-38,2 °C (98,6-100,9 °F) 25%; &lt;37 °C (&lt;98,6 °F) 36%. La figura solo da °F; los °C son la conversión de la ficha.</p>
             </div>
+            <div style="overflow-x:auto;">
             <table class="data-table" id="ma-tabla-fig44-5">
                 <thead><tr><th>Temperatura inicial</th><th>Mortalidad hospitalaria (%)</th></tr></thead>
                 <tbody>
-                    <tr><td>&gt;39,4 °C</td><td>16</td></tr>
-                    <tr><td>38,3-39,4 °C</td><td>20</td></tr>
-                    <tr><td>37-38,2 °C</td><td>25</td></tr>
-                    <tr><td>&lt;37 °C</td><td>36</td></tr>
+                    <tr><td>&gt;39,4 °C (&gt;103 °F)</td><td>16</td></tr>
+                    <tr><td>38,3-39,4 °C (101-103 °F)</td><td>20</td></tr>
+                    <tr><td>37-38,2 °C (98,6-100,9 °F)</td><td>25</td></tr>
+                    <tr><td>&lt;37 °C (&lt;98,6 °F)</td><td>36</td></tr>
                 </tbody>
             </table>
-            <p class="fuente-ficha">Figura 44.5 en números (lectura aproximada de las categorías en °F de la figura).</p>
+            </div>
+            <p class="fuente-ficha">Figura 44.5 en números: categorías en °F tal como las da la figura, con su conversión a °C.</p>
             <dl class="kv-row" id="ma-antip-guias"><dt>Recomendación</dt><dd>Las guías de fiebre en la UCI recomiendan <strong>no suprimir la fiebre de rutina</strong>. Excepción: la fiebre <span class="hl-rojo">sí es dañina</span> con lesión cerebral isquémica (tras una parada o un ictus agudo) y debe tratarse.</dd></dl>
 
             <p class="section-label">Antipiréticos</p>
@@ -1450,7 +1488,7 @@
             <dl class="kv-row" id="ma-antip-mantas"><dt>Mantas de enfriamiento</dt><dd>Contraproducentes en la fiebre: la respuesta febril ya imita la respuesta al frío (vasoconstricción y escalofríos), así que la manta <strong>agrava</strong> esos mecanismos. Su sitio es el <strong>golpe de calor</strong>, donde la respuesta al calor se ha perdido.</dd></dl>
             <div class="agua-simulador" id="ma-antip-calc">
                 <h4 style="color: var(--accent-red);">🧮 ¿Antipirético? ¿Cuál y cuánto?</h4>
-                <div class="form-group"><label for="ma-antip-peso">Peso (kg)</label><input type="number" id="ma-antip-peso" min="20" max="200" step="1" value="70" inputmode="decimal"></div>
+                <div class="form-group"><label for="ma-antip-peso">Peso (kg)</label><input type="number" id="ma-antip-peso" min="20" max="300" step="1" value="70" inputmode="decimal"></div>
                 <div class="form-group"><label for="ma-antip-cerebro">Lesión cerebral isquémica (posparada o ictus agudo)</label><select id="ma-antip-cerebro"><option value="no">No</option><option value="si">Sí</option></select></div>
                 <div class="form-group"><label for="ma-antip-higado">Insuficiencia hepática</label><select id="ma-antip-higado"><option value="no">No</option><option value="si">Sí</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="ma-antip-resultado"></div>

@@ -178,3 +178,15 @@ Coinciden los tres revisores:
 - **Fig. 38.1 viva**: mando de albúmina (baja el total, no el iónico) y de pH (la alcalosis baja el iónico). Fósforo:
   la glucosa y la insulina lo meten en la célula (realimentación).
 - **Casos**: hipoK por furosemida con Mg bajo; hiperK ficticia por hemólisis; transfusión masiva con citrato.
+### R10 · Caps. 39-44 (Marino Abdomen: hígado, páncreas, infecciones, temperatura) · 2026-10-15
+
+- **Hígado y amonio vivos**, con el patrón de la nefrona: intestino → hígado (ciclo de la urea) → astrocito
+  (glutamina, edema). Mandos: función hepática, lactulosa, rifaximina y CVVH. Frase viva: amonio, West Haven y
+  hemofiltración. Fichas I-IV; el SHR y la PBE comparten el eje esplácnico → riñón.
+- **Termostato**: punto de ajuste frente a temperatura real, para fiebre frente a hipertermia, golpe de calor,
+  hipertermias por fármacos, hipotermia y antipiréticos (fichas XII-XVII). Sería el equivalente de los receptores
+  animados.
+- **Semáforo antibiótico** (Tabla 41.3) ampliado a la PBE, la colecistitis (penetración en bilis), la ITU de sonda y
+  la candiduria.
+- **Casos**: cirrótico con varices → PBE → SHR; pancreatitis del día 1 al 7; fiebre en la posparada.
+- **«Encuentra el error»**: ceftriaxona + metronidazol en el shock; bajar la fiebre de rutina.

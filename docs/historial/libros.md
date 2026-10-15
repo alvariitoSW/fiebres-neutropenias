@@ -400,3 +400,16 @@ Parte: `autonomo/partes/2026-10-14-marino-r8.md`.
 - la Tabla 38.3 a 360 px.
 
 Parte: `autonomo/partes/2026-10-15-marino-r9.md`.
+## Marino Abdomen: revisión R10 del plan Marino, caps. 39-44 (octubre 2026)
+
+`marino-r10` (revisión sin construir), 1 vuelta, 17 fichas. Sin cifras equivocadas. Corregido:
+- fuera tres notas de interpretación que no eran de Marino;
+- ceftriaxona + metronidazol, nunca en shock;
+- límites en todas las calculadoras;
+- golpe de calor solo con disfunción del SNC;
+- regla de hipertermia distinta de la de fiebre;
+- Tabla 44.3 en dos listas;
+- redondeos que contradecían el veredicto;
+- huecos H1-H8 y erratas anotadas.
+
+Parte: `autonomo/partes/2026-10-15-marino-r10.md`.
