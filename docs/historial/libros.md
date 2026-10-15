@@ -372,3 +372,31 @@ Lo demás va al parte `autonomo/partes/2026-10-14-marino-r1.md` y a `autonomo/id
 - capnografía `#page=44`.
 
 Parte: `autonomo/partes/2026-10-14-marino-r2.md`.
+
+## Marino Renal: revisión R8 del plan Marino, caps. 31-35 (octubre 2026)
+
+`marino-r8` (revisión sin construir), 1 vuelta, 15 fichas. Corregido:
+- la KDIGO, que fallaba por redondeo (2,0 → 2,3);
+- etiquetas de la vista Visual (delta >1, Regla 2, KDIGO);
+- límites genéricos en `enlazar()` para todas las calculadoras de Marino Renal;
+- el simulador de salino al 3 %, con techo fisiológico y eje adaptable;
+- la hipernatremia normovolémica, la Regla 4 y el delta con HA corregido;
+- el reto de volumen;
+- notas de fidelidad y huecos de las págs. 26 y 46 y del cap. 35.
+
+Parte: `autonomo/partes/2026-10-14-marino-r8.md`.
+
+## Marino Renal: revisión R9 del plan Marino, caps. 36-38 (octubre 2026)
+
+`marino-r9` (revisión sin construir), 1 vuelta, 8 fichas. Va encima de R8. Corregido:
+- la vista Visual de la hipopotasemia (primero la redistribución, no el magnesio);
+- `calcHiperk` sin pauta para la no grave;
+- el panel de fármacos de la Tabla 36.2 completo;
+- la hipermagnesemia con tramos leídos de la tabla;
+- límites por unidad en todas las calculadoras;
+- notas de fuentes (fosfato potásico, hipomagnesemia, déficit de K⁺ frente a Nefrología);
+- sevelamer «gluconato (sic)»;
+- `data-en-visual` en los enlaces a las simulaciones;
+- la Tabla 38.3 a 360 px.
+
+Parte: `autonomo/partes/2026-10-15-marino-r9.md`.

@@ -422,7 +422,8 @@
                 <div class="tfg-estado tfg-estado-ok" id="mr-ab-resultado"></div>
                 <p class="subtitle" style="margin-top:8px;">El HCO₃⁻ que escribas aquí pasa solo a la calculadora del hiato aniónico y el delta.</p>
                 <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoRenal" data-panel="panel-marino-renal-tabs" data-tab="mr-acidobase-gaps" data-resaltar="#mr-gap-calc">➡️ Sigue: hiato aniónico y delta con esta gasometría →</button>
-                <p class="fuente-ficha" style="margin-top:6px;">La fuente compara la cifra medida con la esperada sin dar un margen de tolerancia: si la diferencia es menor de 1 unidad, la calculadora la da por coincidente.</p>
+                <p class="fuente-ficha" style="margin-top:6px;">La fuente no da margen de tolerancia en ninguna regla y tampoco cubre el pH anormal con PaCO₂ normal. Criterio de la calculadora, no de la fuente: dar por coincidente una diferencia de menos de 1 unidad (Regla 3), la tolerancia de ±0,5 alrededor del rango agudo-crónico (Regla 4) y la conclusión de «primario metabólico» cuando el pH es anormal y la PaCO₂ normal.</p>
+                <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la gasometría que carga la calculadora (pH 7,28, PaCO₂ 23, HCO₃⁻ 14) es la del ejemplo de la Regla 3 del libro, y se deja tal cual. No es coherente entre sí: con [H⁺] = 24 × 23/14 ≈ 39 nEq/L el pH sería 7,40, no 7,28; por eso la calculadora avisa de que «la gasometría no es coherente». El aviso es correcto; el ejemplo es del libro.</p></details>
             </div>
 
             <p class="section-label">Desconfiar de la sencillez</p>
@@ -504,10 +505,10 @@
             <div class="agua-simulador" id="mr-gap-calc">
                 <h4 style="color: var(--accent-blue);">🧮 Hiato aniónico, corregido y delta gap</h4>
                 <p class="subtitle">Ecuaciones 31.14-31.16. La albúmina es opcional.</p>
-                <div class="form-group"><label for="mr-gap-na">Na⁺ (mEq/L)</label><input type="number" id="mr-gap-na" min="100" max="180" step="1" value="140" inputmode="decimal"></div>
-                <div class="form-group"><label for="mr-gap-cl">Cl⁻ (mEq/L)</label><input type="number" id="mr-gap-cl" min="70" max="140" step="1" value="104" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-gap-na">Na⁺ (mEq/L)</label><input type="number" id="mr-gap-na" min="100" max="200" step="1" value="140" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-gap-cl">Cl⁻ (mEq/L)</label><input type="number" id="mr-gap-cl" min="60" max="150" step="1" value="104" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-gap-hco3">HCO₃⁻ (mEq/L)</label><input type="number" id="mr-gap-hco3" min="2" max="60" step="1" value="14" inputmode="decimal"></div>
-                <div class="form-group"><label for="mr-gap-alb">Albúmina (g/dL, opcional)</label><input type="number" id="mr-gap-alb" min="0.5" max="6" step="0.1" value="" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-gap-alb">Albúmina (g/dL, opcional)</label><input type="number" id="mr-gap-alb" min="0.5" max="7" step="0.1" value="" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="mr-gap-resultado"></div>
             </div>
 
@@ -635,7 +636,7 @@
             <div class="agua-simulador" id="mr-bicarb-calc">
                 <h4 style="color: var(--accent-red);">🧮 Déficit de bicarbonato y ampollas</h4>
                 <p class="subtitle">Ecuación 32.2 y Tabla 32.2. Solo si hay indicación (ver arriba).</p>
-                <div class="form-group"><label for="mr-bicarb-peso">Peso (kg)</label><input type="number" id="mr-bicarb-peso" min="20" max="250" step="1" value="70" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-bicarb-peso">Peso (kg)</label><input type="number" id="mr-bicarb-peso" min="20" max="300" step="1" value="70" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-bicarb-hco3">HCO₃⁻ medido (mEq/L)</label><input type="number" id="mr-bicarb-hco3" min="1" max="30" step="1" value="5" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="mr-bicarb-resultado"></div>
             </div>
@@ -660,7 +661,8 @@
                 <img src="js/modules/libros/img/mar-fig32-4-cetoacidos-nitroprusiato.jpg" alt="Barras de acetoacetato y beta-hidroxibutirato en la cetoacidosis diabética y alcohólica, con la línea del umbral de detección del nitroprusiato" loading="lazy">
                 <p class="article-figure-caption">Figura 32.4 — Acetoacetato y β-hidroxibutirato en la cetoacidosis diabética (CAD) y alcohólica (CAA). La línea discontinua marca el acetoacetato mínimo que hace positiva la reacción del nitroprusiato.</p>
             </div>
-            <dl class="kv-row" id="mr-nitroprusiato"><dt>La reacción del nitroprusiato</dt><dd>Tiras y tabletas (Acetest, Ketostix…) que detectan <strong>acetoacetato y acetona</strong>, con un mínimo de 3 mmol/L de AcAc. <span class="hl-rojo">No detectan el β-OHB</span>, el cetoácido predominante: en la CAA, con 13 mmol/L de cetoácidos totales (más de cien veces lo normal), la reacción puede ser <strong>negativa</strong>.</dd></dl>
+            <dl class="kv-row" id="mr-nitroprusiato"><dt>La reacción del nitroprusiato</dt><dd>Tiras y tabletas (Acetest, Ketostix…) que detectan <strong>acetoacetato y acetona</strong>, con un mínimo de 3 mmol/L de AcAc. <span class="hl-rojo">No detectan el β-OHB</span>, el cetoácido predominante: en la CAA, con 13 mmol/L de cetoácidos totales (más de cien veces lo normal), la reacción <strong>será negativa</strong>.</dd></dl>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el texto da cocientes β-OHB:AcAc de 3:1 (CAD) y hasta 8:1 (CAA). Las barras de la Figura 32.4, leídas a ojo, dan unos 2,7:1 (≈9,5/3,5) y unos 5:1 (≈11,3/2,1). Se reproducen las cifras del texto; la figura es aproximada.</p></details>
             <dl class="kv-row" id="mr-bohb-medidor"><dt>Medir el β-hidroxibutirato</dt><dd>Hay medidores portátiles en sangre capilar (≈10 segundos). La American Diabetes Association los considera el método preferido para vigilar la CAD.</dd></dl>
 
             <p class="section-label">Cetoacidosis diabética (CAD)</p>
@@ -670,8 +672,7 @@
             <ul class="term-chips" id="mr-cad-otros">
                 <li>Leucocitosis proporcional a las cetonas (no fiable para infección; sí las cayados)</li>
                 <li>Troponina I alta sin SCA en el 27%</li>
-                <li>Deshidratación casi universal</li>
-                <li>El Na baja 2,4 mEq/L por cada 100 mg/dL de glucosa</li>
+                <li>Deshidratación casi universal, pero puede no verse en el Na⁺: la hiperglucemia lo diluye (baja 2,4 mEq/L por cada 100 mg/dL de glucosa)</li>
                 <li>HA con el Na medido, no el corregido (la hiperglucemia también diluye el cloro)</li>
             </ul>
 
@@ -690,7 +691,7 @@
                     <tr><td>5. Hasta normalizar el HA y HCO₃⁻ &gt;18; pasar a subcutánea y seguir la perfusión <strong>≥1 h</strong> tras la primera dosis SC.</td></tr>
                 </tbody>
             </table>
-            <dl class="kv-row" id="mr-cad-fluidos"><dt>Volumen</dt><dd>Déficit medio de <strong>50-100 mL/kg</strong> (4-8 L en un adulto de 80 kg). Los cristaloides balanceados (Plasma-Lyte®, Ringer lactato) resuelven antes la acidosis que el salino: <strong>son preferibles</strong>.</dd></dl>
+            <dl class="kv-row" id="mr-cad-fluidos"><dt>Volumen</dt><dd>Déficit medio de <strong>50-100 mL/kg</strong> (4-8 L en un adulto de 175 lb, ≈80 kg). Los cristaloides balanceados (Plasma-Lyte®, Ringer lactato) resuelven antes la acidosis que el salino: <strong>son preferibles</strong>.</dd></dl>
             <dl class="kv-row" id="mr-cad-insulina-nueva"><dt>Insulina subcutánea de novo</dt><dd>Si ya usaba insulina, su pauta habitual. Si es nuevo: <strong>0,5-0,8 U/kg/día</strong>, mitad basal (glargina) y mitad rápida (lispro) repartida en las comidas.</dd></dl>
 
             <table class="data-table" id="mr-tabla-32-4">
@@ -709,10 +710,10 @@
             <div class="agua-simulador" id="mr-cad-calc">
                 <h4 style="color: var(--accent-red);">🧮 Primeras horas de la CAD: insulina y potasio</h4>
                 <p class="subtitle">Tablas 32.3 y 32.4 con el peso, el K⁺ y la glucosa.</p>
-                <div class="form-group"><label for="mr-cad-peso">Peso (kg)</label><input type="number" id="mr-cad-peso" min="20" max="250" step="1" value="70" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-cad-peso">Peso (kg)</label><input type="number" id="mr-cad-peso" min="20" max="300" step="1" value="70" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-cad-k">K⁺ (mEq/L)</label><input type="number" id="mr-cad-k" min="1.5" max="9" step="0.1" value="3.8" inputmode="decimal"></div>
-                <div class="form-group"><label for="mr-cad-glucosa">Glucosa (mg/dL)</label><input type="number" id="mr-cad-glucosa" min="50" max="2000" step="10" value="480" inputmode="decimal"></div>
-                <div class="form-group"><label for="mr-cad-na">Na⁺ medido (mEq/L, opcional)</label><input type="number" id="mr-cad-na" min="100" max="180" step="1" value="" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-cad-glucosa">Glucosa (mg/dL)</label><input type="number" id="mr-cad-glucosa" min="20" max="2000" step="10" value="480" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-cad-na">Na⁺ medido (mEq/L, opcional)</label><input type="number" id="mr-cad-na" min="100" max="200" step="1" value="" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="mr-cad-resultado"></div>
             </div>
 
@@ -799,11 +800,12 @@
                 <img src="js/modules/libros/img/mar-fig33-2-hco3-pco2.jpg" alt="Recta de la PaCO2 frente al HCO3 plasmático en la alcalosis metabólica, con los umbrales de hipercapnia 46 y 50 mmHg" loading="lazy">
                 <p class="article-figure-caption">Figura 33.2 — HCO₃⁻ plasmático frente a PaCO₂ en la alcalosis metabólica (ΔPaCO₂ = 0,7 × ΔHCO₃⁻).</p>
             </div>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el texto dice que la hipercapnia (&gt;46) aparece cuando el HCO₃⁻ sube «casi 10 mEq/L». En la Figura 33.2 el umbral de 46 mmHg cae en HCO₃⁻ ≈32,5 (unos 8,5 por encima de 24), y la propia ecuación da 6/0,7 ≈ 8,6. Se reproduce la cifra del texto.</p></details>
             <div class="agua-simulador" id="mr-alc-paco2-calc">
                 <h4 style="color: var(--accent-purple);">🧮 ¿Cuánto debería retener CO₂?</h4>
                 <p class="subtitle">La recta de la Figura 33.2 con el HCO₃⁻ de tu paciente.</p>
-                <div class="form-group"><label for="mr-alc-hco3">HCO₃⁻ (mEq/L)</label><input type="number" id="mr-alc-hco3" min="24" max="70" step="1" value="40" inputmode="decimal"></div>
-                <div class="form-group"><label for="mr-alc-paco2">PaCO₂ medida (mmHg, opcional)</label><input type="number" id="mr-alc-paco2" min="15" max="100" step="1" value="" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-alc-hco3">HCO₃⁻ (mEq/L)</label><input type="number" id="mr-alc-hco3" min="5" max="70" step="1" value="40" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-alc-paco2">PaCO₂ medida (mmHg, opcional)</label><input type="number" id="mr-alc-paco2" min="10" max="120" step="1" value="" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="mr-alc-paco2-resultado"></div>
             </div>
             <dl class="kv-row" id="mr-alc-bohr"><dt>Curva de la hemoglobina</dt><dd>La alcalosis desvía la curva a la izquierda (efecto Bohr): la Hb cede peor el O₂ y baja la PO₂ venosa, pero no hay pruebas de que la oxigenación tisular sea insuficiente.</dd></dl>
@@ -898,8 +900,8 @@
             <div class="agua-simulador" id="mr-cloro-calc">
                 <h4 style="color: var(--accent-purple);">🧮 Déficit de cloro y salino</h4>
                 <p class="subtitle">Ecuaciones 33.2 y 33.3.</p>
-                <div class="form-group"><label for="mr-cloro-peso">Peso magro (kg)</label><input type="number" id="mr-cloro-peso" min="20" max="200" step="1" value="70" inputmode="decimal"></div>
-                <div class="form-group"><label for="mr-cloro-cl">Cl⁻ plasmático (mEq/L)</label><input type="number" id="mr-cloro-cl" min="50" max="120" step="1" value="80" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-cloro-peso">Peso magro (kg)</label><input type="number" id="mr-cloro-peso" min="20" max="300" step="1" value="70" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-cloro-cl">Cl⁻ plasmático (mEq/L)</label><input type="number" id="mr-cloro-cl" min="50" max="130" step="1" value="80" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="mr-cloro-resultado"></div>
             </div>
 
@@ -922,9 +924,9 @@
             <div class="agua-simulador" id="mr-hcl-calc">
                 <h4 style="color: var(--accent-purple);">🧮 Déficit de H⁺ y HCl 0,1 N</h4>
                 <p class="subtitle">Ecuación 33.4 y Tabla 33.3. Solo con HCO₃⁻ &gt;50 o pH &gt;7,55.</p>
-                <div class="form-group"><label for="mr-hcl-peso">Peso magro (kg)</label><input type="number" id="mr-hcl-peso" min="20" max="200" step="1" value="70" inputmode="decimal"></div>
-                <div class="form-group"><label for="mr-hcl-hco3">HCO₃⁻ (mEq/L)</label><input type="number" id="mr-hcl-hco3" min="24" max="100" step="1" value="52" inputmode="decimal"></div>
-                <div class="form-group"><label for="mr-hcl-ph">pH (opcional)</label><input type="number" id="mr-hcl-ph" min="7.3" max="7.9" step="0.01" value="" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-hcl-peso">Peso magro (kg)</label><input type="number" id="mr-hcl-peso" min="20" max="300" step="1" value="70" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-hcl-hco3">HCO₃⁻ (mEq/L)</label><input type="number" id="mr-hcl-hco3" min="10" max="100" step="1" value="52" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-hcl-ph">pH (opcional)</label><input type="number" id="mr-hcl-ph" min="7.0" max="7.9" step="0.01" value="" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="mr-hcl-resultado"></div>
             </div>
 
@@ -939,6 +941,7 @@
             <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 34 "Acute Kidney Injury".</p>
 
             <dl class="kv-row" id="mr-fra-intro"><dt>Magnitud</dt><dd>Hasta el <strong>60%</strong> de los pacientes de UCI sufren un deterioro agudo de la función renal, el "fracaso renal agudo" (acute kidney injury). Sus causas son sobre todo <strong>inflamatorias, isquémicas o nefrotóxicas</strong>. Un <strong>15%</strong> necesita terapia de reemplazo renal y hasta el <strong>60%</strong> no sobrevive.</dd></dl>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el capítulo da dos cifras para la TRR: un 15% al presentar el fracaso renal (aquí) y un 10-15% de los pacientes de UCI al hablar de la terapia (ficha «Terapia de reemplazo renal: diálisis y hemofiltración»). Se reproducen las dos tal cual.</p></details>
 
             <p class="section-label">Criterios diagnósticos</p>
             <dl class="kv-row" id="mr-fra-historia"><dt>Historia</dt><dd>"Insuficiencia renal aguda" (1951) → "acute kidney injury" (2002) → criterios de las guías <strong>KDIGO</strong> (2012).</dd></dl>
@@ -981,13 +984,13 @@
                 <h4 style="color: var(--accent-yellow);">🧮 Cockcroft-Gault y MDRD (Figura 34.1)</h4>
                 <div class="warning-box" style="margin:0 0 10px 0;">En el crítico estas fórmulas <strong>sobrestiman</strong> el filtrado real: tómalas como techo, no como dato.</div>
                 <div class="form-group"><label for="mr-fg-edad">Edad (años)</label><input type="number" id="mr-fg-edad" min="18" max="110" step="1" value="60" inputmode="decimal"></div>
-                <div class="form-group"><label for="mr-fg-peso">Peso (kg)</label><input type="number" id="mr-fg-peso" min="20" max="250" step="1" value="70" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-fg-peso">Peso (kg)</label><input type="number" id="mr-fg-peso" min="20" max="300" step="1" value="70" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-fg-cr">Creatinina (mg/dL)</label><input type="number" id="mr-fg-cr" min="0.1" max="20" step="0.1" value="1.2" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-fg-sexo">Sexo</label><select id="mr-fg-sexo"><option value="h">Hombre</option><option value="m">Mujer</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="mr-fg-resultado"></div>
             </div>
             <dl class="kv-row" id="mr-cistatina"><dt>Cistatina C</dt><dd>Proteína de casi todas las células que se aclara solo por filtrado y <strong>no depende de la masa muscular</strong>. Sus estimaciones son más exactas que las de la creatinina, pero a menudo <strong>infraestiman</strong> el filtrado del crítico; combinarlas mejora la exactitud, a costa de complicarlo.</dd></dl>
-            <dl class="kv-row" id="mr-fra-nombres"><dt>Otros nombres</dt><dd>Si el fracaso dura más de unos días se llama <strong>enfermedad renal aguda</strong>, y si persiste <strong>≥90 días</strong>, <strong>enfermedad renal crónica</strong>. El autor no ve clara la lógica de estas distinciones.</dd></dl>
+            <dl class="kv-row" id="mr-fra-nombres"><dt>Otros nombres</dt><dd>Si el fracaso dura más de unos días se llama <strong>enfermedad renal aguda</strong>, y si persiste <strong>≥90 días</strong>, <strong>enfermedad renal crónica</strong>. El autor no ve clara la lógica de estas distinciones (lesión frente a enfermedad, y <strong>90 días frente a 60 días</strong>).</dd></dl>
 
             <div class="compare-box blue" style="margin-top:12px;">
                 <p><strong>🔗 Más calculadoras de función renal.</strong> El estadio KDIGO por creatinina está en Nefrología (FRA); CKD-EPI 2009 y Cockcroft-Gault, en Fisiopatología UCI (Vías Urinarias); CKD-EPI 2021, en ERC.</p>
@@ -1162,8 +1165,8 @@
                 <h4 style="color: var(--accent-yellow);">🧮 EFNa y EFU (Ecuaciones 34.4 y 34.5)</h4>
                 <p class="subtitle">Muestras de orina y plasma a la vez. La urea es opcional.</p>
                 <div class="form-group"><label for="mr-ind-nau">Na⁺ en orina (mEq/L)</label><input type="number" id="mr-ind-nau" min="0" max="300" step="1" value="15" inputmode="decimal"></div>
-                <div class="form-group"><label for="mr-ind-nap">Na⁺ plasmático (mEq/L)</label><input type="number" id="mr-ind-nap" min="100" max="180" step="1" value="138" inputmode="decimal"></div>
-                <div class="form-group"><label for="mr-ind-cru">Creatinina en orina (mg/dL)</label><input type="number" id="mr-ind-cru" min="1" max="500" step="1" value="90" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-ind-nap">Na⁺ plasmático (mEq/L)</label><input type="number" id="mr-ind-nap" min="100" max="200" step="1" value="138" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-ind-cru">Creatinina en orina (mg/dL)</label><input type="number" id="mr-ind-cru" min="5" max="500" step="1" value="90" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-ind-crp">Creatinina plasmática (mg/dL)</label><input type="number" id="mr-ind-crp" min="0.1" max="20" step="0.1" value="2.0" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-ind-ureau">Urea (BUN) en orina (mg/dL, opcional)</label><input type="number" id="mr-ind-ureau" min="1" max="3000" step="1" value="" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-ind-ureap">Urea (BUN) plasmática (mg/dL, opcional)</label><input type="number" id="mr-ind-ureap" min="1" max="300" step="1" value="" inputmode="decimal"></div>
@@ -1200,6 +1203,7 @@
             <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 34 "Acute Kidney Injury".</p>
 
             <dl class="kv-row" id="mr-trr-indicaciones"><dt>Quién y por qué</dt><dd>La recibe un <strong>10-15%</strong> de los pacientes de UCI. Indicaciones habituales: a) uremia sintomática (p. ej., encefalopatía), b) sobrecarga de volumen, c) hiperpotasemia grave refractaria y d) eliminar un tóxico.</dd></dl>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el capítulo dice aquí 10-15% y, al presentar el fracaso renal agudo, un 15% (ficha «Fracaso renal agudo: los criterios y el problema de la creatinina»). Se reproducen las dos cifras tal cual.</p></details>
             <div class="article-figure" id="mar-img-34-4">
                 <img src="js/modules/libros/img/mar-fig34-4-hemodialisis-hemofiltracion.jpg" alt="Esquema de hemodiálisis por gradiente de concentración y de hemofiltración por gradiente de presión" loading="lazy">
                 <p class="article-figure-caption">Figura 34.4 — Aclaramiento por hemodiálisis (gradiente de concentración) y por hemofiltración (gradiente de presión). Las partículas pequeñas (urea) se aclaran con las dos; las grandes (toxinas), solo con la hemofiltración.</p>
@@ -1279,7 +1283,7 @@
             <div class="agua-simulador" id="mr-osm-calc">
                 <h4 style="color: var(--accent-green);">🧮 Osmolalidad calculada, efectiva y hiato osmolal</h4>
                 <p class="subtitle">Ecuaciones 35.3 y 35.4. Con la medida, el hiato osmolal del Cap. 31 (normal &lt;10).</p>
-                <div class="form-group"><label for="mr-osm-na">Na⁺ (mEq/L)</label><input type="number" id="mr-osm-na" min="100" max="190" step="1" value="140" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-osm-na">Na⁺ (mEq/L)</label><input type="number" id="mr-osm-na" min="100" max="200" step="1" value="140" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-osm-glu">Glucosa (mg/dL)</label><input type="number" id="mr-osm-glu" min="20" max="2000" step="1" value="90" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-osm-bun">BUN (mg/dL)</label><input type="number" id="mr-osm-bun" min="1" max="300" step="1" value="14" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-osm-medida">Osmolalidad medida (opcional)</label><input type="number" id="mr-osm-medida" min="200" max="450" step="1" value="" inputmode="decimal"></div>
@@ -1330,7 +1334,7 @@
             <div class="agua-simulador" id="mr-hiperna-calc">
                 <h4 style="color: var(--accent-green);">🧮 ¿Cuánto se tarda a 0,5 mEq/L/h?</h4>
                 <p class="subtitle">Aritmética con el límite tradicional del capítulo; no calcula el volumen a infundir (la fuente no da fórmula).</p>
-                <div class="form-group"><label for="mr-hiperna-na">Na⁺ actual (mEq/L)</label><input type="number" id="mr-hiperna-na" min="146" max="200" step="1" value="160" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-hiperna-na">Na⁺ actual (mEq/L)</label><input type="number" id="mr-hiperna-na" min="130" max="200" step="1" value="160" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-hiperna-obj">Na⁺ objetivo (mEq/L)</label><input type="number" id="mr-hiperna-obj" min="130" max="160" step="1" value="145" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="mr-hiperna-resultado"></div>
             </div>
@@ -1380,7 +1384,7 @@
             <dl class="kv-row" id="mr-hipona-def"><dt>Cuánto</dt><dd>Na⁺ plasmático <strong>&lt;135 mEq/L</strong>: probablemente la alteración electrolítica más frecuente, en el <strong>30-40%</strong> de los hospitalizados.</dd></dl>
 
             <p class="section-label">Hiponatremias que no lo son</p>
-            <dl class="kv-row" id="mr-pseudohipona"><dt>Pseudohiponatremia</dt><dd>El plasma tiene una fase acuosa (con el sodio) y otra no acuosa (lípidos y proteínas). El laboratorio mide las dos; normalmente da igual porque el plasma es un 95% agua. Con <strong>proteínas ≥12 g/dL</strong> (normal 5,5-8) o <strong>triglicéridos ≥1.500 mg/dL</strong> (normal 25-175), la fase no acuosa crece y el Na⁺ medido baja sin que baje el real.</dd></dl>
+            <dl class="kv-row" id="mr-pseudohipona"><dt>Pseudohiponatremia</dt><dd>El plasma tiene una fase acuosa (con el sodio) y otra no acuosa (lípidos y proteínas). El laboratorio mide las dos; normalmente da igual porque el plasma es un 95% agua. Cuando las <strong>proteínas alcanzan 12 g/dL</strong> (normal 5,5-8) o los <strong>triglicéridos 1.500 mg/dL</strong> (normal 25-175), la fase no acuosa crece y el Na⁺ medido baja sin que baje el real.</dd></dl>
             <table class="data-table" id="mr-tabla-35-2">
                 <thead><tr><th>Mecanismo</th><th>Situaciones (Tabla 35.2)</th></tr></thead>
                 <tbody>
@@ -1393,8 +1397,8 @@
             <dl class="kv-row" id="mr-hiperglucemia-na"><dt>Hiperglucemia</dt><dd>La glucosa que no entra en las células saca agua de ellas y diluye el sodio: <strong>2,4 mEq/L menos por cada 100 mg/dL</strong> de glucosa. <span class="hl-azul">Na corregido = Na medido + 2,4 × (glucosa − 100)/100</span> (Ecuación 35.5). Ejemplo: Na 130 con glucosa 600 → 142.</dd></dl>
             <div class="agua-simulador" id="mr-nacorr-calc">
                 <h4 style="color: var(--accent-green);">🧮 Sodio corregido por la glucosa (Ecuación 35.5)</h4>
-                <div class="form-group"><label for="mr-nacorr-na">Na⁺ medido (mEq/L)</label><input type="number" id="mr-nacorr-na" min="100" max="180" step="1" value="130" inputmode="decimal"></div>
-                <div class="form-group"><label for="mr-nacorr-glu">Glucosa (mg/dL)</label><input type="number" id="mr-nacorr-glu" min="50" max="2500" step="10" value="600" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-nacorr-na">Na⁺ medido (mEq/L)</label><input type="number" id="mr-nacorr-na" min="100" max="200" step="1" value="130" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-nacorr-glu">Glucosa (mg/dL)</label><input type="number" id="mr-nacorr-glu" min="20" max="2000" step="10" value="600" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="mr-nacorr-resultado"></div>
             </div>
 
@@ -1410,6 +1414,7 @@
                     </div>
                     <div class="micro-prof-body">
                         <p>Pérdida de sodio por orina o tubo digestivo <strong>más</strong> retención de agua: la hipovolemia activa la renina-angiotensina, la angiotensina libera ADH y la ADH retiene agua (sin retención, la pérdida de líquidos hipotónicos daría hipernatremia).</p>
+                        <dl class="kv-row" id="mr-hipona-digestiva"><dt>Vómitos y diarrea</dt><dd>La Figura 35.3 los incluye entre las causas de la hiponatremia hipovolémica: pérdida de sodio por el tubo digestivo. Un Na⁺ en orina <strong>&lt;20 mEq/L</strong> sugiere pérdida extrarrenal (ver abajo).</dd></dl>
                         <dl class="kv-row" id="mr-hipona-tiazidas"><dt>Tiazidas</dt><dd>En alrededor de <strong>un tercio</strong> de los tratados, normalmente a las 3 semanas; mecanismo complejo.</dd></dl>
                         <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el texto dice "Hypernatremia is reported in about one-third of patients being treated with a thiazide diuretic", dentro del apartado de hiponatremia y con una cita sobre hiponatremia por tiazidas: es una errata por <em>hiponatremia</em>.</p></details>
                         <dl class="kv-row" id="mr-hipona-suprarrenal"><dt>Insuficiencia suprarrenal</dt><dd>La <strong>primaria</strong> (falta de mineralocorticoide) pierde sodio por la orina; suele dar hiponatremia en la forma crónica. La <strong>secundaria</strong> (hipotálamo-hipófisis) es sobre todo de glucocorticoides y no la produce.</dd></dl>
@@ -1474,11 +1479,11 @@
                 <li>Límites para prevenir la desmielinización osmótica: a) la subida inicial no debe pasar de <strong>5 mEq/L en 2 h ni 10 mEq/L en 5 h</strong>; b) la diaria, de <strong>10 mEq/L el primer día y 8 los siguientes</strong>; c) el Na⁺ final no debe pasar de <strong>130 mEq/L</strong>.</li>
             </ol>
             <p class="fuente-ficha">Tabla 35.3. Cada bolo puede subir el Na⁺ hasta 2 mEq/L, y una subida de 5-6 debería mejorar los síntomas.</p>
-            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la tabla impresa da "Na⁺ = 153 mEq/L" para el NaCl al 3%; el texto (y la composición real) da 513.</p></details>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la tabla impresa da "Na⁺ = 153 mEq/L" para el NaCl al 3%; el texto da 513 (y 513 × 2 = 1.026 mOsm/L, la osmolaridad que dan la tabla y el texto).</p></details>
             <div class="agua-simulador" id="mr-sal3-calc">
                 <h4 style="color: var(--accent-green);">🧮 Bolo de salino al 3% y vigilancia de los límites</h4>
                 <p class="subtitle">Tabla 35.3. Mete el Na⁺ inicial y el actual para ver si se respetan los límites.</p>
-                <div class="form-group"><label for="mr-sal3-peso">Peso (kg)</label><input type="number" id="mr-sal3-peso" min="20" max="250" step="1" value="70" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-sal3-peso">Peso (kg)</label><input type="number" id="mr-sal3-peso" min="20" max="300" step="1" value="70" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-sal3-na0">Na⁺ al empezar (mEq/L)</label><input type="number" id="mr-sal3-na0" min="90" max="135" step="1" value="112" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-sal3-na1">Na⁺ actual (mEq/L, opcional)</label><input type="number" id="mr-sal3-na1" min="90" max="150" step="1" value="" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-sal3-horas">Horas desde el inicio (opcional)</label><input type="number" id="mr-sal3-horas" min="0" max="72" step="0.5" value="" inputmode="decimal"></div>
@@ -1540,7 +1545,7 @@
             <dl class="kv-row" id="mr-k-excrecion"><dt>Eliminación</dt><dd>Heces 5-10 mEq/día, sudor 0-10 y <strong>orina 40-120</strong> (según la ingesta). El K⁺ filtrado se reabsorbe casi todo en el proximal y luego se <strong>secreta</strong> en el distal y el colector, bajo el control del K⁺ plasmático y, sobre todo, de la <strong>aldosterona</strong> (que también retiene Na⁺ y agua; la espironolactona la bloquea y por eso ahorra potasio). Con riñón normal, una carga de K⁺ no da hiperpotasemia mantenida. La aldosterona la libera la corteza suprarrenal cuando sube el K⁺ plasmático (y con la angiotensina II).</dd></dl>
 
             <p class="section-label">Hipopotasemia (&lt;3,5 mEq/L)</p>
-            <dl class="kv-row" id="mr-hipok-redistribucion"><dt>Redistribución</dt><dd>Los receptores <strong>β₂</strong> del músculo meten K⁺ en las células: los β₂ inhalados (salbutamol) lo bajan ≤0,5 mEq/L a dosis habituales, más si se combinan con diuréticos. También la <strong>alcalosis</strong> (efecto variable e impredecible), la <strong>hipotermia</strong> (transitoria, se corrige al recalentar) y la <strong>insulina</strong>.</dd></dl>
+            <dl class="kv-row" id="mr-hipok-redistribucion"><dt>Redistribución</dt><dd>Los receptores <strong>β₂</strong> del músculo meten K⁺ en las células: los β₂ inhalados (salbutamol) lo bajan ≤0,5 mEq/L a dosis habituales, más si se combinan con diuréticos. También la <strong>alcalosis</strong> (efecto variable e impredecible), la <strong>hipotermia</strong> accidental o inducida (transitoria, se corrige al recalentar) y la <strong>insulina</strong>.</dd></dl>
             <dl class="kv-row" id="mr-hipok-renal"><dt>Pérdida renal</dt><dd>La primera causa: <strong>diuréticos</strong>. En la UCI, además: aspiración nasogástrica (poco K⁺, 10-15 mEq/L, pero la pérdida de volumen y de H⁺ aumenta la pérdida urinaria), alcalosis y <strong>depleción de magnesio</strong> (altera la reabsorción tubular de K⁺; muy importante con diuréticos). El <strong>Cl⁻ urinario</strong> separa las causas (Figura 36.3): bajo (<strong>&lt;15 mEq/L</strong>) con la aspiración nasogástrica y la alcalosis; alto (<strong>&gt;25 mEq/L</strong>) con los diuréticos y la depleción de magnesio.</dd></dl>
             <dl class="kv-row" id="mr-hipok-extrarrenal"><dt>Pérdida extrarrenal</dt><dd>Sobre todo la <strong>diarrea</strong>: en la secretora e inflamatoria el K⁺ fecal es de 15-40 mEq/L y el volumen puede llegar a 10 L/día: hasta <strong>400 mEq/día</strong> en los casos graves.</dd></dl>
             <div class="article-figure" id="mar-img-36-3">
@@ -1572,12 +1577,13 @@
             </table>
             <p class="fuente-ficha">Tabla 36.1 — Déficit estimado (70 kg de peso magro, 50 mEq/kg): se pierde un 10% del K⁺ total por cada 1 mEq/L que baja. Incluso una hipopotasemia leve (3,0) supone 175 mEq.</p>
             <dl class="kv-row" id="mr-kcl-preparados"><dt>Preparados</dt><dd><strong>Cloruro potásico</strong> concentrado (1-2 mEq/mL; ampollas de 10, 20, 30 y 40 mEq), muy hiperosmótico (el de 2 mEq/mL tiene 4.000 mOsm/L): <strong>siempre diluido</strong>. El <strong>fosfato potásico</strong> (4,5 mEq de K⁺ y 3 mmol de fosfato por mL) lo prefieren algunos en la cetoacidosis.</dd></dl>
+            <details class="nota-plegable"><summary>📝 Nota de fuentes</summary><p class="fuente-ficha">Nota de fuentes: el Cap. 36 (pág. 23) da <strong>4,5 mEq de K⁺</strong> por mL de fosfato potásico; la Tabla 38.5 del Cap. 38 (pág. 51) da <strong>4,3 mEq</strong> por mL (la ficha del fósforo). Es la misma solución con dos cifras en dos capítulos; se reproducen ambas, sin elegir una.</p></details>
             <dl class="kv-row" id="mr-kcl-ritmo"><dt>Ritmo</dt><dd>Lo estándar: <strong>20 mEq en 100 mL de salino en 1 hora</strong>. El máximo suele fijarse en <strong>20 mEq/h</strong>; puede hacer falta 40 mEq/h en la grave, y se han usado hasta 100 mEq/h con seguridad. Mejor por vena central grande, pero <span class="hl-rojo">no en la vena cava superior si se pasa de 20 mEq/h</span> (riesgo, mal documentado, de asistolia).</dd></dl>
             <dl class="kv-row" id="mr-kcl-respuesta"><dt>Respuesta</dt><dd>Al principio sube despacio (la parte plana de la curva). Si es <strong>resistente</strong>, piensa en el <strong>magnesio</strong>: la hipopotasemia de quien tiene déficit de magnesio no se corrige hasta reponerlo.</dd></dl>
             <div class="agua-simulador" id="mr-kdef-calc">
                 <h4 style="color: var(--accent-purple);">🧮 Déficit de potasio y tiempo de reposición</h4>
                 <p class="subtitle">Tabla 36.1 y la regla del 10% por mEq/L aplicada a tu peso; ritmo de la ficha.</p>
-                <div class="form-group"><label for="mr-kdef-k">K⁺ (mEq/L)</label><input type="number" id="mr-kdef-k" min="1.5" max="3.5" step="0.1" value="3.0" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-kdef-k">K⁺ (mEq/L)</label><input type="number" id="mr-kdef-k" min="1" max="10" step="0.1" value="3.0" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-kdef-peso">Peso magro (kg)</label><input type="number" id="mr-kdef-peso" min="20" max="200" step="1" value="70" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-kdef-ritmo">Ritmo</label><select id="mr-kdef-ritmo"><option value="10">10 mEq/h</option><option value="20" selected>20 mEq/h (máximo habitual)</option><option value="40">40 mEq/h (hipopotasemia grave)</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="mr-kdef-resultado"></div>
@@ -1585,7 +1591,8 @@
 
             <div class="compare-box blue" style="margin-top:12px;">
                 <p><strong>🔗 Para verlo en marcha</strong>: la simulación de la hipopotasemia de Nefrología mueve el K⁺ entre el plasma y las células, con las causas y la reposición.</p>
-                <p><button type="button" class="especialidad-link" data-especialidad="nefrologia" data-view="nefrona" data-panel="panel-fisio-tabs" data-tab="fisio-hipopotasemia">🔋 Hipopotasemia (Nefrología) →</button></p>
+                <p><button type="button" class="especialidad-link" data-especialidad="nefrologia" data-view="nefrona" data-panel="panel-fisio-tabs" data-tab="fisio-hipopotasemia" data-en-visual>🔋 Hipopotasemia (Nefrología) →</button></p>
+                <details class="nota-plegable"><summary>📝 Nota de fuentes</summary><p class="fuente-ficha">Nota de fuentes: la simulación de Nefrología mide el déficit desde K⁺ 4,0 (su ficha da 200-400 mEq por cada 1 mEq/L; el modelo usa 300 entre 4 y 3 y 600 por debajo de 3), mientras que la Tabla 36.1 de esta ficha lo mide desde 3,5 (el 10% del total por mEq/L). Por eso, con K⁺ 2,8, la simulación marca unos 420 mEq y la tabla 245. Marino da las dos magnitudes en el mismo capítulo (200-400 mEq por mEq/L desde un K⁺ de 4, pág. 19; Tabla 36.1, pág. 22); se muestran ambas, sin elegir una.</p></details>
                 <p><button type="button" class="especialidad-link" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-electrolitos">⚡ Reposición de electrolitos (Manual UMI) →</button></p>
             </div>
 
@@ -1636,7 +1643,7 @@
 
             <p class="section-label">Fallo de la excreción renal</p>
             <dl class="kv-row" id="mr-hiperk-renal"><dt>Siempre interviene</dt><dd>Como el riñón puede eliminar una carga de K⁺, toda hiperpotasemia mantenida implica, al menos en parte, un defecto renal: enfermedad renal, insuficiencia suprarrenal (solo la crónica) o fármacos. Todos los de la Tabla 36.2 actúan sobre el eje renina-angiotensina-aldosterona, salvo el <strong>trimetoprim-sulfametoxazol</strong>, que inhibe directamente la secreción distal. Suele haber además suplementos de K⁺ o insuficiencia renal.</dd></dl>
-            <dl class="kv-row" id="mr-hiperk-transfusion"><dt>Transfusión masiva</dt><dd>A 4 °C la bomba del hematíe se para y el K⁺ sale. Tras <strong>18 días</strong> de almacenamiento (la media), una unidad lleva <strong>2-3 mEq</strong>: una transfusión masiva (≥6 unidades) son al menos 12-18 mEq. El riñón suele eliminarlo, pero quien necesita transfusión masiva suele tener el flujo comprometido. La hiperpotasemia empieza a verse tras <strong>7 unidades</strong>.</dd></dl>
+            <dl class="kv-row" id="mr-hiperk-transfusion"><dt>Transfusión masiva</dt><dd>A 4 °C la bomba del hematíe se para y el K⁺ sale. Tras <strong>18 días</strong> de almacenamiento (la media), una unidad lleva <strong>2-3 mEq</strong>: una transfusión masiva (≥6 unidades) son al menos 12-18 mEq, una carga considerable si se compara con los <strong>9-10 mEq</strong> de K⁺ que contiene el plasma de un adulto medio. El riñón suele eliminarlo, pero quien necesita transfusión masiva suele tener el flujo comprometido. La hiperpotasemia empieza a verse tras <strong>7 unidades</strong>.</dd></dl>
             <dl class="kv-row" id="mr-cautopireiofagia"><dt>Todo es posible</dt><dd>En 1985 se describió una hiperpotasemia grave en un paciente que comía <strong>1.500 cabezas de cerilla quemadas al día</strong> (ricas en clorato potásico): la "cautopireiofagia".</dd></dl>
 
             <p class="section-label">El ECG</p>
@@ -1693,7 +1700,7 @@
             <div class="agua-simulador" id="mr-hiperk-calc">
                 <h4 style="color: var(--accent-purple);">🧮 Plan para esta hiperpotasemia</h4>
                 <p class="subtitle">Tabla 36.3 y las indicaciones de la ficha.</p>
-                <div class="form-group"><label for="mr-hk-k">K⁺ (mEq/L)</label><input type="number" id="mr-hk-k" min="5" max="12" step="0.1" value="7.0" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-hk-k">K⁺ (mEq/L)</label><input type="number" id="mr-hk-k" min="1" max="12" step="0.1" value="7.0" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-hk-ecg">Cambios en el ECG</label><select id="mr-hk-ecg"><option value="no">No</option><option value="si">Sí</option></select></div>
                 <div class="form-group"><label for="mr-hk-colapso">Colapso circulatorio o parada</label><select id="mr-hk-colapso"><option value="no">No</option><option value="si">Sí</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="mr-hk-resultado"></div>
@@ -1713,7 +1720,7 @@
                     <thead><tr><th>Punto</th><th>Marino (este bloque)</th><th>Nefrología</th></tr></thead>
                     <tbody><tr><td>Cuándo es grave</td><td>K⁺ &gt;6,5 mEq/L o cualquier K⁺ con cambios del ECG</td><td>&gt;6,5 siempre grave; 6,1-6,5 grave si hay cambios del ECG (Figura 7)</td></tr><tr><td>Gluconato cálcico 10%</td><td>10 mL IV en 3 min; repetir a los 5 min</td><td>10-30 mL en 2-5 min IV</td></tr><tr><td>Insulina-glucosa</td><td>10 U IV + 50 mL de glucosa al 50%, en bolo</td><td>10 U en 500 mL de glucosado 10% (o 50 mL al 50%)</td></tr><tr><td>Salbutamol</td><td>20 mg en aerosol, nunca solo</td><td>10-20 mg nebulizado, o 0,5 mg IV en 15 min</td></tr><tr><td>Bicarbonato</td><td>No (sin acidosis no cambia el K⁺; además fija el calcio)</td><td>Sobre todo si hay acidosis</td></tr><tr><td>Sacar el K⁺</td><td>Ciclosilicato de zirconio 10 g/8 h 48 h; Kayexalate cuestionado</td><td>CSZ 5-10 g/día; patirómero; diurético de asa</td></tr><tr><td>Hemodiálisis</td><td>Baja 1 mEq/L en 1 h y 2 en 3 h</td><td>El método más rápido en la IR grave</td></tr></tbody>
                 </table></div><p>La simulación de la hiperpotasemia de Nefrología muestra en marcha cada fármaco.</p>
-                <p><button type="button" class="especialidad-link" data-especialidad="nefrologia" data-view="nefrona" data-panel="panel-fisio-tabs" data-tab="fisio-hiperpotasemia">⚡ Hiperpotasemia (Nefrología) →</button></p>
+                <p><button type="button" class="especialidad-link" data-especialidad="nefrologia" data-view="nefrona" data-panel="panel-fisio-tabs" data-tab="fisio-hiperpotasemia" data-en-visual>⚡ Hiperpotasemia (Nefrología) →</button></p>
             </div>
 
             <p class="fuente-ficha" style="margin-top:12px;">📚 Fuente completa: <a class="biblio-link" href="docs/marino-2024-electrolitos-caps35-38.pdf#page=27" target="_blank" rel="noopener">Marino PL. The ICU Book, 5.ª ed., Cap. 36 "Potassium" →</a></p>
@@ -1745,7 +1752,7 @@
 
             <p class="section-label">Medirlo</p>
             <dl class="kv-row" id="mr-mg-suero"><dt>Suero, no plasma</dt><dd>El anticoagulante del tubo de plasma puede llevar citrato u otros aniones que fijan el Mg.</dd></dl>
-            <dl class="kv-row" id="mr-mg-unidades"><dt>Unidades</dt><dd>El laboratorio lo da en <strong>mg/dL</strong>; la literatura, en <strong>mEq/L</strong>: mEq/L = (mg/dL × 10 / peso atómico) × valencia = (mg/dL × 10 / 24) × 2. Así, 1,7 mg/dL = <strong>1,4 mEq/L</strong>. En el Sistema Internacional, <strong>mmol/L = mEq/L × 0,5</strong>.</dd></dl>
+            <dl class="kv-row" id="mr-mg-unidades"><dt>Unidades</dt><dd>El laboratorio lo da en <strong>mg/dL</strong> (porque el Mg está en parte unido a las proteínas plasmáticas); la literatura, en <strong>mEq/L</strong>: mEq/L = (mg/dL × 10 / peso atómico) × valencia = (mg/dL × 10 / 24) × 2. Así, 1,7 mg/dL = <strong>1,4 mEq/L</strong>. En el Sistema Internacional, <strong>mmol/L = mEq/L × 0,5</strong>.</dd></dl>
             <div style="overflow-x:auto;">
             <table class="data-table" id="mr-tabla-37-2">
                 <thead><tr><th>Rango de referencia (Tabla 37.2)</th><th>mg/dL</th><th>mEq/L</th><th>mmol/L</th></tr></thead>
@@ -1759,7 +1766,7 @@
             <div class="agua-simulador" id="mr-mgconv-calc">
                 <h4 style="color: var(--accent-green);">🧮 Conversor de unidades del magnesio</h4>
                 <p class="subtitle">Ecuación 37.1 y la regla mmol/L = mEq/L × 0,5.</p>
-                <div class="form-group"><label for="mr-mgconv-valor">Valor</label><input type="number" id="mr-mgconv-valor" min="0" max="20" step="0.1" value="1.7" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-mgconv-valor">Valor</label><input type="number" id="mr-mgconv-valor" min="0.1" max="24" step="0.1" value="1.7" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-mgconv-unidad">Unidad del valor</label><select id="mr-mgconv-unidad"><option value="mgdl">mg/dL</option><option value="meq">mEq/L</option><option value="mmol">mmol/L</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="mr-mgconv-resultado"></div>
             </div>
@@ -1772,6 +1779,7 @@
 
             <p class="section-label">Déficit de magnesio</p>
             <p>La hipomagnesemia (Mg sérico total <strong>&lt;1,7 mg/dL</strong> o <strong>&lt;0,7 mmol/L</strong>) aparece en hasta el <strong>65%</strong> de los pacientes de UCI, y el déficit es probablemente más frecuente, porque puede existir sin hipomagnesemia.</p>
+            <details class="nota-plegable"><summary>📝 Nota de fuentes</summary><p class="fuente-ficha">Nota de fuentes: el capítulo da la frecuencia de hipomagnesemia en la UCI como «hasta el 65%» (pág. 33) y, en su resumen final, como «más del 50%» (pág. 39). Se reproducen ambas.</p></details>
             <div style="overflow-x:auto;">
             <table class="data-table" id="mr-tabla-37-3">
                 <thead><tr><th colspan="2">Marcadores de posible déficit de Mg (Tabla 37.3; entre paréntesis, frecuencia de hipomagnesemia)</th></tr></thead>
@@ -1821,7 +1829,7 @@
                         <p>El déficit despolariza las células cardíacas y favorece las arritmias.</p>
                         <dl class="kv-row"><dt>Digital</dt><dd>La digital y el déficit de Mg inhiben la misma bomba: el déficit favorece la toxicidad digitálica, y el Mg IV puede suprimir esas arritmias <strong>aunque el Mg sérico sea normal</strong>.</dd></dl>
                         <dl class="kv-row"><dt>Arritmias ventriculares refractarias</dt><dd>El Mg IV puede abolirlas con Mg normal, quizá por un efecto estabilizador de membrana que no tiene que ver con reponer el déficit.</dd></dl>
-                        <dl class="kv-row"><dt>Torsade de pointes</dt><dd>La más citada; se desarrolla en el capítulo de taquiarritmias.</dd></dl>
+                        <dl class="kv-row"><dt>Torsade de pointes</dt><dd>La más citada; Marino la desarrolla en el Cap. 19 (taquiarritmias, Figura 19.9).</dd></dl>
                         <p><button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-otras-taqui">❤️ Torsade de pointes (Merino Cardiología) →</button></p>
                     </div>
                 </div>
@@ -1837,7 +1845,7 @@
 
             <div class="compare-box blue" style="margin-top:12px;">
                 <p><strong>🔗 En otras partes de la app.</strong> Nefrología desarrolla la reabsorción tubular del Mg por tramos y su relación con la presión arterial.</p>
-                <p><button type="button" class="especialidad-link" data-especialidad="nefrologia" data-view="nefrona" data-panel="panel-fisio-tabs" data-tab="fisio-magnesio">🧂 Magnesio (Nefrología) →</button></p>
+                <p><button type="button" class="especialidad-link" data-especialidad="nefrologia" data-view="nefrona" data-panel="panel-fisio-tabs" data-tab="fisio-magnesio" data-en-visual>🧂 Magnesio (Nefrología) →</button></p>
             </div>
 
             <p class="fuente-ficha" style="margin-top:12px;">📚 Fuente completa: <a class="biblio-link" href="docs/marino-2024-electrolitos-caps35-38.pdf#page=31" target="_blank" rel="noopener">Marino PL. The ICU Book, 5.ª ed., Cap. 37 "Magnesium" →</a></p>
@@ -1909,7 +1917,7 @@
             <div class="agua-simulador" id="mr-mgrep-calc">
                 <h4 style="color: var(--accent-green);">🧮 ¿Qué protocolo y cuánto Mg?</h4>
                 <p class="subtitle">Los tres protocolos de la ficha; el gramo es de MgSO₄ heptahidratado (8 mEq/g).</p>
-                <div class="form-group"><label for="mr-mgrep-mg">Mg sérico (mEq/L)</label><input type="number" id="mr-mgrep-mg" min="0" max="3" step="0.1" value="1.2" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-mgrep-mg">Mg sérico (mEq/L)</label><input type="number" id="mr-mgrep-mg" min="0.1" max="3" step="0.1" value="1.2" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-mgrep-peso">Peso (kg)</label><input type="number" id="mr-mgrep-peso" min="20" max="250" step="1" value="70" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-mgrep-clinica">Situación</label><select id="mr-mgrep-clinica"><option value="silente">Sin clínica ni otros trastornos</option><option value="otros">Con otros trastornos electrolíticos</option><option value="vital">Arritmia grave o convulsiones</option></select></div>
                 <div class="form-group"><label for="mr-mgrep-renal">Función renal</label><select id="mr-mgrep-renal"><option value="normal">Normal</option><option value="ir">Insuficiencia renal (ClCr 30-50 mL/min)</option></select></div>
@@ -1928,7 +1936,7 @@
             <div class="warning-box" id="mr-mg-retencion-limite"><strong>Limitación.</strong> La prueba puede no ser fiable con la función renal alterada, que es lo habitual en la UCI.</div>
             <div class="agua-simulador" id="mr-mgret-calc">
                 <h4 style="color: var(--accent-green);">🧮 Interpretar la prueba de retención</h4>
-                <div class="form-group"><label for="mr-mgret-orina">Mg en orina de 24 h</label><input type="number" id="mr-mgret-orina" min="0" max="80" step="0.5" value="10" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-mgret-orina">Mg en orina de 24 h</label><input type="number" id="mr-mgret-orina" min="0" max="24" step="0.5" value="10" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-mgret-unidad">Unidad</label><select id="mr-mgret-unidad"><option value="mmol">mmol</option><option value="meq">mEq</option></select></div>
                 <div class="form-group"><label for="mr-mgret-renal">Función renal</label><select id="mr-mgret-renal"><option value="normal">Normal</option><option value="alterada">Alterada</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="mr-mgret-resultado"></div>
@@ -1948,13 +1956,15 @@
             </table>
             </div>
             <dl class="kv-row" id="mr-hipermg-tto"><dt>Mecanismo y tratamiento</dt><dd>El Mg es el "<strong>calcioantagonista fisiológico</strong>": lo grave es el bloqueo de la conducción AV; la depresión contráctil y la vasodilatación no destacan. Tratamiento de elección: <strong>hemodiálisis</strong>. Mientras llega, <strong>gluconato cálcico 1 g IV en 2-3 min</strong> antagoniza los efectos cardiovasculares. Si se puede dar volumen y queda función renal, sueroterapia agresiva con furosemida en casos menos avanzados.</dd></dl>
+            <details class="nota-plegable" id="mr-nota-hipermg-grave"><summary>Nota de fuentes: ¿desde qué cifra es «grave»?</summary><p class="fuente-ficha">Marino llama «grave» a la hipermagnesemia que trata con hemodiálisis (pág. 39), pero no le pone cifra. La calculadora la toma desde el bloqueo AV de su tabla (&gt;5 mEq/L): es criterio de la app. Fuera de Marino, el Manual Merck sitúa los cambios del ECG entre 6 y 12 mg/dL (2,5-5 mmol/L, ≈5-10 mEq/L) y pone 12 mg/dL (≈10 mEq/L) como ejemplo de toxicidad grave, que trata con soporte, gluconato cálcico al 10% 10-20 mL IV y hemodiálisis (<a class="biblio-link" href="https://www.merckmanuals.com/professional/nephrology/electrolyte-disorders/hypermagnesemia" target="_blank" rel="noopener">Merck Manual Professional, «Hypermagnesemia»</a>). El mismo manual añade que, con función renal adecuada, la furosemida IV aumenta su eliminación.</p></details>
             <div class="agua-simulador" id="mr-hipermg-calc">
                 <h4 style="color: var(--accent-green);">🧮 ¿Qué espero con este magnesio?</h4>
-                <div class="form-group"><label for="mr-hipermg-valor">Mg sérico (mEq/L)</label><input type="number" id="mr-hipermg-valor" min="0" max="20" step="0.1" value="6" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-hipermg-valor">Mg sérico (mEq/L)</label><input type="number" id="mr-hipermg-valor" min="0.1" max="20" step="0.1" value="6" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="mr-hipermg-resultado"></div>
             </div>
 
             <div class="warning-box" id="mr-mg-final"><strong>Cuatro ideas.</strong> 1) El Mg sérico puede ser normal con depleción. 2) La hipomagnesemia afecta a más del 50% de la UCI, y la furosemida es su primera causa. 3) <span class="hl-rojo">Sospecha déficit de Mg en toda hipopotasemia por diuréticos</span>, sobre todo si no se corrige con K⁺. 4) El Mg sérico se normaliza antes que los depósitos: la mejor guía es la prueba de retención.</div>
+            <details class="nota-plegable"><summary>📝 Nota de fuentes</summary><p class="fuente-ficha">Nota de fuentes: «más del 50%» es la cifra del resumen final (pág. 39); en el apartado del déficit (pág. 33, ficha anterior) el capítulo dice «hasta el 65%». Se reproducen ambas.</p></details>
 
             <div class="compare-box blue" style="margin-top:12px;">
                 <p><strong>🔗 Comparativa de fuentes.</strong> El Manual UMI del hospital dosifica el MgSO₄ por peso según el Mg sérico (0,05-0,15 g/kg), en vez de por protocolos fijos de gramos como Marino. No son contradictorios, pero las cifras no coinciden: comprueba con cuál trabajas.</p>
@@ -1993,7 +2003,7 @@
             <div class="agua-simulador" id="mr-caconv-calc">
                 <h4 style="color: var(--accent-yellow);">🧮 Conversor y lectura de la Tabla 38.1</h4>
                 <div class="form-group"><label for="mr-caconv-param">Parámetro</label><select id="mr-caconv-param"><option value="total">Calcio total</option><option value="ionico">Calcio iónico</option><option value="fosforo">Fósforo</option></select></div>
-                <div class="form-group"><label for="mr-caconv-valor">Valor</label><input type="number" id="mr-caconv-valor" min="0" max="30" step="0.01" value="1.05" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-caconv-valor">Valor</label><input type="number" id="mr-caconv-valor" min="1" max="5" step="0.01" value="2.4" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-caconv-unidad">Unidad</label><select id="mr-caconv-unidad"><option value="mmol">mmol/L</option><option value="mgdl">mg/dL</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="mr-caconv-resultado"></div>
             </div>
@@ -2046,13 +2056,14 @@
             <p class="section-label">Reposición (solo si hay efecto adverso grave)</p>
             <div style="overflow-x:auto;">
             <table class="data-table" id="mr-tabla-38-3">
-                <thead><tr><th>Solución (Tabla 38.3)</th><th>Ca elemento</th><th>Presentación</th><th>Osmolaridad</th></tr></thead>
+                <thead><tr><th>Solución</th><th>Ca</th><th>Ampolla</th><th>Osmolaridad</th></tr></thead>
                 <tbody>
-                    <tr><td>Cloruro cálcico 10%</td><td>27 mg/mL</td><td>Ampollas de 10 mL</td><td>2.000 mOsm/L</td></tr>
-                    <tr><td>Gluconato cálcico 10%</td><td>9 mg/mL</td><td>Ampollas de 10 mL</td><td>680 mOsm/L</td></tr>
+                    <tr><td>Cloruro cálcico 10%</td><td>27 mg/mL</td><td>10 mL</td><td>2.000 mOsm/L</td></tr>
+                    <tr><td>Gluconato cálcico 10%</td><td>9 mg/mL</td><td>10 mL</td><td>680 mOsm/L</td></tr>
                 </tbody>
             </table>
             </div>
+            <p class="fuente-ficha">Tabla 38.3 — Soluciones de calcio IV: Ca = calcio elemento por mL; las dos van en ampollas de 10 mL.</p>
             <ol id="mr-ca-pauta">
                 <li>Bolo de <strong>200 mg de calcio elemento</strong> (p. ej. 22 mL de gluconato al 10%) en 100 mL de salino isotónico en <strong>5-10 min</strong> (la Tabla 38.3 dice 10 min): sube el calcio total unos 0,5 mg/dL, pero empieza a bajar a los 30 min.</li>
                 <li>Perfusión de <strong>1-2 mg/kg/h</strong> de calcio elemento durante 6-12 h (al menos 6 h).</li>
@@ -2133,7 +2144,7 @@
             </div>
             <div class="agua-simulador" id="mr-hiperca-calc">
                 <h4 style="color: var(--accent-yellow);">🧮 ¿Trato esta hipercalcemia y con qué?</h4>
-                <div class="form-group"><label for="mr-hiperca-ca">Calcio sérico total (mg/dL)</label><input type="number" id="mr-hiperca-ca" min="8" max="25" step="0.1" value="14.5" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-hiperca-ca">Calcio sérico total (mg/dL)</label><input type="number" id="mr-hiperca-ca" min="4" max="20" step="0.1" value="14.5" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-hiperca-neuro">Síntomas neurológicos</label><select id="mr-hiperca-neuro"><option value="no">No</option><option value="si">Sí</option></select></div>
                 <div class="form-group"><label for="mr-hiperca-volumen">Volumen</label><select id="mr-hiperca-volumen"><option value="hipo">Hipovolemia o normal</option><option value="sobrecarga">Sobrecarga de volumen</option></select></div>
                 <div class="form-group"><label for="mr-hiperca-origen">Enfermedad de base</label><select id="mr-hiperca-origen"><option value="otro">Otra o desconocida</option><option value="hemato">Mieloma o linfoma</option></select></div>
@@ -2143,7 +2154,7 @@
 
             <div class="compare-box blue" style="margin-top:12px;">
                 <p><strong>🔗 En otras partes de la app.</strong> Nefrología desarrolla la hipercalcemia mediada y no mediada por PTH, con su algoritmo diagnóstico, y la nefrona viva enseña el hiperparatiroidismo en el túbulo.</p>
-                <p><button type="button" class="especialidad-link" data-especialidad="nefrologia" data-view="nefrona" data-panel="panel-fisio-tabs" data-tab="fisio-hipercalcemia">🧂 Hipercalcemia (Nefrología) →</button></p>
+                <p><button type="button" class="especialidad-link" data-especialidad="nefrologia" data-view="nefrona" data-panel="panel-fisio-tabs" data-tab="fisio-hipercalcemia" data-en-visual>🧂 Hipercalcemia (Nefrología) →</button></p>
             </div>
 
             <div class="compare-box green" style="margin-top:12px;">
@@ -2216,9 +2227,10 @@
             </div>
             <dl class="kv-row" id="mr-fosfato-soluciones"><dt>Soluciones</dt><dd>Fosfato sódico y fosfato potásico: <strong>93 mg (3 mmol) de PO₄ por mL</strong>; el sódico lleva 4,0 mEq de Na⁺ y el potásico 4,3 mEq de K⁺. <span class="hl-azul">Si el K⁺ es ≥4 mEq/L, fosfato sódico; si es &lt;4, fosfato potásico.</span></dd></dl>
             <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la tabla escribe "Na⁺: 4,0 mEq/L" y "K⁺: 4,3 mEq/L"; por el contexto (contenido por mL de solución) debe de ser mEq/mL.</p></details>
+            <details class="nota-plegable"><summary>📝 Nota de fuentes</summary><p class="fuente-ficha">Nota de fuentes: la Tabla 38.5 (pág. 51) da <strong>4,3 mEq de K⁺</strong> por mL de fosfato potásico; el Cap. 36 (pág. 23) da <strong>4,5 mEq</strong> por mL (ficha de la hipopotasemia). Se reproducen ambas, sin elegir una.</p></details>
             <div class="agua-simulador" id="mr-fosfato-calc">
                 <h4 style="color: var(--accent-yellow);">🧮 Reposición de fosfato IV (Tabla 38.5)</h4>
-                <div class="form-group"><label for="mr-fosfato-po4">PO₄ sérico (mg/dL)</label><input type="number" id="mr-fosfato-po4" min="0" max="10" step="0.1" value="0.9" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-fosfato-po4">PO₄ sérico (mg/dL)</label><input type="number" id="mr-fosfato-po4" min="0.1" max="10" step="0.1" value="0.9" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-fosfato-peso">Peso (kg)</label><input type="number" id="mr-fosfato-peso" min="30" max="150" step="1" value="70" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-fosfato-k">K⁺ sérico (mEq/L)</label><input type="number" id="mr-fosfato-k" min="1" max="9" step="0.1" value="3.6" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-fosfato-indic">Disfunción cardíaca, fracaso respiratorio o rabdomiólisis</label><select id="mr-fosfato-indic"><option value="no">No</option><option value="si">Sí</option></select></div>
@@ -2239,11 +2251,11 @@
                 </tbody>
             </table>
             </div>
-            <p>El sevelamer va en polvo para reconstituir en agua; se prefiere a la sal clorhidrato, que puede dar acidosis metabólica. <strong>Acetato cálcico</strong> (comprimidos de 667 mg o solución 667 mg/5 mL): empezar con <strong>1.334 mg cada 8 h</strong> y subir hasta PO₄ &lt;6 mg/dL si no aparece hipercalcemia.</p>
-            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la fuente escribe "sevelamer gluconato"; la sal comercial que se contrapone al clorhidrato es el <em>carbonato</em> de sevelamer. Se deja anotado sin cambiar la fuente.</p></details>
+            <p>El sevelamer va en polvo para reconstituir en agua; se prefiere el sevelamer <em>gluconato</em> (sic) al clorhidrato, que puede dar acidosis metabólica. <strong>Acetato cálcico</strong> (comprimidos de 667 mg o solución 667 mg/5 mL): empezar con <strong>1.334 mg cada 8 h</strong> y subir hasta PO₄ &lt;6 mg/dL si no aparece hipercalcemia.</p>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: Marino escribe «sevelamer gluconato» (pág. 52) y se reproduce tal cual; el PDF no dice qué sal se comercializa.</p></details>
             <div class="agua-simulador" id="mr-quelante-calc">
                 <h4 style="color: var(--accent-yellow);">🧮 Dosis de quelante por fósforo</h4>
-                <div class="form-group"><label for="mr-quelante-po4">PO₄ sérico (mg/dL)</label><input type="number" id="mr-quelante-po4" min="0" max="20" step="0.1" value="8" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-quelante-po4">PO₄ sérico (mg/dL)</label><input type="number" id="mr-quelante-po4" min="0.1" max="20" step="0.1" value="8" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="mr-quelante-resultado"></div>
             </div>
 

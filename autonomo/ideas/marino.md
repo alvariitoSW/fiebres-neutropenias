@@ -155,3 +155,26 @@ Coinciden los tres revisores:
   - weaning el día 7: SBT fallido con la SvO₂ que cae; fuga <110 mL;
   - «encuentra el error»: clorhexidina + SOD;
   - «piensa y destapa»: ¿ansiedad o fracaso en el SBT?; extubar sube el trabajo respiratorio (Fig. 30.2).
+
+### R8 · Caps. 31-35 (Marino Renal: ácido-base, CAD, alcalosis, FRA, sodio) · 2026-10-14
+
+- **Ácido-base vivo**: el mapa de la gasometría que se mueve con la compensación respiratoria y renal, y el pH a la
+  par. Caso de 3 gasometrías encadenadas. Balanza de aniones (HCO₃⁻ que se vacía y Cl⁻ o lactato que llena).
+- **`mr-trr` con el filtro vivo** (`filtro-vivo.js`), que ya existe, y **`mr-fra-indices` con la nefrona viva**
+  (prerrenal, NTA, obstrucción) junto a los índices urinarios.
+- **Cap. 35 con la nefrona viva**: SIADH, DI, deshidratación e hiperglucemia ya existen como estados.
+- **Glomérulo vivo**: faltan la presión venosa renal alta (congestión) y la PIA (Pā − 2·PIA).
+- **Casos**:
+  - CAD → salino → delta, con K⁺ 3,1 al ingreso;
+  - hiponatremia con salino al 3 % → diuresis acuosa → sobrecorrección → desmopresina;
+  - FRA por sepsis con furosemida (la EFNa engaña, la EFU decide).
+
+### R9 · Caps. 36-38 (Marino Renal: potasio, magnesio, calcio y fósforo) · 2026-10-15
+
+- **Potasio y ECG en escalera**: el simulador de hiperpotasemia de Nefrología con la Fig. 36.4 y el aviso «el ECG no
+  predice el K⁺». La Fig. 36.2 interactiva (déficit frente a K⁺, con el tramo plano).
+- **Cadena del magnesio con Motion**: el Mg bajo arrastra al K⁺ y al Ca²⁺; la prueba de retención animada (24 mmol
+  infundidos, orina frente a retenido). Con la nefrona viva en la reabsorción de Mg en el asa.
+- **Fig. 38.1 viva**: mando de albúmina (baja el total, no el iónico) y de pH (la alcalosis baja el iónico). Fósforo:
+  la glucosa y la insulina lo meten en la célula (realimentación).
+- **Casos**: hipoK por furosemida con Mg bajo; hiperK ficticia por hemólisis; transfusión masiva con citrato.
