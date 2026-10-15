@@ -150,13 +150,26 @@ esta sección.
 
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
-| `marino-r4` … `marino-r13` | Plan Marino, fase 1: los 10 trozos que quedan (empieza por el shock, caps. 14-17) | pendiente | 2026-10-14 | Aprobada (solo la fase 1 de B-003). 3 por sesión. |
+| `marino-r8`, `marino-r9` | Plan Marino R8-R9 (Marino Renal, caps. 31-38) | en revisión: [PR #10](https://github.com/alvariitoSW/fiebres-neutropenias/pull/10) y [#12](https://github.com/alvariitoSW/fiebres-neutropenias/pull/12) (la #12 va encima de la #10) | 2026-10-15 | «Ver en el móvil» arriba de cada PR |
+| `marino-r10` | Plan Marino R10 (Marino Abdomen, caps. 39-44) | en revisión: [PR #11](https://github.com/alvariitoSW/fiebres-neutropenias/pull/11) | 2026-10-15 | |
+| `marino-r11` … `marino-r13` | Plan Marino, fase 1: lo que queda (caps. 45-53) | pendiente | 2026-10-14 | Aprobada. **La fase 2 (mapa visual) espera a que termine toda la fase 1** (decisión del usuario, 14/10). |
 
 El resto del tablero sigue `aparcada` hasta que apruebes la entrada de la bitácora que le toca.
 
 ## 3. Esperando algo tuyo
 
 - **Aprobar B-001, B-002, B-004, B-005, B-006 y las fases 2-5 de B-003** (o cambiar el orden).
+- **Revisar las PR #10, #11 y #12** (R8-R10). Decisiones que piden:
+  - R8: la gasometría de ejemplo del libro (7,28 / 23 / 14) no es coherente; ¿se queda con su nota o se pone otra?
+  - R9: Marino no pone cifra a la hipermagnesemia «grave»; la app toma >5 (bloqueo AV).
+  - R10: la nota del Ringer lactato «casi isotónico» (fisiología general, rotulada): ¿se queda?
+- **Propuestas de regla nacidas de R4-R10** (para `autonomo/REGLAS.md` §6, con tu visto bueno):
+  - **erratas de dosis**: la dosis habitual + nota plegable visible con lo que imprime el libro (vasopresina U/h,
+    dabigatrán 50 mg, HNF 60 U; parte de R4);
+  - **tablas que se salen de su tarjeta**: que los jueces lo midan, no solo la página (parte de R5);
+  - **SVG recreados con fondo propio**, porque `.article-figure` es blanca (parte de R6);
+  - **umbrales clínicos comparados redondeados** (la KDIGO fallaba en 2,0 → 2,3; parte de R8);
+  - **notas de interpretación solo con fuente**, o marcadas como conocimiento general (parte de R10).
 
 - **Simulador de arritmias (idea de RitmoLab)**: los PDF de los algoritmos **AHA 2025** (bradicardia, taquicardia,
   parada y la guía completa); heart.org está bloqueado desde el entorno. Decidido: puerta propia en la raíz
@@ -184,14 +197,22 @@ El resto del tablero sigue `aparcada` hasta que apruebes la entrada de la bitác
 
 ## 5. 💡 Lo que yo propondría (no lo has pedido tú)
 
-- **Para el mapa visual de Marino**, ya hay ideas de los revisores de R1-R3 y una tuya («agua de río y de mar» para
-  los fluidos) en `autonomo/ideas/marino.md`.
+- **Para el mapa visual de Marino**, ya hay ideas de los revisores de R1-R10 y dos tuyas («agua de río y de mar»
+  para los fluidos; **ácido-base como proyecto propio sobre el riñón de PIF Nefrología**, «que sorprenda a nivel
+  artístico») en `autonomo/ideas/marino.md`. Los revisores de R6 y R7 piden, los tres, un **pulmón con respirador**
+  (caps. 23-30).
 - **Inventario de estudio**: una tabla de qué fichas tienen vista Visual, cuáles tienen un modelo grande que las
   explique y cuáles tienen solo preguntas viejas. Por qué: sirve para ordenar las tareas `estudio` por lo que más
   ayuda. Es una tarea pequeña de solo lectura.
 
 ## 6. Hecho (últimos 7 días)
 
+- 2026-10-15 · **Plan Marino, revisiones R4-R7** (caps. 14-30, 47 fichas), aprobadas y en la app (PR #6-#9):
+  - R4: vasopresina en U/min con nota, 3.er vasopresor = epinefrina, remisiones «Ficha N» → botones; después,
+    el escenario de bradicardia repuesto con el texto de Marino (lo pediste);
+  - R5: dabigatrán y HNF con nota de errata, CHA₂DS₂-VASc puntuable, tablas que cabían mal a 360 px;
+  - R6: clasificador de riesgo de la EP fiel, esteroides del SDRA, figuras legibles;
+  - R7: descontaminación oral (SOD), notas del manguito y la PImax, clasificador del derrame sin conducta inventada.
 - 2026-10-14 · **Plan Marino, revisiones R1-R3** (caps. 1-13, 29 fichas), aprobadas y en la app (PR #3, #4 y #5):
   - R1: signo de la RASS, límites de las calculadoras y notas de fuentes (propofol con fuentes externas);
   - R2: los simuladores de fluidos y de retorno venoso ya dan pacientes posibles;
