@@ -340,6 +340,14 @@ function renal() {
     });
 }
 
+// Variantes de la regla de temperatura para calor y hipotermia: Marino (pág. 45) dice que sus
+// elevaciones son hipertermia, no fiebre; por eso no llevan la banda «Fiebre ≥38,3».
+const reglaHipertermia = (titulo, nodos) => ({ tipo: 'linea', titulo, min: 34, max: 44, unidad: '°C', ticks: [35, 38, 39, 41, 44],
+    bandas: [{ desde: 38, hasta: 44, texto: 'Hipertermia: no es fiebre', color: 'rojo', alinear: 'fin' }], nodos });
+const reglaHipotermia = (titulo, nodos) => ({ tipo: 'linea', titulo, min: 22, max: 38, unidad: '°C', ticks: [24, 28, 32, 35, 38],
+    bandas: [{ desde: 22, hasta: 24, texto: 'Mortal', color: 'purpura' }, { desde: 24, hasta: 28, texto: 'Grave', color: 'rojo' },
+        { desde: 28, hasta: 32, texto: 'Moder.', color: 'amarillo' }, { desde: 32, hasta: 35, texto: 'Leve', color: 'dorado' }], nodos });
+
 function abdomen() {
     // ---- Cap. 39 ----
     montarVisual('ma-fallo-hepatico-agudo', {
@@ -349,7 +357,7 @@ function abdomen() {
             { tipo: 'selector', titulo: '¿Cuál es la causa?', control: '#ma-fha-causa', forma: 'chips', color: 'rojo', resultado: ['#ma-fha-causa-resultado'] },
             { tipo: 'comparar', titulo: 'Hepatotóxicos (Tabla 39.1)', columnas: [
                 { titulo: 'Dependientes de la dosis', color: 'rojo', nodos: [n('#ma-fha-paracetamol', 'Paracetamol')] },
-                { titulo: 'Idiosincrásicos', color: 'amarillo', nodos: [n('#ma-fha-farmacos', 'Otros fármacos')] }
+                { titulo: 'Idiosincrásicos', color: 'amarillo', nodos: [n('#ma-tabla-39-1', 'Tabla 39.1 (amiodarona y estatinas, en las dos columnas)')] }
             ] },
             { tipo: 'flujo', titulo: 'Qué vigilar', nodos: [n('#ma-fha-clinica', 'Clínica', 'dorado'), n('#ma-fha-hemodinamica', 'Hemodinámica', 'amarillo'), n('#ma-fha-ira', 'Riñón', 'rojo'), n('#ma-fha-trasplante', 'Trasplante', 'verde')] }
         ]
@@ -364,7 +372,7 @@ function abdomen() {
         ]
     });
     montarVisual('ma-varices', {
-        guia: 'Las 6 medidas de la hemorragia por varices (Tabla 39.3).',
+        guia: 'Los 5 componentes del manejo de la hemorragia por varices (Tabla 39.3); el checklist de la ficha los desglosa en 6 pasos.',
         paneles: [
             FIGURAS,
             { tipo: 'requisitos', modo: 'todos', titulo: 'Paquete de la hemorragia por varices', puerta: 'Paquete completo', items: [{ checks: '.ma-var-check' }], resultado: ['#ma-var-resultado'] },
@@ -389,7 +397,7 @@ function abdomen() {
         paneles: [
             FIGURAS,
             { tipo: 'racimos', titulo: 'Causas (Tabla 40.1)', tabla: '#ma-tabla-40-1', color: 'rojo' },
-            calc('Gravedad de Atlanta (calculadora de la ficha)', ['#ma-atl-fallo', '#ma-atl-compl'], ['#ma-atl-resultado']),
+            calc('Gravedad de Atlanta (calculadora de la ficha)', ['#ma-atl-fallo', '#ma-atl-compl'], ['#ma-atl-resultado'], 'Los 3 criterios diagnósticos (dolor, enzimas, imagen) se marcan en la vista Texto: por defecto hay 2 de 3.'),
             cineticaEnzimas,
             { tipo: 'racimos', titulo: 'Diagnóstico', grupos: [{ titulo: 'Claves', color: 'dorado', nodos: [n('#ma-panc-lipasa', 'Lipasa'), n('#ma-panc-morfologia', 'Morfología'), n('#ma-panc-imagen', 'Imagen'), n('#ma-panc-gravedad', 'Gravedad')] }] }
         ]
@@ -437,7 +445,6 @@ function abdomen() {
             FIGURAS,
             { tipo: 'matriz', titulo: 'Espectro (Tabla 41.3)', tabla: '#ma-tabla-41-3', normales: ['+'], leyenda: ['cubre (+)', 'no cubre o dudoso (−, +/−)'] },
             semaforoAntibioticos,
-            calc('Shock séptico (calculadora de la ficha)', ['#ma-cob-shock'], ['#ma-cob-resultado']),
             { tipo: 'racimos', titulo: 'Pautas', grupos: [
                 { titulo: 'Empírica', color: 'verde', nodos: [n('#ma-iia-sin-resistentes', 'Sin resistentes'), n('#ma-iia-blee', 'BLEE'), n('#ma-iia-alergia', 'Alergia'), n('#ma-iia-candida', 'Candida')] },
                 { titulo: 'Situaciones', color: 'rojo', nodos: [n('#ma-iia-neumoperitoneo', 'Neumoperitoneo'), n('#ma-iia-postop', 'Posoperatoria'), n('#ma-iia-absceso', 'Absceso')] }
@@ -451,7 +458,7 @@ function abdomen() {
         paneles: [
             FIGURAS,
             { tipo: 'flujo', titulo: 'De la sonda a la infección', nodos: [n('#ma-itu-adherencia', 'Biopelícula', 'dorado'), n('#ma-itu-germenes', 'Gérmenes', 'amarillo'), n('#ma-itu-nhsn', 'Criterios NHSN', 'rojo'), n('#ma-itu-retirar', 'Retirar la sonda', 'verde')] },
-            calc('¿Cumple criterios de ITU? (calculadora de la ficha)', ['#ma-nhsn-sonda', '#ma-nhsn-cultivo', '#ma-nhsn-hemo'], ['#ma-nhsn-resultado']),
+            calc('¿Cumple criterios de ITU? (calculadora de la ficha)', ['#ma-nhsn-sonda', '#ma-nhsn-cultivo', '#ma-nhsn-hemo'], ['#ma-nhsn-resultado'], 'Los síntomas (fiebre, dolor suprapúbico, dolor costovertebral) se marcan en la vista Texto: por defecto no hay ninguno.'),
             { tipo: 'comparar', titulo: 'Tratar o no', columnas: [
                 { titulo: 'No tratar', color: 'gris', nodos: [n('#ma-itu-asintomatica', 'Bacteriuria asintomática')] },
                 { titulo: 'Tratar', color: 'rojo', nodos: [n('#ma-itu-empirico', 'Empírico'), n('#ma-itu-dirigido', 'Dirigido')] }
@@ -472,9 +479,9 @@ function abdomen() {
         paneles: [
             { tipo: 'comparar', titulo: 'Agotamiento frente a golpe de calor (Tabla 43.1)', columnas: [
                 { titulo: 'Agotamiento', color: 'amarillo', nodos: [n('#ma-calor-agotamiento', '38-39 °C, SNC normal, suda')] },
-                { titulo: 'Golpe de calor', color: 'rojo', nodos: [n('#ma-calor-golpe', '≥41 °C, SNC alterado, no suda')] }
+                { titulo: 'Golpe de calor', color: 'rojo', nodos: [n('#ma-calor-golpe', '≥41 °C, SNC alterado, anhidrosis típica (no constante)')] }
             ] },
-            reglaTemperatura('Dónde caen en la escala de temperatura', [{ fuente: '#ma-calor-agotamiento', etiqueta: 'Agotamiento por calor (38-39 °C)', en: 38.5, color: 'amarillo', fila: 'abajo' }, { fuente: '#ma-calor-golpe', etiqueta: 'Golpe de calor (≥41 °C)', en: 41, color: 'rojo', fila: 'abajo' }]),
+            reglaHipertermia('Dónde caen en la escala de temperatura', [{ fuente: '#ma-calor-agotamiento', etiqueta: 'Agotamiento por calor (38-39 °C)', en: 38.5, color: 'amarillo', fila: 'abajo' }, { fuente: '#ma-calor-golpe', etiqueta: 'Golpe de calor (≥41 °C)', en: 41, color: 'rojo', fila: 'abajo' }]),
             calc('¿Golpe de calor? (calculadora de la ficha)', ['#ma-calor-temp', '#ma-calor-snc', '#ma-calor-hemo'], ['#ma-calor-resultado']),
             { tipo: 'comparar', titulo: 'Enfriar', columnas: [
                 { titulo: 'Externo', color: 'verde', nodos: [n('#ma-calor-externo', 'Externo')] },
@@ -504,7 +511,7 @@ function abdomen() {
         paneles: [
             FIGURAS,
             { tipo: 'escalera', titulo: 'Gravedad (Tabla 43.6)', tabla: '#ma-tabla-43-6' },
-            reglaTemperatura('La hipotermia en la escala de temperatura', [
+            reglaHipotermia('La hipotermia en la escala de temperatura', [
                 { fuente: 'css:#ma-tabla-43-6 tbody tr:nth-child(1)', etiqueta: 'Leve (32-35 °C)', en: 33.5, color: 'dorado', fila: 'abajo' },
                 { fuente: 'css:#ma-tabla-43-6 tbody tr:nth-child(2)', etiqueta: 'Moderada (28-31,9 °C)', en: 30, color: 'amarillo', fila: 'abajo' },
                 { fuente: 'css:#ma-tabla-43-6 tbody tr:nth-child(3)', etiqueta: 'Grave (<28 °C)', en: 26, color: 'rojo', fila: 'abajo' },
@@ -527,7 +534,7 @@ function abdomen() {
             { tipo: 'mapa', titulo: 'Fuentes de fiebre nueva en la UCI (Figura 44.1)', nodos: [
                 { fuente: '#ma-ff-1', etiqueta: 'Ictus', organo: 'cabeza' },
                 { fuente: '#ma-ff-2', etiqueta: 'Transfusiones, catéter, fármacos', organo: 'cateter', color: 'amarillo' },
-                { fuente: '#ma-ff-3', etiqueta: 'Herida quirúrgica (esternotomía)', organo: 'esternon', color: 'dorado' },
+                { fuente: '#ma-ff-3', etiqueta: 'Infección de herida quirúrgica', organo: 'esternon', color: 'dorado' },
                 { fuente: '#ma-ff-4', etiqueta: 'Neumonía y embolia pulmonar', organo: 'pulmonDcho' },
                 { fuente: '#ma-ff-5', etiqueta: 'Infarto y endocarditis', organo: 'corazon' },
                 { fuente: '#ma-ff-6', etiqueta: 'Colecistitis alitiásica', organo: 'higado', color: 'amarillo' },
@@ -538,7 +545,9 @@ function abdomen() {
                 { titulo: 'Más frecuentes', color: 'amarillo', nodos: [n('#ma-fiebre-postop', 'Posoperatoria'), n('#ma-fiebre-tev-transfusion', 'TEV y transfusión'), n('#ma-fiebre-farmacos', 'Fármacos')] },
                 { titulo: 'Otras', color: 'purpura', nodos: [n('#ma-fiebre-otras', 'Otras')] }
             ] },
-            { tipo: 'racimos', titulo: 'Fiebre por fármacos (Tabla 44.3)', tabla: '#ma-tabla-44-3', color: 'rojo' }
+            { tipo: 'racimos', titulo: 'Fiebre por fármacos (Tabla 44.3)', nota: 'Son dos listas independientes: los fármacos no se corresponden fila a fila con los hallazgos.', grupos: [
+                { titulo: 'Fármacos más implicados', color: 'rojo', tabla: '#ma-tabla-44-3-farmacos' },
+                { titulo: 'Hallazgos clínicos (% de los pacientes con fiebre por fármacos)', color: 'amarillo', tabla: '#ma-tabla-44-3-hallazgos' }] }
         ]
     });
     montarVisual('ma-infecciones-nosocomiales', {
@@ -556,8 +565,8 @@ function abdomen() {
         guia: 'La fiebre defiende: cuándo bajarla y con qué.',
         paneles: [
             FIGURAS,
-            { tipo: 'flujo', titulo: '¿Bajar la fiebre?', nodos: [n('#ma-antip-defensa', 'La fiebre defiende', 'verde'), n('#ma-antip-clinica', 'Lo que dicen los ensayos', 'amarillo'), n('#ma-antip-guias', 'Las guías', 'dorado')] },
-            { tipo: 'barras', titulo: 'Mortalidad según la temperatura inicial en la sepsis (Figura 44.5, %)', nota: 'Lectura aproximada de las categorías en °F.', tabla: '#ma-tabla-fig44-5', series: [{ col: 1, nombre: 'Mortalidad', color: 'rojo' }] },
+            { tipo: 'flujo', titulo: '¿Bajar la fiebre?', nodos: [n('#ma-antip-defensa', 'La fiebre defiende', 'verde'), n('#ma-antip-clinica', 'Estudios clínicos', 'amarillo'), n('#ma-antip-guias', 'Las guías', 'dorado')] },
+            { tipo: 'barras', titulo: 'Mortalidad según la temperatura inicial en la sepsis (Figura 44.5, %)', nota: 'Las categorías de la figura están en °F; los °C son la conversión de la ficha.', tabla: '#ma-tabla-fig44-5', series: [{ col: 1, nombre: 'Mortalidad', color: 'rojo' }] },
             calc('¿Antipirético? (calculadora de la ficha)', ['#ma-antip-peso', '#ma-antip-cerebro', '#ma-antip-higado'], ['#ma-antip-resultado']),
             { tipo: 'comparar', titulo: 'Con qué', columnas: [
                 { titulo: 'Paracetamol', color: 'verde', nodos: [n('#ma-antip-paracetamol', 'Paracetamol')] },

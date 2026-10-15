@@ -7,19 +7,47 @@ import { initCorkboard } from '../../core/corkboard.js';
 import { initSiNoWizard } from '../../core/wizard.js';
 
 const $ = id => document.getElementById(id);
-const num = el => (el && el.value !== '' ? Number(el.value) : null);
+// Hasta 2 decimales (mínimo 1): cerca del umbral, 38,29 no puede verse como 38,3.
+const fmt2 = v => v.toLocaleString('es-ES', { minimumFractionDigits: 1, maximumFractionDigits: 2 });
 const fmt = (v, d = 1) => v.toLocaleString('es-ES', { minimumFractionDigits: d, maximumFractionDigits: d });
+
+// Rangos de los campos numéricos: son de fisiología general (un paciente posible), no de la ficha.
+// num() anota los valores que se salen del min/max de su input; pintar() y ocultar() muestran
+// entonces el aviso en lugar de calcular. Cada cálculo empieza con la lista vacía (enlazar).
+let fuera = [];
+const nombreDe = el => (document.querySelector(`label[for="${el.id}"]`)?.textContent || el.id).trim();
+const num = el => {
+    if (!el || el.value === '') return null;
+    const v = Number(el.value), mn = el.min === '' ? -Infinity : Number(el.min), mx = el.max === '' ? Infinity : Number(el.max);
+    if (!Number.isFinite(v) || v < mn || v > mx) fuera.push({ el, v, mn, mx });
+    return v;
+};
+const avisoRango = () => `<strong>Combinación no fisiológica / fuera de rango</strong>: ${fuera.map(({ el, v, mn, mx }) =>
+    `«${nombreDe(el)}» = ${v.toLocaleString('es-ES')} (admitido: ${mn.toLocaleString('es-ES')}–${mx.toLocaleString('es-ES')})`).join('; ')}. No se calcula. Los rangos son de fisiología general, no de la ficha.`;
 
 function pintar(box, estado, html) {
     if (!box) return;
+    if (fuera.length) { estado = 'warn'; html = avisoRango(); }
     box.style.display = 'block';
     box.className = `tfg-estado tfg-estado-${estado}`;
     box.innerHTML = html;
 }
-function ocultar(box) { if (box) box.style.display = 'none'; }
+function ocultar(box) {
+    if (fuera.length) return pintar(box, 'warn', '');
+    if (box) box.style.display = 'none';
+}
 function enlazar(ids, fn) {
-    ids.forEach(id => { const el = $(id); el?.addEventListener(el.tagName === 'SELECT' || el.type === 'checkbox' ? 'change' : 'input', fn); });
-    fn();
+    const correr = () => { fuera = []; fn(); fuera = []; };
+    ids.forEach(id => { const el = $(id); el?.addEventListener(el.tagName === 'SELECT' || el.type === 'checkbox' ? 'change' : 'input', correr); });
+    correr();
+}
+// Bajo cada campo numérico, su rango admitido y de dónde sale.
+function rotularRangos() {
+    document.querySelectorAll('#panel-marino-abd-tabs input[type="number"]').forEach(el => {
+        let r = el.parentElement.querySelector('.ma-rango');
+        if (!r) { r = document.createElement('p'); r.className = 'fuente-ficha ma-rango'; r.style.margin = '4px 0 0'; el.after(r); }
+        r.textContent = `Rango admitido: ${Number(el.min).toLocaleString('es-ES')}–${Number(el.max).toLocaleString('es-ES')} (fisiología general, no de la ficha).`;
+    });
 }
 const idsDe = (sel, pref) => [...document.querySelectorAll(sel)].map((c, i) => c.id || (c.id = `${pref}${i}`));
 // Selector con explicación en una caja tfg-estado: datos = { valor: [estado, html] }.
@@ -48,7 +76,7 @@ function calcCvvh() {
     if (edema) motivos.push('edema cerebral');
     const grado = wh ? ` West Haven grado ${wh}: ${['', 'atención corta, cambio de personalidad', 'apatía, desorientado en el tiempo', 'estupor, desorientado en lugar y tiempo', 'coma'][wh]}.` : '';
     if (motivos.length) pintar(box, 'danger', `<strong>Hemofiltración (CVVH) cuanto antes</strong>: ${motivos.join(', ')}. Su eficacia depende del tiempo.${grado}${wh >= 2 ? ' Consulta con trasplante si la encefalopatía progresa.' : ''}`);
-    else pintar(box, wh ? 'warn' : 'ok', `Sin indicación de CVVH por estos criterios${nh3 !== null ? ` (amonio ${fmt(nh3, 0)}; normal &lt;60)` : ''}.${grado} Lactulosa y rifaximina reducen el amonio intestinal.`);
+    else pintar(box, wh || nh3 === null ? 'warn' : 'ok', `Sin indicación de CVVH por los criterios que has rellenado${nh3 !== null ? ` (amonio ${fmt(nh3, 0)}; normal &lt;60)` : ': <strong>falta el amonio</strong>, así que el criterio del amonio &gt;150 no se ha podido valorar'}.${grado} Lactulosa y rifaximina reducen el amonio intestinal.`);
 }
 function calcVarices() {
     const hechos = [...document.querySelectorAll('.ma-var-check')], falta = hechos.filter(c => !c.checked).map(c => c.value), box = $('ma-var-resultado');
@@ -67,7 +95,9 @@ function calcPmn() {
     let estado = ini > 250 ? 'danger' : 'ok';
     if (ini > 250 && d48 !== null) {
         const caida = (ini - d48) / ini * 100;
-        html += `<br>A las 48 h: ${fmt(d48, 0)}/mm³, un <strong>${fmt(caida, 0)}%</strong> ${caida >= 0 ? 'menos' : 'más'}. ${caida >= 25 ? '<strong>Respuesta favorable</strong> (≥25%).' : '<strong>Respuesta insuficiente</strong> (&lt;25%). La ficha solo define la respuesta favorable; no dice qué hacer después.'}`;
+        // Se muestra truncado a un decimal: el redondeo no puede contradecir el corte del 25%.
+        const caidaTxt = fmt(Math.trunc(Math.abs(caida) * 10) / 10, 1);
+        html += `<br>A las 48 h: ${fmt(d48, 0)}/mm³, ${caida >= 0 ? 'baja' : 'sube'} un <strong>${caidaTxt}%</strong>. ${caida >= 25 ? '<strong>Respuesta favorable</strong> (≥25%).' : '<strong>Respuesta insuficiente</strong> (&lt;25%). La ficha solo define la respuesta favorable; no dice qué hacer después.'}`;
         estado = caida >= 25 ? 'ok' : 'danger';
     }
     pintar(box, estado, html);
@@ -80,7 +110,7 @@ function calcAlbumina() {
 }
 function calcShr() {
     const c = [...document.querySelectorAll('.ma-shr-check')], n = c.filter(x => x.checked).length, box = $('ma-shr-resultado');
-    if (n === c.length) return pintar(box, 'danger', '<strong>Cumple los 5 criterios de síndrome hepatorrenal</strong> (Tabla 39.4): albúmina al 25% 20-40 g/día + terlipresina (1 mg IV cada 4-6 h o 2 mg/día en perfusión) o noradrenalina 5-40 µg/min. Consulta para trasplante. Mide la presión intraabdominal si hay ascitis a tensión.');
+    if (n === c.length) return pintar(box, 'danger', '<strong>Cumple los 5 criterios de síndrome hepatorrenal</strong> (Tabla 39.4): albúmina al 25% 20-40 g/día + terlipresina (1 mg IV cada 4-6 h o 2 mg/día en perfusión), o noradrenalina 5-40 µg/min, o octreótido 100-200 µg SC + midodrina 7,5-15 mg VO 3 veces al día. Consulta para trasplante. Mide la presión intraabdominal si hay ascitis a tensión.');
     pintar(box, n ? 'warn' : 'ok', `<strong>${n}/5 criterios</strong>: el diagnóstico exige los cinco.`);
 }
 
@@ -119,14 +149,14 @@ function calcBilis() {
 }
 export const CDI_WIZARD = {
     inicio: { pregunta: '¿La PCR del gen de la toxina B en heces es positiva?', si: 'elisa', no: { estado: 'tfg-estado-ok', final: 'PCR negativa: descarta la infección por C. difficile (no hay C. difficile toxigénico).' } },
-    elisa: { pregunta: 'PCR positiva = toxigénico, pero puede ser colonización. ¿El ELISA de toxinas A y B es positivo?', si: { estado: 'tfg-estado-danger', final: 'Infección confirmada: vancomicina 125 mg VO cada 6 h o fidaxomicina 200 mg cada 12 h, 10 días.' }, no: 'sospecha' },
+    elisa: { pregunta: 'PCR positiva = toxigénico, pero puede ser colonización. ¿El ELISA de toxinas A y B es positivo?', si: { estado: 'tfg-estado-danger', final: 'Infección confirmada: vancomicina 125 mg VO 4 veces al día o fidaxomicina 200 mg 2 veces al día, 10 días.' }, no: 'sospecha' },
     sospecha: { pregunta: 'ELISA negativo (pierde un 20%). ¿La sospecha clínica sigue siendo alta?', si: { estado: 'tfg-estado-warn', final: 'Colonoscopia: las pseudomembranas confirman el diagnóstico.' }, no: { estado: 'tfg-estado-ok', final: 'PCR positiva sin toxinas: la mayoría evoluciona bien sin tratamiento. No trates solo por la PCR.' } },
 };
 const CDI_TTO = {
-    inicial: ['warn', 'Vancomicina <strong>125 mg VO cada 6 h</strong> 10 días, o fidaxomicina <strong>200 mg VO cada 12 h</strong> 10 días. La fiebre cede en 24-48 h y la diarrea en 4-5 días.'],
+    inicial: ['warn', 'Vancomicina <strong>125 mg VO 4 veces al día</strong> 10 días, o fidaxomicina <strong>200 mg VO 2 veces al día</strong> 10 días. La fiebre cede en 24-48 h y la diarrea en 4-5 días.'],
     fulminante: ['danger', 'Vancomicina <strong>500 mg cada 6 h</strong> VO, por sonda o en enema <strong>+ metronidazol 500 mg IV cada 8 h</strong>. El megacolon tóxico es una urgencia quirúrgica: colectomía subtotal si hace falta.'],
-    'rec1-vanco': ['warn', 'Fidaxomicina 200 mg cada 12 h 10 días, o vancomicina en pauta prolongada: 125 mg cada 6 h 10-14 días, cada 12 h 7 días, cada 24 h 7 días y cada 2-3 días 2-8 semanas.'],
-    'rec1-fidax': ['warn', 'Vancomicina en pauta prolongada (125 mg cada 6 h 10-14 días, cada 12 h 7 días, cada 24 h 7 días y cada 2-3 días 2-8 semanas). La fidaxomicina como opción de recurrencia solo se da si el primer episodio se trató con vancomicina.'],
+    'rec1-vanco': ['warn', 'Fidaxomicina 200 mg 2 veces al día 10 días, o vancomicina en pauta prolongada: 125 mg 4 veces al día 10-14 días, luego 2 veces al día 7 días, luego 1 vez al día 7 días y luego cada 2-3 días 2-8 semanas.'],
+    'rec1-fidax': ['warn', 'Vancomicina en pauta prolongada (125 mg 4 veces al día 10-14 días, luego 2 veces al día 7 días, luego 1 vez al día 7 días y luego cada 2-3 días 2-8 semanas). La fidaxomicina como opción de recurrencia solo se da si el primer episodio se trató con vancomicina.'],
     rec2: ['danger', '<strong>Trasplante de microbiota fecal</strong>: curación del 80-100% en la infección recurrente.'],
 };
 // Tabla 41.3: columnas gramnegativos, Pseudomonas, enterococos, anaerobios, BLEE ('+', '±', '-').
@@ -145,13 +175,17 @@ function calcCobertura() {
     let solos = TABLA_41_3.filter(([, c]) => cols.every(i => c[i] === '+')).map(([n]) => n);
     const avisos = [];
     if (shock && solos.includes('Tigeciclina')) { solos = solos.filter(n => n !== 'Tigeciclina'); avisos.push('la tigeciclina no se recomienda en el shock séptico'); }
-    // Parejas que la ficha cita: ceftriaxona + metronidazol y amikacina + metronidazol.
-    const parejas = [['Ceftriaxona', 'Metronidazol'], ['Amikacina', 'Metronidazol']]
-        .filter(([a, b]) => { const ca = TABLA_41_3.find(x => x[0] === a)[1], cb = TABLA_41_3.find(x => x[0] === b)[1]; return cols.every(i => ca[i] === '+' || cb[i] === '+'); })
-        .map(p => p.join(' + '));
+    // Parejas que la ficha cita (pág. 33), cada una con su salvedad. Ceftriaxona + metronidazol es
+    // para el paciente no grave: con shock séptico no se ofrece.
+    const parejas = [
+        ['Ceftriaxona', 'Metronidazol', ' (solo si no está grave; cobertura muy inferior a piperacilina-tazobactam, pág. 33)', !shock],
+        ['Amikacina', 'Metronidazol', ' (la de la alergia a betalactámicos)', true],
+    ].filter(([a, b, , ofrecer]) => { const ca = TABLA_41_3.find(x => x[0] === a)[1], cb = TABLA_41_3.find(x => x[0] === b)[1]; return ofrecer && cols.every(i => ca[i] === '+' || cb[i] === '+'); })
+        .map(([a, b, nota]) => `${a} + ${b}${nota}`);
     let html = solos.length ? `<strong>Cubren todo en monoterapia</strong>: ${solos.join(', ')}.` : '<strong>Ningún antibiótico de la tabla lo cubre todo solo.</strong>';
-    if (parejas.length) html += `<br>Combinaciones de la ficha que lo cubren: ${parejas.join('; ')}${parejas.includes('Amikacina + Metronidazol') ? ' (la de la alergia a betalactámicos)' : ''}.`;
-    if (shock && solos.includes('Meropenem')) html += '<br>En el shock séptico, el de elección es el <strong>meropenem</strong>.';
+    if (parejas.length) html += `<br>Combinaciones de la ficha que lo cubren: ${parejas.join('; ')}.`;
+    if (shock) html += '<br><small>Con shock séptico no se ofrece ceftriaxona + metronidazol: Marino la limita al paciente que no está gravemente enfermo.</small>';
+    if (shock && cols.includes(4) && solos.includes('Meropenem')) html += '<br>Con sospecha de BLEE y shock séptico, el de elección es el <strong>meropenem</strong> (pág. 33).';
     if (avisos.length) html += `<br><small>${avisos.join('; ')}.</small>`;
     html += '<br><small>Ojo: el meropenem no cubre SARM ni enterococo resistente a vancomicina.</small>';
     pintar(box, solos.length ? 'ok' : 'warn', html);
@@ -179,9 +213,10 @@ const CANDIDURIA = {
 function calcCalor() {
     const t = num($('ma-calor-temp')), snc = $('ma-calor-snc')?.value === 'si', hemo = $('ma-calor-hemo')?.value === 'si', box = $('ma-calor-resultado');
     if (t === null) return ocultar(box);
+    if (t >= 41 && !snc && !hemo) return pintar(box, 'warn', `${fmt(t, 1)} °C sin disfunción neurológica ni hemodinámica: la Tabla 43.1 define el golpe de calor por ≥41 °C con disfunción del SNC; este caso no lo clasifica.`);
     if (t >= 41) {
         const min = (t - 38) / 0.3;
-        return pintar(box, 'danger', `<strong>Golpe de calor</strong> (≥41 °C${snc || hemo ? ', con afectación neurológica o hemodinámica' : ''}): volumen y enfriamiento activo hasta 38 °C. Con enfriamiento evaporativo (0,3 °C/min) bajar de ${fmt(t, 1)} a 38 °C lleva unos <strong>${fmt(min, 0)} min</strong>. Vigila el escalofrío.`);
+        return pintar(box, 'danger', `<strong>Golpe de calor</strong> (≥41 °C, con afectación neurológica o hemodinámica): volumen y enfriamiento activo hasta 38 °C. Marino da la velocidad del enfriamiento evaporativo (0,3 °C/min), no el tiempo: bajar de ${fmt(t, 1)} a 38 °C serían unos <strong>${fmt(min, 0)} min</strong> (ilustrativo: extrapolación de 0,3 °C/min). Vigila el escalofrío.`);
     }
     if (snc || hemo) return pintar(box, 'danger', `Disfunción ${snc ? 'neurológica' : 'hemodinámica'} con ${fmt(t, 1)} °C: grave, pero la Tabla 43.1 define el golpe de calor con ≥41 °C y la ficha no clasifica este caso.`);
     if (t >= 38 && t <= 39) return pintar(box, 'warn', '<strong>Agotamiento por calor</strong> (38-39 °C): deshidratación sin compromiso hemodinámico ni del SNC. Volumen y medidas generales; no hace falta enfriar de forma activa.');
@@ -195,7 +230,7 @@ function calcDiferencial() {
     if (f === 'anestesico' || etco2) html = '<strong>Hipertermia maligna</strong>: suspende el anestésico y da <strong>dantroleno</strong>. Avisa a la familia (autosómica dominante).';
     else if (f === 'sero' || clonus) html = '<strong>Síndrome serotoninérgico</strong>: hiperreflexia, mioclonías y clonus son lo más específico. Retira los fármacos; en los graves, ciproheptadina 12 mg y después 2 mg cada 2 h.';
     else if (f === 'retirada') html = '<strong>Síndrome neuroléptico maligno por retirada</strong>: <strong>reinicia</strong> el dopaminérgico ya y bájalo despacio después.';
-    else html = '<strong>Síndrome neuroléptico maligno</strong>: retira el fármaco; bromocriptina 10 mg cada 8 h o dantroleno en los graves; profilaxis tromboembólica obligatoria.';
+    else html = '<strong>Síndrome neuroléptico maligno</strong>: retira el fármaco; bromocriptina 10 mg 3 veces al día o dantroleno en los graves; profilaxis tromboembólica obligatoria.';
     if (f === 'sero' && etco2) html += '<br><small>Aviso: la subida del CO₂ espirado orienta a hipertermia maligna; revisa si hubo anestésico.</small>';
     if ((f === 'antidopa' || f === 'retirada') && clonus) html += '<br><small>El clonus apunta a síndrome serotoninérgico: revisa los fármacos (comparten algunos).</small>';
     if (ck) html += '<br>CK &gt;1.000 U/L: en la ficha, este corte distingue el SNM de una <strong>distonía</strong> (en la que solo sube algo), no de los otros dos síndromes. Vigila la rabdomiólisis y el riñón.';
@@ -222,13 +257,22 @@ function calcHipotermia() {
 }
 
 // ---- Cap. 44 — fiebre --------------------------------------------------
+// Rango de la temperatura (fisiología general): 25-44 °C, que son 77-111,2 °F.
+function rangoTemperatura() {
+    const inp = $('ma-tconv-valor'), f = $('ma-tconv-unidad')?.value === 'f';
+    if (!inp) return;
+    inp.min = f ? '77' : '25';
+    inp.max = f ? '111.2' : '44';
+    rotularRangos();
+}
 function calcTemperatura() {
+    rangoTemperatura();
     const v = num($('ma-tconv-valor')), u = $('ma-tconv-unidad')?.value, neutro = $('ma-tconv-neutro')?.value === 'si', box = $('ma-tconv-resultado');
     if (v === null) return ocultar(box);
     const c = u === 'f' ? 5 / 9 * (v - 32) : v, f = 9 / 5 * c + 32;
     const umbral = neutro ? 38.0 : 38.3;
     const fiebre = c >= umbral;
-    pintar(box, fiebre ? 'warn' : 'ok', `<strong>${fmt(c, 1)} °C = ${fmt(f, 1)} °F</strong>. ${fiebre ? `<strong>Fiebre</strong> (≥${fmt(umbral, 1)} °C${neutro ? ', mantenida ≥1 h en el neutropénico' : ''}): merece estudio, pero la mitad no es infecciosa.` : `Por debajo del umbral de fiebre (${fmt(umbral, 1)} °C).`}`);
+    pintar(box, fiebre ? 'warn' : 'ok', `<strong>${fmt2(c)} °C = ${fmt2(f)} °F</strong>. ${fiebre ? `<strong>Fiebre</strong> (≥${fmt(umbral, 1)} °C${neutro ? ', mantenida ≥1 h en el neutropénico' : ''}): merece estudio, pero la mitad no es infecciosa.` : `Por debajo del umbral de fiebre (${fmt(umbral, 1)} °C).`}`);
 }
 const DETECCION = { endo: [89, 94, 94, 100], otras: [65, 80, 96, 100] };
 function calcHemocultivos() {
@@ -236,7 +280,7 @@ function calcHemocultivos() {
     if (!n || !tipo) return ocultar(box);
     const pct = DETECCION[tipo][n - 1];
     const objetivo = tipo === 'endo' ? 2 : 3;
-    pintar(box, n >= objetivo ? 'ok' : 'warn', `Con ${n} hemocultivo${n > 1 ? 's' : ''} en 24 h se detecta el <strong>${pct}%</strong> de las bacteriemias (Figura 44.3). ${n >= objetivo ? 'Suficiente' : `Recomendado: ${tipo === 'endo' ? '2 en la endocarditis' : '3-4 en 24 h'}`}. Extrae 20-30 mL por punción.`);
+    pintar(box, n >= objetivo ? 'ok' : 'warn', `Con ${n} hemocultivo${n > 1 ? 's' : ''} en 24 h se detecta el <strong>${pct}%</strong> de las bacteriemias (Figura 44.3). ${n >= objetivo ? 'Suficiente' : `Recomendado: ${tipo === 'endo' ? '2 en la endocarditis' : '3-4 en 24 h'}`}. Extrae 20-30 mL por punción.<br><small>Cifras de un estudio de bacteriemias ya documentadas con 4 o más hemocultivos (cada uno es una punción): por eso con 4 sale el 100%.</small>`);
 }
 function calcDtp() {
     const cvc = num($('ma-dtp-cvc')), per = num($('ma-dtp-per')), box = $('ma-dtp-resultado');
@@ -251,11 +295,12 @@ function calcAntipiretico() {
     let html = cerebro ? '<strong>Sí, bájala</strong>: con lesión cerebral isquémica (posparada o ictus) la fiebre es dañina.' : '<strong>No suprimas la fiebre de rutina</strong>: es una respuesta adaptativa (las guías no recomiendan tratarla sistemáticamente).';
     html += '<br>Si decides tratarla: ';
     html += higado ? 'paracetamol <strong>contraindicado</strong> (insuficiencia hepática); ' : 'paracetamol 650 mg cada 6 h (VO, rectal o IV) o 1.000 mg IV cada 8 h, máximo 3 g/día; ';
-    html += `ibuprofeno IV <strong>${fmt(ibu, 0)} mg</strong> cada 6 h (10 mg/kg, máx. 800) o ketorolaco IV <strong>${fmt(keto, 0)} mg</strong> en dosis única (0,5 mg/kg). Nada de mantas de enfriamiento.`;
+    html += `ibuprofeno IV <strong>${fmt(ibu, 0)} mg</strong> cada 6 h (10 mg/kg, máx. 800) o ketorolaco IV <strong>${fmt(keto, 0)} mg</strong> en dosis única (0,5 mg/kg; <small>Marino no da dosis máxima de ketorolaco: con pesos altos, revisa la dosis</small>). Nada de mantas de enfriamiento.`;
     pintar(box, cerebro ? 'warn' : 'ok', html);
 }
 
 export function init() {
+    rotularRangos();
     initCorkboard('marino-abd-corkboard', 'panel-marino-abd-tabs');
     selector('ma-fha-causa', 'ma-fha-causa-resultado', FHA_CAUSA);
     enlazar(['ma-cvvh-nh3', 'ma-cvvh-oliguria', 'ma-cvvh-edema', 'ma-cvvh-wh'], calcCvvh);
