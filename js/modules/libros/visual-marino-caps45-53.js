@@ -23,7 +23,7 @@ function neuro() {
             FIGURAS,
             { tipo: 'comparar', titulo: 'Los dos componentes (Tabla 45.1)', columnas: [
                 { titulo: 'Despierta y consciente', color: 'verde', nodos: [n('#mn-cons-ansiedad', 'Ansiedad y letargia'), n('#mn-cons-lockedin', 'Enclaustramiento')] },
-                { titulo: 'Despierta, no consciente', color: 'amarillo', nodos: [n('#mn-cons-delirio', 'Delirio y demencia'), n('#mn-cons-estupor', 'Estupor'), n('#mn-cons-vegetativo', 'Estado vegetativo')] },
+                { titulo: 'Despierta, no consciente', color: 'amarillo', nodos: [n('#mn-cons-delirio', 'Delirio y demencia'), n('#mn-cons-psicosis', 'Psicosis'), n('#mn-cons-estupor', 'Estupor'), n('#mn-cons-vegetativo', 'Estado vegetativo')] },
                 { titulo: 'Ni despierta ni consciente', color: 'rojo', nodos: [n('#mn-cons-coma', 'Coma'), n('#mn-cons-muerte', 'Muerte encefálica')] }
             ] },
             { tipo: 'racimos', titulo: 'Bases', grupos: [racimo('Componentes', 'purpura', [n('#mn-cons-despertar', 'Despertar'), n('#mn-cons-conciencia', 'Conciencia'), n('#mn-cons-causas', 'Causas en la UCI')])] }
@@ -46,14 +46,14 @@ function neuro() {
     montarVisual('mn-abstinencia', {
         guia: 'Qué aparece y cuándo, desde la última copa (Tabla 45.3).',
         paneles: [
-            { tipo: 'linea', titulo: 'Desde la última copa', min: 0, max: 96, unidad: 'h', ticks: [0, 6, 12, 24, 48, 72, 96],
+            { tipo: 'linea', titulo: 'Desde la última copa', min: 0, max: 96, unidad: 'horas', ticks: [0, 12, 24, 48, 72, 96],
                 bandas: [{ desde: 6, hasta: 48, texto: 'Convulsiones', color: 'amarillo' }, { desde: 48, hasta: 96, texto: 'Delirium tremens', color: 'rojo', alinear: 'fin' }],
                 nodos: [
                     { fuente: 'css:#mn-tabla-45-3 tbody tr:nth-child(1)', etiqueta: 'Precoz (6-8 h)', en: 7, color: 'dorado', fila: 'abajo' },
                     { fuente: 'css:#mn-tabla-45-3 tbody tr:nth-child(3)', etiqueta: 'Alucinaciones (12-48 h)', en: 24, color: 'purpura', fila: 'abajo' },
                     { fuente: '#mn-oh-dt', etiqueta: 'Delirium tremens (48-96 h)', en: 60, color: 'rojo', fila: 'abajo' }
                 ] },
-            calc('¿Qué esperar ahora? (calculadora de la ficha)', ['#mn-oh-horas'], ['#mn-oh-resultado']),
+            calc('¿Qué esperar ahora? (calculadora de la ficha)', ['#mn-oh-horas'], ['#mn-oh-resultado'], 'Origen: ilustrativo. Cada rasgo cuenta desde su inicio más temprano hasta su inicio más tardío + su duración máxima (Tabla 45.3); la tabla no da esta ventana.'),
             { tipo: 'flujo', titulo: 'Tratamiento', nodos: [n('#mn-oh-bzd', 'Benzodiacepinas', 'verde'), n('#mn-oh-uci', 'En la UCI', 'amarillo'), [n('#mn-oh-propofol', 'Propofol', 'purpura'), n('#mn-oh-fenobarbital', 'Fenobarbital', 'purpura'), n('#mn-oh-dex', 'Dexmedetomidina', 'purpura')]] },
             calc('Lorazepam y propilenglicol (calculadora de la ficha)', ['#mn-lzp-peso', '#mn-lzp-ritmo', '#mn-lzp-horas'], ['#mn-lzp-resultado']),
             { tipo: 'racimos', titulo: 'No olvidar', grupos: [racimo('Otras', 'rojo', [n('#mn-oh-wernicke', 'Wernicke'), n('#mn-oh-gabapentina', 'Gabapentina')])] }
@@ -75,7 +75,8 @@ function neuro() {
     montarVisual('mn-muerte-encefalica', {
         guia: 'Los 5 pasos de la lista de comprobación y el test de apnea.',
         paneles: [
-            { tipo: 'requisitos', modo: 'todos', titulo: 'Lista de comprobación (Tabla 45.6)', puerta: 'Pasos 1-4 confirmados', items: [{ checks: '.mn-me-pre' }, { checks: '.mn-me-causa' }, { checks: '.mn-me-tronco' }, { checks: '.mn-me-apnea' }], resultado: ['#mn-me-resultado'] },
+            { tipo: 'requisitos', modo: 'todos', titulo: 'Pasos 1-4 de la lista de comprobación (Tabla 45.6)', puerta: 'Pasos 1-4 confirmados', items: [{ checks: '.mn-me-pre' }, { checks: '.mn-me-causa' }, { checks: '.mn-me-tronco' }, { checks: '.mn-me-apnea' }], resultado: ['#mn-me-resultado'] },
+            { tipo: 'requisitos', modo: 'todos', titulo: 'Paso 5 · Prueba confirmatoria (solo si los pasos 1-4 no se pueden completar o interpretar)', puerta: 'Con ella positiva también se puede declarar la muerte', items: [{ checks: '#mn-me-confirmatoria' }], resultado: ['#mn-me-resultado'], nota: 'Es la vía alternativa de la tabla: «pasos 1-4 confirmados, o prueba confirmatoria positiva».' },
             calc('Test de apnea (calculadora de la ficha)', ['#mn-apnea-basal', '#mn-apnea-final', '#mn-apnea-esfuerzo'], ['#mn-apnea-resultado']),
             { tipo: 'racimos', titulo: 'Matices', grupos: [racimo('Requisitos', 'dorado', [n('#mn-me-pam', 'PAM ≥75'), n('#mn-me-farmacos', 'Depresores'), n('#mn-me-ttm', 'Tras temperatura')]), racimo('Otros', 'purpura', [n('#mn-me-lazaro', 'Signo de Lázaro'), n('#mn-me-confirmatorias', 'Pruebas confirmatorias')])] }
         ]
@@ -104,7 +105,7 @@ function neuro() {
         guia: 'Qué la empeora y cuándo intubar.',
         paneles: [
             FIGURAS,
-            { tipo: 'selector', titulo: '¿Puede empeorarla este fármaco? (Tabla 46.5)', control: '#mn-mg-farmaco', forma: 'chips', color: 'rojo', resultado: ['#mn-mg-farmaco-resultado'] },
+            { tipo: 'selector', titulo: '¿Puede empeorarla este fármaco? (Tabla 46.5)', control: '#mn-mg-farmaco', forma: 'chips', color: 'rojo', resultado: ['#mn-mg-farmaco-resultado'], nota: 'La tabla solo nombra las familias; los ejemplos concretos de los botones son conocimiento general, no de la fuente.' },
             calc('¿Pensar en intubar? (calculadora de la ficha)', ['#mn-mg-peso', '#mn-mg-cv', '#mn-mg-pim'], ['#mn-mg-resultado']),
             { tipo: 'flujo', titulo: 'Crisis miasténica', nodos: [n('#mn-mg-crisis', 'Plasmaféresis o IgIV', 'rojo'), [n('#mn-mg-piridostigmina', 'Piridostigmina', 'amarillo'), n('#mn-mg-corticoides', 'Corticoides', 'amarillo')], n('#mn-mg-pronostico', 'Pronóstico', 'verde')] }
         ]
@@ -145,7 +146,7 @@ function neuro() {
         paneles: [
             FIGURAS,
             { tipo: 'linea', titulo: 'La primera semana del ictus isquémico', min: 0, max: 7, unidad: 'día', ticks: [0, 1, 2, 3, 5, 7],
-                bandas: [{ desde: 0, hasta: 1, texto: 'Tras trombólisis: 24 h en UCI', color: 'rojo' }],
+                bandas: [{ desde: 0, hasta: 1, texto: 'UCI', color: 'rojo' }],
                 nodos: [
                     { fuente: '#mn-isq-hemorragia', etiqueta: 'Hemorragia tras trombólisis: se retrasan 24 h anticoagulantes y antiagregantes', en: 0.3, color: 'rojo', fila: 'abajo' },
                     { fuente: '#mn-isq-tvp', etiqueta: 'Compresión neumática las primeras 24 h tras trombólisis', en: 0.8, color: 'purpura' },
@@ -176,7 +177,7 @@ function neuro() {
         paneles: [
             FIGURAS,
             { tipo: 'linea', titulo: 'Las tres primeras semanas', min: 0, max: 21, unidad: 'día', ticks: [0, 3, 7, 10, 14, 21],
-                bandas: [{ desde: 0, hasta: 3, texto: 'Excluir aneurisma', color: 'verde' }, { desde: 4, hasta: 14, texto: 'Isquemia diferida', color: 'rojo' }],
+                bandas: [{ desde: 0, hasta: 3, texto: 'Excluir', color: 'verde' }, { desde: 4, hasta: 14, texto: 'Isquemia diferida', color: 'rojo' }],
                 nodos: [
                     { fuente: '#mn-hsa-aneurisma', etiqueta: 'Excluir el aneurisma (≤3 días)', en: 2, color: 'verde', fila: 'abajo' },
                     { fuente: '#mn-hsa-icd', etiqueta: 'Isquemia diferida (días 4-14)', en: 9, color: 'rojo', fila: 'abajo' },

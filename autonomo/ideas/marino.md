@@ -190,3 +190,14 @@ Coinciden los tres revisores:
   la candiduria.
 - **Casos**: cirrótico con varices → PBE → SHR; pancreatitis del día 1 al 7; fiebre en la posparada.
 - **«Encuentra el error»**: ceftriaxona + metronidazol en el shock; bajar la fiebre de rutina.
+### R11 · Caps. 45-47 (Marino Neuro: consciencia, movimiento, ictus) · 2026-10-15
+
+- **Cráneo vivo** (decisión grande, con maqueta): PIC, PPC = PAM − PIC, hematoma, edema, hidrocefalia, herniación y
+  pupilas. Serviría para HIC, HSA, edema del ictus, coma y muerte encefálica. La cara de Glasgow ya existe y podría
+  ser su cara.
+- **Unión neuromuscular con Motion**, como los receptores: miastenia, bloqueo y reversión, GBS frente a miastenia.
+- **Ecógrafo**: burbujas del FOP en el apical de 4 cámaras.
+- **Casos**:
+  - el alcohólico del día 1 al 4;
+  - la HIC con warfarina o con apixabán (andexanet);
+  - la crisis miasténica.

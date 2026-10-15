@@ -14,7 +14,7 @@ const caja = id => `<div id="${id}" hidden></div>`;
 
 // ---------- Cap. 45: Glasgow y pupilas sobre una cara ----------
 const PUP = {
-    dilR: [9, 9, true], dilNR: [9, 9, false], uni: [9, 3.5, false], medR: [5, 5, true], medNR: [5, 5, false],
+    dilR: [9, 9, true], dilNR: [9, 9, false], uni: [9, 3.5, false, 'Una dilatada y fija; la otra reactiva'], medR: [5, 5, true], medNR: [5, 5, false],
     horner: [5, 3, true], pequeR: [3, 3, true], puntR: [1.6, 1.6, true], puntNR: [1.6, 1.6, false]
 };
 export const caraGlasgow = {
@@ -39,10 +39,10 @@ export const caraGlasgow = {
             const ojo = (cx, r) => abiertos
                 ? `<ellipse cx="${cx}" cy="70" rx="17" ry="${(10 * abiertos).toFixed(1)}" fill="var(--bg-card)" stroke="var(--text-main)"/><circle cx="${cx}" cy="70" r="${Math.min(p ? r : 5, 10 * abiertos)}" fill="var(--text-main)"/>`
                 : `<path d="M${cx - 17},70 Q${cx},78 ${cx + 17},70" fill="none" stroke="var(--text-main)" stroke-width="2"/>`;
-            const voz = { 5: 'Orientado', 4: 'Confuso', 3: 'Palabras sueltas', 2: 'Sonidos', 1: '…', T: 'Intubado' }[v] || '';
+            const voz = { 5: 'Orientado', 4: 'Confuso', 3: 'Inapropiadas', 2: 'Sonidos', 1: '…', T: 'Intubado' }[v] || '';
             const boca = v === 'T' ? `<rect x="93" y="112" width="34" height="9" rx="3" fill="${C('blue')}"/>` : `<path d="M88,116 Q110,${v >= 4 ? 128 : 120} 132,116" fill="none" stroke="var(--text-main)" stroke-width="2"/>`;
             const mano = { 6: 'Obedece', 5: 'Localiza', 4: 'Retira', 3: 'Decorticación', 2: 'Descerebración', 1: 'Sin respuesta' }[m] || '';
-            const luz = !p ? '<text x="110" y="226" text-anchor="middle" class="mrp-pq">Elige un patrón de pupilas</text>' : p[2] ? '<text x="110" y="226" text-anchor="middle" class="mrp-pq">Reactivas a la luz</text>' : `<text x="110" y="226" text-anchor="middle" class="mrp-pq" fill="${C('red')}">No reactivas</text>`;
+            const luz = !p ? '<text x="110" y="226" text-anchor="middle" class="mrp-pq">Elige un patrón de pupilas</text>' : p[2] ? '<text x="110" y="226" text-anchor="middle" class="mrp-pq">Reactivas a la luz</text>' : `<text x="110" y="226" text-anchor="middle" class="mrp-pq" fill="${C('red')}">${p[3] || 'No reactivas'}</text>`;
             const pupila = (cx, r) => `<ellipse cx="${cx}" cy="200" rx="17" ry="10" fill="var(--bg-card)" stroke="var(--text-muted)"/>${p ? `<circle cx="${cx}" cy="200" r="${r}" fill="var(--text-main)"/>` : ''}`;
             cuerpo.querySelector('#mrp-cara').innerHTML = SVG('0 0 220 232', `
                 <ellipse cx="110" cy="85" rx="62" ry="72" fill="none" stroke="var(--border-color)" stroke-width="2"/>
