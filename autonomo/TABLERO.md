@@ -74,7 +74,7 @@ cada trozo salen de `js/data/libros-indice.js` (capítulos y su `tab`); el PDF y
 | 9 | `marino-r9` | 36-38 | en revisión (2026-10-15) · PR #12 (encima de #10) | 8 fichas · Libros |
 | 10 | `marino-r10` | 39-44 | en revisión (2026-10-15) · PR #11 | 17 fichas · Libros |
 | 11 | `marino-r11` | 45-47 | pendiente | 14 fichas · Libros |
-| 12 | `marino-r12` | 48-51 | en revisión (2026-10-15) | 14 fichas · Libros |
+| 12 | `marino-r12` | 48-51 | en revisión (2026-10-15) · PR #15 | 14 fichas · Libros |
 | 13 | `marino-r13` | 52-53 y apéndices | pendiente | 11 fichas · Libros |
 
 ---
