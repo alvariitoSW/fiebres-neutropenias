@@ -1,0 +1,1114 @@
+<!-- MAQUETA PARA ELEGIR (plan socialista, tarea marino-mapa, M1 · dirección C «Móvil cinético»). No es parte de la app.
+     Ábrela con el servidor de la app: http://localhost:8000/autonomo/maquetas/marino-acidobase-c.html
+     Datos: el caso de M1 del mapa del profesor (§7), con la medicina de las fichas de Marino (The ICU Book, caps. 31-33
+     y 53) que ya están en la app. El paciente es inventado; la medicina, no. -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ácido-base vivo · C · Móvil cinético</title>
+<style>
+/* Tokens de css/variables.css, copiados tal cual (como el modelo de preguntas). Ningún color fuera de ellos. */
+:root {
+  color-scheme: dark;
+  --bg-main: #17140f;
+  --bg-card: rgba(46, 38, 28, 0.72);
+  --border-color: rgba(196, 154, 74, 0.35);
+  --text-main: #ece3cc;
+  --text-muted: #a5967c;
+  --text-dim: #c9bda4;
+  --accent-green: #90a06a;
+  --accent-red: #b85c3e;
+  --accent-yellow: #cf9a3e;
+  --accent-blue: #d4af37;
+  --accent-purple: #9c5476;
+  --glow-green: 0 0 8px rgba(144, 160, 106, 0.45);
+  --glow-red: 0 0 10px rgba(184, 92, 62, 0.5);
+  --glow-blue: 0 0 10px rgba(212, 175, 55, 0.5);
+  --glow-purple: 0 0 8px rgba(156, 84, 118, 0.5);
+  --serif: Georgia, 'Times New Roman', serif;
+  --sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg-main); color: var(--text-main); font: 16px/1.5 var(--serif);
+  padding: 0 max(12px, env(safe-area-inset-right, 0px)) 110px max(12px, env(safe-area-inset-left, 0px)); overflow-x: hidden; }
+main { max-width: 560px; margin: 0 auto; display: grid; gap: 40px; }
+h1 { font-size: 1.75rem; line-height: 1.15; margin: 0; color: var(--accent-blue); font-weight: normal; letter-spacing: .01em; text-wrap: balance; }
+h2 { font-size: 1.22rem; margin: 0; font-weight: normal; color: var(--text-main); text-wrap: balance; }
+p { margin: 0; }
+.aviso { margin: 0 calc(-1 * max(12px, env(safe-area-inset-left, 0px))); padding: 9px 14px; text-align: center;
+  font: 600 .82rem/1.3 var(--sans); color: var(--bg-main); background: var(--accent-blue); letter-spacing: .02em; }
+.eyebrow { font: 600 .72rem var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); }
+.lead { color: var(--text-dim); font-size: 1.02rem; }
+header.cab { display: grid; gap: 10px; padding-top: 22px; }
+section { display: grid; gap: 12px; min-width: 0; }
+.idea { color: var(--text-dim); font-size: .98rem; }
+figure { margin: 0; min-width: 0; }
+svg.lam { display: block; width: 100%; height: auto; overflow: visible; }
+.origen { font: .76rem/1.5 var(--sans); color: var(--text-muted); padding-top: 6px; }
+.origen b { color: var(--text-dim); font-weight: 600; }
+/* Rótulo de origen: la forma del borde también distingue (no solo el color) */
+.og { display: inline-block; font: 600 .66rem/1 var(--sans); letter-spacing: .04em; padding: 2px 5px 3px; border-radius: 4px;
+  border: 1px solid var(--text-muted); color: var(--text-dim); vertical-align: 1px; white-space: nowrap; }
+.og.ficha { border-style: solid; border-color: var(--accent-blue); color: var(--accent-blue); }
+.og.fis { border-style: dashed; }
+.og.ilu { border-style: dotted; color: var(--text-muted); }
+.hl-r { background: rgba(184,92,62,.28); padding: 0 3px; border-radius: 2px; }
+.hl-v { background: rgba(144,160,106,.25); padding: 0 3px; border-radius: 2px; }
+.hl-p { background: rgba(156,84,118,.3); padding: 0 3px; border-radius: 2px; }
+.hl-a { background: rgba(212,175,55,.2); padding: 0 3px; border-radius: 2px; }
+
+/* SVG: texto y formas (clases, nunca colores sueltos) */
+.lam text { font-family: var(--sans); fill: var(--text-dim); }
+.t-serif { font-family: var(--serif) !important; }
+.t-dim { fill: var(--text-muted) !important; }
+.t-main { fill: var(--text-main) !important; }
+.t-oro { fill: var(--accent-blue) !important; }
+.t-rojo { fill: var(--accent-red) !important; }
+.t-verde { fill: var(--accent-green) !important; }
+.t-purpura { fill: var(--accent-purple) !important; }
+.t-ocre { fill: var(--accent-yellow) !important; }
+.t-fondo { fill: var(--bg-main) !important; }
+.f-co2 { fill: var(--accent-blue); }
+.f-hco3 { fill: var(--accent-green); }
+.f-h { fill: var(--accent-red); }
+.f-cl { fill: var(--accent-purple); }
+.f-keto { fill: var(--accent-yellow); }
+.f-na { fill: var(--text-main); }
+.f-fondo { fill: var(--bg-main); }
+.f-organo { fill: var(--text-muted); fill-opacity: .26; }
+.hilo { stroke: var(--accent-blue); stroke-width: 1; fill: none; opacity: .85; }
+.varilla { stroke: var(--accent-blue); stroke-width: 2.2; stroke-linecap: round; fill: none; }
+.oro-fino { stroke: var(--accent-blue); stroke-width: .9; fill: none; }
+.rejilla { stroke: var(--border-color); stroke-width: .7; fill: none; }
+.humo { fill: none; stroke: var(--accent-blue); stroke-width: 1.4; stroke-linecap: round; }
+.brillo-verde { filter: drop-shadow(var(--glow-green)); }
+.brillo-oro { filter: drop-shadow(var(--glow-blue)); }
+
+/* Pasos y reloj */
+.pasos { display: grid; grid-template-columns: repeat(7, minmax(44px, 1fr)); gap: 4px; }
+.paso { min-height: 48px; min-width: 44px; padding: 0; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-card);
+  color: var(--text-dim); font: 700 1rem var(--sans); cursor: pointer; }
+.paso[aria-current="step"] { background: var(--accent-blue); border-color: var(--accent-blue); color: var(--bg-main); }
+.paso.visto:not([aria-current]) { border-style: solid; color: var(--text-main); }
+.paso-tit { font-size: 1.05rem; color: var(--accent-blue); }
+.botonera { display: flex; gap: 8px; flex-wrap: wrap; }
+button.b { min-height: 46px; padding: 0 16px; font: 600 .9rem var(--sans); background: var(--bg-card); color: var(--text-main);
+  border: 1px solid var(--border-color); border-radius: 10px; cursor: pointer; }
+button.b.prim { background: var(--accent-blue); color: var(--bg-main); border-color: var(--accent-blue); }
+button:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--accent-blue); outline-offset: 2px; }
+.fab { position: fixed; right: max(14px, env(safe-area-inset-right, 0px)); bottom: max(14px, env(safe-area-inset-bottom, 0px)); z-index: 5;
+  min-height: 52px; padding: 0 20px; border-radius: 999px; border: 0; background: var(--accent-blue); color: var(--bg-main);
+  font: 700 .95rem var(--sans); box-shadow: var(--glow-blue); cursor: pointer; transition: opacity .25s; }
+.fab[hidden] { display: none; }
+
+/* Frase viva */
+.frase { font-size: 1.12rem; line-height: 1.55; border-left: 3px solid var(--accent-blue); padding: 4px 0 4px 14px; min-height: 5.5em; }
+.frase .og { margin-left: 2px; }
+.frase-origen { font: .76rem/1.5 var(--sans); color: var(--text-muted); }
+
+/* Albúmina */
+.mando { display: grid; gap: 6px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; }
+.mando label { font: 600 .9rem var(--sans); color: var(--text-dim); display: flex; justify-content: space-between; gap: 8px; }
+.mando output { color: var(--accent-blue); font-variant-numeric: tabular-nums; }
+input[type=range] { width: 100%; height: 44px; accent-color: var(--accent-blue); margin: 0; }
+.lectura { font: .9rem/1.5 var(--sans); color: var(--text-dim); }
+.lectura strong { color: var(--text-main); }
+
+/* Plegables */
+details { border: 1px solid var(--border-color); border-radius: 14px; background: var(--bg-card); }
+details > summary { list-style: none; cursor: pointer; min-height: 48px; padding: 12px 14px; display: flex; align-items: center; gap: 10px;
+  font: 1.02rem/1.3 var(--serif); color: var(--text-main); }
+details > summary::-webkit-details-marker { display: none; }
+details > summary::after { content: '+'; margin-left: auto; color: var(--accent-blue); font: 600 1.2rem var(--sans); }
+details[open] > summary::after { content: '−'; }
+.plegado { padding: 0 14px 14px; display: grid; gap: 10px; }
+dl.kv { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; font: .88rem/1.45 var(--sans); }
+dl.kv dt { color: var(--text-muted); }
+dl.kv dd { margin: 0; color: var(--text-dim); min-width: 0; }
+.notas { display: grid; gap: 10px; }
+.notas details > summary { font: .92rem/1.3 var(--sans); color: var(--text-dim); }
+.notas p { font: .86rem/1.5 var(--sans); color: var(--text-dim); }
+.foto { margin: 0; }
+.foto img { width: 100%; height: auto; border-radius: 8px; display: block; }
+.foto figcaption { font: .76rem/1.45 var(--sans); color: var(--text-muted); padding-top: 6px; }
+
+/* Elección */
+.elige { border: 1px solid var(--accent-blue); border-radius: 14px; padding: 16px; display: grid; gap: 12px; }
+.eleccion { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.eleccion button { min-height: 52px; text-align: left; }
+.eleccion button[aria-pressed="true"] { background: var(--accent-blue); color: var(--bg-main); border-color: var(--accent-blue); }
+.leyenda { display: flex; flex-wrap: wrap; gap: 6px 14px; font: .78rem/1.4 var(--sans); color: var(--text-dim); }
+.leyenda span { display: inline-flex; align-items: center; gap: 6px; }
+.leyenda svg { width: 22px; height: 10px; flex: none; }
+@media (prefers-reduced-motion: reduce) { .fab { transition: none; } }
+</style>
+</head><body>
+<div class="aviso" role="note">Maqueta para elegir: no es la app</div>
+
+<main>
+  <header class="cab">
+    <span class="eyebrow">M1 · Ácido-base vivo · Dirección C · Móvil cinético</span>
+    <h1>El pH cuelga de un cociente</h1>
+    <p class="lead">El pulmón carga el platillo del <strong class="hl-a">CO₂</strong>; el riñón, el del <strong class="hl-v">HCO₃⁻</strong>. Si uno pesa más, la aguja se va. El otro órgano compensa despacio y la devuelve hacia 7,40, <strong>sin llegar</strong>.</p>
+  </header>
+
+  <!-- 1 y 2 · El pH grande en su arco y el móvil (Ec. 31.2 hecha objeto) -->
+  <section aria-labelledby="t-movil">
+    <h2 id="t-movil" class="eyebrow" style="font-size:.72rem">1 · El pH · 2 · El móvil de la Ec. 31.2</h2>
+    <figure>
+      <svg id="escena" class="lam" viewBox="0 0 360 604" role="img" aria-label="Móvil colgante: a la izquierda el platillo del CO2 sobre el pulmón, a la derecha el del bicarbonato sobre el riñón; arriba, la aguja del pH en un arco"></svg>
+      <figcaption class="origen" id="escena-origen"></figcaption>
+    </figure>
+  </section>
+
+  <!-- 3 · Segundo móvil: la electroneutralidad -->
+  <section aria-labelledby="t-electro">
+    <span class="eyebrow">3 · La sangre siempre está en equilibrio eléctrico</span>
+    <h2 id="t-electro">El hiato es la pieza que cuelga sin nombre</h2>
+    <p class="idea">Este móvil nunca se inclina: lo que se descuelga de HCO₃⁻ lo ocupa otra pieza. Si es <span class="hl-p">cloro</span>, la acidosis es hiperclorémica; si es un ácido que no se mide, crece el <span class="hl-a">hiato</span>.</p>
+    <figure>
+      <svg id="electro" class="lam" viewBox="0 0 360 300" role="img" aria-label="Móvil de la electroneutralidad: sodio a un lado; cloro, bicarbonato y el hiato aniónico al otro"></svg>
+      <figcaption class="origen" id="electro-origen"></figcaption>
+    </figure>
+  </section>
+
+  <!-- 4 · El mapa de la gasometría -->
+  <section aria-labelledby="t-mapa">
+    <span class="eyebrow">4 · El mapa de la gasometría</span>
+    <h2 id="t-mapa">Primero por el eje, después por la línea</h2>
+    <p class="idea">El trastorno primario saca el punto de la normalidad por su eje. La compensación lo lleva a su línea. Si el punto se separa de la línea, hay un trastorno añadido.</p>
+    <figure>
+      <svg id="mapa" class="lam" viewBox="0 0 360 300" role="img" aria-label="Mapa de PaCO2 frente a HCO3 con las líneas de compensación y la estela de la gasometría"></svg>
+      <div class="leyenda" id="mapa-leyenda"></div>
+      <figcaption class="origen">Líneas: Fig. 31.2 · <span class="og ficha">ficha mr-comp-acidosis-met</span> (40 − 1,2 × ΔHCO₃⁻), <span class="og ficha">ficha mr-comp-alcalosis-met</span> (40 + 0,7 × ΔHCO₃⁻), <span class="og ficha">ficha mr-comp-agudo</span> y <span class="og ficha">ficha mr-comp-cronico</span>. Rectas de pH: Ec. 31.2 <span class="og ficha">ficha mr-ecuacion-h</span>. Recuadro: rangos de referencia <span class="og ficha">ficha mr-rangos-ref</span>.</figcaption>
+    </figure>
+  </section>
+
+  <!-- 5 · Los pasos, con el reloj -->
+  <section aria-labelledby="t-pasos" id="sec-pasos">
+    <span class="eyebrow">5 · El caso, paso a paso</span>
+    <h2 id="t-pasos" class="paso-tit" aria-live="polite"></h2>
+    <div class="pasos" role="group" aria-label="Pasos del caso" id="pasos"></div>
+    <div class="botonera">
+      <button type="button" class="b" id="b-repetir">↺ Repetir este paso</button>
+      <button type="button" class="b prim" id="b-sig">Siguiente paso →</button>
+    </div>
+    <figure>
+      <svg id="reloj" class="lam" viewBox="0 0 360 92" role="img" aria-label="Reloj del caso: minutos, horas y días; el pulmón compensa en 30-120 minutos y el riñón en 2-3 días"></svg>
+      <figcaption class="origen">Franjas: pulmón 30-120 min <span class="og ficha">ficha mr-comp-acidosis-met</span>; riñón 2-3 días, en los trastornos respiratorios <span class="og ficha">ficha mr-comp-respiratoria</span>. «2 h» es del caso; la posición del resto de los pasos es <span class="og ilu">ilustrativo</span>.</figcaption>
+    </figure>
+  </section>
+
+  <!-- 6 · La frase viva -->
+  <section aria-labelledby="t-frase">
+    <span class="eyebrow" id="t-frase">6 · Lo que está pasando</span>
+    <p class="frase" id="frase" aria-live="polite"></p>
+    <p class="frase-origen" id="frase-origen"></p>
+  </section>
+
+  <!-- 7 · La albúmina -->
+  <section aria-labelledby="t-alb">
+    <span class="eyebrow">7 · La albúmina esconde aniones</span>
+    <h2 id="t-alb">Mueve la albúmina en el paso 2</h2>
+    <p class="idea">La albúmina es el principal anión no medido: aporta unos <strong>2,5 mEq por gramo</strong>. Si baja, ocupa menos sitio dentro del hiato y un ácido puede esconderse.</p>
+    <div class="mando">
+      <label for="alb">Albúmina <output id="alb-v" for="alb">4,5 g/dL</output></label>
+      <input type="range" id="alb" min="2" max="4.5" step="0.1" value="4.5" aria-describedby="alb-lectura">
+      <svg id="alb-fig" class="lam" viewBox="0 0 360 130" role="img" aria-label="El hiato por dentro: la parte de la albúmina y el ácido escondido"></svg>
+      <p class="lectura" id="alb-lectura"></p>
+      <p class="origen">Ec. 31.15: HAc = HA + 2,5 × (4,5 − albúmina) <span class="og ficha">ficha mr-ag-albumina</span>. Na⁺, Cl⁻ y HCO₃⁻ del paso 2 <span class="og ilu">ilustrativo (caso)</span>; solo cambia la albúmina. Cada hexágono, 2 mEq/L <span class="og ilu">ilustrativo</span>.</p>
+    </div>
+  </section>
+
+  <!-- 8 · El plegable del hiato osmolal -->
+  <section aria-label="Hiato osmolal">
+    <span class="eyebrow">8 · Otro hueco</span>
+    <details id="osm">
+      <summary>Hiato osmolal: la sal que el cálculo no ve</summary>
+      <div class="plegado">
+        <svg id="osm-fig" class="lam" viewBox="0 0 360 190" role="img" aria-label="Móvil de la osmolalidad: la medida pesa más que la calculada por un soluto que la fórmula no ve"></svg>
+        <dl class="kv">
+          <dt>Calculada</dt><dd>2 × Na + glucosa/18 + BUN/2,8 = 2 × 140 + 90/18 + 14/2,8 = <strong>290</strong> mOsm/kg H₂O (Ec. 31.17) <span class="og ficha">ficha mr-osm-gap</span></dd>
+          <dt>Medida</dt><dd><strong>320</strong> mOsm/kg H₂O <span class="og ilu">ilustrativo (caso)</span></dd>
+          <dt>Hiato</dt><dd>320 − 290 = <strong class="hl-r">30</strong>. Lo normal es <strong>&lt;10</strong> <span class="og ficha">ficha mr-osm-gap</span></dd>
+          <dt>Piensa en</dt><dd>Un soluto que no está en la fórmula sube la medida, no la calculada: <strong>metanol o etilenglicol</strong>, con hiatos aniónico y osmolar altos <span class="og ficha">ficha mr-osm-oculto</span> <span class="og ficha">ficha mt-alcoholes</span></dd>
+        </dl>
+      </div>
+    </details>
+  </section>
+
+  <!-- Notas de fidelidad y fuentes -->
+  <section aria-label="Notas de fidelidad" class="notas">
+    <span class="eyebrow">Notas de fidelidad</span>
+    <details>
+      <summary>De dónde sale el pH (Ec. 31.2)</summary>
+      <div class="plegado">
+        <p>El pH se calcula en la página con la Ec. 31.2 tal como la da el libro: <strong>[H⁺] = 24 × PaCO₂ / HCO₃⁻</strong> (nEq/L), y pH = −log [H⁺] (Ec. 31.1) <span class="og ficha">ficha mr-ecuacion-h</span> <span class="og ficha">ficha mr-ph-definicion</span>. Con ella salen las cifras de la tabla del caso (7,40 · 7,10 · 7,28 · 7,38 · 7,51).</p>
+        <p>El encargo escribía la forma de Henderson-Hasselbalch, pH = 6,1 + log (HCO₃⁻ / 0,03 × PaCO₂). No está en la ficha <span class="og fis">fisiología general</span> y da 0,01 más en dos pasos (7,29 en el 2 y 7,52 en el 4). Aquí manda la del libro.</p>
+      </div>
+    </details>
+    <details>
+      <summary>Los ejemplos de la ficha y este caso</summary>
+      <div class="plegado">
+        <p>Los ejemplos de las reglas 3 y 4 del cap. 31 (pH 7,28 con PaCO₂ 23 y HCO₃⁻ 14; pH 7,50 con PaCO₂ 26 y HCO₃⁻ 14) no cumplen la Ec. 31.2 del propio libro: darían 7,40 y 7,35. Por eso el caso usa gasometrías coherentes con la ecuación. La ficha <span class="og ficha">ficha mr-regla-3</span> <span class="og ficha">ficha mr-regla-4</span> aún no lleva la nota.</p>
+      </div>
+    </details>
+    <details>
+      <summary>Lo que es ilustrativo</summary>
+      <div class="plegado">
+        <p><strong>Las fichas de los platillos.</strong> Una ficha de CO₂ = 4 mmHg de PaCO₂; una de HCO₃⁻ = 2,4 mEq/L. La escala está elegida para que en la normalidad pesen igual (10 y 10): así el cociente de fichas es [H⁺]/40.</p>
+        <p><strong>El ritmo del pulmón.</strong> La ficha da la PaCO₂ esperada, no la ventilación minuto que la produce.</p>
+        <p><strong>Los instantes teóricos.</strong> El pH «sin compensar» del paso 1 (7,10) y el que se ve de paso en el 4 (7,62, con HCO₃⁻ 40 y PaCO₂ 40) salen de la Ec. 31.2; en la vida real la compensación empieza a la vez.</p>
+        <p><strong>El paso 5.</strong> La ficha da el déficit de cloro y el ritmo, no la curva de bajada del HCO₃⁻: se anima como tendencia, sin cifras finales.</p>
+        <p><strong>Las formas.</strong> En el móvil de la electroneutralidad el área de cada pieza es proporcional a sus mEq/L.</p>
+      </div>
+    </details>
+    <details>
+      <summary>La célula de la pendrina, de verdad (Fig. 33.1)</summary>
+      <div class="plegado">
+        <figure class="foto">
+          <img src="../../js/modules/libros/img/mar-fig33-1-celulas-colector.jpg" alt="Tres células del túbulo colector; abajo, la que secreta bicarbonato por la pendrina" loading="lazy">
+          <figcaption>Figura 33.1 — Abajo, la célula que secreta HCO₃⁻ con la pendrina (entra Cl⁻, sale HCO₃⁻ a la luz). Apenas activa en reposo; se enciende en la alcalosis; sin Cl⁻ en la luz no puede trabajar. <span class="og ficha">ficha mr-alc-pendrina</span> <span class="og ficha">ficha mr-alc-cloro</span></figcaption>
+        </figure>
+      </div>
+    </details>
+  </section>
+
+  <section class="elige" aria-labelledby="t-elige">
+    <span class="eyebrow">Para ti</span>
+    <h2 id="t-elige">¿Qué dirección quieres para el ácido-base vivo?</h2>
+    <div class="eleccion" role="group" aria-label="Dirección artística">
+      <button type="button" class="b" data-elige="dir" aria-pressed="false">A · Lámina dorada</button>
+      <button type="button" class="b" data-elige="dir" aria-pressed="false">B · Campo oscuro</button>
+      <button type="button" class="b" data-elige="dir" aria-pressed="false">C · Móvil (esta)</button>
+      <button type="button" class="b" data-elige="dir" aria-pressed="false">Mezcla</button>
+    </div>
+    <p class="idea" style="font-size:.92rem">Y el riñón:</p>
+    <div class="eleccion" role="group" aria-label="Riñón">
+      <button type="button" class="b" data-elige="rinon" aria-pressed="false">Con la foto real del corte</button>
+      <button type="button" class="b" data-elige="rinon" aria-pressed="false">Dibujado, como aquí</button>
+    </div>
+    <p class="origen" id="elige-res">Tu elección no se guarda: dísela a Claude en el chat.</p>
+  </section>
+</main>
+
+<button type="button" class="fab" id="fab">Siguiente →</button>
+
+<script src="../../js/vendor/motion.js"></script>
+<script>
+(() => {
+'use strict';
+const M = window.Motion || null;
+const QUIETO = !M || matchMedia('(prefers-reduced-motion: reduce)').matches;
+const NS = 'http://www.w3.org/2000/svg';
+const $ = s => document.querySelector(s);
+const nodo = (tag, at = {}, padre) => { const e = document.createElementNS(NS, tag); for (const k in at) e.setAttribute(k, at[k]); if (padre) padre.appendChild(e); return e; };
+const texto = (padre, x, y, t, at = {}) => { const e = nodo('text', { x, y, ...at }, padre); e.textContent = t; return e; };
+const fmt = (v, d = 0) => v.toFixed(d).replace('.', ',');
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const suave = t => t < .5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2;
+const og = (tipo, txt) => `<span class="og ${tipo}">${tipo === 'ficha' && !txt.startsWith('ficha') ? 'ficha ' + txt : txt}</span>`;
+
+// ---------- La medicina (fichas de Marino en la app) ----------
+// Ec. 31.2: [H⁺] = 24 × PaCO₂/HCO₃⁻ (ficha mr-ecuacion-h). Ec. 31.1: pH = −log[H⁺] (mr-ph-definicion).
+const hDe = (pco2, hco3) => 24 * pco2 / hco3;
+const phDe = (pco2, hco3) => 9 - Math.log10(hDe(pco2, hco3));
+const NA = 140;
+// Ec. 31.14 (mr-ag-formula)
+const haDe = v => NA - (v.cl + v.hco3);
+// Fig. 31.2 (mr-comp-acidosis-met, mr-comp-alcalosis-met)
+const lineaAcida = h => 40 - 1.2 * (24 - h);
+const lineaAlcalina = h => 40 + 0.7 * (h - 24);
+
+// ---------- El caso (mapa §7 M1). El paso 5 es tendencia: sus valores internos no se muestran ----------
+const P = {
+  '0':  { v: { pco2: 40, hco3: 24, cl: 104 }, pac: 'A', tit: 'Paso 0 · Normal', corto: 'En equilibrio', reloj: { pos: 0, txt: 'reposo' }, pend: 'casi', resp: 'normal' },
+  '1':  { v: { pco2: 40, hco3: 12, cl: 104 }, pac: 'A', tit: 'Paso 1 · CAD, primeros minutos', corto: 'Los cetoácidos se comen el HCO₃⁻', reloj: { pos: .181, txt: 'minutos' }, pend: 'casi', resp: 'normal', teorico: true },
+  '2':  { v: { pco2: 26, hco3: 12, cl: 104 }, pac: 'A', tit: 'Paso 2 · CAD a las 2 h', corto: 'El pulmón sopla CO₂', reloj: { pos: .539, txt: '2 h' }, pend: 'casi', resp: 'rapida' },
+  '3':  { v: { pco2: 26, hco3: 12, cl: 112 }, pac: 'A', tit: 'Paso 3 · Tras salino a chorro', corto: 'El cloro ocupa el sitio', reloj: { pos: .664, txt: 'horas' }, pend: 'casi', resp: 'rapida' },
+  '3b': { v: { pco2: 35, hco3: 20, cl: 104 }, pac: 'A', tit: 'Paso 3b · Con Ringer en su lugar', corto: 'El HCO₃⁻ vuelve', reloj: { pos: .664, txt: 'horas' }, pend: 'casi', resp: 'media' },
+  '4':  { v: { pco2: 51, hco3: 40, cl: 88 }, pac: 'B', tit: 'Paso 4 · Otro paciente: vómitos', corto: 'Alcalosis que se mantiene', reloj: { pos: .58, txt: 'horas' }, pend: 'sin', resp: 'lenta' },
+  '5':  { v: { pco2: 46.3, hco3: 33, cl: 95 }, pac: 'B', tit: 'Paso 5 · Salino + ClK', corto: 'Llega cloro: la pendrina se enciende', reloj: { pos: .741, txt: 'horas' }, pend: 'on', resp: 'media', tendencia: true },
+};
+const ORDEN = ['0', '1', '2', '3', '3b', '4', '5'];
+const SIGUIENTE = { '0': '1', '1': '2', '2': '3', '3': '3b', '3b': '4', '4': '5', '5': '0' };
+
+const FRASES = {
+  '0': [`Equilibrio: 10 fichas de CO₂ frente a 10 de HCO₃⁻. [H⁺] = 24 × 40 / 24 = <strong>40 nEq/L</strong>, pH <strong class="hl-v">7,40</strong>. La pendrina está casi apagada: apenas trabaja en reposo.`,
+        `${og('ficha', 'mr-ecuacion-h')} ${og('ficha', 'mr-alc-pendrina')} Valores ${og('ilu', 'ilustrativo (caso)')}`],
+  '1': [`Los cetoácidos se comen el HCO₃⁻: cada H⁺ + HCO₃⁻ se va como CO₂ por el pulmón. El HCO₃⁻ cae a <strong>12</strong> y el hueco crece (<strong>HA 24</strong>). <span class="hl-r">Instante teórico: aún sin compensar</span>, pH 7,10.`,
+        `HA = 140 − (104 + 12) ${og('ficha', 'mr-ag-formula')} · H⁺ + HCO₃⁻ → CO₂ + H₂O ${og('fis', 'fisiología general')} · Valores ${og('ilu', 'ilustrativo (caso)')}`],
+  '2': [`A las 2 h el pulmón ya sopla: PaCO₂ esperada 40 − 1,2 × 12 = <strong>25,6</strong>; la medida, 26, coincide. El pH sube a 7,28: <span class="hl-r">limita, pero no corrige</span>. Delta (24 − 12) / (24 − 12) = <strong>1</strong>: cetoacidosis sola.`,
+        `Pulmón en 30-120 min ${og('ficha', 'mr-comp-acidosis-met')} · ${og('ficha', 'mr-compensacion-concepto')} · delta, Ec. 31.16 ${og('ficha', 'mr-delta-gap')}`],
+  '3': [`Tras salino a chorro las cetonas bajan (HA 16), pero el HCO₃⁻ sigue en 12: el cloro del salino ocupa su sitio (<strong>Cl⁻ 112</strong>). Delta (16 − 12) / (24 − 12) = <strong class="hl-r">0,33</strong>: hay además una acidosis hiperclorémica. <strong>Parece que la CAD no se resuelve.</strong>`,
+        `${og('ficha', 'mr-delta-cad')} ${og('ficha', 'mr-delta-menor')} ${og('ficha', 'mr-cad-vigilar')} · Valores ${og('ilu', 'ilustrativo (caso)')}`],
+  '3b': [`Con Ringer en su lugar no entra ese cloro: Cl⁻ 104 y el HCO₃⁻ vuelve a <strong>20</strong>. Delta (16 − 12) / (24 − 20) = <strong class="hl-v">1</strong>. El pulmón sopla menos: PaCO₂ 35 (esperada 40 − 1,2 × 4 = 35,2). pH 7,38.`,
+        `Los balanceados resuelven antes la acidosis ${og('ficha', 'mr-cad-fluidos')} · ${og('ficha', 'mr-comp-acidosis-met')} · Valores ${og('ilu', 'ilustrativo (caso)')}`],
+  '4': [`Otro paciente. Cada H⁺ vomitado deja un HCO₃⁻: <strong>HCO₃⁻ 40</strong> y Cl⁻ 88. El pulmón hipoventila, con menos vigor: PaCO₂ esperada 40 + 0,7 × 16 = 51,2; medida <strong>51</strong>. pH 7,51. Cl⁻ en orina &lt;20 y, <span class="hl-p">sin cloro en la luz, la pendrina no puede sacar el HCO₃⁻</span>: la alcalosis se mantiene.`,
+        `${og('ficha', 'mr-alc-gastrico')} ${og('ficha', 'mr-comp-alcalosis-met')} (su ejemplo: HCO₃⁻ 40 → 51) ${og('ficha', 'mr-tabla-33-1')} ${og('ficha', 'mr-alc-cloro')} · Cl⁻ 88 ${og('ilu', 'ilustrativo (caso)')}`],
+  '5': [`Llega cloro: <span class="hl-v">la pendrina se enciende</span> y el HCO₃⁻ sale por la orina. Déficit de Cl⁻ para 70 kg: 0,2 × 70 × (100 − 88) = <strong>168 mEq</strong> → 168 / 154 ≈ <strong>1,1 L</strong> de salino, a 100 mL/h sobre las pérdidas. Tendencia, sin cifra final.`,
+        `Ec. 33.2 y 33.3 ${og('ficha', 'mr-tabla-33-2')} · ${og('ficha', 'mr-alc-pendrina')} · la bajada es ${og('ilu', 'ilustrativo')}: la ficha no da la curva`],
+};
+
+// ---------- Estado vivo ----------
+const S = { v: { ...P['0'].v }, paso: '0', alb: 4.5, pac: 'A' };
+let tramos = [], tramo = null, alTerminar = null;
+const visto = new Set(['0']);
+
+// ============================================================
+// 1 y 2 · ESCENA: arco del pH + móvil + pulmón + riñón
+// ============================================================
+const E = $('#escena');
+const HUB = { x: 180, y: 170 }, R = 134, KANG = 0.8;
+const angDeH = h => clamp((40 - h) * KANG, -94.8, 19.4);
+const polar = (r, a) => { const t = a * Math.PI / 180; return { x: HUB.x + r * Math.sin(t), y: HUB.y - r * Math.cos(t) }; };
+const arco = (r, a0, a1) => { const p0 = polar(r, a0), p1 = polar(r, a1); return `M${p0.x.toFixed(2)},${p0.y.toFixed(2)} A${r},${r} 0 ${Math.abs(a1 - a0) > 180 ? 1 : 0} 1 ${p1.x.toFixed(2)},${p1.y.toFixed(2)}`; };
+const BRAZO = 98, VARILLA = 100, HILO = 78;
+const extremo = (lado, psi) => { const p = psi * Math.PI / 180, x = lado * BRAZO, y = VARILLA;
+  return { x: HUB.x + x * Math.cos(p) - y * Math.sin(p), y: HUB.y + x * Math.sin(p) + y * Math.cos(p) }; };
+
+// defs
+const defs = nodo('defs', {}, E);
+const clip = nodo('clipPath', { id: 'lente-clip' }, defs); nodo('circle', { cx: 318, cy: 506, r: 29 }, clip);
+
+// --- formas de los iones (la identidad va por la forma) ---
+const FORMA = {
+  co2: g => { nodo('circle', { r: 5.8, class: 'f-co2' }, g); nodo('path', { d: 'M-2.4,.8 a2.5,2.5 0 1 1 2.6,2.2 a1.3,1.3 0 1 1 -.7,-2.4', fill: 'none', stroke: 'var(--bg-main)', 'stroke-width': 1.15, 'stroke-linecap': 'round' }, g); },
+  hco3: g => nodo('path', { d: 'M0,-6.6 L6.2,4.6 L-6.2,4.6Z', class: 'f-hco3' }, g),
+  h: g => nodo('path', { d: 'M-1.9,-6.2h3.8v4.3h4.3v3.8h-4.3v4.3h-3.8v-4.3h-4.3v-3.8h4.3z', class: 'f-h' }, g),
+  cl: g => nodo('path', { d: 'M0,-6.8 L5,0 L0,6.8 L-5,0Z', class: 'f-cl' }, g),
+  keto: g => nodo('path', { d: hexD(5.6), class: 'f-keto' }, g),
+  humo: g => nodo('path', { d: 'M0,0 a2.6,2.6 0 1 1 2.6,2.6 a5,5 0 1 1 -5.6,-5 a7.6,7.6 0 0 1 8.4,-1.4', class: 'humo' }, g),
+};
+function hexD(r) { let d = ''; for (let i = 0; i < 6; i++) { const a = Math.PI / 6 + i * Math.PI / 3; d += `${i ? 'L' : 'M'}${(r * Math.cos(a)).toFixed(2)},${(r * Math.sin(a)).toFixed(2)}`; } return d + 'Z'; }
+const ficha = (tipo, padre) => { const g = nodo('g', {}, padre); FORMA[tipo](g); return g; };
+
+// --- capas ---
+const capaDial = nodo('g', {}, E);
+const capaOrganos = nodo('g', {}, E);
+const capaMovil = nodo('g', {}, E);
+const capaVuelos = nodo('g', {}, E);
+const capaRotulos = nodo('g', {}, E);
+
+// --- el arco del pH (Fig. 31.1: marcas a pasos iguales de [H⁺]) ---
+const A_MIN = -94.8, A_MAX = 19.4, A_736 = angDeH(10 ** (9 - 7.36)), A_744 = angDeH(10 ** (9 - 7.44));
+nodo('path', { d: arco(R, A_MIN, A_736), stroke: 'var(--accent-red)', 'stroke-width': 2.4, fill: 'none', 'stroke-linecap': 'round', opacity: .9 }, capaDial);
+nodo('path', { d: arco(R, A_744, A_MAX), stroke: 'var(--accent-purple)', 'stroke-width': 2.4, fill: 'none', 'stroke-linecap': 'round', opacity: .95 }, capaDial);
+nodo('path', { d: arco(R, A_736, A_744), stroke: 'var(--accent-green)', 'stroke-width': 7, fill: 'none' }, capaDial);
+nodo('path', { d: arco(R - 12, A_MIN, A_MAX), class: 'rejilla' }, capaDial);
+for (let h = 20; h <= 150; h += 10) { // [H⁺] cada 10 nEq/L: marcas equidistantes
+  const a = angDeH(h), p0 = polar(R - 12, a), p1 = polar(R - (h % 50 === 0 ? 20 : 16), a);
+  nodo('line', { x1: p0.x, y1: p0.y, x2: p1.x, y2: p1.y, class: 'oro-fino', opacity: h % 50 === 0 ? .9 : .55 }, capaDial);
+}
+[[40, '40'], [100, '100'], [150, '150']].forEach(([h, t]) => { const p = polar(R - 30, angDeH(h)); texto(capaDial, p.x, p.y + 3.5, t, { 'text-anchor': 'middle', 'font-size': 9.5, class: 't-dim' }); });
+{ const p = polar(R - 44, angDeH(126)); texto(capaDial, p.x + 4, p.y + 3, '[H⁺] nEq/L', { 'text-anchor': 'middle', 'font-size': 9.5, class: 't-dim' }); }
+[6.8, 6.9, 7.0, 7.1, 7.2, 7.3, 7.4, 7.5, 7.8].forEach(ph => {
+  const a = angDeH(10 ** (9 - ph)), p0 = polar(R + 3, a), p1 = polar(R + 8, a), pt = polar(R + 19, a);
+  nodo('line', { x1: p0.x, y1: p0.y, x2: p1.x, y2: p1.y, class: 'oro-fino' }, capaDial);
+  texto(capaDial, pt.x, pt.y + 4, fmt(ph, 1), { 'text-anchor': 'middle', 'font-size': ph === 7.4 ? 12 : 10.5, class: ph === 7.4 ? 't-verde t-serif' : 't-serif' });
+});
+texto(capaDial, 30, 204, 'ácido', { 'font-size': 10.5, class: 't-rojo t-serif', 'text-anchor': 'middle', 'font-style': 'italic' });
+{ const p = polar(R + 22, 17); texto(capaDial, p.x + 30, p.y + 22, 'alcalino', { 'font-size': 10.5, class: 't-purpura t-serif', 'font-style': 'italic' }); }
+
+// Abanico «limita, pero no corrige»: lo que la compensación no recupera
+const abanico = nodo('path', { fill: 'var(--accent-red)', 'fill-opacity': .14, stroke: 'none' }, capaDial);
+const agujaFantasma = nodo('line', { stroke: 'var(--text-muted)', 'stroke-width': 1.2, 'stroke-dasharray': '3 4', opacity: 0 }, capaDial);
+
+// Aguja (fiel)
+const aguja = nodo('line', { stroke: 'var(--accent-blue)', 'stroke-width': 1.8, 'stroke-linecap': 'round' }, capaDial);
+const agujaPunta = nodo('circle', { r: 5 }, capaDial);
+
+// Cuerpo rígido: varilla + travesaño (gira alrededor del eje del disco)
+const cuerpo = nodo('g', {}, capaMovil);
+nodo('line', { x1: HUB.x, y1: HUB.y + 40, x2: HUB.x, y2: HUB.y + VARILLA, class: 'varilla', 'stroke-width': 1.6 }, cuerpo);
+nodo('line', { x1: HUB.x - BRAZO, y1: HUB.y + VARILLA, x2: HUB.x + BRAZO, y2: HUB.y + VARILLA, class: 'varilla' }, cuerpo);
+nodo('circle', { cx: HUB.x, cy: HUB.y + VARILLA, r: 3.2, class: 'f-co2' }, cuerpo);
+nodo('circle', { cx: HUB.x - BRAZO, cy: HUB.y + VARILLA, r: 2.6, class: 'f-co2' }, cuerpo);
+nodo('circle', { cx: HUB.x + BRAZO, cy: HUB.y + VARILLA, r: 2.6, class: 'f-co2' }, cuerpo);
+
+// Disco del pH (eje): el número grande
+const disco = nodo('circle', { cx: HUB.x, cy: HUB.y, r: 46 }, capaMovil);
+const discoNum = texto(capaMovil, HUB.x, HUB.y + 8, '7,40', { 'text-anchor': 'middle', 'font-size': 33, class: 't-serif', 'font-weight': 'bold' });
+const discoPal = texto(capaMovil, HUB.x, HUB.y + 26, 'normal', { 'text-anchor': 'middle', 'font-size': 10.5, 'letter-spacing': '.06em' });
+texto(capaMovil, HUB.x, HUB.y - 22, 'pH', { 'text-anchor': 'middle', 'font-size': 11, class: 't-serif', 'font-style': 'italic', id: 'disco-ph' });
+
+// Platillos (cuelgan siempre en vertical)
+function platillo(lado) {
+  const g = nodo('g', {}, capaMovil);
+  const hilos = nodo('path', { class: 'hilo' }, capaMovil);
+  nodo('path', { d: 'M-42,0 Q0,9 42,0', class: 'varilla', 'stroke-width': 2 }, g);
+  const pila = nodo('g', {}, g);
+  const val = texto(g, 0, 24, '', { 'text-anchor': 'middle', 'font-size': 13, class: 't-main t-serif' });
+  return { g, hilos, pila, val, fichas: [], lado };
+}
+const PL = platillo(-1), PR = platillo(1);
+const posFicha = i => { let r = 0, cap = 6, k = i; while (k >= cap) { k -= cap; r++; cap = Math.max(1, cap - 1); } return { x: (k - (cap - 1) / 2) * 13.4, y: -9 - r * 12.5 }; };
+
+// --- Pulmón estilizado ---
+const pulmon = nodo('g', { transform: 'translate(0,16)' }, capaOrganos);
+const lobulos = nodo('g', {}, pulmon);
+nodo('path', { d: 'M88,424 C70,414 46,430 40,460 C34,492 44,516 64,518 C82,520 90,504 90,488 Z', class: 'f-organo' }, lobulos);
+nodo('path', { d: 'M108,424 C126,414 150,430 156,460 C162,492 152,516 132,518 C114,520 106,504 106,488 Z', class: 'f-organo' }, lobulos);
+nodo('path', { d: 'M98,416 L84,434 L70,456 M84,434 L80,462 M98,416 L112,434 L126,456 M112,434 L116,462', class: 'oro-fino', 'stroke-width': 1.1, opacity: .8 }, lobulos);
+nodo('path', { d: 'M98,418 L98,402 C98,386 72,384 50,380 C32,377 24,368 24,350', fill: 'none', stroke: 'var(--text-muted)', 'stroke-width': 5, 'stroke-linecap': 'round', opacity: .55 }, pulmon);
+nodo('path', { d: 'M98,418 L98,402 C98,386 72,384 50,380 C32,377 24,368 24,350', class: 'oro-fino', 'stroke-width': 1 }, pulmon);
+texto(capaOrganos, 98, 556, 'pulmón', { 'text-anchor': 'middle', 'font-size': 12, class: 't-serif t-main' });
+const pulmonRitmo = texto(capaOrganos, 98, 570, 'ritmo ilustrativo', { 'text-anchor': 'middle', 'font-size': 9.5, class: 't-dim' });
+const SALIDA = { x: 24, y: 364 };
+
+// --- Riñón estilizado + lente de la pendrina ---
+const rinon = nodo('g', {}, capaOrganos);
+nodo('path', { d: 'M292,414 C320,412 338,434 336,460 C334,486 316,498 296,496 C276,494 264,484 268,470 C270,462 274,456 270,448 C264,436 266,416 292,414 Z', class: 'f-organo' }, rinon);
+nodo('path', { d: 'M269,458 C254,470 248,498 248,524', fill: 'none', stroke: 'var(--text-muted)', 'stroke-width': 3, opacity: .6, 'stroke-linecap': 'round' }, rinon);
+const gota = nodo('path', { d: 'M248,526 C252,533 255,537 255,541 A7,7 0 1 1 241,541 C241,537 244,533 248,526Z', fill: 'var(--accent-blue)', 'fill-opacity': .2, stroke: 'var(--accent-blue)', 'stroke-width': .9 }, rinon);
+texto(capaOrganos, 300, 432, 'riñón', { 'text-anchor': 'middle', 'font-size': 12, class: 't-serif t-main' });
+const orinaTxt = texto(capaOrganos, 236, 545, 'orina', { 'text-anchor': 'end', 'font-size': 10, class: 't-dim' });
+const clOrinaTxt = texto(capaOrganos, 236, 558, '', { 'text-anchor': 'end', 'font-size': 10, class: 't-purpura' });
+nodo('line', { x1: 306, y1: 482, x2: 309, y2: 478, class: 'oro-fino' }, capaOrganos);
+const lente = nodo('g', {}, capaOrganos);
+nodo('circle', { cx: 318, cy: 506, r: 29, class: 'f-fondo' }, lente);
+const lenteDentro = nodo('g', { 'clip-path': 'url(#lente-clip)' }, lente);
+nodo('rect', { x: 286, y: 474, width: 32, height: 64, class: 'f-organo' }, lenteDentro);
+nodo('line', { x1: 318, y1: 474, x2: 318, y2: 540, class: 'oro-fino', opacity: .7 }, lenteDentro);
+texto(lenteDentro, 304, 518, 'célula', { 'text-anchor': 'middle', 'font-size': 7.5, class: 't-dim' });
+texto(lenteDentro, 331, 518, 'luz', { 'text-anchor': 'middle', 'font-size': 7.5, class: 't-dim' });
+const capaLente = nodo('g', { 'clip-path': 'url(#lente-clip)' }, lente);
+const pendrina = nodo('circle', { cx: 318, cy: 502, r: 7, fill: 'var(--accent-green)', stroke: 'var(--accent-green)', 'stroke-width': 1.6 }, lente);
+nodo('circle', { cx: 318, cy: 506, r: 29, fill: 'none', stroke: 'var(--accent-blue)', 'stroke-width': 1.4 }, lente);
+texto(capaOrganos, 318, 549, 'pendrina', { 'text-anchor': 'middle', 'font-size': 10.5, class: 't-verde t-serif' });
+const pendTxt = texto(capaOrganos, 316, 562, '', { 'text-anchor': 'middle', 'font-size': 9.5, class: 't-dim' });
+const pendTxt2 = texto(capaOrganos, 316, 574, '', { 'text-anchor': 'middle', 'font-size': 9.5, class: 't-purpura' });
+
+// --- Rótulos de la escena ---
+const relojG = nodo('g', { transform: 'translate(34,38)' }, capaRotulos);
+nodo('circle', { r: 21, fill: 'none', stroke: 'var(--accent-blue)', 'stroke-width': 1.2 }, relojG);
+for (let i = 0; i < 12; i++) { const a = i * Math.PI / 6; nodo('line', { x1: 17 * Math.sin(a), y1: -17 * Math.cos(a), x2: 19.5 * Math.sin(a), y2: -19.5 * Math.cos(a), class: 'oro-fino' }, relojG); }
+const relojAguja = nodo('line', { x1: 0, y1: 0, x2: 0, y2: -15, stroke: 'var(--text-main)', 'stroke-width': 1.6, 'stroke-linecap': 'round' }, relojG);
+nodo('circle', { r: 2.2, class: 'f-na' }, relojG);
+const relojTxt = texto(capaRotulos, 34, 76, 'reposo', { 'text-anchor': 'middle', 'font-size': 11, class: 't-serif t-main' });
+texto(capaRotulos, 34, 89, 'reloj', { 'text-anchor': 'middle', 'font-size': 9, class: 't-dim' });
+
+const notaDcha = nodo('g', {}, capaRotulos);
+const nota1 = texto(notaDcha, 352, 92, '', { 'text-anchor': 'end', 'font-size': 13, class: 't-serif', 'font-style': 'italic' });
+const nota2 = texto(notaDcha, 352, 109, '', { 'text-anchor': 'end', 'font-size': 13, class: 't-serif', 'font-style': 'italic' });
+const nota3 = texto(notaDcha, 352, 124, '', { 'text-anchor': 'end', 'font-size': 9.5, class: 't-dim' });
+const pieTxt = texto(capaRotulos, 180, 598, '', { 'text-anchor': 'middle', 'font-size': 11.5, class: 't-serif t-oro' });
+
+// ---------- Muelle de Motion: la aguja y el travesaño ----------
+const agMV = M ? M.motionValue(0) : { v: 0, get() { return this.v; }, set(x) { this.v = x; pintarMovil(); }, on() {} };
+let agObjetivo = 0;
+function muelleA(a) {
+  agObjetivo = a;
+  if (QUIETO) { agMV.set(a); pintarMovil(); return; }
+  M.animate(agMV, a, { type: 'spring', stiffness: 36, damping: 5.2, mass: 1 });
+}
+if (M) agMV.on('change', () => pintarMovil());
+
+function pintarMovil() {
+  const a = agMV.get(), psi = a * 0.55;
+  const p0 = polar(52, a), p1 = polar(R - 5, a);
+  aguja.setAttribute('x1', p0.x); aguja.setAttribute('y1', p0.y); aguja.setAttribute('x2', p1.x); aguja.setAttribute('y2', p1.y);
+  agujaPunta.setAttribute('cx', p1.x); agujaPunta.setAttribute('cy', p1.y);
+  cuerpo.setAttribute('transform', `rotate(${psi.toFixed(3)} ${HUB.x} ${HUB.y})`);
+  for (const pl of [PL, PR]) {
+    const e = extremo(pl.lado, psi), py = e.y + HILO;
+    pl.g.setAttribute('transform', `translate(${e.x.toFixed(2)},${py.toFixed(2)})`);
+    pl.hilos.setAttribute('d', `M${e.x - 42},${py} L${e.x},${e.y} L${e.x + 42},${py}`);
+    pl.abs = { x: e.x, y: py };
+  }
+}
+
+// ---------- Vuelos (rAF) ----------
+const vuelos = [];
+function catmull(pts, t) {
+  const n = pts.length - 1, s = Math.min(n - 1e-6, t * n), i = Math.floor(s), u = s - i;
+  const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(n, i + 2)];
+  const f = (a, b, c, d) => .5 * ((2 * b) + (-a + c) * u + (2 * a - 5 * b + 4 * c - d) * u * u + (-a + 3 * b - 3 * c + d) * u * u * u);
+  return { x: f(p0.x, p1.x, p2.x, p3.x), y: f(p0.y, p1.y, p2.y, p3.y) };
+}
+function volar(g, pts, dur, op = {}) {
+  return new Promise(res => vuelos.push({ g, pts, dur, t0: performance.now() + (op.retraso || 0), op, res }));
+}
+function moverVuelos(ahora) {
+  for (let i = vuelos.length - 1; i >= 0; i--) {
+    const v = vuelos[i], t = (ahora - v.t0) / v.dur;
+    if (t < 0) { v.g.setAttribute('opacity', 0); continue; }
+    const k = v.op.lineal ? clamp(t, 0, 1) : suave(clamp(t, 0, 1));
+    const p = catmull(v.pts, k);
+    const s = v.op.escala ? lerp(v.op.escala[0], v.op.escala[1], k) : 1;
+    const o = v.op.opac ? lerp(v.op.opac[0], v.op.opac[1], k) : 1;
+    const rot = v.op.giro ? v.op.giro * k : 0;
+    v.g.setAttribute('transform', `translate(${p.x.toFixed(2)},${p.y.toFixed(2)}) rotate(${rot.toFixed(1)}) scale(${s.toFixed(3)})`);
+    v.g.setAttribute('opacity', o.toFixed(3));
+    if (t >= 1) { vuelos.splice(i, 1); v.res(); }
+  }
+}
+const azar = (a, b) => a + Math.random() * (b - a);
+
+function exhalar(retraso = 0, fuerte = true) {
+  const g = ficha('humo', capaVuelos);
+  g.setAttribute('opacity', 0);
+  const x0 = SALIDA.x, y0 = SALIDA.y;
+  return volar(g, [{ x: x0, y: y0 }, { x: x0 - azar(0, 8), y: y0 - 40 }, { x: x0 - azar(4, 14), y: y0 - azar(90, 120) }], fuerte ? 2600 : 3200,
+    { retraso, escala: [.7, fuerte ? 1.9 : 1.3], opac: [fuerte ? 1 : .45, 0], giro: azar(-90, 90), lineal: true }).then(() => g.remove());
+}
+const enPulmon = () => ({ x: azar(60, 136), y: azar(472, 516) });
+
+// Fichas del platillo
+function absFicha(pl, i) { const f = posFicha(i); return { x: pl.abs.x + f.x, y: pl.abs.y + f.y }; }
+function ponerFicha(pl, tipo, animar) {
+  const i = pl.fichas.length, f = posFicha(i), g = ficha(tipo, pl.pila);
+  pl.fichas.push(g);
+  if (!animar || QUIETO) { g.setAttribute('transform', `translate(${f.x},${f.y})`); return g; }
+  volar(g, [{ x: f.x, y: f.y - 46 }, { x: f.x, y: f.y - 10 }, { x: f.x, y: f.y }], 750, { opac: [0, 1] });
+  return g;
+}
+function quitarFicha(pl) {
+  const g = pl.fichas.pop(); if (!g) return null;
+  const p = absFicha(pl, pl.fichas.length);
+  g.remove(); return p;
+}
+
+// Lo que pasa cuando cambia el número de fichas, según el tramo
+const VIAJE = {
+  tampona(p) { // H⁺ + HCO₃⁻ → CO₂ + H₂O; el CO₂ sale por el pulmón; el anión (hexágono) se descuelga hacia el móvil de abajo
+    const m = { x: p.x - 34, y: p.y - 58 };
+    const tri = ficha('hco3', capaVuelos), cruz = ficha('h', capaVuelos), hex = ficha('keto', capaVuelos);
+    const yIn = azar(200, 250);
+    volar(tri, [p, { x: p.x - 10, y: p.y - 40 }, m], 900);
+    volar(hex, [{ x: 372, y: yIn + 10 }, { x: m.x + 30, y: m.y + 8 }, { x: m.x + 50, y: 470 }, { x: 196, y: 600 }], 2800, { opac: [1, .2] }).then(() => hex.remove());
+    volar(cruz, [{ x: 376, y: yIn }, { x: m.x + 30, y: m.y - 6 }, m], 900).then(() => {
+      tri.remove(); cruz.remove();
+      const destello = nodo('circle', { cx: m.x, cy: m.y, r: 4, fill: 'none', stroke: 'var(--accent-blue)', 'stroke-width': 1.4 }, capaVuelos);
+      volar(destello, [{ x: 0, y: 0 }, { x: 0, y: 0 }], 600, { escala: [1, 4], opac: [1, 0] }).then(() => destello.remove());
+      const co2 = ficha('co2', capaVuelos);
+      volar(co2, [m, { x: 210, y: 330 }, { x: 150, y: 420 }, enPulmon()], 1700).then(() => { co2.remove(); exhalar(250); });
+    });
+  },
+  sopla(p) {
+    const co2 = ficha('co2', capaVuelos);
+    volar(co2, [p, { x: p.x - 8, y: p.y + 40 }, enPulmon()], 1300).then(() => { co2.remove(); exhalar(200); });
+  },
+  orina(p) { // la pendrina: entra Cl⁻ desde la luz, sale HCO₃⁻ a la luz y a la orina
+    const tri = ficha('hco3', capaVuelos), rom = ficha('cl', capaVuelos);
+    volar(tri, [p, { x: p.x + 6, y: 400 }, { x: 296, y: 452 }, { x: 304, y: 502 }, { x: 318, y: 502 }, { x: 332, y: 506 }, { x: 290, y: 520 }, { x: 248, y: 540 }], 3000, { opac: [1, .5] }).then(() => tri.remove());
+    volar(rom, [{ x: 372, y: 470 }, { x: 340, y: 490 }, { x: 330, y: 500 }, { x: 318, y: 502 }, { x: 302, y: 504 }, { x: 294, y: 512 }], 2600, { retraso: 300, opac: [1, 0] }).then(() => rom.remove());
+  },
+  vomito(p) { // cada H⁺ perdido deja un HCO₃⁻
+    const cruz = ficha('h', capaVuelos);
+    volar(cruz, [{ x: p.x, y: p.y - 20 }, { x: p.x + 30, y: p.y - 120 }, { x: 376, y: 150 }], 1500, { opac: [1, .3] }).then(() => cruz.remove());
+  },
+};
+
+function ajustarFichas(animar, tramoActual) {
+  const nC = Math.round(S.v.pco2 / 4), nH = Math.round(S.v.hco3 / 2.4);
+  let cambio = false;
+  while (PL.fichas.length > nC) { const p = quitarFicha(PL); cambio = true; if (animar && !QUIETO) VIAJE[tramoActual?.bajaCO2 || 'sopla'](p); }
+  while (PL.fichas.length < nC) { ponerFicha(PL, 'co2', animar); cambio = true; }
+  while (PR.fichas.length > nH) { const p = quitarFicha(PR); cambio = true; if (animar && !QUIETO && tramoActual?.bajaHCO3) VIAJE[tramoActual.bajaHCO3](p); }
+  while (PR.fichas.length < nH) { const g = ponerFicha(PR, 'hco3', animar); cambio = true; if (animar && !QUIETO && tramoActual?.subeHCO3) VIAJE[tramoActual.subeHCO3](absFicha(PR, PR.fichas.length - 1)); }
+  if (cambio) muelleA(angDeH(hDe(S.v.pco2, S.v.hco3)));
+}
+
+// Respiración (ilustrativa)
+const RESP = { normal: [.22, .025], media: [.34, .04], rapida: [.62, .075], lenta: [.13, .015] };
+let fase = 0, ritmo = RESP.normal[0], ampl = RESP.normal[1], ultimaResp = 0;
+function respirar(dt, ahora) {
+  const [r, a] = RESP[P[S.paso].resp] || RESP.normal;
+  ritmo = lerp(ritmo, r, .02); ampl = lerp(ampl, a, .02);
+  if (QUIETO) { lobulos.removeAttribute('transform'); return; }
+  const f0 = fase; fase += dt * ritmo;
+  const s = 1 + ampl * Math.sin(fase * 2 * Math.PI);
+  lobulos.setAttribute('transform', `translate(98,470) scale(${s.toFixed(4)}) translate(-98,-470)`);
+  if (Math.floor(f0 + .5) !== Math.floor(fase + .5) && ahora - ultimaResp > 900) { ultimaResp = ahora; exhalar(0, false); } // CO₂ de siempre
+}
+
+// Pendrina: casi apagada · sin cloro · encendida
+const pendMV = M ? M.motionValue(.25) : { v: .25, get() { return this.v; }, set(x) { this.v = x; }, on() {} };
+let pendModo = 'casi', rebote = 0;
+function ponerPendrina(modo) {
+  pendModo = modo;
+  const obj = modo === 'on' ? 1 : modo === 'sin' ? 0 : .25;
+  if (QUIETO || !M) pendMV.set(obj); else M.animate(pendMV, obj, { duration: 1.4, ease: 'easeInOut' });
+  pendTxt.textContent = modo === 'on' ? 'encendida' : modo === 'sin' ? 'apagada:' : 'casi apagada';
+  pendTxt2.textContent = modo === 'sin' ? 'sin Cl⁻ en la luz' : '';
+  pendTxt.setAttribute('class', modo === 'sin' ? 't-purpura' : modo === 'on' ? 't-verde' : 't-dim');
+  pendrina.setAttribute('stroke-dasharray', modo === 'sin' ? '2.5 2.5' : 'none');
+  pendrina.setAttribute('stroke', modo === 'sin' ? 'var(--text-muted)' : 'var(--accent-green)');
+  pendrina.setAttribute('class', modo === 'on' ? 'brillo-verde' : '');
+  clOrinaTxt.textContent = modo === 'sin' ? 'Cl⁻ en orina <20' : '';
+}
+let ultimoRebote = 0;
+function pintarPendrina(ahora) {
+  const v = pendMV.get();
+  const pulso = pendModo === 'on' && !QUIETO ? .12 * Math.sin(ahora / 260) : 0;
+  pendrina.setAttribute('fill-opacity', clamp(v * .95 + pulso, 0, 1).toFixed(3));
+  pendrina.setAttribute('r', (6.4 + v * 1.4 + pulso * 3).toFixed(2));
+  // sin cloro: un HCO₃⁻ se acerca y rebota (no puede salir)
+  if (pendModo === 'sin' && !QUIETO && ahora - ultimoRebote > 2600) {
+    ultimoRebote = ahora;
+    const t = ficha('hco3', capaLente);
+    volar(t, [{ x: 294, y: 506 }, { x: 312, y: 503 }, { x: 296, y: 512 }], 1500, { opac: [1, .2], escala: [.8, .8] }).then(() => t.remove());
+  }
+}
+
+// ============================================================
+// 3 · MÓVIL DE LA ELECTRONEUTRALIDAD
+// ============================================================
+const EL = $('#electro');
+const SA = 22; // px² por mEq/L (ilustrativo)
+const ePiv = { x: 180, y: 40 }, eBrazo = 120;
+nodo('circle', { cx: 180, cy: 8, r: 3, fill: 'none', stroke: 'var(--accent-blue)', 'stroke-width': 1.2 }, EL);
+nodo('line', { x1: 180, y1: 11, x2: 180, y2: 40, class: 'hilo' }, EL);
+const eCuerpo = nodo('g', {}, EL);
+nodo('line', { x1: 60, y1: 40, x2: 300, y2: 40, class: 'varilla' }, eCuerpo);
+nodo('circle', { cx: 180, cy: 40, r: 3, class: 'f-co2' }, eCuerpo);
+const eHiloNa = nodo('line', { x1: 60, y1: 40, x2: 60, y2: 64, class: 'hilo' }, eCuerpo);
+const eNa = nodo('circle', { cx: 60, class: 'f-na' }, eCuerpo);
+const eNaT1 = texto(eCuerpo, 60, 0, 'Na⁺', { 'text-anchor': 'middle', 'font-size': 12, class: 't-fondo t-serif', 'font-weight': 'bold' });
+const eNaT2 = texto(eCuerpo, 60, 0, '140', { 'text-anchor': 'middle', 'font-size': 12, class: 't-fondo', 'font-weight': 'bold' });
+const eHiloD = nodo('path', { class: 'hilo' }, eCuerpo);
+const eCl = nodo('path', { class: 'f-cl' }, eCuerpo);
+const eHco3 = nodo('path', { class: 'f-hco3' }, eCuerpo);
+const eHiato = nodo('circle', { fill: 'none', stroke: 'var(--accent-blue)', 'stroke-width': 1.3, 'stroke-dasharray': '3 3' }, eCuerpo);
+const eHiatoQ = texto(eCuerpo, 0, 0, '?', { 'text-anchor': 'middle', 'font-size': 11, class: 't-oro t-serif' });
+const eHexCapa = nodo('g', {}, eCuerpo);
+const eLblCl = texto(eCuerpo, 0, 0, '', { 'text-anchor': 'end', 'font-size': 12.5, class: 't-serif' });
+const eLblH = texto(eCuerpo, 0, 0, '', { 'text-anchor': 'end', 'font-size': 12.5, class: 't-serif' });
+const eLblHa = texto(eCuerpo, 0, 0, '', { 'text-anchor': 'end', 'font-size': 12.5, class: 't-serif t-oro' });
+const eLblK = texto(eCuerpo, 0, 0, '', { 'text-anchor': 'end', 'font-size': 11, class: 't-ocre' });
+const eCalc1 = texto(EL, 12, 196, '', { 'font-size': 11.5, class: 't-dim' });
+const eCalc2 = texto(EL, 12, 213, '', { 'font-size': 12.5, class: 't-main' });
+const eCalc3 = texto(EL, 12, 238, '', { 'font-size': 11.5, class: 't-dim' });
+const eCalc4 = texto(EL, 12, 255, '', { 'font-size': 12.5, class: 't-main' });
+const eCalc5 = texto(EL, 12, 280, '', { 'font-size': 10.5, class: 't-dim' });
+const omMV = M ? M.motionValue(0) : { get: () => 0, set() {}, on() {} };
+if (M) omMV.on('change', v => eCuerpo.setAttribute('transform', `rotate(${v.toFixed(3)} ${ePiv.x} ${ePiv.y})`));
+let hexes = [], ultimoEmpuje = 0;
+function empujar(dir) {
+  if (QUIETO || !M) return;
+  const ahora = performance.now(); if (ahora - ultimoEmpuje < 350) return; ultimoEmpuje = ahora;
+  M.animate(omMV, 3.2 * dir, { type: 'spring', stiffness: 260, damping: 18 }).then(() => M.animate(omMV, 0, { type: 'spring', stiffness: 34, damping: 3.2 }));
+}
+const baseHiato = () => 12 - 2.5 * (4.5 - S.alb); // la parte «de siempre» del hiato (Tabla 31.2), menos lo que no aporta la albúmina baja
+function pintarElectro() {
+  const v = S.v, ha = haDe(v), pas = P[S.paso];
+  // Na⁺
+  const rNa = Math.sqrt(NA * SA / Math.PI);
+  eNa.setAttribute('cy', 64 + rNa); eNa.setAttribute('r', rNa);
+  eHiloNa.setAttribute('y2', 64);
+  eNaT1.setAttribute('y', 64 + rNa - 2); eNaT2.setAttribute('y', 64 + rNa + 13);
+  // Cl⁻ (rombo), HCO₃⁻ (triángulo), hiato (pieza sin nombre)
+  const x = 300, d2 = Math.sqrt(v.cl * SA * 2 / 1.4), d1 = 1.4 * d2;
+  const yCl = 60, yClC = yCl + d1 / 2;
+  eCl.setAttribute('d', `M${x},${yCl} L${x + d2 / 2},${yClC} L${x},${yCl + d1} L${x - d2 / 2},${yClC}Z`);
+  const a = Math.sqrt(4 * v.hco3 * SA / Math.sqrt(3)), hT = a * Math.sqrt(3) / 2, yT = yCl + d1 + 8;
+  eHco3.setAttribute('d', `M${x},${yT} L${x + a / 2},${yT + hT} L${x - a / 2},${yT + hT}Z`);
+  const base = Math.max(0, baseHiato()), rH = Math.sqrt(Math.max(1, base) * SA / Math.PI), yH = yT + hT + 8 + rH;
+  eHiato.setAttribute('cx', x); eHiato.setAttribute('cy', yH); eHiato.setAttribute('r', rH);
+  eHiatoQ.setAttribute('x', x); eHiatoQ.setAttribute('y', yH + 4);
+  eHiloD.setAttribute('d', `M300,40 L300,${yCl} M300,${yCl + d1} L300,${yT} M300,${yT + hT} L300,${yH - rH}`);
+  // hexágonos: el ácido que no se mide, 2 mEq/L cada uno (ilustrativo)
+  const extra = Math.max(0, ha - base), nHex = Math.round(extra / 2);
+  while (hexes.length < nHex) {
+    const g = ficha('keto', eHexCapa), hilo = nodo('line', { class: 'hilo', opacity: .6 }, eHexCapa); eHexCapa.insertBefore(hilo, g);
+    hexes.push({ g, hilo, nace: performance.now() }); empujar(1);
+  }
+  while (hexes.length > nHex) { const h = hexes.pop(); empujar(-1); caer(h); }
+  hexes.forEach((h, i) => {
+    const fila = Math.floor(i / 5), col = i % 5, enFila = Math.min(5, nHex - fila * 5);
+    const hx = x + (col - (enFila - 1) / 2) * 13, hy = yH + rH + 16 + fila * 17 + (col % 2) * 4;
+    const t = QUIETO ? 1 : clamp((performance.now() - h.nace) / 600, 0, 1);
+    h.g.setAttribute('transform', `translate(${hx},${(hy - 14 * (1 - suave(t))).toFixed(2)})`); h.g.setAttribute('opacity', t.toFixed(2));
+    h.hilo.setAttribute('x1', x); h.hilo.setAttribute('y1', yH + rH); h.hilo.setAttribute('x2', hx); h.hilo.setAttribute('y2', hy - 5);
+  });
+  // rótulos
+  const xl = 300 - Math.max(d2 / 2, a / 2, 30) - 8;
+  const tend = pas.tendencia;
+  eLblCl.setAttribute('x', 300 - d2 / 2 - 8); eLblCl.setAttribute('y', yClC + 4); eLblCl.textContent = `Cl⁻ ${tend ? '↑' : Math.round(v.cl)}`;
+  eLblH.setAttribute('x', 300 - a / 2 - 8); eLblH.setAttribute('y', yT + hT * .66 + 4); eLblH.textContent = `HCO₃⁻ ${tend ? '↓' : Math.round(v.hco3)}`;
+  eLblHa.setAttribute('x', 300 - rH - 8); eLblHa.setAttribute('y', yH + 4); eLblHa.textContent = `hiato ${tend ? '12' : Math.round(ha)}`;
+  eLblK.setAttribute('x', x - 40); eLblK.setAttribute('y', yH + rH + 22); eLblK.textContent = nHex ? (S.alb < 4.5 ? 'ácido escondido' : 'cetoácidos') : '';
+  // cuentas (Ec. 31.14 y 31.16)
+  eCalc1.textContent = 'HA = Na − (Cl + HCO₃⁻)';
+  eCalc2.textContent = tend ? '= 12: no cambia; sube Cl⁻, baja HCO₃⁻' : `= 140 − (${Math.round(v.cl)} + ${Math.round(v.hco3)}) = ${Math.round(ha)}`;
+  const hco3r = Math.round(v.hco3), har = Math.round(ha);
+  if (!tend && hco3r < 24 && !tramo) {
+    const dl = (har - 12) / (24 - hco3r);
+    eCalc3.textContent = 'delta = (HA − 12) / (24 − HCO₃⁻)';
+    eCalc4.textContent = `= ${har - 12} / ${24 - hco3r} = ${fmt(dl, Math.abs(dl - Math.round(dl)) < .005 ? 0 : 2)}`;
+    eCalc4.setAttribute('class', Math.abs(dl - 1) < .05 ? 't-verde' : 't-rojo');
+  } else { eCalc3.textContent = ''; eCalc4.textContent = ''; }
+  eCalc5.textContent = 'HA normal 8-12 · delta <1: + hiperclorémica · >1: + alcalosis';
+}
+function caer(h) {
+  if (QUIETO) { h.g.remove(); h.hilo.remove(); return; }
+  h.hilo.remove();
+  const m = /translate\(([-\d.]+),([-\d.]+)\)/.exec(h.g.getAttribute('transform') || '') || [0, 300, 200];
+  const x = +m[1], y = +m[2];
+  volar(h.g, [{ x, y }, { x: x + azar(-8, 8), y: y + 30 }, { x: x + azar(-14, 14), y: y + 70 }], 1100, { opac: [1, 0], giro: azar(-120, 120) }).then(() => h.g.remove());
+}
+// Cl⁻ del salino que entra (paso 3)
+function lloverCl(n) {
+  if (QUIETO) return;
+  for (let i = 0; i < n; i++) {
+    const g = ficha('cl', eCuerpo);
+    volar(g, [{ x: 350 + azar(-6, 6), y: -10 }, { x: 330, y: 30 }, { x: 304 + azar(-8, 8), y: 100 }], 1300, { retraso: i * 260, opac: [1, 0] }).then(() => g.remove());
+  }
+}
+
+// ============================================================
+// 4 · MAPA DE LA GASOMETRÍA
+// ============================================================
+const MP = $('#mapa');
+const X = p => 44 + (p - 10) / 80 * 302, Y = h => 262 - (h - 4) / 46 * 248;
+nodo('rect', { x: 44, y: 14, width: 302, height: 248, class: 'rejilla' }, MP);
+[7.2, 7.4, 7.6].forEach(ph => { // rectas de pH constante (Ec. 31.2)
+  const H = 10 ** (9 - ph), pts = [];
+  for (let p = 10; p <= 90; p += 1) { const h = 24 * p / H; if (h >= 4 && h <= 50) pts.push([X(p), Y(h)]); }
+  nodo('path', { d: 'M' + pts.map(q => q.map(n => n.toFixed(1)).join(',')).join('L'), stroke: 'var(--text-muted)', 'stroke-width': .8, 'stroke-dasharray': '2 4', fill: 'none' }, MP);
+  const u = pts[pts.length - 1]; texto(MP, u[0] - 3, u[1] + (u[1] < 20 ? 12 : -5), `pH ${fmt(ph, 1)}`, { 'text-anchor': 'end', 'font-size': 10, class: 't-dim' });
+});
+nodo('rect', { x: X(36), y: Y(26), width: X(44) - X(36), height: Y(22) - Y(26), fill: 'var(--accent-green)', 'fill-opacity': .14, stroke: 'var(--accent-green)', 'stroke-width': .8 }, MP);
+const trazar = (f, a, b, paso = .5) => { let d = ''; for (let t = a; a < b ? t <= b + 1e-9 : t >= b - 1e-9; t += a < b ? paso : -paso) { const [p, h] = f(t); d += `${d ? 'L' : 'M'}${X(p).toFixed(1)},${Y(h).toFixed(1)}`; } return d; };
+const LINEAS = [
+  { id: 'acida', d: trazar(h => [lineaAcida(h), h], 24, 4), col: 'var(--accent-red)', txt: 'Acidosis metabólica', dash: '' },
+  { id: 'alcalina', d: trazar(h => [lineaAlcalina(h), h], 24, 48), col: 'var(--accent-yellow)', txt: 'Alcalosis metabólica', dash: '' },
+  { id: 'agudo', d: trazar(p => [p, 24 + .1 * (p - 40)], 40, 90) + trazar(p => [p, 24 - .2 * (40 - p)], 40, 12), col: 'var(--accent-purple)', txt: 'Respiratoria aguda', dash: '5 4' },
+  { id: 'cronico', d: trazar(p => [p, 24 + .4 * (p - 40)], 40, 90) + trazar(p => [p, 24 - .4 * (40 - p)], 40, 12), col: 'var(--accent-purple)', txt: 'Respiratoria crónica', dash: '' },
+];
+const lineaEl = {};
+LINEAS.forEach(l => { lineaEl[l.id] = nodo('path', { d: l.d, stroke: l.col, 'stroke-width': 1.4, fill: 'none', 'stroke-dasharray': l.dash, opacity: .45, 'stroke-linecap': 'round' }, MP); });
+[10, 30, 50, 70, 90].forEach(p => texto(MP, X(p), 278, String(p), { 'text-anchor': 'middle', 'font-size': 10.5, class: 't-dim' }));
+[10, 20, 30, 40, 50].forEach(h => texto(MP, 38, Y(h) + 4, String(h), { 'text-anchor': 'end', 'font-size': 10.5, class: 't-dim' }));
+texto(MP, 195, 296, 'PaCO₂ (mmHg)', { 'text-anchor': 'middle', 'font-size': 11, class: 't-main' });
+texto(MP, 12, 138, 'HCO₃⁻ (mEq/L)', { 'text-anchor': 'middle', 'font-size': 11, class: 't-main', transform: 'rotate(-90 12 138)' });
+const estela = nodo('path', { fill: 'none', stroke: 'var(--accent-blue)', 'stroke-width': 2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', opacity: .75 }, MP);
+const marcas = nodo('g', {}, MP);
+const punto = nodo('circle', { r: 7, class: 'f-na', stroke: 'var(--bg-main)', 'stroke-width': 2 }, MP);
+const puntoTxt = texto(MP, 0, 0, '', { 'font-size': 11.5, class: 't-main t-serif' });
+const mapaAviso = texto(MP, 340, 252, '', { 'text-anchor': 'end', 'font-size': 11, class: 't-rojo t-serif', 'font-style': 'italic' });
+let rastro = [];
+$('#mapa-leyenda').innerHTML = LINEAS.map(l => `<span><svg viewBox="0 0 22 10" aria-hidden="true"><line x1="1" y1="5" x2="21" y2="5" stroke="${l.col}" stroke-width="2.4" ${l.dash ? 'stroke-dasharray="4 3"' : ''}/></svg>${l.txt}</span>`).join('')
+  + `<span><svg viewBox="0 0 22 10" aria-hidden="true"><rect x="5" y="1" width="12" height="8" fill="var(--accent-green)" fill-opacity=".25" stroke="var(--accent-green)"/></svg>Normal</span>`;
+const PUNTOS_PASO = { '0': [40, 24], '1': [40, 12], '2': [26, 12], '3': [26, 12], '3b': [35, 20], '4': [51, 40], '5': [46.3, 33] };
+function trayectoCanonico(paso) {
+  const A = [[40, 24]];
+  if (P[paso].pac === 'A') {
+    if (paso === '0') return A;
+    A.push([40, 12]); if (paso === '1') return A;
+    A.push([26, 12]); if (paso === '2' || paso === '3') return A;
+    for (let h = 12.5; h <= 20; h += .5) A.push([lineaAcida(h) + lerp(26 - lineaAcida(12), 35 - lineaAcida(20), (h - 12) / 8), h]);
+    return A;
+  }
+  A.push([40, 40], [51, 40]); if (paso === '4') return A;
+  for (let h = 39.5; h >= 33; h -= .5) A.push([lineaAlcalina(h) + lerp(51 - lineaAlcalina(40), 46.3 - lineaAlcalina(33), (40 - h) / 7), h]);
+  return A;
+}
+function pintarMapa() {
+  const v = S.v, ph = phDe(v.pco2, v.hco3), pas = P[S.paso];
+  const px = X(v.pco2), py = Y(v.hco3);
+  punto.setAttribute('cx', px.toFixed(2)); punto.setAttribute('cy', py.toFixed(2));
+  const u = rastro[rastro.length - 1];
+  if (!u || Math.hypot(u[0] - px, u[1] - py) > 1.2) rastro.push([px, py]);
+  estela.setAttribute('d', rastro.length ? 'M' + rastro.map(q => q.map(n => n.toFixed(1)).join(',')).join('L') : '');
+  const izq = pas.pac === 'A' && S.paso !== '0';
+  puntoTxt.setAttribute('x', izq ? px - 12 : px + 12); puntoTxt.setAttribute('y', izq ? py + 20 : py - 10); puntoTxt.setAttribute('text-anchor', izq ? 'end' : 'start');
+  puntoTxt.textContent = pas.tendencia ? 'pH ↓ (tendencia)' : `pH ${fmt(ph, 2)}`;
+  lineaEl.acida.setAttribute('opacity', pas.pac === 'A' ? 1 : .35); lineaEl.acida.setAttribute('stroke-width', pas.pac === 'A' ? 2.6 : 1.4);
+  lineaEl.alcalina.setAttribute('opacity', pas.pac === 'B' ? 1 : .35); lineaEl.alcalina.setAttribute('stroke-width', pas.pac === 'B' ? 2.6 : 1.4);
+  const esperada = v.hco3 <= 24 ? lineaAcida(v.hco3) : lineaAlcalina(v.hco3);
+  mapaAviso.textContent = !tramo && pas.teorico ? 'fuera de su línea: instante teórico' : tramo && Math.abs(v.pco2 - esperada) > 3 ? 'aún sin compensar' : '';
+}
+function marcasPaso(hasta) {
+  marcas.innerHTML = '';
+  const lista = P[hasta].pac === 'A' ? ['0', '1', '2', '3', '3b'] : ['0', '4', '5'];
+  const idx = lista.indexOf(hasta);
+  lista.slice(0, idx + 1).forEach(k => {
+    if (k === '3' && hasta !== '3') return;
+    const [p, h] = k === '0' ? [40, 24] : PUNTOS_PASO[k], cx = X(p), cy = Y(h);
+    nodo('circle', { cx, cy, r: 3, fill: 'var(--accent-blue)' }, marcas);
+    if (k !== hasta) texto(marcas, cx + (k === '1' ? 7 : -7), cy + (k === '1' ? 4 : -6), k, { 'font-size': 10, class: 't-oro', 'text-anchor': k === '1' ? 'start' : 'end' });
+  });
+}
+
+// ============================================================
+// 5 · RELOJ (minutos · horas · días, escala logarítmica)
+// ============================================================
+const RJ = $('#reloj');
+const RX = pos => 18 + pos * 324;
+const lpos = min => Math.log(min) / Math.log(7200);
+nodo('line', { x1: RX(0), y1: 46, x2: RX(1), y2: 46, class: 'varilla', 'stroke-width': 1.4 }, RJ);
+[[1, '1 min'], [60, '1 h'], [1440, '1 día'], [7200, '5 días']].forEach(([m, t]) => {
+  const x = RX(lpos(m)); nodo('line', { x1: x, y1: 41, x2: x, y2: 51, class: 'oro-fino' }, RJ);
+  texto(RJ, x, 64, t, { 'text-anchor': m === 1 ? 'start' : m === 7200 ? 'end' : 'middle', 'font-size': 10, class: 't-dim' });
+});
+[['minutos', 0, lpos(60)], ['horas', lpos(60), lpos(1440)], ['días', lpos(1440), 1]].forEach(([t, a, b]) => texto(RJ, RX((a + b) / 2), 82, t, { 'text-anchor': 'middle', 'font-size': 12, class: 't-serif t-main', 'font-style': 'italic' }));
+nodo('rect', { x: RX(lpos(30)), y: 36, width: RX(lpos(120)) - RX(lpos(30)), height: 5, rx: 2, fill: 'var(--accent-blue)' }, RJ);
+texto(RJ, RX(lpos(60)), 30, 'pulmón 30-120 min', { 'text-anchor': 'middle', 'font-size': 10.5, class: 't-oro' });
+nodo('rect', { x: RX(lpos(2880)), y: 36, width: RX(lpos(4320)) - RX(lpos(2880)), height: 5, rx: 2, fill: 'var(--accent-green)' }, RJ);
+texto(RJ, RX(1), 30, 'riñón 2-3 días', { 'text-anchor': 'end', 'font-size': 10.5, class: 't-verde' });
+const rjMarca = nodo('circle', { cy: 46, r: 6.5, class: 'f-na', stroke: 'var(--bg-main)', 'stroke-width': 2 }, RJ);
+const rjTxt = texto(RJ, 0, 14, '', { 'text-anchor': 'middle', 'font-size': 11, class: 't-main t-serif' });
+let relojPos = 0;
+function pintarReloj() {
+  rjMarca.setAttribute('cx', RX(relojPos));
+  const t = tramo ? '…' : P[S.paso].reloj.txt;
+  rjTxt.setAttribute('x', clamp(RX(relojPos), 40, 320)); rjTxt.textContent = t;
+  relojAguja.setAttribute('transform', `rotate(${(relojPos * 330).toFixed(1)})`);
+  relojTxt.textContent = t;
+}
+
+// ============================================================
+// Tramos animados entre pasos
+// ============================================================
+function viaInterp(from, to, k, via) {
+  const h = lerp(from.hco3, to.hco3, k), cl = lerp(from.cl, to.cl, k);
+  let p = lerp(from.pco2, to.pco2, k);
+  if (via === 'acida') p = lineaAcida(h) + lerp(from.pco2 - lineaAcida(from.hco3), to.pco2 - lineaAcida(to.hco3), k);
+  if (via === 'alcalina') p = lineaAlcalina(h) + lerp(from.pco2 - lineaAlcalina(from.hco3), to.pco2 - lineaAlcalina(to.hco3), k);
+  return { pco2: p, hco3: h, cl };
+}
+function tramosPara(de, a) {
+  const v = k => ({ ...P[k].v });
+  if (a === '1' && de === '0') return [{ to: v('1'), dur: 4200, via: 'recta', bajaHCO3: 'tampona', reloj: [0, .181] }];
+  if (a === '2' && de === '1') return [{ to: v('2'), dur: 4600, via: 'recta', bajaCO2: 'sopla', reloj: [.181, .539] }];
+  if (a === '3' && de === '2') return [{ to: v('3'), dur: 3000, via: 'recta', reloj: [.539, .664], llueveCl: true }];
+  if (a === '3b' && (de === '2' || de === '3')) return [{ to: v('3b'), dur: 4200, via: 'acida', reloj: [.539, .664] }];
+  if (a === '4' && de !== '5') return [{ reset: true }, { to: { pco2: 40, hco3: 40, cl: 88 }, dur: 3800, via: 'recta', subeHCO3: 'vomito', reloj: [0, .2] },
+    { to: v('4'), dur: 3600, via: 'recta', reloj: [.2, .58] }];
+  if (a === '5' && de === '4') return [{ to: v('5'), dur: 7000, via: 'alcalina', bajaHCO3: 'orina', bajaCO2: 'sopla', reloj: [.58, .741] }];
+  return null;
+}
+function irA(paso, { repetir = false } = {}) {
+  let de = S.paso;
+  if (repetir) { // vuelve al paso anterior en silencio y lo anima otra vez
+    const prev = { '1': '0', '2': '1', '3': '2', '3b': '2', '4': '0', '5': '4' }[paso];
+    if (prev) { saltar(prev, true); de = prev; }
+  }
+  if (paso !== '2' && S.alb !== 4.5) { S.alb = 4.5; $('#alb').value = 4.5; pintarAlb(); }
+  S.paso = paso; visto.add(paso);
+  const lista = QUIETO ? null : tramosPara(de, paso);
+  pintarTextos();
+  if (!lista) { saltar(paso); return; }
+  tramos = lista.slice(); tramo = null; siguienteTramo();
+}
+function saltar(paso, silencioso = false) {
+  tramos = []; tramo = null;
+  S.paso = paso; S.v = { ...P[paso].v }; S.pac = P[paso].pac;
+  rastro = trayectoCanonico(paso).map(([p, h]) => [X(p), Y(h)]);
+  relojPos = P[paso].reloj.pos;
+  ajustarFichas(false);
+  if (QUIETO || silencioso) { const a = angDeH(hDe(S.v.pco2, S.v.hco3)); agObjetivo = a; if (agMV.jump) agMV.jump(a); else agMV.set(a); pintarMovil(); }
+  else muelleA(angDeH(hDe(S.v.pco2, S.v.hco3)));
+  ponerPendrina(P[paso].pend);
+  marcasPaso(paso);
+  if (!silencioso) pintarTextos();
+}
+function siguienteTramo() {
+  const t = tramos.shift();
+  if (!t) { tramo = null; fin(); return; }
+  if (t.reset) { // otro paciente: vuelve a la normalidad
+    S.v = { ...P['0'].v }; S.pac = 'B'; rastro = [[X(40), Y(24)]]; relojPos = 0;
+    PL.fichas.forEach(g => g.remove()); PR.fichas.forEach(g => g.remove()); PL.fichas = []; PR.fichas = [];
+    ajustarFichas(true); muelleA(0); marcasPaso('0'); ponerPendrina('casi');
+    tramo = { from: { ...S.v }, to: { ...S.v }, dur: 900, t0: performance.now(), via: 'recta', reloj: [0, 0] };
+    return;
+  }
+  tramo = { ...t, from: { ...S.v }, t0: performance.now() };
+  if (t.llueveCl) lloverCl(4);
+  if (S.paso === '5') ponerPendrina('on');
+  if (S.paso === '4' && t.subeHCO3) ponerPendrina('sin');
+}
+function fin() {
+  const k = S.paso;
+  S.v = { ...P[k].v }; relojPos = P[k].reloj.pos;
+  ajustarFichas(true);
+  muelleA(angDeH(hDe(S.v.pco2, S.v.hco3)));
+  ponerPendrina(P[k].pend);
+  marcasPaso(k);
+  pintarTextos();
+}
+
+// ============================================================
+// Textos: disco, notas, frase, pasos, origen
+// ============================================================
+function pintarDisco() {
+  const v = S.v, pas = P[S.paso], ph = phDe(v.pco2, v.hco3), ph2 = Math.round(ph * 100) / 100;
+  const estado = ph2 < 7.36 ? 'acidemia' : ph2 > 7.44 ? 'alcalemia' : 'normal';
+  const col = { acidemia: 'var(--accent-red)', alcalemia: 'var(--accent-purple)', normal: 'var(--accent-green)' }[estado];
+  disco.setAttribute('fill', col);
+  disco.setAttribute('class', estado === 'normal' ? 'brillo-verde' : '');
+  agujaPunta.setAttribute('fill', col);
+  const tendencia = pas.tendencia && !tramo;
+  discoNum.textContent = tendencia || (pas.tendencia && tramo) ? '↓' : fmt(ph2, 2);
+  discoNum.setAttribute('class', `t-serif ${estado === 'normal' ? 't-fondo' : 't-main'}`);
+  discoPal.textContent = pas.tendencia ? 'tendencia' : estado;
+  discoPal.setAttribute('class', estado === 'normal' ? 't-fondo' : 't-main');
+  document.getElementById('disco-ph').setAttribute('class', `t-serif ${estado === 'normal' ? 't-fondo' : 't-main'}`);
+  // valores de los platillos
+  PL.val.textContent = pas.tendencia ? 'PaCO₂ ↓' : `PaCO₂ ${Math.round(v.pco2)}`;
+  PR.val.textContent = pas.tendencia ? 'HCO₃⁻ ↓' : `HCO₃⁻ ${Math.round(v.hco3)}`;
+}
+function pintarNotas() {
+  const k = S.paso, pas = P[k], a = agObjetivo;
+  const fantasma = { '2': [40, 12], '3': [40, 12], '3b': [40, 12], '4': [40, 40] }[k];
+  let n1 = '', n2 = '', n3 = '', cls = 't-serif t-rojo';
+  if (tramo) {
+    cls = 't-serif t-main';
+    if (k === '1') { n1 = 'H⁺ + HCO₃⁻ →'; n2 = 'CO₂ + H₂O'; n3 = 'fisiología general'; }
+    else if (k === '2') { n1 = 'el pulmón'; n2 = 'sopla CO₂'; n3 = 'en 30-120 min (ficha)'; }
+    else if (k === '3') { n1 = 'entra el cloro'; n2 = 'del salino'; }
+    else if (k === '3b') { n1 = 'vuelve'; n2 = 'el HCO₃⁻'; }
+    else if (k === '4') { n1 = 'cada H⁺ vomitado'; n2 = 'deja un HCO₃⁻'; n3 = 'ficha mr-alc-gastrico'; }
+    else if (k === '5') { n1 = 'entra Cl⁻,'; n2 = 'sale HCO₃⁻'; n3 = 'por la pendrina'; }
+  }
+  else if (k === '0') { n1 = 'en equilibrio'; cls = 't-serif t-verde'; n3 = '10 fichas frente a 10'; }
+  else if (k === '3') { n1 = 'el HCO₃⁻ no sube:'; n2 = 'el cloro ocupa su sitio'; }
+  else if (pas.teorico) { n1 = 'instante teórico:'; n2 = 'aún sin compensar'; }
+  else if (pas.tendencia) { n1 = 'vuelve hacia 7,40'; n2 = 'como tendencia'; cls = 't-serif t-verde'; n3 = 'sin cifra final (ficha)'; }
+  else { n1 = 'limita,'; n2 = 'pero no corrige'; }
+  [nota1, nota2].forEach(n => n.setAttribute('class', cls));
+  // fantasma: dónde estaría la aguja sin compensación
+  if (fantasma && !tramo) {
+    const af = angDeH(hDe(fantasma[0], fantasma[1])), p0 = polar(56, af), p1 = polar(R - 16, af);
+    agujaFantasma.setAttribute('x1', p0.x); agujaFantasma.setAttribute('y1', p0.y); agujaFantasma.setAttribute('x2', p1.x); agujaFantasma.setAttribute('y2', p1.y);
+    agujaFantasma.setAttribute('opacity', .9);
+    n3 = `- - - sin compensar: ${fmt(phDe(fantasma[0], fantasma[1]), 2)}`;
+  } else agujaFantasma.setAttribute('opacity', 0);
+  nota1.textContent = n1; nota2.textContent = n2; nota3.textContent = n3;
+  // abanico entre la aguja y 7,40
+  if (!tramo && k !== '0' && Math.abs(a) > .6) {
+    const a0 = Math.min(0, a), a1 = Math.max(0, a), r1 = R - 13, r0 = 52;
+    const p = (r, x) => polar(r, x), q0 = p(r0, a0), q1 = p(r1, a0), q2 = p(r1, a1), q3 = p(r0, a1);
+    abanico.setAttribute('d', `M${q0.x},${q0.y} L${q1.x},${q1.y} A${r1},${r1} 0 0 1 ${q2.x},${q2.y} L${q3.x},${q3.y} A${r0},${r0} 0 0 0 ${q0.x},${q0.y}Z`);
+    abanico.setAttribute('fill', a < 0 ? 'var(--accent-red)' : 'var(--accent-purple)');
+  } else abanico.setAttribute('d', '');
+  pieTxt.textContent = `${pas.tit.split(' · ')[0]} · ${pas.corto}`;
+}
+function pintarTextos() {
+  const k = S.paso, pas = P[k];
+  $('#t-pasos').textContent = pas.tit;
+  $('#frase').innerHTML = FRASES[k][0];
+  $('#frase-origen').innerHTML = 'Origen: ' + FRASES[k][1];
+  document.querySelectorAll('.paso').forEach(b => { const on = b.dataset.paso === k; if (on) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current'); b.classList.toggle('visto', visto.has(b.dataset.paso)); });
+  $('#fab').textContent = k === '5' ? '↺ Volver a empezar' : `Siguiente: paso ${SIGUIENTE[k]} →`;
+  $('#b-sig').textContent = k === '5' ? '↺ Volver a empezar' : 'Siguiente paso →';
+  $('#escena-origen').innerHTML = `pH calculado en la página con la Ec. 31.2, [H⁺] = 24 × PaCO₂ / HCO₃⁻ ${og('ficha', 'ficha mr-ecuacion-h')}. Arco: marcas a pasos iguales de [H⁺] (Fig. 31.1) ${og('ficha', 'ficha mr-ph-no-lineal')}; normal 7,36-7,44 ${og('ficha', 'ficha mr-rangos-ref')}. PaCO₂ y HCO₃⁻ del caso ${og('ilu', 'ilustrativo')}. Una ficha = 4 mmHg de PaCO₂ o 2,4 mEq/L de HCO₃⁻ ${og('ilu', 'ilustrativo')}. Pendrina ${og('ficha', 'ficha mr-alc-pendrina')}. Ritmo del pulmón ${og('ilu', 'ilustrativo')}.`;
+  $('#electro-origen').innerHTML = `Na⁺, Cl⁻ y HCO₃⁻ del caso ${og('ilu', 'ilustrativo')}. HA, Ec. 31.14 ${og('ficha', 'ficha mr-ag-formula')}; normal 8-12 ${og('ficha', 'ficha mr-ag-rango')}; la pieza «de siempre» es ANM − CNM = 23 − 11 = 12 ${og('ficha', 'ficha mr-tabla-31-2')}. Delta, Ec. 31.16 ${og('ficha', 'ficha mr-delta-gap')}, cortes ${og('ficha', 'ficha mr-delta-menor')} ${og('ficha', 'ficha mr-delta-mayor')}. Área de cada pieza ∝ mEq/L y un hexágono = 2 mEq/L ${og('ilu', 'ilustrativo')}.`;
+}
+
+// ============================================================
+// 7 · ALBÚMINA
+// ============================================================
+const AF = $('#alb-fig');
+const afPieza = nodo('circle', { cx: 92, cy: 52, fill: 'none', stroke: 'var(--accent-blue)', 'stroke-width': 1.3, 'stroke-dasharray': '3 3' }, AF);
+const afAlb = nodo('circle', { cx: 92, cy: 52, fill: 'var(--text-muted)', 'fill-opacity': .55 }, AF);
+texto(AF, 92, 110, 'albúmina y demás', { 'text-anchor': 'middle', 'font-size': 10.5, class: 't-dim' });
+const afBase = texto(AF, 92, 124, '', { 'text-anchor': 'middle', 'font-size': 10.5, class: 't-main' });
+const afHex = nodo('g', {}, AF);
+texto(AF, 262, 110, 'ácido que no se mide', { 'text-anchor': 'middle', 'font-size': 10.5, class: 't-ocre' });
+const afTxtHex = texto(AF, 262, 124, '', { 'text-anchor': 'middle', 'font-size': 10.5, class: 't-main' });
+const afMas = texto(AF, 178, 60, '+', { 'text-anchor': 'middle', 'font-size': 22, class: 't-oro t-serif' });
+function pintarAlb() {
+  const alb = S.alb, ha = 24, base = 12 - 2.5 * (4.5 - alb), hac = ha + 2.5 * (4.5 - alb), extra = ha - base;
+  $('#alb-v').textContent = `${fmt(alb, 1)} g/dL`;
+  const r = Math.sqrt(Math.max(.5, base) * 150 / Math.PI);
+  afAlb.setAttribute('r', r.toFixed(2)); afPieza.setAttribute('r', Math.sqrt(12 * 150 / Math.PI).toFixed(2));
+  afBase.textContent = `de siempre: ${fmt(base, base % 1 ? 2 : 0)}`;
+  const n = Math.round(extra / 2);
+  afHex.innerHTML = '';
+  for (let i = 0; i < n; i++) { const c = i % 5, f = Math.floor(i / 5); const g = ficha('keto', afHex); g.setAttribute('transform', `translate(${226 + c * 18},${34 + f * 20}) scale(1.35)`); }
+  afTxtHex.textContent = `${fmt(extra, extra % 1 ? 2 : 0)} mEq/L`;
+  const cambia = alb < 4.5;
+  $('#alb-lectura').innerHTML = cambia
+    ? `Albúmina ${fmt(alb, 1)}: el hiato medido sigue siendo <strong>24</strong>, pero corregido es 24 + 2,5 × (4,5 − ${fmt(alb, 1)}) = <strong class="hl-r">${fmt(hac, 2)}</strong>. La albúmina baja deja sitio a <strong>${fmt(hac - 24, 2)} mEq/L</strong> más de ácido escondido. Ejemplo de la ficha: HA 10 con albúmina 2 → HAc 16, un hiato «normal» que pasa a elevado.`
+    : `Con albúmina normal (4,5 g/dL) el hiato del paso 2 es <strong>24</strong> y no hay nada que corregir: 12 de siempre + 12 de cetoácidos.`;
+}
+$('#alb').addEventListener('input', e => {
+  S.alb = Number(e.target.value);
+  if (S.paso !== '2') { const a = S.alb; irA('2'); S.alb = a; $('#alb').value = a; }
+  pintarAlb();
+});
+
+// ============================================================
+// 8 · HIATO OSMOLAL (móvil pequeño)
+// ============================================================
+const OF = $('#osm-fig');
+nodo('circle', { cx: 180, cy: 8, r: 3, fill: 'none', stroke: 'var(--accent-blue)', 'stroke-width': 1.2 }, OF);
+nodo('line', { x1: 180, y1: 11, x2: 180, y2: 30, class: 'hilo' }, OF);
+const oCuerpo = nodo('g', {}, OF);
+nodo('line', { x1: 70, y1: 30, x2: 290, y2: 30, class: 'varilla' }, oCuerpo);
+nodo('circle', { cx: 180, cy: 30, r: 3, class: 'f-co2' }, oCuerpo);
+const oL = nodo('g', {}, OF), oR = nodo('g', {}, OF);
+const rOsm = v => Math.sqrt(v * 9 / Math.PI);
+nodo('line', { x1: 0, y1: 0, x2: 0, y2: 18, class: 'hilo' }, oL);
+nodo('circle', { cx: 0, cy: 18 + rOsm(290), r: rOsm(290), fill: 'var(--text-main)', 'fill-opacity': .85 }, oL);
+texto(oL, 0, 18 + rOsm(290) + 5, '290', { 'text-anchor': 'middle', 'font-size': 13, class: 't-fondo t-serif', 'font-weight': 'bold' });
+nodo('line', { x1: 0, y1: 18 + 2 * rOsm(290), x2: 0, y2: 18 + 2 * rOsm(290) + 10, class: 'hilo' }, oL);
+nodo('circle', { cx: 0, cy: 28 + 2 * rOsm(290) + rOsm(30), r: rOsm(30), fill: 'none', stroke: 'var(--accent-red)', 'stroke-width': 1.4, 'stroke-dasharray': '3 3' }, oL);
+texto(oL, 0, 28 + 2 * rOsm(290) + rOsm(30) + 4, '?', { 'text-anchor': 'middle', 'font-size': 11, class: 't-rojo t-serif' });
+texto(oL, 22, 28 + 2 * rOsm(290) + rOsm(30) + 4, '30: sal que el cálculo no ve', { 'font-size': 11, class: 't-rojo t-serif', 'font-style': 'italic' });
+texto(oL, 0, -8, 'medida 320', { 'text-anchor': 'middle', 'font-size': 11.5, class: 't-main' });
+nodo('line', { x1: 0, y1: 0, x2: 0, y2: 18, class: 'hilo' }, oR);
+nodo('circle', { cx: 0, cy: 18 + rOsm(290), r: rOsm(290), fill: 'var(--text-muted)', 'fill-opacity': .55 }, oR);
+texto(oR, 0, 18 + rOsm(290) + 5, '290', { 'text-anchor': 'middle', 'font-size': 13, class: 't-main t-serif', 'font-weight': 'bold' });
+texto(oR, 0, -8, 'calculada', { 'text-anchor': 'middle', 'font-size': 11.5, class: 't-main' });
+const osMV = M ? M.motionValue(0) : { get: () => -9, set() {}, on() {} };
+function pintarOsm() {
+  const a = QUIETO || !M ? -9 : osMV.get(), t = a * Math.PI / 180;
+  oCuerpo.setAttribute('transform', `rotate(${a.toFixed(2)} 180 30)`);
+  oL.setAttribute('transform', `translate(${(180 - 110 * Math.cos(t)).toFixed(2)},${(30 - 110 * Math.sin(t)).toFixed(2)})`);
+  oR.setAttribute('transform', `translate(${(180 + 110 * Math.cos(t)).toFixed(2)},${(30 + 110 * Math.sin(t)).toFixed(2)})`);
+}
+if (M) osMV.on('change', pintarOsm);
+pintarOsm();
+$('#osm').addEventListener('toggle', e => {
+  if (!e.target.open || QUIETO || !M) { pintarOsm(); return; }
+  osMV.set(0); M.animate(osMV, -9, { type: 'spring', stiffness: 30, damping: 3.5 });
+});
+
+// ============================================================
+// Mandos, elección y bucle
+// ============================================================
+$('#pasos').innerHTML = ORDEN.map(k => `<button type="button" class="paso" data-paso="${k}" aria-label="${P[k].tit}">${k}</button>`).join('');
+$('#pasos').addEventListener('click', e => { const b = e.target.closest('.paso'); if (b) irA(b.dataset.paso); });
+const avanzar = () => irA(S.paso === '5' ? '0' : SIGUIENTE[S.paso]);
+$('#b-sig').addEventListener('click', avanzar);
+$('#fab').addEventListener('click', avanzar);
+$('#b-repetir').addEventListener('click', () => irA(S.paso, { repetir: true }));
+if ('IntersectionObserver' in window) {
+  new IntersectionObserver(es => es.forEach(x => { $('#fab').hidden = x.isIntersecting || x.boundingClientRect.top < 0; }), { threshold: [0, .2, 1] }).observe($('#sec-pasos'));
+}
+document.querySelectorAll('[data-elige]').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll(`[data-elige="${b.dataset.elige}"]`).forEach(o => o.setAttribute('aria-pressed', String(o === b)));
+  const sel = [...document.querySelectorAll('[data-elige][aria-pressed="true"]')].map(o => o.textContent.trim());
+  $('#elige-res').textContent = `Has marcado: ${sel.join(' · ')}. No se guarda: dísela a Claude en el chat.`;
+}));
+
+let antes = performance.now();
+function bucle(ahora) {
+  const dt = Math.min(.05, (ahora - antes) / 1000); antes = ahora;
+  if (tramo) {
+    const k = clamp((ahora - tramo.t0) / tramo.dur, 0, 1), ke = suave(k);
+    S.v = viaInterp(tramo.from, tramo.to, ke, tramo.via);
+    relojPos = lerp(tramo.reloj[0], tramo.reloj[1], ke);
+    ajustarFichas(true, tramo);
+    if (k >= 1) { S.v = { ...tramo.to }; siguienteTramo(); }
+  }
+  respirar(dt, ahora);
+  moverVuelos(ahora);
+  pintarPendrina(ahora);
+  pintarDisco(); pintarNotas(); pintarElectro(); pintarMapa(); pintarReloj();
+  requestAnimationFrame(bucle);
+}
+
+// Arranque
+saltar('0', true);
+pintarTextos(); pintarAlb(); pintarMovil();
+requestAnimationFrame(bucle);
+window.__maqueta = { irA, S, get tramo() { return tramo; } }; // para las pruebas
+})();
+</script>
+</body></html>

@@ -1,0 +1,1510 @@
+<!-- MAQUETA PARA ELEGIR (plan socialista, tarea marino-mapa, M2). No es parte de la app.
+     Ábrela con el servidor de la app: http://localhost:8000/autonomo/maquetas/marino-agua.html
+     Datos: Marino, The ICU Book, caps. 10-11, tal como están en las fichas de js/modules/libros/marino-fundamentos.html
+     (mar-tabla-10-1, mar-fig-10-1, mar-salino, mar-glucosado-volumen, mar-hipertonico, mar-tabla-10-3, mar-albumina,
+     mar-tabla-11-1, mar-deficit-calc, mar-cristaloide-reparto, mar-cristaloide-historia, mar-agravantes). -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El agua del cuerpo: río, marisma y mar</title>
+<style>
+/* Tokens de css/variables.css, copiados tal cual (como el modelo de preguntas). */
+:root {
+  color-scheme: dark;
+  --bg-main: #17140f;
+  --bg-card: rgba(46, 38, 28, 0.72);
+  --border-color: rgba(196, 154, 74, 0.35);
+  --text-main: #ece3cc;
+  --text-muted: #a5967c;
+  --text-dim: #c9bda4;
+  --accent-green: #90a06a;
+  --accent-red: #b85c3e;
+  --accent-yellow: #cf9a3e;
+  --accent-blue: #d4af37;
+  --accent-purple: #9c5476;
+  /* FUERA DE LOS TOKENS, a propósito: el «agua» que ya pinta el filtro vivo (js/modules/nefrologia/filtro-vivo.js).
+     Solo se usa con el interruptor «Agua del filtro vivo», para que el usuario compare y elija (mapa §3.2). */
+  --agua-filtro: #8fb8d8;
+  --bg: #17140f; --card: #241e16; --card2: #2e261c; --line: rgba(196,154,74,.35);
+  --fg: #ece3cc; --dim: #c9bda4; --muted: #a5967c;
+  --oro: #cf9a3e; --rojo: #b85c3e; --verde: #90a06a; --purpura: #9c5476;
+  --serif: Georgia, 'Times New Roman', serif;
+  --sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 var(--serif);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 14px 48px; }
+main { max-width: 560px; margin: 0 auto; display: grid; gap: 22px; }
+h1 { font-size: 1.55rem; line-height: 1.2; margin: 0; text-wrap: balance; color: var(--oro); font-weight: normal; }
+h1 em { color: var(--fg); }
+h2 { font-size: 1.15rem; margin: 0 0 4px; text-wrap: balance; color: var(--oro); font-weight: normal; }
+p { margin: 0; }
+.aviso { font: 600 .74rem/1.3 var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--bg);
+  background: var(--oro); border-radius: 6px; padding: 5px 9px; width: fit-content; }
+.eyebrow { font: 600 .7rem var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.lead { color: var(--dim); font-size: .98rem; }
+.cabecera { display: grid; gap: 8px; }
+.hl-r { background: rgba(184,92,62,.28); padding: 0 3px; border-radius: 2px; }
+.hl-a { background: rgba(207,154,62,.22); padding: 0 3px; border-radius: 2px; }
+.hl-p { background: rgba(156,84,118,.3); padding: 0 3px; border-radius: 2px; }
+
+/* Selectores segmentados */
+.segmento { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.segmento button { min-height: 44px; font: 600 .82rem/1.2 var(--sans); background: transparent; color: var(--muted); border: 0; padding: 6px 8px; cursor: pointer; }
+.segmento button + button { border-left: 1px solid var(--line); }
+.segmento button[aria-pressed="true"], .segmento button[aria-selected="true"] { background: var(--oro); color: var(--bg); }
+.fila-agua { display: flex; align-items: center; gap: 10px; }
+.fila-agua .eyebrow { flex: none; }
+.fila-agua .segmento { flex: 1; }
+.muestra { display: inline-block; width: 12px; height: 12px; border-radius: 50%; vertical-align: -1px; margin-right: 5px; border: 1px solid rgba(236,227,204,.35); }
+.muestra.tok { background: radial-gradient(circle at 35% 35%, #d4af37, rgba(236,227,204,.35) 60%); }
+.muestra.fil { background: var(--agua-filtro); }
+
+/* Laboratorio: la escena se queda arriba mientras se tocan los mandos */
+.lab { display: grid; gap: 12px; }
+.pegajoso { position: sticky; top: 0; z-index: 3; background: var(--bg); padding-top: 6px; display: grid; gap: 8px;
+  box-shadow: 0 10px 14px -10px rgba(0,0,0,.8); }
+.escena { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: var(--bg); }
+.escena canvas { display: block; width: 100%; touch-action: pan-y; }
+.chapa { position: absolute; font: 600 .62rem/1 var(--sans); letter-spacing: .07em; text-transform: uppercase; padding: 4px 7px;
+  border-radius: 999px; background: rgba(23,20,15,.78); border: 1px solid var(--line); color: var(--dim); pointer-events: none; }
+.chapa.izq { top: 8px; left: 8px; color: var(--oro); }
+.chapa.der { top: 8px; right: 8px; }
+.mareas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.marea { background: var(--card); border: 1px solid var(--card2); border-radius: 10px; padding: 5px 7px; min-width: 0; }
+.marea .nom { font: .84rem/1.2 var(--serif); color: var(--fg); white-space: nowrap; }
+.marea .nom small { font: .62rem/1.2 var(--sans); color: var(--muted); margin-left: 4px; }
+@media (max-width: 380px) { .marea .nom small { display: block; margin-left: 0; } }
+.marea .tot { font: .98rem/1.25 var(--serif); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.marea .dl { font: 600 .74rem/1.2 var(--sans); font-variant-numeric: tabular-nums; color: var(--muted); white-space: nowrap; }
+.marea .dl.sube { color: var(--oro); }
+.marea .dl.baja { color: var(--rojo); }
+.marea .org { font: .6rem/1.25 var(--sans); color: var(--muted); overflow-wrap: anywhere; }
+.escala { font: .66rem/1.3 var(--sans); color: var(--muted); text-align: right; margin-top: -4px; }
+.frase { font: .93rem/1.38 var(--serif); color: var(--fg); min-height: 2.8em; border-left: 3px solid var(--oro); padding: 2px 0 2px 10px; }
+.frase .org { font: .7rem var(--sans); color: var(--muted); white-space: nowrap; }
+
+.mandos { display: grid; gap: 10px; }
+.chips { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.chip { min-height: 48px; display: grid; grid-template-columns: 16px 1fr; align-items: center; gap: 6px; text-align: left;
+  background: var(--card); color: var(--fg); border: 1px solid var(--card2); border-radius: 12px; padding: 5px 8px; cursor: pointer; min-width: 0; }
+.chip span { font: 600 .78rem/1.15 var(--sans); min-width: 0; }
+.chip small { display: block; font: .68rem/1.1 var(--sans); color: var(--muted); }
+.chip[aria-pressed="true"] { border-color: var(--oro); background: rgba(207,154,62,.14); box-shadow: inset 0 0 0 1px var(--oro); }
+.chip svg { width: 16px; height: 16px; }
+.dato { font: .82rem/1.4 var(--sans); color: var(--dim); }
+.acciones { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.acciones .ancho { grid-column: 1 / -1; }
+button.b { min-height: 48px; font: 600 .86rem/1.2 var(--sans); background: var(--card2); color: var(--fg); border: 1px solid var(--line);
+  border-radius: 12px; padding: 8px 10px; cursor: pointer; }
+button.b.prim { background: var(--oro); color: var(--bg); border-color: var(--oro); font-size: .95rem; }
+button.b.rojo { border-color: rgba(184,92,62,.7); }
+button.b:disabled { opacity: .45; cursor: default; }
+button.b small { display: block; font-weight: 400; font-size: .7rem; color: inherit; opacity: .8; }
+button:focus-visible { outline: 2px solid var(--oro); outline-offset: 2px; }
+.interr { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 48px; background: var(--card); border: 1px dashed var(--line);
+  border-radius: 12px; padding: 6px 12px; color: var(--fg); cursor: pointer; text-align: left; font: .9rem/1.3 var(--serif); }
+.interr .pista { flex: none; width: 40px; height: 24px; border-radius: 999px; background: var(--card2); border: 1px solid var(--line); position: relative; }
+.interr .pista::after { content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: var(--muted); transition: transform .2s, background .2s; }
+.interr[aria-pressed="true"] .pista::after { transform: translateX(16px); background: var(--rojo); }
+.interr small { display: block; font: .7rem var(--sans); color: var(--muted); }
+.reinicio { justify-self: start; background: transparent; border: 1px dashed var(--line); color: var(--oro); }
+
+.leyenda { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 12px; margin: 0; padding: 0; list-style: none; font: .8rem/1.3 var(--sans); color: var(--dim); }
+.leyenda li { display: grid; grid-template-columns: 18px 1fr; gap: 6px; align-items: center; min-width: 0; }
+.leyenda svg { width: 16px; height: 16px; }
+.simil { display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; font: .86rem/1.35 var(--sans); background: var(--card); border-radius: 12px; padding: 10px 12px; }
+.simil dt { color: var(--oro); font-family: var(--serif); }
+.simil dd { margin: 0; color: var(--dim); }
+
+details.nota-plegable { background: var(--card); border: 1px solid var(--card2); border-radius: 12px; padding: 4px 12px; }
+details.nota-plegable summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font: 600 .88rem var(--sans); color: var(--dim); }
+details.nota-plegable[open] { padding-bottom: 12px; }
+.tabla-scroll { overflow-x: auto; }
+table.data-table { border-collapse: collapse; width: 100%; font: .78rem/1.35 var(--sans); }
+.data-table th, .data-table td { border-bottom: 1px solid var(--card2); padding: 5px 4px; text-align: left; vertical-align: top; }
+.data-table th { color: var(--muted); font-weight: 600; }
+.data-table td.n { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.data-table .o { color: var(--muted); font-size: .7rem; }
+ul.huecos { margin: 6px 0 0; padding-left: 18px; font: .84rem/1.45 var(--sans); color: var(--dim); display: grid; gap: 4px; }
+
+.elige { border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: grid; gap: 14px; }
+.elige .q { display: grid; gap: 8px; }
+.elige .q p { font-size: .95rem; }
+.opciones { display: flex; flex-wrap: wrap; gap: 8px; }
+.opciones button { min-height: 44px; font: 600 .82rem var(--sans); background: var(--card2); color: var(--fg); border: 1px solid var(--line); border-radius: 10px; padding: 6px 12px; cursor: pointer; }
+.opciones button[aria-pressed="true"] { background: var(--oro); color: var(--bg); border-color: var(--oro); }
+.resumen { font: .84rem/1.4 var(--sans); color: var(--dim); background: var(--card); border-radius: 10px; padding: 8px 10px; }
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <div class="cabecera">
+    <p class="aviso">Maqueta para elegir: no es la app</p>
+    <p class="eyebrow">Marino · caps. 10-11 · maqueta M2</p>
+    <h1>El agua del cuerpo: <em>río, marisma y mar</em></h1>
+    <p class="lead">El plasma es un río estrecho: lleva solo <strong class="hl-a">3 de los 45 L</strong> de agua. Lo que infundes no se queda en él. Elige un suero y mira adónde va.</p>
+  </div>
+
+  <div class="segmento" role="tablist" aria-label="Dirección artística">
+    <button type="button" role="tab" id="dir-1" aria-selected="true">1 · Estuario de noche</button>
+    <button type="button" role="tab" id="dir-2" aria-selected="false">2 · Corte del terreno</button>
+  </div>
+  <div class="fila-agua">
+    <span class="eyebrow">Agua</span>
+    <div class="segmento" aria-label="Color del agua">
+      <button type="button" id="agua-tok" aria-pressed="true"><span class="muestra tok"></span>Solo tokens</button>
+      <button type="button" id="agua-fil" aria-pressed="false"><span class="muestra fil"></span>Agua del filtro vivo</button>
+    </div>
+  </div>
+
+  <section class="lab" aria-label="Simulación">
+    <div class="pegajoso">
+      <div class="escena">
+        <canvas id="lienzo" role="img" aria-label="Río, marisma y mar: dónde acaba cada fluido"></canvas>
+        <span class="chapa izq">símil ilustrativo</span>
+      </div>
+      <div class="mareas" aria-live="off">
+        <div class="marea"><div class="nom">Río<small>plasma</small></div><div class="tot" id="tot-rio">3.000 mL</div><div class="dl" id="dl-rio">±0</div><div class="org" id="org-rio">ficha · mar-tabla-10-1</div></div>
+        <div class="marea"><div class="nom">Marisma<small>intersticio</small></div><div class="tot" id="tot-marisma">13.000 mL</div><div class="dl" id="dl-marisma">±0</div><div class="org" id="org-marisma">ficha · mar-tabla-10-1</div></div>
+        <div class="marea"><div class="nom">Mar<small>células</small></div><div class="tot" id="tot-mar">29.000 mL</div><div class="dl" id="dl-mar">±0</div><div class="org" id="org-mar">ficha · mar-tabla-10-1</div></div>
+      </div>
+      <p class="frase" id="frase" aria-live="polite"></p>
+    </div>
+    <p class="escala">Las alturas del agua exageran el cambio; los mL son los de la ficha.</p>
+
+    <div class="mandos">
+      <div class="chips" role="group" aria-label="Fluido">
+        <button type="button" class="chip" data-fluido="glucosado" aria-pressed="false"><svg viewBox="-8 -8 16 16" data-forma="anillo"></svg><span>Glucosado<small>5 % · agua dulce</small></span></button>
+        <button type="button" class="chip" data-fluido="salino" aria-pressed="true"><svg viewBox="-8 -8 16 16" data-forma="rombo"></svg><span>Salino<small>0,9 %</small></span></button>
+        <button type="button" class="chip" data-fluido="ringer" aria-pressed="false"><svg viewBox="-8 -8 16 16" data-forma="triangulo"></svg><span>Ringer<small>lactato</small></span></button>
+        <button type="button" class="chip" data-fluido="alb5" aria-pressed="false"><svg viewBox="-8 -8 16 16" data-forma="grano"></svg><span>Albúmina<small>5 %</small></span></button>
+        <button type="button" class="chip" data-fluido="alb25" aria-pressed="false"><svg viewBox="-8 -8 16 16" data-forma="granoGrande"></svg><span>Albúmina<small>25 %</small></span></button>
+        <button type="button" class="chip" data-fluido="hiper" aria-pressed="false"><svg viewBox="-8 -8 16 16" data-forma="estrella"></svg><span>Salino<small>7,5 % · muy salado</small></span></button>
+      </div>
+      <p class="dato" id="dato"></p>
+      <div class="acciones">
+        <button type="button" class="b prim ancho" id="btn-infundir">Infundir 1 L</button>
+        <button type="button" class="b rojo" id="btn-hemorragia">Hemorragia del 15 %<small>−450 mL de río</small></button>
+        <button type="button" class="b" id="btn-reponer" disabled>Reponer con 2,25 L de Ringer<small>tras la hemorragia</small></button>
+      </div>
+      <button type="button" class="interr" id="btn-edema" aria-pressed="false"><span class="pista" aria-hidden="true"></span><span>Albúmina baja / permeabilidad alta<small>ilustrativo: la ficha no da cifras (mar-agravantes)</small></span></button>
+      <button type="button" class="b reinicio" id="btn-reinicio">Empezar de nuevo</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Cómo leer el paisaje</h2>
+    <dl class="simil">
+      <dt>Río</dt><dd>el plasma: corre, es estrecho y lleva 3 L</dd>
+      <dt>Marisma</dt><dd>el intersticio: 13 L de agua entre juncos</dd>
+      <dt>Mar</dt><dd>las células: 29 L detrás de la duna</dd>
+      <dt>Orilla</dt><dd>la pared del capilar: el agua y la sal la cruzan; el limo (albúmina) no</dd>
+      <dt>Compuertas</dt><dd>las acuaporinas de la membrana celular</dd>
+      <dt>Salinidad</dt><dd>la osmolalidad: el agua va hacia donde hay más sal (los destellos)</dd>
+    </dl>
+    <p class="dato" style="margin-top:8px">Volúmenes del varón de 75 kg: Tabla 10.1 (ficha <code>mar-tabla-10-1</code>). El paisaje es ilustrativo; las cifras, de la ficha.</p>
+  </section>
+
+  <section>
+    <h2>Qué es cada cosa que se mueve</h2>
+    <ul class="leyenda" id="leyenda">
+      <li><svg viewBox="-8 -8 16 16" data-forma="anillo"></svg>glucosado: agua dulce, no brilla</li>
+      <li><svg viewBox="-8 -8 16 16" data-forma="rombo"></svg>salino 0,9 %: sal</li>
+      <li><svg viewBox="-8 -8 16 16" data-forma="triangulo"></svg>Ringer lactato</li>
+      <li><svg viewBox="-8 -8 16 16" data-forma="grano"></svg>albúmina: limo que no cruza la orilla</li>
+      <li><svg viewBox="-8 -8 16 16" data-forma="estrella"></svg>salino 7,5 %: agua muy salada</li>
+      <li><svg viewBox="-8 -8 16 16" data-forma="gota"></svg>agua que sale del mar o de la marisma</li>
+      <li><svg viewBox="-8 -8 16 16" data-forma="sangre"></svg>sangre que se pierde</li>
+      <li><svg viewBox="-8 -8 16 16" data-forma="brillo"></svg>destellos: la sal disuelta (osmolalidad)</li>
+    </ul>
+    <p class="dato" style="margin-top:8px">Cada figura que viaja son 25 mL (ilustrativo). Las cifras de los mareógrafos son las de la ficha.</p>
+  </section>
+
+  <details class="nota-plegable">
+    <summary>De dónde sale cada cifra</summary>
+    <div class="tabla-scroll">
+      <table class="data-table">
+        <thead><tr><th>Fluido</th><th>Río</th><th>Marisma</th><th>Mar</th></tr></thead>
+        <tbody>
+          <tr><td>Glucosado 5 % (1 L)</td><td class="n">+100</td><td class="n">+250</td><td class="n">+650<br><span class="o">1.000 − 350</span></td></tr>
+          <tr><td>Salino 0,9 % (1 L)</td><td class="n">+275</td><td class="n">+825</td><td class="n">−100<br><span class="o">1.100 − 1.000</span></td></tr>
+          <tr><td>Ringer lactato (1 L)</td><td class="n">+200</td><td class="n">+800</td><td class="n">sin cifra</td></tr>
+          <tr><td>Albúmina 5 % (1 L)</td><td class="n">+700</td><td class="n">+300</td><td class="n">0<br><span class="o">700 + 300 = 1.000</span></td></tr>
+          <tr><td>Albúmina 25 % (100 mL)</td><td class="n">+300 a +400</td><td class="n">−200 a −300</td><td class="n">sin cifra</td></tr>
+          <tr><td>Salino 7,5 % (250 mL)</td><td class="n">+535</td><td class="n">+700</td><td class="n">−985<br><span class="o">1.235 − 250</span></td></tr>
+          <tr><td>Hemorragia del 15 %</td><td class="n">−450</td><td class="n">cede agua, sin cifra</td><td class="n">—</td></tr>
+          <tr><td>Reponer: 2,25 L de Ringer</td><td class="n">+450</td><td class="n">+1.800</td><td class="n">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="huecos">
+      <li><strong>Fig. 10.1</strong> (ficha <code>mar-fig-10-1</code>): glucosado, salino 0,9 %, albúmina 5 % y salino 7,5 %, río y marisma.</li>
+      <li><strong>Mar con glucosado</strong>: «solo unos 350 mL quedan fuera de las células; dos tercios acaban dentro» (<code>mar-glucosado-volumen</code>). Los 650 son la resta.</li>
+      <li><strong>Mar con salino 0,9 %</strong>: el total es 1.100 mL, «saca agua de las células» (<code>mar-salino</code>). Los 100 son la resta.</li>
+      <li><strong>Mar con salino 7,5 %</strong>: 250 mL añaden 1.235 mL «sacando agua de las células» (<code>mar-hipertonico</code>). Los 985 son la resta.</li>
+      <li><strong>Ringer</strong>: «el 20 % queda en el plasma y el 80 % va al intersticio» (<code>mar-cristaloide-reparto</code>).</li>
+      <li><strong>Albúmina 25 %</strong>: expande el plasma 3-4 veces su volumen sacando agua del intersticio (Tabla 10.3, <code>mar-tabla-10-3</code>, <code>mar-albumina</code>); alícuotas de 50-100 mL. El dibujo usa el punto medio (×3,5): ilustrativo.</li>
+      <li><strong>Hemorragia y reposición</strong>: 15 % del plasma = 450 mL; 2,25 L de Ringer, de los que 1,8 L van al intersticio (Tabla 11.1, <code>mar-tabla-11-1</code>, <code>mar-deficit-calc</code>).</li>
+      <li><strong>Varias dosis seguidas</strong>: se suman proporcionalmente a la Fig. 10.1 (ilustrativo). Tope de la maqueta: tres infusiones y una sola de salino al 7,5 %.</li>
+    </ul>
+  </details>
+
+  <details class="nota-plegable">
+    <summary>Lo que la ficha no da (huecos)</summary>
+    <ul class="huecos">
+      <li>Cuánta agua cede la marisma al río en la hemorragia: la ficha dice que hay «un déficit intersticial» (<code>mar-cristaloide-historia</code>), sin cifra. Se dibuja con flechas, sin mover los mareógrafos.</li>
+      <li>El edema por albúmina baja o permeabilidad alta: explicado sin cifras (<code>mar-agravantes</code>). Es ilustrativo.</li>
+      <li>Qué pasa en las células con el Ringer y con la albúmina al 25 %: la ficha no lo dice.</li>
+      <li>La salinidad (los destellos) es cualitativa: no se calcula la osmolalidad.</li>
+      <li>Las alturas del agua exageran los cambios para que se vean; los mL exactos están en los mareógrafos.</li>
+    </ul>
+  </details>
+
+  <section class="elige" aria-label="Tu elección">
+    <h2>¿Cuál construimos?</h2>
+    <div class="q"><p>1. Dirección artística</p>
+      <div class="opciones" data-q="direccion"><button type="button" aria-pressed="false">1 · Estuario de noche</button><button type="button" aria-pressed="false">2 · Corte del terreno</button><button type="button" aria-pressed="false">Mezcla</button></div></div>
+    <div class="q"><p>2. Color del agua</p>
+      <div class="opciones" data-q="agua"><button type="button" aria-pressed="false">Solo tokens (crema y oro)</button><button type="button" aria-pressed="false">Agua del filtro vivo</button></div></div>
+    <div class="q"><p>3. ¿Entra el fregadero de la Fig. 11.1 (retorno venoso) en este mundo?</p>
+      <div class="opciones" data-q="fregadero"><button type="button" aria-pressed="false">Sí</button><button type="button" aria-pressed="false">No</button><button type="button" aria-pressed="false">Más adelante</button></div></div>
+    <p class="resumen" id="resumen">Aún no has elegido.</p>
+  </section>
+</main>
+
+<script src="../../js/vendor/motion.js"></script>
+<script>
+'use strict';
+/* ============================================================
+   1. Tokens y utilidades
+   ============================================================ */
+const raiz = getComputedStyle(document.documentElement);
+const tok = n => raiz.getPropertyValue(n).trim();
+const C = {
+  bg: tok('--bg-main'), texto: tok('--text-main'), muted: tok('--text-muted'), dim: tok('--text-dim'),
+  verde: tok('--accent-green'), rojo: tok('--accent-red'), ambar: tok('--accent-yellow'), oro: tok('--accent-blue'),
+  purpura: tok('--accent-purple'), filtro: tok('--agua-filtro')
+};
+const REDUCIR = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const rgbCache = {};
+function rgb(h) {
+  if (rgbCache[h]) return rgbCache[h];
+  const s = h.replace('#', '');
+  return (rgbCache[h] = [parseInt(s.slice(0, 2), 16), parseInt(s.slice(2, 4), 16), parseInt(s.slice(4, 6), 16)]);
+}
+const rgba = (h, a) => { const [r, g, b] = rgb(h); return `rgba(${r},${g},${b},${a})`; };
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const TAU = Math.PI * 2;
+function fmt(n) { return Math.round(Math.abs(n)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+function fmtD(n) { const r = Math.round(n); return r > 0 ? '+' + fmt(r) : r < 0 ? '−' + fmt(r) : '±0'; }
+// Altura visible de un cambio de volumen: crece rápido al principio y se satura (las alturas exageran; los mL mandan).
+function vis(d, S, Amas, Amenos) { const A = d >= 0 ? Amas : (Amenos ?? Amas); return Math.sign(d) * A * (1 - Math.exp(-Math.abs(d) / S)); }
+// Pseudoaleatorio con semilla: el paisaje es el mismo en cada carga.
+function azar(sem) { let s = sem >>> 0; return () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }; }
+
+/* Sprites de brillo (halo suave), uno por color */
+const sprites = {};
+function brilloSprite(color) {
+  if (sprites[color]) return sprites[color];
+  const c = document.createElement('canvas'); c.width = c.height = 64;
+  const g = c.getContext('2d'); const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+  gr.addColorStop(0, rgba(color, 1)); gr.addColorStop(0.25, rgba(color, 0.55)); gr.addColorStop(1, rgba(color, 0));
+  g.fillStyle = gr; g.fillRect(0, 0, 64, 64);
+  return (sprites[color] = c);
+}
+
+/* ============================================================
+   2. Datos (todas las cifras, con su ficha)
+   ============================================================ */
+const BASE = { rio: 3000, marisma: 13000, mar: 29000 };      // Tabla 10.1, varón de 75 kg (mar-tabla-10-1)
+const COMP = ['rio', 'marisma', 'mar'];
+const MLPART = 25;                                               // cada figura que viaja: 25 mL (ilustrativo)
+
+const FLUIDOS = {
+  glucosado: {
+    nombre: 'glucosado al 5 %', dosis: '1 L', forma: 'anillo', color: 'texto',
+    delta: { rio: 100, marisma: 250, mar: 650 },
+    org: { rio: 'ficha · mar-fig-10-1', marisma: 'ficha · mar-fig-10-1', mar: 'ficha · mar-glucosado-volumen (resta)' },
+    reparto: [['fuente', 'rio', 4], ['fuente', 'marisma', 10], ['fuente', 'mar', 26]],
+    sal: { pico: { rio: -0.55, marisma: -0.3, mar: 0 }, fin: -0.08 },
+    empieza: 'La vasija vierte 1 L de agua dulce en el río…',
+    medio: '…la glucosa entra en las células y el agua la sigue, por las compuertas…',
+    frase: 'Agua dulce: la glucosa se la beben las células y el agua la sigue. <span class="hl-r">Dos tercios acaban en el mar</span>; al río solo llegan 100 mL.',
+    fuente: 'ficha · mar-fig-10-1 · mar-glucosado-volumen',
+    dato: '278 mOsm/L, cerca del plasma, pero la glucosa entra en las células y se metaboliza: el agua la sigue (ficha mar-glucosado-volumen).'
+  },
+  salino: {
+    nombre: 'salino al 0,9 %', dosis: '1 L', forma: 'rombo', color: 'ambar',
+    delta: { rio: 275, marisma: 825, mar: -100 },
+    org: { rio: 'ficha · mar-fig-10-1', marisma: 'ficha · mar-fig-10-1', mar: 'ficha · mar-salino (resta)' },
+    reparto: [['fuente', 'rio', 11], ['fuente', 'marisma', 29], ['mar', 'marisma', 4]],
+    sal: { pico: { rio: 0.25, marisma: 0.1, mar: 0 }, fin: 0.03 },
+    empieza: 'La vasija vierte 1 L de salino al 0,9 % en el río…',
+    medio: '…la sal cruza la orilla y se lleva el agua a la marisma…',
+    frase: 'De 1 L de salino, <span class="hl-r">solo 275 mL se quedan en el río</span>: el resto inunda la marisma. Es algo salado: saca 100 mL del mar.',
+    fuente: 'ficha · mar-fig-10-1 · mar-salino',
+    dato: 'El sodio se reparte por todo el extracelular, y el plasma es solo el 20 % (ficha mar-salino).'
+  },
+  ringer: {
+    nombre: 'Ringer lactato', dosis: '1 L', forma: 'triangulo', color: 'verde',
+    delta: { rio: 200, marisma: 800, mar: 0 },
+    org: { rio: 'ficha · mar-cristaloide-reparto (20 %)', marisma: 'ficha · mar-cristaloide-reparto (80 %)', mar: 'sin cifra en la ficha' },
+    reparto: [['fuente', 'rio', 8], ['fuente', 'marisma', 32]],
+    sal: { pico: { rio: 0.05, marisma: 0.02, mar: 0 }, fin: 0 },
+    empieza: 'La vasija vierte 1 L de Ringer lactato en el río…',
+    medio: '…casi todo cruza la orilla…',
+    frase: 'Ringer: <span class="hl-a">el 20 % se queda en el río</span> y el 80 % se va a la marisma.',
+    fuente: 'ficha · mar-cristaloide-reparto',
+    dato: 'Cloro 109, parecido al del plasma: no produce acidosis hiperclorémica (ficha mar-ringer).'
+  },
+  alb5: {
+    nombre: 'albúmina al 5 %', dosis: '1 L', forma: 'grano', color: 'purpura',
+    delta: { rio: 700, marisma: 300, mar: 0 },
+    org: { rio: 'ficha · mar-fig-10-1', marisma: 'ficha · mar-fig-10-1', mar: 'ficha · mar-fig-10-1 (700 + 300)' },
+    reparto: [['fuente', 'rio', 28], ['fuente', 'marisma', 12]],
+    sal: { pico: { rio: 0, marisma: 0, mar: 0 }, fin: 0 },
+    empieza: 'La vasija vierte 1 L de albúmina al 5 % en el río…',
+    medio: '…el limo no cruza la orilla y sujeta el agua…',
+    frase: 'El limo de la albúmina no cruza la orilla: <span class="hl-a">700 de cada 1.000 mL se quedan en el río</span>.',
+    fuente: 'ficha · mar-fig-10-1 · mar-coloides',
+    dato: 'Unas 3 veces más eficaz que el salino para el plasma (ficha mar-coloides).'
+  },
+  alb25: {
+    nombre: 'albúmina al 25 %', dosis: '100 mL', forma: 'granoGrande', color: 'purpura', rango: true,
+    delta: { rio: 350, marisma: -250, mar: 0 },
+    org: { rio: 'ficha · mar-tabla-10-3 (×3-4; dibujo ×3,5)', marisma: 'ficha · mar-albumina (sale de aquí)', mar: 'sin cifra en la ficha' },
+    reparto: [['fuente', 'rio', 4], ['marisma', 'rio', 10]],
+    sal: { pico: { rio: 0, marisma: 0, mar: 0 }, fin: 0 },
+    empieza: 'La vasija vierte 100 mL de limo espeso en el río…',
+    medio: '…el limo tira del agua de la marisma hacia el río…',
+    frase: 'Limo espeso: <span class="hl-a">100 mL hacen crecer el río 300-400 mL</span>, y esa agua sale de la marisma. <span class="hl-r">Mueve agua; no repone.</span>',
+    fuente: 'ficha · mar-tabla-10-3 · mar-albumina',
+    dato: 'Alícuotas de 50-100 mL; presión oncótica de 70 mmHg; expande el plasma 3-4 veces su volumen (ficha mar-albumina, Tabla 10.3).'
+  },
+  hiper: {
+    nombre: 'salino al 7,5 %', dosis: '250 mL', forma: 'estrella', color: 'oro',
+    delta: { rio: 535, marisma: 700, mar: -985 },
+    org: { rio: 'ficha · mar-fig-10-1', marisma: 'ficha · mar-fig-10-1', mar: 'ficha · mar-hipertonico (resta)' },
+    reparto: [['fuente', 'rio', 10], ['mar', 'rio', 11], ['mar', 'marisma', 28]],
+    sal: { pico: { rio: 2.4, marisma: 1.3, mar: 0 }, fin: 0.35 },
+    empieza: 'La vasija vierte 250 mL de agua muy salada en el río…',
+    medio: '…la sal tira del mar: el agua sale de las células por las compuertas…',
+    frase: '250 mL de agua muy salada sacan agua del mar: <span class="hl-a">el río y la marisma ganan 1.235 mL</span>, unas 5 veces lo infundido.',
+    fuente: 'ficha · mar-fig-10-1 · mar-hipertonico',
+    dato: '2.567 mOsm/L, 9 veces el plasma (ficha mar-hipertonico). Una sola dosis de 250 mL, como en la Fig. 10.1.'
+  }
+};
+const HEMORRAGIA = {
+  nombre: 'hemorragia', forma: 'sangre', color: 'rojo',
+  delta: { rio: -450, marisma: 0, mar: 0 },
+  org: { rio: 'ficha · mar-tabla-11-1 (15 %)', marisma: 'sin cifra · mar-cristaloide-historia', mar: '' },
+  reparto: [['rio', 'herida', 18]],
+  sal: { pico: { rio: 0, marisma: 0, mar: 0 }, fin: 0 },
+  empieza: 'Se abre una herida: el río pierde sangre…',
+  medio: '…la marisma empieza a cederle agua…',
+  frase: 'Hemorragia del 15 %: <span class="hl-r">el río pierde 450 mL</span>. La marisma le cede agua: hay un déficit intersticial (sin cifra en la ficha).',
+  fuente: 'ficha · mar-tabla-11-1 · mar-cristaloide-historia'
+};
+const REPONER = {
+  nombre: '2,25 L de Ringer', forma: 'triangulo', color: 'verde',
+  delta: { rio: 450, marisma: 1800, mar: 0 },
+  org: { rio: 'ficha · mar-deficit-calc', marisma: 'ficha · mar-deficit-calc (1,8 L)', mar: '' },
+  reparto: [['fuente', 'rio', 18], ['fuente', 'marisma', 72]],
+  sal: { pico: { rio: 0.05, marisma: 0.02, mar: 0 }, fin: 0 },
+  empieza: 'La vasija vierte 2,25 L de Ringer para reponer 450 mL…',
+  medio: '…cuatro de cada cinco litros cruzan la orilla…',
+  frase: 'El río recupera sus 450 mL, pero <span class="hl-r">1,8 L acaban en la marisma: edema</span>. Hacen falta 2,25 L para reponer 450 mL.',
+  fuente: 'ficha · mar-tabla-11-1 · mar-deficit-calc'
+};
+const FRASE_INICIO = 'Varón de 75 kg: 45 L de agua. <span class="hl-a">El río lleva solo 3 L</span>; la marisma, 13 L, y el mar de las células, 29 L.';
+const FUENTE_INICIO = 'ficha · mar-tabla-10-1';
+const FRASE_EDEMA = 'Albúmina baja o inflamación: <span class="hl-r">la orilla deja escapar el río y la marisma desborda los prados</span>.';
+const FUENTE_EDEMA = 'ilustrativo · mar-agravantes';
+
+/* ============================================================
+   3. Estado y motor de eventos (un solo reloj)
+   ============================================================ */
+const estado = { dir: 1, agua: 'tokens', fluido: 'salino', infusiones: 0, hiperUsado: false, hemorragia: false, repuesto: false, edema: false };
+let eventos = [];   // { def, cuenta: {rio:{tot,hechos}}, prog, pend, fase }
+let parts = [];
+let tiempo = 0;
+let ultimoEv = null;
+let rellenoHasta = -1;  // flechas de la marisma al río tras la hemorragia (ilustrativo)
+let fugaPulso = 0;
+
+function colorDe(nombre) { return nombre === 'agua' ? pal().gota : C[nombre]; }
+function pal() {
+  return estado.agua === 'tokens'
+    ? { agua: C.texto, brillo: C.oro, gota: C.texto, profundo: C.ambar, aA: 1 }
+    : { agua: C.filtro, brillo: C.texto, gota: C.filtro, profundo: C.filtro, aA: 1.6 };
+}
+
+function lanzar(def) {
+  const ev = { def, cuenta: {}, pend: 0, total: 0, llegados: 0, fase: 0, t0: tiempo };
+  for (const c of COMP) ev.cuenta[c] = { tot: 0, hechos: 0 };
+  const lista = [];
+  for (const [de, a, n] of def.reparto) {
+    for (let i = 0; i < n; i++) {
+      if (COMP.includes(de)) ev.cuenta[de].tot++;
+      if (COMP.includes(a)) ev.cuenta[a].tot++;
+      lista.push({ de, a });
+    }
+  }
+  // Las que salen de la vasija, barajadas (unas van al río, otras a la marisma o al mar)
+  const deFuente = lista.filter(p => p.de === 'fuente');
+  for (let i = deFuente.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [deFuente[i], deFuente[j]] = [deFuente[j], deFuente[i]]; }
+  const otras = lista.filter(p => p.de !== 'fuente');
+  const paso = deFuente.length > 60 ? 0.035 : 0.06;
+  deFuente.forEach((p, i) => parts.push(nuevaParticula(ev, p.de, p.a, i * paso)));
+  otras.forEach((p, i) => {
+    const retraso = p.de === 'rio' ? i * 0.12 : 1.1 + i * 0.06 + Math.random() * 0.4; // el agua del mar sale cuando llega la sal
+    parts.push(nuevaParticula(ev, p.de, p.a, retraso));
+  });
+  ev.total = lista.length; ev.pend = lista.length;
+  eventos.push(ev); ultimoEv = ev;
+  decir(def.empieza, def.fuente);
+  if (def === HEMORRAGIA) rellenoHasta = tiempo + 9;
+  if (REDUCIR) { finalizarTodo(); dibujarUnaVez(); }
+  recortarParticulas();
+}
+
+function nuevaParticula(ev, de, a, retraso) {
+  const def = ev.def;
+  let forma = def.forma, color = def.color;
+  if (de === 'mar' || de === 'marisma') { forma = 'gota'; color = 'agua'; }
+  if (de === 'rio' && a === 'herida') { forma = 'sangre'; color = 'rojo'; }
+  return { ev, de, a, forma, color, espera: retraso, viva: false, pts: null, seg: 0, t: 0, x: 0, y: 0,
+    asentada: false, edad: 0, semilla: Math.random() * 1000, salio: false, vel: 100 + Math.random() * 50, alfa: 1 };
+}
+
+function contar(ev, c) {
+  const k = ev.cuenta[c]; if (!k) return; k.hechos = Math.min(k.tot, k.hechos + 1);
+}
+function progresoEv(ev) { return ev.total ? ev.llegados / ev.total : 1; }
+
+function mostrado(c) {
+  let v = BASE[c];
+  for (const ev of eventos) {
+    const d = ev.def.delta[c]; if (!d) continue;
+    const k = ev.cuenta[c]; const f = k.tot ? k.hechos / k.tot : 1;
+    v += d * f;
+  }
+  return v;
+}
+function salinidad(c) {
+  let s = 1;
+  for (const ev of eventos) {
+    const p = progresoEv(ev); const sal = ev.def.sal; if (!sal) continue;
+    const arranque = clamp((tiempo - ev.t0) / 0.8, 0, 1);
+    s += (sal.pico[c] || 0) * arranque * (1 - p) + sal.fin * p;
+  }
+  return clamp(s, 0.25, 4);
+}
+
+function llegar(p) {
+  if (COMP.includes(p.de) && !p.salio) { contar(p.ev, p.de); p.salio = true; }
+  if (COMP.includes(p.a)) contar(p.ev, p.a);
+  p.ev.llegados++; p.ev.pend--;
+  p.asentada = true; p.edad = 0;
+  const sigue = escena().asentar(p);
+  if (p.forma !== 'sangre' && p.a !== 'herida') tinta(p.x, p.y, colorDe(p.color), 16, 0.16);
+  return sigue;
+}
+
+function finalizarTodo() {
+  const E = escena();
+  for (const p of parts) {
+    if (p.asentada) continue;
+    if (!p.viva) { p.viva = true; }
+    if (COMP.includes(p.de) && !p.salio) { contar(p.ev, p.de); p.salio = true; }
+    if (COMP.includes(p.a)) contar(p.ev, p.a);
+    p.ev.llegados++; p.ev.pend--;
+    p.asentada = true; p.edad = 30;
+    E.colocar(p);
+  }
+  parts = parts.filter(p => !p.quitar);
+  if (ultimoEv) { ultimoEv.fase = 2; decir(ultimoEv.def.frase, ultimoEv.def.fuente); }
+}
+
+function recortarParticulas() {
+  const MAX = 300;
+  if (parts.length <= MAX) return;
+  const asentadas = parts.filter(p => p.asentada).sort((a, b) => b.edad - a.edad);
+  let sobran = parts.length - MAX;
+  for (const p of asentadas) { if (sobran-- <= 0) break; p.quitar = true; }
+  parts = parts.filter(p => !p.quitar);
+}
+
+/* ============================================================
+   4. Lienzo, capas y formas
+   ============================================================ */
+const lienzo = document.getElementById('lienzo');
+const ctx = lienzo.getContext('2d');
+const capaTinta = document.createElement('canvas');
+const ctxT = capaTinta.getContext('2d');
+let fondo = document.createElement('canvas');
+let viñeta = document.createElement('canvas');
+let W = 360, H = 360, DPR = 1;
+
+function tinta(x, y, color, r, a) {
+  ctxT.globalAlpha = a; ctxT.drawImage(brilloSprite(color), x - r, y - r, r * 2, r * 2); ctxT.globalAlpha = 1;
+}
+
+function forma(g, f, x, y, s, color, alfa, giro) {
+  g.globalAlpha = alfa;
+  g.fillStyle = color; g.strokeStyle = color;
+  switch (f) {
+    case 'anillo': g.lineWidth = 1.4; g.beginPath(); g.arc(x, y, s, 0, TAU); g.stroke(); break;
+    case 'rombo': g.beginPath(); g.moveTo(x, y - s * 1.25); g.lineTo(x + s * 0.85, y); g.lineTo(x, y + s * 1.25); g.lineTo(x - s * 0.85, y); g.closePath(); g.fill(); break;
+    case 'triangulo': g.beginPath(); g.moveTo(x, y - s * 1.15); g.lineTo(x + s * 1.05, y + s * 0.75); g.lineTo(x - s * 1.05, y + s * 0.75); g.closePath(); g.fill(); break;
+    case 'grano': g.beginPath(); g.arc(x, y, s * 0.9, 0, TAU); g.fill(); break;
+    case 'granoGrande': g.beginPath(); g.arc(x, y, s * 1.15, 0, TAU); g.fill(); g.lineWidth = 1; g.globalAlpha = alfa * 0.5; g.beginPath(); g.arc(x, y, s * 1.9, 0, TAU); g.stroke(); break;
+    case 'estrella': {
+      g.globalAlpha = alfa * 0.6; g.drawImage(brilloSprite(color), x - s * 3, y - s * 3, s * 6, s * 6); g.globalAlpha = alfa;
+      const r1 = s * 1.7, r2 = s * 0.45; g.beginPath();
+      for (let i = 0; i < 8; i++) { const ang = giro + i * Math.PI / 4; const r = i % 2 ? r2 : r1; g.lineTo(x + Math.cos(ang) * r, y + Math.sin(ang) * r); }
+      g.closePath(); g.fill(); break;
+    }
+    case 'gota': case 'sangre':
+      g.beginPath(); g.arc(x, y + s * 0.35, s * 0.85, 0, Math.PI); g.lineTo(x, y - s * 1.35); g.closePath(); g.fill(); break;
+    case 'brillo': {
+      g.globalAlpha = alfa * 0.5; g.drawImage(brilloSprite(color), x - s * 2.2, y - s * 2.2, s * 4.4, s * 4.4); g.globalAlpha = alfa;
+      g.lineWidth = 0.8; g.beginPath(); g.moveTo(x - s * 1.4, y); g.lineTo(x + s * 1.4, y); g.moveTo(x, y - s * 1.4); g.lineTo(x, y + s * 1.4); g.stroke(); break;
+    }
+  }
+  g.globalAlpha = 1;
+}
+
+function texto(g, t, x, y, { size = 10, color = C.dim, align = 'left', italic = true, peso = '', caja = false, base = 'alphabetic' } = {}) {
+  g.font = `${italic ? 'italic ' : ''}${peso} ${size}px Georgia, serif`;
+  g.textAlign = align; g.textBaseline = base;
+  if (caja) {
+    const w = g.measureText(t).width; const x0 = align === 'center' ? x - w / 2 : align === 'right' ? x - w : x;
+    g.fillStyle = rgba(C.bg, 0.78); g.beginPath(); g.roundRect(x0 - 4, y - size + 0.5, w + 8, size + 5, 4); g.fill();
+  }
+  g.fillStyle = color; g.fillText(t, x, y);
+}
+
+/* Catmull-Rom por los puntos de la ruta: el viaje es una curva, no una línea quebrada */
+function cr(p0, p1, p2, p3, t) {
+  const t2 = t * t, t3 = t2 * t;
+  return [
+    0.5 * (2 * p1[0] + (-p0[0] + p2[0]) * t + (2 * p0[0] - 5 * p1[0] + 4 * p2[0] - p3[0]) * t2 + (-p0[0] + 3 * p1[0] - 3 * p2[0] + p3[0]) * t3),
+    0.5 * (2 * p1[1] + (-p0[1] + p2[1]) * t + (2 * p0[1] - 5 * p1[1] + 4 * p2[1] - p3[1]) * t2 + (-p0[1] + 3 * p1[1] - 3 * p2[1] + p3[1]) * t3)
+  ];
+}
+
+/* Muelle de los niveles: la marea sube con un pequeño rebote */
+const nivel = { rio: { v: 0, vel: 0 }, marisma: { v: 0, vel: 0 }, mar: { v: 0, vel: 0 }, edema: { v: 0, vel: 0 } };
+function muelle(n, objetivo, dt) {
+  if (REDUCIR) { n.v = objetivo; n.vel = 0; return; }
+  const k = 26, c = 4.2; const a = k * (objetivo - n.v) - c * n.vel;
+  n.vel += a * dt; n.v += n.vel * dt;
+}
+
+/* ============================================================
+   5. Dirección 1 · Estuario de noche (vista cenital)
+   ============================================================ */
+const Estuario = {
+  layout() {
+    const r = azar(7);
+    this.puertas = [0.15, 0.4, 0.64, 0.87].map(f => ({ x: f * W, luz: 0, dir: 0 }));
+    this.vasija = { x: 0.085 * W, y: this.rioY(0.03 * W) - 30 };
+    this.herida = { x: 0.6 * W };
+    // islotes de barro en la marisma, lejos del río
+    this.islotes = [];
+    const candidatos = [[0.2, 0.47, 11], [0.36, 0.44, 8], [0.5, 0.81, 15], [0.8, 0.46, 9], [0.16, 0.8, 10], [0.93, 0.72, 8], [0.68, 0.84, 9], [0.06, 0.58, 13]];
+    for (const [fx, fy, rr] of candidatos) {
+      const x = fx * W, y = fy * H, rad = rr * W / 360;
+      if (Math.abs(y - this.rioY(x)) > rad + 22 && y > this.dunaAbajo(x) + rad + 2 && y < this.marismaAbajo(x) - rad - 2) this.islotes.push({ x, y, r: rad });
+    }
+    this.islotes.push({ x: this.vasija.x, y: this.vasija.y + 6, r: 15 * W / 360, vasija: true });
+    // juncos (vistos desde arriba: matas en estrella)
+    this.juncos = [];
+    for (const is of this.islotes) for (let i = 0; i < 4; i++) {
+      const a = r() * TAU, d = is.r * (0.7 + r() * 0.5);
+      this.juncos.push({ x: is.x + Math.cos(a) * d, y: is.y + Math.sin(a) * d, n: 3 + Math.floor(r() * 3), l: 6 + r() * 5, s: r() * 10 });
+    }
+    for (let i = 0; i < 26; i++) {
+      const x = r() * W; const y0 = this.dunaAbajo(x) + 4, y1 = this.marismaAbajo(x) - 2;
+      const y = r() < 0.5 ? y0 + r() * 12 : y1 - r() * 12;
+      if (Math.abs(y - this.rioY(x)) < 22) continue;
+      this.juncos.push({ x, y, n: 3 + Math.floor(r() * 3), l: 6 + r() * 6, s: r() * 10 });
+    }
+    // reflejos de estrellas en el mar y destellos de sal
+    this.estrellas = Array.from({ length: 70 }, () => ({ x: r() * W, y: r(), f: r() * TAU, z: 0.4 + r() * 0.8 }));
+    this.limo = Array.from({ length: 18 }, () => ({ s: r() * W, o: r() * 1.6 - 0.8, f: r() * TAU }));
+    this.ondas = Array.from({ length: 6 }, () => ({ x: r() * W, y: 0, t0: r() * 6 }));
+    this.pradoHierba = Array.from({ length: 160 }, () => ({ x: r() * W, y: H * (0.7 + r() * 0.3), a: -Math.PI / 2 + (r() - 0.5) * 2.2, l: 2 + r() * 3 }));
+    this.fondo();
+  },
+  orillaMar(x) { return H * 0.255 + H * 0.02 * Math.sin(x / W * 5.1 + 0.6) + H * 0.009 * Math.sin(x / W * 13 + 2.1); },
+  dunaArriba(x) { return H * 0.325 + H * 0.008 * Math.sin(x / W * 7 + 1); },
+  dunaAbajo(x) { return this.dunaArriba(x) + H * 0.058 + 2.5 * Math.sin(x / W * 11); },
+  rioY(x) { return H * 0.625 + H * 0.075 * Math.sin(x / W * Math.PI * 1.9 + 0.5); },
+  marismaAbajo(x) { const u = (x / W - 0.5) * 2; return H * 0.9 - H * 0.13 * u ** 4 + H * 0.014 * Math.sin(x / W * 9 + 0.3); },
+  anchoRio() { return 9 * W / 360 + nivel.rio.v; },
+  offMar() { return nivel.mar.v; },
+  offMarisma() { return nivel.marisma.v + nivel.edema.v; },
+  objetivos() {
+    const dR = mostrado('rio') - BASE.rio, dM = mostrado('marisma') - BASE.marisma, dC = mostrado('mar') - BASE.mar;
+    return { rio: vis(dR, 650, 10 * W / 360, 4.5 * W / 360), marisma: vis(dM, 1500, 15 * W / 360, 6), mar: vis(dC, 1200, 15 * W / 360, 13 * W / 360), edema: estado.edema ? 16 * W / 360 : 0 };
+  },
+  fondo() {
+    const g = fondo.getContext('2d'); fondo.width = W * DPR; fondo.height = H * DPR; g.setTransform(DPR, 0, 0, DPR, 0, 0);
+    g.fillStyle = C.bg; g.fillRect(0, 0, W, H);
+    // tierra y prados: grano fino
+    const r = azar(11);
+    const gr = g.createLinearGradient(0, H * 0.4, 0, H);
+    gr.addColorStop(0, rgba(C.verde, 0.03)); gr.addColorStop(1, rgba(C.verde, 0.08));
+    g.fillStyle = gr; g.fillRect(0, H * 0.35, W, H * 0.65);
+    for (let i = 0; i < 900; i++) { g.fillStyle = rgba(r() < 0.6 ? C.muted : C.verde, 0.04 + r() * 0.08); g.fillRect(r() * W, r() * H, 1, 1); }
+    g.strokeStyle = rgba(C.verde, 0.22); g.lineWidth = 0.7;
+    for (const h of this.pradoHierba) { g.beginPath(); g.moveTo(h.x, h.y); g.lineTo(h.x + Math.cos(h.a) * h.l, h.y + Math.sin(h.a) * h.l); g.stroke(); }
+    // viñeta
+    const v = viñeta.getContext('2d'); viñeta.width = W * DPR; viñeta.height = H * DPR; v.setTransform(DPR, 0, 0, DPR, 0, 0);
+    const rv = v.createRadialGradient(W * 0.5, H * 0.5, Math.min(W, H) * 0.35, W * 0.5, H * 0.5, Math.max(W, H) * 0.78);
+    rv.addColorStop(0, rgba(C.bg, 0)); rv.addColorStop(1, rgba(C.bg, 0.7));
+    v.fillStyle = rv; v.fillRect(0, 0, W, H);
+  },
+  puertaCerca(x) { let m = this.puertas[0]; for (const p of this.puertas) if (Math.abs(p.x - x) < Math.abs(m.x - x)) m = p; return m; },
+  puntoRio(x, o = (Math.random() * 1.4 - 0.7)) { return [x, this.rioY(x) + o * this.anchoRio()]; },
+  caminoRio(x0, x1) { const pts = []; const n = Math.max(1, Math.round(Math.abs(x1 - x0) / 26)); for (let i = 0; i <= n; i++) pts.push(this.puntoRio(lerp(x0, x1, i / n), (Math.random() - 0.5) * 0.6)); return pts; },
+  puntoMarisma(cerca) {
+    for (let k = 0; k < 60; k++) {
+      const x = cerca != null ? clamp(cerca + (Math.random() - 0.5) * 70, 8, W - 8) : 8 + Math.random() * (W - 16);
+      const y0 = this.dunaAbajo(x) + 6, y1 = this.marismaAbajo(x) + this.offMarisma() - 6;
+      const y = lerp(y0, y1, Math.random());
+      if (Math.abs(y - this.rioY(x)) > this.anchoRio() + 7 && !this.islotes.some(i => Math.hypot(i.x - x, i.y - y) < i.r + 3)) return [x, y];
+    }
+    return [W / 2, this.dunaAbajo(W / 2) + 10];
+  },
+  puntoMar(cerca) {
+    const x = cerca != null ? clamp(cerca + (Math.random() - 0.5) * 90, 6, W - 6) : 6 + Math.random() * (W - 12);
+    const y = lerp(H * 0.03, this.orillaMar(x) + this.offMar() - 8, Math.random() ** 0.8);
+    return [x, y];
+  },
+  // Ruta de ida: de un sitio a otro, pasando por la orilla y las compuertas
+  ruta(p) {
+    const { de, a } = p; const V = this.vasija;
+    const boca = [V.x + 13, V.y + 2];
+    const caida = [V.x + 15, this.rioY(V.x + 15)];
+    const pts = [];
+    if (de === 'fuente') {
+      pts.push(boca, caida);
+      if (a === 'rio') { const xr = 0.15 * W + Math.random() * 0.8 * W; pts.push(...this.caminoRio(V.x + 15, xr)); }
+      else if (a === 'marisma') {
+        const destino = this.puntoMarisma(); const xb = clamp(destino[0], V.x + 30, W - 10);
+        pts.push(...this.caminoRio(V.x + 15, xb));
+        const lado = destino[1] < this.rioY(xb) ? -1 : 1;
+        pts.push([xb, this.rioY(xb) + lado * (this.anchoRio() + 5)], destino);
+      } else if (a === 'mar') {
+        const pu = this.puertas[Math.floor(Math.random() * this.puertas.length)];
+        pts.push(...this.caminoRio(V.x + 15, pu.x));
+        pts.push([pu.x, this.rioY(pu.x) - this.anchoRio() - 5], [pu.x + (Math.random() - 0.5) * 10, this.dunaAbajo(pu.x) + 6], [pu.x, (this.dunaArriba(pu.x) + this.dunaAbajo(pu.x)) / 2], [pu.x, this.dunaArriba(pu.x) - 3], this.puntoMar(pu.x));
+        p.puerta = pu;
+      }
+    } else if (de === 'mar') {
+      const pu = this.puertas[Math.floor(Math.random() * this.puertas.length)]; p.puerta = pu;
+      pts.push(this.puntoMar(pu.x), [pu.x, this.orillaMar(pu.x) + this.offMar() - 2], [pu.x, (this.dunaArriba(pu.x) + this.dunaAbajo(pu.x)) / 2], [pu.x, this.dunaAbajo(pu.x) + 6]);
+      if (a === 'marisma') pts.push(this.puntoMarisma(pu.x));
+      else { pts.push([pu.x + (Math.random() - 0.5) * 20, this.rioY(pu.x) - this.anchoRio() - 6], this.puntoRio(pu.x + 10)); }
+    } else if (de === 'marisma') {
+      const m = this.puntoMarisma(); const lado = m[1] < this.rioY(m[0]) ? -1 : 1;
+      pts.push(m, [m[0], this.rioY(m[0]) + lado * (this.anchoRio() + 5)], this.puntoRio(m[0] + 8));
+    } else if (de === 'rio') {
+      const h = this.herida.x; const x0 = h - 60 - Math.random() * 60;
+      pts.push(...this.caminoRio(x0, h), [h + 2, this.rioY(h) + this.anchoRio() + 4], [h + 8, lerp(this.rioY(h), H, 0.45)], [h + 20, H + 12]);
+    }
+    return pts;
+  },
+  asentar(p) {
+    if (p.a === 'herida') { p.quitar = true; return false; }
+    if (p.a === 'rio') { p.o = (p.y - this.rioY(p.x)) / Math.max(1, this.anchoRio()); p.o = clamp(p.o, -0.8, 0.8); }
+    p.bx = p.x; p.by = p.y;
+    return true;
+  },
+  colocar(p) {
+    if (p.a === 'herida') { p.quitar = true; return; }
+    let q;
+    if (p.a === 'rio') { q = this.puntoRio(Math.random() * W); p.o = (q[1] - this.rioY(q[0])) / this.anchoRio(); }
+    else if (p.a === 'marisma') q = this.puntoMarisma();
+    else q = this.puntoMar();
+    p.x = q[0]; p.y = q[1]; p.bx = q[0]; p.by = q[1];
+  },
+  mover(p, dt) {
+    if (p.a === 'rio') {
+      p.x += dt * (20 + 8 * Math.sin(tiempo * 0.7 + p.semilla)) * W / 360;
+      if (p.x > W + 8) p.x = -8;
+      p.y = this.rioY(p.x) + p.o * this.anchoRio() * 0.85;
+    } else if (p.a === 'marisma') {
+      p.x = p.bx + Math.sin(tiempo * 0.25 + p.semilla) * 2.5; p.y = p.by + Math.cos(tiempo * 0.21 + p.semilla) * 2;
+    } else {
+      p.x = p.bx + Math.sin(tiempo * 0.35 + p.semilla) * 3.5; p.y = p.by + Math.sin(tiempo * 0.6 + p.semilla * 2) * 1.5;
+      const tope = this.orillaMar(p.x) + this.offMar() - 5; if (p.y > tope) p.by -= 0.6;
+    }
+  },
+  dibujar(g) {
+    const P = pal(); const t = tiempo;
+    g.drawImage(fondo, 0, 0, W, H);
+    const offMar = this.offMar(), offM = this.offMarisma(), hw = this.anchoRio();
+    const salMar = salinidad('mar'), salM = salinidad('marisma'), salR = salinidad('rio');
+
+    /* --- playa, arena mojada y duna --- */
+    g.beginPath(); g.moveTo(0, 0);
+    for (let x = 0; x <= W; x += 6) g.lineTo(x, this.dunaArriba(x) + 1);
+    g.lineTo(W, 0); g.closePath(); g.fillStyle = rgba(C.ambar, 0.13); g.fill();
+    // huella de la marea alta (arena mojada) si el mar se retiró
+    if (offMar < -1) {
+      g.beginPath(); for (let x = 0; x <= W; x += 6) g.lineTo(x, this.orillaMar(x)); for (let x = W; x >= 0; x -= 6) g.lineTo(x, this.orillaMar(x) + offMar);
+      g.closePath(); g.fillStyle = rgba(P.agua, 0.06 * P.aA); g.fill();
+      g.strokeStyle = rgba(C.dim, 0.25); g.setLineDash([2, 4]); g.beginPath(); for (let x = 0; x <= W; x += 6) g.lineTo(x, this.orillaMar(x)); g.stroke(); g.setLineDash([]);
+    }
+    /* --- el mar de las células --- */
+    g.beginPath(); g.moveTo(0, 0); for (let x = 0; x <= W; x += 4) g.lineTo(x, this.orillaMar(x) + offMar + 1.5 * Math.sin(x * 0.05 + t * 1.2)); g.lineTo(W, 0); g.closePath();
+    const gm = g.createLinearGradient(0, 0, 0, H * 0.3);
+    gm.addColorStop(0, rgba(P.profundo, 0.08 * P.aA)); gm.addColorStop(0.6, rgba(P.agua, 0.15 * P.aA)); gm.addColorStop(1, rgba(P.agua, 0.28 * P.aA));
+    g.fillStyle = gm; g.fill();
+    g.save(); g.clip();
+    // camino de luna
+    const lx = W * 0.7;
+    g.globalAlpha = 0.35; g.drawImage(brilloSprite(P.brillo), lx - 55, -40, 110, 90); g.globalAlpha = 1;
+    for (let i = 0; i < 46; i++) {
+      const yy = (i / 46) * H * 0.3; const ancho = 4 + 22 * (1 - yy / (H * 0.3)) * 0.6 + 6;
+      const desv = Math.sin(i * 12.9 + t * 0.9) * ancho * 0.6;
+      const a = 0.12 + 0.3 * (0.5 + 0.5 * Math.sin(t * 3 + i * 2.3));
+      g.strokeStyle = rgba(P.brillo, a); g.lineWidth = 1; g.beginPath(); g.moveTo(lx + desv - 3 - i % 3, yy); g.lineTo(lx + desv + 3 + i % 4, yy); g.stroke();
+    }
+    // crestas de ola que viajan hacia la orilla
+    for (let k = 0; k < 7; k++) {
+      const fase = ((t * 0.07) + k / 7) % 1; const dist = (1 - fase) * H * 0.22;
+      g.strokeStyle = rgba(P.brillo, 0.4 * Math.sin(fase * Math.PI)); g.lineWidth = 1; g.setLineDash([14 + k * 5, 9 + k * 3]); g.lineDashOffset = k * 17;
+      g.beginPath(); for (let x = 0; x <= W; x += 8) g.lineTo(x, this.orillaMar(x) + offMar - dist + 2 * Math.sin(x * 0.04 + k));
+      g.stroke();
+    }
+    g.setLineDash([]);
+    // reflejos de estrellas y sal (más destellos = más salado)
+    const nEst = Math.round(clamp(28 * salMar, 4, 70));
+    for (let i = 0; i < nEst; i++) {
+      const s = this.estrellas[i]; const y = s.y * (this.orillaMar(s.x) + offMar - 6);
+      const a = 0.25 + 0.6 * Math.max(0, Math.sin(t * 1.6 + s.f));
+      forma(g, 'brillo', s.x, y, 1.5 * s.z, C.oro, a * 0.8, 0);
+    }
+    g.restore();
+    // espuma de la orilla
+    g.strokeStyle = rgba(P.brillo, 0.45 + 0.15 * Math.sin(t * 1.5)); g.lineWidth = 1.3; g.beginPath();
+    for (let x = 0; x <= W; x += 4) g.lineTo(x, this.orillaMar(x) + offMar + 1.5 * Math.sin(x * 0.05 + t * 1.2));
+    g.stroke();
+
+    /* --- duna con compuertas (acuaporinas) --- */
+    g.beginPath(); for (let x = 0; x <= W; x += 6) g.lineTo(x, this.dunaArriba(x)); for (let x = W; x >= 0; x -= 6) g.lineTo(x, this.dunaAbajo(x)); g.closePath();
+    const gd = g.createLinearGradient(0, H * 0.32, 0, H * 0.39); gd.addColorStop(0, rgba(C.ambar, 0.3)); gd.addColorStop(0.55, rgba(C.dim, 0.26)); gd.addColorStop(1, rgba(C.muted, 0.2));
+    g.fillStyle = gd; g.fill();
+    g.strokeStyle = rgba(C.ambar, 0.3); g.lineWidth = 0.7;
+    for (let k = 1; k < 4; k++) { g.beginPath(); for (let x = 0; x <= W; x += 6) g.lineTo(x, lerp(this.dunaArriba(x), this.dunaAbajo(x), k / 4) + 1.2 * Math.sin(x * 0.15 + k)); g.stroke(); }
+    for (const pu of this.puertas) {
+      const ya = this.dunaArriba(pu.x) - 1, yb = this.dunaAbajo(pu.x) + 1;
+      g.fillStyle = rgba(P.agua, (0.16 + 0.3 * pu.luz) * P.aA); g.fillRect(pu.x - 3.5, ya, 7, yb - ya);
+      g.fillStyle = rgba(C.bg, 0.85); g.fillRect(pu.x - 6, ya - 1, 2.5, yb - ya + 2); g.fillRect(pu.x + 3.5, ya - 1, 2.5, yb - ya + 2);
+      g.fillStyle = rgba(C.ambar, 0.55 + 0.45 * pu.luz); g.fillRect(pu.x - 6.5, lerp(ya, yb, 0.5) - 1 - pu.luz * 5, 13, 2);
+      if (pu.luz > 0.05) {
+        g.globalAlpha = pu.luz * 0.7; g.drawImage(brilloSprite(P.brillo), pu.x - 14, lerp(ya, yb, 0.5) - 14, 28, 28); g.globalAlpha = 1;
+        const ym = lerp(ya, yb, 0.5), d = pu.dir; g.strokeStyle = rgba(P.brillo, pu.luz); g.lineWidth = 1.4; g.beginPath();
+        g.moveTo(pu.x - 4, ym - 3 * d); g.lineTo(pu.x, ym + 3 * d); g.lineTo(pu.x + 4, ym - 3 * d); g.stroke();
+      }
+      pu.luz = Math.max(0, pu.luz - 0.016);
+    }
+
+    /* --- la marisma (intersticio) --- */
+    const bajo = x => this.marismaAbajo(x) + offM;
+    g.beginPath(); for (let x = 0; x <= W; x += 5) g.lineTo(x, this.dunaAbajo(x) + 1); for (let x = W; x >= 0; x -= 5) g.lineTo(x, bajo(x) + 1.2 * Math.sin(x * 0.08 + t * 0.8)); g.closePath();
+    const gma = g.createLinearGradient(0, H * 0.4, 0, H * 0.9); gma.addColorStop(0, rgba(P.agua, 0.13 * P.aA)); gma.addColorStop(0.5, rgba(P.agua, 0.19 * P.aA)); gma.addColorStop(1, rgba(P.agua, 0.13 * P.aA));
+    g.fillStyle = gma; g.fill();
+    // desbordamiento: lenguas de agua sobre los prados
+    if (nivel.edema.v > 0.5) {
+      const e = nivel.edema.v / (16 * W / 360);
+      for (const [fx, ancho, alto] of [[0.1, 0.15, 0.1], [0.38, 0.17, 0.08], [0.68, 0.15, 0.1], [0.94, 0.12, 0.09]]) {
+        const cx = fx * W; const cy = bajo(cx);
+        g.beginPath(); g.ellipse(cx, cy + alto * H * 0.4 * e, ancho * W * (0.5 + 0.5 * e), alto * H * e, 0, 0, TAU);
+        g.fillStyle = rgba(P.agua, 0.2 * e * P.aA); g.fill();
+        g.setLineDash([3, 4]); g.lineDashOffset = -tiempo * 6; g.strokeStyle = rgba(P.brillo, 0.55 * e); g.lineWidth = 1; g.stroke(); g.setLineDash([]);
+      }
+    }
+    g.strokeStyle = rgba(P.brillo, 0.3); g.lineWidth = 1; g.beginPath(); for (let x = 0; x <= W; x += 5) g.lineTo(x, bajo(x) + 1.2 * Math.sin(x * 0.08 + t * 0.8)); g.stroke();
+    // ondas que se abren en la marisma
+    for (const o of this.ondas) {
+      const edad = ((t - o.t0) % 6 + 6) % 6;
+      if (edad < 0.05) { const q = this.puntoMarisma(); o.x = q[0]; o.y = q[1]; }
+      if (!o.y) continue;
+      g.strokeStyle = rgba(P.brillo, 0.3 * (1 - edad / 6)); g.lineWidth = 0.8;
+      g.beginPath(); g.ellipse(o.x, o.y, 2 + edad * 4, (2 + edad * 4) * 0.55, 0, 0, TAU); g.stroke();
+    }
+    // destellos de sal en la marisma
+    const nSalM = Math.round(clamp(9 * salM, 1, 30));
+    for (let i = 0; i < nSalM; i++) {
+      const s = this.estrellas[(i * 7) % this.estrellas.length]; const x = (s.x * 1.7 + i * 37) % W; const y0 = this.dunaAbajo(x) + 6, y1 = bajo(x) - 4;
+      const y = lerp(y0, y1, (s.y * 3.1 + i * 0.13) % 1);
+      if (Math.abs(y - this.rioY(x)) < hw + 4) continue;
+      forma(g, 'brillo', x, y, 1.3, C.oro, (0.2 + 0.6 * Math.max(0, Math.sin(t * 2 + s.f + i))) * 0.8, 0);
+    }
+    // islotes de barro (el agua los cubre cuando sube)
+    for (const is of this.islotes) {
+      const rr = Math.max(is.vasija ? is.r : 2, is.r - offM * 0.55);
+      g.beginPath(); g.ellipse(is.x, is.y, rr * 1.25, rr * 0.85, 0.3, 0, TAU);
+      g.fillStyle = rgba(C.bg, 0.92); g.fill(); g.fillStyle = rgba(C.muted, 0.18); g.fill();
+      g.strokeStyle = rgba(C.dim, 0.18); g.lineWidth = 0.8; g.stroke();
+    }
+    // juncos
+    const sumergido = clamp(1 - offM / (40 * W / 360), 0.35, 1);
+    for (const j of this.juncos) {
+      const sway = Math.sin(t * 1.2 + j.s) * 1.2;
+      g.strokeStyle = rgba(C.verde, 0.62 * sumergido); g.lineWidth = 0.8; g.beginPath();
+      for (let i = 0; i < j.n; i++) {
+        const a = -Math.PI / 2 + (i / (j.n - 1) - 0.5) * 1.9 + Math.sin(j.s + i) * 0.2; const l = j.l * (0.7 + 0.5 * ((i * 7 + j.s) % 1));
+        g.moveTo(j.x, j.y); g.quadraticCurveTo(j.x + Math.cos(a) * l * 0.5, j.y + Math.sin(a) * l * 0.6, j.x + Math.cos(a) * l + sway, j.y + Math.sin(a) * l * 0.85);
+      }
+      g.stroke();
+      g.fillStyle = rgba(C.ambar, 0.45 * sumergido); g.beginPath(); g.arc(j.x + sway * 0.8, j.y - j.l * 0.8, 0.9, 0, TAU); g.fill();
+    }
+
+    /* --- herida (hemorragia) --- */
+    if (estado.hemorragia) {
+      const h = this.herida.x;
+      g.strokeStyle = rgba(C.rojo, 0.55); g.lineWidth = 2.5; g.beginPath();
+      g.moveTo(h, this.rioY(h) + hw); g.quadraticCurveTo(h + 4, lerp(this.rioY(h), H, 0.5), h + 20, H + 2); g.stroke();
+      g.globalAlpha = 0.35 + 0.2 * Math.sin(t * 3); g.drawImage(brilloSprite(C.rojo), h - 14, this.rioY(h) + hw - 12, 28, 24); g.globalAlpha = 1;
+    }
+
+    /* --- el río (plasma) --- */
+    g.lineCap = 'round'; g.lineJoin = 'round';
+    const camino = new Path2D(); for (let x = -12; x <= W + 12; x += 5) camino[x === -12 ? 'moveTo' : 'lineTo'](x, this.rioY(x));
+    g.strokeStyle = rgba(P.brillo, 0.07); g.lineWidth = hw * 2 + 16; g.stroke(camino);
+    g.strokeStyle = rgba(C.muted, 0.5); g.lineWidth = hw * 2 + 6; g.stroke(camino);
+    g.strokeStyle = rgba(C.bg, 1); g.lineWidth = hw * 2 + 1; g.stroke(camino);
+    g.strokeStyle = rgba(P.agua, 0.36 * P.aA); g.lineWidth = hw * 2; g.stroke(camino);
+    g.strokeStyle = rgba(P.agua, 0.2 * P.aA); g.lineWidth = hw * 0.9; g.stroke(camino);
+    // corriente: hilos de luz que avanzan
+    g.lineWidth = 1;
+    for (const [desv, vel, a] of [[-0.45, 34, 0.5], [0.05, 46, 0.65], [0.5, 28, 0.4]]) {
+      const hilo = new Path2D(); for (let x = -12; x <= W + 12; x += 5) hilo[x === -12 ? 'moveTo' : 'lineTo'](x, this.rioY(x) + desv * hw);
+      g.setLineDash([5 + 4 * a, 16]); g.lineDashOffset = -t * vel * W / 360; g.strokeStyle = rgba(P.brillo, a * 0.6); g.stroke(hilo);
+    }
+    g.setLineDash([]);
+    // limo de albúmina en suspensión (menos si la albúmina está baja)
+    const nLimo = estado.edema ? 5 : 16;
+    for (let i = 0; i < nLimo; i++) {
+      const l = this.limo[i]; const x = ((l.s + t * 22 * W / 360) % (W + 20)) - 10;
+      forma(g, 'grano', x, this.rioY(x) + l.o * hw * 0.8, 1.6, C.purpura, 0.75, 0);
+    }
+    // sal en el río
+    const nSalR = Math.round(clamp(6 * salR, 0, 26));
+    for (let i = 0; i < nSalR; i++) {
+      const x = ((i * 53.7 + t * 30 * W / 360) % (W + 20)) - 10;
+      forma(g, 'brillo', x, this.rioY(x) + Math.sin(i * 2.1) * hw * 0.6, 1.3, C.oro, 0.3 + 0.5 * Math.max(0, Math.sin(t * 3 + i)), 0);
+    }
+    // fuga por la orilla (permeabilidad alta) y relleno tras la hemorragia: flechas cortas, sin cifra
+    if (nivel.edema.v > 1) this.flechasOrilla(g, +1, nivel.edema.v / (16 * W / 360), P);
+    if (tiempo < rellenoHasta) this.flechasOrilla(g, -1, clamp((rellenoHasta - tiempo) / 3, 0, 1), P);
+
+    /* --- tinta en acuarela --- */
+    g.drawImage(capaTinta, 0, 0, W, H);
+
+    /* --- la vasija --- */
+    this.dibujarVasija(g, P);
+  },
+  flechasOrilla(g, sentido, fuerza, P) {
+    const hw = this.anchoRio();
+    for (let i = 0; i < 9; i++) {
+      const x = (i + 0.5) / 9 * W + 12 * Math.sin(i * 3);
+      for (const lado of [-1, 1]) {
+        const fase = ((tiempo * 0.6 + i * 0.37 + (lado > 0 ? 0.5 : 0)) % 1);
+        const y0 = this.rioY(x) + lado * (hw + 2), d = 12 * W / 360;
+        const ya = sentido > 0 ? y0 + lado * fase * d : y0 + lado * (1 - fase) * d;
+        const a = Math.sin(fase * Math.PI) * 0.7 * fuerza;
+        const col = sentido > 0 ? P.brillo : C.verde;
+        g.strokeStyle = rgba(col, a); g.lineWidth = 1.1; g.beginPath();
+        const dir = sentido * lado;
+        g.moveTo(x - 2.5, ya - 2.5 * dir); g.lineTo(x, ya); g.lineTo(x + 2.5, ya - 2.5 * dir); g.stroke();
+      }
+    }
+  },
+  dibujarVasija(g, P) {
+    const V = this.vasija; const vertiendo = parts.some(p => p.de === 'fuente' && p.viva && p.seg === 0 && !p.asentada) || parts.some(p => p.de === 'fuente' && !p.viva);
+    this.giro = lerp(this.giro || 0, vertiendo ? 0.75 : 0.15, REDUCIR ? 1 : 0.08);
+    g.save(); g.translate(V.x, V.y); g.rotate(this.giro);
+    const s = W / 360;
+    g.beginPath(); g.ellipse(0, 0, 9 * s, 11 * s, 0, 0, TAU);
+    g.fillStyle = rgba(C.ambar, 0.32); g.fill(); g.strokeStyle = rgba(C.ambar, 0.95); g.lineWidth = 1.2; g.stroke();
+    g.beginPath(); g.moveTo(-3.5 * s, -10 * s); g.lineTo(-3 * s, -15 * s); g.lineTo(3 * s, -15 * s); g.lineTo(3.5 * s, -10 * s); g.stroke();
+    g.beginPath(); g.ellipse(0, -15.5 * s, 4.6 * s, 1.6 * s, 0, 0, TAU); g.stroke();
+    g.beginPath(); g.arc(-9 * s, -4 * s, 4 * s, Math.PI * 0.6, Math.PI * 1.5); g.stroke();
+    g.beginPath(); g.arc(9 * s, -4 * s, 4 * s, -Math.PI * 0.5, Math.PI * 0.4); g.stroke();
+    g.strokeStyle = rgba(C.ambar, 0.6); g.lineWidth = 0.7; g.beginPath(); g.moveTo(-8 * s, 2 * s); g.quadraticCurveTo(0, 5 * s, 8 * s, 2 * s); g.stroke();
+    g.restore();
+    texto(g, 'vasija', V.x, V.y + 22 * s, { size: 9, color: C.muted, align: 'center' });
+  },
+  mareografos(g) {
+    const s = W / 360;
+    const marca = (x, y, nombre, sub, c, alto, abajo) => {
+      const d = mostrado(c) - BASE[c]; const nivelF = clamp(0.5 + d / 4000, 0.06, 0.94);
+      const h = alto * s, w = 6 * s;
+      g.fillStyle = rgba(C.bg, 0.85); g.fillRect(x - w / 2 - 1, y - h - 1, w + 2, h + 2);
+      g.fillStyle = rgba(pal().agua, 0.55 * pal().aA); g.fillRect(x - w / 2, y - h * nivelF, w, h * nivelF);
+      g.strokeStyle = rgba(C.dim, 0.75); g.lineWidth = 0.7;
+      for (let k = 0; k <= 8; k++) { const yy = y - h * k / 8; g.beginPath(); g.moveTo(x - w / 2, yy); g.lineTo(x - w / 2 + (k % 4 === 0 ? w : w * 0.5), yy); g.stroke(); }
+      g.strokeStyle = rgba(C.oro, 0.95); g.lineWidth = 1.2; g.beginPath(); g.moveTo(x - w / 2 - 3, y - h * 0.5); g.lineTo(x + w / 2 + 3, y - h * 0.5); g.stroke();
+      const tx = x + w / 2 + 5;
+      texto(g, nombre, tx, y - h + 8 * s, { size: 9.5 * s, color: C.dim, italic: false, peso: '600', caja: true });
+      texto(g, sub, tx, y - h + 19 * s, { size: 8.5 * s, color: C.muted, caja: true });
+      const col = d > 0.5 ? C.oro : d < -0.5 ? C.rojo : C.dim;
+      texto(g, fmtD(d) + ' mL', tx, y - h + 33 * s, { size: 12.5 * s, color: col, italic: false, peso: 'bold', caja: true });
+    };
+    marca(0.06 * W, 0.245 * H, 'MAR', 'las células', 'mar', 46);
+    const xr = 0.27 * W; marca(xr, this.rioY(xr), 'RÍO', 'el plasma', 'rio', 46);
+    const xm = 0.79 * W; marca(xm, Math.min(this.marismaAbajo(xm) - 8, H - 10), 'MARISMA', 'el intersticio', 'marisma', 46);
+    texto(g, 'acuaporinas', (this.puertas[1].x + this.puertas[2].x) / 2, (this.dunaArriba(W * 0.52) + this.dunaAbajo(W * 0.52)) / 2 + 3.5, { size: 9 * s, color: C.dim, align: 'center', italic: true, peso: '600' });
+    if (estado.edema) texto(g, 'desborda · ilustrativo', W * 0.5, H - 8, { size: 9.5 * s, color: C.rojo, align: 'center', caja: true });
+    if (estado.hemorragia) texto(g, 'herida', this.herida.x + 22, H - 22, { size: 9 * s, color: C.rojo, caja: true });
+    if (tiempo < rellenoHasta) texto(g, 'la marisma cede agua · sin cifra', W * 0.5, this.rioY(W * 0.5) + this.anchoRio() + 24 * s, { size: 9 * s, color: C.verde, align: 'center', caja: true });
+  }
+};
+
+/* ============================================================
+   6. Dirección 2 · Corte del terreno (vista lateral)
+   ============================================================ */
+const Corte = {
+  layout() {
+    const r = azar(23);
+    this.ys = H * 0.17; this.ym = H * 0.6; this.col = 50 * W / 360;  // columna de reglas a la derecha
+    this.yv = this.ys + 0.43 * (this.ym - this.ys); this.r0 = H * 0.052;
+    this.ywt0 = this.ys + 0.33 * (this.yv - this.r0 - this.ys);
+    this.bx = 0.5 * (W - 50 * W / 360);
+    this.herida = { x: 0.6 * (W - this.col) };
+    const anchoUtil = W - this.col;
+    this.acuas = [0.12, 0.34, 0.56, 0.8].map(f => ({ x: f * anchoUtil, luz: 0, dir: 0 }));
+    this.poros = []; for (let x = 18; x < W; x += 30 * W / 360) this.poros.push({ x, luz: 0 });
+    // células en panal
+    const filas = 3; const altoFila = (H - this.ym - 6) / filas; this.rc0 = altoFila * 0.5;
+    this.celulas = [];
+    for (let f = 0; f < filas; f++) {
+      const y = this.ym + 5 + altoFila * (f + 0.5); const paso = this.rc0 * 1.95;
+      for (let x = (f % 2 ? paso / 2 : 0) - paso * 0.2; x < W + paso; x += paso) this.celulas.push({ x, y, s: r() * 10, nx: (r() - 0.5) * 0.4, ny: (r() - 0.5) * 0.4 });
+    }
+    this.cristales = Array.from({ length: 60 }, () => ({ x: r(), y: r(), f: r() * TAU, g: r() * TAU }));
+    this.limo = Array.from({ length: 16 }, () => ({ s: r() * W, o: r() * 1.4 - 0.7, f: r() * TAU }));
+    this.charcoSangre = 0;
+    this.fondo();
+  },
+  objetivos() {
+    const dR = mostrado('rio') - BASE.rio, dM = mostrado('marisma') - BASE.marisma, dC = mostrado('mar') - BASE.mar;
+    const sube = this.ywt0 - this.ys;
+    return { rio: vis(dR, 700, this.r0 * 0.55, this.r0 * 0.28), marisma: vis(dM, 1600, sube * 0.75, sube * 0.4), mar: vis(dC, 1200, 0.2, 0.12), edema: estado.edema ? sube * 1.15 : 0 };
+  },
+  radio() { return this.r0 + nivel.rio.v; },
+  freatico() { return this.ywt0 - nivel.marisma.v - nivel.edema.v; },
+  escalaCel() { return 1 + nivel.mar.v; },
+  fondo() {
+    const g = fondo.getContext('2d'); fondo.width = W * DPR; fondo.height = H * DPR; g.setTransform(DPR, 0, 0, DPR, 0, 0);
+    g.fillStyle = C.bg; g.fillRect(0, 0, W, H);
+    const r = azar(5);
+    // cielo nocturno
+    const gc = g.createLinearGradient(0, 0, 0, this.ys); gc.addColorStop(0, rgba(C.bg, 1)); gc.addColorStop(1, rgba(C.muted, 0.08));
+    g.fillStyle = gc; g.fillRect(0, 0, W, this.ys);
+    for (let i = 0; i < 30; i++) { g.fillStyle = rgba(C.texto, 0.2 + r() * 0.5); g.fillRect(r() * W, r() * this.ys * 0.85, 1, 1); }
+    // tierra: estratos y granos
+    const gt = g.createLinearGradient(0, this.ys, 0, this.ym); gt.addColorStop(0, rgba(C.muted, 0.16)); gt.addColorStop(1, rgba(C.muted, 0.1));
+    g.fillStyle = gt; g.fillRect(0, this.ys, W, this.ym - this.ys);
+    for (let i = 0; i < 700; i++) { const y = this.ys + r() * (this.ym - this.ys); g.fillStyle = rgba(r() < 0.7 ? C.muted : C.dim, 0.08 + r() * 0.15); g.beginPath(); g.arc(r() * W, y, 0.4 + r() * 1.3, 0, TAU); g.fill(); }
+    for (let i = 0; i < 18; i++) { const y = this.ys + 6 + r() * (this.ym - this.ys - 12); g.fillStyle = rgba(C.bg, 0.5); g.beginPath(); g.ellipse(r() * W, y, 2 + r() * 4, 1.5 + r() * 2, r(), 0, TAU); g.fill(); }
+    // fondo del acuífero (entre las células)
+    g.fillStyle = rgba(C.purpura, 0.06); g.fillRect(0, this.ym, W, H - this.ym);
+    const v = viñeta.getContext('2d'); viñeta.width = W * DPR; viñeta.height = H * DPR; v.setTransform(DPR, 0, 0, DPR, 0, 0);
+    const rv = v.createRadialGradient(W * 0.45, H * 0.45, Math.min(W, H) * 0.4, W * 0.45, H * 0.5, Math.max(W, H) * 0.8);
+    rv.addColorStop(0, rgba(C.bg, 0)); rv.addColorStop(1, rgba(C.bg, 0.55)); v.fillStyle = rv; v.fillRect(0, 0, W, H);
+  },
+  puntoTubo(x = 20 + Math.random() * (W - 40)) { const r = this.radio(); return [x, this.yv + (Math.random() * 2 - 1) * (r - 5)]; },
+  puntoTierra(cerca) {
+    for (let k = 0; k < 60; k++) {
+      const x = cerca != null ? clamp(cerca + (Math.random() - 0.5) * 60, 6, W - this.col - 6) : 6 + Math.random() * (W - this.col - 12);
+      const y0 = Math.max(this.freatico(), this.ys) + 5, y = lerp(y0, this.ym - 6, Math.random());
+      if (Math.abs(y - this.yv) > this.radio() + 6) return [x, y];
+    }
+    return [W * 0.3, this.ym - 10];
+  },
+  celulaCerca(x) { const cand = this.celulas.filter(c => c.y < this.ym + this.rc0 * 2.2 && c.x < W - this.col); return cand.reduce((m, c) => Math.abs(c.x - x) < Math.abs(m.x - x) ? c : m, cand[0]); },
+  puntoCelula(cel) { const a = Math.random() * TAU, d = Math.random() * this.rc0 * 0.5; return [cel.x + Math.cos(a) * d, cel.y + Math.sin(a) * d]; },
+  ruta(p) {
+    const { de, a } = p; const pts = []; const r = this.radio();
+    const goteo = [this.bx, this.ys * 0.62];
+    const poroAbajo = x => [x, this.yv + r + 1];
+    if (de === 'fuente') {
+      pts.push(goteo, [this.bx, this.yv - r - 2], [this.bx + 4, this.yv]);
+      if (a === 'rio') pts.push(this.puntoTubo(this.bx + 20 + Math.random() * (W - this.bx - 40)));
+      else if (a === 'marisma') {
+        const d = this.puntoTierra(); const po = this.poroCerca(d[0]);
+        const lado = d[1] < this.yv ? -1 : 1; pts.push([po.x, this.yv + lado * (r - 4)], [po.x, this.yv + lado * (r + 3)], d); p.poro = po;
+      } else {
+        const aq = this.acuas[Math.floor(Math.random() * this.acuas.length)]; const po = this.poroCerca(aq.x); const cel = this.celulaCerca(aq.x);
+        pts.push([po.x, this.yv + r - 4], poroAbajo(po.x), [aq.x + (Math.random() - 0.5) * 12, this.ym - 12], [aq.x, this.ym], [aq.x, this.ym + 6], this.puntoCelula(cel));
+        p.poro = po; p.acua = aq; p.cel = cel;
+      }
+    } else if (de === 'mar') {
+      const aq = this.acuas[Math.floor(Math.random() * this.acuas.length)]; const cel = this.celulaCerca(aq.x); p.acua = aq;
+      pts.push(this.puntoCelula(cel), [aq.x, this.ym + 6], [aq.x, this.ym], [aq.x, this.ym - 8]);
+      if (a === 'marisma') pts.push(this.puntoTierra(aq.x));
+      else { const po = this.poroCerca(aq.x); p.poro = po; pts.push([po.x, this.yv + r + 8], poroAbajo(po.x), this.puntoTubo(po.x + 10)); }
+    } else if (de === 'marisma') {
+      const d = this.puntoTierra(); const po = this.poroCerca(d[0]); p.poro = po;
+      const lado = d[1] < this.yv ? -1 : 1;
+      pts.push(d, [po.x, this.yv + lado * (r + 3)], [po.x, this.yv + lado * (r - 4)], this.puntoTubo(po.x + 10));
+    } else if (de === 'rio') {
+      const h = this.herida.x;
+      pts.push(this.puntoTubo(h - 50 - Math.random() * 50), [h, this.yv - r * 0.3], [h + 1, this.yv - r - 2], [h + 4, lerp(this.yv - r, this.ys, 0.5)], [h + 6, this.ys + 1], [h + 6 + (Math.random() - 0.5) * 26, this.ys - 1]);
+    }
+    return pts;
+  },
+  poroCerca(x) { return this.poros.reduce((m, q) => Math.abs(q.x - x) < Math.abs(m.x - x) ? q : m, this.poros[0]); },
+  asentar(p) {
+    if (p.a === 'herida') { this.charcoSangre = Math.min(this.charcoSangre + 1, 40); p.quitar = true; return false; }
+    if (p.a === 'rio') p.o = clamp((p.y - this.yv) / Math.max(1, this.radio()), -0.85, 0.85);
+    if (p.a === 'mar') { if (!p.cel) p.cel = this.celulas.reduce((m, c) => Math.hypot(c.x - p.x, c.y - p.y) < Math.hypot(m.x - p.x, m.y - p.y) ? c : m, this.celulas[0]); p.ang = Math.random() * TAU; p.rad = Math.random() * 0.55; }
+    p.bx = p.x; p.by = p.y;
+    return true;
+  },
+  colocar(p) {
+    if (p.a === 'herida') { this.charcoSangre = Math.min(this.charcoSangre + 1, 40); p.quitar = true; return; }
+    let q;
+    if (p.a === 'rio') { q = this.puntoTubo(); p.o = (q[1] - this.yv) / this.radio(); }
+    else if (p.a === 'marisma') q = this.puntoTierra();
+    else { p.cel = this.celulas[Math.floor(Math.random() * this.celulas.length)]; q = this.puntoCelula(p.cel); p.ang = Math.random() * TAU; p.rad = Math.random() * 0.55; }
+    p.x = q[0]; p.y = q[1]; p.bx = q[0]; p.by = q[1];
+  },
+  mover(p, dt) {
+    if (p.a === 'rio') { p.x += dt * (26 + 8 * Math.sin(tiempo + p.semilla)) * W / 360; if (p.x > W + 8) p.x = -8; p.y = this.yv + p.o * this.radio() * 0.85 + Math.sin(tiempo * 2 + p.semilla) * 0.8; }
+    else if (p.a === 'marisma') { p.x = p.bx + Math.sin(tiempo * 0.3 + p.semilla) * 2; p.y = Math.max(p.by + Math.cos(tiempo * 0.27 + p.semilla) * 1.5, this.freatico() + 3); }
+    else if (p.cel) { const rr = this.rc0 * this.escalaCel() * p.rad; p.ang += dt * 0.3; p.x = p.cel.x + Math.cos(p.ang) * rr; p.y = p.cel.y + Math.sin(p.ang) * rr; }
+  },
+  dibujar(g) {
+    const P = pal(); const t = tiempo; const r = this.radio(); const yw = this.freatico(); const esc = this.escalaCel();
+    g.drawImage(fondo, 0, 0, W, H);
+    const salR = salinidad('rio'), salM = salinidad('marisma'), salC = salinidad('mar');
+
+    /* --- tierra empapada (intersticio): nivel freático --- */
+    const ywv = Math.max(yw, this.ys - 0.5);
+    g.beginPath(); g.moveTo(0, this.ym);
+    for (let x = 0; x <= W; x += 5) g.lineTo(x, ywv + 1.6 * Math.sin(x * 0.06 + t * 1.4));
+    g.lineTo(W, this.ym); g.closePath();
+    const gw = g.createLinearGradient(0, ywv, 0, this.ym); gw.addColorStop(0, rgba(P.agua, 0.27 * P.aA)); gw.addColorStop(1, rgba(P.agua, 0.15 * P.aA));
+    g.fillStyle = gw; g.fill();
+    g.strokeStyle = rgba(P.brillo, 0.55); g.lineWidth = 1.1; g.beginPath(); for (let x = 0; x <= W; x += 5) g.lineTo(x, ywv + 1.6 * Math.sin(x * 0.06 + t * 1.4)); g.stroke();
+    // agua que brilla entre los granos
+    for (let i = 0; i < 26; i++) {
+      const c = this.cristales[(i * 11) % 60]; const x = ((c.y * 7.3 + i * 0.137) % 1) * (W - this.col); const y = lerp(ywv + 3, this.ym - 3, (c.x * 3.7 + i * 0.29) % 1);
+      if (Math.abs(y - this.yv) < r + 3) continue;
+      g.strokeStyle = rgba(P.brillo, 0.35 * Math.max(0, Math.sin(t * 1.3 + c.f * 3))); g.lineWidth = 0.9; g.beginPath(); g.moveTo(x - 3, y); g.lineTo(x + 3, y); g.stroke();
+    }
+    // poros brillantes en la tierra mojada (sal)
+    const nC = Math.round(clamp(14 * salM, 2, 50));
+    for (let i = 0; i < nC; i++) {
+      const c = this.cristales[i]; const x = c.x * (W - this.col); const y = lerp(ywv + 4, this.ym - 4, c.y);
+      if (Math.abs(y - this.yv) < r + 3) continue;
+      this.cristal(g, x, y + Math.sin(t * 0.8 + c.f) * 1.2, 1.7, t * 0.4 + c.g, 0.35 + 0.45 * Math.max(0, Math.sin(t * 1.7 + c.f)));
+    }
+    // charcos sobre el prado (edema que desborda)
+    if (nivel.edema.v > 0.5) {
+      const e = clamp(nivel.edema.v / ((this.ywt0 - this.ys) * 1.15), 0, 1);
+      for (const [fx, an] of [[0.22, 0.12], [0.48, 0.16], [0.74, 0.1]]) {
+        const cx = fx * (W - this.col);
+        g.beginPath(); g.ellipse(cx, this.ys, an * W * e, 6 * e, 0, Math.PI, 0); g.closePath(); g.fillStyle = rgba(P.agua, 0.45 * Math.min(1, P.aA) * e); g.fill();
+        g.strokeStyle = rgba(P.brillo, 0.8 * e); g.lineWidth = 1; g.beginPath(); g.ellipse(cx, this.ys, an * W * e, 6 * e, 0, Math.PI, 0); g.stroke();
+        const brilla = 0.5 + 0.5 * Math.sin(tiempo * 2 + fx * 9);
+        g.strokeStyle = rgba(P.brillo, 0.7 * e * brilla); g.beginPath(); g.moveTo(cx - an * W * e * 0.5, this.ys - 3); g.lineTo(cx + an * W * e * 0.1, this.ys - 3); g.stroke();
+      }
+    }
+    // superficie del prado
+    g.strokeStyle = rgba(C.verde, 0.55); g.lineWidth = 1.2; g.beginPath(); g.moveTo(0, this.ys); g.lineTo(W, this.ys); g.stroke();
+    g.strokeStyle = rgba(C.verde, 0.5); g.lineWidth = 0.8;
+    for (let x = 4; x < W; x += 7) { const sw = Math.sin(t * 1.1 + x * 0.3) * 1.2; g.beginPath(); g.moveTo(x, this.ys); g.lineTo(x - 1.5 + sw, this.ys - 4 - (x * 7 % 4)); g.moveTo(x + 2, this.ys); g.lineTo(x + 3 + sw, this.ys - 3 - (x * 3 % 3)); g.stroke(); }
+
+    /* --- la herida y su charco --- */
+    if (estado.hemorragia) {
+      const h = this.herida.x;
+      g.strokeStyle = rgba(C.rojo, 0.6); g.lineWidth = 1.6; g.beginPath(); g.moveTo(h, this.yv - r); g.lineTo(h + 3, lerp(this.yv - r, this.ys, 0.35)); g.lineTo(h + 1, lerp(this.yv - r, this.ys, 0.6)); g.lineTo(h + 6, this.ys); g.stroke();
+      if (this.charcoSangre > 0) { const w = 4 + this.charcoSangre * 0.7; g.beginPath(); g.ellipse(h + 6, this.ys - 0.5, w, 2.6, 0, Math.PI, 0); g.fillStyle = rgba(C.rojo, 0.75); g.fill(); }
+    }
+
+    /* --- el vaso (plasma): tubo rojo cortado --- */
+    const yT = this.yv - r, yB = this.yv + r;
+    const gi = g.createLinearGradient(0, yT, 0, yB); gi.addColorStop(0, rgba(P.agua, 0.42 * Math.min(1, P.aA))); gi.addColorStop(0.5, rgba(P.agua, 0.24 * P.aA)); gi.addColorStop(1, rgba(P.agua, 0.34 * Math.min(1, P.aA)));
+    g.fillStyle = rgba(C.bg, 0.9); g.fillRect(0, yT, W, r * 2);
+    g.fillStyle = gi; g.fillRect(0, yT, W, r * 2);
+    // corriente dentro del tubo
+    g.lineWidth = 1;
+    for (const [d, vel, a] of [[-0.55, 30, 0.45], [-0.1, 44, 0.6], [0.4, 36, 0.5]]) {
+      g.setLineDash([7, 18]); g.lineDashOffset = -t * vel * W / 360; g.strokeStyle = rgba(P.brillo, a * 0.7);
+      g.beginPath(); for (let x = 0; x <= W; x += 6) g.lineTo(x, this.yv + d * r + Math.sin(x * 0.05 + t * 2 + d * 3) * 1.2); g.stroke();
+    }
+    g.setLineDash([]);
+    // sal (cristales) y limo en el plasma
+    const nCr = Math.round(clamp(7 * salR, 0, 28));
+    for (let i = 0; i < nCr; i++) { const c = this.cristales[59 - i]; const x = ((c.x * W + t * 34 * W / 360) % (W + 16)) - 8; this.cristal(g, x, this.yv + (c.y * 2 - 1) * r * 0.7, 1.8, t * 1.2 + c.g, 0.5 + 0.4 * Math.max(0, Math.sin(t * 2.5 + c.f))); }
+    const nLimo = estado.edema ? 4 : 14;
+    for (let i = 0; i < nLimo; i++) { const l = this.limo[i]; const x = ((l.s + t * 26 * W / 360) % (W + 16)) - 8; forma(g, 'grano', x, this.yv + l.o * r * 0.85, 2, C.purpura, 0.8, 0); }
+    // paredes del vaso, con poros
+    const pared = (y, arriba) => {
+      const gr = g.createLinearGradient(0, y - 3, 0, y + 3);
+      gr.addColorStop(0, rgba(C.rojo, arriba ? 1 : 0.65)); gr.addColorStop(1, rgba(C.rojo, arriba ? 0.6 : 1));
+      g.strokeStyle = gr; g.lineWidth = 4.5; g.beginPath(); g.moveTo(-5, y); g.lineTo(W + 5, y); g.stroke();
+      g.strokeStyle = rgba(C.texto, arriba ? 0.35 : 0.12); g.lineWidth = 0.8; g.beginPath(); g.moveTo(-5, y - 1.5); g.lineTo(W + 5, y - 1.5); g.stroke();
+      for (const po of this.poros) {
+        const ancho = 2.4 + (estado.edema ? 2.2 : 0) + po.luz * 1.5;
+        g.fillStyle = rgba(C.bg, 1); g.fillRect(po.x - ancho / 2, y - 2.5, ancho, 5);
+        g.fillStyle = rgba(P.agua, (0.4 + po.luz * 0.6) * Math.min(1, P.aA)); g.fillRect(po.x - ancho / 2, y - 2.5, ancho, 5);
+      }
+    };
+    pared(yT, true); pared(yB, false);
+    for (const po of this.poros) po.luz = Math.max(0, po.luz - 0.02);
+    // fuga (permeabilidad alta) y relleno tras la hemorragia
+    if (nivel.edema.v > 1) this.flechasPoros(g, +1, clamp(nivel.edema.v / ((this.ywt0 - this.ys) * 1.15), 0, 1), P);
+    if (tiempo < rellenoHasta) this.flechasPoros(g, -1, clamp((rellenoHasta - tiempo) / 3, 0, 1), P);
+
+    /* --- membrana con acuaporinas --- */
+    g.strokeStyle = rgba(C.dim, 0.55); g.lineWidth = 1;
+    for (const d of [-2, 2]) { g.setLineDash([2, 2.5]); g.beginPath(); for (let x = 0; x <= W; x += 4) g.lineTo(x, this.ym + d + Math.sin(x * 0.07 + t * 0.6) * 0.8); g.stroke(); }
+    g.setLineDash([]);
+    for (const aq of this.acuas) {
+      const y = this.ym;
+      g.fillStyle = rgba(C.bg, 1); g.fillRect(aq.x - 5, y - 6, 10, 12);
+      g.fillStyle = rgba(C.oro, 0.6 + 0.4 * aq.luz); g.beginPath(); g.moveTo(aq.x - 5, y - 6); g.lineTo(aq.x + 5, y - 6); g.lineTo(aq.x + 1.3, y); g.lineTo(aq.x + 5, y + 6); g.lineTo(aq.x - 5, y + 6); g.lineTo(aq.x - 1.3, y); g.closePath(); g.fill();
+      if (aq.luz > 0.05) {
+        g.globalAlpha = aq.luz * 0.7; g.drawImage(brilloSprite(P.brillo), aq.x - 14, y - 14, 28, 28); g.globalAlpha = 1;
+        g.strokeStyle = rgba(P.brillo, aq.luz); g.lineWidth = 1.5; const d = aq.dir; g.beginPath();
+        g.moveTo(aq.x + 9, y - 6 * d); g.lineTo(aq.x + 9, y + 6 * d); g.moveTo(aq.x + 6, y + 3 * d); g.lineTo(aq.x + 9, y + 6 * d); g.lineTo(aq.x + 12, y + 3 * d); g.stroke();
+      }
+      aq.luz = Math.max(0, aq.luz - 0.016);
+    }
+
+    /* --- células (el acuífero): se hinchan o se arrugan --- */
+    const rc = this.rc0 * esc; const arruga = clamp((1 - esc) * 3.2, 0, 0.5);
+    g.save(); g.beginPath(); g.rect(0, this.ym + 3, W, H - this.ym); g.clip();
+    for (const c of this.celulas) {
+      g.beginPath();
+      for (let k = 0; k <= 36; k++) {
+        const a = k / 36 * TAU; const rr = rc * (1 + arruga * 0.18 * Math.sin(a * 9 + c.s) + 0.025 * Math.sin(a * 3 + t * 0.8 + c.s));
+        g[k ? 'lineTo' : 'moveTo'](c.x + Math.cos(a) * rr, c.y + Math.sin(a) * rr * 0.92);
+      }
+      g.closePath();
+      const gc = g.createRadialGradient(c.x - rc * 0.3, c.y - rc * 0.35, rc * 0.1, c.x, c.y, rc);
+      gc.addColorStop(0, rgba(C.purpura, 0.42)); gc.addColorStop(0.7, rgba(C.purpura, 0.26)); gc.addColorStop(1, rgba(C.rojo, 0.22));
+      g.fillStyle = gc; g.fill();
+      g.fillStyle = rgba(P.agua, 0.06 * P.aA); g.fill();
+      g.strokeStyle = rgba(C.purpura, 0.85); g.lineWidth = 1.3; g.stroke();
+      g.beginPath(); g.ellipse(c.x + c.nx * rc, c.y + c.ny * rc, rc * 0.27, rc * 0.22, c.s, 0, TAU); g.fillStyle = rgba(C.purpura, 0.6); g.fill();
+      g.strokeStyle = rgba(C.texto, 0.18); g.lineWidth = 1; g.beginPath(); g.arc(c.x - rc * 0.25, c.y - rc * 0.25, rc * 0.55, Math.PI * 1.05, Math.PI * 1.45); g.stroke();
+    }
+    const nCc = Math.round(clamp(8 * salC, 1, 30));
+    for (let i = 0; i < nCc; i++) { const c = this.cristales[(i * 3) % 60]; forma(g, 'brillo', c.x * W, lerp(this.ym + 8, H - 6, c.y), 1.2, C.oro, 0.25 + 0.4 * Math.max(0, Math.sin(t * 1.5 + c.f)), 0); }
+    g.restore();
+
+    /* --- tinta --- */
+    g.drawImage(capaTinta, 0, 0, W, H);
+
+    /* --- botella de suero y goteo --- */
+    this.dibujarBotella(g, P);
+  },
+  cristal(g, x, y, s, giro, a) {
+    g.save(); g.translate(x, y); g.rotate(giro); g.globalAlpha = a;
+    g.fillStyle = rgba(C.oro, 0.9); g.fillRect(-s, -s, s * 2, s * 2); g.strokeStyle = rgba(C.texto, 0.6); g.lineWidth = 0.5; g.strokeRect(-s, -s, s * 2, s * 2);
+    g.restore(); g.globalAlpha = 1;
+  },
+  flechasPoros(g, sentido, fuerza, P) {
+    const r = this.radio();
+    this.poros.forEach((po, i) => {
+      if (i % 2) return;
+      for (const lado of [-1, 1]) {
+        const fase = (tiempo * 0.7 + i * 0.21 + (lado > 0 ? 0.5 : 0)) % 1;
+        const y0 = this.yv + lado * (r + 3), d = 12;
+        const y = sentido > 0 ? y0 + lado * fase * d : y0 + lado * (1 - fase) * d;
+        const a = Math.sin(fase * Math.PI) * 0.8 * fuerza; const dir = sentido * lado;
+        g.strokeStyle = rgba(sentido > 0 ? P.brillo : C.verde, a); g.lineWidth = 1.2; g.beginPath();
+        g.moveTo(po.x - 2.5, y - 2.5 * dir); g.lineTo(po.x, y); g.lineTo(po.x + 2.5, y - 2.5 * dir); g.stroke();
+      }
+    });
+  },
+  dibujarBotella(g, P) {
+    const x = this.bx, s = W / 360;
+    const pend = parts.filter(p => p.de === 'fuente' && (!p.viva || p.seg === 0) && !p.asentada);
+    const goteando = pend.length > 0;
+    const def = goteando ? pend[0].ev.def : FLUIDOS[estado.fluido];
+    const lleno = goteando ? clamp(pend.length / pend[0].ev.def.reparto.filter(q => q[0] === 'fuente').reduce((a, q) => a + q[2], 0), 0, 1) : 1;
+    g.strokeStyle = rgba(C.dim, 0.6); g.lineWidth = 1; g.beginPath(); g.moveTo(x, 0); g.lineTo(x, 4 * s); g.stroke();
+    const bw = 22 * s, bh = 30 * s, by = 5 * s;
+    g.beginPath(); g.roundRect(x - bw / 2, by, bw, bh, 5 * s); g.fillStyle = rgba(C.texto, 0.07); g.fill();
+    g.save(); g.clip(); g.fillStyle = rgba(colorDe(def.color), 0.5); g.fillRect(x - bw / 2, by + bh * (1 - 0.85 * lleno), bw, bh); g.restore();
+    g.strokeStyle = rgba(C.dim, 0.85); g.lineWidth = 1.1; g.beginPath(); g.roundRect(x - bw / 2, by, bw, bh, 5 * s); g.stroke();
+    forma(g, def.forma, x, by + bh * 0.55, 3, colorDe(def.color), 0.95, tiempo);
+    const cy = by + bh + 2 * s; g.strokeStyle = rgba(C.dim, 0.7); g.beginPath(); g.roundRect(x - 3.5 * s, cy, 7 * s, 10 * s, 2); g.stroke();
+    if (goteando && !REDUCIR) { const f = (tiempo * 2.2) % 1; forma(g, 'gota', x, cy + 2 + f * 7 * s, 1.6, colorDe(def.color), 1, 0); }
+    g.strokeStyle = rgba(C.dim, 0.5); g.lineWidth = 1.2; g.beginPath(); g.moveTo(x, cy + 10 * s); g.lineTo(x, this.yv - this.radio() - 2); g.stroke();
+    texto(g, 'suero', x + bw / 2 + 4, by + 12 * s, { size: 9.5 * s, color: C.muted });
+  },
+  mareografos(g) {
+    const s = W / 360; const x0 = W - this.col; const PXL = 11 * s; // px por litro, igual en las tres reglas
+    g.fillStyle = rgba(C.bg, 0.8); g.fillRect(x0, 0, this.col, H);
+    g.strokeStyle = rgba(C.line || C.muted, 0.3); g.beginPath(); g.moveTo(x0, 0); g.lineTo(x0, H); g.stroke();
+    const regla = (c, yTop, yBot, cero, nombre, enlaceY) => {
+      const d = mostrado(c) - BASE[c]; const xr = x0 + this.col - 12 * s;
+      g.strokeStyle = rgba(C.dim, 0.75); g.lineWidth = 1; g.beginPath(); g.moveTo(xr, yTop); g.lineTo(xr, yBot); g.stroke();
+      for (let l = -6; l <= 6; l += 0.5) {
+        const y = cero - l * PXL; if (y < yTop || y > yBot) continue;
+        const mayor = Number.isInteger(l); g.beginPath(); g.moveTo(xr, y); g.lineTo(xr + (mayor ? 6 : 3.5) * s, y); g.stroke();
+      }
+      g.strokeStyle = rgba(C.oro, 0.9); g.lineWidth = 1.2; g.beginPath(); g.moveTo(xr - 3, cero); g.lineTo(xr + 7 * s, cero); g.stroke();
+      const yl = clamp(cero - d / 1000 * PXL, yTop, yBot);
+      const fuera = (cero - d / 1000 * PXL) < yTop || (cero - d / 1000 * PXL) > yBot;
+      const col = d > 0.5 ? C.oro : d < -0.5 ? C.rojo : C.dim;
+      // ola en la regla
+      g.strokeStyle = rgba(pal().agua, 0.95); g.lineWidth = 1.6; g.beginPath();
+      for (let k = 0; k <= 8; k++) g.lineTo(xr - 1 + k * 1.1 * s, yl + Math.sin(k + tiempo * 4) * 1.1); g.stroke();
+      g.fillStyle = col; g.beginPath(); g.moveTo(xr - 2, yl); g.lineTo(xr - 7, yl - 3.5); g.lineTo(xr - 7, yl + 3.5); g.closePath(); g.fill();
+      if (fuera) texto(g, d > 0 ? '▲' : '▼', xr + 3 * s, d > 0 ? yTop - 2 : yBot + 9, { size: 8, color: col, align: 'center', italic: false });
+      // rótulo a la izquierda, dentro de la escena
+      texto(g, nombre, x0 - 4, yTop + 9 * s, { size: 9 * s, color: C.dim, align: 'right', italic: false, peso: '600', caja: true });
+      texto(g, fmtD(d) + ' mL', x0 - 4, yTop + 22 * s, { size: 12 * s, color: col, align: 'right', italic: false, peso: 'bold', caja: true });
+      g.strokeStyle = rgba(col, 0.4); g.setLineDash([2, 3]); g.lineWidth = 0.8; g.beginPath(); g.moveTo(xr - 7, yl); g.lineTo(x0 + 2, yl); g.stroke(); g.setLineDash([]);
+    };
+    regla('rio', this.ys + 4, this.yv + this.r0 + 6, this.yv, 'PLASMA', this.yv);
+    regla('marisma', this.yv + this.r0 + 14, this.ym - 4, this.ym - 12, 'INTERSTICIO');
+    regla('mar', this.ym + 8, H - 6, (this.ym + H) / 2 + 6, 'CÉLULAS');
+    texto(g, 'regla', x0 + this.col / 2, this.ys - 4, { size: 8.5 * s, color: C.muted, align: 'center' });
+    texto(g, 'en L', x0 + this.col / 2, this.ys + 0 * s + 8, { size: 8 * s, color: C.muted, align: 'center' });
+    // rótulos de capas
+    texto(g, 'vaso · el río', 6, this.yv - this.radio() - 7, { size: 9.5 * s, color: C.texto, caja: true });
+    texto(g, 'tierra empapada · la marisma', 6, this.ym - 8, { size: 9.5 * s, color: C.texto, caja: true });
+    texto(g, 'células · el mar', 6, H - 8, { size: 9.5 * s, color: C.texto, caja: true });
+    const aq = this.acuas[2]; texto(g, 'acuaporina', aq.x + 9, this.ym - 9, { size: 8.5 * s, color: C.oro, caja: true });
+    if (estado.edema) texto(g, 'desborda · ilustrativo', (W - this.col) * 0.24, this.ys - 8, { size: 9.5 * s, color: C.rojo, align: 'center', caja: true });
+    if (tiempo < rellenoHasta) texto(g, 'la tierra cede agua · sin cifra', (W - this.col) * 0.5, this.yv + this.radio() + 26 * s, { size: 9 * s, color: C.verde, align: 'center', caja: true });
+    if (estado.hemorragia) texto(g, 'herida', this.herida.x + 12, this.ys - 6, { size: 9 * s, color: C.rojo, caja: true });
+  }
+};
+
+const escena = () => estado.dir === 1 ? Estuario : Corte;
+
+/* ============================================================
+   7. Bucle
+   ============================================================ */
+function medir() {
+  const ancho = lienzo.parentElement.clientWidth || 358;
+  W = Math.round(ancho); H = Math.round(W * 0.98);
+  H = Math.min(H, 540);
+  DPR = Math.min(window.devicePixelRatio || 1, 2.5);
+  lienzo.width = Math.round(W * DPR); lienzo.height = Math.round(H * DPR); lienzo.style.height = H + 'px';
+  capaTinta.width = lienzo.width; capaTinta.height = lienzo.height; ctxT.setTransform(DPR, 0, 0, DPR, 0, 0);
+  escena().layout();
+  // las que ya llegaron se recolocan en el paisaje nuevo; las que viajaban, llegan
+  for (const p of parts) if (p.asentada) escena().colocar(p);
+  if (parts.some(p => !p.asentada)) finalizarTodo();
+  parts = parts.filter(p => !p.quitar);
+  const o = escena().objetivos(); for (const k in nivel) { nivel[k].v = o[k]; nivel[k].vel = 0; }
+}
+
+let tPrev = performance.now();
+function paso(dt) {
+  tiempo += dt;
+  const E = escena();
+  // la tinta se desvanece poco a poco (acuarela)
+  ctxT.save(); ctxT.globalCompositeOperation = 'destination-out'; ctxT.fillStyle = 'rgba(0,0,0,0.018)'; ctxT.fillRect(0, 0, W, H); ctxT.restore();
+  for (const p of parts) {
+    if (p.asentada) { p.edad += dt; E.mover(p, dt); continue; }
+    if (!p.viva) { p.espera -= dt; if (p.espera > 0) continue; p.viva = true; p.pts = E.ruta(p); p.seg = 0; p.t = 0; [p.x, p.y] = p.pts[0]; }
+    const pts = p.pts; const a = pts[p.seg], b = pts[p.seg + 1];
+    const largo = Math.max(4, Math.hypot(b[0] - a[0], b[1] - a[1]));
+    p.t += dt * p.vel * (W / 360) / largo;
+    while (p.t >= 1 && !p.asentada) {
+      p.t -= 1; p.seg++;
+      if (p.seg === 1 && COMP.includes(p.de) && !p.salio) { contar(p.ev, p.de); p.salio = true; }
+      // luz en las compuertas y poros al pasar
+      if (p.puerta && Math.abs(pts[p.seg][0] - p.puerta.x) < 2) { p.puerta.luz = 1; p.puerta.dir = pts[p.seg + 1] && pts[p.seg + 1][1] < pts[p.seg][1] ? -1 : 1; }
+      if (p.acua && Math.abs(pts[p.seg][0] - p.acua.x) < 1 && Math.abs(pts[p.seg][1] - E.ym) < 1) { p.acua.luz = 1; p.acua.dir = p.de === 'mar' ? -1 : 1; }
+      if (p.poro && Math.abs(pts[p.seg][0] - p.poro.x) < 1) p.poro.luz = 1;
+      if (p.seg >= pts.length - 1) { p.x = b[0]; p.y = b[1]; llegar(p); break; }
+    }
+    if (p.asentada) continue;
+    const i = p.seg; const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(pts.length - 1, i + 2)];
+    [p.x, p.y] = cr(p0, p1, p2, p3, clamp(p.t, 0, 1));
+    p.y += Math.sin(tiempo * 6 + p.semilla) * 0.6;
+    if (p.forma !== 'sangre') tinta(p.x, p.y, colorDe(p.color), 6, p.forma === 'gota' ? 0.018 : p.forma === 'anillo' ? 0.025 : 0.05);
+  }
+  if (parts.some(p => p.quitar)) parts = parts.filter(p => !p.quitar);
+  // muelles de los niveles
+  const o = E.objetivos(); for (const k in nivel) muelle(nivel[k], o[k], dt);
+  // frase viva por fases
+  if (ultimoEv) {
+    const pr = progresoEv(ultimoEv);
+    if (ultimoEv.fase === 0 && pr >= 0.35 && ultimoEv.def.medio) { ultimoEv.fase = 1; decir(ultimoEv.def.medio, ultimoEv.def.fuente); }
+    if (ultimoEv.fase < 2 && ultimoEv.pend <= 0) { ultimoEv.fase = 2; decir(ultimoEv.def.frase, ultimoEv.def.fuente); actualizarBotones(); }
+  }
+}
+
+function dibujar() {
+  const g = ctx; g.setTransform(DPR, 0, 0, DPR, 0, 0);
+  const E = escena();
+  E.dibujar(g);
+  const t = tiempo;
+  for (const p of parts) {
+    if (!p.viva && !p.asentada) continue;
+    const viejo = p.asentada ? clamp(1 - (p.edad - 20) / 20, 0.45, 1) : 1;
+    forma(g, p.forma, p.x, p.y, p.forma === 'estrella' ? 2.3 : 2.6, colorDe(p.color), 0.95 * viejo, t * 1.5 + p.semilla);
+  }
+  g.drawImage(viñeta, 0, 0, W, H);
+  E.mareografos(g);
+  pintarMareas();
+}
+
+function bucle(ahora) {
+  const dt = Math.min(0.05, (ahora - tPrev) / 1000); tPrev = ahora;
+  paso(dt); dibujar();
+  requestAnimationFrame(bucle);
+}
+function dibujarUnaVez() {
+  const E = escena(); const o = E.objetivos(); for (const k in nivel) { nivel[k].v = o[k]; nivel[k].vel = 0; }
+  dibujar();
+}
+
+/* ============================================================
+   8. Interfaz
+   ============================================================ */
+const $ = id => document.getElementById(id);
+const fraseEl = $('frase');
+let fraseActual = '';
+function decir(html, fuente) {
+  const nuevo = `${html} <span class="org">(${fuente})</span>`;
+  if (nuevo === fraseActual) return; fraseActual = nuevo;
+  fraseEl.innerHTML = nuevo;
+  lienzo.setAttribute('aria-label', fraseEl.textContent);
+  if (!REDUCIR && window.Motion) window.Motion.animate(fraseEl, { opacity: [0.2, 1], transform: ['translateY(4px)', 'translateY(0)'] }, { duration: 0.45, easing: 'ease-out' });
+}
+const ultimoOrigen = { rio: FUENTE_INICIO, marisma: FUENTE_INICIO, mar: FUENTE_INICIO };
+function pintarMareas() {
+  for (const c of COMP) {
+    const v = mostrado(c), d = v - BASE[c];
+    const aprox = eventos.some(ev => ev.def.rango && ev.def.delta[c]);
+    $('tot-' + c).textContent = (aprox ? '≈ ' : '') + fmt(v) + ' mL';
+    const dl = $('dl-' + c); dl.textContent = fmtD(d) + ' mL';
+    dl.className = 'dl' + (d > 0.5 ? ' sube' : d < -0.5 ? ' baja' : '');
+  }
+}
+function fijarOrigenes(def) {
+  for (const c of COMP) {
+    if (def.org[c]) {
+      const n = eventos.filter(ev => ev.def.delta[c]).length;
+      ultimoOrigen[c] = n > 1 ? 'suma de ' + n + ' sucesos (tabla de abajo)' : def.org[c];
+    }
+    $('org-' + c).textContent = ultimoOrigen[c];
+  }
+}
+
+function actualizarBotones() {
+  const f = FLUIDOS[estado.fluido];
+  const bI = $('btn-infundir');
+  const tope = estado.infusiones >= 3; const hiperBloq = estado.fluido === 'hiper' && estado.hiperUsado;
+  bI.disabled = tope || hiperBloq;
+  bI.innerHTML = `Infundir ${f.dosis} de ${f.nombre}` + (tope ? '<small>tope de la maqueta: 3 infusiones</small>' : hiperBloq ? '<small>una sola dosis, como en la Fig. 10.1</small>' : '');
+  $('btn-hemorragia').disabled = estado.hemorragia;
+  const bR = $('btn-reponer'); bR.disabled = !estado.hemorragia || estado.repuesto;
+  bR.innerHTML = 'Reponer con 2,25 L de Ringer<small>' + (estado.repuesto ? 'ya repuesto' : estado.hemorragia ? 'Tabla 11.1' : 'tras la hemorragia') + '</small>';
+  $('dato').textContent = f.dato;
+}
+
+document.querySelectorAll('.chip').forEach(b => b.addEventListener('click', () => {
+  estado.fluido = b.dataset.fluido;
+  document.querySelectorAll('.chip').forEach(o => o.setAttribute('aria-pressed', String(o === b)));
+  actualizarBotones();
+}));
+$('btn-infundir').addEventListener('click', () => {
+  if (estado.infusiones >= 3) return;
+  const def = FLUIDOS[estado.fluido];
+  if (estado.fluido === 'hiper') { if (estado.hiperUsado) return; estado.hiperUsado = true; }
+  estado.infusiones++;
+  lanzar(def); fijarOrigenes(def); actualizarBotones();
+});
+$('btn-hemorragia').addEventListener('click', () => {
+  if (estado.hemorragia) return; estado.hemorragia = true;
+  lanzar(HEMORRAGIA); fijarOrigenes(HEMORRAGIA); actualizarBotones();
+});
+$('btn-reponer').addEventListener('click', () => {
+  if (!estado.hemorragia || estado.repuesto) return; estado.repuesto = true;
+  lanzar(REPONER); fijarOrigenes(REPONER); actualizarBotones();
+});
+$('btn-edema').addEventListener('click', e => {
+  estado.edema = !estado.edema; e.currentTarget.setAttribute('aria-pressed', String(estado.edema));
+  if (estado.edema) decir(FRASE_EDEMA + (estado.fluido.startsWith('alb') ? ' Toda albúmina expande más si hay hipoalbuminemia.' : ''), FUENTE_EDEMA + (estado.fluido.startsWith('alb') ? ' · mar-albumina' : ''));
+  else if (ultimoEv) decir(ultimoEv.def.frase, ultimoEv.def.fuente); else decir(FRASE_INICIO, FUENTE_INICIO);
+  if (REDUCIR) dibujarUnaVez();
+});
+$('btn-reinicio').addEventListener('click', () => {
+  eventos = []; parts = []; ultimoEv = null; rellenoHasta = -1;
+  Object.assign(estado, { infusiones: 0, hiperUsado: false, hemorragia: false, repuesto: false });
+  if (Corte.charcoSangre) Corte.charcoSangre = 0;
+  ctxT.clearRect(0, 0, W, H);
+  for (const c of COMP) { ultimoOrigen[c] = FUENTE_INICIO; $('org-' + c).textContent = FUENTE_INICIO; }
+  decir(FRASE_INICIO, FUENTE_INICIO); actualizarBotones();
+  if (REDUCIR) dibujarUnaVez();
+});
+function elegirDir(n) {
+  estado.dir = n;
+  $('dir-1').setAttribute('aria-selected', String(n === 1)); $('dir-2').setAttribute('aria-selected', String(n === 2));
+  ctxT.clearRect(0, 0, W, H);
+  medir(); if (REDUCIR) dibujarUnaVez();
+}
+$('dir-1').addEventListener('click', () => elegirDir(1));
+$('dir-2').addEventListener('click', () => elegirDir(2));
+function elegirAgua(a) {
+  estado.agua = a; $('agua-tok').setAttribute('aria-pressed', String(a === 'tokens')); $('agua-fil').setAttribute('aria-pressed', String(a === 'filtro'));
+  if (REDUCIR) dibujarUnaVez();
+}
+$('agua-tok').addEventListener('click', () => elegirAgua('tokens'));
+$('agua-fil').addEventListener('click', () => elegirAgua('filtro'));
+
+/* Iconos de forma en chips y leyenda (los mismos dibujos que en la escena) */
+function iconos() {
+  const COL = { anillo: C.texto, rombo: C.ambar, triangulo: C.verde, grano: C.purpura, granoGrande: C.purpura, estrella: C.oro, gota: C.filtro, sangre: C.rojo, brillo: C.oro };
+  document.querySelectorAll('svg[data-forma]').forEach(svg => {
+    const f = svg.dataset.forma; const c = f === 'gota' ? (estado.agua === 'tokens' ? C.texto : C.filtro) : COL[f];
+    const d = {
+      anillo: `<circle r="4.6" fill="none" stroke="${c}" stroke-width="1.6"/>`,
+      rombo: `<path d="M0 -6 L4.2 0 L0 6 L-4.2 0Z" fill="${c}"/>`,
+      triangulo: `<path d="M0 -5.5 L5.2 4 L-5.2 4Z" fill="${c}"/>`,
+      grano: `<circle r="3.6" fill="${c}"/>`,
+      granoGrande: `<circle r="3.8" fill="${c}"/><circle r="6.4" fill="none" stroke="${c}" stroke-opacity=".5"/>`,
+      estrella: `<path d="M0 -7 L1.6 -1.6 L7 0 L1.6 1.6 L0 7 L-1.6 1.6 L-7 0 L-1.6 -1.6Z" fill="${c}"/>`,
+      gota: `<path d="M0 -6.5 C2 -3 4.4 0 4.4 2.4 A4.4 4.4 0 0 1 -4.4 2.4 C-4.4 0 -2 -3 0 -6.5Z" fill="${c}"/>`,
+      sangre: `<path d="M0 -6.5 C2 -3 4.4 0 4.4 2.4 A4.4 4.4 0 0 1 -4.4 2.4 C-4.4 0 -2 -3 0 -6.5Z" fill="${c}"/>`,
+      brillo: `<path d="M-6 0H6M0 -6V6" stroke="${c}" stroke-width="1.2"/><circle r="2" fill="${c}"/>`
+    }[f];
+    svg.innerHTML = d;
+  });
+}
+document.querySelectorAll('.opciones').forEach(grupo => grupo.addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  grupo.querySelectorAll('button').forEach(o => o.setAttribute('aria-pressed', String(o === b)));
+  const partes = [...document.querySelectorAll('.opciones')].map(gp => { const s = gp.querySelector('[aria-pressed="true"]'); return s ? s.textContent : null; }).filter(Boolean);
+  $('resumen').textContent = 'Tu elección: ' + partes.join(' · ') + '.';
+}));
+$('agua-fil').addEventListener('click', iconos); $('agua-tok').addEventListener('click', iconos);
+
+let anchoPrevio = 0;
+new ResizeObserver(() => {
+  const a = Math.round(lienzo.parentElement.clientWidth);
+  if (a && a !== anchoPrevio) { anchoPrevio = a; medir(); if (REDUCIR) dibujarUnaVez(); }
+}).observe(lienzo.parentElement);
+
+iconos(); medir(); decir(FRASE_INICIO, FUENTE_INICIO); actualizarBotones();
+if (REDUCIR) dibujarUnaVez(); else requestAnimationFrame(t => { tPrev = t; requestAnimationFrame(bucle); });
+</script>
+</body>
+</html>

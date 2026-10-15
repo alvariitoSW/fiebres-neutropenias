@@ -201,7 +201,7 @@ revisión** (decisión del usuario del 14/10: primero la fase 1 entera). Las fas
 
 | # | Clave | Qué | Estado | Notas |
 |---|---|---|---|---|
-| 1 | `marino-mapa` | Mapa visual de todo Marino (profesor, modo mapa) | en curso (2026-10-15) | fase 1 terminada |
+| 1 | `marino-mapa` | Mapa visual de todo Marino (profesor, modo mapa) | en revisión (2026-10-15) | maquetas: https://claude.ai/artifact/XkbXSjmeJF7BeHhQ2wSC4L |
 
 **Encargo de `marino-mapa`** (tipo `mapa`, profesor con el modelo potente):
 - **Qué quiero**: el «Mapa visual» de The ICU Book en `autonomo/ideas/marino.md`. Son los pocos modelos grandes,
