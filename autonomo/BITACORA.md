@@ -165,6 +165,9 @@ El resto del tablero sigue `aparcada` hasta que apruebes la entrada de la bitác
   - R8: la gasometría de ejemplo se queda como está, con su nota.
   - R9: hipermagnesemia grave consultada en la web (Manual Merck), anotada en la ficha.
   - R10: Ringer lactato consultado en la web (WikEM y StatPearls), anotado.
+- **Revisar las PR #13, #14 y #15** (R11-R13, fase 1 terminada). Decisiones ya respondidas (15/10): los topes de
+  la reversión de R11 se quedan; las abreviaturas de R12 valen; las calculadoras de tóxicos de R13 se quedan solo
+  para adultos (20-300 kg).
 - **Regla sin respuesta**: que los jueces midan también las tablas que se salen de su tarjeta (no solo la página).
   Salió en R5. ¿La apruebas?
 
