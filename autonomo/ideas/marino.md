@@ -155,3 +155,15 @@ Coinciden los tres revisores:
   - weaning el día 7: SBT fallido con la SvO₂ que cae; fuga <110 mL;
   - «encuentra el error»: clorhexidina + SOD;
   - «piensa y destapa»: ¿ansiedad o fracaso en el SBT?; extubar sube el trabajo respiratorio (Fig. 30.2).
+
+### R11 · Caps. 45-47 (Marino Neuro: consciencia, movimiento, ictus) · 2026-10-15
+
+- **Cráneo vivo** (decisión grande, con maqueta): PIC, PPC = PAM − PIC, hematoma, edema, hidrocefalia, herniación y
+  pupilas. Serviría para HIC, HSA, edema del ictus, coma y muerte encefálica. La cara de Glasgow ya existe y podría
+  ser su cara.
+- **Unión neuromuscular con Motion**, como los receptores: miastenia, bloqueo y reversión, GBS frente a miastenia.
+- **Ecógrafo**: burbujas del FOP en el apical de 4 cámaras.
+- **Casos**:
+  - el alcohólico del día 1 al 4;
+  - la HIC con warfarina o con apixabán (andexanet);
+  - la crisis miasténica.

@@ -372,3 +372,17 @@ Lo demás va al parte `autonomo/partes/2026-10-14-marino-r1.md` y a `autonomo/id
 - capnografía `#page=44`.
 
 Parte: `autonomo/partes/2026-10-14-marino-r2.md`.
+
+## Marino Neuro: revisión R11 del plan Marino, caps. 45-47 (octubre 2026)
+
+`marino-r11` (revisión sin construir), 1 vuelta, 14 fichas. Corregido:
+- erratas de dosis de la Tabla 47.4 con la dosis de la ficha técnica y su nota: idarucizumab 2,5 g × 2, desmopresina
+  0,3-0,4 µg/kg, andexanet según la FDA;
+- NaCl 23,4 % con el bolo fijo primero;
+- tope de 5 mg de la neostigmina;
+- nota CAM-ICU con las dos versiones;
+- abstinencia, PImax, PA del ictus, Glasgow intubado;
+- límites y umbrales redondeados;
+- huecos y `#page=`.
+
+Parte: `autonomo/partes/2026-10-15-marino-r11.md`.

@@ -121,7 +121,7 @@
                 <div class="field-hook">"¿con qué capacidad vital hay que pensar seriamente en intubar a un miasténico?"</div>
             </div>
             <div class="card-face back">
-                <div class="back-hook">Con ≤15 mL/kg (o &lt;1 L), o una presión inspiratoria máxima de −20 cmH₂O. Sin esperar a que esté in extremis.</div>
+                <div class="back-hook">Con ≤15 mL/kg (o &lt;1 L) y una presión inspiratoria máxima de −20 cmH₂O. Sin esperar a que esté in extremis.</div>
                 <div class="back-cta">Ver contenido completo →</div>
             </div>
         </div></div>
@@ -217,7 +217,7 @@
         <!-- ===== FICHA I: ESTADOS ALTERADOS DE LA CONSCIENCIA (Cap. 45) ===== -->
         <div id="mn-consciencia" class="tab-content">
             <h3 style="color: var(--accent-purple);">Estados alterados de la consciencia</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 45 "Disorders of Consciousness".</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 45 "Disorders of Consciousness". <a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=2" target="_blank" rel="noopener">PDF, pág. 2 →</a></p>
 
             <p>Reconocer el entorno e interactuar con él (la consciencia) es lo esencial de la vida, y perderlo es uno de los signos más temidos de una enfermedad grave. El capítulo trata los trastornos que se ven en la UCI: el <strong>delirio</strong>, el <strong>coma</strong> y el último de todos, la <strong>muerte encefálica</strong>.</p>
 
@@ -254,6 +254,10 @@
                     <div class="micro-prof-body" id="mn-cons-delirio"><p>Despertar intacto con la conciencia alterada: <strong>fluctuante</strong> en el delirio, <strong>permanente</strong> en la demencia.</p></div>
                 </div>
                 <div class="micro-prof-item">
+                    <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧩 Psicosis</span> <span class="toggle-icon">+</span></div>
+                    <div class="micro-prof-body" id="mn-cons-psicosis"><p>Despierta pero <strong>sin conciencia</strong> del entorno (Tabla 45.1). El capítulo no la describe aparte: solo avisa de que el delirio se confunde con ella (ficha «Delirio en la UCI»).</p></div>
+                </div>
+                <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>😶 Estupor</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body" id="mn-cons-estupor"><p>Cuesta despertarlo y no es consciente de parte o de todo el entorno.</p></div>
                 </div>
@@ -284,7 +288,7 @@
         <!-- ===== FICHA II: DELIRIO (Cap. 45) ===== -->
         <div id="mn-delirio" class="tab-content">
             <h3 style="color: var(--accent-purple);">Delirio en la UCI</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 45 y Apéndice 2 (CAM-ICU).</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 45 y Apéndice 2 (CAM-ICU). <a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=4" target="_blank" rel="noopener">PDF, pág. 4 →</a></p>
 
             <p>El delirio de la UCI es una manifestación de <strong>disfunción cerebral</strong>, una parte más del fallo multiorgánico del crítico. Afecta al <span class="hl-azul">25-50%</span>, sobre todo a ancianos y pacientes con ventilación mecánica. El delirio de la abstinencia alcohólica es otra entidad (ficha siguiente).</p>
 
@@ -311,7 +315,7 @@
                 <div class="form-group"><label for="mn-cam-4">IV. Nivel de consciencia alterado: ¿es distinto de alerta (hiperalerta o letárgico)?</label><select id="mn-cam-4"><option value="">—</option><option value="si">Sí</option><option value="no">No</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="mn-cam-resultado"></div>
             </div>
-            <details class="nota-plegable"><summary>📝 Nota de fuentes</summary><p class="fuente-ficha">Nota de fuentes: el CAM-ICU del Apéndice 2 valora la inatención con 5 objetos que hay que recordar; la tabla del CAM-UCI de Fisiopatología UCI (El Libro Azul) habla de "pruebas de atención estandarizadas" sin concretar. La regla diagnóstica es la misma en las dos.</p></details>
+            <details class="nota-plegable" id="mn-nota-cam"><summary>📝 Nota de fuentes</summary><p class="fuente-ficha">Nota de fuentes: el CAM-ICU de Marino (Apéndice 2, <a class="biblio-link" href="docs/marino-2024-toxicologia-caps52-53-apendices.pdf#page=43" target="_blank" rel="noopener">pág. 43</a>) y el CAM-UCI de El Libro Azul (Fisiopatología UCI, Cap. 21, Tabla 2, <a class="biblio-link" href="docs/libro-azul-seccion-iii-inmunitario-parte2.pdf#page=33" target="_blank" rel="noopener">pág. 33</a>) <strong>no definen igual los criterios II, III y IV</strong>. Se muestran las dos versiones, sin elegir una; la calculadora de la ficha sigue la de Marino. Coinciden en la regla final (I + II + III o IV).</p><p class="fuente-ficha"><strong>II · Inatención.</strong> Marino: dificultad para centrar la atención; se pueden enseñar 5 objetos sencillos y pedir que los recuerde seguidos. Libro Azul: «puntajes menores a 8 en cualquiera de los componentes visual o auditivo del examen de tamizaje para la atención».</p><p class="fuente-ficha"><strong>III · Pensamiento desorganizado.</strong> Marino: respuestas incorrectas a <strong>3 o más</strong> de las 4 preguntas <strong>Y</strong> dificultad para seguir órdenes. Libro Azul: respuestas incorrectas a <strong>2 o más</strong> de las 4 preguntas <strong>O</strong> incapacidad para obedecer órdenes.</p><p class="fuente-ficha"><strong>IV · Nivel de consciencia.</strong> Marino: distinto de alerta, como hiperalerta o letárgico. Libro Azul: distinto de alerta, como vigilante, letárgico o con estupor.</p></details>
             <p><button type="button" class="especialidad-link" data-especialidad="fisioUci" data-view="inmunologia" data-panel="panel-inmuno-tabs" data-tab="inmuno-encefalopatia-diagnostico">🧠 Delirio y CAM-UCI en la encefalopatía séptica (Fisiopatología UCI) →</button></p>
 
             <dl class="kv-row" id="mn-del-demencia"><dt>Delirio frente a demencia</dt><dd>Comparten inatención y pensamiento desorganizado; distinguen al delirio el <strong>comienzo agudo</strong> y el <strong>curso fluctuante</strong>.</dd></dl>
@@ -320,7 +324,7 @@
             <p class="section-label">Tratamiento</p>
             <div class="warning-box" id="mn-del-tratamiento"><strong>Ningún fármaco previene ni corrige el delirio de la UCI.</strong> Solo se recomiendan para calmar al paciente muy agitado, lo que no trata el delirio de fondo.</div>
             <div style="overflow-x:auto;">
-            <table class="data-table" id="mn-tabla-45-2">
+            <table class="data-table" id="mn-tabla-45-2" style="font-size:0.76rem;">
                 <thead><tr><th>Fármaco</th><th>Dosis</th><th>Comentario</th></tr></thead>
                 <tbody>
                     <tr><td><strong>Dexmedetomidina</strong> (preferida)</td><td>Carga opcional 1 µg/kg IV en 10 min; luego 0,2-1,5 µg/kg/h</td><td>Bradicardia e hipotensión; se ha descrito abstinencia con hiperexcitabilidad</td></tr>
@@ -329,16 +333,21 @@
                 </tbody>
             </table>
             </div>
-            <details class="nota-plegable"><summary>📝 Nota de interpretación</summary><p class="fuente-ficha">Nota de interpretación: la fuente dice que la ziprasidona "solo se puede dar por vía intramuscular". También existe por vía oral; lo que se quiere decir es que, de los fármacos de la tabla, es el que no se da por vía IV, y eso es lo útil cuando no hay acceso venoso.</p></details>
+            <details class="nota-plegable"><summary>📝 Nota de interpretación</summary><p class="fuente-ficha">Nota de interpretación (conocimiento general, no de la fuente): el libro dice que la ziprasidona "solo se puede dar por vía intramuscular" (pág. 6). La ziprasidona también existe por vía oral; en la Tabla 45.2 lo que cuenta, según la fuente, es que la vía IM sirve cuando el acceso venoso es problemático.</p></details>
             <div class="compare-box blue" style="margin-top:12px;" id="mn-comparativa-delirio">
                 <p><strong>🔗 Comparativa de fuentes: el delirio en la app</strong></p>
-                <div style="overflow-x:auto;"><table class="data-table comparativa-fuentes">
-                    <thead><tr><th>Punto</th><th>Marino, Cap. 45 (esta ficha)</th><th>Marino, Cap. 6 (Fundamentos)</th><th>El Libro Azul (encefalopatía séptica)</th></tr></thead>
+                <p class="fuente-ficha" style="margin-bottom:2px;">↔ Desliza la tabla para ver las cuatro columnas.</p>
+                <div style="overflow-x:auto;"><table class="data-table comparativa-fuentes" style="min-width:560px; hyphens:none; word-break:normal; overflow-wrap:normal;">
+                    <thead><tr><th>Punto</th><th>Marino, Cap. 45</th><th>Marino, Cap. 6</th><th>Libro Azul</th></tr></thead>
                     <tbody>
                         <tr><td>Fármaco de elección</td><td>Dexmedetomidina</td><td>Dexmedetomidina (menos delirio que benzodiacepinas o propofol)</td><td>Dexmedetomidina sobre benzodiacepinas y opioides</td></tr>
                         <tr><td>Haloperidol</td><td>5 mg IV; si a los 15 min no hay efecto, 10 mg; mantener con el 25% cada 6 h</td><td>Igual en la Tabla 6.8 (el texto: 20 min y cada 4-6 h; midazolam 1-2 mg si está muy agitado)</td><td>—</td></tr>
                         <tr><td>Antipsicótico sin vía IV</td><td>Ziprasidona IM</td><td>El haloperidol es el único que se da IV</td><td>—</td></tr>
-                        <tr><td>Cribado</td><td>CAM-ICU del Apéndice 2 (inatención con 5 objetos)</td><td>—</td><td>CAM-UCI e ICDSC</td></tr>
+                        <tr><td>Cribado</td><td>CAM-ICU del Apéndice 2</td><td>—</td><td>CAM-UCI e ICDSC</td></tr>
+                        <tr><td>CAM-ICU · II inatención</td><td>Dificultad para centrar la atención; 5 objetos sencillos que hay que recordar seguidos</td><td>—</td><td>Puntaje &lt;8 en el componente visual o auditivo del examen de tamizaje de la atención</td></tr>
+                        <tr><td>CAM-ICU · III pensamiento desorganizado</td><td>Falla ≥3 de las 4 preguntas <strong>Y</strong> le cuesta seguir órdenes</td><td>—</td><td>Falla ≥2 de las 4 preguntas <strong>O</strong> no puede obedecer órdenes</td></tr>
+                        <tr><td>CAM-ICU · IV nivel de consciencia</td><td>Distinto de alerta (hiperalerta o letárgico)</td><td>—</td><td>Distinto de alerta (vigilante, letárgico o con estupor)</td></tr>
+                        <tr><td>CAM-ICU · regla final</td><td>I + II + (III o IV)</td><td>—</td><td>Igual: 1 + 2 + (3 o 4)</td></tr>
                         <tr><td>Sedación</td><td>—</td><td>La dexmedetomidina evita las vacaciones de sedación</td><td>Ventanas de sedación diarias</td></tr>
                     </tbody>
                 </table></div>
@@ -362,7 +371,7 @@
         <!-- ===== FICHA III: ABSTINENCIA ALCOHÓLICA (Cap. 45) ===== -->
         <div id="mn-abstinencia" class="tab-content">
             <h3 style="color: var(--accent-purple);">Abstinencia alcohólica</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 45.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 45. <a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=7" target="_blank" rel="noopener">PDF, pág. 7 →</a></p>
 
             <p>El alcohol es un depresor del SNC: estimula la liberación de <strong>GABA</strong>, el principal neurotransmisor inhibidor. El consumo crónico aumenta la densidad de receptores GABA, lo que contribuye al estado de <span class="hl-azul">excitación</span> de la abstinencia.</p>
 
@@ -378,9 +387,11 @@
             </table>
             </div>
             <p class="fuente-ficha">Tabla 45.3 — Rasgos clínicos de la abstinencia alcohólica.</p>
+            <dl class="kv-row" id="mn-oh-orden"><dt>Orden de aparición</dt><dd>Los primeros signos son <strong>agitación y temblor</strong>, desde las 6 h. Después pueden venir convulsiones generalizadas, alucinaciones y signos de hiperactividad autonómica (taquicardia, hipertensión). <span class="hl-azul">El delirio es un hallazgo relativamente tardío</span> y se acompaña de aumento de la actividad motora.</dd></dl>
             <div class="agua-simulador" id="mn-oh-calc">
                 <h4 style="color: var(--accent-purple);">🧮 ¿Qué esperar según las horas desde la última copa? (Tabla 45.3)</h4>
                 <div class="form-group"><label for="mn-oh-horas">Horas desde la última copa</label><input type="number" id="mn-oh-horas" min="0" max="240" step="1" value="30" inputmode="decimal"></div>
+                <p class="fuente-ficha" id="mn-oh-origen">Origen: <strong>ilustrativo</strong>. La Tabla 45.3 da el comienzo y la duración de cada rasgo, no una ventana. Aquí cada rasgo cuenta desde su inicio más temprano hasta su inicio más tardío + su duración máxima (p. ej., convulsiones: 6 h hasta 48 h + 3 días = 120 h). Rango del campo (0-240 h): fisiología general, no de la ficha.</p>
                 <div class="tfg-estado tfg-estado-ok" id="mn-oh-resultado"></div>
             </div>
             <dl class="kv-row" id="mn-oh-escalas"><dt>Monitorizar la gravedad</dt><dd>La escala estándar es la <strong>CIWA-Ar</strong>, pero no se recomienda en el delirio de abstinencia: para ese delirio se usa el <strong>CAM-ICU</strong> (ficha anterior).</dd></dl>
@@ -428,7 +439,7 @@
         <!-- ===== FICHA IV: COMA (Cap. 45) ===== -->
         <div id="mn-coma" class="tab-content">
             <h3 style="color: var(--accent-purple);">Coma: causas y exploración</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 45.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 45. <a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=9" target="_blank" rel="noopener">PDF, pág. 9 →</a></p>
 
             <p>El paciente en coma (no despierta y no es consciente) es uno de los problemas más difíciles de la UCI, porque la recuperación <strong>nunca es segura</strong>.</p>
 
@@ -492,6 +503,7 @@
             <dl class="kv-row" id="mn-coma-oculovestibular"><dt>Oculovestibular (pruebas calóricas)</dt><dd><strong>50 mL de salino frío</strong> en cada conducto auditivo (jeringa de 50 mL y angiocatéter blando de 2 pulgadas), tras comprobar que el tímpano está íntegro y el conducto libre. Con el tronco intacto, los dos ojos se desvían despacio <strong>hacia el oído irrigado</strong>; se pierde con el tronco dañado. Esperar <strong>5 min</strong> antes del otro lado.</dd></dl>
 
             <p class="section-label">Escala de coma de Glasgow</p>
+            <dl class="kv-row" id="mn-gcs-origen"><dt>Origen y rango</dt><dd>Se creó para valorar la gravedad del <strong>traumatismo craneal</strong> y se extendió después al no traumático. Suma tres componentes (ojos, voz, movimiento). <strong>3</strong> = ausencia total de conciencia y de respuesta; <strong>15</strong> = normal.</dd></dl>
             <div style="overflow-x:auto;">
             <table class="data-table" id="mn-tabla-45-5">
                 <thead><tr><th>Componente</th><th>Respuesta</th><th>Puntos</th></tr></thead>
@@ -506,20 +518,20 @@
             <div class="agua-simulador" id="mn-gcs-calc">
                 <h4 style="color: var(--accent-purple);">🧮 Glasgow (Tabla 45.5) y qué hacer con él</h4>
                 <div class="form-group"><label for="mn-gcs-o">Apertura ocular</label><select id="mn-gcs-o"><option value="4">4 · Espontánea</option><option value="3">3 · A la voz</option><option value="2">2 · Al dolor</option><option value="1">1 · Ninguna</option></select></div>
-                <div class="form-group"><label for="mn-gcs-v">Respuesta verbal</label><select id="mn-gcs-v"><option value="5">5 · Orientada</option><option value="4">4 · Confusa</option><option value="3">3 · Palabras inapropiadas</option><option value="2">2 · Sonidos incomprensibles</option><option value="1">1 · Ninguna</option><option value="T">Intubado (pseudopuntuación 1)</option></select></div>
+                <div class="form-group"><label for="mn-gcs-v">Respuesta verbal</label><select id="mn-gcs-v"><option value="5">5 · Orientada</option><option value="4">4 · Confusa</option><option value="3">3 · Palabras inapropiadas pero reconocibles</option><option value="2">2 · Sonidos incomprensibles</option><option value="1">1 · Ninguna</option><option value="T">Intubado (pseudopuntuación 1)</option></select></div>
                 <div class="form-group"><label for="mn-gcs-m">Respuesta motora</label><select id="mn-gcs-m"><option value="6">6 · Obedece</option><option value="5">5 · Localiza</option><option value="4">4 · Retira</option><option value="3">3 · Decorticación</option><option value="2">2 · Descerebración</option><option value="1">1 · Ninguna</option></select></div>
                 <div class="form-group"><label for="mn-gcs-contexto">Situación</label><select id="mn-gcs-contexto"><option value="ok">Sin relajantes, sedación profunda ni hipotensión</option><option value="no">Relajado, muy sedado o hipotenso</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="mn-gcs-resultado"></div>
             </div>
             <dl class="kv-row" id="mn-gcs-usos"><dt>Para qué sirve</dt><dd>No es fiable con relajantes, sedación profunda o hipotensión. Si no, la mejor puntuación sirve para: 1) definir el coma (<strong>≤8</strong>); 2) estratificar el traumatismo craneal (leve 13-15, moderado 9-12, grave ≤8); 3) decidir la intubación (con ≤8 los reflejos protectores de la vía aérea suelen fallar); 4) pronóstico: en el coma no traumático, un GCS inicial ≤6 tiene siete veces más probabilidades de despertar que uno ≤5.</dd></dl>
-            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la fuente compara "GCS ≤6" con "GCS ≤5", dos grupos que se solapan; lo más probable es que quiera decir GCS de 6 (o más) frente a ≤5. Se reproduce tal cual.</p></details>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la fuente compara "GCS ≤6" con "GCS ≤5" (pág. 14, ref. 27: Teasdale y Jennett, 1976); los dos grupos se solapan. Se reproduce tal cual.</p></details>
             <p><button type="button" class="especialidad-link" data-especialidad="home" data-pulsar="btn-escalas-generales" data-resaltar="#gcs-eye">⚡ Glasgow en Escalas Generales →</button></p>
         </div>
 
         <!-- ===== FICHA V: MUERTE ENCEFÁLICA (Cap. 45) ===== -->
         <div id="mn-muerte-encefalica" class="tab-content">
             <h3 style="color: var(--accent-purple);">Muerte encefálica</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 45. Lista de comprobación adaptada de la guía AAN/AAP/CNS/SCCM de 2023.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 45. Lista de comprobación adaptada de la guía AAN/AAP/CNS/SCCM de 2023. <a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=14" target="_blank" rel="noopener">PDF, pág. 14 →</a></p>
 
             <dl class="kv-row" id="mn-me-definicion"><dt>Definición legal (EE. UU.)</dt><dd>La <em>Uniform Determination of Death Act</em>: está muerto quien ha sufrido el cese irreversible de las funciones circulatoria y respiratoria, o el <strong>cese irreversible de todas las funciones del encéfalo entero, incluido el tronco</strong>. La determinación de muerte encefálica comprueba lo segundo.</dd></dl>
             <dl class="kv-row" id="mn-me-causas"><dt>Cuándo se da</dt><dd>No es frecuente tras el coma no traumático de la UCI: sobre todo tras <strong>traumatismo craneal o hemorragia intracerebral</strong>, cuando la presión intracraneal sube lo bastante como para detener el flujo cerebral. Suele sospecharse por pupilas sin reflejo fotomotor o por no haber esfuerzos respiratorios en el respirador.</dd></dl>
@@ -550,6 +562,7 @@
                 <div class="tfg-estado tfg-estado-ok" id="mn-me-resultado"></div>
             </div>
             <p class="fuente-ficha">Se puede declarar la muerte legal si se confirman los pasos 1-4 o hay una prueba confirmatoria positiva. Un solo explorador basta en el adulto si tiene experiencia.</p>
+            <p class="fuente-ficha" id="mn-me-segundo-apnea">El test de apnea (pág. 16, punto 5) habla de un «segundo test de apnea», pero la Tabla 45.6 solo trae una casilla para el paso 4. Interpretación de la app, no de la tabla: el test se haría en cada una de las dos exploraciones, separadas ≥12 h (pág. 15).</p>
 
             <p class="section-label">Los requisitos, con matices</p>
             <dl class="kv-row" id="mn-me-pam"><dt>Presión</dt><dd>La PAM es la presión fisiológica que importa (medirla si hay arteria). La PAM exigida (<strong>≥75 mmHg</strong>) es mayor que el objetivo habitual (≥65) para contrarrestar la hipertensión intracraneal.</dd></dl>
@@ -565,6 +578,7 @@
                 <li>Si persiste la apnea pese a una subida ≥20 mmHg, confirma la muerte encefálica.</li>
                 <li>Si el segundo test la confirma, la hora de la muerte es la hora en que llega el resultado de esa segunda gasometría. Se suele mantener un tiempo en el respirador para la despedida de la familia.</li>
             </ol>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la Tabla 45.6 (paso 4, pág. 15) pide una PaCO₂ «&gt;60 mmHg y &gt;20 mmHg sobre la basal»; el texto del test (pág. 16) dice «subir 20 mmHg sobre la basal» (punto 3) y «subida ≥20 mmHg» (punto 4). Se reproducen las dos; la calculadora usa ≥20 sobre la basal y &gt;60.</p></details>
             <div class="agua-simulador" id="mn-apnea-calc">
                 <h4 style="color: var(--accent-purple);">🧮 Test de apnea: objetivo y tiempo</h4>
                 <div class="form-group"><label for="mn-apnea-basal">PaCO₂ basal (mmHg)</label><input type="number" id="mn-apnea-basal" min="20" max="80" step="1" value="40" inputmode="decimal"></div>
@@ -583,7 +597,7 @@
         <!-- ===== FICHA VI: CONVULSIONES (Cap. 46) ===== -->
         <div id="mn-convulsiones" class="tab-content">
             <h3 style="color: var(--accent-yellow);">Convulsiones y estado epiléptico no convulsivo</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 46 "Disorders of Movement".</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 46 "Disorders of Movement". <a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=19" target="_blank" rel="noopener">PDF, pág. 19 →</a></p>
 
             <p>El capítulo trata tres trastornos del movimiento de la UCI: movimientos involuntarios (<strong>convulsiones</strong>), movimientos débiles o ineficaces (<strong>debilidad neuromuscular</strong>) y ausencia de movimiento (<strong>parálisis farmacológica</strong>). El riesgo de convulsiones depende sobre todo de la <span class="hl-azul">presencia y el tipo de lesión cerebral</span>, no del estado general (la gravedad del shock, por ejemplo).</p>
 
@@ -635,7 +649,7 @@
         <!-- ===== FICHA VII: TRATAMIENTO DEL ESTADO EPILÉPTICO (Cap. 46) ===== -->
         <div id="mn-estado-epileptico" class="tab-content">
             <h3 style="color: var(--accent-yellow);">Tratamiento del estado epiléptico</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 46. Dosis de la guía de la American Epilepsy Society (Tabla 46.3) y de la Ref. 1 (Tabla 46.4).</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 46. Dosis de la guía de la American Epilepsy Society (Tabla 46.3) y de la Ref. 1 (Tabla 46.4). <a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=21" target="_blank" rel="noopener">PDF, pág. 21 →</a></p>
 
             <p>Tres pasos. Una crisis que dura más de <span class="hl-rojo">30 minutos</span> puede dejar lesión neuronal permanente: hay que cortarla pronto. El tratamiento está pensado para el estado <strong>generalizado convulsivo</strong>; en el no convulsivo se usa igual, con menos éxito.</p>
 
@@ -714,7 +728,7 @@
         <!-- ===== FICHA VIII: MIASTENIA GRAVIS (Cap. 46) ===== -->
         <div id="mn-miastenia" class="tab-content">
             <h3 style="color: var(--accent-yellow);">Miastenia gravis</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 46.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 46. <a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=24" target="_blank" rel="noopener">PDF, pág. 24 →</a></p>
 
             <dl class="kv-row" id="mn-mg-definicion"><dt>Qué es</dt><dd>Enfermedad autoinmune: anticuerpos que destruyen los <strong>receptores de acetilcolina postsinápticos</strong> de la unión neuromuscular. Solo afecta al músculo esquelético.</dd></dl>
             <dl class="kv-row" id="mn-mg-desencadenantes"><dt>Desencadenantes</dt><dd>Cirugía mayor, enfermedad intercurrente, estrés fisiológico y fármacos que dificultan la transmisión neuromuscular. Un <strong>timoma</strong> causa el 10%.</dd></dl>
@@ -732,6 +746,7 @@
             <p class="fuente-ficha">Tabla 46.5 — No usarlos en la miastenia. *Los corticoides a dosis altas también se usan para tratarla.</p>
             <div class="agua-simulador" id="mn-mg-farmaco-calc">
                 <h4 style="color: var(--accent-yellow);">🔎 ¿Puede empeorar la miastenia? (Tabla 46.5)</h4>
+                <p class="fuente-ficha">La tabla solo nombra las familias. Los ejemplos concretos del selector (gentamicina, amikacina, levofloxacino, ciprofloxacino, azitromicina, claritromicina) son <strong>conocimiento general, no de la fuente</strong>.</p>
                 <div class="form-group"><label for="mn-mg-farmaco">Fármaco</label><select id="mn-mg-farmaco"><option value="">— Elige —</option><option value="aminoglucosido">Gentamicina / amikacina</option><option value="quinolona">Levofloxacino / ciprofloxacino</option><option value="macrolido">Azitromicina / claritromicina</option><option value="penicilina">Penicilinas</option><option value="betabloq">Betabloqueante</option><option value="calcioant">Calcioantagonista</option><option value="ia">Procainamida / quinidina / disopiramida</option><option value="bnm">Relajante neuromuscular</option><option value="corticoide">Corticoides a dosis altas</option><option value="magnesio">Magnesio</option><option value="litio">Litio</option><option value="inhalado">Anestésico inhalado</option></select></div>
                 <div class="tfg-estado tfg-estado-danger" id="mn-mg-farmaco-resultado" style="display:none"></div>
             </div>
@@ -753,7 +768,7 @@
             <dl class="kv-row" id="mn-mg-anticuerpos"><dt>Autoanticuerpos</dt><dd>Los anticuerpos contra el receptor de acetilcolina confirman el diagnóstico. El <strong>10-15%</strong> no los tiene: entonces se piden anticuerpos <strong>anti-MuSK</strong> (cinasa específica del músculo), presentes en un <strong>40%</strong> de esos seronegativos.</dd></dl>
 
             <p class="section-label">Manejo en la UCI</p>
-            <dl class="kv-row" id="mn-mg-intubacion"><dt>¿Cuándo intubar?</dt><dd>El deterioro respiratorio puede ser muy rápido: <span class="hl-rojo">no esperar a que esté in extremis</span>. Una capacidad vital <strong>≤15 mL/kg (o &lt;1 L)</strong> y una presión inspiratoria máxima de <strong>−20 cmH₂O</strong> (normal, más negativa de −100) deben hacer pensar seriamente en intubar. La BiPAP solo si se espera mejoría en pocos días (lo que no suele ser el caso).</dd></dl>
+            <dl class="kv-row" id="mn-mg-intubacion"><dt>¿Cuándo intubar?</dt><dd>El deterioro respiratorio puede ser muy rápido: <span class="hl-rojo">no esperar a que esté in extremis</span>. Una capacidad vital <strong>≤15 mL/kg (o &lt;1 L)</strong> y una presión inspiratoria máxima de <strong>−20 cmH₂O</strong> (normal, según el libro, &gt;−100 cmH₂O; ver la nota) deben hacer pensar seriamente en intubar. La BiPAP solo si se espera mejoría en pocos días (lo que no suele ser el caso).</dd></dl>
             <div class="agua-simulador" id="mn-mg-calc">
                 <h4 style="color: var(--accent-yellow);">🧮 Debilidad neuromuscular: ¿pensar en intubar?</h4>
                 <div class="form-group"><label for="mn-mg-peso">Peso (kg)</label><input type="number" id="mn-mg-peso" min="20" max="200" step="1" value="70" inputmode="decimal"></div>
@@ -761,6 +776,7 @@
                 <div class="form-group"><label for="mn-mg-pim">Presión inspiratoria máxima (cmH₂O, número negativo)</label><input type="number" id="mn-mg-pim" min="-150" max="0" step="1" value="-30" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="mn-mg-resultado"></div>
             </div>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: 1) el libro escribe «normal being &gt;–100 cm H2O» (pág. 25); leído al pie de la letra, el −20 también sería «&gt;−100». Se reproduce tal cual. La lectura habitual (más negativa de −100, es decir, mayor de 100 en valor absoluto) es conocimiento general, no de la fuente. 2) El libro une los dos criterios con «y»; la calculadora avisa si se cumple cualquiera de los dos (elección de la app).</p></details>
             <p class="fuente-ficha">Sirve igual en el Guillain-Barré (ficha siguiente), que vigila la capacidad vital y la presión inspiratoria del mismo modo.</p>
 
             <dl class="kv-row" id="mn-mg-crisis"><dt>Crisis miasténica</dt><dd>Dos opciones igual de eficaces (respuesta favorable en un <strong>70%</strong>): 1) <strong>inmunoglobulina IV 2 g/kg en 2-5 días</strong>; 2) <strong>plasmaféresis</strong>, 5 sesiones en 7-10 días, cada una con 1-1,5 volúmenes plasmáticos. Se prefiere la plasmaféresis porque responde antes: la IgIV tarda 4-5 días y la plasmaféresis puede notarse tras la segunda sesión.</dd></dl>
@@ -775,7 +791,7 @@
         <!-- ===== FICHA IX: GUILLAIN-BARRÉ Y NEUROMIOPATÍA DEL CRÍTICO (Cap. 46) ===== -->
         <div id="mn-gbs-pnc" class="tab-content">
             <h3 style="color: var(--accent-yellow);">Guillain-Barré y neuromiopatía del paciente crítico</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 46; guía EAN/PNS 2023 del Guillain-Barré.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 46; guía EAN/PNS 2023 del Guillain-Barré. <a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=26" target="_blank" rel="noopener">PDF, pág. 26 →</a></p>
 
             <p class="section-label">Síndrome de Guillain-Barré</p>
             <dl class="kv-row" id="mn-gbs-definicion"><dt>Qué es</dt><dd>Polineuropatía <strong>desmielinizante inflamatoria</strong> que suele seguir a una infección aguda (1-3 semanas): <em>Campylobacter jejuni</em>, virus Zika, SARS-CoV-2. Mecanismo inmune, con <strong>mimetismo molecular</strong> (anticuerpos contra un componente del germen que reaccionan con el nervio periférico).</dd></dl>
@@ -806,7 +822,7 @@
             </div>
             <dl class="kv-row" id="mn-gbs-dx"><dt>Diagnóstico</dt><dd>Clínica (debilidad simétrica pocas semanas después de una infección) y estudios de conducción con <strong>velocidad disminuida</strong>. La punción lumbar descarta otras causas y muestra <strong>proteínas elevadas</strong>.</dd></dl>
             <dl class="kv-row" id="mn-gbs-tratamiento"><dt>Tratamiento</dt><dd>Como la miastenia: vigilar la capacidad vital y la presión inspiratoria para intubar a tiempo. Si <strong>no camina sin ayuda</strong> o tiene fracaso respiratorio: <strong>IgIV o plasmaféresis</strong> con las mismas pautas; la guía no prefiere ninguna.</dd></dl>
-            <dl class="kv-row" id="mn-gbs-dolor"><dt>Dolor</dt><dd>Prominente en las fases aguda y de resolución; es <strong>neuropático</strong>. La guía recomienda <strong>gabapentina 300 mg cada 8 h</strong>; considerar opioides para un alivio más inmediato (también sirven en el dolor neuropático).</dd></dl>
+            <dl class="kv-row" id="mn-gbs-dolor"><dt>Dolor</dt><dd>Prominente en las fases aguda y de resolución; es <strong>neuropático</strong>. La guía recomienda <strong>gabapentina 300 mg tres veces al día</strong>; considerar opioides para un alivio más inmediato (también sirven en el dolor neuropático).</dd></dl>
             <dl class="kv-row" id="mn-gbs-pronostico"><dt>Pronóstico</dt><dd>En EE. UU. sobrevive al ingreso un <strong>97%</strong>, pero el <strong>10-15%</strong> queda con discapacidad grave.</dd></dl>
 
             <p class="section-label">Polineuropatía y miopatía del paciente crítico</p>
@@ -823,14 +839,15 @@
             </div>
             <dl class="kv-row" id="mn-pnc-clinica"><dt>Clínica</dt><dd>Parálisis <strong>flácida</strong> de miembros y tronco con hiporreflexia o arreflexia.</dd></dl>
             <dl class="kv-row" id="mn-pnc-manejo"><dt>Tratamiento y pronóstico</dt><dd><strong>No hay tratamiento.</strong> Se han propuesto medidas (movilización precoz, mejor nutrición), ninguna validada ni dirigida a la inflamación. Recuperación completa en la <strong>mitad</strong>, a lo largo de meses.</dd></dl>
-            <div class="warning-box" id="mn-pnc-final"><strong>La inflamación ataca de nuevo.</strong> Una idea central del libro: la inflamación sistémica grave daña el pulmón (SDRA), el riñón (fracaso renal agudo) y causa el fallo multiorgánico del shock séptico y de la post-parada. Este capítulo añade el nervio periférico y el músculo. Para el autor, la inflamación es <span class="hl-rojo">la fuerza más letal</span> que te encontrarás en la UCI.</div>
+            <div class="warning-box" id="mn-pnc-final"><strong>La inflamación ataca de nuevo.</strong> Una idea central del libro: la inflamación sistémica grave daña el pulmón (SDRA), el riñón (fracaso renal agudo) y causa el fallo multiorgánico del shock séptico y de la post-parada. Este capítulo añade el nervio periférico y el músculo. Para el autor, la inflamación es <span class="hl-rojo">la fuerza más letal</span> que te encontrarás en la UCI. El libro remite a su Tabla 17.1 (espectro de lesión inflamatoria de órganos, pág. 28).</div>
+            <p><button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-inflamacion-ros">📋 Tabla 17.1: lesión inflamatoria de órganos (Cap. 17) →</button></p>
             <div style="display:flex;flex-wrap:wrap;gap:6px;"><button type="button" class="especialidad-link" data-especialidad="neumologia" data-view="merinoNeumologia" data-panel="panel-merino-neumo-tabs" data-tab="neumo-sdra-diagnostico">🫁 SDRA (Cap. 24) →</button> <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoRenal" data-panel="panel-marino-renal-tabs" data-tab="mr-fra-causas">🩺 Fracaso renal agudo (Cap. 34) →</button> <button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-shock-septico">🦠 Shock séptico (Cap. 17) →</button> <button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-posresucitacion">💓 Post-parada (Cap. 21) →</button></div>
         </div>
 
         <!-- ===== FICHA X: RELAJANTES NEUROMUSCULARES (Cap. 46) ===== -->
         <div id="mn-relajantes" class="tab-content">
             <h3 style="color: var(--accent-yellow);">Bloqueo neuromuscular y su reversión</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 46.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 46. <a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=29" target="_blank" rel="noopener">PDF, pág. 29 →</a></p>
 
             <dl class="kv-row" id="mn-bnm-usos"><dt>Para qué</dt><dd>Parálisis flácida para: a) facilitar la intubación; b) evitar los escalofríos en la hipotermia inducida; c) sincronizar la ventilación en el paciente muy agitado.</dd></dl>
             <dl class="kv-row" id="mn-bnm-mecanismo"><dt>Mecanismo</dt><dd>Se unen a los receptores de acetilcolina postsinápticos: los <strong>despolarizantes</strong> producen una despolarización mantenida; los <strong>no despolarizantes</strong> compiten con la acetilcolina. Muchos expertos dosifican por el <strong>peso ideal</strong>.</dd></dl>
@@ -849,6 +866,7 @@
                 </tbody>
             </table>
             </div>
+            <p class="fuente-ficha" style="margin-bottom:2px;">↔ Desliza la tabla para ver las tres columnas.</p>
             <p class="fuente-ficha">Tabla 46.7 — †Contraindicaciones de la succinilcolina: hiperpotasemia, hipertermia maligna, rabdomiólisis, quemaduras e inmovilidad por lesión medular.</p>
             <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la Tabla 46.7 da una duración del rocuronio de 50-70 min y el texto, 30-70 min ("unos 60 min" al hablar de la intubación). Se reproducen las dos.</p></details>
 
@@ -867,7 +885,7 @@
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Rocuronio</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="mn-bnm-rocuronio"><p>No despolarizante, rápido e intermedio, sin efectos cardiovasculares; ha sustituido al vecuronio. Efecto prolongado en la disfunción hepática (cuánto, mal estudiado). A <strong>1,0 mg/kg</strong> su inicio equivale al de 1,0 mg/kg de succinilcolina: sirve para intubar si la succinilcolina está contraindicada. El problema es que dura <strong>una hora</strong>: si la vía aérea no se asegura a tiempo, revertir con <span class="hl-verde">sugammadex 16 mg/kg</span>.</p></div>
+                    <div class="micro-prof-body" id="mn-bnm-rocuronio"><p>No despolarizante, rápido e intermedio, sin efectos cardiovasculares; ha ido sustituyendo, poco a poco, al vecuronio. Efecto prolongado en la disfunción hepática (cuánto, mal estudiado). A <strong>1,0 mg/kg</strong> su inicio equivale al de 1,0 mg/kg de succinilcolina: sirve para intubar si la succinilcolina está contraindicada. El problema es que dura <strong>una hora</strong>: si la vía aérea no se asegura a tiempo, revertir con <span class="hl-verde">sugammadex 16 mg/kg</span>.</p></div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Cisatracurio</span> <span class="toggle-icon">+</span></div>
@@ -879,6 +897,7 @@
 
             <p class="section-label">Reversión</p>
             <dl class="kv-row" id="mn-bnm-neostigmina"><dt>Neostigmina</dt><dd>Inhibe la acetilcolinesterasa: el aumento de acetilcolina supera el bloqueo competitivo de los no despolarizantes (edrofonio y piridostigmina no se usan para revertir). <strong>70 µg/kg IV</strong> revierte un bloqueo moderado en <strong>8-45 min</strong> según el relajante, la profundidad y el anestésico. <span class="hl-rojo">No pasar nunca de 70 µg/kg</span> por los efectos parasimpaticomiméticos.</dd></dl>
+            <details class="nota-plegable"><summary>📝 Nota de fuentes</summary><p class="fuente-ficha">Nota de fuentes: el libro da 70 µg/kg «nunca más» y no pone tope en mg. La ficha técnica de la FDA (neostigmina, Bloxiverz) da 0,03-0,07 mg/kg con un <strong>máximo total de 5 mg</strong> (<a class="biblio-link" href="https://www.accessdata.fda.gov/drugsatfda_docs/label/2023/204078Orig1s014lbl.pdf" target="_blank" rel="noopener">ficha técnica</a>). La calculadora aplica los dos: 70 µg/kg con un tope de 5 mg.</p></details>
             <dl class="kv-row" id="mn-bnm-sugammadex"><dt>Sugammadex</dt><dd>Se une directamente a los aminoesteroides (rocuronio, vecuronio y, mucho menos, pancuronio). Dosis según la profundidad: <strong>16 mg/kg</strong> justo tras la intubación, <strong>4 mg/kg</strong> con bloqueo profundo y <strong>2 mg/kg</strong> con bloqueo moderado; revierte siempre en <strong>2-3 min</strong> (menos de lo que tarda en pasarse la succinilcolina), sin efectos colinérgicos.</dd></dl>
 
             <div class="warning-box" id="mn-bnm-ruego"><strong>Un ruego: evitar la parálisis prolongada.</strong> Estar despierto y paralizado es horrible y doloroso: sedación profunda y algo de analgesia siempre. Pero sin EEG continuo no se puede saber si la sedación y la analgesia bastan. Evitarla también reduce: <strong>miopatía del crítico</strong>, neumonía "hipostática" (secreciones en zonas declives), <strong>tromboembolismo venoso</strong> y <strong>úlceras por presión</strong>.</div>
@@ -888,10 +907,10 @@
         <!-- ===== FICHA XI: ICTUS ISQUÉMICO, MEDIDAS GENERALES (Cap. 47) ===== -->
         <div id="mn-ictus-soporte" class="tab-content">
             <h3 style="color: var(--accent-red);">Ictus isquémico: medidas generales</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 47 "Acute Stroke in the ICU"; guías AHA/ASA.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 47 "Acute Stroke in the ICU"; guías AHA/ASA. <a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=34" target="_blank" rel="noopener">PDF, pág. 34 →</a></p>
 
             <p>El ictus es la <strong>segunda causa de muerte</strong> del mundo y ha cargado con nombres poco afortunados (apoplejía, "accidente" cerebrovascular, "ataque cerebral"). El capítulo trata el manejo <strong>en la UCI</strong>, no las decisiones iniciales como la trombólisis, que corresponden a neurología y urgencias.</p>
-            <dl class="kv-row" id="mn-isq-origen"><dt>Origen</dt><dd>El isquémico es el <strong>85%</strong>. La mayoría por rotura de una placa de ateroma con trombosis (como el infarto de miocardio); un <strong>20%</strong> son embólicos, casi siempre del corazón izquierdo y, en pocos casos, de una trombosis venosa de las piernas a través de un <strong>foramen oval permeable</strong>.</dd></dl>
+            <dl class="kv-row" id="mn-isq-origen"><dt>Origen</dt><dd>El isquémico es el <strong>85%</strong>. La mayoría por rotura de una placa de ateroma con trombosis (como el infarto de miocardio); un <strong>20%</strong> son embólicos, la mayoría del corazón izquierdo y, en pocos casos, de una trombosis venosa de las piernas a través de un <strong>foramen oval permeable</strong>.</dd></dl>
 
             <div style="overflow-x:auto;">
             <table class="data-table" id="mn-tabla-47-1">
@@ -946,7 +965,7 @@
             </div>
             <p class="fuente-ficha">Tabla 47.2 — Antihipertensivos en el ictus isquémico agudo.</p>
             <dl class="kv-row" id="mn-isq-evitar"><dt>A evitar</dt><dd>Betabloqueantes puros (bajan el gasto), aunque el <strong>metoprolol 5-10 mg IV cada 6 h</strong> vale tras una trombectomía con reperfusión. <span class="hl-rojo">Nitroprusiato no</span>: sube la presión intracraneal.</dd></dl>
-            <dl class="kv-row" id="mn-isq-hipotension"><dt>Hipotensión</dt><dd>Corregirla ya (la autorregulación falla). 1) La guía pide salino isotónico (sin diferencias coloide-cristaloide), aunque el autor prefiere algo de <strong>albúmina al 5%</strong> por el edema que favorecen los cristaloides, sobre todo con hipoalbuminemia. 2) Vasopresor: <strong>fenilefrina</strong> si hay FA rápida; si no, <strong>noradrenalina</strong>. 3) Sin objetivo fijado; parece razonable una PAM <strong>mayor de 65 mmHg</strong>.</dd></dl>
+            <dl class="kv-row" id="mn-isq-hipotension"><dt>Hipotensión</dt><dd>Corregirla ya (la autorregulación falla). 1) La guía pide salino isotónico (sin diferencias coloide-cristaloide), aunque el autor prefiere algo de <strong>albúmina al 5%</strong> por el edema que favorecen los cristaloides, sobre todo con hipoalbuminemia. 2) Vasopresor: <strong>fenilefrina</strong> si hay FA rápida; si no, <strong>noradrenalina</strong>. 3) Sin objetivo fijado; parece razonable una presión <strong>mayor de lo habitual (es decir, PAM mayor de 65 mmHg)</strong>.</dd></dl>
 
             <p class="section-label">Glucemia y fiebre</p>
             <dl class="kv-row" id="mn-isq-glucemia"><dt>Hiperglucemia</dt><dd>En el <strong>30-50%</strong> (diabéticos o no) las primeras 24 h, y empeora la recuperación (como tras la parada): más ácido láctico y acidosis local, estrés oxidativo y rotura de la barrera hematoencefálica con edema en la penumbra. Tratar si <strong>&gt;180 mg/dL</strong>, objetivo <strong>140-180</strong> (un control más estricto arriesga hipoglucemia) y sin sueros glucosados.</dd></dl>
@@ -957,7 +976,7 @@
         <!-- ===== FICHA XII: ICTUS ISQUÉMICO, COMPLICACIONES (Cap. 47) ===== -->
         <div id="mn-ictus-complicaciones" class="tab-content">
             <h3 style="color: var(--accent-red);">Ictus isquémico: antitrombóticos, ecocardiograma y complicaciones</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 47.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 47. <a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=38" target="_blank" rel="noopener">PDF, pág. 38 →</a></p>
 
             <dl class="kv-row" id="mn-isq-tvp"><dt>Tromboprofilaxis</dt><dd>La embolia pulmonar se cita como complicación frecuente, aunque en 3 millones de ictus en Alemania (12 años) fue solo del <strong>0,4%</strong>. Aun así: <strong>HBPM</strong> (dosis en la Tabla 5.2) y, tras trombólisis, compresión neumática las primeras 24 h.</dd></dl>
             <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoFundamentos" data-panel="panel-marino-fund-tabs" data-tab="mar-tromboprofilaxis-farmacos">🩸 Dosis de tromboprofilaxis (Cap. 5) →</button></p>
@@ -977,7 +996,7 @@
             <dl class="kv-row" id="mn-isq-burbujas"><dt>Prueba de burbujas</dt><dd>Con ETE o ETT (mejor apical de 4 cámaras): agitar unos <strong>10 mL de salino</strong> entre dos jeringas con una llave de tres pasos e inyectarlo rápido por una vía central o periférica del brazo. Las burbujas se ven en el corazón derecho y, si hay cortocircuito derecha-izquierda, pasan al izquierdo en pocos ciclos.</dd></dl>
             <div class="article-figure" id="mar-img-47-1">
                 <img src="js/modules/libros/img/mar-fig47-1-burbujas-fop.jpg" alt="Tres imágenes ecocardiográficas de cuatro cámaras: las microburbujas llenan el corazón derecho y pasan al izquierdo" loading="lazy">
-                <p class="article-figure-caption">Figura 47.1 — Ecocardiografía en un ictus isquémico: las microburbujas del salino agitado pasan del corazón derecho al izquierdo, prueba de un cortocircuito por foramen oval permeable.</p>
+                <p class="article-figure-caption">Figura 47.1 — Ecocardiografía transesofágica en un ictus isquémico: las microburbujas del salino agitado pasan del corazón derecho al izquierdo, prueba de un cortocircuito por foramen oval permeable. Imágenes adaptadas de Wade E et al., <em>Interv Cardiol</em> 2021 (ref. 26 del capítulo).</p>
             </div>
             <p>Un FOP en un ictus no demuestra que sea la causa, pero basta para cerrarlo más adelante con catéter si la recuperación neurológica es buena.</p>
             <p><button type="button" class="especialidad-link" data-especialidad="eco" data-eco-vista="a4c">🫀 Practicar la vista de 4 cámaras en Eco cardíaca →</button></p>
@@ -985,7 +1004,7 @@
             <p class="section-label">Hemorragia tras la trombólisis</p>
             <div class="article-figure" id="mar-img-47-2">
                 <img src="js/modules/libros/img/mar-fig47-2-hemorragia-tpa.jpg" alt="Dos TC cerebrales: antes del tPA sin sangre y 5 horas después con una gran hemorragia hiperdensa y desviación de la línea media" loading="lazy">
-                <p class="article-figure-caption">Figura 47.2 — TC sin contraste de un paciente que empeoró bruscamente 5 h después del tPA: hemorragia intracerebral masiva (hiperdensa) con desviación de la línea media.</p>
+                <p class="article-figure-caption">Figura 47.2 — TC sin contraste de un paciente que empeoró bruscamente 5 h después del tPA: hemorragia intracerebral masiva (hiperdensa) con desviación de la línea media. Imágenes de Ko S-B y Yoon B-W, <em>Semin Resp Crit Care Med</em> 2017 (ref. 27 del capítulo).</p>
             </div>
             <dl class="kv-row" id="mn-isq-hemorragia"><dt>Riesgo</dt><dd>Hemorragia sintomática en el <strong>6,4-8,8%</strong> tras la trombólisis. Factores: edad avanzada, PA &gt;180/105 y un ictus que afecta a más de <strong>un tercio de un hemisferio</strong>. Por eso se ingresa 24 h en UCI o unidad de ictus y se retrasan 24 h anticoagulantes y antiagregantes.</dd></dl>
             <ol id="mn-isq-hemorragia-tto">
@@ -1008,7 +1027,9 @@
                 </tbody>
             </table>
             </div>
+            <p class="fuente-ficha" style="margin-bottom:2px;">↔ Desliza la tabla para ver las cinco soluciones.</p>
             <p class="fuente-ficha">Tabla 47.3 — Soluciones salinas hipertónicas para el edema cerebral. Las más concentradas sirven con menos volumen.</p>
+            <details class="nota-plegable"><summary>📝 Nota de fuentes</summary><p class="fuente-ficha">Nota de fuentes: en la Tabla 47.3 (pág. 41) Marino da dos cifras para cada bolo y no coinciden en un adulto de 70 kg (ejemplo ilustrativo): NaCl 3%, 250 mL o 5 mL/kg (350 mL); NaCl 7,5%, 100 mL o 2-4 mL/kg (140-280 mL); NaCl 23,4%, 30 mL o 0,68-2 mL/kg. Para el 23,4% las fuentes web dan un bolo fijo habitual de <strong>30 mL</strong> en 15-20 min, por vía central (<a class="biblio-link" href="https://www.surgicalcriticalcare.net/Guidelines/Hypertonic%20Saline%202020.pdf" target="_blank" rel="noopener">guía de cuidados críticos quirúrgicos</a> · <a class="biblio-link" href="https://researchexperts.utmb.edu/en/publications/treatment-of-refractory-intracranial-hypertension-with-234-saline/" target="_blank" rel="noopener">UTMB</a>) y una dosis por peso de unos <strong>0,6 mL/kg</strong> (2,4 mEq/kg) (<a class="biblio-link" href="https://journals.sagepub.com/doi/10.1177/1060028020907997" target="_blank" rel="noopener">Busey 2020</a>), que cuadra con el extremo bajo del libro. El extremo alto de 2 mL/kg del libro no aparece en esas fuentes: se reproduce aquí, sin calcularlo. La calculadora muestra primero el volumen fijo y, por kg, solo el extremo bajo.</p></details>
             <div class="agua-simulador" id="mn-hiper-calc">
                 <h4 style="color: var(--accent-red);">🧮 Bolo de salino hipertónico (Tabla 47.3)</h4>
                 <div class="form-group"><label for="mn-hiper-sol">Solución</label><select id="mn-hiper-sol"><option value="3">NaCl 3%</option><option value="5">NaCl 5%</option><option value="7.5">NaCl 7,5%</option><option value="14.6">NaCl 14,6%</option><option value="23.4">NaCl 23,4%</option></select></div>
@@ -1026,7 +1047,7 @@
         <!-- ===== FICHA XIII: HEMORRAGIA INTRACEREBRAL (Cap. 47) ===== -->
         <div id="mn-hic" class="tab-content">
             <h3 style="color: var(--accent-red);">Hemorragia intracerebral espontánea</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 47; guía AHA/ASA 2015 de la hemorragia intracerebral (Hemphill et al.).</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 47; guía AHA/ASA 2015 de la hemorragia intracerebral (Hemphill et al.). <a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=41" target="_blank" rel="noopener">PDF, pág. 41 →</a></p>
 
             <dl class="kv-row" id="mn-hic-datos"><dt>Qué pesa</dt><dd>El <strong>10-15%</strong> de los ictus; predisponen la hipertensión y la anticoagulación. Peor pronóstico que el isquémico: la <strong>mitad</strong> no sobrevive 30 días y dos tercios de los supervivientes quedan con secuelas importantes.</dd></dl>
             <div class="article-figure" id="mar-img-47-3">
@@ -1041,23 +1062,28 @@
                 <thead><tr><th>Antitrombótico</th><th>Reversión y dosis</th></tr></thead>
                 <tbody>
                     <tr><td>Warfarina</td><td>Vitamina K 10 mg IV, más CCP de 4 factores según el INR: 2-4 → 25 U/kg; 4-6 → 35 U/kg; &gt;6 → 50 U/kg</td></tr>
-                    <tr><td>Dabigatrán (Pradaxa®)</td><td>Idarucizumab 2,5 mg IV en bolo, repetido en 15 min. Si no hay, CCP de 4 factores a dosis altas (50 U/kg)</td></tr>
+                    <tr><td>Dabigatrán (Pradaxa®)</td><td>Idarucizumab <strong>2,5 g</strong> IV en bolo, repetido en 15 min (5 g en total). <em>El libro imprime «2,5 mg» (pág. 44): ver la nota.</em> Si no hay, CCP de 4 factores a dosis altas (50 U/kg)</td></tr>
                     <tr><td>Apixabán (Eliquis®) o rivaroxabán (Xarelto®)</td><td>Andexanet alfa (Tabla 47.5). Si no hay, CCP de 4 factores a dosis altas (50 U/kg)</td></tr>
                     <tr><td>Heparina no fraccionada</td><td>Protamina 1 mg por cada 100 U de heparina de la última dosis</td></tr>
-                    <tr><td>Enoxaparina (Clexane®)</td><td>Protamina 1 mg por cada mg de enoxaparina de la última dosis; menos eficaz que con la heparina</td></tr>
-                    <tr><td>Aspirina, clopidogrel</td><td>Desmopresina 3 µg/kg SC o IV; repetible una vez</td></tr>
+                    <tr><td>Enoxaparina (Lovenox®)</td><td>Protamina 1 mg por cada mg de enoxaparina de la última dosis; menos eficaz que con la heparina</td></tr>
+                    <tr><td>Aspirina, clopidogrel</td><td>Desmopresina <strong>0,3-0,4 µg/kg</strong> SC o IV; repetible una vez. <em>El libro imprime «3 µg/kg» (pág. 44): ver la nota.</em></td></tr>
                 </tbody>
             </table>
             </div>
-            <p class="fuente-ficha">Tabla 47.4 — Reversión de antitrombóticos en la hemorragia intracraneal. CCP = concentrado de complejo protrombínico.</p>
-            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: dos cifras de la Tabla 47.4 no cuadran con las fichas técnicas. 1) Idarucizumab "2,5 mg": el vial es de 2,5 <em>g</em> (5 g en total con la repetición). 2) Desmopresina "3 µg/kg": la dosis habitual es 0,3 µg/kg, diez veces menos. Se reproducen las cifras de la fuente; la calculadora las muestra con este aviso.</p></details>
+            <p class="fuente-ficha">Tabla 47.4 — Reversión de antitrombóticos en la hemorragia intracraneal. CCP = concentrado de complejo protrombínico. Idarucizumab y desmopresina: dosis habitual de la ficha técnica y de fuentes web, no la que imprime el libro (ver la nota).</p>
+            <details class="nota-plegable" id="mn-nota-dosis-47-4" open><summary>📝 Nota de fidelidad: dos dosis de la Tabla 47.4</summary>
+                <p class="fuente-ficha">Nota de fidelidad: en la Tabla 47.4 (pág. 44) el libro imprime dos dosis que no son las habituales. La ficha y la calculadora muestran la dosis habitual y dicen aquí lo que imprime el libro.</p>
+                <p class="fuente-ficha"><strong>Idarucizumab.</strong> El libro imprime «2,5 mg IV en bolo, repetido en 15 min». La ficha técnica da como dosis recomendada <strong>5 g</strong>, en dos viales de 2,5 g/50 mL, y permite valorar una segunda dosis de 5 g si reaparece un sangrado relevante. Se muestra 2,5 g IV, repetido (5 g en total). Fuentes: <a class="biblio-link" href="https://www.drugs.com/pro/praxbind.html" target="_blank" rel="noopener">Praxbind (drugs.com)</a> · <a class="biblio-link" href="https://www.medicines.org.uk/emc/product/5073/smpc/print" target="_blank" rel="noopener">Praxbind (ficha técnica EMC)</a>.</p>
+                <p class="fuente-ficha"><strong>Desmopresina.</strong> El libro imprime «3 µg/kg SC o IV; repetible una vez». Las fuentes consultadas discrepan entre sí y se muestran las dos, sin elegir una: <strong>0,3 µg/kg IV</strong> (<a class="biblio-link" href="https://www.wikem.org/wiki/Desmopressin" target="_blank" rel="noopener">WikEM</a>) y <strong>0,4 µg/kg</strong> (resumen de la guía NCS/SCCM 2016, ref. 37 de Marino: <a class="biblio-link" href="https://www.the-hospitalist.org/hospitalist/article/136398/thrombosis/guideline-reversal-antithrombotics-intracranial-hemorrhage" target="_blank" rel="noopener">The Hospitalist</a>). La calculadora da el rango 0,3-0,4 µg/kg × peso.</p>
+            </details>
+            <details class="nota-plegable"><summary>📝 Nota de interpretación (INR 4 y 6)</summary><p class="fuente-ficha">Nota de interpretación: la Tabla 47.4 da los tramos de INR «2–4», «4–6» y «&gt;6»: el 4 y el 6 caben en dos tramos. La calculadora pone el INR 4 en 25 U/kg y el INR 6 en 35 U/kg. Es una elección de la app; el libro no lo dice.</p></details>
 
             <div class="agua-simulador" id="mn-rev-calc">
-                <h4 style="color: var(--accent-red);">🧮 Reversión del anticoagulante (Tablas 47.4 y 47.5)</h4>
+                <h4 style="color: var(--accent-red);">🧮 Reversión del anticoagulante (Tablas 47.4 y 47.5; andexanet según la ficha técnica de la FDA)</h4>
                 <div class="form-group"><label for="mn-rev-farmaco">Antitrombótico</label><select id="mn-rev-farmaco"><option value="warfarina">Warfarina</option><option value="dabigatran">Dabigatrán</option><option value="apixaban">Apixabán</option><option value="rivaroxaban">Rivaroxabán</option><option value="heparina">Heparina no fraccionada</option><option value="enoxaparina">Enoxaparina</option><option value="antiagregante">Aspirina o clopidogrel</option></select></div>
                 <div class="form-group"><label for="mn-rev-peso">Peso (kg)</label><input type="number" id="mn-rev-peso" min="20" max="200" step="1" value="70" inputmode="decimal"></div>
                 <div class="form-group" id="mn-rev-inr-g"><label for="mn-rev-inr">INR (warfarina)</label><input type="number" id="mn-rev-inr" min="1" max="15" step="0.1" value="3.5" inputmode="decimal"></div>
-                <div class="form-group" id="mn-rev-dosis-g"><label for="mn-rev-dosis">Última dosis (mg; en heparina, unidades)</label><input type="number" id="mn-rev-dosis" min="0" max="50000" step="1" value="5" inputmode="decimal"></div>
+                <div class="form-group" id="mn-rev-dosis-g"><label for="mn-rev-dosis">Última dosis (mg; en heparina, unidades)</label><input type="number" id="mn-rev-dosis" min="0" max="50000" step="1" value="" inputmode="decimal"></div>
                 <div class="form-group" id="mn-rev-horas-g"><label for="mn-rev-horas">Horas desde la última dosis</label><select id="mn-rev-horas"><option value="menos8">Menos de 8 h</option><option value="mas8">8 h o más</option><option value="desconocido">Desconocido</option></select></div>
                 <div class="form-group" id="mn-rev-andexanet-g"><label for="mn-rev-andexanet">¿Hay andexanet alfa?</label><select id="mn-rev-andexanet"><option value="si">Sí</option><option value="no">No</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="mn-rev-resultado"></div>
@@ -1091,7 +1117,7 @@
             </table>
             </div>
             <p class="fuente-ficha">Tabla 47.5 — Dosis de andexanet alfa.</p>
-            <details class="nota-plegable"><summary>📝 Nota de interpretación</summary><p class="fuente-ficha">Nota de interpretación: los criterios de la Tabla 47.5 se solapan (p. ej., apixabán 10 mg tomado hace 9 h cumple "dosis &gt;5 mg" de la pauta alta y "≥8 h" de la baja). La calculadora elige la pauta alta si se cumple cualquier criterio de la alta, que es como suele leerse la ficha técnica. Compruébalo con la del producto.</p></details>
+            <details class="nota-plegable" id="mn-nota-andexanet"><summary>📝 Nota de fuentes</summary><p class="fuente-ficha">Nota de fuentes: los criterios de la Tabla 47.5 de Marino (pág. 44) se solapan (p. ej., apixabán 5 mg hace 4 h cumple «≤5 mg» de la pauta baja y «&lt;8 h» de la alta) y el libro no lo resuelve. La calculadora sigue la ficha técnica de la FDA (Tabla 2): <strong>pauta baja</strong> (400 mg en bolo a 30 mg/min y luego 4 mg/min hasta 120 min) si la última dosis fue apixabán ≤5 mg o rivaroxabán ≤10 mg, o si pasaron ≥8 h desde la última dosis, sea cual sea la dosis; <strong>pauta alta</strong> (800 mg y luego 8 mg/min) si fue apixabán &gt;5 mg, rivaroxabán &gt;10 mg o dosis desconocida, y además &lt;8 h o tiempo desconocido. Fuentes: <a class="biblio-link" href="https://fda.gov/media/113279/download" target="_blank" rel="noopener">ficha técnica de Andexxa (FDA)</a> · <a class="biblio-link" href="https://www.drugs.com/pro/andexxa.html" target="_blank" rel="noopener">Andexxa (drugs.com)</a>.</p></details>
 
             <p class="section-label">Otras medidas</p>
             <ol id="mn-hic-otras">
@@ -1117,11 +1143,11 @@
         <!-- ===== FICHA XIV: HEMORRAGIA SUBARACNOIDEA (Cap. 47) ===== -->
         <div id="mn-hsa" class="tab-content">
             <h3 style="color: var(--accent-red);">Hemorragia subaracnoidea aneurismática</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 47; guía AHA/ASA 2023 de la HSA.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 47; guía AHA/ASA 2023 de la HSA. <a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=45" target="_blank" rel="noopener">PDF, pág. 45 →</a></p>
 
             <div class="article-figure" id="mar-img-47-4">
                 <img src="js/modules/libros/img/mar-fig47-4-hsa.jpg" alt="Pieza de autopsia de la base del encéfalo cubierta de sangre en el espacio subaracnoideo; una flecha señala el aneurisma de la arteria basilar" loading="lazy">
-                <p class="article-figure-caption">Figura 47.4 — Pieza de autopsia con sangre en el espacio subaracnoideo de la base del encéfalo; la flecha señala el aneurisma sacular roto de la arteria basilar, bajo el hematoma.</p>
+                <p class="article-figure-caption">Figura 47.4 — Pieza de autopsia con sangre en el espacio subaracnoideo de la base del encéfalo; la flecha señala el aneurisma sacular roto de la arteria basilar, bajo el hematoma. Imagen de Doberentz E et al., <em>Legal Med</em> 2015 (ref. 45 del capítulo).</p>
             </div>
             <p>El ictus más devastador: se rompe un aneurisma sacular y la sangre llena el espacio subaracnoideo.</p>
             <ol id="mn-hsa-gravedad">
@@ -1188,6 +1214,10 @@
         <h3>📚 Bibliografía</h3>
         <p class="fuente-ficha">Marino PL. <em>The ICU Book</em>. 5.ª ed. Wolters Kluwer; 2024. Los PDF de los capítulos se guardan en el repositorio.</p>
         <ul class="biblio-list">
-            <li><a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=2" target="_blank" rel="noopener">Capítulos 45-47 — Nervous System Disorders</a> <span class="biblio-nota">Trastornos de la consciencia (Cap. 45, pág. 2), trastornos del movimiento (Cap. 46, pág. 19) e ictus en la UCI (Cap. 47, pág. 34).</span></li>
+            <li><a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=2" target="_blank" rel="noopener">Cap. 45 — Disorders of Consciousness</a> <span class="biblio-nota">Trastornos de la consciencia (pág. 2 del PDF).</span></li>
+            <li><a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=19" target="_blank" rel="noopener">Cap. 46 — Disorders of Movement</a> <span class="biblio-nota">Trastornos del movimiento (pág. 19).</span></li>
+            <li><a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=34" target="_blank" rel="noopener">Cap. 47 — Acute Stroke in the ICU</a> <span class="biblio-nota">Ictus en la UCI (pág. 34).</span></li>
+            <li><a class="biblio-link" href="docs/marino-2024-toxicologia-caps52-53-apendices.pdf#page=43" target="_blank" rel="noopener">Apéndice 2 — CAM-ICU</a> <span class="biblio-nota">Criterios del CAM-ICU (pág. 43 del PDF de toxicología).</span></li>
+            <li><a class="biblio-link" href="docs/libro-azul-seccion-iii-inmunitario-parte2.pdf#page=33" target="_blank" rel="noopener">El Libro Azul, Cap. 21 — Encefalopatía séptica</a> <span class="biblio-nota">Tabla 2, criterios del CAM-UCI (pág. 33 del PDF).</span></li>
         </ul>
     </div>
