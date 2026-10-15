@@ -515,7 +515,7 @@ function calcHiperMg() {
     const esperable = esperableMg(v)?.[1] || 'nada específico en la tabla (los umbrales empiezan en 4)';
     // Pág. 39: la hemodiálisis es el tratamiento de elección de la hipermagnesemia grave y el calcio IV es un puente hasta ella.
     // El capítulo no pone cifra a «grave»: la app la toma desde el bloqueo AV (>5).
-    const pauta = v > 5 ? ' Pauta (grave): <strong>hemodiálisis</strong>; mientras llega, <strong>gluconato cálcico 1 g IV en 2-3 min</strong>. <small>El capítulo no fija una cifra para «grave»: se toma desde el bloqueo AV (&gt;5).</small>'
+    const pauta = v > 5 ? ' Pauta (grave): <strong>hemodiálisis</strong>; mientras llega, <strong>gluconato cálcico 1 g IV en 2-3 min</strong>. <small>El capítulo no fija una cifra para «grave»: la app la toma desde el bloqueo AV (&gt;5). El Manual Merck pone ≈10 mEq/L (12 mg/dL) como ejemplo de toxicidad grave (ver la nota de fuentes).</small>'
         : ' Marino no da pauta para la leve.';
     pintar(box, v > 5 ? 'danger' : 'warn', `Con ${fmt(v, 1)} mEq/L se espera: <strong>${esperable}</strong>.${pauta}`);
 }
