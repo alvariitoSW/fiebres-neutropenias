@@ -19,7 +19,7 @@
                 <div class="plate-label">Ficha I</div>
                 <svg class="field-illust" viewBox="0 0 80 56" fill="none" stroke="var(--accent-red)" stroke-width="1.6"><rect x="16" y="20" width="48" height="16" rx="8" stroke-opacity="0.7"/><path d="M40,20 L40,36"/></svg>
                 <div class="field-name">Paracetamol y<br>nomograma</div>
-                <div class="field-hook">"¿sirve el nomograma de Rumack-Matthew en una ingesta repetida?"</div>
+                <div class="field-hook">"¿sirve el nomograma del paracetamol en una ingesta repetida?"</div>
             </div>
             <div class="card-face back">
                 <div class="back-hook">No: solo vale para ingestas agudas con hora conocida. Por encima de la línea de tratamiento (150 µg/mL a las 4 h), N-acetilcisteína.</div>
@@ -175,7 +175,7 @@
         <!-- ===== FICHA I: PARACETAMOL (Cap. 52) ===== -->
         <div id="mt-paracetamol" class="tab-content">
             <h3 style="color: var(--accent-red);">Paracetamol: mecanismo, dosis tóxica y nomograma</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 52 "Pharmaceutical Drug Overdoses".</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 52 "Pharmaceutical Drug Overdoses" (<a class="biblio-link" href="docs/marino-2024-toxicologia-caps52-53-apendices.pdf#page=3" target="_blank" rel="noopener">pág. 3</a>).</p>
 
             <p>Las muertes por sobredosis en EE. UU. se han multiplicado por más de 5 en veintitantos años (de <strong>20.000</strong> en 2000 a <strong>108.000</strong> en 2022). El capítulo trata las intoxicaciones más frecuentes o problemáticas: paracetamol, benzodiacepinas, betabloqueantes, opioides y salicilatos.</p>
             <div class="article-figure" id="mar-img-52-1">
@@ -183,14 +183,15 @@
                 <p class="article-figure-caption">Figura 52.1 — Uso de fármacos con receta en EE. UU. (2015-2018) por edad: con ≥1 fármaco, 22% (18-44 años), 67% (45-64) y 90% (≥65); con ≥3, 10%, 37% y 65%.</p>
             </div>
 
-            <dl class="kv-row" id="mt-para-datos"><dt>Por qué preocupa</dt><dd>Está en más de <strong>600 preparados</strong> sin receta y es hepatotóxico: la primera causa de fallo hepático agudo en Norteamérica, Europa y Australia (casi la <strong>mitad</strong> en EE. UU.), y la mitad de las sobredosis son <strong>involuntarias</strong>. En 2011 la FDA endureció el etiquetado y limitó los productos de receta a 325 mg por unidad, sin apenas efecto.</dd></dl>
+            <dl class="kv-row" id="mt-para-datos"><dt>Por qué preocupa</dt><dd>Está en más de <strong>600 preparados</strong> sin receta y es hepatotóxico: la primera causa de fallo hepático agudo en Norteamérica, Europa y Australia (casi la <strong>mitad</strong> en EE. UU.), y la mitad de las sobredosis son <strong>involuntarias</strong>. En 2011 la FDA endureció el etiquetado y limitó los productos de receta a 325 mg por unidad, con poco efecto sobre la <strong>prevalencia del fallo hepático agudo</strong> por paracetamol.</dd></dl>
             <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoAbdomen" data-panel="panel-marino-abd-tabs" data-tab="ma-fallo-hepatico-agudo">🫀 Fallo hepático agudo (Cap. 39) →</button></p>
 
             <p class="section-label">Mecanismo</p>
             <div class="article-figure" id="mar-img-52-2">
                 <img src="js/modules/libros/img/mar-fig52-2-metabolismo-paracetamol.jpg" alt="Esquema del metabolismo hepático del paracetamol: 90% a conjugados no tóxicos y 10% por el citocromo P-450 a un metabolito tóxico que el glutatión neutraliza; la N-acetilcisteína repone el glutatión" loading="lazy">
-                <p class="article-figure-caption">Figura 52.2 — Metabolismo hepático del paracetamol: un 90% a conjugados no tóxicos (vía que se satura por encima de 4 g/día) y un 10% por el citocromo P-450 a un metabolito tóxico que neutraliza el glutatión (glutamato-cisteína-glicina); la N-acetilcisteína repone el glutatión.</p>
+                <p class="article-figure-caption">Figura 52.2 — Metabolismo hepático del paracetamol: un 90% a conjugados no tóxicos (vía que se satura por encima de 4 g/día) y un 10% por el citocromo P-450 a un metabolito tóxico que neutraliza el glutatión (la figura lo rotula «Glutathione = Glutamine/Cystine/Glycine»: glutamina/cistina/glicina); la N-acetilcisteína repone el glutatión.</p>
             </div>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la figura (pág. 4) imprime «Glutamine/Cystine/Glycine» y el texto (págs. 4 y 7) dice «glutamine, cysteine, and glycine». Son erratas: el glutatión es un tripéptido de <strong>glutamato</strong>, <strong>cisteína</strong> y glicina (no glutamina ni cistina). Es conocimiento general, no de la fuente: la búsqueda web no lo confirmó. Se reproduce la figura tal cual.</p></details>
             <dl class="kv-row" id="mt-para-mecanismo"><dt>Cómo daña</dt><dd>Casi todo se conjuga (sulfato y glucurónido) y se elimina por orina. Un <strong>10%</strong> lo oxida el citocromo P450 a un metabolito tóxico, que el <strong>glutatión</strong> neutraliza con su cisteína. Por encima de <strong>4 g/día</strong> la vía de conjugación se satura y aumenta la tóxica; cuando el glutatión cae un <strong>70%</strong>, el metabolito se acumula y lesiona el hepatocito.</dd></dl>
 
             <p class="section-label">Dosis tóxica</p>
@@ -213,22 +214,22 @@
             <dl class="kv-row" id="mt-para-nomograma"><dt>Nomograma</dt><dd>Por encima de la <strong>línea de tratamiento</strong> (de 150 µg/mL a las 4 h a 5 µg/mL a las 24 h): <strong>N-acetilcisteína</strong>. Por encima de la <strong>línea de alto riesgo</strong> (de 300 a 10): <span class="hl-rojo">90% de probabilidad de hepatotoxicidad</span>; puede necesitar NAC prolongada. Solo vale para ingestas agudas con hora conocida. Liberación prolongada: si a las 4-12 h no supera la línea, repetir el nivel 4-6 h después. Con dosis repetidas, el nivel no predice el riesgo.</dd></dl>
             <div class="agua-simulador" id="mt-nomo-calc">
                 <h4 style="color: var(--accent-red);">🧮 Nomograma de paracetamol (Figura 52.3)</h4>
-                <div class="form-group"><label for="mt-nomo-horas">Horas desde la ingesta (4-24)</label><input type="number" id="mt-nomo-horas" min="0" max="48" step="0.5" value="8" inputmode="decimal"></div>
-                <div class="form-group"><label for="mt-nomo-nivel">Nivel de paracetamol</label><input type="number" id="mt-nomo-nivel" min="0" max="2000" step="1" value="90" inputmode="decimal"></div>
+                <div class="form-group"><label for="mt-nomo-horas">Horas desde la ingesta (el nomograma va de 4 a 24)</label><input type="number" id="mt-nomo-horas" min="0" max="48" step="0.5" value="8" inputmode="decimal"></div>
+                <div class="form-group"><label for="mt-nomo-nivel">Nivel de paracetamol</label><input type="number" id="mt-nomo-nivel" min="0" max="13240" step="1" value="90" inputmode="decimal"></div>
                 <div class="form-group"><label for="mt-nomo-unidad">Unidad</label><select id="mt-nomo-unidad"><option value="ug">µg/mL (mg/L)</option><option value="umol">µmol/L</option></select></div>
-                <div class="form-group"><label for="mt-nomo-tipo">Tipo de ingesta</label><select id="mt-nomo-tipo"><option value="aguda">Aguda, hora conocida, liberación inmediata</option><option value="prolongada">Aguda, liberación prolongada</option><option value="repetida">Dosis supraterapéuticas repetidas</option></select></div>
+                <div class="form-group"><label for="mt-nomo-tipo">Tipo de ingesta (aguda: con hora conocida; repetidas: supraterapéuticas)</label><select id="mt-nomo-tipo"><option value="aguda">Aguda, liberación inmediata</option><option value="prolongada">Aguda, liberación prolongada</option><option value="repetida">Dosis repetidas</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="mt-nomo-resultado"></div>
             </div>
-            <p class="fuente-ficha">Las dos líneas son rectas en la escala logarítmica del nomograma: la calculadora interpola entre los extremos que da el texto (150→5 y 300→10 µg/mL de las 4 a las 24 h).</p>
+            <p class="fuente-ficha">El texto de Marino da solo los extremos de las líneas (150→5 y 300→10 µg/mL de las 4 a las 24 h). Los puntos intermedios se leen en el dibujo de la Figura 52.3 (pág. 6), donde la línea de tratamiento baja a la mitad cada 4 h: 150, 75, 37,5, 18,8, 9,4 y 5 µg/mL a las 4, 8, 12, 16, 20 y 24 h; la de alto riesgo es paralela (300 → 10). Entre esas horas la línea es una interpolación aproximada. El nivel se compara redondeado a 1 decimal; en la línea exacta, la calculadora aconseja tratar (el libro trata «por encima»). «Rumack-Matthew» es el nombre habitual del nomograma (conocimiento general): Marino solo dice «redibujado de la referencia 14». Rangos: fisiología general, no de la ficha.</p>
         </div>
 
         <!-- ===== FICHA II: N-ACETILCISTEÍNA (Cap. 52) ===== -->
         <div id="mt-nac" class="tab-content">
             <h3 style="color: var(--accent-red);">N-acetilcisteína y hemodiálisis</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 52.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 52 (<a class="biblio-link" href="docs/marino-2024-toxicologia-caps52-53-apendices.pdf#page=7" target="_blank" rel="noopener">pág. 7</a>).</p>
 
             <dl class="kv-row" id="mt-nac-por-que"><dt>Por qué funciona</dt><dd>El glutatión no entra bien en las células, así que darlo no sirve. Pero es un tripéptido (glutamato, cisteína, glicina) y su <strong>cisteína</strong> es la que neutraliza el metabolito: un sustituto de la cisteína, la <strong>N-acetilcisteína (NAC)</strong>, es un antídoto lógico y eficaz.</dd></dl>
-            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la fuente dice dos veces que el glutatión está formado por glutamina, cisteína y glicina. El tripéptido lleva <strong>glutamato</strong> (ácido glutámico), no glutamina.</p></details>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la fuente dice dos veces en el texto (págs. 4 y 7) que el glutatión está formado por glutamina, cisteína y glicina, y la Figura 52.2 lo rotula «Glutamine/Cystine/Glycine» (con «cistina»). Son erratas: el tripéptido lleva <strong>glutamato</strong> (ácido glutámico) y <strong>cisteína</strong>, no glutamina ni cistina. Conocimiento general, no de la fuente (la búsqueda web no lo confirmó).</p></details>
             <dl class="kv-row" id="mt-nac-indicacion"><dt>Cuándo</dt><dd>Nivel por encima de la línea de tratamiento, o cualquier posible hepatotoxicidad <strong>con transaminasas altas</strong>.</dd></dl>
 
             <p class="section-label">Pauta IV (preferida)</p>
@@ -242,12 +243,13 @@
                 </tbody>
             </table>
             </div>
-            <p class="fuente-ficha">Tabla 52.1 — NAC intravenosa.</p>
+            <p class="fuente-ficha">Tabla 52.1 — NAC intravenosa. Pauta de la ref. 2; criterios para parar de la ref. 14 (pág. 7).</p>
             <div class="agua-simulador" id="mt-nac-calc">
                 <h4 style="color: var(--accent-red);">🧮 Dosis de NAC IV (Tabla 52.1)</h4>
-                <div class="form-group"><label for="mt-nac-peso">Peso (kg)</label><input type="number" id="mt-nac-peso" min="5" max="200" step="1" value="70" inputmode="decimal"></div>
+                <div class="form-group"><label for="mt-nac-peso">Peso (kg)</label><input type="number" id="mt-nac-peso" min="20" max="300" step="1" value="70" inputmode="decimal"></div>
                 <div class="form-group"><label for="mt-nac-hd">¿En hemodiálisis?</label><select id="mt-nac-hd"><option value="no">No</option><option value="si">Sí</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="mt-nac-resultado"></div>
+                <p class="fuente-ficha">Rangos aceptados: fisiología general, no de la ficha.</p>
             </div>
             <div class="agua-simulador" id="mt-parar-calc">
                 <h4 style="color: var(--accent-red);">✅ ¿Puedo parar la NAC? (Tabla 52.1)</h4>
@@ -259,21 +261,23 @@
             </div>
 
             <p class="section-label">Pauta oral</p>
-            <dl class="kv-row" id="mt-nac-oral"><dt>Igual de eficaz, poco usada</dt><dd>Sabe muy mal (azufre). NAC al 10% diluida 2:1 en agua (al 5%, 50 mg/mL): <strong>140 mg/kg</strong> y luego <strong>70 mg/kg cada 4 h durante 72 h</strong>; total <strong>1.330 mg/kg</strong>. No hay instrucciones claras para valorar la mejoría ni alargarla.</dd></dl>
+            <dl class="kv-row" id="mt-nac-oral"><dt>Igual de eficaz, poco usada</dt><dd>Sabe muy mal (azufre). NAC al 10% diluida 2:1 en agua (al 5%, 50 mg/mL), según el libro: <strong>140 mg/kg</strong> y luego <strong>70 mg/kg cada 4 h durante 72 h</strong>; total <strong>1.330 mg/kg</strong>. No hay instrucciones claras para valorar la mejoría ni alargarla.</dd></dl>
+            <details class="nota-plegable"><summary>📝 Nota de fuentes</summary><p class="fuente-ficha">Nota de fuentes: Marino (pág. 8) imprime «NAC al 10%, diluir 2:1 en agua para hacer una solución al 5% (50 mg/mL)». La ficha técnica de la acetilcisteína oral la presenta al 20% y la diluye hasta el 5%: 3 mL de diluyente por cada mL de solución al 20% (1:3). No es la misma dilución y no se elige ninguna: se reproduce la del libro. Consulta la ficha técnica del preparado que uses. <a class="biblio-link" href="https://medlibrary.org/lib/rx/meds/acetylcysteine-1/page/3/" target="_blank" rel="noopener">Etiquetado: diluir el 20% hasta el 5%</a> · <a class="biblio-link" href="https://download.skyscape.com/download/ota/lonestar/077DE147-649A-4DA7-B2C3-415B395210D4/poisonod.ed8/content/HTML/5/tn3.htm" target="_blank" rel="noopener">3 mL de diluyente por mL de solución al 20%</a>.</p></details>
             <dl class="kv-row" id="mt-nac-adversos"><dt>Reacciones adversas IV</dt><dd>Náuseas, vómitos y reacciones cutáneas (exantema, angioedema), sobre todo en la primera hora (dosis mayor); incidencia del <strong>9 al 77%</strong>. Hay pautas alternativas con menos reacciones, de eficacia poco clara.</dd></dl>
             <dl class="kv-row" id="mt-nac-hd-txt"><dt>Hemodiálisis</dt><dd>Elimina el paracetamol: añadirla a la NAC con niveles <strong>&gt;900 µg/mL y encefalopatía hepática</strong>. Durante la diálisis, NAC IV a <strong>≥12,5 mg/kg/h</strong> (también se dializa); la oral no se ajusta.</dd></dl>
             <dl class="kv-row" id="mt-nac-pronostico"><dt>Pronóstico</dt><dd>Casi todos responden: mortalidad del <strong>0,4%</strong>. Si el daño progresa pese a la NAC, valorar el <strong>trasplante hepático</strong>.</dd></dl>
-            <div class="warning-box" id="mt-para-final"><strong>Regular el paracetamol.</strong> Si algún fármaco sin receta merece regularse, es este: primera causa de fallo hepático agudo y la mitad de las sobredosis por uso terapéutico, lo que muestra que no se conoce su riesgo. ¿Quién lee la letra pequeña del envase? Pedir receta con instrucciones parece el paso correcto. Se popularizó en los años 70 por miedo a la aspirina: "cambiamos un fármaco potencialmente tóxico por uno potencialmente letal".</div>
+            <div class="warning-box" id="mt-para-final"><strong>Regular el paracetamol.</strong> Si algún fármaco sin receta merece regularse, es este: primera causa de fallo hepático agudo y la mitad de las sobredosis por uso terapéutico, lo que muestra que no se conoce su riesgo. ¿Quién lee la letra pequeña del envase? Pedir receta con instrucciones parece el paso correcto. Se popularizó en los años 70 por miedo a la toxicidad de la aspirina, y Marino concluye que parece que sustituimos un fármaco potencialmente tóxico por uno potencialmente letal.</div>
         </div>
 
         <!-- ===== FICHA III: BENZODIACEPINAS Y BETABLOQUEANTES (Cap. 52) ===== -->
         <div id="mt-bzd-betabloq" class="tab-content">
             <h3 style="color: var(--accent-red);">Benzodiacepinas y betabloqueantes</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 52.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 52 (<a class="biblio-link" href="docs/marino-2024-toxicologia-caps52-53-apendices.pdf#page=8" target="_blank" rel="noopener">pág. 8</a>: benzodiacepinas; <a class="biblio-link" href="docs/marino-2024-toxicologia-caps52-53-apendices.pdf#page=10" target="_blank" rel="noopener">pág. 10</a>: betabloqueantes).</p>
 
             <p class="section-label">Benzodiacepinas</p>
             <dl class="kv-row" id="mt-bzd-datos"><dt>Riesgo</dt><dd>Segundas tras los opiáceos en las muertes por medicamentos, pero <strong>rara vez matan solas</strong>: casi siempre hay otro depresor respiratorio (opiáceos).</dd></dl>
             <dl class="kv-row" id="mt-bzd-clinica"><dt>Clínica</dt><dd>La sobredosis pura da sedación profunda y rara vez coma. Poco frecuentes: depresión respiratoria (<strong>2-12%</strong>), bradicardia (<strong>1-2%</strong>) e hipotensión (<strong>5-7%</strong>). Puede dar un cuadro confusional agitado con alucinaciones que parece una abstinencia alcohólica.</dd></dl>
+            <dl class="kv-row" id="mt-bzd-tto"><dt>Tratamiento</dt><dd>Soporte general: apoyo de la presión arterial y ventilación mecánica si hace falta. Hay antídoto (flumazenil), pero <strong>no es popular</strong>.</dd></dl>
             <dl class="kv-row" id="mt-bzd-dx"><dt>Diagnóstico</dt><dd>No hay niveles en sangre y el cribado en orina puede no detectar algunas (como el lorazepam): casi siempre se basa en la historia.</dd></dl>
             <dl class="kv-row" id="mt-flumazenil"><dt>Flumazenil</dt><dd>Antagonista del receptor GABA-A sin apenas efecto agonista: revierte la sedación, pero <strong>de forma irregular la depresión respiratoria</strong>. <strong>0,2 mg IV</strong> repetidos cada pocos minutos hasta <strong>1,0 mg</strong>; actúa en 1-2 min, máximo a los 6-10 min, dura ~1 h. Dura menos que las benzodiacepinas: la sedación puede volver a los 30-60 min; para evitarlo, perfusión de <strong>0,3-0,4 mg/h</strong>.</dd></dl>
             <div style="overflow-x:auto;">
@@ -300,7 +304,7 @@
                 <img src="js/modules/libros/img/mar-fig52-4-glucagon.jpg" alt="Esquema de la membrana del miocito: los receptores de glucagón y beta activan la adenilato ciclasa, que forma AMPc para la entrada de calcio; los betabloqueantes y los calcioantagonistas bloquean, la milrinona inhibe la fosfodiesterasa" loading="lazy">
                 <p class="article-figure-caption">Figura 52.4 — Cómo cambian los fármacos la fuerza de contracción: los receptores de glucagón y β activan la adenilato ciclasa (ATP → AMPc), el AMPc activa la proteína cinasa que abre la entrada de Ca²⁺; los betabloqueantes y los calcioantagonistas bloquean, la milrinona inhibe la fosfodiesterasa (PDE) que degrada el AMPc.</p>
             </div>
-            <dl class="kv-row" id="mt-glucagon-mecanismo"><dt>Por qué sirve</dt><dd>El receptor de glucagón activa la misma adenilato ciclasa que el receptor β: más <strong>AMPc</strong>, más entrada de calcio y más contracción. Su efecto cardioestimulante <span class="hl-verde">no depende del receptor β</span>: antídoto de los betabloqueantes.</dd></dl>
+            <dl class="kv-row" id="mt-glucagon-mecanismo"><dt>Por qué sirve</dt><dd>El glucagón es una hormona reguladora que se opone a la insulina (estimula la degradación del glucógeno para subir la glucosa); su papel cardíaco parece «no relacionado». El receptor de glucagón activa la misma adenilato ciclasa que el receptor β: más <strong>AMPc</strong>, más entrada de calcio y más contracción. Su efecto cardioestimulante <span class="hl-verde">no depende del receptor β</span>: antídoto de los betabloqueantes.</dd></dl>
             <dl class="kv-row" id="mt-glucagon-uso"><dt>Indicación</dt><dd>Hipotensión y bradicardia sintomática por betabloqueantes: respuesta favorable en el <strong>90%</strong>. <span class="hl-rojo">No revierte el bloqueo AV ni la neurotoxicidad</span> (no dependen del receptor β). También antagoniza los calcioantagonistas, pero peor.</dd></dl>
             <ol id="mt-glucagon-dosis">
                 <li>Bolo de <strong>3-5 mg IV</strong> (inicial habitual 3 mg o 0,05 mg/kg): respuesta en 3 min.</li>
@@ -310,9 +314,10 @@
             </ol>
             <div class="agua-simulador" id="mt-glucagon-calc">
                 <h4 style="color: var(--accent-red);">🧮 Glucagón en la intoxicación por betabloqueantes</h4>
-                <div class="form-group"><label for="mt-glucagon-peso">Peso (kg)</label><input type="number" id="mt-glucagon-peso" min="20" max="200" step="1" value="70" inputmode="decimal"></div>
+                <div class="form-group"><label for="mt-glucagon-peso">Peso (kg)</label><input type="number" id="mt-glucagon-peso" min="20" max="300" step="1" value="70" inputmode="decimal"></div>
                 <div class="form-group"><label for="mt-glucagon-respuesta">Respuesta al primer bolo</label><select id="mt-glucagon-respuesta"><option value="pendiente">Aún no dado</option><option value="si">Ha respondido</option><option value="no">No ha respondido</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="mt-glucagon-resultado"></div>
+                <p class="fuente-ficha">Rangos aceptados: fisiología general, no de la ficha.</p>
             </div>
             <dl class="kv-row" id="mt-glucagon-adversos"><dt>Efectos adversos</dt><dd>Náuseas y vómitos resistentes al ondansetrón por encima de 5 mg/h; hiperglucemia leve (glucogenólisis), con <strong>hipopotasemia</strong> por la insulina; y subidas de PA en hipertensos (libera catecolaminas).</dd></dl>
             <dl class="kv-row" id="mt-ipde"><dt>Inhibidores de la fosfodiesterasa</dt><dd>La <strong>milrinona</strong> impide degradar el AMPc: aumenta el gasto con bloqueo β y debería sumarse al glucagón (no está claro que añada eficacia). Son vasodilatadores: se reservan para el caso que no responde al glucagón.</dd></dl>
@@ -321,7 +326,7 @@
         <!-- ===== FICHA IV: OPIOIDES (Cap. 52) ===== -->
         <div id="mt-opioides" class="tab-content">
             <h3 style="color: var(--accent-red);">Opioides y naloxona</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 52.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 52 (<a class="biblio-link" href="docs/marino-2024-toxicologia-caps52-53-apendices.pdf#page=12" target="_blank" rel="noopener">pág. 12</a>).</p>
 
             <p>El problema de las sobredosis de opioides en EE. UU. no es ningún secreto, y la mayoría son de <strong>opioides con receta</strong>, no de la calle. Los efectos adversos de los opioides están en el Cap. 6.</p>
             <dl class="kv-row" id="mt-op-clinica"><dt>Clínica</dt><dd>El cuadro "de libro" es estupor, <strong>pupilas puntiformes</strong> y bradipnea, pero en realidad no se puede reconocer por la clínica ni la exploración: lo más fiable es la <strong>respuesta a la naloxona</strong>.</dd></dl>
@@ -358,6 +363,7 @@
                 <h4 style="color: var(--accent-red);">🧮 Perfusión de naloxona tras responder</h4>
                 <div class="form-group"><label for="mt-nal-eficaz">Dosis eficaz (mg)</label><input type="number" id="mt-nal-eficaz" min="0.1" max="15" step="0.1" value="2" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="mt-nal-resultado"></div>
+                <p class="fuente-ficha">Rangos aceptados: fisiología general, no de la ficha.</p>
             </div>
             <dl class="kv-row" id="mt-nal-adversos"><dt>Efectos adversos</dt><dd>Pocos: el más frecuente, el síndrome de <strong>abstinencia</strong>. Hay casos de <strong>edema pulmonar</strong> con dosis altas (venoconstricción pulmonar por activación simpática).</dd></dl>
             <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoFundamentos" data-panel="panel-marino-fund-tabs" data-tab="mar-analgesia">💊 Opioides en la UCI (Cap. 6) →</button></p>
@@ -366,7 +372,7 @@
         <!-- ===== FICHA V: SALICILATOS (Cap. 52) ===== -->
         <div id="mt-salicilatos" class="tab-content">
             <h3 style="color: var(--accent-red);">Salicilatos</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 52.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 52 (<a class="biblio-link" href="docs/marino-2024-toxicologia-caps52-53-apendices.pdf#page=14" target="_blank" rel="noopener">pág. 14</a>).</p>
 
             <dl class="kv-row" id="mt-sal-datos"><dt>Por qué importa</dt><dd>Se habla poco, pero es la segunda causa (tras el paracetamol) de muertes por suicidio con analgésicos sin receta. <strong>10-30 g, o 150 mg/kg</strong>, de aspirina pueden ser mortales.</dd></dl>
             <dl class="kv-row" id="mt-sal-seña"><dt>La seña de identidad</dt><dd>La aspirina pasa a <strong>ácido salicílico</strong> (la forma activa), que se absorbe en el tubo digestivo alto y se metaboliza en el hígado. Su marca: <span class="hl-purpura">alcalosis respiratoria + acidosis metabólica con hiato aniónico elevado</span>.</dd></dl>
@@ -393,11 +399,13 @@
                 <div class="form-group"><label for="mt-sal-unidad">Unidad</label><select id="mt-sal-unidad"><option value="mgdl">mg/dL</option><option value="mmol">mmol/L</option></select></div>
                 <div class="form-group"><label for="mt-sal-renal">¿Función renal alterada?</label><select id="mt-sal-renal"><option value="no">No</option><option value="si">Sí</option></select></div>
                 <div class="form-group"><label for="mt-sal-grave">¿Edema cerebral, SDRA o fallo multiorgánico?</label><select id="mt-sal-grave"><option value="no">No</option><option value="si">Sí</option></select></div>
-                <div class="form-group"><label for="mt-sal-peso">Peso (kg)</label><input type="number" id="mt-sal-peso" min="5" max="200" step="1" value="70" inputmode="decimal"></div>
+                <div class="form-group"><label for="mt-sal-peso">Peso (kg)</label><input type="number" id="mt-sal-peso" min="20" max="300" step="1" value="70" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="mt-sal-resultado"></div>
+                <p class="fuente-ficha">Rangos aceptados: fisiología general, no de la ficha.</p>
             </div>
 
             <p class="section-label">Tratamiento</p>
+            <dl class="kv-row" id="mt-sal-soporte"><dt>Soporte general</dt><dd>Líquidos, vasopresores y ventilación mecánica, además de lo siguiente.</dd></dl>
             <dl class="kv-row" id="mt-sal-carbon"><dt>Carbón activado</dt><dd>En <strong>todas</strong>, sea cual sea la hora: los salicilatos enlentecen el vaciamiento gástrico y los preparados entéricos o retard se quedan en el estómago (mejor en las primeras 2 h). <strong>1 g/kg</strong> (máx. 100 g) cada 4 h hasta que salga en las heces o bajen los niveles.</dd></dl>
             <dl class="kv-row" id="mt-sal-alcalinizar"><dt>Alcalinizar la orina</dt><dd>Una de las piedras angulares: aumenta la excreción. Bicarbonato (Tabla 52.3) hasta que los niveles vuelvan al rango terapéutico.</dd></dl>
             <div style="overflow-x:auto;">
@@ -411,7 +419,7 @@
                 </tbody>
             </table>
             </div>
-            <p class="fuente-ficha">Tabla 52.3 — Alcalinización de la orina.</p>
+            <p class="fuente-ficha">Tabla 52.3 — Alcalinización de la orina. Refs. 42 y 43 (pág. 16).</p>
             <dl class="kv-row" id="mt-sal-potasio"><dt>¿Por qué el potasio?</dt><dd>El bicarbonato mete K⁺ en las células, y la <strong>hipopotasemia impide alcalinizar la orina</strong> (aumenta la secreción de H⁺ en el túbulo distal): por eso los 40 mEq de KCl.</dd></dl>
             <dl class="kv-row" id="mt-sal-hd"><dt>Hemodiálisis</dt><dd>Lo más eficaz para eliminar salicilatos. Indicaciones: a) nivel <strong>&gt;90 mg/dL</strong> (&gt;6,5 mmol/L); b) <strong>&gt;80 mg/dL</strong> (&gt;5,8 mmol/L) con función renal alterada; c) intoxicación que amenaza la vida (edema cerebral, SDRA, fallo multiorgánico).</dd></dl>
         </div>
@@ -419,7 +427,7 @@
         <!-- ===== FICHA VI: MONÓXIDO DE CARBONO (Cap. 53) ===== -->
         <div id="mt-co" class="tab-content">
             <h3 style="color: var(--accent-purple);">Monóxido de carbono</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 53 "Nonpharmaceutical Poisons".</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 53 "Nonpharmaceutical Poisons" (<a class="biblio-link" href="docs/marino-2024-toxicologia-caps52-53-apendices.pdf#page=19" target="_blank" rel="noopener">pág. 19</a>).</p>
 
             <p>El capítulo trata los tóxicos no farmacológicos: <strong>monóxido de carbono, cianuro y alcoholes tóxicos</strong> (metanol y etilenglicol). Menos frecuentes que las sobredosis de fármacos, pero mortales si no se reconocen.</p>
             <dl class="kv-row" id="mt-co-origen"><dt>De dónde sale</dt><dd>De la combustión incompleta de materia orgánica: le falta una oxidación para ser CO₂ (2CO + O₂ → 2CO₂). Sobre todo humo de incendios, calefacciones defectuosas y escapes de coche (los catalizadores, que lo pasan a CO₂, han reducido sus emisiones más de un 95%).</dd></dl>
@@ -433,10 +441,10 @@
             <dl class="kv-row" id="mt-co-oxigenacion"><dt>Lo que dice la curva</dt><dd>El contenido arterial de O₂ baja en proporción a la COHb. Con una extracción normal (CaO₂ − CvO₂ = 5 mL/dL), la <strong>PO₂ venosa</strong> (aproximación de la tisular) es mucho menor con COHb: prueba indirecta de que el CO empeora la oxigenación de los tejidos.</dd></dl>
             <div class="agua-simulador" id="mt-co-sim">
                 <h4 style="color: var(--accent-purple);">🎛️ Simulador: el CO y la PO₂ venosa (Figura 53.1)</h4>
-                <div class="form-group"><label for="mt-co-sim-cohb">Carboxihemoglobina (%)</label><input type="range" id="mt-co-sim-cohb" min="0" max="60" step="1" value="50"></div>
+                <div class="form-group"><label for="mt-co-sim-cohb">Carboxihemoglobina (%)</label><input type="range" id="mt-co-sim-cohb" min="0" max="60" step="1" value="50" style="width:100%;box-sizing:border-box;margin-left:0;margin-right:0;"></div>
                 <svg id="mt-co-sim-svg" viewBox="0 0 320 190" role="img" aria-label="Curva de contenido de O₂ frente a PO₂ con y sin carboxihemoglobina" style="width:100%;max-width:420px;display:block;margin:0 auto;"></svg>
                 <div class="tfg-estado tfg-estado-ok" id="mt-co-sim-resultado"></div>
-                <p class="fuente-ficha">Ilustrativo: curva de Hill normal (P50 26,8 mmHg, n 2,7, 1,34 mL O₂/g con Hb 15 g/dL) y diferencia arteriovenosa fija de 5 mL/dL, como en la figura. El desplazamiento a la izquierda que produce la COHb en la curva real no se dibuja; la figura del libro tampoco lo muestra.</p>
+                <p class="fuente-ficha">Ilustrativo, aproximado a la Figura 53.1: curva de Hill normal (P50 26,8 mmHg, n 2,7, 1,34 mL O₂/g con Hb 15 g/dL) y diferencia arteriovenosa fija de 5 mL/dL, como en la figura. La COHb desplaza la curva a la izquierda (la figura lo muestra con el 50%): aquí el P50 baja 0,3 mmHg por cada 1% de COHb, un ajuste propio y lineal para que con el 50% la PO₂ venosa quede cerca de la de la figura (unos 12 mmHg). El tope del mando es 60%: con más, mantener 5 mL/dL de extracción dejaría una PO₂ venosa de pocos mmHg, que este modelo simple no describe.</p>
             </div>
             <dl class="kv-row" id="mt-co-otros"><dt>Otros efectos</dt><dd>Inhibe otras hemoproteínas: <strong>mioglobina</strong> (reserva de O₂ del músculo) y <strong>citocromo oxidasa</strong> (ATP en la mitocondria): paso a metabolismo anaerobio. Y activa los neutrófilos (especies reactivas de oxígeno). Quizá por eso la COHb <span class="hl-rojo">se correlaciona mal con la gravedad</span>.</dd></dl>
             <button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-inflamacion-ros">⚡ Activación de neutrófilos y especies reactivas de oxígeno (Cap. 17, Figura 17.1) →</button>
@@ -450,21 +458,22 @@
             <dl class="kv-row" id="mt-co-diferidas"><dt>Secuelas neurológicas diferidas</dt><dd>A las <strong>1-4 semanas</strong>: deterioro mental (juicio, memoria, cognición) y parkinsonismo. Su relación con la COHb no está clara.</dd></dl>
 
             <p class="section-label">Diagnóstico</p>
+            <dl class="kv-row" id="mt-co-dx-cohb"><dt>Qué exige</dt><dd>El diagnóstico <strong>no es posible solo con signos y síntomas</strong>: exige una <strong>COHb elevada en sangre</strong>.</dd></dl>
             <div class="warning-box" id="mt-co-pulsioximetria"><strong>La pulsioximetría NO sirve.</strong> Usa 2 longitudes de onda, y a 660 nm la COHb absorbe casi como la oxihemoglobina: la cuenta como HbO₂ y da una saturación <span class="hl-rojo">falsamente alta</span>. Hace falta un <strong>cooxímetro</strong> de 8 longitudes de onda (en casi todos los laboratorios), que mide todas las formas de hemoglobina en % del total.</div>
             <p style="display:flex;flex-wrap:wrap;gap:6px;"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoFundamentos" data-panel="panel-marino-fund-tabs" data-tab="mar-oximetria" data-resaltar="#mar-cooximetria">🩸 Cooximetría y oximetría (Cap. 7) →</button> <button type="button" class="especialidad-link" data-especialidad="fisioUci" data-view="hematologia" data-panel="panel-fuci-hemato-tabs" data-tab="fuci-transfusion">📈 El CO desplaza la curva de la Hb a la izquierda (El Libro Azul) →</button></p>
-            <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoFundamentos" data-panel="panel-marino-fund-tabs" data-tab="mar-oximetria">🔦 Oximetría (Cap. 7) →</button></p>
-            <dl class="kv-row" id="mt-co-umbral"><dt>Cuándo está alta</dt><dd>&lt;1% en el no fumador; 3-5% o más en el fumador. Umbral: <strong>3-4%</strong> en no fumadores y <strong>10%</strong> en fumadores.</dd></dl>
+                        <dl class="kv-row" id="mt-co-umbral"><dt>Cuándo está alta</dt><dd>&lt;1% en el no fumador; 3-5% o más en el fumador. Umbral: <strong>3-4%</strong> en no fumadores y <strong>10%</strong> en fumadores.</dd></dl>
 
             <p class="section-label">Tratamiento</p>
-            <dl class="kv-row" id="mt-co-o2"><dt>Oxígeno al 100%</dt><dd>Semivida de la COHb: <strong>320 min</strong> con aire y <strong>74 min</strong> con O₂ al 100%: menos de hora y media de O₂ al 100% debería normalizarla. Lo mejor para asegurarlo: <strong>gafas nasales de alto flujo</strong> calentadas y humidificadas (hasta 40 L/min).</dd></dl>
-            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: con la semivida de 74 min que da la propia fuente, hora y media de O₂ al 100% baja la COHb a algo menos de la mitad de la inicial, no a lo normal (un 25% tarda unas 3 h en llegar al 4%). La calculadora de esta ficha usa la semivida.</p></details>
+            <dl class="kv-row" id="mt-co-o2"><dt>Oxígeno al 100%</dt><dd>Semivida de la COHb: <strong>320 min</strong> con aire y <strong>74 min</strong> con O₂ al 100%: según Marino, menos de hora y media de O₂ al 100% debería normalizarla. Lo mejor para asegurarlo: <strong>gafas nasales de alto flujo</strong> calentadas y humidificadas (hasta 40 L/min).</dd></dl>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: con la semivida de 74 min que da la propia fuente, hora y media de O₂ al 100% baja la COHb a algo menos de la mitad de la inicial, no a lo normal (cálculo propio sobre la cifra del libro: un 25% tarda unas 3 h en llegar al 4%). La calculadora de esta ficha usa la semivida.</p></details>
             <button type="button" class="especialidad-link" data-especialidad="neumologia" data-view="merinoNeumologia" data-panel="panel-merino-neumo-tabs" data-tab="neumo-o2-sistemas">💨 Gafas nasales de alto flujo (Cap. 25, Figura 25.5) →</button>
             <div class="agua-simulador" id="mt-co-calc">
                 <h4 style="color: var(--accent-purple);">🧮 COHb: ¿alta? y cuánto tarda en bajar</h4>
-                <div class="form-group"><label for="mt-co-cohb">COHb (%)</label><input type="number" id="mt-co-cohb" min="0" max="80" step="0.5" value="25" inputmode="decimal"></div>
+                <div class="form-group"><label for="mt-co-cohb">COHb (%)</label><input type="number" id="mt-co-cohb" min="0" max="100" step="0.5" value="25" inputmode="decimal"></div>
                 <div class="form-group"><label for="mt-co-fumador">¿Fumador?</label><select id="mt-co-fumador"><option value="no">No</option><option value="si">Sí</option></select></div>
                 <div class="form-group"><label for="mt-co-grave">¿Intoxicación moderada o grave?</label><select id="mt-co-grave"><option value="no">No</option><option value="si">Sí</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="mt-co-resultado"></div>
+                <p class="fuente-ficha">Rangos aceptados: fisiología general, no de la ficha.</p>
             </div>
             <dl class="kv-row" id="mt-co-hiperbarico"><dt>Oxígeno hiperbárico</dt><dd>Estudiado desde los años 70; quizá reduzca las secuelas neuropsiquiátricas diferidas, pero en conjunto <span class="hl-rojo">no hay prueba convincente</span> de que supere al O₂ normobárico.</dd></dl>
             <dl class="kv-row" id="mt-co-corazon"><dt>El corazón</dt><dd>Lesión miocárdica en cerca del <strong>40%</strong> de las intoxicaciones moderadas o graves, de mal pronóstico: <strong>ECG y marcadores</strong> en todas ellas.</dd></dl>
@@ -474,7 +483,7 @@
         <!-- ===== FICHA VII: CIANURO (Cap. 53) ===== -->
         <div id="mt-cianuro" class="tab-content">
             <h3 style="color: var(--accent-purple);">Cianuro</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 53.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 53 (<a class="biblio-link" href="docs/marino-2024-toxicologia-caps52-53-apendices.pdf#page=22" target="_blank" rel="noopener">pág. 22</a>).</p>
 
             <dl class="kv-row" id="mt-cn-historia"><dt>Un tóxico con historia</dt><dd>Los nazis usaron gas cianhídrico (Zyklon-B) para el asesinato en masa en los años 40, y en 1978 bebidas con cianuro mataron a más de 900 adultos y niños en Jonestown (Guyana).</dd></dl>
             <dl class="kv-row" id="mt-cn-fuentes"><dt>Fuentes</dt><dd>Inhalación de ácido cianhídrico en <strong>incendios domésticos</strong>; ingesta de cianuro potásico o sódico (el ácido gástrico lo convierte en cianhídrico); y una fuente iatrogénica que no hay que olvidar: el <span class="hl-rojo">nitroprusiato</span>.</dd></dl>
@@ -499,6 +508,7 @@
                 <div class="form-group"><label for="mt-cn-parada">¿Parada cardíaca?</label><select id="mt-cn-parada"><option value="no">No</option><option value="si">Sí</option></select></div>
                 <div class="form-group"><label for="mt-cn-renal">¿Insuficiencia renal?</label><select id="mt-cn-renal"><option value="no">No</option><option value="si">Sí</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="mt-cn-resultado"></div>
+                <p class="fuente-ficha">Rangos aceptados: fisiología general, no de la ficha.</p>
             </div>
 
             <p class="section-label">Antídotos</p>
@@ -512,7 +522,7 @@
                 </tbody>
             </table>
             </div>
-            <p class="fuente-ficha">Tabla 53.1 — Antídotos del cianuro. Los más eficaces son IV, lo que puede retrasar el tratamiento.</p>
+            <p class="fuente-ficha">Tabla 53.1 — Antídotos del cianuro. Los más eficaces son IV, lo que puede retrasar el tratamiento. Refs. 12, 15 y 18 (pág. 24).</p>
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Hidroxocobalamina</span> <span class="toggle-icon">+</span></div>
@@ -534,7 +544,7 @@
         <!-- ===== FICHA VIII: ALCOHOLES TÓXICOS (Cap. 53) ===== -->
         <div id="mt-alcoholes" class="tab-content">
             <h3 style="color: var(--accent-purple);">Alcoholes tóxicos: etilenglicol y metanol</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 53.</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 53 (<a class="biblio-link" href="docs/marino-2024-toxicologia-caps52-53-apendices.pdf#page=25" target="_blank" rel="noopener">pág. 25</a>).</p>
 
             <p>Están en productos domésticos, de automoción e industriales, y los dos dan <strong>acidosis metabólica</strong>. Llamarlos "alcoholes tóxicos" es impreciso: da a entender que el etanol no lo es.</p>
             <div class="article-figure" id="mar-img-53-3">
@@ -588,15 +598,16 @@
                 </tbody>
             </table>
             </div>
-            <p class="fuente-ficha">Tabla 53.2 — Fomepizol.</p>
+            <p class="fuente-ficha">Tabla 53.2 — Fomepizol. Ref. 19 (pág. 28).</p>
             <div class="agua-simulador" id="mt-fome-calc">
                 <h4 style="color: var(--accent-purple);">🧮 Fomepizol y coadyuvantes (Tabla 53.2)</h4>
                 <div class="form-group"><label for="mt-fome-toxico">Tóxico</label><select id="mt-fome-toxico"><option value="eg">Etilenglicol</option><option value="met">Metanol</option></select></div>
-                <div class="form-group"><label for="mt-fome-peso">Peso (kg)</label><input type="number" id="mt-fome-peso" min="5" max="200" step="1" value="70" inputmode="decimal"></div>
-                <div class="form-group"><label for="mt-fome-ph">pH</label><input type="number" id="mt-fome-ph" min="6.5" max="7.7" step="0.01" value="7.15" inputmode="decimal"></div>
+                <div class="form-group"><label for="mt-fome-peso">Peso (kg)</label><input type="number" id="mt-fome-peso" min="20" max="300" step="1" value="70" inputmode="decimal"></div>
+                <div class="form-group"><label for="mt-fome-ph">pH</label><input type="number" id="mt-fome-ph" min="6.5" max="7.8" step="0.01" value="7.15" inputmode="decimal"></div>
                 <div class="form-group"><label for="mt-fome-organo">¿Coma, convulsiones o insuficiencia renal?</label><select id="mt-fome-organo"><option value="no">No</option><option value="si">Sí</option></select></div>
                 <div class="form-group"><label for="mt-fome-vision">¿Alteración visual?</label><select id="mt-fome-vision"><option value="no">No</option><option value="si">Sí</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="mt-fome-resultado"></div>
+                <p class="fuente-ficha">Rangos aceptados: fisiología general, no de la ficha.</p>
             </div>
             <dl class="kv-row" id="mt-alc-hd"><dt>Hemodiálisis</dt><dd>Aclara el etilenglicol y todos sus metabolitos. Inmediata si hay <strong>acidemia grave (pH &lt;7,1)</strong> o daño orgánico importante (coma, convulsiones, insuficiencia renal); en el metanol, también con <strong>alteración visual</strong>. Puede hacer falta repetirla; ajustar el fomepizol.</dd></dl>
             <dl class="kv-row" id="mt-alc-coadyuvantes"><dt>Coadyuvantes</dt><dd>Etilenglicol: <strong>tiamina 100 mg IV/día y piridoxina 100 mg IV/día</strong>, que desvían el glioxílico a metabolitos no tóxicos. Metanol: <strong>ácido folínico</strong> (leucovorina) <strong>1 mg/kg IV (máx. 50 mg) cada 4 h</strong>, que convierte el fórmico en no tóxicos; si no hay, ácido fólico.</dd></dl>
@@ -607,8 +618,8 @@
         <!-- ===== FICHA IX: APÉNDICE 1, UNIDADES Y CONVERSIONES ===== -->
         <div id="mt-unidades" class="tab-content">
             <h3 style="color: var(--accent-blue);">Apéndice 1 · Unidades y conversiones</h3>
-            <div class="form-group mt-apx-buscar"><label for="mt-unidades-buscar">🔎 Buscar en este apéndice</label><input type="search" id="mt-unidades-buscar" placeholder="p. ej., potasio, mmHg, French…" autocomplete="off"><span class="fuente-ficha" id="mt-unidades-buscar-n"></span></div>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Apéndice 1 "Units and Conversions".</p>
+            <div class="form-group mt-apx-buscar"><label for="mt-unidades-buscar">🔎 Buscar en este apéndice</label><input type="search" id="mt-unidades-buscar" placeholder="p. ej., calcio, kPa, French, onza…" autocomplete="off"><span class="fuente-ficha" id="mt-unidades-buscar-n"></span></div>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Apéndice 1 "Units and Conversions" (<a class="biblio-link" href="docs/marino-2024-toxicologia-caps52-53-apendices.pdf#page=32" target="_blank" rel="noopener">pág. 32</a>).</p>
 
             <p>Las unidades de la medicina vienen del sistema métrico (centímetro, gramo, segundo) y del anglosajón (pie, libra, segundo). El métrico nació con la Revolución francesa y se revisó en 1960: el <strong>Sistema Internacional (SI)</strong>, hoy el estándar mundial.</p>
             <div style="overflow-x:auto;">
@@ -632,23 +643,23 @@
             </table>
             </div>
             <p class="fuente-ficha">Unidades del Sistema Internacional (Partes 1 y 2).</p>
-            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el texto extraído del PDF trae varias erratas, corregidas aquí donde la intención es inequívoca y anotadas: "1 cm² = 10⁴ m²" (es 10⁻⁴), "0 °C = −273 K" (es 273 K), "1 mmHg = 1 × 10⁻⁹ torr" (1 mmHg ≈ 1 torr) y "1 onza = 30 mg" (son 30 g). La milla por hora son 0,45 m/s (la fuente redondea a 0,4).</p></details>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el texto extraído del PDF trae varias erratas, corregidas aquí donde la intención es inequívoca y anotadas: "1 cm² = 10⁴ m²" (es 10⁻⁴), "0 °C = −273 K" (es 273 K), "1 mmHg = 1 × 10⁻⁹ torr" (1 mmHg ≈ 1 torr) y "1 onza = 30 mg" (son 30 g) y "1 pie/s² = 0,03 m/s²" (1 pie/s² = 0,3048 m/s², porque 1 pie = 0,3048 m). La milla por hora son 0,45 m/s (la fuente redondea a 0,4). Las correcciones son conocimiento general, no de la fuente; las filas de la tabla reproducen lo que imprime el libro.</p></details>
 
             <p class="section-label">Concentraciones de solutos</p>
             <ol id="mt-conv-solutos">
                 <li><strong>Iones libres</strong> (mEq/L) a mmol/L: <span class="hl-purpura">mmol/L = mEq/L ÷ valencia</span>. Univalente (K⁺): igual; divalente (Mg²⁺): la mitad.</li>
                 <li><strong>Iones unidos en parte</strong> (Ca²⁺ en mg/dL) a mEq/L: <span class="hl-purpura">(mg/dL × 10 ÷ peso molecular) × valencia</span> (el 10 pasa de dL a L). Ejemplo: Ca²⁺ de 8 mg/dL (PM 40, valencia 2) = (8 × 10/40) × 2 = <strong>4 mEq/L</strong>.</li>
                 <li><strong>Moléculas sin carga</strong> (glucosa en mg/dL) a mmol/L: <span class="hl-purpura">mg/dL × 10 ÷ peso molecular</span>. Glucosa de 90 mg/dL (PM 180) = 90 × 10/180 = <strong>5 mmol/L</strong>.</li>
-                <li><strong>Osmolalidad</strong> (mOsm/kg H₂O): <span class="hl-purpura">mmol/L × n</span> = (mEq/L ÷ valencia) × n = (mg/dL × 10 ÷ PM) × n, con n el número de partículas no disociables por molécula. Na⁺ de 140 mEq/L = 140/1 × 1 = <strong>140 mOsm/kg</strong>; glucosa de 90 mg/dL = 90 × 10/180 × 1 = <strong>5 mOsm/kg</strong>. La actividad osmótica depende del número de partículas, no de su tamaño: un ion de sodio "pesa" lo mismo que una molécula de glucosa.</li>
+                <li><strong>Osmolalidad</strong> (mOsm/kg H₂O): <span class="hl-purpura">mmol/L × n</span> = (mEq/L ÷ valencia) × n = (mg/dL × 10 ÷ PM) × n, con n el número de partículas no disociables por molécula. Na⁺ de 140 mEq/L = 140/1 × 1 = <strong>140 mOsm/kg</strong>; glucosa de 90 mg/dL = 90 × 10/180 × 1 = <strong>5 mOsm/kg</strong>. El sodio del plasma tiene mucha más actividad osmótica que la glucosa (140 frente a 5 mOsm/kg) porque la actividad osmótica depende del número de partículas en solución, no de su tamaño: un ion de sodio tiene la misma actividad osmótica que una molécula de glucosa.</li>
             </ol>
             <div class="agua-simulador" id="mt-conv-calc">
                 <h4 style="color: var(--accent-blue);">🧮 Conversor de concentraciones (Apéndice 1)</h4>
-                <div class="form-group"><label for="mt-conv-soluto">Soluto</label><select id="mt-conv-soluto"><option value="na">Sodio (PM 23, valencia 1)</option><option value="k">Potasio (PM 39, valencia 1)</option><option value="cl">Cloro (PM 35,5, valencia 1)</option><option value="ca" selected>Calcio (PM 40, valencia 2)</option><option value="mg">Magnesio (PM 24,3, valencia 2)</option><option value="glucosa">Glucosa (PM 180, sin carga)</option><option value="urea">Nitrógeno ureico (BUN, PM 28, sin carga)</option></select></div>
-                <div class="form-group"><label for="mt-conv-valor">Valor</label><input type="number" id="mt-conv-valor" min="0" max="5000" step="0.1" value="8" inputmode="decimal"></div>
+                <div class="form-group"><label for="mt-conv-soluto">Soluto</label><select id="mt-conv-soluto"><option value="na">Sodio (PM 23)</option><option value="k">Potasio (PM 39)</option><option value="cl">Cloro (PM 35,5)</option><option value="ca" selected>Calcio (PM 40)</option><option value="mg">Magnesio (PM 24,3)</option><option value="glucosa">Glucosa (PM 180)</option><option value="urea">BUN (PM 28)</option></select></div>
+                <div class="form-group"><label for="mt-conv-valor">Valor</label><input type="number" id="mt-conv-valor" min="0" max="2000" step="0.1" value="8" inputmode="decimal"></div>
                 <div class="form-group"><label for="mt-conv-unidad">Unidad</label><select id="mt-conv-unidad"><option value="mgdl" selected>mg/dL</option><option value="mmol">mmol/L</option><option value="meq">mEq/L</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="mt-conv-resultado"></div>
             </div>
-            <p class="fuente-ficha">Pesos moleculares estándar; los del calcio y la glucosa son los del ejemplo del apéndice.</p>
+            <p class="fuente-ficha">Valencias: sodio, potasio y cloro, 1; calcio y magnesio, 2; glucosa y BUN, sin carga. Pesos moleculares: conocimiento general, no del apéndice; solo los del calcio (40) y la glucosa (180) son los del ejemplo del libro. Rangos: fisiología general, no de la ficha.</p>
 
             <p class="section-label">Equivalencias de farmacia y caseras</p>
             <div style="overflow-x:auto;">
@@ -665,7 +676,16 @@
             </div>
 
             <p class="section-label">Calibres: French y gauge</p>
-            <dl class="kv-row" id="mt-french"><dt>French</dt><dd>Regla útil: <span class="hl-purpura">diámetro externo (mm) × 3 = French</span>. Ejemplos de la tabla: 8 Fr = 2,6 mm; 12 Fr = 4,0 mm; 16 Fr = 5,3 mm; 20 Fr = 6,6 mm; 24 Fr = 8,0 mm; 30 Fr = 10,0 mm; 38 Fr = 12,6 mm (varía con el fabricante).</dd></dl>
+            <dl class="kv-row" id="mt-french"><dt>French</dt><dd>Regla útil: <span class="hl-purpura">diámetro externo (mm) × 3 = French</span>. Los diámetros varían con el fabricante.</dd></dl>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="mt-french-tabla">
+                <thead><tr><th>French</th><th>Diámetro externo (pulgadas)</th><th>Diámetro externo (mm)</th></tr></thead>
+                <tbody>
+                    <tr><td>1</td><td>0,01</td><td>0,3</td></tr><tr><td>4</td><td>0,05</td><td>1,3</td></tr><tr><td>8</td><td>0,10</td><td>2,6</td></tr><tr><td>10</td><td>0,13</td><td>3,3</td></tr><tr><td>12</td><td>0,16</td><td>4,0</td></tr><tr><td>14</td><td>0,18</td><td>4,6</td></tr><tr><td>16</td><td>0,21</td><td>5,3</td></tr><tr><td>18</td><td>0,23</td><td>6,0</td></tr><tr><td>20</td><td>0,26</td><td>6,6</td></tr><tr><td>22</td><td>0,28</td><td>7,3</td></tr><tr><td>24</td><td>0,31</td><td>8,0</td></tr><tr><td>26</td><td>0,34</td><td>8,6</td></tr><tr><td>28</td><td>0,36</td><td>9,3</td></tr><tr><td>30</td><td>0,39</td><td>10,0</td></tr><tr><td>32</td><td>0,41</td><td>10,6</td></tr><tr><td>34</td><td>0,44</td><td>11,3</td></tr><tr><td>36</td><td>0,47</td><td>12,0</td></tr><tr><td>38</td><td>0,50</td><td>12,6</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p class="fuente-ficha">Tabla de calibres French (págs. 34-35). La regla ×3 es aproximada: con ella 8 Fr dan 2,7 mm y 38 Fr, 12,7 mm, mientras la tabla pone 2,6 y 12,6 (cálculo propio sobre las cifras del libro).</p>
             <div style="overflow-x:auto;">
             <table class="data-table" id="mt-gauge">
                 <thead><tr><th>Gauge</th><th>Diámetro (pulgadas)</th><th>Diámetro (mm)</th></tr></thead>
@@ -674,37 +694,66 @@
                 </tbody>
             </table>
             </div>
-            <p class="fuente-ficha">Calibres gauge (diámetro externo; varía con el fabricante). La fila del 16 G trae 0,040 pulgadas, que no cuadra con sus 1,62 mm (serían ~0,064).</p>
+            <p class="fuente-ficha">Calibres gauge (diámetro externo; varía con el fabricante).</p>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la fila del 16 G trae 0,040 pulgadas, que no cuadra con sus 1,62 mm (serían ~0,064: cálculo propio, 1,62 ÷ 25,4). Se reproduce tal cual.</p></details>
             <div class="agua-simulador" id="mt-calibre-calc">
                 <h4 style="color: var(--accent-blue);">🧮 French ↔ milímetros</h4>
                 <div class="form-group"><label for="mt-calibre-valor">Valor</label><input type="number" id="mt-calibre-valor" min="0" max="60" step="0.1" value="12" inputmode="decimal"></div>
                 <div class="form-group"><label for="mt-calibre-unidad">Unidad</label><select id="mt-calibre-unidad"><option value="fr">French</option><option value="mm">mm</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="mt-calibre-resultado"></div>
+                <p class="fuente-ficha">Rangos aceptados: fisiología general, no de la ficha.</p>
             </div>
             <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoFundamentos" data-panel="panel-marino-fund-tabs" data-tab="mar-cateteres-flujo">📏 Catéteres y flujo: French y gauge (Cap. 1) →</button></p>
 
             <p class="section-label">Temperatura y presión</p>
-            <dl class="kv-row" id="mt-temp"><dt>Temperatura</dt><dd><span class="hl-purpura">°F = (9/5 × °C) + 32</span>; <span class="hl-purpura">°C = 5/9 × (°F − 32)</span>. De la tabla: 41 °C = 105,8 °F; 40 = 104; 39 = 102,2; 38 = 100,4; 37 = 98,6; 36 = 96,8; 35 = 95; 30 = 86.</dd></dl>
+            <dl class="kv-row" id="mt-temp"><dt>Temperatura</dt><dd><span class="hl-purpura">°F = (9/5 × °C) + 32</span>; <span class="hl-purpura">°C = 5/9 × (°F − 32)</span>.</dd></dl>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="mt-temp-tabla">
+                <thead><tr><th>°C</th><th>°F</th><th>°C</th><th>°F</th></tr></thead>
+                <tbody>
+                    <tr><td>41</td><td>105,8</td><td>35</td><td>95</td></tr>
+                    <tr><td>40</td><td>104</td><td>34</td><td>93,2</td></tr>
+                    <tr><td>39</td><td>102,2</td><td>33</td><td>91,4</td></tr>
+                    <tr><td>38</td><td>100,4</td><td>32</td><td>89,6</td></tr>
+                    <tr><td>37</td><td>98,6</td><td>31</td><td>87,8</td></tr>
+                    <tr><td>36</td><td>96,8</td><td>30</td><td>86</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p class="fuente-ficha">Conversión de temperaturas (págs. 35-36).</p>
             <dl class="kv-row" id="mt-presion"><dt>Presión</dt><dd><span class="hl-purpura">kPa = 0,133 × mmHg</span>; <span class="hl-purpura">mmHg = 7,5 × kPa</span>; 1 kPa = 10,2 cmH₂O.</dd></dl>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="mt-pres-tabla">
+                <thead><tr><th>mmHg</th><th>kPa</th><th>mmHg</th><th>kPa</th><th>mmHg</th><th>kPa</th></tr></thead>
+                <tbody>
+                    <tr><td>41</td><td>5,45</td><td>61</td><td>8,11</td><td>81</td><td>10,77</td></tr><tr><td>42</td><td>5,59</td><td>62</td><td>8,25</td><td>82</td><td>10,91</td></tr><tr><td>43</td><td>5,72</td><td>63</td><td>8,38</td><td>83</td><td>11,04</td></tr><tr><td>44</td><td>5,85</td><td>64</td><td>8,51</td><td>84</td><td>11,17</td></tr><tr><td>45</td><td>5,99</td><td>64</td><td>8,51</td><td>85</td><td>11,31</td></tr><tr><td>46</td><td>6,12</td><td>66</td><td>8,78</td><td>86</td><td>11,44</td></tr><tr><td>47</td><td>6,25</td><td>67</td><td>8,91</td><td>87</td><td>11,57</td></tr><tr><td>48</td><td>6,38</td><td>68</td><td>9,04</td><td>88</td><td>11,70</td></tr><tr><td>49</td><td>6,52</td><td>68</td><td>9,04</td><td>89</td><td>11,84</td></tr><tr><td>50</td><td>6,65</td><td>70</td><td>9,31</td><td>90</td><td>11,97</td></tr><tr><td>51</td><td>6,78</td><td>71</td><td>9,44</td><td>91</td><td>12,10</td></tr><tr><td>52</td><td>6,92</td><td>72</td><td>9,58</td><td>92</td><td>12,24</td></tr><tr><td>53</td><td>7,05</td><td>73</td><td>9,71</td><td>93</td><td>12,37</td></tr><tr><td>54</td><td>7,18</td><td>74</td><td>9,84</td><td>94</td><td>12,50</td></tr><tr><td>55</td><td>7,32</td><td>75</td><td>9,98</td><td>95</td><td>12,64</td></tr><tr><td>56</td><td>7,45</td><td>76</td><td>10,11</td><td>96</td><td>12,77</td></tr><tr><td>57</td><td>7,58</td><td>76</td><td>10,11</td><td>97</td><td>12,90</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p class="fuente-ficha">Apéndice 1 — Conversión de presiones de 41 a 97 mmHg a kPa (kPa = 0,133 × mmHg; mmHg = 7,5 × kPa), tal como se imprime en la pág. 36.</p>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la columna central repite tres filas: «64» dos veces con 8,51, «68» dos veces con 9,04 y «76» dos veces con 10,11. Por la secuencia deberían ser 65, 69 y 77, que con la fórmula del propio libro dan unos 8,64, 9,18 y 10,24 kPa (cálculo propio: 0,133 × mmHg). Además la tabla salta de 57 a 61 y de 77 a 81 (no imprime 58-60 ni 78-80). Se reproduce tal cual.</p></details>
+            <details class="nota-plegable"><summary>🖼️ Ver la tabla original (imagen)</summary>
             <div class="article-figure" id="mar-img-a1-1">
                 <img src="js/modules/libros/img/mar-apx1-presion.jpg" alt="Tabla de conversión de presiones de 41 a 97 mmHg a kilopascales" loading="lazy">
-                <p class="article-figure-caption">Apéndice 1 — Conversión de presiones de 41 a 97 mmHg a kPa (kPa = 0,133 × mmHg).</p>
+                <p class="article-figure-caption">Apéndice 1 — Conversión de presiones de 41 a 97 mmHg a kPa, como se imprime en el libro.</p>
             </div>
+            </details>
             <div class="agua-simulador" id="mt-unid-calc">
                 <h4 style="color: var(--accent-blue);">🧮 Temperatura y presión</h4>
-                <div class="form-group"><label for="mt-temp-valor">Temperatura</label><input type="number" id="mt-temp-valor" min="-50" max="250" step="0.1" value="38.5" inputmode="decimal"></div>
+                <div class="form-group"><label for="mt-temp-valor">Temperatura</label><input type="number" id="mt-temp-valor" min="10" max="113" step="0.1" value="38.5" inputmode="decimal"></div>
                 <div class="form-group"><label for="mt-temp-unidad">Unidad</label><select id="mt-temp-unidad"><option value="c">°C</option><option value="f">°F</option></select></div>
-                <div class="form-group"><label for="mt-pres-valor">Presión</label><input type="number" id="mt-pres-valor" min="0" max="2000" step="0.1" value="40" inputmode="decimal"></div>
+                <div class="form-group"><label for="mt-pres-valor">Presión</label><input type="number" id="mt-pres-valor" min="0" max="1100" step="0.1" value="40" inputmode="decimal"></div>
                 <div class="form-group"><label for="mt-pres-unidad">Unidad</label><select id="mt-pres-unidad"><option value="mmhg">mmHg</option><option value="kpa">kPa</option><option value="cmh2o">cmH₂O</option></select></div>
                 <div class="tfg-estado tfg-estado-ok" id="mt-unid-resultado"></div>
+                <p class="fuente-ficha">Rangos aceptados: fisiología general, no de la ficha.</p>
             </div>
         </div>
 
         <!-- ===== FICHA X: APÉNDICE 2, VALORES DE REFERENCIA ===== -->
         <div id="mt-referencias" class="tab-content">
             <h3 style="color: var(--accent-blue);">Apéndice 2 · Valores de referencia escogidos</h3>
-            <div class="form-group mt-apx-buscar"><label for="mt-referencias-buscar">🔎 Buscar en este apéndice</label><input type="search" id="mt-referencias-buscar" placeholder="p. ej., potasio, mmHg, French…" autocomplete="off"><span class="fuente-ficha" id="mt-referencias-buscar-n"></span></div>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Apéndice 2 "Selected Reference Ranges".</p>
+            <div class="form-group mt-apx-buscar"><label for="mt-referencias-buscar">🔎 Buscar en este apéndice</label><input type="search" id="mt-referencias-buscar" placeholder="p. ej., radiografía, IMC, PEF, volumen…" autocomplete="off"><span class="fuente-ficha" id="mt-referencias-buscar-n"></span></div>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Apéndice 2 "Selected Reference Ranges" (<a class="biblio-link" href="docs/marino-2024-toxicologia-caps52-53-apendices.pdf#page=37" target="_blank" rel="noopener">pág. 37</a>).</p>
 
             <p class="section-label">Radiación de las pruebas de imagen</p>
             <div style="overflow-x:auto;">
@@ -732,6 +781,7 @@
                 <div class="form-group"><label for="mt-rad-tca">TC abdominales</label><input type="number" id="mt-rad-tca" min="0" max="30" step="1" value="1" inputmode="decimal"></div>
                 <div class="form-group"><label for="mt-rad-angio">Angio-TC de tórax</label><input type="number" id="mt-rad-angio" min="0" max="30" step="1" value="0" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="mt-rad-resultado"></div>
+                <p class="fuente-ficha">Rangos aceptados: fisiología general, no de la ficha.</p>
             </div>
 
             <p class="section-label">Índice de masa corporal y pesos deseables</p>
@@ -744,15 +794,16 @@
                 <div class="form-group"><label for="mt-imc-peso">Peso (kg)</label><input type="number" id="mt-imc-peso" min="20" max="300" step="0.5" value="70" inputmode="decimal"></div>
                 <div class="form-group"><label for="mt-imc-talla">Talla (cm)</label><input type="number" id="mt-imc-talla" min="100" max="230" step="1" value="170" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="mt-imc-resultado"></div>
+                <p class="fuente-ficha">Rangos aceptados: fisiología general, no de la ficha.</p>
             </div>
             <p class="fuente-ficha">Las bandas del IMC no vienen con cifras en el apéndice; la calculadora usa las habituales de la OMS (bajo peso &lt;18,5; saludable 18,5-24,9; sobrepeso 25-29,9; obesidad ≥30; extrema ≥40). El IMC ≤18,5 es también criterio de riesgo de realimentación (Cap. 50).</p>
             <div class="article-figure" id="mar-img-a2-2">
                 <img src="js/modules/libros/img/mar-apx2-pesos-varones.jpg" alt="Tabla de pesos deseables en libras para varones según la talla y la complexión" loading="lazy">
-                <p class="article-figure-caption">Apéndice 2 — Pesos deseables (libras) de los varones según talla y complexión (pequeña, mediana, grande).</p>
+                <p class="article-figure-caption">Apéndice 2 — Pesos deseables (libras) de los varones, sin ropa, según talla y complexión (pequeña, mediana, grande).</p>
             </div>
             <div class="article-figure" id="mar-img-a2-3">
                 <img src="js/modules/libros/img/mar-apx2-pesos-mujeres.jpg" alt="Tabla de pesos deseables en libras para mujeres según la talla y la complexión" loading="lazy">
-                <p class="article-figure-caption">Apéndice 2 — Pesos deseables (libras) de las mujeres. Son los pesos con mayor esperanza de vida (Metropolitan Life, 1983); el libro los usa como peso ideal para el peso ajustado (Caps. 48-50).</p>
+                <p class="article-figure-caption">Apéndice 2 — Pesos deseables (libras) de las mujeres, sin ropa. Son los pesos con mayor esperanza de vida (Metropolitan Life, 1983); el libro los usa como peso ideal para el peso ajustado (Caps. 48-50).</p>
             </div>
 
             <p class="section-label">Flujo espiratorio máximo</p>
@@ -767,12 +818,13 @@
             <div class="agua-simulador" id="mt-pef-calc">
                 <h4 style="color: var(--accent-blue);">🧮 PEF previsto (ecuaciones de Leiner)</h4>
                 <div class="form-group"><label for="mt-pef-sexo">Sexo</label><select id="mt-pef-sexo"><option value="h">Varón</option><option value="m">Mujer</option></select></div>
-                <div class="form-group"><label for="mt-pef-edad">Edad (años)</label><input type="number" id="mt-pef-edad" min="15" max="100" step="1" value="40" inputmode="decimal"></div>
-                <div class="form-group"><label for="mt-pef-talla">Talla (cm)</label><input type="number" id="mt-pef-talla" min="120" max="220" step="1" value="175" inputmode="decimal"></div>
+                <div class="form-group"><label for="mt-pef-edad">Edad (años)</label><input type="number" id="mt-pef-edad" min="18" max="110" step="1" value="40" inputmode="decimal"></div>
+                <div class="form-group"><label for="mt-pef-talla">Talla (cm)</label><input type="number" id="mt-pef-talla" min="100" max="230" step="1" value="175" inputmode="decimal"></div>
                 <div class="form-group"><label for="mt-pef-medido">PEF medido (L/min, opcional)</label><input type="number" id="mt-pef-medido" min="0" max="1000" step="5" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="mt-pef-resultado"></div>
+                <p class="fuente-ficha">Rangos aceptados: fisiología general, no de la ficha.</p>
             </div>
-            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: las tablas no cuadran con sus propias ecuaciones. En los varones, cada columna coincide con la ecuación 5 pulgadas más arriba (lo que pone "60″" es el valor para 65″); en las mujeres, 5 pulgadas más abajo (lo que pone "65″" es el de 60″), y la primera celda (309 L/min a los 20 años) no encaja con ninguna. La calculadora usa las ecuaciones, que son la fuente de las tablas.</p></details>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: las tablas no cuadran con sus propias ecuaciones. En los varones, cada columna coincide con la ecuación 5 pulgadas más arriba (lo que pone "60″" es el valor para 65″); en las mujeres, 5 pulgadas más abajo (lo que pone "65″" es el de 60″), y la primera celda (309 L/min a los 20 años) no encaja con ninguna. La calculadora usa las ecuaciones. La comprobación de las columnas es propia, sobre las cifras del libro.</p></details>
             <p><button type="button" class="especialidad-link" data-especialidad="neumologia" data-view="merinoNeumologia" data-panel="panel-merino-neumo-tabs" data-tab="neumo-asma-epoc-basicos">🫁 PEF y gravedad del asma (Merino Neumología) →</button></p>
 
             <p class="section-label">Volumen sanguíneo</p>
@@ -790,8 +842,9 @@
             <div class="agua-simulador" id="mt-volemia-calc">
                 <h4 style="color: var(--accent-blue);">🧮 Volemia estimada</h4>
                 <div class="form-group"><label for="mt-volemia-sexo">Sexo</label><select id="mt-volemia-sexo"><option value="h">Varón</option><option value="m">Mujer</option></select></div>
-                <div class="form-group"><label for="mt-volemia-peso">Peso (kg)</label><input type="number" id="mt-volemia-peso" min="20" max="250" step="1" value="70" inputmode="decimal"></div>
+                <div class="form-group"><label for="mt-volemia-peso">Peso (kg)</label><input type="number" id="mt-volemia-peso" min="20" max="300" step="1" value="70" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="mt-volemia-resultado"></div>
+                <p class="fuente-ficha">Rangos aceptados: fisiología general, no de la ficha.</p>
             </div>
 
             <p class="section-label">CAM-ICU</p>
@@ -799,13 +852,14 @@
                 <img src="js/modules/libros/img/mar-apx2-cam-icu.jpg" alt="Formulario del CAM-ICU con los cuatro rasgos: comienzo agudo o curso fluctuante, inatención, pensamiento desorganizado y nivel de consciencia alterado" loading="lazy">
                 <p class="article-figure-caption">Apéndice 2 — El CAM-ICU (Ely, JAMA 2001): delirio si hay un sí en I y II, y en III o IV. La calculadora está en la ficha del delirio (Cap. 45).</p>
             </div>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la imagen del libro (pág. 43) dice «metal status» en el rasgo I-A; es «mental status». Se reproduce tal cual.</p></details>
             <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoNeuro" data-panel="panel-marino-neuro-tabs" data-tab="mn-delirio" data-resaltar="#mn-cam-calc">🌀 Calcular el CAM-ICU (Cap. 45) →</button></p>
         </div>
 
         <!-- ===== FICHA XI: APÉNDICE 3, EL CUERPO FANTÁSTICO ===== -->
         <div id="mt-cuerpo" class="tab-content">
             <h3 style="color: var(--accent-blue);">Apéndice 3 · El cuerpo fantástico</h3>
-            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Apéndice 3 "The Body Fantastic".</p>
+            <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Apéndice 3 "The Body Fantastic" (<a class="biblio-link" href="docs/marino-2024-toxicologia-caps52-53-apendices.pdf#page=44" target="_blank" rel="noopener">pág. 44</a>).</p>
 
             <p>El verdadero problema de la medicina no es el coste ni el acceso: es arreglar una máquina de unos <strong>100 billones de piezas</strong> (las células del cuerpo), ninguna visible a simple vista. Datos y curiosidades sin aplicación práctica, como homenaje al cuerpo humano.</p>
             <div class="micro-profiles">
@@ -847,7 +901,7 @@
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🫀 El latido incomprensible</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="mt-cuerpo-latido"><p>Cada latido tiene, según la fuente, <strong>6 variables</strong>: la fase (sístole, diástole), el lado (derecho, izquierdo) y la respiración (inspiración, espiración). Solo procesamos unas 4 a la vez: un latido es, en cada instante, incomprensible.</p><p class="fuente-ficha">Nota de interpretación: en rigor son 3 variables con 2 valores cada una: 6 valores y 8 combinaciones posibles, no 6 variables.</p></div>
+                    <div class="micro-prof-body" id="mt-cuerpo-latido"><p>Cada latido tiene, según la fuente, <strong>6 variables</strong>: la fase (sístole, diástole), el lado (derecho, izquierdo) y la respiración (inspiración, espiración). Solo procesamos unas 4 a la vez: un latido es, en cada instante, incomprensible.</p><p class="fuente-ficha">Nota de interpretación (conocimiento general, no de la fuente): en rigor son 3 variables con 2 valores cada una: 6 valores y 8 combinaciones posibles, no 6 variables.</p></div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🐍 Mudar la piel</span> <span class="toggle-icon">+</span></div>
@@ -863,7 +917,7 @@
                 </div>
             </div>
             <p class="fuente-ficha">Para quien disfrute de este enfoque numérico, el libro recomienda: Milo R, Phillips R. <em>Cell Biology by the Numbers</em>. Garland Science, 2016.</p>
-            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la fuente escribe "Akira Hiraguchi"; el nombre del mnemonista es Akira Haraguchi. Y redondea los 32 millones de años: 10¹⁵ segundos son unos 32 millones de años.</p></details>
+            <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la fuente escribe «Akira Hiraguchi»; el nombre habitual del mnemonista es Akira Haraguchi (conocimiento general, no de la fuente). Los 32 millones de años son la cifra del libro; comprobación propia: 10¹⁵ segundos son unos 31,7 millones de años.</p></details>
         </div>
 
     </div>

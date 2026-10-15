@@ -372,3 +372,19 @@ Lo demás va al parte `autonomo/partes/2026-10-14-marino-r1.md` y a `autonomo/id
 - capnografía `#page=44`.
 
 Parte: `autonomo/partes/2026-10-14-marino-r2.md`.
+
+## Marino Tóxicos: revisión R13 del plan Marino, caps. 52-53 y apéndices (octubre 2026)
+
+`marino-r13` (revisión sin construir), 1 vuelta, 11 fichas. Corregido:
+- el simulador del CO con el desplazamiento de la Fig. 53.1;
+- el pie y la errata de la Fig. 52.2;
+- el conversor de presión, que alteraba el valor;
+- límites y umbrales redondeados;
+- la línea del nomograma según la figura;
+- nota de fuentes de la NAC oral (con ficha técnica);
+- tope del glucagón;
+- erratas de los apéndices con nota;
+- el buscador de apéndices;
+- la tabla French completa.
+
+Parte: `autonomo/partes/2026-10-15-marino-r13.md`.

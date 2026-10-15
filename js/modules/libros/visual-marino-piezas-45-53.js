@@ -113,14 +113,14 @@ export const escaleraTiamina = {
     }
 };
 
-// ---------- Cap. 52: el nomograma de Rumack-Matthew con el paciente ----------
+// ---------- Cap. 52: el nomograma del paracetamol con el paciente ----------
 export const nomogramaVivo = {
     tipo: 'propio', titulo: 'El nomograma, con tu paciente',
-    nota: 'Las dos líneas, como en la calculadora: rectas en escala logarítmica de 150 a 5 µg/mL (tratamiento) y de 300 a 10 µg/mL (alto riesgo), de las 4 a las 24 h. Toca el gráfico para colocar al paciente.',
+    nota: 'Las dos líneas, como en la calculadora: puntos leídos en la Figura 52.3 (tratamiento: 150, 75, 37,5, 18,8, 9,4 y 5 µg/mL a las 4, 8, 12, 16, 20 y 24 h; alto riesgo: de 300 a 10), con interpolación aproximada entre ellos. Toca el gráfico para colocar al paciente.',
     render(cuerpo, { tab }) {
         cuerpo.innerHTML = `<div id="mrp-nomo"></div>${aTexto('mt-para-nomograma', 'Nomograma ↓')} ${aTexto('mt-nomo-calc', 'La calculadora ↓')}`;
         const X = t => 40 + (t - 4) / 20 * 265, Y = v => 175 - Math.log10(v) / 3 * 165;
-        const linea = (a, b) => { let d = ''; for (let t = 4; t <= 24.01; t += 0.5) d += `${d ? 'L' : 'M'}${X(t).toFixed(1)},${Y(lineaNomograma(t, a, b)).toFixed(1)}`; return d; };
+        const linea = alto => { let d = ''; for (let t = 4; t <= 24.01; t += 0.5) d += `${d ? 'L' : 'M'}${X(t).toFixed(1)},${Y(lineaNomograma(t, alto)).toFixed(1)}`; return d; };
         const pintar = () => {
             const t = num($('mt-nomo-horas')), n = num($('mt-nomo-nivel')), umol = $('mt-nomo-unidad').value === 'umol';
             const ug = n === null ? null : umol ? n / 6.62 : n;
@@ -129,11 +129,11 @@ export const nomogramaVivo = {
             const dentro = t !== null && ug !== null && t >= 4 && t <= 24 && ug > 0;
             const punto = dentro ? `<circle cx="${X(t)}" cy="${Math.max(10, Y(Math.min(ug, 1000)))}" r="6" fill="var(--text-main)" stroke="var(--bg-main)" stroke-width="2"/>` : '';
             cuerpo.querySelector('#mrp-nomo').innerHTML = SVG('0 0 320 196', `${ejesY}${ejesX}
-                <path d="${linea(300, 10)}" fill="none" stroke="${C('red')}" stroke-width="2.4"/>
-                <path d="${linea(150, 5)}" fill="none" stroke="${C('yellow')}" stroke-width="2.4"/>
-                <text x="${X(14)}" y="${Y(lineaNomograma(14, 300, 10)) - 6}" fill="${C('red')}">alto riesgo</text>
-                <text x="${X(14)}" y="${Y(lineaNomograma(14, 150, 5)) + 14}" fill="${C('yellow')}">tratamiento</text>
-                <text x="44" y="18" class="mrp-eje">µg/mL (escala log)</text>${punto}`, 'Nomograma de Rumack-Matthew con el nivel del paciente');
+                <path d="${linea(true)}" fill="none" stroke="${C('red')}" stroke-width="2.4"/>
+                <path d="${linea(false)}" fill="none" stroke="${C('yellow')}" stroke-width="2.4"/>
+                <text x="${X(14)}" y="${Y(lineaNomograma(14, true)) - 6}" fill="${C('red')}">alto riesgo</text>
+                <text x="${X(14)}" y="${Y(lineaNomograma(14)) + 14}" text-anchor="end" fill="${C('yellow')}">tratamiento</text>
+                <text x="44" y="18" class="mrp-eje">µg/mL (escala log)</text>${punto}`, 'Nomograma del paracetamol con el nivel del paciente');
         };
         cuerpo.querySelector('#mrp-nomo').addEventListener('click', e => {
             const svg = e.currentTarget.querySelector('svg');
@@ -157,7 +157,7 @@ export const alcalinizacion = {
     tipo: 'propio', titulo: 'Por qué alcalinizar la orina',
     nota: 'Fisiología general, no del capítulo: el salicílico es un ácido débil (pKa ≈3); solo la forma no ionizada atraviesa la membrana y se reabsorbe. Al subir el pH urinario queda atrapado como salicilato y sale por la orina. El objetivo, pH ≥7,5, es el de la Tabla 52.3.',
     render(cuerpo, { tab }) {
-        cuerpo.innerHTML = `<div class="form-group"><label for="mrp-alc-ph">pH de la orina: <strong id="mrp-alc-ph-v"></strong></label><input type="range" id="mrp-alc-ph" min="5" max="8" step="0.1" value="6"></div>
+        cuerpo.innerHTML = `<div class="form-group"><label for="mrp-alc-ph">pH de la orina: <strong id="mrp-alc-ph-v"></strong></label><input type="range" id="mrp-alc-ph" min="5" max="8" step="0.1" value="6" style="width:100%;box-sizing:border-box;margin-left:0;margin-right:0;"></div>
             <div id="mrp-alc"></div><div class="tfg-estado" id="mrp-alc-res"></div>
             ${aTexto('mt-sal-alcalinizar', 'Alcalinizar ↓')} ${aTexto('mt-sal-potasio', '¿Por qué el potasio? ↓')}`;
         const PKA = 3, noIon = ph => 1 / (1 + 10 ** (ph - PKA));
@@ -168,10 +168,10 @@ export const alcalinizacion = {
             const reabs = Math.max(0, Math.round(f / ref * puntos));
             let pts = '';
             for (let i = 0; i < puntos; i++) pts += `<circle cx="${20 + (i % 20) * 14}" cy="${30 + Math.floor(i / 20) * 16}" r="5" fill="${i < reabs ? C('red') : C('green')}"/>`;
-            cuerpo.querySelector('#mrp-alc').innerHTML = SVG('0 0 300 70', `${pts}<text x="10" y="64" class="mrp-pq">Rojo: forma no ionizada (se reabsorbe), escalada a pH 5 = 40. Verde: atrapado en la orina.</text>`, 'Salicilato ionizado y no ionizado en la orina');
+            cuerpo.querySelector('#mrp-alc').innerHTML = SVG('0 0 300 92', `${pts}<text x="10" y="68" class="mrp-pq" style="font-size:11.5px">Rojo: no ionizado, se reabsorbe (pH 5 = 40).</text><text x="10" y="84" class="mrp-pq" style="font-size:11.5px">Verde: atrapado en la orina.</text>`, 'Salicilato ionizado y no ionizado en la orina');
             const r = cuerpo.querySelector('#mrp-alc-res');
             r.className = `tfg-estado tfg-estado-${ph >= 7.5 ? 'ok' : ph >= 6.5 ? 'warn' : 'danger'}`;
-            r.innerHTML = `pH ${fmt(ph)}: la forma reabsorbible es <strong>${fmt(ref / f, 0)} veces menor</strong> que a pH 5 (${ph >= 7.5 ? 'en el objetivo de la Tabla 52.3' : 'por debajo del objetivo ≥7,5'}).`;
+            r.innerHTML = `pH ${fmt(ph)}: la forma reabsorbible es <strong>${fmt(ref / f, 0)} ${Math.round(ref / f) === 1 ? 'vez' : 'veces'} menor</strong> que a pH 5 (${ph >= 7.5 ? 'en el objetivo de la Tabla 52.3' : 'por debajo del objetivo ≥7,5'}).`;
         };
         cuerpo.querySelector('#mrp-alc-ph').addEventListener('input', pintar);
         pintar();
@@ -187,7 +187,7 @@ export const caidaCohb = {
         cuerpo.innerHTML = `<div id="mrp-cohb"></div>${aTexto('mt-co-o2', 'Oxígeno al 100% ↓')} ${aTexto('mt-co-calc', 'La calculadora ↓')}`;
         const pintar = () => {
             const c = num($('mt-co-cohb')), umbral = $('mt-co-fumador').value === 'si' ? 10 : 4, destino = cuerpo.querySelector('#mrp-cohb');
-            if (c === null || c <= 0) { destino.innerHTML = ''; return; }
+            if (c === null || c <= 0 || c > 100) { destino.innerHTML = ''; return; }
             const ymax = Math.max(c, umbral) * 1.1, X = t => 34 + t / 480 * 276, Y = v => 160 - v / ymax * 145;
             const curva = T => { let d = ''; for (let t = 0; t <= 480; t += 8) d += `${d ? 'L' : 'M'}${X(t).toFixed(1)},${Y(c * 0.5 ** (t / T)).toFixed(1)}`; return d; };
             const ticks = [0, 60, 120, 180, 240, 300, 360, 420, 480].map(t => `<text x="${X(t)}" y="174" text-anchor="middle">${t / 60} h</text>`).join('');
@@ -212,17 +212,17 @@ export const lineaFomepizol = {
         cuerpo.innerHTML = `<div id="mrp-fome"></div>${aTexto('mt-tabla-53-2', 'Tabla 53.2 ↓')} ${aTexto('mt-alc-hd', 'Hemodiálisis ↓')}`;
         const pintar = () => {
             const p = num($('mt-fome-peso')), destino = cuerpo.querySelector('#mrp-fome');
-            if (!p || p <= 0) { destino.innerHTML = ''; return; }
-            const X = h => 24 + h / 84 * 280;
+            if (!p || p < 20 || p > 300) { destino.innerHTML = ''; return; }
+            const X = h => 24 + h / 84 * 280, g = n => n.toLocaleString('es-ES', { maximumFractionDigits: 0, useGrouping: 'always' }), T = 'style="font-size:11.5px"';
             const dosis = [[0, 15, 'red', 'Carga'], [12, 10, 'yellow'], [24, 10, 'yellow'], [36, 10, 'yellow'], [48, 10, 'yellow'], [60, 15, 'purple'], [72, 15, 'purple']];
-            const marcas = dosis.map(([h, mgkg, col, etq]) => `<circle cx="${X(h)}" cy="60" r="${mgkg === 15 ? 8 : 6}" fill="${C(col)}" opacity="${h >= 60 ? 0.5 : 0.9}"/><text x="${etq ? X(h) - 8 : X(h)}" y="${etq ? 40 : 84}" text-anchor="${etq ? 'start' : 'middle'}" class="mrp-pq">${etq ? `${etq} ` : ''}${fmt(mgkg * p, 0)} mg</text>`).join('');
-            const ticks = [0, 12, 24, 36, 48, 60, 72, 84].map(h => `<text x="${X(h)}" y="118" text-anchor="${h === 84 ? 'end' : 'middle'}">${h} h</text>`).join('');
-            destino.innerHTML = SVG('0 0 320 124', `
-                <line x1="${X(0)}" x2="${X(84)}" y1="60" y2="60" class="mrp-rejilla"/>
+            const marcas = dosis.map(([h, mgkg, col, etq], i) => `<circle cx="${X(h)}" cy="70" r="${mgkg === 15 ? 8 : 6}" fill="${C(col)}" opacity="${h >= 60 ? 0.5 : 0.9}"/><text x="${etq ? X(h) - 8 : X(h)}" y="${etq ? 50 : 92 + (i % 2) * 14}" text-anchor="${etq ? 'start' : 'middle'}" class="mrp-pq" ${T}>${etq ? `${etq} ` : ''}${g(mgkg * p)} mg</text>`).join('');
+            const ticks = [0, 12, 24, 36, 48, 60, 72, 84].map(h => `<text x="${X(h)}" y="128" text-anchor="${h === 84 ? 'end' : 'middle'}" ${T}>${h} h</text>`).join('');
+            destino.innerHTML = SVG('0 0 320 170', `
+                <line x1="${X(0)}" x2="${X(84)}" y1="70" y2="70" class="mrp-rejilla"/>
                 ${marcas}${ticks}
-                <text x="${X(30)}" y="104" text-anchor="middle" class="mrp-pq" fill="${C('yellow')}">10 mg/kg/12 h, 4 dosis</text>
-                <text x="314" y="104" text-anchor="end" class="mrp-pq" fill="${C('purple')}">15 mg/kg/12 h si sigue &gt;20</text>
-                <text x="${X(0)}" y="16" class="mrp-pq">Con más de una sesión de diálisis: 15 mg/kg cada 4 h</text>`, 'Pauta del fomepizol a lo largo del tiempo');
+                <text x="${X(0)}" y="14" class="mrp-pq" ${T}>Con más de una sesión de diálisis:</text><text x="${X(0)}" y="29" class="mrp-pq" ${T}>15 mg/kg cada 4 h</text>
+                <text x="${X(0)}" y="148" class="mrp-pq" fill="${C('yellow')}" ${T}>10 mg/kg/12 h, 4 dosis</text>
+                <text x="${X(0)}" y="164" class="mrp-pq" fill="${C('purple')}" ${T}>15 mg/kg/12 h si sigue &gt;20</text>`, 'Pauta del fomepizol a lo largo del tiempo');
         };
         alCambiar(['mt-fome-toxico', 'mt-fome-peso', 'mt-fome-ph', 'mt-fome-organo', 'mt-fome-vision'], pintar);
         pintar();

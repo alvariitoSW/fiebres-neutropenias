@@ -155,3 +155,15 @@ Coinciden los tres revisores:
   - weaning el día 7: SBT fallido con la SvO₂ que cae; fuga <110 mL;
   - «encuentra el error»: clorhexidina + SOD;
   - «piensa y destapa»: ¿ansiedad o fracaso en el SBT?; extubar sube el trabajo respiratorio (Fig. 30.2).
+
+### R13 · Caps. 52-53 y apéndices (Marino Tóxicos) · 2026-10-15
+
+- **Casos de la escalera tóxica**:
+  - humo con SpO₂ normal y lactato alto → cianuro;
+  - metanol frente a etilenglicol con el hiato osmolal;
+  - paracetamol con dosis repetidas;
+  - salicilato que acaba en hemodiálisis.
+- **Hiato osmolal vivo** en la ficha de alcoholes, sobre la gasometría del cap. 31: encaja con el proyecto de
+  ácido-base del usuario.
+- **«Encuentra el error»**: pulsioxímetro normal descarta CO; nomograma con dosis repetidas; flumazenil con
+  convulsiones; tiosulfato en la insuficiencia renal.
