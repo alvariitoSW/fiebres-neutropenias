@@ -70,12 +70,12 @@ cada trozo salen de `js/data/libros-indice.js` (capítulos y su `tab`); el PDF y
 | 5 | `marino-r5` | 18-21 (trastornos cardíacos) | hecha (2026-10-14) · PR #7 | 12 fichas · Merino Cardiología |
 | 6 | `marino-r6` | 22-26 | hecha (2026-10-14) · PR #8 | 13 fichas · Merino Neumología |
 | 7 | `marino-r7` | 27-30 | hecha (2026-10-14) · PR #9 | 10 fichas · Merino Neumología |
-| 8 | `marino-r8` | 31-35 | en revisión (2026-10-14) · PR #10 | 15 fichas · Libros |
-| 9 | `marino-r9` | 36-38 | en revisión (2026-10-15) · PR #12 (encima de #10) | 8 fichas · Libros |
-| 10 | `marino-r10` | 39-44 | en revisión (2026-10-15) · PR #11 | 17 fichas · Libros |
-| 11 | `marino-r11` | 45-47 | en revisión (2026-10-15) · PR #14 | 14 fichas · Libros |
-| 12 | `marino-r12` | 48-51 | pendiente | 14 fichas · Libros |
-| 13 | `marino-r13` | 52-53 y apéndices | en revisión (2026-10-15) · PR #13 | 11 fichas · Libros |
+| 8 | `marino-r8` | 31-35 | hecha (2026-10-15) · PR #10 | 15 fichas · Libros |
+| 9 | `marino-r9` | 36-38 | hecha (2026-10-15) · PR #12 | 8 fichas · Libros |
+| 10 | `marino-r10` | 39-44 | hecha (2026-10-15) · PR #11 | 17 fichas · Libros |
+| 11 | `marino-r11` | 45-47 | hecha (2026-10-15) · PR #14 | 14 fichas · Libros |
+| 12 | `marino-r12` | 48-51 | hecha (2026-10-15) · PR #15 | 14 fichas · Libros |
+| 13 | `marino-r13` | 52-53 y apéndices | hecha (2026-10-15) · PR #13 | 11 fichas · Libros |
 
 ---
 
@@ -201,7 +201,7 @@ revisión** (decisión del usuario del 14/10: primero la fase 1 entera). Las fas
 
 | # | Clave | Qué | Estado | Notas |
 |---|---|---|---|---|
-| 1 | `marino-mapa` | Mapa visual de todo Marino (profesor, modo mapa) | pendiente | tras `marino-r13` |
+| 1 | `marino-mapa` | Mapa visual de todo Marino (profesor, modo mapa) | en curso (2026-10-15) | fase 1 terminada |
 
 **Encargo de `marino-mapa`** (tipo `mapa`, profesor con el modelo potente):
 - **Qué quiero**: el «Mapa visual» de The ICU Book en `autonomo/ideas/marino.md`. Son los pocos modelos grandes,
