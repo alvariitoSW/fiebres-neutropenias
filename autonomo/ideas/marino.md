@@ -201,3 +201,14 @@ Coinciden los tres revisores:
   - el alcohólico del día 1 al 4;
   - la HIC con warfarina o con apixabán (andexanet);
   - la crisis miasténica.
+### R12 · Caps. 48-51 (Marino Nutrición y endocrino) · 2026-10-15
+
+- **El intestino como defensa**: la mucosa con y sin nutrientes en la luz (trofismo, IgA, translocación) frente a la
+  NPT.
+- **Realimentación con la escena del potasio** (`potasio-escena.js`): la glucosa y la insulina meten K⁺, fosfato y
+  Mg²⁺ en la célula, y la tiamina se agota.
+- **Eje hipotálamo-hipófisis-tiroides y suprarrenal** con T4 libre y TSH como mandos (Tabla 51.2, Fig. 51.1).
+- **Casos**:
+  - el alcohólico desnutrido con NPT y noradrenalina;
+  - el coma mixedematoso;
+  - la tormenta tiroidea en un asmático.

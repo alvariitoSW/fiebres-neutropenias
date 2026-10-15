@@ -19,7 +19,9 @@
 // Tipos de panel: 'figuras' (las figuras reales de la ficha en una tira;
 // `todas: true` o `nodos` con sus ids), 'flujo', 'escalera', 'comparar', 'racimos', 'mapa',
 // 'linea', 'puntos' (barras de puntuación conectadas a una calculadora),
-// 'requisitos' (casillas reales como candados o barreras),
+// 'requisitos' (casillas reales como candados o barreras; opcional `sinPuerta: true`
+// quita la barra de la puerta cuando el veredicto lo da el resultado de la calculadora,
+// e `iconoMarcado` cambia el icono de lo marcado en el modo 'ninguno'),
 // 'propio' (`render(cuerpo, { tab, texto })`: una pieza a medida del
 // módulo, que se monta una vez y gestiona sus propias actualizaciones),
 // 'selector' (opciones de un <select> real), 'calculadora' (los campos de
@@ -369,12 +371,12 @@ function renderRequisitos(p, estado) {
     const abierto = todos ? marcados === total : marcados === 0;
     const items = estado.items.map((it, k) => {
         const on = it.control.checked;
-        const icono = todos ? (on ? '🔓' : '🔒') : (on ? '⛔' : '○');
+        const icono = todos ? (on ? '🔓' : '🔒') : (on ? (p.iconoMarcado || '⛔') : '○');   // `iconoMarcado`: opcional, p. ej. '☑' si lo marcado no es una barrera
         return `<button type="button" class="vk-req ${on ? 'on' : ''}" data-item="${k}" aria-pressed="${on}"><span class="vk-req-icono" aria-hidden="true">${icono}</span><span>${it.etiqueta}</span></button>`;
     }).join('');
     const cuenta = todos ? `${marcados}/${total} abiertos` : (marcados ? `${marcados} barrera${marcados > 1 ? 's' : ''}` : 'sin barreras');
     return `<div class="vk-reqs ${todos ? 'todos' : 'ninguno'}">${items}</div>
-        <div class="vk-puerta ${abierto ? 'abierta' : 'cerrada'}"><span>${p.puerta || ''}</span><b>${cuenta}</b></div>
+        ${p.sinPuerta ? '' : `<div class="vk-puerta ${abierto ? 'abierta' : 'cerrada'}"><span>${p.puerta || ''}</span><b>${cuenta}</b></div>`}
         <div class="vk-resultado">${copiarResultados(p.resultado)}</div>${LINK_CONTROL}`;
 }
 
