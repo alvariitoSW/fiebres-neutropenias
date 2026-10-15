@@ -70,9 +70,9 @@ cada trozo salen de `js/data/libros-indice.js` (capítulos y su `tab`); el PDF y
 | 5 | `marino-r5` | 18-21 (trastornos cardíacos) | hecha (2026-10-14) · PR #7 | 12 fichas · Merino Cardiología |
 | 6 | `marino-r6` | 22-26 | hecha (2026-10-14) · PR #8 | 13 fichas · Merino Neumología |
 | 7 | `marino-r7` | 27-30 | hecha (2026-10-14) · PR #9 | 10 fichas · Merino Neumología |
-| 8 | `marino-r8` | 31-35 | pendiente | 15 fichas · Libros |
-| 9 | `marino-r9` | 36-38 | pendiente | 8 fichas · Libros |
-| 10 | `marino-r10` | 39-44 | pendiente | 17 fichas · Libros |
+| 8 | `marino-r8` | 31-35 | en revisión (2026-10-14) · PR #10 | 15 fichas · Libros |
+| 9 | `marino-r9` | 36-38 | en revisión (2026-10-15) · PR #12 (encima de #10) | 8 fichas · Libros |
+| 10 | `marino-r10` | 39-44 | en revisión (2026-10-15) · PR #11 | 17 fichas · Libros |
 | 11 | `marino-r11` | 45-47 | pendiente | 14 fichas · Libros |
 | 12 | `marino-r12` | 48-51 | pendiente | 14 fichas · Libros |
 | 13 | `marino-r13` | 52-53 y apéndices | pendiente | 11 fichas · Libros |
@@ -193,6 +193,38 @@ Aparcadas hasta que el usuario apruebe la entrada B-006 de la bitácora (método
   frente a crónica que evoluciona.
 - Lo que NO quiero: tarjetas de números como figura principal; párrafos largos; un esquema de círculos.
 - Fuente: echodemo (`src/ch/mr.js`, `index.html` #ch-mr), extracto en la PR #2.
+
+## Objetivo M2 · Plan Marino, fase 2: mapa visual
+
+Aprobado por el usuario el 15/10/2026 (bitácora B-003, fase 2). **Empieza cuando toda la fase 1 esté hecha o en
+revisión** (decisión del usuario del 14/10: primero la fase 1 entera). Las fases 3-5 de B-003 siguen esperando.
+
+| # | Clave | Qué | Estado | Notas |
+|---|---|---|---|---|
+| 1 | `marino-mapa` | Mapa visual de todo Marino (profesor, modo mapa) | pendiente | tras `marino-r13` |
+
+**Encargo de `marino-mapa`** (tipo `mapa`, profesor con el modelo potente):
+- **Qué quiero**: el «Mapa visual» de The ICU Book en `autonomo/ideas/marino.md`. Son los pocos modelos grandes,
+  vivos y biológicos que explicarían casi todo el libro, el orden de los bloques de estudio y lo que no merece
+  modelo.
+- **Para qué**: que las fases 4-5 construyan pocos modelos buenos en vez de un gráfico por ficha (REGLAS §7.8).
+- **Mandan las ideas del usuario** (sección de `autonomo/ideas/marino.md`):
+  - los fluidos como **agua de río y de mar**, con un buen trabajo artístico;
+  - **ácido-base como proyecto propio** sobre el riñón de PIF Nefrología (nefrona viva, glomérulo), mejorado con
+    Marino. Tiene que **sorprender a nivel artístico** y ser de las mejores herramientas visuales de la app.
+- **Ideas de los revisores R1-R13** en el mismo archivo. Hay que pesar sobre todo:
+  - el **pulmón con respirador** (lo piden los tres revisores de R6 y de R7);
+  - el **modelo de shock** sobre el motor del latido y el eco;
+  - el **hígado y el amonio**;
+  - el **termostato**.
+- **Modelos que ya existen** y hay que mirar funcionando: corazón, ecógrafo y atlas; motor del latido; nefrona viva
+  y glomérulo; potasio; filtro de la TRR; receptores animados con Motion.
+- **Lo visual que espero**: cada modelo nuevo, con una **maqueta** (página o Artifact) para que el usuario elija
+  antes de construir.
+- **Lo que NO quiero**: gráficos de tarjetas de números ni barras sueltas; modelos que repiten lo que un modelo
+  grande ya puede hacer.
+- **Fuente**: los PDF de Marino en `docs/` (imágenes reales ya en la app) e `js/data/libros-indice.js`.
+- **Hecho**: el mapa escrito, con las maquetas de los modelos nuevos publicadas y la PR en borrador con su enlace.
 
 ---
 

@@ -99,7 +99,8 @@ esta sección.
 - **Tamaño**: grande. La fase 1 es barata y rápida; lo caro es la 4.
 - **Decidido (14/10)**: las fichas **se quedan donde están**; basta con que Libros → Marino las reúna. **3 tareas
   por sesión**; hasta 3 vueltas por tarea (una 4.ª solo si quedan más de 3 fallos). **Fase 1 aprobada** (en el
-  tablero como Objetivo M); las fases 2-5 esperan.
+  tablero como Objetivo M). **Fase 2 aprobada el 15/10** (Objetivo M2, `marino-mapa`): empieza al terminar la fase 1.
+  Las fases 3-5 esperan.
 
 ### B-004 · El Libro Azul (Fisiopatología UCI): comprobar, estudio y completar · apuntado 2026-10-14
 - **Lo que dijiste**: «y del libro azul de fisiopatología a la UCI, que me faltaría además subir el temario».
@@ -153,23 +154,19 @@ esta sección.
 | `marino-r8`, `marino-r9` | Plan Marino R8-R9 (Marino Renal, caps. 31-38) | en revisión: [PR #10](https://github.com/alvariitoSW/fiebres-neutropenias/pull/10) y [#12](https://github.com/alvariitoSW/fiebres-neutropenias/pull/12) (la #12 va encima de la #10) | 2026-10-15 | «Ver en el móvil» arriba de cada PR |
 | `marino-r10` | Plan Marino R10 (Marino Abdomen, caps. 39-44) | en revisión: [PR #11](https://github.com/alvariitoSW/fiebres-neutropenias/pull/11) | 2026-10-15 | |
 | `marino-r11` … `marino-r13` | Plan Marino, fase 1: lo que queda (caps. 45-53) | pendiente | 2026-10-14 | Aprobada. **La fase 2 (mapa visual) espera a que termine toda la fase 1** (decisión del usuario, 14/10). |
+| `marino-mapa` | Plan Marino, fase 2: mapa visual (profesor) | pendiente, tras R13 | 2026-10-15 | Aprobada el 15/10. Mandan tus ideas: río y mar; ácido-base sobre el riñón de PIF «que sorprenda». |
 
 El resto del tablero sigue `aparcada` hasta que apruebes la entrada de la bitácora que le toca.
 
 ## 3. Esperando algo tuyo
 
 - **Aprobar B-001, B-002, B-004, B-005, B-006 y las fases 2-5 de B-003** (o cambiar el orden).
-- **Revisar las PR #10, #11 y #12** (R8-R10). Decisiones que piden:
-  - R8: la gasometría de ejemplo del libro (7,28 / 23 / 14) no es coherente; ¿se queda con su nota o se pone otra?
-  - R9: Marino no pone cifra a la hipermagnesemia «grave»; la app toma >5 (bloqueo AV).
-  - R10: la nota del Ringer lactato «casi isotónico» (fisiología general, rotulada): ¿se queda?
-- **Propuestas de regla nacidas de R4-R10** (para `autonomo/REGLAS.md` §6, con tu visto bueno):
-  - **erratas de dosis**: la dosis habitual + nota plegable visible con lo que imprime el libro (vasopresina U/h,
-    dabigatrán 50 mg, HNF 60 U; parte de R4);
-  - **tablas que se salen de su tarjeta**: que los jueces lo midan, no solo la página (parte de R5);
-  - **SVG recreados con fondo propio**, porque `.article-figure` es blanca (parte de R6);
-  - **umbrales clínicos comparados redondeados** (la KDIGO fallaba en 2,0 → 2,3; parte de R8);
-  - **notas de interpretación solo con fuente**, o marcadas como conocimiento general (parte de R10).
+- **Revisar las PR #10, #11 y #12** (R8-R10). Ya respondiste a sus dudas (15/10):
+  - R8: la gasometría de ejemplo se queda como está, con su nota.
+  - R9: hipermagnesemia grave consultada en la web (Manual Merck), anotada en la ficha.
+  - R10: Ringer lactato consultado en la web (WikEM y StatPearls), anotado.
+- **Regla sin respuesta**: que los jueces midan también las tablas que se salen de su tarjeta (no solo la página).
+  Salió en R5. ¿La apruebas?
 
 - **Simulador de arritmias (idea de RitmoLab)**: los PDF de los algoritmos **AHA 2025** (bradicardia, taquicardia,
   parada y la guía completa); heart.org está bloqueado desde el entorno. Decidido: puerta propia en la raíz
@@ -207,6 +204,11 @@ El resto del tablero sigue `aparcada` hasta que apruebes la entrada de la bitác
 
 ## 6. Hecho (últimos 7 días)
 
+- 2026-10-15 · **Reglas aprobadas tras R4-R10** (`autonomo/REGLAS.md` §1.8-1.10 y §2.5b, `CLAUDE.md` §5 y §7):
+  - erratas de dosis: dosis habitual + nota visible, con consulta web si hay duda;
+  - notas de interpretación siempre con fuente, y web si hay discordia;
+  - umbrales de las calculadoras comparados redondeados;
+  - SVG recreados con fondo propio.
 - 2026-10-15 · **Plan Marino, revisiones R4-R7** (caps. 14-30, 47 fichas), aprobadas y en la app (PR #6-#9):
   - R4: vasopresina en U/min con nota, 3.er vasopresor = epinefrina, remisiones «Ficha N» → botones; después,
     el escenario de bradicardia repuesto con el texto de Marino (lo pediste);
