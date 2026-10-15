@@ -26,6 +26,17 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
    error** (el modelo, una unidad, una fórmula, un parámetro mal ajustado) y corregirlo en su origen. Si el modelo
    lleva a un estado posible pero que el texto no describe (p. ej. un shock), se ajusta el modelo o se dice en
    pantalla.
+8. **Erratas de dosis.** Cuando la fuente imprime una dosis imposible o equivocada (U/h por U/min, «50 mg» por 150,
+   «60 U» sin /kg), se muestra la dosis habitual y una nota plegable visible dice lo que imprime el libro y en qué
+   página. Si hay duda sobre cuál es la dosis habitual, **se consulta la web** (CLAUDE §7.2: URL que salga
+   literalmente en los resultados) y la nota cita esa fuente; si sale de conocimiento general, lo dice.
+9. **Notas de interpretación, siempre con fuente.** Una nota que explica, matiza o concilia lleva la fuente de lo
+   que afirma. Sin fuente, no se pone (o se rotula «conocimiento general, no de la fuente»). **Si algo genera mucha
+   discordia** entre fuentes o con lo que se sabe, se busca en la web y se citan las fuentes encontradas, sin elegir
+   una ganadora (regla 4).
+10. **Calculadoras: los umbrales se comparan redondeados.** Un umbral clínico (≥0,3, ×1,5, <25 %) se compara con
+    enteros o con el valor redondeado que se muestra, nunca restando decimales tal cual (2,3 − 2,0 da 0,2999 y falla
+    justo en el límite). El texto del resultado no puede contradecir su propio veredicto por el redondeo.
 
 ## 2. La app
 
@@ -38,6 +49,8 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
 4. **Ids únicos en toda la app** (todas las vistas están en el DOM a la vez): comprueba con grep antes de inventar
    uno.
 5. **Si cambias un `.css` o `js/main.js`**, sube la fecha `?v=` de `index.html`.
+5b. **SVG recreados con fondo propio** (`var(--bg-main)`): la caja de `.article-figure` es blanca y el texto claro de la
+   app desaparece en ella.
 6. **Motor del simulador de eco**: si lo tocas, todas sus pruebas siguen en verde y lo cuentas en
    `js/modules/eco/README.md`. Nunca cambies una referencia de `referencias.mjs` para que una prueba pase.
 
@@ -90,6 +103,12 @@ vez:
   - Recetas Visual por id (`CLAUDE.md` §5): «Fase I» encontraba la «Fase II».
   - En una serie de revisiones, primero los archivos modelo (Merino HEMATO tenía 7 graves).
   - Dos tareas a la vez en carpetas aparte (`git worktree`, skill del plan).
+- Revisiones de Marino R4-R10 (octubre 2026), aprobadas por el usuario el 15/10:
+  - §1.8 erratas de dosis (vasopresina, dabigatrán, HNF; R4-R5), con consulta web si hay duda.
+  - §1.9 notas de interpretación con fuente (R10: tres notas sin fuente, una contradecía a Marino), con web si hay
+    discordia.
+  - §1.10 umbrales redondeados (R8: la KDIGO decía «no cumple» con 2,0 → 2,3).
+  - §2: SVG recreados con fondo propio (R6: texto claro sobre la caja blanca de `.article-figure`).
 
 ## 7. Sirve para estudiar (rúbrica; manda tanto como la fidelidad)
 

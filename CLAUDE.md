@@ -104,7 +104,8 @@ backend/ admin/         panel de subida de contenido (aparte de la app)
   `.yellow`, III `.red`); notas de fidelidad en `<details class="nota-plegable">`; `.comparativa-fuentes`.
 - **Bibliografía**: `.biblio-link` + `.biblio-nota`. Nunca `.pkpd-btn` (está atado a la calculadora PK/PD).
 - **Figuras**: `<div class="article-figure"><img loading="lazy">` + `.article-figure-caption` (lightbox gratis).
-  Nunca un `<img>` que apunte a un archivo que no se llegó a extraer.
+  Nunca un `<img>` que apunte a un archivo que no se llegó a extraer. Un SVG recreado lleva su propio fondo
+  (`var(--bg-main)`): la caja de `.article-figure` es blanca y el texto claro de la app desaparece en ella.
 - **Ocultar** con el atributo `hidden` (regla global `[hidden]{display:none!important}`).
 - **Color**: solo los tokens de `css/variables.css`, nunca colores nuevos. Ojo: `--accent-blue` es en realidad un
   dorado casi igual a `--accent-yellow` (no los uses juntos para distinguir cosas) y `--accent-green` se ve apagado
@@ -137,7 +138,9 @@ backend/ admin/         panel de subida de contenido (aparte de la app)
    faltan; no las des por leídas.
 4. **Origen visible** en simuladores y calculadoras: `ficha`, `fisiología general` o `ilustrativo`.
 5. **Erratas de la fuente**: se reproducen tal cual con nota de fidelidad. **Fuentes que discrepan**: se muestran las
-   dos con una nota de fuentes; nunca se elige una ganadora por criterio propio.
+   dos con una nota de fuentes; nunca se elige una ganadora por criterio propio. **Errata de dosis**: la dosis
+   habitual y una nota visible con lo que imprime el libro. **Notas de interpretación**: siempre con su fuente. Si
+   hay duda o mucha discordia, se busca en la web y se cita (ver §7.2 y `autonomo/REGLAS.md` §1.8-1.9).
 6. **No resumas por debajo de la fuente**: cifras, fármacos, mecanismos y tablas completas.
 7. **Tablas** de la fuente → `.data-table` nativas (en `overflow-x:auto` si son anchas). **Imágenes**: solo fotos y
    registros reales (eco, Rx, TC, histología, ECG); gráficos y flujogramas se recrean. Extracción con `pdfimages`; si
@@ -148,7 +151,8 @@ backend/ admin/         panel de subida de contenido (aparte de la app)
    la app. Nada de imágenes de pacientes con licencia restrictiva (CAMUS, EchoNet).
 10. **Calculadoras**: `calcX()` + `init()`; un campo vacío nunca es 0 (`el.value === ''`); clamp de rangos; aviso de
     «combinación no fisiológica»; scores aditivos sí, regresiones complejas sin verificar (p. ej. KFRE) no. Casillas
-    que suman puntos: clase `.puntuable` o `<select>` (la regla general tacha lo marcado).
+    que suman puntos: clase `.puntuable` o `<select>` (la regla general tacha lo marcado). Los umbrales se comparan
+    redondeados (2,3 − 2,0 da 0,2999): el resultado nunca contradice su veredicto por el redondeo.
 11. **Texto de las fichas**: en el gancho de una ficha, no unas 3 o más palabras con «/» sin espacios
     («α1/α2/β1»): no parte la línea y desborda en el móvil.
 12. **Si el usuario pide convenciones que no están aquí, pregunta** antes de asumir que vienen de otro proyecto.
