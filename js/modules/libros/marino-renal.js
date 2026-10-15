@@ -23,15 +23,24 @@ function ocultar(box) { if (box) box.style.display = 'none'; }
 // calculadora avisa en su propio recuadro y no calcula (así una albúmina en
 // g/L o una creatinina en µmol/L no dan un resultado que parece válido).
 const numES = v => Number(v).toLocaleString('es-ES', { maximumFractionDigits: 2 });
-// Campos de los caps. 36-38 cuyo min/max del HTML es más estrecho que lo que su calculadora ya sabe
-// contestar (K⁺ ≥3,5 «no hay hipopotasemia», K⁺ ≤5,5 «no es hiperpotasemia», calcio ≤10 «no hay
-// hipercalcemia»): se dejan como estaban hasta que la revisión de esos capítulos ensanche su rango.
-const SIN_LIMITE = new Set(['mr-kdef-k', 'mr-hk-k', 'mr-hiperca-ca']);
 function camposFueraDeRango(ids) {
-    return ids.map($).filter(el => el && el.type === 'number' && el.value !== '' && !SIN_LIMITE.has(el.id)).filter(el => {
+    return ids.map($).filter(el => el && el.type === 'number' && el.value !== '').filter(el => {
         const v = Number(el.value);
         return (el.min !== '' && v < Number(el.min)) || (el.max !== '' && v > Number(el.max));
     });
+}
+// Campos cuyo rango depende de la unidad elegida (caps. 37-38): el min/max del HTML vale para la unidad
+// por defecto y este ajuste lo cambia al elegir otra. Debe llamarse ANTES de enlazar() para que su
+// aviso de rango lea ya los límites nuevos. Los límites son de fisiología general, no de la ficha.
+function limitesPorUnidad(campoId, selectIds, tabla) {
+    const campo = $(campoId), selects = selectIds.map($);
+    if (!campo || selects.some(s => !s)) return;
+    const aplicar = () => {
+        const lim = tabla[selects.map(s => s.value).join('|')];
+        if (lim) { campo.min = lim[0]; campo.max = lim[1]; }
+    };
+    selects.forEach(s => s.addEventListener('change', aplicar));
+    aplicar();
 }
 function enlazar(ids, fn) {
     const campos = ids.map($).filter(Boolean);
@@ -416,6 +425,7 @@ function calcKdeficit() {
     html += ` A ${fmt(ritmo, 0)} mEq/h: unas <strong>${fmt(def / ritmo, 1)} h</strong> de reposición.`;
     html += ritmo > 20 ? ' <strong>Más de 20 mEq/h</strong>: solo en la grave, mejor por vena central grande y no en la cava superior.' : ' Lo estándar: 20 mEq en 100 mL de salino en 1 h.';
     html += '<br><small>Peso magro, 50 mEq/kg. Si no responde, piensa en el magnesio.</small>';
+    if (k < 2.5) html += '<br><small>⚠️ La Tabla 36.1 se detiene en 2,5: por debajo, el déficit es una <strong>extrapolación de la app</strong> de la regla del 10% (la Figura 36.2 muestra una curva no lineal).</small>';
     pintar(box, k < 2.5 ? 'danger' : 'warn', html);
 }
 function calcFicticia() {
@@ -428,14 +438,15 @@ function calcFicticia() {
 function calcHiperk() {
     const k = num($('mr-hk-k')), ecg = $('mr-hk-ecg')?.value === 'si', colapso = $('mr-hk-colapso')?.value === 'si', box = $('mr-hk-resultado');
     if (k === null) return ocultar(box);
-    if (k <= 5.5 && !ecg) return pintar(box, 'ok', 'K⁺ ≤5,5 sin cambios en el ECG: no es hiperpotasemia.');
-    const grave = k > 6.5 || ecg;
+    // El capítulo define la hiperpotasemia como K⁺ >5,5 (pág. 23); la grave (pág. 27) es una hiperpotasemia con K⁺ >6,5 o con cambios del ECG.
+    if (k <= 5.5) return pintar(box, ecg ? 'warn' : 'ok', 'K⁺ ≤5,5: <strong>no es hiperpotasemia</strong> (el capítulo la define como &gt;5,5), con o sin cambios en el ECG.');
+    if (k <= 6.5 && !ecg) return pintar(box, 'warn', '<strong>Hiperpotasemia no grave</strong>: Marino solo da pauta para la grave (&gt;6,5 o con cambios en el ECG). Descarta una hiperpotasemia ficticia (págs. 23-24), busca la causa (Tabla 36.2) y vigila.' + (colapso ? '<br>Has marcado colapso circulatorio o parada: Marino no da pauta para este cruce (su cloruro cálcico está dentro de la pauta de la grave, Tabla 36.3).' : ''));
     const pasos = [];
     if (colapso) pasos.push('<strong>Cloruro cálcico al 10%</strong> (tres veces más calcio que el gluconato): está indicado en el colapso circulatorio o la parada.');
-    else if (grave) pasos.push(`<strong>Gluconato cálcico al 10%, 10 mL IV en 3 min</strong>; repetir a los 5 min si hace falta${ecg ? '' : ' (indicado por K⁺ &gt;6,5; el autor lo reservaría para cuando hay cambios en el ECG)'}. Dura 30-60 min.`);
+    else pasos.push(`<strong>Gluconato cálcico al 10%, 10 mL IV en 3 min</strong>; repetir a los 5 min si hace falta${ecg ? '' : ' (indicado por K⁺ &gt;6,5; el autor lo reservaría para cuando hay cambios en el ECG)'}. Dura 30-60 min.`);
     pasos.push('<strong>Insulina regular 10 U IV + 50 mL de glucosa al 50%</strong> (baja ≥0,6 mEq/L, pico a los 30-60 min) ± salbutamol 20 mg en aerosol (nunca solo). Bicarbonato no.');
     pasos.push('<strong>Ciclosilicato de sodio y zirconio 10 g cada 8 h 48 h</strong>; la <strong>hemodiálisis</strong> es el método más eficaz (baja 1 mEq/L en 1 h y 2 en 3 h).');
-    pintar(box, grave ? 'danger' : 'warn', `${grave ? '<strong>Hiperpotasemia grave</strong>' : 'Hiperpotasemia no grave (K⁺ ≤6,5 sin ECG)'}:<br>${pasos.map((p, i) => `${i + 1}. ${p}`).join('<br>')}`);
+    pintar(box, 'danger', `<strong>Hiperpotasemia grave</strong>:<br>${pasos.map((p, i) => `${i + 1}. ${p}`).join('<br>')}`);
 }
 function calcCalcioMl() {
     const mg = num($('mr-camg-prep')), ml = num($('mr-camg-ml')), box = $('mr-camg-resultado');
@@ -444,25 +455,33 @@ function calcCalcioMl() {
 }
 
 // ---- Cap. 37 — magnesio ------------------------------------------------
+// Tramos de la hipermagnesemia (Tabla de la ficha, pág. 39): una sola copia, la de la tabla `#mr-hipermg-umbral`,
+// que también leen la escalera de la vista Visual y las dos calculadoras. Devuelve de mayor a menor umbral.
+function tramosHiperMg() {
+    const filas = [...($('mr-hipermg-umbral')?.tBodies[0]?.rows || [])];
+    return filas.map(r => [Number(r.cells[0].textContent.replace(',', '.').replace(/[^\d.]/g, '')), r.cells[1].innerHTML.replace(/^./, c => c.toLowerCase())])
+        .sort((a, b) => b[0] - a[0]);
+}
+const esperableMg = meq => tramosHiperMg().find(([u]) => meq > u) || null;
 function calcMgConv() {
     const v = num($('mr-mgconv-valor')), u = $('mr-mgconv-unidad')?.value, box = $('mr-mgconv-resultado');
     if (v === null) return ocultar(box);
     const meq = u === 'mgdl' ? v * 10 / 24 * 2 : u === 'mmol' ? v * 2 : v;
     const mgdl = meq / 2 * 24 / 10, mmol = meq * 0.5;
     const estado = meq < 1.4 ? (meq < 1 ? 'danger' : 'warn') : meq > 2 ? (meq > 4 ? 'danger' : 'warn') : 'ok';
-    const lect = meq < 1 ? 'hipomagnesemia moderada (&lt;1 mEq/L)' : meq < 1.4 ? 'hipomagnesemia leve (1-1,4 mEq/L)' : meq <= 2 ? 'dentro del rango de referencia' : meq > 4 ? 'hipermagnesemia con hiporreflexia esperable (&gt;4)' : 'por encima del rango';
+    const lect = meq < 1 ? 'hipomagnesemia moderada (&lt;1 mEq/L)' : meq < 1.4 ? 'hipomagnesemia leve (1-1,4 mEq/L)' : meq <= 2 ? 'dentro del rango de referencia' : esperableMg(meq) ? `hipermagnesemia: ${esperableMg(meq)[1]} esperable (&gt;${esperableMg(meq)[0]})` : 'por encima del rango';
     pintar(box, estado, `<strong>${fmt(mgdl, 2)} mg/dL = ${fmt(meq, 2)} mEq/L = ${fmt(mmol, 2)} mmol/L</strong>: ${lect} (Tabla 37.2: 1,7-2,4 mg/dL, 1,4-2,0 mEq/L, 0,7-1,0 mmol/L).`);
 }
 function calcMgReposicion() {
     const mg = num($('mr-mgrep-mg')), peso = num($('mr-mgrep-peso')), clin = $('mr-mgrep-clinica')?.value, ir = $('mr-mgrep-renal')?.value === 'ir', box = $('mr-mgrep-resultado');
     if (mg === null || peso === null || peso <= 0) return ocultar(box);
     const f = ir ? 0.5 : 1;
-    const nota = ir ? '<br><strong>Insuficiencia renal</strong>: no más del 50% de lo de abajo (ya aplicado) y vigila el Mg de cerca.' : '';
+    const nota = ir ? '<br><strong>Insuficiencia renal</strong>: no más del 50% de lo de arriba (ya aplicado) y vigila el Mg de cerca.' + (clin === 'vital' ? ' <small>Marino dice «no más del 50% del Mg de los protocolos estándar»; aplicarlo también al bolo inicial de la amenaza vital es una extrapolación de la app.</small>' : '') : '';
     let html, estado;
-    // Los protocolos de la fuente son para la hipomagnesemia (<1,4 mEq/L).
-    if (mg >= 1.4) {
+    // Los protocolos de la fuente son para la hipomagnesemia (leve: 1-1,4 mEq/L, 1,4 incluido).
+    if (mg > 1.4) {
         const arr = clin === 'vital' ? '<br>Con arritmias ventriculares refractarias, el Mg IV puede abolirlas aun con Mg normal (efecto estabilizador de membrana), pero la ficha no da una pauta para ese caso.' : '';
-        return pintar(box, 'ok', 'Mg ≥1,4 mEq/L: no hay hipomagnesemia, así que no aplican los protocolos de reposición (aunque puede haber déficit con Mg normal: piensa en la prueba de retención).' + arr);
+        return pintar(box, 'ok', 'Mg &gt;1,4 mEq/L: no hay hipomagnesemia, así que no aplican los protocolos de reposición (aunque puede haber déficit con Mg normal: piensa en la prueba de retención).' + arr);
     }
     if (clin === 'vital') {
         estado = 'danger';
@@ -493,8 +512,12 @@ function calcHiperMg() {
     const v = num($('mr-hipermg-valor')), box = $('mr-hipermg-resultado');
     if (v === null) return ocultar(box);
     if (v <= 2) return pintar(box, 'ok', 'Dentro o por debajo del rango de referencia (1,4-2,0 mEq/L).');
-    const esperable = v > 13 ? 'parada cardíaca' : v > 10 ? 'bloqueo AV completo' : v > 5 ? 'bloqueo AV de 1.<sup>er</sup> grado' : v > 4 ? 'hiporreflexia' : 'nada específico en la tabla (los umbrales empiezan en 4)';
-    pintar(box, v > 5 ? 'danger' : 'warn', `Con ${fmt(v, 1)} mEq/L se espera: <strong>${esperable}</strong>.${v > 4 ? ' Gluconato cálcico 1 g IV en 2-3 min mientras llega la <strong>hemodiálisis</strong>.' : ''}`);
+    const esperable = esperableMg(v)?.[1] || 'nada específico en la tabla (los umbrales empiezan en 4)';
+    // Pág. 39: la hemodiálisis es el tratamiento de elección de la hipermagnesemia grave y el calcio IV es un puente hasta ella.
+    // El capítulo no pone cifra a «grave»: la app la toma desde el bloqueo AV (>5).
+    const pauta = v > 5 ? ' Pauta (grave): <strong>hemodiálisis</strong>; mientras llega, <strong>gluconato cálcico 1 g IV en 2-3 min</strong>. <small>El capítulo no fija una cifra para «grave»: se toma desde el bloqueo AV (&gt;5).</small>'
+        : ' Marino no da pauta para la leve.';
+    pintar(box, v > 5 ? 'danger' : 'warn', `Con ${fmt(v, 1)} mEq/L se espera: <strong>${esperable}</strong>.${pauta}`);
 }
 
 // ---- Cap. 38 — calcio y fósforo ----------------------------------------
@@ -598,10 +621,19 @@ export function init() {
     enlazar([...document.querySelectorAll('.mr-ficticia')].map((c, i) => c.id || (c.id = `mr-ficticia-c${i}`)), calcFicticia);
     enlazar(['mr-hk-k', 'mr-hk-ecg', 'mr-hk-colapso'], calcHiperk);
     enlazar(['mr-camg-prep', 'mr-camg-ml'], calcCalcioMl);
+    // 20 mEq/L ya es parada cardíaca (>13); 0,1 mEq/L es el suelo de lo medible. Mismo rango en las tres unidades.
+    limitesPorUnidad('mr-mgconv-valor', ['mr-mgconv-unidad'], { mgdl: [0.1, 24], meq: [0.1, 20], mmol: [0.1, 10] });
     enlazar(['mr-mgconv-valor', 'mr-mgconv-unidad'], calcMgConv);
     enlazar(['mr-mgrep-mg', 'mr-mgrep-peso', 'mr-mgrep-clinica', 'mr-mgrep-renal'], calcMgReposicion);
+    // La prueba infunde 24 mmol (48 mEq, Tabla 37.5): en la orina no puede salir más de lo infundido.
+    limitesPorUnidad('mr-mgret-orina', ['mr-mgret-unidad'], { mmol: [0, 24], meq: [0, 48] });
     enlazar(['mr-mgret-orina', 'mr-mgret-unidad', 'mr-mgret-renal'], calcMgRetencion);
     enlazar(['mr-hipermg-valor'], calcHiperMg);
+    // Rangos de fisiología general por parámetro y unidad (factores de la Tabla 38.1: ×0,25 el calcio y ×0,32 el fósforo).
+    limitesPorUnidad('mr-caconv-valor', ['mr-caconv-param', 'mr-caconv-unidad'], {
+        'total|mgdl': [4, 20], 'total|mmol': [1, 5], 'ionico|mgdl': [2, 10], 'ionico|mmol': [0.5, 2.5],
+        'fosforo|mgdl': [0.1, 20], 'fosforo|mmol': [0.1, 6],
+    });
     enlazar(['mr-caconv-param', 'mr-caconv-valor', 'mr-caconv-unidad'], calcCaConv);
     enlazar(['mr-capauta-peso', 'mr-capauta-prep', 'mr-capauta-dosis'], calcCaPauta);
     enlazar(['mr-hiperca-ca', 'mr-hiperca-neuro', 'mr-hiperca-volumen', 'mr-hiperca-origen', 'mr-hiperca-clcr'], calcHiperca);

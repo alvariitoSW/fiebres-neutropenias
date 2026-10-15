@@ -143,25 +143,39 @@ export const icebergK = {
         const pintar = () => {
             const k = num($('mr-kdef-k')), peso = num($('mr-kdef-peso'));
             if (k === null || !peso || peso <= 0) return;
+            // Mismos límites que la calculadora (fisiología general): fuera de ellos no se dibuja un iceberg imposible.
+            const fueraDeRango = ['mr-kdef-k', 'mr-kdef-peso'].map($).some(el => (el.min !== '' && Number(el.value) < Number(el.min)) || (el.max !== '' && Number(el.value) > Number(el.max)));
+            if (fueraDeRango) {
+                cuerpo.querySelector('#mrp-ice').innerHTML = '';
+                const rr = cuerpo.querySelector('#mrp-ice-res');
+                rr.className = 'tfg-estado tfg-estado-warn';
+                rr.innerHTML = '<strong>Fuera de rango</strong>: corrige el K⁺ o el peso en la calculadora (límites de fisiología general, no de la ficha).';
+                return;
+            }
             const { total, def } = deficitK(k, peso);
-            const bloques = Math.round(total / 100), faltan = Math.min(bloques, Math.round(def / 100)), fuera = total * 0.02;
+            const bloques = Math.round(total / 100), faltan = Math.min(bloques, def / 100), fuera = total * 0.02;
             const col = 7, lado = 26, ancho = col * (lado + 4) + 8, filasN = Math.ceil(bloques / col);
             const top = 46, alto = top + filasN * (lado + 4) + 10;
             let b = '';
             for (let i = 0; i < bloques; i++) {
                 const xx = 4 + (i % col) * (lado + 4), yy = top + Math.floor(i / col) * (lado + 4);
-                b += `<rect x="${xx}" y="${yy}" width="${lado}" height="${lado}" rx="3" class="${i < faltan ? 'mrp-hueco' : 'mrp-bloque'}"/>`;
+                // Un bloque son 100 mEq: el último hueco se dibuja a medias para que la figura coincida con la cifra (35 mEq = un tercio de bloque).
+                const parte = Math.max(0, Math.min(1, faltan - i));
+                if (parte > 0 && parte < 1) {
+                    const hueco = (lado * parte).toFixed(1);
+                    b += `<rect x="${xx}" y="${yy}" width="${hueco}" height="${lado}" rx="3" class="mrp-hueco"/><rect x="${(xx + lado * parte).toFixed(1)}" y="${yy}" width="${(lado - lado * parte).toFixed(1)}" height="${lado}" rx="3" class="mrp-bloque"/>`;
+                } else b += `<rect x="${xx}" y="${yy}" width="${lado}" height="${lado}" rx="3" class="${parte >= 1 ? 'mrp-hueco' : 'mrp-bloque'}"/>`;
             }
-            const anchoFuera = Math.max(4, lado * fuera / 100);
+            const anchoFuera = Math.max(4, lado * fuera / 100), xTexto = 4 + Math.max(lado, anchoFuera) + 10;
             cuerpo.querySelector('#mrp-ice').innerHTML = SVG(`0 0 ${ancho + 110} ${alto}`, `
                 <line x1="0" x2="${ancho + 110}" y1="${top - 6}" y2="${top - 6}" class="mrp-agua"/>
-                <rect x="${4 + (lado - anchoFuera) / 2}" y="${top - 6 - lado * 0.6}" width="${anchoFuera}" height="${lado * 0.6}" rx="2" fill="${C('yellow')}"/>
-                <text x="${lado + 14}" y="${top - 16}">Extracelular ~2% (${fmt(fuera, 0)} mEq)</text>
+                <rect x="4" y="${top - 6 - lado * 0.6}" width="${anchoFuera}" height="${lado * 0.6}" rx="2" fill="${C('yellow')}"/>
+                <text x="${xTexto}" y="${top - 16}">Extracelular ~2% (${fmt(fuera, 0)} mEq)</text>
                 <text x="${ancho + 4}" y="${top + 14}">Intracelular</text><text x="${ancho + 4}" y="${top + 28}">~98%</text>${b}`, 'Bloques de potasio corporal: intracelular frente a extracelular');
             const r = cuerpo.querySelector('#mrp-ice-res');
             r.className = `tfg-estado tfg-estado-${def <= 0 ? 'ok' : k < 2.5 ? 'danger' : 'warn'}`;
             r.innerHTML = def <= 0 ? `Con K⁺ ${fmt(k)} no hay déficit: ${fmt(total, 0)} mEq en total (${bloques} bloques).`
-                : `K⁺ ${fmt(k)} mEq/L, ${fmt(peso, 0)} kg: total ≈ ${fmt(total, 0)} mEq; faltan ≈ <strong>${fmt(def, 0)} mEq</strong> (${faltan} bloque${faltan === 1 ? '' : 's'} hueco${faltan === 1 ? '' : 's'}). El plasma lleva menos del 1%: la punta del iceberg.`;
+                : `K⁺ ${fmt(k)} mEq/L, ${fmt(peso, 0)} kg: total ≈ ${fmt(total, 0)} mEq; faltan ≈ <strong>${fmt(def, 0)} mEq</strong> (≈${fmt(faltan, 1)} bloques de 100 mEq huecos). El plasma lleva menos del 1%: la punta del iceberg.`;
             const kr = Math.round(k * 10) / 10;
             cuerpo.querySelector('#mrp-ice-tabla').innerHTML = tabla.map(([kk, dd]) => `<div class="mrp-esc-fila${Math.abs(kk - kr) < 0.01 ? ' sel' : ''}"><span>${fmt(kk)}</span><i style="width:${dd / maxDef * 100}%"></i><em>${dd} mEq</em></div>`).join('');
         };

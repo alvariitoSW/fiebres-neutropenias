@@ -248,7 +248,7 @@ function renal() {
                 { titulo: 'Redistribución', color: 'amarillo', nodos: [n('#mr-hipok-redistribucion', 'Hacia la célula')] },
                 { titulo: 'Pérdidas', color: 'rojo', nodos: [n('#mr-hipok-renal', 'Renales'), n('#mr-hipok-extrarrenal', 'Extrarrenales')] }
             ] },
-            { tipo: 'racimos', titulo: 'Reponer', grupos: [{ titulo: 'KCl', color: 'verde', nodos: [n('#mr-kcl-ritmo', 'Ritmo'), n('#mr-kcl-respuesta', 'Respuesta esperada'), n('#mr-hipok-primero', 'Primero el magnesio')] }] }
+            { tipo: 'racimos', titulo: 'Reponer', grupos: [{ titulo: 'Tratamiento', color: 'verde', nodos: [n('#mr-hipok-primero', 'Primero: quitar lo que mete K⁺ en la célula (p. ej. alcalosis)'), n('#mr-kcl-ritmo', 'Ritmo'), n('#mr-kcl-respuesta', 'Respuesta esperada'), n('#mr-kcl-respuesta', 'Si no sube: piensa en el magnesio')] }] }
         ]
     });
     montarVisual('mr-hiperk-causas', {
@@ -256,7 +256,10 @@ function renal() {
         paneles: [
             FIGURAS,
             { tipo: 'requisitos', modo: 'ninguno', titulo: '¿Hiperpotasemia ficticia?', puerta: 'Hiperpotasemia probablemente real', items: [{ checks: '.mr-ficticia' }], resultado: ['#mr-ficticia-resultado'] },
-            { tipo: 'racimos', titulo: 'Fármacos (Tabla 36.2)', tabla: '#mr-tabla-36-2', color: 'amarillo' },
+            { tipo: 'racimos', titulo: 'Fármacos (Tabla 36.2)', grupos: [
+                { titulo: 'Favorecen la salida celular', color: 'amarillo', nodos: [n('css:#mr-tabla-36-2 tbody tr:nth-child(1) td:nth-child(1)', 'Betabloqueantes'), n('css:#mr-tabla-36-2 tbody tr:nth-child(2) td:nth-child(1)', 'Digital'), n('css:#mr-tabla-36-2 tbody tr:nth-child(3) td:nth-child(1)', 'Succinilcolina')] },
+                { titulo: 'Reducen la excreción renal', color: 'rojo', nodos: [n('css:#mr-tabla-36-2 tbody tr:nth-child(1) td:nth-child(2)', 'IECA'), n('css:#mr-tabla-36-2 tbody tr:nth-child(2) td:nth-child(2)', 'ARA-II'), n('css:#mr-tabla-36-2 tbody tr:nth-child(3) td:nth-child(2)', 'Amilorida'), n('css:#mr-tabla-36-2 tbody tr:nth-child(4) td:nth-child(2)', 'AINE'), n('css:#mr-tabla-36-2 tbody tr:nth-child(5) td:nth-child(2)', 'Espironolactona'), n('css:#mr-tabla-36-2 tbody tr:nth-child(6) td:nth-child(2)', 'Trimetoprim-sulfametoxazol')] }
+            ] },
             { tipo: 'flujo', titulo: 'El ECG', nodos: [n('#mr-ecg-hiperk', 'Secuencia de cambios', 'rojo'), n('#mr-ecg-correlacion', 'Mala correlación con el K⁺', 'amarillo')] }
         ]
     });
@@ -290,7 +293,8 @@ function renal() {
     montarVisual('mr-magnesio-reposicion', {
         guia: 'Reponer según la gravedad y el riñón; la prueba de retención.',
         paneles: [
-            { tipo: 'escalera', titulo: 'Pautas por gravedad', nodos: [n('#mr-mg-leve', 'Leve', 'verde'), n('#mr-mg-moderada', 'Moderada', 'amarillo'), n('#mr-mg-grave', 'Grave', 'rojo'), n('#mr-mg-renal', 'Con insuficiencia renal', 'purpura')] },
+            { tipo: 'escalera', titulo: 'Pautas por gravedad', nodos: [n('#mr-mg-leve', 'Leve', 'verde'), n('#mr-mg-moderada', 'Moderada', 'amarillo'), n('#mr-mg-grave', 'Grave', 'rojo')] },
+            { tipo: 'racimos', titulo: 'Modifica la dosis (no es un nivel de gravedad)', grupos: [{ titulo: 'Función renal', color: 'purpura', nodos: [n('#mr-mg-renal', 'Con insuficiencia renal: no más del 50%')] }] },
             calc('Reposición de Mg (calculadora de la ficha)', ['#mr-mgrep-mg', '#mr-mgrep-peso', '#mr-mgrep-clinica', '#mr-mgrep-renal'], ['#mr-mgrep-resultado']),
             calc('Prueba de retención (calculadora de la ficha)', ['#mr-mgret-orina', '#mr-mgret-unidad', '#mr-mgret-renal'], ['#mr-mgret-resultado']),
             calc('¿Qué espero con este Mg? (calculadora de la ficha)', ['#mr-hipermg-valor'], ['#mr-hipermg-resultado']),

@@ -385,3 +385,18 @@ Parte: `autonomo/partes/2026-10-14-marino-r2.md`.
 - notas de fidelidad y huecos de las págs. 26 y 46 y del cap. 35.
 
 Parte: `autonomo/partes/2026-10-14-marino-r8.md`.
+
+## Marino Renal: revisión R9 del plan Marino, caps. 36-38 (octubre 2026)
+
+`marino-r9` (revisión sin construir), 1 vuelta, 8 fichas. Va encima de R8. Corregido:
+- la vista Visual de la hipopotasemia (primero la redistribución, no el magnesio);
+- `calcHiperk` sin pauta para la no grave;
+- el panel de fármacos de la Tabla 36.2 completo;
+- la hipermagnesemia con tramos leídos de la tabla;
+- límites por unidad en todas las calculadoras;
+- notas de fuentes (fosfato potásico, hipomagnesemia, déficit de K⁺ frente a Nefrología);
+- sevelamer «gluconato (sic)»;
+- `data-en-visual` en los enlaces a las simulaciones;
+- la Tabla 38.3 a 360 px.
+
+Parte: `autonomo/partes/2026-10-15-marino-r9.md`.

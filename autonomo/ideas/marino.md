@@ -155,3 +155,13 @@ Coinciden los tres revisores:
   - CAD → salino → delta, con K⁺ 3,1 al ingreso;
   - hiponatremia con salino al 3 % → diuresis acuosa → sobrecorrección → desmopresina;
   - FRA por sepsis con furosemida (la EFNa engaña, la EFU decide).
+
+### R9 · Caps. 36-38 (Marino Renal: potasio, magnesio, calcio y fósforo) · 2026-10-15
+
+- **Potasio y ECG en escalera**: el simulador de hiperpotasemia de Nefrología con la Fig. 36.4 y el aviso «el ECG no
+  predice el K⁺». La Fig. 36.2 interactiva (déficit frente a K⁺, con el tramo plano).
+- **Cadena del magnesio con Motion**: el Mg bajo arrastra al K⁺ y al Ca²⁺; la prueba de retención animada (24 mmol
+  infundidos, orina frente a retenido). Con la nefrona viva en la reabsorción de Mg en el asa.
+- **Fig. 38.1 viva**: mando de albúmina (baja el total, no el iónico) y de pH (la alcalosis baja el iónico). Fósforo:
+  la glucosa y la insulina lo meten en la célula (realimentación).
+- **Casos**: hipoK por furosemida con Mg bajo; hiperK ficticia por hemólisis; transfusión masiva con citrato.
