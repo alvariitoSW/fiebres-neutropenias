@@ -372,10 +372,10 @@ function toxicos() {
         guia: 'El CO baja el contenido de O₂ y la PO₂ venosa; el pulsioxímetro engaña.',
         paneles: [
             FIGURAS,
-            calc('Simulador: el CO y la PO₂ venosa (de la ficha)', ['#mt-co-sim-cohb'], ['svg#mt-co-sim-svg', '#mt-co-sim-resultado'], 'Ilustrativo, como en la Figura 53.1.'),
+            calc('Simulador: el CO y la PO₂ venosa (de la ficha)', ['#mt-co-sim-cohb'], ['svg#mt-co-sim-svg', '#mt-co-sim-resultado'], 'Ilustrativo, aproximado a la Figura 53.1 (el P50 baja con la COHb).'),
             calc('COHb: ¿alta? y cuánto tarda en bajar (calculadora de la ficha)', ['#mt-co-cohb', '#mt-co-fumador', '#mt-co-grave'], ['#mt-co-resultado']),
             caidaCohb,
-            { tipo: 'flujo', titulo: 'Del diagnóstico al tratamiento', nodos: [n('#mt-co-umbral', 'Cooxímetro', 'dorado'), n('#mt-co-o2', 'O₂ al 100%', 'verde'), [n('#mt-co-hiperbarico', 'Hiperbárico', 'purpura'), n('#mt-co-corazon', 'El corazón', 'rojo'), n('#mt-co-cianuro', '¿Y el cianuro?', 'rojo')]] }
+            { tipo: 'flujo', titulo: 'Del diagnóstico al tratamiento', nodos: [n('#mt-co-pulsioximetria', 'Cooxímetro', 'dorado'), n('#mt-co-o2', 'O₂ al 100%', 'verde'), [n('#mt-co-hiperbarico', 'Hiperbárico', 'purpura'), n('#mt-co-corazon', 'El corazón', 'rojo'), n('#mt-co-cianuro', '¿Y el cianuro?', 'rojo')]] }
         ]
     });
     montarVisual('mt-cianuro', {

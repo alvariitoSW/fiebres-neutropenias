@@ -212,3 +212,14 @@ Coinciden los tres revisores:
   - el alcohólico desnutrido con NPT y noradrenalina;
   - el coma mixedematoso;
   - la tormenta tiroidea en un asmático.
+### R13 · Caps. 52-53 y apéndices (Marino Tóxicos) · 2026-10-15
+
+- **Casos de la escalera tóxica**:
+  - humo con SpO₂ normal y lactato alto → cianuro;
+  - metanol frente a etilenglicol con el hiato osmolal;
+  - paracetamol con dosis repetidas;
+  - salicilato que acaba en hemodiálisis.
+- **Hiato osmolal vivo** en la ficha de alcoholes, sobre la gasometría del cap. 31: encaja con el proyecto de
+  ácido-base del usuario.
+- **«Encuentra el error»**: pulsioxímetro normal descarta CO; nomograma con dosis repetidas; flumazenil con
+  convulsiones; tiosulfato en la insuficiencia renal.
