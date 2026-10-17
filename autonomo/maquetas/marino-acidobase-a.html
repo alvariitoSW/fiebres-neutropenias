@@ -1,0 +1,1467 @@
+<!-- MAQUETA PARA ELEGIR (plan socialista, tarea marino-mapa, fase 2). No es parte de la app.
+     M1 · Ácido-base vivo · dirección A «Lámina de anatomía dorada».
+     Ábrela con un servidor en la raíz del repositorio: http://localhost:8000/autonomo/maquetas/marino-acidobase-a.html
+     Datos: el caso del mapa (§7, M1) y las fichas mr-acidobase-analisis, mr-acidobase-gaps, mr-cetoacidosis,
+     mr-alcalosis-mecanismos, mr-alcalosis-tratamiento, mar-cristaloides y mt-alcoholes (Marino, The ICU Book). -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ácido-base vivo · A · Lámina dorada (maqueta)</title>
+<style>
+/* Tokens de css/variables.css (copiados, como en el modelo de preguntas) y sus alias de la maqueta. */
+:root {
+  color-scheme: dark;
+  --bg-main: #17140f;
+  --bg-card: rgba(46, 38, 28, 0.72);
+  --border-color: rgba(196, 154, 74, 0.35);
+  --text-main: #ece3cc;
+  --text-muted: #a5967c;
+  --text-dim: #c9bda4;
+  --accent-green: #90a06a;
+  --accent-red: #b85c3e;
+  --accent-yellow: #cf9a3e;
+  --accent-blue: #d4af37;
+  --accent-purple: #9c5476;
+  --glow-green: 0 0 8px rgba(144, 160, 106, 0.45);
+  --glow-red: 0 0 10px rgba(184, 92, 62, 0.5);
+  --glow-blue: 0 0 10px rgba(212, 175, 55, 0.5);
+  --glow-purple: 0 0 8px rgba(156, 84, 118, 0.5);
+  /* alias */
+  --bg: var(--bg-main); --line: var(--border-color); --fg: var(--text-main); --dim: var(--text-dim); --muted: var(--text-muted);
+  --oro: var(--accent-blue); --ocre: var(--accent-yellow); --rojo: var(--accent-red); --verde: var(--accent-green); --ciruela: var(--accent-purple);
+  --serif: Georgia, 'Times New Roman', serif;
+  --sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; color: var(--fg); font: 16px/1.5 var(--serif);
+  background:
+    radial-gradient(ellipse 90% 40% at 50% 0%, rgba(212,175,55,.07), transparent 70%),
+    radial-gradient(ellipse 120% 60% at 50% 100%, rgba(207,154,62,.05), transparent 70%),
+    var(--bg-main);
+  padding: 14px max(14px, env(safe-area-inset-right, 0px)) 0 max(14px, env(safe-area-inset-left, 0px));
+}
+main { max-width: 560px; margin: 0 auto; display: grid; gap: 30px; }
+h1, h2, p { margin: 0; }
+strong { color: var(--fg); }
+.aviso { font: 700 .8rem var(--sans); letter-spacing: .02em; color: var(--bg-main); background: var(--ocre); border-radius: 8px; padding: 8px 12px; text-align: center; }
+
+/* Portada: cartela de lámina grabada */
+.portada { position: relative; padding: 18px 16px 16px; border: 1px solid var(--line); outline: 1px solid rgba(212,175,55,.18); outline-offset: 4px; border-radius: 3px; display: grid; gap: 10px; text-align: center; }
+.eyebrow { font: 600 .7rem var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+h1 { font-weight: normal; color: var(--oro); font-size: 1.85rem; line-height: 1.1; letter-spacing: .02em; text-wrap: balance; }
+h1 span { display: block; font-style: italic; font-size: 1.05rem; color: var(--dim); margin-top: 4px; letter-spacing: .04em; }
+.filete { display: block; height: 9px; width: 70%; margin: 2px auto; background:
+  linear-gradient(var(--oro), var(--oro)) center 2px / 100% 1px no-repeat,
+  linear-gradient(var(--oro), var(--oro)) center 6px / 60% 1px no-repeat; opacity: .55; }
+.lead { color: var(--dim); font-size: 1rem; text-wrap: pretty; }
+.leyenda-org { font: .78rem/1.6 var(--sans); color: var(--muted); }
+
+/* Rótulo de sección: numeral romano entre filetes */
+.rotulo { display: flex; align-items: center; gap: 10px; font-weight: normal; font-size: 1.12rem; color: var(--fg); letter-spacing: .03em; }
+.rotulo i { font-style: normal; font: 600 .74rem var(--sans); letter-spacing: .12em; color: var(--oro); border: 1px solid var(--oro); border-radius: 50%; width: 28px; height: 28px; display: grid; place-items: center; flex: none; }
+.rotulo::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--line), transparent); }
+.bloque { display: grid; gap: 12px; min-width: 0; }
+.bloque > * { min-width: 0; }
+.sub { font: .86rem/1.45 var(--sans); color: var(--muted); }
+
+/* Rótulos de origen */
+.org { display: inline-block; max-width: 100%; font: 600 .62rem/1.5 var(--sans); letter-spacing: .05em; text-transform: uppercase; border: 1px solid currentColor; border-radius: 4px; padding: 0 5px; margin: 1px 0; overflow-wrap: anywhere; vertical-align: 1px; }
+.org.f { color: var(--oro); }
+.org.g { color: var(--verde); }
+.org.i { color: var(--muted); border-style: dashed; }
+.origenes { display: flex; flex-wrap: wrap; gap: 4px; }
+
+/* Resaltes (rotulador de la app) */
+.hl-r { background: rgba(184,92,62,.28); padding: 0 3px; border-radius: 2px; }
+.hl-v { background: rgba(144,160,106,.25); padding: 0 3px; border-radius: 2px; }
+.hl-a { background: rgba(212,175,55,.2); padding: 0 3px; border-radius: 2px; }
+.hl-p { background: rgba(156,84,118,.3); padding: 0 3px; border-radius: 2px; }
+
+/* I · pH */
+.dial { position: relative; display: grid; justify-items: center; }
+.dial svg { width: 100%; height: auto; display: block; }
+.ph-grande { margin-top: 0; font-size: 4.2rem; line-height: 1; color: var(--oro); letter-spacing: .01em; font-variant-numeric: lining-nums tabular-nums; text-shadow: 0 0 18px rgba(212,175,55,.25); display: flex; align-items: baseline; gap: 6px; }
+.ph-grande small { font-size: 1rem; color: var(--muted); font-style: italic; letter-spacing: .06em; }
+#ph-flecha { font-size: 2.6rem; color: var(--verde); }
+.ph-palabra { display: flex; align-items: center; gap: 8px; font: 600 .82rem var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--dim); margin-top: 6px; }
+.ph-palabra svg { width: 14px; height: 14px; }
+.cociente { text-align: center; font-size: .98rem; color: var(--dim); font-variant-numeric: tabular-nums; }
+.cociente b { color: var(--fg); font-weight: normal; }
+.gaso { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; margin: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.gaso div { padding: 6px 2px; text-align: center; border-right: 1px dotted var(--line); min-width: 0; }
+.gaso div:last-child { border-right: 0; }
+.gaso dt { font: .68rem var(--sans); color: var(--muted); letter-spacing: .04em; }
+.gaso dd { margin: 0; font-size: 1.12rem; font-variant-numeric: tabular-nums; }
+.gaso dd.cambia { color: var(--rojo); }
+.gaso dd.cambia.sube { color: var(--verde); }
+
+/* II · Láminas */
+.lamina { position: relative; }
+.lamina svg, .lamina canvas { display: block; width: 100%; height: auto; }
+.lamina canvas, .capa-celulas canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+svg text { font-family: var(--serif); fill: var(--text-dim); }
+.cap { font: 600 9px var(--sans); letter-spacing: .18em; fill: var(--accent-blue); }
+.tx { font-size: 10.5px; }
+.tx-s { font-size: 9.5px; }
+.tx-xs { font-size: 8.6px; }
+.tx-l { font-size: 13px; fill: var(--accent-blue); }
+.it { font-style: italic; }
+.mu { fill: var(--text-muted); }
+.oro-l { stroke: var(--accent-blue); fill: none; stroke-width: .9; }
+.oro-f { stroke: var(--accent-blue); fill: none; stroke-width: .5; opacity: .7; }
+.hueso { stroke: var(--text-muted); fill: none; stroke-width: .7; opacity: .5; }
+.trazo { stroke-dasharray: 1; stroke-dashoffset: 0; }
+.por-dibujar .trazo { stroke-dashoffset: 1; }
+.dibujado .trazo { stroke-dashoffset: 0; transition: stroke-dashoffset 2.6s cubic-bezier(.5,0,.2,1); }
+.cartela { display: grid; gap: 6px; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; font: .84rem/1.45 var(--sans); color: var(--dim); background: var(--bg-card); }
+.cartela .kv { display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; margin: 0; align-items: baseline; }
+.cartela dt { color: var(--muted); font-size: .78rem; }
+.cartela dd { margin: 0; min-width: 0; }
+.leyenda-iones { display: flex; flex-wrap: wrap; gap: 4px 12px; font: .78rem var(--sans); color: var(--dim); }
+.leyenda-iones span { display: inline-flex; align-items: center; gap: 5px; }
+.leyenda-iones svg { width: 12px; height: 12px; flex: none; }
+
+.cab-rinon { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.cab-rinon p { font-size: .92rem; color: var(--dim); }
+.cab-rinon .capt { font: 600 .66rem var(--sans); letter-spacing: .18em; color: var(--oro); display: block; }
+.mini { width: 52px; height: 52px; border-radius: 50%; padding: 0; border: 1.5px solid var(--oro); background: var(--bg-main); overflow: hidden; cursor: pointer; flex: none; box-shadow: 0 0 0 3px var(--bg-main), 0 0 0 4px rgba(212,175,55,.35); }
+.mini img { width: 100%; height: 100%; object-fit: cover; object-position: 56% 77%; transform: scale(2.2); filter: sepia(.55) saturate(.75) brightness(.8); }
+.rinon { position: relative; aspect-ratio: 360 / 440; border: 1px solid var(--line); border-radius: 4px; overflow: hidden;
+  background: radial-gradient(ellipse at 50% 45%, rgba(212,175,55,.06), transparent 70%), var(--bg-main); }
+.capa-foto { position: absolute; inset: 0; display: grid; place-items: center; transition: opacity .5s ease; }
+.rinon.cerca .capa-foto { opacity: 0; pointer-events: none; transition: opacity .8s ease .95s; }
+.medallon { position: relative; width: 82%; aspect-ratio: 1; border-radius: 50%; overflow: hidden; border: 1.5px solid var(--oro);
+  box-shadow: 0 0 0 6px var(--bg-main), 0 0 0 7px rgba(212,175,55,.45), 0 0 40px rgba(212,175,55,.12); }
+.medallon img { width: 100%; height: 100%; object-fit: cover; display: block; filter: sepia(.55) saturate(.75) brightness(.8) contrast(1.05);
+  transform-origin: 56% 77%; transition: transform .9s ease; }
+.rinon.cerca .medallon img { transform: scale(5.2); transition: transform 1.7s cubic-bezier(.6,0,.25,1); }
+.lupa { position: absolute; left: 56%; top: 77%; width: 46px; height: 46px; transform: translate(-50%, -50%); border-radius: 50%;
+  border: 1.5px solid var(--oro); box-shadow: 0 0 12px rgba(212,175,55,.6), inset 0 0 10px rgba(212,175,55,.3); transition: opacity .4s; }
+.rinon.cerca .lupa { opacity: 0; }
+.pie-foto { position: absolute; left: 0; right: 0; bottom: 8px; text-align: center; font: italic .8rem var(--serif); color: var(--muted); padding: 0 12px; }
+.capa-celulas { position: absolute; inset: 0; opacity: 0; transform: scale(.94); transition: opacity .4s ease, transform .4s ease; }
+.rinon.cerca .capa-celulas { opacity: 1; transform: none; transition: opacity .9s ease 1.15s, transform 1.1s ease 1.1s; }
+.capa-celulas svg { width: 100%; height: 100%; display: block; }
+.estado-rinon { font: .86rem/1.45 var(--sans); color: var(--dim); display: grid; gap: 4px; }
+
+/* III · Carta */
+.carta { position: relative; border: 1px solid var(--line); border-radius: 3px; padding: 4px; background: rgba(212,175,55,.025); }
+.carta svg { display: block; width: 100%; height: auto; }
+.pie-carta { font: .84rem/1.45 var(--sans); color: var(--dim); }
+#tendencia { animation: fluir 1.1s linear infinite; }
+@keyframes fluir { to { stroke-dashoffset: -18; } }
+.leyenda-lineas { display: flex; flex-wrap: wrap; gap: 4px 14px; font: .76rem var(--sans); color: var(--dim); }
+.leyenda-lineas span { display: inline-flex; align-items: center; gap: 6px; }
+.leyenda-lineas i { display: inline-block; width: 20px; height: 0; border-top: 2px solid var(--c); }
+.leyenda-lineas i.dash { border-top-style: dashed; }
+
+/* IV · Pasos */
+.pasos { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 3px; }
+.paso { min-height: 52px; min-width: 0; padding: 4px 0 3px; border: 1px solid var(--line); border-radius: 6px; background: transparent; color: var(--dim); cursor: pointer; display: grid; place-items: center; gap: 0; font: 1.15rem/1 var(--serif); }
+.paso small { font: .6rem/1 var(--sans); color: var(--muted); letter-spacing: .02em; white-space: nowrap; }
+.paso[aria-current="step"] { border-color: var(--oro); background: rgba(212,175,55,.12); color: var(--oro); box-shadow: var(--glow-blue); }
+.paso[aria-current="step"] small { color: var(--oro); }
+.paso:focus-visible, .b:focus-visible, .seg button:focus-visible, summary:focus-visible, .mini:focus-visible { outline: 2px solid var(--oro); outline-offset: 2px; }
+.titulo-paso { display: grid; gap: 2px; }
+.titulo-paso b { font-weight: normal; font-size: 1.12rem; color: var(--fg); }
+.titulo-paso span { font: .84rem var(--sans); color: var(--muted); }
+.fila { display: flex; gap: 8px; flex-wrap: wrap; }
+.b { min-height: 44px; font: 600 .9rem var(--sans); background: transparent; color: var(--fg); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; cursor: pointer; }
+.b.prim { background: var(--oro); color: var(--bg-main); border-color: var(--oro); }
+.b.flex { flex: 1; }
+.reloj { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); border-radius: 999px; overflow: hidden; font: .8rem var(--sans); }
+.reloj span { text-align: center; padding: 6px 0; color: var(--muted); border-right: 1px solid var(--line); }
+.reloj span:last-child { border-right: 0; }
+.reloj span.on { background: rgba(212,175,55,.16); color: var(--oro); font-weight: 600; }
+
+/* V · Frase viva */
+.frase { position: relative; margin: 0; padding: 16px 16px 14px 18px; border-left: 2px solid var(--oro); background: linear-gradient(90deg, rgba(212,175,55,.08), transparent 80%); font-size: 1.04rem; line-height: 1.55; color: var(--fg); text-wrap: pretty; }
+.frase::first-letter { font-size: 2.3em; float: left; line-height: .9; padding: 4px 6px 0 0; color: var(--oro); }
+.frase-org { margin-top: 8px; }
+
+/* VI · Albúmina */
+.seg { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.seg button { min-height: 44px; border: 0; background: transparent; color: var(--dim); font: 600 .84rem var(--sans); cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: rgba(212,175,55,.16); color: var(--oro); }
+.mando { display: grid; gap: 2px; font: .9rem var(--sans); color: var(--dim); }
+.mando .val { display: flex; justify-content: space-between; align-items: baseline; }
+.mando output { font: 1.25rem var(--serif); color: var(--oro); }
+input[type="range"] { width: 100%; height: 44px; margin: 0; accent-color: var(--accent-blue); background: transparent; }
+.alb-svg { width: 100%; height: auto; display: block; }
+.frase-alb { font-size: 1rem; color: var(--fg); }
+
+/* VII y notas */
+details { border: 1px solid var(--line); border-radius: 4px; background: var(--bg-card); }
+summary { min-height: 48px; padding: 12px 14px; cursor: pointer; list-style: none; display: flex; align-items: center; gap: 10px; color: var(--fg); }
+summary::-webkit-details-marker { display: none; }
+summary::before { content: '+'; color: var(--oro); font: 600 1.1rem var(--sans); width: 18px; flex: none; text-align: center; }
+details[open] > summary::before { content: '−'; }
+.det-cuerpo { padding: 0 14px 14px; display: grid; gap: 10px; font: .88rem/1.5 var(--sans); color: var(--dim); }
+.det-cuerpo .serif { font: 1rem/1.5 var(--serif); color: var(--fg); }
+.nota-plegable summary { font: .9rem var(--sans); color: var(--dim); min-height: 44px; }
+.osm-svg { width: 100%; height: auto; display: block; }
+
+/* Elegir */
+.elige { border: 1px solid var(--oro); border-radius: 6px; padding: 14px; display: grid; gap: 12px; background: rgba(212,175,55,.05); }
+.elige h2 { font-weight: normal; color: var(--oro); font-size: 1.15rem; }
+.opciones { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.opciones .b[aria-pressed="true"] { background: var(--oro); color: var(--bg-main); border-color: var(--oro); }
+.respuesta-elige { font: .85rem var(--sans); color: var(--muted); min-height: 1.3em; }
+
+/* Barra fija abajo: el paso siempre a mano */
+.barra { position: sticky; bottom: 0; z-index: 5; margin: 0 -14px; padding: 8px 14px calc(8px + env(safe-area-inset-bottom, 0px)); display: grid; grid-template-columns: 48px 1fr 48px; gap: 8px; align-items: center;
+  background: linear-gradient(transparent, var(--bg-main) 14px); border-top: 0; }
+.barra .b { min-height: 48px; padding: 0; font-size: 1.2rem; background: var(--bg-main); }
+.barra .centro { display: grid; justify-items: center; line-height: 1.2; background: var(--bg-main); border: 1px solid var(--line); border-radius: 10px; padding: 5px 6px; min-width: 0; }
+.barra .centro b { font-weight: normal; color: var(--oro); font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+.barra .centro span { font: .72rem var(--sans); color: var(--dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.pie { font: .78rem var(--sans); color: var(--muted); text-align: center; padding-bottom: 6px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+</style>
+</head>
+<body>
+<main>
+  <p class="aviso" role="note">Maqueta para elegir: no es la app</p>
+
+  <header class="portada">
+    <p class="eyebrow">M1 · Ácido-base vivo · Dirección A</p>
+    <h1>Lámina dorada<span>del ácido y la base</span></h1>
+    <span class="filete" aria-hidden="true"></span>
+    <p class="lead">El pH depende de un <strong>cociente</strong>: el pulmón maneja el CO₂ de arriba y el riñón, el HCO₃⁻ de abajo. Sigue un caso de cetoacidosis y uno de vómitos por el cuerpo.</p>
+    <p class="leyenda-org">Cada cifra lleva su origen: <span class="org f">ficha</span> con su id · <span class="org g">fisiología general</span> · <span class="org i">ilustrativo</span></p>
+  </header>
+
+  <!-- 1 · El pH grande -->
+  <section class="bloque" aria-labelledby="t-ph">
+    <h2 class="rotulo" id="t-ph"><i>I</i>El pH</h2>
+    <div class="dial">
+      <svg id="dial" viewBox="0 0 360 186" role="img" aria-label="Esfera del pH de 6,8 a 7,8, con la escala de hidrogeniones por dentro"></svg>
+      <div class="ph-grande" aria-live="polite"><small>pH</small><span id="ph-num">7,40</span><span id="ph-flecha" hidden>↓</span></div>
+      <p class="ph-palabra" id="ph-palabra"></p>
+    </div>
+    <p class="cociente" id="cociente"></p>
+    <dl class="gaso" id="gaso"></dl>
+    <p class="origenes" id="gaso-org"></p>
+  </section>
+
+  <!-- 2 · Los órganos -->
+  <section class="bloque" aria-labelledby="t-org">
+    <h2 class="rotulo" id="t-org"><i>II</i>Los órganos</h2>
+    <p class="sub">Arriba el pulmón, que sopla el CO₂; en medio la sangre, con la balanza de cargas; abajo el riñón.</p>
+    <div class="lamina por-dibujar" id="lamina-caja">
+      <svg id="lamina" viewBox="0 0 360 640" role="img" aria-label="Lámina: tórax con los pulmones, un vaso con los iones y una balanza de latón con cationes y aniones"></svg>
+      <canvas id="lamina-cv" aria-hidden="true"></canvas>
+    </div>
+    <div class="cartela" id="cartela-sangre"></div>
+
+    <div class="cab-rinon">
+      <p><span class="capt">LÁM. III</span><i>El riñón · células del túbulo colector</i></p>
+      <button class="mini" id="mini" type="button" aria-label="Ver el corte real del riñón"><img src="../../js/modules/nefrologia/img/nefrona-anatomia.jpg" alt=""></button>
+    </div>
+    <div class="rinon" id="rinon">
+      <div class="capa-foto">
+        <div class="medallon">
+          <img id="foto" src="../../js/modules/nefrologia/img/nefrona-anatomia.jpg" alt="Corte real del riñón: corteza, médula, nefronas y túbulo colector">
+          <span class="lupa" aria-hidden="true"></span>
+        </div>
+        <p class="pie-foto">Corte del riñón (la lámina de la nefrona viva). El anillo marca el túbulo colector.</p>
+      </div>
+      <div class="capa-celulas">
+        <svg id="celulas" viewBox="0 0 360 440" role="img" aria-label="Tres células del túbulo colector redibujadas de la figura 33.1: principal, intercalar A e intercalar B con la pendrina"></svg>
+        <canvas id="celulas-cv" aria-hidden="true"></canvas>
+      </div>
+    </div>
+    <div class="fila"><button class="b flex" id="btn-zoom" type="button">Ver el corte real</button></div>
+    <div class="estado-rinon" id="estado-rinon"></div>
+  </section>
+
+  <!-- 3 · El mapa de la gasometría -->
+  <section class="bloque" aria-labelledby="t-carta">
+    <h2 class="rotulo" id="t-carta"><i>III</i>La carta de la gasometría</h2>
+    <div class="carta por-dibujar" id="carta-caja">
+      <svg id="carta" viewBox="0 0 360 318" role="img" aria-label="Carta de PaCO₂ frente a HCO₃⁻ con las isolíneas de pH, las líneas de compensación y el paciente"></svg>
+    </div>
+    <p class="pie-carta" id="pie-carta"></p>
+    <div class="leyenda-lineas">
+      <span><i style="--c: var(--accent-red)"></i>acidosis metabólica</span>
+      <span><i style="--c: var(--accent-yellow)"></i>alcalosis metabólica</span>
+      <span><i class="dash" style="--c: var(--text-muted)"></i>respiratoria aguda</span>
+      <span><i style="--c: var(--text-muted)"></i>respiratoria crónica</span>
+      <span><i class="dash" style="--c: var(--accent-blue)"></i>isolíneas de pH</span>
+    </div>
+    <p class="origenes"><span class="org f">ficha mr-acidobase-analisis · Fig. 31.2</span><span class="org f">rangos de referencia: misma ficha</span></p>
+  </section>
+
+  <!-- 4 · Los pasos y el reloj -->
+  <section class="bloque" aria-labelledby="t-pasos">
+    <h2 class="rotulo" id="t-pasos"><i>IV</i>El caso, paso a paso</h2>
+    <div class="titulo-paso"><b id="paso-nombre"></b><span id="paso-trastorno"></span></div>
+    <div class="pasos" id="pasos" role="group" aria-label="Pasos del caso"></div>
+    <div class="reloj" id="reloj" aria-label="Reloj"><span>minutos</span><span>horas</span><span>días</span></div>
+    <p class="origenes"><span class="org f">pulmón 30-120 min · riñón 2-3 días · mr-acidobase-analisis</span><span class="org i" id="reloj-org" hidden>reloj de este paso: ilustrativo</span></p>
+    <div class="fila">
+      <button class="b" id="btn-ant" type="button">◂ Anterior</button>
+      <button class="b prim flex" id="btn-sig" type="button">Siguiente ▸</button>
+      <button class="b" id="btn-play" type="button">▶ Todo</button>
+    </div>
+  </section>
+
+  <!-- 5 · Frase viva -->
+  <section class="bloque" aria-labelledby="t-frase">
+    <h2 class="rotulo" id="t-frase"><i>V</i>Qué está pasando</h2>
+    <p class="frase" id="frase" aria-live="polite"></p>
+    <p class="origenes frase-org" id="frase-org"></p>
+  </section>
+
+  <!-- 6 · Albúmina -->
+  <section class="bloque" aria-labelledby="t-alb">
+    <h2 class="rotulo" id="t-alb"><i>VI</i>La albúmina esconde aniones</h2>
+    <p class="sub">La albúmina es el principal anión no medido: aporta unos <strong>2,5 mEq por gramo</strong>. Si baja, el hiato baja con ella y puede esconder un cetoácido o un lactato.</p>
+    <div class="seg" role="group" aria-label="Qué hiato miras">
+      <button type="button" data-alb="paso2" aria-pressed="true">Paso 2 del caso</button>
+      <button type="button" data-alb="ficha" aria-pressed="false">Ejemplo de la ficha</button>
+    </div>
+    <label class="mando" for="alb"><span class="val">Albúmina del paciente <output id="alb-out">4,5 g/dL</output></span>
+      <input type="range" id="alb" min="2" max="4.5" step="0.1" value="4.5"></label>
+    <svg class="alb-svg" id="alb-svg" viewBox="0 0 360 160" role="img" aria-label="Regla del hiato aniónico: medido frente a corregido"></svg>
+    <p class="frase-alb" id="alb-frase"></p>
+    <p class="origenes"><span class="org f">mr-acidobase-gaps · Ec. 31.15 · Tabla 31.2</span><span class="org i">medido = el del paso − 2,5 × (4,5 − albúmina): derivado de la ficha</span></p>
+  </section>
+
+  <!-- 7 · Hiato osmolal -->
+  <details id="osmolal">
+    <summary><span><span style="color:var(--oro)">VII</span> · Hiato osmolal: la sal que el cálculo no ve</span></summary>
+    <div class="det-cuerpo">
+      <svg class="osm-svg" id="osm-svg" viewBox="0 0 360 196" role="img" aria-label="Balanza de osmoles: medida 320 frente a calculada 290"></svg>
+      <p class="serif">Calculada = 2 × Na + glucosa/18 + BUN/2,8 = 2 × 140 + 90/18 + 14/2,8 = <strong>290</strong>. Medida: <strong>320</strong>. El hiato es <span class="hl-r">30</span>; lo normal es <span class="hl-v">&lt;10</span>.</p>
+      <p class="serif">Falta una pesa que la fórmula no ve: <strong>piensa en metanol o etilenglicol</strong>, que suben a la vez el hiato aniónico y el osmolal.</p>
+      <p class="origenes"><span class="org f">mr-acidobase-gaps · Ec. 31.17</span><span class="org f">mt-alcoholes</span><span class="org i">medida 320: del caso</span></p>
+    </div>
+  </details>
+
+  <!-- Notas -->
+  <section class="bloque" aria-labelledby="t-notas">
+    <h2 class="rotulo" id="t-notas"><i>·</i>Notas de la lámina</h2>
+    <details class="nota-plegable">
+      <summary>Nota de fidelidad: dos ejemplos del cap. 31 no cumplen la Ec. 31.2</summary>
+      <div class="det-cuerpo">
+        <p>El libro pone «pH 7,28, PaCO₂ 23, HCO₃⁻ 14». Con su propia Ec. 31.2: [H⁺] = 24 × 23 / 14 = 39 nEq/L → <strong>pH 7,40</strong>.</p>
+        <p>Y «PaCO₂ 26, pH 7,50, HCO₃⁻ 14»: 24 × 26 / 14 = 45 nEq/L → <strong>pH 7,35</strong>.</p>
+        <p>La ficha <span class="org f">mr-acidobase-analisis</span> los reproduce tal cual. Aquí no se usan: el caso tiene gasometrías coherentes y el pH se calcula en la página.</p>
+      </div>
+    </details>
+    <details class="nota-plegable">
+      <summary>Cómo sale el pH de esta página</summary>
+      <div class="det-cuerpo">
+        <p>[H⁺] = 24 × PaCO₂ / HCO₃⁻ (Ec. 31.2) y pH = −log [H⁺] (Ec. 31.1), con [H⁺] en nEq/L. <span class="org f">mr-acidobase-analisis</span></p>
+        <p>Con la forma de Henderson-Hasselbalch (pH = 6,1 + log [HCO₃⁻ / (0,03 × PaCO₂)]) el paso 2 daría 7,29 y el paso 4, 7,52: es la diferencia de redondeo entre las dos formas. La tabla del caso coincide con la del libro. <span class="org g">fisiología general</span></p>
+      </div>
+    </details>
+    <details class="nota-plegable">
+      <summary>Qué es ilustrativo en esta lámina</summary>
+      <div class="det-cuerpo">
+        <p>El ritmo de los pulmones y la cantidad de volutas: Marino da la PaCO₂ esperada, no la ventilación que la produce.</p>
+        <p>Cuántas partículas hay en el vaso y en la célula: van en proporción, no son mEq contados.</p>
+        <p>El paso 5 baja como tendencia, sin cifras: la ficha da el déficit de cloro y el ritmo, no la curva de bajada del HCO₃⁻. El peso de 70 kg es del caso.</p>
+        <p>El reloj de los pasos 4 y 5: la ficha no dice cuánto duran los vómitos ni cuánto tarda la corrección.</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="elige" aria-labelledby="t-elige">
+    <h2 id="t-elige">¿Con qué dirección te quedas?</h2>
+    <p class="sub">Esta es la A. Las otras dos (B · Campo oscuro, C · Móvil) usan el mismo caso.</p>
+    <div class="opciones" role="group" aria-label="Dirección">
+      <button class="b" type="button" data-elige="dir" data-v="A · Lámina dorada" aria-pressed="false">A · Lámina dorada</button>
+      <button class="b" type="button" data-elige="dir" data-v="B · Campo oscuro" aria-pressed="false">B · Campo oscuro</button>
+      <button class="b" type="button" data-elige="dir" data-v="C · Móvil" aria-pressed="false">C · Móvil</button>
+      <button class="b" type="button" data-elige="dir" data-v="Mezcla" aria-pressed="false">Mezcla</button>
+    </div>
+    <p class="sub">¿Y el riñón?</p>
+    <div class="opciones" role="group" aria-label="Riñón">
+      <button class="b" type="button" data-elige="rinon" data-v="foto real del corte" aria-pressed="false">Foto real del corte</button>
+      <button class="b" type="button" data-elige="rinon" data-v="dibujado a plumilla" aria-pressed="false">Dibujado a plumilla</button>
+    </div>
+    <p class="respuesta-elige" id="respuesta-elige" aria-live="polite"></p>
+  </section>
+
+  <p class="pie">Marino PL. The ICU Book, 5.ª ed., caps. 10 y 31-33 · foto: lámina de la nefrona viva.</p>
+
+  <nav class="barra" aria-label="Paso del caso">
+    <button class="b" id="barra-ant" type="button" aria-label="Paso anterior">◂</button>
+    <div class="centro"><b id="barra-ph">pH 7,40</b><span id="barra-paso">Paso 0 · Normal</span></div>
+    <button class="b" id="barra-sig" type="button" aria-label="Paso siguiente">▸</button>
+  </nav>
+</main>
+
+<script src="../../js/vendor/motion.js"></script>
+<script>
+(() => {
+'use strict';
+const M = window.Motion || null;
+const QUIETO = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const NS = 'http://www.w3.org/2000/svg';
+const $ = s => document.querySelector(s);
+const raiz = getComputedStyle(document.documentElement);
+const tok = n => raiz.getPropertyValue(n).trim();
+const C = { fondo: tok('--bg-main'), crema: tok('--text-main'), dim: tok('--text-dim'), muted: tok('--text-muted'),
+  verde: tok('--accent-green'), rojo: tok('--accent-red'), ocre: tok('--accent-yellow'), oro: tok('--accent-blue'), ciruela: tok('--accent-purple') };
+const alfa = (hex, a) => { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`; };
+const fmt = (v, d = 0) => { const r = Math.round(v * 10 ** d) / 10 ** d; return (Object.is(r, -0) ? 0 : r).toFixed(d).replace('.', ','); };
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const suave = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const azar = (a, b) => a + Math.random() * (b - a);
+const O = (t, x) => `<span class="org ${t}">${{ f: 'ficha', g: 'fisiología general', i: 'ilustrativo' }[t]}${x ? ' · ' + x : ''}</span>`;
+function el(tag, at = {}, padre) { const e = document.createElementNS(NS, tag); for (const k in at) e.setAttribute(k, at[k]); if (padre) padre.appendChild(e); return e; }
+
+// ───────────── Fisiología (fichas de Marino) ─────────────
+const NA = 140, CNM = 11, ANM = 23;                  // Tabla 31.2 (mr-acidobase-gaps)
+const hNeq = (p, h) => 24 * p / h;                   // Ec. 31.2
+const calcPH = (p, h) => 9 - Math.log10(hNeq(p, h)); // Ec. 31.1, [H⁺] en nEq/L
+const espAcid = h => 40 - 1.2 * (24 - h);            // Fig. 31.2
+const espAlc = h => 40 + 0.7 * (h - 24);             // Fig. 31.2, Ec. 33.1
+const ESP = { acid: espAcid, alc: espAlc };
+const lineaDe = (p, h) => h < 24 ? (Math.abs(p - espAcid(h)) < 1.5 ? 'acid' : null) : h > 24 ? (Math.abs(p - espAlc(h)) < 1.5 ? 'alc' : null) : null;
+
+// El caso del mapa (§7, M1). Los pH NO están escritos: se calculan.
+const PASOS = [
+  { id: '0', corto: 'normal', nombre: 'Normal', reloj: 0, Cl: 104, HCO3: 24, HA: 12, P: 40, pend: .12, clLuz: .5,
+    trastorno: 'Sin trastorno: el punto de partida' },
+  { id: '1', corto: 'min', nombre: 'CAD, primeros minutos', reloj: 1, Cl: 104, HCO3: 12, HA: 24, P: 40, teorico: true, pend: .12, clLuz: .5,
+    trastorno: 'Acidosis metabólica con hiato elevado · aún sin compensar' },
+  { id: '2', corto: '2 h', nombre: 'CAD a las 2 horas', reloj: 2, Cl: 104, HCO3: 12, HA: 24, P: 26, pend: .12, clLuz: .5,
+    trastorno: 'Acidosis metabólica con hiato elevado · compensada por el pulmón' },
+  { id: '3', corto: 'salino', nombre: 'Tras salino a chorro', reloj: 2, Cl: 112, HCO3: 12, HA: 16, P: 26, suero: 'Salino 0,9 %', pend: .12, clLuz: .5,
+    trastorno: 'Hiato elevado más acidosis hiperclorémica (delta <1)' },
+  { id: '3b', corto: 'Ringer', nombre: 'Con Ringer en su lugar', reloj: 2, Cl: 104, HCO3: 20, HA: 16, P: 35, suero: 'Ringer', pend: .12, clLuz: .5,
+    trastorno: 'Hiato elevado que se va cerrando (delta 1)' },
+  { id: '4', corto: 'vómitos', nombre: 'Otro paciente: vómitos', reloj: 3, Cl: 88, HCO3: 40, HA: 12, P: 51, otro: true, pend: 0, clLuz: .06, bloqueo: true, relojIlus: true,
+    trastorno: 'Alcalosis metabólica sensible al cloro (Cl⁻ en orina <20)' },
+  // Paso 5: tendencia. Cl 94 y HCO₃⁻ 34 solo mueven la balanza (ilustrativo); nunca se muestran como cifras.
+  { id: '5', corto: 'ClK', nombre: 'Salino + ClK', reloj: 2, Cl: 94, HCO3: 34, HA: 12, P: 51, otro: true, tendencia: true, suero: 'Salino + ClK', pend: 1, clLuz: 1, relojIlus: true,
+    trastorno: 'Alcalosis metabólica en corrección (tendencia)' },
+];
+const P4 = PASOS[5];
+const valores = s => ({ Cl: s.Cl, HCO3: s.HCO3, ceto: s.HA - 12, P: s.P });
+const D = { Cl: 104, HCO3: 24, ceto: 0, P: 40, mapP: 40, mapH: 24 };
+let actual = 0;
+
+// ───────────── I · Esfera del pH ─────────────
+const DIAL = { cx: 180, cy: 168, R: 128 };
+const angPH = ph => Math.PI * (1 - (clamp(ph, 6.8, 7.8) - 6.8));
+const polar = (r, a) => [DIAL.cx + r * Math.cos(a), DIAL.cy - r * Math.sin(a)];
+function sector(r0, r1, ph0, ph1) {
+  const a0 = angPH(ph0), a1 = angPH(ph1);
+  const [x0, y0] = polar(r1, a0), [x1, y1] = polar(r1, a1), [x2, y2] = polar(r0, a1), [x3, y3] = polar(r0, a0);
+  return `M${x0.toFixed(1)} ${y0.toFixed(1)}A${r1} ${r1} 0 0 1 ${x1.toFixed(1)} ${y1.toFixed(1)}L${x2.toFixed(1)} ${y2.toFixed(1)}A${r0} ${r0} 0 0 0 ${x3.toFixed(1)} ${y3.toFixed(1)}Z`;
+}
+function construirDial() {
+  const svg = $('#dial');
+  let t = defs('d');
+  t += `<path class="trazo oro-l" pathLength="1" d="M${DIAL.cx - DIAL.R - 8} ${DIAL.cy}A${DIAL.R + 8} ${DIAL.R + 8} 0 0 1 ${DIAL.cx + DIAL.R + 8} ${DIAL.cy}"/>`;
+  t += `<path d="${sector(DIAL.R - 9, DIAL.R, 6.8, 7.36)}" fill="url(#d-rojo)" stroke="${C.rojo}" stroke-width=".6"/>`;
+  t += `<path d="${sector(DIAL.R - 9, DIAL.R, 7.36, 7.44)}" fill="${alfa(C.oro, .35)}" stroke="${C.oro}" stroke-width=".6"/>`;
+  t += `<path d="${sector(DIAL.R - 9, DIAL.R, 7.44, 7.8)}" fill="url(#d-verde)" stroke="${C.verde}" stroke-width=".6"/>`;
+  for (let i = 0; i <= 20; i++) {
+    const ph = 6.8 + i * .05, a = angPH(ph), mayor = i % 2 === 0;
+    const [x0, y0] = polar(DIAL.R - 9, a), [x1, y1] = polar(DIAL.R - 9 - (mayor ? 9 : 4), a);
+    t += `<line x1="${x0.toFixed(1)}" y1="${y0.toFixed(1)}" x2="${x1.toFixed(1)}" y2="${y1.toFixed(1)}" stroke="${C.oro}" stroke-width="${mayor ? .9 : .5}"/>`;
+    if (i % 4 === 0) { const [lx, ly] = polar(DIAL.R + 18, a); t += `<text class="tx" x="${lx.toFixed(1)}" y="${(ly + 4).toFixed(1)}" text-anchor="middle" style="fill:${C.oro}">${fmt(ph, 1)}</text>`; }
+  }
+  // Escala interior de [H⁺] (Fig. 31.1): la misma distancia de pH no pesa igual
+  const rH = DIAL.R - 34;
+  t += `<path d="M${DIAL.cx - rH} ${DIAL.cy}A${rH} ${rH} 0 0 1 ${DIAL.cx + rH} ${DIAL.cy}" fill="none" stroke="${C.muted}" stroke-width=".6" stroke-dasharray="1 2.5"/>`;
+  for (const h of [158, 100, 63, 40, 25, 16]) {
+    const ph = 9 - Math.log10(h), a = angPH(ph), [x, y] = polar(rH, a), [lx, ly] = polar(rH - 12, a);
+    t += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1.6" fill="${C.muted}"/><text class="tx-xs it mu" x="${lx.toFixed(1)}" y="${(ly + 3).toFixed(1)}" text-anchor="middle">${h}</text>`;
+  }
+  t += `<text class="tx-xs it mu" x="${DIAL.cx}" y="185" text-anchor="middle">escala interior: [H⁺] en nEq/L</text>`;
+  t += `<path id="dial-tend" d="" fill="none" stroke="${C.verde}" stroke-width="1.4" stroke-dasharray="3 3" opacity="0"/>`;
+  t += `<g id="aguja"><path d="M${DIAL.cx - 2.2} ${DIAL.cy}L${DIAL.cx} ${DIAL.cy - DIAL.R + 12}L${DIAL.cx + 2.2} ${DIAL.cy}Z" fill="${C.oro}"/>
+        <path d="M${DIAL.cx} ${DIAL.cy - DIAL.R + 6}l4 7h-8z" fill="${C.oro}"/></g>
+        <circle cx="${DIAL.cx}" cy="${DIAL.cy}" r="7" fill="${C.fondo}" stroke="${C.oro}" stroke-width="1.2"/><circle cx="${DIAL.cx}" cy="${DIAL.cy}" r="2.5" fill="${C.oro}"/>
+        <text class="tx-xs it mu" x="22" y="182">acidemia</text><text class="tx-xs it mu" x="338" y="182" text-anchor="end">alcalemia</text>`;
+  svg.innerHTML = t;
+}
+function pintarAguja(ph) {
+  const rot = 90 - angPH(ph) * 180 / Math.PI;
+  $('#aguja').setAttribute('transform', `rotate(${rot.toFixed(2)} ${DIAL.cx} ${DIAL.cy})`);
+}
+
+// Patrones de grabado compartidos (cada SVG con su prefijo: los ids no se repiten)
+function defs(p) {
+  return `<defs>
+  <pattern id="${p}-ray" width="3.2" height="3.2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="3.2" style="stroke:${C.muted};stroke-width:.55;opacity:.5"/></pattern>
+  <pattern id="${p}-cruz" width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><line x1="0" y1="0" x2="0" y2="3" style="stroke:${C.muted};stroke-width:.5;opacity:.4"/></pattern>
+  <pattern id="${p}-oro" width="2.6" height="2.6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="2.6" style="stroke:${C.oro};stroke-width:.55;opacity:.55"/></pattern>
+  <pattern id="${p}-rojo" width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="3" style="stroke:${C.rojo};stroke-width:.8"/></pattern>
+  <pattern id="${p}-verde" width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><line x1="0" y1="0" x2="0" y2="3" style="stroke:${C.verde};stroke-width:.8"/></pattern>
+  <pattern id="${p}-mon" width="8" height="2.4" patternUnits="userSpaceOnUse"><rect width="8" height="2.4" style="fill:${C.ocre};opacity:.6"/><line x1="0" y1="2.1" x2="8" y2="2.1" style="stroke:${C.fondo};stroke-width:.7"/></pattern>
+  <pattern id="${p}-pun" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".5" style="fill:${C.muted}"/><circle cx="3" cy="3" r=".35" style="fill:${C.muted};opacity:.6"/></pattern>
+  </defs>`;
+}
+function icono(forma, col, s = 1) {
+  if (forma === 'circ') return `<circle r="${3.6 * s}" fill="${col}"/>`;
+  if (forma === 'rombo') return `<path d="M0 ${-4.6 * s}L${3.6 * s} 0L0 ${4.6 * s}L${-3.6 * s} 0Z" fill="${col}"/>`;
+  if (forma === 'tri') return `<path d="M0 ${-4.4 * s}L${4.2 * s} ${3.2 * s}L${-4.2 * s} ${3.2 * s}Z" fill="${col}"/>`;
+  if (forma === 'cruz') return `<path d="M${-1.3 * s} ${-4.4 * s}h${2.6 * s}v${3.1 * s}h${3.1 * s}v${2.6 * s}h${-3.1 * s}v${3.1 * s}h${-2.6 * s}v${-3.1 * s}h${-3.1 * s}v${-2.6 * s}h${3.1 * s}z" fill="${col}"/>`;
+  if (forma === 'hex') { let d = ''; for (let i = 0; i < 6; i++) { const a = Math.PI / 6 + i * Math.PI / 3; d += `${i ? 'L' : 'M'}${(Math.cos(a) * 4.6 * s).toFixed(2)} ${(Math.sin(a) * 4.6 * s).toFixed(2)}`; } return `<path d="${d}Z" fill="${col}"/>`; }
+  if (forma === 'voluta') return `<path d="M-3 3c-2-3 0-7 4-6s4 6 0 6-3-4 0-3" fill="none" stroke="${col}" stroke-width="1.4" stroke-linecap="round"/>`;
+  return '';
+}
+
+// ───────────── II · Lámina: tórax, vaso y balanza ─────────────
+const K = 1.1;                         // px de pila por mEq/L
+const PIV = { x: 180, y: 372 }, BRAZO = 122, COLGAR = 0;
+const G = { xL: 58, yL: 372, xR: 302, yR: 372 };
+const fiel = { a: 0, w: 0 };
+const pilas = { I: [], D: [] };
+let nodos = {};
+
+function ramas(x, y, ang, len, prof, rnd, hojas) {
+  if (prof === 0 || len < 3) { hojas.push([x, y]); return ''; }
+  const x2 = x + Math.cos(ang) * len, y2 = y + Math.sin(ang) * len;
+  let d = `M${x.toFixed(1)} ${y.toFixed(1)}L${x2.toFixed(1)} ${y2.toFixed(1)}`;
+  const da = .38 + rnd() * .22;
+  d += ramas(x2, y2, ang - da, len * .74, prof - 1, rnd, hojas) + ramas(x2, y2, ang + da * .9, len * .7, prof - 1, rnd, hojas);
+  return d;
+}
+function semilla(s) { return () => { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }; }
+
+function construirLamina() {
+  const svg = $('#lamina');
+  const pulmonIz = 'M160 82C140 84 116 104 104 132C92 160 88 190 95 212C112 220 142 216 166 206C170 190 165 174 169 158C172 140 168 110 160 82Z';
+  const hojas = [];
+  const rnd = semilla(7);
+  const arbol = 'M176 120L166 134' + ramas(166, 134, Math.PI + .95, 17, 5, rnd, hojas) + ramas(166, 134, Math.PI + .12, 19, 6, rnd, hojas) + ramas(166, 136, Math.PI - .8, 22, 6, rnd, hojas);
+  let costillas = '';
+  for (let i = 0; i < 6; i++) {
+    const y = 90 + i * 21;
+    costillas += `<path class="hueso trazo" pathLength="1" d="M178 ${y}C152 ${y - 13} 110 ${y - 8} 84 ${y + 22}"/><path class="hueso" style="opacity:.25" d="M178 ${y + 4}C152 ${y - 9} 112 ${y - 4} 87 ${y + 26}"/>`;
+  }
+  const alveolos = hojas.map(([x, y]) => `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1.7" fill="none" stroke="${C.oro}" stroke-width=".5" opacity=".7"/>`).join('');
+  let anillos = '';
+  for (let y = 52; y <= 116; y += 6) anillos += `<path d="M174 ${y}Q180 ${y + 2.6} 186 ${y}" stroke="${C.oro}" stroke-width=".6" fill="none" opacity=".8"/>`;
+
+  let t = defs('l') + `
+  <clipPath id="l-clip-pulmon"><path d="${pulmonIz}"/></clipPath>
+  <rect x="2.5" y="2.5" width="355" height="635" rx="2" fill="none" stroke="${C.oro}" stroke-width=".9" id="marco"/>
+  <rect x="7" y="7" width="346" height="626" fill="none" stroke="${C.oro}" stroke-width=".35" opacity=".6"/>
+  ${[[7, 7], [353, 7], [7, 633], [353, 633]].map(([x, y]) => `<path d="M${x} ${y - 4}L${x + 4} ${y}L${x} ${y + 4}L${x - 4} ${y}Z" fill="${C.oro}"/>`).join('')}
+  <text class="cap" x="18" y="26">LÁM. I</text>
+  <text class="tx it" x="18" y="40">El pulmón · el CO₂</text>
+  <text class="tx-l" id="lec-p" x="342" y="26" text-anchor="end">PaCO₂ 40 mmHg</text>
+  <text class="tx-s" id="lec-esp" x="342" y="40" text-anchor="end"></text>
+  <text class="tx-xs it mu" x="342" y="52" text-anchor="end">ritmo: ilustrativo</text>
+  <g id="mitad-costillas">${costillas}<path class="hueso" d="M124 72Q150 63 174 68"/></g>
+  <use href="#mitad-costillas" transform="translate(360 0) scale(-1 1)"/>
+  <path d="M180 278V238C180 220 172 200 162 176M180 238C180 220 188 200 198 176" fill="none" stroke="${C.muted}" stroke-width="2.6" opacity=".35"/>
+  <path class="trazo" pathLength="1" d="M180 278V238C180 220 172 200 162 176M180 238C180 220 188 200 198 176" fill="none" stroke="${C.rojo}" stroke-width=".7" opacity=".7"/>
+  <g id="pulmones">
+    <g id="mitad-pulmon">
+      <path d="${pulmonIz}" fill="${C.fondo}" opacity=".88"/>
+      <path d="${pulmonIz}" fill="url(#l-ray)"/>
+      <g clip-path="url(#l-clip-pulmon)"><path d="M126 100C100 138 94 180 98 214L128 216C114 182 116 140 140 96Z" fill="url(#l-cruz)"/>
+        <path d="M110 120C98 150 96 186 100 212L112 214C104 184 106 150 118 118Z" fill="url(#l-cruz)"/>
+        <path d="${arbol}" stroke="${C.oro}" stroke-width=".7" fill="none" opacity=".85"/>${alveolos}</g>
+      <path class="trazo oro-l" pathLength="1" d="${pulmonIz}" style="stroke-width:1.1"/>
+    </g>
+    <use href="#mitad-pulmon" transform="translate(360 0) scale(-1 1)"/>
+  </g>
+  <path d="M174 46V118L160 132M186 46V118L200 132" class="oro-l" style="stroke-width:1"/>
+  ${anillos}
+  <path class="hueso trazo" pathLength="1" d="M82 216Q130 186 180 208Q230 186 278 216" style="opacity:.6"/>
+  <text class="tx-xs it mu" x="282" y="230">diafragma</text>
+
+  <path d="M8 276H352M8 322H352" stroke="${C.oro}" stroke-width=".9"/>
+  <rect x="8" y="276" width="344" height="6" fill="url(#l-ray)"/><rect x="8" y="316" width="344" height="6" fill="url(#l-ray)"/>
+  <path d="M8 282H352M8 316H352" stroke="${C.oro}" stroke-width=".45" opacity=".7"/>
+  <text class="tx-xs it mu" x="346" y="271" text-anchor="end">← corriente de la sangre</text>
+  <g id="frasco" opacity="0">
+    <path d="M18 226h16v4l4 6v24h-24v-24l4-6z" fill="url(#l-ray)" stroke="${C.oro}" stroke-width=".8"/>
+    <path d="M26 260V282" stroke="${C.oro}" stroke-width=".6" stroke-dasharray="1.5 2"/>
+    <text class="tx-s" id="frasco-tx" x="44" y="236" style="fill:${C.ciruela}"></text>
+    <text class="tx-xs it mu" id="frasco-cl" x="44" y="247"></text>
+  </g>
+  <g id="vomito" opacity="0"><text class="tx-s it" x="14" y="240" style="fill:${C.rojo}">↖ vómito: se van H⁺ y Cl⁻</text></g>
+
+  <text class="cap" x="18" y="340">LÁM. II</text>
+  <text class="tx it" x="18" y="354">La sangre · balanza de cargas</text>
+  <text class="tx-l" id="lec-ha" x="342" y="340" text-anchor="end"></text>
+  <text class="tx-xs it mu" x="342" y="353" text-anchor="end">Ec. 31.14 y 31.16</text>
+
+  <path d="M175 380V610M185 380V610" stroke="${C.oro}" stroke-width=".8"/>
+  <rect x="175" y="380" width="10" height="230" fill="url(#l-oro)"/>
+  <path d="M168 380h24l-4 -6h-16z" fill="url(#l-oro)" stroke="${C.oro}" stroke-width=".7"/>
+  <path d="M146 610h68l6 10h-80z" fill="url(#l-oro)" stroke="${C.oro}" stroke-width=".8"/>
+  <path d="M132 620h96v8h-96z" fill="url(#l-ray)" stroke="${C.oro}" stroke-width=".8"/>
+  ${[-20, -15, -10, -5, 0, 5, 10, 15, 20].map(g => { const a = (g - 90) * Math.PI / 180, r0 = 29, r1 = g % 10 === 0 ? 35 : 32;
+    return `<line x1="${(PIV.x + r0 * Math.cos(a)).toFixed(1)}" y1="${(PIV.y + r0 * Math.sin(a)).toFixed(1)}" x2="${(PIV.x + r1 * Math.cos(a)).toFixed(1)}" y2="${(PIV.y + r1 * Math.sin(a)).toFixed(1)}" stroke="${C.oro}" stroke-width="${g ? .5 : 1}"/>`; }).join('')}
+  <g id="platoI"></g><g id="platoD"></g>
+  <g id="astil">
+    <path d="M${PIV.x - BRAZO} ${PIV.y - 2.5}L${PIV.x} ${PIV.y - 5.5}L${PIV.x + BRAZO} ${PIV.y - 2.5}V${PIV.y + 2.5}L${PIV.x} ${PIV.y + 5.5}L${PIV.x - BRAZO} ${PIV.y + 2.5}Z" fill="url(#l-oro)" stroke="${C.oro}" stroke-width=".9"/>
+    <path d="M${PIV.x} ${PIV.y}V${PIV.y - 27}" stroke="${C.oro}" stroke-width="1.2"/><path d="M${PIV.x} ${PIV.y - 31}l3 5h-6z" fill="${C.oro}"/>
+    <circle cx="${PIV.x - BRAZO}" cy="${PIV.y}" r="3" fill="${C.fondo}" stroke="${C.oro}"/><circle cx="${PIV.x + BRAZO}" cy="${PIV.y}" r="3" fill="${C.fondo}" stroke="${C.oro}"/>
+  </g>
+  <circle cx="${PIV.x}" cy="${PIV.y}" r="6" fill="${C.fondo}" stroke="${C.oro}" stroke-width="1.1"/><circle cx="${PIV.x}" cy="${PIV.y}" r="2" fill="${C.oro}"/>
+  <g id="hiato">
+    <path id="hiato-guia" d="" stroke="${C.oro}" stroke-width=".7" stroke-dasharray="2 3" fill="none"/>
+    <path id="hiato-llave" d="" stroke="${C.oro}" stroke-width="1.1" fill="none"/>
+    <text id="hiato-t1" class="tx-s it" text-anchor="end" style="fill:${C.oro}">hiato</text>
+    <text id="hiato-t2" class="tx-l" text-anchor="end"></text>
+  </g>
+  <text id="lenta" class="tx-xs it" x="180" y="404" text-anchor="middle" opacity="0" style="fill:${C.oro}">a cámara lenta: la sangre es siempre neutra</text>
+  <text id="lenta2" class="tx-xs it mu" x="180" y="415" text-anchor="middle" opacity="0">(Ec. 31.12)</text>`;
+  svg.innerHTML = t;
+
+  // Platillos: barra, cadenas, plato y pesas (coordenadas locales: el origen es el extremo del astil)
+  for (const lado of ['I', 'D']) {
+    const g = $('#plato' + lado);
+    g.innerHTML = `<path d="M0 0V14M-40 14H40" stroke="${C.oro}" stroke-width="1"/>
+      <path d="M-40 14V222M40 14V222" stroke="${C.oro}" stroke-width="1.1" stroke-dasharray="2.5 1.6" opacity=".8"/>
+      <path d="M-47 222Q0 240 47 222Z" fill="url(#l-oro)" stroke="${C.oro}" stroke-width="1"/>
+      <text class="tx-s it" x="0" y="252" text-anchor="middle">${lado === 'I' ? 'cationes' : 'aniones'}</text>`;
+  }
+  const defI = [
+    { k: 'na', forma: 'circ', col: C.crema, val: () => NA, et: () => 'Na⁺ 140' },
+    { k: 'cnm', forma: null, col: C.muted, val: () => CNM, et: () => 'otros 11' },
+  ];
+  const defD = [
+    { k: 'cl', forma: 'rombo', col: C.ciruela, val: () => D.Cl, et: () => PASOS[actual].tendencia ? 'Cl⁻ ↑' : `Cl⁻ ${fmt(D.Cl)}` },
+    { k: 'hco3', forma: 'tri', col: C.verde, val: () => D.HCO3, et: () => PASOS[actual].tendencia ? 'HCO₃⁻ ↓' : `HCO₃⁻ ${fmt(D.HCO3)}` },
+    { k: 'anm', forma: null, col: C.muted, val: () => ANM, et: () => 'no medidos 23' },
+    { k: 'ceto', forma: null, col: C.ocre, val: () => D.ceto, et: () => `cetoácidos ${fmt(D.ceto)}`, monedas: true },
+  ];
+  for (const [lado, lista] of [['I', defI], ['D', defD]]) {
+    const g = $('#plato' + lado);
+    for (const b of lista) {
+      const grupo = el('g', {}, g);
+      b.rect = el('rect', { x: -32, width: 64, rx: 2, fill: b.monedas ? `url(#l-mon)` : alfa(b.col, .16), stroke: b.col, 'stroke-width': .9 }, grupo);
+      if (!b.monedas) b.rayado = el('rect', { x: -32, width: 64, rx: 2, fill: 'url(#l-ray)', opacity: .7 }, grupo);
+      if (b.forma) { b.ico = el('g', {}, grupo); b.ico.innerHTML = icono(b.forma, b.col, .95); }
+      b.txt = el('text', { x: b.forma ? 5 : 0, 'text-anchor': 'middle', class: 'tx-s' }, grupo);
+      b.txt.style.fill = C.crema;
+      b.ultimo = '';
+      pilas[lado].push(b);
+    }
+  }
+  nodos = { astil: $('#astil'), platoI: $('#platoI'), platoD: $('#platoD'), pulmones: $('#pulmones'), marco: $('#marco'),
+    guia: $('#hiato-guia'), llave: $('#hiato-llave'), t1: $('#hiato-t1'), t2: $('#hiato-t2'), lecP: $('#lec-p'), lecEsp: $('#lec-esp'), lecHA: $('#lec-ha'), lenta: $('#lenta'), lenta2: $('#lenta2') };
+}
+
+function pintarPila(lado) {
+  let acum = 0;
+  for (const b of pilas[lado]) {
+    const v = Math.max(0, b.val()), h = v * K, y = 220 - (acum + v) * K;
+    b.rect.setAttribute('y', y.toFixed(2)); b.rect.setAttribute('height', Math.max(0, h).toFixed(2));
+    b.rect.setAttribute('opacity', h < .3 ? 0 : 1);
+    if (b.rayado) { b.rayado.setAttribute('y', y.toFixed(2)); b.rayado.setAttribute('height', Math.max(0, h).toFixed(2)); }
+    const cabe = h >= 10.5;
+    if (b.ico) { b.ico.setAttribute('transform', `translate(-23 ${(y + h / 2).toFixed(1)})`); b.ico.setAttribute('opacity', h >= 9 ? 1 : 0); }
+    b.txt.setAttribute('y', (y + h / 2 + 3.4).toFixed(1));
+    b.txt.setAttribute('opacity', cabe ? 1 : 0);
+    const et = b.et(); if (et !== b.ultimo) { b.txt.textContent = et; b.ultimo = et; }
+    acum += v;
+  }
+  return acum;
+}
+
+// ───────────── Partículas (canvas sobre la lámina) ─────────────
+const cvL = $('#lamina-cv'), ctxL = cvL.getContext('2d');
+const parts = [], flujo = [], cruces = [];
+const VEL_FLUJO = 16;
+let resp = { fase: 0, a: 0 }, acumVoluta = 0;
+
+function nueva(p) { p.edad = 0; p.espera = p.espera || 0; p.alpha = p.alpha ?? 1; parts.push(p); return p; }
+function sueloD() { return G.yR + 220 - (D.Cl + D.HCO3 + ANM + D.ceto) * K - 4; }
+function rutaCO2(x) { const lado = Math.random() < .5 ? 164 : 196; return [[x, 299], [180, 294], [180, 238], [lado, 178], [180, 124], [180, 50]]; }
+function voluta(x, y, enRuta) {
+  if (enRuta) return nueva({ forma: 'voluta', col: C.oro, x, y, r: 3.6, modo: 'ruta', pts: rutaCO2(x), seg: 0, vel: 150,
+    alFin: p => { p.modo = 'sube'; p.vy = 17; p.vx = azar(-6, 6); p.vida = 2.2; p.r = 5.4; return true; } });
+  return nueva({ forma: 'voluta', col: C.oro, x, y, r: 5, modo: 'sube', vy: azar(13, 19), vx: azar(-5, 5), vida: 2.3, rot: azar(0, 6) });
+}
+function texto(txt, x, y, col, vida = 2.4, alinea = 'center') { return nueva({ forma: 'texto', txt, x, y, col, modo: 'quieto', vida, alinea }); }
+
+function mover(p, dt) {
+  if (p.espera > 0) { p.espera -= dt; return true; }
+  p.edad += dt;
+  switch (p.modo) {
+    case 'ruta': {
+      let resto = p.vel * dt;
+      while (resto > 0 && p.seg < p.pts.length - 1) {
+        const [x1, y1] = p.pts[p.seg + 1], dx = x1 - p.x, dy = y1 - p.y, d = Math.hypot(dx, dy);
+        if (d <= resto) { p.x = x1; p.y = y1; p.seg++; resto -= d; } else { p.x += dx / d * resto; p.y += dy / d * resto; resto = 0; }
+      }
+      if (p.seg >= p.pts.length - 1) return p.alFin ? p.alFin(p) : false;
+      return true;
+    }
+    case 'cae': {
+      p.vy += 820 * dt; p.x += (p.tx - p.x) * Math.min(1, dt * 4); p.y += p.vy * dt;
+      const suelo = p.suelo();
+      if (p.y >= suelo) { p.y = suelo; if (p.botes > 0) { p.vy = -Math.abs(p.vy) * .34; p.botes--; } else return false; }
+      return true;
+    }
+    case 'sube': p.y -= p.vy * dt; p.x += p.vx * dt; p.alpha = 1 - p.edad / p.vida; return p.alpha > 0;
+    case 'baja': p.y += p.vy * dt; p.alpha = 1 - p.edad / p.vida; return p.alpha > 0;
+    case 'flash': p.r += dt * 34; p.alpha = 1 - p.edad / .5; return p.alpha > 0;
+    case 'quieto': p.alpha = Math.min(1, p.edad * 3, (p.vida - p.edad) * 2); return p.edad < p.vida;
+  }
+  return false;
+}
+
+function forma(c, p) {
+  const { x, y } = p, r = p.r || 4;
+  c.fillStyle = p.col; c.strokeStyle = p.col;
+  c.beginPath();
+  switch (p.forma) {
+    case 'tri': c.moveTo(x, y - r); c.lineTo(x + r * .95, y + r * .72); c.lineTo(x - r * .95, y + r * .72); c.closePath(); c.fill(); break;
+    case 'rombo': c.moveTo(x, y - r * 1.15); c.lineTo(x + r * .85, y); c.lineTo(x, y + r * 1.15); c.lineTo(x - r * .85, y); c.closePath(); c.fill(); break;
+    case 'cruz': c.rect(x - r, y - r * .3, 2 * r, r * .6); c.rect(x - r * .3, y - r, r * .6, 2 * r); c.fill(); break;
+    case 'circ': c.arc(x, y, r * .78, 0, 7); c.fill(); break;
+    case 'cuad': c.rect(x - r * .7, y - r * .7, r * 1.4, r * 1.4); c.fill(); break;
+    case 'moneda': {
+      for (let i = 0; i < 6; i++) { const a = Math.PI / 6 + i * Math.PI / 3; c[i ? 'lineTo' : 'moveTo'](x + Math.cos(a) * r, y + Math.sin(a) * r); }
+      c.closePath(); c.fill();
+      c.beginPath(); for (let i = 0; i < 6; i++) { const a = Math.PI / 6 + i * Math.PI / 3; c[i ? 'lineTo' : 'moveTo'](x + Math.cos(a) * r * .6, y + Math.sin(a) * r * .6); }
+      c.closePath(); c.strokeStyle = C.fondo; c.lineWidth = .8; c.stroke(); break;
+    }
+    case 'voluta': {
+      c.lineWidth = 1.15; c.lineCap = 'round';
+      const giro = (p.rot || 0) + p.edad * 2.4;
+      for (let a = 0; a <= Math.PI * 2.7; a += .22) {
+        const rr = .4 + a * r / 8.5, px = x + Math.cos(a + giro) * rr, py = y + Math.sin(a + giro) * rr * .85;
+        a ? c.lineTo(px, py) : c.moveTo(px, py);
+      }
+      c.stroke(); break;
+    }
+    case 'anillo': c.lineWidth = 1.3; c.arc(x, y, p.r, 0, 7); c.stroke(); break;
+    case 'texto': c.font = 'italic 9.5px Georgia, serif'; c.textAlign = p.alinea; c.fillText(p.txt, x, y); break;
+  }
+}
+
+// Iones que corren por el vaso (proporcionales, ilustrativo)
+function objetivoFlujo() { return { tri: Math.round(D.HCO3 / 1.5), rombo: Math.round(D.Cl / 8), circ: 9 }; }
+const COLF = { tri: () => C.verde, rombo: () => C.ciruela, circ: () => alfa(C.crema, .55) };
+function actualizarFlujo(dt) {
+  const obj = objetivoFlujo(), cuenta = { tri: 0, rombo: 0, circ: 0 };
+  for (const f of flujo) if (!f.sale) cuenta[f.forma]++;
+  for (const k in obj) {
+    if (cuenta[k] < obj[k]) {
+      flujo.push({ forma: k, x: 352 + azar(0, 30), y: azar(288, 310), v: azar(.8, 1.25) * VEL_FLUJO, fase: azar(0, 6), r: k === 'circ' ? 3 : 3.4, alpha: 0, vis: 0 });
+    } else if (cuenta[k] > obj[k]) {
+      const vivos = flujo.filter(f => f.forma === k && !f.sale && f.x > 30 && f.x < 330);
+      const f = vivos[Math.floor(Math.random() * vivos.length)];
+      if (f) {
+        f.sale = true;
+        if (k === 'tri' && reaccionaAhora()) reaccion(f);
+      }
+    }
+  }
+  for (let i = flujo.length - 1; i >= 0; i--) {
+    const f = flujo[i];
+    if (f.reacciona) continue;
+    f.x -= f.v * dt; f.fase += dt * 1.7; f.y += Math.sin(f.fase) * .12;
+    if (f.x < 10) f.x += 344;
+    const borde = clamp(Math.min((f.x - 10) / 18, (352 - f.x) / 18), 0, 1);
+    f.vis = f.sale ? Math.max(0, f.vis - dt * 2) : Math.min(1, f.vis + dt * 2);
+    f.alpha = f.vis * borde;
+    if (f.sale && f.vis <= 0) flujo.splice(i, 1);
+  }
+}
+let reaccionando = false;
+// el vaso empieza lleno (y así se ve también con «reducir movimiento»)
+function sembrarFlujo() {
+  flujo.length = 0;
+  const obj = objetivoFlujo();
+  for (const k in obj) for (let j = 0; j < obj[k]; j++) flujo.push({ forma: k, x: azar(14, 348), y: azar(288, 310), v: azar(.8, 1.25) * VEL_FLUJO, fase: azar(0, 6), r: k === 'circ' ? 3 : 3.4, alpha: 1, vis: 1 });
+}
+function reaccionaAhora() { return reaccionando; }
+// H⁺ + HCO₃⁻ → CO₂ + H₂O: el H⁺ del cetoácido encuentra un HCO₃⁻ del vaso y nace una voluta que sale por el pulmón
+function reaccion(f) {
+  f.reacciona = true;
+  let cr = cruces.find(c => !c.ocupada);
+  if (!cr) { cr = nueva({ forma: 'cruz', col: C.rojo, x: Math.max(14, f.x - 70), y: f.y, r: 3.6, modo: 'deambula' }); cruces.push(cr); }
+  cr.ocupada = true;
+  cr.modo = 'ruta'; cr.pts = [[cr.x, cr.y], [f.x, f.y]]; cr.seg = 0; cr.vel = 130;
+  cr.alFin = () => {
+    const i = flujo.indexOf(f); if (i >= 0) flujo.splice(i, 1);
+    const j = cruces.indexOf(cr); if (j >= 0) cruces.splice(j, 1);
+    nueva({ forma: 'anillo', col: C.oro, x: f.x, y: f.y, r: 2, modo: 'flash' });
+    if (!reaccion.rotulado) { reaccion.rotulado = true; texto('H⁺ + HCO₃⁻ → CO₂ + H₂O', clamp(f.x, 80, 280), 256, C.oro, 2.6); }
+    voluta(f.x, f.y, true);
+    return false;
+  };
+}
+
+// ───────────── Línea de tiempo de un cambio de paso ─────────────
+let tl = null;
+function planificar(a, b, extra = {}) {
+  const fases = [], la = lineaDe(a.P, a.HCO3), lb = lineaDe(b.P, b.HCO3);
+  if (la && la === lb && a.HCO3 !== b.HCO3) {
+    fases.push({ dur: 2.6, hacia: { Cl: b.Cl, HCO3: b.HCO3, ceto: b.ceto }, desliza: la, errA: a.P - ESP[la](a.HCO3), errB: b.P - ESP[la](b.HCO3), ...extra });
+    return fases;
+  }
+  // Primero entran o salen los cetoácidos (la balanza se desequilibra un instante); después Cl⁻ y HCO₃⁻ a la vez
+  // (se reequilibra). Así el hiato pasa del valor de partida al final sin cifras imposibles por el camino.
+  if (Math.abs(b.ceto - a.ceto) > .01) fases.push({ dur: 2, hacia: { ceto: b.ceto }, ...extra });
+  const medidos = {};
+  for (const k of ['Cl', 'HCO3']) if (Math.abs(b[k] - a[k]) > .01) medidos[k] = b[k];
+  if (Object.keys(medidos).length) fases.push({ dur: 2.4, hacia: medidos, ...extra });
+  if (Math.abs(b.P - a.P) > .01) fases.push({ dur: 1.9, hacia: { P: b.P }, pulmon: true, ...extra });
+  return fases;
+}
+function lanzar(f, paso) {
+  const n = d => clamp(Math.round(Math.abs(d)), 2, 12);
+  for (const k in f.hacia) {
+    if (k === 'P') continue;
+    const d = f.hacia[k] - f.desde[k];
+    if (Math.abs(d) < .5) continue;
+    const cuantos = n(d);
+    for (let j = 0; j < cuantos; j++) {
+      const espera = j / cuantos * f.dur * .72;
+      if (k === 'ceto' && d > 0) {             // monedas ocres que caen al platillo; sueltan su H⁺ en el vaso
+        const tx = G.xR + azar(-14, 14);
+        nueva({ forma: 'moneda', col: C.ocre, x: -8, y: azar(292, 306), r: 5.2, espera, modo: 'ruta', pts: null, seg: 0, vel: 210,
+          inicio(p) { p.pts = [[p.x, p.y], [tx, p.y]]; },
+          alFin: p => {
+            const cr = nueva({ forma: 'cruz', col: C.rojo, x: p.x - azar(20, 120), y: p.y, r: 3.4, modo: 'deambula' }); cruces.push(cr);
+            p.modo = 'cae'; p.vy = -60; p.tx = tx; p.suelo = sueloD; p.botes = 1; return true;
+          } });
+        if (j === 0) texto('cetoácidos: el H⁺ queda en la sangre, el anión cae a la balanza', 180, 256, C.ocre, 3);
+      } else if (k === 'ceto' && d < 0) {      // las cetonas se van
+        nueva({ forma: 'moneda', col: C.ocre, x: G.xR + azar(-18, 18), y: sueloD(), r: 4.6, espera, modo: 'sube', vy: azar(30, 45), vx: azar(-8, 8), vida: 1.6 });
+        if (j === 0) texto('las cetonas bajan', G.xR - 40, 400, C.ocre, 2.4);
+      } else if (k === 'Cl' && d > 0) {        // el cloro del suero
+        const tx = G.xR + azar(-16, 16);
+        nueva({ forma: 'rombo', col: C.ciruela, x: 26, y: 262, r: 3.6, espera, modo: 'ruta', pts: [[26, 262], [26, 298], [tx, 298 + azar(-6, 6)]], seg: 0, vel: 190,
+          alFin: p => { p.modo = 'cae'; p.vy = 0; p.tx = tx; p.suelo = () => G.yR + 220 - D.Cl * K - 3; p.botes = 1; return true; } });
+        if (j === 0 && paso.suero) texto(paso.id === '5' ? 'llega Cl⁻: salino y ClK' : 'el Cl⁻ del suero entra en la balanza', 200, 256, C.ciruela, 2.6);
+      } else if (k === 'Cl' && d < 0) {        // vómito: se pierden Cl⁻ (y H⁺)
+        const x0 = G.xR + azar(-18, 18), y0 = G.yR + 220 - f.desde.Cl * K * .5;
+        nueva({ forma: 'rombo', col: C.ciruela, x: x0, y: y0, r: 3.6, espera, modo: 'ruta', pts: [[x0, y0], [x0 - 10, 300], [40, 298], [16, 240]], seg: 0, vel: 230,
+          alFin: p => { p.modo = 'sube'; p.vy = 40; p.vx = -10; p.vida = .8; return true; } });
+      } else if (k === 'HCO3' && d > 0) {      // vuelve o sube el HCO₃⁻
+        const tx = G.xR + azar(-16, 16), x0 = azar(200, 340);
+        nueva({ forma: 'tri', col: C.verde, x: x0, y: 312, r: 3.6, espera, modo: 'cae', vy: 0, tx, suelo: () => G.yR + 220 - (D.Cl + D.HCO3) * K - 3, botes: 1 });
+        if (paso.id === '4') {                  // cada H⁺ perdido con el vómito deja un HCO₃⁻
+          nueva({ forma: 'cruz', col: C.rojo, x: x0, y: 300, r: 3.4, espera, modo: 'ruta', pts: [[x0, 300], [40, 298], [16, 236]], seg: 0, vel: 240,
+            alFin: p => { p.modo = 'sube'; p.vy = 40; p.vx = -10; p.vida = .8; return true; } });
+          if (j === 0) texto('cada H⁺ perdido deja un HCO₃⁻', 220, 256, C.verde, 2.8);
+        }
+      } else if (k === 'HCO3' && d < 0 && paso.tendencia) {  // a la orina, por la pendrina
+        const x0 = G.xR + azar(-18, 18), y0 = G.yR + 220 - (f.desde.Cl + f.desde.HCO3 * .5) * K;
+        nueva({ forma: 'tri', col: C.verde, x: x0, y: y0, r: 3.6, espera, modo: 'baja', vy: 120, vida: 1.6 });
+        if (j === 0) texto('el HCO₃⁻ baja al riñón: sale por la orina', 180, 598, C.verde, 3);
+      }
+    }
+  }
+}
+function avanzarTL(ahora) {
+  if (!tl) return;
+  const f = tl.fases[tl.i];
+  if (!f) { const fin = tl.alFinal; tl = null; reaccionando = false; fin && fin(); return; }
+  if (f.inicio == null) {
+    f.inicio = ahora; f.desde = { Cl: D.Cl, HCO3: D.HCO3, ceto: D.ceto, P: D.P };
+    if (f.mapaFijo) tl.congelar = true;
+    reaccionando = ('HCO3' in f.hacia) && f.hacia.HCO3 < f.desde.HCO3 && !tl.paso.tendencia;
+    reaccion.rotulado = false;
+    lanzar(f, tl.paso);
+  }
+  const t = clamp((ahora - f.inicio) / (f.dur * 1000), 0, 1), e = suave(t);
+  for (const k in f.hacia) D[k] = lerp(f.desde[k], f.hacia[k], e);
+  if (f.desliza) D.P = ESP[f.desliza](D.HCO3) + lerp(f.errA, f.errB, e);
+  if (!tl.congelar) { D.mapP = D.P; D.mapH = D.HCO3; }
+  if (t >= 1) tl.i++;
+}
+
+// ───────────── III · Carta náutica ─────────────
+const MX = p => 44 + (p - 10) / 80 * 296, MY = h => 14 + (50 - h) / 46 * 270;
+let estela = [], nodosCarta = {};
+function construirCarta() {
+  const svg = $('#carta');
+  let t = defs('c');
+  const pts = (f, a, b, paso = 1) => { let d = ''; for (let v = a; a < b ? v <= b + 1e-9 : v >= b - 1e-9; v += a < b ? paso : -paso) { const [p, h] = f(v); d += `${d ? 'L' : 'M'}${MX(p).toFixed(1)} ${MY(h).toFixed(1)}`; } return d; };
+  // graduación del borde, como una carta
+  t += `<rect x="44" y="14" width="296" height="270" fill="none" stroke="${C.oro}" stroke-width=".9"/>
+        <rect x="40" y="10" width="304" height="278" fill="none" stroke="${C.oro}" stroke-width=".45"/>`;
+  for (let p = 10; p < 90; p += 5) { const on = (p / 5) % 2 === 0; if (on) t += `<rect x="${MX(p)}" y="284" width="${MX(p + 5) - MX(p)}" height="4" fill="${C.oro}" opacity=".7"/><rect x="${MX(p)}" y="10" width="${MX(p + 5) - MX(p)}" height="4" fill="${C.oro}" opacity=".7"/>`; }
+  for (let h = 4; h < 50; h += 4) { const on = (h / 4) % 2 === 1; if (on) t += `<rect x="40" y="${MY(Math.min(50, h + 4))}" width="4" height="${MY(h) - MY(Math.min(50, h + 4))}" fill="${C.oro}" opacity=".7"/><rect x="340" y="${MY(Math.min(50, h + 4))}" width="4" height="${MY(h) - MY(Math.min(50, h + 4))}" fill="${C.oro}" opacity=".7"/>`; }
+  t += [10, 30, 50, 70, 90].map(p => `<text class="tx-s" x="${MX(p)}" y="300" text-anchor="middle">${p}</text>`).join('');
+  t += [10, 20, 30, 40, 50].map(h => `<text class="tx-s" x="36" y="${MY(h) + 3}" text-anchor="end">${h}</text>`).join('');
+  t += `<text class="tx-s it" x="192" y="314" text-anchor="middle">PaCO₂ (mmHg)</text>
+        <text class="tx-s it" x="11" y="150" text-anchor="middle" transform="rotate(-90 11 150)">HCO₃⁻ (mEq/L)</text>`;
+  // rumbos tenues
+  t += `<g opacity=".18" stroke="${C.oro}" stroke-width=".4">${[0, 30, 60, 90, 120, 150].map(g => { const a = g * Math.PI / 180; return `<line x1="${78 - 260 * Math.cos(a)}" y1="${58 - 260 * Math.sin(a)}" x2="${78 + 260 * Math.cos(a)}" y2="${58 + 260 * Math.sin(a)}"/>`; }).join('')}</g>`;
+  t = t.replace('</defs>', `<clipPath id="c-clip"><rect x="44" y="14" width="296" height="270"/></clipPath></defs>`);
+  // isolíneas de pH, como isobaras (Ec. 31.2)
+  let iso = '';
+  for (let i = 0; i <= 7; i++) {
+    const ph = 7 + i / 10, Hn = 10 ** (9 - ph), h = p => 24 * p / Hn;
+    const p0 = Math.max(10, 4 * Hn / 24), p1 = Math.min(90, 50 * Hn / 24);
+    const es74 = i === 4;
+    iso += `<path class="trazo" pathLength="1" d="M${MX(p0).toFixed(1)} ${MY(h(p0)).toFixed(1)}L${MX(p1).toFixed(1)} ${MY(h(p1)).toFixed(1)}" stroke="${es74 ? C.oro : C.muted}" stroke-width="${es74 ? .7 : .5}" ${es74 ? 'stroke-dasharray="3 3"' : ''} opacity="${es74 ? .75 : .5}" fill="none"/>`;
+    const lx = p1 < 90 ? MX(p1) - 3 : 336, ly = p1 < 90 ? 25 : MY(h(90)) - 3;
+    iso += `<text class="tx-xs it" x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="end" style="fill:${es74 ? C.oro : C.muted}">${fmt(ph, 1)}</text>`;
+  }
+  t += `<g clip-path="url(#c-clip)">${iso}`;
+  // rosa de los vientos
+  t += `<g transform="translate(80 58)" opacity=".9">
+      <circle r="21" fill="none" stroke="${C.oro}" stroke-width=".5"/><circle r="16" fill="none" stroke="${C.oro}" stroke-width=".35" stroke-dasharray="1 2"/>
+      ${[0, 1, 2, 3].map(i => `<path d="M0 -24L3.4 -3.4L0 0Z" fill="${C.oro}" transform="rotate(${i * 90})"/><path d="M0 -24L-3.4 -3.4L0 0Z" fill="url(#c-oro)" stroke="${C.oro}" stroke-width=".4" transform="rotate(${i * 90})"/>`).join('')}
+      ${[0, 1, 2, 3].map(i => `<path d="M0 -14L2 -2L0 0L-2 -2Z" fill="none" stroke="${C.oro}" stroke-width=".5" transform="rotate(${45 + i * 90})"/>`).join('')}
+    </g>`;
+  // normal: un puerto rayado
+  t += `<rect x="${MX(36)}" y="${MY(26)}" width="${MX(44) - MX(36)}" height="${MY(22) - MY(26)}" fill="url(#c-ray)" stroke="${C.verde}" stroke-width=".9"/>
+        <text class="tx-xs it" x="${MX(44) + 3}" y="${MY(22) + 1}" style="fill:${C.verde}">normal</text>`;
+  // líneas de compensación (Fig. 31.2)
+  t += `<path class="trazo" pathLength="1" d="${pts(p => [p, 24 + .1 * (p - 40)], 40, 90, 2)}" stroke="${C.muted}" stroke-width=".8" stroke-dasharray="4 3" fill="none"/>
+        <path class="trazo" pathLength="1" d="${pts(p => [p, 24 + .4 * (p - 40)], 40, 90, 2)}" stroke="${C.muted}" stroke-width=".8" fill="none"/>
+        <path class="trazo" pathLength="1" d="${pts(p => [p, 24 - .2 * (40 - p)], 40, 12, 2)}" stroke="${C.muted}" stroke-width=".8" stroke-dasharray="4 3" fill="none"/>
+        <path class="trazo" pathLength="1" d="${pts(p => [p, 24 - .4 * (40 - p)], 40, 12, 2)}" stroke="${C.muted}" stroke-width=".8" fill="none"/>
+        <path id="linea-acid" class="trazo" pathLength="1" d="${pts(h => [espAcid(h), h], 24, 4, .5)}" stroke="${C.rojo}" stroke-width="1.7" fill="none"/>
+        <path id="linea-alc" class="trazo" pathLength="1" d="${pts(h => [espAlc(h), h], 24, 50, .5)}" stroke="${C.ocre}" stroke-width="1.7" fill="none"/>
+        <text class="tx-s it" x="${MX(19)}" y="${MY(4.6)}" style="fill:${C.rojo}">acidosis metabólica</text>
+        <text class="tx-s it" x="${MX(espAlc(45)) + 6}" y="${MY(45) + 3}" style="fill:${C.ocre}">alcalosis metabólica</text>
+        <path id="brillo" d="" stroke="${C.oro}" stroke-width="4" stroke-linecap="round" fill="none" opacity="0" pathLength="1" stroke-dasharray="1"/>
+        <path id="tendencia" d="" stroke="${C.verde}" stroke-width="2.2" fill="none" stroke-dasharray="5 4" stroke-linecap="round" opacity="0"/>
+        <path id="estela" d="" stroke="${C.oro}" stroke-width="1.1" fill="none" stroke-dasharray="1.2 3" stroke-linecap="round"/>
+        <g id="punto"><circle r="10" fill="none" stroke="${C.oro}" stroke-width=".7" id="punto-halo"/><circle r="5.2" fill="${C.crema}" stroke="${C.oro}" stroke-width="1.6"/><circle r="1.6" fill="${C.fondo}"/></g>
+        <text id="punto-t" class="tx-s" style="fill:${C.crema}"></text>`;
+  t += `</g>`;
+  // reloj de arena
+  t += `<g id="arena" transform="translate(302 226)">
+      <path d="M-14 -24H14M-14 24H14" stroke="${C.oro}" stroke-width="1.6"/>
+      <path d="M-11 -24C-11 -8 -2 -4 -2 0C-2 4 -11 8 -11 24M11 -24C11 -8 2 -4 2 0C2 4 11 8 11 24" stroke="${C.oro}" stroke-width=".9" fill="${alfa(C.fondo, .7)}"/>
+      <path id="arena-arriba" d="" fill="${C.ocre}"/><path id="arena-abajo" d="" fill="${C.ocre}"/>
+      <line id="arena-chorro" x1="0" y1="0" x2="0" y2="22" stroke="${C.ocre}" stroke-width=".9" stroke-dasharray="1 1.5" opacity="0"/>
+      <text class="tx-xs" y="38" text-anchor="middle"><tspan id="ar-0">min</tspan> · <tspan id="ar-1">h</tspan> · <tspan id="ar-2">días</tspan></text>
+    </g>`;
+  svg.innerHTML = t;
+  nodosCarta = { punto: $('#punto'), halo: $('#punto-halo'), pt: $('#punto-t'), estela: $('#estela'), brillo: $('#brillo'), tend: $('#tendencia'),
+    arriba: $('#arena-arriba'), abajo: $('#arena-abajo'), chorro: $('#arena-chorro') };
+}
+function pintarArena(f) {
+  // f: fracción caída (0 arriba llena → 1 abajo llena). Anchura del vidrio en y: 11 en los extremos, 2 en el cuello.
+  const anchoA = y => 2 + 9 * Math.pow(Math.abs(y) / 24, .7);
+  const hArr = 22 * (1 - f), hAb = 22 * f;
+  let d = '';
+  if (hArr > .3) { const y0 = -2 - hArr; d = `M${-anchoA(y0) + 1} ${y0}H${anchoA(y0) - 1}L1 -2H-1Z`; }
+  nodosCarta.arriba.setAttribute('d', d);
+  let e = '';
+  if (hAb > .3) { const y0 = 23 - hAb; e = `M-10 23H10L${anchoA(y0) - 1.5} ${y0 + 2}Q0 ${y0 - 3} ${-anchoA(y0) + 1.5} ${y0 + 2}Z`; }
+  nodosCarta.abajo.setAttribute('d', e);
+}
+let arenaF = 0;
+function relojA(n, ilus) {
+  document.querySelectorAll('#reloj span').forEach((s, i) => s.classList.toggle('on', n === i + 1));
+  for (let i = 0; i < 3; i++) { const ts = $('#ar-' + i); ts.style.fill = n === i + 1 ? C.oro : C.muted; ts.style.fontWeight = n === i + 1 ? '700' : '400'; }
+  $('#reloj-org').hidden = !ilus;
+  const obj = [0, .2, .55, .92][n];
+  if (!M || QUIETO) { arenaF = obj; pintarArena(arenaF); return; }
+  nodosCarta.chorro.setAttribute('opacity', obj > arenaF ? 1 : 0);
+  M.animate(arenaF, obj, { duration: 1.6, ease: 'easeInOut', onUpdate: v => { arenaF = v; pintarArena(v); },
+    onComplete: () => nodosCarta.chorro.setAttribute('opacity', 0) });
+}
+function pintarPunto() {
+  const x = MX(D.mapP), y = MY(D.mapH);
+  nodosCarta.punto.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
+  const u = estela[estela.length - 1];
+  if (!u || Math.hypot(u[0] - x, u[1] - y) > 1.5) {
+    estela.push([x, y]);
+    nodosCarta.estela.setAttribute('d', estela.map((q, i) => `${i ? 'L' : 'M'}${q[0].toFixed(1)} ${q[1].toFixed(1)}`).join(''));
+  }
+  const tx = x > 250 ? x - 10 : x + 10, abajo = D.mapH < 24;
+  nodosCarta.pt.setAttribute('x', tx.toFixed(1)); nodosCarta.pt.setAttribute('y', (abajo ? y + 18 : y - 9).toFixed(1));
+  nodosCarta.pt.setAttribute('text-anchor', x > 250 ? 'end' : 'start');
+}
+function brilloLinea(paso) {
+  const ln = lineaDe(paso.P, paso.HCO3);
+  const b = nodosCarta.brillo;
+  if (!ln || paso.teorico || paso.tendencia) { b.setAttribute('opacity', 0); return; }
+  let d = '';
+  const h1 = paso.HCO3, paso_ = ln === 'acid' ? -.5 : .5;
+  for (let h = 24; ln === 'acid' ? h >= h1 : h <= h1; h += paso_) d += `${d ? 'L' : 'M'}${MX(ESP[ln](h)).toFixed(1)} ${MY(h).toFixed(1)}`;
+  b.setAttribute('d', d);
+  b.setAttribute('stroke', ln === 'acid' ? C.rojo : C.ocre);
+  if (!M || QUIETO) { b.setAttribute('opacity', .35); b.setAttribute('stroke-dashoffset', 0); return; }
+  M.animate(0, 1, { duration: 1.5, ease: 'easeOut', onUpdate: v => { b.setAttribute('stroke-dashoffset', (1 - v).toFixed(3)); b.setAttribute('opacity', (.55 * Math.min(1, v * 3)).toFixed(2)); },
+    onComplete: () => M.animate(.55, .3, { duration: .8, onUpdate: v => b.setAttribute('opacity', v.toFixed(2)) }) });
+}
+function tendencia(on) {
+  const t = nodosCarta.tend;
+  if (!on) { t.setAttribute('opacity', 0); return; }
+  let d = '';
+  // paralela a la línea ocre, un poco a la izquierda, con punta de flecha hacia el puerto
+  const off = -9;
+  for (let h = 38; h >= 28; h -= .5) d += `${d ? 'L' : 'M'}${(MX(espAlc(h)) + off).toFixed(1)} ${MY(h).toFixed(1)}`;
+  const xe = MX(espAlc(28)) + off, ye = MY(28);
+  d += `M${(xe - 6).toFixed(1)} ${(ye - 8).toFixed(1)}L${xe.toFixed(1)} ${ye.toFixed(1)}L${(xe + 6).toFixed(1)} ${(ye - 6).toFixed(1)}`;
+  t.setAttribute('d', d); t.setAttribute('opacity', 1);
+}
+
+// ───────────── Riñón: tres células de la Fig. 33.1 ─────────────
+const cvR = $('#celulas-cv'), ctxR = cvR.getContext('2d');
+const partsR = [];
+const RIN = { pend: .12, pendObj: .12, clLuz: .5, bloqueo: false, acum: { pr: 0, a: 0, b: 0 } };
+let nodosR = {};
+function construirCelulas() {
+  const svg = $('#celulas');
+  const celula = (y, h, nombre, funcion, nx = 196) => `
+    <rect x="72" y="${y}" width="224" height="${h}" rx="26" fill="${C.fondo}"/>
+    <rect x="72" y="${y}" width="224" height="${h}" rx="26" fill="url(#r-ray)" opacity=".6"/>
+    <rect class="trazo" pathLength="1" x="72" y="${y}" width="224" height="${h}" rx="26" fill="none" stroke="${C.oro}" stroke-width="1"/>
+    <rect x="76" y="${y + 4}" width="216" height="${h - 8}" rx="22" fill="none" stroke="${C.oro}" stroke-width=".35" opacity=".55"/>
+    <ellipse cx="${nx}" cy="${y + h / 2 + 2}" rx="42" ry="${h * .21}" fill="url(#r-cruz)" stroke="${C.muted}" stroke-width=".7"/>
+    <ellipse cx="${nx}" cy="${y + h / 2 + 2}" rx="42" ry="${h * .21}" fill="url(#r-pun)" opacity=".7"/>
+    <text class="cap" x="86" y="${y + 17}">${nombre}</text>
+    <text class="tx-s it" x="184" y="${y + h - 10}" text-anchor="middle">${funcion}</text>`;
+  svg.innerHTML = defs('r') + `
+    <text class="cap" x="36" y="16" text-anchor="middle">LUZ</text>
+    <text class="tx-xs it mu" x="36" y="28" text-anchor="middle">hacia la orina</text>
+    <text class="cap" x="327" y="16" text-anchor="middle">SANGRE</text>
+    <rect x="8" y="34" width="56" height="398" rx="6" fill="url(#r-pun)" stroke="${C.muted}" stroke-width=".6" stroke-dasharray="2 3"/>
+    <rect x="302" y="34" width="50" height="398" rx="6" fill="url(#r-ray)" stroke="${C.rojo}" stroke-width=".6" opacity=".7"/>
+    <path d="M36 404V424M31 418L36 425L41 418" stroke="${C.muted}" stroke-width=".9" fill="none"/>
+    ${celula(36, 112, 'PRINCIPAL', 'reabsorbe Na⁺ · secreta K⁺')}
+    ${celula(156, 134, 'INTERCALAR A', 'reabsorbe HCO₃⁻ · secreta H⁺')}
+    ${celula(298, 132, 'INTERCALAR B', 'secreta HCO₃⁻ por la pendrina', 228)}
+    <circle cx="296" cy="92" r="10" fill="${C.fondo}" stroke="${C.oro}" stroke-width="1.1"/>
+    <text class="tx-xs" x="284" y="120" text-anchor="end" style="fill:${C.oro}">ATPasa Na⁺/K⁺</text>
+    <circle cx="72" cy="236" r="10" fill="${C.fondo}" stroke="${C.rojo}" stroke-width="1.2"/>
+    <text class="tx-xs" x="88" y="258" style="fill:${C.rojo}">ATPasa de H⁺</text>
+    <text class="tx-xs it" x="196" y="186" text-anchor="middle">H₂CO₃ → H⁺ + HCO₃⁻</text>
+    <circle id="pend-halo" cx="72" cy="352" r="20" fill="${C.verde}" opacity=".1"/>
+    <circle id="pend" cx="72" cy="352" r="11.5" fill="${C.verde}" fill-opacity=".25" stroke="${C.verde}" stroke-width="1.4"/>
+    <g id="pend-x" opacity="0"><path d="M65 345L79 359M79 345L65 359" stroke="${C.rojo}" stroke-width="2"/></g>
+    <text class="tx-s" x="90" y="372" style="fill:${C.verde}">pendrina</text>
+    <text class="tx-xs it" id="pend-estado" x="90" y="385"></text>
+    <text class="tx-xs" id="orina-tx" x="36" y="400" text-anchor="middle"></text>`;
+  nodosR = { pend: $('#pend'), halo: $('#pend-halo'), x: $('#pend-x'), estado: $('#pend-estado'), orina: $('#orina-tx') };
+}
+function rutaR(forma, col, pts, vel, alFin, r = 3.3) { const p = { forma, col, x: pts[0][0], y: pts[0][1], pts, seg: 0, vel, modo: 'ruta', r, alFin, edad: 0, alpha: 1, espera: 0 }; partsR.push(p); return p; }
+const aLuz = p => { p.modo = 'baja'; p.vy = 16; p.vida = 4; return true; };
+const aSangre = p => { p.modo = 'baja'; p.vy = 22; p.vida = 3; return true; };
+function moverRinon(dt) {
+  RIN.pend += (RIN.pendObj - RIN.pend) * Math.min(1, dt * 2);
+  const a = RIN.acum;
+  a.pr += dt * .7; a.a += dt * .9; a.b += dt * (RIN.bloqueo ? 0 : RIN.pend * 2.4 * Math.min(1, RIN.clLuz * 2));
+  if (a.pr >= 1) { a.pr = 0;
+    rutaR('circ', alfa(C.crema, .85), [[36, 74], [120, 76], [286, 88], [328, 88]], 70, aSangre, 3.4);
+    rutaR('cuad', C.dim, [[330, 104], [286, 98], [160, 112], [36, 116]], 60, aLuz, 3); }
+  if (a.a >= 1) { a.a = 0;
+    rutaR('cruz', C.rojo, [[170, 214], [82, 236], [36, 240]], 70, aLuz, 3.4);
+    rutaR('tri', C.verde, [[210, 200], [300, 204], [328, 206]], 60, aSangre, 3.6);
+    rutaR('rombo', C.ciruela, [[330, 270], [296, 268], [236, 262]], 40, p => { p.modo = 'baja'; p.vy = 0; p.vida = .6; return true; }, 3.3); }
+  if (a.b >= 1) { a.b = 0;
+    rutaR('tri', C.verde, [[176, 330], [82, 346], [36, 340]], 75, aLuz, 3.6);
+    rutaR('rombo', C.ciruela, [[30, 372], [64, 358], [82, 356], [168, 352]], 75, p => { p.modo = 'baja'; p.vy = 0; p.vida = .5; return true; }, 3.3); }
+  // el Cl⁻ de la luz: abundante, escaso o ausente según el paso
+  const objCl = Math.round(RIN.clLuz * 14), vivos = partsR.filter(p => p.luzCl && !p.sale).length;
+  if (vivos < objCl) partsR.push({ forma: 'rombo', col: C.ciruela, x: azar(16, 56), y: 36, modo: 'baja', vy: azar(12, 20), vida: 30, edad: 0, alpha: 1, espera: 0, r: 3.2, luzCl: true });
+  else if (vivos > objCl) { const v = partsR.find(p => p.luzCl && !p.sale); if (v) { v.sale = true; v.vida = v.edad + .6; } }
+  for (let i = partsR.length - 1; i >= 0; i--) {
+    const p = partsR[i];
+    let vivo = mover(p, dt);
+    if (p.luzCl) { if (p.y > 398) vivo = false; p.alpha = p.sale ? Math.max(0, p.alpha - dt * 2) : Math.min(1, p.edad * 2); if (p.sale && p.alpha <= 0) vivo = false; }
+    else if (p.modo === 'baja' && p.y > 428) vivo = false;
+    if (!vivo) partsR.splice(i, 1);
+  }
+}
+function pintarRinon(t) {
+  const c = ctxR, s = cvR._s || 1;
+  c.setTransform(s, 0, 0, s, 0, 0); c.clearRect(0, 0, 360, 440);
+  for (const p of partsR) { c.globalAlpha = clamp(p.alpha, 0, 1); forma(c, p); }
+  if (RIN.bloqueo) {           // HCO₃⁻ esperando junto a la pendrina, sin cloro con el que cambiarse
+    c.globalAlpha = .9;
+    for (let i = 0; i < 4; i++) forma(c, { forma: 'tri', col: C.verde, x: 96 + i * 10 + Math.sin(t / 300 + i) * 1.4, y: 340 + (i % 2) * 7 + Math.cos(t / 260 + i) * 1.2, r: 3.5 });
+  }
+  c.globalAlpha = 1;
+  const pulso = RIN.pend > .5 ? .5 + .5 * Math.sin(t / 320) : 0;
+  nodosR.halo.setAttribute('r', (14 + RIN.pend * 10 + pulso * 3).toFixed(1));
+  nodosR.halo.setAttribute('opacity', (.05 + RIN.pend * .3).toFixed(2));
+  nodosR.pend.setAttribute('fill-opacity', (.12 + RIN.pend * .75).toFixed(2));
+}
+function estadoRinon(paso) {
+  RIN.pendObj = paso.pend; RIN.clLuz = paso.clLuz; RIN.bloqueo = !!paso.bloqueo;
+  if (QUIETO) RIN.pend = paso.pend;
+  nodosR.x.setAttribute('opacity', paso.bloqueo ? 1 : 0);
+  const est = paso.bloqueo ? ['apagada: sin Cl⁻', C.rojo] : paso.pend > .5 ? ['encendida', C.verde] : ['casi apagada', C.muted];
+  nodosR.estado.textContent = est[0]; nodosR.estado.style.fill = est[1];
+  nodosR.orina.textContent = paso.bloqueo ? 'Cl⁻ <20' : paso.tendencia ? '▲ HCO₃⁻' : '';
+  nodosR.orina.style.fill = paso.bloqueo ? C.ciruela : C.verde;
+  const txt = {
+    '0': `La <strong>pendrina</strong> apenas trabaja en reposo; la intercalar A secreta H⁺ y devuelve HCO₃⁻ a la sangre. ${O('f', 'mr-alcalosis-mecanismos · Fig. 33.1')}`,
+    acido: `En un trastorno metabólico compensa el <strong>pulmón</strong> (30-120 min). El riñón compensa los respiratorios, y tarda 2-3 días. ${O('f', 'mr-acidobase-analisis · Fig. 31.2')}`,
+    '4': `<span class="hl-r">Sin Cl⁻ en la luz, la pendrina no puede secretar HCO₃⁻</span>: la alcalosis se mantiene. Cl⁻ en orina <span class="hl-p">&lt;20 mEq/L</span>. ${O('f', 'mr-alcalosis-mecanismos · Tabla 33.1')}`,
+    '5': `<span class="hl-v">Llega Cl⁻: la pendrina se enciende</span> y el HCO₃⁻ sale por la orina. ${O('f', 'mr-alcalosis-mecanismos · mr-alcalosis-tratamiento')}`,
+  };
+  $('#estado-rinon').innerHTML = `<span>${txt[paso.id] || txt.acido}</span><span class="origenes">${O('i', 'cantidad de partículas')}</span>`;
+}
+
+// ───────────── Textos de cada paso ─────────────
+function pintarTextos(paso) {
+  const i = PASOS.indexOf(paso), ph = calcPH(paso.P, paso.HCO3), H = hNeq(paso.P, paso.HCO3);
+  const n0 = PASOS[0];
+  // palabra del pH, con forma además de color
+  const pal = $('#ph-palabra');
+  if (paso.tendencia) pal.innerHTML = `<svg viewBox="-6 -6 12 12">${icono('tri', C.verde, 1.1)}</svg>alcalemia · tendencia: baja`;
+  else if (ph < 7.355) pal.innerHTML = `<svg viewBox="-6 -6 12 12">${icono('cruz', C.rojo, 1.2)}</svg><span style="color:${C.rojo}">acidemia</span>`;
+  else if (ph > 7.445) pal.innerHTML = `<svg viewBox="-6 -6 12 12">${icono('tri', C.verde, 1.1)}</svg><span style="color:${C.verde}">alcalemia</span>`;
+  else pal.innerHTML = `<svg viewBox="-6 -6 12 12">${icono('circ', C.crema, 1.1)}</svg>en rango (7,36-7,44)`;
+  $('#ph-flecha').hidden = !paso.tendencia;
+  $('#cociente').innerHTML = paso.tendencia
+    ? `Tendencia: Cl⁻ <b>↑</b> · HCO₃⁻ <b>↓</b> · PaCO₂ <b>↓</b> · pH <b>↓</b>. Sin cifras: la ficha no da la curva de corrección.`
+    : `[H⁺] = 24 × <b>${paso.P}</b> / <b>${paso.HCO3}</b> = <b>${fmt(H)}</b> nEq/L → pH <b>${fmt(ph, 2)}</b>`;
+  const celdas = [['Na⁺', paso.tendencia ? '—' : NA, NA], ['Cl⁻', paso.tendencia ? '↑' : paso.Cl, n0.Cl], ['HCO₃⁻', paso.tendencia ? '↓' : paso.HCO3, n0.HCO3],
+    ['PaCO₂', paso.tendencia ? '↓' : paso.P, n0.P], ['Hiato', paso.HA, n0.HA]];
+  $('#gaso').innerHTML = celdas.map(([k, v, n]) => {
+    const cambia = typeof v === 'number' ? v !== n : v !== '—';
+    const sube = (typeof v === 'number' && v > n && k !== 'Hiato' && k !== 'Cl⁻') || v === '↑';
+    return `<div><dt>${k}</dt><dd class="${cambia ? 'cambia' : ''}${cambia && sube ? ' sube' : ''}">${v}</dd></div>`; }).join('');
+  $('#gaso-org').innerHTML = `${O('i', 'gasometría del caso')}${O('f', 'pH calculado · Ec. 31.1-31.2 · mr-acidobase-analisis')}`;
+  // pasos
+  document.querySelectorAll('.paso').forEach((b, j) => { if (j === i) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current'); });
+  $('#paso-nombre').textContent = `Paso ${paso.id} · ${paso.nombre}`;
+  $('#paso-trastorno').textContent = paso.trastorno;
+  $('#btn-ant').disabled = i === 0; $('#btn-sig').disabled = i === PASOS.length - 1;
+  $('#barra-paso').textContent = `Paso ${paso.id} · ${paso.nombre}`;
+  // frase viva
+  const [frase, orgs] = fraseViva(paso);
+  $('#frase').innerHTML = frase; $('#frase-org').innerHTML = orgs;
+  // cartela de la sangre
+  const dl = paso.HCO3 < 24 ? (paso.HA - 12) / (24 - paso.HCO3) : null;
+  $('#cartela-sangre').innerHTML = `
+    <dl class="kv">
+      <dt>Hiato aniónico</dt><dd>Na⁺ − (Cl⁻ + HCO₃⁻) = ${paso.tendencia ? '12 (sin cetoácidos)' : `140 − (${paso.Cl} + ${paso.HCO3}) = <strong>${paso.HA}</strong>`} <span class="mu">· 8-12</span></dd>
+      <dt>Delta</dt><dd>${dl === null ? 'no aplica: no hay acidosis' : `(${paso.HA} − 12) / (24 − ${paso.HCO3}) = <strong>${fmt(dl, dl % 1 ? 2 : 0)}</strong> ${dl < .95 ? '<span class="hl-r">&lt;1: además hiperclorémica</span>' : '<span class="hl-v">≈1</span>'}`}</dd>
+      <dt>No medidos</dt><dd>aniones 23 (albúmina 15, orgánicos 5, fosfato 2, sulfato 1) · cationes 11 (Ca 5, K 4,5, Mg 1,5)</dd>
+    </dl>
+    <div class="leyenda-iones">
+      <span><svg viewBox="-6 -6 12 12">${icono('circ', C.crema)}</svg>Na⁺</span><span><svg viewBox="-6 -6 12 12">${icono('rombo', C.ciruela)}</svg>Cl⁻</span>
+      <span><svg viewBox="-6 -6 12 12">${icono('tri', C.verde)}</svg>HCO₃⁻</span><span><svg viewBox="-6 -6 12 12">${icono('cruz', C.rojo)}</svg>H⁺</span>
+      <span><svg viewBox="-6 -6 12 12">${icono('hex', C.ocre)}</svg>cetoácido</span><span><svg viewBox="-6 -6 12 12">${icono('voluta', C.oro)}</svg>CO₂</span>
+    </div>
+    <p class="origenes">${O('f', 'mr-acidobase-gaps · Ec. 31.12-31.16 · Tabla 31.2')}${O('g', 'H⁺ + HCO₃⁻ → CO₂ + H₂O')}${O('i', 'altura de las pesas en proporción; partículas')}</p>`;
+  // carta
+  const ln = lineaDe(paso.P, paso.HCO3);
+  let pie;
+  if (paso.teorico) pie = `<span class="hl-r">Instante teórico, aún sin compensar</span>: el HCO₃⁻ bajó por el eje del trastorno y la PaCO₂ sigue en 40. Esperada: ${fmt(espAcid(paso.HCO3), 1)}.`;
+  else if (paso.tendencia) pie = `La flecha verde es solo la <strong>dirección</strong>: el punto vuelve hacia el puerto por la línea ocre. ${O('i', 'tendencia')}`;
+  else if (ln) pie = `Sobre la línea ${ln === 'acid' ? 'roja' : 'ocre'}: <span class="hl-v">compensación esperada</span> (PaCO₂ ${paso.P}; esperada ${fmt(ESP[ln](paso.HCO3), 1)}). Si el punto se separa de su línea, hay un trastorno añadido.`;
+  else pie = 'En el puerto: gasometría normal. El punto es el paciente y la línea de puntos, su derrota.';
+  $('#pie-carta').innerHTML = pie;
+  // lecturas de la lámina
+  nodosCarta.pt.textContent = `paso ${paso.id}`;
+  nodos.lecEsp.textContent = paso.tendencia ? 'tendencia: baja' : paso.HCO3 < 24 ? `esperada ${fmt(espAcid(paso.HCO3), 1)} · Fig. 31.2` : paso.HCO3 > 24 ? `esperada ${fmt(espAlc(paso.HCO3), 1)} · Fig. 31.2` : 'rango 36-44';
+  // frasco de suero
+  const fr = $('#frasco');
+  fr.setAttribute('opacity', paso.suero ? 1 : 0);
+  $('#frasco-tx').textContent = paso.suero || '';
+  $('#frasco-cl').textContent = paso.id === '3' ? 'Cl⁻ 154 mEq/L' : paso.id === '3b' ? 'Cl⁻ 109 mEq/L' : '';
+  $('#vomito').setAttribute('opacity', paso.id === '4' ? 1 : 0);
+  // tendencia en la esfera
+  const dt = $('#dial-tend');
+  if (paso.tendencia) {
+    const r = DIAL.R - 20, a0 = angPH(7.51), a1 = angPH(7.43);
+    const [x0, y0] = polar(r, a0), [x1, y1] = polar(r, a1);
+    dt.setAttribute('d', `M${x0.toFixed(1)} ${y0.toFixed(1)}A${r} ${r} 0 0 0 ${x1.toFixed(1)} ${y1.toFixed(1)}`);
+    dt.setAttribute('opacity', 1);
+  } else dt.setAttribute('opacity', 0);
+}
+
+function fraseViva(p) {
+  const ph = fmt(calcPH(p.P, p.HCO3), 2);
+  switch (p.id) {
+    case '0': return [`En reposo, [H⁺] = 24 × 40 / 24 = 40 nEq/L: <span class="hl-v">pH ${ph}</span>. Las cargas se equilibran: Na⁺ 140 frente a Cl⁻ 104 + HCO₃⁻ 24 + un <span class="hl-p">hiato de 12</span>. La pendrina apenas trabaja.`,
+      O('f', 'mr-acidobase-analisis · Ec. 31.2') + O('f', 'mr-acidobase-gaps · Tabla 31.2') + O('f', 'mr-alcalosis-mecanismos')];
+    case '1': return [`Los cetoácidos se comen el HCO₃⁻: cada H⁺ gasta uno, que sale como CO₂. El HCO₃⁻ cae a 12 y su sitio lo ocupa el cetoanión: <span class="hl-r">el hiato crece a 24</span>. Instante teórico: el pulmón aún no ha respondido, <strong>pH ${ph}</strong>.`,
+      O('g', 'H⁺ + HCO₃⁻ → CO₂') + O('f', 'mr-acidobase-gaps: los aniones del ácido equilibran la caída del HCO₃⁻') + O('i', 'instante teórico')];
+    case '2': return [`A las 2 horas el pulmón ya sopla: PaCO₂ esperada 40 − 1,2 × (24 − 12) = <span class="hl-a">25,6</span>; la medida, 26. Compensa, pero <strong>no corrige</strong>: pH ${ph}. Delta = 12 / 12 = <span class="hl-v">1</span>: solo hay hiato elevado.`,
+      O('f', 'mr-acidobase-analisis · Fig. 31.2 · 30-120 min') + O('f', 'mr-acidobase-gaps · Ec. 31.16')];
+    case '3': return [`Las cetonas bajan (hiato 16), pero el HCO₃⁻ no sube: <span class="hl-p">el cloro del salino ocupa su sitio</span> (Cl⁻ 112). Delta = 4 / 12 = <span class="hl-r">0,33</span>: hay además una acidosis hiperclorémica. Mirando solo el HCO₃⁻, <strong>parece que la CAD no se resuelve</strong>.`,
+      O('f', 'mr-acidobase-gaps · delta') + O('f', 'mr-cetoacidosis') + O('f', 'mar-cristaloides · Cl⁻ 154')];
+    case '3b': return [`Con Ringer (Cl⁻ 109) no hay hipercloremia: el Cl⁻ sigue en 104 y <span class="hl-v">el HCO₃⁻ vuelve a 20</span>. Delta = 4 / 4 = 1. El punto se desliza por su línea: PaCO₂ 35 (esperada 35,2), pH ${ph}.`,
+      O('f', 'mar-cristaloides · Fig. 10.2') + O('f', 'mr-cetoacidosis: los balanceados resuelven antes')];
+    case '4': return [`Otro paciente, con vómitos. El jugo gástrico se lleva H⁺ (50-100 mEq/L) y Cl⁻ (120-160): <span class="hl-v">cada H⁺ perdido deja un HCO₃⁻</span>, que sube a 40. El pulmón retiene CO₂: esperada 40 + 0,7 × 16 = 51,2. <span class="hl-r">Sin cloro en la luz, la pendrina no puede tirar el HCO₃⁻</span>.`,
+      O('f', 'mr-alcalosis-mecanismos · Tabla 33.1') + O('f', 'mr-acidobase-analisis · ejemplo HCO₃⁻ 40 → 51')];
+    case '5': return [`Salino + ClK: llega Cl⁻ al colector, <span class="hl-v">la pendrina se enciende</span> y el HCO₃⁻ sale por la orina. Déficit de Cl⁻ (70 kg): 0,2 × 70 × (100 − 88) = <span class="hl-a">168 mEq</span> → 168 / 154 ≈ <strong>1,1 L</strong> de salino, sin prisa: 100 mL/h sobre las pérdidas.`,
+      O('f', 'mr-alcalosis-tratamiento · Ec. 33.2-33.3') + O('i', '70 kg del caso; bajada como tendencia')];
+  }
+  return ['', ''];
+}
+
+// ───────────── Navegación entre pasos ─────────────
+function irA(i, inmediato = false) {
+  i = clamp(i, 0, PASOS.length - 1);
+  const a = PASOS[actual], b = PASOS[i];
+  const cruza = !!a.otro !== !!b.otro;
+  actual = i;
+  pintarTextos(b);
+  estadoRinon(b);
+  relojA(b.reloj, b.relojIlus);
+  tendencia(false); nodosCarta.brillo.setAttribute('opacity', 0);
+  if (inmediato || QUIETO) {
+    Object.assign(D, valores(b));
+    const m = b.tendencia ? P4 : b;
+    D.mapP = m.P; D.mapH = m.HCO3;
+    tl = null; reaccionando = false; parts.length = 0; cruces.length = 0;
+    estela = cruza || i === 0 || inmediato ? [] : estela;
+    if (b.otro) estela = [[MX(40), MY(24)], [MX(40), MY(P4.HCO3)]];
+    else if (i > 0) estela = [[MX(40), MY(24)], [MX(40), MY(b.HCO3)]];
+    fiel.a = 0; fiel.w = 0;
+    sembrarFlujo();
+    pintarPunto(); brilloLinea(b); tendencia(!!b.tendencia);
+    return;
+  }
+  // salir del paso 5 (tendencia): se vuelve a las cifras del paso 4 antes de moverse
+  if (a.tendencia) { Object.assign(D, valores(P4)); D.mapP = P4.P; D.mapH = P4.HCO3; }
+  if (cruza || i === 0 && a.id !== '1') {
+    Object.assign(D, valores(PASOS[0])); D.mapP = 40; D.mapH = 24;
+    parts.length = 0; cruces.length = 0; estela = [];
+    if (cruza) { const caja = $('#lamina-caja'); caja.animate?.([{ opacity: .35 }, { opacity: 1 }], { duration: 700 }); }
+  }
+  const desde = { Cl: D.Cl, HCO3: D.HCO3, ceto: D.ceto, P: D.P };
+  let fases;
+  if (b.tendencia && a.id !== '4') fases = [...planificar(desde, valores(P4)), ...planificar(valores(P4), valores(b), { mapaFijo: true })];
+  else fases = planificar(desde, valores(b), b.tendencia ? { mapaFijo: true } : {});
+  tl = { fases, i: 0, paso: b, congelar: false, alFinal: () => { brilloLinea(b); tendencia(!!b.tendencia); limpiarCruces(); } };
+}
+function limpiarCruces() { for (const c of cruces) if (!c.ocupada) { c.modo = 'sube'; c.vy = 10; c.vx = 0; c.vida = .8; c.edad = 0; } cruces.length = 0; }
+
+let auto = null;
+function reproducir() {
+  if (auto) { parar(); return; }
+  $('#btn-play').textContent = '■ Parar';
+  irA(0, true);
+  let i = 0;
+  const siguiente = () => {
+    if (!auto) return;
+    i++; if (i >= PASOS.length) { parar(); return; }
+    irA(i);
+    const espera = () => { if (!auto) return; if (tl) { auto = setTimeout(espera, 300); return; } auto = setTimeout(siguiente, 2600); };
+    auto = setTimeout(espera, 400);
+  };
+  auto = setTimeout(siguiente, 1200);
+}
+function parar() { clearTimeout(auto); auto = null; $('#btn-play').textContent = '▶ Todo'; }
+
+// ───────────── Bucle de animación ─────────────
+function ajustar(cv, w) { const r = cv.getBoundingClientRect(); const dpr = Math.min(2, devicePixelRatio || 1); cv.width = Math.max(1, Math.round(r.width * dpr)); cv.height = Math.max(1, Math.round(r.height * dpr)); cv._s = r.width / w * dpr; }
+function ajustarTodo() { ajustar(cvL, 360); ajustar(cvR, 360); }
+
+let antes = performance.now(), visible = { lamina: true, rinon: true };
+function cuadro(ahora) {
+  const dt = Math.min(.05, (ahora - antes) / 1000); antes = ahora;
+  avanzarTL(ahora);
+  if (!QUIETO) {
+    // respiración (ilustrativa): más ventilación cuanto más baja la PaCO₂
+    const vent = clamp(40 / D.P, .6, 1.8);
+    resp.fase += dt * Math.PI * 2 * .22 * vent;
+    resp.a = (.5 - .5 * Math.cos(resp.fase)) * .045 * vent;
+    acumVoluta += dt * 1.25 * vent;
+    if (acumVoluta >= 1) { acumVoluta = 0; if (Math.sin(resp.fase) < 0 || Math.random() < .3) voluta(180 + azar(-3, 3), 46, false); }
+    actualizarFlujo(dt);
+    for (let i = parts.length - 1; i >= 0; i--) {
+      const p = parts[i];
+      if (p.espera > 0) { p.espera -= dt; continue; }
+      if (p.inicio) { p.inicio(p); p.inicio = null; }
+      if (p.modo === 'deambula') { p.edad += dt; p.x += (-VEL_FLUJO * .4 + Math.sin(p.edad * 3 + p.y) * 6) * dt; p.y = clamp(p.y + Math.sin(p.edad * 4) * .2, 289, 309); if (p.x < 14) p.x = 14; continue; }
+      if (!mover(p, dt)) { parts.splice(i, 1); const j = cruces.indexOf(p); if (j >= 0) cruces.splice(j, 1); }
+    }
+    moverRinon(dt);
+  }
+  // física de la balanza: un muelle amortiguado hacia el desequilibrio de cargas
+  const imb = (D.Cl + D.HCO3 + ANM + D.ceto) - (NA + CNM);
+  const obj = clamp(imb * .55, -8, 8);
+  if (QUIETO) { fiel.a = obj; fiel.w = 0; } else { fiel.w += (-38 * (fiel.a - obj) - 4.2 * fiel.w) * dt; fiel.a += fiel.w * dt; }
+  pintarLamina();
+  pintarParticulas();
+  pintarPunto();
+  const phv = PASOS[actual].tendencia ? calcPH(P4.P, P4.HCO3) : calcPH(D.P, D.HCO3);
+  pintarAguja(phv);
+  const tphv = fmt(phv, 2);
+  if ($('#ph-num').textContent !== tphv) { $('#ph-num').textContent = tphv; $('#barra-ph').textContent = PASOS[actual].tendencia ? 'pH ↓' : `pH ${tphv}`; }
+  if (PASOS[actual].tendencia) $('#barra-ph').textContent = 'pH ↓';
+  pintarRinon(ahora);
+  if (!QUIETO) requestAnimationFrame(cuadro);
+}
+function pintarLamina() {
+  const rad = fiel.a * Math.PI / 180;
+  G.xL = PIV.x - BRAZO * Math.cos(rad); G.yL = PIV.y - BRAZO * Math.sin(rad);
+  G.xR = PIV.x + BRAZO * Math.cos(rad); G.yR = PIV.y + BRAZO * Math.sin(rad);
+  nodos.astil.setAttribute('transform', `rotate(${fiel.a.toFixed(2)} ${PIV.x} ${PIV.y})`);
+  nodos.platoI.setAttribute('transform', `translate(${G.xL.toFixed(1)} ${G.yL.toFixed(1)})`);
+  nodos.platoD.setAttribute('transform', `translate(${G.xR.toFixed(1)} ${G.yR.toFixed(1)})`);
+  pintarPila('I'); pintarPila('D');
+  // el hiato: la pesa que falta entre Cl⁻ + HCO₃⁻ y el Na⁺
+  const yNaI = G.yL + 220 - NA * K, yNaD = G.yR + 220 - NA * K, yMed = G.yR + 220 - (D.Cl + D.HCO3) * K, xb = G.xR - 37;
+  nodos.guia.setAttribute('d', `M${(G.xL + 32).toFixed(1)} ${yNaI.toFixed(1)}L${(xb).toFixed(1)} ${yNaD.toFixed(1)}`);
+  nodos.llave.setAttribute('d', `M${(xb + 4).toFixed(1)} ${yMed.toFixed(1)}H${xb.toFixed(1)}V${yNaD.toFixed(1)}H${(xb + 4).toFixed(1)}`);
+  const ym = (yMed + yNaD) / 2;
+  nodos.t1.setAttribute('x', (xb - 5).toFixed(1)); nodos.t1.setAttribute('y', (ym - 4).toFixed(1));
+  nodos.t2.setAttribute('x', (xb - 5).toFixed(1)); nodos.t2.setAttribute('y', (ym + 10).toFixed(1));
+  const ha = NA - D.Cl - D.HCO3, tha = fmt(ha);
+  if (nodos.t2.textContent !== tha) nodos.t2.textContent = tha;
+  const desq = Math.abs((D.Cl + D.HCO3 + ANM + D.ceto) - (NA + CNM));
+  const op = desq > 1 ? '1' : '0';
+  if (nodos.lenta.getAttribute('opacity') !== op) { nodos.lenta.setAttribute('opacity', op); nodos.lenta2.setAttribute('opacity', op); }
+  const pa = PASOS[actual], dl = !tl && pa.HCO3 < 24 ? (pa.HA - 12) / (24 - pa.HCO3) : null;
+  const tl2 = pa.tendencia ? 'hiato 12 · delta: no aplica' : `hiato ${tha}${tl ? '' : ` · delta ${dl === null ? '—' : fmt(dl, dl % 1 ? 2 : 0)}`}`;
+  if (nodos.lecHA.textContent !== tl2) nodos.lecHA.textContent = tl2;
+  // la lámina respira
+  const s = 1 + resp.a;
+  nodos.pulmones.setAttribute('transform', `translate(180 122) scale(${(1 + resp.a * .75).toFixed(4)} ${s.toFixed(4)}) translate(-180 -122)`);
+  nodos.marco.setAttribute('stroke-opacity', (.55 + resp.a * 8).toFixed(2));
+  const tp = PASOS[actual].tendencia ? 'PaCO₂ ↓' : `PaCO₂ ${fmt(D.P)} mmHg`;
+  if (nodos.lecP.textContent !== tp) nodos.lecP.textContent = tp;
+}
+function pintarParticulas() {
+  const c = ctxL, s = cvL._s || 1;
+  c.setTransform(s, 0, 0, s, 0, 0); c.clearRect(0, 0, 360, 640);
+  for (const f of flujo) { c.globalAlpha = clamp(f.alpha ?? 1, 0, 1) * .9; forma(c, { forma: f.forma, col: COLF[f.forma](), x: f.x, y: f.y, r: f.r }); }
+  for (const p of parts) { if (p.espera > 0) continue; c.globalAlpha = clamp(p.alpha, 0, 1); forma(c, p); }
+  c.globalAlpha = 1;
+}
+
+// ───────────── VI · Albúmina ─────────────
+let modoAlb = 'paso2';
+function pintarAlbumina() {
+  const alb = parseFloat($('#alb').value);
+  $('#alb-out').textContent = `${fmt(alb, 1)} g/dL`;
+  const real = modoAlb === 'paso2' ? 24 : 16;         // ficha: HA 10 con albúmina 2 → HAc 16
+  const esconde = 2.5 * (4.5 - alb), medido = real - esconde, corr = medido + 2.5 * (4.5 - alb);
+  const X = v => 92 + v / 30 * 248;
+  const ap = 15 - esconde;                               // la pesa de la albúmina (15 mEq/L en la Tabla 31.2)
+  let t = defs('a') + `
+    <text class="cap" x="12" y="14">ALBÚMINA</text>
+    <rect x="18" y="${(120 - 15 * 5.6).toFixed(1)}" width="44" height="${(15 * 5.6).toFixed(1)}" rx="3" fill="none" stroke="${C.muted}" stroke-dasharray="3 3"/>
+    <rect x="18" y="${(120 - ap * 5.6).toFixed(1)}" width="44" height="${(ap * 5.6).toFixed(1)}" rx="3" fill="url(#a-ray)" stroke="${C.oro}"/>
+    <text class="tx" x="40" y="${(120 - ap * 5.6 + 14).toFixed(1)}" text-anchor="middle" style="fill:${C.crema}">${fmt(ap)}</text>
+    <text class="tx-xs it mu" x="40" y="136" text-anchor="middle">mEq/L</text>
+    <text class="tx-xs it mu" x="40" y="148" text-anchor="middle">(15 normal)</text>
+    <rect x="${X(8)}" y="82" width="${X(12) - X(8)}" height="16" fill="url(#a-verde)" stroke="${C.verde}" stroke-width=".7"/>
+    <text class="tx-xs it" x="${(X(8) + X(12)) / 2}" y="112" text-anchor="middle" style="fill:${C.verde}">8-12</text>
+    <path d="M${X(0)} 98H${X(30)}" stroke="${C.oro}" stroke-width="1"/>
+    ${[0, 5, 10, 15, 20, 25, 30].map(v => `<path d="M${X(v)} 98v5" stroke="${C.oro}"/><text class="tx-xs mu" x="${X(v)}" y="124" text-anchor="middle">${v}</text>`).join('')}
+    <text class="tx-xs it mu" x="${X(30)}" y="140" text-anchor="end">hiato aniónico (mEq/L)</text>`;
+  if (esconde > .2) {
+    // la parte escondida: del medido al corregido, con la moneda del anión que no se ve
+    t += `<path d="M${X(medido).toFixed(1)} 64H${X(corr).toFixed(1)}" stroke="${C.oro}" stroke-width="1.1"/>
+      <path d="M${X(medido).toFixed(1)} 59v10M${X(corr).toFixed(1)} 59v10" stroke="${C.oro}"/>
+      <path d="M${X(corr).toFixed(1)} 50V98" stroke="${C.ocre}" stroke-dasharray="2 2"/>
+      <g transform="translate(${X(corr).toFixed(1)} 42)" opacity="${clamp(esconde / 4, .35, 1).toFixed(2)}">${icono('hex', C.ocre, 1.4)}</g>
+      <text class="tx-s" x="${X(corr).toFixed(1)}" y="26" text-anchor="${X(corr) > 300 ? 'end' : 'middle'}" style="fill:${C.ocre}">corregido ${fmt(corr)}</text>
+      <text class="tx-xs it" x="${((X(medido) + X(corr)) / 2).toFixed(1)}" y="78" text-anchor="middle" style="fill:${C.oro}">${X(corr) - X(medido) > 46 ? `+${fmt(esconde, 1)}` : ''}</text>`;
+  }
+  t += `<path d="M${X(medido).toFixed(1)} 98l-6 -11h12z" fill="${C.crema}"/>
+    <text class="tx" x="${(X(medido) + (esconde > .2 ? 4 : 0)).toFixed(1)}" y="56" text-anchor="${esconde > .2 ? 'end' : 'middle'}" style="fill:${C.crema}">${esconde > .2 ? 'medido ≈' : 'hiato '}${fmt(medido)}</text>`;
+  $('#alb-svg').innerHTML = t;
+  let f;
+  if (esconde < .2) f = modoAlb === 'paso2' ? `Con albúmina normal, el hiato del paso 2 es <strong>24</strong>: los 12 mEq de cetoácidos se ven enteros. Baja la albúmina.` : `Ejemplo de la ficha. Baja la albúmina hasta 2 g/dL.`;
+  else if (medido <= 12.5 && corr > 12.5) f = `Albúmina ${fmt(alb, 1)}: <span class="hl-v">el hiato parece normal (${fmt(medido)})</span>, pero corregido es <span class="hl-r">${fmt(corr)}</span>: <strong>hay un anión escondido</strong>.`;
+  else f = `Albúmina ${fmt(alb, 1)}: el hiato medido baja a ≈${fmt(medido)} y parece menos grave. Corregido vuelve a <span class="hl-r">${fmt(corr)}</span>: ${modoAlb === 'paso2' ? 'los cetoácidos siguen ahí.' : 'hay un anión escondido.'}`;
+  $('#alb-frase').innerHTML = f;
+}
+
+// ───────────── VII · Hiato osmolal ─────────────
+const osm = { a: -7 };
+function pintarOsm(ghost) {
+  // pesas a escala: 0,3 px por mOsm/kg (320 → 96 px; el hiato de 30 → 9 px)
+  const a = osm.a * Math.PI / 180, cx = 180, cy = 20, L = 112, k = .3;
+  const xL = cx - L * Math.cos(a), yL = cy - L * Math.sin(a), xR = cx + L * Math.cos(a), yR = cy + L * Math.sin(a);
+  const hM = 320 * k, hC = 290 * k, hG = 30 * k;
+  const plato = (x, y, cuerpo, et, sub) => `<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)})"><path d="M0 0V10M-34 10H34" stroke="${C.oro}" stroke-width=".9"/><path d="M-34 10V130M34 10V130" stroke="${C.oro}" stroke-width=".9" stroke-dasharray="2 1.5"/>
+      <path d="M-42 130Q0 144 42 130Z" fill="url(#o-oro)" stroke="${C.oro}"/>${cuerpo}
+      <text class="tx-s" y="160" text-anchor="middle" style="fill:${C.crema}">${et}</text><text class="tx-xs it mu" y="172" text-anchor="middle">${sub}</text></g>`;
+  const pesa = (h, y0, txt, col, extra = '') => `<rect x="-24" y="${(y0 - h).toFixed(1)}" width="48" height="${h.toFixed(1)}" rx="2" fill="url(#o-ray)" stroke="${col}" ${extra}/>${txt ? `<text class="tx-s" y="${(y0 - h / 2 + 4).toFixed(1)}" text-anchor="middle" style="fill:${C.crema}">${txt}</text>` : ''}`;
+  let t = defs('o') + `<path d="M180 20V186M146 186H214" stroke="${C.oro}" stroke-width="1.2"/>
+    <g transform="rotate(${osm.a.toFixed(2)} 180 20)"><path d="M68 18L180 16L292 18V22L180 24L68 22Z" fill="url(#o-oro)" stroke="${C.oro}"/></g>
+    <circle cx="180" cy="20" r="4" fill="${C.fondo}" stroke="${C.oro}"/>`;
+  t += plato(xL, yL, pesa(hM, 128, '320', C.crema), 'medida', 'del caso');
+  t += plato(xR, yR, pesa(hC, 128, '290', C.oro) + (ghost > 0 ? `<g opacity="${ghost.toFixed(2)}">${pesa(hG, 128 - hC, '', C.ocre, 'stroke-dasharray="3 2" fill-opacity=".5"')}</g>` : ''), 'calculada', 'Ec. 31.17');
+  if (ghost > .3) t += `<g opacity="${ghost.toFixed(2)}"><path d="M${(xR + 26).toFixed(1)} ${(yR + 128 - hC - hG / 2).toFixed(1)}h14" stroke="${C.ocre}"/><text class="tx-s it" x="${(xR + 22).toFixed(1)}" y="${(yR + 128 - hC - hG - 6).toFixed(1)}" text-anchor="end" style="fill:${C.ocre}">hiato 30: ¿qué falta?</text></g>`;
+  $('#osm-svg').innerHTML = t;
+}
+function animarOsm() {
+  if (!M || QUIETO) { osm.a = 0; pintarOsm(1); return; }
+  osm.a = -7; pintarOsm(0);
+  M.animate(0, 1, { duration: .7, delay: .5, onUpdate: v => pintarOsm(v),
+    onComplete: () => M.animate(-7, 0, { type: 'spring', stiffness: 120, damping: 7, onUpdate: v => { osm.a = v; pintarOsm(1); } }) });
+}
+
+// ───────────── Arranque ─────────────
+function construirPasos() {
+  $('#pasos').innerHTML = PASOS.map((p, i) => `<button type="button" class="paso" data-i="${i}" aria-label="Paso ${p.id}: ${p.nombre}">${p.id}<small>${p.corto}</small></button>`).join('');
+  $('#pasos').addEventListener('click', e => { const b = e.target.closest('.paso'); if (b) { parar(); irA(+b.dataset.i); } });
+  $('#btn-sig').addEventListener('click', () => { parar(); irA(actual + 1); });
+  $('#btn-ant').addEventListener('click', () => { parar(); irA(actual - 1); });
+  $('#barra-sig').addEventListener('click', () => { parar(); irA(actual + 1); });
+  $('#barra-ant').addEventListener('click', () => { parar(); irA(actual - 1); });
+  $('#btn-play').addEventListener('click', reproducir);
+}
+function zoom(cerca) {
+  $('#rinon').classList.toggle('cerca', cerca);
+  $('#btn-zoom').textContent = cerca ? 'Ver el corte real' : 'Acercar a las células';
+}
+
+construirDial();
+construirLamina();
+construirCarta();
+construirCelulas();
+construirPasos();
+pintarArena(0);
+ajustarTodo();
+addEventListener('resize', ajustarTodo);
+irA(0, true);
+pintarAlbumina();
+pintarOsm(0);
+
+$('#alb').addEventListener('input', pintarAlbumina);
+document.querySelectorAll('[data-alb]').forEach(b => b.addEventListener('click', () => {
+  modoAlb = b.dataset.alb;
+  document.querySelectorAll('[data-alb]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  pintarAlbumina();
+}));
+$('#osmolal').addEventListener('toggle', e => { if (e.target.open) animarOsm(); });
+$('#btn-zoom').addEventListener('click', () => zoom(!$('#rinon').classList.contains('cerca')));
+$('#mini').addEventListener('click', () => zoom(false));
+const elegido = {};
+document.querySelectorAll('[data-elige]').forEach(b => b.addEventListener('click', () => {
+  const g = b.dataset.elige;
+  document.querySelectorAll(`[data-elige="${g}"]`).forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  elegido[g] = b.dataset.v;
+  $('#respuesta-elige').textContent = `Elegido: ${elegido.dir || '—'} · riñón: ${elegido.rinon || '—'}. Díselo al director: aquí no se guarda nada.`;
+}));
+
+if (QUIETO) {
+  zoom(true);
+  cuadro(performance.now());
+  // sin animación: se repinta solo cuando cambia algo
+  const repinta = () => requestAnimationFrame(t => cuadro(t));
+  ['#pasos', '#btn-sig', '#btn-ant', '#barra-sig', '#barra-ant'].forEach(s => $(s).addEventListener('click', repinta));
+} else {
+  // los trazos de oro se dibujan al entrar en pantalla; el riñón se acerca solo la primera vez
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    const t = e.target;
+    if (t.id === 'rinon') { io.unobserve(t); setTimeout(() => zoom(true), 900); return; }
+    t.classList.add('dibujado'); t.classList.remove('por-dibujar'); io.unobserve(t);
+  }), { threshold: .3 });
+  ['#lamina-caja', '#carta-caja', '#rinon'].forEach(s => io.observe($(s)));
+  $('#dial').classList.add('dibujado');
+  requestAnimationFrame(cuadro);
+}
+if (QUIETO) { $('#lamina-caja').classList.remove('por-dibujar'); $('#carta-caja').classList.remove('por-dibujar'); }
+})();
+</script>
+</body>
+</html>
