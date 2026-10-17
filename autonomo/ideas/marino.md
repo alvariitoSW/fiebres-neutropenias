@@ -745,6 +745,12 @@ receptores animados. Basta con que el usuario apruebe la lista.
     balanza de aniones (HCO₃⁻ que se vacía, Cl⁻ o lactato que llena) y los casos de gasometrías encadenadas.
   - Decisión grande: el profesor propone, el usuario elige con una **maqueta visual** antes de construir.
 
+- **Decisión del usuario sobre las maquetas** (17/10/2026): «estoy flipando con las maquetas». No elige una: quiere
+  **coger lo mejor de cada maqueta de ácido-base (A, B, C) y unirla en una más potente**, como apuntaba el profesor.
+  El río y el mar le parece «sublime». Agua en **crema y oro** (solo tokens). Antes de seguir, el profesor completa
+  las maquetas y les añade la **parte de estudio**: preguntas, casos clínicos distintos y explicaciones de
+  conceptos, aprovechando que son interactivas.
+
 ## Ideas de los revisores, por bloque
 
 *(Se añaden aquí tras cada revisión.)*
