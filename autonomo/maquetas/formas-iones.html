@@ -1,0 +1,411 @@
+<!-- MAQUETA PARA ELEGIR (plan socialista, tarea formas-iones, vuelta 1). No es parte de la app.
+     Una sola leyenda de formas de iones y moléculas para todos los modelos vivos: inventario de hoy, tabla única
+     propuesta y, por modelo, antes (captura real de la app o de la maqueta v2) y después (su leyenda con las formas
+     nuevas). Ábrela con un servidor en la raíz del repositorio:
+     http://localhost:8000/autonomo/maquetas/formas-iones.html
+     Las capturas viven en autonomo/maquetas/formas-iones/. Las maquetas v2 de río y mar y de ácido-base están en la
+     rama auto/marino-mapa (commit 1777fd2). -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Una sola leyenda de formas (maqueta)</title>
+<style>
+/* Tokens de css/variables.css, copiados tal cual. Ningún color fuera de ellos. */
+:root {
+  color-scheme: dark;
+  --bg-main: #17140f;
+  --bg-card: rgba(46, 38, 28, 0.72);
+  --border-color: rgba(196, 154, 74, 0.35);
+  --text-main: #ece3cc;
+  --text-muted: #a5967c;
+  --text-dim: #c9bda4;
+  --accent-green: #90a06a;
+  --accent-red: #b85c3e;
+  --accent-yellow: #cf9a3e;
+  --accent-blue: #d4af37;
+  --accent-purple: #9c5476;
+  --serif: Georgia, 'Times New Roman', serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg-main); color: var(--text-main); }
+body { font: 16px/1.45 var(--serif); }
+main { max-width: 440px; margin: 0 auto; padding: 14px 14px 40px; display: grid; gap: 18px; min-width: 0; }
+.aviso { background: var(--accent-yellow); color: var(--bg-main); font: 700 .78rem/1.2 var(--serif); letter-spacing: .04em;
+  text-transform: uppercase; text-align: center; border-radius: 10px; padding: 9px 10px; }
+h1 { font-size: 1.45rem; line-height: 1.2; margin: 0; color: var(--accent-blue); font-weight: normal; }
+h2 { font-size: 1.15rem; margin: 0 0 6px; color: var(--accent-blue); font-weight: normal; }
+h3 { font-size: 1rem; margin: 0; color: var(--text-main); }
+p { margin: 0; }
+.idea { font-size: 1.02rem; color: var(--text-dim); }
+.hl-verde { background: linear-gradient(to bottom, transparent 58%, rgba(144, 160, 106, .35) 58%); }
+.hl-rojo { background: linear-gradient(to bottom, transparent 58%, rgba(184, 92, 62, .4) 58%); }
+.hl-azul { background: linear-gradient(to bottom, transparent 58%, rgba(212, 175, 55, .32) 58%); }
+.bloque { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; display: grid; gap: 10px; min-width: 0; }
+.sub { font-size: .86rem; color: var(--text-muted); }
+.org { display: inline-block; font-size: .7rem; letter-spacing: .03em; border: 1px solid var(--border-color); border-radius: 6px;
+  padding: 0 5px; color: var(--text-muted); vertical-align: 1px; white-space: nowrap; }
+.org.ficha { color: var(--accent-green); border-color: var(--accent-green); }
+
+/* Tabla única: tarjetas, una por especie */
+.formas { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.forma { border: 1px solid var(--border-color); border-radius: 12px; padding: 8px; display: grid; grid-template-columns: 34px 1fr; gap: 4px 8px; align-items: center; min-width: 0; }
+.forma svg.grande { width: 34px; height: 34px; grid-row: span 2; }
+.forma b { font-size: .92rem; line-height: 1.15; overflow-wrap: anywhere; }
+.forma small { display: block; font-size: .72rem; color: var(--text-muted); line-height: 1.25; overflow-wrap: anywhere; }
+.forma .real { grid-column: 1 / -1; display: flex; gap: 6px; align-items: center; font-size: .68rem; color: var(--text-muted); }
+.forma .real svg { width: 22px; height: 22px; border-radius: 5px; flex: none; }
+.forma small code { font-size: .6rem; color: var(--text-muted); white-space: nowrap; }
+.forma.reserva { border-style: dashed; }
+.seccion-forma { grid-column: 1 / -1; font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; color: var(--accent-yellow); margin-top: 4px; }
+
+/* Choques de hoy */
+.choques { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.choques li { display: grid; grid-template-columns: 54px 1fr; gap: 8px; align-items: center; font-size: .9rem; }
+.choques svg { width: 54px; height: 26px; }
+
+/* Modelos: antes y después */
+.modelo { display: grid; gap: 10px; min-width: 0; }
+.par { display: grid; gap: 8px; }
+.lado { border: 1px solid var(--border-color); border-radius: 12px; padding: 8px; display: grid; gap: 6px; min-width: 0; }
+.lado .rot { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
+.lado.despues .rot { color: var(--accent-green); }
+.lado img { width: 100%; height: auto; display: block; border-radius: 8px; }
+.capturas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.capturas.una { grid-template-columns: 1fr; }
+.capturas figure { margin: 0; min-width: 0; }
+.capturas figcaption { font-size: .7rem; color: var(--text-muted); margin-top: 2px; }
+.leyenda { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: .84rem; }
+.leyenda li { display: inline-flex; align-items: center; gap: 5px; }
+.leyenda li.cambia { color: var(--text-main); }
+.leyenda li.cambia::after { content: '•'; color: var(--accent-red); font-size: .9rem; margin-left: -2px; }
+.leyenda svg { width: 16px; height: 16px; flex: none; }
+.tira { width: 100%; height: auto; display: block; border-radius: 8px; }
+.cambios { margin: 0; padding-left: 18px; font-size: .88rem; display: grid; gap: 3px; }
+.cambios b { color: var(--text-main); }
+.tam { font-size: .8rem; color: var(--text-muted); }
+.tam b { color: var(--accent-yellow); font-weight: normal; }
+
+/* Dudas */
+.dudas { margin: 0; padding-left: 20px; display: grid; gap: 10px; font-size: .92rem; }
+.dudas .opc { display: block; font-size: .84rem; color: var(--text-dim); margin-top: 2px; }
+
+/* Inventario */
+details.plegable { border: 1px solid var(--border-color); border-radius: 12px; padding: 0 10px; min-width: 0; }
+details.plegable > summary { cursor: pointer; padding: 11px 0; font-size: .95rem; color: var(--accent-blue); min-height: 44px; }
+details.plegable[open] > summary { border-bottom: 1px solid var(--border-color); margin-bottom: 8px; }
+.tabla-scroll { overflow-x: auto; margin-bottom: 10px; }
+table.data-table { border-collapse: collapse; font-size: .74rem; min-width: 620px; }
+.data-table th, .data-table td { border: 1px solid var(--border-color); padding: 4px 5px; text-align: left; vertical-align: top; }
+.data-table th { color: var(--accent-yellow); font-weight: normal; }
+.data-table td.mal { color: var(--accent-red); }
+.data-table td.vacio { color: var(--text-muted); }
+.rutas { margin: 0 0 10px; padding-left: 16px; font-size: .78rem; color: var(--text-dim); display: grid; gap: 4px; overflow-wrap: anywhere; }
+code { font-size: .78rem; color: var(--text-dim); overflow-wrap: anywhere; }
+</style>
+</head>
+<body>
+<main>
+  <p class="aviso">Maqueta para elegir: no es la app</p>
+
+  <header class="bloque">
+    <h1>Una sola leyenda de formas</h1>
+    <p class="idea">Cada ion o molécula, <span class="hl-azul">la misma forma en todos los modelos vivos</span>. La forma dice qué es; el color ayuda, pero nunca decide solo.</p>
+    <p class="sub">Hoy, el mismo rombo es la glucosa en la nefrona y el Cl⁻ en el ácido-base; el K⁺ es un cuadrado en tres modelos y un punto en el potasio. Abajo, la tabla única propuesta, lo que choca hoy y cada modelo antes y después.</p>
+  </header>
+
+  <!-- ============ TABLA ÚNICA ============ -->
+  <section class="bloque" aria-labelledby="t-tabla">
+    <h2 id="t-tabla">La tabla única</h2>
+    <p class="sub">Cada tarjeta: la forma grande, su nombre, su color (un token de la app) y, abajo, cómo se ve <b>a tamaño real</b> sobre la luz clara, la isotónica y la médula de la nefrona, y sobre fondo oscuro. Todas llevan un borde fino oscuro para leerse sobre cualquier fondo.</p>
+    <ul class="formas" id="formas"></ul>
+  </section>
+
+  <!-- ============ CHOQUES ============ -->
+  <section class="bloque" aria-labelledby="t-choques">
+    <h2 id="t-choques">Lo que choca hoy</h2>
+    <ul class="choques" id="choques"></ul>
+  </section>
+
+  <!-- ============ MODELOS ============ -->
+  <section class="bloque" aria-labelledby="t-modelos">
+    <h2 id="t-modelos">Cada modelo, antes y después</h2>
+    <p class="sub">Antes: captura real (390 px). Después: su leyenda con las formas nuevas y una muestra a tamaño real. El punto rojo marca lo que cambia. La fisiología de cada modelo no se toca: solo forma y color.</p>
+    <div id="modelos" style="display:grid; gap:22px;"></div>
+  </section>
+
+  <!-- ============ DUDAS ============ -->
+  <section class="bloque" aria-labelledby="t-dudas">
+    <h2 id="t-dudas">Lo que decides tú</h2>
+    <ol class="dudas">
+      <li><b>La glucosa, «cristal».</b> El cristal de la maqueta del agua es un cuadrado girado 20°: a 5 px es el cuadrado del K⁺, y en la nefrona viajan juntos.
+        <span class="opc">Propuesta: <b>copo de seis radios</b> (un cristal). Otra opción: una gema tallada, pero a tamaño real se confunde con el triángulo invertido del fosfato.</span></li>
+      <li><b>El Ringer y el Plasma-Lyte en el río y mar.</b> La maqueta los pinta como triángulo (lleno y hueco), la forma del HCO₃⁻.
+        <span class="opc">Propuesta: dejarlos así, porque su tampón acaba como HCO₃⁻: «cada mmol de lactato genera un mmol de bicarbonato» <span class="org ficha">ficha · mar-ringer</span>. El lactato del ácido-base sigue siendo estrella hueca (llega con su H⁺). Otra opción: rombo hueco («sal con menos cloro»).</span></li>
+      <li><b>El salino al 3 % y al 7,5 %.</b> Hoy son una chispa y una estrella: chocan con la estrella hueca de los aniones no medidos.
+        <span class="opc">Propuesta: <b>rombo con uno o dos halos</b>: sigue siendo sal, más concentrada.</span></li>
+      <li><b>Los tonos claros.</b> Los modelos pintan hoy las partículas con unos 15 colores sueltos que no son tokens (p. ej. los «tonos claros» de <code>potasio-escena.js</code>), para que se lean sobre la médula roja.
+        <span class="opc">Propuesta: solo tokens, con un borde oscuro fino (lo ves en las tarjetas). Otra opción: permitir un tono claro de cada token, escrito una sola vez en la tabla.</span></li>
+      <li><b>El color del potasio.</b> En las escenas del potasio el color dice <i>dónde</i> está el K⁺ (plasma, célula, fuera del cuerpo): eso es lo que enseñan.
+        <span class="opc">Propuesta: el K⁺ pasa a cuadrado y conserva el color por sitio.</span></li>
+      <li><b>El HCO₃⁻.</b> Triángulo <span class="hl-verde">verde salvia</span>: ninguna otra especie lleva ese color (la urea deja el verde y pasa a topo).
+        <span class="opc">Dijiste que el color te daba igual mientras se distinga. ¿Te vale el verde? La alternativa sería el teja, pero es el del H⁺ y el de la alarma.</span></li>
+      <li><b>Na⁺ y albúmina, los dos círculos.</b> El Na⁺ es un círculo pequeño oro y la albúmina un círculo grande ciruela. Hoy nunca salen juntos como partículas (en el ácido-base la albúmina es una columna).
+        <span class="opc">Si un modelo futuro los junta, la albúmina llevaría un anillo.</span></li>
+    </ol>
+  </section>
+
+  <!-- ============ INVENTARIO ============ -->
+  <section class="bloque" aria-labelledby="t-inv">
+    <h2 id="t-inv">Inventario de hoy</h2>
+    <p class="sub">Qué forma y qué color lleva cada partícula en cada modelo, leído en el código. En rojo, lo que choca con otro modelo o dentro del mismo.</p>
+    <details class="plegable">
+      <summary>Ver la tabla del inventario</summary>
+      <div class="tabla-scroll" tabindex="0" role="region" aria-label="Inventario de formas por modelo">
+        <table class="data-table">
+          <thead><tr><th>Partícula</th><th>Nefrona (túbulo)</th><th>Nefrona (célula)</th><th>Glomérulo</th><th>Filtro TRR</th><th>Nefronas que quedan</th><th>Potasio</th><th>Río y mar (v2)</th><th>Ácido-base (v2)</th></tr></thead>
+          <tbody>
+            <tr><td>Agua</td><td>punto crema</td><td>punto crema</td><td>punto crema («filtrado»)</td><td class="mal">círculo azul claro</td><td class="vacio">—</td><td class="vacio">gotas del gotero (verde)</td><td>gota crema</td><td class="vacio">—</td></tr>
+            <tr><td>Glucosado</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td>anillo crema</td><td class="vacio">—</td></tr>
+            <tr><td>Na⁺</td><td>círculo oro claro</td><td class="mal">círculo oro claro (igual que Ca²⁺/Mg²⁺)</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="mal">punto rosa (bomba)</td><td class="vacio">—</td><td>círculo crema</td></tr>
+            <tr><td>K⁺</td><td>cuadrado rosa</td><td>cuadrado rosa</td><td class="vacio">—</td><td>cuadrado rosa</td><td>cuadrado rosa (rojo si alto)</td><td class="mal">círculo; color según sitio</td><td class="vacio">—</td><td>cuadrado crema oscuro</td></tr>
+            <tr><td>Cl⁻</td><td class="vacio">—</td><td class="mal">círculo gris verdoso</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td>rombo ámbar («Cl⁻ y sal»)</td><td>rombo ciruela</td></tr>
+            <tr><td>Glucosa</td><td class="mal">rombo verde claro</td><td class="mal">rombo verde claro</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="mal">«cristal»: cuadrado girado ámbar</td><td>barra ámbar sin forma (hiato osmolal)</td></tr>
+            <tr><td>HCO₃⁻</td><td>triángulo teja claro</td><td class="mal">triángulo teja claro (igual que el fosfato)</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">solo texto</td><td class="mal">(triángulo = Ringer)</td><td>triángulo verde</td></tr>
+            <tr><td>H⁺</td><td>cruz crema</td><td class="mal">anillo crema (igual que el CO₂)</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td>texto «H⁺» teja claro</td><td class="vacio">—</td><td>cruz teja</td></tr>
+            <tr><td>NH₄⁺</td><td>pentágono lila</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td>pentágono crema oscuro</td></tr>
+            <tr><td>CO₂</td><td class="vacio">—</td><td class="mal">anillo gris</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td>voluta oro</td></tr>
+            <tr><td>Urea</td><td>hexágono azul</td><td>hexágono azul</td><td class="vacio">—</td><td class="mal">círculo crema pequeño</td><td class="vacio">—</td><td class="vacio">—</td><td>hexágono verde</td><td>hexágono verde (hiato osmolal)</td></tr>
+            <tr><td>Ca²⁺</td><td>óvalo crema</td><td class="mal">círculo crema</td><td class="vacio">—</td><td>óvalo crema</td><td class="vacio">—</td><td class="vacio">texto (corazón)</td><td class="vacio">—</td><td class="vacio">en «otros 11»</td></tr>
+            <tr><td>Mg²⁺</td><td class="mal">óvalo menta (igual que Ca²⁺)</td><td class="mal">círculo menta</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">en «otros 11»</td></tr>
+            <tr><td>Ca²⁺/Mg²⁺ juntos</td><td class="vacio">—</td><td class="mal">círculo oro (igual que Na⁺)</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td></tr>
+            <tr><td>Fosfato</td><td>triángulo invertido celeste</td><td class="mal">triángulo celeste (igual que el HCO₃⁻)</td><td class="vacio">—</td><td class="vacio">—</td><td class="mal">triángulo celeste</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">en «otros 8»</td></tr>
+            <tr><td>Albúmina</td><td class="vacio">solo texto</td><td class="vacio">—</td><td>círculo grande ciruela</td><td>círculo grande ciruela</td><td class="vacio">—</td><td class="vacio">—</td><td>círculo ciruela (25 %: con halo)</td><td>columna crema oscuro</td></tr>
+            <tr><td>Aniones no medidos</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td>estrella hueca ámbar</td></tr>
+            <tr><td>Salino 3 % / 7,5 %</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="mal">chispa ámbar / estrella oro</td><td class="vacio">—</td></tr>
+            <tr><td>Ringer / Plasma-Lyte</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td>triángulo verde lleno / hueco</td><td class="vacio">—</td></tr>
+            <tr><td>Hematíes</td><td>elipse (leyenda)</td><td>elipse</td><td>elipse</td><td>elipse</td><td class="vacio">—</td><td class="vacio">—</td><td>disco teja</td><td class="vacio">—</td></tr>
+            <tr><td>Citoquinas</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="mal">triángulo menta</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td></tr>
+            <tr><td>Ca²⁺ con citrato</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td>óvalo en anillo lila</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td></tr>
+            <tr><td>Célula desprendida (NTA)</td><td class="mal">círculo marrón (familia del Na⁺)</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td><td class="vacio">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="sub" style="margin-bottom:6px;">Dónde está cada cosa (archivo y línea):</p>
+      <ul class="rutas">
+        <li><code>js/modules/nefrologia/nefrona-viva.js</code>: color de la urea 22; túbulo 251-263; célula 265; dibujo del túbulo 279-290; dibujo de la célula 561-569; leyenda 1028-1032.</li>
+        <li><code>js/modules/nefrologia/glomerulo-vivo.js</code>: hematíes 241-247; filtrado y albúmina 255-256; renina 258-259. Sin leyenda.</li>
+        <li><code>js/modules/nefrologia/filtro-vivo.js</code>: tipos 41-48; colores 55; leyenda 56; iconos 57-62; dibujo 163-171; dializado 208.</li>
+        <li><code>js/modules/nefrologia/nefronas-vivas.js</code>: cuadrado y triángulo 100-101; K⁺ en sangre 110-111; partículas del túbulo 147-148. Sin leyenda.</li>
+        <li><code>js/modules/nefrologia/potasio-escena.js</code>: tonos claros 21; puntos y anillos 118-129; Na⁺ de la bomba 202-207. <code>hiperpotasemia-sim.js</code> 243, 253, 259-263; <code>hipopotasemia-sim.js</code> 76, 316-346. Sin leyenda.</li>
+        <li><code>autonomo/maquetas/marino-agua-v2.html</code> (rama auto/marino-mapa): leyendas 269-297; sueros 517-597; dibujo 794-826; glucosa 1187-1192; urea 1194-1197; iconos 1996-2013.</li>
+        <li><code>autonomo/maquetas/marino-acidobase-v2.html</code> (misma rama): especies 715-724; iconos 725-736; dibujo 739-765; columnas 1151-1163; urea del hiato osmolal 1345.</li>
+      </ul>
+    </details>
+  </section>
+
+  <section class="bloque" aria-labelledby="t-codigo">
+    <h2 id="t-codigo">Cómo quedaría en el código</h2>
+    <ul class="cambios">
+      <li><b>Una tabla</b> en <code>js/data/formas-iones.js</code>: cada especie con su forma y su token (≈40 líneas).</li>
+      <li><b>Un dibujo</b> compartido (lienzo y SVG) con la leyenda, en <code>js/core/</code> (≈70 líneas). Sustituye los cuatro dibujos de formas que hay hoy.</li>
+      <li>Los seis modelos de la app la leen: <b>≈105 líneas</b> cambiadas en total (detalle en cada modelo). Las dos maquetas v2: ≈30.</li>
+      <li>Ninguna cifra, ritmo ni mando cambia.</li>
+    </ul>
+  </section>
+</main>
+
+<script>
+// ─────────────────────────────────────────────────────────────
+// Tabla única propuesta (lo que iría a js/data/formas-iones.js)
+// ─────────────────────────────────────────────────────────────
+const T = { crema: '--text-main', cremaOsc: '--text-dim', topo: '--text-muted', salvia: '--accent-green', teja: '--accent-red',
+  ambar: '--accent-yellow', oro: '--accent-blue', ciruela: '--accent-purple' };
+const NOMBRE_COLOR = { crema: 'crema', cremaOsc: 'crema oscuro', topo: 'topo', salvia: 'verde salvia', teja: 'teja', ambar: 'ámbar', oro: 'oro', ciruela: 'ciruela' };
+const FORMAS = [
+  { grupo: 'Agua y sal' },
+  { k: 'agua', n: 'Agua', f: 'gota', c: 'crema' },
+  { k: 'dulce', n: 'Agua sin sal (glucosado)', f: 'anillo', c: 'crema', d: 'solo río y mar' },
+  { k: 'na', n: 'Na⁺', f: 'circulo', c: 'oro' },
+  { k: 'cl', n: 'Cl⁻ y la sal (salino 0,9 %)', f: 'rombo', c: 'ciruela' },
+  { k: 'hiper', n: 'Salino 3 % · 7,5 %', f: 'rombo1', c: 'ciruela', d: 'rombo con 1 o 2 halos', dos: ['rombo1', 'rombo2'] },
+  { grupo: 'Ácido-base' },
+  { k: 'hco3', n: 'HCO₃⁻', f: 'tri', c: 'salvia', d: 'su color no lo lleva nadie más' },
+  { k: 'tampon', n: 'Ringer · Plasma-Lyte', f: 'triHueco', c: 'salvia', d: 'lleno · hueco; su tampón acaba en HCO₃⁻', dos: ['tri', 'triHueco'] },
+  { k: 'h', n: 'H⁺', f: 'cruz', c: 'teja' },
+  { k: 'co2', n: 'CO₂', f: 'voluta', c: 'oro' },
+  { k: 'nh4', n: 'NH₄⁺', f: 'pent', c: 'cremaOsc' },
+  { k: 'anion', n: 'Aniones no medidos', f: 'estrella', c: 'ambar', d: 'cetoácidos, lactato, fórmico' },
+  { grupo: 'Otros iones' },
+  { k: 'k', n: 'K⁺', f: 'cuadrado', c: 'cremaOsc' },
+  { k: 'ca', n: 'Ca²⁺', f: 'ovalo', c: 'crema' },
+  { k: 'mg', n: 'Mg²⁺', f: 'ovaloHueco', c: 'crema', d: 'el óvalo del Ca²⁺, hueco' },
+  { k: 'p', n: 'Fosfato', f: 'triInv', c: 'topo' },
+  { grupo: 'Moléculas y células' },
+  { k: 'glu', n: 'Glucosa', f: 'copo', c: 'ambar', d: 'cristal: copo de seis radios' },
+  { k: 'urea', n: 'Urea', f: 'hex', c: 'topo' },
+  { k: 'alb', n: 'Albúmina', f: 'grano', c: 'ciruela', d: 'círculo grande' },
+  { k: 'cito', n: 'Citoquinas', f: 'trebol', c: 'cremaOsc', d: 'filtro de la TRR' },
+  { k: 'cacit', n: 'Ca²⁺ unido al citrato', f: 'caCitrato', c: 'crema', d: 'el óvalo del Ca²⁺ en un anillo ámbar' },
+  { k: 'rbc', n: 'Hematíes', f: 'disco', c: 'teja' },
+  { k: 'celula', n: 'Célula desprendida (NTA)', f: 'celula', c: 'topo' },
+  { k: 'creat', n: 'Creatinina', f: 'luna', c: 'cremaOsc', d: 'reservada: hoy no la dibuja ningún modelo', reserva: true },
+];
+const POR_CLAVE = Object.fromEntries(FORMAS.filter(x => x.k).map(x => [x.k, x]));
+
+// ─────────────────────────────────────────────────────────────
+// Dibujo SVG de cada forma (radio r, centro 0,0)
+// ─────────────────────────────────────────────────────────────
+const v = t => `var(${T[t] || t})`;
+const n2 = x => +x.toFixed(2);
+function poli(nPts, r, giro) { let d = ''; for (let i = 0; i < nPts; i++) { const a = giro + i * 2 * Math.PI / nPts; d += `${i ? 'L' : 'M'}${n2(Math.cos(a) * r)} ${n2(Math.sin(a) * r)}`; } return d + 'Z'; }
+function svgForma(f, r, color, borde = true) {
+  const col = v(color);
+  const bd = borde ? ` stroke="var(--bg-main)" stroke-width="${n2(r * 0.22)}" paint-order="stroke" stroke-linejoin="round"` : '';
+  const lleno = d => `<path d="${d}" fill="${col}"${bd}/>`;
+  const trazo = (d, w = 0.32) => (borde ? `<path d="${d}" fill="none" stroke="var(--bg-main)" stroke-width="${n2(r * (w + 0.26))}" stroke-linejoin="round" stroke-linecap="round"/>` : '') + `<path d="${d}" fill="none" stroke="${col}" stroke-width="${n2(r * w)}" stroke-linejoin="round" stroke-linecap="round"/>`;
+  switch (f) {
+    case 'gota': return lleno(`M0 ${n2(-1.5 * r)}C${n2(.55 * r)} ${n2(-.75 * r)} ${n2(1.05 * r)} ${n2(-.15 * r)} ${n2(1.05 * r)} ${n2(.35 * r)}A${n2(1.05 * r)} ${n2(1.05 * r)} 0 0 1 ${n2(-1.05 * r)} ${n2(.35 * r)}C${n2(-1.05 * r)} ${n2(-.15 * r)} ${n2(-.55 * r)} ${n2(-.75 * r)} 0 ${n2(-1.5 * r)}Z`);
+    case 'anillo': return trazo(`M${n2(r)} 0A${n2(r)} ${n2(r)} 0 1 1 ${n2(-r)} 0A${n2(r)} ${n2(r)} 0 1 1 ${n2(r)} 0Z`, .34);
+    case 'circulo': return `<circle r="${n2(r)}" fill="${col}"${bd}/>`;
+    case 'grano': return `<circle r="${n2(r * 1.6)}" fill="${col}"${bd}/>`;
+    case 'cuadrado': return lleno(`M${n2(-.92 * r)} ${n2(-.92 * r)}h${n2(1.84 * r)}v${n2(1.84 * r)}h${n2(-1.84 * r)}Z`);
+    case 'rombo': return lleno(`M0 ${n2(-1.35 * r)}L${n2(.92 * r)} 0L0 ${n2(1.35 * r)}L${n2(-.92 * r)} 0Z`);
+    case 'rombo1': case 'rombo2': {
+      const halo = rr => `<circle r="${n2(rr)}" fill="none" stroke="${col}" stroke-opacity=".6" stroke-width="${n2(r * .2)}"/>`;
+      return halo(r * 1.85) + (f === 'rombo2' ? halo(r * 2.45) : '') + svgForma('rombo', r, color, borde);
+    }
+    case 'tri': return lleno(`M0 ${n2(-1.25 * r)}L${n2(1.15 * r)} ${n2(.85 * r)}L${n2(-1.15 * r)} ${n2(.85 * r)}Z`);
+    case 'triHueco': return trazo(`M0 ${n2(-1.25 * r)}L${n2(1.15 * r)} ${n2(.85 * r)}L${n2(-1.15 * r)} ${n2(.85 * r)}Z`, .3);
+    case 'triInv': return lleno(`M0 ${n2(1.25 * r)}L${n2(1.15 * r)} ${n2(-.85 * r)}L${n2(-1.15 * r)} ${n2(-.85 * r)}Z`);
+    case 'cruz': { const a = n2(r * 1.1), b = n2(r * .38); return lleno(`M${-b} ${-a}H${b}V${-b}H${a}V${b}H${b}V${a}H${-b}V${b}H${-a}V${-b}H${-b}Z`); }
+    case 'pent': return lleno(poli(5, r * 1.2, -Math.PI / 2));
+    case 'hex': return lleno(poli(6, r * 1.2, Math.PI / 6));
+    case 'voluta': { let d = ''; for (let a = 0, i = 0; a <= Math.PI * 2.6; a += .25, i++) { const rr = r * (.15 + a / 6.2); d += `${i ? 'L' : 'M'}${n2(Math.cos(a) * rr)} ${n2(Math.sin(a) * rr)}`; } return trazo(d, .3); }
+    case 'estrella': { let d = ''; for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? r * .58 : r * 1.45; d += `${i ? 'L' : 'M'}${n2(Math.cos(a) * rr)} ${n2(Math.sin(a) * rr)}`; } return trazo(d + 'Z', .28); }
+    case 'copo': { let d = ''; for (let i = 0; i < 3; i++) { const a = Math.PI / 2 + i * Math.PI / 3, x = Math.cos(a) * r * 1.4, y = Math.sin(a) * r * 1.4; d += `M${n2(x)} ${n2(y)}L${n2(-x)} ${n2(-y)}`; } return trazo(d, .36); }
+    case 'ovalo': return `<ellipse rx="${n2(r * 1.4)}" ry="${n2(r * .82)}" fill="${col}"${bd}/>`;
+    case 'ovaloHueco': return trazo(`M${n2(r * 1.3)} 0A${n2(r * 1.3)} ${n2(r * .74)} 0 1 1 ${n2(-r * 1.3)} 0A${n2(r * 1.3)} ${n2(r * .74)} 0 1 1 ${n2(r * 1.3)} 0Z`, .3);
+    case 'disco': return `<ellipse rx="${n2(r * 1.35)}" ry="${n2(r * 1)}" fill="${col}"${bd}/><ellipse rx="${n2(r * .55)}" ry="${n2(r * .36)}" fill="var(--bg-main)" fill-opacity=".55"/>`;
+    case 'trebol': return [-90, 30, 150].map(g => { const a = g * Math.PI / 180; return `<circle cx="${n2(Math.cos(a) * r * .62)}" cy="${n2(Math.sin(a) * r * .62)}" r="${n2(r * .62)}" fill="${col}"${bd}/>`; }).join('');
+    case 'caCitrato': return `<ellipse rx="${n2(r * 1.9)}" ry="${n2(r * 1.4)}" fill="none" stroke="var(--accent-yellow)" stroke-width="${n2(r * .28)}"/>` + svgForma('ovalo', r * .85, color, borde);
+    case 'celula': return trazo(`M${n2(r * 1.4)} 0A${n2(r * 1.4)} ${n2(r * 1.4)} 0 1 1 ${n2(-r * 1.4)} 0A${n2(r * 1.4)} ${n2(r * 1.4)} 0 1 1 ${n2(r * 1.4)} 0Z`, .38) + `<circle r="${n2(r * .45)}" fill="${col}"/>`;
+    case 'luna': { const R = r * 1.15; return lleno(`M${n2(.5275 * R)} ${n2(-.8495 * R)}A${n2(R)} ${n2(R)} 0 1 0 ${n2(.5275 * R)} ${n2(.8495 * R)}A${n2(.85 * R)} ${n2(.85 * R)} 0 0 1 ${n2(.5275 * R)} ${n2(-.8495 * R)}Z`); }
+  }
+  return '';
+}
+const icono = (k, tam = 16, r = 4.2) => { const e = POR_CLAVE[k]; return `<svg viewBox="${-tam / 2} ${-tam / 2} ${tam} ${tam}" aria-hidden="true">${svgForma(e.f, r, e.c)}</svg>`; };
+
+// ─────────────────────────────────────────────────────────────
+// Tarjetas de la tabla única
+// ─────────────────────────────────────────────────────────────
+// Fondos de la muestra a tamaño real: luz clara (≈50 mOsm), isotónica (300), médula (700) y fondo oscuro.
+const FONDOS = ['--text-main', '--accent-yellow', '--accent-red', '--bg-main'];
+const real = e => FONDOS.map(fo => `<svg viewBox="-11 -11 22 22" aria-hidden="true" style="background:var(${fo})">${svgForma(e.f, e.f === 'grano' ? 2.4 : 2.6, e.c)}</svg>`).join('');
+document.getElementById('formas').innerHTML = FORMAS.map(e => e.grupo
+  ? `<li class="seccion-forma">${e.grupo}</li>`
+  : `<li class="forma${e.reserva ? ' reserva' : ''}">
+      <svg class="grande" viewBox="-17 -17 34 34" aria-hidden="true">${e.dos
+        ? e.dos.map((f, i) => `<g transform="translate(${i ? 8.5 : -8.5} 0)">${svgForma(f, f.startsWith('rombo') ? 3 : 5, e.c)}</g>`).join('')
+        : svgForma(e.f, e.f === 'grano' ? 7 : 8.5, e.c)}</svg>
+      <b>${e.n}</b>
+      <small>${NOMBRE_COLOR[e.c]} <code>${T[e.c]}</code>${e.d ? ' · ' + e.d : ''}</small>
+      <span class="real">${real(e)}<span>real</span></span>
+    </li>`).join('');
+
+// ─────────────────────────────────────────────────────────────
+// Choques de hoy (antes → después)
+// ─────────────────────────────────────────────────────────────
+const par = (a, ca, b, cb) => `<svg viewBox="0 0 54 26" aria-hidden="true"><g transform="translate(13 13)">${svgForma(a, 6, ca)}</g><g transform="translate(41 13)">${svgForma(b, 6, cb)}</g></svg>`;
+const CHOQUES = [
+  [par('rombo', 'salvia', 'rombo', 'ciruela'), 'El <b>rombo</b> es la glucosa en la nefrona y el Cl⁻ en el ácido-base y en el río y mar.'],
+  [par('cuadrado', 'ciruela', 'cuadrado', 'ambar'), 'El «cristal» de la glucosa del agua es un <b>cuadrado</b> girado: a tamaño real, el del K⁺.'],
+  [par('tri', 'teja', 'tri', 'cremaOsc'), 'En la célula del túbulo proximal, HCO₃⁻ y fosfato son el <b>mismo triángulo</b>; solo cambia el color.'],
+  [par('circulo', 'oro', 'circulo', 'ambar'), 'En la rama gruesa, Na⁺ y Ca²⁺/Mg²⁺ son <b>círculos casi del mismo oro</b>. Na⁺, Cl⁻, Ca²⁺ y Mg²⁺: todos círculos en la célula.'],
+  [par('anillo', 'crema', 'anillo', 'cremaOsc'), 'En la célula, H⁺ y CO₂ son el <b>mismo anillo crema</b>. En el túbulo, el H⁺ es una cruz.'],
+  [par('tri', 'salvia', 'triInv', 'cremaOsc'), 'El fosfato es triángulo invertido en el túbulo y triángulo normal en la célula y en las nefronas que quedan.'],
+  [par('circulo', 'crema', 'cuadrado', 'cremaOsc'), 'El K⁺ es un <b>cuadrado</b> en la nefrona, el filtro, las nefronas que quedan y el ácido-base, y un <b>punto</b> en el potasio.'],
+  [par('estrella', 'ambar', 'estrella', 'oro'), 'La <b>estrella</b>: aniones no medidos (hueca) y salino al 7,5 % (llena).'],
+];
+document.getElementById('choques').innerHTML = CHOQUES.map(([s, t]) => `<li>${s}<span>${t}</span></li>`).join('');
+
+// ─────────────────────────────────────────────────────────────
+// Modelos: antes (capturas) y después (leyenda nueva + muestra a tamaño real)
+// ─────────────────────────────────────────────────────────────
+// Muestra: partículas sueltas sobre el fondo del modelo, al tamaño al que las pinta (radio ≈ 2,4 px).
+function muestra(claves, fondo, r = 2.6) {
+  let s = 12345; const azar = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  let g = ''; const W = 300, H = 46, n = claves.length;
+  for (let i = 0; i < n * 3; i++) {
+    const e = POR_CLAVE[claves[i % n]];
+    const x = 10 + (i / (n * 3)) * (W - 20) + (azar() - .5) * 6, y = 10 + azar() * (H - 20);
+    g += `<g transform="translate(${n2(x)} ${n2(y)})">${svgForma(e.f, e.f === 'grano' ? r * .9 : r, e.c)}</g>`;
+  }
+  return `<svg class="tira" viewBox="0 0 ${W} ${H}" role="img" aria-label="Muestra a tamaño real" style="background:var(${fondo})">${g}</svg>`;
+}
+const img = (src, pie, w = 480, h = 628) => `<figure><img src="formas-iones/${src}" width="${w}" height="${h}" loading="lazy" alt="${pie}"><figcaption>${pie}</figcaption></figure>`;
+const MODELOS = [
+  { t: 'Nefrona viva', sub: 'PIF Nefrología · túbulo y célula',
+    antes: [img('nefrona.png', 'Túbulo, hiperglucemia'), img('celula-proximal.png', 'Célula del proximal'), img('celula-gruesa.png', 'Célula de la rama gruesa'), img('celula-distal.png', 'Célula del distal'), img('celula-colector.png', 'Célula del colector')],
+    antesLey: img('nefrona-leyenda.png', 'Su leyenda de hoy', 560, 131),
+    claves: ['agua', 'na', 'k', 'cl', 'glu', 'hco3', 'urea', 'h', 'nh4', 'co2', 'ca', 'mg', 'p', 'celula', 'rbc'],
+    cambian: ['agua', 'k', 'cl', 'glu', 'hco3', 'urea', 'h', 'nh4', 'co2', 'ca', 'mg', 'p', 'celula', 'rbc'],
+    fondo: '--accent-yellow',
+    cambios: ['La <b>glucosa</b> pasa de rombo verde a cristal ámbar.', 'El <b>Cl⁻</b> de la célula pasa de círculo a rombo ciruela.', 'El <b>HCO₃⁻</b> pasa de teja claro a verde salvia; el <b>fosfato</b>, de triángulo a triángulo invertido también en la célula.', '<b>H⁺</b>: cruz también en la célula (hoy, anillo). <b>CO₂</b>: voluta (hoy, anillo igual que el H⁺).', '<b>Ca²⁺</b> óvalo y <b>Mg²⁺</b> óvalo hueco, también en la célula (hoy, círculos como el Na⁺).', 'El <b>agua</b> pasa de punto a gota; la <b>célula desprendida</b>, a anillo con núcleo.', 'Colores: los 9 tonos sueltos (urea azul, H⁺, NH₄⁺, Ca²⁺, Mg²⁺, fosfato, Cl⁻, CO₂, célula) pasan a tokens.'],
+    tam: 'nefrona-viva.js: ≈45 líneas (se borran sus dos dibujos de formas y lee la tabla)' },
+  { t: 'Glomérulo vivo', sub: 'Regulación del filtrado · ERC',
+    antes: [img('glomerulo.png', 'Con albuminuria (ERC · PA y SRAA)', 480, 400)], una: true,
+    claves: ['agua', 'alb', 'rbc'], cambian: ['agua', 'rbc'], fondo: '--bg-main',
+    cambios: ['El <b>filtrado</b> pasa de punto a gota (agua).', 'Los <b>hematíes</b>, disco teja (hoy, elipse de un rojo suelto).', 'La <b>albúmina</b> no cambia: círculo grande ciruela.', 'Gana una <b>leyenda</b> (hoy no tiene). La renina sigue como puntos con su rótulo.'],
+    tam: 'glomerulo-vivo.js: ≈10 líneas' },
+  { t: 'Filtro de la TRR', sub: 'TRR · anticoagulación',
+    antes: [img('filtro.png', 'Convección, sin anticoagular', 480, 354)], una: true,
+    antesLey: img('filtro-leyenda.png', 'Su leyenda de hoy', 560, 97),
+    claves: ['rbc', 'alb', 'urea', 'k', 'cito', 'ca', 'cacit', 'agua'], cambian: ['rbc', 'urea', 'k', 'cito', 'cacit', 'agua'], fondo: '--bg-main',
+    cambios: ['La <b>urea</b> pasa de círculo pequeño a hexágono, como en la nefrona.', 'Las <b>citoquinas</b> dejan el triángulo (es del HCO₃⁻) y pasan a trébol.', 'El <b>agua</b> y la reposición, gota crema (hoy, círculo azul suelto).', 'El anillo del <b>citrato</b>, ámbar; el <b>K⁺</b>, crema oscuro.'],
+    tam: 'filtro-vivo.js: ≈20 líneas (su dibujo de iconos pasa a la tabla)' },
+  { t: 'Nefronas que quedan', sub: 'ERC · acidosis e hiperpotasemia',
+    antes: [img('nefronas.png', '40 de 40 nefronas', 480, 387)], una: true,
+    claves: ['k', 'p'], cambian: ['p'], fondo: '--bg-main',
+    cambios: ['El <b>fosfato</b> pasa de triángulo a triángulo invertido topo (el triángulo es del HCO₃⁻).', 'El <b>K⁺</b> sigue cuadrado; en sangre conserva el rojo cuando está alto.', 'Gana una leyenda de dos partículas.'],
+    tam: 'nefronas-vivas.js: ≈8 líneas' },
+  { t: 'Escenas del potasio', sub: 'Hiperpotasemia e hipopotasemia',
+    antes: [img('hiperpotasemia.png', 'Hiperpotasemia', 480, 427), img('hipopotasemia.png', 'Hipopotasemia', 480, 429)],
+    claves: ['k', 'na'], cambian: ['k', 'na'], fondo: '--bg-main', porSitio: true,
+    cambios: ['El <b>K⁺</b> pasa de punto a cuadrado en el plasma, la célula y las salidas. Conserva el color por sitio.', 'Los <b>huecos</b> de la hipopotasemia, cuadrado discontinuo («□ = 20 mEq que faltan»).', 'El <b>Na⁺</b> que sale por la bomba, círculo oro (hoy, rosa: el color del K⁺ en la nefrona).', 'La guía «el K⁺ es una nube de puntos» pasa a «de cuadrados».'],
+    tam: 'potasio-escena.js + hiperpotasemia-sim.js + hipopotasemia-sim.js: ≈20 líneas' },
+  { t: 'Río y mar', sub: 'Maqueta v2 (rama auto/marino-mapa)',
+    antes: [img('agua.png', 'Tras 2 L de salino', 480, 419)], una: true,
+    antesLey: img('agua-leyenda.png', 'Su leyenda de hoy', 560, 46),
+    claves: ['cl', 'hiper', 'tampon', 'hco3', 'urea', 'glu', 'alb', 'rbc', 'dulce', 'agua'], cambian: ['cl', 'hiper', 'urea', 'glu'], fondo: '--bg-main',
+    cambios: ['El <b>salino</b> (rombo) pasa de ámbar a ciruela, el color del Cl⁻.', 'El salino al <b>3 % y al 7,5 %</b> deja la chispa y la estrella: rombo con uno o dos halos.', 'La <b>glucosa</b> deja el cuadrado girado: cristal (copo).', 'La <b>urea</b> deja el verde (es del HCO₃⁻): hexágono topo.', 'Ringer y Plasma-Lyte siguen como triángulo (ver «Lo que decides tú»).'],
+    tam: 'marino-agua-v2.html: ≈25 líneas' },
+  { t: 'Ácido-base vivo', sub: 'Maqueta v2 (misma rama)',
+    antes: [img('acidobase.png', 'Cetoacidosis, minuto 1', 480, 471)], una: true,
+    antesLey: img('acidobase-leyenda.png', 'Su leyenda de hoy', 560, 80),
+    claves: ['na', 'cl', 'hco3', 'h', 'anion', 'co2', 'k', 'nh4', 'urea'], cambian: ['na', 'urea'], fondo: '--bg-main',
+    cambios: ['Ya es casi la tabla: rombo Cl⁻, triángulo HCO₃⁻, cruz H⁺, estrella hueca para los aniones.', 'El <b>Na⁺</b> pasa de crema a oro (crema es el agua).', 'La <b>urea</b> del hiato osmolal, hexágono topo (hoy, verde).'],
+    tam: 'marino-acidobase-v2.html: ≈6 líneas' },
+];
+document.getElementById('modelos').innerHTML = MODELOS.map(m => `
+  <article class="modelo">
+    <div><h3>${m.t}</h3><p class="sub">${m.sub}</p></div>
+    <div class="par">
+      <div class="lado antes"><span class="rot">Antes · captura real</span>
+        <div class="capturas${m.una ? ' una' : ''}">${m.antes.join('')}</div>
+        ${m.antesLey ? `<div class="capturas una">${m.antesLey}</div>` : ''}
+      </div>
+      <div class="lado despues"><span class="rot">Después · su leyenda</span>
+        <ul class="leyenda">${m.claves.map(k => `<li class="${m.cambian.includes(k) ? 'cambia' : ''}">${icono(k)}${POR_CLAVE[k].n}</li>`).join('')}</ul>
+        ${muestra(m.claves, m.fondo)}
+        ${m.fondo === '--accent-yellow' ? muestra(m.claves, '--accent-red') : ''}
+        <p class="sub">Muestra a tamaño real${m.fondo === '--accent-yellow' ? ': luz isotónica y médula' : ''}.${m.porSitio ? ' Aquí el color sigue diciendo dónde está el K⁺; la forma, qué es.' : ''}</p>
+      </div>
+    </div>
+    <ul class="cambios">${m.cambios.map(c => `<li>${c}</li>`).join('')}</ul>
+    <p class="tam">Tamaño del cambio: <b>${m.tam}</b>.</p>
+  </article>`).join('');
+</script>
+</body>
+</html>
