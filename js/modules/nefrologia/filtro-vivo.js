@@ -24,6 +24,7 @@
 import { irAlTexto } from '../../core/vista-visual.js';
 import { CLARO, alfa } from './potasio-escena.js';
 import { clamp } from '../../core/ui.js';
+import { pintarParticula, colorParticula, leyendaParticulas } from '../../core/particulas.js';
 
 const W = 360, H = 300;
 const FIB = { x0: 44, x1: 316, y0: 128, y1: 172 };           // luz de la fibra (sangre)
@@ -37,29 +38,30 @@ const MODOS = {
     hib: { nombre: 'Híbrida (SLED/PIRRT)', dif: 0.6, conv: 0.5, texto: 'trr-t-hib' },
 };
 const ANTICOAG = { no: 'Sin anticoagulación', heparina: 'Heparina', citrato: 'Citrato' };
-// Partículas de la sangre: cuánto cruzan por difusión y por convección (relativo).
+// Partículas de la sangre: cuánto cruzan por difusión y por convección
+// (relativo). `r` = radio de dibujo; la forma y el color, de la tabla única
+// (js/data/formas-iones.js).
 const TIPOS = {
-    rbc: { tasa: 7, dif: 0, conv: 0, r: 2.6 },
-    alb: { tasa: 1.4, dif: 0, conv: 0, r: 3.4 },
-    urea: { tasa: 7, dif: 1.8, conv: 1, r: 1.7 },
+    rbc: { tasa: 7, dif: 0, conv: 0, r: 1.95 },
+    alb: { tasa: 1.4, dif: 0, conv: 0, r: 2.1 },
+    urea: { tasa: 7, dif: 1.8, conv: 1, r: 1.6 },
     k: { tasa: 2.5, dif: 1.5, conv: 1, r: 2 },
-    cito: { tasa: 2.2, dif: 0.08, conv: 0.85, r: 2.6 },
-    ca: { tasa: 2.5, dif: 0, conv: 0, r: 2.2 },
+    cito: { tasa: 2.2, dif: 0.08, conv: 0.85, r: 2.4 },
+    ca: { tasa: 2.5, dif: 0, conv: 0, r: 1.9 },
 };
+// Lo que no viene de la sangre: el agua (ultrafiltrado y reposición) y el Ca²⁺ unido al citrato.
+const RADIO_EXTRA = { agua: 1.7, cit: 1.9 };
+const CLAVE = { cit: 'citrato' };
 
 export function montarFiltro(cuerpo, { tab }, opciones) {
     const reducido = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const css = getComputedStyle(document.documentElement);
     const tk = v => css.getPropertyValue(v).trim();
     const C = { texto: tk('--text-main'), suave: tk('--text-muted'), verde: tk('--accent-green'), rojo: tk('--accent-red'), amarillo: tk('--accent-yellow'), oro: tk('--accent-blue'), purpura: tk('--accent-purple') };
-    const COLOR = { rbc: '#d9604a', alb: C.purpura, urea: C.texto, k: CLARO.na, cito: '#7fc8a9', ca: '#ece4cf', cit: '#b9a3d9', agua: '#8fb8d8' };
-    const LEYENDA = [['rbc', 'Hematíes'], ['alb', 'Albúmina'], ['urea', 'Urea'], ['k', 'K⁺'], ['cito', 'Citoquinas (mayor tamaño)'], ['ca', 'Ca²⁺'], ...(opciones.mandos.includes('anticoag') ? [['cit', 'Ca²⁺ unido al citrato']] : []), ['agua', 'Agua / reposición']];
-    const glifo = t => t === 'rbc' ? `<ellipse cx="6" cy="6" rx="5" ry="3.3" fill="${COLOR.rbc}"/>`
-        : t === 'k' ? `<rect x="2.5" y="2.5" width="7" height="7" fill="${COLOR.k}"/>`
-        : t === 'cito' ? `<path d="M6 1.5L10.5 10H1.5Z" fill="${COLOR.cito}"/>`
-        : t === 'cit' ? `<ellipse cx="6" cy="6" rx="3" ry="2" fill="${COLOR.ca}"/><ellipse cx="6" cy="6" rx="5.3" ry="4" fill="none" stroke="${COLOR.cit}" stroke-width="1.3"/>`
-        : t === 'ca' ? `<ellipse cx="6" cy="6" rx="4.5" ry="2.8" fill="${COLOR.ca}"/>`
-        : `<circle cx="6" cy="6" r="${t === 'alb' ? 4.5 : t === 'urea' ? 2.5 : 3}" fill="${COLOR[t]}"/>`;
+    // Colores de los rótulos del citrato y del calcio: los de sus partículas.
+    const COLOR = { cit: tk('--accent-yellow'), ca: colorParticula('ca'), agua: colorParticula('agua') };
+    const LEYENDA = [{ clave: 'rbc' }, { clave: 'alb' }, { clave: 'urea' }, { clave: 'k' }, { clave: 'cito', nombre: 'Citoquinas (mayor tamaño)' }, { clave: 'ca' },
+        ...(opciones.mandos.includes('anticoag') ? [{ clave: 'citrato' }, { clave: 'cacit' }] : []), { clave: 'agua', nombre: 'Agua / reposición' }];
     const e = { modo: 'hf', dosis: 25, reposicion: 'post', qb: 150, anticoag: 'citrato', ...opciones.inicial };
     const m = new Set(opciones.mandos);
     // Sin el mando de anticoagulación, el filtro no se coagula ni se dibuja el citrato.
@@ -72,7 +74,7 @@ export function montarFiltro(cuerpo, { tab }, opciones) {
 
     cuerpo.innerHTML = `
         <div class="gl-escenario"><canvas aria-label="Filtro de la TRR animado"></canvas></div>
-        <div class="nv-especies">${LEYENDA.map(([t, n]) => `<span><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">${glifo(t)}</svg>${n}</span>`).join('')}</div>
+        ${leyendaParticulas(LEYENDA)}
         ${m.has('modo') ? chips('modo', MODOS) : ''}
         ${m.has('dosis') ? deslizador('dosis', 'Flujo del efluente', 15, 70, 5, 'ml/kg/h') : ''}
         ${m.has('qb') ? deslizador('qb', 'Flujo sanguíneo', 80, 250, 10, 'ml/min') : ''}
@@ -158,17 +160,10 @@ export function montarFiltro(cuerpo, { tab }, opciones) {
         ctx.beginPath(); ctx.roundRect(x - w / 2, y - 7, w, 13, 4); ctx.fill(); ctx.stroke();
         ctx.fillStyle = color; ctx.textAlign = 'center'; ctx.fillText(t, x, y + 3); ctx.textAlign = 'left';
     }
+    // Una partícula con la forma de la tabla única; el Ca²⁺ atrapado por el citrato, con su anillo.
     function punto(t, x, y, unido) {
-        const r = TIPOS[t]?.r ?? 1.6;
-        ctx.fillStyle = COLOR[t];
-        ctx.beginPath();
-        if (t === 'rbc') ctx.ellipse(x, y, r, r * 0.65, 0.3, 0, 7);
-        else if (t === 'k') ctx.rect(x - r, y - r, 2 * r, 2 * r);
-        else if (t === 'cito') { ctx.moveTo(x, y - r * 1.2); ctx.lineTo(x + r * 1.1, y + r * 0.8); ctx.lineTo(x - r * 1.1, y + r * 0.8); ctx.closePath(); }
-        else if (t === 'ca' || t === 'cit') ctx.ellipse(x, y, r * 1.3, r * 0.8, 0, 0, 7);
-        else ctx.arc(x, y, r, 0, 7);
-        ctx.fill();
-        if (unido) { ctx.strokeStyle = COLOR.cit; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.ellipse(x, y, r * 2, r * 1.5, 0, 0, 7); ctx.stroke(); }
+        if (unido) { pintarParticula(ctx, 'cacit', x, y, RADIO_EXTRA.cit); return; }
+        pintarParticula(ctx, CLAVE[t] ?? t, x, y, TIPOS[t]?.r ?? RADIO_EXTRA[t], { giro: t === 'rbc' ? 0.3 : 0 });
     }
     function dibujar() {
         ctx.clearRect(0, 0, W, H);
@@ -202,7 +197,7 @@ export function montarFiltro(cuerpo, { tab }, opciones) {
         if (M.md.dif) { flecha(W - 6, 100, CAJA.x1 - 6, 100, '#8fb8d8'); rotulo('dializado', W - 2, 84, '#8fb8d8', 'right'); }
         flecha(DREN, CAJA.y1, DREN, CAJA.y1 + 34, C.amarillo); flecha(DREN, CAJA.y0, DREN, CAJA.y0 - 30, C.amarillo);
         rotulo('efluente', DREN + 7, CAJA.y1 + 32, C.amarillo);
-        if (M.md.conv) rotulo(e.reposicion === 'pre' ? 'reposición prefiltro' : 'reposición posfiltro', e.reposicion === 'pre' ? 30 : 330, 66, '#8fb8d8', e.reposicion === 'pre' ? 'left' : 'right');
+        if (M.md.conv) rotulo(e.reposicion === 'pre' ? 'reposición prefiltro' : 'reposición posfiltro', e.reposicion === 'pre' ? 30 : 330, 66, COLOR.agua, e.reposicion === 'pre' ? 'left' : 'right');
         if (citrato()) { rotulo('citrato', 4, 78, COLOR.cit); rotulo('calcio', W - 4, 78, COLOR.ca, 'right'); }
         // Partículas
         for (const p of dializado) { ctx.globalAlpha = 0.45; ctx.fillStyle = '#8fb8d8'; ctx.beginPath(); ctx.arc(p.x, p.y, 1.2, 0, 7); ctx.fill(); }

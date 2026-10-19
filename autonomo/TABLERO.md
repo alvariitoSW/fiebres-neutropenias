@@ -201,7 +201,8 @@ revisión** (decisión del usuario del 14/10: primero la fase 1 entera). Las fas
 
 | # | Clave | Qué | Estado | Notas |
 |---|---|---|---|---|
-| 1 | `marino-mapa` | Mapa visual de todo Marino (profesor, modo mapa) | en revisión (2026-10-15) | maquetas: https://claude.ai/artifact/XkbXSjmeJF7BeHhQ2wSC4L |
+| 1 | `marino-mapa` | Mapa visual de todo Marino (profesor, modo mapa) y maquetas v2 con Mayéutica | hecha (2026-10-19) · PR #16 | Maquetas: https://claude.ai/artifact/XkbXSjmeJF7BeHhQ2wSC4L |
+| 2 | `formas-iones` | Una sola leyenda de formas de iones y moléculas en toda la app | hecha (2026-10-19) · PR #17 | |
 
 **Encargo de `marino-mapa`** (tipo `mapa`, profesor con el modelo potente):
 - **Qué quiero**: el «Mapa visual» de The ICU Book en `autonomo/ideas/marino.md`. Son los pocos modelos grandes,
@@ -225,6 +226,28 @@ revisión** (decisión del usuario del 14/10: primero la fase 1 entera). Las fas
   grande ya puede hacer.
 - **Fuente**: los PDF de Marino en `docs/` (imágenes reales ya en la app) e `js/data/libros-indice.js`.
 - **Hecho**: el mapa escrito, con las maquetas de los modelos nuevos publicadas y la PR en borrador con su enlace.
+
+**Encargo de `formas-iones`** (tipo `arreglo`, constructor potente; aprobado el 19/10/2026):
+- **Lo que dijo el usuario**: «Sí, vamos a unificar todas esas formas en la app, pero antes arregla los fallos que me
+  has comentado». Del color del HCO₃⁻ dijo que le da igual, siempre que se distinga del resto.
+- **Qué quiero**: que cada ion o molécula tenga **la misma forma en todos los modelos vivos**: nefrona viva,
+  glomérulo, filtro de la TRR, escena del potasio, ácido-base vivo y río y mar. Hoy chocan:
+  - en la nefrona viva, el rombo es la glucosa y el hexágono la urea;
+  - en el agua, el rombo es el salino;
+  - en el ácido-base, el rombo es el Cl⁻ y el hexágono los cetoácidos.
+- **Propuesta de partida (profesor, 19/10)**:
+  - hexágono = urea en todos;
+  - rombo = Cl⁻ y la sal;
+  - glucosa = «cristal»;
+  - aniones no medidos (cetoácidos, lactato, fórmico) = una forma propia;
+  - HCO₃⁻ = triángulo, con un color que se distinga.
+- **Cómo**: una sola tabla de formas en `js/data/`, que lean todos los modelos (CLAUDE §5: los datos compartidos van
+  una sola vez). Las maquetas de `autonomo/maquetas/` se ajustan a la misma tabla.
+- **Lo visual que espero**: una leyenda de formas igual en todos los modelos. Antes de tocar la app, una lámina con la
+  tabla de formas y una captura de cada modelo, para que el usuario la vea.
+- **Lo que NO quiero**: la identidad solo por color (CLAUDE §5), ni cambiar la fisiología de los modelos.
+- **Hecho**: jueces en verde (`--ficha` de las fichas con nefrona viva y glomérulo), pruebas de eco en verde si se
+  toca, capturas a 390 y 360 px de cada modelo con su leyenda.
 
 ---
 

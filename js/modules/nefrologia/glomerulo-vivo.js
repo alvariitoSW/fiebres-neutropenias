@@ -14,6 +14,7 @@
 import { irAlTexto, irAlVisual } from '../../core/vista-visual.js';
 import { CLARO, alfa } from './potasio-escena.js';
 import { clamp } from '../../core/ui.js';
+import { pintarParticula, leyendaParticulas } from '../../core/particulas.js';
 
 const W = 360, H = 300;
 const B = { x: 224, y: 150, r: 78, ovillo: 50 };
@@ -114,6 +115,7 @@ export function montarGlomerulo(cuerpo, { tab }, opciones) {
 
     cuerpo.innerHTML = `
         <div class="gl-escenario"><canvas aria-label="Glomérulo animado: sangre por las arteriolas y filtrado hacia el túbulo"></canvas></div>
+        ${leyendaParticulas([{ clave: 'agua', nombre: 'Filtrado (agua y lo disuelto)' }, ...(opciones.mandos.includes('albuminuria') ? ['alb'] : []), { clave: 'rbc', nombre: 'Hematíes (no se filtran)' }])}
         ${opciones.mandos.includes('pam') ? `<div class="tfg-slider-row"><label>Presión arterial media</label><input type="range" class="gl-pam" min="40" max="220" step="5" value="${e.pam}"><span class="gl-pam-out">${e.pam} mmHg</span></div>` : ''}
         ${toggles.length ? `<div class="nv-chips gl-mandos">${toggles.map(m => `<button type="button" class="visual-mini" data-gl="${m}" aria-pressed="false">${MANDOS[m]}</button>`).join('')}</div>` : ''}
         <div class="nv-medidores gl-medidores"></div>
@@ -238,13 +240,12 @@ export function montarGlomerulo(cuerpo, { tab }, opciones) {
     function dibujar() {
         ctx.clearRect(0, 0, W, H);
         ctx.drawImage(fondo, 0, 0, W, H);
-        ctx.fillStyle = '#d9604a';
         for (const s of sangre) {
             let x, y;
             if (s.fase === 0) { const [px, py] = enRuta(RUTA_AF, s.t / 1.4); x = px; y = py + s.lat * 3; }
             else if (s.fase === 1) { const a = s.t / 1.2 * Math.PI * 2; x = s.lob.x + Math.cos(a) * 10; y = s.lob.y + Math.sin(a) * 10; }
             else { const [px, py] = enRuta(RUTA_EF, s.t / 1.4); x = px; y = py + s.lat * 2; }
-            ctx.beginPath(); ctx.ellipse(x, y, 2.6, 1.7, 0.4, 0, 7); ctx.fill();
+            pintarParticula(ctx, 'rbc', x, y, 1.8, { giro: 0.4 });
         }
         for (const p of filtrado) {
             let x, y, al = 1;
@@ -252,8 +253,7 @@ export function montarGlomerulo(cuerpo, { tab }, opciones) {
             else if (p.fase === 1) { const u = p.t / 0.9, x0 = B.x + Math.cos(p.a) * 62, y0 = B.y + Math.sin(p.a) * 62; x = x0 + (300 - x0) * u; y = y0 + (150 - y0) * u; }
             else { const [px, py] = enRuta(RUTA_PT, p.t / 1.6); x = px; y = py; al = 1 - p.t / 1.8; }
             ctx.globalAlpha = Math.max(0, al);
-            ctx.fillStyle = p.alb ? C.purpura : C.texto;
-            ctx.beginPath(); ctx.arc(x, y, p.alb ? 3.2 : 1.8, 0, 7); ctx.fill();
+            if (p.alb) pintarParticula(ctx, 'alb', x, y, 2); else pintarParticula(ctx, 'agua', x, y, 1.6);
         }
         ctx.fillStyle = CLARO.na;
         for (const r of renina) { ctx.globalAlpha = 1 - r.t / 1.5; ctx.beginPath(); ctx.arc(r.x, r.y, 1.8, 0, 7); ctx.fill(); }

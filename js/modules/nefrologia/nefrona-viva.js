@@ -17,9 +17,9 @@ import { openCorkboardTopic } from '../../core/corkboard.js';
 import { irAlTexto } from '../../core/vista-visual.js';
 import { CLARO, alfa } from './potasio-escena.js';
 import { clamp } from '../../core/ui.js';
+import { pintarParticula, svgParticula, colorParticula, leyendaParticulas } from '../../core/particulas.js';
 
 const CIF = cifrasNefrona;
-const UREA = '#7fb3c8';
 const W = 360, H = 470;
 const BANDAS = { corteza: [0, 140], externa: [140, 300], interna: [300, 458] };
 const G = { x: 232, y: 58, r: 21 };
@@ -247,23 +247,29 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
     const C = { texto: tk('--text-main'), suave: tk('--text-muted'), verde: tk('--accent-green'), rojo: tk('--accent-red'), amarillo: tk('--accent-yellow'), oro: tk('--accent-blue'), purpura: tk('--accent-purple') };
     // Escala de la osmolalidad: agua clara → isotónico (amarillo) → hipertónico (rojo → púrpura).
     ESCALA = [[50, [233, 226, 207]], [300, hex(C.amarillo)], [700, hex(C.rojo)], [1200, hex(C.purpura)]];
+    // Partículas: la forma y el color salen de la tabla única (js/data/formas-iones.js).
+    // `clave` = especie de la tabla; `r` = radio de dibujo; `tasa` = las que nacen por segundo.
     const ESPECIES = {
-        h2o: { nombre: 'Agua', color: C.texto, forma: 'punto', tasa: 22 },
-        na: { nombre: 'Na⁺', color: CLARO.oro, forma: 'circulo', tasa: 10 },
-        k: { nombre: 'K⁺', color: CLARO.na, forma: 'cuadrado', tasa: 5 },
-        glu: { nombre: 'Glucosa', color: CLARO.verde, forma: 'rombo', tasa: 4 },
-        hco3: { nombre: 'HCO₃⁻', color: CLARO.rojo, forma: 'triangulo', tasa: 4 },
-        urea: { nombre: 'Urea', color: UREA, forma: 'hex', tasa: 3.5 },
+        h2o: { nombre: 'Agua', clave: 'agua', tasa: 22, r: 1.5 },
+        na: { nombre: 'Na⁺', clave: 'na', tasa: 10, r: 2.4 },
+        k: { nombre: 'K⁺', clave: 'k', tasa: 5, r: 2.3 },
+        glu: { nombre: 'Glucosa', clave: 'glu', tasa: 4, r: 2.2 },
+        hco3: { nombre: 'HCO₃⁻', clave: 'hco3', tasa: 4, r: 2.3 },
+        urea: { nombre: 'Urea', clave: 'urea', tasa: 3.5, r: 2.2 },
         // H⁺ y NH₄⁺ no se filtran: los secreta el colector (la acidificación de la orina).
-        h: { nombre: 'H⁺ (secretado)', color: '#f0e6c8', forma: 'cruz', tasa: 0 },
-        nh4: { nombre: 'NH₄⁺', color: '#b9a3d9', forma: 'pent', tasa: 0 },
-        ca: { nombre: 'Ca²⁺', color: '#ece4cf', forma: 'oval', tasa: 2.5 },
-        mg: { nombre: 'Mg²⁺', color: '#7fc8a9', forma: 'oval', tasa: 2 },
-        p: { nombre: 'Fosfato', color: '#9ad0e6', forma: 'trinv', tasa: 2.5 },
-        celula: { nombre: 'Célula desprendida (NTA)', color: '#9c7a52', forma: 'circulo', tasa: 0, r: 3.4 },
+        h: { nombre: 'H⁺ (secretado)', clave: 'h', tasa: 0, r: 2.4 },
+        nh4: { nombre: 'NH₄⁺', clave: 'nh4', tasa: 0, r: 2.3 },
+        ca: { nombre: 'Ca²⁺', clave: 'ca', tasa: 2.5, r: 2 },
+        mg: { nombre: 'Mg²⁺', clave: 'mg', tasa: 2, r: 2 },
+        p: { nombre: 'Fosfato', clave: 'p', tasa: 2.5, r: 2.2 },
+        celula: { nombre: 'Célula desprendida (NTA)', clave: 'celula', tasa: 0, r: 2.4 },
     };
-    const ION = { ca2: ['Ca²⁺', '#ece4cf', 'circulo'], mg2: ['Mg²⁺', '#7fc8a9', 'circulo'], p: ['Fosfato', '#9ad0e6', 'triangulo'], na: ['Na⁺', CLARO.oro, 'circulo'], k: ['K⁺', CLARO.na, 'cuadrado'], glu: ['Glucosa', CLARO.verde, 'rombo'], hco3: ['HCO₃⁻', CLARO.rojo, 'triangulo'], h: ['H⁺', '#f0e6c8', 'anillo'], cl: ['Cl⁻', '#9fb2a4', 'circulo'], ca: ['Ca²⁺/Mg²⁺', C.oro, 'circulo'], h2o: ['H₂O', C.texto, 'punto'], urea: ['Urea', UREA, 'hex'], co2: ['CO₂', '#bdb2a0', 'anillo'] };
-    const RADIO = { punto: 1.5, circulo: 2.4, cuadrado: 2.1, rombo: 2.2, triangulo: 2.3, hex: 2.3, cruz: 2.4, pent: 2.4, oval: 2.3, trinv: 2.3 };
+    // Vista de célula: [nombre del rótulo, color (para rótulos y guías), especie de la tabla].
+    // `ca` es el paso de Ca²⁺ y Mg²⁺ entre las células: alterna las dos formas.
+    const ION = Object.fromEntries(Object.entries({
+        ca2: ['Ca²⁺', 'ca'], mg2: ['Mg²⁺', 'mg'], p: ['Fosfato', 'p'], na: ['Na⁺', 'na'], k: ['K⁺', 'k'], glu: ['Glucosa', 'glu'],
+        hco3: ['HCO₃⁻', 'hco3'], h: ['H⁺', 'h'], cl: ['Cl⁻', 'cl'], ca: ['Ca²⁺/Mg²⁺', 'ca'], h2o: ['H₂O', 'agua'], urea: ['Urea', 'urea'], co2: ['CO₂', 'co2'],
+    }).map(([k, [n, clave]]) => [k, [n, colorParticula(clave), clave]]));
 
     const estado = { sit: 'normal', farm: 'ninguno', glucemia: 350, nivel: 'foto', seg: null, pausa: false, vel: 1 };
     let M = modelo('normal', 'ninguno', 350);
@@ -276,18 +282,6 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
     fondo.width = W * dpr; fondo.height = H * dpr;
     const fctx = fondo.getContext('2d'); fctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    function forma(c, f, x, y, r) {
-        c.beginPath();
-        if (f === 'punto' || f === 'circulo') c.arc(x, y, r, 0, Math.PI * 2);
-        else if (f === 'cuadrado') c.rect(x - r, y - r, 2 * r, 2 * r);
-        else if (f === 'rombo') { c.moveTo(x, y - r * 1.3); c.lineTo(x + r * 1.3, y); c.lineTo(x, y + r * 1.3); c.lineTo(x - r * 1.3, y); c.closePath(); }
-        else if (f === 'oval') c.ellipse(x, y, r * 1.35, r * 0.8, 0, 0, Math.PI * 2);
-        else if (f === 'trinv') { c.moveTo(x, y + r * 1.3); c.lineTo(x + r * 1.2, y - r); c.lineTo(x - r * 1.2, y - r); c.closePath(); }
-        else if (f === 'cruz') { c.rect(x - r, y - r * 0.35, 2 * r, r * 0.7); c.rect(x - r * 0.35, y - r, r * 0.7, 2 * r); }
-        else if (f === 'pent') { for (let i = 0; i < 5; i++) { const a = -Math.PI / 2 + i * 2 * Math.PI / 5; c[i ? 'lineTo' : 'moveTo'](x + Math.cos(a) * r * 1.25, y + Math.sin(a) * r * 1.25); } c.closePath(); }
-        else if (f === 'hex') { for (let i = 0; i < 6; i++) { const a = i * Math.PI / 3; c[i ? 'lineTo' : 'moveTo'](x + Math.cos(a) * r * 1.2, y + Math.sin(a) * r * 1.2); } c.closePath(); }
-        else { c.moveTo(x, y - r * 1.3); c.lineTo(x + r * 1.2, y + r); c.lineTo(x - r * 1.2, y + r); c.closePath(); }
-    }
     const trazar = (c, pts) => { c.beginPath(); c.moveTo(pts[0][0], pts[0][1]); for (const p of pts.slice(1)) c.lineTo(p[0], p[1]); c.stroke(); };
     function etiqueta(c, t, x, y, color, alinea = 'center') {
         c.font = 'bold 9px Georgia, serif';
@@ -519,12 +513,10 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
     function dibujar() {
         ctx.clearRect(0, 0, W, H);
         ctx.drawImage(fondo, 0, 0, W, H);
-        ctx.fillStyle = '#d9604a'; // hematíes: circulan por el ovillo y nunca pasan
-        for (const g of globulos) { ctx.beginPath(); ctx.ellipse(G.x + Math.cos(g.a) * g.r, G.y + Math.sin(g.a * 1.3) * g.r * 0.8, 2.2, 1.5, g.a, 0, 7); ctx.fill(); }
-        // Por especie, un solo trazado por color.
+        // Hematíes: circulan por el ovillo y nunca pasan.
+        for (const g of globulos) pintarParticula(ctx, 'rbc', G.x + Math.cos(g.a) * g.r, G.y + Math.sin(g.a * 1.3) * g.r * 0.8, 1.6, { giro: g.a });
         for (const esp in ESPECIES) {
             const e = ESPECIES[esp];
-            ctx.fillStyle = e.color;
             for (const p of parts) {
                 if (p.esp !== esp) continue;
                 let x, y, al = 1;
@@ -539,8 +531,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
                     if (p.modo === 'orina') { y += p.t * 14; al = 1 - p.t / 1.1; }
                 }
                 ctx.globalAlpha = Math.max(0, al) * (esp === 'h2o' ? 0.65 : 1);
-                forma(ctx, e.forma, x, y, e.r || RADIO[e.forma]);
-                ctx.fill();
+                pintarParticula(ctx, e.clave, x, y, e.r);
             }
         }
         ctx.globalAlpha = 1;
@@ -558,15 +549,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
     new IntersectionObserver(([e]) => { visible = e.isIntersecting; ultimo = 0; programar(); }).observe($('#nv-escenario'));
 
     // ---------- Vista de célula ----------
-    function glifo(tipo, x, y) {
-        const [, color, f] = ION[tipo];
-        if (f === 'cuadrado') return `<rect x="${x - 4}" y="${y - 4}" width="8" height="8" fill="${color}"/>`;
-        if (f === 'rombo') return `<path d="M${x} ${y - 5}L${x + 5} ${y}L${x} ${y + 5}L${x - 5} ${y}Z" fill="${color}"/>`;
-        if (f === 'hex') return `<path d="M${x + 5} ${y}L${x + 2.5} ${y + 4.3}L${x - 2.5} ${y + 4.3}L${x - 5} ${y}L${x - 2.5} ${y - 4.3}L${x + 2.5} ${y - 4.3}Z" fill="${color}"/>`;
-        if (f === 'triangulo') return `<path d="M${x} ${y - 5}L${x + 5} ${y + 4}L${x - 5} ${y + 4}Z" fill="${color}"/>`;
-        if (f === 'anillo') return `<circle cx="${x}" cy="${y}" r="3.6" fill="none" stroke="${color}" stroke-width="1.8"/>`;
-        return `<circle cx="${x}" cy="${y}" r="${f === 'punto' ? 3 : 4.2}" fill="${color}"/>`;
-    }
+    const glifo = (tipo, x, y, r = tipo === 'h2o' ? 2.8 : 3.5) => svgParticula(ION[tipo][2], x, y, r);
     // Un ion que viaja por una ruta (SMIL); con movimiento reducido se queda quieto.
     function viajero(ion, ruta, dur, retraso, apagado) {
         const g = glifo(ion, 0, 0);
@@ -631,7 +614,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
         const guia = (ruta, col, off) => `<path d="${ruta}" fill="none" stroke="${col}" stroke-width="1.2" stroke-dasharray="2 5" opacity="${off ? 0.16 : 0.42}"/>`;
         const flujoIones = (ruta, ion, n, dur, off, k = 0) => {
             let g = '';
-            for (let q = 0; q < n; q++) g += viajero(ion, ruta, dur, -(q * dur / n + k * 0.4).toFixed(2), off);
+            for (let q = 0; q < n; q++) g += viajero(ion === 'ca' ? (q % 2 ? 'mg2' : 'ca2') : ion, ruta, dur, -(q * dur / n + k * 0.4).toFixed(2), off);
             return g;
         };
         const puerta = (x, y, color, alto = 14) => `<rect x="${x - 5}" y="${y - alto / 2}" width="10" height="${alto}" rx="4" fill="${color}" stroke="#17140f"/>`;
@@ -786,7 +769,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
     function svgGlomerulo() {
         const peq = ['h2o', 'na', 'glu', 'k', 'h2o', 'na', 'hco3', 'h2o'];
         const pasan = peq.map((ion, i) => `<g class="nv-pasa" style="animation-delay:${(i * 0.3).toFixed(1)}s">${glifo(ion, 70, 90 + i * 40)}</g>`).join('');
-        const quedan = [0, 1, 2, 3].map(i => `<g class="nv-rebota" style="animation-delay:${(i * 0.55).toFixed(2)}s"><ellipse cx="52" cy="${120 + i * 80}" rx="11" ry="7" fill="#d9604a"/></g><g class="nv-rebota" style="animation-delay:${(i * 0.55 + 0.3).toFixed(2)}s"><circle cx="40" cy="${150 + i * 80}" r="6" fill="${C.purpura}"/></g>`).join('');
+        const quedan = [0, 1, 2, 3].map(i => `<g class="nv-rebota" style="animation-delay:${(i * 0.55).toFixed(2)}s">${svgParticula('rbc', 52, 120 + i * 80, 7.5)}</g><g class="nv-rebota" style="animation-delay:${(i * 0.55 + 0.3).toFixed(2)}s">${svgParticula('alb', 40, 150 + i * 80, 3.8)}</g>`).join('');
         const fam = 'Courier New';
         return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Barrera de filtración glomerular">
             <rect width="${W}" height="${H}" fill="#120f0b"/>
@@ -1015,7 +998,9 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
         pintarFondo(); pintarMedidores(); pintarExplica();
         lienzo.setAttribute('aria-label', `Nefrona animada. ${situacionesNefrona.find(x => x.id === estado.sit).nombre}${estado.farm !== 'ninguno' ? ' con ' + farmacosNefrona.find(x => x.id === estado.farm).nombre : ''}: orina ${enPico() ? num(M.V * 1000 / 1440) + ' ml/min en el pico' : num(M.V) + ' L/día'}, ${Math.round(M.Uosm)} mOsm/kg.`);
         if (estado.seg) pintarDetalle();
-        if (estado.nivel === 'celula') capaCel.innerHTML = svgCelula(estado.seg);
+        // Sin tramo elegido no hay célula que pintar (p. ej. un botón de la ficha
+        // que pone otra situación con la célula abierta: luego vuelve a la nefrona).
+        if (estado.nivel === 'celula' && estado.seg) capaCel.innerHTML = svgCelula(estado.seg);
         if (estado.nivel !== 'nefrona') parts = [];
         dibujar();
     }
@@ -1024,12 +1009,12 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
         $('#nv-glucemia-out').textContent = `${estado.glucemia} mg/dl`;
         actualizar();
     });
-    // Leyenda de partículas con las mismas formas del dibujo.
-    $('#nv-especies').innerHTML = Object.values(ESPECIES).map(e => {
-        const c = document.createElement('canvas'); c.width = c.height = 24;
-        const x = c.getContext('2d'); x.fillStyle = e.color; forma(x, e.forma, 12, 12, RADIO[e.forma] * 3); x.fill();
-        return `<span><img src="${c.toDataURL()}" width="12" height="12" alt="">${e.nombre}</span>`;
-    }).join('') + '<span><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><ellipse cx="6" cy="6" rx="5" ry="3.5" fill="#d9604a"/></svg>Hematíes (no se filtran)</span>';
+    // Leyenda de partículas: la de la tabla única, igual en todos los modelos.
+    $('#nv-especies').innerHTML = leyendaParticulas([
+        ...Object.values(ESPECIES).map(e => ({ clave: e.clave, nombre: e.nombre })),
+        { clave: 'cl', nombre: 'Cl⁻ (en la célula)' }, { clave: 'co2', nombre: 'CO₂ (en la célula)' },
+        { clave: 'rbc', nombre: 'Hematíes (no se filtran)' },
+    ], { envolver: false });
 
     document.addEventListener('click', e => {
         const b = e.target.closest('[data-nefrona-viva]');

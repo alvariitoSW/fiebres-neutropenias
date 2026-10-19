@@ -5,7 +5,7 @@ aprobado**, lo que espera algo del usuario y lo hecho en la última semana. Lo a
 lo único que trabaja el plan socialista. Lo hecho hace más de 7 días y lo descartado pasan a
 `docs/historial/bitacora.md`.
 
-Última sincronización: 2026-10-14 (R1-R3 aprobadas y fusionadas).
+Última sincronización: 2026-10-19 (fase 1 de Marino, R1-R13, fusionada; fase 2 en curso).
 
 ---
 
@@ -101,6 +101,16 @@ esta sección.
   por sesión**; hasta 3 vueltas por tarea (una 4.ª solo si quedan más de 3 fallos). **Fase 1 aprobada** (en el
   tablero como Objetivo M). **Fase 2 aprobada el 15/10** (Objetivo M2, `marino-mapa`): empieza al terminar la fase 1.
   Las fases 3-5 esperan.
+- **Decidido (17-19/10), sobre las maquetas de la fase 2**:
+  - ácido-base: unir lo mejor de A, B y C en una sola herramienta;
+  - el río y el mar es «sublime»;
+  - el agua, en crema y oro;
+  - antes de seguir, el profesor completa las maquetas y les añade la parte de estudio;
+  - la parte de estudio se llama **Mayéutica** (interruptor Explorar | Conceptos | Mayéutica): ayuda a estudiar con
+    preguntas, como Sócrates;
+  - el color del HCO₃⁻ da igual, mientras se distinga de los demás iones;
+  - cada herramienta vive en su apartado (el ácido-base, en Nefrología, junto a la nefrona viva), con un acceso
+    rápido común (B-007).
 
 ### B-004 · El Libro Azul (Fisiopatología UCI): comprobar, estudio y completar · apuntado 2026-10-14
 - **Lo que dijiste**: «y del libro azul de fisiopatología a la UCI, que me faltaría además subir el temario».
@@ -130,6 +140,28 @@ esta sección.
 - **Depende de**: B-001 y de cómo salga B-002 (es el mismo tipo de capítulo).
 - **Tamaño**: grande, 20 tareas.
 
+### B-007 · Acceso rápido a las herramientas grandes · apuntado 2026-10-19
+- **Lo que dijiste**: «que viva en su apartado correspondiente, aunque si vamos a meter maquetas tochas como esta, la
+  nefrona, la de eco cardíaca, ya pondremos un acceso rápido a todas ellas».
+- **Cómo lo entiendo**: tipo `arreglo` (navegación). Cada herramienta grande sigue viviendo en su apartado. Además,
+  hay **un solo sitio** para abrirlas todas de un toque:
+  - nefrona viva y glomérulo (PIF Nefrología);
+  - circulación viva y eco cardíaca;
+  - escena del potasio;
+  - ácido-base vivo y río y mar (fase 2 de Marino, cuando estén en la app);
+  - y las que vengan, como el pulmón con respirador.
+  
+  Cada acceso lleva su nombre, una línea de qué enseña y su icono o miniatura. Abre la herramienta con el enlace
+  cruzado de siempre (`data-especialidad`…), sin un listener nuevo. Dónde va el acceso (un botón en la raíz, una fila
+  arriba de las puertas o dentro del buscador): **(supongo) un botón «Herramientas» en la raíz**, con maqueta antes
+  para elegir.
+- **Para qué**: llegar en un toque a los modelos que explican muchas fichas, sin recordar en qué especialidad viven.
+- **Lo que NO quiero**: mover las herramientas de sitio ni duplicar su código.
+- **Depende de**: que el ácido-base y el río y mar entren en la app (fase 4 de B-003). Se puede hacer antes con las
+  que ya hay y añadirlas después.
+- **Tamaño**: pequeña.
+- **Dudas**: dónde va el botón (se verá en la maqueta).
+
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
 | Fase | Quién | Para qué | Modelo |
@@ -151,23 +183,20 @@ esta sección.
 
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
-| `marino-r8`, `marino-r9` | Plan Marino R8-R9 (Marino Renal, caps. 31-38) | en revisión: [PR #10](https://github.com/alvariitoSW/fiebres-neutropenias/pull/10) y [#12](https://github.com/alvariitoSW/fiebres-neutropenias/pull/12) (la #12 va encima de la #10) | 2026-10-15 | «Ver en el móvil» arriba de cada PR |
-| `marino-r10` | Plan Marino R10 (Marino Abdomen, caps. 39-44) | en revisión: [PR #11](https://github.com/alvariitoSW/fiebres-neutropenias/pull/11) | 2026-10-15 | |
-| `marino-r11` … `marino-r13` | Plan Marino, fase 1: lo que queda (caps. 45-53) | pendiente | 2026-10-14 | Aprobada. **La fase 2 (mapa visual) espera a que termine toda la fase 1** (decisión del usuario, 14/10). |
-| `marino-mapa` | Plan Marino, fase 2: mapa visual (profesor) | pendiente, tras R13 | 2026-10-15 | Aprobada el 15/10. Mandan tus ideas: río y mar; ácido-base sobre el riñón de PIF «que sorprenda». |
+| `marino-mapa` | Plan Marino, fase 2: mapa visual (profesor) | en curso: [PR #16](https://github.com/alvariitoSW/fiebres-neutropenias/pull/16) en borrador; maquetas v1 en [este enlace](https://claude.ai/artifact/XkbXSjmeJF7BeHhQ2wSC4L) | 2026-10-15 | Mapa hecho y maquetas v1 vistas (17/10). Ahora, **maquetas v2**: ácido-base unificado y río y mar en crema y oro, con su Mayéutica (conceptos, preguntas y casos). Se enseñan en el mismo enlace. |
 
 El resto del tablero sigue `aparcada` hasta que apruebes la entrada de la bitácora que le toca.
 
 ## 3. Esperando algo tuyo
 
-- **Aprobar B-001, B-002, B-004, B-005, B-006 y las fases 2-5 de B-003** (o cambiar el orden).
-- **Revisar las PR #10, #11 y #12** (R8-R10). Ya respondiste a sus dudas (15/10):
-  - R8: la gasometría de ejemplo se queda como está, con su nota.
-  - R9: hipermagnesemia grave consultada en la web (Manual Merck), anotada en la ficha.
-  - R10: Ringer lactato consultado en la web (WikEM y StatPearls), anotado.
-- **Revisar las PR #13, #14 y #15** (R11-R13, fase 1 terminada). Decisiones ya respondidas (15/10): los topes de
-  la reversión de R11 se quedan; las abreviaturas de R12 valen; las calculadoras de tóxicos de R13 se quedan solo
-  para adultos (20-300 kg).
+- **Aprobar B-001, B-002, B-004, B-005, B-006, B-007 y las fases 3-5 de B-003** (o cambiar el orden).
+- **Maquetas v2 de la fase 2**: mirarlas en el mismo enlace (https://claude.ai/artifact/XkbXSjmeJF7BeHhQ2wSC4L) y
+  decir qué cambiar, o aprobar la PR #16.
+- **Visto de paso (formas-iones)**:
+  - 2 px de desborde a 360 px en «Nefronas que quedan» (Visual de `erc-acidosis-k`);
+  - el salicilato de `visual-marino-piezas-45-53.js` se distingue solo por el color.
+  
+  **Propuesta de regla**: que los jueces abran también la vista Visual.
 - **Regla sin respuesta**: que los jueces midan también las tablas que se salen de su tarjeta (no solo la página).
   Salió en R5. ¿La apruebas?
 
@@ -206,6 +235,21 @@ El resto del tablero sigue `aparcada` hasta que apruebes la entrada de la bitác
   ayuda. Es una tarea pequeña de solo lectura.
 
 ## 6. Hecho (últimos 7 días)
+
+- 2026-10-19 · **Una sola leyenda de formas de iones** en los modelos vivos (PR #17), aprobada y en la app.
+  - Una tabla única (`js/data/formas-iones.js`) y un dibujo común (`js/core/particulas.js`), que usan la nefrona viva,
+    el glomérulo, el filtro de la TRR, las nefronas que quedan y el potasio.
+  - Leyenda nueva en tres modelos.
+  - Arreglada la célula de la nefrona viva que se quedaba congelada.
+
+- 2026-10-15 · **Plan Marino, revisiones R8-R13** (caps. 31-53 y apéndices, 79 fichas), aprobadas y en la app
+  (PR #10-#15). **La fase 1 de Marino está terminada.**
+  - R8: la gasometría de ejemplo se queda como en el libro, con su nota.
+  - R9: la hipermagnesemia grave, consultada en la web (Manual Merck) y anotada.
+  - R10: el Ringer lactato, consultado en la web (WikEM y StatPearls) y anotado.
+  - R11: los topes de la reversión se quedan.
+  - R12: las abreviaturas valen.
+  - R13: las calculadoras de tóxicos, solo para adultos (20-300 kg).
 
 - 2026-10-15 · **Reglas aprobadas tras R4-R10** (`autonomo/REGLAS.md` §1.8-1.10 y §2.5b, `CLAUDE.md` §5 y §7):
   - erratas de dosis: dosis habitual + nota visible, con consulta web si hay duda;
