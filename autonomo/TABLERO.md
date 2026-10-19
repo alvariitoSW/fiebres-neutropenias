@@ -202,7 +202,7 @@ revisión** (decisión del usuario del 14/10: primero la fase 1 entera). Las fas
 | # | Clave | Qué | Estado | Notas |
 |---|---|---|---|---|
 | 1 | `marino-mapa` | Mapa visual de todo Marino (profesor, modo mapa) | en curso (2026-10-15) | fase 1 terminada |
-| 2 | `formas-iones` | Una sola leyenda de formas de iones y moléculas en toda la app | en revisión (2026-10-19) · PR #17 · lámina: https://claude.ai/artifact/U5DbmWSEDTBVAbZiqFjuLP | Aprobada el 19/10/2026. Empieza **después de la vuelta 2 de las maquetas v2** (decisión del usuario). Encargo debajo. |
+| 2 | `formas-iones` | Una sola leyenda de formas de iones y moléculas en toda la app | hecha (2026-10-19) · PR #17 | Aprobada el 19/10/2026. Empieza **después de la vuelta 2 de las maquetas v2** (decisión del usuario). Encargo debajo. |
 
 **Encargo de `marino-mapa`** (tipo `mapa`, profesor con el modelo potente):
 - **Qué quiero**: el «Mapa visual» de The ICU Book en `autonomo/ideas/marino.md`. Son los pocos modelos grandes,

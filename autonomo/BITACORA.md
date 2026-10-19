@@ -184,14 +184,19 @@ esta sección.
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
 | `marino-mapa` | Plan Marino, fase 2: mapa visual (profesor) | en curso: [PR #16](https://github.com/alvariitoSW/fiebres-neutropenias/pull/16) en borrador; maquetas v1 en [este enlace](https://claude.ai/artifact/XkbXSjmeJF7BeHhQ2wSC4L) | 2026-10-15 | Mapa hecho y maquetas v1 vistas (17/10). Ahora, **maquetas v2**: ácido-base unificado y río y mar en crema y oro, con su Mayéutica (conceptos, preguntas y casos). Se enseñan en el mismo enlace. |
-| `formas-iones` | Una sola leyenda de formas de iones en toda la app (nefrona viva, glomérulo, TRR, potasio, ácido-base, agua) | pendiente, tras la vuelta 2 de las maquetas | 2026-10-19 | Aprobada por el usuario el 19/10 («vamos a unificar todas esas formas en la app, pero antes arregla los fallos»). |
 
 El resto del tablero sigue `aparcada` hasta que apruebes la entrada de la bitácora que le toca.
 
 ## 3. Esperando algo tuyo
 
 - **Aprobar B-001, B-002, B-004, B-005, B-006, B-007 y las fases 3-5 de B-003** (o cambiar el orden).
-- **Maquetas v2 de la fase 2** (cuando estén): mirarlas en el mismo enlace y decir qué cambiar.
+- **Maquetas v2 de la fase 2**: mirarlas en el mismo enlace (https://claude.ai/artifact/XkbXSjmeJF7BeHhQ2wSC4L) y
+  decir qué cambiar, o aprobar la PR #16.
+- **Visto de paso (formas-iones)**:
+  - 2 px de desborde a 360 px en «Nefronas que quedan» (Visual de `erc-acidosis-k`);
+  - el salicilato de `visual-marino-piezas-45-53.js` se distingue solo por el color.
+  
+  **Propuesta de regla**: que los jueces abran también la vista Visual.
 - **Regla sin respuesta**: que los jueces midan también las tablas que se salen de su tarjeta (no solo la página).
   Salió en R5. ¿La apruebas?
 
@@ -230,6 +235,12 @@ El resto del tablero sigue `aparcada` hasta que apruebes la entrada de la bitác
   ayuda. Es una tarea pequeña de solo lectura.
 
 ## 6. Hecho (últimos 7 días)
+
+- 2026-10-19 · **Una sola leyenda de formas de iones** en los modelos vivos (PR #17), aprobada y en la app.
+  - Una tabla única (`js/data/formas-iones.js`) y un dibujo común (`js/core/particulas.js`), que usan la nefrona viva,
+    el glomérulo, el filtro de la TRR, las nefronas que quedan y el potasio.
+  - Leyenda nueva en tres modelos.
+  - Arreglada la célula de la nefrona viva que se quedaba congelada.
 
 - 2026-10-15 · **Plan Marino, revisiones R8-R13** (caps. 31-53 y apéndices, 79 fichas), aprobadas y en la app
   (PR #10-#15). **La fase 1 de Marino está terminada.**
