@@ -62,3 +62,22 @@ Cada ficha ya cita su página con `#page=N`: úsala. Las fichas están revisadas
 - **Cobertura, casos A1 y A2**: piden «encuentra el error» con 3 errores; REGLAS §8 permite como mucho 2.
 - **Capilar**: tres cifras ajustadas frente a la especificación, porque se contradecía. Umbral SvO₂ 48 (no 50), VO₂
   201 en «dependiente» (no 197), B3 con gap de CO₂ 3, y B2 con SaO₂ 98 en el giro. Anotadas en la maqueta.
+
+## 7. Decisiones del 19/10 (noche)
+
+- El usuario: «me gusta, creo que se puede dar una vuelta más a esas maquetas […] tiene que comprobarse bien el
+  contenido, la funcionalidad, tratar de mejorar lo que hay e intentar pulirlo, pero sigue también con el resto del
+  plan socialista, que mañana por la mañana quiero ver avances y te voy validando las cosas».
+- Las preguntas de la página de maquetas siguen sin respuesta. El director toma estas decisiones por defecto (el
+  usuario las validará):
+  - la lupa de pinchar con eco se queda como opcional;
+  - la capnografía va en el capilar, como recomienda el profesor;
+  - las 5 fichas sin modelo llevan por ahora solo Mayéutica, casos y «Para profundizar»; los modelos nuevos para
+    ellas (mucosa viva, vaso que sangra, paciente en la cama) esperan a que el usuario los elija;
+  - el motor del corazón no se amplía todavía. Las 4 fichas de hemodinámica se enlazan con la circulación viva tal
+    como está, y las ampliaciones esperan al usuario.
+- Plan de esta noche:
+  1. Revisar las maquetas, con el auditor y el profesor a la vez.
+  2. Pulirlas.
+  3. Construir los dos modelos en la app (`auto/b1-modelos`).
+  4. En paralelo, la pieza común de Mayéutica en las fichas, con el piloto de fluidos (`auto/b1-estudio`).
