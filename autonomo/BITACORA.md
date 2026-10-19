@@ -186,13 +186,16 @@ esta sección.
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
 
-Ahora mismo no hay nada en marcha: todo lo aprobado está hecho. El resto del tablero sigue `aparcada` hasta que
-apruebes la entrada de la bitácora que le toca.
+| `b1-cobertura` … `b1-estudio` | **Objetivo M5 · Marino en modelos vivos, bloque 1** (caps. 1-11): cobertura, maquetas, modelos y Mayéutica en cada ficha | pendiente | 2026-10-19 | Aprobado el 19/10. Prioridad única: el resto (atlas, Libro Azul, PIF) espera a terminar Marino. |
+
+El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
-- **Aprobar B-001, B-002, B-004, B-005, B-006, B-007 y la fase 5 de B-003** (o cambiar el orden). De B-003 quedan:
-  más modelos grandes del mapa (pulmón con respirador primero) y el estudio por bloques.
+- **Decidido el 19/10**: Marino primero, por bloques (Objetivo M5). B-002, B-004, B-005 y B-006 esperan a terminar
+  Marino. B-001 (preguntas) se hace como la **Mayéutica** de cada ficha, bloque a bloque. B-007 sigue sin aprobar.
+- **Optimizar los agentes del plan** (pedido del usuario el 19/10: más fluido, menos gasto, mejor trabajo): propuesta
+  en el chat, esperando su visto bueno.
 - **Regla sin respuesta**: que los jueces midan también las tablas que se salen de su tarjeta (no solo la página).
   Salió en R5. ¿La apruebas?
 

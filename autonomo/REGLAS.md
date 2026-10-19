@@ -200,5 +200,21 @@ correcta no es siempre la más larga. Si una pregunta se acierta sin haber estud
 **Cuántas**: el recorrido, una por idea importante (no un número fijo); al menos un caso por ficha o por bloque de
 fichas cortas. Cada pregunta enlaza su sitio en el texto («Ver en el texto»).
 
+**Mayéutica** (decisión del usuario, 19/10/2026; ya funciona en el ácido-base vivo y el río y mar):
+- **Nombre e idea**: es la mayéutica socrática, la que cuenta Platón: aprender **a base de preguntas** que te llevan a
+  entender por qué son las cosas. El interruptor de cada ficha pasa a ser **Texto | Visual | Mayéutica**. Visual es
+  el modelo vivo en el estado de esa ficha; Mayéutica, sus conceptos, preguntas y casos.
+- **Dos tipos de pregunta, los dos en cada ficha**:
+  - **Guía socrática**: preguntas encadenadas que te llevan de la mano («¿qué pasa si…?», «¿por qué el riñón tarda
+    días?»). Si da pereza leer, se aprende jugando con el modelo y siguiendo las preguntas.
+  - **Examen**: difíciles, al nivel del MIR o de una oposición, con distractores finos que salen de la propia fuente.
+    Pueden ser algo ambiguas si la fuente lo es, pero siempre con una respuesta defendible desde la fuente y su
+    explicación. La correcta nunca se adivina por la forma (ni la más larga ni la de siempre la misma posición).
+- **Predice y comprueba**: en las preguntas que se responden con el modelo, el modelo no enseña la cifra antes de
+  contestar.
+- **Cobertura**: la Mayéutica y los modelos vivos deben explicar la mayor parte de la ficha (objetivo ≈85 %). Lo que
+  no cubren va al final como **«Para profundizar»**: una pestaña plegable con ese trozo de información, más el enlace
+  directo a su sitio en el texto. Nunca se deja fuera sin decirlo.
+
 **Las preguntas que ya hay** en la app (test sueltos y de redactar) se reconvierten más adelante, en una tarea que
 pedirá el usuario. Hasta entonces no se tocan.

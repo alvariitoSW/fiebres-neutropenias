@@ -289,6 +289,34 @@ es ligera):
   - verificador, auditor ciego (solo lo que cambie de la maqueta) y profesor (≥4);
   - PR en borrador con «Ver en el móvil».
 
+## Objetivo M5 · Marino en modelos vivos, por bloques (prioridad única)
+
+Aprobado por el usuario el 19/10/2026. **Es la prioridad**: lo demás (atlas de eco, El Libro Azul, PIF) espera hasta
+terminar Marino. La app pasa de texto teórico a **modelos vivos + Mayéutica** que explican casi todo el libro
+(REGLAS §8, «Mayéutica»). **Un bloque no empieza hasta que el anterior está terminado y aprobado.**
+
+**Cada bloque, en 5 pasos**:
+1. **Mapa de cobertura** (profesor): para cada ficha, qué modelo vivo la explica y en qué estado, qué cubre la
+   Mayéutica y qué queda para «Para profundizar». Da un porcentaje por ficha y por bloque (objetivo ≈85 %).
+2. **Maquetas** de los modelos nuevos que hagan falta, para que el usuario elija.
+3. **Construir** los modelos en la app.
+4. **Estudio en cada ficha**:
+   - interruptor Texto | Visual | Mayéutica (Visual = el modelo vivo en el estado de la ficha);
+   - Guía socrática + Examen (nivel MIR) + casos;
+   - «Para profundizar» con lo que no se cubre;
+   - la **ruta del bloque**, con el orden de estudio.
+5. Jueces (`--ficha` y `--modelo`), auditor, profesor (≥4) y PR en borrador con «Ver en el móvil».
+
+**Orden de los bloques**: 1-11 → 12-13 → 14-22 → 23-30 (pulmón con respirador) → 31-38 (ya tiene ácido-base vivo y
+río y mar) → 39-44 → 45-53.
+
+| # | Clave | Qué | Estado | Notas |
+|---|---|---|---|---|
+| 1 | `b1-cobertura` | Bloque 1 (caps. 1-11, 23 fichas): mapa de cobertura | pendiente | Grupos: fluidos (río y mar), hemodinámica (circulación viva), oxígeno (capilar y oxígeno, nuevo), accesos vasculares (catéter vivo, nuevo), sin modelo claro (úlcera de estrés, tromboprofilaxis, analgesia, sedación) |
+| 2 | `b1-maquetas` | Bloque 1: maquetas de «capilar y oxígeno» y «catéter vivo» | pendiente | Aprobadas por el usuario el 19/10, tras el mapa de cobertura |
+| 3 | `b1-modelos` | Bloque 1: construir en la app los modelos elegidos | pendiente | |
+| 4 | `b1-estudio` | Bloque 1: Texto \| Visual \| Mayéutica en las 23 fichas, ruta y «Para profundizar» | pendiente | Sustituye a B-001 (preguntas) para este bloque |
+
 ## Lo que aún no está aprobado
 
 Vive en `autonomo/BITACORA.md` (skill `/bitacora`): lo apuntado que espera el visto bueno del usuario, lo que espera
