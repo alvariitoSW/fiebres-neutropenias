@@ -2626,3 +2626,33 @@ en la app, pero antes arregla los fallos»; después, sobre la lámina, «la tab
   está en `autonomo/maquetas/formas-iones.html`.
 - **Regla para lo que venga**: un modelo nuevo con partículas pinta con `js/core/particulas.js`; no se dibujan formas
   propias.
+
+### Ácido-base vivo en la app (octubre 2026, plan socialista, Objetivo M4)
+
+- **Qué**: la maqueta aprobada `autonomo/maquetas/marino-acidobase-v2.html` (PR #16), pasada a la app sin perder
+  nada: instrumento de latón con el móvil, alvéolo, plasma y riñón en tres saltos, carta náutica, laboratorio de 16
+  estados, Explorar | Conceptos | Mayéutica (14 preguntas, repaso y 4 casos), cabecera mini y dock. La medicina ya
+  estaba auditada: no se tocó ni una cifra ni un texto clínico.
+- **Dónde**: vista propia de Nefrología, junto a la nefrona viva (`acidobase` en `nefroLevel`, partial
+  `acidobase-vivo.html`). Código en `acidobase-vivo.js` (modelo y capa de estudio) y `acidobase-vivo-calculo.js`
+  (Ec. 31.1-31.17 y Reglas 1-4, sin DOM); datos en `js/data/acidobase-vivo-data.js`. CSS con prefijo `abv-`.
+- **Cambios para integrarla**:
+  - formas de las partículas con `js/core/particulas.js` (fuera las formas copiadas; el Na⁺ del vaso pasa a oro,
+    como en la tabla);
+  - Motion con `cargarMotion()`, y solo si no hay «reducir movimiento»; todo se construye la primera vez que se
+    abre la vista; el bucle se para con la vista oculta o la pestaña en segundo plano;
+  - lo que en la maqueta eran funciones en los datos («comprobar», botones de los conceptos) va declarado;
+  - sin `data-correcta` ni `data-mal`; aciertos, fallos y casos hechos en `localStorage` (`acidobase-vivo-v1`);
+  - las salidas de la maqueta (nefrona viva, glomérulo, fichas, calculadoras) son enlaces cruzados de verdad;
+    «Ver en el texto» abre la ficha y resalta la línea citada;
+  - el pico al cambiar de paciente (20 vuelos a la vez) se quitó: los platillos se rellenan de golpe;
+  - la nota de las formas se actualizó a la tabla única; «Río y mar» (paso 3) apunta, de momento, a la Tabla 10.2
+    de la ficha de cristaloides.
+- **Accesos** (los mismos mecanismos que el río y mar, para fusionar sin choques):
+  - bloque «Modelos vivos» en el mapa del riñón y en el menú de Libros (`abv-menu-nefro`, `abv-menu-libros`);
+  - buscador global: atajos ocultos con `data-buscar-titulo` en el partial (gasometría, pH, hiato aniónico y
+    osmolal, compensación, alcalosis, salicilatos, EPOC, preguntas);
+  - un botón en 11 fichas (`mr-acidobase-*`, `mr-alcalosis-*`, `mr-cetoacidosis`, `mr-lactato-bicarbonato`,
+    `mr-osmolalidad`, `mt-alcoholes`, `mt-salicilatos`, `fisio-acidobase-*`) que abre el estado de su tema con
+    `data-acidobase-vivo` (Nefrología lo declara en `modelosVivos` de su API; lo resuelve el listener de
+    `home/index.js`).

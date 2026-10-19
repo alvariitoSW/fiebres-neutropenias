@@ -1,0 +1,216 @@
+<!-- Ácido-base vivo (Nefrología, junto a la nefrona viva). La maqueta aprobada autonomo/maquetas/marino-acidobase-v2.html
+     pasada a la app: lo monta js/modules/nefrologia/acidobase-vivo.js (datos en js/data/acidobase-vivo-data.js).
+     Medicina: fichas de Marino (The ICU Book, 5.ª ed.) de la app y PIF Nefrología. Los pacientes se inventan; la medicina, no. -->
+<button class="back-btn btn-volver-nefro-kidney">← VOLVER</button>
+<div class="abv-raiz" id="abv-raiz">
+<div class="abv-mini" id="abv-mini" aria-hidden="true">
+  <svg id="abv-mini-aguja" viewBox="-24 -24 48 30"></svg>
+  <span>pH</span><b id="abv-mini-ph">7,40</b><span class="abv-pal" id="abv-mini-pal">normal</span><span id="abv-mini-paso">paso 0</span>
+</div>
+
+<div class="abv-main">
+
+  <header class="abv-cab">
+    <p class="abv-eyebrow">Modelo vivo · Ácido-base</p>
+    <h1>El pH cuelga de un cociente</h1>
+    <p class="abv-idea">El pulmón carga el CO₂; el riñón, el HCO₃⁻. La compensación <span class="hl-azul">limita, pero no corrige</span>. <span class="abv-org abv-org-f">ficha mr-acidobase-analisis#mr-compensacion-concepto</span></p>
+  </header>
+
+  <div class="abv-interruptor" role="tablist" aria-label="Cómo quieres estudiar">
+    <button type="button" role="tab" aria-selected="true" data-modo="explorar">Explorar</button>
+    <button type="button" role="tab" aria-selected="false" data-modo="conceptos">Conceptos</button>
+    <button type="button" role="tab" aria-selected="false" data-modo="preguntas">Mayéutica</button>
+  </div>
+
+  <!-- El instrumento: esfera (A) + móvil de dos platillos (C) + cociente con dueño (B) -->
+  <section class="abv-instrumento" id="abv-instrumento" aria-label="El instrumento: el pH cuelga del cociente PaCO₂ / HCO₃⁻">
+    <p class="abv-teorico" id="abv-teorico" hidden>Instante teórico: aún sin compensar</p>
+    <svg id="abv-inst" viewBox="0 0 360 330" role="img" aria-label="Esfera del pH de 6,8 a 7,8 con la escala de hidrogeniones por dentro; de su eje cuelga un móvil con el platillo del CO₂ (lo carga el pulmón) y el del HCO₃⁻ (lo carga el riñón)"></svg>
+    <p class="abv-cociente" id="abv-cociente" aria-live="polite"></p>
+    <p class="abv-inst-aviso" id="abv-inst-aviso" hidden></p>
+    <div class="abv-leyenda-iones abv-leyenda-fija" id="abv-leyenda-inst" aria-label="Cada ion tiene su forma"></div>
+  </section>
+
+  <!-- ═════════════ EXPLORAR ═════════════ -->
+  <div id="abv-m-explorar" class="abv-bloque">
+    <section class="abv-bloque" aria-label="Qué está pasando">
+      <div class="abv-paso-tit"><b id="abv-paso-nombre"></b><span id="abv-paso-trastorno"></span></div>
+      <p class="abv-frase" id="abv-frase" aria-live="polite"></p>
+      <p class="abv-origenes" id="abv-frase-org"></p>
+      <dl class="abv-datos" id="abv-datos"></dl>
+      <details class="abv-plegable" id="abv-de-donde-det"><summary>De dónde sale cada cifra</summary><div class="abv-det" id="abv-de-donde"></div></details>
+      <div class="abv-fila" id="abv-salidas-paso"></div>
+    </section>
+
+    <section class="abv-bloque" aria-labelledby="abv-t-cuerpo">
+      <h2 class="abv-rotulo" id="abv-t-cuerpo"><i>I</i>Dentro del cuerpo</h2>
+      <div class="abv-cadena" id="abv-cadena">
+        <svg class="abv-hilo" viewBox="0 0 360 96" preserveAspectRatio="none" aria-hidden="true" id="abv-hilo-sangre"></svg>
+        <button type="button" class="abv-obj" data-obj="alveolo" aria-pressed="false"><span class="abv-lente"><svg id="abv-lente-alveolo" viewBox="-42 -42 84 84" aria-hidden="true"></svg></span><b>ALVÉOLO</b><small id="abv-obj-alveolo-l"></small></button>
+        <button type="button" class="abv-obj" data-obj="plasma" aria-pressed="true"><span class="abv-lente"><svg id="abv-lente-plasma" viewBox="-42 -42 84 84" aria-hidden="true"></svg></span><b>PLASMA</b><small id="abv-obj-plasma-l"></small></button>
+        <button type="button" class="abv-obj" data-obj="rinon" aria-pressed="false"><span class="abv-lente"><img src="js/modules/nefrologia/img/nefrona-anatomia.jpg" alt="" loading="lazy" width="84" height="84"></span><b>RIÑÓN</b><small id="abv-obj-rinon-l"></small></button>
+      </div>
+
+      <!-- Cada vista vive en su «casa»; las tarjetas de estudio la toman prestada y la devuelven -->
+      <div class="abv-casa" id="abv-casa-alveolo" hidden>
+        <div class="abv-vista" id="abv-vista-alveolo">
+          <p class="abv-vista-tit">① Alvéolo · el pulmón sopla el CO₂</p>
+          <div class="abv-lamina" id="abv-lam-alveolo"><svg id="abv-svg-alveolo" viewBox="0 0 360 250" role="img" aria-label="Pulmón grabado a plumilla; las volutas de CO₂ salen con cada espiración"></svg><canvas id="abv-cv-alveolo" aria-hidden="true"></canvas></div>
+          <p class="abv-frase-mando" id="abv-alveolo-frase"></p>
+          <p class="abv-origenes" id="abv-alveolo-org"></p>
+        </div>
+      </div>
+
+      <div class="abv-casa" id="abv-casa-plasma">
+        <div class="abv-vista" id="abv-vista-plasma">
+          <p class="abv-vista-tit">② Plasma · la sangre es neutra</p>
+          <div class="abv-lamina" id="abv-lam-plasma"><svg id="abv-svg-plasma" viewBox="0 0 360 352" role="img" aria-label="Arriba, el vaso con los iones; abajo, dos columnas de pesas: cationes frente a aniones; el hiato es el hueco rotulado"></svg><canvas id="abv-cv-plasma" aria-hidden="true"></canvas></div>
+          <div class="abv-leyenda-iones" id="abv-leyenda-iones"></div>
+          <label class="abv-mando" for="abv-alb-col"><span class="abv-val">Albúmina del paciente <output id="abv-alb-col-out">4,5 g/dL</output></span>
+            <input type="range" id="abv-alb-col" min="2" max="4.5" step="0.1" value="4.5" data-mando="alb"></label>
+          <p class="abv-frase-mando" id="abv-alb-frase"></p>
+          <details class="abv-plegable"><summary>Nota de fuentes: ¿cuánto pesa la albúmina?</summary><div class="abv-det">
+            <p>La misma ficha da dos cifras y no se elige ninguna: la <strong>Tabla 31.2</strong> pone la albúmina en <strong>15 mEq/L</strong> de los 23 de aniones no medidos; la <strong>Ec. 31.15</strong> da unos <strong>2,5 mEq por gramo</strong>, que con 4,5 g/dL serían 11,25. <span class="abv-org abv-org-f">ficha mr-acidobase-gaps#mr-ag-formula</span><span class="abv-org abv-org-f">ficha mr-acidobase-gaps#mr-ag-albumina</span></p>
+            <p>El bloque de la columna parte del alto de la Tabla 31.2 y encoge 2,5 por cada g/dL que falta: su alto es <span class="abv-org abv-org-i">ilustrativo</span>, por eso no lleva cifra. El hiato corregido sí es el de la Ec. 31.15.</p></div></details>
+          <p class="abv-origenes" id="abv-plasma-org"></p>
+          <div class="abv-vista" id="abv-vista-osmoles">
+            <p class="abv-vista-tit">La sal que el cálculo no ve · hiato osmolal</p>
+            <svg id="abv-svg-osm" viewBox="0 0 360 156" role="img" aria-label="Osmolalidad medida frente a calculada: el hueco es lo que la fórmula no ve"></svg>
+            <label class="abv-mando" for="abv-osm-col"><span class="abv-val">Osmolalidad medida <output id="abv-osm-col-out">290</output></span>
+              <input type="range" id="abv-osm-col" min="280" max="340" step="1" value="290" data-mando="osm"></label>
+            <p class="abv-frase-mando" id="abv-osm-frase"></p>
+            <p class="abv-origenes" id="abv-osm-org"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="abv-casa" id="abv-casa-rinon" hidden>
+        <div class="abv-vista" id="abv-vista-rinon">
+          <p class="abv-vista-tit">③ Riñón · zoom en tres saltos</p><p class="abv-sub">Corte anatómico (ilustración) → nefrona → célula del tramo.</p>
+          <div class="abv-saltos" role="group" aria-label="Nivel del zoom">
+            <button type="button" data-nivel="0" aria-pressed="false">Corte</button>
+            <button type="button" data-nivel="1" aria-pressed="false">Nefrona</button>
+            <button type="button" data-nivel="2" aria-pressed="true">Célula</button>
+          </div>
+          <div class="abv-rinon" id="abv-rinon" data-nivel="2">
+            <div class="abv-capa" id="abv-capa-foto" data-on="0">
+              <div class="abv-medallon"><img id="abv-foto-rinon" src="js/modules/nefrologia/img/nefrona-anatomia.jpg" alt="Corte anatómico del riñón (ilustración de la nefrona viva): corteza, médula, nefronas y túbulo colector" loading="lazy"><span class="abv-lupa" aria-hidden="true"></span></div>
+              <p class="abv-pie-foto">Corte anatómico (ilustración de la nefrona viva). El anillo: un túbulo.</p>
+            </div>
+            <div class="abv-capa" id="abv-capa-nefrona" data-on="0"><svg id="abv-svg-nefrona" viewBox="0 0 360 340" role="img" aria-label="Nefrona esquemática con dos tramos marcados: 1, túbulo proximal; 2, túbulo colector"></svg></div>
+            <div class="abv-capa" id="abv-capa-celula" data-on="1"><svg id="abv-svg-celula" viewBox="0 0 360 340" role="img" aria-label="Célula del tramo: luz a la izquierda, sangre a la derecha, transportadores en la membrana"></svg><canvas id="abv-cv-celula" aria-hidden="true"></canvas></div>
+          </div>
+          <p class="abv-sub" id="abv-celula-clave"></p>
+          <div class="abv-seg" role="group" aria-label="Tramo">
+            <button type="button" data-tramo="proximal" aria-pressed="false">Proximal</button>
+            <button type="button" data-tramo="colector" aria-pressed="true">Colector</button>
+          </div>
+          <div class="abv-seg" role="group" aria-label="Cloro en la luz del colector" id="abv-seg-clluz">
+            <button type="button" data-clluz="bajo" aria-pressed="false">Cl⁻ en la luz: bajo</button>
+            <button type="button" data-clluz="alto" aria-pressed="true">Cl⁻ en la luz: alto</button>
+          </div>
+          <div class="abv-seg" role="group" aria-label="Aldosterona" id="abv-seg-aldo">
+            <button type="button" data-aldo="normal" aria-pressed="true">Aldosterona normal</button>
+            <button type="button" data-aldo="alta" aria-pressed="false">Aldosterona alta</button>
+          </div>
+          <p class="abv-frase-mando" id="abv-rinon-frase"></p>
+          <p class="abv-origenes" id="abv-rinon-org"></p>
+          <div class="abv-fila" id="abv-rinon-salidas"></div>
+          <details class="abv-plegable"><summary>Así es en el libro (Fig. 33.1)</summary>
+            <div class="abv-det"><figure class="abv-figura"><img loading="lazy" id="abv-fig33" src="js/modules/libros/img/mar-fig33-1-celulas-colector.jpg" alt="Figura 33.1 de Marino: célula principal (reabsorbe Na⁺ y secreta K⁺), intercalar que reabsorbe HCO₃⁻ y secreta H⁺, e intercalar con pendrina que secreta HCO₃⁻">
+              <figcaption>Fig. 33.1 (Marino, The ICU Book): luz a la izquierda, sangre a la derecha, como en el dibujo. <span class="abv-org abv-org-f">ficha mr-alcalosis-mecanismos#mr-alc-pendrina</span></figcaption></figure></div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="abv-bloque" aria-labelledby="abv-t-carta">
+      <h2 class="abv-rotulo" id="abv-t-carta"><i>II</i>La carta de la gasometría</h2>
+      <div class="abv-casa" id="abv-casa-carta">
+        <div class="abv-vista" id="abv-vista-carta">
+          <div class="abv-carta"><svg id="abv-svg-carta" viewBox="0 0 360 322" role="img" aria-label="Carta náutica: PaCO₂ frente a HCO₃⁻, isolíneas de pH, líneas de compensación y el paciente como un cometa"></svg></div>
+          <p class="abv-lema">Primero por el eje, después por la línea. El mapa no ve el cloro: el delta sí.</p>
+          <p class="abv-frase-mando" id="abv-carta-frase"></p>
+          <div class="abv-leyenda-lineas" id="abv-leyenda-lineas"></div>
+          <details class="abv-plegable"><summary>Nota de fuentes: Marino frente a Nefrología al día</summary><div class="abv-det">
+            <p>Las líneas son las de Marino (Fig. 31.2, desde HCO₃⁻ 24). Nefrología al día da otras: desde HCO₃⁻ 25; acidosis metabólica con 0,85-1,2; respiratorias 0,1 y 0,3 (acidosis) o 0,2-0,25 y 0,5 (alcalosis). Ninguna gana: cámbialas en Laboratorio · Fuente. <span class="abv-org abv-org-f">ficha mr-acidobase-analisis#mr-comp-acidosis-met</span><span class="abv-org abv-org-f">ficha fisio-acidobase-acidosis</span></p></div></details>
+          <p class="abv-origenes" id="abv-carta-org"></p>
+        </div>
+      </div>
+    </section>
+
+    <details class="abv-plegable" id="abv-lab">
+      <summary>Laboratorio: mueve tú el paciente</summary>
+      <div class="abv-det" id="abv-lab-cuerpo"></div>
+    </details>
+
+    <details class="abv-plegable">
+      <summary>Límites de este modelo</summary>
+      <div class="abv-det">
+        <p>Marino pide <strong>desconfiar de la sencillez</strong> del modelo clásico del cociente: el CO₂ del plasma está casi todo como HCO₃⁻, así que es difícil darle al HCO₃⁻ una identidad independiente; y el HCO₃⁻ no actúa como tampón en el rango fisiológico de pH. Existe una visión fisicoquímica alternativa, la de Peter Stewart, que el autor considera más válida. <span class="abv-org abv-org-f">ficha mr-acidobase-analisis#mr-stewart</span></p>
+        <p>Este instrumento usa el modelo clásico porque es el de las reglas y fórmulas de la ficha.</p>
+      </div>
+    </details>
+
+    <details class="abv-plegable">
+      <summary>Notas de fidelidad y lo que es ilustrativo</summary>
+      <div class="abv-det">
+        <p><strong>Cómo sale el pH.</strong> [H⁺] = 24 × PaCO₂ / HCO₃⁻ (Ec. 31.2) y pH = −log [H⁺] (Ec. 31.1), con [H⁺] en nEq/L: pH = 9 − log₁₀ [H⁺]. <span class="abv-org abv-org-f">ficha mr-acidobase-analisis#mr-ecuacion-h</span> Ningún pH de esta página está escrito a mano: se calcula.</p>
+        <p><strong>Dos ejemplos del cap. 31 no cumplen la Ec. 31.2.</strong> «pH 7,28, PaCO₂ 23, HCO₃⁻ 14»: 24 × 23 / 14 = 39 nEq/L, pH 7,40. «PaCO₂ 26, pH 7,50, HCO₃⁻ 14»: 45 nEq/L, pH 7,35. La ficha reproduce el primero (Regla 3) con una nota de fidelidad; el segundo (Regla 4) va sin nota. Aquí se usan gasometrías coherentes. <span class="abv-org abv-org-f">ficha mr-acidobase-analisis#mr-regla-3</span></p>
+        <p><strong>Ilustrativo:</strong> el ritmo del pulmón y las volutas (Marino da la PaCO₂ esperada, no la ventilación minuto); cuántas partículas hay (van en proporción, no son mEq contados); las duraciones de las animaciones (el pulmón ≈ 1,5 s y el riñón ≈ 4 s, en ese orden); el paso 5 (tendencia: la ficha no da la curva de bajada); el Cl⁻ que ocupa el sitio cuando baja la albúmina.</p>
+        <p><strong>Las formas son la identidad</strong> (nunca solo el color), las de la tabla única de la app, iguales en la nefrona viva y en los demás modelos: HCO₃⁻ triángulo, H⁺ cruz, NH₄⁺ pentágono, Na⁺ círculo, K⁺ cuadrado, Cl⁻ rombo, aniones no medidos (cetoácido, lactato, fórmico) estrella, CO₂ voluta y urea hexágono.</p>
+        <p><strong>Límite del laboratorio:</strong> los mandos se detienen si el pH sale de 6,80-7,80 <span class="abv-org abv-org-g">fisiología general</span>: fuera de ese rango no es un paciente posible.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ═════════════ CONCEPTOS ═════════════ -->
+  <div id="abv-m-conceptos" class="abv-bloque" hidden>
+    <article class="abv-concepto abv-entra" id="abv-concepto" aria-live="polite"></article>
+  </div>
+
+  <!-- ═════════════ MAYÉUTICA (preguntas) ═════════════ -->
+  <div id="abv-m-preguntas" class="abv-bloque" hidden>
+    <p class="abv-sub abv-mayeutica">Mayéutica: preguntas para pensar, como Sócrates. Primero el recorrido, luego lo que fallaste y al final los casos.</p>
+    <div id="abv-preg" class="abv-bloque"></div>
+  </div>
+
+  <p class="abv-pie">Marino PL. The ICU Book, 5.ª ed., caps. 10, 23, 31-33, 35, 52-53 · Nefrología al día (PIF Nefrología) · corte anatómico: ilustración de la nefrona viva.</p>
+</div>
+
+<!-- Lo que encuentra el buscador global (core/search.js): cada entrada es un enlace cruzado normal que abre el modelo
+     en un estado. Ocultas: solo se pulsan desde el buscador. -->
+<div hidden>
+  <button type="button" data-especialidad="nefrologia" data-view="acidobase" data-acidobase-vivo="" data-buscar-titulo="Ácido-base vivo: gasometría, pH y compensación (modelo vivo)" data-buscar-bloque="Nefrología · Modelos vivos" data-buscar-palabras="acido-base vivo ácido-base acidobase gasometría gasometria ph pH compensación compensacion paco2 hco3 bicarbonato cociente">Ácido-base vivo: gasometría, pH y compensación (modelo vivo)</button>
+  <button type="button" data-especialidad="nefrologia" data-view="acidobase" data-acidobase-vivo="paso-2" data-buscar-titulo="Ácido-base vivo: la compensación de una acidosis metabólica (CAD)" data-buscar-bloque="Nefrología · Modelos vivos" data-buscar-palabras="compensación compensacion acidosis metabólica cetoacidosis cad paco2 esperada regla 3">Ácido-base vivo: la compensación de una acidosis metabólica (CAD)</button>
+  <button type="button" data-especialidad="nefrologia" data-view="acidobase" data-acidobase-vivo="paso-3" data-buscar-titulo="Ácido-base vivo: hiato aniónico y delta (CAD con salino)" data-buscar-bloque="Nefrología · Modelos vivos" data-buscar-palabras="hiato aniónico hiato anionico anion gap delta hiperclorémica salino">Ácido-base vivo: hiato aniónico y delta (CAD con salino)</button>
+  <button type="button" data-especialidad="nefrologia" data-view="acidobase" data-acidobase-vivo="vomitos" data-buscar-titulo="Ácido-base vivo: alcalosis metabólica por vómitos (pendrina y cloro)" data-buscar-bloque="Nefrología · Modelos vivos" data-buscar-palabras="alcalosis metabólica vómitos cloro pendrina alcalosis">Ácido-base vivo: alcalosis metabólica por vómitos (pendrina y cloro)</button>
+  <button type="button" data-especialidad="nefrologia" data-view="acidobase" data-acidobase-vivo="metanol" data-buscar-titulo="Ácido-base vivo: hiato osmolal (metanol y etilenglicol)" data-buscar-bloque="Nefrología · Modelos vivos" data-buscar-palabras="hiato osmolal osmolalidad metanol etilenglicol tóxicos">Ácido-base vivo: hiato osmolal (metanol y etilenglicol)</button>
+  <button type="button" data-especialidad="nefrologia" data-view="acidobase" data-acidobase-vivo="salicilatos" data-buscar-titulo="Ácido-base vivo: salicilatos en la carta de la gasometría" data-buscar-bloque="Nefrología · Modelos vivos" data-buscar-palabras="salicilatos aspirina alcalosis respiratoria acidosis mixta">Ácido-base vivo: salicilatos en la carta de la gasometría</button>
+  <button type="button" data-especialidad="nefrologia" data-view="acidobase" data-acidobase-vivo="epoc-cronica" data-buscar-titulo="Ácido-base vivo: acidosis respiratoria crónica (EPOC)" data-buscar-bloque="Nefrología · Modelos vivos" data-buscar-palabras="acidosis respiratoria crónica epoc hipercapnia compensación renal">Ácido-base vivo: acidosis respiratoria crónica (EPOC)</button>
+  <button type="button" data-especialidad="nefrologia" data-view="acidobase" data-acidobase-vivo="mayeutica" data-buscar-titulo="Ácido-base vivo: preguntas y casos clínicos (Mayéutica)" data-buscar-bloque="Nefrología · Modelos vivos" data-buscar-palabras="preguntas casos clínicos mayéutica ácido-base gasometría">Ácido-base vivo: preguntas y casos clínicos (Mayéutica)</button>
+</div>
+
+<p class="abv-toast" id="abv-toast" aria-live="polite" hidden></p>
+
+<nav class="abv-dock" id="abv-dock" aria-label="Pasos y reloj">
+  <div id="abv-dock-explorar">
+    <div class="abv-chips" id="abv-chips" role="group" aria-label="Pasos del caso guiado"></div>
+    <div class="abv-fila-reloj">
+      <div class="abv-reloj" aria-label="Reloj: minutos, horas, días">
+        <div class="abv-zonas"><span data-z="min">minutos</span><span data-z="h">horas</span><span data-z="dias">días</span></div>
+        <div class="abv-barra"><span>pulmón</span><i id="abv-barra-pulmon"><b></b></i><span>30-120 min</span></div>
+        <div class="abv-barra"><span>riñón</span><i id="abv-barra-rinon"><b></b></i><span>2-3 días</span></div>
+      </div>
+      <button type="button" class="abv-sig" id="abv-sig">Siguiente ▸</button>
+    </div>
+  </div>
+  <div id="abv-dock-estudio" hidden>
+    <div class="abv-dock-est">
+      <button type="button" class="abv-b" id="abv-est-ant" aria-label="Anterior">◂</button>
+      <div class="abv-centro"><div class="abv-prog" id="abv-est-prog"></div><span id="abv-est-txt"></span></div>
+      <button type="button" class="abv-b" id="abv-est-sig" aria-label="Siguiente">▸</button>
+    </div>
+  </div>
+</nav>
+</div>

@@ -7,6 +7,7 @@
 import { createViewSwitcher } from '../../core/navigation.js';
 import { openCorkboardTopic } from '../../core/corkboard.js';
 import { initNefronaViva } from './nefrona-viva.js';
+import { initAcidoBaseVivo } from './acidobase-vivo.js';
 import { initRinon } from './rinon.js';
 import { init as initFisiologia } from './fisiologia.js';
 import { init as initHta } from './hta.js';
@@ -46,9 +47,13 @@ function mostrarEnPreparacion() {
 }
 
 export function init() {
+    // Ácido-base vivo: vista propia junto a la nefrona viva. Se construye la primera vez que se abre y su
+    // animación solo corre mientras se ve.
+    const acidoBase = initAcidoBaseVivo(document.getElementById('abv-raiz'));
     const nefroLevel = createViewSwitcher({
         kidney: document.getElementById('nefro-kidney-view'),
         nefrona: document.getElementById('nefro-menu-view'),
+        acidobase: document.getElementById('nefro-acidobase-view'),
         diureticosAsa: document.getElementById('nefro-diureticos-asa-view'),
         hta: document.getElementById('nefro-hta-view'),
         erc: document.getElementById('nefro-erc-view'),
@@ -57,7 +62,7 @@ export function init() {
         tratamiento: document.getElementById('nefro-tratamiento-view'),
         trr: document.getElementById('nefro-trr-view'),
         trasplanteRenal: document.getElementById('nefro-trasplante-renal-view'),
-    });
+    }, (key) => (key === 'acidobase' ? acidoBase.mostrar() : acidoBase.ocultar()));
 
     document.querySelectorAll('.btn-volver-nefro-kidney').forEach(b =>
         b.addEventListener('click', () => { nefroLevel.show('kidney'); nefrona.reset(); }));
@@ -113,5 +118,8 @@ export function init() {
         // desde otras especialidades como desde la propia Nefrología
         // (guía transversal IRA/ERC, PNT del mapa del riñón).
         irAFicha: nefroLevel.irAFicha,
+        // Modelos vivos que se abren en un estado (data-acidobase-vivo="paso-3", "vomitos"…): los
+        // resuelve el enlace cruzado de siempre de home/index.js. abrir() cambia él solo a su vista.
+        modelosVivos: { acidobaseVivo: (ancla) => { nefroLevel.show('acidobase'); acidoBase.abrir(ancla); } },
     };
 }

@@ -183,6 +183,11 @@ export function init() {
         if (!btn) return;
         const { especialidad, view, panel, tab, trasplante, resaltar, pulsar, enVisual } = btn.dataset;
         irAResultadoBusqueda({ especialidad, view, panel, tab, trasplante });
+        // Modelos vivos que se abren en un estado (data-agua-viva="salino"…): cada
+        // especialidad los declara en `modelosVivos` de su API ({ aguaViva: abrir }).
+        Object.values(apis).forEach(api => Object.entries(api?.modelosVivos ?? {}).forEach(([clave, abrir]) => {
+            if (btn.dataset[clave] !== undefined) abrir(btn.dataset[clave]);
+        }));
         // data-en-visual: abre la ficha de destino directamente en su vista Visual
         if (enVisual !== undefined && tab) irAlVisual(document.getElementById(tab));
         pulsar?.split(/\s+/).forEach(id => document.getElementById(id)?.click());
