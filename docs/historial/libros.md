@@ -455,3 +455,29 @@ Parte: `autonomo/partes/2026-10-15-marino-r12.md`.
 - la tabla French completa.
 
 Parte: `autonomo/partes/2026-10-15-marino-r13.md`.
+
+## Río y mar: el agua del cuerpo, modelo vivo (plan Marino, fase 4; octubre 2026)
+
+`agua-viva` (tablero, Objetivo M4). Pasa a la app la maqueta aprobada `autonomo/maquetas/marino-agua-v2.html`
+(PR #16) sin tocar la medicina, ya auditada. Vive en Libros, como vista propia `aguaViva` de `librosLevel`:
+- `js/modules/libros/agua-viva.html` (partial), `agua-viva-escena.js` (estuario, mareógrafos, lectura Na⁺ · Posm ·
+  Hto, partículas, lupas de la orilla y de la neurona, bucle que se para en reposo o con la vista oculta) y
+  `agua-viva.js` (dock de 5 pestañas, Explorar | Conceptos | Mayéutica, 14 preguntas, repaso y 3 casos).
+- Datos y modelo, sin DOM, en `js/data/agua-viva-data.js` (fluidos, `derivar()`, conceptos, preguntas, casos y los
+  estados con nombre). Las acciones de los conceptos pasan a ser datos (`poner`, `cambiar`, `sumar`, `bolo`, `lupa`).
+- Partículas con `core/particulas.js`. Dos formas nuevas en `formas-iones.js`: albúmina al 25 % (`grano1`, el
+  grano con un halo, como pedía la lámina) y osmolitos de la neurona (`pajarita`): antes eran círculos ámbar, iguales
+  que la albúmina salvo el color. La sangre que se va por la herida son hematíes (antes, gotas rojas con la forma
+  del agua).
+- Mayéutica: aciertos y fallos en `localStorage` (`agua-viva-mayeutica-v1`, en try/catch), con «Empezar de cero».
+  Las respuestas buenas solo están en los datos, no en el HTML.
+- «Ver en el texto» y «Repasar en la ficha» son enlaces cruzados reales a la ficha y su línea (`rutaDePanel` de
+  `core/search.js`). La calculadora del caso 1 abre la del volumen de reanimación.
+
+Cómo se llega: botón «Río y mar» en el bloque «Modelos vivos» de los menús de Libros y de Nefrología; el buscador
+(atajos con `data-buscar-titulo`, nuevo en `core/search.js`); y un botón en las fichas que tocan (`mar-cristaloides`
+×4, `mar-coloides`, `mar-retorno-venoso`, `mc-hemorragico-clasificacion`, `mc-hemorragico-fluidos`,
+`mr-osmolalidad`, `mr-hipernatremia`, `mr-hiponatremia-dx`, `mr-hiponatremia-tto`), cada uno con
+`data-agua-viva="<estado>"`. El listener delegado de `home/index.js` llama a `modelosVivos` de la API de cada
+especialidad (sin listener nuevo). El enlace al ácido-base (`data-acidobase-vivo="paso-3"`) lo resuelve la tarea
+`acidobase-vivo`.

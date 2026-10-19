@@ -88,6 +88,10 @@ const PANEL_NAV = {
     'panel-manual-umi-tabs': { especialidad: 'sobrevivirUmi', view: 'manualUmi', bloque: 'Manual UMI Negrín' },
 };
 
+// Cómo llegar a la ficha de un panel (para enlaces cruzados construidos en vivo,
+// p. ej. el «Ver en el texto» de los modelos vivos).
+export const rutaDePanel = panelId => PANEL_NAV[panelId];
+
 // Vistas sin cuaderno de campo cuyas tarjetas (.card de primer nivel con
 // su <h3>) también se indexan: cada una dice cómo llegar — especialidad +
 // vista raíz + los botones YA existentes que hay que pulsar, en orden —, y
@@ -141,6 +145,19 @@ function construirIndice() {
                 tituloBusqueda: titulo.toLowerCase(),
                 textoBusqueda: textoFuente(card).toLowerCase(),
             });
+        });
+    });
+    // Atajos: botones de enlace cruzado con data-buscar-titulo (p. ej. los
+    // estados del río y mar). Al elegirlos se pulsa el propio botón.
+    document.querySelectorAll('[data-especialidad][data-buscar-titulo]').forEach((el, k) => {
+        const titulo = el.dataset.buscarTitulo;
+        indice.push({
+            clave: `atajo-${k}`,
+            atajo: el,
+            titulo,
+            nav: { especialidad: el.dataset.especialidad, bloque: el.dataset.buscarBloque || '' },
+            tituloBusqueda: titulo.toLowerCase(),
+            textoBusqueda: `${titulo} ${el.dataset.buscarPalabras || ''}`.toLowerCase(),
         });
     });
     return indice;
@@ -249,6 +266,7 @@ export function initSearch({ navegar }) {
                 const item = indice.find(i => i.clave === btn.dataset.clave);
                 if (!item) return;
                 cerrar();
+                if (item.atajo) { item.atajo.click(); return; }
                 if (item.el) {
                     navegar?.({ especialidad: item.nav.especialidad, view: item.nav.view });
                     item.nav.botones.forEach(id => document.getElementById(id)?.click());

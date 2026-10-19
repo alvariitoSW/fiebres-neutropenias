@@ -32,6 +32,8 @@ function partesDe(forma, r, e = {}) {
         case 'grano': return [lleno(elipse(1.6 * r, 1.6 * r))];
         case 'cuadrado': return [lleno(`M${n2(-0.92 * r)} ${n2(-0.92 * r)}h${n2(1.84 * r)}v${n2(1.84 * r)}h${n2(-1.84 * r)}Z`)];
         case 'rombo': return [lleno(`M0 ${n2(-1.35 * r)}L${n2(0.92 * r)} 0L0 ${n2(1.35 * r)}L${n2(-0.92 * r)} 0Z`)];
+        case 'grano1': return [trazo(elipse(2.4 * r, 2.4 * r), 0.2, { opacidad: 0.6, sinBorde: true }), ...partesDe('grano', r)];
+        case 'pajarita': return [lleno(`M${n2(-1.3 * r)} ${n2(-0.95 * r)}L0 0L${n2(-1.3 * r)} ${n2(0.95 * r)}ZM${n2(1.3 * r)} ${n2(-0.95 * r)}L0 0L${n2(1.3 * r)} ${n2(0.95 * r)}Z`)];
         case 'rombo1': case 'rombo2': {
             const halo = rr => trazo(elipse(rr, rr), 0.2, { opacidad: 0.6, sinBorde: true });
             return [halo(1.85 * r), ...(forma === 'rombo2' ? [halo(2.45 * r)] : []), ...partesDe('rombo', r)];
@@ -69,7 +71,7 @@ function partesDe(forma, r, e = {}) {
     return [lleno(elipse(r, r))];
 }
 // Hasta dónde llega cada forma, en radios (para que quepa en un icono).
-const ALCANCE = { gota: 1.55, grano: 1.7, rombo1: 2, rombo2: 2.6, caCitrato: 2.05, aro: 2.05, estrella: 1.5, celula: 1.6, ovalo: 1.45, ovaloHueco: 1.45, disco: 1.4, copo: 1.5 };
+const ALCANCE = { gota: 1.55, grano: 1.7, grano1: 2.5, pajarita: 1.35, rombo1: 2, rombo2: 2.6, caCitrato: 2.05, aro: 2.05, estrella: 1.5, celula: 1.6, ovalo: 1.45, ovaloHueco: 1.45, disco: 1.4, copo: 1.5 };
 
 // Grosor del borde oscuro: fino, pero visible también en partículas pequeñas.
 const borde = r => Math.max(0.22 * r, 0.8);
