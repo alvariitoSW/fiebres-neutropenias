@@ -751,6 +751,11 @@ receptores animados. Basta con que el usuario apruebe la lista.
   las maquetas y les añade la **parte de estudio**: preguntas, casos clínicos distintos y explicaciones de
   conceptos, aprovechando que son interactivas.
 
+- **Decisiones del usuario sobre las maquetas v2** (19/10/2026): la parte de estudio se llama **Mayéutica**
+  (Explorar | Conceptos | Mayéutica), «porque te ayuda a estudiar con preguntas como Sócrates». Color del HCO₃⁻
+  indiferente mientras se distinga. Cada herramienta vive en su apartado, con un acceso rápido común a todas (B-007).
+  Unificar las formas de los iones en toda la app (`formas-iones`), después de arreglar las maquetas.
+
 ## Ideas de los revisores, por bloque
 
 *(Se añaden aquí tras cada revisión.)*
