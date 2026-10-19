@@ -2582,3 +2582,47 @@ de nefro»).
   hiperparatiroidismo); accesos de Calcio/Fósforo/Magnesio a la nefrona
   viva sin regresión; sin errores ni desborde.
 
+
+### Una sola leyenda de formas de iones (octubre 2026)
+
+Tarea `formas-iones` del plan socialista, aprobada el 19/10/2026. El usuario: «sí, vamos a unificar todas esas formas
+en la app, pero antes arregla los fallos»; después, sobre la lámina, «la tabla de formas me vale, aplícala».
+
+- **Por qué**: cada modelo vivo dibujaba los iones a su manera. En la nefrona viva el rombo era la glucosa; en las
+  maquetas de Marino era el Cl⁻. Dentro de la propia nefrona, el túbulo y la célula no coincidían (H⁺, Ca²⁺,
+  fosfato).
+- **Qué se hizo**:
+  - Una sola tabla, `js/data/formas-iones.js`, y un solo dibujo, `js/core/particulas.js`. Este pinta la forma en
+    lienzo (`pintarParticula`) y en SVG (`svgParticula`) y monta la leyenda (`leyendaParticulas`, reutiliza
+    `.nv-especies`).
+  - La leen la nefrona viva (túbulo, célula y barrera), el glomérulo, el filtro de la TRR, las nefronas que quedan
+    y las escenas del potasio.
+  - Se quitaron los dibujos de formas repetidos en cada modelo.
+- **Tabla**:
+  - agua: gota;
+  - Na⁺: círculo oro;
+  - Cl⁻ y la sal: rombo ciruela (el salino al 3 % y al 7,5 % llevan 1 y 2 halos);
+  - HCO₃⁻: triángulo salvia (Ringer lleno y Plasma-Lyte hueco);
+  - H⁺: cruz teja;
+  - CO₂: voluta;
+  - NH₄⁺: pentágono;
+  - aniones no medidos: estrella hueca;
+  - K⁺: cuadrado (en el potasio, el color dice el sitio);
+  - Ca²⁺: óvalo, y Mg²⁺ óvalo hueco;
+  - fosfato: triángulo invertido;
+  - glucosa: copo de 6 radios;
+  - urea: hexágono;
+  - albúmina: círculo grande;
+  - citoquinas: trébol;
+  - citrato: anillo ámbar;
+  - hematíes: disco;
+  - creatinina: luna (reservada).
+  
+  Solo tokens, con borde fino `--bg-main`. Ninguna pareja que sale junta comparte forma.
+- **Leyenda nueva** en el glomérulo, las nefronas que quedan y el potasio.
+- **Error arreglado**: con la vista de célula abierta, un botón `data-nefrona-viva` (o el «← VOLVER») llamaba a
+  `svgCelula(null)` y la célula quedaba congelada.
+- Las maquetas v2 de Marino (rama `auto/marino-mapa`) siguen la misma tabla. La lámina con el antes y el después
+  está en `autonomo/maquetas/formas-iones.html`.
+- **Regla para lo que venga**: un modelo nuevo con partículas pinta con `js/core/particulas.js`; no se dibujan formas
+  propias.

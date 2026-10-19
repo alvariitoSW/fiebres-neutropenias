@@ -24,6 +24,7 @@ import {
     VASO, CEL, actividades, estadoDosis, enlazarTexto, crearPoner, animarMientrasVisible,
     crearEscena, onda, azar, coma, fmtT, enlace, alfa, CLARO,
 } from './potasio-escena.js';
+import { leyendaParticulas } from '../../core/particulas.js';
 
 const TAB_ID = 'fisio-hipopotasemia';
 const POR_MEQ = 4, T_MAX = 720, MEQ_HUECO = 20, HUECOS = 48, K_MIN = 1.2;
@@ -73,7 +74,7 @@ function tarjetaAccion(a) {
       <button type="button" class="visual-link" data-ver="${a.fuente}${a.extra ? ',' + a.extra : ''}" aria-label="Ver ${a.nombre} en el texto">Texto ↓</button></div>${extraIv}</div>`;
 }
 const MARCADO = `
-<p class="visual-guia">El K⁺ del plasma es una ventana pequeña a un depósito grande: cada hueco ○ de la célula son 20 mEq que faltan en el cuerpo. Elige la causa, repón y corre el reloj.</p>
+<p class="visual-guia">El K⁺ del plasma es una ventana pequeña a un depósito grande: cada hueco □ de la célula son 20 mEq que faltan en el cuerpo. Elige la causa, repón y corre el reloj.</p>
 <div class="hk-escenario">
   <div class="hk-campo"><label for="hp-causa">Causa</label><select id="hp-causa">${Object.entries(CAUSAS).map(([k, c]) => `<option value="${k}">${c.etiqueta}</option>`).join('')}</select></div>
   <p class="hk-causa-detalle" id="hp-causa-detalle"></p>
@@ -85,6 +86,16 @@ const MARCADO = `
   <canvas id="hp-escena" aria-label="Simulación del potasio entre plasma, célula, corazón, analítica y vías de pérdida y de reposición"></canvas>
   <canvas id="hp-ecg" class="hk-ecg" aria-label="Electrocardiograma"></canvas>
 </div>
+${leyendaParticulas([
+    { clave: 'k', nombre: 'K⁺ en el plasma', color: '--text-main' },
+    { clave: 'k', nombre: 'K⁺ que sale de la célula', color: '--accent-red' },
+    { clave: 'k', nombre: 'ClK que entra', color: '--text-main', halo: '--accent-green' },
+    { clave: 'k', nombre: 'K⁺ metido en la célula', color: '--accent-blue', halo: '--accent-blue' },
+    { clave: 'k', nombre: 'K⁺ de la célula', color: '--accent-blue', opacidad: 0.5 },
+    { clave: 'k', nombre: 'Hueco: 20 mEq que faltan', color: '--accent-blue', hueco: true },
+    { clave: 'k', nombre: 'K⁺ que se pierde', color: '--accent-green' },
+    { clave: 'na', nombre: 'Na⁺ que saca la bomba' },
+])}
 <div class="hk-marcador">
   <div class="hk-k" id="hp-k" aria-live="polite"></div>
   <span class="grade-badge" id="hp-gravedad"></span>
@@ -122,7 +133,7 @@ function montar(tab, texto, visual) {
     for (const a of ACCIONES) { E['estado-' + a.id] = $('hp-estado-' + a.id); E['dar-' + a.id] = $('hp-dar-' + a.id); }
     const poner = crearPoner();
     const esc = crearEscena(visual, { escena: 'hp-escena', ecg: 'hp-ecg' });
-    const { C, rotulo, puntos, anillos } = esc;
+    const { C, rotulo, puntos, particulas, anillos } = esc;
 
     let S, rapido = false;
     let P = [], TOKENS = [], TUBO_K = [], GOTAS = [];
@@ -316,7 +327,7 @@ function montar(tab, texto, visual) {
         puntos(GOTAS, alfa(C.verde, 0.8), 1.6);
         esc.vaso('PLASMA · ≈4 mEq/l normal · 2% del K⁺');
         esc.tubo(m.medido, c.pseudo && !S.repetido ? { texto: 'leucocitos', puntos: TUBO_K, color: CLARO.rojo } : null);
-        esc.celula('CÉLULA · 98% del K⁺ · ○ = 20 mEq que faltan');
+        esc.celula('CÉLULA · 98% del K⁺ · □ = 20 mEq que faltan');
         if (m.salido > 0.05) esc.roturas();
         const absorbiendo = absorbido(S.t, S.t + 1) > 0;
         esc.salidas([
@@ -326,8 +337,8 @@ function montar(tab, texto, visual) {
         // depósito: huecos vacíos y llenos
         const llenos = [], vacios = [];
         HUECO.forEach((h, i) => (i < huecos ? vacios : llenos).push(h));
-        puntos(llenos, alfa(C.oro, 0.5), 2.6, h => Math.sin(reloj * 0.6 + h.x) * 0.8);
-        esc.ctx.setLineDash([2, 2]); anillos(vacios, alfa(CLARO.oro, 0.85), 3.2); esc.ctx.setLineDash([]);
+        particulas(llenos, 'k', { color: C.oro, r: 2.6, alfa: 0.5, ox: h => Math.sin(reloj * 0.6 + h.x) * 0.8 });
+        particulas(vacios, 'k', { color: C.oro, r: 3.2, alfa: 0.85, hueco: true });
         esc.bombas(clamp(act.insulina + act.salbutamol + (S.iv.activa && E['hp-iv-suero'].value === 'glucosado' ? 0.3 : 0) + (c.ataque ? ataque(S.t) * 0.6 : 0), 0, 1));
         if (c.ataque) rotulo(ataque(S.t) > 0.05 ? 'Ataque: el K⁺ entra en masa en la célula' : 'Fin del ataque: el K⁺ vuelve al plasma', CEL.x + 12, CEL.y + 34, CLARO.rojo);
         if (c.cad) rotulo(act.insulina > 0.5 ? 'Insulina: el K⁺ vuelve a entrar en la célula' : 'Sin insulina: el K⁺ sale de la célula', CEL.x + 12, CEL.y + 34, CLARO.rojo);
@@ -337,13 +348,13 @@ function montar(tab, texto, visual) {
         const grupos = { plasma: [], salido: [], celula: [], entra: [], fuera: [] };
         for (const p of P) grupos[p.cat === 'celula' || p.sale ? 'celula' : p.salido ? 'salido' : 'plasma'].push(p);
         for (const p of TOKENS) grupos[p.cat === 'entra' || (p.nuevo && p.ruta.length > 4) ? 'entra' : 'fuera'].push(p);
-        puntos(grupos.plasma, C.ink, 2.8);
-        puntos(grupos.salido, CLARO.rojo, 2.8);
-        puntos(grupos.fuera, CLARO.verde, 2.6);
-        puntos(grupos.entra, C.ink, 3.4);
+        particulas(grupos.plasma, 'k', { color: C.ink, r: 2.8 });
+        particulas(grupos.salido, 'k', { color: C.rojo, r: 2.8 });
+        particulas(grupos.fuera, 'k', { color: C.verde, r: 2.6 });
+        particulas(grupos.entra, 'k', { color: C.ink, r: 3.4 });
         anillos(grupos.entra, alfa(C.verde, 0.9), 5.5);
-        puntos(grupos.celula, CLARO.oro, 3.2);
-        anillos(grupos.celula, alfa(CLARO.oro, 0.45), 5.5);
+        particulas(grupos.celula, 'k', { color: C.oro, r: 3.2 });
+        anillos(grupos.celula, alfa(C.oro, 0.45), 5.5);
         esc.corazon(g.nivel / 3);
     }
 

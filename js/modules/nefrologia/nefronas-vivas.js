@@ -17,8 +17,9 @@
 //   el techo de secreción de K⁺, el K⁺ en sangre, la FEP entre sus extremos).
 import { irAlTexto } from '../../core/vista-visual.js';
 import { openCorkboardTopic } from '../../core/corkboard.js';
-import { CLARO, alfa } from './potasio-escena.js';
+import { alfa } from './potasio-escena.js';
 import { categoriaG } from './erc-cga.js';
+import { pintarParticula, leyendaParticulas } from '../../core/particulas.js';
 
 const W = 360, H = 290, N = 40, COLS = 10;
 const X0 = 22, DX = 35, Y0 = 82, DY = 48;
@@ -62,6 +63,7 @@ export function montarNefronas(cuerpo, { tab }, opciones = {}) {
 
     cuerpo.innerHTML = `
         <div class="gl-escenario nf-escenario"><canvas aria-label="Riñón con 40 nefronas"></canvas></div>
+        ${leyendaParticulas([{ clave: 'k', nombre: 'K⁺ (en sangre, teja si está alto)' }, 'p'])}
         <div class="tfg-slider-row"><label for="nf-nefronas-${tab.id}">Nefronas que funcionan</label><input type="range" id="nf-nefronas-${tab.id}" class="nf-nefronas" min="5" max="100" step="5" value="${e.nefronas}"><span class="nf-nefronas-out">${e.nefronas}%</span></div>
         <div class="nv-chips gl-mandos">${Object.entries(MANDOS_NEFRONAS).map(([k, t]) => `<button type="button" class="visual-mini" data-nf="${k}" aria-pressed="false">${t}</button>`).join('')}</div>
         <div class="nv-medidores gl-medidores"></div>
@@ -97,8 +99,6 @@ export function montarNefronas(cuerpo, { tab }, opciones = {}) {
         if (sangre.length > objetivo) sangre.length = objetivo;
         for (const s of sangre) { s.x += s.v * dt; if (s.x > W - 8) s.x = 8; }
     }
-    function cuadrado(x, y, l) { ctx.fillRect(x - l / 2, y - l / 2, l, l); }
-    function triangulo(x, y, l) { ctx.beginPath(); ctx.moveTo(x, y - l / 2); ctx.lineTo(x + l / 2, y + l / 2); ctx.lineTo(x - l / 2, y + l / 2); ctx.closePath(); ctx.fill(); }
     function dibujar() {
         ctx.clearRect(0, 0, W, H);
         ctx.fillStyle = '#211814'; ctx.fillRect(0, 0, W, H);
@@ -107,8 +107,8 @@ export function montarNefronas(cuerpo, { tab }, opciones = {}) {
         ctx.fillStyle = alfa('#a23d28', kAlto ? 0.55 : 0.35); ctx.fillRect(0, 16, W, 34);
         ctx.font = '9px Georgia, serif'; ctx.fillStyle = C.texto; ctx.textAlign = 'left';
         ctx.fillText(`Sangre · K⁺ ${M.k.toFixed(1).replace('.', ',')} mEq/l`, 8, 12);
-        ctx.fillStyle = kAlto ? CLARO.rojo : CLARO.na;
-        for (const s of sangre) cuadrado(s.x, s.y, 4);
+        // K⁺ en sangre: la forma de la tabla; el color avisa cuando está alto.
+        for (const s of sangre) pintarParticula(ctx, 'k', s.x, s.y, 2.2, kAlto ? { color: '--accent-red' } : {});
         // Nefronas
         const r = 4.5 + 3 * (M.h - 1);
         const rojo = Math.min(1, 0.45 + (M.pcg - 55) / 25);
@@ -144,8 +144,7 @@ export function montarNefronas(cuerpo, { tab }, opciones = {}) {
                 else { px = xi + (W - 64 - xi) * (u - 0.35) / 0.65; py = COLECTOR_Y; }
             }
             ctx.globalAlpha = p.t > 1.45 ? (1.6 - p.t) / 0.15 : 1;
-            ctx.fillStyle = p.tipo === 'k' ? CLARO.na : '#9ad0e6';
-            if (p.tipo === 'k') cuadrado(px, py, 3.6); else triangulo(px, py, 4.4);
+            pintarParticula(ctx, p.tipo, px, py, 2);
         }
         ctx.globalAlpha = 1;
         // Rótulos

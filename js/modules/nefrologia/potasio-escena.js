@@ -6,6 +6,7 @@
 // causas, sus fármacos, sus avisos y qué partículas pinta de cada color.
 
 import { irAlTexto, marcar } from '../../core/vista-visual.js';
+import { pintarParticula } from '../../core/particulas.js';
 
 // ---------- Geometría (coordenadas lógicas 360×320, ECG 360×74) ----------
 export const W = 360, H = 320, EW = 360, EH = 74;
@@ -121,6 +122,16 @@ export function crearEscena(visual, { escena, ecg }) {
         for (const p of lista) { const x = p.x + (ox ? ox(p) : 0), y = p.y + (oy ? oy(p) : 0); ctx.moveTo(x + radio, y); ctx.arc(x, y, radio, 0, 6.29); }
         ctx.fill();
     }
+    // Partículas con la forma de la tabla única (js/data/formas-iones.js). En
+    // estas escenas el color del K⁺ dice dónde está; la forma, qué es.
+    // Opciones: color, r, alfa, ox/oy (desplazamiento por partícula), hueco.
+    function particulas(lista, clave, { color, r = 2.8, alfa: a = 1, ox, oy, hueco = false } = {}) {
+        if (!lista.length) return;
+        const a0 = ctx.globalAlpha;
+        ctx.globalAlpha = a0 * a;
+        for (const p of lista) pintarParticula(ctx, clave, p.x + (ox ? ox(p) : 0), p.y + (oy ? oy(p) : 0), r, { color, hueco });
+        ctx.globalAlpha = a0;
+    }
     function anillos(lista, color, radio) {
         if (!lista.length) return;
         ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.beginPath();
@@ -203,8 +214,8 @@ export function crearEscena(visual, { escena, ecg }) {
         });
         NA = NA.filter(n => (n.vida -= 0.02) > 0);
         for (const n of NA) n.y += n.vy;
-        puntos(NA, alfa(CLARO.na, 0.7), 1.7);
-        if (activa) for (const bx of BOMBAS) rotulo('Na⁺↑', bx + 12, CEL.y - 12, CLARO.na, 8.5);
+        particulas(NA, 'na', { color: C.oro, r: 1.7, alfa: 0.7 });
+        if (activa) for (const bx of BOMBAS) rotulo('Na⁺↑', bx + 12, CEL.y - 12, C.oro, 8.5);
         rotulo(activa ? 'Bomba Na⁺/K⁺ acelerada: salen 3 Na⁺, entran 2 K⁺' : 'Bomba Na⁺/K⁺ a ritmo basal', CEL.x + 12, CEL.y + 20, activa ? C.ink : C.muted);
     }
     // Canal y salidas: `lista` = [{ clave: 'orina'|'heces'|'dial', a: 0-1, cerrado, rot }].
@@ -256,7 +267,7 @@ export function crearEscena(visual, { escena, ecg }) {
         ctx.fillStyle = alfa(C.rojo, marca ? 0.55 : 0.25);
         ctx.beginPath(); ctx.moveTo(x - 7, y + 14); ctx.lineTo(x - 7, y + 40); ctx.arc(x, y + 40, 7, Math.PI, 0, true); ctx.lineTo(x + 7, y + 14); ctx.fill();
         if (marca) {
-            puntos(marca.puntos, marca.color, 1.8, k => Math.sin(reloj + k.fase));
+            particulas(marca.puntos, 'k', { color: C.rojo, r: 1.8, ox: k => Math.sin(reloj + k.fase) });
             rotulo(marca.texto, x, y + 62, marca.color, 8.5, 'center');
         }
         rotulo('Analítica', x, y + 74, C.muted, 9, 'center');
@@ -325,7 +336,7 @@ export function crearEscena(visual, { escena, ecg }) {
         get reloj() { return reloj; },
         tick(dt) { reloj += dt; },
         limpiar() { ctx.clearRect(0, 0, W, H); },
-        rr, rotulo, puntos, anillos,
+        rr, rotulo, puntos, particulas, anillos,
         puntoPlasma, puntoCelula, rutaHacia, rutaEntrada, moverParticulas, puntosTubo,
         vaso, celula, roturas, bombas, salidas, tubo, corazon,
         pintarECG, reiniciarECG,

@@ -22,6 +22,7 @@ import {
     VASO, CEL, actividades, estadoDosis, enlazarTexto, crearPoner, animarMientrasVisible,
     crearEscena, onda, azar, coma, fmtT, enlace, alfa, CLARO,
 } from './potasio-escena.js';
+import { leyendaParticulas } from '../../core/particulas.js';
 
 const TAB_ID = 'fisio-hiperpotasemia';
 const POR_MEQ = 4, K_MIN = 3.5, T_MAX = 720;
@@ -45,7 +46,7 @@ export function initHiperpotasemiaSim() {
 
 // ---------- Marcado de la vista Visual ----------
 const MARCADO = `
-<p class="visual-guia">El K⁺ es una nube de puntos que vive en el plasma, en la célula o sale del cuerpo. Elige la causa, da los fármacos de la tabla y corre el reloj.</p>
+<p class="visual-guia">El K⁺ es una nube de cuadrados que vive en el plasma, en la célula o sale del cuerpo. Elige la causa, da los fármacos de la tabla y corre el reloj.</p>
 <div class="hk-escenario">
   <div class="hk-campo"><label for="hk-causa">Causa</label><select id="hk-causa">${Object.entries(CAUSAS).map(([k, c]) => `<option value="${k}">${c.etiqueta}</option>`).join('')}</select></div>
   <p class="hk-causa-detalle" id="hk-causa-detalle"></p>
@@ -56,6 +57,14 @@ const MARCADO = `
   <canvas id="hk-escena" aria-label="Simulación del potasio entre plasma, célula, corazón, analítica y vías de salida"></canvas>
   <canvas id="hk-ecg" class="hk-ecg" aria-label="Electrocardiograma"></canvas>
 </div>
+${leyendaParticulas([
+    { clave: 'k', nombre: 'K⁺ en el plasma', color: '--text-main' },
+    { clave: 'k', nombre: 'K⁺ que entra en el plasma', color: '--accent-red' },
+    { clave: 'k', nombre: 'K⁺ metido en la célula', color: '--accent-blue', halo: '--accent-blue' },
+    { clave: 'k', nombre: 'K⁺ de la célula', color: '--accent-blue', opacidad: 0.4 },
+    { clave: 'k', nombre: 'K⁺ fuera del cuerpo', color: '--accent-green' },
+    { clave: 'na', nombre: 'Na⁺ que saca la bomba' },
+])}
 <div class="hk-marcador">
   <div class="hk-k" id="hk-k" aria-live="polite"></div>
   <span class="grade-badge" id="hk-gravedad"></span>
@@ -172,7 +181,7 @@ function montar(tab, texto, visual) {
     for (const f of FARMACOS) { E['estado-' + f.id] = $('hk-estado-' + f.id); E['dar-' + f.id] = $('hk-dar-' + f.id); }
     const poner = crearPoner();
     const esc = crearEscena(visual, { escena: 'hk-escena', ecg: 'hk-ecg' });
-    const { C, reducido, rotulo, puntos, anillos } = esc;
+    const { C, reducido, rotulo, particulas, anillos } = esc;
 
     // ---------- Estado ----------
     let S, rapido = false;
@@ -240,7 +249,7 @@ function montar(tab, texto, visual) {
             { clave: 'dial', a: actividadRuta(act, 'dial') },
         ]);
         // K⁺ intracelular de fondo (el 98%)
-        puntos(FONDO, alfa(C.oro, 0.3), 2, f => Math.sin(reloj * 0.6 + f.fase) * 1.2, f => Math.cos(reloj * 0.5 + f.fase) * 1.2);
+        particulas(FONDO, 'k', { color: C.oro, r: 2, alfa: 0.3, ox: f => Math.sin(reloj * 0.6 + f.fase) * 1.2, oy: f => Math.cos(reloj * 0.5 + f.fase) * 1.2 });
         esc.bombas(m.bomba);
         // acidosis y lisis
         if (c.acido) {
@@ -256,11 +265,11 @@ function montar(tab, texto, visual) {
         esc.moverParticulas(P);
         const grupos = { plasma: [], nuevo: [], celula: [], fuera: [] };
         for (const p of P) grupos[p.cat === 'plasma' ? (p.fuente && p.ruta.length ? 'nuevo' : 'plasma') : p.cat === 'celula' ? 'celula' : 'fuera'].push(p);
-        puntos(grupos.plasma, C.ink, 2.8);
-        puntos(grupos.nuevo, CLARO.rojo, 2.8);
-        puntos(grupos.fuera, CLARO.verde, 2.4);
-        puntos(grupos.celula, CLARO.oro, 3.2);
-        anillos(grupos.celula, alfa(CLARO.oro, 0.45), 5.5);
+        particulas(grupos.plasma, 'k', { color: C.ink, r: 2.8 });
+        particulas(grupos.nuevo, 'k', { color: C.rojo, r: 2.8 });
+        particulas(grupos.fuera, 'k', { color: C.verde, r: 2.4 });
+        particulas(grupos.celula, 'k', { color: C.oro, r: 3.2 });
+        anillos(grupos.celula, alfa(C.oro, 0.45), 5.5);
         esc.corazon(nivel / 3, m.calcio);
     }
     const latido = (u, r) => r.fv ? 0.55 * Math.sin(u * 6.28 * 2.2) + 0.25 * Math.sin(u * 6.28 * 5.3 + 1)

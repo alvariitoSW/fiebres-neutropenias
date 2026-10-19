@@ -1,6 +1,6 @@
 # 2026-10-19 · formas-iones, vuelta 1 (inventario y lámina)
 
-**Resultado:** en curso, esperando que el usuario mire la lámina. La app no se ha tocado.
+**Resultado:** vuelta 1 (lámina) aprobada por el usuario («la tabla de formas me vale, aplícala»); vuelta 2 aplicada, en revisión en la PR.
 Lámina: https://claude.ai/artifact/U5DbmWSEDTBVAbZiqFjuLP (`autonomo/maquetas/formas-iones.html` y sus capturas).
 
 ## Qué se hizo
@@ -29,3 +29,20 @@ Propuestas del director, que se aplican salvo que diga otra cosa:
 - El glomérulo, las nefronas que quedan y el potasio no tienen leyenda de partículas. Entra en esta tarea.
 - `js/modules/libros/visual-marino-piezas-45-53.js:174`: el salicilato ionizado y el no ionizado se distinguen solo
   por el color (CLAUDE §5). Fuera de esta tarea: va a la bitácora.
+
+## Vuelta 2 · aplicar (19/10)
+- Tabla `js/data/formas-iones.js` + dibujo común `js/core/particulas.js`. Aplicada en nefrona viva (túbulo, célula,
+  barrera), glomérulo, filtro TRR, nefronas que quedan y potasio (3 archivos). Leyenda nueva en glomérulo, nefronas
+  que quedan y potasio. Maquetas v2 ajustadas en `auto/marino-mapa`.
+- Error de la nefrona arreglado (también en `reset()`): reproducido antes y comprobado después a 390 y 360 px.
+- **Jueces** ✅ con 7 fichas (`fisio-regulacion`, `fisio-tubular`, `fisio-hiperpotasemia`, `fisio-hipopotasemia`,
+  `erc-pa-raas`, `erc-acidosis-k`, `trr-anticoagulacion`): sin desbordar, sin ids repetidos, sin errores, quiz y
+  caché bien. Modelos abiertos en Visual a 390 y 360 px: 0 errores.
+- Decisión del constructor: el citrato que se infunde en el filtro (antes óvalo lila) es el anillo ámbar vacío.
+
+## Visto de paso (vuelta 2), sin tocar
+- 2 px de desborde a 360 px en «Nefronas que quedan» (vista Visual de `erc-acidosis-k`): la etiqueta «fisiología
+  general» de un medidor (`.nv-medidor-nombre` no parte línea). Ya pasaba antes. Los jueces no lo ven porque abren la
+  ficha en Texto. **Propuesta de regla**: que los jueces abran también la vista Visual.
+- Maqueta del agua: los osmolitos de la neurona son círculos ámbar, como la albúmina; solo los distingue el color.
+- Colores sueltos que no son partículas (rótulos, renina, dializado `#8fb8d8`, gotas del gotero): se quedan.
