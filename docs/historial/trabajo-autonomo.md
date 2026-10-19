@@ -178,3 +178,15 @@ Tres revisiones sin construir (29 fichas). Lo que enseñaron:
   las cuatro propuestas de regla: puerto libre y carga de imágenes en `jueces.mjs`, recetas Visual por id, primero
   los archivos modelo, y worktree para el paralelo.
 - El usuario aprobó las tres PR. Tiempo: unas 2 h 30 para las tres, con agentes en paralelo.
+
+### Los jueces abren la vista Visual (octubre 2026)
+
+En la tarea `formas-iones`, el constructor vio 2 px de desborde a 360 px en la vista Visual de «Nefronas que quedan»
+(`erc-acidosis-k`). `jueces.mjs` no lo veía porque abría las fichas solo en Texto. El usuario aprobó la regla el
+19/10/2026.
+
+- Ahora, con `--ficha`, los jueces pulsan «Visual» en cada bloque con interruptor (la ficha misma o un bloque dentro)
+  y miden el desborde.
+- Con eso se cazaron los 2 px. Se arreglaron haciendo que `.nv-medidor-nombre` parta línea; `?v=` subido.
+- En la misma tanda, la animación de alcalinizar la orina (`visual-marino-piezas-45-53.js`, salicilatos) distingue el
+  no ionizado (bola llena) del ionizado (anillo con «−») por la forma, no solo por el color (CLAUDE §5).

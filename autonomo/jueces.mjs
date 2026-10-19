@@ -16,7 +16,8 @@
 //   2. Quiz: ningún tema sin preguntas; ninguna entidad &lt; / &gt; en los bancos; «correcta» dentro de rango.
 //   3. Caché: si cambió un .css o js/main.js respecto a origin/main, la fecha ?v= de index.html también cambió.
 //   4. Navegador (390 y 360 px): sin errores de consola ni de página, sin ids repetidos, sin desbordamiento; y
-//      cada ficha/capítulo pedido abre de verdad, sin desbordar, con sus imágenes cargadas.
+//      cada ficha/capítulo pedido abre de verdad, sin desbordar, con sus imágenes cargadas; y en cada ficha se
+//      abre también la vista Visual de cada bloque (sin desbordar y sin errores).
 //   5. --eco: node --test 'js/modules/eco/pruebas/*.test.mjs' en verde.
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
@@ -147,6 +148,17 @@ if (!pide('--sin-navegador')) {
                 const d = await desborda();
                 sin.length ? mal(`${ancho}px: ${f.tab}: imágenes sin cargar: ${sin.join(', ')}`)
                     : d > 0 ? mal(`${ancho}px: ${f.tab}: desborda ${d}px`) : ok(`${ancho}px: ficha ${f.tab} abre, sin desbordar, imágenes cargadas`);
+                // La vista Visual de cada bloque (interruptor Texto | Visual): se monta al pulsarla y puede desbordar
+                // aunque el texto no lo haga (2 px de «Nefronas que quedan», octubre 2026).
+                const nVisual = await pag.evaluate((t) => document.querySelectorAll(`#${t}[data-visual] > .vista-toggle button[data-vista="visual"], #${t} [data-visual] > .vista-toggle button[data-vista="visual"]`).length, f.tab);
+                for (let i = 0; i < nVisual; i++) {
+                    await pag.evaluate(([t, j]) => document.querySelectorAll(`#${t}[data-visual] > .vista-toggle button[data-vista="visual"], #${t} [data-visual] > .vista-toggle button[data-vista="visual"]`)[j].click(), [f.tab, i]);
+                    await pag.waitForTimeout(700);
+                    const dv = await desborda();
+                    if (dv > 0) mal(`${ancho}px: ${f.tab}: la vista Visual del bloque ${i + 1} desborda ${dv}px`);
+                    await pag.evaluate(([t, j]) => document.querySelectorAll(`#${t}[data-visual] > .vista-toggle button[data-vista="texto"], #${t} [data-visual] > .vista-toggle button[data-vista="texto"]`)[j].click(), [f.tab, i]);
+                }
+                if (nVisual) ok(`${ancho}px: ficha ${f.tab}: ${nVisual} vista(s) Visual abiertas`);
             }
             for (const k of atlas) {
                 await pulsar({ especialidad: 'eco', ecoAtlas: k });

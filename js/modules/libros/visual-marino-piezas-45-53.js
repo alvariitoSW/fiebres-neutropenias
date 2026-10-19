@@ -171,8 +171,11 @@ export const alcalinizacion = {
             const f = noIon(ph), ref = noIon(5), puntos = 40;
             const reabs = Math.max(0, Math.round(f / ref * puntos));
             let pts = '';
-            for (let i = 0; i < puntos; i++) pts += `<circle cx="${20 + (i % 20) * 14}" cy="${30 + Math.floor(i / 20) * 16}" r="5" fill="${i < reabs ? C('red') : C('green')}"/>`;
-            cuerpo.querySelector('#mrp-alc').innerHTML = SVG('0 0 300 92', `${pts}<text x="10" y="68" class="mrp-pq" style="font-size:11.5px">Rojo: no ionizado, se reabsorbe (pH 5 = 40).</text><text x="10" y="84" class="mrp-pq" style="font-size:11.5px">Verde: atrapado en la orina.</text>`, 'Salicilato ionizado y no ionizado en la orina');
+            // La forma distingue las dos especies (no solo el color): bola llena sin carga, anillo con «−» ionizado.
+            const bola = (x, y) => `<circle cx="${x}" cy="${y}" r="5" fill="${C('red')}"/>`;
+            const anion = (x, y) => `<circle cx="${x}" cy="${y}" r="5" fill="none" stroke="${C('green')}" stroke-width="1.6"/><line x1="${x - 2.6}" x2="${x + 2.6}" y1="${y}" y2="${y}" stroke="${C('green')}" stroke-width="1.6"/>`;
+            for (let i = 0; i < puntos; i++) pts += (i < reabs ? bola : anion)(20 + (i % 20) * 14, 30 + Math.floor(i / 20) * 16);
+            cuerpo.querySelector('#mrp-alc').innerHTML = SVG('0 0 300 92', `${pts}${bola(14, 64)}<text x="24" y="68" class="mrp-pq" style="font-size:11.5px">No ionizado: se reabsorbe (pH 5 = 40).</text>${anion(14, 80)}<text x="24" y="84" class="mrp-pq" style="font-size:11.5px">Ionizado (−): atrapado en la orina.</text>`, 'Salicilato ionizado y no ionizado en la orina');
             const r = cuerpo.querySelector('#mrp-alc-res');
             r.className = `tfg-estado tfg-estado-${ph >= 7.5 ? 'ok' : ph >= 6.5 ? 'warn' : 'danger'}`;
             r.innerHTML = `pH ${fmt(ph)}: la forma reabsorbible es <strong>${fmt(ref / f, 0)} ${Math.round(ref / f) === 1 ? 'vez' : 'veces'} menor</strong> que a pH 5 (${ph >= 7.5 ? 'en el objetivo de la Tabla 52.3' : 'por debajo del objetivo ≥7,5'}).`;

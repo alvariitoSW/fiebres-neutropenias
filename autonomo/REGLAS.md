@@ -109,6 +109,9 @@ vez:
     discordia.
   - §1.10 umbrales redondeados (R8: la KDIGO decía «no cumple» con 2,0 → 2,3).
   - §2: SVG recreados con fondo propio (R6: texto claro sobre la caja blanca de `.article-figure`).
+- Formas de los iones (octubre 2026), aprobada por el usuario el 19/10: `jueces.mjs --ficha` abre también la
+  vista Visual de cada bloque. Abría las fichas solo en Texto y no vio 2 px de desborde en la Visual de «Nefronas
+  que quedan».
 
 ## 7. Sirve para estudiar (rúbrica; manda tanto como la fidelidad)
 

@@ -208,7 +208,8 @@ como las conoce un médico, no como están hechas por dentro. Los botones dicen 
 ## 12. Antes de dar un trabajo por terminado
 
 - [ ] `node autonomo/jueces.mjs` en verde (añade `--eco`, `--atlas <clave>` o `--ficha esp:vista:panel:pestaña`
-      según lo que tocaste): imágenes, quiz, caché, ids, errores y desbordamiento a 390 y 360 px.
+      según lo que tocaste): imágenes, quiz, caché, ids, errores y desbordamiento a 390 y 360 px. Con `--ficha`
+      abre también la vista Visual de cada bloque.
 - [ ] Probado en el navegador a 390 y 360 px: sin desbordamiento, sin errores de consola, todo abre y calcula (§9).
 - [ ] Si tocaste el simulador de eco: `node --test 'js/modules/eco/pruebas/*.test.mjs'` en verde.
 - [ ] Si hay un simulador: en los extremos y el punto medio de cada mando, las constantes son las de un paciente
