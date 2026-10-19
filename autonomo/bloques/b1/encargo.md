@@ -81,3 +81,15 @@ Cada ficha ya cita su página con `#page=N`: úsala. Las fichas están revisadas
   2. Pulirlas.
   3. Construir los dos modelos en la app (`auto/b1-modelos`).
   4. En paralelo, la pieza común de Mayéutica en las fichas, con el piloto de fluidos (`auto/b1-estudio`).
+
+## 8. Respuestas del usuario a la página de maquetas (19/10, noche)
+
+1. «Me gusta. Más que cambiar, repensar si se le podría dar una vuelta y hacerlo mejor, pero así está bastante
+   bien.» → En la vuelta 2 de las maquetas el profesor repiensa, no solo corrige.
+2. La lupa de pinchar con eco: **sí, se queda**.
+3. La capnografía: **sí, en el capilar**.
+4. Las fichas sin modelo: «Habría que darle una vuelta de tuerca para ver cómo hacemos una muy muy buena versión de
+   eso.» → Tarea para el profesor: diseñar, con calma y con ambición artística, los modelos de las 5-6 fichas sin
+   modelo (microbioma y úlcera de estrés, tromboprofilaxis, analgesia y sedación), con maqueta para elegir.
+5. Ampliar el motor del corazón: «Se puede ver si el profesor lo considera necesario, o para tener una base para ir a
+   futuro modificándola.» → Lo decide el profesor, con su porqué; si lo ve útil, se construye como base ampliable.
