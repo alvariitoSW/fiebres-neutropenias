@@ -120,6 +120,6 @@ export function init() {
         irAFicha: nefroLevel.irAFicha,
         // Modelos vivos que se abren en un estado (data-acidobase-vivo="paso-3", "vomitos"…): los
         // resuelve el enlace cruzado de siempre de home/index.js. abrir() cambia él solo a su vista.
-        modelosVivos: { acidobaseVivo: (ancla) => { nefroLevel.show('acidobase'); acidoBase.abrir(ancla); } },
+        modelosVivos: { acidobaseVivo: (ancla, origen) => { nefroLevel.show('acidobase'); acidoBase.abrir(ancla, origen); } },
     };
 }

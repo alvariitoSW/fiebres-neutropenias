@@ -8,8 +8,11 @@
 //   node autonomo/jueces.mjs --ficha cardiologia:merinoCardiologia:panel-merino-cardio-tabs:mc-vasopresores
 //                                                    + abre esa ficha (especialidad:vista:panel:pestaña; la
 //                                                      vista puede ir vacía; Hematología usa «home»)
+//   node autonomo/jueces.mjs --modelo acidobase-vivo  + la prueba de navegador de ese modelo vivo
+//                                                      (autonomo/pruebas/<clave>.mjs: acidobase-vivo | agua-viva),
+//                                                      con el servidor de los jueces; tarda unos minutos
 //   node autonomo/jueces.mjs --sin-navegador         solo lo estático (rápido)
-// Se pueden repetir --atlas y --ficha. Sale con código 1 si algún juez falla.
+// Se pueden repetir --atlas, --ficha y --modelo. Sale con código 1 si algún juez falla.
 //
 // Comprueba:
 //   1. Imágenes: todo <img src> de los .html apunta a un archivo que existe.
@@ -19,6 +22,8 @@
 //      cada ficha/capítulo pedido abre de verdad, sin desbordar, con sus imágenes cargadas; y en cada ficha se
 //      abre también la vista Visual de cada bloque (sin desbordar y sin errores).
 //   5. --eco: node --test 'js/modules/eco/pruebas/*.test.mjs' en verde.
+//   6. --modelo: la prueba del modelo vivo en verde, a 390 y 360 px: el desborde lateral (0 px) tras cada respuesta,
+//      el repaso y cada paso de los casos; sin errores; la entrada desde las fichas y el «← VOLVER» a la ficha.
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { execSync, spawn } from 'node:child_process';
@@ -180,6 +185,23 @@ if (!pide('--sin-navegador')) {
             await pag.close();
         }
         await nav.close();
+        // ---- 6. Modelos vivos: su prueba de navegador, con este mismo servidor
+        for (const clave of valores('--modelo')) {
+            const prueba = join(RAIZ, 'autonomo', 'pruebas', `${clave}.mjs`);
+            if (!existsSync(prueba)) { mal(`Modelo vivo «${clave}»: no existe autonomo/pruebas/${clave}.mjs`); continue; }
+            const r = await new Promise(fin => {
+                const hijo = spawn('node', [prueba, base], { cwd: RAIZ });
+                let salida = '';
+                hijo.stdout.on('data', d => { salida += d; });
+                hijo.stderr.on('data', d => { salida += d; });
+                hijo.on('close', codigo => fin({ codigo, salida }));
+            });
+            const lineas = r.salida.split('\n');
+            const malas = lineas.filter(l => l.startsWith('❌'));
+            const buenas = lineas.filter(l => l.startsWith('✅')).length;
+            r.codigo === 0 ? ok(`Modelo vivo «${clave}»: ${buenas} comprobaciones a favor (390 y 360 px)`)
+                : mal(`Modelo vivo «${clave}»: ${malas.length || 'la prueba falló'}\n   ${(malas.length ? malas : lineas.slice(-8)).slice(0, 15).join('\n   ')}`);
+        }
     } catch (e) { mal(`Navegador: ${e.message}`); }
     finally { servidor.kill(); }
 }

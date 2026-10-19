@@ -494,3 +494,7 @@ especialidad (sin listener nuevo). El enlace al ácido-base (`data-acidobase-viv
 - Buscador: los atajos de los modelos vivos suben un punto si coinciden («sueros» los pone primeros).
 - Botones nuevos en Nefrología: regulación del agua corporal, hiponatremia e hipernatremia.
 - `mr-hiponatremia-dx` abre la glucosa que diluye el sodio; la neurona hinchada pasa a `mr-hiponatremia-tto`.
+
+**Vuelta 3**: «← VOLVER» vuelve a la ficha de la que se entró (mismo mecanismo que el ácido-base vivo:
+`core/volver-ficha.js`; ver `nefrologia.md`). Los botones del menú llevan `data-agua-viva=""` (abren como se dejó y
+borran el origen). La prueba de navegador está en `autonomo/pruebas/agua-viva.mjs` (`jueces.mjs --modelo agua-viva`).

@@ -2656,3 +2656,25 @@ en la app, pero antes arregla los fallos»; después, sobre la lámina, «la tab
     `mr-osmolalidad`, `mt-alcoholes`, `mt-salicilatos`, `fisio-acidobase-*`) que abre el estado de su tema con
     `data-acidobase-vivo` (Nefrología lo declara en `modelosVivos` de su API; lo resuelve el listener de
     `home/index.js`).
+
+**Vuelta 2** (juicio del profesor, 19/10/2026):
+- Entrar desde una ficha con un estado baja a la vista del tema y pone el anillo dorado sobre lo clave (vómitos: la
+  pendrina; metanol: el hiato osmolal; salicilatos y EPOC: el punto en la carta; bicarbonato: el alvéolo; el resto,
+  el hiato del plasma). Con «reducir movimiento», sin animación.
+- Los rótulos «ficha mr-…#…» son botones con el nombre de la ficha y de la línea, que la abren; «Ver en el texto»,
+  un botón por cita. El plegable pequeño pasa a «Fuentes (n)»: un solo «De dónde sale cada cifra» por bloque.
+- Nefrona: el colector ya no cruza el recuadro «2 colector». Pregunta 11: sin hueco bajo la célula (lo oculto hasta
+  contestar ya no ocupa sitio). Volver del caso al modelo dice «Caso · Lucía · 10:00».
+- Picos de fotograma al cambiar de paso (CPU ×4) de 83-133 ms a 50-85 ms: los textos que no cambian no se reescriben,
+  lo que está dentro de un desplegable cerrado no se pinta y el cambio de vista va en su propio fotograma.
+
+**Vuelta 3** (pedido del usuario, 19/10/2026):
+- «← VOLVER» vuelve a la ficha de la que se entró (abierta y en el mismo sitio), en el ácido-base y en el río y mar.
+  El listener delegado de `home/index.js` apunta el origen (`core/volver-ficha.js`: ficha, panel y scroll) y se lo
+  pasa a `modelosVivos`; cada herramienta lo pone en su botón como atributos del enlace cruzado de siempre, así que
+  vuelve sin listener nuevo. Desde un menú o el buscador, VOLVER hace lo de antes. Un enlace entre las dos
+  herramientas hereda el origen: ficha → río y mar → ácido-base → VOLVER vuelve a la ficha.
+- Regla aprobada: los jueces miden el desborde tras contestar. Las pruebas de navegador de los dos modelos vivos
+  están en `autonomo/pruebas/` y `node autonomo/jueces.mjs --modelo acidobase-vivo --modelo agua-viva` las lanza:
+  a 390 y 360 px, desborde 0 tras cada respuesta, repaso y paso de caso, sin errores, entrada desde las fichas y
+  VOLVER.

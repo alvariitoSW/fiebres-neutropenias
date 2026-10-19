@@ -258,8 +258,8 @@ a parte añadiría también que se pueda ir a ambos desde Marino y desde Nefrolo
 
 | # | Clave | Qué | Estado | Notas |
 |---|---|---|---|---|
-| 1 | `acidobase-vivo` | Ácido-base vivo en la app (PIF → Nefrología, junto a la nefrona viva) | pendiente | Maqueta `autonomo/maquetas/marino-acidobase-v2.html` |
-| 2 | `agua-viva` | Río y mar en la app (Libros → Marino → Fundamentos, junto a la fluidoterapia) | pendiente | Maqueta `autonomo/maquetas/marino-agua-v2.html` |
+| 1 | `acidobase-vivo` | Ácido-base vivo en la app (PIF → Nefrología, junto a la nefrona viva) | en revisión (2026-10-19) · PR #18 | Maqueta `autonomo/maquetas/marino-acidobase-v2.html` |
+| 2 | `agua-viva` | Río y mar en la app (Libros → Marino → Fundamentos, junto a la fluidoterapia) | en revisión (2026-10-19) · PR #18 | Maqueta `autonomo/maquetas/marino-agua-v2.html` |
 
 **Encargo común** (tipo `visual`, constructor potente; la medicina ya está auditada en las maquetas, así que la fase A
 es ligera):

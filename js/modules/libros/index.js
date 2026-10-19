@@ -78,6 +78,6 @@ export function init() {
         volverAlMenu: () => librosLevel.show('menu'),
         irAFicha: librosLevel.irAFicha,
         // data-agua-viva="<estado>" en un enlace cruzado abre el río y mar en ese estado
-        modelosVivos: { aguaViva: estadoClave => aguaViva?.abrir(estadoClave) },
+        modelosVivos: { aguaViva: (estadoClave, origen) => aguaViva?.abrir(estadoClave, origen) },
     };
 }

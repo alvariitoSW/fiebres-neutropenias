@@ -14,6 +14,7 @@ import { cargarMotion, sinMovimiento } from '../../core/motion.js';
 import { pintarParticula, svgParticula, leyendaParticulas } from '../../core/particulas.js';
 import { nombreFicha } from '../../core/corkboard.js';
 import { rutaDePanel } from '../../core/search.js';
+import { marcarVolver } from '../../core/volver-ficha.js';
 import { CNM, OTROS_A, ALB_A, FUENTES, BASE, PASOS, FRASES_PASO, CAUSAS, CAUSA, CONCEPTOS, PREGUNTAS, CASOS } from '../../data/acidobase-vivo-data.js';
 import { hNeq, calcPH, espPaco2, espHco3, haBase, derivar, palabraPH, r1, r2 } from './acidobase-vivo-calculo.js';
 
@@ -1788,7 +1789,10 @@ const ALIAS = {
   cetoacidosis: 'cad', 'acidosis-lactica': 'lactica', salicilatos: 'salic', 'epoc-cronica': 'respCr', 'respiratoria-cronica': 'respCr',
   'respiratoria-aguda': 'respAg', hiperaldosteronismo: 'hiperaldo', etilenglicol: 'metanol', acetazolamida: 'acetazol', bicarbonato: 'bicarb',
 };
-async function abrir(ancla = '') {
+// `origen`: la ficha de la que se entra (su «← VOLVER» vuelve a ella), null desde un menú o el buscador, o undefined
+// desde el otro modelo vivo (se conserva el que había; ver core/volver-ficha.js).
+async function abrir(ancla = '', origen) {
+  if (origen !== undefined) marcarVolver(document.getElementById('abv-volver'), R, origen);
   construir();
   await motionListo;
   const a = String(ancla || '').trim();

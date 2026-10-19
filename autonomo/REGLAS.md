@@ -112,6 +112,9 @@ vez:
 - Formas de los iones (octubre 2026), aprobada por el usuario el 19/10: `jueces.mjs --ficha` abre también la
   vista Visual de cada bloque. Abría las fichas solo en Texto y no vio 2 px de desborde en la Visual de «Nefronas
   que quedan».
+- Modelos vivos (octubre 2026), aprobada por el usuario el 19/10: los jueces miden el desborde también **después de
+  contestar** cada pregunta y en cada paso de los casos (`jueces.mjs --modelo`, pruebas en `autonomo/pruebas/`). El
+  río y mar se iba 21-31 px de lado tras contestar y no lo vio nadie hasta el profesor.
 
 ## 7. Sirve para estudiar (rúbrica; manda tanto como la fidelidad)
 

@@ -11,6 +11,7 @@
 // La Mayéutica guarda aciertos y fallos en localStorage (como el quiz), con
 // clave propia y siempre dentro de try/catch.
 import { cargarMotion } from '../../core/motion.js';
+import { marcarVolver } from '../../core/volver-ficha.js';
 import { iconoParticula } from '../../core/particulas.js';
 import { escapeHtml } from '../../core/ui.js';
 import { rutaDePanel } from '../../core/search.js';
@@ -713,7 +714,11 @@ function ponerEnEstado(a) {
     if (a.fluido) elegirFluido(a.fluido);
     if (a.lupa) Lupa.abrir(a.lupa);
 }
-export function abrirEstado(clave) {
+// `origen`: la ficha de la que se entra (su «← VOLVER» vuelve a ella), null desde un menú o el buscador, o undefined
+// desde el otro modelo vivo (se conserva el que había; ver core/volver-ficha.js). Sin estado (menú): se abre como estaba.
+export function abrirEstado(clave, origen) {
+    if (origen !== undefined) marcarVolver(document.getElementById('agv-volver'), raiz, origen);
+    if (!clave) { requestAnimationFrame(() => raiz.scrollIntoView({ block: 'start' })); return; }
     const a = ESTADOS_ANCLA[clave] || ESTADOS_ANCLA.inicio;
     if (modo !== 'explorar') setModo('explorar');
     ponerEnEstado(a);

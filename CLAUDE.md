@@ -79,7 +79,9 @@ backend/ admin/         panel de subida de contenido (aparte de la app)
 - **Enlace cruzado (el único mecanismo)**: `<button data-especialidad="X" data-view data-panel data-tab>`. Lo
   resuelve un listener delegado en `home/index.js`. Sirve entre especialidades y dentro de una (sin `data-view`).
   Extras: `data-trasplante` (con `especialidad="home"`), `data-resaltar="#id"`, `data-pulsar="id1 id2"`,
-  `data-en-visual`, `data-eco-vista/escenario/medir/atlas`, `data-nefrona-viva`, `data-glomerulo`. Las claves de
+  `data-en-visual`, `data-eco-vista/escenario/medir/atlas`, `data-nefrona-viva`, `data-glomerulo`,
+  `data-acidobase-vivo`, `data-agua-viva` (modelos vivos: cada especialidad los declara en `modelosVivos` de su API;
+  su «← VOLVER» lleva a la ficha de origen, `core/volver-ficha.js`). Las claves de
   vista y panel de cada cuaderno están en `PANEL_NAV` de `core/search.js` (Hematología usa `especialidad="home"`). **Nunca un
   listener nuevo por módulo.** `.tx-link`, `.especialidad-link`, `.paper-link`, `.neumo-internal-link` son solo
   estilo.
@@ -209,7 +211,8 @@ como las conoce un médico, no como están hechas por dentro. Los botones dicen 
 
 - [ ] `node autonomo/jueces.mjs` en verde (añade `--eco`, `--atlas <clave>` o `--ficha esp:vista:panel:pestaña`
       según lo que tocaste): imágenes, quiz, caché, ids, errores y desbordamiento a 390 y 360 px. Con `--ficha`
-      abre también la vista Visual de cada bloque.
+      abre también la vista Visual de cada bloque. Si tocaste un modelo vivo con preguntas, `--modelo <clave>`
+      (prueba en `autonomo/pruebas/<clave>.mjs`): mide el desborde tras cada respuesta y cada paso de los casos.
 - [ ] Probado en el navegador a 390 y 360 px: sin desbordamiento, sin errores de consola, todo abre y calcula (§9).
 - [ ] Si tocaste el simulador de eco: `node --test 'js/modules/eco/pruebas/*.test.mjs'` en verde.
 - [ ] Si hay un simulador: en los extremos y el punto medio de cada mando, las constantes son las de un paciente
