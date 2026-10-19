@@ -184,7 +184,6 @@ esta sección.
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
 | `marino-mapa` | Plan Marino, fase 2: mapa visual (profesor) | hecha (2026-10-19) · PR #16; antes en curso: [PR #16](https://github.com/alvariitoSW/fiebres-neutropenias/pull/16) en borrador; maquetas v1 en [este enlace](https://claude.ai/artifact/XkbXSjmeJF7BeHhQ2wSC4L) | 2026-10-15 | Mapa hecho y maquetas v1 vistas (17/10). Ahora, **maquetas v2**: ácido-base unificado y río y mar en crema y oro, con su Mayéutica (conceptos, preguntas y casos). Se enseñan en el mismo enlace. |
-| `acidobase-vivo`, `agua-viva` | Plan Marino, fase 4: ácido-base vivo (Nefrología) y río y mar (Libros → Marino) en la app, con accesos desde Marino y Nefrología y en el buscador | pendiente | 2026-10-19 | Aprobada por el usuario el 19/10. |
 
 El resto del tablero sigue `aparcada` hasta que apruebes la entrada de la bitácora que le toca.
 
@@ -211,6 +210,10 @@ El resto del tablero sigue `aparcada` hasta que apruebes la entrada de la bitác
 
 ## 4. Mejoras de lo que ya existe
 
+- **Ácido-base vivo, al entrar desde una ficha**: durante la animación (unos 3 s) la cabecera mini dice «paso 0»
+  antes de pasar al estado (p. ej. «Vómitos»). Que diga el estado desde el principio.
+- **La Mayéutica, al recargar**, empieza otra vez en la pregunta 1: recuerda aciertos y fallos, pero no por dónde ibas.
+
 - **Reconvertir las preguntas viejas** al formato de estudio (`REGLAS.md` §8): hay **361 de redactar** entre ~2.600
   preguntas. **Cuando lo pidas** (lo dijiste el 14/10), por bloques, con tareas `estudio`.
 - **Prueba intermitente del simulador de eco**: `navegador.test.mjs`, «la barra del ciclo tiene las 7 fases», falla
@@ -229,6 +232,16 @@ El resto del tablero sigue `aparcada` hasta que apruebes la entrada de la bitác
   ayuda. Es una tarea pequeña de solo lectura.
 
 ## 6. Hecho (últimos 7 días)
+
+- 2026-10-19 · **Ácido-base vivo y río y mar en la app** (PR #18), aprobados.
+  - Dónde están:
+    - el ácido-base, en PIF → Nefrología;
+    - el río y mar, en Libros → Marino;
+    - los dos, en el bloque «Modelos vivos» de los dos menús, en el buscador y con botones desde las fichas.
+  - Mayéutica con 14 + 14 preguntas y 4 + 3 casos.
+  - «← VOLVER A LA FICHA» lleva a la ficha de origen.
+  - El título «HUD Clínico UCI», más pequeño, lleva al menú principal.
+  - Regla nueva: los jueces miden el desborde también tras contestar (`--modelo`).
 
 - 2026-10-19 · **Plan Marino, fase 2: mapa visual y maquetas v2** (PR #16), aprobado.
   - Ácido-base vivo unificado (A+B+C) y río y mar en crema y oro, con su Mayéutica.
