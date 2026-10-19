@@ -513,7 +513,8 @@ export const Estuario = {
             texto(g, nombre, tx, y - h + 8 * s, { size: 9.5 * s, color: C.dim, italic: false, peso: '600', caja: true });
             const col = d > 0.5 ? C.oro : d < -0.5 ? C.rojo : C.dim;
             const fl = c === 'mar' && D.marFlecha ? (D.marFlecha > 0 ? ' ↑' : ' ↓') : '';
-            texto(g, ocultos.has(c) ? '? mL' : fmtD(d) + ' mL' + fl, tx, y - h + (compacto ? 20 : 21) * s, { size: 12 * s, color: ocultos.has(c) ? C.dim : col, italic: false, peso: 'bold', caja: true });
+            const sinCifraMar = fl && Math.abs(d) < 0.5;   // el mar se mueve sin cifra: la flecha, no «±0 mL»
+            texto(g, ocultos.has(c) ? '? mL' : sinCifraMar ? fl.trim() + ' sin cifra' : fmtD(d) + ' mL' + fl, tx, y - h + (compacto ? 20 : 21) * s, { size: 12 * s, color: ocultos.has(c) ? C.dim : col, italic: false, peso: 'bold', caja: true });
         };
         marca(0.05 * W, 0.235 * H + (compacto ? 12 : 0), 'MAR', 'mar', compacto ? 28 : 40);
         const xr = 0.27 * W; marca(xr, this.rioY(xr) - 2, 'RÍO', 'rio', compacto ? 30 : 40);
@@ -913,6 +914,9 @@ function origenDe(c) {
     if (c === 'mar' && D.marFlecha) partes.push('flecha: ilustrativo');
     return partes.filter(Boolean).join(' · ');
 }
+let formatoOrigen = t => t.replace(/[&<>]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[ch]));
+// La interfaz convierte las fichas citadas en enlaces (agua-viva.js, origenHTML).
+export function ponerFormatoOrigen(fn) { formatoOrigen = fn; }
 export function pintarMareas() {
     for (const c of COMP) {
         const v = vis[c], d = v - D.base[c];
@@ -920,10 +924,12 @@ export function pintarMareas() {
             ? `${fmtD(D.delta[c] + D.rango[c][0])} a ${fmtD(D.delta[c] + D.rango[c][1]).replace('+', '')}` : null;
         poner($('tot-' + c), 'textContent', ocultos.has(c) ? '? mL' : (D.rango.hay && c !== 'mar' ? '≈ ' : '') + fmt(v) + ' mL');
         const dl = $('dl-' + c);
-        const flecha = c === 'mar' && D.marFlecha ? ` · ${D.marFlecha > 0 ? '↑' : '↓'} sin cifra` : '';
-        poner(dl, 'innerHTML', ocultos.has(c) ? '?' : (rangoTxt || fmtD(d)) + ' mL' + (flecha || (D.sinCifra[c] && Math.abs(d) < 0.5 ? ' · sin cifra' : '')));
+        const flecha = c === 'mar' && D.marFlecha ? `${D.marFlecha > 0 ? '↑' : '↓'} sin cifra` : '';
+        // el mar que se hincha o se encoge sin cifra en la ficha: «↑ sin cifra», no «±0 mL» (se leía como «no cambia»)
+        const txtDl = flecha && Math.abs(d) < 0.5 ? flecha : (rangoTxt || fmtD(d)) + ' mL' + (flecha ? ' · ' + flecha : D.sinCifra[c] && Math.abs(d) < 0.5 ? ' · sin cifra' : '');
+        poner(dl, 'innerHTML', ocultos.has(c) ? '?' : txtDl);
         poner(dl, 'className', 'agv-dl' + (d > 0.5 ? ' agv-sube' : d < -0.5 ? ' agv-baja' : ''));
-        const o = $('org-' + c); const txt = origenDe(c); if (o.textContent !== txt) o.textContent = txt;
+        const o = $('org-' + c); const txt = origenDe(c); if (o._txt !== txt) { o._txt = txt; o.innerHTML = formatoOrigen(txt); }
     }
 }
 export function setOcultos(arr) { ocultos.clear(); (arr || []).forEach(k => ocultos.add(k)); pintarLectura(); pintarMareas(); if (!enMarcha) dibujar(); }

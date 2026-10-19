@@ -176,6 +176,9 @@ function buscar(indice, query) {
                 const veces = item.textoBusqueda.split(q).length - 1;
                 score += 1 + Math.min(veces - 1, 9) * 0.15;
             }
+            // Los atajos de los modelos vivos son pocos y escogidos: si coinciden, suben
+            // por delante de las fichas que solo nombran la palabra («sueros»).
+            if (score > 0 && item.atajo) score += 1;
             return score > 0 ? { ...item, score } : null;
         })
         .filter(Boolean)

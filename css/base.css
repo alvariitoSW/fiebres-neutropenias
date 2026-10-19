@@ -37,13 +37,19 @@ body {
 .header { text-align: center; margin-bottom: 30px; }
 .header h1 {
     color: var(--accent-blue);
-    font-size: 1.8rem;
+    font-size: 1.15rem;
     margin: 0 0 8px 0;
     text-transform: uppercase;
     letter-spacing: 3px;
     text-shadow: var(--glow-blue);
 }
-.header p { color: var(--text-muted); font-size: 0.85rem; margin: 0; text-transform: uppercase; letter-spacing: 1px;}
+/* El título es también el botón «al menú principal» (petición del usuario, octubre 2026). */
+.hud-inicio {
+    font: inherit; color: inherit; letter-spacing: inherit; text-transform: inherit; text-shadow: inherit;
+    background: none; border: 0; padding: 8px 12px; min-height: 44px; cursor: pointer;
+}
+.hud-inicio:focus-visible { outline: 2px solid var(--accent-blue); outline-offset: 2px; border-radius: 6px; }
+.header p { color: var(--text-muted); font-size: 0.75rem; margin: 0; text-transform: uppercase; letter-spacing: 1px;}
 
 /* Cabecera en 2 filas: título arriba (ancho completo, sin competir por
    espacio con nada), fila de acciones (Escalas/Estudio/Buscar) debajo —

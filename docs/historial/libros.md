@@ -481,3 +481,16 @@ Cómo se llega: botón «Río y mar» en el bloque «Modelos vivos» de los men�
 `data-agua-viva="<estado>"`. El listener delegado de `home/index.js` llama a `modelosVivos` de la API de cada
 especialidad (sin listener nuevo). El enlace al ácido-base (`data-acidobase-vivo="paso-3"`) lo resuelve la tarea
 `acidobase-vivo`.
+
+**Vuelta 2** (juicio del profesor y del auditor, 19/10/2026):
+- Los chips de origen ya no desbordan (partían la pantalla 21-31 px tras contestar ag-09, w1-4 y w2-2). Ahora son
+  enlaces con el título de la ficha, como «Ver en el texto».
+- w2-2: el delta se da con el hiato medido (Ec. 31.16): −0,25. Una nota de fuentes dice que Marino no aclara si va
+  con el corregido (0,5). La opción buena pasa a «delta <1», que vale con los dos. Fuera el «criterio de la maqueta».
+- Mareógrafo del mar: «↑ sin cifra» en lugar de «±0 mL ↑». La entradilla («3 de los 45 L») se oculta en la
+  Mayéutica.
+- Volver de un caso al modelo deja el dock en su pestaña (Pablo: Sangrado 35 %).
+- Un «tocar» fallado dos veces cuenta como fallo y vuelve en el repaso, como en el ácido-base.
+- Buscador: los atajos de los modelos vivos suben un punto si coinciden («sueros» los pone primeros).
+- Botones nuevos en Nefrología: regulación del agua corporal, hiponatremia e hipernatremia.
+- `mr-hiponatremia-dx` abre la glucosa que diluye el sodio; la neurona hinchada pasa a `mr-hiponatremia-tto`.

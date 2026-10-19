@@ -20,7 +20,7 @@ import {
 } from '../../data/agua-viva-data.js';
 import {
     $, estado, D, REDUCIR, Lupa, ocultos, initEscena, aplicarModelo, setOcultos, pintarLectura, medir, dibujar,
-    arrancar, pintarUnaVez, ponerVisible, zonaEn, puntoDe, estadoBucle, vaciarFotogramas, SVG_BRILLO,
+    arrancar, pintarUnaVez, ponerVisible, ponerFormatoOrigen, zonaEn, puntoDe, estadoBucle, vaciarFotogramas, SVG_BRILLO,
 } from './agua-viva-escena.js';
 
 let raiz = null;
@@ -33,7 +33,7 @@ let fraseActual = '';
 function decir(html, fuente) {
     const fraseEl = $('frase');
     const ilu = /ilustrativo|sin cifra/.test(fuente || '');
-    const nuevo = `${html} ${fuente ? `<span class="agv-org${ilu ? ' agv-ilu' : ''}">${fuente}</span>` : ''}`;
+    const nuevo = `${html} ${fuente ? `<span class="agv-org${ilu ? ' agv-ilu' : ''}">${origenHTML(fuente)}</span>` : ''}`;
     if (nuevo === fraseActual) return; fraseActual = nuevo;
     fraseEl.innerHTML = nuevo;
     $('lienzo').setAttribute('aria-label', fraseEl.textContent);
@@ -270,6 +270,7 @@ function setModo(m) {
     modo = m;
     for (const k of ['explorar', 'conceptos', 'preguntas']) $('modo-' + k).setAttribute('aria-selected', String(k === m));
     raiz.classList.toggle('agv-estudio', m !== 'explorar');
+    raiz.classList.toggle('agv-mayeutica', m === 'preguntas');   // la entradilla da la respuesta de la ag-01
     $('vista-explorar').hidden = m !== 'explorar'; $('vista-conceptos').hidden = m !== 'conceptos'; $('vista-preguntas').hidden = m !== 'preguntas';
     $('dock-explorar').hidden = m !== 'explorar'; $('dock-estudio').hidden = m === 'explorar';
     alTocar = null; anillo(null); setOcultos([]);
@@ -322,6 +323,29 @@ function verEnTexto(fuente) {
     return `<p class="agv-fuente-p">Ver en el texto: ${trozos.join(' ')}</p>`;
 }
 
+// Un texto de origen («ficha · mar-fig-10-1 · proporcional: ilustrativo»): cada ficha citada pasa a ser
+// un enlace a ella con su título; lo demás («ficha», «ilustrativo», «sin cifra»…) queda como texto.
+function origenHTML(texto) {
+    const vistos = new Set();
+    return String(texto).split(' · ').map(t => {
+        const m = t.trim().match(/^(#?)([a-z0-9]+(?:-[a-z0-9]+)+)(?:#([a-z0-9-]+))?(\s.*)?$/);
+        const r = m && (rutaDe(m[3] || m[2]) || rutaDe(m[2]));
+        if (!r) return escapeHtml(t);
+        const resto = m[4] ? escapeHtml(m[4]) : '';
+        if (vistos.has(r.tab.id)) return resto.trim() || null;   // la misma ficha, un solo enlace
+        vistos.add(r.tab.id);
+        return `<button type="button" class="agv-org-ir" data-especialidad="${r.nav.especialidad}" data-view="${r.nav.view}" data-panel="${r.panel}" data-tab="${r.tab.id}"${r.el !== r.tab ? ` data-resaltar="#${r.el.id}"` : ''}>${escapeHtml(tituloFicha(r.tab))}</button>${resto}`;
+    }).filter(x => x !== null).join(' · ');
+}
+// Los chips de origen escritos en el HTML o en los textos de las preguntas («ficha · …») se enlazan al pintarse.
+function enlazarOrigenes(cont) {
+    cont.querySelectorAll('span.agv-org').forEach(sp => {
+        if (sp.dataset.enlazado !== undefined || sp.children.length || !/^ficha · /.test(sp.textContent)) return;
+        sp.innerHTML = origenHTML(sp.textContent);
+        sp.dataset.enlazado = '';
+    });
+}
+
 /* ============================================================
    Capa de estudio: Conceptos y Mayéutica (recorrido, repaso de lo fallado y casos)
    ============================================================ */
@@ -360,7 +384,7 @@ function pintarPregunta(cont, q, { cabecera = '', repaso = null, alFinal }) {
     if (q.acidobase) h += enlaceAcidobase(q.acidobase);
     h += '<div id="agv-fmt"></div><div id="agv-q-res"></div>';
     if (q.tocar) h += `<div class="agv-mando" id="agv-mando" hidden>${mandoHTML(q.tocar)}<div class="agv-fila"><button class="agv-b agv-prim" type="button" data-accion="comprobar">Comprobar</button></div><p class="agv-pista" id="agv-pista" hidden></p></div><div id="agv-q-fin"></div>`;
-    cont.innerHTML = h; entrar(cont);
+    cont.innerHTML = h; entrar(cont); enlazarOrigenes(cont);
     const fmtEl = cont.querySelector('#agv-fmt');
     let intentos = 0, piePendiente = '';
 
@@ -399,12 +423,14 @@ function pintarPregunta(cont, q, { cabecera = '', repaso = null, alFinal }) {
         if (q.despues) aplicar(estadoDe(q.despues));
         setOcultos([]);
         r.innerHTML = `<div class="agv-respuesta agv-entra">${htmlRes}${pie}${botonSig()}</div>`;
+        enlazarOrigenes(r);
         verAbajo(r.querySelector('[data-accion="sig"]'));
     }
     function finComprobar(html) {
         setOcultos([]); alTocar = null; cont.querySelectorAll('#agv-mando [data-mando]').forEach(b => { b.disabled = true; });
         const f = cont.querySelector('#agv-q-fin');
         f.innerHTML = `<div class="agv-respuesta agv-entra">${html}${piePendiente}${botonSig()}</div>`;
+        enlazarOrigenes(f);
         verAbajo(f.querySelector('[data-accion="sig"]'));
     }
 
@@ -416,10 +442,11 @@ function pintarPregunta(cont, q, { cabecera = '', repaso = null, alFinal }) {
             intentos++;
             p.hidden = false;
             if (intentos < 2) { p.textContent = 'Aún no. ' + q.tocar.pista; return; }
+            res.ok = false;   // no supo ponerlo en el modelo: cuenta como fallo y vuelve en el repaso
             aplicar(estadoDe(Object.assign({}, q.estado, q.tocar.bueno)), {});
             if (q.tocar.bueno.tocado) anillo(q.tocar.bueno.tocado);
             p.textContent = q.tocar.pista + ' Te lo pongo en el modelo.';
-            e.target.closest('.agv-fila').remove(); finComprobar(`<span class="agv-ok">Así queda: ${q.tocar.confirma || 'míralo en el modelo.'}</span>`); return;
+            e.target.closest('.agv-fila').remove(); finComprobar(`<span class="agv-mal">Así queda (cuenta como fallo: vuelve en el repaso): ${q.tocar.confirma || 'míralo en el modelo.'}</span>`); return;
         }
         if (a === 'ops') { cont.querySelector('#agv-ops').hidden = false; e.target.closest('.agv-fila').remove(); return; }
         if (a === 'destapa') { cont.querySelector('#agv-pts').hidden = false; e.target.closest('.agv-fila').remove(); return; }
@@ -665,7 +692,7 @@ const Estudio = {
         pintarDock(C0.pasos.map(() => 'on'), C0.corto, 'hecho');
         cont.onclick = e => {
             const a = e.target.closest('[data-fin]')?.dataset.fin;
-            if (a === 'modelo') { const st = estadoDe(C0.volver.estado); setModo('explorar'); aplicar(st); }
+            if (a === 'modelo') { setModo('explorar'); ponerEnEstado(C0.volver); }
             if (a === 'otro') this.listaCasos();
         };
     },
@@ -674,9 +701,9 @@ const Estudio = {
 /* ============================================================
    Abrir en un estado (los botones de las fichas, los menús y el buscador)
    ============================================================ */
-export function abrirEstado(clave) {
-    const a = ESTADOS_ANCLA[clave] || ESTADOS_ANCLA.inicio;
-    if (modo !== 'explorar') setModo('explorar');
+// Deja el modelo en un estado, con el dock en su pestaña y su fluido y la lupa que toque:
+// { estado, pestana, fluido, lupa }. Lo usan los estados con nombre y la vuelta de un caso.
+function ponerEnEstado(a) {
     medir();
     if (Lupa.abierta) Lupa.cerrar();
     aplicar(estadoBase(), { reiniciar: true, frase: false });
@@ -685,6 +712,11 @@ export function abrirEstado(clave) {
     pestana(a.pestana || 'sueros');
     if (a.fluido) elegirFluido(a.fluido);
     if (a.lupa) Lupa.abrir(a.lupa);
+}
+export function abrirEstado(clave) {
+    const a = ESTADOS_ANCLA[clave] || ESTADOS_ANCLA.inicio;
+    if (modo !== 'explorar') setModo('explorar');
+    ponerEnEstado(a);
     requestAnimationFrame(() => raiz.scrollIntoView({ block: 'start' }));
 }
 
@@ -696,6 +728,8 @@ export function init() {
     if (!raiz) return null;
     initEscena({ enEstudio });
     chipsFluido(); iconos(raiz); engancharDock();
+    enlazarOrigenes(raiz);
+    ponerFormatoOrigen(origenHTML);   // los orígenes de los mareógrafos, también con su enlace
     Estudio.cargar();
     pintarLectura(); sincronizarMandos(); decir(...FRASE_INICIO());
 

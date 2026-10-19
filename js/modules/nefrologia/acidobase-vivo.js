@@ -36,14 +36,26 @@ const fmt = (v, d = 0) => { const r = Math.round(v * 10 ** d) / 10 ** d; return 
 const fmtA = v => fmt(v, Math.abs(v - Math.round(v)) < 0.05 ? 0 : 1);       // 26 o 25,6
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const lerp = (a, b, t) => a + (b - a) * t;
+const enFotograma = (n, fn) => (n > 0 ? requestAnimationFrame(() => enFotograma(n - 1, fn)) : fn());
 const suave = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 const azar = (a, b) => a + Math.random() * (b - a);
 function el(tag, at = {}, padre) { const e = document.createElementNS(NS, tag); for (const k in at) e.setAttribute(k, at[k]); if (padre) padre.appendChild(e); return e; }
 // Chip de origen. 'f' = ficha (con ficha#elemento), 'g' = fisiología general, 'i' = ilustrativo.
 // Varios chips juntos, plegados en una línea («De dónde sale»), para no apilarlos bajo cada figura
-const plegarOrigen = html => { const n = (html.match(/class="abv-org /g) || []).length; return n <= 1 ? html : `<details class="abv-fuentes-mini"><summary>De dónde sale cada cifra (${n})</summary><span class="abv-origenes">${html}</span></details>`; };
-const O = (t, x) => `<span class="abv-org abv-org-${t}">${{ f: 'ficha', g: 'fisiología general', i: 'ilustrativo' }[t]}${x ? ' · ' + x : ''}</span>`;
+const plegarOrigen = html => { const n = (html.match(/class="abv-org /g) || []).length; return n <= 1 ? html : `<details class="abv-fuentes-mini"><summary>Fuentes (${n})</summary><span class="abv-origenes">${html}</span></details>`; };
+// Las de tipo «ficha» con su ficha#elemento son un botón con el nombre de la ficha (y de la línea) que la abre y la
+// resalta: el id interno no se ve.
+const REF_FICHA = /^((?:mr|mt|mar|fisio|neumo)-[\w-]+)(?:#([\wñ-]+))?(?: · (.+))?$/;
+const O = (t, x) => {
+  const m = t === 'f' && x && REF_FICHA.exec(x);
+  const at = m && attrFicha(m[1] + (m[2] ? '#' + m[2] : ''));
+  if (at) return `<button type="button" class="abv-org abv-org-f abv-org-btn" ${at}>📖 ${etiquetaFicha(m[1], m[2])}${m[3] ? ' · ' + m[3] : ''}</button>`;
+  return `<span class="abv-org abv-org-${t}">${{ f: 'ficha', g: 'fisiología general', i: 'ilustrativo' }[t]}${x ? ' · ' + x : ''}</span>`;
+};
 const orgDe = lista => lista.map(([t, x]) => O(t, x)).join('');
+// Escritura de textos que se repintan a menudo: si el HTML no cambia, no se toca el DOM (cada escritura obliga a
+// recalcular estilos y maquetar; era lo que alargaba los fotogramas al cambiar de paso)
+const html = sel => { const e = $(sel); return { set innerHTML(h) { if (e && e._h !== h) { e.innerHTML = h; e._h = h; } } }; };
 
 // Formas de las partículas: las de la tabla única (js/core/particulas.js). Los nombres cortos de la maqueta → especie.
 const ESPECIE = { circ: 'na', cuad: 'k', rombo: 'cl', tri: 'hco3', cruz: 'h', pent: 'nh4', estrella: 'anion', voluta: 'co2', hex: 'urea' };
@@ -393,8 +405,8 @@ function pintarAlveolo() {
   else if (d.lectura.prim === 'acidResp') f = `Aquí el problema es el pulmón: no saca el CO₂ (PaCO₂ ${fmtA(E.paco2)}). Compensa el riñón, y tarda días.`;
   else if (d.lectura.prim === 'alcResp') f = `El pulmón saca CO₂ de más (PaCO₂ ${fmtA(E.paco2)}). Compensa el riñón, y tarda días.`;
   else f = `En reposo: PaCO₂ ${fmtA(E.paco2)}. Las volutas salen con calma.`;
-  $('#abv-alveolo-frase').innerHTML = f;
-  $('#abv-alveolo-org').innerHTML = plegarOrigen((E.farmaco === 'bicarbonato' ? O('f', 'mr-lactato-bicarbonato#mr-bicarb-contra') : O('f', 'mr-acidobase-analisis#mr-comp-acidosis-met')) + O('i', `ventilación ×${fmt(vent, 1)} (dibujo)`));
+  html('#abv-alveolo-frase').innerHTML = f;
+  html('#abv-alveolo-org').innerHTML = plegarOrigen((E.farmaco === 'bicarbonato' ? O('f', 'mr-lactato-bicarbonato#mr-bicarb-contra') : O('f', 'mr-acidobase-analisis#mr-comp-acidosis-met')) + O('i', `ventilación ×${fmt(vent, 1)} (dibujo)`));
   $('#abv-obj-alveolo-l').textContent = E.tendencia ? 'PaCO₂ ↓' : `PaCO₂ ${fmtA(E.paco2)}`;
 }
 // ventilación del dibujo (ilustrativa): más cuanto más baja la PaCO₂ que mantiene
@@ -511,8 +523,8 @@ function pintarPlasma(ligero) {
   if (E.alb >= albN - .05) fa = `Albúmina normal: el hiato que ves es el que hay${oc('hiato') ? '' : ` (<strong>${fmt(d.HA)}</strong>)`}. Bájala.`;
   else if (d.HA <= 12.5 && d.HAc > 12.5) fa = `Albúmina ${fmt(E.alb, 1)}: <span class="hl-verde">el hiato parece normal (${fmt(d.HA)})</span>, pero corregido es <span class="hl-rojo">${fmt(d.HAc)}</span>: hay un anión escondido.`;
   else fa = `Albúmina ${fmt(E.alb, 1)}: el bloque de la albúmina encoge y el hiato medido baja a ${fmt(d.HA)}; corregido, <strong>${fmt(d.HAc)}</strong>.`;
-  $('#abv-alb-frase').innerHTML = fa;
-  $('#abv-plasma-org').innerHTML = plegarOrigen(O('f', 'mr-acidobase-gaps#mr-ag-formula') + O('f', 'mr-acidobase-gaps#mr-ag-albumina') + (E.fuente === 'nefro' ? O('f', 'fisio-acidobase-acidosis · albúmina normal 4,4 (Figge)') : '') + O('g', 'H⁺ + HCO₃⁻ → CO₂ + H₂O') + O('i', 'alto del bloque de la albúmina; Cl⁻ que ocupa su sitio al bajar; partículas'));
+  html('#abv-alb-frase').innerHTML = fa;
+  html('#abv-plasma-org').innerHTML = plegarOrigen(O('f', 'mr-acidobase-gaps#mr-ag-formula') + O('f', 'mr-acidobase-gaps#mr-ag-albumina') + (E.fuente === 'nefro' ? O('f', 'fisio-acidobase-acidosis · albúmina normal 4,4 (Figge)') : '') + O('g', 'H⁺ + HCO₃⁻ → CO₂ + H₂O') + O('i', 'alto del bloque de la albúmina; Cl⁻ que ocupa su sitio al bajar; partículas'));
   $('#abv-obj-plasma-l').textContent = `hiato ${oc('hiato') ? '?' : fmt(d.HA)}`;
   pintarOsmoles(d);
 }
@@ -656,8 +668,8 @@ function pintarOsmoles(d) {
   if (gap == null) f = `Calculada = 2 × Na + glucosa/18 + BUN/2,8 = <strong>${fmtA(calc)}</strong>. Sube la medida.`;
   else if (E.fuente === 'nefro' ? gap <= 20 : gap < 10) f = `Medida ${fmtA(med)}, calculada ${fmtA(calc)}: diferencia ${fmtA(gap)}, <span class="hl-verde">${E.fuente === 'nefro' ? 'no pasa de 20 (Nefrología al día)' : 'normal (<10)'}</span>.`;
   else f = `Medida ${fmtA(med)}, calculada ${fmtA(calc)}: <span class="hl-rojo">${fmtA(gap)} de sal que el cálculo no ve</span>. ${d.HA > 12.5 ? 'Con HA alto, piensa en <strong>metanol o etilenglicol</strong>.' : 'Hay un soluto escondido.'}`;
-  $('#abv-osm-frase').innerHTML = f;
-  $('#abv-osm-org').innerHTML = plegarOrigen(O('f', 'mr-acidobase-gaps#mr-osm-gap') + O('f', 'mr-acidobase-gaps#mr-osm-oculto') + (E.fuente === 'nefro' ? O('f', 'fisio-acidobase-acidosis · >20 sugiere tóxico; usa urea/5,6 en vez de BUN/2,8') : '') + (med == null ? '' : O('i', 'osmolalidad medida: del caso o del mando')));
+  html('#abv-osm-frase').innerHTML = f;
+  html('#abv-osm-org').innerHTML = plegarOrigen(O('f', 'mr-acidobase-gaps#mr-osm-gap') + O('f', 'mr-acidobase-gaps#mr-osm-oculto') + (E.fuente === 'nefro' ? O('f', 'fisio-acidobase-acidosis · >20 sugiere tóxico; usa urea/5,6 en vez de BUN/2,8') : '') + (med == null ? '' : O('i', 'osmolalidad medida: del caso o del mando')));
 }
 
 // ───────── ③ Riñón: foto → nefrona → célula del tramo ─────────
@@ -677,9 +689,9 @@ function construirNefrona() {
     <path id="abv-n-prox" d="M108 66C126 52 138 84 154 70S178 52 186 76C192 96 172 104 168 120V286" fill="none" stroke="${C.oro}" stroke-width="7" opacity=".25"/>
     <path d="M108 66C126 52 138 84 154 70S178 52 186 76C192 96 172 104 168 120V286" fill="none" stroke="${C.oro}" stroke-width="1.4"/>
     <path d="M168 286C168 312 196 312 196 286V140C196 124 214 112 232 116S262 136 270 120" fill="none" stroke="${C.muted}" stroke-width="1.2"/>
-    <path d="M270 120C280 98 292 92 300 96V324" fill="none" stroke="${C.oro}" stroke-width="7" opacity=".25"/>
-    <path d="M270 120C280 98 292 92 300 96V324" fill="none" stroke="${C.oro}" stroke-width="1.4"/>
-    <path d="M300 324l-5-8M300 324l5-8" stroke="${C.oro}" stroke-width="1"/>
+    <path d="M270 120C292 96 322 90 340 96V324" fill="none" stroke="${C.oro}" stroke-width="7" opacity=".25"/>
+    <path d="M270 120C292 96 322 90 340 96V324" fill="none" stroke="${C.oro}" stroke-width="1.4"/>
+    <path d="M340 324l-5-8M340 324l5-8" stroke="${C.oro}" stroke-width="1"/>
     <text x="210" y="300" font-size="10.5" font-style="italic" fill="${C.muted}">asa de Henle</text>
     <g data-tramo-ir="proximal" role="button" tabindex="0" aria-label="Ver la célula del túbulo proximal" style="cursor:pointer">
       <rect x="22" y="128" width="142" height="80" rx="10" fill="${alfa(C.oro, .07)}" stroke="${C.oro}" stroke-dasharray="2 3"/>
@@ -688,11 +700,11 @@ function construirNefrona() {
       <text x="30" y="172" font-size="10.5" fill="${C.dim}">recupera el 85-90 %</text><text x="30" y="186" font-size="10.5" fill="${C.dim}">del HCO₃⁻ filtrado</text>
       <text x="30" y="201" font-size="10.5" font-style="italic" fill="${C.oro}">tocar: ver la célula ▸</text></g>
     <g data-tramo-ir="colector" role="button" tabindex="0" aria-label="Ver las células del túbulo colector" style="cursor:pointer">
-      <rect x="204" y="172" width="150" height="100" rx="10" fill="${alfa(C.oro, .07)}" stroke="${C.oro}" stroke-dasharray="2 3"/>
-      <circle cx="224" cy="196" r="11" fill="${C.oro}"/><text x="224" y="200" text-anchor="middle" font-size="12" fill="${C.fondo}">2</text>
-      <text x="240" y="200" font-size="12.5" fill="${C.crema}">colector</text>
-      <text x="212" y="218" font-size="10.5" fill="${C.dim}">10-15 % del HCO₃⁻;</text><text x="212" y="233" font-size="10.5" fill="${C.dim}">secreta H⁺ y, con la</text><text x="212" y="248" font-size="10.5" fill="${C.dim}">pendrina, HCO₃⁻</text>
-      <text x="212" y="264" font-size="10.5" font-style="italic" fill="${C.oro}">tocar: ver las células ▸</text></g>
+      <rect x="202" y="172" width="128" height="100" rx="10" fill="${alfa(C.oro, .07)}" stroke="${C.oro}" stroke-dasharray="2 3"/>
+      <circle cx="220" cy="196" r="11" fill="${C.oro}"/><text x="220" y="200" text-anchor="middle" font-size="12" fill="${C.fondo}">2</text>
+      <text x="236" y="200" font-size="12.5" fill="${C.crema}">colector</text>
+      <text x="209" y="218" font-size="10.5" fill="${C.dim}">10-15 % del HCO₃⁻;</text><text x="209" y="233" font-size="10.5" fill="${C.dim}">secreta H⁺ y, con la</text><text x="209" y="248" font-size="10.5" fill="${C.dim}">pendrina, HCO₃⁻</text>
+      <text x="209" y="264" font-size="10.5" font-style="italic" fill="${C.oro}">tocar: ver las células ▸</text></g>
     <text x="14" y="334" font-size="10.5" font-style="italic" fill="${C.muted}">esquema, no a escala</text>`;
 }
 // geometría de las células (viewBox 360 × 340): luz a la izquierda, sangre a la derecha
@@ -779,8 +791,8 @@ function pintarRinon() {
     else if (po > .5) { f = `<span class="hl-verde">Llega Cl⁻ y la pendrina se enciende</span>: entra Cl⁻ y sale HCO₃⁻ por la orina.${E.aldo === 'alta' ? ' La aldosterona alta sigue secretando K⁺ y H⁺: no responde al cloro.' : ''}`; org = O('f', 'mr-alcalosis-mecanismos#mr-alc-pendrina') + (E.aldo === 'alta' ? O('f', 'mr-alcalosis-mecanismos#mr-tabla-33-1') : O('f', 'mr-alcalosis-tratamiento#mr-tabla-33-2')); }
     else { f = `En reposo la <strong>pendrina</strong> apenas trabaja; la intercalar A secreta H⁺ y devuelve HCO₃⁻ a la sangre.${E.aldo === 'alta' ? ' <span class="hl-azul">La aldosterona</span> reabsorbe Na⁺, secreta K⁺ y enciende la bomba de H⁺.' : ''}`; org = O('f', 'mr-alcalosis-mecanismos#mr-alc-pendrina'); }
   }
-  $('#abv-rinon-frase').innerHTML = f; $('#abv-rinon-org').innerHTML = plegarOrigen(org + (prox ? '' : O('f', 'mr-alcalosis-mecanismos#mr-alc-reabsorcion') + O('g', 'nombres de las células: principal, intercalar A y B')) + O('i', 'cantidad y ritmo de las partículas'));
-  $('#abv-celula-clave').innerHTML = prox
+  html('#abv-rinon-frase').innerHTML = f; html('#abv-rinon-org').innerHTML = plegarOrigen(org + (prox ? '' : O('f', 'mr-alcalosis-mecanismos#mr-alc-reabsorcion') + O('g', 'nombres de las células: principal, intercalar A y B')) + O('i', 'cantidad y ritmo de las partículas'));
+  html('#abv-celula-clave').innerHTML = prox
     ? `En la luz, la <strong>anhidrasa carbónica (AC)</strong> une H⁺ + HCO₃⁻ en CO₂ + H₂O; el CO₂ entra y dentro se rehace el HCO₃⁻, que sale a la sangre. La AC es la diana de la acetazolamida.`
     : `<strong>Principal</strong>: entra Na⁺, sale K⁺. <strong>Intercalar A</strong>: sale H⁺ y el HCO₃⁻ vuelve a la sangre. <strong>Intercalar B</strong>: la pendrina cambia Cl⁻ de la luz por HCO₃⁻ (Fig. 33.1).`;
   $('#abv-obj-rinon-l').textContent = prox ? (E.farmaco === 'acetazolamida' ? 'AC bloqueada' : 'proximal') : bloq ? 'pendrina ✕' : po > .5 ? 'pendrina ●' : 'pendrina ○';
@@ -790,7 +802,7 @@ function pintarRinon() {
   if (c && c.nefrona) sal.push(boton('nefrona', c.nefrona, `Abrir en la nefrona viva: ${c.t}`));
   if (E.vomito) sal.push(boton('glomerulo', 'deplecion', 'Ver en el glomérulo: depleción de volumen'));
   if (E.vomito || c?.id === 'vomitos') sal.push(boton('nefrona', 'normal|furosemida', 'Abrir en la nefrona viva: furosemida'));
-  $('#abv-rinon-salidas').innerHTML = sal.join('');
+  html('#abv-rinon-salidas').innerHTML = sal.join('');
 }
 function boton(tipo, valor, txt) {
   // El glomérulo vivo vive en la ficha «Regulación» de Fisiología renal (como el enlace de la nefrona viva)
@@ -1048,8 +1060,8 @@ function fraseCarta() {
   else if (l.prim === 'acidResp' || l.prim === 'alcResp') f = `Respiratorio: HCO₃⁻ esperado ${fmt(d.eH.ag, 1)} agudo y ${fmt(d.eH.cr, 1)} crónico; el medido, ${fmtA(E.hco3)}: <strong>${l.txt}</strong>.`;
   else if (l.prim === 'mixto') f = `pH en rango con la PaCO₂ fuera: <span class="hl-rojo">${l.txt}</span> (Regla 2).`;
   else f = 'En el puerto: gasometría normal. El punto es el paciente; la línea de puntos, su derrota.';
-  $('#abv-carta-frase').innerHTML = f;
-  $('#abv-carta-org').innerHTML = plegarOrigen(O('f', 'mr-acidobase-analisis#mr-regla-3') + O('f', 'mr-acidobase-analisis#mr-regla-4') + (E.fuente === 'nefro' ? O('f', 'fisio-acidobase-acidosis · líneas desde HCO₃⁻ 25') : '') + O('g', 'isolíneas: la Ec. 31.2 a pH fijo'));
+  html('#abv-carta-frase').innerHTML = f;
+  html('#abv-carta-org').innerHTML = plegarOrigen(O('f', 'mr-acidobase-analisis#mr-regla-3') + O('f', 'mr-acidobase-analisis#mr-regla-4') + (E.fuente === 'nefro' ? O('f', 'fisio-acidobase-acidosis · líneas desde HCO₃⁻ 25') : '') + O('g', 'isolíneas: la Ec. 31.2 a pH fijo'));
 }
 
 // ═════════════════════════════════════════════════════════════════════
@@ -1150,11 +1162,12 @@ function pintarTextos() {
   const d = derivarRapido(), p = PASOS.find(x => x.id === pasoActual);
   if (p && !CAUSA_ACTUAL) {
     $('#abv-paso-nombre').textContent = `Paso ${p.id} · ${p.nombre}`; $('#abv-paso-trastorno').textContent = p.trastorno;
-    const fp = FRASES_PASO[p.id]; $('#abv-frase').innerHTML = T(fp.t); $('#abv-frase-org').innerHTML = plegarOrigen(orgDe(fp.org));
+    const fp = FRASES_PASO[p.id]; html('#abv-frase').innerHTML = T(fp.t); html('#abv-frase-org').innerHTML = plegarOrigen(orgDe(fp.org));
   } else {
-    $('#abv-paso-nombre').textContent = CAUSA_ACTUAL ? `Causa · ${causaActual().t}` : 'Laboratorio';
+    // sin paso ni causa: el laboratorio, o el paciente de un caso («Abrir el modelo en el estado del paciente»)
+    $('#abv-paso-nombre').textContent = CAUSA_ACTUAL ? `Causa · ${causaActual().t}` : E.caso ? `Caso · ${E.etiqueta}` : 'Laboratorio';
     $('#abv-paso-trastorno').textContent = d.lectura.txt;
-    const [f, o] = fraseGenerica(d); $('#abv-frase').innerHTML = f; $('#abv-frase-org').innerHTML = plegarOrigen(o);
+    const [f, o] = fraseGenerica(d); html('#abv-frase').innerHTML = f; html('#abv-frase-org').innerHTML = plegarOrigen(o);
   }
   // los datos, cada uno con su origen corto (el largo, en «De dónde sale cada cifra»)
   const tend = E.tendencia, n0 = BASE;
@@ -1169,8 +1182,8 @@ function pintarTextos() {
     met ? ['PaCO₂ esp.', tend ? '—' : fmt(d.eP.v, 1), false, 'Fig. 31.2'] : resp ? ['HCO₃⁻ esp.', `${fmt(d.eH.ag, 0)}-${fmt(d.eH.cr, 0)}`, false, 'ag.-cr.'] : ['PaCO₂ esp.', '—', false, 'Fig. 31.2'],
     E.k != null ? ['K⁺', typeof E.k === 'number' ? fmt(E.k, 1) : E.k, true, typeof E.k === 'number' ? 'caso' : 'tabla PIF'] : d.osmGap != null ? ['Hiato osm.', fmt(d.osmGap), E.fuente === 'nefro' ? d.osmGap > 20 : d.osmGap >= 10, 'Ec. 31.17'] : ['Cl⁻ orina', E.clOrina || '—', !!E.clOrina, 'Tabla 33.1'],
   ];
-  $('#abv-datos').innerHTML = celdas.map(([k, v, cambia, o]) => `<div><dt>${k}</dt><dd class="${cambia ? 'abv-cambia' : ''}">${v}<small>${o}</small></dd></div>`).join('');
-  $('#abv-de-donde').innerHTML = `<ul>
+  html('#abv-datos').innerHTML = celdas.map(([k, v, cambia, o]) => `<div><dt>${k}</dt><dd class="${cambia ? 'abv-cambia' : ''}">${v}<small>${o}</small></dd></div>`).join('');
+  if ($('#abv-de-donde-det').open) html('#abv-de-donde').innerHTML = `<ul>
     <li>Na⁺, Cl⁻, HCO₃⁻, PaCO₂: ${pasoActual && !CAUSA_ACTUAL ? 'del caso guiado' : 'del estado elegido'} ${O('i', 'paciente inventado')}</li>
     <li>pH = 9 − log (24 × PaCO₂ / HCO₃⁻) ${O('f', 'mr-acidobase-analisis#mr-ecuacion-h')}</li>
     <li>Hiato = Na − (Cl + HCO₃⁻); corregido = HA + 2,5 × (${fmt(FUENTES[E.fuente].albN, 1)} − albúmina) ${O('f', 'mr-acidobase-gaps#mr-ag-formula')}${O('f', 'mr-acidobase-gaps#mr-ag-albumina')}</li>
@@ -1186,10 +1199,10 @@ function pintarTextos() {
     sal.push(enlaceFicha('mar-cristaloides', 'Ver el cloro de cada suero (Tabla 10.2) →', 'mar-tabla-10-2'));
   }
   const c = causaActual(); if (c && c.nefrona) sal.push(boton('nefrona', c.nefrona, `Abrir en la nefrona viva: ${c.t}`));
-  $('#abv-salidas-paso').innerHTML = sal.join('');
+  html('#abv-salidas-paso').innerHTML = sal.join('');
   // dock
   $$('#abv-chips .abv-chip').forEach(b => { if (b.dataset.id === pasoActual && !CAUSA_ACTUAL) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current'); });
-  $('#abv-mini-paso').textContent = CAUSA_ACTUAL ? causaActual().t : pasoActual ? `paso ${pasoActual}` : 'laboratorio';
+  $('#abv-mini-paso').textContent = CAUSA_ACTUAL ? causaActual().t : pasoActual ? `paso ${pasoActual}` : E.caso ? E.etiqueta.split(' · ')[0] : 'laboratorio';
 }
 function construirDock() {
   $('#abv-chips').innerHTML = PASOS.map((p, i) => `<button type="button" class="abv-chip" data-i="${i}" data-id="${p.id}" aria-label="Paso ${p.id}: ${p.nombre}">${p.id}<small>${p.corto}</small></button>`).join('');
@@ -1206,8 +1219,9 @@ function irPaso(i) {
   const antes = pasoActual, desdeCanon = PASO_E[Math.max(0, PASOS.findIndex(x => x.id === antes))];
   CAUSA_ACTUAL = null; pasoActual = p.id;
   if (dest.obj === 'rinon') E.tramo = dest.tramo;
-  // abrir la vista va en su propio fotograma: así el clic no junta la maqueta de la vista y el primer repintado
-  requestAnimationFrame(() => requestAnimationFrame(() => { if (dest.obj === 'rinon') irNivel(dest.nivel); abrirObjetivo(dest.obj, true); }));
+  // abrir la vista va en su propio fotograma, después de las tres tandas del repintado: así ningún fotograma junta
+  // la maqueta de la vista nueva con los textos
+  enFotograma(4, () => { if (dest.obj === 'rinon') irNivel(dest.nivel); abrirObjetivo(dest.obj, true); });
   const reinicio = i === 0 || (E.paciente !== dest.paciente);
   if (i === 0) { reiniciarEstela(); CARTA.marcas = []; }
   CARTA.marcas = marcasDe(p.id);
@@ -1217,7 +1231,7 @@ function irCausa(id) {
   const c = CAUSA[id]; CAUSA_ACTUAL = id; pasoActual = null;
   const dest = estadoDe({ ...c.e, fuente: E.fuente });
   if (dest.obj === 'rinon') E.tramo = dest.tramo;
-  requestAnimationFrame(() => requestAnimationFrame(() => { if (dest.obj === 'rinon') irNivel(2); abrirObjetivo(dest.obj, true); }));
+  enFotograma(4, () => { if (dest.obj === 'rinon') irNivel(2); abrirObjetivo(dest.obj, true); });
   CARTA.marcas = [];
   irAEstado(dest, { reinicio: true, desdeCanon: BASE });
 }
@@ -1228,7 +1242,7 @@ function irCausa(id) {
 // Devuelve el estado nuevo o {error}. Reglas: el HCO₃⁻ con el Cl⁻ quieto mueve el hiato; el Cl⁻ con el hiato quieto mueve
 // el HCO₃⁻ (hiperclorémica); los aniones con el Cl⁻ quieto se comen el HCO₃⁻; la albúmina mueve el Cl⁻ (ilustrativo).
 function mandar(campo, v, base = E) {
-  let e = { ...base, teorico: false, etiqueta: 'Laboratorio' };
+  let e = { ...base, teorico: false, etiqueta: 'Laboratorio', caso: false };
   if (base.tendencia) { const v4 = PASO_E[5]; if (base.paciente === 'B') Object.assign(e, { na: v4.na, cl: v4.cl, hco3: v4.hco3, paco2: v4.paco2 }); e.tendencia = false; }
   const d = derivar(e), HAb = haBase(e.alb, e.fuente);
   switch (campo) {
@@ -1313,25 +1327,26 @@ function construirLab() {
         <p>Las dos se muestran; ninguna gana. Marino: líneas desde HCO₃⁻ 24, delta con corte en 1, albúmina normal 4,5, hiato osmolal normal &lt;10 ${O('f', 'mr-acidobase-gaps#mr-osm-gap')}. Nefrología al día: líneas desde HCO₃⁻ 25 (acidosis 0,85-1,2; respiratorias 0,1 y 0,3 o 0,2-0,25 y 0,5), Δ-ratio con cortes 0,4 y 2 (los de la calculadora de su ficha), corrección de Figge con 4,4, osmolalidad calculada con urea/5,6 (en vez de BUN/2,8) e hiato osmolal &gt;20 como sospecha de tóxico ${O('f', 'fisio-acidobase-acidosis#ab-hau')}.</p></div></details></div>`;
 }
 function frasesLab() {
-  if (!$('#abv-lf-paco2')) return;
+  if (!$('#abv-lf-paco2') || !$('#abv-lab').open) return;   // dentro del desplegable cerrado no se ve: se pinta al abrirlo
   const d = derivarRapido(), l = d.lectura;
   const met = l.prim === 'acidMet' || l.prim === 'alcMet';
-  $('#abv-lf-paco2').innerHTML = met ? `Con HCO₃⁻ ${fmtA(E.hco3)}, la PaCO₂ esperada es <strong>${fmt(d.eP.v, 1)}</strong>: más alta, acidosis respiratoria añadida; más baja, alcalosis respiratoria añadida. ${O('f', 'mr-acidobase-analisis#mr-regla-3')}` : `Ahora: ${l.txt}. ${O('f', 'mr-acidobase-analisis#mr-regla-1')}`;
-  $('#abv-lf-hco3').innerHTML = `El mismo cambio de 0,4 unidades de pH pesa más en el lado ácido: de 7,40 a 7,00 la [H⁺] sube 60 nEq/L; de 7,40 a 7,80 baja solo 24. Ahora, [H⁺] ${fmt(d.H)} nEq/L. ${O('f', 'mr-acidobase-analisis#mr-ph-no-lineal')}`;
-  $('#abv-lf-cl').innerHTML = `Sube el Cl⁻ con el hiato quieto: <span class="hl-purpura">el HCO₃⁻ tiene que bajar</span> (hiperclorémica). ${O('f', 'mr-acidobase-gaps#mr-ag-formula')}`;
-  $('#abv-lf-an').innerHTML = `${d.aniones >= 1 ? `Los ${E.anion === 'lact' ? 'lactatos' : 'cetoácidos'} se comen el HCO₃⁻: el hueco crece a ${fmt(d.HA)}.` : 'Sin aniones de más: el hiato es el de siempre.'} ${O('f', 'mr-acidobase-gaps#mr-ag-concepto')}`;
-  $('#abv-lf-alb').innerHTML = `Albúmina ${fmt(E.alb, 1)}: hiato ${fmt(d.HA)}; corregido, <strong>${fmt(d.HAc)}</strong> (2,5 mEq por gramo). ${O('f', 'mr-acidobase-gaps#mr-ag-albumina')}${O('i', 'el Cl⁻ ocupa el sitio')}`;
-  $('#abv-lf-reloj').innerHTML = `El pulmón compensa en 30-120 min; el riñón tarda 2-3 días. ${E.reloj === 'dias' ? 'Hoy es crónica.' : 'Hoy es aguda.'} ${E.auto ? 'Con «solos», el riñón sigue a la PaCO₂ según el reloj y el pulmón sigue al HCO₃⁻.' : ''} ${O('f', 'mr-acidobase-analisis#mr-comp-agudo')}${O('f', 'mr-acidobase-analisis#mr-comp-cronico')}`;
-  $('#abv-lf-col').innerHTML = `${E.clLuz === 'bajo' ? 'Sin cloro en la luz, la pendrina no puede tirar el HCO₃⁻.' : 'Con cloro en la luz, la pendrina puede cambiar Cl⁻ por HCO₃⁻.'} ${E.aldo === 'alta' ? 'La aldosterona reabsorbe Na⁺, secreta K⁺ y enciende la bomba de H⁺.' : ''} ${O('f', 'mr-alcalosis-mecanismos#mr-alc-pendrina')}`;
-  $('#abv-lf-osm').innerHTML = d.osmGap == null ? `Calculada ${fmt(d.osmCalc)}. ${O('f', 'mr-acidobase-gaps#mr-osm-gap')}` : `Medida ${fmtA(E.osm)}, calculada ${fmt(d.osmCalc)}: ${fmt(d.osmGap)} de sal que el cálculo no ve. ${O('f', 'mr-acidobase-gaps#mr-osm-oculto')}`;
-  $('#abv-lf-resp').innerHTML = `${E.respirador ? 'Ventilado: la ventilación minuto la pones tú. Si das bicarbonato, súbela para sacar su CO₂.' : 'Respira solo.'} ${O('f', 'mr-lactato-bicarbonato#mr-bicarb-contra')}`;
-  $('#abv-lf-fuente').innerHTML = `${E.fuente === 'nefro' ? 'Nefrología al día: líneas desde 25, Δ-ratio 0,4 y 2, albúmina 4,4, hiato osmolal >20.' : 'Marino: líneas desde 24, delta 1, albúmina 4,5, hiato osmolal <10.'}`;
+  html('#abv-lf-paco2').innerHTML = met ? `Con HCO₃⁻ ${fmtA(E.hco3)}, la PaCO₂ esperada es <strong>${fmt(d.eP.v, 1)}</strong>: más alta, acidosis respiratoria añadida; más baja, alcalosis respiratoria añadida. ${O('f', 'mr-acidobase-analisis#mr-regla-3')}` : `Ahora: ${l.txt}. ${O('f', 'mr-acidobase-analisis#mr-regla-1')}`;
+  html('#abv-lf-hco3').innerHTML = `El mismo cambio de 0,4 unidades de pH pesa más en el lado ácido: de 7,40 a 7,00 la [H⁺] sube 60 nEq/L; de 7,40 a 7,80 baja solo 24. Ahora, [H⁺] ${fmt(d.H)} nEq/L. ${O('f', 'mr-acidobase-analisis#mr-ph-no-lineal')}`;
+  html('#abv-lf-cl').innerHTML = `Sube el Cl⁻ con el hiato quieto: <span class="hl-purpura">el HCO₃⁻ tiene que bajar</span> (hiperclorémica). ${O('f', 'mr-acidobase-gaps#mr-ag-formula')}`;
+  html('#abv-lf-an').innerHTML = `${d.aniones >= 1 ? `Los ${E.anion === 'lact' ? 'lactatos' : 'cetoácidos'} se comen el HCO₃⁻: el hueco crece a ${fmt(d.HA)}.` : 'Sin aniones de más: el hiato es el de siempre.'} ${O('f', 'mr-acidobase-gaps#mr-ag-concepto')}`;
+  html('#abv-lf-alb').innerHTML = `Albúmina ${fmt(E.alb, 1)}: hiato ${fmt(d.HA)}; corregido, <strong>${fmt(d.HAc)}</strong> (2,5 mEq por gramo). ${O('f', 'mr-acidobase-gaps#mr-ag-albumina')}${O('i', 'el Cl⁻ ocupa el sitio')}`;
+  html('#abv-lf-reloj').innerHTML = `El pulmón compensa en 30-120 min; el riñón tarda 2-3 días. ${E.reloj === 'dias' ? 'Hoy es crónica.' : 'Hoy es aguda.'} ${E.auto ? 'Con «solos», el riñón sigue a la PaCO₂ según el reloj y el pulmón sigue al HCO₃⁻.' : ''} ${O('f', 'mr-acidobase-analisis#mr-comp-agudo')}${O('f', 'mr-acidobase-analisis#mr-comp-cronico')}`;
+  html('#abv-lf-col').innerHTML = `${E.clLuz === 'bajo' ? 'Sin cloro en la luz, la pendrina no puede tirar el HCO₃⁻.' : 'Con cloro en la luz, la pendrina puede cambiar Cl⁻ por HCO₃⁻.'} ${E.aldo === 'alta' ? 'La aldosterona reabsorbe Na⁺, secreta K⁺ y enciende la bomba de H⁺.' : ''} ${O('f', 'mr-alcalosis-mecanismos#mr-alc-pendrina')}`;
+  html('#abv-lf-osm').innerHTML = d.osmGap == null ? `Calculada ${fmt(d.osmCalc)}. ${O('f', 'mr-acidobase-gaps#mr-osm-gap')}` : `Medida ${fmtA(E.osm)}, calculada ${fmt(d.osmCalc)}: ${fmt(d.osmGap)} de sal que el cálculo no ve. ${O('f', 'mr-acidobase-gaps#mr-osm-oculto')}`;
+  html('#abv-lf-resp').innerHTML = `${E.respirador ? 'Ventilado: la ventilación minuto la pones tú. Si das bicarbonato, súbela para sacar su CO₂.' : 'Respira solo.'} ${O('f', 'mr-lactato-bicarbonato#mr-bicarb-contra')}`;
+  html('#abv-lf-fuente').innerHTML = `${E.fuente === 'nefro' ? 'Nefrología al día: líneas desde 25, Δ-ratio 0,4 y 2, albúmina 4,4, hiato osmolal >20.' : 'Marino: líneas desde 24, delta 1, albúmina 4,5, hiato osmolal <10.'}`;
 }
 // Delegación única para los mandos (laboratorio, vistas y tarjetas), dentro de la vista
 function escucharMandos() {
 R.addEventListener('input', e => { const i = e.target.closest('input[data-mando]'); if (!i) return; const ok = aplicarMando(i.dataset.mando, parseFloat(i.value), { animar: false }); if (!ok) i.value = MANDOS[i.dataset.mando].val(); });
 R.addEventListener('change', e => { const i = e.target.closest('input[data-mando]'); if (i && E.auto && i.dataset.mando === 'paco2') aplicarMando('paco2', parseFloat(i.value)); });
 R.addEventListener('click', e => {
+  if (ANILLO && modo === 'explorar') quitarAnillo();   // el anillo de la entrada se va al primer toque
   const b = e.target.closest('button[data-mando]'); if (b) { aplicarMando(b.dataset.mando, valorDe(b.dataset.mando, b.dataset.v)); return; }
   const c = e.target.closest('[data-causa]'); if (c) { irCausa(c.dataset.causa); return; }
   const o = e.target.closest('.abv-obj'); if (o) { abrirObjetivo(o.dataset.obj); return; }
@@ -1386,12 +1401,16 @@ function colocarAnillo() {
 const T = s => (s || '').replace(/\{ph:([\d.]+):([\d.]+)\}/g, (_, p, h) => phTxt(+p, +h)).replace(/\{h:([\d.]+):([\d.]+)\}/g, (_, p, h) => fmt(hNeq(+p, +h)))
   .replace(/\{f:([^}]+)\}/g, (_, x) => O('f', x));
 // «Ver en el texto»: un botón por ficha (abre la ficha y resalta la primera línea citada) y sus orígenes exactos
-const tituloFicha = tab => { const card = document.querySelector(`.field-card[data-tab="${tab}"]`); return card ? nombreFicha(card, tab) : tab; };
+const titulos = new Map();
+const tituloFicha = tab => { if (!titulos.has(tab)) { const card = document.querySelector(`.field-card[data-tab="${tab}"]`); titulos.set(tab, card ? nombreFicha(card, tab) : tab); } return titulos.get(tab); };
+// «Ficha · línea»: la línea es el rótulo (dt) del campo citado, si lo tiene
+function etiquetaFicha(tab, ancla) {
+  const dt = ancla && document.getElementById(ancla)?.querySelector(':scope > dt')?.textContent.trim();
+  return tituloFicha(tab) + (dt ? ` · ${dt}` : '');
+}
 function verTexto(f) {
-  const refs = [].concat(f), porFicha = new Map();
-  refs.forEach(r => { const tab = r.split('#')[0]; if (!porFicha.has(tab)) porFicha.set(tab, r); });
-  const botones = [...porFicha.values()].map(r => enlaceFicha(r, `📖 ${tituloFicha(r.split('#')[0])}`)).join('');
-  return `<div class="abv-ver-texto"><p>Ver en el texto:</p><div class="abv-fila">${botones}</div>${plegarOrigen(refs.map(x => O('f', x)).join(''))}</div>`;
+  const botones = [].concat(f).map(r => { const [tab, ancla] = r.split('#'); return enlaceFicha(r, `📖 ${etiquetaFicha(tab, ancla)}`); }).join('');
+  return `<div class="abv-ver-texto"><p>Ver en el texto:</p><div class="abv-fila">${botones}</div></div>`;
 }
 let VIVO = null;
 function pintarEstudioVivo() { if (!VIVO) return; const v = $((modo === 'conceptos' ? '#abv-m-conceptos' : '#abv-m-preguntas') + ' [data-vivo]'); if (v) v.innerHTML = VIVO(derivar(E)); }
@@ -1418,7 +1437,7 @@ function subirAlEstudio() {
   window.scrollTo(0, Math.max(0, window.scrollY + y - (modo === 'explorar' ? 8 : 0)));
 }
 function dockEstudio(n, actual, marca, txt) {
-  $('#abv-est-prog').innerHTML = Array.from({ length: n }, (_, i) => `<i class="${marca(i) ? 'abv-' + marca(i) : ''}${i === actual ? ' abv-ahora' : ''}"></i>`).join('');
+  html('#abv-est-prog').innerHTML = Array.from({ length: n }, (_, i) => `<i class="${marca(i) ? 'abv-' + marca(i) : ''}${i === actual ? ' abv-ahora' : ''}"></i>`).join('');
   $('#abv-est-txt').textContent = txt;
 }
 
@@ -1529,7 +1548,9 @@ $('#abv-m-preguntas').addEventListener('click', e => {
   const r = e.target.closest('[data-repaso]'); if (r) { const q = PREGUNTAS.find(x => x.id === r.dataset.repaso); FASE = 'repaso'; pintarPregunta(q, { num: PREGUNTAS.indexOf(q) + 1, repaso: true, contenedor: $('#abv-preg'), alAcabar: pintarRepaso }); return; }
   const ir = e.target.closest('[data-ir]'); if (ir) { const k = ir.dataset.ir; if (k === 'recorrido') mostrarRecorrido(Math.min(QI, PREGUNTAS.length - 1)); else if (k === 'casos') pintarCasos(); else pintarRepaso(); return; }
   const c = e.target.closest('[data-caso]'); if (c) { empezarCaso(+c.dataset.caso); return; }
-  const a = e.target.closest('[data-abrir-modelo]'); if (a) { const caso = CASOS[+a.dataset.abrirModelo]; ponerModo('explorar'); CAUSA_ACTUAL = null; pasoActual = null; const dest = estadoDe({ ...caso.volver.estado, etiqueta: caso.titulo.split(' — ')[0] }); abrirObjetivo(dest.obj); irAEstado(dest, { reinicio: true }); return; }
+  const a = e.target.closest('[data-abrir-modelo]'); if (a) { const caso = CASOS[+a.dataset.abrirModelo]; ponerModo('explorar'); CAUSA_ACTUAL = null; pasoActual = null; const dest = estadoDe({ ...caso.volver.estado, etiqueta: caso.volver.estado.etiqueta || caso.titulo.split(' — ')[0], caso: true });
+    enFotograma(5, () => abrirObjetivo(dest.obj));   // después del irPaso de ponerModo
+    irAEstado(dest, { reinicio: true }); return; }
 });
 }
 
@@ -1741,6 +1762,10 @@ function construir() {
   // cabecera mini: aparece al salir el instrumento de la pantalla (solo en Explorar)
   new IntersectionObserver(es => es.forEach(e => $('#abv-mini').classList.toggle('abv-on', !!R.offsetParent && !e.isIntersecting && modo === 'explorar' && e.boundingClientRect.top < 0)), { threshold: 0 }).observe($('#abv-instrumento'));
   escucharMandos(); escucharEstudio(); escucharPreguntas();
+  $('#abv-de-donde-det').addEventListener('toggle', () => { if ($('#abv-de-donde-det').open) pintarTextos(); });
+  $('#abv-lab').addEventListener('toggle', () => { if ($('#abv-lab').open) frasesLab(); });
+  // los rótulos «ficha …» escritos en el partial, también como botón a su ficha
+  $$('span.abv-org-f').forEach(s => { const x = s.textContent.trim().replace(/^ficha\s+/, ''); if (REF_FICHA.test(x)) s.outerHTML = O('f', x); });
   E = { ...PASO_E[0] };
   abrirObjetivo('plasma'); irNivel(2);
   sembrarFlujo(); estampaCelula();
@@ -1769,13 +1794,35 @@ async function abrir(ancla = '') {
   const a = String(ancla || '').trim();
   if (a === 'conceptos' || a === 'mayeutica' || a === 'preguntas') { ponerModo(a === 'conceptos' ? 'conceptos' : 'preguntas'); return; }
   const m = /^paso-(\w+)$/.exec(a), causa = CAUSA[a] ? a : ALIAS[a];
+  let foco = null;
   if (m || causa) {
     const i = m ? PASOS.findIndex(p => p.id === m[1]) : -1;
     if (m && i < 0) return;
     if (modo !== 'explorar') ponerModo('explorar');
     if (m) irPaso(i); else irCausa(causa);
+    foco = m ? (m[1] === '0' ? null : focoDe(PASO_E[i], 'paso-' + m[1])) : focoDe(estadoDe(CAUSA[causa].e), causa);
   }
-  requestAnimationFrame(subirAlEstudio);
+  if (!foco) { requestAnimationFrame(subirAlEstudio); return; }
+  // La vista del tema se abre a los cuatro fotogramas (irPaso / irCausa): se baja hasta ella después y se marca lo clave
+  quitarAnillo();
+  enFotograma(6, () => {
+    const v = $(foco[0]); if (!v || !R.offsetParent) return;
+    window.scrollTo({ top: Math.max(0, window.scrollY + v.getBoundingClientRect().top - 64), behavior: QUIETO ? 'auto' : 'smooth' });
+    setTimeout(() => anillo(foco[1]), QUIETO ? 0 : 650);
+  });
+}
+// Al entrar desde una ficha: qué vista enseñar ([lo que se baja a ver, lo que lleva el anillo]).
+// La carta para los trastornos que se leen en ella; si no, la vista del objeto del estado (riñón, alvéolo, plasma).
+const FOCO = {
+  metanol: ['#abv-vista-osmoles', '#svg-osm'],
+  salic: ['#abv-vista-carta', '#k-punto'], respCr: ['#abv-vista-carta', '#k-punto'], respAg: ['#abv-vista-carta', '#k-punto'],
+  mixta: ['#abv-vista-carta', '#k-punto'],
+};
+function focoDe(e, clave) {
+  if (FOCO[clave]) return FOCO[clave];
+  if (e.obj === 'rinon') return ['#abv-vista-rinon', e.tramo === 'proximal' ? '#c-ac2' : e.aldo === 'alta' ? '#c-hatp' : '#c-pend'];
+  if (e.obj === 'alveolo') return ['#abv-vista-alveolo', e.respirador ? '#a-tubo' : '#a-lee'];
+  return ['#abv-vista-plasma', '#p-hiato'];
 }
 
 // Para las pruebas (Playwright): pH calculado de todas las gasometrías, el estado y el contador de partículas

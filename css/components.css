@@ -2608,6 +2608,8 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 .abv-org-g { color: var(--abv-verde); }
 .abv-org-i { color: var(--abv-muted); border-style: dashed; }
 .abv-origenes { display: flex; flex-wrap: wrap; gap: 2px; }
+/* El rótulo «ficha» es un botón a su ficha: se toca con el dedo (44 px) y dice su nombre, no su id */
+.abv-org-btn { min-height: 44px; display: inline-flex; align-items: center; font-size: .7rem; line-height: 1.3; text-align: left; padding: 3px 8px; background: transparent; cursor: pointer; vertical-align: middle; }
 
 .abv-cab { display: grid; gap: 4px; }
 .abv-cab h1 { font-weight: normal; color: var(--abv-oro); font-size: 1.5rem; line-height: 1.15; letter-spacing: .01em; }
@@ -2652,9 +2654,11 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 /* Rótulos del SVG con halo del color de fondo: una partícula que pase no los borra */
 #abv-svg-celula text, #abv-svg-nefrona text, #abv-svg-plasma text { paint-order: stroke; stroke: var(--bg-main); stroke-width: 3px; stroke-linejoin: round; }
 /* Mayéutica: hasta contestar, el modelo no chiva (frases de las vistas, estados y cifras marcadas con «?») */
-.abv-sin-responder .abv-vista .abv-frase-mando, .abv-sin-responder #abv-c-pend-est, .abv-sin-responder #abv-c-prox-est, .abv-sin-responder #abv-c-aldo,
-.abv-sin-responder #abv-a-esp, .abv-sin-responder #abv-c-pend-x, .abv-sin-responder #abv-carta-frase,
-.abv-sin-responder #abv-seg-aldo, .abv-sin-responder #abv-seg-clluz, .abv-sin-responder #abv-celula-clave, .abv-sin-responder #abv-k-marcas { visibility: hidden; }
+.abv-sin-responder #abv-c-pend-est, .abv-sin-responder #abv-c-prox-est, .abv-sin-responder #abv-c-aldo,
+.abv-sin-responder #abv-a-esp, .abv-sin-responder #abv-c-pend-x, .abv-sin-responder #abv-k-marcas { visibility: hidden; }
+/* Lo que ocupa sitio en la página se quita del todo (si no, queda un hueco bajo la figura) */
+.abv-sin-responder .abv-vista .abv-frase-mando, .abv-sin-responder #abv-carta-frase,
+.abv-sin-responder #abv-seg-aldo, .abv-sin-responder #abv-seg-clluz, .abv-sin-responder #abv-celula-clave { display: none; }
 .abv-fuentes-mini { border: 0; background: transparent; }
 .abv-fuentes-mini > summary { min-height: 44px; display: flex; align-items: center; gap: 6px; cursor: pointer; list-style: none; font: .74rem var(--abv-sans); color: var(--abv-muted); }
 .abv-fuentes-mini > summary::-webkit-details-marker { display: none; }
@@ -2875,8 +2879,12 @@ body.study-mode-on .abv-dock { padding-right: 82px; }
 
 .agv-raiz .agv-cabecera { display: grid; gap: 5px; }
 .agv-raiz .agv-lead { color: var(--text-dim); font-size: .92rem; line-height: 1.35; }
+.agv-raiz.agv-mayeutica .agv-lead { display: none; }   /* en la Mayéutica daría la respuesta de la ag-01 */
 .agv-raiz .agv-eyebrow { font: 600 .68rem var(--agv-sans); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
-.agv-raiz .agv-org { font: .66rem/1.25 var(--agv-sans); color: var(--text-muted); white-space: nowrap; border: 1px solid var(--border-color); border-radius: 999px; padding: 0 6px; vertical-align: 1px; }
+.agv-raiz .agv-org { font: .66rem/1.25 var(--agv-sans); color: var(--text-muted); display: inline-block; max-width: 100%; white-space: normal; overflow-wrap: anywhere; border: 1px solid var(--border-color); border-radius: 8px; padding: 0 6px; vertical-align: 1px; }
+/* Dentro de un chip de origen, cada ficha es un enlace cruzado a ella (con zona de toque de 44 px) */
+.agv-raiz .agv-org-ir { position: relative; background: none; border: 0; padding: 0; margin: 0; font: inherit; color: var(--accent-yellow); text-decoration: underline; text-underline-offset: 2px; text-align: left; cursor: pointer; }
+.agv-raiz .agv-org-ir::before { content: ''; position: absolute; inset: -14px -4px; }
 .agv-raiz .agv-org.agv-ilu { border-style: dashed; }
 .agv-raiz .agv-org.agv-caso { color: var(--accent-red); border-color: rgba(184, 92, 62, .6); }
 

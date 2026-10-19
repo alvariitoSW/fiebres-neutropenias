@@ -538,7 +538,7 @@ export const CASOS = [
     lleva: ['El Hto no mide la hemorragia en las primeras horas: refleja lo que infundes.',
       'El cristaloide se va al intersticio: ×3 (Tabla 15.4) o ×5 (cap. 11) del déficit, según el capítulo.',
       'Catéter periférico corto y grueso; la PVC no decide los fluidos.'],
-    volver: { nombre: 'Shock hemorrágico', ficha: 'mc-hemorragico-clasificacion (Merino Cardiología)', estado: { hemorragia: 35, reloj: '1h' } } },
+    volver: { nombre: 'Shock hemorrágico', ficha: 'mc-hemorragico-clasificacion (Merino Cardiología)', estado: { hemorragia: 35, reloj: '1h' }, pestana: 'sangrado' } },
 
   { id: 'w-2', titulo: 'Rosa, 68 años: el salino que se fue a la marisma', corto: 'Caso 2 · Rosa', sub: 'shock séptico urinario, 60 kg',
     paciente: { Edad: '68 años', Peso: '60 kg (río de 2 L)', Motivo: 'Shock séptico de origen urinario' },
@@ -560,8 +560,9 @@ export const CASOS = [
           opciones: [
             { t: 'HA 10, normal: solo una acidosis hiperclorémica del salino', ok: false, porque: 'Con albúmina 2, el HA esconde 6 mEq: corregido = 10 + 2,5 × (4,5 − 2) = 16. Te habrías perdido el lactato.' },
             { t: 'Alcalosis respiratoria primaria: la PaCO₂ está en 30', ok: false, porque: 'Es la compensación esperada: 40 − 1,2 × (24 − 16) = 30,4. El pH es ácido: el primario es metabólico.' },
-            { t: 'HAc 16 (lactato) y delta 0,5: hiperclorémica añadida', ok: true }],
-          explicacion: 'HA = 140 − (114 + 16) = 10; <span class="hl">corregido 16</span>; delta = (16 − 12)/(24 − 16) = <span class="hl-rojo">0,5</span> <span class="agv-org agv-ilu">delta con el HA corregido: criterio de la maqueta, no de Marino</span>: acidosis hiperclorémica añadida. El salino trae Cl⁻ 154.' } },
+            { t: 'HAc 16 (lactato) y delta <1: hiperclorémica añadida', ok: true }],
+          explicacion: 'HA = 140 − (114 + 16) = 10; <span class="hl">corregido 16</span> (Ec. 31.15): el lactato que escondía la albúmina. Delta (Ec. 31.16) = (10 − 12)/(24 − 16) = <span class="hl-rojo">−0,25</span>: por debajo de 1, el HCO₃⁻ ha bajado mucho más de lo que ha subido el HA. Acidosis hiperclorémica añadida: el salino trae Cl⁻ 154.',
+          nota: '<b>Nota de fuentes.</b> Marino corrige el hiato por la albúmina (Ec. 31.15), pero no dice si el delta se calcula con el hiato corregido; con el corregido saldría (16 − 12)/(24 − 16) = 0,5. Los dos quedan por debajo de 1. <span class="agv-org">ficha · mr-ag-albumina · mr-delta-gap</span>' } },
       { momento: 'Hora 3', datos: { PA: 'sigue hipotensa', Exploración: 'edemas' }, nuevo: ['PA', 'Exploración'],
         estado: { paciente: 'mujer', infusiones: [{ f: 'salino', ml: 2000 }], albBaja: true, inflamacion: true }, lupa: 'orilla',
         pregunta: { id: 'w2-3', tipo: 'test', fuente: 'mar-coloides#mar-fluido-a-medida · mar-albumina',
@@ -593,7 +594,7 @@ export const CASOS = [
     lleva: ['Cada litro de salino deja 275 mL en el vaso (Fig. 10.1); en la mujer de 60 kg, el río es de 2 L.',
       'El salino trae cloro: una acidosis hiperclorémica que el delta descubre (y la albúmina baja esconde el lactato).',
       'Con albúmina baja e inflamación la marisma se inunda, y la PVC no lo ve.'],
-    volver: { nombre: 'Retorno venoso y sobrecarga', ficha: 'mar-retorno-venoso (Marino cap. 11)', estado: { paciente: 'mujer', infusiones: [{ f: 'salino', ml: 2000 }, { f: 'salino', ml: 2000 }, { f: 'salino', ml: 2000 }], albBaja: true, inflamacion: true } } },
+    volver: { nombre: 'Retorno venoso y sobrecarga', ficha: 'mar-retorno-venoso (Marino cap. 11)', estado: { paciente: 'mujer', infusiones: [{ f: 'salino', ml: 2000 }, { f: 'salino', ml: 2000 }, { f: 'salino', ml: 2000 }], albBaja: true, inflamacion: true }, pestana: 'paciente' } },
 
   { id: 'w-3', titulo: 'Elena, 45 años: el suero que la hizo convulsionar', corto: 'Caso 3 · Elena', sub: 'posoperatorio, 60 kg',
     paciente: { Edad: '45 años', Peso: '60 kg', Motivo: 'Posoperatorio de colecistectomía' },
@@ -648,7 +649,7 @@ export const CASOS = [
     lleva: ['Posoperatorio y sueros hipotónicos: riesgo de hiponatremia (ADH por estrés).',
       'Los síntomas, no la cifra, deciden el salino al 3 %: bolos de 2 mL/kg o 150 mL.',
       'Límites: ≤5 en 2 h, ≤10 en 5 h y el primer día, final ≤130. Si se dispara la diuresis, valorar desmopresina (el libro no la aconseja con ADH no regulada y no lo concilia con el estrés).'],
-    volver: { nombre: 'Hiponatremia: encefalopatía y salino al 3 %', ficha: 'mr-hiponatremia-tto (Marino cap. 35)', estado: { paciente: 'mujer', na0: 124, adh: true, bolos3: 1, periodo3: '2h' } } }
+    volver: { nombre: 'Hiponatremia: encefalopatía y salino al 3 %', ficha: 'mr-hiponatremia-tto (Marino cap. 35)', estado: { paciente: 'mujer', na0: 124, adh: true, bolos3: 1, periodo3: '2h' }, pestana: 'sueros', fluido: 'salino3', lupa: 'neurona' } }
 ];
 
 
@@ -656,7 +657,7 @@ export const CASOS = [
 // Los abren los botones de las fichas, los menús y el buscador con el enlace
 // cruzado de siempre (data-especialidad="libros" data-view="aguaViva"
 // data-agua-viva="<estado>"). Son estados de la maqueta (sus conceptos y sus
-// preguntas): ninguna cifra nueva. `pestana` y `fluido` dejan el dock en ese
+// preguntas): ninguna cifra nueva. La vuelta de cada caso (`volver`) usa los mismos campos. `pestana` y `fluido` dejan el dock en ese
 // tema; `lupa` abre la lupa.
 export const ESTADOS_ANCLA = {
   inicio: { estado: {}, pestana: 'sueros' },
