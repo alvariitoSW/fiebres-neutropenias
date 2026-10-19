@@ -49,8 +49,8 @@ Cada ficha ya cita su página con `#page=N`: úsala. Las fichas están revisadas
 
 | Paso | Quién | Sale en | Estado |
 |---|---|---|---|
-| 1 · Cobertura | profesor (modo cobertura) | `autonomo/bloques/b1/cobertura.md` | en curso |
-| 2 · Maquetas | constructor potente ×2 en paralelo | `autonomo/maquetas/b1-*.html` | pendiente |
+| 1 · Cobertura | profesor (modo cobertura) | `autonomo/bloques/b1/cobertura.md` | hecha (≈90 %) |
+| 2 · Maquetas | constructor potente ×2 en paralelo | `autonomo/maquetas/b1-*.html` | en curso |
 | 3 · Modelos en la app | constructor potente | rama `auto/b1-modelos` | pendiente |
 | 4 · Estudio en las 23 fichas | constructor barato, por grupos | rama `auto/b1-estudio` | pendiente |
 | 5 · Jueces, auditor y profesor | — | `autonomo/bloques/b1/*.md` | pendiente |

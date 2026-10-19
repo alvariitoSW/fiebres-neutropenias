@@ -312,8 +312,8 @@ río y mar) → 39-44 → 45-53.
 
 | # | Clave | Qué | Estado | Notas |
 |---|---|---|---|---|
-| 1 | `b1-cobertura` | Bloque 1 (caps. 1-11, 23 fichas): mapa de cobertura | en curso (2026-10-19) | Grupos: fluidos (río y mar), hemodinámica (circulación viva), oxígeno (capilar y oxígeno, nuevo), accesos vasculares (catéter vivo, nuevo), sin modelo claro (úlcera de estrés, tromboprofilaxis, analgesia, sedación) |
-| 2 | `b1-maquetas` | Bloque 1: maquetas de «capilar y oxígeno» y «catéter vivo» | pendiente | Aprobadas por el usuario el 19/10, tras el mapa de cobertura |
+| 1 | `b1-cobertura` | Bloque 1 (caps. 1-11, 23 fichas): mapa de cobertura | hecha (2026-10-19) · ≈90 % | Grupos: fluidos (río y mar), hemodinámica (circulación viva), oxígeno (capilar y oxígeno, nuevo), accesos vasculares (catéter vivo, nuevo), sin modelo claro (úlcera de estrés, tromboprofilaxis, analgesia, sedación) |
+| 2 | `b1-maquetas` | Bloque 1: maquetas de «capilar y oxígeno» y «catéter vivo» | en curso (2026-10-19) | Aprobadas por el usuario el 19/10, tras el mapa de cobertura |
 | 3 | `b1-modelos` | Bloque 1: construir en la app los modelos elegidos | pendiente | |
 | 4 | `b1-estudio` | Bloque 1: Texto \| Visual \| Mayéutica en las 23 fichas, ruta y «Para profundizar» | pendiente | Sustituye a B-001 (preguntas) para este bloque |
 
