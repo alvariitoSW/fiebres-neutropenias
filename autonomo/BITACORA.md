@@ -5,7 +5,7 @@ aprobado**, lo que espera algo del usuario y lo hecho en la última semana. Lo a
 lo único que trabaja el plan socialista. Lo hecho hace más de 7 días y lo descartado pasan a
 `docs/historial/bitacora.md`.
 
-Última sincronización: 2026-10-19 (fase 1 de Marino, R1-R13, fusionada; fase 2 en curso).
+Última sincronización: 2026-10-19 (fases 1, 2 y 4 de Marino en la app: revisiones, mapa, ácido-base vivo y río y mar).
 
 ---
 
@@ -157,8 +157,10 @@ esta sección.
   para elegir.
 - **Para qué**: llegar en un toque a los modelos que explican muchas fichas, sin recordar en qué especialidad viven.
 - **Lo que NO quiero**: mover las herramientas de sitio ni duplicar su código.
-- **Depende de**: que el ácido-base y el río y mar entren en la app (fase 4 de B-003). Se puede hacer antes con las
-  que ya hay y añadirlas después.
+- **Ya hay un primer paso** (19/10, PR #18): bloque «Modelos vivos» en los menús de Nefrología y de Libros, con el
+  ácido-base vivo y el río y mar. Faltaría el acceso común desde la raíz y sumar la nefrona viva, el glomérulo, el
+  potasio y la eco.
+- **Depende de**: nada.
 - **Tamaño**: pequeña.
 - **Dudas**: dónde va el botón (se verá en la maqueta).
 
@@ -183,13 +185,14 @@ esta sección.
 
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
-| `marino-mapa` | Plan Marino, fase 2: mapa visual (profesor) | hecha (2026-10-19) · PR #16; antes en curso: [PR #16](https://github.com/alvariitoSW/fiebres-neutropenias/pull/16) en borrador; maquetas v1 en [este enlace](https://claude.ai/artifact/XkbXSjmeJF7BeHhQ2wSC4L) | 2026-10-15 | Mapa hecho y maquetas v1 vistas (17/10). Ahora, **maquetas v2**: ácido-base unificado y río y mar en crema y oro, con su Mayéutica (conceptos, preguntas y casos). Se enseñan en el mismo enlace. |
 
-El resto del tablero sigue `aparcada` hasta que apruebes la entrada de la bitácora que le toca.
+Ahora mismo no hay nada en marcha: todo lo aprobado está hecho. El resto del tablero sigue `aparcada` hasta que
+apruebes la entrada de la bitácora que le toca.
 
 ## 3. Esperando algo tuyo
 
-- **Aprobar B-001, B-002, B-004, B-005, B-006, B-007 y las fases 3-5 de B-003** (o cambiar el orden).
+- **Aprobar B-001, B-002, B-004, B-005, B-006, B-007 y la fase 5 de B-003** (o cambiar el orden). De B-003 quedan:
+  más modelos grandes del mapa (pulmón con respirador primero) y el estudio por bloques.
 - **Regla sin respuesta**: que los jueces midan también las tablas que se salen de su tarjeta (no solo la página).
   Salió en R5. ¿La apruebas?
 
