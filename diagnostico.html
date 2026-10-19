@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diagnóstico de arranque</title>
+<link rel="stylesheet" href="css/variables.css">
+<style>
+  /* Página aparte de la app: comprueba en el móvil del usuario qué pieza no carga. */
+  body { margin: 0; padding: 16px; background: var(--bg-main); color: var(--text-main); font: 14px/1.45 Georgia, serif; }
+  h1 { font-size: 1.1rem; color: var(--accent-blue); margin: 0 0 6px; }
+  p { color: var(--text-muted); margin: 0 0 12px; }
+  li { margin: 2px 0; overflow-wrap: anywhere; }
+  .ok { color: var(--accent-green); } .mal { color: var(--accent-red); font-weight: bold; }
+  #resumen { padding: 10px; border: 1px solid var(--accent-blue); border-radius: 8px; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+<h1>Diagnóstico de arranque</h1>
+<p>Comprueba una a una las piezas de la app. Espera a que diga «Terminado» y manda una captura de arriba.</p>
+<div id="resumen">Comprobando…</div>
+<ul id="lista"></ul>
+<script type="module">
+const lista = document.getElementById('lista'), resumen = document.getElementById('resumen');
+const malas = [];
+const linea = (ok, t) => { const li = document.createElement('li'); li.className = ok ? 'ok' : 'mal'; li.textContent = (ok ? '✓ ' : '✗ ') + t; ok ? lista.append(li) : lista.prepend(li); if (!ok) malas.push(t); };
+resumen.textContent = 'Navegador: ' + navigator.userAgent;
+// 1. Fragmentos HTML que index.html carga al arrancar
+const html = await (await fetch('index.html', { cache: 'no-store' })).text();
+const version = (html.match(/main\.js\?v=([\w-]+)/) || [])[1];
+linea(true, `Versión publicada: ${version}`);
+const parciales = [...html.matchAll(/data-include="([^"]+)"/g)].map(m => m[1]);
+await Promise.all(parciales.map(async u => { try { const r = await fetch(u, { cache: 'no-store' }); linea(r.ok, `${u} (${r.status})`); } catch (e) { linea(false, `${u}: ${e.message}`); } }));
+// 2. Módulos de código que importa main.js (cada uno con sus dependencias)
+const main = await (await fetch('js/main.js', { cache: 'no-store' })).text();
+const modulos = [...main.matchAll(/from '\.\/([^']+)'/g)].map(m => 'js/' + m[1]);
+for (const m of modulos) { try { await import('./' + m); linea(true, m); } catch (e) { linea(false, `${m}: ${e.message}`); } }
+resumen.innerHTML = `<strong>Terminado.</strong> ${malas.length ? `<span class="mal">${malas.length} con fallo (arriba de la lista)</span>` : '<span class="ok">Todo carga bien.</span>'}<br><small></small>`;
+resumen.querySelector('small').textContent = navigator.userAgent;
+</script>
+</body>
+</html>
