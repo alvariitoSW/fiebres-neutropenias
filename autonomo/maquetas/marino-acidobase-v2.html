@@ -713,7 +713,7 @@ const CAUSA = Object.fromEntries(CAUSAS.map(c => [c.id, c]));
 // 3 · Formas de los iones (la identidad va por la forma) · SVG y canvas
 // ═════════════════════════════════════════════════════════════════════
 const ION = {
-  na: { forma: 'circ', col: () => C.crema, nombre: 'Na⁺' },
+  na: { forma: 'circ', col: () => C.oro, nombre: 'Na⁺' },   // tabla de formas de la app: Na⁺ círculo oro (crema es el agua)
   k: { forma: 'cuad', col: () => C.dim, nombre: 'K⁺' },
   cl: { forma: 'rombo', col: () => C.ciruela, nombre: 'Cl⁻' },
   hco3: { forma: 'tri', col: () => C.verde, nombre: 'HCO₃⁻' },
@@ -731,7 +731,7 @@ function svgForma(forma, col, s = 1) {
   if (forma === 'pent') { let d = ''; for (let i = 0; i < 5; i++) { const a = -Math.PI / 2 + i * 2 * Math.PI / 5; d += `${i ? 'L' : 'M'}${(Math.cos(a) * 4.6 * s).toFixed(2)} ${(Math.sin(a) * 4.6 * s).toFixed(2)}`; } return `<path d="${d}Z" fill="${col}"/>`; }
   if (forma === 'hex') { let d = ''; for (let i = 0; i < 6; i++) { const a = Math.PI / 6 + i * Math.PI / 3; d += `${i ? 'L' : 'M'}${(Math.cos(a) * 4.6 * s).toFixed(2)} ${(Math.sin(a) * 4.6 * s).toFixed(2)}`; } return `<path d="${d}Z" fill="${col}"/>`; }
   if (forma === 'estrella') { let d = ''; for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, r = (i % 2 ? 2.2 : 5.2) * s; d += `${i ? 'L' : 'M'}${(Math.cos(a) * r).toFixed(2)} ${(Math.sin(a) * r).toFixed(2)}`; } return `<path d="${d}Z" fill="${alfa(col, .25)}" stroke="${col}" stroke-width="${1.1 * s}" stroke-linejoin="round"/>`; }
-  if (forma === 'voluta') return `<circle r="${4.8 * s}" fill="${alfa(col, .18)}" stroke="${col}" stroke-width="${.9 * s}"/><path d="M${-2 * s} ${.8 * s}a${2.2 * s} ${2.2 * s} 0 1 1 ${2.3 * s} ${1.9 * s}a${1.1 * s} ${1.1 * s} 0 1 1 ${-.6 * s} ${-2.1 * s}" fill="none" stroke="${col}" stroke-width="${1.1 * s}" stroke-linecap="round"/>`;
+  if (forma === 'voluta') return `<path d="M${-2 * s} ${.8 * s}a${2.2 * s} ${2.2 * s} 0 1 1 ${2.3 * s} ${1.9 * s}a${1.1 * s} ${1.1 * s} 0 1 1 ${-.6 * s} ${-2.1 * s}" fill="none" stroke="${col}" stroke-width="${1.1 * s}" stroke-linecap="round"/>`;
   return '';
 }
 const iconoIon = (k, s = 1) => svgForma(ION[k].forma, ION[k].col(), s);
@@ -1149,7 +1149,7 @@ function construirPlasma() {
   $('#leyenda-inst').innerHTML = [['co2', 'CO₂'], ['hco3', 'HCO₃⁻'], ['h', 'H⁺'], ['cl', 'Cl⁻'], ['anion', 'aniones no medidos'], ['na', 'Na⁺']].map(([k, t]) => `<span><svg viewBox="-6 -6 12 12" aria-hidden="true">${iconoIon(k, 1.05)}</svg>${t}</span>`).join('');
 }
 const bloquesC = () => [
-  { k: 'na', v: E.na, et: `Na⁺ ${fmtA(E.na)}`, col: C.crema, forma: 'circ' },
+  { k: 'na', v: E.na, et: `Na⁺ ${fmtA(E.na)}`, col: C.oro, forma: 'circ' },
   { k: 'cnm', v: CNM, et: 'otros 11', sub: 'Ca 5 · K 4,5 · Mg 1,5', col: C.muted },
 ];
 function bloquesA(d) {
@@ -1339,10 +1339,10 @@ function pintarOsmoles(d) {
     <rect x="64" y="22" width="${(X(na2) - 64).toFixed(1)}" height="24" fill="${alfa(C.crema, .12)}" stroke="${C.crema}" stroke-width=".8"/>
     <text x="${((64 + X(na2)) / 2).toFixed(1)}" y="38" text-anchor="middle" font-size="10" fill="${C.crema}">2 × Na⁺${oc('osm') ? '' : ' = ' + fmtA(na2)}</text>
     <rect x="${X(na2).toFixed(1)}" y="22" width="${(X(na2 + g) - X(na2)).toFixed(1)}" height="24" fill="${alfa(C.ocre, .3)}" stroke="${C.ocre}" stroke-width=".7"/>
-    <rect x="${X(na2 + g).toFixed(1)}" y="22" width="${(X(calc) - X(na2 + g)).toFixed(1)}" height="24" fill="${alfa(C.verde, .3)}" stroke="${C.verde}" stroke-width=".7"/>
+    <rect x="${X(na2 + g).toFixed(1)}" y="22" width="${(X(calc) - X(na2 + g)).toFixed(1)}" height="24" fill="${alfa(C.muted, .3)}" stroke="${C.muted}" stroke-width=".7"/>
     <text x="${(X(calc) + 4).toFixed(1)}" y="31" font-size="8.6" fill="${C.muted}">+ glucosa/18 ${fmt(g, 0)}</text>
     <text x="${(X(calc) + 4).toFixed(1)}" y="42" font-size="8.6" fill="${C.muted}">+ BUN/2,8 ${fmt(u, 0)}</text>
-    <g transform="translate(${((X(na2 + g) + X(calc)) / 2).toFixed(1)} 34)">${svgForma('hex', C.verde, .55)}</g>
+    <g transform="translate(${((X(na2 + g) + X(calc)) / 2).toFixed(1)} 34)">${svgForma('hex', C.muted, .55)}</g>
     <text x="${X(calc).toFixed(1)}" y="16" text-anchor="middle" font-size="12" fill="${C.crema}">${oc('osm') ? '?' : fmtA(calc)}</text>`;
   if (med == null) t += `<text x="70" y="86" font-size="10" font-style="italic" fill="${C.muted}">sin osmolalidad medida: mueve el mando</text>`;
   else {

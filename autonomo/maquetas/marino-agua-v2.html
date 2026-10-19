@@ -269,7 +269,7 @@ code { font-size: .78em; color: var(--dim); overflow-wrap: anywhere; }
     <ul class="leyenda-mini" aria-label="Formas">
       <li><svg viewBox="-8 -8 16 16" data-forma="rombo"></svg>Cl⁻ y sal</li>
       <li><svg viewBox="-8 -8 16 16" data-forma="hexagono"></svg>urea</li>
-      <li><svg viewBox="-8 -8 16 16" data-forma="cristal"></svg>glucosa</li>
+      <li><svg viewBox="-8 -8 16 16" data-forma="copo"></svg>glucosa</li>
       <li><svg viewBox="-8 -8 16 16" data-forma="grano"></svg>albúmina</li>
       <li><svg viewBox="-8 -8 16 16" data-forma="disco"></svg>hematíes</li>
       <li><svg viewBox="-8 -8 16 16" data-forma="anillo"></svg>agua dulce</li>
@@ -288,15 +288,15 @@ code { font-size: .78em; color: var(--dim); overflow-wrap: anywhere; }
         <li><svg viewBox="-8 -8 16 16" data-forma="triangulo"></svg>Ringer lactato</li>
         <li><svg viewBox="-8 -8 16 16" data-forma="trianguloHueco"></svg>Plasma-Lyte</li>
         <li><svg viewBox="-8 -8 16 16" data-forma="grano"></svg>albúmina: limo que no cruza</li>
-        <li><svg viewBox="-8 -8 16 16" data-forma="estrella"></svg>salino 7,5 %: muy salado</li>
-        <li><svg viewBox="-8 -8 16 16" data-forma="chispa"></svg>salino 3 %: bolo</li>
+        <li><svg viewBox="-8 -8 16 16" data-forma="rombo2"></svg>salino 7,5 %: muy salado (dos halos)</li>
+        <li><svg viewBox="-8 -8 16 16" data-forma="rombo1"></svg>salino 3 %: bolo (un halo)</li>
         <li><svg viewBox="-8 -8 16 16" data-forma="disco"></svg>hematíes · sangre</li>
-        <li><svg viewBox="-8 -8 16 16" data-forma="cristal"></svg>glucosa (cristal), sin insulina</li>
+        <li><svg viewBox="-8 -8 16 16" data-forma="copo"></svg>glucosa (cristal: copo), sin insulina</li>
         <li><svg viewBox="-8 -8 16 16" data-forma="hexagono"></svg>urea, como en la nefrona viva: cruza todas las orillas</li>
         <li><svg viewBox="-8 -8 16 16" data-forma="gota"></svg>agua que sale del mar o de la marisma</li>
         <li><svg viewBox="-8 -8 16 16" data-forma="brillo"></svg>destellos: la sal (osmolalidad)</li>
       </ul>
-      <p class="para">Cada figura que viaja son unos 25 mL (ilustrativo). La forma dice qué es; el color, nunca solo. Hexágono = urea y rombo = Cl⁻ y la sal, como propone el profesor para toda la app.</p>
+      <p class="para">Cada figura que viaja son unos 25 mL (ilustrativo). La forma dice qué es; el color, nunca solo. Hexágono = urea, rombo = Cl⁻ y la sal y copo = glucosa: la misma tabla de formas que la nefrona viva y el resto de modelos de la app.</p>
     </section>
 
     <div id="puente" class="puente" hidden>
@@ -524,7 +524,7 @@ const FLUIDOS = {
     dato: '278 mOsm/L, cerca del plasma; la glucosa entra en las células y se metaboliza.'
   },
   salino: {
-    nombre: 'salino al 0,9 %', corto: 'Salino', sub: '0,9 % · Cl⁻ 154', forma: 'rombo', color: 'ambar',
+    nombre: 'salino al 0,9 %', corto: 'Salino', sub: '0,9 % · Cl⁻ 154', forma: 'rombo', color: 'purpura',
     ref: 1000, cantidades: [250, 500, 1000, 2000],
     delta: { rio: 275, marisma: 825, mar: -100 },
     org: { rio: 'ficha · mar-fig-10-1', marisma: 'ficha · mar-fig-10-1', mar: 'ficha · mar-salino (resta)' },
@@ -574,7 +574,7 @@ const FLUIDOS = {
     dato: 'Oncótica 70 mmHg; expande el plasma 3-4 veces su volumen (Tabla 10.3).'
   },
   hiper: {
-    nombre: 'salino al 7,5 %', corto: 'Salino', sub: '7,5 % · 250 mL', forma: 'estrella', color: 'oro',
+    nombre: 'salino al 7,5 %', corto: 'Salino', sub: '7,5 % · 250 mL', forma: 'rombo2', color: 'purpura',
     ref: 250, cantidades: [250], unaVez: true,
     delta: { rio: 535, marisma: 700, mar: -985 },
     org: { rio: 'ficha · mar-fig-10-1', marisma: 'ficha · mar-fig-10-1', mar: 'ficha · mar-hipertonico (resta)' },
@@ -584,7 +584,7 @@ const FLUIDOS = {
     dato: '2.567 mOsm/L, 9 veces el plasma.'
   },
   salino3: {
-    nombre: 'salino al 3 %', corto: 'Salino', sub: '3 % · bolo', forma: 'chispa', color: 'ambar',
+    nombre: 'salino al 3 %', corto: 'Salino', sub: '3 % · bolo', forma: 'rombo1', color: 'purpura',
     ref: null, bolo: true, cantidades: [0],
     delta: { rio: null, marisma: null, mar: null },
     org: { rio: 'sin cifra en la ficha', marisma: 'sin cifra en la ficha', mar: 'se encoge · ilustrativo' },
@@ -801,19 +801,21 @@ function forma(g, f, x, y, s, color, alfa, giro) {
     case 'trianguloHueco': g.lineWidth = 1.3; g.beginPath(); g.moveTo(x, y - s * 1.15); g.lineTo(x + s * 1.05, y + s * 0.75); g.lineTo(x - s * 1.05, y + s * 0.75); g.closePath(); g.stroke(); break;
     case 'grano': g.beginPath(); g.arc(x, y, s * 0.9, 0, TAU); g.fill(); break;
     case 'granoGrande': g.beginPath(); g.arc(x, y, s * 1.15, 0, TAU); g.fill(); g.lineWidth = 1; g.globalAlpha = alfa * 0.5; g.beginPath(); g.arc(x, y, s * 1.9, 0, TAU); g.stroke(); break;
-    case 'estrella': case 'chispa': {
-      g.globalAlpha = alfa * 0.18; g.beginPath(); g.arc(x, y, s * 2.4, 0, TAU); g.fill(); g.globalAlpha = alfa;
-      const n = f === 'estrella' ? 8 : 4; const r1 = s * (f === 'estrella' ? 1.7 : 1.5), r2 = s * 0.42; g.beginPath();
-      for (let i = 0; i < n * 2; i++) { const ang = giro + i * Math.PI / n; const r = i % 2 ? r2 : r1; g.lineTo(x + Math.cos(ang) * r, y + Math.sin(ang) * r); }
-      g.closePath(); g.fill(); break;
+    case 'rombo1': case 'rombo2': {   // salino hipertónico: la sal (rombo) con 1 halo (3 %) o 2 (7,5 %); tabla de formas de la app
+      g.globalAlpha = alfa * 0.6; g.lineWidth = Math.max(0.8, s * 0.2);
+      for (const k of f === 'rombo2' ? [1.85, 2.45] : [1.85]) { g.beginPath(); g.arc(x, y, s * k, 0, TAU); g.stroke(); }
+      forma(g, 'rombo', x, y, s, color, alfa, giro); break;
     }
     case 'gota': case 'sangre':
       g.beginPath(); g.arc(x, y + s * 0.35, s * 0.85, 0, Math.PI); g.lineTo(x, y - s * 1.35); g.closePath(); g.fill(); break;
     case 'disco':
       g.beginPath(); g.ellipse(x, y, s * 1.15, s * 0.85, giro * 0.3, 0, TAU); g.fill();
       g.globalAlpha = alfa * 0.55; g.fillStyle = C.bg; g.beginPath(); g.ellipse(x, y, s * 0.45, s * 0.3, giro * 0.3, 0, TAU); g.fill(); break;
-    case 'cristal':
-      g.save(); g.translate(x, y); g.rotate(giro); g.fillRect(-s * 0.75, -s * 0.75, s * 1.5, s * 1.5); g.restore(); break;
+    case 'copo': {   // glucosa: cristal, copo de seis radios (tabla de formas de la app)
+      g.lineWidth = Math.max(1, s * 0.36); g.lineCap = 'round'; g.beginPath();
+      for (let i = 0; i < 3; i++) { const a = giro + Math.PI / 2 + i * Math.PI / 3, dx = Math.cos(a) * s * 1.4, dy = Math.sin(a) * s * 1.4; g.moveTo(x + dx, y + dy); g.lineTo(x - dx, y - dy); }
+      g.stroke(); g.lineCap = 'butt'; break;
+    }
     case 'hexagono':
       g.beginPath(); for (let i = 0; i < 6; i++) { const a = giro + i * Math.PI / 3; g.lineTo(x + Math.cos(a) * s, y + Math.sin(a) * s); } g.closePath(); g.fill(); break;
     case 'brillo': {
@@ -1188,13 +1190,13 @@ const Estuario = {
     const nGlu = Math.round(clamp((estado.glucosa - 100) / 500, 0, 1) * 16);
     for (let i = 0; i < nGlu; i++) {
       const c = this.cristales[i];
-      if (c.m < 0.5) { const x = ((c.s + t * 24 * s) % (W + 20)) - 10; forma(g, 'cristal', x, this.rioY(x) + c.o * hw * 0.7, 2.1, C.ambar, 0.85, c.g + t); }
-      else { const x = (c.s * 1.3) % W; const y = lerp(this.dunaAbajo(x) + 6, this.marismaAbajo(x) - 6, c.m); if (Math.abs(y - this.rioY(x)) > hw + 4) forma(g, 'cristal', x, y, 2, C.ambar, 0.7, c.g); }
+      if (c.m < 0.5) { const x = ((c.s + t * 24 * s) % (W + 20)) - 10; forma(g, 'copo', x, this.rioY(x) + c.o * hw * 0.7, 2.1, C.ambar, 0.85, c.g + t); }
+      else { const x = (c.s * 1.3) % W; const y = lerp(this.dunaAbajo(x) + 6, this.marismaAbajo(x) - 6, c.m); if (Math.abs(y - this.rioY(x)) > hw + 4) forma(g, 'copo', x, y, 2, C.ambar, 0.7, c.g); }
     }
-    // urea: hexágonos salvia que cruzan todas las orillas
+    // urea: hexágonos topo que cruzan todas las orillas
     if (estado.urea) for (const u of this.ureas) {
       const fase = (Math.sin(t * u.v * 6 + u.f) + 1) / 2; const x = u.x + Math.sin(t * 0.3 + u.f) * 6;
-      forma(g, 'hexagono', x, lerp(H * 0.08, this.marismaAbajo(x) - 10, fase), 2.4, C.verde, 0.85, t * 0.5 + u.f);
+      forma(g, 'hexagono', x, lerp(H * 0.08, this.marismaAbajo(x) - 10, fase), 2.4, C.muted, 0.85, t * 0.5 + u.f);
     }
     if (estado.hemorragia > 0) { const h = this.herida.x; g.globalAlpha = 0.3 + 0.2 * Math.sin(t * 3); g.fillStyle = C.rojo; g.beginPath(); g.arc(h, this.rioY(h) + hw, 5, 0, TAU); g.fill(); g.globalAlpha = 1; }
     if (nivel.edema.v > 1) this.flechasOrilla(g, +1, clamp(nivel.edema.v / (20 * s), 0.3, 1), P);
@@ -1376,7 +1378,7 @@ function dibujar() {
   for (const p of parts) {
     if (!p.viva && !p.asentada) continue;
     const viejo = p.asentada ? clamp(1 - (p.edad - 20) / 20, 0.45, 1) : 1;
-    forma(g, p.forma, p.x, p.y, p.forma === 'estrella' ? 2.3 : 2.6, colorDe(p.color), 0.95 * viejo, t * 1.5 + p.semilla);
+    forma(g, p.forma, p.x, p.y, 2.6, colorDe(p.color), 0.95 * viejo, t * 1.5 + p.semilla);
   }
   Estuario.mareografos(g);
   pintarMareas();
@@ -1611,7 +1613,7 @@ const Lupa = {
           if (p.fuera) { p.vy = Math.abs(p.vy) * 0.3 + 2; if (p.y > yM - 8) p.vy = -Math.abs(p.vy); }
           forma(g, 'grano', p.x, p.y, 3 * s, C.purpura, 0.95, 0);
           if (p.choque > 0.05) { g.strokeStyle = rgba(C.oro, p.choque); g.lineWidth = 1; g.beginPath(); g.arc(p.x, yW - 3 * s, 5 * s * (1.4 - p.choque), Math.PI, TAU); g.stroke(); p.choque -= dt * 2; }
-        } else if (p.tipo === 'glucosa') forma(g, 'cristal', p.x + Math.sin(t + p.g) * 2, p.y, 3 * s, C.ambar, 0.85, p.g + t * 0.3);
+        } else if (p.tipo === 'glucosa') forma(g, 'copo', p.x + Math.sin(t + p.g) * 2, p.y, 3 * s, C.ambar, 0.85, p.g + t * 0.3);
         continue;
       }
       p.t += dt * p.vel; if (p.t >= 2) { p.muere = true; continue; }
@@ -1621,7 +1623,7 @@ const Lupa = {
       const alfa = Math.min(1, p.t * 3, (2 - p.t) * 3);
       if (p.tipo === 'gota') forma(g, 'gota', x, y, 2.8 * s, C.texto, 0.9 * alfa, 0);
       else if (p.tipo === 'sal') forma(g, 'brillo', x, y, 2 * s, C.oro, 0.9 * alfa, 0);
-      else if (p.tipo === 'urea') forma(g, 'hexagono', x, y, 2.8 * s, C.verde, 0.95 * alfa, p.g);
+      else if (p.tipo === 'urea') forma(g, 'hexagono', x, y, 2.8 * s, C.muted, 0.95 * alfa, p.g);
     }
     if (this.parts.some(p => p.muere)) this.parts = this.parts.filter(p => !p.muere);
   },
@@ -1993,7 +1995,7 @@ function anillo(obj) {
 
 /* Iconos de forma (los mismos dibujos que en la escena) */
 function iconos(raizEl = document) {
-  const COL = { anillo: C.texto, rombo: C.ambar, triangulo: C.verde, trianguloHueco: C.verde, grano: C.purpura, granoGrande: C.purpura, estrella: C.oro, chispa: C.ambar, gota: C.texto, sangre: C.rojo, brillo: C.oro, disco: C.rojo, cristal: C.ambar, hexagono: C.verde };
+  const COL = { anillo: C.texto, rombo: C.purpura, rombo1: C.purpura, rombo2: C.purpura, triangulo: C.verde, trianguloHueco: C.verde, grano: C.purpura, granoGrande: C.purpura, gota: C.texto, sangre: C.rojo, brillo: C.oro, disco: C.rojo, copo: C.ambar, hexagono: C.muted };
   raizEl.querySelectorAll('svg[data-forma]').forEach(svg => {
     const f = svg.dataset.forma, c = COL[f];
     svg.innerHTML = {
@@ -2003,12 +2005,12 @@ function iconos(raizEl = document) {
       trianguloHueco: `<path d="M0 -5.5 L5.2 4 L-5.2 4Z" fill="none" stroke="${c}" stroke-width="1.5"/>`,
       grano: `<circle r="3.6" fill="${c}"/>`,
       granoGrande: `<circle r="3.8" fill="${c}"/><circle r="6.4" fill="none" stroke="${c}" stroke-opacity=".5"/>`,
-      estrella: `<path d="M0 -7 L1.6 -1.6 L7 0 L1.6 1.6 L0 7 L-1.6 1.6 L-7 0 L-1.6 -1.6Z" fill="${c}"/>`,
-      chispa: `<path d="M0 -6.5 L1.8 -1.8 L6.5 0 L1.8 1.8 L0 6.5 L-1.8 1.8 L-6.5 0 L-1.8 -1.8Z" fill="${c}" transform="rotate(45)"/>`,
+      rombo1: `<circle r="5.6" fill="none" stroke="${c}" stroke-opacity=".6" stroke-width="1"/><path d="M0 -4 L2.8 0 L0 4 L-2.8 0Z" fill="${c}"/>`,
+      rombo2: `<circle r="5" fill="none" stroke="${c}" stroke-opacity=".6" stroke-width="0.9"/><circle r="7.2" fill="none" stroke="${c}" stroke-opacity=".6" stroke-width="0.9"/><path d="M0 -3.4 L2.4 0 L0 3.4 L-2.4 0Z" fill="${c}"/>`,
       gota: `<path d="M0 -6.5 C2 -3 4.4 0 4.4 2.4 A4.4 4.4 0 0 1 -4.4 2.4 C-4.4 0 -2 -3 0 -6.5Z" fill="${c}"/>`,
       sangre: `<path d="M0 -6.5 C2 -3 4.4 0 4.4 2.4 A4.4 4.4 0 0 1 -4.4 2.4 C-4.4 0 -2 -3 0 -6.5Z" fill="${c}"/>`,
       disco: `<ellipse rx="5.6" ry="4.2" fill="${c}"/><ellipse rx="2.2" ry="1.5" fill="${C.bg}" fill-opacity=".55"/>`,
-      cristal: `<rect x="-3.6" y="-3.6" width="7.2" height="7.2" fill="${c}" transform="rotate(20)"/>`,
+      copo: `<path d="M0 -6V6M-5.2 -3L5.2 3M-5.2 3L5.2 -3" stroke="${c}" stroke-width="1.7" stroke-linecap="round"/>`,
       hexagono: `<path d="M5 0 L2.5 4.3 L-2.5 4.3 L-5 0 L-2.5 -4.3 L2.5 -4.3Z" fill="${c}"/>`,
       brillo: `<path d="M-6 0H6M0 -6V6" stroke="${c}" stroke-width="1.2"/><circle r="2" fill="${c}"/>`
     }[f] || '';
