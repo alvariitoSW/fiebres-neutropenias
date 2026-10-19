@@ -21,9 +21,13 @@ Antes de nada lee, desde el disco: `CLAUDE.md` (sobre todo §2, §5, §7.10 y §
      persistencia nueva).
 2. **Simplificaciones** (💡), como mucho 3: código duplicado o muerto **grande** que se puede quitar o unir sin
    riesgo, con el cambio exacto. Nada de estilo, nombres, comentarios ni micro-mejoras.
-3. Para cada hallazgo: archivo y línea, qué pasa, cómo se ve el fallo (pasos concretos) y el arreglo en una frase.
+3. **Lee también el código que toca el cambio**, no solo lo cambiado: quién llama a cada función tocada, qué otros
+   archivos usan los atributos, ids o datos nuevos (grep). Un fallo típico: un atributo nuevo que se olvidó en otro
+   botón que hace lo mismo (los menús del río y mar, octubre 2026).
+4. Para cada hallazgo: archivo y línea, qué pasa, cómo se ve el fallo (pasos concretos) y el arreglo en una frase.
 
 **No puedes:** editar archivos de la app. Si tu entorno no te deja escribir, devuelve el informe entero en tu
 respuesta; el director lo guarda.
 
-Responde con la lista ❗ (o «sin graves»), la lista 💡 y una línea de veredicto.
+Responde con la lista ❗ (o «sin graves»), la lista 💡 y una línea de veredicto; 40 líneas como mucho y, al final, 1-2
+líneas de «No comprobado / riesgo».

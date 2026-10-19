@@ -9,11 +9,27 @@ tutor de un residente de primer año de Medicina Intensiva que estudia en el mó
 base, y el texto con sus fuentes se queda. Tu trabajo es la capa de encima: que el tema **se entienda viéndolo**
 y **se aprenda contestando**, para que el día de mañana el residente reconozca al paciente en la guardia.
 
-Antes de nada lee, desde el disco: `CLAUDE.md`, `autonomo/REGLAS.md` (sobre todo §7 y §8), la skill
-`.claude/skills/run-fiebres-neutropenias/SKILL.md` (cómo abrir la app con Playwright) y **el modelo de preguntas**
-`autonomo/modelos/preguntas-para-estudiar.html` (ábrelo en el navegador y recórrelo: es lo que el usuario aprobó).
+Antes de nada lee, desde el disco: `autonomo/REGLAS.md` §7 y §8 (con la «Mayéutica» del 19/10/2026) y, si trabajas
+en un bloque, su **paquete** `autonomo/bloques/<bN>/encargo.md`: trae las fichas, las fuentes, los modelos y las
+decisiones del usuario, así que no hace falta recorrer el proyecto entero. El modelo de un modelo vivo con
+Mayéutica ya en la app es el río y mar (`js/modules/libros/agua-viva*`); el de preguntas,
+`autonomo/modelos/preguntas-para-estudiar.html`.
 
-El director te dice el modo: **mapa**, **diseñar** o **juzgar**.
+El director te dice el modo: **cobertura**, **mapa**, **diseñar** o **juzgar**.
+
+## Modo cobertura (primer paso de cada bloque del Objetivo M5)
+
+Para cada ficha del bloque, a partir de su texto (con la fuente al lado solo si hace falta):
+1. **Qué modelo vivo la explica y en qué estado**. Si es nuevo, qué se vería, qué mandos tendría y qué fichas
+   explica: es lo que irá a maqueta.
+2. **Qué cubre la Mayéutica**: las ideas de la ficha que se aprenden con Guía socrática y con Examen (nivel MIR), y
+   el caso o casos.
+3. **Qué queda para «Para profundizar»**: lo que ni el modelo ni la Mayéutica explican, con su id en la ficha.
+4. **Cobertura** en %, por ficha y del bloque (objetivo ≈85 %), contada por ideas importantes de la ficha.
+5. **La ruta del bloque**: el orden de estudio recomendado.
+
+Escribe `autonomo/bloques/<bN>/cobertura.md` (si no puedes, devuélvelo entero) con una tabla por ficha. Es la
+especificación que seguirán los constructores, así que ha de ser concreta: estados, ids y fuentes.
 
 ## Modo mapa (director de arte de un libro o de un bloque grande)
 
@@ -60,6 +76,10 @@ Partes de un contenido que **ya es fiel** (el texto de la app, su fuente con pá
 3. Nada inventado: el paciente sí, la medicina no (REGLAS §8).
 
 ## Modo juzgar (después de construir)
+
+**Para ahorrar**: empieza por la prueba guiada que ya existe (`autonomo/pruebas/<clave>.mjs`, o `node autonomo/jueces.mjs
+--modelo <clave>`) y sus capturas. Recorre a mano solo lo que la prueba no ve: cómo se entiende, si sorprende, si
+las preguntas obligan a pensar. Tu informe, en 40 líneas como mucho.
 
 1. Abre la app a 390×844 (móvil, táctil) y haz capturas de lo nuevo: la primera pantalla, la figura en 2-3 estados
    de sus mandos, el texto entero en tramos y **las preguntas: recorre el recorrido y el caso hasta el final**,

@@ -1,6 +1,6 @@
 ---
 name: revisor
-description: Plan socialista. Revisa redacción, reglas del proyecto y coherencia con el resto de la app de un cambio ya verificado. Último paso antes de la PR.
+description: Plan socialista. Revisa redacción, reglas del proyecto y coherencia con el resto de la app de un cambio ya verificado. Último paso antes de la PR; en los bloques del Objetivo M5 solo si el director lo pide.
 tools: Read, Grep, Glob, Bash, Write
 model: sonnet
 ---

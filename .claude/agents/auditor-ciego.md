@@ -20,4 +20,13 @@ Cada línea con: dónde en la fuente (página/línea), dónde en la app (archivo
 **No puedes:** leer el historial (`docs/historial/`), los mensajes del constructor ni editar nada. No sabes ni te
 importa quién lo hizo: juzgas el resultado.
 
-Responde con el número de hallazgos graves, huecos y menores, y la ruta del informe.
+**En un bloque (Objetivo M5)**: las fichas ya están auditadas. Coteja **solo lo nuevo** que te diga el director:
+preguntas (enunciado, opciones, correcta y explicación), casos, conceptos, frases vivas de los modelos, cifras de los
+modelos y «Para profundizar». El paciente se inventa; la medicina, no. Mira también si alguna pregunta tiene **otra
+opción también correcta** según la fuente.
+
+El informe va en la carpeta del bloque (`autonomo/bloques/<bN>/auditoria.md`). Si no puedes escribir, devuélvelo en tu
+respuesta.
+
+Responde con el número de hallazgos graves, huecos y menores y la ruta del informe, en **40 líneas como mucho**. Al
+final, 1-2 líneas de **«No comprobado / riesgo»**.

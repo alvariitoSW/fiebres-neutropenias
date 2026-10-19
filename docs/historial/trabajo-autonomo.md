@@ -190,3 +190,22 @@ En la tarea `formas-iones`, el constructor vio 2 px de desborde a 360 px en la v
 - Con eso se cazaron los 2 px. Se arreglaron haciendo que `.nv-medidor-nombre` parta línea; `?v=` subido.
 - En la misma tanda, la animación de alcalinizar la orina (`visual-marino-piezas-45-53.js`, salicilatos) distingue el
   no ionizado (bola llena) del ionizado (anillo con «−») por la forma, no solo por el color (CLAUDE §5).
+
+### Plan nuevo y agentes optimizados (19/10/2026)
+
+El usuario reorienta el proyecto: «lo del modelo de ácido-base y de la mayéutica ahora mismo es la clave de esta
+aplicación». Marino pasa a trabajarse **por bloques en modelos vivos + Mayéutica** (Objetivo M5 del tablero), y lo
+demás espera. La Mayéutica queda definida en REGLAS §8: Guía socrática más Examen nivel MIR, y «Para profundizar» con
+lo que no se cubre (objetivo ≈85 %).
+
+En la misma conversación pidió que los agentes gasten menos y trabajen mejor. Se aplicó:
+- un **paquete por bloque** (`autonomo/bloques/`);
+- una **lista de comprobación del constructor** con los fallos que ya salieron;
+- **informes de 40 líneas** con «No comprobado / riesgo»;
+- el **profesor** solo para cobertura y juicio, y juzgando sobre la prueba guiada;
+- el **auditor** solo sobre lo nuevo;
+- el **verificador** sustituido casi siempre por `jueces --ficha --modelo`;
+- el **revisor de código** lee también lo que toca el cambio.
+
+De Ponytail (github.com/DietrichGebert/ponytail, MIT) se tomaron dos ideas: la escalera antes de escribir código y el
+cierre «qué no he comprobado». No se instaló, porque su modo «vago» chocaría con no resumir por debajo de la fuente.

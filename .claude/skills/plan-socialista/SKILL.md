@@ -86,6 +86,40 @@ su fase A ya está hecha (p. ej. la continuación de un piloto), se salta.
    menores se arreglan si es barato; si no, van al parte. Si tras las vueltas máximas sigue fallando →
    `necesita humano`.
 
+### Modo bloque · Marino en modelos vivos (Objetivo M5, desde el 19/10/2026)
+
+Es la prioridad del tablero. Un bloque de Marino se trabaja entero y se aprueba antes de empezar el siguiente. Todo
+gira alrededor del **paquete del bloque** (`autonomo/bloques/<bN>/encargo.md`, ver `autonomo/bloques/LEEME.md`):
+escríbelo tú antes de lanzar a nadie, y en cada encargo di «lee el paquete», no «lee todo el proyecto».
+
+1. **Cobertura** · profesor (potente), modo cobertura → `autonomo/bloques/<bN>/cobertura.md`. Léelo: si propone
+   modelos nuevos, van a maqueta (el usuario elige).
+2. **Maquetas** de los modelos nuevos · un constructor potente por maqueta, en paralelo → `autonomo/maquetas/`.
+   Publícalas como Artifact y espera la elección del usuario.
+3. **Modelos en la app** · constructor potente, uno por modelo, cada uno en su carpeta (`git worktree`) y con dueño
+   fijo de cada archivo compartido. Copia el patrón del río y mar (`js/modules/libros/agua-viva*`) y añade su prueba
+   en `autonomo/pruebas/<clave>.mjs` para `jueces --modelo`.
+4. **Estudio en las fichas** · constructor **barato**, por grupos de fichas, siguiendo el modelo ya hecho: interruptor
+   Texto | Visual | Mayéutica, Guía socrática y Examen, casos, «Para profundizar» y ruta del bloque.
+5. **Jueces** (`--ficha` y `--modelo`, los pasas tú) · **auditor** (barato, solo lo nuevo) · **profesor** (potente,
+   juzgar sobre la prueba guiada y capturas) en paralelo. Ya no hace falta el verificador como agente: solo si un
+   simulador necesita mirar «paciente posible» a mano.
+
+### Ahorro (aprobado por el usuario el 19/10/2026)
+
+- **Lista de comprobación del constructor** (`.claude/agents/constructor.md`): la pasa antes de entregar. Si un juez
+  encuentra algo que estaba en la lista, la vuelta la paga el constructor, no un juez más.
+- **Informes de 40 líneas como mucho**, en la carpeta del bloque, con ✅/❌ y «No comprobado / riesgo» al final. Lee el
+  archivo, no pidas el informe entero en el mensaje.
+- **Modelos**: potente solo para el profesor y los modelos vivos o maquetas; barato para el auditor, la Mayéutica
+  siguiendo un modelo, el revisor de código y el verificador.
+- **Escalera antes de escribir código** (idea de Ponytail): reutilizar lo que ya hay antes de escribir nada nuevo. Vale
+  para el código; el contenido médico y lo visual no se recortan.
+- **Paralelo con dueño de archivo**: dos constructores a la vez, cada uno en su carpeta; los archivos compartidos los
+  toca uno solo y tú juntas al fusionar.
+- **Límite de uso**: si un agente se para por el límite, se reanuda con SendMessage cuando se reinicia; no se lanza
+  otro desde cero.
+
 ### Fase R · Revisar lo ya construido (tareas `revision`)
 
 Para lo que ya está en la app y ya tiene su fuente: **no se construye nada, se revisa**. Trabajadores revisores,
