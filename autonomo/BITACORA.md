@@ -184,6 +184,7 @@ esta sección.
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
 | `marino-mapa` | Plan Marino, fase 2: mapa visual (profesor) | en curso: [PR #16](https://github.com/alvariitoSW/fiebres-neutropenias/pull/16) en borrador; maquetas v1 en [este enlace](https://claude.ai/artifact/XkbXSjmeJF7BeHhQ2wSC4L) | 2026-10-15 | Mapa hecho y maquetas v1 vistas (17/10). Ahora, **maquetas v2**: ácido-base unificado y río y mar en crema y oro, con su Mayéutica (conceptos, preguntas y casos). Se enseñan en el mismo enlace. |
+| `formas-iones` | Una sola leyenda de formas de iones en toda la app (nefrona viva, glomérulo, TRR, potasio, ácido-base, agua) | pendiente, tras la vuelta 2 de las maquetas | 2026-10-19 | Aprobada por el usuario el 19/10 («vamos a unificar todas esas formas en la app, pero antes arregla los fallos»). |
 
 El resto del tablero sigue `aparcada` hasta que apruebes la entrada de la bitácora que le toca.
 
