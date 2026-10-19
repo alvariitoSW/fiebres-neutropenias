@@ -50,7 +50,15 @@ Cada ficha ya cita su página con `#page=N`: úsala. Las fichas están revisadas
 | Paso | Quién | Sale en | Estado |
 |---|---|---|---|
 | 1 · Cobertura | profesor (modo cobertura) | `autonomo/bloques/b1/cobertura.md` | hecha (≈90 %) |
-| 2 · Maquetas | constructor potente ×2 en paralelo | `autonomo/maquetas/b1-*.html` | en curso |
+| 2 · Maquetas | constructor potente ×2 en paralelo | `autonomo/maquetas/b1-*.html` | hechas, esperando la elección del usuario (https://claude.ai/artifact/Q4Fii5DVMgqGhQf7429ouv) |
 | 3 · Modelos en la app | constructor potente | rama `auto/b1-modelos` | pendiente |
 | 4 · Estudio en las 23 fichas | constructor barato, por grupos | rama `auto/b1-estudio` | pendiente |
 | 5 · Jueces, auditor y profesor | — | `autonomo/bloques/b1/*.md` | pendiente |
+
+## 6. Notas para la siguiente vuelta
+
+- **Catéter (A2)**: la cobertura (§6.2) dice que con el recambio sobre guía «la biopelícula se queda: recurrencia».
+  El PDF (p. 52) no lo dice: la recurrencia es de **dejar** el catéter. La maqueta sigue el PDF. Corregir la cobertura.
+- **Cobertura, casos A1 y A2**: piden «encuentra el error» con 3 errores; REGLAS §8 permite como mucho 2.
+- **Capilar**: tres cifras ajustadas frente a la especificación, porque se contradecía. Umbral SvO₂ 48 (no 50), VO₂
+  201 en «dependiente» (no 197), B3 con gap de CO₂ 3, y B2 con SaO₂ 98 en el giro. Anotadas en la maqueta.
