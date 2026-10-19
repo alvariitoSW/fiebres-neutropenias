@@ -210,6 +210,14 @@ El resto del tablero sigue `aparcada` hasta que apruebes la entrada de la bitác
 
 ## 4. Mejoras de lo que ya existe
 
+- **Que cada versión nueva descargue todas sus piezas a la vez.** El 19/10, tras publicar los modelos vivos (PR #18),
+  la app no arrancaba en el móvil del usuario: la portada se veía, pero tocar PIF no hacía nada. Se arregló sola al
+  publicar la siguiente versión. Lo más probable es que el navegador mezclara piezas guardadas de la versión
+  anterior con piezas nuevas: solo `main.js` y el CSS llevan `?v=`, el resto de módulos no.
+  - Ya hecho: el arranque no se cae entero si falla una pieza, y sale un aviso rojo que dice cuál
+    (`js/core/aviso-arranque.js`, y `diagnostico.html` para comprobarlo en el móvil).
+  - Propuesta: versionar también los módulos que importa `main.js`.
+
 - **Ácido-base vivo, al entrar desde una ficha**: durante la animación (unos 3 s) la cabecera mini dice «paso 0»
   antes de pasar al estado (p. ej. «Vómitos»). Que diga el estado desde el principio.
 - **La Mayéutica, al recargar**, empieza otra vez en la pregunta 1: recuerda aciertos y fallos, pero no por dónde ibas.
