@@ -251,6 +251,44 @@ revisión** (decisión del usuario del 14/10: primero la fase 1 entera). Las fas
 
 ---
 
+## Objetivo M4 · Plan Marino, fase 4: los modelos grandes en la app
+
+Aprobado por el usuario el 19/10/2026: aprobó las maquetas v2 (PR #16) y dónde vive cada una. «Me parece bien, pero
+a parte añadiría también que se pueda ir a ambos desde Marino y desde Nefrología y así poder buscarlas fácilmente».
+
+| # | Clave | Qué | Estado | Notas |
+|---|---|---|---|---|
+| 1 | `acidobase-vivo` | Ácido-base vivo en la app (PIF → Nefrología, junto a la nefrona viva) | pendiente | Maqueta `autonomo/maquetas/marino-acidobase-v2.html` |
+| 2 | `agua-viva` | Río y mar en la app (Libros → Marino → Fundamentos, junto a la fluidoterapia) | pendiente | Maqueta `autonomo/maquetas/marino-agua-v2.html` |
+
+**Encargo común** (tipo `visual`, constructor potente; la medicina ya está auditada en las maquetas, así que la fase A
+es ligera):
+- **Qué quiero**: pasar la maqueta aprobada a la app **sin perder nada**:
+  - Explorar, Conceptos y Mayéutica, con los casos;
+  - el «primero predices, luego compruebas»;
+  - las formas de `js/core/particulas.js`;
+  - los chips de origen.
+- **Dónde vive**:
+  - el ácido-base, en Nefrología, junto a la nefrona viva;
+  - el río y mar, en Libros → Marino → Fundamentos, junto a la fluidoterapia (caps. 10-11).
+- **Accesos (pedido del usuario)**:
+  - a **las dos** se llega desde el menú de Marino (Libros) y desde el de Nefrología;
+  - el buscador global las encuentra por su nombre y por sus temas (pH, gasometría, hiato, sueros, hemorragia,
+    sodio…);
+  - botones en las fichas que tocan, que abren el modelo **en el estado de ese tema** (p. ej. la alcalosis abre los
+    vómitos), con el enlace cruzado de siempre (CLAUDE §5).
+- **Mayéutica**: aciertos y fallos en el almacenamiento del quiz que ya existe (CLAUDE §2: es una de las tres
+  excepciones). Sin `data-correcta` ni `data-mal` en el HTML. Ids con prefijo propio, sin duplicados.
+- **Lo que NO quiero**: colores fuera de los tokens, otra librería, un listener nuevo por módulo, copiar la nefrona
+  viva.
+- **Hecho**:
+  - jueces en verde con `--ficha` de las fichas que enlazan;
+  - las dos herramientas abren a 390 y 360 px sin errores ni desborde;
+  - `__pruebas()` o su equivalente en verde;
+  - los casos llegan a «Lo que te llevas»;
+  - verificador, auditor ciego (solo lo que cambie de la maqueta) y profesor (≥4);
+  - PR en borrador con «Ver en el móvil».
+
 ## Lo que aún no está aprobado
 
 Vive en `autonomo/BITACORA.md` (skill `/bitacora`): lo apuntado que espera el visto bueno del usuario, lo que espera
