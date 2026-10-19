@@ -3,7 +3,9 @@
 // archivo .html en vez de amontonarse todas en index.html.
 export async function includeAll(root = document) {
     const nodes = Array.from(root.querySelectorAll('[data-include]'));
-    await Promise.all(nodes.map(async (node) => {
+    // Un fragmento que no se descarga no debe dejar sin arrancar toda la app: se cargan los demás y el fallo
+    // se avisa en pantalla (core/aviso-arranque.js).
+    const resultados = await Promise.allSettled(nodes.map(async (node) => {
         const url = node.getAttribute('data-include');
         const response = await fetch(url);
         if (!response.ok) {
@@ -11,4 +13,8 @@ export async function includeAll(root = document) {
         }
         node.innerHTML = await response.text();
     }));
+    resultados.filter(r => r.status === 'rejected').forEach(r => {
+        console.error(r.reason);
+        window.dispatchEvent(new ErrorEvent('error', { message: r.reason.message }));
+    });
 }

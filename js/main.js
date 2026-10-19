@@ -25,6 +25,14 @@ import * as eco from './modules/eco/index.js';
 import * as libros from './modules/libros/index.js';
 import { initQuiz } from './modules/quiz/quiz.js';
 
+// Un módulo que falla al arrancar no debe dejar muertos a los demás (ni la portada): se avisa y se sigue.
+function seguro(nombre, fn) {
+    try { return fn(); } catch (e) {
+        console.error(e);
+        window.dispatchEvent(new ErrorEvent('error', { message: `${nombre}: ${e.message}` }));
+    }
+}
+
 async function start() {
     await includeAll();
     initAccordions();
@@ -34,12 +42,13 @@ async function start() {
     initBotonVisualGlobal(document.getElementById('btn-modo-visual'));
     const homeApi = home.init();
     // Módulos de Hematología, que cuelgan del propio switcher raíz de home.
-    [generales, neutropeniaFebril, reconocimiento, sindromesUrgentes, trasplante, merinoHemato].forEach(m => m.init());
+    Object.entries({ generales, neutropeniaFebril, reconocimiento, sindromesUrgentes, trasplante, merinoHemato })
+        .forEach(([nombre, m]) => seguro(nombre, () => m.init()));
     // Especialidades con switcher medio propio: cada init() devuelve
     // { volverAlMenu, irAFicha }, que home registra bajo la misma clave que
     // su vista raíz (ver registrarEspecialidad en home/index.js).
     const especialidades = { nefrologia, uciPapers, fisioUci, cardiologia, neumologia, sobrevivirUmi, eco, libros };
-    Object.entries(especialidades).forEach(([key, mod]) => home.registrarEspecialidad(key, mod.init()));
+    Object.entries(especialidades).forEach(([key, mod]) => seguro(key, () => home.registrarEspecialidad(key, mod.init())));
 
     // Única llamada a initQuiz() de toda la app — el modal
     // (#quiz-modal-overlay) es un partial compartido, así que cada
@@ -64,6 +73,7 @@ async function start() {
     // navegación a cada resultado reutiliza el router que home.init() ya
     // expone para los botones .especialidad-link.
     initSearch({ navegar: homeApi?.irAResultadoBusqueda });
+    window.__appLista = true;
 }
 
 start();

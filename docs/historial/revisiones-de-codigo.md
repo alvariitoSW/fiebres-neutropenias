@@ -129,3 +129,14 @@ A petición explícita del usuario («los arreglos de código que me has dicho, 
 - **Saltos de la huella de las aurículas** en el corazón 3D: ver `js/modules/eco/README.md` («Huella de las aurículas
   sin saltos»). AI 8,0 → 0,7 mm y AD 5,7 → 1,1 mm entre dos fotogramas; prueba nueva.
 
+
+### La app no arrancaba en el móvil del usuario (octubre 2026)
+
+Tras publicar los modelos vivos (PR #18), en el móvil del usuario (Brave, Android) la portada se veía pero al tocar
+PIF no pasaba nada: la app no llegaba a arrancar. En el navegador de pruebas cargaba bien (limpio, bajo la subcarpeta
+de GitHub Pages, con la CPU frenada y con la versión anterior en la caché). Había dos puntos frágiles:
+- Si fallaba un solo fragmento (`includeAll` usaba `Promise.all`) o el `init()` de un módulo, no arrancaba nada.
+  Ahora los fragmentos se cargan con `allSettled` y cada `init()` va protegido (`seguro()` en `main.js`).
+- No se veía qué fallaba. Nuevo `js/core/aviso-arranque.js`, un script clásico que se carga antes que `main.js`:
+  si una pieza no se descarga, si hay un error antes de terminar el arranque o si a los 20 s no ha arrancado, pone
+  un aviso en pantalla con el motivo. `main.js` marca `window.__appLista` al terminar.

@@ -3072,3 +3072,7 @@ body.study-mode-on .abv-dock { padding-right: 82px; }
 /* El reloj del Modo Estudio sube por encima del dock mientras se ve el río y mar */
 body.agv-activo .pomodoro-fab { bottom: calc(var(--agv-dock-h, 170px) + 14px); }
 body.agv-activo .pomodoro-panel { bottom: calc(var(--agv-dock-h, 170px) + 76px); }
+
+/* Aviso de arranque (core/aviso-arranque.js): solo sale si la app no termina de arrancar. */
+.aviso-arranque { position: relative; z-index: 50; margin: 8px 12px; padding: 10px 12px; border: 1px solid var(--accent-red); border-left: 4px solid var(--accent-red); border-radius: 8px; background: var(--bg-main); color: var(--text-main); font-size: 0.85rem; line-height: 1.4; overflow-wrap: anywhere; }
+.aviso-arranque code { display: block; margin-top: 6px; color: var(--accent-red); font-size: 0.75rem; white-space: normal; }
