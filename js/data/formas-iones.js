@@ -1,6 +1,6 @@
 // Tabla única de formas de iones y moléculas: la misma forma para la misma
 // especie en todos los modelos vivos (nefrona viva, glomérulo, filtro de la
-// TRR, nefronas que quedan y escenas del potasio). Aprobada por el usuario el
+// TRR, nefronas que quedan, escenas del potasio y río y mar). Aprobada por el usuario el
 // 19/10/2026 sobre la lámina autonomo/maquetas/formas-iones.html.
 //
 // Datos puros, sin DOM. Los dibuja js/core/particulas.js (lienzo y SVG) y
@@ -36,11 +36,13 @@ export const FORMAS_IONES = {
     glu: { nombre: 'Glucosa', forma: 'copo', color: '--accent-yellow' },
     urea: { nombre: 'Urea', forma: 'hexagono', color: '--text-muted' },
     alb: { nombre: 'Albúmina', forma: 'grano', color: '--accent-purple' },
+    alb25: { nombre: 'Albúmina 25 %', forma: 'grano1', color: '--accent-purple' }, // grano con un halo (lámina: «25 %: con halo»)
     cito: { nombre: 'Citoquinas', forma: 'trebol', color: '--text-dim' },
     cacit: { nombre: 'Ca²⁺ unido al citrato', forma: 'caCitrato', color: '--text-main', anillo: '--accent-yellow' },
     citrato: { nombre: 'Citrato', forma: 'aro', color: '--accent-yellow' }, // el anillo del Ca²⁺ unido, vacío
     rbc: { nombre: 'Hematíes', forma: 'disco', color: '--accent-red' },
     celula: { nombre: 'Célula desprendida (NTA)', forma: 'celula', color: '--text-muted' },
+    osmol: { nombre: 'Osmolitos (neurona)', forma: 'pajarita', color: '--accent-yellow' }, // río y mar: no un círculo ámbar como la albúmina
     creat: { nombre: 'Creatinina', forma: 'luna', color: '--text-dim', reserva: true },
 };
 

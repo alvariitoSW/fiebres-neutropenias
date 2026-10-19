@@ -1,0 +1,221 @@
+    <button class="back-btn btn-volver-libros-menu">← VOLVER</button>
+    <!-- Río y mar: el agua del cuerpo (Marino caps. 10-11, 15 y 35). Modelo vivo de Libros.
+         Lógica en agua-viva.js y agua-viva-escena.js; datos en js/data/agua-viva-data.js. -->
+    <div class="agv-raiz" id="agv-raiz">
+      <header class="agv-cabecera">
+        <p class="agv-eyebrow">Modelo vivo · Marino caps. 10-11, 15 y 35</p>
+        <h2 class="agv-titulo">El agua del cuerpo: <em>río, marisma y mar</em></h2>
+        <p class="agv-lead">El plasma es un río estrecho: <strong class="hl">3 de los 45 L</strong> de agua de un varón de 75 kg. Lo que infundes no se queda en él. <span class="agv-org">ficha · mar-tabla-10-1</span></p>
+      </header>
+
+      <div class="agv-interruptor" role="tablist" aria-label="Qué hacer con el modelo">
+        <button type="button" role="tab" id="agv-modo-explorar" aria-selected="true">Explorar</button>
+        <button type="button" role="tab" id="agv-modo-conceptos" aria-selected="false">Conceptos</button>
+        <button type="button" role="tab" id="agv-modo-preguntas" aria-selected="false">Mayéutica</button>
+      </div>
+
+      <section class="agv-escena-bloque" id="agv-escena-bloque" aria-label="El estuario">
+        <div class="agv-escena" id="agv-escena">
+          <canvas id="agv-lienzo" role="img" aria-label="Río, marisma y mar: dónde acaba cada fluido"></canvas>
+          <span class="agv-chapa">símil · ilustrativo</span>
+          <div class="agv-lectura" id="agv-lectura" aria-live="off"></div>
+          <button type="button" class="agv-lupa-btn" id="agv-lupa-orilla" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>Lupa: orilla</button>
+          <button type="button" class="agv-lupa-btn" id="agv-lupa-neurona" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>Lupa: neurona</button>
+          <div class="agv-lupa" id="agv-lupa" hidden>
+            <canvas id="agv-lupa-lienzo" role="img" aria-label="Lupa"></canvas>
+            <p class="agv-lupa-tit" id="agv-lupa-tit" hidden></p>
+          </div>
+          <button type="button" class="agv-lupa-cerrar" id="agv-lupa-cerrar" hidden aria-label="Cerrar la lupa">×</button>
+          <div class="agv-anillo" id="agv-anillo" hidden></div>
+        </div>
+        <div class="agv-mareas" aria-live="off">
+          <div class="agv-marea"><div class="agv-nom">Río<small>plasma</small></div><div class="agv-tot" id="agv-tot-rio">3.000 mL</div><div class="agv-dl" id="agv-dl-rio">±0</div><span class="agv-o" id="agv-org-rio">ficha · mar-tabla-10-1</span></div>
+          <div class="agv-marea"><div class="agv-nom">Marisma<small>intersticio</small></div><div class="agv-tot" id="agv-tot-marisma">13.000 mL</div><div class="agv-dl" id="agv-dl-marisma">±0</div><span class="agv-o" id="agv-org-marisma">ficha · mar-tabla-10-1</span></div>
+          <div class="agv-marea"><div class="agv-nom">Mar<small>células</small></div><div class="agv-tot" id="agv-tot-mar">29.000 mL</div><div class="agv-dl" id="agv-dl-mar">±0</div><span class="agv-o" id="agv-org-mar">ficha · mar-tabla-10-1</span></div>
+        </div>
+        <ul class="agv-leyenda-mini" aria-label="Formas">
+          <li><span data-agv-particula="cl"></span>Cl⁻ y sal</li>
+          <li><span data-agv-particula="urea"></span>urea</li>
+          <li><span data-agv-particula="glu"></span>glucosa</li>
+          <li><span data-agv-particula="alb"></span>albúmina</li>
+          <li><span data-agv-particula="rbc"></span>hematíes</li>
+          <li><span data-agv-particula="dulce"></span>agua dulce</li>
+          <li><span data-agv-particula="agua"></span>agua</li>
+        </ul>
+        <p class="agv-frase" id="agv-frase" aria-live="polite"></p>
+      </section>
+
+      <!-- ============ EXPLORAR ============ -->
+      <div id="agv-vista-explorar" class="agv-bloque">
+        <section class="agv-bloque">
+          <h3 class="agv-h">Qué es cada cosa que se mueve</h3>
+          <ul class="agv-leyenda" id="agv-leyenda">
+            <li><span data-agv-particula="dulce"></span>glucosado: agua dulce, no brilla</li>
+            <li><span data-agv-particula="cl"></span>Cl⁻ y la sal: salino 0,9 %</li>
+            <li><span data-agv-particula="ringer"></span>Ringer lactato</li>
+            <li><span data-agv-particula="plasmalyte"></span>Plasma-Lyte</li>
+            <li><span data-agv-particula="alb"></span>albúmina: limo que no cruza</li>
+            <li><span data-agv-particula="alb25"></span>albúmina 25 %: limo espeso (un halo)</li>
+            <li><span data-agv-particula="salino75"></span>salino 7,5 %: muy salado (dos halos)</li>
+            <li><span data-agv-particula="salino3"></span>salino 3 %: bolo (un halo)</li>
+            <li><span data-agv-particula="rbc"></span>hematíes · sangre</li>
+            <li><span data-agv-particula="glu"></span>glucosa (cristal: copo), sin insulina</li>
+            <li><span data-agv-particula="urea"></span>urea, como en la nefrona viva: cruza todas las orillas</li>
+            <li><span data-agv-particula="agua"></span>agua que sale del mar o de la marisma</li>
+            <li><span data-agv-particula="osmol"></span>osmolitos de la neurona (hipernatremia)</li>
+            <li><span data-agv-particula="brillo"></span>destellos: la sal (osmolalidad)</li>
+          </ul>
+          <p class="agv-para">Cada figura que viaja son unos 25 mL (ilustrativo). La forma dice qué es; el color, nunca solo. Hexágono = urea, rombo = Cl⁻ y la sal y copo = glucosa: la misma tabla de formas que la nefrona viva y el resto de modelos de la app.</p>
+        </section>
+
+        <div id="agv-puente" class="agv-puente" hidden>
+          <div class="agv-nota-fuentes"><b>El cloro del salino.</b> Cl⁻ 154 frente a 103 del plasma (Tabla 10.2). Con salino a 30 mL/kg/h el pH bajó de <span class="hl-rojo">7,41 a 7,28</span>; con Ringer lactato (Cl⁻ 109) no cambió (Fig. 10.2). <span class="agv-org">ficha · mar-tabla-10-2 · mar-cristaloides</span></div>
+          <div class="agv-fila"><button type="button" class="agv-b agv-link" id="agv-ir-acidobase" data-especialidad="nefrologia" data-view="acidobase" data-acidobase-vivo="paso-3">Ver el cloro en el ácido-base vivo →</button></div>
+        </div>
+
+        <section class="agv-bloque">
+          <h3 class="agv-h">Cómo leer el paisaje</h3>
+          <dl class="agv-simil">
+            <dt>Río</dt><dd>el plasma: corre, es estrecho y lleva 3 L (varón) o 2 L (mujer)</dd>
+            <dt>Marisma</dt><dd>el intersticio: 13 L (8 L) de agua entre juncos</dd>
+            <dt>Mar</dt><dd>las células: 29 L (20 L) detrás de la duna</dd>
+            <dt>Orilla</dt><dd>la pared del capilar: el agua y la sal la cruzan; el limo (albúmina) no</dd>
+            <dt>Compuertas</dt><dd>las acuaporinas de la membrana celular</dd>
+            <dt>Destellos</dt><dd>la sal disuelta: el agua va hacia donde hay más partículas</dd>
+            <dt>Discos</dt><dd>los hematíes del río: cuanto más separados, más bajo el Hto</dd>
+          </dl>
+          <p class="agv-para">Volúmenes: Tabla 10.1 <span class="agv-org">ficha · mar-tabla-10-1</span>. El paisaje es ilustrativo; los mL de los mareógrafos, de la ficha. Los pesos (75 y 60 kg) y los mL/kg (plasma 40 y 36; volemia 66 y 60) son de <b>peso magro</b>.</p>
+        </section>
+
+        <details class="nota-plegable" open>
+          <summary>Nota de fuentes: ¿×5 o ×3 de cristaloide?</summary>
+          <div class="agv-nota-fuentes"><b>Cap. 11</b> (Tabla 11.1): déficit del 15 % del plasma = 450 mL → <span class="hl">2,25 L de Ringer</span> (el 20 % se queda: ×5), de los que 1,8 L van al intersticio <span class="agv-org">ficha · mar-tabla-11-1 · mar-deficit-pequeno</span>.<br>
+          <b>Cap. 15</b> (Tabla 15.4): volumen de reanimación = déficit <span class="hl">× 3</span> con cristaloides y × 1 con coloides; el ×3 es una «estimación conservadora», porque se queda el 20-25 % <span class="agv-org">ficha · mc-hemorragico-fluidos</span>.<br>
+          <b>Fig. 10.1</b>: de 1 L de salino, 275 mL quedan en el plasma (27,5 %) <span class="agv-org">ficha · mar-fig-10-1</span>.<br>
+          Las tres son de Marino. El modelo las muestra juntas y no elige.</div>
+        </details>
+
+        <details class="nota-plegable">
+          <summary>De dónde sale cada cifra</summary>
+          <div class="agv-tabla-scroll">
+            <table class="data-table">
+              <thead><tr><th>Fluido (varón)</th><th>Río</th><th>Marisma</th><th>Mar</th></tr></thead>
+              <tbody>
+                <tr><td>Glucosado 5 % (1 L)</td><td class="agv-n">+100</td><td class="agv-n">+250</td><td class="agv-n">+650</td></tr>
+                <tr><td>Salino 0,9 % (1 L)</td><td class="agv-n">+275</td><td class="agv-n">+825</td><td class="agv-n">−100<br><span class="agv-org">resta</span></td></tr>
+                <tr><td>Ringer · Plasma-Lyte (1 L)</td><td class="agv-n">+200</td><td class="agv-n">+800</td><td class="agv-n">sin cifra</td></tr>
+                <tr><td>Albúmina 5 % (1 L)</td><td class="agv-n">+700</td><td class="agv-n">+300</td><td class="agv-n">0</td></tr>
+                <tr><td>Albúmina 25 % (100 mL)</td><td class="agv-n">+300 a +400</td><td class="agv-n">−200 a −300</td><td class="agv-n">sin cifra</td></tr>
+                <tr><td>Salino 7,5 % (250 mL)</td><td class="agv-n">+535</td><td class="agv-n">+700</td><td class="agv-n">−985<br><span class="agv-org">resta</span></td></tr>
+                <tr><td>Salino 3 % (bolo)</td><td colspan="3">Na⁺ hasta +2 mEq/L por bolo, cada pocas horas; reparto en mL: sin cifra</td></tr>
+                <tr><td>Sangre completa</td><td colspan="3">se queda en el vaso; Hto sin cambios (Fig. 15.1)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <ul class="agv-huecos">
+            <li><b>Fig. 10.1</b> <code>mar-fig-10-1</code>: glucosado, salino 0,9 %, albúmina 5 % y salino 7,5 %, en río y marisma.</li>
+            <li><b>Mar</b>: glucosado, «solo unos 350 mL quedan fuera; dos tercios acaban dentro» (<code>mar-glucosado-volumen</code>; el libro da los 650 mL). Salino 0,9 %, total 1.100 «saca agua de las células» (<code>mar-salino</code>) y 7,5 %, 1.235 mL «sacando agua de las células» (<code>mar-hipertonico</code>): esos mL del mar son la resta.</li>
+            <li><b>Ringer y Plasma-Lyte</b>: «el 20 % queda en el plasma y el 80 % va al intersticio» (<code>mar-cristaloide-reparto</code>). No están en la Fig. 10.1.</li>
+            <li><b>Albúmina 25 %</b>: 3-4 veces su volumen, sacando agua del intersticio (Tabla 10.3, <code>mar-tabla-10-3</code>, <code>mar-albumina</code>). El dibujo usa el punto medio (×3,5): ilustrativo.</li>
+            <li><b>Otras cantidades</b>: proporcionales a la Fig. 10.1 (ilustrativo). La mujer de 60 kg reparte igual: el plasma es el 20 % de su extracelular (2 de 10 L, Tabla 10.1).</li>
+            <li><b>Hemorragia</b>: volemia 66 mL/kg (varón) y 60 mL/kg (mujer); el río pierde el mismo % (pérdida proporcional de plasma y hematíes); relleno transcapilar de hasta 1 L (<code>mc-hemorragico-clasificacion</code>).</li>
+            <li><b>Hto</b>: hematíes ÷ volemia, partiendo de 45 % (Fig. 15.1): cálculo de fisiología general. Nota de fuentes: el plasma de la Tabla 10.1 (3 L) y la volemia del cap. 15 (≈ 5 L) vienen de capítulos distintos y no suman exacto con un Hto de 45 %; cada uno se usa para lo suyo.</li>
+            <li><b>Pérdidas hipotónicas</b>, Tabla 35.1 completa (Na⁺ medio, mEq/L; <code>mr-tabla-35-1</code>): secreción gástrica 60, heces 25, orina &lt;10, sudor 65, orina con diurético 80, drenaje de ileostomía 125, diarrea inflamatoria 75, diarrea secretora 90. El dock usa tres.</li>
+            <li><b>Na⁺, Posm</b>: Posm = 2 × Na + glucosa/18 + BUN/2,8 (Ec. 35.3) y efectiva sin la urea (Ec. 35.4) (<code>mr-osm-efectiva-calc</code>); Na corregido = Na + 2,4 × (glucosa − 100)/100 (Ec. 35.5, <code>mr-hiperglucemia-na</code>).</li>
+          </ul>
+        </details>
+
+        <details class="nota-plegable">
+          <summary>Nota de fidelidad: el Na⁺ del salino al 3 %</summary>
+          <div class="agv-nota-fuentes">La Tabla 35.3 impresa da «Na⁺ = 153 mEq/L» para el NaCl al 3 %; el texto da <b>513</b> (y 513 × 2 = 1.026 mOsm/L, la osmolaridad que dan la tabla y el texto). Se usa 513. <span class="agv-org">ficha · mr-tabla-35-3</span></div>
+        </details>
+
+        <details class="nota-plegable">
+          <summary>Lo que la ficha no da (huecos)</summary>
+          <ul class="agv-huecos">
+            <li>Cuánta agua entra o sale de las células en la hipo y la hipernatremia, y el reparto en mL del salino al 3 % y del Ringer en el mar. El mar y la neurona se mueven de forma ilustrativa.</li>
+            <li>Cuánto baja el Na⁺ con el estrés y los sueros hipotónicos, o cuánto sube con las pérdidas hipotónicas: solo la flecha.</li>
+            <li>El edema por albúmina baja o permeabilidad alta: sin cifras (<code>mar-agravantes</code>).</li>
+            <li>El ritmo del relleno transcapilar: «hasta 1 L», 8-12 h para que baje el Hto y días para completarse. El dibujo usa lo perdido, con 1 L de tope.</li>
+            <li>Cuánto cambia el Na⁺ con cada litro de salino 0,9 % o de Ringer: no está.</li>
+          </ul>
+        </details>
+
+        <!-- Lo que encuentra el buscador global (core/search.js): cada entrada es un enlace cruzado
+             normal que abre el modelo en un estado. Ocultas: solo se pulsan desde el buscador. -->
+        <div hidden>
+          <button type="button" data-especialidad="libros" data-view="aguaViva" data-agua-viva="inicio" data-buscar-titulo="Río y mar: el agua del cuerpo (modelo vivo)" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="rio y mar río marisma mar agua corporal compartimentos plasma intersticio sueros fluidos fluidoterapia volumen">Río y mar</button>
+          <button type="button" data-especialidad="libros" data-view="aguaViva" data-agua-viva="salino" data-buscar-titulo="Río y mar: adónde va 1 L de salino" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="sueros cristaloides salino 0,9 suero fisiológico reparto de fluidos">Salino</button>
+          <button type="button" data-especialidad="libros" data-view="aguaViva" data-agua-viva="ringer" data-buscar-titulo="Río y mar: el cristaloide se reparte (Ringer, Plasma-Lyte)" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="sueros cristaloides ringer lactato plasma-lyte reparto de fluidos intersticio edema">Ringer</button>
+          <button type="button" data-especialidad="libros" data-view="aguaViva" data-agua-viva="glucosado" data-buscar-titulo="Río y mar: adónde va el glucosado al 5 %" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="sueros glucosado dextrosa agua libre reparto de fluidos">Glucosado</button>
+          <button type="button" data-especialidad="libros" data-view="aguaViva" data-agua-viva="albumina25" data-buscar-titulo="Río y mar: la albúmina al 25 % mueve agua" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="coloides albúmina oncótica reparto de fluidos">Albúmina</button>
+          <button type="button" data-especialidad="libros" data-view="aguaViva" data-agua-viva="hipertonico" data-buscar-titulo="Río y mar: salino hipertónico al 7,5 %" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="salino hipertónico 7,5 sueros reparto de fluidos">Salino 7,5 %</button>
+          <button type="button" data-especialidad="libros" data-view="aguaViva" data-agua-viva="hemorragia" data-buscar-titulo="Río y mar: la hemorragia y el Hto" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="hemorragia shock hemorrágico hematocrito relleno transcapilar sangrado">Hemorragia</button>
+          <button type="button" data-especialidad="libros" data-view="aguaViva" data-agua-viva="hiponatremia" data-buscar-titulo="Río y mar: hiponatremia, la neurona se hincha" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="hiponatremia sodio na edema cerebral adh">Hiponatremia</button>
+          <button type="button" data-especialidad="libros" data-view="aguaViva" data-agua-viva="salino3" data-buscar-titulo="Río y mar: bolo de salino hipertónico al 3 %" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="salino hipertónico 3 % bolo hiponatremia encefalopatía sodio">Salino 3 %</button>
+          <button type="button" data-especialidad="libros" data-view="aguaViva" data-agua-viva="hipernatremia" data-buscar-titulo="Río y mar: hipernatremia y osmolitos" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="hipernatremia sodio na osmolitos neurona">Hipernatremia</button>
+          <button type="button" data-especialidad="libros" data-view="aguaViva" data-agua-viva="osmolalidad" data-buscar-titulo="Río y mar: osmolalidad efectiva y urea" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="osmolalidad osmolaridad tonicidad urea posm efectiva sodio">Osmolalidad</button>
+        </div>
+      </div>
+
+      <!-- ============ CONCEPTOS ============ -->
+      <div id="agv-vista-conceptos" class="agv-bloque" hidden>
+        <div id="agv-concepto" class="agv-formato agv-entra"></div>
+      </div>
+
+      <!-- ============ MAYÉUTICA ============ -->
+      <div id="agv-vista-preguntas" class="agv-bloque" hidden>
+        <div id="agv-preg" class="agv-formato agv-entra"></div>
+      </div>
+
+      <nav class="agv-dock" id="agv-dock" aria-label="Mandos del río y mar">
+        <div class="agv-dock-in">
+          <div id="agv-dock-explorar">
+            <div class="agv-dock-tabs" role="tablist" aria-label="Mandos del estuario">
+              <button type="button" role="tab" data-agv-tab="sueros" aria-selected="true">Sueros</button>
+              <button type="button" role="tab" data-agv-tab="sangrado" aria-selected="false">Sangrado</button>
+              <button type="button" role="tab" data-agv-tab="sodio" aria-selected="false">Sodio</button>
+              <button type="button" role="tab" data-agv-tab="solutos" aria-selected="false">Solutos</button>
+              <button type="button" role="tab" data-agv-tab="paciente" aria-selected="false">Paciente</button>
+            </div>
+            <div class="agv-dock-panel" data-agv-panel="sueros">
+              <div class="agv-raya" id="agv-chips-fluido" role="group" aria-label="Fluido"></div>
+              <div class="agv-infundir">
+                <div class="agv-cantidad"><button type="button" id="agv-cant-menos" aria-label="Menos">−</button><output id="agv-cant-val">1 L</output><button type="button" id="agv-cant-mas" aria-label="Más">+</button></div>
+                <button type="button" class="agv-b agv-prim" id="agv-btn-infundir">Infundir</button>
+              </div>
+            </div>
+            <div class="agv-dock-panel" data-agv-panel="sangrado" hidden>
+              <label class="agv-desliza"><span>Hemorragia</span><input type="range" id="agv-m-hemorragia" min="0" max="45" step="1" value="0" aria-label="Hemorragia, % de la volemia"><output id="agv-o-hemorragia">0 %</output></label>
+              <div class="agv-fila agv-sin-salto"><span class="agv-clase" id="agv-o-clase">Sin pérdida</span><div class="agv-seg agv-crece" id="agv-m-reloj" aria-label="Reloj"><button type="button" data-v="1h" aria-pressed="true">1 h</button><button type="button" data-v="8-12h" aria-pressed="false">8-12 h</button><button type="button" data-v="dias" aria-pressed="false">Días</button></div></div>
+            </div>
+            <div class="agv-dock-panel" data-agv-panel="sodio" hidden>
+              <label class="agv-desliza"><span>Na⁺ del paciente</span><input type="range" id="agv-m-na" min="110" max="165" step="1" value="140" aria-label="Sodio del paciente"><output id="agv-o-na">140</output></label>
+              <div class="agv-fila agv-sin-salto"><span class="agv-para">Reloj</span><div class="agv-seg agv-crece" id="agv-m-reloj2" aria-label="Reloj"><button type="button" data-v="1h" aria-pressed="true">1 h</button><button type="button" data-v="8-12h" aria-pressed="false">8-12 h</button><button type="button" data-v="dias" aria-pressed="false">Días</button></div></div>
+            </div>
+            <div class="agv-dock-panel" data-agv-panel="solutos" hidden>
+              <label class="agv-desliza"><span>Glucosa<br><small>sin insulina</small></span><input type="range" id="agv-m-glucosa" min="90" max="600" step="10" value="90" aria-label="Glucosa sin insulina"><output id="agv-o-glucosa">90</output></label>
+              <div class="agv-raya">
+                <button type="button" class="agv-tog" id="agv-m-adh" aria-pressed="false">ADH · estrés</button>
+                <button type="button" class="agv-tog" id="agv-m-urea" aria-pressed="false"><span data-agv-particula="urea"></span>Urea alta</button>
+                <button type="button" class="agv-tog" data-agv-perdida="sudor" aria-pressed="false">Sudor <small>Na 65</small></button>
+                <button type="button" class="agv-tog" data-agv-perdida="diarrea" aria-pressed="false">Diarrea secretora <small>Na 90</small></button>
+                <button type="button" class="agv-tog" data-agv-perdida="diuretico" aria-pressed="false">Orina con diurético <small>Na 80</small></button>
+              </div>
+            </div>
+            <div class="agv-dock-panel" data-agv-panel="paciente" hidden>
+              <div class="agv-seg" id="agv-m-paciente" aria-label="Paciente"><button type="button" data-v="varon" aria-pressed="true">Varón 75 kg</button><button type="button" data-v="mujer" aria-pressed="false">Mujer 60 kg</button></div>
+              <div class="agv-raya">
+                <button type="button" class="agv-tog" id="agv-m-albbaja" aria-pressed="false">Albúmina baja</button>
+                <button type="button" class="agv-tog" id="agv-m-inflamacion" aria-pressed="false">Inflamación</button>
+                <button type="button" class="agv-tog" id="agv-m-reinicio" aria-pressed="false">Empezar de nuevo</button>
+              </div>
+            </div>
+          </div>
+          <div id="agv-dock-estudio" class="agv-dock-estudio" hidden>
+            <div class="agv-pasos" id="agv-dock-pasos"></div>
+            <div class="agv-dock-est-txt"><span id="agv-dock-est-izq"></span><span id="agv-dock-est-der"></span></div>
+          </div>
+        </div>
+      </nav>
+    </div>

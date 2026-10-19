@@ -22,6 +22,7 @@ import { initVisualMarinoCaps45a53 } from './visual-marino-caps45-53.js';
 import { initVisualMarinoCaps31a44 } from './visual-marino-caps31-44.js';
 import { initVisualMarino } from './visual-marino.js';
 import { initIndice, idRepaso } from './indice.js';
+import { init as initAguaViva } from './agua-viva.js';
 import { librosIndice } from '../../data/libros-indice.js';
 
 // Mismo patrón que el resto de especialidades: main.js fusiona banco, temas
@@ -47,6 +48,8 @@ export function init() {
         marinoNeuro: document.getElementById('marino-neuro-view'),
         marinoNutricion: document.getElementById('marino-nutri-view'),
         marinoToxicos: document.getElementById('marino-tox-view'),
+        // Modelo vivo: río y mar (el agua del cuerpo), junto a la fluidoterapia (caps. 10-11)
+        aguaViva: document.getElementById('agua-viva-view'),
     });
 
     document.getElementById('btn-marino-fund').addEventListener('click', () => librosLevel.show('marinoFundamentos'));
@@ -67,11 +70,14 @@ export function init() {
     initMarinoNutricion();
     initMarinoToxicos();
     initVisualMarinoCaps45a53();
+    const aguaViva = initAguaViva();
 
     librosLevel.show('menu');
 
     return {
         volverAlMenu: () => librosLevel.show('menu'),
         irAFicha: librosLevel.irAFicha,
+        // data-agua-viva="<estado>" en un enlace cruzado abre el río y mar en ese estado
+        modelosVivos: { aguaViva: estadoClave => aguaViva?.abrir(estadoClave) },
     };
 }

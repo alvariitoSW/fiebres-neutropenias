@@ -1181,7 +1181,10 @@ function pintarTextos() {
     <li>Fichas de los platillos: 1 ≈ 4 mmHg o 2,4 mEq/L; partículas en proporción ${O('i', '')}</li></ul>`;
   // salidas de este paso
   const sal = [];
-  if (pasoActual === '3' && !CAUSA_ACTUAL) sal.push(enlaceFicha('mar-cristaloides', 'Ver el cloro de cada suero (Tabla 10.2) →', 'mar-tabla-10-2'));
+  if (pasoActual === '3' && !CAUSA_ACTUAL) {
+    sal.push('<button type="button" class="abv-b abv-link" data-especialidad="libros" data-view="aguaViva" data-agua-viva="salino">Ver adónde va el salino en el río y mar →</button>');
+    sal.push(enlaceFicha('mar-cristaloides', 'Ver el cloro de cada suero (Tabla 10.2) →', 'mar-tabla-10-2'));
+  }
   const c = causaActual(); if (c && c.nefrona) sal.push(boton('nefrona', c.nefrona, `Abrir en la nefrona viva: ${c.t}`));
   $('#abv-salidas-paso').innerHTML = sal.join('');
   // dock
