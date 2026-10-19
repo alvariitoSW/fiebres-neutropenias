@@ -73,7 +73,7 @@ body.estudio .escena-bloque { position: sticky; top: 0; padding-top: 4px; paddin
 .escena { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: var(--bg); }
 .lamina-caja { position: relative; }
 #lamina { display: block; width: 100%; height: auto; }
-body.estudio #lamina { height: 200px; }
+body.estudio #lamina { height: 220px; }
 body.estudio .escena.con-lupa #lamina { height: 252px; }
 #lamina text, .lupa svg text, .grafica svg text { font-family: var(--serif); }
 .chapa { position: absolute; font: 600 .6rem/1 var(--sans); letter-spacing: .07em; text-transform: uppercase; padding: 4px 7px;
@@ -113,7 +113,8 @@ body.estudio .celda .o, body.estudio .celda .sub { display: none; }
 .leyenda-mini li { display: inline-flex; align-items: center; gap: 4px; }
 .leyenda-mini svg { width: 13px; height: 13px; }
 body.estudio .leyenda-mini { display: none; }
-.frase { font: .9rem/1.36 var(--serif); color: var(--fg); min-height: 2.7em; border-left: 3px solid var(--oro); padding: 1px 0 1px 9px; }
+.frase { font: .84rem/1.32 var(--serif); color: var(--fg); min-height: 2.64em; border-left: 3px solid var(--oro); padding: 1px 0 1px 9px; margin: 0 0 4px; }
+.frase .org { font-size: .6rem; white-space: normal; }
 body.estudio .frase { display: none; }
 
 /* Botones y mandos comunes (los del río y mar) */
@@ -147,7 +148,7 @@ input[type="range"] { width: 100%; min-width: 0; height: 44px; accent-color: var
 .dock-tabs { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2px; }
 .dock-tabs button { min-height: 44px; background: transparent; border: 0; border-bottom: 2px solid transparent; color: var(--muted); font: 600 .74rem/1.1 var(--sans); cursor: pointer; padding: 0 2px; }
 .dock-tabs button[aria-selected="true"] { color: var(--oro); border-bottom-color: var(--oro); }
-.dock-panel { display: grid; gap: 6px; min-height: 96px; align-content: start; }
+.dock-panel { display: grid; gap: 4px; align-content: start; }
 .raya { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 1px; scroll-snap-type: x proximity; }
 .raya::-webkit-scrollbar { display: none; }
 .raya > * { scroll-snap-align: start; }
@@ -235,6 +236,9 @@ a.pdf { color: var(--oro); font: 600 .74rem var(--sans); display: inline-flex; a
 .concepto-n { font: 700 1.6rem/1 var(--serif); color: var(--oro); }
 .nav-c { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .casos-lista { display: grid; gap: 8px; }
+.camas { display: grid; gap: 6px; }
+.data-table.mini td.n, .data-table.mini th { text-align: center; }
+.data-table.mini th:first-child { text-align: left; }
 .entrada { border: 1px dashed var(--line); border-radius: 10px; padding: 8px 10px; display: grid; gap: 4px; font: .82rem/1.4 var(--sans); color: var(--dim); }
 .entrada b { color: var(--fg); font-family: var(--serif); font-weight: normal; font-size: .95rem; }
 
@@ -256,6 +260,9 @@ a.pdf { color: var(--oro); font: 600 .74rem var(--sans); display: inline-flex; a
 .perla.vacia circle { fill: none; stroke: var(--text-main); stroke-width: .6; opacity: .8; }
 .perla.co circle { fill: var(--text-muted); }
 .perla.co line { display: inline; stroke: var(--bg-main); stroke-width: .7; }
+.grande .perla circle { stroke-width: .7; }
+.grande .perla.vacia circle { stroke-width: 1.1; opacity: .9; }
+.grande .perla.co line { stroke-width: 1.1; }
 </style>
 </head>
 <body>
@@ -275,7 +282,7 @@ a.pdf { color: var(--oro); font: 600 .74rem var(--sans); display: inline-flex; a
   <section class="escena-bloque" id="escena-bloque" aria-label="Capilar y oxígeno">
     <div class="escena" id="escena">
       <div class="lamina-caja" id="lamina-caja">
-        <svg id="lamina" viewBox="0 0 360 300" role="img" aria-label="Circuito de la sangre: alvéolo, arteria, capilar del tejido con su célula, vena y corazón">
+        <svg id="lamina" viewBox="0 0 360 300" role="img" aria-label="El capilar del tejido: los hematíes sueltan su O₂ hacia las mitocondrias de la célula">
           <defs>
             <pattern id="raya" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" style="stroke:var(--accent-yellow);stroke-width:.7;opacity:.32"/></pattern>
             <pattern id="raya2" width="3.4" height="3.4" patternUnits="userSpaceOnUse" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="3.4" style="stroke:var(--accent-yellow);stroke-width:.6;opacity:.27"/></pattern>
@@ -284,72 +291,38 @@ a.pdf { color: var(--oro); font: 600 .74rem var(--sans); display: inline-flex; a
           <rect width="360" height="300" style="fill:var(--bg-main)"/>
           <!-- La célula del tejido, con su núcleo y sus mitocondrias -->
           <g id="celula">
-            <ellipse cx="250" cy="176" rx="46" ry="48" style="fill:url(#raya2);stroke:var(--text-muted);stroke-width:1.1"/>
-            <ellipse cx="236" cy="166" rx="12" ry="10" style="fill:url(#raya);stroke:var(--text-muted);stroke-width:.8"/>
-            <g id="mitos" style="stroke:var(--text-dim);stroke-width:.8;fill:var(--bg-main)">
-              <g transform="translate(270 148) rotate(20)"><ellipse rx="13" ry="6"/><path d="M-9 0l2.5-3 2.5 3 2.5-3 2.5 3 2.5-3 2.5 3" style="fill:none;stroke-width:.6"/></g>
-              <g transform="translate(272 196) rotate(-15)"><ellipse rx="13" ry="6"/><path d="M-9 0l2.5-3 2.5 3 2.5-3 2.5 3 2.5-3 2.5 3" style="fill:none;stroke-width:.6"/></g>
-              <g transform="translate(228 202) rotate(8)"><ellipse rx="11" ry="5.5"/><path d="M-7.5 0l2.5-3 2.5 3 2.5-3 2.5 3 2.5-3" style="fill:none;stroke-width:.6"/></g>
-            </g>
-            <g id="mitos-x" hidden style="stroke:var(--accent-red);stroke-width:2;stroke-linecap:round">
-              <path d="M262 141l16 14M278 141l-16 14M264 189l16 14M280 189l-16 14M220 196l16 12M236 196l-16 12"/>
-            </g>
-            <text id="mitos-x-txt" x="250" y="132" text-anchor="middle" hidden style="font-size:8.5px;fill:var(--accent-red);font-style:italic"></text>
+            <ellipse cx="180" cy="250" rx="210" ry="86" style="fill:url(#raya2);stroke:var(--text-muted);stroke-width:1.2"/>
+            <ellipse cx="52" cy="244" rx="24" ry="16" style="fill:url(#raya);stroke:var(--text-muted);stroke-width:.9"/>
+            <text x="52" y="274" text-anchor="middle" style="font-size:8px;font-style:italic;fill:var(--text-muted)">núcleo</text>
+            <g id="mitos" style="stroke:var(--text-dim);stroke-width:1;fill:var(--bg-main)"><g transform="translate(120 198) rotate(-8)"><ellipse rx="23" ry="10"/><path d="M-17 1l4-5 4 5 4-5 4 5 4-5 4 5 4-5 4 5" style="fill:none;stroke-width:.8"/></g><g transform="translate(192 194) rotate(6)"><ellipse rx="23" ry="10"/><path d="M-17 1l4-5 4 5 4-5 4 5 4-5 4 5 4-5 4 5" style="fill:none;stroke-width:.8"/></g><g transform="translate(262 204) rotate(-10)"><ellipse rx="23" ry="10"/><path d="M-17 1l4-5 4 5 4-5 4 5 4-5 4 5 4-5 4 5" style="fill:none;stroke-width:.8"/></g><g transform="translate(318 216) rotate(12)"><ellipse rx="23" ry="10"/><path d="M-17 1l4-5 4 5 4-5 4 5 4-5 4 5 4-5 4 5" style="fill:none;stroke-width:.8"/></g></g>
+            <text x="258" y="228" text-anchor="middle" style="font-size:8px;font-style:italic;fill:var(--text-muted)">mitocondrias</text>
+            <text x="180" y="294" text-anchor="middle" style="font-size:9px;font-style:italic;fill:var(--text-dim)">célula del tejido</text>
+            <g id="mitos-x" hidden style="stroke:var(--accent-red);stroke-width:2.2;stroke-linecap:round"><path d="M107 188l26 20M133 188l-26 20M179 184l26 20M205 184l-26 20M249 194l26 20M275 194l-26 20M305 206l26 20M331 206l-26 20"/></g>
+            <text id="mitos-x-txt" x="190" y="177" text-anchor="middle" hidden style="font-size:8.5px;fill:var(--accent-red);font-family:var(--sans);font-weight:700"></text>
           </g>
-          <!-- Tráquea, alvéolo y la «boca» con su capnograma pequeño -->
-          <g id="alveolo">
-            <path d="M73 4V37M83 4V37" style="stroke:var(--text-muted);stroke-width:1.1;fill:none"/>
-            <circle cx="78" cy="62" r="27" style="fill:url(#raya);stroke:var(--text-muted);stroke-width:1.1"/>
-            <text x="78" y="57" text-anchor="middle" style="font-size:8.5px;font-style:italic;fill:var(--text-dim)">alvéolo</text>
-            <text id="lam-tubo" x="60" y="14" text-anchor="end" style="font-size:8px;font-style:italic;fill:var(--text-muted)">tubo</text>
-          </g>
+          <text x="14" y="122" style="font-size:8.5px;font-style:italic;fill:var(--text-muted)">intersticio</text>
+          <text id="lam-aviso" x="14" y="142" style="font-size:9px;fill:var(--accent-red);font-family:var(--sans);font-weight:700"></text>
+          <!-- El capilar: pared en grabado con sus poros, luz punteada -->
+          <path id="circuito" d="M-30 70C90 76 250 150 390 146" style="fill:none;stroke:var(--text-muted);stroke-width:66;opacity:.55"/>
+          <path d="M-30 70C90 76 250 150 390 146" style="fill:none;stroke:var(--bg-main);stroke-width:66;stroke-dasharray:2.4 16"/>
+          <path d="M-30 70C90 76 250 150 390 146" style="fill:none;stroke:var(--bg-main);stroke-width:58"/>
+          <path d="M-30 70C90 76 250 150 390 146" style="fill:none;stroke:url(#punteo);stroke-width:58;opacity:.6"/>
+          <!-- Entrada (arterial) y salida (venosa) -->
+          <g id="lam-alveolo"><circle cx="18" cy="18" r="12" style="fill:url(#raya);stroke:var(--text-muted);stroke-width:1"/>
+            <text x="36" y="16" style="font-size:8.5px;fill:var(--text-dim);font-family:var(--sans);font-weight:600">del pulmón: sangre arterial</text>
+            <text x="36" y="27" style="font-size:7.5px;font-style:italic;fill:var(--text-muted)">SaO₂ · perlas llenas</text></g>
+          <text x="110" y="50" style="font-size:7.5px;font-style:italic;fill:var(--text-muted)">plasma: el 1,5 % del O₂ va disuelto</text>
+          <text id="lam-toma" x="352" y="90" text-anchor="end" style="font-size:8.5px;fill:var(--accent-blue);font-family:var(--sans);font-weight:600"></text>
+          <text x="352" y="101" text-anchor="end" style="font-size:7.5px;font-style:italic;fill:var(--text-muted)">sangre venosa, al corazón →</text>
           <g id="capno-mini">
-            <rect x="98" y="4" width="108" height="38" rx="6" style="fill:var(--bg-main);stroke:var(--border-color);stroke-width:1"/>
+            <rect x="248" y="4" width="106" height="38" rx="6" style="fill:var(--bg-main);stroke:var(--border-color);stroke-width:1"/>
             <path id="capno-mini-onda" d="" style="fill:none;stroke:var(--accent-yellow);stroke-width:1.3;stroke-linejoin:round"/>
-            <rect id="capno-mini-barre" x="98" y="5" width="6" height="36" style="fill:var(--bg-main);opacity:.85"/>
-            <text x="102" y="13" style="font-size:7px;fill:var(--text-muted);font-family:var(--sans)">boca · CO₂</text>
-            <text id="capno-mini-val" x="202" y="13" text-anchor="end" style="font-size:8px;fill:var(--text-main);font-family:var(--sans);font-weight:700"></text>
+            <rect id="capno-mini-barre" x="248" y="5" width="6" height="36" style="fill:var(--bg-main);opacity:.85"/>
+            <text id="lam-boca" x="252" y="13" style="font-size:7px;fill:var(--text-muted);font-family:var(--sans)">boca · CO₂</text>
+            <text id="capno-mini-val" x="350" y="13" text-anchor="end" style="font-size:8px;fill:var(--text-main);font-family:var(--sans);font-weight:700"></text>
           </g>
-          <!-- El vaso: un circuito en U -->
-          <path id="circuito" d="M34 232L34 118Q34 100 52 100L298 100Q316 100 316 118L316 234Q316 252 298 252L52 252Q34 252 34 234Z" style="fill:none;stroke:var(--text-muted);stroke-width:18;opacity:.5"/>
-          <path d="M34 232L34 118Q34 100 52 100L298 100Q316 100 316 118L316 234Q316 252 298 252L52 252Q34 252 34 234Z" style="fill:none;stroke:var(--bg-main);stroke-width:15"/>
-          <path d="M34 232L34 118Q34 100 52 100L298 100Q316 100 316 118L316 234Q316 252 298 252L52 252Q34 252 34 234Z" style="fill:none;stroke:url(#punteo);stroke-width:15;opacity:.7"/>
-          <path d="M306.5 122V230" style="stroke:var(--text-dim);stroke-width:1;stroke-dasharray:3 3"/>
-          <text x="340" y="176" text-anchor="middle" transform="rotate(90 340 176)" style="font-size:8.5px;font-style:italic;fill:var(--text-dim)">capilar del tejido</text>
-          <text x="276" y="89" text-anchor="middle" style="font-size:8.5px;font-style:italic;fill:var(--text-dim)">arteria</text>
-          <text x="232" y="273" text-anchor="middle" style="font-size:8.5px;font-style:italic;fill:var(--text-dim)">vena</text>
-          <text x="250" y="238" text-anchor="middle" style="font-size:8.5px;font-style:italic;fill:var(--text-dim)">célula</text>
-          <text x="58" y="124" style="font-size:7.5px;font-style:italic;fill:var(--text-muted)">plasma: el 1,5 % del O₂ va disuelto</text>
-          <text x="58" y="232" style="font-size:7.5px;font-style:italic;fill:var(--text-muted)">en reposo, el 70 % del O₂ de la sangre</text>
-          <text x="58" y="241" style="font-size:7.5px;font-style:italic;fill:var(--text-muted)">va en las venas: 555 de 805 mL (Tabla 9.1)</text>
-          <!-- El dedo (pulsioxímetro) y la jeringa (gasometría con cooximetría) -->
-          <g id="lam-dedo">
-            <rect x="149" y="85" width="22" height="30" rx="6" style="fill:none;stroke:var(--accent-yellow);stroke-width:1.4"/>
-            <circle cx="160" cy="88" r="2.2" style="fill:var(--accent-red)"/>
-            <text id="lam-dedo-txt" x="160" y="79" text-anchor="middle" style="font-size:8.5px;fill:var(--accent-yellow);font-family:var(--sans);font-weight:600">SpO₂ · dedo</text>
-          </g>
-          <g id="lam-jeringa">
-            <path d="M226 93V80" style="stroke:var(--text-dim);stroke-width:1"/>
-            <rect x="221" y="58" width="10" height="22" rx="1.5" style="fill:url(#raya);stroke:var(--text-dim);stroke-width:1"/>
-            <path d="M226 58V50M221.5 50h9" style="stroke:var(--text-dim);stroke-width:1.2"/>
-            <text x="238" y="63" style="font-size:8.5px;fill:var(--text-dim);font-family:var(--sans);font-weight:600">SaO₂</text>
-            <text x="238" y="73" style="font-size:7.5px;fill:var(--text-muted);font-style:italic">gasometría</text>
-          </g>
-          <!-- Las dos tomas venosas -->
-          <g id="toma-scv"><circle cx="150" cy="252" r="9.5" style="fill:none;stroke:var(--text-dim);stroke-width:1;stroke-dasharray:2 2"/>
-            <text x="150" y="273" text-anchor="middle" style="font-size:8px;fill:var(--text-dim);font-family:var(--sans)">ScvO₂ · cava superior</text></g>
-          <g id="toma-sv"><circle cx="34" cy="172" r="9.5" style="fill:none;stroke:var(--text-dim);stroke-width:1;stroke-dasharray:2 2"/>
-            <text x="48" y="168" style="font-size:8px;fill:var(--text-dim);font-family:var(--sans)">SvO₂</text>
-            <text x="48" y="178" style="font-size:7.5px;fill:var(--text-muted);font-style:italic">arteria pulmonar</text></g>
-          <!-- Aviso dentro de la lámina (frío, esófago, parada, combinación extrema) -->
-          <text id="lam-aviso" x="128" y="206" text-anchor="middle" style="font-size:8.5px;fill:var(--accent-red);font-family:var(--sans);font-weight:600"></text>
           <g id="g-part"></g>
           <g id="g-hem"></g>
-          <!-- El corazón -->
-          <g id="corazon" transform="translate(34 252)">
-            <path d="M0 9C-14 0-13-9-7-10-3-11-1-8 0-6 1-8 3-11 7-10 13-9 14 0 0 9Z" style="fill:var(--accent-red);stroke:var(--bg-main);stroke-width:1.2;opacity:.9"/>
-          </g>
-          <text x="34" y="283" text-anchor="middle" style="font-size:8.5px;font-style:italic;fill:var(--text-dim)">corazón</text>
           <g id="g-anillo"></g>
         </svg>
         <span class="chapa">ilustrativo</span>
@@ -365,7 +338,6 @@ a.pdf { color: var(--oro); font: 600 .74rem var(--sans); display: inline-flex; a
     </div>
     <div class="tablero" id="tablero" aria-live="off"></div>
     <ul class="leyenda-mini" id="leyenda-mini" aria-label="Formas"></ul>
-    <p class="frase" id="frase" aria-live="polite"></p>
   </section>
 
   <!-- ============ EXPLORAR ============ -->
@@ -379,19 +351,19 @@ a.pdf { color: var(--oro); font: 600 .74rem var(--sans); display: inline-flex; a
     <details class="nota-plegable grafica" id="gr-93" open>
       <summary>Fig. 9.3 viva: aporte y consumo</summary>
       <div class="gr-fila"><svg id="svg-93" viewBox="0 0 240 168" role="img" aria-label="Consumo frente a aporte de O₂"></svg>
-        <button type="button" class="lam" data-img="mar-fig9-3-aporte-consumo.jpg" data-pie="Figura 9.3 del libro (M p. 76): relación entre el aporte (DO₂) y el consumo de O₂ (VO₂)."><img loading="lazy" src="../../js/modules/libros/img/mar-fig9-3-aporte-consumo.jpg" alt="Figura 9.3 del libro"></button></div>
+        <button type="button" class="lam" data-img="mar-fig9-3-aporte-consumo.jpg" data-pie="Figura 9.3 del libro (PDF p. 76): relación entre el aporte (DO₂) y el consumo de O₂ (VO₂)."><img loading="lazy" src="../../js/modules/libros/img/mar-fig9-3-aporte-consumo.jpg" alt="Figura 9.3 del libro"></button></div>
       <p class="para">El punto es el paciente. Mientras el tejido pueda subir la extracción, el consumo no cambia (meseta). Cuando la diferencia SaO₂ − SvO₂ llega al 50 %, el consumo cae con el aporte (rampa). Ejes indexados con SC 1,7 m² <span class="org">ficha · mar-extraccion-curva · mar-sc</span></p>
     </details>
     <details class="nota-plegable grafica" id="gr-91">
       <summary>Fig. 9.1 viva: la curva de disociación</summary>
       <div class="gr-fila"><svg id="svg-91" viewBox="0 0 240 168" role="img" aria-label="Curva de disociación de la oxihemoglobina"></svg>
-        <button type="button" class="lam" data-img="mar-fig9-1-curva-disociacion.jpg" data-pie="Figura 9.1 del libro (M p. 69): curva de disociación de la oxihemoglobina."><img loading="lazy" src="../../js/modules/libros/img/mar-fig9-1-curva-disociacion.jpg" alt="Figura 9.1 del libro"></button></div>
+        <button type="button" class="lam" data-img="mar-fig9-1-curva-disociacion.jpg" data-pie="Figura 9.1 del libro (PDF p. 69): curva de disociación de la oxihemoglobina."><img loading="lazy" src="../../js/modules/libros/img/mar-fig9-1-curva-disociacion.jpg" alt="Figura 9.1 del libro"></button></div>
       <p class="para">A = arterial (parte plana), V = venosa (parte empinada), P50 = 27 mmHg <span class="org">ficha · mar-curva-forma · mar-curva-desplazamientos</span> La curva es la de Severinghaus <span class="org ilu">fisiología general</span>, ajustada para pasar por los 4 puntos de la ficha.</p>
     </details>
     <details class="nota-plegable grafica" id="gr-92">
       <summary>Fig. 9.2 viva: anemia frente a hipoxemia</summary>
       <div class="gr-fila"><svg id="svg-92" viewBox="0 0 240 150" role="img" aria-label="Contenido arterial de O₂: normal, hipoxemia y anemia"></svg>
-        <button type="button" class="lam" data-img="mar-fig9-2-anemia-hipoxemia.jpg" data-pie="Figura 9.2 del libro (M p. 71): efecto de la anemia y de la hipoxemia sobre el CaO₂."><img loading="lazy" src="../../js/modules/libros/img/mar-fig9-2-anemia-hipoxemia.jpg" alt="Figura 9.2 del libro"></button></div>
+        <button type="button" class="lam" data-img="mar-fig9-2-anemia-hipoxemia.jpg" data-pie="Figura 9.2 del libro (PDF p. 71): efecto de la anemia y de la hipoxemia sobre el CaO₂."><img loading="lazy" src="../../js/modules/libros/img/mar-fig9-2-anemia-hipoxemia.jpg" alt="Figura 9.2 del libro"></button></div>
       <p class="para">Las barras aparecen cuando visitas el estado: Hb a la mitad (7,5) o PaO₂ a la mitad (45) <span class="org">ficha · mar-anemia-hipoxemia</span></p>
     </details>
 
@@ -414,11 +386,12 @@ a.pdf { color: var(--oro); font: 600 .74rem var(--sans); display: inline-flex; a
             <tr><td>Fiebre o sepsis</td><td>Pide 300 mL/min</td><td><span class="org ilu">ilustrativo</span></td></tr>
             <tr><td>O₂ER y SvO₂</td><td>O₂ER = VO₂/DO₂ = (SaO₂ − SvO₂)/SaO₂</td><td><span class="org">ficha · mar-o2er</span></td></tr>
             <tr><td>Defecto de utilización</td><td>La extracción no pasa del 15 % (cae en la columna «&lt;20 %» de la Tabla 9.4)</td><td><span class="org ilu">ilustrativo</span></td></tr>
-            <tr><td>ScvO₂</td><td>= SvO₂ fuera del shock (la ficha dice «algo menor», sin cifra); SvO₂ + 7 en el shock (GC &lt;4, sepsis o parada)</td><td><span class="org">ficha · mar-scvo2-9 (media +7 %, hasta +18 %)</span> <span class="org ilu">regla del shock: ilustrativa</span></td></tr>
+            <tr><td>ScvO₂</td><td>= SvO₂ fuera del shock (la ficha dice «algo menor», sin cifra); SvO₂ + 7 en el shock (GC &lt;4, sepsis o parada)</td><td><span class="org">ficha · mar-scvo2-9 (+7 % de media en el crítico, hasta +18 % en el shock)</span> <span class="org ilu">regla del shock: ilustrativa</span></td></tr>
             <tr><td>Indexado</td><td>÷ 1,7 m² (adulto medio)</td><td><span class="org">ficha · mar-sc</span></td></tr>
             <tr><td>Gap de PCO₂</td><td>20 / GC: inversamente proporcional al gasto (Fick); la constante da 4 mmHg con 5 L/min</td><td><span class="org">ficha · mar-gap-co2</span> <span class="org ilu">constante ilustrativa</span></td></tr>
             <tr><td>PETCO₂</td><td>PaCO₂ 40 menos 2 (sano), 8 (EPOC) o 10 (embolia); baja un 5 % por cada L/min de gasto por debajo de 5; sedación: PaCO₂ 55; esófago 0; RCP ≤10</td><td><span class="org ilu">ilustrativo</span> <span class="org">ficha · mar-gradiente-co2 · Tabla 7.1 · mar-capno-rcp</span></td></tr>
             <tr><td>Lactato</td><td>1 mmol/L de base; +8 × la fracción de consumo que falta; +3 con la PDH bloqueada; +1 con catecolaminas. Las bandas (≤2, 2,1-3,9, ≥4) y su mortalidad sí son de la Fig. 9.4.</td><td><span class="org ilu">ilustrativo</span> <span class="org">ficha · mar-fig-9-4</span></td></tr>
+            <tr><td>La fila de hematíes</td><td>Cuántos desfilan: proporcional a la Hb (11 con Hb 17); a qué velocidad: proporcional al gasto. Las perlas que se vacían en el capilar van de la SaO₂ a la SvO₂ del modelo.</td><td><span class="org ilu">ilustrativo</span> <span class="org">las saturaciones: ficha · mar-o2er</span></td></tr>
             <tr><td>Humo (CO)</td><td>COHb del 25 %: SaO₂ = curva × 0,75; la SpO₂ no cambia</td><td><span class="org ilu">fracción ilustrativa</span> <span class="org">ficha · mar-cooximetria</span></td></tr>
           </tbody>
         </table>
@@ -429,9 +402,14 @@ a.pdf { color: var(--oro); font: 600 .74rem var(--sans); display: inline-flex; a
       <summary>Notas de fuentes y de fidelidad</summary>
       <div class="nota-fuentes"><b>P50.</b> Marino da 27 mmHg; El Libro Azul (Fisiopatología UCI · Hematología), 22,5. Son fuentes distintas: cada una se reproduce tal cual. El modelo usa la de Marino. <span class="org">ficha · mar-curva-desplazamientos</span></div>
       <div class="nota-fuentes"><b>SvO₂ normal.</b> 65-75 % en el cap. 9 (Tabla 9.4); 70-75 % en el cap. 7 y la Tabla 8.1. Las dos son de la fuente. <span class="org">ficha · mar-svo2-guia · mar-svo2-ecuacion</span></div>
-      <div class="nota-fuentes"><b>DO₂ y VO₂.</b> El texto da un DO₂ indexado de 500-600 y un VO₂ de 200-300; la Tabla 9.2, 520-600 y 200-270; la Tabla 8.1, 520-570. Se reproducen las tablas. <span class="org">ficha · mar-o2er</span></div>
+      <div class="nota-fuentes"><b>DO₂ y VO₂ normales.</b> Texto del cap. 9 (PDF p. 73): DO₂ 900-1.100 mL/min (500-600 por m²) y VO₂ 200-300 mL/min (110-160 por m²). Tabla 9.2 (p. 72): DO₂ 520-600 por m² y VO₂ 200-270 mL/min (110-160 por m²). Tabla 8.1 (p. 61): DO₂ 520-570 por m². Se reproducen las tablas. <span class="org">ficha · mar-o2er</span></div>
       <div class="nota-fuentes"><b>Ec. 7.1.</b> El libro imprime «SpO₂ = (HbO₂ / Hb + HbO₂) × 100», sin paréntesis; la fracción buena es HbO₂ / (Hb + HbO₂). <span class="org">ficha · mar-nota-spo2-formula</span></div>
-      <div class="nota-fuentes"><b>Cambios frente a la especificación (§6.1 y §3).</b> (1) El techo de la extracción se aplica a la diferencia SaO₂ − SvO₂ (como lo dice la ficha: «del 25 % al 50 %»), no a la O₂ER: así el corte «≥50 %» de la Tabla 9.4 y de la oximetría dual se alcanza. Por eso el <code>umbral</code> da SvO₂ 48 % (la especificación decía 50, pero 98 − 50 = 48) y el <code>dependiente</code>, VO₂ 201 (decía 197). (2) Caso B2: en el giro la cama 2 ya respira con O₂ (SaO₂ 98 %), porque con SaO₂ 78 % una ScvO₂ de 84 % es imposible; el modelo da ScvO₂ 90 %. (3) Caso B3: el gap sale de 3 mmHg (gasto alto de la sepsis), no de 8: así el tablero y la ficha del paciente dicen lo mismo, y enseña que un gap normal no descarta la oxigenación alterada.</div>
+      <div class="nota-fuentes"><b>El umbral de la Fig. 9.3.</b> El libro imprime «SaO₂ 98 %, SvO₂ 50 %, SaO₂ − SvO₂ 50 %» (Fig. 9.3, PDF p. 76) y el cap. 11 dice que la SvO₂ «cae al 50 %» (fluidoterapia, p. 29). Con SaO₂ 98 % la resta da 48: el modelo pone el techo en la diferencia (50 puntos) y enseña 48. <span class="org">ficha · mar-extraccion-curva · mar-scvo2-11</span></div>
+      <div class="nota-fuentes"><b>El VO₂ cuando depende del aporte.</b> Con GC 2 el aporte es 394 mL/min: la Ec. 9.17 (VO₂ = DO₂ × (SaO₂ − SvO₂), con SaO₂ ≈ 1) da 394 × 0,50 = 197; la Ec. 9.13 (VO₂ = DO₂ × O₂ER, con O₂ER = (SaO₂ − SvO₂)/SaO₂ = 0,51) da 201. Las dos son del libro; el modelo usa la exacta (201). <span class="org">ficha · mar-o2er · mar-extraccion-curva</span></div>
+      <div class="nota-fuentes"><b>Dos juegos de cortes de la extracción.</b> Oximetría dual, cap. 7 (PDF p. 43): &gt;25 %, 25-50 % y ≥50 %. Cap. 9 (p. 76-77): normal 20-30 %, &gt;30 % y ≥50 %. Y para la SvO₂ alta, el punto 5 de la p. 77 dice «80 % o más» y la Tabla 9.4, «&gt;80 %». Son del mismo libro; cada pregunta usa el de su capítulo. <span class="org">ficha · mar-dual-tabla · mar-sao2-svo2-guia</span></div>
+      <div class="nota-fuentes"><b>La Tabla 9.4 y el metabolismo.</b> Sus cortes valen «si el metabolismo es normal» (PDF p. 76). Con fiebre, estrés o sin tiamina el tablero dice «no válida»; en la sepsis rotula «defecto de utilización», porque esa columna de la tabla describe precisamente la sepsis. <span class="org">ficha · mar-sao2-svo2-guia</span></div>
+      <div class="nota-fuentes"><b>La ScvO₂ alta en el shock séptico.</b> Que una ScvO₂ &gt;80 % en el shock séptico sea, lo más probable, un defecto de utilización lo dice el cap. 11 (fluidoterapia, PDF p. 29, «Cómo leer la ScvO₂»); la Tabla 9.4 es de la SvO₂ mixta. <span class="org">ficha · mar-respuesta-fluidos · mar-scvo2-pautas</span></div>
+      <div class="nota-fuentes"><b>Los pacientes de los casos.</b> En el giro del caso B2, la cama 2 ya respira con O₂ (SaO₂ 98 %): con SaO₂ 78 % una ScvO₂ de 90 % sería imposible. El gap de PCO₂ del modelo es ilustrativo (∝ 1/GC).</div>
     </details>
 
     <details class="nota-plegable">
@@ -475,7 +453,7 @@ a.pdf { color: var(--oro); font: 600 .74rem var(--sans); display: inline-flex; a
       <summary>Para profundizar (lo que esta Mayéutica no cubre)</summary>
       <div class="prof">
         <section><b>Consumo medido: la calorimetría indirecta.</b> VO₂ = VE × (FiO₂ − FeO₂), con un analizador de O₂ en la vía aérea. Varía solo ±5 % (el calculado, ±18 %), pero requiere equipo y personal. El calculado no incluye el consumo del pulmón (&lt;5 %, hasta un 20 % si está inflamado).
-          <span class="fuente-p">Ver en el texto: <span class="org">mar-transporte-o2#mar-tabla-9-3</span></span> <a class="pdf" href="../../docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=73" target="_blank" rel="noopener">PDF, p. 73 →</a></section>
+          <span class="fuente-p">Ver en el texto: <span class="org">mar-transporte-o2#mar-tabla-9-3</span></span> <a class="pdf" href="../../docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=73" target="_blank" rel="noopener">PDF, pp. 73-74 →</a></section>
         <section><b>StO₂ (espectroscopia infrarroja).</b> Un sensor en la piel mide la saturación de la microcirculación; casi toda esa sangre está en las vénulas, así que refleja sobre todo la saturación venosa. En el shock, la StO₂ muscular sigue al aporte. No hay valores normales definidos.
           <span class="fuente-p">Ver en el texto: <span class="org">mar-extraccion-lactato#mar-sto2</span></span> <a class="pdf" href="../../docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=78" target="_blank" rel="noopener">PDF, p. 78 →</a></section>
         <section><b>Oximetría venosa continua.</b> Catéteres de fibra óptica que emiten las dos longitudes de onda y miden la luz reflejada por los hematíes (reflectancia): un dato cada 5 segundos (Fig. 7.5). La SvO₂, con una exactitud del 1-2 %.
@@ -483,10 +461,20 @@ a.pdf { color: var(--oro); font: 600 .74rem var(--sans); display: inline-flex; a
         <section><b>Capnografía sin intubar.</b> Sensores para gafas nasales y mascarillas, con un adaptador que recoge el gas espirado por la boca y el O₂ por otra cánula (Fig. 7.7).
           <span class="fuente-p">Ver en el texto: <span class="org">mar-capnografia#mar-capno-nasal</span></span> <a class="pdf" href="../../docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=45" target="_blank" rel="noopener">PDF, p. 45 →</a></section>
         <section><b>El lactato como combustible.</b> Su densidad calórica equivale a la de la glucosa (Tabla 9.6) y una glucosa da dos lactatos. En la sepsis lo usan el corazón y el cerebro: hasta el 60 % de la energía del miocardio y un 25-30 % de la del cerebro.
-          <span class="fuente-p">Ver en el texto: <span class="org">mar-extraccion-lactato#mar-lactato-combustible</span></span> <a class="pdf" href="../../docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=82" target="_blank" rel="noopener">PDF, p. 82 →</a></section>
-        <section><b>La reflexión final del autor.</b> En animales, la PO₂ intracelular puede ser de 1 mmHg y la producción aerobia de ATP sigue por debajo de 0,5 mmHg: la célula está hecha para vivir con poco O₂. El culpable del fallo multiorgánico sería la lesión inflamatoria. Y la oximetría de los años cuarenta, para los pilotos, por el lóbulo de la oreja (historia).
-          <span class="fuente-p">Ver en el texto: <span class="org">mar-extraccion-lactato#mar-hipoxia-final</span> <span class="org">mar-oximetria#mar-oxi-historia</span></span> <a class="pdf" href="../../docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=83" target="_blank" rel="noopener">PDF, p. 83 →</a></section>
-        <p class="para">En la app, el recorrido completo de las 4 fichas cubre el resto (≈90 %, <code>autonomo/bloques/b1/cobertura.md</code> §2.B); esta maqueta trae una muestra de 8 preguntas y 2 casos.</p>
+          <span class="fuente-p">Ver en el texto: <span class="org">mar-extraccion-lactato#mar-lactato-combustible</span></span> <a class="pdf" href="../../docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=82" target="_blank" rel="noopener">PDF, pp. 82-83 →</a></section>
+        <section><b>La reflexión final del autor.</b> En animales, la PO₂ intracelular puede ser de 1 mmHg y la producción aerobia de ATP sigue por debajo de 0,5 mmHg: la célula está hecha para vivir con poco O₂. El culpable del fallo multiorgánico sería la lesión inflamatoria.
+          <span class="fuente-p">Ver en el texto: <span class="org">mar-extraccion-lactato#mar-hipoxia-final</span></span> <a class="pdf" href="../../docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=83" target="_blank" rel="noopener">PDF, p. 83 →</a></section>
+        <section><b>Historia: la oximetría de los pilotos.</b> Nació en los años cuarenta para detectar la hipoxemia de los pilotos de combate, con luz a través del lóbulo de la oreja; fallaba porque la luz dependía del pigmento y el grosor de la piel, y no distinguía arterias de venas.
+          <span class="fuente-p">Ver en el texto: <span class="org">mar-oximetria#mar-oxi-historia</span></span> <a class="pdf" href="../../docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=37" target="_blank" rel="noopener">PDF, p. 37 →</a></section>
+        <section><b>Piel oscura e hipoxemia oculta.</b> La SpO₂ suele ser algo mayor que la SaO₂, y la diferencia es 1-3 % mayor con piel oscura. En 88.000 pares de medidas, la hipoxemia no detectada (SaO₂ &lt;88 % con SpO₂ ≥92 %) fue del 6,9 % en negros, 6,0 % en hispanos y 4,9 % en blancos y asiáticos; al ser medidas puntuales, su importancia clínica no está clara.
+          <span class="fuente-p">Ver en el texto: <span class="org">mar-oximetria#mar-oxi-exactitud</span> <span class="org">mar-oximetria#mar-hipoxemia-oculta</span></span> <a class="pdf" href="../../docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=41" target="_blank" rel="noopener">PDF, p. 41 →</a></section>
+        <section><b>Objetivo de SpO₂.</b> La guía más reciente de oxigenoterapia: <b>90-94 %</b> en la mayoría y <b>88-92 %</b> en la insuficiencia respiratoria hipercápnica. Un cambio de 3-4 % se considera significativo.
+          <span class="fuente-p">Ver en el texto: <span class="org">mar-oximetria#mar-spo2-objetivo</span></span> <a class="pdf" href="../../docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=41" target="_blank" rel="noopener">PDF, p. 41 →</a></section>
+        <section><b>La metahemoglobina.</b> Como la carboxihemoglobina, el pulsioxímetro no la detecta (hacen falta las longitudes de onda del cooxímetro, hasta 8); normalmente las dos suman menos del 5 %. Si sube, la SaO₂ cae y la SpO₂ apenas cambia: la sobrestima. El modelo solo dibuja el CO.
+          <span class="fuente-p">Ver en el texto: <span class="org">mar-oximetria#mar-cooximetria</span></span> <a class="pdf" href="../../docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=40" target="_blank" rel="noopener">PDF, p. 40 →</a></section>
+        <section><b>El lactato y el shock.</b> Un lactato &gt;2 mmol/L se considera el marcador más fiable de mala oxigenación tisular y es requisito del diagnóstico de shock. Pruebas en contra de la hipoxia: en animales con shock séptico, un marcador de hipoxia celular no la encontró en ningún órgano, y en humanos la PO₂ del músculo está aumentada en el shock séptico.
+          <span class="fuente-p">Ver en el texto: <span class="org">mar-extraccion-lactato#mar-lactato-circular</span> <span class="org">mar-extraccion-lactato#mar-lactato-contra</span></span> <a class="pdf" href="../../docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=78" target="_blank" rel="noopener">PDF, pp. 78-79 →</a></section>
+        <p class="para">En la app, el recorrido completo de las 4 fichas cubre el resto (≈90 %); aquí van solo 8 preguntas y 2 casos de muestra.</p>
       </div>
     </details>
   </div>
@@ -495,6 +483,7 @@ a.pdf { color: var(--oro); font: 600 .74rem var(--sans); display: inline-flex; a
 <nav class="dock" id="dock" aria-label="Mandos">
   <div class="dock-in">
     <div id="dock-explorar">
+      <p class="frase" id="frase" aria-live="polite"></p>
       <div class="dock-tabs" role="tablist" aria-label="Mandos del modelo">
         <button type="button" role="tab" data-tab="sangre" aria-selected="true">Sangre</button>
         <button type="button" role="tab" data-tab="pulmon" aria-selected="false">Pulmón</button>
@@ -526,7 +515,7 @@ a.pdf { color: var(--oro); font: 600 .74rem var(--sans); display: inline-flex; a
         <div class="seg" id="m-util" aria-label="Utilización del O₂"><button type="button" data-v="normal" aria-pressed="true">Usa el O₂</button><button type="button" data-v="sepsis" aria-pressed="false">Sepsis</button><button type="button" data-v="tiamina" aria-pressed="false">Sin tiamina</button></div>
         <div class="raya">
           <button type="button" class="tog" id="m-fiebre" aria-pressed="false">Fiebre: más consumo <small>ilustr.</small></button>
-          <button type="button" class="tog" id="m-estres" aria-pressed="false">Estrés: catecolaminas</button>
+          <button type="button" class="tog" id="m-estres" aria-pressed="false">Estrés fisiológico</button>
         </div>
       </div>
       <div class="dock-panel" data-panel="mido" hidden>
@@ -667,9 +656,10 @@ function iconoParticula(clave, tam = 14, opc = {}) {
 // El hematíe de este modelo: el disco de la tabla con sus 4 perlas (los 4 sitios del hemo).
 const PERLAS = [[-3.5, 0], [3.5, 0], [0, -2.5], [0, 2.5]];
 function hematieSVG(estados = ['', '', '', ''], color = '--accent-red', r = 4.6) {
-  return svgParticula('rbc', 0, 0, r, { color }) + PERLAS.map(([x, y], i) => `<g class="perla ${estados[i]}" transform="translate(${n2(x * r / 4.6)} ${n2(y * r / 4.6)})"><circle r="${n2(1.3 * r / 4.6)}"/><line x1="-1.2" y1="1.2" x2="1.2" y2="-1.2"/></g>`).join('');
+  const k = r / 4.6;
+  return svgParticula('rbc', 0, 0, r, { color }) + PERLAS.map(([x, y], i) => `<g class="perla ${estados[i]}" transform="translate(${n2(x * k)} ${n2(y * k)})"><circle r="${n2(1.3 * k)}"/><line x1="${n2(-1.2 * k)}" y1="${n2(1.2 * k)}" x2="${n2(1.2 * k)}" y2="${n2(-1.2 * k)}"/></g>`).join('');
 }
-function iconoHematie(estados, tam = 16) { return `<svg width="${tam}" height="${tam}" viewBox="-8 -8 16 16" aria-hidden="true">${hematieSVG(estados)}</svg>`; }
+function iconoHematie(estados, tam = 16, color = '--accent-red') { return `<svg width="${tam}" height="${tam}" viewBox="-8 -8 16 16" aria-hidden="true">${hematieSVG(estados, color)}</svg>`; }
 
 /* ============================================================
    3. El modelo (cada línea con su origen; ver «De dónde sale cada cifra»)
@@ -730,13 +720,15 @@ function derivar(e) {
   R.dual = R.spo2 == null ? null : R.spo2 - R.ven;
   return { S, sao2, svo2, scvo2, ven, cao2, unido, disuelto, do2, vo2, o2er, dif, lact, gap, petco2, paco2, pedido, techo, shock, porAporte, deficit, sinOnda, avisos, pvo2, fco, R };
 }
-// Tabla 9.4 (válida solo con SaO₂ >90 %): qué dice la saturación venosa
-function tabla94(R) {
-  if (R.sao2 <= 90) return { t: 'Tabla 9.4 no válida: SaO₂ ≤90 %', c: 'neutro' };
-  if (R.dif < 20 || R.svo2 > 80) return { t: 'defecto de utilización', c: 'mal' };
-  if (R.dif >= 50 || R.svo2 <= 50) return { t: 'O₂ tisular amenazado', c: 'mal' };
-  if (R.dif > 30 || R.svo2 < 65) return { t: 'menos aporte', c: 'aviso' };
-  return { t: 'normal', c: 'ok' };
+// Tabla 9.4 (válida solo con metabolismo normal y SaO₂ >90 %): qué dice la saturación venosa.
+// Su columna «defecto de utilización» describe la sepsis, así que en la sepsis se rotula; con fiebre, estrés o sin tiamina, no.
+function tabla94(R, e = {}) {
+  if (R.sao2 <= 90) return { t: 'Tabla 9.4 no válida: SaO₂ ≤90 %', corto: 'SaO₂ ≤90 %', c: 'neutro' };
+  if (e.consumo === 'fiebre' || e.estres || e.util === 'tiamina') return { t: 'Tabla 9.4 no válida: metabolismo alterado', corto: 'no válida: metab.', c: 'neutro' };
+  if (R.dif < 20 || R.svo2 > 80) return { t: 'defecto de utilización', corto: 'defecto de utilización', c: 'mal' };
+  if (R.dif >= 50 || R.svo2 <= 50) return { t: 'O₂ tisular amenazado', corto: 'O₂ tisular amenazado', c: 'mal' };
+  if (R.dif > 30 || R.svo2 < 65) return { t: 'menos aporte', corto: 'menos aporte', c: 'aviso' };
+  return { t: 'normal', corto: 'normal', c: 'ok' };
 }
 
 // Estados con nombre (§6.1). `umbral`: el aporte con el que la extracción llega justo al 50 % (Fig. 9.3).
@@ -779,7 +771,7 @@ window.__pruebas = () => {
   mira('normal', 'VO₂ mL/min', d.R.vo2, 250, 1); mira('normal', 'VO₂ /m²', d.R.vo2i, 147, 1); mira('normal', 'O₂ER', d.R.o2er, 0.25, 0.01);
   mira('normal', 'SvO₂ %', d.R.svo2, 73, 1); mira('normal', 'SaO₂ − SvO₂', d.R.dif, 25, 1); mira('normal', 'PaO₂ 60 → SaO₂ %', pct(satDe(60)), 89, 1, '«poco cambio» (mar-curva-forma)');
   d = D('anemia');
-  mira('anemia', 'CaO₂ mL/dL', Math.round(d.cao2), 10, 1); mira('anemia', 'DO₂ mL/min', d.R.do2, 490, 3, 'la especificación dice ≈490; sale 492');
+  mira('anemia', 'CaO₂ mL/dL', Math.round(d.cao2), 10, 1); mira('anemia', 'DO₂ mL/min', d.R.do2, 490, 3, 'el texto dice ≈490; sale 492');
   mira('anemia', 'O₂ER', d.R.o2er, 0.5, 0.01); mira('anemia', 'SvO₂ %', d.R.svo2, 49, 1);
   d = D('hipoxemia');
   mira('hipoxemia', 'SaO₂ %', d.R.sao2, 78, 1); mira('hipoxemia', 'CaO₂ mL/dL', Math.round(d.cao2), 16, 1);
@@ -788,14 +780,16 @@ window.__pruebas = () => {
   mira('bajo-gasto', 'DO₂ mL/min', d.R.do2, 490, 3, '≈490'); mira('bajo-gasto', 'O₂ER', d.R.o2er, 0.5, 0.01); mira('bajo-gasto', 'SvO₂ %', d.R.svo2, 49, 1);
   mira('bajo-gasto', 'gap PCO₂ mmHg', d.R.gap, 8, 0);
   d = D('umbral');
-  mira('umbral', 'SaO₂ %', d.R.sao2, 98, 0); mira('umbral', 'SaO₂ − SvO₂', d.R.dif, 50, 0); mira('umbral', 'SvO₂ %', d.R.svo2, 48, 0, 'la especificación dice 50; 98 − 50 = 48');
+  mira('umbral', 'SaO₂ %', d.R.sao2, 98, 0); mira('umbral', 'SaO₂ − SvO₂', d.R.dif, 50, 0); mira('umbral', 'SvO₂ %', d.R.svo2, 48, 0, 'la Fig. 9.3 imprime 50; con SaO₂ 98 la resta da 48');
   mira('umbral', 'VO₂ mL/min', d.R.vo2, 250, 1);
   d = D('dependiente');
-  mira('dependiente', 'DO₂ mL/min', d.R.do2, 394, 1); mira('dependiente', 'VO₂ mL/min', d.R.vo2, 201, 1, 'la especificación dice ≈197 (techo en la O₂ER); con el techo en SaO₂ − SvO₂ sale 201');
+  mira('dependiente', 'DO₂ mL/min', d.R.do2, 394, 1); mira('dependiente', 'VO₂ mL/min', d.R.vo2, 201, 1, 'Ec. 9.17 (SaO₂ ≈ 1) da 197; la Ec. 9.13, exacta, 201');
   mira('dependiente', 'VO₂ < 250', d.R.vo2 < 250 ? 1 : 0, 1, 0); mira('dependiente', 'lactato sube (>2)', d.R.lact > 2 ? 1 : 0, 1, 0);
   d = D('sepsis');
   mira('sepsis', 'SvO₂ %', d.R.svo2, 83, 1); mira('sepsis', 'SaO₂ − SvO₂', d.R.dif, 15, 1); mira('sepsis', 'lactato ≥4', d.R.lact >= 4 ? 1 : 0, 1, 0);
-  mira('sepsis', 'Tabla 9.4', tabla94(d.R).t === 'defecto de utilización' ? 1 : 0, 1, 0);
+  mira('sepsis', 'Tabla 9.4', tabla94(d.R, estadoDe(ESTADOS.sepsis.p)).t === 'defecto de utilización' ? 1 : 0, 1, 0);
+  mira('fiebre', 'Tabla 9.4 no válida (metabolismo alterado)', /no válida/.test(tabla94(derivar(estadoDe({ consumo: 'fiebre' })).R, { consumo: 'fiebre' }).t) ? 1 : 0, 1, 0);
+  { const antes = estado; aplicar(estadoDe(ESTADOS.sepsis.p), { frase: false }); mira('sepsis', 'chip de la SvO₂: ilustr.', document.querySelector('#c-ven .o').textContent === 'ilustr.' ? 1 : 0, 1, 0); aplicar(antes, { frase: false }); }
   d = D('tiamina');
   mira('tiamina', 'SvO₂ % (no se toca)', d.R.svo2, 73, 0); mira('tiamina', 'lactato ≥4', d.R.lact >= 4 ? 1 : 0, 1, 0);
   d = D('co');
@@ -857,39 +851,40 @@ window.__pruebas = () => {
 };
 
 /* ============================================================
-   5. La lámina: el circuito en U, los hematíes con sus perlas y las partículas
+   5. La lámina: el capilar del tejido. Hematíes grandes con sus 4 perlas: cuántos, según la Hb; a qué velocidad,
+      según el gasto; las perlas se sueltan como O₂ que cruza hacia las mitocondrias.
    ============================================================ */
 const circuito = $('circuito');
 const LCIRC = circuito.getTotalLength();
-const NMUESTRAS = 700;
-const MUESTRAS = [];   // [x, y, zona, avance]
+const NMUESTRAS = 600;
+const MUESTRAS = [];   // [x, y, avance 0-1, ángulo en grados]
 for (let i = 0; i < NMUESTRAS; i++) {
-  const p = circuito.getPointAtLength(i / NMUESTRAS * LCIRC);
-  let zona = 'vena', av = 0;
-  if (p.y <= 101.5 && p.x >= 40 && p.x <= 104) { zona = 'pulmon'; av = (p.x - 40) / 64; }
-  else if ((p.y <= 101.5 && p.x > 104) || (p.x > 300 && p.y < 118)) zona = 'arteria';
-  else if (p.x >= 315 && p.y >= 118 && p.y <= 234) { zona = 'tejido'; av = (p.y - 118) / 116; }
-  MUESTRAS.push([p.x, p.y, zona, av]);
+  const p = circuito.getPointAtLength(i / NMUESTRAS * LCIRC), q = circuito.getPointAtLength(Math.min(LCIRC, (i + 1) / NMUESTRAS * LCIRC + 0.5));
+  MUESTRAS.push([p.x, p.y, i / NMUESTRAS, Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI]);
 }
 const gHem = $('g-hem'), gPart = $('g-part');
-const NH = 18;
+const NH = 11;                                    // huecos de la fila; con Hb 17 van todos llenos
+const RANGO = [0, 6, 3, 9, 1, 7, 4, 10, 2, 8, 5]; // orden en que se vacían al bajar la Hb: los huecos quedan repartidos
+const R_HEM = 11.5;
+const ORDEN_PERLA = [[0, 2, 1, 3], [3, 1, 2, 0], [1, 3, 0, 2], [2, 0, 3, 1]];   // qué perla se vacía antes en cada hematíe
 const HEM = [];
 for (let j = 0; j < NH; j++) {
-  const g = document.createElementNS(NS, 'g');
-  g.innerHTML = hematieSVG();
+  const g = document.createElementNS(NS, 'g'); g.setAttribute('class', 'grande');
+  g.innerHTML = hematieSVG(['', '', '', ''], '--accent-red', R_HEM);
   gHem.appendChild(g);
-  HEM.push({ g, cuerpo: g.querySelector('path'), perlas: [...g.querySelectorAll('.perla')], estado: ['', '', '', ''], color: '', s0: j / NH * LCIRC });
+  HEM.push({ g, cuerpo: g.querySelector('path'), perlas: [...g.querySelectorAll('.perla')], estado: ['', '', '', ''], color: '', s0: j / NH * LCIRC, vis: null });
 }
+const hematiesVisibles = () => Math.round(NH * estado.hb / 17);   // proporcional a la Hb (ilustrativo: la fila, no el recuento)
 // Partículas: grupos ya creados que se reutilizan
 function pool(clave, n, r) {
   const arr = [];
   for (let i = 0; i < n; i++) { const g = document.createElementNS(NS, 'g'); g.innerHTML = svgParticula(clave, 0, 0, r); g.setAttribute('opacity', '0'); gPart.appendChild(g); arr.push({ g, vivo: false }); }
   return arr;
 }
-const POOL = { o2: pool('o2', 26, 2.8), lact: pool('lact', 10, 3), co2: pool('co2', 14, 2.9) };
-const ALV_O2 = pool('o2', 10, 3);       // el O₂ del alvéolo (más con más PaO₂)
-const DIS_O2 = pool('o2', 3, 2.3);        // el disuelto del plasma: pocos
-const MITOS = [[270, 148], [272, 196], [228, 202]];
+const POOL = { o2: pool('o2', 30, 4), lact: pool('lact', 14, 4), co2: pool('co2', 12, 3.8) };
+const DIS_O2 = pool('o2', 3, 3.2);        // el disuelto del plasma: pocos
+const MITOS = [[120, 198], [192, 194], [262, 204], [318, 216]];
+const mitoCerca = x => MITOS.reduce((a, m) => Math.abs(m[0] - x) < Math.abs(a[0] - x) ? m : a);
 function lanzar(clave, x0, y0, x1, y1, dur, curva = 0) {
   const p = POOL[clave].find(q => !q.vivo); if (!p) return;
   Object.assign(p, { vivo: true, x0, y0, x1, y1, cx: (x0 + x1) / 2 + curva, cy: (y0 + y1) / 2 - Math.abs(curva) * 0.4, t: 0, dur });
@@ -910,69 +905,63 @@ function apagarParticulas() { for (const k in POOL) for (const p of POOL[k]) { p
 let estado = estadoBase();
 let D = derivar(estado);
 let tiempo = 0;
-const acum = { lact: 0, co2a: 0, co2b: 0 };
-function satLocal(m) {
-  // fracción de los sitios sin CO que llevan O₂ en ese punto del circuito
+const acum = { lact: 0, co2: 0 };
+// fracción de los sitios sin CO que llevan O₂ en cada punto del capilar: arterial a la entrada, venosa a la salida
+function satLocal(u) {
   const art = D.S, venO2 = clamp(D.svo2 / (1 - D.fco), 0, 1);
-  if (m[2] === 'pulmon') return lerp(venO2, art, m[3]);
-  if (m[2] === 'arteria') return art;
-  if (m[2] === 'tejido') return lerp(art, venO2, m[3]);
-  return venO2;
+  if (u < 0.1) return art;
+  if (u > 0.9) return venO2;
+  return lerp(art, venO2, (u - 0.1) / 0.8);
 }
-function velocidad() { return estado.rcp ? 9 : 40 * estado.gc / 5; }   // px/s, proporcional al gasto (ilustrativo)
+function velocidad() { return estado.rcp ? 5 : 28 * estado.gc / 5; }   // px/s, proporcional al gasto (ilustrativo)
 function pasoLamina(dt) {
   tiempo += dt;
   const v = velocidad();
   const art = D.S, venO2 = clamp(D.svo2 / (1 - D.fco), 0, 1), medio = (art + venO2) / 2;
+  const nVis = hematiesVisibles();
   for (let j = 0; j < NH; j++) {
     const h = HEM[j];
+    const vis = RANGO[j] < nVis;
+    if (vis !== h.vis) { h.vis = vis; h.g.setAttribute('opacity', vis ? '1' : '0'); }
     const s = ((h.s0 + v * tiempo) % LCIRC + LCIRC) % LCIRC;
     const m = MUESTRAS[Math.floor(s / LCIRC * NMUESTRAS) % NMUESTRAS];
-    h.g.setAttribute('transform', `translate(${n2(m[0])} ${n2(m[1])})`);
-    const loc = satLocal(m);
-    const col = loc >= medio - 1e-6 && art - venO2 > 0.01 ? '--accent-red' : (art - venO2 <= 0.01 ? '--accent-red' : '--accent-purple');
+    h.g.setAttribute('transform', `translate(${n2(m[0])} ${n2(m[1])}) rotate(${n2(m[3])})`);
+    if (!vis) continue;
+    const loc = satLocal(m[2]);
+    const col = art - venO2 <= 0.01 || loc >= medio - 1e-6 ? '--accent-red' : '--accent-purple';
     if (col !== h.color) { h.color = col; h.cuerpo.style.fill = `var(${col})`; }
+    // cuántas perlas lleva llenas este hematíe: loc × 4, repartiendo el redondeo entre hematíes (la media es exacta)
+    const nCO = Math.floor(D.fco * 4 + hash01(j, 0, 7)), nLlenas = Math.floor(loc * (4 - nCO) + hash01(j, 0, 3));
     for (let i = 0; i < 4; i++) {
-      const esCO = hash01(j, i, 7) < D.fco;
-      const est = esCO ? 'co' : (hash01(j, i, 3) < loc ? '' : 'vacia');
+      const orden = ORDEN_PERLA[j % 4][i];
+      const est = orden < nCO ? 'co' : (orden - nCO < nLlenas ? '' : 'vacia');
       if (est !== h.estado[i]) {
         const antes = h.estado[i];
         h.estado[i] = est; h.perlas[i].setAttribute('class', 'perla ' + est);
-        if (dt > 0 && !REDUCIR) {
-          if (antes === '' && est === 'vacia' && m[2] === 'tejido') { const t = MITOS[(j + i) % 3]; lanzar('o2', m[0] - 4, m[1], t[0], t[1], 1.4, -8); }
-          if (antes === 'vacia' && est === '' && m[2] === 'pulmon') lanzar('o2', 70 + 16 * hash01(j, i, 1), 66 + 12 * hash01(j, i, 2), m[0], m[1] - 3, 0.7, 0);
+        // la perla que se vacía en el capilar suelta su O₂, que cruza el intersticio hasta una mitocondria
+        if (dt > 0 && !REDUCIR && antes === '' && est === 'vacia' && m[2] > 0.08 && m[2] < 0.92) {
+          const t = mitoCerca(m[0] + 30 * (hash01(j, i, 5) - 0.3));
+          lanzar('o2', m[0], m[1] + 10, t[0] + 8 * (hash01(j, i, 6) - 0.5), t[1], 1.5, -6);
         }
       }
     }
   }
-  // O₂ del alvéolo (cuántos según la PaO₂) y el disuelto del plasma (3 que viajan con la sangre arterial)
-  const nAlv = estado.esofago ? 2 : Math.round(3 + estado.pao2 / 15);
-  ALV_O2.forEach((p, i) => {
-    const vis = i < nAlv;
-    const x = 78 + Math.cos(i * 2.4 + tiempo * 0.7) * 15 * hash01(i, 1), y = 70 + Math.sin(i * 1.7 + tiempo * 0.9) * 11 * hash01(i, 2);
-    p.g.setAttribute('transform', `translate(${n2(x)} ${n2(y)})`); p.g.setAttribute('opacity', vis ? '0.95' : '0');
-  });
+  // el O₂ disuelto: tres sueltos que viajan con el plasma
   DIS_O2.forEach((p, i) => {
-    const s = ((LCIRC * (0.18 + i * 0.09) + v * tiempo) % LCIRC);
+    const s = ((LCIRC * (0.05 + i * 0.29) + v * tiempo) % LCIRC);
     const m = MUESTRAS[Math.floor(s / LCIRC * NMUESTRAS) % NMUESTRAS];
-    const vis = m[2] === 'arteria';
-    p.g.setAttribute('transform', `translate(${n2(m[0])} ${n2(m[1] + 4)})`); p.g.setAttribute('opacity', vis ? '0.9' : '0');
+    p.g.setAttribute('transform', `translate(${n2(m[0])} ${n2(m[1] - 21)})`); p.g.setAttribute('opacity', m[2] < 0.6 ? '0.9' : '0');
   });
   if (dt > 0 && !REDUCIR) {
-    // lactato que sale de la célula a la vena; CO₂ de la célula a la vena y del alvéolo por la tráquea
-    acum.lact += dt * Math.max(0, D.lact - 1.2) * 0.5;
-    while (acum.lact >= 1) { acum.lact -= 1; lanzar('lact', 222 + 30 * Math.random(), 214, 170 + 60 * Math.random(), 252, 1.8, 6); }
-    acum.co2a += dt * (estado.rcp ? 0.1 : D.vo2 / 250) * 0.7;
-    while (acum.co2a >= 1) { acum.co2a -= 1; lanzar('co2', 296, 160 + 50 * Math.random(), 312, 236, 1.2, 4); }
-    acum.co2b += dt * (D.petco2 / 38) * 0.7;
-    while (acum.co2b >= 1) { acum.co2b -= 1; lanzar('co2', 72 + 12 * Math.random(), 70, 78, 2, 1.6, 0); }
+    // la célula suelta lactato y CO₂ hacia el extremo venoso del capilar
+    acum.lact += dt * Math.max(0, D.lact - 1.2) * 0.6;
+    while (acum.lact >= 1) { acum.lact -= 1; const m = MITOS[1 + Math.floor(Math.random() * 3)]; lanzar('lact', m[0], m[1] - 8, 250 + 90 * Math.random(), 132 + 12 * Math.random(), 2.2, 10); }
+    acum.co2 += dt * (estado.rcp ? 0.1 : D.vo2 / 250) * 0.6;
+    while (acum.co2 >= 1) { acum.co2 -= 1; const m = MITOS[Math.floor(Math.random() * 4)]; lanzar('co2', m[0], m[1] - 8, m[0] + 50 + 30 * Math.random(), 118 + 24 * Math.random(), 2, 8); }
     moverParticulas(dt);
   }
-  // el corazón late; en la parada, la RCP lo comprime
-  const f = estado.rcp ? 1.7 : 1.15, u = (tiempo * f) % 1, k = 1 + 0.14 * Math.exp(-Math.pow((u - 0.1) / 0.07, 2));
-  $('corazon').setAttribute('transform', `translate(34 252) scale(${n2(k)})`);
   // el barrido del capnograma pequeño
-  $('capno-mini-barre').setAttribute('x', String(n2(99 + ((tiempo * 18) % 100))));
+  $('capno-mini-barre').setAttribute('x', String(n2(249 + ((tiempo * 18) % 102))));
 }
 
 // Onda del capnograma: n respiraciones en una caja (x0, y0, w, h) con escala de 0 a 60 mmHg
@@ -1012,7 +1001,7 @@ const CELDAS = [
 ];
 $('tablero').innerHTML = CELDAS.map(c => `<div class="celda" id="c-${c.k}"><span class="k">${c.n}</span><b>—</b><span class="u">${c.u}</span><span class="sub"></span><span class="o${c.ilu ? ' ilu' : ''}">${c.o}</span></div>`).join('');
 const ocultos = new Set();
-function setOcultos(arr) { ocultos.clear(); (arr || []).forEach(k => ocultos.add(k)); pintarTablero(); pintarLupa(); }
+function setOcultos(arr) { ocultos.clear(); (arr || []).forEach(k => ocultos.add(k)); pintarTablero(); pintarLupa(); pintarCamas(); }
 const tapado = k => ocultos.has(k) || (k === 'ven' && estado.toma === 'svo2' && ocultos.has('svo2ap'));
 function pintarTablero() {
   const R = D.R, e = estado;
@@ -1034,8 +1023,9 @@ function pintarTablero() {
     el.classList.toggle('fuera', !tap && !!fl);
     if (c.k === 'ven') el.querySelector('.k').textContent = e.toma === 'scvo2' ? 'ScvO₂' : 'SvO₂';
     if (c.k === 'sao2') { const o = el.querySelector('.o'); o.textContent = e.co ? 'ilustr.' : 'fisiol.'; o.classList.toggle('ilu', e.co); }
+    if (['vo2', 'o2er', 'ven'].includes(c.k)) { const ilu = e.util !== 'normal' || e.consumo === 'fiebre' || e.estres, o = el.querySelector('.o'); o.textContent = ilu ? 'ilustr.' : 'ficha'; o.classList.toggle('ilu', ilu); }
     const sub = el.querySelector('.sub');
-    sub.textContent = tap || e.rcp ? '' : c.k === 'do2' ? `/m² ${R.do2i}` : c.k === 'vo2' ? `/m² ${R.vo2i}` : c.k === 'ven' ? tabla94(R).t.replace('Tabla 9.4 no válida: SaO₂ ≤90 %', 'SaO₂ ≤90 %') : c.k === 'spo2' && R.spo2 == null ? 'sin onda' : c.k === 'lact' ? (R.lact <= 2 ? 'mort. 15 %' : R.lact < 4 ? 'mort. 25 %' : 'mort. 38 %') : c.k === 'gap' ? (R.gap > 6 ? 'hipoperfusión' : 'normal 2-5') : '';
+    sub.textContent = tap || e.rcp ? '' : c.k === 'do2' ? `/m² ${R.do2i}` : c.k === 'vo2' ? `/m² ${R.vo2i}` : c.k === 'ven' ? tabla94(R, e).corto : c.k === 'spo2' && R.spo2 == null ? 'sin onda' : c.k === 'lact' ? (R.lact <= 2 ? 'mort. 15 %' : R.lact < 4 ? 'mort. 25 %' : 'mort. 38 %') : c.k === 'gap' ? (R.gap > 6 ? 'hipoperfusión' : R.gap >= 2 && R.gap <= 5 ? 'normal 2-5' : R.gap > 5 ? 'sin corte (5-6)' : '') : '';
   }
 }
 function mirarCelda(k) { document.querySelectorAll('.celda.mira').forEach(c => c.classList.remove('mira')); if (k && $('c-' + k)) $('c-' + k).classList.add('mira'); }
@@ -1045,19 +1035,15 @@ function mirarCelda(k) { document.querySelectorAll('.celda.mira').forEach(c => c
    ============================================================ */
 function pintarLaminaFija() {
   const e = estado;
-  $('mitos-x').hidden = e.util === 'normal';
-  const xt = $('mitos-x-txt'); xt.hidden = e.util === 'normal'; xt.textContent = e.util === 'sepsis' ? 'sepsis: PDH bloqueada' : e.util === 'tiamina' ? 'sin tiamina: PDH parada' : '';
-  $('lam-dedo-txt').textContent = e.sensor === 'frente' ? 'SpO₂ · frente' : e.frio ? 'SpO₂ · dedo frío' : 'SpO₂ · dedo';
-  $('lam-tubo').textContent = e.esofago ? 'tubo en el esófago' : 'tubo';
-  $('lam-tubo').style.fill = e.esofago ? 'var(--accent-red)' : 'var(--text-muted)';
-  for (const [id, t] of [['toma-scv', 'scvo2'], ['toma-sv', 'svo2']]) {
-    const c = $(id).querySelector('circle'), on = e.toma === t;
-    c.style.stroke = on ? 'var(--accent-blue)' : 'var(--text-dim)'; c.style.strokeWidth = on ? '2' : '1'; c.style.strokeDasharray = on ? 'none' : '2 2';
-  }
-  const aviso = e.rcp ? 'Parada: sin pulso, la SpO₂ no lee' : D.sinOnda ? 'Onda plana: pon el sensor en la frente' : e.esofago ? 'Sin CO₂ espirado: esófago' : D.avisos[0] || '';
-  $('lam-aviso').textContent = aviso;
+  $('mitos-x').toggleAttribute('hidden', e.util === 'normal');
+  const xt = $('mitos-x-txt'); xt.toggleAttribute('hidden', e.util === 'normal'); xt.textContent = e.util === 'sepsis' ? 'sepsis: la PDH no deja usar el O₂' : e.util === 'tiamina' ? 'sin tiamina: la PDH se para' : '';
+  $('lam-toma').textContent = e.toma === 'scvo2' ? 'ScvO₂ · cava superior' : 'SvO₂ · arteria pulmonar';
+  $('lam-boca').textContent = e.esofago ? 'boca · ¡esófago!' : 'boca · CO₂';
+  $('lam-boca').style.fill = e.esofago ? 'var(--accent-red)' : 'var(--text-muted)';
+  const aviso = e.rcp ? ['Parada:', 'sin pulso, el flujo casi se para'] : D.sinOnda ? ['Dedo frío: onda plana.', 'Pon el sensor en la frente'] : e.esofago ? ['Sin CO₂ espirado:', 'tubo en el esófago'] : D.porAporte ? ['Falta aporte: el tejido', 'ya coge la mitad del O₂'] : e.util === 'sepsis' ? ['Llega O₂, pero', 'la célula no lo usa'] : D.avisos.length ? ['Aporte extremo:', 'casi incompatible con la vida'] : ['', ''];
+  $('lam-aviso').innerHTML = aviso[0] ? `<tspan x="14">${aviso[0]}</tspan><tspan x="14" dy="11">${aviso[1]}</tspan>` : '';
   const R = D.R;
-  $('capno-mini-onda').setAttribute('d', ondaCapno(100, 15, 104, 26, 3, e, R));
+  $('capno-mini-onda').setAttribute('d', ondaCapno(252, 15, 98, 24, 3, e, R));
   $('capno-mini-val').textContent = tapado('petco2') ? '?' : e.rcp ? '≤10' : `${R.petco2} mmHg`;
 }
 
@@ -1065,11 +1051,11 @@ function pintarLaminaFija() {
    8. Las lupas: el dedo, la mitocondria y la boca
    ============================================================ */
 const LUPAS = {
-  dedo: { tit: 'El dedo · pulsioxímetro (Figs. 7.1-7.4)', lams: [['mar-fig7-1-espectro-hemoglobina.jpg', 'Figura 7.1 (M p. 37): absorción de la luz por HbO₂, Hb, COHb y metHb; líneas a 660 y 940 nm.'], ['mar-fig7-3-pulsioximetro-dedo.jpg', 'Figura 7.3 (M p. 39): sensor de dedo con dos diodos y el fotodetector.'], ['mar-fig7-4-oximetria-frente.jpg', 'Figura 7.4 (M p. 40): oximetría de frente, por reflectancia.']],
+  dedo: { tit: 'El dedo · pulsioxímetro (Figs. 7.1-7.4)', lams: [['mar-fig7-1-espectro-hemoglobina.jpg', 'Figura 7.1 (PDF p. 37): absorción de la luz por HbO₂, Hb, COHb y metHb; líneas a 660 y 940 nm.'], ['mar-fig7-3-pulsioximetro-dedo.jpg', 'Figura 7.3 (PDF p. 39): sensor de dedo con dos diodos y el fotodetector.'], ['mar-fig7-4-oximetria-frente.jpg', 'Figura 7.4 (PDF p. 40): oximetría de frente, por reflectancia.']],
     txt: 'Lámina del libro: Figs. 7.1, 7.3 y 7.4; tócala para verla grande.' },
-  mito: { tit: 'La mitocondria (Fig. 9.5)', lams: [['mar-fig9-5-vias-glucosa.jpg', 'Figura 9.5 (M p. 82): vías de la glucosa.'], ['mar-fig9-4-lactato-mortalidad.jpg', 'Figura 9.4 (M p. 80): lactato y mortalidad hospitalaria.']],
+  mito: { tit: 'La mitocondria (Fig. 9.5)', lams: [['mar-fig9-5-vias-glucosa.jpg', 'Figura 9.5 (PDF p. 82): vías de la glucosa.'], ['mar-fig9-4-lactato-mortalidad.jpg', 'Figura 9.4 (PDF p. 80): lactato y mortalidad hospitalaria.']],
     txt: 'Lámina del libro: Figs. 9.5 y 9.4.' },
-  boca: { tit: 'La boca · capnograma (Fig. 7.6)', lams: [['mar-fig7-6-capnografia.jpg', 'Figura 7.6 (M p. 44): capnografía infrarroja y sus 4 fases.'], ['mar-fig7-8-etco2-gasto.jpg', 'Figura 7.8 (M p. 46): cambios de PETCO₂ frente a cambios del gasto (r = 0,87).']],
+  boca: { tit: 'La boca · capnograma (Fig. 7.6)', lams: [['mar-fig7-6-capnografia.jpg', 'Figura 7.6 (PDF p. 44): capnografía infrarroja y sus 4 fases.'], ['mar-fig7-8-etco2-gasto.jpg', 'Figura 7.8 (PDF p. 46): cambios de PETCO₂ frente a cambios del gasto (r = 0,87).']],
     txt: 'Lámina del libro: Figs. 7.6 y 7.8.' }
 };
 const Lupa = {
@@ -1135,23 +1121,23 @@ function pintarLupa(forzar) {
     const bloq = e.util !== 'normal';
     const lact = tapado('lact') ? '?' : dec(R.lact, 1);
     h += T(110, 28, `lactato ${lact} mmol/L`, { a: 'middle', s: 10, b: 1, c: R.lact > 2 && !tapado('lact') ? '--accent-red' : '--text-main', sans: 1 });
-    h += svgParticula('glu', 52, 50, 4.5) + T(62, 53, 'glucosa', { s: 8 });
-    h += `<path d="M52 60V82" style="stroke:var(--text-dim);stroke-width:1.2"/><path d="M48 78l4 6 4-6" style="fill:none;stroke:var(--text-dim);stroke-width:1.2"/>`;
-    h += T(60, 74, 'glucólisis · 2 ATP', { s: 8, sans: 1 });
-    if (e.estres) h += `<path d="M150 58L112 70" style="stroke:var(--accent-red);stroke-width:1.6"/><path d="M117 65l-6 5 7 2" style="fill:none;stroke:var(--accent-red);stroke-width:1.4"/>` + T(158, 46, 'catecolaminas', { a: 'middle', s: 8, b: 1, c: '--accent-red', sans: 1 }) + T(158, 55, '+40-50 %', { a: 'middle', s: 8, b: 1, c: '--accent-red', sans: 1 });
-    h += T(20, 98, 'piruvato ×2', { s: 8 });
-    h += `<path d="M42 104V136" style="stroke:var(--text-dim);stroke-width:1.2"/><path d="M38 132l4 6 4-6" style="fill:none;stroke:var(--text-dim);stroke-width:1.2"/>` + T(48, 124, 'LDH', { s: 8, sans: 1 });
-    h += svgParticula('lact', 42, 150, 4.5) + T(52, 153, 'lactato', { s: 8, b: 1, c: '--accent-yellow' });
-    h += `<path d="M80 95H106" style="stroke:var(--text-dim);stroke-width:1.2"/><path d="M102 91l6 4-6 4" style="fill:none;stroke:var(--text-dim);stroke-width:1.2"/>`;
-    h += `<rect x="110" y="86" width="40" height="18" rx="4" style="fill:var(--bg-main);stroke:var(--accent-yellow);stroke-width:1.1"/>` + T(130, 98, 'PDH', { a: 'middle', s: 8.5, b: 1, sans: 1 }) + T(130, 113, 'con TPP (tiamina)', { a: 'middle', s: 7.2, i: 1, c: '--text-muted' });
-    if (bloq) h += `<path d="M108 82l44 26M152 82l-44 26" style="stroke:var(--accent-red);stroke-width:2.4;stroke-linecap:round"/>` + T(132, 124, e.util === 'sepsis' ? 'sepsis: endotoxina y citocinas' : 'sin pirofosfato de tiamina', { a: 'middle', s: 7.6, b: 1, c: '--accent-red', sans: 1 });
-    h += `<path d="M130 104V130" style="stroke:var(--text-dim);stroke-width:1.2${bloq ? ';opacity:.3' : ''}"/>`;
-    h += `<ellipse cx="134" cy="160" rx="48" ry="27" style="fill:url(#raya);stroke:var(--text-dim);stroke-width:1.3"/>`;
-    h += `<path d="M96 168l7-6 7 6 7-6 7 6 7-6 7 6 7-6 7 6 7-6 7 6 7-6" style="fill:none;stroke:var(--text-muted);stroke-width:.7;opacity:.35"/>`;
-    h += T(134, 146, 'mitocondria', { a: 'middle', s: 8, i: 1, c: '--text-muted' });
-    h += svgParticula('o2', 112, 156, 3) + T(120, 159, 'O₂ → H₂O', { s: 8, sans: 1 });
-    h += T(134, 178, 'Krebs → cadena · 28 ATP', { a: 'middle', s: 8, sans: 1, b: 1 });
-    h += svgParticula('co2', 190, 150, 3.4) + T(184, 166, 'CO₂', { s: 8, sans: 1 });
+    h += svgParticula('glu', 52, 46, 4.5) + T(62, 49, 'glucosa', { s: 8 });
+    h += `<path d="M52 56V76" style="stroke:var(--text-dim);stroke-width:1.2"/><path d="M48 72l4 6 4-6" style="fill:none;stroke:var(--text-dim);stroke-width:1.2"/>`;
+    h += T(60, 68, 'glucólisis · 2 ATP', { s: 8, sans: 1 });
+    if (e.estres) h += `<path d="M154 58L140 63" style="stroke:var(--accent-red);stroke-width:1.6"/><path d="M145 59l-6 4 6 3" style="fill:none;stroke:var(--accent-red);stroke-width:1.4"/>` + T(162, 42, 'estrés:', { a: 'middle', s: 8, b: 1, c: '--accent-red', sans: 1 }) + T(162, 52, '+40-50 %', { a: 'middle', s: 8, b: 1, c: '--accent-red', sans: 1 });
+    h += T(20, 96, 'piruvato ×2', { s: 8 });
+    h += `<path d="M42 102V134" style="stroke:var(--text-dim);stroke-width:1.2"/><path d="M38 130l4 6 4-6" style="fill:none;stroke:var(--text-dim);stroke-width:1.2"/>` + T(48, 122, 'LDH', { s: 8, sans: 1 });
+    h += svgParticula('lact', 42, 148, 4.5) + T(26, 166, 'lactato', { s: 8, b: 1, c: '--accent-yellow' });
+    h += `<path d="M78 92H104" style="stroke:var(--text-dim);stroke-width:1.2"/><path d="M100 88l6 4-6 4" style="fill:none;stroke:var(--text-dim);stroke-width:1.2"/>`;
+    h += `<rect x="108" y="83" width="40" height="18" rx="4" style="fill:var(--bg-main);stroke:var(--accent-yellow);stroke-width:1.1"/>` + T(128, 96, 'PDH', { a: 'middle', s: 8.5, b: 1, sans: 1 });
+    h += T(153, 90, 'con TPP', { s: 7.6, i: 1, c: '--text-muted' }) + T(153, 99, '(tiamina)', { s: 7.6, i: 1, c: '--text-muted' });
+    if (bloq) h += `<path d="M110 85l36 14M146 85l-36 14" style="stroke:var(--accent-red);stroke-width:2.2;stroke-linecap:round"/>` + T(136, 116, e.util === 'sepsis' ? 'sepsis: endotoxina' : 'sin pirofosfato', { s: 7.6, b: 1, c: '--accent-red', sans: 1 }) + T(136, 125, e.util === 'sepsis' ? 'y citocinas' : 'de tiamina', { s: 7.6, b: 1, c: '--accent-red', sans: 1 });
+    h += `<path d="M128 101V126" style="stroke:var(--text-dim);stroke-width:1.2${bloq ? ';opacity:.3' : ''}"/>`;
+    h += `<ellipse cx="134" cy="160" rx="58" ry="32" style="fill:url(#raya);stroke:var(--text-dim);stroke-width:1.3"/>`;
+    h += T(134, 142, 'mitocondria', { a: 'middle', s: 7.6, i: 1, c: '--text-muted' });
+    h += svgParticula('o2', 110, 153, 3) + T(118, 156, 'O₂ → H₂O', { s: 8, sans: 1 });
+    h += T(134, 170, 'Krebs · 2 ATP', { a: 'middle', s: 8, sans: 1, b: 1 }) + T(134, 182, 'cadena · 28 ATP', { a: 'middle', s: 8, sans: 1, b: 1 });
+    h += svgParticula('co2', 204, 148, 3.4) + T(190, 136, 'CO₂', { s: 8, sans: 1 });
     h += `<g id="lupa-flujo"></g>`;
   } else if (tipo === 'boca') {
     const x0 = 36, y0 = 52, w = 156, hh = 100;
@@ -1168,15 +1154,16 @@ function pintarLupa(forzar) {
     }
     const pet = tapado('petco2') ? '?' : e.rcp ? '≤10' : R.petco2;
     h += T(110, 30, `PETCO₂ ${pet} mmHg`, { a: 'middle', s: 11, b: 1, c: '--text-main', sans: 1 });
-    let pie = 'I espacio muerto · II sube · III meseta · IV inspira';
-    if (e.esofago) pie = 'Sin CO₂ espirado: tubo en el esófago';
-    else if (e.rcp) pie = '≤10 tras 20 min de RCP: pulso improbable';
-    else if (e.sedacion) pie = 'Sedación: la PETCO₂ sube antes que baje la SpO₂';
-    else if (e.espacio === 'epoc') pie = 'EPOC: fase II lenta (espacio muerto alveolar)';
-    else if (e.espacio === 'embolia') pie = 'Alvéolos sin sangre: PETCO₂ &lt; PaCO₂';
-    else if (e.gc < 4) pie = 'Menos gasto, menos PETCO₂ (Fig. 7.8)';
-    h += T(110, 180, pie, { a: 'middle', s: 8, b: 1, c: e.esofago || e.rcp ? '--accent-red' : '--text-dim', sans: 1 });
-    if (!e.esofago && !e.rcp && !tapado('petco2')) h += T(110, 192, `PaCO₂ − PETCO₂ = ${R.paco2 - R.petco2} mmHg`, { a: 'middle', s: 8, i: 1, c: '--text-muted' });
+    let pie = ['I espacio muerto · II sube', 'III meseta · IV inspira'];
+    if (e.esofago) pie = ['Sin CO₂ espirado: esófago…', '…o parada, sin retorno venoso'];
+    else if (e.rcp) pie = ['≤10 tras 20 min de RCP: improbable', 'recuperar la circulación espontánea'];
+    else if (e.sedacion) pie = ['Sedación: la PETCO₂ sube', 'antes de que baje la SpO₂'];
+    else if (e.espacio === 'epoc') pie = ['EPOC: fase II lenta', '(espacio muerto alveolar)'];
+    else if (e.espacio === 'embolia') pie = ['Alvéolos sin sangre:', 'PETCO₂ &lt; PaCO₂'];
+    else if (e.gc < 4) pie = ['Menos gasto,', 'menos PETCO₂ (Fig. 7.8)'];
+    const rojo = e.esofago || e.rcp ? '--accent-red' : '--text-dim';
+    h += T(110, 175, pie[0], { a: 'middle', s: 8, b: 1, c: rojo, sans: 1 }) + T(110, 185, pie[1], { a: 'middle', s: 8, b: 1, c: rojo, sans: 1 });
+    if (!e.esofago && !e.rcp && !tapado('petco2')) h += T(110, 197, `PaCO₂ − PETCO₂ = ${R.paco2 - R.petco2} mmHg`, { a: 'middle', s: 7.6, i: 1, c: '--text-muted' });
   }
   h += `</g>`;
   if (forzar || h !== lupaFija) { lupaFija = h; Lupa.svg.innerHTML = h; }
@@ -1205,9 +1192,9 @@ function pasoLupa(dt) {
       f.t += dt * (e.estres ? 0.42 : 0.3);
       if (f.t >= 1) { f.t -= 1; f.ruta = Math.random() < aLact ? 1 : 0; }
       let x, y; const u = f.t;
-      if (u < 0.4) { x = 52; y = lerp(60, 90, u / 0.4); }
-      else if (f.ruta === 1) { x = 42; y = lerp(104, 142, (u - 0.4) / 0.6); }
-      else { const v = (u - 0.4) / 0.6; if (v < 0.4) { x = lerp(80, 130, v / 0.4); y = 95; } else { x = 134 + Math.cos(v * 9) * 34 * (v - 0.4); y = lerp(106, 168, (v - 0.4) / 0.6); } }
+      if (u < 0.4) { x = 52; y = lerp(56, 86, u / 0.4); }
+      else if (f.ruta === 1) { x = 42; y = lerp(102, 140, (u - 0.4) / 0.6); }
+      else { const v = (u - 0.4) / 0.6; if (v < 0.4) { x = lerp(78, 104, v / 0.4); y = 92; } else { x = 134 + Math.cos(v * 9) * 34 * (v - 0.4); y = lerp(128, 176, (v - 0.4) / 0.6); } }
       f.el.setAttribute('cx', n2(x)); f.el.setAttribute('cy', n2(y));
       f.el.style.fill = f.ruta === 1 && u >= 0.4 ? 'var(--accent-red)' : 'var(--accent-yellow)';
     }
@@ -1279,11 +1266,11 @@ function pintarGraficas() {
       const x = 46 + i * 64, vis = visitados.has(k);
       if (vis) {
         h += `<rect class="barra" data-k="${k}" x="${x}" y="${n2(Y(v))}" width="40" height="${n2(120 - Y(v))}" style="fill:url(#raya);stroke:var(--accent-yellow);stroke-width:1.2"/>`;
-        h += T(x + 20, Y(v) - 4, k === 'normal' ? '20' : `${Math.round(v)} (−${Math.round((1 - v / 19.97) * 100)} %)`, { a: 'middle', s: 7.5, b: 1, sans: 1, c: '--text-main' });
+        h += T(x + 20, Y(v) - 4, { normal: '20', hipoxemia: '16 (−20 %)', anemia: '10 (−50 %)' }[k], { a: 'middle', s: 7.5, b: 1, sans: 1, c: '--text-main' });
       } else h += `<rect x="${x}" y="40" width="40" height="80" style="fill:none;stroke:var(--text-muted);stroke-dasharray:3 3"/>` + T(x + 20, 84, '?', { a: 'middle', s: 12, b: 1, c: '--text-muted' });
       h += T(x + 20, 132, n, { a: 'middle', s: 7.5, sans: 1 });
     });
-    h += T(130, 146, 'anemia: −50 % · hipoxemia: −20 % (Fig. 9.2)', { a: 'middle', s: 7, i: 1, c: '--text-muted' });
+    h += T(130, 146, 'cifras de la Fig. 9.2 (el modelo da 10,1 y 15,8)', { a: 'middle', s: 7, i: 1, c: '--text-muted' });
     $('svg-92').innerHTML = h;
   }
 }
@@ -1302,25 +1289,25 @@ const fraseEl = $('frase');
 function decir(html, fuente, ilu) { fraseEl.innerHTML = `${html} <span class="org${ilu ? ' ilu' : ''}">${fuente}</span>`; }
 function fraseDe(prev, e) {
   const R = D.R, cambio = k => prev && prev[k] !== e[k];
-  if (e.rcp) return [`Parada con RCP: <span class="hl-r">PETCO₂ ≤10 mmHg tras 20 min</span> de RCP: es improbable recuperar la circulación espontánea.`, 'ficha · mar-capno-rcp'];
-  if (e.esofago) return [`<span class="hl-r">Sin CO₂ espirado: el tubo está en el esófago.</span> Pasa en 1 de cada 18 intubaciones urgentes del crítico, y auscultar no siempre lo distingue.`, 'ficha · mar-capno-intubacion'];
+  if (e.rcp) return [`Parada con RCP: con una <span class="hl-r">PETCO₂ ≤10 mmHg tras 20 min</span> de RCP, es improbable recuperar la circulación espontánea.`, 'ficha · mar-capno-rcp'];
+  if (e.esofago) return [`<span class="hl-r">Sin CO₂ espirado: el tubo está en el esófago</span> (o hay una parada, sin retorno venoso). La intubación esofágica no reconocida se da en 1 de cada 18 intubaciones urgentes del crítico.`, 'ficha · mar-capno-intubacion'];
   if (cambio('sedacion') && e.sedacion || (e.sedacion && !prev)) return [`Hipoventila: <span class="hl-r">la PETCO₂ sube</span> (${R.petco2} mmHg); la SpO₂ todavía no ha bajado (${R.spo2 ?? '—'} %).`, 'ficha · mar-capno-sedacion · PETCO₂ ilustrativa'];
   if (cambio('espacio') && e.espacio !== 'no') return [`Alvéolos ventilados sin sangre: la PETCO₂ (${R.petco2}) se queda <span class="hl-a">por debajo de la PaCO₂</span> (${R.paco2}).${e.espacio === 'epoc' ? ' En la EPOC, además, la fase II sube despacio.' : ''}`, 'ficha · mar-gradiente-co2 · Tabla 7.1 · mar-capno-f2'];
   if (cambio('co') && e.co) return [`La SpO₂ sigue en ${R.spo2 ?? '—'} %: <span class="hl-r">el pulsioxímetro no ve la COHb</span>; la SaO₂ real ha caído a ${R.sao2} %. Pide gasometría con cooximetría.`, 'ficha · mar-cooximetria · COHb 25 % ilustrativa'];
-  if ((cambio('frio') || cambio('sensor')) && e.frio) return e.sensor === 'dedo' ? [`Dedo frío: <span class="hl-r">la onda se aplana</span> y la SpO₂ deja de ser fiable. Pon el sensor en la frente.`, 'ficha · mar-oxi-frente'] : [`En la frente (carótida interna) los vasos se contraen menos: <span class="hl-v">la SpO₂ vuelve</span> (${R.spo2} %).`, 'ficha · mar-oxi-frente'];
-  if (cambio('util') && e.util === 'sepsis') return [`Llega O₂ pero la PDH está bloqueada: <span class="hl-r">SvO₂ ${R.svo2} %</span> (&gt;80 %), SaO₂ − SvO₂ ${R.dif} % y lactato alto. Es el defecto de utilización.`, 'ficha · Tabla 9.4 · mar-sao2-svo2-guia'];
+  if ((cambio('frio') || cambio('sensor')) && e.frio) return e.sensor === 'dedo' ? [`Dedo frío: <span class="hl-r">la onda se aplana</span> y la SpO₂ deja de ser fiable. Pon el sensor en la frente.`, 'ficha · mar-oxi-frente · onda plana: ilustrativa', true] : [`En la frente (carótida interna) los vasos se contraen menos: <span class="hl-v">la SpO₂ vuelve</span> (${R.spo2} %).`, 'ficha · mar-oxi-frente'];
+  if (cambio('util') && e.util === 'sepsis') return [`Llega O₂ pero la PDH está bloqueada: los hematíes <span class="hl-r">salen casi llenos</span> (SvO₂ ${R.svo2} %, &gt;80 %) y la célula suelta lactato. Es el defecto de utilización.`, 'cortes: ficha · Tabla 9.4 · las cifras: ilustrativas', true];
   if (cambio('util') && e.util === 'tiamina') return [`Sin pirofosfato de tiamina la PDH no trabaja: el piruvato se desvía a <span class="hl-r">lactato</span>. La SvO₂ no se toca: la ficha no la da.`, 'ficha · mar-extraccion-lactato (acordeón «Déficit de tiamina»)'];
-  if (cambio('estres') && e.estres) return [`Las catecolaminas aceleran la glucólisis: <span class="hl-a">sube un 40-50 %</span>, y con ella el lactato.`, 'ficha · mar-extraccion-lactato (acordeón «Estrés fisiológico»)'];
+  if (cambio('estres') && e.estres) return [`El estrés fisiológico (más transportadores de glucosa y catecolaminas) sube la glucólisis aerobia <span class="hl-a">un 40-50 %</span>, y con ella el lactato.`, 'ficha · mar-extraccion-lactato (acordeón «Estrés fisiológico») · lactato: ilustrativo'];
   if (cambio('consumo') && e.consumo === 'fiebre') return [`Más consumo con el mismo aporte: <span class="hl-a">sube la extracción</span> (O₂ER ${dec(R.o2er, 2)}) y baja la SvO₂ (${R.svo2} %).`, 'ilustrativo: 300 mL/min', true];
-  if (cambio('toma')) return e.toma === 'scvo2' ? (D.shock ? [`En el shock la ScvO₂ sale <span class="hl-r">más alta que la SvO₂</span>: de media un 7 %, hasta un 18 %. Aquí, ${R.scvo2} % frente a ${R.svo2} %.`, 'ficha · mar-scvo2-9'] : [`Fuera del shock la ScvO₂ es algo menor que la SvO₂; la ficha no da cuánto: el modelo las iguala (${R.scvo2} %).`, 'ficha · mar-scvo2-9 · igualdad ilustrativa', true]) : [`La SvO₂ mixta, en la arteria pulmonar: la media de todos los retornos venosos (${R.svo2} %).`, 'ficha · mar-svo2-mixta'];
-  if (cambio('hb')) return e.hb === 7.5 && e.pao2 === 90 ? [`Con la Hb a la mitad, <span class="hl-r">el contenido cae a la mitad</span>: de 20 a ${Math.round(D.cao2)} mL/dL. La extracción llega al ${R.dif} %.`, 'ficha · mar-anemia-hipoxemia (Fig. 9.2)'] : [`Hb ${dec(e.hb, 1)}: CaO₂ ${dec(R.cao2, 1)} mL/dL y aporte ${mil(R.do2)} mL/min (con Hb 15, 20 y 985).`, 'ficha · mar-cao2-9 · mar-do2'];
+  if (cambio('toma')) return e.toma === 'scvo2' ? (D.shock ? [`En el crítico la ScvO₂ sale <span class="hl-r">más alta que la SvO₂</span>: de media un 7 %; en el shock, hasta un 18 %. Aquí, ${R.scvo2} % frente a ${R.svo2} %.`, 'ficha · mar-scvo2-9 · +7 en el shock: ilustrativo', true] : [`Fuera del shock la ScvO₂ es algo menor que la SvO₂; la ficha no da cuánto: el modelo las iguala (${R.scvo2} %).`, 'ficha · mar-scvo2-9 · igualdad ilustrativa', true]) : [`La SvO₂ mixta, en la arteria pulmonar: la media de todos los retornos venosos (${R.svo2} %).`, 'ficha · mar-svo2-mixta'];
+  if (cambio('hb')) return e.hb === 7.5 && e.pao2 === 90 ? [`Con la Hb a la mitad, <span class="hl-r">la fila tiene huecos</span> y el contenido cae a la mitad: de 20 a ${Math.round(D.cao2)} mL/dL. Cada hematíe suelta más: la extracción llega al ${R.dif} %.`, 'ficha · mar-anemia-hipoxemia (Fig. 9.2) · la fila: ilustrativa'] : [`Hb ${dec(e.hb, 1)}: CaO₂ ${dec(R.cao2, 1)} mL/dL y aporte ${mil(R.do2)} mL/min (con Hb 15, 20 y 985).`, 'ficha · mar-cao2-9 · mar-do2'];
   if (cambio('pao2')) return e.pao2 === 45 ? [`PaO₂ a la mitad: SaO₂ ${R.sao2} %, CaO₂ ${Math.round(D.cao2)} mL/dL: <span class="hl-a">solo un 20 % menos</span>.`, 'ficha · mar-anemia-hipoxemia (Fig. 9.2)'] : e.pao2 >= 60 ? [`PaO₂ ${e.pao2}: SaO₂ ${R.sao2} %. <span class="hl-a">Casi no cambia: estás en la parte plana</span> de la curva.`, 'ficha · mar-curva-forma · curva: fisiología general'] : [`PaO₂ ${e.pao2}: ya en la parte empinada; la SaO₂ cae deprisa (${R.sao2} %).`, 'ficha · mar-curva-forma · curva: fisiología general'];
   if (cambio('gc') || (prev && prev.frio !== e.frio)) {
-    if (D.porAporte) return [`El aporte cayó a ${mil(R.do2)} mL/min: la extracción llega al 50 % y la SvO₂ al ${R.svo2} %. <span class="hl-r">El consumo ya depende del aporte</span> (VO₂ ${R.vo2}).`, 'ficha · mar-extraccion-curva (Fig. 9.3)'];
+    if (D.porAporte) return [`El aporte cayó a ${mil(R.do2)} mL/min: los hematíes <span class="hl-r">salen con la mitad de las perlas vacías</span> (extracción del 50 %, SvO₂ ${R.svo2} %) y el consumo ya depende del aporte (VO₂ ${R.vo2}).`, 'ficha · mar-extraccion-curva (Fig. 9.3)'];
     return [`Gasto ${dec(e.gc, 1)} L/min: aporte ${mil(R.do2)} mL/min; el tejido sigue cogiendo ${R.vo2} subiendo la extracción (${R.dif} %). Gap de PCO₂ ${R.gap} mmHg.`, 'ficha · mar-extraccion-curva · mar-gap-co2 · gap ilustrativo'];
   }
   if (D.porAporte) return [`El aporte (${mil(R.do2)} mL/min) no llega: la extracción tocó el 50 % y <span class="hl-r">el consumo depende del aporte</span> (VO₂ ${R.vo2}).`, 'ficha · mar-extraccion-curva (Fig. 9.3)'];
-  return [`Hb 15, PaO₂ 90 y gasto 5: llegan <span class="hl-a">${mil(R.do2)} mL/min</span> de O₂ y el tejido usa 250, una cuarta parte. La sangre vuelve con una SvO₂ del ${R.svo2} %.`, 'ficha · Tablas 9.1-9.2 · mar-o2er'];
+  return [`Hb 15, PaO₂ 90 y gasto 5: llegan <span class="hl-a">${mil(R.do2)} mL/min</span> de O₂ y el tejido usa 250, una cuarta parte: cada hematíe suelta una perla de cada cuatro (SvO₂ ${R.svo2} %).`, 'ficha · Tablas 9.1-9.2 · mar-o2er'];
 }
 
 /* ============================================================
@@ -1335,7 +1322,7 @@ function aplicar(nuevo, op = {}) {
     const p = ESTADOS[k].p, igual = !e.co && e.hb === (p.hb ?? 15) && e.pao2 === (p.pao2 ?? 90);
     if (igual) { vistosQ.add(k); if (!visitados.has(k)) { visitados.add(k); barraNueva = k; } }
   }
-  pintarTablero(); pintarLaminaFija(); pintarLupa(); pintarGraficas();
+  pintarTablero(); pintarLaminaFija(); pintarLupa(); pintarGraficas(); pintarCamas();
   if (barraNueva) { animarBarra(barraNueva); barraNueva = null; }
   if (op.frase !== false && modo === 'explorar') decir(...fraseDe(prev, e));
   sincronizarMandos();
@@ -1389,12 +1376,13 @@ $('chips-estado').addEventListener('click', ev => {
    ============================================================ */
 $('leyenda-mini').innerHTML = [
   `${iconoHematie(['', '', '', ''], 13)}hematíe: 4 perlas = 4 sitios del hemo`,
-  `${iconoHematie(['', 'vacia', '', 'vacia'], 13)}perla hueca: sitio sin O₂`,
+  `${iconoHematie(['', 'vacia', '', 'vacia'], 13, '--accent-purple')}anillo: sitio sin O₂ (venoso)`,
   `${iconoParticula('o2', 13)}O₂ <span class="prop">propuesta</span>`,
   `${iconoParticula('co2', 13)}CO₂`, `${iconoParticula('lact', 13)}lactato <span class="prop">propuesta</span>`
 ].map(t => `<li>${t}</li>`).join('');
 $('leyenda').innerHTML = [
-  [iconoHematie(['', '', '', ''], 20), 'Hematíe (disco de la tabla) con sus <b>4 perlas</b>: los 4 sitios del hemo. Llenas = O₂ unido. Con SaO₂ 98 % casi todas; con 73 %, tres de cada cuatro. La saturación se ve por la forma, no solo por el color (ciruela al entrar en el pulmón, terracota al salir).'],
+  [iconoHematie(['', '', '', ''], 20), 'Hematíe arterial (disco de la tabla) con sus <b>4 perlas</b>, los 4 sitios del hemo: <b>bolitas llenas</b> = O₂ unido. Con SaO₂ 98 % casi todas.'],
+  [iconoHematie(['', 'vacia', '', 'vacia'], 20, '--accent-purple'), 'Hematíe venoso: las perlas que soltaron su O₂ quedan como <b>anillos huecos</b>. Con SvO₂ 73 %, una de cada cuatro; la sangre venosa se reconoce por la forma, no solo por el color (ciruela).'],
   [iconoHematie(['co', '', 'co', ''], 20), 'Perla gris tachada: sitio ocupado por CO. El pulsioxímetro la cuenta como llena.'],
   [iconoParticula('o2', 20), 'O₂: <b>pesa</b>, dos átomos unidos (O=O). <span class="prop">propuesta</span> No choca con la tabla: ninguna forma es un par de círculos (la pajarita son dos triángulos).'],
   [iconoParticula('lact', 20), 'Lactato: <b>trípode</b>, medio copo: una glucosa (copo de 6 brazos) da dos lactatos. <span class="prop">propuesta</span> La creatinina guarda la luna; el trípode no lo usa nadie.'],
@@ -1427,7 +1415,7 @@ function pintarUnaVez() { apagarParticulas(); pasoLamina(0); pasoLupa(0); }
    ============================================================ */
 let modo = 'explorar';
 function anilloLamina(k) {
-  const POS = { alveolo: [78, 62, 30], dedo: [160, 98, 20], jeringa: [226, 68, 18], celula: [250, 176, 52], scv: [150, 252, 14], sv: [34, 172, 14], boca: [152, 23, 58], corazon: [34, 252, 16] };
+  const POS = { alveolo: [18, 18, 16], celula: [190, 205, 64], boca: [301, 23, 58], venoso: [322, 96, 36], arterial: [30, 70, 36] };
   const g = $('g-anillo'); g.innerHTML = '';
   if (!k || !POS[k]) return;
   const [x, y, r] = POS[k];
@@ -1438,6 +1426,8 @@ function setModo(m) {
   modo = m;
   for (const k of ['explorar', 'conceptos', 'preguntas']) $('modo-' + k).setAttribute('aria-selected', String(k === m));
   document.body.classList.toggle('estudio', m !== 'explorar');
+  // en Conceptos y Mayéutica la lámina se recorta por abajo: el capilar y las mitocondrias, sin el núcleo
+  $('lamina').setAttribute('preserveAspectRatio', m === 'explorar' ? 'xMidYMid meet' : 'xMidYMin slice');
   $('vista-explorar').hidden = m !== 'explorar'; $('vista-conceptos').hidden = m !== 'conceptos'; $('vista-preguntas').hidden = m !== 'preguntas';
   $('dock-explorar').hidden = m !== 'explorar'; $('dock-estudio').hidden = m === 'explorar';
   mirar(null); setOcultos([]);
@@ -1481,7 +1471,19 @@ function pintarDock(items, izq, der) {
 function entrar(el) { el.classList.remove('entra'); void el.offsetWidth; el.classList.add('entra'); }
 const subir = el => el?.scrollIntoView?.({ block: 'nearest', behavior: REDUCIR ? 'auto' : 'smooth' });
 
+let camasQ = null;   // las camas del paso de un caso, para verlas a la vez
+function pintarCamas() {
+  const el = $('camas-tabla'); if (!el || !camasQ) return;
+  const ds = camasQ.map(c => ({ e: estadoDe(c.e), R: derivar(estadoDe(c.e)).R }));
+  const actual = JSON.stringify(estado);
+  document.querySelectorAll('[data-cama]').forEach(b => b.setAttribute('aria-pressed', String(JSON.stringify(ds[+b.dataset.cama].e) === actual)));
+  const fila = (n, k, f) => `<tr><th>${n}</th>${ds.map(d => `<td class="n">${tapado(k) ? '?' : f(d)}</td>`).join('')}</tr>`;
+  el.innerHTML = `<table class="data-table mini"><thead><tr><th></th>${camasQ.map(c => `<th>${c.n}</th>`).join('')}</tr></thead><tbody>
+    ${fila('CaO₂ (mL/dL)', 'cao2', d => dec(d.R.cao2, 1))}${fila('DO₂ (mL/min)', 'do2', d => mil(d.R.do2))}
+    ${fila('Sat. venosa', 'ven', d => `${d.e.toma === 'scvo2' ? 'ScvO₂' : 'SvO₂'} ${d.R.ven} %`)}${fila('Lactato', 'lact', d => dec(d.R.lact, 1))}</tbody></table>`;
+}
 function pintarPregunta(cont, q, { cabecera = '', repaso = null, alFinal }) {
+  camasQ = q.camas || null;
   ponerModelo(q);
   const res = { ok: true, faltan: [] };
   let h = cabecera;
@@ -1540,6 +1542,7 @@ function pintarPregunta(cont, q, { cabecera = '', repaso = null, alFinal }) {
       if (intentos < 2) { p.textContent = 'Aún no. ' + q.tocar.pista; return; }
       aplicar(estadoDe(Object.assign({}, q.estado, q.tocar.bueno)), { frase: false });
       for (const k of q.tocar.visitar || []) vistosQ.add(k);
+      sincronizarMandoPregunta(cont, q.tocar.visitar);
       p.textContent = q.tocar.pista + ' Te lo pongo en el modelo.';
       e.target.closest('.fila').remove(); finComprobar(`<span class="ok">Así queda: ${confirma()}</span>`); return;
     }
@@ -1568,6 +1571,8 @@ function pintarPregunta(cont, q, { cabecera = '', repaso = null, alFinal }) {
       return;
     }
     if (a === 'sig') { mirar(null); setOcultos([]); alFinal(res); return; }
+    const cm = e.target.closest('[data-cama]');
+    if (cm) { aplicar(estadoDe(q.camas[+cm.dataset.cama].e), { frase: false }); return; }
     const ver = e.target.closest('[data-ver]');
     if (ver) { ver.parentElement.innerHTML = '<b>Corrección:</b> ' + q.frases[ver.dataset.ver].c; return; }
     const fr = e.target.closest('[data-fr]');
@@ -1597,6 +1602,15 @@ function mandoHTML(t) {
     else if (m.startsWith('estado|')) { const [, k, txt] = m.split('|'); partes.push(`<button type="button" class="b" data-mando="estado" data-v="${k}">${txt}</button>`); }
   }
   return partes.join('');
+}
+// El mando de la pregunta enseña lo mismo que el modelo (también tras «Te lo pongo en el modelo»)
+function sincronizarMandoPregunta(cont, visitados = []) {
+  cont.querySelectorAll('#mando input[data-mando]').forEach(r => {
+    const k = r.dataset.mando; r.value = estado[k];
+    r.parentElement.querySelector('output').innerHTML = `${k === 'pao2' ? estado[k] : dec(estado[k], 1)} <small>${{ hb: 'g/dL', pao2: 'mmHg', gc: 'L/min' }[k]}</small>`;
+  });
+  cont.querySelectorAll('#mando [data-mando="toma"]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === estado.toma)));
+  cont.querySelectorAll('#mando [data-mando="estado"]').forEach(b => { if (visitados.includes(b.dataset.v)) { b.setAttribute('aria-pressed', 'true'); b.style.borderColor = 'var(--oro)'; } });
 }
 function accionMando(m, cont) {
   const tipo = m.dataset.mando;
@@ -1715,8 +1729,10 @@ const Estudio = {
     pintarDock(C0.pasos.map((_, j) => j < this.p ? 'on' : j === this.p ? 'on aqui' : ''), C0.corto, `paso ${this.p + 1} de ${C0.pasos.length}`);
     const cab = `<span class="dia">${paso.momento}</span>
       <dl class="paciente">${Object.entries(this.ficha).map(([kk, v]) => `<dt>${kk}</dt><dd class="${nuevos.includes(kk) ? 'cambia' : ''}">${v}</dd>`).join('')}</dl>`;
-    const q = { ...paso.pregunta, estado: paso.estado, lupa: paso.lupa, mirar: paso.mirar, ultimo: this.p === C0.pasos.length - 1, calculadora: paso.calculadora };
-    pintarPregunta($('preg'), q, { cabecera: cab, alFinal: () => {
+    const camas = paso.camas || C0.camas;
+    const cab2 = camas ? cab + `<div class="camas"><div class="seg" role="group" aria-label="Qué cama ves en el modelo">${camas.map((c, i) => `<button type="button" data-cama="${i}" aria-pressed="false">Ver ${c.n}</button>`).join('')}</div><div id="camas-tabla"></div></div>` : cab;
+    const q = { ...paso.pregunta, estado: paso.estado, lupa: paso.lupa, mirar: paso.mirar, ultimo: this.p === C0.pasos.length - 1, calculadora: paso.calculadora, camas };
+    pintarPregunta($('preg'), q, { cabecera: cab2, alFinal: () => {
       if (this.p < C0.pasos.length - 1) { this.p++; this.pasoCaso(); window.scrollTo({ top: 0 }); }
       else this.finCaso();
     } });
@@ -1749,10 +1765,10 @@ const CONCEPTOS = [
     texto: 'El O₂ se disuelve mal en el plasma: <span class="hl-a">0,003 × PaO₂</span>. Con PaO₂ 90, 0,27 mL/dL: el <span class="hl-r">1,5 %</span> del contenido. El resto, 19,7 mL/dL, va unido a la Hb (1,34 mL por gramo). Total ≈ 20 mL/dL.',
     hacer: 'sube la PaO₂ a 100 y mira cuánto cambia el contenido; luego baja la Hb.', estado: {}, mirar: 'cao2',
     acciones: [{ t: 'PaO₂ 100', p: { pao2: 100 } }, { t: 'Hb 10', p: { hb: 10 } }, { t: 'Normal', p: {} }],
-    mira: 'el CaO₂ del tablero: la PaO₂ casi no lo mueve; la Hb, mucho. En la lámina, las perlas de cada hematíe frente a los pocos O₂ sueltos del plasma.',
+    mira: 'el CaO₂ del tablero: la PaO₂ casi no lo mueve; la Hb, mucho (quita hematíes de la fila). En el capilar, las perlas de cada hematíe frente a los tres O₂ sueltos del plasma.',
     fuente: 'mar-transporte-o2#mar-o2-disuelto · #mar-cao2-9' },
   { titulo: 'La curva en S protege',
-    texto: 'La PaO₂ normal está en la <span class="hl-a">parte plana</span>: puede caer hasta 60 con poco cambio de saturación. La venosa (≈40 mmHg, 73 %) está en la parte <span class="hl-azul">empinada</span>, donde un poco de PO₂ suelta mucho O₂. La P50 marca su posición: 27 mmHg.',
+    texto: 'La PaO₂ normal está en la <span class="hl-a">parte plana</span>: puede caer hasta 60 con poco cambio de saturación. La venosa (≈40 mmHg, 73 %) está en la parte <span class="hl-azul">empinada</span>, lo que facilita la captación de O₂ en los capilares pulmonares. La P50 marca su posición: 27 mmHg.',
     hacer: 'baja la PaO₂ paso a paso.', estado: {}, mirar: 'sao2',
     acciones: [{ t: 'PaO₂ 60', p: { pao2: 60 } }, { t: 'PaO₂ 45', p: { pao2: 45 } }, { t: 'PaO₂ 40', p: { pao2: 40 } }, { t: 'PaO₂ 90', p: {} }],
     mira: 'la SaO₂: 98 → 89 % con 60; 78 % con 45; 73 % con 40. Las perlas se vacían poco hasta que entras en la parte empinada.',
@@ -1761,7 +1777,7 @@ const CONCEPTOS = [
     texto: 'Bajar la Hb a la mitad (15 → 7,5) baja el CaO₂ <span class="hl-r">a la mitad</span> (20 → 10). Bajar la PaO₂ a la mitad (90 → 45; SaO₂ 98 → 78 %) solo lo baja <span class="hl-a">un 20 %</span> (20 → 16).',
     hacer: 'visita los dos estados y abre la Fig. 9.2 viva (Explorar).', estado: {}, mirar: 'cao2',
     acciones: [{ t: 'Hb a la mitad', p: { hb: 7.5 } }, { t: 'PaO₂ a la mitad', p: { pao2: 45 } }],
-    mira: 'el CaO₂ y las perlas: en la anemia hay la mitad de hematíes que llevar; en la hipoxemia, cada hematíe va casi lleno.',
+    mira: 'el capilar: en la anemia, <b>huecos en la fila</b> (la mitad de hematíes) y cada uno sale más vacío; en la hipoxemia, la fila está entera y cada hematíe entra con 3 perlas de cada 4.',
     fuente: 'mar-transporte-o2#mar-anemia-hipoxemia (Fig. 9.2)' },
   { titulo: 'Aporte, consumo y extracción',
     texto: '<span class="hl-a">DO₂ = GC × 1,34 × Hb × SaO₂ × 10</span> (900-1.100 mL/min). El tejido consume 250 (VO₂) y coge una cuarta parte: <span class="hl-a">O₂ER 0,25</span>. Si el aporte cae, sube la extracción y el consumo no cambia… <span class="hl-r">hasta el 50 %</span>: ahí el consumo empieza a depender del aporte.',
@@ -1770,13 +1786,13 @@ const CONCEPTOS = [
     mira: 'la O₂ER y la SvO₂ cambian; el VO₂ se queda en 250 hasta el umbral y luego cae (y sube el lactato). En Explorar, el punto de la Fig. 9.3 baja por la rampa.',
     fuente: 'mar-transporte-o2#mar-do2 · #mar-o2er · mar-extraccion-lactato#mar-extraccion-curva (Fig. 9.3)' },
   { titulo: 'La saturación venosa avisa',
-    texto: 'Con SaO₂ &gt;90 %: SvO₂ 65-75 % normal; <span class="hl-a">&lt;65 % menos aporte</span>; <span class="hl-r">≤50 % O₂ tisular amenazado</span>; <span class="hl-r">&gt;80 % defecto de utilización</span>, casi siempre sepsis (Tabla 9.4). La ScvO₂ de la cava superior sale más alta en el shock: de media un 7 %, hasta un 18 %.',
+    texto: 'Con metabolismo normal y SaO₂ &gt;90 %: SvO₂ 65-75 % normal; <span class="hl-a">&lt;65 % menos aporte</span>; <span class="hl-r">≤50 % O₂ tisular amenazado</span>; <span class="hl-r">&gt;80 % defecto de utilización</span>, casi siempre sepsis (Tabla 9.4). La ScvO₂ de la cava superior sale más alta en el crítico (de media un 7 %) y en el shock, hasta un 18 %.',
     hacer: 'compara el bajo gasto con la sepsis, y cambia la toma.', estado: {}, mirar: 'ven',
     acciones: [{ t: 'Bajo gasto', p: { gc: 2.5 } }, { t: 'Bajo gasto · ScvO₂', p: { gc: 2.5, toma: 'scvo2' } }, { t: 'Sepsis', p: { gc: 6, util: 'sepsis' } }],
-    mira: 'la SvO₂ (48 % en el bajo gasto, 83 % en la sepsis) y el rótulo de la Tabla 9.4 bajo la cifra. Con la toma en la cava, la ScvO₂ del shock engaña: 55 %.',
+    mira: 'los hematíes que salen del capilar: medio vacíos en el bajo gasto (SvO₂ 48 %) y casi llenos en la sepsis (83 %, ilustrativo). Con la toma en la cava, la ScvO₂ del shock engaña: 55 % (+7, ilustrativo).',
     fuente: 'mar-extraccion-lactato#mar-sao2-svo2-guia · #mar-svo2-guia · #mar-scvo2-9' },
   { titulo: 'El lactato no siempre es falta de O₂',
-    texto: 'El lactato se produce también con O₂ (unos 20 mmol/kg al día). Con O₂ de sobra sube si la <span class="hl-azul">PDH</span> no trabaja (sepsis, déficit de tiamina) o si las catecolaminas aceleran la glucólisis (+40-50 %). «La acumulación de lactato por hipoxia es la excepción, no la regla».',
+    texto: 'El lactato se produce también con O₂ (unos 20 mmol/kg al día). Con O₂ de sobra sube si la <span class="hl-azul">PDH</span> no trabaja (sepsis, déficit de tiamina) o con el estrés fisiológico, que sube la glucólisis aerobia un 40-50 %. «La acumulación de lactato por hipoxia es la excepción, no la regla».',
     hacer: 'abre la mitocondria y prueba cada causa.', estado: {}, lupa: 'mito', mirar: 'lact',
     acciones: [{ t: 'Sepsis', p: { gc: 6, util: 'sepsis' }, lupa: 'mito' }, { t: 'Sin tiamina', p: { util: 'tiamina' }, lupa: 'mito' }, { t: 'Estrés', p: { estres: true }, lupa: 'mito' }, { t: 'Aporte bajo (GC 2)', p: { gc: 2 }, lupa: 'mito' }],
     mira: 'en la lupa, la X sobre la PDH desvía el piruvato al lactato (puntos rojos). Las bandas del lactato y su mortalidad (≤2: 15 %; 2,1-3,9: 25 %; ≥4: 38 %) son de la Fig. 9.4; cuánto sube en cada estado, ilustrativo.',
@@ -1785,7 +1801,7 @@ const CONCEPTOS = [
     texto: 'Dos luces: <span class="hl-a">660 nm</span> (rojo) y <span class="hl-a">940 nm</span> (infrarrojo); la HbO₂ y la Hb absorben al revés en cada una. Solo analiza <span class="hl-azul">lo que late</span> (A/B): así ignora las venas. No ve la COHb ni la metHb: en el CO <span class="hl-r">la SpO₂ sobrestima</span> la SaO₂.',
     hacer: 'mete humo y enfría el dedo.', estado: {}, lupa: 'dedo', mirar: 'spo2',
     acciones: [{ t: 'Humo (CO)', p: { co: true }, lupa: 'dedo' }, { t: 'Dedo frío', p: { gc: 2.5, frio: true }, lupa: 'dedo' }, { t: 'Sensor en la frente', p: { gc: 2.5, frio: true, sensor: 'frente' }, lupa: 'dedo' }],
-    mira: 'con CO, SpO₂ 98 % y SaO₂ 74 % (COHb ilustrativa). Con el dedo frío, la onda se aplana; en la frente vuelve. Exactitud: ±3-4 % una medida suelta; ±2-3 % las seriadas.',
+    mira: 'con CO, SpO₂ 98 % y SaO₂ 74 % (COHb ilustrativa): en el capilar, perlas grises tachadas. Con el dedo frío, la onda se aplana (ilustrativo); en la frente vuelve. Exactitud: ±3-4 % una medida suelta; ±2-3 % las seriadas.',
     fuente: 'mar-oximetria#mar-oxi-absorcion · #mar-pulsioximetria · #mar-cooximetria · #mar-oxi-frente · #mar-oxi-exactitud' },
   { titulo: 'El CO₂ que se espira',
     texto: 'Fase I: espacio muerto anatómico. II: sube (lento si hay más espacio muerto alveolar, como en la EPOC). III: meseta hasta la <span class="hl-a">PETCO₂</span>. IV: inspiración. Sin CO₂: <span class="hl-r">tubo en el esófago</span>… o una parada, sin retorno venoso.',
@@ -1800,7 +1816,7 @@ const PREGUNTAS = [
   { id: 'co-g1', serie: 'guia', corto: 'para qué la Hb', tipo: 'test', fuente: 'mar-transporte-o2#mar-o2-disuelto · #mar-cao2-9', estado: {}, mirar: 'cao2',
     enunciado: 'Si el O₂ se disuelve en el plasma, ¿para qué hace falta la hemoglobina?',
     opciones: [
-      { t: 'Porque el plasma casi no tiene agua donde disolverlo', ok: false, porque: 'El plasma es un 93 % agua: el problema es que el O₂ se disuelve mal en ella. Si buscaras «más agua» (más volumen) para llevar O₂, diluirías la Hb y el CaO₂ bajaría.' },
+      { t: 'No hace falta si respira O₂ al 100 %: con PaO₂ 500 basta el disuelto', ok: false, porque: 'Con PaO₂ 500 el disuelto es 0,003 × 500 = 1,5 mL/dL, frente a los ≈20 que lleva la Hb. Un anémico seguiría sin O₂ aunque respirara O₂ puro.' },
       { t: 'Porque se disuelve poco: es el 1,5 % del contenido', ok: true },
       { t: 'Porque el disuelto solo cuenta si la PaO₂ pasa de 100', ok: false, porque: 'Cuenta siempre, pero poco: con 90 mmHg, 0,27 mL/dL. Si esperaras que subir la PaO₂ compensara una anemia, el paciente seguiría sin O₂: cada 10 mmHg añaden 0,03 mL/dL.' }],
     explicacion: 'O₂ disuelto = <span class="hl-a">0,003 × PaO₂</span>: con 90 mmHg, 0,27 mL/dL. Unido a la Hb: 1,34 × 15 × 0,98 = 19,7. Total ≈ 20 mL/dL; el disuelto es el <span class="hl-r">1,5 %</span>. Por eso hace falta la Hb.' },
@@ -1812,7 +1828,7 @@ const PREGUNTAS = [
       { t: 'Un tercio también, hasta ≈65 %: van en paralelo', ok: false, porque: 'La curva no es una recta. Si lo creyeras, verías una desaturación grave donde no la hay y subirías el O₂ o la presión de la ventilación sin necesidad.' },
       { t: 'Nada: la Hb sigue saturada mientras la PaO₂ pase de 40', ok: false, porque: '40 mmHg es la PO₂ venosa, en la parte empinada: ahí la saturación es del 73 %. Si esperaras a ver la caída por debajo de 40, el paciente ya estaría en la parte que cae en picado.' },
       { t: 'Poco, hasta ≈89 %: está en la parte plana de la curva', ok: true }],
-    explicacion: 'La PaO₂ normal está en la <span class="hl-a">parte plana</span>: puede caer hasta 60 con poco cambio de saturación. La venosa (≈40) está en la empinada, donde un poco de PO₂ suelta mucho O₂. <span class="org ilu">89 %: curva de fisiología general ajustada a la ficha</span>' },
+    explicacion: 'La PaO₂ normal está en la <span class="hl-a">parte plana</span>: puede caer hasta 60 con poco cambio de saturación. La venosa (≈40) está en la empinada, lo que facilita la captación de O₂ en el pulmón. <span class="org ilu">89 %: curva de fisiología general ajustada a la ficha</span>' },
   { id: 'co-g3', serie: 'guia', corto: 'anemia o hipoxemia', tipo: 'test', fuente: 'mar-transporte-o2#mar-anemia-hipoxemia (Fig. 9.2)', estado: {}, mirar: 'cao2',
     tocar: { mandos: ['estado|anemia|Hb a la mitad (7,5)', 'estado|hipoxemia|PaO₂ a la mitad (45)'], ocultar: ['cao2', 'sao2', 'spo2'], instruccion: 'pon los dos estados, uno tras otro.', comprobar: () => vistosQ.has('anemia') && vistosQ.has('hipoxemia'), visitar: ['anemia', 'hipoxemia'],
       pista: 'Pulsa los dos botones: «Hb a la mitad» y «PaO₂ a la mitad».', bueno: { hb: 7.5 }, confirma: () => 'con la Hb a la mitad, CaO₂ 10 mL/dL (−50 %); con la PaO₂ a la mitad, 16 (−20 %). Lo ves en la Fig. 9.2 viva.' },
@@ -1822,10 +1838,13 @@ const PREGUNTAS = [
       { t: 'Al hipoxémico: la PaO₂ es la que empuja el O₂ a la sangre', ok: false, porque: 'Con PaO₂ 45 la Hb aún va saturada al 78 %. Si lo creyeras, corregirías la PaO₂ y dejarías al anémico sin transfundir, con la mitad del O₂ en la sangre.' },
       { t: 'Igual: los dos pierden la mitad del CaO₂', ok: false, porque: 'La curva en S protege la saturación; la Hb no tiene esa defensa. Sobrestimarías la gravedad de la hipoxemia y te quedarías corto con la anemia.' }],
     explicacion: 'Fig. 9.2: Hb a la mitad → CaO₂ <span class="hl-r">de 20 a 10</span>; PaO₂ a la mitad (SaO₂ 98 → 78 %) → <span class="hl-a">de 20 a 16</span>. <span class="hl-r">La anemia pesa mucho más</span> que la hipoxemia en el O₂ arterial.' },
-  { id: 'co-g4', serie: 'guia', corto: 'el aporte', tipo: 'destapa', fuente: 'mar-transporte-o2#mar-do2 · Tabla 9.2', estado: {}, mirar: 'do2',
-    enunciado: 'Para el aporte de O₂ a los tejidos (DO₂), ¿qué multiplicas, y por qué hay un ×10 al final?',
-    puntos: ['El <span class="hl-a">gasto cardíaco</span> (L/min).', 'La <span class="hl-a">Hb</span> × 1,34 (mL de O₂ por gramo).', 'La <span class="hl-a">SaO₂</span>, en decimales.', 'El <span class="hl-azul">×10</span> pasa de mL/dL a mL/L: con GC 5, Hb 15 y SaO₂ 0,98 salen ≈985 mL/min.'],
-    explicacion: 'DO₂ = GC × 1,34 × Hb × SaO₂ × 10. Tabla 9.2: <span class="hl-a">900-1.100 mL/min</span> (520-600 por m²). Tres medidas: gasto, Hb y SaO₂.' },
+  { id: 'co-g4', serie: 'guia', corto: 'devolver el aporte', tipo: 'destapa', fuente: 'mar-transporte-o2#mar-do2 · #mar-o2-disuelto · Tabla 9.2', estado: { hb: 7.5 }, mirar: 'do2',
+    tocar: { mandos: ['hb', 'gc'], ocultar: ['do2', 'vo2', 'o2er', 'ven'], instruccion: 'devuélvele el aporte a ≈985 con el mando que quieras y pulsa «Comprobar».', comprobar: e => derivar(e).R.do2 >= 950,
+      pista: 'Con el gasto no llegas: en el modelo se queda en 8 L/min. Sube la Hb.', bueno: { hb: 15 },
+      confirma: R => `DO₂ ${mil(R.do2)} mL/min. Con el gasto al máximo del modelo (8 L/min) y la Hb en 7,5 te quedarías en ${mil(derivar(estadoDe({ hb: 7.5, gc: 8 })).R.do2)}.` },
+    enunciado: 'Con Hb 7,5 y gasto 5, el aporte de O₂ se ha quedado en ≈490 mL/min. ¿Con qué palanca lo devolverías a ≈985, cuánto tendría que cambiar y cuál no te sirve?',
+    puntos: ['La <span class="hl-a">Hb</span>: el aporte es proporcional a ella; de 7,5 a 15 vuelve a ≈985.', 'El <span class="hl-a">gasto</span>: tendría que <span class="hl-r">doblarse</span> (de 5 a 10 L/min), porque también multiplica.', 'La <span class="hl-a">PaO₂</span> no sirve: la SaO₂ ya es del 98 % y el disuelto no entra en la fórmula del aporte (es el 1,5 %).'],
+    explicacion: 'DO₂ = GC × 1,34 × Hb × SaO₂ × 10: tres medidas que se multiplican, y doblar una dobla el aporte. La SaO₂ ya está cerca de 1. Tabla 9.2: <span class="hl-a">900-1.100 mL/min</span>.' },
   { id: 'co-g5', serie: 'guia', corto: 'el consumo', tipo: 'test', fuente: 'mar-transporte-o2#mar-vo2 · #mar-tabla-9-3 · mar-extraccion-lactato#mar-scvo2-9', estado: {}, mirar: 'ven',
     enunciado: 'Y para el consumo (VO₂, por el «Fick inverso»), ¿qué cuarta medida necesitas además de las tres del aporte?',
     opciones: [
@@ -1865,11 +1884,12 @@ const PREGUNTAS = [
 ];
 
 // Estados de los casos
-const B2_GIRO = { gc: 6, util: 'sepsis', toma: 'scvo2' };
+const B2_GIRO = { gc: 6, util: 'sepsis', consumo: 'fiebre', toma: 'scvo2' };
 const B3E = { gc: 6, util: 'sepsis', estres: true, toma: 'scvo2' };
 const CASOS = [
   { id: 'B2', titulo: 'Dos camas, una pregunta', corto: 'Caso B2 · dos camas', sub: 'anemia frente a hipoxemia',
     paciente: { 'Cama 1': 'Varón, 62 años: hemorragia digestiva', 'Cama 2': 'Mujer, 55 años: neumonía' },
+    camas: [{ n: 'Cama 1', e: { hb: 7.5 } }, { n: 'Cama 2', e: { pao2: 45 } }],
     pasos: [
       { momento: 'Pase de guardia · 8:00', datos: { 'Cama 1 · datos': 'Hb 7,5 g/dL · SpO₂ 98 % (PaO₂ 90)', 'Cama 2 · datos': 'Hb 15 g/dL · PaO₂ 45 (SaO₂ 78 %)' }, nuevo: ['Cama 1 · datos', 'Cama 2 · datos'],
         estado: {}, mirar: 'cao2',
@@ -1897,7 +1917,7 @@ const CASOS = [
             { t: '≈ 49 mL/min: 5 × 1,34 × 7,5 × 0,98', ok: false, porque: 'Falta el ×10 (de mL/dL a mL/L): diez veces menos de lo real. Con 49 mL/min ningún paciente llegaría vivo al pase.' },
             { t: '≈ 490 mL/min: la mitad de lo normal', ok: true }],
           explicacion: 'DO₂ = 5 × 1,34 × 7,5 × 0,98 × 10 ≈ <span class="hl-r">492 mL/min</span>. Para seguir consumiendo 250, la extracción sube hasta el 50 %: el umbral de la Fig. 9.3.' } },
-      { momento: '10:00', datos: { 'ScvO₂ cama 1': '48 % (CVC)' }, nuevo: ['ScvO₂ cama 1'], estado: { hb: 7.5, toma: 'scvo2' }, lupa: 'dedo', mirar: 'ven', calculadora: { nombre: 'Oximetría dual', ids: 'mar-dual-calc' },
+      { momento: '10:00', camas: [{ n: 'Cama 1', e: { hb: 7.5, toma: 'scvo2' } }, { n: 'Cama 2', e: { pao2: 45, toma: 'scvo2' } }], datos: { 'ScvO₂ cama 1': '48 % (CVC)' }, nuevo: ['ScvO₂ cama 1'], estado: { hb: 7.5, toma: 'scvo2' }, lupa: 'dedo', mirar: 'ven', calculadora: { nombre: 'Oximetría dual', ids: 'mar-dual-calc' },
         pregunta: { id: 'b2-4', tipo: 'test', fuente: 'mar-oximetria#mar-dual · #mar-dual-tabla',
           enunciado: 'A la cama 1 le ponen un CVC: ScvO₂ 48 %, con SpO₂ 98 %. ¿Qué te dice la oximetría dual?',
           opciones: [
@@ -1906,17 +1926,17 @@ const CASOS = [
             { t: 'Nada: la ScvO₂ normal es menor que la SvO₂, así que 48 % es esperable', ok: false, porque: 'Es algo menor en el sano, no 25 puntos; y en el crítico suele ser mayor. Atribuirías a la toma una anemia que ya amenaza el metabolismo aerobio.' }],
           explicacion: '(SpO₂ − SvO₂) ≈ extracción: VO₂ = DO₂ × (SpO₂ − SvO₂). <span class="hl-r">≥50 %: amenaza</span> para el metabolismo aerobio; ha resultado un indicador válido para transfundir hematíes en la anemia.',
           nota: 'En el modelo, la ScvO₂ se iguala a la SvO₂ fuera del shock (la ficha dice «algo menor», sin cifra).' } },
-      { momento: 'Día 2 · el giro', datos: { 'Cama 2 · datos': 'Con O₂: PaO₂ 90 (SaO₂ 98 %) · fiebre · GC 6 L/min', 'ScvO₂ cama 2': '90 %', 'Lactato cama 2': '4 mmol/L' }, nuevo: ['Cama 2 · datos', 'ScvO₂ cama 2', 'Lactato cama 2'],
+      { momento: 'Día 2 · el giro', camas: [{ n: 'Cama 1', e: { hb: 7.5, toma: 'scvo2' } }, { n: 'Cama 2', e: B2_GIRO }], datos: { 'Cama 2 · datos': 'Con O₂: PaO₂ 90 (SaO₂ 98 %) · fiebre · GC 6 L/min', 'ScvO₂ cama 2': '90 %', 'Lactato cama 2': '4 mmol/L' }, nuevo: ['Cama 2 · datos', 'ScvO₂ cama 2', 'Lactato cama 2'],
         estado: B2_GIRO, mirar: 'ven',
-        pregunta: { id: 'b2-5', tipo: 'error', fuente: 'mar-transporte-o2#mar-anemia-hipoxemia · mar-extraccion-lactato#mar-sao2-svo2-guia · #mar-scvo2-9 · #mar-fig-9-4',
+        pregunta: { id: 'b2-5', tipo: 'error', fuente: 'mar-transporte-o2#mar-anemia-hipoxemia · mar-respuesta-fluidos#mar-scvo2-pautas · mar-extraccion-lactato#mar-scvo2-9 · #mar-fig-9-4',
           enunciado: 'La cama 2 hace una sepsis. Nota del R2 en su historia:',
           frases: [
             { t: 'Ayer estaba peor que la cama 1: con la PaO₂ a la mitad, el contenido baja a la mitad.', mal: true, c: 'La PaO₂ a la mitad baja el CaO₂ <span class="hl-a">un 20 %</span> (20 → 16); la Hb a la mitad, un 50 %.' },
-            { t: 'Hoy satura bien y la ScvO₂ es del 90 %: objetivo del 70 % cumplido, la perfusión es buena.', mal: true, c: 'Con SaO₂ &gt;90 %, una saturación venosa <span class="hl-r">&gt;80 %</span> es defecto de utilización (Tabla 9.4): el tejido no usa el O₂ que le llega. Con lactato 4, nada está resuelto.' },
+            { t: 'Hoy satura bien y la ScvO₂ es del 90 %: objetivo del 70 % cumplido, la perfusión es buena.', mal: true, c: 'Una ScvO₂ <span class="hl-r">&gt;80 % en el shock séptico</span> es, lo más probable, un defecto de utilización (cap. 11; en la SvO₂ mixta, la Tabla 9.4): el tejido no usa el O₂ que le llega. Con lactato 4, nada está resuelto.' },
             { t: 'En el shock, la ScvO₂ puede superar a la SvO₂ hasta un 18 %.', mal: false },
             { t: 'Un lactato inicial ≥4 se asocia a una mortalidad hospitalaria del 38 % (Fig. 9.4).', mal: false }],
           explicacion: 'La cama 2 no mejora: le sobra O₂ en la sangre venosa porque la mitocondria no lo usa.' } },
-      { momento: 'Día 2', datos: {}, nuevo: [], estado: B2_GIRO, lupa: 'mito', mirar: 'lact',
+      { momento: 'Día 2', camas: [{ n: 'Cama 1', e: { hb: 7.5, toma: 'scvo2' } }, { n: 'Cama 2', e: B2_GIRO }], datos: {}, nuevo: [], estado: B2_GIRO, lupa: 'mito', mirar: 'lact',
         pregunta: { id: 'b2-6', tipo: 'destapa', fuente: 'mar-extraccion-lactato (acordeón «Sepsis») · #mar-tabla-9-5 · #mar-lactato-conclusion',
           enunciado: 'La cama 2 tiene O₂ de sobra y aun así lactato 4. ¿De dónde sale? Míralo en la lupa.',
           puntos: ['La <span class="hl-azul">PDH inhibida</span> por productos bacterianos (endotoxina) y citocinas: el piruvato no entra en la mitocondria y se desvía a lactato.', 'La <span class="hl-azul">glucólisis acelerada</span> por las catecolaminas.'],
@@ -1932,13 +1952,13 @@ const CASOS = [
     pasos: [
       { momento: 'Ingreso en la UCI', datos: { Fármacos: 'noradrenalina · propofol', 'SaO₂': '98 %', 'ScvO₂': '90 %', Lactato: '5 mmol/L' }, nuevo: ['Fármacos', 'SaO₂', 'ScvO₂', 'Lactato'],
         estado: B3E, mirar: 'ven', calculadora: { nombre: '¿Qué dice esta saturación venosa?', ids: 'mar-extraccion-calc' },
-        pregunta: { id: 'b3-1', tipo: 'test', fuente: 'mar-extraccion-lactato#mar-sao2-svo2-guia · #mar-scvo2-9',
-          enunciado: 'Con la Tabla 9.4 en la mano, ¿qué te dice esta saturación venosa?',
+        pregunta: { id: 'b3-1', tipo: 'test', fuente: 'mar-respuesta-fluidos#mar-scvo2-pautas (cap. 11) · mar-extraccion-lactato#mar-sao2-svo2-guia · #mar-scvo2-9',
+          enunciado: 'Con la ficha en la mano (cómo leer la ScvO₂, cap. 11, y la Tabla 9.4), ¿qué te dice esta saturación venosa?',
           opciones: [
             { t: 'Que la perfusión es buena: supera el objetivo de 70 %', ok: false, porque: 'Pararías la reanimación con un lactato de 5: el grupo de ≥4 tiene un 38 % de mortalidad (Fig. 9.4).' },
             { t: 'Que la extracción está amenazada: hay que subir el aporte', ok: false, porque: 'Amenaza es una SvO₂ ≤50 %; aquí es al revés. Transfundir o subir el gasto no arregla una mitocondria que no usa el O₂.' },
             { t: 'Que el tejido no usa el O₂: defecto de utilización', ok: true }],
-          explicacion: 'SvO₂ <span class="hl-r">&gt;80 %</span> (o SaO₂ − SvO₂ &lt;20 %): defecto de utilización, casi siempre sepsis. Ojo: los cortes son de la SvO₂ mixta; la ScvO₂ en el shock sale más alta (de media un 7 %).' } },
+          explicacion: 'SvO₂ <span class="hl-r">&gt;80 %</span> (o SaO₂ − SvO₂ &lt;20 %): defecto de utilización, casi siempre sepsis. Para la ScvO₂, el cap. 11: <span class="hl-r">&gt;80 % en el shock séptico</span> es, lo más probable, un defecto de utilización, y el gap de PCO₂ ayuda a destapar la hipoperfusión. La ScvO₂ sale más alta que la mixta en el crítico (de media un 7 %) y en el shock (hasta un 18 %).' } },
       { momento: 'Hora 1', datos: { 'Gap de PCO₂': '3 mmHg' }, nuevo: ['Gap de PCO₂'], estado: B3E, mirar: 'gap', calculadora: { nombre: 'ScvO₂ + gap de PCO₂', ids: 'mar-perfusion-calc' },
         pregunta: { id: 'b3-2', tipo: 'test', fuente: 'mar-respuesta-fluidos#mar-gap-co2 · #mar-tabla-11-2 · #mar-gap-vs-scvo2',
           enunciado: 'Pides el gap de PCO₂ (venoso central − arterial): 3 mmHg. ¿Qué concluyes?',
@@ -1947,7 +1967,7 @@ const CASOS = [
             { t: 'Hay hipoperfusión: el gap de 3 se suma a la ScvO₂ alta', ok: false, porque: 'Normal es 2-5; hipoperfusión, &gt;6 (Tabla 11.2). Subirías la noradrenalina o los fluidos sin indicación.' },
             { t: 'Perfusión y oxigenación correctas: ya puedes bajar el soporte', ok: false, porque: 'El gap no informa de la oxigenación tisular. Con un lactato de 5 por defecto de utilización, retirar el soporte sería prematuro.' }],
           explicacion: 'Tabla 11.2: gap <span class="hl-v">2-5 normal</span>, &gt;6 hipoperfusión. Es más específico de hipoperfusión y el shock séptico no lo altera; pero <span class="hl-r">no informa de la oxigenación tisular</span>: combinar los dos puede ser lo óptimo.',
-          nota: 'El gap del modelo es ilustrativo (∝ 1/GC). El caso B3 de la especificación daba 8 mmHg; aquí sale 3 para que el tablero y la ficha del paciente coincidan con un gasto alto.' } },
+          nota: 'El gap del modelo es ilustrativo (∝ 1/GC).' } },
       { momento: 'Hora 2', datos: {}, nuevo: [], estado: B3E, lupa: 'mito', mirar: 'lact', calculadora: { nombre: '¿Por qué está alto el lactato?', ids: 'mar-lactato-calc' },
         pregunta: { id: 'b3-3', tipo: 'destapa', fuente: 'mar-extraccion-lactato#mar-tabla-9-5 · acordeones «Sepsis» y «Estrés fisiológico»',
           enunciado: 'El lactato sigue en 5 con O₂ de sobra en la sangre venosa. Según la Tabla 9.5, ¿qué lo explica en este paciente?',
