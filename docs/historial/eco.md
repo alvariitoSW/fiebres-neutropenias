@@ -319,3 +319,11 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
     ahora con lo que el anillo recorre a lo largo del haz.
   - **Siguiente**: las válvulas (IM primero), pericardio.
 
+- **Calibración de la PVC y de la EPP (20/10/2026, decisión del usuario; rama `auto/b1-calibra`)**. PVC normal 5,02 → 4,19
+  mmHg (Tabla 8.1 de Marino, 0-5): la AD era un reservorio demasiado rígido y en la sístole ventricular se llenaba hasta la
+  presión venosa (meseta de ~6,5 mmHg; el retorno se paraba). AD más distensible (a 0,13, b 0,080), VD a 1,9, vuVen 2300 y
+  rRetorno 0,025; el resto del normal, igual. Bajarla a 3-4 rompía la VD sistólica (20-25) o el paciente posible
+  (venas pulmonares >40 mmHg en la hipertrofia con 1,5 L). EPP en la hemorragia: la app la hacía a los 10 s del
+  escenario, con el barorreflejo aún compensando (+64 %; el fallo del VI «respondía», +15 %). Ahora el panel deja
+  asentar al paciente hasta 40 s antes de la primera maniobra (`faltaParaAsentar`, `aplicarEscenario`), igual que las
+  pruebas: hemorragia +20,2 %, fallo +2,7 %, dilatada +1,3 %.

@@ -19,7 +19,7 @@ export const REFERENCIAS = [
   { id: 'papd', nombre: 'Arteria pulmonar diastólica', unidad: 'mmHg', valor: (u) => u.papd, min: 6, max: 12, texto: '6-12', origen: 'ficha', fuente: F5 },
   { id: 'pvdmax', nombre: 'VD sistólica', unidad: 'mmHg', valor: (u) => u.pvd_max, min: 20, max: 25, texto: '20-25', origen: 'ficha', fuente: F5 },
   { id: 'rvs', nombre: 'RVS', unidad: 'dyn·s·cm⁻⁵', valor: (u) => u.rvs, min: 900, max: 1200, texto: '900-1200', origen: 'ficha', fuente: F5,
-    pendiente: 'el motor da ~1.450: PAM algo alta (~100) para un GC de 5,2' },
+    pendiente: 'el motor da ~1.490: PAM algo alta (~100) para un GC de 5,2' },
   { id: 'gc', nombre: 'Gasto cardíaco', unidad: 'L/min', valor: (u) => u.gc, min: 4, max: 6, texto: '4-6', origen: 'ficha', fuente: F10, dec: 2 },
   { id: 'ic', nombre: 'Índice cardíaco', unidad: 'L/min/m²', valor: (u) => u.ic, min: 2.4, max: 4, texto: '2,4-4', origen: 'ficha', fuente: F10, dec: 2 },
   { id: 'do2', nombre: 'DO₂', unidad: 'mL/min', valor: (u) => u.do2, min: 870, max: 1200, texto: '870-1200', origen: 'ficha', fuente: F10 },
@@ -46,8 +46,7 @@ export const REFERENCIAS = [
   // Tabla 8.1 de Marino (lo que mide el catéter de arteria pulmonar). El enclavamiento es la presión de las venas
   // pulmonares del motor (lecturas.mjs, LUGARES.enclavado): con el globo hinchado la punta lee la presión venosa del
   // lado izquierdo (#mar-enclavamiento-ondas)
-  { id: 'pvc-t81', nombre: 'PVC (Tabla 8.1 del catéter)', unidad: 'mmHg', valor: (u) => u.pvc, min: 0, max: 5, texto: '0-5', origen: 'ficha', fuente: T81, dec: 2,
-    pendiente: 'el motor da 5,02 mmHg: en el borde alto (con la Ficha 5, 0-8, cumple)' },
+  { id: 'pvc-t81', nombre: 'PVC (Tabla 8.1 del catéter)', unidad: 'mmHg', valor: (u) => u.pvc, min: 0, max: 5, texto: '0-5', origen: 'ficha', fuente: T81, dec: 2 },
   { id: 'pawp-t81', nombre: 'Enclavamiento (Tabla 8.1 del catéter)', unidad: 'mmHg', valor: (u) => u.pvp, min: 6, max: 12, texto: '6-12', origen: 'ficha', fuente: T81, dec: 1 },
 ];
 

@@ -13,7 +13,7 @@ import { construirCorazon, LIMITES, TAPSE_POR_ML, recortar, planoCorte } from '.
 import { construirAbdomen, anatomiaAbdomen, modeloVci, ARRIBA } from './abdomen.mjs';
 import { crearCamara, m4, MODELO, nrm } from './mat.mjs';
 import { crearWebGL } from './render-webgl.mjs';
-import { ESCENARIOS, evaluarForma, ASENTAR_FORMA } from './escenarios.mjs';
+import { ESCENARIOS, evaluarForma, aplicarEscenario } from './escenarios.mjs';
 import { crearFlujo } from './flujo-sangre.mjs';
 import { COLOR_FASE, segmentosFase, estadoRevision, crearDiagramas, crearPanelesHemo } from './diagramas.mjs';
 import { VALVULAS, apertura, estadoGeo, crearTablaFormas, semejantes, extraDeMotor } from './formas.mjs';
@@ -654,9 +654,8 @@ export function montarSimulador(raiz, opc = {}) {
   function elegirEscenario(k) {
     if (!ESCENARIOS[k]) return;
     escenario = k;
-    motor = crearMotor({ barorreflejo: $('#cv-baro').checked }); motor.correr(12); ESCENARIOS[k].aplicar(motor);
-    // que se vea ya el efecto (y el barorreflejo respondiendo); una forma de enfermedad, ya asentada
-    if (k !== 'normal') motor.correr(ESCENARIOS[k].forma ? ASENTAR_FORMA : 10);
+    // que se vea ya el efecto (y el barorreflejo respondiendo); una forma de enfermedad, ya asentada (escenarios.mjs)
+    motor = crearMotor({ barorreflejo: $('#cv-baro').checked }); motor.correr(12); aplicarEscenario(motor, k);
     if (opc.depuracion) window.__motor = motor;
     revision = null; ponerPausa(false); sangre.reiniciar(); latidoTexto = -1; claveTd = ''; ensuciar(); colocarLineaM(); reiniciarD();
     paneles?.alCambiarMotor();

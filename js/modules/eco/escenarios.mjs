@@ -51,6 +51,15 @@ export const ESCENARIOS = {
 // que se asienten (la página y las pruebas usan el mismo). Los escenarios de shock se ven a los 10 s.
 export const ASENTAR_FORMA = 40;
 
+// El escenario tal como lo ve la app (simulador.mjs) y lo comprueban las pruebas: se aplica sobre el normal y se deja
+// correr 10 s un shock (para ver al barorreflejo respondiendo) o ASENTAR_FORMA una forma de enfermedad. Apunta cuándo se
+// aplicó (p.tEscenario): las maniobras de volumen esperan a que el paciente esté asentado (maniobras.mjs, faltaParaAsentar)
+export function aplicarEscenario(m, k) {
+  ESCENARIOS[k].aplicar(m);
+  if (k !== 'normal') { m.p.tEscenario = m.s.t; m.correr(ESCENARIOS[k].forma ? ASENTAR_FORMA : 10); }
+  return m;
+}
+
 // --- Criterios de cada forma de enfermedad: cifras y direcciones de las fichas de la app ---
 // c = { u, md, u0, md0 }: el último latido y las medidas del corazón (ecografia.mjs, medidasCorazon) de la forma y del
 // corazón normal. Cada criterio dice qué ficha lo da (fuente: la línea exacta, para el botón «ir a la ficha»).

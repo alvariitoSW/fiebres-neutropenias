@@ -12,7 +12,7 @@
 //
 // Al final, los tres paneles de la hemodinámica de Marino (Guyton con la EPP y el bolo, el catéter que avanza y la
 // termodilución): leen el mismo estado del fotograma con lecturas.mjs y mueven volumen con maniobras.mjs.
-import { epp, bolo, SEGUNDOS_MANIOBRA } from './maniobras.mjs';
+import { epp, bolo, SEGUNDOS_MANIOBRA, faltaParaAsentar } from './maniobras.mjs';
 import { guyton, curvaFuncion, presionEnPunta, lecturaCateter, curvaTermo, medidasTermo, LUGARES, ORDEN_LUGARES } from './lecturas.mjs';
 import { REFERENCIAS } from './referencias.mjs';
 import { cargarMotion, sinMovimiento } from '../../core/motion.js';
@@ -333,7 +333,17 @@ export function crearPanelesHemo(raiz, ctx) {
   const cG = $('#cvh-guyton');
   let claveG = '', antes = null, ultimaManiobra = null, registro = [];
   const foto = (m) => { const g = guyton(m), u = m.ultimo; return g && { ...g, pas: u.pas, pad_: u.pad_, fc: u.fc, pcp: u.pvp }; };
+  // Si el escenario acaba de empezar, el paciente se asienta antes (maniobras.mjs, faltaParaAsentar): la EPP y el bolo
+  // se miden sobre un VS basal estable, como en las pruebas
+  function asentar() {
+    const falta = faltaParaAsentar(ctx.motor());
+    if (falta < 0.05) return;
+    ctx.correr(falta);
+    registro.unshift(`El paciente se asienta ${n0(falta)} s más (el barorreflejo termina de compensar): así el VS de partida es estable`);
+    registro = registro.slice(0, 4); claveG = '';
+  }
   function maniobra(tipo, valor) {
+    asentar();
     const m = ctx.motor(); antes = foto(m); ultimaManiobra = { tipo, valor };
     if (tipo === 'epp') epp(m, valor); else bolo(m, valor);
     ctx.correr(SEGUNDOS_MANIOBRA);
@@ -590,6 +600,7 @@ export function crearPanelesHemo(raiz, ctx) {
   function abrir(clave) {
     const d = $(PANEL[clave]); if (!d) return;
     d.open = true; claveG = ''; claveC = ''; claveTe = '';
+    if (clave === 'guyton' || clave === 'epp') asentar();
     requestAnimationFrame(() => d.scrollIntoView({ block: 'start', behavior: sinMovimiento() ? 'auto' : 'smooth' }));
     if (clave === 'epp') { const b = $('#cvh-epp'); b.classList.add('cvh-destacar'); setTimeout(() => b.classList.remove('cvh-destacar'), 2400); }
   }
