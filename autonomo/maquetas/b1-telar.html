@@ -1733,7 +1733,13 @@ function pintarDock(items, izq, der) {
   $('dock-est-izq').textContent = izq || ''; $('dock-est-der').textContent = der || '';
 }
 function entrar(el) { el.classList.remove('entra'); void el.offsetWidth; el.classList.add('entra'); }
-const desplazar = el => el?.scrollIntoView?.({ block: 'nearest', behavior: REDUCIR ? 'auto' : 'smooth' });
+// Lleva el botón a la vista sin que lo tape la barra de abajo ni la lámina fija de arriba
+const desplazar = el => { if (!el) return; requestAnimationFrame(() => {
+  const r = el.getBoundingClientRect(), abajo = $('dock').getBoundingClientRect().top - 12;
+  const arriba = document.body.classList.contains('estudio') ? $('escena-bloque').getBoundingClientRect().bottom + 8 : 8;
+  const dy = r.bottom > abajo ? r.bottom - abajo : r.top < arriba ? r.top - arriba : 0;
+  if (dy) window.scrollBy({ top: dy, behavior: REDUCIR ? 'auto' : 'smooth' });
+}); };
 
 /* ---------- Una pregunta (recorrido, repaso y pasos de un caso) ---------- */
 function pintarPregunta(cont, q, { cabecera = '', repaso = null, alFinal }) {
@@ -1832,7 +1838,7 @@ function pintarPregunta(cont, q, { cabecera = '', repaso = null, alFinal }) {
     }
     if (a === 'sig') { anillo(null); setOcultos([]); alFinal(res); return; }
     const ver = ev.target.closest('[data-ver]');
-    if (ver) { ver.parentElement.innerHTML = '<b>Corrección:</b> ' + q.frases[ver.dataset.ver].c; return; }
+    if (ver) { ver.parentElement.innerHTML = '<b>Corrección:</b> ' + q.frases[ver.dataset.ver].c; desplazar(cont.querySelector('[data-accion="sig"]')); return; }
     const fr = ev.target.closest('[data-fr]');
     if (fr && !fr.disabled) { fr.classList.toggle('marcada'); return; }
     const op = ev.target.closest('[data-op]');
