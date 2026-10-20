@@ -60,6 +60,17 @@ export const FORMAS_IONES = {
     huso: { nombre: 'Flora residente (anaerobios)', forma: 'huso', color: '--text-dim' },
     linfocito: { nombre: 'Linfocito del GALT', forma: 'linfocito', color: '--text-main' },
     cadena: { nombre: 'Ácidos grasos de cadena corta', forma: 'cadena', color: '--accent-yellow' },
+    // El telar de la trombina (Marino cap. 5; maqueta aprobada autonomo/maquetas/b1-telar.html, 20/10/2026): las
+    // formas que propuso la maqueta con borde discontinuo. El escudo es la antitrombina (la guardiana); el collar, la
+    // heparina (su largo decide qué ata); las cuatro bolitas, el FP4; la Y, la IgG; la plaqueta es un disco pequeño con
+    // gránulos (con espinas al activarse) y el hilo, la fibrina de la red. Ninguna choca con las de arriba.
+    at: { nombre: 'Antitrombina', forma: 'escudo', color: '--accent-blue' },
+    heparina: { nombre: 'Heparina', forma: 'collar', color: '--accent-purple' },
+    fp4: { nombre: 'Factor plaquetario 4 (FP4)', forma: 'fp4', color: '--text-dim' },
+    igg: { nombre: 'IgG', forma: 'igg', color: '--accent-red' },
+    plaqueta: { nombre: 'Plaqueta', forma: 'plaqueta', color: '--text-main' },
+    plaquetaActiva: { nombre: 'Plaqueta activada', forma: 'plaquetaActiva', color: '--text-main' },
+    fibrina: { nombre: 'Fibrina', forma: 'hilo', color: '--accent-yellow' },
 };
 
 // Borde fino de todas las partículas, para que se lean sobre cualquier fondo.

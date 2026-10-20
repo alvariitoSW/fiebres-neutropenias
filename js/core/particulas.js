@@ -20,6 +20,8 @@ const poligono = (n, r, giro) => {
     return d + 'Z';
 };
 const elipse = (rx, ry) => `M${n2(rx)} 0A${n2(rx)} ${n2(ry)} 0 1 1 ${n2(-rx)} 0A${n2(rx)} ${n2(ry)} 0 1 1 ${n2(rx)} 0Z`;
+// Un círculo de radio r centrado en (cx, cy): para las formas hechas de bolitas (collar, FP4, gránulos)
+const circ = (cx, cy, r) => `M${n2(cx + r)} ${n2(cy)}A${n2(r)} ${n2(r)} 0 1 1 ${n2(cx - r)} ${n2(cy)}A${n2(r)} ${n2(r)} 0 1 1 ${n2(cx + r)} ${n2(cy)}Z`;
 const lleno = (d, extra = {}) => ({ d, tipo: 'lleno', ...extra });
 const trazo = (d, w, extra = {}) => ({ d, tipo: 'trazo', w, ...extra });
 
@@ -91,11 +93,21 @@ function partesDe(forma, r, e = {}) {
         case 'huso': { const L = 1.5 * r, w = 0.55 * r; return [lleno(`M${n2(-L)} 0Q0 ${n2(-2 * w)} ${n2(L)} 0Q0 ${n2(2 * w)} ${n2(-L)} 0Z`)]; }
         case 'linfocito': return [lleno(elipse(1.15 * r, 1.15 * r), { color: '--text-dim' }), lleno(elipse(0.78 * r, 0.78 * r), { color: '--accent-purple', sinBorde: true })];
         case 'cadena': return [trazo(`M${n2(-1.4 * r)} ${n2(0.4 * r)}L${n2(-0.7 * r)} ${n2(-0.4 * r)}L0 ${n2(0.4 * r)}L${n2(0.7 * r)} ${n2(-0.4 * r)}L${n2(1.4 * r)} ${n2(0.4 * r)}`, 0.3)];
+        // El telar de la trombina (Marino cap. 5). Escudo: la antitrombina. Collar: la heparina (5 cuentas en arco).
+        // FP4: cuatro bolitas en cuadrado. IgG: una Y. Plaqueta: disco con gránulos (con 8 espinas al activarse).
+        // Hilo: la fibrina.
+        case 'escudo': return [lleno(`M0 ${n2(-1.35 * r)}L${n2(1.1 * r)} ${n2(-0.9 * r)}L${n2(1.02 * r)} ${n2(0.25 * r)}Q${n2(0.7 * r)} ${n2(1.05 * r)} 0 ${n2(1.45 * r)}Q${n2(-0.7 * r)} ${n2(1.05 * r)} ${n2(-1.02 * r)} ${n2(0.25 * r)}L${n2(-1.1 * r)} ${n2(-0.9 * r)}Z`)];
+        case 'collar': return [lleno([-2, -1, 0, 1, 2].map(i => circ(i * 0.62 * r, Math.abs(i) * 0.22 * r - 0.25 * r, 0.32 * r)).join(''))];
+        case 'fp4': return [lleno([[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([a, b]) => circ(a * 0.55 * r, b * 0.55 * r, 0.5 * r)).join(''))];
+        case 'igg': return [trazo(`M0 ${n2(1.35 * r)}L0 0M0 0L${n2(-0.95 * r)} ${n2(-1.1 * r)}M0 0L${n2(0.95 * r)} ${n2(-1.1 * r)}`, 0.42)];
+        case 'plaqueta': return [lleno(elipse(r, r)), lleno(circ(-0.35 * r, -0.2 * r, 0.2 * r) + circ(0.3 * r, -0.3 * r, 0.17 * r) + circ(0.05 * r, 0.38 * r, 0.19 * r), { color: BORDE_PARTICULA, opacidad: 0.6, sinBorde: true })];
+        case 'plaquetaActiva': { let d = ''; for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4 + 0.3, c = Math.cos(a), s = Math.sin(a); d += `M${n2(c * 0.95 * r)} ${n2(s * 0.95 * r)}L${n2(c * 1.75 * r)} ${n2(s * 1.75 * r)}`; } return [trazo(d, 0.28), ...partesDe('plaqueta', r)]; }
+        case 'hilo': return [trazo(`M${n2(-1.5 * r)} ${n2(0.4 * r)}C${n2(-0.7 * r)} ${n2(-0.9 * r)} ${n2(0.1 * r)} ${n2(0.9 * r)} ${n2(0.7 * r)} ${n2(-0.3 * r)}S${n2(1.5 * r)} ${n2(-0.2 * r)} ${n2(1.5 * r)} ${n2(-0.6 * r)}`, 0.26)];
     }
     return [lleno(elipse(r, r))];
 }
 // Hasta dónde llega cada forma, en radios (para que quepa en un icono).
-const ALCANCE = { gota: 1.55, grano: 1.7, grano1: 2.5, pajarita: 1.35, rombo1: 2, rombo2: 2.6, caCitrato: 2.05, aro: 2.05, estrella: 1.5, celula: 1.6, ovalo: 1.45, ovaloHueco: 1.45, disco: 1.4, copo: 1.5, pesa: 1.55, tripode: 1.45, coco: 1.65, burbuja: 1.3, bacilo: 1.6, huso: 1.55, linfocito: 1.2, cadena: 1.5 };
+const ALCANCE = { gota: 1.55, grano: 1.7, grano1: 2.5, pajarita: 1.35, rombo1: 2, rombo2: 2.6, caCitrato: 2.05, aro: 2.05, estrella: 1.5, celula: 1.6, ovalo: 1.45, ovaloHueco: 1.45, disco: 1.4, copo: 1.5, pesa: 1.55, tripode: 1.45, coco: 1.65, burbuja: 1.3, bacilo: 1.6, huso: 1.55, linfocito: 1.2, cadena: 1.5, escudo: 1.5, collar: 1.65, fp4: 1.1, igg: 1.4, plaqueta: 1.05, plaquetaActiva: 1.8, hilo: 1.6 };
 
 // Grosor del borde oscuro: fino, pero visible también en partículas pequeñas.
 const borde = r => Math.max(0.22 * r, 0.8);

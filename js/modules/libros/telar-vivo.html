@@ -1,0 +1,241 @@
+    <button class="back-btn btn-volver-libros-menu" id="tel-volver">← VOLVER</button>
+    <!-- La cama 7 · El telar de la trombina: la tromboprofilaxis venosa (Marino cap. 5). Modelo vivo de Libros. Viene de
+         la maqueta aprobada autonomo/maquetas/b1-telar.html (vuelta 2).
+         Lógica en telar-vivo.js y telar-vivo-escena.js; datos en js/data/telar-vivo-data.js; la cama, en cama7.js. -->
+    <div class="tel-raiz" id="tel-raiz" data-modelo-vivo>
+      <header class="tel-cabecera">
+        <p class="tel-eyebrow">Modelo vivo · Marino cap. 5 · La cama 7</p>
+        <h2 class="tel-titulo">La cama 7 · <em>El telar de la trombina</em></h2>
+        <p class="tel-lead">En el bolsillo de una válvula de la femoral, la trombina teje la red del trombo. Cada anticoagulante corta un hilo, y la heparina es una cadena: <strong class="hl">su largo decide qué puede atar</strong>. Y una adivinanza: <strong class="hl-rojo">inmovilidad no es estasis</strong>. <span class="tel-org">ficha · p. 4-7, 13</span></p>
+      </header>
+
+      <div class="tel-interruptor" role="tablist" aria-label="Qué hacer con el modelo">
+        <button type="button" role="tab" id="tel-modo-explorar" aria-selected="true">Explorar</button>
+        <button type="button" role="tab" id="tel-modo-conceptos" aria-selected="false">Conceptos</button>
+        <button type="button" role="tab" id="tel-modo-preguntas" aria-selected="false">Mayéutica</button>
+      </div>
+
+      <section class="tel-escena-bloque" id="tel-escena-bloque" aria-label="El telar de la trombina">
+        <div id="tel-cama7"></div>
+        <!-- Las lecturas van encima de la lámina: abajo las taparía el dock (juicio de las maquetas) -->
+        <div class="tel-tablero" id="tel-tablero" aria-live="off"></div>
+        <div class="tel-escena" id="tel-escena">
+          <svg id="tel-lamina" viewBox="0 0 360 330" role="img" aria-label="La pierna y el telar de la trombina"></svg>
+          <span class="tel-chapa" id="tel-chapa">la pierna · el telar</span>
+          <button type="button" class="tel-vista-cerrar" id="tel-vista-cerrar" hidden aria-label="Volver al telar">× al telar</button>
+          <div class="tel-anillo" id="tel-anillo" hidden></div>
+        </div>
+        <div class="tel-dosis" id="tel-dosis" hidden></div>
+      </section>
+
+      <!-- ============ EXPLORAR ============ -->
+      <div id="tel-vista-explorar" class="tel-bloque">
+        <section class="tel-bloque">
+          <h3 class="tel-h">Qué es cada cosa que se mueve</h3>
+          <ul class="tel-leyenda" id="tel-leyenda"></ul>
+          <p class="tel-para">Todas las formas salen de la tabla única de la app, la misma de la nefrona viva, el río y mar y la muralla: disco = hematíe, trébol = citoquinas, escudo = antitrombina, collar = heparina, cuatro bolitas = FP4, Y = IgG. Las «máquinas» del telar (Xa, II, IIa) van rotuladas con su nombre, como en la Fig. 5.2. La forma dice qué es; el color, nunca solo. Cuántas cuentas lleva cada cadena y a qué ritmo crece la red: <b>ilustrativo</b>.</p>
+        </section>
+
+        <section class="tel-bloque">
+          <h3 class="tel-h">Cómo leer la lámina</h3>
+          <dl class="tel-simil">
+            <dt>La pierna</dt><dd>de lado, en grabado, con la femoral y la ilíaca transparentes: ahí se forman los trombos, «silentes hasta que embolizan». Los hematíes suben al ritmo del gasto</dd>
+            <dt>La lupa</dt><dd>el bolsillo de una válvula: la Fig. 5.2 hecha máquina. El Xa convierte la protrombina (II) en trombina (IIa); la trombina teje la fibrina; la red atrapa hematíes</dd>
+            <dt>La heparina</dt><dd>un collar de cuentas que despierta a la antitrombina (escudo). Larga (HNF), corta (HBPM) o de 5 cuentas (fondaparinux): el largo decide si llega a la trombina</dd>
+            <dt>Abajo</dt><dd>el riñón y su vaso: cuánto se acumula el fármaco elegido, con lo que diría la calculadora de la ficha</dd>
+            <dt>La hoja de órdenes</dt><dd>abajo: paciente, fármaco, riñón, pierna y reloj. Cada orden cambia lo que ves dentro. Toca la pierna, la lupa o el riñón para que te los cuente</dd>
+          </dl>
+        </section>
+
+        <section class="tel-bloque">
+          <h3 class="tel-h">Láminas del libro</h3>
+          <div class="tel-laminas" id="tel-laminas"></div>
+          <p class="tel-para">Las figuras reales del libro: tócalas para ampliarlas. La Fig. 5.2 es el telar de la lupa. No hay figuras de las medias ni de la CNI: se dibujan en grabado.</p>
+        </section>
+
+        <details class="nota-plegable" open>
+          <summary>Tablas 5.2 y 5.3: las dosis que lee la escena</summary>
+          <div class="tel-tabla-scroll">
+            <table class="data-table">
+              <caption>Tabla 5.2 · parenteral (SC) · p. 4</caption>
+              <thead><tr><th>Fármaco</th><th>Estándar</th><th>IMC ≥40</th><th>Riñón</th></tr></thead>
+              <tbody>
+                <tr><td>HNF</td><td>5.000 U cada 8-12 h</td><td>7.500 U cada 8 h</td><td>Sin ajuste</td></tr>
+                <tr><td>Enoxaparina</td><td>40 mg al día o 30 mg cada 12 h</td><td>40 mg cada 12 h</td><td>ClCr &lt;30: 30 mg al día, o HNF</td></tr>
+                <tr><td>Dalteparina</td><td>2.500-5.000 U al día</td><td>No bien estudiada</td><td>Sin ajuste</td></tr>
+                <tr><td>Fondaparinux</td><td>2,5 mg al día</td><td>Sin recomendaciones</td><td>ClCr 35-50: 1,5 mg; no usar &lt;30</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tel-tabla-scroll">
+            <table class="data-table">
+              <caption>Tabla 5.3 · oral · p. 8-9</caption>
+              <thead><tr><th>Fármaco</th><th>Estándar</th><th>Obesidad</th><th>Riñón</th></tr></thead>
+              <tbody>
+                <tr><td>Dabigatrán</td><td>110 mg al inicio, luego 220 mg al día</td><td>No usar si IMC ≥40 o &gt;120 kg</td><td>No usar &lt;30</td></tr>
+                <tr><td>Apixabán</td><td>2,5 mg cada 12 h</td><td>Estándar</td><td>No usar &lt;15</td></tr>
+                <tr><td>Rivaroxabán</td><td>10 mg al día</td><td>Estándar</td><td>No usar &lt;15</td></tr>
+                <tr><td>Warfarina</td><td>2,5-5 mg al día, INR 1,5-2,5</td><td>Sin ajuste conocido</td><td>Sin ajuste</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="tel-para">Ninguna dosis del capítulo es una errata de dosis: las del dabigatrán (110 → 220 mg) y la HNF (5.000 U) son las que imprime el libro. Lo que hay son dos discrepancias del propio libro (en las notas, abajo).</p>
+        </details>
+
+        <details class="nota-plegable" open>
+          <summary>Notas de fidelidad y de fuentes</summary>
+          <div class="tel-prof">
+            <section><b>Fondaparinux en la insuficiencia renal.</b> La Tabla 5.2 (p. 4) dice «1,5 mg si ClCr 35-50; no usar si &lt;30»; el texto (p. 8), «1,5 mg si ClCr 20-50; no usar si &lt;20». Ninguna cubre el tramo 30-35 de la tabla. Se muestran las dos; no se elige.</section>
+            <section><b>Dalteparina con ClCr &lt;15.</b> La Tabla 5.2 (p. 4) y el texto (p. 7) dicen «sin ajuste renal»; las recomendaciones generales (p. 11), que con ClCr &lt;15 «solo se pueden usar HNF y warfarina». El capítulo no las concilia.</section>
+            <section><b>«Tabla 5.3».</b> El texto (p. 7) remite a la Tabla 5.3 para las dosis de las HBPM, pero están en la 5.2: la 5.3 es la de los orales (errata del libro).</section>
+            <section><b>IMC 40.</b> Las tablas dicen IMC ≥40 y las situaciones especiales (p. 11), «IMC &gt;40». La escena usa las tablas, como la calculadora.</section>
+            <section><b>La inmovilidad.</b> La Tabla 5.1 (p. 2) la incluye entre los factores de riesgo; la reflexión final del autor (p. 13) la discute, con un «probablemente». El modelo enseña su argumento como lo que es: su opinión.</section>
+            <section><b>El fondaparinux y el FP4.</b> El libro dice que se puede usar con TIH sospechada o previa (y que el tratamiento aprobado de la TIH es el argatrobán), pero no explica cómo se relaciona con el FP4. La lupa no dibuja ningún complejo con él. Los lazos de la HNF y la HBPM son una imagen de «se une».</section>
+          </div>
+        </details>
+
+        <details class="nota-plegable">
+          <summary>De dónde sale cada cifra</summary>
+          <div class="tel-tabla-scroll">
+            <table class="data-table">
+              <thead><tr><th>Cifra</th><th>Origen (página del PDF)</th></tr></thead>
+              <tbody>
+                <tr><td>Cirugía mayor: un tercio de las muertes por ETV · trauma grave: TVP en el 58 % · médica aguda: ×8 y 50-75 % · déficit de AT III: ×14</td><td>ficha · p. 2-3</td></tr>
+                <tr><td>Lesión medular ~60-80 % (Fig. 5.1, lectura aproximada) · riesgo alto solo 3-4 semanas</td><td>ficha · p. 3, 13</td></tr>
+                <tr><td>HNF de 3.000 a 30.000 Da · anti-IIa 10 veces el anti-Xa · HBPM de 4.500 Da · biodisponibilidad 90 % frente a 15-30 %</td><td>ficha · p. 4-7</td></tr>
+                <tr><td>Qué hilo corta cada fármaco (Xa, IIa, con o sin AT)</td><td>Fig. 5.2, ficha · p. 6, 8</td></tr>
+                <tr><td>Fondaparinux: 5 cuentas (el pentasacárido) · 2,5 mg al día · 17 h</td><td>ficha · p. 8</td></tr>
+                <tr><td>TIH: 2,6 % con HNF y 0,2 % con HBPM · no depende de la dosis</td><td>ficha · p. 5, 7</td></tr>
+                <tr><td>Las dosis y sus ajustes (la caja de la calculadora y el vaso del riñón)</td><td>Tablas 5.2 y 5.3 · p. 4, 8-9</td></tr>
+                <tr><td>Anti-Xa: pico profiláctico de 0,2-0,5 UI/mL</td><td>ficha · p. 7</td></tr>
+                <tr><td>Medias 18 y 8 mmHg · CNI 35-40 y 20 mmHg, ciclo de 10 s · nunca por encima de la diastólica</td><td>ficha · p. 10</td></tr>
+                <tr><td>Reloj neuroaxial: HNF ≥12 h; enoxaparina una vez al día ≥24 h; apixabán ≥24 h; dabigatrán y rivaroxabán ≥48 h</td><td>ficha · p. 9-10</td></tr>
+                <tr><td>El flujo de la femoral = el gasto (sistema cerrado)</td><td>ficha · p. 13</td></tr>
+                <tr><td>Con gasto bajo, el flujo se enlentece (estasis) · el pie pálido con la arteria apretada</td><td>fisiología general</td></tr>
+                <tr><td>Cuántas cuentas tiene cada cadena, cuánto frena cada fármaco, el ritmo de la red, el 35 % del gasto bajo, la altura del vaso, la caída de las plaquetas, los lazos del FP4 y el reparto del ciclo de la CNI</td><td>ilustrativo</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+        <details class="nota-plegable">
+          <summary>Lo que la ficha no da (huecos)</summary>
+          <ul class="tel-huecos">
+            <li>El mecanismo de la warfarina (qué factores): no se dibuja.</li>
+            <li>La ventana neuroaxial de la enoxaparina <b>cada 12 h</b>: la ficha solo da la de una vez al día (≥24 h).</li>
+            <li>Las ventanas de los ACOD con una insuficiencia renal más grave: «más tiempo», sin cifra.</li>
+            <li>La velocidad del telar, cuánto frena cada fármaco y el valor del anti-Xa de un paciente: ilustrativos o sin simular.</li>
+            <li>Cómo se relaciona el fondaparinux con el FP4: el libro no lo dice.</li>
+            <li>Qué hacer con la CNI si la diastólica baja: el libro solo dice que nunca debe superarla.</li>
+            <li>Las cifras de la Fig. 5.1 son lecturas aproximadas de las barras.</li>
+          </ul>
+        </details>
+
+        <details class="nota-plegable">
+          <summary>Para profundizar (lo que el modelo no cuenta)</summary>
+          <div class="tel-prof" id="tel-prof-lista"></div>
+        </details>
+
+        <!-- Lo que encuentra el buscador global (core/search.js): cada entrada es un enlace cruzado
+             normal que abre el modelo en un estado. Ocultas: solo se pulsan desde el buscador. -->
+        <div hidden>
+          <button type="button" data-especialidad="libros" data-view="telarVivo" data-telar-vivo="" data-buscar-titulo="La cama 7 · El telar de la trombina (modelo vivo)" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="telar trombina cama 7 tromboprofilaxis profilaxis tromboembólica tvp antitrombina fibrina">Telar de la trombina</button>
+          <button type="button" data-especialidad="libros" data-view="telarVivo" data-telar-vivo="hnf" data-buscar-titulo="El telar de la trombina: HNF, HBPM y fondaparinux" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="heparina no fraccionada hbpm enoxaparina dalteparina fondaparinux anti-xa anti-iia cadena">Heparinas</button>
+          <button type="button" data-especialidad="libros" data-view="telarVivo" data-telar-vivo="tih" data-buscar-titulo="El telar de la trombina: la TIH (FP4 e IgG)" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="trombocitopenia inducida por heparina tih factor plaquetario 4 fp4 igg argatrobán">TIH</button>
+          <button type="button" data-especialidad="libros" data-view="telarVivo" data-telar-vivo="renal-25" data-buscar-titulo="El telar de la trombina: el riñón y la dosis" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="insuficiencia renal aclaramiento creatinina ajuste dosis enoxaparina obesidad">Riñón</button>
+          <button type="button" data-especialidad="libros" data-view="telarVivo" data-telar-vivo="cni" data-buscar-titulo="El telar de la trombina: medias y compresión neumática" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="compresión neumática intermitente cni medias de compresión profilaxis mecánica diastólica">CNI</button>
+          <button type="button" data-especialidad="libros" data-view="telarVivo" data-telar-vivo="neuroeje" data-buscar-titulo="El telar de la trombina: el reloj neuroaxial" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="punción neuroaxial catéter epidural hematoma espinal anticoagulante horas">Neuroeje</button>
+          <button type="button" data-especialidad="libros" data-view="telarVivo" data-telar-vivo="inmovil" data-buscar-titulo="El telar de la trombina: inmovilidad no es estasis" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="inmovilidad estasis virchow encamado adivinanza inflamación">Inmovilidad</button>
+          <button type="button" data-especialidad="libros" data-view="telarVivo" data-telar-vivo="filtro" data-buscar-titulo="El telar de la trombina: el filtro de cava" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="filtro de vena cava inferior embolia pulmonar">Filtro</button>
+        </div>
+      </div>
+
+      <!-- ============ CONCEPTOS ============ -->
+      <div id="tel-vista-conceptos" class="tel-bloque" hidden>
+        <div id="tel-concepto" class="tel-formato tel-entra"></div>
+      </div>
+
+      <!-- ============ MAYÉUTICA ============ -->
+      <div id="tel-vista-preguntas" class="tel-bloque" hidden>
+        <div id="tel-preg" class="tel-formato tel-entra"></div>
+        <details class="nota-plegable" id="tel-profundizar">
+          <summary>Para profundizar (lo que esta Mayéutica no cubre)</summary>
+          <div class="tel-prof" id="tel-prof-may"></div>
+        </details>
+      </div>
+
+      <nav class="tel-dock" id="tel-dock" aria-label="Hoja de órdenes">
+        <div class="tel-dock-in">
+          <div id="tel-dock-explorar">
+            <p class="tel-frase" id="tel-frase" aria-live="polite" title="Toca para leerla entera"></p>
+            <div class="tel-dock-tabs" role="tablist" aria-label="Hoja de órdenes">
+              <button type="button" role="tab" data-tel-tab="paciente" aria-selected="true">Paciente</button>
+              <button type="button" role="tab" data-tel-tab="farmaco" aria-selected="false">Fármaco</button>
+              <button type="button" role="tab" data-tel-tab="rinon" aria-selected="false">Riñón</button>
+              <button type="button" role="tab" data-tel-tab="pierna" aria-selected="false">Pierna</button>
+              <button type="button" role="tab" data-tel-tab="reloj" aria-selected="false">Reloj</button>
+            </div>
+            <div class="tel-dock-panel" data-tel-panel="paciente">
+              <div class="tel-r2 tel-c11">
+                <select id="tel-m-riesgo" aria-label="Riesgo del paciente (Tabla 5.1)">
+                  <option value="ninguno">Riesgo: elige paciente</option>
+                  <option value="cirugia">Cirugía mayor</option>
+                  <option value="trauma">Trauma grave</option>
+                  <option value="medica">Médica aguda (UCI)</option>
+                  <option value="medular">Lesión medular</option>
+                  <option value="at3">Déficit de AT III</option>
+                </select>
+                <select id="tel-m-estado" aria-label="Ir a un estado con nombre"></select>
+              </div>
+              <div class="tel-r2 tel-c4">
+                <button type="button" class="tel-tog" data-m="inflamacion">Inflamación<small>citoquinas</small></button>
+                <button type="button" class="tel-tog" data-m="inmovil">Inmóvil<small>3 semanas</small></button>
+                <button type="button" class="tel-tog" data-m="gasto">Gasto bajo<small>estasis</small></button>
+                <button type="button" class="tel-tog" data-m="tih">Plaquetas<small>caen (TIH)</small></button>
+              </div>
+            </div>
+            <div class="tel-dock-panel" data-tel-panel="farmaco" hidden>
+              <div class="tel-r2 tel-c5" role="group" aria-label="Fármaco">
+                <button type="button" class="tel-tog" data-m="farmaco" data-v="">Ninguno</button>
+                <button type="button" class="tel-tog" data-m="farmaco" data-v="hnf">HNF</button>
+                <button type="button" class="tel-tog" data-m="farmaco" data-v="enoxaparina">Enoxa&shy;parina</button>
+                <button type="button" class="tel-tog" data-m="farmaco" data-v="dalteparina">Dalte&shy;parina</button>
+                <button type="button" class="tel-tog" data-m="farmaco" data-v="fondaparinux">Fonda&shy;parinux</button>
+                <button type="button" class="tel-tog" data-m="farmaco" data-v="apixaban">Apixa&shy;bán</button>
+                <button type="button" class="tel-tog" data-m="farmaco" data-v="rivaroxaban">Rivaro&shy;xabán</button>
+                <button type="button" class="tel-tog" data-m="farmaco" data-v="dabigatran">Dabi&shy;gatrán</button>
+                <button type="button" class="tel-tog" data-m="farmaco" data-v="warfarina">Warfa&shy;rina</button>
+                <button type="button" class="tel-tog" data-m="antixa">Anti-Xa<small>medir</small></button>
+              </div>
+            </div>
+            <div class="tel-dock-panel" data-tel-panel="rinon" hidden>
+              <div class="tel-seg" role="group" aria-label="Aclaramiento de creatinina (mL/min)">
+                <button type="button" data-m="clcr" data-v="90">ClCr 90</button><button type="button" data-m="clcr" data-v="50">50</button><button type="button" data-m="clcr" data-v="32">32</button><button type="button" data-m="clcr" data-v="25">25</button><button type="button" data-m="clcr" data-v="18">18</button><button type="button" data-m="clcr" data-v="12">12</button>
+              </div>
+              <div class="tel-r2 tel-c21">
+                <div class="tel-seg" role="group" aria-label="IMC (kg/m²)"><button type="button" data-m="imc" data-v="25">IMC 25</button><button type="button" data-m="imc" data-v="42">42</button><button type="button" data-m="imc" data-v="52">52</button></div>
+                <span class="tel-rot-dock">ClCr en mL/min · IMC en kg/m²</span>
+              </div>
+            </div>
+            <div class="tel-dock-panel" data-tel-panel="pierna" hidden>
+              <div class="tel-r2 tel-c32">
+                <div class="tel-seg" role="group" aria-label="Profilaxis mecánica"><button type="button" data-m="mecanica" data-v="nada">Nada</button><button type="button" data-m="mecanica" data-v="medias">Medias</button><button type="button" data-m="mecanica" data-v="cni">CNI</button></div>
+                <div class="tel-seg" role="group" aria-label="Presión diastólica del paciente (mmHg)"><button type="button" data-m="diastolica" data-v="70">PAD 70</button><button type="button" data-m="diastolica" data-v="34">PAD 34</button></div>
+              </div>
+              <div class="tel-r2 tel-c21">
+                <button type="button" class="tel-tog" data-m="filtro">Filtro de vena cava inferior</button>
+                <span class="tel-rot-dock">PAD: presión diastólica (mmHg)</span>
+              </div>
+            </div>
+            <div class="tel-dock-panel" data-tel-panel="reloj" hidden>
+              <div class="tel-seg" role="group" aria-label="Horas desde la última dosis"><button type="button" data-m="horas" data-v="6">6 h</button><button type="button" data-m="horas" data-v="12">12 h</button><button type="button" data-m="horas" data-v="24">24 h</button><button type="button" data-m="horas" data-v="48">48 h</button></div>
+              <p class="tel-rot-dock tel-rot-alto">Punción o catéter neuroaxial: horas desde la última dosis profiláctica, con función renal normal o algo reducida.</p>
+            </div>
+          </div>
+          <div id="tel-dock-estudio" class="tel-dock-estudio" hidden>
+            <div class="tel-pasos" id="tel-dock-pasos"></div>
+            <div class="tel-dock-est-txt"><span id="tel-dock-est-izq"></span><span id="tel-dock-est-der"></span></div>
+          </div>
+        </div>
+      </nav>
+    </div>

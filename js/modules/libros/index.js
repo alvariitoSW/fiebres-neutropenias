@@ -26,8 +26,8 @@ import { init as initAguaViva } from './agua-viva.js';
 import { init as initCapilarVivo } from './capilar-vivo.js';
 import { init as initCateterVivo } from './cateter-vivo.js';
 import { init as initMurallaViva } from './muralla-viva.js';
-// [HUECO telar: import]
-// [HUECO inmersión: import]
+import { init as initTelarVivo } from './telar-vivo.js';
+import { init as initInmersionViva } from './inmersion-viva.js';
 import { montarMayeutica } from '../../core/mayeutica.js';
 import { MAYEUTICA_B1 } from '../../data/mayeutica/b1.js';
 import { librosIndice } from '../../data/libros-indice.js';
@@ -63,8 +63,10 @@ export function init() {
         cateterVivo: document.getElementById('cateter-vivo-view'),
         // Modelo vivo: la cama 7 · la muralla de papel (microbioma y úlcera de estrés), junto al cap. 4
         murallaViva: document.getElementById('muralla-viva-view'),
-        // [HUECO telar: vista]
-        // [HUECO inmersión: vista]
+        // Modelo vivo: la cama 7 · el telar de la trombina (tromboprofilaxis), junto al cap. 5
+        telarVivo: document.getElementById('telar-vivo-view'),
+        // Modelo vivo: la cama 7 · la inmersión (analgesia y sedación), junto al cap. 6
+        inmersionViva: document.getElementById('inmersion-viva-view'),
     });
 
     document.getElementById('btn-marino-fund').addEventListener('click', () => librosLevel.show('marinoFundamentos'));
@@ -87,12 +89,15 @@ export function init() {
     initMarinoNutricion();
     initMarinoToxicos();
     initVisualMarinoCaps45a53();
-    const aguaViva = initAguaViva();
-    const capilarVivo = initCapilarVivo();
-    const cateterVivo = initCateterVivo();
-    const murallaViva = initMurallaViva();
-    // [HUECO telar: init]
-    // [HUECO inmersión: init]
+    // Cada modelo vivo arranca por separado: si uno falla (p. ej. una forma de partícula que falta), los demás y el
+    // resto de Libros siguen funcionando, y el error queda en la consola.
+    const arrancar = (nombre, init) => { try { return init(); } catch (e) { console.error(`Modelo vivo «${nombre}» no arrancó:`, e); return null; } };
+    const aguaViva = arrancar('río y mar', initAguaViva);
+    const capilarVivo = arrancar('capilar', initCapilarVivo);
+    const cateterVivo = arrancar('catéter', initCateterVivo);
+    const murallaViva = arrancar('muralla', initMurallaViva);
+    const telarVivo = arrancar('telar', initTelarVivo);
+    const inmersionViva = arrancar('inmersión', initInmersionViva);
 
     librosLevel.show('menu');
 
@@ -107,8 +112,8 @@ export function init() {
             capilarVivo: (estadoClave, origen) => capilarVivo?.abrir(estadoClave, origen),
             cateterVivo: (estadoClave, origen) => cateterVivo?.abrir(estadoClave, origen),
             murallaViva: (estadoClave, origen) => murallaViva?.abrir(estadoClave, origen),
-            // [HUECO telar: modelosVivos]
-            // [HUECO inmersión: modelosVivos]
+            telarVivo: (estadoClave, origen) => telarVivo?.abrir(estadoClave, origen),
+            inmersionViva: (estadoClave, origen) => inmersionViva?.abrir(estadoClave, origen),
         },
     };
 }

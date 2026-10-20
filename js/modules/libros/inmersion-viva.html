@@ -1,0 +1,178 @@
+    <button class="back-btn btn-volver-libros-menu" id="inm-volver">← VOLVER</button>
+    <!-- La cama 7 · La inmersión: dolor y sedación del crítico (Marino cap. 6). Modelo vivo de Libros. Viene de la maqueta
+         aprobada autonomo/maquetas/b1-inmersion.html (vuelta 2). Lógica en inmersion-viva.js e inmersion-viva-escena.js;
+         datos en js/data/inmersion-viva-data.js; la cama, en cama7.js. -->
+    <div class="inm-raiz" id="inm-raiz" data-modelo-vivo>
+      <header class="inm-cabecera">
+        <p class="inm-eyebrow">Modelo vivo · Marino cap. 6 · La cama 7</p>
+        <h2 class="inm-titulo">La cama 7 · <em>La inmersión</em></h2>
+        <p class="inm-lead">Sedar es <strong class="hl">bajar bajo el agua</strong>: la RASS es el profundímetro. El dolor es <strong class="hl-rojo">la tormenta de la superficie</strong>, y sedar no es calmarla. Cuanto más hondo, <strong class="hl">más tarda en subir</strong>. <span class="inm-org">ficha · p. 16-31</span></p>
+      </header>
+
+      <div class="inm-interruptor" role="tablist" aria-label="Qué hacer con el modelo">
+        <button type="button" role="tab" id="inm-modo-explorar" aria-selected="true">Explorar</button>
+        <button type="button" role="tab" id="inm-modo-conceptos" aria-selected="false">Conceptos</button>
+        <button type="button" role="tab" id="inm-modo-preguntas" aria-selected="false">Mayéutica</button>
+      </div>
+
+      <section class="inm-escena-bloque" id="inm-escena-bloque" aria-label="La inmersión">
+        <div id="inm-cama7"></div>
+        <!-- Las lecturas van encima de la lámina: abajo las taparía el dock (juicio de la maqueta) -->
+        <div class="inm-tablero" id="inm-tablero" aria-live="off"></div>
+        <div class="inm-escena" id="inm-escena">
+          <svg id="inm-mar" viewBox="0 0 360 330" role="img" aria-label="Corte de agua: el paciente bajo la superficie, el profundímetro de la RASS y la tormenta del dolor"></svg>
+          <!-- La Tabla 6.7 (y lo que cuenta cada subida), fuera del agua: bajo la lámina -->
+          <div class="inm-tira" id="inm-tira-par" hidden></div>
+          <div class="inm-libro" id="inm-libro"></div>
+        </div>
+      </section>
+
+      <!-- ============ EXPLORAR ============ -->
+      <div id="inm-vista-explorar" class="inm-bloque">
+        <section class="inm-bloque">
+          <h3 class="inm-h">Ir a un estado</h3>
+          <div class="inm-chips-estado" id="inm-chips-estado"></div>
+          <p class="inm-para">Cada estado es el de una idea de las fichas de analgesia y de sedación (o el de un paciente de los casos). Los mandos, abajo, en la hoja de órdenes.</p>
+        </section>
+
+        <details class="nota-plegable" id="inm-t67" open>
+          <summary>La subida: Tabla 6.7 viva</summary>
+          <div class="inm-tabla-scroll"><table class="data-table" id="inm-tabla67-viva">
+            <thead><tr><th>Propofol durante</th><th>Sedación ligera</th><th>Sedación profunda</th></tr></thead>
+            <tbody></tbody>
+          </table></div>
+          <p class="inm-para">Lo que más alarga el despertar es la <span class="hl">profundidad</span>, no el tiempo: a las 24 h, 13 minutos frente a 25 horas. <span class="inm-org">ficha · p. 29</span></p>
+          <div class="inm-fila"><button type="button" class="inm-b inm-prim" id="inm-ir-despertar">Ver subir a los dos buzos</button></div>
+        </details>
+
+        <section class="inm-bloque">
+          <h3 class="inm-h">Qué es cada cosa</h3>
+          <ul class="inm-leyenda" id="inm-leyenda"></ul>
+          <p class="inm-para">La forma dice qué es; el color ayuda, pero nunca decide solo. El lactato (trípode), el H⁺ (cruz) y la inflamación (trébol) salen de la tabla única de formas de la app, la misma del capilar y oxígeno. Lastres, boya y aceite son dibujos de la escena, no partículas. La escena entera (profundidades, olas, velocidades) es <b>ilustrativa</b>; las cifras, de la ficha.</p>
+        </section>
+
+        <details class="nota-plegable">
+          <summary>De dónde sale cada cifra</summary>
+          <div class="inm-tabla-scroll">
+            <table class="data-table">
+              <thead><tr><th>Cifra</th><th>Cómo la da la escena</th><th>Origen</th></tr></thead>
+              <tbody>
+                <tr><td>Escala BPS</td><td>3 categorías de 1 a 4 (cara, miembros superiores, ventilador); total de 3 a 12; ≥6 inaceptable</td><td>ficha · Tabla 6.1 · p. 17-18</td></tr>
+                <tr><td>BPS de la escena</td><td>3 + intensidad: reposo 2, moverle en la cama 6; inflamación × 1,4; un opioide −6; cada ahorrador −1; dexmedetomidina −1 («algo analgésica»). Benzodiacepinas y propofol: 0</td><td>ilustrativo; el sentido de cada cambio, ficha · p. 17, 25-29</td></tr>
+                <tr><td>RASS</td><td>Sin sedante, del dolor: BPS 6-8 → +1; ≥9 → +2; opioide solo −1. Sedación ligera −2; profunda −4; diazepam −3; midazolam más de 48 h −3 (acumula); delirio +3; haloperidol −1</td><td>ilustrativo; la escala y el objetivo, ficha · Tabla 6.4 · p. 24</td></tr>
+                <tr><td>FC y PA</td><td>FC 80 + (BPS − 3) / 3: casi no se mueve con el dolor. PA 125/70. Las caídas (dexmedetomidina; opioide con BZD o propofol en la hipovolemia; el SIP) se dibujan con flecha, sin cifra</td><td>ilustrativo; ficha · p. 18, 21, 28-29</td></tr>
+                <tr><td>Despertar tras el propofol</td><td>Los ocho tiempos de la tabla, tal cual</td><td>ficha · Tabla 6.7 · p. 29</td></tr>
+                <tr><td>Midazolam frente a lorazepam</td><td>30 h frente a 4-5 h (un estudio); dexmedetomidina 6-10 min</td><td>ficha · p. 26-27</td></tr>
+                <tr><td>Velocidad de la subida</td><td>Escala logarítmica: segundos = 1,15 × ln(minutos / 5)</td><td>ilustrativo</td></tr>
+                <tr><td>Inicio de los opioides</td><td>El chip da el de la Tabla 6.2; la calma se dibuja más deprisa cuanto más corto (velocidad ilustrativa)</td><td>ficha · Tabla 6.2 · p. 19</td></tr>
+                <tr><td>Umbrales</td><td>SIP: propofol &gt;5 mg/kg/h (&gt;80 µg/kg/min) más de 48 h. Propilenglicol: lorazepam &gt;0,1 mg/kg/h o &gt;10 mg/h más de 48 h; hiato osmolar &gt;10. Midazolam ≤48 h. Haloperidol: QTc &gt;500 ms no</td><td>ficha · p. 25-31</td></tr>
+                <tr><td>La esponja del midazolam</td><td>Crece con las horas</td><td>ilustrativo</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+        <details class="nota-plegable">
+          <summary>Notas de fuentes y de fidelidad</summary>
+          <div class="inm-prof">
+            <div class="inm-nota-fuentes"><b>Lorazepam: dos frases del mismo capítulo.</b> «En un estudio, 30 h para salir de la sedación con midazolam frente a 4-5 h con lorazepam (de ahí que el lorazepam sea la de elección en perfusiones prolongadas)». Y, más abajo: «evitar las benzodiacepinas en la sedación prolongada del ventilado (guías más recientes)». La escena las enseña juntas y no elige. <span class="inm-org">ficha · p. 26-27</span></div>
+            <div class="inm-nota-fuentes"><b>Ketamina.</b> La Tabla 6.3 imprime «60-120 µg/h»; el texto, «60-120 µg/kg/h». Se sigue el texto. <span class="inm-org">ficha · p. 22</span></div>
+            <div class="inm-nota-fuentes"><b>Haloperidol.</b> La Tabla 6.8 y el texto no coinciden: midazolam 1 mg frente a 1-2 mg; esperar 15 frente a 20 min; mantenimiento cada 6 frente a cada 4-6 h. Se dan las dos. <span class="inm-org">ficha · p. 30</span></div>
+            <div class="inm-nota-fuentes"><b>Umbral del lorazepam.</b> El riesgo aparece con &gt;0,1 mg/kg/h o &gt;10 mg/h durante más de 48 h; para vigilar el hiato osmolar, el PDF escribe «≥0,1 mg/kg/h, o &gt;10 mg/h, durante 48 h». Se reproducen los dos. <span class="inm-org">ficha · p. 25-26</span></div>
+            <div class="inm-nota-fuentes"><b>Despertar del propofol.</b> La Tabla 6.6 da «10-15 min (depende de la profundidad y la duración)»; la Tabla 6.7, de 13 min a 74 h. No se contradicen: la 6.7 es esa dependencia. <span class="inm-org">ficha · p. 27, 29</span></div>
+            <div class="inm-nota-fuentes"><b>SIP.</b> Marino da dos umbrales equivalentes: &gt;80 µg/kg/min o &gt;5 mg/kg/h, más de 48 h; y lo ha visto describir con 36 µg/kg/min. <span class="inm-org">ficha · p. 28</span></div>
+            <div class="inm-nota-fuentes"><b>Fig. 6.1.</b> Lectura aproximada de las barras (~80 % y ~43 %). El dibujo pone «Doctors»; la leyenda, «médicos residentes». <span class="inm-org">ficha · p. 17</span></div>
+            <div class="inm-nota-fuentes"><b>Que el sedante no quite el dolor</b> es lo que enseña la Fig. 6.1 (da por mala la respuesta «sí, el diazepam lo alivia») y lo que dice la ficha del propofol («sin efecto analgésico»). Que la tormenta siga con el diazepam es una deducción de la figura, no una cita. <span class="inm-org">ficha · p. 17, 28</span></div>
+            <div class="inm-nota-fuentes"><b>Cambios frente al diseño.</b> (1) En el estado «Dolor oculto», la RASS −3 la fija el propio estado. (2) En el caso del intubado que lucha, el plan con errores pedía tres (la FC, el diazepam y un QTc de 520); las reglas de las preguntas permiten dos, así que el QTc de 520 se pregunta en el Examen (haloperidol). (3) En ese caso, la RASS +1 del día 2 es un dato del paciente (ansioso con el ventilador).</div>
+          </div>
+        </details>
+
+        <details class="nota-plegable">
+          <summary>Lo que la ficha no da (huecos)</summary>
+          <ul class="inm-huecos">
+            <li>La aspiración traqueal como estímulo: la ficha solo nombra «moverle en la cama» y el dolor en reposo.</li>
+            <li>Tiempos de despertar por duración: solo los del propofol (Tabla 6.7). Midazolam y lorazepam, el dato de un estudio; dexmedetomidina, 6-10 min; diazepam, ninguno (vida media de 90 h).</li>
+            <li>Cuánto baja la FC o la PA con la dexmedetomidina, con un opioide más una benzodiacepina en la hipovolemia o en el SIP: solo la flecha.</li>
+            <li>La relación entre dosis de opioide y BPS, y cuánto calma cada ahorrador: la escena solo enseña el sentido.</li>
+            <li>Qué hacer con la toxicidad por propilenglicol, más allá de vigilar el hiato osmolar.</li>
+            <li>Si un sedado profundo puede mostrar toda la BPS: la escena mantiene la tormenta, que es lo que se deduce de la Fig. 6.1 (no una cita).</li>
+          </ul>
+        </details>
+
+        <details class="nota-plegable">
+          <summary>Para profundizar (lo que el modelo no cuenta)</summary>
+          <div class="inm-prof" id="inm-prof-lista"></div>
+        </details>
+
+        <!-- Lo que encuentra el buscador global (core/search.js): cada entrada es un enlace cruzado
+             normal que abre el modelo en un estado. Ocultas: solo se pulsan desde el buscador. -->
+        <div hidden>
+          <button type="button" data-especialidad="libros" data-view="inmersionViva" data-inmersion-viva="" data-buscar-titulo="La cama 7 · La inmersión (modelo vivo)" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="inmersión cama 7 analgesia sedación dolor buzo profundímetro">Inmersión</button>
+          <button type="button" data-especialidad="libros" data-view="inmersionViva" data-inmersion-viva="dolor-oculto" data-buscar-titulo="La inmersión: el dolor del intubado y la BPS" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="escala conductual del dolor bps behavioral pain scale intubado frecuencia cardíaca">BPS</button>
+          <button type="button" data-especialidad="libros" data-view="inmersionViva" data-inmersion-viva="diazepam" data-buscar-titulo="La inmersión: el diazepam no quita el dolor (Fig. 6.1)" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="diazepam benzodiacepina analgesia figura 6.1 sedar no es tratar el dolor">Diazepam</button>
+          <button type="button" data-especialidad="libros" data-view="inmersionViva" data-inmersion-viva="morfina-ir" data-buscar-titulo="La inmersión: opioides e insuficiencia renal" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="opioides fentanilo morfina hidromorfona remifentanilo insuficiencia renal">Opioides</button>
+          <button type="button" data-especialidad="libros" data-view="inmersionViva" data-inmersion-viva="despertar" data-buscar-titulo="La inmersión: el despertar del propofol (Tabla 6.7)" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="rass richmond propofol despertar sedación profunda ligera tabla 6.7">Despertar</button>
+          <button type="button" data-especialidad="libros" data-view="inmersionViva" data-inmersion-viva="lorazepam-pg" data-buscar-titulo="La inmersión: midazolam, lorazepam y propilenglicol" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="midazolam lorazepam propilenglicol hiato osmolar benzodiacepinas perfusión">Benzodiacepinas</button>
+          <button type="button" data-especialidad="libros" data-view="inmersionViva" data-inmersion-viva="pris" data-buscar-titulo="La inmersión: el síndrome de infusión del propofol" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="síndrome de infusión de propofol sip pris acidosis láctica rabdomiólisis">SIP</button>
+          <button type="button" data-especialidad="libros" data-view="inmersionViva" data-inmersion-viva="dexmedetomidina" data-buscar-titulo="La inmersión: dexmedetomidina, delirio y haloperidol" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="dexmedetomidina sedación cooperativa delirio haloperidol qtc">Delirio</button>
+        </div>
+      </div>
+
+      <!-- ============ CONCEPTOS ============ -->
+      <div id="inm-vista-conceptos" class="inm-bloque" hidden>
+        <div id="inm-concepto" class="inm-formato inm-entra"></div>
+      </div>
+
+      <!-- ============ MAYÉUTICA ============ -->
+      <div id="inm-vista-preguntas" class="inm-bloque" hidden>
+        <div id="inm-preg" class="inm-formato inm-entra"></div>
+        <details class="nota-plegable" id="inm-profundizar">
+          <summary>Para profundizar (lo que esta Mayéutica no cubre)</summary>
+          <div class="inm-prof" id="inm-prof-may"></div>
+        </details>
+      </div>
+
+      <nav class="inm-dock" id="inm-dock" aria-label="Hoja de órdenes">
+        <div class="inm-dock-in">
+          <div id="inm-dock-explorar">
+            <p class="inm-frase" id="inm-frase" aria-live="polite" title="Toca para leerla entera"></p>
+            <div class="inm-dock-tabs" role="tablist" aria-label="Hoja de órdenes">
+              <button type="button" role="tab" data-inm-tab="dolor" aria-selected="true">Dolor</button>
+              <button type="button" role="tab" data-inm-tab="analgesia" aria-selected="false">Analgesia</button>
+              <button type="button" role="tab" data-inm-tab="sedante" aria-selected="false">Sedante</button>
+              <button type="button" role="tab" data-inm-tab="subida" aria-selected="false">Despertar</button>
+              <button type="button" role="tab" data-inm-tab="paciente" aria-selected="false">Paciente</button>
+              <button type="button" role="tab" data-inm-tab="delirio" aria-selected="false">Delirio</button>
+            </div>
+            <div class="inm-dock-panel" data-inm-panel="dolor">
+              <div class="inm-seg" id="inm-m-estimulo" role="group" aria-label="Lo que le haces"><button type="button" data-v="reposo">En reposo<small>la mitad tiene dolor</small></button><button type="button" data-v="mover">Moverle en la cama<small>causa frecuente</small></button></div>
+              <div class="inm-raya"><button type="button" class="inm-tog" id="inm-m-inflamacion">Inflamación sistémica <small>hipernocicepción</small></button><button type="button" class="inm-tog" id="inm-m-reinicio">Empezar de nuevo</button></div>
+            </div>
+            <div class="inm-dock-panel" data-inm-panel="analgesia" hidden>
+              <div class="inm-raya" id="inm-m-opioide" role="group" aria-label="Opioide"></div>
+              <div class="inm-raya" id="inm-m-ahorro" role="group" aria-label="Ahorradores de opioide"></div>
+            </div>
+            <div class="inm-dock-panel" data-inm-panel="sedante" hidden>
+              <div class="inm-raya" id="inm-m-sedante" role="group" aria-label="Sedante"></div>
+              <div class="inm-fila2"><div class="inm-seg" id="inm-m-prof" role="group" aria-label="Profundidad"><button type="button" data-v="ligera">Ligera <small>RASS −1/−2</small></button><button type="button" data-v="profunda">Profunda <small>RASS −4</small></button></div><button type="button" class="inm-tog" id="inm-m-dosis">Dosis alta</button></div>
+            </div>
+            <div class="inm-dock-panel" data-inm-panel="subida" hidden>
+              <div class="inm-seg" id="inm-m-horas" role="group" aria-label="Duración de la perfusión"><button type="button" data-v="24">24 h</button><button type="button" data-v="72">72 h</button><button type="button" data-v="168">7 días</button><button type="button" data-v="336">14 días</button></div>
+              <div class="inm-raya"><button type="button" class="inm-tog inm-tog-prim" id="inm-m-despertar">Despertar <small>soltar el lastre</small></button><button type="button" class="inm-tog" id="inm-m-llamar">Llamarle por su nombre</button><button type="button" class="inm-tog" id="inm-m-sacudir">Sacudirle el hombro</button></div>
+            </div>
+            <div class="inm-dock-panel" data-inm-panel="paciente" hidden>
+              <div class="inm-seg" id="inm-m-renal" role="group" aria-label="Riñón"><button type="button" data-v="normal">Riñón normal</button><button type="button" data-v="ir">Insuficiencia renal</button></div>
+              <div class="inm-seg" id="inm-m-volemia" role="group" aria-label="Volemia"><button type="button" data-v="normal">Volemia normal</button><button type="button" data-v="hipovolemia">Hipovolemia</button></div>
+            </div>
+            <div class="inm-dock-panel" data-inm-panel="delirio" hidden>
+              <div class="inm-raya"><button type="button" class="inm-tog" id="inm-m-delirio">Agitación por delirio</button><button type="button" class="inm-tog" id="inm-m-bradi">Bradicardia o hipotensión</button></div>
+              <div class="inm-raya"><button type="button" class="inm-tog" id="inm-m-halo">Haloperidol 5 mg IV</button><button type="button" class="inm-tog" id="inm-m-qtc">QTc &gt;500 ms</button></div>
+            </div>
+          </div>
+          <div id="inm-dock-estudio" class="inm-dock-estudio" hidden>
+            <div class="inm-pasos" id="inm-dock-pasos"></div>
+            <div class="inm-dock-est-txt"><span id="inm-dock-est-izq"></span><span id="inm-dock-est-der"></span></div>
+          </div>
+        </div>
+      </nav>
+    </div>
