@@ -313,9 +313,9 @@ río y mar) → 39-44 → 45-53.
 | # | Clave | Qué | Estado | Notas |
 |---|---|---|---|---|
 | 1 | `b1-cobertura` | Bloque 1 (caps. 1-11, 23 fichas): mapa de cobertura | hecha (2026-10-19) · ≈90 % | Grupos: fluidos (río y mar), hemodinámica (circulación viva), oxígeno (capilar y oxígeno, nuevo), accesos vasculares (catéter vivo, nuevo), sin modelo claro (úlcera de estrés, tromboprofilaxis, analgesia, sedación) |
-| 2 | `b1-maquetas` | Bloque 1: maquetas de «capilar y oxígeno» y «catéter vivo» | en curso (2026-10-19) · vuelta 2: revisión y pulido | Aprobadas por el usuario el 19/10, tras el mapa de cobertura |
-| 3 | `b1-modelos` | Bloque 1: construir en la app los modelos elegidos | pendiente | |
-| 4 | `b1-estudio` | Bloque 1: Texto \| Visual \| Mayéutica en las 23 fichas, ruta y «Para profundizar» | en curso (2026-10-19) · pieza común + piloto fluidos | Sustituye a B-001 (preguntas) para este bloque |
+| 2 | `b1-maquetas` | Bloque 1: maquetas (capilar, catéter y «La cama 7»: muralla, telar, inmersión) | en revisión (2026-10-20) · vueltas 2 hechas, con auditor y profesor; https://claude.ai/artifact/Q4Fii5DVMgqGhQf7429ouv | Aprobadas por el usuario el 19/10, tras el mapa de cobertura |
+| 3 | `b1-modelos` | Bloque 1: construir en la app los modelos elegidos | en revisión (2026-10-20) · capilar y catéter, PR #20; motor del corazón, PR #21 | La cama 7 espera a que el usuario elija las maquetas |
+| 4 | `b1-estudio` | Bloque 1: Texto \| Visual \| Mayéutica en las 23 fichas, ruta y «Para profundizar» | en revisión (2026-10-20) · 23 fichas, auditadas, PR #19 | Sustituye a B-001 (preguntas) para este bloque |
 
 ## Lo que aún no está aprobado
 
