@@ -186,11 +186,18 @@ esta sección.
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
 
-| `b1-cobertura` … `b1-estudio` | **Objetivo M5 · Marino en modelos vivos, bloque 1** (caps. 1-11): cobertura, maquetas, modelos y Mayéutica en cada ficha | pendiente | 2026-10-19 | Aprobado el 19/10. Prioridad única: el resto (atlas, Libro Azul, PIF) espera a terminar Marino. |
+| `b1-*` | **Objetivo M5 · bloque 1** (caps. 1-11) | hecho el 20/10, salvo «La cama 7» | 2026-10-19 | Siguiente: construir La cama 7 cuando la elijas y empezar el bloque 2. |
 
 El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
+
+- **Bloque 1 · «La cama 7»** (muralla, telar e inmersión, vuelta 2): ¿te gustan? Si dices que sí, se construyen en la
+  app. Maquetas: https://claude.ai/artifact/Q4Fii5DVMgqGhQf7429ouv.
+- **Formas nuevas** de partícula (O₂, lactato, coco y burbuja, ya en la app; bacilo, linfocito y otras, en las
+  maquetas): ¿entran en la tabla única?
+- **Motor del corazón**: la PVC normal da 5,02 (Tabla 8.1: 0-5), y la elevación de piernas en la hemorragia sube el VS
+  un 44-47 %. ¿Se calibra?
 
 - **Decidido el 19/10**: Marino primero, por bloques (Objetivo M5). B-002, B-004, B-005 y B-006 esperan a terminar
   Marino. B-001 (preguntas) se hace como la **Mayéutica** de cada ficha, bloque a bloque. B-007 sigue sin aprobar.
@@ -227,6 +234,10 @@ El resto del tablero sigue `aparcada`.
 - **Ácido-base vivo, al entrar desde una ficha**: durante la animación (unos 3 s) la cabecera mini dice «paso 0»
   antes de pasar al estado (p. ej. «Vómitos»). Que diga el estado desde el principio.
 - **La Mayéutica, al recargar**, empieza otra vez en la pregunta 1: recuerda aciertos y fallos, pero no por dónde ibas.
+- **Una sola Mayéutica**: el río y mar, el capilar y el catéter tienen cada uno su propio motor de preguntas. Pasarlos a
+  `core/mayeutica.js` (la pieza de las fichas) para que todos se comporten igual.
+- **Dos detalles de las fichas de Marino**: `mar-resumen-cateteres` traduce «go-to catheters» como «de último recurso»
+  (p. 11; pide nota de fidelidad), y el lorazepam dice «>0,1 mg/kg/h» donde el PDF (p. 26) dice «≥0,1».
 
 - **Reconvertir las preguntas viejas** al formato de estudio (`REGLAS.md` §8): hay **361 de redactar** entre ~2.600
   preguntas. **Cuando lo pidas** (lo dijiste el 14/10), por bloques, con tareas `estudio`.
@@ -246,6 +257,12 @@ El resto del tablero sigue `aparcada`.
   ayuda. Es una tarea pequeña de solo lectura.
 
 ## 6. Hecho (últimos 7 días)
+
+- 2026-10-20 · **Marino, bloque 1 en modelos vivos** (PR #19, #20 y #21), aprobados y en main.
+  - Mayéutica en las 23 fichas de Fundamentos (botón Texto | Visual | Mayéutica).
+  - Capilar y oxígeno, y catéter vivo, en Libros → Marino → Modelos vivos y desde las fichas.
+  - El motor del corazón lee Guyton, la elevación de piernas, el bolo, el catéter de AP y la termodilución.
+  - Auditados con el PDF: 9 graves corregidos (ninguno de dosis).
 
 - 2026-10-19 · **Ácido-base vivo y río y mar en la app** (PR #18), aprobados.
   - Dónde están:

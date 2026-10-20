@@ -498,3 +498,33 @@ especialidad (sin listener nuevo). El enlace al ácido-base (`data-acidobase-viv
 **Vuelta 3**: «← VOLVER» vuelve a la ficha de la que se entró (mismo mecanismo que el ácido-base vivo:
 `core/volver-ficha.js`; ver `nefrologia.md`). Los botones del menú llevan `data-agua-viva=""` (abren como se dejó y
 borran el origen). La prueba de navegador está en `autonomo/pruebas/agua-viva.mjs` (`jueces.mjs --modelo agua-viva`).
+
+## Marino, bloque 1 en modelos vivos (Objetivo M5, 19-20/10/2026)
+
+Aprobado y unido a `main` el 20/10 (PR #19, #20 y #21). Lo hizo el plan socialista por bloques
+(`autonomo/bloques/b1/`: encargo, cobertura, maquetas, auditorías, juicios y parte del 20/10).
+
+- **Mayéutica en las 23 fichas** de Fundamentos (caps. 1-11):
+  - Interruptor Texto | Visual | Mayéutica con la pieza común `js/core/mayeutica.js`.
+  - Datos por grupos en `js/data/mayeutica/b1-*.js`: fluidos, hemodinámica, sin modelo, accesos y oxígeno.
+  - Cada ficha tiene Guía socrática, Examen MIR, repaso, casos y «Para profundizar».
+  - «Ver en el texto» va por id. Un `data-nombre` da nombre legible al trozo de ficha cuando su rótulo es ambiguo.
+  - Ruta del bloque en el plegable `#mar-ruta-bloque`.
+  - Cada pregunta puede llevar `modeloVivo` (su modelo grande) y `modelo` (la vista Visual de la ficha).
+- **Modelos vivos nuevos:**
+  - Capilar y oxígeno (`data-capilar-vivo`): capnografía dentro y casos B1-B4.
+  - Catéter vivo (`data-cateter-vivo`): Poiseuille con la Fig. 1.1, lupas B/C/D (la de pinchar con eco se queda) y casos A1-A3.
+  - Los dos salen de sus maquetas aprobadas (vuelta 2).
+  - Formas nuevas en la tabla única: O₂, lactato, coco y burbuja.
+- **Capa de lectura del motor del corazón** (`js/modules/eco/maniobras.mjs`, `lecturas.mjs`, `guyton-tablas.mjs`):
+  - Contenido: Guyton, elevación pasiva de piernas, bolo, catéter de AP que avanza (esquema 2D) y termodilución.
+  - Se abre con `data-eco-panel` desde las 4 fichas de hemodinámica.
+  - No toca la fisiología del latido.
+  - Pendientes: la PVC normal del motor da 5,02 (Tabla 8.1: 0-5), y la elevación de piernas en la hemorragia sube el VS un 44-47 %.
+- **Auditorías:**
+  - 9 graves en total, todos corregidos y ninguno de dosis. Por ejemplo: un enclavamiento por encima de la diastólica
+    pulmonar, 100 mL/s atribuidos a una luz de 18 G, el sellado antibiótico (va en salino heparinizado) y una regla de
+    úlcera de estrés que contradecía su clave.
+  - Regla nueva en la prueba: la correcta no es ni la más larga ni la más corta en más de ⅓ de los tests de cada grupo.
+- **«La cama 7»** (maquetas de las fichas sin modelo: muralla, telar e inmersión, con la misma cama): vuelta 2 hecha,
+  pendiente de que el usuario elija. Están en `autonomo/maquetas/b1-{muralla,telar,inmersion}.html`.

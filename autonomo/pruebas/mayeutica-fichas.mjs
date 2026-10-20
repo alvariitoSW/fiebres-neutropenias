@@ -155,7 +155,7 @@ async function correr(ANCHO, REDUCIDO) {
             const antes = await p.evaluate(z => document.querySelector(z).innerHTML, Z);
             const fuga = [q.explicacion, ...(q.opciones || []).map(o => o.porque || ''), ...(q.frases || []).map(f => f.c || '')].filter(Boolean).map(t => t.replace(/<[^>]+>/g, '').slice(0, 40)).find(t => antes.replace(/<[^>]+>/g, '').includes(t));
             if (fuga || /data-ok|data-correcta|data-mal/.test(antes)) ok(false, `${donde}: la respuesta está en el HTML antes de contestar («${fuga}»)`);
-            if (q.modelo && await p.evaluate(z => !!document.querySelector(z + ' .may-modelo'), Z)) ok(false, `${donde}: el botón del modelo sale antes de contestar`);
+            if ((q.modelo || q.modeloVivo) && await p.evaluate(z => !!document.querySelector(z + ' .may-modelo'), Z)) ok(false, `${donde}: el botón del modelo sale antes de contestar`);
             if (q.tipo === 'test') {
                 await pulsar(`${Z} [data-accion="ops"]`);
                 const orden = barajar(q.opciones, q.id);
@@ -178,7 +178,7 @@ async function correr(ANCHO, REDUCIDO) {
             if (!r.sig) ok(false, `${donde}: tras contestar no hay «Siguiente»`);
             if (fallar && !/✗/.test(r.txt)) ok(false, `${donde}: el fallo no se marca`);
             if (!fallar && !/✓/.test(r.txt)) ok(false, `${donde}: el acierto no se marca`);
-            if (q.modelo && !r.modelo) ok(false, `${donde}: falta «Compruébalo en el modelo» tras contestar`);
+            if ((q.modelo || q.modeloVivo) && !r.modelo) ok(false, `${donde}: falta «Compruébalo en el modelo» tras contestar`);
             if (!r.ver) ok(false, `${donde}: falta «Ver en el texto»`);
             const crudos = await p.evaluate(z => [...document.querySelectorAll(z + ' .may-res .may-org, ' + z + ' .may-res .may-ir')].map(e => e.textContent).filter(t => /\b(mar|mr|mc)-[a-z0-9-]+/.test(t)), Z);
             if (crudos.length) ok(false, `${donde}: «Ver en el texto» con ids a la vista: ${crudos.join(' | ')}`);

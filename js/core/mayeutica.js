@@ -71,9 +71,13 @@ const MODELOS = {
     aguaViva: { especialidad: 'libros', view: 'aguaViva', nombre: '🌊 el río y mar' },
     acidobaseVivo: { especialidad: 'nefrologia', nombre: '🧪 el ácido-base vivo' },
     ecoEscenario: { especialidad: 'eco', nombre: '🫀 la circulación viva' },
+    capilarVivo: { especialidad: 'libros', view: 'capilarVivo', nombre: '🩸 el capilar vivo' },
+    cateterVivo: { especialidad: 'libros', view: 'cateterVivo', nombre: '💉 el catéter vivo' },
 };
+// modeloVivo (el modelo grande de la pregunta) sale primero; modelo (p. ej. la vista Visual de la ficha), detrás.
+const modelosDe = o => [].concat(o?.modeloVivo || [], o?.modelo || []);
 function botonesModelo(modelo, verbo = 'Compruébalo en') {
-    if (!modelo) return '';
+    if (!modelo || !modelo.length) return '';
     return [].concat(modelo).map(m => {
         const clave = Object.keys(m).find(k => MODELOS[k]);
         const base = clave ? MODELOS[clave] : {};
@@ -168,7 +172,7 @@ function pintarPregunta(cont, q, { tab, cabecera = '', repaso = null, alFinal })
 
     function cerrar(htmlRes) {
         const r = cont.querySelector('.may-res');
-        const modelo = botonesModelo(q.modelo);
+        const modelo = botonesModelo(modelosDe(q));
         r.innerHTML = `<div class="may-respuesta may-entra">${htmlRes}
             ${q.nota ? `<div class="may-nota-fuentes">${q.nota}</div>` : ''}
             ${modelo ? `<div class="may-fila">${modelo}</div>` : ''}
@@ -385,7 +389,7 @@ class Mayeutica {
         this.zona.innerHTML = `<div class="may-respuesta may-entra"><span class="may-eyebrow">Lo que te llevas · ${C.corto}</span>
             <ol class="may-lleva">${C.lleva.map(t => `<li>${t}</li>`).join('')}</ol>
             <div class="may-fila"><button class="may-b may-link" type="button" data-may-texto="${C.volver?.ancla || this.tab.id}">📖 Repasar en la ficha${C.volver?.nombre ? `: ${C.volver.nombre}` : ''}</button>
-            ${botonesModelo(C.volver?.modelo, 'Abrir en el estado del paciente:')}
+            ${botonesModelo(modelosDe(C.volver), 'Abrir en el estado del paciente:')}
             <button class="may-b" type="button" data-fin="otro">Otro caso</button></div></div>`;
         entrar(this.zona); this.subir();
         this.barra(C.pasos.map(() => 'on'), `${C.corto} · hecho`);

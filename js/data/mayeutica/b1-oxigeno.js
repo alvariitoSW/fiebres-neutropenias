@@ -6,9 +6,9 @@
 // `fuente`. Los pacientes se inventan, y sus cuentas (contenido, aporte, extracción) se marcan con `origen`.
 // Cobertura y casos: autonomo/bloques/b1/cobertura.md §2.B y §3 (B1-B4). Los números de B2 y B3 siguen los ajustes de
 // la maqueta del capilar (en el giro de B2, la cama 2 ya con SaO₂ 98 %; en B3, un gap de PCO₂ normal).
-// Formato: el de b1-fluidos.js. El capilar y oxígeno vivo se construye en otra rama: donde una pregunta se comprobaría
-// en él va `modeloFuturo: { capilarVivo: '<estado>' }` (los ESTADOS de js/data/capilar-vivo-data.js de esa rama), que la
-// pieza ignora hasta unir las ramas. Mientras, el botón «modelo» abre la vista Visual de la propia ficha.
+// Formato: el de b1-fluidos.js. Donde una pregunta se comprueba en el capilar vivo va
+// `modeloVivo: { capilarVivo: '<estado>' }` (los ESTADOS de js/data/capilar-vivo-data.js); su botón sale primero, y
+// detrás el de la vista Visual de la propia ficha (`modelo`).
 
 // La vista Visual de una ficha de Marino · Fundamentos, como botón «modelo» (sale tras contestar).
 const visual = (tab, texto) => ({ especialidad: 'libros', view: 'marinoFundamentos', panel: 'panel-marino-fund-tabs', tab, enVisual: '', texto });
@@ -34,7 +34,7 @@ export const MAYEUTICA_OXIGENO = {
           { t: 'Con una tercera longitud de onda para la Hb venosa', porque: 'Usa solo dos (660 y 940 nm). Lo que separa la arteria es el latido.' },
           { t: 'Analiza solo la fracción de la señal que late', ok: true }],
         explicacion: 'En sístole, el aumento de volumen arterial <span class="hl">reduce la luz transmitida</span> (fotopletismograma). Analizar solo la fracción sistólica (<span class="hl">A/B</span>) centra el análisis en la sangre arterial y elimina lo que no late, como las venas.' },
-      { id: 'ox-g3', corto: 'el dedo frío', tipo: 'test', fuente: 'mar-oxi-frente', modeloFuturo: { capilarVivo: 'dedo-frio' },
+      { id: 'ox-g3', corto: 'el dedo frío', tipo: 'test', fuente: 'mar-oxi-frente', modeloVivo: { capilarVivo: 'dedo-frio' },
         modelo: visual('mar-oximetria', '👁️ Cómo funciona el pulsioxímetro (vista Visual)'),
         enunciado: 'Shock con vasoconstricción: el dedo no da onda. ¿Dónde pones el sensor?',
         opciones: [
@@ -42,7 +42,7 @@ export const MAYEUTICA_OXIGENO = {
           { t: 'En la frente, sin cinta', porque: 'Al revés: la cinta reduce las pulsaciones venosas de la frente, que se confunden con las arteriales.' },
           { t: 'En otro dedo, y si no sale, en el lóbulo de la oreja', porque: 'Otro dedo sigue siendo una arteria digital, más propensa a la vasoconstricción que la frente (que recibe la carótida interna). Seguirías buscando señal donde el shock la apaga.' }],
         explicacion: 'La frente recibe la <span class="hl">carótida interna</span> y se contrae menos que los dedos: da SpO₂ válidas con hipotensión o vasoconstricción. Funciona por <span class="hl">reflectancia</span>, siempre con cinta elástica.' },
-      { id: 'ox-g4', corto: 'el CO', tipo: 'test', fuente: 'mar-cooximetria', modeloFuturo: { capilarVivo: 'co' },
+      { id: 'ox-g4', corto: 'el CO', tipo: 'test', fuente: 'mar-cooximetria', modeloVivo: { capilarVivo: 'co' },
         enunciado: 'Predice: intoxicación por monóxido de carbono. ¿Qué hace la SpO₂ respecto a la SaO₂ real?',
         opciones: [
           { t: 'La infraestima', porque: 'Al revés: la SaO₂ cae y la SpO₂ apenas cambia. Te tranquilizaría una cifra falsa.' },
@@ -78,7 +78,7 @@ export const MAYEUTICA_OXIGENO = {
           { t: 'Nada: varía un 5-6 % sola en pocas horas', porque: 'Varía así, pero 12 puntos sostenidos superan el 5 % significativo. Ignorarías un aviso.' }],
         explicacion: 'La SvO₂ refleja el equilibrio entre aporte y consumo: bajar de lo normal (70-75 % en el cap. 7; 65-75 % en el cap. 9) indica <span class="hl">menos aporte respecto al consumo</span>. Un cambio es significativo si <span class="hl">supera el 5 % durante más de 10 min</span>.',
         nota: '<b>Nota de fuentes.</b> La SvO₂ normal es 70-75 % en el cap. 7 (M pág. 42) y 65-75 % en el cap. 9 (M pág. 77, Tabla 9.4). No se elige una: la caída de la pregunta (72 a 60 %) queda por debajo de las dos.' },
-      { id: 'ox-g9', corto: 'la dual', tipo: 'destapa', fuente: 'mar-dual · mar-dual-tabla · mar-dual-calc', modeloFuturo: { capilarVivo: 'dual' },
+      { id: 'ox-g9', corto: 'la dual', tipo: 'destapa', fuente: 'mar-dual · mar-dual-tabla · mar-dual-calc', modeloVivo: { capilarVivo: 'dual' },
         modelo: visual('mar-oximetria', '👁️ Oximetría dual en la calculadora (vista Visual)'),
         enunciado: 'SpO₂ 97 % y SvO₂ 45 %. ¿Qué te dice la diferencia, y por qué?',
         cuantas: 'son dos cosas',
@@ -127,7 +127,7 @@ export const MAYEUTICA_OXIGENO = {
         paciente: { Edad: '45 años', Motivo: 'rescatada de un incendio en su casa', Clínica: 'cefalea y confusión', 'SpO₂': '99 % en aire' },
         pasos: [
           { momento: 'Urgencias',
-            pregunta: { id: 'oxa-1', tipo: 'test', fuente: 'mar-cooximetria', modeloFuturo: { capilarVivo: 'co' },
+            pregunta: { id: 'oxa-1', tipo: 'test', fuente: 'mar-cooximetria', modeloVivo: { capilarVivo: 'co' },
               enunciado: 'SpO₂ de 99 % respirando aire. ¿Hipoxemia descartada?',
               opciones: [
                 { t: 'Sí: 99 % es una saturación normal', porque: 'En el CO la SpO₂ sobrestima la SaO₂: la pinza no ve la COHb. Te irías tranquilo con una intoxicada.' },
@@ -164,7 +164,7 @@ export const MAYEUTICA_OXIGENO = {
                 'Para verla hacen falta más longitudes de onda: la <span class="hl">cooximetría</span> del laboratorio, con sangre arterial.'],
               explicacion: 'Lo mismo pasa con la metahemoglobinemia. El tratamiento del CO no está en este capítulo.' } },
           { momento: 'UCI · el giro', datos: { Hemodinámica: 'hipotensa y fría', Pulsioxímetro: 'el dedo da una onda plana' }, nuevo: ['Hemodinámica', 'Pulsioxímetro'],
-            pregunta: { id: 'oxa-5', tipo: 'test', fuente: 'mar-oxi-frente · mar-cooximetria · mt-co', modeloFuturo: { capilarVivo: 'dedo-frio' },
+            pregunta: { id: 'oxa-5', tipo: 'test', fuente: 'mar-oxi-frente · mar-cooximetria · mt-co', modeloVivo: { capilarVivo: 'dedo-frio' },
               enunciado: 'Ya en la UCI, hipotensa y fría, el dedo no da onda. ¿Dónde mides la SpO₂, y te sirve para seguir el CO?',
               opciones: [
                 { t: 'En la frente, y sí: la frente sí ve la COHb', porque: 'La frente arregla la vasoconstricción, no las dos longitudes de onda. Seguirías el CO con una cifra que lo ignora.' },
@@ -176,7 +176,7 @@ export const MAYEUTICA_OXIGENO = {
           'El pulsioxímetro solo distingue HbO₂ de Hb: con CO o metHb, la SpO₂ sobrestima la SaO₂.',
           'Si se sospechan, gasometría arterial con cooximetría; la frente sirve para el dedo frío, no para el CO.',
           'El CaO₂ se calcula con la SaO₂ real (1,34 × Hb × SaO₂): con CO cae aunque la pinza marque 99 %.'],
-        volver: { nombre: 'Carboxi y metahemoglobina', ancla: 'mar-cooximetria', modelo: visual('mar-oximetria', '👁️ Lo que la SpO₂ no ve (vista Visual)'), modeloFuturo: { capilarVivo: 'co' } } },
+        volver: { nombre: 'Carboxi y metahemoglobina', ancla: 'mar-cooximetria', modelo: visual('mar-oximetria', '👁️ Lo que la SpO₂ no ve (vista Visual)'), modeloVivo: { capilarVivo: 'co' } } },
     ],
     profundizar: [
       { id: 'mar-oxi-venosa', titulo: 'Cómo se mide la saturación venosa' },
@@ -190,14 +190,14 @@ export const MAYEUTICA_OXIGENO = {
   'mar-capnografia': {
     entrada: 'Qué cuenta cada fase del capnograma, para qué sirve el CO₂ espirado (sedación, intubación, gasto, RCP) y qué separa la PETCO₂ de la PaCO₂.',
     guia: [
-      { id: 'cpn-g1', corto: 'la fase I', tipo: 'test', fuente: 'mar-capno-f1', modeloFuturo: { capilarVivo: 'capno-normal' },
+      { id: 'cpn-g1', corto: 'la fase I', tipo: 'test', fuente: 'mar-capno-f1', modeloVivo: { capilarVivo: 'capno-normal' },
         enunciado: '¿Por qué cada espiración empieza casi sin CO₂?',
         opciones: [
           { t: 'Sale primero el espacio muerto anatómico', ok: true },
           { t: 'Porque el sensor tarda en calentarse', porque: 'El fotodetector es rápido y registra en continuo. Leerías como fallo técnico lo que es fisiología.' },
           { t: 'Porque al principio se vacían los alvéolos mal perfundidos', porque: 'Eso explica una fase II lenta (espacio muerto alveolar). La fase I es el gas de la vía aérea, que no intercambia.' }],
         explicacion: 'Fase I: inicio de la espiración, gas del <span class="hl">espacio muerto anatómico</span>, casi sin CO₂.' },
-      { id: 'cpn-g2', corto: 'la fase II', tipo: 'test', fuente: 'mar-capno-f2', modeloFuturo: { capilarVivo: 'capno-epoc' },
+      { id: 'cpn-g2', corto: 'la fase II', tipo: 'test', fuente: 'mar-capno-f2', modeloVivo: { capilarVivo: 'capno-epoc' },
         enunciado: 'En la EPOC, la fase II sube despacio. ¿Por qué?',
         opciones: [
           { t: 'Porque el paciente espira más despacio', porque: 'La pendiente no es de velocidad del aire sino de cómo se mezcla el gas de alvéolos distintos. Te perderías el espacio muerto.' },
@@ -212,21 +212,21 @@ export const MAYEUTICA_OXIGENO = {
           { t: 'Como la media de toda la espiración', porque: 'La media incluye el espacio muerto. La PETCO₂ es la del final, cuando sale gas alveolar.' }],
         explicacion: 'Fase III: normalmente una <span class="hl">meseta</span>, por el vaciado alveolar estable; a su final, la <span class="hl">PETCO₂</span>. Fase IV: empieza la inspiración.',
         nota: '<b>Nota de la fuente.</b> Marino (M págs. 44-45) describe las cuatro fases y habla de la PETCO₂ sin rotular dónde se lee. Que sea el valor del final de la meseta es la lectura estándar del capnograma (conocimiento general, no de la fuente).' },
-      { id: 'cpn-g4', corto: 'en la sedación', tipo: 'test', fuente: 'mar-capno-sedacion', modeloFuturo: { capilarVivo: 'capno-sedacion' },
+      { id: 'cpn-g4', corto: 'en la sedación', tipo: 'test', fuente: 'mar-capno-sedacion', modeloVivo: { capilarVivo: 'capno-sedacion' },
         enunciado: 'Sedación para una endoscopia. ¿Qué te avisa antes de la hipoventilación?',
         opciones: [
           { t: 'La SpO₂, que cae en cuanto hipoventila', porque: 'La SpO₂ cae tarde. Esperarla es llegar cuando ya hay hipoxemia.' },
           { t: 'La PETCO₂ al subir, antes de que baje la SpO₂', ok: true },
           { t: 'La frecuencia cardíaca', porque: 'La ficha da la capnografía como superior a la oximetría para detectarla, y la recomienda siempre.' }],
         explicacion: 'La PETCO₂ <span class="hl">sube antes</span> de que baje la SpO₂: la capnografía es superior a la oximetría para detectar la hipoventilación y se recomienda <span class="hl">siempre</span> que se seda para un procedimiento (más riesgo en ancianos, obesos, apnea del sueño y retenedores de CO₂).' },
-      { id: 'cpn-g5', corto: 'el capno plano', tipo: 'test', fuente: 'mar-capno-intubacion', modeloFuturo: { capilarVivo: 'capno-esofago' },
+      { id: 'cpn-g5', corto: 'el capno plano', tipo: 'test', fuente: 'mar-capno-intubacion', modeloVivo: { capilarVivo: 'capno-esofago' },
         enunciado: 'Intubas a un paciente con pulso y el capnograma sale plano. ¿Qué piensas primero?',
         opciones: [
           { t: 'En un broncoespasmo grave', porque: 'Se ha propuesto, pero sin buena confirmación. Dejarías un tubo esofágico.' },
           { t: 'Nada, si al auscultar se oye bien', porque: 'Auscultar no siempre distingue la intubación esofágica: 1 de cada 18 urgentes. Puede ser mortal.' },
           { t: 'En el esófago, antes que nada', ok: true }],
         explicacion: 'Confirmar con CO₂ espirado (colorimétrico o infrarrojo) es «estándar de cuidado»: la intubación esofágica no reconocida ocurre en <span class="hl-rojo">1 de cada 18 intubaciones urgentes</span> del crítico, y auscultar no siempre la distingue.' },
-      { id: 'cpn-g6', corto: 'en la parada', tipo: 'test', fuente: 'mar-capno-intubacion', modeloFuturo: { capilarVivo: 'capno-rcp' },
+      { id: 'cpn-g6', corto: 'en la parada', tipo: 'test', fuente: 'mar-capno-intubacion', modeloVivo: { capilarVivo: 'capno-rcp' },
         enunciado: 'Parada. Has visto pasar el tubo por las cuerdas y no hay CO₂. ¿Por qué?',
         opciones: [
           { t: 'Sin retorno venoso no llega CO₂', ok: true },
@@ -303,7 +303,7 @@ export const MAYEUTICA_OXIGENO = {
                 { t: 'Gasometrías arteriales cada 15 minutos', porque: 'Entre una y otra no ves la ventilación; la capnografía dibuja cada espiración sin pinchar y se recomienda siempre en la sedación. La hipoventilación te pillaría entre dos muestras.' }],
               explicacion: 'La capnografía se recomienda <span class="hl">siempre</span> que se seda para un procedimiento; hay sensores para gafas nasales y mascarillas.' } },
           { momento: 'Minuto 10', datos: { 'PETCO₂': '38 → 55 mmHg', 'SpO₂': '96 %' }, nuevo: ['PETCO₂', 'SpO₂'],
-            pregunta: { id: 'cpa-2', tipo: 'test', fuente: 'mar-capno-sedacion', modeloFuturo: { capilarVivo: 'capno-sedacion' },
+            pregunta: { id: 'cpa-2', tipo: 'test', fuente: 'mar-capno-sedacion', modeloVivo: { capilarVivo: 'capno-sedacion' },
               enunciado: 'La PETCO₂ sube de 38 a 55 con la SpO₂ aún en 96 %. ¿Qué pasa?',
               opciones: [
                 { t: 'Nada preocupante: la SpO₂ es buena', porque: 'La PETCO₂ avisa antes que la SpO₂. Esperar a que caiga es esperar a la hipoxemia.' },
@@ -311,7 +311,7 @@ export const MAYEUTICA_OXIGENO = {
                 { t: 'Hipermetabolismo por el estrés de la endoscopia', porque: 'Con sedación y apnea del sueño, una PETCO₂ que sube es hipoventilación hasta que se demuestre lo contrario.' }],
               explicacion: 'La sedación puede causar hipoventilación (más en obesos y con apnea del sueño). <span class="hl">La PETCO₂ sube antes</span> de que baje la SpO₂.' } },
           { momento: 'Minuto 15', datos: { 'SpO₂': '84 %', Decisión: 'intubar' }, nuevo: ['SpO₂', 'Decisión'],
-            pregunta: { id: 'cpa-3', tipo: 'error', fuente: 'mar-capno-intubacion', modeloFuturo: { capilarVivo: 'capno-esofago' },
+            pregunta: { id: 'cpa-3', tipo: 'error', fuente: 'mar-capno-intubacion', modeloVivo: { capilarVivo: 'capno-esofago' },
               enunciado: 'Se intuba y el capnograma sale plano. El R1 escribe: encuentra los errores.',
               frases: [
                 { t: 'Ausculto y se oye bien: el tubo está en la tráquea.', mal: true,
@@ -322,7 +322,7 @@ export const MAYEUTICA_OXIGENO = {
                 { t: 'Una intubación esofágica no reconocida puede ser mortal.' }],
               explicacion: 'Se puede confirmar con detector colorimétrico o con capnografía infrarroja.' } },
           { momento: 'Minuto 16 · el giro', datos: { Laringoscopia: 'el tubo pasa las cuerdas', Pulso: 'no hay: parada' }, nuevo: ['Laringoscopia', 'Pulso'],
-            pregunta: { id: 'cpa-4', tipo: 'destapa', fuente: 'mar-capno-intubacion · mar-capno-gasto · mar-capno-rcp', modeloFuturo: { capilarVivo: 'capno-rcp' },
+            pregunta: { id: 'cpa-4', tipo: 'destapa', fuente: 'mar-capno-intubacion · mar-capno-gasto · mar-capno-rcp', modeloVivo: { capilarVivo: 'capno-rcp' },
               enunciado: 'El tubo está en la tráquea, pero no tiene pulso. ¿Por qué no había CO₂, y qué te dirá la PETCO₂ durante la RCP?',
               cuantas: 'son tres cosas',
               puntos: [
@@ -343,7 +343,7 @@ export const MAYEUTICA_OXIGENO = {
           'En la sedación, la PETCO₂ avisa de la hipoventilación antes que la SpO₂: capnografía siempre.',
           'Sin CO₂ tras intubar, primero el esófago (1 de cada 18); auscultar no basta.',
           'En la parada no hay CO₂ aunque el tubo esté bien; la PETCO₂ sigue al gasto, y ≤10 tras 20 min es mal pronóstico.'],
-        volver: { nombre: 'Intubación', ancla: 'mar-capno-intubacion', modelo: visual('mar-capnografia', '👁️ El capnograma y sus usos (vista Visual)'), modeloFuturo: { capilarVivo: 'capno-rcp' } } },
+        volver: { nombre: 'Intubación', ancla: 'mar-capno-intubacion', modelo: visual('mar-capnografia', '👁️ El capnograma y sus usos (vista Visual)'), modeloVivo: { capilarVivo: 'capno-rcp' } } },
     ],
     profundizar: [
       { id: 'mar-capno-nasal', titulo: 'Capnografía sin intubar' },
@@ -357,14 +357,14 @@ export const MAYEUTICA_OXIGENO = {
   'mar-transporte-o2': {
     entrada: 'Dónde va el O₂ de la sangre, por qué la curva en S protege, por qué la anemia pesa más que la hipoxemia, y cómo se calculan el aporte, el consumo y la extracción.',
     guia: [
-      { id: 'to-g1', corto: 'el disuelto', tipo: 'test', fuente: 'mar-o2-disuelto · mar-cao2-9', modeloFuturo: { capilarVivo: 'normal' },
+      { id: 'to-g1', corto: 'el disuelto', tipo: 'test', fuente: 'mar-o2-disuelto · mar-cao2-9', modeloVivo: { capilarVivo: 'normal' },
         enunciado: 'Con PaO₂ de 90 mmHg, ¿cuánto O₂ va disuelto en el plasma, y qué parte del total es?',
         opciones: [
           { t: '2,7 mL/dL: un 15 % del total', porque: 'Es diez veces menos: 0,003 × 90 = 0,27 mL/dL. Creerías que subir la PaO₂ arregla una anemia.' },
           { t: '0,27 mL/dL: solo el 1,5 % del total', ok: true },
           { t: 'La mitad: el plasma es un 93 % agua', porque: 'El O₂ se disuelve mal en el agua: por eso hace falta la Hb. El disuelto es el 1,5 %.' }],
         explicacion: 'Solubilidad a 37 °C: 0,03 mL/L por mmHg: <span class="hl-azul">disuelto = 0,003 × PO₂</span> (mL/dL). Con PaO₂ 90: <span class="hl">0,27 mL/dL, el 1,5 %</span> del CaO₂. Por eso suele omitirse.' },
-      { id: 'to-g2', corto: 'la parte plana', tipo: 'test', fuente: 'mar-curva-forma', modeloFuturo: { capilarVivo: 'hipoxemia' },
+      { id: 'to-g2', corto: 'la parte plana', tipo: 'test', fuente: 'mar-curva-forma', modeloVivo: { capilarVivo: 'hipoxemia' },
         enunciado: 'Predice: la PaO₂ cae de 90 a 60 mmHg. ¿Cuánto cae la saturación?',
         opciones: [
           { t: 'A dos tercios, como la PaO₂', porque: 'La curva no es una recta: la PaO₂ normal está en su parte plana. Te alarmarías de más.' },
@@ -379,7 +379,7 @@ export const MAYEUTICA_OXIGENO = {
           { t: 'A la derecha: suelta menos O₂ en los tejidos', porque: 'A la derecha la Hb libera más O₂ en los tejidos (la P50 sube). Lo leerías al revés.' }],
         explicacion: '<span class="hl">A la derecha</span> (acidemia, temperatura alta, más CO₂, más 2,3-DPG): libera más O₂ en los tejidos. La marca la <span class="hl">P50</span> (≈27 mmHg); en sangre conservada 3 semanas baja a 15. Como tiene efectos opuestos en pulmón y tejidos, su importancia neta no está clara.',
         nota: '<b>Nota de fuentes.</b> La P50 de Marino (27 mmHg) no coincide con la de El Libro Azul (22,5 mmHg). Se reproduce cada una tal cual.' },
-      { id: 'to-g4', corto: 'anemia o hipoxemia', tipo: 'test', fuente: 'mar-anemia-hipoxemia · mar-img-9-2 · mar-cao2-calc', modeloFuturo: { capilarVivo: 'anemia' },
+      { id: 'to-g4', corto: 'anemia o hipoxemia', tipo: 'test', fuente: 'mar-anemia-hipoxemia · mar-img-9-2 · mar-cao2-calc', modeloVivo: { capilarVivo: 'anemia' },
         modelo: visual('mar-transporte-o2', '👁️ Pruébalo en la calculadora del contenido (vista Visual)'),
         enunciado: 'Predice: Hb a la mitad (15 → 7,5) o PaO₂ a la mitad (90 → 45). ¿Qué baja más el CaO₂?',
         opciones: [
@@ -459,7 +459,7 @@ export const MAYEUTICA_OXIGENO = {
         paciente: { 'Cama 1': 'Hb 7,5 g/dL; SpO₂ 98 %', 'Cama 2': 'Hb 15 g/dL; PaO₂ 45 mmHg (SaO₂ 78 %)' },
         pasos: [
           { momento: 'Pase de la mañana',
-            pregunta: { id: 'toa-1', tipo: 'test', fuente: 'mar-anemia-hipoxemia', modeloFuturo: { capilarVivo: 'anemia' },
+            pregunta: { id: 'toa-1', tipo: 'test', fuente: 'mar-anemia-hipoxemia', modeloVivo: { capilarVivo: 'anemia' },
               enunciado: '¿Cuál de las dos lleva menos O₂ por dL de sangre arterial?',
               opciones: [
                 { t: 'La cama 2: su PaO₂ es la mitad de lo normal', porque: 'La PaO₂ a la mitad baja el contenido solo un 20 %. Pondrías el foco en la cama equivocada.' },
@@ -494,7 +494,7 @@ export const MAYEUTICA_OXIGENO = {
                   c: 'Su SaO₂ ya es del 98 %: más O₂ apenas cambia su contenido (el disuelto es el 1,5 %). <span class="hl">Lo que le falta es Hb.</span>' }],
               explicacion: 'En el aporte entran tres cosas: gasto, Hb y SaO₂.' } },
           { momento: 'Tarde · la cama 1', datos: { 'Cama 1': 'Hb 7,5; SpO₂ 98 %; ScvO₂ 45 %' }, nuevo: ['Cama 1'], calculadora: { ir: 'mar-dual-calc', nombre: 'Oximetría dual' },
-            pregunta: { id: 'toa-5', tipo: 'test', fuente: 'mar-dual · mar-dual-tabla', origen: 'ficha · la cuenta, del caso', modeloFuturo: { capilarVivo: 'dual' },
+            pregunta: { id: 'toa-5', tipo: 'test', fuente: 'mar-dual · mar-dual-tabla', origen: 'ficha · la cuenta, del caso', modeloVivo: { capilarVivo: 'dual' },
               enunciado: 'Cama 1: SpO₂ 98 % y ScvO₂ 45 %. ¿Qué te dice?',
               opciones: [
                 { t: 'Diferencia del 53 %: indica transfundir', ok: true },
@@ -502,7 +502,7 @@ export const MAYEUTICA_OXIGENO = {
                 { t: 'Nada: la ScvO₂ no sirve, solo la mixta', porque: 'La calculadora acepta SvO₂ o ScvO₂, y la ScvO₂ sigue a la mixta.' }],
               explicacion: 'SpO₂ − ScvO₂ = <span class="hl-rojo">53 %</span>: ≥50 %, amenaza para el metabolismo aerobio. En la anemia, un indicador válido para transfundir hematíes.' } },
           { momento: 'Día 2 · el giro', datos: { 'Cama 2': 'sepsis; ya con O₂: SaO₂ 98 %, ScvO₂ 84 %, lactato 4 mmol/L' }, nuevo: ['Cama 2'],
-            pregunta: { id: 'toa-6', tipo: 'destapa', fuente: 'mar-sao2-svo2-guia · mar-tabla-9-4 · mar-scvo2-9', modeloFuturo: { capilarVivo: 'sepsis' },
+            pregunta: { id: 'toa-6', tipo: 'destapa', fuente: 'mar-sao2-svo2-guia · mar-tabla-9-4 · mar-scvo2-9', modeloVivo: { capilarVivo: 'sepsis' },
               enunciado: 'La cama 2 hace una sepsis. Su ScvO₂ está en 84 % y el lactato en 4. ¿Por qué esa saturación alta no tranquiliza?',
               cuantas: 'son dos cosas',
               puntos: [
@@ -515,7 +515,7 @@ export const MAYEUTICA_OXIGENO = {
           'La Hb pesa más que la PaO₂: anemia a la mitad, CaO₂ a la mitad; PaO₂ a la mitad, solo −20 %.',
           'DO₂ = GC × 1,34 × Hb × SaO₂ × 10; el VO₂ necesita además la SvO₂ mixta.',
           'SpO₂ − SvO₂ ≥50 % amenaza el metabolismo aerobio; <20 % con saturación venosa alta es mala utilización, no buena perfusión.'],
-        volver: { nombre: 'Anemia frente a hipoxemia', ancla: 'mar-anemia-hipoxemia', modelo: visual('mar-transporte-o2', '👁️ El contenido de O₂ en la calculadora (vista Visual)'), modeloFuturo: { capilarVivo: 'anemia' } } },
+        volver: { nombre: 'Anemia frente a hipoxemia', ancla: 'mar-anemia-hipoxemia', modelo: visual('mar-transporte-o2', '👁️ El contenido de O₂ en la calculadora (vista Visual)'), modeloVivo: { capilarVivo: 'anemia' } } },
     ],
     profundizar: [
       { id: 'mar-vo2-medido', titulo: 'VO₂ calculado frente a medido' },
@@ -529,7 +529,7 @@ export const MAYEUTICA_OXIGENO = {
   'mar-extraccion-lactato': {
     entrada: 'Cómo defiende el cuerpo el consumo cuando cae el aporte, qué dicen la SvO₂ y la ScvO₂, y por qué un lactato alto casi nunca es falta de O₂.',
     guia: [
-      { id: 'el-g1', corto: 'la meseta', tipo: 'test', fuente: 'mar-extraccion-curva · mar-img-9-3', modeloFuturo: { capilarVivo: 'bajo-gasto' },
+      { id: 'el-g1', corto: 'la meseta', tipo: 'test', fuente: 'mar-extraccion-curva · mar-img-9-3', modeloVivo: { capilarVivo: 'bajo-gasto' },
         modelo: visual('mar-extraccion-lactato', '👁️ Aporte y consumo en el simulador (vista Visual)'),
         enunciado: 'El aporte cae a la mitad por un bajo gasto. ¿Por qué, al principio, el consumo no cambia?',
         opciones: [
@@ -537,14 +537,14 @@ export const MAYEUTICA_OXIGENO = {
           { t: 'Porque la extracción sube y lo compensa todo', ok: true },
           { t: 'Porque el O₂ de las venas vuelve a usarse', porque: 'El O₂ venoso no sirve para el metabolismo aerobio. Lo que cambia es cuánto se extrae en el capilar.' }],
         explicacion: '<span class="hl-azul">VO₂ = DO₂ × O₂ER</span>: al bajar el DO₂, el VO₂ se mantiene porque <span class="hl">sube la extracción</span> (SaO₂ − SvO₂).' },
-      { id: 'el-g2', corto: 'hasta dónde', tipo: 'test', fuente: 'mar-extraccion-curva · mar-dual', modeloFuturo: { capilarVivo: 'umbral' },
+      { id: 'el-g2', corto: 'hasta dónde', tipo: 'test', fuente: 'mar-extraccion-curva · mar-dual', modeloVivo: { capilarVivo: 'umbral' },
         enunciado: '¿Hasta dónde puede subir la extracción (SaO₂ − SvO₂) antes de que el consumo empiece a caer?',
         opciones: [
           { t: 'Hasta el 30 %', porque: 'El 20-30 % es la extracción normal. Si crees que ahí acaba la reserva, verás alarmas donde aún hay margen.' },
           { t: 'Del 25 al 50 %', ok: true },
           { t: 'Casi al 100 %: el capilar puede vaciar la sangre', porque: 'Más allá del 50 % ya no puede compensar. Te confiarías con un paciente al límite.' }],
         explicacion: 'La extracción sube de forma lineal del <span class="hl">25 % al 50 %</span>; ahí el VO₂ empieza a caer con el aporte: el umbral del <span class="hl-rojo">metabolismo limitado por el oxígeno</span>.' },
-      { id: 'el-g3', corto: 'la SvO₂ del umbral', tipo: 'test', fuente: 'mar-svo2-guia · mar-tabla-9-4', modeloFuturo: { capilarVivo: 'umbral' },
+      { id: 'el-g3', corto: 'la SvO₂ del umbral', tipo: 'test', fuente: 'mar-svo2-guia · mar-tabla-9-4', modeloVivo: { capilarVivo: 'umbral' },
         enunciado: 'Predice: con la SaO₂ cerca del 100 % y la extracción en el 50 %, ¿qué SvO₂ verías?',
         opciones: [
           { t: 'Alrededor del 75 %, la normal', porque: 'Con la SaO₂ cerca del 100 %, la SvO₂ va al revés que la extracción: con 50 % de extracción, ≈50 %. No verías el peligro.' },
@@ -552,28 +552,28 @@ export const MAYEUTICA_OXIGENO = {
           { t: 'Alrededor del 50 %: la SvO₂ cae al subir la extracción', ok: true }],
         explicacion: 'SvO₂ normal 65-75 %; <span class="hl">&lt;65 %</span>, menos aporte; <span class="hl-rojo">≤50 %</span>, oxigenación tisular amenazada; <span class="hl">≥80 %</span>, mala utilización. Varía un 5 % de forma espontánea.',
         nota: '<b>Nota de fuentes.</b> Dos discrepancias de Marino que se reproducen tal cual: la SvO₂ normal es 70-75 % en el cap. 7 (M pág. 42) y 65-75 % en el cap. 9 (M pág. 77); y la mala utilización es «80 % o más» en el texto (M pág. 77) y «>80 %» en la Tabla 9.4. La pregunta (SvO₂ ≈50 %) no depende de ninguna.' },
-      { id: 'el-g4', corto: 'dependiente', tipo: 'test', fuente: 'mar-extraccion-curva', modeloFuturo: { capilarVivo: 'dependiente' },
+      { id: 'el-g4', corto: 'dependiente', tipo: 'test', fuente: 'mar-extraccion-curva', modeloVivo: { capilarVivo: 'dependiente' },
         enunciado: 'Pasado ese 50 %, el aporte sigue cayendo. ¿Qué pasa con el consumo?',
         opciones: [
           { t: 'Cae con el aporte: depende de él', ok: true },
           { t: 'Se mantiene: la extracción sigue subiendo', porque: 'Ya no puede: más allá del 50 % no compensa. Creerías protegido a quien ya no lo está.' },
           { t: 'Sube, por el estrés', porque: 'Lo que describe la Figura 9.3 es que el VO₂ se vuelve dependiente del aporte y cae con él.' }],
         explicacion: 'El VO₂ se vuelve <span class="hl-rojo">dependiente del aporte</span>: es el metabolismo limitado por el oxígeno.' },
-      { id: 'el-g5', corto: 'SvO₂ de 85 %', tipo: 'test', fuente: 'mar-sao2-svo2-guia · mar-svo2-guia', modeloFuturo: { capilarVivo: 'sepsis' },
+      { id: 'el-g5', corto: 'SvO₂ de 85 %', tipo: 'test', fuente: 'mar-sao2-svo2-guia · mar-svo2-guia', modeloVivo: { capilarVivo: 'sepsis' },
         enunciado: 'Séptico: SaO₂ 98 %, SvO₂ 85 % y lactato 5. ¿Le sobra O₂?',
         opciones: [
           { t: 'Sí: está bien perfundido y oxigenado', porque: 'Una SvO₂ >80 % en la sepsis no es buena perfusión sino defecto de utilización. Pararías la reanimación con un lactato de 5.' },
           { t: 'No: los tejidos no usan el O₂ que llega', ok: true },
           { t: 'No: le falta aporte y hay que transfundir', porque: 'La falta de aporte baja la SvO₂, no la sube. Transfundir no arregla una mitocondria que no usa el O₂.' }],
         explicacion: 'SaO₂ − SvO₂ <span class="hl-rojo">&lt;20 %</span> (o SvO₂ &gt;80 %): <span class="hl">defecto de utilización del O₂</span>, casi siempre por sepsis (también llamado «cortocircuito periférico»).' },
-      { id: 'el-g6', corto: 'de dónde', tipo: 'test', fuente: 'mar-lactato-sepsis · mar-img-9-5 · mar-lactato-contra', modeloFuturo: { capilarVivo: 'sepsis' },
+      { id: 'el-g6', corto: 'de dónde', tipo: 'test', fuente: 'mar-lactato-sepsis · mar-img-9-5 · mar-lactato-contra', modeloVivo: { capilarVivo: 'sepsis' },
         enunciado: 'Si hay O₂ de sobra, ¿de dónde sale el lactato del séptico?',
         opciones: [
           { t: 'De zonas hipóxicas ocultas', porque: 'En el shock séptico no se vio hipoxia en ningún órgano (animales) y la PO₂ del músculo está aumentada. Buscarías una hipoxia que no hay.' },
           { t: 'PDH frenada y glucólisis acelerada', ok: true },
           { t: 'De un hígado que no lo aclara', porque: 'La disfunción hepática está en la Tabla 9.5, pero en la sepsis la vía principal es la PDH bloqueada.' }],
         explicacion: 'Dos vías: la principal, la <span class="hl">inhibición de la PDH</span> por endotoxina y citocinas (el defecto de utilización); y la <span class="hl">glucólisis acelerada por las catecolaminas</span>. La hiperlactatemia es universal en la sepsis.' },
-      { id: 'el-g7', corto: 'la tiamina', tipo: 'test', fuente: 'mar-lactato-tiamina · mar-img-9-5 · mu-tiamina', modeloFuturo: { capilarVivo: 'tiamina' },
+      { id: 'el-g7', corto: 'la tiamina', tipo: 'test', fuente: 'mar-lactato-tiamina · mar-img-9-5 · mu-tiamina', modeloVivo: { capilarVivo: 'tiamina' },
         enunciado: 'Alcohólico desnutrido, buena perfusión, lactato alto. ¿Qué buscas?',
         opciones: [
           { t: 'Un bajo gasto oculto', porque: 'Con buena perfusión, un lactato alto apunta a una causa aerobia. Te perderías un déficit tratable.' },
@@ -643,7 +643,7 @@ export const MAYEUTICA_OXIGENO = {
         pasos: [
           { momento: 'Ingreso', datos: { Gasometría: 'SaO₂ 98 %; ScvO₂ 88 %', Lactato: '5 mmol/L' }, nuevo: ['Gasometría', 'Lactato'],
             calculadora: { ir: 'mar-extraccion-calc', nombre: '¿Qué dice esta saturación venosa?' },
-            pregunta: { id: 'ela-1', tipo: 'test', fuente: 'mar-sao2-svo2-guia · mar-scvo2-9', origen: 'ficha · la cuenta, del caso', modeloFuturo: { capilarVivo: 'sepsis' },
+            pregunta: { id: 'ela-1', tipo: 'test', fuente: 'mar-sao2-svo2-guia · mar-scvo2-9', origen: 'ficha · la cuenta, del caso', modeloVivo: { capilarVivo: 'sepsis' },
               enunciado: '¿Qué te dice esa saturación venosa?',
               opciones: [
                 { t: 'Perfusión buena: supera el objetivo del 70 %', porque: 'Con un lactato de 5 y una extracción del 10 %, no es buena perfusión: los tejidos no usan el O₂. Pararías la reanimación.' },
@@ -700,7 +700,7 @@ export const MAYEUTICA_OXIGENO = {
           'Saturación venosa >80 % (o extracción <20 %) en la sepsis: defecto de utilización, no buena perfusión.',
           'El gap de PCO₂ ve la hipoperfusión, no la oxigenación tisular; el lactato alto casi nunca es hipoxia (Tabla 9.5).',
           'Propofol >5 mg/kg/h (>80 µg/kg/min) más de 48 h con un lactato que no cede: síndrome de infusión.'],
-        volver: { nombre: 'SaO₂ − SvO₂: cómo leerla', ancla: 'mar-sao2-svo2-guia', modelo: visual('mar-extraccion-lactato', '👁️ La extracción y el lactato (vista Visual)'), modeloFuturo: { capilarVivo: 'sepsis' } } },
+        volver: { nombre: 'SaO₂ − SvO₂: cómo leerla', ancla: 'mar-sao2-svo2-guia', modelo: visual('mar-extraccion-lactato', '👁️ La extracción y el lactato (vista Visual)'), modeloVivo: { capilarVivo: 'sepsis' } } },
     ],
     profundizar: [
       { id: 'mar-sto2', titulo: 'StO₂: la espectroscopia infrarroja' },

@@ -79,8 +79,8 @@ backend/ admin/         panel de subida de contenido (aparte de la app)
 - **Enlace cruzado (el único mecanismo)**: `<button data-especialidad="X" data-view data-panel data-tab>`. Lo
   resuelve un listener delegado en `home/index.js`. Sirve entre especialidades y dentro de una (sin `data-view`).
   Extras: `data-trasplante` (con `especialidad="home"`), `data-resaltar="#id"`, `data-pulsar="id1 id2"`,
-  `data-en-visual`, `data-eco-vista/escenario/medir/atlas`, `data-nefrona-viva`, `data-glomerulo`,
-  `data-acidobase-vivo`, `data-agua-viva` (modelos vivos: cada especialidad los declara en `modelosVivos` de su API;
+  `data-en-visual`, `data-eco-vista/escenario/medir/atlas/panel`, `data-nefrona-viva`, `data-glomerulo`,
+  `data-acidobase-vivo`, `data-agua-viva`, `data-capilar-vivo`, `data-cateter-vivo` (modelos vivos: cada especialidad los declara en `modelosVivos` de su API;
   su «← VOLVER» lleva a la ficha de origen, `core/volver-ficha.js`). Las claves de
   vista y panel de cada cuaderno están en `PANEL_NAV` de `core/search.js` (Hematología usa `especialidad="home"`). **Nunca un
   listener nuevo por módulo.** `.tx-link`, `.especialidad-link`, `.paper-link`, `.neumo-internal-link` son solo
@@ -128,6 +128,8 @@ backend/ admin/         panel de subida de contenido (aparte de la app)
 | Enlace cruzado | `js/modules/fisio-uci/vias-urinarias.html` (botones `.especialidad-link`) |
 | Capítulo del atlas de eco | `js/modules/eco/atlas/cap-sistolica.html` + `sistolica.mjs` |
 | Mecanismo animado paso a paso (Motion) | `js/modules/cardiologia/receptores-animados.js` |
+| Modelo vivo con su Mayéutica y casos | `js/modules/libros/capilar-vivo.js` (+ `-escena.js`, `js/data/capilar-vivo-data.js`, prueba `autonomo/pruebas/capilar-vivo.mjs`) |
+| Mayéutica en una ficha (Texto \| Visual \| Mayéutica) | `js/core/mayeutica.js` + `js/data/mayeutica/b1-fluidos.js` (formato arriba del archivo); prueba `mayeutica-fichas` |
 
 ## 7. Contenido clínico
 

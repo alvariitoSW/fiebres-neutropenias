@@ -6,9 +6,9 @@
 // (docs/marino-2024-acceso-vascular-practicas-caps1-4.pdf, págs. 2-66); cada pregunta dice dónde con `fuente`. Los
 // pacientes se inventan. Cobertura y casos: autonomo/bloques/b1/cobertura.md §2.A y §3 (A1 partido en tres, A3 en
 // dos, A2, A4 y E5), con las correcciones del 20/10 (como mucho 2 errores; el recambio sobre guía, «no se aconseja»).
-// Formato: el de b1-fluidos.js. El catéter vivo se construye en otra rama: donde una pregunta se comprobaría en él va
-// `modeloFuturo: { cateterVivo: '<estado>' }` (los estados de autonomo/maquetas/b1-cateter-vivo.html), que la pieza
-// ignora hasta unir las ramas. Mientras, el botón «modelo» abre la vista Visual de la propia ficha.
+// Formato: el de b1-fluidos.js. Donde una pregunta se comprueba en el catéter vivo va
+// `modeloVivo: { cateterVivo: '<estado>' }` (los ESTADOS de js/data/cateter-vivo-data.js); su botón sale primero, y
+// detrás el de la vista Visual de la propia ficha (`modelo`).
 
 const PDF_A = 'docs/marino-2024-acceso-vascular-practicas-caps1-4.pdf';
 // La vista Visual de una ficha de Marino · Fundamentos, como botón «modelo» (sale tras contestar).
@@ -21,7 +21,7 @@ export const MAYEUTICA_ACCESOS = {
   'mar-cateteres-flujo': {
     entrada: 'Qué decide cuánto pasa por un catéter (el radio a la cuarta, la longitud, la altura de la bolsa), cómo se lee su tamaño y qué pedir en una hemorragia masiva.',
     guia: [
-      { id: 'fl-g1', corto: 'el radio', tipo: 'test', fuente: 'mar-fig-1-1-calibre · mar-poiseuille', modeloFuturo: { cateterVivo: 'calibre' },
+      { id: 'fl-g1', corto: 'el radio', tipo: 'test', fuente: 'mar-fig-1-1-calibre · mar-poiseuille', modeloVivo: { cateterVivo: 'calibre' },
         modelo: visual('mar-cateteres-flujo', '👁️ La ecuación de Poiseuille, en marcha (vista Visual)'),
         enunciado: 'Predice: entre un catéter de 16 G y uno de 20 G hay menos de 1 mm de diámetro externo. Misma longitud, agua por gravedad. ¿Cuánto más pasa por el de 16 G?',
         opciones: [
@@ -29,7 +29,7 @@ export const MAYEUTICA_ACCESOS = {
           { t: 'Casi cuatro veces más: el radio pesa a la cuarta', ok: true },
           { t: 'Lo mismo: con la vía abierta manda la altura de la bolsa', porque: 'La presión cuenta, pero con la misma bolsa el 16 G pasa casi cuatro veces más que el 20 G. Creerlo es pinchar cualquier catéter en un shock.' }],
         explicacion: 'Figura 1.1 (catéteres de 1,2 pulgadas): <span class="hl">16 G 220, 18 G 105 y 20 G 60 mL/min</span>. Por Hagen-Poiseuille, Q = ΔP × πr⁴ / 8µL: el flujo va con la <span class="hl-azul">cuarta potencia del radio</span>. El radio es lo que más pesa.' },
-      { id: 'fl-g2', corto: 'la longitud', tipo: 'test', fuente: 'mar-fig-1-1-longitud · mar-poiseuille', modeloFuturo: { cateterVivo: 'longitud' },
+      { id: 'fl-g2', corto: 'la longitud', tipo: 'test', fuente: 'mar-fig-1-1-longitud · mar-poiseuille', modeloVivo: { cateterVivo: 'longitud' },
         enunciado: 'Mismo 16 G, pero de 6 pulgadas en vez de 2 (la longitud de un catéter central frente a la de un periférico). ¿Qué le pasa al flujo?',
         opciones: [
           { t: 'Nada: el calibre es el mismo, y el calibre es lo que manda', porque: 'La longitud está en el denominador de la ecuación. Esperarías del catéter largo lo mismo que del corto, y no llegaría.' },
@@ -43,14 +43,14 @@ export const MAYEUTICA_ACCESOS = {
           { t: 'No: el ritmo lo marca el catéter, no el tamaño de la vena', ok: true },
           { t: 'Sí: la sangre de toda la pierna arrastra lo que infundes', porque: 'El flujo de la vena no tira de la infusión. Contarías con un ritmo que no vas a tener.' }],
         explicacion: '<span class="hl">La velocidad de infusión la marca el catéter, no la vena</span>: depende de las dimensiones del catéter colocado, no del tamaño de la vena canalizada.' },
-      { id: 'fl-g4', corto: 'la bolsa', tipo: 'test', fuente: 'mar-altura-bolsa · mar-bombas', modeloFuturo: { cateterVivo: 'altura' },
+      { id: 'fl-g4', corto: 'la bolsa', tipo: 'test', fuente: 'mar-altura-bolsa · mar-bombas', modeloVivo: { cateterVivo: 'altura' },
         enunciado: 'Sin cambiar de catéter, ¿cómo consigues que pase más por gravedad, y cuánta presión de infusión ganas?',
         opciones: [
           { t: 'Subiendo la bolsa: a 100 cm, 75 mmHg', ok: true },
           { t: 'Con una bomba volumétrica, que empuja hasta 1.000 mL/h', porque: 'La volumétrica da como mucho 1 L/h; por gravedad, un catéter de línea media ya pasa 1,3 L/h por luz (Tabla 1.2). Le darías menos de lo que caería solo.' },
           { t: 'Subiendo la bolsa: a 68 cm ya son 75 mmHg', porque: 'A 68 cm son 50 mmHg (1 psi); los 75 mmHg piden 100 cm (1,5 psi). Calcularías más presión de la que das.' }],
         explicacion: 'La resistencia se vence subiendo el gradiente (ΔP): <span class="hl">a 68 cm, 50 mmHg (1 psi); a 100 cm, 75 mmHg (1,5 psi)</span>. Las bombas ajustan la presión (hasta 15 psi) para dar el ritmo programado.' },
-      { id: 'fl-g5', corto: 'hemorragia masiva', tipo: 'test', fuente: 'mar-corto-grueso · mar-bombas', modeloFuturo: { cateterVivo: 'infusor' },
+      { id: 'fl-g5', corto: 'hemorragia masiva', tipo: 'test', fuente: 'mar-corto-grueso · mar-bombas', modeloVivo: { cateterVivo: 'infusor' },
         enunciado: 'Hemorragia masiva. Juntando todo lo anterior: ¿qué catéter y qué sistema pides?',
         opciones: [
           { t: 'Un catéter venoso central de triple luz: llega a una vena más grande', porque: 'Mide 20 cm y su luz más gruesa es de 16 G: el catéter, no la vena, marca el ritmo. Repondrías más despacio que con un periférico corto y grueso.' },
@@ -122,7 +122,7 @@ export const MAYEUTICA_ACCESOS = {
                 { t: '50 mmHg, y subirla más no cambia nada', porque: 'Subir la bolsa sube el ΔP de la ecuación, y el flujo crece con él. Te quedarías sin la palanca más fácil.' }],
               explicacion: 'Por gravedad: <span class="hl">68 cm = 50 mmHg (1 psi); 100 cm = 75 mmHg (1,5 psi)</span>.' } },
           { momento: 'Minuto 15 · el giro', datos: { PA: '70/40 mmHg', Pérdidas: 'fractura de pelvis; hemorragia masiva' }, nuevo: ['PA', 'Pérdidas'],
-            pregunta: { id: 'cfa-3', tipo: 'destapa', fuente: 'mar-bombas · mar-corto-grueso · mar-poiseuille', modeloFuturo: { cateterVivo: 'infusor' },
+            pregunta: { id: 'cfa-3', tipo: 'destapa', fuente: 'mar-bombas · mar-corto-grueso · mar-poiseuille', modeloVivo: { cateterVivo: 'infusor' },
               enunciado: 'El adjunto pide el infusor rápido. ¿Qué necesitas para que funcione, y por qué ese catéter?',
               cuantas: 'son tres cosas',
               puntos: [
@@ -155,7 +155,7 @@ export const MAYEUTICA_ACCESOS = {
           'El flujo va con el radio a la cuarta y cae con la longitud: corto y grueso.',
           'El catéter, no la vena, marca el ritmo; sin cambiarlo, solo queda subir la bolsa (100 cm, 75 mmHg).',
           'Hemorragia masiva: infusor rápido (hasta 1,5 L/min) con un catéter de 7-8 Fr y 2-2,5 pulgadas.'],
-        volver: { nombre: 'Corto y grueso', ancla: 'mar-corto-grueso', modelo: visual('mar-cateteres-flujo', '👁️ La ecuación de Poiseuille, en marcha (vista Visual)'), modeloFuturo: { cateterVivo: 'infusor' } } },
+        volver: { nombre: 'Corto y grueso', ancla: 'mar-corto-grueso', modelo: visual('mar-cateteres-flujo', '👁️ La ecuación de Poiseuille, en marcha (vista Visual)'), modeloVivo: { cateterVivo: 'infusor' } } },
     ],
     profundizar: [
       { id: 'mar-materiales', titulo: 'De qué están hechos: poliuretano y silicona' },
@@ -176,7 +176,7 @@ export const MAYEUTICA_ACCESOS = {
           { t: 'Por dónde se pincha: los centrales, en el cuello o la ingle', porque: 'El PICC se pincha en el brazo y es central. Si lo defines por el punto de entrada, tratarás como periférico un catéter que llega a la cava.' },
           { t: 'Por dónde acaba la punta: en una vena cava o no', ok: true }],
         explicacion: '<span class="hl-purpura">Un catéter central llega a una de las venas cavas; uno periférico, no.</span> El PICC es un midline más largo que llega a la cava superior.' },
-      { id: 'tk-g2', corto: 'el precio del largo', tipo: 'test', fuente: 'mar-tabla-1-2 · mar-tabla-1-3 · mar-picc', modeloFuturo: { cateterVivo: 'catalogo' },
+      { id: 'tk-g2', corto: 'el precio del largo', tipo: 'test', fuente: 'mar-tabla-1-2 · mar-tabla-1-3 · mar-picc', modeloVivo: { cateterVivo: 'catalogo' },
         enunciado: 'Predice: un midline de 15 cm y un PICC de 50 cm, los dos con luces de 18 G. ¿Cuánto pasa por el PICC respecto al midline?',
         opciones: [
           { t: 'Lo mismo: si la luz es igual, el flujo es igual', porque: 'La longitud está en el denominador: el PICC mide más del triple. Contarías con un ritmo que no tendrás.' },
@@ -190,7 +190,7 @@ export const MAYEUTICA_ACCESOS = {
           { t: 'El neumotórax, más que con el catéter central', porque: 'Se pone en el brazo: no hay neumotórax. Si lo temes, descartarás un acceso que no lo da.' },
           { t: 'Los fallos al primer intento de pincharlo', porque: 'Ese es el problema del periférico corto (falla en un tercio). El flujo pobre del PICC se relaciona con las oclusiones, que le dejan sin vía.' }],
         explicacion: 'El PICC mide más del triple que el midline y su flujo es solo un 20 % del de este: ese flujo comprometido <span class="hl">podría explicar su tasa relativamente alta de oclusiones</span> (Tabla 1.4).' },
-      { id: 'tk-g4', corto: 'qué luz', tipo: 'test', fuente: 'mar-cvc-triple · mar-tabla-1-3', modeloFuturo: { cateterVivo: 'cvc-luces' },
+      { id: 'tk-g4', corto: 'qué luz', tipo: 'test', fuente: 'mar-cvc-triple · mar-tabla-1-3', modeloVivo: { cateterVivo: 'cvc-luces' },
         enunciado: 'Predice: catéter venoso central de triple luz, 7 Fr y 20 cm. Necesitas pasar un bolo deprisa. ¿Por qué luz?',
         opciones: [
           { t: 'La proximal: sale antes y recorre menos catéter', porque: 'Es de 18 G: 0,99 L/h, menos de la mitad que la distal. Le darías el bolo a medio ritmo.' },
@@ -260,7 +260,7 @@ export const MAYEUTICA_ACCESOS = {
                 { t: 'Un PICC: más seguro y bien aceptado', porque: 'Más seguro que el CVC, pero se ocluye a menudo y su longitud limita el ritmo. En la inestabilidad grave, el preferido es el CVC.' }],
               explicacion: 'El CVC es <span class="hl">el preferido en la inestabilidad hemodinámica grave</span>.' } },
           { momento: 'Día 1 · el catéter', datos: { CVC: 'triple luz, 7 Fr, 20 cm' }, nuevo: ['CVC'],
-            pregunta: { id: 'tka-2', tipo: 'test', fuente: 'mar-tabla-1-3 · mar-cvc-triple', modeloFuturo: { cateterVivo: 'cvc-luces' },
+            pregunta: { id: 'tka-2', tipo: 'test', fuente: 'mar-tabla-1-3 · mar-cvc-triple', modeloVivo: { cateterVivo: 'cvc-luces' },
               enunciado: 'A la vez: un bolo rápido de cristaloide, la noradrenalina y la sedación. ¿Por qué luz va el bolo, y cuánto da?',
               opciones: [
                 { t: 'Por la medial: 0,91 L/h, la del medio para todo', porque: 'La medial es de 18 G. Por la distal (16 G) pasa más del doble: el bolo tardaría el doble.' },
@@ -288,7 +288,7 @@ export const MAYEUTICA_ACCESOS = {
                 'El CVC queda para la <span class="hl">inestabilidad hemodinámica grave</span>; ya estable, el midline lo está sustituyendo en el acceso prolongado.'],
               explicacion: 'Si se previeran varias semanas de tratamiento IV, el PICC sigue siendo útil.' } },
           { momento: 'Día 6', datos: { Acceso: 'midline de doble luz, 15 cm (luces de 18 G)' }, nuevo: ['Acceso'],
-            pregunta: { id: 'tka-5', tipo: 'test', fuente: 'mar-tabla-1-2', modeloFuturo: { cateterVivo: 'catalogo' },
+            pregunta: { id: 'tka-5', tipo: 'test', fuente: 'mar-tabla-1-2', modeloVivo: { cateterVivo: 'catalogo' },
               enunciado: 'La enfermera pregunta si por el midline, a gravedad, un bolo pasará más rápido que con la bomba volumétrica.',
               opciones: [
                 { t: 'Sí: 1,3 L/h por luz, más que la volumétrica (1 L/h)', ok: true },
@@ -300,7 +300,7 @@ export const MAYEUTICA_ACCESOS = {
           'Central es el que llega a la cava; la longitud cuesta flujo (el PICC da un 20 % del midline).',
           'En el CVC de triple luz, el volumen por la distal (16 G, 2,28 L/h): más del doble que las otras.',
           'Hoy, cada vez más, el midline para el acceso estable; el CVC, en la inestabilidad grave.'],
-        volver: { nombre: 'Tabla 1.3', ancla: 'mar-tabla-1-3', modelo: visual('mar-tipos-cateter', '👁️ De periférico a central (vista Visual)'), modeloFuturo: { cateterVivo: 'cvc-luces' } } },
+        volver: { nombre: 'Tabla 1.3', ancla: 'mar-tabla-1-3', modelo: visual('mar-tipos-cateter', '👁️ De periférico a central (vista Visual)'), modeloVivo: { cateterVivo: 'cvc-luces' } } },
     ],
     profundizar: [
       { id: 'mar-periferico-largo', titulo: 'El periférico largo (8 cm)' },
@@ -313,14 +313,14 @@ export const MAYEUTICA_ACCESOS = {
   'mar-eco-intraosea': {
     entrada: 'Pinchar con eco sin atravesar la vena, distinguir vena de arteria sin fiarse del color, y la intraósea: cuándo, dónde, cuánto pasa y cómo quitarle el dolor.',
     guia: [
-      { id: 'ei-g1', corto: 'el punto brillante', tipo: 'test', fuente: 'mar-eco-ejes · mar-eco-aguja', modeloFuturo: { cateterVivo: 'eco-eje-corto' },
+      { id: 'ei-g1', corto: 'el punto brillante', tipo: 'test', fuente: 'mar-eco-ejes · mar-eco-aguja', modeloVivo: { cateterVivo: 'eco-eje-corto' },
         enunciado: 'Pinchas en eje corto y ves un punto brillante dentro de la luz de la vena. ¿Qué sabes ya, y qué no?',
         opciones: [
           { t: 'Que está bien colocada: puedes pasar el catéter directamente', porque: 'En eje corto solo ves un corte de la aguja: no sabes si la punta ha salido por detrás. Pasarías el catéter fuera de la vena.' },
           { t: 'La punción, sí; que la guía esté dentro, aún no', ok: true },
           { t: 'Nada: en eje corto la aguja no se llega a ver', porque: 'Se ve como un punto brillante cuando llega al vaso: así se confirma la punción en eje corto.' }],
         explicacion: 'En eje corto la aguja solo se ve como un punto brillante al llegar al vaso; se avanza con pequeños impulsos que desplazan el tejido. Confirma la <span class="hl">punción</span>, no que la guía y el catéter estén dentro.' },
-      { id: 'ei-g2', corto: 'la pared posterior', tipo: 'test', fuente: 'mar-eco-pared-posterior', modeloFuturo: { cateterVivo: 'eco-eje-largo' },
+      { id: 'ei-g2', corto: 'la pared posterior', tipo: 'test', fuente: 'mar-eco-pared-posterior', modeloVivo: { cateterVivo: 'eco-eje-largo' },
         enunciado: '¿Por qué la aguja tiende a atravesar la pared posterior de la vena?',
         opciones: [
           { t: 'La vena se colapsa al pincharla y la aguja la cruza', ok: true },
@@ -334,14 +334,14 @@ export const MAYEUTICA_ACCESOS = {
           { t: 'Siempre eje corto: ve la arteria y la vena a la vez', porque: 'Ve las dos, pero no confirma que la guía y el catéter estén en la luz (pared posterior, 40 %).' },
           { t: 'Corto para pinchar; largo para confirmar', ok: true }],
         explicacion: 'Ninguno es claramente mejor. Hoy: <span class="hl">eje corto para localizar la vena y confirmar la punción</span>; <span class="hl">eje largo para confirmar que la guía y el catéter están dentro</span>.' },
-      { id: 'ei-g4', corto: '¿el rojo es arteria?', tipo: 'test', fuente: 'mar-doppler-color · mar-compresibilidad', modeloFuturo: { cateterVivo: 'eco-doppler' },
+      { id: 'ei-g4', corto: '¿el rojo es arteria?', tipo: 'test', fuente: 'mar-doppler-color · mar-compresibilidad', modeloVivo: { cateterVivo: 'eco-doppler' },
         enunciado: 'Dos círculos negros en la ingle. Con Doppler color, uno sale rojo y el otro azul. ¿El rojo es la arteria?',
         opciones: [
           { t: 'Sí: el Doppler pinta las arterias en rojo y las venas en azul', porque: 'Los colores indican la dirección del flujo respecto a la sonda, no arteria o vena. Si te fías del color, puedes canalizar la arteria.' },
           { t: 'No se sabe: el color indica la dirección del flujo', ok: true },
           { t: 'No: el rojo es la vena, que lleva más sangre', porque: 'El color no dice «arteria» ni «vena», solo dirección. Elegir por el color te puede llevar a la arteria.' }],
         explicacion: '<span class="hl-purpura">Los colores no significan «arteria» o «vena»</span>: indican la dirección del flujo respecto a la sonda (lo dice la escala de color). El método más fácil es la compresión.' },
-      { id: 'ei-g5', corto: 'no se comprime', tipo: 'test', fuente: 'mar-compresibilidad · mar-io-indicaciones', modeloFuturo: { cateterVivo: 'eco-compresion' },
+      { id: 'ei-g5', corto: 'no se comprime', tipo: 'test', fuente: 'mar-compresibilidad · mar-io-indicaciones', modeloVivo: { cateterVivo: 'eco-compresion' },
         enunciado: 'Aprietas la piel con la sonda y ninguno de los dos vasos se colapsa. ¿Qué piensas?',
         opciones: [
           { t: 'Que los dos son arterias', porque: 'Junto a la arteria va su vena. Si tomas una vena trombosada por arteria, pasarás por alto el trombo.' },
@@ -355,7 +355,7 @@ export const MAYEUTICA_ACCESOS = {
           { t: 'Porque es rígida y no se colapsa con la hipotensión', ok: true },
           { t: 'Porque se pincha sin dolor: el hueso no tiene nervios', porque: 'El periostio está muy inervado y la infusión duele en el despierto: hace falta lidocaína. Sin ella, el paciente sufriría.' }],
         explicacion: 'La cavidad medular es rígida y <span class="hl">no se colapsa</span> con la hipotensión o la hipovolemia, a diferencia de las venas. Indicada en parada, trauma grave o shock; la AHA pide pasar a la IO si falla el primer intento IV. Éxito extrahospitalario de hasta el 97 %; forma parte del ATLS.' },
-      { id: 'ei-g7', corto: 'cuánto pasa', tipo: 'test', fuente: 'mar-io-flujo', modeloFuturo: { cateterVivo: 'intraosea' },
+      { id: 'ei-g7', corto: 'cuánto pasa', tipo: 'test', fuente: 'mar-io-flujo', modeloVivo: { cateterVivo: 'intraosea' },
         enunciado: 'Predice: ¿cuánto pasa por una intraósea, y qué haces por ello?',
         opciones: [
           { t: 'Lo mismo que por un periférico de 16 G', porque: 'Un 25 % de una periférica, por la viscosidad de la médula y su presión. Sin presurizar, la reposición se quedaría muy corta.' },
@@ -435,7 +435,7 @@ export const MAYEUTICA_ACCESOS = {
                 { t: 'No importa: se puede infundir sin comprobar nada', porque: 'Hay que confirmarla: aspirar y, si no sale, lavar con 5-10 mL de salino para licuar la médula.' }],
               explicacion: 'Se confirma aspirando sangre, que no siempre sale porque <span class="hl">la médula es viscosa</span>: un lavado con <span class="hl">5-10 mL de salino</span> la licúa lo suficiente.' } },
           { momento: 'Minuto 6 · el plan del R1', datos: { Plan: 'el R1 escribe el plan' }, nuevo: ['Plan'],
-            pregunta: { id: 'eia-4', tipo: 'error', fuente: 'mar-io-flujo · mar-io-duracion · mar-io-lidocaina', modeloFuturo: { cateterVivo: 'intraosea' },
+            pregunta: { id: 'eia-4', tipo: 'error', fuente: 'mar-io-flujo · mar-io-duracion · mar-io-lidocaina', modeloVivo: { cateterVivo: 'intraosea' },
               enunciado: 'El plan del R1. Encuentra los errores.',
               frases: [
                 { t: 'Por gravedad pasará como una periférica: no hace falta presurizar.', mal: true,
@@ -466,7 +466,7 @@ export const MAYEUTICA_ACCESOS = {
           'La IO no se colapsa en el shock: la AHA la pide si falla el primer intento IV.',
           'Tibia (3 cm bajo la rótula, 2 cm medial) o húmero; nunca un hueso fracturado o ya pinchado, ni un miembro con lesión vascular.',
           'Pasa un 25 % de una periférica: presurizar; lidocaína 40 mg en 2 min en el despierto; menos de 24 h.'],
-        volver: { nombre: 'El flujo de la intraósea', ancla: 'mar-io-flujo', modelo: visual('mar-eco-intraosea', '👁️ El acceso intraóseo, paso a paso (vista Visual)'), modeloFuturo: { cateterVivo: 'intraosea' } } },
+        volver: { nombre: 'El flujo de la intraósea', ancla: 'mar-io-flujo', modelo: visual('mar-eco-intraosea', '👁️ El acceso intraóseo, paso a paso (vista Visual)'), modeloVivo: { cateterVivo: 'intraosea' } } },
     ],
     profundizar: [
       { id: 'mar-eco-metodo', titulo: 'La sonda: 5-15 MHz y unos 9 cm' },
@@ -496,7 +496,7 @@ export const MAYEUTICA_ACCESOS = {
           { t: 'Contraindicado hasta corregir: plaquetas <20.000 o INR >3', porque: 'Hay una recomendación de corregirlos, pero sin pruebas que la respalden. Retrasarías un acceso que necesita.' },
           { t: 'La coagulopatía grave es la única contraindicación absoluta', porque: 'No hay contraindicaciones absolutas, ni siquiera la coagulopatía, por grave que sea.' }],
         explicacion: '<span class="hl">No hay contraindicaciones absolutas</span>, ni la presencia ni la gravedad de una coagulopatía. Corregir plaquetas &lt;20.000 × 10⁶/L o INR &gt;3 antes es una recomendación <span class="hl-purpura">sin pruebas que la respalden</span>.' },
-      { id: 'cs-g3', corto: 'el paquete', tipo: 'destapa', fuente: 'mar-tabla-2-1 · mar-higiene-manos · mar-barreras · mar-clorhexidina', modeloFuturo: { cateterVivo: 'colonizacion' },
+      { id: 'cs-g3', corto: 'el paquete', tipo: 'destapa', fuente: 'mar-tabla-2-1 · mar-higiene-manos · mar-barreras · mar-clorhexidina', modeloVivo: { cateterVivo: 'colonizacion' },
         enunciado: 'Vas a poner un CVC. ¿Qué haces antes de pinchar para no infectarlo, y por qué cada cosa?',
         cuantas: 'son cuatro cosas',
         puntos: [
@@ -652,7 +652,7 @@ export const MAYEUTICA_ACCESOS = {
           'CVC en el shock y en la hemodiálisis aguda; para lo demás hay midline y PICC. Sin contraindicaciones absolutas.',
           'El paquete de inserción reduce las bacteriemias; hoy la infección depende del cuidado del punto más que del sitio.',
           'Yugular: Trendelenburg 15° y giro <40°; evitar la subclavia si hará falta una fístula en ese brazo; femoral: segura, más trombosis.'],
-        volver: { nombre: 'Tabla 2.1', ancla: 'mar-tabla-2-1', modelo: visual('mar-cvc-sitios', '👁️ Los tres sitios y el paquete (vista Visual)'), modeloFuturo: { cateterVivo: 'colonizacion' } } },
+        volver: { nombre: 'Tabla 2.1', ancla: 'mar-tabla-2-1', modelo: visual('mar-cvc-sitios', '👁️ Los tres sitios y el paquete (vista Visual)'), modeloVivo: { cateterVivo: 'colonizacion' } } },
     ],
     profundizar: [
       { id: 'mar-yugular-referencias', titulo: 'Yugular por referencias anatómicas' },
@@ -667,14 +667,14 @@ export const MAYEUTICA_ACCESOS = {
   'mar-cvc-complicaciones': {
     entrada: 'Por qué entra aire por un catéter central y cómo evitarlo y tratarlo, por qué la radiografía no ve el neumotórax y dónde debe quedar la punta.',
     guia: [
-      { id: 'cc-g1', corto: 'qué mete aire', tipo: 'test', fuente: 'mar-aire-fisio', modeloFuturo: { cateterVivo: 'aire' },
+      { id: 'cc-g1', corto: 'qué mete aire', tipo: 'test', fuente: 'mar-aire-fisio', modeloVivo: { cateterVivo: 'aire' },
         enunciado: 'Paciente que respira solo; el conector del CVC yugular queda abierto. ¿Qué mete aire en la vena?',
         opciones: [
           { t: 'La presión venosa alta, que hace burbujear la sangre', porque: 'Al revés: una presión venosa alta protege (por eso el Trendelenburg). Buscarías el problema donde no está.' },
           { t: 'Nada: el aire solo entra si se infunde a presión', porque: 'La presión negativa de la respiración espontánea basta para crear el gradiente. Dejar un conector abierto puede matarlo.' },
           { t: 'La presión intratorácica negativa', ok: true }],
         explicacion: 'La <span class="hl-rojo">presión intratorácica negativa</span> de la respiración espontánea crea el gradiente que mete aire en las venas.' },
-      { id: 'cc-g2', corto: 'cuánto pasa', tipo: 'test', fuente: 'mar-aire-fisio', modeloFuturo: { cateterVivo: 'aire' },
+      { id: 'cc-g2', corto: 'cuánto pasa', tipo: 'test', fuente: 'mar-aire-fisio', modeloVivo: { cateterVivo: 'aire' },
         enunciado: 'Predice: un gradiente de solo 5 mmHg a través de un catéter de 14 G (1,8 mm de diámetro interno). ¿Cuánto aire pasa?',
         opciones: [
           { t: '100 mL por segundo: en pocos segundos, una dosis mortal', ok: true },
@@ -688,7 +688,7 @@ export const MAYEUTICA_ACCESOS = {
           { t: '200-300 mL en segundos; bloquea el VD', ok: true },
           { t: 'Cualquier burbuja visible: va directa al cerebro', porque: 'Lo mortal es el volumen y la velocidad (200-300 mL en segundos); al cerebro llega si cruza un foramen oval permeable.' }],
         explicacion: 'Mortal con <span class="hl">200-300 mL (3-5 mL/kg) en pocos segundos</span>. El aire puede <span class="hl-rojo">bloquear el ventrículo derecho</span> (fallo derecho agudo y shock), dar edema pulmonar por fuga capilar o <span class="hl">cruzar un foramen oval permeable</span> y causar un ictus.' },
-      { id: 'cc-g4', corto: 'por qué Trendelenburg', tipo: 'test', fuente: 'mar-aire-prevencion', modeloFuturo: { cateterVivo: 'trendelenburg' },
+      { id: 'cc-g4', corto: 'por qué Trendelenburg', tipo: 'test', fuente: 'mar-aire-prevencion', modeloVivo: { cateterVivo: 'trendelenburg' },
         enunciado: '¿Por qué Trendelenburg al canalizar la yugular y la subclavia, y no la femoral?',
         opciones: [
           { t: 'Para que el aire suba hacia las piernas, lejos del corazón', porque: 'Lo que hace es subir la presión venosa para que no entre. Creyendo que mueve el aire, lo usarías mal.' },
@@ -711,7 +711,7 @@ export const MAYEUTICA_ACCESOS = {
           { t: 'No: la Rx portátil pierde hasta la mitad de los neumotórax', ok: true },
           { t: 'Sí: la radiografía es más sensible que la ecografía', porque: 'Al revés: la eco (deslizamiento pulmonar) es más sensible y se recomienda en su lugar.' }],
         explicacion: 'La Rx portátil <span class="hl-rojo">no ve hasta el 50 %</span> de los neumotórax del crítico: en supino el aire se acumula en la parte anterior de la cavidad pleural, delante del pulmón. La <span class="hl-verde">eco es más sensible</span> y se recomienda en su lugar.' },
-      { id: 'cc-g7', corto: 'la punta', tipo: 'test', fuente: 'mar-punta-objetivo · mar-punta-rx', modeloFuturo: { cateterVivo: 'punta' },
+      { id: 'cc-g7', corto: 'la punta', tipo: 'test', fuente: 'mar-punta-objetivo · mar-punta-rx', modeloVivo: { cateterVivo: 'punta' },
         enunciado: '¿Dónde debe quedar la punta de un CVC yugular o subclavio, y qué referencia miras en la Rx?',
         opciones: [
           { t: 'Dentro de la aurícula derecha', porque: 'Debe quedar en la cava superior, 1-2 cm por encima de la aurícula. Lo buscarías más abajo de lo debido.' },
@@ -772,7 +772,7 @@ export const MAYEUTICA_ACCESOS = {
         paciente: { Edad: '70 años', Motivo: 'posoperatorio de colectomía', Acceso: 'CVC yugular derecho; se le cambia el sistema de infusión', Postura: 'sentado a 45°' },
         pasos: [
           { momento: 'Día 4 · 10:00', datos: { Clínica: 'disnea brusca y tos angustiosa con el conector abierto' }, nuevo: ['Clínica'],
-            pregunta: { id: 'cca-1', tipo: 'test', fuente: 'mar-aire-fisio · mar-aire-clinica', modeloFuturo: { cateterVivo: 'aire' },
+            pregunta: { id: 'cca-1', tipo: 'test', fuente: 'mar-aire-fisio · mar-aire-clinica', modeloVivo: { cateterVivo: 'aire' },
               enunciado: '¿Qué ha pasado?',
               opciones: [
                 { t: 'Un neumotórax por la manipulación del catéter', porque: 'Con un catéter ya puesto no se pincha la pleura. Sentado y respirando solo, el gradiente negativo mete aire por el conector abierto: tratarías otra cosa.' },
@@ -822,7 +822,7 @@ export const MAYEUTICA_ACCESOS = {
           'Respirando solo, la presión intratorácica negativa mete aire: 5 mmHg por un 14 G pasan 100 mL/s.',
           'Si entra: O₂ al 100 % y decúbito lateral izquierdo (aspirar si el catéter sigue); puede cruzar un FOP.',
           'La Rx portátil pierde hasta la mitad de los neumotórax; la punta, a la altura de la carina, y en la aurícula no se recoloca.'],
-        volver: { nombre: 'Embolia gaseosa', ancla: 'mar-aire-fisio', modelo: visual('mar-cvc-complicaciones', '👁️ Aire, neumotórax y punta (vista Visual)'), modeloFuturo: { cateterVivo: 'aire' } } },
+        volver: { nombre: 'Embolia gaseosa', ancla: 'mar-aire-fisio', modelo: visual('mar-cvc-complicaciones', '👁️ Aire, neumotórax y punta (vista Visual)'), modeloVivo: { cateterVivo: 'aire' } } },
     ],
     profundizar: [
       { id: 'mar-img-2-5', titulo: 'Figura 2.5: la Rx que no ve el neumotórax' },
@@ -835,7 +835,7 @@ export const MAYEUTICA_ACCESOS = {
   'mar-cateter-cuidados': {
     entrada: 'Cómo se cuida el catéter que se queda (apósitos, lavados, recambio), qué hacer cuando se ocluye, la TVP del brazo y las perforaciones.',
     guia: [
-      { id: 'cu-g1', corto: 'el apósito húmedo', tipo: 'test', fuente: 'mar-aposito-paradoja · mar-tabla-3-1', modeloFuturo: { cateterVivo: 'aposito-humedo' },
+      { id: 'cu-g1', corto: 'el apósito húmedo', tipo: 'test', fuente: 'mar-aposito-paradoja · mar-tabla-3-1', modeloVivo: { cateterVivo: 'aposito-humedo' },
         enunciado: 'Apósito transparente puesto hace 3 días, con humedad y sangre debajo. ¿Esperas al día 7 para cambiarlo?',
         opciones: [
           { t: 'Sí: el transparente se cambia cada 7 días, y sella el punto', porque: 'Con humedad o sangre debajo, el oclusivo favorece la colonización y la infección. Esperar es incubar.' },
@@ -870,21 +870,21 @@ export const MAYEUTICA_ACCESOS = {
           { t: 'Salino sin conservantes en los dos, sin más', porque: 'En los venosos sí, pero en los arteriales «no es así»: la alternativa al salino heparinizado es el citrato al 1,4 %. Lavarías la arterial con una pauta que la fuente no da por válida.' },
           { t: 'Venoso: salino sin conservantes. Arterial: salino heparinizado o citrato al 1,4 %', ok: true }],
         explicacion: 'Venosos: <span class="hl">salino al 0,9 % sin conservantes</span>, igual de eficaz que la heparina (10-1.000 U/mL), sin riesgo de TIH. <span class="hl-rojo">En los arteriales no es así</span>: el <span class="hl">citrato sódico al 1,4 %</span> es una alternativa al salino heparinizado (A pág. 42).' },
-      { id: 'cu-g6', corto: '¿una guía?', tipo: 'test', fuente: 'mar-permeabilidad · mar-oclusion-causas', modeloFuturo: { cateterVivo: 'oclusion-trombo' },
+      { id: 'cu-g6', corto: '¿una guía?', tipo: 'test', fuente: 'mar-permeabilidad · mar-oclusion-causas', modeloVivo: { cateterVivo: 'oclusion-trombo' },
         enunciado: 'El CVC no refluye y la bomba alarma por presión. ¿Le pasas una guía para desatascarlo?',
         opciones: [
           { t: 'No: la guía podría soltar y embolizar la masa', ok: true },
           { t: 'Sí, si es un catéter difícil de reponer', porque: 'Que valga la pena recuperarlo no cambia el riesgo de soltar el trombo: se disuelve químicamente.' },
           { t: 'Sí, aspirando a la vez con una jeringa grande', porque: 'Para aspirar, mejor jeringas pequeñas (menos presión negativa, menos colapso). Y la guía puede embolizar la masa.' }],
         explicacion: '<span class="hl-rojo">No pasar una guía para desatascarlo</span>: puede soltar la masa y embolizarla. Lo estándar es disolverla químicamente. Los periféricos cortos se cambian; los largos (CVC) merecen el esfuerzo.' },
-      { id: 'cu-g7', corto: 'el trombo', tipo: 'test', fuente: 'mar-oclusion-causas · mar-alteplasa', modeloFuturo: { cateterVivo: 'oclusion-trombo' },
+      { id: 'cu-g7', corto: 'el trombo', tipo: 'test', fuente: 'mar-oclusion-causas · mar-alteplasa', modeloVivo: { cateterVivo: 'oclusion-trombo' },
         enunciado: '¿Qué ocluye más a menudo un catéter, y con qué empiezas?',
         opciones: [
           { t: 'Un precipitado de fármacos: bicarbonato a la luz', porque: 'El trombo es la causa más frecuente (60 %). Empezarías por la excepción.' },
           { t: 'Un trombo, en el 60 %: empezar con alteplasa', ok: true },
           { t: 'Un acodamiento: cambiar de postura y seguir', porque: 'Los factores mecánicos existen (un punto que lo estrangula), pero el trombo es el 60 %.' }],
         explicacion: 'Causas: <span class="hl">trombo (60 %)</span>, factores mecánicos, malposición y precipitados. La alteplasa recupera la permeabilidad en el <span class="hl-verde">80-90 %</span>.' },
-      { id: 'cu-g8', corto: 'si no cede', tipo: 'destapa', fuente: 'mar-alteplasa · mar-tabla-3-3', modeloFuturo: { cateterVivo: 'oclusion-precipitado' },
+      { id: 'cu-g8', corto: 'si no cede', tipo: 'destapa', fuente: 'mar-alteplasa · mar-tabla-3-3', modeloVivo: { cateterVivo: 'oclusion-precipitado' },
         enunciado: 'Dos dosis de alteplasa y sigue ocluido. ¿Qué miras ahora, y qué regla te guía?',
         cuantas: 'son dos cosas',
         puntos: [
@@ -922,7 +922,7 @@ export const MAYEUTICA_ACCESOS = {
           { t: 'Retirar el PICC ya: es obligatorio con una TVP', porque: 'Solo si el edema es intenso o doloroso, o si la anticoagulación está contraindicada. Le quitarías un acceso sin necesidad.' },
           { t: 'Eco de compresión; retirarlo no es obligatorio', ok: true }],
         explicacion: 'Ingurgitación del hombro = <span class="hl">signo de Urschel</span>. Diagnóstico: <span class="hl">eco de compresión (S 97 %, E 96 %)</span>. <span class="hl-purpura">Retirar el catéter no es obligatorio</span>; se anticoagula como en la TVP de las piernas.' },
-      { id: 'cu-e5', corto: 'la perforación', tipo: 'test', fuente: 'mar-perforacion-vcs · mar-perforacion-manejo', modeloFuturo: { cateterVivo: 'punta-izquierda' },
+      { id: 'cu-e5', corto: 'la perforación', tipo: 'test', fuente: 'mar-perforacion-vcs · mar-perforacion-manejo', modeloVivo: { cateterVivo: 'punta-izquierda' },
         enunciado: 'CVC subclavio izquierdo. Día 3: dolor retroesternal, mediastino ensanchado y derrame pleural nuevos. ¿Qué haces?',
         opciones: [
           { t: 'Parar la infusión; si se confirma, retirarlo', ok: true },
@@ -946,7 +946,7 @@ export const MAYEUTICA_ACCESOS = {
         paciente: { Edad: '58 años', Motivo: 'fístula enterocutánea; nutrición parenteral', Acceso: 'PICC de doble luz, brazo derecho; NPT por la proximal' },
         pasos: [
           { momento: 'Día 12', datos: { Alarma: 'presión alta en la bomba; la proximal no refluye' }, nuevo: ['Alarma'],
-            pregunta: { id: 'cua-1', tipo: 'test', fuente: 'mar-permeabilidad · mar-alteplasa', modeloFuturo: { cateterVivo: 'oclusion-trombo' },
+            pregunta: { id: 'cua-1', tipo: 'test', fuente: 'mar-permeabilidad · mar-alteplasa', modeloVivo: { cateterVivo: 'oclusion-trombo' },
               enunciado: '¿Qué haces primero?',
               opciones: [
                 { t: 'Pasar una guía fina para desatascar la luz', porque: 'Puede soltar la masa y embolizarla. Le darías una embolia por recuperar una luz.' },
@@ -954,7 +954,7 @@ export const MAYEUTICA_ACCESOS = {
                 { t: 'Alteplasa 2 mg en esa luz y mirar a los 30 min', ok: true }],
               explicacion: 'La causa más frecuente es el <span class="hl">trombo (60 %)</span>: alteplasa 2 mg, mirar a los 30 y a los 120 min.' } },
           { momento: 'Día 12 · 4 h después', datos: { Alteplasa: 'dos dosis de 2 mg; sigue ocluido' }, nuevo: ['Alteplasa'],
-            pregunta: { id: 'cua-2', tipo: 'destapa', fuente: 'mar-tabla-3-3', modeloFuturo: { cateterVivo: 'oclusion-precipitado' },
+            pregunta: { id: 'cua-2', tipo: 'destapa', fuente: 'mar-tabla-3-3', modeloVivo: { cateterVivo: 'oclusion-precipitado' },
               enunciado: '¿Qué sospechas ahora, y cómo lo disuelves?',
               cuantas: 'son dos cosas',
               puntos: [
@@ -993,7 +993,7 @@ export const MAYEUTICA_ACCESOS = {
           'Catéter ocluido: nunca una guía; alteplasa 2 mg (80-90 %) y, si falla, lo que pasaba por esa luz (Tabla 3.3).',
           'Alcalino con álcali, ácido con ácido, lípidos con etanol; el precipitado mineral de la NPT, NaOH 0,1 N.',
           'TVP del brazo: eco de compresión, no dímero-D; retirar el catéter no es obligatorio.'],
-        volver: { nombre: 'Tabla 3.3', ancla: 'mar-tabla-3-3', modelo: visual('mar-cateter-cuidados', '👁️ El catéter ocluido (vista Visual)'), modeloFuturo: { cateterVivo: 'oclusion-precipitado' } } },
+        volver: { nombre: 'Tabla 3.3', ancla: 'mar-tabla-3-3', modelo: visual('mar-cateter-cuidados', '👁️ El catéter ocluido (vista Visual)'), modeloVivo: { cateterVivo: 'oclusion-precipitado' } } },
     ],
     profundizar: [
       { id: 'mar-taponamiento', titulo: 'Taponamiento cardíaco' },
@@ -1006,14 +1006,14 @@ export const MAYEUTICA_ACCESOS = {
   'mar-bacteriemia-cateter': {
     entrada: 'Por dónde se coloniza un catéter, por qué la biopelícula burla al antibiótico, cómo se demuestra que el catéter es la fuente, cuándo retirarlo y cuántos días tratar.',
     guia: [
-      { id: 'bc-g1', corto: 'por dónde', tipo: 'test', fuente: 'mar-bac-vias', modeloFuturo: { cateterVivo: 'colonizacion' },
+      { id: 'bc-g1', corto: 'por dónde', tipo: 'test', fuente: 'mar-bac-vias', modeloVivo: { cateterVivo: 'colonizacion' },
         enunciado: 'CVC percutáneo, no tunelizado, como casi todos los de la UCI. ¿Por dónde se coloniza sobre todo?',
         opciones: [
           { t: 'Por la luz interna, desde los conectores', porque: 'Esa vía quizá destaca en los tunelizados. En los percutáneos, centrarte en los conectores deja sin cuidar el punto de la piel.' },
           { t: 'Por la piel, a lo largo del trayecto', ok: true },
           { t: 'Por la infusión contaminada', porque: 'Es rara (hemoderivados, por ejemplo). Buscarías la fuente en la bolsa y no en la piel.' }],
         explicacion: 'Cuatro vías (Figura 3.2): infusión (rara), luz interna (quizá en los tunelizados), <span class="hl">piel, que migra por el trayecto subcutáneo</span> (la principal en los percutáneos no tunelizados) y sangre (microbios que se pegan a la parte intravascular).' },
-      { id: 'bc-g2', corto: 'tras un día', tipo: 'test', fuente: 'mar-biofilm', modeloFuturo: { cateterVivo: 'biopelicula' },
+      { id: 'bc-g2', corto: 'tras un día', tipo: 'test', fuente: 'mar-biofilm', modeloVivo: { cateterVivo: 'biopelicula' },
         enunciado: 'Predice: el catéter lleva un día puesto. ¿Hay ya biopelícula?',
         opciones: [
           { t: 'No: tarda una semana en formarse', porque: 'En los catéteres se ve con microscopía electrónica incluso tras un solo día. Darías por limpio un catéter que ya no lo está.' },
@@ -1027,7 +1027,7 @@ export const MAYEUTICA_ACCESOS = {
           { t: 'Porque los estafilococos de la biopelícula son siempre resistentes a la meticilina', porque: 'No es la resistencia del germen: es la matriz, que lo protege. Cambiar de antibiótico no lo arreglaría.' },
           { t: 'Porque el antibiótico no llega a la sangre que rodea el catéter', porque: 'Llega, pero la matriz protege a los microbios y los fagocitos no pueden ingerirlos. Subir la dosis no basta.' }],
         explicacion: 'Los fagocitos no pueden ingerirlos y hacen falta <span class="hl-rojo">concentraciones 100 a 1.000 veces mayores</span> que para las bacterias libres. Por eso <span class="hl">el antibiótico no es el tratamiento óptimo</span>: la dosis necesaria sería tóxica.' },
-      { id: 'bc-g4', corto: 'dejarlo puesto', tipo: 'test', fuente: 'mar-bac-guia · mar-bac-sellado', modeloFuturo: { cateterVivo: 'recambio-guia' },
+      { id: 'bc-g4', corto: 'dejarlo puesto', tipo: 'test', fuente: 'mar-bac-guia · mar-bac-sellado', modeloVivo: { cateterVivo: 'recambio-guia' },
         enunciado: 'Bacteriemia confirmada. Poner otro catéter cuesta, y el equipo prefiere dejarlo con antibiótico sistémico. ¿Qué cabe esperar, según Marino?',
         opciones: [
           { t: 'La curación: el antibiótico sistémico basta en 14 días', porque: 'Con el catéter puesto, el antibiótico sistémico apenas lo descontamina (biopelícula). La infección volvería.' },
@@ -1049,7 +1049,7 @@ export const MAYEUTICA_ACCESOS = {
           { t: 'Improbable: no aparece en las primeras 48 h', ok: true },
           { t: 'Solo si además el punto está enrojecido', porque: 'El eritema del punto no tiene valor predictivo.' }],
         explicacion: 'Clínica inespecífica: <span class="hl">no aparece en las primeras 48 h</span>; fiebre y leucocitosis son inflamación; el eritema no predice; el pus puede ser solo del orificio. <span class="hl">El diagnóstico no puede hacerse por la clínica.</span>' },
-      { id: 'bc-g7', corto: 'cómo probarlo', tipo: 'test', fuente: 'mar-tabla-3-4 · mar-bac-metodo', modeloFuturo: { cateterVivo: 'hemocultivos' },
+      { id: 'bc-g7', corto: 'cómo probarlo', tipo: 'test', fuente: 'mar-tabla-3-4 · mar-bac-metodo', modeloVivo: { cateterVivo: 'hemocultivos' },
         enunciado: '¿Cómo demuestras que el catéter es la fuente sin retirarlo?',
         opciones: [
           { t: 'Con el cultivo semicuantitativo de la punta', porque: 'Obliga a retirarlo y solo cultiva la superficie externa: cayó en desuso.' },
@@ -1148,7 +1148,7 @@ export const MAYEUTICA_ACCESOS = {
                 { t: 'Uno periférico y uno de cada luz', ok: true }],
               explicacion: 'Hace falta un hemocultivo de un sitio distinto del catéter y alguna prueba de que el catéter es la fuente. <span class="hl">Cultivar cada luz</span>.' } },
           { momento: 'Día 10', datos: { Cultivos: 'S. aureus en todos; la luz distal crece 2,5 h antes que la periférica' }, nuevo: ['Cultivos'],
-            pregunta: { id: 'bca-3', tipo: 'test', fuente: 'mar-tabla-3-4 · mar-bac-retirar', origen: 'ficha · las cifras, del caso', modeloFuturo: { cateterVivo: 'hemocultivos' },
+            pregunta: { id: 'bca-3', tipo: 'test', fuente: 'mar-tabla-3-4 · mar-bac-retirar', origen: 'ficha · las cifras, del caso', modeloVivo: { cateterVivo: 'hemocultivos' },
               enunciado: '¿Es una bacteriemia por catéter, y qué haces con él?',
               opciones: [
                 { t: 'Sí; con S. aureus, retirarlo aunque esté estable', ok: true },
@@ -1188,7 +1188,7 @@ export const MAYEUTICA_ACCESOS = {
           'Fiebre, leucocitosis y eritema no prueban nada: mismo germen y ≥2 h de ventaja del catéter (o ≥3 veces más colonias), cultivando cada luz.',
           'Mientras se espera, el catéter se deja (se confirma el 11 %); con S. aureus, Candida, Pseudomonas o BGN multirresistentes, se retira y se pone en un sitio nuevo.',
           'S. aureus: ETE; sin endocarditis, catéter retirado y sin prótesis ni inmunodepresión, 14 días.'],
-        volver: { nombre: 'Tabla 3.4', ancla: 'mar-tabla-3-4', modelo: visual('mar-bacteriemia-cateter', '👁️ ¿El catéter es la fuente? (vista Visual)'), modeloFuturo: { cateterVivo: 'hemocultivos' } } },
+        volver: { nombre: 'Tabla 3.4', ancla: 'mar-tabla-3-4', modelo: visual('mar-bacteriemia-cateter', '👁️ ¿El catéter es la fuente? (vista Visual)'), modeloVivo: { cateterVivo: 'hemocultivos' } } },
     ],
     profundizar: [
       { id: 'mar-tabla-3-5', titulo: 'Tabla 3.5: los diez gérmenes más frecuentes' },
@@ -1366,7 +1366,7 @@ export const MAYEUTICA_ACCESOS = {
           'La mucosa intestinal es una barrera de 0,1 mm; la disbiosis y la hipoperfusión la rompen y el intestino se vuelve el motor del fallo multiorgánico.',
           'El ácido gástrico es un antiséptico: suprimirlo trae Salmonella, Campylobacter y C. difficile.',
           'SDD si más de 72 h en una UCI sin multirresistentes (cefuroxima 4 días); clorhexidina oral al 0,12 %, ya sin recomendación; probióticos, en los 2 primeros días.'],
-        volver: { nombre: 'SDD', ancla: 'mar-sdd', modelo: visual('mar-microbioma', '👁️ El intestino como motor del fallo multiorgánico (vista Visual)'), modeloFuturo: { cateterVivo: 'colonizacion' } } },
+        volver: { nombre: 'SDD', ancla: 'mar-sdd', modelo: visual('mar-microbioma', '👁️ El intestino como motor del fallo multiorgánico (vista Visual)'), modeloVivo: { cateterVivo: 'colonizacion' } } },
     ],
     profundizar: [
       { id: 'mar-microbioma-cifras', titulo: 'Las cifras del microbioma' },
