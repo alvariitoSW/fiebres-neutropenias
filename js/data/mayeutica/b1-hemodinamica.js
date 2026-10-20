@@ -54,7 +54,7 @@ export const MAYEUTICA_HEMODINAMICA = {
           'En el varón medio eso son solo <span class="hl">450 mL</span> de plasma (300 en la mujer).',
           'Del Ringer, el 20 % queda en el plasma: <span class="hl">2,25 L</span>, y <span class="hl-rojo">1,8 L acaban en el intersticio</span>.'],
         explicacion: 'Plasma estimado: 40 mL/kg de peso magro en el varón y 36 en la mujer. No tener en cuenta lo pequeño que es el déficit lleva a infundir de más, y el cristaloide expande sobre todo el intersticio: favorece el edema.',
-        nota: `<b>Nota de fidelidad.</b> El texto habla de un déficit del 15 % «de la volemia» (<a class="biblio-link" href="${PDF_F}#page=25" target="_blank" rel="noopener">PDF pág. 25</a>); la Tabla 11.1 aplica ese 15 % al plasma (450 mL de 3 L). La pregunta sigue la tabla.` },
+        nota: `<b>Nota de fidelidad.</b> El texto habla de un déficit del 15 % «de la volemia» (<a class="biblio-link" href="${PDF_F}#page=25" target="_blank" rel="noopener">PDF pág. 25</a>); la Tabla 11.1 aplica ese 15 % al plasma (450 mL de 3 L). La pregunta sigue la tabla.<br><b>Nota de fuentes.</b> El reparto del cristaloide no es el mismo en los dos capítulos: aquí, el cap. 11 (<a class="biblio-link" href="${PDF_F}#page=26" target="_blank" rel="noopener">PDF pág. 26</a>) dice que el 20 % va al plasma; la Figura 10.1 del cap. 10 (<a class="biblio-link" href="${PDF_F}#page=6" target="_blank" rel="noopener">PDF pág. 6</a>) da 275 mL por litro de salino (27,5 %). Se usa el 20 % del cap. 11; no se elige ganadora.` },
       { id: 'rv-g6', corto: 'las constantes', tipo: 'test', fuente: 'mar-constantes-volemia · mar-volemia-sim',
         enunciado: 'Le falta un 20 % de la volemia y está tumbado. ¿Qué signo esperas encontrar?',
         opciones: [
@@ -105,7 +105,7 @@ export const MAYEUTICA_HEMODINAMICA = {
         opciones: [
           { t: 'La Pms no cambia: depende del tono venoso, no del volumen', porque: 'Es justo lo que mueve el volumen. Si crees que la Pms no cambia al sangrar, no verás por qué cae el retorno de quien sangra, y retrasarás la reposición.' },
           { t: 'Baja la Pms, y con ella el retorno y el gasto', ok: true },
-          { t: 'Sube la PVC para compensar, y el retorno se mantiene', porque: 'Subir la PVC frenaría aún más el retorno; y con menos volumen la PVC tiende a bajar. Esperar que se compense solo retrasa la reposición.' }],
+          { t: 'Sube la PVC para compensar, y el retorno se mantiene', porque: 'Subir la PVC frenaría aún más el retorno (Figura 11.2). Y con menos volumen la PVC tiende a bajar (fisiología general, no lo dice la ficha). Esperar que se compense solo retrasa la reposición.' }],
         explicacion: 'La Pms <span class="hl">depende del volumen</span>: la hipovolemia la baja, el gradiente Pms − PVC se estrecha y <span class="hl-rojo">caen el retorno y el gasto</span>. En la circulación viva, una hemorragia de 1 L baja la PVC y el gasto (magnitudes ilustrativas del modelo).' },
       { id: 'rv-e6', corto: 'el resumen', tipo: 'error', fuente: 'mar-rv-fregadero · mar-rv-pvc · mar-constantes-volemia · mar-pms-fluidos',
         enunciado: 'Resumen de un compañero para la sesión. Encuentra los errores.',
@@ -145,7 +145,8 @@ export const MAYEUTICA_HEMODINAMICA = {
                 { t: '≈320 mL; ≈1,6 L de Ringer: ya lleva casi el doble', ok: true },
                 { t: '≈320 mL; 320 mL de Ringer, porque el Ringer se queda en el plasma', porque: 'Solo el 20 % del cristaloide se queda en el plasma: hacen falta unas 5 veces el déficit. Con esa cuenta creerías que 3 L son una barbaridad sin entender por qué, o que 320 mL reponen algo.' },
                 { t: '≈900 mL (15 % de 6 L de volemia); 4,5 L de Ringer', porque: 'La Tabla 11.1 calcula el déficit sobre el plasma (36 mL/kg en la mujer), no sobre una volemia estimada. Con esa cifra seguirías dando litros a quien ya lleva de sobra.' }],
-              explicacion: 'Plasma: 60 kg × 36 mL/kg ≈ <span class="hl">2,16 L</span>; 15 % ≈ <span class="hl">324 mL</span> (la Tabla 11.1 redondea a 300 mL en la mujer de 60 kg). Con Ringer (20 % al plasma): <span class="hl">≈1,6 L</span>, y ≈1,3 L al intersticio. <span class="hl-rojo">Lleva 3 L.</span>' } },
+              explicacion: 'Plasma: 60 kg × 36 mL/kg ≈ <span class="hl">2,16 L</span>; 15 % ≈ <span class="hl">324 mL</span> (la Tabla 11.1 redondea a 300 mL en la mujer de 60 kg). Con Ringer (20 % al plasma): <span class="hl">≈1,6 L</span>, y ≈1,3 L al intersticio. <span class="hl-rojo">Lleva 3 L.</span>',
+              nota: `<b>Nota de fuentes.</b> La cuenta usa el 20 % del cap. 11 (<a class="biblio-link" href="${PDF_F}#page=26" target="_blank" rel="noopener">PDF pág. 26</a>). La Figura 10.1 (cap. 10, <a class="biblio-link" href="${PDF_F}#page=6" target="_blank" rel="noopener">PDF pág. 6</a>) da 275 mL por litro (27,5 %); con ese reparto saldrían ≈1,2 L. No se elige ganadora.` } },
           { momento: 'Día 1 · 09:30', datos: { PA: '84/50 mmHg (sin cambios)' }, nuevo: ['PA'],
             pregunta: { id: 'c1a-4', tipo: 'destapa', fuente: 'mar-pms-fluidos · mar-rv-ecuacion · mar-respuesta-50',
               enunciado: 'Antes de decidir otro bolo, explica al R2 qué tendría que pasar para que ese bolo le sirviera. Son dos cosas.',
@@ -295,7 +296,7 @@ export const MAYEUTICA_HEMODINAMICA = {
     ],
     casos: [
       { id: 'c1b', titulo: 'Andrés, 72 años: el bolo que no hizo nada', corto: 'Caso · Andrés', sub: 'shock séptico por neumonía',
-        paciente: { Edad: '72 años', Motivo: 'neumonía; shock séptico', Soporte: 'intubado; noradrenalina', Monitor: 'catéter radial con contorno del pulso (VS continuo)' },
+        paciente: { Edad: '72 años', Motivo: 'neumonía; shock séptico', Soporte: 'intubado, respira espontáneamente sobre el ventilador (esfuerzos propios); noradrenalina', Monitor: 'catéter radial con contorno del pulso (VS continuo)' },
         pasos: [
           { momento: 'Día 1 · 11:00', datos: { PA: '82/48 mmHg', Fluidos: '2 L de Ringer' }, nuevo: ['PA', 'Fluidos'],
             pregunta: { id: 'c1b-1', tipo: 'test', fuente: 'mar-respuesta-50 · mar-epp',
@@ -311,7 +312,7 @@ export const MAYEUTICA_HEMODINAMICA = {
               opciones: [
                 { t: 'Desde supino: así el cambio de VS es mayor', porque: 'Desde supino ya has quitado la sangre esplácnica de la prueba: la respuesta puede quedarse corta y lo darías por no respondedor.' },
                 { t: 'Semiincorporado a 30-45°, con su VS basal', ok: true },
-                { t: 'Sentado a 90° para que la diferencia se note más', porque: 'La ficha da 30-45°. Inventar otra posición quita valor a los cortes (S 85 %, E 92 %) que se midieron con la prueba tal cual.' }],
+                { t: 'Sentado a 90° para que la diferencia se note más', porque: 'La ficha da 30-45°. Otra posición se sale del método descrito, y no se sabe qué valor tendrían con ella los cortes de la prueba (S 85 %, E 92 %).' }],
               explicacion: 'Paso 1: <span class="hl">semiincorporado (cabecera a 30-45°)</span> y VS basal. Empezar en supino quita la sangre que aporta la circulación esplácnica. Paso 2: con la cama, tronco horizontal y piernas a 30-45°.' } },
           { momento: 'Día 1 · 11:20', datos: { EPP: 'VS 50 → 53 mL; FC 96 → 97 lpm' }, nuevo: ['EPP'], calculadora: { ir: 'mar-respuesta-calc', nombre: '¿Responde a fluidos?' },
             pregunta: { id: 'c1b-3', tipo: 'test', fuente: 'mar-epp · mar-respuesta-calc', origen: 'ficha · la cuenta, del caso',
@@ -341,7 +342,7 @@ export const MAYEUTICA_HEMODINAMICA = {
               enunciado: 'El plan del R2. Encuentra los errores.',
               frases: [
                 { t: 'La EPP no respondió: le pongo otros 500 mL para asegurarme.', mal: true,
-                  c: 'Sin respuesta, el bolo no le subirá el VS: solo sumará edema. <span class="hl">Desescalar pronto</span> si no hay respuesta a la reposición inicial.' },
+                  c: 'Sin respuesta (la EPP tiene S 85 % y E 92 %), el bolo probablemente no le subirá el VS y sí sumará edema. <span class="hl">Desescalar pronto</span> si no hay respuesta a la reposición inicial.' },
                 { t: 'La EPP vale en respiración espontánea, esté ventilado o no.' },
                 { t: 'El gap de 10 indica hipoperfusión aunque la ScvO₂ sea 76 %.' },
                 { t: 'La próxima EPP la empiezo desde supino, que el VS sube más.', mal: true,
@@ -365,6 +366,10 @@ export const MAYEUTICA_HEMODINAMICA = {
     ],
     profundizar: [
       { id: 'mar-doppler-esofagico', titulo: 'Doppler esofágico' },
+      { id: 'mar-scvo2-pautas', titulo: 'ScvO₂ <70 % como indicación de transfundir hematíes',
+        nota: 'La Mayéutica pregunta las cifras de la ScvO₂, pero no esta: con anemia, se ha propuesto una ScvO₂ <b>&lt;70 %</b> como indicación de transfusión (última fila; <a class="biblio-link" href="docs/marino-2024-fluidoterapia-caps10-11.pdf#page=29" target="_blank" rel="noopener">PDF pág. 29</a>).' },
+      { id: 'mar-gap-co2', titulo: 'El efecto Haldane y el gap de PCO₂',
+        nota: 'No se pregunta el efecto Haldane (fila «Límites»): la hipoxia aumenta la unión del CO₂ a la hemoglobina y puede alterar la fiabilidad del gap, con una importancia clínica que el libro llama incierta (<a class="biblio-link" href="docs/marino-2024-fluidoterapia-caps10-11.pdf#page=30" target="_blank" rel="noopener">PDF pág. 30</a>).' },
     ],
   },
 
@@ -476,23 +481,23 @@ export const MAYEUTICA_HEMODINAMICA = {
                 { t: 'Hinchar el globo con 1,5 mL de aire y avanzar', ok: true },
                 { t: 'Hinchar el globo con 3 mL para que flote mejor', porque: 'El globo es de 1,5 mL; la ficha no da otro volumen. Hincharlo de más es salirse de lo que admite el catéter.' }],
               explicacion: 'Se pasa por un introductor de <span class="hl">8-9 Fr</span> con la luz distal al transductor. Al ver la onda venosa de la cava: <span class="hl">globo con 1,5 mL de aire</span> y avanzar; las ondas guían el avance.' } },
-          { momento: '02:10', datos: { Trazado: 'onda pulsátil de 32/6 mmHg que pasa a 32/18 mmHg' }, nuevo: ['Trazado'],
+          { momento: '02:10', datos: { Trazado: 'onda pulsátil de 42/6 mmHg que pasa a 42/26 mmHg' }, nuevo: ['Trazado'],
             pregunta: { id: 'c2a-2', tipo: 'test', fuente: 'mar-cap-pasos', origen: 'ficha · las cifras, del caso',
-              enunciado: 'La onda pasa de 32/6 a 32/18 mmHg. ¿Dónde está la punta?',
+              enunciado: 'La onda pasa de 42/6 a 42/26 mmHg. ¿Dónde está la punta?',
               opciones: [
                 { t: 'Sigue en el ventrículo: la sistólica no ha cambiado', porque: 'Al cruzar la pulmonar la sistólica no cambia: lo que delata el paso es la diastólica que sube de golpe. Seguirías avanzando un catéter que ya está en la arteria.' },
                 { t: 'Ha cruzado la pulmonar', ok: true },
                 { t: 'Está enclavada: la diastólica ha subido al nivel de la aurícula izquierda', porque: 'El enclavamiento es una presión no pulsátil; aquí la onda sigue siendo pulsátil. Leerías como llenado izquierdo la presión de la arteria.' }],
-              explicacion: 'Ventrículo derecho: la diastólica (6) es la media de la aurícula derecha. Al cruzar la pulmonar <span class="hl">sube de golpe la diastólica</span> (18) sin cambiar la sistólica.' } },
-          { momento: '02:15', datos: { Enclavamiento: '24 mmHg, con ondas v de 40 mmHg' }, nuevo: ['Enclavamiento'],
+              explicacion: 'Ventrículo derecho: la diastólica (6) es la media de la aurícula derecha. Al cruzar la pulmonar <span class="hl">sube de golpe la diastólica</span> (26) sin cambiar la sistólica (42).' } },
+          { momento: '02:15', datos: { Enclavamiento: '24 mmHg, con ondas v de 38 mmHg' }, nuevo: ['Enclavamiento'],
             pregunta: { id: 'c2a-3', tipo: 'destapa', fuente: 'mar-enclavamiento-ondas · mar-enclavamiento-principio',
               enunciado: 'Se enclava con 24 mmHg y unas ondas v enormes. ¿Qué te dicen las ondas, y qué mide de verdad ese 24?',
               cuantas: 'son dos cosas',
               puntos: [
                 'Ondas v prominentes: <span class="hl-rojo">insuficiencia mitral</span> (la sístole del VI contra una mitral que no cierra).',
                 'Sin flujo, el enclavamiento es la <span class="hl">presión de la aurícula izquierda</span>; equivale a la telediastólica del VI <span class="hl">solo con mitral normal</span>.'],
-              explicacion: 'Las ondas a, c y v cuestan de distinguir, pero las v prominentes saltan a la vista en la insuficiencia mitral.' } },
-          { momento: '02:30 · el giro', datos: { Ventilación: 'intubado; PEEP 10 cmH₂O', Enclavamiento: '28 mmHg al final de la espiración' }, nuevo: ['Ventilación', 'Enclavamiento'],
+              explicacion: 'Las ondas a, c y v cuestan de distinguir, pero las v prominentes saltan a la vista en la insuficiencia mitral. Y el 24 queda por debajo de la diastólica pulmonar (26): el enclavamiento nunca supera a la diastólica pulmonar, y con hipertensión pulmonar queda por debajo de ella (Marino, <a class="biblio-link" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=53" target="_blank" rel="noopener">PDF pág. 53</a>).' } },
+          { momento: '02:30 · el giro', datos: { Ventilación: 'intubado; PEEP 10 cmH₂O', Pulmonar: '48/32 mmHg', Enclavamiento: '28 mmHg al final de la espiración' }, nuevo: ['Ventilación', 'Pulmonar', 'Enclavamiento'],
             pregunta: { id: 'c2a-4', tipo: 'test', fuente: 'mar-enclavamiento-peep · mar-enclavamiento-respiracion',
               enunciado: 'Lo intuban con PEEP 10 y el enclavamiento pasa a 28. ¿Qué haces?',
               opciones: [
@@ -514,10 +519,10 @@ export const MAYEUTICA_HEMODINAMICA = {
             pregunta: { id: 'c2a-6', tipo: 'test', fuente: 'mar-cap-usos · mar-cap-final',
               enunciado: '«¿Para qué le ponemos esto, si los estudios no mostraron mejor supervivencia?». ¿Qué dice Marino?',
               opciones: [
-                { t: 'Que tiene razón: si no salva vidas, sobra', porque: 'Es un monitor, no un tratamiento: la mortalidad juzga tratamientos, no medidas. Retirarlo le quita información útil en el shock cardiogénico, donde ha mejorado algo los resultados.' },
-                { t: 'Que sí: es el shock donde ha mejorado algo los resultados', ok: true },
-                { t: 'Que sí, porque bajar el enclavamiento ya trata su shock', porque: 'Medir no trata: el catéter da información, y el tratamiento es otra cosa. Esperar que la medida cure confunde monitor con tratamiento.' }],
-              explicacion: 'Usos: IC aguda descompensada, perioperatorio cardíaco, <span class="hl">shock, sobre todo cardiogénico (donde ha mejorado algo los resultados)</span>, respuesta a volumen, transfusión y el destete difícil. «<span class="hl">Es un monitor, no un tratamiento</span>».' } },
+                { t: 'Que tiene razón: si no mejora la supervivencia, sobra', porque: 'Es un monitor, no un tratamiento: la mortalidad juzga tratamientos, no medidas. Retirarlo le quita información útil, sobre todo en el shock cardiogénico, donde ha mejorado algo los resultados.' },
+                { t: 'Que es un monitor, no un tratamiento; ha ayudado en el cardiogénico', ok: true },
+                { t: 'Que sí lo justifica, porque bajar el enclavamiento ya trata su shock', porque: 'Medir no trata: el catéter da información, y el tratamiento es otra cosa. Esperar que la medida cure confunde monitor con tratamiento.' }],
+              explicacion: 'Usos: IC aguda descompensada, perioperatorio cardíaco, <span class="hl">shock, sobre todo cardiogénico (donde ha mejorado algo los resultados)</span>, respuesta a volumen, transfusión y el destete difícil. «<span class="hl">Es un monitor, no un tratamiento</span>»: los resultados (la mortalidad) juzgan tratamientos, no medidas; su meta es dar información útil.' } },
         ],
         lleva: [
           'Las ondas guían el avance: al cruzar la pulmonar sube la diastólica; el enclavamiento es plano.',

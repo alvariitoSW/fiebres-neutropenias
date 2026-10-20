@@ -47,7 +47,8 @@ export const MAYEUTICA_FLUIDOS = {
           { t: '1.000 mL: es isotónico y el sodio no sale de los vasos', porque: 'El sodio cruza el endotelio y se reparte por todo el extracelular. Si esperas 1 L en el vaso, repetirás bolos y lo que ganará el paciente será edema: 825 mL de cada litro van al intersticio.' },
           { t: '700 mL: el resto se va al intersticio', porque: 'Eso hace la albúmina al 5 %, cuyas moléculas grandes no cruzan la pared capilar. Con salino esperarías casi el triple de lo que da y te quedarías corto de volumen.' },
           { t: '275 mL: el sodio se reparte por todo el extracelular', ok: true }],
-        explicacion: 'El sodio es el soluto extracelular principal y decide el volumen extracelular; se reparte por <span class="hl">todo el extracelular</span>, y el plasma es solo el 20 %. De 1 L: <span class="hl-rojo">275 mL al plasma y 825 al intersticio</span> (Figura 10.1).' },
+        explicacion: 'El sodio es el soluto extracelular principal y decide el volumen extracelular; se reparte por <span class="hl">todo el extracelular</span>, y el plasma es solo una parte pequeña de él. De 1 L: <span class="hl-rojo">275 mL al plasma y 825 al intersticio</span> (Figura 10.1).',
+        nota: '<b>Nota de fuentes.</b> El libro da dos repartos distintos. La Figura 10.1 (cap. 10, <a class="biblio-link" href="docs/marino-2024-fluidoterapia-caps10-11.pdf#page=6" target="_blank" rel="noopener">PDF pág. 6</a>) muestra 275 mL al plasma por litro de salino (27,5 %); el cap. 11 (<a class="biblio-link" href="docs/marino-2024-fluidoterapia-caps10-11.pdf#page=26" target="_blank" rel="noopener">PDF pág. 26</a>) dice que el plasma es el 20 % del extracelular y que el 20 % del cristaloide va al plasma. Aquí se usa la figura; en Retorno venoso, el 20 %. No se elige ganadora.' },
       { id: 'cri-g3', corto: 'los 100 mL de más', tipo: 'destapa', fuente: 'mar-salino · mar-tabla-10-2', modelo: { aguaViva: 'salino' },
         enunciado: 'Sigue la cadena: 275 + 825 suman 1.100 mL, más de lo que infundiste. ¿De dónde sale lo que sobra?',
         puntos: [
@@ -182,11 +183,11 @@ export const MAYEUTICA_FLUIDOS = {
               explicacion: 'El Ringer lleva 28 mmol/L de lactato, pero el hígado aclara unos 100 mmol/h: un bolo de 30 mL/kg lo sube poco (0,9 mmol/L en sanos).' } },
           { momento: 'Día 2', datos: { Hb: '7,0 g/dL', Plan: 'el equipo decide transfundir 1 concentrado de hematíes' }, nuevo: ['Hb', 'Plan'],
             pregunta: { id: 'd1-6', tipo: 'test', fuente: 'mar-ringer · mar-tabla-10-2',
-              enunciado: 'La enfermera va a pasar el concentrado de hematíes por la misma línea del Ringer, «para que corra mejor». ¿Qué le dices?',
+              enunciado: 'La enfermera va a pasar el concentrado de hematíes por la misma línea del Ringer, «para que corra mejor». Según Marino, ¿qué le dices?',
               opciones: [
                 { t: 'Adelante: el Ringer no lleva calcio', porque: 'Sí lleva calcio (3 mEq/L de calcio iónico, Tabla 10.2), y ese calcio puede unirse al citrato de los hematíes y favorecer coágulos en la línea.' },
-                { t: 'Mejor no: su calcio puede unirse al citrato', ok: true },
-                { t: 'Adelante: hay estudios que dicen que mezclarlos es seguro', porque: 'Los hay, y la recomendación no tiene apoyo experimental, pero Marino aconseja evitarlo si se puede: arriesgas un coágulo en la línea sin necesidad.' }],
+                { t: 'Mejor evitarlo si se puede: su calcio puede unirse al citrato', ok: true },
+                { t: 'Adelante: hay estudios que dicen que mezclarlos es seguro', porque: 'Los hay, y la recomendación no tiene apoyo experimental, pero Marino concluye que aun así es mejor evitarlo si se puede: arriesgas un coágulo en la línea sin necesidad.' }],
               explicacion: 'El calcio del Ringer puede unirse al citrato anticoagulante de los concentrados y favorecer coágulos: <span class="hl">no se aconseja como diluyente de la transfusión</span>. La recomendación no tiene apoyo experimental (hay estudios que lo ven seguro), pero aun así mejor evitarlo.' } },
           { momento: 'Día 2 · dieta absoluta', datos: { Dieta: 'absoluta' }, nuevo: ['Dieta'],
             pregunta: { id: 'd1-7', tipo: 'test', fuente: 'mar-glucosado-calorias · mar-glucosado-lactato · mar-img-10-4', modelo: { aguaViva: 'glucosado' },
@@ -194,7 +195,7 @@ export const MAYEUTICA_FLUIDOS = {
               opciones: [
                 { t: 'Bien: 510 kcal al día ahorran proteínas', porque: 'Es la cuenta del ahorro de proteínas, pero ya no hace falta: quien no come recibe nutrición completa. Y si se inestabiliza, hasta el 85 % de esa glucosa acabaría en lactato.' },
                 { t: 'Bien, pero solo 1 L: con 170 kcal basta para ahorrar proteínas', porque: '170 kcal es lo que da 1 L; para ahorrar proteínas hacían falta 3 L (510 kcal). Y de todos modos ya no se hace: el glucosado le daría lactato y edema celular, no nutrición.' },
-                { t: 'No: si no come, nutrición completa; y la glucosa da lactato', ok: true }],
+                { t: 'No: si no come, nutrición completa; y si se inestabiliza, la glucosa da lactato', ok: true }],
               explicacion: '1 L de glucosado al 5 % da <span class="hl">170 kcal</span>; 3 L, 510, suficientes para ahorrar proteínas, pero <span class="hl">ya no hace falta</span>: quien no come recibe nutrición completa. En el paciente con compromiso hemodinámico, <span class="hl-rojo">hasta el 85 %</span> de la glucosa acaba en lactato (el 5 % en el sano; Figura 10.4).' } },
         ],
         lleva: [
@@ -248,7 +249,7 @@ export const MAYEUTICA_FLUIDOS = {
         enunciado: 'Entonces, ¿le pondrías albúmina al 25 % a un paciente que sangra? Piensa por qué.',
         puntos: [
           'No: <span class="hl-rojo">no repone lo perdido</span>, solo mueve agua del intersticio al plasma; no es un fluido de reanimación de pérdidas.',
-          'Y en la hemorragia el intersticio ya ha cedido líquido a la sangre (hay un <span class="hl">déficit intersticial</span>): le quitarías todavía más.'],
+          'Y en la hemorragia el intersticio ya ha cedido líquido a la sangre (hay un <span class="hl">déficit intersticial</span>): le quitarías todavía más <em>(inferencia, conocimiento general: el libro solo dice que no repone pérdidas)</em>.'],
         explicacion: 'Se usa para subir rápido el plasma (y la presión) en pacientes con edemas, sobre todo por hipoalbuminemia. Toda albúmina expande más si hay hipoalbuminemia.' },
       { id: 'col-g6', corto: 'por qué cristaloides', tipo: 'test', fuente: 'mar-cristaloide-historia',
         enunciado: 'Durante décadas, la hemorragia se repuso con cristaloides. ¿De qué observación salió esa costumbre?',
@@ -319,13 +320,13 @@ export const MAYEUTICA_FLUIDOS = {
         pasos: [
           { momento: '07:00 · Cama 1', datos: { 'Cama 1': 'varón de 58 años, 70 kg. Hemorragia digestiva. PA 70/40, FC 130. La sangre está pedida' }, nuevo: ['Cama 1'],
             pregunta: { id: 'd2-1', tipo: 'test', fuente: 'mar-fluido-a-medida · mar-coloide-definicion · mc-hemorragico-fluidos',
-              enunciado: 'Hay que reponer su plasma ya, mientras llega la sangre. Según la propuesta de Marino (un fluido para cada situación), ¿qué fluido lo hace más deprisa?',
+              enunciado: 'Hay que reponer su plasma ya, mientras llega la sangre. Según la propuesta de Marino (un fluido para cada situación), ¿qué fluido propone para la hipovolemia con riesgo vital?',
               opciones: [
                 { t: 'Salino al 0,9 %, a chorro', porque: 'Solo 275 mL de cada litro se quedan en el plasma: harían falta al menos 3 veces más volumen, y el resto acaba en edema.' },
-                { t: 'Un coloide, como la albúmina al 5 %', ok: true },
+                { t: 'Albúmina al 5 %, un coloide que se queda en el plasma', ok: true },
                 { t: 'Albúmina al 25 %, que expande 3-4 veces su volumen', porque: 'No repone: saca agua del intersticio, que en la hemorragia ya ha cedido líquido a la sangre. No es un fluido de reanimación de pérdidas.' }],
               explicacion: 'Hipovolemia con riesgo vital, cuando hay que reponer el plasma ya: <span class="hl">coloide (p. ej., albúmina al 5 %)</span>, 700 mL al plasma por litro.',
-              nota: '<b>Ojo:</b> el cap. 10 trata del fluido. La sangre, los hemoderivados y por qué se limitan los cristaloides en la hemorragia grave están en el cap. 15 de Marino (enlace «Reanimación del shock hemorrágico», abajo).' } },
+              nota: '<b>Ojo:</b> el cap. 10 trata del fluido. La sangre, los hemoderivados y por qué se limitan los cristaloides en la hemorragia grave están en el cap. 15 de Marino, que la app recoge en la ficha «Reanimación del shock hemorrágico» de Merino Cardiología (botón «Ver en el texto», abajo).' } },
           { momento: '07:10 · Cama 1', datos: { 'Cama 1 · fluido': '500 mL de albúmina al 5 %' }, nuevo: ['Cama 1 · fluido'],
             pregunta: { id: 'd2-2', tipo: 'test', fuente: 'mar-fig-10-1', origen: 'ilustrativo: proporcional a la Figura 10.1', modelo: { aguaViva: 'albumina5' },
               enunciado: 'Calcula, proporcional a la Figura 10.1: ¿cuánto plasma ganan 500 mL de albúmina al 5 %, y cuánto ganarían 500 mL de salino?',
@@ -370,12 +371,12 @@ export const MAYEUTICA_FLUIDOS = {
               explicacion: 'El debate coloide-cristaloide busca un fluido para todo; el autor propone elegir uno para cada situación.' } },
           { momento: '10:30 · Cama 1 · el giro', datos: { 'Cama 1 · TC': 'hematoma subdural: se golpeó la cabeza en el síncope' }, nuevo: ['Cama 1 · TC'],
             pregunta: { id: 'd2-7', tipo: 'test', fuente: 'mar-albumina',
-              enunciado: 'La TC de la cama 1 muestra un TCE. Lleva albúmina al 5 % y la sangre ya está pasando. ¿Cambia algo en el fluido?',
+              enunciado: 'La TC de la cama 1 muestra un TCE. Lleva albúmina al 5 % y la sangre ya está pasando. ¿Qué dice Marino de la albúmina en el TCE?',
               opciones: [
-                { t: 'No: la albúmina es segura en todos los pacientes', porque: 'Los estudios recientes la ven segura, pero hay una posible excepción: en el TCE, un gran estudio vio más mortalidad con albúmina que con salino.' },
-                { t: 'Sí: en el TCE la albúmina dio más mortalidad', ok: true },
-                { t: 'Sí: pasar a albúmina al 25 % para bajar el edema cerebral', porque: 'La ficha no la da para el edema cerebral, y en el TCE la albúmina se asoció a más mortalidad. Lo que sí baja la PIC es el salino hipertónico (ficha de cristaloides).' }],
-              explicacion: 'Revisiones antiguas sugerían más mortalidad con albúmina; estudios recientes la ven segura. <span class="hl-rojo">Posible excepción: el TCE</span>, con más mortalidad que el salino en un gran estudio.' } },
+                { t: 'Que es segura en todos los pacientes, sin excepciones', porque: 'Los estudios recientes la ven segura, pero hay una posible excepción: en el TCE, un gran estudio vio más mortalidad con albúmina que con salino.' },
+                { t: 'Que es una posible excepción: un gran estudio vio más mortalidad que con salino', ok: true },
+                { t: 'Que conviene pasar a albúmina al 25 % para bajar el edema cerebral', porque: 'La ficha no la da para el edema cerebral, y en el TCE la albúmina se asoció a más mortalidad. Lo que sí baja la PIC es el salino hipertónico (ficha de cristaloides).' }],
+              explicacion: 'Revisiones antiguas sugerían más mortalidad con albúmina; estudios recientes la ven segura. <span class="hl-rojo">Posible excepción: el TCE</span>, con más mortalidad que el salino en un gran estudio. El libro no manda cambiar de fluido: es un motivo para dudar de la albúmina en el TCE, no una prohibición.' } },
           { momento: 'Día 2 · Cama 1', datos: { 'Cama 1 · fluidos': 'recibió un hidroxietilalmidón en quirófano', 'Cama 1 · analítica': 'amilasa ×3; lipasa normal' }, nuevo: ['Cama 1 · fluidos', 'Cama 1 · analítica'],
             pregunta: { id: 'd2-8', tipo: 'test', fuente: 'mar-hes',
               enunciado: 'Hoy la amilasa está 3 veces por encima de lo normal y la lipasa es normal. ¿Pancreatitis?',
@@ -388,7 +389,7 @@ export const MAYEUTICA_FLUIDOS = {
         lleva: [
           'Un fluido para cada situación: riesgo vital → coloide (albúmina al 5 %); deshidratación → cristaloide (Ringer); hipoalbuminemia → albúmina al 25 %.',
           'La albúmina al 25 % mueve agua del intersticio al plasma: no repone pérdidas.',
-          'En el TCE, la albúmina tuvo más mortalidad que el salino; y tras un HES, la amilasa sube sin pancreatitis.'],
+          'En el TCE, un gran estudio vio más mortalidad con albúmina que con salino (posible excepción); y tras un HES, la amilasa sube sin pancreatitis.'],
         volver: { nombre: 'Un enfoque a medida', ancla: 'mar-fluido-a-medida', modelo: { aguaViva: 'albumina25' } } },
     ],
     profundizar: [
