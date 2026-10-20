@@ -75,7 +75,7 @@ export const MAYEUTICA_SANGRE = {
           { t: 'Hasta que el aporte de O₂ (DO₂) empieza a caer, con un Hto de un 30 %', porque: 'El aporte cae desde el principio, pero la extracción sube y sostiene el VO₂. Poner ahí el límite es confundir que baje el aporte con que sufra el tejido.' }],
         explicacion: 'Figura 12.3 (primates): el DO₂ cae, pero la extracción sube y el VO₂ se mantiene <span class="hl">hasta un Hto del 10 % (Hb 3 g/dl)</span>. Ahí la extracción llega a su techo, <span class="hl-rojo">~50 %</span>: el VO₂ empieza a caer y sube el lactato. Ese 50 % podría servir de disparador de transfusión.' },
       { id: 'ane-g8', corto: 'qué lo permite', tipo: 'destapa', fuente: 'mh-tolerancia · mh-volumen-vs-celulas', modeloFuturo: { capilarVivo: 'anemia-hipovolemia' },
-        enunciado: 'Ya sabes que se tolera una Hb muy baja. ¿Qué condición pone el libro, y qué lo muestra en personas? Son tres cosas.',
+        enunciado: 'Ya sabes que se tolera una Hb muy baja. ¿Qué condición pone el libro en los animales, y qué lo muestra en personas? Son tres cosas.',
         puntos: [
           'Que se mantenga el <span class="hl">volumen intravascular</span>: así el gasto puede subir (en animales, un Hto del 5-10 % no daña la oxigenación).',
           'Testigos de Jehová posoperados (300): el <span class="hl">50 %</span> sobrevivió con Hb 2-3 y el <span class="hl">75 %</span> con Hb 3-4 g/dl.',
@@ -226,7 +226,7 @@ export const MAYEUTICA_SANGRE = {
           { t: 'Con la Hb: a menos Hb, más extracción, en la misma proporción', porque: 'La Hb no dice cuánto O₂ extraen los tejidos: es justo el problema del disparador por Hb. Seguirías transfundiendo por un número.' },
           { t: 'SaO₂ − ScvO₂: pulsioxímetro y catéter central de oximetría', ok: true }],
         explicacion: 'La extracción ≈ <span class="hl">SaO₂ − ScvO₂</span>, continua con pulsioximetría y un catéter venoso central «de oximetría». Disparador: <span class="hl-rojo">50 %</span>; si la SaO₂ es casi del 100 %, basta la ScvO₂ (<70 %). Pese a sus ventajas, han recibido poca atención.' },
-      { id: 'trf-g5', corto: 'Hb 7', tipo: 'test', fuente: 'mh-limite-compensacion · mh-extraccion-disparador', origen: 'ficha · la posición es ilustrativa, de la forma de la Figura 12.3', modeloFuturo: { capilarVivo: 'umbral-7' },
+      { id: 'trf-g5', corto: 'Hb 7', tipo: 'test', fuente: 'mh-limite-compensacion · mh-extraccion-disparador', origen: 'deducción de la ficha · el libro no da la extracción con Hb 7; su posición intermedia es una lectura ilustrativa de la forma de la Figura 12.3', modeloFuturo: { capilarVivo: 'umbral-7' },
         enunciado: 'Predice: Hb 7 g/dl, volemia normal, el corazón compensa. ¿Dónde está la extracción de O₂?',
         opciones: [
           { t: 'Ya en el 50 %: por eso se transfunde con 7', porque: 'El 50 % llega con un Hto del 10 % (Hb ≈3) en la Figura 12.3. El 7 es un umbral de las guías, no el techo fisiológico: verías hipoxia tisular donde no la hay.' },
@@ -276,7 +276,8 @@ export const MAYEUTICA_SANGRE = {
           { t: 'Las dos cosas: el lavado quita el plasma y los leucocitos', porque: 'El salino quita el plasma residual, pero no elimina bien los leucocitos. Te quedarías tranquilo frente a una fiebre que el lavado no evita.' },
           { t: 'Solo la fiebre: el lavado quita los leucocitos', porque: 'Es al revés: quita el plasma (protege del déficit de IgA) y no los leucocitos. La dejarías expuesta a la anafilaxia que querías evitar.' },
           { t: 'El riesgo de anafilaxia por la IgA, no el de la fiebre', ok: true }],
-        explicacion: 'Lavados: sin plasma residual, menos hipersensibilidad; indicados tras una reacción alérgica y en el déficit de IgA. <span class="hl-rojo">El lavado no quita bien los leucocitos</span>: eso lo hace la leucorreducción, indicada si hubo fiebre no hemolítica. Los filtros de 170-260 µm tampoco los retienen.' },
+        explicacion: 'Lavados: sin plasma residual, menos hipersensibilidad; indicados tras una reacción alérgica y en el déficit de IgA. <span class="hl-rojo">El lavado no quita bien los leucocitos</span>: eso lo hace la leucorreducción, indicada si hubo fiebre no hemolítica. Los filtros de 170-260 µm tampoco los retienen.',
+        nota: '<b>Las fuentes discrepan.</b> La Tabla 12.3 (p. 9) indica los leucorreducidos con antecedente de fiebre no hemolítica; la p. 13 los aconseja a partir de la segunda reacción, porque más del 75 % no recurre. Aquí se muestran las dos, sin elegir.' + enFicha('merino-transfusion', 'merino-nota-leucorreducido-cuando') },
       { id: 'trf-e4', corto: 'el filtro', tipo: 'test', fuente: 'mh-filtros',
         enunciado: 'El filtro estándar de 170-260 micras de la transfusión. ¿Qué es cierto?',
         opciones: [
@@ -340,7 +341,7 @@ export const MAYEUTICA_SANGRE = {
                 { t: 'El objetivo es llegar a una Hb de 10, el umbral clásico.', mal: true,
                   c: 'Su umbral es <span class="hl">8</span>. El ≤10 de 1942 se abandonó: 7-8 dio los mismos resultados, incluidos los cardíacos, con un 41 % menos de hematíes.' },
                 { t: 'Cada unidad le subirá la Hb ~1 g/dl y el Hto ~3 %.' },
-                { t: 'Pasará en unas 2 h por la vía de 18 G, sin diluir.' },
+                { t: 'Como está estable, la pongo en unas 2 h por unidad y sin diluir con suero.' },
                 { t: 'Así mejorará la oxigenación de sus tejidos.', mal: true,
                   c: 'Subirá el aporte (DO₂), pero en la Figura 12.4 el consumo (VO₂) no cambió: la transfusión <span class="hl-rojo">no es un método absoluto</span> para mejorar la oxigenación tisular.' }],
               explicacion: 'Dos ideas que la ficha desmonta: el objetivo de 10 y que transfundir oxigena los tejidos.' } },
@@ -397,7 +398,7 @@ export const MAYEUTICA_SANGRE = {
         opciones: [
           { t: 'No obliga a parar; lo habitual: pausa y difenhidramina', ok: true },
           { t: 'Parar del todo y no volver a transfundir', porque: 'Eso es tras una anafilaxia. Una urticaria leve sin fiebre ni siquiera obliga a interrumpir: le negarías una transfusión indicada.' },
-          { t: 'Seguir sin hacer nada: unos habones sin fiebre no son ninguna reacción', porque: 'Es una reacción de hipersensibilidad, la más común (1:100). No obliga a parar, pero se alivia, y las siguientes irán con hematíes lavados.' }],
+          { t: 'Seguir como si nada y, en las siguientes, hematíes sin lavar', porque: 'Es una reacción de hipersensibilidad, la más común (1:100 unidades). Tras ella, todas las siguientes transfusiones van con hematíes lavados y se busca un déficit de IgA; si no, la repetirá.' }],
         explicacion: 'Urticaria leve sin fiebre: no obliga a interrumpir; la práctica habitual es parar un rato y dar <span class="hl">difenhidramina 25-50 mg</span> VO, IM o IV. En adelante, hematíes <span class="hl">lavados</span>, y estudiar un déficit de IgA. Disnea y sibilancias bruscas: anafilaxia, parar ya.' },
       { id: 'rsg-g5', corto: 'el TRALI', tipo: 'test', fuente: 'mh-trali · mh-fig-12-5', modelo: visual('merino-riesgos', '👁️ La radiografía del TRALI (vista Visual)'), modeloFuturo: { capilarVivo: 'trali' },
         enunciado: 'Predice: en el TRALI, ¿de quién son los anticuerpos y dónde se quedan las células que activan?',
@@ -493,7 +494,7 @@ export const MAYEUTICA_SANGRE = {
               enunciado: 'La enfermera te llama por los habones. ¿Qué indicas?',
               opciones: [
                 { t: 'Parar del todo: es una anafilaxia', porque: 'Sin disnea, sibilancias ni hipotensión es una urticaria leve. Pararla del todo le quitaría una transfusión indicada.' },
-                { t: 'Nada: unos habones sin fiebre no son una reacción a la transfusión', porque: 'Es la reacción de hipersensibilidad más común (1:100 unidades). Pasarla por alto hará que la próxima vez no pidas hematíes lavados.' },
+                { t: 'Seguir como hasta ahora y pedir hematíes normales para las próximas', porque: 'Es la reacción de hipersensibilidad más común (1:100 unidades). Si no cambias a hematíes lavados para las siguientes, el paciente puede repetirla, y no estudiarías el déficit de IgA.' },
                 { t: 'Pausa y difenhidramina 25-50 mg; luego puede seguir', ok: true }],
               explicacion: 'La urticaria leve sin fiebre <span class="hl">no obliga a interrumpir</span>; lo habitual es parar un rato y dar un antihistamínico (difenhidramina 25-50 mg VO, IM o IV).' } },
           { momento: 'Día 4 · 12:40', datos: { Respiración: 'disnea; SpO₂ 86 %; crepitantes bilaterales', Temperatura: '38,1 °C', PA: '168/92 mmHg', Transfusión: 'quedan unos 50 ml' }, nuevo: ['Respiración', 'Temperatura', 'PA', 'Transfusión'],

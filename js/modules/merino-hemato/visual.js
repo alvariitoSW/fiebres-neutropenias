@@ -83,8 +83,10 @@ export function init() {
                 { fuente: '#mh-hemostasia-primaria', etiqueta: 'Herida: tapón de plaquetas (GPIIb/IIIa, FvW)', color: 'amarillo' },
                 { fuente: '#mh-hemostasia-secundaria', etiqueta: 'Fibrina: el tapón se vuelve trombo', color: 'rojo' }
             ] },
+            { tipo: 'flujo', titulo: 'Recuento inesperadamente bajo', nodos: [
+                { fuente: '#mh-pseudotrombo', etiqueta: 'Pseudotrombocitopenia: el contador se equivoca', color: 'gris' }
+            ] },
             { tipo: 'flujo', titulo: 'HIT paso a paso', nodos: [
-                { fuente: '#mh-pseudotrombo', color: 'gris' },
                 { fuente: '#mh-hit-mecanismo', color: 'dorado' }, { fuente: '#mh-hit-riesgo', color: 'amarillo' },
                 { fuente: '#mh-hit-clinica', color: 'rojo' }, { fuente: '#mh-hit-diagnostico', color: 'purpura' }
             ] },
@@ -117,7 +119,7 @@ export function init() {
         guia: 'Umbrales de plaquetas, reacciones por preparación y el plasma.',
         paneles: [
             { ...LAMINAS, nodos: ['#mh-fig-13-2', '#mh-fig-13-3'] },
-            { tipo: 'escalera', titulo: 'Umbrales de transfusión de plaquetas, de menor a mayor', nota: 'Ninguno está validado formalmente (ver texto).', nodos: [
+            { tipo: 'escalera', titulo: 'Umbrales de transfusión de plaquetas, de menor a mayor', nota: 'Según la fuente, los umbrales profilácticos (sin sangrado y para procedimientos) no están validados; para el sangrado activo no dice lo mismo (ver texto).', nodos: [
                 '#mh-plaq-profilaxis', '#mh-plaq-cvc', '#mh-plaq-cirugia', '#mh-plaq-pl', '#mh-plaq-sangrado'] },
             { tipo: 'barras', titulo: 'Reacciones por 100.000 unidades', tabla: '#mh-tabla-13-4', excluir: ['Total'],
               series: [{ col: 1, nombre: 'Multidonante', color: 'verde' }, { col: 2, nombre: 'Aféresis', color: 'rojo' }] },
