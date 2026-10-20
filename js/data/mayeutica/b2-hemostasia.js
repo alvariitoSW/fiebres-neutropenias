@@ -6,9 +6,10 @@
 // (docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf, págs. 20-36); cada pregunta dice dónde con `fuente` (ids
 // `mh-…` de la ficha). Los pacientes se inventan (lista del bloque: Gonzalo, Inés y Salvador) y sus cuentas se marcan
 // con `origen`. Plan: autonomo/bloques/b2/cobertura.md §3.B y §6.
-// Formato: el de b1-fluidos.js. `modeloVivo` es un modelo que ya existe (el telar de la trombina, para la TIH);
-// `modelo`, la vista Visual de la ficha (el paso «Mira»). `modeloFuturo` es el estado del vaso que sangra, que aún no
-// existe (`vasoVivo: '<estado>'`): el motor no lo pinta; queda aquí para conectarlo cuando se construya.
+// Formato: el de b1-fluidos.js. `modeloVivo` es el modelo vivo en el estado de la pregunta, con el texto de su botón:
+// el vaso que sangra (`vasoVivo: '<estado>'`, js/modules/libros/vaso-vivo.js) y el telar de la trombina (la TIH);
+// `modelo`, la vista Visual de la ficha (el paso «Mira»). El vaso usa estas mismas preguntas en su Mayéutica
+// (js/data/vaso-vivo-data.js): una sola fuente de preguntas.
 
 // La vista Visual de una ficha de Merino HEMATO, como botón «modelo» (sale tras contestar).
 const visual = (tab, texto) => ({ especialidad: 'home', view: 'merinoHemato', panel: 'panel-merino-tabs', tab, enVisual: '', texto });
@@ -22,49 +23,49 @@ export const MAYEUTICA_HEMOSTASIA = {
   'merino-trombocitopenia': {
     entrada: 'Cómo se tapa un vaso, cuándo importa de verdad el recuento, qué baja las plaquetas en la UCI y cómo se sospecha, se puntúa y se trata la HIT.',
     guia: [
-      { id: 'trb-g1', corto: 'el glucocálix', tipo: 'test', fuente: 'mh-glucocalix', modeloFuturo: { vasoVivo: 'sano' },
+      { id: 'trb-g1', corto: 'el glucocálix', tipo: 'test', fuente: 'mh-glucocalix', modeloVivo: { vasoVivo: 'sano', texto: '🩹 El glucocálix, en el vaso que sangra' },
         enunciado: '¿Por qué las plaquetas no se pegan al endotelio sano?',
         opciones: [
           { t: 'Porque la sangre corre demasiado deprisa', porque: 'El libro da otra razón: el glucocálix impide que leucocitos y plaquetas se adhieran y, como mecanorreceptor de la cizalla, hace que el endotelio libere óxido nítrico.' },
           { t: 'El glucocálix lo impide y hace que el endotelio libere NO', ok: true },
           { t: 'Porque el colágeno del endotelio sano está tapado por una capa de fibrina', porque: 'La fibrina llega después, para estabilizar el tapón. En el endotelio sano lo que lo impide es el glucocálix, una malla de mucopolisacáridos; al romperse, asoma el colágeno y empieza el tapón.' }],
         explicacion: 'El <span class="hl-purpura">glucocálix</span> (malla de mucopolisacáridos sobre el endotelio) mantiene la presión oncótica (frena las proteínas grandes) y la <span class="hl">fluidez</span>: impide que leucocitos y plaquetas se adhieran y, como mecanorreceptor de la cizalla, hace que el endotelio libere óxido nítrico.' },
-      { id: 'trb-g2', corto: 'la herida', tipo: 'test', fuente: 'mh-hemostasia-primaria', modelo: visual('merino-trombocitopenia', '👁️ La hemostasia en tres pasos (vista Visual)'), modeloFuturo: { vasoVivo: 'herida' },
+      { id: 'trb-g2', corto: 'la herida', tipo: 'test', fuente: 'mh-hemostasia-primaria', modelo: visual('merino-trombocitopenia', '👁️ La hemostasia en tres pasos (vista Visual)'), modeloVivo: { vasoVivo: 'herida', texto: '🩹 La herida en sus 4 tiempos, en el vaso que sangra' },
         enunciado: 'Predice: se rompe la pared del vaso. ¿A qué se pegan las plaquetas, y qué ancla el tapón a la pared?',
         opciones: [
           { t: 'Al fibrinógeno; el colágeno lo ancla', porque: 'Al revés: se adhieren al colágeno subendotelial; la GPIIb/IIIa, encendida por el calcio, se une al FvW (que ancla el tapón) y al fibrinógeno (que une las plaquetas entre sí).' },
           { t: 'Al colágeno; la GPIIb/IIIa se une al FvW sin soltarse', ok: true },
           { t: 'A la fibrina ya formada, que llega antes por la vía del factor tisular', porque: 'La fibrina llega después (hemostasia secundaria) y estabiliza el tapón; el primer paso es la adhesión al colágeno.' }],
         explicacion: 'Las plaquetas se adhieren al <span class="hl">colágeno</span> subendotelial. Liberan <span class="hl-azul">calcio, que activa la GPIIb/IIIa</span>: se une de forma irreversible al FvW (ancla el tapón) y al fibrinógeno; los puentes de fibrina lo estabilizan y lo contraen, y el flujo vuelve.' },
-      { id: 'trb-g3', corto: 'la fibrina', tipo: 'test', fuente: 'mh-hemostasia-secundaria · mh-vias-coagulacion', modeloFuturo: { vasoVivo: 'herida' },
+      { id: 'trb-g3', corto: 'la fibrina', tipo: 'test', fuente: 'mh-hemostasia-secundaria · mh-vias-coagulacion', modeloVivo: { vasoVivo: 'herida', texto: '🩹 La herida en sus 4 tiempos, en el vaso que sangra' },
         enunciado: '¿Qué convierte el tapón en un trombo estable, y por qué vía principal se forma?',
         opciones: [
           { t: 'La fibrina, por la vía del factor tisular', ok: true },
           { t: 'Más plaquetas: un trombo es solo un tapón grande', porque: 'El trombo es un cúmulo de plaquetas dentro de una malla de fibrina: sin fibrina no es estable.' },
           { t: 'La fibrina, sobre todo por la vía de contacto (la antigua «intrínseca»)', porque: 'La principal es la del factor tisular, activada por la tromboplastina del subendotelio; la de contacto la activan los cininógenos.' }],
         explicacion: 'La <span class="hl">fibrina</span> estabiliza el trombo. Dos vías: la del <span class="hl-azul">factor tisular (la principal)</span>, activada por la tromboplastina del subendotelio, y la de contacto, por los cininógenos. Las dos llevan a la protrombina (II) y del fibrinógeno (I) a la fibrina.' },
-      { id: 'trb-g4', corto: 'el corte', tipo: 'test', fuente: 'mh-trombo-umbral', modeloFuturo: { vasoVivo: 'plaquetas-100k' },
+      { id: 'trb-g4', corto: 'el corte', tipo: 'test', fuente: 'mh-trombo-umbral', modeloVivo: { vasoVivo: 'plaquetas-100k', texto: '🩹 El tapón con 100.000 plaquetas, en el vaso que sangra' },
         enunciado: 'Predice: ¿por debajo de qué recuento deja de formarse bien el tapón plaquetario?',
         opciones: [
           { t: '150.000/µl, la definición clásica', porque: 'Es el corte tradicional, pero el tapón se forma hasta 100.000: por eso <100.000 es más útil para hablar de una trombocitopenia relevante.' },
           { t: '10.000/µl, cuando aparece la hemorragia cerebral espontánea', porque: '<10.000 es el riesgo de hemorragia intracerebral espontánea, poco frecuente; el tapón deja de formarse bien ya por debajo de 100.000.' },
           { t: '100.000/µl: por eso es un corte más útil', ok: true }],
         explicacion: 'El tapón se forma hasta que el recuento cae por debajo de <span class="hl-rojo">100.000/µl</span>: un corte más útil que el clásico de 150.000 para hablar de trombocitopenia relevante. Es el trastorno hemostático más frecuente de la UCI (hasta el 60 %).' },
-      { id: 'trb-g5', corto: '5.000', tipo: 'test', fuente: 'mh-trombo-umbral', modeloFuturo: { vasoVivo: 'plaquetas-5k' },
+      { id: 'trb-g5', corto: '5.000', tipo: 'test', fuente: 'mh-trombo-umbral', modeloVivo: { vasoVivo: 'plaquetas-5k', texto: '🩹 5.000 plaquetas sin lesión, en el vaso que sangra' },
         enunciado: 'Paciente con 5.000 plaquetas/µl y ninguna lesión que sangre. ¿Qué esperas?',
         opciones: [
           { t: 'Una hemorragia grave segura: transfundir ya', porque: 'Sin lesión estructural, recuentos de hasta 5.000 se toleran sin hemorragia mayor; transfundir por el número no está validado (ficha 6).' },
           { t: 'Que no sangre de forma mayor: hace falta una lesión', ok: true },
           { t: 'Que sangre solo cuando baje de 1.000/µl, ni antes ni después', porque: 'No hay ese corte. El riesgo con menos de 10.000 es la hemorragia intracerebral espontánea, que es poco frecuente.' }],
         explicacion: 'El sangrado mayor <span class="hl">no depende solo del recuento</span>: hace falta una lesión estructural que sangre. Sin ella se toleran hasta <span class="hl">5.000/µl</span>; con <10.000 el riesgo es la hemorragia intracerebral espontánea, poco frecuente.' },
-      { id: 'trb-g6', corto: 'el tubo', tipo: 'test', fuente: 'mh-pseudotrombo', modeloFuturo: { vasoVivo: 'pseudotrombocitopenia' },
+      { id: 'trb-g6', corto: 'el tubo', tipo: 'test', fuente: 'mh-pseudotrombo', modeloVivo: { vasoVivo: 'pseudotrombocitopenia', texto: '🩹 El tubo con EDTA, en el vaso que sangra' },
         enunciado: 'Ayer 210.000 plaquetas; hoy 38.000, sin nada que lo explique, y en el frotis hay grumos de plaquetas. ¿Qué haces?',
         opciones: [
           { t: 'Transfundir plaquetas antes de que sangre', porque: 'Puede ser una pseudotrombocitopenia: anticuerpos anti-EDTA agrupan las plaquetas en el tubo y el contador las lee como leucocitos. Transfundirías a quien tiene plaquetas normales.' },
           { t: 'Repetir el recuento en un tubo con citrato o heparina', ok: true },
           { t: 'Retirar ya toda la heparina y pedir el ELISA anti-FP4/heparina', porque: 'Antes hay que confirmar que la caída es real: grumos en el frotis sugieren una pseudotrombocitopenia (2 % de los recuentos).' }],
         explicacion: '<span class="hl">Pseudotrombocitopenia</span>: anticuerpos anti-EDTA agrupan las plaquetas en el tubo y el contador las lee como leucocitos (2 % de los recuentos hospitalarios). Se sospecha por un recuento inesperado o grumos en el frotis; se repite en <span class="hl-verde">citrato o heparina</span>.' },
-      { id: 'trb-g7', corto: 'la sepsis', tipo: 'test', fuente: 'mh-trombo-sepsis · mh-trombo-farmacos · mh-tabla-13-1', modeloFuturo: { vasoVivo: 'sepsis' },
+      { id: 'trb-g7', corto: 'la sepsis', tipo: 'test', fuente: 'mh-trombo-sepsis · mh-trombo-farmacos · mh-tabla-13-1', modeloVivo: { vasoVivo: 'sepsis', texto: '🩹 Los macrófagos de la sepsis, en el vaso que sangra' },
         enunciado: '¿Cuál es la causa más frecuente de trombocitopenia en la UCI, y por qué mecanismo?',
         opciones: [
           { t: 'La heparina: anticuerpos contra las plaquetas', porque: 'La heparina es menos frecuente, aunque más grave. La causa más frecuente es la sepsis.' },
@@ -72,14 +73,14 @@ export const MAYEUTICA_HEMOSTASIA = {
           { t: 'Los antibióticos, porque suprimen la producción de la médula', porque: 'Los antibióticos (linezolid, β-lactámicos, vancomicina) actúan sobre todo por anticuerpos; la supresión es de los antineoplásicos. Y la causa más frecuente es la sepsis.' }],
         explicacion: '<span class="hl">Sepsis</span>: mayor destrucción de plaquetas por los <span class="hl-azul">macrófagos</span>. Menos frecuentes pero más graves: la heparina y las microangiopatías (CID, PTT, SHU).' },
       { id: 'trb-g8', corto: 'la IgG', tipo: 'test', fuente: 'mh-hit-mecanismo · mh-hit-clinica',
-        modeloVivo: { telarVivo: 'tih', texto: '🧵 La heparina, el FP4 y la IgG en el telar de la trombina' }, modeloFuturo: { vasoVivo: 'hit' },
+        modeloVivo: [{ telarVivo: 'tih', texto: '🧵 La heparina, el FP4 y la IgG en el telar de la trombina' }, { vasoVivo: 'hit', texto: '🩹 La HIT: FP4, IgG y trombosis, en el vaso que sangra' }],
         enunciado: 'En la HIT, ¿qué hace la IgG, y por qué el peligro es la trombosis y no el sangrado?',
         opciones: [
           { t: 'Destruye las plaquetas y el paciente sangra', porque: 'El sistema reticuloendotelial retira las plaquetas recubiertas, pero lo que hace la IgG es activarlas con fuerza: trombosis. Temer el sangrado te haría no anticoagular.' },
           { t: 'Neutraliza la heparina, que deja de anticoagular al paciente', porque: 'La heparina se une al FP4 y el complejo es el antígeno; la IgG activa las plaquetas. El problema no es que falle la heparina, sino una activación plaquetaria que forma trombos.' },
           { t: 'Se une a las plaquetas y las activa: forma trombos', ok: true }],
         explicacion: 'La heparina se une al <span class="hl">FP4</span>; el complejo desencadena IgG que se une a las plaquetas y las <span class="hl-azul">activa</span>. Sin tratar: TEV en el 17-55 % y trombosis arterial en el 1-3 %; en hasta el 25 %, la trombosis precede a la trombocitopenia. Las plaquetas caen ~50 %, rara vez por debajo de 20.000.' },
-      { id: 'trb-g9', corto: 'riesgo intermedio', tipo: 'destapa', fuente: 'mh-hit-manejo · mh-hit · mh-4ts', modeloFuturo: { vasoVivo: 'hit-argatroban' }, origen: 'deducción de la ficha · la HIT puede salir con los lavados de catéter (p. 23); retirarlos es la consecuencia',
+      { id: 'trb-g9', corto: 'riesgo intermedio', tipo: 'destapa', fuente: 'mh-hit-manejo · mh-hit · mh-4ts', modeloVivo: { vasoVivo: 'hit-argatroban', texto: '🩹 El argatrobán en la cascada, en el vaso que sangra' }, origen: 'deducción de la ficha · la HIT puede salir con los lavados de catéter (p. 23); retirarlos es la consecuencia',
         enunciado: 'La 4Ts da 5 puntos: riesgo intermedio. ¿Qué haces ya? Son tres cosas.',
         puntos: [
           'Retirar <span class="hl-rojo">toda</span> la heparina (también la de los lavados: la HIT no depende de la dosis).',
@@ -171,7 +172,7 @@ export const MAYEUTICA_HEMOSTASIA = {
                 { t: '3: riesgo bajo, porque la cirugía es reciente y la explica', porque: 'La cirugía resta solo si fue en los 3 días previos; fue hace 7. Una caída >50 % con nadir ≥20.000 da 2 puntos.' }],
               explicacion: 'Caída >50 % con nadir ≥20.000 y sin cirugía en 3 días → <span class="hl">2</span>; día 7 de exposición (5-10) → <span class="hl">2</span>; sin trombosis → 0; otra causa posible (vancomicina) → <span class="hl">1</span>. Total <span class="hl-rojo">5: riesgo intermedio (~10 %)</span>.' } },
           { momento: 'Día 7 · ahora', datos: { '4Ts': '5 puntos' }, nuevo: ['4Ts'],
-            pregunta: { id: 'h3-3', tipo: 'destapa', fuente: 'mh-hit-manejo · mh-hit', modeloFuturo: { vasoVivo: 'hit-argatroban' }, origen: 'deducción de la ficha · la HIT puede salir con los lavados de catéter (p. 23); retirarlos es la consecuencia',
+            pregunta: { id: 'h3-3', tipo: 'destapa', fuente: 'mh-hit-manejo · mh-hit', modeloVivo: { vasoVivo: 'hit-argatroban', texto: '🩹 El argatrobán en la cascada, en el vaso que sangra' }, origen: 'deducción de la ficha · la HIT puede salir con los lavados de catéter (p. 23); retirarlos es la consecuencia',
               enunciado: 'Riesgo intermedio. ¿Qué haces ya? Son tres cosas.',
               puntos: [
                 'Retirar <span class="hl-rojo">toda</span> la heparina: la subcutánea y la de los lavados de los catéteres.',
@@ -219,7 +220,7 @@ export const MAYEUTICA_HEMOSTASIA = {
           'La 4Ts antes que el ELISA: con riesgo intermedio, retirar toda la heparina, anticoagulante no heparínico y ELISA.',
           'El ELISA negativo descarta la HIT: se suspende el no heparínico y puede volver la heparina.',
           'La HIT no depende de la dosis (cuentan los lavados) y la warfarina está contraindicada en la fase aguda.'],
-        volver: { nombre: 'Manejo según el riesgo', ancla: 'mh-hit-manejo', modelo: visual('merino-trombocitopenia', '👁️ La 4Ts y el manejo (vista Visual)'), modeloVivo: { telarVivo: 'tih' }, modeloFuturo: { vasoVivo: 'hit-argatroban' } } },
+        volver: { nombre: 'Manejo según el riesgo', ancla: 'mh-hit-manejo', modelo: visual('merino-trombocitopenia', '👁️ La 4Ts y el manejo (vista Visual)'), modeloVivo: [{ telarVivo: 'tih' }, { vasoVivo: 'hit-argatroban', texto: '🩹 El argatrobán en la cascada, en el vaso que sangra' }] } },
     ],
     profundizar: [
       { id: 'mh-tabla-13-1', titulo: 'Tabla 13.1: el resto de causas de trombocitopenia en el crítico' },
@@ -233,7 +234,7 @@ export const MAYEUTICA_HEMOSTASIA = {
   'merino-microangiopatias': {
     entrada: 'Cómo se rompe un hematíe sin anticuerpos, qué separa la CID de la PTT y del SHU, y por qué en ellas lo que mata es la trombosis.',
     guia: [
-      { id: 'mat-g1', corto: 'el esquistocito', tipo: 'test', fuente: 'mh-mat · mh-fig-13-1', modelo: visual('merino-microangiopatias', '👁️ El frotis de la Figura 13.1 (vista Visual)'), modeloFuturo: { vasoVivo: 'cid' },
+      { id: 'mat-g1', corto: 'el esquistocito', tipo: 'test', fuente: 'mh-mat · mh-fig-13-1', modelo: visual('merino-microangiopatias', '👁️ El frotis de la Figura 13.1 (vista Visual)'), modeloVivo: { vasoVivo: 'cid', texto: '🩹 La CID: microtrombos y consumo, en el vaso que sangra' },
         enunciado: '¿Cómo se rompe un hematíe en una microangiopatía, si no hay anticuerpos contra él?',
         opciones: [
           { t: 'Lo destruyen anticuerpos del receptor', porque: 'Es una hemólisis no inmune: buscar anticuerpos (como en una reacción transfusional) no te llevará al diagnóstico.' },
@@ -247,7 +248,7 @@ export const MAYEUTICA_HEMOSTASIA = {
           { t: 'Hemólisis microangiopática; la confirman los esquistocitos', ok: true },
           { t: 'Una hemólisis inmune; la confirma el test de Coombs directo', porque: 'El Coombs es de la reacción hemolítica por transfusión; aquí la hemólisis es no inmune, mecánica.' }],
         explicacion: 'Se <span class="hl-azul">sospecha</span> por LDH alta y haptoglobina baja y se <span class="hl-rojo">confirma</span> con esquistocitos en el frotis.' },
-      { id: 'mat-g3', corto: 'la coagulación en la CID', tipo: 'test', fuente: 'mh-cid · mh-tabla-13-3', modelo: visual('merino-microangiopatias', '👁️ El perfil de laboratorio (vista Visual)'), modeloFuturo: { vasoVivo: 'cid' },
+      { id: 'mat-g3', corto: 'la coagulación en la CID', tipo: 'test', fuente: 'mh-cid · mh-tabla-13-3', modelo: visual('merino-microangiopatias', '👁️ El perfil de laboratorio (vista Visual)'), modeloVivo: { vasoVivo: 'cid', texto: '🩹 La CID: microtrombos y consumo, en el vaso que sangra' },
         enunciado: 'Predice: en la CID se forma fibrina en toda la microcirculación. ¿Qué les pasa al INR, al aPTT y al fibrinógeno?',
         opciones: [
           { t: 'Nada: los trombos no gastan factores', porque: 'Los gastan: es una coagulopatía de consumo. Esperar un perfil normal te haría confundir una CID con una PTT.' },
@@ -261,14 +262,14 @@ export const MAYEUTICA_HEMOSTASIA = {
           { t: 'Porque la fibrinólisis está aumentada', ok: true },
           { t: 'Porque el riñón no lo elimina bien cuando hay microtrombos', porque: 'La ficha lo explica por la fibrinólisis aumentada; en el SHU, con el riñón peor, el dímero-D es normal.' }],
         explicacion: 'En la CID la <span class="hl-azul">fibrinólisis está aumentada</span> y suben los productos de degradación de la fibrina (dímero-D). En la PTT y el SHU es normal (Tabla 13.3).' },
-      { id: 'mat-g5', corto: 'echar leña', tipo: 'test', fuente: 'mh-cid · mh-plaq-indicaciones', modeloFuturo: { vasoVivo: 'cid-lena' },
+      { id: 'mat-g5', corto: 'echar leña', tipo: 'test', fuente: 'mh-cid · mh-plaq-indicaciones', modeloVivo: { vasoVivo: 'cid-lena', texto: '🩹 Reponer en la CID: echar leña, en el vaso que sangra' },
         enunciado: 'Una CID séptica sangra por el punto de la vía central. ¿Qué pasa si repones plaquetas y factores?',
         opciones: [
           { t: 'Que se corrige la causa y la CID se para', porque: 'No hay tratamiento eficaz de la CID: se trata la causa. Reponer no suele parar el sangrado.' },
           { t: 'Que para el sangrado; solo está contraindicado en la PTT', porque: 'Reponer no suele parar el sangrado de la CID, y plaquetas y factores pueden «echar leña» a la microtrombosis.' },
           { t: 'No suele parar el sangrado y alimenta la microtrombosis', ok: true }],
         explicacion: 'La hemorragia con riesgo vital lleva a reponer hemoderivados, pero <span class="hl">no suele parar el sangrado</span>, y plaquetas y factores pueden <span class="hl-rojo">«echar leña» a la microtrombosis</span>. Por eso las indicaciones de plaquetas no valen en las microangiopatías (ficha 6).' },
-      { id: 'mat-g6', corto: 'la tijera', tipo: 'test', fuente: 'mh-ptt', modeloFuturo: { vasoVivo: 'ptt' },
+      { id: 'mat-g6', corto: 'la tijera', tipo: 'test', fuente: 'mh-ptt', modeloVivo: { vasoVivo: 'ptt', texto: '🩹 La PTT: el FvW sin cortar, en el vaso que sangra' },
         enunciado: 'Predice: mujer de 45 años, confusa, con esquistocitos y plaquetas bajas; INR, aPTT y fibrinógeno normales; creatinina 1,4 mg/dl. ¿Qué falta?',
         opciones: [
           { t: 'ADAMTS-13, la proteasa que corta el FvW: PTT', ok: true },
@@ -281,7 +282,7 @@ export const MAYEUTICA_HEMOSTASIA = {
           'El <span class="hl">riñón</span>: en la PTT la insuficiencia renal suele ser leve (Cr <2 mg/dl); en el SHU, más grave.',
           'La <span class="hl-azul">actividad de ADAMTS-13</span> muy baja es patognomónica de la PTT (aunque en la mayoría de hospitales no se obtiene rápido).'],
         explicacion: 'Las dos tienen INR, aPTT, fibrinógeno y dímero-D normales (Tabla 13.3); así se separan de la CID.' },
-      { id: 'mat-g8', corto: 'el recambio', tipo: 'test', fuente: 'mh-ptt', modeloFuturo: { vasoVivo: 'ptt-recambio' },
+      { id: 'mat-g8', corto: 'el recambio', tipo: 'test', fuente: 'mh-ptt', modeloVivo: { vasoVivo: 'ptt-recambio', texto: '🩹 El recambio plasmático, en el vaso que sangra' },
         enunciado: 'Recambio plasmático en la PTT: ¿cuánto plasma y hasta cuándo?',
         opciones: [
           { t: '1 volumen, hasta que pasen de 50.000', porque: 'El libro da ~1,5 volúmenes por sesión, a diario hasta plaquetas normales 2 días seguidos. Parar antes deja la PTT a medias.' },
@@ -291,7 +292,7 @@ export const MAYEUTICA_HEMOSTASIA = {
         nota: '<b>Nota: la fuente no lo dice.</b> Marino no dice qué molécula retira ni cuál repone el recambio; solo que se desecha el plasma del paciente y se repone con el de un donante sano.' + enFicha('merino-microangiopatias', 'mh-nota-recambio') },
     ],
     examen: [
-      { id: 'mat-e1', corto: 'la Tabla 13.3', tipo: 'test', fuente: 'mh-tabla-13-3 · mh-shu · mh-ptt', modeloFuturo: { vasoVivo: 'shu' },
+      { id: 'mat-e1', corto: 'la Tabla 13.3', tipo: 'test', fuente: 'mh-tabla-13-3 · mh-shu · mh-ptt', modeloVivo: { vasoVivo: 'shu', texto: '🩹 El SHU: el riñón, en el vaso que sangra' },
         enunciado: 'Esquistocitos, plaquetas 40.000/µl, INR 1,1, fibrinógeno normal, dímero-D normal, creatinina 3,8 mg/dl. ¿Qué es lo más probable?',
         opciones: [
           { t: 'CID: el dímero-D sube en las tres', porque: 'Según la Tabla 13.3, solo en la CID está elevado; y aquí la coagulación es normal. Tratarías una CID que no es.' },
@@ -320,7 +321,7 @@ export const MAYEUTICA_HEMOSTASIA = {
           { t: 'Edad media, 3 veces más en mujeres; péntada a menudo incompleta', ok: true },
           { t: 'Sigue a una diarrea por E. coli productor de toxina Shiga', porque: 'Esa infección es la causa más frecuente del SHU, no de la PTT, cuyos anticuerpos no tienen desencadenante conocido.' }],
         explicacion: 'PTT: suele aparecer en la <span class="hl">edad media</span>, <span class="hl">tres veces más en mujeres</span>. Péntada (fiebre, alteración mental, insuficiencia renal, trombocitopenia, hemólisis microangiopática) <span class="hl-rojo">a menudo incompleta</span> al inicio.' },
-      { id: 'mat-e5', corto: 'el SHU atípico', tipo: 'test', fuente: 'mh-shu', modeloFuturo: { vasoVivo: 'shu' },
+      { id: 'mat-e5', corto: 'el SHU atípico', tipo: 'test', fuente: 'mh-shu', modeloVivo: { vasoVivo: 'shu', texto: '🩹 El SHU: el riñón, en el vaso que sangra' },
         enunciado: '¿Qué es el SHU atípico y cómo se trata?',
         opciones: [
           { t: 'Por toxina Shiga; eculizumab', porque: 'El de la toxina Shiga es el SHU asociado a infección (soporte y tratar la infección). El atípico es hereditario, por complemento sin regular.' },
@@ -359,7 +360,7 @@ export const MAYEUTICA_HEMOSTASIA = {
                 { t: 'Una sepsis con CID: hemocultivos y transfundir plaquetas ya', porque: 'Primero hay que confirmar la hemólisis con esquistocitos. Y si fuese una microangiopatía, las plaquetas podrían agravar la microtrombosis.' }],
               explicacion: 'LDH alta y haptoglobina baja → <span class="hl-azul">sospecha</span> de hemólisis microangiopática; los <span class="hl-rojo">esquistocitos</span> la confirman. Con plaquetas bajas: una microangiopatía trombótica.' } },
           { momento: '22:40', datos: { Frotis: 'esquistocitos', PA: '96/58 mmHg', 'El R2': '«sepsis con CID»' }, nuevo: ['Frotis', 'PA', 'El R2'],
-            pregunta: { id: 'h4-2', tipo: 'destapa', fuente: 'mh-tabla-13-3 · mh-cid', modelo: visual('merino-microangiopatias', '👁️ El perfil de laboratorio (vista Visual)'), modeloFuturo: { vasoVivo: 'cid' },
+            pregunta: { id: 'h4-2', tipo: 'destapa', fuente: 'mh-tabla-13-3 · mh-cid', modelo: visual('merino-microangiopatias', '👁️ El perfil de laboratorio (vista Visual)'), modeloVivo: { vasoVivo: 'cid', texto: '🩹 La CID: microtrombos y consumo, en el vaso que sangra' },
               enunciado: 'Antes de aceptar la CID, ¿qué pruebas la separan de la PTT y del SHU? Son cuatro cosas.',
               puntos: [
                 'El <span class="hl">INR</span>: elevado en la CID, normal en las otras dos.',
@@ -368,7 +369,7 @@ export const MAYEUTICA_HEMOSTASIA = {
                 'El <span class="hl">dímero-D</span>: elevado solo en la CID (fibrinólisis aumentada).'],
               explicacion: 'Los esquistocitos y las plaquetas bajas los comparten las tres: lo que separa es la coagulación (Tabla 13.3).' } },
           { momento: '23:30 · el giro', datos: { INR: '1,1', aPTT: 'normal', Fibrinógeno: 'normal', 'Dímero-D': 'normal' }, nuevo: ['INR', 'aPTT', 'Fibrinógeno', 'Dímero-D'],
-            pregunta: { id: 'h4-3', tipo: 'test', fuente: 'mh-ptt · mh-tabla-13-3', modeloFuturo: { vasoVivo: 'ptt' },
+            pregunta: { id: 'h4-3', tipo: 'test', fuente: 'mh-ptt · mh-tabla-13-3', modeloVivo: { vasoVivo: 'ptt', texto: '🩹 La PTT: el FvW sin cortar, en el vaso que sangra' },
               enunciado: 'Con la coagulación, ¿qué es, y qué cambia en el plan?',
               opciones: [
                 { t: 'Una CID que empieza: repetir en 6 h', porque: 'La CID consume factores: con todo normal no es CID. Esperar es peligroso: la PTT puede ser mortal en 24-48 h.' },
@@ -395,7 +396,7 @@ export const MAYEUTICA_HEMOSTASIA = {
                 { t: 'Unos 6 l, para lavar bien todos los anticuerpos del plasma', porque: 'El libro da ~1,5 volúmenes de plasma (unos 3 l en ella), y no dice qué retira el recambio (nota de la ficha).' }],
               explicacion: '1,5 × ~2 l = <span class="hl">unos 3 l</span> por sesión, a diario.' } },
           { momento: 'Días 1-4', datos: { Plaquetas: 'día 1: 38.000 · día 2: 96.000 · día 3: 158.000 · día 4: 171.000/µl' }, nuevo: ['Plaquetas'],
-            pregunta: { id: 'h4-6', tipo: 'test', fuente: 'mh-ptt · mh-plaq-preparaciones', modeloFuturo: { vasoVivo: 'ptt-recambio' },
+            pregunta: { id: 'h4-6', tipo: 'test', fuente: 'mh-ptt · mh-plaq-preparaciones', modeloVivo: { vasoVivo: 'ptt-recambio', texto: '🩹 El recambio plasmático, en el vaso que sangra' },
               enunciado: '¿Cuál es la última sesión de recambio?',
               opciones: [
                 { t: 'La del día 3: ya son normales', porque: 'Hace falta que sean normales 2 días seguidos: parar el día 3 es parar con un solo día de normalidad.' },
@@ -407,7 +408,7 @@ export const MAYEUTICA_HEMOSTASIA = {
           'Esquistocitos con plaquetas bajas = microangiopatía trombótica.',
           'La coagulación (INR, aPTT, fibrinógeno, dímero-D) separa la CID; el riñón separa la PTT del SHU.',
           'Plaquetas no en las microangiopatías; en la PTT, recambio en las primeras 48 h, a diario hasta 2 días con plaquetas normales.'],
-        volver: { nombre: 'Púrpura trombocitopénica trombótica', ancla: 'mh-ptt', modelo: visual('merino-microangiopatias', '👁️ El perfil de laboratorio (vista Visual)'), modeloFuturo: { vasoVivo: 'ptt-recambio' } } },
+        volver: { nombre: 'Púrpura trombocitopénica trombótica', ancla: 'mh-ptt', modelo: visual('merino-microangiopatias', '👁️ El perfil de laboratorio (vista Visual)'), modeloVivo: { vasoVivo: 'ptt-recambio', texto: '🩹 El recambio plasmático, en el vaso que sangra' } } },
     ],
     profundizar: [
       { id: 'mh-shu', titulo: 'SHU: el resto de causas y el trasplante renal', nota: 'Embarazo, lupus, síndrome antifosfolípido, neoplasias, fármacos (quinina, ciclosporina, tacrolimus) y el trasplante renal en el atípico.' },
@@ -420,14 +421,14 @@ export const MAYEUTICA_HEMOSTASIA = {
   'merino-plaquetas-plasma': {
     entrada: 'Cuándo transfundir plaquetas y cuánto suben, qué preparación da más reacciones, y por qué el INR engaña con el plasma.',
     guia: [
-      { id: 'ppl-g1', corto: '¿en las MAT?', tipo: 'test', fuente: 'mh-plaq-indicaciones · mh-cid', modeloFuturo: { vasoVivo: 'cid-lena' },
+      { id: 'ppl-g1', corto: '¿en las MAT?', tipo: 'test', fuente: 'mh-plaq-indicaciones · mh-cid', modeloVivo: { vasoVivo: 'cid-lena', texto: '🩹 Reponer en la CID: echar leña, en el vaso que sangra' },
         enunciado: 'Las indicaciones de transfusión de plaquetas, ¿valen para una CID o una PTT?',
         opciones: [
           { t: 'Sí: con ≤10.000 se transfunde siempre', porque: 'No se aplican a la trombocitopenia de consumo de las microangiopatías: ahí las plaquetas pueden agravar la microtrombosis.' },
           { t: 'No: en las microangiopatías agravan la microtrombosis', ok: true },
           { t: 'Solo en la PTT, porque ahí la coagulación es normal', porque: 'Tampoco en la PTT: la adhesión plaquetaria ya está sin control. La nota del libro vale para todas las microangiopatías.' }],
         explicacion: 'Las indicaciones <span class="hl-rojo">no se aplican</span> a la trombocitopenia de consumo de las microangiopatías trombóticas: transfundir plaquetas puede <span class="hl-azul">agravar la microtrombosis</span>.' },
-      { id: 'ppl-g2', corto: 'si sangra', tipo: 'test', fuente: 'mh-plaq-indicaciones', modelo: visual('merino-plaquetas-plasma', '👁️ Los umbrales en una escalera (vista Visual)'), modeloFuturo: { vasoVivo: 'transfusion-plaquetas' },
+      { id: 'ppl-g2', corto: 'si sangra', tipo: 'test', fuente: 'mh-plaq-indicaciones', modelo: visual('merino-plaquetas-plasma', '👁️ Los umbrales en una escalera (vista Visual)'), modeloVivo: { vasoVivo: 'transfusion-plaquetas', texto: '🩹 Una unidad de plaquetas y la Fig. 13.2 viva, en el vaso que sangra' },
         enunciado: 'Predice: sangrado activo. ¿Qué recuento buscas, y si sangra dentro del cráneo?',
         opciones: [
           { t: '>20.000; >50.000 si es intracraneal', porque: '<20.000 es el umbral profiláctico para un catéter central. Con sangrado activo: >50.000, y >100.000 en la hemorragia intracraneal. Te quedarías corto.' },
@@ -447,7 +448,7 @@ export const MAYEUTICA_HEMOSTASIA = {
           '<span class="hl">Ninguno está validado</span>: ni siquiera 5.000/µl provoca sangrado espontáneo.',
           'Sin sangrado activo, el problema de la trombocitopenia <span class="hl-azul">no es el recuento sino la causa</span>: las transfusiones profilácticas rara vez hacen falta.'],
         explicacion: 'Es uno de los mensajes finales del capítulo. Y el otro: lo más temible de la trombocitopenia no es el sangrado, sino la trombosis (HIT, CID, PTT, SHU).' },
-      { id: 'ppl-g5', corto: 'cuánto sube', tipo: 'test', fuente: 'mh-plaq-respuesta · mh-fig-13-2', modelo: visual('merino-plaquetas-plasma', '👁️ La Figura 13.2 (vista Visual)'), modeloFuturo: { vasoVivo: 'transfusion-plaquetas' },
+      { id: 'ppl-g5', corto: 'cuánto sube', tipo: 'test', fuente: 'mh-plaq-respuesta · mh-fig-13-2', modelo: visual('merino-plaquetas-plasma', '👁️ La Figura 13.2 (vista Visual)'), modeloVivo: { vasoVivo: 'transfusion-plaquetas', texto: '🩹 Una unidad de plaquetas y la Fig. 13.2 viva, en el vaso que sangra' },
         enunciado: 'Predice: 1 unidad de plaquetas en un adulto medio que no está sangrando. ¿Cuánto sube a la hora, y cuánto queda a las 24 h?',
         opciones: [
           { t: '+10.000 a la hora, y lo mismo a las 24 h', porque: 'Sube bastante más (35.000-50.000 a la hora). Con esa expectativa pedirías unidades de más.' },
@@ -455,34 +456,34 @@ export const MAYEUTICA_HEMOSTASIA = {
           { t: '+35.000-50.000 a la hora, y sigue igual a las 24 h', porque: 'A las 24 h el incremento es ~40 % menor (Figura 13.2). Si cuentas con la cifra de la hora, el recuento del día siguiente te parecerá un fracaso.' }],
         explicacion: 'Agrupada o de aféresis: <span class="hl">+35.000-50.000/µl a la hora</span>, en un adulto medio sin pérdida de sangre en curso; a las 24 h el incremento es <span class="hl-rojo">~40 % menor</span>.',
         nota: '<b>Nota de fuentes.</b> En la Figura 13.2 (otra referencia), el incremento medio tras la primera transfusión ronda los 66.000/µl a la hora (lectura aproximada). Marino no las concilia.' + enFicha('merino-plaquetas-plasma', 'mh-nota-fig-13-2') },
-      { id: 'ppl-g6', corto: 'refractariedad', tipo: 'test', fuente: 'mh-plaq-respuesta · mh-fig-13-2', modelo: visual('merino-plaquetas-plasma', '👁️ La Figura 13.2 (vista Visual)'), modeloFuturo: { vasoVivo: 'refractariedad' },
+      { id: 'ppl-g6', corto: 'refractariedad', tipo: 'test', fuente: 'mh-plaq-respuesta · mh-fig-13-2', modelo: visual('merino-plaquetas-plasma', '👁️ La Figura 13.2 (vista Visual)'), modeloVivo: { vasoVivo: 'refractariedad', texto: '🩹 La refractariedad, en el vaso que sangra' },
         enunciado: 'Tras 5 transfusiones de plaquetas, cada unidad sube menos. ¿Por qué, y qué haces?',
         opciones: [
           { t: 'Anticuerpos contra el ABO del donante; ABO-compatibles', ok: true },
           { t: 'Se gastan antes por la fiebre; dar el doble', porque: 'El libro lo atribuye a anticuerpos del receptor contra los antígenos ABO de las plaquetas del donante: doblar unidades no lo resuelve.' },
           { t: 'Pedir plaquetas de aféresis, que evitan la aloinmunización', porque: 'Ese beneficio de la aféresis no está validado, y con preparaciones leucorreducidas el riesgo de aloinmunización es el mismo. Lo que lo mitiga son plaquetas ABO-compatibles.' }],
         explicacion: '<span class="hl">Refractariedad plaquetaria</span>: ~25 % menos de incremento tras 5 transfusiones, por <span class="hl-azul">anticuerpos del receptor contra los antígenos ABO</span> de las plaquetas del donante. Se mitiga con plaquetas <span class="hl-verde">ABO-compatibles</span>.' },
-      { id: 'ppl-g7', corto: 'el INR', tipo: 'test', fuente: 'mh-trampa-inr · mh-fig-13-3', modelo: visual('merino-plaquetas-plasma', '👁️ La Figura 13.3 (vista Visual)'), modeloFuturo: { vasoVivo: 'pfc-inr' },
+      { id: 'ppl-g7', corto: 'el INR', tipo: 'test', fuente: 'mh-trampa-inr · mh-fig-13-3', modelo: visual('merino-plaquetas-plasma', '👁️ La Figura 13.3 (vista Visual)'), modeloVivo: { vasoVivo: 'pfc-inr', texto: '🩹 La balanza del INR con el PFC, en el vaso que sangra' },
         enunciado: 'Predice: crítico sin sangrado, INR 1,8, antes de un procedimiento; PFC 12 ml/kg. ¿Qué pasa con el INR y con la antitrombina?',
         opciones: [
           { t: 'El INR baja a 1,4; la antitrombina no cambia', porque: 'La antitrombina sube de 38 a 50 %: el PFC trae también anticoagulantes. Si no lo esperas, darás por mejorada una coagulación que apenas cambia.' },
           { t: 'El INR se normaliza (1,0) y la antitrombina baja', porque: 'Baja a 1,4, no a 1,0; y la antitrombina sube. Con esa idea darías más PFC buscando un INR normal.' },
           { t: 'El INR baja a 1,4 y la antitrombina sube de 38 a 50 %', ok: true }],
         explicacion: 'Figura 13.3 (críticos sin sangrado antes de un procedimiento): INR <span class="hl">1,8 → 1,4</span>, y antitrombina <span class="hl-rojo">38 → 50 %</span>; también subieron las otras proteínas anticoagulantes.' },
-      { id: 'ppl-g8', corto: '¿coagula mejor?', tipo: 'destapa', fuente: 'mh-trampa-inr · mh-mensajes', modeloFuturo: { vasoVivo: 'pfc-inr' },
+      { id: 'ppl-g8', corto: '¿coagula mejor?', tipo: 'destapa', fuente: 'mh-trampa-inr · mh-mensajes', modeloVivo: { vasoVivo: 'pfc-inr', texto: '🩹 La balanza del INR con el PFC, en el vaso que sangra' },
         enunciado: 'Su INR ha bajado. ¿Coagula mejor? Son dos cosas.',
         puntos: [
           'El INR solo mira los factores dependientes de vitamina K (<span class="hl">II, VII, IX y X</span>), no los anticoagulantes endógenos.',
           'El PFC también sube la <span class="hl-azul">antitrombina, la proteína C y la proteína S</span>: el efecto neto puede ser poco o ningún cambio.'],
         explicacion: 'El INR da información engañosa para guiar el PFC: una bajada del INR no garantiza que coagule mejor.' },
-      { id: 'ppl-g9', corto: 'la warfarina', tipo: 'test', fuente: 'mh-pfc-warfarina', modeloFuturo: { vasoVivo: 'warfarina' },
+      { id: 'ppl-g9', corto: 'la warfarina', tipo: 'test', fuente: 'mh-pfc-warfarina', modeloVivo: { vasoVivo: 'warfarina', texto: '🩹 Revertir la warfarina: vitamina K, PFC y CCP4F, en el vaso que sangra' },
         enunciado: 'Sangrado problemático con warfarina. ¿Qué das primero, y por qué el complejo protrombínico (CCP4F) gana al PFC?',
         opciones: [
           { t: 'PFC 10-15 ml/kg; la vitamina K sobra', porque: 'La vitamina K va primero, para frenar la anticoagulación en curso. Sin ella, el efecto de la warfarina seguiría.' },
           { t: 'Vitamina K; el CCP4F revierte en <30 min con 100 ml', ok: true },
           { t: 'CCP4F, y la vitamina K solo si no ha bastado al cabo de unas horas', porque: 'El libro pone la vitamina K primero, para bloquear la anticoagulación en curso, y después el PFC. El CCP4F se introdujo para evitar sus dos problemas (la espera y el volumen), no para dejar la vitamina K para más tarde.' }],
         explicacion: '<span class="hl">Vitamina K primero</span>; luego PFC 10-15 ml/kg, con dos problemas: tarda en descongelarse y su volumen puede agravar el sangrado. El <span class="hl-verde">CCP4F</span> (II, VII, IX, X liofilizados; 100 ml) revierte en <30 min.' },
-      { id: 'ppl-g10', corto: 'hemorragia masiva', tipo: 'test', fuente: 'mh-crio · mh-pfc-masiva', modeloFuturo: { vasoVivo: 'hemorragia-masiva' },
+      { id: 'ppl-g10', corto: 'hemorragia masiva', tipo: 'test', fuente: 'mh-crio · mh-pfc-masiva', modeloVivo: { vasoVivo: 'hemorragia-masiva', texto: '🩹 La hemorragia masiva y el fibrinógeno, en el vaso que sangra' },
         enunciado: 'Hemorragia masiva por un trauma. ¿Qué factor se agota primero, y cuándo pides crioprecipitado?',
         opciones: [
           { t: 'El fibrinógeno; con 150-200 mg/dl', ok: true },
@@ -572,7 +573,7 @@ export const MAYEUTICA_HEMOSTASIA = {
                 { t: 'Perder la volemia en 24 h; el PFC solo cuando suba el INR', porque: 'La práctica actual es 1 PFC por cada 1-2 CH, sin esperar al INR, que además no refleja toda la coagulación.' }],
               explicacion: 'Hemorragia masiva: <span class="hl">pérdida equivalente a la volemia en 24 h</span>. Práctica actual: <span class="hl">1 PFC por cada 1-2 CH</span>. El PFC tarda en descongelarse; el plasma líquido lo evita.' } },
           { momento: 'Hora 2', datos: { Transfundido: '8 CH y 5 PFC', Fibrinógeno: '120 mg/dl' }, nuevo: ['Transfundido', 'Fibrinógeno'],
-            pregunta: { id: 'h5-2', tipo: 'destapa', fuente: 'mh-crio', origen: 'ficha · la cuenta, del caso', modeloFuturo: { vasoVivo: 'hemorragia-masiva' },
+            pregunta: { id: 'h5-2', tipo: 'destapa', fuente: 'mh-crio', origen: 'ficha · la cuenta, del caso', modeloVivo: { vasoVivo: 'hemorragia-masiva', texto: '🩹 La hemorragia masiva y el fibrinógeno, en el vaso que sangra' },
               enunciado: 'Fibrinógeno de 120 en un trauma que sangra. ¿Cuánto crio, y qué esperas? Son tres cosas.',
               puntos: [
                 'Está por debajo de <span class="hl">150-200 mg/dl</span>, el corte del trauma: toca crio.',
@@ -608,7 +609,7 @@ export const MAYEUTICA_HEMOSTASIA = {
                   c: 'El INR <span class="hl-rojo">no mide</span> los anticoagulantes endógenos (antitrombina, proteínas C y S): una bajada del INR no garantiza que coagule mejor.' }],
               explicacion: 'El crio se pide con 150-200 mg/dl de fibrinógeno en el trauma, y el INR no ve toda la coagulación.' } },
           { momento: 'Día 2', datos: { Sangrado: 'controlado', INR: '1,7', Plan: 'traqueotomía mañana; el R1 pide PFC 12 ml/kg' }, nuevo: ['Sangrado', 'INR', 'Plan'],
-            pregunta: { id: 'h5-6', tipo: 'destapa', fuente: 'mh-trampa-inr · mh-fig-13-3 · mh-pfc-profilactico · mh-pfc-riesgos', modelo: visual('merino-plaquetas-plasma', '👁️ La Figura 13.3 (vista Visual)'), modeloFuturo: { vasoVivo: 'pfc-inr' },
+            pregunta: { id: 'h5-6', tipo: 'destapa', fuente: 'mh-trampa-inr · mh-fig-13-3 · mh-pfc-profilactico · mh-pfc-riesgos', modelo: visual('merino-plaquetas-plasma', '👁️ La Figura 13.3 (vista Visual)'), modeloVivo: { vasoVivo: 'pfc-inr', texto: '🩹 La balanza del INR con el PFC, en el vaso que sangra' },
               enunciado: 'Sin sangrado y antes de un procedimiento, el R1 pide PFC 12 ml/kg «para que coagule». ¿Coagulará mejor? Son tres cosas.',
               puntos: [
                 'En críticos sin sangrado antes de un procedimiento (Figura 13.3), el PFC bajó el INR de 1,8 a 1,4, pero subió la <span class="hl-azul">antitrombina de 38 a 50 %</span>: poco o ningún cambio neto.',
@@ -620,7 +621,7 @@ export const MAYEUTICA_HEMOSTASIA = {
           'El fibrinógeno se agota el primero: en el trauma, crio con 150-200 mg/dl, y más si sangra.',
           'Plaquetas >50.000 si sangra; >100.000 si sangra dentro del cráneo.',
           'El INR no ve la antitrombina: el PFC profiláctico no ha demostrado beneficio.'],
-        volver: { nombre: 'La trampa del INR con el PFC', ancla: 'mh-trampa-inr', modelo: visual('merino-plaquetas-plasma', '👁️ Las Figuras 13.2 y 13.3 (vista Visual)'), modeloFuturo: { vasoVivo: 'pfc-inr' } } },
+        volver: { nombre: 'La trampa del INR con el PFC', ancla: 'mh-trampa-inr', modelo: visual('merino-plaquetas-plasma', '👁️ Las Figuras 13.2 y 13.3 (vista Visual)'), modeloVivo: { vasoVivo: 'pfc-inr', texto: '🩹 La balanza del INR con el PFC, en el vaso que sangra' } } },
     ],
     profundizar: [
       { id: 'mh-plaq-preparaciones', titulo: 'El concentrado agrupado: sus cifras', nota: 'Lee también la nota de fidelidad que lo acompaña en el texto: las tres cifras no cuadran entre sí.' },

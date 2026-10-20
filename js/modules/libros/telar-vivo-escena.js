@@ -203,19 +203,7 @@ function construirTelar() {
     <path d="${VALVA_DER}" style="fill:var(--text-main);stroke:var(--text-dim)" stroke-width=".8" opacity=".55"/>
     <path d="${VALVA_IZQ}" fill="url(#tel-p-rayado-fino)"/><path d="${VALVA_DER}" fill="url(#tel-p-rayado-fino)"/>
     <g id="tel-g-rbc-lupa"></g>
-    <g id="tel-g-maquina">
-      <path d="M${II[0] - 2} ${II[1] + 7} C192 86 184 110 ${IIA0[0] + 4} 140" style="fill:none;stroke:var(--text-dim)" stroke-width=".9" stroke-dasharray="2.5 2" opacity=".7"/>
-      <path d="M${XA[0] - 14} ${XA[1] + 8} C214 84 200 92 192 98" style="fill:none;stroke:var(--accent-yellow)" stroke-width="1" opacity=".8"/>
-      <path d="M190 95 L192 100 L196 96" style="fill:none;stroke:var(--accent-yellow)" stroke-width="1"/>
-      <g transform="translate(${II[0]} ${II[1]})"><path d="M-9 -6 L9 -6 L6 0 L9 6 L-9 6 L-6 0 Z" style="fill:var(--bg-card);stroke:var(--text-dim)" stroke-width=".9"/>${T(0, 3, 'II', { a: 'middle', i: false, c: 'text-main', w: 700 })}</g>
-      ${T(II[0], II[1] + 17, 'protrombina', { a: 'middle', c: 'text-dim', plato: true })}
-      <g transform="translate(${XA[0]} ${XA[1]})"><path id="tel-xa-rueda" d="${engranaje(11)}" style="fill:var(--bg-card);stroke:var(--accent-yellow)" stroke-width="1.1"/><circle r="5.5" style="fill:var(--bg-main);stroke:var(--accent-yellow)" stroke-width=".7"/></g>
-      ${T(XA[0], XA[1] + 3, 'Xa', { a: 'middle', i: false, c: 'text-main', w: 700 })}
-      <g id="tel-g-spools"></g>
-      <g id="tel-iia"><path d="M-14 0 Q0 -9 14 0 Q0 9 -14 0 Z" style="fill:var(--bg-card);stroke:var(--accent-yellow)" stroke-width="1.1"/><path d="M-13 0 L-18 -1 M13 0 L18 1" style="stroke:var(--accent-yellow)" stroke-width=".8"/>${T(0, 3, 'IIa', { a: 'middle', i: false, c: 'text-main', w: 700 })}</g>
-      <path id="tel-iia-hilo" d="" style="fill:none;stroke:var(--accent-yellow)" stroke-width=".8" stroke-dasharray="2 1.5"/>
-      ${T(190, 212, '← IIa: la tejedora', { c: 'accent-yellow', plato: true })}
-    </g>
+    <g id="tel-g-maquina">${svgMaquinaTrombina()}</g>
     <g id="tel-g-at"></g>
     <g id="tel-g-farmaco"></g>
     <g id="tel-g-embolo-lupa"></g>
@@ -234,25 +222,57 @@ function construirTelar() {
 
 /* ---------- La TIH: la plaqueta, el FP4 y la IgG ---------- */
 const PLAQ = [236, 140, 44];
-const FP4S = [-70, 20, 110, 200].map(g => { const a = g * Math.PI / 180; return [PLAQ[0] + Math.cos(a) * (PLAQ[2] + 3), PLAQ[1] + Math.sin(a) * (PLAQ[2] + 3), g]; });
+// Las 4 bolitas de FP4 alrededor de una plaqueta de centro (cx, cy) y radio r: [x, y, ángulo en grados]
+export const fp4Posiciones = (cx, cy, r) => [-70, 20, 110, 200].map(g => { const a = g * Math.PI / 180; return [cx + Math.cos(a) * (r + 3), cy + Math.sin(a) * (r + 3), g]; });
+const FP4S = fp4Posiciones(...PLAQ);
 function construirTih() {
     $('v-tih').innerHTML = `
     <rect x="118" y="28" width="240" height="240" fill="url(#tel-p-punteado)" opacity=".6"/>
     <path d="M160 20 L160 276 M312 20 L312 276" style="stroke:var(--text-dim)" stroke-width="1" opacity=".5"/>
-    <g id="tel-tih-espinas"></g>
-    <g transform="translate(${PLAQ[0]} ${PLAQ[1]})">
-      <circle r="${PLAQ[2]}" style="fill:var(--text-main)" opacity=".2"/>
-      <circle r="${PLAQ[2]}" style="fill:none;stroke:var(--text-main)" stroke-width="1.4"/>
-      <circle r="${PLAQ[2]}" fill="url(#tel-p-rayado-fino)"/>
-      ${[[-14, -10, 5], [12, -16, 4], [4, 14, 5], [-16, 16, 3.5], [20, 8, 3.6]].map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" style="fill:var(--text-dim)" opacity=".5"/>`).join('')}
+    ${svgPlaquetaFp4()}`;
+}
+
+/* ---------- Piezas que comparte con el vaso que sangra (cobertura del bloque 2, pieza común 5) ----------
+   El telar y el vaso (js/modules/libros/vaso-vivo-escena.js) llaman a las mismas dos funciones: el R1 reconoce el
+   mismo dibujo en los dos modelos. Con sus valores por defecto dibujan lo de siempre del telar (ids tel-…).
+   `pre`: el prefijo de los ids; `rotulos`: false si quien las llama pone sus propios rótulos (p. ej. si dibuja la
+   pieza a otra escala y los rótulos tienen que medir ≥ 7,5 px). */
+// La máquina de la Fig. 5.2: el Xa (la rueda), la protrombina (II) y la trombina (IIa), la tejedora de la fibrina.
+// `xa`, `ii`, `iia`: dónde va cada pieza (los trazos que las unen se calculan desde ellas).
+export function svgMaquinaTrombina({ pre = 'tel', xa = XA, ii = II, iia = IIA0, rotulos = true } = {}) {
+    const R = (x, y, t, o) => (rotulos ? T(x, y, t, o) : '');
+    return `
+      <path d="M${ii[0] - 2} ${ii[1] + 7} C${ii[0] - 4} ${ii[1] + 36} ${ii[0] - 12} ${ii[1] + 60} ${iia[0] + 4} ${iia[1] - 38}" style="fill:none;stroke:var(--text-dim)" stroke-width=".9" stroke-dasharray="2.5 2" opacity=".7"/>
+      <path d="M${xa[0] - 14} ${xa[1] + 8} C${xa[0] - 22} ${xa[1] + 22} ${xa[0] - 36} ${xa[1] + 30} ${xa[0] - 44} ${xa[1] + 36}" style="fill:none;stroke:var(--accent-yellow)" stroke-width="1" opacity=".8"/>
+      <path d="M${xa[0] - 46} ${xa[1] + 33} L${xa[0] - 44} ${xa[1] + 38} L${xa[0] - 40} ${xa[1] + 34}" style="fill:none;stroke:var(--accent-yellow)" stroke-width="1"/>
+      <g transform="translate(${ii[0]} ${ii[1]})"><path d="M-9 -6 L9 -6 L6 0 L9 6 L-9 6 L-6 0 Z" style="fill:var(--bg-card);stroke:var(--text-dim)" stroke-width=".9"/>${R(0, 3, 'II', { a: 'middle', i: false, c: 'text-main', w: 700 })}</g>
+      ${R(ii[0], ii[1] + 17, 'protrombina', { a: 'middle', c: 'text-dim', plato: true })}
+      <g transform="translate(${xa[0]} ${xa[1]})"><path id="${pre}-xa-rueda" d="${engranaje(11)}" style="fill:var(--bg-card);stroke:var(--accent-yellow)" stroke-width="1.1"/><circle r="5.5" style="fill:var(--bg-main);stroke:var(--accent-yellow)" stroke-width=".7"/></g>
+      ${R(xa[0], xa[1] + 3, 'Xa', { a: 'middle', i: false, c: 'text-main', w: 700 })}
+      <g id="${pre}-g-spools"></g>
+      <g id="${pre}-iia"${pre === 'tel' ? '' : ` transform="translate(${iia[0]} ${iia[1]}) rotate(-35)"`}><path d="M-14 0 Q0 -9 14 0 Q0 9 -14 0 Z" style="fill:var(--bg-card);stroke:var(--accent-yellow)" stroke-width="1.1"/><path d="M-13 0 L-18 -1 M13 0 L18 1" style="stroke:var(--accent-yellow)" stroke-width=".8"/>${R(0, 3, 'IIa', { a: 'middle', i: false, c: 'text-main', w: 700 })}</g>
+      <path id="${pre}-iia-hilo" d="" style="fill:none;stroke:var(--accent-yellow)" stroke-width=".8" stroke-dasharray="2 1.5"/>
+      ${R(iia[0] + 18, iia[1] + 34, '← IIa: la tejedora', { c: 'accent-yellow', plato: true })}`;
+}
+// La plaqueta de la TIH con sus 4 FP4 (las cadenas de heparina, las IgG, las espinas y los agregados se pintan
+// después en sus grupos vacíos, ${pre}-tih-…). `trama`: el patrón de rayado del modelo que la dibuja.
+export function svgPlaquetaFp4({ pre = 'tel', cx = PLAQ[0], cy = PLAQ[1], r = PLAQ[2], rotulos = true, trama = '#tel-p-rayado-fino' } = {}) {
+    const k = r / PLAQ[2], fp4 = fp4Posiciones(cx, cy, r);
+    return `
+    <g id="${pre}-tih-espinas"></g>
+    <g transform="translate(${cx} ${cy})">
+      <circle r="${r}" style="fill:var(--text-main)" opacity=".2"/>
+      <circle r="${r}" style="fill:none;stroke:var(--text-main)" stroke-width="1.4"/>
+      <circle r="${r}" fill="url(${trama})"/>
+      ${[[-14, -10, 5], [12, -16, 4], [4, 14, 5], [-16, 16, 3.5], [20, 8, 3.6]].map(([x, y, rr]) => `<circle cx="${n2(x * k)}" cy="${n2(y * k)}" r="${n2(rr * k)}" style="fill:var(--text-dim)" opacity=".5"/>`).join('')}
     </g>
-    ${T(PLAQ[0], PLAQ[1] + 4, 'plaqueta', { s: 9, a: 'middle', c: 'text-main', plato: true })}
-    <g id="tel-tih-fp4">${FP4S.map(([x, y]) => P('fp4', x, y, 5.2)).join('')}</g>
-    ${T(FP4S[1][0] + 4, FP4S[1][1] + 25, 'FP4', { a: 'middle', c: 'text-main', i: false, w: 700, plato: true })}
-    <g id="tel-tih-cadenas"></g>
-    <g id="tel-tih-igg"></g>
-    <g id="tel-tih-peques"></g>
-    <g id="tel-tih-rotulos"></g>`;
+    ${rotulos ? T(cx, cy + 4, 'plaqueta', { s: 9, a: 'middle', c: 'text-main', plato: true }) : ''}
+    <g id="${pre}-tih-fp4">${fp4.map(([x, y]) => P('fp4', x, y, n2(5.2 * Math.max(1, k)))).join('')}</g>
+    ${rotulos ? T(fp4[1][0] + 4, fp4[1][1] + 25, 'FP4', { a: 'middle', c: 'text-main', i: false, w: 700, plato: true }) : ''}
+    <g id="${pre}-tih-cadenas"></g>
+    <g id="${pre}-tih-igg"></g>
+    <g id="${pre}-tih-peques"></g>
+    <g id="${pre}-tih-rotulos"></g>`;
 }
 
 /* ---------- El reloj neuroaxial ---------- */

@@ -6,10 +6,10 @@
 // (docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf, págs. 1-19); cada pregunta dice dónde con `fuente` (ids
 // `mh-…` de la ficha). Los pacientes se inventan (lista del bloque: Fermín y Rocío) y sus cuentas se marcan con
 // `origen`. Plan: autonomo/bloques/b2/cobertura.md §3.A y §6.
-// Formato: el de b1-fluidos.js. Donde una pregunta se comprueba en un modelo vivo que ya existe va
-// `modeloVivo: { capilarVivo: '<estado>' }`; `modelo` es la vista Visual de la ficha (el paso «Mira»).
-// `modeloFuturo` es el estado del modelo que aún no existe (el capilar que compensa, sus lupas del tubo y del
-// alvéolo): el motor no lo pinta; queda aquí para conectarlo cuando se construya.
+// Formato: el de b1-fluidos.js. Donde una pregunta se comprueba en un modelo vivo va
+// `modeloVivo: { capilarVivo: '<estado>', texto }` (o una lista: el capilar del bloque 1 y el ampliado del bloque 2,
+// con el corazón que compensa y las lupas del tubo y del alvéolo); `modelo` es la vista Visual de la ficha (el paso
+// «Mira»).
 
 // La vista Visual de una ficha de Merino HEMATO, como botón «modelo» (sale tras contestar).
 const visual = (tab, texto) => ({ especialidad: 'home', view: 'merinoHemato', panel: 'panel-merino-tabs', tab, enVisual: '', texto });
@@ -30,14 +30,14 @@ export const MAYEUTICA_SANGRE = {
           { t: 'Son concentraciones: también los mueve el volumen de plasma', ok: true },
           { t: 'Son igual de exactos, pero salen antes', porque: 'No son igual de exactos: el plasma los cambia aunque la masa de hematíes no se mueva. Fiarse de ellos como de la masa eritrocitaria lleva a sobrestimar la anemia del crítico.' }],
         explicacion: 'La definición clínica (Hb <13 g/dl en varones y <12 en mujeres) <span class="hl">se basa en una concentración</span>: depende del volumen plasmático tanto como de la masa de hematíes.' },
-      { id: 'ane-g2', corto: 'tumbarse', tipo: 'test', fuente: 'mh-trampa-volumen · mh-fig-12-1', modelo: visual('merino-anemia', '👁️ La Figura 12.1 en cifras (vista Visual)'), modeloFuturo: { capilarVivo: 'dilucion' },
+      { id: 'ane-g2', corto: 'tumbarse', tipo: 'test', fuente: 'mh-trampa-volumen · mh-fig-12-1', modelo: visual('merino-anemia', '👁️ La Figura 12.1 en cifras (vista Visual)'), modeloVivo: { capilarVivo: 'dilucion', texto: '🩸 El tubo: el Hto baja sin perder un hematíe, en el capilar vivo' },
         enunciado: 'Predice: un voluntario sano pasa de estar de pie a tumbado. Sin perder ni ganar sangre, ¿qué hace su hematocrito, y por qué?',
         opciones: [
           { t: 'No cambia: no ha perdido ni un hematíe', porque: 'Los hematíes no cambian, pero el plasma sí: al tumbarse gana unos 420 ml. Si esperas un Hto fijo, leerás como sangrado lo que es solo un cambio de postura.' },
           { t: 'Baja unos 4 puntos: entra líquido del intersticio al plasma', ok: true },
           { t: 'Sube: al tumbarse, la sangre se concentra en el tórax y el abdomen', porque: 'Es al revés: cae la presión hidrostática en los capilares de las piernas, el líquido intersticial vuelve a la sangre y la diluye. Esperar una subida te haría pasar por alto la dilución.' }],
         explicacion: 'Figura 12.1: de 41,8 a <span class="hl-rojo">37,7 %</span> (4,1 puntos). Sin el efecto de la gravedad cae la presión hidrostática en los capilares de las piernas, entra líquido intersticial y el plasma crece <span class="hl">420 ml</span>.' },
-      { id: 'ane-g3', corto: 'el bolo', tipo: 'test', fuente: 'mh-trampa-volumen · mh-fig-12-1', modelo: visual('merino-anemia', '👁️ La Figura 12.1 en cifras (vista Visual)'), modeloFuturo: { capilarVivo: 'dilucion' },
+      { id: 'ane-g3', corto: 'el bolo', tipo: 'test', fuente: 'mh-trampa-volumen · mh-fig-12-1', modelo: visual('merino-anemia', '👁️ La Figura 12.1 en cifras (vista Visual)'), modeloVivo: { capilarVivo: 'dilucion', texto: '🩸 El tubo: el Hto baja sin perder un hematíe, en el capilar vivo' },
         enunciado: 'Sigue la cadena: a otro sano le pasas un bolo de 20 ml/kg de salino isotónico. A los 90 min, su Hto ha bajado 4,2 puntos. ¿A qué pérdida de sangre «equivale» esa caída?',
         opciones: [
           { t: 'A ninguna: un bolo de salino no cambia el Hto', porque: 'Lo cambia: diluye la misma masa de hematíes en más plasma. Si no lo esperas, la Hb tras la reanimación te parecerá una hemorragia oculta y buscarás un sangrado que no existe.' },
@@ -58,7 +58,7 @@ export const MAYEUTICA_SANGRE = {
           'Devolverle la primera muestra que se desecha al sacar por un catéter (unos 5 ml cada vez) reduce la flebotomía diaria <span class="hl-verde">a la mitad</span>.'],
         explicacion: 'Inflamación y flebotomía son las dos causas que la propia UCI añade a la anemia.' },
       { id: 'ane-g6', corto: 'el gasto', tipo: 'test', fuente: 'mh-anemia-compensacion · mh-viscosidad · mh-no-newtoniano · mh-fig-12-2',
-        modeloVivo: { capilarVivo: 'anemia', texto: '🩸 El capilar con Hb 7,5 y el gasto fijo: lo que pasaría si el corazón no compensara' }, modelo: visual('merino-anemia', '👁️ La Figura 12.2 (vista Visual)'), modeloFuturo: { capilarVivo: 'anemia-compensada' },
+        modeloVivo: [{ capilarVivo: 'anemia', texto: '🩸 El capilar con Hb 7,5 y el gasto fijo: lo que pasaría si el corazón no compensara' }, { capilarVivo: 'anemia-compensada', texto: '🩸 La anemia que el corazón compensa, en el capilar vivo' }], modelo: visual('merino-anemia', '👁️ La Figura 12.2 (vista Visual)'),
         enunciado: 'Predice: baja la Hb a la mitad, con la volemia mantenida. ¿Qué hace el gasto cardíaco, y por qué?',
         opciones: [
           { t: 'Sube, pero solo en proporción a lo que cae el Hto', porque: 'Sube más que eso: la sangre es no newtoniana y su viscosidad baja al aumentar el flujo. Si esperas una subida proporcional, infravaloras cuánto compensa el corazón.' },
@@ -67,14 +67,14 @@ export const MAYEUTICA_SANGRE = {
         explicacion: 'La viscosidad depende sobre todo del Hto (Tabla 12.2) y, por Poiseuille, la resistencia es proporcional a la viscosidad. Como la sangre es <span class="hl-azul">no newtoniana</span> (a más flujo, menos viscosa), el gasto sube <span class="hl">más</span> de lo que cae el Hto: en la Figura 12.2, el Hto baja un 38 % y el gasto llega al 225 % del inicial.',
         nota: '<b>Nota de fidelidad.</b> La Figura 12.2 rotula «225 % de cambio en el gasto»; sus puntos van de unos 5,8 a 13 l/min: el gasto llega al 225 % del inicial (sube un 125 %). El capilar vivo, en su estado «anemia», mantiene el gasto fijo (la cuenta del capítulo de transporte de O₂): por eso su extracción llega al 50 %.' + enFicha('merino-anemia', 'mh-nota-fig-12-2') },
       { id: 'ane-g7', corto: 'el techo', tipo: 'test', fuente: 'mh-limite-compensacion · mh-fig-12-3',
-        modeloVivo: { capilarVivo: 'umbral', texto: '🩸 El techo de la extracción (50 %) en el capilar, aquí alcanzado por bajo gasto' }, modelo: visual('merino-anemia', '👁️ La Figura 12.3 (vista Visual)'), modeloFuturo: { capilarVivo: 'techo-anemia' },
+        modeloVivo: [{ capilarVivo: 'umbral', texto: '🩸 El techo de la extracción (50 %) en el capilar, aquí alcanzado por bajo gasto' }, { capilarVivo: 'techo-anemia', texto: '🩸 El techo de la extracción con Hb 3, en el capilar vivo' }], modelo: visual('merino-anemia', '👁️ La Figura 12.3 (vista Visual)'),
         enunciado: 'Predice: sigues bajando la Hb y mantienes la volemia. ¿Hasta dónde aguanta el consumo de O₂ (VO₂) de los tejidos?',
         opciones: [
           { t: 'Hasta una Hb de 7: por debajo, el VO₂ cae', porque: '7 g/dl es un umbral de transfusión de las guías, no el límite fisiológico. Si crees que los tejidos sufren ahí, transfundirás a pacientes que aún compensan de sobra.' },
           { t: 'Hasta un Hto del 10 % (Hb ≈3): la extracción llega al 50 %', ok: true },
           { t: 'Hasta que el aporte de O₂ (DO₂) empieza a caer, con un Hto de un 30 %', porque: 'El aporte cae desde el principio, pero la extracción sube y sostiene el VO₂. Poner ahí el límite es confundir que baje el aporte con que sufra el tejido.' }],
         explicacion: 'Figura 12.3 (primates): el DO₂ cae, pero la extracción sube y el VO₂ se mantiene <span class="hl">hasta un Hto del 10 % (Hb 3 g/dl)</span>. Ahí la extracción llega a su techo, <span class="hl-rojo">~50 %</span>: el VO₂ empieza a caer y sube el lactato. Ese 50 % podría servir de disparador de transfusión.' },
-      { id: 'ane-g8', corto: 'qué lo permite', tipo: 'destapa', fuente: 'mh-tolerancia · mh-volumen-vs-celulas', modeloFuturo: { capilarVivo: 'anemia-hipovolemia' },
+      { id: 'ane-g8', corto: 'qué lo permite', tipo: 'destapa', fuente: 'mh-tolerancia · mh-volumen-vs-celulas', modeloVivo: { capilarVivo: 'anemia-hipovolemia', texto: '🩸 La anemia sin volumen, en el capilar vivo' },
         enunciado: 'Ya sabes que se tolera una Hb muy baja. ¿Qué condición pone el libro en los animales, y qué lo muestra en personas? Son tres cosas.',
         puntos: [
           'Que se mantenga el <span class="hl">volumen intravascular</span>: así el gasto puede subir (en animales, un Hto del 5-10 % no daña la oxigenación).',
@@ -136,7 +136,7 @@ export const MAYEUTICA_SANGRE = {
         paciente: { Edad: '71 años', Peso: '75 kg', Motivo: 'shock séptico por neumonía', Ingreso: 'Hto 39 %, Hb 12,9 g/dl' },
         pasos: [
           { momento: 'Urgencias · 90 min después', datos: { Fluidos: 'bolo de 1,5 L de cristaloide (20 ml/kg)', Hto: '39 % → 35 %', Hb: '12,9 → 11,6 g/dl', Sangrado: 'ninguno visible' }, nuevo: ['Fluidos', 'Hto', 'Hb', 'Sangrado'],
-            pregunta: { id: 'h1-1', tipo: 'test', fuente: 'mh-trampa-volumen · mh-fig-12-1', origen: 'ficha · la cuenta, del caso', modeloFuturo: { capilarVivo: 'dilucion' },
+            pregunta: { id: 'h1-1', tipo: 'test', fuente: 'mh-trampa-volumen · mh-fig-12-1', origen: 'ficha · la cuenta, del caso', modeloVivo: { capilarVivo: 'dilucion', texto: '🩸 El tubo: el Hto baja sin perder un hematíe, en el capilar vivo' },
               enunciado: 'El R1 de Urgencias escribe «caída de Hb: descartar sangrado oculto». Calcula y decide: ¿qué explica mejor esa caída de 4 puntos de Hto?',
               opciones: [
                 { t: 'Un sangrado oculto de 1,5 L, lo mismo que el suero', porque: 'La caída no se corresponde con el suero infundido, y ni siquiera con un sangrado: un bolo de 20 ml/kg baja el Hto lo mismo sin perder un hematíe. Pedirías endoscopia y TC sin motivo.' },
@@ -171,7 +171,7 @@ export const MAYEUTICA_SANGRE = {
                 'Reinfundir la muestra que se desecha del catéter (unos 5 ml en cada extracción) reduce la flebotomía diaria <span class="hl-verde">a la mitad</span>.'],
               explicacion: '60 ml × 7 días = 420 ml. La flebotomía y la inflamación son las dos causas de anemia que añade la UCI.' } },
           { momento: 'Día 6', datos: { Hb: '7,6 g/dl', 'SpO₂': '97 %', 'ScvO₂': '72 %', Lactato: '1,4 mmol/l' }, nuevo: ['Hb', 'SpO₂', 'ScvO₂', 'Lactato'], calculadora: { ir: 'mar-dual-calc', nombre: 'Oximetría dual' },
-            pregunta: { id: 'h1-5', tipo: 'test', fuente: 'mh-limite-compensacion · mh-techo-extraccion · mh-scvo2-disparador', origen: 'ficha · la cuenta, del caso', modeloFuturo: { capilarVivo: 'anemia-compensada' },
+            pregunta: { id: 'h1-5', tipo: 'test', fuente: 'mh-limite-compensacion · mh-techo-extraccion · mh-scvo2-disparador', origen: 'ficha · la cuenta, del caso', modeloVivo: { capilarVivo: 'anemia-compensada', texto: '🩸 La anemia que el corazón compensa, en el capilar vivo' },
               enunciado: '«Con 7,6 de Hb sus tejidos estarán al límite», dice el estudiante. ¿Qué le contestas con los datos de Fermín?',
               opciones: [
                 { t: 'Que sí: con Hb <8 la extracción ya está en el 50 %', porque: '97 − 72 = 25 %: lejos del 50 %, que en la Figura 12.3 llega con un Hto del 10 % (Hb ≈3). Si lo crees al límite, transfundirás a un tejido que compensa.' },
@@ -183,7 +183,7 @@ export const MAYEUTICA_SANGRE = {
           'El Hto y la Hb son concentraciones: un bolo de 20 ml/kg los baja como perder una unidad, sin perder un hematíe.',
           'Ferritina >100 µg/l con hierro bajo: anemia de la inflamación, no ferropenia; y las analíticas quitan 40-70 ml al día.',
           'Con la volemia mantenida, la extracción no llega a su techo (50 %) hasta un Hto del 10 %.'],
-        volver: { nombre: 'La trampa del volumen plasmático', ancla: 'mh-trampa-volumen', modelo: visual('merino-anemia', '👁️ Las Figuras 12.1 y 12.3 (vista Visual)'), modeloFuturo: { capilarVivo: 'dilucion' } } },
+        volver: { nombre: 'La trampa del volumen plasmático', ancla: 'mh-trampa-volumen', modelo: visual('merino-anemia', '👁️ Las Figuras 12.1 y 12.3 (vista Visual)'), modeloVivo: { capilarVivo: 'dilucion', texto: '🩸 El tubo: el Hto baja sin perder un hematíe, en el capilar vivo' } } },
     ],
     profundizar: [
       { id: 'mh-tabla-12-1', titulo: 'Tabla 12.1: los rangos de referencia (VCM, recuento, reticulocitos, masa eritrocitaria)' },
@@ -219,14 +219,14 @@ export const MAYEUTICA_SANGRE = {
           'Una caída aguda puede ser solo <span class="hl-azul">dilución</span>: lleva a transfusiones innecesarias.'],
         explicacion: 'Por eso algunas guías proponen abandonar la Hb como disparador y usar medidas fisiológicas de la oxigenación tisular, como la extracción de O₂.' },
       { id: 'trf-g4', corto: 'medir la extracción', tipo: 'test', fuente: 'mh-extraccion-disparador',
-        modeloVivo: { capilarVivo: 'dual', texto: '🩸 La oximetría doble en el capilar vivo' }, modeloFuturo: { capilarVivo: 'umbral-7' },
+        modeloVivo: [{ capilarVivo: 'dual', texto: '🩸 La oximetría doble en el capilar vivo' }, { capilarVivo: 'umbral-7', texto: '🩸 Hb 7: el umbral y la extracción, en el capilar vivo' }],
         enunciado: '¿Cómo medirías la extracción de O₂ a pie de cama, de forma continua, sin catéter de arteria pulmonar?',
         opciones: [
           { t: 'Con el lactato: si es normal, la extracción también', porque: 'El lactato sube cuando la extracción ya no compensa (pasado el 50 %); no la mide. Esperar al lactato es transfundir tarde.' },
           { t: 'Con la Hb: a menos Hb, más extracción, en la misma proporción', porque: 'La Hb no dice cuánto O₂ extraen los tejidos: es justo el problema del disparador por Hb. Seguirías transfundiendo por un número.' },
           { t: 'SaO₂ − ScvO₂: pulsioxímetro y catéter central de oximetría', ok: true }],
         explicacion: 'La extracción ≈ <span class="hl">SaO₂ − ScvO₂</span>, continua con pulsioximetría y un catéter venoso central «de oximetría». Disparador: <span class="hl-rojo">50 %</span>; si la SaO₂ es casi del 100 %, basta la ScvO₂ (<70 %). Pese a sus ventajas, han recibido poca atención.' },
-      { id: 'trf-g5', corto: 'Hb 7', tipo: 'test', fuente: 'mh-limite-compensacion · mh-extraccion-disparador', origen: 'deducción de la ficha · el libro no da la extracción con Hb 7; su posición intermedia es una lectura ilustrativa de la forma de la Figura 12.3', modeloFuturo: { capilarVivo: 'umbral-7' },
+      { id: 'trf-g5', corto: 'Hb 7', tipo: 'test', fuente: 'mh-limite-compensacion · mh-extraccion-disparador', origen: 'deducción de la ficha · el libro no da la extracción con Hb 7; su posición intermedia es una lectura ilustrativa de la forma de la Figura 12.3', modeloVivo: { capilarVivo: 'umbral-7', texto: '🩸 Hb 7: el umbral y la extracción, en el capilar vivo' },
         enunciado: 'Predice: Hb 7 g/dl, volemia normal, el corazón compensa. ¿Dónde está la extracción de O₂?',
         opciones: [
           { t: 'Ya en el 50 %: por eso se transfunde con 7', porque: 'El 50 % llega con un Hto del 10 % (Hb ≈3) en la Figura 12.3. El 7 es un umbral de las guías, no el techo fisiológico: verías hipoxia tisular donde no la hay.' },
@@ -240,14 +240,14 @@ export const MAYEUTICA_SANGRE = {
           { t: 'La Hb ~1 g/dl y el Hto ~3 % por unidad', ok: true },
           { t: 'La Hb ~2 g/dl y el Hto ~6 %, si no sangra', porque: 'Es lo de dos unidades. Con esa expectativa, tras una sola verías «poca respuesta» y buscarías un sangrado o pedirías otra.' }],
         explicacion: 'En un adulto medio, 1 unidad: <span class="hl">Hb +1 g/dl y Hto +3 %</span>.' },
-      { id: 'trf-g7', corto: 'el VO₂', tipo: 'test', fuente: 'mh-efecto-transfusion · mh-fig-12-4', modelo: visual('merino-transfusion', '👁️ La Figura 12.4 (vista Visual)'), modeloFuturo: { capilarVivo: 'transfusion' },
+      { id: 'trf-g7', corto: 'el VO₂', tipo: 'test', fuente: 'mh-efecto-transfusion · mh-fig-12-4', modelo: visual('merino-transfusion', '👁️ La Figura 12.4 (vista Visual)'), modeloVivo: { capilarVivo: 'transfusion', texto: '🩸 Transfundir sube el aporte, no el consumo, en el capilar vivo' },
         enunciado: 'Predice: posoperados con Hb 6,4; con 1-2 unidades la Hb sube a 8 (un 25 %). ¿Qué pasa con el aporte (DO₂) y el consumo (VO₂) de O₂?',
         opciones: [
           { t: 'Suben los dos, un 25 %', porque: 'Sube el aporte, pero el consumo no cambia (Figura 12.4). Esperar más VO₂ es creer que la transfusión «oxigena» los tejidos, y no lo hace.' },
           { t: 'Sube el aporte; el consumo no cambia y cae la extracción', ok: true },
           { t: 'No se mueve ninguno: la Hb no cambia el aporte de O₂', porque: 'El aporte depende del contenido de O₂, y este de la Hb: subió en paralelo a ella. Lo que no cambia es el consumo.' }],
         explicacion: 'Figura 12.4: el DO₂ sube como la Hb, el <span class="hl-rojo">VO₂ no cambia</span>, así que la extracción baja (VO₂ = DO₂ × extracción): lo contrario que la anemia. Varios estudios lo confirman, y los hematíes almacenados mucho tiempo pueden incluso empeorar la oxigenación. Una guía: «no es un método absoluto para mejorar la oxigenación tisular».' },
-      { id: 'trf-g8', corto: 'volumen o hematíes', tipo: 'destapa', fuente: 'mh-volumen-vs-celulas · mh-fig-12-6 · mh-tolerancia', modelo: visual('merino-transfusion', '👁️ La Figura 12.6 (vista Visual)'), modeloFuturo: { capilarVivo: 'anemia-hipovolemia' },
+      { id: 'trf-g8', corto: 'volumen o hematíes', tipo: 'destapa', fuente: 'mh-volumen-vs-celulas · mh-fig-12-6 · mh-tolerancia', modelo: visual('merino-transfusion', '👁️ La Figura 12.6 (vista Visual)'), modeloVivo: { capilarVivo: 'anemia-hipovolemia', texto: '🩸 La anemia sin volumen, en el capilar vivo' },
         enunciado: 'Si la transfusión no sube el VO₂ y se toleran Hb muy bajas, ¿qué sostiene de verdad la oxigenación de los tejidos? Son dos cosas.',
         puntos: [
           'El <span class="hl">volumen intravascular</span>: si se mantiene, el gasto sube y compensa la anemia, incluso extrema.',
@@ -310,7 +310,7 @@ export const MAYEUTICA_SANGRE = {
         pasos: [
           { momento: 'Día 6 · 08:00', datos: { 'SpO₂': '97 %', 'ScvO₂': '72 %', Lactato: '1,4 mmol/l', Noradrenalina: 'retirada ayer; PA 118/64 mmHg' }, nuevo: ['SpO₂', 'ScvO₂', 'Lactato', 'Noradrenalina'], calculadora: { ir: 'mar-dual-calc', nombre: 'Oximetría dual' },
             pregunta: { id: 'h1b-1', tipo: 'test', fuente: 'mh-umbrales-guias · mh-extraccion-disparador', origen: 'ficha · la cuenta, del caso',
-              modeloVivo: { capilarVivo: 'dual', texto: '🩸 La oximetría doble en el capilar vivo' }, modeloFuturo: { capilarVivo: 'umbral-7' },
+              modeloVivo: [{ capilarVivo: 'dual', texto: '🩸 La oximetría doble en el capilar vivo' }, { capilarVivo: 'umbral-7', texto: '🩸 Hb 7: el umbral y la extracción, en el capilar vivo' }],
               enunciado: '¿Transfundes hoy? Mira el umbral y la extracción (SpO₂ − ScvO₂).',
               opciones: [
                 { t: 'Sí: con Hb <8 se transfunde a todo crítico', porque: '<8 es para la cardiopatía isquémica y la cirugía cardíaca u ortopédica. En el shock séptico sin coronariopatía el umbral es <7: transfundirías sin necesidad, con todos sus riesgos.' },
@@ -346,7 +346,7 @@ export const MAYEUTICA_SANGRE = {
                   c: 'Subirá el aporte (DO₂), pero en la Figura 12.4 el consumo (VO₂) no cambió: la transfusión <span class="hl-rojo">no es un método absoluto</span> para mejorar la oxigenación tisular.' }],
               explicacion: 'Dos ideas que la ficha desmonta: el objetivo de 10 y que transfundir oxigena los tejidos.' } },
           { momento: 'Día 7', datos: { Hb: '8,5 g/dl', 'ScvO₂': '76 %' }, nuevo: ['Hb', 'ScvO₂'],
-            pregunta: { id: 'h1b-5', tipo: 'destapa', fuente: 'mh-efecto-transfusion · mh-fig-12-4', origen: 'ficha · la cuenta, del caso', modelo: visual('merino-transfusion', '👁️ La Figura 12.4 (vista Visual)'), modeloFuturo: { capilarVivo: 'transfusion' },
+            pregunta: { id: 'h1b-5', tipo: 'destapa', fuente: 'mh-efecto-transfusion · mh-fig-12-4', origen: 'ficha · la cuenta, del caso', modelo: visual('merino-transfusion', '👁️ La Figura 12.4 (vista Visual)'), modeloVivo: { capilarVivo: 'transfusion', texto: '🩸 Transfundir sube el aporte, no el consumo, en el capilar vivo' },
               enunciado: 'El adjunto pregunta: «¿ha mejorado la oxigenación de los tejidos de Fermín?». Contéstale. Son tres cosas.',
               puntos: [
                 'Ha subido el <span class="hl">aporte de O₂ (DO₂)</span>: tiene más Hb (7,6 → 8,5, lo esperado de una unidad).',
@@ -358,7 +358,7 @@ export const MAYEUTICA_SANGRE = {
           'Umbral 7 en el crítico estable; 8 si hay cardiopatía isquémica: el antecedente cambia la decisión.',
           'La extracción (SaO₂ − ScvO₂) dice si el tejido sufre; la Hb, no.',
           'Una unidad sube la Hb ~1 g/dl y el aporte de O₂, no el consumo; en el estable, 2 h y sin diluir.'],
-        volver: { nombre: 'Umbrales actuales de las guías', ancla: 'mh-umbrales-guias', modelo: visual('merino-transfusion', '👁️ Los umbrales en una regla (vista Visual)'), modeloVivo: { capilarVivo: 'dual' }, modeloFuturo: { capilarVivo: 'transfusion' } } },
+        volver: { nombre: 'Umbrales actuales de las guías', ancla: 'mh-umbrales-guias', modelo: visual('merino-transfusion', '👁️ Los umbrales en una regla (vista Visual)'), modeloVivo: [{ capilarVivo: 'dual' }, { capilarVivo: 'transfusion', texto: '🩸 Transfundir sube el aporte, no el consumo, en el capilar vivo' }] } },
     ],
     profundizar: [
       { id: 'mh-componentes', titulo: 'La sangre se fracciona en componentes' },
@@ -400,21 +400,21 @@ export const MAYEUTICA_SANGRE = {
           { t: 'Parar del todo y no volver a transfundir', porque: 'Eso es tras una anafilaxia. Una urticaria leve sin fiebre ni siquiera obliga a interrumpir: le negarías una transfusión indicada.' },
           { t: 'Seguir como si nada y, en las siguientes, hematíes sin lavar', porque: 'Es una reacción de hipersensibilidad, la más común (1:100 unidades). Tras ella, todas las siguientes transfusiones van con hematíes lavados y se busca un déficit de IgA; si no, la repetirá.' }],
         explicacion: 'Urticaria leve sin fiebre: no obliga a interrumpir; la práctica habitual es parar un rato y dar <span class="hl">difenhidramina 25-50 mg</span> VO, IM o IV. En adelante, hematíes <span class="hl">lavados</span>, y estudiar un déficit de IgA. Disnea y sibilancias bruscas: anafilaxia, parar ya.' },
-      { id: 'rsg-g5', corto: 'el TRALI', tipo: 'test', fuente: 'mh-trali · mh-fig-12-5', modelo: visual('merino-riesgos', '👁️ La radiografía del TRALI (vista Visual)'), modeloFuturo: { capilarVivo: 'trali' },
+      { id: 'rsg-g5', corto: 'el TRALI', tipo: 'test', fuente: 'mh-trali · mh-fig-12-5', modelo: visual('merino-riesgos', '👁️ La radiografía del TRALI (vista Visual)'), modeloVivo: { capilarVivo: 'trali', texto: '🩸 El alvéolo en el TRALI, en el capilar vivo' },
         enunciado: 'Predice: en el TRALI, ¿de quién son los anticuerpos y dónde se quedan las células que activan?',
         opciones: [
           { t: 'Del receptor; los hematíes se rompen en el pulmón', porque: 'Eso mezcla la hemolítica con el TRALI. En el TRALI, los anticuerpos vienen del donante y activan los neutrófilos del receptor, no rompen hematíes.' },
           { t: 'Del donante; los neutrófilos activados se quedan en los capilares del pulmón', ok: true },
           { t: 'No hay anticuerpos: es agua que entra por presión', porque: 'Eso es el TACO (edema hidrostático). En el TRALI, el 80 % se debe a anticuerpos del donante; en ~20 % no los hay, pero el agente no se conoce.' }],
         explicacion: 'En el <span class="hl">80 %</span>, anticuerpos <span class="hl-azul">del donante</span> contra antígenos de los neutrófilos del receptor: se activan, quedan secuestrados en los capilares pulmonares y migran al pulmón, donde lo inflaman. Radiografía como la del SDRA (Figura 12.5).' },
-      { id: 'rsg-g6', corto: 'el TACO', tipo: 'test', fuente: 'mh-taco', modeloFuturo: { capilarVivo: 'taco' },
+      { id: 'rsg-g6', corto: 'el TACO', tipo: 'test', fuente: 'mh-taco', modeloVivo: { capilarVivo: 'taco', texto: '🩸 El alvéolo en el TACO, en el capilar vivo' },
         enunciado: '¿Y en el TACO? ¿Qué llena el alvéolo, y qué paciente lo sufre más?',
         opciones: [
           { t: 'Neutrófilos; el que recibe muchas unidades', porque: 'Los neutrófilos son del TRALI. El TACO es un edema hidrostático, y no se correlaciona con el número de unidades.' },
           { t: 'Agua por presión; quien recibe más unidades, porque depende del volumen', porque: 'No hay correlación con el número de unidades: pueden intervenir otros factores además del volumen. Fiarte de «solo una unidad» te hará bajar la guardia.' },
           { t: 'Agua por presión; el que tiene insuficiencia cardíaca o renal', ok: true }],
         explicacion: 'Edema pulmonar <span class="hl">hidrostático</span> en las primeras 6 h, más frecuente con <span class="hl">insuficiencia cardíaca o renal previas</span>, propensos a la sobrecarga. <span class="hl-azul">No se correlaciona con el número de unidades.</span>' },
-      { id: 'rsg-g7', corto: 'TRALI o TACO', tipo: 'destapa', fuente: 'mh-taco · mh-trali', modeloFuturo: [{ capilarVivo: 'trali' }, { capilarVivo: 'taco' }],
+      { id: 'rsg-g7', corto: 'TRALI o TACO', tipo: 'destapa', fuente: 'mh-taco · mh-trali', modeloVivo: [{ capilarVivo: 'trali', texto: '🩸 El alvéolo en el TRALI, en el capilar vivo' }, { capilarVivo: 'taco', texto: '🩸 El alvéolo en el TACO, en el capilar vivo' }],
         enunciado: 'Disnea e hipoxemia a las 2 h de una transfusión, con infiltrados bilaterales. ¿Qué te inclina hacia uno u otro? Son tres cosas.',
         puntos: [
           'Hacia el TACO: <span class="hl">insuficiencia cardíaca o renal previas</span> y sobrecarga de volumen evidente.',
@@ -510,7 +510,7 @@ export const MAYEUTICA_SANGRE = {
                 { t: 'Con la radiografía sola no voy a poder separar TRALI de TACO.' }],
               explicacion: 'TRALI y TACO aparecen en el mismo plazo y pueden ser indistinguibles; en los dos se para y se avisa al banco.' } },
           { momento: 'Día 4 · 12:50', datos: { Analítica: 'pedida (PCR incluida)' }, nuevo: ['Analítica'],
-            pregunta: { id: 'h2-4', tipo: 'destapa', fuente: 'mh-taco · mh-trali', modeloFuturo: [{ capilarVivo: 'taco' }, { capilarVivo: 'trali' }],
+            pregunta: { id: 'h2-4', tipo: 'destapa', fuente: 'mh-taco · mh-trali', modeloVivo: [{ capilarVivo: 'taco', texto: '🩸 El alvéolo en el TACO, en el capilar vivo' }, { capilarVivo: 'trali', texto: '🩸 El alvéolo en el TRALI, en el capilar vivo' }],
               enunciado: 'Mientras llega la analítica, ¿qué te inclina hacia el TACO o el TRALI en Rocío? Son tres cosas.',
               puntos: [
                 'Su <span class="hl">IC y su ERC previas</span>, y la sobrecarga (+2,8 L): apuntan al TACO.',
@@ -538,7 +538,7 @@ export const MAYEUTICA_SANGRE = {
           'Su cardiopatía la pone en <8; su IC y su ERC, en riesgo de TACO, la complicación pulmonar más frecuente.',
           'TRALI y TACO salen en las mismas 6 h: parar y avisar; IC, ERC y sobrecarga apuntan al TACO, y la fiebre no los separa.',
           'Tras una urticaria, hematíes lavados; tras un TACO, corregir el balance antes de transfundir.'],
-        volver: { nombre: 'TACO (sobrecarga circulatoria)', ancla: 'mh-taco', modelo: visual('merino-riesgos', '👁️ El reloj de la transfusión (vista Visual)'), modeloFuturo: { capilarVivo: 'taco' } } },
+        volver: { nombre: 'TACO (sobrecarga circulatoria)', ancla: 'mh-taco', modelo: visual('merino-riesgos', '👁️ El reloj de la transfusión (vista Visual)'), modeloVivo: { capilarVivo: 'taco', texto: '🩸 El alvéolo en el TACO, en el capilar vivo' } } },
     ],
     profundizar: [
       { id: 'mh-tabla-12-5', titulo: 'Las infecciones transmitidas (Tabla 12.5)', nota: 'Virus y bacterias: VHB 1:1,2 millones, VHC y VIH 1:1,5 millones, bacterias 1:500.000.' },

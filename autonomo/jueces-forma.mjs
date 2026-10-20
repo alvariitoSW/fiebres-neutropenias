@@ -38,6 +38,8 @@ export const BANCOS = [
     { nombre: 'fichas · sin modelo', datos: 'js/data/mayeutica/b1-sin-modelo.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · sangre (bloque 2)', datos: 'js/data/mayeutica/b2-sangre.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · hemostasia (bloque 2)', datos: 'js/data/mayeutica/b2-hemostasia.js', motor: 'js/core/mayeutica-motor.js' },
+    // el vaso usa las preguntas de las fichas 4-6 (las mismas) más 4 propias de «predice y compruébalo»
+    { nombre: 'vaso que sangra', datos: 'js/data/vaso-vivo-data.js', motor: 'js/core/mayeutica-motor.js' },
 ];
 
 /* ---------- Los modelos vivos en el navegador ---------- */
@@ -60,6 +62,9 @@ export const MODELOS = {
         estados: ['sano', 'tih', 'medias', 'neuroeje', 'filtro'] },
     'inmersion-viva': { raiz: '#inm-raiz', enlace: { especialidad: 'libros', view: 'inmersionViva' }, clave: 'inmersionViva', modo: modosLibros('inm'),
         estados: ['dolor-oculto', 'rass-objetivo', 'delirio', 'pris'] },
+    // El vaso que sangra: Explorar | Mayéutica (sin Conceptos: cada estado lleva su explicación guiada)
+    'vaso-vivo': { raiz: '#vso-raiz', enlace: { especialidad: 'libros', view: 'vasoVivo' }, clave: 'vasoVivo', modo: { explorar: '#vso-modo-explorar', mayeutica: '#vso-modo-preguntas' },
+        estados: ['sano', 'herida', 'hit-argatroban', 'cid', 'transfusion-plaquetas', 'pfc-inr', 'hemorragia-masiva'] },
 };
 // Las fichas del bloque 1 (Libros → Marino → Fundamentos): se leen del DOM, todas las del cuaderno.
 const B1 = { especialidad: 'libros', view: 'marinoFundamentos', panel: 'panel-marino-fund-tabs' };
@@ -319,6 +324,7 @@ export async function juzgarFormaNavegador({ nav, base, ok, mal, fichas = [], mo
             J.mirar(`Explorar·${estado}`, await pag.evaluate(leerTexto, M.raiz), await pag.evaluate(medirRotulos, M.raiz));
         }
         for (const modo of ['conceptos', 'mayeutica']) {
+            if (!M.modo[modo]) continue;   // un modelo sin ese modo (el vaso no tiene Conceptos)
             if (!(await clic(M.modo[modo]))) { mal(`Forma · ${k}: no hay botón ${modo}`); continue; }
             await pag.waitForTimeout(500);
             if (modo === 'mayeutica') await contestarPrimera(M.raiz);

@@ -31,6 +31,7 @@ import { init as initCateterVivo } from './cateter-vivo.js';
 import { init as initMurallaViva } from './muralla-viva.js';
 import { init as initTelarVivo } from './telar-vivo.js';
 import { init as initInmersionViva } from './inmersion-viva.js';
+import { init as initVasoVivo } from './vaso-vivo.js';
 import { montarMayeutica } from '../../core/mayeutica.js';
 import { MAYEUTICA_B1 } from '../../data/mayeutica/b1.js';
 import { librosIndice } from '../../data/libros-indice.js';
@@ -56,14 +57,14 @@ const BLOQUES = {
     // Bloque 2 (caps. 12-13): sus fichas viven en Hematología → Merino HEMATO (su botón es un enlace cruzado, no una vista
     // de Libros); aquí solo cuenta sus fichas y pone la tira de sus modelos vivos en ese cuaderno. Sus preguntas de
     // repaso están en el quiz de Hematología.
-    marinoSangre: { vista: 'merino-hemato-view', panel: 'panel-merino-tabs', nombre: 'Sangre y hemostasia', preguntas: [], vivos: ['cpv-menu-libros', 'tel-menu-libros'] },
+    marinoSangre: { vista: 'merino-hemato-view', panel: 'panel-merino-tabs', nombre: 'Sangre y hemostasia', preguntas: [], vivos: ['cpv-menu-libros', 'vso-menu-libros', 'tel-menu-libros'] },
     marinoRenal: { vista: 'marino-renal-view', panel: 'panel-marino-renal-tabs', nombre: 'Ácido-base, renal y electrolitos', preguntas: preguntasMarinoRenal, vivos: ['abv-menu-libros', 'agv-menu-libros'] },
     marinoAbdomen: { vista: 'marino-abd-view', panel: 'panel-marino-abd-tabs', nombre: 'Abdomen y temperatura', preguntas: preguntasMarinoAbdomen, vivos: [] },
     marinoNeuro: { vista: 'marino-neuro-view', panel: 'panel-marino-neuro-tabs', nombre: 'Neurología', preguntas: preguntasMarinoNeuro, vivos: [] },
     marinoNutricion: { vista: 'marino-nutri-view', panel: 'panel-marino-nutri-tabs', nombre: 'Nutrición y endocrino', preguntas: preguntasMarinoNutricion, vivos: [] },
     marinoToxicos: { vista: 'marino-tox-view', panel: 'panel-marino-tox-tabs', nombre: 'Tóxicos y apéndices', preguntas: preguntasMarinoToxicos, vivos: ['abv-menu-libros'] },
 };
-const MODELOS = new Set(['aguaViva', 'capilarVivo', 'cateterVivo', 'murallaViva', 'telarVivo', 'inmersionViva']);
+const MODELOS = new Set(['aguaViva', 'capilarVivo', 'cateterVivo', 'murallaViva', 'telarVivo', 'inmersionViva', 'vasoVivo']);
 
 // Tira «Modelos vivos de este bloque» arriba de cada bloque: copia los atributos del enlace cruzado de su botón
 // en la portada (una sola fuente) y se pinta tras la cabecera del bloque.
@@ -113,6 +114,8 @@ export function init() {
         telarVivo: document.getElementById('telar-vivo-view'),
         // Modelo vivo: la cama 7 · la inmersión (analgesia y sedación), junto al cap. 6
         inmersionViva: document.getElementById('inmersion-viva-view'),
+        // Modelo vivo: el vaso que sangra (la herida y la red), junto al bloque 2 (cap. 13; fichas en Merino HEMATO)
+        vasoVivo: document.getElementById('vaso-vivo-view'),
     }, (key) => {
         if (MODELOS.has(key) && !MODELOS.has(previa)) volverDeModelo = BLOQUES[previa] ? previa : 'marinoPortada';
         if (BLOQUES[key]) ultimoBloque = key;
@@ -204,6 +207,7 @@ export function init() {
     const murallaViva = arrancar('muralla', initMurallaViva);
     const telarVivo = arrancar('telar', initTelarVivo);
     const inmersionViva = arrancar('inmersión', initInmersionViva);
+    const vasoVivo = arrancar('vaso que sangra', initVasoVivo);
 
     librosLevel.show('menu');
 
@@ -220,6 +224,8 @@ export function init() {
             murallaViva: (estadoClave, origen) => murallaViva?.abrir(estadoClave, origen),
             telarVivo: (estadoClave, origen) => telarVivo?.abrir(estadoClave, origen),
             inmersionViva: (estadoClave, origen) => inmersionViva?.abrir(estadoClave, origen),
+            // data-vaso-vivo="<estado>", el vaso que sangra
+            vasoVivo: (estadoClave, origen) => vasoVivo?.abrir(estadoClave, origen),
         },
     };
 }

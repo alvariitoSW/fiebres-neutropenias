@@ -1,0 +1,207 @@
+    <button class="back-btn btn-volver-libros-menu" id="vso-volver">← VOLVER</button>
+    <!-- El vaso que sangra: la herida y la red (Marino cap. 13). Modelo vivo de Libros; sus fichas son las 4-6 de
+         Hematología → Merino HEMATO. Viene de la maqueta aprobada autonomo/maquetas/b2-vaso.html (la fusión de A y B).
+         Lógica en vaso-vivo.js y vaso-vivo-escena.js; datos en js/data/vaso-vivo-data.js. -->
+    <div class="vso-raiz" id="vso-raiz" data-modelo-vivo>
+      <header class="vso-cabecera">
+        <p class="vso-eyebrow">Modelo vivo · Marino cap. 13</p>
+        <h2 class="vso-titulo">El vaso que sangra: <em>la herida y la red</em></h2>
+        <p class="vso-lead">Un vaso roto se tapa en dos tiempos: <strong class="hl-azul">las plaquetas hacen el tapón</strong> y la fibrina lo convierte en trombo. <span class="vso-org">ficha · merino-trombocitopenia#mh-hemostasia-primaria · p. 20-21</span> Cuando faltan plaquetas, lo más temible no es el sangrado: <strong class="hl-rojo">es la trombosis</strong> (HIT, CID, PTT y SHU). <span class="vso-org">ficha · merino-plaquetas-plasma#mh-mensajes · p. 36</span></p>
+      </header>
+
+      <div class="vso-interruptor" role="tablist" aria-label="Qué hacer con el modelo">
+        <button type="button" role="tab" id="vso-modo-explorar" aria-selected="true">Explorar</button>
+        <button type="button" role="tab" id="vso-modo-preguntas" aria-selected="false">Mayéutica</button>
+      </div>
+
+      <section class="vso-escena-bloque" id="vso-escena-bloque" aria-label="El vaso que sangra">
+        <div class="vso-escena" id="vso-escena">
+          <svg id="vso-lamina" viewBox="0 0 360 360" role="img" aria-label="Una arteriola en corte, su herida y la red de capilares"></svg>
+          <span class="vso-chapa">ilustrativo</span>
+        </div>
+        <div class="vso-lupas-fila" role="group" aria-label="Lupas">
+          <button type="button" class="vso-lupa-btn" data-vso-lupa="herida" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>La herida</button>
+          <button type="button" class="vso-lupa-btn" data-vso-lupa="cascada" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>La cascada</button>
+          <button type="button" class="vso-lupa-btn" data-vso-lupa="plaqueta" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>La plaqueta</button>
+          <button type="button" class="vso-lupa-btn" data-vso-lupa="frotis" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>El frotis</button>
+          <button type="button" class="vso-lupa-btn" data-vso-lupa="tubo" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>El tubo</button>
+          <button type="button" class="vso-lupa-btn" data-vso-lupa="complemento" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>Complemento</button>
+        </div>
+        <div class="vso-libro" id="vso-libro" hidden><div class="vso-lams" id="vso-libro-lams"></div><p class="vso-para" id="vso-libro-txt"></p></div>
+        <div class="vso-tablero" id="vso-tablero" aria-live="off"></div>
+        <ul class="vso-leyenda-mini" id="vso-leyenda-mini" aria-label="Formas"></ul>
+      </section>
+
+      <!-- ============ EXPLORAR ============ -->
+      <div id="vso-vista-explorar" class="vso-bloque">
+        <section class="vso-bloque">
+          <h3 class="vso-h">Ir a un estado</h3>
+          <div class="vso-guia-abrir"><button type="button" class="vso-b vso-prim" id="vso-guia-abrir">Explícame este estado paso a paso</button><span class="vso-para" id="vso-guia-de"></span></div>
+          <div id="vso-chips-estado"></div>
+          <p class="vso-para">Cada estado es el de una ficha de la hemostasia (o el de un paciente de los casos). Elige uno y pulsa «Explícame»: te cuenta qué pasa y te lo señala en el dibujo. Toca la pared del vaso para abrir una herida; los mandos, abajo.</p>
+        </section>
+
+        <section class="vso-bloque">
+          <h3 class="vso-h">Qué es cada forma</h3>
+          <ul class="vso-leyenda" id="vso-leyenda"></ul>
+          <p class="vso-para">La forma dice qué es; el color ayuda, pero nunca decide solo. Todas salen de la tabla única de formas de la app, la misma del capilar y del telar. La máquina de la cascada (el Xa, la protrombina y la trombina) es la del telar de la trombina, para que la reconozcas.</p>
+        </section>
+
+        <details class="nota-plegable">
+          <summary>Notas de fuentes y de fidelidad</summary>
+          <div class="vso-notas" id="vso-notas"></div>
+        </details>
+
+        <details class="nota-plegable">
+          <summary>De dónde sale cada cifra</summary>
+          <div class="vso-tabla-scroll">
+            <table class="data-table">
+              <thead><tr><th>Cifra</th><th>De dónde</th><th>Origen</th></tr></thead>
+              <tbody>
+                <tr><td>Plaquetas normales: 150.000-400.000/µL (el vaso sano, 250.000)</td><td>El recuento normal que da el capítulo</td><td><span class="vso-org">ficha · merino-plaquetas-plasma#mh-plaq-preparaciones · p. 30</span></td></tr>
+                <tr><td>Cortes de 100.000, 10.000 y 5.000</td><td>El tapón se forma hasta 100.000; sin lesión, 5.000 sin hemorragia mayor; &lt;10.000, HIC espontánea poco frecuente</td><td><span class="vso-org">ficha · merino-trombocitopenia#mh-trombo-umbral · p. 21</span></td></tr>
+                <tr><td>Cuánto tapón se forma por debajo de 100.000</td><td>El dibujo hace un tapón más pequeño cuanto menos plaquetas</td><td><span class="vso-org vso-ilu">ilustrativo</span></td></tr>
+                <tr><td>Plaquetas de cada causa (sepsis 60.000, CID 40.000, PTT 20.000, SHU 50.000)</td><td>Solo para el dibujo: en las microangiopatías el tablero da flechas, como la Tabla 13.3</td><td><span class="vso-org vso-ilu">ilustrativo</span></td></tr>
+                <tr><td>HIT: 115.000</td><td>Cae un 50 % (rara vez por debajo de 20.000) desde un recuento de 230.000</td><td><span class="vso-org">ficha · merino-trombocitopenia#mh-hit-clinica · p. 23</span> <span class="vso-org vso-ilu">230.000: ilustrativo</span></td></tr>
+                <tr><td>Una unidad de plaquetas: 55.000-70.000 a la hora; 41.000-50.000 a las 24 h</td><td>Desde 20.000: +35.000-50.000 a la hora; a las 24 h el aumento es un 40 % menor</td><td><span class="vso-org">ficha · merino-plaquetas-plasma#mh-plaq-respuesta · p. 30</span> <span class="vso-org vso-ilu">20.000: ilustrativo</span></td></tr>
+                <tr><td>Barras de la Fig. 13.2 (1.ª: 66 y 38; 3.ª: 54,5 y 20; 5.ª: 51 y 26 mil)</td><td>Lectura aproximada de la figura del libro</td><td><span class="vso-org">ficha · merino-plaquetas-plasma#mh-fig-13-2 · p. 31</span></td></tr>
+                <tr><td>PFC 12 mL/kg: INR 1,8 → 1,4; antitrombina 38 → 50 %</td><td>Medianas de la Fig. 13.3, en críticos sin sangrado antes de un procedimiento</td><td><span class="vso-org">ficha · merino-plaquetas-plasma#mh-fig-13-3 · p. 34</span></td></tr>
+                <tr><td>Fibrinógeno normal: 200-400 mg/dL</td><td>La fuente no lo da</td><td><span class="vso-org vso-ilu">fisiología general</span></td></tr>
+                <tr><td>Fibrinógeno 120 mg/dL en la hemorragia masiva; +50 con el crio</td><td>120, del caso de Salvador; 1 U de crio por 10 kg sube unos 50 mg/dL sin sangrado</td><td><span class="vso-org vso-ilu">120: ilustrativo</span> <span class="vso-org">ficha · merino-plaquetas-plasma#mh-crio · p. 35</span></td></tr>
+                <tr><td>Los órganos que se encienden</td><td>CID: pulmón, riñón y SNC. PTT: alteración mental; el riñón, leve. SHU: el riñón; en el atípico, un 20 % fuera del riñón</td><td><span class="vso-org">ficha · merino-microangiopatias#mh-cid · p. 27-28</span></td></tr>
+                <tr><td>Cuántas partículas corren y a qué velocidad; el INR del dial con warfarina</td><td>Solo para el dibujo</td><td><span class="vso-org vso-ilu">ilustrativo</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+        <details class="nota-plegable">
+          <summary>Lo que la ficha no da (huecos)</summary>
+          <ul class="vso-huecos">
+            <li>Cifras de INR, aPTT, fibrinógeno y dímero-D en la CID, la PTT y el SHU: la Tabla 13.3 solo dice alto, bajo o normal.</li>
+            <li>Por qué la warfarina es protrombótica en la HIT, la plasmina y los multímeros del FvW.</li>
+            <li>Qué molécula retira o repone el recambio plasmático.</li>
+            <li>Cuánto atenúan la refractariedad las plaquetas ABO-compatibles.</li>
+            <li>Dosis de eculizumab, CCP4F, vitamina K, bivalirudina, fondaparinux y rivaroxabán en la HIT.</li>
+            <li>El umbral de fibrinógeno en la hemorragia posparto (solo da el del trauma) y el fibrinógeno normal.</li>
+            <li>En qué punto de la cascada entra cada factor: el capítulo solo dice que II, VII, IX y X dependen de la vitamina K.</li>
+          </ul>
+        </details>
+
+        <!-- Lo que encuentra el buscador global (core/search.js): cada entrada es un enlace cruzado normal que abre el
+             modelo en un estado. Ocultas: solo se pulsan desde el buscador. -->
+        <div hidden>
+          <button type="button" data-especialidad="libros" data-view="vasoVivo" data-vaso-vivo="sano" data-buscar-titulo="El vaso que sangra: la herida y la red (modelo vivo)" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="vaso que sangra hemostasia plaquetas glucocálix tapón plaquetario fibrina coagulación herida">El vaso que sangra</button>
+          <button type="button" data-especialidad="libros" data-view="vasoVivo" data-vaso-vivo="herida" data-buscar-titulo="El vaso que sangra: la herida en sus 4 tiempos" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="hemostasia primaria secundaria colágeno gpiib/iiia factor de von willebrand fvw fibrinógeno factor tisular cascada">La herida</button>
+          <button type="button" data-especialidad="libros" data-view="vasoVivo" data-vaso-vivo="plaquetas-100k" data-buscar-titulo="El vaso que sangra: trombocitopenia, el corte de 100.000" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="trombocitopenia plaquetas bajas recuento 100000 5000 hemorragia intracerebral pseudotrombocitopenia edta sepsis">Trombocitopenia</button>
+          <button type="button" data-especialidad="libros" data-view="vasoVivo" data-vaso-vivo="hit" data-buscar-titulo="El vaso que sangra: la HIT y el argatrobán" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="hit tih trombocitopenia inducida por heparina fp4 igg argatrobán trombosis">HIT</button>
+          <button type="button" data-especialidad="libros" data-view="vasoVivo" data-vaso-vivo="cid" data-buscar-titulo="El vaso que sangra: CID, PTT y SHU (microangiopatías)" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="cid coagulación intravascular diseminada ptt púrpura trombocitopénica trombótica shu síndrome hemolítico urémico esquistocitos adamts-13 microangiopatía recambio plasmático">Microangiopatías</button>
+          <button type="button" data-especialidad="libros" data-view="vasoVivo" data-vaso-vivo="pfc-inr" data-buscar-titulo="El vaso que sangra: plaquetas, plasma y la trampa del INR" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="transfusión de plaquetas pfc plasma fresco congelado inr antitrombina crioprecipitado fibrinógeno ccp4f complejo protrombínico warfarina hemorragia masiva refractariedad">Plaquetas y plasma</button>
+        </div>
+      </div>
+
+      <!-- ============ MAYÉUTICA ============ -->
+      <div id="vso-vista-preguntas" class="vso-bloque" hidden>
+        <div id="vso-preg" class="vso-formato vso-entra"></div>
+        <details class="nota-plegable" id="vso-profundizar">
+          <summary>Para profundizar (lo que el vaso no enseña)</summary>
+          <div class="vso-prof">
+            <section><b>Las otras causas de trombocitopenia en el crítico (Tabla 13.1).</b> Circulación extracorpórea, balón de contrapulsación, hepatopatía e hiperesplenismo, terapia renal sustitutiva, transfusión masiva, infección por VIH, neoplasia, y los fármacos: fenitoína, ácido valproico, cotrimoxazol, antihistamínicos H₂, amiodarona, furosemida, tiazidas y morfina.
+              <span class="vso-fuente-p" data-vso-fuente="merino-trombocitopenia#mh-tabla-13-1"></span> <a class="vso-pdf" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=22" target="_blank" rel="noopener">PDF, p. 22 →</a></section>
+            <section><b>La escala 4Ts y el manejo según el riesgo.</b> Bajo (≤3): nada más, ni ELISA ni retirar la heparina. Intermedio (4-5): retirar la heparina, anticoagulante no heparínico y ELISA. Alto (6-8): lo mismo, a dosis plenas. El ELISA es sensible (negativo, descarta); la SRA es la de referencia. La calculadora está en la ficha.
+              <span class="vso-fuente-p" data-vso-fuente="merino-trombocitopenia#mh-4ts · #mh-hit-manejo"></span> <a class="vso-pdf" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=23" target="_blank" rel="noopener">PDF, pp. 23-24 →</a></section>
+            <section><b>Las alternativas al argatrobán.</b> Bivalirudina en el intervencionismo coronario; fondaparinux y ACOD (sobre todo rivaroxabán) si está estable. Después, un ACOD 1-3 meses, un identificador de alerta 3 meses y nunca más heparina.
+              <span class="vso-fuente-p" data-vso-fuente="merino-trombocitopenia#mh-hit-alternativas · #mh-hit-seguimiento"></span> <a class="vso-pdf" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=25" target="_blank" rel="noopener">PDF, p. 25 →</a></section>
+            <section><b>El SHU: el resto de causas.</b> Embarazo, lupus, síndrome antifosfolípido, neoplasias y fármacos (quinina, ciclosporina, tacrolimus); terapia renal si hace falta y el trasplante renal en el atípico.
+              <span class="vso-fuente-p" data-vso-fuente="merino-microangiopatias#mh-shu"></span> <a class="vso-pdf" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=28" target="_blank" rel="noopener">PDF, pp. 28-29 →</a></section>
+            <section><b>Las preparaciones de plaquetas.</b> Agrupadas (4-6 donantes; 38 × 10¹⁰ en 260 mL, con su nota de fidelidad), de aféresis y la leucorreducción; y la Tabla 13.4: más reacciones con un solo donante (478 frente a 70 por 100.000).
+              <span class="vso-fuente-p" data-vso-fuente="merino-plaquetas-plasma#mh-plaq-preparaciones · #mh-tabla-13-4"></span> <a class="vso-pdf" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=29" target="_blank" rel="noopener">PDF, pp. 29-32 →</a></section>
+            <section><b>El plasma, de cerca.</b> −18 °C en 8 h, 230 mL, 1 año; 5 días descongelado; el plasma líquido, 26 días sin congelar. Sus riesgos: hemólisis por anticuerpos del donante, alergia 1:600-1:2.000, TRALI 1:250.000, TACO si pasa de 1 mL/kg/h en predispuestos, e infecciones.
+              <span class="vso-fuente-p" data-vso-fuente="merino-plaquetas-plasma#mh-pfc · #mh-pfc-riesgos"></span> <a class="vso-pdf" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=32" target="_blank" rel="noopener">PDF, pp. 32-35 →</a></section>
+            <p class="vso-para">El resto de las 3 fichas está en su texto: cada «Ver en el texto» de las preguntas lleva a su sitio.</p>
+          </div>
+        </details>
+      </div>
+
+      <nav class="vso-dock" id="vso-dock" aria-label="Mandos del vaso">
+        <div class="vso-dock-in">
+          <div id="vso-dock-explorar">
+            <p class="vso-frase" id="vso-frase" aria-live="polite"></p>
+            <div class="vso-dock-tabs" role="tablist" aria-label="Mandos del modelo">
+              <button type="button" role="tab" data-vso-tab="herida" aria-selected="true">Herida</button>
+              <button type="button" role="tab" data-vso-tab="plaquetas" aria-selected="false">Plaquetas</button>
+              <button type="button" role="tab" data-vso-tab="causa" aria-selected="false">Causa</button>
+              <button type="button" role="tab" data-vso-tab="plasma" aria-selected="false">Plasma</button>
+              <button type="button" role="tab" data-vso-tab="farmaco" aria-selected="false">Fármaco</button>
+            </div>
+            <div class="vso-dock-panel" data-vso-panel="herida">
+              <div class="vso-seg" id="vso-m-lesion" role="group" aria-label="Lesión">
+                <button type="button" data-v="ninguna">Sin herida</button>
+                <button type="button" data-v="herida">Herida</button>
+                <button type="button" data-v="grande">Lesión estructural</button>
+              </div>
+              <div class="vso-fila-io">
+                <div class="vso-seg" id="vso-m-tiempo" role="group" aria-label="Tiempo de la herida">
+                  <button type="button" data-v="1">1<small>se pegan</small></button>
+                  <button type="button" data-v="2">2<small>se anclan</small></button>
+                  <button type="button" data-v="3">3<small>fibrina</small></button>
+                  <button type="button" data-v="4">4<small>se contrae</small></button>
+                </div>
+                <button type="button" class="vso-tog vso-play" id="vso-m-play" aria-pressed="false" aria-label="Ver los 4 tiempos">▶<small>los 4</small></button>
+              </div>
+            </div>
+            <div class="vso-dock-panel" data-vso-panel="plaquetas" hidden>
+              <label class="vso-desliza"><span>Plaquetas</span><input type="range" id="vso-m-plaq" min="0" max="1000" step="1" aria-label="Plaquetas por microlitro, de 5.000 a 400.000"><output id="vso-m-plaq-out"></output></label>
+              <div class="vso-rejilla">
+                <button type="button" class="vso-tog" id="vso-m-transfundir" aria-pressed="false">Transfundir <small>1 unidad</small></button>
+                <button type="button" class="vso-tog" data-vso-previas="1" aria-pressed="false">1.ª <small>transfusión</small></button>
+                <button type="button" class="vso-tog" data-vso-previas="3" aria-pressed="false">3.ª <small>transfusión</small></button>
+                <button type="button" class="vso-tog" data-vso-previas="5" aria-pressed="false">5.ª <small>transfusión</small></button>
+                <button type="button" class="vso-tog" id="vso-m-abo" aria-pressed="false">ABO <small>compatibles</small></button>
+              </div>
+            </div>
+            <div class="vso-dock-panel" data-vso-panel="causa" hidden>
+              <div class="vso-rejilla" id="vso-m-causa">
+                <button type="button" class="vso-tog" data-vso-causa="ninguna" aria-pressed="false">Ninguna</button>
+                <button type="button" class="vso-tog" data-vso-causa="sepsis" aria-pressed="false">Sepsis</button>
+                <button type="button" class="vso-tog" data-vso-causa="hit" aria-pressed="false">Heparina <small>HIT</small></button>
+                <button type="button" class="vso-tog" data-vso-causa="edta" aria-pressed="false">Tubo <small>con EDTA</small></button>
+                <button type="button" class="vso-tog" data-vso-causa="cid" data-var="fulminante" aria-pressed="false">Púrpura <small>fulminante</small></button>
+                <button type="button" class="vso-tog" data-vso-causa="cid" data-var="septica" aria-pressed="false">CID <small>séptica</small></button>
+                <button type="button" class="vso-tog" data-vso-causa="cid" data-var="obstetrica" aria-pressed="false">CID <small>obstétrica</small></button>
+                <button type="button" class="vso-tog" data-vso-causa="ptt" aria-pressed="false">PTT</button>
+                <button type="button" class="vso-tog" data-vso-causa="shu" data-var="tipico" aria-pressed="false">SHU <small>infección</small></button>
+                <button type="button" class="vso-tog" data-vso-causa="shu" data-var="atipico" aria-pressed="false">SHU <small>atípico</small></button>
+              </div>
+            </div>
+            <div class="vso-dock-panel" data-vso-panel="plasma" hidden>
+              <div class="vso-rejilla" id="vso-m-rep">
+                <button type="button" class="vso-tog" data-vso-rep="pfc" aria-pressed="false">PFC <small>12 mL/kg</small></button>
+                <button type="button" class="vso-tog" data-vso-rep="warf-pfc" aria-pressed="false">Vit. K + PFC <small>10-15 mL/kg</small></button>
+                <button type="button" class="vso-tog" data-vso-rep="ccp4f" aria-pressed="false">Vit. K + CCP4F <small>100 mL</small></button>
+                <button type="button" class="vso-tog" data-vso-rep="masiva" aria-pressed="false">Masiva <small>1 PFC : 1-2 CH</small></button>
+                <button type="button" class="vso-tog" data-vso-rep="crio" aria-pressed="false">Crio <small>1 U/10 kg</small></button>
+                <button type="button" class="vso-tog" data-vso-rep="fibconc" aria-pressed="false">Fibrinógeno <small>concentrado</small></button>
+                <button type="button" class="vso-tog" data-vso-rep="recambio" aria-pressed="false">Recambio <small>plasmático</small></button>
+                <button type="button" class="vso-tog" data-vso-rep="lena" aria-pressed="false">Reponer <small>en la CID</small></button>
+              </div>
+            </div>
+            <div class="vso-dock-panel" data-vso-panel="farmaco" hidden>
+              <div class="vso-rejilla" id="vso-m-hep">
+                <button type="button" class="vso-tog" data-vso-hep="curso" aria-pressed="false">Heparina <small>en curso</small></button>
+                <button type="button" class="vso-tog" data-vso-hep="retirada" aria-pressed="false">Retirar <small>toda heparina</small></button>
+                <button type="button" class="vso-tog" data-vso-hep="argatroban" aria-pressed="false">Argatrobán <small>1-2 µg/kg/min</small></button>
+                <button type="button" class="vso-tog vso-enlace" data-especialidad="libros" data-view="telarVivo" data-telar-vivo="tih">El resto <small>en el telar →</small></button>
+              </div>
+              <p class="vso-para" id="vso-farmaco-nota">Los fármacos actúan sobre la HIT: elige antes «Heparina» en Causa.</p>
+            </div>
+          </div>
+          <!-- La explicación guiada de un estado (js/core/explicacion-guiada.js): ocupa el sitio de los mandos -->
+          <div id="vso-dock-guia" hidden></div>
+          <div id="vso-dock-estudio" class="vso-dock-estudio" hidden>
+            <div class="vso-pasos" id="vso-dock-pasos"></div>
+            <div class="vso-dock-est-txt"><span id="vso-dock-est-izq"></span><span id="vso-dock-est-der"></span></div>
+          </div>
+        </div>
+      </nav>
+    </div>
