@@ -3296,6 +3296,62 @@ body.agv-activo .pomodoro-panel { bottom: calc(var(--agv-dock-h, 170px) + 76px);
 body.cpv-activo .pomodoro-fab { bottom: calc(var(--cpv-dock-h, 190px) + 14px); }
 body.cpv-activo .pomodoro-panel { bottom: calc(var(--cpv-dock-h, 190px) + 76px); }
 body.study-mode-on .cpv-dock { padding-right: 82px; }
+/* [HUECO capilar: capilar vivo ampliado del bloque 2 (cap. 12) y las dos piezas comunes que estrena: la cita que lleva
+   a la app (js/core/citas.js, clases cita-) y la explicación guiada (js/core/explicacion-guiada.js, clases guia-)] */
+.cpv-raiz .cpv-tablero { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 3px; }
+.cpv-raiz .cpv-celda { padding: 3px 3px 4px; }
+.cpv-raiz .cpv-celda b { font-size: .9rem; }
+.cpv-raiz .cpv-grupo-chips { display: grid; gap: 4px; margin-top: 6px; }
+.cpv-raiz .cpv-grupo-chips h4 { margin: 0; font: 600 .74rem/1.2 var(--cpv-sans); color: var(--text-muted); letter-spacing: .04em; text-transform: uppercase; }
+.cpv-raiz .cpv-guia-abrir { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.cpv-raiz .cpv-guia-abrir .cpv-para { margin: 0; }
+.cpv-raiz .cpv-frase .cpv-ir-estado { font: 600 .72rem/1.2 var(--cpv-sans); color: var(--accent-yellow); background: transparent; border: 1px dashed var(--accent-yellow); border-radius: 999px; padding: 2px 9px; min-height: 30px; cursor: pointer; margin-left: 2px; }
+.cpv-raiz .cpv-ab { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 6px 0; }
+.cpv-raiz .cpv-ab-col { background: var(--cpv-card2); border: 1px solid var(--border-color); border-radius: 10px; padding: 8px; display: grid; gap: 4px; align-content: start; min-width: 0; }
+.cpv-raiz .cpv-ab-col.cpv-ab-nueva { border-color: var(--accent-green); }
+.cpv-raiz .cpv-ab-col h4 { margin: 0; font: 600 .8rem/1.2 var(--cpv-sans); color: var(--text-muted); }
+.cpv-raiz .cpv-ab-col.cpv-ab-nueva h4 { color: var(--accent-green); }
+.cpv-raiz .cpv-ab-col dl { margin: 0; display: grid; grid-template-columns: auto auto; gap: 1px 6px; font: .78rem/1.35 var(--cpv-sans); }
+.cpv-raiz .cpv-ab-col dt { color: var(--text-muted); }
+.cpv-raiz .cpv-ab-col dd { margin: 0; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+.cpv-raiz .cpv-ab-col dd.cpv-ab-mal { color: var(--accent-red); }
+.cpv-raiz .cpv-ab-col p { margin: 0; font: italic .8rem/1.35 var(--cpv-serif); color: var(--text-dim); }
+.cpv-raiz .cpv-lam-ancha { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 8px; align-items: center; margin-top: 6px; }
+.cpv-raiz .cpv-lam-ancha .article-figure.cpv-lam { width: 72px; height: 60px; }
+.cpv-raiz .cpv-tipo-nota { display: block; font: 700 .62rem/1.3 var(--cpv-sans); letter-spacing: .06em; text-transform: uppercase; color: var(--accent-purple); }
+.cpv-raiz #cpv-dock-guia { max-height: 48vh; overflow-y: auto; overscroll-behavior: contain; }
+/* La cita que lleva a la app (core/citas.js): «Ver en la ficha» y, de segunda opción, el PDF */
+.cita { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 8px; }
+.cita-ir { display: inline-flex; align-items: center; min-height: 44px; padding: 0 10px; border: 1px dashed var(--accent-yellow); border-radius: 999px; background: transparent; color: var(--accent-yellow); font: 600 .74rem/1.2 system-ui, -apple-system, 'Segoe UI', sans-serif; text-align: left; cursor: pointer; max-width: 100%; overflow-wrap: anywhere; }
+.cita-pdf { display: inline-flex; align-items: center; min-height: 44px; color: var(--text-muted); font: .72rem system-ui, -apple-system, 'Segoe UI', sans-serif; text-decoration: underline; text-underline-offset: 2px; }
+/* La explicación guiada (core/explicacion-guiada.js): la tarjeta de los pasos y el anillo que señala en el dibujo */
+.guia { display: grid; gap: 6px; font: .9rem/1.4 Georgia, 'Times New Roman', serif; color: var(--text-main); }
+.guia-cab { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.guia-n { font: 700 .66rem/1.2 system-ui, -apple-system, 'Segoe UI', sans-serif; letter-spacing: .06em; text-transform: uppercase; color: var(--accent-yellow); white-space: nowrap; }
+.guia-tit { flex: 1; min-width: 0; font: 600 .84rem/1.2 system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.guia-x { flex: none; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border-color); background: transparent; color: var(--text-main); font-size: 1.2rem; cursor: pointer; }
+.guia-txt { margin: 0; border-left: 3px solid var(--accent-yellow); padding: 1px 0 1px 9px; }
+.guia-org { font: .62rem/1.2 system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--text-muted); border: 1px dashed var(--border-color); border-radius: 999px; padding: 0 5px; }
+.guia-citas { display: grid; gap: 2px; }
+.guia-fuentes { font: .76rem/1.4 system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--text-muted); }
+.guia-fuentes summary { min-height: 32px; cursor: pointer; }
+.guia-nav { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center; }
+.guia-b { min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main); font: 600 .84rem system-ui, -apple-system, 'Segoe UI', sans-serif; cursor: pointer; }
+.guia-b:disabled { opacity: .45; cursor: default; }
+.guia-b.guia-prim { background: var(--accent-yellow); border-color: var(--accent-yellow); color: var(--bg-main); }
+.guia-puntos { display: flex; justify-content: center; gap: 5px; }
+.guia-puntos i { width: 7px; height: 7px; border-radius: 50%; border: 1px solid var(--accent-yellow); }
+.guia-puntos i.hecho { background: var(--accent-yellow); opacity: .5; }
+.guia-puntos i.aqui { background: var(--accent-yellow); }
+.guia-anillo { fill: none; stroke: var(--accent-blue); stroke-width: 2.4; stroke-dasharray: 6 3; vector-effect: non-scaling-stroke; }
+.guia-marco { box-shadow: 0 0 0 2px var(--accent-blue); }
+@media (prefers-reduced-motion: no-preference) {
+  .guia-anillo { animation: guia-late 1.4s ease-in-out infinite; }
+  .guia-entra { animation: guia-entra .25s ease-out; }
+}
+@keyframes guia-late { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
+@keyframes guia-entra { from { opacity: .4; } to { opacity: 1; } }
+/* [FIN HUECO capilar] */
 
 /* ===== Catéter vivo: flujo, piel y biopelícula (js/modules/libros/cateter-vivo.*). Prefijo ctv-. =====
    Viene de la maqueta aprobada autonomo/maquetas/b1-cateter-vivo.html (vuelta 2) y copia el capilar (cpv-).

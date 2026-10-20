@@ -103,11 +103,66 @@ function partesDe(forma, r, e = {}) {
         case 'plaqueta': return [lleno(elipse(r, r)), lleno(circ(-0.35 * r, -0.2 * r, 0.2 * r) + circ(0.3 * r, -0.3 * r, 0.17 * r) + circ(0.05 * r, 0.38 * r, 0.19 * r), { color: BORDE_PARTICULA, opacidad: 0.6, sinBorde: true })];
         case 'plaquetaActiva': { let d = ''; for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4 + 0.3, c = Math.cos(a), s = Math.sin(a); d += `M${n2(c * 0.95 * r)} ${n2(s * 0.95 * r)}L${n2(c * 1.75 * r)} ${n2(s * 1.75 * r)}`; } return [trazo(d, 0.28), ...partesDe('plaqueta', r)]; }
         case 'hilo': return [trazo(`M${n2(-1.5 * r)} ${n2(0.4 * r)}C${n2(-0.7 * r)} ${n2(-0.9 * r)} ${n2(0.1 * r)} ${n2(0.9 * r)} ${n2(0.7 * r)} ${n2(-0.3 * r)}S${n2(1.5 * r)} ${n2(-0.2 * r)} ${n2(1.5 * r)} ${n2(-0.6 * r)}`, 0.26)];
+        // La sangre y la hemostasia (Marino caps. 12-13; lámina autonomo/maquetas/b2-formas.html, aprobada).
+        // Esquistocito: el disco del hematíe (1,35r × r) con un mordisco cóncavo a la derecha (casco), sin palidez central.
+        case 'casco': {
+            const x = 0.868 * r, y = 0.766 * r;
+            return [lleno(`M${n2(x)} ${n2(-y)}A${n2(1.35 * r)} ${n2(r)} 0 1 0 ${n2(x)} ${n2(y)}A${n2(0.8 * r)} ${n2(0.8 * r)} 0 0 1 ${n2(x)} ${n2(-y)}Z`)];
+        }
+        // FvW: cordón ondulado y largo con cinco cuentas.
+        case 'cordon': {
+            const pts = [-2.1, -1.05, 0, 1.05, 2.1].map((t, i) => [t * r, (i % 2 ? -0.35 : 0.35) * r]);
+            let d = `M${n2(pts[0][0])} ${n2(pts[0][1])}`;
+            for (let i = 1; i < pts.length; i++) { const [x0, y0] = pts[i - 1], [x1, y1] = pts[i]; d += `C${n2(x0 + 0.45 * r)} ${n2(y0)} ${n2(x1 - 0.45 * r)} ${n2(y1)} ${n2(x1)} ${n2(y1)}`; }
+            return [trazo(d, 0.28), lleno(pts.map(([x, y]) => circ(x, y, 0.4 * r)).join(''))];
+        }
+        // ADAMTS-13: tijera. Dos anillos (los mangos) a la izquierda y dos hojas que se cruzan en el eje.
+        case 'tijera': return [
+            trazo(`M${n2(-0.55 * r)} ${n2(-0.42 * r)}L${n2(1.55 * r)} ${n2(0.62 * r)}M${n2(-0.55 * r)} ${n2(0.42 * r)}L${n2(1.55 * r)} ${n2(-0.62 * r)}`, 0.3),
+            trazo(circ(-1.05 * r, -0.62 * r, 0.42 * r) + circ(-1.05 * r, 0.62 * r, 0.42 * r), 0.24),
+            lleno(circ(0.42 * r, 0, 0.17 * r), { color: BORDE_PARTICULA, sinBorde: true })];
+        // Fibrinógeno: bastón recto con tres nudos (los de los extremos, mayores).
+        case 'baston': return [trazo(`M${n2(-1.45 * r)} 0H${n2(1.45 * r)}`, 0.32), lleno(circ(-1.45 * r, 0, 0.55 * r) + circ(0, 0, 0.44 * r) + circ(1.45 * r, 0, 0.55 * r))];
+        // Dímero-D: dos nudos del bastón pegados en diagonal (un «8»), con la marca del enlace.
+        case 'dimero': return [lleno(circ(-0.45 * r, 0.42 * r, 0.62 * r) + circ(0.45 * r, -0.42 * r, 0.62 * r)),
+            trazo(`M${n2(-0.42 * r)} ${n2(-0.45 * r)}L${n2(0.42 * r)} ${n2(0.45 * r)}`, 0.16, { color: BORDE_PARTICULA, sinBorde: true })];
+        // Factor tisular: chispa. Estrella de cuatro puntas finas y cuatro rayos cortos en diagonal.
+        case 'chispa': {
+            let d = '';
+            for (let i = 0; i < 8; i++) { const a = -Math.PI / 2 + i * Math.PI / 4, rr = i % 2 ? 0.34 * r : 1.55 * r; d += `${i ? 'L' : 'M'}${n2(Math.cos(a) * rr)} ${n2(Math.sin(a) * rr)}`; }
+            let rayos = '';
+            for (let i = 0; i < 4; i++) { const a = Math.PI / 4 + i * Math.PI / 2, c = Math.cos(a), s = Math.sin(a); rayos += `M${n2(c * 0.7 * r)} ${n2(s * 0.7 * r)}L${n2(c * 1.15 * r)} ${n2(s * 1.15 * r)}`; }
+            return [lleno(d + 'Z'), trazo(rayos, 0.2)];
+        }
+        // Neutrófilo: célula clara con el núcleo en tres lóbulos unidos (ciruela).
+        case 'neutrofilo': {
+            const lob = [[-0.62, 0.24], [0, -0.36], [0.62, 0.24]];
+            return [lleno(elipse(1.25 * r, 1.25 * r)),
+                trazo(`M${n2(lob[0][0] * r)} ${n2(lob[0][1] * r)}L${n2(lob[1][0] * r)} ${n2(lob[1][1] * r)}L${n2(lob[2][0] * r)} ${n2(lob[2][1] * r)}`, 0.12, { color: '--accent-purple', sinBorde: true }),
+                lleno(lob.map(([x, y]) => circ(x * r, y * r, 0.29 * r)).join(''), { color: '--accent-purple', sinBorde: true })];
+        }
+        // Macrófago: célula grande (≈1,9r) con cuatro brazos (seudópodos) y un núcleo en judía.
+        case 'macrofago': {
+            let d = '';
+            const N = 48;
+            for (let i = 0; i <= N; i++) {
+                const a = i / N * Math.PI * 2, rr = r * (1.35 + 0.42 * Math.pow(Math.max(0, Math.cos(4 * a + 0.4)), 3) - 0.08 * Math.sin(3 * a));
+                d += `${i ? 'L' : 'M'}${n2(Math.cos(a) * rr)} ${n2(Math.sin(a) * rr)}`;
+            }
+            return [lleno(d + 'Z'), lleno(`M${n2(-0.55 * r)} ${n2(-0.1 * r)}C${n2(-0.55 * r)} ${n2(-0.6 * r)} ${n2(0.45 * r)} ${n2(-0.6 * r)} ${n2(0.5 * r)} ${n2(-0.15 * r)}C${n2(0.55 * r)} ${n2(0.3 * r)} ${n2(0.15 * r)} ${n2(0.15 * r)} 0 ${n2(0.3 * r)}C${n2(-0.2 * r)} ${n2(0.5 * r)} ${n2(-0.55 * r)} ${n2(0.35 * r)} ${n2(-0.55 * r)} ${n2(-0.1 * r)}Z`, { color: '--accent-purple', sinBorde: true })];
+        }
+        // Ficha de factor: placa redondeada (2,3r × 1,6r) con su número romano (parte 'texto', en el color del fondo).
+        case 'ficha': {
+            const w = 1.15 * r, h = 0.8 * r, k = 0.3 * r;
+            return [lleno(`M${n2(-w + k)} ${n2(-h)}H${n2(w - k)}Q${n2(w)} ${n2(-h)} ${n2(w)} ${n2(-h + k)}V${n2(h - k)}Q${n2(w)} ${n2(h)} ${n2(w - k)} ${n2(h)}H${n2(-w + k)}Q${n2(-w)} ${n2(h)} ${n2(-w)} ${n2(h - k)}V${n2(-h + k)}Q${n2(-w)} ${n2(-h)} ${n2(-w + k)} ${n2(-h)}Z`),
+                { tipo: 'texto', d: '', t: e.etiqueta || '', tam: n2((e.etiqueta || '').length > 2 ? 0.92 * r : 1.05 * r) }];
+        }
     }
     return [lleno(elipse(r, r))];
 }
 // Hasta dónde llega cada forma, en radios (para que quepa en un icono).
-const ALCANCE = { gota: 1.55, grano: 1.7, grano1: 2.5, pajarita: 1.35, rombo1: 2, rombo2: 2.6, caCitrato: 2.05, aro: 2.05, estrella: 1.5, celula: 1.6, ovalo: 1.45, ovaloHueco: 1.45, disco: 1.4, copo: 1.5, pesa: 1.55, tripode: 1.45, coco: 1.65, burbuja: 1.3, bacilo: 1.6, huso: 1.55, linfocito: 1.2, cadena: 1.5, escudo: 1.5, collar: 1.65, fp4: 1.1, igg: 1.4, plaqueta: 1.05, plaquetaActiva: 1.8, hilo: 1.6 };
+const ALCANCE = { gota: 1.55, grano: 1.7, grano1: 2.5, pajarita: 1.35, rombo1: 2, rombo2: 2.6, caCitrato: 2.05, aro: 2.05, estrella: 1.5, celula: 1.6, ovalo: 1.45, ovaloHueco: 1.45, disco: 1.4, copo: 1.5, pesa: 1.55, tripode: 1.45, coco: 1.65, burbuja: 1.3, bacilo: 1.6, huso: 1.55, linfocito: 1.2, cadena: 1.5, escudo: 1.5, collar: 1.65, fp4: 1.1, igg: 1.4, plaqueta: 1.05, plaquetaActiva: 1.8, hilo: 1.6,
+    casco: 1.4, cordon: 2.5, tijera: 1.65, baston: 1.95, dimero: 1.1, chispa: 1.6, neutrofilo: 1.3, macrofago: 1.85, ficha: 1.2 };
 
 // Grosor del borde oscuro: fino, pero visible también en partículas pequeñas.
 const borde = r => Math.max(0.22 * r, 0.8);
@@ -132,7 +187,7 @@ export const nombreParticula = clave => especie(clave).nombre;
 // ---------- Lienzo 2D ----------
 const caminos = new Map();
 function partesLienzo(forma, r, e) {
-    const k = `${forma}|${r}|${e.anillo || ''}`;
+    const k = `${forma}|${r}|${e.anillo || ''}|${e.etiqueta || ''}`;
     if (!caminos.has(k)) caminos.set(k, partesDe(forma, r, e).map(p => ({ ...p, camino: new Path2D(p.d) })));
     return caminos.get(k);
 }
@@ -151,6 +206,8 @@ export function pintarParticula(ctx, clave, x, y, r, { color, giro = 0, borde: c
     for (const p of partesLienzo(e.forma, r, e)) {
         const c = p.color ? colorToken(p.color) : col;
         ctx.globalAlpha = alfa0 * (p.opacidad ?? 1);
+        // la ficha de un factor: su número romano, en el color del fondo
+        if (p.tipo === 'texto') { if (!hueco) { ctx.fillStyle = fondo; ctx.font = `700 ${p.tam}px system-ui, sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic'; ctx.fillText(p.t, 0, p.tam * 0.36); } continue; }
         if (hueco) {
             ctx.setLineDash([r * 0.7, r * 0.55]);
             ctx.strokeStyle = c; ctx.lineWidth = Math.max(0.9, r * 0.3); ctx.stroke(p.camino);
@@ -172,13 +229,15 @@ export function pintarParticula(ctx, clave, x, y, r, { color, giro = 0, borde: c
 // ---------- SVG ----------
 const pintura = c => c.startsWith('--') ? `var(${c})` : c;
 // La partícula como SVG (texto), centrada en (x, y). Mismas opciones que en
-// el lienzo, más `halo` (token: anillo alrededor, p. ej. «metido en la
-// célula») y `opacidad`.
-export function svgParticula(clave, x = 0, y = 0, r = 4, { color, borde: conBorde = true, hueco = false, halo, opacidad } = {}) {
+// el lienzo (aquí `giro` va en grados, como en el atributo transform), más
+// `halo` (token: anillo alrededor, p. ej. «metido en la célula») y `opacidad`.
+export function svgParticula(clave, x = 0, y = 0, r = 4, { color, borde: conBorde = true, hueco = false, halo, opacidad, giro = 0 } = {}) {
     const e = especie(clave);
     const col = pintura(color ?? e.color), fondo = pintura(BORDE_PARTICULA);
     let s = halo ? `<circle r="${n2(1.75 * r)}" style="fill:none;stroke:${pintura(halo)};stroke-width:${n2(Math.max(0.8, 0.28 * r))};opacity:.8"/>` : '';
     for (const p of partesDe(e.forma, r, e)) {
+        // la ficha de un factor: su número romano, en el color del fondo
+        if (p.tipo === 'texto') { if (!hueco) s += `<text x="0" y="${n2(p.tam * 0.36)}" text-anchor="middle" style="font:700 ${p.tam}px system-ui, sans-serif;fill:${fondo}">${p.t}</text>`; continue; }
         const c = p.color ? pintura(p.color) : col, op = p.opacidad != null ? `;opacity:${p.opacidad}` : '';
         if (hueco) { s += `<path d="${p.d}" style="fill:none;stroke:${c};stroke-width:${n2(Math.max(0.9, 0.3 * r))};stroke-dasharray:${n2(0.7 * r)} ${n2(0.55 * r)}"/>`; break; }
         if (p.tipo === 'lleno') {
@@ -189,8 +248,8 @@ export function svgParticula(clave, x = 0, y = 0, r = 4, { color, borde: conBord
             s += `<path d="${p.d}" style="fill:none;stroke:${c};stroke-width:${n2(r * p.w)};stroke-linejoin:round;stroke-linecap:round${op}"/>`;
         }
     }
-    const g = x || y ? `transform="translate(${n2(x)} ${n2(y)})"` : '';
-    return `<g${g ? ' ' + g : ''}${opacidad != null ? ` opacity="${opacidad}"` : ''}>${s}</g>`;
+    const tr = [x || y ? `translate(${n2(x)} ${n2(y)})` : '', giro ? `rotate(${n2(giro)})` : ''].filter(Boolean).join(' ');
+    return `<g${tr ? ` transform="${tr}"` : ''}${opacidad != null ? ` opacity="${opacidad}"` : ''}>${s}</g>`;
 }
 
 // ---------- Leyenda ----------

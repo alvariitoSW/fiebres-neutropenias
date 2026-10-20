@@ -1,12 +1,13 @@
     <button class="back-btn btn-volver-libros-menu" id="cpv-volver">← VOLVER</button>
-    <!-- Capilar y oxígeno: del pulmón a la mitocondria (Marino caps. 7 y 9). Modelo vivo de Libros.
-         Viene de la maqueta aprobada autonomo/maquetas/b1-capilar-oxigeno.html (vuelta 2).
+    <!-- Capilar y oxígeno: del pulmón a la mitocondria (Marino caps. 7, 9 y 12). Modelo vivo de Libros.
+         Viene de las maquetas aprobadas autonomo/maquetas/b1-capilar-oxigeno.html (vuelta 2) y
+         autonomo/maquetas/b2-capilar.html (bloque 2: anemia y transfusión).
          Lógica en capilar-vivo.js y capilar-vivo-escena.js; datos en js/data/capilar-vivo-data.js. -->
     <div class="cpv-raiz" id="cpv-raiz" data-modelo-vivo>
       <header class="cpv-cabecera">
-        <p class="cpv-eyebrow">Modelo vivo · Marino caps. 7 y 9</p>
+        <p class="cpv-eyebrow">Modelo vivo · Marino caps. 7, 9 y 12</p>
         <h2 class="cpv-titulo">Del pulmón a la <em>mitocondria</em></h2>
-        <p class="cpv-lead">El oxígeno viaja <strong class="hl">pegado a la hemoglobina</strong>; el tejido coge lo que necesita <strong class="hl">hasta la mitad</strong> de lo que le llega; más allá, o si la mitocondria no puede usarlo, <strong class="hl-rojo">sale lactato</strong>. <span class="cpv-org">ficha · mar-transporte-o2 · mar-extraccion-lactato</span></p>
+        <p class="cpv-lead">El oxígeno viaja <strong class="hl">pegado a la hemoglobina</strong>; el tejido coge lo que necesita <strong class="hl">hasta la mitad</strong> de lo que le llega; más allá, o si la mitocondria no puede usarlo, <strong class="hl-rojo">sale lactato</strong>. <span class="cpv-org">ficha · mar-transporte-o2 · mar-extraccion-lactato</span> Con anemia, <strong class="hl">el corazón bombea más</strong> y el techo no llega hasta una Hb ≈3. <span class="cpv-org">ficha · merino-anemia · p. 4-7</span></p>
       </header>
 
       <div class="cpv-interruptor" role="tablist" aria-label="Qué hacer con el modelo">
@@ -26,11 +27,11 @@
               </defs>
               <rect width="360" height="300" style="fill:var(--bg-main)"/>
               <!-- La célula del tejido, con su núcleo y sus mitocondrias -->
-              <g>
+              <g id="cpv-celula">
                 <ellipse cx="180" cy="250" rx="210" ry="86" style="fill:url(#cpv-raya2);stroke:var(--text-muted);stroke-width:1.2"/>
                 <ellipse cx="52" cy="244" rx="24" ry="16" style="fill:url(#cpv-raya);stroke:var(--text-muted);stroke-width:.9"/>
                 <text x="52" y="274" text-anchor="middle" style="font-size:8px;font-style:italic;fill:var(--text-muted)">núcleo</text>
-                <g style="stroke:var(--text-dim);stroke-width:1;fill:var(--bg-main)"><g transform="translate(120 198) rotate(-8)"><ellipse rx="23" ry="10"/><path d="M-17 1l4-5 4 5 4-5 4 5 4-5 4 5 4-5 4 5" style="fill:none;stroke-width:.8"/></g><g transform="translate(192 194) rotate(6)"><ellipse rx="23" ry="10"/><path d="M-17 1l4-5 4 5 4-5 4 5 4-5 4 5 4-5 4 5" style="fill:none;stroke-width:.8"/></g><g transform="translate(262 204) rotate(-10)"><ellipse rx="23" ry="10"/><path d="M-17 1l4-5 4 5 4-5 4 5 4-5 4 5 4-5 4 5" style="fill:none;stroke-width:.8"/></g><g transform="translate(318 216) rotate(12)"><ellipse rx="23" ry="10"/><path d="M-17 1l4-5 4 5 4-5 4 5 4-5 4 5 4-5 4 5" style="fill:none;stroke-width:.8"/></g></g>
+                <g id="cpv-mitos" style="stroke:var(--text-dim);stroke-width:1;fill:var(--bg-main)"><g transform="translate(120 198) rotate(-8)"><ellipse rx="23" ry="10"/><path d="M-17 1l4-5 4 5 4-5 4 5 4-5 4 5 4-5 4 5" style="fill:none;stroke-width:.8"/></g><g transform="translate(192 194) rotate(6)"><ellipse rx="23" ry="10"/><path d="M-17 1l4-5 4 5 4-5 4 5 4-5 4 5 4-5 4 5" style="fill:none;stroke-width:.8"/></g><g transform="translate(262 204) rotate(-10)"><ellipse rx="23" ry="10"/><path d="M-17 1l4-5 4 5 4-5 4 5 4-5 4 5 4-5 4 5" style="fill:none;stroke-width:.8"/></g><g transform="translate(318 216) rotate(12)"><ellipse rx="23" ry="10"/><path d="M-17 1l4-5 4 5 4-5 4 5 4-5 4 5 4-5 4 5" style="fill:none;stroke-width:.8"/></g></g>
                 <text x="258" y="228" text-anchor="middle" style="font-size:8px;font-style:italic;fill:var(--text-muted)">mitocondrias</text>
                 <text x="180" y="294" text-anchor="middle" style="font-size:9px;font-style:italic;fill:var(--text-dim)">célula del tejido</text>
                 <g id="cpv-mitos-x" hidden style="stroke:var(--accent-red);stroke-width:2.2;stroke-linecap:round"><path d="M107 188l26 20M133 188l-26 20M179 184l26 20M205 184l-26 20M249 194l26 20M275 194l-26 20M305 206l26 20M331 206l-26 20"/></g>
@@ -47,10 +48,12 @@
               <g><circle cx="18" cy="18" r="12" style="fill:url(#cpv-raya);stroke:var(--text-muted);stroke-width:1"/>
                 <text x="36" y="16" style="font-size:8.5px;fill:var(--text-dim);font-family:var(--cpv-sans);font-weight:600">del pulmón: sangre arterial</text>
                 <text x="36" y="27" style="font-size:7.5px;font-style:italic;fill:var(--text-muted)">SaO₂ · perlas llenas</text></g>
-              <text x="110" y="50" style="font-size:7.5px;font-style:italic;fill:var(--text-muted)">plasma: el 1,5 % del O₂ va disuelto</text>
+              <text id="cpv-lam-plasma" x="110" y="50" style="font-size:7.6px;font-style:italic;fill:var(--text-muted)">plasma: el 1,5 % del O₂ va disuelto</text>
+              <!-- La bolsa (pieza común, js/core/bolsa.js): la pinta capilar-vivo-escena.js al arrancar -->
+              <g id="cpv-bolsa-sitio"></g>
               <text id="cpv-lam-toma" x="352" y="90" text-anchor="end" style="font-size:8.5px;fill:var(--accent-blue);font-family:var(--cpv-sans);font-weight:600"></text>
               <text x="352" y="101" text-anchor="end" style="font-size:7.5px;font-style:italic;fill:var(--text-muted)">sangre venosa, al corazón →</text>
-              <g>
+              <g id="cpv-capno-mini">
                 <rect x="248" y="4" width="106" height="38" rx="6" style="fill:var(--bg-main);stroke:var(--border-color);stroke-width:1"/>
                 <path id="cpv-capno-mini-onda" d="" style="fill:none;stroke:var(--accent-yellow);stroke-width:1.3;stroke-linejoin:round"/>
                 <rect id="cpv-capno-mini-barre" x="248" y="5" width="6" height="36" style="fill:var(--bg-main);opacity:.85"/>
@@ -60,12 +63,21 @@
               <g id="cpv-g-part"></g>
               <g id="cpv-g-hem"></g>
               <g id="cpv-g-anillo"></g>
+              <!-- Zonas que señala la explicación guiada (invisibles) -->
+              <g id="cpv-zonas" aria-hidden="true" style="fill:none;stroke:none;pointer-events:none">
+                <rect id="cpv-zona-arterial" x="2" y="40" width="112" height="86"/>
+                <rect id="cpv-zona-venosa" x="250" y="98" width="108" height="80"/>
+                <rect id="cpv-zona-capilar" x="2" y="40" width="356" height="138"/>
+                <rect id="cpv-zona-celula" x="4" y="180" width="352" height="116"/>
+              </g>
             </svg>
             <span class="cpv-chapa">ilustrativo</span>
             <div class="cpv-lupa" id="cpv-lupa" hidden><svg id="cpv-lupa-svg" viewBox="0 0 220 220" role="img" aria-label="Lupa"></svg></div>
             <button type="button" class="cpv-lupa-cerrar" id="cpv-lupa-cerrar" hidden aria-label="Cerrar la lupa">×</button>
           </div>
           <div class="cpv-lupas-fila">
+            <button type="button" class="cpv-lupa-btn" data-cpv-lupa="tubo" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>El tubo</button>
+            <button type="button" class="cpv-lupa-btn" data-cpv-lupa="alveolo" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>El alvéolo</button>
             <button type="button" class="cpv-lupa-btn" data-cpv-lupa="dedo" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>El dedo</button>
             <button type="button" class="cpv-lupa-btn" data-cpv-lupa="mito" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>Mitocondria</button>
             <button type="button" class="cpv-lupa-btn" data-cpv-lupa="boca" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>La boca</button>
@@ -80,9 +92,35 @@
       <div id="cpv-vista-explorar" class="cpv-bloque">
         <section class="cpv-bloque">
           <h3 class="cpv-h">Ir a un estado</h3>
-          <div class="cpv-chips-estado" id="cpv-chips-estado"></div>
-          <p class="cpv-para">Cada estado es el de una ficha (o el de un paciente de los casos). Los mandos, abajo.</p>
+          <div class="cpv-guia-abrir"><button type="button" class="cpv-b cpv-prim" id="cpv-guia-abrir">Explícame este estado paso a paso</button><span class="cpv-para" id="cpv-guia-de"></span></div>
+          <div id="cpv-chips-estado"></div>
+          <p class="cpv-para">Cada estado es el de una ficha (o el de un paciente de los casos). Elige uno y pulsa «Explícame»: te cuenta qué pasa y te lo señala en el dibujo. Los mandos, abajo.</p>
         </section>
+
+        <details class="nota-plegable cpv-grafica" id="cpv-gr-ab">
+          <summary>Antes y después: la anemia con Hb 7,5</summary>
+          <div class="cpv-ab" id="cpv-ab"></div>
+          <div class="cpv-fila"><button type="button" class="cpv-b" data-cpv-ir-estado="anemia">Ver: gasto fijo</button><button type="button" class="cpv-b cpv-prim" data-cpv-ir-estado="anemia-compensada">Ver: el corazón compensa</button></div>
+          <div class="cpv-lam-ancha"><div class="article-figure cpv-lam"><img loading="lazy" src="js/modules/libros/img/mar-fig12-2-gasto-hemodilucion.jpg" alt="Figura 12.2 del libro (PDF p. 6): hemodilución isovolémica progresiva en un paciente con policitemia; el gasto pasa de 5,8 a 13 L/min mientras el Hto cae un 38 %."></div>
+            <p class="cpv-para">Fig. 12.2: en un paciente con policitemia, el Hto cae un 38 % y el gasto <b>sube más de lo que cae el Hto</b> (de 5,8 a 13 L/min): la sangre no es newtoniana; al fluir más deprisa, es menos viscosa. <span class="cpv-org">ficha · merino-anemia#mh-no-newtoniano · p. 5-6</span></p></div>
+        </details>
+        <details class="nota-plegable cpv-grafica" id="cpv-gr-123">
+          <summary>Fig. 12.3 viva: el techo de la extracción</summary>
+          <div class="cpv-gr-fila"><svg id="cpv-svg-123" viewBox="0 0 240 196" role="img" aria-label="Extracción y consumo de O₂ al bajar la Hb, con el corazón que compensa"></svg>
+            <div class="article-figure cpv-lam"><img loading="lazy" src="js/modules/libros/img/mar-fig12-3-oxigenacion-anemia.jpg" alt="Figura 12.3 del libro (PDF p. 7): anemia isovolémica progresiva en primates: aporte, extracción, consumo y lactato frente al Hto."></div></div>
+          <p class="cpv-para">El punto es el paciente. Con «el corazón compensa», la extracción sigue la forma de la Fig. 12.3 (primates) y toca el 50 % con Hb 3 (Hto 10 %); por debajo, el consumo cae. <span class="cpv-org">ficha · merino-anemia#mh-limite-compensacion · p. 6-7</span> <span class="cpv-org cpv-ilu">la curva: ilustrativa</span></p>
+        </details>
+        <details class="nota-plegable cpv-grafica" id="cpv-gr-124">
+          <summary>Fig. 12.4 viva: antes y después de transfundir</summary>
+          <div class="cpv-gr-fila"><svg id="cpv-svg-124" viewBox="0 0 240 168" role="img" aria-label="Hb, aporte y consumo de O₂ antes y después de transfundir"></svg>
+            <div class="article-figure cpv-lam"><img loading="lazy" src="js/modules/libros/img/mar-fig12-4-transfusion-do2-vo2.jpg" alt="Figura 12.4 del libro (PDF p. 11): 1-2 CH en 11 posoperados con Hb menor de 7: la Hb sube de 6,4 a 8 g/dL, el aporte sube y el consumo no cambia."></div></div>
+          <p class="cpv-para">Aparece al visitar el estado «Transfusión». En el libro: Hb 6,4 → 8 (+25 %), un aumento parecido del aporte y el consumo igual. <span class="cpv-org">ficha · merino-transfusion#mh-efecto-transfusion · p. 10-11</span> <span class="cpv-org cpv-ilu">aporte del modelo: ilustrativo</span></p>
+        </details>
+        <details class="nota-plegable cpv-grafica" id="cpv-gr-126">
+          <summary>Fig. 12.6: el volumen salva vidas</summary>
+          <div class="cpv-lam-ancha"><div class="article-figure cpv-lam"><img loading="lazy" src="js/modules/libros/img/mar-fig12-6-volumen-salva.jpg" alt="Figura 12.6 del libro (PDF p. 17): el lema «la sangre salva vidas», corregido a «el volumen de sangre salva vidas»."></div>
+            <p class="cpv-para">Las anemias extremas no dañan la oxigenación de los tejidos si se mantiene la volemia, que deja subir el gasto. <b>La hipovolemia es causa de shock; la anemia, no.</b> Pruébalo con «Volemia baja» (Corazón). <span class="cpv-org">ficha · merino-transfusion#mh-volumen-vs-celulas · p. 16-17</span></p></div>
+        </details>
 
         <details class="nota-plegable cpv-grafica" open>
           <summary>Fig. 9.3 viva: aporte y consumo</summary>
@@ -129,6 +167,15 @@
                 <tr><td>Lactato</td><td>1 mmol/L de base; +8 × la fracción de consumo que falta; +3 con la PDH bloqueada; +1 con catecolaminas. Las bandas (≤2, 2,1-3,9, ≥4) y su mortalidad sí son de la Fig. 9.4.</td><td><span class="cpv-org cpv-ilu">ilustrativo</span> <span class="cpv-org">ficha · mar-fig-9-4</span></td></tr>
                 <tr><td>La fila de hematíes</td><td>Cuántos desfilan: proporcional a la Hb (11 con Hb 17); a qué velocidad: proporcional al gasto. Las perlas que se vacían en el capilar van de la SaO₂ a la SvO₂ del modelo.</td><td><span class="cpv-org cpv-ilu">ilustrativo</span> <span class="cpv-org">las saturaciones: ficha · mar-o2er</span></td></tr>
                 <tr><td>Humo (CO)</td><td>COHb del 25 %: SaO₂ = curva × 0,75; la SpO₂ no cambia</td><td><span class="cpv-org cpv-ilu">fracción ilustrativa</span> <span class="cpv-org">ficha · mar-cooximetria</span></td></tr>
+                <tr><td>Gasto con «el corazón compensa»</td><td>El que mantiene un consumo de 250 mL/min con la extracción que la Fig. 12.3 da a cada Hto: 25 % (Hb 15), 29 % (Hb 10), 35 % (Hb ≈6,7) y 50 % (Hb 3); entre medias, en línea recta. Por debajo de Hb 3 ya no sube más (12,7 L/min).</td><td><span class="cpv-org cpv-ilu">ilustrativo</span> <span class="cpv-org">ficha · merino-anemia#mh-limite-compensacion · p. 6-7 (Fig. 12.3, primates)</span></td></tr>
+                <tr><td>Viscosidad</td><td>Tabla 12.2 (relativa al agua), con el Hto estimado como 3 × Hb</td><td><span class="cpv-org">ficha · merino-anemia#mh-tabla-12-2 · p. 4-5</span> <span class="cpv-org cpv-ilu">Hto ≈ 3 × Hb: fisiología general</span></td></tr>
+                <tr><td>Transfundir 1 CH</td><td>Hb +1 g/dL (y Hto +3 %), en unas 2 h (en pantalla, 2 s); el gasto se queda quieto mientras gotea la bolsa</td><td><span class="cpv-org">ficha · merino-transfusion#mh-efecto-transfusion · p. 10</span> <span class="cpv-org cpv-ilu">gasto quieto: ilustrativo</span></td></tr>
+                <tr><td>Transfusión 6,4 → 8</td><td>Los valores medios de la Fig. 12.4 (1-2 CH); aporte y extracción, del modelo</td><td><span class="cpv-org">ficha · merino-transfusion#mh-efecto-transfusion · p. 10-11</span></td></tr>
+                <tr><td>La bolsa</td><td>Un CH: 350 mL</td><td><span class="cpv-org">ficha · merino-transfusion#mh-tabla-12-3 · p. 9</span></td></tr>
+                <tr><td>Volemia baja</td><td>El gasto no puede subir: como mucho 5 L/min; en el estado, 4</td><td><span class="cpv-org cpv-ilu">ilustrativo</span></td></tr>
+                <tr><td>El tubo</td><td>Hto de la Fig. 12.1; la columna roja (la masa) no cambia y el plasma crece hasta dar el Hto medido</td><td><span class="cpv-org">ficha · merino-anemia#mh-trampa-volumen · p. 2-3</span></td></tr>
+                <tr><td>Hb en la dilución</td><td>Hto / 3</td><td><span class="cpv-org cpv-ilu">fisiología general</span></td></tr>
+                <tr><td>PaO₂ 55 en TRALI y TACO</td><td>Un valor de hipoxemia para mover el tablero; la fuente no da cifras</td><td><span class="cpv-org cpv-ilu">ilustrativo</span></td></tr>
               </tbody>
             </table>
           </div>
@@ -145,6 +192,13 @@
           <div class="cpv-nota-fuentes"><b>Dos juegos de cortes de la extracción.</b> Oximetría dual, cap. 7 (PDF p. 43): &gt;25 %, 25-50 % y ≥50 %. Cap. 9 (p. 76-77): normal 20-30 %, &gt;30 % y ≥50 %. Y para la SvO₂ alta, el punto 5 de la p. 77 dice «80 % o más» y la Tabla 9.4, «&gt;80 %». Son del mismo libro; cada pregunta usa el de su capítulo. <span class="cpv-org">ficha · mar-dual-tabla · mar-sao2-svo2-guia</span></div>
           <div class="cpv-nota-fuentes"><b>La Tabla 9.4 y el metabolismo.</b> Sus cortes valen «si el metabolismo es normal» (PDF p. 76). Con fiebre, estrés o sin tiamina el tablero dice «no válida»; en la sepsis rotula «defecto de utilización» (aunque la acompañen fiebre o estrés), porque esa columna de la tabla describe precisamente la sepsis. <span class="cpv-org">ficha · mar-sao2-svo2-guia</span></div>
           <div class="cpv-nota-fuentes"><b>La ScvO₂ alta en el shock séptico.</b> Que una ScvO₂ &gt;80 % en el shock séptico sea, lo más probable, un defecto de utilización lo dice el cap. 11 (fluidoterapia, PDF p. 29, «Cómo leer la ScvO₂»); la Tabla 9.4 es de la SvO₂ mixta. <span class="cpv-org">ficha · mar-respuesta-fluidos · mar-scvo2-pautas</span></div>
+          <div class="cpv-nota-fuentes"><span class="cpv-tipo-nota">La fuente no lo dice</span><b>Cuánto sube el gasto con cada Hb en el ser humano.</b> La Fig. 12.2 es un paciente con policitemia y la 12.3, primates. La curva del modelo sigue la forma de la 12.3 y es ilustrativa: con Hb 7,5 da 7,6 L/min y una extracción del 34 %. <span class="cpv-org">ficha · merino-anemia#mh-no-newtoniano · p. 5-7</span></div>
+          <div class="cpv-nota-fuentes"><span class="cpv-tipo-nota">Nota de fidelidad</span><b>El rótulo de la Fig. 12.2.</b> Dice «225 % de cambio en el gasto»; sus puntos van de 5,8 a 13 L/min: el gasto llega al 225 % del inicial (+125 %). <span class="cpv-org">ficha · merino-anemia#mh-no-newtoniano · p. 6</span></div>
+          <div class="cpv-nota-fuentes"><span class="cpv-tipo-nota">Contexto</span><b>Hto 10 % ≈ Hb 3.</b> Es la equivalencia que da el libro (p. 6); el modelo pone el techo en Hb 3. El texto añade que, en animales con la volemia mantenida, un Hto de 5-10 % (Hb 1,5-3) no alteró la oxigenación de los tejidos, y que en humanos hasta Hb 5 parece seguro y algunos toleran 2-3 (p. 7). La Fig. 12.3 es de otro estudio, en primates. <span class="cpv-org">ficha · merino-anemia#mh-tolerancia</span></div>
+          <div class="cpv-nota-fuentes"><span class="cpv-tipo-nota">La fuente no lo dice</span><b>El gasto durante la transfusión.</b> La Fig. 12.4 da un aumento del aporte «similar» al de la Hb (25 %, p. 10). El modelo deja quieto el gasto mientras gotea la bolsa: así el aporte sube lo mismo que la Hb. <span class="cpv-org">ficha · merino-transfusion#mh-efecto-transfusion</span></div>
+          <div class="cpv-nota-fuentes"><span class="cpv-tipo-nota">Las fuentes discrepan</span><b>El plasma que queda en un CH.</b> La Tabla 12.3 dice 15-30 mL por unidad; el texto de la misma página, 30-50 mL (p. 9). La bolsa del modelo no da esa cifra. <span class="cpv-org">ficha · merino-transfusion#mh-tabla-12-3</span></div>
+          <div class="cpv-nota-fuentes"><span class="cpv-tipo-nota">La fuente no lo dice</span><b>TRALI frente a TACO.</b> No da cifras de PCR, BNP ni ecografía: solo que una inflamación sistémica (PCR alta) y la ausencia de insuficiencia cardíaca o de sobrecarga apoyan el TRALI (p. 14). La PaO₂ de la lupa es ilustrativa. <span class="cpv-org">ficha · merino-riesgos#mh-trali</span></div>
+          <div class="cpv-nota-fuentes"><span class="cpv-tipo-nota">Contexto</span><b>La anemia con el gasto fijo.</b> El estado «Anemia, gasto fijo» y la oximetría dual con Hb 7,5 son la cuenta del cap. 9 (Fig. 9.2: el contenido cae a la mitad) con el gasto quieto en 5 L/min. El cap. 12 añade que, con la volemia mantenida, el corazón compensa: con esa Hb, la extracción no llega al 50 %. <span class="cpv-org">ficha · mar-anemia-hipoxemia · merino-anemia#mh-limite-compensacion</span></div>
           <div class="cpv-nota-fuentes"><b>Los pacientes de los casos.</b> En el giro del caso de las dos camas, la cama 2 ya respira con O₂ (SaO₂ 98 %): con SaO₂ 78 % una ScvO₂ de 90 % sería imposible. El gap de PCO₂ del modelo es ilustrativo (∝ 1/GC). La COHb del 25 % del caso del humo y las cifras de PETCO₂ del caso de la sedación son de pacientes inventados.</div>
         </details>
 
@@ -157,6 +211,10 @@
             <li>Cómo sube el lactato con el déficit de aporte o con cada causa: solo las bandas de la Fig. 9.4.</li>
             <li>La SvO₂ en el déficit de tiamina: la ficha no la da, y el modelo no la toca.</li>
             <li>El flujo de la RCP: el tablero no da aporte ni consumo en la parada.</li>
+            <li>Cuánto sube el gasto con cada Hb en el ser humano: la curva es ilustrativa.</li>
+            <li>Cuánto baja el gasto con la volemia baja: el estado usa 4 L/min, ilustrativo.</li>
+            <li>Cifras de PCR, BNP o ecografía para separar TRALI y TACO.</li>
+            <li>Cuánto plasma añade el bolo de 20 mL/kg (los +420 mL son solo de tumbarse).</li>
           </ul>
         </details>
 
@@ -169,6 +227,9 @@
           <button type="button" data-especialidad="libros" data-view="capilarVivo" data-capilar-vivo="sepsis" data-buscar-titulo="Capilar y oxígeno: el lactato y el defecto de utilización (sepsis)" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="lactato sepsis defecto de utilización svo2 alta pdh tiamina mitocondria">Lactato</button>
           <button type="button" data-especialidad="libros" data-view="capilarVivo" data-capilar-vivo="co" data-buscar-titulo="Capilar y oxígeno: el pulsioxímetro y el CO" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="pulsioximetría pulsioxímetro spo2 cooximetría monóxido de carbono carboxihemoglobina oximetría dual">Pulsioxímetro</button>
           <button type="button" data-especialidad="libros" data-view="capilarVivo" data-capilar-vivo="capno-normal" data-buscar-titulo="Capilar y oxígeno: el capnograma y la PETCO₂" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="capnografía capnograma petco2 etco2 co2 espirado intubación esofágica rcp">Capnografía</button>
+          <button type="button" data-especialidad="libros" data-view="capilarVivo" data-capilar-vivo="anemia-compensada" data-buscar-titulo="Capilar y oxígeno: la anemia que el corazón compensa" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="anemia gasto cardíaco viscosidad hemodilución extracción techo hematocrito 10 tolerancia anemia extrema">Anemia que compensa</button>
+          <button type="button" data-especialidad="libros" data-view="capilarVivo" data-capilar-vivo="transfusion" data-buscar-titulo="Capilar y oxígeno: transfundir sube el aporte, no el consumo" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="transfusión concentrado de hematíes umbral transfusional hb 7 hb 8 volemia hipovolemia">Transfusión</button>
+          <button type="button" data-especialidad="libros" data-view="capilarVivo" data-capilar-vivo="trali" data-buscar-titulo="Capilar y oxígeno: el alvéolo en el TRALI y el TACO" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="trali taco lesión pulmonar aguda transfusión sobrecarga circulatoria edema neutrófilos">TRALI y TACO</button>
         </div>
       </div>
 
@@ -229,11 +290,18 @@
             </div>
             <div class="cpv-dock-panel" data-cpv-panel="sangre">
               <label class="cpv-desliza"><span>Hb</span><input type="range" id="cpv-m-hb" min="5" max="17" step="0.5" value="15" aria-label="Hemoglobina, g/dL"><output id="cpv-o-hb"></output></label>
-              <div class="cpv-raya"><button type="button" class="cpv-tog" id="cpv-m-co" aria-pressed="false">Humo: CO <small>COHb 25 %, ilustr.</small></button></div>
+              <div class="cpv-raya">
+                <button type="button" class="cpv-tog" id="cpv-m-transf">Transfundir 1 CH <small>+1 g/dL</small></button>
+                <button type="button" class="cpv-tog" id="cpv-m-tumbar" aria-pressed="false">Tumbarse <small>el tubo</small></button>
+                <button type="button" class="cpv-tog" id="cpv-m-bolo" aria-pressed="false">Bolo 20 mL/kg <small>el tubo</small></button>
+                <button type="button" class="cpv-tog" id="cpv-m-co" aria-pressed="false">Humo: CO <small>COHb 25 %, ilustr.</small></button>
+              </div>
             </div>
             <div class="cpv-dock-panel" data-cpv-panel="pulmon" hidden>
               <label class="cpv-desliza"><span>PaO₂</span><input type="range" id="cpv-m-pao2" min="40" max="100" step="1" value="90" aria-label="PaO₂, mmHg"><output id="cpv-o-pao2"></output></label>
               <div class="cpv-raya">
+                <button type="button" class="cpv-tog" data-cpv-alveolo="trali" aria-pressed="false">Alvéolo: TRALI</button>
+                <button type="button" class="cpv-tog" data-cpv-alveolo="taco" aria-pressed="false">Alvéolo: TACO</button>
                 <button type="button" class="cpv-tog" data-cpv-espacio="epoc" aria-pressed="false">EPOC</button>
                 <button type="button" class="cpv-tog" data-cpv-espacio="embolia" aria-pressed="false">Embolia</button>
                 <button type="button" class="cpv-tog" id="cpv-m-sedacion" aria-pressed="false">Sedación: hipoventila</button>
@@ -243,6 +311,8 @@
             <div class="cpv-dock-panel" data-cpv-panel="corazon" hidden>
               <label class="cpv-desliza"><span>Gasto</span><input type="range" id="cpv-m-gc" min="1.5" max="8" step="0.1" value="5" aria-label="Gasto cardíaco, L/min"><output id="cpv-o-gc"></output></label>
               <div class="cpv-raya">
+                <button type="button" class="cpv-tog" id="cpv-m-compensa" aria-pressed="false">El corazón compensa <small>ilustr.</small></button>
+                <button type="button" class="cpv-tog" id="cpv-m-volemia" aria-pressed="false">Volemia baja</button>
                 <button type="button" class="cpv-tog" id="cpv-m-rcp" aria-pressed="false">Parada con RCP</button>
                 <button type="button" class="cpv-tog" id="cpv-m-frio" aria-pressed="false">Dedo frío (vasoconstricción)</button>
               </div>
@@ -259,6 +329,8 @@
               <div class="cpv-seg" id="cpv-m-sensor" aria-label="Sensor del pulsioxímetro"><button type="button" data-v="dedo" aria-pressed="true">Sensor en el dedo</button><button type="button" data-v="frente" aria-pressed="false">En la frente</button></div>
             </div>
           </div>
+          <!-- La explicación guiada de un estado (js/core/explicacion-guiada.js): ocupa el sitio de los mandos -->
+          <div id="cpv-dock-guia" hidden></div>
           <div id="cpv-dock-estudio" class="cpv-dock-estudio" hidden>
             <div class="cpv-pasos" id="cpv-dock-pasos"></div>
             <div class="cpv-dock-est-txt"><span id="cpv-dock-est-izq"></span><span id="cpv-dock-est-der"></span></div>

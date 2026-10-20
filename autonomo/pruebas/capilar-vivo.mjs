@@ -1,18 +1,26 @@
 // Prueba de navegador del capilar y oxígeno (juez de autonomo/jueces.mjs --modelo capilar-vivo).
-// Uso: node autonomo/pruebas/capilar-vivo.mjs <url-base> [--capturas <carpeta>]
+// Uso: node autonomo/pruebas/capilar-vivo.mjs <url-base> [--capturas <carpeta>] [--estricto]
 // Copia la del río y mar (agua-viva.mjs). Recorre, a 390 px (con movimiento y su medida de rendimiento) y a 360 px
 // (con «reducir movimiento»), cada uno en un contexto limpio: accesos (menú de Libros, buscador y las 4 fichas del
-// grupo oxígeno con su estado), los mandos en sus extremos y su punto medio (cifras de un paciente posible), la
+// grupo oxígeno con su estado), los estados del cap. 12 (anemia que compensa, techo, umbral, transfusión, sin volumen,
+// dilución, TRALI y TACO; sus cifras ±1 en la última frente a la cobertura del bloque 2), los mandos en sus extremos y
+// su punto medio (cifras de un paciente posible; también el corazón que compensa, la volemia baja y «Transfundir 1 CH»),
+// la explicación guiada recorrida entera en 3 estados (cada paso señala en el dibujo y lleva su «Ver en la ficha»), la
 // Mayéutica entera fallando 4 con su repaso, los 4 casos hasta «Lo que te llevas», lo guardado tras recargar,
-// Conceptos y el «← VOLVER» a la ficha. Mide el desborde lateral (0 px) tras cada respuesta, el repaso y cada paso
-// de los casos; comprueba que las cifras que se predicen salen tapadas y los errores de consola.
+// Conceptos y el «← VOLVER» a la ficha. Mide el desborde lateral (0 px) tras cada respuesta, el repaso, cada paso de
+// los casos y cada paso de las explicaciones; los rótulos de las lupas y gráficas nuevas (≥7,5 px, sin pisarse);
+// comprueba que las cifras que se predicen salen tapadas y los errores de consola.
+// Cada «Ver en la ficha» de las explicaciones lleva a un id que existe. Los párrafos de Merino HEMATO (ids mh-…) los
+// pone la rama de las fichas del bloque 2: sin ellos la cita lleva a la ficha entera y aquí sale un aviso; con
+// --estricto, un fallo.
 // Sale con código 1 si algo falla.
 import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs';
-const { PREGUNTAS, CASOS, CONCEPTOS } = await import(new URL('../../js/data/capilar-vivo-data.js', import.meta.url));
+const { PREGUNTAS, CASOS, CONCEPTOS, ESTADOS, GUIAS, estadoFinal, derivar, estadoDe } = await import(new URL('../../js/data/capilar-vivo-data.js', import.meta.url));
 const { barajar } = await import(new URL('../../js/core/mayeutica-motor.js', import.meta.url));
 const args = process.argv.slice(2);
 const BASE = (args.find(a => /^https?:/.test(a)) || 'http://localhost:8000/').replace(/\/?$/, '/');
 const CAPTURAS = args.includes('--capturas') ? args[args.indexOf('--capturas') + 1].replace(/\/?$/, '/') : null;
+const ESTRICTO = args.includes('--estricto');
 const b = await chromium.launch();
 const fallosTotales = [];
 
@@ -81,7 +89,14 @@ await desde('mar-capnografia', 'capno-rcp', t => t.estado.rcp && t.lupa === 'boc
 const crudosExp = await p.evaluate(() => [...document.querySelectorAll('#cpv-raiz .cpv-org')].filter(e => e.offsetParent).map(e => e.textContent).filter(t => /\b(mar|mr|mc)-[a-z0-9-]+/.test(t)));
 ok(!crudosExp.length, `chips de origen sin ids a la vista en Explorar ${crudosExp.slice(0, 3).join(' | ')}`);
 ok(await p.evaluate(() => document.querySelectorAll('#cpv-raiz .cpv-org-ir').length > 5), 'los chips de origen llevan enlaces a su ficha');
-ok(await p.evaluate(() => [...document.querySelectorAll('#cpv-raiz img')].filter(i => i.offsetParent).every(i => i.complete && i.naturalWidth > 0)), 'las láminas del libro visibles cargan');
+ok(await p.evaluate(() => [...document.querySelectorAll('#cpv-raiz img')].filter(i => i.offsetParent && !i.closest('details:not([open])')).every(i => i.complete && i.naturalWidth > 0)), 'las láminas del libro visibles cargan');
+// Las láminas de los plegables (Figs. 12.2-12.6, 9.1-9.3): al abrirlos, cargan
+ok(await p.evaluate(async () => {
+  const ds = [...document.querySelectorAll('#cpv-vista-explorar details')], cerrados = ds.filter(d => !d.open); cerrados.forEach(d => { d.open = true; });
+  const imgs = ds.flatMap(d => [...d.querySelectorAll('img')]); imgs.forEach(i => { i.loading = 'eager'; });
+  await Promise.all(imgs.map(i => i.complete ? null : new Promise(r => { i.onload = i.onerror = r; })));
+  const bien = imgs.every(i => i.naturalWidth > 0); cerrados.forEach(d => { d.open = false; }); return bien && imgs.length >= 7;
+}), 'las láminas de los plegables (Figs. 12.2-12.6 y 9.1-9.3) cargan');
 
 // 4. Los mandos en sus extremos y su punto medio: cifras de un paciente posible
 await p.evaluate(() => document.querySelector('[data-cpv-estado="anemia"]').click());
@@ -100,6 +115,153 @@ for (const [id, tab, vals] of [['hb', 'sangre', [5, 11, 17]], ['pao2', 'pulmon',
 await deslizar('#cpv-m-pao2', 40);
 ok((await T()).R.sao2 === 73, 'PaO₂ 40: SaO₂ 73 % (Tabla 9.1), sin saturaciones del 100 %');
 await foto('05-mandos');
+
+// 4b. Los estados del cap. 12, desde el enlace cruzado de siempre (como desde las fichas de Merino HEMATO): sus
+// cifras, ±1 en la última (cobertura del bloque 2 §4.2), su lupa y sin desborde
+const abrirModelo = k => p.evaluate(k => { const t = document.createElement('button'); Object.assign(t.dataset, { especialidad: 'libros', view: 'capilarVivo', capilarVivo: k }); document.body.append(t); t.click(); t.remove(); }, k);
+const cerca = (v, e, tol) => v != null && Math.abs(v - e) <= tol + 1e-9;
+for (const [k, compr, nota] of [
+  ['dilucion', t => t.lupa === 'tubo' && cerca(t.estado.hb, 13.9, 0) && t.estado.dil === 'pie', 'Hto 41,8 %, Hb 13,9 (Hto/3)'],
+  ['anemia-compensada', t => cerca(t.R.gc, 7.6, 0.15) && cerca(t.R.ext, 34, 1) && cerca(t.R.vo2, 250, 1) && cerca(t.R.visc, 2.3, 0.1), 'gasto ≈7,6, extracción ≈34 %, VO₂ 250, viscosidad ×2,3'],
+  ['techo-anemia', t => cerca(t.R.gc, 12.7, 0.1) && t.R.ext === 50 && cerca(t.R.vo2, 250, 1), 'Hb 3: gasto 12,7, extracción 50 %'],
+  ['umbral-7', t => cerca(t.R.ext, 34, 1) && t.R.ext < 40, 'Hb 7: extracción ≈34 %'],
+  ['transfusion', t => cerca(t.estado.hb, 8, 0) && t.estado.transf && t.estado.transf.de === 6.4 && cerca(t.R.vo2, 250, 1), 'Hb 6,4 → 8, VO₂ igual'],
+  ['anemia-hipovolemia', t => t.R.gc === 4 && cerca(t.R.do2, 394, 1) && t.R.vo2 < 250 && t.R.lact > 2, 'gasto 4, aporte 394, VO₂ <250'],
+  ['trali', t => t.lupa === 'alveolo' && t.estado.alveolo === 'trali' && t.R.sao2 < 90, 'alvéolo, PaO₂ 55'],
+  ['taco', t => t.lupa === 'alveolo' && t.estado.alveolo === 'taco' && t.R.sao2 < 90, 'alvéolo, PaO₂ 55'],
+]) {
+  await abrirModelo(k); await p.waitForTimeout(REDUCIDO ? 300 : 2600);
+  const t = await T();
+  ok(await vistaVisible() && compr(t), `abre en «${k}»: ${nota} (gasto ${t.R.gc}, extracción ${t.R.ext} %, VO₂ ${t.R.vo2})`);
+  if (await desborde() > 0) ok(false, `desborde en «${k}»`);
+  if (['dilucion', 'anemia-compensada', 'transfusion', 'trali', 'taco'].includes(k)) { await p.evaluate(() => document.getElementById('cpv-escena-bloque').scrollIntoView({ block: 'start' })); await p.waitForTimeout(300); await foto('04b-' + k); }
+}
+// la anemia del bloque 1 (gasto fijo) dice que es con el gasto fijo y enlaza con el corazón que compensa
+await abrirModelo('anemia'); await p.waitForTimeout(500);
+ok(await p.evaluate(() => /gasto fijo/.test(document.getElementById('cpv-frase').textContent) && !!document.querySelector('#cpv-frase [data-cpv-ir-estado="anemia-compensada"]')), '«Anemia, gasto fijo»: la frase dice «con el gasto fijo» y ofrece «¿Y si el corazón compensa?»');
+await pulsar('#cpv-frase [data-cpv-ir-estado="anemia-compensada"]'); await p.waitForTimeout(400);
+ok((await T()).estado.compensa === true, '«¿Y si el corazón compensa?» pone el modelo en la anemia que compensa');
+
+// 4c. Los mandos nuevos en sus extremos y su punto medio (uno a uno): paciente posible
+await pulsar('[data-cpv-estado="anemia-compensada"]'); await p.waitForTimeout(300);
+await pulsar('[data-cpv-tab="sangre"]');
+ok(await p.evaluate(() => document.getElementById('cpv-m-hb').min === '2' && document.getElementById('cpv-m-gc').disabled), 'con el corazón que compensa, la Hb baja hasta 2 y el gasto lo pone el modelo');
+for (const v of [2, 9.5, 17]) {
+  await deslizar('#cpv-m-hb', v); await p.waitForTimeout(60);
+  const { R } = await T();
+  ok(R.gc >= 4.9 && R.gc <= 13 && R.svo2 >= 20 && R.svo2 <= 85 && R.do2 >= 190 && R.do2 <= 1900 && R.vo2 <= 250, `compensa, Hb ${v}: gasto ${R.gc}, aporte ${R.do2}, VO₂ ${R.vo2}, SvO₂ ${R.svo2} %, lactato ${R.lact}`);
+}
+await pulsar('[data-cpv-estado="anemia-hipovolemia"]'); await p.waitForTimeout(300); await pulsar('[data-cpv-tab="corazon"]');
+ok(await p.evaluate(() => document.getElementById('cpv-m-gc').max === '5' && !document.getElementById('cpv-m-gc').disabled), 'con la volemia baja, el gasto no pasa de 5');
+await deslizar('#cpv-m-hb', 11); await p.waitForTimeout(60);   // la Hb en su punto medio: el gasto, solo
+for (const v of [1.5, 3.25, 5]) {
+  await deslizar('#cpv-m-gc', v); await p.waitForTimeout(60);
+  const { R } = await T();
+  ok(R.gc <= 5 && R.svo2 >= 20 && R.do2 >= 190 && R.vo2 <= 250, `volemia baja, Hb 11, gasto ${v}: aporte ${R.do2}, VO₂ ${R.vo2}, SvO₂ ${R.svo2} %, lactato ${R.lact}`);
+}
+// Hb 7,5 sin volumen y el gasto al mínimo: un shock extremo que la lámina avisa
+await deslizar('#cpv-m-hb', 7.5); await deslizar('#cpv-m-gc', 1.5); await p.waitForTimeout(60);
+ok(await p.evaluate(() => /Aporte extremo/.test(document.getElementById('cpv-lam-aviso').textContent)), 'Hb 7,5, sin volumen y gasto 1,5: la lámina avisa «Aporte extremo»');
+// «Transfundir 1 CH»: Hb +1 g/dL con el gasto quieto, el consumo igual y la extracción que cae
+await pulsar('[data-cpv-estado="umbral-7"]'); await p.waitForTimeout(300); await pulsar('[data-cpv-tab="sangre"]');
+const antesT = await T();
+await pulsar('#cpv-m-transf'); await p.waitForTimeout(REDUCIDO ? 200 : 2600);
+const trasT = await T();
+ok(cerca(trasT.estado.hb, antesT.estado.hb + 1, 0.01) && trasT.R.gc === antesT.R.gc && cerca(trasT.R.vo2, antesT.R.vo2, 1) && trasT.R.ext < antesT.R.ext && trasT.R.do2 > antesT.R.do2,
+  `«Transfundir 1 CH»: Hb ${antesT.estado.hb} → ${trasT.estado.hb}, gasto ${antesT.R.gc} → ${trasT.R.gc}, aporte ${antesT.R.do2} → ${trasT.R.do2}, VO₂ ${trasT.R.vo2}, extracción ${antesT.R.ext} → ${trasT.R.ext} %`);
+ok(await p.evaluate(() => !document.getElementById('cpv-bolsa').hasAttribute('hidden')), 'la bolsa se ve mientras dura la transfusión');
+await deslizar('#cpv-m-hb', 16.5); await p.waitForTimeout(60); await pulsar('#cpv-m-transf'); await p.waitForTimeout(REDUCIDO ? 200 : 2600);
+ok((await T()).estado.hb === 17, 'transfundir con Hb 16,5 llega como mucho a 17');
+// El tubo: tumbarse y el bolo (Fig. 12.1)
+await pulsar('#cpv-m-tumbar'); await p.waitForTimeout(REDUCIDO ? 100 : 1500);
+let tt = await T();
+ok(tt.lupa === 'tubo' && tt.estado.dil === 'tumbado' && tt.estado.hb === 12.6, `Tumbarse: el tubo, Hto 37,7 %, Hb ${tt.estado.hb}`);
+await pulsar('#cpv-m-bolo'); await p.waitForTimeout(REDUCIDO ? 100 : 1500);
+tt = await T();
+ok(tt.estado.dil === 'bolo' && tt.estado.hb === 12.9, `Bolo de 20 mL/kg: Hto 38,7 %, Hb ${tt.estado.hb}`);
+if (await desborde() > 0) ok(false, 'desborde con los mandos nuevos');
+
+// 4d. Rótulos de las lupas y gráficas nuevas: ≥7,5 px de alto y sin pisarse (como jueces-forma, C)
+const rotulos = () => p.evaluate(() => {
+  const r = document.getElementById('cpv-raiz'), cajas = [];
+  for (const t of r.querySelectorAll('#cpv-lupa-svg text, #cpv-lamina text, #cpv-svg-123 text, #cpv-svg-124 text')) {
+    if (!t.textContent.trim() || !t.getClientRects().length) continue;
+    let vis = true; for (let e = t; e && e !== document.documentElement; e = e.parentElement) { const cs = getComputedStyle(e); if (cs.display === 'none' || cs.visibility === 'hidden' || +cs.opacity === 0) { vis = false; break; } }
+    if (!vis) continue;
+    const b = t.getBoundingClientRect(); if (!b.width || !b.height) continue;
+    const svg = t.ownerSVGElement, c = svg.getBoundingClientRect();
+    if (b.right <= c.left || b.left >= c.right || b.bottom <= c.top || b.top >= c.bottom) continue;
+    const cx = b.left + b.width / 2, cy = b.top + b.height / 2;
+    if (svg.id === 'cpv-lamina' && document.getElementById('cpv-lupa') && !document.getElementById('cpv-lupa').hidden) { const L = document.getElementById('cpv-lupa').getBoundingClientRect(); if (cx > L.left && cx < L.right && cy > L.top && cy < L.bottom) continue; }
+    cajas.push({ s: t.textContent.trim().slice(0, 24), d: svg.id, x: b.left, y: b.top, w: b.width, h: b.height });
+  }
+  const pequenos = cajas.filter(c => c.h < 7.5).map(c => `${c.s} ${c.h.toFixed(1)} px`), pisados = [];
+  for (let i = 0; i < cajas.length; i++) for (let j = i + 1; j < cajas.length; j++) {
+    const a = cajas[i], b2 = cajas[j]; if (a.d !== b2.d) continue;
+    const ay = a.y + a.h * 0.25, ah = a.h * 0.6, by = b2.y + b2.h * 0.25, bh = b2.h * 0.6;
+    const iw = Math.min(a.x + a.w, b2.x + b2.w) - Math.max(a.x, b2.x), ih = Math.min(ay + ah, by + bh) - Math.max(ay, by);
+    if (iw > 0 && ih > 0 && iw * ih / Math.min(a.w * ah, b2.w * bh) > 0.3) pisados.push(`«${a.s}» y «${b2.s}»`);
+  }
+  return { n: cajas.length, pequenos, pisados };
+});
+for (const k of ANCHO === 390 ? ['dilucion', 'transfusion', 'trali', 'taco', 'anemia-compensada'] : []) {   // REGLAS §2.8: a 390 px
+  await abrirModelo(k); await p.waitForTimeout(REDUCIDO ? 300 : 2600);
+  if (k === 'dilucion') { await pulsar('#cpv-m-tumbar'); await p.waitForTimeout(REDUCIDO ? 100 : 1400); }
+  await p.evaluate(() => { for (const id of ['cpv-gr-123', 'cpv-gr-124']) document.getElementById(id).open = true; });
+  await p.evaluate(() => document.getElementById('cpv-escena-bloque').scrollIntoView({ block: 'start' })); await p.waitForTimeout(200);
+  const r = await rotulos();
+  ok(r.n > 10 && !r.pequenos.length && !r.pisados.length, `rótulos en «${k}» (${r.n}): ${r.pequenos.slice(0, 3).join(', ')} ${r.pisados.slice(0, 3).join(', ')}`);
+  await p.evaluate(() => { for (const id of ['cpv-gr-123', 'cpv-gr-124']) document.getElementById(id).open = false; });
+}
+
+// 4e. La explicación guiada, entera, en 3 estados: cada paso señala en el dibujo (un anillo o el marco de una cifra),
+// lleva su «Ver en la ficha» (a un id que existe) y el PDF; sin desborde; al terminar vuelven los mandos
+for (const k of ['anemia-compensada', 'dilucion', 'trali']) {
+  await abrirModelo(k); await p.waitForTimeout(REDUCIDO ? 300 : 2600);
+  await pulsar('#cpv-guia-abrir'); await p.waitForTimeout(REDUCIDO ? 150 : 600);
+  const g = (await p.evaluate(() => window.__cpvPruebas().guia));
+  ok(g && g.clave === k && g.n === GUIAS[k].length && g.n >= 3 && g.n <= 5, `«Explícame» abre la explicación de «${k}» (${g && g.n} pasos)`);
+  ok(await p.evaluate(() => document.getElementById('cpv-dock-explorar').hidden && !document.getElementById('cpv-dock-guia').hidden), `${k}: la explicación ocupa el sitio de los mandos`);
+  for (let i = 0; i < GUIAS[k].length; i++) {
+    await p.waitForTimeout(REDUCIDO ? 120 : 650);
+    const paso = GUIAS[k][i];
+    const v = await p.evaluate(() => ({ n: window.__cpvPruebas().guia?.paso, anillos: document.querySelectorAll('#cpv-raiz g.guia-capa rect').length, marcos: document.querySelectorAll('#cpv-raiz .guia-marco, #cpv-raiz .cpv-celda.cpv-mira').length,
+      citas: [...document.querySelectorAll('#cpv-dock-guia .guia-citas .cita-ir')].map(c => ({ tab: c.dataset.tab, res: c.dataset.resaltar || null, tabOk: !!document.getElementById(c.dataset.tab), resOk: !c.dataset.resaltar || !!document.querySelector(c.dataset.resaltar) })),
+      pdf: [...document.querySelectorAll('#cpv-dock-guia .guia-citas .cita-pdf')].map(a => a.getAttribute('href')),
+      escena: document.getElementById('cpv-escena-bloque').getBoundingClientRect().top, txt: document.querySelector('#cpv-dock-guia .guia-txt')?.textContent || '' }));
+    const quiere = (paso.resalta ? 1 : 0) + (paso.mirar ? 1 : 0);
+    ok(v.n === i && (!quiere || v.anillos + v.marcos > 0) && v.citas.length === [].concat(paso.cita).length && v.citas.every(c => c.tabOk && c.resOk) && v.pdf.length === v.citas.length && Math.abs(v.escena) <= 6,
+      `${k}, paso ${i + 1}: señala (${v.anillos} anillos, ${v.marcos} cifras), ${v.citas.length} «Ver en la ficha» y su PDF (${v.pdf.join(' ')})`);
+    if (/\b(mar|mr|mc|mh)-[a-z0-9-]+|maqueta|§/.test(v.txt)) ok(false, `${k}, paso ${i + 1}: nombre interno a la vista`);
+    if (await desborde() > 0) ok(false, `desborde en ${k}, paso ${i + 1}`);
+    if (i === 1) await foto(`10-guia-${k}`);
+    if (i < GUIAS[k].length - 1) await pulsar('#cpv-dock-guia [data-guia="1"]');
+  }
+  ok(await p.evaluate(() => !!document.querySelector('#cpv-dock-guia .guia-fuentes .cita-ir')), `${k}: el último paso lista las fuentes del estado`);
+  await pulsar('#cpv-dock-guia [data-guia="-1"]'); await p.waitForTimeout(150);
+  ok((await p.evaluate(() => window.__cpvPruebas().guia.paso)) === GUIAS[k].length - 2, `${k}: «← Anterior» vuelve un paso`);
+  await pulsar('#cpv-dock-guia [data-guia="1"]'); await p.waitForTimeout(150);
+  await pulsar('#cpv-dock-guia [data-guia="salir"]'); await p.waitForTimeout(200);
+  ok(await p.evaluate(() => !window.__cpvPruebas().guia && !document.getElementById('cpv-dock-explorar').hidden && !document.querySelectorAll('g.guia-capa').length), `${k}: «Terminar» devuelve los mandos y quita los anillos`);
+}
+// «Ver en la ficha» desde la explicación lleva a la ficha (Merino HEMATO), y el capilar vuelve a abrir
+await abrirModelo('anemia-compensada'); await p.waitForTimeout(REDUCIDO ? 300 : 800);
+await pulsar('#cpv-guia-abrir'); await p.waitForTimeout(300);
+const destino = await p.evaluate(() => { const b = document.querySelector('#cpv-dock-guia .cita-ir'); b.click(); return b.dataset.tab; });
+await p.waitForTimeout(900);
+ok(await p.evaluate(t => { const e = document.getElementById(t); return e.classList.contains('active') && !!e.offsetParent; }, destino), `«Ver en la ficha» abre la ficha «${destino}», visible`);
+// Las citas de todas las explicaciones: cada ficha existe; cada párrafo, también (los de Merino HEMATO, con --estricto)
+const citas = await p.evaluate(() => window.__cpvPruebas().citas);
+const sinFicha = citas.filter(c => !c.ficha_existe), sinParrafo = citas.filter(c => !c.exacta);
+ok(!sinFicha.length, `las ${citas.length} citas de las explicaciones llevan a una ficha que existe ${sinFicha.slice(0, 3).map(c => c.ficha).join(' ')}`);
+const pendientes = sinParrafo.filter(c => /^mh-/.test(c.id)), rotas = sinParrafo.filter(c => !/^mh-/.test(c.id));
+ok(!rotas.length, `cada «Ver en la ficha» va a un párrafo que existe ${rotas.slice(0, 4).map(c => c.id).join(' ')}`);
+if (pendientes.length) {
+  const ids = [...new Set(pendientes.map(c => c.id))];
+  if (ESTRICTO) ok(false, `párrafos de Merino HEMATO que aún no existen (${ids.length}): ${ids.join(' ')}`);
+  else console.log(`⚠️  ${ids.length} párrafos de Merino HEMATO aún no existen en esta rama (los pone la de las fichas; la cita lleva a la ficha entera): ${ids.join(' ')}`);
+} else ok(true, 'todos los párrafos de Merino HEMATO citados existen');
+await p.evaluate(() => { const t = document.createElement('button'); Object.assign(t.dataset, { especialidad: 'libros', view: 'capilarVivo', capilarVivo: 'normal' }); document.body.append(t); t.click(); t.remove(); }); await p.waitForTimeout(400);
 
 // 5. Rendimiento (solo con movimiento): CPU ×4
 if (!REDUCIDO) {
@@ -236,7 +398,7 @@ for (let i = 0; i < CONCEPTOS.length; i++) {
 ok(await desborde() <= 0, `sin desborde en los ${CONCEPTOS.length} conceptos`);
 await pulsar('#cpv-modo-explorar');
 // Las tres lupas abren y cierran sin desbordar
-for (const l of ['dedo', 'mito', 'boca']) {
+for (const l of ['tubo', 'alveolo', 'dedo', 'mito', 'boca']) {
   await pulsar(`[data-cpv-lupa="${l}"]`); await p.waitForTimeout(REDUCIDO ? 50 : 400);
   ok((await T()).lupa === l && await desborde() <= 0, `la lupa «${l}» abre sin desbordar`);
 }
@@ -261,8 +423,9 @@ await p.evaluate(() => { document.getElementById('cpv-menu-libros').click(); });
 ok(await p.evaluate(() => document.getElementById('cpv-volver').textContent === '← VOLVER'), 'desde el menú, «← VOLVER» lleva al menú');
 // «Ver en el texto» desde el modelo lleva a la ficha
 await pulsar('#cpv-modo-conceptos'); await p.waitForTimeout(200);
+const fichaDestino = await p.evaluate(() => document.querySelector('#cpv-concepto .cpv-ir-texto')?.dataset.tab);
 await pulsar('#cpv-concepto .cpv-ir-texto'); await p.waitForTimeout(800);
-ok(await p.evaluate(() => [...document.querySelectorAll('#marino-fund-view .tab-content.active')].some(e => e.offsetParent)), '«Ver en el texto» abre la ficha');
+ok(await p.evaluate(t => { const e = document.getElementById(t); return !!e && e.classList.contains('active') && !!e.offsetParent; }, fichaDestino), `«Ver en el texto» abre la ficha (${fichaDestino})`);
 ok(errores.length === 0, `0 errores de consola al final (${errores.length}) ${errores.slice(0, 3).join(' | ')}`);
 await ctx.close();
 fallosTotales.push(...fallos.map(f => `${tag}: ${f}`));

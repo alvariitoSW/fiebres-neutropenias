@@ -12,8 +12,8 @@
 // localStorage (como el quiz), con su clave propia y siempre dentro de try/catch.
 import { cargarMotion } from '../../core/motion.js';
 import { marcarVolver } from '../../core/volver-ficha.js';
-import { escapeHtml } from '../../core/ui.js';
-import { crearMayeuticaModelo, rutaDe, atributosFicha, entrar, pintarDock as pintarDockComun } from '../../core/mayeutica-motor.js';
+import { crearMayeuticaModelo, entrar, pintarDock as pintarDockComun } from '../../core/mayeutica-motor.js';
+import { enlacesFuente, origenEnlazado, enlazarOrigenes as enlazarCitas } from '../../core/citas.js';
 import { iconoParticula } from '../../core/particulas.js';
 import {
     CAT, ORDEN_CAT, OCLUSIONES, INSTILAR, ORDEN_PUNTA, FIGS, TIRA, ESTADOS, FICHAS_ESTADO, NOMBRE_ESTADO,
@@ -376,65 +376,13 @@ function setModo(m) {
 }
 
 /* ============================================================
-   «Ver en el texto»: cada fuente (ficha#elemento) es un enlace cruzado a su ficha (como en el capilar)
+   «Ver en el texto» y los chips de origen: la pieza común de las citas (core/citas.js), la misma del capilar. Cada
+   fuente (ficha#elemento · #elemento) es un enlace cruzado a su sitio de la ficha, con el nombre que tiene en el texto.
    ============================================================ */
-const tituloFicha = tab => (tab.querySelector('h3')?.textContent || tab.id).replace(/\s+/g, ' ').trim();
-const corto = t => t.length > 48 ? t.slice(0, 46).trim() + '…' : t;
-function etiquetaDe(el) {
-    const dt = el.matches('dl') && el.querySelector('dt');
-    if (dt) return dt.textContent.trim();
-    const cab = el.matches('.micro-prof-item') && el.querySelector('.micro-prof-head span');
-    if (cab) return cab.textContent.trim();
-    // Tablas, listas y párrafos: el rótulo de su sección; recuadros: su primera frase en negrita
-    const prev = el.previousElementSibling;
-    if (el.matches('table, ol, ul, p') && prev?.matches('.section-label')) return corto(prev.textContent.replace(/\s+/g, ' ').trim());
-    const fuerte = el.matches('.warning-box') && el.querySelector(':scope > strong');
-    if (fuerte) return corto(fuerte.textContent.replace(/[.:]\s*$/, '').trim());
-    return null;
-}
-function enlacesTexto(fuente) {
-    let tabPrevio = null; const vistosTab = new Set();
-    const trozos = fuente.split(' · ').map(t => {
-        const m = t.trim().match(/^(#?)([a-z0-9-]+)(?:#([a-z0-9-]+))?\s*(.*)$/i);
-        if (!m) return `<span class="ctv-org">${t}</span>`;
-        const [, rel, a, b, resto] = m;
-        const idEl = rel ? a : b || a, idTab = rel ? tabPrevio : a;
-        const r = rutaDe(idEl) || rutaDe(idTab);
-        if (!r) return `<span class="ctv-org">${t}</span>`;
-        tabPrevio = r.tab.id;
-        const sub = r.el !== r.tab ? etiquetaDe(r.el) : null;
-        let texto = vistosTab.has(r.tab.id) ? (sub || tituloFicha(r.tab)) : tituloFicha(r.tab) + (sub ? ' · ' + sub : '');
-        vistosTab.add(r.tab.id);
-        if (resto) texto += ' ' + resto;
-        texto = texto.length > 70 ? texto.slice(0, 68) + '…' : texto;
-        return `<button type="button" class="ctv-ir-texto" ${atributosFicha(r)}>${escapeHtml(texto)} →</button>`;
-    });
-    return `Ver en el texto: ${trozos.join(' ')}`;
-}
-const verEnTexto = fuente => `<p class="ctv-fuente-p">${enlacesTexto(fuente)}</p>`;
-// Un texto de origen («ficha · mar-io-flujo · mar-io-indicaciones»): cada ficha citada pasa a ser un enlace a ella
-// con su título; lo demás («ficha», «ilustrativo», «calculado»…) queda como texto.
-function origenHTML(texto) {
-    const vistosTab = new Set();
-    return String(texto).split(' · ').map(t => {
-        const m = t.trim().match(/^(.*?)((?:mar|mr|mc)-[a-z0-9]+(?:-[a-z0-9]+)*)(?:#([a-z0-9-]+))?(\s.*)?$/);
-        const r = m && (rutaDe(m[3] || m[2]) || rutaDe(m[2]));
-        if (!r) return escapeHtml(t);
-        const antes = m[1] ? escapeHtml(m[1]) : '', resto = m[4] ? escapeHtml(m[4]) : '';
-        if (vistosTab.has(r.tab.id)) return (antes + resto).trim() || null;   // la misma ficha, un solo enlace
-        vistosTab.add(r.tab.id);
-        const sub = r.el !== r.tab ? etiquetaDe(r.el) : null;
-        return `${antes}<button type="button" class="ctv-org-ir" ${atributosFicha(r)}>${escapeHtml(tituloFicha(r.tab) + (sub ? ' · ' + sub : ''))}</button>${resto}`;
-    }).filter(x => x !== null).join(' · ');
-}
+const verEnTexto = fuente => `<p class="ctv-fuente-p">${enlacesFuente(fuente, { clase: 'ctv-ir-texto', claseOrg: 'ctv-org' })}</p>`;
+const origenHTML = texto => origenEnlazado(texto, { clase: 'ctv-org-ir' });
 // Los chips de origen escritos en el HTML o en los textos se enlazan al pintarse.
-function enlazarOrigenes(cont) {
-    cont.querySelectorAll('span.ctv-org').forEach(sp => {
-        if (sp.dataset.enlazado !== undefined || sp.children.length || !/(mar|mr|mc)-[a-z0-9]/.test(sp.textContent)) return;
-        sp.innerHTML = origenHTML(sp.textContent);
-        sp.dataset.enlazado = '';
-    });
-}
+const enlazarOrigenes = cont => enlazarCitas(cont, { selector: 'span.ctv-org', clase: 'ctv-org-ir' });
 
 /* ============================================================
    Capa de estudio: Conceptos (aquí) y Mayéutica (recorrido, repaso de lo fallado y casos: el motor común,
