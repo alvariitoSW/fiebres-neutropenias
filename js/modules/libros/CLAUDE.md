@@ -6,8 +6,8 @@ Historia completa: `docs/historial/libros.md`.
   no encaja en ninguna (hoy, Marino caps. 1-11 y 31-53).
 - **El índice** (capítulos, secciones, dónde vive cada uno, botones, bloques de repaso) sale solo de
   `js/data/libros-indice.js`. Para añadir un capítulo o un libro, solo se toca ese archivo.
-- **Bloque nuevo de Marino**: vista propia en `librosLevel` (`index.js`), botón en el `.constellation` de
-  `libros-menu.html`, su entrada en `PANEL_NAV` de `js/core/search.js`, banco en `js/data/marino-*-preguntas.js` y su
+- **Bloque nuevo de Marino**: vista propia en `librosLevel` (`index.js`), su tarjeta en `BLOQUES` de `index.js` (la
+  portada de Marino, `marino-portada.html`, con pestañas Índice | Modelos vivos | Repasar), su entrada en `PANEL_NAV` de `js/core/search.js`, banco en `js/data/marino-*-preguntas.js` y su
   bloque en `quiz` de `libros-indice.js`.
 - Las fichas de Marino se generaron con un script de montaje que no está en el repo: **si las retocas, edita el
   `.html` directamente**.

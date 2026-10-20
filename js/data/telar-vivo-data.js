@@ -225,7 +225,7 @@ export const CONCEPTOS = [
         texto: 'El <span class="hl">pentasacárido</span> que une la heparina a la AT: la «heparina diminuta». Solo frena el Xa. 2,5 mg SC al día; vida media de 17 h; lo elimina el riñón.',
         hacer: 'pon el fondaparinux.',
         acciones: [{ t: 'Fondaparinux', e: { farmaco: 'fondaparinux' } }, { t: 'Con ClCr 32', e: { farmaco: 'fondaparinux', clcr: 32 }, mirar: 'rinon' }],
-        mira: 'cinco cuentas en cada AT; ninguna llega a la trombina. Con ClCr 32, la tabla y el texto discrepan.',
+        mira: 'cinco cuentas en cada AT; ninguna llega a la trombina. Con ClCr 32, la tabla no dice nada y el texto da 1,5 mg al día.',
         fuente: 'mar-fondaparinux · mar-fondaparinux-errata (p. 4, 8)' },
     { titulo: 'La TIH: FP4 e IgG', estado: { vista: 'tih', tih: true, farmaco: 'hnf' }, mirar: 'fp4',
         texto: 'La heparina se une al <span class="hl">factor plaquetario 4</span>: complejo antigénico → <span class="hl-rojo">IgG</span> → activación plaquetaria, <span class="hl-rojo">trombosis y trombocitopenia</span>. No depende de la dosis. 2,6 % con HNF, 0,2 % con HBPM. Del fondaparinux, el libro solo dice que puede usarse con TIH sospechada o previa.',
@@ -622,7 +622,7 @@ export function pruebasTelar() {
     ok(/no da una pauta para obesidad e insuficiencia renal a la vez/.test(r.dosis.enox25y42), 'IMC 42 y ClCr 25 chocan');
     ok(r.dosis.hnf === '5.000 U cada 8-12 h' && r.dosis.hnf42 === '7.500 U cada 8 h', 'HNF 5.000 y 7.500');
     ok(r.dosis.dalte12.aviso15 && r.dosis.dalte12.corta === '2.500-5.000 U al día', 'ClCr 12: dalteparina con la nota de la p. 11');
-    ok(r.dosis.fonda32.estado === 'warn' && /discrepan/.test(r.dosis.fonda32.html) && /discrepan/.test(r.dosis.fonda25.html), 'fondaparinux con ClCr 25-32: la discrepancia');
+    ok(r.dosis.fonda32.estado === 'warn' && /no es clara/.test(r.dosis.fonda32.html) && /no es clara/.test(r.dosis.fonda25.html), 'fondaparinux con ClCr 25-32: la fuente no es clara');
     ok(r.dosis.fonda50 === '1,5 mg al día' && r.dosis.fonda18.estado === 'danger', 'fondaparinux con ClCr 50 y 18');
     ok(r.dosis.dabi42.estado === 'danger' && r.dosis.dabi25.estado === 'danger', 'dabigatrán: no con IMC ≥40 ni ClCr <30');
     ok(r.dosis.apix12.estado === 'danger' && r.dosis.rivar90 === '10 mg al día' && r.dosis.warf === '2,5-5 mg al día', 'apixabán, rivaroxabán y warfarina');
