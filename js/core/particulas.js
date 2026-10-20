@@ -85,11 +85,17 @@ function partesDe(forma, r, e = {}) {
             return [lleno(elipse(r, r)), trazo(d, 0.26)];
         }
         case 'burbuja': return [trazo(elipse(1.15 * r, 1.15 * r), 0.2), trazo(`M${n2(-0.72 * r)} ${n2(-0.2 * r)}A${n2(0.75 * r)} ${n2(0.75 * r)} 0 0 1 ${n2(-0.2 * r)} ${n2(-0.72 * r)}`, 0.24, { sinBorde: true })];
+        // La muralla de papel (Marino cap. 4). Bacilo: bastón de extremos redondos. Huso: la flora residente
+        // (anaerobios). Linfocito: círculo claro con núcleo grande. Cadena corta: zigzag abierto de cuatro tramos.
+        case 'bacilo': { const L = 1.55 * r, w = 0.62 * r; return [lleno(`M${n2(-L + w)} ${n2(-w)}H${n2(L - w)}A${n2(w)} ${n2(w)} 0 0 1 ${n2(L - w)} ${n2(w)}H${n2(-L + w)}A${n2(w)} ${n2(w)} 0 0 1 ${n2(-L + w)} ${n2(-w)}Z`)]; }
+        case 'huso': { const L = 1.5 * r, w = 0.55 * r; return [lleno(`M${n2(-L)} 0Q0 ${n2(-2 * w)} ${n2(L)} 0Q0 ${n2(2 * w)} ${n2(-L)} 0Z`)]; }
+        case 'linfocito': return [lleno(elipse(1.15 * r, 1.15 * r), { color: '--text-dim' }), lleno(elipse(0.78 * r, 0.78 * r), { color: '--accent-purple', sinBorde: true })];
+        case 'cadena': return [trazo(`M${n2(-1.4 * r)} ${n2(0.4 * r)}L${n2(-0.7 * r)} ${n2(-0.4 * r)}L0 ${n2(0.4 * r)}L${n2(0.7 * r)} ${n2(-0.4 * r)}L${n2(1.4 * r)} ${n2(0.4 * r)}`, 0.3)];
     }
     return [lleno(elipse(r, r))];
 }
 // Hasta dónde llega cada forma, en radios (para que quepa en un icono).
-const ALCANCE = { gota: 1.55, grano: 1.7, grano1: 2.5, pajarita: 1.35, rombo1: 2, rombo2: 2.6, caCitrato: 2.05, aro: 2.05, estrella: 1.5, celula: 1.6, ovalo: 1.45, ovaloHueco: 1.45, disco: 1.4, copo: 1.5, pesa: 1.55, tripode: 1.45, coco: 1.65, burbuja: 1.3 };
+const ALCANCE = { gota: 1.55, grano: 1.7, grano1: 2.5, pajarita: 1.35, rombo1: 2, rombo2: 2.6, caCitrato: 2.05, aro: 2.05, estrella: 1.5, celula: 1.6, ovalo: 1.45, ovaloHueco: 1.45, disco: 1.4, copo: 1.5, pesa: 1.55, tripode: 1.45, coco: 1.65, burbuja: 1.3, bacilo: 1.6, huso: 1.55, linfocito: 1.2, cadena: 1.5 };
 
 // Grosor del borde oscuro: fino, pero visible también en partículas pequeñas.
 const borde = r => Math.max(0.22 * r, 0.8);

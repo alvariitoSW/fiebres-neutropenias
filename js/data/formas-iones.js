@@ -53,6 +53,13 @@ export const FORMAS_IONES = {
     // glucosado, pero solo sale en la lupa del aire, donde no hay glucosado.
     coco: { nombre: 'Coco (bacteria)', forma: 'coco', color: '--accent-green' },
     burbuja: { nombre: 'Burbuja de aire', forma: 'burbuja', color: '--text-dim' },
+    // La muralla de papel (Marino cap. 4; maqueta aprobada autonomo/maquetas/b1-muralla.html, 20/10/2026). El bacilo es
+    // un bastón de extremos redondos (sin adhesinas: eso es el coco); el huso, la flora residente anaerobia; el
+    // linfocito, un círculo claro con un núcleo grande; la cadena corta, un zigzag abierto (no confundir con la voluta).
+    bacilo: { nombre: 'Bacilo gramnegativo', forma: 'bacilo', color: '--accent-purple' },
+    huso: { nombre: 'Flora residente (anaerobios)', forma: 'huso', color: '--text-dim' },
+    linfocito: { nombre: 'Linfocito del GALT', forma: 'linfocito', color: '--text-main' },
+    cadena: { nombre: 'Ácidos grasos de cadena corta', forma: 'cadena', color: '--accent-yellow' },
 };
 
 // Borde fino de todas las partículas, para que se lean sobre cualquier fondo.

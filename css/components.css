@@ -3628,3 +3628,211 @@ button.cvh-org { color: var(--accent-yellow); cursor: pointer; }
 .cvh-cat-linea { fill: none; stroke: var(--text-main); stroke-width: 2.5; stroke-linecap: round; }
 .cvh-cat-globo { fill: var(--accent-red); stroke: var(--text-main); stroke-width: 1; }
 .cvh-cat-txt { fill: var(--text-dim); font: 600 11px Georgia, serif; }
+
+/* ===== La cama 7: la cama compartida de la muralla, el telar y la inmersión (js/modules/libros/cama7.js). Prefijo c7-. =====
+   Viene del bloque común «CAMA 7» de las maquetas aprobadas (b1-muralla.html, b1-telar.html, b1-inmersion.html).
+   La ventana de la escena se enciende por data-escena; las otras dos son enlaces cruzados (botones encima del dibujo).
+   Solo tokens: rgba(23, 20, 15, …) es --bg-main con transparencia. */
+.c7-cama { position: relative; border: 1px solid var(--border-color); border-radius: 16px; background: var(--bg-main); overflow: hidden; }
+.c7-cama .c7-svg { display: block; width: 100%; height: auto; }
+.c7-cama .c7-pie { position: absolute; left: 10px; bottom: 6px; margin: 0; font: 600 .72rem/1.2 system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--accent-yellow);
+  background: rgba(23, 20, 15, .85); border-radius: 999px; padding: 3px 9px; pointer-events: none; }
+.c7-cama .c7-botones { position: absolute; inset: 0; }
+.c7-cama .c7-boton { position: absolute; padding: 0; margin: 0; border: 0; border-radius: 50%; background: transparent; cursor: pointer; min-width: 44px; min-height: 44px; }
+.c7-cama .c7-boton:focus-visible, .c7-cama .c7-tapa:focus-visible { outline: 2px solid var(--accent-yellow); outline-offset: 2px; }
+.c7-cama .c7-boton:disabled { cursor: default; }
+.c7-cama .c7-tapa { display: none; position: absolute; inset: 0; width: 100%; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.c7-cama.c7-compacta { display: grid; grid-template-columns: 120px 1fr; align-items: center; gap: 8px; min-height: 48px; padding-right: 8px; }
+.c7-cama.c7-compacta .c7-svg { height: 50px; width: 120px; }
+.c7-cama.c7-compacta .c7-pie { position: static; background: none; padding: 0; color: var(--text-dim); font-weight: 400; }
+.c7-cama.c7-compacta .c7-pie b { color: var(--accent-yellow); }
+.c7-cama.c7-compacta .c7-botones { display: none; }
+.c7-cama.c7-compacta .c7-tapa { display: block; }
+.c7-cama .c7-v .c7-arte { opacity: .45; }
+.c7-cama .c7-v .c7-on { display: none; }
+.c7-cama .c7-lbl { font: italic 400 8px Georgia, 'Times New Roman', serif; fill: var(--text-muted); }
+.c7-cama[data-escena="muralla"] [data-v="muralla"] .c7-arte, .c7-cama[data-escena="telar"] [data-v="telar"] .c7-arte, .c7-cama[data-escena="inmersion"] [data-v="inmersion"] .c7-arte { opacity: 1; }
+.c7-cama[data-escena="muralla"] [data-v="muralla"] .c7-on, .c7-cama[data-escena="telar"] [data-v="telar"] .c7-on, .c7-cama[data-escena="inmersion"] [data-v="inmersion"] .c7-on { display: inline; }
+.c7-cama[data-escena="muralla"] [data-v="muralla"] .c7-off, .c7-cama[data-escena="telar"] [data-v="telar"] .c7-off, .c7-cama[data-escena="inmersion"] [data-v="inmersion"] .c7-off { display: none; }
+.c7-cama[data-escena="muralla"] [data-v="muralla"] .c7-lbl, .c7-cama[data-escena="telar"] [data-v="telar"] .c7-lbl, .c7-cama[data-escena="inmersion"] [data-v="inmersion"] .c7-lbl { font-style: normal; font-weight: 700; fill: var(--accent-blue); }
+/* Ventana cuya escena aún no está en la app: sin flecha y más apagada */
+.c7-cama .c7-v-pronto { opacity: .55; }
+.c7-cama .c7-v-pronto tspan.c7-off { display: none; }
+
+/* ===== La muralla de papel (js/modules/libros/muralla-viva.*). Prefijo mur-. =====
+   Viene de la maqueta aprobada autonomo/maquetas/b1-muralla.html (vuelta 2) y copia el capilar (cpv-).
+   Solo tokens: los rgba son los mismos tokens con transparencia (--bg-main 23,20,15; --accent-yellow 207,154,62;
+   --accent-red 184,92,62; --accent-blue 212,175,55; --accent-green 144,160,106; --border-color 196,154,74) y
+   --mur-card2 es --bg-card opaco. */
+.mur-raiz { --mur-card2: rgba(46, 38, 28, 1); --mur-serif: Georgia, 'Times New Roman', serif; --mur-sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  display: grid; gap: 8px; grid-template-columns: minmax(0, 1fr); font: 16px/1.5 var(--mur-serif); color: var(--text-main);
+  padding-bottom: calc(var(--mur-dock-h, 200px) + 24px); }
+.mur-raiz > *, .mur-raiz .mur-bloque > * { min-width: 0; }
+.mur-raiz * { font-family: inherit; }
+.mur-raiz h2, .mur-raiz .mur-h { font-size: 1.1rem; margin: 0 0 4px; text-wrap: balance; color: var(--accent-yellow); font-weight: normal; text-transform: none; letter-spacing: 0; text-shadow: none; }
+.mur-raiz h3 { font-size: 1rem; margin: 0; font-weight: normal; color: var(--text-main); }
+.mur-raiz p { margin: 0; }
+.mur-raiz b { color: var(--text-main); }
+.mur-raiz h2.mur-titulo { font-size: 1.18rem; line-height: 1.2; margin: 0; }
+.mur-raiz h2.mur-titulo em { color: var(--text-main); }
+.mur-raiz .mur-cabecera { display: grid; gap: 5px; }
+.mur-raiz .mur-lead { color: var(--text-dim); font-size: .86rem; line-height: 1.32; }
+.mur-raiz.mur-mayeutica .mur-lead { display: none; }   /* en la Mayéutica daría respuestas */
+.mur-raiz .mur-eyebrow { font: 600 .68rem var(--mur-sans); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
+.mur-raiz .mur-org { font: .66rem/1.25 var(--mur-sans); color: var(--text-muted); display: inline-block; max-width: 100%; white-space: normal; overflow-wrap: anywhere; border: 1px solid var(--border-color); border-radius: 999px; padding: 0 6px; vertical-align: 1px; background: none; }
+.mur-raiz .mur-org.mur-ilu { border-style: dashed; }
+.mur-raiz button.mur-org-ir { position: relative; cursor: pointer; color: var(--accent-yellow); margin: 0; }
+.mur-raiz button.mur-org-ir:not(.mur-org) { background: none; border: 0; padding: 0; font: inherit; text-decoration: underline; text-underline-offset: 2px; text-align: left; }
+.mur-raiz button.mur-org-ir::before { content: ''; position: absolute; inset: -14px -4px; }
+
+/* Interruptor Explorar | Conceptos | Mayéutica */
+.mur-raiz .mur-interruptor { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--border-color); border-radius: 999px; overflow: hidden; font: .86rem var(--mur-sans); }
+.mur-raiz .mur-interruptor button { min-height: 44px; background: transparent; color: var(--text-muted); border: 0; font: inherit; cursor: pointer; padding: 0 6px; }
+.mur-raiz .mur-interruptor button + button { border-left: 1px solid var(--border-color); }
+.mur-raiz .mur-interruptor button[aria-selected="true"] { background: var(--accent-yellow); color: var(--bg-main); font-weight: 600; }
+
+/* La escena: cama 7, lámina, tablero y consecuencias. En Conceptos y Mayéutica se queda fija arriba, más baja. */
+.mur-raiz .mur-escena-bloque { display: grid; gap: 5px; background: var(--bg-main); z-index: 6; }
+.mur-raiz.mur-estudio .mur-escena-bloque { position: sticky; top: 0; padding-top: 4px; padding-bottom: 6px; box-shadow: 0 12px 14px -12px rgba(23, 20, 15, 1); }
+.mur-raiz .mur-escena { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--border-color); background: var(--bg-main); }
+.mur-raiz #mur-lamina { display: block; width: 100%; height: auto; max-height: 350px; touch-action: pan-y; }
+.mur-raiz.mur-estudio #mur-lamina { height: 292px; }
+.mur-raiz #mur-lamina [data-toca] { cursor: pointer; }
+.mur-raiz .mur-anillo { position: absolute; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; border: 2px solid var(--accent-blue);
+  box-shadow: 0 0 0 4px rgba(212, 175, 55, .18); pointer-events: none; z-index: 4; }
+.mur-raiz .mur-tablero { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
+.mur-raiz .mur-celda { background: var(--bg-card); border: 1px solid var(--mur-card2); border-radius: 10px; padding: 4px 7px; min-width: 0; }
+.mur-raiz .mur-celda .mur-k { font: .62rem/1.2 var(--mur-sans); color: var(--text-muted); display: block; }
+.mur-raiz .mur-celda b { font: 700 .8rem/1.25 var(--mur-serif); font-variant-numeric: tabular-nums; color: var(--text-main); display: block; overflow-wrap: anywhere; }
+.mur-raiz .mur-celda b.mur-alarma { color: var(--accent-red); }
+.mur-raiz .mur-celda b.mur-bien { color: var(--accent-green); }
+.mur-raiz .mur-celda .mur-o { font: .56rem/1.2 var(--mur-sans); color: var(--text-muted); display: block; overflow-wrap: anywhere; }
+.mur-raiz.mur-estudio .mur-celda .mur-o { display: none; }
+.mur-raiz .mur-consec { display: flex; flex-wrap: wrap; gap: 4px; }
+.mur-raiz .mur-consec span { font: 600 .68rem/1.2 var(--mur-sans); border: 1px solid var(--border-color); border-radius: 999px; padding: 3px 8px; color: var(--text-dim); }
+.mur-raiz .mur-consec span.mur-r { color: var(--accent-red); border-color: rgba(184, 92, 62, .6); }
+.mur-raiz .mur-consec span.mur-v { color: var(--accent-green); border-color: rgba(144, 160, 106, .6); }
+.mur-raiz.mur-estudio .mur-consec { display: none; }
+
+/* Botones y mandos comunes */
+.mur-raiz button.mur-b { min-height: 44px; font: 600 .86rem/1.2 var(--mur-sans); background: var(--mur-card2); color: var(--text-main); border: 1px solid var(--border-color);
+  border-radius: 10px; padding: 8px 12px; cursor: pointer; text-align: left; }
+.mur-raiz button.mur-b.mur-prim { background: var(--accent-yellow); color: var(--bg-main); border-color: var(--accent-yellow); }
+.mur-raiz button.mur-b.mur-link { background: transparent; color: var(--accent-yellow); border-style: dashed; display: inline-flex; flex-direction: column; align-items: flex-start; justify-content: center; }
+.mur-raiz button.mur-b:disabled { opacity: .5; cursor: default; }
+.mur-raiz button.mur-b small { display: block; font-weight: 400; font-size: .7rem; opacity: .85; }
+.mur-raiz button.mur-b[aria-pressed="true"] { border-color: var(--accent-yellow); }
+.mur-raiz button.mur-b.mur-op-bien { border-color: var(--accent-green); opacity: 1; }
+.mur-raiz button.mur-b.mur-op-mal { border-color: var(--accent-red); opacity: 1; }
+.mur-raiz button:focus-visible, .mur-raiz select:focus-visible, .mur-raiz summary:focus-visible { outline: 2px solid var(--accent-yellow); outline-offset: 2px; }
+.mur-raiz .mur-fila { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.mur-raiz .mur-seg { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; min-width: 0; }
+.mur-raiz .mur-seg button { min-height: 44px; font: 600 .74rem/1.1 var(--mur-sans); background: transparent; color: var(--text-muted); border: 0; padding: 2px 4px; cursor: pointer; min-width: 0; }
+.mur-raiz .mur-seg button + button { border-left: 1px solid var(--border-color); }
+.mur-raiz .mur-seg button[aria-pressed="true"] { background: var(--accent-yellow); color: var(--bg-main); }
+.mur-raiz .mur-seg button:disabled { opacity: .4; cursor: default; }
+.mur-raiz .mur-tog { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; padding: 2px 6px; border-radius: 10px; background: var(--mur-card2);
+  border: 1px solid var(--border-color); color: var(--text-main); font: 600 .7rem/1.1 var(--mur-sans); cursor: pointer; text-align: center; min-width: 0; }
+.mur-raiz .mur-tog[aria-pressed="true"] { border-color: var(--accent-yellow); background: rgba(207, 154, 62, .2); box-shadow: inset 0 0 0 1px var(--accent-yellow); }
+
+/* Dock fijo abajo: la frase viva y la hoja de órdenes */
+.mur-raiz .mur-dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--bg-main); isolation: isolate; border-top: 1px solid var(--border-color);
+  padding: 4px max(10px, env(safe-area-inset-left, 0px)) calc(4px + env(safe-area-inset-bottom, 0px)); }
+.mur-raiz .mur-dock-in { max-width: 560px; margin: 0 auto; display: grid; gap: 4px; }
+.mur-raiz #mur-dock-explorar { display: grid; gap: 4px; }
+.mur-raiz #mur-dock-explorar[hidden] { display: none; }
+.mur-raiz .mur-frase { font: .84rem/1.3 var(--mur-serif); color: var(--text-main); border-left: 3px solid var(--accent-yellow); padding: 1px 0 1px 9px; margin: 0; cursor: pointer;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.6em; }
+.mur-raiz .mur-frase.mur-abierta { display: block; max-height: 40vh; overflow-y: auto; }
+.mur-raiz .mur-frase .mur-org { font-size: .6rem; }
+.mur-raiz .mur-dock-tabs { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2px; }
+.mur-raiz .mur-dock-tabs button { min-height: 44px; background: transparent; border: 0; border-bottom: 2px solid transparent; color: var(--text-muted); font: 600 .74rem/1.1 var(--mur-sans); cursor: pointer; padding: 0 2px; }
+.mur-raiz .mur-dock-tabs button[aria-selected="true"] { color: var(--accent-yellow); border-bottom-color: var(--accent-yellow); }
+.mur-raiz .mur-dock-panel { display: grid; gap: 4px; align-content: start; }
+.mur-raiz .mur-r2 { display: grid; gap: 4px; }
+.mur-raiz .mur-r2.mur-c5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.mur-raiz .mur-r2.mur-c31 { grid-template-columns: 3fr 1.2fr; }
+.mur-raiz .mur-r2.mur-c13 { grid-template-columns: 1fr 3fr; }
+.mur-raiz .mur-r2.mur-c21 { grid-template-columns: 2fr 1fr; }
+.mur-raiz .mur-dock select { min-height: 44px; width: 100%; min-width: 0; background: var(--mur-card2); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 10px; font: 600 .74rem var(--mur-sans); padding: 0 6px; }
+.mur-raiz .mur-dock-estudio { display: grid; gap: 4px; }
+.mur-raiz .mur-pasos { display: flex; gap: 4px; align-items: center; min-height: 12px; }
+.mur-raiz .mur-pasos i { flex: 1; height: 6px; border-radius: 3px; background: var(--mur-card2); border: 1px solid rgba(196, 154, 74, .2); }
+.mur-raiz .mur-pasos i.mur-on { background: var(--accent-yellow); border-color: var(--accent-yellow); }
+.mur-raiz .mur-pasos i.mur-mal { background: var(--accent-red); border-color: var(--accent-red); }
+.mur-raiz .mur-pasos i.mur-aqui { box-shadow: 0 0 0 2px var(--accent-blue); }
+.mur-raiz .mur-dock-est-txt { font: .74rem/1.3 var(--mur-sans); color: var(--text-muted); display: flex; justify-content: space-between; gap: 8px; min-height: 18px; }
+
+/* Explorar: lo de debajo de la escena */
+.mur-raiz .mur-bloque { display: grid; gap: 10px; }
+.mur-raiz .mur-leyenda { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 10px; margin: 0; padding: 0; list-style: none; font: .76rem/1.3 var(--mur-sans); color: var(--text-dim); }
+.mur-raiz .mur-leyenda li { display: grid; grid-template-columns: 18px 1fr; gap: 6px; align-items: center; min-width: 0; padding: 3px 5px; }
+.mur-raiz .mur-simil { display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; font: .82rem/1.35 var(--mur-sans); background: var(--bg-card); border-radius: 12px; padding: 10px 12px; margin: 0; }
+.mur-raiz .mur-simil dt { color: var(--accent-yellow); font-family: var(--mur-serif); }
+.mur-raiz .mur-simil dd { margin: 0; color: var(--text-dim); }
+.mur-raiz .mur-para { font: .82rem/1.45 var(--mur-sans); color: var(--text-muted); }
+.mur-raiz .mur-laminas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.mur-raiz .mur-lam-item { margin: 0; display: grid; gap: 2px; min-width: 0; }
+.mur-raiz .mur-lam-item figcaption { font: 600 .66rem/1.2 var(--mur-sans); color: var(--text-muted); text-align: center; }
+/* La lámina del libro, en miniatura: el lightbox de la app (core/lightbox.js) la amplía al tocarla */
+.mur-raiz .article-figure.mur-lam { margin: 0; padding: 0; border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; }
+.mur-raiz .article-figure.mur-lam img { width: 100%; height: 82px; object-fit: contain; display: block; }
+.mur-raiz details.nota-plegable { background: var(--bg-card); border: 1px solid var(--mur-card2); border-radius: 12px; padding: 2px 12px; }
+.mur-raiz details.nota-plegable summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font: 600 .86rem var(--mur-sans); color: var(--text-dim); }
+.mur-raiz details.nota-plegable[open] { padding-bottom: 12px; }
+.mur-raiz .mur-nota-fuentes { border-left: 3px solid var(--accent-purple); background: var(--bg-card); border-radius: 0 10px 10px 0; padding: 8px 10px; font: .82rem/1.45 var(--mur-sans); color: var(--text-dim); }
+.mur-raiz .mur-tabla-scroll { overflow-x: auto; }
+.mur-raiz table.data-table { border-collapse: collapse; width: 100%; font: .76rem/1.35 var(--mur-sans); }
+.mur-raiz .data-table th, .mur-raiz .data-table td { border-bottom: 1px solid var(--mur-card2); padding: 5px 4px; text-align: left; vertical-align: top; }
+.mur-raiz .data-table th { color: var(--text-muted); font-weight: 600; }
+.mur-raiz ul.mur-huecos { margin: 6px 0 0; padding-left: 18px; font: .82rem/1.45 var(--mur-sans); color: var(--text-dim); display: grid; gap: 5px; }
+.mur-raiz .mur-prof { display: grid; gap: 8px; }
+.mur-raiz .mur-prof section { background: var(--mur-card2); border-radius: 10px; padding: 8px 10px; font: .84rem/1.45 var(--mur-sans); color: var(--text-dim); }
+.mur-raiz a.mur-pdf { color: var(--accent-yellow); font: 600 .74rem var(--mur-sans); display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; border-bottom: 1px dashed var(--accent-yellow); }
+
+/* Capa de estudio: el aspecto del modelo aprobado */
+.mur-raiz .mur-formato { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; display: grid; gap: 10px; min-width: 0; }
+.mur-raiz .mur-formato [data-accion], .mur-raiz .mur-formato .mur-mando, .mur-raiz .mur-formato .mur-respuesta { scroll-margin-bottom: calc(var(--mur-dock-h, 200px) + 16px); }
+.mur-raiz .mur-cab-preg { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.mur-raiz .mur-num { font: 700 .76rem var(--mur-sans); color: var(--accent-yellow); border: 1px solid var(--accent-yellow); border-radius: 6px; padding: 1px 7px; }
+.mur-raiz .mur-serie { font: 700 .66rem var(--mur-sans); letter-spacing: .05em; text-transform: uppercase; color: var(--bg-main); background: var(--text-dim); border-radius: 4px; padding: 1px 6px; }
+.mur-raiz .mur-serie.mur-examen { background: var(--accent-purple); color: var(--text-main); }
+.mur-raiz .mur-tipo { font: 600 .68rem var(--mur-sans); letter-spacing: .06em; text-transform: uppercase; color: var(--text-muted); }
+.mur-raiz .mur-pregunta { font-size: 1rem; line-height: 1.45; }
+.mur-raiz .mur-op { display: grid; gap: 8px; }
+.mur-raiz .mur-respuesta { background: var(--mur-card2); border-radius: 10px; padding: 12px; display: grid; gap: 8px; }
+.mur-raiz .mur-ok { color: var(--accent-green); font: 600 .9rem var(--mur-sans); }
+.mur-raiz .mur-mal { color: var(--accent-red); font: 600 .9rem var(--mur-sans); }
+.mur-raiz .mur-punto { display: flex; gap: 10px; align-items: flex-start; font: .94rem/1.45 var(--mur-serif); cursor: pointer; min-height: 44px; padding: 4px 0; }
+.mur-raiz .mur-punto input { margin-top: 4px; width: 20px; height: 20px; accent-color: var(--accent-green); flex: none; }
+.mur-raiz .mur-frase-e { display: flex; gap: 10px; width: 100%; min-height: 44px; font: .95rem/1.45 var(--mur-serif); background: transparent; color: var(--text-main); border: 1px solid var(--mur-card2);
+  border-radius: 8px; padding: 8px 10px; text-align: left; cursor: pointer; }
+.mur-raiz .mur-frase-e .mur-n { font: 700 .76rem var(--mur-sans); color: var(--text-muted); padding-top: 3px; }
+.mur-raiz .mur-frase-e.mur-marcada { border-color: var(--accent-yellow); background: rgba(207, 154, 62, .1); }
+.mur-raiz .mur-frase-e.mur-acierto { border-color: var(--accent-green); }
+.mur-raiz .mur-frase-e.mur-fallo { border-color: var(--accent-red); background: rgba(184, 92, 62, .12); }
+.mur-raiz .mur-correccion { font: .88rem/1.45 var(--mur-sans); color: var(--text-dim); padding: 2px 0 0 26px; }
+.mur-raiz .mur-mando { border: 1px dashed var(--accent-yellow); border-radius: 12px; padding: 8px 10px; display: grid; gap: 6px; background: rgba(207, 154, 62, .06); }
+.mur-raiz .mur-mando .mur-para { color: var(--text-dim); }
+.mur-raiz .mur-pista { font: .84rem/1.4 var(--mur-sans); color: var(--accent-yellow); }
+.mur-raiz .mur-fuente-p { font: .72rem/1.6 var(--mur-sans); color: var(--text-muted); }
+.mur-raiz .mur-ir-texto { display: inline-flex; align-items: center; min-height: 44px; margin: 2px 4px 2px 0; padding: 0 10px; border: 1px dashed var(--border-color);
+  border-radius: 999px; background: transparent; color: var(--accent-yellow); font: 600 .72rem/1.2 var(--mur-sans); text-align: left; cursor: pointer; max-width: 100%; }
+.mur-raiz .mur-dia { font: 700 .76rem var(--mur-sans); color: var(--accent-yellow); letter-spacing: .06em; text-transform: uppercase; }
+.mur-raiz .mur-paciente { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; background: var(--mur-card2); border-radius: 10px; padding: 10px 12px; font: .84rem/1.4 var(--mur-sans); margin: 0; }
+.mur-raiz .mur-paciente dt { color: var(--text-muted); }
+.mur-raiz .mur-paciente dd { margin: 0; font-variant-numeric: tabular-nums; min-width: 0; overflow-wrap: anywhere; }
+.mur-raiz .mur-paciente dd.mur-cambia { color: var(--accent-red); font-weight: 600; }
+.mur-raiz .mur-lleva { display: grid; gap: 6px; margin: 0; padding-left: 20px; }
+.mur-raiz .mur-lleva li { font: .94rem/1.45 var(--mur-serif); }
+.mur-raiz .mur-ruta { font: .84rem/1.5 var(--mur-sans); color: var(--text-dim); display: grid; gap: 4px; }
+.mur-raiz .mur-repaso-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.mur-raiz .mur-concepto-n { font: 700 1.6rem/1 var(--mur-serif); color: var(--accent-yellow); }
+.mur-raiz .mur-nav-c { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.mur-raiz .mur-casos-lista { display: grid; gap: 8px; }
+@media (prefers-reduced-motion: no-preference) { .mur-raiz .mur-entra { animation: mur-entra .25s ease-out; } }
+@keyframes mur-entra { from { opacity: .4; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+/* El reloj del Modo Estudio sube por encima del dock mientras se ve la muralla */
+body.mur-activo .pomodoro-fab { bottom: calc(var(--mur-dock-h, 200px) + 14px); }
+body.mur-activo .pomodoro-panel { bottom: calc(var(--mur-dock-h, 200px) + 76px); }
+body.study-mode-on .mur-dock { padding-right: 82px; }

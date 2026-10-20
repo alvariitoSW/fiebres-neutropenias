@@ -1,0 +1,225 @@
+    <button class="back-btn btn-volver-libros-menu" id="mur-volver">← VOLVER</button>
+    <!-- La cama 7 · La muralla de papel: el intestino, el estómago y la boca del crítico (Marino cap. 4). Modelo vivo de
+         Libros. Viene de la maqueta aprobada autonomo/maquetas/b1-muralla.html (vuelta 2).
+         Lógica en muralla-viva.js y muralla-viva-escena.js; datos en js/data/muralla-viva-data.js; la cama, en cama7.js. -->
+    <div class="mur-raiz" id="mur-raiz" data-modelo-vivo>
+      <header class="mur-cabecera">
+        <p class="mur-eyebrow">Modelo vivo · Marino cap. 4 · La cama 7</p>
+        <h2 class="mur-titulo">La cama 7 · <em>La muralla de papel</em></h2>
+        <p class="mur-lead">La mucosa del tubo digestivo es <strong class="hl-rojo">una sola capa de células de 0,1 mm</strong> frente a <strong class="hl">100-400 billones de microbios</strong>. <span class="mur-org">ficha · p. 58</span></p>
+      </header>
+
+      <div class="mur-interruptor" role="tablist" aria-label="Qué hacer con el modelo">
+        <button type="button" role="tab" id="mur-modo-explorar" aria-selected="true">Explorar</button>
+        <button type="button" role="tab" id="mur-modo-conceptos" aria-selected="false">Conceptos</button>
+        <button type="button" role="tab" id="mur-modo-preguntas" aria-selected="false">Mayéutica</button>
+      </div>
+
+      <section class="mur-escena-bloque" id="mur-escena-bloque" aria-label="La muralla de papel">
+        <div id="mur-cama7"></div>
+        <!-- Las lecturas van encima de la lámina: abajo las taparía el dock (juicio de la maqueta) -->
+        <div class="mur-tablero" id="mur-tablero" aria-live="off"></div>
+        <div class="mur-escena" id="mur-escena">
+          <svg id="mur-lamina" viewBox="0 0 360 380" role="img" aria-label="La muralla de papel"></svg>
+          <div class="mur-anillo" id="mur-anillo" hidden></div>
+        </div>
+        <div class="mur-consec" id="mur-consec"></div>
+      </section>
+
+      <!-- ============ EXPLORAR ============ -->
+      <div id="mur-vista-explorar" class="mur-bloque">
+        <section class="mur-bloque">
+          <h3 class="mur-h">Qué es cada cosa que se mueve</h3>
+          <ul class="mur-leyenda" id="mur-leyenda"></ul>
+          <p class="mur-para">Todas las formas salen de la tabla única de la app, la misma de la nefrona viva, el río y mar, el capilar y el catéter: cruz = H⁺, triángulo = HCO₃⁻, trébol = citoquinas, disco = hematíe. La forma dice qué es; el color, nunca solo. Cuántos microbios se dibujan y a qué velocidad se mueven: <b>ilustrativo</b>.</p>
+        </section>
+
+        <section class="mur-bloque">
+          <h3 class="mur-h">Cómo leer la lámina</h3>
+          <dl class="mur-simil">
+            <dt>La tira</dt><dd>el tubo desenrollado, de la boca al colon. Los puntos siguen la Fig. 4.1 en escala logarítmica. Tócala para elegir estación</dd>
+            <dt>La luz</dt><dd>arriba: está «fuera» del cuerpo, como el agujero de un dónut</dd>
+            <dt>La muralla</dt><dd>una sola fila de células, con su regla de 0,1 mm</dd>
+            <dt>Debajo</dt><dd>el capilar, el GALT con sus dos guardias y, abajo, la sangre que lleva al catéter (vía 4)</dd>
+            <dt>La rueda</dt><dd>el motor del fallo multiorgánico: quieta en el sano, cada vez más deprisa</dd>
+            <dt>Abajo a la izquierda</dt><dd>la figura viva de cada estación: Tabla 4.2, Fig. 4.6, Fig. 4.5 o Fig. 4.4</dd>
+          </dl>
+        </section>
+
+        <section class="mur-bloque">
+          <h3 class="mur-h">Láminas del libro</h3>
+          <div class="mur-laminas" id="mur-laminas"></div>
+          <p class="mur-para">Las figuras reales del libro (Figs. 4.1-4.6): tócalas para ampliarlas. En la lámina viva, la Fig. 4.2 se recrea en el mismo encuadre y las Figs. 4.3, 4.4, 4.5 y 4.6 se recrean vivas.</p>
+        </section>
+
+        <details class="nota-plegable" open>
+          <summary>Notas de fidelidad y de fuentes</summary>
+          <div class="mur-prof">
+            <section><b>SDD: −67 % (texto) o −69 % (barras).</b> El texto (A p. 66) dice «una reducción del 67 %». Con las barras de la Fig. 4.5 sale −69 % (4,5 → 1,4 por 1.000 días; 6,2 → 1,9 %). El modelo muestra la del texto y esta nota. La SOD (4,5 → 3) sí da el −33 % del texto.</section>
+            <section><b>La Fig. 4.2 imprime «Cleatance».</b> Es «Clearance» (aclaramiento): errata de la figura del libro.</section>
+            <section><b>Fig. 4.4: lectura aproximada.</b> Las barras no llevan número. La ficha lee ~2 % en los sanos y los empleados; la barra está cerca del 3 %, así que el modelo dice ~2-3 %. Los ~37 y ~70 % están leídos a ojo, como en la ficha.</section>
+            <section><b>La estación «Intestino».</b> La vellosidad de la Fig. 4.2 es del intestino delgado: el colon no tiene vellosidades <span class="mur-org mur-ilu">fisiología general</span>. Por eso la estación se llama «Intestino» y la tira marca aparte el colon, donde vive el 99 %.</section>
+            <section><b>La SDD respeta a los anaerobios.</b> El libro la diseña para erradicar estafilococos, bacilos gramnegativos y <em>Candida</em> «respetando la flora normal (sobre todo anaerobios)». Por eso la tira no se vacía entera: solo se van los patógenos.</section>
+            <section><b>Riego y úlcera.</b> Que la lesión aparezca cuando cae el riego y no cuando sube el ácido es de la ficha (p. 67 y 72-73). Su tamaño y su ritmo son ilustrativos. Con enteral completa el IBP no la achica más: «los supresores del ácido dejaban de reducir el sangrado» (ficha, p. 72).</section>
+          </div>
+        </details>
+
+        <details class="nota-plegable">
+          <summary>De dónde sale cada cifra</summary>
+          <div class="mur-tabla-scroll">
+            <table class="data-table">
+              <thead><tr><th>Cifra</th><th>Origen (página del PDF)</th></tr></thead>
+              <tbody>
+                <tr><td>0,1 mm · 100-400 billones · 70.000 genomas · 2 kg</td><td>ficha · p. 58</td></tr>
+                <tr><td>Boca 10⁶ · estómago &lt;10³ · intestino 10⁹ · colon 10¹² UFC/mL · 99 % en el colon</td><td>Fig. 4.1 · p. 58-59</td></tr>
+                <tr><td>pH del jugo 1-2 · <em>Salmonella</em>: pH 4 crece, pH 3 cae, pH 2 erradicada en 1 h</td><td>Fig. 4.3, ficha · p. 61-62</td></tr>
+                <tr><td>750 mL de saliva al día · 10⁶ por mL · aspirar el 0,13 %</td><td>ficha · p. 62</td></tr>
+                <tr><td>BGN en la boca: sano ~2-3 %, alcohólicos ~45 %, empleados ~2-3 %, planta ~37 %, UCI ~70 %</td><td>Fig. 4.4 (lectura aproximada) · p. 63</td></tr>
+                <tr><td>Clorhexidina 0,12 %/6 h (no al 2 %) · SOD gentamicina, colistina y vancomicina 2 %/6 h</td><td>Tabla 4.1 · p. 63-64</td></tr>
+                <tr><td>Bacteriemias por BGN por 1.000 días: control 4,5 · SOD 3 · SDD 1,4 (−33 % y −67 %)</td><td>Fig. 4.5, ficha · p. 64-66</td></tr>
+                <tr><td>SDD: cefuroxima 1,5 g/8 h los 4 primeros días; el intestino tarda 5-7 días; &gt;72 h de UCI</td><td>ficha · p. 65</td></tr>
+                <tr><td>Probióticos: solo si se empiezan en los 2 primeros días de antibiótico (19 estudios)</td><td>ficha · p. 66</td></tr>
+                <tr><td>Moco con HCO₃⁻ pH 7 · 70-90 % del riego a la mucosa · erosiones en el 75-100 % en 24 h</td><td>ficha · p. 67</td></tr>
+                <tr><td>Sangrado significativo: PA −20 mmHg · vasopresor +20 % · Hb −2 g/dL · ≥2 CH</td><td>ficha · p. 67</td></tr>
+                <tr><td>Tabla 4.2: máximo 8-10 %, alto 4-8 %, moderado 2-4 %, bajo 1-2 %</td><td>ficha · p. 68</td></tr>
+                <tr><td>Famotidina 20 mg/12 h (−50 % con ClCr &lt;50) · pantoprazol 40 mg/día · sucralfato 1 g/6 h</td><td>Tabla 4.3 · p. 68</td></tr>
+                <tr><td>&gt;80 % la reciben, el 70 % no la necesita · pH ≥4 objetivo · IBP &gt; anti-H2 &gt; sucralfato</td><td>ficha · p. 68-69</td></tr>
+                <tr><td>Fig. 4.6: sangrado 4,2 → 2,5 % (1,7 %) · total 21,9 % frente a 22,6 % · 3.298 pacientes</td><td>ficha · p. 69-71</td></tr>
+                <tr><td><em>C. difficile</em> ×3 con IBP · más neumonía</td><td>acordeón «Riesgos de suprimir el ácido» · p. 70-71</td></tr>
+                <tr><td>Vía 4: microbios de la sangre que se pegan a la parte intravascular</td><td>ficha · p. 47; reflexión del autor, p. 53-54</td></tr>
+                <tr><td>Cuántos microbios se dibujan, su velocidad, el ritmo de la erosión y de la SDD, la velocidad de la rueda</td><td>ilustrativo</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+        <details class="nota-plegable">
+          <summary>Lo que la ficha no da (huecos)</summary>
+          <ul class="mur-huecos">
+            <li>El ritmo de la erosión, de la translocación y de la descontaminación (fuera de «5-7 días»): todo ilustrativo.</li>
+            <li>Cuánto sube el pH con la enteral, y el pH real con famotidina: solo «sube» y «objetivo ≥4».</li>
+            <li>El efecto de la clorhexidina sobre los bacilos, en cifras: solo «actúa sobre todo frente a grampositivos». Sobre los anaerobios, nada.</li>
+            <li>Si los multirresistentes anulan también la SOD: la ficha solo lo dice de la SDD.</li>
+            <li>El tratamiento de la neumonía y de <em>C. difficile</em>: no están en estas fichas (se enlazan, no se preguntan).</li>
+            <li>Los recuentos de la tira y de la lámina: proporcionales al exponente de la Fig. 4.1 (escala logarítmica desde 10²), ilustrativos.</li>
+          </ul>
+        </details>
+
+        <details class="nota-plegable">
+          <summary>Para profundizar (lo que el modelo no cuenta)</summary>
+          <div class="mur-prof" id="mur-prof-lista"></div>
+        </details>
+
+        <!-- Lo que encuentra el buscador global (core/search.js): cada entrada es un enlace cruzado
+             normal que abre el modelo en un estado. Ocultas: solo se pulsan desde el buscador. -->
+        <div hidden>
+          <button type="button" data-especialidad="libros" data-view="murallaViva" data-muralla-viva="" data-buscar-titulo="La cama 7 · La muralla de papel (modelo vivo)" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="muralla de papel cama 7 microbioma intestino mucosa piel interna translocación">Muralla de papel</button>
+          <button type="button" data-especialidad="libros" data-view="murallaViva" data-muralla-viva="disbiosis" data-buscar-titulo="La muralla de papel: disbiosis y translocación" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="disbiosis translocación bacteriana antibiótico de amplio espectro flora residente">Disbiosis</button>
+          <button type="button" data-especialidad="libros" data-view="murallaViva" data-muralla-viva="motor-fmo" data-buscar-titulo="La muralla de papel: el intestino, motor del fallo multiorgánico" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="motor del fallo multiorgánico fmo hipoperfusión esplácnica intestino">Motor del FMO</button>
+          <button type="button" data-especialidad="libros" data-view="murallaViva" data-muralla-viva="boca-uci" data-buscar-titulo="La muralla de papel: la boca del crítico y la aspiración" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="colonización orofaríngea bacilos gramnegativos saliva aspiración neumonía nosocomial">Boca</button>
+          <button type="button" data-especialidad="libros" data-view="murallaViva" data-muralla-viva="sod" data-buscar-titulo="La muralla de papel: clorhexidina oral, SOD y SDD" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="descontaminación oral clorhexidina sod sdd descontaminación digestiva selectiva">Descontaminación</button>
+          <button type="button" data-especialidad="libros" data-view="murallaViva" data-muralla-viva="ulcera" data-buscar-titulo="La muralla de papel: la úlcera de estrés y el riego" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="úlcera de estrés lesión mucosa por estrés isquemia gástrica moco bicarbonato">Úlcera de estrés</button>
+          <button type="button" data-especialidad="libros" data-view="murallaViva" data-muralla-viva="ibp" data-buscar-titulo="La muralla de papel: el IBP y la balanza de la Fig. 4.6" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="profilaxis úlcera de estrés ibp pantoprazol famotidina sucralfato ph gástrico">IBP</button>
+        </div>
+      </div>
+
+      <!-- ============ CONCEPTOS ============ -->
+      <div id="mur-vista-conceptos" class="mur-bloque" hidden>
+        <div id="mur-concepto" class="mur-formato mur-entra"></div>
+      </div>
+
+      <!-- ============ MAYÉUTICA ============ -->
+      <div id="mur-vista-preguntas" class="mur-bloque" hidden>
+        <div id="mur-preg" class="mur-formato mur-entra"></div>
+        <details class="nota-plegable" id="mur-profundizar">
+          <summary>Para profundizar (lo que esta Mayéutica no cubre)</summary>
+          <div class="mur-prof" id="mur-prof-may"></div>
+        </details>
+      </div>
+
+      <nav class="mur-dock" id="mur-dock" aria-label="Hoja de órdenes">
+        <div class="mur-dock-in">
+          <div id="mur-dock-explorar">
+            <p class="mur-frase" id="mur-frase" aria-live="polite" title="Toca para leerla entera"></p>
+            <div class="mur-dock-tabs" role="tablist" aria-label="Hoja de órdenes">
+              <button type="button" role="tab" data-mur-tab="paciente" aria-selected="true">Paciente</button>
+              <button type="button" role="tab" data-mur-tab="estomago" aria-selected="false">Estómago</button>
+              <button type="button" role="tab" data-mur-tab="intestino" aria-selected="false">Intestino</button>
+              <button type="button" role="tab" data-mur-tab="boca" aria-selected="false">Boca</button>
+              <button type="button" role="tab" data-mur-tab="unidad" aria-selected="false">Unidad</button>
+            </div>
+            <div class="mur-dock-panel" data-mur-panel="paciente">
+              <div class="mur-r2 mur-c5">
+                <button type="button" class="mur-tog" data-m="paciente" data-v="sano">Sano</button>
+                <button type="button" class="mur-tog" data-m="paciente" data-v="planta">Planta</button>
+                <button type="button" class="mur-tog" data-m="paciente" data-v="uci">UCI</button>
+                <button type="button" class="mur-tog" data-m="vm" data-v="0">Sin VM</button>
+                <button type="button" class="mur-tog" data-m="vm" data-v="1">VM &gt;24 h</button>
+              </div>
+              <div class="mur-r2 mur-c31">
+                <div class="mur-seg" role="group" aria-label="Riego de la mucosa">
+                  <button type="button" data-m="riego" data-v="normal">Riego normal</button>
+                  <button type="button" data-m="riego" data-v="oculta">PA normal con VM</button>
+                  <button type="button" data-m="riego" data-v="shock">Shock</button>
+                </div>
+                <button type="button" class="mur-tog" data-m="clcr50">ClCr &lt;50</button>
+              </div>
+            </div>
+            <div class="mur-dock-panel" data-mur-panel="estomago" hidden>
+              <div class="mur-seg" role="group" aria-label="Protección gástrica">
+                <button type="button" data-m="proteccion" data-v="nada">Nada</button>
+                <button type="button" data-m="proteccion" data-v="famotidina">Famotidina</button>
+                <button type="button" data-m="proteccion" data-v="pantoprazol">Pantoprazol</button>
+                <button type="button" data-m="proteccion" data-v="sucralfato">Sucralfato</button>
+              </div>
+              <div class="mur-r2 mur-c5">
+                <button type="button" class="mur-tog" data-m="enteral">Enteral completa</button>
+                <button type="button" class="mur-tog" data-m="coag">Coagulo&shy;patía</button>
+                <button type="button" class="mur-tog" data-m="cirrosis">Cirrosis</button>
+                <button type="button" class="mur-tog" data-m="corticoides">Cortico&shy;ides</button>
+                <button type="button" class="mur-tog" data-m="anticoag">Anticoa&shy;gulación</button>
+              </div>
+            </div>
+            <div class="mur-dock-panel" data-mur-panel="intestino" hidden>
+              <div class="mur-r2 mur-c13">
+                <button type="button" class="mur-tog" data-m="antibiotico">Antibiótico amplio</button>
+                <div class="mur-seg" role="group" aria-label="Probiótico">
+                  <button type="button" data-m="probiotico" data-v="no">Sin probiótico</button>
+                  <button type="button" data-m="probiotico" data-v="temprano">Probiótico día 1-2</button>
+                  <button type="button" data-m="probiotico" data-v="tarde">Día ≥3</button>
+                </div>
+              </div>
+              <div class="mur-seg" role="group" aria-label="SDD y día">
+                <button type="button" data-m="sdd" data-v="no">Sin SDD</button>
+                <button type="button" data-m="sdd" data-v="0">SDD día 0</button>
+                <button type="button" data-m="sdd" data-v="2">Día 2</button>
+                <button type="button" data-m="sdd" data-v="4">Día 4</button>
+                <button type="button" data-m="sdd" data-v="7">Día 7</button>
+              </div>
+            </div>
+            <div class="mur-dock-panel" data-mur-panel="boca" hidden>
+              <div class="mur-seg" role="group" aria-label="Descontaminación oral">
+                <button type="button" data-m="descontaminacion" data-v="nada">Nada</button>
+                <button type="button" data-m="descontaminacion" data-v="clorhexidina">Clorhexidina 0,12 %</button>
+                <button type="button" data-m="descontaminacion" data-v="sod">SOD</button>
+              </div>
+              <button type="button" class="mur-tog" data-m="aspirar">Aspirar el 0,13 % de la saliva del día</button>
+            </div>
+            <div class="mur-dock-panel" data-mur-panel="unidad" hidden>
+              <div class="mur-r2 mur-c21">
+                <div class="mur-seg" role="group" aria-label="Gramnegativos multirresistentes en la unidad">
+                  <button type="button" data-m="mr" data-v="0">Sin multirresistentes</button>
+                  <button type="button" data-m="mr" data-v="1">Multirresistentes</button>
+                </div>
+                <button type="button" class="mur-tog" data-m="reinicio">Empezar de nuevo</button>
+              </div>
+              <select id="mur-m-estado" aria-label="Ir a un estado con nombre"></select>
+            </div>
+          </div>
+          <div id="mur-dock-estudio" class="mur-dock-estudio" hidden>
+            <div class="mur-pasos" id="mur-dock-pasos"></div>
+            <div class="mur-dock-est-txt"><span id="mur-dock-est-izq"></span><span id="mur-dock-est-der"></span></div>
+          </div>
+        </div>
+      </nav>
+    </div>

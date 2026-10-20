@@ -8,7 +8,8 @@
 // autonomo/bloques/b1/cobertura.md §2.E y §3 (E1-E4; E4 partido en dos, una mitad por ficha).
 // Formato: el de b1-fluidos.js. Estas fichas aún no tienen modelo vivo (los propuestos esperan al usuario): el botón
 // «modelo» abre la vista Visual de la propia ficha (la regla de la Tabla 4.2, la calculadora de dosis, la BPS, la
-// escalera RASS), con el enlace cruzado de siempre y data-en-visual.
+// escalera RASS), con el enlace cruzado de siempre y data-en-visual. La ficha IX ya tiene el suyo, la muralla de papel:
+// `modeloVivo: { murallaViva: '<estado>' }` (js/data/muralla-viva-data.js), que sale antes que la vista Visual.
 
 const PDF_M = 'docs/marino-2024-practicas-monitorizacion-caps5-9.pdf';
 // La vista Visual de una ficha de Marino · Fundamentos, como botón «modelo» (sale tras contestar).
@@ -21,49 +22,49 @@ export const MAYEUTICA_SIN_MODELO = {
   'mar-ulcera-estres': {
     entrada: 'Por qué se erosiona la mucosa del crítico, a quién proteger de verdad (Tabla 4.2), con qué, qué cuesta suprimir el ácido y cuándo retirarlo.',
     guia: [
-      { id: 'ue-g1', corto: 'qué protege', tipo: 'test', fuente: 'mar-ulcera-patogenia · mar-acidofobia · mar-piel-interna',
+      { id: 'ue-g1', corto: 'qué protege', tipo: 'test', modeloVivo: { murallaViva: 'estomago-sano' }, fuente: 'mar-ulcera-patogenia · mar-acidofobia · mar-piel-interna',
         enunciado: 'El jugo gástrico tiene el pH del zumo de limón (2,0). ¿Qué impide que el estómago sano se digiera a sí mismo?',
         opciones: [
           { t: 'Que el ácido se neutraliza en cuanto toca la pared', porque: 'El ácido no se neutraliza al tocarla: lo frena una capa de moco con bicarbonato que el riego sostiene. Si crees que la pared se defiende sola, no ves por qué la isquemia la rompe.' },
           { t: 'Moco con bicarbonato (pH 7), sostenido por el riego', ok: true },
           { t: 'Una pared de muchas capas de células resistentes al ácido', porque: 'El epitelio digestivo es una sola capa (ficha del microbioma). Lo protege el moco, y el moco depende del flujo: confiar en la pared es no ver qué falla en el crítico.' }],
         explicacion: 'Una capa de <span class="hl">moco rico en bicarbonato (pH 7)</span> protege el epitelio del ácido y la pepsina, y <span class="hl">el flujo sanguíneo de la mucosa la sostiene</span>: el 70-90 % del riego del estómago va a la mucosa (prostaciclina y óxido nítrico mantienen ese flujo).' },
-      { id: 'ue-g2', corto: 'qué la rompe', tipo: 'test', fuente: 'mar-ulcera-patogenia · mar-mito-corticoides',
+      { id: 'ue-g2', corto: 'qué la rompe', tipo: 'test', modeloVivo: { murallaViva: 'isquemia' }, fuente: 'mar-ulcera-patogenia · mar-mito-corticoides',
         enunciado: 'Entonces, en la UCI, ¿qué rompe esa defensa?',
         opciones: [
           { t: 'El exceso de ácido que produce el estrés', porque: 'El ácido la agrava, pero el desencadenante es la isquemia local. Si solo bloqueas el ácido, tratas lo secundario y dejas la causa.' },
           { t: 'Los corticoides, que adelgazan el moco', porque: 'El conjunto de 25 estudios no mostró efecto de los corticoides sobre el sangrado digestivo. Culparlos lleva a dar IBP por un motivo que no existe.' },
           { t: 'La isquemia de la mucosa, aun sin hipotensión', ok: true }],
         explicacion: 'El desencadenante es la <span class="hl-rojo">isquemia local</span>; el ácido la agrava, y en la hemorragia la reperfusión también contribuye. Puede haber <span class="hl">hipoperfusión gástrica oculta sin hipotensión</span>, sobre todo con ventilación mecánica.' },
-      { id: 'ue-g3', corto: 'la gastroscopia', tipo: 'test', fuente: 'mar-ulcera-frecuencia · mar-sangrado-significativo',
+      { id: 'ue-g3', corto: 'la gastroscopia', tipo: 'test', modeloVivo: { murallaViva: 'isquemia' }, fuente: 'mar-ulcera-frecuencia · mar-sangrado-significativo',
         enunciado: 'Si haces una gastroscopia a los pacientes en sus primeras 24 h de UCI, ¿qué encontrarás?',
         opciones: [
           { t: 'Erosiones en la mitad, y casi todas con sangrado importante', porque: 'Las erosiones son casi universales (75-100 %), y el sangrado «clínicamente significativo» es infrecuente. Con esa idea darías profilaxis a todos.' },
           { t: 'Erosiones en el 75-100 %; sangrado importante, raro', ok: true },
           { t: 'Nada en la mayoría: las erosiones tardan días en aparecer', porque: 'Aparecen ya en las primeras 24 h, en el 75-100 %. Pensar que son tardías te hace subestimar lo pronto que empieza la lesión.' }],
         explicacion: 'Erosiones visibles en el <span class="hl">75-100 %</span> en las primeras 24 h; rezuman sangre, pero el sangrado <span class="hl">clínicamente significativo es infrecuente</span>. Las más profundas (hasta la submucosa) son las úlceras de estrés, más propensas a sangrar.' },
-      { id: 'ue-g4', corto: 'la enteral', tipo: 'test', fuente: 'mar-enteral-protege · mar-tabla-4-2', modelo: visual('mar-ulcera-estres', '👁️ Pruébalo en la regla de la Tabla 4.2 (vista Visual)'),
+      { id: 'ue-g4', corto: 'la enteral', tipo: 'test', modeloVivo: { murallaViva: 'enteral' }, fuente: 'mar-enteral-protege · mar-tabla-4-2', modelo: visual('mar-ulcera-estres', '👁️ Pruébalo en la regla de la Tabla 4.2 (vista Visual)'),
         enunciado: 'Ventilado más de 24 h. Predice: ¿cambia su riesgo de sangrar si recibe nutrición enteral, y por qué?',
         opciones: [
           { t: 'No: la ventilación de más de 24 h es siempre riesgo máximo', porque: 'Solo sin enteral. Con enteral baja a moderado: si no lo sabes, darás profilaxis a quien no la necesita.' },
           { t: 'Sí, a moderado: es trófica y sube el pH', ok: true },
           { t: 'Sí, pero solo porque diluye el ácido', porque: 'Además es trófica para la mucosa. Con enteral completa, los supresores del ácido dejaban de reducir el sangrado: no es una simple dilución.' }],
         explicacion: 'Tabla 4.2: VM >24 h <span class="hl-rojo">sin enteral, riesgo máximo (8-10 %)</span>; <span class="hl-verde">con enteral, moderado (2-4 %)</span>. La enteral protege por su <span class="hl">efecto trófico</span> y porque sube el pH. Según la fuente, la nutrición enteral es todo lo que hace falta.' },
-      { id: 'ue-g5', corto: 'la regla', tipo: 'test', fuente: 'mar-tabla-4-2 · mar-ulcera-calc',
+      { id: 'ue-g5', corto: 'la regla', tipo: 'test', modeloVivo: { murallaViva: 'isquemia' }, fuente: 'mar-tabla-4-2 · mar-ulcera-calc',
         enunciado: 'Sepsis y fracaso renal agudo, sin otros factores. ¿Profilaxis?',
         opciones: [
           { t: 'No: son dos moderados, y hace falta uno máximo', porque: 'También basta un factor alto, y dos moderados cuentan como alto. Le dejarías sin profilaxis a quien la tabla se la da.' },
           { t: 'Sí: dos moderados suben el riesgo a alto', ok: true },
           { t: 'Solo si además tiene corticoides o anticoagulación', porque: 'Corticoides y anticoagulación son riesgo bajo: no cambian la decisión. Esperarlos es usar como criterio lo que no lo es.' }],
         explicacion: 'Regla de la Tabla 4.2: profilaxis con <span class="hl">un factor máximo o alto, o con dos o más moderados</span> (el alto es el corte). Moderados: VM >24 h con enteral, FRA, sepsis, shock.' },
-      { id: 'ue-g6', corto: 'cuánto protege', tipo: 'test', fuente: 'mar-ibp-pantoprazol · mar-img-4-6 · mar-profilaxis-uso',
+      { id: 'ue-g6', corto: 'cuánto protege', tipo: 'test', modeloVivo: { murallaViva: 'ibp' }, fuente: 'mar-ibp-pantoprazol · mar-img-4-6 · mar-profilaxis-uso',
         enunciado: 'Si la causa es la isquemia, ¿qué esperas de quitar el ácido? 3.298 pacientes de alto riesgo, con pantoprazol 40 mg IV o placebo.',
         opciones: [
           { t: 'Sangrado de 4,2 a 2,5 % y menos mortalidad', porque: 'El sangrado bajó, pero ninguno de estos fármacos mejora la supervivencia. Contar con un beneficio de mortalidad lleva a darlo a todos.' },
           { t: 'Ninguna diferencia en el sangrado', porque: 'Sí lo redujo (de 4,2 a 2,5 %): el efecto existe, pero es pequeño (1,7 puntos). Negarlo es tan inexacto como exagerarlo.' },
           { t: 'Menos sangrado, sin beneficio neto', ok: true }],
         explicacion: 'Sangrado significativo (Figura 4.6): <span class="hl">4,2 % con placebo frente a 2,5 % con pantoprazol</span>, un efecto de solo 1,7 puntos. Sumando sangrado, neumonía, <i>C. difficile</i> e isquemia miocárdica: <span class="hl-rojo">21,9 % con pantoprazol frente a 22,6 % con placebo</span>. Sin beneficio neto. Eficacia: IBP > anti-H2 > sucralfato; ninguno mejora la supervivencia.' },
-      { id: 'ue-g7', corto: 'lo que cuesta', tipo: 'destapa', fuente: 'mar-acido-riesgos',
+      { id: 'ue-g7', corto: 'lo que cuesta', tipo: 'destapa', modeloVivo: { murallaViva: 'ibp' }, fuente: 'mar-acido-riesgos',
         enunciado: '¿Qué le cuesta al paciente suprimir su ácido?',
         cuantas: 'son dos cosas',
         puntos: [
@@ -94,7 +95,7 @@ export const MAYEUTICA_SIN_MODELO = {
           { t: 'Reducirla un 50 %: se acumula y puede ser neurotóxica', ok: true },
           { t: 'Pasar a pantoprazol 20 mg: los IBP se ajustan a la mitad', porque: 'Los IBP no requieren ajuste renal (40 mg al día). Reducirlo es infradosificar sin motivo.' }],
         explicacion: 'Famotidina 20 mg cada 12 h; <span class="hl">reducir un 50 % con ClCr <50</span>: se elimina por el riñón y puede dar alteración mental. Los IBP no requieren ajuste renal.' },
-      { id: 'ue-e4', corto: 'sucralfato', tipo: 'test', fuente: 'mar-sucralfato · mar-sucralfato-pegas',
+      { id: 'ue-e4', corto: 'sucralfato', tipo: 'test', modeloVivo: { murallaViva: 'sucralfato' }, fuente: 'mar-sucralfato · mar-sucralfato-pegas',
         enunciado: 'Sucralfato en un paciente con nutrición enteral y warfarina. ¿Qué problema hay?',
         opciones: [
           { t: 'Ninguno: mantiene la acidez y da menos neumonía', porque: 'Esas son sus ventajas, pero no se puede usar con enteral (estómago vacío; bezoares) y su aluminio fija la warfarina. Le darías un fármaco que no actúa y le quita anticoagulación.' },

@@ -25,6 +25,7 @@ import { initIndice, idRepaso } from './indice.js';
 import { init as initAguaViva } from './agua-viva.js';
 import { init as initCapilarVivo } from './capilar-vivo.js';
 import { init as initCateterVivo } from './cateter-vivo.js';
+import { init as initMurallaViva } from './muralla-viva.js';
 import { montarMayeutica } from '../../core/mayeutica.js';
 import { MAYEUTICA_B1 } from '../../data/mayeutica/b1.js';
 import { librosIndice } from '../../data/libros-indice.js';
@@ -58,6 +59,8 @@ export function init() {
         capilarVivo: document.getElementById('capilar-vivo-view'),
         // Modelo vivo: catéter vivo (flujo, piel y biopelícula), junto al grupo accesos vasculares (caps. 1-3)
         cateterVivo: document.getElementById('cateter-vivo-view'),
+        // Modelo vivo: la cama 7 · la muralla de papel (microbioma y úlcera de estrés), junto al cap. 4
+        murallaViva: document.getElementById('muralla-viva-view'),
     });
 
     document.getElementById('btn-marino-fund').addEventListener('click', () => librosLevel.show('marinoFundamentos'));
@@ -83,6 +86,7 @@ export function init() {
     const aguaViva = initAguaViva();
     const capilarVivo = initCapilarVivo();
     const cateterVivo = initCateterVivo();
+    const murallaViva = initMurallaViva();
 
     librosLevel.show('menu');
 
@@ -90,11 +94,13 @@ export function init() {
         volverAlMenu: () => librosLevel.show('menu'),
         irAFicha: librosLevel.irAFicha,
         // data-agua-viva="<estado>" en un enlace cruzado abre el río y mar en ese estado;
-        // data-capilar-vivo="<estado>", el capilar y oxígeno; data-cateter-vivo="<estado>", el catéter vivo
+        // data-capilar-vivo="<estado>", el capilar y oxígeno; data-cateter-vivo="<estado>", el catéter vivo;
+        // data-muralla-viva="<estado>", la muralla de papel
         modelosVivos: {
             aguaViva: (estadoClave, origen) => aguaViva?.abrir(estadoClave, origen),
             capilarVivo: (estadoClave, origen) => capilarVivo?.abrir(estadoClave, origen),
             cateterVivo: (estadoClave, origen) => cateterVivo?.abrir(estadoClave, origen),
+            murallaViva: (estadoClave, origen) => murallaViva?.abrir(estadoClave, origen),
         },
     };
 }

@@ -7,7 +7,8 @@
 // pacientes se inventan. Cobertura y casos: autonomo/bloques/b1/cobertura.md §2.A y §3 (A1 partido en tres, A3 en
 // dos, A2, A4 y E5), con las correcciones del 20/10 (como mucho 2 errores; el recambio sobre guía, «no se aconseja»).
 // Formato: el de b1-fluidos.js. Donde una pregunta se comprueba en el catéter vivo va
-// `modeloVivo: { cateterVivo: '<estado>' }` (los ESTADOS de js/data/cateter-vivo-data.js); su botón sale primero, y
+// `modeloVivo: { cateterVivo: '<estado>' }` (los ESTADOS de js/data/cateter-vivo-data.js); en la ficha VIII, la muralla de
+// papel: `modeloVivo: { murallaViva: '<estado>' }` (js/data/muralla-viva-data.js). Su botón sale primero, y
 // detrás el de la vista Visual de la propia ficha (`modelo`).
 
 const PDF_A = 'docs/marino-2024-acceso-vascular-practicas-caps1-4.pdf';
@@ -1202,21 +1203,21 @@ export const MAYEUTICA_ACCESOS = {
   'mar-microbioma': {
     entrada: 'La «piel interna» y su microbioma, cómo la disbiosis y la hipoperfusión encienden el fallo multiorgánico, para qué sirve el ácido gástrico, y qué hacen la clorhexidina, la SOD, la SDD y los probióticos.',
     guia: [
-      { id: 'mb-g1', corto: 'la piel interna', tipo: 'test', fuente: 'mar-piel-interna',
+      { id: 'mb-g1', corto: 'la piel interna', tipo: 'test', modeloVivo: { murallaViva: 'sano' }, fuente: 'mar-piel-interna',
         enunciado: 'Si la luz del intestino está «fuera» del cuerpo, como el agujero de un dónut, ¿qué separa 100-400 billones de microbios de tu sangre?',
         opciones: [
           { t: 'Una mucosa gruesa de muchas capas, como la piel', porque: 'Es una sola capa de células cilíndricas de 0,1 mm. Si la crees gruesa, no entenderás lo fácil que es romperla.' },
           { t: 'Una sola capa de células cilíndricas de 0,1 mm', ok: true },
           { t: 'El ácido gástrico, a lo largo de todo el tubo', porque: 'El ácido actúa en el estómago; en el resto, la barrera es la mucosa. Te faltaría la idea de la «barrera de papel».' }],
         explicacion: 'La mucosa digestiva, nuestra <span class="hl">«piel interna»</span>, es una sola capa de células cilíndricas de <span class="hl-rojo">0,1 mm</span> frente a 100-400 billones de microbios: una barrera de papel ante un ejército.' },
-      { id: 'mb-g2', corto: 'dónde están', tipo: 'test', fuente: 'mar-microbioma-cifras · mar-img-4-1',
+      { id: 'mb-g2', corto: 'dónde están', tipo: 'test', modeloVivo: { murallaViva: 'sano' }, fuente: 'mar-microbioma-cifras · mar-img-4-1',
         enunciado: '¿Dónde está la mayor parte del microbioma, y qué zona es la menos poblada?',
         opciones: [
           { t: 'En la boca (10⁶/mL); el colon es casi estéril', porque: 'El colon tiene 10¹² por mL y el 99 % del microbioma. Buscarías el riesgo en el sitio equivocado.' },
           { t: 'Repartido por igual a lo largo del tubo', porque: 'El reparto es muy desigual (Figura 4.1): estómago &lt;10³, colon 10¹².' },
           { t: '99 % en el colon; el estómago, el menos', ok: true }],
         explicacion: 'Figura 4.1: boca 10⁶, <span class="hl">estómago &lt;10³</span> (el menos poblado), intestino 10⁹ y <span class="hl">colon 10¹² por mL, con el 99 %</span>.' },
-      { id: 'mb-g3', corto: 'cómo protege', tipo: 'destapa', fuente: 'mar-microbioma-proteccion',
+      { id: 'mb-g3', corto: 'cómo protege', tipo: 'destapa', modeloVivo: { murallaViva: 'sano' }, fuente: 'mar-microbioma-proteccion',
         enunciado: 'Tu propia flora te defiende de los patógenos. ¿Cómo lo hace?',
         cuantas: 'son tres cosas',
         puntos: [
@@ -1224,42 +1225,42 @@ export const MAYEUTICA_ACCESOS = {
           'Produce <span class="hl">ácidos grasos de cadena corta</span>, el combustible de las células de la mucosa, que mantiene la barrera.',
           'Sus productos ayudan al <span class="hl">tejido linfoide del intestino (GALT)</span>, que atrapa y destruye lo que cruza.'],
         explicacion: 'Alterar el microbioma (disbiosis) estropea los tres mecanismos.' },
-      { id: 'mb-g4', corto: 'amplio espectro', tipo: 'test', fuente: 'mar-disbiosis',
+      { id: 'mb-g4', corto: 'amplio espectro', tipo: 'test', modeloVivo: { murallaViva: 'disbiosis' }, fuente: 'mar-disbiosis',
         enunciado: 'Varios días de antibiótico de amplio espectro. ¿Qué le hace a esa defensa?',
         opciones: [
           { t: 'La refuerza: menos bacterias en el intestino, menos riesgo', porque: 'Al revés: altera el ecosistema (disbiosis) y facilita que los patógenos crucen. Creerías proteger a quien expones.' },
           { t: 'Nada: solo actúa sobre los patógenos', porque: 'El amplio espectro también arrasa la flora normal, que es la que defiende.' },
           { t: 'Disbiosis: falla la barrera y los patógenos cruzan', ok: true }],
         explicacion: 'La <span class="hl">disbiosis</span> estropea los tres mecanismos y favorece la <span class="hl-rojo">translocación</span>: una fuente principal de sepsis y fallo multiorgánico en el crítico.' },
-      { id: 'mb-g5', corto: 'el motor', tipo: 'test', fuente: 'mar-motor-fmo',
+      { id: 'mb-g5', corto: 'el motor', tipo: 'test', modeloVivo: { murallaViva: 'motor-fmo' }, fuente: 'mar-motor-fmo',
         enunciado: 'Shock con hipoperfusión esplácnica. ¿Por qué Marino llama al intestino el «motor» del fallo multiorgánico?',
         opciones: [
           { t: 'Porque el intestino isquémico acaba siempre necrosado', porque: 'No habla de necrosis: habla de una barrera rota que alimenta la inflamación. Buscarías un infarto intestinal que no tiene por qué haber.' },
           { t: 'Porque la translocación es la única causa del fallo multiorgánico', porque: 'Es una fuente principal, no la única. El «motor» es el círculo que se autoalimenta.' },
           { t: 'Porque es un círculo vicioso que se alimenta a sí mismo', ok: true }],
         explicacion: 'Disbiosis o hipoperfusión esplácnica rompen la barrera → pasan patógenos o mediadores → inflamación sistémica → la activación simpática contrae los vasos esplácnicos y rompe más la barrera… <span class="hl-purpura">un proceso que se autoalimenta</span>.' },
-      { id: 'mb-g6', corto: 'el ácido', tipo: 'test', fuente: 'mar-acido-antiseptico · mar-fig-4-3',
+      { id: 'mb-g6', corto: 'el ácido', tipo: 'test', modeloVivo: { murallaViva: 'estomago-sano' }, fuente: 'mar-acido-antiseptico · mar-fig-4-3',
         enunciado: '¿Para qué sirve de verdad el ácido gástrico?',
         opciones: [
           { t: 'Para digerir: sin él hay malabsorción', porque: 'La aclorhidria no causa malabsorción relevante (solo facilita hierro y calcio). Te perderías su papel principal.' },
           { t: 'Como defensa antimicrobiana frente a lo que se ingiere', ok: true },
           { t: 'De antiséptico, pero a pH 4 ya basta', porque: 'A pH 4, Salmonella crece sin problema; a 3 cae poco a poco; a 2 se erradica en 1 hora.' }],
         explicacion: 'Su función principal es una <span class="hl">defensa antimicrobiana</span> frente a lo ingerido (el primer antiséptico, el de Lister, fue un ácido: el fenol). Figura 4.3: <span class="hl">a pH 2, Salmonella erradicada en 1 h</span>. El jugo gástrico tiene pH 1-2.' },
-      { id: 'mb-g7', corto: 'suprimirlo', tipo: 'test', fuente: 'mar-acido-antiseptico · mar-acido-riesgos',
+      { id: 'mb-g7', corto: 'suprimirlo', tipo: 'test', modeloVivo: { murallaViva: 'ibp' }, fuente: 'mar-acido-antiseptico · mar-acido-riesgos',
         enunciado: 'Entonces, ¿qué esperas al suprimir el ácido con IBP o anti-H2?',
         opciones: [
           { t: 'Menos neumonía: hay menos ácido que aspirar', porque: 'Al revés: suprimir el ácido se asocia a más neumonía (ficha de la úlcera de estrés). Le darías un IBP creyendo protegerle.' },
           { t: 'Más Salmonella, Campylobacter y C. difficile', ok: true },
           { t: 'Nada: el intestino tiene su propia defensa', porque: 'La prueba del papel del ácido es justo eso: al suprimirlo aumentan esas infecciones.' }],
         explicacion: 'Suprimir el ácido aumenta las gastroenteritis por <span class="hl">Salmonella y Campylobacter</span> y las infecciones por <span class="hl-rojo">C. difficile</span>.' },
-      { id: 'mb-g8', corto: 'la saliva', tipo: 'test', fuente: 'mar-saliva',
+      { id: 'mb-g8', corto: 'la saliva', tipo: 'test', modeloVivo: { murallaViva: 'boca-uci' }, fuente: 'mar-saliva',
         enunciado: '¿Por qué importa tanto la boca en la neumonía nosocomial?',
         opciones: [
           { t: 'Porque tiene más microbios por mL que el colon', porque: 'Tiene 10⁶ por mL, frente a 10¹² del colon. El problema es el volumen que se aspira, no la densidad.' },
           { t: 'Aspirar un 0,13 % mete un millón', ok: true },
           { t: 'Porque la saliva del sano ya lleva gramnegativos', porque: 'En el sano la flora es poco dañina; en el grave, la orofaringe se coloniza por gramnegativos.' }],
         explicacion: 'Unos <span class="hl">750 mL de saliva al día</span> con un millón de microbios por mL: aspirar solo el <span class="hl">0,13 %</span> mete un millón en la vía aérea. Sería el desencadenante de la mayoría de las neumonías nosocomiales.' },
-      { id: 'mb-g9', corto: 'la adhesión', tipo: 'test', fuente: 'mar-colonizacion-orofaringe · mar-fig-4-4', origen: 'ficha · cifras leídas a ojo de la Figura 4.4',
+      { id: 'mb-g9', corto: 'la adhesión', tipo: 'test', modeloVivo: { murallaViva: 'boca-uci' }, fuente: 'mar-colonizacion-orofaringe · mar-fig-4-4', origen: 'ficha · cifras leídas a ojo de la Figura 4.4',
         enunciado: 'En la Figura 4.4, unos 70 % de los pacientes de UCI llevan bacilos gramnegativos en la orofaringe, frente a un 3-4 % de los empleados del hospital. ¿Por qué, si respiran el mismo aire?',
         opciones: [
           { t: 'Por el contagio en el entorno de la UCI', porque: 'Los empleados viven ese entorno y apenas se colonizan. Lavarías el entorno y seguiría pasando.' },
@@ -1268,28 +1269,28 @@ export const MAYEUTICA_ACCESOS = {
         explicacion: '<span class="hl">No depende del entorno sino de la enfermedad</span>: las proteínas de adhesión del epitelio cambian de forma y pasan a unir patógenos. Lo que decide no es que el germen esté, sino que <span class="hl-azul">pueda pegarse</span>.' },
     ],
     examen: [
-      { id: 'mb-e1', corto: 'clorhexidina oral', tipo: 'test', fuente: 'mar-tabla-4-1 · mar-clorhexidina-oral',
+      { id: 'mb-e1', corto: 'clorhexidina oral', tipo: 'test', modeloVivo: { murallaViva: 'clorhexidina' }, fuente: 'mar-tabla-4-1 · mar-clorhexidina-oral',
         enunciado: '¿Qué dice hoy Marino de la clorhexidina oral en el intubado?',
         opciones: [
           { t: 'Al 2 % cada 6 h: −30 % de neumonía y menos mortalidad', porque: 'Al 2 % da mucositis ulcerosa (va al 0,12 %), y nunca bajó la mortalidad. Le harías daño en la boca sin beneficio.' },
           { t: 'Más mortalidad en 11 ensayos, y ya sin recomendación', ok: true },
           { t: 'Es el estándar porque cubre bien los gramnegativos', porque: 'Actúa sobre todo frente a grampositivos, y en la orofaringe del crítico predominan los gramnegativos.' }],
         explicacion: 'Al <span class="hl">0,12 %</span> cada 6 h (evitar el 2 %). Algunos estudios, −30 % de neumonía sin menos mortalidad; el conjunto de 11 ensayos, <span class="hl-rojo">más mortalidad</span>. Las guías de NAV <span class="hl">retiraron la recomendación</span>.' },
-      { id: 'mb-e2', corto: 'Figura 4.5', tipo: 'test', fuente: 'mar-fig-4-5 · mar-sod · mar-sdd',
+      { id: 'mb-e2', corto: 'Figura 4.5', tipo: 'test', modeloVivo: { murallaViva: 'sdd' }, fuente: 'mar-fig-4-5 · mar-sod · mar-sdd',
         enunciado: 'Figura 4.5. ¿Cuántas bacteriemias por gramnegativos por 1.000 días dieron el control, la SOD y la SDD?',
         opciones: [
           { t: '6,2 / 4 / 1,9', porque: 'Esos son los porcentajes de pacientes, no las tasas por 1.000 días.' },
           { t: '4,5 / 1,4 / 3: la oral reduce más que la digestiva', porque: 'Al revés: la SDD (1,4) reduce más que la SOD (3). Elegirías la estrategia más débil.' },
           { t: '4,5 / 3 / 1,4 (control, SOD y SDD)', ok: true }],
         explicacion: 'Por 1.000 días: <span class="hl">control 4,5; SOD 3 (−33 %); SDD 1,4 (−67 %)</span>. En % de pacientes: 6,2 / 4 / 1,9.' },
-      { id: 'mb-e3', corto: 'la pauta SDD', tipo: 'test', fuente: 'mar-sdd',
+      { id: 'mb-e3', corto: 'la pauta SDD', tipo: 'test', modeloVivo: { murallaViva: 'sdd' }, fuente: 'mar-sdd',
         enunciado: 'SDD. ¿Cuál es la parte sistémica, y a quién se le pone?',
         opciones: [
           { t: 'Cefuroxima hasta el alta de la UCI, en todo ventilado', porque: 'La descontaminación tópica sigue hasta el alta; la cefuroxima, solo 4 días. Y la indicación es estar >72 h, no estar ventilado.' },
           { t: 'Cefuroxima 4 días, si va a estar más de 72 h', ok: true },
           { t: 'Vancomicina IV, para cubrir los estafilococos', porque: 'La vancomicina va en el gel de la SOD (2 %). La parte sistémica de la SDD es la cefuroxima.' }],
         explicacion: 'Cefuroxima IV <span class="hl">1,5 g cada 8 h los 4 primeros días</span>, protección mientras se descontamina el intestino (5-7 días). A todo paciente que vaya a estar <span class="hl">más de 72 h</span> en la UCI, hasta el alta.' },
-      { id: 'mb-e4', corto: 'cuándo no', tipo: 'test', fuente: 'mar-sdd',
+      { id: 'mb-e4', corto: 'cuándo no', tipo: 'test', modeloVivo: { murallaViva: 'multirresistentes' }, fuente: 'mar-sdd',
         enunciado: '¿Cuándo no es apropiada la SDD?',
         opciones: [
           { t: 'Nunca se usa: genera resistencias', porque: 'Ningún estudio (uno prospectivo de 5 años y una experiencia de 16) ha mostrado más infecciones por resistentes.' },
@@ -1318,7 +1319,7 @@ export const MAYEUTICA_ACCESOS = {
         paciente: { Edad: '55 años', Motivo: 'neumonía grave; intubado', Previsión: 'UCI más de 72 h', Unidad: 'sin resistencias problemáticas' },
         pasos: [
           { momento: 'Día 1',
-            pregunta: { id: 'mba-1', tipo: 'test', fuente: 'mar-sdd',
+            pregunta: { id: 'mba-1', tipo: 'test', modeloVivo: { murallaViva: 'sdd' }, fuente: 'mar-sdd',
               enunciado: '¿Es candidato a SDD?',
               opciones: [
                 { t: 'No: la SDD solo crea resistencias', porque: 'Ningún estudio lo ha mostrado, y reduce infecciones y mortalidad. Le privarías de un beneficio.' },
@@ -1354,7 +1355,7 @@ export const MAYEUTICA_ACCESOS = {
                 { t: 'Que reduce la eficacia de la cefuroxima', porque: 'La ficha no habla de esa interacción. Lo que dice es que suprimir el ácido quita una defensa antimicrobiana.' }],
               explicacion: 'El ácido es una <span class="hl">defensa antimicrobiana</span>: suprimirlo aumenta Salmonella, Campylobacter y <span class="hl-rojo">C. difficile</span>, y la neumonía. Tabla 4.2: ventilación >24 h con nutrición enteral es riesgo moderado, sin profilaxis (sin enteral, riesgo máximo).' } },
           { momento: 'Día 10 · el giro', datos: { Unidad: 'brote de Klebsiella multirresistente en la UCI' }, nuevo: ['Unidad'],
-            pregunta: { id: 'mba-5', tipo: 'test', fuente: 'mar-sdd',
+            pregunta: { id: 'mba-5', tipo: 'test', modeloVivo: { murallaViva: 'multirresistentes' }, fuente: 'mar-sdd',
               enunciado: 'Brote de Klebsiella multirresistente en la unidad. ¿Qué pasa con la SDD?',
               opciones: [
                 { t: 'Que ha causado el brote', porque: 'Ningún estudio ha mostrado más infecciones por resistentes con la SDD. Culparla te haría buscar mal el origen.' },
