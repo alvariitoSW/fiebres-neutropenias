@@ -61,16 +61,6 @@ p { margin: 0; }
 .hl-p { background: linear-gradient(to bottom, transparent 58%, rgba(156, 84, 118, .36) 58%); }
 .hl-azul { background: linear-gradient(to bottom, transparent 58%, rgba(212, 175, 55, .32) 58%); color: var(--oro-claro); }
 
-/* La cama 7: la entrada, con sus tres ventanas */
-.cama { position: relative; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: var(--bg); }
-.cama svg { display: block; width: 100%; height: auto; }
-.cama svg text { font-family: var(--serif); }
-.ventana { position: absolute; width: 48px; height: 48px; margin: -24px 0 0 -24px; border-radius: 50%; background: transparent; border: 0; cursor: pointer; padding: 0; }
-.ventana:focus-visible { outline: 2px solid var(--oro); outline-offset: 2px; }
-.cama-nota { font: .8rem/1.4 var(--sans); color: var(--dim); background: var(--card); border-radius: 10px; padding: 8px 10px; }
-.cama-nota a { color: var(--oro); display: inline-flex; align-items: center; min-height: 44px; }
-body.estudio .cama, body.estudio .cama-nota { display: none !important; }
-
 /* Interruptor Explorar | Conceptos | Mayéutica */
 .interruptor { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); border-radius: 999px; overflow: hidden; font: .86rem var(--sans); }
 .interruptor button { min-height: 44px; background: transparent; color: var(--muted); border: 0; font: inherit; cursor: pointer; padding: 0 6px; }
@@ -263,14 +253,140 @@ a.pdf { color: var(--oro); font: 600 .74rem var(--sans); display: inline-flex; a
     <p class="lead">Sedar es <strong class="hl-a">bajar bajo el agua</strong>: la RASS es el profundímetro. El dolor es <strong class="hl-r">la tormenta de la superficie</strong>, y sedar no es calmarla. Cuanto más hondo, <strong class="hl-a">más tarda en subir</strong>. <span class="org">ficha · mar-analgesia · mar-sedacion</span></p>
   </header>
 
-  <!-- La cama 7, en grabado: la ventana de la cabeza encendida; el vientre y la pierna, apagados (otras dos escenas) -->
-  <div class="cama" id="cama">
-    <svg id="cama-svg" viewBox="0 0 360 100" role="img" aria-label="La cama 7: un paciente intubado, con tres ventanas: cabeza, vientre y pierna"></svg>
-    <button type="button" class="ventana" id="ventana-cabeza" style="left:calc(74 / 360 * 100%);top:calc(36 / 100 * 100%)" aria-label="Ventana de la cabeza: entrar en La inmersión"></button>
-    <button type="button" class="ventana" id="ventana-vientre" style="left:calc(184 / 360 * 100%);top:calc(50 / 100 * 100%)" aria-label="Ventana del vientre: La muralla de papel (otra maqueta)"></button>
-    <button type="button" class="ventana" id="ventana-pierna" style="left:calc(272 / 360 * 100%);top:calc(52 / 100 * 100%)" aria-label="Ventana de la pierna: El telar de la trombina (otra maqueta)"></button>
-  </div>
-  <p class="cama-nota" id="cama-nota" hidden></p>
+    <!-- CAMA 7: copiar igual en las tres maquetas -->
+    <!-- Bloque común de «La cama 7» (muralla, telar e inmersión). Se copia entero, sin tocar nada salvo data-escena:
+         data-escena="muralla" (vientre encendido), "telar" (pierna) o "inmersion" (cabeza). La ventana de la escena
+         actual se enciende sola por CSS; las otras dos llevan a su maqueta (b1-muralla.html, b1-telar.html,
+         b1-inmersion.html). Solo usa los tokens de color de :root y window.Motion si está cargado.
+         Avisa a la página con dos eventos que suben al document: «c7-entrada» (al terminar el zoom de entrada o al
+         volver a entrar) y «c7-aparato» (detail: respirador, monitor o bolsa). API: window.Cama7.entrar(),
+         .compactar() y .ampliar(). El paciente de la cama: Andrés, 62 años, intubado. -->
+    <style>
+    .c7-cama { position: relative; border: 1px solid var(--border-color); border-radius: 16px; background: var(--bg-main); overflow: hidden; }
+    .c7-cama .c7-svg { display: block; width: 100%; height: auto; }
+    .c7-pie { position: absolute; left: 10px; bottom: 6px; margin: 0; font: 600 .72rem/1.2 system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--accent-yellow);
+      background: rgba(23, 20, 15, .85); border-radius: 999px; padding: 3px 9px; pointer-events: none; }
+    .c7-cama.c7-compacta { cursor: pointer; display: grid; grid-template-columns: 120px 1fr; align-items: center; gap: 8px; min-height: 48px; padding-right: 8px; }
+    .c7-cama.c7-compacta .c7-svg { height: 50px; width: 120px; }
+    .c7-cama.c7-compacta .c7-pie { position: static; background: none; padding: 0; color: var(--text-dim); font-weight: 400; }
+    .c7-cama.c7-compacta .c7-pie b { color: var(--accent-yellow); }
+    body.estudio .c7-cama { display: none; }
+    .c7-v { cursor: pointer; }
+    .c7-v:focus-visible { outline: 2px solid var(--accent-yellow); }
+    .c7-v .c7-arte { opacity: .45; }
+    .c7-v .c7-on { display: none; }
+    .c7-lbl { font: italic 400 7.5px Georgia, 'Times New Roman', serif; fill: var(--text-muted); }
+    .c7-cama[data-escena="muralla"] [data-v="muralla"] .c7-arte, .c7-cama[data-escena="telar"] [data-v="telar"] .c7-arte, .c7-cama[data-escena="inmersion"] [data-v="inmersion"] .c7-arte { opacity: 1; }
+    .c7-cama[data-escena="muralla"] [data-v="muralla"] .c7-on, .c7-cama[data-escena="telar"] [data-v="telar"] .c7-on, .c7-cama[data-escena="inmersion"] [data-v="inmersion"] .c7-on { display: inline; }
+    .c7-cama[data-escena="muralla"] [data-v="muralla"] .c7-off, .c7-cama[data-escena="telar"] [data-v="telar"] .c7-off, .c7-cama[data-escena="inmersion"] [data-v="inmersion"] .c7-off { display: none; }
+    .c7-cama[data-escena="muralla"] [data-v="muralla"] .c7-lbl, .c7-cama[data-escena="telar"] [data-v="telar"] .c7-lbl, .c7-cama[data-escena="inmersion"] [data-v="inmersion"] .c7-lbl { font-style: normal; font-weight: 700; fill: var(--accent-blue); }
+    .c7-cama.c7-compacta .c7-v { pointer-events: none; }
+    </style>
+    <div class="c7-cama c7-grande" id="c7-cama" data-escena="inmersion">
+      <svg class="c7-svg" viewBox="0 0 360 150" role="img" aria-label="La cama 7: Andrés, 62 años, intubado, con tres ventanas: la cabeza, el vientre y la pierna">
+        <defs>
+          <pattern id="c7-rayado" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" style="stroke:var(--accent-yellow)" stroke-opacity=".3" stroke-width=".8"/></pattern>
+          <pattern id="c7-rayado-fino" width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)"><line x1="0" y1="0" x2="0" y2="3" style="stroke:var(--accent-yellow)" stroke-opacity=".22" stroke-width=".6"/></pattern>
+          <pattern id="c7-cruzado" width="7" height="7" patternUnits="userSpaceOnUse"><path d="M0 0L7 7M7 0L0 7" style="stroke:var(--text-muted)" stroke-opacity=".2" stroke-width=".6"/></pattern>
+          <pattern id="c7-punteado" width="7" height="6" patternUnits="userSpaceOnUse"><circle cx="1.6" cy="1.5" r=".7" style="fill:var(--text-dim)" fill-opacity=".3"/><circle cx="5.1" cy="4.4" r=".55" style="fill:var(--text-dim)" fill-opacity=".24"/></pattern>
+          <pattern id="c7-sabana" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-20)"><line x1="0" y1="0" x2="0" y2="6" style="stroke:var(--text-dim)" stroke-opacity=".28" stroke-width=".7"/></pattern>
+          <clipPath id="c7-cv-cabeza"><circle cx="62" cy="66" r="14"/></clipPath>
+          <clipPath id="c7-cv-vientre"><circle cx="168" cy="64" r="18"/></clipPath>
+          <clipPath id="c7-cv-pierna"><circle cx="268" cy="72" r="14"/></clipPath>
+        </defs>
+        <rect width="360" height="150" style="fill:var(--bg-main)"/>
+        <line x1="0" y1="141" x2="360" y2="141" style="stroke:var(--accent-yellow)" stroke-opacity=".35"/>
+        <g data-aparato="respirador" opacity=".55"><rect x="2" y="30" width="20" height="30" rx="3" style="fill:var(--bg-card);stroke:var(--text-muted)"/><rect x="2" y="30" width="20" height="30" rx="3" fill="url(#c7-cruzado)"/><line x1="12" y1="60" x2="12" y2="140" style="stroke:var(--text-muted)"/><text x="2" y="26" style="font:italic 6.5px Georgia, serif;fill:var(--text-muted)">respirador</text></g>
+        <g data-aparato="monitor" opacity=".55"><rect x="36" y="6" width="34" height="22" rx="3" style="fill:var(--bg-card);stroke:var(--text-muted)"/><path d="M39 20 L46 20 L48 13 L51 24 L53 18 L67 18" style="fill:none;stroke:var(--accent-green)" stroke-width="1"/></g>
+        <g data-aparato="bolsa" opacity=".55"><line x1="118" y1="8" x2="118" y2="84" style="stroke:var(--text-muted)"/><path d="M109 10 h18 v18 q-9 7 -18 0Z" style="fill:var(--bg-card);stroke:var(--text-muted)"/><path d="M109 10 h18 v18 q-9 7 -18 0Z" fill="url(#c7-rayado-fino)"/><path d="M118 31 C118 50 100 58 86 66" style="fill:none;stroke:var(--text-muted)" stroke-dasharray="2 2"/></g>
+        <path d="M22 118 V56 Q22 48 30 48 Q36 48 36 56 V118Z" style="fill:var(--bg-card);stroke:var(--accent-yellow)" stroke-opacity=".7"/><path d="M22 118 V56 Q22 48 30 48 Q36 48 36 56 V118Z" fill="url(#c7-rayado)"/>
+        <path d="M326 118 V70 Q326 62 333 62 Q340 62 340 70 V118Z" style="fill:var(--bg-card);stroke:var(--accent-yellow)" stroke-opacity=".7"/><path d="M326 118 V70 Q326 62 333 62 Q340 62 340 70 V118Z" fill="url(#c7-rayado)"/>
+        <rect x="327" y="80" width="12" height="16" rx="2" style="fill:var(--bg-main);stroke:var(--accent-yellow)"/><text x="333" y="92" text-anchor="middle" style="font:700 10px Georgia, serif;fill:var(--accent-yellow)">7</text>
+        <rect x="36" y="96" width="290" height="8" style="fill:var(--bg-card);stroke:var(--accent-yellow)" stroke-opacity=".6"/>
+        <rect x="36" y="84" width="290" height="12" rx="4" style="fill:var(--text-main)" fill-opacity=".1"/><rect x="36" y="84" width="290" height="12" rx="4" fill="url(#c7-rayado-fino)"/>
+        <line x1="52" y1="104" x2="52" y2="128" style="stroke:var(--accent-yellow)" stroke-opacity=".6"/><circle cx="52" cy="133" r="7" style="fill:none;stroke:var(--accent-yellow)" stroke-opacity=".6"/>
+        <line x1="310" y1="104" x2="310" y2="128" style="stroke:var(--accent-yellow)" stroke-opacity=".6"/><circle cx="310" cy="133" r="7" style="fill:none;stroke:var(--accent-yellow)" stroke-opacity=".6"/>
+        <ellipse cx="66" cy="80" rx="24" ry="7" style="fill:var(--text-main)" fill-opacity=".12"/>
+        <circle cx="66" cy="66" r="12.5" style="fill:var(--bg-card);stroke:var(--text-dim)"/><path d="M76 60 q4 -2 5 2" style="fill:none;stroke:var(--text-dim)"/>
+        <path d="M78 64 C70 40 40 34 22 44" style="fill:none;stroke:var(--accent-yellow)" stroke-width="2" stroke-opacity=".75"/>
+        <path d="M80 74 C95 58 120 54 140 56 C160 58 178 54 196 62 C214 70 250 68 290 70 C300 64 310 58 316 66 C320 72 322 80 322 84 L82 84Z" style="fill:var(--bg-card);stroke:var(--text-dim)"/>
+        <path d="M80 74 C95 58 120 54 140 56 C160 58 178 54 196 62 C214 70 250 68 290 70 C300 64 310 58 316 66 C320 72 322 80 322 84 L82 84Z" fill="url(#c7-sabana)"/>
+        <path d="M130 62 C140 72 150 74 160 70 M220 70 C230 76 250 77 262 74" style="fill:none;stroke:var(--text-dim)" stroke-opacity=".5"/>
+        <path d="M84 66 l6 -3" style="stroke:var(--accent-red)" stroke-width="2"/>
+        <!-- Ventana de la cabeza: La inmersión -->
+        <g class="c7-v" data-v="inmersion" tabindex="0" role="link" aria-label="La cabeza: La inmersión (dolor y sedación)">
+          <circle cx="62" cy="66" r="25" fill="transparent"/>
+          <circle cx="62" cy="66" r="15" style="fill:var(--bg-main)"/>
+          <g class="c7-arte" clip-path="url(#c7-cv-cabeza)"><rect x="47" y="62" width="30" height="20" style="fill:var(--accent-blue)" fill-opacity=".14"/>
+            <path d="M46 62 q4 -3 8 0 t8 0 t8 0 t8 0 M46 69 q4 -3 8 0 t8 0 t8 0 t8 0 M46 76 q4 -3 8 0 t8 0 t8 0 t8 0" style="fill:none;stroke:var(--accent-blue)" stroke-width=".9" stroke-opacity=".8"/>
+            <circle cx="62" cy="58" r="2.4" style="fill:var(--text-main)" fill-opacity=".7"/><path d="M62 61 V74" style="stroke:var(--text-main)" stroke-opacity=".5" stroke-dasharray="1.5 1.5"/></g>
+          <circle class="c7-off" cx="62" cy="66" r="15" style="fill:none;stroke:var(--text-muted)" stroke-dasharray="3 3"/>
+          <g class="c7-on"><circle cx="62" cy="66" r="15" style="fill:none;stroke:var(--accent-blue)" stroke-width="3"/><circle cx="62" cy="66" r="12" style="fill:none;stroke:var(--accent-blue)" stroke-width=".7"/></g>
+          <text class="c7-lbl" x="58" y="35" text-anchor="middle">La inmersión<tspan class="c7-off"> →</tspan></text>
+        </g>
+        <!-- Ventana del vientre: La muralla de papel -->
+        <g class="c7-v" data-v="muralla" tabindex="0" role="link" aria-label="El vientre: La muralla de papel (intestino, estómago y boca)">
+          <circle cx="168" cy="64" r="29" fill="transparent"/>
+          <circle cx="168" cy="64" r="19" style="fill:var(--bg-main)"/>
+          <g class="c7-arte" clip-path="url(#c7-cv-vientre)"><rect x="149" y="45" width="38" height="15" style="fill:var(--accent-purple)" fill-opacity=".08"/>
+            <rect x="150.6" y="62" width="5.6" height="10" style="fill:var(--text-main);stroke:var(--accent-yellow)" fill-opacity=".15" stroke-width=".5"/><rect x="157.2" y="62" width="5.6" height="10" style="fill:var(--text-main);stroke:var(--accent-yellow)" fill-opacity=".15" stroke-width=".5"/><rect x="163.8" y="62" width="5.6" height="10" style="fill:var(--text-main);stroke:var(--accent-yellow)" fill-opacity=".15" stroke-width=".5"/><rect x="170.4" y="62" width="5.6" height="10" style="fill:var(--text-main);stroke:var(--accent-yellow)" fill-opacity=".15" stroke-width=".5"/><rect x="177" y="62" width="5.6" height="10" style="fill:var(--text-main);stroke:var(--accent-yellow)" fill-opacity=".15" stroke-width=".5"/><rect x="183.6" y="62" width="5.6" height="10" style="fill:var(--text-main);stroke:var(--accent-yellow)" fill-opacity=".15" stroke-width=".5"/>
+            <g style="fill:var(--accent-purple)"><path transform="translate(159 55) rotate(-60)" d="M-1.67 -1.12H1.67A1.12 1.12 0 0 1 1.67 1.12H-1.67A1.12 1.12 0 0 1 -1.67 -1.12Z"/><path transform="translate(166 52) rotate(10)" d="M-1.67 -1.12H1.67A1.12 1.12 0 0 1 1.67 1.12H-1.67A1.12 1.12 0 0 1 -1.67 -1.12Z"/><path transform="translate(174 56) rotate(40)" d="M-1.67 -1.12H1.67A1.12 1.12 0 0 1 1.67 1.12H-1.67A1.12 1.12 0 0 1 -1.67 -1.12Z"/><path transform="translate(178 52) rotate(-20)" d="M-1.67 -1.12H1.67A1.12 1.12 0 0 1 1.67 1.12H-1.67A1.12 1.12 0 0 1 -1.67 -1.12Z"/><path transform="translate(156 60) rotate(80)" d="M-1.67 -1.12H1.67A1.12 1.12 0 0 1 1.67 1.12H-1.67A1.12 1.12 0 0 1 -1.67 -1.12Z"/></g>
+            <rect x="149" y="73" width="38" height="12" fill="url(#c7-punteado)"/></g>
+          <circle class="c7-off" cx="168" cy="64" r="19" style="fill:none;stroke:var(--text-muted)" stroke-dasharray="3 3"/>
+          <g class="c7-on"><circle cx="168" cy="64" r="19" style="fill:none;stroke:var(--accent-blue)" stroke-width="3"/><circle cx="168" cy="64" r="16" style="fill:none;stroke:var(--accent-blue)" stroke-width=".7"/></g>
+          <text class="c7-lbl" x="168" y="40" text-anchor="middle">La muralla de papel<tspan class="c7-off"> →</tspan></text>
+        </g>
+        <!-- Ventana de la pierna: El telar de la trombina -->
+        <g class="c7-v" data-v="telar" tabindex="0" role="link" aria-label="La pierna: El telar de la trombina (tromboprofilaxis)">
+          <circle cx="268" cy="72" r="25" fill="transparent"/>
+          <circle cx="268" cy="72" r="15" style="fill:var(--bg-main)"/>
+          <g class="c7-arte" clip-path="url(#c7-cv-pierna)"><rect x="253" y="65" width="30" height="14" style="fill:var(--accent-purple)" fill-opacity=".18"/>
+            <path d="M253 65 H283 M253 79 H283" style="stroke:var(--accent-purple)" stroke-width=".8"/>
+            <path d="M256 66 L278 78 M260 78 L282 66 M254 72 L284 72 M266 65 L272 79" style="fill:none;stroke:var(--text-dim)" stroke-width=".7" stroke-opacity=".9"/>
+            <ellipse cx="262" cy="71" rx="2.6" ry="1.9" style="fill:var(--accent-red)"/><ellipse cx="275" cy="74" rx="2.6" ry="1.9" style="fill:var(--accent-red)"/></g>
+          <circle class="c7-off" cx="268" cy="72" r="15" style="fill:none;stroke:var(--text-muted)" stroke-dasharray="3 3"/>
+          <g class="c7-on"><circle cx="268" cy="72" r="15" style="fill:none;stroke:var(--accent-blue)" stroke-width="3"/><circle cx="268" cy="72" r="12" style="fill:none;stroke:var(--accent-blue)" stroke-width=".7"/></g>
+          <text class="c7-lbl" x="268" y="53" text-anchor="middle">El telar<tspan class="c7-off"> →</tspan></text>
+        </g>
+      </svg>
+      <p class="c7-pie"></p>
+    </div>
+    <script>
+    (function () {
+      const caja = document.getElementById('c7-cama'); if (!caja || caja.dataset.listo) return; caja.dataset.listo = '1';
+      const svg = caja.querySelector('.c7-svg'), pie = caja.querySelector('.c7-pie');
+      const reducir = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const ESC = {
+        muralla: { archivo: 'b1-muralla.html', sitio: 'el vientre', origen: '46.7% 42.7%' },
+        telar: { archivo: 'b1-telar.html', sitio: 'la pierna', origen: '74.4% 48%' },
+        inmersion: { archivo: 'b1-inmersion.html', sitio: 'la cabeza', origen: '17.2% 44%' } };
+      const aqui = ESC[caja.dataset.escena] || ESC.muralla;
+      let espera = null;
+      const avisar = (tipo, detalle) => caja.dispatchEvent(new CustomEvent(tipo, { bubbles: true, detail: detalle }));
+      function compactar() { clearTimeout(espera); espera = null; caja.classList.remove('c7-grande'); caja.classList.add('c7-compacta'); pie.innerHTML = '<b>Cama 7 · Andrés, 62 años</b><br>Toca para ver sus tres ventanas'; }
+      function ampliar() { caja.classList.remove('c7-compacta'); caja.classList.add('c7-grande'); pie.textContent = 'Andrés, 62 años · toca ' + aqui.sitio + ' para entrar'; }
+      function entrar() {
+        clearTimeout(espera); espera = null;
+        if (caja.classList.contains('c7-compacta')) { avisar('c7-entrada'); return; }
+        if (reducir || !window.Motion) { compactar(); avisar('c7-entrada'); return; }
+        svg.style.transformOrigin = aqui.origen;
+        window.Motion.animate(svg, { transform: ['scale(1)', 'scale(3.6)'], opacity: [1, 0] }, { duration: 0.7, easing: 'ease-in' }).finished
+          .then(() => { svg.style.transform = ''; svg.style.opacity = ''; compactar(); avisar('c7-entrada'); });
+      }
+      caja.addEventListener('click', ev => {
+        if (caja.classList.contains('c7-compacta')) { ampliar(); return; }
+        const v = ev.target.closest('[data-v]')?.dataset.v;
+        if (v) { if (v === caja.dataset.escena) entrar(); else location.href = ESC[v].archivo; return; }
+        const a = ev.target.closest('[data-aparato]')?.dataset.aparato;
+        if (a) avisar('c7-aparato', a);
+      });
+      caja.addEventListener('keydown', ev => { const v = ev.target.closest('[data-v]'); if (v && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); v.dispatchEvent(new MouseEvent('click', { bubbles: true })); } });
+      window.Cama7 = { entrar, compactar, ampliar };
+      ampliar();
+      if (reducir) compactar(); else espera = setTimeout(entrar, 1500);
+    })();
+    </script>
+    <!-- /CAMA 7 -->
 
   <div class="interruptor" role="tablist" aria-label="Qué hacer con el modelo">
     <button type="button" role="tab" id="modo-explorar" aria-selected="true">Explorar</button>
@@ -886,44 +1002,6 @@ function ojosDe(items, rass, mira) {
   return rass >= 0 ? 'abiertos' : 'cerrados';
 }
 
-/* ---------- La cama 7 (la entrada) ---------- */
-function construirCama() {
-  const s = $('cama-svg');
-  let h = `<defs><pattern id="c-raya" width="3.5" height="3.5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="3.5" style="stroke:var(--accent-yellow);stroke-width:.6;opacity:.32"/></pattern></defs>`;
-  h += `<rect width="360" height="100" style="fill:var(--bg-main)"/><path d="M0 94 H360" style="stroke:var(--text-muted);stroke-width:.8"/>`;
-  // ventilador y tubo
-  h += `<rect x="6" y="20" width="30" height="40" rx="3" style="fill:url(#c-raya);stroke:var(--text-muted);stroke-width:1"/><rect x="10" y="24" width="22" height="12" style="fill:var(--bg-main);stroke:var(--text-muted);stroke-width:.6"/><path d="M11 32 l4 -5 l3 6 l3 -4 l4 3 l5 -2" style="fill:none;stroke:var(--accent-yellow);stroke-width:.8"/>`;
-  h += T(21, 68, 'ventilador', { a: 'middle', s: 6, i: 1, c: '--text-muted' });
-  h += `<path d="M36 40 C50 44 56 46 70 44" style="fill:none;stroke:var(--text-dim);stroke-width:2"/>`;
-  // pie de suero con las bolsas de la hoja de órdenes
-  h += `<path d="M120 6 V64 M110 64 H130" style="stroke:var(--text-muted);stroke-width:1"/><path d="M106 8 H134" style="stroke:var(--text-muted);stroke-width:1"/>`;
-  h += `<rect x="102" y="10" width="13" height="18" rx="3" style="fill:url(#c-raya);stroke:var(--text-dim);stroke-width:.8"/><rect x="125" y="10" width="13" height="18" rx="3" style="fill:url(#c-raya);stroke:var(--text-dim);stroke-width:.8"/>`;
-  h += T(108, 36, '—', { a: 'middle', s: 5.6, c: '--text-dim', sans: 1, id: 'bolsa-1' }) + T(132, 36, '—', { a: 'middle', s: 5.6, c: '--text-dim', sans: 1, id: 'bolsa-2' });
-  // la cama: cabecero elevado, colchón, ruedas
-  h += `<path d="M44 64 H330 V70 H44Z" style="fill:url(#c-raya);stroke:var(--text-dim);stroke-width:1"/><path d="M52 70 V88 M322 70 V88" style="stroke:var(--text-dim);stroke-width:1.4"/><circle cx="52" cy="90" r="3.4" style="fill:none;stroke:var(--text-dim)"/><circle cx="322" cy="90" r="3.4" style="fill:none;stroke:var(--text-dim)"/>`;
-  h += `<path d="M44 64 L58 22 L66 24 L54 64" style="fill:url(#c-raya);stroke:var(--text-dim);stroke-width:1"/>`;
-  // el paciente: cabeza en la almohada, cuerpo bajo la sábana
-  h += `<ellipse cx="66" cy="44" rx="12" ry="6" transform="rotate(-62 66 44)" style="fill:var(--card2);stroke:var(--text-muted);stroke-width:.8"/>`;
-  h += `<path d="M82 52 C110 48 140 56 170 56 C220 56 270 52 316 54 L318 64 H86Z" style="fill:url(#c-raya);stroke:var(--text-dim);stroke-width:1.1"/>`;
-  h += `<path d="M300 54 q10 -10 16 0" style="fill:none;stroke:var(--text-dim);stroke-width:1"/>`;
-  h += `<circle cx="74" cy="36" r="9" style="fill:var(--bg-main);stroke:var(--text-dim);stroke-width:1.2"/><path d="M68 40 q6 4 12 0" style="fill:none;stroke:var(--text-muted)"/>`;
-  // las tres ventanas
-  h += `<g class="ventana-viva"><circle cx="74" cy="36" r="17" style="fill:none;stroke:var(--accent-blue);stroke-width:2.4"/><circle cx="74" cy="36" r="20.5" style="fill:none;stroke:var(--accent-blue);stroke-width:.8"/></g>`;
-  h += `<circle id="ventana-anillo" cx="74" cy="36" r="17" style="fill:none;stroke:var(--accent-blue);stroke-width:1.4" opacity="0"/>`;
-  h += `<circle cx="184" cy="50" r="15" style="fill:none;stroke:var(--text-muted);stroke-width:1.2;stroke-dasharray:3 3"/><circle cx="272" cy="52" r="15" style="fill:none;stroke:var(--text-muted);stroke-width:1.2;stroke-dasharray:3 3"/>`;
-  h += T(100, 92, 'La inmersión · cabeza', { s: 7.2, c: '--accent-blue', b: 1, sans: 1 });
-  h += T(184, 30, 'Muralla · vientre', { a: 'middle', s: 6.6, c: '--text-muted', sans: 1 }) + T(272, 32, 'Telar · pierna', { a: 'middle', s: 6.6, c: '--text-muted', sans: 1 });
-  // la tarjeta de la cama
-  h += `<rect x="296" y="74" width="54" height="16" rx="3" style="fill:var(--card2);stroke:var(--accent-yellow);stroke-width:.8"/>` + T(323, 85, 'CAMA 7', { a: 'middle', s: 7.4, b: 1, c: '--accent-yellow', sans: 1 });
-  s.innerHTML = h;
-}
-function pintarCama() {
-  const b1 = $('bolsa-1'), b2 = $('bolsa-2');
-  if (!b1) return;
-  b1.textContent = estado.opioide ? OPIOIDES[estado.opioide].n.slice(0, 5) + '.' : '—';
-  b2.textContent = estado.sedante ? SEDANTES[estado.sedante].n.slice(0, 5) + '.' : '—';
-}
-
 /* ---------- Partículas: lactato (propuesta), H⁺ y la inflamación (tabla única) ---------- */
 const gPart = $('g-part');
 function pool(clave, n, r) {
@@ -1095,7 +1173,7 @@ function pintarEscena() {
   tormenta.nivel = (D.bps - 3) / 9;
   tormenta.Aobj = 1.5 + tormenta.nivel * 22;
   $('g-nubes').style.opacity = n2(0.2 + tormenta.nivel * 0.8);
-  rehacerBuzos(); pintarAceite(); pintarVent(); pintarMonitor(); pintarDerecha(); pintarRotulos(); pintarRelojes(); pintarCama();
+  rehacerBuzos(); pintarAceite(); pintarVent(); pintarMonitor(); pintarDerecha(); pintarRotulos(); pintarRelojes();
   // la boya de la dexmedetomidina
   $('g-boya').innerHTML = estado.sedante === 'dexmedetomidina' ? `<path id="cuerda-boya" d="" style="fill:none;stroke:var(--text-muted);stroke-width:1;stroke-dasharray:3 2"/><g id="boya"><ellipse rx="10" ry="6.5" style="fill:var(--accent-yellow);stroke:var(--bg-main);stroke-width:1"/><path d="M-4 -6 V6 M3 -6.3 V6.3" style="stroke:var(--bg-main);stroke-width:2"/><path d="M0 -6.5 V-14" style="stroke:var(--text-dim);stroke-width:1"/><circle cy="-15" r="1.8" style="fill:var(--accent-red)"/></g>${T(0, 0, 'boya: dexmedetomidina', { s: 6.6, b: 1, c: '--accent-yellow', sans: 1, id: 'boya-txt' })}` : '';
   // la aguja del profundímetro
@@ -1457,18 +1535,12 @@ document.querySelectorAll('button.lam').forEach(b => b.addEventListener('click',
 $('visor-cerrar').addEventListener('click', () => { $('visor').hidden = true; });
 $('visor').addEventListener('click', e => { if (e.target === $('visor')) $('visor').hidden = true; });
 
-/* ---------- La cama 7: entrar por la ventana de la cabeza ---------- */
-function entrar7() {
-  $('cama-nota').hidden = true;
-  const a = $('ventana-anillo');
-  if (!REDUCIR && window.Motion && a) window.Motion.animate(0, 1, { duration: .7, ease: 'easeOut', onUpdate: v => { a.setAttribute('r', n2(17 + v * 120)); a.setAttribute('opacity', n2(1 - v)); } });
-  $('escena-bloque').scrollIntoView({ behavior: REDUCIR ? 'auto' : 'smooth', block: 'start' });
+/* ---------- La cama 7 (bloque común): al entrar por la ventana de la cabeza, el paciente se sumerge ---------- */
+document.addEventListener('c7-entrada', () => {
   const B = BUZOS[0];
-  if (B && !D.par) { B.y = SUP - 46; moverBuzo(B, yObjetivo(B), 1.5, 'easeOut'); }
-}
-$('ventana-cabeza').addEventListener('click', entrar7);
-$('ventana-vientre').addEventListener('click', () => { const n = $('cama-nota'); n.hidden = false; n.innerHTML = 'El vientre lleva a <b>La muralla de papel</b> (úlcera de estrés y microbioma): es otra maqueta, <a href="b1-muralla.html">b1-muralla.html →</a>'; });
-$('ventana-pierna').addEventListener('click', () => { const n = $('cama-nota'); n.hidden = false; n.innerHTML = 'La pierna lleva a <b>El telar de la trombina</b> (tromboprofilaxis): es otra maqueta, <a href="b1-telar.html">b1-telar.html →</a>'; });
+  if (!B || D.par || REDUCIR || modo !== 'explorar') return;
+  B.y = SUP - 46; moverBuzo(B, yObjetivo(B), 1.5, 'easeOut');
+});
 
 /* ---------- Altura real de la hoja de órdenes ---------- */
 function medirDock() { document.documentElement.style.setProperty('--dock-h', $('dock').offsetHeight + 'px'); }
@@ -2257,10 +2329,10 @@ window.__pruebas = () => {
 /* ============================================================
    12. Arranque
    ============================================================ */
-limpiarChips(); construirFondo(); construirRegla(); construirCama(); chipsDock(); chipsEstados(); leyenda(); pintarProfundizar();
+limpiarChips(); construirFondo(); construirRegla(); chipsDock(); chipsEstados(); leyenda(); pintarProfundizar();
 aplicar(estadoBase(), { frase: false, inmediato: true });
 decir(...fraseDe(null, estado));
-if (!REDUCIR) { const B = BUZOS[0]; B.y = SUP - 40; moverBuzo(B, yObjetivo(B), 1.6, 'easeOut'); } else pintarUnaVez();
+if (REDUCIR) pintarUnaVez();
 medirDock();
 </script>
 </body>
