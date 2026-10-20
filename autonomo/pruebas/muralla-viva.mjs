@@ -37,7 +37,7 @@ await p.goto(BASE + 'index.html');   // contexto nuevo: localStorage vacío
 await p.waitForFunction(() => window.__murPruebas);
 
 // 1. Desde el menú de Libros: la cama 7 grande y, con movimiento, su zoom de entrada
-await p.click('#btn-libros'); await p.click('#mur-menu-libros'); await p.waitForTimeout(300);
+await p.click('#btn-libros'); await p.click('#btn-libro-marino'); await p.click('#lib-pest-vivos'); await p.click('#mur-menu-libros'); await p.waitForTimeout(300);
 ok(await vistaVisible(), 'abre desde el menú de Libros (Modelos vivos)');
 let t = await T();
 if (!REDUCIDO) {
@@ -281,7 +281,7 @@ ok(nDesbordeOk >= nRespuestas, `sin desborde tras contestar en ${nDesbordeOk} de
 
 // 9. Lo guardado sigue al recargar; Conceptos
 await p.reload(); await p.waitForFunction(() => window.__murPruebas);
-await p.click('#btn-libros'); await p.click('#mur-menu-libros'); await p.waitForTimeout(300);
+await p.click('#btn-libros'); await p.click('#btn-libro-marino'); await p.click('#lib-pest-vivos'); await p.click('#mur-menu-libros'); await p.waitForTimeout(300);
 await pulsar('#mur-modo-preguntas'); await p.waitForTimeout(200);
 ok(await p.evaluate(n => new RegExp(`Seguir \\(${n} de ${n}\\)`).test(document.getElementById('mur-preg').textContent), PREGUNTAS.length), `tras recargar, la Mayéutica recuerda las ${PREGUNTAS.length}`);
 await pulsar('#mur-modo-conceptos');

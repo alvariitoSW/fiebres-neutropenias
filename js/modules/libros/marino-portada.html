@@ -1,0 +1,171 @@
+    <!-- Portada de The ICU Book (Marino): pestañas Índice | Modelos vivos | Repasar. Cada bloque abre su vista de
+         siempre; su «← VOLVER» (.btn-volver-libros-menu) vuelve aquí (libros/index.js). Los botones de los modelos
+         vivos y el repaso del libro entero conservan sus ids (los usan las pruebas, el quiz y el buscador). -->
+    <button class="back-btn btn-volver-libros-estante">← VOLVER</button>
+    <div class="diag-header">
+        <h2 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">The ICU Book · Marino</h2>
+        <p>Marino PL, 5.ª ed. Seis bloques viven aquí, en Libros; los caps. 12‑30, en Merino (Hematología, Cardiología y Neumología).</p>
+    </div>
+
+    <div class="lib-pestanas" role="tablist" aria-label="The ICU Book">
+        <button type="button" class="lib-pestana active" role="tab" id="lib-pest-indice" aria-selected="true" aria-controls="lib-panel-indice" data-lib-pestana="indice">📖 Índice</button>
+        <button type="button" class="lib-pestana" role="tab" id="lib-pest-vivos" aria-selected="false" aria-controls="lib-panel-vivos" data-lib-pestana="vivos">🫀 Modelos vivos</button>
+        <button type="button" class="lib-pestana" role="tab" id="lib-pest-repasar" aria-selected="false" aria-controls="lib-panel-repasar" data-lib-pestana="repasar">🎯 Repasar</button>
+    </div>
+
+    <div class="lib-panel" id="lib-panel-indice" role="tabpanel" aria-labelledby="lib-pest-indice">
+        <!-- «Seguir donde lo dejaste»: la ficha abierta en el último bloque visitado en esta sesión (sin guardar nada) -->
+        <button type="button" class="lib-seguir" id="lib-seguir" hidden></button>
+        <div class="lib-bloques">
+            <button type="button" class="lib-bloque" id="btn-marino-fund" data-lib-bloque="marinoFundamentos" style="--lib-color: var(--accent-blue);">
+                <span class="lib-bloque-icono" aria-hidden="true">📘</span>
+                <span class="lib-bloque-nombre">Fundamentos</span>
+                <span class="lib-bloque-dato">caps. 1-11 · <span data-lib-fichas></span></span>
+                <span class="lib-bloque-vivos" data-lib-vivos hidden></span>
+                <span class="lib-bloque-progreso" data-lib-progreso hidden><span class="lib-bloque-barra"><i></i></span><span class="lib-bloque-progreso-txt"></span></span>
+            </button>
+            <button type="button" class="lib-bloque" id="btn-marino-renal" data-lib-bloque="marinoRenal" style="--lib-color: var(--accent-purple);">
+                <span class="lib-bloque-icono" aria-hidden="true">⚗️</span>
+                <span class="lib-bloque-nombre">Ácido-base, renal y electrolitos</span>
+                <span class="lib-bloque-dato">caps. 31-38 · <span data-lib-fichas></span></span>
+                <span class="lib-bloque-vivos" data-lib-vivos hidden></span>
+                <span class="lib-bloque-progreso" data-lib-progreso hidden><span class="lib-bloque-barra"><i></i></span><span class="lib-bloque-progreso-txt"></span></span>
+            </button>
+            <button type="button" class="lib-bloque" id="btn-marino-abd" data-lib-bloque="marinoAbdomen" style="--lib-color: var(--accent-green);">
+                <span class="lib-bloque-icono" aria-hidden="true">🌡️</span>
+                <span class="lib-bloque-nombre">Abdomen y temperatura</span>
+                <span class="lib-bloque-dato">caps. 39-44 · <span data-lib-fichas></span></span>
+                <span class="lib-bloque-vivos" data-lib-vivos hidden></span>
+                <span class="lib-bloque-progreso" data-lib-progreso hidden><span class="lib-bloque-barra"><i></i></span><span class="lib-bloque-progreso-txt"></span></span>
+            </button>
+            <button type="button" class="lib-bloque" id="btn-marino-neuro" data-lib-bloque="marinoNeuro" style="--lib-color: var(--accent-purple);">
+                <span class="lib-bloque-icono" aria-hidden="true">🧠</span>
+                <span class="lib-bloque-nombre">Neurología</span>
+                <span class="lib-bloque-dato">caps. 45-47 · <span data-lib-fichas></span></span>
+                <span class="lib-bloque-vivos" data-lib-vivos hidden></span>
+                <span class="lib-bloque-progreso" data-lib-progreso hidden><span class="lib-bloque-barra"><i></i></span><span class="lib-bloque-progreso-txt"></span></span>
+            </button>
+            <button type="button" class="lib-bloque" id="btn-marino-nutri" data-lib-bloque="marinoNutricion" style="--lib-color: var(--accent-green);">
+                <span class="lib-bloque-icono" aria-hidden="true">🥣</span>
+                <span class="lib-bloque-nombre">Nutrición y endocrino</span>
+                <span class="lib-bloque-dato">caps. 48-51 · <span data-lib-fichas></span></span>
+                <span class="lib-bloque-vivos" data-lib-vivos hidden></span>
+                <span class="lib-bloque-progreso" data-lib-progreso hidden><span class="lib-bloque-barra"><i></i></span><span class="lib-bloque-progreso-txt"></span></span>
+            </button>
+            <button type="button" class="lib-bloque" id="btn-marino-tox" data-lib-bloque="marinoToxicos" style="--lib-color: var(--accent-red);">
+                <span class="lib-bloque-icono" aria-hidden="true">☠️</span>
+                <span class="lib-bloque-nombre">Tóxicos y apéndices</span>
+                <span class="lib-bloque-dato">caps. 52-53 y apéndices · <span data-lib-fichas></span></span>
+                <span class="lib-bloque-vivos" data-lib-vivos hidden></span>
+                <span class="lib-bloque-progreso" data-lib-progreso hidden><span class="lib-bloque-barra"><i></i></span><span class="lib-bloque-progreso-txt"></span></span>
+            </button>
+        </div>
+        <!-- El buscador del índice (indice.js) se pinta aquí; al escribir, abre el índice completo de abajo -->
+        <div id="lib-buscador-marino"></div>
+        <details class="lib-plegable" id="lib-indice-det-marino">
+            <summary>📖 Índice completo del libro <span class="lib-plegable-dato" data-lib-resumen="marino"></span></summary>
+            <div id="lib-indice-marino"></div>
+        </details>
+        <details class="lib-plegable" id="lib-repasar-det-marino">
+            <summary>🎯 Repasar The ICU Book entero</summary>
+            <p class="lib-plegable-txt">Preguntas de los 6 bloques de Libros y de Merino HEMATO, Cardiología y Neumología (los caps. 12-30). Primero eliges los temas.</p>
+            <button type="button" class="lib-repasar" data-especialidad="libros" data-pulsar="btn-libro-repasar-marino" style="--lib-color: var(--accent-blue);">
+                <span class="lib-repasar-nombre">🎯 Empezar el repaso del libro entero</span>
+            </button>
+        </details>
+    </div>
+
+    <div class="lib-panel" id="lib-panel-vivos" role="tabpanel" aria-labelledby="lib-pest-vivos" hidden>
+        <p class="lib-panel-nota">Cada modelo se mueve con mandos, explica sus conceptos y te pregunta con casos. En el orden de los capítulos.</p>
+        <div class="lib-vivos">
+            <button class="const-node" id="ctv-menu-libros" data-lib-corto="Catéter vivo" data-lib-caps="caps. 1-3" data-especialidad="libros" data-view="cateterVivo" data-cateter-vivo="">
+                <span class="const-orb" style="--orb-color: var(--accent-yellow); --orb-glow: rgba(207,154,62,0.5);">💉</span>
+                <span class="const-card">
+                    <span class="const-title">Catéter vivo: flujo, piel y biopelícula</span>
+                    <span class="const-desc">El flujo lo marca el catéter, no la vena: calibre, longitud, la bolsa, las bombas y la intraósea. Lupas de la piel y la biopelícula, la punta y el aire, y pinchar con eco. Explorar, conceptos y mayéutica con 3 casos (Marino caps. 1-3)</span>
+                    <span class="const-tag" style="--orb-color: var(--accent-yellow);">Abrir el modelo →</span>
+                </span>
+            </button>
+            <button class="const-node" id="mur-menu-libros" data-lib-corto="La muralla de papel" data-lib-caps="cap. 4" data-especialidad="libros" data-view="murallaViva" data-muralla-viva="">
+                <span class="const-orb" style="--orb-color: var(--accent-purple); --orb-glow: rgba(156,84,118,0.5);">🧱</span>
+                <span class="const-card">
+                    <span class="const-title">La cama 7 · La muralla de papel</span>
+                    <span class="const-desc">Una sola capa de células frente a billones de microbios: la flora y la translocación, el motor del fallo multiorgánico, el ácido que protege, la úlcera de estrés que viene del riego, la Tabla 4.2, el IBP y su balanza, la boca del intubado y la SDD. Explorar, conceptos y mayéutica con 3 casos (Marino cap. 4)</span>
+                    <span class="const-tag" style="--orb-color: var(--accent-purple);">Abrir el modelo →</span>
+                </span>
+            </button>
+            <button class="const-node" id="tel-menu-libros" data-lib-corto="El telar de la trombina" data-lib-caps="cap. 5" data-especialidad="libros" data-view="telarVivo" data-telar-vivo="">
+                <span class="const-orb" style="--orb-color: var(--accent-red); --orb-glow: rgba(184,92,62,0.5);">🧵</span>
+                <span class="const-card">
+                    <span class="const-title">La cama 7 · El telar de la trombina</span>
+                    <span class="const-desc">La trombina teje la red del trombo en el bolsillo de una válvula de la femoral: qué hilo corta la HNF, la HBPM, el fondaparinux y los ACOD, la TIH, la dosis según el riñón y el peso, medias y CNI, el filtro, el reloj neuroaxial y la adivinanza de la inmovilidad. Explorar, conceptos y mayéutica con 3 casos (Marino cap. 5)</span>
+                    <span class="const-tag" style="--orb-color: var(--accent-red);">Abrir el modelo →</span>
+                </span>
+            </button>
+            <button class="const-node" id="inm-menu-libros" data-lib-corto="La inmersión" data-lib-caps="cap. 6" data-especialidad="libros" data-view="inmersionViva" data-inmersion-viva="">
+                <span class="const-orb" style="--orb-color: var(--accent-blue); --orb-glow: rgba(212,175,55,0.5);">🤿</span>
+                <span class="const-card">
+                    <span class="const-title">La cama 7 · La inmersión</span>
+                    <span class="const-desc">Sedar es bajar bajo el agua; el dolor, la tormenta de arriba. La cara de la BPS, el profundímetro de la RASS, el diazepam que hunde y no calma, los opioides y el riñón, los lastres de cada sedante, la subida de la Tabla 6.7, el SIP, el propilenglicol y el delirio. Explorar, conceptos y mayéutica con 2 casos (Marino cap. 6)</span>
+                    <span class="const-tag" style="--orb-color: var(--accent-blue);">Abrir el modelo →</span>
+                </span>
+            </button>
+            <button class="const-node" id="cpv-menu-libros" data-lib-corto="Capilar y oxígeno" data-lib-caps="caps. 7 y 9" data-especialidad="libros" data-view="capilarVivo" data-capilar-vivo="">
+                <span class="const-orb" style="--orb-color: var(--accent-red); --orb-glow: rgba(184,92,62,0.5);">🩸</span>
+                <span class="const-card">
+                    <span class="const-title">Capilar y oxígeno: del pulmón a la mitocondria</span>
+                    <span class="const-desc">Hematíes con sus 4 perlas de O₂: contenido, aporte, consumo y extracción; la saturación venosa, el lactato, el pulsioxímetro y el capnograma. Explorar, conceptos y mayéutica con 4 casos (Marino caps. 7 y 9)</span>
+                    <span class="const-tag" style="--orb-color: var(--accent-red);">Abrir el modelo →</span>
+                </span>
+            </button>
+            <button class="const-node" id="agv-menu-libros" data-lib-corto="Río y mar" data-lib-caps="caps. 10-11, 15 y 35" data-especialidad="libros" data-view="aguaViva" data-agua-viva="">
+                <span class="const-orb" style="--orb-color: var(--accent-yellow); --orb-glow: rgba(207,154,62,0.5);">🌊</span>
+                <span class="const-card">
+                    <span class="const-title">Río y mar: el agua del cuerpo</span>
+                    <span class="const-desc">Adónde va cada suero (salino, Ringer, glucosado, albúmina, hipertónico), la hemorragia y el Hto, el sodio y la neurona. Explorar, conceptos y mayéutica con 3 casos (Marino caps. 10-11, 15 y 35)</span>
+                    <span class="const-tag" style="--orb-color: var(--accent-yellow);">Abrir el modelo →</span>
+                </span>
+            </button>
+            <button class="const-node" id="abv-menu-libros" data-lib-corto="Ácido-base vivo" data-lib-caps="cap. 31 · vive en Nefrología" data-especialidad="nefrologia" data-view="acidobase" data-acidobase-vivo="">
+                <span class="const-orb" style="--orb-color: var(--accent-blue); --orb-glow: rgba(212,175,55,0.5);">⚖️</span>
+                <span class="const-card">
+                    <span class="const-title">Ácido-base vivo</span>
+                    <span class="const-desc">El pH cuelga del cociente PaCO₂ / HCO₃⁻: pulmón, plasma y riñón moviéndose, la carta de la gasometría, un laboratorio de 16 estados, conceptos, Mayéutica y 4 casos</span>
+                    <span class="const-tag" style="--orb-color: var(--accent-blue);">Abrir el modelo →</span>
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <div class="lib-panel" id="lib-panel-repasar" role="tabpanel" aria-labelledby="lib-pest-repasar" hidden>
+        <p class="lib-panel-nota">Preguntas de repaso con su explicación. En cada bloque eliges los temas.</p>
+        <!-- El repaso del libro entero (id btn-libro-repasar-marino) lo pinta aquí indice.js -->
+        <div id="lib-repaso-marino"></div>
+        <p class="section-label">Por bloques</p>
+        <div class="lib-repasar-lista">
+            <button type="button" class="lib-repasar" data-especialidad="libros" data-pulsar="btn-marino-fund-repasar" style="--lib-color: var(--accent-blue);">
+                <span class="lib-repasar-nombre">🎯 Fundamentos</span>
+                <span class="lib-repasar-dato">caps. 1-11 · <span data-lib-preguntas="marinoFundamentos"></span></span>
+            </button>
+            <button type="button" class="lib-repasar" data-especialidad="libros" data-pulsar="btn-marino-renal-repasar" style="--lib-color: var(--accent-purple);">
+                <span class="lib-repasar-nombre">🎯 Ácido-base, renal y electrolitos</span>
+                <span class="lib-repasar-dato">caps. 31-38 · <span data-lib-preguntas="marinoRenal"></span></span>
+            </button>
+            <button type="button" class="lib-repasar" data-especialidad="libros" data-pulsar="btn-marino-abd-repasar" style="--lib-color: var(--accent-green);">
+                <span class="lib-repasar-nombre">🎯 Abdomen y temperatura</span>
+                <span class="lib-repasar-dato">caps. 39-44 · <span data-lib-preguntas="marinoAbdomen"></span></span>
+            </button>
+            <button type="button" class="lib-repasar" data-especialidad="libros" data-pulsar="btn-marino-neuro-repasar" style="--lib-color: var(--accent-purple);">
+                <span class="lib-repasar-nombre">🎯 Neurología</span>
+                <span class="lib-repasar-dato">caps. 45-47 · <span data-lib-preguntas="marinoNeuro"></span></span>
+            </button>
+            <button type="button" class="lib-repasar" data-especialidad="libros" data-pulsar="btn-marino-nutri-repasar" style="--lib-color: var(--accent-green);">
+                <span class="lib-repasar-nombre">🎯 Nutrición y endocrino</span>
+                <span class="lib-repasar-dato">caps. 48-51 · <span data-lib-preguntas="marinoNutricion"></span></span>
+            </button>
+            <button type="button" class="lib-repasar" data-especialidad="libros" data-pulsar="btn-marino-tox-repasar" style="--lib-color: var(--accent-red);">
+                <span class="lib-repasar-nombre">🎯 Tóxicos y apéndices</span>
+                <span class="lib-repasar-dato">caps. 52-53 · <span data-lib-preguntas="marinoToxicos"></span></span>
+            </button>
+        </div>
+    </div>

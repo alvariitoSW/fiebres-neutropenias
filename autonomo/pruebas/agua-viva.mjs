@@ -32,7 +32,7 @@ await p.goto(BASE + 'index.html');   // contexto nuevo: localStorage vacío
 await p.waitForFunction(() => window.__agvPruebas);
 
 // 1. Desde el menú de Marino (Libros)
-await p.click('#btn-libros'); await p.click('#agv-menu-libros'); await p.waitForTimeout(600);
+await p.click('#btn-libros'); await p.click('#btn-libro-marino'); await p.click('#lib-pest-vivos'); await p.click('#agv-menu-libros'); await p.waitForTimeout(600);
 ok(await vistaVisible(), 'abre desde el menú de Libros');
 ok((await T()).todo, '__agvPruebas().todoCoincide');
 await p.evaluate(() => window.scrollTo(0, 0)); await p.waitForTimeout(300);
@@ -196,7 +196,7 @@ ok(await desborde() <= 0, 'sin desborde al final del caso');
 
 // 8. Lo guardado sigue al recargar
 await p.reload(); await p.waitForFunction(() => window.__agvPruebas);
-await p.click('#btn-libros'); await p.click('#agv-menu-libros'); await p.waitForTimeout(300);
+await p.click('#btn-libros'); await p.click('#btn-libro-marino'); await p.click('#lib-pest-vivos'); await p.click('#agv-menu-libros'); await p.waitForTimeout(300);
 await pulsar('#agv-modo-preguntas'); await p.waitForTimeout(200);
 ok(await p.evaluate(() => /Seguir el recorrido \(14 de 14\)/.test(document.getElementById('agv-preg').textContent)), 'tras recargar, el recorrido recuerda las 14');
 await p.evaluate(() => window.scrollTo(0, 0));

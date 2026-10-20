@@ -39,7 +39,7 @@ await p.goto(BASE + 'index.html');   // contexto nuevo: localStorage vacío
 await p.waitForFunction(() => window.__telPruebas);
 
 // 1. Desde el menú de Libros: la cama 7 grande y, con movimiento, su zoom de entrada
-await p.click('#btn-libros'); await p.click('#tel-menu-libros'); await p.waitForTimeout(300);
+await p.click('#btn-libros'); await p.click('#btn-libro-marino'); await p.click('#lib-pest-vivos'); await p.click('#tel-menu-libros'); await p.waitForTimeout(300);
 ok(await vistaVisible(), 'abre desde el menú de Libros (Modelos vivos)');
 let t = await T();
 if (!REDUCIDO) {
@@ -89,12 +89,12 @@ const abrirFicha = tab => p.evaluate(tab => { const t = document.createElement('
 const fichaAbierta = tab => p.evaluate(t => { const e = document.getElementById(t); return e.classList.contains('active') && !!e.offsetParent; }, tab);
 for (const tab of FICHAS) {
   await abrirFicha(tab); await p.waitForTimeout(400);
-  const n = await p.evaluate(tab => [...document.querySelectorAll(`#${tab} [data-telar-vivo]`)].filter(b => !b.closest('.vista-mayeutica, .vista-visual')).length, tab);
+  const n = await p.evaluate(tab => [...document.querySelectorAll(`#${tab} [data-telar-vivo]`)].filter(b => !b.closest('.vista-estudiar, .vista-visual')).length, tab);
   ok(n >= 5, `la ficha ${tab} tiene ${n} botones «Ver en el telar vivo»`);
   for (let i = 0; i < n; i++) {
     await abrirFicha(tab); await p.waitForTimeout(250);
-    const k = await p.evaluate(([tab, i]) => [...document.querySelectorAll(`#${tab} [data-telar-vivo]`)].filter(b => !b.closest('.vista-mayeutica, .vista-visual'))[i].dataset.telarVivo, [tab, i]);
-    await p.evaluate(([tab, i]) => [...document.querySelectorAll(`#${tab} [data-telar-vivo]`)].filter(b => !b.closest('.vista-mayeutica, .vista-visual'))[i].click(), [tab, i]); await p.waitForTimeout(REDUCIDO ? 150 : 450);
+    const k = await p.evaluate(([tab, i]) => [...document.querySelectorAll(`#${tab} [data-telar-vivo]`)].filter(b => !b.closest('.vista-estudiar, .vista-visual'))[i].dataset.telarVivo, [tab, i]);
+    await p.evaluate(([tab, i]) => [...document.querySelectorAll(`#${tab} [data-telar-vivo]`)].filter(b => !b.closest('.vista-estudiar, .vista-visual'))[i].click(), [tab, i]); await p.waitForTimeout(REDUCIDO ? 150 : 450);
     const tt = await T();
     ok(await vistaVisible() && estadoEs(tt, k) && tt.cama === 'compacta', `desde ${tab}: abre en «${k}» con la cama compacta`);
     if (await desborde() > 0) ok(false, `desborde en «${k}»`);
@@ -268,7 +268,7 @@ ok(nDesbordeOk >= nRespuestas, `sin desborde tras contestar en ${nDesbordeOk} de
 
 // 9. Lo guardado sigue al recargar; Conceptos
 await p.reload(); await p.waitForFunction(() => window.__telPruebas);
-await p.click('#btn-libros'); await p.click('#tel-menu-libros'); await p.waitForTimeout(300);
+await p.click('#btn-libros'); await p.click('#btn-libro-marino'); await p.click('#lib-pest-vivos'); await p.click('#tel-menu-libros'); await p.waitForTimeout(300);
 await pulsar('#tel-modo-preguntas'); await p.waitForTimeout(200);
 ok(await p.evaluate(n => new RegExp(`Seguir \\(${n} de ${n}\\)`).test(document.getElementById('tel-preg').textContent), PREGUNTAS.length), `tras recargar, la Mayéutica recuerda las ${PREGUNTAS.length}`);
 await pulsar('#tel-modo-conceptos');

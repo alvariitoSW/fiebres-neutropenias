@@ -4242,5 +4242,92 @@ body.inm-activo .pomodoro-panel { bottom: calc(var(--inm-dock-h, 200px) + 76px);
 body.study-mode-on .inm-dock { padding-right: 82px; }
 
 /* [HUECO portada: CSS de la portada de Libros y Marino, prefijo lib-] */
+/* Estantería de Libros (libros-menu.html): un libro grande por fila, con su lomo */
+.lib-estante { display: grid; gap: 14px; }
+.lib-libro-btn { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: 14px; align-items: center; width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); border-left: 4px solid var(--lib-color); background: var(--bg-card); color: var(--text-main); text-align: left; font-family: inherit; cursor: pointer; touch-action: manipulation; }
+.lib-libro-btn:active { background: color-mix(in srgb, var(--lib-color) 14%, var(--bg-main)); }
+.lib-lomo { height: 92px; border-radius: 3px 9px 9px 3px; display: grid; place-items: center; padding: 4px; box-shadow: inset 6px 0 0 color-mix(in srgb, var(--bg-main) 30%, transparent); }
+.lib-lomo span { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 0.62rem; font-weight: 700; letter-spacing: 1.5px; }
+.lib-lomo-lleno { background: linear-gradient(160deg, var(--lib-color), var(--accent-yellow)); color: var(--bg-main); }
+.lib-lomo-hueco { background: var(--bg-main); border: 2px solid var(--lib-color); color: var(--lib-color); }
+.lib-libro-texto { display: grid; gap: 3px; min-width: 0; }
+.lib-libro-titulo { font-size: 1.15rem; font-weight: 700; color: var(--lib-color); line-height: 1.2; }
+.lib-libro-autor { font-size: 0.74rem; color: var(--text-dim); }
+.lib-libro-datos { font-size: 0.74rem; color: var(--text-main); font-weight: 600; }
+.lib-libro-que { font-size: 0.72rem; color: var(--text-muted); line-height: 1.35; }
+.lib-libro-chev { color: var(--lib-color); font-size: 1rem; }
+/* Portada de Marino (marino-portada.html): pestañas Índice | Modelos vivos | Repasar */
+.lib-pestanas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--border-color); border-radius: 999px; overflow: hidden; margin-bottom: 14px; }
+.lib-pestana { min-height: 44px; padding: 6px 4px; border: 0; background: transparent; color: var(--text-muted); font-family: inherit; font-size: 0.78rem; font-weight: 600; cursor: pointer; touch-action: manipulation; }
+.lib-pestana + .lib-pestana { border-left: 1px solid var(--border-color); }
+.lib-pestana.active { background: var(--accent-blue); color: var(--bg-main); }
+.lib-panel-nota { font-size: 0.78rem; color: var(--text-muted); margin: 0 0 12px; }
+.lib-seguir { display: grid; gap: 2px; width: 100%; margin-bottom: 12px; padding: 10px 12px; border: 1px solid var(--accent-blue); border-radius: 10px; background: color-mix(in srgb, var(--accent-blue) 8%, transparent); color: var(--text-main); text-align: left; font-family: inherit; cursor: pointer; touch-action: manipulation; }
+.lib-seguir-eyebrow { font-size: 0.72rem; font-weight: 700; color: var(--accent-blue); }
+.lib-seguir-ficha { font-size: 0.84rem; }
+.lib-bloques { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+.lib-bloque { display: flex; flex-direction: column; gap: 4px; min-height: 112px; padding: 10px; border-radius: 12px; border: 1px solid var(--border-color); border-top: 3px solid var(--lib-color); background: var(--bg-card); color: var(--text-main); text-align: left; font-family: inherit; cursor: pointer; touch-action: manipulation; }
+.lib-bloque:active { background: color-mix(in srgb, var(--lib-color) 14%, var(--bg-main)); }
+.lib-bloque-icono { font-size: 1.4rem; line-height: 1; }
+.lib-bloque-nombre { font-size: 0.9rem; font-weight: 700; line-height: 1.2; }
+.lib-bloque-dato { font-size: 0.7rem; color: var(--text-muted); }
+.lib-bloque-vivos { font-size: 0.7rem; color: var(--lib-color); font-weight: 600; }
+.lib-bloque-vivos::before { content: '● '; }
+.lib-bloque-progreso { display: grid; gap: 2px; margin-top: auto; }
+.lib-bloque-barra { display: block; height: 4px; border-radius: 4px; background: var(--border-color); overflow: hidden; }
+.lib-bloque-barra i { display: block; height: 100%; background: var(--lib-color); }
+.lib-bloque-progreso-txt { font-size: 0.64rem; color: var(--text-muted); }
+.lib-plegable { margin: 0 0 10px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-card); padding: 0 12px; }
+.lib-plegable > summary { min-height: 44px; display: flex; align-items: center; flex-wrap: wrap; gap: 4px 8px; cursor: pointer; font-size: 0.88rem; font-weight: 600; touch-action: manipulation; }
+.lib-plegable[open] { padding-bottom: 12px; }
+.lib-plegable-dato { font-size: 0.72rem; font-weight: 400; color: var(--text-muted); }
+.lib-plegable-txt { font-size: 0.8rem; color: var(--text-muted); margin: 0 0 10px; }
+.lib-vivos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.lib-vivos .const-node { flex-direction: column; gap: 6px; align-items: stretch; margin: 0; padding: 10px; border: 1px solid var(--border-color); border-radius: 12px; background: var(--bg-card); }
+.lib-vivos .const-orb { width: 40px; height: 40px; font-size: 1.1rem; }
+.lib-vivos .const-card { background: none; border: 0; padding: 0; margin: 0; }
+.lib-vivos .const-title { font-size: 0.8rem; }
+.lib-vivos .const-desc { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.lib-vivos .const-node::after { content: attr(data-lib-caps); font-size: 0.66rem; color: var(--text-muted); font-family: 'Courier New', monospace; letter-spacing: 0.5px; }
+.lib-repasar-lista { display: grid; gap: 8px; }
+.lib-repasar { display: grid; gap: 2px; width: 100%; min-height: 48px; padding: 10px 12px; border: 1px solid var(--border-color); border-left: 4px solid var(--lib-color); border-radius: 8px; background: var(--bg-card); color: var(--text-main); text-align: left; font-family: inherit; cursor: pointer; touch-action: manipulation; }
+.lib-repasar:active { background: color-mix(in srgb, var(--lib-color) 14%, var(--bg-main)); }
+.lib-repasar-nombre { font-size: 0.86rem; font-weight: 600; }
+.lib-repasar-dato { font-size: 0.72rem; color: var(--text-muted); }
+/* Tira «Modelos vivos de este bloque», arriba de cada bloque de Marino (la pinta libros/index.js) */
+.lib-tira-vivos { margin: 0 0 14px; }
+.lib-tira-vivos-titulo { font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin: 0 0 6px; }
+.lib-tira-vivos-fila { display: flex; flex-wrap: wrap; gap: 6px; }
+.lib-vivo-chip { min-height: 36px; padding: 6px 12px; border-radius: 18px; border: 1px solid var(--accent-blue); background: color-mix(in srgb, var(--accent-blue) 10%, transparent); color: var(--text-main); font-family: inherit; font-size: 0.78rem; cursor: pointer; touch-action: manipulation; }
+.lib-vivo-chip:active { background: color-mix(in srgb, var(--accent-blue) 25%, transparent); }
 
 /* [HUECO estudiar: CSS del modo Estudiar, prefijo est-] */
+/* ===== Estudiar (core/mayeutica.js): el recorrido de cinco pasos (Mira, Juega, Piensa, Examínate, El caso) de las
+   fichas del bloque 1, segundo botón del interruptor Texto | Estudiar. Prefijo est-; las preguntas usan las piezas
+   may- de la Mayéutica. Solo tokens de color; lo hecho lleva ✓ y «(hecho)», no solo color. ===== */
+[data-visual] > .vista-estudiar { display: none; }
+[data-visual].modo-estudiar > .vista-estudiar { display: grid; }
+[data-visual].modo-estudiar > .vista-texto { display: none; }
+.est-cabeza { display: grid; gap: 4px; min-width: 0; }
+.est-resumen { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; min-width: 0; }
+.est-resumen li { min-width: 0; }
+.may button.est-ir { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; align-items: center; width: 100%; min-height: 52px;
+  padding: 7px 10px; text-align: left; background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border-color);
+  border-radius: 10px; cursor: pointer; touch-action: manipulation; font: inherit; }
+.est-marca, .est-paso-n { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border-color); display: grid; place-items: center;
+  font: 700 .8rem system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--text-muted); flex: none; }
+.est-txt { display: grid; gap: 2px; min-width: 0; }
+.est-txt b { font: 600 .9rem/1.25 system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--text-main); }
+.est-txt small { font: .76rem/1.35 system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--text-muted); overflow-wrap: anywhere; }
+.may button.est-ir.est-hecho .est-marca { color: var(--accent-green); border-color: var(--accent-green); }
+.may button.est-ir.est-aqui { border: 2px solid var(--accent-yellow); padding: 6px 9px; }
+.may button.est-ir.est-aqui .est-marca, .est-paso-n { background: var(--accent-yellow); color: var(--bg-main); border-color: var(--accent-yellow); }
+.est-paso { display: grid; gap: 10px; min-width: 0; }
+.est-paso-t { margin: 6px 0 0; display: flex; align-items: center; gap: 8px; font: 600 1rem system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--text-main); }
+.est-lienzo { min-width: 0; }
+.est-grupo { display: grid; gap: 6px; min-width: 0; }
+.est-grupo-t { margin: 4px 0 0; font: 600 .86rem system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--text-dim); }
+.may button.est-juega { min-height: 44px; width: 100%; max-width: 100%; padding: 8px 12px; text-align: left; background: transparent; color: var(--accent-yellow);
+  border: 1px dashed var(--accent-yellow); border-radius: 10px; font: 600 .86rem/1.3 system-ui, -apple-system, 'Segoe UI', sans-serif;
+  cursor: pointer; touch-action: manipulation; overflow-wrap: anywhere; }
+.est-pie { border-top: 1px solid var(--border-color); padding-top: 10px; }
