@@ -3836,3 +3836,7 @@ button.cvh-org { color: var(--accent-yellow); cursor: pointer; }
 body.mur-activo .pomodoro-fab { bottom: calc(var(--mur-dock-h, 200px) + 14px); }
 body.mur-activo .pomodoro-panel { bottom: calc(var(--mur-dock-h, 200px) + 76px); }
 body.study-mode-on .mur-dock { padding-right: 82px; }
+
+/* [HUECO telar: CSS, prefijo tel-] */
+
+/* [HUECO inmersión: CSS, prefijo inm-] */

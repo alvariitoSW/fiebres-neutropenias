@@ -74,6 +74,8 @@ const MODELOS = {
     capilarVivo: { especialidad: 'libros', view: 'capilarVivo', nombre: '🩸 el capilar vivo' },
     cateterVivo: { especialidad: 'libros', view: 'cateterVivo', nombre: '💉 el catéter vivo' },
     murallaViva: { especialidad: 'libros', view: 'murallaViva', nombre: '🧱 la muralla viva' },
+    // [HUECO telar: MODELOS]
+    // [HUECO inmersión: MODELOS]
 };
 // modeloVivo (el modelo grande de la pregunta) sale primero; modelo (p. ej. la vista Visual de la ficha), detrás.
 const modelosDe = o => [].concat(o?.modeloVivo || [], o?.modelo || []);

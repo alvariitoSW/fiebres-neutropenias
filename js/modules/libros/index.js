@@ -26,6 +26,8 @@ import { init as initAguaViva } from './agua-viva.js';
 import { init as initCapilarVivo } from './capilar-vivo.js';
 import { init as initCateterVivo } from './cateter-vivo.js';
 import { init as initMurallaViva } from './muralla-viva.js';
+// [HUECO telar: import]
+// [HUECO inmersión: import]
 import { montarMayeutica } from '../../core/mayeutica.js';
 import { MAYEUTICA_B1 } from '../../data/mayeutica/b1.js';
 import { librosIndice } from '../../data/libros-indice.js';
@@ -61,6 +63,8 @@ export function init() {
         cateterVivo: document.getElementById('cateter-vivo-view'),
         // Modelo vivo: la cama 7 · la muralla de papel (microbioma y úlcera de estrés), junto al cap. 4
         murallaViva: document.getElementById('muralla-viva-view'),
+        // [HUECO telar: vista]
+        // [HUECO inmersión: vista]
     });
 
     document.getElementById('btn-marino-fund').addEventListener('click', () => librosLevel.show('marinoFundamentos'));
@@ -87,6 +91,8 @@ export function init() {
     const capilarVivo = initCapilarVivo();
     const cateterVivo = initCateterVivo();
     const murallaViva = initMurallaViva();
+    // [HUECO telar: init]
+    // [HUECO inmersión: init]
 
     librosLevel.show('menu');
 
@@ -101,6 +107,8 @@ export function init() {
             capilarVivo: (estadoClave, origen) => capilarVivo?.abrir(estadoClave, origen),
             cateterVivo: (estadoClave, origen) => cateterVivo?.abrir(estadoClave, origen),
             murallaViva: (estadoClave, origen) => murallaViva?.abrir(estadoClave, origen),
+            // [HUECO telar: modelosVivos]
+            // [HUECO inmersión: modelosVivos]
         },
     };
 }
