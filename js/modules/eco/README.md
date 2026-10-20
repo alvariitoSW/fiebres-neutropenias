@@ -91,6 +91,8 @@ cumplirse, una prueba avisa para quitar la marca.
 | `que-mirar.js` | Qué líneas de otras fichas se copian en «Qué mirar» para cada vista |
 | `laboratorio.html`, `latido.html` | Páginas de laboratorio (no se enlazan desde la app) |
 | `motor.mjs` | Motor del latido en el tiempo (sin DOM): 4 cámaras, válvulas por gradiente, aórtica con inercia, pericardio, tabique, lechos sistémico y pulmonar, barorreflejo |
+| `maniobras.mjs`, `lecturas.mjs` | Capa de lectura de la hemodinámica de Marino (sin DOM): EPP y bolo; recta de Guyton, presión en la punta del catéter y curva de termodilución |
+| `guyton-tablas.mjs` | Curvas de función de cada escenario (generado por `herramientas/curvas-guyton.mjs`: no se edita a mano) |
 | `escenarios.mjs` | Escenarios de shock (los usa la página y los comprueban las pruebas) y el patrón de cada tipo según la fuente |
 | `referencias.mjs` | Cifras del latido normal con su referencia y su origen (ficha de la app o fisiología general) |
 | `corazon-geo.mjs` | Geometría procedural del corazón a partir de los volúmenes del motor, y el interior para la sangre |
@@ -542,6 +544,29 @@ los que ya están en la app se abren aquí, los demás siguen enlazando al origi
 - **Siguiente, por orden.** Las válvulas, empezando por la IM (el motor ya la
   tiene); pericardio. Las vistas (04) y la ETE (05) chocan con la anatomía congelada y la sonda libre ya existe, así
   que van al final. Los capítulos de enfermedad necesitan la forma de enfermedad correspondiente en el corazón.
+
+## Hemodinámica de Marino: capa de lectura (octubre 2026)
+
+Decisión del profesor (bloque 1, `autonomo/bloques/b1/diseno-sin-modelo.md` §8): el motor **no cambia su fisiología**;
+se le añade una capa que lo lee y dos maniobras de volumen, para las fichas `mar-retorno-venoso`, `mar-respuesta-fluidos`,
+`mar-cateter-ap` y `mar-termodilucion` de Marino · Fundamentos.
+- `maniobras.mjs`: `epp(motor, on)` pasa 300 mL del volumen venoso sin tensión al que empuja (`p.vuVen −= 300`) y los
+  devuelve al quitarla; `bolo(motor, mL)` suma a `s.vven`. Tras cada maniobra el panel corre 10 s (ilustrativo).
+- `lecturas.mjs`: `guyton(motor)` (RV = (Pms − PAD)/Rv con Rv = (Pms − PVC)/GC del último latido), `curvaFuncion` de la
+  tabla precalculada, `presionEnPunta(estado, 'ad'|'vd'|'ap'|'enclavado')`, `lecturaCateter` y `curvaTermo(gc, qRegT)`.
+  **El enclavamiento lee `pvp` (venas pulmonares), no `pai`**: la ficha lo define como «la presión venosa del lado
+  izquierdo»; la AI del motor oscila 2-16 mmHg y la onda pulsátil no «desaparecería». La diastólica del VD es la
+  telediastólica (= PVC, ficha #mar-termodilucion).
+- `guyton-tablas.mjs`: (PVC, GC, Pms, VS) de cada escenario con −600 a +900 mL, 40 s con barorreflejo; se regenera con
+  `node js/modules/eco/herramientas/curvas-guyton.mjs` si cambia el motor o un escenario (~45 s).
+- `diagramas.mjs` · `crearPanelesHemo`: tres plegables en `eco.html` (ids `cvh-`): Guyton con EPP y bolos (tope
+  1.500 mL), catéter que avanza en un esquema 2D tipo Fig. 8.2 (no en el corazón 3D; globo con Motion solo al moverlo) y
+  termodilución (3 medidas, ±6 % ilustrativo entre ellas; insuficiencia tricuspídea ilustrativa). Cada cifra con su chip.
+- Acceso: `data-eco-panel="guyton|epp|cateter|termo"` junto a `data-eco-escenario`, en el listener de siempre de
+  `index.js`; el escenario se rehace limpio y el «← VOLVER» vuelve a la ficha (`modelosVivos.ecoPanel` +
+  `core/volver-ficha.js`).
+- Pruebas: `pruebas/maniobras.test.mjs` (Tabla 8.1, catéter, EPP, bolo, Guyton, termodilución y paciente posible).
+  Pendiente: la PVC normal del motor es 5,02 (Tabla 8.1: 0-5).
 
 ## Rendimiento medido
 

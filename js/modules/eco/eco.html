@@ -212,6 +212,78 @@
             <p class="cv-muted">Tenue: el último latido completo; fuerte: el latido en curso, que termina en el cursor. Rayas: ESPVR (pendiente = Ees efectiva del modelo, con el barorreflejo) y EDPVR (rigidez diastólica), sin tabique ni pericardio. Ilustrativo.</p>
         </details>
 
+        <!-- Hemodinámica de Marino (Fundamentos, caps. 8 y 11): la pintan crearPanelesHemo (diagramas.mjs) con lecturas.mjs
+             y maniobras.mjs, sobre el mismo motor y el mismo estado del fotograma. Ids con prefijo cvh-. -->
+        <details class="card cv-tarjeta cv-plegable cvh-panel" id="cv-plegable-guyton">
+            <summary>Guyton: retorno venoso, EPP y bolo</summary>
+            <p class="cvh-idea">El corazón solo bombea lo que le vuelve. La sangre vuelve por el gradiente <b>Pms − PVC</b>: el paciente vive donde se cruzan la <b>recta de retorno venoso</b> y la <b>curva de función</b> de su corazón.</p>
+            <canvas id="cvh-guyton" width="360" height="280" aria-label="Diagrama de Guyton: curva de función del corazón, recta de retorno venoso que corta el eje en la Pms y el punto del paciente"></canvas>
+            <ul class="cvh-leyenda">
+                <li><span class="cvh-ley-recta" aria-hidden="true"></span>Recta de retorno venoso: RV = (Pms − PAD) / Rv; corta el eje en la <b>Pms</b> (◆) <button type="button" class="especialidad-link cvh-org" data-especialidad="libros" data-view="marinoFundamentos" data-panel="panel-marino-fund-tabs" data-tab="mar-retorno-venoso" data-resaltar="#mar-rv-ecuacion">📖 ficha · Ec. 11.1-11.2 (Marino, cap. 11, p. 22)</button></li>
+                <li><span class="cvh-ley-curva" aria-hidden="true"></span>Curva de función del corazón: el motor con más o menos volumen, precalculada <span class="cvh-org cvh-org-gen">◇ fisiología general</span></li>
+                <li><span class="cvh-ley-punto" aria-hidden="true"></span>Paciente (PVC, GC); hueco y a rayas, el de antes de la última maniobra <span class="cvh-org cvh-org-mod">⚙ modelo</span></li>
+            </ul>
+            <p class="cv-muted" id="cvh-guyton-14"></p>
+            <div class="cv-fila">
+                <button type="button" class="cv-mini" id="cvh-epp" aria-pressed="false">🦵 Subir las piernas (EPP)</button>
+                <button type="button" class="cv-mini" id="cvh-bolo250">💧 Bolo de 250 mL</button>
+                <button type="button" class="cv-mini" id="cvh-bolo500">💧 Bolo de 500 mL</button>
+                <button type="button" class="cv-mini" id="cvh-paciente">↺ Paciente de nuevo</button>
+            </div>
+            <p class="cv-muted" id="cvh-bolo-total"></p>
+            <div id="cvh-guyton-res"></div>
+            <p class="cv-muted">La EPP pasa <b>300 mL</b> de sangre venosa «sin tensión» a sangre que empuja <button type="button" class="especialidad-link cvh-org" data-especialidad="libros" data-view="marinoFundamentos" data-panel="panel-marino-fund-tabs" data-tab="mar-respuesta-fluidos" data-resaltar="#mar-epp">📖 ficha · EPP: unos 300 mL (p. 33)</button>; el reparto entre las dos, <span class="cvh-org cvh-org-gen">◇ fisiología general</span>. Tras cada maniobra el modelo corre 10 s para que veas ya el efecto <span class="cvh-org cvh-org-ilu">✎ ilustrativo</span>. Mira además el VTI subaórtico, que es lo que se mide a pie de cama:</p>
+            <div class="cv-fila"><button type="button" class="cv-mini" id="cvh-tsvi">🔊 Ver el VTI subaórtico (Doppler del TSVI)</button></div>
+            <details class="nota-plegable"><summary>📝 Nota: la Pms del modelo</summary><p class="fuente-ficha">La Pms del modelo (unos 7 mmHg en el normal) es la de los experimentos en animales (7-8 mmHg); en pacientes de UCI, algunos con vasopresores, se han medido 14-20 mmHg. <button type="button" class="especialidad-link cvh-org" data-especialidad="libros" data-view="marinoFundamentos" data-panel="panel-marino-fund-tabs" data-tab="mar-retorno-venoso" data-resaltar="#mar-pms">📖 ficha · Pms (p. 23)</button> La curva de función está calculada con el barorreflejo encendido.</p></details>
+        </details>
+
+        <details class="card cv-tarjeta cv-plegable cvh-panel" id="cv-plegable-cateter">
+            <summary>Catéter de arteria pulmonar que avanza</summary>
+            <p class="cvh-idea">Como en la Figura 8.2: el globo hinchado se deja llevar por la sangre y <b>la onda de presión dice dónde está la punta</b>. El catéter va en este esquema, no dentro del corazón 3D.</p>
+            <svg class="cvh-cat" id="cvh-cat-svg" viewBox="0 0 340 190" role="img" aria-label="Esquema del corazón derecho con el catéter de arteria pulmonar: aurícula derecha, ventrículo derecho, arteria pulmonar y una rama donde se enclava">
+                <rect class="cvh-cat-fondo" x="0" y="0" width="340" height="190" rx="8"/>
+                <path class="cvh-cat-vaso" d="M61 0 V58"/>
+                <path class="cvh-cat-vaso-luz" d="M61 0 V58"/>
+                <ellipse class="cvh-cat-cam" data-sitio="ad" cx="64" cy="92" rx="38" ry="36"/>
+                <path class="cvh-cat-cam" data-sitio="vd" d="M100 104 Q120 168 182 158 Q232 146 222 104 Q214 80 176 84 Q128 86 100 104Z"/>
+                <path class="cvh-cat-vaso" data-sitio="ap" d="M212 96 Q222 58 246 43 L300 43"/>
+                <path class="cvh-cat-vaso-luz" d="M212 96 Q222 58 246 43 L300 43"/>
+                <path class="cvh-cat-rama" data-sitio="enclavado" d="M296 43 L334 68"/>
+                <path class="cvh-cat-rama-luz" d="M296 43 L334 68"/>
+                <path class="cvh-cat-valvula" d="M94 96 L106 114"/>
+                <path class="cvh-cat-valvula" d="M206 92 L224 98"/>
+                <path id="cvh-cat-camino" class="cvh-cat-camino" d="M61 0 L61 60 Q62 96 92 112 Q132 140 176 128 Q206 118 215 90 Q225 56 248 44 L294 44 L326 63"/>
+                <path id="cvh-cat-linea" class="cvh-cat-linea" d="M61 0 L61 60 Q62 96 92 112 Q132 140 176 128 Q206 118 215 90 Q225 56 248 44 L294 44 L326 63"/>
+                <circle id="cvh-cat-globo" class="cvh-cat-globo" cx="61" cy="40" r="6"/>
+                <text class="cvh-cat-txt" x="70" y="14">Cava superior</text>
+                <text class="cvh-cat-txt" x="32" y="108">AD</text>
+                <text class="cvh-cat-txt" x="140" y="150">VD</text>
+                <text class="cvh-cat-txt" x="250" y="30">Arteria pulmonar</text>
+                <text class="cvh-cat-txt" x="262" y="86">Rama</text>
+            </svg>
+            <div class="cv-fila">
+                <button type="button" class="cv-mini" id="cvh-cat-atras">◀ Retirar</button>
+                <button type="button" class="cv-mini" id="cvh-cat-avanza">Avanzar ▶</button>
+                <button type="button" class="cv-mini" id="cvh-cat-globo-btn" hidden>🎈 Deshinchar el globo</button>
+            </div>
+            <canvas id="cvh-cat-traza" width="360" height="180" aria-label="Trazado de presión en la punta del catéter en los últimos 3 segundos, con el sitio de cada tramo"></canvas>
+            <div id="cvh-cat-lect"></div>
+            <p class="cv-muted">El trazado es la presión del motor en ese sitio, en el mismo instante que el corazón. En el enclavamiento, la punta lee la presión venosa del lado izquierdo (en el modelo, las venas pulmonares) <button type="button" class="especialidad-link cvh-org" data-especialidad="libros" data-view="marinoFundamentos" data-panel="panel-marino-fund-tabs" data-tab="mar-cateter-ap" data-resaltar="#mar-enclavamiento-ondas">📖 ficha · su forma (p. 53)</button>. Velocidad del globo: <span class="cvh-org cvh-org-ilu">✎ ilustrativo</span>. Prueba el TEP masivo en «Escenario».</p>
+        </details>
+
+        <details class="card cv-tarjeta cv-plegable cvh-panel" id="cv-plegable-termo">
+            <summary>Gasto cardíaco por termodilución</summary>
+            <p class="cvh-idea">Se inyectan <b>10 mL de suero frío</b> en la aurícula derecha y el termistor de la punta registra cómo se enfría la sangre: <b>el área bajo la curva es inversamente proporcional al gasto</b>. <button type="button" class="especialidad-link cvh-org" data-especialidad="libros" data-view="marinoFundamentos" data-panel="panel-marino-fund-tabs" data-tab="mar-termodilucion" data-resaltar="#mar-termo-metodo">📖 ficha · el método (p. 57)</button></p>
+            <canvas id="cvh-termo" width="360" height="216" aria-label="Curvas de termodilución de hasta tres medidas seguidas"></canvas>
+            <div class="cv-fila">
+                <button type="button" class="cv-mini" id="cvh-termo-inyectar">💉 Inyectar 10 mL de suero frío</button>
+                <button type="button" class="cv-mini" id="cvh-termo-borrar">Borrar las medidas</button>
+                <label class="cv-mini"><input type="checkbox" id="cvh-termo-it"> Con insuficiencia tricuspídea</label>
+            </div>
+            <div id="cvh-termo-res"></div>
+            <p class="cv-muted">La forma de la curva (Fig. 8.7) y la insuficiencia tricuspídea marcada son <span class="cvh-org cvh-org-ilu">✎ ilustrativo</span>: el modelo no tiene hoy un escenario con insuficiencia tricuspídea. Compara el gasto de la hemorragia y el de la vasoplejía en «Escenario».</p>
+        </details>
+
         <details class="card cv-tarjeta cv-plegable" id="cv-plegable-cifras">
             <summary>Cifras del latido y válvulas</summary>
             <div class="cv-lect">

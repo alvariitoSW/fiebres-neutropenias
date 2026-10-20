@@ -3587,3 +3587,44 @@ body.study-mode-on .ctv-dock { padding-right: 82px; }
 .ruta-etapas b { color: var(--text-main); }
 .ruta-etapas .nv-chips { margin-top: 6px; }
 .ruta-pendiente { font-size: .74rem; color: var(--text-muted); border: 1px dashed var(--border-color); border-radius: 6px; padding: 3px 8px; }
+
+/* Eco cardíaca · hemodinámica de Marino (js/modules/eco/diagramas.mjs, crearPanelesHemo): paneles Guyton con EPP y
+   bolo, catéter de arteria pulmonar que avanza y termodilución. Prefijo cvh-. */
+.cvh-panel canvas { display: block; width: 100%; height: auto; border-radius: 6px; background: var(--bg-main); border: 1px solid var(--border-color); margin-top: 8px; }
+.cvh-idea { margin: 0 0 6px; font-size: 0.86rem; line-height: 1.45; color: var(--text-main); }
+.cvh-leyenda { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 4px; font-size: 0.76rem; line-height: 1.4; color: var(--text-muted); }
+.cvh-leyenda li { display: block; }
+.cvh-ley-recta, .cvh-ley-curva, .cvh-ley-punto { display: inline-block; width: 20px; margin-right: 6px; vertical-align: middle; }
+.cvh-ley-recta { border-top: 3px solid var(--accent-blue); }
+.cvh-ley-curva { border-top: 4px double var(--accent-purple); }
+.cvh-ley-punto { width: 11px; height: 11px; border-radius: 50%; background: var(--text-main); border: 2px solid var(--accent-red); }
+.cvh-org { display: inline-flex; align-items: center; min-height: 26px; padding: 2px 8px; border: 1px dashed var(--border-color); border-radius: 999px;
+    background: transparent; font: 600 0.68rem/1.25 system-ui, sans-serif; color: var(--text-muted); text-align: left; overflow-wrap: anywhere; max-width: 100%; }
+button.cvh-org { color: var(--accent-yellow); cursor: pointer; }
+.cvh-org-ilu { border-style: dotted; }
+.cvh-org-mod { border-style: solid; }
+.cvh-tabla { width: 100%; margin-top: 8px; font-size: 0.78rem; }
+.cvh-tabla th, .cvh-tabla td { padding: 4px 6px; }
+.cvh-tabla td { text-align: right; white-space: nowrap; }
+.cvh-tabla td.cvh-fila-nombre { text-align: left; white-space: normal; color: var(--text-dim); }
+.cvh-registro { margin: 8px 0 0; padding-left: 18px; font-size: 0.76rem; line-height: 1.45; color: var(--text-dim); }
+.cvh-panel .tfg-estado { margin-top: 8px; font-size: 0.8rem; line-height: 1.45; }
+.cvh-paso { margin: 8px 0 0; font-size: 0.82rem; line-height: 1.45; }
+.cvh-panel .cv-mini[aria-pressed="true"], .cvh-panel .cv-mini.on { border-color: var(--accent-yellow); color: var(--accent-yellow); font-weight: 700; }
+.cvh-panel .cv-mini:disabled { opacity: 0.45; cursor: default; }
+.cvh-destacar { outline: 2px solid var(--accent-yellow); outline-offset: 2px; }
+/* esquema del catéter (Fig. 8.2), con su propio fondo */
+.cvh-cat { display: block; width: 100%; height: auto; margin-top: 8px; }
+.cvh-cat-fondo { fill: var(--bg-main); stroke: var(--border-color); }
+.cvh-cat-cam { fill: var(--bg-card); stroke: var(--border-color); stroke-width: 1.5; }
+.cvh-cat-vaso { fill: none; stroke: var(--border-color); stroke-width: 24; stroke-linecap: round; }
+.cvh-cat-vaso-luz { fill: none; stroke: var(--bg-main); stroke-width: 20; stroke-linecap: round; }
+.cvh-cat-rama { fill: none; stroke: var(--border-color); stroke-width: 12; stroke-linecap: round; }
+.cvh-cat-rama-luz { fill: none; stroke: var(--bg-main); stroke-width: 8; stroke-linecap: round; }
+.cvh-cat-cam.on { stroke: var(--accent-yellow); stroke-width: 3; }
+.cvh-cat-vaso.on, .cvh-cat-rama.on { stroke: var(--accent-yellow); }
+.cvh-cat-valvula { stroke: var(--text-muted); stroke-width: 2; stroke-dasharray: 3 2; }
+.cvh-cat-camino { fill: none; stroke: none; }
+.cvh-cat-linea { fill: none; stroke: var(--text-main); stroke-width: 2.5; stroke-linecap: round; }
+.cvh-cat-globo { fill: var(--accent-red); stroke: var(--text-main); stroke-width: 1; }
+.cvh-cat-txt { fill: var(--text-dim); font: 600 11px Georgia, serif; }

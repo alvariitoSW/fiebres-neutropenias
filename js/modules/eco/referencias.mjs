@@ -9,6 +9,7 @@
 const F5 = 'Fisiopatología UCI · Cardiología, Ficha 5 (El Libro Azul, cap. 5)';
 const ALH = 'Alhakak 2025 (1.969 adultos sanos, Copenhagen City Heart Study; media ± 2 DE), en Atlas · Ciclo cardíaco';
 const F10 = 'Fisiopatología UCI · Cardiología, Ficha 10 (El Libro Azul, cap. 10, tabla de macrohemodinamia)';
+const T81 = 'Marino · Fundamentos, Tabla 8.1 (#mar-tabla-8-1; docs/marino-2024-practicas-monitorizacion-caps5-9.pdf, p. 61)';
 
 const extremos = (o, k) => [Math.min(...o.map(x => x[k])), Math.max(...o.map(x => x[k]))];
 export const REFERENCIAS = [
@@ -42,6 +43,12 @@ export const REFERENCIAS = [
   { id: 'admin', nombre: 'Aurícula derecha (mínimo)', unidad: 'mL', valor: (u, o) => extremos(o, 'vad')[0], min: 10, max: 30, texto: '~15-25', origen: 'general' },
   { id: 'admax', nombre: 'Aurícula derecha (máximo)', unidad: 'mL', valor: (u, o) => extremos(o, 'vad')[1], min: 35, max: 65, texto: '~40-60', origen: 'general' },
   { id: 'svo2', nombre: 'SvO₂', unidad: '%', valor: (u) => u.svo2 * 100, min: 65, max: 80, texto: '70-75', origen: 'general' },
+  // Tabla 8.1 de Marino (lo que mide el catéter de arteria pulmonar). El enclavamiento es la presión de las venas
+  // pulmonares del motor (lecturas.mjs, LUGARES.enclavado): con el globo hinchado la punta lee la presión venosa del
+  // lado izquierdo (#mar-enclavamiento-ondas)
+  { id: 'pvc-t81', nombre: 'PVC (Tabla 8.1 del catéter)', unidad: 'mmHg', valor: (u) => u.pvc, min: 0, max: 5, texto: '0-5', origen: 'ficha', fuente: T81, dec: 2,
+    pendiente: 'el motor da 5,02 mmHg: en el borde alto (con la Ficha 5, 0-8, cumple)' },
+  { id: 'pawp-t81', nombre: 'Enclavamiento (Tabla 8.1 del catéter)', unidad: 'mmHg', valor: (u) => u.pvp, min: 6, max: 12, texto: '6-12', origen: 'ficha', fuente: T81, dec: 1 },
 ];
 
 // Devuelve, para un latido (u = motor.ultimo, o = motor.onda), cada referencia con su valor y si cumple
