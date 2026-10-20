@@ -548,3 +548,17 @@ faltaba).
 Auditoría de la versión de la app: un grave (una nota del plan a la vista) y 11 menores, todos corregidos; ninguna dosis
 mal. El fondaparinux con ClCr 30-35 queda como «la fuente no es clara aquí» (el texto da 1,5 mg con 20-50; la tabla
 calla).
+
+### Libros más corto y «Texto | Estudiar» (20/10/2026)
+
+Pedido del usuario: Libros era un scroll infinito (~16 pantallas) y en la ficha había demasiados botones. Propuesta con
+opciones (https://claude.ai/artifact/XF9rGsUJYivo6BAs9yTCGA); eligió A + C y la opción 2:
+- **Libros** enseña solo la estantería (The ICU Book y El Libro Azul). **Marino** se abre en
+  `marino-portada.html` con pestañas Índice | Modelos vivos | Repasar. El Índice tiene «Seguir donde lo dejaste»
+  (solo de la sesión, sin persistencia nueva), los 6 bloques en tarjetas con su progreso y sus modelos vivos, el
+  buscador y, plegados, el índice completo y el repaso. El Libro Azul tiene su vista propia (`libro-azul.html`).
+  Cada bloque lleva arriba la tira de sus modelos vivos; su VOLVER lleva a la portada de Marino.
+- **Texto | Estudiar** en las 23 fichas del bloque 1 (sustituye a Texto | Visual | Mayéutica): un recorrido de 5 pasos
+  (Mira: la vista Visual de siempre; Juega con el modelo; Piensa: Guía; Examínate: Examen y repaso; El caso) y «Para
+  profundizar» al final. El botón «Visual» de la cabecera y `data-en-visual` abren Estudiar → Mira. Las demás fichas de
+  la app siguen con Texto | Visual.
