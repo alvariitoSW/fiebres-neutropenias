@@ -71,6 +71,24 @@ export const FORMAS_IONES = {
     plaqueta: { nombre: 'Plaqueta', forma: 'plaqueta', color: '--text-main' },
     plaquetaActiva: { nombre: 'Plaqueta activada', forma: 'plaquetaActiva', color: '--text-main' },
     fibrina: { nombre: 'Fibrina', forma: 'hilo', color: '--accent-yellow' },
+    // La sangre y la hemostasia (Marino caps. 12-13; lámina autonomo/maquetas/b2-formas.html, aprobada por el usuario
+    // el 20/10/2026 tal como está: el dímero-D en «8», el FvW en oro y las fichas de los factores con su número). El
+    // esquistocito es el disco del hematíe con un mordisco y sin el centro pálido; el FvW, un cordón con cuentas (la
+    // heparina es un collar sin hilo, en ciruela); el fibrinógeno, un bastón recto de tres nudos que se hace hilo de
+    // fibrina; el neutrófilo, claro con el núcleo en tres lóbulos (el linfocito lo tiene redondo); el macrófago, grande
+    // y con brazos. La ficha de factor es la única forma con letras: se dibuja grande (r ≥ 7,5) para que se lea.
+    esquisto: { nombre: 'Esquistocito', forma: 'casco', color: '--accent-red' },
+    fvw: { nombre: 'Factor de von Willebrand (FvW)', forma: 'cordon', color: '--accent-blue' },
+    adamts13: { nombre: 'ADAMTS-13', forma: 'tijera', color: '--accent-green' },
+    fibrinogeno: { nombre: 'Fibrinógeno (factor I)', forma: 'baston', color: '--accent-yellow' },
+    dimero: { nombre: 'Dímero-D', forma: 'dimero', color: '--accent-yellow' },
+    ft: { nombre: 'Factor tisular', forma: 'chispa', color: '--accent-red' },
+    neutrofilo: { nombre: 'Neutrófilo', forma: 'neutrofilo', color: '--text-dim' },
+    macrofago: { nombre: 'Macrófago', forma: 'macrofago', color: '--text-muted' },
+    fII: { nombre: 'Factor II', forma: 'ficha', color: '--accent-blue', etiqueta: 'II' },
+    fVII: { nombre: 'Factor VII', forma: 'ficha', color: '--accent-blue', etiqueta: 'VII' },
+    fIX: { nombre: 'Factor IX', forma: 'ficha', color: '--accent-blue', etiqueta: 'IX' },
+    fX: { nombre: 'Factor X', forma: 'ficha', color: '--accent-blue', etiqueta: 'X' },
 };
 
 // Borde fino de todas las partículas, para que se lean sobre cualquier fondo.
