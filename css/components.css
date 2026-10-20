@@ -4240,3 +4240,7 @@ body.study-mode-on .tel-dock { padding-right: 82px; }
 body.inm-activo .pomodoro-fab { bottom: calc(var(--inm-dock-h, 200px) + 14px); }
 body.inm-activo .pomodoro-panel { bottom: calc(var(--inm-dock-h, 200px) + 76px); }
 body.study-mode-on .inm-dock { padding-right: 82px; }
+
+/* [HUECO portada: CSS de la portada de Libros y Marino, prefijo lib-] */
+
+/* [HUECO estudiar: CSS del modo Estudiar, prefijo est-] */
