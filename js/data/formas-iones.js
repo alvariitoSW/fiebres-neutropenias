@@ -44,6 +44,15 @@ export const FORMAS_IONES = {
     celula: { nombre: 'Célula desprendida (NTA)', forma: 'celula', color: '--text-muted' },
     osmol: { nombre: 'Osmolitos (neurona)', forma: 'pajarita', color: '--accent-yellow' }, // río y mar: no un círculo ámbar como la albúmina
     creat: { nombre: 'Creatinina', forma: 'luna', color: '--text-dim', reserva: true },
+    // Capilar y oxígeno (Marino cap. 9): las dos formas que propuso su maqueta (autonomo/maquetas/b1-capilar-oxigeno.html),
+    // pendientes de que el usuario las confirme. Ninguna choca con las de arriba.
+    o2: { nombre: 'O₂', forma: 'pesa', color: '--text-main' },              // dos átomos unidos: O=O
+    lact: { nombre: 'Lactato', forma: 'tripode', color: '--accent-yellow' }, // medio copo: una glucosa da dos lactatos
+    // Catéter vivo (Marino caps. 1-3): las dos formas que propuso su maqueta (autonomo/maquetas/b1-cateter-vivo.html),
+    // pendientes de que el usuario las confirme. El coco es la única con adhesinas; la burbuja recuerda al anillo del
+    // glucosado, pero solo sale en la lupa del aire, donde no hay glucosado.
+    coco: { nombre: 'Coco (bacteria)', forma: 'coco', color: '--accent-green' },
+    burbuja: { nombre: 'Burbuja de aire', forma: 'burbuja', color: '--text-dim' },
 };
 
 // Borde fino de todas las partículas, para que se lean sobre cualquier fondo.

@@ -1,0 +1,268 @@
+    <button class="back-btn btn-volver-libros-menu" id="cpv-volver">← VOLVER</button>
+    <!-- Capilar y oxígeno: del pulmón a la mitocondria (Marino caps. 7 y 9). Modelo vivo de Libros.
+         Viene de la maqueta aprobada autonomo/maquetas/b1-capilar-oxigeno.html (vuelta 2).
+         Lógica en capilar-vivo.js y capilar-vivo-escena.js; datos en js/data/capilar-vivo-data.js. -->
+    <div class="cpv-raiz" id="cpv-raiz" data-modelo-vivo>
+      <header class="cpv-cabecera">
+        <p class="cpv-eyebrow">Modelo vivo · Marino caps. 7 y 9</p>
+        <h2 class="cpv-titulo">Del pulmón a la <em>mitocondria</em></h2>
+        <p class="cpv-lead">El oxígeno viaja <strong class="hl">pegado a la hemoglobina</strong>; el tejido coge lo que necesita <strong class="hl">hasta la mitad</strong> de lo que le llega; más allá, o si la mitocondria no puede usarlo, <strong class="hl-rojo">sale lactato</strong>. <span class="cpv-org">ficha · mar-transporte-o2 · mar-extraccion-lactato</span></p>
+      </header>
+
+      <div class="cpv-interruptor" role="tablist" aria-label="Qué hacer con el modelo">
+        <button type="button" role="tab" id="cpv-modo-explorar" aria-selected="true">Explorar</button>
+        <button type="button" role="tab" id="cpv-modo-conceptos" aria-selected="false">Conceptos</button>
+        <button type="button" role="tab" id="cpv-modo-preguntas" aria-selected="false">Mayéutica</button>
+      </div>
+
+      <section class="cpv-escena-bloque" id="cpv-escena-bloque" aria-label="Capilar y oxígeno">
+        <div class="cpv-escena" id="cpv-escena">
+          <div class="cpv-lamina-caja" id="cpv-lamina-caja">
+            <svg id="cpv-lamina" viewBox="0 0 360 300" role="img" aria-label="El capilar del tejido: los hematíes sueltan su O₂ hacia las mitocondrias de la célula">
+              <defs>
+                <pattern id="cpv-raya" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" style="stroke:var(--accent-yellow);stroke-width:.7;opacity:.32"/></pattern>
+                <pattern id="cpv-raya2" width="3.4" height="3.4" patternUnits="userSpaceOnUse" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="3.4" style="stroke:var(--accent-yellow);stroke-width:.6;opacity:.27"/></pattern>
+                <pattern id="cpv-punteo" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="1.2" cy="1.2" r=".55" style="fill:var(--accent-yellow);opacity:.3"/></pattern>
+              </defs>
+              <rect width="360" height="300" style="fill:var(--bg-main)"/>
+              <!-- La célula del tejido, con su núcleo y sus mitocondrias -->
+              <g>
+                <ellipse cx="180" cy="250" rx="210" ry="86" style="fill:url(#cpv-raya2);stroke:var(--text-muted);stroke-width:1.2"/>
+                <ellipse cx="52" cy="244" rx="24" ry="16" style="fill:url(#cpv-raya);stroke:var(--text-muted);stroke-width:.9"/>
+                <text x="52" y="274" text-anchor="middle" style="font-size:8px;font-style:italic;fill:var(--text-muted)">núcleo</text>
+                <g style="stroke:var(--text-dim);stroke-width:1;fill:var(--bg-main)"><g transform="translate(120 198) rotate(-8)"><ellipse rx="23" ry="10"/><path d="M-17 1l4-5 4 5 4-5 4 5 4-5 4 5 4-5 4 5" style="fill:none;stroke-width:.8"/></g><g transform="translate(192 194) rotate(6)"><ellipse rx="23" ry="10"/><path d="M-17 1l4-5 4 5 4-5 4 5 4-5 4 5 4-5 4 5" style="fill:none;stroke-width:.8"/></g><g transform="translate(262 204) rotate(-10)"><ellipse rx="23" ry="10"/><path d="M-17 1l4-5 4 5 4-5 4 5 4-5 4 5 4-5 4 5" style="fill:none;stroke-width:.8"/></g><g transform="translate(318 216) rotate(12)"><ellipse rx="23" ry="10"/><path d="M-17 1l4-5 4 5 4-5 4 5 4-5 4 5 4-5 4 5" style="fill:none;stroke-width:.8"/></g></g>
+                <text x="258" y="228" text-anchor="middle" style="font-size:8px;font-style:italic;fill:var(--text-muted)">mitocondrias</text>
+                <text x="180" y="294" text-anchor="middle" style="font-size:9px;font-style:italic;fill:var(--text-dim)">célula del tejido</text>
+                <g id="cpv-mitos-x" hidden style="stroke:var(--accent-red);stroke-width:2.2;stroke-linecap:round"><path d="M107 188l26 20M133 188l-26 20M179 184l26 20M205 184l-26 20M249 194l26 20M275 194l-26 20M305 206l26 20M331 206l-26 20"/></g>
+                <text id="cpv-mitos-x-txt" x="190" y="177" text-anchor="middle" hidden style="font-size:8.5px;fill:var(--accent-red);font-family:var(--cpv-sans);font-weight:700"></text>
+              </g>
+              <text x="14" y="122" style="font-size:8.5px;font-style:italic;fill:var(--text-muted)">intersticio</text>
+              <text id="cpv-lam-aviso" x="14" y="142" style="font-size:9px;fill:var(--accent-red);font-family:var(--cpv-sans);font-weight:700"></text>
+              <!-- El capilar: pared en grabado con sus poros, luz punteada -->
+              <path id="cpv-circuito" d="M-30 70C90 76 250 150 390 146" style="fill:none;stroke:var(--text-muted);stroke-width:66;opacity:.55"/>
+              <path d="M-30 70C90 76 250 150 390 146" style="fill:none;stroke:var(--bg-main);stroke-width:66;stroke-dasharray:2.4 16"/>
+              <path d="M-30 70C90 76 250 150 390 146" style="fill:none;stroke:var(--bg-main);stroke-width:58"/>
+              <path d="M-30 70C90 76 250 150 390 146" style="fill:none;stroke:url(#cpv-punteo);stroke-width:58;opacity:.6"/>
+              <!-- Entrada (arterial) y salida (venosa) -->
+              <g><circle cx="18" cy="18" r="12" style="fill:url(#cpv-raya);stroke:var(--text-muted);stroke-width:1"/>
+                <text x="36" y="16" style="font-size:8.5px;fill:var(--text-dim);font-family:var(--cpv-sans);font-weight:600">del pulmón: sangre arterial</text>
+                <text x="36" y="27" style="font-size:7.5px;font-style:italic;fill:var(--text-muted)">SaO₂ · perlas llenas</text></g>
+              <text x="110" y="50" style="font-size:7.5px;font-style:italic;fill:var(--text-muted)">plasma: el 1,5 % del O₂ va disuelto</text>
+              <text id="cpv-lam-toma" x="352" y="90" text-anchor="end" style="font-size:8.5px;fill:var(--accent-blue);font-family:var(--cpv-sans);font-weight:600"></text>
+              <text x="352" y="101" text-anchor="end" style="font-size:7.5px;font-style:italic;fill:var(--text-muted)">sangre venosa, al corazón →</text>
+              <g>
+                <rect x="248" y="4" width="106" height="38" rx="6" style="fill:var(--bg-main);stroke:var(--border-color);stroke-width:1"/>
+                <path id="cpv-capno-mini-onda" d="" style="fill:none;stroke:var(--accent-yellow);stroke-width:1.3;stroke-linejoin:round"/>
+                <rect id="cpv-capno-mini-barre" x="248" y="5" width="6" height="36" style="fill:var(--bg-main);opacity:.85"/>
+                <text id="cpv-lam-boca" x="252" y="13" style="font-size:7px;fill:var(--text-muted);font-family:var(--cpv-sans)">boca · CO₂</text>
+                <text id="cpv-capno-mini-val" x="350" y="13" text-anchor="end" style="font-size:8px;fill:var(--text-main);font-family:var(--cpv-sans);font-weight:700"></text>
+              </g>
+              <g id="cpv-g-part"></g>
+              <g id="cpv-g-hem"></g>
+              <g id="cpv-g-anillo"></g>
+            </svg>
+            <span class="cpv-chapa">ilustrativo</span>
+            <div class="cpv-lupa" id="cpv-lupa" hidden><svg id="cpv-lupa-svg" viewBox="0 0 220 220" role="img" aria-label="Lupa"></svg></div>
+            <button type="button" class="cpv-lupa-cerrar" id="cpv-lupa-cerrar" hidden aria-label="Cerrar la lupa">×</button>
+          </div>
+          <div class="cpv-lupas-fila">
+            <button type="button" class="cpv-lupa-btn" data-cpv-lupa="dedo" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>El dedo</button>
+            <button type="button" class="cpv-lupa-btn" data-cpv-lupa="mito" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>Mitocondria</button>
+            <button type="button" class="cpv-lupa-btn" data-cpv-lupa="boca" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>La boca</button>
+          </div>
+          <div class="cpv-libro" id="cpv-libro" hidden><div class="cpv-lams" id="cpv-libro-lams"></div><p class="cpv-para" id="cpv-libro-txt"></p></div>
+        </div>
+        <div class="cpv-tablero" id="cpv-tablero" aria-live="off"></div>
+        <ul class="cpv-leyenda-mini" id="cpv-leyenda-mini" aria-label="Formas"></ul>
+      </section>
+
+      <!-- ============ EXPLORAR ============ -->
+      <div id="cpv-vista-explorar" class="cpv-bloque">
+        <section class="cpv-bloque">
+          <h3 class="cpv-h">Ir a un estado</h3>
+          <div class="cpv-chips-estado" id="cpv-chips-estado"></div>
+          <p class="cpv-para">Cada estado es el de una ficha (o el de un paciente de los casos). Los mandos, abajo.</p>
+        </section>
+
+        <details class="nota-plegable cpv-grafica" open>
+          <summary>Fig. 9.3 viva: aporte y consumo</summary>
+          <div class="cpv-gr-fila"><svg id="cpv-svg-93" viewBox="0 0 240 168" role="img" aria-label="Consumo frente a aporte de O₂"></svg>
+            <div class="article-figure cpv-lam"><img loading="lazy" src="js/modules/libros/img/mar-fig9-3-aporte-consumo.jpg" alt="Figura 9.3 del libro (PDF p. 76): relación entre el aporte (DO₂) y el consumo de O₂ (VO₂)."></div></div>
+          <p class="cpv-para">El punto es el paciente. Mientras el tejido pueda subir la extracción, el consumo no cambia (meseta). Cuando la diferencia SaO₂ − SvO₂ llega al 50 %, el consumo cae con el aporte (rampa). Ejes indexados con SC 1,7 m² <span class="cpv-org">ficha · mar-extraccion-curva · mar-sc</span></p>
+        </details>
+        <details class="nota-plegable cpv-grafica">
+          <summary>Fig. 9.1 viva: la curva de disociación</summary>
+          <div class="cpv-gr-fila"><svg id="cpv-svg-91" viewBox="0 0 240 168" role="img" aria-label="Curva de disociación de la oxihemoglobina"></svg>
+            <div class="article-figure cpv-lam"><img loading="lazy" src="js/modules/libros/img/mar-fig9-1-curva-disociacion.jpg" alt="Figura 9.1 del libro (PDF p. 69): curva de disociación de la oxihemoglobina."></div></div>
+          <p class="cpv-para">A = arterial (parte plana), V = venosa (parte empinada), P50 = 27 mmHg <span class="cpv-org">ficha · mar-curva-forma · mar-curva-desplazamientos</span> La curva es la de Severinghaus <span class="cpv-org cpv-ilu">fisiología general</span>, ajustada para pasar por los 4 puntos de la ficha.</p>
+        </details>
+        <details class="nota-plegable cpv-grafica">
+          <summary>Fig. 9.2 viva: anemia frente a hipoxemia</summary>
+          <div class="cpv-gr-fila"><svg id="cpv-svg-92" viewBox="0 0 240 150" role="img" aria-label="Contenido arterial de O₂: normal, hipoxemia y anemia"></svg>
+            <div class="article-figure cpv-lam"><img loading="lazy" src="js/modules/libros/img/mar-fig9-2-anemia-hipoxemia.jpg" alt="Figura 9.2 del libro (PDF p. 71): efecto de la anemia y de la hipoxemia sobre el CaO₂."></div></div>
+          <p class="cpv-para">Las barras aparecen cuando visitas el estado: Hb a la mitad (7,5) o PaO₂ a la mitad (45) <span class="cpv-org">ficha · mar-anemia-hipoxemia</span></p>
+        </details>
+
+        <section class="cpv-bloque">
+          <h3 class="cpv-h">Qué es cada forma</h3>
+          <ul class="cpv-leyenda" id="cpv-leyenda"></ul>
+          <p class="cpv-para">La forma dice qué es; el color ayuda, pero nunca decide solo. Hematíe, CO₂, glucosa, O₂ y lactato salen de la tabla única de formas de la app, la misma de la nefrona viva y el río y mar.</p>
+        </section>
+
+        <details class="nota-plegable">
+          <summary>De dónde sale cada cifra</summary>
+          <div class="cpv-tabla-scroll">
+            <table class="data-table">
+              <thead><tr><th>Cifra</th><th>Cálculo</th><th>Origen</th></tr></thead>
+              <tbody>
+                <tr><td>SaO₂ y SpO₂</td><td>Curva de Severinghaus corregida para pasar por 27 → 50 %, 40 → 73 %, 45 → 78 % y 90 → 98 % (la corrección se interpola entre esos puntos). Con 60 mmHg sale ≈89 %.</td><td><span class="cpv-org cpv-ilu">fisiología general</span> <span class="cpv-org">ficha · mar-tabla-9-1 · mar-anemia-hipoxemia · mar-curva-desplazamientos</span></td></tr>
+                <tr><td>CaO₂</td><td>1,34 × Hb × SaO₂ + 0,003 × PaO₂ (Ec. 9.3)</td><td><span class="cpv-org">ficha · mar-cao2-9</span></td></tr>
+                <tr><td>DO₂</td><td>GC × 1,34 × Hb × SaO₂ × 10 (la fórmula de la ficha, sin el disuelto)</td><td><span class="cpv-org">ficha · mar-do2</span></td></tr>
+                <tr><td>VO₂</td><td>Pide 250 mL/min en reposo; el tejido lo coge mientras la extracción (SaO₂ − SvO₂) no pase del 50 %. Si se pasa, VO₂ = DO₂ × 0,5 / SaO₂: dependiente del aporte.</td><td><span class="cpv-org">ficha · mar-cvo2 · mar-extraccion-curva (Fig. 9.3)</span></td></tr>
+                <tr><td>Fiebre o sepsis</td><td>Pide 300 mL/min</td><td><span class="cpv-org cpv-ilu">ilustrativo</span></td></tr>
+                <tr><td>O₂ER y SvO₂</td><td>O₂ER = VO₂/DO₂ = (SaO₂ − SvO₂)/SaO₂</td><td><span class="cpv-org">ficha · mar-o2er</span></td></tr>
+                <tr><td>Defecto de utilización</td><td>La extracción no pasa del 15 % (cae en la columna «&lt;20 %» de la Tabla 9.4)</td><td><span class="cpv-org cpv-ilu">ilustrativo</span></td></tr>
+                <tr><td>ScvO₂</td><td>= SvO₂ fuera del shock (la ficha dice «algo menor», sin cifra); SvO₂ + 7 en el shock (GC &lt;4, sepsis o parada)</td><td><span class="cpv-org">ficha · mar-scvo2-9 (+7 % de media en el crítico, hasta +18 % en el shock)</span> <span class="cpv-org cpv-ilu">regla del shock: ilustrativa</span></td></tr>
+                <tr><td>Indexado</td><td>÷ 1,7 m² (adulto medio)</td><td><span class="cpv-org">ficha · mar-sc</span></td></tr>
+                <tr><td>Gap de PCO₂</td><td>20 / GC: inversamente proporcional al gasto (Fick); la constante da 4 mmHg con 5 L/min</td><td><span class="cpv-org">ficha · mar-gap-co2</span> <span class="cpv-org cpv-ilu">constante ilustrativa</span></td></tr>
+                <tr><td>PETCO₂</td><td>PaCO₂ 40 menos 2 (sano), 8 (EPOC) o 10 (embolia); baja un 5 % por cada L/min de gasto por debajo de 5; sedación: PaCO₂ 55; esófago 0; RCP ≤10</td><td><span class="cpv-org cpv-ilu">ilustrativo</span> <span class="cpv-org">ficha · mar-gradiente-co2 · mar-tabla-7-1 · mar-capno-rcp</span></td></tr>
+                <tr><td>Lactato</td><td>1 mmol/L de base; +8 × la fracción de consumo que falta; +3 con la PDH bloqueada; +1 con catecolaminas. Las bandas (≤2, 2,1-3,9, ≥4) y su mortalidad sí son de la Fig. 9.4.</td><td><span class="cpv-org cpv-ilu">ilustrativo</span> <span class="cpv-org">ficha · mar-fig-9-4</span></td></tr>
+                <tr><td>La fila de hematíes</td><td>Cuántos desfilan: proporcional a la Hb (11 con Hb 17); a qué velocidad: proporcional al gasto. Las perlas que se vacían en el capilar van de la SaO₂ a la SvO₂ del modelo.</td><td><span class="cpv-org cpv-ilu">ilustrativo</span> <span class="cpv-org">las saturaciones: ficha · mar-o2er</span></td></tr>
+                <tr><td>Humo (CO)</td><td>COHb del 25 %: SaO₂ = curva × 0,75; la SpO₂ no cambia</td><td><span class="cpv-org cpv-ilu">fracción ilustrativa</span> <span class="cpv-org">ficha · mar-cooximetria</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+        <details class="nota-plegable">
+          <summary>Notas de fuentes y de fidelidad</summary>
+          <div class="cpv-nota-fuentes"><b>P50.</b> Marino da 27 mmHg; El Libro Azul (Fisiopatología UCI · Hematología), 22,5. Son fuentes distintas: cada una se reproduce tal cual. El modelo usa la de Marino. <span class="cpv-org">ficha · mar-curva-desplazamientos</span></div>
+          <div class="cpv-nota-fuentes"><b>SvO₂ normal.</b> 65-75 % en el cap. 9 (Tabla 9.4); 70-75 % en el cap. 7 y la Tabla 8.1. Las dos son de la fuente. <span class="cpv-org">ficha · mar-svo2-guia · mar-svo2-ecuacion</span></div>
+          <div class="cpv-nota-fuentes"><b>DO₂ y VO₂ normales.</b> Texto del cap. 9 (PDF p. 73): DO₂ 900-1.100 mL/min (500-600 por m²) y VO₂ 200-300 mL/min (110-160 por m²). Tabla 9.2 (p. 72): DO₂ 520-600 por m² y VO₂ 200-270 mL/min (110-160 por m²). Tabla 8.1 (p. 61): DO₂ 520-570 por m². Se reproducen las tablas. <span class="cpv-org">ficha · mar-o2er</span></div>
+          <div class="cpv-nota-fuentes"><b>Ec. 7.1.</b> El libro imprime «SpO₂ = (HbO₂ / Hb + HbO₂) × 100», sin paréntesis; la fracción buena es HbO₂ / (Hb + HbO₂). <span class="cpv-org">ficha · mar-nota-spo2-formula</span></div>
+          <div class="cpv-nota-fuentes"><b>El umbral de la Fig. 9.3.</b> El libro imprime «SaO₂ 98 %, SvO₂ 50 %, SaO₂ − SvO₂ 50 %» (Fig. 9.3, PDF p. 76) y el cap. 11 dice que la SvO₂ «cae al 50 %» (fluidoterapia, p. 29). Con SaO₂ 98 % la resta da 48: el modelo pone el techo en la diferencia (50 puntos) y enseña 48. <span class="cpv-org">ficha · mar-extraccion-curva · mar-scvo2-11</span></div>
+          <div class="cpv-nota-fuentes"><b>El VO₂ cuando depende del aporte.</b> Con GC 2 el aporte es 394 mL/min: la Ec. 9.17 (VO₂ = DO₂ × (SaO₂ − SvO₂), con SaO₂ ≈ 1) da 394 × 0,50 = 197; la Ec. 9.13 (VO₂ = DO₂ × O₂ER, con O₂ER = (SaO₂ − SvO₂)/SaO₂ = 0,51) da 201. Las dos son del libro; el modelo usa la exacta (201). <span class="cpv-org">ficha · mar-o2er · mar-extraccion-curva</span></div>
+          <div class="cpv-nota-fuentes"><b>Dos juegos de cortes de la extracción.</b> Oximetría dual, cap. 7 (PDF p. 43): &gt;25 %, 25-50 % y ≥50 %. Cap. 9 (p. 76-77): normal 20-30 %, &gt;30 % y ≥50 %. Y para la SvO₂ alta, el punto 5 de la p. 77 dice «80 % o más» y la Tabla 9.4, «&gt;80 %». Son del mismo libro; cada pregunta usa el de su capítulo. <span class="cpv-org">ficha · mar-dual-tabla · mar-sao2-svo2-guia</span></div>
+          <div class="cpv-nota-fuentes"><b>La Tabla 9.4 y el metabolismo.</b> Sus cortes valen «si el metabolismo es normal» (PDF p. 76). Con fiebre, estrés o sin tiamina el tablero dice «no válida»; en la sepsis rotula «defecto de utilización» (aunque la acompañen fiebre o estrés), porque esa columna de la tabla describe precisamente la sepsis. <span class="cpv-org">ficha · mar-sao2-svo2-guia</span></div>
+          <div class="cpv-nota-fuentes"><b>La ScvO₂ alta en el shock séptico.</b> Que una ScvO₂ &gt;80 % en el shock séptico sea, lo más probable, un defecto de utilización lo dice el cap. 11 (fluidoterapia, PDF p. 29, «Cómo leer la ScvO₂»); la Tabla 9.4 es de la SvO₂ mixta. <span class="cpv-org">ficha · mar-respuesta-fluidos · mar-scvo2-pautas</span></div>
+          <div class="cpv-nota-fuentes"><b>Los pacientes de los casos.</b> En el giro del caso B2, la cama 2 ya respira con O₂ (SaO₂ 98 %): con SaO₂ 78 % una ScvO₂ de 90 % sería imposible. El gap de PCO₂ del modelo es ilustrativo (∝ 1/GC). La COHb del 25 % del caso B1 y las cifras de PETCO₂ del caso B4 son del paciente inventado.</div>
+        </details>
+
+        <details class="nota-plegable">
+          <summary>Lo que la ficha no da (huecos)</summary>
+          <ul class="cpv-huecos">
+            <li>Cuánto menor es la ScvO₂ que la SvO₂ en el sano («algo menor»): el modelo las iguala.</li>
+            <li>Cuánto sube el consumo con la fiebre o la sepsis, y cuánto baja la extracción en la sepsis: ilustrativos.</li>
+            <li>Cifras de PETCO₂ en la EPOC, la embolia o la sedación, y cuánto baja con el gasto: solo el sentido (Tabla 7.1, r = 0,87).</li>
+            <li>Cómo sube el lactato con el déficit de aporte o con cada causa: solo las bandas de la Fig. 9.4.</li>
+            <li>La SvO₂ en el déficit de tiamina: la ficha no la da, y el modelo no la toca.</li>
+            <li>El flujo de la RCP: el tablero no da aporte ni consumo en la parada.</li>
+          </ul>
+        </details>
+
+        <!-- Lo que encuentra el buscador global (core/search.js): cada entrada es un enlace cruzado
+             normal que abre el modelo en un estado. Ocultas: solo se pulsan desde el buscador. -->
+        <div hidden>
+          <button type="button" data-especialidad="libros" data-view="capilarVivo" data-capilar-vivo="normal" data-buscar-titulo="Capilar y oxígeno: del pulmón a la mitocondria (modelo vivo)" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="capilar y oxigeno capilar vivo oxígeno transporte de oxigeno aporte consumo do2 vo2 extracción contenido arterial cao2 hemoglobina">Capilar y oxígeno</button>
+          <button type="button" data-especialidad="libros" data-view="capilarVivo" data-capilar-vivo="anemia" data-buscar-titulo="Capilar y oxígeno: la anemia frente a la hipoxemia" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="anemia hipoxemia contenido arterial cao2 curva de disociación">Anemia</button>
+          <button type="button" data-especialidad="libros" data-view="capilarVivo" data-capilar-vivo="dependiente" data-buscar-titulo="Capilar y oxígeno: la extracción y el consumo dependiente del aporte" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="extracción de oxígeno o2er svo2 saturación venosa consumo dependiente del aporte bajo gasto">Extracción</button>
+          <button type="button" data-especialidad="libros" data-view="capilarVivo" data-capilar-vivo="sepsis" data-buscar-titulo="Capilar y oxígeno: el lactato y el defecto de utilización (sepsis)" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="lactato sepsis defecto de utilización svo2 alta pdh tiamina mitocondria">Lactato</button>
+          <button type="button" data-especialidad="libros" data-view="capilarVivo" data-capilar-vivo="co" data-buscar-titulo="Capilar y oxígeno: el pulsioxímetro y el CO" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="pulsioximetría pulsioxímetro spo2 cooximetría monóxido de carbono carboxihemoglobina oximetría dual">Pulsioxímetro</button>
+          <button type="button" data-especialidad="libros" data-view="capilarVivo" data-capilar-vivo="capno-normal" data-buscar-titulo="Capilar y oxígeno: el capnograma y la PETCO₂" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="capnografía capnograma petco2 etco2 co2 espirado intubación esofágica rcp">Capnografía</button>
+        </div>
+      </div>
+
+      <!-- ============ CONCEPTOS ============ -->
+      <div id="cpv-vista-conceptos" class="cpv-bloque" hidden>
+        <div id="cpv-concepto" class="cpv-formato cpv-entra"></div>
+      </div>
+
+      <!-- ============ MAYÉUTICA ============ -->
+      <div id="cpv-vista-preguntas" class="cpv-bloque" hidden>
+        <div id="cpv-preg" class="cpv-formato cpv-entra"></div>
+        <details class="nota-plegable" id="cpv-profundizar">
+          <summary>Para profundizar (lo que esta Mayéutica no cubre)</summary>
+          <div class="cpv-prof">
+            <section><b>Consumo medido: la calorimetría indirecta.</b> VO₂ = VE × (FiO₂ − FeO₂), con un analizador de O₂ en la vía aérea. Varía solo ±5 % (el calculado, ±18 %), pero requiere equipo y personal. El calculado no incluye el consumo del pulmón (&lt;5 %, hasta un 20 % si está inflamado).
+              <span class="cpv-fuente-p" data-cpv-fuente="mar-transporte-o2#mar-tabla-9-3"></span> <a class="cpv-pdf" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=73" target="_blank" rel="noopener">PDF, pp. 73-74 →</a></section>
+            <section><b>StO₂ (espectroscopia infrarroja).</b> Un sensor en la piel mide la saturación de la microcirculación; casi toda esa sangre está en las vénulas, así que refleja sobre todo la saturación venosa. En el shock, la StO₂ muscular sigue al aporte. No hay valores normales definidos.
+              <span class="cpv-fuente-p" data-cpv-fuente="mar-extraccion-lactato#mar-sto2"></span> <a class="cpv-pdf" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=78" target="_blank" rel="noopener">PDF, p. 78 →</a></section>
+            <section><b>Oximetría venosa continua.</b> Catéteres de fibra óptica que emiten las dos longitudes de onda y miden la luz reflejada por los hematíes (reflectancia): un dato cada 5 segundos (Fig. 7.5). La SvO₂, con una exactitud del 1-2 %.
+              <span class="cpv-fuente-p" data-cpv-fuente="mar-oximetria#mar-oxi-venosa"></span> <a class="cpv-pdf" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=42" target="_blank" rel="noopener">PDF, p. 42 →</a></section>
+            <section><b>Capnografía sin intubar.</b> Sensores para gafas nasales y mascarillas, con un adaptador que recoge el gas espirado por la boca y el O₂ por otra cánula (Fig. 7.7).
+              <span class="cpv-fuente-p" data-cpv-fuente="mar-capnografia#mar-capno-nasal"></span> <a class="cpv-pdf" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=45" target="_blank" rel="noopener">PDF, p. 45 →</a></section>
+            <section><b>El lactato como combustible.</b> Su densidad calórica equivale a la de la glucosa (Tabla 9.6) y una glucosa da dos lactatos. En la sepsis lo usan el corazón y el cerebro: hasta el 60 % de la energía del miocardio y un 25-30 % de la del cerebro.
+              <span class="cpv-fuente-p" data-cpv-fuente="mar-extraccion-lactato#mar-lactato-combustible"></span> <a class="cpv-pdf" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=82" target="_blank" rel="noopener">PDF, pp. 82-83 →</a></section>
+            <section><b>La reflexión final del autor.</b> En animales, la PO₂ intracelular puede ser de 1 mmHg y la producción aerobia de ATP sigue por debajo de 0,5 mmHg: la célula está hecha para vivir con poco O₂. El culpable del fallo multiorgánico sería la lesión inflamatoria.
+              <span class="cpv-fuente-p" data-cpv-fuente="mar-extraccion-lactato#mar-hipoxia-final"></span> <a class="cpv-pdf" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=83" target="_blank" rel="noopener">PDF, p. 83 →</a></section>
+            <section><b>Historia: la oximetría de los pilotos.</b> Nació en los años cuarenta para detectar la hipoxemia de los pilotos de combate, con luz a través del lóbulo de la oreja; fallaba porque la luz dependía del pigmento y el grosor de la piel, y no distinguía arterias de venas.
+              <span class="cpv-fuente-p" data-cpv-fuente="mar-oximetria#mar-oxi-historia"></span> <a class="cpv-pdf" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=37" target="_blank" rel="noopener">PDF, p. 37 →</a></section>
+            <section><b>Piel oscura e hipoxemia oculta.</b> La SpO₂ suele ser algo mayor que la SaO₂, y la diferencia es 1-3 % mayor con piel oscura. En 88.000 pares de medidas, la hipoxemia no detectada (SaO₂ &lt;88 % con SpO₂ ≥92 %) fue del 6,9 % en negros, 6,0 % en hispanos y 4,9 % en blancos y asiáticos; al ser medidas puntuales, su importancia clínica no está clara.
+              <span class="cpv-fuente-p" data-cpv-fuente="mar-oximetria#mar-oxi-exactitud · #mar-hipoxemia-oculta"></span> <a class="cpv-pdf" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=41" target="_blank" rel="noopener">PDF, p. 41 →</a></section>
+            <section><b>Objetivo de SpO₂.</b> La guía más reciente de oxigenoterapia: <b>90-94 %</b> en la mayoría y <b>88-92 %</b> en la insuficiencia respiratoria hipercápnica. Un cambio de 3-4 % se considera significativo.
+              <span class="cpv-fuente-p" data-cpv-fuente="mar-oximetria#mar-spo2-objetivo"></span> <a class="cpv-pdf" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=41" target="_blank" rel="noopener">PDF, p. 41 →</a></section>
+            <section><b>La metahemoglobina.</b> Como la carboxihemoglobina, el pulsioxímetro no la detecta (hacen falta las longitudes de onda del cooxímetro, hasta 8); normalmente las dos suman menos del 5 %. Si sube, la SaO₂ cae y la SpO₂ apenas cambia: la sobrestima. El modelo solo dibuja el CO.
+              <span class="cpv-fuente-p" data-cpv-fuente="mar-oximetria#mar-cooximetria"></span> <a class="cpv-pdf" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=40" target="_blank" rel="noopener">PDF, p. 40 →</a></section>
+            <section><b>El lactato y el shock.</b> Un lactato &gt;2 mmol/L se considera el marcador más fiable de mala oxigenación tisular y es requisito del diagnóstico de shock. Pruebas en contra de la hipoxia: en animales con shock séptico, un marcador de hipoxia celular no la encontró en ningún órgano, y en humanos la PO₂ del músculo está aumentada en el shock séptico.
+              <span class="cpv-fuente-p" data-cpv-fuente="mar-extraccion-lactato#mar-lactato-circular · #mar-lactato-contra"></span> <a class="cpv-pdf" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=78" target="_blank" rel="noopener">PDF, pp. 78-79 →</a></section>
+            <section><b>El pulsicooxímetro portátil.</b> Los cooxímetros del laboratorio (hasta 8 longitudes de onda, con sangre arterial) ven la COHb y la metHb; hay un «pulsicooxímetro» portátil, el que usan los bomberos, de exactitud irregular.
+              <span class="cpv-fuente-p" data-cpv-fuente="mar-oximetria#mar-cooximetria"></span> <a class="cpv-pdf" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=40" target="_blank" rel="noopener">PDF, p. 40 →</a></section>
+            <section><b>Cuándo la PETCO₂ supera a la PaCO₂, y para qué más sirve.</b> La otra columna de la Tabla 7.1: PETCO₂ &gt; PaCO₂ con <b>hipermetabolismo, acidosis metabólica o hiperoxia</b>. Los cambios de PETCO₂ predicen la respuesta a volumen en ventilados (no en sanos que respiran solos). Y en ventilación mecánica, si la diferencia PaCO₂ − PETCO₂ aumenta puede ser en parte por sobreinsuflación: ayuda a encontrar el volumen óptimo.
+              <span class="cpv-fuente-p" data-cpv-fuente="mar-capnografia#mar-tabla-7-1 · #mar-capno-gasto · #mar-gradiente-co2"></span> <a class="cpv-pdf" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=46" target="_blank" rel="noopener">PDF, pp. 46-47 →</a></section>
+            <section><b>Cuándo un cambio de la SvO₂ cuenta.</b> En ventilados estables varía un 5-6 % en pocas horas: un cambio es significativo si supera el 5 % durante más de 10 minutos (cap. 7); el cap. 9 dice que varía de forma espontánea un 5 %.
+              <span class="cpv-fuente-p" data-cpv-fuente="mar-oximetria#mar-svo2-mixta · mar-extraccion-lactato#mar-svo2-guia"></span> <a class="cpv-pdf" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=43" target="_blank" rel="noopener">PDF, p. 43 (y p. 77) →</a></section>
+            <p class="cpv-para">El resto de las 4 fichas (caps. 7 y 9) está en su texto: cada «Ver en el texto» de las preguntas lleva a su sitio.</p>
+          </div>
+        </details>
+      </div>
+
+      <nav class="cpv-dock" id="cpv-dock" aria-label="Mandos del capilar">
+        <div class="cpv-dock-in">
+          <div id="cpv-dock-explorar">
+            <p class="cpv-frase" id="cpv-frase" aria-live="polite"></p>
+            <div class="cpv-dock-tabs" role="tablist" aria-label="Mandos del modelo">
+              <button type="button" role="tab" data-cpv-tab="sangre" aria-selected="true">Sangre</button>
+              <button type="button" role="tab" data-cpv-tab="pulmon" aria-selected="false">Pulmón</button>
+              <button type="button" role="tab" data-cpv-tab="corazon" aria-selected="false">Corazón</button>
+              <button type="button" role="tab" data-cpv-tab="tejido" aria-selected="false">Tejido</button>
+              <button type="button" role="tab" data-cpv-tab="mido" aria-selected="false">Mido en</button>
+            </div>
+            <div class="cpv-dock-panel" data-cpv-panel="sangre">
+              <label class="cpv-desliza"><span>Hb</span><input type="range" id="cpv-m-hb" min="5" max="17" step="0.5" value="15" aria-label="Hemoglobina, g/dL"><output id="cpv-o-hb"></output></label>
+              <div class="cpv-raya"><button type="button" class="cpv-tog" id="cpv-m-co" aria-pressed="false">Humo: CO <small>COHb 25 %, ilustr.</small></button></div>
+            </div>
+            <div class="cpv-dock-panel" data-cpv-panel="pulmon" hidden>
+              <label class="cpv-desliza"><span>PaO₂</span><input type="range" id="cpv-m-pao2" min="40" max="100" step="1" value="90" aria-label="PaO₂, mmHg"><output id="cpv-o-pao2"></output></label>
+              <div class="cpv-raya">
+                <button type="button" class="cpv-tog" data-cpv-espacio="epoc" aria-pressed="false">EPOC</button>
+                <button type="button" class="cpv-tog" data-cpv-espacio="embolia" aria-pressed="false">Embolia</button>
+                <button type="button" class="cpv-tog" id="cpv-m-sedacion" aria-pressed="false">Sedación: hipoventila</button>
+                <button type="button" class="cpv-tog" id="cpv-m-esofago" aria-pressed="false">Tubo en el esófago</button>
+              </div>
+            </div>
+            <div class="cpv-dock-panel" data-cpv-panel="corazon" hidden>
+              <label class="cpv-desliza"><span>Gasto</span><input type="range" id="cpv-m-gc" min="1.5" max="8" step="0.1" value="5" aria-label="Gasto cardíaco, L/min"><output id="cpv-o-gc"></output></label>
+              <div class="cpv-raya">
+                <button type="button" class="cpv-tog" id="cpv-m-rcp" aria-pressed="false">Parada con RCP</button>
+                <button type="button" class="cpv-tog" id="cpv-m-frio" aria-pressed="false">Dedo frío (vasoconstricción)</button>
+              </div>
+            </div>
+            <div class="cpv-dock-panel" data-cpv-panel="tejido" hidden>
+              <div class="cpv-seg" id="cpv-m-util" aria-label="Utilización del O₂"><button type="button" data-v="normal" aria-pressed="true">Usa el O₂</button><button type="button" data-v="sepsis" aria-pressed="false">Sepsis</button><button type="button" data-v="tiamina" aria-pressed="false">Sin tiamina</button></div>
+              <div class="cpv-raya">
+                <button type="button" class="cpv-tog" id="cpv-m-fiebre" aria-pressed="false">Fiebre: más consumo <small>ilustr.</small></button>
+                <button type="button" class="cpv-tog" id="cpv-m-estres" aria-pressed="false">Estrés fisiológico</button>
+              </div>
+            </div>
+            <div class="cpv-dock-panel" data-cpv-panel="mido" hidden>
+              <div class="cpv-seg" id="cpv-m-toma" aria-label="Toma venosa"><button type="button" data-v="svo2" aria-pressed="true">A. pulmonar · SvO₂</button><button type="button" data-v="scvo2" aria-pressed="false">Cava sup. · ScvO₂</button></div>
+              <div class="cpv-seg" id="cpv-m-sensor" aria-label="Sensor del pulsioxímetro"><button type="button" data-v="dedo" aria-pressed="true">Sensor en el dedo</button><button type="button" data-v="frente" aria-pressed="false">En la frente</button></div>
+            </div>
+          </div>
+          <div id="cpv-dock-estudio" class="cpv-dock-estudio" hidden>
+            <div class="cpv-pasos" id="cpv-dock-pasos"></div>
+            <div class="cpv-dock-est-txt"><span id="cpv-dock-est-izq"></span><span id="cpv-dock-est-der"></span></div>
+          </div>
+        </div>
+      </nav>
+    </div>
