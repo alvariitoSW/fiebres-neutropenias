@@ -76,7 +76,7 @@ ok(await p.evaluate(() => document.querySelector('#cpv-c-ven .cpv-o').textConten
 await desde('mar-oximetria', 'co', t => t.estado.co && t.R.spo2 === 98 && t.R.sao2 === 74 && t.lupa === 'dedo', 'co');
 await desde('mar-oximetria', 'dual', t => t.estado.hb === 7.5 && t.R.dual === 50, 'dual');
 await desde('mar-capnografia', 'capno-normal', t => t.lupa === 'boca' && t.R.petco2 === 38, 'capno-normal');
-await desde('mar-capnografia', 'capno-rcp', t => t.estado.rcp && t.lupa === 'boca' && t.celdas.petco2 === '≤10', 'capno-rcp');
+await desde('mar-capnografia', 'capno-rcp', t => t.estado.rcp && t.lupa === 'boca' && /^8\b/.test(t.celdas.petco2), 'capno-rcp');
 const crudosExp = await p.evaluate(() => [...document.querySelectorAll('#cpv-raiz .cpv-org')].filter(e => e.offsetParent).map(e => e.textContent).filter(t => /\b(mar|mr|mc)-[a-z0-9-]+/.test(t)));
 ok(!crudosExp.length, `chips de origen sin ids a la vista en Explorar ${crudosExp.slice(0, 3).join(' | ')}`);
 ok(await p.evaluate(() => document.querySelectorAll('#cpv-raiz .cpv-org-ir').length > 5), 'los chips de origen llevan enlaces a su ficha');

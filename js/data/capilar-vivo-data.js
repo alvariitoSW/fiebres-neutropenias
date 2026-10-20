@@ -79,9 +79,11 @@ export function derivar(e) {
     return { S, sao2, svo2, scvo2, ven, cao2, unido, disuelto, do2, vo2, o2er, dif, lact, gap, petco2, paco2, pedido, techo, shock, porAporte, deficit, sinOnda, avisos, pvo2, fco, R };
 }
 // Tabla 9.4 (válida solo con metabolismo normal y SaO₂ >90 %): qué dice la saturación venosa.
-// Su columna «defecto de utilización» describe la sepsis, así que en la sepsis se rotula; con fiebre, estrés o sin tiamina, no.
+// Su columna «defecto de utilización» describe la sepsis, así que en la sepsis se rotula (también si hay fiebre o estrés,
+// que la acompañan); con fiebre, estrés o sin tiamina fuera de la sepsis, no.
 export function tabla94(R, e = {}) {
     if (R.sao2 <= 90) return { t: 'Tabla 9.4 no válida: SaO₂ ≤90 %', corto: 'SaO₂ ≤90 %', c: 'neutro' };
+    if (e.util === 'sepsis' && (R.dif < 20 || R.svo2 > 80)) return { t: 'defecto de utilización', corto: 'defecto de utilización', c: 'mal' };
     if (e.consumo === 'fiebre' || e.estres || e.util === 'tiamina') return { t: 'Tabla 9.4 no válida: metabolismo alterado', corto: 'no válida: metab.', c: 'neutro' };
     if (R.dif < 20 || R.svo2 > 80) return { t: 'defecto de utilización', corto: 'defecto de utilización', c: 'mal' };
     if (R.dif >= 50 || R.svo2 <= 50) return { t: 'O₂ tisular amenazado', corto: 'O₂ tisular amenazado', c: 'mal' };
@@ -108,7 +110,7 @@ export const ESTADOS = {
     'capno-epoc': { n: 'EPOC', s: 'fase II lenta', p: { espacio: 'epoc' }, ficha: 'mar-capnografia', lupa: 'boca', pestana: 'pulmon' },
     'capno-sedacion': { n: 'Sedación', s: 'hipoventila', p: { sedacion: true }, ficha: 'mar-capnografia', lupa: 'boca', pestana: 'pulmon' },
     'capno-esofago': { n: 'Esófago', s: 'sin CO₂', p: { esofago: true }, ficha: 'mar-capnografia', lupa: 'boca', pestana: 'pulmon' },
-    'capno-rcp': { n: 'RCP', s: 'PETCO₂ ≤10', p: { rcp: true }, ficha: 'mar-capnografia', lupa: 'boca', pestana: 'corazon' },
+    'capno-rcp': { n: 'RCP', s: 'PETCO₂ muy baja', p: { rcp: true }, ficha: 'mar-capnografia', lupa: 'boca', pestana: 'corazon' },
 };
 // Los que salen como chips en «Ir a un estado» (dual y capno-normal se abren desde sus fichas).
 export const ESTADOS_CHIPS = Object.keys(ESTADOS).filter(k => k !== 'dual' && k !== 'capno-normal');
@@ -127,7 +129,7 @@ export const CONCEPTOS = [
         texto: 'La PaO₂ normal está en la <span class="hl">parte plana</span>: puede caer hasta 60 con poco cambio de saturación. La venosa (≈40 mmHg, 73 %) está en la parte <span class="hl-azul">empinada</span>, lo que facilita la captación de O₂ en los capilares pulmonares. La P50 marca su posición: 27 mmHg.',
         hacer: 'baja la PaO₂ paso a paso.', estado: {}, mirar: 'sao2',
         acciones: [{ t: 'PaO₂ 60', p: { pao2: 60 } }, { t: 'PaO₂ 45', p: { pao2: 45 } }, { t: 'PaO₂ 40', p: { pao2: 40 } }, { t: 'PaO₂ 90', p: {} }],
-        mira: 'la SaO₂: 98 → 89 % con 60; 78 % con 45; 73 % con 40. Las perlas se vacían poco hasta que entras en la parte empinada.',
+        mira: 'la SaO₂: 98 → 89 % con 60 (curva de fisiología general: la ficha solo dice que por encima de 60 los cambios son menores); 78 % con 45; 73 % con 40. Las perlas se vacían poco hasta que entras en la parte empinada.',
         fuente: 'mar-transporte-o2#mar-curva-forma · #mar-curva-desplazamientos (Fig. 9.1)' },
     { titulo: 'La anemia pesa más que la hipoxemia',
         texto: 'Bajar la Hb a la mitad (15 → 7,5) baja el CaO₂ <span class="hl-rojo">a la mitad</span> (20 → 10). Bajar la PaO₂ a la mitad (90 → 45; SaO₂ 98 → 78 %) solo lo baja <span class="hl">un 20 %</span> (20 → 16).',
@@ -178,7 +180,7 @@ export const PREGUNTAS = [
     { id: 'co-g1', serie: 'guia', corto: 'para qué la Hb', tipo: 'test', fuente: 'mar-transporte-o2#mar-o2-disuelto · #mar-cao2-9', estado: {}, mirar: 'cao2',
         enunciado: 'Si el O₂ se disuelve en el plasma, ¿para qué hace falta la hemoglobina?',
         opciones: [
-            { t: 'No hace falta si respira O₂ al 100 %: con PaO₂ 500 basta el disuelto', ok: false, porque: 'Con PaO₂ 500 el disuelto es 0,003 × 500 = 1,5 mL/dL, frente a los ≈20 que lleva la Hb. Un anémico seguiría sin O₂ aunque respirara O₂ puro.' },
+            { t: 'No hace falta si respira O₂ al 100 %: con PaO₂ 500 basta el disuelto', ok: false, porque: 'Con PaO₂ 500 el disuelto es 0,003 × 500 = 1,5 mL/dL, frente a los ≈20 que lleva la Hb normal. Al anémico el O₂ puro solo le añade ese poco: seguiría con mucho menos O₂ del que necesita.' },
             { t: 'Porque se disuelve poco: es el 1,5 % del contenido', ok: true },
             { t: 'Porque el disuelto solo cuenta si la PaO₂ pasa de 100', ok: false, porque: 'Cuenta siempre, pero poco: con 90 mmHg, 0,27 mL/dL. Si esperaras que subir la PaO₂ compensara una anemia, el paciente seguiría sin O₂: cada 10 mmHg añaden 0,03 mL/dL.' }],
         explicacion: 'O₂ disuelto = <span class="hl">0,003 × PaO₂</span>: con 90 mmHg, 0,27 mL/dL. Unido a la Hb: 1,34 × 15 × 0,98 = 19,7. Total ≈ 20 mL/dL; el disuelto es el <span class="hl-rojo">1,5 %</span>. Por eso hace falta la Hb.' },
@@ -376,7 +378,7 @@ export const CASOS = [
                     enunciado: 'El celador comenta: «Satura al 98 %, así que el humo no le ha hecho nada». ¿Está descartada la hipoxemia?',
                     opciones: [
                         { t: 'Sí: con SpO₂ 98 % la SaO₂ es normal', ok: false, porque: 'El pulsioxímetro no detecta la COHb: la SaO₂ real puede haber caído mucho con la SpO₂ intacta. La darías de alta con la Hb ocupada por CO.' },
-                        { t: 'Sí, si el sensor va en la frente, donde la circulación no se contrae', ok: false, porque: 'La frente arregla la vasoconstricción del dedo, no la COHb: usa las mismas dos longitudes de onda. Seguirías sin ver el CO.' },
+                        { t: 'Sí, si el sensor va en la frente, donde la circulación no se contrae', ok: false, porque: 'La frente arregla la vasoconstricción del dedo, no la COHb: la ficha dice que los pulsioxímetros estándar no la detectan (hacen falta las longitudes de onda del cooxímetro) y no da al de frente por distinto. Seguirías sin ver el CO.' },
                         { t: 'No: el pulsioxímetro no ve la COHb y la sobrestima', ok: true }],
                     explicacion: 'Con dos longitudes de onda (660 y 940 nm) el pulsioxímetro solo distingue HbO₂ y Hb. <span class="hl-rojo">En la intoxicación por CO la SpO₂ sobrestima la SaO₂</span>: si se sospecha, gasometría arterial con cooximetría.' } },
             { momento: '20 min', datos: { 'Cooximetría': 'SaO₂ 74 % · COHb 25 %' }, nuevo: ['Cooximetría'], estado: { co: true }, lupa: 'dedo', mirar: 'sao2',
@@ -400,7 +402,7 @@ export const CASOS = [
                     enunciado: 'Nota del R1 de urgencias, antes de subirla:',
                     frases: [
                         { t: 'SpO₂ 98 % en aire: sin hipoxemia.', mal: true, c: 'Con COHb <span class="hl-rojo">la SpO₂ sobrestima</span>: la SaO₂ por cooximetría es del 74 %.' },
-                        { t: 'Si dudo de la SpO₂, pongo el sensor en la frente.', mal: true, c: 'La frente sirve cuando el dedo falla por <span class="hl">hipotensión o vasoconstricción</span>; no ve la COHb. Lo que sirve es la gasometría arterial con cooximetría.' },
+                        { t: 'Si dudo de la SpO₂, pongo el sensor en la frente.', mal: true, c: 'La frente sirve cuando el dedo falla por <span class="hl">hipotensión o vasoconstricción</span>. La COHb no la ven los pulsioxímetros estándar, y la ficha no dice que el de frente sea distinto: lo que sirve es la gasometría arterial con cooximetría.' },
                         { t: 'Pedida gasometría arterial con cooximetría.', mal: false },
                         { t: 'Normalmente la COHb y la metHb suman menos del 5 %.', mal: false }],
                     explicacion: 'La SpO₂ no informa del CO: la cooximetría sí.' } },
@@ -444,7 +446,7 @@ export const CASOS = [
                 pregunta: { id: 'b4-4', tipo: 'error', fuente: 'mar-capnografia#mar-capno-intubacion · #mar-capno-rcp',
                     enunciado: 'El tubo está bien puesto, pero la paciente no tiene pulso. Nota del R1:',
                     frases: [
-                        { t: 'El tubo está en la tráquea; el CO₂ plano será un fallo del sensor.', mal: true, c: 'En la <span class="hl-rojo">parada</span> puede no haber CO₂ con el tubo bien puesto: sin retorno venoso no llega CO₂ al alvéolo.' },
+                        { t: 'El tubo está en la tráquea; si apenas sale CO₂, será un fallo del sensor.', mal: true, c: 'En la <span class="hl-rojo">parada</span> puede haber muy poco o ningún CO₂ con el tubo bien puesto: sin retorno venoso apenas llega CO₂ al alvéolo.' },
                         { t: 'Durante la RCP, la PETCO₂ también informa del pronóstico.', mal: false },
                         { t: 'Si tras 20 min de RCP la PETCO₂ sigue ≤10 mmHg, es improbable recuperar la circulación espontánea.', mal: false },
                         { t: 'El broncoespasmo grave se ha propuesto como causa de CO₂ nulo, sin buena confirmación.', mal: false }],
@@ -457,7 +459,7 @@ export const CASOS = [
                         { t: 'Nada: la PETCO₂ solo sirve para confirmar el tubo', ok: false, porque: 'Sirve también en la RCP: ≤10 mmHg tras 20 min es un dato de pronóstico. Te perderías la información que da.' },
                         { t: 'Que es improbable recuperar la circulación espontánea', ok: true }],
                     explicacion: '<span class="hl-rojo">PETCO₂ ≤10 mmHg tras 20 min de RCP</span>: es improbable recuperar la circulación espontánea. Los cambios de PETCO₂ siguen a los del gasto (r = 0,87, Fig. 7.8).',
-                    nota: 'El tiempo y la cifra del caso son del paciente inventado; el umbral es de la ficha.' } },
+                    nota: 'Los 8 mmHg son del paciente inventado; el umbral (≤10 mmHg tras 20 min de RCP) es de la ficha.' } },
         ],
         lleva: ['En la sedación, la PETCO₂ sube antes de que baje la SpO₂: capnografía siempre que se seda para un procedimiento.',
             'Capnograma plano tras intubar: esófago hasta que se demuestre lo contrario; auscultar no basta (1 de cada 18).',

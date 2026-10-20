@@ -1,0 +1,227 @@
+    <button class="back-btn btn-volver-libros-menu" id="ctv-volver">← VOLVER</button>
+    <!-- Catéter vivo: flujo, piel y biopelícula (Marino caps. 1-3). Modelo vivo de Libros.
+         Viene de la maqueta aprobada autonomo/maquetas/b1-cateter-vivo.html (vuelta 2).
+         Lógica en cateter-vivo.js y cateter-vivo-escena.js; datos en js/data/cateter-vivo-data.js. -->
+    <div class="ctv-raiz" id="ctv-raiz" data-modelo-vivo>
+      <header class="ctv-cabecera">
+        <p class="ctv-eyebrow">Modelo vivo · Marino caps. 1-3</p>
+        <h2 class="ctv-titulo">El catéter vivo: <em>flujo, piel y biopelícula</em></h2>
+        <p class="ctv-lead">La velocidad la marca <strong class="hl">el catéter, no la vena</strong>: el radio a la cuarta y la longitud. Y lo que se queda dentro se coloniza: <strong class="hl-rojo">la biopelícula no la limpia el antibiótico</strong>. <span class="ctv-org">ficha · mar-flujo-cateter · mar-biofilm</span></p>
+      </header>
+
+      <div class="ctv-interruptor" role="tablist" aria-label="Qué hacer con el modelo">
+        <button type="button" role="tab" id="ctv-modo-explorar" aria-selected="true">Explorar</button>
+        <button type="button" role="tab" id="ctv-modo-conceptos" aria-selected="false">Conceptos</button>
+        <button type="button" role="tab" id="ctv-modo-preguntas" aria-selected="false">Mayéutica</button>
+      </div>
+
+      <section class="ctv-escena-bloque" id="ctv-escena-bloque" aria-label="La lámina del catéter">
+        <div class="ctv-escena" id="ctv-escena">
+          <svg id="ctv-lamina" viewBox="0 0 360 330" role="img" aria-label="Lámina del catéter"></svg>
+          <span class="ctv-chapa" id="ctv-chapa">lámina A · el flujo</span>
+          <div class="ctv-lectura" id="ctv-lectura" aria-live="off"></div>
+          <button type="button" class="ctv-lupa-cerrar" id="ctv-lupa-cerrar" hidden aria-label="Cerrar la lupa y volver a la lámina del flujo">×</button>
+          <div class="ctv-anillo" id="ctv-anillo" hidden></div>
+        </div>
+        <div class="ctv-lupas" id="ctv-lupas" role="group" aria-label="Lupas">
+          <button type="button" class="ctv-tog" data-ctv-lupa="A" aria-pressed="true"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 14 L14 2" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>A · El flujo</button>
+          <button type="button" class="ctv-tog" data-ctv-lupa="B" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>B · Piel y biopelícula</button>
+          <button type="button" class="ctv-tog" data-ctv-lupa="C" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>C · La punta y el aire</button>
+          <button type="button" class="ctv-tog" data-ctv-lupa="D" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>D · Pinchar con eco</button>
+        </div>
+        <p class="ctv-para ctv-nota-lupa" id="ctv-nota-lupa" hidden></p>
+        <div class="ctv-tira" id="ctv-tira" role="group" aria-label="Láminas del libro"></div>
+        <ul class="ctv-leyenda-mini" id="ctv-leyenda-mini" aria-label="Formas"></ul>
+      </section>
+
+      <!-- ============ EXPLORAR ============ -->
+      <div id="ctv-vista-explorar" class="ctv-bloque">
+        <section class="ctv-bloque">
+          <h3 class="ctv-h">Ir a un estado</h3>
+          <p class="ctv-para">Cada ficha de los accesos vasculares abre el catéter en su estado («Ver en el catéter vivo»), y su «← VOLVER» te devuelve a ella. Aquí están todos, por ficha. Los mandos, abajo.</p>
+          <ul class="ctv-prof ctv-estados" id="ctv-lista-estados"></ul>
+        </section>
+
+        <section class="ctv-bloque">
+          <h3 class="ctv-h">Qué es cada cosa que se mueve</h3>
+          <ul class="ctv-leyenda" id="ctv-leyenda"></ul>
+          <p class="ctv-para">Las formas son las de la tabla única de la app, la misma de la nefrona viva, el río y mar y el capilar. La forma dice qué es; el color ayuda, pero nunca decide solo.</p>
+        </section>
+
+        <section class="ctv-bloque">
+          <h3 class="ctv-h">Cómo leer la lámina</h3>
+          <dl class="ctv-simil">
+            <dt>Pie de gotero</dt><dd>la bolsa sube o baja por la regla; la altura sobre el punto de punción es el ΔP de la ecuación</dd>
+            <dt>Brazo en corte</dt><dd>piel (rayado), grasa (punteado) y la vena (ciruela). El catéter entra con su longitud real (8 px por cm, con la barra de 5 cm abajo) y su grosor real entre ellos (aumentado ×4); el PICC sale del encuadre: «sigue: 50 cm»</dd>
+            <dt>Probeta</dt><dd>el caudalímetro: se llena al ritmo del flujo. La cifra, en la lectura de arriba, con su origen</dd>
+            <dt>Lupas</dt><dd>B: la piel, las cuatro vías del germen y la biopelícula. C: la punta y el aire. D: pinchar con eco</dd>
+          </dl>
+        </section>
+
+        <details class="nota-plegable" open>
+          <summary>Dos experimentos, dos unidades: no se mezclan</summary>
+          <div class="ctv-nota-fuentes"><b>Fig. 1.1</b> (mL/min): agua por gravedad, catéteres de 1,2″ para el calibre y de 16 G para la longitud; datos de dos estudios, uno por panel. <b>No dice a qué altura</b> estaba la bolsa: sus cifras no se escalan con la altura. <span class="ctv-org">ficha · mar-fig-1-1-calibre · mar-fig-1-1-longitud</span></div>
+          <div class="ctv-nota-fuentes"><b>Tablas 1.2 y 1.3</b> (L/h): agua por gravedad desde 40 pulgadas, catéteres reales del catálogo. <span class="ctv-org">ficha · mar-tabla-1-2 · mar-tabla-1-3</span> Son dos experimentos distintos: aquí nunca se pasa una cifra del uno al otro ni se convierten unidades entre ellos.</div>
+          <div class="ctv-tabla-scroll">
+            <table class="data-table">
+              <caption>Fig. 1.1 · mL/min</caption>
+              <thead><tr><th>Calibre (1,2″)</th><th>Flujo</th><th>Longitud (16 G)</th><th>Flujo</th></tr></thead>
+              <tbody>
+                <tr><td>16 G</td><td class="ctv-n">220</td><td>2″ (≈5 cm)</td><td class="ctv-n">151</td></tr>
+                <tr><td>18 G</td><td class="ctv-n">105</td><td>6″ (≈15 cm)</td><td class="ctv-n">91</td></tr>
+                <tr><td>20 G</td><td class="ctv-n">60</td><td>12″ (≈30 cm)</td><td class="ctv-n">54</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="ctv-tabla-scroll">
+            <table class="data-table">
+              <caption>Tablas 1.2-1.3 · L/h (desde 40 pulgadas)</caption>
+              <thead><tr><th>Catéter</th><th>Tamaño</th><th>Longitud</th><th>Flujo</th></tr></thead>
+              <tbody>
+                <tr><td>Periférico corto</td><td>18 G</td><td>3 cm</td><td class="ctv-n">6,0</td></tr>
+                <tr><td>Periférico largo</td><td>18 G</td><td>8 cm</td><td class="ctv-n">3,7</td></tr>
+                <tr><td>Midline doble luz</td><td>5,5 Fr (luces 18 G)</td><td>15 cm</td><td class="ctv-n">1,3 por luz</td></tr>
+                <tr><td>CVC triple luz · distal</td><td>7 Fr · 16 G</td><td>20 cm</td><td class="ctv-n">2,28</td></tr>
+                <tr><td>CVC · medial</td><td>18 G</td><td>20 cm</td><td class="ctv-n">0,91</td></tr>
+                <tr><td>CVC · proximal</td><td>18 G</td><td>20 cm</td><td class="ctv-n">0,99</td></tr>
+                <tr><td>PICC doble luz · distal</td><td>5,5 Fr · 18 G</td><td>50 cm</td><td class="ctv-n">0,26</td></tr>
+                <tr><td>PICC · proximal</td><td>18 G</td><td>50 cm</td><td class="ctv-n">0,27</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+        <details class="nota-plegable">
+          <summary>De dónde sale cada cifra del modelo</summary>
+          <ul class="ctv-huecos">
+            <li><b>Altura de la bolsa</b>: 68 cm = 50 mmHg y 100 cm = 75 mmHg <span class="ctv-org">ficha · mar-altura-bolsa</span>. Con las tablas, a 68 cm el flujo se <b>calcula</b>: el de la tabla × 50/75, porque el flujo es proporcional al ΔP (Hagen-Poiseuille, <span class="ctv-org">ficha · mar-poiseuille</span>). A 0 cm no hay gradiente ni flujo. Solo esas tres paradas: la regla no se interpola.</li>
+            <li><b>Bombas</b> <span class="ctv-org">ficha · mar-bombas</span>: volumétrica 0,1-1.000 mL/h; jeringa hasta 100 mL, a 0,1-100 mL/h; infusor rápido hasta 1,5 L/min, con catéteres de infusión rápida de 7-8 Fr y 2-2,5″. Con otro catéter, la ficha no da cifra.</li>
+            <li><b>Intraósea</b> <span class="ctv-org">ficha · mar-io-flujo</span>: un 25 % del flujo «de una vía periférica» (sin decir cuál) y la médula a unos 30 mmHg. La barra es relativa: no hay L/h.</li>
+            <li><b>French y gauge</b> <span class="ctv-org">ficha · mar-tabla-1-1 · mar-french</span>: Fr × 0,33 = mm. La tabla y la ecuación no coinciden del todo (nota de fidelidad abajo).</li>
+            <li><b>Aire</b> <span class="ctv-org">ficha · mar-aire-fisio</span>: 100 mL/s por un 14 G con 5 mmHg de gradiente; mortal con 200-300 mL (3-5 mL/kg) en pocos segundos. El peso de 70 kg con el que se pasan esos mL/kg a 210-350 mL es <b>ilustrativo</b>. Con Trendelenburg sube la presión venosa y el riesgo baja (el libro no dice cuánto: burbujas lentas, ilustrativo); con un catéter femoral no entra aire <span class="ctv-org">ficha · mar-aire-prevencion</span>.</li>
+            <li><b>Biopelícula</b> <span class="ctv-org">ficha · mar-biofilm · mar-bac-clinica</span>: visible al microscopio electrónico tras un solo día; sin clínica en las primeras 48 h. Cuánto crece entre esas marcas: <b>ilustrativo</b>.</li>
+            <li><b>Paquete de inserción</b> <span class="ctv-org">ficha · mar-tabla-2-1</span>: reduce las bacteriemias aplicado junto; no da cifras de cada medida. Las «puertas» de la piel que cierra cada una (manos, barreras, clorhexidina): <b>ilustrativo</b>. Evitar la femoral se hace hoy por la trombosis: no cierra ninguna puerta.</li>
+            <li><b>Hemocultivos</b> <span class="ctv-org">ficha · mar-tabla-3-4</span>: tiempo diferencial ≥2 h (91 %) o recuento ≥3 veces (94 %). Las horas absolutas de los frascos son <b>ilustrativas</b>; la diferencia de 2,5 h es del caso.</li>
+          </ul>
+        </details>
+
+        <details class="nota-plegable">
+          <summary>Notas de fidelidad</summary>
+          <div class="ctv-nota-fuentes"><b>French.</b> 7 Fr: 2,31 mm por la ecuación y 2,4 en la Tabla 1.1; 9 Fr: 2,97 frente a 3,2. La tabla recoge catéteres reales y la ecuación es una aproximación: se dan las dos. <span class="ctv-org">ficha · mar-french-nota</span></div>
+          <div class="ctv-nota-fuentes"><b>40 pulgadas y 100 cm.</b> Las Tablas 1.2-1.3 se midieron desde 40 pulgadas (101,6 cm) y la ficha da 75 mmHg para 100 cm (39 pulgadas). Aquí se toman como la misma marca. <span class="ctv-org">ficha · mar-tabla-1-2 · mar-altura-bolsa</span></div>
+          <div class="ctv-nota-fuentes"><b>Fig. 1.10: «fémur».</b> El pie de la figura y el «A Final Word» dicen fémur proximal; el texto y el dibujo describen la tibia. Se sigue el texto. <span class="ctv-org">ficha · mar-io-errata</span></div>
+          <div class="ctv-nota-fuentes"><b>Tabla 3.3.</b> NaOH 0,1 mmol/L en la fila de los precipitados alcalinos y 0,1 N en las demás. Se reproduce tal cual. <span class="ctv-org">ficha · mar-nota-naoh</span></div>
+          <div class="ctv-nota-fuentes"><b>Recambio sobre guía.</b> El libro dice que no se recambie sobre guía (solo si el acceso venoso es muy limitado) y que, si el catéter infectado se <b>deja</b>, el antibiótico apenas lo descontamina y se esperan recurrencias. No dice qué pasa con la biopelícula tras el recambio: el modelo no lo dibuja. <span class="ctv-org">ficha · mar-bac-guia</span></div>
+        </details>
+
+        <details class="nota-plegable">
+          <summary>Lo que la ficha no da (huecos)</summary>
+          <ul class="ctv-huecos">
+            <li>La altura de la bolsa en la Fig. 1.1: sus cifras no se escalan.</li>
+            <li>Qué «vía periférica» es el 100 % de la intraósea: barra relativa.</li>
+            <li>El flujo por gravedad del catéter de infusión rápida: sin cifra.</li>
+            <li>El ritmo de crecimiento de la biopelícula entre 24 h y 48 h, y en días: ilustrativo.</li>
+            <li>Cuánto reduce cada medida del paquete de inserción: cualitativo.</li>
+            <li>Cuánto aire entra en Trendelenburg: el libro solo dice que reduce el riesgo.</li>
+          </ul>
+        </details>
+
+        <details class="nota-plegable" id="ctv-profundizar-explorar">
+          <summary>Para profundizar: lo que el modelo no enseña</summary>
+          <ul class="ctv-prof" id="ctv-lista-profundizar"></ul>
+        </details>
+
+        <!-- Lo que encuentra el buscador global (core/search.js): cada entrada es un enlace cruzado
+             normal que abre el modelo en un estado. Ocultas: solo se pulsan desde el buscador. -->
+        <div hidden>
+          <button type="button" data-especialidad="libros" data-view="cateterVivo" data-cateter-vivo="inicio" data-buscar-titulo="Catéter vivo: flujo, piel y biopelícula (modelo vivo)" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="catéter vivo cateter acceso vascular vía periférica flujo calibre gauge french longitud poiseuille">Catéter vivo</button>
+          <button type="button" data-especialidad="libros" data-view="cateterVivo" data-cateter-vivo="catalogo" data-buscar-titulo="Catéter vivo: el flujo de cada catéter (periférico, midline, PICC y CVC)" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="picc midline cvc catéter venoso central luces triple luz flujo por gravedad infusor rápido bomba">Catálogo</button>
+          <button type="button" data-especialidad="libros" data-view="cateterVivo" data-cateter-vivo="biopelicula" data-buscar-titulo="Catéter vivo: biopelícula y bacteriemia por catéter" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="biopelícula biofilm bacteriemia por catéter colonización hemocultivos tiempo diferencial recambio sobre guía">Biopelícula</button>
+          <button type="button" data-especialidad="libros" data-view="cateterVivo" data-cateter-vivo="aire" data-buscar-titulo="Catéter vivo: la embolia gaseosa y la punta del CVC" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="embolia gaseosa embolia aérea aire conector abierto punta del catéter carina malposición">Aire y punta</button>
+          <button type="button" data-especialidad="libros" data-view="cateterVivo" data-cateter-vivo="eco-doppler" data-buscar-titulo="Catéter vivo: pinchar con eco (compresión y Doppler color)" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="ecografía vascular eco canalización eje corto eje largo compresión doppler color vena arteria">Pinchar con eco</button>
+          <button type="button" data-especialidad="libros" data-view="cateterVivo" data-cateter-vivo="oclusion-trombo" data-buscar-titulo="Catéter vivo: el catéter ocluido (trombo y precipitados)" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="oclusión del catéter catéter que no refluye alteplasa precipitado trombo">Oclusión</button>
+        </div>
+      </div>
+
+      <!-- ============ CONCEPTOS ============ -->
+      <div id="ctv-vista-conceptos" class="ctv-bloque" hidden>
+        <div id="ctv-concepto" class="ctv-formato ctv-entra"></div>
+      </div>
+
+      <!-- ============ MAYÉUTICA ============ -->
+      <div id="ctv-vista-preguntas" class="ctv-bloque" hidden>
+        <div id="ctv-preg" class="ctv-formato ctv-entra"></div>
+        <details class="nota-plegable" id="ctv-profundizar-preg">
+          <summary>Para profundizar: lo que la Mayéutica no cubre</summary>
+          <ul class="ctv-prof" id="ctv-lista-profundizar-2"></ul>
+          <p class="ctv-para">El resto de las 8 fichas (caps. 1-3 y la vía 4 del cap. 4) está en su texto: cada «Ver en el texto» de las preguntas lleva a su sitio.</p>
+        </details>
+      </div>
+
+      <nav class="ctv-dock" id="ctv-dock" aria-label="Mandos del catéter">
+        <div class="ctv-dock-in">
+          <div id="ctv-dock-explorar">
+            <p class="ctv-frase" id="ctv-frase" aria-live="polite" title="Toca para leerla entera"></p>
+            <div class="ctv-dock-tabs" role="tablist" aria-label="Mandos del catéter">
+              <button type="button" role="tab" data-ctv-tab="cateter" aria-selected="true">Catéter</button>
+              <button type="button" role="tab" data-ctv-tab="empujar" aria-selected="false">Empujar</button>
+              <button type="button" role="tab" data-ctv-tab="tiempo" aria-selected="false">Tiempo</button>
+              <button type="button" role="tab" data-ctv-tab="problema" aria-selected="false">Problema</button>
+              <button type="button" role="tab" data-ctv-tab="lupa" aria-selected="false" id="ctv-tab-lupa" hidden>Lupa</button>
+            </div>
+            <div class="ctv-dock-panel" data-ctv-panel="cateter">
+              <div class="ctv-dos-seg" id="ctv-banco-fig">
+                <div class="ctv-seg" id="ctv-m-calibre" aria-label="Calibre (longitud fija de 1,2 pulgadas)"><button type="button" data-v="16">16 G<small>1,2″</small></button><button type="button" data-v="18">18 G<small>1,2″</small></button><button type="button" data-v="20">20 G<small>1,2″</small></button></div>
+                <div class="ctv-seg" id="ctv-m-longitud" aria-label="Longitud (16 G)"><button type="button" data-v="2">2″<small>16 G</small></button><button type="button" data-v="6">6″<small>16 G</small></button><button type="button" data-v="12">12″<small>16 G</small></button></div>
+              </div>
+              <div class="ctv-raya ctv-con-mas" id="ctv-m-catalogo" role="group" aria-label="Catálogo (desliza)" hidden></div>
+              <div class="ctv-dos-seg"><div class="ctv-seg" id="ctv-m-banco" aria-label="Experimento"><button type="button" data-v="fig" aria-pressed="true">Fig. 1.1<small>mL/min</small></button><button type="button" data-v="tablas" aria-pressed="false">Tablas<small>L/h</small></button></div>
+                <div class="ctv-seg" id="ctv-m-vena" aria-label="Vena"><button type="button" data-v="pequena">Vena<small>pequeña</small></button><button type="button" data-v="grande">Vena<small>grande</small></button></div></div>
+            </div>
+            <div class="ctv-dock-panel" data-ctv-panel="empujar" hidden>
+              <div class="ctv-fila-io"><div class="ctv-seg" id="ctv-m-altura" aria-label="Altura de la bolsa"><button type="button" data-v="0">0 cm<small>sin ΔP</small></button><button type="button" data-v="68">68 cm<small>50 mmHg</small></button><button type="button" data-v="100">100 cm<small>75 mmHg</small></button></div>
+                <button type="button" class="ctv-tog" id="ctv-m-io" aria-pressed="false">Intraósea</button></div>
+              <div class="ctv-seg" id="ctv-m-bomba" aria-label="Bomba"><button type="button" data-v="gravedad">Gravedad</button><button type="button" data-v="volumetrica">Volumé&shy;trica</button><button type="button" data-v="jeringa">Jeringa</button><button type="button" data-v="infusor">Infusor<small>rápido</small></button></div>
+            </div>
+            <div class="ctv-dock-panel" data-ctv-panel="tiempo" hidden>
+              <div class="ctv-seg" id="ctv-m-tiempo" aria-label="Tiempo con el catéter"><button type="button" data-v="0">0 h</button><button type="button" data-v="24">24 h</button><button type="button" data-v="48">48 h</button><button type="button" data-v="168">Día 7</button><button type="button" data-v="336">Día 14</button></div>
+              <div class="ctv-rejilla4" role="group" aria-label="Paquete de inserción">
+                <button type="button" class="ctv-tog" data-ctv-paq="manos" aria-pressed="false">Higiene de manos</button>
+                <button type="button" class="ctv-tog" data-ctv-paq="barreras" aria-pressed="false">Barreras máximas</button>
+                <button type="button" class="ctv-tog" data-ctv-paq="clorhex" aria-pressed="false">Clorhexidina 30 s</button>
+                <button type="button" class="ctv-tog" data-ctv-paq="femoral" aria-pressed="false">Evitar femoral<small>trombosis</small></button>
+              </div>
+            </div>
+            <div class="ctv-dock-panel" data-ctv-panel="problema" hidden>
+              <div class="ctv-seg" id="ctv-m-problema" aria-label="Problema"><button type="button" data-v="biopelicula">Biopelícula</button><button type="button" data-v="hemocultivos">Hemo&shy;cultivos</button><button type="button" data-v="oclusion">Oclusión</button><button type="button" data-v="aire">Conector<small>abierto</small></button></div>
+              <div id="ctv-sub-biopelicula" class="ctv-rejilla4">
+                <button type="button" class="ctv-tog" id="ctv-m-antibiotico" aria-pressed="false">Antibiótico<small>dosis habitual</small></button>
+                <button type="button" class="ctv-tog" data-ctv-manejo="dejar" aria-pressed="false">Dejarlo</button>
+                <button type="button" class="ctv-tog" data-ctv-manejo="retirar" aria-pressed="false">Retirar<small>sitio nuevo</small></button>
+                <button type="button" class="ctv-tog" data-ctv-manejo="guia" aria-pressed="false">Sobre guía</button>
+              </div>
+              <div id="ctv-sub-hemocultivos" class="ctv-fila" hidden><button type="button" class="ctv-b ctv-prim" id="ctv-m-incubar">Incubar los dos frascos</button><span class="ctv-nota-mini">catéter y periférico</span></div>
+              <div id="ctv-sub-oclusion" class="ctv-dos-seg" hidden>
+                <select id="ctv-m-oclusion" aria-label="Qué lo ocluye"></select>
+                <select id="ctv-m-instilar" aria-label="Qué instilas"></select>
+              </div>
+              <div id="ctv-sub-aire" class="ctv-fila-io" hidden>
+                <div class="ctv-seg" id="ctv-m-postura" aria-label="Postura y sitio"><button type="button" data-v="espontanea">Sentado<small>respira solo</small></button><button type="button" data-v="trendelenburg">Trende&shy;lenburg</button><button type="button" data-v="femoral">Femoral</button></div>
+                <button type="button" class="ctv-b ctv-prim" id="ctv-m-conector">Abrir conector</button>
+              </div>
+            </div>
+            <div class="ctv-dock-panel" data-ctv-panel="lupa" hidden><div id="ctv-mandos-lupa" role="group" aria-label="Mandos de la lupa" class="ctv-dock-panel"></div></div>
+          </div>
+          <div id="ctv-dock-estudio" class="ctv-dock-estudio" hidden>
+            <div class="ctv-pasos" id="ctv-dock-pasos"></div>
+            <div class="ctv-dock-est-txt"><span id="ctv-dock-est-izq"></span><span id="ctv-dock-est-der"></span></div>
+          </div>
+        </div>
+      </nav>
+
+      <dialog class="ctv-visor" id="ctv-visor" aria-label="Lámina del libro">
+        <div class="ctv-caja-img"><img id="ctv-visor-img" alt=""></div>
+        <p id="ctv-visor-pie"></p>
+        <div class="ctv-fila"><a class="ctv-b-enlace" id="ctv-visor-pdf" href="docs/marino-2024-acceso-vascular-practicas-caps1-4.pdf" target="_blank" rel="noopener">Ver en el PDF</a><button type="button" class="ctv-b" id="ctv-visor-cerrar">Cerrar</button></div>
+      </dialog>
+    </div>

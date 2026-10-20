@@ -24,6 +24,7 @@ import { initVisualMarino } from './visual-marino.js';
 import { initIndice, idRepaso } from './indice.js';
 import { init as initAguaViva } from './agua-viva.js';
 import { init as initCapilarVivo } from './capilar-vivo.js';
+import { init as initCateterVivo } from './cateter-vivo.js';
 import { librosIndice } from '../../data/libros-indice.js';
 
 // Mismo patrón que el resto de especialidades: main.js fusiona banco, temas
@@ -53,6 +54,8 @@ export function init() {
         aguaViva: document.getElementById('agua-viva-view'),
         // Modelo vivo: capilar y oxígeno (del pulmón a la mitocondria), junto al grupo oxígeno (caps. 7 y 9)
         capilarVivo: document.getElementById('capilar-vivo-view'),
+        // Modelo vivo: catéter vivo (flujo, piel y biopelícula), junto al grupo accesos vasculares (caps. 1-3)
+        cateterVivo: document.getElementById('cateter-vivo-view'),
     });
 
     document.getElementById('btn-marino-fund').addEventListener('click', () => librosLevel.show('marinoFundamentos'));
@@ -75,6 +78,7 @@ export function init() {
     initVisualMarinoCaps45a53();
     const aguaViva = initAguaViva();
     const capilarVivo = initCapilarVivo();
+    const cateterVivo = initCateterVivo();
 
     librosLevel.show('menu');
 
@@ -82,10 +86,11 @@ export function init() {
         volverAlMenu: () => librosLevel.show('menu'),
         irAFicha: librosLevel.irAFicha,
         // data-agua-viva="<estado>" en un enlace cruzado abre el río y mar en ese estado;
-        // data-capilar-vivo="<estado>", el capilar y oxígeno
+        // data-capilar-vivo="<estado>", el capilar y oxígeno; data-cateter-vivo="<estado>", el catéter vivo
         modelosVivos: {
             aguaViva: (estadoClave, origen) => aguaViva?.abrir(estadoClave, origen),
             capilarVivo: (estadoClave, origen) => capilarVivo?.abrir(estadoClave, origen),
+            cateterVivo: (estadoClave, origen) => cateterVivo?.abrir(estadoClave, origen),
         },
     };
 }

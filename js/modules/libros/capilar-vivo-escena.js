@@ -187,15 +187,18 @@ export function pintarTablero() {
         ven: e.rcp ? ['—', ''] : [`${R.ven}`, R.ven < 65 ? '↓' : R.ven > 75 ? '↑' : ''],
         lact: e.rcp ? ['—', ''] : [dec(R.lact, 1), R.lact > 2 ? '↑' : ''],
         gap: e.rcp ? ['—', ''] : [`${R.gap}`, R.gap > 6 ? '↑' : ''],
-        petco2: [e.rcp ? '≤10' : `${R.petco2}`, ''],
+        petco2: [`${R.petco2}`, R.petco2 <= 10 && e.rcp ? '↓' : ''],
     };
     for (const c of CELDAS) {
         const el = $('c-' + c.k), b = el.querySelector('b'), [v, fl] = val[c.k], tap = tapado(c.k);
         b.textContent = tap ? '?' : v + (fl ? ' ' + fl : '');
         el.classList.toggle('cpv-fuera', !tap && !!fl);
         if (c.k === 'ven') el.querySelector('.cpv-k').textContent = e.toma === 'scvo2' ? 'ScvO₂' : 'SvO₂';
-        if (c.k === 'sao2') { const o = el.querySelector('.cpv-o'); o.textContent = e.co ? 'ilustr.' : 'fisiol.'; o.classList.toggle('cpv-ilu', e.co); }
-        if (['vo2', 'o2er', 'ven'].includes(c.k)) { const ilu = e.util !== 'normal' || e.consumo === 'fiebre' || e.estres, o = el.querySelector('.cpv-o'); o.textContent = ilu ? 'ilustr.' : 'ficha'; o.classList.toggle('cpv-ilu', ilu); }
+        const origen = (ilu, base) => { const o = el.querySelector('.cpv-o'); o.textContent = ilu ? 'ilustr.' : base; o.classList.toggle('cpv-ilu', ilu); };
+        if (c.k === 'sao2') origen(e.co, 'fisiol.');
+        if (c.k === 'spo2') origen(R.spo2 == null, 'fisiol.');   // el «—» del dedo frío es del modelo
+        if (c.k === 'cao2') origen(e.co, 'ficha');                // con CO, la SaO₂ (y el CaO₂) salen de una COHb ilustrativa
+        if (['vo2', 'o2er', 'ven'].includes(c.k)) origen(e.util !== 'normal' || e.consumo === 'fiebre' || e.estres || (c.k === 'ven' && e.toma === 'scvo2' && D.shock), 'ficha');   // ScvO₂ +7 en el shock: ilustrativo
         const sub = el.querySelector('.cpv-sub');
         sub.textContent = tap || e.rcp || sinPista() ? '' : c.k === 'do2' ? `/m² ${R.do2i}` : c.k === 'vo2' ? `/m² ${R.vo2i}` : c.k === 'ven' ? tabla94(R, e).corto : c.k === 'spo2' && R.spo2 == null ? 'sin onda' : c.k === 'lact' ? (R.lact <= 2 ? 'mort. 15 %' : R.lact < 4 ? 'mort. 25 %' : 'mort. 38 %') : c.k === 'gap' ? (R.gap > 6 ? 'hipoperfusión' : R.gap >= 2 && R.gap <= 5 ? 'normal 2-5' : R.gap > 5 ? 'sin corte (5-6)' : '') : '';
     }
@@ -221,7 +224,7 @@ function pintarLaminaFija() {
     $('lam-aviso').innerHTML = aviso[0] ? `<tspan x="14">${aviso[0]}</tspan><tspan x="14" dy="11">${aviso[1]}</tspan>` : '';
     const R = D.R;
     $('capno-mini-onda').setAttribute('d', ondaCapno(252, 15, 98, 24, 3, e, R));
-    $('capno-mini-val').textContent = tapado('petco2') ? '?' : e.rcp ? '≤10' : `${R.petco2} mmHg`;
+    $('capno-mini-val').textContent = tapado('petco2') ? '?' : `${R.petco2} mmHg`;
 }
 
 /* ============================================================
@@ -329,12 +332,12 @@ export function pintarLupa(forzar) {
             h += T(x0 + bw * 0.06, y0 + hh + 11, 'I', { a: 'middle', s: 8, b: 1, sans: 1 }) + T(x0 + bw * (e.espacio === 'epoc' ? 0.28 : 0.17), y0 + hh + 11, 'II', { a: 'middle', s: 8, b: 1, sans: 1 });
             h += T(x0 + bw * 0.5, y0 + hh + 11, 'III', { a: 'middle', s: 8, b: 1, sans: 1 }) + T(x0 + bw * 0.78, y0 + hh + 11, 'IV', { a: 'middle', s: 8, b: 1, sans: 1 });
         }
-        const pet = tapado('petco2') ? '?' : e.rcp ? '≤10' : R.petco2;
+        const pet = tapado('petco2') ? '?' : R.petco2;
         h += T(110, 30, `PETCO₂ ${pet} mmHg`, { a: 'middle', s: 11, b: 1, c: '--text-main', sans: 1 });
         let pie = ['I espacio muerto · II sube', 'III meseta · IV inspira'];
-        if (!pista) pie = e.esofago || e.rcp ? ['Capnograma plano:', '¿qué piensas?'] : pie;
+        if (!pista) pie = e.esofago ? ['Capnograma plano:', '¿qué piensas?'] : e.rcp ? ['Casi sin CO₂ espirado:', '¿qué piensas?'] : pie;
         else if (e.esofago) pie = ['Sin CO₂ espirado: esófago…', '…o parada, sin retorno venoso'];
-        else if (e.rcp) pie = ['≤10 tras 20 min de RCP: improbable', 'recuperar la circulación espontánea'];
+        else if (e.rcp) pie = ['Si sigue ≤10 tras 20 min de RCP: improbable', 'recuperar la circulación espontánea'];
         else if (e.sedacion) pie = ['Sedación: la PETCO₂ sube', 'antes de que baje la SpO₂'];
         else if (e.espacio === 'epoc') pie = ['EPOC: fase II lenta', '(espacio muerto alveolar)'];
         else if (e.espacio === 'embolia') pie = ['Alvéolos sin sangre:', 'PETCO₂ &lt; PaCO₂'];

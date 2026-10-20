@@ -77,11 +77,19 @@ function partesDe(forma, r, e = {}) {
             for (const g of [90, 210, 330]) { const a = g * Math.PI / 180; d += `M0 0L${n2(Math.cos(a) * 1.4 * r)} ${n2(Math.sin(a) * 1.4 * r)}`; }
             return [trazo(d, 0.38)];
         }
+        // Catéter vivo (Marino caps. 1-3). Coco: círculo lleno con 8 adhesinas cortas (el círculo va primero: «hueco»,
+        // la bacteria muerta, es su contorno). Burbuja de aire: aro fino con un reflejo arriba a la izquierda.
+        case 'coco': {
+            let d = '';
+            for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4 + 0.2, c = Math.cos(a), s = Math.sin(a); d += `M${n2(c * 1.08 * r)} ${n2(s * 1.08 * r)}L${n2(c * 1.6 * r)} ${n2(s * 1.6 * r)}`; }
+            return [lleno(elipse(r, r)), trazo(d, 0.26)];
+        }
+        case 'burbuja': return [trazo(elipse(1.15 * r, 1.15 * r), 0.2), trazo(`M${n2(-0.72 * r)} ${n2(-0.2 * r)}A${n2(0.75 * r)} ${n2(0.75 * r)} 0 0 1 ${n2(-0.2 * r)} ${n2(-0.72 * r)}`, 0.24, { sinBorde: true })];
     }
     return [lleno(elipse(r, r))];
 }
 // Hasta dónde llega cada forma, en radios (para que quepa en un icono).
-const ALCANCE = { gota: 1.55, grano: 1.7, grano1: 2.5, pajarita: 1.35, rombo1: 2, rombo2: 2.6, caCitrato: 2.05, aro: 2.05, estrella: 1.5, celula: 1.6, ovalo: 1.45, ovaloHueco: 1.45, disco: 1.4, copo: 1.5, pesa: 1.55, tripode: 1.45 };
+const ALCANCE = { gota: 1.55, grano: 1.7, grano1: 2.5, pajarita: 1.35, rombo1: 2, rombo2: 2.6, caCitrato: 2.05, aro: 2.05, estrella: 1.5, celula: 1.6, ovalo: 1.45, ovaloHueco: 1.45, disco: 1.4, copo: 1.5, pesa: 1.55, tripode: 1.45, coco: 1.65, burbuja: 1.3 };
 
 // Grosor del borde oscuro: fino, pero visible también en partículas pequeñas.
 const borde = r => Math.max(0.22 * r, 0.8);
