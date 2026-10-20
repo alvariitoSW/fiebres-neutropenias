@@ -647,7 +647,7 @@ export function pintarTablero() {
             celda('Con la dosis', 'tih', 'no depende', 'mar-hnf (p. 5)');
         }
     } else {
-        const corto = k => ({ hnf: 'HNF', enoxaparina: 'enoxa', apixaban: 'apixa', rivaroxaban: 'rivaro', dabigatran: 'dabi' }[k]);
+        const corto = k => ({ hnf: 'HNF', enoxaparina: 'enoxa 1/día', apixaban: 'apixa', rivaroxaban: 'rivaro', dabigatran: 'dabi' }[k]);
         const listos = ORDEN_NEURO.filter(k => D.reloj[k]), esperar = ORDEN_NEURO.filter(k => !D.reloj[k]);
         celda('Desde la dosis', 'horas', `${e.horas} h`, '!función renal normal');
         celda('Ya se puede', 'reloj', listos.length ? listos.map(corto).join(', ') : 'ninguno', 'mar-neuroeje (p. 9-10)', 'bien');

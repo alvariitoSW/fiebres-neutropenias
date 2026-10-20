@@ -257,11 +257,11 @@ export const MAYEUTICA_SIN_MODELO = {
       { id: 'tf-e3', corto: 'fondaparinux y riñón', tipo: 'test', modeloVivo: { telarVivo: 'fonda-32' }, fuente: 'mar-fondaparinux-errata · mar-tabla-5-2',
         enunciado: 'Fondaparinux con un aclaramiento de 32 mL/min. ¿Qué dice Marino?',
         opciones: [
-          { t: '2,5 mg al día: el ajuste empieza por debajo de 30', porque: 'Ni la tabla ni el texto dejan la dosis plena a 32: la tabla ajusta desde 50 (y no cubre 30-35) y el texto también desde 50. Se elimina por el riñón y se acumularía.' },
-          { t: 'Que no se usa: está contraindicado por debajo de 35', porque: 'La tabla pone el «no usar» por debajo de 30, y el texto por debajo de 20. Ninguna de las dos lo prohíbe a 32 con esas palabras.' },
-          { t: 'El texto da 1,5 mg; la tabla no cubre 30-35', ok: true }],
-        explicacion: 'Tabla 5.2: 1,5 mg con ClCr 35-50; no usar con <30. Texto: 1,5 mg con ClCr 20-50; no usar con <20. <span class="hl-rojo">La tabla no cubre el tramo 30-35; el texto sí (1,5 mg con 20-50).</span>',
-        nota: '<b>Nota de fuentes.</b> La tabla y el texto del mismo capítulo no coinciden; la ficha reproduce las dos y su calculadora avisa en el tramo en que discrepan. No se elige ganadora.' },
+          { t: '1,5 mg al día: la tabla y el texto dicen lo mismo a 32', porque: 'No dicen lo mismo: el texto da 1,5 mg con 20-50, pero la tabla solo lo da con 35-50 y a 32 no indica ni ajuste ni «no usar». Si crees que coinciden, no ves la discrepancia que la ficha te pide vigilar.' },
+          { t: 'Que no se usa: la contraindicación empieza por debajo de 35', porque: 'La tabla pone el «no usar» por debajo de 30, y el texto por debajo de 20. Ninguna de las dos lo prohíbe a 32; retirar un anticoagulante que sí procede deja al paciente sin profilaxis.' },
+          { t: 'El texto da 1,5 mg con 20-50; la tabla no dice nada para 30-35', ok: true }],
+        explicacion: 'Tabla 5.2: 1,5 mg con ClCr 35-50; no usar con <30. Texto: 1,5 mg con ClCr 20-50; no usar con <20. <span class="hl-rojo">A 32, el texto da 1,5 mg (20-50); la tabla no indica nada para 30-35 (ni ajuste ni «no usar»).</span>',
+        nota: '<b>Nota de fuentes.</b> La tabla y el texto del mismo capítulo no coinciden; la ficha reproduce las dos y su calculadora avisa en el tramo en que discrepan (30-35): el texto sí da dosis ahí, la tabla no. No se elige ganadora.' },
       { id: 'tf-e4', corto: 'los ACOD', tipo: 'test', fuente: 'mar-acod-puntos · mar-tabla-5-3',
         enunciado: '¿En qué profilaxis recomienda hoy Marino los anticoagulantes orales directos?',
         opciones: [

@@ -167,7 +167,7 @@ function fraseDe(v, n) {
             if (n.opioide === 'morfina') return [`Morfina con IR: sus metabolitos se acumulan (la M3G da mioclonías y convulsiones): ${R('−50 % el mantenimiento')}.`, 'ficha · mar-tabla-6-2 · mar-morfina'];
             return o ? [`IR con ${o.n.toLowerCase()}: ${A(o.irC)}.`, 'ficha · mar-tabla-6-2'] : ['Insuficiencia renal: cambia la elección del opioide. Elige uno en «Analgesia».', 'ficha · mar-tabla-6-2'];
         case 'volemia':
-            return av.hipoPA ? [`Hipovolemia con opioide y benzodiacepina, o con propofol: ${R('la PA puede caer de forma marcada')}. Responde a líquidos o a pequeños bolos de vasopresor.`, 'ficha · mar-opioide-cardio · mar-propofol']
+            return av.hipoPA ? [`Hipovolemia con opioide y benzodiacepina, o con propofol: ${R('la PA puede caer de forma marcada')}.${n.opioide ? ' La hipotensión por opioides responde a líquidos o a pequeños bolos de vasopresor.' : ' De la hipotensión por propofol, la ficha no da tratamiento.'}`, 'ficha · mar-opioide-cardio · mar-propofol']
                 : [n.volemia === 'hipovolemia' ? 'Hipovolemia: con un opioide más una benzodiacepina, o con propofol, la PA cae.' : 'Volemia normal.', 'ficha · mar-opioide-cardio'];
         case 'inflamacion': return n.inflamacion ? [`Inflamación sistémica: ${R('hipernocicepción')}. El mismo gesto duele más: BPS ${D.bps}.`, 'ficha · mar-hipernocicepcion'] : [`Sin inflamación: BPS ${D.bps}.`, ''];
         case 'estimulo': return n.estimulo === 'mover' ? [`Moverle en la cama: una causa frecuente de dolor. BPS ${D.bps}; ${R('la FC apenas cambia')}.`, 'ficha · mar-hipernocicepcion · mar-constantes-dolor'] : [`En reposo: un 50 % de los críticos tiene dolor (lumbar, piernas). BPS ${D.bps}.`, 'ficha · mar-hipernocicepcion'];

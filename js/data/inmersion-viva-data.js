@@ -117,6 +117,7 @@ export function derivar(e) {
       if (f.fc != null) fc = { v: f.fc, txt: String(f.fc), o: 'caso', fuera: f.fc < 60 };
       else if (e.bradi) fc = { v: null, txt: '↓↓', u: 'bradicardia · sin cifra', o: 'sin cifra', fuera: true };
       else if (dexm) fc = { v: null, txt: '↓', u: 'simpaticolítico · sin cifra', o: 'sin cifra' };
+      else if (pris) fc = { v: null, txt: '—', u: 'sin cifra', o: 'sin cifra' };
       else fc = { v: 80 + Math.round((bps - 3) / 3), o: 'ilustr.' };
       if (fc.v != null && !fc.txt) fc.txt = String(fc.v);
       let pa;
@@ -379,7 +380,7 @@ export const PREGUNTAS = [
       estado: { opioide: 'fentanilo', sedante: 'lorazepam', par: true }, mirar: 'relojes',
       enunciado: 'Ventilado para varios días. El R2, con la ficha en la mano: «el lorazepam es la benzodiacepina de elección en perfusión prolongada: 4-5 h para despertar frente a 30 h del midazolam». ¿Qué le contestas?',
       opciones: [
-        { t: 'El dato es de un estudio; las guías recientes piden evitar las BZD', ok: true },
+        { t: 'El capítulo lo dice, a partir de un estudio; pero las guías recientes piden evitar las BZD', ok: true },
         { t: 'Falso: el lorazepam se acumula más que el midazolam, porque es más liposoluble', ok: false, porque: 'Al revés: el midazolam es más liposoluble (+++ frente a ++) y tiene metabolito activo. El riesgo del lorazepam es el propilenglicol.' },
         { t: 'Correcto: lo dice el capítulo, y con eso basta', ok: false, porque: 'El mismo capítulo recoge que las guías piden evitar las BZD en el ventilado: le expondrías a acumulación, delirio y propilenglicol.' }],
       explicacion: 'Las dos frases son de Marino: <span class="hl">un estudio</span> (30 h frente a 4-5 h) y, después, <span class="hl-rojo">evitar las BZD</span> en la sedación prolongada del ventilado. Hay que leer las dos.' },
@@ -388,10 +389,10 @@ export const PREGUNTAS = [
       enunciado: 'Nota de evolución, día 3: propofol a 6 mg/kg/h (peso ideal) desde hace 60 h.',
       frases: [
         { t: 'Lleva más de 5 mg/kg/h durante más de 48 h: está en la dosis de riesgo.', mal: false },
-        { t: 'Lactato que no cede, CK que sube y una FEVI que cae de golpe: encaja con un síndrome de infusión de propofol.', mal: false },
+        { t: 'Lactato que no cede, rabdomiólisis y una insuficiencia cardíaca sistólica brusca: encaja con un síndrome de infusión de propofol.', mal: false },
         { t: 'Solo aparece por encima de 80 µg/kg/min: con dosis menores se descarta.', mal: true, c: 'Se ha descrito con <span class="hl-rojo">36 µg/kg/min</span>: una dosis moderada no lo descarta.' },
-        { t: 'Mientras cambio de sedante, le doy una carga de propofol para que no se despierte.', mal: true, c: 'No se da carga de propofol si hay <span class="hl-rojo">inestabilidad hemodinámica</span>. El tratamiento del SIP es de soporte (ECMO en algún caso).' },
-        { t: 'Incidencia descrita del 3 % y mortalidad del 30-35 %; tratamiento de soporte (ECMO en algún caso).', mal: false }],
+        { t: 'El tratamiento es el ECMO, en todos los casos.', mal: true, c: 'El manejo es de <span class="hl">soporte general</span>; el ECMO se ha usado solo en <span class="hl-rojo">unos pocos casos</span>.' },
+        { t: 'Incidencia descrita del 3 % y mortalidad del 30-35 %.', mal: false }],
       explicacion: '6 mg/kg/h son 100 µg/kg/min: por encima de los dos umbrales (&gt;80 µg/kg/min o &gt;5 mg/kg/h, más de 48 h).' },
     { id: 'in-e6', grupo: 'examen', corto: 'haloperidol', tipo: 'error', fuente: 'mar-sedacion#mar-tabla-6-8 · #mar-haloperidol-qtc · #mar-haloperidol-intro',
       estado: { opioide: 'fentanilo', delirio: true, bradi: true, halo: true }, mirar: 'buzo',
@@ -440,9 +441,9 @@ export const CASOS = [
             opciones: [
               { t: 'Morfina a dosis plenas: es la clásica', ok: false, porque: 'Sus metabolitos se acumulan en la IR: la M3G da agitación con mioclonías y convulsiones. Hay que bajar el mantenimiento un 50 %.' },
               { t: 'Fentanilo; o morfina con el mantenimiento al 50 %', ok: true },
-              { t: 'Hidromorfona al 50 %: también tiene metabolitos activos', ok: false, porque: 'Los tiene, pero la Tabla 6.2 no pide ajuste en la IR: le darías la mitad de lo que necesita.' }],
+              { t: 'Hidromorfona al 50 %, como la morfina', ok: false, porque: 'La Tabla 6.2 no pide ajustar la hidromorfona en la IR: darle la mitad la dejaría infradosificada y con dolor.' }],
             explicacion: 'Fentanilo: sin metabolitos activos ni histamina, inicio en 1-2 min. Míralo calmar la tormenta.',
-            nota: 'La ficha deja una duda: el fentanilo se acumula en la IR, y algunos aconsejan evitarlo en la enfermedad renal terminal («¿evitar?», Tabla 6.2). Se enseña tal cual.' } },
+            nota: 'La ficha deja dudas: el fentanilo se acumula en la IR, y algunos aconsejan evitarlo en la enfermedad renal terminal («¿evitar?», Tabla 6.2); y la hidromorfona, sin ajuste en la IR según la misma tabla, sería otra opción posible. La pregunta solo descarta las dosis plenas de morfina y bajar la hidromorfona. Se enseña tal cual.' } },
         { momento: 'Día 2', datos: { Analgesia: 'fentanilo en perfusión', Conducta: 'cara relajada; tolera el ventilador', RASS: '+1 (ansioso, se desadapta)' }, nuevo: ['Analgesia', 'Conducta', 'RASS'],
           estado: { estimulo: 'reposo', renal: 'ir', opioide: 'fentanilo', fijo: { rass: 1 } }, mirar: 'regla', calculadora: { nombre: 'Propofol: dosis y riesgo', ir: 'mar-propofol-calc' },
           pregunta: { id: 'e4-4', tipo: 'destapa', fuente: 'mar-sedacion#mar-propofol · #mar-escalas-sedacion · #mar-tabla-6-6',
@@ -538,15 +539,17 @@ export const CASOS = [
               { t: 'El hiato osmolar de 14 (>10) se correlaciona con su acumulación; lo seguiré vigilando.', mal: false },
               { t: 'Mañana pido un lactato: si es normal, descarto la toxicidad.', mal: true, c: 'El lactato <span class="hl-rojo">no predice bien</span> la toxicidad; lo que se vigila es el hiato osmolar.' },
               { t: 'El propilenglicol se convierte en ácido láctico y puede dar fracaso renal.', mal: false },
-              { t: 'Es la benzodiacepina de elección en perfusión prolongada, así que la dejo como está.', mal: true, c: 'Es el dato de un estudio; las guías recientes piden <span class="hl">evitar las BZD</span> en el ventilado, y ya está en la dosis de riesgo.' }],
-            explicacion: 'El primer error es la trampa del lactato; el segundo, leer solo la mitad del capítulo.' } }
+              { t: 'No cambio la perfusión: el lorazepam es la benzodiacepina de elección en perfusión prolongada.', mal: true, c: 'Marino lo escribe así a partir de un estudio, pero cita también que las guías recientes piden <span class="hl">evitar las BZD</span> en el ventilado. El error es no actuar ante la <span class="hl-rojo">dosis de riesgo</span> (&gt;10 mg/h más de 48 h), no la frase del libro.' }],
+            explicacion: 'El primer error es la trampa del lactato; el segundo, quedarse con una sola de las dos frases del capítulo y dejar la perfusión en la dosis de riesgo.' } }
       ] }
 ];
 
 const PROF = [
     ['Opiáceo, opioide y narcótico', 'Opiáceo: derivado natural del opio. Opioide: derivado natural o sintético que actúa sobre los receptores opioides (analgesia, sedación, euforia, miosis, depresión respiratoria, bradicardia, estreñimiento, náuseas, retención urinaria, prurito). Narcótico: término anticuado, y policial para el uso ilegal.', 'mar-opioide-definiciones', 18],
     ['Fentanilo e hidromorfona, más a fondo', 'El fentanilo, por su lipofilia, se acumula en el cerebro con el uso continuado; sin metabolitos activos, pero el fármaco se acumula en la IR. La hidromorfona es semisintética, quizá más analgésica que la morfina, preferida en el dolor oncológico y sin ventajas demostradas sobre el fentanilo.', 'mar-tabla-6-2', 20],
+    ['Tabla 6.2: bolos e infusiones', 'Morfina: bolo de 2-4 mg cada 1-2 h; infusión de 2-30 mg/h. Hidromorfona: bolo de 0,2-0,6 mg cada 1-2 h; infusión de 0,5-3 mg/h. Fentanilo: bolo de 0,35-0,5 µg/kg cada 0,5-1 h; infusión de 0,7-10 µg/kg/h. El capítulo insiste en que la dosis eficaz la marca la respuesta de cada paciente, no la pauta recomendada.', 'mar-tabla-6-2', 19],
     ['Paracetamol IV y ketamina, de dónde vienen', 'El paracetamol IV se aprobó en 2010 para el dolor y la fiebre del posoperatorio que no puede tomarlo por boca; su gran pega, además de la hepatotoxicidad, es que no es antiinflamatorio. La ketamina es un derivado de la fenciclidina, anestésica y analgésica.', 'mar-tabla-6-3 · mar-ketamina', 22],
+    ['Ketamina: otros efectos', 'Además de subir la PA y la FC y de broncodilatar, la ketamina da náuseas y vómitos e hipersalivación. A las dosis de ahorro de opioide, sus efectos no analgésicos disminuyen.', 'mar-ketamina', 23],
     ['Medidas no farmacológicas', 'El capítulo no las trata: remite a una guía de práctica clínica. Sí cita, como parte de sedar, el apoyo general: hablar a menudo con el paciente y con la familia.', 'mar-dolor-intro · mar-ansiedad', 16],
     ['Escalas de sedación', 'Las dos más fiables en la UCI: la escala de sedación-agitación (SAS) y la RASS. La RASS permite además seguir los cambios y servir de objetivo de la perfusión.', 'mar-escalas-sedacion', 24],
     ['Dexmedetomidina: dosis y más ventajas', 'Tabla 6.6: carga de 1 µg/kg en 10 min; inicio en 5-10 min; mantenimiento de 0,2-1,5 µg/kg/h; despertar en 6-10 min. Sirve en el paciente no ventilado (no deprime la respiración), y el EEG de su sedación se parece al del sueño natural.', 'mar-tabla-6-6 · mar-dexmedetomidina', 27],

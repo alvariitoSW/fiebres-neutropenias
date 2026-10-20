@@ -528,3 +528,23 @@ Aprobado y unido a `main` el 20/10 (PR #19, #20 y #21). Lo hizo el plan socialis
   - Regla nueva en la prueba: la correcta no es ni la más larga ni la más corta en más de ⅓ de los tests de cada grupo.
 - **«La cama 7»** (maquetas de las fichas sin modelo: muralla, telar e inmersión, con la misma cama): vuelta 2 hecha,
   pendiente de que el usuario elija. Están en `autonomo/maquetas/b1-{muralla,telar,inmersion}.html`.
+
+### «La cama 7» en la app (20/10/2026)
+
+El usuario aprobó las tres maquetas. Se construyeron como modelos vivos con la cama compartida
+(`js/modules/libros/cama7.js`: las tres ventanas llevan de una escena a otra):
+- **muralla** (`data-muralla-viva`, cap. 4);
+- **telar** (`data-telar-vivo`, cap. 5);
+- **inmersión** (`data-inmersion-viva`, cap. 6).
+
+Cada una tiene Mayéutica, casos y «Para profundizar», y la Mayéutica de sus 5 fichas abre su modelo (`modeloVivo`).
+
+Formas nuevas en la tabla única: bacilo, huso, linfocito y cadena (muralla); antitrombina, heparina, FP4, IgG, plaqueta,
+plaqueta activada y fibrina (telar).
+
+`libros/index.js` arranca cada modelo vivo por separado: si uno falla, los demás siguen (pasó con una forma que
+faltaba).
+
+Auditoría de la versión de la app: un grave (una nota del plan a la vista) y 11 menores, todos corregidos; ninguna dosis
+mal. El fondaparinux con ClCr 30-35 queda como «la fuente no es clara aquí» (el texto da 1,5 mg con 20-50; la tabla
+calla).

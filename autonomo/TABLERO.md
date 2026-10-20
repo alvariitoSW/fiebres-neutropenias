@@ -313,8 +313,8 @@ río y mar) → 39-44 → 45-53.
 | # | Clave | Qué | Estado | Notas |
 |---|---|---|---|---|
 | 1 | `b1-cobertura` | Bloque 1 (caps. 1-11, 23 fichas): mapa de cobertura | hecha (2026-10-19) · ≈90 % | Grupos: fluidos (río y mar), hemodinámica (circulación viva), oxígeno (capilar y oxígeno, nuevo), accesos vasculares (catéter vivo, nuevo), sin modelo claro (úlcera de estrés, tromboprofilaxis, analgesia, sedación) |
-| 2 | `b1-maquetas` | Bloque 1: maquetas (capilar, catéter y «La cama 7»: muralla, telar, inmersión) | hecha (2026-10-20) · capilar y catéter, construidos; «La cama 7» (vuelta 2) espera la elección del usuario; https://claude.ai/artifact/Q4Fii5DVMgqGhQf7429ouv | Aprobadas por el usuario el 19/10, tras el mapa de cobertura |
-| 3 | `b1-modelos` | Bloque 1: construir en la app los modelos elegidos | hecha (2026-10-20) · capilar y catéter (PR #20) y motor del corazón (PR #21), en main | La cama 7 espera a que el usuario elija las maquetas |
+| 2 | `b1-maquetas` | Bloque 1: maquetas (capilar, catéter y «La cama 7»: muralla, telar, inmersión) | hecha (2026-10-20) · capilar y catéter, construidos; «La cama 7» aprobada y construida en la app (PR en borrador); https://claude.ai/artifact/Q4Fii5DVMgqGhQf7429ouv | Aprobadas por el usuario el 19/10, tras el mapa de cobertura |
+| 3 | `b1-modelos` | Bloque 1: construir en la app los modelos elegidos | hecha (2026-10-20) · capilar y catéter (PR #20) y motor del corazón (PR #21), en main | La cama 7 (muralla, telar e inmersión), en PR en borrador (20/10) |
 | 4 | `b1-estudio` | Bloque 1: Texto \| Visual \| Mayéutica en las 23 fichas, ruta y «Para profundizar» | hecha (2026-10-20) · 23 fichas, auditadas (PR #19), en main | Sustituye a B-001 (preguntas) para este bloque |
 
 ## Lo que aún no está aprobado

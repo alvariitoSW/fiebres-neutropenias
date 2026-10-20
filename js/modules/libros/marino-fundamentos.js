@@ -81,7 +81,7 @@ function calcProfilaxis() {
             break;
         case 'fondaparinux':
             if (clcr < 20) { estado = 'danger'; txt = '<strong>No usar</strong> (ClCr &lt;20, y también &lt;30 según la tabla).'; }
-            else if (clcr < 35) { estado = 'warn'; txt = `<strong>Las dos cifras de la fuente discrepan aquí</strong> (ClCr ${clcr}): la Tabla 5.2 no da 1,5 mg por debajo de 35 y prohíbe por debajo de 30; el texto da 1,5 mg al día entre 20 y 50.`; }
+            else if (clcr < 35) { estado = 'warn'; txt = `<strong>La fuente no es clara aquí</strong> (ClCr ${clcr}): el texto da 1,5 mg al día entre 20 y 50; la Tabla 5.2 no dice nada para 30-35 (da 1,5 mg con 35-50 y prohíbe por debajo de 30).`; }
             else if (clcr <= 50) { estado = 'warn'; txt = '<strong>1,5 mg al día</strong> (ClCr 35-50).'; }
             else txt = '<strong>2,5 mg al día</strong>.';
             if (obeso) txt += ' En la obesidad, la tabla no da recomendaciones.';

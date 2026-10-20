@@ -303,7 +303,7 @@ function pintarMonitor() {
     h += `<path id="inm-ecg" d="" style="fill:none;stroke:var(${D.av.pris || D.av.pg ? '--accent-red' : '--accent-green'});stroke-width:1"/>`;
     h += T(270, 68, 'FC', { s: 6.8, c: '--text-muted', sans: 1 }) + T(281, 69, q('fc') ? '?' : fc.txt, { s: 10, b: 1, c: fc.fuera ? '--accent-red' : '--text-main', sans: 1 });
     h += T(305, 68, 'PA', { s: 6.8, c: '--text-muted', sans: 1 }) + T(316, 69, q('pa') ? '?' : pa.txt, { s: 10, b: 1, c: pa.fuera ? '--accent-red' : '--text-main', sans: 1 });
-    const alarma = D.av.pris ? ['IC brusca · lactato ↑', 'CK ↑ (rabdomiólisis)'] : D.av.pg ? ['acidosis láctica', 'hiato osmolar >10'] : D.av.hipoPA ? ['caída marcada', 'sin cifra'] : null;
+    const alarma = D.av.pris ? ['IC sistólica · lactato ↑', 'rabdomiólisis'] : D.av.pg ? ['acidosis láctica', 'hiato osmolar >10'] : D.av.hipoPA ? ['caída marcada', 'sin cifra'] : null;
     if (alarma) h += T(311, 79, alarma[0], { a: 'middle', s: 6.8, b: 1, c: '--accent-red', sans: 1 }) + T(311, 88, alarma[1], { a: 'middle', s: 6.8, b: 1, c: '--accent-red', sans: 1 });
     else h += T(311, 82, 'mala guía del dolor', { a: 'middle', s: 6.8, i: 1, c: '--text-muted' });
     if (D.av.pris || D.av.pg) h += `<rect x="266" y="38" width="90" height="54" rx="4" class="inm-anillo-svg" style="fill:none;stroke:var(--accent-red);stroke-width:1.6"/>`;
@@ -355,7 +355,7 @@ function pintarRotulos() {
     } else if (av.haloBloq) { l1 = 'QTc >500 ms: el haloperidol no se usa.'; l2 = 'torsade de pointes: 3-4 % con haloperidol IV'; }
     else if (estado.halo && estado.delirio) { l1 = 'Haloperidol 5 mg IV: efecto a los 10-20 min, dura 3-4 h.'; l2 = 'si no responde: 10 mg · QTc >500 ms: no'; c = '--accent-yellow'; }
     else if (estado.delirio) { l1 = estado.sedante === 'dexmedetomidina' ? 'Delirio: la dexmedetomidina es la de elección.' : 'Delirio (no por abstinencia): dexmedetomidina de elección.'; l2 = estado.bradi ? 'no la tolera (bradicardia o hipotensión): haloperidol' : ''; c = '--accent-purple'; }
-    else if (av.pris) { l1 = 'SIP: IC brusca · acidosis láctica que no cede · CK ↑'; l2 = 'incidencia 3 % · mortalidad 30-35 %'; }
+    else if (av.pris) { l1 = 'SIP: IC sistólica brusca · acidosis láctica · rabdomiólisis'; l2 = 'incidencia 3 % · mortalidad 30-35 %'; }
     else if (av.pg) { l1 = 'El barril gotea: propilenglicol → ácido láctico.'; l2 = 'vigila el hiato osmolar (>10); el lactato no lo predice'; }
     else if (av.midaz) { l1 = 'La esponja pesa: se acumula en el SNC.'; l2 = 'perfusión de midazolam: ≤48 h'; }
     else if (av.trampa) { l1 = 'Le hunde, pero la tormenta sigue: no quita el dolor.'; l2 = 'Fig. 6.1: ~80 % de los residentes contestó mal'; }

@@ -132,7 +132,7 @@ export const estadoDe = parcial => Object.assign(estadoBase(), copia(parcial || 
 export const PAGINAS = { 'mar-piel-interna': '58', 'mar-microbioma-cifras': '58', 'mar-microbioma-proteccion': '59', 'mar-disbiosis': '59', 'mar-motor-fmo': '60',
     'mar-acido-antiseptico': '60', 'mar-fig-4-3': '61-62', 'mar-saliva': '62', 'mar-colonizacion-orofaringe': '63', 'mar-fig-4-4': '63', 'mar-tabla-4-1': '63-64',
     'mar-fig-4-5': '64-65', 'mar-sdd': '65-66', 'mar-probioticos': '66', 'mar-ulcera-patogenia': '67', 'mar-ulcera-frecuencia': '67', 'mar-sangrado-significativo': '67',
-    'mar-tabla-4-2': '68', 'mar-mito-corticoides': '68', 'mar-tabla-4-3': '68', 'mar-profilaxis-uso': '68', 'mar-img-4-6': '69-70', 'mar-desprescribir': '71',
+    'mar-tabla-4-2': '68', 'mar-mito-corticoides': '68', 'mar-tabla-4-3': '68-69', 'mar-profilaxis-uso': '68', 'mar-img-4-6': '69-70', 'mar-desprescribir': '71',
     'mar-enteral-protege': '72', 'mar-acidofobia': '72-73', 'mar-bac-vias': '47', 'mar-bac-intestino': '53-54', 'mar-ulcera-calc': '68' };
 export function chipTxt(f) {
     if (!f) return '';
@@ -248,7 +248,7 @@ export const PREGUNTAS = [
         explicacion: 'La colonización <span class="hl-azul">no depende del entorno sino de la enfermedad</span> (Fig. 4.4): las proteínas de adhesión cambian de forma y pasan a unir patógenos. Lo mismo ocurre en el intestino y la vejiga.' },
     { id: 'mu-g10', grupo: 'guia', corto: 'clorhexidina', tipo: 'test', fuente: 'mar-microbioma#mar-tabla-4-1 · acordeones «Clorhexidina oral» y «SOD» (A p. 63-64)',
         estado: { estacion: 'boca', paciente: 'uci', vm: true },
-        tocar: { mandos: ['descontaminacion'], mirar: 'cerraduras', instruccion: 'pon la clorhexidina; después compárala con la SOD.', comprobar: e => e.descontaminacion === 'clorhexidina', pista: 'Pulsa «Clorhexidina 0,12 %».', bueno: { descontaminacion: 'clorhexidina' }, confirma: 'mueren sobre todo los grampositivos (los cocos); los bacilos siguen pegados. Con la SOD caen también los bacilos.' },
+        tocar: { mandos: ['descontaminacion'], mirar: 'cerraduras', instruccion: 'pon la clorhexidina; después compárala con la SOD.', comprobar: e => e.descontaminacion === 'clorhexidina', pista: 'Pulsa «Clorhexidina 0,12 %».', bueno: { descontaminacion: 'clorhexidina' }, confirma: 'mueren sobre todo los grampositivos; los bacilos siguen pegados. Con la SOD caen también los bacilos.' },
         enunciado: 'Le pones clorhexidina al 0,12 % cada 6 h. Predice qué microbios siguen pegados a sus cerraduras.',
         opciones: [
             { t: 'Ninguno: es un antiséptico de amplio espectro', ok: false, porque: 'Actúa sobre todo frente a grampositivos, y en la boca del crítico predominan los gramnegativos: el paciente seguiría colonizado. Y en 11 ensayos se asoció a más mortalidad.' },
@@ -531,7 +531,7 @@ export const PROFUNDIZAR = [
     { html: '<b>Suprimir el ácido tiene precio.</b> Aumenta las gastroenteritis por <i>Salmonella</i> y <i>Campylobacter</i> y las infecciones por <i>C. difficile</i>; la FDA publicó en 2013 una alerta de seguridad sobre <i>C. difficile</i> e IBP.', donde: 'mar-acido-antiseptico · acordeón «Riesgos» · A p. 62, 70', href: PDF(70) },
     { html: '<b>Tabla 4.4, contra la profilaxis rutinaria.</b> El sangrado significativo es infrecuente; el efecto de la profilaxis es pequeño; no mejora la supervivencia; y el beneficio se pierde al contar los riesgos de suprimir el ácido.', donde: 'mar-tabla-4-4 · A p. 72', href: PDF(72) },
     { html: '<b>Profilaxis de más.</b> Más del 80 % de los pacientes de UCI la reciben y unos 70 % no la necesitan: un exceso que no solo es caro, también puede hacer daño.', donde: 'mar-profilaxis-uso · A p. 68', href: PDF(68) },
-    { html: '<b>La boca del grave.</b> Se coloniza sobre todo por bacilos gramnegativos aerobios como <i>Pseudomonas aeruginosa</i>, que son también la causa más frecuente de la neumonía nosocomial: por eso se descontamina la boca del intubado, y la clorhexidina se mantiene mientras dependa del respirador. Impedir que los patógenos se peguen al epitelio sería un método eficaz de control de la infección; para el autor, merece mucha más atención.', donde: 'mar-colonizacion-orofaringe · Tabla 4.1 · A p. 63-64', href: PDF(63) },
+    { html: '<b>La boca del grave.</b> Se coloniza sobre todo por bacilos gramnegativos aerobios como <i>Pseudomonas aeruginosa</i>, que son también la causa más frecuente de la neumonía nosocomial: por eso se descontamina la boca del intubado. La pauta de la clorhexidina es mantenerla mientras dependa del respirador, aunque las guías internacionales de NAV <span class="hl-rojo">retiraron su recomendación</span> por la duda sobre el daño. Impedir que los patógenos se peguen al epitelio sería un método eficaz de control de la infección; para el autor, merece mucha más atención.', donde: 'mar-colonizacion-orofaringe · Tabla 4.1 · A p. 63-64', href: PDF(63) },
     { html: '<b>¿La piel o el intestino?</b> La reflexión del autor sobre el origen de la bacteriemia por catéter (vía 4): poca correlación entre la piel del punto y la punta; gramnegativos, enterococos y <i>Candida</i> son la mitad.', donde: 'mar-bac-intestino · A p. 53-54', href: PDF(53) },
 ];
 

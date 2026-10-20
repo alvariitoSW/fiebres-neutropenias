@@ -73,7 +73,7 @@ export function profilaxis(f, clcr, imc) {
             break;
         case 'fondaparinux':
             if (clcr < 20) { estado = 'danger'; txt = '<strong>No usar</strong> (ClCr &lt;20, y también &lt;30 según la tabla).'; }
-            else if (clcr < 35) { estado = 'warn'; txt = `<strong>Las dos cifras de la fuente discrepan aquí</strong> (ClCr ${clcr}): la Tabla 5.2 no da 1,5 mg por debajo de 35 y prohíbe por debajo de 30; el texto da 1,5 mg al día entre 20 y 50.`; }
+            else if (clcr < 35) { estado = 'warn'; txt = `<strong>La fuente no es clara aquí</strong> (ClCr ${clcr}): el texto da 1,5 mg al día entre 20 y 50; la Tabla 5.2 no dice nada para 30-35 (da 1,5 mg con 35-50 y prohíbe por debajo de 30).`; }
             else if (clcr <= 50) { estado = 'warn'; txt = '<strong>1,5 mg al día</strong> (ClCr 35-50).'; }
             else txt = '<strong>2,5 mg al día</strong>.';
             if (obeso) txt += ' En la obesidad, la tabla no da recomendaciones.';
@@ -179,7 +179,7 @@ export const PAGINAS = { 'mar-tev-intro': '1', 'mar-tabla-5-1': '2', 'mar-tev-ci
     'mar-tev-contra-absolutas': '4', 'mar-tev-contra-relativas': '4', 'mar-tabla-5-2': '4', 'mar-profilaxis-calc': '4, 8-9', 'mar-hnf': '4-5', 'mar-hbpm': '6-7', 'mar-img-5-2': '6',
     'mar-fondaparinux': '8', 'mar-fondaparinux-errata': '4, 8', 'mar-nota-dalteparina-farmacos': '4, 7, 11', 'mar-tabla-5-3': '8-9', 'mar-acod-puntos': '8-9', 'mar-aspirina': '9',
     'mar-neuroeje': '9-10', 'mar-mecanica': '10', 'mar-cni-pegas': '10', 'mar-filtro-vci': '11', 'mar-esc-alto-riesgo': '11', 'mar-esc-especiales': '11', 'mar-esc-cirugia-general': '11',
-    'mar-esc-bariatrica': '11', 'mar-esc-ortopedica': '12', 'mar-esc-neuro-cardio': '12', 'mar-esc-trauma': '12', 'mar-esc-tce': '12', 'mar-esc-medica': '13', 'mar-inmovilidad': '13' };
+    'mar-esc-bariatrica': '11-12', 'mar-esc-ortopedica': '12', 'mar-esc-neuro-cardio': '12', 'mar-esc-trauma': '12', 'mar-esc-tce': '12', 'mar-esc-medica': '13', 'mar-inmovilidad': '13' };
 export function chipTxt(f) {
     if (!f) return '';
     const tipos = new Set();
@@ -434,7 +434,7 @@ export const CASOS = [
                         { t: '2,5 mg al día: el riñón no cambia su dosis', ok: false, porque: 'Se elimina por el riñón (vida media de 17 h): a dosis plena con ClCr 25 se acumularía y la paciente podría sangrar.' },
                         { t: 'Tabla: no usar si <30. Texto: 1,5 mg si 20-50', ok: true }],
                     explicacion: 'El libro se contradice y <span class="hl-rojo">no se elige ganadora</span>: la tabla (p. 4) da 1,5 mg con ClCr 35-50 y prohíbe por debajo de 30; el texto (p. 8), 1,5 mg con 20-50 y prohíbe por debajo de 20. La calculadora avisa en ese tramo.',
-                    nota: '<b>Nota de fidelidad.</b> Ninguna de las dos cifras cubre el tramo 30-35 de la tabla. Se reproducen las dos, como en la ficha.' } },
+                    nota: '<b>Nota de fidelidad.</b> El texto cubre todo el tramo 20-50; la tabla calla entre 30 y 35 (ni ajuste ni «no usar»). Se reproducen las dos, como en la ficha.' } },
             { momento: 'Día 9', datos: { ClCr: '50 mL/min', Plaquetas: 'se recuperan' }, nuevo: ['ClCr', 'Plaquetas'], estado: { farmaco: 'fondaparinux', imc: 42, clcr: 25 }, mirar: 'rinon',
                 pregunta: { id: 'tr-6', tipo: 'test', fuente: 'mar-fondaparinux · mar-tabla-5-2 (p. 4, 8)',
                     tocar: { mandos: ['clcr'], mirar: 'rinon', ocultar: ['dosis'], instruccion: 'sube el ClCr a 50 y lee la calculadora.', comprobar: e => e.clcr === 50, pista: 'Pulsa «50».', bueno: { clcr: 50 }, confirma: 'con ClCr 50, 1,5 mg al día: la tabla (35-50) y el texto (20-50) coinciden.' },
@@ -520,34 +520,34 @@ export const CASOS = [
                         { t: 'Retirar la CNI y pasar a enoxaparina sola', ok: false, porque: 'En la lesión medular van juntas. Quitar la CNI le restaría eficacia en el grupo de más riesgo.' },
                         { t: 'Enoxaparina 40 mg al día y sin CNI, como en la UCI', ok: false, porque: 'Esa es la pauta de la enfermedad médica. En la lesión medular, 30 mg cada 12 h y CNI, juntas: con menos, quedaría infraprotegido.' }],
                     explicacion: 'Lesión medular: <span class="hl">enoxaparina 30 mg SC cada 12 h</span> en cuanto sea seguro, y <span class="hl">CNI</span>, juntas.' } },
-            { momento: 'Semana 4 · el giro', datos: { Estado: 'la inflamación de la lesión ha cedido; sigue en la cama' }, nuevo: ['Estado'], estado: { riesgo: 'medular', inflamacion: true, inmovil: true }, mirar: 'telar',
+            { momento: 'Semana 4 · el giro', datos: { Estado: 'cuatro semanas tras la lesión; sigue en la cama' }, nuevo: ['Estado'], estado: { riesgo: 'medular', inflamacion: true, inmovil: true }, mirar: 'telar',
                 pregunta: { id: 'tt-3', tipo: 'test', fuente: 'mar-inmovilidad · mar-tabla-5-1 (p. 2, 13)',
                     tocar: { mandos: ['inflamacion'], mirar: 'telar', ocultar: ['red', 'flujo'], instruccion: 'apaga la inflamación (sigue inmóvil) y mira la red y los hematíes.', comprobar: e => !e.inflamacion, pista: 'Pulsa «Sin inflamación».', bueno: { inflamacion: false }, confirma: 'sin inflamación el telar se para, y los hematíes suben al mismo ritmo aunque siga en la cama.' },
-                    enunciado: 'Predice. Ha pasado la fase aguda: sin inflamación, pero inmóvil. ¿Qué hace el telar?',
+                    enunciado: 'Predice. Pasadas 3-4 semanas, el libro ya no ve riesgo alto. Si lo que lo disparaba fuera la inflamación y no la cama, ¿qué haría el telar sin inflamación pero con el paciente inmóvil?',
                     opciones: [
                         { t: 'Teje más: cuatro semanas inmóvil es estasis máxima', ok: false, porque: 'Con gasto normal no hay estasis aunque no se mueva. Creerlo te llevaría a anticoagularle de más, con su riesgo de sangrado.' },
                         { t: 'Se para, aunque siga sin moverse de la cama', ok: true },
                         { t: 'Sigue igual: la paraplejía no cambia', ok: false, porque: 'Si fuera así, se haría profilaxis perpetua en la paraplejía, y no se hace: el riesgo es alto solo 3-4 semanas. Mantenerla le expondría al sangrado sin beneficio.' }],
-                    explicacion: 'Según el autor, lo que dispara la TVP es probablemente la <span class="hl">inflamación</span>, no la cama.',
-                    nota: '<b>Nota de fuentes.</b> La Tabla 5.1 (p. 2) sí incluye la inmovilidad prolongada entre los factores de riesgo; la reflexión del autor (p. 13) la discute. Es su opinión.' } },
+                    explicacion: 'Según el autor, lo que dispara la TVP es probablemente la <span class="hl">inflamación</span>, no la cama: por eso el riesgo es alto solo 3-4 semanas y después se suspende la profilaxis.',
+                    nota: '<b>Nota de fuentes.</b> La Tabla 5.1 (p. 2) sí incluye la inmovilidad prolongada entre los factores de riesgo; la reflexión del autor (p. 13) la discute y deduce, de que la profilaxis se suspenda, que la inmovilidad sola no es factor de riesgo. Es su opinión; el capítulo no dice que la inflamación haya cedido en este paciente.' } },
             { momento: 'Semana 6', datos: { Familia: '«si sigue sin moverse, ¿por qué le quitan la heparina?»' }, nuevo: ['Familia'], estado: { riesgo: 'medular', inmovil: true }, mirar: 'flujo',
                 pregunta: { id: 'tt-4', tipo: 'destapa', fuente: 'mar-inmovilidad (p. 13)',
                     enunciado: 'La familia pregunta por qué le quitan la heparina si sigue sin moverse. ¿Qué les explicas?',
-                    puntos: ['Tras la lesión medular, el riesgo de TVP es alto <span class="hl">solo 3-4 semanas</span>; luego se suspende la profilaxis.', '<span class="hl">Inmovilidad no es estasis</span>: con el gasto normal, la sangre de las piernas vuelve al mismo ritmo.', 'Lo que dispara la TVP es probablemente la <span class="hl">inflamación</span> de la lesión; la cama sola, no.'],
+                    puntos: ['Tras la lesión medular, el riesgo de TVP es alto <span class="hl">solo 3-4 semanas</span>; luego se suspende la profilaxis y, según el autor, eso implica que la inmovilidad sola no es factor de riesgo (la Tabla 5.1 sí la lista).', '<span class="hl">Inmovilidad no es estasis</span>: con el gasto normal, la sangre de las piernas vuelve al mismo ritmo.', 'Lo que dispara la TVP es probablemente la <span class="hl">inflamación</span> de la lesión; la cama sola, no.'],
                     explicacion: 'Según el autor, creer que la inmovilidad predispone a la TVP lleva a usar anticoagulantes de más.',
                     nota: '<b>Nota de interpretación.</b> Es la reflexión final de Marino (p. 13), con su «probablemente»: se presenta como su opinión.' } },
             { momento: 'Semana 6 · el plan', datos: { Plan: 'revisar la profilaxis' }, nuevo: ['Plan'], estado: { riesgo: 'medular', inmovil: true, mecanica: 'medias' }, mirar: 'mangas',
                 pregunta: { id: 'tt-5', tipo: 'error', fuente: 'mar-inmovilidad · mar-mecanica · mar-tabla-5-1 (p. 2, 10, 13)',
                     enunciado: 'Plan del R1.',
                     frases: [
-                        { t: 'Suspendo la enoxaparina: el riesgo alto era de 3-4 semanas.', mal: false },
+                        { t: 'Según el libro, el riesgo alto dura 3-4 semanas tras la lesión, así que valoro suspender la enoxaparina.', mal: false },
                         { t: 'Le dejo las medias como único método, ya que no camina.', mal: true, c: 'Las medias <span class="hl-rojo">nunca se usan como único método</span> en el hospitalizado; y, según el autor, la inmovilidad sola no pide profilaxis.' },
-                        { t: 'Si sigue encamado, la profilaxis debe ser indefinida.', mal: true, c: 'No se hace profilaxis perpetua en la paraplejía: <span class="hl">inmovilidad no es estasis</span>.' },
+                        { t: 'Si sigue encamado, la profilaxis debe ser indefinida.', mal: true, c: 'No se hace profilaxis perpetua en la paraplejía y, según el autor, <span class="hl">inmovilidad no es estasis</span>.' },
                         { t: 'Si aparece una sepsis, vuelvo a valorar el riesgo.', mal: false }],
                     explicacion: 'La sepsis es un factor de riesgo de la Tabla 5.1: la inflamación vuelve a encender el telar.' } },
         ],
         lleva: ['Lesión medular: CNI cuanto antes y enoxaparina 30 mg cada 12 h en cuanto sea seguro, juntas.',
-            'El riesgo es alto solo 3-4 semanas: después se suspende, aunque siga sin caminar.',
+            'El riesgo es alto solo 3-4 semanas tras la lesión; después se suspende la profilaxis, aunque siga sin caminar (el autor lo interpreta así; la Tabla 5.1 sí lista la inmovilidad).',
             'Inmovilidad no es estasis; lo que dispara la TVP es probablemente la inflamación (opinión del autor, frente a la Tabla 5.1). Creer lo contrario lleva a anticoagular de más.'],
         volver: { nombre: '¿La inmovilidad causa la TVP?', ancla: 'mar-inmovilidad', estado: { riesgo: 'medular', inmovil: true } } },
 ];
@@ -563,7 +563,8 @@ export const PROFUNDIZAR = [
     { html: '<b>El fondaparinux en el paciente médico.</b> Se recomienda (con la HNF y la HBPM) en los pacientes médicos hospitalizados, pero no es popular y no se ha estudiado en la UCI.', donde: 'mar-fondaparinux · p. 8', pag: 8 },
     { html: '<b>Los ACOD.</b> Solo para prótesis de cadera y rodilla (ahí superan a la HBPM; dabigatrán y rivaroxabán sangran más en algunos estudios y el apixabán podría ser el preferido); apixabán y rivaroxabán igual de eficaces en la obesidad mórbida; mejor no usarlos tras un bypass gástrico; el edoxabán no tiene dosis de profilaxis. El rivaroxabán está aprobado en la enfermedad médica aguda, pero un metaanálisis de los ACOD frente a HBPM en estos pacientes ve la misma eficacia con más sangrado.', donde: 'mar-acod-puntos · p. 8-9', pag: 9 },
     { html: '<b>La aspirina tras la artroplastia.</b> Recomendación condicional de la ASH, casi siempre a dosis bajas y a menudo combinada; como único fármaco tras una artroplastia no parece justificada.', donde: 'mar-aspirina · p. 9', pag: 9 },
-    { html: '<b>Cirugía general y bariátrica.</b> Última dosis ≥6 h (HNF) o ≥12 h (HBPM) antes de operar; reanudar a las 6 y 12 h; en la oncológica de alto riesgo, hasta 4 semanas. Bariátrica: enoxaparina 40 mg cada 12 h con IMC 30-49 y 60 mg con ≥50, unas 2 semanas.', donde: 'mar-esc-cirugia-general · mar-esc-bariatrica · p. 11', pag: 11 },
+    { html: '<b>Cirugía general mayor.</b> HNF o HBPM, con CNI añadida en el alto riesgo; en el alto riesgo son populares las dosis altas (HNF 5.000 U cada 8 h; enoxaparina 30 mg cada 12 h). Última dosis ≥6 h (HNF) o ≥12 h (HBPM) antes de operar; reanudar a las 6 y 12 h; en la oncológica de abdomen y pelvis de alto riesgo, hasta 4 semanas con HBPM.', donde: 'mar-esc-cirugia-general · p. 11', pag: 11 },
+    { html: '<b>Cirugía bariátrica.</b> HBPM más CNI: enoxaparina 40 mg cada 12 h con IMC 30-49 y 60 mg cada 12 h con IMC ≥50. Cerca del 80 % de las ETV posoperatorias ocurren tras el alta, por eso se prolonga la HBPM unas 2 semanas en total (la duración no está bien estudiada).', donde: 'mar-esc-bariatrica · p. 12', pag: 12 },
     { html: '<b>Ortopedia.</b> ACOD en las prótesis de cadera y rodilla, con CNI al principio; HBPM en la fractura de cadera; prolongar hasta 35 días.', donde: 'mar-esc-ortopedica · p. 12', pag: 12 },
     { html: '<b>Neurocirugía y cirugía cardíaca.</b> Neurocirugía: CNI; cuando cede el riesgo de sangrado, HBPM en el alto riesgo y en la oncológica. Cardíaca: CNI si no se complica; CNI + HBPM si se complica o es de alto riesgo.', donde: 'mar-esc-neuro-cardio · p. 12', pag: 12 },
     { html: '<b>Trauma de órganos sólidos o extremidades.</b> Enoxaparina 40 mg SC cada 12 h cuando el sangrado no preocupe, idealmente a las 12-24 h; CNI en el alto riesgo si se tolera.', donde: 'mar-esc-trauma · p. 12', pag: 12 },
