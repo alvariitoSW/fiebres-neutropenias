@@ -140,3 +140,12 @@ de GitHub Pages, con la CPU frenada y con la versión anterior en la caché). Ha
 - No se veía qué fallaba. Nuevo `js/core/aviso-arranque.js`, un script clásico que se carga antes que `main.js`:
   si una pieza no se descarga, si hay un error antes de terminar el arranque o si a los 20 s no ha arrancado, pone
   un aviso en pantalla con el motivo. `main.js` marca `window.__appLista` al terminar.
+
+### Cada pieza arranca por separado (20/10/2026, lección 13 del bloque 1 de Marino)
+
+- `seguro()` de `main.js` y el `arrancar()` local de `libros/index.js` hacían lo mismo. Ahora es una sola pieza:
+  `arrancar(nombre, init)` en `core/ui.js` (avisa en consola y en la pantalla de arranque, y devuelve `null`).
+- La usan `main.js` (cada especialidad), Libros (cada modelo vivo), Nefrología (ácido-base vivo, nefrona viva,
+  mapa del riñón y los 7 cuadernos) y Eco (el atlas). Las llamadas a un modelo que no arrancó van con `?.`.
+- Prueba de sabotaje: con el ácido-base vivo y el atlas de eco rotos a propósito, FRA, la nefrona, el simulador de
+  eco y Libros siguieron abriendo, y los dos fallos salieron en consola con su nombre.

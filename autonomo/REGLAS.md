@@ -70,7 +70,7 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
 8. **Rótulos de los dibujos legibles** (lección 6): a 390 px, ningún texto de un dibujo mide menos de 7,5 px de alto
    ni pisa a otro. Lo comprueba `jueces.mjs`.
 9. **Cada modelo vivo arranca por separado** (lección 13): si uno falla, el resto de su especialidad sigue
-   funcionando.
+   funcionando. Se hace con `arrancar(nombre, init)` de `core/ui.js` (Libros, Nefrología, Eco y las especialidades).
 
 ## 3. Redacción
 

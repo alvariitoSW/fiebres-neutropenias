@@ -4,6 +4,7 @@
 // 3. Inicializa cada módulo clínico (listeners + cálculo inicial).
 import { includeAll } from './core/include.js';
 import { initAccordions } from './core/accordion.js';
+import { arrancar } from './core/ui.js';
 import { initLightbox } from './core/lightbox.js';
 import { initStudyMode } from './core/pomodoro.js';
 import { initSearch } from './core/search.js';
@@ -25,13 +26,6 @@ import * as eco from './modules/eco/index.js';
 import * as libros from './modules/libros/index.js';
 import { initQuiz } from './modules/quiz/quiz.js';
 
-// Un módulo que falla al arrancar no debe dejar muertos a los demás (ni la portada): se avisa y se sigue.
-function seguro(nombre, fn) {
-    try { return fn(); } catch (e) {
-        console.error(e);
-        window.dispatchEvent(new ErrorEvent('error', { message: `${nombre}: ${e.message}` }));
-    }
-}
 
 async function start() {
     await includeAll();
@@ -43,12 +37,12 @@ async function start() {
     const homeApi = home.init();
     // Módulos de Hematología, que cuelgan del propio switcher raíz de home.
     Object.entries({ generales, neutropeniaFebril, reconocimiento, sindromesUrgentes, trasplante, merinoHemato })
-        .forEach(([nombre, m]) => seguro(nombre, () => m.init()));
+        .forEach(([nombre, m]) => arrancar(nombre, () => m.init()));
     // Especialidades con switcher medio propio: cada init() devuelve
     // { volverAlMenu, irAFicha }, que home registra bajo la misma clave que
     // su vista raíz (ver registrarEspecialidad en home/index.js).
     const especialidades = { nefrologia, uciPapers, fisioUci, cardiologia, neumologia, sobrevivirUmi, eco, libros };
-    Object.entries(especialidades).forEach(([key, mod]) => seguro(key, () => home.registrarEspecialidad(key, mod.init())));
+    Object.entries(especialidades).forEach(([key, mod]) => arrancar(key, () => home.registrarEspecialidad(key, mod.init())));
 
     // Única llamada a initQuiz() de toda la app — el modal
     // (#quiz-modal-overlay) es un partial compartido, así que cada

@@ -6,6 +6,7 @@
 // medio y resuelve qué vista abrir desde cada nodo/segmento.
 import { createViewSwitcher } from '../../core/navigation.js';
 import { openCorkboardTopic } from '../../core/corkboard.js';
+import { arrancar } from '../../core/ui.js';
 import { initNefronaViva } from './nefrona-viva.js';
 import { initAcidoBaseVivo } from './acidobase-vivo.js';
 import { initRinon } from './rinon.js';
@@ -48,8 +49,9 @@ function mostrarEnPreparacion() {
 
 export function init() {
     // Ácido-base vivo: vista propia junto a la nefrona viva. Se construye la primera vez que se abre y su
-    // animación solo corre mientras se ve.
-    const acidoBase = initAcidoBaseVivo(document.getElementById('abv-raiz'));
+    // animación solo corre mientras se ve. Cada modelo y cada cuaderno arranca por separado (arrancar(), core/ui.js):
+    // si uno falla, el resto de Nefrología sigue funcionando.
+    const acidoBase = arrancar('ácido-base vivo', () => initAcidoBaseVivo(document.getElementById('abv-raiz')));
     const nefroLevel = createViewSwitcher({
         kidney: document.getElementById('nefro-kidney-view'),
         nefrona: document.getElementById('nefro-menu-view'),
@@ -62,10 +64,10 @@ export function init() {
         tratamiento: document.getElementById('nefro-tratamiento-view'),
         trr: document.getElementById('nefro-trr-view'),
         trasplanteRenal: document.getElementById('nefro-trasplante-renal-view'),
-    }, (key) => (key === 'acidobase' ? acidoBase.mostrar() : acidoBase.ocultar()));
+    }, (key) => (key === 'acidobase' ? acidoBase?.mostrar() : acidoBase?.ocultar()));
 
     document.querySelectorAll('.btn-volver-nefro-kidney').forEach(b =>
-        b.addEventListener('click', () => { nefroLevel.show('kidney'); nefrona.reset(); }));
+        b.addEventListener('click', () => { nefroLevel.show('kidney'); nefrona?.reset(); }));
     // Diuréticos de asa cuelga de la nefrona: su "← VOLVER" vuelve a ella.
     document.querySelectorAll('.btn-volver-nefro-menu').forEach(b =>
         b.addEventListener('click', () => nefroLevel.show('nefrona')));
@@ -75,14 +77,14 @@ export function init() {
     // ficha del cuaderno de fisiología, que vive en la misma página que la
     // nefrona (no hace falta cambiar de vista); solo 'diureticos-asa' es
     // una página aparte. Cualquier otra clave: "en preparación".
-    const nefrona = initNefronaViva({
+    const nefrona = arrancar('nefrona viva', () => initNefronaViva({
         mostrarVista: () => nefroLevel.show('nefrona'),
         onCategoria: (key) => {
             if (key === 'diureticos-asa') nefroLevel.show('diureticosAsa');
             else if (key.startsWith('fisio-') && document.getElementById(key)) openCorkboardTopic('panel-fisio-tabs', key);
             else mostrarEnPreparacion();
         },
-    });
+    }));
 
     // Nodo del mapa del riñón → vista de este switcher. 'fisiopatologia'
     // hace zoom a la nefrona ya construida; el resto abre su vista propia.
@@ -90,17 +92,17 @@ export function init() {
         fisiopatologia: 'nefrona', hta: 'hta', erc: 'erc', fra: 'fra', nefrotoxicidad: 'nefrotoxicidad',
         tratamiento: 'tratamiento', trr: 'trr', trasplanteRenal: 'trasplanteRenal',
     };
-    const rinon = initRinon({
+    const rinon = arrancar('mapa del riñón', () => initRinon({
         onRoute: (key) => { if (vistaPorNodoRinon[key]) nefroLevel.show(vistaPorNodoRinon[key]); },
-    });
+    }));
 
-    initFisiologia();
-    initHta();
-    initErc();
-    initFra();
-    initTrr();
-    initNefrotoxicidad();
-    initTrasplanteRenal();
+    arrancar('fisiología renal', initFisiologia);
+    arrancar('HTA', initHta);
+    arrancar('ERC', initErc);
+    arrancar('FRA', initFra);
+    arrancar('TRR', initTrr);
+    arrancar('nefrotoxicidad', initNefrotoxicidad);
+    arrancar('trasplante renal', initTrasplanteRenal);
 
     nefroLevel.show('kidney');
 
@@ -110,8 +112,8 @@ export function init() {
     return {
         volverAlMenu: () => {
             nefroLevel.show('kidney');
-            rinon.reset();
-            nefrona.reset();
+            rinon?.reset();
+            nefrona?.reset();
         },
         // Salto a una ficha concreta (ERC/FRA/TRR/fisiología...) — lo usan
         // los enlaces cruzados `[data-especialidad="nefrologia"]`, tanto
@@ -120,6 +122,6 @@ export function init() {
         irAFicha: nefroLevel.irAFicha,
         // Modelos vivos que se abren en un estado (data-acidobase-vivo="paso-3", "vomitos"…): los
         // resuelve el enlace cruzado de siempre de home/index.js. abrir() cambia él solo a su vista.
-        modelosVivos: { acidobaseVivo: (ancla, origen) => { nefroLevel.show('acidobase'); acidoBase.abrir(ancla, origen); } },
+        modelosVivos: { acidobaseVivo: (ancla, origen) => { nefroLevel.show('acidobase'); acidoBase?.abrir(ancla, origen); } },
     };
 }

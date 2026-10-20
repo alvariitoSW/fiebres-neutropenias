@@ -90,7 +90,7 @@ backend/ admin/         panel de subida de contenido (aparte de la app)
   su `.tab-content`. Cajón (≤12 fichas) u hoja fija abajo (>12). «Siguiente ficha», marca de visto y
   `openCorkboardTopic(panel, tab)` salen solos. Es el patrón para todo contenido teórico.
   Un cuaderno nuevo necesita su entrada en `PANEL_NAV` de `core/search.js`, o el buscador global no lo encuentra.
-- **`core/ui.js`**: `wireSelectExplicacion()`, `pintarGauge()` (gauges `.kinetic-*`), `clamp()`, `escapeHtml()`
+- **`core/ui.js`**: `arrancar(nombre, init)` (cada modelo vivo, cuaderno o especialidad arranca por separado: si falla, el resto sigue), `wireSelectExplicacion()`, `pintarGauge()` (gauges `.kinetic-*`), `clamp()`, `escapeHtml()`
   (solo para texto que escribe el usuario). **`core/wizard.js`**: `initSiNoWizard()`.
 - **Pestañas** (`core/tabs.js`, ya casi sin uso): `initTabs(contenedor)` siempre acotado a su contenedor, nunca
   `document`; si no, los grupos de pestañas de módulos distintos se pisan.

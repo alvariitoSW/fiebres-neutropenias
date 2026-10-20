@@ -5,6 +5,7 @@
 // modelos vivos y el índice completo plegado; El Libro Azul abre su índice,
 // que lleva a sus fichas de Fisiopatología UCI.
 import { createViewSwitcher } from '../../core/navigation.js';
+import { arrancar } from '../../core/ui.js';
 import { preguntasMarinoFundamentos, temasMarinoFundamentos } from '../../data/marino-fundamentos-preguntas.js';
 import { preguntasMarinoRenal, temasMarinoRenal } from '../../data/marino-renal-preguntas.js';
 import { preguntasMarinoAbdomen, temasMarinoAbdomen } from '../../data/marino-abdomen-preguntas.js';
@@ -192,7 +193,6 @@ export function init() {
     initVisualMarinoCaps45a53();
     // Cada modelo vivo arranca por separado: si uno falla (p. ej. una forma de partícula que falta), los demás y el
     // resto de Libros siguen funcionando, y el error queda en la consola.
-    const arrancar = (nombre, init) => { try { return init(); } catch (e) { console.error(`Modelo vivo «${nombre}» no arrancó:`, e); return null; } };
     const aguaViva = arrancar('río y mar', initAguaViva);
     const capilarVivo = arrancar('capilar', initCapilarVivo);
     const cateterVivo = arrancar('catéter', initCateterVivo);
