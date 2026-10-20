@@ -457,7 +457,7 @@ ul.prof a.pdf { display: inline-flex; align-items: center; min-height: 44px; }
       </div>
       <div class="dock-panel" data-panel="pierna" hidden>
         <div class="fila-io"><div class="seg" id="m-mecanica" aria-label="Profilaxis mecánica"><button type="button" data-v="nada">Nada</button><button type="button" data-v="medias">Medias</button><button type="button" data-v="cni">CNI</button></div>
-          <div class="seg" id="m-diastolica" aria-label="Presión diastólica del paciente"><button type="button" data-v="70">PAD 70</button><button type="button" data-v="30">PAD 30</button></div></div>
+          <div class="seg" id="m-diastolica" aria-label="Presión diastólica del paciente"><button type="button" data-v="70">PAD 70</button><button type="button" data-v="34">PAD 34</button></div></div>
         <div class="fila-io"><button type="button" class="tog" id="m-filtro" aria-pressed="false">Filtro de vena cava inferior</button><span class="rot-dock">PAD: presión diastólica del paciente (mmHg)</span></div>
       </div>
       <div class="dock-panel" data-panel="reloj" hidden>
@@ -677,7 +677,10 @@ function derivar(e) {
   D.tendencia = D.lisis ? (D.teje > 0.3 ? 'frenada' : 'se deshace') : D.teje > 0.3 ? 'crece' : D.teje > 0.01 ? 'frenada' : 'quieta';
   D.atrapaEmbolos = e.filtro;
   // TIH (mar-hnf «Uniones», mar-hbpm): el complejo heparina-FP4 solo con cadenas que envuelvan
-  D.tih = { envuelve: e.farmaco === 'hnf' ? 'si' : ES_HBPM(e.farmaco) ? 'poco' : e.farmaco === 'fondaparinux' ? 'no' : 'sin heparina',
+  // «envuelve»: imagen ilustrativa de «la heparina se une al FP4» (ficha). Del fondaparinux la ficha solo dice que puede usarse
+  // con TIH sospechada o previa y que el tratamiento aprobado de la TIH es el argatrobán: no se dibuja ninguna relación con el FP4.
+  D.tih = { envuelve: e.farmaco === 'hnf' ? 'si' : ES_HBPM(e.farmaco) ? 'poco' : e.farmaco === 'fondaparinux' ? 'sin dato' : 'sin heparina',
+    fondaUsoTihPrevia: e.farmaco === 'fondaparinux', tratamientoAprobado: 'argatrobán',
     incidencia: e.farmaco === 'hnf' ? HEP.tih.hnf : ES_HBPM(e.farmaco) ? HEP.tih.hbpm : null, dependeDosis: false };
   D.plaquetasCaen = e.tih && (e.farmaco === 'hnf' || ES_HBPM(e.farmaco));
   // dosis: la calculadora de la ficha
@@ -689,7 +692,7 @@ function derivar(e) {
   D.notaDalte = e.farmaco === 'dalteparina' && e.clcr < 15;
   // mecánica
   D.medias = e.mecanica === 'medias' ? { ...MEDIAS } : null;
-  D.cni = e.mecanica === 'cni' ? { ...CNI, fibrinolisis: true, aprietaArteria: e.diastolica < CNI.tobillo[0] } : null;
+  D.cni = e.mecanica === 'cni' ? { ...CNI, fibrinolisis: true, aprietaArteria: e.diastolica < CNI.tobillo[0] } : null;   // 35-40 mmHg frente a la PAD
   // reloj neuroaxial
   D.reloj = Object.fromEntries(ORDEN_NEURO.map(k => [k, e.horas >= NEURO[k]]));
   D.antiXa = e.antiXa && ES_HBPM(e.farmaco) ? { objetivo: HEP.antiXa } : null;
@@ -725,7 +728,7 @@ window.__pruebas = () => {
   const tih = derivar(mezcla({ vista: 'tih', tih: true, farmaco: 'hnf' })), tihF = derivar(mezcla({ vista: 'tih', tih: true, farmaco: 'fondaparinux' })), tihB = derivar(mezcla({ vista: 'tih', tih: true, farmaco: 'enoxaparina' }));
   r.tih = { hnf: tih.tih, fondaparinux: tihF.tih, hbpm: tihB.tih };
   ok(tih.tih.envuelve === 'si' && tih.tih.incidencia === 2.6 && tih.tih.dependeDosis === false && tih.plaquetasCaen, 'TIH con HNF: envuelve el FP4, 2,6 %, no depende de la dosis');
-  ok(tihF.tih.envuelve === 'no' && !tihF.plaquetasCaen, 'tih-fondaparinux: el FP4 no se envuelve');
+  ok(tihF.tih.envuelve === 'sin dato' && tihF.tih.fondaUsoTihPrevia && tihF.tih.tratamientoAprobado === 'argatrobán', 'tih-fondaparinux: solo lo que dice el libro (uso con TIH sospechada o previa; argatrobán)');
   ok(tihB.tih.incidencia === 0.2, 'TIH con HBPM: 0,2 %');
   // dosis: la calculadora
   const dosis = (f, clcr, imc) => profilaxis(f, clcr, imc);
@@ -750,11 +753,11 @@ window.__pruebas = () => {
   r.vaso = { hnf12: derivar(mezcla({ farmaco: 'hnf', clcr: 12 })).vaso, enox25: derivar(mezcla({ farmaco: 'enoxaparina', clcr: 25 })).vaso, enox90: derivar(mezcla({ farmaco: 'enoxaparina', clcr: 90 })).vaso, dabi25: derivar(mezcla({ farmaco: 'dabigatran', clcr: 25 })).vaso };
   ok(r.vaso.enox90 < r.vaso.enox25 && r.vaso.enox25 < r.vaso.dabi25 && r.vaso.hnf12 === r.vaso.enox90, 'el vaso: sin ajuste < ajustar < no usar');
   // mecánica
-  const med = derivar(mezcla({ mecanica: 'medias' })).medias, cni = derivar(mezcla({ mecanica: 'cni' })), cniD = derivar(mezcla({ mecanica: 'cni', diastolica: 30 }));
+  const med = derivar(mezcla({ mecanica: 'medias' })).medias, cni = derivar(mezcla({ mecanica: 'cni' })), cniD = derivar(mezcla({ mecanica: 'cni', diastolica: 34 }));
   r.medias = med; ok(med.tobillo === 18 && med.muslo === 8 && med.gradiente === 10, 'medias 18/8, gradiente 10');
-  r.cni = { tobillo: cni.cni.tobillo.join('-'), muslo: cni.cni.muslo, ciclo: cni.cni.ciclo, porMinuto: cni.cni.porMinuto, fibrinolisis: cni.cni.fibrinolisis, pad70: cni.cni.aprietaArteria, pad30: cniD.cni.aprietaArteria };
+  r.cni = { tobillo: cni.cni.tobillo.join('-'), muslo: cni.cni.muslo, ciclo: cni.cni.ciclo, porMinuto: cni.cni.porMinuto, fibrinolisis: cni.cni.fibrinolisis, pad70: cni.cni.aprietaArteria, pad34: cniD.cni.aprietaArteria };
   ok(r.cni.tobillo === '35-40' && r.cni.muslo === 20 && r.cni.ciclo === 10 && r.cni.porMinuto === 6 && r.cni.fibrinolisis, 'CNI 35-40/20, 10 s, fibrinólisis');
-  ok(!r.cni.pad70 && r.cni.pad30, 'cni-diastolica: aviso con PAD 30');
+  ok(!r.cni.pad70 && r.cni.pad34, 'cni-diastolica: aviso con PAD 34');
   // filtro: atrapa émbolos, la red sigue
   const fil = derivar(mezcla({ filtro: true, inflamacion: true })); r.filtro = { atrapa: fil.atrapaEmbolos, tendencia: fil.tendencia };
   ok(fil.atrapaEmbolos && fil.tendencia === 'crece', 'filtro: no previene la TVP');
@@ -1192,7 +1195,7 @@ function pintarTihFijo() {
   Anim.tihEnv = nEnv;
   FP4S.forEach(([x, y, g], i) => {
     const a = g * Math.PI / 180;
-    if (!f || !ES_HEPARINA(f)) return;
+    if (!f || !ES_HEPARINA(f) || f === 'fondaparinux') return;
     if (i < nEnv) {
       // la cadena larga envuelve el FP4: un lazo de cuentas alrededor
       const pts = []; const n = env === 'si' ? 14 : 9;
@@ -1212,12 +1215,12 @@ function pintarTihFijo() {
   let esp = '';
   for (let k = 0; k < 14; k++) { const a = k * Math.PI / 7 + 0.2; esp += `<path d="M${n2(PLAQ[0] + Math.cos(a) * (PLAQ[2] - 1))} ${n2(PLAQ[1] + Math.sin(a) * (PLAQ[2] - 1))} L${n2(PLAQ[0] + Math.cos(a) * (PLAQ[2] + 13))} ${n2(PLAQ[1] + Math.sin(a) * (PLAQ[2] + 13))}" style="stroke:var(--text-main)" stroke-width="1.6" stroke-linecap="round"/>`; }
   $('tih-espinas').innerHTML = `<g id="tih-esp" opacity="0">${esp}</g>`;
-  $('tih-peques').innerHTML = `<g id="tih-agreg" opacity="0">${[[198, 208], [214, 216], [232, 220], [250, 216], [266, 208], [222, 230], [242, 230]].map(([x, y], i) => svgParticula(i % 2 ? 'plaqAct' : 'plaq', x, y, 4.2)).join('')}${t(236, 244, 'trombosis + trombocitopenia', { s: 5, a: 'middle', c: 'accent-red', i: false, w: 600 })}</g>`;
-  if (!f || !ES_HEPARINA(f)) r += t(PLAQ[0], 52, 'sin heparina, el FP4 queda solo', { s: 5.6, a: 'middle', c: 'text-dim' });
-  else if (env === 'no') r += t(PLAQ[0], 52, '5 cuentas: no envuelven el FP4', { s: 5.6, a: 'middle', c: 'accent-green', i: false, w: 600 }) + t(PLAQ[0], 61, 'sin complejo, sin IgG', { s: 5.4, a: 'middle', c: 'text-dim' });
-  else r += t(PLAQ[0], 50, env === 'si' ? 'cadenas largas: envuelven el FP4' : 'cortas: envuelven menos (0,2 %)', { s: 5.6, a: 'middle', c: 'text-main', i: false, w: 600 }) + t(PLAQ[0], 59, 'complejo antigénico → IgG', { s: 5.4, a: 'middle', c: 'text-dim' });
-  r += t(PLAQ[0], 32 + 0, '', {});
-  rot.innerHTML = r + t(PLAQ[0], 268, 'no depende de la dosis', { s: 5.4, a: 'middle', c: 'text-dim' });
+  $('tih-peques').innerHTML = `<g id="tih-agreg" opacity="0">${[[198, 208], [214, 216], [232, 220], [250, 216], [266, 208], [222, 230], [242, 230]].map(([x, y], i) => svgParticula(i % 2 ? 'plaqAct' : 'plaq', x, y, 4.2)).join('')}${t(236, 241, 'trombosis + trombocitopenia', { s: 6.2, a: 'middle', c: 'accent-red', i: false, w: 600 })}</g>`;
+  if (f === 'fondaparinux') r += t(PLAQ[0], 50, 'fondaparinux: se puede usar', { s: 6.6, a: 'middle', c: 'text-main', i: false, w: 600 }) + t(PLAQ[0], 59, 'con TIH sospechada o previa', { s: 6.4, a: 'middle', c: 'text-dim' })
+    + t(PLAQ[0], 214, 'tratamiento aprobado', { s: 6.4, a: 'middle', c: 'text-dim' }) + t(PLAQ[0], 224, 'de la TIH: argatrobán', { s: 6.6, a: 'middle', c: 'accent-yellow', i: false, w: 600 });
+  else if (!f || !ES_HEPARINA(f)) r += t(PLAQ[0], 54, 'sin heparina, no hay complejo', { s: 6.4, a: 'middle', c: 'text-dim' });
+  else r += t(PLAQ[0], 50, env === 'si' ? 'HNF: se une al FP4' : 'HBPM: se une menos', { s: 6.6, a: 'middle', c: 'text-main', i: false, w: 600 }) + t(PLAQ[0], 59, 'lazos: imagen ilustrativa', { s: 6.4, a: 'middle', c: 'text-dim' });
+  rot.innerHTML = r;
   Anim.tihT = REDUCIR ? 9 : 0;
 }
 function pintarReloj() {
@@ -1426,9 +1429,15 @@ function pintarLectura() {
     if (e.farmaco) h += celda('Corta', q('corta', CORTA_TXT[e.farmaco] + (ES_HBPM(e.farmaco) && !ocultos.has('corta') ? '<small>IIa poco</small>' : '')), 'ficha · Fig. 5.2');
     else h += celda('Antitrombina', D.atN === 6 ? '6<small>dormidas</small>' : '2<small>de 6</small>', D.atN === 6 ? 'sin heparina · ilustr.' : 'déficit · ×14 ficha', { ilu: D.atN === 6 });
   } else if (e.vista === 'tih') {
-    h += celda('Plaquetas', q('tih', D.plaquetasCaen ? 'caen' : 'estables'), 'consumo · ilustr.', { ilu: true, cls: !ocultos.has('tih') && D.plaquetasCaen ? 'alarma' : '' });
-    h += celda('TIH', q('tih', D.tih.incidencia != null ? String(D.tih.incidencia).replace('.', ',') + ' %' : e.farmaco === 'fondaparinux' ? 'sin complejo' : '—'), e.farmaco === 'hnf' ? 'con HNF · ficha' : ES_HBPM(e.farmaco) ? 'con HBPM · ficha' : 'ficha · mar-fondaparinux');
-    h += celda('Con la dosis', q('tih', 'no depende'), 'también profiláctica · ficha');
+    if (e.farmaco === 'fondaparinux') {
+      h += celda('Con TIH', q('tih', 'se puede usar'), 'sospechada o previa · ficha · p. 8');
+      h += celda('Tratamiento', q('tih', 'argatrobán'), 'el aprobado · ficha · p. 8');
+      h += celda('Con el FP4', 'sin dato', 'la ficha no lo dice', { ilu: true });
+    } else {
+      h += celda('Plaquetas', q('tih', D.plaquetasCaen ? 'caen' : '—'), 'consumo · ilustr.', { ilu: true, cls: !ocultos.has('tih') && D.plaquetasCaen ? 'alarma' : '' });
+      h += celda('TIH', q('tih', D.tih.incidencia != null ? String(D.tih.incidencia).replace('.', ',') + ' %' : '—'), e.farmaco === 'hnf' ? 'con HNF · ficha · p. 7' : ES_HBPM(e.farmaco) ? 'con HBPM · ficha · p. 7' : 'sin heparina');
+      h += celda('Con la dosis', q('tih', 'no depende'), 'también profiláctica · ficha · p. 5');
+    }
   } else {
     const listos = ORDEN_NEURO.filter(k => D.reloj[k]), esperar = ORDEN_NEURO.filter(k => !D.reloj[k]);
     const corto = k => ({ hnf: 'HNF', enoxaparina: 'enoxa', apixaban: 'apixa', rivaroxaban: 'rivaro', dabigatran: 'dabi' }[k]);
@@ -1479,7 +1488,7 @@ function fraseDe(v, n) {
     if (v.vista !== 'telar') return FRASE_INICIO();
   }
   if (n.vista === 'tih' && n.farmaco !== v.farmaco) {
-    if (n.farmaco === 'fondaparinux') return ['Fondaparinux: <span class="hl-a">5 cuentas no envuelven el FP4</span>; sin complejo no hay IgG. Sirve para la profilaxis con TIH sospechada o previa.', 'ficha · mar-fondaparinux · PDF p. 8'];
+    if (n.farmaco === 'fondaparinux') return ['Fondaparinux: el libro dice que <span class="hl-a">puede usarse para la profilaxis con TIH sospechada o previa</span> (y se ha usado en la confirmada), y que el tratamiento aprobado de la TIH es el <span class="hl-a">argatrobán</span>. Cómo se relaciona con el FP4, no lo dice: no se dibuja.', 'ficha · mar-fondaparinux · PDF p. 8'];
     if (ES_HBPM(n.farmaco)) return ['HBPM: se une menos a las plaquetas: <span class="hl-a">TIH en el 0,2 %</span>, frente al 2,6 % con HNF (diez veces menos). Menos, no cero.', 'ficha · mar-hbpm · PDF p. 7'];
     if (n.farmaco === 'hnf') return ['HNF: sus cadenas largas envuelven el FP4: <span class="hl-r">TIH en el 2,6 %</span>, también con dosis profilácticas.', 'ficha · mar-hnf · mar-hbpm · PDF p. 5 y 7'];
     return ['Sin heparina no hay complejo con el FP4.', 'ficha · mar-hnf'];
@@ -1501,10 +1510,10 @@ function fraseDe(v, n) {
   if ((n.clcr !== v.clcr || n.imc !== v.imc) && !n.farmaco) return ['Elige un fármaco: el riñón y el IMC cambian su dosis, no el telar.', 'ficha · mar-tabla-5-2'];
   if (n.clcr !== v.clcr || n.imc !== v.imc) return fraseDosis(n);
   if (n.mecanica !== v.mecanica || n.diastolica !== v.diastolica) {
-    if (n.mecanica === 'cni' && n.diastolica < 35) return ['<span class="hl-r">La CNI aprieta a 35-40 mmHg en el tobillo, por encima de una diastólica de 30</span>: comprime la arteria. La presión nunca debe superar la diastólica.', 'ficha · mar-cni-pegas · PDF p. 10'];
+    if (n.mecanica === 'cni' && n.diastolica < 35) return ['<span class="hl-r">La CNI aprieta a 35-40 mmHg en el tobillo, por encima de una diastólica de 34</span>: comprime la arteria. La presión nunca debe superar la diastólica.', 'ficha · mar-cni-pegas · PDF p. 10'];
     if (n.mecanica === 'cni') return ['CNI: 2-3 cámaras que se inflan <span class="hl-a">de distal a proximal</span>, 35-40 mmHg en el tobillo y 20 en el muslo, <span class="hl-a">cada 10 s</span>. Mueve sangre y además <span class="hl-a">activa la fibrinólisis</span> (los puntos verdes).', 'ficha · mar-mecanica · PDF p. 10 · reparto del ciclo ilustrativo'];
     if (n.mecanica === 'medias') return ['Medias: <span class="hl-a">18 mmHg en el tobillo y 8 en el muslo</span>, un gradiente de 10. El método menos eficaz: <span class="hl-r">nunca solas</span> en el hospitalizado.', 'ficha · mar-mecanica · PDF p. 10'];
-    if (n.diastolica !== v.diastolica) return [n.diastolica < 35 ? 'Diastólica de 30 mmHg: importa con la CNI. Pruébala.' : 'Diastólica de 70: la CNI no la supera.', 'ficha · mar-cni-pegas'];
+    if (n.diastolica !== v.diastolica) return [n.diastolica < 35 ? 'Diastólica de 34 mmHg: importa con la CNI. Pruébala.' : 'Diastólica de 70: la CNI no la supera.', 'ficha · mar-cni-pegas'];
     return ['Sin profilaxis mecánica.', ''];
   }
   if (n.filtro !== v.filtro) return n.filtro
@@ -1605,13 +1614,13 @@ const ESTADOS = {
   'xa-directo': { clave: 'farmaco', e: { inflamacion: true, farmaco: 'apixaban' }, cifra: d => d.corta.directa && d.corta.xa && d.dosis.corta === '2,5 mg cada 12 h' },
   dabigatran: { clave: 'farmaco', e: { inflamacion: true, farmaco: 'dabigatran' }, cifra: d => d.corta.directa && d.corta.iia === 'pleno' && d.dosis.corta === '110 mg al inicio, luego 220 mg al día' },
   tih: { clave: 'vista', e: { vista: 'tih', tih: true, farmaco: 'hnf' }, cifra: d => d.tih.envuelve === 'si' && d.tih.incidencia === 2.6 && !d.tih.dependeDosis },
-  'tih-fondaparinux': { clave: 'farmaco', e: { vista: 'tih', tih: true, farmaco: 'fondaparinux' }, cifra: d => d.tih.envuelve === 'no' && !d.plaquetasCaen },
+  'tih-fondaparinux': { clave: 'farmaco', e: { vista: 'tih', tih: true, farmaco: 'fondaparinux' }, cifra: d => d.tih.envuelve === 'sin dato' && d.tih.fondaUsoTihPrevia && d.tih.tratamientoAprobado === 'argatrobán' },
   'renal-25': { clave: 'clcr', e: { farmaco: 'enoxaparina', clcr: 25 }, cifra: d => d.dosis.corta === '30 mg al día' && d.vaso > 0.5 },
   'renal-12': { clave: 'clcr', e: { farmaco: 'dalteparina', clcr: 12 }, cifra: d => d.dosis.aviso15 && d.notaDalte },
   'obesidad-42': { clave: 'imc', e: { farmaco: 'enoxaparina', imc: 42 }, cifra: d => d.dosis.corta === '40 mg cada 12 h' },
   medias: { clave: 'mecanica', e: { mecanica: 'medias' }, cifra: d => d.medias.tobillo === 18 && d.medias.muslo === 8 && d.medias.gradiente === 10 },
   cni: { clave: 'mecanica', e: { mecanica: 'cni', inflamacion: true }, cifra: d => d.cni.ciclo === 10 && d.cni.muslo === 20 && d.cni.tobillo.join('-') === '35-40' && d.lisis },
-  'cni-diastolica': { clave: 'diastolica', e: { mecanica: 'cni', diastolica: 30 }, cifra: d => d.cni.aprietaArteria },
+  'cni-diastolica': { clave: 'diastolica', e: { mecanica: 'cni', diastolica: 34 }, cifra: d => d.cni.aprietaArteria },
   filtro: { clave: 'filtro', e: { filtro: true, inflamacion: true }, cifra: d => d.atrapaEmbolos && d.tendencia === 'crece' },
   neuroeje: { clave: 'horas', e: { vista: 'reloj', horas: 24 }, cifra: d => d.reloj.hnf && d.reloj.enoxaparina && d.reloj.apixaban && !d.reloj.rivaroxaban && !d.reloj.dabigatran }
 };
@@ -1620,7 +1629,7 @@ const FICHAS_ESTADO = [
   ['XI · Métodos mecánicos y qué pauta', 'mar-tromboprofilaxis-escenarios', ['medias', 'cni', 'cni-diastolica', 'filtro', 'inmovil']]
 ];
 const NOMBRE_ESTADO = { sano: 'Sano', inflamacion: 'Inflamación', inmovil: 'Inmóvil (adivinanza)', hnf: 'HNF', hbpm: 'HBPM', fondaparinux: 'Fondaparinux', 'xa-directo': 'Xa directo', dabigatran: 'Dabigatrán', tih: 'TIH', 'tih-fondaparinux': 'TIH + fondaparinux',
-  'renal-25': 'Enoxaparina, ClCr 25', 'renal-12': 'Dalteparina, ClCr 12', 'obesidad-42': 'Enoxaparina, IMC 42', medias: 'Medias', cni: 'CNI', 'cni-diastolica': 'CNI y PAD 30', filtro: 'Filtro de VCI', neuroeje: 'Reloj neuroaxial' };
+  'renal-25': 'Enoxaparina, ClCr 25', 'renal-12': 'Dalteparina, ClCr 12', 'obesidad-42': 'Enoxaparina, IMC 42', medias: 'Medias', cni: 'CNI', 'cni-diastolica': 'CNI y PAD 34', filtro: 'Filtro de VCI', neuroeje: 'Reloj neuroaxial' };
 function irAEstado(k) {
   const st = estadoDe(ESTADOS[k].e);
   const tab = st.vista === 'reloj' ? 'reloj' : st.vista === 'tih' ? 'paciente' : st.mecanica !== 'nada' || st.filtro ? 'pierna' : st.clcr !== 90 || st.imc !== 25 ? 'rinon' : st.farmaco ? 'farmaco' : 'paciente';
@@ -1819,7 +1828,7 @@ const MANDOS_PREG = {
   'farmaco-tih': { tipo: 'seg', campo: 'farmaco', ops: [['hnf', 'HNF'], ['enoxaparina', 'Enoxaparina'], ['fondaparinux', 'Fondaparinux']] },
   clcr: { tipo: 'seg', campo: 'clcr', ops: [[90, 'ClCr 90'], [50, '50'], [25, '25'], [12, '12']] },
   imc: { tipo: 'seg', campo: 'imc', ops: [[25, 'IMC 25'], [42, '42'], [52, '52']] },
-  diastolica: { tipo: 'seg', campo: 'diastolica', ops: [[70, 'PAD 70'], [30, 'PAD 30']] },
+  diastolica: { tipo: 'seg', campo: 'diastolica', ops: [[70, 'PAD 70'], [34, 'PAD 34']] },
   horas: { tipo: 'seg', campo: 'horas', ops: [[6, '6 h'], [12, '12 h'], [24, '24 h'], [48, '48 h']] }
 };
 function mandoHTML(t0) {
@@ -2055,8 +2064,8 @@ const CONCEPTOS = [
   { titulo: 'Medias y CNI',
     texto: 'Medias: <span class="hl-a">18 mmHg en el tobillo y 8 en el muslo</span>; nunca solas. CNI: <span class="hl-a">35-40 y 20 mmHg</span>, de distal a proximal, cada 10 s: <span class="hl-a">flujo y fibrinólisis</span>. Nunca por encima de la diastólica.',
     hacer: 'ponle medias, luego la CNI, y baja la diastólica.', estado: { inflamacion: true }, mirar: 'mangas',
-    acciones: [{ t: 'Medias', e: { mecanica: 'medias' } }, { t: 'CNI', e: { mecanica: 'cni' } }, { t: 'CNI con PAD 30', e: { mecanica: 'cni', diastolica: 30 } }],
-    mira: 'las cámaras se inflan de abajo arriba en un ciclo real de 10 s; los puntos verdes deshacen la red. Con PAD 30, la arteria se aprieta.',
+    acciones: [{ t: 'Medias', e: { mecanica: 'medias' } }, { t: 'CNI', e: { mecanica: 'cni' } }, { t: 'CNI con PAD 34', e: { mecanica: 'cni', diastolica: 34 } }],
+    mira: 'las cámaras se inflan de abajo arriba en un ciclo real de 10 s; los puntos verdes deshacen la red. Con PAD 34, la arteria se aprieta y el pie palidece.',
     fuente: `${FXI}#mar-mecanica · #mar-cni-pegas` },
   { titulo: 'El reloj neuroaxial',
     texto: 'Antes de una punción o un catéter neuroaxial: <span class="hl-a">HNF ≥12 h</span>; enoxaparina una vez al día <span class="hl-a">≥24 h</span>; dabigatrán y rivaroxabán <span class="hl-a">≥48 h</span>; apixabán ≥24 h. Con más insuficiencia renal, más tiempo.',

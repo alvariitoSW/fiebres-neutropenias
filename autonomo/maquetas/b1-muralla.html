@@ -64,17 +64,6 @@ a { color: var(--oro); }
 .interruptor button + button { border-left: 1px solid var(--line); }
 .interruptor button[aria-selected="true"] { background: var(--oro); color: var(--bg); font-weight: 600; }
 
-/* La cama 7 (entrada) */
-.cama { position: relative; border: 1px solid var(--line); border-radius: 16px; background: var(--bg); overflow: hidden; }
-.cama svg { display: block; width: 100%; height: auto; }
-.cama-pie { position: absolute; left: 10px; bottom: 6px; font: 600 .72rem/1.2 var(--sans); color: var(--oro); background: rgba(23, 20, 15, .85);
-  border-radius: 999px; padding: 3px 9px; pointer-events: none; }
-.cama.compacta { cursor: pointer; display: grid; grid-template-columns: 128px 1fr; align-items: center; gap: 8px; min-height: 54px; padding-right: 8px; }
-.cama.compacta svg { height: 54px; width: 128px; }
-.cama.compacta .cama-pie { position: static; background: none; padding: 0; color: var(--dim); font-weight: 400; pointer-events: auto; }
-.cama.compacta .cama-pie b { color: var(--oro); }
-body.estudio .cama { display: none; }
-.cama [data-ventana] { cursor: pointer; }
 
 /* La lámina */
 .escena-bloque { display: grid; gap: 6px; background: var(--bg); z-index: 6; }
@@ -233,7 +222,7 @@ code { font-size: .78em; color: var(--dim); overflow-wrap: anywhere; }
   <header class="cabecera">
     <p class="aviso">Maqueta para elegir: no es la app</p>
     <h1>La cama 7 · <em>La muralla de papel</em></h1>
-    <p class="lead">La mucosa del tubo digestivo es <strong class="hl-r">una sola capa de células de 0,1 mm</strong> frente a <strong class="hl-a">100-400 billones de microbios</strong>. <span class="org">ficha · mar-piel-interna</span></p>
+    <p class="lead">La mucosa del tubo digestivo es <strong class="hl-r">una sola capa de células de 0,1 mm</strong> frente a <strong class="hl-a">100-400 billones de microbios</strong>. <span class="org" data-ref="mar-microbioma#mar-piel-interna">ficha · p. 58</span></p>
   </header>
 
   <div class="interruptor" role="tablist" aria-label="Qué hacer con el modelo">
@@ -243,10 +232,140 @@ code { font-size: .78em; color: var(--dim); overflow-wrap: anywhere; }
   </div>
 
   <section class="escena-bloque" id="escena-bloque" aria-label="La muralla de papel">
-    <div class="cama grande" id="cama">
-      <svg id="cama-svg" viewBox="0 0 360 150" role="img" aria-label="La cama 7: un paciente intubado con tres ventanas: cabeza, vientre y pierna"></svg>
-      <p class="cama-pie" id="cama-pie">Toca el vientre para entrar</p>
+    <!-- CAMA 7: copiar igual en las tres maquetas -->
+    <!-- Bloque común de «La cama 7» (muralla, telar e inmersión). Se copia entero, sin tocar nada salvo data-escena:
+         data-escena="muralla" (vientre encendido), "telar" (pierna) o "inmersion" (cabeza). La ventana de la escena
+         actual se enciende sola por CSS; las otras dos llevan a su maqueta (b1-muralla.html, b1-telar.html,
+         b1-inmersion.html). Solo usa los tokens de color de :root y window.Motion si está cargado.
+         Avisa a la página con dos eventos que suben al document: «c7-entrada» (al terminar el zoom de entrada o al
+         volver a entrar) y «c7-aparato» (detail: respirador, monitor o bolsa). API: window.Cama7.entrar(),
+         .compactar() y .ampliar(). El paciente de la cama: Andrés, 62 años, intubado. -->
+    <style>
+    .c7-cama { position: relative; border: 1px solid var(--border-color); border-radius: 16px; background: var(--bg-main); overflow: hidden; }
+    .c7-cama .c7-svg { display: block; width: 100%; height: auto; }
+    .c7-pie { position: absolute; left: 10px; bottom: 6px; margin: 0; font: 600 .72rem/1.2 system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--accent-yellow);
+      background: rgba(23, 20, 15, .85); border-radius: 999px; padding: 3px 9px; pointer-events: none; }
+    .c7-cama.c7-compacta { cursor: pointer; display: grid; grid-template-columns: 120px 1fr; align-items: center; gap: 8px; min-height: 48px; padding-right: 8px; }
+    .c7-cama.c7-compacta .c7-svg { height: 50px; width: 120px; }
+    .c7-cama.c7-compacta .c7-pie { position: static; background: none; padding: 0; color: var(--text-dim); font-weight: 400; }
+    .c7-cama.c7-compacta .c7-pie b { color: var(--accent-yellow); }
+    body.estudio .c7-cama { display: none; }
+    .c7-v { cursor: pointer; }
+    .c7-v:focus-visible { outline: 2px solid var(--accent-yellow); }
+    .c7-v .c7-arte { opacity: .45; }
+    .c7-v .c7-on { display: none; }
+    .c7-lbl { font: italic 400 7.5px Georgia, 'Times New Roman', serif; fill: var(--text-muted); }
+    .c7-cama[data-escena="muralla"] [data-v="muralla"] .c7-arte, .c7-cama[data-escena="telar"] [data-v="telar"] .c7-arte, .c7-cama[data-escena="inmersion"] [data-v="inmersion"] .c7-arte { opacity: 1; }
+    .c7-cama[data-escena="muralla"] [data-v="muralla"] .c7-on, .c7-cama[data-escena="telar"] [data-v="telar"] .c7-on, .c7-cama[data-escena="inmersion"] [data-v="inmersion"] .c7-on { display: inline; }
+    .c7-cama[data-escena="muralla"] [data-v="muralla"] .c7-off, .c7-cama[data-escena="telar"] [data-v="telar"] .c7-off, .c7-cama[data-escena="inmersion"] [data-v="inmersion"] .c7-off { display: none; }
+    .c7-cama[data-escena="muralla"] [data-v="muralla"] .c7-lbl, .c7-cama[data-escena="telar"] [data-v="telar"] .c7-lbl, .c7-cama[data-escena="inmersion"] [data-v="inmersion"] .c7-lbl { font-style: normal; font-weight: 700; fill: var(--accent-blue); }
+    .c7-cama.c7-compacta .c7-v { pointer-events: none; }
+    </style>
+    <div class="c7-cama c7-grande" id="c7-cama" data-escena="muralla">
+      <svg class="c7-svg" viewBox="0 0 360 150" role="img" aria-label="La cama 7: Andrés, 62 años, intubado, con tres ventanas: la cabeza, el vientre y la pierna">
+        <defs>
+          <pattern id="c7-rayado" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" style="stroke:var(--accent-yellow)" stroke-opacity=".3" stroke-width=".8"/></pattern>
+          <pattern id="c7-rayado-fino" width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)"><line x1="0" y1="0" x2="0" y2="3" style="stroke:var(--accent-yellow)" stroke-opacity=".22" stroke-width=".6"/></pattern>
+          <pattern id="c7-cruzado" width="7" height="7" patternUnits="userSpaceOnUse"><path d="M0 0L7 7M7 0L0 7" style="stroke:var(--text-muted)" stroke-opacity=".2" stroke-width=".6"/></pattern>
+          <pattern id="c7-punteado" width="7" height="6" patternUnits="userSpaceOnUse"><circle cx="1.6" cy="1.5" r=".7" style="fill:var(--text-dim)" fill-opacity=".3"/><circle cx="5.1" cy="4.4" r=".55" style="fill:var(--text-dim)" fill-opacity=".24"/></pattern>
+          <pattern id="c7-sabana" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-20)"><line x1="0" y1="0" x2="0" y2="6" style="stroke:var(--text-dim)" stroke-opacity=".28" stroke-width=".7"/></pattern>
+          <clipPath id="c7-cv-cabeza"><circle cx="62" cy="66" r="14"/></clipPath>
+          <clipPath id="c7-cv-vientre"><circle cx="168" cy="64" r="18"/></clipPath>
+          <clipPath id="c7-cv-pierna"><circle cx="268" cy="72" r="14"/></clipPath>
+        </defs>
+        <rect width="360" height="150" style="fill:var(--bg-main)"/>
+        <line x1="0" y1="141" x2="360" y2="141" style="stroke:var(--accent-yellow)" stroke-opacity=".35"/>
+        <g data-aparato="respirador" opacity=".55"><rect x="2" y="30" width="20" height="30" rx="3" style="fill:var(--bg-card);stroke:var(--text-muted)"/><rect x="2" y="30" width="20" height="30" rx="3" fill="url(#c7-cruzado)"/><line x1="12" y1="60" x2="12" y2="140" style="stroke:var(--text-muted)"/><text x="2" y="26" style="font:italic 6.5px Georgia, serif;fill:var(--text-muted)">respirador</text></g>
+        <g data-aparato="monitor" opacity=".55"><rect x="36" y="6" width="34" height="22" rx="3" style="fill:var(--bg-card);stroke:var(--text-muted)"/><path d="M39 20 L46 20 L48 13 L51 24 L53 18 L67 18" style="fill:none;stroke:var(--accent-green)" stroke-width="1"/></g>
+        <g data-aparato="bolsa" opacity=".55"><line x1="118" y1="8" x2="118" y2="84" style="stroke:var(--text-muted)"/><path d="M109 10 h18 v18 q-9 7 -18 0Z" style="fill:var(--bg-card);stroke:var(--text-muted)"/><path d="M109 10 h18 v18 q-9 7 -18 0Z" fill="url(#c7-rayado-fino)"/><path d="M118 31 C118 50 100 58 86 66" style="fill:none;stroke:var(--text-muted)" stroke-dasharray="2 2"/></g>
+        <path d="M22 118 V56 Q22 48 30 48 Q36 48 36 56 V118Z" style="fill:var(--bg-card);stroke:var(--accent-yellow)" stroke-opacity=".7"/><path d="M22 118 V56 Q22 48 30 48 Q36 48 36 56 V118Z" fill="url(#c7-rayado)"/>
+        <path d="M326 118 V70 Q326 62 333 62 Q340 62 340 70 V118Z" style="fill:var(--bg-card);stroke:var(--accent-yellow)" stroke-opacity=".7"/><path d="M326 118 V70 Q326 62 333 62 Q340 62 340 70 V118Z" fill="url(#c7-rayado)"/>
+        <rect x="327" y="80" width="12" height="16" rx="2" style="fill:var(--bg-main);stroke:var(--accent-yellow)"/><text x="333" y="92" text-anchor="middle" style="font:700 10px Georgia, serif;fill:var(--accent-yellow)">7</text>
+        <rect x="36" y="96" width="290" height="8" style="fill:var(--bg-card);stroke:var(--accent-yellow)" stroke-opacity=".6"/>
+        <rect x="36" y="84" width="290" height="12" rx="4" style="fill:var(--text-main)" fill-opacity=".1"/><rect x="36" y="84" width="290" height="12" rx="4" fill="url(#c7-rayado-fino)"/>
+        <line x1="52" y1="104" x2="52" y2="128" style="stroke:var(--accent-yellow)" stroke-opacity=".6"/><circle cx="52" cy="133" r="7" style="fill:none;stroke:var(--accent-yellow)" stroke-opacity=".6"/>
+        <line x1="310" y1="104" x2="310" y2="128" style="stroke:var(--accent-yellow)" stroke-opacity=".6"/><circle cx="310" cy="133" r="7" style="fill:none;stroke:var(--accent-yellow)" stroke-opacity=".6"/>
+        <ellipse cx="66" cy="80" rx="24" ry="7" style="fill:var(--text-main)" fill-opacity=".12"/>
+        <circle cx="66" cy="66" r="12.5" style="fill:var(--bg-card);stroke:var(--text-dim)"/><path d="M76 60 q4 -2 5 2" style="fill:none;stroke:var(--text-dim)"/>
+        <path d="M78 64 C70 40 40 34 22 44" style="fill:none;stroke:var(--accent-yellow)" stroke-width="2" stroke-opacity=".75"/>
+        <path d="M80 74 C95 58 120 54 140 56 C160 58 178 54 196 62 C214 70 250 68 290 70 C300 64 310 58 316 66 C320 72 322 80 322 84 L82 84Z" style="fill:var(--bg-card);stroke:var(--text-dim)"/>
+        <path d="M80 74 C95 58 120 54 140 56 C160 58 178 54 196 62 C214 70 250 68 290 70 C300 64 310 58 316 66 C320 72 322 80 322 84 L82 84Z" fill="url(#c7-sabana)"/>
+        <path d="M130 62 C140 72 150 74 160 70 M220 70 C230 76 250 77 262 74" style="fill:none;stroke:var(--text-dim)" stroke-opacity=".5"/>
+        <path d="M84 66 l6 -3" style="stroke:var(--accent-red)" stroke-width="2"/>
+        <!-- Ventana de la cabeza: La inmersión -->
+        <g class="c7-v" data-v="inmersion" tabindex="0" role="link" aria-label="La cabeza: La inmersión (dolor y sedación)">
+          <circle cx="62" cy="66" r="25" fill="transparent"/>
+          <circle cx="62" cy="66" r="15" style="fill:var(--bg-main)"/>
+          <g class="c7-arte" clip-path="url(#c7-cv-cabeza)"><rect x="47" y="62" width="30" height="20" style="fill:var(--accent-blue)" fill-opacity=".14"/>
+            <path d="M46 62 q4 -3 8 0 t8 0 t8 0 t8 0 M46 69 q4 -3 8 0 t8 0 t8 0 t8 0 M46 76 q4 -3 8 0 t8 0 t8 0 t8 0" style="fill:none;stroke:var(--accent-blue)" stroke-width=".9" stroke-opacity=".8"/>
+            <circle cx="62" cy="58" r="2.4" style="fill:var(--text-main)" fill-opacity=".7"/><path d="M62 61 V74" style="stroke:var(--text-main)" stroke-opacity=".5" stroke-dasharray="1.5 1.5"/></g>
+          <circle class="c7-off" cx="62" cy="66" r="15" style="fill:none;stroke:var(--text-muted)" stroke-dasharray="3 3"/>
+          <g class="c7-on"><circle cx="62" cy="66" r="15" style="fill:none;stroke:var(--accent-blue)" stroke-width="3"/><circle cx="62" cy="66" r="12" style="fill:none;stroke:var(--accent-blue)" stroke-width=".7"/></g>
+          <text class="c7-lbl" x="62" y="47" text-anchor="middle">La inmersión<tspan class="c7-off"> →</tspan></text>
+        </g>
+        <!-- Ventana del vientre: La muralla de papel -->
+        <g class="c7-v" data-v="muralla" tabindex="0" role="link" aria-label="El vientre: La muralla de papel (intestino, estómago y boca)">
+          <circle cx="168" cy="64" r="29" fill="transparent"/>
+          <circle cx="168" cy="64" r="19" style="fill:var(--bg-main)"/>
+          <g class="c7-arte" clip-path="url(#c7-cv-vientre)"><rect x="149" y="45" width="38" height="15" style="fill:var(--accent-purple)" fill-opacity=".08"/>
+            <rect x="150.6" y="62" width="5.6" height="10" style="fill:var(--text-main);stroke:var(--accent-yellow)" fill-opacity=".15" stroke-width=".5"/><rect x="157.2" y="62" width="5.6" height="10" style="fill:var(--text-main);stroke:var(--accent-yellow)" fill-opacity=".15" stroke-width=".5"/><rect x="163.8" y="62" width="5.6" height="10" style="fill:var(--text-main);stroke:var(--accent-yellow)" fill-opacity=".15" stroke-width=".5"/><rect x="170.4" y="62" width="5.6" height="10" style="fill:var(--text-main);stroke:var(--accent-yellow)" fill-opacity=".15" stroke-width=".5"/><rect x="177" y="62" width="5.6" height="10" style="fill:var(--text-main);stroke:var(--accent-yellow)" fill-opacity=".15" stroke-width=".5"/><rect x="183.6" y="62" width="5.6" height="10" style="fill:var(--text-main);stroke:var(--accent-yellow)" fill-opacity=".15" stroke-width=".5"/>
+            <g style="fill:var(--accent-purple)"><path transform="translate(159 55) rotate(-60)" d="M-1.67 -1.12H1.67A1.12 1.12 0 0 1 1.67 1.12H-1.67A1.12 1.12 0 0 1 -1.67 -1.12Z"/><path transform="translate(166 52) rotate(10)" d="M-1.67 -1.12H1.67A1.12 1.12 0 0 1 1.67 1.12H-1.67A1.12 1.12 0 0 1 -1.67 -1.12Z"/><path transform="translate(174 56) rotate(40)" d="M-1.67 -1.12H1.67A1.12 1.12 0 0 1 1.67 1.12H-1.67A1.12 1.12 0 0 1 -1.67 -1.12Z"/><path transform="translate(178 52) rotate(-20)" d="M-1.67 -1.12H1.67A1.12 1.12 0 0 1 1.67 1.12H-1.67A1.12 1.12 0 0 1 -1.67 -1.12Z"/><path transform="translate(156 60) rotate(80)" d="M-1.67 -1.12H1.67A1.12 1.12 0 0 1 1.67 1.12H-1.67A1.12 1.12 0 0 1 -1.67 -1.12Z"/></g>
+            <rect x="149" y="73" width="38" height="12" fill="url(#c7-punteado)"/></g>
+          <circle class="c7-off" cx="168" cy="64" r="19" style="fill:none;stroke:var(--text-muted)" stroke-dasharray="3 3"/>
+          <g class="c7-on"><circle cx="168" cy="64" r="19" style="fill:none;stroke:var(--accent-blue)" stroke-width="3"/><circle cx="168" cy="64" r="16" style="fill:none;stroke:var(--accent-blue)" stroke-width=".7"/></g>
+          <text class="c7-lbl" x="168" y="40" text-anchor="middle">La muralla de papel<tspan class="c7-off"> →</tspan></text>
+        </g>
+        <!-- Ventana de la pierna: El telar de la trombina -->
+        <g class="c7-v" data-v="telar" tabindex="0" role="link" aria-label="La pierna: El telar de la trombina (tromboprofilaxis)">
+          <circle cx="268" cy="72" r="25" fill="transparent"/>
+          <circle cx="268" cy="72" r="15" style="fill:var(--bg-main)"/>
+          <g class="c7-arte" clip-path="url(#c7-cv-pierna)"><rect x="253" y="65" width="30" height="14" style="fill:var(--accent-purple)" fill-opacity=".18"/>
+            <path d="M253 65 H283 M253 79 H283" style="stroke:var(--accent-purple)" stroke-width=".8"/>
+            <path d="M256 66 L278 78 M260 78 L282 66 M254 72 L284 72 M266 65 L272 79" style="fill:none;stroke:var(--text-dim)" stroke-width=".7" stroke-opacity=".9"/>
+            <ellipse cx="262" cy="71" rx="2.6" ry="1.9" style="fill:var(--accent-red)"/><ellipse cx="275" cy="74" rx="2.6" ry="1.9" style="fill:var(--accent-red)"/></g>
+          <circle class="c7-off" cx="268" cy="72" r="15" style="fill:none;stroke:var(--text-muted)" stroke-dasharray="3 3"/>
+          <g class="c7-on"><circle cx="268" cy="72" r="15" style="fill:none;stroke:var(--accent-blue)" stroke-width="3"/><circle cx="268" cy="72" r="12" style="fill:none;stroke:var(--accent-blue)" stroke-width=".7"/></g>
+          <text class="c7-lbl" x="268" y="53" text-anchor="middle">El telar<tspan class="c7-off"> →</tspan></text>
+        </g>
+      </svg>
+      <p class="c7-pie"></p>
     </div>
+    <script>
+    (function () {
+      const caja = document.getElementById('c7-cama'); if (!caja || caja.dataset.listo) return; caja.dataset.listo = '1';
+      const svg = caja.querySelector('.c7-svg'), pie = caja.querySelector('.c7-pie');
+      const reducir = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const ESC = {
+        muralla: { archivo: 'b1-muralla.html', sitio: 'el vientre', origen: '46.7% 42.7%' },
+        telar: { archivo: 'b1-telar.html', sitio: 'la pierna', origen: '74.4% 48%' },
+        inmersion: { archivo: 'b1-inmersion.html', sitio: 'la cabeza', origen: '17.2% 44%' } };
+      const aqui = ESC[caja.dataset.escena] || ESC.muralla;
+      let espera = null;
+      const avisar = (tipo, detalle) => caja.dispatchEvent(new CustomEvent(tipo, { bubbles: true, detail: detalle }));
+      function compactar() { clearTimeout(espera); espera = null; caja.classList.remove('c7-grande'); caja.classList.add('c7-compacta'); pie.innerHTML = '<b>Cama 7 · Andrés, 62 años</b><br>Toca para ver sus tres ventanas'; }
+      function ampliar() { caja.classList.remove('c7-compacta'); caja.classList.add('c7-grande'); pie.textContent = 'Andrés, 62 años · toca ' + aqui.sitio + ' para entrar'; }
+      function entrar() {
+        clearTimeout(espera); espera = null;
+        if (caja.classList.contains('c7-compacta')) { avisar('c7-entrada'); return; }
+        if (reducir || !window.Motion) { compactar(); avisar('c7-entrada'); return; }
+        svg.style.transformOrigin = aqui.origen;
+        window.Motion.animate(svg, { transform: ['scale(1)', 'scale(3.6)'], opacity: [1, 0] }, { duration: 0.7, easing: 'ease-in' }).finished
+          .then(() => { svg.style.transform = ''; svg.style.opacity = ''; compactar(); avisar('c7-entrada'); });
+      }
+      caja.addEventListener('click', ev => {
+        if (caja.classList.contains('c7-compacta')) { ampliar(); return; }
+        const v = ev.target.closest('[data-v]')?.dataset.v;
+        if (v) { if (v === caja.dataset.escena) entrar(); else location.href = ESC[v].archivo; return; }
+        const a = ev.target.closest('[data-aparato]')?.dataset.aparato;
+        if (a) avisar('c7-aparato', a);
+      });
+      caja.addEventListener('keydown', ev => { const v = ev.target.closest('[data-v]'); if (v && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); v.dispatchEvent(new MouseEvent('click', { bubbles: true })); } });
+      window.Cama7 = { entrar, compactar, ampliar };
+      ampliar();
+      if (reducir) compactar(); else espera = setTimeout(entrar, 1500);
+    })();
+    </script>
+    <!-- /CAMA 7 -->
     <div class="escena" id="escena">
       <svg id="lamina" viewBox="0 0 360 380" role="img" aria-label="La muralla de papel"></svg>
       <div class="anillo" id="anillo" hidden></div>
@@ -260,7 +379,7 @@ code { font-size: .78em; color: var(--dim); overflow-wrap: anywhere; }
     <section class="bloque">
       <h2>Qué es cada cosa que se mueve</h2>
       <ul class="leyenda" id="leyenda"></ul>
-      <p class="para">Las formas de la tabla única de la app (<code>js/data/formas-iones.js</code>): cruz = H⁺, triángulo = HCO₃⁻, trébol = citoquinas, disco = hematíe. <b>Las de borde discontinuo son propuestas</b>: no están en la tabla y solo entran si las apruebas. La forma dice qué es; el color, nunca solo. Cuántos microbios se dibujan y a qué velocidad se mueven: <b>ilustrativo</b>.</p>
+      <p class="para">Las formas de la tabla única de la app: cruz = H⁺, triángulo = HCO₃⁻, trébol = citoquinas, disco = hematíe. <b>Las de borde discontinuo son propuestas</b>: no están en la tabla y solo entran si las apruebas. La forma dice qué es; el color, nunca solo. Cuántos microbios se dibujan y a qué velocidad se mueven: <b>ilustrativo</b>.</p>
     </section>
 
     <section class="bloque">
@@ -286,10 +405,10 @@ code { font-size: .78em; color: var(--dim); overflow-wrap: anywhere; }
       <div class="prof">
         <div><b>SDD: −67 % (texto) o −69 % (barras).</b> El texto (A p. 66) dice «una reducción del 67 %». Con las barras de la Fig. 4.5 sale −69 % (4,5 → 1,4 por 1.000 días; 6,2 → 1,9 %). La maqueta muestra la del texto y esta nota. La SOD (4,5 → 3) sí da el −33 % del texto.</div>
         <div><b>La Fig. 4.2 imprime «Cleatance».</b> Es «Clearance» (aclaramiento): errata de la figura del libro.</div>
-        <div><b>Fig. 4.4: lectura aproximada.</b> Las barras no llevan número; los ~2, ~37 y ~70 % están leídos a ojo, como en la ficha.</div>
+        <div><b>Fig. 4.4: lectura aproximada.</b> Las barras no llevan número. La ficha lee ~2 % en los sanos y los empleados; la barra está cerca del 3 %, así que la maqueta dice ~2-3 %. Los ~37 y ~70 % están leídos a ojo, como en la ficha.</div>
         <div><b>La estación «Intestino».</b> La especificación la llamaba «Colon» y le ponía la vellosidad de la Fig. 4.2. El colon no tiene vellosidades <span class="org">fisiología general</span>: la vellosidad es del intestino delgado. La estación se llama «Intestino» y la tira marca aparte el colon, donde vive el 99 %.</div>
         <div><b>La SDD respeta a los anaerobios.</b> El libro la diseña para erradicar estafilococos, bacilos gramnegativos y <em>Candida</em> «respetando la flora normal (sobre todo anaerobios)». Por eso la tira no se vacía entera: solo se van los patógenos.</div>
-        <div><b>Riego y úlcera.</b> Que la lesión aparezca cuando cae el riego y no cuando sube el ácido es de la ficha (<code>#mar-ulcera-patogenia</code>, <code>#mar-acidofobia</code>). Su tamaño y su ritmo son ilustrativos. Con enteral completa el IBP no la achica más: «los supresores del ácido dejaban de reducir el sangrado» (<code>#mar-enteral-protege</code>).</div>
+        <div><b>Riego y úlcera.</b> Que la lesión aparezca cuando cae el riego y no cuando sube el ácido es de la ficha (p. 67 y 72-73). Su tamaño y su ritmo son ilustrativos. Con enteral completa el IBP no la achica más: «los supresores del ácido dejaban de reducir el sangrado» (ficha, p. 72).</div>
       </div>
     </details>
 
@@ -297,25 +416,25 @@ code { font-size: .78em; color: var(--dim); overflow-wrap: anywhere; }
       <summary>De dónde sale cada cifra</summary>
       <div class="tabla-scroll">
         <table class="data-table">
-          <thead><tr><th>Cifra</th><th>Origen (A = PDF caps. 1-4)</th></tr></thead>
+          <thead><tr><th>Cifra</th><th>Origen (página del PDF)</th></tr></thead>
           <tbody>
-            <tr><td>0,1 mm · 100-400 billones · 70.000 genomas · 2 kg</td><td><code>mar-piel-interna</code>, <code>mar-microbioma-cifras</code> · A p. 58</td></tr>
-            <tr><td>Boca 10⁶ · estómago &lt;10³ · intestino 10⁹ · colon 10¹² UFC/mL · 99 % en el colon</td><td>Fig. 4.1 · A p. 58-59</td></tr>
-            <tr><td>pH del jugo 1-2 · <em>Salmonella</em>: pH 4 crece, pH 3 cae, pH 2 erradicada en 1 h</td><td>Fig. 4.3, <code>mar-fig-4-3</code> · A p. 61-62</td></tr>
-            <tr><td>750 mL de saliva al día · 10⁶ por mL · aspirar el 0,13 %</td><td><code>mar-saliva</code> · A p. 62</td></tr>
-            <tr><td>BGN en la boca: sano ~2 %, alcohólicos ~45 %, empleados ~2 %, planta ~37 %, UCI ~70 %</td><td>Fig. 4.4 (lectura aproximada) · A p. 63</td></tr>
-            <tr><td>Clorhexidina 0,12 %/6 h (no al 2 %) · SOD gentamicina, colistina y vancomicina 2 %/6 h</td><td>Tabla 4.1 · A p. 63-64</td></tr>
-            <tr><td>Bacteriemias por BGN por 1.000 días: control 4,5 · SOD 3 · SDD 1,4 (−33 % y −67 %)</td><td>Fig. 4.5, <code>mar-fig-4-5</code> · A p. 64-66</td></tr>
-            <tr><td>SDD: cefuroxima 1,5 g/8 h los 4 primeros días; el intestino tarda 5-7 días; &gt;72 h de UCI</td><td><code>mar-sdd</code> · A p. 65</td></tr>
-            <tr><td>Probióticos: solo si se empiezan en los 2 primeros días de antibiótico (19 estudios)</td><td><code>mar-probioticos</code> · A p. 66</td></tr>
-            <tr><td>Moco con HCO₃⁻ pH 7 · 70-90 % del riego a la mucosa · erosiones en el 75-100 % en 24 h</td><td><code>mar-ulcera-patogenia</code>, <code>mar-ulcera-frecuencia</code> · A p. 67</td></tr>
-            <tr><td>Sangrado significativo: PA −20 mmHg · vasopresor +20 % · Hb −2 g/dL · ≥2 CH</td><td><code>mar-sangrado-significativo</code> · A p. 67</td></tr>
-            <tr><td>Tabla 4.2: máximo 8-10 %, alto 4-8 %, moderado 2-4 %, bajo 1-2 %</td><td><code>mar-tabla-4-2</code> · A p. 68</td></tr>
-            <tr><td>Famotidina 20 mg/12 h (−50 % con ClCr &lt;50) · pantoprazol 40 mg/día · sucralfato 1 g/6 h</td><td>Tabla 4.3 · A p. 68</td></tr>
-            <tr><td>&gt;80 % la reciben, el 70 % no la necesita · pH ≥4 objetivo · IBP &gt; anti-H2 &gt; sucralfato</td><td><code>mar-profilaxis-uso</code> · A p. 68-69</td></tr>
-            <tr><td>Fig. 4.6: sangrado 4,2 → 2,5 % (1,7 %) · total 21,9 % frente a 22,6 % · 3.298 pacientes</td><td><code>mar-img-4-6</code> · A p. 69-71</td></tr>
-            <tr><td><em>C. difficile</em> ×3 con IBP · más neumonía</td><td>acordeón «Riesgos de suprimir el ácido» · A p. 70-71</td></tr>
-            <tr><td>Vía 4: microbios de la sangre que se pegan a la parte intravascular</td><td><code>mar-bac-vias</code> · A p. 47; reflexión del autor, A p. 53-54</td></tr>
+            <tr><td>0,1 mm · 100-400 billones · 70.000 genomas · 2 kg</td><td>ficha · p. 58</td></tr>
+            <tr><td>Boca 10⁶ · estómago &lt;10³ · intestino 10⁹ · colon 10¹² UFC/mL · 99 % en el colon</td><td>Fig. 4.1 · p. 58-59</td></tr>
+            <tr><td>pH del jugo 1-2 · <em>Salmonella</em>: pH 4 crece, pH 3 cae, pH 2 erradicada en 1 h</td><td>Fig. 4.3, ficha · p. 61-62</td></tr>
+            <tr><td>750 mL de saliva al día · 10⁶ por mL · aspirar el 0,13 %</td><td>ficha · p. 62</td></tr>
+            <tr><td>BGN en la boca: sano ~2-3 %, alcohólicos ~45 %, empleados ~2-3 %, planta ~37 %, UCI ~70 %</td><td>Fig. 4.4 (lectura aproximada) · p. 63</td></tr>
+            <tr><td>Clorhexidina 0,12 %/6 h (no al 2 %) · SOD gentamicina, colistina y vancomicina 2 %/6 h</td><td>Tabla 4.1 · p. 63-64</td></tr>
+            <tr><td>Bacteriemias por BGN por 1.000 días: control 4,5 · SOD 3 · SDD 1,4 (−33 % y −67 %)</td><td>Fig. 4.5, ficha · p. 64-66</td></tr>
+            <tr><td>SDD: cefuroxima 1,5 g/8 h los 4 primeros días; el intestino tarda 5-7 días; &gt;72 h de UCI</td><td>ficha · p. 65</td></tr>
+            <tr><td>Probióticos: solo si se empiezan en los 2 primeros días de antibiótico (19 estudios)</td><td>ficha · p. 66</td></tr>
+            <tr><td>Moco con HCO₃⁻ pH 7 · 70-90 % del riego a la mucosa · erosiones en el 75-100 % en 24 h</td><td>ficha · p. 67</td></tr>
+            <tr><td>Sangrado significativo: PA −20 mmHg · vasopresor +20 % · Hb −2 g/dL · ≥2 CH</td><td>ficha · p. 67</td></tr>
+            <tr><td>Tabla 4.2: máximo 8-10 %, alto 4-8 %, moderado 2-4 %, bajo 1-2 %</td><td>ficha · p. 68</td></tr>
+            <tr><td>Famotidina 20 mg/12 h (−50 % con ClCr &lt;50) · pantoprazol 40 mg/día · sucralfato 1 g/6 h</td><td>Tabla 4.3 · p. 68</td></tr>
+            <tr><td>&gt;80 % la reciben, el 70 % no la necesita · pH ≥4 objetivo · IBP &gt; anti-H2 &gt; sucralfato</td><td>ficha · p. 68-69</td></tr>
+            <tr><td>Fig. 4.6: sangrado 4,2 → 2,5 % (1,7 %) · total 21,9 % frente a 22,6 % · 3.298 pacientes</td><td>ficha · p. 69-71</td></tr>
+            <tr><td><em>C. difficile</em> ×3 con IBP · más neumonía</td><td>acordeón «Riesgos de suprimir el ácido» · p. 70-71</td></tr>
+            <tr><td>Vía 4: microbios de la sangre que se pegan a la parte intravascular</td><td>ficha · p. 47; reflexión del autor, p. 53-54</td></tr>
           </tbody>
         </table>
       </div>
@@ -790,7 +909,7 @@ function bucle(ahora) {
 function arrancar() { if (REDUCIR) return; if (enMarcha) return; enMarcha = true; tPrev = performance.now(); requestAnimationFrame(bucle); }
 
 /* ============================================================
-   6. La cama 7 (entrada, en grabado)
+   6. Utilidades de dibujo de la lámina (la cama 7 va en su bloque común, en el HTML)
    ============================================================ */
 const DEFS = `<defs>
   <pattern id="p-rayado" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" style="stroke:var(--accent-yellow)" stroke-opacity=".3" stroke-width=".8"/></pattern>
@@ -809,44 +928,6 @@ const T = (x, y, txt, { size = 8, color = '--text-dim', anchor = 'start', peso =
   return `<rect x="${n2(x0)}" y="${n2(y - size)}" width="${n2(w)}" height="${n2(size * 1.35)}" rx="2" style="fill:var(--bg-main)" fill-opacity=".82"/>` + tt;
 };
 
-function pintarCama() {
-  let h = DEFS + `<rect width="360" height="150" style="fill:var(--bg-main)"/>`;
-  // suelo y aparatos (apagados: llevarán a otros modelos del bloque)
-  h += `<line x1="0" y1="141" x2="360" y2="141" style="stroke:var(--accent-yellow)" stroke-opacity=".35"/>`;
-  h += `<g data-aparato="ventilador" opacity=".55"><rect x="2" y="30" width="20" height="30" rx="3" style="fill:var(--bg-card);stroke:var(--text-muted)"/><rect x="2" y="30" width="20" height="30" rx="3" fill="url(#p-cruzado)"/><line x1="12" y1="60" x2="12" y2="140" style="stroke:var(--text-muted)"/>${T(2, 26, 'respirador', { size: 6.5, color: '--text-muted' })}</g>`;
-  h += `<g data-aparato="monitor" opacity=".55"><rect x="36" y="6" width="34" height="22" rx="3" style="fill:var(--bg-card);stroke:var(--text-muted)"/><path d="M39 20 L46 20 L48 13 L51 24 L53 18 L67 18" style="fill:none;stroke:var(--accent-green)" stroke-width="1"/></g>`;
-  h += `<g data-aparato="bolsa" opacity=".55"><line x1="118" y1="8" x2="118" y2="84" style="stroke:var(--text-muted)"/><path d="M109 10 h18 v18 q-9 7 -18 0Z" style="fill:var(--bg-card);stroke:var(--text-muted)"/><path d="M109 10 h18 v18 q-9 7 -18 0Z" fill="url(#p-rayado-fino)"/><path d="M118 31 C118 50 100 58 86 66" style="fill:none;stroke:var(--text-muted)" stroke-dasharray="2 2"/></g>`;
-  // la cama
-  h += `<path d="M22 118 V56 Q22 48 30 48 Q36 48 36 56 V118Z" style="fill:var(--bg-card);stroke:var(--accent-yellow)" stroke-opacity=".7"/><path d="M22 118 V56 Q22 48 30 48 Q36 48 36 56 V118Z" fill="url(#p-rayado)"/>`;
-  h += `<path d="M326 118 V70 Q326 62 333 62 Q340 62 340 70 V118Z" style="fill:var(--bg-card);stroke:var(--accent-yellow)" stroke-opacity=".7"/><path d="M326 118 V70 Q326 62 333 62 Q340 62 340 70 V118Z" fill="url(#p-rayado)"/>`;
-  h += `<rect x="327" y="80" width="12" height="16" rx="2" style="fill:var(--bg-main);stroke:var(--accent-yellow)"/>` + T(333, 92, '7', { size: 10, color: '--accent-yellow', anchor: 'middle', peso: 700 });
-  h += `<rect x="36" y="96" width="290" height="8" style="fill:var(--bg-card);stroke:var(--accent-yellow)" stroke-opacity=".6"/>`;
-  h += `<rect x="36" y="84" width="290" height="12" rx="4" style="fill:var(--text-main)" fill-opacity=".1"/><rect x="36" y="84" width="290" height="12" rx="4" fill="url(#p-rayado-fino)"/>`;
-  for (const x of [52, 310]) h += `<line x1="${x}" y1="104" x2="${x}" y2="128" style="stroke:var(--accent-yellow)" stroke-opacity=".6"/><circle cx="${x}" cy="133" r="7" style="fill:none;stroke:var(--accent-yellow)" stroke-opacity=".6"/>`;
-  // el paciente, bajo la sábana
-  h += `<ellipse cx="66" cy="80" rx="24" ry="7" style="fill:var(--text-main)" fill-opacity=".12"/>`;
-  h += `<circle cx="66" cy="66" r="12.5" style="fill:var(--bg-card);stroke:var(--text-dim)"/><path d="M76 60 q4 -2 5 2" style="fill:none;stroke:var(--text-dim)"/>`;
-  h += `<path d="M78 64 C70 40 40 34 22 44" style="fill:none;stroke:var(--accent-yellow)" stroke-width="2" stroke-opacity=".75"/>`;   // tubo endotraqueal al respirador
-  const sabana = 'M80 74 C95 58 120 54 140 56 C160 58 178 54 196 62 C214 70 250 68 290 70 C300 64 310 58 316 66 C320 72 322 80 322 84 L82 84Z';
-  h += `<path d="${sabana}" style="fill:var(--bg-card);stroke:var(--text-dim)" stroke-width="1"/><path d="${sabana}" fill="url(#p-sabana)"/>`;
-  h += `<path d="M130 62 C140 72 150 74 160 70 M220 70 C230 76 250 77 262 74" style="fill:none;stroke:var(--text-dim)" stroke-opacity=".5"/>`;
-  h += `<path d="M84 66 l6 -3" style="stroke:var(--accent-red)" stroke-width="2"/>`;   // CVC yugular
-  // las tres ventanas
-  const ventana = (id, cx, cy, r, nombre, on) => `<g data-ventana="${id}" role="button" aria-label="${nombre}" tabindex="0">
-    <circle cx="${cx}" cy="${cy}" r="${r + 10}" fill="transparent"/>
-    ${on ? `<circle cx="${cx}" cy="${cy}" r="${r}" style="fill:var(--bg-main)"/><clipPath id="cv-${id}"><circle cx="${cx}" cy="${cy}" r="${r - 1}"/></clipPath>
-      <g clip-path="url(#cv-${id})"><rect x="${cx - r}" y="${cy - r}" width="${2 * r}" height="${r * .8}" style="fill:var(--accent-purple)" fill-opacity=".08"/>
-      ${[...Array(6)].map((_, i) => `<rect x="${cx - r + 2 + i * 6.6}" y="${cy - 2}" width="5.6" height="10" style="fill:var(--text-main);stroke:var(--accent-yellow)" fill-opacity=".15" stroke-width=".5"/>`).join('')}
-      ${[[-9, -9], [-2, -12], [6, -8], [10, -12], [-12, -4]].map(([dx, dy]) => `<g transform="translate(${cx + dx} ${cy + dy}) rotate(${dx * 7})">${svgParticula('bacilo', 1.8)}</g>`).join('')}
-      <rect x="${cx - r}" y="${cy + 9}" width="${2 * r}" height="${r}" fill="url(#p-punteado)"/></g>
-      <circle cx="${cx}" cy="${cy}" r="${r}" style="fill:none;stroke:var(--accent-blue)" stroke-width="3"/><circle cx="${cx}" cy="${cy}" r="${r - 3}" style="fill:none;stroke:var(--accent-blue)" stroke-width=".7"/>`
-    : `<circle cx="${cx}" cy="${cy}" r="${r}" style="fill:var(--bg-main);stroke:var(--text-muted)" fill-opacity=".55" stroke-dasharray="3 3"/>`}
-    ${T(cx, cy - r - 4, nombre, { size: 7.5, color: on ? '--accent-blue' : '--text-muted', anchor: 'middle', peso: on ? 700 : 400, italic: !on })}</g>`;
-  h += ventana('cabeza', 62, 66, 15, 'La inmersión', false);
-  h += ventana('vientre', 168, 64, 19, 'La muralla de papel', true);
-  h += ventana('pierna', 268, 72, 15, 'El telar', false);
-  $('cama-svg').innerHTML = h;
-}
 
 /* ============================================================
    7. La lámina: la tira, la muralla de cada estación, la sangre, la figura viva y la rueda
@@ -1102,10 +1183,10 @@ function figuraViva(e, D) {
   }
   // boca: Fig. 4.4
   let h = plato('Fig. 4.4 · BGN en la boca (aprox.)');
-  [['sano', 2, 'sano'], ['alc', 45, 'alcoh.'], ['empl', 2, 'empl.'], ['planta', 37, 'planta'], ['uci', 70, 'UCI']].forEach(([k, v, nom], i) => {
+  [['sano', 2, 'sano', '~2-3'], ['alc', 45, 'alcoh.'], ['empl', 2, 'empl.', '~2-3'], ['planta', 37, 'planta'], ['uci', 70, 'UCI']].forEach(([k, v, nom, txt], i) => {
     const x = 74 + i * 38, alto = Math.max(1.5, v / 70 * 40), y = 358 - alto, hl = k === e.paciente;
     h += `<rect x="${x}" y="${y}" width="22" height="${alto}" style="fill:var(--accent-purple);stroke:${hl ? 'var(--accent-blue)' : 'var(--accent-purple)'}" fill-opacity="${hl ? .7 : .25}" stroke-width="${hl ? 2 : 1}"/>`;
-    h += T(x + 11, y - 3, (ocultos.has('bgn') && hl) ? '?' : '~' + v, { size: 7.5, anchor: 'middle', color: '--text-main', peso: hl ? 700 : 400 }) + T(x + 11, 369, nom, { size: 6.8, anchor: 'middle', color: hl ? '--accent-blue' : '--text-dim', peso: hl ? 700 : 400 });
+    h += T(x + 11, y - 3, (ocultos.has('bgn') && hl) ? '?' : (txt || '~' + v), { size: 7.5, anchor: 'middle', color: '--text-main', peso: hl ? 700 : 400 }) + T(x + 11, 369, nom, { size: 6.8, anchor: 'middle', color: hl ? '--accent-blue' : '--text-dim', peso: hl ? 700 : 400 });
   });
   return h;
 }
@@ -1180,9 +1261,27 @@ const Balanza = {
    ============================================================ */
 const fraseEl = $('frase');
 let fraseActual = '';
+const PAGINAS = { 'mar-piel-interna': '58', 'mar-microbioma-cifras': '58', 'mar-microbioma-proteccion': '59', 'mar-disbiosis': '59', 'mar-motor-fmo': '60',
+  'mar-acido-antiseptico': '60', 'mar-fig-4-3': '61-62', 'mar-saliva': '62', 'mar-colonizacion-orofaringe': '63', 'mar-fig-4-4': '63', 'mar-tabla-4-1': '63-64',
+  'mar-fig-4-5': '64-65', 'mar-sdd': '65-66', 'mar-probioticos': '66', 'mar-ulcera-patogenia': '67', 'mar-ulcera-frecuencia': '67', 'mar-sangrado-significativo': '67',
+  'mar-tabla-4-2': '68', 'mar-mito-corticoides': '68', 'mar-tabla-4-3': '68', 'mar-profilaxis-uso': '68', 'mar-img-4-6': '69-70', 'mar-desprescribir': '71',
+  'mar-enteral-protege': '72', 'mar-acidofobia': '72-73', 'mar-bac-vias': '47', 'mar-bac-intestino': '53-54', 'mar-ulcera-calc': '68' };
+// Lo que se ve: «ficha», «fisiología general» o «ilustrativo», y la página del PDF. El id interno de la ficha va solo en data-ref.
+function chipTxt(f) {
+  if (!f) return '';
+  const tipos = new Set();
+  if (/ilustrativ/.test(f)) tipos.add('ilustrativo');
+  if (/fisiología general/.test(f)) tipos.add('fisiología general');
+  if (/mar-|Fig\.|Tabla|acordeón|ficha|A p\./.test(f) || !tipos.size) tipos.add('ficha');
+  let pags = []; const m = /A p\. ([\d\-, ]+\d)/.exec(f);
+  if (m) pags = [m[1]]; else for (const [id, p] of Object.entries(PAGINAS)) if (new RegExp(id + '(?![\\w-])').test(f)) pags.push(p);
+  pags = [...new Set(pags)];
+  return ['ficha', 'fisiología general', 'ilustrativo'].filter(t => tipos.has(t)).join(' · ') + (pags.length ? ' · p. ' + pags.join(', ') : '');
+}
+const atr = t => String(t).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+const chip = f => f ? `<span class="org${/ilustrativ/.test(f) && !/mar-|Fig|Tabla/.test(f) ? ' ilu' : ''}" data-ref="${atr(f)}">${chipTxt(f)}</span>` : '';
 function decir(html, fuente) {
-  const ilu = /ilustrativo|sin cifra|opinión/.test(fuente || '');
-  const nuevo = `${html} ${fuente ? `<span class="org${ilu ? ' ilu' : ''}">${fuente}</span>` : ''}`;
+  const nuevo = `${html} ${chip(fuente)}`;
   if (nuevo === fraseActual) return; fraseActual = nuevo;
   fraseEl.innerHTML = nuevo;
   $('lamina').setAttribute('aria-label', fraseEl.textContent);
@@ -1200,14 +1299,14 @@ function aplicar(nuevo, op = {}) {
 const cambiar = (fn, op) => { const e = copia(estado); fn(e); aplicar(e, op); };
 function setOcultos(arr, repintar = true) { ocultos.clear(); (arr || []).forEach(k => ocultos.add(k)); if (repintar) { pintarLamina(); pintarTablero(); } }
 
-const ORG = (t, ilu) => `<span class="o">${t}</span>`;
+const ORG = t => `<span class="o">${chipTxt(t)}</span>`;
 function pintarTablero() {
   const e = estado, c = [];
   const celda = (k, clave, valor, origen, tono = '') => c.push(`<div class="celda"><span class="k">${k}</span><b class="${ocultos.has(clave) ? '' : tono}">${Q(clave, valor)}</b>${ORG(origen)}</div>`);
   if (e.estacion === 'estomago') {
     const R = D.riesgo;
-    celda('Riesgo · Tabla 4.2', 'riesgo', `${R.nombre} · ${R.pct}`, 'ficha · #mar-ulcera-calc', R.profilaxis ? 'alarma' : 'bien');
-    celda('pH de la luz', 'ph', D.ph + (D.phSube ? ' ↑' : ''), D.phSube ? 'ficha · sube: sin cifra' : 'ficha · mar-profilaxis-uso', D.supresor ? 'alarma' : '');
+    celda('Riesgo · Tabla 4.2', 'riesgo', `${R.nombre} · ${R.pct}`, 'ficha · mar-tabla-4-2', R.profilaxis ? 'alarma' : 'bien');
+    celda('pH de la luz', 'ph', D.ph + (D.phSube ? ' ↑' : ''), D.phSube ? 'ficha · mar-enteral-protege' : 'ficha · mar-profilaxis-uso', D.supresor ? 'alarma' : '');
     celda('<i>Salmonella</i> · Fig. 4.3', 'salmonella', { muere: 'muere en 1 h', crece: 'crece', 'sin cifra': 'sin cifra' }[D.salmonella], 'ficha · mar-fig-4-3', D.salmonella === 'crece' ? 'alarma' : D.salmonella === 'muere' ? 'bien' : '');
   } else if (e.estacion === 'intestino') {
     celda('Flora residente', 'flora', D.disbiosis ? 'disbiosis' : 'en todos los huecos', 'ficha · mar-disbiosis', D.disbiosis ? 'alarma' : 'bien');
@@ -1215,7 +1314,7 @@ function pintarTablero() {
     else celda('Barrera', 'barrera', D.translocacion ? 'rota: translocación' : 'íntegra', 'ficha · mar-disbiosis · mar-motor-fmo', D.translocacion ? 'alarma' : 'bien');
     celda('Motor del FMO', 'motor', ['quieto', 'gira', 'a toda velocidad'][D.motor], 'ficha · mar-motor-fmo · velocidad ilustrativa', D.motor ? 'alarma' : '');
   } else {
-    celda('BGN en la boca · Fig. 4.4', 'bgn', '~' + D.bgnPct + ' %', 'ficha · mar-fig-4-4 (aprox.)', D.bgnPct > 10 ? 'alarma' : 'bien');
+    celda('BGN en la boca · Fig. 4.4', 'bgn', (D.bgnPct === 2 ? '~2-3' : '~' + D.bgnPct) + ' %', 'ficha · mar-fig-4-4 (aprox.)', D.bgnPct > 10 ? 'alarma' : 'bien');
     celda('Cerraduras', 'cerraduras', D.cerradurasCambiadas ? 'cambiadas' : 'normales', 'ficha · mar-colonizacion-orofaringe', D.cerradurasCambiadas ? 'alarma' : 'bien');
     celda('Aspirar el 0,13 %', 'aspirar', '≈ 10⁶ microbios', 'ficha · mar-saliva');
   }
@@ -1250,21 +1349,21 @@ function fraseRiesgo() {
 function fraseDe(v, n) {
   if (v.estacion !== n.estacion) return fraseEstacion(n.estacion);
   if (v.paciente !== n.paciente) {
-    if (n.estacion === 'boca') return [`${{ sano: 'Sano', planta: 'Paciente de planta', uci: 'Paciente de UCI' }[n.paciente]}: <span class="hl-a">~${D.bgnPct} %</span> lleva bacilos gramnegativos en la boca. <span class="hl-azul">No depende del entorno, sino de la enfermedad</span>: los empleados del hospital, ~2 %.`, 'ficha · mar-fig-4-4 (lectura aproximada) · mar-colonizacion-orofaringe'];
+    if (n.estacion === 'boca') return [`${{ sano: 'Sano', planta: 'Paciente de planta', uci: 'Paciente de UCI' }[n.paciente]}: <span class="hl-a">~${D.bgnPct} %</span> lleva bacilos gramnegativos en la boca. <span class="hl-azul">No depende del entorno, sino de la enfermedad</span>: los empleados del hospital, ~2-3 %.`, 'ficha · mar-fig-4-4 (lectura aproximada) · mar-colonizacion-orofaringe'];
     return [`${{ sano: 'Sano', planta: 'Paciente de planta', uci: 'Paciente de UCI' }[n.paciente]}. ${n.estacion === 'estomago' ? fraseRiesgo() : 'En la boca, cambia la colonización (Fig. 4.4).'}`, 'ficha · mar-tabla-4-2 · mar-fig-4-4'];
   }
   if (v.riego !== n.riego) {
     if (n.estacion === 'intestino') return n.riego === 'normal' ? ['Riego normal: la barrera aguanta.', 'ficha · mar-motor-fmo'] : ['Hipoperfusión esplácnica: <span class="hl-r">rompe la barrera sin necesidad de antibiótico</span>, pasan microbios o mediadores y la rueda del FMO arranca.', 'ficha · mar-motor-fmo (A p. 60)'];
     if (n.riego === 'normal') return ['Riego normal: <span class="hl-v">aunque el pH esté en 1-2, no aparece erosión</span>. El moco con bicarbonato y el flujo bastan.', 'ficha · mar-ulcera-patogenia (A p. 67)'];
     if (n.riego === 'oculta') return ['<span class="hl-r">Sin hipotensión también puede faltar riego</span>: hipoperfusión gástrica oculta, sobre todo con VM. El moco adelgaza y aparece una erosión que rezuma (en el 75-100 % en las primeras 24 h).', 'ficha · mar-ulcera-patogenia · mar-ulcera-frecuencia (A p. 67)'];
-    return [`Shock: el moco casi desaparece y la erosión se hace <span class="hl-r">úlcera hasta la submucosa, que sangra</span>${D.supresor || n.enteral ? ' (más pequeña, pero aparece)' : ''}. Para el autor, la causa es la hipoperfusión, no el ácido.`, 'ficha · mar-ulcera-patogenia · mar-acidofobia (A p. 67, 72-73)'];
+    return [`Shock: el moco casi desaparece y la erosión se hace <span class="hl-r">úlcera hasta la submucosa, que sangra</span>${D.supresor || n.enteral ? ' (sigue apareciendo; su tamaño en la lámina es ilustrativo)' : ''}. Para el autor, la causa es la hipoperfusión, no el ácido.`, 'ficha · mar-ulcera-patogenia · mar-acidofobia (A p. 67, 72-73)'];
   }
   if (v.vm !== n.vm) return [`${n.vm ? 'VM más de 24 h.' : 'Sin ventilación mecánica.'} ${fraseRiesgo()}`, 'ficha · mar-tabla-4-2 (A p. 68)'];
   if (v.proteccion !== n.proteccion) {
     const p = n.proteccion;
     if (p === 'nada') return ['Sin protección: pH 1-2, <span class="hl-v">la <i>Salmonella</i> muere en 1 hora</span>.', 'ficha · mar-fig-4-3 (A p. 61-62)'];
     if (p === 'famotidina') return [`Famotidina 20 mg cada 12 h (anti-H2): menos ácido; objetivo pH ≥4, casi nunca se mide.${n.clcr50 ? ' <span class="hl-r">Con ClCr <50, la mitad de la dosis</span>: puede ser neurotóxica.' : ''} Más neumonía y <i>C. difficile</i>, menos que con IBP.`, 'ficha · mar-tabla-4-3 · mar-profilaxis-uso (A p. 68-71)'];
-    if (p === 'pantoprazol') return [`Pantoprazol 40 mg IV al día: inhibición completa del ácido. Las cruces H⁺ desaparecen y <span class="hl-r">la <i>Salmonella</i> deja de morir</span>${D.lesion.nivel ? '; la lesión sigue, más pequeña' : ''}. Mira la balanza: <span class="hl-p">sin beneficio neto</span>.`, 'ficha · mar-fig-4-3 · Fig. 4.6 (A p. 69-71)'];
+    if (p === 'pantoprazol') return [`Pantoprazol 40 mg IV al día: inhibición completa del ácido. Las cruces H⁺ desaparecen y <span class="hl-r">la <i>Salmonella</i> deja de morir</span>${D.lesion.nivel ? '; la lesión sigue (el libro solo da el efecto sobre el sangrado: 4,2 → 2,5 %)' : ''}. Mira la balanza: <span class="hl-p">sin beneficio neto</span>.`, 'ficha · mar-fig-4-3 · Fig. 4.6 (A p. 69-71)'];
     return ['Sucralfato 1 g cada 6 h: <span class="hl-a">una capa sobre la mucosa dañada; la acidez sigue</span> (lo más deseable). Reduce el sangrado y hay menos neumonía que con los supresores.', 'ficha · acordeón «Sucralfato» (A p. 71)'];
   }
   if (v.enteral !== n.enteral) {
@@ -1282,12 +1381,12 @@ function fraseDe(v, n) {
     return [`SDD, día ${n.dia}: boca, tubo y cefuroxima IV los 4 primeros días. <span class="hl-a">Descontaminar el intestino tarda 5-7 días</span>; la flora anaerobia se respeta.${n.mr ? ' <span class="hl-r">Con multirresistentes, pierde el efecto.</span>' : ''}`, 'ficha · mar-sdd (A p. 65-66) · ritmo ilustrativo'];
   }
   if (v.descontaminacion !== n.descontaminacion) {
-    if (n.descontaminacion === 'clorhexidina') return ['Clorhexidina al 0,12 % cada 6 h: <span class="hl-r">mueren sobre todo los cocos (grampositivos); los bacilos gramnegativos siguen pegados</span>. Las guías de NAV retiraron su recomendación.', 'ficha · mar-tabla-4-1 · acordeón «Clorhexidina oral» (A p. 63-64)'];
+    if (n.descontaminacion === 'clorhexidina') return ['Clorhexidina al 0,12 % cada 6 h: <span class="hl-r">mueren sobre todo los grampositivos (los cocos del dibujo); los bacilos gramnegativos siguen pegados</span>. Las guías de NAV retiraron su recomendación.', 'ficha · mar-tabla-4-1 · acordeón «Clorhexidina oral» (A p. 63-64)'];
     if (n.descontaminacion === 'sod') return ['SOD (gentamicina, colistina y vancomicina al 2 % cada 6 h): <span class="hl-v">mueren estafilococos, bacilos gramnegativos y <i>Candida</i></span>; quedan los anaerobios, la flora normal.', 'ficha · mar-tabla-4-1 · acordeón «SOD» (A p. 63-64)'];
     return ['Sin descontaminación oral.', ''];
   }
   if (v.gota !== n.gota && n.gota) return ['Aspirar el 0,13 % de 750 mL (≈1 mL) <span class="hl-r">mete un millón de microbios en la vía aérea</span>. En el sano no importa; en el grave, con la boca llena de gramnegativos, sí.', 'ficha · mar-saliva (A p. 62)'];
-  if (v.mr !== n.mr) return n.mr ? ['Gramnegativos multirresistentes en la unidad: <span class="hl-r">la SDD pierde su efecto</span>; no es apropiada en UCI con resistencias problemáticas.', 'ficha · mar-sdd (A p. 66)'] : ['Sin multirresistentes en la unidad.', ''];
+  if (v.mr !== n.mr) return n.mr ? ['Gramnegativos multirresistentes en la unidad (resistencias problemáticas): <span class="hl-r">la SDD pierde su efecto</span>; no es apropiada en UCI con resistencias problemáticas.', 'ficha · mar-sdd (A p. 66)'] : ['Sin multirresistentes en la unidad.', ''];
   return fraseEstacion(n.estacion);
 }
 
@@ -1307,42 +1406,17 @@ $('lamina').addEventListener('click', ev => {
   if (k.startsWith('est:')) { const est = k.slice(4); if (alTocar) { alTocar(est); return; } if (est !== estado.estacion) { cambiar(s => { s.estacion = est; }); elegirPestana(est); } return; }
   if (TOQUES[k]) decir(...TOQUES[k]());
 });
-const VENTANAS = {
-  cabeza: ['La cabeza lleva a <b>La inmersión</b> (dolor y sedación): otra maqueta de «La cama 7».', 'diseno-sin-modelo §3'],
-  pierna: ['La pierna lleva a <b>El telar de la trombina</b> (tromboprofilaxis): otra maqueta de «La cama 7».', 'diseno-sin-modelo §2'],
-  ventilador: ['El respirador: en la cama 7 completa, la VM es una orden de la hoja (pestaña Paciente).', ''],
-  monitor: ['El monitor llevaría al capilar y oxígeno y a la circulación viva (después).', 'diseno-sin-modelo §4'],
-  bolsa: ['La bolsa de suero llevaría al río y mar (después).', 'diseno-sin-modelo §4'],
+const APARATOS = {
+  respirador: ['El respirador: en esta escena, la VM es una orden de la hoja (pestaña Paciente).', ''],
+  monitor: ['El monitor de la cama 7 llevará al capilar y oxígeno y a la circulación viva.', ''],
+  bolsa: ['La bolsa de suero de la cama 7 llevará al río y mar.', ''],
 };
-$('cama').addEventListener('click', ev => { if ($('cama').classList.contains('compacta')) { ev.stopPropagation(); entrarCama(); } }, true);
-$('cama-svg').addEventListener('click', ev => {
-  const v = ev.target.closest('[data-ventana]')?.dataset.ventana || ev.target.closest('[data-aparato]')?.dataset.aparato;
-  if (!v) return;
-  if (v === 'vientre') { entrarCama(); return; }
-  decir(...VENTANAS[v]);
-});
-$('cama-svg').addEventListener('keydown', ev => { if ((ev.key === 'Enter' || ev.key === ' ') && ev.target.closest('[data-ventana]')) { ev.preventDefault(); ev.target.dispatchEvent(new MouseEvent('click', { bubbles: true })); } });
-
-/* La entrada: de la cama al vientre */
-let entrada = null;
-function compactar() {
-  const c = $('cama'); c.classList.remove('grande'); c.classList.add('compacta');
-  $('cama-pie').innerHTML = '<b>Cama 7 · el vientre</b><br>Toca la cama para volver a entrar';
-}
+document.addEventListener('c7-aparato', ev => { if (APARATOS[ev.detail]) decir(...APARATOS[ev.detail]); });
+document.addEventListener('c7-entrada', () => { revelar(); decir(...fraseEstacion(estado.estacion)); });
 function revelar() {
   const esc = $('escena');
   if (REDUCIR || !window.Motion) return;
   window.Motion.animate(0, 1, { duration: 0.8, ease: 'easeOut', onUpdate: v => { esc.style.clipPath = `circle(${n2(8 + v * 120)}% at 58% 30%)`; } }).finished.then(() => { esc.style.clipPath = ''; });
-}
-function entrarCama() {
-  if (entrada) clearTimeout(entrada); entrada = null;
-  const c = $('cama'), svg = $('cama-svg');
-  if (c.classList.contains('compacta')) { revelar(); decir(...fraseEstacion(estado.estacion)); return; }
-  if (REDUCIR || !window.Motion) { compactar(); return; }
-  svg.style.transformOrigin = '46.7% 42.7%';
-  window.Motion.animate(svg, { transform: ['scale(1)', 'scale(3.6)'], opacity: [1, 0] }, { duration: 0.7, easing: 'ease-in' }).finished.then(() => {
-    svg.style.transform = ''; svg.style.opacity = ''; compactar(); revelar(); decir(...fraseEstacion(estado.estacion));
-  });
 }
 
 /* ---------- Dock: la hoja de órdenes ---------- */
@@ -1431,7 +1505,7 @@ function setModo(m) {
   $('vista-explorar').hidden = m !== 'explorar'; $('vista-conceptos').hidden = m !== 'conceptos'; $('vista-preguntas').hidden = m !== 'preguntas';
   $('dock-explorar').hidden = m !== 'explorar'; $('dock-estudio').hidden = m === 'explorar';
   alTocar = null; anillo(null); setOcultos([], false);
-  if (m !== 'explorar' && entrada) { clearTimeout(entrada); entrada = null; compactar(); }
+  if (m !== 'explorar') window.Cama7?.compactar();
   if (m === 'conceptos') Estudio.concepto(Estudio.c);
   else if (m === 'preguntas') Estudio.inicioPreguntas();
   else { aplicar(estado, { frase: false }); decir(...fraseEstacion(estado.estacion)); }
@@ -1462,7 +1536,7 @@ function barajar(ops, id) {
   for (let i = a.length - 1; i > 0; i--) { const j = (h >>> (i * 3)) % (i + 1); [a[i], a[j]] = [a[j], a[i]]; }
   return a;
 }
-function verEnTexto(fuente) { return `<p class="fuente-p">Ver en el texto: ${fuente.split(' · ').map(f => `<span class="org">${f}</span>`).join(' ')}</p>`; }
+function verEnTexto(fuente) { return `<p class="fuente-p">Ver en el texto: ${chip(fuente)}</p>`; }
 function ponerModelo(q) {
   setOcultos(q.ocultar || (q.tocar && q.tocar.ocultar) || [], false);
   aplicar(estadoDe(q.estado), { frase: false });
@@ -1561,7 +1635,7 @@ function pintarPregunta(cont, q, { cabecera = '', repaso = null, alFinal }) {
   }
   cont.onclick = e => {
     const a = e.target.closest('[data-accion]')?.dataset.accion;
-    if (a === 'calc') { e.target.closest('button').textContent = `🧮 En la app abriría la calculadora de la ficha (${q.calculadora.ids}) y volvería aquí`; return; }
+    if (a === 'calc') { e.target.closest('button').textContent = `🧮 En la app abriría la calculadora «${q.calculadora.nombre}» de la ficha y volvería aquí`; return; }
     if (a === 'comprobar') {
       const p = cont.querySelector('#pista');
       if (q.tocar.comprobar(estado)) { p.hidden = true; e.target.closest('.fila').remove(); finComprobar(`<span class="ok">✓ Comprobado: ${q.tocar.confirma}</span>`); return; }
@@ -1819,9 +1893,9 @@ const CONCEPTOS = [
     mira: 'con el riego normal, ni con pH 1-2 hay erosión. Con la hipoperfusión oculta, erosión; con shock, úlcera hasta la submucosa que sangra.',
     fuente: 'mar-ulcera-estres#mar-ulcera-patogenia · #mar-acidofobia (A p. 67, 72-73)' },
   { titulo: 'Quitar el ácido cuesta', estado: { estacion: 'estomago', paciente: 'uci', vm: true, riego: 'shock' }, mirar: 'lesion',
-    texto: 'Con IBP la úlcera <span class="hl-a">aparece igual, más pequeña</span>: la causa no era el ácido. Y quitarlo tiene precio: <span class="hl-r"><i>C. difficile</i> ×3 y más neumonía</span>. La balanza de la Fig. 4.6 no se inclina.',
+    texto: 'Con IBP la úlcera <span class="hl-a">sigue apareciendo</span>: la causa no era el ácido. El libro solo da su efecto sobre el sangrado (4,2 → 2,5 %); el tamaño que dibuja la lámina es ilustrativo. Y quitarlo tiene precio: <span class="hl-r"><i>C. difficile</i> ×3 y más neumonía</span>. La balanza de la Fig. 4.6 no se inclina.',
     hacer: 'pon un supresor.', acciones: [{ t: 'Pantoprazol', e: { proteccion: 'pantoprazol' }, mirar: 'balanza' }, { t: 'Famotidina', e: { proteccion: 'famotidina' } }, { t: 'Sucralfato', e: { proteccion: 'sucralfato' }, mirar: 'lesion' }],
-    mira: 'la balanza: 4,2 → 2,5 % de sangrado, pero 21,9 % frente a 22,6 % al sumar los riesgos. El sucralfato tapa la lesión y deja el ácido.',
+    mira: 'la úlcera sigue; la balanza: 4,2 → 2,5 % de sangrado, pero 21,9 % frente a 22,6 % al sumar los riesgos. El sucralfato tapa la lesión y deja el ácido.',
     fuente: 'mar-ulcera-estres#mar-profilaxis-uso · Fig. 4.6 · acordeón «Sucralfato» (A p. 68-71)' },
   { titulo: 'La enteral protege', estado: { estacion: 'estomago', paciente: 'uci', vm: true, riego: 'oculta' }, mirar: 'escalera',
     texto: 'La nutrición enteral es <span class="hl-v">trófica y sube el pH</span>. En el ventilado cambia el escalón: <span class="hl-r">sin enteral, máximo (8-10 %)</span>; con enteral, moderado (2-4 %), sin profilaxis.',
@@ -1831,7 +1905,7 @@ const CONCEPTOS = [
   { titulo: 'La boca del crítico', estado: { estacion: 'boca', paciente: 'sano' }, mirar: 'cerraduras',
     texto: 'En el grave, las proteínas de adhesión del epitelio <span class="hl-r">cambian de forma</span> y los bacilos gramnegativos se pegan. <span class="hl-azul">Lo que decide no es que el germen esté, sino que pueda pegarse</span>. Aspirar el 0,13 % de la saliva mete un millón de microbios.',
     hacer: 'cambia de paciente y aspira.', acciones: [{ t: 'Sano', e: {} }, { t: 'Planta', e: { paciente: 'planta' } }, { t: 'UCI', e: { paciente: 'uci' } }, { t: 'UCI y aspirar', e: { paciente: 'uci', gota: 1 }, mirar: 'traquea' }],
-    mira: 'las cerraduras: en ángulo en el sano, redondas en el grave. ~2, ~37 y ~70 % (Fig. 4.4, aproximada).',
+    mira: 'las cerraduras: en ángulo en el sano, redondas en el grave. ~2-3, ~37 y ~70 % (Fig. 4.4, aproximada).',
     fuente: 'mar-microbioma#mar-saliva · #mar-colonizacion-orofaringe · #mar-fig-4-4 (A p. 62-63)' },
   { titulo: 'Descontaminar', estado: { estacion: 'boca', paciente: 'uci', vm: true }, mirar: 'cerraduras',
     texto: 'La clorhexidina actúa sobre todo frente a <span class="hl-r">grampositivos</span>; la SOD y la SDD, frente a estafilococos, bacilos gramnegativos y <i>Candida</i>, <span class="hl-v">respetando a los anaerobios</span>. La SDD: −67 % de bacteriemias por gramnegativos, salvo con multirresistentes.',
@@ -1879,13 +1953,13 @@ const PREGUNTAS = [
     tocar: { mandos: ['paciente'], mirar: 'cerraduras', ocultar: ['bgn', 'cerraduras'], instruccion: 'pon el paciente de UCI y mira las cerraduras.', comprobar: e => e.paciente === 'uci', pista: 'Pulsa «UCI».', bueno: { paciente: 'uci' }, confirma: '~70 %: las cerraduras cambian de forma y 7 de 10 llevan un bacilo pegado.' },
     enunciado: 'Un paciente de UCI y un celador del mismo hospital. ¿Quién lleva bacilos gramnegativos en la boca, y por qué?',
     opciones: [
-      { t: 'Los dos por igual: lo decide el ambiente del hospital', ok: false, porque: 'Los empleados del hospital, ~2 %, como los sanos. Si culpas al ambiente, no ves que es la enfermedad del paciente la que deja pegarse a los bacilos que luego aspira.' },
+      { t: 'Los dos por igual: lo decide el ambiente del hospital', ok: false, porque: 'Los empleados del hospital, ~2-3 %, como los sanos. Si culpas al ambiente, no ves que es la enfermedad del paciente la que deja pegarse a los bacilos que luego aspira.' },
       { t: 'El paciente: la enfermedad cambia las cerraduras del epitelio', ok: true },
       { t: 'El celador, que toca a muchos pacientes', ok: false, porque: 'Lleva ~2 %, como un sano. El paciente de UCI, ~70 %: es a él a quien amenaza la neumonía por aspiración.' }],
     explicacion: 'La colonización <span class="hl-azul">no depende del entorno sino de la enfermedad</span> (Fig. 4.4): las proteínas de adhesión cambian de forma y pasan a unir patógenos. Lo mismo ocurre en el intestino y la vejiga.' },
   { id: 'mu-g10', grupo: 'guia', corto: 'clorhexidina', tipo: 'test', fuente: 'mar-microbioma#mar-tabla-4-1 · acordeones «Clorhexidina oral» y «SOD» (A p. 63-64)',
     estado: { estacion: 'boca', paciente: 'uci', vm: true },
-    tocar: { mandos: ['descontaminacion'], mirar: 'cerraduras', instruccion: 'pon la clorhexidina; después compárala con la SOD.', comprobar: e => e.descontaminacion === 'clorhexidina', pista: 'Pulsa «Clorhexidina 0,12 %».', bueno: { descontaminacion: 'clorhexidina' }, confirma: 'mueren los cocos; los bacilos siguen pegados. Con la SOD caen también los bacilos.' },
+    tocar: { mandos: ['descontaminacion'], mirar: 'cerraduras', instruccion: 'pon la clorhexidina; después compárala con la SOD.', comprobar: e => e.descontaminacion === 'clorhexidina', pista: 'Pulsa «Clorhexidina 0,12 %».', bueno: { descontaminacion: 'clorhexidina' }, confirma: 'mueren sobre todo los grampositivos (los cocos); los bacilos siguen pegados. Con la SOD caen también los bacilos.' },
     enunciado: 'Le pones clorhexidina al 0,12 % cada 6 h. Predice qué microbios siguen pegados a sus cerraduras.',
     opciones: [
       { t: 'Ninguno: es un antiséptico de amplio espectro', ok: false, porque: 'Actúa sobre todo frente a grampositivos, y en la boca del crítico predominan los gramnegativos: el paciente seguiría colonizado. Y en 11 ensayos se asoció a más mortalidad.' },
@@ -1899,7 +1973,7 @@ const PREGUNTAS = [
       { t: 'Boca: gel de polimixina 2 %, tobramicina 2 % y anfotericina 2 % cada 6 h.', mal: false },
       { t: 'Tubo: 10 mL con polimixina E 100 mg, tobramicina 80 mg y anfotericina 500 mg por SNG cada 6 h.', mal: false },
       { t: 'Cefuroxima IV 1,5 g cada 8 h hasta el alta de la UCI.', mal: true, c: 'La cefuroxima, <span class="hl-r">los 4 primeros días</span>: protege mientras se descontamina el intestino (5-7 días). Lo que sigue hasta el alta es la pauta de boca y tubo.' },
-      { t: 'Está indicada en todo paciente que vaya a estar más de 72 h en la UCI.', mal: false },
+      { t: 'Está indicada en todo paciente que vaya a estar más de 72 h en una UCI sin resistencias problemáticas.', mal: false },
       { t: 'Respeta la flora anaerobia, la normal del tubo.', mal: false }],
     explicacion: 'Ningún estudio, ni uno de 5 años ni una experiencia de 16, ha mostrado más infecciones por resistentes: el miedo que la deja de lado no tiene base.' },
   { id: 'mu-e6', grupo: 'examen', corto: 'probióticos', tipo: 'test', fuente: 'mar-microbioma#mar-probioticos (A p. 66)',
@@ -1954,13 +2028,13 @@ const PREGUNTAS = [
     explicacion: 'Tabla 4.3: famotidina 20 mg cada 12 h, <span class="hl-r">−50 % con ClCr <50</span> (neurotóxica en la insuficiencia renal). Los IBP no necesitan ajuste.' },
   { id: 'mu-g7', grupo: 'guia', corto: 'IBP en el shock', tipo: 'test', fuente: 'mar-microbioma#mar-fig-4-3 · mar-ulcera-estres#mar-profilaxis-uso (A p. 61-62, 68-71)',
     estado: { ...EULC, riego: 'shock' },
-    tocar: { mandos: ['proteccion'], mirar: 'gauge', ocultar: ['ph', 'salmonella'], instruccion: 'pon pantoprazol y mira la Fig. 4.3, a la derecha, y la úlcera.', comprobar: e => e.proteccion === 'pantoprazol', pista: 'Pulsa «Pantoprazol».', bueno: { proteccion: 'pantoprazol' }, confirma: 'pH ≥4: la <i>Salmonella</i> crece; la úlcera sigue, más pequeña. Y abajo, la balanza.' },
+    tocar: { mandos: ['proteccion'], mirar: 'gauge', ocultar: ['ph', 'salmonella'], instruccion: 'pon pantoprazol y mira la Fig. 4.3, a la derecha, y la úlcera.', comprobar: e => e.proteccion === 'pantoprazol', pista: 'Pulsa «Pantoprazol».', bueno: { proteccion: 'pantoprazol' }, confirma: 'pH ≥4: la <i>Salmonella</i> crece; la úlcera sigue (su tamaño, ilustrativo). Y abajo, la balanza.' },
     enunciado: 'Ese paciente en shock tiene una úlcera. Pones pantoprazol. Predice qué verás en la lámina.',
     opciones: [
-      { t: 'La úlcera desaparece: sin ácido no hay lesión', ok: false, porque: 'La causa es la isquemia: la úlcera sigue, más pequeña. Si crees que el IBP la cura, dejas de corregir la perfusión del paciente.' },
-      { t: 'Nada: el IBP casi no cambia el pH del estómago', ok: false, porque: 'Bloquea de forma irreversible la bomba de H⁺: inhibición completa del ácido. Por eso al paciente le crecen patógenos en el estómago: <i>C. difficile</i> ×3 y más neumonía.' },
-      { t: 'Una úlcera más pequeña, y la <i>Salmonella</i> deja de morir', ok: true }],
-    explicacion: 'Fig. 4.3: a pH 4 la <i>Salmonella</i> crece; a pH 2 desaparece en 1 h. <span class="hl-r">Quitar el ácido abre la puerta</span>: más gastroenteritis, más neumonía y <i>C. difficile</i>. Y la úlcera no venía del ácido: <span class="hl-a">el efecto es pequeño</span>.' },
+      { t: 'La úlcera desaparece: sin ácido no hay lesión', ok: false, porque: 'La causa es la isquemia: la úlcera sigue. Si crees que el IBP la cura, dejas de corregir la perfusión del paciente.' },
+      { t: 'Nada: el IBP casi no cambia el pH del estómago', ok: false, porque: 'Bloquea de forma irreversible la bomba de H⁺: inhibición completa del ácido. Por eso el estómago deja de frenar a los patógenos que llegan: más gastroenteritis y neumonía, y <i>C. difficile</i> ×3 con IBP.' },
+      { t: 'La úlcera sigue, y la <i>Salmonella</i> deja de morir', ok: true }],
+    explicacion: 'Fig. 4.3: a pH 4 la <i>Salmonella</i> crece; a pH 2 desaparece en 1 h. <span class="hl-r">Quitar el ácido abre la puerta</span>: más gastroenteritis, más neumonía y <i>C. difficile</i>. Y la úlcera no venía del ácido: <span class="hl-a">el efecto es pequeño</span> (sangrado 4,2 → 2,5 %, Fig. 4.6).' },
   { id: 'mu-e3', grupo: 'examen', corto: 'Fig. 4.6', tipo: 'test', fuente: 'mar-ulcera-estres · acordeón «IBP» · Fig. 4.6 (A p. 69-71)',
     estado: { ...EULC, riego: 'oculta', proteccion: 'pantoprazol' }, ocultar: ['balanza'], mirar: 'balanza',
     enunciado: '3.298 pacientes de UCI de alto riesgo, pantoprazol 40 mg IV al día frente a placebo (Fig. 4.6). ¿Qué concluye la fuente?',
@@ -1977,7 +2051,7 @@ const PREGUNTAS = [
 ];
 
 const CASOS = [
-  { id: 'E1', titulo: 'Ramón, 70 años: ¿protección gástrica a este?', corto: 'Caso E1 · Ramón', sub: 'neumonía, intubado',
+  { id: 'E1', titulo: 'Ramón, 70 años: ¿protección gástrica a este?', corto: 'Ramón · ¿protección gástrica?', sub: 'neumonía, intubado',
     paciente: { Edad: '70 años', Motivo: 'Neumonía; intubado', 'ClCr basal': '40 mL/min (ERC estable, sin FRA)' },
     pasos: [
       { momento: 'Día 1', datos: { VM: 'prevista más de 24 h', Enteral: 'no', Fármacos: 'metilprednisolona a dosis altas', 'Sepsis / shock': 'no / no', Coagulación: 'normal' }, nuevo: ['VM', 'Enteral', 'Fármacos', 'Sepsis / shock', 'Coagulación'],
@@ -2028,16 +2102,16 @@ const CASOS = [
     lleva: ['La úlcera de estrés la desencadena la isquemia de la mucosa, no el ácido: la profilaxis tiene un efecto pequeño.',
       'La enteral completa es la mejor protección: con un solo moderado, se desprescribe el IBP.',
       'Los corticoides no son motivo; la famotidina, a mitad de dosis con ClCr <50.'],
-    volver: { nombre: 'Lesión mucosa por estrés', ficha: 'mar-ulcera-estres (Marino cap. 4)', estado: { ...EULC, riego: 'oculta', enteral: true, corticoides: true, dia: 5 } } },
+    volver: { nombre: 'Lesión mucosa por estrés', ficha: '«Lesión mucosa por estrés» (Marino, cap. 4)', estado: { ...EULC, riego: 'oculta', enteral: true, corticoides: true, dia: 5 } } },
 
-  { id: 'E5', titulo: 'Lucía, 55 años: ¿SDD a esta?', corto: 'Caso E5 · Lucía', sub: 'posoperatorio, ingreso largo',
+  { id: 'E5', titulo: 'Lucía, 55 años: ¿SDD a esta?', corto: 'Lucía · ¿descontaminar?', sub: 'posoperatorio, ingreso largo',
     paciente: { Edad: '55 años', Motivo: 'Posoperatorio de cirugía abdominal; ventilada', Previsión: 'UCI más de 72 h', Unidad: 'sin resistencias problemáticas' },
     pasos: [
       { momento: 'Día 0 · ingreso', datos: {}, nuevo: [], estado: { estacion: 'intestino', paciente: 'uci', vm: true, dia: 0 }, mirar: 'tira',
         pregunta: { id: 'e5-1', tipo: 'test', fuente: 'mar-microbioma#mar-sdd (A p. 65-66)',
           enunciado: '¿Le pones SDD?',
           opciones: [
-            { t: 'No: la SDD dispara las resistencias', ok: false, porque: 'Ningún estudio lo ha mostrado (ni uno de 5 años ni una experiencia de 16). Le quitarías menos infecciones adquiridas en la UCI y menos mortalidad.' },
+            { t: 'No: la SDD dispara las resistencias', ok: false, porque: 'Ningún estudio lo ha mostrado (ni uno de 5 años ni una experiencia de 16). Le quitarías un beneficio probado: menos infecciones adquiridas en la UCI y menos mortalidad.' },
             { t: 'Solo si llega a tener una neumonía asociada al ventilador', ok: false, porque: 'Es profilaxis: se da para prevenir las infecciones adquiridas en la UCI, no para tratarlas. Esperar a la neumonía es perder lo que evita.' },
             { t: 'Sí: más de 72 h de UCI; hasta el alta', ok: true }],
           explicacion: 'Indicación: <span class="hl-a">todo paciente que vaya a estar más de 72 h</span> en la UCI, hasta el alta. Reduce neumonía, infección urinaria y bacteriemia, y <span class="hl-v">la mortalidad</span>.' } },
@@ -2063,10 +2137,10 @@ const CASOS = [
             { t: '−31 %: 1,4 es el 31 % de 4,5', ok: false, porque: 'El 31 % es lo que queda, no lo que baja. Leer así un ensayo te hace infravalorar lo que gana tu paciente.' },
             { t: '−67 %', ok: true }],
           explicacion: 'SOD: −33 %; SDD: <span class="hl-v">−67 %</span> (texto). También el % de pacientes con bacteriemia: 6,2 → 4 → 1,9 %.',
-          nota: '<b>Nota de fidelidad.</b> Con las barras (4,5 → 1,4) sale −69 %; el texto dice −67 %. Se muestra la del texto. <span class="org">A p. 66</span>' } },
-      { momento: 'Día 9 · el giro', datos: { Unidad: 'se aísla un BGN multirresistente' }, nuevo: ['Unidad'], estado: { estacion: 'intestino', paciente: 'uci', vm: true, sdd: true, dia: 9, mr: true }, mirar: 'vellosidad',
+          nota: '<b>Nota de fidelidad.</b> Con las barras (4,5 → 1,4) sale −69 %; el texto dice −67 %. Se muestra la del texto. <span class="org">ficha · p. 66</span>' } },
+      { momento: 'Día 9 · el giro', datos: { Unidad: 'brote de BGN multirresistentes: resistencias problemáticas' }, nuevo: ['Unidad'], estado: { estacion: 'intestino', paciente: 'uci', vm: true, sdd: true, dia: 9, mr: true }, mirar: 'vellosidad',
         pregunta: { id: 'e5-5', tipo: 'test', fuente: 'mar-microbioma#mar-sdd (A p. 66)',
-          enunciado: 'Se aísla en la unidad un bacilo gramnegativo multirresistente. ¿Qué cambia para la SDD?',
+          enunciado: 'La unidad tiene ya resistencias problemáticas: un brote de bacilos gramnegativos multirresistentes. ¿Qué cambia para la SDD?',
           opciones: [
             { t: 'Nada: la SDD también cubre a los multirresistentes', ok: false, porque: 'Con multirresistentes el efecto se pierde: la paciente seguiría expuesta a sus bacteriemias con una falsa seguridad.' },
             { t: 'Pierde su efecto: no es apropiada en esa UCI', ok: true },
@@ -2085,12 +2159,12 @@ const CASOS = [
     lleva: ['SDD a todo el que vaya a estar más de 72 h en una UCI sin resistencias problemáticas, hasta el alta.',
       'Boca, tubo y cefuroxima 4 días: el intestino tarda 5-7 días; bacteriemias por gramnegativos −67 %.',
       'Con multirresistentes, la SDD pierde el efecto; la clorhexidina, al 0,12 % y no al 2 %.'],
-    volver: { nombre: 'El intestino como origen de infección', ficha: 'mar-microbioma (#mar-sdd)', estado: { estacion: 'intestino', paciente: 'uci', vm: true, sdd: true, dia: 7 } } },
+    volver: { nombre: 'El intestino como origen de infección', ficha: '«El intestino como origen de infección», apartado SDD (Marino, cap. 4)', estado: { estacion: 'intestino', paciente: 'uci', vm: true, sdd: true, dia: 7 } } },
 
-  { id: 'E6', titulo: 'Andrés, 62 años: la neumonía del que tomaba IBP', corto: 'Caso E6 · Andrés', sub: 'ventilado, día 6',
+  { id: 'E6', titulo: 'Andrés, 62 años: la neumonía del que tomaba IBP', corto: 'Andrés · la neumonía y el IBP', sub: 'ventilado, día 6',
     paciente: { Edad: '62 años', Motivo: 'Ventilado (ingreso neurológico)', Enteral: 'completa desde el día 2', Fármacos: 'pantoprazol 40 mg IV desde el ingreso', 'Otros factores de la Tabla 4.2': 'ninguno' },
     hueco: 'El tratamiento de la neumonía no está en estas fichas: no se pregunta, se enlaza.',
-    extra: { texto: '🫁 La prevención de la NAV (Merino Neumología)', app: 'En la app: enlace cruzado a neumo-nav-prevencion' },
+    extra: { texto: '🫁 La prevención de la NAV (Merino Neumología)', app: 'En la app abriría «Prevención de la NAV» (Merino Neumología)' },
     pasos: [
       { momento: 'Día 6', datos: { Fiebre: 'sí', Secreciones: 'purulentas', Rx: 'infiltrado nuevo' }, nuevo: ['Fiebre', 'Secreciones', 'Rx'],
         estado: { ...EULC, enteral: true, proteccion: 'pantoprazol', dia: 6 }, mirar: 'gauge',
@@ -2109,7 +2183,7 @@ const CASOS = [
             { t: 'Lo que evita pesa más: el sangrado baja de 4,2 a 2,5 %', ok: false, porque: 'Es un efecto de solo un 1,7 % y se pierde al sumar neumonía, <i>C. difficile</i> e isquemia. Con esa lectura, seguiría expuesto a sus riesgos sin ganancia.' },
             { t: 'Se iguala: sin beneficio neto', ok: true },
             { t: 'Lo que añade pesa el doble: el total se duplica', ok: false, porque: 'No se duplica: 21,9 frente a 22,6 %. La conclusión es «sin beneficio neto», no «daño neto»: exagerarlo te haría negárselo también a quien la Tabla 4.2 sí se lo indica.' }],
-          explicacion: '21,9 % frente a 22,6 %: <span class="hl-p">sin beneficio neto</span>. Y Andrés ni siquiera era de alto riesgo.' } },
+          explicacion: '21,9 % frente a 22,6 %: <span class="hl-p">sin beneficio neto</span>. Y desde el día 2, con la enteral completa, Andrés ya ni siquiera era de alto riesgo.' } },
       { momento: 'Día 6', datos: {}, nuevo: [],
         estado: { estacion: 'boca', paciente: 'uci', vm: true, enteral: true, proteccion: 'pantoprazol', dia: 6 }, mirar: 'traquea',
         pregunta: { id: 'e6-3', tipo: 'test', fuente: 'mar-microbioma#mar-saliva (A p. 62)',
@@ -2124,15 +2198,15 @@ const CASOS = [
         estado: { estacion: 'boca', paciente: 'uci', vm: true, enteral: true, proteccion: 'pantoprazol', dia: 6, gota: 1 }, mirar: 'cerraduras',
         pregunta: { id: 'e6-4', tipo: 'destapa', fuente: 'mar-microbioma#mar-colonizacion-orofaringe · #mar-fig-4-4 · acordeón «Riesgos de suprimir el ácido» (A p. 63, 71)',
           enunciado: '¿Por qué su boca está llena de gramnegativos, y qué añade el IBP? Son tres cosas.',
-          puntos: ['La enfermedad <span class="hl-azul">cambia la forma de las proteínas de adhesión</span>: los bacilos se pegan. No es el entorno.', 'En la UCI, <span class="hl-r">~70 %</span> lleva bacilos gramnegativos en la boca; un sano, ~2 % (Fig. 4.4, aproximada).', 'Con el IBP, <span class="hl-r">el jugo gástrico también se coloniza</span> y se aspira.'],
+          puntos: ['La enfermedad <span class="hl-azul">cambia la forma de las proteínas de adhesión</span>: los bacilos se pegan. No es el entorno.', 'En la UCI, <span class="hl-r">~70 %</span> lleva bacilos gramnegativos en la boca; un sano, ~2-3 % (Fig. 4.4, aproximada).', 'Con el IBP, <span class="hl-r">el jugo gástrico también se coloniza</span> y se aspira.'],
           explicacion: 'En la tira, la flecha roja sube del estómago a la boca y a la tráquea.' } },
       { momento: 'Día 6 · el giro', datos: { Revisión: '¿tenía indicación?' }, nuevo: ['Revisión'],
         estado: { ...EULC, enteral: true, proteccion: 'pantoprazol', dia: 6 }, mirar: 'escalera',
         pregunta: { id: 'e6-5', tipo: 'test', fuente: 'mar-ulcera-estres#mar-tabla-4-2 · #mar-profilaxis-uso (A p. 68)', ocultar: ['riesgo'],
           enunciado: 'Revisas por qué llevaba pantoprazol. ¿Qué dice la Tabla 4.2 de su caso?',
           opciones: [
-            { t: 'Un solo moderado: no la necesitaba', ok: true },
-            { t: 'Riesgo máximo: la VM >24 h obliga a la profilaxis', ok: false, porque: 'Eso es la VM sin enteral. Con enteral completa desde el día 2 es un moderado: el IBP le sobraba y le ha expuesto a neumonía y <i>C. difficile</i>.' },
+            { t: 'Desde el día 2, un solo moderado: ya no la necesitaba', ok: true },
+            { t: 'Riesgo máximo: la VM >24 h obliga a la profilaxis', ok: false, porque: 'Eso es la VM sin enteral. Con enteral completa desde el día 2 es un moderado: desde entonces el IBP le sobraba y le ha expuesto a neumonía y <i>C. difficile</i>.' },
             { t: 'Riesgo bajo: la VM no cuenta si tiene enteral', ok: false, porque: 'Sí cuenta, como moderado (2-4 %); con un segundo moderado (sepsis, shock, FRA) subiría a alto y sí la necesitaría. Si no lo vigilas, se la quitarás a quien la necesite.' }],
           explicacion: 'Más del 80 % de los pacientes de UCI reciben profilaxis, y <span class="hl-r">unos 70 % de ellos no la necesitan</span>.' } },
       { momento: 'Día 7', datos: { Fármacos: 'pantoprazol retirado' }, nuevo: ['Fármacos'],
@@ -2144,12 +2218,12 @@ const CASOS = [
             { t: 'Lo cambio por famotidina: los anti-H2 no aumentan la neumonía.', mal: true, c: 'También la aumentan, aunque menos que los IBP; y no tiene indicación.' },
             { t: 'Con enteral completa y un solo moderado, no necesita otra profilaxis.', mal: false },
             { t: 'Clorhexidina oral para prevenir otra NAV: es lo que recomiendan las guías.', mal: true, c: 'Las guías internacionales de NAV <span class="hl-r">retiraron la recomendación</span>: el conjunto de 11 ensayos mostró más mortalidad.' }],
-          explicacion: 'Con el ácido de vuelta (pH 1-2), la <i>Salmonella</i> vuelve a morir en 1 h.' } },
+          explicacion: 'Sin el IBP, vuelve el ácido; con la enteral completa el pH sube algo, sin cifra en la ficha.' } },
     ],
     lleva: ['Suprimir el ácido deja crecer patógenos en el estómago: más neumonía (y <i>C. difficile</i> ×3 con IBP).',
       'El 0,13 % de la saliva lleva un millón de microbios a la vía aérea; en el grave, gramnegativos pegados por la enfermedad.',
       'Más del 80 % recibe profilaxis y el 70 % no la necesita: revisa la indicación y retírala.'],
-    volver: { nombre: 'Lesión mucosa por estrés', ficha: 'mar-ulcera-estres (Marino cap. 4)', estado: { ...EULC, riego: 'oculta', proteccion: 'pantoprazol' } } },
+    volver: { nombre: 'Lesión mucosa por estrés', ficha: '«Lesión mucosa por estrés» (Marino, cap. 4)', estado: { ...EULC, riego: 'oculta', proteccion: 'pantoprazol' } } },
 ];
 
 const PDF = p => `../../docs/marino-2024-acceso-vascular-practicas-caps1-4.pdf#page=${p}`;
@@ -2185,7 +2259,6 @@ function ajustarDock() {
   r.setProperty('--frase-h', (document.body.classList.contains('estudio') ? 0 : fraseEl.offsetHeight) + 'px');
 }
 (function arrancarTodo() {
-  pintarCama();
   const ley = [['h', 'H⁺: el ácido del estómago'], ['hco3', 'HCO₃⁻: el moco que protege (pH 7)'], ['rbc', 'hematíes'], ['cito', 'citoquinas: mediadores de la inflamación'], ['agua', 'saliva'],
     ['bacilo', 'bacilo gramnegativo (<i>Salmonella</i>, <i>Pseudomonas</i>)'], ['coco', 'coco grampositivo (estafilococos)'], ['huso', 'flora residente (anaerobios)'], ['linfocito', 'linfocito del GALT'], ['cadena', 'ácidos grasos de cadena corta']];
   $('leyenda').innerHTML = ley.map(([k, txt]) => `<li${ESPECIES[k].propuesta ? ' class="propuesta"' : ''}>${iconoParticula(k, 16)}<span>${txt}${ESPECIES[k].propuesta ? ' · <i>propuesta</i>' : ''}</span></li>`).join('')
@@ -2206,7 +2279,6 @@ function ajustarDock() {
   new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) arrancar(); }).observe($('escena'));
   document.addEventListener('visibilitychange', () => { if (!document.hidden) arrancar(); });
   window.addEventListener('resize', () => { if (anilloObj) anillo(anilloObj); });
-  if (REDUCIR) compactar(); else entrada = setTimeout(entrarCama, 1500);
   arrancar();
 })();
 </script>
