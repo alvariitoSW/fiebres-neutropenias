@@ -551,7 +551,11 @@ Decisión del profesor (bloque 1, `autonomo/bloques/b1/diseno-sin-modelo.md` §8
 se le añade una capa que lo lee y dos maniobras de volumen, para las fichas `mar-retorno-venoso`, `mar-respuesta-fluidos`,
 `mar-cateter-ap` y `mar-termodilucion` de Marino · Fundamentos.
 - `maniobras.mjs`: `epp(motor, on)` pasa 300 mL del volumen venoso sin tensión al que empuja (`p.vuVen −= 300`) y los
-  devuelve al quitarla; `bolo(motor, mL)` suma a `s.vven`. Tras cada maniobra el panel corre 10 s (ilustrativo).
+  devuelve al quitarla; `bolo(motor, mL)` suma a `s.vven`. Tras cada maniobra el panel corre 10 s (ilustrativo). Antes
+  de la primera (y al abrir el panel desde una ficha), el paciente se asienta hasta 40 s desde que empezó el escenario
+  (`faltaParaAsentar`; `aplicarEscenario` de `escenarios.mjs` apunta `p.tEscenario`): un shock se ve a los 10 s con el
+  barorreflejo aún compensando, y la EPP ahí medía también esa compensación (hemorragia +64 %, fallo del VI +15 %).
+  Asentado, y igual en la app que en las pruebas: hemorragia +20,2 %, fallo +2,7 %, dilatada +1,3 %.
 - `lecturas.mjs`: `guyton(motor)` (RV = (Pms − PAD)/Rv con Rv = (Pms − PVC)/GC del último latido), `curvaFuncion` de la
   tabla precalculada, `presionEnPunta(estado, 'ad'|'vd'|'ap'|'enclavado')`, `lecturaCateter` y `curvaTermo(gc, qRegT)`.
   **El enclavamiento lee `pvp` (venas pulmonares), no `pai`**: la ficha lo define como «la presión venosa del lado
@@ -566,7 +570,10 @@ se le añade una capa que lo lee y dos maniobras de volumen, para las fichas `ma
   `index.js`; el escenario se rehace limpio y el «← VOLVER» vuelve a la ficha (`modelosVivos.ecoPanel` +
   `core/volver-ficha.js`).
 - Pruebas: `pruebas/maniobras.test.mjs` (Tabla 8.1, catéter, EPP, bolo, Guyton, termodilución y paciente posible).
-  Pendiente: la PVC normal del motor es 5,02 (Tabla 8.1: 0-5).
+  Calibración del 20/10/2026: la PVC normal pasó de 5,02 a 4,19 mmHg (Tabla 8.1: 0-5). La meseta sistólica de la AD,
+  pegada a la presión venosa, inflaba la media: AD más distensible (a 0,13, b 0,080), VD algo más (a 1,9: su
+  telediastólica baja con la PVC, el catéter las lee iguales), vuVen 2300 y rRetorno 0,025 (Pms ~7). Más baja no cabía
+  sin sacar del rango la VD sistólica (20-25) o pasar de 40 mmHg las venas pulmonares en la hipertrofia con 1,5 L y EPP.
 
 ## Rendimiento medido
 

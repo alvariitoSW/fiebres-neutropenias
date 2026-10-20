@@ -5,15 +5,16 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { crearMotor } from '../motor.mjs';
-import { ESCENARIOS, ASENTAR_FORMA } from '../escenarios.mjs';
+import { ESCENARIOS, aplicarEscenario } from '../escenarios.mjs';
 import { evaluar } from '../referencias.mjs';
-import { epp, bolo, EPP_ML, SEGUNDOS_MANIOBRA } from '../maniobras.mjs';
+import { epp, bolo, EPP_ML, SEGUNDOS_MANIOBRA, ASENTAR_MANIOBRA, faltaParaAsentar } from '../maniobras.mjs';
 import { guyton, curvaFuncion, funcionEn, presionEnPunta, lecturaCateter, curvaTermo, areaNumerica, medidasTermo, LUGARES } from '../lecturas.mjs';
 import { CURVAS_GUYTON } from '../guyton-tablas.mjs';
 
-// El paciente de cada escenario, ya asentado (40 s tras aplicarlo: el barorreflejo también)
+// El paciente de cada escenario, ya asentado, en el mismo momento en que la app hace la primera maniobra: el escenario
+// como lo pone la app (aplicarEscenario) y lo que falta hasta 40 s desde que empezó (faltaParaAsentar)
 function paciente(k) {
-  const m = crearMotor(); m.correr(12); ESCENARIOS[k].aplicar(m); m.correr(k === 'normal' ? 28 : 40);
+  const m = crearMotor(); m.correr(12); aplicarEscenario(m, k); m.correr(faltaParaAsentar(m));
   return m;
 }
 const normal = paciente('normal'), u = normal.ultimo, o = normal.onda;
@@ -70,6 +71,18 @@ function conEpp(k) {
 }
 const eppHem = conEpp('hemorragia');
 test('3 · EPP en la hemorragia: el VS sube ≥10 %', () => assert.ok(eppHem.sube >= 0.10, `${(eppHem.sube * 100).toFixed(1)} %`));
+test('3 · EPP en la hemorragia: la subida es la de un respondedor humano, ≤25 % (orientativo, fisiología general)', () =>
+  assert.ok(eppHem.sube <= 0.25, `${(eppHem.sube * 100).toFixed(1)} %`));
+test('3 · la app y la prueba hacen la EPP en el mismo momento: el escenario recién puesto se asienta antes', () => {
+  for (const k of ['normal', 'hemorragia', 'dilatada']) {
+    const m = crearMotor(); m.correr(12); aplicarEscenario(m, k);
+    const falta = faltaParaAsentar(m);
+    assert.ok(Math.abs(m.s.t + falta - (k === 'normal' ? ASENTAR_MANIOBRA : 12 + ASENTAR_MANIOBRA)) < 1e-6, `${k}: asentado a los ${m.s.t + falta} s`);
+    m.correr(falta);
+    assert.equal(faltaParaAsentar(m), 0);
+    assert.equal(m.ultimo.vs, paciente(k).ultimo.vs, `${k}: el VS de partida de la app es el de la prueba`);
+  }
+});
 for (const k of ['fallo', 'dilatada']) {
   test(`3 · EPP en «${ESCENARIOS[k].nombre}»: el VS sube <10 %`, () => { const r = conEpp(k); assert.ok(r.sube < 0.10, `${(r.sube * 100).toFixed(1)} %`); });
 }
@@ -163,9 +176,9 @@ function humano(etiqueta, x) {
 }
 for (const k of Object.keys(ESCENARIOS)) {
   test(`7 · «${ESCENARIOS[k].nombre}»: presiones, volúmenes y GC de un humano con EPP y con bolos de 250 a 1.500 mL`, () => {
-    const m = crearMotor(); m.correr(12); ESCENARIOS[k].aplicar(m);
-    if (k !== 'normal') m.correr(ESCENARIOS[k].forma ? ASENTAR_FORMA : 10);   // como lo ve la app
-    humano('basal', m.ultimo);
+    const m = crearMotor(); m.correr(12); aplicarEscenario(m, k);   // como lo ve la app
+    humano('recién elegido', m.ultimo);
+    m.correr(faltaParaAsentar(m)); humano('basal (asentado, como antes de la primera maniobra)', m.ultimo);
     epp(m, true); m.correr(SEGUNDOS_MANIOBRA); humano('EPP', m.ultimo);
     epp(m, false); m.correr(SEGUNDOS_MANIOBRA); humano('EPP quitada', m.ultimo);
     bolo(m, 250); m.correr(SEGUNDOS_MANIOBRA); humano('bolo 250', m.ultimo);

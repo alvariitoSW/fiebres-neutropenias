@@ -34,3 +34,14 @@ export function bolo(motor, mL) {
 // escenario elegido. El VS de la EPP llega a su pico en unos segundos y luego el barorreflejo lo recorta (en el
 // cuerpo, «se disipa en minutos»). Ilustrativo.
 export const SEGUNDOS_MANIOBRA = 10;
+
+// La maniobra se hace sobre un VS basal estable (#mar-epp-pasos, paso 1). Un shock se ve a los 10 s de aplicarlo, con el
+// barorreflejo todavía compensando (la venoconstricción tarda ~10 s): si la EPP se hiciera ahí, el VS subiría además por
+// la propia compensación (en la hemorragia, +64 % en vez de +20 %; y en el fallo del VI, +15 %: «respondería»). Por eso, antes de
+// la primera maniobra se deja correr al paciente hasta 40 s desde que empezó el escenario (desde que arrancó el motor, en
+// el normal), el mismo tiempo que asienta una forma de enfermedad. Ilustrativo.
+export const ASENTAR_MANIOBRA = 40;
+/** Segundos que faltan para que el paciente esté asentado (0 si ya lo está). */
+export function faltaParaAsentar(motor) {
+  return Math.max(0, (motor.p.tEscenario ?? 0) + ASENTAR_MANIOBRA - motor.s.t);
+}

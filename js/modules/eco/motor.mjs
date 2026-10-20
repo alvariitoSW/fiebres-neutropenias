@@ -29,9 +29,16 @@ export const BASE = {
   fc: 70,
   // cámaras: Ees sistólica (mmHg/mL), V0, A y B de la curva diastólica
   vi: { ees: 3.1,  v0: 10, a: 1.8, b: 0.017 },
-  vd: { ees: 0.50, v0: 25, a: 2.0, b: 0.012 },
+  // VD: a 2,0 → 1,9 (calibración del 20/10/2026, con la AD, vuVen y rRetorno: su presión telediastólica tiene que bajar
+  // con la PVC, porque el catéter las lee iguales, #mar-termodilucion). Ilustrativo
+  vd: { ees: 0.50, v0: 25, a: 1.9, b: 0.012 },
   ai: { ees: 0.70, v0: 5,  a: 0.20, b: 0.090 },
-  ad: { ees: 0.70, v0: 5,  a: 0.15, b: 0.090 },
+  // AD: reservorio más distensible (a 0,15 → 0,13; b 0,090 → 0,080; calibración del 20/10/2026, ilustrativo). Con la
+  // curva de antes, la AD se llenaba en la sístole ventricular hasta la presión de las venas y el retorno se paraba: la
+  // meseta de ~6,5 mmHg de toda la sístole subía la PVC media a 5,02 (Tabla 8.1 de Marino: 0-5). Ahora, 4,19. Más baja
+  // no cabe sin sacar la VD sistólica de 20-25 (Ficha 5) o pasar de 40 mmHg las venas pulmonares en la hipertrofia con
+  // 1,5 L y EPP (pruebas/maniobras.test.mjs, paciente posible)
+  ad: { ees: 0.70, v0: 5,  a: 0.13, b: 0.080 },
   // tiempos de activación (s). Las sístoles escalan con √(periodo).
   pr: 0.16, tsAur: 0.10, tsVen: 0.45, fSubida: 0.62, qSubida: 0.55,
   // relajación del VI: multiplica la constante de tiempo de la cola exponencial de su activación (1 = normal; >1 =
@@ -54,7 +61,9 @@ export const BASE = {
   // pasado el orificio, el chorro frena y recupera 4v² · 2r(1 − r), con r = área ÷ área de la aorta (Baumgartner 2017)
   areaAortica: 0, dAorta: 3.0,
   // lecho sistémico (cAo/vuAo: aorta y grandes arterias, distal a la raíz)
-  cAo: 1.5, vuAo: 700, rSis: 1.05, cVen: 160, vuVen: 2210, rRetorno: 0.02,
+  // (calibración del 20/10/2026, con la AD y el VD: vuVen 2210 → 2300 y rRetorno 0,02 → 0,025, para que la Pms siga
+  // en ~7, el gradiente Pms − PVC del normal pase de ~2,5 a ~2,9 mmHg y el resto de cifras del normal no cambie. Ilustrativo)
+  cAo: 1.5, vuAo: 700, rSis: 1.05, cVen: 160, vuVen: 2300, rRetorno: 0.025,
   // aorta proximal: impedancia característica (mmHg·s/mL), inercia del tracto de salida (mmHg·s²/mL)
   // y volumen de reflujo que cierra la válvula (mL)
   zAo: 0.03, lAo: 0.00025, vCierreAo: 1.5,
