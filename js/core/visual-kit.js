@@ -460,8 +460,9 @@ export function montarVisual(tabId, receta) {
     if (!tab || tab.hasAttribute('data-visual')) return;
     const { texto, visual } = envolver(tab);
     let construido = false;
+    // También se construye cuando la pide el paso «Mira» de Estudiar (core/mayeutica.js), que se la lleva dentro.
     tab.addEventListener('vistachange', e => {
-        if (e.detail.vista === 'visual' && !construido) { construido = true; construir(tab, texto, visual, receta); }
+        if ((e.detail.vista === 'visual' || e.detail.mira) && !construido) { construido = true; construir(tab, texto, visual, receta); }
     });
     // Si el modo Visual global ya estaba activo, la ficha nace en Visual
     // antes de que exista este listener: construir ahora.

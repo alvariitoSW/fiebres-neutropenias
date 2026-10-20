@@ -7,11 +7,15 @@
 //    «destapa» y 3 «Lo que te llevas»; la buena es la opción más larga en ≤ ⅓ de los tests (y, por archivo de grupo, también la más corta en ≤ ⅓) y no siempre en el mismo
 //    sitio; ids únicos; toda `fuente` y todo «Para profundizar» apuntan a un id que existe.
 // 2. En el navegador, a 390 px y a 360 px (con «reducir movimiento»), en un contexto limpio: cada ficha con
-//    Mayéutica abre con Texto | Visual | Mayéutica (y una ficha sin ella sigue con Texto | Visual); la Mayéutica
-//    entera fallando algunas (sin las respuestas en el HTML, sin el botón del modelo antes de contestar), el repaso
-//    hasta vaciarlo, todos los casos hasta «Lo que te llevas», «Para profundizar» (copiado sin ids repetidos, con su
-//    «Ver en el texto»), «Compruébalo en el modelo» y su «← VOLVER» a la ficha, la ruta del bloque y lo guardado
-//    tras recargar. Mide el desborde lateral tras cada respuesta y cada paso. Sale con código 1 si algo falla.
+//    Mayéutica abre con Texto | Estudiar (y una ficha sin ella sigue con Texto | Visual); Estudiar enseña el resumen
+//    de los 5 pasos y abre en «Mira», con la vista Visual de la ficha dentro; «Juega» trae los botones a los modelos
+//    vivos (y en una ficha, el modelo y su «← VOLVER» al paso Juega); «Piensa» (la guía) y «Examínate» (el examen y
+//    el repaso hasta vaciarlo) enteros, fallando algunas (sin las respuestas en el HTML, sin el botón del modelo
+//    antes de contestar); «El caso», todos hasta «Lo que te llevas»; las marcas de hecho; «Para profundizar»
+//    (copiado sin ids repetidos, con su «Ver en el texto»); «Compruébalo en el modelo» y su «← VOLVER» a la ficha;
+//    un enlace «vista Visual» de una pregunta, que abre «Mira» con la vuelta a la pregunta; el botón «🖼️ Visual» de
+//    la cabecera, que abre Estudiar → Mira; la ruta del bloque y lo guardado tras recargar. Mide el desborde lateral
+//    tras cada respuesta y cada paso. Sale con código 1 si algo falla.
 import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
@@ -117,10 +121,10 @@ async function correr(ANCHO, REDUCIDO) {
     const fichaAbierta = tab => p.evaluate(t => { const e = document.getElementById(t); return e.classList.contains('active') && !!e.offsetParent; }, tab);
 
     await p.goto(BASE + 'index.html');   // contexto nuevo: localStorage vacío
-    await p.waitForFunction(() => document.getElementById('mar-cristaloides')?.querySelector(':scope > .vista-mayeutica'), null, { timeout: 15000 });
+    await p.waitForFunction(() => document.getElementById('mar-cristaloides')?.querySelector(':scope > .vista-estudiar'), null, { timeout: 15000 });
 
     // La ruta del bloque, al principio del cuaderno
-    await p.click('#btn-libros'); await p.click('#btn-marino-fund'); await p.waitForTimeout(300);
+    await p.click('#btn-libros'); await p.click('#btn-libro-marino'); await p.click('#btn-marino-fund'); await p.waitForTimeout(300);
     const ruta = await p.evaluate(() => { const d = document.getElementById('mar-ruta-bloque'); d.open = true; return { etapas: d.querySelectorAll('.ruta-etapas > li').length, fichas: d.querySelectorAll('[data-tab]').length, visible: !!d.offsetParent }; });
     ok(ruta.visible && ruta.etapas === 7 && ruta.fichas === 23, `la ruta del bloque: ${ruta.etapas} etapas y ${ruta.fichas} enlaces a fichas`);
     ok(await desborde() <= 0, 'sin desborde con la ruta abierta');
@@ -136,22 +140,49 @@ async function correr(ANCHO, REDUCIDO) {
         ok(await p.evaluate(t => [...document.querySelectorAll(`#${t} > .vista-toggle button`)].map(b => b.textContent).join('|'), sinMay) === 'Texto|Visual', `una ficha sin Mayéutica (${sinMay}) sigue con Texto | Visual`);
     }
 
-    let nDesbordeOk = 0;
+    let nDesbordeOk = 0, juegaProbado = false, enVisualProbado = false;
+    const PASO = (f, paso) => `#${f} .est-paso[data-paso="${paso}"]`;
+    const irPaso = (f, paso) => pulsar(`#${f} .est-ir[data-ir-paso="${paso}"]`);
+    const volverVisible = () => p.evaluate(() => [...document.querySelectorAll('button')].find(b => /VOLVER A LA FICHA/.test(b.textContent) && b.offsetParent)?.id || null);
     for (const [nf, ficha] of FICHAS.entries()) {
         const d = MAYEUTICA_B1[ficha];
-        const Z = `#${ficha} .may-zona`;
         await abrirFicha(ficha); await p.waitForTimeout(500);
         ok(await fichaAbierta(ficha), `${ficha}: la ficha abre`);
         const botones = await p.evaluate(f => [...document.querySelectorAll(`#${f} > .vista-toggle button`)].map(b => b.textContent).join('|'), ficha);
-        ok(botones === 'Texto|Visual|Mayéutica', `${ficha}: interruptor «${botones}»`);
-        ok(await p.evaluate(f => !document.querySelector(`#${f} .may-zona`), ficha), `${ficha}: la Mayéutica no se construye hasta pulsarla (no hay preguntas en el HTML)`);
-        await pulsar(`#${ficha} > .vista-toggle [data-vista="mayeutica"]`); await p.waitForTimeout(250);
-        const vis = await p.evaluate(f => { const t = document.getElementById(f); return { may: !!t.querySelector(':scope > .vista-mayeutica').offsetParent, texto: !!t.querySelector(':scope > .vista-texto').offsetParent }; }, ficha);
-        ok(vis.may && !vis.texto, `${ficha}: Mayéutica visible y el texto oculto`);
-        ok(await desborde() <= 0, `${ficha}: sin desborde en la portada de la Mayéutica`);
-        if (nf === 0) await foto('01-portada', `#${ficha} > .vista-toggle`);
+        ok(botones === 'Texto|Estudiar', `${ficha}: interruptor «${botones}»`);
+        ok(await p.evaluate(f => !document.querySelector(`#${f} .est-resumen, #${f} .may-zona`), ficha), `${ficha}: Estudiar no se construye hasta pulsarlo (no hay preguntas en el HTML)`);
+        if (nf === 0) await foto('00b-interruptor', `#${ficha} > .vista-toggle`);
+        await pulsar(`#${ficha} > .vista-toggle [data-vista="estudiar"]`); await p.waitForTimeout(400);
+        const vis = await p.evaluate(f => { const t = document.getElementById(f); return { est: !!t.querySelector(':scope > .vista-estudiar').offsetParent, texto: !!t.querySelector(':scope > .vista-texto').offsetParent }; }, ficha);
+        ok(vis.est && !vis.texto, `${ficha}: Estudiar visible y el texto oculto`);
+        // El resumen de los 5 pasos, y «Mira» abierto con la vista Visual de la ficha dentro
+        const res = await p.evaluate(f => [...document.querySelectorAll(`#${f} .est-ir`)].map(b => b.querySelector('b').textContent.replace(/ \(hecho\)$/, '')).join('|'), ficha);
+        const esperado = `1 · Mira|2 · Juega con el modelo|3 · Piensa|4 · Examínate|5 · ${d.casos.length > 1 ? 'Los casos' : 'El caso'}`;
+        ok(res === esperado, `${ficha}: el resumen con los 5 pasos («${res}»)`);
+        const mira = await p.evaluate(f => { const s = document.querySelector(`#${f} .est-paso[data-paso="mira"]`), v = s.querySelector('.est-lienzo > .vista-visual'); return { abierto: !s.hidden && !!s.offsetParent, solo: [...document.querySelectorAll(`#${f} .est-paso`)].filter(x => !x.hidden).length, visual: !!v && v.children.length > 0 && v.offsetHeight > 100, fuera: !!document.querySelector(`#${f} > .vista-visual`), marca: document.querySelector(`#${f} .est-ir[data-ir-paso="mira"] .est-marca`).textContent }; }, ficha);
+        ok(mira.abierto && mira.solo === 1 && mira.visual && !mira.fuera && mira.marca === '✓', `${ficha}: Estudiar abre en «Mira», con la vista Visual dentro y su marca (${JSON.stringify(mira)})`);
+        ok(await desborde() <= 0, `${ficha}: sin desborde en «Mira»`);
+        if (nf === 0) { await foto('01-resumen', `#${ficha} > .vista-toggle`); await foto('01b-mira', PASO(ficha, 'mira')); }
+        // «Juega con el modelo»
+        await irPaso(ficha, 'juega'); await p.waitForTimeout(200);
+        const juega = await p.evaluate(f => [...document.querySelectorAll(`#${f} .est-paso[data-paso="juega"] .est-juega`)].map(b => ({ modelo: Object.keys(b.dataset).some(k => /Viva|Vivo|ecoEscenario/.test(k)), texto: b.textContent.trim() })), ficha);
+        ok(juega.length > 0 && juega.every(j => j.modelo && j.texto.length > 3 && !/\b(mar|mr)-[a-z0-9-]+/.test(j.texto)), `${ficha}: «Juega» con ${juega.length} estado(s) de modelo vivo, cada uno con su qué mirar`);
+        ok(await desborde() <= 0, `${ficha}: sin desborde en «Juega»`);
+        if (nf === 0) await foto('01c-juega', PASO(ficha, 'juega'));
+        if (!REDUCIDO && !juegaProbado) {
+            juegaProbado = true;
+            await pulsar(`${PASO(ficha, 'juega')} .est-juega`); await p.waitForTimeout(1500);
+            const v = await volverVisible();
+            ok(!!v, `${ficha}: «Juega» abre el modelo vivo con «← VOLVER A LA FICHA»`);
+            if (v) {
+                await pulsar('#' + v); await p.waitForTimeout(900);
+                const vuelta = await p.evaluate(f => { const t = document.getElementById(f); return { abierta: t.classList.contains('active') && !!t.offsetParent, est: t.classList.contains('modo-estudiar'), juega: !t.querySelector('.est-paso[data-paso="juega"]').hidden, marca: t.querySelector('.est-ir[data-ir-paso="juega"] .est-marca').textContent }; }, ficha);
+                ok(vuelta.abierta && vuelta.est && vuelta.juega && vuelta.marca === '✓', `${ficha}: el «← VOLVER» del modelo deja la ficha en Estudiar, en el paso Juega y marcado (${JSON.stringify(vuelta)})`);
+            }
+        }
+        await irPaso(ficha, 'piensa'); await p.waitForTimeout(200);
 
-        const contestar = async (q, fallar, donde, fotoN) => {
+        const contestar = async (q, fallar, donde, fotoN, Z) => {
             const antes = await p.evaluate(z => document.querySelector(z).innerHTML, Z);
             const fuga = [q.explicacion, ...(q.opciones || []).map(o => o.porque || ''), ...(q.frases || []).map(f => f.c || '')].filter(Boolean).map(t => t.replace(/<[^>]+>/g, '').slice(0, 40)).find(t => antes.replace(/<[^>]+>/g, '').includes(t));
             if (fuga || /data-ok|data-correcta|data-mal/.test(antes)) ok(false, `${donde}: la respuesta está en el HTML antes de contestar («${fuga}»)`);
@@ -185,19 +216,24 @@ async function correr(ANCHO, REDUCIDO) {
             const dsb = await desborde(); if (dsb > 0) ok(false, `${donde}: desborde de ${dsb} px tras contestar`); else nDesbordeOk++;
             if (fotoN) await foto(fotoN + '-despues', Z + ' .may-res');
         };
-        const siguiente = () => pulsar(`${Z} [data-accion="sig"]`);
+        const siguiente = Z => pulsar(`${Z} [data-accion="sig"]`);
+        const ZG = `${PASO(ficha, 'piensa')} .may-zona`, ZE = `${PASO(ficha, 'examen')} .may-zona`, ZC = `${PASO(ficha, 'caso')} .may-zona`;
 
-        // Guía socrática y examen, en orden, fallando la 1.ª de la guía, la 1.ª destapa y el «error» del examen
+        // Guía socrática (Piensa) y examen (Examínate), en orden, fallando la 1.ª de la guía, la 1.ª destapa y el «error» del examen
         const FALLAR = new Set([d.guia[0].id, d.guia.find(q => q.tipo === 'destapa')?.id, d.examen.find(q => q.tipo === 'error')?.id].filter(Boolean));
-        await pulsar(`${Z} [data-ir="seguir"]`);
+        await pulsar(`${ZG} [data-ir="seguir"]`);
         const todas = [...d.guia, ...d.examen];
+        let Z = ZG;
         for (const [i, q] of todas.entries()) {
             if (i === d.guia.length) {
-                ok(await p.evaluate(z => /Guía socrática hecha/.test(document.querySelector(z).textContent), Z), `${ficha}: al acabar la guía, el paso al examen`);
-                await pulsar(`${Z} [data-ir="examen"]`);
+                ok(await p.evaluate(z => /Guía socrática hecha/.test(document.querySelector(z).textContent), ZG), `${ficha}: al acabar la guía, el paso al examen`);
+                await pulsar(`${ZG} [data-ir-paso="examen"]`); await p.waitForTimeout(100);
+                ok(await p.evaluate(f => !document.querySelector(`#${f} .est-paso[data-paso="examen"]`).hidden && document.querySelector(`#${f} .est-ir[data-ir-paso="piensa"] .est-marca`).textContent === '✓', ficha), `${ficha}: «Examínate» se abre y «Piensa» queda marcado`);
+                await pulsar(`${ZE} [data-ir="seguir"]`);
+                Z = ZE;
             }
             const fotoN = nf === 0 && i === 1 ? '02-pregunta' : nf === 0 && q.tipo === 'error' ? '03-error' : null;
-            await contestar(q, FALLAR.has(q.id), `${ficha} ${q.id}`, fotoN);
+            await contestar(q, FALLAR.has(q.id), `${ficha} ${q.id}`, fotoN, Z);
             // «Compruébalo en el modelo» y su «← VOLVER» (la primera pregunta con modelo vivo, a 390 px)
             if (!REDUCIDO && !d.__modeloProbado && [].concat(q.modelo || []).some(m => m.aguaViva)) {
                 d.__modeloProbado = true;
@@ -207,33 +243,45 @@ async function correr(ANCHO, REDUCIDO) {
                 ok(rio.visible && /FICHA/.test(rio.volver), `${ficha} ${q.id}: «Compruébalo en el modelo» abre el río y mar (${estado}) con «${rio.volver}»`);
                 await foto('04-modelo', '#agv-raiz');
                 await pulsar('#agv-volver'); await p.waitForTimeout(900);
-                const vuelta = await p.evaluate(f => { const t = document.getElementById(f); return { abierta: t.classList.contains('active') && !!t.offsetParent, may: t.classList.contains('modo-mayeutica'), sig: !!t.querySelector('.may-res [data-accion="sig"]') }; }, ficha);
-                ok(vuelta.abierta && vuelta.may && vuelta.sig, `${ficha}: «← VOLVER» deja la ficha abierta, en la Mayéutica y en la misma pregunta`);
+                const vuelta = await p.evaluate(([f, z]) => { const t = document.getElementById(f); return { abierta: t.classList.contains('active') && !!t.offsetParent, est: t.classList.contains('modo-estudiar'), sig: !!document.querySelector(z + ' .may-res [data-accion="sig"]') && !!document.querySelector(z).offsetParent }; }, [ficha, Z]);
+                ok(vuelta.abierta && vuelta.est && vuelta.sig, `${ficha}: «← VOLVER» deja la ficha abierta, en Estudiar, en su paso y en la misma pregunta`);
             }
-            await siguiente();
+            // Un «… (vista Visual)» de una pregunta abre «Mira», con la vuelta a la pregunta
+            if (!enVisualProbado && await p.evaluate(z => !!document.querySelector(z + ' .may-res .may-modelo[data-en-visual]'), Z)) {
+                enVisualProbado = true;
+                const paso = Z === ZG ? 'piensa' : 'examen';
+                await pulsar(`${Z} .may-res .may-modelo[data-en-visual]`); await p.waitForTimeout(700);
+                const m = await p.evaluate(f => { const s = document.querySelector(`#${f} .est-paso[data-paso="mira"]`); return { mira: !s.hidden && !!s.offsetParent, volver: s.querySelector('.est-volver-a [data-ir-paso]')?.dataset.irPaso }; }, ficha);
+                ok(m.mira && m.volver === paso, `${ficha} ${q.id}: el enlace a la vista Visual abre «Mira», con «← Volver a» ${paso} (${JSON.stringify(m)})`);
+                await pulsar(`${PASO(ficha, 'mira')} .est-volver-a [data-ir-paso]`); await p.waitForTimeout(150);
+                ok(await p.evaluate(z => !!document.querySelector(z).offsetParent && !!document.querySelector(z + ' .may-res [data-accion="sig"]'), Z), `${ficha} ${q.id}: «← Volver a» deja la misma pregunta contestada`);
+            }
+            await siguiente(Z);
         }
-        // Repaso de lo fallado
-        const nRep = await p.evaluate(z => document.querySelectorAll(z + ' [data-rep]').length, Z);
+        // Repaso de lo fallado (al final de «Examínate»)
+        const nRep = await p.evaluate(z => document.querySelectorAll(z + ' [data-rep]').length, ZE);
         ok(nRep === FALLAR.size, `${ficha}: el repaso trae las ${FALLAR.size} falladas (${nRep})`);
-        if (nf === 0) await foto('05-repaso', Z);
+        if (nf === 0) await foto('05-repaso', ZE);
         for (const id of FALLAR) {
-            await pulsar(`${Z} [data-rep="${id}"]`);
+            await pulsar(`${ZE} [data-rep="${id}"]`);
             const q = todas.find(x => x.id === id);
-            if (q.tipo === 'destapa') ok(await p.evaluate(z => document.querySelectorAll(z + ' .may-pts input').length, Z) === q.puntos.length - 1, `${id}: en el repaso solo vuelven los puntos que faltaron`);
-            await contestar(q, false, `${ficha} repaso ${id}`);
-            await siguiente();
+            if (q.tipo === 'destapa') ok(await p.evaluate(z => document.querySelectorAll(z + ' .may-pts input').length, ZE) === q.puntos.length - 1, `${id}: en el repaso solo vuelven los puntos que faltaron`);
+            await contestar(q, false, `${ficha} repaso ${id}`, null, ZE);
+            await siguiente(ZE);
         }
-        ok(await p.evaluate(z => /No queda nada por repasar/.test(document.querySelector(z).textContent), Z), `${ficha}: el repaso se vacía al acertarlas`);
+        ok(await p.evaluate(z => /No queda nada por repasar/.test(document.querySelector(z).textContent), ZE), `${ficha}: el repaso se vacía al acertarlas`);
+        ok(await p.evaluate(f => document.querySelector(`#${f} .est-ir[data-ir-paso="examen"] .est-marca`).textContent === '✓', ficha), `${ficha}: «Examínate» queda marcado`);
         // Casos
-        await pulsar(`${Z} [data-ir="casos"]`);
+        Z = ZC;
+        await pulsar(`${ZE} [data-ir-paso="caso"]`); await p.waitForTimeout(100);
         for (const [k, caso] of d.casos.entries()) {
             await pulsar(`${Z} [data-caso="${k}"]`);
             for (const [j, paso] of caso.pasos.entries()) {
                 const fichaPac = await p.evaluate(z => ({ nuevos: document.querySelectorAll(z + ' .may-paciente dd.may-cambia .may-nuevo').length, dia: document.querySelector(z + ' .may-dia')?.textContent }), Z);
                 if (paso.nuevo?.length && fichaPac.nuevos !== paso.nuevo.length) ok(false, `${caso.id} paso ${j + 1}: lo nuevo no sale marcado (${fichaPac.nuevos} de ${paso.nuevo.length})`);
                 if (fichaPac.dia !== paso.momento) ok(false, `${caso.id} paso ${j + 1}: sin su momento`);
-                await contestar(paso.pregunta, j === 0, `${caso.id} paso ${j + 1}`, nf === 0 && j === 2 ? '06-caso' : null);
-                await siguiente();
+                await contestar(paso.pregunta, j === 0, `${caso.id} paso ${j + 1}`, nf === 0 && j === 2 ? '06-caso' : null, Z);
+                await siguiente(Z);
             }
             const fin = await p.evaluate(z => ({ txt: document.querySelector(z).textContent, ficha: !!document.querySelector(z + ' [data-may-texto]'), modelo: !!document.querySelector(z + ' .may-modelo') }), Z);
             ok(/Lo que te llevas/.test(fin.txt) && fin.ficha && fin.modelo, `${ficha}: el caso ${caso.id} llega a «Lo que te llevas», con vuelta a la ficha y al modelo`);
@@ -241,12 +289,13 @@ async function correr(ANCHO, REDUCIDO) {
             if (nf === 0 && k === 0) await foto('07-fin-caso', Z);
             if (k < d.casos.length - 1) await pulsar(`${Z} [data-fin="otro"]`);
         }
+        ok(await p.evaluate(f => document.querySelector(`#${f} .est-ir[data-ir-paso="caso"] .est-marca`).textContent === '✓', ficha), `${ficha}: «${d.casos.length > 1 ? 'Los casos' : 'El caso'}» queda marcado`);
         // «Repasar en la ficha»: vuelve al texto, en su sitio
         await pulsar(`${Z} [data-may-texto]`); await p.waitForTimeout(900);   // el scroll de «Ver en el texto» es suave
         const ancla = d.casos.at(-1).volver.ancla;
-        ok(await p.evaluate(([f, a]) => { const t = document.getElementById(f), e = document.getElementById(a); const r = e.getBoundingClientRect(); return !t.classList.contains('modo-mayeutica') && !!e.offsetParent && r.top < innerHeight && r.bottom > 0; }, [ficha, ancla]), `${ficha}: «Repasar en la ficha» vuelve al texto, a «${ancla}»`);
+        ok(await p.evaluate(([f, a]) => { const t = document.getElementById(f), e = document.getElementById(a); const r = e.getBoundingClientRect(); return !t.classList.contains('modo-estudiar') && !!e.offsetParent && r.top < innerHeight && r.bottom > 0; }, [ficha, ancla]), `${ficha}: «Repasar en la ficha» vuelve al texto, a «${ancla}»`);
         // «Para profundizar»
-        await pulsar(`#${ficha} > .vista-toggle [data-vista="mayeutica"]`); await p.waitForTimeout(150);
+        await pulsar(`#${ficha} > .vista-toggle [data-vista="estudiar"]`); await p.waitForTimeout(150);
         const prof = await p.evaluate(f => {
             const det = document.querySelector(`#${f} .may-profundizar`); det.open = true; det.dispatchEvent(new Event('toggle'));
             const items = [...det.querySelectorAll('.may-prof-item')];
@@ -258,20 +307,35 @@ async function correr(ANCHO, REDUCIDO) {
         if (nf === 0) await foto('08-profundizar', `#${ficha} .may-profundizar`);
         const p0 = d.profundizar[0].id;
         await pulsar(`#${ficha} .may-prof-item [data-may-texto="${p0}"]`); await p.waitForTimeout(900);
-        ok(await p.evaluate(([f, a]) => { const e = document.getElementById(a); const r = e.getBoundingClientRect(); return !document.getElementById(f).classList.contains('modo-mayeutica') && !!e.offsetParent && r.top < innerHeight && r.bottom > 0; }, [ficha, p0]), `${ficha}: «Ver en el texto» de «Para profundizar» lleva a «${p0}», en el texto`);
+        ok(await p.evaluate(([f, a]) => { const e = document.getElementById(a); const r = e.getBoundingClientRect(); return !document.getElementById(f).classList.contains('modo-estudiar') && !!e.offsetParent && r.top < innerHeight && r.bottom > 0; }, [ficha, p0]), `${ficha}: «Ver en el texto» de «Para profundizar» lleva a «${p0}», en el texto`);
     }
     ok(nDesbordeOk >= 40, `sin desborde tras contestar en ${nDesbordeOk} respuestas y pasos`);
+    ok(juegaProbado || REDUCIDO, '«Juega» probado hasta el modelo y vuelta');
+    ok(enVisualProbado, 'un enlace «vista Visual» de una pregunta probado');
+
+    // El botón «🖼️ Visual» de la cabecera: en estas fichas abre Estudiar → Mira; al apagarlo, vuelven al texto
+    await abrirFicha(FICHAS[1]); await p.waitForTimeout(400);
+    await pulsar(`#${FICHAS[1]} > .vista-toggle [data-vista="texto"]`);
+    await pulsar('#btn-modo-visual'); await p.waitForTimeout(600);
+    const glob = await p.evaluate(f => { const t = document.getElementById(f), s = t.querySelector('.est-paso[data-paso="mira"]'); return { est: t.classList.contains('modo-estudiar'), mira: !s.hidden && !!s.offsetParent, visual: !!s.querySelector('.est-lienzo > .vista-visual') }; }, FICHAS[1]);
+    ok(glob.est && glob.mira && glob.visual, `«🖼️ Visual» de la cabecera abre ${FICHAS[1]} en Estudiar → Mira (${JSON.stringify(glob)})`);
+    ok(await desborde() <= 0, 'sin desborde con «🖼️ Visual» encendido');
+    await pulsar('#btn-modo-visual'); await p.waitForTimeout(300);
+    ok(await p.evaluate(f => !document.getElementById(f).classList.contains('modo-estudiar'), FICHAS[1]), '«🖼️ Visual» apagado: la ficha vuelve al texto');
 
     // Lo guardado sigue al recargar
     const nPreg = FICHAS.reduce((a, f) => a + MAYEUTICA_B1[f].guia.length + MAYEUTICA_B1[f].examen.length, 0);
     const g = await p.evaluate(() => JSON.parse(localStorage.getItem('mayeutica-fichas-v1') || '{}'));
     const guardadas = Object.values(g).filter(x => x.resultado).length;
     ok(guardadas === nPreg && !Object.values(g).some(x => x.repasar), `localStorage: ${guardadas} de ${nPreg} con resultado y ninguna pendiente de repaso`);
-    await p.reload(); await p.waitForFunction(() => document.getElementById('mar-cristaloides')?.querySelector(':scope > .vista-mayeutica'));
+    await p.reload(); await p.waitForFunction(() => document.getElementById('mar-cristaloides')?.querySelector(':scope > .vista-estudiar'));
     await abrirFicha(FICHAS[0]); await p.waitForTimeout(400);
-    await pulsar(`#${FICHAS[0]} > .vista-toggle [data-vista="mayeutica"]`); await p.waitForTimeout(150);
-    const n0 = MAYEUTICA_B1[FICHAS[0]].guia.length + MAYEUTICA_B1[FICHAS[0]].examen.length;
-    ok(await p.evaluate(([f, n]) => new RegExp(`Seguir \\(${n} de ${n}\\)`).test(document.querySelector(`#${f} .may-zona`).textContent), [FICHAS[0], n0]), `tras recargar, ${FICHAS[0]} recuerda las ${n0}`);
+    await pulsar(`#${FICHAS[0]} > .vista-toggle [data-vista="estudiar"]`); await p.waitForTimeout(150);
+    const marcas = await p.evaluate(f => [...document.querySelectorAll(`#${f} .est-ir .est-marca`)].map(m => m.textContent).join(''), FICHAS[0]);
+    ok(marcas === '✓2✓✓✓', `tras recargar, ${FICHAS[0]}: Mira, Piensa, Examínate y El caso marcados; Juega, de esta sesión, no («${marcas}»)`);
+    await irPaso(FICHAS[0], 'piensa'); await p.waitForTimeout(150);
+    const nG0 = MAYEUTICA_B1[FICHAS[0]].guia.length;
+    ok(await p.evaluate(([f, n]) => new RegExp(`de ${n} bien a la primera`).test(document.querySelector(`#${f} .est-paso[data-paso="piensa"] .may-zona`).textContent), [FICHAS[0], nG0]), `tras recargar, ${FICHAS[0]} recuerda las ${nG0} de la guía`);
 
     ok(errores.length === 0, `0 errores de consola (${errores.length}) ${errores.slice(0, 3).join(' | ')}`);
     const ids = await p.evaluate(() => { const v = {}; document.querySelectorAll('[id]').forEach(e => { v[e.id] = (v[e.id] || 0) + 1; }); return Object.keys(v).filter(k => v[k] > 1); });

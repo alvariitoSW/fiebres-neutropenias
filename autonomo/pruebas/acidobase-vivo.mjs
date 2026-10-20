@@ -42,7 +42,7 @@ await pag.evaluate(() => window.scrollTo(0, 0)); await espera(300);
 await foto('primera');
 ok(await desborda() <= 0, `sin desborde en la primera pantalla (${await desborda()})`);
 // ── 2. Desde el menú de Marino (Libros)
-await clic('.btn-volver-especialidades'); await clic('#btn-libros'); await espera(400);
+await clic('.btn-volver-especialidades'); await clic('#btn-libros'); await clic('#btn-libro-marino'); await clic('#lib-pest-vivos'); await espera(400);
 await pag.evaluate(() => document.getElementById('abv-menu-libros').scrollIntoView({ block: 'center' }));
 await foto('menu-marino');
 await clic('#abv-menu-libros'); await espera(1500);

@@ -1,9 +1,8 @@
-// Índice central de los libros (pantalla de entrada de Libros). Pinta
-// js/data/libros-indice.js: una pestaña por libro, un buscador de capítulos,
-// una tira de capítulos coloreada por dónde vive cada uno en la app, y la
-// lista por secciones. Los botones de cada ficha son enlaces cruzados
-// normales (`data-especialidad`), resueltos por el listener único de
-// home/index.js — este archivo no navega por su cuenta.
+// Índice de los libros. Pinta js/data/libros-indice.js en el sitio de cada libro: el de Marino en su portada
+// (marino-portada.html, plegado bajo los bloques; el repaso del libro entero, en su pestaña Repasar) y el de El Libro
+// Azul en su vista (libro-azul.html). Cada libro lleva un buscador de capítulos, una tira de capítulos coloreada por
+// dónde vive cada uno en la app y la lista por secciones. Los botones de cada ficha son enlaces cruzados normales
+// (`data-especialidad`), resueltos por el listener único de home/index.js — este archivo no navega por su cuenta.
 import { librosIndice } from '../../data/libros-indice.js';
 import { escapeHtml } from '../../core/ui.js';
 import { textoFuente } from '../../core/vista-visual.js';
@@ -53,6 +52,12 @@ function tarjetaCapitulo(c) {
         </div>`;
 }
 
+// Capítulos y fichas de un libro (la estantería y la portada lo enseñan).
+function resumenLibro(libro) {
+    const caps = capitulosDe(libro);
+    return { capitulos: caps.length, fichas: caps.reduce((s, c) => s + c.fichas.length, 0) };
+}
+
 function htmlLibro(libro) {
     const caps = capitulosDe(libro);
     const tira = libro.secciones.map(s => s.pendiente
@@ -72,27 +77,41 @@ function htmlLibro(libro) {
             <span>🎯 Repasar ${escapeHtml(libro.titulo)} entero</span>
             <span style="font-size: 0.8rem; color: ${libro.color};">[ ${libro.quiz.length} BLOQUES → ]</span>
         </button>` : '';
+    const huecoRepaso = document.getElementById(`lib-repaso-${libro.id}`);
+    if (huecoRepaso) huecoRepaso.innerHTML = repaso;
+    const { capitulos, fichas } = resumenLibro(libro);
     return `
         <p class="lib-nota">${escapeHtml(libro.nota)}</p>
-        <p class="lib-resumen"><strong>${caps.length}</strong> capítulos en la app · <strong>${caps.reduce((s, c) => s + c.fichas.length, 0)}</strong> fichas<span class="lib-resumen-estudio"></span></p>
-        ${repaso}
+        <p class="lib-resumen"><strong>${capitulos}</strong> capítulos en la app · <strong>${fichas}</strong> fichas<span class="lib-resumen-estudio"></span></p>
+        ${huecoRepaso ? '' : repaso}
         <div class="lib-tira" aria-label="Capítulos del libro">${tira}</div>
         <div class="lib-leyenda">${usados.map(d => `<span style="--lib-color:${d.color};">${d.icono} ${d.nombre}</span>`).join('')}<span class="lib-leyenda-pend">⏳ sin PDF todavía</span><span class="lib-leyenda-estudio">● con estudio en Modo Estudio</span></div>
         <div class="lib-secciones">${secciones}</div>`;
 }
 
 export function initIndice() {
-    const cont = document.getElementById('libros-indice');
+    // «56 capítulos · 151 fichas» en la estantería y en la portada de cada libro
+    librosIndice.forEach(l => {
+        const { capitulos, fichas } = resumenLibro(l);
+        document.querySelectorAll(`[data-lib-resumen="${l.id}"]`).forEach(el => { el.textContent = `${capitulos} capítulos · ${fichas} fichas en la app`; });
+    });
+    librosIndice.forEach(initLibro);
+}
+
+// Un libro en su sitio: #lib-indice-<id> (y su buscador en #lib-buscador-<id>, si existe; si no, encima).
+function initLibro(libro) {
+    const cont = document.getElementById(`lib-indice-${libro.id}`);
     if (!cont) return;
-    cont.innerHTML = `
-        <div class="lib-tabs" role="tablist">
-            ${librosIndice.map((l, i) => `<button type="button" class="lib-tab${i ? '' : ' active'}" role="tab" id="lib-tab-${l.id}" aria-selected="${i ? 'false' : 'true'}" aria-controls="lib-libro-${l.id}" data-libro="${l.id}" style="--lib-color:${l.color};">
-                <span class="lib-tab-titulo">${escapeHtml(l.titulo)}</span><span class="lib-tab-autor">${escapeHtml(l.autor)}${l.edicion ? ` · ${escapeHtml(l.edicion)}` : ''}</span></button>`).join('')}
-        </div>
-        <div class="form-group"><label for="lib-buscar">Buscar un capítulo o un tema (también dentro de las fichas)</label>
-            <input type="text" id="lib-buscar" enterkeyhint="search" placeholder="p. ej. sedación, catéter, sepsis…" autocomplete="off"></div>
-        <p class="lib-vacio" id="lib-vacio" hidden>Ningún capítulo de este libro coincide. <button type="button" class="especialidad-link" id="lib-buscar-global">🔍 Buscar en toda la app →</button></p>
-        ${librosIndice.map((l, i) => `<div class="lib-libro" id="lib-libro-${l.id}" role="tabpanel" aria-labelledby="lib-tab-${l.id}" data-libro="${l.id}"${i ? ' hidden' : ''}>${htmlLibro(l)}</div>`).join('')}`;
+    const id = libro.id;
+    const buscador = `
+        <div class="form-group"><label for="lib-buscar-${id}">Buscar un capítulo o un tema (también dentro de las fichas)</label>
+            <input type="text" id="lib-buscar-${id}" enterkeyhint="search" placeholder="p. ej. sedación, catéter, sepsis…" autocomplete="off"></div>
+        <p class="lib-vacio" id="lib-vacio-${id}" hidden>Ningún capítulo de este libro coincide. <button type="button" class="especialidad-link" id="lib-buscar-global-${id}">🔍 Buscar en toda la app →</button></p>`;
+    const huecoBuscador = document.getElementById(`lib-buscador-${id}`) || cont;
+    huecoBuscador.insertAdjacentHTML('afterbegin', buscador);
+    cont.insertAdjacentHTML('beforeend', `<div class="lib-libro" id="lib-libro-${id}" data-libro="${id}">${htmlLibro(libro)}</div>`);
+    // Si el índice está plegado (portada de Marino), buscar o ir a un capítulo lo despliega
+    const plegable = cont.closest('details');
 
     // Texto de las fichas de cada capítulo: se lee del DOM (las fichas ya
     // están cargadas aunque estén ocultas) la primera vez que se busca, sin
@@ -106,12 +125,13 @@ export function initIndice() {
         return contenido.get(tab);
     };
 
-    const buscar = cont.querySelector('#lib-buscar');
+    const buscar = document.getElementById(`lib-buscar-${id}`);
+    const vacio = document.getElementById(`lib-vacio-${id}`);
     const filtrar = () => {
         const q = norm(buscar.value.trim());
-        const libro = cont.querySelector('.lib-libro:not([hidden])');
+        if (q && plegable) plegable.open = true;
         let visibles = 0;
-        libro.querySelectorAll('.lib-cap').forEach(c => {
+        cont.querySelectorAll('.lib-cap').forEach(c => {
             const enTitulo = !q || c.dataset.texto.includes(q);
             const fichasCon = q && q.length >= 3 && !enTitulo ? c.dataset.tabs.split(' ').filter(t => textoFicha(t).includes(q)) : [];
             const ok = enTitulo || fichasCon.length > 0;
@@ -124,12 +144,18 @@ export function initIndice() {
             } else c.querySelectorAll('.lib-ficha.coincide').forEach(b => b.classList.remove('coincide'));
             if (ok) visibles++;
         });
-        libro.querySelectorAll('.lib-seccion').forEach(s => {
+        cont.querySelectorAll('.lib-seccion').forEach(s => {
             s.hidden = !!q && !s.querySelector('.lib-cap:not([hidden])');
         });
-        cont.querySelector('#lib-vacio').hidden = visibles > 0;
+        vacio.hidden = visibles > 0;
     };
     buscar.addEventListener('input', filtrar);
+    document.getElementById(`lib-buscar-global-${id}`).addEventListener('click', () => {
+        const q = buscar.value.trim();
+        document.getElementById('btn-buscar-global')?.click();
+        const campo = document.getElementById('search-input-el');
+        if (campo) { campo.value = q; campo.dispatchEvent(new Event('input', { bubbles: true })); }
+    });
 
     // Progreso de Modo Estudio: pomodoros invertidos en las fichas de cada
     // capítulo (el mismo dato que guarda Modo Estudio; nada nuevo).
@@ -137,45 +163,29 @@ export function initIndice() {
         const prog = progresoEstudio();
         const hechos = tabs => tabs.split(' ').filter(Boolean).map(t => prog[t] || 0);
         cont.querySelectorAll('.lib-tira-cap').forEach(b => b.classList.toggle('estudiado', hechos(b.dataset.tabs).some(n => n > 0)));
-        cont.querySelectorAll('.lib-libro').forEach(lib => {
-            let total = 0, caps = 0;
-            lib.querySelectorAll('.lib-cap').forEach(c => {
-                const h = hechos(c.dataset.tabs);
-                const suma = h.reduce((a, n) => a + n, 0), fichas = h.filter(n => n > 0).length;
-                const el = c.querySelector('.lib-cap-progreso');
-                el.hidden = !suma;
-                if (suma) { el.textContent = `🍅 ${suma} pomodoro${suma > 1 ? 's' : ''} de estudio en ${fichas} de ${h.length} ficha${h.length > 1 ? 's' : ''}`; caps++; }
-                total += suma;
-            });
-            lib.querySelector('.lib-resumen-estudio').textContent = total ? ` · 🍅 ${total} pomodoros en ${caps} capítulo${caps > 1 ? 's' : ''}` : '';
+        let total = 0, caps = 0;
+        cont.querySelectorAll('.lib-cap').forEach(c => {
+            const h = hechos(c.dataset.tabs);
+            const suma = h.reduce((a, n) => a + n, 0), fichas = h.filter(n => n > 0).length;
+            const el = c.querySelector('.lib-cap-progreso');
+            el.hidden = !suma;
+            if (suma) { el.textContent = `🍅 ${suma} pomodoro${suma > 1 ? 's' : ''} de estudio en ${fichas} de ${h.length} ficha${h.length > 1 ? 's' : ''}`; caps++; }
+            total += suma;
         });
+        cont.querySelector('.lib-resumen-estudio').textContent = total ? ` · 🍅 ${total} pomodoros en ${caps} capítulo${caps > 1 ? 's' : ''}` : '';
     };
     pintarProgreso();
     document.addEventListener('estudio-progreso', pintarProgreso);
 
+    // La tira de capítulos lleva a cada capítulo de la lista
     cont.addEventListener('click', (e) => {
-        const tab = e.target.closest('.lib-tab');
-        if (tab) {
-            cont.querySelectorAll('.lib-tab').forEach(t => { t.classList.toggle('active', t === tab); t.setAttribute('aria-selected', String(t === tab)); });
-            cont.querySelectorAll('.lib-libro').forEach(l => { l.hidden = l.dataset.libro !== tab.dataset.libro; });
-            filtrar();
-            return;
-        }
-        if (e.target.closest('#lib-buscar-global')) {
-            const q = buscar.value.trim();
-            document.getElementById('btn-buscar-global')?.click();
-            const campo = document.getElementById('search-input-el');
-            if (campo) { campo.value = q; campo.dispatchEvent(new Event('input', { bubbles: true })); }
-            return;
-        }
         const ir = e.target.closest('[data-ir-cap]');
-        if (ir) {
-            buscar.value = '';
-            filtrar();
-            const cap = document.getElementById(ir.dataset.irCap);
-            cap?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            cap?.classList.add('lib-cap-resaltado');
-            setTimeout(() => cap?.classList.remove('lib-cap-resaltado'), 1600);
-        }
+        if (!ir) return;
+        buscar.value = '';
+        filtrar();
+        const cap = document.getElementById(ir.dataset.irCap);
+        cap?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        cap?.classList.add('lib-cap-resaltado');
+        setTimeout(() => cap?.classList.remove('lib-cap-resaltado'), 1600);
     });
 }

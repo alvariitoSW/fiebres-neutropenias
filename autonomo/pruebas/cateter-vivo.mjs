@@ -36,7 +36,7 @@ await p.goto(BASE + 'index.html');   // contexto nuevo: localStorage vacío
 await p.waitForFunction(() => window.__ctvPruebas);
 
 // 1. Desde el menú de Libros
-await p.click('#btn-libros'); await p.click('#ctv-menu-libros'); await p.waitForTimeout(600);
+await p.click('#btn-libros'); await p.click('#btn-libro-marino'); await p.click('#lib-pest-vivos'); await p.click('#ctv-menu-libros'); await p.waitForTimeout(600);
 ok(await vistaVisible(), 'abre desde el menú de Libros (Modelos vivos)');
 let t = await T();
 ok(t.todo, `__ctvPruebas().todoCoincide ${t.fallos.join(' | ')} (Mayéutica: ${t.mayeutica.tests} tests, la buena la más larga en ${t.mayeutica.correctaMasLarga}, posiciones ${t.mayeutica.posiciones})`);
@@ -265,7 +265,7 @@ ok(nDesbordeOk >= nRespuestas, `sin desborde tras contestar en ${nDesbordeOk} de
 
 // 9. Lo guardado sigue al recargar
 await p.reload(); await p.waitForFunction(() => window.__ctvPruebas);
-await p.click('#btn-libros'); await p.click('#ctv-menu-libros'); await p.waitForTimeout(300);
+await p.click('#btn-libros'); await p.click('#btn-libro-marino'); await p.click('#lib-pest-vivos'); await p.click('#ctv-menu-libros'); await p.waitForTimeout(300);
 await pulsar('#ctv-modo-preguntas'); await p.waitForTimeout(200);
 ok(await p.evaluate(n => new RegExp(`Seguir \\(${n} de ${n}\\)`).test(document.getElementById('ctv-preg').textContent), PREGUNTAS.length), `tras recargar, la Mayéutica recuerda las ${PREGUNTAS.length}`);
 // Conceptos: todos, tocando cada acción

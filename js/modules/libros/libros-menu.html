@@ -1,120 +1,30 @@
     <button class="back-btn btn-volver-especialidades">← VOLVER</button>
     <div class="diag-header">
         <h2 style="color: var(--accent-blue); text-shadow: var(--glow-blue);">Libros</h2>
-        <p>Los libros de texto de la app en un solo sitio: qué capítulos hay, de qué PDF salen y en qué ficha vive cada uno. El contenido sigue en su especialidad; aquí solo se busca y se llega.</p>
+        <p>Los libros de texto de la app. Toca uno para ver sus capítulos, sus fichas y sus modelos vivos.</p>
     </div>
 
-    <p class="section-label">Contenido propio de Libros</p>
-    <div class="constellation" style="--const-accent: var(--accent-blue);">
-        <button class="const-node" id="btn-marino-fund">
-            <span class="const-orb" style="--orb-color: var(--accent-blue); --orb-glow: rgba(212,175,55,0.5);">📘</span>
-            <span class="const-card">
-                <span class="const-title">Marino · Fundamentos (caps. 1-11)</span>
-                <span class="const-desc">Acceso vascular, catéteres e infección, profilaxis digestiva y tromboprofilaxis, analgesia y sedación, oximetría y capnografía, catéter de arteria pulmonar, oxigenación y fluidoterapia — 23 fichas</span>
-                <span class="const-tag" style="--orb-color: var(--accent-blue);">Ver →</span>
+    <!-- La estantería: solo los libros. Lo de dentro de cada uno vive en su vista
+         (marino-portada.html y libro-azul.html). Las cifras las pinta indice.js desde js/data/libros-indice.js. -->
+    <div class="lib-estante">
+        <button type="button" class="lib-libro-btn" id="btn-libro-marino" style="--lib-color: var(--accent-blue);">
+            <span class="lib-lomo lib-lomo-lleno" aria-hidden="true"><span>THE ICU BOOK</span></span>
+            <span class="lib-libro-texto">
+                <span class="lib-libro-titulo">The ICU Book</span>
+                <span class="lib-libro-autor">Marino PL · 5.ª ed.</span>
+                <span class="lib-libro-datos" data-lib-resumen="marino"></span>
+                <span class="lib-libro-que">6 bloques propios con sus fichas, 7 modelos vivos y el repaso</span>
             </span>
+            <span class="lib-libro-chev" aria-hidden="true">→</span>
         </button>
-        <button class="const-node" id="btn-marino-renal">
-            <span class="const-orb" style="--orb-color: var(--accent-purple); --orb-glow: rgba(156,84,118,0.5);">⚗️</span>
-            <span class="const-card">
-                <span class="const-title">Marino · Ácido-base, renal y electrolitos (caps. 31-38)</span>
-                <span class="const-desc">Análisis ácido-base, acidosis láctica y cetoacidosis, alcalosis metabólica, fracaso renal agudo y reemplazo renal, sodio, potasio, magnesio, calcio y fósforo — 23 fichas</span>
-                <span class="const-tag" style="--orb-color: var(--accent-purple);">Ver →</span>
+        <button type="button" class="lib-libro-btn" id="btn-libro-azul" style="--lib-color: var(--accent-yellow);">
+            <span class="lib-lomo lib-lomo-hueco" aria-hidden="true"><span>LIBRO AZUL</span></span>
+            <span class="lib-libro-texto">
+                <span class="lib-libro-titulo">El Libro Azul</span>
+                <span class="lib-libro-autor">Bases fisiopatológicas de la medicina crítica</span>
+                <span class="lib-libro-datos" data-lib-resumen="libro-azul"></span>
+                <span class="lib-libro-que">Sus capítulos viven en Fisiopatología UCI: el índice lleva a cada ficha</span>
             </span>
-        </button>
-        <button class="const-node" id="btn-marino-abd">
-            <span class="const-orb" style="--orb-color: var(--accent-green); --orb-glow: rgba(144,160,106,0.5);">🌡️</span>
-            <span class="const-card">
-                <span class="const-title">Marino · Abdomen y temperatura (caps. 39-44)</span>
-                <span class="const-desc">Fallo hepático, pancreatitis, infecciones abdominales y urinarias, golpe de calor, hipertermias por fármacos, hipotermia y fiebre en la UCI — 17 fichas</span>
-                <span class="const-tag" style="--orb-color: var(--accent-green);">Ver →</span>
-            </span>
-        </button>
-        <button class="const-node" id="btn-marino-neuro">
-            <span class="const-orb" style="--orb-color: var(--accent-purple); --orb-glow: rgba(156,84,118,0.5);">🧠</span>
-            <span class="const-card">
-                <span class="const-title">Marino · Neurología (caps. 45-47)</span>
-                <span class="const-desc">Delirio, abstinencia alcohólica, coma y muerte encefálica, estado epiléptico, miastenia, Guillain-Barré, relajantes e ictus — 14 fichas</span>
-                <span class="const-tag" style="--orb-color: var(--accent-purple);">Ver →</span>
-            </span>
-        </button>
-        <button class="const-node" id="btn-marino-nutri">
-            <span class="const-orb" style="--orb-color: var(--accent-green); --orb-glow: rgba(144,160,106,0.5);">🥣</span>
-            <span class="const-card">
-                <span class="const-title">Marino · Nutrición y endocrino (caps. 48-51)</span>
-                <span class="const-desc">Necesidades nutricionales, tiamina, nutrición enteral y parenteral, realimentación, suprarrenal y tiroides — 14 fichas</span>
-                <span class="const-tag" style="--orb-color: var(--accent-green);">Ver →</span>
-            </span>
-        </button>
-        <button class="const-node" id="btn-marino-tox">
-            <span class="const-orb" style="--orb-color: var(--accent-red); --orb-glow: rgba(184,92,62,0.5);">☠️</span>
-            <span class="const-card">
-                <span class="const-title">Marino · Tóxicos y apéndices (caps. 52-53)</span>
-                <span class="const-desc">Paracetamol, benzodiacepinas, betabloqueantes, opioides, salicilatos, monóxido de carbono, cianuro y alcoholes tóxicos; unidades, valores de referencia y el cuerpo fantástico — 11 fichas</span>
-                <span class="const-tag" style="--orb-color: var(--accent-red);">Ver →</span>
-            </span>
+            <span class="lib-libro-chev" aria-hidden="true">→</span>
         </button>
     </div>
-
-    <p class="section-label">Modelos vivos</p>
-    <div class="constellation" style="--const-accent: var(--accent-blue);">
-        <button class="const-node" id="abv-menu-libros" data-especialidad="nefrologia" data-view="acidobase" data-acidobase-vivo="">
-            <span class="const-orb" style="--orb-color: var(--accent-blue); --orb-glow: rgba(212,175,55,0.5);">⚖️</span>
-            <span class="const-card">
-                <span class="const-title">Ácido-base vivo</span>
-                <span class="const-desc">El pH cuelga del cociente PaCO₂ / HCO₃⁻: pulmón, plasma y riñón moviéndose, la carta de la gasometría, un laboratorio de 16 estados, conceptos, Mayéutica y 4 casos</span>
-                <span class="const-tag" style="--orb-color: var(--accent-blue);">Abrir el modelo →</span>
-            </span>
-        </button>
-        <button class="const-node" id="agv-menu-libros" data-especialidad="libros" data-view="aguaViva" data-agua-viva="">
-            <span class="const-orb" style="--orb-color: var(--accent-yellow); --orb-glow: rgba(207,154,62,0.5);">🌊</span>
-            <span class="const-card">
-                <span class="const-title">Río y mar: el agua del cuerpo</span>
-                <span class="const-desc">Adónde va cada suero (salino, Ringer, glucosado, albúmina, hipertónico), la hemorragia y el Hto, el sodio y la neurona. Explorar, conceptos y mayéutica con 3 casos (Marino caps. 10-11, 15 y 35)</span>
-                <span class="const-tag" style="--orb-color: var(--accent-yellow);">Abrir el modelo →</span>
-            </span>
-        </button>
-        <button class="const-node" id="cpv-menu-libros" data-especialidad="libros" data-view="capilarVivo" data-capilar-vivo="">
-            <span class="const-orb" style="--orb-color: var(--accent-red); --orb-glow: rgba(184,92,62,0.5);">🩸</span>
-            <span class="const-card">
-                <span class="const-title">Capilar y oxígeno: del pulmón a la mitocondria</span>
-                <span class="const-desc">Hematíes con sus 4 perlas de O₂: contenido, aporte, consumo y extracción; la saturación venosa, el lactato, el pulsioxímetro y el capnograma. Explorar, conceptos y mayéutica con 4 casos (Marino caps. 7 y 9)</span>
-                <span class="const-tag" style="--orb-color: var(--accent-red);">Abrir el modelo →</span>
-            </span>
-        </button>
-        <button class="const-node" id="ctv-menu-libros" data-especialidad="libros" data-view="cateterVivo" data-cateter-vivo="">
-            <span class="const-orb" style="--orb-color: var(--accent-yellow); --orb-glow: rgba(207,154,62,0.5);">💉</span>
-            <span class="const-card">
-                <span class="const-title">Catéter vivo: flujo, piel y biopelícula</span>
-                <span class="const-desc">El flujo lo marca el catéter, no la vena: calibre, longitud, la bolsa, las bombas y la intraósea. Lupas de la piel y la biopelícula, la punta y el aire, y pinchar con eco. Explorar, conceptos y mayéutica con 3 casos (Marino caps. 1-3)</span>
-                <span class="const-tag" style="--orb-color: var(--accent-yellow);">Abrir el modelo →</span>
-            </span>
-        </button>
-        <button class="const-node" id="mur-menu-libros" data-especialidad="libros" data-view="murallaViva" data-muralla-viva="">
-            <span class="const-orb" style="--orb-color: var(--accent-purple); --orb-glow: rgba(156,84,118,0.5);">🧱</span>
-            <span class="const-card">
-                <span class="const-title">La cama 7 · La muralla de papel</span>
-                <span class="const-desc">Una sola capa de células frente a billones de microbios: la flora y la translocación, el motor del fallo multiorgánico, el ácido que protege, la úlcera de estrés que viene del riego, la Tabla 4.2, el IBP y su balanza, la boca del intubado y la SDD. Explorar, conceptos y mayéutica con 3 casos (Marino cap. 4)</span>
-                <span class="const-tag" style="--orb-color: var(--accent-purple);">Abrir el modelo →</span>
-            </span>
-        </button>
-        <button class="const-node" id="tel-menu-libros" data-especialidad="libros" data-view="telarVivo" data-telar-vivo="">
-            <span class="const-orb" style="--orb-color: var(--accent-red); --orb-glow: rgba(184,92,62,0.5);">🧵</span>
-            <span class="const-card">
-                <span class="const-title">La cama 7 · El telar de la trombina</span>
-                <span class="const-desc">La trombina teje la red del trombo en el bolsillo de una válvula de la femoral: qué hilo corta la HNF, la HBPM, el fondaparinux y los ACOD, la TIH, la dosis según el riñón y el peso, medias y CNI, el filtro, el reloj neuroaxial y la adivinanza de la inmovilidad. Explorar, conceptos y mayéutica con 3 casos (Marino cap. 5)</span>
-                <span class="const-tag" style="--orb-color: var(--accent-red);">Abrir el modelo →</span>
-            </span>
-        </button>
-        <button class="const-node" id="inm-menu-libros" data-especialidad="libros" data-view="inmersionViva" data-inmersion-viva="">
-            <span class="const-orb" style="--orb-color: var(--accent-blue); --orb-glow: rgba(212,175,55,0.5);">🤿</span>
-            <span class="const-card">
-                <span class="const-title">La cama 7 · La inmersión</span>
-                <span class="const-desc">Sedar es bajar bajo el agua; el dolor, la tormenta de arriba. La cara de la BPS, el profundímetro de la RASS, el diazepam que hunde y no calma, los opioides y el riñón, los lastres de cada sedante, la subida de la Tabla 6.7, el SIP, el propilenglicol y el delirio. Explorar, conceptos y mayéutica con 2 casos (Marino cap. 6)</span>
-                <span class="const-tag" style="--orb-color: var(--accent-blue);">Abrir el modelo →</span>
-            </span>
-        </button>
-    </div>
-
-    <p class="section-label">Índice de los libros</p>
-    <div id="libros-indice"></div>

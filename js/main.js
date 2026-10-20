@@ -73,6 +73,11 @@ async function start() {
     // navegación a cada resultado reutiliza el router que home.init() ya
     // expone para los botones .especialidad-link.
     initSearch({ navegar: homeApi?.irAResultadoBusqueda });
+    // La versión, en pequeño al final del menú principal: para saber qué versión estás viendo (lección 7).
+    const pie = document.createElement('p');
+    pie.className = 'version-app';
+    pie.textContent = `Versión ${new URL(import.meta.url).searchParams.get('v') || 'local'}`;
+    document.getElementById('especialidades-view')?.append(pie);
     window.__appLista = true;
 }
 

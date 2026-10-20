@@ -194,8 +194,10 @@ backend/ admin/         panel de subida de contenido (aparte de la app)
   - Ningún `:active`/`:hover` con `transform`, `filter`, `perspective` ni `backdrop-filter` sobre algo que contenga un
     elemento `position:fixed` (encierra la hoja fija y la hace intocable en el móvil).
   - Comprueba ids duplicados en cada bloque nuevo (todas las vistas comparten el DOM).
-- **Cache-busting**: si cambia un `.css` o `js/main.js`, sube la fecha `?v=AAAAMMDD` de `index.html` (con sufijo
-  `-2`, `-3` si es el segundo despliegue del día).
+- **Versión de la app (cache-busting)**: si cambia cualquier pieza (`.css`, un módulo `.js`/`.mjs` o un fragmento
+  `.html` de `js/`), ejecuta `node autonomo/version.mjs AAAAMMDD-N`: pone esa versión en todo `index.html` y regenera
+  el mapa que da la versión a cada módulo (así el móvil no mezcla piezas de dos versiones). Los jueces lo comprueban.
+  La versión se ve al final del menú principal.
 
 ## 10. Git
 
@@ -226,7 +228,7 @@ como las conoce un médico, no como están hechas por dentro. Los botones dicen 
       de muros de texto, 1-3 cosas resaltadas por bloque y el mecanismo visible con las piezas de la app, al nivel de
       los modelos (receptores animados, atlas 14 y 10, nefrona viva, vista Visual). Preguntas nuevas: REGLAS §8.
 - [ ] Ningún id duplicado; ningún `<img>` sin archivo; ningún tema de quiz sin preguntas.
-- [ ] Si cambió un `.css` o `js/main.js`: fecha `?v=` subida en `index.html`.
+- [ ] Si cambió una pieza de la app: `node autonomo/version.mjs AAAAMMDD-N` (§9).
 - [ ] La historia del trabajo, añadida al archivo de `docs/historial/` que toque (no aquí). Este archivo, solo si
       cambia una regla. Si hay algo pendiente nuevo, va a `autonomo/BITACORA.md` (el tablero, solo lo aprobado).
 - [ ] `git checkout -- .gitignore .ignore` (las herramientas los ensucian), commit, push y merge a `main` (§10).

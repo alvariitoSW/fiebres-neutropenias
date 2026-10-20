@@ -27,6 +27,11 @@ Para cada ficha del bloque, a partir de su texto (con la fuente al lado solo si 
 3. **Qué queda para «Para profundizar»**: lo que ni el modelo ni la Mayéutica explican, con su id en la ficha.
 4. **Cobertura** en %, por ficha y del bloque (objetivo ≈85 %), contada por ideas importantes de la ficha.
 5. **La ruta del bloque**: el orden de estudio recomendado.
+6. **Las piezas comunes** (lección 8 del bloque 1): lo que compartirán varios modelos o escenas (una cama, un
+   paciente, un motor, un dock), para que se construya primero y los demás lo copien.
+7. **La lista de pacientes del bloque** (lección 9): nombre, edad e ingreso de cada paciente de los casos.
+Al diseñar los casos, aplica REGLAS §8 ya en la cobertura («encuentra el error» con 0-2 errores) y §1.12 (cada cifra
+del libro en su contexto; cada paso, un paciente posible).
 
 Escribe `autonomo/bloques/<bN>/cobertura.md` (si no puedes, devuélvelo entero) con una tabla por ficha. Es la
 especificación que seguirán los constructores, así que ha de ser concreta: estados, ids y fuentes.
@@ -76,6 +81,9 @@ Partes de un contenido que **ya es fiel** (el texto de la app, su fuente con pá
 3. Nada inventado: el paciente sí, la medicina no (REGLAS §8).
 
 ## Modo juzgar (después de construir)
+
+Al juzgar, comprueba también que cada paso de los casos sea un **paciente posible** con cifras que encajan entre sí
+(REGLAS §1.12) y que las **piezas comunes** del encargo se usen tal cual.
 
 **Para ahorrar**: empieza por la prueba guiada que ya existe (`autonomo/pruebas/<clave>.mjs`, o `node autonomo/jueces.mjs
 --modelo <clave>`) y sus capturas. Recorre a mano solo lo que la prueba no ve: cómo se entiende, si sorprende, si

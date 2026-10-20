@@ -11,6 +11,12 @@ Lo que lleva un `encargo.md` (corto: lo que cabe en una pantalla larga, no más 
 4. **Decisiones del usuario** que afectan al bloque, con su fecha y sus palabras.
 5. **Reglas que más fallan** (enlace a la lista de comprobación del constructor, en `.claude/agents/constructor.md`).
 6. **Pasos y su estado**: cobertura, maquetas, modelos y estudio, con el archivo de salida de cada uno.
+7. **Piezas comunes** del bloque (lo que comparten varios modelos o escenas): se construyen primero y los demás las
+   copian (lección 8 del bloque 1).
+8. **Pacientes del bloque**: nombre, edad e ingreso de cada paciente de los casos; nadie inventa otro con el mismo
+   nombre (lección 9).
+
+Antes de escribir el encargo de un bloque nuevo, lee `autonomo/bloques/b1/lecciones.md`.
 
 Los informes de los agentes van a la misma carpeta (`cobertura.md`, `auditoria.md`, `juicio.md`…), cortos: como mucho
 40 líneas, con una tabla de ✅/❌ y al final «No comprobado / riesgo» en 1-2 líneas. El detalle largo, si hace falta,

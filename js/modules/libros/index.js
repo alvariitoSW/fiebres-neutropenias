@@ -1,10 +1,9 @@
 // Especialidad "Libros": un sitio central para los libros de texto de la app
-// (The ICU Book de Marino y El Libro Azul). La pantalla de entrada es un
-// índice de capítulos que lleva a la ficha donde vive cada uno (casi todos
-// siguen en su especialidad); los caps. 1-11 de Marino, que no encajan en
-// ninguna especialidad, viven aquí mismo (Marino · Fundamentos), igual que los
-// caps. 31-53 (ácido-base, renal y electrolitos; abdomen y temperatura;
-// neurología; nutrición y endocrino; tóxicos y apéndices).
+// (The ICU Book de Marino y El Libro Azul). La pantalla de entrada es la
+// estantería (solo los dos libros). Marino abre su portada (Índice | Modelos
+// vivos | Repasar): los 6 bloques que viven aquí (caps. 1-11 y 31-53), sus
+// modelos vivos y el índice completo plegado; El Libro Azul abre su índice,
+// que lleva a sus fichas de Fisiopatología UCI.
 import { createViewSwitcher } from '../../core/navigation.js';
 import { preguntasMarinoFundamentos, temasMarinoFundamentos } from '../../data/marino-fundamentos-preguntas.js';
 import { preguntasMarinoRenal, temasMarinoRenal } from '../../data/marino-renal-preguntas.js';
@@ -22,6 +21,8 @@ import { initVisualMarinoCaps45a53 } from './visual-marino-caps45-53.js';
 import { initVisualMarinoCaps31a44 } from './visual-marino-caps31-44.js';
 import { initVisualMarino } from './visual-marino.js';
 import { initIndice, idRepaso } from './indice.js';
+import { nombreFicha } from '../../core/corkboard.js';
+import { progresoEstudio } from '../../core/pomodoro.js';
 import { init as initAguaViva } from './agua-viva.js';
 import { init as initCapilarVivo } from './capilar-vivo.js';
 import { init as initCateterVivo } from './cateter-vivo.js';
@@ -46,9 +47,48 @@ export const quizTemas = [
     ...enBloque(temasMarinoToxicos, 'Marino · Tóxicos y apéndices (caps. 52-53)'),
 ];
 
+// Los 6 bloques de Marino: vista → su cuaderno, su banco de preguntas y los modelos vivos que enlazan sus fichas
+// (los botones de la pestaña Modelos vivos de la portada, por id).
+const BLOQUES = {
+    marinoFundamentos: { vista: 'marino-fund-view', panel: 'panel-marino-fund-tabs', nombre: 'Fundamentos', preguntas: preguntasMarinoFundamentos, vivos: ['ctv-menu-libros', 'mur-menu-libros', 'tel-menu-libros', 'inm-menu-libros', 'cpv-menu-libros', 'agv-menu-libros'] },
+    marinoRenal: { vista: 'marino-renal-view', panel: 'panel-marino-renal-tabs', nombre: 'Ácido-base, renal y electrolitos', preguntas: preguntasMarinoRenal, vivos: ['abv-menu-libros', 'agv-menu-libros'] },
+    marinoAbdomen: { vista: 'marino-abd-view', panel: 'panel-marino-abd-tabs', nombre: 'Abdomen y temperatura', preguntas: preguntasMarinoAbdomen, vivos: [] },
+    marinoNeuro: { vista: 'marino-neuro-view', panel: 'panel-marino-neuro-tabs', nombre: 'Neurología', preguntas: preguntasMarinoNeuro, vivos: [] },
+    marinoNutricion: { vista: 'marino-nutri-view', panel: 'panel-marino-nutri-tabs', nombre: 'Nutrición y endocrino', preguntas: preguntasMarinoNutricion, vivos: [] },
+    marinoToxicos: { vista: 'marino-tox-view', panel: 'panel-marino-tox-tabs', nombre: 'Tóxicos y apéndices', preguntas: preguntasMarinoToxicos, vivos: ['abv-menu-libros'] },
+};
+const MODELOS = new Set(['aguaViva', 'capilarVivo', 'cateterVivo', 'murallaViva', 'telarVivo', 'inmersionViva']);
+
+// Tira «Modelos vivos de este bloque» arriba de cada bloque: copia los atributos del enlace cruzado de su botón
+// en la portada (una sola fuente) y se pinta tras la cabecera del bloque.
+function tiraModelos(vista, ids) {
+    const botones = ids.map(id => document.getElementById(id)).filter(Boolean);
+    if (!vista || !botones.length) return;
+    const tira = document.createElement('div');
+    tira.className = 'lib-tira-vivos';
+    tira.innerHTML = '<p class="lib-tira-vivos-titulo">Modelos vivos de este bloque</p><div class="lib-tira-vivos-fila"></div>';
+    botones.forEach(b => {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'lib-vivo-chip';
+        Object.entries(b.dataset).filter(([k]) => !k.startsWith('lib')).forEach(([k, v]) => { chip.dataset[k] = v; });
+        chip.textContent = `${b.querySelector('.const-orb')?.textContent.trim() ?? ''} ${b.dataset.libCorto}`;
+        chip.title = b.querySelector('.const-title')?.textContent ?? '';
+        tira.lastElementChild.append(chip);
+    });
+    (vista.querySelector('.diag-header') ?? vista.firstElementChild).after(tira);
+}
+
 export function init() {
+    // Recuerdos de esta sesión (en memoria, nada se guarda): el último bloque abierto (para «Seguir donde lo
+    // dejaste») y adónde vuelve el «← VOLVER» de un modelo vivo (al bloque si se abrió desde su tira; si no, a la
+    // portada). Si se abrió desde una ficha, core/volver-ficha.js lo lleva a la ficha, como siempre.
+    let previa = null, ultimoBloque = null, volverDeModelo = 'marinoPortada';
     const librosLevel = createViewSwitcher({
         menu: document.getElementById('libros-menu-view'),
+        // Portada de The ICU Book (Índice | Modelos vivos | Repasar) y el índice de El Libro Azul
+        marinoPortada: document.getElementById('marino-portada-view'),
+        libroAzul: document.getElementById('libro-azul-view'),
         marinoFundamentos: document.getElementById('marino-fund-view'),
         marinoRenal: document.getElementById('marino-renal-view'),
         marinoAbdomen: document.getElementById('marino-abd-view'),
@@ -67,7 +107,61 @@ export function init() {
         telarVivo: document.getElementById('telar-vivo-view'),
         // Modelo vivo: la cama 7 · la inmersión (analgesia y sedación), junto al cap. 6
         inmersionViva: document.getElementById('inmersion-viva-view'),
+    }, (key) => {
+        if (MODELOS.has(key) && !MODELOS.has(previa)) volverDeModelo = BLOQUES[previa] ? previa : 'marinoPortada';
+        if (BLOQUES[key]) ultimoBloque = key;
+        if (key === 'marinoPortada') pintarPortada();
+        previa = key;
     });
+
+    const portada = document.getElementById('marino-portada-view');
+    // Pestañas de la portada (Índice | Modelos vivos | Repasar)
+    portada.querySelector('.lib-pestanas').addEventListener('click', (e) => {
+        const pest = e.target.closest('[data-lib-pestana]');
+        if (!pest) return;
+        portada.querySelectorAll('.lib-pestana').forEach(p => { p.classList.toggle('active', p === pest); p.setAttribute('aria-selected', String(p === pest)); });
+        portada.querySelectorAll('.lib-panel').forEach(p => { p.hidden = p.id !== pest.getAttribute('aria-controls'); });
+    });
+
+    // Fichas de cada bloque, vistas (marca del cuaderno en esta sesión) o con estudio en Modo Estudio
+    const fichasDe = key => [...document.querySelectorAll(`#${BLOQUES[key].panel} .tab-content[id]`)].map(t => t.id);
+    function pintarPortada() {
+        const prog = progresoEstudio();
+        portada.querySelectorAll('[data-lib-bloque]').forEach(tile => {
+            const key = tile.dataset.libBloque;
+            const tabs = fichasDe(key);
+            const vistas = tabs.filter(t => prog[t] > 0 || document.querySelector(`.field-card.visited[data-tab="${t}"]`)).length;
+            tile.querySelector('[data-lib-fichas]').textContent = `${tabs.length} fichas`;
+            const barra = tile.querySelector('[data-lib-progreso]');
+            barra.hidden = !vistas;
+            if (vistas) {
+                barra.querySelector('i').style.width = `${Math.round(100 * vistas / tabs.length)}%`;
+                barra.querySelector('.lib-bloque-progreso-txt').textContent = `${vistas} de ${tabs.length} vistas`;
+            }
+        });
+        // «Seguir donde lo dejaste»: la ficha abierta del último bloque visitado
+        const seguir = document.getElementById('lib-seguir');
+        const bloque = BLOQUES[ultimoBloque];
+        const panel = bloque && document.getElementById(bloque.panel);
+        const ficha = panel && panel.style.display !== 'none' ? panel.querySelector('.tab-content.active[id]') : null;
+        const tarjeta = ficha && document.querySelector(`.field-card[data-tab="${ficha.id}"]`);
+        seguir.hidden = !tarjeta;
+        if (!tarjeta) return;
+        Object.assign(seguir.dataset, { especialidad: 'libros', view: ultimoBloque, panel: bloque.panel, tab: ficha.id });
+        seguir.innerHTML = `<span class="lib-seguir-eyebrow">Seguir donde lo dejaste →</span><span class="lib-seguir-ficha"></span>`;
+        seguir.lastElementChild.textContent = `${bloque.nombre} · ${nombreFicha(tarjeta, ficha.id)}`;
+    }
+    document.addEventListener('estudio-progreso', () => { if (librosLevel.actual() === 'marinoPortada') pintarPortada(); });
+
+    // Lo que no cambia: cuántos modelos vivos tiene cada bloque, su tira dentro del bloque y cuántas preguntas
+    portada.querySelectorAll('[data-lib-bloque]').forEach(tile => {
+        const { vivos } = BLOQUES[tile.dataset.libBloque];
+        const el = tile.querySelector('[data-lib-vivos]');
+        el.hidden = !vivos.length;
+        el.textContent = vivos.length === 1 ? '1 modelo vivo' : `${vivos.length} modelos vivos`;
+    });
+    portada.querySelectorAll('[data-lib-preguntas]').forEach(el => { el.textContent = `${BLOQUES[el.dataset.libPreguntas].preguntas.length} preguntas`; });
+    Object.values(BLOQUES).forEach(b => tiraModelos(document.getElementById(b.vista), b.vivos));
 
     document.getElementById('btn-marino-fund').addEventListener('click', () => librosLevel.show('marinoFundamentos'));
     document.getElementById('btn-marino-renal').addEventListener('click', () => librosLevel.show('marinoRenal'));
@@ -75,7 +169,14 @@ export function init() {
     document.getElementById('btn-marino-neuro').addEventListener('click', () => librosLevel.show('marinoNeuro'));
     document.getElementById('btn-marino-nutri').addEventListener('click', () => librosLevel.show('marinoNutricion'));
     document.getElementById('btn-marino-tox').addEventListener('click', () => librosLevel.show('marinoToxicos'));
-    document.querySelectorAll('.btn-volver-libros-menu').forEach(b => b.addEventListener('click', () => librosLevel.show('menu')));
+    document.getElementById('btn-libro-marino').addEventListener('click', () => librosLevel.show('marinoPortada'));
+    document.getElementById('btn-libro-azul').addEventListener('click', () => librosLevel.show('libroAzul'));
+    // «← VOLVER» de los bloques y de los modelos vivos de Libros: a la portada de Marino (o, el de un modelo, al
+    // bloque desde cuya tira se abrió). El de la portada y el de El Libro Azul, a la estantería.
+    document.querySelectorAll('.btn-volver-libros-menu').forEach(b => b.addEventListener('click', () => {
+        librosLevel.show(MODELOS.has(librosLevel.actual()) ? volverDeModelo : 'marinoPortada');
+    }));
+    document.querySelectorAll('.btn-volver-libros-estante').forEach(b => b.addEventListener('click', () => librosLevel.show('menu')));
 
     initIndice();
     initMarinoFundamentos();
