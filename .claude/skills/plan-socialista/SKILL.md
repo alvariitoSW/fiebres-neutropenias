@@ -92,17 +92,24 @@ Es la prioridad del tablero. Un bloque de Marino se trabaja entero y se aprueba 
 gira alrededor del **paquete del bloque** (`autonomo/bloques/<bN>/encargo.md`, ver `autonomo/bloques/LEEME.md`):
 escríbelo tú antes de lanzar a nadie, y en cada encargo di «lee el paquete», no «lee todo el proyecto».
 
-1. **Cobertura** · profesor (potente), modo cobertura → `autonomo/bloques/<bN>/cobertura.md`. Léelo: si propone
-   modelos nuevos, van a maqueta (el usuario elige).
-2. **Maquetas** de los modelos nuevos · un constructor potente por maqueta, en paralelo → `autonomo/maquetas/`.
-   Publícalas como Artifact y espera la elección del usuario.
+Antes de empezar un bloque, lee `autonomo/bloques/b1/lecciones.md` (lo aprendido en el bloque 1, aprobado el 20/10):
+es la base de cómo se trabaja ahora.
+
+1. **Cobertura** · profesor (potente), modo cobertura → `autonomo/bloques/<bN>/cobertura.md`, con las **piezas
+   comunes** y la **lista de pacientes** del bloque (cópialas al encargo). Léelo: si propone modelos nuevos, van a
+   maqueta (el usuario elige).
+2. **Maquetas** de los modelos nuevos → `autonomo/maquetas/`. Primero la **pieza común** (un constructor); después,
+   las escenas que la copian (≤3 constructores a la vez). Revisión con auditor (con la lista de frases nuevas de cada
+   constructor) y profesor a la vez; vuelta 2. Publícalas como Artifact y espera la elección del usuario.
 3. **Modelos en la app** · constructor potente, uno por modelo, cada uno en su carpeta (`git worktree`) y con dueño
    fijo de cada archivo compartido. Copia el patrón del río y mar (`js/modules/libros/agua-viva*`) y añade su prueba
    en `autonomo/pruebas/<clave>.mjs` para `jueces --modelo`.
-4. **Estudio en las fichas** · constructor **barato**, por grupos de fichas, siguiendo el modelo ya hecho: interruptor
-   Texto | Visual | Mayéutica, Guía socrática y Examen, casos, «Para profundizar» y ruta del bloque.
-5. **Jueces** (`--ficha` y `--modelo`, los pasas tú) · **auditor** (barato, solo lo nuevo) · **profesor** (potente,
-   juzgar sobre la prueba guiada y capturas) en paralelo. Ya no hace falta el verificador como agente: solo si un
+4. **Estudio en las fichas** · constructor, por grupos de fichas, siguiendo el modelo ya hecho: interruptor
+   **Texto | Estudiar** (recorrido Mira → Juega → Piensa → Examínate → Caso, y «Para profundizar» al final), con los
+   datos en `js/data/mayeutica/<bN>-<grupo>.js`.
+5. **Jueces** (`--ficha`, `--modelo` y `--forma`: forma de las preguntas, nombres internos y rótulos; los pasas tú, al
+   final y sin agentes trabajando) · **auditor** (barato, solo lo nuevo y la lista de frases nuevas) · **profesor**
+   (potente, juzgar sobre la prueba guiada y capturas) en paralelo. Ya no hace falta el verificador como agente: solo si un
    simulador necesita mirar «paciente posible» a mano.
 
 ### Ahorro (aprobado por el usuario el 19/10/2026)
@@ -118,7 +125,12 @@ escríbelo tú antes de lanzar a nadie, y en cada encargo di «lee el paquete»,
 - **Paralelo con dueño de archivo**: dos constructores a la vez, cada uno en su carpeta; los archivos compartidos los
   toca uno solo y tú juntas al fusionar.
 - **Límite de uso**: si un agente se para por el límite, se reanuda con SendMessage cuando se reinicia; no se lanza
-  otro desde cero.
+  otro desde cero. Para no perder horas: **como mucho 3 agentes pesados a la vez**, encargos de una pieza, y una copia
+  de seguridad (commit) cada vez que uno avanza (REGLAS §4.6).
+- **Varios constructores en una carpeta**: marca tú antes un hueco para cada uno en los archivos compartidos
+  (`[HUECO <quién>: …]`), sube tú el `?v=` y decide el orden de fusión. Cada agente, en su subcarpeta temporal.
+- **Dependencias entre ramas**: si una pieza necesita un modelo de otra rama aún sin fusionar, deja el enlace
+  preparado (`modeloFuturo`/`modeloVivo`) y conéctalo al unir.
 
 ### Fase R · Revisar lo ya construido (tareas `revision`)
 
