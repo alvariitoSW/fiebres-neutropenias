@@ -70,6 +70,7 @@ const atributos = datos => Object.entries(datos).map(([k, v]) => ` data-${kebab(
 const MODELOS = {
     aguaViva: { especialidad: 'libros', view: 'aguaViva', nombre: '🌊 el río y mar' },
     acidobaseVivo: { especialidad: 'nefrologia', nombre: '🧪 el ácido-base vivo' },
+    ecoEscenario: { especialidad: 'eco', nombre: '🫀 la circulación viva' },
 };
 function botonesModelo(modelo, verbo = 'Compruébalo en') {
     if (!modelo) return '';

@@ -114,8 +114,12 @@ async function correr(ANCHO, REDUCIDO) {
     ok(await fichaAbierta('mar-coloides'), 'la ruta lleva a su ficha (coloides)');
 
     // Una ficha sin Mayéutica sigue con Texto | Visual
-    await abrirFicha('mar-retorno-venoso'); await p.waitForTimeout(400);
-    ok(await p.evaluate(() => [...document.querySelectorAll('#mar-retorno-venoso > .vista-toggle button')].map(b => b.textContent).join('|')) === 'Texto|Visual', 'una ficha sin Mayéutica sigue con Texto | Visual');
+    // (la primera ficha del cuaderno que aún no tiene Mayéutica; si ya la tienen todas, no hay nada que mirar)
+    const sinMay = await p.evaluate(f => [...document.querySelectorAll('#panel-marino-fund-tabs .tab-content[data-visual]')].map(t => t.id).find(id => !f.includes(id)), FICHAS);
+    if (sinMay) {
+        await abrirFicha(sinMay); await p.waitForTimeout(400);
+        ok(await p.evaluate(t => [...document.querySelectorAll(`#${t} > .vista-toggle button`)].map(b => b.textContent).join('|'), sinMay) === 'Texto|Visual', `una ficha sin Mayéutica (${sinMay}) sigue con Texto | Visual`);
+    }
 
     let nDesbordeOk = 0;
     for (const [nf, ficha] of FICHAS.entries()) {
