@@ -12,6 +12,8 @@
 //                                                      (autonomo/pruebas/<clave>.mjs: acidobase-vivo | agua-viva |
 //                                                      mayeutica-fichas),
 //                                                      con el servidor de los jueces; tarda unos minutos
+//   node autonomo/jueces.mjs --forma                 + nombres internos y rótulos (B y C, abajo) en los 7 modelos
+//                                                      vivos y en las 23 fichas de Marino · Fundamentos (unos minutos)
 //   node autonomo/jueces.mjs --sin-navegador         solo lo estático (rápido)
 // Se pueden repetir --atlas, --ficha y --modelo. Sale con código 1 si algún juez falla.
 //
@@ -25,11 +27,21 @@
 //   5. --eco: node --test 'js/modules/eco/pruebas/*.test.mjs' en verde.
 //   6. --modelo: la prueba del modelo vivo en verde, a 390 y 360 px: el desborde lateral (0 px) tras cada respuesta,
 //      el repaso y cada paso de los casos; sin errores; la entrada desde las fichas y el «← VOLVER» a la ficha.
+//   7. Jueces de forma (autonomo/jueces-forma.mjs; lecciones 4-6 del bloque 1, 20/10/2026):
+//      A. Siempre, sin navegador: en cada banco de Mayéutica (modelos vivos y fichas), la buena es la más larga en
+//         ≤ ⅓ de los tests y la más corta en ≤ ⅓; ninguna posición (en el orden en que se ve) con la buena en más de
+//         la mitad; cada falsa con su «porque»; «encuentra el error» con 0-2 errores; ningún nombre interno en el
+//         texto de preguntas, casos y conceptos.
+//      B. Con --ficha, --modelo y --forma (390 px): ningún nombre interno a la vista (ids de ficha, «§», «maqueta»,
+//         «diseño», «REGLAS», «cobertura», «encargo», «Caso A1», rutas de archivo, <code>) en cada modo del modelo
+//         (Explorar en varios estados, Conceptos, Mayéutica tras contestar) y en cada vista de la ficha.
+//      C. Mismos momentos: en los SVG, cada rótulo <text> visible mide ≥ 7,5 px de alto y ningún par se pisa > 30 %.
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { execSync, spawn } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 import { createServer } from 'node:net';
+import { juzgarFormaPreguntas, juzgarFormaNavegador } from './jueces-forma.mjs';
 
 const RAIZ = resolve(dirname(new URL(import.meta.url).pathname), '..');
 const args = process.argv.slice(2);
@@ -93,6 +105,9 @@ function archivos(dir, ext, fuera = []) {
     const rango = preguntas.filter(p => p.tipo !== 'redactar' && (!Array.isArray(p.opciones) || p.correcta < 0 || p.correcta >= p.opciones.length));
     rango.length ? mal(`Quiz: «correcta» fuera de rango en ${rango.map(p => p.id).join(', ')}`) : ok('Quiz: respuestas correctas dentro de rango');
 }
+
+// ---- 7A. Forma de las preguntas (jueces-forma.mjs)
+await juzgarFormaPreguntas({ RAIZ, ok, mal });
 
 // ---- 3. Caché
 try {
@@ -185,6 +200,8 @@ if (!pide('--sin-navegador')) {
             errores.length ? mal(`${ancho}px: errores:\n   ${[...new Set(errores)].join('\n   ')}`) : ok(`${ancho}px: sin errores de consola ni de red`);
             await pag.close();
         }
+        // ---- 7B-C. Nombres internos y rótulos (jueces-forma.mjs)
+        await juzgarFormaNavegador({ nav, base, ok, mal, fichas, modelos: valores('--modelo'), todo: pide('--forma') });
         await nav.close();
         // ---- 6. Modelos vivos: su prueba de navegador, con este mismo servidor
         for (const clave of valores('--modelo')) {
