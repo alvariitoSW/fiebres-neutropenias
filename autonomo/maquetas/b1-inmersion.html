@@ -130,7 +130,7 @@ button:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px 
 .dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--bg-main); isolation: isolate; border-top: 1px solid var(--line);
   padding: 5px max(10px, env(safe-area-inset-left, 0px)) calc(5px + env(safe-area-inset-bottom, 0px)); }
 .dock-in { max-width: 560px; margin: 0 auto; display: grid; gap: 4px; }
-.frase { font: .84rem/1.32 var(--serif); color: var(--fg); border-left: 3px solid var(--oro); padding: 1px 0 1px 9px; margin-bottom: 2px; }
+.frase { font: .8rem/1.3 var(--serif); color: var(--fg); border-left: 3px solid var(--oro); padding: 1px 0 1px 9px; margin-bottom: 2px; }
 body.estudio .frase { display: none; }
 .dock-tabs { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 1px; }
 .dock-tabs button { min-height: 44px; background: transparent; border: 0; border-bottom: 2px solid transparent; color: var(--muted); font: 600 .7rem/1.1 var(--sans); cursor: pointer; padding: 0 1px; }
@@ -226,6 +226,20 @@ a.pdf { color: var(--oro); font: 600 .74rem var(--sans); display: inline-flex; a
 .entrada b { color: var(--fg); font-family: var(--serif); font-weight: normal; font-size: .95rem; }
 .entrada a { color: var(--oro); display: inline-flex; align-items: center; min-height: 44px; }
 
+/* La Tabla 6.7 (y lo que cuenta cada subida) fuera del agua, bajo la lámina */
+.tira { display: grid; grid-template-columns: auto repeat(4, minmax(0, 1fr)); gap: 1px 6px; padding: 6px 8px; border-top: 1px solid var(--card2); font: .72rem/1.3 var(--sans); color: var(--dim); align-items: baseline; }
+.tira.una { display: block; }
+.tira .tt { font-weight: 700; color: var(--oro); }
+.tira .th { color: var(--muted); text-align: center; }
+.tira .tl { color: var(--muted); }
+.tira .v { text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; }
+.tira .v.ok { color: var(--verde); }
+.tira .v.mal { color: var(--rojo); }
+.tira .aqui { background: rgba(207, 154, 62, .16); border-radius: 4px; }
+.tira .org { grid-column: 1 / -1; justify-self: start; margin-top: 3px; }
+/* Que «Siguiente →» no quede bajo la barra fija de abajo */
+#preg *, #concepto * { scroll-margin-bottom: calc(var(--dock-h) + 12px); }
+
 /* Visor de láminas del libro */
 .visor { position: fixed; inset: 0; z-index: 40; background: rgba(23, 20, 15, .96); display: grid; place-items: center; padding: 16px; }
 .visor figure { margin: 0; display: grid; gap: 8px; max-width: 560px; width: 100%; }
@@ -246,7 +260,7 @@ a.pdf { color: var(--oro); font: 600 .74rem var(--sans); display: inline-flex; a
   <header class="cabecera">
     <p class="aviso">Maqueta para elegir: no es la app</p>
     <h1>La cama 7 · <em>La inmersión</em></h1>
-    <p class="lead">Sedar es <strong class="hl-a">bajar bajo el agua</strong>: la RASS es el profundímetro. El dolor es <strong class="hl-r">la tormenta de la superficie</strong>, y el sedante no la calma. Cuanto más hondo, <strong class="hl-a">más tarda en subir</strong>. <span class="org">ficha · mar-analgesia · mar-sedacion</span></p>
+    <p class="lead">Sedar es <strong class="hl-a">bajar bajo el agua</strong>: la RASS es el profundímetro. El dolor es <strong class="hl-r">la tormenta de la superficie</strong>, y sedar no es calmarla. Cuanto más hondo, <strong class="hl-a">más tarda en subir</strong>. <span class="org">ficha · mar-analgesia · mar-sedacion</span></p>
   </header>
 
   <!-- La cama 7, en grabado: la ventana de la cabeza encendida; el vientre y la pierna, apagados (otras dos escenas) -->
@@ -300,6 +314,7 @@ a.pdf { color: var(--oro); font: 600 .74rem var(--sans); display: inline-flex; a
         <g id="g-relojes"></g>
         <g id="g-anillo"></g>
       </svg>
+      <div class="tira" id="tira-par" hidden></div>
       <div class="libro" id="libro">
         <button type="button" class="lam" data-img="mar-fig6-1-diazepam-dolor.jpg" data-pie="Figura 6.1 del libro (M p. 17): porcentaje de médicos residentes y de enfermeras de UCI que contestaron mal si el diazepam alivia el dolor (lectura aproximada: ~80 % y ~43 %)."><img loading="lazy" src="../../js/modules/libros/img/mar-fig6-1-diazepam-dolor.jpg" alt="Figura 6.1 del libro: barras de quienes contestaron mal"></button>
         <p class="para"><b style="color:var(--fg)">Lámina del libro · Fig. 6.1.</b> ¿El diazepam alivia el dolor? Contestó mal el <span class="hl-r">~80 % de los residentes</span> y el ~43 % de las enfermeras. Tócala. <span class="org">ficha · mar-fig-6-1</span></p>
@@ -329,7 +344,7 @@ a.pdf { color: var(--oro); font: 600 .74rem var(--sans); display: inline-flex; a
     <section class="bloque">
       <h2>Qué es cada cosa</h2>
       <ul class="leyenda" id="leyenda"></ul>
-      <p class="para">La forma dice qué es; el color ayuda, pero nunca decide solo. H⁺ (cruz) y la inflamación (trébol) salen de la tabla única de la app (<code>js/data/formas-iones.js</code>). El lactato (trípode) no está en la tabla: es la misma <b>propuesta</b> que en el capilar. Lastres, boya y aceite son dibujos de la escena, no partículas.</p>
+      <p class="para">La forma dice qué es; el color ayuda, pero nunca decide solo. H⁺ (cruz) y la inflamación (trébol) salen de la tabla única de formas de la app. El lactato (trípode) no está en la tabla: es la misma <b>propuesta</b> que en el capilar. Lastres, boya y aceite son dibujos de la escena, no partículas.</p>
     </section>
 
     <details class="nota-plegable">
@@ -360,9 +375,9 @@ a.pdf { color: var(--oro); font: 600 .74rem var(--sans); display: inline-flex; a
       <div class="nota-fuentes"><b>Haloperidol.</b> La Tabla 6.8 y el texto no coinciden: midazolam 1 mg frente a 1-2 mg; esperar 15 frente a 20 min; mantenimiento cada 6 frente a cada 4-6 h. Se dan las dos. <span class="org">ficha · mar-tabla-6-8</span></div>
       <div class="nota-fuentes"><b>Umbral del lorazepam.</b> El riesgo aparece con &gt;0,1 mg/kg/h o &gt;10 mg/h durante más de 48 h; para vigilar el hiato osmolar, el PDF escribe «≥0,1 mg/kg/h, o &gt;10 mg/h, durante 48 h» (M p. 26). Se reproducen los dos.</div>
       <div class="nota-fuentes"><b>Despertar del propofol.</b> La Tabla 6.6 da «10-15 min (depende de la profundidad y la duración)»; la Tabla 6.7, de 13 min a 74 h. No se contradicen: la 6.7 es esa dependencia. <span class="org">ficha · mar-tabla-6-6 · mar-tabla-6-7</span></div>
-      <div class="nota-fuentes"><b>SIP.</b> Marino: &gt;5 mg/kg/h; la ficha técnica de la FDA, no pasar de 4 mg/kg/h. La ficha de la app muestra las dos. <span class="org">ficha · mar-nota-propofol-240</span></div>
+      <div class="nota-fuentes"><b>SIP.</b> Marino da dos umbrales equivalentes: &gt;80 µg/kg/min o &gt;5 mg/kg/h, más de 48 h; y lo ha visto describir con 36 µg/kg/min. <span class="org">ficha · p. 28</span></div>
       <div class="nota-fuentes"><b>Fig. 6.1.</b> Lectura aproximada de las barras (~80 % y ~43 %). El dibujo pone «Doctors»; la leyenda, «médicos residentes». <span class="org">ficha · mar-fig-6-1</span></div>
-      <div class="nota-fuentes"><b>Cambios frente al diseño (§3.4 y §3.5).</b> (1) <code>dolor-oculto</code>: RASS −3 fijado por el estado, como pide la tabla. (2) Caso E4: el «encuentra el error» pedía tres errores (FC, diazepam y QTc 520); REGLAS §8 permite dos, así que el QTc 520 va al Examen (pregunta 16). (3) Caso E4, día 2: la RASS +1 es un dato del caso (ansioso con el ventilador).</div>
+      <div class="nota-fuentes"><b>Cambios frente al diseño.</b> (1) En el estado «Dolor oculto», la RASS −3 la fija el propio estado. (2) En el caso del intubado que lucha, el plan con errores pedía tres (la FC, el diazepam y un QTc de 520); las reglas de las preguntas permiten dos, así que el QTc de 520 se pregunta en el Examen (haloperidol). (3) En ese caso, la RASS +1 del día 2 es un dato del paciente (ansioso con el ventilador).</div>
     </details>
 
     <details class="nota-plegable">
@@ -373,7 +388,7 @@ a.pdf { color: var(--oro); font: 600 .74rem var(--sans); display: inline-flex; a
         <li>Cuánto baja la FC o la PA con la dexmedetomidina o con un opioide más una benzodiacepina en la hipovolemia: solo la flecha.</li>
         <li>La relación entre dosis de opioide y BPS, y cuánto calma cada ahorrador: la escena solo enseña el sentido.</li>
         <li>Qué hacer con la toxicidad por propilenglicol, más allá de vigilar el hiato osmolar.</li>
-        <li>Si un sedado profundo puede mostrar toda la BPS: la escena mantiene la tormenta, que es la lección de la Fig. 6.1.</li>
+        <li>Si un sedado profundo puede mostrar toda la BPS: la escena mantiene la tormenta, que es lo que se deduce de la Fig. 6.1 (no una cita).</li>
       </ul>
     </details>
 
@@ -469,6 +484,36 @@ const lerp = (a, b, t) => a + (b - a) * t;
 const dec = (n, d = 1) => n.toFixed(d).replace('.', ',');
 const copia = o => JSON.parse(JSON.stringify(o));
 const signo = r => r > 0 ? '+' + r : r < 0 ? '−' + Math.abs(r) : '0';
+// Página del PDF (cap. 6) de cada elemento de las fichas: el chip enseña la página, nunca el nombre interno.
+const PAG = { 'mar-dolor-intro': 16, 'mar-fig-6-1': 17, 'mar-hipernocicepcion': 17, 'mar-escala-numerica': 17, 'mar-bps-intro': 17, 'mar-bps-calc': 18,
+  'mar-constantes-dolor': 18, 'mar-opioide-definiciones': 18, 'mar-opioide-dosis-individual': 19, 'mar-tabla-6-2': 19, 'mar-opioide-respiratorio': 21,
+  'mar-opioide-cardio': 21, 'mar-opioide-intestino': 21, 'mar-opioide-nauseas': 22, 'mar-tabla-6-3': 22, 'mar-analgesico-calc': 22, 'mar-ketamina-errata': 22,
+  'mar-ketamina': 23, 'mar-neuropatico': 23, 'mar-ansiedad': 23, 'mar-tabla-6-4': 24, 'mar-rass-pasos': 24, 'mar-escalas-sedacion': 24, 'mar-bzd-intro': 25,
+  'mar-midazolam': 25, 'mar-lorazepam': 25, 'mar-tabla-6-5': 26, 'mar-bzd-proscontras': 26, 'mar-bzd-prevencion': 27, 'mar-tabla-6-6': 27, 'mar-propofol': 28,
+  'mar-propofol-calc': 28, 'mar-nota-propofol-240': 28, 'mar-pris': 28, 'mar-tabla-6-7': 29, 'mar-dexmedetomidina': 29, 'mar-haloperidol-intro': 30,
+  'mar-tabla-6-8': 30, 'mar-halo-wizard': 30, 'mar-haloperidol-qtc': 31, 'mar-opiofobia': 31 };
+const idsDe = f => [...(f || '').matchAll(/mar-[a-z0-9-]+/g)].map(m => m[0]).filter(id => PAG[id]);
+const listaPag = ids => [...new Set(ids.map(id => PAG[id]))].sort((a, b) => a - b).join(', ');
+function origen(f) {
+  if (!f) return '';
+  const ids = idsDe(f), extra = [];
+  if (/ilustr/.test(f)) extra.push('ilustrativo');
+  if (/sin cifra/.test(f)) extra.push('sin cifra');
+  if (/hueco/.test(f)) extra.push('hueco');
+  if (/fisiología general/.test(f)) extra.push('fisiología general');
+  const base = ids.length ? `ficha · p. ${listaPag(ids)}` : /ficha|mar-/.test(f) ? 'ficha' : '';
+  return [base, ...extra].filter(Boolean).join(' · ');
+}
+const esSedacion = id => PAG[id] >= 24 || id === 'mar-ansiedad';
+function enTexto(f) {
+  const ids = idsDe(f), an = ids.filter(id => !esSedacion(id)), se = ids.filter(esSedacion), partes = [];
+  if (an.length) partes.push(`Analgesia · p. ${listaPag(an)}`);
+  if (se.length) partes.push(`Sedación · p. ${listaPag(se)}`);
+  return partes.length ? partes : ['la ficha'];
+}
+function limpiarChips(raiz = document) {
+  raiz.querySelectorAll('.org').forEach(el => { if (/mar-/.test(el.textContent)) { const o = origen(el.textContent); el.textContent = o; el.classList.toggle('ilu', /ilustrativo|sin cifra|hueco/.test(o)); } });
+}
 
 /* ============================================================
    2. Formas: la tabla única de la app (js/data/formas-iones.js y js/core/particulas.js), copiada,
@@ -663,6 +708,7 @@ function derivar(e) {
   if (fc.v != null && !fc.txt) fc.txt = String(fc.v);
   let pa;
   if (f.pa != null) pa = { txt: f.pa, o: 'caso', fuera: true };
+  else if (e.sedante === 'propofol' && e.dosisAlta && e.horas > 48) pa = { txt: '↓↓', u: 'IC brusca · ilustrativo', o: 'ilustr.', fuera: true };
   else if (hipoPA) pa = { txt: '↓↓', u: 'caída marcada · sin cifra', o: 'sin cifra', fuera: true };
   else if (e.bradi || dexm) pa = { txt: '↓', u: 'baja · sin cifra', o: 'sin cifra', fuera: e.bradi };
   else pa = { txt: '125/70', o: 'ilustr.' };
@@ -707,7 +753,7 @@ const SUP = 98;
 const Y = { 4: 18, 3: 38, 2: 58, 1: 78, 0: 98, '-1': 126, '-2': 154, '-3': 186, '-4': 222, '-5': 260 };
 const yR = r => Y[String(clamp(Math.round(r), -5, 4))];
 const SC = 0.85;                       // escala del buzo
-const X_SOLO = [172], X_PAR = [134, 214], X_UNO = [172];
+const X_SOLO = [172], X_PAR = [140, 236], X_UNO = [172];
 const VENT = [304, 27];                // entrada del ventilador
 const MED = [311, 198, 38];            // el medallón de la cara
 const T = (x, y, t, o = {}) => `<text x="${x}" y="${y}"${o.a ? ` text-anchor="${o.a}"` : ''} style="font-size:${o.s || 7.5}px;fill:var(${o.c || '--text-dim'});${o.i ? 'font-style:italic;' : ''}${o.b ? 'font-weight:700;' : ''}${o.sans ? 'font-family:var(--sans);' : ''}"${o.id ? ` id="${o.id}"` : ''}>${t}</text>`;
@@ -722,7 +768,7 @@ function construirFondo() {
   h += `<path d="M0 300 C60 292 120 304 180 298 S300 290 360 298 V330 H0Z" style="fill:url(#arena);stroke:var(--text-muted);stroke-width:.9"/>`;
   h += `<path d="M232 300 q8 -16 22 -10 q10 -8 16 8Z M96 302 q6 -10 16 -6 q6 -2 8 6Z" style="fill:url(#raya2);stroke:var(--text-muted);stroke-width:.8"/>`;
   h += `<path d="M118 300 q-4 -16 2 -26 M124 300 q4 -12 -2 -22 M250 296 q-3 -12 3 -20" style="fill:none;stroke:var(--accent-green);stroke-width:.9;opacity:.6"/>`;
-  h += T(354, 292, 'escena: ilustrativo · cifras con su origen', { a: 'end', s: 6, i: 1, c: '--text-muted' });
+  h += T(354, 292, 'escena: ilustrativo', { a: 'end', s: 6.8, i: 1, c: '--text-muted' });
   $('g-fondo').innerHTML = h;
   // las nubes de la tormenta
   const nube = (x, y, s) => `<path transform="translate(${x} ${y}) scale(${s})" d="M0 14 q-2 -10 9 -11 q3 -9 14 -6 q7 -8 17 -1 q11 -2 11 9 q8 3 3 9Z" style="fill:url(#nube);stroke:var(--text-muted);stroke-width:1"/>`;
@@ -745,63 +791,93 @@ function construirRegla() {
   $('g-aguja').innerHTML = `<g id="aguja"><path d="M23 0 L33 -5 L33 5Z" style="fill:var(--accent-blue);stroke:var(--bg-main);stroke-width:.8"/></g>`;
 }
 
-/* ---------- La cara (Tabla 6.1 viva): cejas, ojos y mejillas según la categoría «expresión facial» ---------- */
+/* ---------- La cara (Tabla 6.1 viva) ---------- */
+// La cara pequeña, la que se ve por el visor de la escafandra.
 function caraSVG(cara, ojos) {
   const L = 'stroke:var(--text-main);fill:none;stroke-linecap:round;stroke-width:1.2';
   let h = `<circle r="15" style="fill:var(--bg-main);stroke:var(--text-dim);stroke-width:1.4"/>`;
-  h += `<path d="M-14 4 A15 15 0 0 1 -6 -13.6 A16 16 0 0 0 -11 8Z" style="fill:url(#raya)"/>`;          // sombra en grabado
-  h += `<path d="M-13 -6 Q-6 -17 8 -14 Q14 -11 14 -4" style="${L};stroke:var(--text-muted);stroke-width:2"/>`;  // pelo
-  const cejas = {
-    1: 'M-9 -6 Q-6 -8 -3 -6 M3 -6 Q6 -8 9 -6',
-    2: 'M-9 -7 Q-6 -8 -3 -5.2 M3 -5.2 Q6 -8 9 -7',
-    3: 'M-9.5 -8 L-3 -4.6 M3 -4.6 L9.5 -8 M-3.5 -10.5 L3.5 -10.5',
-    4: 'M-10 -8.6 L-2.4 -3.8 M2.4 -3.8 L10 -8.6 M-4.5 -10.6 L4.5 -10.6 M-3 -12.4 L3 -12.4 M-2 0 Q-5 4 -7.5 8.6 M2 0 Q5 4 7.5 8.6'
-  }[cara];
-  h += `<path d="${cejas}" style="${L}"/>`;
-  if (ojos === 'abiertos') h += `<ellipse cx="-6" cy="-1" rx="2.7" ry="1.9" style="fill:var(--text-main)"/><ellipse cx="6" cy="-1" rx="2.7" ry="1.9" style="fill:var(--text-main)"/><circle cx="-6" cy="-1" r="1" style="fill:var(--bg-main)"/><circle cx="6" cy="-1" r="1" style="fill:var(--bg-main)"/>`;
-  else if (ojos === 'apretados') h += `<path d="M-8.6 -2.4 L-4 -0.6 L-8.6 1.2 M8.6 -2.4 L4 -0.6 L8.6 1.2" style="${L}"/>`;
-  else h += `<path d="M-8.6 -1 Q-6 0.8 -3.4 -1 M3.4 -1 Q6 0.8 8.6 -1" style="${L}"/>`;
-  h += `<path d="M-11 6.2 H11" style="stroke:var(--text-muted);stroke-width:1.4;stroke-dasharray:2 1.4"/>`;            // la venda del tubo
-  h += `<rect x="-3" y="5" width="6" height="4" rx="1" style="fill:var(--text-muted);stroke:var(--bg-main);stroke-width:.6"/>`; // el tubo en la boca
-  if (cara >= 3) h += `<path d="M-5 10.5 Q0 ${cara === 4 ? 8.5 : 9.6} 5 10.5" style="${L};stroke-width:1"/>`;
+  h += `<path d="M-14 4 A15 15 0 0 1 -6 -13.6 A16 16 0 0 0 -11 8Z" style="fill:url(#raya)"/>`;
+  const cejas = { 1: 'M-9 -6 Q-6 -8 -3 -6 M3 -6 Q6 -8 9 -6', 2: 'M-9 -7 Q-6 -8 -3 -5.2 M3 -5.2 Q6 -8 9 -7', 3: 'M-9.5 -8 L-3 -4.6 M3 -4.6 L9.5 -8', 4: 'M-10 -8.6 L-2.4 -3.8 M2.4 -3.8 L10 -8.6' }[cara];
+  h += `<path d="${cejas}" style="${L};stroke-width:1.8"/>`;
+  if (ojos === 'abiertos') h += `<circle cx="-6" cy="-1" r="1.9" style="fill:var(--text-main)"/><circle cx="6" cy="-1" r="1.9" style="fill:var(--text-main)"/>`;
+  else if (ojos === 'apretados') h += `<path d="M-8.6 -2.4 L-4 -0.6 L-8.6 1.2 M8.6 -2.4 L4 -0.6 L8.6 1.2" style="${L};stroke-width:1.5"/>`;
+  else h += `<path d="M-8.6 -1 Q-6 0.8 -3.4 -1 M3.4 -1 Q6 0.8 8.6 -1" style="${L};stroke-width:1.4"/>`;
+  h += `<rect x="-3" y="5" width="6" height="4" rx="1" style="fill:var(--text-muted)"/>`;
   return h;
 }
-function lastreSVG(tipo, esc = 1, horas = 24) {
+// Simétrico de un trazo (solo órdenes M, L, Q: pares x y).
+const espejoX = d => d.replace(/(-?\d+(?:\.\d+)?) (-?\d+(?:\.\d+)?)/g, (m, x, y) => `${n2(-x)} ${y}`);
+// La cara grande del medallón, en grabado: cejas, ojos, surcos, el tubo y las manos de la categoría «miembros superiores».
+function caraGrabado(cara, ojos, brazos) {
+  const S = (d, w = 1.2, c = '--text-main') => `<path d="${d}" style="fill:none;stroke:var(${c});stroke-width:${w};stroke-linecap:round;stroke-linejoin:round"/>`;
+  const par = (d, w, c) => S(d + ' ' + espejoX(d), w, c);
+  let h = `<path d="M-42 46 Q-36 26 -14 22 L14 22 Q36 26 42 46Z" style="fill:url(#raya2);stroke:var(--text-dim);stroke-width:1.2"/>`;
+  h += S('M-14 22 Q0 29 14 22', .9, '--text-muted') + S('M-24 30 Q-22 38 -24 46 M24 30 Q22 38 24 46', .6, '--text-muted');
+  h += `<path d="M-7 12 L-7 22 Q0 25 7 22 L7 12" style="fill:var(--bg-main);stroke:var(--text-dim);stroke-width:1.1"/>`;
+  h += `<ellipse cx="-17.5" cy="-1" rx="3" ry="5" style="fill:var(--bg-main);stroke:var(--text-dim);stroke-width:1"/><ellipse cx="17.5" cy="-1" rx="3" ry="5" style="fill:var(--bg-main);stroke:var(--text-dim);stroke-width:1"/>`;
+  h += `<ellipse cx="0" cy="-2" rx="17" ry="21" style="fill:var(--bg-main);stroke:var(--text-dim);stroke-width:1.4"/>`;
+  h += `<path d="M-17 -2 Q-17 16 -4 19 Q-13 12 -14 -4 Q-14 -14 -8 -20 Q-16 -15 -17 -2Z" style="fill:url(#raya)"/>`;
+  h += `<path d="M-17 -6 Q-18 -22 -4 -24 Q12 -26 17 -10 Q13 -18 4 -19 Q-8 -20 -13 -10Z" style="fill:url(#raya);stroke:var(--text-muted);stroke-width:1"/>`;
+  const frente = ['', '', 'M-7 -15 Q0 -16.5 7 -15', 'M-8 -15 Q0 -17 8 -15 M-6 -18 Q0 -19.4 6 -18', 'M-9 -14.5 Q0 -17 9 -14.5 M-7 -17.6 Q0 -19.6 7 -17.6 M-1.4 -12 L-0.9 -8 M1.4 -12 L0.9 -8'][cara];
+  if (frente) h += S(frente, .7, '--text-muted');
+  h += par({ 1: 'M-12 -10 Q-7 -12.5 -2.5 -10.5', 2: 'M-12 -10.8 Q-7 -12.2 -2.5 -8.8', 3: 'M-12.5 -12 Q-7 -11 -2.5 -7.6', 4: 'M-13 -12.6 Q-7 -10.5 -2 -6.6' }[cara], [0, 1.4, 1.7, 2, 2.4][cara]);
+  if (ojos === 'abiertos') h += par('M-11 -4 Q-7 -6.6 -3 -4', 1) + `<circle cx="-7" cy="-3.7" r="1.9" style="fill:var(--text-main)"/><circle cx="7" cy="-3.7" r="1.9" style="fill:var(--text-main)"/>` + par('M-11 -4 Q-7 -2 -3 -4', .7, '--text-muted');
+  else if (ojos === 'apretados') h += par('M-11 -5 L-3.5 -3.4 L-11 -1.6', 1.3) + par('M-13.5 -6 L-16 -8 M-14 -3.4 L-16.6 -3.4 M-13.5 -1 L-16 1', .7, '--text-muted');
+  else h += par('M-11 -3.6 Q-7 -1.4 -3 -3.6', 1.1) + par('M-9.5 -2.6 L-10.2 -1.2 M-7 -2 L-7 -0.6 M-4.5 -2.6 L-3.9 -1.2', .5, '--text-muted');
+  h += S('M-0.5 -3 Q-2.6 4 -1.4 6.5 Q0 7.6 2 6.6', .9, '--text-dim');
+  if (cara >= 3) h += par('M-4 5 Q-8 9 -8.5 13', cara === 4 ? 1.1 : .8, '--text-dim');
+  if (cara === 4) h += par('M-12 2 Q-10 5 -11 8', .7, '--text-muted');
+  h += `<path d="M-15 11 L15 11" style="stroke:var(--text-muted);stroke-width:2.4;stroke-dasharray:3 1.6"/>`;
+  h += `<rect x="-4" y="9" width="8" height="5" rx="1.2" style="fill:var(--text-muted);stroke:var(--bg-main);stroke-width:.6"/>`;
+  h += `<path d="M3 12 Q16 14 34 4" style="fill:none;stroke:var(--text-muted);stroke-width:4.4;stroke-linecap:round"/><path d="M3 12 Q16 14 34 4" style="fill:none;stroke:var(--bg-main);stroke-width:1.6;stroke-linecap:round"/>`;
+  h += S(cara >= 3 ? 'M-6 13 Q-4 15.8 0 15.8' : 'M-5.5 13.5 Q-3 15 0 15', .9, '--text-dim');
+  const manos = { 1: [], 2: [[-25, 33, false]], 3: [[-14, 30, true]], 4: [[-9, 24, true]] }[brazos] || [];
+  for (const [x, y, puno] of manos) for (const k of [1, -1]) h += puno
+    ? `<circle cx="${k * x}" cy="${y}" r="4.4" style="fill:var(--text-dim);stroke:var(--bg-main);stroke-width:1"/><path d="M${k * x - 2.6} ${y - 1.2} L${k * x + 2.6} ${y - 1.2} M${k * x - 2.6} ${y + 1.2} L${k * x + 2.6} ${y + 1.2}" style="stroke:var(--bg-main);stroke-width:.7"/>`
+    : `<ellipse cx="${k * x}" cy="${y}" rx="4.4" ry="3.2" style="fill:var(--bg-main);stroke:var(--text-dim);stroke-width:1.1"/>`;
+  return h;
+}
+// Los lastres: unos 24-28 px en la escena, cada uno con su forma y su nombre.
+const NOMBRE_LASTRE = { plomo: 'propofol', esponja: 'midazolam', barril: 'lorazepam', piedra: 'diazepam' };
+function lastreSVG(tipo, esc = 1, horas = 24, conNombre = true) {
   if (!tipo) return '';
-  const cuerda = `<path d="M8 44 L20 56" style="stroke:var(--text-muted);stroke-width:1.1"/>`;
-  if (tipo === 'plomo') return cuerda + `<g transform="translate(21 63)"><rect x="-9" y="-6" width="18" height="12" rx="2.5" style="fill:var(--text-muted);stroke:var(--bg-main);stroke-width:1"/><path d="M-6 -3 H6 M-6 0 H4" style="stroke:var(--text-main);stroke-width:.7;opacity:.6"/></g>`;
+  const cuerda = `<path class="cuerda" d="M11 42 Q21 44 30 50" style="fill:none;stroke:var(--text-muted);stroke-width:1.3"/>`;
+  const nombre = y => conNombre ? T(31, y, NOMBRE_LASTRE[tipo], { a: 'middle', s: 9, b: 1, c: '--text-dim', sans: 1 }) : '';
+  const lingote = (x, y, k = 1) => `<g transform="translate(${x} ${y}) scale(${k})"><path d="M-15 -8 H15 L12 8 H-12Z" style="fill:var(--text-muted);stroke:var(--bg-main);stroke-width:1.2"/><path d="M-11 -3.5 H11 M-10 .5 H8 M-9 4.5 H5" style="stroke:var(--text-main);stroke-width:.8;opacity:.55"/><path d="M-15 -8 H15" style="stroke:var(--text-main);stroke-width:1.3"/></g>`;
+  if (tipo === 'plomo') return cuerda + lingote(31, 58) + nombre(78);
   if (tipo === 'esponja') {
-    const s = horas > 168 ? 1.6 : horas > 72 ? 1.45 : horas > 48 ? 1.25 : 1;   // crece con las horas (ilustrativo)
-    return cuerda + `<g transform="translate(22 64) scale(${s * esc})"><path d="M-10 -4 q2 -6 9 -4 q6 -4 10 2 q4 6 -1 10 q-4 5 -11 2 q-8 0 -7 -10Z" style="fill:var(--accent-yellow);opacity:.75;stroke:var(--bg-main);stroke-width:1"/><circle cx="-4" cy="0" r="1.6" style="fill:var(--bg-main)"/><circle cx="3" cy="-2" r="1.3" style="fill:var(--bg-main)"/><circle cx="2" cy="4" r="1.5" style="fill:var(--bg-main)"/><circle cx="-6" cy="5" r="1" style="fill:var(--bg-main)"/></g>`;
+    const k = (horas > 168 ? 1.45 : horas > 72 ? 1.3 : horas > 48 ? 1.15 : 1) * esc;   // crece con las horas (ilustrativo)
+    return cuerda + `<g transform="translate(31 60) scale(${k})"><path d="M-15 -6 Q-12 -15 -2 -12 Q7 -18 13 -9 Q19 0 12 6 Q6 13 -4 9 Q-16 9 -15 -6Z" style="fill:var(--accent-yellow);opacity:.85;stroke:var(--bg-main);stroke-width:1.2"/>${[[-7, -4, 2.2], [2, -7, 1.6], [8, 0, 2], [-1, 3, 2.4], [-9, 4, 1.4], [5, 6, 1.2]].map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" style="fill:var(--bg-main)"/>`).join('')}</g>` + nombre(n2(60 + 14 * k + 8));
   }
-  if (tipo === 'barril') return cuerda + `<g transform="translate(21 61)"><rect x="-7" y="-5" width="14" height="9" rx="2" style="fill:var(--text-muted);stroke:var(--bg-main);stroke-width:1"/></g><path d="M14 66 L10 74" style="stroke:var(--text-muted);stroke-width:1"/><g transform="translate(8 81)"><rect x="-6" y="-7" width="12" height="14" rx="3" style="fill:url(#raya2);stroke:var(--accent-yellow);stroke-width:1"/><path d="M-6 -3 H6 M-6 3 H6" style="stroke:var(--accent-yellow);stroke-width:.8"/></g>`;
-  if (tipo === 'piedra') return cuerda + `<g transform="translate(22 65)"><path d="M-11 -2 L-6 -9 L5 -10 L12 -3 L10 7 L-2 10 L-10 6Z" style="fill:var(--text-dim);opacity:.85;stroke:var(--bg-main);stroke-width:1"/><path d="M-6 -4 L4 -6 M-7 2 L6 0" style="stroke:var(--bg-main);stroke-width:.8"/></g>`;
+  if (tipo === 'barril') return cuerda + lingote(31, 55, .8) + `<path d="M31 61 V68" style="stroke:var(--text-muted);stroke-width:1.2"/><g transform="translate(31 80)"><path d="M-10 -12 Q-13 0 -10 12 H10 Q13 0 10 -12Z" style="fill:url(#raya2);stroke:var(--accent-yellow);stroke-width:1.2"/><path d="M-11.6 -5 H11.6 M-11.6 5 H11.6" style="stroke:var(--accent-yellow);stroke-width:1"/>${T(0, 3, 'PG', { a: 'middle', s: 7, b: 1, c: '--accent-yellow', sans: 1 })}</g>` + nombre(102);
+  if (tipo === 'piedra') return cuerda + `<g transform="translate(31 60)"><path d="M-15 -2 L-9 -11 L5 -12 L15 -4 L13 8 L-2 12 L-13 7Z" style="fill:var(--text-dim);opacity:.9;stroke:var(--bg-main);stroke-width:1.2"/><path d="M-8 -5 L5 -7 M-9 2 L8 0 M-3 7 L6 6" style="stroke:var(--bg-main);stroke-width:.9"/></g>` + nombre(82);
   return '';
 }
+const MIEMBRO = (d, w = 8) => `<path d="${d}" style="fill:none;stroke:var(--text-dim);stroke-width:${w};stroke-linecap:round;stroke-linejoin:round"/><path d="${d}" style="fill:none;stroke:var(--bg-main);stroke-width:${w - 2.4};stroke-linecap:round;stroke-linejoin:round"/><path d="${d}" style="fill:none;stroke:url(#raya);stroke-width:${w - 2.4};stroke-linecap:round;stroke-linejoin:round"/>`;
 function brazosSVG(b) {
-  const L = 'fill:none;stroke:var(--text-dim);stroke-width:3;stroke-linecap:round;stroke-linejoin:round';
-  const brazo = {
-    1: ['M-12 20 Q-19 32 -18 44', [-18, 46, false]],
-    2: ['M-12 20 L-21 33 L-13 39', [-12, 39, false]],
-    3: ['M-12 20 L-20 32 L-9 27', [-8, 26, true]],
-    4: ['M-11 18 L-15 27 L-5 21', [-4.5, 20.5, true]]
-  }[b];
-  const espejo = d => d.replace(/(-?\d+(\.\d+)?) (-?\d+(\.\d+)?)/g, (m, x, _, y) => `${-x} ${y}`);
-  const mano = ([x, y, puno], s) => puno ? `<circle cx="${s * x}" cy="${y}" r="2.8" style="fill:var(--text-dim);stroke:var(--bg-main);stroke-width:.8"/>` : `<circle cx="${s * x}" cy="${y}" r="2.3" style="fill:var(--bg-main);stroke:var(--text-dim);stroke-width:1"/>`;
-  let h = `<path d="${brazo[0]}" style="${L}"/><path d="${espejo(brazo[0])}" style="${L}"/>` + mano(brazo[1], 1) + mano(brazo[1], -1);
-  if (b === 4) h += `<path d="M-20 14 q-3 4 0 8 M20 14 q3 4 0 8" style="fill:none;stroke:var(--accent-red);stroke-width:.9"/>`;
+  const [d, [x, y, puno]] = { 1: ['M-13 18 Q-20 30 -19 42', [-19, 45, false]], 2: ['M-13 18 L-22 31 L-13 38', [-12, 38, false]], 3: ['M-13 18 L-21 30 L-10 26', [-9, 25, true]], 4: ['M-12 17 L-16 26 L-6 21', [-5, 20, true]] }[b];
+  const guante = k => puno ? `<circle cx="${k * x}" cy="${y}" r="3.8" style="fill:var(--text-dim);stroke:var(--bg-main);stroke-width:1"/>` : `<ellipse cx="${k * x}" cy="${y}" rx="3.4" ry="4" style="fill:var(--bg-main);stroke:var(--text-dim);stroke-width:1.4"/>`;
+  let h = MIEMBRO(d) + MIEMBRO(espejoX(d)) + guante(1) + guante(-1);
+  if (b === 4) h += `<path d="M-22 12 Q-25 16 -22 20 M22 12 Q25 16 22 20" style="fill:none;stroke:var(--accent-red);stroke-width:1"/>`;
   return h;
 }
+// El buzo: escafandra de latón con la cara del paciente en el visor; su manguera es el tubo al ventilador.
 function buzoSVG(o) {
-  let h = '';
-  h += `<path d="M-5 45 L-8 70 L-11 72 M5 45 L8 70 L11 72" style="fill:none;stroke:var(--text-dim);stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/>`;
-  h += `<path d="M-12 17 Q0 13 12 17 L10 46 Q0 49 -10 46Z" style="fill:url(#raya2);stroke:var(--text-dim);stroke-width:1.2"/>`;
-  h += `<path d="M-10 46 Q0 49 10 46" style="stroke:var(--text-muted);stroke-width:2;fill:none"/>`;     // cinturón
+  let h = MIEMBRO('M-6 44 L-8 66') + MIEMBRO('M6 44 L8 66');
+  h += `<path d="M-16 72 Q-16 64 -9 64 L-3 64 L-2 72Z M16 72 Q16 64 9 64 L3 64 L2 72Z" style="fill:var(--text-muted);stroke:var(--bg-main);stroke-width:1"/><path d="M-16 72.5 H-2 M16 72.5 H2" style="stroke:var(--text-dim);stroke-width:1.8"/>`;
+  h += `<path d="M-14 15 Q0 10 14 15 L13 44 Q0 49 -13 44Z" style="fill:url(#raya);stroke:var(--text-dim);stroke-width:1.4"/>`;
+  h += `<path d="M-6 24 Q-4 33 -6 41 M6 24 Q4 33 6 41" style="fill:none;stroke:var(--text-muted);stroke-width:.7"/>`;
+  h += `<rect x="-13.5" y="39" width="27" height="5" rx="1.5" style="fill:var(--text-muted);stroke:var(--bg-main);stroke-width:.8"/><rect x="-3" y="39.5" width="6" height="4" rx="1" style="fill:none;stroke:var(--accent-yellow);stroke-width:1"/>`;
   h += lastreSVG(o.lastre, 1, o.horas);
   h += brazosSVG(o.items.brazos);
-  h += `<g>${caraSVG(o.items.cara, o.ojos)}</g>`;
-  if (o.agitado) h += `<path d="M-22 -6 q-4 6 0 12 M-26 -9 q-6 9 0 18 M22 -6 q4 6 0 12 M26 -9 q6 9 0 18" style="fill:none;stroke:var(--accent-red);stroke-width:1"/>`;
-  if (o.delirio) h += `<path d="M0 -22 c8 -6 14 2 6 6 c-6 4 -12 -4 -4 -8 c6 -2 4 4 0 4" style="fill:none;stroke:var(--accent-purple);stroke-width:1.2;stroke-dasharray:2 1.5"/>`;
+  h += `<path d="M-15 13 Q0 6 15 13 L12 22 Q0 27 -12 22Z" style="fill:var(--bg-main);stroke:var(--accent-yellow);stroke-width:1.3"/>` + [[-9, 17.5], [0, 20.5], [9, 17.5]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="1.1" style="fill:var(--accent-yellow)"/>`).join('');
+  h += `<circle r="16.5" style="fill:url(#raya);stroke:var(--accent-yellow);stroke-width:1.8"/><circle r="15" style="fill:none;stroke:var(--bg-main);stroke-width:.6"/>`;
+  h += [0, 60, 120, 180, 240, 300].map(g => { const a = g * Math.PI / 180; return `<circle cx="${n2(Math.cos(a) * 13.3)}" cy="${n2(Math.sin(a) * 13.3)}" r="1" style="fill:var(--accent-yellow)"/>`; }).join('');
+  h += `<circle r="10.6" style="fill:var(--bg-main);stroke:var(--accent-yellow);stroke-width:1.5"/><g transform="scale(.66)">${caraSVG(o.items.cara, o.ojos)}</g>`;
+  h += `<path d="M-7.5 -6.5 Q-4 -9.6 0 -9.2" style="fill:none;stroke:var(--text-main);stroke-width:.8;opacity:.55"/>`;
+  h += `<rect x="10.5" y="-14" width="6" height="5" rx="1" transform="rotate(-35 13.5 -11.5)" style="fill:var(--accent-yellow);stroke:var(--bg-main);stroke-width:.6"/>`;
+  if (o.agitado) h += `<path d="M-24 -6 Q-28 0 -24 6 M-28 -9 Q-34 0 -28 9 M24 -6 Q28 0 24 6 M28 -9 Q34 0 28 9" style="fill:none;stroke:var(--accent-red);stroke-width:1.1"/>`;
+  if (o.delirio) h += `<path d="M0 -22 c8 -6 14 2 6 6 c-6 4 -12 -4 -4 -8 c6 -2 4 4 0 4" style="fill:none;stroke:var(--accent-purple);stroke-width:1.3;stroke-dasharray:2 1.5"/>`;
   return h;
 }
 function ojosDe(items, rass, mira) {
@@ -928,7 +1004,7 @@ function pintarVent() {
   const v = D.items.vent;
   let h = `<rect x="304" y="4" width="52" height="30" rx="4" style="fill:url(#raya);stroke:var(--text-muted);stroke-width:1"/><rect x="308" y="8" width="26" height="12" style="fill:var(--bg-main);stroke:var(--text-muted);stroke-width:.6"/>`;
   h += `<path d="M309 16 l4 -5 l3 7 l3 -5 l4 3 l3 -2 l4 1" style="fill:none;stroke:${v >= 3 ? 'var(--accent-red)' : 'var(--accent-yellow)'};stroke-width:.8"/>`;
-  h += T(330, 30, 'ventilador', { a: 'middle', s: 5.8, i: 1, c: '--text-muted' });
+  h += T(330, 30, 'ventilador', { a: 'middle', s: 6.4, i: 1, c: '--text-muted' });
   if (v >= 3) h += `<g id="alarma"><path d="M346 9 l6 10 h-12Z" style="fill:var(--accent-red)"/>${T(346, 18, '!', { a: 'middle', s: 7, b: 1, c: '--bg-main', sans: 1 })}</g>`;
   $('g-vent').innerHTML = h;
 }
@@ -944,42 +1020,38 @@ function pintarMonitor() {
   if (D.av.pris || D.av.pg) h += `<rect x="266" y="40" width="90" height="46" rx="4" class="anillo-svg" style="fill:none;stroke:var(--accent-red);stroke-width:1.6"/>`;
   $('g-monitor').innerHTML = h;
 }
+function pintarTira() {
+  const t = $('tira-par');
+  if (!D.par) { t.hidden = true; return; }
+  t.hidden = false;
+  const tap = ocultos.has('reloj');
+  if (estado.sedante === 'propofol') {
+    const cols = Object.entries(TABLA_6_7), aq = k => +k === estado.horas ? ' aqui' : '';
+    t.className = 'tira';
+    t.innerHTML = `<span class="tt">Tabla 6.7</span>${cols.map(([k, x]) => `<span class="th${aq(k)}">${x.n.replace(' horas', ' h')}</span>`).join('')}`
+      + `<span class="tl">ligera</span>${cols.map(([k, x]) => `<span class="v ok${aq(k)}">${tap && aq(k) ? '?' : x.lig}</span>`).join('')}`
+      + `<span class="tl">profunda</span>${cols.map(([k, x]) => `<span class="v mal${aq(k)}">${tap && aq(k) ? '?' : x.prof}</span>`).join('')}`
+      + `<span class="org">ficha · p. 29</span>`;
+    return;
+  }
+  t.className = 'tira una';
+  if (estado.sedante === 'midazolam' || estado.sedante === 'lorazepam') t.innerHTML = `<b style="color:var(--oro)">Un estudio:</b> midazolam <b style="color:var(--rojo)">${tap ? '?' : '30 h'}</b> frente a lorazepam <b style="color:var(--verde)">${tap ? '?' : '4-5 h'}</b> para despertar. Pero las guías más recientes: <b style="color:var(--rojo)">evitar las BZD</b> en el ventilado. <span class="org">ficha · p. 26, 27</span>`;
+  else if (estado.sedante === 'dexmedetomidina') t.innerHTML = `<b style="color:var(--oro)">Tabla 6.6:</b> despertar en ${tap ? '?' : '6-10 min'}; y sin pararla, se despierta al llamarle (cooperativa). <span class="org">ficha · p. 27, 29</span>`;
+  else t.innerHTML = `<b style="color:var(--oro)">Diazepam:</b> vida media de 90 h y metabolitos activos; la ficha no da cuánto tarda en despertar. <span class="org ilu">ficha · p. 25 · hueco</span>`;
+}
 function pintarDerecha() {
   const g = $('g-derecha');
-  if (D.par) {   // en la subida, la Tabla 6.7 viva en la columna derecha
-    let h = `<rect x="266" y="112" width="90" height="${estado.sedante === 'propofol' ? 104 : 74}" rx="5" style="fill:var(--bg-main);stroke:var(--accent-yellow);stroke-width:.8"/>`;
-    if (estado.sedante === 'propofol') {
-      h += T(311, 124, 'Tabla 6.7 · propofol', { a: 'middle', s: 6.8, b: 1, c: '--accent-yellow', sans: 1 });
-      h += T(296, 135, 'ligera', { a: 'middle', s: 6, c: '--text-muted', sans: 1 }) + T(334, 135, 'profunda', { a: 'middle', s: 6, c: '--text-muted', sans: 1 });
-      Object.entries(TABLA_6_7).forEach(([k, t], i) => {
-        const y = 148 + i * 17, aqui = +k === estado.horas, tap = ocultos.has('reloj') && aqui;
-        if (aqui) h += `<rect x="268" y="${y - 10}" width="86" height="14" rx="3" style="fill:var(--accent-yellow);opacity:.18"/>`;
-        h += T(271, y, t.n.replace(' horas', ' h'), { s: 6.4, c: aqui ? '--text-main' : '--text-muted', sans: 1 });
-        h += T(305, y, tap ? '?' : t.lig, { a: 'middle', s: 7, b: aqui, c: aqui ? '--accent-green' : '--text-dim', sans: 1 });
-        h += T(337, y, tap ? '?' : t.prof, { a: 'middle', s: 7, b: aqui, c: aqui ? '--accent-red' : '--text-dim', sans: 1 });
-      });
-      h += T(311, 230, 'cifras: ficha · mar-tabla-6-7', { a: 'middle', s: 5.6, i: 1, c: '--text-muted' });
-    } else if (BZD.includes(estado.sedante) && estado.sedante !== 'diazepam') {
-      h += T(311, 124, 'Un estudio', { a: 'middle', s: 6.8, b: 1, c: '--accent-yellow', sans: 1 });
-      h += T(271, 140, 'midazolam', { s: 6.6, c: '--text-dim', sans: 1 }) + T(352, 140, ocultos.has('reloj') ? '?' : '30 h', { a: 'end', s: 7.4, b: 1, c: '--accent-red', sans: 1 });
-      h += T(271, 154, 'lorazepam', { s: 6.6, c: '--text-dim', sans: 1 }) + T(352, 154, ocultos.has('reloj') ? '?' : '4-5 h', { a: 'end', s: 7.4, b: 1, c: '--accent-green', sans: 1 });
-      h += T(311, 170, 'pero las guías:', { a: 'middle', s: 6.2, i: 1, c: '--text-muted' }) + T(311, 180, 'evitar las BZD', { a: 'middle', s: 6.8, b: 1, c: '--accent-red', sans: 1 });
-    } else {
-      h += T(311, 124, estado.sedante === 'dexmedetomidina' ? 'Tabla 6.6' : 'Diazepam', { a: 'middle', s: 6.8, b: 1, c: '--accent-yellow', sans: 1 });
-      h += T(311, 144, estado.sedante === 'dexmedetomidina' ? 'despertar: 6-10 min' : 'vida media: 90 h', { a: 'middle', s: 7, c: '--text-dim', sans: 1 });
-      h += T(311, 158, estado.sedante === 'dexmedetomidina' ? 'sin bajarla: cooperativa' : 'sin cifra de despertar', { a: 'middle', s: 6.4, i: 1, c: '--text-muted' });
-    }
-    g.innerHTML = h; return;
-  }
+  pintarTira();
+  if (D.par) { g.innerHTML = ''; return; }
   const [cx, cy, r] = MED, it = D.items, oc = ocultos.has('bps');
   let h = `<path id="guia-med" d="" style="fill:none;stroke:var(--accent-blue);stroke-width:.7;stroke-dasharray:2 3;opacity:.7"/>`;
-  h += T(cx, cy - r - 6, 'la cara · Tabla 6.1', { a: 'middle', s: 6.6, c: '--accent-blue', sans: 1, b: 1 });
+  h += T(cx, cy - r - 6, 'la cara · Tabla 6.1', { a: 'middle', s: 7, c: '--accent-blue', sans: 1, b: 1 });
   h += `<circle cx="${cx}" cy="${cy}" r="${r + 3}" style="fill:var(--bg-main);stroke:var(--accent-blue);stroke-width:.8"/><circle cx="${cx}" cy="${cy}" r="${r}" style="fill:var(--bg-main);stroke:var(--accent-blue);stroke-width:1.8"/>`;
-  h += `<g clip-path="url(#clip-med)"><g transform="translate(${cx} ${cy + 3}) scale(2.05)">${caraSVG(it.cara, ojosDe(it, D.rass, BUZOS[0]?.mira))}</g></g>`;
+  h += `<g clip-path="url(#clip-med)"><g transform="translate(${cx} ${cy + 3}) scale(1.18)">${caraGrabado(it.cara, ojosDe(it, D.rass, BUZOS[0]?.mira), it.brazos)}</g></g>`;
   h += T(cx, cy + r + 15, oc ? 'BPS ?' : `BPS ${D.bps}`, { a: 'middle', s: 12, b: 1, c: oc ? '--text-main' : D.bps >= 6 ? '--accent-red' : '--accent-green' });
-  h += T(cx, cy + r + 25, oc ? 'cara ? · brazos ?' : `cara ${it.cara} · brazos ${it.brazos}`, { a: 'middle', s: 6.6, c: '--text-dim', sans: 1 });
-  h += T(cx, cy + r + 34, oc ? 'ventilador ?' : `ventilador ${it.vent}`, { a: 'middle', s: 6.6, c: '--text-dim', sans: 1 });
-  h += T(cx, cy + r + 43, '≥6 = dolor inaceptable', { a: 'middle', s: 6.2, i: 1, c: '--text-muted' });
+  h += T(cx, cy + r + 25, oc ? 'cara ? · brazos ?' : `cara ${it.cara} · brazos ${it.brazos}`, { a: 'middle', s: 7, c: '--text-dim', sans: 1 });
+  h += T(cx, cy + r + 34, oc ? 'ventilador ?' : `ventilador ${it.vent}`, { a: 'middle', s: 7, c: '--text-dim', sans: 1 });
+  h += T(cx, cy + r + 43, '≥6 = dolor inaceptable', { a: 'middle', s: 6.6, i: 1, c: '--text-muted' });
   g.innerHTML = h;
 }
 function pintarRotulos() {
@@ -1073,7 +1145,7 @@ function dibujar(dt) {
     const agit = datosBuzo(B).rass >= 2 && !REDUCIR ? Math.sin(tiempo * 9) * 1.4 : 0;
     const y = B.y + bob;
     B.g.setAttribute('transform', `translate(${n2(B.x + agit)} ${n2(y)}) scale(${SC})`);
-    const sx = B.x + agit + 2 * SC, sy = y + 7 * SC, w = vent >= 3 && !REDUCIR ? (vent - 2) * 3 * Math.sin(tiempo * 11 + i) : 0;
+    const sx = B.x + agit + 15 * SC, sy = y - 13 * SC, w = vent >= 3 && !REDUCIR ? (vent - 2) * 3 * Math.sin(tiempo * 11 + i) : 0;
     const d = `M${n2(sx)} ${n2(sy)} C${n2(sx + 18 + w)} ${n2(sy - 6)} ${n2(sx + 36)} ${n2(20 + w)} ${VENT[0]} ${VENT[1]}`;
     if (tubosA[i]) { tubosA[i].setAttribute('d', d); tubosB[i].setAttribute('d', d); }
     if (i === 0) {
@@ -1102,7 +1174,7 @@ function dibujar(dt) {
     const B = BUZOS[0];
     if (B && emitir > .35) {
       emitir = 0;
-      if (D.av.pg && !D.par) { const bx = B.x + 8 * SC, by = B.y + 81 * SC; soltar('lact', bx, by, (Math.random() - .5) * 14, -6 - Math.random() * 6, 3.2); if (Math.random() < .5) soltar('h', bx + 4, by, 8, -5, 3); }
+      if (D.av.pg && !D.par) { const bx = B.x + 31 * SC, by = B.y + 90 * SC; soltar('lact', bx, by, (Math.random() - .5) * 14, -6 - Math.random() * 6, 3.2); if (Math.random() < .5) soltar('h', bx + 4, by, 8, -5, 3); }
       if (D.av.pris && !D.par) { soltar('lact', B.x + (Math.random() - .5) * 20, B.y + 30 * SC, (Math.random() - .5) * 10, -10, 3); if (Math.random() < .4) soltar('h', B.x - 10, B.y + 20, -6, -8, 2.6); }
       if (estado.inflamacion && D.par == null) soltar('cito', 100 + Math.random() * 150, olaY(140) - 20 - Math.random() * 30, (Math.random() - .5) * 8, 6, 3.5);
     }
@@ -1130,7 +1202,7 @@ function subir() {
     // el lastre se suelta y cae al fondo (la esponja del midazolam, no del todo)
     if (c.lastre && c.lastre !== 'esponja' && c.min && !REDUCIR && window.Motion) {
       const g = document.createElementNS('http://www.w3.org/2000/svg', 'g'); $('g-lastres-caidos').appendChild(g);
-      g.innerHTML = lastreSVG(c.lastre).replace(/<path d="M8 44 L20 56"[^>]*\/>/, '');
+      g.innerHTML = lastreSVG(c.lastre).replace(/<path class="cuerda"[^>]*\/>/, '');
       const y0 = B.y, x0 = B.x;
       window.Motion.animate(0, 1, { duration: 1.1, ease: 'easeIn', onUpdate: v => g.setAttribute('transform', `translate(${n2(x0)} ${n2(lerp(y0, 250, v))}) scale(${SC})`), onComplete: () => setTimeout(() => g.remove(), 1500) });
     }
@@ -1178,8 +1250,8 @@ function llamar(tipo) {
    ============================================================ */
 const fraseEl = $('frase');
 function decir(html, fuente) {
-  const ilu = /ilustrativo|sin cifra|hueco/.test(fuente || '');
-  fraseEl.innerHTML = `${html}${fuente ? ` <span class="org${ilu ? ' ilu' : ''}">${fuente}</span>` : ''}`;
+  const o = origen(fuente), ilu = /ilustrativo|sin cifra|hueco/.test(o);
+  fraseEl.innerHTML = `${html}${o ? ` <span class="org${ilu ? ' ilu' : ''}">${o}</span>` : ''}`;
   if (!REDUCIR && fraseEl.animate) fraseEl.animate([{ opacity: .3 }, { opacity: 1 }], { duration: 300 });
 }
 const A = t => `<span class="hl-a">${t}</span>`, R = t => `<span class="hl-r">${t}</span>`;
@@ -1217,7 +1289,7 @@ function fraseDe(v, n) {
       if (n.sedante === 'propofol' && TABLA_6_7[n.horas]) { const t = TABLA_6_7[n.horas]; return [`Propofol ${t.n}: si lo paras, ligera ${t.lig} y profunda ${t.prof}. Pulsa «Despertar».`, 'ficha · mar-tabla-6-7']; }
       return [`Perfusión de ${TABLA_6_7[n.horas]?.n || n.horas + ' h'}.`, ''];
     case 'sedante':
-      if (n.sedante === 'diazepam') return [`Diazepam: le hunde (RASS −3), pero ${R('la tormenta sigue')}: no alivia el dolor. El ~80 % de los residentes contestó mal (Fig. 6.1).`, 'ficha · mar-fig-6-1 · mar-bzd-intro'];
+      if (n.sedante === 'diazepam') return [`Diazepam: le hunde (RASS −3), pero ${R('la tormenta sigue')}. La Fig. 6.1 da por mala la respuesta «sí, alivia el dolor»: falló el ~80 % de los residentes.`, 'ficha · mar-fig-6-1 · mar-bzd-intro'];
       if (n.sedante === 'propofol') return av.sinAnalgesia ? [`Propofol: sedante y amnésico, ${R('sin efecto analgésico')}: le hunde y le sigue doliendo.`, 'ficha · mar-propofol'] : [`Propofol: plomo liso; seda en 1-2 min. Titula a ${A('RASS −1/−2')}.`, 'ficha · mar-propofol · mar-escalas-sedacion'];
       if (n.sedante === 'midazolam') return [`Midazolam: lastre de esponja. Muy liposoluble: en perfusión, ${A('≤48 h')}.`, 'ficha · mar-midazolam'];
       if (n.sedante === 'lorazepam') return [`Lorazepam: acumula menos, pero ${R('lleva un barril de propilenglicol')} (su disolvente).`, 'ficha · mar-lorazepam'];
@@ -1233,7 +1305,7 @@ function fraseDe(v, n) {
       const k = n.ahorro.find(x => !v.ahorro.includes(x));
       if (k === 'ketorolaco') return [`Ketorolaco 30 mg/6 h (${A('15 mg')} con IR, ≥65 años o <50 kg): ${A('reduce el opioide un 25-50 %')}.`, 'ficha · mar-tabla-6-3'];
       if (k === 'paracetamol') return ['Paracetamol 1 g IV/6 h, sin pasar de 4 g al día; sin efecto antiinflamatorio. Ahorra opioide.', 'ficha · mar-tabla-6-3'];
-      if (k === 'ketamina') return [`Ketamina 60-120 µg/kg/h con un opioide (la tabla imprime µg/h: errata). ${R('No en la isquemia miocárdica')}.`, 'ficha · mar-tabla-6-3 · mar-ketamina-errata · mar-ketamina'];
+      if (k === 'ketamina') return [`Ketamina 60-120 µg/kg/h con un opioide (la tabla imprime µg/h: errata). ${R('En general, no en la isquemia miocárdica')}.`, 'ficha · mar-tabla-6-3 · mar-ketamina-errata · mar-ketamina'];
       return ['Sin ese ahorrador.', ''];
     }
     case 'renal':
@@ -1268,7 +1340,7 @@ function setOcultos(arr) { ocultos = new Set(arr || []); pintarTablero(); pintar
 function mirarCelda(k) { document.querySelectorAll('.celda.mira').forEach(c => c.classList.remove('mira')); if (k && $('c-' + k)) $('c-' + k).classList.add('mira'); }
 function anilloEscena(k) {
   const B = BUZOS[0];
-  const POS = { medallon: [311, 198, 46], monitor: [311, 63, 36], buzo: B ? [B.x, B.y + 14, 34] : null, aceite: [118, 60, 28], vent: [330, 19, 22], relojes: [174, 40, 56], regla: [20, 140, 26], fondo: [180, 316, 20] };
+  const POS = { medallon: [311, 198, 46], monitor: [311, 63, 36], buzo: B ? [B.x, B.y + 14, 34] : null, aceite: [118, 60, 28], vent: [330, 19, 22], relojes: [188, 42, 66], regla: [20, 140, 26], fondo: [180, 316, 20] };
   const g = $('g-anillo'); g.innerHTML = '';
   if (!k || !POS[k]) return;
   const [x, y, r] = POS[k];
@@ -1364,11 +1436,11 @@ function chipsEstados() {
 function leyenda() {
   const ic = (vb, s) => `<svg viewBox="${vb}" aria-hidden="true">${s}</svg>`;
   const it = [
-    [ic('-20 -18 40 40', `<g transform="scale(.9)">${caraSVG(4, 'apretados')}</g>`), 'La cara del paciente: la BPS (Tabla 6.1). Relajada → muecas.'],
-    [ic('8 50 26 26', lastreSVG('plomo').replace(/<path d="M8 44[^>]*\/>/, '')), 'Propofol: lastre de plomo liso. Hunde rápido; al soltarlo, sube según la Tabla 6.7.'],
-    [ic('6 50 32 30', lastreSVG('esponja').replace(/<path d="M8 44[^>]*\/>/, '')), 'Midazolam: esponja que en perfusión pesa cada vez más (se acumula; ≤48 h).'],
-    [ic('0 52 32 38', lastreSVG('barril').replace(/<path d="M8 44[^>]*\/>/, '')), 'Lorazepam: con un barril de propilenglicol que gotea con dosis altas más de 48 h.'],
-    [ic('8 52 28 26', lastreSVG('piedra').replace(/<path d="M8 44[^>]*\/>/, '')), 'Diazepam: piedra (vida media de 90 h). Hunde y no quita el dolor.'],
+    [ic('-30 -30 60 60', caraGrabado(4, 'apretados', 3)), 'La cara del paciente, en el visor y en el medallón: la BPS (Tabla 6.1). De relajada a muecas; los puños, los miembros superiores.'],
+    [ic('14 48 34 22', lastreSVG('plomo', 1, 24, false)), 'Propofol: lastre de plomo liso. Hunde rápido; al soltarlo, sube según la Tabla 6.7.'],
+    [ic('14 46 34 28', lastreSVG('esponja', 1, 24, false)), 'Midazolam: esponja que en perfusión pesa cada vez más (se acumula; ≤48 h).'],
+    [ic('14 46 34 48', lastreSVG('barril', 1, 24, false)), 'Lorazepam: con un barril de propilenglicol que gotea con dosis altas más de 48 h.'],
+    [ic('14 46 34 28', lastreSVG('piedra', 1, 24, false)), 'Diazepam: piedra (vida media de 90 h). Hunde y no quita el dolor.'],
     [ic('-14 -18 28 28', `<ellipse rx="10" ry="6.5" style="fill:var(--accent-yellow)"/><path d="M-4 -6 V6 M3 -6.3 V6.3" style="stroke:var(--bg-main);stroke-width:2"/><path d="M0 -6.5 V-14" style="stroke:var(--text-dim)"/>`), 'Dexmedetomidina: boya. Se despierta al llamarle y vuelve solo (cooperativa).'],
     [ic('-14 -12 30 26', `<g transform="rotate(28)"><rect x="-9" y="-7" width="18" height="14" rx="4" style="fill:url(#raya);stroke:var(--accent-blue)"/><path d="M9 -2 L20 -7 L20 -4 L10 2" style="fill:var(--accent-blue)"/></g>`), 'Opioide: aceite que calma la tormenta. Su chip da el inicio de la Tabla 6.2.'],
     [iconoParticula('lact', 22), 'Lactato <span class="prop">propuesta</span> (trípode, como en el capilar): del propilenglicol y del SIP.'],
@@ -1438,7 +1510,7 @@ document.querySelectorAll('.opciones-elige').forEach(grupo => grupo.addEventList
    ============================================================ */
 const TIPO_TXT = { test: 'Test · piensa antes', destapa: 'Piensa y destapa', error: 'Encuentra el error' };
 const SERIE_TXT = { guia: 'Guía socrática', examen: 'Examen · nivel MIR' };
-function verEnTexto(fuente) { return `<p class="fuente-p">Ver en el texto: ${fuente.split(' · ').map(f => `<span class="org">${f}</span>`).join(' ')}</p>`; }
+function verEnTexto(fuente) { return `<p class="fuente-p">Ver en el texto: ${enTexto(fuente).map(f => `<span class="org">${f}</span>`).join(' ')}</p>`; }
 function ponerModelo(q) {
   aplicar(estadoDe(q.estado), { frase: false, inmediato: true });
   mirar(q.mirar || null);
@@ -1516,7 +1588,7 @@ function pintarPregunta(cont, q, { cabecera = '', repaso = null, alFinal }) {
   }
   cont.onclick = e => {
     const a = e.target.closest('[data-accion]')?.dataset.accion;
-    if (a === 'calc') { e.target.closest('button').textContent = `En la app abriría la calculadora de la ficha (${q.calculadora.ids}) y volvería aquí`; return; }
+    if (a === 'calc') { e.target.closest('button').textContent = `En la app abriría la calculadora «${q.calculadora.nombre}» de la ficha y volvería aquí`; return; }
     if (a === 'comprobar') {
       const p = cont.querySelector('#pista');
       if (q.tocar.comprobar(estado)) { p.hidden = true; e.target.closest('.fila').remove(); finComprobar(`<span class="ok">✓ Comprobado: ${q.tocar.confirma}</span>`); return; }
@@ -1671,9 +1743,9 @@ const Estudio = {
     cont.innerHTML = `<span class="eyebrow">Casos clínicos</span><h2 style="margin:0">Pacientes que evolucionan</h2>
       <p class="para">El modelo se mueve al estado de cada paso antes de la pregunta. Lo nuevo de la ficha del paciente sale en rojo.</p>
       <div class="casos-lista">${CASOS.map((c, k) => `<button class="b" type="button" data-caso="${k}">${c.titulo}<small>${c.sub} · ${c.pasos.length} pasos</small></button>`).join('')}</div>
-      <p class="eyebrow" style="margin-top:6px">Vive en el capilar; aquí, su entrada</p>
-      <div class="entrada"><b>B3 · Shock séptico: la ScvO₂ alta que no tranquiliza</b><span>Varón de 58 años, neumonía, noradrenalina, sedado con propofol.</span><span>Giro del día 3: lleva 60 h de propofol a más de 5 mg/kg/h: el umbral del síndrome de infusión. Ese giro abre esta escena en el estado «SIP».</span>
-      <span class="fila"><button class="b" type="button" data-sip>Ver aquí el SIP</button><a href="b1-capilar-oxigeno.html">Abrir el capilar y oxígeno →</a></span><span class="fuente-p"><span class="org">mar-sedacion#mar-pris · capilar, caso B3</span></span></div>`;
+      <p class="eyebrow" style="margin-top:6px">Vive en el capilar y oxígeno; aquí, su entrada</p>
+      <div class="entrada"><b>Shock séptico: la ScvO₂ alta que no tranquiliza</b><span>Varón de 58 años, neumonía, noradrenalina, sedado con propofol.</span><span>Giro del día 3: lleva 60 h de propofol a más de 5 mg/kg/h: el umbral del síndrome de infusión. Ese giro abre esta escena en el estado «SIP».</span>
+      <span class="fila"><button class="b" type="button" data-sip>Ver aquí el SIP</button><a href="b1-capilar-oxigeno.html">Abrir el capilar y oxígeno →</a></span><span class="fuente-p"><span class="org">ficha · p. 28</span></span></div>`;
     entrar(cont);
     pintarDock(CASOS.map(() => ''), 'Casos clínicos', '');
     cont.onclick = e => {
@@ -1708,7 +1780,7 @@ const Estudio = {
     pintarDock(C0.pasos.map(() => 'on'), C0.corto, 'hecho');
     cont.onclick = e => {
       const a = e.target.closest('[data-fin]')?.dataset.fin;
-      if (a === 'ficha') e.target.closest('button').textContent = `En la app abriría la ficha ${C0.volver.ficha}`;
+      if (a === 'ficha') e.target.closest('button').textContent = `En la app abriría la ficha «${C0.volver.nombre}»`;
       if (a === 'modelo') { setModo('explorar'); aplicar(estadoDe(C0.volver.estado)); if (C0.volver.subir) setTimeout(() => cambiar(x => { x.subido = true; }), REDUCIR ? 0 : 700); }
       if (a === 'otro') this.listaCasos();
     };
@@ -1721,7 +1793,7 @@ const Estudio = {
    ============================================================ */
 const CONCEPTOS = [
   { titulo: 'El sedante no quita el dolor',
-    texto: '¿El diazepam alivia el dolor? Contestó mal el <span class="hl-r">~80 % de los residentes</span> y el ~43 % de las enfermeras (Fig. 6.1). Benzodiacepinas y propofol <span class="hl-a">hunden al paciente, pero no calman la tormenta</span>.',
+    texto: '¿El diazepam alivia el dolor? Contestó mal el <span class="hl-r">~80 % de los residentes</span> y el ~43 % de las enfermeras (Fig. 6.1): la figura da por mala la respuesta «sí». Y el propofol no tiene efecto analgésico. Los dos <span class="hl-a">hunden al paciente, pero no calman la tormenta</span> (deducción de la figura, no una cita).',
     hacer: 'muévele en la cama; luego, ponle diazepam; luego, fentanilo.', estado: { estimulo: 'mover' }, mirar: 'medallon',
     acciones: [{ t: 'Moverle en la cama', p: { estimulo: 'mover' } }, { t: '+ Diazepam', p: { estimulo: 'mover', sedante: 'diazepam' } }, { t: '+ Fentanilo', p: { estimulo: 'mover', opioide: 'fentanilo' } }],
     mira: 'con diazepam, el paciente baja a RASS −3 y la cara del medallón sigue con las cejas apretadas: BPS 9. Con fentanilo, el mar se calma.',
@@ -1751,7 +1823,7 @@ const CONCEPTOS = [
     mira: 'el rótulo del aceite: «↓50 %», «sin ajuste» o «¿evitar?».',
     fuente: 'mar-analgesia#mar-tabla-6-2 (acordeones morfina, fentanilo e hidromorfona)' },
   { titulo: 'Ahorrar opioide',
-    texto: 'Paracetamol 1 g IV/6 h (≤4 g/día). Ketorolaco 30 mg/6 h, <span class="hl-a">15 mg</span> con IR, ≥65 años o <50 kg: <span class="hl-a">reduce el opioide un 25-50 %</span>. Ketamina 60-120 µg/kg/h (la tabla imprime µg/h: errata), <span class="hl-r">no en la isquemia miocárdica</span>.',
+    texto: 'Paracetamol 1 g IV/6 h (≤4 g/día). Ketorolaco 30 mg/6 h, <span class="hl-a">15 mg</span> con IR, ≥65 años o <50 kg: <span class="hl-a">reduce el opioide un 25-50 %</span>. Ketamina 60-120 µg/kg/h (la tabla imprime µg/h: errata); <span class="hl-r">en general, no en la isquemia miocárdica</span>.',
     hacer: 'añade los ahorradores al fentanilo.', estado: { estimulo: 'mover', inflamacion: true, opioide: 'fentanilo' }, mirar: 'aceite',
     acciones: [{ t: '+ Ketorolaco', p: { estimulo: 'mover', inflamacion: true, opioide: 'fentanilo', ahorro: ['ketorolaco'] } }, { t: '+ Paracetamol', p: { estimulo: 'mover', inflamacion: true, opioide: 'fentanilo', ahorro: ['ketorolaco', 'paracetamol'] } }],
     mira: 'el frasco de aceite se hace más pequeño con el ketorolaco: menos opioide para la misma calma.',
@@ -1784,7 +1856,7 @@ const CONCEPTOS = [
     texto: 'Con <span class="hl-r">>80 µg/kg/min o >5 mg/kg/h más de 48 h</span> (descrito incluso con 36 µg/kg/min): IC sistólica brusca, acidosis láctica que no cede, rabdomiólisis, fracaso renal. Quizá por bloqueo de la cadena de transporte de electrones. <span class="hl-a">3 %</span>; mortalidad <span class="hl-r">30-35 %</span>.',
     hacer: 'dosis alta a las 24 h; luego, a las 72 h.', estado: { opioide: 'fentanilo', sedante: 'propofol', prof: 'profunda', dosisAlta: true, horas: 24 }, mirar: 'buzo',
     acciones: [{ t: 'Dosis alta, 24 h', p: { opioide: 'fentanilo', sedante: 'propofol', prof: 'profunda', dosisAlta: true, horas: 24 } }, { t: 'Dosis alta, 72 h', p: { opioide: 'fentanilo', sedante: 'propofol', prof: 'profunda', dosisAlta: true, horas: 72 } }],
-    mira: 'a las 24 h no pasa nada; a las 72 h el paciente suelta lactato. En el capilar vivo, el caso B3 lo enseña en la mitocondria.',
+    mira: 'a las 24 h no pasa nada; a las 72 h el paciente suelta lactato. En el capilar vivo, el caso del shock séptico lo enseña en la mitocondria.',
     fuente: 'mar-sedacion#mar-pris' },
   { titulo: 'Delirio: dexmedetomidina; si no la tolera, haloperidol',
     texto: 'Haloperidol 5 mg IV (efecto en 10-20 min, dura 3-4 h); si no responde, <span class="hl-a">10 mg</span>; si responde, el 25 % de la dosis eficaz cada 6 h (el texto: 4-6 h). <span class="hl-r">QTc >500 ms: no</span> (torsade en el 3-4 %, sobre todo con QTc >500 o >35 mg/día). Ojo al síndrome neuroléptico maligno.',
@@ -1803,7 +1875,7 @@ const PREGUNTAS = [
     opciones: [
       { t: 'Se calmará: el diazepam alivia el dolor y, de paso, la agitación', ok: false, porque: 'Es la respuesta del ~80 % de los residentes (Fig. 6.1). Quedaría quieto y con la misma BPS: dolor sin tratar, y ahora sin poder quejarse.' },
       { t: 'Seguirá igual: le hunde, pero no le quita el dolor', ok: true },
-      { t: 'Empeorará: las benzodiacepinas aumentan el dolor', ok: false, porque: 'La ficha no dice que aumenten el dolor: dice que no lo alivian. Con esa idea seguirías sin dar analgesia por un motivo falso.' }],
+      { t: 'Empeorará: las benzodiacepinas aumentan el dolor', ok: false, porque: 'La ficha no dice que aumenten el dolor: la Fig. 6.1 da por mala la respuesta «sí, lo alivia». Con esa idea seguirías sin dar analgesia por un motivo falso.' }],
     explicacion: 'Fig. 6.1: contestó mal el <span class="hl-r">~80 % de los residentes</span> y el ~43 % de las enfermeras. Sedar no es tratar el dolor; y el diazepam, además, se evita (vida media de 90 h, metabolitos activos).' },
   { id: 'in-g2', serie: 'guia', corto: 'la FC', tipo: 'test', fuente: 'mar-analgesia#mar-constantes-dolor',
     estado: {}, mirar: 'monitor',
@@ -1838,6 +1910,32 @@ const PREGUNTAS = [
       { t: 'La mínima, por miedo a la depresión respiratoria', ok: false, porque: 'La depresión respiratoria es rara a dosis habituales, y está ventilado: la dosis mínima le deja con dolor.' },
       { t: 'La que le calma: la marca su respuesta', ok: true }],
     explicacion: 'La dosis eficaz de un opioide la marca <span class="hl-a">la respuesta del paciente</span>, no la dosis recomendada. Míralo: la tormenta se calma en 1-2 min.' },
+  // ---- Examen, nivel MIR · ficha XII ----
+  { id: 'in-e1', serie: 'examen', corto: 'morfina y asma', tipo: 'test', fuente: 'mar-analgesia#mar-tabla-6-2 (acordeón morfina)',
+    estado: { estimulo: 'mover' },
+    enunciado: 'Asmático intubado por una crisis grave, con dolor. Un compañero: «morfina no, que libera histamina y le cerrará los bronquios». ¿Qué le dices?',
+    opciones: [
+      { t: 'Tiene razón: está contraindicada en el asmático', ok: false, porque: 'No da broncoespasmo: se han dado 1,5 mg/kg a asmáticos sin problemas. Le negarías una analgesia válida por un mito.' },
+      { t: 'No libera histamina: eso le pasa al fentanilo', ok: false, porque: 'Es al revés: la morfina libera histamina y el fentanilo no. Elegirías el fármaco por la razón equivocada.' },
+      { t: 'Libera histamina, pero no da broncoespasmo; su riesgo es la hipotensión', ok: true }],
+    explicacion: 'La histamina de la morfina da vasodilatación e <span class="hl-r">hipotensión</span>, sobre todo en estados hiperadrenérgicos; <span class="hl-a">no broncoespasmo</span>.' },
+  { id: 'in-e2', serie: 'examen', corto: 'ketorolaco', tipo: 'test', fuente: 'mar-analgesia#mar-tabla-6-3 · #mar-analgesico-calc',
+    estado: { estimulo: 'mover', opioide: 'fentanilo' }, despues: { estimulo: 'mover', opioide: 'fentanilo', ahorro: ['ketorolaco'] }, mirar: 'aceite',
+    enunciado: 'Varón de 70 años y 80 kg, posoperatorio, con fentanilo; su función renal es normal. Quieres ahorrar opioide con ketorolaco. ¿Qué pautas?',
+    opciones: [
+      { t: '30 mg IV cada 6 h: pesa más de 50 kg y su riñón está bien', ok: false, porque: 'Tiene 70 años: la edad ≥65 por sí sola pide 15 mg. Con 30 mg le doblas la dosis.' },
+      { t: '15 mg IV cada 6 h', ok: true },
+      { t: '15 mg IM cada 6 h, para no gastar otra vía', ok: false, porque: 'La dosis es la buena, pero la vía IM produce hematomas: mejor IV.' },
+      { t: 'Nada de AINE: las complicaciones renales y gástricas son la norma', ok: false, porque: 'Son raras en tratamientos cortos a la dosis recomendada; perderías el ahorro del 25-50 % de opioide.' }],
+    explicacion: 'Ketorolaco 30 mg/6 h; <span class="hl-a">15 mg/6 h</span> con insuficiencia renal, edad ≥65 o peso <50 kg. Junto a un opioide, lo reduce un 25-50 %.' },
+  { id: 'in-e3', serie: 'examen', corto: 'ketamina', tipo: 'test', fuente: 'mar-analgesia#mar-ketamina · #mar-ketamina-errata',
+    estado: { estimulo: 'mover', inflamacion: true, opioide: 'fentanilo' },
+    enunciado: 'Shock séptico con noradrenalina y dolor mal controlado con fentanilo. Tuvo un infarto hace 2 días. ¿Añades ketamina a 60-120 µg/kg/h?',
+    opciones: [
+      { t: 'Sí: sube la PA y la FC, útil en el shock', ok: false, porque: 'Ese efecto es justo el problema: en general no se aconseja en la isquemia miocárdica, y un infarto reciente lo es.' },
+      { t: 'No: en general, no se aconseja en la isquemia', ok: true },
+      { t: 'Sí, pero a 60-120 µg/h, que es lo que pone la tabla', ok: false, porque: 'Es una errata de la Tabla 6.3: el texto da 60-120 µg/<b>kg</b>/h. Y, en general, no en la isquemia.' }],
+    explicacion: 'La ketamina sube la PA y la FC (útil en el shock) y broncodilata, pero <span class="hl-r">en general no se aconseja en la isquemia miocárdica</span>. La dosis buena es la del texto: µg/<b>kg</b>/h.' },
   // ---- Guía socrática · ficha XIII (sedación) ----
   { id: 'in-g6', serie: 'guia', corto: 'la subida', tipo: 'test', fuente: 'mar-sedacion#mar-tabla-6-7',
     estado: { opioide: 'fentanilo', sedante: 'propofol', prof: 'profunda', horas: 24, par: true }, mirar: 'relojes',
@@ -1860,7 +1958,7 @@ const PREGUNTAS = [
     enunciado: 'Va con fentanilo y propofol. ¿A qué RASS titulas la perfusión?',
     opciones: [
       { t: '−1 a −2: sedación ligera; el óptimo es 0', ok: true },
-      { t: '−3, sedación moderada: así no se tirará del tubo', ok: false, porque: 'A −3 ya no tiene contacto visual a la voz. Más hondo es más tiempo para despertar y más delirio: retrasas el destete.' },
+      { t: '−3, sedación moderada: así no se tirará del tubo', ok: false, porque: 'A −3 ya no tiene contacto visual a la voz. Más hondo es más tiempo para despertar (Tabla 6.7): retrasas el destete.' },
       { t: '−4 a −5 mientras siga intubado', ok: false, porque: 'Es sedación profunda: tras 72 h de propofol tardaría 59 h en despertar (Tabla 6.7).' }],
     explicacion: 'La RASS sirve de objetivo de la perfusión: <span class="hl-a">−1 a −2</span>. El óptimo es 0 (alerta y tranquilo).' },
   { id: 'in-g9', serie: 'guia', corto: 'midazolam', tipo: 'test', fuente: 'mar-sedacion#mar-midazolam · #mar-lorazepam · #mar-bzd-intro',
@@ -1880,32 +1978,7 @@ const PREGUNTAS = [
       { t: 'Midazolam en bolos: es corto', ok: false, porque: 'Acumula, da más delirio y las guías piden evitar las BZD en el ventilado; tampoco despierta sin retirarlo.' },
       { t: 'Dexmedetomidina: sedación cooperativa', ok: true }],
     explicacion: 'La dexmedetomidina deja que se despierte <span class="hl-a">sin bajar la perfusión</span> y vuelve sola a su sedación: útil en el destete y para valorar el estado mental (ictus, TCE).' },
-  // ---- Examen, nivel MIR ----
-  { id: 'in-e1', serie: 'examen', corto: 'morfina y asma', tipo: 'test', fuente: 'mar-analgesia#mar-tabla-6-2 (acordeón morfina)',
-    estado: { estimulo: 'mover' },
-    enunciado: 'Asmático intubado por una crisis grave, con dolor. Un compañero: «morfina no, que libera histamina y le cerrará los bronquios». ¿Qué le dices?',
-    opciones: [
-      { t: 'Tiene razón: está contraindicada en el asmático', ok: false, porque: 'No da broncoespasmo: se han dado 1,5 mg/kg a asmáticos sin problemas. Le negarías una analgesia válida por un mito.' },
-      { t: 'No libera histamina: eso le pasa al fentanilo', ok: false, porque: 'Es al revés: la morfina libera histamina y el fentanilo no. Elegirías el fármaco por la razón equivocada.' },
-      { t: 'Libera histamina, pero no da broncoespasmo; su riesgo es la hipotensión', ok: true }],
-    explicacion: 'La histamina de la morfina da vasodilatación e <span class="hl-r">hipotensión</span>, sobre todo en estados hiperadrenérgicos; <span class="hl-a">no broncoespasmo</span>.' },
-  { id: 'in-e2', serie: 'examen', corto: 'ketorolaco', tipo: 'test', fuente: 'mar-analgesia#mar-tabla-6-3 · #mar-analgesico-calc',
-    estado: { estimulo: 'mover', opioide: 'fentanilo' }, despues: { estimulo: 'mover', opioide: 'fentanilo', ahorro: ['ketorolaco'] }, mirar: 'aceite',
-    enunciado: 'Varón de 70 años y 80 kg, posoperatorio, con fentanilo; su función renal es normal. Quieres ahorrar opioide con ketorolaco. ¿Qué pautas?',
-    opciones: [
-      { t: '30 mg IV cada 6 h: pesa más de 50 kg y su riñón está bien', ok: false, porque: 'Tiene 70 años: la edad ≥65 por sí sola pide 15 mg. Con 30 mg le doblas la dosis.' },
-      { t: '15 mg IV cada 6 h', ok: true },
-      { t: '15 mg IM cada 6 h, para no gastar otra vía', ok: false, porque: 'La dosis es la buena, pero la vía IM produce hematomas: mejor IV.' },
-      { t: 'Nada de AINE: las complicaciones renales y gástricas son la norma', ok: false, porque: 'Son raras en tratamientos cortos a la dosis recomendada; perderías el ahorro del 25-50 % de opioide.' }],
-    explicacion: 'Ketorolaco 30 mg/6 h; <span class="hl-a">15 mg/6 h</span> con insuficiencia renal, edad ≥65 o peso <50 kg. Junto a un opioide, lo reduce un 25-50 %.' },
-  { id: 'in-e3', serie: 'examen', corto: 'ketamina', tipo: 'test', fuente: 'mar-analgesia#mar-ketamina · #mar-ketamina-errata',
-    estado: { estimulo: 'mover', inflamacion: true, opioide: 'fentanilo' },
-    enunciado: 'Shock séptico con noradrenalina y dolor mal controlado con fentanilo. Tuvo un infarto hace 2 días. ¿Añades ketamina a 60-120 µg/kg/h?',
-    opciones: [
-      { t: 'Sí: sube la PA y la FC, útil en el shock', ok: false, porque: 'Ese efecto es justo el problema: no se aconseja en la isquemia miocárdica, y un infarto reciente lo es.' },
-      { t: 'No: no se aconseja en la isquemia miocárdica', ok: true },
-      { t: 'Sí, pero a 60-120 µg/h, que es lo que pone la tabla', ok: false, porque: 'Es una errata de la Tabla 6.3: 60-120 µg/h sería una dosis irrisoria. Y además, no en la isquemia.' }],
-    explicacion: 'La ketamina sube la PA y la FC (útil en el shock) y broncodilata, pero <span class="hl-r">no se aconseja en la isquemia miocárdica</span>. La dosis buena es la del texto: µg/<b>kg</b>/h.' },
+  // ---- Examen, nivel MIR · ficha XIII ----
   { id: 'in-e4', serie: 'examen', corto: 'lorazepam', tipo: 'test', fuente: 'mar-sedacion#mar-bzd-proscontras · #mar-bzd-prevencion · #mar-tabla-6-5',
     estado: { opioide: 'fentanilo', sedante: 'lorazepam', par: true }, mirar: 'relojes',
     enunciado: 'Ventilado para varios días. El R2, con la ficha en la mano: «el lorazepam es la benzodiacepina de elección en perfusión prolongada: 4-5 h para despertar frente a 30 h del midazolam». ¿Qué le contestas?',
@@ -1921,7 +1994,7 @@ const PREGUNTAS = [
       { t: 'Lleva más de 5 mg/kg/h durante más de 48 h: está en la dosis de riesgo.', mal: false },
       { t: 'Lactato que no cede, CK que sube y una FEVI que cae de golpe: encaja con un síndrome de infusión de propofol.', mal: false },
       { t: 'Solo aparece por encima de 80 µg/kg/min: con dosis menores se descarta.', mal: true, c: 'Se ha descrito con <span class="hl-r">36 µg/kg/min</span>: una dosis moderada no lo descarta.' },
-      { t: 'Mientras cambio de sedante, le doy una carga de propofol para que no se despierte.', mal: true, c: 'No se da carga de propofol si hay <span class="hl-r">inestabilidad hemodinámica</span>; y aquí el problema es el propio propofol. El tratamiento del SIP es de soporte.' },
+      { t: 'Mientras cambio de sedante, le doy una carga de propofol para que no se despierte.', mal: true, c: 'No se da carga de propofol si hay <span class="hl-r">inestabilidad hemodinámica</span>. El tratamiento del SIP es de soporte (ECMO en algún caso).' },
       { t: 'Incidencia descrita del 3 % y mortalidad del 30-35 %; tratamiento de soporte (ECMO en algún caso).', mal: false }],
     explicacion: '6 mg/kg/h son 100 µg/kg/min: por encima de los dos umbrales (&gt;80 µg/kg/min o &gt;5 mg/kg/h, más de 48 h).' },
   { id: 'in-e6', serie: 'examen', corto: 'haloperidol', tipo: 'error', fuente: 'mar-sedacion#mar-tabla-6-8 · #mar-haloperidol-qtc · #mar-haloperidol-intro',
@@ -1935,11 +2008,12 @@ const PREGUNTAS = [
       { t: 'Su QTc es de 520 ms: lo vigilo, pero no lo contraindica.', mal: true, c: '<span class="hl-r">QTc &gt;500 ms: no se usa</span> el haloperidol IV (torsade de pointes en el 3-4 %).' }],
     explicacion: 'Tabla 6.8 y texto no coinciden en tres cifras (midazolam 1 o 1-2 mg; esperar 15 o 20 min; cada 6 o 4-6 h): las dos valen.',
     nota: 'Fidelidad: la Tabla 6.8 dice midazolam 1 mg, 15 min y cada 6 h; el texto, 1-2 mg, 20 min y cada 4-6 h.' }
+
 ];
 
 const E4_BASE = { estimulo: 'mover', renal: 'ir' };
 const CASOS = [
-  { id: 'E4', titulo: 'E4 · El intubado que lucha', corto: 'Caso E4', sub: 'neumonía, IR, delirio el día 4',
+  { id: 'E4', titulo: 'El intubado que lucha', corto: 'El intubado que lucha', sub: 'neumonía, IR, delirio el día 4',
     paciente: { Edad: '62 años, varón', Motivo: 'Neumonía; intubado', Riñón: 'ClCr 25 mL/min' },
     volver: { nombre: 'Analgesia y Sedación', ficha: 'mar-analgesia y mar-sedacion', estado: { estimulo: 'mover', renal: 'ir', opioide: 'fentanilo', sedante: 'propofol', prof: 'ligera' } },
     lleva: ['Primero el dolor: BPS ≥6 es inaceptable, y la FC no lo mide. El diazepam no alivia el dolor.',
@@ -1959,7 +2033,7 @@ const CASOS = [
         pregunta: { id: 'e4-2', tipo: 'test', fuente: 'mar-analgesia#mar-fig-6-1 · mar-sedacion#mar-propofol · #mar-bzd-intro',
           enunciado: 'El R1 de guardia: «diazepam, que está agitado». ¿Qué haces primero?',
           opciones: [
-            { t: 'Diazepam: con la agitación controlada, el dolor ya se valorará', ok: false, porque: 'El diazepam no alivia el dolor (Fig. 6.1): quedaría hundido con la misma tormenta. Y se evita: vida media de 90 h.' },
+            { t: 'Diazepam: con la agitación controlada, el dolor ya se valorará', ok: false, porque: 'El diazepam no alivia el dolor (lo que enseña la Fig. 6.1): quedaría hundido con la misma tormenta. Y se evita: vida media de 90 h.' },
             { t: 'Primero analgesia (opioide); sedar, después y si hace falta', ok: true },
             { t: 'Propofol: seda rápido y deja despertar pronto', ok: false, porque: 'El propofol no tiene efecto analgésico: misma tormenta, bajo el agua.' }],
           explicacion: 'Su agitación (RASS +2) sale del dolor (BPS 9). <span class="hl-a">Analgesia primero</span>.' } },
@@ -1989,7 +2063,7 @@ const CASOS = [
           despues: { estimulo: 'reposo', renal: 'ir', opioide: 'fentanilo', sedante: 'dexmedetomidina', delirio: true },
           enunciado: 'Delirio hiperactivo: se tira del tubo. ¿Qué haces con la sedación?',
           opciones: [
-            { t: 'Subir el propofol hasta RASS −4', ok: false, porque: 'Más hondo: 59 h para despertar a las 72 h (Tabla 6.7) y más delirio. Y a dosis altas más de 48 h, riesgo de SIP.' },
+            { t: 'Subir el propofol hasta RASS −4', ok: false, porque: 'Más hondo: 59 h para despertar a las 72 h (Tabla 6.7). Y a dosis altas más de 48 h, riesgo de SIP.' },
             { t: 'Midazolam en perfusión: seda rápido', ok: false, porque: 'Las BZD se asocian a más delirio (quizá por el GABA), y las guías piden evitarlas en el ventilado.' },
             { t: 'Pasar a dexmedetomidina', ok: true }],
           explicacion: 'La dexmedetomidina es <span class="hl-a">la de elección para el delirio de la UCI</span> y da menos delirio que las BZD o el propofol.' } },
@@ -2012,16 +2086,16 @@ const CASOS = [
             { t: 'Ingresó con BPS 9: dolor inaceptable, aunque la FC era normal.', mal: false },
             { t: 'Como la FC es normal, por la noche el dolor se controla mirando el monitor.', mal: true, c: 'La FC y la PA se correlacionan mal con el dolor: se mira la <span class="hl-a">BPS</span> (≥6 inaceptable).' },
             { t: 'Fentanilo en perfusión; si fuera morfina, con su ClCr de 25 iría al 50 %.', mal: false },
-            { t: 'Si vuelve a agitarse, diazepam: calma el dolor y la agitación.', mal: true, c: 'El diazepam <span class="hl-r">no alivia el dolor</span> (Fig. 6.1) y se evita (vida media de 90 h). En el delirio: dexmedetomidina o, si no se tolera, haloperidol.' },
+            { t: 'Si vuelve a agitarse, diazepam: calma el dolor y la agitación.', mal: true, c: 'El diazepam <span class="hl-r">no alivia el dolor</span> (lo que enseña la Fig. 6.1) y se evita (vida media de 90 h). En el delirio: dexmedetomidina o, si no se tolera, haloperidol.' },
             { t: 'Haloperidol: mantenimiento con el 25 % de la dosis eficaz cada 6 h.', mal: false }],
-          explicacion: 'Dos errores, y los dos se repiten de verdad en las guardias.' } }
+          explicacion: 'Dos errores: la FC como medida del dolor y el diazepam como analgésico.' } }
     ] },
-  { id: 'E8', titulo: 'E8 · El despertar que no llega', corto: 'Caso E8', sub: 'tres camas, tres sedantes',
+  { id: 'E8', titulo: 'El despertar que no llega', corto: 'El despertar que no llega', sub: 'tres camas, tres sedantes',
     paciente: { Edad: '55 años, mujer', Motivo: 'SDRA; ventilada', Sedación: 'propofol, sedación profunda (RASS −4)', Tiempo: '72 h' },
     volver: { nombre: 'Sedación', ficha: 'mar-sedacion', estado: { opioide: 'fentanilo', sedante: 'propofol', prof: 'profunda', horas: 72, par: true }, subir: true },
     lleva: ['La profundidad pesa más que el tiempo: a las 72 h de propofol, 34 min en ligera frente a 59 h en profunda.',
       'Midazolam ≤48 h (se acumula). Lorazepam >10 mg/h o >0,1 mg/kg/h más de 48 h: propilenglicol; mira el hiato osmolar, no el lactato.',
-      'Sedación ligera con escala, interrupción diaria y evitar las BZD en el ventilado.'],
+      'Sedación ligera con escala; y con las BZD, interrupción diaria o, mejor, evitarlas en el ventilado.'],
     pasos: [
       { momento: 'Día 3 · 08:00 · predice', datos: {}, nuevo: [],
         estado: { opioide: 'fentanilo', sedante: 'propofol', prof: 'profunda', horas: 72, par: true }, mirar: 'relojes',
@@ -2038,9 +2112,9 @@ const CASOS = [
         pregunta: { id: 'e8-2', tipo: 'destapa', fuente: 'mar-sedacion#mar-bzd-prevencion · #mar-tabla-6-7 · #mar-dexmedetomidina',
           enunciado: 'Para que a la próxima cama no le pase lo mismo, ¿qué harías desde el primer día? Son tres cosas.',
           puntos: ['<span class="hl-a">Sedación ligera</span> titulada con la RASS (−1 a −2): es lo que más acorta el despertar.',
-            '<span class="hl-a">Interrupción diaria</span> («vacaciones de sedación»): acelera el destete.',
+            '<span class="hl-a">Interrupción diaria</span> de la perfusión («vacaciones de sedación»): acelera el destete (el libro la da para las perfusiones de BZD).',
             'O dexmedetomidina: se despierta sin bajarla y <span class="hl-a">evita las vacaciones de sedación</span>.'],
-          explicacion: 'Las tres salen de la ficha XIII; la sedación ligera, además, reduce el delirio.' } },
+          explicacion: 'Las tres salen de la ficha de sedación; la sedación ligera, además, favorece el destete y reduce el delirio (lo dice de las BZD).' } },
       { momento: 'Día 3 · 09:00 · la cama 8', datos: { 'Cama 8': 'midazolam en perfusión desde hace 96 h; pedido: ligera; hoy, RASS −3' }, nuevo: ['Cama 8'],
         estado: { opioide: 'fentanilo', sedante: 'midazolam', prof: 'ligera', horas: 96 }, mirar: 'buzo',
         pregunta: { id: 'e8-3', tipo: 'test', fuente: 'mar-sedacion#mar-midazolam · #mar-lorazepam',
@@ -2074,6 +2148,12 @@ const CASOS = [
 ];
 
 const PROF = [
+  ['Opiáceo, opioide y narcótico', 'Opiáceo: derivado natural del opio. Opioide: derivado natural o sintético que actúa sobre los receptores opioides (analgesia, sedación, euforia, miosis, depresión respiratoria, bradicardia, estreñimiento, náuseas, retención urinaria, prurito). Narcótico: término anticuado, y policial para el uso ilegal.', 'mar-opioide-definiciones', 18],
+  ['Fentanilo e hidromorfona, más a fondo', 'El fentanilo, por su lipofilia, se acumula en el cerebro con el uso continuado; sin metabolitos activos, pero el fármaco se acumula en la IR. La hidromorfona es semisintética, quizá más analgésica que la morfina, preferida en el dolor oncológico y sin ventajas demostradas sobre el fentanilo.', 'mar-tabla-6-2', 20],
+  ['Paracetamol IV y ketamina, de dónde vienen', 'El paracetamol IV se aprobó en 2010 para el dolor y la fiebre del posoperatorio que no puede tomarlo por boca; su gran pega, además de la hepatotoxicidad, es que no es antiinflamatorio. La ketamina es un derivado de la fenciclidina, anestésica y analgésica.', 'mar-tabla-6-3 · mar-ketamina', 22],
+  ['Medidas no farmacológicas', 'El capítulo no las trata: remite a una guía de práctica clínica. Sí cita, como parte de sedar, el apoyo general: hablar a menudo con el paciente y con la familia.', 'mar-dolor-intro · mar-ansiedad', 16],
+  ['Escalas de sedación', 'Las dos más fiables en la UCI: la escala de sedación-agitación (SAS) y la RASS. La RASS permite además seguir los cambios y servir de objetivo de la perfusión.', 'mar-escalas-sedacion', 24],
+  ['Dexmedetomidina: dosis y más ventajas', 'Tabla 6.6: carga de 1 µg/kg en 10 min; inicio en 5-10 min; mantenimiento de 0,2-1,5 µg/kg/h; despertar en 6-10 min. Sirve en el paciente no ventilado (no deprime la respiración), y el EEG de su sedación se parece al del sueño natural.', 'mar-tabla-6-6 · mar-dexmedetomidina', 27],
   ['PCA (analgesia controlada por el paciente)', 'Para el despierto y capaz: pulsa y recibe un bolo; la bomba se bloquea un intervalo de cierre, cuyo mínimo lo marca el tiempo hasta el efecto máximo. En la orden: carga, intervalo y bolo (morfina 0,5-3 mg, 10-20 min; hidromorfona 0,1-0,5 mg, 5-15 min; fentanilo 15-75 µg, 3-10 min).', 'mar-analgesia#mar-tabla-6-2 (acordeón PCA)', 21],
   ['Remifentanilo', '250 veces más potente que la morfina. Carga de 1,5 µg/kg y 0,5-15 µg/kg/h; efecto en un minuto que desaparece a los 10 min (esterasas plasmáticas, sin ajuste renal ni hepático). Útil en el TCE. El corte brusco puede precipitar abstinencia.', 'mar-analgesia#mar-tabla-6-2 (acordeón remifentanilo)', 20],
   ['Meperidina', 'Ya no se usa: la normeperidina tiene una vida media de 15-40 h y se acumula (agitación, mioclonías, delirio, convulsiones).', 'mar-analgesia (acordeón meperidina)', 20],
@@ -2087,8 +2167,8 @@ const PROF = [
 ];
 function pintarProfundizar() {
   $('prof').innerHTML = PROF.map(([t, x, f, p]) => `<section><b>${t}.</b> ${x}
-    <span class="fuente-p">Ver en el texto: <span class="org">${f}</span></span> <a class="pdf" href="../../docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=${p}" target="_blank" rel="noopener">PDF, p. ${p} →</a></section>`).join('') +
-    '<p class="para">En la app, el recorrido completo de las dos fichas cubre el resto (cobertura del diseño: XII 16/18, XIII 14/15).</p>';
+    <span class="fuente-p">Ver en el texto: ${enTexto(f).map(x => `<span class="org">${x}</span>`).join(' ')}</span> <a class="pdf" href="../../docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=${p}" target="_blank" rel="noopener">PDF, p. ${p} →</a></section>`).join('') +
+    '<p class="para">En la app, el recorrido completo de las dos fichas cubre el resto.</p>';
 }
 
 /* ============================================================
@@ -2122,6 +2202,13 @@ window.__pruebas = () => {
   mira('dexmedetomidina', 'RASS · FC y PA bajan sin cifra', [E('dexmedetomidina').rass, E('dexmedetomidina').fc.txt, E('dexmedetomidina').pa.txt], [-2, '↓', '↓']);
   mira('dexmedetomidina', 'a la voz sube a la superficie', (() => { const g = estado; estado = estadoDe(ESTADOS.dexmedetomidina.p); const d0 = D; D = derivar(estado); const res = respuestaVoz('voz'); estado = g; D = d0; return [res.y, res.mira]; })(), [SUP, true]);
   mira('pris', 'SIP · no a 24 h', [E('pris').av.pris, derivar(estadoDe({ sedante: 'propofol', dosisAlta: true, horas: 24 })).av.pris], [true, false]);
+  mira('pris', 'la PA cae (sin cifra)', E('pris').pa.txt, '↓↓');
+  { const vis = []; const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement.closest('script,style') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+    while (w.nextNode()) vis.push(w.currentNode.nodeValue);
+    const campos = [...PREGUNTAS, ...CASOS.flatMap(c => c.pasos.map(p => p.pregunta))].flatMap(q => [q.enunciado, q.explicacion, q.nota, ...(q.puntos || []), ...(q.opciones || []).flatMap(o => [o.t, o.porque]), ...(q.frases || []).flatMap(f => [f.t, f.c])])
+      .concat(CASOS.flatMap(c => [c.titulo, c.corto, c.sub, ...c.lleva]), CONCEPTOS.flatMap(k => [k.titulo, k.texto, k.hacer, k.mira]), PROF.flatMap(p => [p[0], p[1]]));
+    const malos = [...vis, ...campos].filter(Boolean).join(' ').match(/mar-[a-z]|formas-iones|dolor-oculto|§|caso B3|Caso E\d|pregunta 16|cobertura del diseño|irrisoria/g) || [];
+    mira('textos', 'nombres internos a la vista', malos, []); }
   mira('delirio', 'RASS · recomienda', [E('delirio').rass, E('delirio').recomienda], [3, 'dexmedetomidina']);
   mira('haloperidol', 'RASS · con QTc >500 bloqueado', [E('haloperidol').rass, derivar(estadoDe({ ...ESTADOS.haloperidol.p, qtcLargo: true })).av.haloBloq], [-1, true]);
   mira('hipovolemia', 'opioide + BZD: PA ↓↓', derivar(estadoDe({ opioide: 'fentanilo', sedante: 'midazolam', volemia: 'hipovolemia' })).pa.txt, '↓↓');
@@ -2170,7 +2257,7 @@ window.__pruebas = () => {
 /* ============================================================
    12. Arranque
    ============================================================ */
-construirFondo(); construirRegla(); construirCama(); chipsDock(); chipsEstados(); leyenda(); pintarProfundizar();
+limpiarChips(); construirFondo(); construirRegla(); construirCama(); chipsDock(); chipsEstados(); leyenda(); pintarProfundizar();
 aplicar(estadoBase(), { frase: false, inmediato: true });
 decir(...fraseDe(null, estado));
 if (!REDUCIR) { const B = BUZOS[0]; B.y = SUP - 40; moverBuzo(B, yObjetivo(B), 1.6, 'easeOut'); } else pintarUnaVez();
