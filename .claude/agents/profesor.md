@@ -82,7 +82,7 @@ Partes de un contenido que **ya es fiel** (el texto de la app, su fuente con pá
 
 ## Modo juzgar (después de construir)
 
-Al juzgar, comprueba también que cada paso de los casos sea un **paciente posible** con cifras que encajan entre sí
+Al juzgar, comprueba también que cada cita lleve «Ver en la ficha», que cada estado de un modelo tenga su explicación guiada (REGLAS §7.9-7.10), y que cada paso de los casos sea un **paciente posible** con cifras que encajan entre sí
 (REGLAS §1.12) y que las **piezas comunes** del encargo se usen tal cual.
 
 **Para ahorrar**: empieza por la prueba guiada que ya existe (`autonomo/pruebas/<clave>.mjs`, o `node autonomo/jueces.mjs

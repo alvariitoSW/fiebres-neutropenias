@@ -193,6 +193,22 @@ pobre que no ayudaba a estudiar. Al usuario le importa **tanto que se entienda y
    en una barra o en un indicador no es una figura. Si ningún modelo sirve y uno nuevo explicaría muchos temas (p. ej.
    un pulmón con respirador para toda la ventilación mecánica), se propone al usuario: es una decisión grande.
 
+9. **Cada cita lleva a la app** (el usuario, 20/10/2026: «que te lleve directamente al párrafo o al sitio donde te
+   viene explicado eso»). En un modelo vivo, una maqueta o una pregunta, cada cifra o concepto con su página del PDF
+   lleva además **«Ver en la ficha»**: el enlace cruzado de siempre al párrafo exacto (`data-resaltar="#id"`), que
+   está en español. Si el trozo no tiene id, se le pone. Si el concepto vive en otra parte de la app (otra ficha,
+   otro libro, otro modelo), también se enlaza. El PDF queda como segunda opción, nunca como la única.
+10. **Explorar explica, no solo enseña** (mismo día: «que te diga, pues mira, en una sepsis pasa esto, pasa esto,
+    como puedes ver en la imagen»). Cada estado con nombre de un modelo vivo lleva su **explicación guiada**: 3-5
+    pasos cortos que se leen uno a uno y, en cada paso, señalan en el dibujo lo que cuentan (resalte o lupa), con
+    su «Ver en la ficha». No sustituye a la Mayéutica: Explorar explica; la Mayéutica pregunta.
+11. **Modelos por concepto, no por libro** (mismo día: «estas maquetas en vivo quizá no solo valgan para este libro…
+    que también te aparezca la sepsis en otro libro… y se pueda integrar dentro del molde visual»). Un modelo vivo
+    se nombra y se construye por el **mecanismo** (la herida, el capilar, la nefrona), no por el capítulo. Cada
+    estado guarda sus fuentes como una **lista** (libro, página, ficha), para que otro libro pueda añadir su estado o
+    su matiz sin rehacer el modelo. Las fuentes nunca se funden: si dos libros dicen distinto, el estado muestra las
+    dos con su nota (§1.8).
+
 **Cómo se juzga**: el agente `profesor` puntúa del 1 al 5 cada punto (y los de §8 si hay preguntas) mirando
 capturas al lado de un modelo. Si alguno queda por debajo de 4, la tarea vuelve al constructor con lo que falta.
 

@@ -51,6 +51,21 @@ El profesor decide si conviene, si basta con ampliar el telar, o algo mejor.
 - 20/10: **solo 4-5 paradas por bloque** (`REGLAS.md` §2.3): 1) este plan con sus maquetas; 2) el primer modelo nuevo
   construido; 3) el bloque entero; 4) los cambios que pida. Todo lo demás lo decide el director.
 
+### Parada 1 (20/10/2026): lo que dijo el usuario de las maquetas
+
+- «Están muy guapas… como base sobre la que trabajar está bien». Aprobadas como base, con estos cambios:
+- **Referencias**: además del PDF, cada cita lleva a la app, al párrafo exacto («el texto está en inglés… quiero ir ya
+  a la aplicación y que me lleve al sitio exacto donde está ese concepto»). → REGLAS §7.9.
+- **Explorar que explica**: «en una sepsis pasa esto, pasa esto, como puedes ver en la imagen». → explicación guiada
+  por estado, REGLAS §7.10.
+- **Vaso: fusión de A y B** («me gustan los dos… podría hacerse una fusión y mejorar todavía más el aspecto visual o
+  el interactivo»). Lo que no explique, que lo referencie.
+- Vaso como modelo nuevo con las piezas del telar: **sí**. Preguntas del vaso: «podría pensarse» → decide el director:
+  el modo Mayéutica del vaso usa las preguntas de las fichas 4-6 (una sola fuente de preguntas) y añade solo las de
+  «predice y compruébalo» que necesiten el dibujo.
+- Corregir el capilar (gasto que sube con anemia), gasto quieto al transfundir y las 9 formas nuevas: **sí**.
+- Modelos por concepto, reutilizables por otros libros (REGLAS §7.11; bitácora B-008).
+
 ## 6. Reglas que más fallan
 
 La lista de comprobación de `.claude/agents/constructor.md` (frases nuevas con página, cifras en su contexto, tipos
@@ -60,8 +75,8 @@ de nota, nada interno a la vista, rótulos ≥7,5 px, forma de las opciones) y l
 
 | Paso | Quién | Sale en | Estado |
 |---|---|---|---|
-| 1 · Cobertura | profesor (modo cobertura) | `autonomo/bloques/b2/cobertura.md` | en curso |
-| 2 · Maquetas (parada 1 del usuario) | constructor potente | `autonomo/maquetas/b2-*.html` + Artifact | pendiente |
+| 1 · Cobertura | profesor (modo cobertura) | `autonomo/bloques/b2/cobertura.md` | hecha (≈92 %) |
+| 2 · Maquetas (parada 1 del usuario) | constructor potente | `autonomo/maquetas/b2-*.html` | hecha: aprobadas como base el 20/10, con cambios (§5) |
 | 3 · Modelos en la app (parada 2: el primero) | constructor potente | rama `auto/b2` | pendiente |
 | 4 · Estudio en las 6 fichas | constructor | rama `auto/b2` | pendiente |
 | 5 · Jueces, auditor y profesor (parada 3: el bloque entero) | — | `autonomo/bloques/b2/*.md`, una sola PR | pendiente |
