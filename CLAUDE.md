@@ -80,7 +80,8 @@ backend/ admin/         panel de subida de contenido (aparte de la app)
   resuelve un listener delegado en `home/index.js`. Sirve entre especialidades y dentro de una (sin `data-view`).
   Extras: `data-trasplante` (con `especialidad="home"`), `data-resaltar="#id"`, `data-pulsar="id1 id2"`,
   `data-en-visual`, `data-eco-vista/escenario/medir/atlas/panel`, `data-nefrona-viva`, `data-glomerulo`,
-  `data-acidobase-vivo`, `data-agua-viva`, `data-capilar-vivo`, `data-cateter-vivo` (modelos vivos: cada especialidad los declara en `modelosVivos` de su API;
+  `data-acidobase-vivo`, `data-agua-viva`, `data-capilar-vivo`, `data-cateter-vivo`, `data-muralla-viva`,
+  `data-telar-vivo`, `data-inmersion-viva` (modelos vivos: cada especialidad los declara en `modelosVivos` de su API;
   su «← VOLVER» lleva a la ficha de origen, `core/volver-ficha.js`). Las claves de
   vista y panel de cada cuaderno están en `PANEL_NAV` de `core/search.js` (Hematología usa `especialidad="home"`). **Nunca un
   listener nuevo por módulo.** `.tx-link`, `.especialidad-link`, `.paper-link`, `.neumo-internal-link` son solo

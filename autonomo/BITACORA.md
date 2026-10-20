@@ -186,18 +186,12 @@ esta sección.
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
 
-| `b1-*` | **Objetivo M5 · bloque 1** (caps. 1-11) | hecho el 20/10, salvo «La cama 7» | 2026-10-19 | Siguiente: construir La cama 7 cuando la elijas y empezar el bloque 2. |
+| `b1-*` | **Objetivo M5 · bloque 1** (caps. 1-11) | hecho el 20/10 | 2026-10-19 | Siguiente: el bloque 2 de Marino. |
 
 El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
-- **Bloque 1 · «La cama 7»** (muralla, telar e inmersión, vuelta 2): ¿te gustan? Si dices que sí, se construyen en la
-  app. Maquetas: https://claude.ai/artifact/Q4Fii5DVMgqGhQf7429ouv.
-- **Formas nuevas** de partícula (O₂, lactato, coco y burbuja, ya en la app; bacilo, linfocito y otras, en las
-  maquetas): ¿entran en la tabla única?
-- **Motor del corazón**: la PVC normal da 5,02 (Tabla 8.1: 0-5), y la elevación de piernas en la hemorragia sube el VS
-  un 44-47 %. ¿Se calibra?
 
 - **Decidido el 19/10**: Marino primero, por bloques (Objetivo M5). B-002, B-004, B-005 y B-006 esperan a terminar
   Marino. B-001 (preguntas) se hace como la **Mayéutica** de cada ficha, bloque a bloque. B-007 sigue sin aprobar.
@@ -257,6 +251,11 @@ El resto del tablero sigue `aparcada`.
   ayuda. Es una tarea pequeña de solo lectura.
 
 ## 6. Hecho (últimos 7 días)
+
+- 2026-10-20 · **«La cama 7» en la app** (PR #23) y **motor calibrado** (PR #22), aprobados y en main.
+  - Muralla, telar e inmersión en Libros → Marino → Modelos vivos, con la misma cama y desde sus 5 fichas.
+  - 11 formas nuevas en la tabla única. Si un modelo vivo falla, el resto de Libros sigue funcionando.
+  - PVC normal 4,2 mmHg; elevación de piernas en la hemorragia +20 %.
 
 - 2026-10-20 · **Marino, bloque 1 en modelos vivos** (PR #19, #20 y #21), aprobados y en main.
   - Mayéutica en las 23 fichas de Fundamentos (botón Texto | Visual | Mayéutica).
