@@ -213,6 +213,7 @@ ul.prof a.pdf { display: inline-flex; align-items: center; min-height: 44px; }
 .resumen { font: .82rem/1.4 var(--sans); color: var(--dim); background: var(--card); border-radius: 10px; padding: 8px 10px; }
 
 /* Capa de estudio: el aspecto del modelo aprobado */
+.formato button, .formato .respuesta, .formato .mando { scroll-margin-bottom: calc(var(--dock-h) + 16px); scroll-margin-top: calc(var(--escena-h, 0px) + 12px); }
 .formato { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: grid; gap: 10px; min-width: 0; }
 .cab-preg { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
 .num { font: 700 .76rem var(--sans); color: var(--oro); border: 1px solid var(--oro); border-radius: 6px; padding: 1px 7px; }
@@ -260,7 +261,7 @@ ul.prof a.pdf { display: inline-flex; align-items: center; min-height: 44px; }
   <header class="cabecera">
     <p class="aviso">Maqueta para elegir: no es la app</p>
     <h1>El telar de la trombina: <em>la pierna de la cama 7</em></h1>
-    <p class="lead">En el bolsillo de una válvula de la femoral, la trombina teje la red del trombo. Cada anticoagulante corta un hilo, y la heparina es una cadena: <strong class="hl-a">su largo decide qué puede atar</strong>. Y una adivinanza: <strong class="hl-r">inmovilidad no es estasis</strong>. <span class="org">ficha · mar-hnf · mar-hbpm · mar-inmovilidad</span></p>
+    <p class="lead">En el bolsillo de una válvula de la femoral, la trombina teje la red del trombo. Cada anticoagulante corta un hilo, y la heparina es una cadena: <strong class="hl-a">su largo decide qué puede atar</strong>. Y una adivinanza: <strong class="hl-r">inmovilidad no es estasis</strong>. <span class="orgNone">ficha · p. 4-5, 6-7, 13</span></p>
   </header>
 
   <!-- La entrada: la cama 7 en grabado -->
@@ -296,7 +297,7 @@ ul.prof a.pdf { display: inline-flex; align-items: center; min-height: 44px; }
     <section class="bloque">
       <h2>Qué es cada cosa</h2>
       <ul class="leyenda" id="leyenda"></ul>
-      <p class="para">El hematíe (disco) y las citoquinas (trébol) son de la tabla única de formas de la app. <b>Las seis con borde discontinuo son propuestas</b> (§6 del diseño): solo entran en la tabla si las apruebas. Las «máquinas» del telar (Xa, II, IIa) no son partículas: van rotuladas con su nombre, como en la Fig. 5.2. La forma dice qué es; el color, nunca solo.</p>
+      <p class="para">El hematíe (disco) y las citoquinas (trébol) son de la tabla única de formas de la app. <b>Las seis con borde discontinuo son propuestas</b>: solo entran en la tabla si las apruebas. Las «máquinas» del telar (Xa, II, IIa) no son partículas: van rotuladas con su nombre, como en la Fig. 5.2. La forma dice qué es; el color, nunca solo.</p>
     </section>
 
     <section class="bloque">
@@ -336,28 +337,28 @@ ul.prof a.pdf { display: inline-flex; align-items: center; min-height: 44px; }
           </tbody>
         </table>
       </div>
-      <p class="para" style="margin-top:6px">Ninguna dosis del capítulo es una errata de dosis (REGLAS §1.8): las del dabigatrán (110 → 220 mg) y la HNF (5.000 U) son las que imprime el libro. Lo que hay son dos discrepancias del propio libro, abajo.</p>
+      <p class="para" style="margin-top:6px">Ninguna dosis del capítulo es una errata de dosis: las del dabigatrán (110 → 220 mg) y la HNF (5.000 U) son las que imprime el libro. Lo que hay son dos discrepancias del propio libro, abajo.</p>
     </details>
 
     <details class="nota-plegable">
       <summary>De dónde sale cada cifra del modelo</summary>
       <ul class="huecos">
-        <li><b>Mecanismo</b> <span class="org">ficha · mar-hnf · mar-hbpm · mar-fondaparinux (Fig. 5.2) · PDF p. 4-8</span>: HNF de 3.000 a 30.000 Da, anti-Xa y anti-IIa, el anti-IIa 10 veces el anti-Xa y dependiente del largo de la cadena; HBPM de 4.500 Da de media, menos unión a la trombina; fondaparinux, el pentasacárido que une la heparina a la antitrombina (5 cuentas).</li>
+        <li><b>Mecanismo</b> <span class="orgNone">ficha · p. 4-5, 6-7, 8, 4-8</span>: HNF de 3.000 a 30.000 Da, anti-Xa y anti-IIa, el anti-IIa 10 veces el anti-Xa y dependiente del largo de la cadena; HBPM de 4.500 Da de media, menos unión a la trombina; fondaparinux, el pentasacárido que une la heparina a la antitrombina (5 cuentas).</li>
         <li><b>Cuántas cuentas</b> lleva cada cadena de HNF y de HBPM: <b>ilustrativo</b> (largo relativo). Solo las 5 del fondaparinux son de la ficha.</li>
         <li><b>Cuánto frena</b> cada fármaco el telar y a qué ritmo crece la red: <b>ilustrativo</b>. Lo que sí es de la ficha es <b>qué hilo corta</b> cada uno.</li>
-        <li><b>Flujo de la femoral</b>: igual al gasto en un sistema cerrado <span class="org">ficha · mar-inmovilidad · PDF p. 13</span>. Con gasto bajo, lento: <span class="org ilu">fisiología general</span>; su 35 %, ilustrativo.</li>
-        <li><b>TIH</b> <span class="org">ficha · mar-hnf (Uniones) · mar-hbpm · PDF p. 5 y 7</span>: FP4 + heparina → IgG → activación, trombosis y trombocitopenia por consumo; no depende de la dosis; 2,6 % con HNF y 0,2 % con HBPM. La caída de plaquetas que ves: ilustrativa.</li>
+        <li><b>Flujo de la femoral</b>: igual al gasto en un sistema cerrado <span class="orgNone">ficha · p. 13</span>. Con gasto bajo, lento: <span class="org ilu">fisiología general</span>; su 35 %, ilustrativo.</li>
+        <li><b>TIH</b> <span class="orgNone">ficha · p. 4-5, 6-7, 5 y 7</span>: FP4 + heparina → IgG → activación, trombosis y trombocitopenia por consumo; no depende de la dosis; 2,6 % con HNF y 0,2 % con HBPM. La caída de plaquetas que ves: ilustrativa.</li>
         <li><b>El vaso del riñón</b>: se llena según el veredicto renal de la calculadora (sin ajuste, ajustar, no usar). Su altura: ilustrativa.</li>
-        <li><b>Medias</b> 18 y 8 mmHg; <b>CNI</b> 35-40 y 20 mmHg, ciclo de 10 s, de distal a proximal <span class="org">ficha · mar-mecanica · PDF p. 10</span>. Cómo se reparte el ciclo entre las cámaras: ilustrativo.</li>
-        <li><b>Reloj neuroaxial</b> <span class="org">ficha · mar-neuroeje · PDF p. 10</span>: HNF ≥12 h; enoxaparina una vez al día ≥24 h; dabigatrán y rivaroxabán ≥48 h; apixabán ≥24 h, con función renal normal o algo reducida.</li>
+        <li><b>Medias</b> 18 y 8 mmHg; <b>CNI</b> 35-40 y 20 mmHg, ciclo de 10 s, de distal a proximal <span class="orgNone">ficha · p. 10</span>. Cómo se reparte el ciclo entre las cámaras: ilustrativo.</li>
+        <li><b>Reloj neuroaxial</b> <span class="orgNone">ficha · p. 10</span>: HNF ≥12 h; enoxaparina una vez al día ≥24 h; dabigatrán y rivaroxabán ≥48 h; apixabán ≥24 h, con función renal normal o algo reducida.</li>
       </ul>
     </details>
 
     <details class="nota-plegable">
       <summary>Notas de fidelidad y de fuentes</summary>
-      <div class="nota-fuentes"><b>Fondaparinux en la insuficiencia renal.</b> La Tabla 5.2 (p. 4) dice «1,5 mg si ClCr 35-50; no usar si &lt;30»; el texto (p. 8), «1,5 mg si ClCr 20-50; no usar si &lt;20». Ninguna cubre el tramo 30-35 de la tabla. Se muestran las dos; no se elige. <span class="org">ficha · mar-fondaparinux-errata</span></div>
-      <div class="nota-fuentes" style="margin-top:6px"><b>Dalteparina con ClCr &lt;15.</b> La Tabla 5.2 (p. 4) y el texto (p. 7) dicen «sin ajuste renal»; las recomendaciones generales (p. 11), que con ClCr &lt;15 «solo se pueden usar HNF y warfarina». El capítulo no las concilia. <span class="org">ficha · mar-nota-dalteparina-farmacos</span></div>
-      <div class="nota-fuentes" style="margin-top:6px"><b>«Tabla 5.3».</b> El texto (p. 7) remite a la Tabla 5.3 para las dosis de las HBPM, pero están en la 5.2: la 5.3 es la de los orales. <span class="org">ficha · mar-tabla-5-3</span></div>
+      <div class="nota-fuentes"><b>Fondaparinux en la insuficiencia renal.</b> La Tabla 5.2 (p. 4) dice «1,5 mg si ClCr 35-50; no usar si &lt;30»; el texto (p. 8), «1,5 mg si ClCr 20-50; no usar si &lt;20». Ninguna cubre el tramo 30-35 de la tabla. Se muestran las dos; no se elige. <span class="orgNone">ficha · p. 4 y 8</span></div>
+      <div class="nota-fuentes" style="margin-top:6px"><b>Dalteparina con ClCr &lt;15.</b> La Tabla 5.2 (p. 4) y el texto (p. 7) dicen «sin ajuste renal»; las recomendaciones generales (p. 11), que con ClCr &lt;15 «solo se pueden usar HNF y warfarina». El capítulo no las concilia. <span class="orgNone">ficha · p. 4, 7 y 11</span></div>
+      <div class="nota-fuentes" style="margin-top:6px"><b>«Tabla 5.3».</b> El texto (p. 7) remite a la Tabla 5.3 para las dosis de las HBPM, pero están en la 5.2: la 5.3 es la de los orales. <span class="orgNone">ficha · p. 8-9</span></div>
       <div class="nota-fuentes" style="margin-top:6px"><b>IMC 40.</b> Las tablas dicen IMC ≥40 y las situaciones especiales (p. 11), «IMC &gt;40». La escena usa las tablas (como la calculadora).</div>
     </details>
 
@@ -374,7 +375,7 @@ ul.prof a.pdf { display: inline-flex; align-items: center; min-height: 44px; }
 
     <details class="nota-plegable">
       <summary>Cada ficha abre el telar en su estado</summary>
-      <p class="para">En la app, cada ficha llevaría su botón a la escena (<code>data-cama-viva="telar/&lt;estado&gt;"</code>) y el «← VOLVER» a la ficha. Toca uno para verlo.</p>
+      <p class="para">En la app, cada ficha llevaría su botón a la escena en su estado, y el «← VOLVER» a la ficha. Toca uno para verlo.</p>
       <ul class="prof" id="lista-estados"></ul>
     </details>
 
@@ -389,7 +390,7 @@ ul.prof a.pdf { display: inline-flex; align-items: center; min-height: 44px; }
       <div class="opciones-elige" data-q="general"><button type="button" aria-pressed="false">Construir así</button><button type="button" aria-pressed="false">Construir con cambios</button></div>
       <p class="para"><b>La cama 7</b>: ¿una cama con tres escenas (vientre, pierna y cabeza) o tres modelos sueltos?</p>
       <div class="opciones-elige" data-q="cama"><button type="button" aria-pressed="false">Una cama, tres escenas</button><button type="button" aria-pressed="false">Tres modelos sueltos</button></div>
-      <p class="para"><b>Formas nuevas</b> para la tabla única (propuestas de §6):</p>
+      <p class="para"><b>Formas nuevas</b> para la tabla única (propuestas):</p>
       <div id="elige-formas" style="display:grid;gap:8px"></div>
       <p class="resumen" id="resumen">Aún no has elegido.</p>
     </section>
@@ -778,8 +779,9 @@ window.__pruebas = () => {
 /* ============================================================
    4. La cama 7 (la entrada) y la lámina (SVG en grabado)
    ============================================================ */
-const t = (x, y, txt, { s = 7, c = 'text-muted', a = 'start', i = true, w = '', id = '', op = '' } = {}) =>
-  `<text${id ? ` id="${id}"` : ''} x="${x}" y="${y}" font-size="${+(s * 1.22).toFixed(1)}" text-anchor="${a}"${op ? ` opacity="${op}"` : ''} style="fill:var(--${c});font-family:Georgia,serif${i ? ';font-style:italic' : ''}${w ? ';font-weight:' + w : ''}">${txt}</text>`;
+let MIN_S = 6.2;   // 6,2 × 1,22 ≈ 7,6 px a 390 px de ancho
+const t = (x, y, txt, { s = 7, c = 'text-muted', a = 'start', i = true, w = '', id = '', op = '' } = {}) => (s = Math.max(s, MIN_S),
+  `<text${id ? ` id="${id}"` : ''} x="${x}" y="${y}" font-size="${+(s * 1.22).toFixed(1)}" text-anchor="${a}"${op ? ` opacity="${op}"` : ''} style="fill:var(--${c});font-family:Georgia,serif${i ? ';font-style:italic' : ''}${w ? ';font-weight:' + w : ''}">${txt}</text>`);
 function defs(pre = '') {
   return `<defs>
     <pattern id="${pre}p-rayado" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" style="stroke:var(--accent-yellow)" stroke-opacity=".28" stroke-width=".7"/></pattern>
@@ -796,6 +798,7 @@ function defs(pre = '') {
 
 /* ---------- La cama 7 ---------- */
 function construirCama() {
+  MIN_S = 0;
   const s = $('cama-svg');
   const vent = (x, y, on, rot) => `<g transform="translate(${x} ${y})">
       <circle r="21" style="fill:var(--bg-main);stroke:var(--accent-${on ? 'blue' : 'yellow'})" stroke-width="${on ? 1.6 : .8}" ${on ? '' : 'stroke-dasharray="2.5 2" opacity=".55"'}/>
@@ -840,6 +843,7 @@ function construirCama() {
   ${t(54, 84.5, 'la inmersión', { s: 5.2, a: 'middle', op: '.6' })}${t(164, 89, 'la muralla de papel', { s: 5.2, a: 'middle', op: '.6' })}
   ${t(265, 28.6, 'el telar de la trombina', { s: 6, a: 'middle', c: 'accent-blue', w: 600 })}
   ${t(352, 14, 'grabado · ilustrativo', { s: 4.6, a: 'end' })}`;
+  MIN_S = 6.2;
 }
 
 /* ---------- La lámina: la pierna (izquierda), la lupa (derecha) y el riñón (abajo) ---------- */
@@ -885,8 +889,8 @@ function construirLamina() {
     </g>
     ${t(74, 6.5, '↑ cava', { s: 5.2, c: 'text-muted' })}
     ${t(6, 326, 'pierna, de lado', { s: 5.4 })}
-    ${t(97, 196, 'femoral', { s: 5.2, c: 'accent-purple' })}
-    <text id="rot-arteria" x="8" y="232" font-size="6.6" style="fill:var(--accent-red);font-family:Georgia,serif;font-style:italic" opacity=".7">arteria</text>
+    ${t(72, 44, 'femoral', { s: 6.4, c: 'accent-purple' })}
+    <text id="rot-arteria" x="52" y="44" font-size="7.8" text-anchor="end" style="fill:var(--accent-red);font-family:Georgia,serif;font-style:italic">arteria</text>
   </g>
   <!-- líneas de la lupa -->
   <path d="M${VALV[0] + 4} ${VALV[1] - 4} L${n2(p1[0])} ${n2(p1[1])} M${VALV[0] + 4} ${VALV[1] + 4} L${n2(p2[0])} ${n2(p2[1])}" style="stroke:var(--accent-blue)" stroke-width=".7" stroke-dasharray="3 2" opacity=".75"/>
@@ -992,11 +996,10 @@ function construirTelar() {
       ${t(II[0], II[1] + 14, 'protrombina', { s: 4.8, a: 'middle' })}
       <g id="xa" transform="translate(${XA[0]} ${XA[1]})"><path id="xa-rueda" d="${engranaje(11)}" style="fill:var(--bg-card);stroke:var(--accent-yellow)" stroke-width="1.1"/><circle r="4.5" style="fill:var(--bg-main);stroke:var(--accent-yellow)" stroke-width=".7"/></g>
       ${t(XA[0], XA[1] + 3, 'Xa', { s: 6.4, a: 'middle', i: false, c: 'text-main', w: 700 })}
-      ${t(XA[0], XA[1] - 17, 'factor Xa', { s: 5, a: 'middle' })}
       <g id="g-spools"></g>
-      <g id="iia"><path d="M-12 0 Q0 -7 12 0 Q0 7 -12 0 Z" style="fill:var(--bg-card);stroke:var(--accent-yellow)" stroke-width="1.1"/><path d="M-12 0 L-17 -1 M12 0 L17 1" style="stroke:var(--accent-yellow)" stroke-width=".8"/>${t(0, 2.6, 'IIa', { s: 5.4, a: 'middle', i: false, c: 'text-main', w: 700 })}</g>
+      <g id="iia"><path d="M-13 0 Q0 -8.5 13 0 Q0 8.5 -13 0 Z" style="fill:var(--bg-card);stroke:var(--accent-yellow)" stroke-width="1.1"/><path d="M-12 0 L-17 -1 M12 0 L17 1" style="stroke:var(--accent-yellow)" stroke-width=".8"/>${t(0, 2.6, 'IIa', { s: 6.2, a: 'middle', i: false, c: 'text-main', w: 700 })}</g>
       <g id="iia-hilo"><path id="iia-hilo-p" d="" style="fill:none;stroke:var(--accent-yellow)" stroke-width=".8" stroke-dasharray="2 1.5"/></g>
-      <text id="rot-iia" x="190" y="208" font-size="6.3" text-anchor="start" style="fill:var(--accent-yellow);font-family:Georgia,serif;font-style:italic">← IIa: la tejedora</text>
+      <text id="rot-iia" x="190" y="208" font-size="7.8" text-anchor="start" style="fill:var(--accent-yellow);font-family:Georgia,serif;font-style:italic">← IIa: la tejedora</text>
     </g>
     <!-- antitrombina y heparina -->
     <g id="g-at"></g>
@@ -1034,7 +1037,7 @@ function construirTih() {
     </g>
     ${t(PLAQ[0], PLAQ[1] + 4, 'plaqueta', { s: 6.4, a: 'middle', c: 'text-main' })}
     <g id="tih-fp4">${FP4S.map(([x, y], i) => `<g id="fp4-${i}">${svgParticula('fp4', x, y, 5.2)}</g>`).join('')}</g>
-    ${t(FP4S[0][0] + 12, FP4S[0][1] - 8, 'FP4', { s: 6, c: 'text-dim', i: false, w: 600 })}
+    ${t(FP4S[1][0] - 15, FP4S[1][1] + 3, 'FP4', { s: 6.4, a: 'end', c: 'text-main', i: false, w: 700 })}
     <g id="tih-cadenas"></g>
     <g id="tih-igg"></g>
     <g id="tih-peques"></g>
@@ -1056,7 +1059,7 @@ function construirReloj() {
     h += `<path d="${arcoH(0, u, r)}" style="fill:none;stroke:var(--accent-red)" stroke-width="8" stroke-dasharray="1 2.4" opacity=".7"/>`;
     if (u < 48) h += `<path d="${arcoH(u, 48, r)}" style="fill:none;stroke:var(--accent-green)" stroke-width="8" opacity=".32"/>`;
     const [xu, yu] = ptH(u, r); h += `<line x1="${n2(xu)}" y1="${n2(yu - 0)}" x2="${n2(ptH(u, r + 5)[0])}" y2="${n2(ptH(u, r + 5)[1])}" style="stroke:var(--text-main)" stroke-width="1.2"/>`;
-    h += t(RELOJ.cx - 3, RELOJ.cy - r + 2.4, NEURO_NOMBRE[k], { s: 4.6, a: 'end', c: 'text-main', i: false });
+    h += t(RELOJ.cx - 3, RELOJ.cy - r + 3, NEURO_NOMBRE[k], { s: 6.2, a: 'end', c: 'text-main', i: false });
   }
   h += t(RELOJ.cx, RELOJ.cy - 110.5, '0 h', { s: 4.8, a: 'middle', c: 'text-dim', i: false });
   h += t(RELOJ.cx + 112, RELOJ.cy + 3, '12', { s: 4.8, a: 'start', c: 'text-dim', i: false });
@@ -1065,8 +1068,7 @@ function construirReloj() {
   h += `<g id="reloj-luces"></g><line id="reloj-aguja" x1="${RELOJ.cx}" y1="${RELOJ.cy}" x2="${RELOJ.cx}" y2="${RELOJ.cy - 104}" style="stroke:var(--accent-blue)" stroke-width="2.2" stroke-linecap="round"/>
     <circle cx="${RELOJ.cx}" cy="${RELOJ.cy}" r="22" style="fill:var(--bg-main);stroke:var(--accent-blue)" stroke-width="1"/>
     <text id="reloj-h" x="${RELOJ.cx}" y="${RELOJ.cy + 4}" font-size="11" text-anchor="middle" style="fill:var(--text-main);font-family:Georgia,serif;font-weight:700">6 h</text>
-    ${t(RELOJ.cx, RELOJ.cy + 13, 'desde la dosis', { s: 3.6, a: 'middle', c: 'text-dim' })}
-    ${t(RELOJ.cx, 264, 'rayado rojo: esperar · verde: se puede', { s: 5, a: 'middle', c: 'text-dim' })}`;
+`;
   $('v-reloj').innerHTML = h;
 }
 
@@ -1091,8 +1093,7 @@ function pintarAT() {
   Anim.at.forEach((a, i) => {
     if (i >= D.atN) { a.el.innerHTML = ''; return; }
     const despierta = hep;
-    a.el.innerHTML = svgParticula('at', 0, 0, 6.2, { color: despierta ? '--accent-blue' : '--text-muted', opacidad: despierta ? 1 : 0.62 })
-      + `<text x="0" y="2.2" font-size="5" text-anchor="middle" style="fill:var(--bg-main);font-family:system-ui,sans-serif;font-weight:700">AT</text>`;
+    a.el.innerHTML = svgParticula('at', 0, 0, 7, { color: despierta ? '--accent-blue' : '--text-muted', opacidad: despierta ? 1 : 0.62 });
   });
 }
 function pintarFarmaco() {
@@ -1110,11 +1111,10 @@ function pintarFarmaco() {
     // la AT 1 y su cadena hacia la trombina: aquí decide el largo
     if (D.atN > 1) {
       const start = [204, 120];
-      if (tipo === 'hnf') { const pts = cadenaPath(15, start[0], start[1], Math.PI * 0.62, 0.035, 4.3); h += cuentasSVG(pts) + xRoja(IIA0[0] + 10, IIA0[1] - 12, 1.05); }
-      else if (tipo === 'hbpm') { const pts = cadenaPath(9, start[0], start[1], Math.PI * 0.62, 0.035, 4.3); h += cuentasSVG(pts) + `<path d="M${n2(pts[8][0])} ${n2(pts[8][1])} L${IIA0[0] + 6} ${IIA0[1] - 8}" style="stroke:var(--text-muted)" stroke-width=".8" stroke-dasharray="1.2 2"/>` + xRoja(IIA0[0] + 10, IIA0[1] - 12, 0.5); }
+      if (tipo === 'hnf') { const pts = cadenaPath(15, start[0], start[1], Math.PI * 0.62, 0.035, 4.3); h += cuentasSVG(pts) + xRoja(IIA0[0] + 10, IIA0[1] - 12, 1.05); r += t(210, 136, 'llega y ata', { s: 6.6, c: 'text-main', i: false, w: 700 }); }
+      else if (tipo === 'hbpm') { const pts = cadenaPath(9, start[0], start[1], Math.PI * 0.62, 0.035, 2.9); h += cuentasSVG(pts) + `<path d="M${n2(pts[8][0])} ${n2(pts[8][1])} L${IIA0[0] + 8} ${IIA0[1] - 10}" style="stroke:var(--text-dim)" stroke-width="1" stroke-dasharray="1.5 2.5"/>` + `<g opacity=".5">${xRoja(IIA0[0] + 10, IIA0[1] - 12, 0.5)}</g>`; r += t(210, 152, 'no llega', { s: 6.6, c: 'text-main', i: false, w: 700 }); }
       else { const pts = cadenaPath(5, start[0], start[1], Math.PI * 0.2, 0.05, 4.3); h += cuentasSVG(pts); }
     }
-    if (D.atN < 3) r += t(300, 150, 'pocas AT:', { s: 5.4, c: 'accent-red' }) + t(300, 158, 'la heparina', { s: 5.4, c: 'accent-red' }) + t(300, 166, 'no tiene a', { s: 5.4, c: 'accent-red' }) + t(300, 174, 'quién despertar', { s: 5.4, c: 'accent-red' });
   } else if (f === 'apixaban' || f === 'rivaroxaban') {
     h += llave(XA[0] + 24, XA[1] + 2, 180) + xRoja(XA[0] - 13, XA[1] + 12, 0.9);
     r += t(XA[0] + 18, XA[1] + 20, 'llave sin AT', { s: 5.4, c: 'text-main' });
@@ -1149,21 +1149,26 @@ function pintarMangas() {
     h += `<g clip-path="url(#clip-pierna)"><rect x="0" y="62" width="120" height="260" style="fill:var(--text-main)" opacity=".06"/>${lineas.join('')}</g>`;
     h += `<path d="M24 64 Q60 58 102 66" style="fill:none;stroke:var(--text-main)" stroke-width="1.2" opacity=".7"/>`;
     h += `<g>${etiq(2, 284, '18', 'mmHg')}${etiq(2, 92, '8', 'mmHg')}</g>`;
-    h += t(98, 236, '↑ 10 de', { s: 5, c: 'text-dim' }) + t(98, 244, 'gradiente', { s: 5, c: 'text-dim' });
   } else if (e.mecanica === 'cni') {
     const cam = [[244, 294, 'c0'], [192, 242, 'c1'], [80, 150, 'c2']];
     h += cam.map(([y0, y1, id]) => `<g id="${id}"><rect x="14" y="${y0}" width="${id === 'c2' ? 100 : 86}" height="${y1 - y0}" rx="10" style="fill:var(--accent-yellow);stroke:var(--accent-yellow)" stroke-width="1" fill-opacity=".1"/><rect x="14" y="${y0}" width="${id === 'c2' ? 100 : 86}" height="${y1 - y0}" rx="10" fill="url(#p-rayado)"/></g>`).join('');
     h += etiq(2, 274, '35-40', 'mmHg') + etiq(2, 120, '20', 'mmHg');
-    h += `<g transform="translate(12 190)"><circle r="8" style="fill:var(--bg-main);stroke:var(--text-dim)" stroke-width=".8"/><path id="cni-arco" d="" style="fill:none;stroke:var(--accent-yellow)" stroke-width="2"/>${t(0, 17, '10 s', { s: 5, a: 'middle', c: 'text-dim', i: false })}</g>`;
+    h += `<g transform="translate(12 190)"><circle r="8" style="fill:var(--bg-main);stroke:var(--text-dim)" stroke-width=".8"/><path id="cni-arco" d="" style="fill:none;stroke:var(--accent-yellow)" stroke-width="2"/>${t(0, 17, '10 s', { s: 6.2, a: 'middle', c: 'text-dim', i: false })}</g>`;
   }
+  // con la CNI por encima de la diastólica: la arteria, en rojo y aplastada bajo las cámaras, y el pie más pálido (fisiología general)
+  if (D.cni && D.cni.aprietaArteria) h += `<path id="arteria-top" d="M50 300 C50 272 46 242 48 212 C50 188 52 172 52 150 C52 124 53 94 55 62" style="fill:none;stroke:var(--accent-red)" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M42 292 L72 288 L112 296 C120 300 120 312 110 316 L46 318 C38 316 36 306 42 292 Z" style="fill:var(--text-main)" opacity=".28"/>
+    ${t(60, 330 - 2, 'pie pálido', { s: 6.4, c: 'text-main', i: false, w: 600 })}`;
   g.innerHTML = h;
   const aprieta = D.cni && D.cni.aprietaArteria;
   $('arteria').style.strokeDasharray = aprieta ? '3 3' : '';
   $('arteria').setAttribute('opacity', aprieta ? '1' : '.5');
   $('rot-arteria').textContent = aprieta ? 'arteria apretada' : 'arteria';
+  $('rot-arteria').style.fill = 'var(--accent-red)';
+  $('rot-arteria').style.fontWeight = aprieta ? '700' : '';
   $('g-filtro').setAttribute('display', e.filtro ? 'inline' : 'none');
 }
-function etiq(x, y, num, uni) { return `<g transform="translate(${x} ${y})"><rect x="-1" y="-9" width="${num.length * 4.6 + 20}" height="12" rx="3" style="fill:var(--bg-main);stroke:var(--accent-yellow)" stroke-width=".7"/>${t(2, 0, num, { s: 6, c: 'accent-yellow', i: false, w: 700 })}<text x="${2 + num.length * 4.4 + 1}" y="0" font-size="4.6" style="fill:var(--text-dim);font-family:system-ui,sans-serif">${uni}</text></g>`; }
+function etiq(x, y, num, uni) { return `<g transform="translate(${x} ${y})"><rect x="-1" y="-9.5" width="${num.length * 4.8 + 4}" height="21" rx="3" style="fill:var(--bg-main);stroke:var(--accent-yellow)" stroke-width=".7"/>${t(1.5, 0, num, { s: 6.4, c: 'accent-yellow', i: false, w: 700 })}<text x="1.5" y="9" font-size="7.6" style="fill:var(--text-dim);font-family:system-ui,sans-serif">${uni}</text></g>`; }
 function pintarRinon() {
   const e = estado, g = $('g-rinon');
   const x0 = 128, y0 = 270;
@@ -1215,7 +1220,7 @@ function pintarTihFijo() {
   let esp = '';
   for (let k = 0; k < 14; k++) { const a = k * Math.PI / 7 + 0.2; esp += `<path d="M${n2(PLAQ[0] + Math.cos(a) * (PLAQ[2] - 1))} ${n2(PLAQ[1] + Math.sin(a) * (PLAQ[2] - 1))} L${n2(PLAQ[0] + Math.cos(a) * (PLAQ[2] + 13))} ${n2(PLAQ[1] + Math.sin(a) * (PLAQ[2] + 13))}" style="stroke:var(--text-main)" stroke-width="1.6" stroke-linecap="round"/>`; }
   $('tih-espinas').innerHTML = `<g id="tih-esp" opacity="0">${esp}</g>`;
-  $('tih-peques').innerHTML = `<g id="tih-agreg" opacity="0">${[[198, 208], [214, 216], [232, 220], [250, 216], [266, 208], [222, 230], [242, 230]].map(([x, y], i) => svgParticula(i % 2 ? 'plaqAct' : 'plaq', x, y, 4.2)).join('')}${t(236, 241, 'trombosis + trombocitopenia', { s: 6.2, a: 'middle', c: 'accent-red', i: false, w: 600 })}</g>`;
+  $('tih-peques').innerHTML = `<g id="tih-agreg" opacity="0">${[[198, 202], [214, 210], [232, 214], [250, 210], [266, 202], [222, 224], [242, 224]].map(([x, y], i) => svgParticula(i % 2 ? 'plaqAct' : 'plaq', x, y, 4.2)).join('')}${t(236, 244, 'trombosis + trombocitopenia', { s: 6.2, a: 'middle', c: 'accent-red', i: false, w: 600 })}</g>`;
   if (f === 'fondaparinux') r += t(PLAQ[0], 50, 'fondaparinux: se puede usar', { s: 6.6, a: 'middle', c: 'text-main', i: false, w: 600 }) + t(PLAQ[0], 59, 'con TIH sospechada o previa', { s: 6.4, a: 'middle', c: 'text-dim' })
     + t(PLAQ[0], 214, 'tratamiento aprobado', { s: 6.4, a: 'middle', c: 'text-dim' }) + t(PLAQ[0], 224, 'de la TIH: argatrobán', { s: 6.6, a: 'middle', c: 'accent-yellow', i: false, w: 600 });
   else if (!f || !ES_HEPARINA(f)) r += t(PLAQ[0], 54, 'sin heparina, no hay complejo', { s: 6.4, a: 'middle', c: 'text-dim' });
@@ -1229,7 +1234,7 @@ function pintarReloj() {
   $('reloj-aguja').setAttribute('x2', n2(x)); $('reloj-aguja').setAttribute('y2', n2(y));
   $('reloj-h').textContent = `${h} h`;
   $('reloj-luces').innerHTML = ORDEN_NEURO.map(k => { const [lx, ly] = ptH(h, RELOJ.radios[k]); const ok = D.reloj[k];
-    return `<g transform="translate(${n2(lx)} ${n2(ly)})"><circle r="5.6" style="fill:var(--bg-main);stroke:var(${oc ? '--text-muted' : ok ? '--accent-green' : '--accent-red'})" stroke-width="1.6"/><text y="2.6" font-size="7" text-anchor="middle" style="fill:var(${oc ? '--text-muted' : ok ? '--accent-green' : '--accent-red'});font-family:system-ui,sans-serif;font-weight:700">${oc ? '?' : ok ? '✓' : '✗'}</text></g>`; }).join('');
+    return `<g transform="translate(${n2(lx)} ${n2(ly)})"><circle r="5.6" style="fill:var(--bg-main);stroke:var(${oc ? '--text-muted' : ok ? '--accent-green' : '--accent-red'})" stroke-width="1.6"/><text y="2.8" font-size="8" text-anchor="middle" style="fill:var(${oc ? '--text-muted' : ok ? '--accent-green' : '--accent-red'});font-family:system-ui,sans-serif;font-weight:700">${oc ? '?' : ok ? '✓' : '✗'}</text></g>`; }).join('');
 }
 
 /* ============================================================
@@ -1374,11 +1379,31 @@ function arrancar() { if (REDUCIR) { pintarUnaVez(); return; } if (enMarcha) ret
 /* ============================================================
    7. Interfaz: aplicar un estado, la vista de la lupa, la lectura, la frase viva y los mandos
    ============================================================ */
+/* Los nombres internos (ids de las fichas) nunca se ven: el origen se enseña como «ficha · p. N», «fisiología general» o «ilustrativo» */
+const NOMBRE_FICHA = { 'mar-tromboprofilaxis-farmacos': 'Tromboprofilaxis: riesgo y fármacos', 'mar-tromboprofilaxis-escenarios': 'Tromboprofilaxis: métodos y pautas' };
+const PAG = { 'mar-tev-intro': '1', 'mar-tabla-5-1': '2', 'mar-fig-5-1': '3', 'mar-tev-contra-absolutas': '4', 'mar-tev-contra-relativas': '4', 'mar-tabla-5-2': '4', 'mar-profilaxis-calc': '4',
+  'mar-hnf': '4-5', 'mar-hbpm': '6-7', 'mar-fondaparinux': '8', 'mar-fondaparinux-errata': '4 y 8', 'mar-nota-dalteparina-farmacos': '4, 7 y 11', 'mar-tabla-5-3': '8-9', 'mar-acod-puntos': '8-9',
+  'mar-aspirina': '9', 'mar-neuroeje': '10', 'mar-mecanica': '10', 'mar-cni-pegas': '10', 'mar-filtro-vci': '11', 'mar-inmovilidad': '13', 'mar-tromboprofilaxis-escenarios': '11-13' };
+function paginasDe(s) {
+  const ps = [];
+  (s.match(/mar-[a-z0-9-]+/g) || []).forEach(id => { if (PAG[id] && !(id === 'mar-tromboprofilaxis-escenarios' && /#/.test(s))) ps.push(PAG[id]); });
+  (s.match(/p\. [0-9][0-9\-–, y]*/g) || []).forEach(m => ps.push(m.slice(3).replace(/[ ,]+$/, '')));
+  return [...new Set(ps)];
+}
+function origen(s) {
+  if (!s) return '';
+  const p = paginasDe(s), partes = [];
+  if (/ficha|mar-|PDF|p\. \d/.test(s)) partes.push('ficha' + (p.length ? ' · p. ' + p.join(', ') : ''));
+  if (/fisiología general/.test(s)) partes.push('fisiología general');
+  if (/ilustrativ/.test(s)) partes.push('ilustrativo');
+  if (/hueco/.test(s)) partes.push('hueco');
+  return partes.join(' · ') || 'ficha';
+}
 const fraseEl = $('frase');
 let fraseActual = '';
 function decir(html, fuente) {
   const ilu = /ilustrativo|fisiología general/.test(fuente || '');
-  const nuevo = `<span class="frase-txt">${html} ${fuente ? `<span class="org${ilu ? ' ilu' : ''}">${fuente}</span>` : ''}</span>`;
+  const nuevo = `<span class="frase-txt">${html} ${fuente ? `<span class="org${ilu ? ' ilu' : ''}">${origen(fuente)}</span>` : ''}</span>`;
   if (nuevo === fraseActual) return; fraseActual = nuevo;
   fraseEl.innerHTML = nuevo;
   svg.setAttribute('aria-label', fraseEl.textContent);
@@ -1443,7 +1468,7 @@ function pintarLectura() {
     const corto = k => ({ hnf: 'HNF', enoxaparina: 'enoxa', apixaban: 'apixa', rivaroxaban: 'rivaro', dabigatran: 'dabi' }[k]);
     h += celda('Desde la dosis', `${e.horas}<small>h</small>`, 'función renal normal');
     h += celda('Ya se puede', q('reloj', `${listos.length}<small>de 5</small>`), q('reloj', listos.map(corto).join(', ') || 'ninguno'), { cls: ocultos.has('reloj') ? '' : 'bien' });
-    h += celda('Esperar', q('reloj', esperar.length ? esperar.map(corto).join(', ') : 'nada'), 'ficha · mar-neuroeje', { cls: !ocultos.has('reloj') && esperar.length ? 'alarma' : '' });
+    h += celda('Esperar', q('reloj', esperar.length ? esperar.map(corto).join(', ') : 'nada'), 'ficha · p. 10', { cls: !ocultos.has('reloj') && esperar.length ? 'alarma' : '' });
   }
   $('lectura').innerHTML = h;
 }
@@ -1457,7 +1482,7 @@ function pintarDosis() {
   if (D.notaDalte) h += ` <span style="color:var(--text-muted)">La Tabla 5.2 (p. 4) y el texto (p. 7) dicen «sin ajuste»; la p. 11, no. No se elige.</span>`;
   if (D.notaFonda) h += ` <span style="color:var(--text-muted)">Nota de fidelidad: tabla (35-50) y texto (20-50) discrepan; se dan las dos.</span>`;
   if (e.antiXa) h += ES_HBPM(e.farmaco) ? `<br><b>Anti-Xa</b>: no de rutina; útil si la dosis fija es dudosa (obesidad). Objetivo profiláctico: pico de <b>0,2-0,5 UI/mL</b>. El valor de este paciente no se simula.` : '<br>El anti-Xa se mide con una HBPM.';
-  h += ` <span class="org">ficha · mar-profilaxis-calc · Tablas 5.2-5.3</span>`;
+  h += ` <span class="org">ficha · p. 4, 8-9</span>`;
   box.innerHTML = h;
 }
 
@@ -1469,7 +1494,7 @@ const FRASE_FARMACO = {
   dalteparina: ['Dalteparina (HBPM): igual de eficaz que la enoxaparina y <span class="hl-a">sin ajuste renal</span>. Cadenas cortas: el Xa sí, la trombina apenas.', 'ficha · mar-hbpm · PDF p. 6-7'],
   fondaparinux: ['Fondaparinux: <span class="hl-a">5 cuentas</span>, el pentasacárido que une la heparina a la AT. Solo frena el Xa. Vida media de 17 h; lo elimina el riñón.', 'ficha · mar-fondaparinux · PDF p. 8'],
   apixaban: ['Apixabán: <span class="hl-a">una llave sin AT</span> que bloquea el Xa directamente (la X de la Fig. 5.2). Los ACOD actúan en 1-4 h y no necesitan controles.', 'ficha · mar-acod-puntos (Fig. 5.2) · PDF p. 8'],
-  rivaroxaban: ['Rivaroxabán: <span class="hl-a">una llave sin AT</span> sobre el Xa. En la enfermedad médica aguda, igual de eficaz que la HBPM pero <span class="hl-r">con más sangrado</span>.', 'ficha · mar-acod-puntos · PDF p. 8-9'],
+  rivaroxaban: ['Rivaroxabán: <span class="hl-a">una llave sin AT</span> sobre el Xa. Aprobado en la enfermedad médica aguda, pero un metaanálisis de los ACOD frente a HBPM en estos pacientes ve la misma eficacia <span class="hl-r">con más sangrado</span>.', 'ficha · mar-acod-puntos · PDF p. 8-9'],
   dabigatran: ['Dabigatrán: la llave va a <span class="hl-a">la trombina</span>: la tejedora se para.', 'ficha · mar-acod-puntos (Fig. 5.2) · PDF p. 8'],
   warfarina: ['Warfarina: <span class="hl-r">tarda 5-7 días</span>, muchas interacciones y controles de INR: ya no se prefiere. En la IR grave es el único oral seguro. Su mecanismo no está en la ficha: no se dibuja.', 'ficha · mar-acod-puntos · PDF p. 8-9 · hueco']
 };
@@ -1568,7 +1593,7 @@ const FIGS = {
 function pintarTira() {
   const el = $('tira'); if (el._k) return; el._k = 1;
   el.innerHTML = Object.entries(FIGS).map(([k, f]) => `<button type="button" class="lamina-libro" data-fig="${k}" aria-label="Ampliar la ${f.n} del libro"><img src="${IMG}${f.src}" alt="" loading="lazy"><span>${f.n} · así la dibuja el libro</span></button>`).join('')
-    + `<p class="tira-txt">Las láminas reales, al lado. No hay figuras de las medias ni de la CNI: se dibujan en grabado (ficha · mar-mecanica).</p>`;
+    + `<p class="tira-txt">Las láminas reales, al lado. No hay figuras de las medias ni de la CNI: se dibujan en grabado.</p>`;
 }
 $('tira').addEventListener('click', ev => { const b = ev.target.closest('[data-fig]'); if (!b) return; const f = FIGS[b.dataset.fig];
   $('visor-img').src = IMG + f.src; $('visor-img').alt = f.pie; $('visor-pie').textContent = f.pie + ` Marino, cap. 5 (PDF, p. ${f.pag}).`; $('visor-pdf').href = `${PDF}#page=${f.pag}`;
@@ -1693,7 +1718,11 @@ function barajar(ops, id) {   // orden fijo por pregunta, para que la buena no s
   for (let i = a.length - 1; i > 0; i--) { const j = (h >>> (i * 3)) % (i + 1); [a[i], a[j]] = [a[j], a[i]]; }
   return a;
 }
-function verEnTexto(fuente) { return `<p class="fuente-p">Ver en el texto: ${fuente.split(' · ').map(f => `<span class="org">${f}</span>`).join(' ')}</p>`; }
+function verEnTexto(fuente) {
+  const fichas = [...new Set((fuente.match(/mar-tromboprofilaxis-(farmacos|escenarios)/g) || []).map(k => NOMBRE_FICHA[k]))];
+  const p = paginasDe(fuente);
+  return `<p class="fuente-p">Ver en el texto: ${fichas.map(n => `ficha «${n}»`).join(' y ') || 'la ficha'} <span class="org">ficha${p.length ? ' · p. ' + p.join(', ') : ''}</span></p>`;
+}
 function ponerModelo(q) {
   aplicar(estadoDe(q.estado), { frase: false, forzar: true, reiniciar: true });
   anillo(q.mirar || null);
@@ -1722,7 +1751,7 @@ function pintarPregunta(cont, q, { cabecera = '', repaso = null, alFinal }) {
 
   if (q.tipo === 'test') {
     fmt.innerHTML = `<p class="para">Piénsalo antes de ver las opciones.</p><div class="fila" style="margin-top:6px"><button class="b prim" type="button" data-accion="ops">Ya lo tengo: ver opciones</button></div>
-      <div class="op" id="ops" hidden style="margin-top:8px">${barajar(q.opciones, q.id).map(o => `<button class="b" type="button" data-op="${o.i}">${o.t}</button>`).join('')}</div>`;
+      <div class="op" id="ops" hidden style="margin-top:8px">${q.opciones.map((o, i) => `<button class="b" type="button" data-op="${i}">${o.t}</button>`).join('')}</div>`;
   } else if (q.tipo === 'destapa') {
     const idx = repaso && repaso.faltan && repaso.faltan.length ? repaso.faltan : q.puntos.map((_, i) => i);
     fmt.innerHTML = `<p class="para">${repaso && repaso.faltan && repaso.faltan.length ? `Vuelven solo ${idx.length === 1 ? 'la que te faltó' : `las ${idx.length} que te faltaron`}.` : `Contesta en la cabeza: son ${['', 'una cosa', 'dos cosas', 'tres cosas', 'cuatro cosas'][q.puntos.length]}. Luego destápalo.`}</p>
@@ -1760,7 +1789,7 @@ function pintarPregunta(cont, q, { cabecera = '', repaso = null, alFinal }) {
   }
   cont.onclick = ev => {
     const a = ev.target.closest('[data-accion]')?.dataset.accion;
-    if (a === 'calc') { ev.target.closest('button').textContent = `🧮 En la app abriría la calculadora de la ficha (${q.calculadora.ids}) y volvería aquí`; return; }
+    if (a === 'calc') { ev.target.closest('button').textContent = `🧮 En la app abriría la calculadora «${q.calculadora.nombre}» de la ficha y volvería aquí`; return; }
     if (a === 'comprobar') {
       const p = cont.querySelector('#pista');
       if (q.tocar.comprobar(estado)) { p.hidden = true; ev.target.closest('.fila').remove(); finComprobar(`<span class="ok">✓ Comprobado: ${q.tocar.confirma}</span>`); return; }
@@ -1972,7 +2001,7 @@ const Estudio = {
     pintarDock(C0.pasos.map(() => 'on'), C0.corto, 'hecho');
     cont.onclick = ev => {
       const a = ev.target.closest('[data-fin]')?.dataset.fin;
-      if (a === 'ficha') ev.target.closest('button').textContent = `📖 En la app abriría la ficha ${C0.volver.ficha}`;
+      if (a === 'ficha') ev.target.closest('button').textContent = `📖 En la app abriría la ficha «${C0.volver.nombre}»`;
       if (a === 'modelo') { setModo('explorar'); aplicar(estadoDe(C0.volver.estado), { forzar: true, reiniciar: true }); }
       if (a === 'otro') this.listaCasos();
     };
@@ -1986,16 +2015,19 @@ function revisarMayeutica() {
   const r = { fallos: [], tests: tests.length, correctaMasLarga: 0, posiciones: [0, 0, 0, 0], errores: errores.map(x => x.frases.filter(f => f.mal).length), destapas: destapas.length,
     guia: PREGUNTAS.filter(x => x.grupo === 'guia').length, examen: PREGUNTAS.filter(x => x.grupo === 'examen').length, casos: CASOS.length, predice: todas.filter(x => x.tocar).length };
   const largo = s => s.replace(/<[^>]+>/g, '').length;
-  r.masLargas = [];
+  r.masLargas = []; r.correctaMasCorta = 0; r.masCortas = [];
   for (const x of tests) {
-    const ok = x.opciones.find(o => o.ok), max = Math.max(...x.opciones.map(o => largo(o.t)));
+    const ok = x.opciones.find(o => o.ok), max = Math.max(...x.opciones.map(o => largo(o.t))), min = Math.min(...x.opciones.map(o => largo(o.t)));
     if (largo(ok.t) === max) { r.correctaMasLarga++; r.masLargas.push(x.id); }
-    r.posiciones[barajar(x.opciones, x.id).findIndex(o => o.ok)]++;
+    if (largo(ok.t) === min) { r.correctaMasCorta++; r.masCortas.push(x.id); }
+    r.posiciones[x.opciones.findIndex(o => o.ok)]++;
     if (x.opciones.filter(o => o.ok).length !== 1) r.fallos.push(x.id + ': una sola correcta');
     if (x.opciones.some(o => !o.ok && !(o.porque && o.porque.length > 30))) r.fallos.push(x.id + ': opción falsa sin «qué le pasaría»');
   }
   if (r.correctaMasLarga > tests.length / 3) r.fallos.push(`la correcta es la más larga en ${r.correctaMasLarga} de ${tests.length} (> 1/3)`);
-  if (r.posiciones.filter(n => n > 0).length < 3) r.fallos.push('la correcta no varía de posición');
+  if (r.correctaMasCorta > tests.length / 3) r.fallos.push(`la correcta es la más corta en ${r.correctaMasCorta} de ${tests.length} (> 1/3)`);
+  if (r.posiciones.filter(n => n > 0).length < 3 || Math.max(...r.posiciones) > tests.length / 2) r.fallos.push('la correcta no reparte su posición');
+  for (const c of CASOS) if (c.pasos.length < 5 || c.pasos.length > 8) r.fallos.push(c.id + ': no tiene de 5 a 8 pasos');
   if (r.errores.some(n => n > 2)) r.fallos.push('«encuentra el error» con más de 2 errores');
   if (!r.guia || !r.examen) r.fallos.push('faltan Guía o Examen');
   for (const c of CASOS) { const tipos = new Set(c.pasos.map(p => p.pregunta.tipo)); if (!tipos.has('error') || !tipos.has('destapa')) r.fallos.push(c.id + ': falta error o destapa'); if (c.lleva.length !== 3) r.fallos.push(c.id + ': «Lo que te llevas» no tiene 3 puntos'); }
@@ -2081,24 +2113,25 @@ const CONCEPTOS = [
     fuente: `${FXI}#mar-inmovilidad` }
 ];
 
+// Las opciones salen en el orden escrito: la posición de la buena se reparte a mano (6 · 7 · 7) y el largo se iguala.
 const PREGUNTAS = [
   { id: 'tl-g1', grupo: 'guia', corto: 'la HNF', tipo: 'test', fuente: `${FX}#mar-hnf (Fig. 5.2)`,
     estado: { inflamacion: true }, mirar: 'iia',
     tocar: { mandos: ['farmaco-hep'], ocultar: ['corta', 'red'], instruccion: 'pon la HNF y mira a quién ata.', comprobar: e => e.farmaco === 'hnf', confirma: 'la HNF despierta la AT contra el Xa y además ata la trombina: X en los dos. El anti-IIa, 10 veces el anti-Xa.', pista: 'Pulsa «HNF».', bueno: { farmaco: 'hnf' } },
     enunciado: 'Predice. La HNF se une a la antitrombina. ¿Qué hilos del telar corta?',
     opciones: [
-      { t: 'Solo el Xa, a través de la antitrombina', ok: false, porque: 'También ata la trombina: su cadena larga une a la vez la AT y la IIa (anti-IIa, 10 veces el anti-Xa). Sin saberlo, no entenderías por qué la misma dosis anticoagula tan distinto a cada paciente.' },
-      { t: 'El Xa y la trombina; pesa más la trombina', ok: true },
-      { t: 'Solo la trombina, como el dabigatrán', ok: false, porque: 'Eso es el dabigatrán, una llave sin AT. La HNF necesita la antitrombina: en un paciente con déficit de AT III, la heparina no tendría a quién despertar.' }],
+      { t: 'Solo el Xa, porque actúa a través de la antitrombina', ok: false, porque: 'También ata la trombina: su cadena larga une a la vez la AT y la IIa (anti-IIa, 10 veces el anti-Xa). Sin saberlo, no entenderías por qué la misma dosis anticoagula tan distinto a cada paciente.' },
+      { t: 'Solo la trombina, igual que hace el dabigatrán', ok: false, porque: 'Eso es el dabigatrán, una llave sin AT. Si los confundes, elegirás mal el fármaco: el dabigatrán no se usa con ClCr <30 y la HNF no tiene ajuste renal.' },
+      { t: 'El Xa por la antitrombina y, además, la trombina', ok: true }],
     explicacion: 'Dos acciones (Fig. 5.2): despierta la <span class="hl-a">antitrombina</span>, que frena el Xa, y se une a la <span class="hl-a">trombina</span>. El anti-IIa depende del <span class="hl-azul">largo de la cadena</span> y es 10 veces el anti-Xa. La activación de la AT es tan sensible que <span class="hl-a">bastan dosis bajas</span> (5.000 U SC cada 8-12 h).' },
   { id: 'tl-g2', grupo: 'guia', corto: 'la HBPM', tipo: 'test', fuente: `${FX}#mar-hbpm (Fig. 5.2)`,
     estado: { inflamacion: true, farmaco: 'hnf' }, mirar: 'iia',
-    tocar: { mandos: ['farmaco-hep'], ocultar: ['corta'], instruccion: 'cambia a enoxaparina (HBPM) y mira la cadena que iba a la trombina.', comprobar: e => e.farmaco === 'enoxaparina', confirma: 'la cadena corta despierta la AT contra el Xa, pero apenas llega a la trombina.', pista: 'Pulsa «Enoxaparina».', bueno: { farmaco: 'enoxaparina' } },
+    tocar: { mandos: ['farmaco-hep'], ocultar: ['corta'], instruccion: 'cambia a enoxaparina (HBPM) y mira la cadena que iba a la trombina.', comprobar: e => e.farmaco === 'enoxaparina', confirma: 'la cadena corta despierta la AT contra el Xa, pero se queda lejos de la trombina.', pista: 'Pulsa «Enoxaparina».', bueno: { farmaco: 'enoxaparina' } },
     enunciado: 'Predice. La HBPM es la misma heparina, cortada en trozos de 4.500 Da de media. ¿Qué pierde?',
     opciones: [
-      { t: 'Casi toda su acción sobre la trombina', ok: true },
+      { t: 'Casi toda su acción sobre la trombina (anti-IIa)', ok: true },
       { t: 'Su acción sobre el Xa: sin largo no despierta la AT', ok: false, porque: 'Las cadenas cortas siguen despertando la AT contra el Xa: es su efecto principal. Si creyeras que no lo frena, dejarías sin profilaxis eficaz a un paciente que la tiene.' },
-      { t: 'Nada: es la misma molécula y solo dura más', ok: false, porque: 'Al perder largo, apenas ata la trombina; por eso su respuesta es predecible y no se monitoriza de rutina. Si la trataras como la HNF, le pedirías controles que no necesita.' }],
+      { t: 'Nada: es la misma molécula, solo dura más', ok: false, porque: 'Al perder largo, apenas ata la trombina; por eso su respuesta es predecible y no se monitoriza de rutina. Si la trataras como la HNF, le pedirías controles que no necesita.' }],
     explicacion: 'Menos unión a la trombina: menos anti-IIa y <span class="hl-a">respuesta predecible</span>. Y se une menos a proteínas, endotelio, macrófagos y plaquetas: <span class="hl-a">biodisponibilidad del 90 %</span> (HNF, 15-30 %), dura más (menos dosis) y menos TIH.' },
   { id: 'tl-g3', grupo: 'guia', corto: 'efecto variable', tipo: 'destapa', fuente: `${FX}#mar-hnf`,
     estado: { inflamacion: true, farmaco: 'hnf' }, mirar: 'telar',
@@ -2113,43 +2146,42 @@ const PREGUNTAS = [
     puntos: ['La heparina se une al <span class="hl-a">factor plaquetario 4</span> y forma un complejo antigénico.',
       'Aparecen <span class="hl-r">anticuerpos IgG</span> que activan las plaquetas: <span class="hl-r">trombosis y trombocitopenia</span> por consumo.',
       '<span class="hl-r">No depende de la dosis</span>: pasa también con las dosis profilácticas.'],
-    explicacion: 'TIH: <span class="hl-a">2,6 % con HNF y 0,2 % con HBPM</span> (diez veces menos), porque la HBPM se une menos a las plaquetas.' },
+    explicacion: 'TIH: <span class="hl-a">2,6 % con HNF y 0,2 % con HBPM</span> (diez veces menos), porque la HBPM se une menos a las plaquetas. Los lazos del dibujo son una imagen; el libro dice «se une».' },
   { id: 'tl-g5', grupo: 'guia', corto: 'TIH previa', tipo: 'test', fuente: `${FX}#mar-fondaparinux · ${FXI} (Situaciones especiales)`,
-    estado: { vista: 'tih', tih: true, farmaco: 'hnf' }, mirar: 'fp4',
-    tocar: { mandos: ['farmaco-tih'], ocultar: ['tih'], instruccion: 'pon el fondaparinux sobre la plaqueta.', comprobar: e => e.farmaco === 'fondaparinux', confirma: 'las 5 cuentas no envuelven el FP4: sin complejo, sin IgG.', pista: 'Pulsa «Fondaparinux».', bueno: { farmaco: 'fondaparinux' } },
-    enunciado: 'Predice. Un paciente con una TIH previa necesita profilaxis. ¿Qué le pones?',
+    estado: { vista: 'tih', tih: true, farmaco: 'hnf' }, despues: { vista: 'tih', tih: true, farmaco: 'fondaparinux' }, mirar: 'fp4', ocultar: ['tih'],
+    enunciado: 'Un paciente con una TIH previa necesita profilaxis. ¿Qué le pones?',
     opciones: [
-      { t: 'Enoxaparina: la HBPM casi no da TIH', ok: false, porque: '0,2 % es poco, pero no cero: la HBPM sigue siendo heparina y puede formar el complejo con el FP4: con una TIH previa, arriesgas otra trombosis y otra caída de plaquetas.' },
-      { t: 'Fondaparinux', ok: true },
-      { t: 'HNF a dosis bajas, que con poca basta', ok: false, porque: 'La TIH no depende de la dosis: con 5.000 U se puede repetir. El paciente volvería a hacer trombosis y trombocitopenia.' }],
-    explicacion: 'El fondaparinux es el <span class="hl-a">pentasacárido</span> que une la heparina a la AT: 5 cuentas, demasiado corto para envolver el FP4. Sirve para la profilaxis con <span class="hl-a">TIH sospechada o previa</span>; se ha usado en la confirmada, pero el tratamiento aprobado de la TIH es el <span class="hl-a">argatrobán</span>.' },
+      { t: 'Enoxaparina, porque la HBPM casi no da TIH (0,2 %)', ok: false, porque: '0,2 % es poco, pero no cero: la HBPM sigue siendo heparina. Con una TIH previa, arriesgas otra trombosis y otra caída de plaquetas.' },
+      { t: 'Fondaparinux, que el libro acepta con TIH previa', ok: true },
+      { t: 'HNF a dosis bajas, porque con muy poca ya basta', ok: false, porque: 'La TIH no depende de la dosis: con 5.000 U se puede repetir. El paciente volvería a hacer trombosis y trombocitopenia.' }],
+    explicacion: 'El capítulo: el fondaparinux <span class="hl-a">puede usarse para la profilaxis con TIH sospechada o previa</span>, y se ha usado en la confirmada; pero el tratamiento aprobado de la TIH es el <span class="hl-a">argatrobán</span>. El libro no explica por qué el fondaparinux sirve aquí: la lupa no lo dibuja.' },
   { id: 'tl-g6', grupo: 'guia', corto: 'el riñón', tipo: 'test', fuente: `${FX}#mar-tabla-5-2 · #mar-hbpm`,
     estado: { farmaco: 'enoxaparina', clcr: 90 }, mirar: 'rinon',
     tocar: { mandos: ['clcr'], ocultar: ['dosis'], instruccion: 'baja el ClCr a 25 y mira el vaso y la dosis.', comprobar: e => e.clcr === 25, confirma: 'con ClCr 25 el vaso se llena: 30 mg al día, o HNF.', pista: 'Pulsa «25».', bueno: { clcr: 25 } },
     enunciado: 'Predice. La enoxaparina se elimina por el riñón. Con un ClCr de 25 mL/min, ¿qué hace la Tabla 5.2?',
     opciones: [
-      { t: 'Nada: las HBPM no se ajustan por el riñón', ok: false, porque: 'Eso vale para la dalteparina, no para la enoxaparina: con ClCr <30 se acumula. A dosis plena, el paciente podría sangrar.' },
-      { t: 'No usar ninguna heparina por debajo de 30', ok: false, porque: 'La HNF no tiene ajuste renal y es la alternativa (la mejor con ClCr <20). Dejarías al paciente sin profilaxis.' },
-      { t: '30 mg al día, o pasar a HNF', ok: true }],
+      { t: 'Nada: las HBPM no necesitan ajuste por el riñón', ok: false, porque: 'Eso vale para la dalteparina, no para la enoxaparina: con ClCr <30 se acumula. A dosis plena, el paciente podría sangrar.' },
+      { t: 'No usar ninguna heparina por debajo de 30 mL/min', ok: false, porque: 'La HNF no tiene ajuste renal y es la alternativa (la mejor con ClCr <20). Dejarías al paciente sin profilaxis.' },
+      { t: '30 mg al día, o cambiar a heparina no fraccionada', ok: true }],
     explicacion: '<span class="hl-a">ClCr &lt;30: 30 mg al día, o HNF</span>; la HNF parece la mejor opción con ClCr &lt;20. La dalteparina no necesita ajuste (con la nota de la p. 11 si el ClCr es &lt;15).' },
-  { id: 'tl-g7', grupo: 'guia', corto: 'la adivinanza', tipo: 'test', fuente: `${FXI}#mar-inmovilidad`,
+  { id: 'tl-g7', grupo: 'guia', corto: 'la adivinanza', tipo: 'test', fuente: `${FXI}#mar-inmovilidad · ${FX}#mar-tabla-5-1`,
     estado: {}, mirar: 'flujo',
     tocar: { mandos: ['inmovil'], ocultar: ['flujo', 'red'], instruccion: 'déjale 3 semanas inmóvil y mira los hematíes de la femoral.', comprobar: e => e.inmovil, confirma: 'los hematíes suben al mismo ritmo: con gasto normal, el retorno venoso es igual. El telar no teje.', pista: 'Pulsa «Inmóvil, 3 semanas».', bueno: { inmovil: true } },
     enunciado: 'Predice. Si la inmovilidad causara TVP, los ancianos encamados con contracturas la tendrían en epidemia. Tres semanas inmóvil en la cama, con el gasto normal: ¿qué le pasa a la sangre de la femoral?',
     opciones: [
-      { t: 'Se estanca en el bolsillo de la válvula: la estasis de Virchow', ok: false, porque: 'Es la intuición que el autor discute: en un sistema cerrado, con gasto normal, el retorno venoso también lo es. Si lo crees, anticoagularías de más a pacientes que solo están en la cama.' },
-      { t: 'Sigue al mismo ritmo', ok: true },
-      { t: 'Va más lenta, pero solo si además está sedado', ok: false, porque: 'La sedación no cambia el razonamiento: lo que decide es el gasto. Con el gasto normal no hay estasis, y anticoagularías sin necesidad.' }],
+      { t: 'Sigue subiendo al mismo ritmo que en un sano', ok: true },
+      { t: 'Se estanca en el bolsillo: la estasis de Virchow', ok: false, porque: 'Es la intuición que el autor discute: en un sistema cerrado, con gasto normal, el retorno venoso también lo es. Si lo crees, anticoagularías de más a pacientes que solo están en la cama.' },
+      { t: 'Va más lenta, pero solo si está sedado', ok: false, porque: 'La sedación no cambia el razonamiento: lo que decide es el gasto. Con el gasto normal no hay estasis, y anticoagularías sin necesidad.' }],
     explicacion: '<span class="hl-a">Inmovilidad no es estasis</span>: el aparato circulatorio es cerrado y, si el gasto es normal, los flujos arterial y venoso son iguales. Según el autor, creer lo contrario <span class="hl-r">lleva a usar anticoagulantes de más</span>.',
-    nota: '<b>Nota de interpretación.</b> Es la reflexión final del autor (Marino, cap. 5, p. 13), no una recomendación de guía: él mismo dice «probablemente». Se presenta como su opinión.' },
+    nota: '<b>Nota de fuentes.</b> La Tabla 5.1 (p. 2) incluye la inmovilidad prolongada y la movilidad limitada entre los factores de riesgo; la reflexión final del autor (p. 13) la discute, con un «probablemente». Se muestran las dos: es su opinión, no una recomendación de guía.' },
   { id: 'tl-g8', grupo: 'guia', corto: 'la inflamación', tipo: 'test', fuente: `${FXI}#mar-inmovilidad`,
     estado: { inmovil: true }, mirar: 'telar',
     tocar: { mandos: ['inflamacion'], ocultar: ['red'], instruccion: 'enciende la inflamación y mira el bolsillo de la válvula.', comprobar: e => e.inflamacion, confirma: 'con el flujo intacto, la tejedora se pone a trabajar y la red crece.', pista: 'Pulsa «Inflamación».', bueno: { inflamacion: true } },
     enunciado: 'Predice. Entonces, según el autor, ¿qué dispara la TVP en muchos pacientes de alto riesgo?',
     opciones: [
-      { t: 'El reposo: por eso la profilaxis dura mientras no camine', ok: false, porque: 'En la lesión medular el riesgo es alto solo 3-4 semanas y luego se suspende la profilaxis, aunque siga sin caminar. Mantenerla por la cama sería anticoagularle de más.' },
-      { t: 'Los catéteres: la cama solo pesa si lleva una vía femoral', ok: false, porque: 'Los catéteres son un factor de la UCI (Tabla 5.1), pero no la explicación del autor. Con esa idea, descuidarías al séptico sin vía, que sigue en riesgo.' },
-      { t: 'La inflamación', ok: true }],
+      { t: 'La sedación, que para la bomba de la pantorrilla', ok: false, porque: 'El capítulo no la cita como desencadenante. Pensando en la sedación, anticoagularías por la cama y descuidarías lo que de verdad enciende el telar, como la sepsis.' },
+      { t: 'La inflamación, que va unida a la coagulación', ok: true },
+      { t: 'Los catéteres: la cama solo pesa con una vía femoral', ok: false, porque: 'Los catéteres son un factor de la UCI (Tabla 5.1), pero no la explicación del autor. Con esa idea, descuidarías al séptico sin vía, que sigue en riesgo.' }],
     explicacion: 'Inflamación y coagulación están muy unidas (además de la lesión vascular en el trauma y la ortopedia). Por eso, en la lesión medular el riesgo es alto <span class="hl-a">solo 3-4 semanas</span>.' },
   { id: 'tl-g9', grupo: 'guia', corto: 'la CNI', tipo: 'destapa', fuente: `${FXI}#mar-mecanica · #mar-cni-pegas`,
     estado: { inflamacion: true, mecanica: 'cni' }, mirar: 'mangas',
@@ -2160,19 +2192,19 @@ const PREGUNTAS = [
     explicacion: 'Puede ser tan eficaz como la anticoagulación y suma a ella: es el método mecánico estándar. Limita la movilidad, macera la piel y molesta al despierto: retirarla en cuanto no haga falta.' },
   { id: 'tl-e1', grupo: 'examen', corto: 'TIH y dosis', tipo: 'test', fuente: `${FX}#mar-hnf (Uniones) · #mar-hbpm`,
     estado: { vista: 'tih', tih: true, farmaco: 'hnf' }, mirar: 'fp4', ocultar: ['tih'],
-    enunciado: 'Varón de 70 años con HNF 5.000 U SC cada 12 h. Día 7: plaquetas de 220.000 a 90.000/µL y una TVP nueva. El R1 dice: «con dosis profilácticas no puede ser una TIH». ¿Qué le contestas?',
+    enunciado: 'Varón de 70 años con HNF 5.000 U SC cada 12 h. Día 7: plaquetas de 220.000 a 90.000/µL. El R1 dice: «con dosis profilácticas no puede ser una TIH». ¿Qué le contestas?',
     opciones: [
-      { t: 'Tiene razón: la TIH necesita dosis terapéuticas', ok: false, porque: 'La TIH no depende de la dosis. Si sigues con la heparina, el paciente seguirá haciendo trombosis y consumiendo plaquetas.' },
-      { t: 'Que puede serlo: la TIH no depende de la dosis', ok: true },
-      { t: 'Solo si llevara HBPM, que se une más a las plaquetas', ok: false, porque: 'Es al revés: la HBPM se une menos (0,2 % frente a 2,6 %). Con ese error, pasarías a HNF y el paciente seguiría expuesto.' }],
+      { t: 'Tiene razón: la TIH necesita dosis terapéuticas', ok: false, porque: 'La TIH no depende de la dosis. Si sigues con la heparina, el paciente puede hacer trombosis y seguir consumiendo plaquetas.' },
+      { t: 'Solo si llevara HBPM, que se une más a las plaquetas', ok: false, porque: 'Es al revés: la HBPM se une menos (0,2 % frente a 2,6 %). Con ese error, pasarías a HNF y el paciente seguiría expuesto.' },
+      { t: 'Que sí puede serlo: la TIH no depende de la dosis', ok: true }],
     explicacion: 'Complejo heparina-FP4 → IgG → activación plaquetaria: <span class="hl-r">trombosis y trombocitopenia</span>, también con dosis profilácticas. 2,6 % con HNF; 0,2 % con HBPM.' },
   { id: 'tl-e2', grupo: 'examen', corto: 'UCI médica', tipo: 'test', fuente: `${FXI} (Enfermedad médica aguda) · #mar-mecanica`,
     estado: { riesgo: 'medica', inflamacion: true, farmaco: 'enoxaparina' }, mirar: 'mangas',
     enunciado: 'Mujer de 58 años con neumonía y shock séptico en la UCI, sin sangrado. Función renal e IMC normales. ¿Qué profilaxis?',
     opciones: [
-      { t: 'HBPM y CNI: en la UCI el riesgo es máximo y suman', ok: false, porque: 'Para la enfermedad médica aguda, incluida la UCI, se recomienda HBPM sin añadir mecánica. Le pondrías una CNI que limita la movilidad y macera la piel sin que la guía la pida aquí.' },
-      { t: 'HBPM sola', ok: true },
-      { t: 'Medias de compresión, por si sangra con la sepsis', ok: false, porque: 'Las medias son el método menos eficaz y nunca se usan como único método en el hospitalizado. Sin sangrado, no hay motivo para dejarla sin anticoagulante: haría una ETV evitable.' }],
+      { t: 'HBPM sola, sin añadir ninguna profilaxis mecánica', ok: true },
+      { t: 'HBPM y CNI: en la UCI el riesgo es máximo y se suman', ok: false, porque: 'Para la enfermedad médica aguda, incluida la UCI, la guía del capítulo pide HBPM sin añadir mecánica. Le pondrías una CNI que limita la movilidad y macera la piel sin que la guía la pida aquí.' },
+      { t: 'Medias, por si sangra con la sepsis', ok: false, porque: 'Las medias son el método menos eficaz y nunca se usan como único método en el hospitalizado. Sin sangrado, no hay motivo para dejarla sin anticoagulante: haría una ETV evitable.' }],
     explicacion: 'Enfermedad médica aguda de alto riesgo (<span class="hl-a">todo paciente de UCI</span>): <span class="hl-a">HBPM sola</span>, sin profilaxis mecánica, y sin prolongarla tras el alta.' },
   { id: 'tl-e3', grupo: 'examen', corto: 'neuroeje', tipo: 'error', fuente: `${FX}#mar-neuroeje`,
     estado: { vista: 'reloj', horas: 24 }, mirar: 'reloj', ocultar: ['reloj'],
@@ -2189,34 +2221,34 @@ const PREGUNTAS = [
     enunciado: 'Politraumatizado con fractura de pelvis que todavía sangra: no se puede anticoagular. El R1 propone un filtro de vena cava «como profilaxis». ¿Qué le dices?',
     opciones: [
       { t: 'Bien: atrapa los trombos, así que previene la ETV', ok: false, porque: 'El filtro reduce la embolia pulmonar atrapando trombos, pero no previene la TVP: mira la red, que sigue creciendo. El paciente seguiría haciendo trombosis en la pierna.' },
-      { t: 'Mejor medias solas, que no hacen sangrar', ok: false, porque: 'Las medias son el método menos eficaz y nunca se usan solas en el hospitalizado. Dejarías al paciente casi sin protección.' },
-      { t: 'Mejor CNI: el filtro no es profilaxis', ok: true }],
+      { t: 'Mejor la CNI: el filtro de cava no es profilaxis', ok: true },
+      { t: 'Mejor medias solas, que nunca hacen sangrar', ok: false, porque: 'Las medias son el método menos eficaz y nunca se usan solas en el hospitalizado. Dejarías al paciente casi sin protección.' }],
     explicacion: 'Cuando sangra o tiene alto riesgo de sangrar, la <span class="hl-a">CNI sustituye</span> a la anticoagulación. Los filtros de VCI <span class="hl-r">no previenen la TVP</span>: se usan a veces en la TVP que no se puede anticoagular, no como profilaxis.' },
   { id: 'tl-e5', grupo: 'examen', corto: 'ClCr <15', tipo: 'test', fuente: `${FXI} (Situaciones especiales) · ${FX}#mar-nota-dalteparina-farmacos`,
     estado: { farmaco: 'dalteparina', clcr: 12 }, mirar: 'rinon', ocultar: ['dosis'],
     enunciado: 'Paciente en hemodiálisis, con un ClCr de 12 mL/min. ¿Qué anticoagulantes acepta el capítulo para su profilaxis?',
     opciones: [
       { t: 'Apixabán o rivaroxabán, a dosis reducida', ok: false, porque: 'Con ClCr <15 no se usan (Tabla 5.3). Se acumularían y el paciente sangraría.' },
-      { t: 'Enoxaparina 30 mg al día, el ajuste renal de la tabla', ok: false, porque: 'Ese ajuste es para ClCr <30; con <15 el capítulo solo acepta HNF o warfarina, y la HNF parece la mejor opción por debajo de 20. Se acumularía.' },
+      { t: 'Enoxaparina 30 mg al día, el ajuste de la tabla', ok: false, porque: 'Ese ajuste es para ClCr <30; con <15 el capítulo solo acepta HNF o warfarina, y la HNF parece la mejor opción por debajo de 20. Se acumularía.' },
       { t: 'HNF o warfarina (la dalteparina, discutida)', ok: true }],
     explicacion: 'Recomendación general (p. 11): con ClCr &lt;15, <span class="hl-a">solo HNF o warfarina</span>. La warfarina es el único oral seguro en la IR grave.',
     nota: '<b>Nota de fuentes.</b> La Tabla 5.2 (p. 4) y el texto (p. 7) dicen que la dalteparina va «sin ajuste renal»; la p. 11 no la incluye entre las que se pueden usar con ClCr &lt;15. El capítulo no lo concilia: se muestran las dos.' }
 ];
 
 const CASOS = [
-  { id: 'c-e2', titulo: 'Rosa, 66 años: la enoxaparina que no era', corto: 'Caso E2 · Rosa', sub: 'UCI médica, IMC 42, ClCr 25',
+  { id: 'c-e2', titulo: 'Rosa, 66 años: la enoxaparina que no era', corto: 'Rosa · UCI médica', sub: 'neumonía con sepsis, IMC 42, ClCr 25',
     paciente: { Edad: '66 años', Motivo: 'neumonía con sepsis; ingresa en la UCI', IMC: '42 kg/m²', ClCr: '25 mL/min' },
     pasos: [
       { momento: 'Ingreso', datos: {}, nuevo: [], estado: { riesgo: 'medica', inflamacion: true, farmaco: 'enoxaparina' }, mirar: 'rinon',
-        calculadora: { nombre: '¿Qué dosis le toca?', ids: '#mar-profilaxis-calc' },
+        calculadora: { nombre: '¿Qué dosis le toca?' },
         pregunta: { id: 'e2-1', tipo: 'test', fuente: `${FX}#mar-tabla-5-2 · #mar-hbpm · calculadora #mar-profilaxis-calc`,
           tocar: { mandos: ['clcr', 'imc'], ocultar: ['dosis'], instruccion: 'pon su ClCr (25) y su IMC (42) y lee la calculadora.', comprobar: e => e.clcr === 25 && e.imc === 42, confirma: 'por el riñón, 30 mg al día o HNF; por la obesidad, 40 mg cada 12 h; y «la tabla no da una pauta para obesidad e insuficiencia renal a la vez».', pista: 'Pulsa «25» y «42».', bueno: { clcr: 25, imc: 42 } },
           enunciado: 'Predice. Quieres enoxaparina. Por la obesidad tocarían 40 mg cada 12 h; por el riñón, 30 mg al día. ¿Qué dice la Tabla 5.2 para las dos cosas a la vez?',
           opciones: [
-            { t: 'Gana la obesidad: 40 mg cada 12 h', ok: false, porque: 'Con ClCr 25 la enoxaparina se acumula; doblar la dosis sin un dato que lo apoye podría hacerla sangrar.' },
-            { t: 'Nada: no da pauta para las dos juntas', ok: true },
-            { t: 'Gana el riñón: 30 mg al día y sin más vueltas', ok: false, porque: 'La tabla no lo dice para la obesa: con 30 mg al día podría quedarse corta, porque en la obesidad la dosis fija es dudosa. Haría una ETV evitable.' }],
-          explicacion: 'La calculadora lo enseña: «la tabla no da una pauta para obesidad e insuficiencia renal a la vez». El capítulo deja dos salidas: la <span class="hl-a">HNF</span>, sin ajuste renal (7.500 U cada 8 h con IMC ≥40); y, si se elige una HBPM, el <span class="hl-a">anti-Xa</span> es útil cuando la dosis fija es dudosa.' } },
+            { t: 'Gana la obesidad: 40 mg cada 12 h, sin más', ok: false, porque: 'Con ClCr 25 la enoxaparina se acumula; doblar la dosis sin un dato que lo apoye podría hacerla sangrar.' },
+            { t: 'Ninguna: la tabla no da pauta para las dos juntas', ok: true },
+            { t: 'Gana el riñón: 30 mg al día, y no hace falta más', ok: false, porque: 'La tabla no lo dice para la obesa: con 30 mg al día podría quedarse corta, porque en la obesidad la dosis fija es dudosa. Haría una ETV evitable.' }],
+          explicacion: 'La calculadora lo enseña: «la tabla no da una pauta para obesidad e insuficiencia renal a la vez». Lo que sí dice el capítulo: la <span class="hl-a">HNF</span> no tiene ajuste renal (7.500 U cada 8 h con IMC ≥40), y el <span class="hl-a">anti-Xa</span> es útil cuando la dosis fija de una HBPM es dudosa, como en la obesidad.' } },
       { momento: 'Ingreso · el plan', datos: { Profilaxis: 'HNF 7.500 U SC cada 8 h' }, nuevo: ['Profilaxis'], estado: { riesgo: 'medica', inflamacion: true, farmaco: 'hnf', imc: 42, clcr: 25, mecanica: 'medias' }, mirar: 'mangas',
         pregunta: { id: 'e2-2', tipo: 'error', fuente: `${FX}#mar-tabla-5-2 · ${FXI}#mar-mecanica · (Enfermedad médica aguda)`,
           enunciado: 'Plan del R1 de noche.',
@@ -2224,30 +2256,48 @@ const CASOS = [
             { t: 'Como la tabla no resuelve la obesidad con ClCr 25, uso HNF, que no tiene ajuste renal.', mal: false },
             { t: 'HNF 7.500 U SC cada 8 h, por el IMC ≥40.', mal: false },
             { t: 'Si empieza a sangrar, medias de compresión como único método.', mal: true, c: 'Las medias <span class="hl-r">nunca se usan como único método</span> en el hospitalizado: son el menos eficaz. Si sangra, la mecánica que sustituye a la anticoagulación es la <span class="hl-a">CNI</span>.' },
-            { t: 'Añado CNI a la heparina, porque es paciente de UCI.', mal: true, c: 'En la enfermedad médica aguda, incluida la UCI, la guía del capítulo pide HBPM <span class="hl-a">sin añadir profilaxis mecánica</span>. La CNI se suma en otros escenarios (cirugía de alto riesgo, trauma).' },
+            { t: 'Le añado CNI de rutina, porque en la UCI médica la guía del capítulo pide sumarla.', mal: true, c: 'Al revés: para la enfermedad médica aguda, incluida la UCI, la guía del capítulo pide HBPM <span class="hl-a">sin añadir profilaxis mecánica</span>. La CNI suma eficacia a la anticoagulación, pero aquí no se recomienda de rutina.' },
             { t: 'No la prolongo tras el alta.', mal: false }],
-          explicacion: 'Los dos errores son la trampa clásica: las medias nunca solas y, en la UCI médica, nada de mecánica añadida.' } },
-      { momento: 'Día 6', datos: { Plaquetas: '210.000 → 95.000/µL', 'Pierna izquierda': 'hinchada' }, nuevo: ['Plaquetas', 'Pierna izquierda'], estado: { vista: 'tih', tih: true, farmaco: 'hnf', imc: 42, clcr: 25 }, mirar: 'fp4', ocultar: ['tih'],
+          explicacion: 'Los dos errores son la trampa clásica: las medias nunca solas y, en la UCI médica, nada de mecánica añadida de rutina.' } },
+      { momento: 'Día 6', datos: { Plaquetas: '210.000 → 95.000/µL', Piernas: 'sin edemas ni dolor' }, nuevo: ['Plaquetas', 'Piernas'], estado: { vista: 'tih', tih: true, farmaco: 'hnf', imc: 42, clcr: 25 }, mirar: 'fp4', ocultar: ['tih'],
         pregunta: { id: 'e2-3', tipo: 'destapa', fuente: `${FX}#mar-hnf (Uniones) · #mar-hbpm`,
-          enunciado: 'Las plaquetas caen a la mitad y la pierna se hincha. ¿Qué mecanismo sospechas, y por qué no te tranquiliza que la dosis fuera profiláctica?',
-          puntos: ['<span class="hl-r">TIH</span>: la heparina se une al FP4 y forma un complejo antigénico.', 'Los <span class="hl-r">IgG</span> activan las plaquetas: trombosis (la pierna) y trombocitopenia por consumo.', '<span class="hl-a">No depende de la dosis</span>: pasa con dosis profilácticas.'],
+          enunciado: 'Las plaquetas caen a menos de la mitad. ¿Qué mecanismo sospechas, y por qué no te tranquiliza que la dosis fuera profiláctica?',
+          puntos: ['<span class="hl-r">TIH</span>: la heparina se une al FP4 y forma un complejo antigénico.', 'Los <span class="hl-r">IgG</span> activan las plaquetas: trombosis y trombocitopenia por consumo.', '<span class="hl-a">No depende de la dosis</span>: pasa con dosis profilácticas.'],
           explicacion: 'Con HNF, 2,6 %; con HBPM, 0,2 %. El diagnóstico y el tratamiento de la TIH están en el cap. 13 (en «Para profundizar»).' } },
-      { momento: 'Día 6 · el giro', datos: { Plan: 'pasar a fondaparinux' }, nuevo: ['Plan'], estado: { vista: 'tih', tih: true, farmaco: 'fondaparinux', imc: 42, clcr: 25 }, mirar: 'fp4',
-        pregunta: { id: 'e2-4', tipo: 'test', fuente: `${FX}#mar-fondaparinux · #mar-fondaparinux-errata · #mar-tabla-5-2`,
-          enunciado: 'El fondaparinux no envuelve el FP4. Pero su ClCr es 25. ¿Qué dice el capítulo sobre su dosis?',
+      { momento: 'Día 6 · la profilaxis', datos: { Sospecha: 'TIH, sin trombosis por ahora' }, nuevo: ['Sospecha'], estado: { vista: 'tih', tih: true, farmaco: 'hnf', imc: 42, clcr: 25 }, mirar: 'fp4',
+        pregunta: { id: 'e2-4', tipo: 'test', fuente: `${FX}#mar-fondaparinux · ${FXI} (Situaciones especiales)`,
+          despues: { vista: 'tih', tih: true, farmaco: 'fondaparinux', imc: 42, clcr: 25 },
+          enunciado: 'Sospechas una TIH y sigue necesitando profilaxis. ¿Qué dice el capítulo?',
           opciones: [
-            { t: '1,5 mg al día: la tabla y el texto dicen lo mismo entre 20 y 50', ok: false, porque: 'La tabla da 1,5 mg solo entre 35 y 50 y prohíbe por debajo de 30. Si no ves la discrepancia, le darías una dosis que una parte del libro prohíbe sin saberlo.' },
-            { t: 'Tabla: no usar si <30. Texto: 1,5 mg si 20-50', ok: true },
-            { t: '2,5 mg al día: el fondaparinux no se ajusta por el riñón', ok: false, porque: 'Se elimina por el riñón (vida media de 17 h): a dosis plena con ClCr 25 se acumularía y la paciente podría sangrar.' }],
+            { t: 'Fondaparinux, que se acepta con TIH sospechada', ok: true },
+            { t: 'Enoxaparina: la HBPM da diez veces menos TIH', ok: false, porque: 'Da menos TIH (0,2 %), pero también la da: es heparina. Con una TIH en marcha, la seguirías exponiendo a trombosis.' },
+            { t: 'Seguir con HNF: a dosis baja la TIH no progresa', ok: false, porque: 'La TIH no depende de la dosis: con la HNF seguiría formando el complejo, con riesgo de trombosis y más caída de plaquetas.' }],
+          explicacion: 'El fondaparinux <span class="hl-a">puede usarse para la profilaxis con TIH sospechada o previa</span>. Si se confirma la TIH o aparece una trombosis, ya no es profilaxis: el tratamiento aprobado de la TIH es el <span class="hl-r">argatrobán</span> (cap. 13, fuera de esta ficha).' } },
+      { momento: 'Día 6 · el giro', datos: { Plan: 'fondaparinux en profilaxis', ClCr: '25 mL/min' }, nuevo: ['Plan'], estado: { farmaco: 'fondaparinux', imc: 42, clcr: 25 }, mirar: 'rinon', ocultar: ['dosis'],
+        pregunta: { id: 'e2-5', tipo: 'test', fuente: `${FX}#mar-fondaparinux · #mar-fondaparinux-errata · #mar-tabla-5-2`,
+          enunciado: 'El fondaparinux lo elimina el riñón, y su ClCr es 25. ¿Qué dice el capítulo sobre su dosis?',
+          opciones: [
+            { t: '1,5 mg al día: tabla y texto coinciden entre 20 y 50', ok: false, porque: 'La tabla da 1,5 mg solo entre 35 y 50 y prohíbe por debajo de 30. Si no ves la discrepancia, le darías una dosis que una parte del libro prohíbe sin saberlo.' },
+            { t: '2,5 mg al día: el riñón no cambia su dosis', ok: false, porque: 'Se elimina por el riñón (vida media de 17 h): a dosis plena con ClCr 25 se acumularía y la paciente podría sangrar.' },
+            { t: 'Tabla: no usar si <30. Texto: 1,5 mg si 20-50', ok: true }],
           explicacion: 'El libro se contradice y <span class="hl-r">no se elige ganadora</span>: la tabla (p. 4) da 1,5 mg con ClCr 35-50 y prohíbe por debajo de 30; el texto (p. 8), 1,5 mg con 20-50 y prohíbe por debajo de 20. La calculadora avisa en ese tramo.',
-          nota: '<b>Nota de fidelidad.</b> Ninguna de las dos cifras cubre el tramo 30-35 de la tabla. Se reproducen las dos, como en la ficha.' } }
+          nota: '<b>Nota de fidelidad.</b> Ninguna de las dos cifras cubre el tramo 30-35 de la tabla. Se reproducen las dos, como en la ficha.' } },
+      { momento: 'Día 9', datos: { ClCr: '50 mL/min', Plaquetas: 'se recuperan' }, nuevo: ['ClCr', 'Plaquetas'], estado: { farmaco: 'fondaparinux', imc: 42, clcr: 25 }, mirar: 'rinon',
+        pregunta: { id: 'e2-6', tipo: 'test', fuente: `${FX}#mar-fondaparinux · #mar-tabla-5-2`,
+          tocar: { mandos: ['clcr'], ocultar: ['dosis'], instruccion: 'sube el ClCr a 50 y lee la calculadora.', comprobar: e => e.clcr === 50, confirma: 'con ClCr 50, 1,5 mg al día: la tabla (35-50) y el texto (20-50) coinciden.', pista: 'Pulsa «50».', bueno: { clcr: 50 } },
+          enunciado: 'Predice. El ClCr sube a 50. ¿Y la dosis de fondaparinux?',
+          opciones: [
+            { t: 'No usar: no se permite por debajo de 60', ok: false, porque: 'Ninguna parte del libro pone ese límite. La dejarías sin profilaxis con una TIH sospechada.' },
+            { t: '1,5 mg al día: aquí la tabla y el texto coinciden', ok: true },
+            { t: '2,5 mg al día: con 50 ya funciona como un riñón sano', ok: false, porque: 'Entre 35 (o 20) y 50, la tabla y el texto piden 1,5 mg. Con 2,5 mg se acumularía y podría sangrar.' }],
+          explicacion: 'Con ClCr <span class="hl-a">35-50: 1,5 mg al día</span> en la tabla; el texto lo da entre 20 y 50. Por encima de 50, 2,5 mg.' } }
     ],
     lleva: ['Con IMC ≥40 y ClCr &lt;30 a la vez, la Tabla 5.2 no da pauta para la enoxaparina; la HNF no tiene ajuste renal (7.500 U cada 8 h con IMC ≥40).',
-      'En la UCI médica, HBPM sin mecánica añadida; las medias, nunca solas.',
-      'TIH: FP4 + IgG, trombosis y trombocitopenia, sin depender de la dosis. Con TIH previa o sospechada, fondaparinux; con ClCr 25, la tabla y el texto discrepan.'],
-    volver: { nombre: 'Tromboprofilaxis: riesgo y fármacos', ficha: `${FX} (Marino cap. 5)`, estado: { vista: 'tih', tih: true, farmaco: 'fondaparinux', imc: 42, clcr: 25 } } },
+      'En la UCI médica, HBPM sin mecánica añadida de rutina; las medias, nunca solas.',
+      'TIH: FP4 + IgG, trombosis y trombocitopenia, sin depender de la dosis. Profilaxis con fondaparinux si es sospechada (con ClCr 25, la tabla y el texto discrepan); si se confirma o trombosa, el tratamiento aprobado es el argatrobán.'],
+    volver: { nombre: 'Tromboprofilaxis: riesgo y fármacos', estado: { farmaco: 'fondaparinux', imc: 42, clcr: 50 } } },
 
-  { id: 'c-e3', titulo: 'Javier, 35 años: trauma con TCE', corto: 'Caso E3 · Javier', sub: 'TCE y fractura de fémur',
+  { id: 'c-e3', titulo: 'Javier, 35 años: trauma con TCE', corto: 'Javier · TCE y fémur', sub: 'TCE y fractura de fémur',
     paciente: { Edad: '35 años', Motivo: 'accidente de moto: TCE con una contusión y fractura de fémur', TC: 'contusión frontal con sangrado' },
     pasos: [
       { momento: 'Ingreso', datos: {}, nuevo: [], estado: { riesgo: 'trauma', inflamacion: true }, mirar: 'mangas',
@@ -2255,18 +2305,18 @@ const CASOS = [
           despues: { riesgo: 'trauma', inflamacion: true, mecanica: 'cni' },
           enunciado: 'Trauma grave con sangrado intracraneal. ¿Qué profilaxis empiezas hoy?',
           opciones: [
-            { t: 'Enoxaparina 30 mg cada 12 h ya: el trauma es el riesgo más alto', ok: false, porque: 'La hemorragia intracraneal es contraindicación absoluta de anticoagular. Con TCE, CNI hasta que la TC no muestre sangrado ni progresión en 24 h; antes, la heparina podría hacer crecer el hematoma.' },
-            { t: 'CNI, hasta que la TC lo permita', ok: true },
+            { t: 'CNI, hasta que la TC no muestre sangrado en 24 h', ok: true },
+            { t: 'Enoxaparina 30 mg cada 12 h desde hoy mismo', ok: false, porque: 'La hemorragia intracraneal es contraindicación absoluta de anticoagular. Con TCE, CNI hasta que la TC no muestre sangrado ni progresión en 24 h; antes, la heparina podría hacer crecer el hematoma.' },
             { t: 'Un filtro de cava, porque no se puede anticoagular', ok: false, porque: 'El filtro no previene la TVP y no se recomienda como profilaxis. El paciente seguiría haciendo trombos en la pierna.' }],
           explicacion: 'TCE: <span class="hl-a">CNI hasta que la TC no muestre sangrado (o progresión) durante 24 h</span>; después se añade enoxaparina 30 mg SC cada 12 h.' } },
-      { momento: 'Día 1 · noche', datos: { PA: '92/30 mmHg con noradrenalina' }, nuevo: ['PA'], estado: { riesgo: 'trauma', inflamacion: true, mecanica: 'cni', diastolica: 70 }, mirar: 'mangas',
+      { momento: 'Día 1 · noche', datos: { PA: '98/34 mmHg con noradrenalina' }, nuevo: ['PA'], estado: { riesgo: 'trauma', inflamacion: true, mecanica: 'cni', diastolica: 70 }, mirar: 'mangas',
         pregunta: { id: 'e3-2', tipo: 'test', fuente: `${FXI}#mar-cni-pegas · #mar-mecanica`,
-          tocar: { mandos: ['diastolica'], ocultar: [], instruccion: 'pon su diastólica (30) con la CNI puesta y mira la arteria de la pierna.', comprobar: e => e.diastolica === 30, confirma: '35-40 mmHg en el tobillo por encima de una diastólica de 30: la CNI aprieta la arteria.', pista: 'Pulsa «PAD 30».', bueno: { diastolica: 30 } },
-          enunciado: 'Predice. La CNI aprieta a 35-40 mmHg en el tobillo y su diastólica ha bajado a 30. ¿Qué pasa?',
+          tocar: { mandos: ['diastolica'], ocultar: [], instruccion: 'pon su diastólica (34) con la CNI puesta y mira la arteria y el pie.', comprobar: e => e.diastolica === 34, confirma: '35-40 mmHg en el tobillo por encima de una diastólica de 34: la CNI aprieta la arteria y el pie palidece.', pista: 'Pulsa «PAD 34».', bueno: { diastolica: 34 } },
+          enunciado: 'Predice. La CNI aprieta a 35-40 mmHg en el tobillo y su diastólica ha bajado a 34. ¿Qué pasa?',
           opciones: [
-            { t: 'Nada: la CNI comprime las venas, no las arterias', ok: false, porque: 'Cuando la presión aplicada supera la diastólica, comprime también la arteria: la pierna se quedaría con menos riego.' },
-            { t: 'Mejor: con la PA baja hay estasis y la CNI la corrige', ok: false, porque: 'La CNI no puede pasar de la diastólica; con 30 mmHg apretaría la arteria y dejaría la pierna con menos riego.' },
-            { t: 'Que aprieta la arteria', ok: true }],
+            { t: 'Nada: la CNI comprime las venas, nunca las arterias', ok: false, porque: 'Cuando la presión aplicada supera la diastólica, comprime también la arteria: la pierna se quedaría con menos riego.' },
+            { t: 'Mejor: con la PA baja hay estasis y la CNI la corrige', ok: false, porque: 'La CNI no puede pasar de la diastólica; con 34 mmHg apretaría la arteria y dejaría la pierna con menos riego.' },
+            { t: 'Que, por encima de la diastólica, aprieta la arteria', ok: true }],
           explicacion: '<span class="hl-r">La presión nunca debe superar la diastólica</span> (comprimiría las arterias). Qué hacer con la CNI en ese momento, el libro no lo dice.' } },
       { momento: 'Día 2', datos: { TC: 'sin sangrado ni progresión en 24 h', PA: '118/64 mmHg' }, nuevo: ['TC', 'PA'], estado: { riesgo: 'trauma', inflamacion: true, mecanica: 'cni', farmaco: 'enoxaparina', antiXa: true }, mirar: 'telar',
         pregunta: { id: 'e3-3', tipo: 'destapa', fuente: `${FXI} (Trauma grave) · ${FX}#mar-hbpm`,
@@ -2277,9 +2327,9 @@ const CASOS = [
         pregunta: { id: 'e3-4', tipo: 'test', fuente: `${FX}#mar-neuroeje`,
           enunciado: 'Le van a poner un drenaje lumbar. ¿Cuántas horas tras la enoxaparina? Ojo: lleva 30 mg cada 12 h. ¿Te da la ficha la cifra para su pauta?',
           opciones: [
-            { t: 'Sí: ≥12 h, como la HNF subcutánea', ok: false, porque: '12 h es la cifra de la HNF. Con la enoxaparina pincharías demasiado pronto: riesgo de hematoma espinal y parálisis.' },
-            { t: 'No: solo da ≥24 h para la pauta de una vez al día', ok: true },
-            { t: 'Sí: ≥24 h, que vale para cualquier pauta de enoxaparina', ok: false, porque: 'La ficha da ≥24 h solo para la pauta de una vez al día; para la de cada 12 h no da cifra. Si la extrapolas sin decirlo, decides sobre su médula con un dato que no está en la fuente.' }],
+            { t: 'Sí: ≥12 h, lo mismo que la HNF subcutánea', ok: false, porque: '12 h es la cifra de la HNF. Con la enoxaparina pincharías demasiado pronto: riesgo de hematoma espinal y parálisis.' },
+            { t: 'No: solo la da para la pauta de una vez al día', ok: true },
+            { t: 'Sí: ≥24 h, que vale para cualquier pauta', ok: false, porque: 'La ficha da ≥24 h solo para la pauta de una vez al día; para la de cada 12 h no da cifra. Si la extrapolas sin decirlo, decides sobre su médula con un dato que no está en la fuente.' }],
           explicacion: 'Es un <span class="hl-r">hueco de la fuente</span>: la ventana de la enoxaparina cada 12 h no está en el capítulo. Lo honesto es decirlo: esa cifra hay que buscarla fuera de esta ficha.' } },
       { momento: 'Día 3 · el pase', datos: { Plan: 'enoxaparina, CNI y anti-Xa; se pidió un filtro de cava' }, nuevo: ['Plan'], estado: { riesgo: 'trauma', inflamacion: true, mecanica: 'cni', farmaco: 'enoxaparina', filtro: true }, mirar: 'filtro',
         pregunta: { id: 'e3-5', tipo: 'error', fuente: `${FXI} (Trauma grave) · #mar-filtro-vci`,
@@ -2294,29 +2344,39 @@ const CASOS = [
     lleva: ['TCE: CNI hasta que la TC no muestre sangrado ni progresión en 24 h; después se añade enoxaparina 30 mg cada 12 h, con anti-Xa.',
       'La CNI nunca por encima de la diastólica; el filtro de cava no es profilaxis.',
       'Neuroeje: la ficha da ≥24 h solo para la enoxaparina una vez al día; para la de cada 12 h, es un hueco.'],
-    volver: { nombre: 'Tromboprofilaxis: métodos mecánicos y qué pauta', ficha: `${FXI} (Marino cap. 5)`, estado: { riesgo: 'trauma', inflamacion: true, mecanica: 'cni', farmaco: 'enoxaparina' } } },
+    volver: { nombre: 'Tromboprofilaxis: métodos mecánicos y qué pauta', estado: { riesgo: 'trauma', inflamacion: true, mecanica: 'cni', farmaco: 'enoxaparina' } } },
 
-  { id: 'c-e7', titulo: 'Andrés, 40 años: la adivinanza', corto: 'Caso E7 · Andrés', sub: 'lesión medular',
+  { id: 'c-e7', titulo: 'Tomás, 40 años: la adivinanza', corto: 'Tomás · lesión medular', sub: 'lesión medular, paraplejía',
     paciente: { Edad: '40 años', Motivo: 'caída: lesión medular dorsal, paraplejía' },
     pasos: [
-      { momento: 'Día 2', datos: { Columna: 'operada; el sangrado ya no preocupa' }, nuevo: ['Columna'], estado: { riesgo: 'medular', inflamacion: true }, mirar: 'telar',
+      { momento: 'Día 1', datos: { Columna: 'recién operada; el sangrado aún preocupa' }, nuevo: ['Columna'], estado: { riesgo: 'medular', inflamacion: true }, mirar: 'mangas',
+        pregunta: { id: 'e7-0', tipo: 'test', fuente: `${FXI} (Trauma grave: lesión medular)`,
+          despues: { riesgo: 'medular', inflamacion: true, mecanica: 'cni' },
+          enunciado: 'Recién operado de la columna; el sangrado aún preocupa. ¿Qué empiezas ya?',
+          opciones: [
+            { t: 'Enoxaparina 30 mg cada 12 h, que es su pauta', ok: false, porque: 'La heparina se empieza en cuanto anticoagular sea seguro, y aún no lo es: podría sangrar en la columna recién operada.' },
+            { t: 'Nada, hasta que se pueda dar la heparina', ok: false, porque: 'La CNI se empieza cuanto antes: esperar a la heparina lo dejaría sin protección en el grupo de más ETV de la Fig. 5.1.' },
+            { t: 'CNI cuanto antes; la heparina, cuando sea seguro', ok: true }],
+          explicacion: 'Lesión medular: <span class="hl-a">CNI cuanto antes</span> y enoxaparina en cuanto anticoagular se considere seguro; después, juntas.' } },
+      { momento: 'Día 3', datos: { Columna: 'el sangrado ya no preocupa' }, nuevo: ['Columna'], estado: { riesgo: 'medular', inflamacion: true, mecanica: 'cni' }, mirar: 'telar',
         pregunta: { id: 'e7-1', tipo: 'test', fuente: `${FXI} (Trauma grave: lesión medular)`,
           despues: { riesgo: 'medular', inflamacion: true, mecanica: 'cni', farmaco: 'enoxaparina' },
-          enunciado: '¿Qué profilaxis le pones?',
+          enunciado: 'Ya se puede anticoagular. ¿Qué profilaxis le dejas?',
           opciones: [
-            { t: 'Solo CNI: con la columna recién operada, nada de heparina', ok: false, porque: 'En cuanto anticoagular sea seguro, la enoxaparina va junto a la CNI. Solo con CNI, el grupo de más ETV de la Fig. 5.1 quedaría a medias.' },
-            { t: 'Enoxaparina 40 mg al día, sin mecánica, como en la UCI médica', ok: false, porque: 'Esa es la pauta de la enfermedad médica. En la lesión medular, 30 mg cada 12 h y CNI, juntas: con menos, quedaría infraprotegido.' },
-            { t: 'Enoxaparina 30 mg cada 12 h y CNI, juntas', ok: true }],
-          explicacion: 'Lesión medular: <span class="hl-a">enoxaparina 30 mg SC cada 12 h</span> en cuanto sea seguro, y <span class="hl-a">CNI cuanto antes</span>, juntas.' } },
+            { t: 'Enoxaparina 30 mg cada 12 h, junto con la CNI', ok: true },
+            { t: 'Retirar la CNI y pasar a enoxaparina sola', ok: false, porque: 'En la lesión medular van juntas. Quitar la CNI le restaría eficacia en el grupo de más riesgo.' },
+            { t: 'Enoxaparina 40 mg al día y sin CNI, como en la UCI', ok: false, porque: 'Esa es la pauta de la enfermedad médica. En la lesión medular, 30 mg cada 12 h y CNI, juntas: con menos, quedaría infraprotegido.' }],
+          explicacion: 'Lesión medular: <span class="hl-a">enoxaparina 30 mg SC cada 12 h</span> en cuanto sea seguro, y <span class="hl-a">CNI</span>, juntas.' } },
       { momento: 'Semana 4', datos: { Estado: 'la inflamación de la lesión ha cedido; sigue en la cama' }, nuevo: ['Estado'], estado: { riesgo: 'medular', inflamacion: true, inmovil: true }, mirar: 'telar',
         pregunta: { id: 'e7-2', tipo: 'test', fuente: `${FXI}#mar-inmovilidad`,
           tocar: { mandos: ['inflamacion'], ocultar: ['red', 'flujo'], instruccion: 'apaga la inflamación (sigue inmóvil) y mira la red y los hematíes.', comprobar: e => !e.inflamacion, confirma: 'sin inflamación el telar se para, y los hematíes suben al mismo ritmo aunque siga en la cama.', pista: 'Pulsa «Inflamación» para apagarla.', bueno: { inflamacion: false } },
           enunciado: 'Predice. Ha pasado la fase aguda: sin inflamación, pero inmóvil. ¿Qué hace el telar?',
           opciones: [
-            { t: 'Teje más: cuatro semanas inmóvil es la estasis máxima', ok: false, porque: 'Con gasto normal no hay estasis aunque no se mueva. Creerlo te llevaría a anticoagularle de más, con su riesgo de sangrado.' },
-            { t: 'Se para, aunque siga en la cama', ok: true },
-            { t: 'Sigue igual: la paraplejía mantiene el riesgo de por vida', ok: false, porque: 'Si fuera así, se haría profilaxis perpetua en la paraplejía, y no se hace: el riesgo es alto solo 3-4 semanas. Mantenerla le expondría al sangrado sin beneficio.' }],
-          explicacion: 'Según el autor, lo que dispara la TVP es probablemente la <span class="hl-a">inflamación</span>, no la cama.' } },
+            { t: 'Teje más: cuatro semanas inmóvil es estasis máxima', ok: false, porque: 'Con gasto normal no hay estasis aunque no se mueva. Creerlo te llevaría a anticoagularle de más, con su riesgo de sangrado.' },
+            { t: 'Se para, aunque siga sin moverse de la cama', ok: true },
+            { t: 'Sigue igual: la paraplejía no cambia', ok: false, porque: 'Si fuera así, se haría profilaxis perpetua en la paraplejía, y no se hace: el riesgo es alto solo 3-4 semanas. Mantenerla le expondría al sangrado sin beneficio.' }],
+          explicacion: 'Según el autor, lo que dispara la TVP es probablemente la <span class="hl-a">inflamación</span>, no la cama.',
+          nota: '<b>Nota de fuentes.</b> La Tabla 5.1 (p. 2) sí incluye la inmovilidad prolongada entre los factores de riesgo; la reflexión del autor (p. 13) la discute. Es su opinión.' } },
       { momento: 'Semana 6', datos: { Familia: '«si sigue sin moverse, ¿por qué le quitan la heparina?»' }, nuevo: ['Familia'], estado: { riesgo: 'medular', inmovil: true }, mirar: 'flujo',
         pregunta: { id: 'e7-3', tipo: 'destapa', fuente: `${FXI}#mar-inmovilidad`,
           enunciado: 'La familia pregunta por qué le quitan la heparina si sigue sin moverse. ¿Qué les explicas?',
@@ -2331,35 +2391,39 @@ const CASOS = [
             { t: 'Le dejo las medias como único método, ya que no camina.', mal: true, c: 'Las medias <span class="hl-r">nunca se usan como único método</span> en el hospitalizado; y, según el autor, la inmovilidad sola no pide profilaxis.' },
             { t: 'Si sigue encamado, la profilaxis debe ser indefinida.', mal: true, c: 'No se hace profilaxis perpetua en la paraplejía: <span class="hl-a">inmovilidad no es estasis</span>.' },
             { t: 'Si aparece una sepsis, vuelvo a valorar el riesgo.', mal: false }],
-          explicacion: 'La sepsis es un factor de riesgo propio de la UCI (Tabla 5.1): la inflamación vuelve a encender el telar.' } }
+          explicacion: 'La sepsis es un factor de riesgo de la Tabla 5.1: la inflamación vuelve a encender el telar.' } }
     ],
-    lleva: ['Lesión medular: enoxaparina 30 mg cada 12 h y CNI, juntas, en cuanto sea seguro.',
+    lleva: ['Lesión medular: CNI cuanto antes y enoxaparina 30 mg cada 12 h en cuanto sea seguro, juntas.',
       'El riesgo es alto solo 3-4 semanas: después se suspende, aunque siga sin caminar.',
-      'Inmovilidad no es estasis; lo que dispara la TVP es probablemente la inflamación (opinión del autor). Creer lo contrario lleva a anticoagular de más.'],
-    volver: { nombre: 'Tromboprofilaxis: métodos mecánicos y qué pauta', ficha: `${FXI}#mar-inmovilidad (Marino cap. 5)`, estado: { riesgo: 'medular', inmovil: true } } }
+      'Inmovilidad no es estasis; lo que dispara la TVP es probablemente la inflamación (opinión del autor, frente a la Tabla 5.1). Creer lo contrario lleva a anticoagular de más.'],
+    volver: { nombre: 'Tromboprofilaxis: métodos mecánicos y qué pauta', estado: { riesgo: 'medular', inmovil: true } } }
 ];
 
-/* Para profundizar: lo que el modelo y la Mayéutica no cubren, con su sitio en el texto (página del PDF) */
+/* Para profundizar: lo que el modelo y la Mayéutica no cubren, con su página del PDF */
 const PROFUNDIZAR = [
-  ['Los factores de riesgo completos (Tabla 5.1) y la Fig. 5.1, con la lectura aproximada de sus barras.', 'mar-tabla-5-1 · mar-fig-5-1', 2],
-  ['Contraindicaciones: absolutas (hemorragia intracraneal; sangrado con caída de la sistólica ≥20 mmHg, de la Hb ≥2 g/dL o ≥2 concentrados) y relativas (TCE o lesión medular, sangrado digestivo recurrente, plaquetas &lt;50.000). La menstruación no contraindica.', 'mar-tev-contra-absolutas · mar-tev-contra-relativas', 4],
-  ['La HNF en la obesidad (IMC ≥30, mayor volumen de distribución) y la dalteparina en la obesidad: una propuesta, de la experiencia de un autor, de 200 U/kg al día (peso real).', 'mar-hnf · mar-hbpm', 5],
-  ['Fondaparinux: no es popular ni se ha estudiado en la UCI; en la TIH confirmada, el tratamiento aprobado es el argatrobán.', 'mar-fondaparinux', 8],
-  ['ACOD: solo para prótesis de cadera y rodilla; apixabán y rivaroxabán igual de eficaces en la obesidad mórbida; mejor no usarlos tras un bypass gástrico; el edoxabán no tiene dosis de profilaxis.', 'mar-acod-puntos', 9],
-  ['La aspirina tras la artroplastia: recomendación condicional de la ASH, a dosis bajas; como único fármaco, no parece justificada.', 'mar-aspirina', 9],
-  ['Pautas por cirugía: general (última dosis ≥6 h la HNF y ≥12 h la HBPM antes; reanudar a las 6 y 12 h; oncológica, hasta 4 semanas), bariátrica (enoxaparina 40 mg cada 12 h con IMC 30-49 y 60 mg con ≥50; unas 2 semanas), ortopédica (ACOD en prótesis, HBPM en la fractura de cadera; 35 días), neurocirugía y cirugía cardíaca.', 'mar-tromboprofilaxis-escenarios', 11],
-  ['Trauma de órganos sólidos o extremidades: enoxaparina 40 mg cada 12 h a las 12-24 h, con CNI en el alto riesgo.', 'mar-tromboprofilaxis-escenarios (Trauma grave)', 12],
-  ['El diagnóstico y el tratamiento de la TIH (cap. 13) y de la embolia pulmonar (cap. 22; en la app, Merino Neumología): fuera de este capítulo.', 'mar-hnf · enlace a la EP', 5],
-  ['El mecanismo de la warfarina: no está en la ficha (hueco).', 'mar-acod-puntos', 8]
+  ['Los factores de riesgo completos están en la Tabla 5.1 (arriba, en Explorar) y la Fig. 5.1, con la lectura aproximada de sus barras.', 2],
+  ['Contraindicaciones: absolutas (hemorragia intracraneal; sangrado con caída de la sistólica ≥20 mmHg, de la Hb ≥2 g/dL o ≥2 concentrados) y relativas (TCE o lesión medular, sangrado digestivo recurrente, plaquetas &lt;50.000). La menstruación no contraindica.', 4],
+  ['Origen de la HNF: un mucopolisacárido de los mastocitos (tradicionalmente, de intestino porcino o pulmón bovino). Cada 8 h es popular en el alto riesgo, pero la mayoría de estudios no ven diferencias de eficacia ni de sangrado con cada 12 h.', 4],
+  ['La HNF en la obesidad (IMC ≥30: mayor volumen de distribución) y la dalteparina en la obesidad: una propuesta, de la experiencia de un autor, de 200 U/kg al día (peso real).', 5],
+  ['Enoxaparina: la primera HBPM aprobada en EE. UU. (1993) y la más usada; más eficaz que la HNF en la cirugía de cadera y rodilla y en el trauma grave.', 7],
+  ['Fondaparinux: no es popular ni se ha estudiado en la UCI; en la TIH confirmada, el tratamiento aprobado es el argatrobán.', 8],
+  ['ACOD: solo para prótesis de cadera y rodilla; apixabán y rivaroxabán igual de eficaces en la obesidad mórbida; mejor no usarlos tras un bypass gástrico; el edoxabán no tiene dosis de profilaxis. El rivaroxabán está aprobado en la enfermedad médica aguda, pero un metaanálisis de los ACOD frente a HBPM en estos pacientes muestra la misma eficacia con más sangrado.', 9],
+  ['La aspirina tras la artroplastia: recomendación condicional de la ASH, a dosis bajas; como único fármaco, no parece justificada.', 9],
+  ['Cirugía general (última dosis ≥6 h la HNF y ≥12 h la HBPM antes; reanudar a las 6 y 12 h; oncológica, hasta 4 semanas) y bariátrica (enoxaparina 40 mg cada 12 h con IMC 30-49 y 60 mg con ≥50; unas 2 semanas).', 11],
+  ['Ortopedia: ACOD en las prótesis de cadera y rodilla, con CNI al principio; HBPM en la fractura de cadera; 35 días.', 12],
+  ['Neurocirugía: CNI; cuando cede el riesgo de sangrado, se añade HBPM en el alto riesgo y en la cirugía oncológica. Cirugía cardíaca: CNI si no se complica; CNI + HBPM si se complica o es de alto riesgo.', 12],
+  ['Trauma de órganos sólidos o extremidades: enoxaparina 40 mg cada 12 h a las 12-24 h, con CNI en el alto riesgo.', 12],
+  ['El diagnóstico y el tratamiento de la TIH (cap. 13) y de la embolia pulmonar (cap. 22; en la app, Merino Neumología): fuera de este capítulo.', 5],
+  ['El mecanismo de la warfarina: no está en la ficha (hueco).', 8]
 ];
 
 /* ============================================================
    10. Arranque
    ============================================================ */
 function pintarProfundizar() {
-  const html = PROFUNDIZAR.map(([txt, ids, pag]) => `<li>${txt} <span class="org">ficha · ${ids}</span><br><a class="pdf" href="${PDF}#page=${pag}" target="_blank" rel="noopener">Ver en el texto · PDF p. ${pag} →</a></li>`).join('');
+  const html = PROFUNDIZAR.map(([txt, pag]) => `<li>${txt} <span class="org">ficha · p. ${pag}</span><br><a class="pdf" href="${PDF}#page=${pag}" target="_blank" rel="noopener">Ver en el texto · PDF p. ${pag} →</a></li>`).join('');
   $('lista-profundizar').innerHTML = html; $('lista-profundizar-2').innerHTML = html;
-  $('lista-estados').innerHTML = FICHAS_ESTADO.map(([nom, id, ests]) => `<li><b>${nom}</b> <span class="org">ficha · ${id}</span><div class="fila" style="margin-top:4px">${ests.map(k => `<button type="button" class="tog" data-estado="${k}">${NOMBRE_ESTADO[k]}</button>`).join('')}</div></li>`).join('');
+  $('lista-estados').innerHTML = FICHAS_ESTADO.map(([nom, id, ests]) => `<li><b>${nom}</b><div class="fila" style="margin-top:4px">${ests.map(k => `<button type="button" class="tog" data-estado="${k}">${NOMBRE_ESTADO[k]}</button>`).join('')}</div></li>`).join('');
 }
 $('lista-estados').addEventListener('click', ev => { const b = ev.target.closest('[data-estado]'); if (b) irAEstado(b.dataset.estado); });
 
@@ -2369,7 +2433,7 @@ construirCama(); construirLamina(); leyendas(); pintarProfundizar();
 D = derivar(estado);
 abrirVista('telar'); pintarTodo();
 decir(...FRASE_INICIO());
-const ajustarDock = () => { const r = document.documentElement.style; r.setProperty('--dock-h', $('dock').offsetHeight + 'px'); r.setProperty('--frase-h', (document.body.classList.contains('estudio') ? 0 : $('frase').offsetHeight) + 'px'); };
+const ajustarDock = () => { const r = document.documentElement.style; r.setProperty('--dock-h', $('dock').offsetHeight + 'px'); r.setProperty('--frase-h', (document.body.classList.contains('estudio') ? 0 : $('frase').offsetHeight) + 'px'); r.setProperty('--escena-h', (document.body.classList.contains('estudio') ? $('escena-bloque').offsetHeight : 0) + 'px'); };
 new ResizeObserver(ajustarDock).observe($('frase'));
 $('frase').addEventListener('click', () => { $('frase').classList.toggle('abierta'); ajustarDock(); });
 new ResizeObserver(ajustarDock).observe($('dock')); ajustarDock();

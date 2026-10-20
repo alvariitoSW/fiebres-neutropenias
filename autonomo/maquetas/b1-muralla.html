@@ -35,7 +35,7 @@ html { -webkit-text-size-adjust: 100%; }
 body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 var(--serif);
   padding-left: max(14px, env(safe-area-inset-left, 0px)); padding-right: max(14px, env(safe-area-inset-right, 0px));
   padding-top: 8px; padding-bottom: calc(var(--dock-h) + var(--frase-h, 40px) + 16px); }
-main { max-width: 560px; margin: 0 auto; display: grid; gap: 10px; grid-template-columns: minmax(0, 1fr); }
+main { max-width: 560px; margin: 0 auto; display: grid; gap: 6px; grid-template-columns: minmax(0, 1fr); }
 main > *, .bloque > * { min-width: 0; }
 h1 { font-size: 1.18rem; line-height: 1.2; margin: 0; color: var(--oro); font-weight: normal; }
 h1 em { color: var(--fg); }
@@ -66,10 +66,10 @@ a { color: var(--oro); }
 
 
 /* La lámina */
-.escena-bloque { display: grid; gap: 6px; background: var(--bg); z-index: 6; }
+.escena-bloque { display: grid; gap: 5px; background: var(--bg); z-index: 6; }
 body.estudio .escena-bloque { position: sticky; top: 0; padding-top: 4px; padding-bottom: 6px; box-shadow: 0 12px 14px -12px rgba(23, 20, 15, 1); }
 .escena { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: var(--bg); }
-.escena svg#lamina { display: block; width: 100%; height: auto; touch-action: pan-y; }
+.escena svg#lamina { display: block; width: 100%; height: auto; max-height: 350px; touch-action: pan-y; }
 body.estudio .escena svg#lamina { height: 292px; width: 100%; }
 .anillo { position: absolute; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; border: 2px solid var(--oro-claro);
   box-shadow: 0 0 0 4px rgba(212, 175, 55, .18); pointer-events: none; z-index: 4; }
@@ -176,6 +176,7 @@ code { font-size: .78em; color: var(--dim); overflow-wrap: anywhere; }
 .prof b { color: var(--fg); }
 
 /* Capa de estudio: el aspecto del modelo aprobado */
+.formato [data-accion], .formato .mando, .formato .respuesta, .formato .frase-e { scroll-margin-bottom: calc(var(--dock-h) + 16px); }
 .formato { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: grid; gap: 10px; min-width: 0; }
 .cab-preg { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
 .num { font: 700 .76rem var(--sans); color: var(--oro); border: 1px solid var(--oro); border-radius: 6px; padding: 1px 7px; }
@@ -301,7 +302,7 @@ code { font-size: .78em; color: var(--dim); overflow-wrap: anywhere; }
             <circle cx="62" cy="58" r="2.4" style="fill:var(--text-main)" fill-opacity=".7"/><path d="M62 61 V74" style="stroke:var(--text-main)" stroke-opacity=".5" stroke-dasharray="1.5 1.5"/></g>
           <circle class="c7-off" cx="62" cy="66" r="15" style="fill:none;stroke:var(--text-muted)" stroke-dasharray="3 3"/>
           <g class="c7-on"><circle cx="62" cy="66" r="15" style="fill:none;stroke:var(--accent-blue)" stroke-width="3"/><circle cx="62" cy="66" r="12" style="fill:none;stroke:var(--accent-blue)" stroke-width=".7"/></g>
-          <text class="c7-lbl" x="62" y="47" text-anchor="middle">La inmersión<tspan class="c7-off"> →</tspan></text>
+          <text class="c7-lbl" x="58" y="35" text-anchor="middle">La inmersión<tspan class="c7-off"> →</tspan></text>
         </g>
         <!-- Ventana del vientre: La muralla de papel -->
         <g class="c7-v" data-v="muralla" tabindex="0" role="link" aria-label="El vientre: La muralla de papel (intestino, estómago y boca)">
@@ -1012,10 +1013,10 @@ function estomago(e, D) {
   const yPh = { 4: 32, 3: 64, 2: 96 };
   h += `<g data-toca="fig43" role="button" aria-label="Fig. 4.3: Salmonella y pH"><rect x="262" y="20" width="96" height="88" fill="transparent"/>`;
   h += `<rect x="342" y="26" width="7" height="76" rx="3.5" style="fill:var(--bg-card);stroke:var(--accent-yellow)" stroke-opacity=".6"/>`;
-  for (const [p, txt] of [[4, 'pH 4 · crece'], [3, 'pH 3 · cae'], [2, 'pH 2 · muere en 1 h']]) h += `<line x1="339" y1="${yPh[p]}" x2="352" y2="${yPh[p]}" style="stroke:var(--accent-yellow)" stroke-opacity=".7"/>` + T(336, yPh[p] + 3, txt, { size: 7, anchor: 'end', color: '--text-dim', plato: true });
+  for (const [p, txt] of [[4, 'pH 4 · crece'], [3, 'pH 3 · cae'], [2, 'pH 2 · muere en 1 h']]) h += `<line x1="339" y1="${yPh[p]}" x2="352" y2="${yPh[p]}" style="stroke:var(--accent-yellow)" stroke-opacity=".7"/>` + T(336, yPh[p] + 3, txt, { size: 8, anchor: 'end', color: '--text-dim', plato: true });
   if (ocultos.has('ph') || ocultos.has('salmonella')) h += T(354, 66, '?', { size: 12, color: '--accent-blue', anchor: 'end', peso: 700 });
-  else { const ym = yPh[D.phNum]; h += `<path d="M358 ${ym - 5} L351 ${ym} L358 ${ym + 5}Z" style="fill:var(--accent-blue)"/>`; if (D.phSube) h += T(352, ym - 8, '↑ sin cifra', { size: 6.5, anchor: 'end', color: '--accent-blue', plato: true }); }
-  h += T(352, 14, 'Fig. 4.3 · <tspan font-style="italic">Salmonella</tspan>', { size: 6.5, anchor: 'end', color: '--text-muted' }) + `</g>`;
+  else { const ym = yPh[D.phNum]; h += `<path d="M358 ${ym - 5} L351 ${ym} L358 ${ym + 5}Z" style="fill:var(--accent-blue)"/>`; if (D.phSube) h += T(352, ym - 8, '↑ sin cifra', { size: 8, anchor: 'end', color: '--accent-blue', plato: true }); }
+  h += T(352, 14, 'Fig. 4.3 · <tspan font-style="italic">Salmonella</tspan>', { size: 8, anchor: 'end', color: '--text-muted' }) + `</g>`;
   return h;
 }
 
@@ -1150,10 +1151,10 @@ function figuraViva(e, D) {
     orden.forEach((k, i) => {
       const x = 74 + i * 46, alto = 12 + i * 10, y = 368 - alto, aqui = R.nivel === k && !ocultos.has('riesgo');
       h += `<rect x="${x}" y="${y}" width="42" height="${alto}" style="fill:var(--accent-yellow);stroke:var(--accent-yellow)" fill-opacity="${aqui ? .45 : .1}" stroke-opacity=".7"/>`;
-      h += T(x + 21, y - 10, NIVELES[k].nombre, { size: 7, anchor: 'middle', color: aqui ? '--text-main' : '--text-dim', peso: aqui ? 700 : 400 }) + T(x + 21, y - 2, NIVELES[k].pct, { size: 6.5, anchor: 'middle', color: '--text-muted' });
-      if (aqui) h += `<path d="M${x + 15} ${y + 4} L${x + 27} ${y + 4} L${x + 21} ${y + 10}Z" style="fill:var(--accent-blue)"/>` + T(x + 21, y + 20, 'aquí', { size: 7, anchor: 'middle', color: '--accent-blue', peso: 700 });
+      h += T(x + 21, y - 11, NIVELES[k].nombre, { size: 8, anchor: 'middle', color: aqui ? '--text-main' : '--text-dim', peso: aqui ? 700 : 400 }) + T(x + 21, y - 2, NIVELES[k].pct, { size: 8, anchor: 'middle', color: '--text-muted' });
+      if (aqui) h += `<path d="M${x + 15} ${y + 4} L${x + 27} ${y + 4} L${x + 21} ${y + 10}Z" style="fill:var(--accent-blue)"/>` + T(x + 21, y + 20, 'aquí', { size: 8, anchor: 'middle', color: '--accent-blue', peso: 700 });
     });
-    h += `<line x1="164" y1="320" x2="164" y2="370" style="stroke:var(--accent-red)" stroke-dasharray="2 2"/>` + T(166, 330, 'corte', { size: 6.5, color: '--accent-red', italic: true });
+    h += `<line x1="164" y1="320" x2="164" y2="370" style="stroke:var(--accent-red)" stroke-dasharray="2 2"/>` + T(166, 332, 'corte', { size: 8, color: '--accent-red', italic: true });
     return h + `</g>`;
   }
   if (e.estacion === 'intestino' && e.sdd) {
@@ -1546,6 +1547,14 @@ function pintarDock(items, izq, der) {
   $('dock-pasos').innerHTML = items.map(c => `<i class="${c}"></i>`).join('');
   $('dock-est-izq').textContent = izq || ''; $('dock-est-der').textContent = der || '';
 }
+// Deja el elemento a la vista entre la lámina fija de arriba y la barra de abajo (scrollIntoView no cuenta con la barra)
+function asomar(el) {
+  if (!el) return;
+  const r = el.getBoundingClientRect(), abajo = innerHeight - $('dock').offsetHeight - 12;
+  const arriba = document.body.classList.contains('estudio') ? $('escena-bloque').getBoundingClientRect().bottom + 8 : 8;
+  const d = r.bottom > abajo ? Math.min(r.bottom - abajo, r.top - arriba) : r.top < arriba ? r.top - arriba : 0;
+  if (Math.abs(d) > 1) window.scrollBy({ top: d, behavior: REDUCIR ? 'auto' : 'smooth' });
+}
 function entrar(el) { el.classList.remove('entra'); void el.offsetWidth; el.classList.add('entra'); }
 
 const MANDOS = {
@@ -1617,21 +1626,21 @@ function pintarPregunta(cont, q, { cabecera = '', repaso = null, alFinal }) {
       const m = cont.querySelector('#mando'); m.hidden = false; entrar(m);
       anillo(q.tocar.mirar || null);
       alTocar = q.tocar.mandos.includes('estacion') ? est => { cambiar(e => { e.estacion = est; }, { frase: false }); sincronizarMandoPregunta(cont); } : null;
-      m.scrollIntoView?.({ block: 'nearest', behavior: REDUCIR ? 'auto' : 'smooth' });
+      asomar(m);
       piePend = pie; return;
     }
     if (q.despues) aplicar(estadoDe(q.despues), { frase: false });
     setOcultos([]);
     if (q.mirarDespues) anillo(q.mirarDespues);
     r.innerHTML = `<div class="respuesta entra" style="margin-top:4px">${htmlRes}${pie}${botonSig()}</div>`;
-    r.querySelector('[data-accion="sig"]').scrollIntoView?.({ block: 'nearest', behavior: REDUCIR ? 'auto' : 'smooth' });
+    asomar(r.querySelector('[data-accion="sig"]'));
   }
   function finComprobar(html) {
     setOcultos([]); alTocar = null;
     cont.querySelectorAll('#mando [data-mando]').forEach(b => { b.disabled = true; });
     const f = cont.querySelector('#q-fin');
     f.innerHTML = `<div class="respuesta entra" style="margin-top:8px">${html}${piePend}${botonSig()}</div>`;
-    f.querySelector('[data-accion="sig"]').scrollIntoView?.({ block: 'nearest', behavior: REDUCIR ? 'auto' : 'smooth' });
+    asomar(f.querySelector('[data-accion="sig"]'));
   }
   cont.onclick = e => {
     const a = e.target.closest('[data-accion]')?.dataset.accion;
@@ -1680,7 +1689,7 @@ function pintarPregunta(cont, q, { cabecera = '', repaso = null, alFinal }) {
     }
     if (a === 'sig') { anillo(null); alTocar = null; setOcultos([], false); alFinal(res); return; }
     const ver = e.target.closest('[data-ver]');
-    if (ver) { ver.parentElement.innerHTML = '<b>Corrección:</b> ' + q.frases[ver.dataset.ver].c; return; }
+    if (ver) { ver.parentElement.innerHTML = '<b>Corrección:</b> ' + q.frases[ver.dataset.ver].c; asomar(cont.querySelector('[data-accion="sig"]')); return; }
     const fr = e.target.closest('[data-fr]');
     if (fr && !fr.disabled) { fr.classList.toggle('marcada'); return; }
     const op = e.target.closest('[data-op]');
@@ -1731,7 +1740,7 @@ const Estudio = {
       <span><b>2.</b> Otra vez lo que fallaste o sabías a medias, solo eso.</span>
       <span><b>3.</b> Casos clínicos: ${CASOS.length} pacientes que evolucionan.</span></div>
       <div class="fila"><button class="b prim" type="button" data-ir="recorrido">${hechas ? `Seguir el recorrido (${hechas} de ${PREGUNTAS.length})` : 'Empezar el recorrido'}</button><button class="b" type="button" data-ir="casos">Ir a los casos</button></div>
-      <details class="nota-plegable"><summary>Para profundizar (lo que no se pregunta)</summary><div class="prof">${PROFUNDIZAR.map(p => `<div>${p.html} <a href="${p.href}" target="_blank" rel="noopener">${p.donde} →</a></div>`).join('')}</div></details>
+      <details class="nota-plegable"><summary>Para profundizar (lo que no se pregunta)</summary><div class="prof">${PROFUNDIZAR.map(p => `<div>${p.html} <a href="${p.href}" target="_blank" rel="noopener" data-ref="${atr(p.donde)}">Ver en el libro (${chipTxt(p.donde).replace('ficha · ', '')}) →</a></div>`).join('')}</div></details>
       <p class="para">El paciente de los casos se inventa; la medicina sale de las fichas, y cada pregunta dice dónde.</p>`;
     entrar(cont);
     cont.onclick = e => { const b = e.target.closest('[data-ir]'); if (!b) return; b.dataset.ir === 'recorrido' ? this.recorrido(this.siguientePendiente()) : this.listaCasos(); };
@@ -1828,18 +1837,20 @@ const Estudio = {
 function revisarMayeutica() {
   const todas = [...PREGUNTAS, ...CASOS.flatMap(c => c.pasos.map(p => p.pregunta))];
   const tests = todas.filter(x => x.tipo === 'test'), errores = todas.filter(x => x.tipo === 'error');
-  const r = { fallos: [], tests: tests.length, correctaMasLarga: 0, posiciones: [0, 0, 0, 0], errores: errores.map(x => x.frases.filter(f => f.mal).length),
+  const r = { fallos: [], tests: tests.length, correctaMasLarga: 0, correctaMasCorta: 0, posiciones: [0, 0, 0, 0], errores: errores.map(x => x.frases.filter(f => f.mal).length),
     destapas: todas.filter(x => x.tipo === 'destapa').length, guia: PREGUNTAS.filter(x => x.grupo === 'guia').length, examen: PREGUNTAS.filter(x => x.grupo === 'examen').length,
     casos: CASOS.length, predice: todas.filter(x => x.tocar).length, pasos: CASOS.map(c => c.pasos.length) };
   const largo = s => s.replace(/<[^>]+>/g, '').length;
   for (const x of tests) {
     const ok = x.opciones.find(o => o.ok), max = Math.max(...x.opciones.map(o => largo(o.t)));
     if (largo(ok.t) === max) r.correctaMasLarga++;
+    if (largo(ok.t) === Math.min(...x.opciones.map(o => largo(o.t)))) r.correctaMasCorta++;
     r.posiciones[barajar(x.opciones, x.id).findIndex(o => o.ok)]++;
     if (x.opciones.filter(o => o.ok).length !== 1) r.fallos.push(x.id + ': una sola correcta');
     if (x.opciones.some(o => !o.ok && !(o.porque && o.porque.length > 40))) r.fallos.push(x.id + ': opción falsa sin «qué le pasaría»');
   }
   if (r.correctaMasLarga > tests.length / 3) r.fallos.push(`la correcta es la más larga en ${r.correctaMasLarga} de ${tests.length} (> 1/3)`);
+  if (r.correctaMasCorta > tests.length / 3) r.fallos.push(`la correcta es la más corta en ${r.correctaMasCorta} de ${tests.length} (> 1/3)`);
   if (r.posiciones.filter(n => n > 0).length < 3) r.fallos.push('la correcta no varía de posición');
   if (r.errores.some(n => n > 2)) r.fallos.push('«encuentra el error» con más de 2 errores');
   if (!r.guia || !r.examen) r.fallos.push('faltan Guía o Examen');
@@ -1919,21 +1930,21 @@ const PREGUNTAS = [
   // ----- Ficha VIII: el intestino como origen de infección -----
   { id: 'mu-g1', grupo: 'guia', corto: 'dónde no hay', tipo: 'test', fuente: 'mar-microbioma#mar-microbioma-cifras · Fig. 4.1 (A p. 58-59)',
     estado: { estacion: 'intestino' },
-    tocar: { mandos: ['estacion'], mirar: 'tira', ocultar: ['tira'], instruccion: 'toca en la tira la estación con menos microbios.', comprobar: e => e.estacion === 'estomago', pista: 'Es la segunda estación, entre la boca y el intestino.', bueno: { estacion: 'estomago' }, confirma: 'el estómago: <10³ por mL; el colon, 10¹² (Fig. 4.1).' },
-    enunciado: 'La luz del tubo digestivo está «fuera» del cuerpo, como el agujero de un dónut, y en ella viven 100-400 billones de microbios. ¿Dónde casi no hay?',
+    tocar: { mandos: ['estacion'], mirar: 'tira', ocultar: ['tira'], instruccion: 'toca en la tira la estación con menos microbios.', comprobar: e => e.estacion === 'estomago', pista: 'Es la segunda estación, entre la boca y el intestino.', bueno: { estacion: 'estomago' }, confirma: 'el estómago: <10³ por mL; la boca, 10⁶; el colon, 10¹² (Fig. 4.1).' },
+    enunciado: 'La luz del tubo digestivo está «fuera» del cuerpo, como el agujero de un dónut, y en ella viven 100-400 billones de microbios. ¿Qué tramo es el menos poblado?',
     opciones: [
-      { t: 'En el estómago: su ácido es un antiséptico', ok: true },
-      { t: 'En el colon, que absorbe el agua y se queda seco', ok: false, porque: 'El colon es el más poblado: allí está el 99 % (10¹² por mL). Si lo crees vacío, no ves de dónde sale la translocación que siembra la sangre del paciente.' },
-      { t: 'En ninguna parte: la densidad es igual de la boca al colon', ok: false, porque: 'Va de 10⁶ en la boca a <10³ en el estómago y 10¹² en el colon. Si crees que el estómago está tan poblado como el resto, no entiendes por qué, al quitarle el ácido, le crecen al paciente patógenos que luego aspira.' }],
+      { t: 'La boca: la saliva arrastra los microbios hacia abajo', ok: false, porque: 'La saliva lleva un millón de microbios por mL (10⁶): mil veces más que el estómago. Si crees la boca casi estéril, no ves por qué aspirar un mililitro de saliva siembra la neumonía del intubado.' },
+      { t: 'El estómago: su ácido mata lo que llega con la comida', ok: true },
+      { t: 'El intestino delgado: lo vacía el peristaltismo', ok: false, porque: 'El intestino tiene 10⁹ por mL; el estómago, <10³. Si lo crees casi vacío, subestimas de dónde sale la translocación que siembra la sangre del paciente.' }],
     explicacion: 'Fig. 4.1: boca 10⁶, estómago <10³, intestino 10⁹ y colon 10¹² UFC/mL. <span class="hl-a">El 99 % está en el colon</span>; el ácido del estómago protege al microbioma de los invasores que llegan con la comida.' },
-  { id: 'mu-g2', grupo: 'guia', corto: 'la pared', tipo: 'test', fuente: 'mar-microbioma#mar-piel-interna (A p. 58)',
+  { id: 'mu-g2', grupo: 'guia', corto: 'por qué el intestino', tipo: 'test', fuente: 'mar-microbioma#mar-piel-interna · #mar-disbiosis (A p. 58-59)',
     estado: { estacion: 'intestino' }, mirarDespues: 'regla',
-    enunciado: 'Entre esos billones de microbios y la sangre de tu paciente, ¿qué hay?',
+    enunciado: 'Para el autor, la antisepsia se centra casi solo en la piel. ¿Por qué mira también al tubo digestivo como puerta de la sepsis del crítico?',
     opciones: [
-      { t: 'Una piel de varias capas, con queratina, como la de fuera', ok: false, porque: 'Esa es la piel. La mucosa es una sola capa: si das por hecha una barrera gruesa, no ves venir la sepsis de origen intestinal de tu paciente.' },
-      { t: 'Una sola capa de células cilíndricas de 0,1 mm', ok: true },
-      { t: 'Un moco que ningún microbio puede cruzar', ok: false, porque: 'Los microbios cruzan la pared (translocación): es una fuente principal de sepsis y fallo multiorgánico en el crítico. Contar con un moco infranqueable deja al paciente sin vigilar.' }],
-    explicacion: 'Nuestra «piel interna»: <span class="hl-r">una sola capa de 0,1 mm</span> frente a 100-400 billones. «Una barrera de papel ante un ejército enorme». Mira la regla de la lámina.' },
+      { t: 'Porque su moco con bicarbonato deja pasar a los microbios', ok: false, porque: 'El moco con bicarbonato es la defensa del estómago frente al ácido, no una puerta. Si culpas al moco, no vigilas lo que de verdad se rompe en tu paciente: la capa de células, con la disbiosis o la hipoperfusión.' },
+      { t: 'Porque es una superficie más pequeña que concentra los microbios', ok: false, porque: 'Es al revés: es una superficie mayor que la piel. Si la imaginas pequeña, infravaloras la puerta por la que entra la sepsis de tu paciente.' },
+      { t: 'Porque una sola capa de células separa la sangre de la mayor carga de microbios del cuerpo', ok: true }],
+    explicacion: 'La «piel interna» es <span class="hl-r">una sola capa de 0,1 mm</span> frente a 100-400 billones, en una superficie mayor que la piel. Si se rompe, los microbios cruzan: la <span class="hl-r">translocación</span>, fuente principal de sepsis y fallo multiorgánico.' },
   { id: 'mu-g3', grupo: 'guia', corto: 'antibiótico', tipo: 'test', fuente: 'mar-microbioma#mar-microbioma-proteccion · #mar-disbiosis · Fig. 4.2 (A p. 59-61)',
     estado: { estacion: 'intestino', paciente: 'uci' },
     tocar: { mandos: ['antibiotico'], mirar: 'numeros', ocultar: ['flora', 'barrera', 'motor'], instruccion: 'pon el antibiótico y mira qué aparece en la vellosidad.', comprobar: e => e.antibiotico, pista: 'Pulsa «Antibiótico amplio».', bueno: { antibiotico: true }, confirma: '① sobrecrecimiento, ② rotura de la mucosa y ③ aclaramiento linfático alterado: translocación (Fig. 4.2).' },
@@ -1955,7 +1966,7 @@ const PREGUNTAS = [
     opciones: [
       { t: 'Los dos por igual: lo decide el ambiente del hospital', ok: false, porque: 'Los empleados del hospital, ~2-3 %, como los sanos. Si culpas al ambiente, no ves que es la enfermedad del paciente la que deja pegarse a los bacilos que luego aspira.' },
       { t: 'El paciente: la enfermedad cambia las cerraduras del epitelio', ok: true },
-      { t: 'El celador, que toca a muchos pacientes', ok: false, porque: 'Lleva ~2 %, como un sano. El paciente de UCI, ~70 %: es a él a quien amenaza la neumonía por aspiración.' }],
+      { t: 'El paciente, porque en la UCI hay más bacilos en el ambiente', ok: false, porque: 'Aciertas quién, no por qué: el empleado comparte ese ambiente y lleva ~2-3 %. Si lo atribuyes al ambiente, buscarás la solución fuera y no en lo que le pasa al epitelio de tu paciente, que es lo que le deja colonizado y expuesto a la neumonía por aspiración.' }],
     explicacion: 'La colonización <span class="hl-azul">no depende del entorno sino de la enfermedad</span> (Fig. 4.4): las proteínas de adhesión cambian de forma y pasan a unir patógenos. Lo mismo ocurre en el intestino y la vejiga.' },
   { id: 'mu-g10', grupo: 'guia', corto: 'clorhexidina', tipo: 'test', fuente: 'mar-microbioma#mar-tabla-4-1 · acordeones «Clorhexidina oral» y «SOD» (A p. 63-64)',
     estado: { estacion: 'boca', paciente: 'uci', vm: true },
@@ -1990,7 +2001,7 @@ const PREGUNTAS = [
     enunciado: 'El jugo gástrico tiene pH 1-2, como el zumo de limón. ¿Por qué no se come el estómago sano?',
     opciones: [
       { t: 'Su epitelio tiene muchas capas, con queratina, que el ácido no atraviesa', ok: false, porque: 'Es una sola capa de células, como en todo el tubo. Si crees que la pared aguanta sola, no vigilas lo que de verdad la sostiene en tu paciente: el riego de la mucosa.' },
-      { t: 'Un moco con bicarbonato, sostenido por el flujo de la mucosa', ok: true },
+      { t: 'Un moco con bicarbonato (pH 7), sostenido por el flujo de la mucosa', ok: true },
       { t: 'Porque en ayunas no se segrega ácido, y el crítico está en ayunas', ok: false, porque: 'La ficha no lo dice así: el jugo tiene pH 1-2 y el objetivo de la profilaxis es subirlo a ≥4. Con esa idea, el ventilado sin enteral parecería protegido, y es el de riesgo máximo (8-10 %).' }],
     explicacion: 'Una capa de moco rico en bicarbonato (<span class="hl-v">pH 7</span>) protege el epitelio del ácido y de la pepsina, y <span class="hl-a">el flujo de la mucosa la sostiene</span>: el 70-90 % del riego del estómago va a la mucosa (prostaciclina y óxido nítrico).' },
   { id: 'mu-g6', grupo: 'guia', corto: 'ácido o riego', tipo: 'test', fuente: 'mar-ulcera-estres#mar-ulcera-patogenia · #mar-ulcera-frecuencia (A p. 67)',
@@ -2040,7 +2051,7 @@ const PREGUNTAS = [
     enunciado: '3.298 pacientes de UCI de alto riesgo, pantoprazol 40 mg IV al día frente a placebo (Fig. 4.6). ¿Qué concluye la fuente?',
     opciones: [
       { t: 'Que hay que dárselo: baja el sangrado de 4,2 a 2,5 %', ok: false, porque: 'Es un efecto de solo un 1,7 %, y se pierde al sumar neumonía, <i>C. difficile</i> e isquemia miocárdica. El paciente cargaría con los riesgos sin ganancia neta.' },
-      { t: 'Sin beneficio neto al sumar sus riesgos', ok: true },
+      { t: 'Sin beneficio neto al sumar sus riesgos al sangrado', ok: true },
       { t: 'Que mejora la supervivencia de los ventilados', ok: false, porque: 'Ninguna profilaxis mejora la supervivencia. Si lo crees, mantendrás el IBP a pacientes que solo reciben sus riesgos.' }],
     explicacion: 'Sangrado 4,2 → 2,5 % (<span class="hl-a">1,7 %</span>); sangrado + neumonía + <i>C. difficile</i> + isquemia miocárdica: <span class="hl-p">21,9 % frente a 22,6 %</span>. Mira la balanza: se inclina con el sangrado y se iguala al sumar los riesgos.' },
   { id: 'mu-g8', grupo: 'guia', corto: 'la enteral', tipo: 'destapa', fuente: 'mar-ulcera-estres#mar-enteral-protege · #mar-tabla-4-2 · #mar-desprescribir (A p. 68, 71-72)',
@@ -2084,7 +2095,7 @@ const CASOS = [
           enunciado: 'Anoche, de guardia, le pautaron famotidina 20 mg cada 12 h. Su ClCr es 40. ¿Qué haces?',
           opciones: [
             { t: 'Pasarla a pantoprazol, que no requiere ajuste renal', ok: false, porque: 'Sigue sin indicación; y con IBP la asociación con <i>C. difficile</i> y neumonía es más fuerte. Le cambiarías un riesgo por otro mayor.' },
-            { t: 'Retirarla; si hiciera falta, a mitad de dosis', ok: true },
+            { t: 'Retirarla; y si hiciera falta, a mitad de dosis', ok: true },
             { t: 'Mantener 20 mg cada 12 h: es la dosis de la Tabla 4.3', ok: false, porque: 'Con ClCr <50, la mitad de la dosis diaria: acumulada, puede alterarle la conciencia. Y no tiene indicación.' }],
           explicacion: 'Con enteral completa y un solo moderado, <span class="hl-v">no hay indicación</span>. Si la hubiera: famotidina <span class="hl-r">−50 % con ClCr <50</span> (neurotóxica).' } },
       { momento: 'Día 5', datos: { Fármacos: 'metilprednisolona' }, nuevo: ['Fármacos'],
@@ -2173,7 +2184,7 @@ const CASOS = [
           opciones: [
             { t: 'Ninguno: el IBP solo actúa dentro del estómago', ok: false, porque: 'Al subir el pH, el jugo gástrico se coloniza y se aspira: hay más neumonía, también asociada al ventilador. No revisarías un fármaco que puede estar empeorándole.' },
             { t: 'Le protege: menos ácido aspirado, menos daño en el pulmón', ok: false, porque: 'Lo que importa es lo que crece en un jugo sin ácido. Mantenerlo «para proteger» le deja más neumonía y <i>C. difficile</i> ×3.' },
-            { t: 'Puede haber contribuido: más neumonía con IBP', ok: true }],
+            { t: 'Puede haber contribuido: con IBP hay más neumonía', ok: true }],
           explicacion: 'Más neumonía comunitaria y asociada al ventilador, <span class="hl-r">más con IBP que con anti-H2</span>; se cree que por colonización del jugo gástrico y aspiración.' } },
       { momento: 'Día 6', datos: { Familia: '«¿Por qué se lo pusieron?»' }, nuevo: ['Familia'],
         estado: { ...EULC, enteral: true, proteccion: 'pantoprazol', dia: 6 }, mirar: 'balanza',
@@ -2181,7 +2192,7 @@ const CASOS = [
           enunciado: '¿Qué dice la balanza de la Fig. 4.6 sobre el pantoprazol en pacientes de alto riesgo?',
           opciones: [
             { t: 'Lo que evita pesa más: el sangrado baja de 4,2 a 2,5 %', ok: false, porque: 'Es un efecto de solo un 1,7 % y se pierde al sumar neumonía, <i>C. difficile</i> e isquemia. Con esa lectura, seguiría expuesto a sus riesgos sin ganancia.' },
-            { t: 'Se iguala: sin beneficio neto', ok: true },
+            { t: 'Se iguala al sumar los riesgos: sin beneficio neto', ok: true },
             { t: 'Lo que añade pesa el doble: el total se duplica', ok: false, porque: 'No se duplica: 21,9 frente a 22,6 %. La conclusión es «sin beneficio neto», no «daño neto»: exagerarlo te haría negárselo también a quien la Tabla 4.2 sí se lo indica.' }],
           explicacion: '21,9 % frente a 22,6 %: <span class="hl-p">sin beneficio neto</span>. Y desde el día 2, con la enteral completa, Andrés ya ni siquiera era de alto riesgo.' } },
       { momento: 'Día 6', datos: {}, nuevo: [],
@@ -2232,12 +2243,17 @@ const PROFUNDIZAR = [
   { html: '<b>El ácido y la digestión.</b> La aclorhidria no causa malabsorción relevante: solo facilita la absorción de hierro y calcio.', donde: 'mar-acido-antiseptico · A p. 60', href: PDF(60) },
   { html: '<b>Lister (1867).</b> El primer antiséptico fue un ácido, el carbólico (fenol). Hoy su nombre se recuerda por un enjuague bucal.', donde: 'mar-acido-antiseptico · A p. 61', href: PDF(61) },
   { html: '<b>Clorhexidina: la evidencia.</b> Algunos estudios, −30 % de NAV sin menos mortalidad; otros, beneficio marginal o nulo; 11 ensayos juntos, más mortalidad.', donde: 'acordeón «Clorhexidina oral» · A p. 64', href: PDF(64) },
-  { html: '<b>¿Por qué se ignora la SDD?</b> Por miedo a las resistencias; ningún estudio (uno de 5 años, una experiencia de 16) mostró más infecciones por resistentes. En la app: el protocolo de DDS de guardia (Manual UMI).', donde: 'mar-sdd · A p. 66', href: PDF(66) },
+  { html: '<b>¿Por qué se ignora la SDD?</b> Por miedo a las resistencias; ningún estudio (uno de 5 años, una experiencia de 16) mostró más infecciones por resistentes. En la app, al lado: el protocolo de DDS de guardia (Manual UMI).', donde: 'mar-sdd · A p. 66', href: PDF(66) },
   { html: '<b>Probióticos y prebióticos.</b> Los prebióticos son fibras que favorecen la flora; juntos, «simbióticos». Los probióticos también reducen la encefalopatía hepática y la NAV.', donde: 'mar-probioticos · A p. 66', href: PDF(66) },
   { html: '<b>El flujo de la mucosa.</b> La prostaciclina y el óxido nítrico lo mantienen; en la hemorragia, la reperfusión también contribuye (modelos animales).', donde: 'mar-ulcera-patogenia · A p. 67', href: PDF(67) },
   { html: '<b>IBP y clopidogrel.</b> Comparten el citocromo P-450: el IBP puede frenar su activación. Pruebas inconsistentes; hoy no se recomienda evitarlos.', donde: 'acordeón «IBP» · A p. 70', href: PDF(70) },
   { html: '<b>El aluminio del sucralfato</b> fija en el estómago ciprofloxacino, digoxina, ketoconazol, norfloxacino, fenitoína, tiroxina, tetraciclina, teofilina y warfarina, y el fosfato intestinal (rara vez hipofosfatemia).', donde: 'acordeón «Sucralfato» · A p. 71', href: PDF(71) },
   { html: '<b>Acidofobia gástrica.</b> pH: ácido gástrico 2,0; zumo de limón 2,0; Pepsi 2,13; vinagre 2,2; Coca-Cola 2,24; Fanta 2,51. No queman la boca: lo que quema en un ácido industrial es su composición, no su acidez.', donde: 'mar-acidofobia · A p. 72-73', href: PDF(72) },
+  { html: '<b>Los otros IBP (Tabla 4.3).</b> Omeprazol 40 mg al día y lansoprazol 30 mg al día, por vía oral o SNG; el esomeprazol también va IV, pero apenas se usa. Se consideran equivalentes, aunque no se ha estudiado; ninguno necesita ajuste renal.', donde: 'mar-tabla-4-3 · A p. 68-69', href: PDF(69) },
+  { html: '<b>Suprimir el ácido tiene precio.</b> Aumenta las gastroenteritis por <i>Salmonella</i> y <i>Campylobacter</i> y las infecciones por <i>C. difficile</i>; la FDA publicó en 2013 una alerta de seguridad sobre <i>C. difficile</i> e IBP.', donde: 'mar-acido-antiseptico · acordeón «Riesgos» · A p. 62, 70', href: PDF(70) },
+  { html: '<b>Tabla 4.4, contra la profilaxis rutinaria.</b> El sangrado significativo es infrecuente; el efecto de la profilaxis es pequeño; no mejora la supervivencia; y el beneficio se pierde al contar los riesgos de suprimir el ácido.', donde: 'mar-tabla-4-4 · A p. 72', href: PDF(72) },
+  { html: '<b>Profilaxis de más.</b> Más del 80 % de los pacientes de UCI la reciben y unos 70 % no la necesitan: un exceso que no solo es caro, también puede hacer daño.', donde: 'mar-profilaxis-uso · A p. 68', href: PDF(68) },
+  { html: '<b>La boca del grave.</b> Se coloniza sobre todo por bacilos gramnegativos aerobios como <i>Pseudomonas aeruginosa</i>, que son también la causa más frecuente de la neumonía nosocomial: por eso se descontamina la boca del intubado, y la clorhexidina se mantiene mientras dependa del respirador. Impedir que los patógenos se peguen al epitelio sería un método eficaz de control de la infección; para el autor, merece mucha más atención.', donde: 'mar-colonizacion-orofaringe · Tabla 4.1 · A p. 63-64', href: PDF(63) },
   { html: '<b>¿La piel o el intestino?</b> La reflexión del autor sobre el origen de la bacteriemia por catéter (vía 4): poca correlación entre la piel del punto y la punta; gramnegativos, enterococos y <i>Candida</i> son la mitad.', donde: 'mar-bac-intestino · A p. 53-54', href: PDF(53) },
 ];
 
@@ -2270,7 +2286,7 @@ function ajustarDock() {
     v.innerHTML = `<figure><img src="../../js/modules/libros/img/${f}" alt="${n}"><figcaption><b>${n}.</b> ${c} Toca para cerrar.</figcaption></figure>`;
     v.addEventListener('click', () => v.remove()); document.body.appendChild(v);
   });
-  $('prof-lista').innerHTML = PROFUNDIZAR.map(p => `<div>${p.html} <a href="${p.href}" target="_blank" rel="noopener">${p.donde} →</a></div>`).join('');
+  $('prof-lista').innerHTML = PROFUNDIZAR.map(p => `<div>${p.html} <a href="${p.href}" target="_blank" rel="noopener" data-ref="${atr(p.donde)}">Ver en el libro (${chipTxt(p.donde).replace('ficha · ', '')}) →</a></div>`).join('');
   $('m-estado').innerHTML = '<option value="">Ir a un estado con nombre…</option>' + Object.entries(ESTADOS).map(([k, s]) => `<option value="${k}">${s.nombre}</option>`).join('');
   aplicar(estado, { frase: false });
   decir(...fraseEstacion('intestino'));
