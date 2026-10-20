@@ -1,0 +1,2093 @@
+<!-- MAQUETA PARA ELEGIR (plan socialista, bloque 2: anemia, transfusión, plaquetas y plasma; paso 2). No es parte de la app.
+     Ábrela con el servidor de la app, desde la raíz del repositorio:
+       python3 -m http.server 8000  →  http://localhost:8000/autonomo/maquetas/b2-capilar.html
+     Es el capilar vivo de la app (el del bloque 1: misma lámina, mismo motor, mismo tablero y misma Mayéutica),
+     ampliado con lo del cap. 12 de Marino: «el corazón compensa», «volemia», «Transfundir 1 CH», la lupa del tubo
+     (hematocrito) y la del alvéolo (TRALI y TACO), y los estados dilucion, anemia-compensada, techo-anemia, umbral-7,
+     transfusion, anemia-hipovolemia, trali y taco. Fuente: docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf
+     (cap. 12 desde la p. 1; la página del PDF es la del libro). Láminas del libro extraídas con pdfimages en
+     autonomo/maquetas/b2-capilar/ (la Rx del TRALI ya está en la app). Sin librerías: Motion no se carga aquí.
+     El paciente del caso (Fermín, 71 años) es de la lista del bloque; la medicina, del libro. -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Capilar vivo: anemia y transfusión (maqueta)</title>
+
+<style>
+/* Tokens de css/variables.css, copiados tal cual. Crema y oro: ningún color fuera de esta lista. */
+:root {
+  color-scheme: dark;
+  --bg-main: #17140f;
+  --bg-card: rgba(46, 38, 28, 0.72);
+  --border-color: rgba(196, 154, 74, 0.35);
+  --text-main: #ece3cc;
+  --text-muted: #a5967c;
+  --text-dim: #c9bda4;
+  --accent-green: #90a06a;
+  --accent-red: #b85c3e;
+  --accent-yellow: #cf9a3e;
+  --accent-blue: #d4af37;
+  --accent-purple: #9c5476;
+  /* Alias de trabajo (los mismos valores, como en el río y mar) */
+  --bg: var(--bg-main); --card: var(--bg-card); --card2: rgba(46, 38, 28, 1); --line: var(--border-color);
+  --fg: var(--text-main); --dim: var(--text-dim); --muted: var(--text-muted);
+  --oro: var(--accent-yellow); --oro-claro: var(--accent-blue); --rojo: var(--accent-red); --verde: var(--accent-green); --purpura: var(--accent-purple);
+  --serif: Georgia, 'Times New Roman', serif;
+  --sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --dock-h: 170px;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 var(--serif);
+  padding-left: max(14px, env(safe-area-inset-left, 0px)); padding-right: max(14px, env(safe-area-inset-right, 0px));
+  padding-top: 8px; padding-bottom: calc(var(--dock-h) + 24px); }
+main { max-width: 560px; margin: 0 auto; display: grid; gap: 10px; grid-template-columns: minmax(0, 1fr); }
+main > *, .bloque > * { min-width: 0; }
+h1 { font-size: 1.22rem; line-height: 1.2; margin: 0; color: var(--oro); font-weight: normal; }
+h1 em { color: var(--fg); }
+h2 { font-size: 1.12rem; margin: 0 0 4px; text-wrap: balance; color: var(--oro); font-weight: normal; }
+h3 { font-size: 1rem; margin: 0; font-weight: normal; color: var(--fg); }
+p { margin: 0; }
+[hidden] { display: none !important; }
+.aviso { font: 600 .7rem/1.2 var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--bg); background: var(--oro);
+  border-radius: 6px; padding: 4px 8px; width: fit-content; }
+.cabecera { display: grid; gap: 5px; }
+.lead { color: var(--dim); font-size: .92rem; line-height: 1.4; }
+.eyebrow { font: 600 .68rem var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.org { font: .66rem/1.25 var(--sans); color: var(--muted); white-space: nowrap; border: 1px solid var(--line); border-radius: 999px; padding: 0 6px; vertical-align: 1px; }
+.org.ilu { border-style: dashed; }
+.org.caso { color: var(--rojo); border-color: rgba(184, 92, 62, .6); }
+.hl-a, .hl-r, .hl-v, .hl-p, .hl-azul { padding: 0 2px; border-radius: 2px; font-weight: 600; }
+.hl-a { background: linear-gradient(to bottom, transparent 58%, rgba(207, 154, 62, .34) 58%); }
+.hl-r { background: linear-gradient(to bottom, transparent 58%, rgba(184, 92, 62, .38) 58%); }
+.hl-v { background: linear-gradient(to bottom, transparent 58%, rgba(144, 160, 106, .36) 58%); }
+.hl-p { background: linear-gradient(to bottom, transparent 58%, rgba(156, 84, 118, .36) 58%); }
+.hl-azul { background: linear-gradient(to bottom, transparent 58%, rgba(212, 175, 55, .32) 58%); color: var(--oro-claro); }
+
+/* Interruptor Explorar | Conceptos | Mayéutica */
+.interruptor { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); border-radius: 999px; overflow: hidden; font: .86rem var(--sans); }
+.interruptor button { min-height: 44px; background: transparent; color: var(--muted); border: 0; font: inherit; cursor: pointer; padding: 0 6px; }
+.interruptor button + button { border-left: 1px solid var(--line); }
+.interruptor button[aria-selected="true"] { background: var(--oro); color: var(--bg); font-weight: 600; }
+
+/* La escena: lámina + tablero. En Conceptos y Mayéutica se queda fija arriba, más baja. */
+.escena-bloque { display: grid; gap: 6px; background: var(--bg); z-index: 6; }
+body.estudio .escena-bloque { position: sticky; top: 0; padding-top: 4px; padding-bottom: 6px; box-shadow: 0 12px 14px -12px rgba(23, 20, 15, 1); }
+.escena { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: var(--bg); }
+.lamina-caja { position: relative; }
+#lamina { display: block; width: 100%; height: auto; }
+body.estudio #lamina { height: 220px; }
+body.estudio .escena.con-lupa #lamina { height: 252px; }
+#lamina text, .lupa svg text, .grafica svg text { font-family: var(--serif); }
+.chapa { position: absolute; font: 600 .6rem/1 var(--sans); letter-spacing: .07em; text-transform: uppercase; padding: 4px 7px;
+  border-radius: 999px; background: rgba(23, 20, 15, .8); border: 1px dashed var(--line); color: var(--muted); pointer-events: none; bottom: 6px; right: 7px; white-space: nowrap; }
+body.estudio .chapa, .escena.con-lupa .chapa { display: none; }
+.lupas-fila { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; padding: 0 6px 6px; }
+body.estudio .lupas-fila { display: none; }
+.lupa-btn { min-height: 44px; display: flex; align-items: center; justify-content: center; gap: 5px; padding: 0 6px; border-radius: 999px;
+  background: rgba(23, 20, 15, .84); border: 1px solid var(--line); color: var(--oro); font: 600 .76rem/1.1 var(--sans); cursor: pointer; min-width: 0; }
+.lupa-btn svg { width: 15px; height: 15px; flex: none; }
+.lupa-btn[aria-pressed="true"] { background: var(--oro); color: var(--bg); }
+.lupa { position: absolute; border-radius: 50%; border: 3px double var(--oro-claro); background: var(--bg); overflow: hidden; z-index: 3;
+  box-shadow: 0 0 0 1px rgba(23, 20, 15, 1), 0 10px 30px rgba(23, 20, 15, .9); }
+.lupa svg { display: block; width: 100%; height: 100%; }
+.lupa-cerrar { position: absolute; width: 44px; height: 44px; border-radius: 50%; background: rgba(23, 20, 15, .92); border: 1px solid var(--oro);
+  color: var(--oro); font: 600 1.2rem/1 var(--sans); cursor: pointer; z-index: 4; }
+.libro { display: grid; grid-template-columns: auto 1fr; gap: 8px; align-items: center; padding: 0 8px 8px; }
+body.estudio .libro { display: none; }
+.libro .para { font-size: .74rem; }
+.lams { display: flex; gap: 6px; }
+button.lam { width: 56px; height: 56px; padding: 0; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--card2); cursor: zoom-in; flex: none; }
+button.lam img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Tablero: como el monitor de la circulación viva */
+.tablero { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
+.celda { background: var(--card); border: 1px solid var(--card2); border-radius: 8px; padding: 3px 4px 4px; min-width: 0; display: grid; align-content: start; gap: 0; }
+.celda .k { font: 600 .6rem/1.15 var(--sans); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.celda b { font: 700 .98rem/1.15 var(--serif); font-variant-numeric: tabular-nums; color: var(--fg); white-space: nowrap; overflow: hidden; }
+.celda .u { font: .55rem/1.1 var(--sans); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.celda .sub { font: .55rem/1.15 var(--sans); color: var(--dim); white-space: nowrap; }
+.celda .o { font: .5rem/1.25 var(--sans); color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 0 3px; justify-self: start; margin-top: 2px; white-space: nowrap; }
+.celda .o.ilu { border-style: dashed; }
+.celda.fuera b { color: var(--rojo); }
+.celda.mira { box-shadow: 0 0 0 2px var(--oro-claro); border-color: var(--oro-claro); }
+body.estudio .celda .o, body.estudio .celda .sub { display: none; }
+.leyenda-mini { display: flex; flex-wrap: wrap; gap: 2px 10px; font: .66rem/1.3 var(--sans); color: var(--dim); margin: 0; padding: 0; list-style: none; }
+.leyenda-mini li { display: inline-flex; align-items: center; gap: 4px; }
+.leyenda-mini svg { width: 13px; height: 13px; }
+body.estudio .leyenda-mini { display: none; }
+.frase { font: .84rem/1.32 var(--serif); color: var(--fg); min-height: 2.64em; border-left: 3px solid var(--oro); padding: 1px 0 1px 9px; margin: 0 0 4px; }
+.frase .org { font-size: .6rem; white-space: normal; }
+body.estudio .frase { display: none; }
+
+/* Botones y mandos comunes (los del río y mar) */
+button { font-family: inherit; }
+button.b { min-height: 44px; font: 600 .86rem/1.2 var(--sans); background: var(--card2); color: var(--fg); border: 1px solid var(--line);
+  border-radius: 10px; padding: 8px 12px; cursor: pointer; text-align: left; }
+button.b.prim { background: var(--oro); color: var(--bg); border-color: var(--oro); }
+button.b.link { background: transparent; color: var(--oro); border-style: dashed; }
+button.b:disabled { opacity: .5; cursor: default; }
+button.b small { display: block; font-weight: 400; font-size: .7rem; opacity: .85; }
+button:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--oro); outline-offset: 2px; }
+.fila { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; min-width: 0; }
+.seg button { min-height: 44px; font: 600 .76rem/1.15 var(--sans); background: transparent; color: var(--muted); border: 0; padding: 4px 6px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--oro); color: var(--bg); }
+.tog { min-height: 44px; display: inline-flex; align-items: center; gap: 7px; padding: 4px 11px; border-radius: 999px; background: var(--card2);
+  border: 1px solid var(--line); color: var(--fg); font: 600 .78rem/1.15 var(--sans); cursor: pointer; white-space: nowrap; flex: none; }
+.tog svg { width: 14px; height: 14px; flex: none; }
+.tog[aria-pressed="true"] { border-color: var(--oro); background: rgba(207, 154, 62, .2); box-shadow: inset 0 0 0 1px var(--oro); }
+.tog small { font-weight: 400; color: var(--muted); }
+.desliza { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center; min-height: 44px; font: .78rem/1.2 var(--sans); color: var(--dim); }
+.desliza output { font: 700 .9rem var(--serif); color: var(--fg); font-variant-numeric: tabular-nums; min-width: 4.4em; text-align: right; white-space: nowrap; }
+.desliza output small { font: .64rem var(--sans); color: var(--muted); }
+input[type="range"] { width: 100%; min-width: 0; height: 44px; accent-color: var(--oro); margin: 0; background: transparent; }
+
+/* Dock fijo abajo */
+.dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--bg-main); isolation: isolate; border-top: 1px solid var(--line);
+  padding: 6px max(10px, env(safe-area-inset-left, 0px)) calc(6px + env(safe-area-inset-bottom, 0px)); }
+.dock-in { max-width: 560px; margin: 0 auto; display: grid; gap: 6px; }
+.dock-tabs { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2px; }
+.dock-tabs button { min-height: 44px; background: transparent; border: 0; border-bottom: 2px solid transparent; color: var(--muted); font: 600 .74rem/1.1 var(--sans); cursor: pointer; padding: 0 2px; }
+.dock-tabs button[aria-selected="true"] { color: var(--oro); border-bottom-color: var(--oro); }
+.dock-panel { display: grid; gap: 4px; align-content: start; }
+.raya { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 1px; scroll-snap-type: x proximity; }
+.raya::-webkit-scrollbar { display: none; }
+.raya > * { scroll-snap-align: start; }
+.chip-f { flex: none; min-height: 44px; display: grid; align-items: center; padding: 3px 10px; background: var(--card2); color: var(--fg); border: 1px solid var(--line);
+  border-radius: 12px; cursor: pointer; text-align: left; font: 600 .76rem/1.1 var(--sans); white-space: nowrap; }
+.chip-f small { display: block; font: .62rem/1.1 var(--sans); color: var(--muted); }
+.chip-f[aria-pressed="true"] { border-color: var(--oro); background: rgba(207, 154, 62, .18); box-shadow: inset 0 0 0 1px var(--oro); }
+.dock-estudio { display: grid; gap: 4px; }
+.pasos { display: flex; gap: 4px; align-items: center; min-height: 12px; }
+.pasos i { flex: 1; height: 6px; border-radius: 3px; background: var(--card2); border: 1px solid rgba(196, 154, 74, .2); }
+.pasos i.on { background: var(--oro); border-color: var(--oro); }
+.pasos i.mal { background: var(--rojo); border-color: var(--rojo); }
+.pasos i.aqui { box-shadow: 0 0 0 2px var(--oro-claro); }
+.dock-est-txt { font: .74rem/1.3 var(--sans); color: var(--muted); display: flex; justify-content: space-between; gap: 8px; min-height: 18px; }
+
+/* Explorar: lo de debajo de la escena */
+.bloque { display: grid; gap: 10px; }
+.leyenda { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; margin: 0; padding: 0; list-style: none; font: .8rem/1.35 var(--sans); color: var(--dim); }
+.leyenda li { display: grid; grid-template-columns: 22px 1fr; gap: 8px; align-items: center; min-width: 0; }
+.leyenda svg { width: 20px; height: 20px; }
+.prop { font: 600 .6rem var(--sans); letter-spacing: .05em; text-transform: uppercase; color: var(--oro); border: 1px dashed var(--oro); border-radius: 999px; padding: 0 5px; margin-left: 4px; }
+details.nota-plegable { background: var(--card); border: 1px solid var(--card2); border-radius: 12px; padding: 2px 12px; }
+details.nota-plegable summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font: 600 .86rem var(--sans); color: var(--dim); }
+details.nota-plegable[open] { padding-bottom: 12px; }
+.nota-fuentes { border-left: 3px solid var(--purpura); background: var(--card); border-radius: 0 10px 10px 0; padding: 8px 10px; font: .82rem/1.45 var(--sans); color: var(--dim); }
+.nota-fuentes b { color: var(--fg); }
+.nota-fuentes + .nota-fuentes { margin-top: 6px; }
+.tabla-scroll { overflow-x: auto; }
+table.data-table { border-collapse: collapse; width: 100%; font: .76rem/1.35 var(--sans); }
+.data-table th, .data-table td { border-bottom: 1px solid var(--card2); padding: 5px 4px; text-align: left; vertical-align: top; }
+.data-table th { color: var(--muted); font-weight: 600; }
+ul.huecos { margin: 6px 0 0; padding-left: 18px; font: .82rem/1.45 var(--sans); color: var(--dim); display: grid; gap: 5px; }
+code { font-size: .78em; color: var(--dim); overflow-wrap: anywhere; }
+.grafica .gr-fila { display: grid; grid-template-columns: minmax(0, 1fr) 60px; gap: 8px; align-items: start; }
+.grafica svg { width: 100%; height: auto; display: block; background: var(--bg-main); border-radius: 8px; }
+.grafica .para { margin-top: 6px; }
+.chips-estado { display: flex; gap: 6px; flex-wrap: wrap; }
+.elige { border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: grid; gap: 10px; }
+.opciones-elige { display: flex; flex-wrap: wrap; gap: 8px; }
+.opciones-elige button { min-height: 44px; font: 600 .8rem var(--sans); background: var(--card2); color: var(--fg); border: 1px solid var(--line); border-radius: 10px; padding: 6px 12px; cursor: pointer; }
+.opciones-elige button[aria-pressed="true"] { background: var(--oro); color: var(--bg); border-color: var(--oro); }
+.resumen { font: .82rem/1.4 var(--sans); color: var(--dim); background: var(--card); border-radius: 10px; padding: 8px 10px; }
+a.pdf { color: var(--oro); font: 600 .74rem var(--sans); display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; border-bottom: 1px dashed var(--oro); }
+.prof { display: grid; gap: 8px; }
+.prof section { background: var(--card2); border-radius: 10px; padding: 8px 10px; font: .84rem/1.45 var(--sans); color: var(--dim); }
+.prof section b { color: var(--fg); }
+
+/* Capa de estudio: el aspecto del modelo aprobado */
+.formato, .caso { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: grid; gap: 10px; min-width: 0; }
+.cab-preg { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.num { font: 700 .76rem var(--sans); color: var(--oro); border: 1px solid var(--oro); border-radius: 6px; padding: 1px 7px; }
+.serie { font: 700 .66rem var(--sans); letter-spacing: .05em; text-transform: uppercase; color: var(--bg); background: var(--dim); border-radius: 4px; padding: 1px 6px; }
+.serie.examen { background: var(--purpura); color: var(--fg); }
+.tipo { font: 600 .68rem var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.para { font: .82rem/1.45 var(--sans); color: var(--muted); }
+.pregunta { font-size: 1rem; line-height: 1.45; }
+.op { display: grid; gap: 8px; }
+.respuesta { background: var(--card2); border-radius: 10px; padding: 12px; display: grid; gap: 8px; }
+.ok { color: var(--verde); font: 600 .9rem var(--sans); }
+.mal { color: var(--rojo); font: 600 .9rem var(--sans); }
+.punto { display: flex; gap: 10px; align-items: flex-start; font: .94rem/1.45 var(--serif); cursor: pointer; min-height: 44px; padding: 4px 0; }
+.punto input { margin-top: 4px; width: 20px; height: 20px; accent-color: var(--verde); flex: none; }
+.frase-e { display: flex; gap: 10px; width: 100%; min-height: 44px; font: .95rem/1.45 var(--serif); background: transparent; color: var(--fg); border: 1px solid var(--card2);
+  border-radius: 8px; padding: 8px 10px; text-align: left; cursor: pointer; }
+.frase-e .n { font: 700 .76rem var(--sans); color: var(--muted); padding-top: 3px; }
+.frase-e.marcada { border-color: var(--oro); background: rgba(207, 154, 62, .1); }
+.frase-e.acierto { border-color: var(--verde); }
+.frase-e.fallo { border-color: var(--rojo); background: rgba(184, 92, 62, .12); }
+.correccion { font: .88rem/1.45 var(--sans); color: var(--dim); padding: 2px 0 0 26px; }
+.mando { border: 1px dashed var(--oro); border-radius: 12px; padding: 8px 10px; display: grid; gap: 6px; background: rgba(207, 154, 62, .06); }
+.mando .para { color: var(--dim); }
+.pista { font: .84rem/1.4 var(--sans); color: var(--oro); }
+.fuente-p { font: .72rem/1.6 var(--sans); color: var(--muted); }
+.fuente-p .org { white-space: normal; overflow-wrap: anywhere; display: inline-block; margin: 1px 0; }
+.dia { font: 700 .76rem var(--sans); color: var(--oro); letter-spacing: .06em; text-transform: uppercase; }
+.paciente { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; background: var(--card2); border-radius: 10px; padding: 10px 12px; font: .84rem/1.4 var(--sans); margin: 0; }
+.paciente dt { color: var(--muted); }
+.paciente dd { margin: 0; font-variant-numeric: tabular-nums; min-width: 0; overflow-wrap: anywhere; }
+.paciente dd.cambia { color: var(--rojo); font-weight: 600; }
+.lleva { display: grid; gap: 6px; margin: 0; padding-left: 20px; }
+.lleva li { font: .94rem/1.45 var(--serif); }
+.ruta { font: .84rem/1.5 var(--sans); color: var(--dim); display: grid; gap: 4px; }
+.ruta b { color: var(--fg); }
+.repaso-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.concepto-n { font: 700 1.6rem/1 var(--serif); color: var(--oro); }
+.nav-c { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.casos-lista { display: grid; gap: 8px; }
+.camas { display: grid; gap: 6px; }
+.data-table.mini td.n, .data-table.mini th { text-align: center; }
+.data-table.mini th:first-child { text-align: left; }
+.entrada { border: 1px dashed var(--line); border-radius: 10px; padding: 8px 10px; display: grid; gap: 4px; font: .82rem/1.4 var(--sans); color: var(--dim); }
+.entrada b { color: var(--fg); font-family: var(--serif); font-weight: normal; font-size: .95rem; }
+
+/* Visor de láminas del libro */
+.visor { position: fixed; inset: 0; z-index: 40; background: rgba(23, 20, 15, .96); display: grid; place-items: center; padding: 16px; }
+.visor figure { margin: 0; display: grid; gap: 8px; max-width: 560px; width: 100%; }
+.visor img { width: 100%; height: auto; border-radius: 8px; }
+.visor figcaption { font: .84rem/1.4 var(--sans); color: var(--dim); }
+.visor button { position: absolute; top: 10px; right: 10px; width: 44px; height: 44px; border-radius: 50%; background: var(--card2); border: 1px solid var(--oro); color: var(--oro); font: 600 1.2rem var(--sans); cursor: pointer; }
+@media (prefers-reduced-motion: no-preference) {
+  .entra { animation: entra .25s ease-out; }
+  .anillo-svg { animation: latido 1.4s ease-in-out infinite; }
+}
+@keyframes entra { from { opacity: .4; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+@keyframes latido { 0%, 100% { opacity: .95; } 50% { opacity: .35; } }
+/* Perlas del hemo (los 4 sitios de cada hematíe) */
+.perla circle { fill: var(--text-main); stroke: var(--bg-main); stroke-width: .5; }
+.perla line { display: none; }
+.perla.vacia circle { fill: none; stroke: var(--text-main); stroke-width: .6; opacity: .8; }
+.perla.co circle { fill: var(--text-muted); }
+.perla.co line { display: inline; stroke: var(--bg-main); stroke-width: .7; }
+.grande .perla circle { stroke-width: .7; }
+.grande .perla.vacia circle { stroke-width: 1.1; opacity: .9; }
+.grande .perla.co line { stroke-width: 1.1; }
+/* ---- Bloque 2: lo nuevo ---- */
+.tablero { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 3px; }
+.celda { padding: 3px 3px 4px; }
+.celda b { font-size: .9rem; }
+.lupas-fila { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.lupa-btn.nueva { border-style: dashed; border-color: var(--oro); }
+.enlace-frase { font: 600 .74rem/1.2 var(--sans); color: var(--oro); background: transparent; border: 1px dashed var(--oro); border-radius: 999px; padding: 3px 9px; min-height: 30px; cursor: pointer; margin-left: 2px; }
+.ab { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ab-col { background: var(--card2); border: 1px solid var(--line); border-radius: 10px; padding: 8px; display: grid; gap: 4px; align-content: start; min-width: 0; }
+.ab-col.nueva { border-color: var(--verde); }
+.ab-col h3 { font: 600 .8rem/1.2 var(--sans); color: var(--muted); }
+.ab-col.nueva h3 { color: var(--verde); }
+.ab-col dl { margin: 0; display: grid; grid-template-columns: auto auto; gap: 1px 6px; font: .78rem/1.35 var(--sans); }
+.ab-col dt { color: var(--muted); }
+.ab-col dd { margin: 0; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ab-col dd.mal { color: var(--rojo); }
+.ab-col p { font: italic .8rem/1.35 var(--serif); color: var(--dim); }
+.tipo-nota { font: 700 .62rem var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--purpura); margin-right: 4px; }
+.lam-ancha { display: grid; grid-template-columns: 96px 1fr; gap: 8px; align-items: center; }
+.lam-ancha button.lam { width: 96px; height: 72px; }
+.lam-ancha .para { font-size: .76rem; }
+.siguen { margin: 0; padding-left: 18px; font: .84rem/1.45 var(--sans); color: var(--dim); display: grid; gap: 3px; }
+@media (prefers-reduced-motion: no-preference) { .lupa.abre { animation: abre .3s ease-out; } }
+@keyframes abre { from { transform: scale(.4); opacity: .3; } to { transform: none; opacity: 1; } }
+.escena.con-lupa #lam-plasma { visibility: hidden; }
+
+</style>
+</head>
+<body>
+<main id="pagina">
+  <header class="cabecera">
+    <p class="aviso">Maqueta para elegir: no es la app</p>
+    <h1>Del pulmón a la <em>mitocondria</em>, con anemia</h1>
+    <p class="lead">Con anemia, <strong class="hl-a">la sangre es menos viscosa y el corazón bombea más</strong>: la extracción sube, pero el techo del 50 % no llega hasta <strong class="hl-r">un Hto del 10 % (Hb ≈3)</strong>. Transfundir sube el aporte, no el consumo. <span class="org">ficha · Anemia en el crítico · Umbral transfusional · p. 4-11</span></p>
+  </header>
+
+  <div class="interruptor" role="tablist" aria-label="Qué hacer con el modelo">
+    <button type="button" role="tab" id="modo-explorar" aria-selected="true">Explorar</button>
+    <button type="button" role="tab" id="modo-conceptos" aria-selected="false">Conceptos</button>
+    <button type="button" role="tab" id="modo-preguntas" aria-selected="false">Mayéutica</button>
+  </div>
+
+  <section class="escena-bloque" id="escena-bloque" aria-label="Capilar y oxígeno">
+    <div class="escena" id="escena">
+      <div class="lamina-caja" id="lamina-caja">
+        <svg id="lamina" viewBox="0 0 360 300" role="img" aria-label="El capilar del tejido: los hematíes sueltan su O₂ hacia las mitocondrias de la célula">
+          <defs>
+            <pattern id="raya" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" style="stroke:var(--accent-yellow);stroke-width:.7;opacity:.32"/></pattern>
+            <pattern id="raya2" width="3.4" height="3.4" patternUnits="userSpaceOnUse" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="3.4" style="stroke:var(--accent-yellow);stroke-width:.6;opacity:.27"/></pattern>
+            <pattern id="punteo" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="1.2" cy="1.2" r=".55" style="fill:var(--accent-yellow);opacity:.3"/></pattern>
+            <pattern id="rayaRoja" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" style="stroke:var(--accent-red);stroke-width:1.1;opacity:.55"/></pattern>
+          </defs>
+          <rect width="360" height="300" style="fill:var(--bg-main)"/>
+          <g id="celula">
+            <ellipse cx="180" cy="250" rx="210" ry="86" style="fill:url(#raya2);stroke:var(--text-muted);stroke-width:1.2"/>
+            <ellipse cx="52" cy="244" rx="24" ry="16" style="fill:url(#raya);stroke:var(--text-muted);stroke-width:.9"/>
+            <text x="52" y="274" text-anchor="middle" style="font-size:8.3px;font-style:italic;fill:var(--text-muted)">núcleo</text>
+            <g id="mitos" style="stroke:var(--text-dim);stroke-width:1;fill:var(--bg-main)"><g transform="translate(120 198) rotate(-8)"><ellipse rx="23" ry="10"/><path d="M-17 1l4-5 4 5 4-5 4 5 4-5 4 5 4-5 4 5" style="fill:none;stroke-width:.8"/></g><g transform="translate(192 194) rotate(6)"><ellipse rx="23" ry="10"/><path d="M-17 1l4-5 4 5 4-5 4 5 4-5 4 5 4-5 4 5" style="fill:none;stroke-width:.8"/></g><g transform="translate(262 204) rotate(-10)"><ellipse rx="23" ry="10"/><path d="M-17 1l4-5 4 5 4-5 4 5 4-5 4 5 4-5 4 5" style="fill:none;stroke-width:.8"/></g><g transform="translate(318 216) rotate(12)"><ellipse rx="23" ry="10"/><path d="M-17 1l4-5 4 5 4-5 4 5 4-5 4 5 4-5 4 5" style="fill:none;stroke-width:.8"/></g></g>
+            <text x="258" y="228" text-anchor="middle" style="font-size:8.3px;font-style:italic;fill:var(--text-muted)">mitocondrias</text>
+            <text x="180" y="294" text-anchor="middle" style="font-size:9px;font-style:italic;fill:var(--text-dim)">célula del tejido</text>
+            <g id="mitos-x" hidden style="stroke:var(--accent-red);stroke-width:2.2;stroke-linecap:round"><path d="M107 188l26 20M133 188l-26 20M179 184l26 20M205 184l-26 20M249 194l26 20M275 194l-26 20M305 206l26 20M331 206l-26 20"/></g>
+            <text id="mitos-x-txt" x="190" y="177" text-anchor="middle" hidden style="font-size:8.5px;fill:var(--accent-red);font-family:var(--sans);font-weight:700"></text>
+          </g>
+          <text x="14" y="122" style="font-size:8.5px;font-style:italic;fill:var(--text-muted)">intersticio</text>
+          <text id="lam-aviso" x="14" y="142" style="font-size:9px;fill:var(--accent-red);font-family:var(--sans);font-weight:700"></text>
+          <path id="circuito" d="M-30 70C90 76 250 150 390 146" style="fill:none;stroke:var(--text-muted);stroke-width:66;opacity:.55"/>
+          <path d="M-30 70C90 76 250 150 390 146" style="fill:none;stroke:var(--bg-main);stroke-width:66;stroke-dasharray:2.4 16"/>
+          <path d="M-30 70C90 76 250 150 390 146" style="fill:none;stroke:var(--bg-main);stroke-width:58"/>
+          <path d="M-30 70C90 76 250 150 390 146" style="fill:none;stroke:url(#punteo);stroke-width:58;opacity:.6"/>
+          <g id="lam-alveolo"><circle cx="18" cy="18" r="12" style="fill:url(#raya);stroke:var(--text-muted);stroke-width:1"/>
+            <text x="36" y="16" style="font-size:8.5px;fill:var(--text-dim);font-family:var(--sans);font-weight:600">del pulmón: sangre arterial</text>
+            <text x="36" y="27" style="font-size:8.3px;font-style:italic;fill:var(--text-muted)">SaO₂ · perlas llenas</text></g>
+          <text id="lam-plasma" x="110" y="50" style="font-size:8.3px;font-style:italic;fill:var(--text-muted)">plasma: el 1,5 % del O₂ va disuelto</text>
+          <!-- La bolsa (pieza común): un concentrado de hematíes que gotea en la sangre -->
+          <g id="lam-bolsa" hidden>
+            <path d="M203 37V84" style="stroke:var(--text-muted);stroke-width:1.2;stroke-dasharray:2 2"/>
+            <rect x="196" y="4" width="22" height="28" rx="5" style="fill:url(#rayaRoja);stroke:var(--accent-red);stroke-width:1.3"/>
+            <rect x="196" y="12" width="22" height="20" rx="4" style="fill:var(--accent-red);opacity:.55"/>
+            <path d="M203 32h2v5h-2z" style="fill:var(--text-muted)"/>
+            <text x="191" y="15" text-anchor="end" style="font-size:8.5px;fill:var(--text-main);font-family:var(--sans);font-weight:700">1 CH</text>
+            <text x="191" y="26" text-anchor="end" style="font-size:8.3px;fill:var(--text-muted);font-family:var(--sans)">350 mL</text>
+            <circle id="gota-bolsa" cx="204" cy="40" r="2" style="fill:var(--accent-red)"/>
+          </g>
+          <text id="lam-toma" x="352" y="90" text-anchor="end" style="font-size:8.5px;fill:var(--accent-blue);font-family:var(--sans);font-weight:600"></text>
+          <text x="352" y="101" text-anchor="end" style="font-size:8.3px;font-style:italic;fill:var(--text-muted)">sangre venosa, al corazón →</text>
+          <g id="capno-mini">
+            <rect x="248" y="4" width="106" height="38" rx="6" style="fill:var(--bg-main);stroke:var(--border-color);stroke-width:1"/>
+            <path id="capno-mini-onda" d="" style="fill:none;stroke:var(--accent-yellow);stroke-width:1.3;stroke-linejoin:round"/>
+            <rect id="capno-mini-barre" x="248" y="5" width="6" height="36" style="fill:var(--bg-main);opacity:.85"/>
+            <text id="lam-boca" x="252" y="13" style="font-size:8.3px;fill:var(--text-muted);font-family:var(--sans)">boca · CO₂</text>
+            <text id="capno-mini-val" x="350" y="13" text-anchor="end" style="font-size:8.3px;fill:var(--text-main);font-family:var(--sans);font-weight:700"></text>
+          </g>
+          <g id="g-part"></g>
+          <g id="g-hem"></g>
+          <g id="g-anillo"></g>
+        </svg>
+        <span class="chapa">ilustrativo</span>
+        <div class="lupa" id="lupa" hidden><svg id="lupa-svg" viewBox="0 0 220 220" role="img" aria-label="Lupa"></svg></div>
+        <button type="button" class="lupa-cerrar" id="lupa-cerrar" hidden aria-label="Cerrar la lupa">×</button>
+      </div>
+      <div class="lupas-fila">
+        <button type="button" class="lupa-btn nueva" data-lupa="tubo" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>El tubo</button>
+        <button type="button" class="lupa-btn nueva" data-lupa="alveolo" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>El alvéolo</button>
+        <button type="button" class="lupa-btn" data-lupa="dedo" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>El dedo</button>
+        <button type="button" class="lupa-btn" data-lupa="mito" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>Mitocondria</button>
+        <button type="button" class="lupa-btn" data-lupa="boca" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>La boca</button>
+      </div>
+      <div class="libro" id="libro" hidden><div class="lams" id="libro-lams"></div><p class="para" id="libro-txt"></p></div>
+    </div>
+    <div class="tablero" id="tablero" aria-live="off"></div>
+    <ul class="leyenda-mini" id="leyenda-mini" aria-label="Formas"></ul>
+  </section>
+
+  <!-- ============ EXPLORAR ============ -->
+  <div id="vista-explorar" class="bloque">
+    <section class="bloque">
+      <h2>Ir a un estado</h2>
+      <div class="chips-estado" id="chips-estado"></div>
+      <p class="para">Cada estado es el de una ficha (Anemia en el crítico, Umbral transfusional, Riesgos de la transfusión). Los mandos nuevos, abajo: «El corazón compensa» y «Volemia baja» en Corazón; «Transfundir 1 CH», «Tumbarse» y «Bolo» en Sangre; TRALI y TACO en Pulmón.</p>
+    </section>
+
+    <details class="nota-plegable grafica" id="gr-ab" open>
+      <summary>Antes y después: la anemia con Hb 7,5</summary>
+      <div class="ab" id="ab"></div>
+      <div class="fila"><button type="button" class="b" data-ir-estado="anemia">Ver: gasto fijo</button><button type="button" class="b prim" data-ir-estado="anemia-compensada">Ver: el corazón compensa</button></div>
+      <div class="lam-ancha"><button type="button" class="lam" data-img="b2-capilar/fig12-2-gasto-hemodilucion.jpg" data-pie="Figura 12.2 del libro (PDF p. 6): hemodilución isovolémica progresiva en un paciente con policitemia; el gasto pasa de 5,8 a 13 L/min mientras el Hto cae un 38 %."><img loading="lazy" src="b2-capilar/fig12-2-gasto-hemodilucion.jpg" alt="Figura 12.2 del libro"></button>
+        <p class="para">Fig. 12.2: en un paciente con policitemia, el Hto cae un 38 % y el gasto <b>sube más de lo que cae el Hto</b> (de 5,8 a 13 L/min): la sangre no es newtoniana, y al fluir más deprisa es menos viscosa. <span class="org">ficha · Anemia en el crítico · p. 5-6</span></p></div>
+    </details>
+    <details class="nota-plegable grafica" id="gr-123" open>
+      <summary>Fig. 12.3 viva: el techo de la extracción</summary>
+      <div class="gr-fila"><svg id="svg-123" viewBox="0 0 240 196" role="img" aria-label="Extracción y consumo de O₂ al bajar la Hb"></svg>
+        <button type="button" class="lam" data-img="b2-capilar/fig12-3-oxigenacion-anemia.jpg" data-pie="Figura 12.3 del libro (PDF p. 7): anemia isovolémica progresiva en primates: aporte, extracción, consumo y lactato frente al Hto."><img loading="lazy" src="b2-capilar/fig12-3-oxigenacion-anemia.jpg" alt="Figura 12.3 del libro"></button></div>
+      <p class="para">El punto es el paciente. Con «el corazón compensa», la extracción sigue la forma de la Fig. 12.3 (primates) y toca el 50 % con Hb 3 (Hto 10 %); por debajo, el consumo cae. <span class="org">ficha · Anemia en el crítico · p. 6-7</span> <span class="org ilu">la curva: ilustrativa</span></p>
+    </details>
+    <details class="nota-plegable grafica" id="gr-124">
+      <summary>Fig. 12.4 viva: antes y después de transfundir</summary>
+      <div class="gr-fila"><svg id="svg-124" viewBox="0 0 240 168" role="img" aria-label="Hb, aporte y consumo de O₂ antes y después de transfundir"></svg>
+        <button type="button" class="lam" data-img="b2-capilar/fig12-4-transfusion-do2-vo2.jpg" data-pie="Figura 12.4 del libro (PDF p. 11): 1-2 CH en 11 posoperados con Hb <7: la Hb sube de 6,4 a 8 g/dL, el aporte sube y el consumo no cambia."><img loading="lazy" src="b2-capilar/fig12-4-transfusion-do2-vo2.jpg" alt="Figura 12.4 del libro"></button></div>
+      <p class="para">Aparece al visitar el estado «Transfusión». En el libro: Hb 6,4 → 8 (+25 %), un aumento parecido del aporte y el consumo igual. <span class="org">ficha · Umbral transfusional · p. 10-11</span> <span class="org ilu">aporte del modelo: ilustrativo</span></p>
+    </details>
+    <details class="nota-plegable grafica" id="gr-126">
+      <summary>Fig. 12.6: el volumen salva vidas</summary>
+      <div class="lam-ancha"><button type="button" class="lam" data-img="b2-capilar/fig12-6-volumen-salva.jpg" data-pie="Figura 12.6 del libro (PDF p. 17): el lema «la sangre salva vidas», corregido a «el volumen de sangre salva vidas»."><img loading="lazy" src="b2-capilar/fig12-6-volumen-salva.jpg" alt="Figura 12.6 del libro"></button>
+        <p class="para">Las anemias extremas no alteran la oxigenación de los tejidos si se mantiene la volemia, que deja subir el gasto. <b>La hipovolemia es causa de shock; la anemia, no.</b> Pruébalo con «Volemia baja». <span class="org">ficha · Umbral transfusional · p. 16-17</span></p></div>
+    </details>
+    <details class="nota-plegable grafica" id="gr-93">
+      <summary>Fig. 9.3 viva: aporte y consumo</summary>
+      <div class="gr-fila"><svg id="svg-93" viewBox="0 0 240 168" role="img" aria-label="Consumo frente a aporte de O₂"></svg>
+        <button type="button" class="lam" data-img="mar-fig9-3-aporte-consumo.jpg" data-pie="Figura 9.3 del libro (PDF p. 76): relación entre el aporte (DO₂) y el consumo de O₂ (VO₂)."><img loading="lazy" src="../../js/modules/libros/img/mar-fig9-3-aporte-consumo.jpg" alt="Figura 9.3 del libro"></button></div>
+      <p class="para">La misma del capilar de hoy. Con anemia y el corazón que compensa, el punto se queda en la meseta. <span class="org">ficha · Extracción y lactato</span></p>
+    </details>
+
+    <section class="bloque">
+      <h2>Qué es cada forma</h2>
+      <ul class="leyenda" id="leyenda"></ul>
+      <p class="para">La forma dice qué es; el color ayuda, pero nunca decide solo. Todas salen de la tabla única de formas de la app, salvo el neutrófilo, que es <b>propuesta</b> (va en la lámina de formas nuevas).</p>
+    </section>
+
+    <details class="nota-plegable">
+      <summary>De dónde sale cada cifra nueva</summary>
+      <div class="tabla-scroll">
+        <table class="data-table">
+          <thead><tr><th>Cifra</th><th>Cálculo</th><th>Origen</th></tr></thead>
+          <tbody>
+            <tr><td>Gasto con «el corazón compensa»</td><td>El que mantiene un consumo de 250 mL/min con la extracción que la Fig. 12.3 da a cada Hto: 25 % (Hb 15), 29 % (Hb 10), 35 % (Hb ≈6,7) y 50 % (Hb 3); entre medias, en línea recta. Por debajo de Hb 3, ya no sube más (12,7 L/min).</td><td><span class="org ilu">ilustrativo</span> <span class="org">ficha · p. 6-7 (Fig. 12.3, primates)</span></td></tr>
+            <tr><td>Viscosidad</td><td>Tabla 12.2 (relativa al agua), con el Hto estimado como 3 × Hb</td><td><span class="org">ficha · p. 4-5</span> <span class="org ilu">Hto ≈ 3 × Hb: fisiología general</span></td></tr>
+            <tr><td>Transfundir 1 CH</td><td>Hb +1 g/dL (y Hto +3 %), en unas 2 h; el gasto se queda quieto mientras gotea la bolsa</td><td><span class="org">ficha · p. 10</span> <span class="org ilu">gasto quieto: ilustrativo</span></td></tr>
+            <tr><td>Transfusión 6,4 → 8</td><td>Los valores medios de la Fig. 12.4 (1-2 CH); aporte y extracción, del modelo</td><td><span class="org">ficha · p. 10-11</span></td></tr>
+            <tr><td>Volemia baja</td><td>El gasto no puede subir: como mucho 5 L/min; en el estado, 4</td><td><span class="org ilu">ilustrativo</span></td></tr>
+            <tr><td>El tubo</td><td>Hto de la Fig. 12.1; la columna roja (la masa) no cambia y el plasma crece hasta dar el Hto medido</td><td><span class="org">ficha · p. 2-3</span></td></tr>
+            <tr><td>Hb en la dilución</td><td>Hto / 3</td><td><span class="org ilu">fisiología general</span></td></tr>
+            <tr><td>PaO₂ 55 en TRALI y TACO</td><td>Un valor de hipoxemia para mover el tablero; la fuente no da cifras</td><td><span class="org ilu">ilustrativo</span></td></tr>
+            <tr><td>Lo demás</td><td>CaO₂, aporte, consumo, extracción, SvO₂, lactato y PETCO₂: igual que en el capilar de hoy</td><td><span class="org">ficha · Transporte de O₂ · Extracción y lactato</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+
+    <details class="nota-plegable">
+      <summary>Notas de fuentes y de fidelidad</summary>
+      <div class="nota-fuentes"><span class="tipo-nota">La fuente no lo dice</span><b>Cuánto sube el gasto con cada Hb en el ser humano.</b> La Fig. 12.2 es un paciente con policitemia y la 12.3, primates. La curva del modelo sigue la forma de la 12.3 y es ilustrativa: con Hb 7,5 da 7,6 L/min y una extracción del 34 %. <span class="org">ficha · p. 5-7</span></div>
+      <div class="nota-fuentes"><span class="tipo-nota">Nota de fidelidad</span><b>El rótulo de la Fig. 12.2.</b> Dice «225 % de cambio en el gasto»; sus puntos van de 5,8 a 13 L/min: el gasto llega al 225 % del inicial (+125 %). Ninguna pregunta usa «sube un 225 %». <span class="org">ficha · p. 6</span></div>
+      <div class="nota-fuentes"><span class="tipo-nota">Contexto</span><b>Hto 10 % ≈ Hb 3.</b> Es la equivalencia que da el libro (p. 6); el modelo pone el techo en Hb 3. El texto añade que, en animales con la volemia mantenida, un Hto de 5-10 % (Hb 1,5-3) no alteró la oxigenación de los tejidos, y que en humanos hasta Hb 5 parece seguro y algunos toleran 2-3 (p. 7). La Fig. 12.3 es de otro estudio, en primates.</div>
+      <div class="nota-fuentes"><span class="tipo-nota">La fuente no lo dice</span><b>El gasto durante la transfusión.</b> La Fig. 12.4 da un aumento del aporte «similar» al de la Hb (25 %, p. 10). El modelo deja quieto el gasto mientras gotea la bolsa: así el aporte sube lo mismo que la Hb.</div>
+      <div class="nota-fuentes"><span class="tipo-nota">Las fuentes discrepan</span><b>El plasma que queda en un CH.</b> La Tabla 12.3 dice 15-30 mL por unidad; el texto de la misma página, 30-50 mL (p. 9). La bolsa del modelo no da esa cifra.</div>
+      <div class="nota-fuentes"><span class="tipo-nota">La fuente no lo dice</span><b>TRALI frente a TACO.</b> No da cifras de PCR, BNP ni ecografía: solo que una inflamación sistémica (PCR alta) y la ausencia de IC o de sobrecarga apoyan el TRALI (p. 14). La PaO₂ de la lupa es ilustrativa.</div>
+    </details>
+
+    <details class="nota-plegable">
+      <summary>Lo que el libro no da (huecos)</summary>
+      <ul class="huecos">
+        <li>Cuánto sube el gasto con cada Hb en el ser humano: la curva es ilustrativa.</li>
+        <li>Cuánto baja el gasto con la volemia baja: el estado usa 4 L/min, ilustrativo.</li>
+        <li>Cifras de PCR, BNP o ecografía para separar TRALI y TACO.</li>
+        <li>Cuánto plasma añade el bolo de 20 mL/kg (los +420 mL son solo de tumbarse).</li>
+      </ul>
+    </details>
+
+    <section class="elige" aria-label="Para decidir">
+      <span class="eyebrow">Para decidir</span>
+      <h2>¿Lo construimos así?</h2>
+      <p class="para">Lo que ya tiene el capilar (las lupas del dedo, la mitocondria y la boca, y las gráficas del cap. 9) no cambia; aquí solo se ve lo nuevo.</p>
+      <div class="opciones-elige" data-q="general"><button type="button" aria-pressed="false">Construir así</button><button type="button" aria-pressed="false">Construir con cambios</button></div>
+      <p class="para">«El corazón compensa», encendido en los estados de anemia (y la frase de la anemia de hoy, corregida)</p>
+      <div class="opciones-elige" data-q="compensa"><button type="button" aria-pressed="false">Compensa: sí</button><button type="button" aria-pressed="false">Compensa: no</button></div>
+      <p class="para">Mientras gotea la bolsa, el gasto…</p>
+      <div class="opciones-elige" data-q="gasto"><button type="button" aria-pressed="false">Se queda quieto (Fig. 12.4)</button><button type="button" aria-pressed="false">Baja un poco (sigue la curva)</button></div>
+      <p class="para">Lupas nuevas</p>
+      <div class="opciones-elige" data-q="tubo"><button type="button" aria-pressed="false">El tubo: sí</button><button type="button" aria-pressed="false">El tubo: no</button></div>
+      <div class="opciones-elige" data-q="alveolo"><button type="button" aria-pressed="false">El alvéolo: sí</button><button type="button" aria-pressed="false">El alvéolo: no</button></div>
+      <p class="resumen" id="resumen">Aún no has elegido.</p>
+      <a class="pdf" href="b2-formas.html">Ver la lámina de formas nuevas →</a>
+    </section>
+  </div>
+
+  <!-- ============ CONCEPTOS ============ -->
+  <div id="vista-conceptos" class="bloque" hidden>
+    <div id="concepto" class="formato entra"></div>
+  </div>
+
+  <!-- ============ MAYÉUTICA ============ -->
+  <div id="vista-preguntas" class="bloque" hidden>
+    <div id="preg" class="formato entra"></div>
+    <details class="nota-plegable" id="profundizar">
+      <summary>Para profundizar (lo que esta Mayéutica no cubre)</summary>
+      <div class="prof">
+        <section><b>Los rangos de la Tabla 12.1.</b> Hb 13,5-18 g/dL en varones y 12-16 en mujeres (1 g/dL menos tras el primer trimestre del embarazo); Hto 40-54 % y 38-47 %; VCM 80-100 fL; hematíes 4,6-6,2 y 4,2-5,4 ×10¹²/L; masa eritrocitaria 26 y 24 mL/kg; reticulocitos 25-75 ×10⁹/L. Ojo: la definición de anemia es otra (Hb &lt;13 en varones y &lt;12 en mujeres).
+          <span class="fuente-p">Ver en el texto: <span class="org">Anemia en el crítico · Tabla 12.1</span></span> <a class="pdf" href="../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=2" target="_blank" rel="noopener">PDF, p. 2 →</a></section>
+        <section><b>Para qué serviría que la sangre no sea newtoniana.</b> <span class="tipo-nota">Opinión del autor</span>En una herida, el flujo local cae, la sangre se «espesa» y frena la pérdida.
+          <span class="fuente-p">Ver en el texto: <span class="org">Anemia en el crítico · la sangre no newtoniana</span></span> <a class="pdf" href="../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=5" target="_blank" rel="noopener">PDF, p. 5 →</a></section>
+        <section><b>Los componentes.</b> La sangre completa solo se guarda si se pide; se separa en hematíes, plaquetas, plasma y crioprecipitado, y así cada donación sirve para varias necesidades.
+          <span class="fuente-p">Ver en el texto: <span class="org">Umbral transfusional · componentes</span></span> <a class="pdf" href="../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=9" target="_blank" rel="noopener">PDF, p. 9 →</a></section>
+        <section><b>Infecciones que transmite la bolsa (Tabla 12.5).</b> Bacterias 1:500.000; VHB 1:1,2 millones; VHC y VIH 1:1,5 millones. Los errores son mucho más frecuentes: transfundir a la persona equivocada, 1:15.000.
+          <span class="fuente-p">Ver en el texto: <span class="org">Riesgos de la transfusión · Tabla 12.5</span></span> <a class="pdf" href="../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=12" target="_blank" rel="noopener">PDF, p. 12 →</a></section>
+        <section><b>Infecciones nosocomiales.</b> El efecto inmunosupresor se vio a principios de los años setenta: las transfusiones antes del trasplante mejoraban la supervivencia de los injertos renales. Al menos 22 estudios muestran que la transfusión es un factor de riesgo independiente; el riesgo sube con el volumen y con el tiempo de almacenamiento.
+          <span class="fuente-p">Ver en el texto: <span class="org">Riesgos de la transfusión · infecciones nosocomiales</span></span> <a class="pdf" href="../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=16" target="_blank" rel="noopener">PDF, p. 16 →</a></section>
+        <p class="para">En la app, la Guía, el Examen y los casos de las tres fichas cubren el resto; aquí solo van dos preguntas y el primer paso de un caso.</p>
+      </div>
+    </details>
+  </div>
+</main>
+
+<nav class="dock" id="dock" aria-label="Mandos">
+  <div class="dock-in">
+    <div id="dock-explorar">
+      <p class="frase" id="frase" aria-live="polite"></p>
+      <div class="dock-tabs" role="tablist" aria-label="Mandos del modelo">
+        <button type="button" role="tab" data-tab="sangre" aria-selected="true">Sangre</button>
+        <button type="button" role="tab" data-tab="pulmon" aria-selected="false">Pulmón</button>
+        <button type="button" role="tab" data-tab="corazon" aria-selected="false">Corazón</button>
+        <button type="button" role="tab" data-tab="tejido" aria-selected="false">Tejido</button>
+        <button type="button" role="tab" data-tab="mido" aria-selected="false">Mido en</button>
+      </div>
+      <div class="dock-panel" data-panel="sangre">
+        <label class="desliza"><span>Hb</span><input type="range" id="m-hb" min="5" max="17" step="0.5" value="15" aria-label="Hemoglobina, g/dL"><output id="o-hb"></output></label>
+        <div class="raya">
+          <button type="button" class="tog" id="m-transf">Transfundir 1 CH <small>+1 g/dL</small></button>
+          <button type="button" class="tog" id="m-tumbar" aria-pressed="false">Tumbarse <small>el tubo</small></button>
+          <button type="button" class="tog" id="m-bolo" aria-pressed="false">Bolo 20 mL/kg <small>el tubo</small></button>
+          <button type="button" class="tog" id="m-co" aria-pressed="false">Humo: CO <small>COHb 25 %, ilustr.</small></button>
+        </div>
+      </div>
+      <div class="dock-panel" data-panel="pulmon" hidden>
+        <label class="desliza"><span>PaO₂</span><input type="range" id="m-pao2" min="40" max="100" step="1" value="90" aria-label="PaO₂, mmHg"><output id="o-pao2"></output></label>
+        <div class="raya">
+          <button type="button" class="tog" data-alveolo="trali" aria-pressed="false">Alvéolo: TRALI</button>
+          <button type="button" class="tog" data-alveolo="taco" aria-pressed="false">Alvéolo: TACO</button>
+          <button type="button" class="tog" data-espacio="epoc" aria-pressed="false">EPOC</button>
+          <button type="button" class="tog" data-espacio="embolia" aria-pressed="false">Embolia</button>
+          <button type="button" class="tog" id="m-sedacion" aria-pressed="false">Sedación: hipoventila</button>
+          <button type="button" class="tog" id="m-esofago" aria-pressed="false">Tubo en el esófago</button>
+        </div>
+      </div>
+      <div class="dock-panel" data-panel="corazon" hidden>
+        <label class="desliza"><span>Gasto</span><input type="range" id="m-gc" min="1.5" max="8" step="0.1" value="5" aria-label="Gasto cardíaco, L/min"><output id="o-gc"></output></label>
+        <div class="raya">
+          <button type="button" class="tog" id="m-compensa" aria-pressed="false">El corazón compensa <small>ilustr.</small></button>
+          <button type="button" class="tog" id="m-volemia" aria-pressed="false">Volemia baja</button>
+          <button type="button" class="tog" id="m-rcp" aria-pressed="false">Parada con RCP</button>
+          <button type="button" class="tog" id="m-frio" aria-pressed="false">Dedo frío (vasoconstricción)</button>
+        </div>
+      </div>
+      <div class="dock-panel" data-panel="tejido" hidden>
+        <div class="seg" id="m-util" aria-label="Utilización del O₂"><button type="button" data-v="normal" aria-pressed="true">Usa el O₂</button><button type="button" data-v="sepsis" aria-pressed="false">Sepsis</button><button type="button" data-v="tiamina" aria-pressed="false">Sin tiamina</button></div>
+        <div class="raya">
+          <button type="button" class="tog" id="m-fiebre" aria-pressed="false">Fiebre: más consumo <small>ilustr.</small></button>
+          <button type="button" class="tog" id="m-estres" aria-pressed="false">Estrés fisiológico</button>
+        </div>
+      </div>
+      <div class="dock-panel" data-panel="mido" hidden>
+        <div class="seg" id="m-toma" aria-label="Toma venosa"><button type="button" data-v="svo2" aria-pressed="true">A. pulmonar · SvO₂</button><button type="button" data-v="scvo2" aria-pressed="false">Cava sup. · ScvO₂</button></div>
+        <div class="seg" id="m-sensor" aria-label="Sensor del pulsioxímetro"><button type="button" data-v="dedo" aria-pressed="true">Sensor en el dedo</button><button type="button" data-v="frente" aria-pressed="false">En la frente</button></div>
+      </div>
+    </div>
+    <div id="dock-estudio" class="dock-estudio" hidden>
+      <div class="pasos" id="dock-pasos"></div>
+      <div class="dock-est-txt"><span id="dock-est-izq"></span><span id="dock-est-der"></span></div>
+    </div>
+  </div>
+</nav>
+
+<div class="visor" id="visor" hidden role="dialog" aria-label="Lámina del libro">
+  <figure><img id="visor-img" alt=""><figcaption id="visor-pie"></figcaption></figure>
+  <button type="button" id="visor-cerrar" aria-label="Cerrar la lámina">×</button>
+</div>
+
+<script>
+
+'use strict';
+/* ============================================================
+   1. Utilidades
+   ============================================================ */
+const $ = id => document.getElementById(id);
+const NS = 'http://www.w3.org/2000/svg';
+const REDUCIR = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const dec = (n, d = 1) => n.toFixed(d).replace('.', ',');
+const mil = n => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+const pct = s => Math.round(s * 100);
+const copia = o => JSON.parse(JSON.stringify(o));
+const hash01 = (a, b, c = 0) => { const x = Math.sin(a * 12.9898 + b * 78.233 + c * 37.719) * 43758.5453; return x - Math.floor(x); };
+
+/* ============================================================
+   2. Formas: la tabla única de la app (js/data/formas-iones.js y js/core/particulas.js), copiada,
+      más el neutrófilo, PROPUESTO en la lámina de formas nuevas (autonomo/maquetas/b2-formas.html).
+   ============================================================ */
+const FORMAS_IONES = {
+  agua: { nombre: 'Agua', forma: 'gota', color: '--text-main' },
+  dulce: { nombre: 'Agua sin sal (glucosado)', forma: 'anillo', color: '--text-main' },
+  na: { nombre: 'Na⁺', forma: 'circulo', color: '--accent-blue' },
+  cl: { nombre: 'Cl⁻', forma: 'rombo', color: '--accent-purple' },
+  salino3: { nombre: 'Salino 3 %', forma: 'rombo1', color: '--accent-purple' },
+  salino75: { nombre: 'Salino 7,5 %', forma: 'rombo2', color: '--accent-purple' },
+  hco3: { nombre: 'HCO₃⁻', forma: 'triangulo', color: '--accent-green' },
+  ringer: { nombre: 'Ringer', forma: 'triangulo', color: '--accent-green' },
+  plasmalyte: { nombre: 'Plasma-Lyte', forma: 'trianguloHueco', color: '--accent-green' },
+  h: { nombre: 'H⁺', forma: 'cruz', color: '--accent-red' },
+  co2: { nombre: 'CO₂', forma: 'voluta', color: '--accent-blue' },
+  nh4: { nombre: 'NH₄⁺', forma: 'pentagono', color: '--text-dim' },
+  anion: { nombre: 'Aniones no medidos', forma: 'estrella', color: '--accent-yellow' },
+  k: { nombre: 'K⁺', forma: 'cuadrado', color: '--text-dim' },
+  ca: { nombre: 'Ca²⁺', forma: 'ovalo', color: '--text-main' },
+  mg: { nombre: 'Mg²⁺', forma: 'ovaloHueco', color: '--text-main' },
+  p: { nombre: 'Fosfato', forma: 'trianguloInv', color: '--text-muted' },
+  glu: { nombre: 'Glucosa', forma: 'copo', color: '--accent-yellow' },
+  urea: { nombre: 'Urea', forma: 'hexagono', color: '--text-muted' },
+  alb: { nombre: 'Albúmina', forma: 'grano', color: '--accent-purple' },
+  alb25: { nombre: 'Albúmina 25 %', forma: 'grano1', color: '--accent-purple' },
+  cito: { nombre: 'Citoquinas', forma: 'trebol', color: '--text-dim' },
+  cacit: { nombre: 'Ca²⁺ unido al citrato', forma: 'caCitrato', color: '--text-main', anillo: '--accent-yellow' },
+  citrato: { nombre: 'Citrato', forma: 'aro', color: '--accent-yellow' },
+  rbc: { nombre: 'Hematíes', forma: 'disco', color: '--accent-red' },
+  celula: { nombre: 'Célula desprendida (NTA)', forma: 'celula', color: '--text-muted' },
+  osmol: { nombre: 'Osmolitos (neurona)', forma: 'pajarita', color: '--accent-yellow' },
+  creat: { nombre: 'Creatinina', forma: 'luna', color: '--text-dim', reserva: true },
+  o2: { nombre: 'O₂', forma: 'pesa', color: '--text-main' },
+  lact: { nombre: 'Lactato', forma: 'tripode', color: '--accent-yellow' },
+  igg: { nombre: 'IgG', forma: 'igg', color: '--accent-red' },
+  // PROPUESTA de la lámina de formas nuevas (no está en la tabla de la app):
+  neutrofilo: { nombre: 'Neutrófilo', forma: 'neutrofilo', color: '--text-dim', propuesta: true }
+};
+const BORDE_PARTICULA = '--bg-main';
+const n2 = x => +x.toFixed(2);
+const poligono = (n, r, giro) => { let d = ''; for (let i = 0; i < n; i++) { const a = giro + i * 2 * Math.PI / n; d += `${i ? 'L' : 'M'}${n2(Math.cos(a) * r)} ${n2(Math.sin(a) * r)}`; } return d + 'Z'; };
+const elipse = (rx, ry) => `M${n2(rx)} 0A${n2(rx)} ${n2(ry)} 0 1 1 ${n2(-rx)} 0A${n2(rx)} ${n2(ry)} 0 1 1 ${n2(rx)} 0Z`;
+const circuloEn = (cx, rr) => `M${n2(cx + rr)} 0A${n2(rr)} ${n2(rr)} 0 1 1 ${n2(cx - rr)} 0A${n2(rr)} ${n2(rr)} 0 1 1 ${n2(cx + rr)} 0Z`;
+const lleno = (d, extra = {}) => ({ d, tipo: 'lleno', ...extra });
+const trazo = (d, w, extra = {}) => ({ d, tipo: 'trazo', w, ...extra });
+function partesDe(forma, r, e = {}) {
+  switch (forma) {
+    case 'gota': return [lleno(`M0 ${n2(-1.5 * r)}C${n2(0.55 * r)} ${n2(-0.75 * r)} ${n2(1.05 * r)} ${n2(-0.15 * r)} ${n2(1.05 * r)} ${n2(0.35 * r)}A${n2(1.05 * r)} ${n2(1.05 * r)} 0 0 1 ${n2(-1.05 * r)} ${n2(0.35 * r)}C${n2(-1.05 * r)} ${n2(-0.15 * r)} ${n2(-0.55 * r)} ${n2(-0.75 * r)} 0 ${n2(-1.5 * r)}Z`)];
+    case 'anillo': return [trazo(elipse(r, r), 0.34)];
+    case 'circulo': return [lleno(elipse(r, r))];
+    case 'grano': return [lleno(elipse(1.6 * r, 1.6 * r))];
+    case 'cuadrado': return [lleno(`M${n2(-0.92 * r)} ${n2(-0.92 * r)}h${n2(1.84 * r)}v${n2(1.84 * r)}h${n2(-1.84 * r)}Z`)];
+    case 'rombo': return [lleno(`M0 ${n2(-1.35 * r)}L${n2(0.92 * r)} 0L0 ${n2(1.35 * r)}L${n2(-0.92 * r)} 0Z`)];
+    case 'grano1': return [trazo(elipse(2.4 * r, 2.4 * r), 0.2, { opacidad: 0.6, sinBorde: true }), ...partesDe('grano', r)];
+    case 'pajarita': return [lleno(`M${n2(-1.3 * r)} ${n2(-0.95 * r)}L0 0L${n2(-1.3 * r)} ${n2(0.95 * r)}ZM${n2(1.3 * r)} ${n2(-0.95 * r)}L0 0L${n2(1.3 * r)} ${n2(0.95 * r)}Z`)];
+    case 'rombo1': case 'rombo2': { const halo = rr => trazo(elipse(rr, rr), 0.2, { opacidad: 0.6, sinBorde: true }); return [halo(1.85 * r), ...(forma === 'rombo2' ? [halo(2.45 * r)] : []), ...partesDe('rombo', r)]; }
+    case 'triangulo': return [lleno(`M0 ${n2(-1.25 * r)}L${n2(1.15 * r)} ${n2(0.85 * r)}L${n2(-1.15 * r)} ${n2(0.85 * r)}Z`)];
+    case 'trianguloHueco': return [trazo(`M0 ${n2(-1.25 * r)}L${n2(1.15 * r)} ${n2(0.85 * r)}L${n2(-1.15 * r)} ${n2(0.85 * r)}Z`, 0.3)];
+    case 'trianguloInv': return [lleno(`M0 ${n2(1.25 * r)}L${n2(1.15 * r)} ${n2(-0.85 * r)}L${n2(-1.15 * r)} ${n2(-0.85 * r)}Z`)];
+    case 'cruz': { const a = n2(1.1 * r), b = n2(0.38 * r); return [lleno(`M${-b} ${-a}H${b}V${-b}H${a}V${b}H${b}V${a}H${-b}V${b}H${-a}V${-b}H${-b}Z`)]; }
+    case 'pentagono': return [lleno(poligono(5, 1.2 * r, -Math.PI / 2))];
+    case 'hexagono': return [lleno(poligono(6, 1.2 * r, Math.PI / 6))];
+    case 'voluta': { let d = ''; for (let a = 0, i = 0; a <= Math.PI * 2.6; a += 0.25, i++) { const rr = r * (0.15 + a / 6.2); d += `${i ? 'L' : 'M'}${n2(Math.cos(a) * rr)} ${n2(Math.sin(a) * rr)}`; } return [trazo(d, 0.3)]; }
+    case 'estrella': { let d = ''; for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? 0.58 * r : 1.45 * r; d += `${i ? 'L' : 'M'}${n2(Math.cos(a) * rr)} ${n2(Math.sin(a) * rr)}`; } return [trazo(d + 'Z', 0.28)]; }
+    case 'copo': { let d = ''; for (let i = 0; i < 3; i++) { const a = Math.PI / 2 + i * Math.PI / 3, x = Math.cos(a) * 1.4 * r, y = Math.sin(a) * 1.4 * r; d += `M${n2(x)} ${n2(y)}L${n2(-x)} ${n2(-y)}`; } return [trazo(d, 0.36)]; }
+    case 'ovalo': return [lleno(elipse(1.4 * r, 0.82 * r))];
+    case 'ovaloHueco': return [trazo(elipse(1.3 * r, 0.74 * r), 0.3)];
+    case 'disco': return [lleno(elipse(1.35 * r, r)), lleno(elipse(0.55 * r, 0.36 * r), { color: BORDE_PARTICULA, opacidad: 0.55, sinBorde: true })];
+    case 'trebol': return [lleno([-90, 30, 150].map(g => { const a = g * Math.PI / 180, cx = Math.cos(a) * 0.62 * r, cy = Math.sin(a) * 0.62 * r, rr = n2(0.62 * r); return `M${n2(cx + rr)} ${n2(cy)}A${rr} ${rr} 0 1 1 ${n2(cx - rr)} ${n2(cy)}A${rr} ${rr} 0 1 1 ${n2(cx + rr)} ${n2(cy)}Z`; }).join(''))];
+    case 'aro': return [trazo(elipse(1.9 * r, 1.4 * r), 0.28)];
+    case 'caCitrato': return [trazo(elipse(1.9 * r, 1.4 * r), 0.28, { color: e.anillo, sinBorde: true }), ...partesDe('ovalo', 0.85 * r)];
+    case 'celula': return [trazo(elipse(1.4 * r, 1.4 * r), 0.38), lleno(elipse(0.45 * r, 0.45 * r), { sinBorde: true })];
+    case 'luna': { const R = 1.15 * r; return [lleno(`M${n2(0.5275 * R)} ${n2(-0.8495 * R)}A${n2(R)} ${n2(R)} 0 1 0 ${n2(0.5275 * R)} ${n2(0.8495 * R)}A${n2(0.85 * R)} ${n2(0.85 * R)} 0 0 1 ${n2(0.5275 * R)} ${n2(-0.8495 * R)}Z`)]; }
+    case 'igg': return [trazo(`M0 ${n2(1.35 * r)}L0 0M0 0L${n2(-0.95 * r)} ${n2(-1.1 * r)}M0 0L${n2(0.95 * r)} ${n2(-1.1 * r)}`, 0.42)];
+    // Propuesta (lámina de formas nuevas): el neutrófilo, con el núcleo en tres lóbulos
+    case 'neutrofilo': { const lob = [[-0.62, 0.24], [0, -0.36], [0.62, 0.24]], cc = (x, y, rr) => `M${n2(x + rr)} ${n2(y)}A${n2(rr)} ${n2(rr)} 0 1 1 ${n2(x - rr)} ${n2(y)}A${n2(rr)} ${n2(rr)} 0 1 1 ${n2(x + rr)} ${n2(y)}Z`;
+      return [lleno(elipse(1.25 * r, 1.25 * r)), trazo(`M${n2(lob[0][0] * r)} ${n2(lob[0][1] * r)}L${n2(lob[1][0] * r)} ${n2(lob[1][1] * r)}L${n2(lob[2][0] * r)} ${n2(lob[2][1] * r)}`, 0.12, { color: '--accent-purple', sinBorde: true }), lleno(lob.map(([x, y]) => cc(x * r, y * r, 0.29 * r)).join(''), { color: '--accent-purple', sinBorde: true })]; }
+    case 'pesa': return [trazo(`M${n2(-0.9 * r)} 0H${n2(0.9 * r)}`, 0.34), lleno(circuloEn(-0.9 * r, 0.6 * r) + circuloEn(0.9 * r, 0.6 * r))];
+    case 'tripode': { let d = ''; for (const g of [90, 210, 330]) { const a = g * Math.PI / 180; d += `M0 0L${n2(Math.cos(a) * 1.4 * r)} ${n2(Math.sin(a) * 1.4 * r)}`; } return [trazo(d, 0.38)]; }
+  }
+  return [lleno(elipse(r, r))];
+}
+const ALCANCE = { gota: 1.55, grano: 1.7, grano1: 2.5, pajarita: 1.35, rombo1: 2, rombo2: 2.6, caCitrato: 2.05, aro: 2.05, estrella: 1.5, celula: 1.6, ovalo: 1.45, ovaloHueco: 1.45, disco: 1.4, copo: 1.5, pesa: 1.55, tripode: 1.45, igg: 1.4, neutrofilo: 1.3 };
+const bordeP = r => Math.max(0.22 * r, 0.8);
+const pintura = c => c.startsWith('--') ? `var(${c})` : c;
+function svgParticula(clave, x = 0, y = 0, r = 4, { color, borde: conBorde = true } = {}) {
+  const e = FORMAS_IONES[clave];
+  const col = pintura(color ?? e.color), fondo = pintura(BORDE_PARTICULA);
+  let s = '';
+  for (const p of partesDe(e.forma, r, e)) {
+    const c = p.color ? pintura(p.color) : col, op = p.opacidad != null ? `;opacity:${p.opacidad}` : '';
+    if (p.tipo === 'lleno') {
+      const bd = conBorde && !p.sinBorde ? `;stroke:${fondo};stroke-width:${n2(bordeP(r) * 2)};paint-order:stroke;stroke-linejoin:round` : '';
+      s += `<path d="${p.d}" style="fill:${c}${bd}${op}"/>`;
+    } else {
+      if (conBorde && !p.sinBorde) s += `<path d="${p.d}" style="fill:none;stroke:${fondo};stroke-width:${n2(r * p.w + bordeP(r) * 1.2)};stroke-linejoin:round;stroke-linecap:round"/>`;
+      s += `<path d="${p.d}" style="fill:none;stroke:${c};stroke-width:${n2(r * p.w)};stroke-linejoin:round;stroke-linecap:round${op}"/>`;
+    }
+  }
+  return `<g${x || y ? ` transform="translate(${n2(x)} ${n2(y)})"` : ''}>${s}</g>`;
+}
+function iconoParticula(clave, tam = 14, opc = {}) {
+  const e = FORMAS_IONES[clave], alc = ALCANCE[e.forma] ?? 1.45, r = n2((tam / 2 - 0.9) / alc);
+  return `<svg width="${tam}" height="${tam}" viewBox="${-tam / 2} ${-tam / 2} ${tam} ${tam}" aria-hidden="true" focusable="false">${svgParticula(clave, 0, 0, r, opc)}</svg>`;
+}
+// El hematíe de este modelo: el disco de la tabla con sus 4 perlas (los 4 sitios del hemo).
+const PERLAS = [[-3.5, 0], [3.5, 0], [0, -2.5], [0, 2.5]];
+function hematieSVG(estados = ['', '', '', ''], color = '--accent-red', r = 4.6) {
+  const k = r / 4.6;
+  return svgParticula('rbc', 0, 0, r, { color }) + PERLAS.map(([x, y], i) => `<g class="perla ${estados[i]}" transform="translate(${n2(x * k)} ${n2(y * k)})"><circle r="${n2(1.3 * k)}"/><line x1="${n2(-1.2 * k)}" y1="${n2(1.2 * k)}" x2="${n2(1.2 * k)}" y2="${n2(-1.2 * k)}"/></g>`).join('');
+}
+function iconoHematie(estados, tam = 16, color = '--accent-red') { return `<svg width="${tam}" height="${tam}" viewBox="-8 -8 16 16" aria-hidden="true">${hematieSVG(estados, color)}</svg>`; }
+/* ============================================================
+   3. El modelo (cada línea con su origen; ver «De dónde sale cada cifra»)
+   ============================================================ */
+// Curva de disociación: Severinghaus (fisiología general) corregida para pasar exactamente por los 4 puntos de la ficha.
+const sev = p => { const x = p * p * p + 150 * p; return x / (x + 23400); };
+const NUDOS = [[0, 0], [27, 0.50], [40, 0.73], [45, 0.78], [90, 0.98]];   // P50; Tabla 9.1; Fig. 9.2
+const DIF = NUDOS.map(([x, y]) => [x, x === 0 ? 0 : y - sev(x)]);
+function correccion(p) {
+  if (p >= 90) return DIF[4][1];
+  for (let i = 0; i < DIF.length - 1; i++) if (p <= DIF[i + 1][0]) return lerp(DIF[i][1], DIF[i + 1][1], (p - DIF[i][0]) / (DIF[i + 1][0] - DIF[i][0]));
+  return 0;
+}
+const satDe = p => clamp(sev(p) + correccion(p), 0, 0.995);
+function po2De(s) { let a = 0, b = 150; for (let i = 0; i < 40; i++) { const m = (a + b) / 2; if (satDe(m) < s) a = m; else b = m; } return (a + b) / 2; }
+
+const FCO = 0.25;                               // COHb del humo: ilustrativo
+const PEDIDO = { reposo: 250, fiebre: 300 };    // 250: ficha (cap. 9); 300: ilustrativo
+const SC = 1.7;                                 // superficie corporal del adulto medio (cap. 9)
+
+// «El corazón compensa» (cap. 12): la extracción que el tejido alcanza con cada Hb, leída de la Fig. 12.3 (primates):
+// ~25 % normal, ~29 % con Hto 30 (Hb 10), ~35 % con Hto 20 (Hb ≈6,7), 50 % con Hto 10 (Hb 3, p. 6). El gasto es el que
+// mantiene el consumo de 250 con esa extracción: ilustrativo (la forma de la figura, en animales).
+const ER_HB = [[3, 0.50], [20 / 3, 0.35], [10, 0.29], [15, PEDIDO.reposo / (5 * 1.34 * 15 * 0.98 * 10)]];
+function erCurva(hb) {
+  const h = clamp(hb, 3, 15);
+  for (let i = 0; i < ER_HB.length - 1; i++) if (h <= ER_HB[i + 1][0]) return lerp(ER_HB[i][1], ER_HB[i + 1][1], (h - ER_HB[i][0]) / (ER_HB[i + 1][0] - ER_HB[i][0]));
+  return ER_HB[ER_HB.length - 1][1];
+}
+// Por encima de Hb 15 el gasto se queda en 5; por debajo de Hb 3 ya no sube más (el techo de la Fig. 12.3).
+function gcCurva(hb) { const h = clamp(hb, 3, 15); return h >= 15 ? 5 : PEDIDO.reposo / (erCurva(h) * 1.34 * h * 0.98 * 10); }
+// Viscosidad relativa al agua (Tabla 12.2, p. 4-5), con el Hto estimado como 3 × Hb (fisiología general).
+const VISC = [[0, 1.4], [10, 1.8], [20, 2.1], [30, 2.8], [40, 3.7], [50, 4.8], [60, 5.8]];
+function viscDe(hb) { const h = clamp(3 * hb, 0, 60); for (let i = 0; i < VISC.length - 1; i++) if (h <= VISC[i + 1][0]) return lerp(VISC[i][1], VISC[i + 1][1], (h - VISC[i][0]) / 10); return 5.8; }
+// El tubo de hematocrito (Fig. 12.1, p. 2-3): [Hto antes, Hto después, rótulo antes, rótulo después]
+const TUBOS = {
+  pie: [41.8, null, 'de pie', 'tumbado'], tumbado: [41.8, 37.7, 'de pie', 'tumbado'],
+  antes: [42.9, null, 'antes', 'a los 90 min'], bolo: [42.9, 38.7, 'antes', 'a los 90 min'],
+  fermin: [39, 35, 'llegada', 'tras 1,5 L']                       // el paciente del caso
+};
+
+function estadoBase() {
+  return { hb: 15, pao2: 90, gc: 5, co: false, espacio: 'no', sedacion: false, esofago: false, rcp: false, frio: false,
+    consumo: 'reposo', util: 'normal', estres: false, toma: 'svo2', sensor: 'dedo',
+    compensa: false, volemia: 'mantenida', gcFijo: null, transf: null, dil: null, alveolo: null };
+}
+// El gasto que de verdad lleva la sangre: el del mando, el de la curva si el corazón compensa, el que tenía al empezar
+// la transfusión mientras gotea la bolsa, y como mucho 5 si falta volumen.
+function gastoDe(e) {
+  if (e.rcp) return e.gc;
+  if (e.gcFijo != null) return e.gcFijo;
+  if (e.volemia === 'baja') return Math.min(e.gc, 5);
+  return e.compensa ? gcCurva(e.hb) : e.gc;
+}
+function derivar(e) {
+  const gc = gastoDe(e);
+  const S = satDe(e.pao2);
+  const fco = e.co ? FCO : 0;
+  const sao2 = S * (1 - fco);
+  const unido = 1.34 * e.hb * sao2, disuelto = 0.003 * e.pao2, cao2 = unido + disuelto;   // Ec. 9.3
+  const do2 = gc * unido * 10;                                                              // DO₂ (cap. 9)
+  const pedido = PEDIDO[e.consumo];
+  const techo = e.util === 'sepsis' ? 0.15 : 0.50;          // Fig. 9.3 y Fig. 12.3: hasta el 50 %; sepsis: ilustrativo
+  const difPedida = pedido / do2 * sao2;
+  const dif = Math.min(difPedida, techo, sao2);
+  const vo2 = do2 * dif / sao2;
+  const o2er = dif / sao2;
+  const svo2 = sao2 - dif;
+  const shock = gc < 4 || e.util === 'sepsis' || e.rcp;
+  const scvo2 = shock ? Math.min(svo2 + 0.07, sao2) : svo2;
+  const ven = e.toma === 'scvo2' ? scvo2 : svo2;
+  const porAporte = difPedida > techo && e.util !== 'sepsis';
+  const deficit = porAporte ? (pedido - vo2) / pedido : 0;
+  const lact = 1 + 8 * deficit + (e.util !== 'normal' ? 3 : 0) + (e.estres ? 1 : 0);   // ilustrativo
+  const gap = 20 / gc;
+  const paco2 = e.sedacion ? 55 : 40;
+  const menos = { no: 2, epoc: 8, embolia: 10 }[e.espacio];
+  const fGasto = gc < 5 ? 1 - 0.05 * (5 - gc) : 1;
+  const petco2 = e.esofago ? 0 : e.rcp ? 8 : Math.min(paco2, (paco2 - menos) * fGasto);
+  const sinOnda = e.rcp || (e.frio && e.sensor === 'dedo');
+  const avisos = [];
+  if (!e.rcp && do2 < 200) avisos.push('Aporte extremo: combinación casi incompatible con la vida');
+  const pvo2 = po2De(clamp(svo2 / (1 - fco), 0.01, 0.99));
+  const gcIlu = e.compensa || e.volemia === 'baja' || e.gcFijo != null;
+  const R = {
+    hb: e.hb, gc: +gc.toFixed(1), visc: +viscDe(e.hb).toFixed(1),
+    spo2: sinOnda ? null : pct(S), sao2: pct(sao2), cao2: cao2, unido, disuelto, do2: Math.round(do2), do2i: Math.round(do2 / SC),
+    vo2: Math.round(vo2), vo2i: Math.round(vo2 / SC), o2er: +o2er.toFixed(2), svo2: pct(svo2), scvo2: pct(scvo2), ven: pct(ven),
+    lact: +lact.toFixed(1), gap: Math.round(gap), petco2: Math.round(petco2), paco2
+  };
+  R.dif = R.sao2 - R.svo2;
+  R.dual = R.spo2 == null ? null : R.spo2 - R.ven;
+  R.ext = Math.round(o2er * 100);              // la extracción en %, como la da la Fig. 12.3
+  return { gc, gcIlu, S, sao2, svo2, scvo2, ven, cao2, unido, disuelto, do2, vo2, o2er, dif, lact, gap, petco2, paco2, pedido, techo, shock, porAporte, deficit, sinOnda, avisos, pvo2, fco, R };
+}
+function tabla94(R, e = {}) {
+  if (R.sao2 <= 90) return { t: 'Tabla 9.4 no válida: SaO₂ ≤90 %', corto: 'SaO₂ ≤90 %', c: 'neutro' };
+  if (e.consumo === 'fiebre' || e.estres || e.util === 'tiamina') return { t: 'Tabla 9.4 no válida: metabolismo alterado', corto: 'no válida: metab.', c: 'neutro' };
+  if (R.dif < 20 || R.svo2 > 80) return { t: 'defecto de utilización', corto: 'defecto de utilización', c: 'mal' };
+  if (R.dif >= 50 || R.svo2 <= 50) return { t: 'O₂ tisular amenazado', corto: 'O₂ tisular amenazado', c: 'mal' };
+  if (R.dif > 30 || R.svo2 < 65) return { t: 'menos aporte', corto: 'menos aporte', c: 'aviso' };
+  return { t: 'normal', corto: 'normal', c: 'ok' };
+}
+
+// Estados con nombre. Los del capilar de hoy siguen en la app; aquí, los nuevos y la anemia de hoy (gasto fijo).
+const GC_UMBRAL = (PEDIDO.reposo * 0.98 / 0.5) / (1.34 * 15 * 0.98 * 10);
+const ESTADOS = {
+  normal: { n: 'Normal', p: {} },
+  anemia: { n: 'Anemia, gasto fijo', s: 'Hb 7,5 · como hoy', p: { hb: 7.5 }, pestana: 'sangre' },
+  'anemia-compensada': { n: 'Anemia que compensa', s: 'Hb 7,5', p: { hb: 7.5, compensa: true }, pestana: 'corazon' },
+  'techo-anemia': { n: 'El techo', s: 'Hb 3', p: { hb: 3, compensa: true }, pestana: 'sangre' },
+  dilucion: { n: 'Dilución', s: 'el tubo', p: { hb: 13.9, dil: 'pie' }, lupa: 'tubo', pestana: 'sangre' },
+  'umbral-7': { n: 'Umbral 7', s: 'el de las guías', p: { hb: 7, compensa: true }, pestana: 'sangre' },
+  transfusion: { n: 'Transfusión', s: 'Hb 6,4 → 8', p: { hb: 6.4, compensa: true }, transfundir: 8, pestana: 'sangre' },
+  'anemia-hipovolemia': { n: 'Anemia sin volumen', s: 'volemia baja', p: { hb: 7.5, compensa: true, volemia: 'baja', gc: 4 }, pestana: 'corazon' },
+  trali: { n: 'TRALI', s: 'el alvéolo', p: { hb: 8, compensa: true, pao2: 55, alveolo: 'trali' }, lupa: 'alveolo', pestana: 'pulmon' },
+  taco: { n: 'TACO', s: 'el alvéolo', p: { hb: 8, compensa: true, pao2: 55, alveolo: 'taco' }, lupa: 'alveolo', pestana: 'pulmon' }
+};
+const estadoDe = parcial => Object.assign(estadoBase(), copia(parcial || {}));
+
+/* ============================================================
+   4. Pruebas: las cifras de cada estado nuevo (±1 en la última cifra salvo donde se dice)
+   ============================================================ */
+window.__pruebas = () => {
+  const r = { estados: [], extremos: null, mayeutica: null, casos: [], todoCoincide: true };
+  const mira = (estado, campo, valor, espera, tol, nota = '') => {
+    const ok = valor != null && Math.abs(valor - espera) <= tol + 1e-9;
+    if (!ok) r.todoCoincide = false;
+    r.estados.push({ estado, campo, valor, espera, tol, ok, nota });
+  };
+  const D = k => derivar(estadoDe(ESTADOS[k].p));
+  let d = D('normal');
+  mira('normal', 'DO₂', d.R.do2, 985, 1); mira('normal', 'SvO₂', d.R.svo2, 73, 1); mira('normal', 'gasto', d.R.gc, 5, 0);
+  mira('normal', 'compensa con Hb 15: gasto 5', derivar(estadoDe({ compensa: true })).R.gc, 5, 0);
+  d = D('anemia');
+  mira('anemia (gasto fijo)', 'gasto', d.R.gc, 5, 0); mira('anemia (gasto fijo)', 'SaO₂ − SvO₂', d.R.dif, 50, 1); mira('anemia (gasto fijo)', 'SvO₂', d.R.svo2, 49, 1);
+  d = D('anemia-compensada');
+  mira('anemia-compensada', 'gasto (cobertura ~7,7)', d.R.gc, 7.6, 0.15); mira('anemia-compensada', 'extracción % (cobertura ~33)', d.R.ext, 34, 1);
+  mira('anemia-compensada', 'VO₂', d.R.vo2, 250, 1); mira('anemia-compensada', 'viscosidad (Tabla 12.2, Hto 22,5)', d.R.visc, 2.3, 0.1);
+  d = D('techo-anemia');
+  mira('techo-anemia', 'extracción %', d.R.ext, 50, 0); mira('techo-anemia', 'gasto (cobertura ~12,5)', d.R.gc, 12.7, 0.1); mira('techo-anemia', 'VO₂', d.R.vo2, 250, 1);
+  const bajo = derivar(estadoDe({ hb: 2, compensa: true }));
+  mira('Hb 2 con compensa', 'VO₂ cae (<250)', bajo.R.vo2 < 250 ? 1 : 0, 1, 0); mira('Hb 2 con compensa', 'lactato sube (>2)', bajo.R.lact > 2 ? 1 : 0, 1, 0);
+  d = D('umbral-7');
+  mira('umbral-7', 'extracción % lejos del 50', d.R.ext < 40 ? 1 : 0, 1, 0);
+  const pre = derivar(estadoDe({ hb: 6.4, compensa: true })), post = derivar(estadoDe({ hb: 8, compensa: true, gcFijo: pre.gc }));
+  mira('transfusion', 'Hb +25 %', Math.round((8 / 6.4 - 1) * 100), 25, 0);
+  mira('transfusion', 'aporte +25 % (Fig. 12.4: «similar»)', Math.round((post.do2 / pre.do2 - 1) * 100), 25, 0);
+  mira('transfusion', 'VO₂ igual', post.R.vo2 - pre.R.vo2, 0, 1); mira('transfusion', 'la extracción cae', post.R.ext < pre.R.ext ? 1 : 0, 1, 0);
+  d = D('anemia-hipovolemia');
+  mira('anemia-hipovolemia', 'gasto', d.R.gc, 4, 0); mira('anemia-hipovolemia', 'VO₂ < 250', d.R.vo2 < 250 ? 1 : 0, 1, 0); mira('anemia-hipovolemia', 'lactato > 2', d.R.lact > 2 ? 1 : 0, 1, 0);
+  mira('trali', 'SaO₂ con PaO₂ 55 (<90)', D('trali').R.sao2 < 90 ? 1 : 0, 1, 0);
+  // Paciente posible: Hb de 2 a 17 con y sin compensar, y la volemia baja
+  const ex = { gcMax: 0, svo2: [100, 0], do2: [1e9, 0] };
+  for (let hb = 2; hb <= 17; hb += 0.5) for (const extra of [{ compensa: true }, { compensa: true, volemia: 'baja' }, {}]) {
+    if ((!extra.compensa || extra.volemia) && hb < 5) continue;   // Hb <5 solo con el corazón que compensa y volumen
+    const q = derivar(estadoDe({ hb, ...extra }));
+    ex.gcMax = Math.max(ex.gcMax, q.R.gc); ex.svo2 = [Math.min(ex.svo2[0], q.R.svo2), Math.max(ex.svo2[1], q.R.svo2)];
+    ex.do2 = [Math.min(ex.do2[0], q.R.do2), Math.max(ex.do2[1], q.R.do2)];
+  }
+  ex.ok = ex.gcMax <= 13 && ex.svo2[0] >= 20 && ex.svo2[1] <= 85 && ex.do2[0] >= 190;
+  if (!ex.ok) r.todoCoincide = false;
+  r.extremos = ex;
+  // Mayéutica: la correcta no es la más larga ni la más corta en más de ⅓ de los tests; ninguna posición en más de la mitad
+  const tests = [], errores = [];
+  const ver = (q, donde) => {
+    if (q.tipo === 'test') {
+      const lens = q.opciones.map(o => o.t.replace(/<[^>]+>/g, '').replace(/&[a-z]+;/g, 'x').length), ic = q.opciones.findIndex(o => o.ok);
+      tests.push({ id: q.id, donde, posicion: ic + 1, masLarga: lens[ic] === Math.max(...lens), masCorta: lens[ic] === Math.min(...lens), lens });
+    }
+    if (q.tipo === 'error') errores.push({ id: q.id, n: q.frases.filter(f => f.mal).length });
+  };
+  PREGUNTAS.forEach(q => ver(q, 'recorrido'));
+  CASOS.forEach(c => c.pasos.forEach(p => ver(p.pregunta, c.id)));
+  const nLarga = tests.filter(t => t.masLarga).length, nCorta = tests.filter(t => t.masCorta).length;
+  const cuenta = {}; tests.forEach(t => { cuenta[t.posicion] = (cuenta[t.posicion] || 0) + 1; });
+  const maxPos = Math.max(...Object.values(cuenta));
+  r.mayeutica = { tests: tests.length, correctaMasLarga: nLarga, correctaMasCorta: nCorta, posiciones: tests.map(t => t.posicion).join(' '), detalle: tests,
+    errores, guia: PREGUNTAS.filter(q => q.serie === 'guia').length, examen: PREGUNTAS.filter(q => q.serie === 'examen').length, predice: PREGUNTAS.filter(q => q.tocar).length,
+    ok: nLarga <= Math.floor(tests.length / 3) && nCorta <= Math.floor(tests.length / 3) && maxPos <= tests.length / 2 && errores.every(e => e.n <= 2) };
+  if (!r.mayeutica.ok) r.todoCoincide = false;
+  // El caso: Hb ≈ Hto / 3 y la caída del Hto parecida a la de la Fig. 12.1
+  for (const [caso, paso, campo, valor, espera, tol] of [['H1', 1, 'Hb de llegada ≈ Hto/3', 12.9, 39 / 3, 0.2], ['H1', 1, 'Hb a los 90 min ≈ Hto/3', 11.6, 35 / 3, 0.2],
+    ['H1', 1, 'caída del Hto (Fig. 12.1: 4,2)', 39 - 35, 4.2, 0.3], ['H1', 1, 'bolo 20 mL/kg × 75 kg (mL)', 20 * 75, 1500, 0]]) {
+    const ok = Math.abs(valor - espera) <= tol; if (!ok) r.todoCoincide = false;
+    r.casos.push({ caso, paso, campo, valor, espera, ok });
+  }
+  return r;
+};
+
+/* ============================================================
+   5. La lámina: el capilar del tejido. Hematíes grandes con sus 4 perlas: cuántos, según la Hb; a qué velocidad,
+      según el gasto; las perlas se sueltan como O₂ que cruza hacia las mitocondrias.
+   ============================================================ */
+const circuito = $('circuito');
+const LCIRC = circuito.getTotalLength();
+const NMUESTRAS = 600;
+const MUESTRAS = [];   // [x, y, avance 0-1, ángulo en grados]
+for (let i = 0; i < NMUESTRAS; i++) {
+  const p = circuito.getPointAtLength(i / NMUESTRAS * LCIRC), q = circuito.getPointAtLength(Math.min(LCIRC, (i + 1) / NMUESTRAS * LCIRC + 0.5));
+  MUESTRAS.push([p.x, p.y, i / NMUESTRAS, Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI]);
+}
+const gHem = $('g-hem'), gPart = $('g-part');
+const NH = 11;                                    // huecos de la fila; con Hb 17 van todos llenos
+const RANGO = [0, 6, 3, 9, 1, 7, 4, 10, 2, 8, 5]; // orden en que se vacían al bajar la Hb: los huecos quedan repartidos
+const R_HEM = 11.5;
+const ORDEN_PERLA = [[0, 2, 1, 3], [3, 1, 2, 0], [1, 3, 0, 2], [2, 0, 3, 1]];   // qué perla se vacía antes en cada hematíe
+const HEM = [];
+for (let j = 0; j < NH; j++) {
+  const g = document.createElementNS(NS, 'g'); g.setAttribute('class', 'grande');
+  g.innerHTML = hematieSVG(['', '', '', ''], '--accent-red', R_HEM);
+  gHem.appendChild(g);
+  HEM.push({ g, cuerpo: g.querySelector('path'), perlas: [...g.querySelectorAll('.perla')], estado: ['', '', '', ''], color: '', s0: j / NH * LCIRC, vis: null });
+}
+const hematiesVisibles = () => Math.round(NH * estado.hb / 17);   // proporcional a la Hb (ilustrativo: la fila, no el recuento)
+// Partículas: grupos ya creados que se reutilizan
+function pool(clave, n, r) {
+  const arr = [];
+  for (let i = 0; i < n; i++) { const g = document.createElementNS(NS, 'g'); g.innerHTML = svgParticula(clave, 0, 0, r); g.setAttribute('opacity', '0'); gPart.appendChild(g); arr.push({ g, vivo: false }); }
+  return arr;
+}
+const POOL = { o2: pool('o2', 30, 4), lact: pool('lact', 14, 4), co2: pool('co2', 12, 3.8) };
+const DIS_O2 = pool('o2', 3, 3.2);        // el disuelto del plasma: pocos
+const MITOS = [[120, 198], [192, 194], [262, 204], [318, 216]];
+const mitoCerca = x => MITOS.reduce((a, m) => Math.abs(m[0] - x) < Math.abs(a[0] - x) ? m : a);
+function lanzar(clave, x0, y0, x1, y1, dur, curva = 0) {
+  const p = POOL[clave].find(q => !q.vivo); if (!p) return;
+  Object.assign(p, { vivo: true, x0, y0, x1, y1, cx: (x0 + x1) / 2 + curva, cy: (y0 + y1) / 2 - Math.abs(curva) * 0.4, t: 0, dur });
+}
+function moverParticulas(dt) {
+  for (const k in POOL) for (const p of POOL[k]) {
+    if (!p.vivo) continue;
+    p.t += dt / p.dur;
+    if (p.t >= 1) { p.vivo = false; p.g.setAttribute('opacity', '0'); continue; }
+    const u = p.t, a = (1 - u) * (1 - u), b = 2 * u * (1 - u), c = u * u;
+    const x = a * p.x0 + b * p.cx + c * p.x1, y = a * p.y0 + b * p.cy + c * p.y1;
+    p.g.setAttribute('transform', `translate(${n2(x)} ${n2(y)})`);
+    p.g.setAttribute('opacity', String(n2(Math.min(1, u * 5, (1 - u) * 4))));
+  }
+}
+function apagarParticulas() { for (const k in POOL) for (const p of POOL[k]) { p.vivo = false; p.g.setAttribute('opacity', '0'); } }
+
+let estado = estadoBase();
+let D = derivar(estado);
+let tiempo = 0;
+const acum = { lact: 0, co2: 0 };
+// fracción de los sitios sin CO que llevan O₂ en cada punto del capilar: arterial a la entrada, venosa a la salida
+function satLocal(u) {
+  const art = D.S, venO2 = clamp(D.svo2 / (1 - D.fco), 0, 1);
+  if (u < 0.1) return art;
+  if (u > 0.9) return venO2;
+  return lerp(art, venO2, (u - 0.1) / 0.8);
+}
+function velocidad() { return estado.rcp ? 5 : 28 * D.gc / 5; }   // px/s, proporcional al gasto (ilustrativo)
+function pasoLamina(dt) {
+  tiempo += dt;
+  const v = velocidad();
+  const art = D.S, venO2 = clamp(D.svo2 / (1 - D.fco), 0, 1), medio = (art + venO2) / 2;
+  const nVis = hematiesVisibles();
+  for (let j = 0; j < NH; j++) {
+    const h = HEM[j];
+    const vis = RANGO[j] < nVis;
+    if (vis !== h.vis) { h.vis = vis; h.g.setAttribute('opacity', vis ? '1' : '0'); }
+    const s = ((h.s0 + v * tiempo) % LCIRC + LCIRC) % LCIRC;
+    const m = MUESTRAS[Math.floor(s / LCIRC * NMUESTRAS) % NMUESTRAS];
+    h.g.setAttribute('transform', `translate(${n2(m[0])} ${n2(m[1])}) rotate(${n2(m[3])})`);
+    if (!vis) continue;
+    const loc = satLocal(m[2]);
+    const col = art - venO2 <= 0.01 || loc >= medio - 1e-6 ? '--accent-red' : '--accent-purple';
+    if (col !== h.color) { h.color = col; h.cuerpo.style.fill = `var(${col})`; }
+    // cuántas perlas lleva llenas este hematíe: loc × 4, repartiendo el redondeo entre hematíes (la media es exacta)
+    const nCO = Math.floor(D.fco * 4 + hash01(j, 0, 7)), nLlenas = Math.floor(loc * (4 - nCO) + hash01(j, 0, 3));
+    for (let i = 0; i < 4; i++) {
+      const orden = ORDEN_PERLA[j % 4][i];
+      const est = orden < nCO ? 'co' : (orden - nCO < nLlenas ? '' : 'vacia');
+      if (est !== h.estado[i]) {
+        const antes = h.estado[i];
+        h.estado[i] = est; h.perlas[i].setAttribute('class', 'perla ' + est);
+        // la perla que se vacía en el capilar suelta su O₂, que cruza el intersticio hasta una mitocondria
+        if (dt > 0 && !REDUCIR && antes === '' && est === 'vacia' && m[2] > 0.08 && m[2] < 0.92) {
+          const t = mitoCerca(m[0] + 30 * (hash01(j, i, 5) - 0.3));
+          lanzar('o2', m[0], m[1] + 10, t[0] + 8 * (hash01(j, i, 6) - 0.5), t[1], 1.5, -6);
+        }
+      }
+    }
+  }
+  // el O₂ disuelto: tres sueltos que viajan con el plasma
+  DIS_O2.forEach((p, i) => {
+    const s = ((LCIRC * (0.05 + i * 0.29) + v * tiempo) % LCIRC);
+    const m = MUESTRAS[Math.floor(s / LCIRC * NMUESTRAS) % NMUESTRAS];
+    p.g.setAttribute('transform', `translate(${n2(m[0])} ${n2(m[1] - 21)})`); p.g.setAttribute('opacity', m[2] < 0.6 ? '0.9' : '0');
+  });
+  if (dt > 0 && !REDUCIR) {
+    // la célula suelta lactato y CO₂ hacia el extremo venoso del capilar
+    acum.lact += dt * Math.max(0, D.lact - 1.2) * 0.6;
+    while (acum.lact >= 1) { acum.lact -= 1; const m = MITOS[1 + Math.floor(Math.random() * 3)]; lanzar('lact', m[0], m[1] - 8, 250 + 90 * Math.random(), 132 + 12 * Math.random(), 2.2, 10); }
+    acum.co2 += dt * (estado.rcp ? 0.1 : D.vo2 / 250) * 0.6;
+    while (acum.co2 >= 1) { acum.co2 -= 1; const m = MITOS[Math.floor(Math.random() * 4)]; lanzar('co2', m[0], m[1] - 8, m[0] + 50 + 30 * Math.random(), 118 + 24 * Math.random(), 2, 8); }
+    moverParticulas(dt);
+  }
+  // la gota de la bolsa, mientras transfunde
+  if (estado.transf) { const g = $('gota-bolsa'); g.setAttribute('cy', n2(40 + 44 * ((tiempo * 0.9) % 1))); g.setAttribute('opacity', goteando && !REDUCIR ? '1' : '0'); }
+  // el barrido del capnograma pequeño
+  $('capno-mini-barre').setAttribute('x', String(n2(249 + ((tiempo * 18) % 102))));
+}
+// Onda del capnograma: n respiraciones en una caja (x0, y0, w, h) con escala de 0 a 60 mmHg
+function ondaCapno(x0, y0, w, h, n, e, Dd, conFases = false) {
+  const y = v => y0 + h - clamp(v, 0, 60) / 60 * h;
+  let d = `M${n2(x0)} ${n2(y(0))}`;
+  const bw = w / n;
+  for (let i = 0; i < n; i++) {
+    const bx = x0 + i * bw;
+    let pet = Dd.petco2;
+    if (e.sedacion) pet = Dd.petco2 - (n - 1 - i) * 4;
+    if (e.esofago) { d += `L${n2(bx + bw)} ${n2(y(0))}`; continue; }
+    const xI = bx + bw * 0.12, xII = bx + bw * (e.espacio === 'epoc' ? 0.42 : 0.22), xIII = bx + bw * 0.72, xIV = bx + bw * 0.8;
+    const ini3 = e.espacio === 'epoc' ? pet - 7 : pet - 2;
+    d += `L${n2(xI)} ${n2(y(0))}`;
+    if (e.espacio === 'epoc') d += `C${n2(xI + (xII - xI) * 0.3)} ${n2(y(pet * 0.1))} ${n2(xI + (xII - xI) * 0.4)} ${n2(y(ini3))} ${n2(xII)} ${n2(y(ini3))}`;
+    else d += `L${n2(xII)} ${n2(y(ini3))}`;
+    d += `L${n2(xIII)} ${n2(y(pet))}L${n2(xIV)} ${n2(y(0))}L${n2(bx + bw)} ${n2(y(0))}`;
+  }
+  return d;
+}
+/* ============================================================
+   6. El tablero (cifras grandes con su unidad, como un monitor). Primera fila: la historia de la anemia.
+   ============================================================ */
+const CELDAS = [
+  { k: 'hb', n: 'Hb', u: 'g/dL', o: 'ilustr.', ilu: true },
+  { k: 'gc', n: 'Gasto', u: 'L/min', o: 'ficha' },
+  { k: 'cao2', n: 'CaO₂', u: 'mL/dL', o: 'ficha' },
+  { k: 'do2', n: 'DO₂', u: 'mL/min', o: 'ficha' },
+  { k: 'vo2', n: 'VO₂', u: 'mL/min', o: 'ficha' },
+  { k: 'o2er', n: 'Extrac.', u: '%', o: 'ficha' },
+  { k: 'ven', n: 'SvO₂', u: '%', o: 'ficha' },
+  { k: 'lact', n: 'Lactato', u: 'mmol/L', o: 'ilustr.', ilu: true },
+  { k: 'spo2', n: 'SpO₂', u: '%', o: 'fisiol.' },
+  { k: 'sao2', n: 'SaO₂', u: '%', o: 'fisiol.' },
+  { k: 'gap', n: 'Gap CO₂', u: 'mmHg', o: 'ilustr.', ilu: true },
+  { k: 'petco2', n: 'PETCO₂', u: 'mmHg', o: 'ilustr.', ilu: true }
+];
+$('tablero').innerHTML = CELDAS.map(c => `<div class="celda" id="c-${c.k}"><span class="k">${c.n}</span><b>—</b><span class="u">${c.u}</span><span class="sub"></span><span class="o${c.ilu ? ' ilu' : ''}">${c.o}</span></div>`).join('');
+const ocultos = new Set();
+function setOcultos(arr) { ocultos.clear(); (arr || []).forEach(k => ocultos.add(k)); pintarTablero(); pintarLupa(); pintarCamas(); pintarLaminaFija(); }
+const tapado = k => ocultos.has(k) || (k === 'ven' && estado.toma === 'svo2' && ocultos.has('svo2ap'));
+function pintarTablero() {
+  const R = D.R, e = estado;
+  const val = {
+    hb: [dec(e.hb, 1), e.hb < 13 ? '↓' : ''],
+    gc: [dec(R.gc, 1), R.gc > 5.5 ? '↑' : R.gc < 4 ? '↓' : ''],
+    spo2: R.spo2 == null ? ['—', ''] : [`${R.spo2}`, R.spo2 < 90 ? '↓' : ''],
+    sao2: [`${R.sao2}`, R.sao2 < 90 ? '↓' : ''],
+    cao2: [dec(R.cao2, 1), ''],
+    do2: e.rcp ? ['—', ''] : [mil(R.do2), R.do2 < 900 ? '↓' : R.do2 > 1100 ? '↑' : ''],
+    vo2: e.rcp ? ['—', ''] : [`${R.vo2}`, R.vo2 < 200 ? '↓' : R.vo2 > 270 ? '↑' : ''],
+    o2er: e.rcp ? ['—', ''] : [`${R.ext}`, R.ext > 30 ? '↑' : R.ext < 20 ? '↓' : ''],
+    ven: e.rcp ? ['—', ''] : [`${R.ven}`, R.ven < 65 ? '↓' : R.ven > 75 ? '↑' : ''],
+    lact: e.rcp ? ['—', ''] : [dec(R.lact, 1), R.lact > 2 ? '↑' : ''],
+    gap: e.rcp ? ['—', ''] : [`${R.gap}`, R.gap > 6 ? '↑' : ''],
+    petco2: [e.rcp ? '≤10' : `${R.petco2}`, '']
+  };
+  for (const c of CELDAS) {
+    const el = $('c-' + c.k), b = el.querySelector('b'), [v, fl] = val[c.k], tap = tapado(c.k);
+    b.textContent = tap ? '?' : v + (fl ? ' ' + fl : '');
+    el.classList.toggle('fuera', !tap && !!fl);
+    if (c.k === 'ven') el.querySelector('.k').textContent = e.toma === 'scvo2' ? 'ScvO₂' : 'SvO₂';
+    const o = el.querySelector('.o'), pon = (t, ilu) => { o.textContent = t; o.classList.toggle('ilu', ilu); };
+    if (c.k === 'sao2') pon(e.co ? 'ilustr.' : 'fisiol.', e.co);
+    if (c.k === 'hb') pon(e.dil ? 'fisiol.' : 'ilustr.', true);
+    // con el gasto del corazón que compensa (o sin volumen, o durante la bolsa), lo que depende del gasto es ilustrativo
+    if (c.k === 'gc') pon(D.gcIlu ? 'ilustr.' : 'ficha', D.gcIlu);
+    if (['do2', 'o2er', 'ven'].includes(c.k)) { const ilu = D.gcIlu || e.util !== 'normal' || e.consumo === 'fiebre' || e.estres; pon(ilu ? 'ilustr.' : 'ficha', ilu); }
+    if (c.k === 'vo2') { const ilu = e.util !== 'normal' || e.consumo === 'fiebre' || e.estres; pon(ilu ? 'ilustr.' : 'ficha', ilu); }
+    const sub = el.querySelector('.sub');
+    sub.textContent = tap || e.rcp ? '' : c.k === 'gc' ? (e.gcFijo != null ? 'con la bolsa' : e.volemia === 'baja' ? 'sin volumen' : e.compensa ? (R.gc > 5.05 ? 'compensa' : '') : '') : c.k === 'hb' ? (e.dil ? 'Hto / 3' : '') : c.k === 'o2er' ? (R.ext >= 50 ? 'techo' : '') : c.k === 'do2' ? `/m² ${R.do2i}` : c.k === 'ven' ? tabla94(R, e).corto : c.k === 'spo2' && R.spo2 == null ? 'sin onda' : c.k === 'lact' ? (R.lact <= 2 ? 'mort. 15 %' : R.lact < 4 ? 'mort. 25 %' : 'mort. 38 %') : c.k === 'gap' ? (R.gap > 6 ? 'hipoperf.' : R.gap >= 2 && R.gap <= 5 ? 'normal 2-5' : '') : '';
+  }
+}
+function mirarCelda(k) { document.querySelectorAll('.celda.mira').forEach(c => c.classList.remove('mira')); if (k && $('c-' + k)) $('c-' + k).classList.add('mira'); }
+
+/* ============================================================
+   7. Lo que cambia en la lámina con el estado (rótulos, X, tomas, avisos, la bolsa)
+   ============================================================ */
+function pintarLaminaFija() {
+  const e = estado;
+  $('mitos-x').toggleAttribute('hidden', e.util === 'normal');
+  const xt = $('mitos-x-txt'); xt.toggleAttribute('hidden', e.util === 'normal'); xt.textContent = e.util === 'sepsis' ? 'sepsis: la PDH no deja usar el O₂' : e.util === 'tiamina' ? 'sin tiamina: la PDH se para' : '';
+  $('lam-toma').textContent = e.toma === 'scvo2' ? 'ScvO₂ · cava superior' : 'SvO₂ · arteria pulmonar';
+  $('lam-boca').textContent = e.esofago ? 'boca · ¡esófago!' : 'boca · CO₂';
+  $('lam-boca').style.fill = e.esofago ? 'var(--accent-red)' : 'var(--text-muted)';
+  const R = D.R, g = tapado('gc') ? '?' : dec(R.gc, 1);
+  let aviso = ['', ''], verde = false;
+  if (e.rcp) aviso = ['Parada:', 'sin pulso, el flujo casi se para'];
+  else if (D.sinOnda) aviso = ['Dedo frío: onda plana.', 'Pon el sensor en la frente'];
+  else if (e.esofago) aviso = ['Sin CO₂ espirado:', 'tubo en el esófago'];
+  else if (e.volemia === 'baja' && D.porAporte) aviso = ['Sin volumen, el corazón', `no compensa: gasto ${g}`];
+  else if (e.volemia === 'baja') aviso = ['Volemia baja: el gasto', `no puede subir (${g})`];
+  else if (e.compensa && D.porAporte && !tapado('o2er')) aviso = ['Por debajo del techo:', 'el consumo cae'];
+  else if (e.compensa && R.ext >= 50 && !tapado('o2er')) aviso = ['El techo: extracción', 'al 50 % (Hb 3)'];
+  else if (D.porAporte) aviso = ['Falta aporte: el tejido', 'ya coge la mitad del O₂'];
+  else if (e.util === 'sepsis') aviso = ['Llega O₂, pero', 'la célula no lo usa'];
+  else if (D.avisos.length) aviso = ['Aporte extremo:', 'casi incompatible con la vida'];
+  else if (e.gcFijo != null) { aviso = ['Durante la bolsa:', `gasto quieto (${g} L/min)`]; verde = true; }
+  else if (e.compensa && R.gc > 5.05) { aviso = ['El corazón compensa:', `gasto ${g} L/min`]; verde = true; }
+  const av = $('lam-aviso');
+  av.innerHTML = aviso[0] ? `<tspan x="14">${aviso[0]}</tspan><tspan x="14" dy="11">${aviso[1]}</tspan>` : '';
+  av.style.fill = verde ? 'var(--accent-green)' : 'var(--accent-red)';
+  // el rótulo del plasma: con el corazón que compensa, la viscosidad (Tabla 12.2)
+  const pl = $('lam-plasma');
+  pl.textContent = e.compensa && e.hb < 15 ? `sangre menos viscosa: ×${dec(R.visc, 1)} el agua (normal ≈×4)` : 'plasma: el 1,5 % del O₂ va disuelto';
+  pl.toggleAttribute('hidden', !!e.transf);
+  $('lam-bolsa').toggleAttribute('hidden', !e.transf);
+  $('capno-mini-onda').setAttribute('d', ondaCapno(252, 15, 98, 24, 3, e, R));
+  $('capno-mini-val').textContent = tapado('petco2') ? '?' : e.rcp ? '≤10' : `${R.petco2} mmHg`;
+}
+
+/* ============================================================
+   8. Las lupas: el tubo y el alvéolo (nuevas), el dedo, la mitocondria y la boca
+   ============================================================ */
+const LUPAS = {
+  tubo: { tit: 'El tubo · el hematocrito (Fig. 12.1)', lams: [['b2-capilar/fig12-1-hematocrito-volumen.jpg', 'Figura 12.1 del libro (PDF p. 3): el Hto de pie y tumbado (41,8 → 37,7 %) y antes y 90 min después de 20 mL/kg de salino (42,9 → 38,7 %).']],
+    txt: 'Lámina del libro: Fig. 12.1.' },
+  alveolo: { tit: 'El alvéolo · TRALI y TACO', lams: [['../../js/modules/merino-hemato/img/fig1-cxr-trali.jpg', 'Figura 12.5 del libro (PDF p. 15): radiografía portátil de un TRALI, con un infiltrado bilateral homogéneo.']],
+    txt: 'Lámina del libro: Fig. 12.5, la Rx de un TRALI.' },
+  dedo: { tit: 'El dedo · pulsioxímetro (Figs. 7.1-7.4)', lams: [['mar-fig7-1-espectro-hemoglobina.jpg', 'Figura 7.1 (PDF p. 37): absorción de la luz por HbO₂, Hb, COHb y metHb; líneas a 660 y 940 nm.'], ['mar-fig7-3-pulsioximetro-dedo.jpg', 'Figura 7.3 (PDF p. 39): sensor de dedo con dos diodos y el fotodetector.'], ['mar-fig7-4-oximetria-frente.jpg', 'Figura 7.4 (PDF p. 40): oximetría de frente, por reflectancia.']],
+    txt: 'Lámina del libro: Figs. 7.1, 7.3 y 7.4; tócala para verla grande.' },
+  mito: { tit: 'La mitocondria (Fig. 9.5)', lams: [['mar-fig9-5-vias-glucosa.jpg', 'Figura 9.5 (PDF p. 82): vías de la glucosa.'], ['mar-fig9-4-lactato-mortalidad.jpg', 'Figura 9.4 (PDF p. 80): lactato y mortalidad hospitalaria.']],
+    txt: 'Lámina del libro: Figs. 9.5 y 9.4.' },
+  boca: { tit: 'La boca · capnograma (Fig. 7.6)', lams: [['mar-fig7-6-capnografia.jpg', 'Figura 7.6 (PDF p. 44): capnografía infrarroja y sus 4 fases.'], ['mar-fig7-8-etco2-gasto.jpg', 'Figura 7.8 (PDF p. 46): cambios de PETCO₂ frente a cambios del gasto (r = 0,87).']],
+    txt: 'Lámina del libro: Figs. 7.6 y 7.8.' }
+};
+const rutaImg = f => f.includes('/') ? f : '../../js/modules/libros/img/' + f;
+const Lupa = {
+  abierta: null, el: $('lupa'), svg: $('lupa-svg'), btnX: $('lupa-cerrar'),
+  abrir(tipo) {
+    this.abierta = tipo; this.el.hidden = false; this.btnX.hidden = false;
+    document.querySelectorAll('[data-lupa]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lupa === tipo)));
+    $('escena').classList.add('con-lupa');
+    $('libro').hidden = false; $('libro-txt').innerHTML = `<b style="color:var(--fg)">${LUPAS[tipo].tit}.</b> ${LUPAS[tipo].txt}`;
+    $('libro-lams').innerHTML = LUPAS[tipo].lams.map(([f, pie]) => `<button type="button" class="lam" data-img="${f}" data-pie="${pie}"><img loading="lazy" src="${rutaImg(f)}" alt="${pie}"></button>`).join('');
+    tuboAnim = 1; this.colocar(); pintarLupa(true);
+    this.el.classList.remove('abre'); void this.el.offsetWidth; this.el.classList.add('abre');
+    arrancar();
+  },
+  cerrar() {
+    this.abierta = null; this.el.hidden = true; this.btnX.hidden = true; $('libro').hidden = true; $('escena').classList.remove('con-lupa');
+    document.querySelectorAll('[data-lupa]').forEach(b => b.setAttribute('aria-pressed', 'false'));
+  },
+  colocar() {
+    if (!this.abierta) return;
+    const caja = $('lamina-caja').getBoundingClientRect(), svgR = $('lamina').getBoundingClientRect();
+    const dTam = Math.round(Math.min(svgR.width * 0.86, svgR.height * 0.97, 320));
+    const x = Math.round((caja.width - dTam) / 2), y = Math.round((svgR.height - dTam) / 2);
+    Object.assign(this.el.style, { width: dTam + 'px', height: dTam + 'px', left: x + 'px', top: y + 'px' });
+    Object.assign(this.btnX.style, { left: Math.min(caja.width - 46, x + dTam - 30) + 'px', top: Math.max(2, y - 4) + 'px' });
+  }
+};
+document.querySelectorAll('[data-lupa]').forEach(b => b.addEventListener('click', () => {
+  if (Lupa.abierta === b.dataset.lupa) { Lupa.cerrar(); return; }
+  // la lupa del tubo sin un tubo puesto enseña el de la Fig. 12.1, de pie
+  if (b.dataset.lupa === 'tubo' && !estado.dil) cambiar(e => { e.dil = 'pie'; });
+  Lupa.abrir(b.dataset.lupa);
+}));
+$('lupa-cerrar').addEventListener('click', () => Lupa.cerrar());
+let tuboAnim = 1;            // 0 → 1: el plasma del tubo de la derecha crece (Motion no hace falta: un número y el bucle)
+
+// El tubo: la columna roja (la masa de hematíes) es la misma en los dos; el plasma crece hasta dar el Hto medido.
+function lupaTubo(e) {
+  const t = TUBOS[e.dil] || TUBOS.pie, [a, b, ra, rb] = t, fondo = 178, k = 1;      // 1 px por punto de Hto del tubo de la izquierda
+  const alto = hto => 100 * a / hto;                                                  // la altura total que da ese Hto con la misma masa
+  let h = T(110, 26, `Hto ${dec(a, 1)} % → ${b == null ? '?' : dec(b, 1) + ' %'}`, { a: 'middle', s: 11, b: 1, c: '--text-main', sans: 1 });
+  h += b == null
+    ? T(110, 40, e.dil === 'antes' ? 'pon el bolo (Sangre)' : 'túmbalo (Sangre)', { a: 'middle', s: 8.5, i: 1, c: '--text-muted' })
+    : T(110, 40, 'misma masa eritrocitaria,', { a: 'middle', s: 8.5, b: 1, c: '--accent-yellow', sans: 1 }) + T(110, 51, 'más plasma', { a: 'middle', s: 8.5, b: 1, c: '--accent-yellow', sans: 1 });
+  const tubo = (cx, hto, id) => {
+    const H = alto(hto) * k, rojo = a * k;
+    let s = `<path d="M${cx - 15} ${fondo - 112}V${fondo - 4}Q${cx - 15} ${fondo + 2} ${cx} ${fondo + 2}Q${cx + 15} ${fondo + 2} ${cx + 15} ${fondo - 4}V${fondo - 112}" style="fill:none;stroke:var(--text-muted);stroke-width:1.4"/>`;
+    s += `<rect id="${id}" x="${cx - 13}" y="${n2(fondo - H)}" width="26" height="${n2(H - rojo)}" style="fill:var(--accent-yellow);opacity:.42"/>`;
+    s += `<rect x="${cx - 13}" y="${n2(fondo - rojo)}" width="26" height="${n2(rojo)}" rx="2" style="fill:var(--accent-red)"/>`;
+    return s;
+  };
+  h += tubo(80, a, 'tubo-p1');
+  if (b != null) h += tubo(140, b, 'tubo-p2');
+  else h += `<path d="M125 ${fondo - 112}V${fondo - 4}Q125 ${fondo + 2} 140 ${fondo + 2}Q155 ${fondo + 2} 155 ${fondo - 4}V${fondo - 112}" style="fill:none;stroke:var(--text-muted);stroke-width:1.2;stroke-dasharray:3 3"/>` + T(140, 128, '?', { a: 'middle', s: 16, b: 1, c: '--text-muted' });
+  // la raya de la masa: la misma altura en los dos tubos
+  h += `<path d="M60 ${n2(fondo - a * k)}H160" style="stroke:var(--text-main);stroke-width:1;stroke-dasharray:3 2"/>`;
+  h += T(56, n2(fondo - a * k + 3), 'masa', { a: 'end', s: 8, i: 1, c: '--text-dim' });
+  if (e.dil === 'tumbado') h += T(160, n2(fondo - alto(b) + 8), '+420 mL', { s: 8.5, b: 1, c: '--accent-yellow', sans: 1 }) + T(160, n2(fondo - alto(b) + 18), 'de plasma', { s: 8, c: '--accent-yellow', sans: 1 });
+  h += T(80, 194, ra, { a: 'middle', s: 8.5 }) + T(140, 194, rb, { a: 'middle', s: 8.5 });
+  h += T(80, 205, dec(a, 1) + ' %', { a: 'middle', s: 8.5, b: 1, sans: 1, c: '--text-main' }) + (b != null ? T(140, 205, dec(b, 1) + ' %', { a: 'middle', s: 8.5, b: 1, sans: 1, c: '--accent-red' }) : '');
+  return h;
+}
+// El alvéolo: arriba el alvéolo, abajo su capilar. TRALI: IgG del donante, neutrófilos que se quedan y pasan.
+// TACO: agua que cruza por presión y un corazón grande al lado.
+function lupaAlveolo(e) {
+  const R = D.R, tipo = e.alveolo;
+  let h = T(110, 20, tipo ? `PaO₂ ${e.pao2} · SpO₂ ${tapado('spo2') ? '?' : R.spo2 + ' %'}` : 'Alvéolo y capilar pulmonar', { a: 'middle', s: 10, b: 1, c: '--text-main', sans: 1 });
+  if (tipo) h += T(110, 31, 'hipoxemia: cifra ilustrativa', { a: 'middle', s: 7.6, i: 1, c: '--text-muted' });
+  // el alvéolo
+  h += `<ellipse cx="110" cy="74" rx="66" ry="36" style="fill:url(#raya);stroke:var(--text-muted);stroke-width:1.3"/>`;
+  if (tipo === 'trali') h += `<ellipse cx="110" cy="74" rx="65" ry="35" style="fill:url(#rayaRoja)"/>`;
+  if (tipo === 'taco') h += `<path id="taco-agua" d="M48 86Q110 92 172 86Q166 104 110 110Q54 104 48 86Z" style="fill:var(--text-main);opacity:.22"/>`;
+  h += T(110, 58, tipo === 'trali' ? 'alvéolo inflamado' : tipo === 'taco' ? 'alvéolo con agua' : 'alvéolo: aire', { a: 'middle', s: 8.5, i: 1, c: '--text-dim' });
+  // la pared y el capilar pulmonar
+  h += `<path d="M14 118H206M14 146H206" style="stroke:var(--text-muted);stroke-width:1.2"/><rect x="14" y="119" width="192" height="26" style="fill:url(#punteo)"/>`;
+  [[44, 132], [92, 133], [170, 131]].forEach(([x, y]) => { h += svgParticula('rbc', x, y, 4.2); });
+  h += T(110, 158, 'capilar pulmonar', { a: 'middle', s: 8, i: 1, c: '--text-muted' });
+  let pie = [];
+  if (tipo === 'trali') {
+    // la bolsa con sus anticuerpos (la Y de la tabla; el libro no dice de qué clase son)
+    h += `<rect x="20" y="92" width="14" height="18" rx="3" style="fill:none;stroke:var(--accent-red);stroke-width:1.1"/><path d="M27 110V118" style="stroke:var(--text-muted);stroke-width:1"/>`;
+    h += svgParticula('igg', 27, 100, 3.2) + svgParticula('igg', 58, 126, 3.4) + svgParticula('igg', 128, 125, 3.4);
+    h += svgParticula('neutrofilo', 70, 128, 5.6) + svgParticula('neutrofilo', 140, 129, 5.6) + svgParticula('neutrofilo', 92, 88, 5.6) + svgParticula('neutrofilo', 136, 80, 5.6);
+    h += `<path d="M142 120Q146 104 138 92" style="fill:none;stroke:var(--accent-red);stroke-width:1.2;stroke-dasharray:2 2"/>`;
+    pie = [['anticuerpos del donante (80 %):', '--text-dim'], ['neutrófilos que se quedan y pasan', '--text-dim'], ['1.ª hora-6 h · mortalidad ≈50 %', '--accent-red']];
+  } else if (tipo === 'taco') {
+    h += `<g id="taco-gotas"></g>`;
+    // el corazón grande, a la derecha
+    h += `<path transform="translate(10 4)" d="M186 96c-6-8-18-4-16 6 2 8 16 16 16 16s14-8 16-16c2-10-10-14-16-6z" style="fill:var(--accent-red);opacity:.85;stroke:var(--bg-main);stroke-width:1"/>`;
+    pie = [['agua por presión: edema', '--text-dim'], ['hidrostático · IC o IR previas', '--text-dim'], ['en 6 h · mortalidad 20 %', '--accent-red']];
+  } else pie = [['elige TRALI o TACO', '--text-muted'], ['en la pestaña Pulmón', '--text-muted']];
+  pie.forEach(([t, c], i) => { h += T(110, 172 + i * 11, t, { a: 'middle', s: 8.5, b: c !== '--text-muted', c, sans: 1 }); });
+  return h;
+}
+
+const T = (x, y, t, o = {}) => `<text x="${x}" y="${y}"${o.a ? ` text-anchor="${o.a}"` : ''} style="font-size:${o.s || 8.5}px;fill:var(${o.c || '--text-dim'});${o.i ? 'font-style:italic;' : ''}${o.b ? 'font-weight:700;' : ''}${o.sans ? 'font-family:var(--sans);' : ''}">${t}</text>`;
+let lupaFija = '';     // la parte que no se mueve, se rehace solo cuando cambia el estado
+function pintarLupa(forzar) {
+  if (!Lupa.abierta) return;
+  const e = estado, R = D.R, tipo = Lupa.abierta;
+  let h = `<defs><clipPath id="lupa-clip"><circle cx="110" cy="110" r="110"/></clipPath></defs><g clip-path="url(#lupa-clip)"><rect width="220" height="220" style="fill:var(--bg-main)"/>`;
+  if (tipo === 'tubo') h += lupaTubo(e);
+  else if (tipo === 'alveolo') h += lupaAlveolo(e);
+  else if (tipo === 'dedo') {
+    const frente = e.sensor === 'frente';
+    const spo = tapado('spo2') ? '?' : R.spo2 == null ? '—' : R.spo2 + ' %', sao = tapado('sao2') ? '?' : R.sao2 + ' %';
+    h += T(110, 28, `SpO₂ ${spo}`, { a: 'middle', s: 11, b: 1, c: '--text-main', sans: 1 });
+    if (!frente) {
+      h += T(94, 42, 'rojo', { a: 'middle', s: 7.6, i: 1, c: '--text-muted' }) + T(126, 42, 'infrarrojo', { a: 'middle', s: 7.6, i: 1, c: '--text-muted' });
+      h += T(94, 51, '660 nm', { a: 'middle', s: 8, sans: 1 }) + T(126, 51, '940 nm', { a: 'middle', s: 8, sans: 1 });
+      h += `<path d="M20 72H170Q194 72 194 96Q194 120 170 120H20Z" style="fill:url(#raya2);stroke:var(--text-muted);stroke-width:1.2"/>`;
+      h += `<path d="M178 78Q188 84 188 96Q188 108 178 114" style="fill:none;stroke:var(--text-muted);stroke-width:1"/>`;
+      h += `<rect x="86" y="56" width="16" height="10" rx="2" style="fill:var(--accent-red)"/><rect x="118" y="56" width="16" height="10" rx="2" style="fill:var(--text-muted)"/>`;
+      h += `<path d="M94 66V128M126 66V128" style="stroke:var(--accent-yellow);stroke-width:1;stroke-dasharray:3 3;opacity:.7"/>`;
+      h += `<rect x="97" y="128" width="26" height="8" rx="2" style="fill:var(--text-dim)"/>` + T(110, 146, 'fotodetector', { a: 'middle', s: 8, sans: 1 });
+      h += `<path id="lupa-arteria" d="M24 96H182" style="stroke:var(--accent-red);stroke-width:5;opacity:.75"/>` + T(30, 88, 'arteria que late', { s: 7.6, i: 1 });
+    } else {
+      h += `<path d="M24 120Q110 70 196 120" style="fill:url(#raya2);stroke:var(--text-muted);stroke-width:1.2"/>` + T(110, 108, 'frente (carótida interna)', { a: 'middle', s: 8, i: 1 });
+      h += `<rect x="86" y="70" width="48" height="12" rx="3" style="fill:none;stroke:var(--accent-yellow);stroke-width:1.2"/><circle cx="98" cy="76" r="2.6" style="fill:var(--accent-red)"/><rect x="114" y="73" width="12" height="6" style="fill:var(--text-dim)"/>`;
+      h += T(110, 50, 'reflectancia: diodos y detector juntos', { a: 'middle', s: 7.6, sans: 1 }) + T(110, 62, 'con cinta elástica (pulso venoso)', { a: 'middle', s: 7.6, i: 1, c: '--text-muted' });
+    }
+    if (R.spo2 == null && !e.rcp) h += T(110, 162, 'Onda plana: pon el sensor en la frente', { a: 'middle', s: 8, b: 1, c: '--accent-red', sans: 1 });
+    else if (e.rcp) h += T(110, 162, 'Parada: sin pulso no hay onda', { a: 'middle', s: 8, b: 1, c: '--accent-red', sans: 1 });
+    else if (e.co) h += T(110, 160, `COHb: dos colores no la ven · SaO₂ ${sao}`, { a: 'middle', s: 8, b: 1, c: '--accent-red', sans: 1 }) + T(110, 170, 'cooxímetro: hasta 8 longitudes de onda', { a: 'middle', s: 7.6, i: 1, c: '--text-muted' });
+    else h += T(110, 162, 'SpO₂ = HbO₂ / (Hb + HbO₂): solo lo que late', { a: 'middle', s: 8, sans: 1 });
+    // fotopletismograma (Fig. 7.2): A = amplitud sistólica, B = transmisión basal
+    h += `<path id="lupa-pleti" d="" style="fill:none;stroke:var(--accent-yellow);stroke-width:1.6"/>`;
+    h += T(42, 184, 'A', { s: 8, b: 1, c: '--accent-yellow', sans: 1 }) + T(110, 207, 'B: basal', { a: 'middle', s: 7.6, b: 1, c: '--accent-yellow', sans: 1 });
+  } else if (tipo === 'mito') {
+    const bloq = e.util !== 'normal';
+    const lact = tapado('lact') ? '?' : dec(R.lact, 1);
+    h += T(110, 28, `lactato ${lact} mmol/L`, { a: 'middle', s: 10, b: 1, c: R.lact > 2 && !tapado('lact') ? '--accent-red' : '--text-main', sans: 1 });
+    h += svgParticula('glu', 52, 46, 4.5) + T(62, 49, 'glucosa', { s: 8 });
+    h += `<path d="M52 56V76" style="stroke:var(--text-dim);stroke-width:1.2"/><path d="M48 72l4 6 4-6" style="fill:none;stroke:var(--text-dim);stroke-width:1.2"/>`;
+    h += T(60, 68, 'glucólisis · 2 ATP', { s: 8, sans: 1 });
+    if (e.estres) h += `<path d="M154 58L140 63" style="stroke:var(--accent-red);stroke-width:1.6"/><path d="M145 59l-6 4 6 3" style="fill:none;stroke:var(--accent-red);stroke-width:1.4"/>` + T(162, 42, 'estrés:', { a: 'middle', s: 8, b: 1, c: '--accent-red', sans: 1 }) + T(162, 52, '+40-50 %', { a: 'middle', s: 8, b: 1, c: '--accent-red', sans: 1 });
+    h += T(20, 96, 'piruvato ×2', { s: 8 });
+    h += `<path d="M42 102V134" style="stroke:var(--text-dim);stroke-width:1.2"/><path d="M38 130l4 6 4-6" style="fill:none;stroke:var(--text-dim);stroke-width:1.2"/>` + T(48, 122, 'LDH', { s: 8, sans: 1 });
+    h += svgParticula('lact', 42, 148, 4.5) + T(26, 166, 'lactato', { s: 8, b: 1, c: '--accent-yellow' });
+    h += `<path d="M78 92H104" style="stroke:var(--text-dim);stroke-width:1.2"/><path d="M100 88l6 4-6 4" style="fill:none;stroke:var(--text-dim);stroke-width:1.2"/>`;
+    h += `<rect x="108" y="83" width="40" height="18" rx="4" style="fill:var(--bg-main);stroke:var(--accent-yellow);stroke-width:1.1"/>` + T(128, 96, 'PDH', { a: 'middle', s: 8.5, b: 1, sans: 1 });
+    h += T(153, 90, 'con TPP', { s: 7.6, i: 1, c: '--text-muted' }) + T(153, 99, '(tiamina)', { s: 7.6, i: 1, c: '--text-muted' });
+    if (bloq) h += `<path d="M110 85l36 14M146 85l-36 14" style="stroke:var(--accent-red);stroke-width:2.2;stroke-linecap:round"/>` + T(136, 116, e.util === 'sepsis' ? 'sepsis: endotoxina' : 'sin pirofosfato', { s: 7.6, b: 1, c: '--accent-red', sans: 1 }) + T(136, 125, e.util === 'sepsis' ? 'y citocinas' : 'de tiamina', { s: 7.6, b: 1, c: '--accent-red', sans: 1 });
+    h += `<path d="M128 101V126" style="stroke:var(--text-dim);stroke-width:1.2${bloq ? ';opacity:.3' : ''}"/>`;
+    h += `<ellipse cx="134" cy="160" rx="58" ry="32" style="fill:url(#raya);stroke:var(--text-dim);stroke-width:1.3"/>`;
+    h += T(134, 142, 'mitocondria', { a: 'middle', s: 7.6, i: 1, c: '--text-muted' });
+    h += svgParticula('o2', 110, 153, 3) + T(118, 156, 'O₂ → H₂O', { s: 8, sans: 1 });
+    h += T(134, 170, 'Krebs · 2 ATP', { a: 'middle', s: 8, sans: 1, b: 1 }) + T(134, 182, 'cadena · 28 ATP', { a: 'middle', s: 8, sans: 1, b: 1 });
+    h += svgParticula('co2', 204, 148, 3.4) + T(190, 136, 'CO₂', { s: 8, sans: 1 });
+    h += `<g id="lupa-flujo"></g>`;
+  } else if (tipo === 'boca') {
+    const x0 = 36, y0 = 52, w = 156, hh = 100;
+    const y = v => y0 + hh - clamp(v, 0, 60) / 60 * hh;
+    h += `<path d="M${x0} ${y0}V${y0 + hh}H${x0 + w}" style="fill:none;stroke:var(--text-muted);stroke-width:1"/>`;
+    for (const v of [0, 20, 40, 60]) h += T(x0 - 4, y(v) + 3, v, { a: 'end', s: 7.2, sans: 1, c: '--text-muted' });
+    h += T(x0, y0 - 6, 'PCO₂ (mmHg)', { s: 7.6, sans: 1, c: '--text-muted' });
+    h += `<path d="M${x0} ${y(R.paco2)}H${x0 + w}" style="stroke:var(--accent-purple);stroke-width:1;stroke-dasharray:4 3"/>` + T(x0 + w, y(R.paco2) - 3, `PaCO₂ ${R.paco2}`, { a: 'end', s: 7.6, sans: 1, c: '--accent-purple' });
+    h += `<path id="lupa-capno" d="${ondaCapno(x0, y0, w, hh, 2, e, R)}" style="fill:none;stroke:var(--accent-yellow);stroke-width:1.8;stroke-linejoin:round"/>`;
+    if (!e.esofago) {
+      const bw = w / 2;
+      h += T(x0 + bw * 0.06, y0 + hh + 11, 'I', { a: 'middle', s: 8, b: 1, sans: 1 }) + T(x0 + bw * (e.espacio === 'epoc' ? 0.28 : 0.17), y0 + hh + 11, 'II', { a: 'middle', s: 8, b: 1, sans: 1 });
+      h += T(x0 + bw * 0.5, y0 + hh + 11, 'III', { a: 'middle', s: 8, b: 1, sans: 1 }) + T(x0 + bw * 0.78, y0 + hh + 11, 'IV', { a: 'middle', s: 8, b: 1, sans: 1 });
+    }
+    const pet = tapado('petco2') ? '?' : e.rcp ? '≤10' : R.petco2;
+    h += T(110, 30, `PETCO₂ ${pet} mmHg`, { a: 'middle', s: 11, b: 1, c: '--text-main', sans: 1 });
+    let pie = ['I espacio muerto · II sube', 'III meseta · IV inspira'];
+    if (e.esofago) pie = ['Sin CO₂ espirado: esófago…', '…o parada, sin retorno venoso'];
+    else if (e.rcp) pie = ['≤10 tras 20 min de RCP: improbable', 'recuperar la circulación espontánea'];
+    else if (e.sedacion) pie = ['Sedación: la PETCO₂ sube', 'antes de que baje la SpO₂'];
+    else if (e.espacio === 'epoc') pie = ['EPOC: fase II lenta', '(espacio muerto alveolar)'];
+    else if (e.espacio === 'embolia') pie = ['Alvéolos sin sangre:', 'PETCO₂ &lt; PaCO₂'];
+    else if (e.gc < 4) pie = ['Menos gasto,', 'menos PETCO₂ (Fig. 7.8)'];
+    const rojo = e.esofago || e.rcp ? '--accent-red' : '--text-dim';
+    h += T(110, 175, pie[0], { a: 'middle', s: 8, b: 1, c: rojo, sans: 1 }) + T(110, 185, pie[1], { a: 'middle', s: 8, b: 1, c: rojo, sans: 1 });
+    if (!e.esofago && !e.rcp && !tapado('petco2')) h += T(110, 197, `PaCO₂ − PETCO₂ = ${R.paco2 - R.petco2} mmHg`, { a: 'middle', s: 7.6, i: 1, c: '--text-muted' });
+  }
+  h += `</g>`;
+  if (forzar || h !== lupaFija) { lupaFija = h; Lupa.svg.innerHTML = h; }
+}
+const FLUJO = [];   // puntitos que recorren la vía de la glucosa en la lupa de la mitocondria
+function pasoLupaB1(dt) {
+  if (!Lupa.abierta) return;
+  const e = estado, R = D.R;
+  if (Lupa.abierta === 'dedo') {
+    const pleti = $('lupa-pleti'); if (!pleti) return;
+    const amp = R.spo2 == null && !e.rcp ? 1 : e.rcp ? 0 : 14, base = 196;
+    let d = '';
+    for (let x = 40; x <= 180; x += 2) {
+      const u = ((x - 40) / 50 - tiempo * 1.1) % 1, uu = u < 0 ? u + 1 : u;
+      const v = Math.exp(-Math.pow((uu - 0.2) / 0.08, 2)) + 0.35 * Math.exp(-Math.pow((uu - 0.45) / 0.1, 2));
+      d += `${x === 40 ? 'M' : 'L'}${x} ${n2(base - amp * v)}`;
+    }
+    pleti.setAttribute('d', d);
+    const art = $('lupa-arteria'); if (art) art.style.strokeWidth = String(n2((R.spo2 == null ? 2 : 4) + (R.spo2 == null ? 0 : 2.5) * Math.exp(-Math.pow((((tiempo * 1.1) % 1) - 0.2) / 0.1, 2))));
+  } else if (Lupa.abierta === 'mito') {
+    const g = $('lupa-flujo'); if (!g) return;
+    if (FLUJO.length === 0) for (let i = 0; i < 10; i++) FLUJO.push({ t: i / 10, ruta: 0, el: null });
+    if (!g.childNodes.length) FLUJO.forEach(f => { f.el = document.createElementNS(NS, 'circle'); f.el.setAttribute('r', '2'); f.el.style.fill = 'var(--accent-yellow)'; g.appendChild(f.el); });
+    const aLact = clamp((e.util !== 'normal' ? 0.75 : 0.08) + D.deficit * 1.5 + (e.estres ? 0.12 : 0), 0, 0.95);
+    for (const f of FLUJO) {
+      f.t += dt * (e.estres ? 0.42 : 0.3);
+      if (f.t >= 1) { f.t -= 1; f.ruta = Math.random() < aLact ? 1 : 0; }
+      let x, y; const u = f.t;
+      if (u < 0.4) { x = 52; y = lerp(56, 86, u / 0.4); }
+      else if (f.ruta === 1) { x = 42; y = lerp(102, 140, (u - 0.4) / 0.6); }
+      else { const v = (u - 0.4) / 0.6; if (v < 0.4) { x = lerp(78, 104, v / 0.4); y = 92; } else { x = 134 + Math.cos(v * 9) * 34 * (v - 0.4); y = lerp(128, 176, (v - 0.4) / 0.6); } }
+      f.el.setAttribute('cx', n2(x)); f.el.setAttribute('cy', n2(y));
+      f.el.style.fill = f.ruta === 1 && u >= 0.4 ? 'var(--accent-red)' : 'var(--accent-yellow)';
+    }
+  }
+}
+// Lo que se mueve en las lupas nuevas: el plasma del tubo que crece y las gotas del TACO que suben por presión.
+function pasoLupa(dt) {
+  if (Lupa.abierta === 'tubo') {
+    const p2 = $('tubo-p2'), t = TUBOS[estado.dil]; if (!p2 || !t || t[1] == null) return;
+    tuboAnim = REDUCIR ? 1 : Math.min(1, tuboAnim + dt / 1.2);
+    const a = t[0], H0 = 100, H1 = 100 * a / t[1], H = H0 + (H1 - H0) * (1 - Math.pow(1 - tuboAnim, 3));
+    p2.setAttribute('y', n2(178 - H)); p2.setAttribute('height', n2(H - a));
+    return;
+  }
+  if (Lupa.abierta === 'alveolo') {
+    const g = $('taco-gotas'); if (!g) return;
+    if (!g.childNodes.length) for (let i = 0; i < 6; i++) { const c = document.createElementNS(NS, 'g'); c.innerHTML = svgParticula('agua', 0, 0, 2.6); g.appendChild(c); }
+    [...g.childNodes].forEach((c, i) => {
+      const u = REDUCIR ? 0.5 + 0.08 * i - 0.2 : ((tiempo * 0.45 + i / 6) % 1);
+      const x = 60 + i * 20, y = 132 - 40 * u;
+      c.setAttribute('transform', `translate(${n2(x)} ${n2(y)})`); c.setAttribute('opacity', n2(Math.min(1, u * 4, (1 - u) * 4)));
+    });
+    return;
+  }
+  pasoLupaB1(dt);
+}
+
+/* ============================================================
+   9. Las gráficas vivas: antes y después, Fig. 12.3, Fig. 12.4 y Fig. 9.3
+   ============================================================ */
+const visitados = new Set(['normal']);
+function pintarAB() {
+  const fijo = derivar(estadoDe({ hb: 7.5 })), comp = derivar(estadoDe({ hb: 7.5, compensa: true }));
+  const col = (tit, d, clase, frase) => `<div class="ab-col${clase}"><h3>${tit}</h3><dl>
+    <dt>Gasto</dt><dd>${dec(d.R.gc, 1)} L/min</dd><dt>Aporte</dt><dd>${mil(d.R.do2)} mL/min</dd>
+    <dt>Extracción</dt><dd class="${d.R.ext >= 50 ? 'mal' : ''}">${d.R.ext} %</dd><dt>SvO₂</dt><dd class="${d.R.svo2 <= 50 ? 'mal' : ''}">${d.R.svo2} %</dd></dl><p>${frase}</p></div>`;
+  $('ab').innerHTML = col('Hoy: gasto fijo', fijo, '', '«…la extracción llega al 50 %»: parece que el tejido está al límite.')
+    + col('Propuesta: el corazón compensa', comp, ' nueva', '«…la extracción sube sin llegar al techo», como en la Fig. 12.3.');
+}
+function pintarGraficas() {
+  const e = estado, R = D.R;
+  if (!$('ab').innerHTML) pintarAB();
+  // Fig. 12.3: extracción (arriba) y consumo (abajo) frente a la Hb, con el corazón que compensa
+  {
+    const X = hb => 34 + (15 - hb) / 13 * 192;
+    const Ye = v => 78 - v / 60 * 64, Yv = v => 172 - v / 300 * 56;
+    let h = `<path d="M34 14V78H226M34 116V172H226" style="fill:none;stroke:var(--text-muted);stroke-width:1"/>`;
+    for (const v of [0, 25, 50]) h += T(30, Ye(v) + 3, v, { a: 'end', s: 7.6, sans: 1, c: '--text-muted' });
+    for (const v of [0, 250]) h += T(30, Yv(v) + 3, v, { a: 'end', s: 7.6, sans: 1, c: '--text-muted' });
+    h += T(38, 11, 'extracción (%)', { s: 7.6, sans: 1, c: '--text-muted' }) + T(38, 110, 'VO₂ (mL/min)', { s: 7.6, sans: 1, c: '--text-muted' });
+    for (const v of [15, 10, 7, 3]) h += T(X(v), 184, v, { a: 'middle', s: 7.6, sans: 1, c: '--text-muted' });
+    h += T(130, 194, 'Hb (g/dL)', { a: 'middle', s: 7.6, sans: 1, c: '--text-muted' });
+    let de = '', dv = '';
+    for (let hb = 15; hb >= 2; hb -= 0.25) { const q = derivar(estadoDe({ hb, compensa: true })); de += `${de ? 'L' : 'M'}${n2(X(hb))} ${n2(Ye(q.o2er * 100))}`; dv += `${dv ? 'L' : 'M'}${n2(X(hb))} ${n2(Yv(q.R.vo2))}`; }
+    h += `<path d="${de}" style="fill:none;stroke:var(--accent-yellow);stroke-width:1.8"/><path d="${dv}" style="fill:none;stroke:var(--accent-yellow);stroke-width:1.8"/>`;
+    h += `<path d="M${n2(X(3))} 14V172" style="stroke:var(--text-muted);stroke-width:.9;stroke-dasharray:3 3"/>`;
+    h += T(X(3) - 3, 26, 'Hb 3 ≈ Hto 10 %', { a: 'end', s: 7.6, i: 1, c: '--text-dim' });
+    h += T(X(3) - 3, 98, 'el techo: 50 %', { a: 'end', s: 7.6, i: 1, c: '--text-dim' });
+    if (!e.rcp && !tapado('o2er') && e.hb <= 15) {
+      const px = X(clamp(e.hb, 2, 15));
+      h += `<circle cx="${n2(px)}" cy="${n2(Ye(D.o2er * 100))}" r="4.5" style="fill:var(--accent-red);stroke:var(--bg-main);stroke-width:1.5"/>`;
+      if (!tapado('vo2')) h += `<circle cx="${n2(px)}" cy="${n2(Yv(R.vo2))}" r="4.5" style="fill:var(--accent-red);stroke:var(--bg-main);stroke-width:1.5"/>`;
+      const izq = px > 150;
+      h += T(px + (izq ? -7 : 7), Ye(R.ext) - 6, `${R.ext} %${e.compensa || e.gcFijo != null ? '' : ' (gasto fijo)'}`, { a: izq ? 'end' : 'start', s: 7.6, b: 1, sans: 1, c: '--text-main' });
+    }
+    $('svg-123').innerHTML = h;
+  }
+  // Fig. 12.4: antes y después de transfundir (aparece al visitar el estado). Cada fila, su escala: la pendiente es el % de cambio.
+  {
+    const vis = visitados.has('transfusion');
+    let h = T(92, 162, 'antes', { a: 'middle', s: 8, sans: 1, c: '--text-muted' }) + T(180, 162, 'después', { a: 'middle', s: 8, sans: 1, c: '--text-muted' });
+    h += `<path d="M92 8V150M180 8V150" style="stroke:var(--text-muted);stroke-width:.7;stroke-dasharray:2 3"/>`;
+    if (!vis) h += T(136, 84, '? visita «Transfusión»', { a: 'middle', s: 9, b: 1, c: '--text-muted', sans: 1 });
+    else {
+      const pre = derivar(estadoDe({ hb: 6.4, compensa: true })), post = derivar(estadoDe({ hb: 8, compensa: true, gcFijo: pre.gc }));
+      const fila = (yc, nombre, a, b, col, fmt) => {
+        const y2 = yc - (b / a - 1) * 100;
+        return T(8, yc + 3, nombre, { s: 8, sans: 1, b: 1, c: col }) + `<path d="M92 ${yc}L180 ${n2(y2)}" style="stroke:var(${col});stroke-width:1.8"/>`
+          + `<circle cx="92" cy="${yc}" r="4" style="fill:var(${col});stroke:var(--bg-main);stroke-width:1.2"/><circle cx="180" cy="${n2(y2)}" r="4" style="fill:var(${col});stroke:var(--bg-main);stroke-width:1.2"/>`
+          + T(84, yc + 3, fmt(a), { a: 'end', s: 8, sans: 1, c: '--text-main' }) + T(188, y2 + 3, fmt(b) + (Math.abs(b / a - 1) < 0.01 ? ' (igual)' : ` (+${Math.round((b / a - 1) * 100)} %)`), { s: 8, sans: 1, c: '--text-main' });
+      };
+      h += fila(40, 'Hb', 6.4, 8, '--accent-red', v => dec(v, 1));
+      h += fila(96, 'DO₂', pre.do2, post.do2, '--accent-yellow', v => mil(v));
+      h += fila(140, 'VO₂', pre.vo2, post.vo2, '--text-dim', v => Math.round(v));
+    }
+    $('svg-124').innerHTML = h;
+  }
+  // Fig. 9.3
+  {
+    const X = v => 32 + v / 1100 * 196, Y = v => 146 - v / 200 * 132;
+    const plateau = D.pedido / SC, pend = D.techo / D.sao2, xc = plateau / pend;
+    let h = `<path d="M32 14V146H228" style="fill:none;stroke:var(--text-muted);stroke-width:1"/>`;
+    for (const v of [0, 300, 600, 900]) h += T(X(v), 157, v, { a: 'middle', s: 7.6, sans: 1, c: '--text-muted' });
+    for (const v of [0, 100, 200]) h += T(28, Y(v) + 3, v, { a: 'end', s: 7.6, sans: 1, c: '--text-muted' });
+    h += T(130, 166, 'DO₂ (mL/min/m²)', { a: 'middle', s: 7.6, sans: 1, c: '--text-muted' }) + T(36, 12, 'VO₂ (mL/min/m²)', { s: 7.6, sans: 1, c: '--text-muted' });
+    if (e.util === 'sepsis' || e.consumo === 'fiebre' || Math.abs(D.sao2 - 0.98) > 0.005) {
+      const p0 = 250 / SC, x0 = p0 / (0.5 / 0.98);
+      h += `<path d="M${X(0)} ${Y(0)}L${n2(X(x0))} ${n2(Y(p0))}H${X(1100)}" style="fill:none;stroke:var(--text-muted);stroke-width:1;stroke-dasharray:3 3"/>` + T(X(1100), Y(p0) - 3, 'normal', { a: 'end', s: 7.6, i: 1, c: '--text-muted' });
+    }
+    const xcl = Math.min(xc, 1100);
+    h += `<path d="M${X(0)} ${Y(0)}L${n2(X(xcl))} ${n2(Y(Math.min(plateau, 1100 * pend)))}${xc < 1100 ? `H${X(1100)}` : ''}" style="fill:none;stroke:var(--accent-yellow);stroke-width:1.8"/>`;
+    h += `<path d="M${n2(X(xc))} ${Y(0)}V${n2(Y(plateau))}" style="stroke:var(--text-muted);stroke-width:.8;stroke-dasharray:2 2"/>`;
+    h += T(X(xc) + 3, Y(0) - 4, 'umbral', { s: 7.6, i: 1, c: '--text-muted' });
+    const bx = clamp(X(xc) - 40, 34, 158);
+    h += `<rect x="${n2(bx)}" y="${n2(Y(plateau) - 24)}" width="80" height="14" rx="3" style="fill:var(--bg-card);stroke:var(--border-color)"/>` + T(bx + 40, Y(plateau) - 14, 'SaO₂ − SvO₂ 50 %', { a: 'middle', s: 7.6, sans: 1 });
+    if (bx + 80 < X(700) - 4) h += `<rect x="${X(700)}" y="${n2(Y(plateau) - 24)}" width="80" height="14" rx="3" style="fill:var(--bg-card);stroke:var(--border-color)"/>` + T(X(700) + 40, Y(plateau) - 14, 'SaO₂ − SvO₂ 25 %', { a: 'middle', s: 7.6, sans: 1 });
+    h += T(X(80), Y(30), 'dependiente', { s: 7.6, i: 1, c: '--accent-red' });
+    if (!e.rcp && !tapado('do2') && !tapado('vo2')) {
+      const px = X(Math.min(R.do2i, 1100)), py = Y(R.vo2i);
+      h += `<circle cx="${n2(px)}" cy="${n2(py)}" r="5" style="fill:var(--accent-red);stroke:var(--bg-main);stroke-width:1.5"/>` + T(px + 7, py + 12, `paciente · dif. ${R.dif} %`, { s: 7.6, b: 1, sans: 1, c: '--text-main' });
+    }
+    $('svg-93').innerHTML = h;
+  }
+}
+
+/* ============================================================
+   10. La frase viva (con su origen: ficha y página, fisiología general o ilustrativo)
+   ============================================================ */
+const fraseEl = $('frase');
+function decir(html, fuente, ilu) { fraseEl.innerHTML = `${html} <span class="org${ilu ? ' ilu' : ''}">${fuente}</span>`; }
+const FA = 'ficha · Anemia en el crítico', FU = 'ficha · Umbral transfusional', FR = 'ficha · Riesgos de la transfusión';
+function fraseDe(prev, e) {
+  const R = D.R, igual = (a, b) => JSON.stringify(a) === JSON.stringify(b), cambio = k => !prev || !igual(prev[k], e[k]);
+  // ---- Lo nuevo (cap. 12) ----
+  if (e.alveolo && cambio('alveolo')) return e.alveolo === 'trali'
+    ? [`Los anticuerpos vienen en la bolsa: <span class="hl-r">los neutrófilos se quedan en el pulmón</span> y lo inflaman. Uno de cada 12.000 CH; la primera causa de muerte por transfusión.`, `${FR} · p. 14 · PaO₂ 55: ilustrativa`]
+    : [`Aquí el agua entra <span class="hl-a">por presión</span>: edema hidrostático, más frecuente con IC o IR previas. Se para la transfusión y va bien un <span class="hl-v">diurético de asa</span>.`, `${FR} · p. 15-16 · PaO₂ 55: ilustrativa`];
+  if (e.dil && cambio('dil')) {
+    const t = TUBOS[e.dil];
+    if (t[1] == null) return [`Hto ${dec(t[0], 1)} %. ${e.dil === 'antes' ? 'Pon el bolo de 20 mL/kg' : 'Túmbalo'} y mira el tubo: ¿cuánto bajará sin perder un hematíe?`, `${FA} · p. 2-3 (Fig. 12.1)`];
+    if (e.dil === 'fermin') return [`Fermín: Hto 39 → 35 % tras 1,5 L de salino. Si no ha perdido hematíes, es la misma masa con más plasma.`, `${FA} · p. 2-3 (Fig. 12.1) · el paciente: del caso`];
+    return [`Ni un hematíe perdido y el Hto cae ${dec(t[0] - t[1], 1)} puntos (${dec(t[0], 1)} → ${dec(t[1], 1)} %), como si hubiera perdido <span class="hl-r">una unidad (500 mL)</span>: el Hto <span class="hl-p">mide una concentración</span>.${e.dil === 'tumbado' ? ' Al tumbarse entran 420 mL de plasma.' : ''}`, `${FA} · p. 2-3 (Fig. 12.1)`];
+  }
+  if (e.transf && cambio('transf')) {
+    const pre = derivar(Object.assign(copia(e), { hb: e.transf.de })), sube = Math.round((R.do2 / Math.round(pre.do2) - 1) * 100);
+    return [`Hb ${dec(e.transf.de, 1)} → ${dec(e.hb, 1)}: <span class="hl-a">sube el aporte</span> (${mil(pre.do2)} → ${mil(R.do2)} mL/min, +${sube} %), <span class="hl-r">el consumo no cambia</span> (${R.vo2}): cae la extracción (${pre.R.ext} → ${R.ext} %). No es un método absoluto para oxigenar.`, `${FU} · p. 10-11 (Fig. 12.4) · aporte: ilustrativo`, true];
+  }
+  if (cambio('volemia') && e.volemia === 'baja' || (e.volemia === 'baja' && (cambio('hb') || cambio('gc')))) return e.hb < 13
+    ? [`Sin volumen el corazón no puede compensar (gasto ${dec(R.gc, 1)}): el aporte cae a ${mil(R.do2)} y ${D.porAporte ? `<span class="hl-r">el consumo ya depende del aporte</span> (VO₂ ${R.vo2})` : `la extracción sube al ${R.ext} %`}. La volemia puede pesar más que la Hb: la hipovolemia causa shock; la anemia, no.`, `${FU} · p. 16-17 (Fig. 12.6) · gasto: ilustrativo`, true]
+    : [`Volemia baja: el gasto no puede subir de 5 (ahora ${dec(R.gc, 1)}). Baja la Hb y mira qué pasa sin el corazón que compensa.`, `${FU} · p. 16-17 · gasto: ilustrativo`, true];
+  if (e.compensa && (cambio('compensa') || cambio('hb') || cambio('volemia') || cambio('gcFijo'))) {
+    if (e.hb < 3) return [`Por debajo de Hb 3 la extracción ya no da más: <span class="hl-r">el consumo cae</span> (VO₂ ${R.vo2}) y sube el lactato (${dec(R.lact, 1)}).`, `${FA} · p. 6 (Fig. 12.3) · gasto y lactato: ilustrativos`, true];
+    if (e.hb <= 3) return [`Hasta un Hto del 10 % (Hb ≈3) la extracción compensa; aquí <span class="hl-r">llega al 50 %</span> (gasto ${dec(R.gc, 1)} L/min). Por debajo, el consumo cae y empieza el lactato.`, `${FA} · p. 6 (Fig. 12.3) · gasto: ilustrativo`, true];
+    if (e.hb === 7) return [`Hb 7: <span class="hl-a">el umbral de las guías</span> en el estable sin coronariopatía. Mira la extracción: ${R.ext} %, lejos del 50 %. El número de Hb no dice si el tejido sufre.`, `${FU} · p. 8 · extracción: ilustrativa`, true];
+    if (e.hb === 8) return [`Hb 8: el umbral con <span class="hl-a">coronariopatía, cirugía cardíaca u ortopédica</span>. La extracción, ${R.ext} %.`, `${FU} · p. 8 · extracción: ilustrativa`, true];
+    if (e.hb < 15) return [`Menos hematíes, <span class="hl-azul">sangre menos viscosa</span> (×${dec(R.visc, 1)} el agua): el corazón bombea más (${dec(R.gc, 1)} L/min) y la extracción sube (${R.ext} %) <span class="hl-v">sin llegar al techo</span>.`, `${FA} · p. 4-6 (Tabla 12.2, Figs. 12.2-12.3) · gasto: ilustrativo`, true];
+    return [`Con la Hb normal el corazón no tiene que compensar: gasto 5 L/min. Baja la Hb.`, `${FA} · p. 4-6`];
+  }
+  // ---- Lo del capilar de hoy ----
+  if (e.rcp) return [`Parada con RCP: con una <span class="hl-r">PETCO₂ ≤10 mmHg tras 20 min</span> de RCP, es improbable recuperar la circulación espontánea.`, 'ficha · Capnografía'];
+  if (e.esofago) return [`<span class="hl-r">Sin CO₂ espirado: el tubo está en el esófago</span> (o hay una parada, sin retorno venoso).`, 'ficha · Capnografía'];
+  if (cambio('sedacion') && e.sedacion) return [`Hipoventila: <span class="hl-r">la PETCO₂ sube</span> (${R.petco2} mmHg); la SpO₂ todavía no ha bajado (${R.spo2 ?? '—'} %).`, 'ficha · Capnografía · PETCO₂ ilustrativa', true];
+  if (cambio('espacio') && e.espacio !== 'no') return [`Alvéolos ventilados sin sangre: la PETCO₂ (${R.petco2}) se queda <span class="hl-a">por debajo de la PaCO₂</span> (${R.paco2}).`, 'ficha · Capnografía (Tabla 7.1)'];
+  if (cambio('co') && e.co) return [`La SpO₂ sigue en ${R.spo2 ?? '—'} %: <span class="hl-r">el pulsioxímetro no ve la COHb</span>; la SaO₂ real ha caído a ${R.sao2} %.`, 'ficha · Oximetría · COHb 25 % ilustrativa', true];
+  if ((cambio('frio') || cambio('sensor')) && e.frio) return e.sensor === 'dedo' ? [`Dedo frío: <span class="hl-r">la onda se aplana</span> y la SpO₂ deja de ser fiable. Pon el sensor en la frente.`, 'ficha · Oximetría · onda plana: ilustrativa', true] : [`En la frente los vasos se contraen menos: <span class="hl-v">la SpO₂ vuelve</span> (${R.spo2} %).`, 'ficha · Oximetría'];
+  if (cambio('util') && e.util === 'sepsis') return [`Llega O₂ pero la PDH está bloqueada: los hematíes <span class="hl-r">salen casi llenos</span> (SvO₂ ${R.svo2} %) y la célula suelta lactato.`, 'cortes: ficha · Extracción y lactato · cifras: ilustrativas', true];
+  if (cambio('util') && e.util === 'tiamina') return [`Sin pirofosfato de tiamina la PDH no trabaja: el piruvato se desvía a <span class="hl-r">lactato</span>.`, 'ficha · Extracción y lactato'];
+  if (cambio('estres') && e.estres) return [`El estrés fisiológico sube la glucólisis aerobia <span class="hl-a">un 40-50 %</span>, y con ella el lactato.`, 'ficha · Extracción y lactato · lactato: ilustrativo', true];
+  if (cambio('consumo') && e.consumo === 'fiebre') return [`Más consumo con el mismo aporte: <span class="hl-a">sube la extracción</span> (${R.ext} %) y baja la SvO₂ (${R.svo2} %).`, 'ilustrativo: 300 mL/min', true];
+  if (cambio('toma')) return e.toma === 'scvo2' ? [`ScvO₂ ${R.scvo2} % frente a SvO₂ ${R.svo2} %: en el shock, la de la cava superior sale más alta.`, 'ficha · Extracción y lactato · +7 en el shock: ilustrativo', true] : [`La SvO₂ mixta, en la arteria pulmonar: la media de todos los retornos venosos (${R.svo2} %).`, 'ficha · Oximetría'];
+  if (cambio('hb')) return e.hb === 7.5 && e.pao2 === 90
+    ? [`Con el gasto fijo (<b>si el corazón no compensara</b>), la fila tiene huecos y el contenido cae a la mitad: de 20 a ${Math.round(D.cao2)} mL/dL; la extracción llegaría al ${R.dif} %. <button type="button" class="enlace-frase" data-ir-estado="anemia-compensada">¿Y si el corazón compensa?</button>`, 'ficha · Transporte de O₂ (Fig. 9.2) · la fila: ilustrativa']
+    : [`Hb ${dec(e.hb, 1)} con el gasto fijo: CaO₂ ${dec(R.cao2, 1)} mL/dL y aporte ${mil(R.do2)} mL/min (con Hb 15, 20 y 985). <button type="button" class="enlace-frase" data-ir-estado="anemia-compensada">¿Y si el corazón compensa?</button>`, 'ficha · Transporte de O₂'];
+  if (cambio('pao2')) return e.pao2 >= 60 ? [`PaO₂ ${e.pao2}: SaO₂ ${R.sao2} %. <span class="hl-a">Casi no cambia: estás en la parte plana</span> de la curva.`, 'ficha · Transporte de O₂ · curva: fisiología general'] : [`PaO₂ ${e.pao2}: ya en la parte empinada; la SaO₂ cae deprisa (${R.sao2} %).`, 'ficha · Transporte de O₂ · curva: fisiología general'];
+  if (cambio('gc') || (prev && prev.frio !== e.frio)) {
+    if (D.porAporte) return [`El aporte cayó a ${mil(R.do2)} mL/min: los hematíes <span class="hl-r">salen con la mitad de las perlas vacías</span> y el consumo ya depende del aporte (VO₂ ${R.vo2}).`, 'ficha · Extracción y lactato (Fig. 9.3)'];
+    return [`Gasto ${dec(R.gc, 1)} L/min: aporte ${mil(R.do2)} mL/min; el tejido sigue cogiendo ${R.vo2} subiendo la extracción (${R.ext} %).`, 'ficha · Extracción y lactato'];
+  }
+  if (D.porAporte) return [`El aporte (${mil(R.do2)} mL/min) no llega: la extracción tocó el 50 % y <span class="hl-r">el consumo depende del aporte</span> (VO₂ ${R.vo2}).`, 'ficha · Extracción y lactato (Fig. 9.3)'];
+  return [`Hb 15, PaO₂ 90 y gasto 5: llegan <span class="hl-a">${mil(R.do2)} mL/min</span> de O₂ y el tejido usa 250, una cuarta parte: cada hematíe suelta una perla de cada cuatro (SvO₂ ${R.svo2} %).`, 'ficha · Transporte de O₂ (Tablas 9.1-9.2)'];
+}
+
+/* ============================================================
+   11. Aplicar un estado: todo se repinta desde aquí
+   ============================================================ */
+let vistosQ = new Set();   // estados visitados en la pregunta actual (para «compruébalo»)
+function aplicar(nuevo, op = {}) {
+  const prev = estado;
+  estado = nuevo; D = derivar(estado);
+  const e = estado;
+  if (e.dil !== prev.dil && e.dil && TUBOS[e.dil][1] != null) tuboAnim = 0;
+  for (const [k, s] of Object.entries(ESTADOS)) if (igualA(e, s.p)) { vistosQ.add(k); visitados.add(k); }
+  if (e.transf) visitados.add('transfusion');
+  pintarTablero(); pintarLaminaFija(); pintarLupa(); pintarGraficas(); pintarCamas();
+  if (op.frase !== false && modo === 'explorar') decir(...fraseDe(prev, e));
+  sincronizarMandos();
+  if (REDUCIR) pintarUnaVez(); else arrancar();
+}
+const igualA = (e, p) => JSON.stringify(e) === JSON.stringify(estadoDe(p));
+const cambiar = (fn, op) => { const e = copia(estado); fn(e); aplicar(e, op); };
+// Mover la Hb, el gasto o los interruptores del corazón deja la bolsa y el tubo atrás
+const soltar = e => { e.gcFijo = null; e.transf = null; e.dil = null; };
+
+// Transfundir: la Hb sube en unas «2 h» (2 s en pantalla) con el gasto quieto (Fig. 12.4, p. 10-11)
+let goteando = false;
+function transfundir(hasta, op = {}) {
+  const e0 = copia(estado), de = e0.hb, gc = gastoDe(e0), a = Math.min(17, hasta);
+  if (a <= de) return;
+  const fin = () => { goteando = false; aplicar(Object.assign(copia(e0), { hb: a, gcFijo: gc, transf: { de, a }, dil: null }), op); };
+  if (REDUCIR) { fin(); return; }
+  goteando = true;
+  const t0 = performance.now(), dur = 2000;
+  const paso = ahora => {
+    const u = Math.min(1, (ahora - t0) / dur);
+    if (u < 1) { aplicar(Object.assign(copia(e0), { hb: +(de + (a - de) * u).toFixed(1), gcFijo: gc, transf: { de, a: null }, dil: null }), { frase: false }); requestAnimationFrame(paso); }
+    else fin();
+  };
+  requestAnimationFrame(paso);
+}
+function irEstado(k, op = {}) {
+  const s = ESTADOS[k];
+  aplicar(estadoDe(s.p), s.transfundir ? Object.assign({}, op, { frase: false }) : op);
+  if (s.lupa) Lupa.abrir(s.lupa); else if (Lupa.abierta) Lupa.cerrar();
+  if (s.pestana && modo === 'explorar') abrirPestana(s.pestana);
+  if (s.transfundir) transfundir(s.transfundir, op);
+}
+
+/* ============================================================
+   12. Mandos del dock
+   ============================================================ */
+function abrirPestana(t) {
+  document.querySelectorAll('.dock-tabs button').forEach(o => o.setAttribute('aria-selected', String(o.dataset.tab === t)));
+  document.querySelectorAll('.dock-panel').forEach(p => { p.hidden = p.dataset.panel !== t; });
+}
+document.querySelectorAll('.dock-tabs button').forEach(b => b.addEventListener('click', () => abrirPestana(b.dataset.tab)));
+$('m-hb').addEventListener('input', ev => cambiar(e => { soltar(e); e.hb = +ev.target.value; }));
+$('m-pao2').addEventListener('input', ev => cambiar(e => { e.pao2 = +ev.target.value; }));
+$('m-gc').addEventListener('input', ev => cambiar(e => { e.gcFijo = null; e.transf = null; e.gc = +ev.target.value; }));
+$('m-co').addEventListener('click', () => cambiar(e => { e.co = !e.co; }));
+$('m-transf').addEventListener('click', () => { if (!goteando) transfundir(Math.min(17, estado.hb + 1)); });
+$('m-tumbar').addEventListener('click', () => { cambiar(e => { soltar(e); e.dil = estado.dil === 'tumbado' ? 'pie' : 'tumbado'; e.hb = +((TUBOS[e.dil][1] ?? TUBOS[e.dil][0]) / 3).toFixed(1); }); if (Lupa.abierta !== 'tubo') Lupa.abrir('tubo'); });
+$('m-bolo').addEventListener('click', () => { cambiar(e => { soltar(e); e.dil = estado.dil === 'bolo' ? 'antes' : 'bolo'; e.hb = +((TUBOS[e.dil][1] ?? TUBOS[e.dil][0]) / 3).toFixed(1); }); if (Lupa.abierta !== 'tubo') Lupa.abrir('tubo'); });
+document.querySelectorAll('[data-alveolo]').forEach(b => b.addEventListener('click', () => {
+  const k = b.dataset.alveolo;
+  if (estado.alveolo === k) { cambiar(e => { e.alveolo = null; }); return; }
+  irEstado(k);
+}));
+document.querySelectorAll('[data-espacio]').forEach(b => b.addEventListener('click', () => cambiar(e => { e.espacio = e.espacio === b.dataset.espacio ? 'no' : b.dataset.espacio; })));
+$('m-sedacion').addEventListener('click', () => cambiar(e => { e.sedacion = !e.sedacion; }));
+$('m-esofago').addEventListener('click', () => cambiar(e => { e.esofago = !e.esofago; }));
+$('m-compensa').addEventListener('click', () => cambiar(e => { e.gcFijo = null; e.transf = null; e.compensa = !e.compensa; if (!e.compensa && e.hb < 5) e.hb = 5; }));
+$('m-volemia').addEventListener('click', () => cambiar(e => { e.gcFijo = null; e.transf = null; e.volemia = e.volemia === 'baja' ? 'mantenida' : 'baja'; if (e.volemia === 'baja') { e.gc = Math.min(e.gc, 5); if (e.hb < 5) e.hb = 5; } }));
+$('m-rcp').addEventListener('click', () => cambiar(e => { e.rcp = !e.rcp; }));
+$('m-frio').addEventListener('click', () => cambiar(e => { e.frio = !e.frio; }));
+$('m-fiebre').addEventListener('click', () => cambiar(e => { e.consumo = e.consumo === 'fiebre' ? 'reposo' : 'fiebre'; }));
+$('m-estres').addEventListener('click', () => cambiar(e => { e.estres = !e.estres; }));
+$('m-util').addEventListener('click', ev => { const b = ev.target.closest('button'); if (b) cambiar(e => { e.util = b.dataset.v; }); });
+$('m-toma').addEventListener('click', ev => { const b = ev.target.closest('button'); if (b) cambiar(e => { e.toma = b.dataset.v; }); });
+$('m-sensor').addEventListener('click', ev => { const b = ev.target.closest('button'); if (b) cambiar(e => { e.sensor = b.dataset.v; }); });
+function sincronizarMandos() {
+  const e = estado;
+  $('m-hb').min = e.compensa && e.volemia === 'mantenida' ? 2 : 5;
+  $('m-hb').value = e.hb; $('o-hb').innerHTML = `${dec(e.hb, 1)} <small>g/dL</small>`;
+  $('m-pao2').value = e.pao2; $('o-pao2').innerHTML = `${e.pao2} <small>mmHg</small>`;
+  // con el corazón que compensa (y volumen), el gasto lo pone la curva: el mando lo enseña, pero no se toca
+  const auto = (e.compensa && e.volemia === 'mantenida') || e.gcFijo != null;
+  $('m-gc').disabled = auto; $('m-gc').max = e.volemia === 'baja' ? 5 : 8;
+  $('m-gc').value = Math.min(D.gc, 8); $('o-gc').innerHTML = `${tapado('gc') ? '?' : dec(D.gc, 1)} <small>L/min</small>`;
+  const pr = (el, v) => el.setAttribute('aria-pressed', String(!!v));
+  pr($('m-co'), e.co); pr($('m-sedacion'), e.sedacion); pr($('m-esofago'), e.esofago); pr($('m-rcp'), e.rcp); pr($('m-frio'), e.frio);
+  pr($('m-fiebre'), e.consumo === 'fiebre'); pr($('m-estres'), e.estres);
+  pr($('m-compensa'), e.compensa); pr($('m-volemia'), e.volemia === 'baja');
+  pr($('m-tumbar'), e.dil === 'tumbado'); pr($('m-bolo'), e.dil === 'bolo');
+  $('m-transf').disabled = goteando || e.hb >= 17;
+  document.querySelectorAll('[data-alveolo]').forEach(b => pr(b, e.alveolo === b.dataset.alveolo));
+  document.querySelectorAll('[data-espacio]').forEach(b => pr(b, e.espacio === b.dataset.espacio));
+  for (const [id, k] of [['m-util', 'util'], ['m-toma', 'toma'], ['m-sensor', 'sensor']]) $(id).querySelectorAll('button').forEach(b => pr(b, b.dataset.v === e[k]));
+  document.querySelectorAll('#chips-estado [data-estado]').forEach(b => {
+    const s = ESTADOS[b.dataset.estado];
+    pr(b, s.transfundir ? (e.transf && e.transf.de === s.p.hb && e.hb === s.transfundir) : igualA(e, s.p));
+  });
+}
+$('chips-estado').innerHTML = Object.entries(ESTADOS).map(([k, s]) => `<button type="button" class="chip-f" data-estado="${k}" aria-pressed="false">${s.n}${s.s ? `<small>${s.s}</small>` : ''}</button>`).join('');
+$('chips-estado').addEventListener('click', ev => { const b = ev.target.closest('[data-estado]'); if (b) irEstado(b.dataset.estado); });
+// Los enlaces a un estado (en la frase viva y en «Antes y después»)
+document.addEventListener('click', ev => { const b = ev.target.closest('[data-ir-estado]'); if (b && modo === 'explorar') irEstado(b.dataset.irEstado); });
+
+/* ============================================================
+   13. Leyendas y visor de láminas
+   ============================================================ */
+$('leyenda-mini').innerHTML = [
+  `${iconoHematie(['', '', '', ''], 13)}hematíe: 4 perlas = 4 sitios del hemo`,
+  `${iconoHematie(['', 'vacia', '', 'vacia'], 13, '--accent-purple')}anillo: sitio sin O₂ (venoso)`,
+  `${iconoParticula('o2', 13)}O₂`, `${iconoParticula('co2', 13)}CO₂`, `${iconoParticula('lact', 13)}lactato`
+].map(t => `<li>${t}</li>`).join('');
+$('leyenda').innerHTML = [
+  [iconoHematie(['', '', '', ''], 20), 'Hematíe arterial con sus <b>4 perlas</b>, los 4 sitios del hemo: <b>bolitas llenas</b> = O₂ unido. Cuántos desfilan depende de la Hb; a qué velocidad, del gasto.'],
+  [iconoHematie(['', 'vacia', '', 'vacia'], 20, '--accent-purple'), 'Hematíe venoso: las perlas que soltaron su O₂ quedan como <b>anillos huecos</b>.'],
+  [iconoParticula('o2', 20), 'O₂: <b>pesa</b>, dos átomos unidos (O=O).'],
+  [iconoParticula('lact', 20), 'Lactato: <b>trípode</b>, medio copo de la glucosa.'],
+  [iconoParticula('co2', 20), 'CO₂: voluta.'],
+  [iconoParticula('neutrofilo', 20), 'Neutrófilo (lupa del alvéolo): célula clara con el núcleo en <b>tres lóbulos</b>. <span class="prop">propuesta</span>'],
+  [iconoParticula('igg', 20), 'Anticuerpo (lupa del alvéolo): la <b>Y</b> de la IgG de la tabla, la misma de la TIH. En el TRALI viene en la bolsa, del donante; el libro no dice de qué clase es.'],
+  [iconoParticula('agua', 20), 'Agua (lupa del alvéolo): <b>gota</b>. En el TACO cruza al alvéolo por presión.']
+].map(([i, t]) => `<li>${i}<span>${t}</span></li>`).join('');
+document.addEventListener('click', ev => {
+  const b = ev.target.closest('button.lam'); if (!b) return;
+  $('visor-img').src = rutaImg(b.dataset.img); $('visor-img').alt = b.dataset.pie; $('visor-pie').textContent = b.dataset.pie;
+  $('visor').hidden = false;
+});
+$('visor-cerrar').addEventListener('click', () => { $('visor').hidden = true; });
+$('visor').addEventListener('click', ev => { if (ev.target === $('visor')) $('visor').hidden = true; });
+
+/* ============================================================
+   14. El bucle (se para cuando la escena no se ve; con «reducir movimiento», un solo dibujo)
+   ============================================================ */
+let tPrev = performance.now(), visible = true, enMarcha = false;
+function bucle(ahora) {
+  if (!visible || document.hidden) { enMarcha = false; return; }
+  const dt = Math.min(0.05, (ahora - tPrev) / 1000); tPrev = ahora;
+  pasoLamina(dt); pasoLupa(dt);
+  requestAnimationFrame(bucle);
+}
+function arrancar() { if (REDUCIR) { pintarUnaVez(); return; } if (enMarcha) return; enMarcha = true; tPrev = performance.now(); requestAnimationFrame(bucle); }
+function pintarUnaVez() { apagarParticulas(); pasoLamina(0); pasoLupa(0); }
+/* ============================================================
+   15. Modos: Explorar | Conceptos | Mayéutica
+   ============================================================ */
+let modo = 'explorar';
+function anilloLamina(k) {
+  const POS = { alveolo: [18, 18, 16], celula: [190, 205, 64], boca: [301, 23, 58], venoso: [322, 96, 36], arterial: [30, 70, 36] };
+  const g = $('g-anillo'); g.innerHTML = '';
+  if (!k || !POS[k]) return;
+  const [x, y, r] = POS[k];
+  g.innerHTML = `<circle class="anillo-svg" cx="${x}" cy="${y}" r="${r}" style="fill:none;stroke:var(--accent-blue);stroke-width:2.2"/>`;
+}
+function mirar(k) { mirarCelda(CELDAS.some(c => c.k === k) ? k : null); anilloLamina(CELDAS.some(c => c.k === k) ? null : k); }
+function setModo(m) {
+  modo = m;
+  for (const k of ['explorar', 'conceptos', 'preguntas']) $('modo-' + k).setAttribute('aria-selected', String(k === m));
+  document.body.classList.toggle('estudio', m !== 'explorar');
+  // en Conceptos y Mayéutica la lámina se recorta por abajo: el capilar y las mitocondrias, sin el núcleo
+  $('lamina').setAttribute('preserveAspectRatio', m === 'explorar' ? 'xMidYMid meet' : 'xMidYMin slice');
+  $('vista-explorar').hidden = m !== 'explorar'; $('vista-conceptos').hidden = m !== 'conceptos'; $('vista-preguntas').hidden = m !== 'preguntas';
+  $('dock-explorar').hidden = m !== 'explorar'; $('dock-estudio').hidden = m === 'explorar';
+  mirar(null); setOcultos([]);
+  if (m === 'conceptos') Estudio.concepto(Estudio.c);
+  if (m === 'preguntas') Estudio.inicioPreguntas();
+  if (m === 'explorar') { aplicar(estado, { frase: false }); decir(...fraseDe(null, estado)); }
+  requestAnimationFrame(() => Lupa.colocar());
+  window.scrollTo({ top: 0 });
+}
+$('modo-explorar').addEventListener('click', () => setModo('explorar'));
+$('modo-conceptos').addEventListener('click', () => setModo('conceptos'));
+$('modo-preguntas').addEventListener('click', () => setModo('preguntas'));
+document.querySelectorAll('.opciones-elige').forEach(grupo => grupo.addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  grupo.querySelectorAll('button').forEach(o => o.setAttribute('aria-pressed', String(o === b)));
+  const partes = [...document.querySelectorAll('.opciones-elige')].map(gp => gp.querySelector('[aria-pressed="true"]')?.textContent).filter(Boolean);
+  $('resumen').textContent = 'Tu elección: ' + partes.join(' · ') + '.';
+}));
+/* ============================================================
+   16. Capa de estudio: el motor de preguntas y casos del río y mar (mismo esquema de datos):
+       { id, serie: 'guia'|'examen', tipo: 'test'|'destapa'|'error', fuente, estado, lupa, mirar,
+         tocar: { mandos, ocultar, instruccion, comprobar, pista, bueno, confirma }, despues,
+         enunciado, opciones: [{ t, ok, porque }], puntos: [], frases: [{ t, mal, c }], explicacion, nota }
+       Las opciones salen en el orden escrito (la posición de la correcta se reparte a mano y la comprueba __pruebas).
+   ============================================================ */
+const TIPO_TXT = { test: 'Test · piensa antes', destapa: 'Piensa y destapa', error: 'Encuentra el error' };
+const SERIE_TXT = { guia: 'Guía socrática', examen: 'Examen · nivel MIR' };
+function verEnTexto(fuente) { return `<p class="fuente-p">Ver en el texto: ${fuente.split(' · ').map(f => `<span class="org">${f}</span>`).join(' ')}</p>`; }
+function ponerModelo(q) {
+  vistosQ = new Set();
+  aplicar(estadoDe(q.estado), { frase: false });
+  if (q.lupa) Lupa.abrir(q.lupa); else if (Lupa.abierta) Lupa.cerrar();
+  mirar(q.mirar || null);
+  setOcultos(q.ocultar || (q.tocar && q.tocar.ocultar) || []);
+}
+function pintarDock(items, izq, der) {
+  $('dock-pasos').innerHTML = items.map(c => `<i class="${c}"></i>`).join('');
+  $('dock-est-izq').textContent = izq || ''; $('dock-est-der').textContent = der || '';
+}
+function entrar(el) { el.classList.remove('entra'); void el.offsetWidth; el.classList.add('entra'); }
+const subir = el => el?.scrollIntoView?.({ block: 'nearest', behavior: REDUCIR ? 'auto' : 'smooth' });
+
+let camasQ = null;   // las camas del paso de un caso, para verlas a la vez
+function pintarCamas() {
+  const el = $('camas-tabla'); if (!el || !camasQ) return;
+  const ds = camasQ.map(c => ({ e: estadoDe(c.e), R: derivar(estadoDe(c.e)).R }));
+  const actual = JSON.stringify(estado);
+  document.querySelectorAll('[data-cama]').forEach(b => b.setAttribute('aria-pressed', String(JSON.stringify(ds[+b.dataset.cama].e) === actual)));
+  const fila = (n, k, f) => `<tr><th>${n}</th>${ds.map(d => `<td class="n">${tapado(k) ? '?' : f(d)}</td>`).join('')}</tr>`;
+  el.innerHTML = `<table class="data-table mini"><thead><tr><th></th>${camasQ.map(c => `<th>${c.n}</th>`).join('')}</tr></thead><tbody>
+    ${fila('CaO₂ (mL/dL)', 'cao2', d => dec(d.R.cao2, 1))}${fila('DO₂ (mL/min)', 'do2', d => mil(d.R.do2))}
+    ${fila('Sat. venosa', 'ven', d => `${d.e.toma === 'scvo2' ? 'ScvO₂' : 'SvO₂'} ${d.R.ven} %`)}${fila('Lactato', 'lact', d => dec(d.R.lact, 1))}</tbody></table>`;
+}
+function pintarPregunta(cont, q, { cabecera = '', repaso = null, alFinal }) {
+  camasQ = q.camas || null;
+  ponerModelo(q);
+  const res = { ok: true, faltan: [] };
+  let h = cabecera;
+  h += `<div class="cab-preg">${q.num ? `<span class="num">${q.num}</span>` : ''}${q.serie ? `<span class="serie ${q.serie}">${SERIE_TXT[q.serie]}</span>` : ''}<span class="tipo">${TIPO_TXT[q.tipo]}${q.tocar ? ' · predice y compruébalo' : ''}</span></div>`;
+  h += `<p class="pregunta">${q.enunciado}</p>`;
+  if (q.calculadora) h += `<div class="fila"><button class="b link" type="button" data-accion="calc">Abrir la calculadora «${q.calculadora.nombre}»</button></div>`;
+  h += `<div id="fmt"></div><div id="q-res"></div>`;
+  if (q.tocar) h += `<div class="mando" id="mando" hidden>${mandoHTML(q.tocar)}<div class="fila"><button class="b prim" type="button" data-accion="comprobar">Comprobar</button></div><p class="pista" id="pista" hidden></p></div><div id="q-fin"></div>`;
+  cont.innerHTML = h; entrar(cont);
+  const fmt = cont.querySelector('#fmt');
+  let intentos = 0, pieTocar = '';
+  if (q.tipo === 'test') {
+    fmt.innerHTML = `<p class="para">Piénsalo antes de ver las opciones.</p><div class="fila" style="margin-top:6px"><button class="b prim" type="button" data-accion="ops">Ya lo tengo: ver opciones</button></div>
+      <div class="op" id="ops" hidden style="margin-top:8px">${q.opciones.map((o, i) => `<button class="b" type="button" data-op="${i}">${o.t}</button>`).join('')}</div>`;
+  } else if (q.tipo === 'destapa') {
+    const idx = repaso && repaso.faltan && repaso.faltan.length ? repaso.faltan : q.puntos.map((_, i) => i);
+    fmt.innerHTML = `<p class="para">${repaso && repaso.faltan && repaso.faltan.length ? `Vuelven solo los ${idx.length === 1 ? 'que te faltó' : idx.length + ' que te faltaron'}.` : `Contesta en la cabeza: son ${['', 'una cosa', 'dos cosas', 'tres cosas', 'cuatro cosas', 'cinco cosas'][q.puntos.length]}. Luego destápalo.`}</p>
+      <div class="fila" style="margin-top:6px"><button class="b prim" type="button" data-accion="destapa">Ya lo tengo: destapar</button></div>
+      <div class="respuesta entra" id="pts" hidden><p class="para">Marca, uno a uno, lo que tenías:</p>
+      ${idx.map(i => `<label class="punto"><input type="checkbox" data-p="${i}"> <span>${q.puntos[i]}</span></label>`).join('')}
+      <div class="fila"><button class="b" type="button" data-accion="puntos">Hecho</button></div></div>`;
+  } else if (q.tipo === 'error') {
+    fmt.innerHTML = `<p class="para">Toca las frases que creas falsas: puede haber 0, 1 o 2 errores.</p><div class="op" style="margin-top:6px">${q.frases.map((f, i) =>
+      `<button class="frase-e" type="button" data-fr="${i}"><span class="n">${i + 1}</span><span>${f.t}</span></button>` + `<div class="correccion" id="cfr${i}" hidden></div>`).join('')}</div>
+      <div class="fila" style="margin-top:8px"><button class="b prim" type="button" data-accion="corregir">Corregir</button></div>`;
+  }
+  const botonSig = () => `<div class="fila"><button class="b prim" type="button" data-accion="sig">${q.ultimo ? 'Ver lo que te llevas' : 'Siguiente →'}</button></div>`;
+  function cerrar(htmlRes) {
+    const r = cont.querySelector('#q-res');
+    const pie = `${q.nota ? `<div class="nota-fuentes">${q.nota}</div>` : ''}${verEnTexto(q.fuente)}`;
+    if (q.tocar) {   // primero se predice; ahora se comprueba en el modelo (las cifras tapadas se destapan al comprobar)
+      r.innerHTML = `<div class="respuesta entra" style="margin-top:4px">${htmlRes}</div>`;
+      const m = cont.querySelector('#mando'); m.hidden = false; entrar(m);
+      mirar(q.tocar.mirar || q.mirar || null);
+      pieTocar = pie; subir(m); return;
+    }
+    if (q.despues) { aplicar(estadoDe(q.despues), { frase: false }); if (q.lupaDespues) Lupa.abrir(q.lupaDespues); }
+    setOcultos([]);
+    r.innerHTML = `<div class="respuesta entra" style="margin-top:4px">${htmlRes}${pie}${botonSig()}</div>`;
+    subir(r.querySelector('[data-accion="sig"]'));
+  }
+  function finComprobar(html) {
+    setOcultos([]); cont.querySelectorAll('#mando [data-mando]').forEach(b => { b.disabled = true; });
+    const f = cont.querySelector('#q-fin');
+    f.innerHTML = `<div class="respuesta entra" style="margin-top:8px">${html}${pieTocar}${botonSig()}</div>`;
+    subir(f.querySelector('[data-accion="sig"]'));
+  }
+  const confirma = () => typeof q.tocar.confirma === 'function' ? q.tocar.confirma(D.R) : q.tocar.confirma;
+  cont.onclick = e => {
+    const a = e.target.closest('[data-accion]')?.dataset.accion;
+    if (a === 'calc') { e.target.closest('button').textContent = `En la app abriría la calculadora de la ficha (${q.calculadora.ids}) y volvería aquí`; return; }
+    if (a === 'comprobar') {
+      const p = cont.querySelector('#pista');
+      if (q.tocar.comprobar(estado)) { p.hidden = true; e.target.closest('.fila').remove(); finComprobar(`<span class="ok">✓ Comprobado: ${confirma()}</span>`); return; }
+      intentos++; p.hidden = false;
+      if (intentos < 2) { p.textContent = 'Aún no. ' + q.tocar.pista; return; }
+      aplicar(estadoDe(Object.assign({}, q.estado, q.tocar.bueno)), { frase: false });
+      for (const k of q.tocar.visitar || []) vistosQ.add(k);
+      sincronizarMandoPregunta(cont, q.tocar.visitar);
+      p.textContent = q.tocar.pista + ' Te lo pongo en el modelo.';
+      e.target.closest('.fila').remove(); finComprobar(`<span class="ok">Así queda: ${confirma()}</span>`); return;
+    }
+    if (a === 'ops') { cont.querySelector('#ops').hidden = false; e.target.closest('.fila').remove(); return; }
+    if (a === 'destapa') { cont.querySelector('#pts').hidden = false; e.target.closest('.fila').remove(); return; }
+    if (a === 'puntos') {
+      const cajas = [...cont.querySelectorAll('#pts input')];
+      const faltan = cajas.filter(c => !c.checked).map(c => +c.dataset.p);
+      cajas.forEach(c => { c.disabled = true; }); e.target.closest('button').disabled = true;
+      if (faltan.length) { res.ok = false; res.faltan = faltan; }
+      const n = cajas.length - faltan.length;
+      cerrar(`<span class="${faltan.length ? 'mal' : 'ok'}">${faltan.length ? `${n} de ${cajas.length}. Lo que te faltó vuelve en el repaso.` : `✓ ${cajas.length === 1 ? 'La tenías' : 'Todas'}. Esta no vuelve.`}</span>${q.explicacion ? `<p>${q.explicacion}</p>` : ''}`);
+      return;
+    }
+    if (a === 'corregir') {
+      let bien = 0;
+      cont.querySelectorAll('.frase-e').forEach(b => {
+        const f = q.frases[b.dataset.fr], m = b.classList.contains('marcada'), ok = m === !!f.mal; if (ok) bien++;
+        b.classList.remove('marcada'); b.classList.add(ok ? 'acierto' : 'fallo'); b.disabled = true;
+        if (f.mal) { const c = cont.querySelector('#cfr' + b.dataset.fr); c.hidden = false; c.innerHTML = `<b>Era falsa.</b> ¿Cómo sería la frase buena? <button class="b link" type="button" data-ver="${b.dataset.fr}">Pensado: ver</button>`; }
+      });
+      e.target.closest('button').disabled = true;
+      const nMal = q.frases.filter(f => f.mal).length;
+      if (bien < q.frases.length) res.ok = false;
+      cerrar(`<span class="${bien === q.frases.length ? 'ok' : 'mal'}">${bien} de ${q.frases.length} bien juzgadas. ${nMal === 0 ? 'No había ningún error.' : nMal === 1 ? `Había un error: la ${q.frases.findIndex(f => f.mal) + 1}.` : `Había ${nMal} errores: la ${q.frases.map((f, i) => f.mal ? i + 1 : 0).filter(Boolean).join(' y la ')}.`}</span>${q.explicacion ? `<p>${q.explicacion}</p>` : ''}`);
+      return;
+    }
+    if (a === 'sig') { mirar(null); setOcultos([]); alFinal(res); return; }
+    const cm = e.target.closest('[data-cama]');
+    if (cm) { aplicar(estadoDe(q.camas[+cm.dataset.cama].e), { frase: false }); return; }
+    const ver = e.target.closest('[data-ver]');
+    if (ver) { ver.parentElement.innerHTML = '<b>Corrección:</b> ' + q.frases[ver.dataset.ver].c; return; }
+    const fr = e.target.closest('[data-fr]');
+    if (fr && !fr.disabled) { fr.classList.toggle('marcada'); return; }
+    const op = e.target.closest('[data-op]');
+    if (op && !op.disabled) {
+      const o = q.opciones[op.dataset.op];
+      cont.querySelectorAll('#ops button').forEach(b => { b.disabled = true; });
+      op.style.borderColor = o.ok ? 'var(--verde)' : 'var(--rojo)'; op.style.opacity = 1;
+      if (!o.ok) res.ok = false;
+      cerrar(`<span class="${o.ok ? 'ok' : 'mal'}">${o.ok ? '✓ Bien' : '✗ Qué le habría pasado al paciente'}</span>${o.ok ? '' : `<p>${o.porque}</p>`}<p>${q.explicacion}</p>`);
+      return;
+    }
+    const m = e.target.closest('[data-mando]');
+    if (m && !m.disabled && m.tagName === 'BUTTON') accionMando(m, cont);
+  };
+  cont.oninput = e => { const m = e.target.closest('[data-mando]'); if (m) accionMando(m, cont); };
+}
+function mandoHTML(t) {
+  const partes = [`<p class="para"><b style="color:var(--fg)">Compruébalo en el modelo:</b> ${t.instruccion || ''}</p>`];
+  const desl = (k, n, min, max, st, u) => `<label class="desliza"><span>${n}</span><input type="range" min="${min}" max="${max}" step="${st}" value="${estado[k]}" data-mando="${k}" aria-label="${n}"><output>${k === 'pao2' ? estado[k] : dec(estado[k], 1)} <small>${u}</small></output></label>`;
+  for (const m of t.mandos) {
+    if (m === 'hb') partes.push(desl('hb', 'Hb', estado.compensa ? 2 : 5, 17, 0.5, 'g/dL'));
+    else if (m === 'pao2') partes.push(desl('pao2', 'PaO₂', 40, 100, 1, 'mmHg'));
+    else if (m === 'gc') partes.push(desl('gc', 'Gasto', 1.5, 8, 0.1, 'L/min'));
+    else if (m === 'toma') partes.push(`<div class="seg"><button type="button" data-mando="toma" data-v="svo2" aria-pressed="${estado.toma === 'svo2'}">A. pulmonar · SvO₂</button><button type="button" data-mando="toma" data-v="scvo2" aria-pressed="${estado.toma === 'scvo2'}">Cava sup. · ScvO₂</button></div>`);
+    else if (m.startsWith('estado|')) { const [, k, txt] = m.split('|'); partes.push(`<button type="button" class="b" data-mando="estado" data-v="${k}">${txt}</button>`); }
+  }
+  return partes.join('');
+}
+// El mando de la pregunta enseña lo mismo que el modelo (también tras «Te lo pongo en el modelo»)
+function sincronizarMandoPregunta(cont, visitados = []) {
+  cont.querySelectorAll('#mando input[data-mando]').forEach(r => {
+    const k = r.dataset.mando; r.value = estado[k];
+    r.parentElement.querySelector('output').innerHTML = `${k === 'pao2' ? estado[k] : dec(estado[k], 1)} <small>${{ hb: 'g/dL', pao2: 'mmHg', gc: 'L/min' }[k]}</small>`;
+  });
+  cont.querySelectorAll('#mando [data-mando="toma"]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === estado.toma)));
+  cont.querySelectorAll('#mando [data-mando="estado"]').forEach(b => { if (visitados.includes(b.dataset.v)) { b.setAttribute('aria-pressed', 'true'); b.style.borderColor = 'var(--oro)'; } });
+}
+function accionMando(m, cont) {
+  const tipo = m.dataset.mando;
+  if (tipo === 'hb' || tipo === 'pao2' || tipo === 'gc') {
+    const v = +m.value;
+    if (tipo === 'hb') { m.parentElement.querySelector('output').innerHTML = `${dec(v, 1)} <small>g/dL</small>`; cambiar(e => { soltar(e); e.hb = v; }, { frase: false }); return; } m.parentElement.querySelector('output').innerHTML = `${tipo === 'pao2' ? v : dec(v, 1)} <small>${{ hb: 'g/dL', pao2: 'mmHg', gc: 'L/min' }[tipo]}</small>`;
+    cambiar(e => { e[tipo] = v; }, { frase: false }); return;
+  }
+  if (tipo === 'toma') { cambiar(e => { e.toma = m.dataset.v; }, { frase: false }); cont.querySelectorAll('[data-mando="toma"]').forEach(b => b.setAttribute('aria-pressed', String(b === m))); return; }
+  if (tipo === 'estado') { aplicar(estadoDe(Object.assign({}, ESTADOS[m.dataset.v].p, { toma: estado.toma })), { frase: false }); m.setAttribute('aria-pressed', 'true'); m.style.borderColor = 'var(--oro)'; }
+}
+
+const Estudio = {
+  c: 0, i: 0, resultados: {}, fallos: {}, fase: 'inicio',
+  concepto(i) {
+    this.c = clamp(i, 0, CONCEPTOS.length - 1);
+    const k = CONCEPTOS[this.c], cont = $('concepto');
+    vistosQ = new Set();
+    aplicar(estadoDe(k.estado), { frase: false });
+    if (k.lupa) Lupa.abrir(k.lupa); else if (Lupa.abierta) Lupa.cerrar();
+    mirar(k.mirar || null);
+    cont.innerHTML = `<div class="cab-preg"><span class="concepto-n">${this.c + 1}</span><h3>${k.titulo}</h3></div>
+      <p class="pregunta">${k.texto}</p>
+      <div class="mando"><p class="para"><b style="color:var(--fg)">Tócalo:</b> ${k.hacer}</p><div class="fila">${k.acciones.map((a, j) => `<button class="b" type="button" data-acc="${j}">${a.t}</button>`).join('')}</div></div>
+      <p class="para"><b style="color:var(--fg)">Mira:</b> ${k.mira}</p>
+      ${verEnTexto(k.fuente)}
+      <div class="nav-c"><button class="b" type="button" data-nav="-1" ${this.c === 0 ? 'disabled' : ''}>← Anterior</button><button class="b prim" type="button" data-nav="1">${this.c === CONCEPTOS.length - 1 ? 'A la mayéutica →' : 'Siguiente →'}</button></div>`;
+    entrar(cont);
+    cont.onclick = e => {
+      const a = e.target.closest('[data-acc]'); if (a) { const ac = CONCEPTOS[this.c].acciones[+a.dataset.acc]; if (ac.estado) irEstado(ac.estado, { frase: false }); else { aplicar(estadoDe(ac.p), { frase: false }); if (ac.lupa) Lupa.abrir(ac.lupa); else if (Lupa.abierta) Lupa.cerrar(); } if (ac.mirar) mirar(ac.mirar); return; }
+      const n = e.target.closest('[data-nav]');
+      if (n) { if (this.c === CONCEPTOS.length - 1 && +n.dataset.nav > 0) { setModo('preguntas'); return; } this.concepto(this.c + (+n.dataset.nav)); window.scrollTo({ top: 0 }); }
+    };
+    pintarDock(CONCEPTOS.map((_, j) => j < this.c ? 'on' : j === this.c ? 'on aqui' : ''), `Concepto ${this.c + 1} de ${CONCEPTOS.length}`, 'cada uno mueve el modelo');
+  },
+  inicioPreguntas() {
+    if (this.fase === 'caso' || this.fase === 'recorrido' || this.fase === 'repaso') { this.reanudar(); return; }
+    this.fase = 'inicio';
+    aplicar(estadoBase(), { frase: false }); if (Lupa.abierta) Lupa.cerrar();
+    const cont = $('preg');
+    const hechas = Object.keys(this.resultados).length;
+    const nG = PREGUNTAS.filter(q => q.serie === 'guia').length, nE = PREGUNTAS.filter(q => q.serie === 'examen').length;
+    cont.innerHTML = `<div><span class="eyebrow">Mayéutica · muestra</span><h2 style="margin:2px 0 0">Preguntas para pensar, como Sócrates</h2></div>
+      <div class="ruta"><span><b>1. Guía socrática</b> (${nG}): predices qué hace el corazón con la anemia y lo compruebas en el modelo.</span>
+      <span><b>2. Examen, nivel MIR</b> (${nE}): el techo de la extracción, con distractores que salen de la propia ficha.</span>
+      <span><b>3.</b> Otra vez lo que fallaste, solo eso.</span>
+      <span><b>4.</b> El caso clínico: Fermín, el primer paso.</span></div>
+      <div class="fila"><button class="b prim" type="button" data-ir="recorrido">${hechas ? `Seguir (${hechas} de ${PREGUNTAS.length})` : 'Empezar la guía socrática'}</button><button class="b" type="button" data-ir="casos">Ir al caso</button></div>
+      <p class="para">En la app, cada ficha trae su Guía y su Examen completos. El paciente se inventa; la medicina sale del libro, y cada pregunta dice dónde.</p>`;
+    entrar(cont);
+    cont.onclick = e => { const b = e.target.closest('[data-ir]'); if (!b) return; b.dataset.ir === 'recorrido' ? this.recorrido(this.siguientePendiente()) : this.listaCasos(); };
+    pintarDock(PREGUNTAS.map(q => this.resultados[q.id] || ''), 'Mayéutica', '');
+  },
+  reanudar() { if (this.fase === 'caso') this.pasoCaso(); else if (this.fase === 'repaso') this.repaso(); else this.recorrido(this.i); },
+  siguientePendiente() { const i = PREGUNTAS.findIndex(q => !this.resultados[q.id]); return i < 0 ? PREGUNTAS.length : i; },
+  recorrido(i) {
+    this.fase = 'recorrido'; this.i = i;
+    if (i >= PREGUNTAS.length) { this.repaso(); return; }
+    const q = PREGUNTAS[i];
+    const nFallos = Object.keys(this.fallos).length;
+    pintarDock(PREGUNTAS.map((p, j) => (this.resultados[p.id] === 'mal' ? 'mal' : this.resultados[p.id] ? 'on' : '') + (j === i ? ' aqui' : '')), `${SERIE_TXT[q.serie]} · ${i + 1} de ${PREGUNTAS.length}`, nFallos ? `para repasar: ${nFallos}` : '');
+    pintarPregunta($('preg'), { ...q, num: i + 1 }, { alFinal: r => {
+      this.resultados[q.id] = r.ok ? 'on' : 'mal';
+      if (!r.ok) this.fallos[q.id] = { faltan: r.faltan }; else delete this.fallos[q.id];
+      this.recorrido(i + 1); window.scrollTo({ top: 0 });
+    } });
+  },
+  repaso() {
+    this.fase = 'repaso';
+    aplicar(estadoBase(), { frase: false }); if (Lupa.abierta) Lupa.cerrar();
+    const ids = PREGUNTAS.filter(q => this.fallos[q.id]).map(q => q.id);
+    const cont = $('preg');
+    pintarDock(ids.map(() => 'mal'), 'Otra vez lo que fallaste', ids.length ? `quedan ${ids.length}` : '');
+    if (!ids.length) {
+      cont.innerHTML = `<span class="eyebrow">Repaso</span><h2 style="margin:0">No queda nada por repasar</h2><p class="para">Has acertado todo, o ya lo repasaste.</p><div class="fila"><button class="b prim" type="button" data-ir="casos">Ir a los casos clínicos →</button></div>`;
+    } else {
+      cont.innerHTML = `<span class="eyebrow">Repaso</span><h2 style="margin:0">Otra vez lo que fallaste: ${ids.length}</h2>
+        <p class="para">Cada pregunta vuelve con el modelo en su estado. En las de destapar, solo vuelve lo que no marcaste. Un acierto la saca de la lista.</p>
+        <div class="repaso-chips">${ids.map(id => { const n = PREGUNTAS.findIndex(q => q.id === id); return `<button class="b" type="button" data-rep="${id}">${n + 1} · ${PREGUNTAS[n].corto}</button>`; }).join('')}</div>
+        <div class="fila"><button class="b link" type="button" data-ir="casos">Saltar a los casos →</button></div>`;
+    }
+    entrar(cont);
+    cont.onclick = e => {
+      const b = e.target.closest('[data-rep]');
+      if (b) {
+        const n = PREGUNTAS.findIndex(q => q.id === b.dataset.rep), q = PREGUNTAS[n];
+        pintarPregunta(cont, { ...q, num: n + 1 }, { repaso: this.fallos[q.id], cabecera: '<span class="eyebrow">Repaso</span>', alFinal: r => {
+          if (r.ok) delete this.fallos[q.id];
+          else if (q.tipo === 'destapa' && this.fallos[q.id].faltan?.length) this.fallos[q.id].faltan = r.faltan.length ? r.faltan : this.fallos[q.id].faltan;
+          else this.fallos[q.id] = { faltan: r.faltan };
+          this.repaso(); window.scrollTo({ top: 0 });
+        } });
+        return;
+      }
+      if (e.target.closest('[data-ir="casos"]')) this.listaCasos();
+    };
+  },
+  listaCasos() {
+    this.fase = 'casos';
+    aplicar(estadoBase(), { frase: false }); if (Lupa.abierta) Lupa.cerrar();
+    const cont = $('preg');
+    cont.innerHTML = `<span class="eyebrow">Casos clínicos</span><h2 style="margin:0">Pacientes que evolucionan</h2>
+      <p class="para">El modelo se mueve al estado de cada paso antes de la pregunta. Lo nuevo de la ficha del paciente sale en rojo.</p>
+      <div class="casos-lista">${CASOS.map((c, k) => `<button class="b" type="button" data-caso="${k}">${c.titulo}<small>${c.sub} · aquí, el paso 1 de 7</small></button>`).join('')}</div>
+`;
+    entrar(cont);
+    pintarDock(CASOS.map(() => ''), 'Casos clínicos', '');
+    cont.onclick = e => { const b = e.target.closest('[data-caso]'); if (b) this.caso(+b.dataset.caso); };
+  },
+  caso(k) { this.fase = 'caso'; this.k = k; this.p = 0; this.ficha = {}; this.pasoCaso(); },
+  pasoCaso() {
+    const C0 = CASOS[this.k], paso = C0.pasos[this.p];
+    if (this.p === 0) this.ficha = { ...C0.paciente };
+    Object.assign(this.ficha, paso.datos || {});
+    const nuevos = paso.nuevo || [];
+    pintarDock(C0.pasos.map((_, j) => j < this.p ? 'on' : j === this.p ? 'on aqui' : ''), C0.corto, `paso ${this.p + 1} de ${C0.pasos.length}`);
+    const cab = `<span class="dia">${paso.momento}</span>
+      <dl class="paciente">${Object.entries(this.ficha).map(([kk, v]) => `<dt>${kk}</dt><dd class="${nuevos.includes(kk) ? 'cambia' : ''}">${v}</dd>`).join('')}</dl>`;
+    const camas = paso.camas || C0.camas;
+    const cab2 = camas ? cab + `<div class="camas"><div class="seg" role="group" aria-label="Qué cama ves en el modelo">${camas.map((c, i) => `<button type="button" data-cama="${i}" aria-pressed="false">Ver ${c.n}</button>`).join('')}</div><div id="camas-tabla"></div></div>` : cab;
+    const q = { ...paso.pregunta, estado: paso.estado, lupa: paso.lupa, mirar: paso.mirar, ultimo: this.p === C0.pasos.length - 1, calculadora: paso.calculadora, camas };
+    pintarPregunta($('preg'), q, { cabecera: cab2, alFinal: () => {
+      if (this.p < C0.pasos.length - 1) { this.p++; this.pasoCaso(); window.scrollTo({ top: 0 }); }
+      else this.finCaso();
+    } });
+  },
+  finCaso() {
+    const C0 = CASOS[this.k], cont = $('preg');
+    this.fase = 'casos';
+    cont.innerHTML = `<div class="respuesta entra"><span class="eyebrow">En la app, el caso sigue</span>
+      <ol class="siguen" start="2">${C0.siguen.map(t => `<li>${t}</li>`).join('')}</ol>
+      <span class="eyebrow" style="margin-top:6px">Lo que te llevarás · ${C0.corto}</span>
+      <ol class="lleva">${C0.lleva.map(t => `<li>${t}</li>`).join('')}</ol>
+      <div class="fila"><button class="b link" type="button" data-fin="ficha">Repasar en la ficha: ${C0.volver.nombre}</button>
+      <button class="b" type="button" data-fin="modelo">Abrir el modelo en el estado del paciente</button>
+      <button class="b" type="button" data-fin="otro">Otro caso</button></div></div>`;
+    entrar(cont);
+    pintarDock(C0.pasos.map(() => 'on'), C0.corto, 'hecho');
+    cont.onclick = e => {
+      const a = e.target.closest('[data-fin]')?.dataset.fin;
+      if (a === 'ficha') e.target.closest('button').textContent = `En la app abriría la ficha ${C0.volver.ficha}`;
+      if (a === 'modelo') { setModo('explorar'); aplicar(estadoDe(C0.volver.estado)); if (C0.volver.lupa) Lupa.abrir(C0.volver.lupa); }
+      if (a === 'otro') this.listaCasos();
+    };
+  }
+};
+/* ============================================================
+   17. Contenido de estudio: la muestra. Toda la medicina sale del libro (ficha y página);
+       el paciente del caso se inventa.
+   ============================================================ */
+const CONCEPTOS = [
+  { titulo: 'El corazón compensa la anemia',
+    texto: 'La anemia baja la <span class="hl-azul">viscosidad</span>: la sangre normal es ≈3 veces más viscosa que el plasma y ≈4 veces más que el agua (Tabla 12.2). La resistencia es proporcional a la viscosidad (R = 8µL/πr⁴): con anemia, <span class="hl-a">el gasto sube</span>. En la Fig. 12.2 sube más de lo que cae el Hto, porque la sangre no es newtoniana: al fluir más deprisa, es menos viscosa.',
+    hacer: 'compara la anemia con el gasto fijo y con el corazón que compensa.', estado: { hb: 7.5 }, mirar: 'gc',
+    acciones: [{ t: 'Gasto fijo', estado: 'anemia' }, { t: 'El corazón compensa', estado: 'anemia-compensada' }, { t: 'Normal', estado: 'normal' }],
+    mira: 'el gasto y la extracción del tablero: con el gasto fijo, la extracción llega al 50 %; si el corazón compensa, se queda en ≈34 % y los hematíes corren más deprisa (gasto ilustrativo).',
+    fuente: 'Anemia en el crítico, p. 4-6 (Tabla 12.2, Fig. 12.2)' },
+  { titulo: 'El techo: un Hto del 10 %',
+    texto: 'La extracción sube hasta un máximo de ≈50 %. En la Fig. 12.3 (primates) llega con un <span class="hl-r">Hto del 10 % (Hb ≈3)</span>: por debajo, el consumo cae y sube el lactato. Por eso una extracción del 50 % podría servir para indicar la transfusión. En humanos, hasta Hb 5 parece seguro, y algunos pacientes toleran 2-3.',
+    hacer: 'baja la Hb con el corazón que compensa.', estado: { hb: 5, compensa: true }, mirar: 'o2er',
+    acciones: [{ t: 'Hb 5', p: { hb: 5, compensa: true } }, { t: 'Hb 3: el techo', estado: 'techo-anemia' }, { t: 'Hb 2', p: { hb: 2, compensa: true } }],
+    mira: 'la extracción llega al 50 % con Hb 3; con Hb 2 el VO₂ baja de 250 y sube el lactato. En Explorar, el punto recorre la Fig. 12.3 viva.',
+    fuente: 'Anemia en el crítico, p. 6-7 (Fig. 12.3)' },
+  { titulo: 'El Hto mide una concentración',
+    texto: 'Tumbarse baja el Hto un <span class="hl-a">4,1 %</span> (entran 420 mL de plasma desde las piernas); un bolo de 20 mL/kg de salino, un <span class="hl-a">4,2 %</span> a los 90 min. En los dos casos, como <span class="hl-r">perder una unidad (500 mL)</span>, sin perder un hematíe.',
+    hacer: 'abre el tubo y prueba las dos cosas.', estado: { hb: 13.9, dil: 'pie' }, lupa: 'tubo', mirar: 'hb',
+    acciones: [{ t: 'Tumbarse', p: { hb: 12.6, dil: 'tumbado' }, lupa: 'tubo' }, { t: 'Bolo de 20 mL/kg', p: { hb: 12.9, dil: 'bolo' }, lupa: 'tubo' }],
+    mira: 'la columna roja (la masa) no se mueve; el plasma crece y el Hto cae.',
+    fuente: 'Anemia en el crítico, p. 2-3 (Fig. 12.1)' },
+  { titulo: 'Transfundir sube el aporte, no el consumo',
+    texto: 'Cada CH sube la Hb ≈1 g/dL y el Hto ≈3 %. En la Fig. 12.4, 1-2 CH subieron la Hb de 6,4 a 8 (+25 %) y el aporte de forma parecida, pero <span class="hl-r">el consumo no cambió</span>: la extracción cayó. Y sin volumen, el corazón no puede compensar: <span class="hl-a">la hipovolemia causa shock; la anemia, no</span>.',
+    hacer: 'transfunde y luego quita volumen.', estado: { hb: 6.4, compensa: true }, mirar: 'vo2',
+    acciones: [{ t: 'Transfundir 6,4 → 8', estado: 'transfusion' }, { t: 'Anemia sin volumen', estado: 'anemia-hipovolemia' }],
+    mira: 'el VO₂ se queda en 250 aunque el aporte suba; sin volumen, el gasto no sube y el consumo cae.',
+    fuente: 'Umbral transfusional, p. 10-11, 16-17 (Figs. 12.4 y 12.6)' },
+  { titulo: 'TRALI o TACO',
+    texto: 'Los dos dan insuficiencia respiratoria hipoxémica en las 6 h tras empezar la transfusión. <span class="hl-r">TRALI</span>: anticuerpos del donante contra los neutrófilos del receptor (80 %), que se quedan en el pulmón; 1 por cada 12.000 CH, mortalidad ≈50 %. <span class="hl-a">TACO</span>: edema hidrostático, ≈1 %, más con IC o IR previas; mortalidad del 20 %.',
+    hacer: 'abre el alvéolo con cada uno.', estado: {}, lupa: 'alveolo', mirar: 'spo2',
+    acciones: [{ t: 'TRALI', estado: 'trali' }, { t: 'TACO', estado: 'taco' }],
+    mira: 'en el TRALI, la IgG de la bolsa y los neutrófilos que pasan al alvéolo; en el TACO, el agua que cruza y el corazón grande. La Rx real del TRALI está en la lámina, debajo de la lupa.',
+    fuente: 'Riesgos de la transfusión, p. 14-16 (Fig. 12.5)' }
+];
+
+const PREGUNTAS = [
+  { id: 'an-g1', serie: 'guia', corto: 'el gasto en la anemia', tipo: 'test', fuente: 'Anemia en el crítico, p. 4-6 (Tabla 12.2, Figs. 12.2-12.3)', estado: { compensa: true }, mirar: 'gc',
+    tocar: { mandos: ['hb'], ocultar: ['gc', 'do2', 'o2er', 'ven'], instruccion: 'con el corazón que compensa, baja la Hb a 7,5 y pulsa «Comprobar».', comprobar: e => e.hb === 7.5, pista: 'Mueve el deslizador de la Hb hasta 7,5.', bueno: { hb: 7.5 },
+      confirma: R => `gasto ${dec(R.gc, 1)} L/min (de 5), extracción ${R.ext} % y SvO₂ ${R.svo2} %: lejos del techo.` },
+    enunciado: 'Un paciente con la volemia normal pierde hematíes poco a poco y la Hb baja de 15 a 7,5. ¿Qué hacen el gasto cardíaco y la extracción de O₂? Contesta y compruébalo en el modelo.',
+    opciones: [
+      { t: 'No cambia: el aporte cae a la mitad y la extracción llega al 50 %, el techo', ok: false, porque: 'Es la cuenta con el gasto fijo. Verías el tejido al límite con Hb 7,5 y transfundirías sin necesidad, con los riesgos de la bolsa (TRALI, TACO, infecciones).' },
+      { t: 'Sube porque la sangre es menos viscosa; la extracción sube, pero lejos del 50 %', ok: true },
+      { t: 'Sube lo justo para que el aporte no cambie, y la extracción sigue en el 25 %', ok: false, porque: 'El gasto sube, pero no tanto: en la Fig. 12.3 el aporte cae pese a todo y es la extracción la que sube para mantener el consumo. Esperando una extracción normal, una SvO₂ algo baja te haría buscar una causa que no existe.' },
+      { t: 'Baja para ahorrar O₂ al miocardio; la extracción pasa del 50 % y sube el lactato', ok: false, porque: 'Es al revés: la anemia baja la viscosidad y el gasto sube (Fig. 12.2). Lo darías por descompensado cuando compensa solo, y lo transfundirías sin indicación.' }],
+    explicacion: 'La anemia baja la <span class="hl-azul">viscosidad</span> (Tabla 12.2: la sangre normal es ≈3 veces más viscosa que el plasma) y la resistencia es proporcional a ella (R = 8µL/πr⁴): <span class="hl-a">el gasto sube</span>. El aporte cae algo y la extracción sube para que el consumo no cambie; el <span class="hl-r">techo del 50 %</span> no llega hasta un Hto del 10 % (Hb ≈3).',
+    nota: '<span class="tipo-nota">La fuente no lo dice</span>Cuánto sube el gasto en el ser humano. El del modelo es ilustrativo: sigue la forma de la Fig. 12.3, que es de primates.' },
+  { id: 'an-e1', serie: 'examen', corto: 'el techo', tipo: 'test', fuente: 'Anemia en el crítico, p. 6-7 (Fig. 12.3)', estado: { compensa: true }, despues: { hb: 3, compensa: true },
+    enunciado: 'En la anemia isovolémica progresiva de la Fig. 12.3 (primates), ¿qué marca el punto en que la oxigenación de los tejidos se ve amenazada?',
+    opciones: [
+      { t: 'Un Hto del 30 %: es cuando el aporte de O₂ cae por debajo de lo normal', ok: false, porque: 'El aporte cae desde el principio, pero el consumo no cambia porque sube la extracción. Con ese corte transfundirías a muchos anémicos de la UCI cuyo tejido aún compensa, con los riesgos de la bolsa.' },
+      { t: 'Una Hb de 7 g/dL, el umbral de transfusión de las guías', ok: false, porque: 'Es un umbral de la práctica clínica (estable, sin coronariopatía), no el de la figura: con Hb 7 la extracción aún está lejos del 50 % y el consumo no ha cambiado. Creerías que el tejido sufre cuando aún compensa.' },
+      { t: 'Una SvO₂ por debajo del 65 %, la que marca «menos aporte»', ok: false, porque: 'Por debajo del 65 % la Tabla 9.4 habla de «menos aporte», no de amenaza: la amenaza es una extracción del 50 % (SvO₂ ≤50 %). Transfundirías al primer descenso de la saturación venosa.' },
+      { t: 'Una extracción del 50 %, que llega con un Hto del 10 % (Hb ≈3)', ok: true }],
+    explicacion: 'Fig. 12.3: el aporte cae desde el principio, pese a que sube el gasto, y la extracción sube para que el consumo no cambie… hasta un <span class="hl-r">Hto del 10 % (Hb ≈3)</span>, cuando la extracción llega a su máximo, <span class="hl-r">≈50 %</span>: ahí cae el consumo y sube el lactato. Por eso una extracción del 50 % podría servir como indicación de transfundir.',
+    nota: '<span class="tipo-nota">Contexto</span>La Fig. 12.3 es de primates. El texto añade que, en animales con la volemia mantenida, un Hto de 5-10 % (Hb 1,5-3) no alteró la oxigenación de los tejidos, y que en humanos hasta Hb 5 parece seguro (p. 7).' }
+];
+
+const CASOS = [
+  { id: 'H1', titulo: 'La Hb que bajó sin sangrar', corto: 'Fermín · la Hb que bajó', sub: 'shock séptico por neumonía',
+    paciente: { Paciente: 'Fermín, 71 años, varón, 75 kg', Motivo: 'Shock séptico por neumonía' },
+    pasos: [
+      { momento: 'Urgencias · 90 min tras el bolo', datos: { 'A la llegada': 'Hto 39 % · Hb 12,9 g/dL', Fluidos: '1,5 L de salino (20 mL/kg)', 'A los 90 min': 'Hto 35 % · Hb 11,6 g/dL' },
+        nuevo: ['A la llegada', 'Fluidos', 'A los 90 min'], estado: { hb: 11.6 }, mirar: 'hb',
+        pregunta: { id: 'h1-1', tipo: 'test', fuente: 'Anemia en el crítico, p. 2-3 (Fig. 12.1) · Umbral transfusional, p. 8', despues: { hb: 11.6, dil: 'fermin' }, lupaDespues: 'tubo',
+          enunciado: 'El R2 mira la analítica: «Ha bajado 4 puntos de Hto en hora y media: está sangrando, pide dos concentrados». ¿Qué le contestas?',
+          opciones: [
+            { t: 'Que no hace falta sangrar: 20 mL/kg de salino bajan el Hto unos 4 puntos', ok: true },
+            { t: 'Que tiene razón: 4 puntos menos de Hto equivalen a perder una unidad de sangre', ok: false, porque: 'Esa caída es la que da perder una unidad, pero el bolo la da sin perder un hematíe (Fig. 12.1). Transfundirías a un paciente con Hb 11,6 que quizá no ha sangrado, con los riesgos de la bolsa.' },
+            { t: 'Que da igual si sangra: con Hb 11,6 ya es anemia y hay que corregirla', ok: false, porque: 'Cumple la definición (Hb &lt;13 en varones), pero es una concentración que los fluidos diluyen, y en el shock séptico el umbral para transfundir es &lt;7. Le darías sangre sin indicación.' },
+            { t: 'Que repita la analítica: el salino no mueve el Hto, será un error de laboratorio', ok: false, porque: 'El salino sí lo mueve: expande el plasma. Repetirías la extracción, y cada analítica también le quita sangre (40-70 mL al día en la UCI).' }],
+          explicacion: 'Fig. 12.1: un bolo de <span class="hl-a">20 mL/kg</span> de salino baja el Hto un <span class="hl-a">4,2 %</span> a los 90 min, lo mismo que <span class="hl-r">perder una unidad (500 mL)</span>. El Hto y la Hb son <span class="hl-p">concentraciones</span>: el plasma los mueve sin que cambie la masa de hematíes. Una caída aguda de la Hb puede ser dilución y llevar a transfusiones innecesarias (p. 8).',
+          nota: '<span class="tipo-nota">Contexto</span>Los 4,2 puntos de la Fig. 12.1 son de adultos sin sangrado; los 4 de Fermín son suyos. El tubo de la lupa dibuja su caso si no ha perdido hematíes.' } }
+    ],
+    siguen: ['Día 3: Hb 9,8, VCM 79 y ferritina 610 µg/L. ¿Ferropenia?', 'Día 5: unos 60 mL al día de analíticas. ¿Qué más le baja la Hb y cómo lo reduces?', 'Día 6: Hb 7,6, ScvO₂ 72 % y lactato 1,4. ¿Transfundes?', 'El giro: un antecedente que cambia el umbral.', 'El plan del R1, con sus errores (encuentra el error).', 'Tras transfundir: ¿han mejorado sus tejidos? (piensa y destapa).'],
+    lleva: ['El Hto y la Hb son concentraciones: 20 mL/kg de salino los bajan como una unidad perdida.', 'Umbral de 7 (u 8 con coronariopatía), y mira la extracción, no solo la Hb.', 'Transfundir sube el aporte, no el consumo.'],
+    volver: { nombre: 'Anemia en el crítico', ficha: 'Anemia en el crítico (Marino, cap. 12)', estado: { hb: 11.6, dil: 'fermin' }, lupa: 'tubo' } }
+];
+
+/* ============================================================
+   18. Arranque
+   ============================================================ */
+aplicar(estadoBase(), { frase: false });
+decir(...fraseDe(null, estado));
+const ajustarDock = () => document.documentElement.style.setProperty('--dock-h', $('dock').offsetHeight + 'px');
+new ResizeObserver(ajustarDock).observe($('dock')); ajustarDock();
+new ResizeObserver(() => Lupa.colocar()).observe($('lamina-caja'));
+new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) arrancar(); }).observe($('escena'));
+document.addEventListener('visibilitychange', () => { if (!document.hidden) arrancar(); });
+pintarUnaVez(); arrancar();
+</script>
+</body>
+</html>

@@ -1,0 +1,404 @@
+<!-- MAQUETA PARA ELEGIR (plan socialista, bloque 2: anemia, transfusión, plaquetas y plasma). No es parte de la app.
+     Ábrela con el servidor de la app, desde la raíz del repositorio:
+       python3 -m http.server 8000  →  http://localhost:8000/autonomo/maquetas/b2-formas.html
+     Formas nuevas para la tabla única (js/data/formas-iones.js), con la misma geometría que js/core/particulas.js
+     (partesDe: partes 'lleno' y 'trazo' con su borde oscuro). Lo que entraría en la tabla si el usuario lo aprueba:
+       esquisto:  { nombre: 'Esquistocito', forma: 'casco', color: '--accent-red' },
+       fvw:       { nombre: 'Factor de von Willebrand', forma: 'cordon', color: '--accent-blue' },
+       adamts13:  { nombre: 'ADAMTS-13', forma: 'tijera', color: '--accent-green' },
+       fibrinogeno: { nombre: 'Fibrinógeno', forma: 'baston', color: '--accent-yellow' },
+       dimero:    { nombre: 'Dímero-D', forma: 'dimero', color: '--accent-yellow' },
+       ft:        { nombre: 'Factor tisular', forma: 'chispa', color: '--accent-red' },
+       neutrofilo:{ nombre: 'Neutrófilo', forma: 'neutrofilo', color: '--text-dim' },
+       macrofago: { nombre: 'Macrófago', forma: 'macrofago', color: '--text-muted' },
+       f2/f7/f9/f10: { nombre: 'Factor II'…, forma: 'ficha', color: '--accent-blue', etiqueta: 'II'… }
+     La ficha de factor es la única forma con texto: particulas.js necesitaría una parte nueva 'texto' y un radio
+     mínimo (r ≥ 7,5) para que el número romano se lea. Cada línea de «qué es» lleva la página del PDF
+     docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf (cap. 12 desde la p. 1; cap. 13 desde la p. 20). -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Formas nuevas: la sangre y la hemostasia (maqueta)</title>
+<style>
+/* Tokens de css/variables.css, copiados tal cual. Ningún color fuera de ellos. */
+:root {
+  color-scheme: dark;
+  --bg-main: #17140f;
+  --bg-card: rgba(46, 38, 28, 0.72);
+  --border-color: rgba(196, 154, 74, 0.35);
+  --text-main: #ece3cc;
+  --text-muted: #a5967c;
+  --text-dim: #c9bda4;
+  --accent-green: #90a06a;
+  --accent-red: #b85c3e;
+  --accent-yellow: #cf9a3e;
+  --accent-blue: #d4af37;
+  --accent-purple: #9c5476;
+  --serif: Georgia, 'Times New Roman', serif;
+  --sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg-main); color: var(--text-main); }
+html { -webkit-text-size-adjust: 100%; }
+body { font: 16px/1.45 var(--serif); }
+main { max-width: 440px; margin: 0 auto; padding: 14px 14px 40px; display: grid; gap: 18px; min-width: 0; grid-template-columns: minmax(0, 1fr); }
+main > * { min-width: 0; }
+.aviso { background: var(--accent-yellow); color: var(--bg-main); font: 700 .78rem/1.2 var(--serif); letter-spacing: .04em;
+  text-transform: uppercase; text-align: center; border-radius: 10px; padding: 9px 10px; }
+h1 { font-size: 1.45rem; line-height: 1.2; margin: 0; color: var(--accent-blue); font-weight: normal; }
+h2 { font-size: 1.15rem; margin: 0 0 6px; color: var(--accent-blue); font-weight: normal; }
+p { margin: 0; }
+.idea { font-size: 1.02rem; color: var(--text-dim); }
+.hl-azul { background: linear-gradient(to bottom, transparent 58%, rgba(212, 175, 55, .32) 58%); }
+.hl-rojo { background: linear-gradient(to bottom, transparent 58%, rgba(184, 92, 62, .4) 58%); }
+.bloque { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; display: grid; gap: 10px; min-width: 0; }
+.sub { font-size: .86rem; color: var(--text-muted); }
+.org { display: inline-block; font: .68rem/1.3 var(--sans); letter-spacing: .02em; border: 1px solid var(--border-color); border-radius: 999px;
+  padding: 0 6px; color: var(--text-muted); vertical-align: 1px; white-space: nowrap; }
+.org.ilu { border-style: dashed; }
+
+/* Tarjetas: una por forma */
+.formas { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+.forma { border: 1px solid var(--border-color); border-radius: 12px; padding: 9px; display: grid; grid-template-columns: 52px 1fr; gap: 3px 10px; align-items: start; min-width: 0; }
+.forma.nueva { border-style: dashed; border-color: var(--accent-yellow); }
+.forma svg.grande { width: 52px; height: 52px; grid-row: span 3; background: var(--bg-main); border-radius: 10px; }
+.forma b { font-size: .98rem; line-height: 1.2; overflow-wrap: anywhere; }
+.forma .que { font: .84rem/1.35 var(--sans); color: var(--text-dim); }
+.forma .color { font: .72rem/1.3 var(--sans); color: var(--text-muted); }
+.forma .real { grid-column: 1 / -1; display: flex; gap: 6px; align-items: center; font: .7rem var(--sans); color: var(--text-muted); margin-top: 3px; flex-wrap: wrap; }
+.forma .real svg { width: 24px; height: 24px; border-radius: 5px; flex: none; }
+.etq-nueva { font: 700 .6rem/1 var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--bg-main); background: var(--accent-yellow); border-radius: 4px; padding: 2px 5px; margin-left: 6px; vertical-align: 2px; }
+.seccion-forma { font: 600 .76rem var(--sans); letter-spacing: .07em; text-transform: uppercase; color: var(--accent-yellow); margin-top: 4px; }
+
+/* Parecidas: pares lado a lado */
+.pares { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.pares li { display: grid; grid-template-columns: 96px 1fr; gap: 10px; align-items: center; font: .86rem/1.4 var(--sans); color: var(--text-dim); }
+.pares svg { width: 96px; height: 40px; background: var(--bg-main); border-radius: 8px; }
+.pares b { color: var(--text-main); font-weight: 600; }
+
+/* Escena */
+.escena { width: 100%; height: auto; display: block; border-radius: 12px; border: 1px solid var(--border-color); }
+.escena text { font-family: var(--serif); }
+
+/* Ya existen */
+.leyenda { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 14px; font: .84rem var(--sans); color: var(--text-dim); }
+.leyenda li { display: inline-flex; align-items: center; gap: 6px; }
+.leyenda svg { width: 20px; height: 20px; flex: none; }
+
+/* Decisiones */
+.dudas { margin: 0; padding-left: 20px; display: grid; gap: 12px; font-size: .92rem; }
+.dudas .opc { display: block; font: .84rem/1.4 var(--sans); color: var(--text-dim); margin-top: 3px; }
+.elige { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.elige button { min-height: 44px; font: 600 .8rem var(--sans); background: rgba(46, 38, 28, 1); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 10px; padding: 6px 12px; cursor: pointer; }
+.elige button[aria-pressed="true"] { background: var(--accent-yellow); color: var(--bg-main); border-color: var(--accent-yellow); }
+.resumen { font: .84rem/1.4 var(--sans); color: var(--text-dim); background: rgba(46, 38, 28, 1); border-radius: 10px; padding: 8px 10px; }
+a.pdf { color: var(--accent-yellow); font: 600 .78rem var(--sans); display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; border-bottom: 1px dashed var(--accent-yellow); }
+</style>
+</head>
+<body>
+<main>
+  <p class="aviso">Maqueta para elegir: no es la app</p>
+
+  <header class="bloque">
+    <h1>Formas nuevas: la sangre y la hemostasia</h1>
+    <p class="idea">Para el capilar que compensa y el vaso que sangra hacen falta <span class="hl-azul">diez formas nuevas</span>: el hematíe roto, las piezas del tapón y la coagulación, dos células que comen o inflaman y las fichas de los factores. La forma dice qué es; el color ayuda, pero nunca decide solo.</p>
+    <p class="sub">Cada tarjeta: la forma grande, su nombre, qué es (con la página del libro) y cómo se ve <b>a tamaño real</b> sobre la luz de un vaso, el plasma, la pared y el fondo oscuro. Todas llevan un borde fino oscuro para leerse sobre cualquier fondo, como las de la tabla de hoy.</p>
+  </header>
+
+  <section class="bloque" aria-labelledby="t-nuevas">
+    <h2 id="t-nuevas">Las formas nuevas</h2>
+    <ul class="formas" id="formas"></ul>
+  </section>
+
+  <section class="bloque" aria-labelledby="t-escena">
+    <h2 id="t-escena">Todas juntas, a tamaño de modelo</h2>
+    <p class="sub">Una herida y su red de capilares, como las vería el vaso que sangra. Es un dibujo de muestra <span class="org ilu">ilustrativo</span>: aquí no hay cifras.</p>
+    <svg class="escena" id="escena" viewBox="0 0 360 236" role="img" aria-label="Muestra: una herida de la pared con plaquetas, factor de von Willebrand, fibrinógeno y fibrina; en la sangre, esquistocitos, dímeros-D, un neutrófilo, un macrófago y las fichas de los factores"></svg>
+  </section>
+
+  <section class="bloque" aria-labelledby="t-pares">
+    <h2 id="t-pares">Junto a las que se parecen</h2>
+    <p class="sub">Cada forma nueva al lado de la de la tabla que más se le parece, a tamaño de leyenda.</p>
+    <ul class="pares" id="pares"></ul>
+  </section>
+
+  <section class="bloque" aria-labelledby="t-hay">
+    <h2 id="t-hay">Las que ya hay y se usan tal cual</h2>
+    <ul class="leyenda" id="ya-hay"></ul>
+  </section>
+
+  <section class="bloque" aria-labelledby="t-dudas">
+    <h2 id="t-dudas">Lo que decides tú</h2>
+    <ol class="dudas">
+      <li><b>Las diez formas, en conjunto.</b>
+        <span class="opc">Propuesta: entran en la tabla única y valen para todos los modelos (el capilar usa el neutrófilo en el alvéolo; el vaso, las demás).</span>
+        <div class="elige" data-q="todas"><button type="button" aria-pressed="false">Sí, todas</button><button type="button" aria-pressed="false">Con cambios</button></div></li>
+      <li><b>El dímero-D, un «8».</b> Dos nudos del fibrinógeno pegados en diagonal. Se parece poco al O₂ (dos bolas con una barra), pero los dos son «dos bolitas».
+        <span class="opc">Otra opción: un trocito roto del hilo de la fibrina con dos nudos en los extremos.</span>
+        <div class="elige" data-q="dimero"><button type="button" aria-pressed="false">El «8»</button><button type="button" aria-pressed="false">El trozo de hilo</button></div></li>
+      <li><b>El factor de von Willebrand, en oro.</b> La heparina ya es un collar de cuentas en ciruela; el FvW es un cordón con cuentas y su color no puede ser el mismo.
+        <span class="opc">Otra opción: crema, pero entonces se confunde con las plaquetas que se le pegan.</span>
+        <div class="elige" data-q="fvw"><button type="button" aria-pressed="false">Oro</button><button type="button" aria-pressed="false">Crema</button></div></li>
+      <li><b>Las fichas de los factores, con su número.</b> Es la única forma con letras: en el modelo se dibuja grande (el número romano a 7,5 px o más) y nunca como partícula diminuta.
+        <span class="opc">Otra opción: sin número, solo la ficha dorada, y el número en la leyenda.</span>
+        <div class="elige" data-q="ficha"><button type="button" aria-pressed="false">Con número</button><button type="button" aria-pressed="false">Sin número</button></div></li>
+    </ol>
+    <p class="resumen" id="resumen">Aún no has elegido.</p>
+    <a class="pdf" href="../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=20" target="_blank" rel="noopener">Abrir el libro: plaquetas y plasma, p. 20 →</a>
+  </section>
+</main>
+
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const n2 = x => +x.toFixed(2);
+const BORDE_PARTICULA = '--bg-main';
+
+/* ── La tabla: las que ya hay (copiadas de la tabla única de la app) y las nuevas propuestas ── */
+const YA = {
+  rbc: { nombre: 'Hematíe', forma: 'disco', color: '--accent-red' },
+  plaqueta: { nombre: 'Plaqueta', forma: 'plaqueta', color: '--text-main' },
+  plaquetaActiva: { nombre: 'Plaqueta activada', forma: 'plaquetaActiva', color: '--text-main' },
+  fibrina: { nombre: 'Fibrina', forma: 'hilo', color: '--accent-yellow' },
+  at: { nombre: 'Antitrombina', forma: 'escudo', color: '--accent-blue' },
+  heparina: { nombre: 'Heparina', forma: 'collar', color: '--accent-purple' },
+  fp4: { nombre: 'FP4', forma: 'fp4', color: '--text-dim' },
+  igg: { nombre: 'IgG', forma: 'igg', color: '--accent-red' },
+  ca: { nombre: 'Ca²⁺', forma: 'ovalo', color: '--text-main' },
+  agua: { nombre: 'Agua', forma: 'gota', color: '--text-main' },
+  o2: { nombre: 'O₂', forma: 'pesa', color: '--text-main' },
+  linfocito: { nombre: 'Linfocito', forma: 'linfocito', color: '--text-main' },
+  celula: { nombre: 'Célula desprendida', forma: 'celula', color: '--text-muted' },
+  cruzH: { nombre: 'H⁺', forma: 'cruz', color: '--accent-red' },
+  anion: { nombre: 'Aniones no medidos', forma: 'estrella', color: '--accent-yellow' },
+  cadena: { nombre: 'Ácidos grasos de cadena corta', forma: 'cadena', color: '--accent-yellow' }
+};
+const COLOR = { '--accent-red': 'teja', '--accent-blue': 'oro', '--accent-green': 'verde salvia', '--accent-yellow': 'ámbar', '--accent-purple': 'ciruela', '--text-main': 'crema', '--text-dim': 'crema oscuro', '--text-muted': 'topo' };
+// q: qué es, en una línea, con su página del PDF (cap. 12 desde la p. 1; cap. 13 desde la p. 20)
+const NUEVAS = [
+  { grupo: 'La sangre que se rompe' },
+  { k: 'esquisto', nombre: 'Esquistocito', forma: 'casco', color: '--accent-red', como: 'el disco del hematíe con un mordisco: forma de casco',
+    q: 'Hematíe roto al pasar por una microcirculación llena de coágulos; su presencia en el frotis es la marca de las microangiopatías.', p: 'p. 25-26' },
+  { grupo: 'El tapón y la coagulación' },
+  { k: 'fvw', nombre: 'Factor de von Willebrand (FvW)', forma: 'cordon', color: '--accent-blue', como: 'cordón largo con cuentas',
+    q: 'Proteína grande del endotelio que favorece la adhesión de las plaquetas; la GPIIb/IIIa se agarra a él y ancla el tapón a la pared.', p: 'p. 20 y 27' },
+  { k: 'adamts13', nombre: 'ADAMTS-13', forma: 'tijera', color: '--accent-green', como: 'tijera',
+    q: 'Proteasa que corta el FvW y frena su efecto protrombótico. En la PTT, unos anticuerpos la inactivan.', p: 'p. 27' },
+  { k: 'fibrinogeno', nombre: 'Fibrinógeno (factor I)', forma: 'baston', color: '--accent-yellow', como: 'bastón de tres nudos',
+    q: 'La GPIIb/IIIa también lo une: tiende puentes de fibrina entre plaquetas vecinas; la coagulación lo convierte en fibrina.', p: 'p. 20-21' },
+  { k: 'dimero', nombre: 'Dímero-D', forma: 'dimero', color: '--accent-yellow', como: 'dos nudos pegados, en «8»',
+    q: 'Producto de la degradación de la fibrina: sube cuando aumenta la fibrinólisis, como en la CID.', p: 'p. 27' },
+  { k: 'ft', nombre: 'Factor tisular', forma: 'chispa', color: '--accent-red', como: 'chispa de cuatro puntas',
+    q: 'Arranca la vía principal de la fibrina. En la CID, su liberación pone en marcha la coagulación en toda la sangre.', p: 'p. 21 y 26' },
+  { k: 'f2', nombre: 'Factores II, VII, IX y X', forma: 'ficha', color: '--accent-blue', como: 'ficha con su número romano', etiquetas: ['II', 'VII', 'IX', 'X'],
+    q: 'Los factores que dependen de la vitamina K: los que mira el INR y los que trae el concentrado de complejo protrombínico.', p: 'p. 33' },
+  { grupo: 'Células' },
+  { k: 'neutrofilo', nombre: 'Neutrófilo', forma: 'neutrofilo', color: '--text-dim', como: 'célula con el núcleo en tres lóbulos',
+    q: 'En el TRALI, los anticuerpos del donante lo activan: se queda en los capilares del pulmón y pasa al alvéolo.', p: 'p. 14' },
+  { k: 'macrofago', nombre: 'Macrófago', forma: 'macrofago', color: '--text-muted', como: 'célula grande con brazos',
+    q: 'En la sepsis, la causa más frecuente de plaquetas bajas en la UCI, destruye más plaquetas.', p: 'p. 21' }
+];
+const TODAS = { ...YA };
+NUEVAS.filter(x => x.k).forEach(x => { TODAS[x.k] = x; });
+['II', 'VII', 'IX', 'X'].forEach(et => { TODAS['f' + et] = { nombre: 'Factor ' + et, forma: 'ficha', color: '--accent-blue', etiqueta: et }; });
+
+/* ── Geometría: la de js/core/particulas.js (partes 'lleno' y 'trazo'), más las formas nuevas ── */
+const elipse = (rx, ry) => `M${n2(rx)} 0A${n2(rx)} ${n2(ry)} 0 1 1 ${n2(-rx)} 0A${n2(rx)} ${n2(ry)} 0 1 1 ${n2(rx)} 0Z`;
+const circ = (cx, cy, r) => `M${n2(cx + r)} ${n2(cy)}A${n2(r)} ${n2(r)} 0 1 1 ${n2(cx - r)} ${n2(cy)}A${n2(r)} ${n2(r)} 0 1 1 ${n2(cx + r)} ${n2(cy)}Z`;
+const lleno = (d, extra = {}) => ({ d, tipo: 'lleno', ...extra });
+const trazo = (d, w, extra = {}) => ({ d, tipo: 'trazo', w, ...extra });
+function partesDe(forma, r, e = {}) {
+  switch (forma) {
+    // ---- Las de la tabla de hoy que salen en esta lámina ----
+    case 'gota': return [lleno(`M0 ${n2(-1.5 * r)}C${n2(0.55 * r)} ${n2(-0.75 * r)} ${n2(1.05 * r)} ${n2(-0.15 * r)} ${n2(1.05 * r)} ${n2(0.35 * r)}A${n2(1.05 * r)} ${n2(1.05 * r)} 0 0 1 ${n2(-1.05 * r)} ${n2(0.35 * r)}C${n2(-1.05 * r)} ${n2(-0.15 * r)} ${n2(-0.55 * r)} ${n2(-0.75 * r)} 0 ${n2(-1.5 * r)}Z`)];
+    case 'ovalo': return [lleno(elipse(1.4 * r, 0.82 * r))];
+    case 'disco': return [lleno(elipse(1.35 * r, r)), lleno(elipse(0.55 * r, 0.36 * r), { color: BORDE_PARTICULA, opacidad: 0.55, sinBorde: true })];
+    case 'celula': return [trazo(elipse(1.4 * r, 1.4 * r), 0.38), lleno(elipse(0.45 * r, 0.45 * r), { sinBorde: true })];
+    case 'cruz': { const a = n2(1.1 * r), b = n2(0.38 * r); return [lleno(`M${-b} ${-a}H${b}V${-b}H${a}V${b}H${b}V${a}H${-b}V${b}H${-a}V${-b}H${-b}Z`)]; }
+    case 'estrella': { let d = ''; for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? 0.58 * r : 1.45 * r; d += `${i ? 'L' : 'M'}${n2(Math.cos(a) * rr)} ${n2(Math.sin(a) * rr)}`; } return [trazo(d + 'Z', 0.28)]; }
+    case 'pesa': return [trazo(`M${n2(-0.9 * r)} 0H${n2(0.9 * r)}`, 0.34), lleno(circ(-0.9 * r, 0, 0.6 * r) + circ(0.9 * r, 0, 0.6 * r))];
+    case 'linfocito': return [lleno(elipse(1.15 * r, 1.15 * r), { color: '--text-dim' }), lleno(elipse(0.78 * r, 0.78 * r), { color: '--accent-purple', sinBorde: true })];
+    case 'cadena': return [trazo(`M${n2(-1.4 * r)} ${n2(0.4 * r)}L${n2(-0.7 * r)} ${n2(-0.4 * r)}L0 ${n2(0.4 * r)}L${n2(0.7 * r)} ${n2(-0.4 * r)}L${n2(1.4 * r)} ${n2(0.4 * r)}`, 0.3)];
+    case 'escudo': return [lleno(`M0 ${n2(-1.35 * r)}L${n2(1.1 * r)} ${n2(-0.9 * r)}L${n2(1.02 * r)} ${n2(0.25 * r)}Q${n2(0.7 * r)} ${n2(1.05 * r)} 0 ${n2(1.45 * r)}Q${n2(-0.7 * r)} ${n2(1.05 * r)} ${n2(-1.02 * r)} ${n2(0.25 * r)}L${n2(-1.1 * r)} ${n2(-0.9 * r)}Z`)];
+    case 'collar': return [lleno([-2, -1, 0, 1, 2].map(i => circ(i * 0.62 * r, Math.abs(i) * 0.22 * r - 0.25 * r, 0.32 * r)).join(''))];
+    case 'fp4': return [lleno([[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([a, b]) => circ(a * 0.55 * r, b * 0.55 * r, 0.5 * r)).join(''))];
+    case 'igg': return [trazo(`M0 ${n2(1.35 * r)}L0 0M0 0L${n2(-0.95 * r)} ${n2(-1.1 * r)}M0 0L${n2(0.95 * r)} ${n2(-1.1 * r)}`, 0.42)];
+    case 'plaqueta': return [lleno(elipse(r, r)), lleno(circ(-0.35 * r, -0.2 * r, 0.2 * r) + circ(0.3 * r, -0.3 * r, 0.17 * r) + circ(0.05 * r, 0.38 * r, 0.19 * r), { color: BORDE_PARTICULA, opacidad: 0.6, sinBorde: true })];
+    case 'plaquetaActiva': { let d = ''; for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4 + 0.3, c = Math.cos(a), s = Math.sin(a); d += `M${n2(c * 0.95 * r)} ${n2(s * 0.95 * r)}L${n2(c * 1.75 * r)} ${n2(s * 1.75 * r)}`; } return [trazo(d, 0.28), ...partesDe('plaqueta', r)]; }
+    case 'hilo': return [trazo(`M${n2(-1.5 * r)} ${n2(0.4 * r)}C${n2(-0.7 * r)} ${n2(-0.9 * r)} ${n2(0.1 * r)} ${n2(0.9 * r)} ${n2(0.7 * r)} ${n2(-0.3 * r)}S${n2(1.5 * r)} ${n2(-0.2 * r)} ${n2(1.5 * r)} ${n2(-0.6 * r)}`, 0.26)];
+
+    // ---- NUEVAS ----
+    // Esquistocito: el disco del hematíe (1,35r × r) con un mordisco cóncavo a la derecha: forma de casco, sin palidez central.
+    case 'casco': {
+      const x = 0.868 * r, y = 0.766 * r;
+      return [lleno(`M${n2(x)} ${n2(-y)}A${n2(1.35 * r)} ${n2(r)} 0 1 0 ${n2(x)} ${n2(y)}A${n2(0.8 * r)} ${n2(0.8 * r)} 0 0 1 ${n2(x)} ${n2(-y)}Z`)];
+    }
+    // FvW: cordón ondulado, largo (2,2r), con cinco cuentas.
+    case 'cordon': {
+      const pts = [-2.1, -1.05, 0, 1.05, 2.1].map((t, i) => [t * r, (i % 2 ? -0.35 : 0.35) * r]);
+      let d = `M${n2(pts[0][0])} ${n2(pts[0][1])}`;
+      for (let i = 1; i < pts.length; i++) { const [x0, y0] = pts[i - 1], [x1, y1] = pts[i]; d += `C${n2(x0 + 0.45 * r)} ${n2(y0)} ${n2(x1 - 0.45 * r)} ${n2(y1)} ${n2(x1)} ${n2(y1)}`; }
+      return [trazo(d, 0.28), lleno(pts.map(([x, y]) => circ(x, y, 0.4 * r)).join(''))];
+    }
+    // ADAMTS-13: tijera. Dos anillos (mangos) a la izquierda y dos hojas que se cruzan en el eje.
+    case 'tijera': return [
+      trazo(`M${n2(-0.55 * r)} ${n2(-0.42 * r)}L${n2(1.55 * r)} ${n2(0.62 * r)}M${n2(-0.55 * r)} ${n2(0.42 * r)}L${n2(1.55 * r)} ${n2(-0.62 * r)}`, 0.3),
+      trazo(circ(-1.05 * r, -0.62 * r, 0.42 * r) + circ(-1.05 * r, 0.62 * r, 0.42 * r), 0.24),
+      lleno(circ(0.42 * r, 0, 0.17 * r), { color: BORDE_PARTICULA, sinBorde: true })];
+    // Fibrinógeno: bastón recto con tres nudos (los dos de los extremos, mayores).
+    case 'baston': return [trazo(`M${n2(-1.45 * r)} 0H${n2(1.45 * r)}`, 0.32), lleno(circ(-1.45 * r, 0, 0.55 * r) + circ(0, 0, 0.44 * r) + circ(1.45 * r, 0, 0.55 * r))];
+    // Dímero-D: dos nudos del bastón pegados en diagonal (un «8»), con la marca del enlace.
+    case 'dimero': return [lleno(circ(-0.45 * r, 0.42 * r, 0.62 * r) + circ(0.45 * r, -0.42 * r, 0.62 * r)),
+      trazo(`M${n2(-0.42 * r)} ${n2(-0.45 * r)}L${n2(0.42 * r)} ${n2(0.45 * r)}`, 0.16, { color: BORDE_PARTICULA, sinBorde: true })];
+    // Factor tisular: chispa. Estrella de cuatro puntas finas y cuatro rayos cortos en diagonal.
+    case 'chispa': {
+      let d = '';
+      for (let i = 0; i < 8; i++) { const a = -Math.PI / 2 + i * Math.PI / 4, rr = i % 2 ? 0.34 * r : 1.55 * r; d += `${i ? 'L' : 'M'}${n2(Math.cos(a) * rr)} ${n2(Math.sin(a) * rr)}`; }
+      let rayos = '';
+      for (let i = 0; i < 4; i++) { const a = Math.PI / 4 + i * Math.PI / 2, c = Math.cos(a), s = Math.sin(a); rayos += `M${n2(c * 0.7 * r)} ${n2(s * 0.7 * r)}L${n2(c * 1.15 * r)} ${n2(s * 1.15 * r)}`; }
+      return [lleno(d + 'Z'), trazo(rayos, 0.2)];
+    }
+    // Neutrófilo: célula clara con el núcleo en tres lóbulos unidos (ciruela).
+    case 'neutrofilo': {
+      const lob = [[-0.62, 0.24], [0, -0.36], [0.62, 0.24]];
+      return [lleno(elipse(1.25 * r, 1.25 * r)),
+        trazo(`M${n2(lob[0][0] * r)} ${n2(lob[0][1] * r)}L${n2(lob[1][0] * r)} ${n2(lob[1][1] * r)}L${n2(lob[2][0] * r)} ${n2(lob[2][1] * r)}`, 0.12, { color: '--accent-purple', sinBorde: true }),
+        lleno(lob.map(([x, y]) => circ(x * r, y * r, 0.29 * r)).join(''), { color: '--accent-purple', sinBorde: true })];
+    }
+    // Macrófago: célula grande (≈1,9r) con cuatro brazos (seudópodos) y un núcleo en judía.
+    case 'macrofago': {
+      let d = '';
+      const N = 48;
+      for (let i = 0; i <= N; i++) {
+        const a = i / N * Math.PI * 2, rr = r * (1.35 + 0.42 * Math.pow(Math.max(0, Math.cos(4 * a + 0.4)), 3) - 0.08 * Math.sin(3 * a));
+        d += `${i ? 'L' : 'M'}${n2(Math.cos(a) * rr)} ${n2(Math.sin(a) * rr)}`;
+      }
+      return [lleno(d + 'Z'), lleno(`M${n2(-0.55 * r)} ${n2(-0.1 * r)}C${n2(-0.55 * r)} ${n2(-0.6 * r)} ${n2(0.45 * r)} ${n2(-0.6 * r)} ${n2(0.5 * r)} ${n2(-0.15 * r)}C${n2(0.55 * r)} ${n2(0.3 * r)} ${n2(0.15 * r)} ${n2(0.15 * r)} ${n2(0) } ${n2(0.3 * r)}C${n2(-0.2 * r)} ${n2(0.5 * r)} ${n2(-0.55 * r)} ${n2(0.35 * r)} ${n2(-0.55 * r)} ${n2(-0.1 * r)}Z`, { color: '--accent-purple', sinBorde: true })];
+    }
+    // Ficha de factor: placa redondeada (2,3r × 1,6r) con su número romano.
+    case 'ficha': {
+      const w = 1.15 * r, h = 0.8 * r, k = 0.3 * r;
+      return [lleno(`M${n2(-w + k)} ${n2(-h)}H${n2(w - k)}Q${n2(w)} ${n2(-h)} ${n2(w)} ${n2(-h + k)}V${n2(h - k)}Q${n2(w)} ${n2(h)} ${n2(w - k)} ${n2(h)}H${n2(-w + k)}Q${n2(-w)} ${n2(h)} ${n2(-w)} ${n2(h - k)}V${n2(-h + k)}Q${n2(-w)} ${n2(-h)} ${n2(-w + k)} ${n2(-h)}Z`),
+        { tipo: 'texto', t: e.etiqueta || '', tam: n2((e.etiqueta || '').length > 2 ? 0.92 * r : 1.05 * r) }];
+    }
+  }
+  return [lleno(elipse(r, r))];
+}
+const ALCANCE = { gota: 1.55, ovalo: 1.45, disco: 1.4, celula: 1.6, estrella: 1.5, pesa: 1.55, linfocito: 1.2, cadena: 1.5, escudo: 1.5, collar: 1.65, fp4: 1.1, igg: 1.4, plaqueta: 1.05, plaquetaActiva: 1.8, hilo: 1.6,
+  casco: 1.4, cordon: 2.5, tijera: 1.65, baston: 1.95, dimero: 1.1, chispa: 1.6, neutrofilo: 1.3, macrofago: 1.85, ficha: 1.2 };
+const bordeP = r => Math.max(0.22 * r, 0.8);
+const pintura = c => c.startsWith('--') ? `var(${c})` : c;
+function svgParticula(clave, x = 0, y = 0, r = 4, { color, giro = 0 } = {}) {
+  const e = TODAS[clave];
+  const col = pintura(color ?? e.color), fondo = pintura(BORDE_PARTICULA);
+  let s = '';
+  for (const p of partesDe(e.forma, r, e)) {
+    if (p.tipo === 'texto') { s += `<text x="0" y="${n2(p.tam * 0.36)}" text-anchor="middle" style="font:700 ${p.tam}px var(--sans);fill:var(--bg-main)">${p.t}</text>`; continue; }
+    const c = p.color ? pintura(p.color) : col, op = p.opacidad != null ? `;opacity:${p.opacidad}` : '';
+    if (p.tipo === 'lleno') {
+      const bd = !p.sinBorde ? `;stroke:${fondo};stroke-width:${n2(bordeP(r) * 2)};paint-order:stroke;stroke-linejoin:round` : '';
+      s += `<path d="${p.d}" style="fill:${c}${bd}${op}"/>`;
+    } else {
+      if (!p.sinBorde) s += `<path d="${p.d}" style="fill:none;stroke:${fondo};stroke-width:${n2(r * p.w + bordeP(r) * 1.2)};stroke-linejoin:round;stroke-linecap:round"/>`;
+      s += `<path d="${p.d}" style="fill:none;stroke:${c};stroke-width:${n2(r * p.w)};stroke-linejoin:round;stroke-linecap:round${op}"/>`;
+    }
+  }
+  const tr = [x || y ? `translate(${n2(x)} ${n2(y)})` : '', giro ? `rotate(${giro})` : ''].filter(Boolean).join(' ');
+  return `<g${tr ? ` transform="${tr}"` : ''}>${s}</g>`;
+}
+const icono = (k, tam = 20) => { const e = TODAS[k], r = n2((tam / 2 - 0.9) / (ALCANCE[e.forma] ?? 1.45)); return `<svg viewBox="${-tam / 2} ${-tam / 2} ${tam} ${tam}" aria-hidden="true">${svgParticula(k, 0, 0, r)}</svg>`; };
+
+/* ── Tarjetas ── */
+// Fondos de la muestra a tamaño real: la luz de un vaso (crema), el plasma (ámbar), la pared (teja) y el fondo oscuro.
+const FONDOS = ['--text-main', '--accent-yellow', '--accent-red', '--bg-main'];
+const real = e => FONDOS.map(fo => {
+  const r = e.forma === 'ficha' ? 7.5 : e.forma === 'macrofago' ? 3.2 : e.forma === 'cordon' ? 2.6 : 2.8;
+  const vb = e.forma === 'ficha' ? 12 : 11;
+  return `<svg viewBox="${-vb} ${-vb} ${2 * vb} ${2 * vb}" aria-hidden="true" style="background:var(${fo})">${svgParticula(e.k === 'f2' ? 'fVII' : e.k, 0, 0, r)}</svg>`;
+}).join('');
+$('formas').innerHTML = NUEVAS.map(e => e.grupo ? `<li class="seccion-forma">${e.grupo}</li>` : (() => {
+  let grande;
+  if (e.etiquetas) grande = `<svg class="grande" viewBox="-26 -26 52 52" aria-hidden="true">${e.etiquetas.map((et, i) => svgParticula('f' + et, i % 2 ? 12 : -12, i < 2 ? -11 : 11, 9)).join('')}</svg>`;
+  else { const r = n2(22 / (ALCANCE[e.forma] ?? 1.45)); grande = `<svg class="grande" viewBox="-26 -26 52 52" aria-hidden="true">${svgParticula(e.k, 0, 0, r)}</svg>`; }
+  return `<li class="forma nueva">${grande}
+    <b>${e.nombre}<span class="etq-nueva">nueva</span></b>
+    <span class="que">${e.q} <span class="org">ficha · ${e.p}</span></span>
+    <span class="color">${e.como} · ${COLOR[e.color]}</span>
+    <span class="real">${real(e)}<span>${e.forma === 'ficha' ? 'real (mínimo para leer el número)' : 'real'}</span></span>
+  </li>`;
+})()).join('');
+
+/* ── Pares: la nueva junto a la que más se le parece ── */
+const par = (a, b) => `<svg viewBox="0 0 96 40" aria-hidden="true">${svgParticula(a, 26, 20, 8.5 / (ALCANCE[TODAS[a].forma] > 1.9 ? 1.55 : 1))}${svgParticula(b, 72, 20, 8.5 / (ALCANCE[TODAS[b].forma] > 1.9 ? 1.55 : 1))}</svg>`;
+const PARES = [
+  ['esquisto', 'rbc', '<b>Esquistocito</b> frente al <b>hematíe</b>: el mismo disco teja, roto por un mordisco y sin el centro pálido.'],
+  ['dimero', 'o2', '<b>Dímero-D</b> frente al <b>O₂</b>: dos nudos pegados en «8» (ámbar) y dos bolas separadas por una barra (crema).'],
+  ['fibrinogeno', 'fibrina', '<b>Fibrinógeno</b> frente a la <b>fibrina</b>: el mismo ámbar; el bastón recto con tres nudos se convierte en el hilo de la red.'],
+  ['fvw', 'heparina', '<b>FvW</b> frente a la <b>heparina</b>: un cordón con cuentas en oro y un collar sin hilo en ciruela.'],
+  ['neutrofilo', 'linfocito', '<b>Neutrófilo</b> frente al <b>linfocito</b>: los dos claros con núcleo ciruela; el del neutrófilo, en tres lóbulos.'],
+  ['ft', 'cruzH', '<b>Factor tisular</b> frente al <b>H⁺</b>: las dos teja; la chispa es de puntas finas y rayos, la cruz de brazos anchos.'],
+  ['macrofago', 'celula', '<b>Macrófago</b> frente a la <b>célula desprendida</b>: grande, llena y con brazos; la otra es un anillo con un punto.'],
+  ['adamts13', 'igg', '<b>ADAMTS-13</b> frente a la <b>IgG</b>: la tijera tiene anillos y hojas cruzadas; la Y, tres brazos. En la PTT se dibujan juntas: la IgG atando la tijera.']
+];
+$('pares').innerHTML = PARES.map(([a, b, t]) => `<li>${par(a, b)}<span>${t}</span></li>`).join('');
+
+/* ── Las que ya hay ── */
+$('ya-hay').innerHTML = ['rbc', 'plaqueta', 'plaquetaActiva', 'fibrina', 'at', 'fp4', 'igg', 'heparina', 'ca', 'agua'].map(k => `<li>${icono(k)}${YA[k].nombre}</li>`).join('');
+
+/* ── La escena: una herida y su red de capilares, con todas juntas ── */
+(function escena() {
+  const T = (x, y, t, o = {}) => `<text x="${x}" y="${y}"${o.a ? ` text-anchor="${o.a}"` : ''} style="font-size:${o.s || 9.6}px;fill:var(${o.c || '--text-dim'});${o.i ? 'font-style:italic;' : ''}${o.b ? 'font-weight:700;font-family:var(--sans);' : ''}">${t}</text>`;
+  let h = `<defs><pattern id="rayaE" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" style="stroke:var(--accent-yellow);stroke-width:.7;opacity:.3"/></pattern>
+    <pattern id="punteoE" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="1.2" cy="1.2" r=".55" style="fill:var(--accent-yellow);opacity:.28"/></pattern></defs>
+    <rect width="360" height="236" style="fill:var(--bg-main)"/>`;
+  // Subendotelio con colágeno (arriba), pared con la herida, luz del vaso
+  h += `<rect x="0" y="0" width="360" height="40" style="fill:url(#rayaE)"/>`;
+  for (let i = 0; i < 4; i++) h += `<path d="M${-10 + i * 6} ${10 + i * 7}C60 ${2 + i * 7} 120 ${20 + i * 7} 190 ${10 + i * 7}S320 ${2 + i * 7} 370 ${12 + i * 7}" style="fill:none;stroke:var(--accent-red);stroke-width:1.1;opacity:.55"/>`;
+  h += T(8, 14, 'colágeno', { i: 1, c: '--text-muted' });
+  // la pared: adoquines del endotelio, rotos entre x=128 y x=214
+  for (let x = 0; x < 360; x += 22) if (x + 22 < 128 || x > 214) h += `<rect x="${x + 1}" y="40" width="20" height="9" rx="3" style="fill:none;stroke:var(--text-muted);stroke-width:1"/>`;
+  h += `<rect x="0" y="49" width="360" height="104" style="fill:url(#punteoE)"/>`;
+  h += T(8, 64, 'luz del vaso', { i: 1, c: '--text-muted' });
+  // el tapón: plaquetas activas pegadas al colágeno, FvW que las ancla, fibrinógeno que las une, fibrina por encima
+  h += svgParticula('fvw', 150, 46, 4.8, { giro: 8 }) + svgParticula('fvw', 194, 47, 4.8, { giro: -6 });
+  [[142, 58], [160, 61], [178, 58], [196, 62], [151, 76], [170, 78], [189, 76]].forEach(([x, y]) => { h += svgParticula('plaquetaActiva', x, y, 5.2); });
+  h += svgParticula('fibrinogeno', 160, 69, 3.6, { giro: 10 }) + svgParticula('fibrinogeno', 182, 68, 3.6, { giro: -14 });
+  h += svgParticula('fibrina', 140, 88, 5) + svgParticula('fibrina', 172, 90, 5) + svgParticula('fibrina', 200, 88, 5);
+  h += svgParticula('ft', 212, 34, 5.2) + svgParticula('ft', 118, 32, 4.4);
+  h += T(226, 25, 'factor tisular', { c: '--accent-red' }) + T(246, 60, 'FvW, GPIIb/IIIa', { c: '--text-dim' }) + T(246, 71, 'y fibrinógeno', { c: '--text-dim' });
+  h += `<path d="M244 57L205 54" style="stroke:var(--text-muted);stroke-width:.8"/>`;
+  // sangre que pasa: hematíes, factores, un neutrófilo y un macrófago que se come una plaqueta
+  [[30, 92], [64, 112], [100, 132], [250, 104], [282, 132], [196, 128]].forEach(([x, y]) => { h += svgParticula('rbc', x, y, 5.4); });
+  h += svgParticula('fII', 40, 126, 10) + svgParticula('fVII', 84, 86, 10) + svgParticula('fIX', 236, 136, 10) + svgParticula('fX', 122, 110, 10);
+  h += T(8, 148, 'factores II, VII, IX, X', { c: '--accent-blue' });
+  h += svgParticula('neutrofilo', 324, 86, 6.2);
+  h += T(322, 111, 'neutrófilo', { a: 'middle' });
+  h += svgParticula('macrofago', 330, 138, 6.4) + svgParticula('plaqueta', 342, 142, 3);
+  h += T(312, 158, 'macrófago', { a: 'middle' });
+  // el delta: capilares con microtrombos, esquistocitos, dímeros sueltos y la tijera
+  h += `<path d="M0 166H360M0 212H360" style="stroke:var(--text-muted);stroke-width:1.2"/>` + `<rect x="0" y="167" width="360" height="44" style="fill:url(#punteoE)"/>`;
+  h += T(8, 226, 'capilar con microtrombos', { i: 1, c: '--text-muted' });
+  h += svgParticula('fvw', 112, 186, 5.6, { giro: 4 });
+  [[96, 184], [108, 194], [124, 182], [138, 190]].forEach(([x, y]) => { h += svgParticula('plaqueta', x, y, 3.4); });
+  h += svgParticula('fibrina', 160, 188, 5);
+  h += svgParticula('esquisto', 186, 186, 5.4) + svgParticula('esquisto', 214, 196, 5.2, { giro: 160 }) + svgParticula('rbc', 56, 192, 5.4);
+  h += T(200, 226, 'esquistocitos', { a: 'middle', c: '--accent-red' });
+  h += svgParticula('dimero', 252, 182, 3.6) + svgParticula('dimero', 270, 198, 3.6) + svgParticula('dimero', 290, 184, 3.6);
+  h += T(272, 226, 'dímeros-D', { a: 'middle', c: '--accent-yellow' });
+  h += svgParticula('adamts13', 330, 190, 5.2);
+  h += T(330, 226, 'ADAMTS-13', { a: 'middle', c: '--accent-green' });
+  $('escena').innerHTML = h;
+})();
+
+/* ── Elegir ── */
+document.querySelectorAll('.elige').forEach(g => g.addEventListener('click', ev => {
+  const b = ev.target.closest('button'); if (!b) return;
+  g.querySelectorAll('button').forEach(o => o.setAttribute('aria-pressed', String(o === b)));
+  const partes = [...document.querySelectorAll('.elige')].map(x => x.querySelector('[aria-pressed="true"]')?.textContent).filter(Boolean);
+  $('resumen').textContent = 'Tu elección: ' + partes.join(' · ') + '.';
+}));
+</script>
+</body>
+</html>
