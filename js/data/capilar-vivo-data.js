@@ -217,7 +217,7 @@ export const CONCEPTOS = [
         mira: 'los hematíes que salen del capilar: medio vacíos en el bajo gasto (SvO₂ 48 %) y casi llenos en la sepsis (83 %, ilustrativo). Con la toma en la cava, la ScvO₂ del shock engaña: 55 % (+7, ilustrativo).',
         fuente: 'mar-extraccion-lactato#mar-sao2-svo2-guia · #mar-svo2-guia · #mar-scvo2-9' },
     { titulo: 'El lactato no siempre es falta de O₂',
-        texto: 'El lactato se produce también con O₂ (unos 20 mmol/kg al día). Con O₂ de sobra sube si la <span class="hl-azul">PDH</span> no trabaja (sepsis, déficit de tiamina) o con el estrés fisiológico, que sube la glucólisis aerobia un 40-50 %. «La acumulación de lactato por hipoxia es la excepción, no la regla».',
+        texto: 'El lactato se produce también con O₂ (unos 20 mmol/kg al día). Con O₂ de sobra sube si la <span class="hl-azul">PDH</span> no trabaja (sepsis, déficit de tiamina) o con el estrés fisiológico, que sube la glucólisis aerobia un 40-50 %. Una revisión que cita el libro (ref. 44, p. 82) dice que la acumulación de lactato por hipoxia es «con mucho la excepción y no la regla».',
         hacer: 'abre la mitocondria y prueba cada causa.', estado: {}, lupa: 'mito', mirar: 'lact',
         acciones: [{ t: 'Sepsis', p: { gc: 6, util: 'sepsis' }, lupa: 'mito' }, { t: 'Sin tiamina', p: { util: 'tiamina' }, lupa: 'mito' }, { t: 'Estrés', p: { estres: true }, lupa: 'mito' }, { t: 'Aporte bajo (GC 2)', p: { gc: 2 }, lupa: 'mito' }],
         mira: 'en la lupa, la X sobre la PDH desvía el piruvato al lactato (puntos rojos). Las bandas del lactato y su mortalidad (≤2: 15 %; 2,1-3,9: 25 %; ≥4: 38 %) son de la Fig. 9.4; cuánto sube en cada estado, ilustrativo.',
@@ -232,38 +232,38 @@ export const CONCEPTOS = [
         texto: 'Fase I: espacio muerto anatómico. II: sube (lento si hay más espacio muerto alveolar, como en la EPOC). III: meseta hasta la <span class="hl">PETCO₂</span>. IV: inspiración. Sin CO₂: <span class="hl-rojo">tubo en el esófago</span>… o una parada, sin retorno venoso.',
         hacer: 'recorre los capnogramas.', estado: {}, lupa: 'boca', mirar: 'petco2',
         acciones: [{ t: 'EPOC', p: { espacio: 'epoc' }, lupa: 'boca' }, { t: 'Sedación', p: { sedacion: true }, lupa: 'boca' }, { t: 'Esófago', p: { esofago: true }, lupa: 'boca' }, { t: 'RCP', p: { rcp: true }, lupa: 'boca' }, { t: 'GC 2,5', p: { gc: 2.5 }, lupa: 'boca' }],
-        mira: 'la onda grande de la lupa y la diferencia PaCO₂ − PETCO₂. La PETCO₂ sigue al gasto (r = 0,87 en posoperados); ≤10 tras 20 min de RCP, recuperar la circulación espontánea es improbable. Las cifras de PETCO₂ son ilustrativas.',
+        mira: 'la onda grande de la lupa y la diferencia PaCO₂ − PETCO₂. Los cambios de PETCO₂ siguen a los del gasto (r = 0,87 entre los cambios, en posoperados); ≤10 tras 20 min de RCP, recuperar la circulación espontánea es improbable. Las cifras de PETCO₂ son ilustrativas.',
         fuente: 'mar-capnografia#mar-capno-f1 · #mar-capno-f2 · #mar-capno-intubacion · #mar-capno-gasto · #mar-capno-rcp · #mar-gradiente-co2' },
     // Cap. 12 (fichas 1-3 de Merino HEMATO). Las acciones con `estado` ponen el modelo en ese estado con nombre.
     { titulo: 'El corazón compensa la anemia',
-        texto: 'La anemia baja la <span class="hl-azul">viscosidad</span>: la sangre normal es ≈3 veces más viscosa que el plasma y ≈4 veces más que el agua (Tabla 12.2). La resistencia es proporcional a la viscosidad (R = 8µL/πr⁴): con anemia, <span class="hl">el gasto sube</span>. En la Fig. 12.2 sube más de lo que cae el Hto, porque la sangre no es newtoniana: al fluir más deprisa, es menos viscosa.',
+        texto: 'La anemia baja la <span class="hl-azul">viscosidad</span>: la sangre normal es ≈3 veces más viscosa que el plasma y ≈4 veces más que el agua (Tabla 12.2). La resistencia es proporcional a la viscosidad (R = 8µL/πr⁴): con anemia, <span class="hl">el gasto sube</span>. En la Fig. 12.2 (un paciente con policitemia, no un anémico habitual) sube más de lo que cae el Hto, porque la sangre no es newtoniana: al fluir más deprisa, es menos viscosa. Todo esto, con la volemia mantenida.',
         hacer: 'compara la anemia con el gasto fijo y con el corazón que compensa.', estado: { hb: 7.5 }, mirar: 'gc',
         acciones: [{ t: 'Gasto fijo', estado: 'anemia' }, { t: 'El corazón compensa', estado: 'anemia-compensada' }, { t: 'Normal', estado: 'normal' }],
-        mira: 'el gasto y la extracción del tablero: con el gasto fijo, la extracción llega al 50 %; si el corazón compensa, se queda en ≈34 % y los hematíes corren más deprisa (gasto ilustrativo).',
+        mira: 'el gasto y la extracción del tablero: con el gasto fijo (la cuenta del cap. 9, Fig. 9.2, con el gasto quieto en 5 L/min), la extracción llega al 50 %; si el corazón compensa (cap. 12, con la volemia mantenida), se queda en ≈34 % y los hematíes corren más deprisa (gasto ilustrativo).',
         fuente: 'merino-anemia#mh-anemia-compensacion · #mh-tabla-12-2 · #mh-no-newtoniano' },
     { titulo: 'El techo: un Hto del 10 %',
-        texto: 'La extracción sube hasta un máximo de ≈50 %. En la Fig. 12.3 (primates) llega con un <span class="hl-rojo">Hto del 10 % (Hb ≈3)</span>: por debajo, el consumo cae y sube el lactato. Por eso una extracción del 50 % podría servir para indicar la transfusión. En humanos, hasta Hb 5 parece seguro, y algunos pacientes toleran 2-3.',
+        texto: 'La extracción sube hasta un máximo de ≈50 %. En la Fig. 12.3 (primates) llega con un <span class="hl-rojo">Hto del 10 % (Hb ≈3)</span>: por debajo, el consumo cae y sube el lactato. Por eso, opina el autor, una extracción del 50 % «podría servir» para indicar la transfusión (p. 6). En humanos, hasta Hb 5 parece seguro; en testigos de Jehová posoperados, el 50 % sobrevivió con Hb 2-3 y el 75 % con Hb 3-4 (p. 7).',
         hacer: 'baja la Hb con el corazón que compensa.', estado: { hb: 5, compensa: true }, mirar: 'o2er',
         acciones: [{ t: 'Hb 5', p: { hb: 5, compensa: true } }, { t: 'Hb 3: el techo', estado: 'techo-anemia' }, { t: 'Hb 2', p: { hb: 2, compensa: true } }],
         mira: 'la extracción llega al 50 % con Hb 3; con Hb 2 el VO₂ baja de 250 y sube el lactato (gasto y lactato, ilustrativos).',
         fuente: 'merino-anemia#mh-limite-compensacion · #mh-tolerancia' },
     { titulo: 'El Hto mide una concentración',
-        texto: 'Tumbarse baja el Hto <span class="hl">4,1 puntos</span> (pasa a la sangre líquido de las piernas: +420 mL de plasma); un bolo de 20 mL/kg de salino, <span class="hl">4,2 puntos</span> a los 90 min. En los dos casos, como <span class="hl-rojo">perder una unidad (500 mL)</span>, sin perder un hematíe.',
+        texto: 'Tumbarse baja el Hto <span class="hl">4,1 puntos</span> (pasa a la sangre líquido de las piernas: +420 mL de plasma); un bolo de 20 mL/kg de salino, <span class="hl">4,2 puntos</span> a los 90 min. En los dos casos, como <span class="hl-rojo">perder una unidad de sangre (500 mL)</span>, sin perder un hematíe. La anemia se define por una concentración: Hb &lt;13 g/dL en varones y &lt;12 en mujeres (Tabla 12.1), y por eso la influye el volumen del plasma.',
         hacer: 'abre el tubo y prueba las dos cosas.', estado: { hb: hbDeHto(41.8), dil: 'pie' }, lupa: 'tubo', mirar: 'hb',
         acciones: [{ t: 'Tumbarse', p: { hb: hbDeHto(37.7), dil: 'tumbado' }, lupa: 'tubo' }, { t: 'Bolo de 20 mL/kg', p: { hb: hbDeHto(38.7), dil: 'bolo' }, lupa: 'tubo' }],
         mira: 'la columna roja (la masa) no se mueve; el plasma crece y el Hto cae. La Hb del tablero es el Hto entre 3 (fisiología general).',
         fuente: 'merino-anemia#mh-trampa-volumen' },
     { titulo: 'Transfundir sube el aporte, no el consumo',
-        texto: 'Cada CH sube la Hb ≈1 g/dL y el Hto ≈3 %. En la Fig. 12.4, 1-2 CH subieron la Hb de 6,4 a 8 (+25 %) y el aporte de forma parecida, pero <span class="hl-rojo">el consumo no cambió</span>: la extracción cayó. Y sin volumen el corazón no puede compensar: <span class="hl">la hipovolemia causa shock; la anemia, no</span>.',
+        texto: 'Cada CH sube la Hb ≈1 g/dL y el Hto ≈3 %. En la Fig. 12.4, 1-2 CH subieron la Hb de 6,4 a 8 (+25 %) y el aporte, según el libro, «de forma parecida» (en el dibujo, ≈+17 %), pero <span class="hl-rojo">el consumo no cambió</span>: la extracción cayó. Y sin volumen el corazón no puede compensar: <span class="hl">la hipovolemia causa shock; la anemia, no</span>.',
         hacer: 'transfunde y luego quita volumen.', estado: { hb: 6.4, compensa: true }, mirar: 'vo2',
         acciones: [{ t: 'Transfundir 6,4 → 8', estado: 'transfusion' }, { t: 'Anemia sin volumen', estado: 'anemia-hipovolemia' }],
         mira: 'el VO₂ se queda en 250 aunque el aporte suba; sin volumen, el gasto no sube y el consumo cae (gasto y lactato, ilustrativos).',
         fuente: 'merino-transfusion#mh-efecto-transfusion · #mh-volumen-vs-celulas' },
     { titulo: 'TRALI o TACO',
-        texto: 'Los dos dan insuficiencia respiratoria hipoxémica en las 6 h tras empezar la transfusión. <span class="hl-rojo">TRALI</span>: anticuerpos del donante contra los neutrófilos del receptor (80 %), que se quedan en el pulmón; 1 por cada 12.000 CH, mortalidad ≈50 %. <span class="hl">TACO</span>: edema hidrostático, ≈1 %, más con IC o IR previas; mortalidad del 20 %.',
+        texto: 'Los dos dan insuficiencia respiratoria hipoxémica en las 6 h tras empezar la transfusión. <span class="hl-rojo">TRALI</span>: anticuerpos del donante contra los neutrófilos del receptor (80 %; en el otro ≈20 % no hay anticuerpos), que se quedan en el pulmón; 1 por cada 12.000 CH, mortalidad ≈50 %. <span class="hl">TACO</span>: edema hidrostático, ≈1 %, más con IC o IR previas; mortalidad del 20 %.',
         hacer: 'abre el alvéolo con cada uno.', estado: {}, lupa: 'alveolo', mirar: 'spo2',
         acciones: [{ t: 'TRALI', estado: 'trali' }, { t: 'TACO', estado: 'taco' }],
-        mira: 'en el TRALI, los anticuerpos de la bolsa y los neutrófilos que pasan al alvéolo; en el TACO, el agua que cruza y el corazón grande. La Rx real del TRALI está en la lámina, debajo de la lupa. La PaO₂ de 55 es ilustrativa.',
+        mira: 'en el TRALI, los anticuerpos de la bolsa y los neutrófilos que pasan al alvéolo; en el TACO, el agua que cruza y un corazón dibujado grande (ilustración: el libro solo dice que el TACO es más frecuente con insuficiencia cardíaca previa, p. 15). La Rx real del TRALI está en la lámina, debajo de la lupa. La PaO₂ de 55 es ilustrativa.',
         fuente: 'merino-riesgos#mh-trali · #mh-taco' },
 ];
 
@@ -285,6 +285,7 @@ const ANE = (id, pag) => ({ ...L12, ficha: 'merino-anemia', id, pag });
 const TRA = (id, pag) => ({ ...L12, ficha: 'merino-transfusion', id, pag });
 const RIE = (id, pag) => ({ ...L12, ficha: 'merino-riesgos', id, pag });
 const ILU = 'cifras del modelo: ilustrativas';
+const INF = HEMODERIVADOS.ch.infusion;   // Tabla 12.4: tiempos de infusión por gravedad (p. 10)
 
 export const GUIAS = {
     normal: [
@@ -308,7 +309,7 @@ export const GUIAS = {
         { t: 'El gasto cae a 2,5 L/min: los hematíes pasan más despacio por el capilar.', resalta: '#cpv-zona-capilar', mirar: 'do2', cita: TO2('mar-do2', '72-73'), org: 'la velocidad: ilustrativa' },
         { t: 'El aporte cae a la mitad (≈490 mL/min). Para seguir consumiendo 250, el tejido sube la extracción hasta el 50 % (Fig. 9.3).', mirar: 'o2er', cita: EXL('mar-extraccion-curva', '75-76') },
         { t: 'Los hematíes salen con la mitad de las perlas vacías: SvO₂ ≈49 %. Una SvO₂ ≤50 % es oxigenación tisular amenazada (Tabla 9.4).', resalta: '#cpv-zona-venosa', mirar: 'ven', cita: EXL('mar-svo2-guia', '77') },
-        { t: 'Con menos gasto, también baja la PETCO₂: sus cambios siguen a los del gasto (r = 0,87 en posoperados, Fig. 7.8).', resalta: '#cpv-capno-mini', mirar: 'petco2', cita: CAP('mar-capno-gasto', '46'), org: 'PETCO₂: ilustrativa' },
+        { t: 'Con menos gasto, también baja la PETCO₂: sus cambios siguen a los del gasto (r = 0,87 entre los cambios, en posoperados, Fig. 7.8).', resalta: '#cpv-capno-mini', mirar: 'petco2', cita: CAP('mar-capno-gasto', '46'), org: 'PETCO₂: ilustrativa' },
     ],
     umbral: [
         { t: 'Bajando el gasto llega un punto en que la extracción (SaO₂ − SvO₂) ha pasado del 25 % al 50 %.', resalta: '#cpv-zona-venosa', mirar: 'o2er', cita: EXL('mar-extraccion-curva', '75') },
@@ -324,7 +325,7 @@ export const GUIAS = {
         { t: 'Llega O₂ de sobra (gasto 6 L/min), pero la mitocondria no lo usa: la PDH, la puerta del piruvato, está inhibida por la endotoxina y las citocinas.', resalta: '#cpv-lupa-pdh', cita: EXL('mar-lactato-sepsis', '81') },
         { t: 'El piruvato se desvía a lactato aunque haya O₂: lactato aerobio. Las catecolaminas, además, aceleran la glucólisis.', resalta: '#cpv-lupa-lact', mirar: 'lact', cita: [EXL('mar-lactato-sepsis', '81'), EXL('mar-lactato-aerobio', '80')] },
         { t: 'Los hematíes salen casi llenos: una SvO₂ &gt;80 % (o SaO₂ − SvO₂ &lt;20 %) es defecto de utilización, casi siempre por sepsis (Tabla 9.4).', lupa: false, resalta: '#cpv-zona-venosa', mirar: 'ven', cita: EXL('mar-sao2-svo2-guia', '76-77'), org: 'SvO₂ 83 %: ilustrativa' },
-        { t: '«La acumulación de lactato por hipoxia es la excepción, no la regla.»', lupa: false, mirar: 'lact', cita: EXL('mar-lactato-conclusion', '82') },
+        { t: 'Una revisión que cita el libro (ref. 44) lo resume: «cualquier aumento del lactato suele reflejar algo distinto de la limitación de O₂; la acumulación de lactato por hipoxia es, con mucho, la excepción y no la regla».', lupa: false, mirar: 'lact', cita: EXL('mar-lactato-conclusion', '82') },
     ],
     tiamina: [
         { t: 'La PDH necesita pirofosfato de tiamina (TPP) como cofactor para meter el piruvato en la mitocondria.', resalta: '#cpv-lupa-pdh', cita: EXL('mar-lactato-tiamina', '81') },
@@ -340,13 +341,13 @@ export const GUIAS = {
     'dedo-frio': [
         { t: 'El pulsioxímetro solo analiza lo que late (A/B en el fotopletismograma): así ignora la sangre de las venas.', resalta: '#cpv-lupa-pleti', cita: OXI('mar-pulsioximetria', '37-38') },
         { t: 'Con hipotensión o vasoconstricción periférica, la SpO₂ del dedo puede fallar: en el modelo, la onda se aplana.', resalta: '#cpv-lupa-pleti', mirar: 'spo2', cita: OXI('mar-oxi-frente', '39'), org: 'onda plana: ilustrativa' },
-        { t: 'En la frente, la circulación viene de la carótida interna y se contrae menos: la SpO₂ vuelve. Se pone con una cinta elástica, que reduce el pulso venoso.', estado: { gc: 2.5, frio: true, sensor: 'frente' }, mirar: 'spo2', cita: OXI('mar-oxi-frente', '39-40') },
+        { t: 'En la frente, la circulación viene de la carótida interna y se contrae menos: la SpO₂ vuelve. Se sujeta con una cinta elástica, que reduce la interferencia de las pulsaciones venosas, que pueden confundirse con las arteriales.', estado: { gc: 2.5, frio: true, sensor: 'frente' }, mirar: 'spo2', cita: OXI('mar-oxi-frente', '39-40') },
     ],
     dual: [
         { t: 'La diferencia SpO₂ − SvO₂ equivale aproximadamente a la extracción de O₂ de los capilares.', resalta: '#cpv-zona-venosa', mirar: 'ven', cita: OXI('mar-dual', '43') },
         { t: 'Aquí, con Hb 7,5 y el gasto fijo en 5, 98 − 48 = 50 %: ≥50 % es amenaza para el metabolismo aerobio.', mirar: 'ven', cita: OXI('mar-dual-tabla', '43') },
         { t: 'En la anemia, un SpO₂ − SvO₂ ≥50 % ha resultado un indicador válido para transfundir hematíes.', cita: OXI('mar-dual', '43') },
-        { t: 'Ojo: es con el gasto fijo. Si el corazón compensa, con esta Hb la extracción se queda lejos del 50 %. La fuente propone, en la anemia, transfundir por la extracción y no por la Hb.', estado: 'anemia-compensada', mirar: 'o2er', cita: [ANE('mh-limite-compensacion', '6'), TRA('mh-extraccion-disparador', '8')], org: 'gasto: ilustrativo' },
+        { t: 'Ojo: es con el gasto fijo. Si el corazón compensa, con esta Hb la extracción se queda lejos del 50 %. Opinión del autor: en la anemia, la extracción del 50 % «puede usarse» como disparador de la transfusión (p. 8), mejor que la Hb; algunas guías proponen abandonar la Hb como disparador.', estado: 'anemia-compensada', mirar: 'o2er', cita: [ANE('mh-limite-compensacion', '6'), TRA('mh-extraccion-disparador', '8')], org: 'gasto: ilustrativo' },
     ],
     'capno-normal': [
         { t: 'Fase I: el principio de la espiración, gas del espacio muerto anatómico, casi sin CO₂.', resalta: '#cpv-lupa-f1', cita: CAP('mar-capno-f1', '44') },
@@ -371,28 +372,29 @@ export const GUIAS = {
     ],
     'capno-rcp': [
         { t: 'En la parada puede haber muy poco CO₂ con el tubo bien puesto: sin retorno venoso, apenas llega CO₂ al alvéolo.', resalta: '#cpv-lupa-capno', cita: CAP('mar-capno-intubacion', '46') },
-        { t: 'La PETCO₂ sigue al gasto (r = 0,87 en posoperados, Fig. 7.8).', cita: CAP('mar-capno-gasto', '46') },
+        { t: 'Los cambios de la PETCO₂ siguen a los del gasto (r = 0,87 entre los cambios, en posoperados, Fig. 7.8).', cita: CAP('mar-capno-gasto', '46') },
         { t: 'Si tras 20 minutos de RCP la PETCO₂ sigue ≤10 mmHg, es improbable recuperar la circulación espontánea.', mirar: 'petco2', cita: CAP('mar-capno-rcp', '47'), org: 'PETCO₂ 8: ilustrativa' },
     ],
     // ---- Cap. 12 ----
     dilucion: [
-        { t: 'La anemia se mide con concentraciones, el Hto y la Hb: la masa de hematíes, la medida exacta, no se usa en la clínica.', resalta: '#cpv-tubo-izq', mirar: 'hb', cita: ANE('mh-anemia-definicion', '1-2') },
+        { t: 'La anemia se mide con concentraciones, el Hto y la Hb: la masa de hematíes, la medida exacta, no se usa en la clínica. Se define por Hb &lt;13 g/dL (Hto &lt;40 %) en varones y &lt;12 (Hto &lt;38 %) en mujeres (Tabla 12.1), y por ser una concentración, la influye el volumen del plasma.', resalta: '#cpv-tubo-izq', mirar: 'hb', cita: [ANE('mh-anemia-corte', '2'), ANE('mh-tabla-12-1', '2')] },
         { t: 'Al tumbarse, baja la presión de los capilares de las piernas y pasa líquido intersticial a la sangre (+420 mL de plasma): el Hto cae de 41,8 a 37,7 %.', estado: { hb: hbDeHto(37.7), dil: 'tumbado' }, resalta: '#cpv-tubo-der', cita: ANE('mh-trampa-volumen', '2-3') },
         { t: 'La columna roja, la masa de hematíes, mide lo mismo en los dos tubos: solo ha crecido el plasma.', estado: { hb: hbDeHto(37.7), dil: 'tumbado' }, resalta: ['#cpv-tubo-p1-masa', '#cpv-tubo-p2-masa'], cita: ANE('mh-trampa-volumen', '2') },
-        { t: 'Un bolo de 20 mL/kg de salino hace lo mismo: 42,9 → 38,7 % a los 90 min. Las dos caídas equivalen a perder una unidad de sangre (500 mL) sin perder un hematíe.', estado: { hb: hbDeHto(38.7), dil: 'bolo' }, resalta: '#cpv-tubo-der', cita: ANE('mh-trampa-volumen', '2-3') },
+        { t: 'Un bolo de 20 mL/kg de salino hace lo mismo: 42,9 → 38,7 % a los 90 min. Las dos caídas equivalen a perder una unidad de sangre (500 mL, dice el pie de la Fig. 12.1; el texto de la p. 2 dice «una unidad de hematíes») sin perder un hematíe.', estado: { hb: hbDeHto(38.7), dil: 'bolo' }, resalta: '#cpv-tubo-der', cita: ANE('mh-trampa-volumen', '2-3') },
         { t: 'En el crítico el volumen plasmático suele estar aumentado: la Hb y el Hto sobrestiman la anemia.', estado: { hb: hbDeHto(38.7), dil: 'bolo' }, mirar: 'hb', cita: ANE('mh-trampa-volumen', '3'), org: 'Hb = Hto / 3: fisiología general' },
     ],
     'anemia-compensada': [
-        { t: 'Con menos hematíes, la sangre es menos viscosa: la normal es ≈4 veces más viscosa que el agua; con un Hto del 22 %, ≈2,3 veces (Tabla 12.2).', resalta: '#cpv-lam-plasma', mirar: 'hb', cita: ANE('mh-tabla-12-2', '4-5'), org: 'Hto = 3 × Hb y el valor entre filas de la tabla: fisiología general' },
+        { t: 'Con menos hematíes, la sangre es menos viscosa: la normal es ≈4 veces más viscosa que el agua; con un Hto del 22,5 % (Hb 7,5), ≈2,3 veces, un valor entre las filas del 20 % (2,1) y el 30 % (2,8) de la Tabla 12.2.', resalta: '#cpv-lam-plasma', mirar: 'hb', cita: ANE('mh-tabla-12-2', '4-5'), org: 'Hto = 3 × Hb y el valor entre filas de la tabla: fisiología general' },
         { t: 'La resistencia al flujo es proporcional a la viscosidad (R = 8µL/πr⁴): con menos resistencia, el corazón bombea más.', mirar: 'gc', cita: ANE('mh-anemia-compensacion', '4-5') },
-        { t: 'Y sube más de lo que cae el Hto, porque la sangre no es newtoniana: a más flujo, menos viscosa (Fig. 12.2). Aquí, ≈7,6 L/min; los hematíes corren más deprisa.', resalta: '#cpv-zona-capilar', mirar: 'gc', cita: ANE('mh-no-newtoniano', '5-6'), org: 'gasto: ilustrativo' },
+        { t: 'Y sube más de lo que cae el Hto, porque la sangre no es newtoniana: a más flujo, menos viscosa (Fig. 12.2, de un paciente con policitemia). Aquí, ≈7,6 L/min; los hematíes corren más deprisa.', resalta: '#cpv-zona-capilar', mirar: 'gc', cita: ANE('mh-no-newtoniano', '5-6'), org: 'gasto: ilustrativo' },
         { t: 'El aporte aun así baja (≈750 mL/min), pero la extracción sube (≈34 %) y el consumo se queda en 250: lejos del techo del 50 %.', resalta: '#cpv-zona-venosa', mirar: 'o2er', cita: ANE('mh-limite-compensacion', '6'), org: ILU },
     ],
     'techo-anemia': [
         { t: 'Hb 3, un Hto del 10 %: anemia extrema. El corazón ya bombea ≈12,7 L/min.', mirar: 'gc', cita: ANE('mh-limite-compensacion', '6'), org: 'gasto: ilustrativo (forma de la Fig. 12.3, en primates)' },
         { t: 'La extracción llega a su máximo, ≈50 %: es el techo de la Fig. 12.3.', resalta: '#cpv-zona-venosa', mirar: 'o2er', cita: ANE('mh-limite-compensacion', '6') },
-        { t: 'Por debajo (aquí, Hb 2) el consumo cae y sube el lactato: oxigenación tisular insuficiente. Por eso una extracción del 50 % podría servir para indicar la transfusión.', estado: { hb: 2, compensa: true }, resalta: '#cpv-zona-celula', mirar: 'vo2', cita: [ANE('mh-limite-compensacion', '6'), TRA('mh-extraccion-disparador', '8')], org: 'lactato: ilustrativo' },
-        { t: 'En animales con la volemia mantenida, Hto de 5-10 % no dañaron la oxigenación de los tejidos; en humanos, una Hb de hasta 5 parece segura, y algunos toleran 2-3.', mirar: 'hb', cita: ANE('mh-tolerancia', '6-7') },
+        { t: 'Por debajo (aquí, Hb 2) el consumo cae y sube el lactato: oxigenación tisular insuficiente. Por eso, opina el autor, una extracción del 50 % «podría servir» para indicar la transfusión (p. 6).', estado: { hb: 2, compensa: true }, resalta: '#cpv-zona-celula', mirar: 'vo2', cita: [ANE('mh-limite-compensacion', '6'), TRA('mh-extraccion-disparador', '8')], org: 'lactato: ilustrativo' },
+        { t: 'Las fuentes discrepan, y las dos son del libro: con la Fig. 12.3 (p. 6), bajo un Hto del 10 % cae el consumo; pero en animales con la volemia mantenida (p. 7), un Hto de 5-10 % (Hb 1,5-3) no dañó la oxigenación de los tejidos. No se elige una: el modelo pone el techo en Hb 3.', mirar: 'hb', cita: [ANE('mh-limite-compensacion', '6'), ANE('mh-tolerancia', '7')] },
+        { t: 'En humanos, una Hb de hasta 5 parece segura (hemodilución en adultos sanos). Entre 300 testigos de Jehová posoperados, el 50 % sobrevivió con Hb 2-3 y el 75 % con Hb 3-4; algunos toleran 2-3.', mirar: 'hb', cita: ANE('mh-tolerancia', '7') },
     ],
     'umbral-7': [
         { t: 'Hb &lt;7: el umbral de las guías en el crítico estable sin cardiopatía isquémica (incluye el shock séptico y la poscirugía cardíaca).', mirar: 'hb', cita: TRA('mh-umbrales-guias', '8') },
@@ -402,27 +404,30 @@ export const GUIAS = {
     ],
     transfusion: [
         { t: 'Hb 6,4: se transfunden 1-2 concentrados de hematíes (CH). En un adulto medio, cada uno sube la Hb ≈1 g/dL y el Hto ≈3 %.', resalta: '#cpv-bolsa', mirar: 'hb', cita: TRA('mh-efecto-transfusion', '10') },
-        { t: 'La Hb sube de 6,4 a 8 (un 25 %) y el aporte sube de forma parecida: mientras gotea la bolsa, el gasto se queda quieto.', mirar: 'do2', cita: TRA('mh-efecto-transfusion', '10'), org: 'gasto quieto: ilustrativo' },
+        { t: `La bolsa es muy viscosa (Hto 60 %) y gotea despacio: por gravedad, un CH sin diluir tarda ${INF.sinDiluir.g20} min por un catéter de 20 G y ${INF.sinDiluir.g18} min por uno de 18 G; con 100 mL de salino, ${INF.con100.g20} y ${INF.con100.g18} min (Tabla 12.4). La pauta recomendada es de unas 2 h por unidad en el estable, y la dilución probablemente no hace falta.`, resalta: '#cpv-bolsa', cita: [TRA('mh-tabla-12-4', '10'), TRA('mh-tiempo-infusion', '10')] },
+        { t: 'La Hb sube de 6,4 a 8 (un 25 %); el libro dice que el aporte sube «de forma parecida», y en la Fig. 12.4 pasa de ≈295 a ≈347 mL/min/m² (≈+17 %, leído del dibujo). Mientras gotea la bolsa, el modelo deja quieto el gasto: así el aporte sube lo mismo que la Hb.', mirar: 'do2', cita: TRA('mh-efecto-transfusion', '10-11'), org: 'gasto quieto: ilustrativo' },
         { t: 'Pero el consumo no cambia (VO₂ 250): cae la extracción, al revés que en la anemia (Fig. 12.4).', resalta: '#cpv-zona-venosa', mirar: 'vo2', cita: TRA('mh-efecto-transfusion', '10-11') },
         { t: 'La transfusión no debe considerarse un método absoluto para mejorar la oxigenación de los tejidos, y la sangre almacenada mucho tiempo puede incluso empeorarla.', cita: TRA('mh-efecto-transfusion', '11') },
     ],
     'anemia-hipovolemia': [
         { t: 'La misma Hb que en «Anemia que compensa», pero sin volumen: el corazón no puede subir el gasto (aquí, 4 L/min).', mirar: 'gc', cita: TRA('mh-volumen-vs-celulas', '16-17'), org: 'gasto: ilustrativo' },
-        { t: 'El aporte cae a ≈394 mL/min, la extracción toca el techo y el consumo depende del aporte: sube el lactato.', resalta: '#cpv-zona-celula', mirar: 'vo2', cita: [EXL('mar-extraccion-curva', '75'), ANE('mh-limite-compensacion', '6')], org: ILU },
-        { t: 'Devuélvele el volumen: el gasto sube y el consumo vuelve a 250. Las anemias extremas no dañan la oxigenación si se mantiene la volemia.', estado: 'anemia-compensada', mirar: 'vo2', cita: TRA('mh-volumen-vs-celulas', '16-17') },
+        { t: 'El aporte cae a ≈394 mL/min, la extracción toca el techo y el consumo depende del aporte: sube el lactato. Eso lo calcula el modelo con lo que el libro dice del techo (p. 6); la fuente no lo dice de una anemia con hipovolemia.', resalta: '#cpv-zona-celula', mirar: 'vo2', cita: [EXL('mar-extraccion-curva', '75'), ANE('mh-limite-compensacion', '6')], org: ILU },
+        { t: 'Devuélvele el volumen: el gasto vuelve a subir (el libro: las anemias extremas no dañan la oxigenación si se mantiene la volemia, p. 16-17). Que el consumo vuelva a 250 lo pone el modelo; la fuente no lo dice.', estado: 'anemia-compensada', mirar: 'vo2', cita: TRA('mh-volumen-vs-celulas', '16-17') },
         { t: 'La hipovolemia es causa de shock; la anemia, no: el volumen puede pesar más que la Hb (Fig. 12.6).', mirar: 'gc', cita: TRA('mh-volumen-vs-celulas', '17') },
     ],
     trali: [
         { t: 'TRALI: una lesión pulmonar inflamatoria parecida al SDRA. Rara (1 de cada 12.000 CH), pero la primera causa de muerte por transfusión, con una mortalidad cercana al 50 %.', resalta: '#cpv-alv-alveolo', cita: RIE('mh-trali', '14') },
-        { t: 'En el 80 % de los casos, anticuerpos del donante, que llegan con la bolsa, se unen a los neutrófilos del receptor.', resalta: '#cpv-alv-bolsa', cita: RIE('mh-trali', '14') },
+        { t: 'En el 80 % de los casos, anticuerpos del donante, que llegan con la bolsa, se unen a los neutrófilos del receptor. En el otro ≈20 % no intervienen anticuerpos, y el agente responsable no se ha identificado.', resalta: '#cpv-alv-bolsa', cita: RIE('mh-trali', '14') },
         { t: 'Los neutrófilos activados se quedan en los capilares pulmonares y pasan al pulmón, donde causan la lesión inflamatoria.', resalta: '#cpv-alv-neutros', cita: RIE('mh-trali', '14') },
-        { t: 'Insuficiencia respiratoria hipoxémica, a menudo en la primera hora y hasta las 6 h; en la Rx, un infiltrado bilateral como el del SDRA (Fig. 12.5).', mirar: 'spo2', cita: RIE('mh-trali', '14-15'), org: 'PaO₂ 55: ilustrativa' },
+        { t: 'Insuficiencia respiratoria hipoxémica, a menudo en la primera hora y hasta las 6 h, con fiebre frecuente; en la Rx, un infiltrado bilateral como el del SDRA (Fig. 12.5).', mirar: 'spo2', cita: RIE('mh-trali', '14-15'), org: 'PaO₂ 55: ilustrativa' },
+        { t: 'Qué hacer: parar la transfusión al primer signo de dificultad respiratoria, avisar al banco de sangre y dar soporte como en el SDRA. Una PCR alta y la ausencia de insuficiencia cardíaca o de sobrecarga de líquido apoyan el TRALI frente al TACO.', cita: RIE('mh-trali', '14-15') },
     ],
     taco: [
         { t: 'TACO: la complicación pulmonar más frecuente de la transfusión de hematíes (≈1 %): edema pulmonar hidrostático en las primeras 6 h.', resalta: '#cpv-alv-agua', cita: RIE('mh-taco', '15') },
         { t: 'El agua entra por presión. Es más frecuente con insuficiencia cardíaca o renal previas, propensos a la sobrecarga de líquido.', resalta: '#cpv-alv-corazon', cita: RIE('mh-taco', '15') },
         { t: 'No hay relación con el número de unidades. Mortalidad del 20 %; tres de cada cuatro necesitan ventilación mecánica.', mirar: 'spo2', cita: RIE('mh-taco', '15-16'), org: 'PaO₂ 55: ilustrativa' },
-        { t: 'Puede ser indistinguible del TRALI, incluso con fiebre. Se para la transfusión, se avisa al banco y va bien un diurético de asa intravenoso.', cita: RIE('mh-taco', '16') },
+        { t: 'Puede ser indistinguible del TRALI: la misma ventana de 6 h, y fiebre en el 30 % de los casos. Orientan al TACO la insuficiencia cardíaca previa, la sobrecarga de líquido o la insuficiencia renal.', cita: RIE('mh-taco', '16') },
+        { t: 'Qué hacer: parar la transfusión si no ha terminado, avisar al banco y poner un diurético de asa intravenoso; el resto es soporte, como en el TRALI. Antes de futuras transfusiones, se aconseja identificar y corregir el balance positivo con diuréticos.', cita: RIE('mh-taco', '16') },
     ],
 };
 // Las fuentes de cada estado (REGLAS §7.11): la lista de sus citas, sin repetir, en el orden de la explicación. Otro
@@ -556,7 +561,7 @@ export const CASOS = [
                         { t: 'SpO₂ − ScvO₂ = 50 %: amenaza; indicador válido para transfundir', ok: true },
                         { t: 'Entre 25 y 50 %: aporte reducido pero compensado; vigilar', ok: false, porque: '50 ya es el corte de amenaza: el metabolismo aerobio está al límite. Si esperas, la siguiente caída del gasto la vuelve dependiente del aporte (y sube el lactato).' },
                         { t: 'Nada: la ScvO₂ normal es menor que la SvO₂, así que 48 % es esperable', ok: false, porque: 'Es algo menor en el sano, no 25 puntos; y en el crítico suele ser mayor. Atribuirías a la toma una anemia que ya amenaza el metabolismo aerobio.' }],
-                    explicacion: '(SpO₂ − SvO₂) ≈ extracción: VO₂ = DO₂ × (SpO₂ − SvO₂). <span class="hl-rojo">≥50 %: amenaza</span> para el metabolismo aerobio; ha resultado un indicador válido para transfundir hematíes en la anemia.',
+                    explicacion: '(SpO₂ − SvO₂) ≈ extracción: VO₂ = DO₂ × (SpO₂ − SvO₂). <span class="hl-rojo">≥50 %: amenaza</span> para el metabolismo aerobio; ha resultado un indicador válido para transfundir hematíes en la anemia. Es con el gasto fijo de este paciente (5 L/min): si su corazón compensara la anemia, con Hb 7,5 la extracción no llegaría al 50 %.',
                     nota: 'En el modelo, la ScvO₂ se iguala a la SvO₂ fuera del shock (la ficha dice «algo menor», sin cifra).' } },
             { momento: 'Día 2 · el giro', camas: [{ n: 'Cama 1', e: { hb: 7.5, toma: 'scvo2' } }, { n: 'Cama 2', e: B2_GIRO }], datos: { 'Cama 2 · datos': 'Con O₂: PaO₂ 90 (SaO₂ 98 %) · fiebre · GC 6 L/min', 'ScvO₂ cama 2': '90 %', 'Lactato cama 2': '4 mmol/L' }, nuevo: ['Cama 2 · datos', 'ScvO₂ cama 2', 'Lactato cama 2'],
                 estado: B2_GIRO, mirar: 'ven',
@@ -572,7 +577,7 @@ export const CASOS = [
                 pregunta: { id: 'b2-6', tipo: 'destapa', fuente: 'mar-extraccion-lactato (acordeón «Sepsis») · #mar-tabla-9-5 · #mar-lactato-conclusion',
                     enunciado: 'La cama 2 tiene O₂ de sobra y aun así lactato 4. ¿De dónde sale? Míralo en la lupa.',
                     puntos: ['La <span class="hl-azul">PDH inhibida</span> por productos bacterianos (endotoxina) y citocinas: el piruvato no entra en la mitocondria y se desvía a lactato.', 'La <span class="hl-azul">glucólisis acelerada</span> por las catecolaminas.'],
-                    explicacion: 'Es lactato aerobio (Tabla 9.5). «La acumulación de lactato por hipoxia es la excepción, no la regla.»' } },
+                    explicacion: 'Es lactato aerobio (Tabla 9.5). Una revisión que cita el libro (ref. 44, p. 82) dice que la hipoxia es «con mucho la excepción y no la regla».' } },
         ],
         lleva: ['La anemia baja el CaO₂ mucho más que la hipoxemia: la mitad frente a un 20 % (Fig. 9.2).',
             'SpO₂ − SvO₂ ≥50 %: amenaza para el metabolismo aerobio y un indicador válido para transfundir en la anemia.',
@@ -612,7 +617,7 @@ export const CASOS = [
                         { t: 'ScvO₂ 90 %, por encima del 70 %: perfusión correcta; no reevaluamos el lactato.', mal: true, c: 'Una saturación venosa tan alta en la sepsis es <span class="hl-rojo">defecto de utilización</span>; y lo que pesa es cuánto tarda el lactato en normalizarse.' },
                         { t: 'Un lactato inicial ≥4 se asocia a una mortalidad hospitalaria del 38 %.', mal: false },
                         { t: 'Si se normaliza en menos de 24 h, la mortalidad es del 4 %; si tarda 48-96 h, del 43 %.', mal: false },
-                        { t: 'Como el lactato alto prueba hipoxia celular, subimos la FiO₂ al 100 %.', mal: true, c: 'El lactato <span class="hl-rojo">no prueba hipoxia</span>: «la acumulación de lactato por hipoxia es la excepción, no la regla». Y la SaO₂ ya es del 98 %.' },
+                        { t: 'Como el lactato alto prueba hipoxia celular, subimos la FiO₂ al 100 %.', mal: true, c: 'El lactato <span class="hl-rojo">no prueba hipoxia</span>: la revisión que cita el libro (ref. 44, p. 82) dice que por hipoxia es «con mucho la excepción y no la regla». Y la SaO₂ ya es del 98 %.' },
                         { t: 'El gap de PCO₂ es más específico de hipoperfusión que la ScvO₂ en el shock séptico.', mal: false }],
                     explicacion: 'Fig. 9.4: importa el lactato inicial y, sobre todo, lo que tarda en normalizarse.' } },
             { momento: 'Día 3 · el giro', datos: { Propofol: '5,5 mg/kg/h desde hace 60 h', Lactato: 'sigue en 5: no cede', CK: '4.800 U/L', Eco: 'FEVI baja, nueva' }, nuevo: ['Propofol', 'Lactato', 'CK', 'Eco'],
@@ -802,7 +807,7 @@ export function pruebasCapilar() {
     const pre = derivar(estadoDe(ESTADOS.transfusion.p)), post = derivar(estadoFinal('transfusion'));
     mira('transfusion', 'Hb +25 %', Math.round((ESTADOS.transfusion.transfundir / ESTADOS.transfusion.p.hb - 1) * 100), 25, 0);
     mira('transfusion', 'gasto quieto', post.R.gc - pre.R.gc, 0, 0);
-    mira('transfusion', 'aporte +25 % (Fig. 12.4: «similar»)', Math.round((post.do2 / pre.do2 - 1) * 100), 25, 0);
+    mira('transfusion', 'aporte +25 % con el gasto quieto (el libro: «similar»; en el dibujo, ≈+17 %)', Math.round((post.do2 / pre.do2 - 1) * 100), 25, 0);
     mira('transfusion', 'VO₂ igual', post.R.vo2 - pre.R.vo2, 0, 1); mira('transfusion', 'la extracción cae', post.R.ext < pre.R.ext ? 1 : 0, 1, 0);
     mira('transfusion', '1 CH: +1 g/dL', estadoDe({ hb: 6.4 }).hb + HB_POR_CH, 7.4, 0.01);
     d = D('anemia-hipovolemia');

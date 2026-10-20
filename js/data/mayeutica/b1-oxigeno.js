@@ -481,7 +481,7 @@ export const MAYEUTICA_OXIGENO = {
                 { t: 'Unos 49 y 78 mL/min', porque: 'Falta el × 10 (de mL/dL a mL/L). Verías una catástrofe donde hay un déficit.' },
                 { t: 'Las dos 900-1.100: el gasto es normal', porque: 'El aporte multiplica el gasto por el contenido: con contenidos bajos, el aporte baja aunque el gasto sea normal.' },
                 { t: 'Unos 490 y 785 mL/min', ok: true }],
-              explicacion: 'DO₂ = GC × 1,34 × Hb × SaO₂ × 10: cama 1 ≈ <span class="hl-rojo">490</span>; cama 2 ≈ <span class="hl">785 mL/min</span>. Las dos, por debajo de lo normal (900-1.100).' } },
+              explicacion: 'DO₂ = GC × 1,34 × Hb × SaO₂ × 10: cama 1 ≈ <span class="hl-rojo">490</span>; cama 2 ≈ <span class="hl">785 mL/min</span>. Las dos, por debajo de lo normal (900-1.100). Es con el gasto fijo de estos pacientes: si el corazón compensara la anemia de la cama 1 (cap. 12), el gasto subiría y su aporte caería menos.' } },
           { momento: 'Pase · el plan del R1', datos: { Plan: 'lo escribe el R1' }, nuevo: ['Plan'],
             pregunta: { id: 'toa-4', tipo: 'error', fuente: 'mar-anemia-hipoxemia · mar-curva-forma · mar-do2 · mar-tabla-9-2',
               enunciado: 'El plan del R1. Encuentra los errores.',
@@ -500,7 +500,7 @@ export const MAYEUTICA_OXIGENO = {
                 { t: 'Diferencia del 53 %: indica transfundir', ok: true },
                 { t: 'Diferencia 53 %: normal en la anemia, que extrae más', porque: 'Extraer más es la compensación, pero ≥50 % ya amenaza el metabolismo aerobio. La dejarías sin transfundir.' },
                 { t: 'Nada: la ScvO₂ no sirve, solo la mixta', porque: 'La calculadora acepta SvO₂ o ScvO₂, y la ScvO₂ sigue a la mixta.' }],
-              explicacion: 'SpO₂ − ScvO₂ = <span class="hl-rojo">53 %</span>: ≥50 %, amenaza para el metabolismo aerobio. En la anemia, un indicador válido para transfundir hematíes.' } },
+              explicacion: 'SpO₂ − ScvO₂ = <span class="hl-rojo">53 %</span>: ≥50 %, amenaza para el metabolismo aerobio. En la anemia, un indicador válido para transfundir hematíes. Es con el gasto fijo de este paciente: si su corazón compensara la anemia (cap. 12), con esta Hb la extracción no llegaría al 50 %.' } },
           { momento: 'Día 2 · el giro', datos: { 'Cama 2': 'sepsis; ya con O₂: SaO₂ 98 %, ScvO₂ 84 %, lactato 4 mmol/L' }, nuevo: ['Cama 2'],
             pregunta: { id: 'toa-6', tipo: 'destapa', fuente: 'mar-sao2-svo2-guia · mar-tabla-9-4 · mar-scvo2-9', modeloVivo: { capilarVivo: 'sepsis' },
               enunciado: 'La cama 2 hace una sepsis. Su ScvO₂ está en 84 % y el lactato en 4. ¿Por qué esa saturación alta no tranquiliza?',
@@ -586,7 +586,7 @@ export const MAYEUTICA_OXIGENO = {
         puntos: [
           'Es un <span class="hl">razonamiento circular</span>: se dice que el lactato marca hipoxia porque se relaciona con la muerte, y que la hipoxia mata… apoyándose en esa misma relación.',
           'Las pruebas van en contra: <span class="hl">sin hipoxia en ningún órgano</span> en el shock séptico (animales), y en humanos la PO₂ del músculo está <span class="hl">aumentada</span>.',
-          '«La acumulación de lactato por hipoxia es <span class="hl-rojo">la excepción, no la regla</span>».'],
+          'Una revisión que cita el libro (ref. 44, p. 82): la acumulación de lactato por hipoxia es «<span class="hl-rojo">con mucho la excepción y no la regla</span>».'],
         explicacion: 'Producimos unos 20 mmol/kg de lactato al día con O₂, y las células viven normalmente con muy poco O₂ (PO₂ intracelular del músculo, unos 5 mmHg).' },
     ],
     examen: [

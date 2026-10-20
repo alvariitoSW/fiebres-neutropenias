@@ -21,6 +21,8 @@ export const HEMODERIVADOS = {
         plasmaResidual: { tabla: '15-30 mL', texto: '30-50 mL' },
         sube: { hb: 1, hto: 3 },                 // por unidad, en un adulto medio (p. 10)
         horasPorUnidad: 2,                       // en el estable (p. 10)
+        // Tabla 12.4 (p. 10): minutos de infusión de 1 unidad por gravedad, catéter periférico de 1,2 pulgadas; g20 = 20 G, g18 = 18 G
+        infusion: { sinDiluir: { volumen: 350, g20: 117, g18: 70 }, con100: { volumen: 450, g20: 19, g18: 12 } },
         cita: cita('merino-transfusion', 'mh-tabla-12-3', '9-10'),
     },
     // Plaquetas agrupadas de 4-6 donantes (p. 29-30)

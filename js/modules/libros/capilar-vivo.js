@@ -58,17 +58,17 @@ function fraseDe(prev, e) {
     // ---- Cap. 12: anemia y transfusión ----
     const FA = 'ficha · merino-anemia', FU = 'ficha · merino-transfusion', FR = 'ficha · merino-riesgos';
     if (e.alveolo && cambio('alveolo')) return e.alveolo === 'trali'
-        ? ['Los anticuerpos vienen en la bolsa: <span class="hl-rojo">los neutrófilos se quedan en el pulmón</span> y lo inflaman. Uno de cada 12.000 CH; la primera causa de muerte por transfusión.', `${FR}#mh-trali · p. 14 · PaO₂ 55: ilustrativa`, true]
+        ? ['En el 80 % de los casos los anticuerpos vienen en la bolsa (en el otro ≈20 % no hay anticuerpos): <span class="hl-rojo">los neutrófilos se quedan en el pulmón</span> y lo inflaman. Uno de cada 12.000 CH; la primera causa de muerte por transfusión.', `${FR}#mh-trali · p. 14 · PaO₂ 55: ilustrativa`, true]
         : ['Aquí el agua entra <span class="hl">por presión</span>: edema hidrostático, más frecuente con insuficiencia cardíaca o renal previas. Se para la transfusión y va bien un <span class="hl-verde">diurético de asa</span>.', `${FR}#mh-taco · p. 15-16 · PaO₂ 55: ilustrativa`, true];
     if (e.dil && cambio('dil')) {
         const t = TUBOS[e.dil];
         if (t[1] == null) return [`Hto ${dec(t[0], 1)} %. ${e.dil === 'antes' ? 'Pon el bolo de 20 mL/kg' : 'Túmbalo'} y mira el tubo: ¿cuánto bajará sin perder un hematíe?`, `${FA}#mh-trampa-volumen · p. 2-3 (Fig. 12.1)`];
-        return [`Ni un hematíe perdido y el Hto cae ${dec(t[0] - t[1], 1)} puntos (${dec(t[0], 1)} → ${dec(t[1], 1)} %), como si hubiera perdido <span class="hl-rojo">una unidad (500 mL)</span>: el Hto <span class="hl-purpura">mide una concentración</span>.${e.dil === 'tumbado' ? ' Al tumbarse entran 420 mL de plasma.' : ''}`, `${FA}#mh-trampa-volumen · p. 2-3 (Fig. 12.1)`];
+        return [`Ni un hematíe perdido y el Hto cae ${dec(t[0] - t[1], 1)} puntos (${dec(t[0], 1)} → ${dec(t[1], 1)} %), como si hubiera perdido <span class="hl-rojo">una unidad de sangre (500 mL)</span>: el Hto <span class="hl-purpura">mide una concentración</span>.${e.dil === 'tumbado' ? ' Al tumbarse entran 420 mL de plasma.' : ''}`, `${FA}#mh-trampa-volumen · p. 2-3 (Fig. 12.1)`];
     }
     if (e.transf && cambio('transf')) {
         if (e.transf.a == null) return [`Gotea la bolsa: Hb ${dec(e.hb, 1)} g/dL, con el gasto quieto.`, `${FU}#mh-efecto-transfusion · p. 10 · gasto quieto: ilustrativo`, true];
         const pre = derivar(Object.assign(copia(e), { hb: e.transf.de })), sube = Math.round((R.do2 / Math.round(pre.do2) - 1) * 100);
-        return [`Hb ${dec(e.transf.de, 1)} → ${dec(e.hb, 1)}: <span class="hl">sube el aporte</span> (${mil(pre.do2)} → ${mil(R.do2)} mL/min, +${sube} %), <span class="hl-rojo">el consumo no cambia</span> (${R.vo2}): cae la extracción (${pre.R.ext} → ${R.ext} %). No es un método absoluto para oxigenar.`, `${FU}#mh-efecto-transfusion · p. 10-11 (Fig. 12.4) · aporte: ilustrativo`, true];
+        return [`Hb ${dec(e.transf.de, 1)} → ${dec(e.hb, 1)}: <span class="hl">sube el aporte</span> (${mil(pre.do2)} → ${mil(R.do2)} mL/min, +${sube} % con el gasto quieto; en el dibujo del libro, ≈+17 %), <span class="hl-rojo">el consumo no cambia</span> (${R.vo2}): cae la extracción (${pre.R.ext} → ${R.ext} %). No es un método absoluto para oxigenar.`, `${FU}#mh-efecto-transfusion · p. 10-11 (Fig. 12.4) · aporte: ilustrativo`, true];
     }
     if ((cambio('volemia') && e.volemia === 'baja') || (e.volemia === 'baja' && (cambio('hb') || cambio('gc')))) return e.hb < 13
         ? [`Sin volumen el corazón no puede compensar (gasto ${dec(R.gc, 1)}): el aporte cae a ${mil(R.do2)} y ${D.porAporte ? `<span class="hl-rojo">el consumo ya depende del aporte</span> (VO₂ ${R.vo2})` : `la extracción sube al ${R.ext} %`}. La volemia puede pesar más que la Hb: la hipovolemia causa shock; la anemia, no.`, `${FU}#mh-volumen-vs-celulas · p. 16-17 (Fig. 12.6) · gasto: ilustrativo`, true]
