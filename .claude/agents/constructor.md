@@ -27,6 +27,9 @@ fuente y los modelos tienen que estar al nivel de los «así sí».
 **Lista de comprobación antes de entregar** (los fallos que ya salieron; si no la pasas, habrá otra vuelta):
 - [ ] Ninguna cifra inventada; cada cifra visible con su origen (`ficha`/`fisiología general`/`ilustrativo`). Las
       erratas y discrepancias de la fuente, con su nota.
+- [ ] **Cada cita lleva a la app** (REGLAS §7.9): junto a la página del PDF, «Ver en la ficha» al párrafo exacto
+      (`data-resaltar="#id"`); en un modelo vivo, cada estado con su **explicación guiada** de 3-5 pasos que señalan el
+      dibujo (§7.10) y sus fuentes como lista (§7.11).
 - [ ] **Lista de frases nuevas** (REGLAS §1.11): cada frase de mecanismo o conducta que escribiste tú (no copiada de
       la ficha), con su página. Sin página → «fisiología general» o fuera. La lista va en tu entrega: el auditor la
       coteja.
