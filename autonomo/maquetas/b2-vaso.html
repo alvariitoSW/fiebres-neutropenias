@@ -680,7 +680,7 @@ const MUESTRA = [
     estado: { lesion: 'ninguna', plaq: 5000 }, ocultar: ['amenaza', 'organos', 'frase'],
     opciones: [
       { t: 'Una hemorragia mayor espontánea en horas: con menos de 10.000 ya no se forma tapón en ningún vaso.', porque: 'El tapón deja de formarse por debajo de 100.000, pero una hemorragia mayor pide además una lesión propensa a sangrar; sin ella, 5.000 se toleran (p. 21). Esperarías un sangrado que, sin lesión, no llega.' },
-      { t: 'Ninguna hemorragia mayor; lo temible, aunque es poco frecuente, sería una hemorragia cerebral espontánea.', ok: true },
+      { t: 'Ninguna hemorragia mayor; lo temible, aunque raro, sería una hemorragia cerebral espontánea.', ok: true },
       { t: 'Sangrado en sábana por las punciones, porque sin plaquetas se gasta también el fibrinógeno.', porque: 'Gastar plaquetas y factores a la vez es la CID (p. 26-27), no una trombocitopenia aislada. Buscarías y tratarías un consumo que no tiene.' },
       { t: 'Trombosis antes que sangrado, como pasa en todas las trombocitopenias del enfermo crítico.', porque: 'El libro lo dice de la HIT, la CID, la PTT y el SHU (p. 36), no de cualquier recuento bajo. Anticoagularías con 5.000 plaquetas a un paciente sin trombosis.' }
     ],
@@ -705,7 +705,7 @@ const MUESTRA = [
     enunciado: '¿Qué te dicen la LDH y la haptoglobina, y qué prueba lo confirmaría?',
     estado: { plaq: 16000 }, ocultar: ['frase'], despues: { causa: 'mat', plaq: 16000 },
     opciones: [
-      { t: 'Una sepsis con trombocitopenia por los macrófagos; lo confirmarán los hemocultivos.', porque: 'La sepsis explica plaquetas bajas (p. 21), pero no una LDH alta con haptoglobina indetectable: eso es hemólisis. Si te quedas en la sepsis, una PTT, mortal en 24-48 h sin tratar (p. 27), espera a los hemocultivos.' },
+      { t: 'Una sepsis con trombocitopenia por los macrófagos; lo confirmarán los hemocultivos que ya has pedido.', porque: 'La sepsis explica plaquetas bajas (p. 21), pero no una LDH alta con haptoglobina indetectable: eso es hemólisis. Si te quedas en la sepsis, una PTT, mortal en 24-48 h sin tratar (p. 27), espera a los hemocultivos.' },
       { t: 'Una hemólisis inmunitaria: lo primero es un Coombs directo para buscar los anticuerpos.', porque: 'En las microangiopatías la hemólisis no es inmunitaria: los hematíes se rompen en una microcirculación llena de coágulos (p. 25). Inés esperaría horas por un Coombs mientras se le tapan los capilares.' },
       { t: 'Hemólisis; la confirman los esquistocitos del frotis, que además dicen microangiopatía.', ok: true },
       { t: 'Una CID: con un dímero-D alto queda hecho el diagnóstico.', porque: 'Aún no sabes si es una CID. La LDH y la haptoglobina dicen hemólisis, y la confirma el frotis; el dímero-D sirve después, con el INR, el aPTT y el fibrinógeno, para separar la CID de la PTT y el SHU (Tabla 13.3). Etiquetada de CID, a Inés le tocaría solo soporte y tratar la causa.' }
