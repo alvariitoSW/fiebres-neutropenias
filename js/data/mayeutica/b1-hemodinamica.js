@@ -22,7 +22,7 @@ export const MAYEUTICA_HEMODINAMICA = {
         enunciado: 'Figura 11.1: un fregadero (las venas) que se llena con un grifo desde un depósito alto (las arterias). Antes de leer la ecuación: ¿qué presión empuja la sangre de vuelta al corazón?',
         opciones: [
           { t: 'La presión arterial media menos la de la aurícula derecha', porque: 'Es lo intuitivo, pero el agua sale del fregadero por la altura de su propia columna, no por la del depósito. Si crees que la PAM mueve el retorno, subirás la presión esperando más llenado, y no es eso lo que lo mueve.' },
-          { t: 'La de las venas pequeñas menos la de la aurícula', ok: true },
+          { t: 'La de las venas pequeñas (Pms) menos la de la aurícula', ok: true },
           { t: 'La PVC: cuanto más alta, más sangre vuelve al corazón', porque: 'Es la presión contra la que vuelve la sangre, no la que la empuja. Perseguir una PVC alta llena al paciente sin darle más gasto: a igual volumen, cada mmHg de más le quita retorno.' }],
         explicacion: 'Las venas guardan el <span class="hl">75 %</span> de la sangre. Retorno venoso = <span class="hl">(Pms − PVC) / Rv</span>: la Pms (presión sistémica media) es la de vénulas y venas pequeñas, la del sistema sin flujo; la PVC, la de la aurícula derecha; Rv, la resistencia venosa.' },
       { id: 'rv-g2', corto: 'qué cambia el volumen', tipo: 'test', fuente: 'mar-rv-ecuacion · mar-rv-pvc',
@@ -36,7 +36,7 @@ export const MAYEUTICA_HEMODINAMICA = {
         enunciado: 'Predice, y luego compruébalo moviendo la curva de la ficha: sube la presión de la aurícula derecha 1 mmHg sin cambiar el volumen. ¿Qué le pasa al retorno venoso?',
         opciones: [
           { t: 'Sube: más presión en la aurícula, más llenado del corazón', porque: 'La PAD es la presión de salida del retorno: si sube sin que cambie el volumen, el gradiente se estrecha. Con esa idea darías volumen para subir la PVC y frenarías el retorno.' },
-          { t: 'Cae, de media un 14 % por cada mmHg', ok: true },
+          { t: 'Cae de forma constante, un 14 % de media por cada mmHg', ok: true },
           { t: 'No cambia: el retorno solo depende del volumen', porque: 'Depende del gradiente, no solo del volumen: a igual volumen (igual Pms), cada mmHg de PAD le quita retorno. Si lo ignoras, no verás por qué un paciente con PVC alta llena mal su corazón.' }],
         explicacion: 'Figura 11.2: si sube la PAD sin cambiar el volumen, el retorno cae de forma constante, <span class="hl-rojo">un 14 % por cada mmHg</span> de media. Cuando llega a cero, <span class="hl">la PAD iguala a la Pms</span>: ya no queda gradiente.' },
       { id: 'rv-g4', corto: 'la Pms tras un bolo', tipo: 'test', fuente: 'mar-pms-fluidos',
@@ -59,7 +59,7 @@ export const MAYEUTICA_HEMODINAMICA = {
         enunciado: 'Le falta un 20 % de la volemia y está tumbado. ¿Qué signo esperas encontrar?',
         opciones: [
           { t: 'Taquicardia en decúbito: es el signo más precoz', porque: 'No aparece en la mayoría de las hemorragias agudas, ni con déficits del 25 %; la bradicardia puede ser incluso más frecuente. Si la esperas, descartarás una hipovolemia real.' },
-          { t: 'Quizá ninguno en decúbito', ok: true },
+          { t: 'Quizá ninguno: ni taquicardia ni hipotensión aún', ok: true },
           { t: 'Hipotensión en decúbito, que sale a partir del 15 %', porque: 'La hipotensión en decúbito no aparece hasta déficits >30 %. Esperarla con un 20 % es llegar tarde.' }],
         explicacion: '1) Taquicardia en decúbito: ausente en la mayoría, incluso con un 25 %. 2) Hipotensión en decúbito: no hasta <span class="hl-rojo">>30 %</span>. 3) El más sensible es el <span class="hl">aumento ortostático de la FC ≥30 lpm</span> (aparece con un 15 %), pero en la UCI muchos no pueden ponerse de pie.' },
       { id: 'rv-g7', corto: 'la PVC no mide', tipo: 'test', fuente: 'mar-pvc-volemia · mar-img-11-4',
@@ -67,7 +67,7 @@ export const MAYEUTICA_HEMODINAMICA = {
         opciones: [
           { t: 'Sí, si se mide al final de la espiración', porque: 'Medir al final de la espiración minimiza la presión intratorácica, pero la PEEP sigue influyendo y la distensibilidad del VD también la mueve. Decidir fluidos por ella es decidir a ciegas.' },
           { t: 'Sí, en ventilación espontánea, sin presión positiva que la falsee', porque: 'Aun sin presión positiva, la distensibilidad del VD la confunde (si baja, la PVC sube). La ficha es tajante: nunca debe usarse para decidir la fluidoterapia.' },
-          { t: 'Tampoco: con la volemia, r = 0,17', ok: true }],
+          { t: 'Tampoco: no guarda relación con la volemia (r = 0,17)', ok: true }],
         explicacion: 'Figura 11.4: 112 pares de medidas en postoperados, <span class="hl">r = 0,17 (p = 0,07)</span>: sin relación. La confunden la distensibilidad del VD y la presión intratorácica positiva. <span class="hl-rojo">Nunca debe usarse para decidir la fluidoterapia.</span>' },
     ],
     examen: [
@@ -76,20 +76,20 @@ export const MAYEUTICA_HEMODINAMICA = {
         opciones: [
           { t: '7-8 mmHg en todos: animales y pacientes de UCI', porque: 'Es la cifra de los animales. En humanos (sobre todo postoperados de UCI) se han medido 14-20 mmHg: con 7 como referencia, leerías como alta una Pms normal.' },
           { t: '14-20 en los animales y 7-8 en los humanos con vasopresores', porque: 'Está al revés: 7-8 en animales y 14-20 en humanos. Invertirlas te haría ver hipovolemia donde no la hay.' },
-          { t: '7-8 en animales; 14-20 en humanos', ok: true }],
+          { t: '7-8 mmHg en animales; 14-20 mmHg en humanos de UCI', ok: true }],
         explicacion: 'En animales, <span class="hl">7-8 mmHg</span>; en humanos (sobre todo postoperados de UCI, algunos con vasopresores), <span class="hl">14-20 mmHg</span>.' },
       { id: 'rv-e2', corto: 'la volemia del séptico', tipo: 'test', fuente: 'mar-fig-11-3 · mar-bva',
         enunciado: 'Se midieron los volúmenes de 50 pacientes con shock séptico con albúmina marcada (BVA-100®). Frente a lo esperado, ¿qué se encontró?',
         opciones: [
           { t: 'Volemia −15 %: la fuga capilar los deja hipovolémicos', porque: 'Es la idea que lleva a seguir dando bolos, y se encontró lo contrario: volemia +29 % y plasma +37 %. Es la prueba de la sobrecarga iatrogénica.' },
-          { t: 'Volemia +29 %, plasma +37 % y hematíes −8 %', ok: true },
+          { t: 'Volemia +29 % de media, plasma +37 % y hematíes −8 %', ok: true },
           { t: 'Volemia normal: el plasma (+37 %) compensa unos hematíes al −29 %', porque: 'Los hematíes bajaron un 8 %, no un 29 %, y la volemia subió un 29 %. Con esa lectura creerías en equilibrio a un paciente sobrecargado.' }],
         explicacion: 'Medias de la Figura 11.3: <span class="hl-rojo">volemia +29 %, masa de hematíes −8 %, plasma +37 %</span>. Corroboran la sobrecarga iatrogénica del crítico. El método (dilución de albúmina marcada con yodo-131 más el hematocrito) está validado, pero se usa poco.' },
       { id: 'rv-e3', corto: 'la VCI', tipo: 'test', fuente: 'mar-vci-volemia · mar-vci-discrepancia',
         enunciado: '¿Qué dicen de la vena cava inferior Marino y la ecografía FATE del Manual UMI?',
         opciones: [
           { t: 'Los dos la usan para estimar la presión de la aurícula derecha', porque: 'Marino dice que sus variaciones respiratorias resultaron poco fiables. Si citas a los dos como si coincidieran, te saltas una discrepancia que la app enseña a propósito.' },
-          { t: 'Marino: poco fiable; FATE sí la usa; no se elige', ok: true },
+          { t: 'Marino: poco fiable; FATE sí la usa para la PAD; no se elige', ok: true },
           { t: 'Que la descartan los dos: la VCI no informa de nada', porque: 'El Manual UMI (FATE) sí usa su diámetro y su colapso para estimar la PAD. Descartarla «porque lo dicen todos» no es lo que dice la otra fuente.' }],
         explicacion: 'Marino: las variaciones respiratorias del diámetro de la VCI tuvieron un breve periodo de popularidad, pero <span class="hl">resultaron poco fiables</span>. FATE sí las usa para estimar la PAD.',
         nota: '<b>Nota de fuentes.</b> Marino y el Manual UMI (FATE) no coinciden; la ficha reproduce lo que dice Marino y deja la otra a la vista. No se elige ganadora.' },
@@ -97,14 +97,14 @@ export const MAYEUTICA_HEMODINAMICA = {
         enunciado: 'Shock séptico con albúmina de 1,9 g/dL. Lleva 4 L de Ringer y los edemas crecen. ¿Qué explica la ficha?',
         opciones: [
           { t: 'Que el Ringer se queda en el plasma y la presión empuja el agua fuera', porque: 'Solo el 20 % del cristaloide queda en el plasma; el 80 % va al intersticio desde el principio. Si crees que llena los vasos, seguirás dando litros esperando una volemia que no llega.' },
-          { t: 'Albúmina baja y más permeabilidad: el agua pasa al intersticio', ok: true },
+          { t: 'Albúmina baja y más permeabilidad capilar: el agua pasa al intersticio', ok: true },
           { t: 'Que el cristaloide está contraindicado: solo coloides desde ahora', porque: 'La ficha no lo contraindica: propone combinar coloide y cristaloide para infundir menos volumen. Quitarlo del todo no se apoya en la fuente.' }],
         explicacion: 'La albúmina da el 80 % de la oncótica: si baja, el agua pasa del plasma al intersticio. La inflamación grave (shock séptico, SDRA) sube la permeabilidad. <span class="hl">Los dos suelen coexistir.</span> Combinar coloide (la albúmina al 5 % expande mucho mejor) y cristaloide se ha propuesto para infundir menos.' },
       { id: 'rv-e5', corto: 'hemorragia', tipo: 'test', fuente: 'mar-rv-pvc · mar-rv-ecuacion', modelo: [{ ecoEscenario: 'hemorragia' }, { aguaViva: 'hemorragia', texto: 'Y la hemorragia en el río y mar' }],
         enunciado: 'Predice: un paciente sangra 1 L y nadie le repone nada todavía. ¿Qué le pasa a su Pms, y con ella a su retorno venoso y a su gasto?',
         opciones: [
           { t: 'La Pms no cambia: depende del tono venoso, no del volumen', porque: 'Es justo lo que mueve el volumen. Si crees que la Pms no cambia al sangrar, no verás por qué cae el retorno de quien sangra, y retrasarás la reposición.' },
-          { t: 'Baja la Pms, y con ella el retorno y el gasto', ok: true },
+          { t: 'Baja la Pms: se estrecha el gradiente y cae el retorno', ok: true },
           { t: 'Sube la PVC para compensar, y el retorno se mantiene', porque: 'Subir la PVC frenaría aún más el retorno (Figura 11.2). Y con menos volumen la PVC tiende a bajar (fisiología general, no lo dice la ficha). Esperar que se compense solo retrasa la reposición.' }],
         explicacion: 'La Pms <span class="hl">depende del volumen</span>: la hipovolemia la baja, el gradiente Pms − PVC se estrecha y <span class="hl-rojo">caen el retorno y el gasto</span>. En la circulación viva, una hemorragia de 1 L baja la PVC y el gasto (magnitudes ilustrativas del modelo).' },
       { id: 'rv-e6', corto: 'el resumen', tipo: 'error', fuente: 'mar-rv-fregadero · mar-rv-pvc · mar-constantes-volemia · mar-pms-fluidos',
@@ -142,7 +142,7 @@ export const MAYEUTICA_HEMODINAMICA = {
             pregunta: { id: 'c1a-3', tipo: 'test', fuente: 'mar-deficit-calc · mar-tabla-11-1', origen: 'ficha · la cuenta, del caso',
               enunciado: 'Suponiendo que le faltara un 15 % del plasma (lo que suele disparar la reposición), ¿cuánto sería en Carmen (mujer, 60 kg de peso magro), y cuánto Ringer lo repondría? Compáralo con lo que lleva.',
               opciones: [
-                { t: '≈320 mL; ≈1,6 L de Ringer: ya lleva casi el doble', ok: true },
+                { t: '≈320 mL; ≈1,6 L de Ringer: con sus 3 L ya lleva casi el doble', ok: true },
                 { t: '≈320 mL; 320 mL de Ringer, porque el Ringer se queda en el plasma', porque: 'Solo el 20 % del cristaloide se queda en el plasma: hacen falta unas 5 veces el déficit. Con esa cuenta creerías que 3 L son una barbaridad sin entender por qué, o que 320 mL reponen algo.' },
                 { t: '≈900 mL (15 % de 6 L de volemia); 4,5 L de Ringer', porque: 'La Tabla 11.1 calcula el déficit sobre el plasma (36 mL/kg en la mujer), no sobre una volemia estimada. Con esa cifra seguirías dando litros a quien ya lleva de sobra.' }],
               explicacion: 'Plasma: 60 kg × 36 mL/kg ≈ <span class="hl">2,16 L</span>; 15 % ≈ <span class="hl">324 mL</span> (la Tabla 11.1 redondea a 300 mL en la mujer de 60 kg). Con Ringer (20 % al plasma): <span class="hl">≈1,6 L</span>, y ≈1,3 L al intersticio. <span class="hl-rojo">Lleva 3 L.</span>',
@@ -205,7 +205,7 @@ export const MAYEUTICA_HEMODINAMICA = {
         enunciado: 'ScvO₂ de 60 % en un paciente con Hb de 7 g/dL y SpO₂ de 97 %. ¿Tiene hipoperfusión?',
         opciones: [
           { t: 'Sí: <65 % es hipoperfusión, y toca volumen', porque: '<65 % es aporte disminuido, no necesariamente hipoperfusión: la anemia también baja el aporte. Le darías volumen a quien quizá le falta hemoglobina.' },
-          { t: 'No se sabe: con Hb 7, mira el gap de PCO₂', ok: true },
+          { t: 'No se sabe: con Hb de 7, mira el gap de PCO₂', ok: true },
           { t: 'No: con la SpO₂ normal la ScvO₂ no tiene valor', porque: 'La ScvO₂ vale; la hipoxemia rara vez es la culpable, pero la anemia sí puede serlo. Ignorarla te deja sin ver un aporte bajo.' }],
         explicacion: '<65 %: aporte disminuido, <span class="hl">no necesariamente hipoperfusión</span>. La hipoxemia rara vez es la culpable (no se la deja persistir): <span class="hl">hay que descartar la anemia</span>. Con ScvO₂ <65 % y anemia, el gap de PCO₂ dice si además hay hipoperfusión. ≤50 %: oxigenación amenazada, corregir sin demora y medir el lactato.' },
       { id: 'rf-g3', corto: 'el gap', tipo: 'test', fuente: 'mar-gap-co2 · mar-tabla-11-2',
@@ -213,14 +213,14 @@ export const MAYEUTICA_HEMODINAMICA = {
         opciones: [
           { t: 'Baja: llega menos CO₂ a la sangre venosa', porque: 'El CO₂, muy difusible, se acumula en los tejidos y sube la PCO₂ venosa: el gap crece. Leerlo al revés te haría dar por buena una perfusión mala.' },
           { t: 'No cambia: lo decide la ventilación, no el gasto', porque: 'La PaCO₂ depende de la ventilación, pero el gap = VCO₂ / (GC × k): baja el gasto, sube el gap. Ignorarlo te quita el marcador más específico de hipoperfusión.' },
-          { t: 'Sube; >6 mmHg es hipoperfusión', ok: true }],
+          { t: 'Sube: por encima de 6 mmHg hay hipoperfusión', ok: true }],
         explicacion: '(PvCO₂ − PaCO₂) = VCO₂ / (GC × k). Normal <span class="hl">2-5 mmHg</span> (0,3-0,7 kPa); <span class="hl-rojo">>6 mmHg</span> (>0,8 kPa) = hipoperfusión tisular. Con la PCO₂ venosa de la cava superior; recomendado como objetivo de la reposición en el shock, incluido el séptico.',
         nota: '<b>Errata menor de la fuente.</b> El texto dice que «la Ecuación 11.3 puede reescribirse» refiriéndose a la del CO₂, que es la 11.4.' },
       { id: 'rf-g4', corto: 'ScvO₂ 84 %', tipo: 'test', fuente: 'mar-scvo2-pautas · mar-gap-vs-scvo2',
         enunciado: 'Shock séptico con una ScvO₂ de 84 %. ¿Te tranquiliza?',
         opciones: [
           { t: 'Sí: el aporte supera de sobra el consumo', porque: '>80 % en el shock séptico no es un buen aporte: lo más probable es un defecto de utilización del O₂. Tranquilizarte dejaría sin buscar una hipoperfusión.' },
-          { t: 'No: puede no usar el O₂; mira el gap', ok: true },
+          { t: 'No: puede ser un defecto de uso del O₂; mira el gap', ok: true },
           { t: 'Sí: son cortocircuitos periféricos, sin importancia clínica', porque: 'Se suele atribuir a cortocircuitos, pero lo más probable es un defecto de utilización del O₂ en los tejidos. El gap ayuda a destapar la hipoperfusión que esa cifra esconde.' }],
         explicacion: '>80 % en el shock séptico: lo más probable, un <span class="hl-rojo">defecto de utilización del O₂</span>. El gap es más específico de hipoperfusión y no lo altera el shock séptico: <span class="hl">debe preferirse</span> (sobre todo en el séptico o con anemia). Pero no detecta la oxigenación alterada: combinar los dos puede ser lo óptimo.' },
       { id: 'rf-g5', corto: '¿responder es estar seco?', tipo: 'test', fuente: 'mar-respuesta-50 · mar-pvc-volemia',
@@ -228,13 +228,13 @@ export const MAYEUTICA_HEMODINAMICA = {
         opciones: [
           { t: 'Sí: responder demuestra que le faltaba volumen', porque: 'Un normovolémico o hipervolémico también puede subir su VS con volumen. Leerlo como «estaba seco» te lleva a seguir dando bolos a quien ya le sobra agua.' },
           { t: 'Sí, si además su PVC era baja antes del bolo', porque: 'La PVC no marca la volemia (r = 0,17, ficha anterior). Sumar una cifra que no informa no convierte la respuesta en un diagnóstico de hipovolemia.' },
-          { t: 'No necesariamente', ok: true }],
+          { t: 'No necesariamente: responde también el normovolémico', ok: true }],
         explicacion: 'Responder <span class="hl">no significa estar hipovolémico</span>: un normovolémico o hipervolémico también puede responder. Evaluarlo antes de infundir debería reducir la sobrecarga.' },
       { id: 'rf-g6', corto: 'la sobrecarga', tipo: 'test', fuente: 'mar-sobrecarga-prueba',
         enunciado: 'Vas a hacer la prueba clásica de sobrecarga de volumen. ¿Cómo la das, y con qué miras si responde?',
         opciones: [
           { t: '500 mL en 30-60 min; termodilución antes y después', porque: 'Importa más la velocidad que el volumen. Y el pico se disipa a los 10 min, demasiado deprisa para la termodilución: te perderías la respuesta.' },
-          { t: '500 mL en 10-15 min; VS >10 %, con gasto continuo', ok: true },
+          { t: '500 mL en 10-15 min; mejora del VS >10 % con gasto continuo', ok: true },
           { t: '250 mL en 10 min; que la presión arterial media suba más de un 10 %', porque: 'La ficha da 500 mL en 10-15 min, y la respuesta es el volumen sistólico, no la presión. Con la PA podrías dar por respondedor a quien no lo es.' }],
         explicacion: 'Método estándar: <span class="hl">500 mL de cristaloide en 10-15 min</span>; importa más la velocidad que el volumen. Respuesta: <span class="hl">VS >10 %</span>. El pico llega en minutos y <span class="hl-rojo">se disipa a los 10 min</span>: hace falta gasto continuo.' },
       { id: 'rf-g7', corto: 'la EPP bien hecha', tipo: 'destapa', fuente: 'mar-epp · mar-epp-pasos · mar-epp-dolor',
@@ -279,7 +279,7 @@ export const MAYEUTICA_HEMODINAMICA = {
         enunciado: '¿Cuánto puede tardar el cuerpo en eliminar 2 L de salino isotónico, y por qué?',
         opciones: [
           { t: 'Unas horas: el riñón responde enseguida al exceso de agua', porque: 'Frente al exceso, la defensa del cuerpo es débil. Si confías en que lo eliminará solo, el balance positivo se acumula día tras día.' },
-          { t: 'Más de 2 días: frente al exceso, su defensa es débil', ok: true },
+          { t: 'Más de 2 días: frente al exceso, su defensa es muy débil', ok: true },
           { t: 'Más de 2 días, porque la ADH sube con la carga de sodio', porque: 'La ficha no lo explica así: las defensas fuertes (renina-angiotensina-aldosterona, ADH) son contra la falta de agua. Frente al exceso, quizá porque su actividad basal es baja o porque el cristaloide sale de los vasos, la respuesta es débil.' }],
         explicacion: 'Ante la falta de agua, el cuerpo se defiende con fuerza (renina-angiotensina-aldosterona, ADH); <span class="hl-rojo">frente al exceso, débil</span>: eliminar 2 L de salino puede llevar <span class="hl">más de 2 días</span>. Apoya un enfoque conservador de la fluidoterapia.' },
       { id: 'rf-e6', corto: 'el plan', tipo: 'error', fuente: 'mar-fluidos-consideraciones · mar-gap-vs-scvo2',
@@ -311,14 +311,14 @@ export const MAYEUTICA_HEMODINAMICA = {
               enunciado: 'Está en supino. La enfermera propone subirle las piernas así, que es más rápido. ¿Desde dónde empiezas?',
               opciones: [
                 { t: 'Desde supino: así el cambio de VS es mayor', porque: 'Desde supino ya has quitado la sangre esplácnica de la prueba: la respuesta puede quedarse corta y lo darías por no respondedor.' },
-                { t: 'Semiincorporado a 30-45°, con su VS basal', ok: true },
+                { t: 'Semiincorporado a 30-45°, con VS basal medido', ok: true },
                 { t: 'Sentado a 90° para que la diferencia se note más', porque: 'La ficha da 30-45°. Otra posición se sale del método descrito, y no se sabe qué valor tendrían con ella los cortes de la prueba (S 85 %, E 92 %).' }],
               explicacion: 'Paso 1: <span class="hl">semiincorporado (cabecera a 30-45°)</span> y VS basal. Empezar en supino quita la sangre que aporta la circulación esplácnica. Paso 2: con la cama, tronco horizontal y piernas a 30-45°.' } },
           { momento: 'Día 1 · 11:20', datos: { EPP: 'VS 50 → 53 mL; FC 96 → 97 lpm' }, nuevo: ['EPP'], calculadora: { ir: 'mar-respuesta-calc', nombre: '¿Responde a fluidos?' },
             pregunta: { id: 'c1b-3', tipo: 'test', fuente: 'mar-epp · mar-respuesta-calc', origen: 'ficha · la cuenta, del caso',
               enunciado: 'Con la EPP, el VS pasa de 50 a 53 mL. ¿Responde?',
               opciones: [
-                { t: 'No: +6 %, por debajo del 10 %', ok: true },
+                { t: 'No: sube solo un 6 %, por debajo del 10 %', ok: true },
                 { t: 'Sí: sube, y cualquier aumento cuenta', porque: 'El corte es un aumento ≥10 %. Con +6 % le darías volumen que, con toda probabilidad, solo acabaría en el intersticio.' },
                 { t: 'Sí: un 6 % con la EPP equivale a más del 10 % con el bolo', porque: 'La ficha usa el mismo corte para la EPP (≥10 %). Esa «equivalencia» no está en la fuente: con ella justificarías un bolo que no le sirve.' }],
               explicacion: '(53 − 50) / 50 = <span class="hl">+6 %</span>. Respuesta positiva a la EPP: <span class="hl">VS ≥10 %</span>. No responde: el bolo probablemente no le subirá el gasto.' } },
@@ -398,12 +398,12 @@ export const MAYEUTICA_HEMODINAMICA = {
         opciones: [
           { t: 'Sube la sistólica y la diastólica no se mueve', porque: 'La sistólica solo sube si hay hipertensión pulmonar. Si buscas un salto de sistólica, creerás que sigues en el ventrículo y avanzarás de más.' },
           { t: 'Desaparece la onda pulsátil y queda una presión plana', porque: 'Eso pasa más adelante, al enclavarse. Si lo esperas aquí, seguirás empujando un catéter que ya estaba en la arteria.' },
-          { t: 'Sube de golpe la diastólica', ok: true }],
+          { t: 'Sube de golpe la diastólica sin cambiar la sistólica', ok: true }],
         explicacion: 'Arteria pulmonar: <span class="hl">sube bruscamente la diastólica sin cambiar la sistólica</span>, por la resistencia del circuito pulmonar. La sistólica sube si hay hipertensión pulmonar.' },
       { id: 'cap-g4', corto: 'Q = 0', tipo: 'test', fuente: 'mar-enclavamiento-principio · mar-cap-pasos',
         enunciado: 'Al avanzar más, la onda pulsátil desaparece. Con el globo hinchado no hay flujo (Q = 0). ¿Qué presión lee la punta?',
         opciones: [
-          { t: 'La de la aurícula izquierda', ok: true },
+          { t: 'La de la aurícula izquierda, vía la columna de sangre quieta', ok: true },
           { t: 'La de una arteria pulmonar ocluida, sin relación con el lado izquierdo', porque: 'Sin flujo queda una columna de sangre quieta hasta la aurícula izquierda: la presión es la misma en toda ella. Si crees que no tiene relación, tirarías la medida que da el llenado izquierdo.' },
           { t: 'La presión capilar con flujo, la que produce el edema', porque: 'Con el globo hinchado no hay flujo: el enclavamiento se mide sin él. Con flujo, la capilar es mayor. Confundirlas te hace descartar edemas hidrostáticos que sí existen.' }],
         explicacion: 'Con Q = 0 queda una columna quieta hasta la aurícula izquierda: <span class="hl">PW = PC = PAI</span>. Con mitral normal equivale a la presión telediastólica del VI: el llenado del ventrículo izquierdo. Siempre que la capilar supere a la alveolar (PC > PA).' },
@@ -425,7 +425,7 @@ export const MAYEUTICA_HEMODINAMICA = {
         enunciado: 'Deshinchas el globo y vuelve el flujo. ¿Qué relación hay entonces entre la presión capilar (PC) y el enclavamiento (PW)?',
         opciones: [
           { t: 'Son iguales: el enclavamiento es la presión del edema', porque: 'Solo son iguales sin flujo. Con flujo, la capilar supera al enclavamiento, y más con venoconstricción pulmonar: tomarlas por iguales te hace descartar un edema hidrostático.' },
-          { t: 'La capilar es mayor: PC − PW = Q × RV', ok: true },
+          { t: 'La capilar es mayor: PC − PW = Q × RV (venas pulmonares)', ok: true },
           { t: 'La capilar es menor: la sangre baja hacia el capilar', porque: 'La sangre va del capilar a la aurícula izquierda: la capilar tiene que ser mayor. Si la crees menor, el enclavamiento te parecerá un techo que no es.' }],
         explicacion: 'Con flujo: <span class="hl">PC − PW = Q × RV</span> (flujo por resistencia de las venas pulmonares). La diferencia no se puede calcular, pero <span class="hl-rojo">crece con la venoconstricción pulmonar</span>: hipoxemia, endotoxemia, vasopresores y SDRA.' },
     ],
@@ -434,7 +434,7 @@ export const MAYEUTICA_HEMODINAMICA = {
         enunciado: 'Sepsis con endotoxemia, hipoxemia y noradrenalina. Infiltrados bilaterales y enclavamiento de 10 mmHg. ¿Qué concluyes con Marino?',
         opciones: [
           { t: 'Que es un SDRA: con 10 mmHg se descarta el edema hidrostático', porque: 'Usar el enclavamiento como criterio diagnóstico de SDRA debería abandonarse: con venoconstricción pulmonar la capilar puede ser mucho mayor. Le quitarías el diurético a quien quizá lo necesita.' },
-          { t: 'Que no descarta el edema hidrostático', ok: true },
+          { t: 'Que no descarta un edema hidrostático: sube la PC − PW', ok: true },
           { t: 'Que con 10 mmHg la presión capilar también es normal', porque: 'Con flujo, la capilar supera al enclavamiento, y la diferencia crece justo con hipoxemia, endotoxemia y vasopresores. Un enclavamiento normal no dice que la capilar lo sea.' }],
         explicacion: 'Un enclavamiento normal <span class="hl-rojo">no descarta el edema pulmonar hidrostático</span>: la diferencia PC − PW aumenta con la venoconstricción pulmonar (hipoxemia, endotoxemia, vasopresores, SDRA). Usarlo como criterio de SDRA debería abandonarse.' },
       { id: 'cap-e2', corto: 'la PEEP', tipo: 'test', fuente: 'mar-enclavamiento-peep',
@@ -449,13 +449,13 @@ export const MAYEUTICA_HEMODINAMICA = {
         opciones: [
           { t: 'Sí: cualquier cambio de 3 mmHg o más cuenta', porque: 'La variación espontánea es ≤4 mmHg en el 60 %: un cambio de 3 cabe en ella. Tratarías un cambio que no existe.' },
           { t: 'Sí: la variación espontánea nunca pasa de 2 mmHg', porque: 'Puede llegar a 7 mmHg. Con esa idea cualquier ruido de la medida te parecería un cambio clínico.' },
-          { t: 'No: tendría que superar los 4 mmHg', ok: true }],
+          { t: 'No: tendría que superar los 4 mmHg de variación', ok: true }],
         explicacion: 'Variación espontánea <span class="hl">≤4 mmHg en el 60 %</span> de los pacientes, pero hasta 7: un cambio <span class="hl">>4 mmHg</span> se considera clínicamente significativo.' },
       { id: 'cap-e4', corto: 'HTP y diastólica', tipo: 'test', fuente: 'mar-enclavamiento-ondas · mar-cap-pasos',
         enunciado: 'No consigues enclavarlo aunque avanzas al máximo. ¿Puedes usar la diastólica pulmonar en su lugar?',
         opciones: [
           { t: 'Siempre: la diastólica pulmonar equivale al enclavamiento', porque: 'Solo si no hay hipertensión pulmonar: con ella el enclavamiento queda por debajo de la diastólica. Le atribuirías un llenado izquierdo alto que no tiene.' },
-          { t: 'Solo si no hay hipertensión pulmonar', ok: true },
+          { t: 'Solo sin hipertensión pulmonar; con ella el enclavamiento es menor', ok: true },
           { t: 'Solo si hay hipertensión pulmonar, que las iguala', porque: 'Es al revés: la hipertensión pulmonar las separa (el enclavamiento queda por debajo). Usarla justo ahí sobrestima el llenado izquierdo.' }],
         explicacion: 'Si la onda pulsátil no desaparece, la <span class="hl">diastólica pulmonar puede sustituir al enclavamiento solo sin hipertensión pulmonar</span>. En la hipertensión pulmonar, el enclavamiento queda por debajo de la diastólica pulmonar.' },
       { id: 'cap-e5', corto: 'la nota', tipo: 'error', fuente: 'mar-cap-colocacion · mar-enclavamiento-ondas · mar-enclavamiento-principio · mar-enclavamiento-respiracion',
@@ -478,7 +478,7 @@ export const MAYEUTICA_HEMODINAMICA = {
               enunciado: 'Introductor colocado. Al entrar en la cava superior aparece una onda venosa. ¿Qué haces?',
               opciones: [
                 { t: 'Avanzar con el globo deshinchado hasta ver una onda pulsátil', porque: 'El globo hinchado protege la punta para que no roce la pared y deja que la sangre la lleve. Avanzar sin él es empujar una punta desnuda por el corazón.' },
-                { t: 'Hinchar el globo con 1,5 mL de aire y avanzar', ok: true },
+                { t: 'Hinchar el globo con 1,5 mL de aire y avanzar con las ondas', ok: true },
                 { t: 'Hinchar el globo con 3 mL para que flote mejor', porque: 'El globo es de 1,5 mL; la ficha no da otro volumen. Hincharlo de más es salirse de lo que admite el catéter.' }],
               explicacion: 'Se pasa por un introductor de <span class="hl">8-9 Fr</span> con la luz distal al transductor. Al ver la onda venosa de la cava: <span class="hl">globo con 1,5 mL de aire</span> y avanzar; las ondas guían el avance.' } },
           { momento: '02:10', datos: { Trazado: 'onda pulsátil de 42/6 mmHg que pasa a 42/26 mmHg' }, nuevo: ['Trazado'],
@@ -486,7 +486,7 @@ export const MAYEUTICA_HEMODINAMICA = {
               enunciado: 'La onda pasa de 42/6 a 42/26 mmHg. ¿Dónde está la punta?',
               opciones: [
                 { t: 'Sigue en el ventrículo: la sistólica no ha cambiado', porque: 'Al cruzar la pulmonar la sistólica no cambia: lo que delata el paso es la diastólica que sube de golpe. Seguirías avanzando un catéter que ya está en la arteria.' },
-                { t: 'Ha cruzado la pulmonar', ok: true },
+                { t: 'Ha cruzado la pulmonar: la diastólica ha subido de golpe', ok: true },
                 { t: 'Está enclavada: la diastólica ha subido al nivel de la aurícula izquierda', porque: 'El enclavamiento es una presión no pulsátil; aquí la onda sigue siendo pulsátil. Leerías como llenado izquierdo la presión de la arteria.' }],
               explicacion: 'Ventrículo derecho: la diastólica (6) es la media de la aurícula derecha. Al cruzar la pulmonar <span class="hl">sube de golpe la diastólica</span> (26) sin cambiar la sistólica (42).' } },
           { momento: '02:15', datos: { Enclavamiento: '24 mmHg, con ondas v de 38 mmHg' }, nuevo: ['Enclavamiento'],
@@ -546,7 +546,7 @@ export const MAYEUTICA_HEMODINAMICA = {
         opciones: [
           { t: 'Lenta y larga: hay más sangre que enfriar', porque: 'Es la del gasto bajo: la sangre pasa despacio y el frío dura. Leer un área grande como gasto alto te haría ver un corazón fuerte en un shock cardiogénico.' },
           { t: 'Subida rápida y pico breve: área pequeña', ok: true },
-          { t: 'Baja y muy prolongada, con una cola larga', porque: 'Esa es la de la insuficiencia tricuspídea (el frío se recicla). Confundirla con un gasto alto te daría una cifra falsa.' }],
+          { t: 'Baja y prolongada, con una cola larga', porque: 'Esa es la de la insuficiencia tricuspídea (el frío se recicla). Confundirla con un gasto alto te daría una cifra falsa.' }],
         explicacion: 'Figura 8.7: gasto alto, <span class="hl">subida rápida, pico breve y área pequeña</span>; gasto bajo, subida y bajada lentas y área grande; insuficiencia tricuspídea, curva prolongada y baja.' },
       { id: 'td-g2', corto: 'área y gasto', tipo: 'destapa', fuente: 'mar-termo-metodo', modelo: { ecoEscenario: 'fallo', texto: 'Mira un gasto bajo (fallo del VI) en la circulación viva' },
         enunciado: 'Entonces, ¿por qué un área grande quiere decir gasto bajo? Piensa en el principio, no en la figura.',
@@ -573,7 +573,7 @@ export const MAYEUTICA_HEMODINAMICA = {
         enunciado: '¿Y con un cortocircuito intracardíaco? ¿En qué sentido se equivoca según su dirección?',
         opciones: [
           { t: 'Izquierda-derecha: bajo; derecha-izquierda: alto', porque: 'Los dos dan falsamente alto: de derecha a izquierda escapa parte del frío; de izquierda a derecha, más volumen diluye el indicador. Con un «bajo» buscarías un fallo que no está.' },
-          { t: 'Falsamente alto en los dos sentidos', ok: true },
+          { t: 'Falsamente alto en los dos, por distinto motivo', ok: true },
           { t: 'Falsamente bajo en los dos sentidos', porque: 'Es al revés: en los dos sentidos sale alto. Creerías que el corazón bombea menos de lo que el monitor dice, cuando la cifra ya está inflada.' }],
         explicacion: 'Cortocircuitos intracardíacos: <span class="hl-rojo">falsamente alto</span> (derecha-izquierda: parte del frío escapa; izquierda-derecha: más volumen diluye el indicador).' },
       { id: 'td-g6', corto: 'tres medidas', tipo: 'test', fuente: 'mar-termo-cuantas', origen: 'ficha · la cuenta, del caso',
@@ -619,7 +619,7 @@ export const MAYEUTICA_HEMODINAMICA = {
         enunciado: '¿En qué situación dice Marino que el catéter de arteria pulmonar ha mejorado algo los resultados?',
         opciones: [
           { t: 'Shock séptico, para guiar los fluidos', porque: 'Lo da como útil para saber si responde a volumen, pero donde dice que ha mejorado algo los resultados es en el shock cardiogénico.' },
-          { t: 'Shock cardiogénico', ok: true },
+          { t: 'Shock cardiogénico, aunque solo algo', ok: true },
           { t: 'Destete difícil del ventilador', porque: 'Es un uso (detectar la disfunción cardíaca oculta inducida por el destete), pero sin mejora de resultados citada.' }],
         explicacion: 'Usos: IC aguda descompensada (sobre todo con PA lábil o empeoramiento renal), perioperatorio de cirugía cardíaca, <span class="hl">shock, sobre todo cardiogénico (donde ha mejorado algo los resultados)</span>, la respuesta a volumen, la transfusión y el destete difícil.' },
       { id: 'td-e5', corto: 'el informe', tipo: 'error', fuente: 'mar-tabla-8-1 · mar-param-cv · mar-termo-cuantas',
@@ -658,7 +658,7 @@ export const MAYEUTICA_HEMODINAMICA = {
             pregunta: { id: 'c2b-3', tipo: 'test', fuente: 'mar-sc · mar-tabla-8-1 · mar-hemo-calc', origen: 'ficha · la cuenta, del caso',
               enunciado: 'Ahora sí: media de 3,7 L/min. Con 175 cm y 80 kg, ¿cuál es su índice cardíaco?',
               opciones: [
-                { t: '≈1,9 L/min/m²: bajo', ok: true },
+                { t: '≈1,9 L/min/m²: bajo, por debajo de 2,4', ok: true },
                 { t: '≈1,45 L/min/m²: 3,7 / 2,55', porque: 'Olvidaste restar 60 en la superficie: es 1,95 m², no 2,55. Verías un gasto peor del que tiene.' },
                 { t: '≈1,9 L/min/m²: aceptable en un infarto, no hace falta compararlo', porque: 'La Tabla 8.1 no tiene rangos por enfermedad: lo normal es 2,4-4,0. Darlo por bueno es no ver que el gasto no llega.' }],
               explicacion: 'SC = [175 + 80 − 60] / 100 = <span class="hl">1,95 m²</span>; IC = 3,7 / 1,95 ≈ <span class="hl-rojo">1,9 L/min/m²</span>, por debajo de 2,4.' } },

@@ -91,7 +91,7 @@ export const MAYEUTICA_SIN_MODELO = {
         enunciado: 'Famotidina en un paciente con aclaramiento de creatinina de 40 mL/min. ¿Qué haces con la dosis?',
         opciones: [
           { t: 'Nada: 20 mg cada 12 h; los anti-H2 no se ajustan', porque: 'Se eliminan por el riñón y en la insuficiencia renal pueden ser neurotóxicos (alteración mental). Sin ajuste, le das una confusión evitable.' },
-          { t: 'Reducirla un 50 %: puede ser neurotóxica', ok: true },
+          { t: 'Reducirla un 50 %: se acumula y puede ser neurotóxica', ok: true },
           { t: 'Pasar a pantoprazol 20 mg: los IBP se ajustan a la mitad', porque: 'Los IBP no requieren ajuste renal (40 mg al día). Reducirlo es infradosificar sin motivo.' }],
         explicacion: 'Famotidina 20 mg cada 12 h; <span class="hl">reducir un 50 % con ClCr <50</span>: se elimina por el riñón y puede dar alteración mental. Los IBP no requieren ajuste renal.' },
       { id: 'ue-e4', corto: 'sucralfato', tipo: 'test', fuente: 'mar-sucralfato · mar-sucralfato-pegas',
@@ -130,7 +130,7 @@ export const MAYEUTICA_SIN_MODELO = {
               enunciado: 'Está en íleo y la sonda no absorbe bien. ¿Con qué le proteges?',
               opciones: [
                 { t: 'Omeprazol 40 mg al día por vía intravenosa', porque: 'El omeprazol va por vía oral o sonda (Tabla 4.3); el IBP intravenoso es el pantoprazol. Le pautarías una vía que no existe para ese fármaco.' },
-                { t: 'Pantoprazol 40 mg IV al día', ok: true },
+                { t: 'Pantoprazol 40 mg IV al día, el IBP más usado en la UCI', ok: true },
                 { t: 'Famotidina 10 mg cada 12 h, ajustada al riñón', porque: 'Con ClCr 75 no hace falta reducirla (el ajuste es con <50), y el IBP es más eficaz que el anti-H2.' }],
               explicacion: '<span class="hl">Pantoprazol 40 mg IV al día</span>: el IBP más usado en la UCI por su vía IV. Eficacia: IBP > anti-H2 > sucralfato.' } },
           { momento: 'Día 3 · el giro', datos: { Nutrición: 'enteral completa', Hemodinámica: 'sin shock, sin sepsis y sin FRA (ClCr 75 mL/min)' }, nuevo: ['Nutrición', 'Hemodinámica'],
@@ -192,7 +192,7 @@ export const MAYEUTICA_SIN_MODELO = {
       { id: 'tf-g1', corto: 'tan poca HNF', tipo: 'test', fuente: 'mar-hnf',
         enunciado: 'La HNF previene la ETV con 5.000 U subcutáneas cada 8-12 h. ¿Por qué basta tan poca?',
         opciones: [
-          { t: 'La antitrombina se activa con muy poca heparina', ok: true },
+          { t: 'Basta poca heparina para activar la antitrombina, muy sensible', ok: true },
           { t: 'Porque en profilaxis solo hace falta frenar la trombina, no el Xa', porque: 'Su primer efecto es activar la antitrombina e inhibir el Xa (con ello, la generación de trombina). Si crees que solo actúa sobre la trombina, no entiendes por qué el fondaparinux, que solo inhibe el Xa, también previene.' },
           { t: 'Porque por vía subcutánea se absorbe casi entera (90 %)', porque: 'El 90 % es la biodisponibilidad de la HBPM; la de la HNF es del 15-30 %. Con esa idea esperarías de la HNF una respuesta tan predecible como la de la HBPM.' }],
         explicacion: 'La activación de la antitrombina <span class="hl">es muy sensible: dosis bajas bastan</span>. 5.000 U SC cada 8-12 h; cada 8 h es popular en el alto riesgo, pero la mayoría de estudios no ven diferencia de eficacia ni de sangrado.' },
@@ -244,7 +244,7 @@ export const MAYEUTICA_SIN_MODELO = {
         enunciado: 'Enoxaparina profiláctica con un aclaramiento de creatinina de 25 mL/min. ¿Qué dice la ficha?',
         opciones: [
           { t: '40 mg cada 12 h, porque el riñón apenas la elimina', porque: 'Esa es la dosis de la obesidad mórbida, y con ClCr <30 la enoxaparina se reduce. Se acumularía y le haría sangrar.' },
-          { t: '30 mg al día u otro (HNF)', ok: true },
+          { t: '30 mg al día, o cambiar a HNF, que no se ajusta al riñón', ok: true },
           { t: '40 mg al día, la dosis estándar: con ClCr 25 aún no se ajusta', porque: 'El ajuste empieza con ClCr <30: a 25 ya toca. Mantener la estándar es arriesgar sangrado.' }],
         explicacion: 'Enoxaparina: 40 mg al día, o 30 mg cada 12 h en el alto riesgo. <span class="hl">ClCr <30: 30 mg al día u otro anticoagulante (HNF)</span>; la HNF parece la mejor opción con ClCr <20. La HNF y la dalteparina no se ajustan (ver la nota de la dalteparina con ClCr <15).' },
       { id: 'tf-e2', corto: 'IMC 44', tipo: 'test', fuente: 'mar-tabla-5-2 · mar-hnf · mar-hbpm',
@@ -266,7 +266,7 @@ export const MAYEUTICA_SIN_MODELO = {
         enunciado: '¿En qué profilaxis recomienda hoy Marino los anticoagulantes orales directos?',
         opciones: [
           { t: 'En la enfermedad médica aguda: el rivaroxabán está aprobado', porque: 'Está aprobado, pero un metaanálisis frente a HBPM muestra la misma eficacia con más sangrado. Le darías más riesgo sin más beneficio.' },
-          { t: 'Solo en las prótesis de cadera y rodilla', ok: true },
+          { t: 'Solo en prótesis de cadera y rodilla; ahí superan la HBPM', ok: true },
           { t: 'En la insuficiencia renal grave, mejor que la warfarina', porque: 'En la insuficiencia renal grave, la warfarina es el único oral seguro. Un ACOD ahí se acumularía.' }],
         explicacion: 'Hoy <span class="hl">solo se recomiendan en profilaxis para prótesis de cadera y rodilla</span> (edoxabán sin dosis aprobada de profilaxis); ahí todos superan a la HBPM, y el apixabán podría ser el preferido. Apixabán y rivaroxabán, a dosis estándar en la obesidad mórbida; tras un bypass gástrico, mejor no usarlos.' },
       { id: 'tf-e5', corto: 'el epidural', tipo: 'test', fuente: 'mar-neuroeje',
@@ -375,14 +375,14 @@ export const MAYEUTICA_SIN_MODELO = {
         enunciado: 'Paciente con PA de 80/28 mmHg y CNI a 35-40 mmHg en el tobillo. ¿Hay algún problema?',
         opciones: [
           { t: 'No: la CNI solo comprime venas', porque: 'Si supera la presión diastólica, comprime también las arterias. Con 35-40 frente a una diastólica de 28, la pierna puede quedarse sin riego.' },
-          { t: 'Sí: supera su diastólica', ok: true },
+          { t: 'Sí: supera su presión diastólica', ok: true },
           { t: 'No: lo único prohibido es superar la sistólica', porque: 'El límite es la diastólica, no la sistólica. Con ese margen equivocado dejarías comprimidas sus arterias en cada ciclo.' }],
         explicacion: 'La presión de la CNI <span class="hl-rojo">nunca debe superar la presión diastólica</span>: comprimiría las arterias. Además limita la movilidad, macera la piel y molesta al despierto: retirarla en cuanto no haga falta.' },
       { id: 'te-g3', corto: 'el filtro', tipo: 'test', fuente: 'mar-filtro-vci',
         enunciado: '¿Es el filtro de vena cava inferior una forma de profilaxis?',
         opciones: [
-          { t: 'Sí: es la alternativa si no se puede anticoagular', porque: 'A veces se usa en la TVP que no se puede anticoagular, pero no previene la TVP y no se recomienda como profilaxis. Si no puede anticoagularse, la profilaxis es la CNI.' },
-          { t: 'No: no previene la TVP; atrapa trombos', ok: true },
+          { t: 'Sí: la alternativa si no se puede anticoagular', porque: 'A veces se usa en la TVP que no se puede anticoagular, pero no previene la TVP y no se recomienda como profilaxis. Si no puede anticoagularse, la profilaxis es la CNI.' },
+          { t: 'No: no previene la TVP; solo atrapa los trombos', ok: true },
           { t: 'Sí, en el trauma grave, donde el riesgo es máximo', porque: 'En el trauma la ficha da enoxaparina y CNI. El filtro no previene la TVP en ningún escenario: ponerlo como profilaxis no protege de la trombosis.' }],
         explicacion: 'Los filtros <span class="hl-rojo">no previenen la TVP</span>; reducen la embolia pulmonar atrapando los trombos. Se usan a veces en la TVP que no se puede anticoagular, pero <span class="hl">no se recomiendan como profilaxis</span>.' },
       { id: 'te-g4', corto: 'antes y después', tipo: 'test', fuente: 'mar-esc-cirugia-general',
@@ -402,7 +402,7 @@ export const MAYEUTICA_SIN_MODELO = {
       { id: 'te-g6', corto: 'los encamados', tipo: 'test', fuente: 'mar-inmovilidad',
         enunciado: 'Si la inmovilidad causara la TVP, ¿qué esperarías ver en los ancianos encamados con contracturas?',
         opciones: [
-          { t: 'TVP epidémica; y no se ve', ok: true },
+          { t: 'TVP epidémica; y no se ve, ni en la paraplejia', ok: true },
           { t: 'Lo que se ve: casi todos hacen una TVP', porque: 'El autor parte justo de lo contrario: la TVP no es epidémica en esos pacientes. Si lo das por hecho, anticoagularás de más.' },
           { t: 'Nada: la inmovilidad solo pesa en los jóvenes', porque: 'La ficha no lo plantea por edades: su argumento es que inmovilidad no es estasis. Inventar una excepción no explica nada.' }],
         explicacion: 'Si la inmovilidad fuera factor de riesgo, ¿por qué la TVP <span class="hl">no es epidémica</span> en ancianos encamados con contracturas, y por qué no se hace profilaxis perpetua en la paraplejia? Es una reflexión del autor.' },
@@ -464,7 +464,7 @@ export const MAYEUTICA_SIN_MODELO = {
               enunciado: '¿Qué profilaxis le pones hoy?',
               opciones: [
                 { t: 'Enoxaparina 40 mg cada 12 h, por la fractura', porque: 'El libro da la pauta del TCE (CNI hasta 24 h de TC sin sangrado) y la de las extremidades por separado, y no dice cuál manda si coinciden. Con una contusión cerebral, anticoagular ya arriesga que crezca; elegir la del TCE es prudencia, no una regla escrita.' },
-                { t: 'CNI, sin anticoagular todavía', ok: true },
+                { t: 'CNI, sin anticoagular hasta una TC estable', ok: true },
                 { t: 'Medias de compresión hasta que camine', porque: 'Las medias nunca son el único método en el hospitalizado, y menos en el grupo de más riesgo: la CNI es el método mecánico estándar.' }],
               explicacion: 'TCE: <span class="hl">CNI hasta que la TC no muestre sangrado (o progresión) durante 24 h</span>. La CNI aumenta el flujo y la fibrinolisis.' } },
           { momento: 'Ingreso · el estudiante',
@@ -481,7 +481,7 @@ export const MAYEUTICA_SIN_MODELO = {
               opciones: [
                 { t: 'Enoxaparina 40 mg cada 12 h, la del trauma de las extremidades', porque: 'Con TCE la pauta es 30 mg cada 12 h. Darle la de las extremidades es subir la dosis donde la ficha la baja.' },
                 { t: 'Seguir solo con la CNI hasta el alta', porque: 'Con 24 h de TC estable toca añadir la enoxaparina. Quedarse en la CNI le deja corto en el grupo de más riesgo.' },
-                { t: 'Enoxaparina 30 mg SC cada 12 h', ok: true }],
+                { t: 'Enoxaparina 30 mg SC cada 12 h: la TC sigue estable', ok: true }],
               explicacion: 'Con 24 h de TC sin sangrado ni progresión: <span class="hl">enoxaparina 30 mg SC cada 12 h</span>.' } },
           { momento: 'Día 4', datos: { ClCr: '140 mL/min', 'Anti-Xa (pico)': '0,1 UI/mL' }, nuevo: ['ClCr', 'Anti-Xa (pico)'],
             pregunta: { id: 'e3-4', tipo: 'test', fuente: 'mar-esc-trauma · mar-hbpm',
@@ -533,7 +533,7 @@ export const MAYEUTICA_SIN_MODELO = {
         enunciado: 'La pregunta de la Figura 6.1, que se hizo a residentes y enfermeras de UCI: ¿el diazepam alivia el dolor?',
         opciones: [
           { t: 'Sí, a dosis altas', porque: 'El diazepam seda y quita la ansiedad, pero no alivia el dolor. Con esa idea sedarías a un paciente que sigue sufriendo dolor sin poder decirlo.' },
-          { t: 'No', ok: true },
+          { t: 'No, no es analgésico', ok: true },
           { t: 'Sí, si el dolor es muscular', porque: 'No es un analgésico en ningún tipo de dolor. Tratar el dolor con una benzodiacepina deja el dolor y añade sedación y delirio.' }],
         explicacion: 'Figura 6.1: respondieron mal <span class="hl-rojo">~80 % de los residentes</span> y ~43 % de las enfermeras de UCI. Las benzodiacepinas son ansiolíticas, sedantes y amnésicas (ficha de sedación), no analgésicas.' },
       { id: 'an-g2', corto: 'por qué duele más', tipo: 'test', fuente: 'mar-hipernocicepcion',
@@ -562,13 +562,13 @@ export const MAYEUTICA_SIN_MODELO = {
         opciones: [
           { t: 'La de la Tabla 6.2, sin salirse del rango', porque: 'Las necesidades varían mucho de una persona a otra: la dosis eficaz la marca la respuesta del paciente. Ceñirte a la tabla deja a unos con dolor y a otros con dosis de más.' },
           { t: 'La mínima, por miedo a la depresión respiratoria', porque: 'La depresión respiratoria es rara a dosis habituales. Infradosificar por miedo deja al paciente con dolor.' },
-          { t: 'La que le alivia', ok: true }],
+          { t: 'La que le alivia el dolor, según su respuesta', ok: true }],
         explicacion: '<span class="hl">La dosis eficaz la marca la respuesta del paciente</span>, no la recomendada: las necesidades varían mucho.' },
       { id: 'an-g6', corto: 'hipotenso', tipo: 'test', fuente: 'mar-tabla-6-2 · mar-fentanilo · mar-morfina',
         enunciado: 'Paciente hipotenso con dolor. ¿Fentanilo o morfina, y por qué?',
         opciones: [
           { t: 'Morfina, porque sus metabolitos la hacen más analgésica', porque: 'La morfina libera histamina (vasodilatación e hipotensión), justo lo que no quieres aquí. Y sus metabolitos se acumulan en la insuficiencia renal.' },
-          { t: 'Fentanilo: no libera histamina', ok: true },
+          { t: 'Fentanilo: no libera histamina y hipotensa menos', ok: true },
           { t: 'Da igual: los dos liberan histamina', porque: 'Solo la morfina libera histamina (Tabla 6.2). Con esa idea no elegirías el fentanilo, que es lo que protege la presión.' }],
         explicacion: 'Fentanilo: <span class="hl">sin liberación de histamina (menos hipotensión: su gran atractivo en el crítico)</span>, 600 veces más liposoluble (inicio en 1-2 min) y sin metabolitos activos. Pega: se acumula en el cerebro con el uso continuado.' },
       { id: 'an-g7', corto: 'el riñón', tipo: 'destapa', fuente: 'mar-tabla-6-2 · mar-morfina · mar-fentanilo · mar-hidromorfona',
@@ -585,7 +585,7 @@ export const MAYEUTICA_SIN_MODELO = {
         enunciado: 'Asmático con dolor postoperatorio. El R2 dice que la morfina está contraindicada porque da broncoespasmo. ¿Qué dice Marino?',
         opciones: [
           { t: 'Que tiene razón: la histamina contrae los bronquios', porque: 'La morfina libera histamina, pero según Marino no causa broncoespasmo: cita dosis de 1,5 mg/kg dadas a asmáticos sin problema. Le negarías un analgésico eficaz.' },
-          { t: 'Que no da broncoespasmo', ok: true },
+          { t: 'Que no da broncoespasmo: su histamina vasodilata, no contrae', ok: true },
           { t: 'Que solo está contraindicada en perfusión continua', porque: 'La ficha no la contraindica en ninguna forma en el asmático. Su problema es la hipotensión por histamina y los metabolitos en la insuficiencia renal.' }],
         explicacion: 'La histamina de la morfina da vasodilatación e hipotensión, sobre todo con tono vascular alto, pero <span class="hl">no causa broncoespasmo</span>: según el libro, se han dado <span class="hl">1,5 mg/kg a asmáticos</span> sin problema.',
         nota: '<b>Nota de fidelidad.</b> La cifra de 1,5 mg/kg es la que imprime el libro (<a class="biblio-link" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=20" target="_blank" rel="noopener">PDF pág. 20</a>). Es una dosis muy alta (en 70 kg serían ≈100 mg) y podría ser una errata de la fuente; no se ha podido contrastar con su referencia 18 y se reproduce tal cual, sin corregirla.' },
@@ -607,14 +607,14 @@ export const MAYEUTICA_SIN_MODELO = {
         enunciado: 'Ketorolaco IV en una mujer de 70 años y 48 kg, con función renal normal. ¿Qué dosis?',
         opciones: [
           { t: '30 mg cada 6 h: su riñón está bien', porque: 'El riñón no es el único motivo: la edad ≥65 y el peso <50 kg también obligan a reducir un 50 %. Le darías el doble.' },
-          { t: '15 mg IV cada 6 h', ok: true },
+          { t: '15 mg IV cada 6 h: la mitad por la edad o el peso', ok: true },
           { t: '7,5 mg cada 6 h: un 50 % por la edad y otro 50 % por el peso', porque: 'La reducción es una sola, del 50 % (15 mg cada 6 h), con cualquiera de esos motivos. Reducirla dos veces la deja infradosificada.' }],
         explicacion: 'Ketorolaco 30 mg IV cada 6 h; <span class="hl">reducir un 50 % (15 mg cada 6 h)</span> con insuficiencia renal, <span class="hl">edad ≥65 o peso <50 kg</span>. Mejor IV (la IM da hematomas). Junto a un opioide reduce su dosis un 25-50 %.' },
       { id: 'an-e5', corto: 'ketamina', tipo: 'test', fuente: 'mar-tabla-6-3 · mar-ketamina · mar-ketamina-errata',
         enunciado: 'Ketamina como ahorradora de opioides. ¿Qué dosis, y en quién no la pondrías?',
         opciones: [
           { t: '60-120 µg/h; no en el asmático, porque contrae los bronquios', porque: '60-120 µg/h es lo que imprime la Tabla 6.3; el texto del capítulo dice µg/kg/h (ver la nota de fidelidad). Y la ketamina broncodilata: es útil en el asma, no un problema.' },
-          { t: '60-120 µg/kg/h; no en la isquemia miocárdica', ok: true },
+          { t: '60-120 µg/kg/h; no se aconseja en la isquemia miocárdica', ok: true },
           { t: '60-120 µg/kg/h; no en el shock, porque baja la presión', porque: 'La ketamina sube la presión y la frecuencia (útil en el shock). Evitarla ahí es quitarle una opción que le favorece.' }],
         explicacion: 'Ketamina: <span class="hl">60-120 µg/kg/h</span> con un opioide, sin efectos psicomiméticos llamativos a esas dosis. Sube la PA y la FC (útil en el shock), broncodilata (útil en el asma); <span class="hl-rojo">no se aconseja en la isquemia miocárdica</span>.',
         nota: '<b>Nota de fidelidad.</b> La Tabla 6.3 (<a class="biblio-link" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=22" target="_blank" rel="noopener">PDF pág. 22</a>) imprime «60-120 µg/h»; el texto del capítulo (<a class="biblio-link" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=23" target="_blank" rel="noopener">PDF pág. 23</a>), «60-120 µg/kg/h». La pregunta sigue el texto; la ficha anota la discrepancia (mar-ketamina-errata).' },
@@ -639,7 +639,7 @@ export const MAYEUTICA_SIN_MODELO = {
               enunciado: 'Se agita y lucha con el ventilador. El R1 propone subir el propofol. ¿Qué haces primero?',
               opciones: [
                 { t: 'Subir el propofol: está agitado (RASS +2)', porque: 'El propofol no tiene efecto analgésico. Con BPS 9 le duele: más propofol le dormiría con el mismo dolor.' },
-                { t: 'Tratar el dolor: su BPS es 9', ok: true },
+                { t: 'Tratar primero el dolor: su BPS de 9 es ≥6', ok: true },
                 { t: 'Diazepam en bolo: calma la agitación y el dolor', porque: 'El diazepam no alivia el dolor (el 80 % de los residentes contestó mal a esa pregunta), y en vena se evita (vida media de 90 h).' }],
               explicacion: 'BPS 4 + 2 + 3 = <span class="hl-rojo">9 (≥6: dolor inaceptable)</span>. Primero el dolor. El propofol es sedante, amnésico y anticonvulsivo, <span class="hl">sin efecto analgésico</span>.' } },
           { momento: '10:15', datos: { Creatinina: '3,1 mg/dL', PA: '95/55 mmHg' }, nuevo: ['Creatinina', 'PA'],
@@ -648,7 +648,7 @@ export const MAYEUTICA_SIN_MODELO = {
               opciones: [
                 { t: 'Morfina: es la clásica, y el riñón no cambia nada', porque: 'Sus metabolitos se acumulan en la insuficiencia renal (convulsiones, −50 % de dosis) y libera histamina (hipotensión). Las dos cosas le perjudican.' },
                 { t: 'Meperidina en bolos, que es más corta', porque: 'La normeperidina se acumula en la insuficiencia renal (vida media de 15-40 h): convulsiones. Ya no se usa en la UCI.' },
-                { t: 'Fentanilo', ok: true }],
+                { t: 'Fentanilo: no libera histamina (menos hipotensión)', ok: true }],
               explicacion: 'Fentanilo: <span class="hl">sin histamina</span> (menos hipotensión) y <span class="hl">sin metabolitos activos</span>, aunque el fármaco se acumula en la insuficiencia renal. La hidromorfona (sin ajuste renal) sería otra opción.' } },
           { momento: '10:20',
             pregunta: { id: 'e4a-3', tipo: 'test', fuente: 'mar-tabla-6-2', origen: 'ficha · la cuenta, del caso',
@@ -708,7 +708,7 @@ export const MAYEUTICA_SIN_MODELO = {
         enunciado: 'Predice: 72 h de propofol. ¿Cuánto tarda en despertar con sedación ligera, y cuánto con profunda?',
         opciones: [
           { t: 'Unos 13 minutos los dos: el propofol es rápido', porque: 'Con sedación profunda tarda 59 horas a las 72 h. Contar con un despertar rápido retrasa el destete sin que lo veas venir.' },
-          { t: '34 minutos frente a 59 horas', ok: true },
+          { t: '34 min con la ligera; 59 h con la profunda', ok: true },
           { t: '34 minutos frente a 59 minutos', porque: 'La profunda se mide en horas: 59 h. Confundir la unidad es no ver el precio de la sedación profunda.' }],
         explicacion: 'Tabla 6.7, a las 72 h: <span class="hl-verde">34 min</span> con sedación ligera frente a <span class="hl-rojo">59 h</span> con profunda. A las 24 h, 13 min frente a 25 h; a los 14 días, 3,4 h frente a 74 h.' },
       { id: 'se-g2', corto: 'profundidad o tiempo', tipo: 'test', fuente: 'mar-tabla-6-7',
@@ -716,13 +716,13 @@ export const MAYEUTICA_SIN_MODELO = {
         opciones: [
           { t: 'El tiempo: a más días, siempre más horas', porque: 'Con sedación ligera, a los 14 días despierta en 3,4 h; con profunda, en 25 h ya el primer día. Si crees que manda el tiempo, no aligerarás la sedación.' },
           { t: 'Pesan igual los dos', porque: 'La diferencia entre ligera y profunda (minutos frente a días) es mucho mayor que la de 24 h a 14 días. Igualarlos te quita la palanca que más funciona.' },
-          { t: 'La profundidad', ok: true }],
+          { t: 'La profundidad de la sedación', ok: true }],
         explicacion: '<span class="hl">Lo que más alarga el despertar es la profundidad de la sedación</span>: mantener una sedación ligera con propofol si es posible.' },
       { id: 'se-g3', corto: 'a qué RASS', tipo: 'test', fuente: 'mar-escalas-sedacion · mar-rass-calc',
         enunciado: 'Paciente en perfusión de sedantes. ¿A qué RASS lo titulas?',
         opciones: [
-          { t: 'A −3 o −4, para que no luche con el ventilador', porque: 'Eso es sedación moderada o profunda: alarga el despertar (horas o días) y retrasa el destete.' },
-          { t: 'A −1 o −2: sedación ligera', ok: true },
+          { t: 'A −3 o −4, para que no luche', porque: 'Eso es sedación moderada o profunda: alarga el despertar (horas o días) y retrasa el destete.' },
+          { t: 'A −1 o −2: sedación ligera, no la profunda', ok: true },
           { t: 'A 0 siempre, aunque lleve sedantes en perfusión', porque: 'El óptimo es 0, pero con perfusión de sedantes la ficha titula a −1 a −2. Exigir 0 con perfusión es pedirle a la escala lo que no da.' }],
         explicacion: 'RASS: 4 niveles de agitación (+1 a +4) y 5 de sedación (−1 a −5). <span class="hl">El óptimo es 0</span>; como objetivo de la perfusión, <span class="hl">−1 a −2 (sedación ligera)</span>. Es fiable, como la SAS.' },
       { id: 'se-g4', corto: 'puntúa', tipo: 'test', fuente: 'mar-rass-pasos · mar-tabla-6-4', modelo: visual('mar-sedacion', '👁️ Búscalo en la escalera RASS (vista Visual)'),
@@ -743,7 +743,7 @@ export const MAYEUTICA_SIN_MODELO = {
         enunciado: '¿Qué sedante deja que el paciente se despierte sin bajar la perfusión, y vuelva solo a su sedación?',
         opciones: [
           { t: 'Propofol: despierta en 10-15 minutos', porque: 'Despierta rápido, pero hay que bajarlo o pararlo. Si esperas que despierte con la perfusión puesta, no lo hará.' },
-          { t: 'Dexmedetomidina', ok: true },
+          { t: 'Dexmedetomidina: se despierta y vuelve sola a su sedación', ok: true },
           { t: 'Lorazepam, que se acumula menos que el midazolam', porque: 'Acumula menos que el midazolam, pero sigue siendo una benzodiacepina: no da sedación cooperativa y se asocia a más delirio.' }],
         explicacion: 'Dexmedetomidina (agonista α2): <span class="hl">sedación cooperativa</span>, se despierta sin bajar la perfusión y vuelve solo a su sedación; más parecida al sueño. Sin depresión respiratoria. Evita las vacaciones de sedación.' },
       { id: 'se-g7', corto: 'ayudar al destete', tipo: 'destapa', fuente: 'mar-bzd-prevencion',
@@ -829,7 +829,7 @@ export const MAYEUTICA_SIN_MODELO = {
             pregunta: { id: 'e4b-3', tipo: 'test', fuente: 'mar-pris · mar-propofol',
               enunciado: 'Acidosis láctica, CK de 12.000 y una FEVI baja nueva. ¿Qué sospechas?',
               opciones: [
-                { t: 'Síndrome de infusión de propofol', ok: true },
+                { t: 'Síndrome de infusión de propofol: toxicidad por dosis altas', ok: true },
                 { t: 'Empeoramiento de la sepsis: el propofol no tiene nada que ver', porque: 'Lleva 60 h a >5 mg/kg/h: es el umbral típico del síndrome. No pensarlo, con una mortalidad del 30-35 %, es dejar correr la causa.' },
                 { t: 'Una pancreatitis por hipertrigliceridemia', porque: 'El propofol puede darla (rara), pero la tríada de insuficiencia cardíaca brusca, acidosis láctica y rabdomiólisis es la del síndrome de infusión.' }],
               explicacion: 'Insuficiencia cardíaca sistólica brusca, acidosis láctica que no cede, rabdomiólisis, fracaso renal y fallo multiorgánico. Típico con <span class="hl-rojo">>5 mg/kg/h o >80 µg/kg/min más de 48 h</span>. Incidencia 3 %, mortalidad 30-35 %. Tratamiento de soporte.' } },
@@ -848,7 +848,7 @@ export const MAYEUTICA_SIN_MODELO = {
               enunciado: 'Tiene delirio, y la dexmedetomidina le ha llevado a FC 44 y PA 85/50. ¿Qué haces?',
               opciones: [
                 { t: 'Subir la dexmedetomidina: es la de elección en el delirio', porque: 'Lo es, pero no la tolera (bradicardia e hipotensión): subirla agrava justo eso.' },
-                { t: 'Haloperidol', ok: true },
+                { t: 'Cambiar a haloperidol: sirve si no se tolera por bradicardia o hipotensión', ok: true },
                 { t: 'Midazolam en perfusión para calmarle', porque: 'Las benzodiacepinas se asocian a más delirio, y se evitan en la sedación prolongada del ventilado. Empeorarías el cuadro que tratas.' }],
               explicacion: 'La dexmedetomidina es la de elección en el delirio, pero <span class="hl">el haloperidol sirve si no se tolera por bradicardia o hipotensión</span>. Seda sin depresión respiratoria ni compromiso cardiovascular; efecto a los 10-20 min, dura 3-4 h.' } },
           { momento: 'Día 4 · el haloperidol', datos: { ECG: 'QTc 480 ms' }, nuevo: ['ECG'],
@@ -857,7 +857,7 @@ export const MAYEUTICA_SIN_MODELO = {
               opciones: [
                 { t: 'No: con QTc >450 está contraindicado', porque: 'El corte de la ficha es QTc >500 ms. Con 480 le negarías la única opción que tolera.' },
                 { t: 'Sí: 10 mg IV de entrada, que está muy agitado', porque: 'Se empieza con 5 mg; si está muy agitado, se añade midazolam 1 mg (1-2 en el texto). Doblar de entrada sube el riesgo de torsade sin necesidad.' },
-                { t: 'Sí: 5 mg IV y esperar 15-20 min', ok: true }],
+                { t: 'Sí: empezar con 5 mg IV y esperar 15-20 min', ok: true }],
               explicacion: 'No usar si el QTc es <span class="hl-rojo">>500 ms</span>. Pauta: <span class="hl">5 mg IV</span>; esperar 15 min (el texto dice 20); si no responde, 10 mg; si tampoco, cambiar de fármaco. Ojo con el síndrome neuroléptico maligno.' } },
         ],
         lleva: [

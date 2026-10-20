@@ -4,7 +4,7 @@
 // 1. Sin navegador, los datos de js/data/mayeutica/*.js frente a REGLAS §8: Guía socrática y Examen en cada ficha;
 //    un test con una sola buena y cada falsa con su «qué le habría pasado al paciente»; «encuentra el error» con 0-2
 //    errores, cada uno con su frase buena; destapa con 2-4 puntos; casos de 5-8 pasos con al menos un «error», un
-//    «destapa» y 3 «Lo que te llevas»; la buena es la opción más larga en ≤ ⅓ de los tests y no siempre en el mismo
+//    «destapa» y 3 «Lo que te llevas»; la buena es la opción más larga en ≤ ⅓ de los tests (y, por archivo de grupo, también la más corta en ≤ ⅓) y no siempre en el mismo
 //    sitio; ids únicos; toda `fuente` y todo «Para profundizar» apuntan a un id que existe.
 // 2. En el navegador, a 390 px y a 360 px (con «reducir movimiento»), en un contexto limpio: cada ficha con
 //    Mayéutica abre con Texto | Visual | Mayéutica (y una ficha sin ella sigue con Texto | Visual); la Mayéutica
@@ -76,6 +76,21 @@ const largo = s => s.replace(/<[^>]+>/g, '').length;
         okG(masLarga <= tests.length / 3, `${ficha}: la buena es la más larga en ${masLarga} de ${tests.length} tests (≤ ⅓)`);
         const maxPos = Math.max(...Object.values(posiciones));
         okG(Object.keys(posiciones).length >= 2 && maxPos <= tests.length * 0.6, `${ficha}: la buena sale en posiciones variadas ${JSON.stringify(posiciones)}`);
+    }
+    // Por archivo de grupo (js/data/mayeutica/b1-*.js): la buena no es sistemáticamente ni la más larga ni la más corta.
+    // La longitud no depende del orden en que se barajan las opciones, así que se miran los datos sin barajar.
+    for (const arch of readdirSync(join(RAIZ, 'js/data/mayeutica')).filter(n => /^b1-.+\.js$/.test(n))) {
+        const mod = await import(new URL('../../js/data/mayeutica/' + arch, import.meta.url));
+        let n = 0, larga = 0, corta = 0;
+        for (const d of Object.values(mod).flatMap(g => Object.values(g))) {
+            const qs = [...d.guia, ...d.examen, ...d.casos.flatMap(c => c.pasos.map(p => p.pregunta))].filter(q => q.tipo === 'test');
+            for (const q of qs) {
+                const ls = q.opciones.map(o => largo(o.t)), ok = largo(q.opciones.find(o => o.ok)?.t || '');
+                n++; if (ok === Math.max(...ls)) larga++; if (ok === Math.min(...ls)) corta++;
+            }
+        }
+        okG(larga <= n / 3, `${arch}: la buena es la más larga en ${larga} de ${n} tests (≤ ⅓)`);
+        okG(corta <= n / 3, `${arch}: la buena es la más corta en ${corta} de ${n} tests (≤ ⅓)`);
     }
 }
 
