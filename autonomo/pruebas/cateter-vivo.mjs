@@ -10,6 +10,7 @@
 // Sale con código 1 si algo falla.
 import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs';
 const { PREGUNTAS, CASOS, CONCEPTOS, CAT, ORDEN_CAT } = await import(new URL('../../js/data/cateter-vivo-data.js', import.meta.url));
+const { barajar } = await import(new URL('../../js/core/mayeutica-motor.js', import.meta.url));
 const args = process.argv.slice(2);
 const BASE = (args.find(a => /^https?:/.test(a)) || 'http://localhost:8000/').replace(/\/?$/, '/');
 const CAPTURAS = args.includes('--capturas') ? args[args.indexOf('--capturas') + 1].replace(/\/?$/, '/') : null;
@@ -180,7 +181,8 @@ const contestar = async (q, fallar, foto1, fallarTocar, donde = q.id) => {
   }
   if (q.tipo === 'test') {
     await pulsar(pref + '[data-accion="ops"]');
-    const buena = q.opciones.findIndex(o => o.ok), mala = q.opciones.findIndex(o => !o.ok);
+    // data-op es la posición en pantalla: las opciones salen barajadas por el motor común (core/mayeutica-motor.js)
+    const orden = barajar(q.opciones, q.id), buena = orden.findIndex(o => o.ok), mala = orden.findIndex(o => !o.ok);
     if (foto1) { await p.evaluate(() => document.getElementById('ctv-preg').scrollIntoView({ block: 'start' })); await foto(foto1 + '-antes'); }
     await pulsar(pref + `[data-op="${fallar ? mala : buena}"]`);
   } else if (q.tipo === 'destapa') {

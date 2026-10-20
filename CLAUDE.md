@@ -129,8 +129,8 @@ backend/ admin/         panel de subida de contenido (aparte de la app)
 | Enlace cruzado | `js/modules/fisio-uci/vias-urinarias.html` (botones `.especialidad-link`) |
 | Capítulo del atlas de eco | `js/modules/eco/atlas/cap-sistolica.html` + `sistolica.mjs` |
 | Mecanismo animado paso a paso (Motion) | `js/modules/cardiologia/receptores-animados.js` |
-| Modelo vivo con su Mayéutica y casos | `js/modules/libros/capilar-vivo.js` (+ `-escena.js`, `js/data/capilar-vivo-data.js`, prueba `autonomo/pruebas/capilar-vivo.mjs`) |
-| Mayéutica en una ficha (Texto \| Visual \| Mayéutica) | `js/core/mayeutica.js` + `js/data/mayeutica/b1-fluidos.js` (formato arriba del archivo); prueba `mayeutica-fichas` |
+| Modelo vivo con su Mayéutica y casos | `js/modules/libros/capilar-vivo.js` (sus enganches) sobre el motor común `js/core/mayeutica-motor.js` (`crearMayeuticaModelo`) (+ `-escena.js`, `js/data/capilar-vivo-data.js`, prueba `autonomo/pruebas/capilar-vivo.mjs`) |
+| Estudiar en una ficha (Texto \| Estudiar) | `js/core/mayeutica.js` (el recorrido) sobre `js/core/mayeutica-motor.js` + `js/data/mayeutica/b1-fluidos.js` (formato arriba del archivo); prueba `mayeutica-fichas` |
 
 ## 7. Contenido clínico
 

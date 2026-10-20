@@ -241,3 +241,13 @@ veces en total, no 25, que si no no avanzamos». En el bloque 1 hubo una PR por 
 «aprobada». Desde ahora (`REGLAS.md` §2.3): el contenido de un bloque va en una sola rama y PR, con 4-5 paradas (el
 plan, el primer modelo nuevo, el bloque entero y los cambios pedidos); los arreglos, los fallos de los jueces y lo
 técnico entran en `main` sin esperar, con los jueces en verde. La PR #25 (jueces de forma) fue la primera en subir así.
+
+### Un solo motor de Mayéutica (20/10/2026, tercera tarea técnica de las lecciones)
+
+Había siete copias del motor de preguntas: las fichas (`core/mayeutica.js`) y los seis modelos vivos de Libros. Ahora
+hay una sola pieza, `js/core/mayeutica-motor.js` (guardado, barajado, los tres formatos, el repaso, los casos y
+`crearMayeuticaModelo()` para un modelo vivo); cada modelo solo le pasa sus datos y sus enganches. −1.150 líneas netas.
+Las claves de guardado y su formato no cambian (no se pierde el progreso). Diferencias que se unificaron, por mayoría:
+el capilar ahora baraja las opciones; las respuestas no van en el HTML hasta que se contestan; «✗ Qué le habría pasado
+al paciente» (la redacción de REGLAS §8); marcas ✓/✗ además del color; «Había un error: la N». El ácido-base vivo se
+queda con su motor: guarda en otro formato y su «tocar» va por etapas; meterlo obligaba a cambiar su guardado.

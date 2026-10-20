@@ -14,8 +14,7 @@
 import { cargarMotion } from '../../core/motion.js';
 import { marcarVolver } from '../../core/volver-ficha.js';
 import { escapeHtml } from '../../core/ui.js';
-import { rutaDePanel } from '../../core/search.js';
-import { barajar } from '../../core/mayeutica.js';
+import { crearMayeuticaModelo, barajar, rutaDe, atributosFicha, entrar, pintarDock as pintarDockComun } from '../../core/mayeutica-motor.js';
 import { iconoParticula } from '../../core/particulas.js';
 import { montarCama7 } from './cama7.js';
 import {
@@ -38,14 +37,6 @@ const enRaiz = sel => raiz.querySelectorAll(sel);
 const ALIAS = { '«Sucralfato»': 'mar-sucralfato', '«IBP»': 'mar-ibp', '«Anti-H2»': 'mar-anti-h2', '«Clorhexidina oral»': 'mar-clorhexidina-oral',
     '«SOD»': 'mar-sod', '«Riesgos de suprimir el ácido»': 'mar-acido-riesgos', '«Riesgos»': 'mar-acido-riesgos', 'Fig. 4.6': 'mar-img-4-6',
     'Fig. 4.5': 'mar-fig-4-5', 'Fig. 4.4': 'mar-fig-4-4', 'Fig. 4.3': 'mar-fig-4-3', 'Fig. 4.1': 'mar-img-4-1', 'Fig. 4.2': 'mar-disbiosis' };
-function rutaDe(id) {
-    const el = id && document.getElementById(id);
-    if (!el) return null;
-    const tab = el.classList.contains('tab-content') ? el : el.closest('.tab-content');
-    const panel = tab?.closest('[id^="panel-"]');
-    const nav = panel && rutaDePanel(panel.id);
-    return nav ? { el, tab, panel: panel.id, nav } : null;
-}
 const limpio = t => (t || '').replace(/\s+/g, ' ').trim();
 const tituloFicha = tab => limpio(tab.querySelector('h3')?.textContent || tab.id).split(':')[0];
 function etiquetaDe(el) {
@@ -58,7 +49,6 @@ function etiquetaDe(el) {
     const t = limpio(el.textContent);
     return t.length > 40 ? t.slice(0, 38).replace(/\s+\S*$/, '') + '…' : t;
 }
-const atributosFicha = r => `data-especialidad="${r.nav.especialidad}" data-view="${r.nav.view}" data-panel="${r.panel}" data-tab="${r.tab.id}"${r.el !== r.tab ? ` data-resaltar="#${r.el.id}"` : ''}`;
 // Los ids (y los alias) que cita una fuente, en orden y sin repetir
 function idsDe(fuente) {
     const ids = [];
@@ -275,28 +265,24 @@ function setModo(m) {
     if (m !== 'explorar') cama?.parar();
     alTocar = null; anillo(null); setOcultos([], false);
     if (m === 'conceptos') Estudio.concepto(Estudio.c);
-    else if (m === 'preguntas') Estudio.inicioPreguntas();
+    else if (m === 'preguntas') Mayeutica.entrar();
     else { aplicar(estado, { frase: false }); fraseActual = ''; decir(...fraseEstacion(estado.estacion)); }
     subir();
 }
 
 /* ============================================================
-   Capa de estudio: Conceptos y Mayéutica (recorrido, repaso de lo fallado y casos).
+   Capa de estudio: Conceptos (aquí) y Mayéutica (recorrido, repaso de lo fallado y casos: el motor común,
+   core/mayeutica-motor.js; aquí, sus enganches con el modelo).
    Pregunta: { id, grupo: 'guia'|'examen', tipo: 'test'|'destapa'|'error', fuente, estado,
    tocar: { mandos, mirar, ocultar, comprobar, pista, bueno, confirma }, enunciado, opciones: [{ t, ok, porque }],
    puntos: [], frases: [{ t, mal, c }], explicacion, despues, mirar, mirarDespues, ocultar, nota }
    ============================================================ */
-const TIPO_TXT = { test: 'Test · piensa antes', destapa: 'Piensa y destapa', error: 'Encuentra el error' };
-const GRUPO_TXT = { guia: 'Guía socrática', examen: 'Examen · nivel MIR' };
 function ponerModelo(q) {
     setOcultos(q.ocultar || (q.tocar && q.tocar.ocultar) || [], false);
     aplicar(estadoDe(q.estado), { frase: false });
     requestAnimationFrame(() => anillo(q.mirar || null));
 }
-function pintarDock(items, izq, der) {
-    $('dock-pasos').innerHTML = items.map(c => `<i class="${c.split(' ').filter(Boolean).map(x => 'mur-' + x).join(' ')}"></i>`).join('');
-    $('dock-est-izq').textContent = izq || ''; $('dock-est-der').textContent = der || '';
-}
+const pintarDock = (items, izq, der) => pintarDockComun('mur', items, izq, der);
 // Deja el elemento a la vista entre la lámina fija de arriba y el dock de abajo (scrollIntoView no cuenta con el dock)
 function asomar(el) {
     if (!el) return;
@@ -305,7 +291,6 @@ function asomar(el) {
     const d = r.bottom > abajo ? Math.min(r.bottom - abajo, r.top - arriba) : r.top < arriba ? r.top - arriba : 0;
     if (Math.abs(d) > 1) window.scrollBy({ top: d, behavior: REDUCIR ? 'auto' : 'smooth' });
 }
-function entrar(el) { el.classList.remove('mur-entra'); void el.offsetWidth; el.classList.add('mur-entra'); }
 
 const MANDOS = {
     estacion: { nombre: 'Estación', ops: [['boca', 'Boca'], ['estomago', 'Estómago'], ['intestino', 'Intestino']], m: 'estacion' },
@@ -340,161 +325,11 @@ function accionMando(b, cont) {
     if (anilloObj) anillo(anilloObj);
 }
 
-/* ---------- Una pregunta (sirve para el recorrido, el repaso y los pasos de un caso) ---------- */
-function pintarPregunta(cont, q, { cabecera = '', repaso = null, alFinal }) {
-    ponerModelo(q);
-    const res = { ok: true, faltan: [] };
-    let h = cabecera;
-    h += `<div class="mur-cab-preg">${q.num ? `<span class="mur-num">${q.num}</span>` : ''}${q.grupo ? `<span class="mur-serie mur-${q.grupo}">${GRUPO_TXT[q.grupo]}</span>` : ''}<span class="mur-tipo">${TIPO_TXT[q.tipo]}${q.tocar ? ' · predice y compruébalo' : ''}</span></div>`;
-    h += `<p class="mur-pregunta">${q.enunciado}</p>`;
-    if (q.calculadora) {
-        const r = rutaDe(q.calculadora.ir);
-        if (r) h += `<div class="mur-fila"><button type="button" class="mur-b mur-link" ${atributosFicha(r)}>🧮 Abrir la calculadora «${q.calculadora.nombre}»<small>el caso te espera aquí: vuelve por Libros → La muralla de papel</small></button></div>`;
-    }
-    h += '<div id="mur-fmt"></div><div id="mur-q-res"></div>';
-    if (q.tocar) h += `<div class="mur-mando" id="mur-mando" hidden>${mandoHTML(q.tocar)}<div class="mur-fila"><button class="mur-b mur-prim" type="button" data-accion="comprobar">Comprobar</button></div><p class="mur-pista" id="mur-pista" hidden></p></div><div id="mur-q-fin"></div>`;
-    cont.innerHTML = h; entrar(cont);
-    const fmt = cont.querySelector('#mur-fmt');
-    let intentos = 0, piePend = '', orden = null;
-    // Las respuestas buenas no están en el HTML: se miran en los datos al contestar.
-    if (q.tipo === 'test') {
-        fmt.innerHTML = `<p class="mur-para">Piénsalo antes de ver las opciones.</p><div class="mur-fila"><button class="mur-b mur-prim" type="button" data-accion="ops">Ya lo tengo: ver opciones</button></div>
-            <div class="mur-op" id="mur-ops" hidden></div>`;
-    } else if (q.tipo === 'destapa') {
-        const idx = repaso && repaso.faltan && repaso.faltan.length ? repaso.faltan : q.puntos.map((_, i) => i);
-        fmt.innerHTML = `<p class="mur-para">${repaso && repaso.faltan && repaso.faltan.length ? `Vuelven solo los ${idx.length === 1 ? 'que te faltó' : idx.length + ' que te faltaron'}.` : `Contesta en la cabeza: ${q.cuantas || `son ${['', 'una cosa', 'dos cosas', 'tres cosas', 'cuatro cosas', 'cinco cosas'][q.puntos.length]}`}. Luego destápalo.`}</p>
-            <div class="mur-fila"><button class="mur-b mur-prim" type="button" data-accion="destapa">Ya lo tengo: destapar</button></div>
-            <div class="mur-respuesta mur-entra" id="mur-pts" hidden data-idx="${idx.join(',')}"></div>`;
-    } else {
-        fmt.innerHTML = `<p class="mur-para">Toca las frases que creas falsas: puede haber 0, 1 o 2 errores.</p><div class="mur-op">${q.frases.map((f, i) =>
-            `<button class="mur-frase-e" type="button" data-fr="${i}"><span class="mur-n">${i + 1}</span><span>${f.t}</span></button><div class="mur-correccion" id="mur-cfr${i}" hidden></div>`).join('')}</div>
-            <div class="mur-fila"><button class="mur-b mur-prim" type="button" data-accion="corregir">Corregir</button></div>`;
-    }
-    const botonSig = () => `<div class="mur-fila"><button class="mur-b mur-prim" type="button" data-accion="sig">${q.ultimo ? 'Ver lo que te llevas' : 'Siguiente →'}</button></div>`;
-    function cerrar(htmlRes) {
-        const r = cont.querySelector('#mur-q-res');
-        const pie = `${q.nota ? `<div class="mur-nota-fuentes">${q.nota}</div>` : ''}${verEnTexto(q.fuente)}`;
-        if (q.tocar) {
-            // primero se predice; ahora se comprueba en el modelo; las cifras tapadas se destapan al comprobar
-            r.innerHTML = `<div class="mur-respuesta mur-entra">${htmlRes}</div>`;
-            const m = cont.querySelector('#mur-mando'); m.hidden = false; entrar(m);
-            anillo(q.tocar.mirar || null);
-            alTocar = q.tocar.mandos.includes('estacion') ? est => { cambiar(e => { e.estacion = est; }, { frase: false }); sincronizarMandoPregunta(cont); } : null;
-            asomar(m);
-            piePend = pie; return;
-        }
-        if (q.despues) aplicar(estadoDe(q.despues), { frase: false });
-        setOcultos([]);
-        if (q.mirarDespues) anillo(q.mirarDespues);
-        r.innerHTML = `<div class="mur-respuesta mur-entra">${htmlRes}${pie}${botonSig()}</div>`;
-        asomar(r.querySelector('[data-accion="sig"]'));
-    }
-    function finComprobar(html) {
-        setOcultos([]); alTocar = null;
-        cont.querySelectorAll('#mur-mando [data-mando]').forEach(b => { b.disabled = true; });
-        const f = cont.querySelector('#mur-q-fin');
-        f.innerHTML = `<div class="mur-respuesta mur-entra">${html}${piePend}${botonSig()}</div>`;
-        asomar(f.querySelector('[data-accion="sig"]'));
-    }
-    cont.onclick = e => {
-        const a = e.target.closest('[data-accion]')?.dataset.accion;
-        if (a === 'comprobar') {
-            const p = cont.querySelector('#mur-pista');
-            if (q.tocar.comprobar(estado)) { p.hidden = true; e.target.closest('.mur-fila').remove(); finComprobar(`<span class="mur-ok">✓ Comprobado: ${q.tocar.confirma}</span>`); return; }
-            intentos++; p.hidden = false;
-            if (intentos < 2) { p.textContent = 'Aún no. ' + q.tocar.pista; return; }
-            res.ok = false;   // no supo ponerlo en el modelo: cuenta como fallo y vuelve en el repaso
-            aplicar(estadoDe(Object.assign({}, q.estado, q.tocar.bueno)), { frase: false });
-            sincronizarMandoPregunta(cont); anillo(q.tocar.mirar || null);
-            p.textContent = q.tocar.pista + ' Te lo pongo en el modelo.';
-            e.target.closest('.mur-fila').remove(); finComprobar(`<span class="mur-mal">Así queda (cuenta como fallo: vuelve en el repaso): ${q.tocar.confirma}</span>`); return;
-        }
-        if (a === 'ops') {
-            orden = barajar(q.opciones, q.id);
-            const ops = cont.querySelector('#mur-ops');
-            ops.innerHTML = orden.map((o, k) => `<button class="mur-b" type="button" data-op="${k}">${o.t}</button>`).join('');
-            ops.hidden = false; e.target.closest('.mur-fila').remove(); return;
-        }
-        if (a === 'destapa') {
-            const pts = cont.querySelector('#mur-pts'), idx = pts.dataset.idx.split(',').map(Number);
-            pts.innerHTML = `<p class="mur-para">Marca, uno a uno, lo que tenías:</p>${idx.map(i => `<label class="mur-punto"><input type="checkbox" data-p="${i}"> <span>${q.puntos[i]}</span></label>`).join('')}<div class="mur-fila"><button class="mur-b" type="button" data-accion="puntos">Hecho</button></div>`;
-            pts.hidden = false; e.target.closest('.mur-fila').remove(); return;
-        }
-        if (a === 'puntos') {
-            const cajas = [...cont.querySelectorAll('#mur-pts input')];
-            const faltan = cajas.filter(c => !c.checked).map(c => +c.dataset.p);
-            cajas.forEach(c => { c.disabled = true; }); e.target.closest('button').disabled = true;
-            if (faltan.length) { res.ok = false; res.faltan = faltan; }
-            const n = cajas.length - faltan.length;
-            cerrar(`<span class="${faltan.length ? 'mur-mal' : 'mur-ok'}">${faltan.length ? `${n} de ${cajas.length}. Lo que te faltó vuelve en el repaso.` : `✓ ${cajas.length === 1 ? 'La tenías' : 'Todas'}. Esta no vuelve.`}</span>${q.explicacion ? `<p>${q.explicacion}</p>` : ''}`);
-            return;
-        }
-        if (a === 'corregir') {
-            let bien = 0;
-            cont.querySelectorAll('.mur-frase-e').forEach(b => {
-                const f = q.frases[b.dataset.fr], m = b.classList.contains('mur-marcada'), ok = m === !!f.mal; if (ok) bien++;
-                b.classList.remove('mur-marcada'); b.classList.add(ok ? 'mur-acierto' : 'mur-fallo'); b.disabled = true;
-                if (f.mal) { const c = cont.querySelector('#mur-cfr' + b.dataset.fr); c.hidden = false; c.innerHTML = `<b>Era falsa.</b> ¿Cómo sería la frase buena? <button class="mur-b mur-link" type="button" data-ver="${b.dataset.fr}">Pensado: ver</button>`; }
-            });
-            e.target.closest('button').disabled = true;
-            const nMal = q.frases.filter(f => f.mal).length;
-            if (bien < q.frases.length) res.ok = false;
-            cerrar(`<span class="${bien === q.frases.length ? 'mur-ok' : 'mur-mal'}">${bien} de ${q.frases.length} bien juzgadas. ${nMal === 0 ? 'No había ningún error.' : nMal === 1 ? `Había un error: la ${q.frases.findIndex(f => f.mal) + 1}.` : `Había ${nMal} errores: la ${q.frases.map((f, i) => f.mal ? i + 1 : 0).filter(Boolean).join(' y la ')}.`}</span>${q.explicacion ? `<p>${q.explicacion}</p>` : ''}`);
-            return;
-        }
-        if (a === 'sig') { anillo(null); alTocar = null; setOcultos([], false); alFinal(res); return; }
-        const ver = e.target.closest('[data-ver]');
-        if (ver) { ver.parentElement.innerHTML = '<b>Corrección:</b> ' + q.frases[ver.dataset.ver].c; asomar(cont.querySelector('[data-accion="sig"]')); return; }
-        const fr = e.target.closest('[data-fr]');
-        if (fr && !fr.disabled) { fr.classList.toggle('mur-marcada'); return; }
-        const op = e.target.closest('[data-op]');
-        if (op && !op.disabled && orden) {
-            const o = orden[+op.dataset.op];
-            cont.querySelectorAll('#mur-ops button').forEach(b => { b.disabled = true; });
-            op.classList.add(o.ok ? 'mur-op-bien' : 'mur-op-mal');
-            if (!o.ok) res.ok = false;
-            cerrar(`<span class="${o.ok ? 'mur-ok' : 'mur-mal'}">${o.ok ? '✓ Bien' : '✗ Qué le pasaría al paciente'}</span>${o.ok ? '' : `<p>${o.porque}</p>`}<p>${q.explicacion}</p>`);
-            return;
-        }
-        const m = e.target.closest('[data-mando]');
-        if (m && !m.disabled) accionMando(m, cont);
-    };
-}
-
-/* ---------- Aciertos y fallos guardados (como el quiz: solo en este dispositivo) ---------- */
-const CLAVE_GUARDADO = 'muralla-viva-mayeutica-v1';
-function leerGuardado() {
-    try { return JSON.parse(localStorage.getItem(CLAVE_GUARDADO)) ?? {}; }
-    catch { return {}; }
-}
-// Por pregunta: { aciertos, fallos, resultado ('on'|'mal'), repasar, faltan }.
-function guardar(id, ok, { resultado, fallo } = {}) {
-    try {
-        const g = leerGuardado();
-        const a = g[id] ?? { aciertos: 0, fallos: 0 };
-        ok ? a.aciertos++ : a.fallos++;
-        if (resultado) a.resultado = resultado;
-        a.repasar = !!fallo; a.faltan = fallo?.faltan ?? [];
-        g[id] = a;
-        localStorage.setItem(CLAVE_GUARDADO, JSON.stringify(g));
-    } catch { /* localStorage no disponible */ }
-}
-function borrarGuardado() { try { localStorage.removeItem(CLAVE_GUARDADO); } catch { /* localStorage no disponible */ } }
-
 // «Para profundizar»: lo que no se pregunta, con su sitio en la ficha y en el libro
 const profundizarHTML = () => PROFUNDIZAR.map(p => `<section>${p.html} <span class="mur-fuente-p">${enlacesTexto(p.donde)} <a class="mur-pdf" href="${p.href}" target="_blank" rel="noopener">Ver en el libro (${chipTxt(p.donde).replace('ficha · ', '')}) →</a></span></section>`).join('');
 
 const Estudio = {
-    c: 0, i: 0, resultados: {}, fallos: {}, fase: 'inicio',
-    cargar() {
-        const g = leerGuardado();
-        this.resultados = {}; this.fallos = {};
-        for (const q of PREGUNTAS) {
-            const a = g[q.id]; if (!a) continue;
-            if (a.resultado) this.resultados[q.id] = a.resultado;
-            if (a.repasar) this.fallos[q.id] = { faltan: a.faltan || [] };
-        }
-    },
+    c: 0,
     concepto(i) {
         this.c = clamp(i, 0, CONCEPTOS.length - 1);
         const k = CONCEPTOS[this.c], cont = $('concepto');
@@ -506,7 +341,7 @@ const Estudio = {
             <p class="mur-para"><b>Mira:</b> ${k.mira}</p>
             ${verEnTexto(k.fuente)}
             <div class="mur-nav-c"><button class="mur-b" type="button" data-nav="-1" ${this.c === 0 ? 'disabled' : ''}>← Anterior</button><button class="mur-b mur-prim" type="button" data-nav="1">${this.c === CONCEPTOS.length - 1 ? 'A la Mayéutica →' : 'Siguiente →'}</button></div>`;
-        entrar(cont);
+        entrar(cont, 'mur');
         cont.onclick = e => {
             const a = e.target.closest('[data-acc]');
             if (a) { const ac = CONCEPTOS[this.c].acciones[+a.dataset.acc]; aplicar(estadoDe({ ...k.estado, ...ac.e }), { frase: false }); requestAnimationFrame(() => anillo(ac.mirar || k.mirar || null)); cont.querySelectorAll('[data-acc]').forEach(b => b.setAttribute('aria-pressed', String(b === a))); return; }
@@ -515,120 +350,46 @@ const Estudio = {
         };
         pintarDock(CONCEPTOS.map((_, j) => j < this.c ? 'on' : j === this.c ? 'on aqui' : ''), `Concepto ${this.c + 1} de ${CONCEPTOS.length}`, 'cada uno mueve la lámina');
     },
-
-    /* ---------- Mayéutica ---------- */
-    inicioPreguntas() {
-        if (['caso', 'recorrido', 'repaso'].includes(this.fase)) { this.reanudar(); return; }
-        this.fase = 'inicio';
-        setOcultos([], false); aplicar(estadoBase(), { frase: false });
-        const cont = $('preg'), hechas = Object.keys(this.resultados).length;
-        const bien = Object.values(this.resultados).filter(r => r === 'on').length;
-        const nG = PREGUNTAS.filter(q => q.grupo === 'guia').length, nE = PREGUNTAS.filter(q => q.grupo === 'examen').length;
-        cont.innerHTML = `<div><span class="mur-eyebrow">Mayéutica</span><h2 class="mur-h">Preguntas para pensar, como Sócrates</h2></div>
-            <div class="mur-ruta"><span><b>1.</b> Recorrido, en el orden de las fichas: <b>${nG} de guía socrática</b> (varias se responden tocando la lámina: primero predices, luego compruebas) y <b>${nE} de examen</b>, nivel MIR, con sus trampas.</span>
-            <span><b>2.</b> Otra vez lo que fallaste o sabías a medias, solo eso.</span>
-            <span><b>3.</b> Casos clínicos: ${CASOS.length} pacientes que evolucionan.</span></div>
-            <div class="mur-fila"><button class="mur-b mur-prim" type="button" data-ir="recorrido">${hechas ? `Seguir (${hechas} de ${PREGUNTAS.length})` : 'Empezar el recorrido'}</button><button class="mur-b" type="button" data-ir="casos">Ir a los casos</button></div>
-            ${hechas ? `<p class="mur-para">Guardado en este dispositivo: ${bien} de ${hechas} bien a la primera. <button class="mur-b mur-link" type="button" data-ir="cero">Empezar de cero</button></p>` : ''}
-            <p class="mur-para">El paciente de los casos se inventa; la medicina sale de las fichas, y cada pregunta dice dónde.</p>`;
-        entrar(cont);
-        cont.onclick = e => {
-            const b = e.target.closest('[data-ir]'); if (!b) return;
-            if (b.dataset.ir === 'cero') { borrarGuardado(); this.resultados = {}; this.fallos = {}; this.inicioPreguntas(); return; }
-            b.dataset.ir === 'recorrido' ? this.recorrido(this.siguientePendiente()) : this.listaCasos();
-        };
-        pintarDock(PREGUNTAS.map(q => this.resultados[q.id] || ''), 'Mayéutica', '');
-    },
-    reanudar() { if (this.fase === 'caso') this.pasoCaso(); else if (this.fase === 'repaso') this.repaso(); else this.recorrido(this.i); },
-    siguientePendiente() { const i = PREGUNTAS.findIndex(q => !this.resultados[q.id]); return i < 0 ? PREGUNTAS.length : i; },
-    recorrido(i) {
-        this.fase = 'recorrido'; this.i = i;
-        if (i >= PREGUNTAS.length) { this.repaso(); return; }
-        const q = PREGUNTAS[i], nFallos = Object.keys(this.fallos).length;
-        pintarDock(PREGUNTAS.map((p, j) => (this.resultados[p.id] === 'mal' ? 'mal' : this.resultados[p.id] ? 'on' : '') + (j === i ? ' aqui' : '')), `${GRUPO_TXT[q.grupo]} · ${i + 1} de ${PREGUNTAS.length}`, nFallos ? `para repasar: ${nFallos}` : '');
-        pintarPregunta($('preg'), { ...q, num: i + 1 }, { alFinal: r => {
-            this.resultados[q.id] = r.ok ? 'on' : 'mal';
-            if (!r.ok) this.fallos[q.id] = { faltan: r.faltan }; else delete this.fallos[q.id];
-            guardar(q.id, r.ok, { resultado: this.resultados[q.id], fallo: this.fallos[q.id] });
-            this.recorrido(i + 1); subir();
-        } });
-    },
-    repaso() {
-        this.fase = 'repaso';
-        setOcultos([], false); aplicar(estadoBase(), { frase: false });
-        const ids = PREGUNTAS.filter(q => this.fallos[q.id]).map(q => q.id), cont = $('preg');
-        pintarDock(ids.map(() => 'mal'), 'Otra vez lo que fallaste', ids.length ? `quedan ${ids.length}` : '');
-        cont.innerHTML = !ids.length ? `<span class="mur-eyebrow">Repaso</span><h2 class="mur-h">No queda nada por repasar</h2><p class="mur-para">Has acertado todo, o ya lo repasaste.</p><div class="mur-fila"><button class="mur-b mur-prim" type="button" data-ir="casos">Ir a los casos clínicos →</button></div>`
-            : `<span class="mur-eyebrow">Repaso</span><h2 class="mur-h">Otra vez lo que fallaste: ${ids.length}</h2>
-                <p class="mur-para">Cada pregunta vuelve con la lámina en su estado. En las de destapar, solo vuelve lo que no marcaste. Un acierto la saca de la lista.</p>
-                <div class="mur-repaso-chips">${ids.map(id => { const n = PREGUNTAS.findIndex(q => q.id === id); return `<button class="mur-b" type="button" data-rep="${id}">${n + 1} · ${PREGUNTAS[n].corto}</button>`; }).join('')}</div>
-                <div class="mur-fila"><button class="mur-b mur-link" type="button" data-ir="casos">Saltar a los casos →</button></div>`;
-        entrar(cont);
-        cont.onclick = e => {
-            const b = e.target.closest('[data-rep]');
-            if (b) {
-                const n = PREGUNTAS.findIndex(q => q.id === b.dataset.rep), q = PREGUNTAS[n];
-                pintarPregunta(cont, { ...q, num: n + 1 }, { repaso: this.fallos[q.id], cabecera: '<span class="mur-eyebrow">Repaso</span>', alFinal: r => {
-                    if (r.ok) delete this.fallos[q.id];
-                    else if (q.tipo === 'destapa' && this.fallos[q.id].faltan?.length) this.fallos[q.id].faltan = r.faltan.length ? r.faltan : this.fallos[q.id].faltan;
-                    else this.fallos[q.id] = { faltan: r.faltan };
-                    guardar(q.id, r.ok, { fallo: this.fallos[q.id] });
-                    this.repaso(); subir();
-                } });
-                return;
-            }
-            if (e.target.closest('[data-ir="casos"]')) this.listaCasos();
-        };
-    },
-
-    /* ---------- Casos clínicos ---------- */
-    listaCasos() {
-        this.fase = 'casos';
-        setOcultos([], false); aplicar(estadoBase(), { frase: false });
-        const cont = $('preg');
-        cont.innerHTML = `<span class="mur-eyebrow">Casos clínicos</span><h2 class="mur-h">Pacientes que evolucionan</h2>
-            <p class="mur-para">La lámina se mueve al estado de cada paso antes de la pregunta, y el día de la hoja es el del caso. Lo nuevo de la ficha del paciente sale en rojo.</p>
-            <div class="mur-casos-lista">${CASOS.map((c, k) => `<button class="mur-b" type="button" data-caso="${k}">${c.titulo}<small>${c.sub} · ${c.pasos.length} pasos</small></button>`).join('')}</div>`;
-        entrar(cont);
-        pintarDock(CASOS.map(() => ''), 'Casos clínicos', '');
-        cont.onclick = e => { const b = e.target.closest('[data-caso]'); if (b) this.caso(+b.dataset.caso); };
-    },
-    caso(k) { this.fase = 'caso'; this.k = k; this.p = 0; this.ficha = {}; this.pasoCaso(); subir(); },
-    pasoCaso() {
-        const C0 = CASOS[this.k], paso = C0.pasos[this.p];
-        if (this.p === 0) this.ficha = { ...C0.paciente };
-        Object.assign(this.ficha, paso.datos || {});
-        const nuevos = paso.nuevo || [];
-        pintarDock(C0.pasos.map((_, j) => j < this.p ? 'on' : j === this.p ? 'on aqui' : ''), C0.corto, `paso ${this.p + 1} de ${C0.pasos.length}`);
-        const cab = `<span class="mur-dia">${paso.momento}</span>
-            <dl class="mur-paciente">${Object.entries(this.ficha).map(([kk, v]) => `<dt>${kk}</dt><dd class="${nuevos.includes(kk) ? 'mur-cambia' : ''}">${v}</dd>`).join('')}</dl>`;
-        const q = { ...paso.pregunta, estado: paso.estado, mirar: paso.mirar, ultimo: this.p === C0.pasos.length - 1, calculadora: paso.calculadora };
-        pintarPregunta($('preg'), q, { cabecera: cab, alFinal: r => {
-            guardar(q.id, r.ok);
-            if (this.p < C0.pasos.length - 1) { this.p++; this.pasoCaso(); subir(); } else this.finCaso();
-        } });
-    },
-    finCaso() {
-        const C0 = CASOS[this.k], cont = $('preg');
-        this.fase = 'casos';
-        aplicar(estadoDe(C0.volver.estado), { frase: false });
-        const r = rutaDe(C0.volver.ancla), ex = C0.extra?.ir;
-        cont.innerHTML = `<div class="mur-respuesta mur-entra"><span class="mur-eyebrow">Lo que te llevas · ${C0.corto}</span>
-            <ol class="mur-lleva">${C0.lleva.map(t => `<li>${t}</li>`).join('')}</ol>
-            ${C0.hueco ? `<p class="mur-para">${C0.hueco}</p>` : ''}
-            <div class="mur-fila">${r ? `<button class="mur-b mur-link" type="button" ${atributosFicha(r)}>📖 Repasar en la ficha: ${C0.volver.nombre}</button>` : ''}
-            ${ex ? `<button class="mur-b mur-link" type="button" data-especialidad="${ex.especialidad}" data-view="${ex.view}" data-panel="${ex.panel}" data-tab="${ex.tab}">${C0.extra.texto}</button>` : ''}
-            <button class="mur-b" type="button" data-fin="modelo">Abrir la lámina en el estado del paciente</button>
-            <button class="mur-b" type="button" data-fin="otro">Otro caso</button></div></div>`;
-        entrar(cont); subir();
-        pintarDock(C0.pasos.map(() => 'on'), C0.corto, 'hecho');
-        cont.onclick = e => {
-            const a = e.target.closest('[data-fin]')?.dataset.fin;
-            if (a === 'modelo') { setModo('explorar'); aplicar(estadoDe(C0.volver.estado)); elegirPestana(estado.estacion); }
-            if (a === 'otro') this.listaCasos();
-        };
-    },
 };
+
+/* ---------- Mayéutica: el motor común (core/mayeutica-motor.js) con los enganches de la lámina ---------- */
+// Aciertos y fallos en localStorage con su clave de siempre (como el quiz: solo en este dispositivo).
+const Mayeutica = crearMayeuticaModelo({
+    p: 'mur', cont: () => $('preg'), clave: 'muralla-viva-mayeutica-v1', preguntas: PREGUNTAS, casos: CASOS,
+    subir, reiniciar: () => { setOcultos([], false); aplicar(estadoBase(), { frase: false }); },
+    volverPor: 'La muralla de papel',
+    pregunta: {
+        alEmpezar: ponerModelo,
+        asomar,
+        verEnTexto: q => verEnTexto(q.fuente),
+        alCerrar: q => { if (q.despues) aplicar(estadoDe(q.despues), { frase: false }); setOcultos([]); if (q.mirarDespues) anillo(q.mirarDespues); },
+        alSalir: () => { anillo(null); alTocar = null; setOcultos([], false); },
+        tocar: {
+            mandoHTML,
+            alMostrar: (q, cont) => {
+                anillo(q.tocar.mirar || null);
+                alTocar = q.tocar.mandos.includes('estacion') ? est => { cambiar(e => { e.estacion = est; }, { frase: false }); sincronizarMandoPregunta(cont); } : null;
+            },
+            comprobar: q => q.tocar.comprobar(estado),
+            ponerBueno: (q, cont) => { aplicar(estadoDe(Object.assign({}, q.estado, q.tocar.bueno)), { frase: false }); sincronizarMandoPregunta(cont); anillo(q.tocar.mirar || null); },
+            alComprobar: () => { setOcultos([]); alTocar = null; },
+            accion: accionMando,
+        },
+    },
+    textos: {
+        ruta: (nG, nE) => `<span><b>1.</b> Recorrido, en el orden de las fichas: <b>${nG} de guía socrática</b> (varias se responden tocando la lámina: primero predices, luego compruebas) y <b>${nE} de examen</b>, nivel MIR, con sus trampas.</span>
+            <span><b>2.</b> Otra vez lo que fallaste o sabías a medias, solo eso.</span>
+            <span><b>3.</b> Casos clínicos: ${CASOS.length} pacientes que evolucionan.</span>`,
+        empezar: 'Empezar el recorrido', seguir: 'Seguir',
+        pie: 'El paciente de los casos se inventa; la medicina sale de las fichas, y cada pregunta dice dónde.',
+        conModelo: 'la lámina',
+        casos: 'La lámina se mueve al estado de cada paso antes de la pregunta, y el día de la hoja es el del caso. Lo nuevo de la ficha del paciente sale en rojo.',
+        abrirPaciente: 'Abrir la lámina en el estado del paciente',
+    },
+    preguntaDePaso: paso => ({ estado: paso.estado, mirar: paso.mirar }),
+    alTerminarCaso: C => aplicar(estadoDe(C.volver.estado), { frase: false }),
+    abrirPaciente: C => { setModo('explorar'); aplicar(estadoDe(C.volver.estado)); elegirPestana(estado.estacion); },
+});
 
 /* Revisión automática de la forma de las preguntas (REGLAS §8), para __murPruebas() */
 function revisarMayeutica() {
@@ -709,7 +470,7 @@ export function init() {
     if (!raiz) return null;
     initEscena();
     leyendas(); engancharDock();
-    Estudio.cargar();
+    Mayeutica.cargar();
     aplicar(estadoBase(), { frase: false }); decir(...fraseEstacion('intestino'));
     // La cama 7: su zoom de entrada abre la lámina; el respirador es una orden de la hoja
     cama = montarCama7($('cama7'), 'muralla');
@@ -749,8 +510,8 @@ export function init() {
         r.mayeutica = revisarMayeutica();
         if (r.mayeutica.fallos.length) { r.todoCoincide = false; r.fallos.push(...r.mayeutica.fallos); }
         const celdas = [...raiz.querySelectorAll('#mur-tablero .mur-celda')].map(c => ({ k: c.querySelector('.mur-k').textContent, v: c.querySelector('b').textContent }));
-        return { ...r, estado: copia(estado), D: derivar(estado), modo, fase: Estudio.fase, ocultos: [...ocultos], celdas, bucle: estadoBucle(), vaciarFotogramas,
-            guardado: leerGuardado(), cama: $('cama7').classList.contains('c7-compacta') ? 'compacta' : 'grande' };
+        return { ...r, estado: copia(estado), D: derivar(estado), modo, fase: Mayeutica.fase, ocultos: [...ocultos], celdas, bucle: estadoBucle(), vaciarFotogramas,
+            guardado: Mayeutica.prog.g.leer(), cama: $('cama7').classList.contains('c7-compacta') ? 'compacta' : 'grande' };
     };
 
     return { abrir: abrirEstado };

@@ -265,7 +265,7 @@ export const CONCEPTOS = [
         fuente: 'mar-inmovilidad · mar-tabla-5-1 (p. 2, 13)' },
 ];
 
-// Las opciones se barajan con barajar() de core/mayeutica.js (orden fijo por pregunta); la prueba comprueba que la
+// Las opciones se barajan con barajar() de core/mayeutica-motor.js (orden fijo por pregunta); la prueba comprueba que la
 // buena no es la más larga ni la más corta en más de ⅓ de los tests y que cambia de sitio.
 export const PREGUNTAS = [
     { id: 'tl-g1', grupo: 'guia', corto: 'la HNF', tipo: 'test', fuente: 'mar-hnf · mar-img-5-2 (p. 4-6)',

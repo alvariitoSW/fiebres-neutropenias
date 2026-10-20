@@ -20,7 +20,7 @@ import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 const { MAYEUTICA_B1 } = await import(new URL('../../js/data/mayeutica/b1.js', import.meta.url));
-const { barajar } = await import(new URL('../../js/core/mayeutica.js', import.meta.url));
+const { barajar } = await import(new URL('../../js/core/mayeutica-motor.js', import.meta.url));
 const args = process.argv.slice(2);
 const BASE = (args.find(a => /^https?:/.test(a)) || 'http://localhost:8000/').replace(/\/?$/, '/');
 const CAPTURAS = args.includes('--capturas') ? args[args.indexOf('--capturas') + 1].replace(/\/?$/, '/') : null;
@@ -194,7 +194,8 @@ async function correr(ANCHO, REDUCIDO) {
                 if (fotoN) await foto(fotoN + '-antes', Z);
                 await pulsar(`${Z} [data-op="${k}"]`);
             } else if (q.tipo === 'destapa') {
-                await pulsar(`${Z} [data-accion="destapa"]`);
+                // (en el repaso ya se destapó para contar los puntos que vuelven)
+                if (await p.evaluate(z => !!document.querySelector(z + ' [data-accion="destapa"]'), Z)) await pulsar(`${Z} [data-accion="destapa"]`);
                 await p.evaluate(([z, f]) => document.querySelectorAll(z + ' .may-pts input').forEach((c, i) => { c.checked = !f || i === 0; }), [Z, fallar]);
                 await pulsar(`${Z} [data-accion="puntos"]`);
             } else {
@@ -265,7 +266,12 @@ async function correr(ANCHO, REDUCIDO) {
         for (const id of FALLAR) {
             await pulsar(`${ZE} [data-rep="${id}"]`);
             const q = todas.find(x => x.id === id);
-            if (q.tipo === 'destapa') ok(await p.evaluate(z => document.querySelectorAll(z + ' .may-pts input').length, ZE) === q.puntos.length - 1, `${id}: en el repaso solo vuelven los puntos que faltaron`);
+            // Los puntos no están en el HTML hasta destapar; al destapar, solo vuelven los que faltaron.
+            if (q.tipo === 'destapa') {
+                const antes = await p.evaluate(z => document.querySelectorAll(z + ' .may-pts input').length, ZE);
+                await pulsar(`${ZE} [data-accion="destapa"]`);
+                ok(antes === 0 && await p.evaluate(z => document.querySelectorAll(z + ' .may-pts input').length, ZE) === q.puntos.length - 1, `${id}: en el repaso solo vuelven los puntos que faltaron`);
+            }
             await contestar(q, false, `${ficha} repaso ${id}`, null, ZE);
             await siguiente(ZE);
         }

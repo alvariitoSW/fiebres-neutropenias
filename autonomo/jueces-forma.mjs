@@ -21,20 +21,21 @@ import { join, dirname, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 /* ---------- Los bancos de Mayéutica y el motor que los pinta ---------- */
-// motor: el .js que pinta las opciones; de él se lee si baraja (barajar(q.opciones…)) y con qué función.
+// motor: el .js que pinta las opciones; de él se lee si baraja (barajar(q.opciones…)) y con qué función. Las fichas y
+// los modelos vivos de Libros usan el motor común (core/mayeutica-motor.js); el ácido-base vivo, el suyo propio.
 export const BANCOS = [
-    { nombre: 'río y mar', datos: 'js/data/agua-viva-data.js', motor: 'js/modules/libros/agua-viva.js' },
+    { nombre: 'río y mar', datos: 'js/data/agua-viva-data.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'ácido-base vivo', datos: 'js/data/acidobase-vivo-data.js', motor: 'js/modules/nefrologia/acidobase-vivo.js' },
-    { nombre: 'capilar vivo', datos: 'js/data/capilar-vivo-data.js', motor: 'js/modules/libros/capilar-vivo.js' },
-    { nombre: 'catéter vivo', datos: 'js/data/cateter-vivo-data.js', motor: 'js/modules/libros/cateter-vivo.js' },
-    { nombre: 'muralla viva', datos: 'js/data/muralla-viva-data.js', motor: 'js/modules/libros/muralla-viva.js' },
-    { nombre: 'telar vivo', datos: 'js/data/telar-vivo-data.js', motor: 'js/modules/libros/telar-vivo.js' },
-    { nombre: 'inmersión viva', datos: 'js/data/inmersion-viva-data.js', motor: 'js/modules/libros/inmersion-viva.js' },
-    { nombre: 'fichas · fluidos', datos: 'js/data/mayeutica/b1-fluidos.js', motor: 'js/core/mayeutica.js' },
-    { nombre: 'fichas · hemodinámica', datos: 'js/data/mayeutica/b1-hemodinamica.js', motor: 'js/core/mayeutica.js' },
-    { nombre: 'fichas · oxígeno', datos: 'js/data/mayeutica/b1-oxigeno.js', motor: 'js/core/mayeutica.js' },
-    { nombre: 'fichas · accesos', datos: 'js/data/mayeutica/b1-accesos.js', motor: 'js/core/mayeutica.js' },
-    { nombre: 'fichas · sin modelo', datos: 'js/data/mayeutica/b1-sin-modelo.js', motor: 'js/core/mayeutica.js' },
+    { nombre: 'capilar vivo', datos: 'js/data/capilar-vivo-data.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'catéter vivo', datos: 'js/data/cateter-vivo-data.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'muralla viva', datos: 'js/data/muralla-viva-data.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'telar vivo', datos: 'js/data/telar-vivo-data.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'inmersión viva', datos: 'js/data/inmersion-viva-data.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'fichas · fluidos', datos: 'js/data/mayeutica/b1-fluidos.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'fichas · hemodinámica', datos: 'js/data/mayeutica/b1-hemodinamica.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'fichas · oxígeno', datos: 'js/data/mayeutica/b1-oxigeno.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'fichas · accesos', datos: 'js/data/mayeutica/b1-accesos.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'fichas · sin modelo', datos: 'js/data/mayeutica/b1-sin-modelo.js', motor: 'js/core/mayeutica-motor.js' },
 ];
 
 /* ---------- Los modelos vivos en el navegador ---------- */

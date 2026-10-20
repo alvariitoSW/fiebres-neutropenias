@@ -7,12 +7,12 @@
 // Se abre en un estado con el enlace cruzado de siempre:
 // <button data-especialidad="libros" data-view="capilarVivo" data-capilar-vivo="anemia">
 // (lo resuelve el listener delegado de home/index.js con `modelosVivos`). Su «← VOLVER» lleva a la ficha de origen
-// (core/volver-ficha.js). La Mayéutica guarda aciertos y fallos en localStorage (como el quiz y el río y mar), con
-// clave propia y siempre dentro de try/catch.
+// (core/volver-ficha.js). La Mayéutica es el motor común (core/mayeutica-motor.js): guarda aciertos y fallos en
+// localStorage (como el quiz), con su clave propia y siempre dentro de try/catch.
 import { cargarMotion } from '../../core/motion.js';
 import { marcarVolver } from '../../core/volver-ficha.js';
 import { escapeHtml } from '../../core/ui.js';
-import { rutaDePanel } from '../../core/search.js';
+import { crearMayeuticaModelo, rutaDe, atributosFicha, entrar, pintarDock as pintarDockComun } from '../../core/mayeutica-motor.js';
 import {
     ESTADOS, ESTADOS_CHIPS, CONCEPTOS, PREGUNTAS, CASOS, estadoBase, estadoDe, derivar, copia, clamp, dec, mil, pruebasCapilar,
 } from '../../data/capilar-vivo-data.js';
@@ -131,7 +131,7 @@ function setModo(m) {
     $('dock-explorar').hidden = m !== 'explorar'; $('dock-estudio').hidden = m === 'explorar';
     mirar(null); setOcultos([]); ponerCamas(null);
     if (m === 'conceptos') Estudio.concepto(Estudio.c);
-    if (m === 'preguntas') Estudio.inicioPreguntas();
+    if (m === 'preguntas') Mayeutica.entrar();
     if (m === 'explorar') { fraseActual = ''; decir(...fraseDe(null, estado)); }
     requestAnimationFrame(() => Lupa.colocar());
     if (REDUCIR) pintarUnaVez(); else arrancar();
@@ -141,14 +141,6 @@ function setModo(m) {
 /* ============================================================
    «Ver en el texto»: cada fuente (ficha#elemento) es un enlace cruzado a su ficha (como en el río y mar)
    ============================================================ */
-function rutaDe(id) {
-    const el = id && document.getElementById(id);
-    if (!el) return null;
-    const tab = el.classList.contains('tab-content') ? el : el.closest('.tab-content');
-    const panel = tab?.closest('[id^="panel-"]');
-    const nav = panel && rutaDePanel(panel.id);
-    return nav ? { el, tab, panel: panel.id, nav } : null;
-}
 const tituloFicha = tab => (tab.querySelector('h3')?.textContent || tab.id).replace(/\s+/g, ' ').trim();
 function etiquetaDe(el) {
     const dt = el.matches('dl') && el.querySelector('dt');
@@ -157,7 +149,6 @@ function etiquetaDe(el) {
     if (cab) return cab.textContent.trim();
     return null;
 }
-const atributosFicha = r => `data-especialidad="${r.nav.especialidad}" data-view="${r.nav.view}" data-panel="${r.panel}" data-tab="${r.tab.id}"${r.el !== r.tab ? ` data-resaltar="#${r.el.id}"` : ''}`;
 function enlacesTexto(fuente) {
     let tabPrevio = null; const vistosTab = new Set();
     const trozos = fuente.split(' · ').map(t => {
@@ -203,10 +194,9 @@ function enlazarOrigenes(cont) {
 }
 
 /* ============================================================
-   Capa de estudio: Conceptos y Mayéutica (guía, examen, repaso de lo fallado y casos)
+   Capa de estudio: Conceptos (aquí) y Mayéutica (guía, examen, repaso de lo fallado y casos: el motor común,
+   core/mayeutica-motor.js; aquí solo sus enganches con el capilar)
    ============================================================ */
-const TIPO_TXT = { test: 'Test · piensa antes', destapa: 'Piensa y destapa', error: 'Encuentra el error' };
-const SERIE_TXT = { guia: 'Guía socrática', examen: 'Examen · nivel MIR' };
 function ponerModelo(q) {
     vistos.clear();
     aplicar(estadoDe(q.estado), { frase: false });
@@ -214,139 +204,9 @@ function ponerModelo(q) {
     mirar(q.mirar || null);
     setOcultos(q.ocultar || (q.tocar && q.tocar.ocultar) || []);
 }
-function pintarDock(items, izq, der) {
-    $('dock-pasos').innerHTML = items.map(c => `<i class="${c.split(' ').filter(Boolean).map(x => 'cpv-' + x).join(' ')}"></i>`).join('');
-    $('dock-est-izq').textContent = izq || ''; $('dock-est-der').textContent = der || '';
-}
-function entrar(el) { el.classList.remove('cpv-entra'); void el.offsetWidth; el.classList.add('cpv-entra'); }
-const verAbajo = el => el?.scrollIntoView?.({ block: 'nearest', behavior: REDUCIR ? 'auto' : 'smooth' });
+const pintarDock = (items, izq, der) => pintarDockComun('cpv', items, izq, der);
 
-/* ---------- Una pregunta (sirve para el recorrido, el repaso y los pasos de un caso) ---------- */
-function pintarPregunta(cont, q, { cabecera = '', repaso = null, alFinal }) {
-    ponerCamas(q.camas);
-    ponerModelo(q);
-    const res = { ok: true, faltan: [] };
-    let h = cabecera;
-    h += `<div class="cpv-cab-preg">${q.num ? `<span class="cpv-num">${q.num}</span>` : ''}${q.serie ? `<span class="cpv-serie cpv-${q.serie}">${SERIE_TXT[q.serie]}</span>` : ''}<span class="cpv-tipo">${TIPO_TXT[q.tipo]}${q.tocar ? ' · predice y compruébalo' : ''}</span></div>`;
-    h += `<p class="cpv-pregunta">${q.enunciado}</p>`;
-    if (q.calculadora) {
-        const r = rutaDe(q.calculadora.ir);
-        if (r) h += `<div class="cpv-fila"><button type="button" class="cpv-b cpv-link" ${atributosFicha(r)}>🧮 Abrir la calculadora «${q.calculadora.nombre}»<small>el caso te espera aquí: vuelve por Libros → Capilar y oxígeno</small></button></div>`;
-    }
-    h += '<div id="cpv-fmt"></div><div id="cpv-q-res"></div>';
-    if (q.tocar) h += `<div class="cpv-mando" id="cpv-mando" hidden>${mandoHTML(q.tocar)}<div class="cpv-fila"><button class="cpv-b cpv-prim" type="button" data-accion="comprobar">Comprobar</button></div><p class="cpv-pista" id="cpv-pista" hidden></p></div><div id="cpv-q-fin"></div>`;
-    cont.innerHTML = h; entrar(cont); enlazarOrigenes(cont); pintarCamas();
-    const fmtEl = cont.querySelector('#cpv-fmt');
-    let intentos = 0, piePendiente = '';
-
-    // Las respuestas buenas no están en el HTML: se miran en los datos al contestar.
-    if (q.tipo === 'test') {
-        fmtEl.innerHTML = `<p class="cpv-para">Piénsalo antes de ver las opciones.</p><div class="cpv-fila"><button class="cpv-b cpv-prim" type="button" data-accion="ops">Ya lo tengo: ver opciones</button></div>
-            <div class="cpv-op" id="cpv-ops" hidden>${q.opciones.map((o, i) => `<button class="cpv-b" type="button" data-op="${i}">${o.t}</button>`).join('')}</div>`;
-    } else if (q.tipo === 'destapa') {
-        const idx = repaso && repaso.faltan && repaso.faltan.length ? repaso.faltan : q.puntos.map((_, i) => i);
-        fmtEl.innerHTML = `<p class="cpv-para">${repaso && repaso.faltan && repaso.faltan.length ? `Vuelven solo los ${idx.length === 1 ? 'que te faltó' : idx.length + ' que te faltaron'}.` : `Contesta en la cabeza: son ${['', 'una cosa', 'dos cosas', 'tres cosas', 'cuatro cosas', 'cinco cosas'][q.puntos.length]}. Luego destápalo.`}</p>
-            <div class="cpv-fila"><button class="cpv-b cpv-prim" type="button" data-accion="destapa">Ya lo tengo: destapar</button></div>
-            <div class="cpv-respuesta cpv-entra" id="cpv-pts" hidden><p class="cpv-para">Marca, uno a uno, lo que tenías:</p>
-            ${idx.map(i => `<label class="cpv-punto"><input type="checkbox" data-p="${i}"> <span>${q.puntos[i]}</span></label>`).join('')}
-            <div class="cpv-fila"><button class="cpv-b" type="button" data-accion="puntos">Hecho</button></div></div>`;
-    } else if (q.tipo === 'error') {
-        fmtEl.innerHTML = `<p class="cpv-para">Toca las frases que creas falsas: puede haber 0, 1 o 2 errores.</p><div class="cpv-op">${q.frases.map((f, i) =>
-            `<button class="cpv-frase-e" type="button" data-fr="${i}"><span class="cpv-n">${i + 1}</span><span>${f.t}</span></button><div class="cpv-correccion" id="cpv-cfr${i}" hidden></div>`).join('')}</div>
-            <div class="cpv-fila"><button class="cpv-b cpv-prim" type="button" data-accion="corregir">Corregir</button></div>`;
-    }
-    entrar(fmtEl);
-    const botonSig = () => `<div class="cpv-fila"><button class="cpv-b cpv-prim" type="button" data-accion="sig">${q.ultimo ? 'Ver lo que te llevas' : 'Siguiente →'}</button></div>`;
-
-    function cerrar(htmlRes) {
-        const r = cont.querySelector('#cpv-q-res');
-        const pie = `${q.nota ? `<div class="cpv-nota-fuentes">${q.nota}</div>` : ''}${verEnTexto(q.fuente)}`;
-        if (q.tocar) {
-            // primero se predice; ahora se comprueba en el modelo, y las cifras tapadas se destapan al comprobar
-            r.innerHTML = `<div class="cpv-respuesta cpv-entra">${htmlRes}</div>`;
-            const m = cont.querySelector('#cpv-mando'); m.hidden = false; entrar(m);
-            mirar(q.tocar.mirar || q.mirar || null);
-            verAbajo(m);
-            piePendiente = pie;
-            return;
-        }
-        if (q.despues) { aplicar(estadoDe(q.despues), { frase: false }); if (q.lupaDespues) Lupa.abrir(q.lupaDespues); }
-        setOcultos([]);
-        r.innerHTML = `<div class="cpv-respuesta cpv-entra">${htmlRes}${pie}${botonSig()}</div>`;
-        enlazarOrigenes(r);
-        verAbajo(r.querySelector('[data-accion="sig"]'));
-    }
-    function finComprobar(html) {
-        setOcultos([]); cont.querySelectorAll('#cpv-mando [data-mando]').forEach(b => { b.disabled = true; });
-        const f = cont.querySelector('#cpv-q-fin');
-        f.innerHTML = `<div class="cpv-respuesta cpv-entra">${html}${piePendiente}${botonSig()}</div>`;
-        enlazarOrigenes(f);
-        verAbajo(f.querySelector('[data-accion="sig"]'));
-    }
-    const confirma = () => typeof q.tocar.confirma === 'function' ? q.tocar.confirma(D.R) : (q.tocar.confirma || 'míralo en el modelo.');
-
-    cont.onclick = e => {
-        const a = e.target.closest('[data-accion]')?.dataset.accion;
-        if (a === 'comprobar') {
-            const p = cont.querySelector('#cpv-pista');
-            if (q.tocar.comprobar(estado, vistos)) { p.hidden = true; e.target.closest('.cpv-fila').remove(); finComprobar(`<span class="cpv-ok">✓ Comprobado: ${confirma()}</span>`); return; }
-            intentos++;
-            p.hidden = false;
-            if (intentos < 2) { p.textContent = 'Aún no. ' + q.tocar.pista; return; }
-            res.ok = false;   // no supo ponerlo en el modelo: cuenta como fallo y vuelve en el repaso
-            aplicar(estadoDe(Object.assign({}, q.estado, q.tocar.bueno)), { frase: false });
-            for (const k of q.tocar.visitar || []) vistos.add(k);
-            sincronizarMandoPregunta(cont, q.tocar.visitar);
-            p.textContent = q.tocar.pista + ' Te lo pongo en el modelo.';
-            e.target.closest('.cpv-fila').remove(); finComprobar(`<span class="cpv-mal">Así queda (cuenta como fallo: vuelve en el repaso): ${confirma()}</span>`); return;
-        }
-        if (a === 'ops') { cont.querySelector('#cpv-ops').hidden = false; e.target.closest('.cpv-fila').remove(); return; }
-        if (a === 'destapa') { cont.querySelector('#cpv-pts').hidden = false; e.target.closest('.cpv-fila').remove(); return; }
-        if (a === 'puntos') {
-            const cajas = [...cont.querySelectorAll('#cpv-pts input')];
-            const faltan = cajas.filter(c => !c.checked).map(c => +c.dataset.p);
-            cajas.forEach(c => { c.disabled = true; });
-            e.target.closest('button').disabled = true;
-            if (faltan.length) { res.ok = false; res.faltan = faltan; }
-            const n = cajas.length - faltan.length;
-            cerrar(`<span class="${faltan.length ? 'cpv-mal' : 'cpv-ok'}">${faltan.length ? `${n} de ${cajas.length}. Lo que te faltó vuelve en el repaso.` : `✓ ${cajas.length === 1 ? 'La tenías' : 'Todas'}. Esta no vuelve.`}</span>${q.explicacion ? `<p>${q.explicacion}</p>` : ''}`);
-            return;
-        }
-        if (a === 'corregir') {
-            let bien = 0;
-            cont.querySelectorAll('.cpv-frase-e').forEach(b => {
-                const f = q.frases[b.dataset.fr], m = b.classList.contains('cpv-marcada'), ok = m === !!f.mal; if (ok) bien++;
-                b.classList.remove('cpv-marcada'); b.classList.add(ok ? 'cpv-acierto' : 'cpv-fallo'); b.disabled = true;
-                if (f.mal) { const c = cont.querySelector('#cpv-cfr' + b.dataset.fr); c.hidden = false; c.innerHTML = `<b>Era falsa.</b> ¿Cómo sería la frase buena? <button class="cpv-b cpv-link" type="button" data-ver="${b.dataset.fr}">Pensado: ver</button>`; }
-            });
-            e.target.closest('button').disabled = true;
-            const nMal = q.frases.filter(f => f.mal).length;
-            if (bien < q.frases.length) res.ok = false;
-            cerrar(`<span class="${bien === q.frases.length ? 'cpv-ok' : 'cpv-mal'}">${bien} de ${q.frases.length} bien juzgadas. ${nMal === 0 ? 'No había ningún error.' : nMal === 1 ? `Había un error: la ${q.frases.findIndex(f => f.mal) + 1}.` : `Había ${nMal} errores: la ${q.frases.map((f, i) => f.mal ? i + 1 : 0).filter(Boolean).join(' y la ')}.`}</span>${q.explicacion ? `<p>${q.explicacion}</p>` : ''}`);
-            return;
-        }
-        if (a === 'sig') { mirar(null); setOcultos([]); ponerCamas(null); alFinal(res); return; }
-        const cm = e.target.closest('[data-cama]');
-        if (cm) { aplicar(estadoDe(q.camas[+cm.dataset.cama].e), { frase: false }); return; }
-        const ver = e.target.closest('[data-ver]');
-        if (ver) { ver.parentElement.innerHTML = '<b>Corrección:</b> ' + q.frases[ver.dataset.ver].c; return; }
-        const fr = e.target.closest('[data-fr]');
-        if (fr && !fr.disabled) { fr.classList.toggle('cpv-marcada'); return; }
-        const op = e.target.closest('[data-op]');
-        if (op && !op.disabled) {
-            const o = q.opciones[op.dataset.op];
-            cont.querySelectorAll('#cpv-ops button').forEach(b => { b.disabled = true; });
-            op.style.borderColor = o.ok ? 'var(--accent-green)' : 'var(--accent-red)'; op.style.opacity = 1;
-            if (!o.ok) res.ok = false;
-            cerrar(`<span class="${o.ok ? 'cpv-ok' : 'cpv-mal'}">${o.ok ? '✓ Bien' : '✗ Qué le habría pasado al paciente'}</span>${o.ok ? '' : `<p>${o.porque}</p>`}<p>${q.explicacion}</p>`);
-            return;
-        }
-        const m = e.target.closest('[data-mando]');
-        if (m && !m.disabled && m.tagName === 'BUTTON') accionMando(m, cont);
-    };
-    cont.oninput = e => { const m = e.target.closest('[data-mando]'); if (m) accionMando(m, cont); };
-}
-
+/* Mandos de «Compruébalo en el modelo» */
 const UNIDAD = { hb: 'g/dL', pao2: 'mmHg', gc: 'L/min' };
 const valorMando = k => `${k === 'pao2' ? estado[k] : dec(estado[k], 1)} <small>${UNIDAD[k]}</small>`;
 function mandoHTML(t) {
@@ -385,37 +245,9 @@ function accionMando(m, cont) {
     }
 }
 
-/* ---------- Aciertos y fallos guardados (como el quiz: solo en este dispositivo) ---------- */
-const CLAVE_GUARDADO = 'capilar-vivo-mayeutica-v1';
-function leerGuardado() {
-    try { return JSON.parse(localStorage.getItem(CLAVE_GUARDADO)) ?? {}; }
-    catch { return {}; }
-}
-// Por pregunta: { aciertos, fallos, resultado ('on'|'mal'), repasar, faltan }.
-function guardar(id, ok, { resultado, fallo } = {}) {
-    try {
-        const g = leerGuardado();
-        const a = g[id] ?? { aciertos: 0, fallos: 0 };
-        ok ? a.aciertos++ : a.fallos++;
-        if (resultado) a.resultado = resultado;
-        a.repasar = !!fallo; a.faltan = fallo?.faltan ?? [];
-        g[id] = a;
-        localStorage.setItem(CLAVE_GUARDADO, JSON.stringify(g));
-    } catch { /* localStorage no disponible */ }
-}
-function borrarGuardado() { try { localStorage.removeItem(CLAVE_GUARDADO); } catch { /* localStorage no disponible */ } }
-
+/* ---------- Conceptos ---------- */
 const Estudio = {
-    c: 0, i: 0, resultados: {}, fallos: {}, fase: 'inicio',
-    cargar() {
-        const g = leerGuardado();
-        this.resultados = {}; this.fallos = {};
-        for (const q of PREGUNTAS) {
-            const a = g[q.id]; if (!a) continue;
-            if (a.resultado) this.resultados[q.id] = a.resultado;
-            if (a.repasar) this.fallos[q.id] = { faltan: a.faltan || [] };
-        }
-    },
+    c: 0,
     concepto(i) {
         this.c = clamp(i, 0, CONCEPTOS.length - 1);
         const k = CONCEPTOS[this.c], cont = $('concepto');
@@ -429,7 +261,7 @@ const Estudio = {
             <p class="cpv-para"><b>Mira:</b> ${k.mira}</p>
             ${verEnTexto(k.fuente)}
             <div class="cpv-nav-c"><button class="cpv-b" type="button" data-nav="-1" ${this.c === 0 ? 'disabled' : ''}>← Anterior</button><button class="cpv-b cpv-prim" type="button" data-nav="1">${this.c === CONCEPTOS.length - 1 ? 'A la Mayéutica →' : 'Siguiente →'}</button></div>`;
-        entrar(cont);
+        entrar(cont, 'cpv');
         cont.onclick = e => {
             const a = e.target.closest('[data-acc]');
             if (a) { const ac = CONCEPTOS[this.c].acciones[+a.dataset.acc]; aplicar(estadoDe(ac.p), { frase: false }); if (ac.lupa) Lupa.abrir(ac.lupa); mirar(ac.mirar || k.mirar || null); return; }
@@ -438,128 +270,56 @@ const Estudio = {
         };
         pintarDock(CONCEPTOS.map((_, j) => j < this.c ? 'on' : j === this.c ? 'on aqui' : ''), `Concepto ${this.c + 1} de ${CONCEPTOS.length}`, 'cada uno mueve el modelo');
     },
+};
 
-    /* ---------- Mayéutica ---------- */
-    inicioPreguntas() {
-        if (this.fase === 'caso' || this.fase === 'recorrido' || this.fase === 'repaso') { this.reanudar(); return; }
-        this.fase = 'inicio';
-        aplicar(estadoBase(), { frase: false }); if (Lupa.abierta) Lupa.cerrar();
-        const cont = $('preg');
-        const hechas = Object.keys(this.resultados).length;
-        const bien = Object.values(this.resultados).filter(r => r === 'on').length;
-        const nG = PREGUNTAS.filter(q => q.serie === 'guia').length, nE = PREGUNTAS.filter(q => q.serie === 'examen').length;
-        cont.innerHTML = `<div><span class="cpv-eyebrow">Mayéutica</span><h2 style="margin:2px 0 0">Preguntas para pensar, como Sócrates</h2></div>
-            <div class="cpv-ruta"><span><b>1. Guía socrática</b> (${nG}): preguntas encadenadas que te llevan de la mano, de la Hb al consumo; varias se predicen y se comprueban en el modelo.</span>
+/* ---------- Mayéutica: el motor común con los enganches del capilar ---------- */
+// Aciertos y fallos en localStorage con su clave de siempre (como el quiz: solo en este dispositivo).
+const Mayeutica = crearMayeuticaModelo({
+    p: 'cpv', cont: () => $('preg'), clave: 'capilar-vivo-mayeutica-v1', preguntas: PREGUNTAS, casos: CASOS,
+    subir, reiniciar: () => { aplicar(estadoBase(), { frase: false }); if (Lupa.abierta) Lupa.cerrar(); },
+    volverPor: 'Capilar y oxígeno',
+    pregunta: {
+        alEmpezar: q => { ponerCamas(q.camas); ponerModelo(q); },
+        alPintar: () => pintarCamas(),
+        enlazar: enlazarOrigenes,
+        verEnTexto: q => verEnTexto(q.fuente),
+        alCerrar: q => { if (q.despues) { aplicar(estadoDe(q.despues), { frase: false }); if (q.lupaDespues) Lupa.abrir(q.lupaDespues); } setOcultos([]); },
+        alSalir: () => { mirar(null); setOcultos([]); ponerCamas(null); },
+        // Las camas del caso: «Ver cama 1 / cama 2» pone el modelo en cada una
+        alClic: (e, q) => { const cm = e.target.closest('[data-cama]'); if (!cm) return false; aplicar(estadoDe(q.camas[+cm.dataset.cama].e), { frase: false }); return true; },
+        tocar: {
+            mandoHTML,
+            alMostrar: q => mirar(q.tocar.mirar || q.mirar || null),
+            comprobar: q => q.tocar.comprobar(estado, vistos),
+            confirma: q => typeof q.tocar.confirma === 'function' ? q.tocar.confirma(D.R) : (q.tocar.confirma || 'míralo en el modelo.'),
+            ponerBueno: (q, cont) => {
+                aplicar(estadoDe(Object.assign({}, q.estado, q.tocar.bueno)), { frase: false });
+                for (const k of q.tocar.visitar || []) vistos.add(k);
+                sincronizarMandoPregunta(cont, q.tocar.visitar);
+            },
+            alComprobar: () => setOcultos([]),
+            accion: accionMando,
+        },
+    },
+    textos: {
+        ruta: (nG, nE) => `<span><b>1. Guía socrática</b> (${nG}): preguntas encadenadas que te llevan de la mano, de la Hb al consumo; varias se predicen y se comprueban en el modelo.</span>
             <span><b>2. Examen, nivel MIR</b> (${nE}): distractores finos que salen de la propia ficha.</span>
             <span><b>3.</b> Otra vez lo que fallaste o sabías a medias, solo eso.</span>
-            <span><b>4.</b> Casos clínicos: ${CASOS.length} pacientes que evolucionan.</span></div>
-            <div class="cpv-fila"><button class="cpv-b cpv-prim" type="button" data-ir="recorrido">${hechas ? `Seguir (${hechas} de ${PREGUNTAS.length})` : 'Empezar la guía socrática'}</button><button class="cpv-b" type="button" data-ir="casos">Ir a los casos</button></div>
-            ${hechas ? `<p class="cpv-para">Guardado en este dispositivo: ${bien} de ${hechas} bien a la primera. <button class="cpv-b cpv-link" type="button" data-ir="cero">Empezar de cero</button></p>` : ''}
-            <p class="cpv-para">El paciente de los casos se inventa; la medicina sale de las fichas, y cada pregunta dice dónde.</p>`;
-        entrar(cont);
-        cont.onclick = e => {
-            const b = e.target.closest('[data-ir]'); if (!b) return;
-            if (b.dataset.ir === 'cero') { borrarGuardado(); this.resultados = {}; this.fallos = {}; this.inicioPreguntas(); return; }
-            b.dataset.ir === 'recorrido' ? this.recorrido(this.siguientePendiente()) : this.listaCasos();
-        };
-        pintarDock(PREGUNTAS.map(q => this.resultados[q.id] || ''), 'Mayéutica', '');
+            <span><b>4.</b> Casos clínicos: ${CASOS.length} pacientes que evolucionan.</span>`,
+        empezar: 'Empezar la guía socrática', seguir: 'Seguir',
+        pie: 'El paciente de los casos se inventa; la medicina sale de las fichas, y cada pregunta dice dónde.',
+        conModelo: 'el modelo',
+        casos: 'El modelo se mueve al estado de cada paso antes de la pregunta. Lo nuevo de la ficha del paciente sale en rojo.',
+        abrirPaciente: 'Abrir el modelo en el estado del paciente',
     },
-    reanudar() { if (this.fase === 'caso') this.pasoCaso(); else if (this.fase === 'repaso') this.repaso(); else this.recorrido(this.i); },
-    siguientePendiente() { const i = PREGUNTAS.findIndex(q => !this.resultados[q.id]); return i < 0 ? PREGUNTAS.length : i; },
-    recorrido(i) {
-        this.fase = 'recorrido'; this.i = i;
-        if (i >= PREGUNTAS.length) { this.repaso(); return; }
-        const q = PREGUNTAS[i];
-        const nFallos = Object.keys(this.fallos).length;
-        pintarDock(PREGUNTAS.map((p, j) => (this.resultados[p.id] === 'mal' ? 'mal' : this.resultados[p.id] ? 'on' : '') + (j === i ? ' aqui' : '')), `${SERIE_TXT[q.serie]} · ${i + 1} de ${PREGUNTAS.length}`, nFallos ? `para repasar: ${nFallos}` : '');
-        pintarPregunta($('preg'), { ...q, num: i + 1 }, { alFinal: r => {
-            this.resultados[q.id] = r.ok ? 'on' : 'mal';
-            if (!r.ok) this.fallos[q.id] = { faltan: r.faltan }; else delete this.fallos[q.id];
-            guardar(q.id, r.ok, { resultado: this.resultados[q.id], fallo: this.fallos[q.id] });
-            this.recorrido(i + 1); subir();
-        } });
+    preguntaDePaso: (paso, C) => ({ estado: paso.estado, lupa: paso.lupa, mirar: paso.mirar, ocultar: paso.ocultar || paso.pregunta.ocultar, camas: paso.camas || C.camas }),
+    // Si el paso compara camas, sus botones van bajo la ficha del paciente
+    cabeceraPaso: (paso, C) => {
+        const camas = paso.camas || C.camas;
+        return camas ? `<div class="cpv-camas"><div class="cpv-seg" role="group" aria-label="Qué cama ves en el modelo">${camas.map((c, i) => `<button type="button" data-cama="${i}" aria-pressed="false">Ver ${c.n}</button>`).join('')}</div><div id="cpv-camas-tabla"></div></div>` : '';
     },
-    repaso() {
-        this.fase = 'repaso';
-        aplicar(estadoBase(), { frase: false }); if (Lupa.abierta) Lupa.cerrar();
-        const ids = PREGUNTAS.filter(q => this.fallos[q.id]).map(q => q.id);
-        const cont = $('preg');
-        pintarDock(ids.map(() => 'mal'), 'Otra vez lo que fallaste', ids.length ? `quedan ${ids.length}` : '');
-        if (!ids.length) {
-            cont.innerHTML = '<span class="cpv-eyebrow">Repaso</span><h2 style="margin:0">No queda nada por repasar</h2><p class="cpv-para">Has acertado todo, o ya lo repasaste.</p><div class="cpv-fila"><button class="cpv-b cpv-prim" type="button" data-ir="casos">Ir a los casos clínicos →</button></div>';
-        } else {
-            cont.innerHTML = `<span class="cpv-eyebrow">Repaso</span><h2 style="margin:0">Otra vez lo que fallaste: ${ids.length}</h2>
-                <p class="cpv-para">Cada pregunta vuelve con el modelo en su estado. En las de destapar, solo vuelve lo que no marcaste. Un acierto la saca de la lista.</p>
-                <div class="cpv-repaso-chips">${ids.map(id => { const n = PREGUNTAS.findIndex(q => q.id === id); return `<button class="cpv-b" type="button" data-rep="${id}">${n + 1} · ${PREGUNTAS[n].corto}</button>`; }).join('')}</div>
-                <div class="cpv-fila"><button class="cpv-b cpv-link" type="button" data-ir="casos">Saltar a los casos →</button></div>`;
-        }
-        entrar(cont);
-        cont.onclick = e => {
-            const b = e.target.closest('[data-rep]');
-            if (b) {
-                const n = PREGUNTAS.findIndex(q => q.id === b.dataset.rep), q = PREGUNTAS[n];
-                pintarPregunta(cont, { ...q, num: n + 1 }, { repaso: this.fallos[q.id], cabecera: '<span class="cpv-eyebrow">Repaso</span>', alFinal: r => {
-                    if (r.ok) delete this.fallos[q.id];
-                    else if (q.tipo === 'destapa' && this.fallos[q.id].faltan?.length) this.fallos[q.id].faltan = r.faltan.length ? r.faltan : this.fallos[q.id].faltan;
-                    else this.fallos[q.id] = { faltan: r.faltan };
-                    guardar(q.id, r.ok, { fallo: this.fallos[q.id] });
-                    this.repaso(); subir();
-                } });
-                return;
-            }
-            if (e.target.closest('[data-ir="casos"]')) this.listaCasos();
-        };
-    },
-
-    /* ---------- Casos clínicos ---------- */
-    listaCasos() {
-        this.fase = 'casos';
-        aplicar(estadoBase(), { frase: false }); if (Lupa.abierta) Lupa.cerrar();
-        const cont = $('preg');
-        cont.innerHTML = `<span class="cpv-eyebrow">Casos clínicos</span><h2 style="margin:0">Pacientes que evolucionan</h2>
-            <p class="cpv-para">El modelo se mueve al estado de cada paso antes de la pregunta. Lo nuevo de la ficha del paciente sale en rojo.</p>
-            <div class="cpv-casos-lista">${CASOS.map((c, k) => `<button class="cpv-b" type="button" data-caso="${k}">${c.titulo}<small>${c.sub} · ${c.pasos.length} pasos</small></button>`).join('')}</div>`;
-        entrar(cont);
-        pintarDock(CASOS.map(() => ''), 'Casos clínicos', '');
-        cont.onclick = e => { const b = e.target.closest('[data-caso]'); if (b) this.caso(+b.dataset.caso); };
-    },
-    caso(k) { this.fase = 'caso'; this.k = k; this.p = 0; this.ficha = {}; this.pasoCaso(); },
-    pasoCaso() {
-        const C0 = CASOS[this.k], paso = C0.pasos[this.p];
-        if (this.p === 0) this.ficha = { ...C0.paciente };
-        Object.assign(this.ficha, paso.datos || {});
-        const nuevos = paso.nuevo || [];
-        pintarDock(C0.pasos.map((_, j) => j < this.p ? 'on' : j === this.p ? 'on aqui' : ''), C0.corto, `paso ${this.p + 1} de ${C0.pasos.length}`);
-        let cab = `<span class="cpv-dia">${paso.momento}</span>
-            <dl class="cpv-paciente">${Object.entries(this.ficha).map(([kk, v]) => `<dt>${kk}</dt><dd class="${nuevos.includes(kk) ? 'cpv-cambia' : ''}">${v}</dd>`).join('')}</dl>`;
-        const camas = paso.camas || C0.camas;
-        if (camas) cab += `<div class="cpv-camas"><div class="cpv-seg" role="group" aria-label="Qué cama ves en el modelo">${camas.map((c, i) => `<button type="button" data-cama="${i}" aria-pressed="false">Ver ${c.n}</button>`).join('')}</div><div id="cpv-camas-tabla"></div></div>`;
-        const q = { ...paso.pregunta, estado: paso.estado, lupa: paso.lupa, mirar: paso.mirar, ocultar: paso.ocultar || paso.pregunta.ocultar,
-            ultimo: this.p === C0.pasos.length - 1, calculadora: paso.calculadora, camas };
-        pintarPregunta($('preg'), q, { cabecera: cab, alFinal: r => {
-            guardar(q.id, r.ok);
-            if (this.p < C0.pasos.length - 1) { this.p++; this.pasoCaso(); subir(); }
-            else this.finCaso();
-        } });
-    },
-    finCaso() {
-        const C0 = CASOS[this.k], cont = $('preg');
-        this.fase = 'casos';
-        const r = rutaDe(C0.volver.ficha);
-        cont.innerHTML = `<div class="cpv-respuesta cpv-entra"><span class="cpv-eyebrow">Lo que te llevas · ${C0.corto}</span>
-            <ol class="cpv-lleva">${C0.lleva.map(t => `<li>${t}</li>`).join('')}</ol>
-            <div class="cpv-fila">${r ? `<button class="cpv-b cpv-link" type="button" ${atributosFicha(r)}>📖 Repasar en la ficha: ${C0.volver.nombre}</button>` : ''}
-            <button class="cpv-b" type="button" data-fin="modelo">Abrir el modelo en el estado del paciente</button>
-            <button class="cpv-b" type="button" data-fin="otro">Otro caso</button></div></div>`;
-        entrar(cont); subir();
-        pintarDock(C0.pasos.map(() => 'on'), C0.corto, 'hecho');
-        cont.onclick = e => {
-            const a = e.target.closest('[data-fin]')?.dataset.fin;
-            if (a === 'modelo') { setModo('explorar'); ponerEnEstado(C0.volver.estado); }
-            if (a === 'otro') this.listaCasos();
-        };
-    },
-};
+    abrirPaciente: C => { setModo('explorar'); ponerEnEstado(C.volver.estado); },
+});
 
 /* ============================================================
    Abrir en un estado (los chips, los botones de las fichas, los menús y el buscador)
@@ -611,7 +371,7 @@ export function init() {
     leyendas(); engancharDock();
     enlazarOrigenes(raiz);
     enRaiz('[data-cpv-fuente]').forEach(sp => { sp.innerHTML = enlacesTexto(sp.dataset.cpvFuente); });
-    Estudio.cargar();
+    Mayeutica.cargar();
     aplicar(estadoBase(), { frase: false }); decir(...fraseDe(null, estado));
 
     // El dock mide lo que mide: la página deja ese hueco abajo (y el reloj del Modo Estudio sube).
@@ -637,8 +397,8 @@ export function init() {
     window.__cpvPruebas = () => {
         const r = pruebasCapilar();
         const celdas = Object.fromEntries(CELDAS.map(c => [c.k, $('c-' + c.k).querySelector('b').textContent]));
-        return { ...r, bucle: estadoBucle(), modo, fase: Estudio.fase, estado: copia(estado), R: derivar(estado).R, ocultos: [...ocultos],
-            lupa: Lupa.abierta, celdas, guardado: leerGuardado(), vaciarFotogramas, hematie: hematieSVG().length > 0 };
+        return { ...r, bucle: estadoBucle(), modo, fase: Mayeutica.fase, estado: copia(estado), R: derivar(estado).R, ocultos: [...ocultos],
+            lupa: Lupa.abierta, celdas, guardado: Mayeutica.prog.g.leer(), vaciarFotogramas, hematie: hematieSVG().length > 0 };
     };
 
     return { abrir: abrirEstado };
