@@ -24,6 +24,11 @@ importa quién lo hizo: juzgas el resultado.
 preguntas (enunciado, opciones, correcta y explicación), casos, conceptos, frases vivas de los modelos, cifras de los
 modelos y «Para profundizar». El paciente se inventa; la medicina, no. Mira también si alguna pregunta tiene **otra
 opción también correcta** según la fuente.
+- **La lista de frases nuevas del constructor** (REGLAS §1.11): cotéjala frase por frase; una frase sin apoyo en la
+  fuente y sin rótulo «fisiología general» es grave.
+- **Cifras en su contexto** (§1.12): una cifra cierta aplicada a otro caso (otro calibre, otro paciente) es grave.
+- **Tipo de cada nota** (§1.13): «discrepan» cuando la fuente solo calla, u «opinión del autor» presentada como regla,
+  es menor (grave si cambia la conducta).
 
 El informe va en la carpeta del bloque (`autonomo/bloques/<bN>/auditoria.md`). Si no puedes escribir, devuélvelo en tu
 respuesta.

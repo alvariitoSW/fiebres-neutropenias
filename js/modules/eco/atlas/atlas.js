@@ -9,6 +9,7 @@
 // - Nada del código del original: solo su texto, traducido, con permiso del autor y citado.
 import { ATLAS_PARTES, atlasUrl, ATLAS_URL, ATLAS_REPO } from '../atlas-ouyang.js';
 import { REFERENCIAS } from './referencias.js';
+import { conVersion } from '../../../core/include.js';
 
 const BASE = 'js/modules/eco/atlas/';
 /** Capítulos ya en la app: fragmento, figura y subtítulo (el título y el número salen de ATLAS_PARTES). */
@@ -30,7 +31,7 @@ export const enApp = (k) => !!CAPITULOS[k];
 
 const cache = {};
 async function fragmento(k) {
-  if (!cache[k]) cache[k] = fetch(BASE + CAPITULOS[k].html).then(r => { if (!r.ok) throw new Error(r.status); return r.text(); });
+  if (!cache[k]) cache[k] = fetch(conVersion(BASE + CAPITULOS[k].html)).then(r => { if (!r.ok) throw new Error(r.status); return r.text(); });
   return cache[k];
 }
 

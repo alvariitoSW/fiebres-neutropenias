@@ -48,6 +48,11 @@
             "type": "command",
             "command": "node \"${CLAUDE_PROJECT_DIR:-.}/.claude/helpers/graft-hooks.cjs\" session-start",
             "timeout": 8000
+          },
+          {
+            "type": "command",
+            "command": "cd \"${CLAUDE_PROJECT_DIR:-.}\" && git update-index --skip-worktree .ignore .gitignore 2>/dev/null || true",
+            "timeout": 5000
           }
         ]
       }

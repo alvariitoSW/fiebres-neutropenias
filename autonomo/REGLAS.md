@@ -37,6 +37,16 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
 10. **Calculadoras: los umbrales se comparan redondeados.** Un umbral clínico (≥0,3, ×1,5, <25 %) se compara con
     enteros o con el valor redondeado que se muestra, nunca restando decimales tal cual (2,3 − 2,0 da 0,2999 y falla
     justo en el límite). El texto del resultado no puede contradecir su propio veredicto por el redondeo.
+11. **Cada frase nueva de mecanismo, con su página** (lección 1 del bloque 1). Al dibujar un mecanismo es fácil
+    rellenar huecos con lo que «suena bien» («el fondaparinux no envuelve el FP4», «CK ↑»). El constructor entrega la
+    lista de sus frases nuevas con su página; lo que no tenga página va rotulado «fisiología general» o se quita, y
+    el auditor coteja esa lista frase por frase.
+12. **Las cifras del libro, en el contexto del libro** (lección 2). Una cifra cierta puesta donde no toca es un error
+    (100 mL/s es de un 14 G, no de una luz de 18 G). En los casos, cada paso es un paciente posible (§1.7): las cifras
+    encajan entre sí (p. ej. el enclavamiento nunca por encima de la diastólica pulmonar).
+13. **Tres tipos de nota, cada una con su nombre** (lección 3): **las fuentes discrepan** (dicen cosas distintas),
+    **la fuente no lo dice** (calla: no es una discrepancia) y **opinión del autor** (no es una regla). Nunca se marca
+    como error algo que el libro afirma literalmente.
 
 ## 2. La app
 
@@ -48,11 +58,19 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
    ninguno que sirva.
 4. **Ids únicos en toda la app** (todas las vistas están en el DOM a la vez): comprueba con grep antes de inventar
    uno.
-5. **Si cambias un `.css` o `js/main.js`**, sube la fecha `?v=` de `index.html`.
+5. **Si cambias una pieza de la app** (`.css`, módulo o fragmento de `js/`), `node autonomo/version.mjs AAAAMMDD-N`
+   (en el plan socialista lo hace solo el director, §4.6).
 5b. **SVG recreados con fondo propio** (`var(--bg-main)`): la caja de `.article-figure` es blanca y el texto claro de la
    app desaparece en ella.
 6. **Motor del simulador de eco**: si lo tocas, todas sus pruebas siguen en verde y lo cuentas en
    `js/modules/eco/README.md`. Nunca cambies una referencia de `referencias.mjs` para que una prueba pase.
+7. **Nada interno a la vista** (lección 5 del bloque 1): ni ids de ficha («mar-…»), ni «§», ni códigos del plan
+   («Caso E1», «maqueta», «diseño», «REGLAS», «cobertura»), ni rutas de archivos, ni notas de trabajo. El chip de
+   origen dice solo «ficha», «fisiología general» o «ilustrativo», más su página. Lo comprueba `jueces.mjs`.
+8. **Rótulos de los dibujos legibles** (lección 6): a 390 px, ningún texto de un dibujo mide menos de 7,5 px de alto
+   ni pisa a otro. Lo comprueba `jueces.mjs`.
+9. **Cada modelo vivo arranca por separado** (lección 13): si uno falla, el resto de su especialidad sigue
+   funcionando.
 
 ## 3. Redacción
 
@@ -68,8 +86,18 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
 3. **El trabajo autónomo nunca va directo a `main`**: va en una rama `auto/<tarea>` con una propuesta (PR) en
    borrador. Solo el usuario la aprueba. (La regla de `CLAUDE.md` de «mergear siempre a main» es para las
    conversaciones normales, no para este modo.)
-4. **Antes de cada commit**: `git checkout -- .gitignore .ignore` (las herramientas los ensucian).
+4. **`.gitignore` e `.ignore`**: una herramienta los ensucia; un gancho al abrir la sesión hace que git no los
+   vigile. Si aun así salen modificados, `git checkout -- .gitignore .ignore` antes del commit.
 5. **El contenedor se borra**: lo que no está en una rama subida a GitHub se pierde.
+6. **Trabajo en paralelo** (lecciones 10-12 y 14 del bloque 1):
+   - Como mucho **3 agentes pesados a la vez** (el límite de uso los corta a todos juntos), con encargos cortos: una
+     pieza cada uno. El director hace una copia de seguridad (commit) cada vez que uno avanza.
+   - Varios constructores en la misma carpeta: el director marca antes un **hueco** para cada uno en los archivos
+     compartidos (`[HUECO <quién>: …]` en CSS, `index.html`, `index.js`, menús) y cada uno escribe solo en el suyo.
+   - **Solo el director sube el `?v=`** de `index.html` y decide el **orden de fusión** de las ramas.
+   - **Cada agente, en su subcarpeta temporal** (`/tmp/plan-socialista/<bloque>/<agente>/`): nunca en una común.
+   - **Los jueces completos, al final y sin otros agentes trabajando**. Un fallo de navegador se repite solo antes de
+     darlo por roto (con la máquina cargada fallan pruebas que están bien).
 
 ## 5. Lo que el agente puede y no puede tocar
 
@@ -112,6 +140,11 @@ vez:
 - Formas de los iones (octubre 2026), aprobada por el usuario el 19/10: `jueces.mjs --ficha` abre también la
   vista Visual de cada bloque. Abría las fichas solo en Texto y no vio 2 px de desborde en la Visual de «Nefronas
   que quedan».
+- **Lecciones del bloque 1 de Marino** (aprobadas por el usuario el 20/10; detalle en
+  `autonomo/bloques/b1/lecciones.md`): §1.11-1.13 (frases con página, cifras en su contexto, tres tipos de nota),
+  §2 (nada interno a la vista, rótulos legibles, modelos que arrancan por separado, versión en todas las piezas),
+  §4.6 (trabajo en paralelo) y §8 (forma de las opciones, pacientes del bloque, Texto | Estudiar). Jueces nuevos en
+  `jueces.mjs` (forma de las preguntas, nombres internos, rótulos).
 - Modelos vivos (octubre 2026), aprobada por el usuario el 19/10: los jueces miden el desborde también **después de
   contestar** cada pregunta y en cada paso de los casos (`jueces.mjs --modelo`, pruebas en `autonomo/pruebas/`). El
   río y mar se iba 21-31 px de lado tras contestar y no lo vio nadie hasta el profesor.
@@ -202,14 +235,19 @@ fichas cortas. Cada pregunta enlaza su sitio en el texto («Ver en el texto»).
 
 **Mayéutica** (decisión del usuario, 19/10/2026; ya funciona en el ácido-base vivo y el río y mar):
 - **Nombre e idea**: es la mayéutica socrática, la que cuenta Platón: aprender **a base de preguntas** que te llevan a
-  entender por qué son las cosas. El interruptor de cada ficha pasa a ser **Texto | Visual | Mayéutica**. Visual es
-  el modelo vivo en el estado de esa ficha; Mayéutica, sus conceptos, preguntas y casos.
+  entender por qué son las cosas. **Interruptor de la ficha: Texto | Estudiar** (decisión del 20/10/2026, sustituye
+  a «Texto | Visual | Mayéutica»). Estudiar es un recorrido de 5 pasos: Mira (la vista Visual), Juega con el modelo
+  (el modelo vivo en su estado), Piensa (Guía socrática), Examínate (Examen y repaso) y El caso; al final, siempre,
+  «Para profundizar». El Texto sigue siendo la base completa de todo.
+- **Pacientes del bloque**: el encargo de cada bloque trae la lista de pacientes (nombre, edad, ingreso) y todos la
+  usan; nunca dos pacientes con el mismo nombre y datos distintos (lección 9).
 - **Dos tipos de pregunta, los dos en cada ficha**:
   - **Guía socrática**: preguntas encadenadas que te llevan de la mano («¿qué pasa si…?», «¿por qué el riñón tarda
     días?»). Si da pereza leer, se aprende jugando con el modelo y siguiendo las preguntas.
   - **Examen**: difíciles, al nivel del MIR o de una oposición, con distractores finos que salen de la propia fuente.
     Pueden ser algo ambiguas si la fuente lo es, pero siempre con una respuesta defendible desde la fuente y su
-    explicación. La correcta nunca se adivina por la forma (ni la más larga ni la de siempre la misma posición).
+    explicación. La correcta nunca se adivina por la forma: no es la más larga en más de ⅓ de los tests, ni la más
+    corta en más de ⅓, ni cae en la misma posición en más de la mitad (lección 4 del bloque 1; lo mide `jueces.mjs`).
 - **Predice y comprueba**: en las preguntas que se responden con el modelo, el modelo no enseña la cifra antes de
   contestar.
 - **Cobertura**: la Mayéutica y los modelos vivos deben explicar la mayor parte de la ficha (objetivo ≈85 %). Lo que

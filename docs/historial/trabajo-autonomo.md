@@ -209,3 +209,14 @@ En la misma conversación pidió que los agentes gasten menos y trabajen mejor. 
 
 De Ponytail (github.com/DietrichGebert/ponytail, MIT) se tomaron dos ideas: la escalera antes de escribir código y el
 cierre «qué no he comprobado». No se instaló, porque su modo «vago» chocaría con no resumir por debajo de la fuente.
+
+## Lecciones del bloque 1 de Marino (20/10/2026)
+
+Al terminar el bloque 1 (Objetivo M5), el usuario pidió «aprender de los fallos y las mejoras que hemos tenido que
+hacer en el plan socialista… para evitar repetir errores y siempre mejorar nuestro trabajo y ser eficientes». Se
+propusieron 14 lecciones (https://claude.ai/artifact/JZfDxXWQfrAEb7Cuz5jkbg) y las aprobó todas. Quedaron escritas en
+`autonomo/REGLAS.md` (§1.11-1.13, §2.7-2.9, §4.4 y §4.6, §8), en `constructor.md`, `profesor.md`, `auditor-ciego.md`,
+la skill del plan («Modo bloque» y «Ahorro») y `autonomo/bloques/LEEME.md`; el resumen, en
+`autonomo/bloques/b1/lecciones.md`. Tres tareas técnicas aprobadas antes del bloque 2: jueces ampliados (forma de las
+preguntas, nombres internos, rótulos), versión en todas las piezas y un solo motor de Mayéutica. El aviso de
+`.ignore` se arregló de raíz con un gancho de inicio de sesión (`git update-index --skip-worktree`).
