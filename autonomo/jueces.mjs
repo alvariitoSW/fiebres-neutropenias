@@ -9,7 +9,8 @@
 //                                                    + abre esa ficha (especialidad:vista:panel:pestaña; la
 //                                                      vista puede ir vacía; Hematología usa «home»)
 //   node autonomo/jueces.mjs --modelo acidobase-vivo  + la prueba de navegador de ese modelo vivo
-//                                                      (autonomo/pruebas/<clave>.mjs: acidobase-vivo | agua-viva),
+//                                                      (autonomo/pruebas/<clave>.mjs: acidobase-vivo | agua-viva |
+//                                                      mayeutica-fichas),
 //                                                      con el servidor de los jueces; tarda unos minutos
 //   node autonomo/jueces.mjs --sin-navegador         solo lo estático (rápido)
 // Se pueden repetir --atlas, --ficha y --modelo. Sale con código 1 si algún juez falla.

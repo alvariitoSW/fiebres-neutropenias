@@ -3076,3 +3076,81 @@ body.agv-activo .pomodoro-panel { bottom: calc(var(--agv-dock-h, 170px) + 76px);
 /* Aviso de arranque (core/aviso-arranque.js): solo sale si la app no termina de arrancar. */
 .aviso-arranque { position: relative; z-index: 50; margin: 8px 12px; padding: 10px 12px; border: 1px solid var(--accent-red); border-left: 4px solid var(--accent-red); border-radius: 8px; background: var(--bg-main); color: var(--text-main); font-size: 0.85rem; line-height: 1.4; overflow-wrap: anywhere; }
 .aviso-arranque code { display: block; margin-top: 6px; color: var(--accent-red); font-size: 0.75rem; white-space: normal; }
+
+/* ===== Mayéutica de las fichas (core/mayeutica.js): tercer botón del interruptor Texto | Visual | Mayéutica.
+   Prefijo may-. Es la capa de estudio del río y mar (agv-) sacada del modelo vivo; solo tokens de color. ===== */
+[data-visual] > .vista-mayeutica { display: none; }
+[data-visual].modo-mayeutica > .vista-mayeutica { display: block; }
+[data-visual].modo-mayeutica > .vista-texto { display: none; }
+.vista-toggle.vista-toggle-3 button { min-width: 0; padding: 0 12px; }
+.may { display: grid; gap: 10px; min-width: 0; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; }
+.may-barra { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: .74rem; color: var(--text-muted); }
+.may-pasos { display: flex; flex-wrap: wrap; gap: 4px; }
+.may-pasos i { width: 9px; height: 9px; border-radius: 50%; border: 1px solid var(--border-color); }
+.may-pasos i.may-on { background: var(--accent-yellow); border-color: var(--accent-yellow); }
+.may-pasos i.may-mal { background: var(--accent-red); border-color: var(--accent-red); border-radius: 2px; }
+.may-pasos i.may-aqui { outline: 2px solid var(--text-main); outline-offset: 1px; }
+.may-zona { display: grid; gap: 10px; min-width: 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; }
+.may-eyebrow { font-weight: 600; font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
+.may-titulo { margin: 0; font-size: 1.05rem; color: var(--text-main); }
+.may-para { margin: 0; font-size: .84rem; line-height: 1.45; color: var(--text-muted); }
+.may-ruta { margin: 0; padding-left: 20px; display: grid; gap: 4px; font-size: .86rem; line-height: 1.45; color: var(--text-dim); }
+.may-ruta b, .may-para b { color: var(--text-main); }
+.may-cab { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.may-num { font-weight: 700; font-size: .76rem; color: var(--accent-yellow); border: 1px solid var(--accent-yellow); border-radius: 6px; padding: 1px 7px; }
+.may-tipo { font-weight: 600; font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--text-muted); }
+.may-pregunta { margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: 1rem; line-height: 1.45; color: var(--text-main); }
+.may-fila { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.may button.may-b { min-height: 44px; max-width: 100%; font: 600 .86rem/1.25 system-ui, -apple-system, 'Segoe UI', sans-serif; background: var(--bg-main); color: var(--text-main);
+  border: 1px solid var(--border-color); border-radius: 10px; padding: 8px 12px; text-align: left; cursor: pointer; touch-action: manipulation; overflow-wrap: anywhere; }
+.may button.may-b.may-prim { background: var(--accent-yellow); color: var(--bg-main); border-color: var(--accent-yellow); }
+.may button.may-b.may-link, .may button.may-b.may-modelo { background: transparent; color: var(--accent-yellow); border-style: dashed; }
+.may button.may-b:disabled { opacity: .55; cursor: default; }
+.may button.may-b small { display: block; font-weight: 400; font-size: .72rem; opacity: .85; }
+.may-ops, .may-frases, .may-casos-lista { display: grid; gap: 8px; }
+.may button.may-op { font-weight: 400; font-size: .92rem; }
+.may button.may-op.may-elegida-ok { border: 2px solid var(--accent-green); opacity: 1; }
+.may button.may-op.may-elegida-mal { border: 2px solid var(--accent-red); opacity: 1; }
+.may-respuesta { background: var(--bg-main); border-radius: 10px; padding: 12px; display: grid; gap: 8px; font-size: .9rem; line-height: 1.5; color: var(--text-dim); min-width: 0; }
+.may-respuesta p { margin: 0; }
+.may-ok { color: var(--accent-green); font-weight: 600; font-size: .92rem; }
+.may-mal { color: var(--accent-red); font-weight: 600; font-size: .92rem; }
+.may-punto { display: flex; gap: 10px; align-items: flex-start; font-size: .92rem; line-height: 1.45; color: var(--text-main); cursor: pointer; min-height: 44px; padding: 4px 0; }
+.may-punto input { margin-top: 4px; width: 20px; height: 20px; accent-color: var(--accent-green); flex: none; }
+.may button.may-frase { display: flex; gap: 10px; width: 100%; min-height: 44px; font: .94rem/1.45 Georgia, 'Times New Roman', serif; background: transparent; color: var(--text-main);
+  border: 1px solid var(--border-color); border-radius: 10px; padding: 8px 10px; text-align: left; cursor: pointer; touch-action: manipulation; }
+.may button.may-frase .may-n { font: 700 .76rem system-ui, sans-serif; color: var(--text-muted); padding-top: 3px; flex: none; }
+.may button.may-frase.may-marcada { border: 2px solid var(--accent-yellow); }
+.may button.may-frase.may-acierto { border-color: var(--accent-green); }
+.may button.may-frase.may-fallo { border: 2px solid var(--accent-red); }
+.may-correccion { font-size: .88rem; line-height: 1.45; color: var(--text-dim); padding: 2px 0 0 26px; }
+.may-nota-fuentes { border-left: 3px solid var(--accent-purple); background: var(--bg-card); border-radius: 0 10px 10px 0; padding: 8px 10px; font-size: .82rem; line-height: 1.45; color: var(--text-dim); }
+.may-nota-fuentes b { color: var(--text-main); }
+.may-fuente { margin: 0; font-size: .74rem; line-height: 1.7; color: var(--text-muted); }
+.may-org { display: inline-block; font-size: .68rem; letter-spacing: .04em; text-transform: uppercase; color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 6px; padding: 0 6px; margin-right: 4px; }
+.may button.may-ir { background: none; border: 0; border-bottom: 1px dashed var(--accent-yellow); color: var(--accent-yellow); font: inherit; padding: 0; margin: 0 4px 0 0; min-height: 0; cursor: pointer; text-align: left; overflow-wrap: anywhere; }
+.may-dia { font-weight: 700; font-size: .76rem; color: var(--accent-yellow); letter-spacing: .06em; text-transform: uppercase; }
+.may-paciente { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 3px 12px; background: var(--bg-main); border-radius: 10px; padding: 10px 12px; font-size: .84rem; line-height: 1.4; margin: 0; }
+.may-paciente dt { color: var(--text-muted); }
+.may-paciente dd { margin: 0; color: var(--text-main); font-variant-numeric: tabular-nums; min-width: 0; overflow-wrap: anywhere; }
+.may-paciente dd.may-cambia { color: var(--accent-red); font-weight: 600; }
+.may-nuevo { font-size: .64rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; border: 1px solid var(--accent-red); border-radius: 4px; padding: 0 4px; }
+.may-lleva { display: grid; gap: 6px; margin: 0; padding-left: 20px; font-size: .94rem; line-height: 1.45; color: var(--text-main); }
+.may-repaso-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.may-profundizar { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 2px 12px; }
+.may-profundizar > summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-weight: 600; font-size: .86rem; color: var(--text-dim); touch-action: manipulation; }
+.may-profundizar[open] { padding-bottom: 12px; }
+.may-prof-item { border-top: 1px solid var(--border-color); padding-top: 10px; margin-top: 8px; display: grid; gap: 6px; min-width: 0; font-family: Georgia, 'Times New Roman', serif; }
+.may-prof-item h5 { margin: 0; font: 600 .9rem system-ui, sans-serif; color: var(--text-main); }
+.may-prof-cuerpo { min-width: 0; overflow-wrap: anywhere; }
+@media (prefers-reduced-motion: no-preference) { .may-entra { animation: may-entra .25s ease-out; } }
+@keyframes may-entra { from { opacity: .4; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+/* Ruta del bloque al principio de un cuaderno (Marino · Fundamentos): un plegable con las etapas y sus enlaces. */
+.ruta-bloque { margin: 0 0 14px; background: var(--bg-card); border: 1px solid var(--border-color); border-left: 4px solid var(--accent-yellow); border-radius: 10px; padding: 2px 12px; }
+.ruta-bloque > summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-size: .9rem; font-weight: 600; color: var(--text-main); touch-action: manipulation; }
+.ruta-bloque[open] { padding-bottom: 12px; }
+.ruta-etapas { margin: 8px 0 0; padding-left: 22px; display: grid; gap: 12px; font-size: .86rem; line-height: 1.45; color: var(--text-dim); }
+.ruta-etapas b { color: var(--text-main); }
+.ruta-etapas .nv-chips { margin-top: 6px; }
+.ruta-pendiente { font-size: .74rem; color: var(--text-muted); border: 1px dashed var(--border-color); border-radius: 6px; padding: 3px 8px; }

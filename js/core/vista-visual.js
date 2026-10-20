@@ -1,4 +1,6 @@
-// Interruptor "Texto | Visual" por tarjeta.
+// Interruptor "Texto | Visual" por tarjeta (y "Texto | Visual | Mayéutica" en
+// las fichas que tienen Mayéutica: core/mayeutica.js añade un tercer hijo
+// `.vista-mayeutica` y su botón sale solo).
 //
 // Cualquier elemento `[data-visual]` (una `.card`, o un `.vista-grupo` que
 // envuelve varias tarjetas) con dos hijos `.vista-texto` y `.vista-visual`
@@ -12,6 +14,8 @@
 // y los dos contenedores, sin tocar este archivo.
 
 const CLASE_VISUAL = 'modo-visual';
+const CLASE_MAYEUTICA = 'modo-mayeutica';
+const vistaDe = card => card.classList.contains(CLASE_VISUAL) ? 'visual' : card.classList.contains(CLASE_MAYEUTICA) ? 'mayeutica' : 'texto';
 
 // Modo global (botón "🖼️ Visual" de la cabecera): pone TODAS las tarjetas
 // en la misma vista de una vez, y las que se creen después (p. ej. la ficha
@@ -20,16 +24,20 @@ const CLASE_VISUAL = 'modo-visual';
 let modoGlobal = 'texto';
 
 function pintarToggle(card) {
-    const esVisual = card.classList.contains(CLASE_VISUAL);
+    const vista = vistaDe(card);
     card.querySelectorAll(':scope > .vista-toggle button').forEach(b => {
-        const activo = (b.dataset.vista === 'visual') === esVisual;
+        const activo = b.dataset.vista === vista;
         b.classList.toggle('active', activo);
         b.setAttribute('aria-pressed', String(activo));
     });
 }
 
 function setVista(card, vista) {
+    // Una tarjeta sin Mayéutica (o sin Visual) no puede quedarse en ese modo.
+    if (vista === 'mayeutica' && !card.querySelector(':scope > .vista-mayeutica')) vista = 'texto';
+    if (vista === 'visual' && !tieneVisual(card)) vista = 'texto';
     card.classList.toggle(CLASE_VISUAL, vista === 'visual');
+    card.classList.toggle(CLASE_MAYEUTICA, vista === 'mayeutica');
     pintarToggle(card);
     card.dispatchEvent(new CustomEvent('vistachange', { detail: { vista } }));
 }
@@ -71,16 +79,29 @@ export function irAlTexto(card, objetivo) {
     requestAnimationFrame(() => resaltar(objetivo));
 }
 
+// La Visual sale siempre, salvo en una ficha que solo tenga Mayéutica (sin `.vista-visual`).
+const tieneVisual = card => !!card.querySelector(':scope > .vista-visual') || !card.querySelector(':scope > .vista-mayeutica');
+const ETIQUETA = { texto: 'Texto', visual: 'Visual', mayeutica: 'Mayéutica' };
+
+// Pone en el interruptor los botones de las vistas que tiene la tarjeta (si
+// core/mayeutica.js añade la suya después, el botón se añade aquí).
+function ponerBotones(card, toggle) {
+    const vistas = ['texto', ...(tieneVisual(card) ? ['visual'] : []), ...(card.querySelector(':scope > .vista-mayeutica') ? ['mayeutica'] : [])];
+    const actuales = [...toggle.querySelectorAll('button[data-vista]')].map(b => b.dataset.vista);
+    if (vistas.join() === actuales.join()) return;
+    toggle.innerHTML = vistas.map(v => `<button type="button" data-vista="${v}">${ETIQUETA[v]}</button>`).join('');
+    toggle.classList.toggle('vista-toggle-3', vistas.length > 2);
+}
+
 export function initVistaVisual(root = document) {
     root.querySelectorAll('[data-visual]').forEach(card => {
-        if (card.querySelector(':scope > .vista-toggle')) return;
+        const previo = card.querySelector(':scope > .vista-toggle');
+        if (previo) { ponerBotones(card, previo); pintarToggle(card); return; }
         const toggle = document.createElement('div');
         toggle.className = 'vista-toggle';
         toggle.setAttribute('role', 'group');
         toggle.setAttribute('aria-label', 'Forma de ver este bloque');
-        toggle.innerHTML =
-            '<button type="button" data-vista="texto">Texto</button>' +
-            '<button type="button" data-vista="visual">Visual</button>';
+        ponerBotones(card, toggle);
         const cabecera = card.querySelector(':scope > h3, :scope > .vista-grupo-titulo');
         if (cabecera) cabecera.after(toggle); else card.prepend(toggle);
         toggle.addEventListener('click', e => {
@@ -118,12 +139,12 @@ export function initBotonVisualGlobal(boton) {
 
 export const hayVisualEn = vista => !!vista?.querySelector('[data-visual]');
 
-// Texto de un bloque tal como lo lee la vista Texto: sin la imagen, sin el
-// interruptor y sin el botón "Siguiente ficha → …" (que lleva el nombre de
+// Texto de un bloque tal como lo lee la vista Texto: sin la imagen, sin la
+// Mayéutica, sin el interruptor y sin el botón "Siguiente ficha → …" (que lleva el nombre de
 // OTRA ficha). Lo usan el buscador global y las estimaciones de Modo
 // Estudio, para no contar dos veces lo que la imagen repite ni encontrar
 // una ficha por el título de la siguiente.
-const NO_FUENTE = '.vista-visual, .vista-toggle, .siguiente-ficha-btn';
+const NO_FUENTE = '.vista-visual, .vista-mayeutica, .vista-toggle, .siguiente-ficha-btn';
 export function textoFuente(el) {
     if (!el.querySelector(NO_FUENTE)) return el.textContent;
     const copia = el.cloneNode(true);
