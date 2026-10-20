@@ -1,7 +1,8 @@
 // Especialidad "Libros": un sitio central para los libros de texto de la app
 // (The ICU Book de Marino y El Libro Azul). La pantalla de entrada es la
 // estantería (solo los dos libros). Marino abre su portada (Índice | Modelos
-// vivos | Repasar): los 6 bloques que viven aquí (caps. 1-11 y 31-53), sus
+// vivos | Repasar): los 6 bloques que viven aquí (caps. 1-11 y 31-53), más el
+// de los caps. 12-13, que vive en Hematología (enlace cruzado), sus
 // modelos vivos y el índice completo plegado; El Libro Azul abre su índice,
 // que lleva a sus fichas de Fisiopatología UCI.
 import { createViewSwitcher } from '../../core/navigation.js';
@@ -52,6 +53,10 @@ export const quizTemas = [
 // (los botones de la pestaña Modelos vivos de la portada, por id).
 const BLOQUES = {
     marinoFundamentos: { vista: 'marino-fund-view', panel: 'panel-marino-fund-tabs', nombre: 'Fundamentos', preguntas: preguntasMarinoFundamentos, vivos: ['ctv-menu-libros', 'mur-menu-libros', 'tel-menu-libros', 'inm-menu-libros', 'cpv-menu-libros', 'agv-menu-libros'] },
+    // Bloque 2 (caps. 12-13): sus fichas viven en Hematología → Merino HEMATO (su botón es un enlace cruzado, no una vista
+    // de Libros); aquí solo cuenta sus fichas y pone la tira de sus modelos vivos en ese cuaderno. Sus preguntas de
+    // repaso están en el quiz de Hematología.
+    marinoSangre: { vista: 'merino-hemato-view', panel: 'panel-merino-tabs', nombre: 'Sangre y hemostasia', preguntas: [], vivos: ['cpv-menu-libros', 'tel-menu-libros'] },
     marinoRenal: { vista: 'marino-renal-view', panel: 'panel-marino-renal-tabs', nombre: 'Ácido-base, renal y electrolitos', preguntas: preguntasMarinoRenal, vivos: ['abv-menu-libros', 'agv-menu-libros'] },
     marinoAbdomen: { vista: 'marino-abd-view', panel: 'panel-marino-abd-tabs', nombre: 'Abdomen y temperatura', preguntas: preguntasMarinoAbdomen, vivos: [] },
     marinoNeuro: { vista: 'marino-neuro-view', panel: 'panel-marino-neuro-tabs', nombre: 'Neurología', preguntas: preguntasMarinoNeuro, vivos: [] },

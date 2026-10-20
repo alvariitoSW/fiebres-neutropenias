@@ -4,6 +4,8 @@
 // Book, 5.ª ed.
 import { initCorkboard } from '../../core/corkboard.js';
 import { init as initVisual } from './visual.js';
+import { montarMayeutica } from '../../core/mayeutica.js';
+import { MAYEUTICA_B2 } from '../../data/mayeutica/b2.js';
 
 // Escala 4Ts (riesgo de trombocitopenia inducida por heparina): 4 selects
 // (uno por criterio), puntuación 0-2 cada uno, suma 0-8.
@@ -46,4 +48,6 @@ export function init() {
     initCorkboard('merino-corkboard', 'panel-merino-tabs');
     init4Ts();
     initVisual();
+    // Texto | Estudiar en las 6 fichas (Marino caps. 12-13, bloque 2), después de su vista Visual (el paso «Mira»)
+    Object.entries(MAYEUTICA_B2).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));
 }

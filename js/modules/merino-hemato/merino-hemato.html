@@ -9,6 +9,25 @@
         <span style="font-size: 0.8rem; color: var(--accent-yellow);">[ EMPEZAR → ]</span>
     </button>
 
+    <details class="ruta-bloque" id="mh-ruta-bloque">
+        <summary>🧭 La ruta del bloque: en qué orden estudiarlo (5 etapas)</summary>
+        <p class="fuente-ficha">Marino, caps. 12-13. El cuaderno sigue los capítulos; la ruta es un orden para estudiar: de la sangre que lleva el O₂ a lo que se repone. En cada ficha, el botón <strong>Estudiar</strong> (junto a Texto) la recorre paso a paso: mira, juega con el modelo, piensa, examínate y un caso.</p>
+        <ol class="ruta-etapas">
+            <li><b>La sangre que lleva el O₂</b> · qué es la anemia y cuándo transfundir
+                <span class="nv-chips"><button type="button" class="especialidad-link" data-especialidad="home" data-view="merinoHemato" data-panel="panel-merino-tabs" data-tab="merino-anemia">Ficha 1 · Anemia</button><button type="button" class="especialidad-link" data-especialidad="home" data-view="merinoHemato" data-panel="panel-merino-tabs" data-tab="merino-transfusion">Ficha 2 · Umbral transfusional</button></span>
+                <span class="nv-chips"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="capilarVivo" data-capilar-vivo="">🩸 Capilar y oxígeno →</button></span></li>
+            <li><b>Lo que trae la bolsa</b> · transfundir tiene un precio
+                <span class="nv-chips"><button type="button" class="especialidad-link" data-especialidad="home" data-view="merinoHemato" data-panel="panel-merino-tabs" data-tab="merino-riesgos">Ficha 3 · Riesgos de la transfusión</button></span></li>
+            <li><b>La herida</b> · cómo se tapa un vaso y por qué bajan las plaquetas
+                <span class="nv-chips"><button type="button" class="especialidad-link" data-especialidad="home" data-view="merinoHemato" data-panel="panel-merino-tabs" data-tab="merino-trombocitopenia">Ficha 4 · Trombocitopenia y HIT</button></span>
+                <span class="nv-chips"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="telarVivo" data-telar-vivo="tih">🧵 El telar de la trombina: la TIH →</button></span></li>
+            <li><b>La red que se tapa</b> · lo que más amenaza es la trombosis, no el sangrado
+                <span class="nv-chips"><button type="button" class="especialidad-link" data-especialidad="home" data-view="merinoHemato" data-panel="panel-merino-tabs" data-tab="merino-microangiopatias">Ficha 5 · Microangiopatías</button></span></li>
+            <li><b>Reponer</b> · plaquetas, plasma y crio, y por qué el INR engaña
+                <span class="nv-chips"><button type="button" class="especialidad-link" data-especialidad="home" data-view="merinoHemato" data-panel="panel-merino-tabs" data-tab="merino-plaquetas-plasma">Ficha 6 · Plaquetas y plasma</button></span></li>
+        </ol>
+    </details>
+
     <p class="section-label">Cuaderno de campo</p>
     <div class="corkboard" id="merino-corkboard">
         <div class="field-card" data-tab="merino-anemia">
@@ -113,12 +132,12 @@
             <h3 style="color: var(--accent-red);">Anemia en el paciente crítico</h3>
             <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Capítulo 12 — Anemia y transfusión de hematíes.</p>
 
-            <p class="section-label">Definición y medida</p>
-            <p style="font-size:0.85rem; color:var(--text-dim);">La anemia se define como una <strong>reducción de la capacidad de la sangre para transportar oxígeno</strong>. La medida más exacta es la masa eritrocitaria (volumen de hematíes circulantes, con hematíes marcados con cromo) — poco práctica en clínica, donde se usan el hematocrito (Hto) y la hemoglobina (Hb) como sustitutos.</p>
-            <table class="data-table">
+            <p class="section-label">Definición y medida <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=1" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 1-2</a></p>
+            <p id="mh-anemia-definicion" data-nombre="Definición de anemia" style="font-size:0.85rem; color:var(--text-dim);">La anemia se define como una <strong>reducción de la capacidad de la sangre para transportar oxígeno</strong>. La medida más exacta es la masa eritrocitaria (volumen de hematíes circulantes, con hematíes marcados con cromo) — poco práctica en clínica, donde se usan el hematocrito (Hto) y la hemoglobina (Hb) como sustitutos.</p>
+            <table class="data-table" id="mh-tabla-12-1">
                 <thead><tr><th>Parámetro</th><th>Varones</th><th>Mujeres</th></tr></thead>
                 <tbody>
-                    <tr><td>Hemoglobina</td><td>13,5-18 g/dl</td><td>12-16 g/dl</td></tr>
+                    <tr><td>Hemoglobina</td><td>13,5-18 g/dl</td><td>12-16 g/dl*</td></tr>
                     <tr><td>Hematocrito</td><td>40-54%</td><td>38-47%</td></tr>
                     <tr><td>Volumen corpuscular medio</td><td>80-100 fl</td><td>igual</td></tr>
                     <tr><td>Recuento de hematíes</td><td>4,6-6,2 ×10¹²/l</td><td>4,2-5,4 ×10¹²/l</td></tr>
@@ -126,31 +145,50 @@
                     <tr><td>Recuento de reticulocitos</td><td>25-75 ×10⁹/l</td><td>igual</td></tr>
                 </tbody>
             </table>
-            <dl class="kv-row"><dt>Definición clínica de anemia</dt><dd><span class="hl-rojo">Hb &lt;13 g/dl (Hto &lt;40%) en varones</span>, <span class="hl-rojo">Hb &lt;12 g/dl (Hto &lt;38%) en mujeres</span>.</dd></dl>
-            <dl class="kv-row"><dt>Frecuencia en la UCI</dt><dd>Casi universal: presente al ingreso en <span class="hl-rojo">2 de cada 3 pacientes</span> y en el <span class="hl-rojo">97%</span> tras una semana de ingreso.</dd></dl>
-            <dl class="kv-row"><dt>Transfusión en la UCI</dt><dd>Hasta el 50% de los pacientes de UCI reciben hematíes. En una gran mayoría de las transfusiones (<strong>90%</strong>), el motivo es subir la Hb en pacientes que no sangran.</dd></dl>
+            <p class="fuente-ficha">Tabla 12.1, rangos de referencia (<a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=2" target="_blank" rel="noopener">pág. 2</a>). *En el embarazo, el rango normal de Hb es 1 g/dl más bajo a partir del primer trimestre.</p>
+            <dl class="kv-row" id="mh-anemia-corte"><dt>Definición clínica de anemia</dt><dd><span class="hl-rojo">Hb &lt;13 g/dl (Hto &lt;40%) en varones</span>, <span class="hl-rojo">Hb &lt;12 g/dl (Hto &lt;38%) en mujeres</span>. Como se basa en una <strong>concentración</strong>, depende del volumen plasmático (abajo).</dd></dl>
+            <dl class="kv-row" id="mh-anemia-frecuencia"><dt>Frecuencia en la UCI</dt><dd>Casi universal: presente al ingreso en <span class="hl-rojo">2 de cada 3 pacientes</span> y en el <span class="hl-rojo">97%</span> tras una semana de ingreso.</dd></dl>
+            <dl class="kv-row" id="mh-anemia-transfusion-uci"><dt>Transfusión en la UCI</dt><dd>Hasta el 50% de los pacientes de UCI reciben hematíes. En una gran mayoría de las transfusiones (<strong>90%</strong>), el motivo es subir la Hb en pacientes que no sangran.</dd></dl>
 
-            <p class="section-label" style="margin-top:16px;">La trampa del volumen plasmático</p>
-            <p style="font-size:0.85rem; color:var(--text-dim);">Como el Hto/Hb son <em>concentraciones</em>, el volumen plasmático las condiciona tanto como la masa real de hematíes. En voluntarios sanos, el simple cambio de bipedestación a decúbito supino <strong>baja el Hto un 4,1%</strong> (por el paso de líquido intersticial al torrente sanguíneo al perder el efecto de la gravedad); un bolo de 20 ml/kg de suero salino isotónico produce una caída equivalente (4,2%). <span class="hl-azul">Ambos cambios equivalen a la pérdida de una unidad de sangre (500 ml)</span> sin que se haya perdido ni un solo hematíe. En el paciente crítico, con expansión de volumen plasmático casi constante, esto significa que <strong>el Hto y la Hb sobreestiman la prevalencia y la gravedad real de la anemia</strong> — y sin embargo son la medida que usan prácticamente todos los estudios clínicos sobre anemia y transfusión.</p>
+            <p class="section-label" style="margin-top:16px;">La trampa del volumen plasmático <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=2" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 2-3</a></p>
+            <p id="mh-trampa-volumen" data-nombre="La trampa del volumen plasmático" style="font-size:0.85rem; color:var(--text-dim);">Como el Hto y la Hb son <em>concentraciones</em>, el volumen plasmático las condiciona tanto como la masa real de hematíes. En voluntarios sanos, el simple paso de estar de pie a tumbado <strong>baja el Hto 4,1 puntos</strong>: al tumbarse cae la presión hidrostática en los capilares de las piernas (se pierde el efecto de la gravedad), pasa líquido intersticial a la sangre y el volumen plasmático crece (<strong>+420 ml</strong> en ese estudio). Un bolo de 20 ml/kg de suero salino isotónico produce una caída parecida (4,2 puntos a los 90 min). <span class="hl-azul">Las dos caídas equivalen a perder una unidad de sangre (500 ml)</span> sin que se haya perdido ni un solo hematíe.</p>
+            <div class="article-figure" id="mh-fig-12-1">
+                <img src="js/modules/merino-hemato/img/fig12-1-hematocrito-volumen.jpg" alt="Figura 12.1 de Marino: dos pares de barras de hematocrito. Izquierda, de pie 41,8 % y tumbado 37,7 %. Derecha, antes del suero 42,9 % y tras 20 ml/kg de salino 38,7 %" loading="lazy">
+                <div class="article-figure-caption">Figura 12.1 — El volumen plasmático cambia el hematocrito. Izquierda: de pie (<em>standing</em>) y tumbado (<em>supine</em>). Derecha: antes del suero (<em>before fluid</em>) y 90 min después de 20 ml/kg de salino isotónico. Las dos caídas equivalen a perder una unidad de sangre. Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=3" target="_blank" rel="noopener">pág. 3</a>.</div>
+            </div>
+            <table class="data-table" id="mh-fig-12-1-cifras" data-nombre="Figura 12.1 en cifras">
+                <thead><tr><th>Figura 12.1</th><th>Hto antes</th><th>Hto después</th></tr></thead>
+                <tbody>
+                    <tr><td>De pie → tumbado</td><td>41,8%</td><td>37,7%</td></tr>
+                    <tr><td>Bolo de salino 20 ml/kg (90 min)</td><td>42,9%</td><td>38,7%</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size:0.85rem; color:var(--text-dim);">El volumen plasmático aumentado es frecuente en el paciente crítico, así que <strong>el Hto y la Hb sobreestiman la prevalencia y la gravedad real de la anemia</strong>; los estudios clínicos lo han confirmado. Y sin embargo son la medida que usan todos los estudios clínicos sobre anemia y transfusión en el crítico.</p>
 
             <p class="section-label" style="margin-top:16px;">Anemia propia de la UCI</p>
             <div class="micro-profiles">
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mh-anemia-inflamacion">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔥 Inflamación</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
-                        <p>La inflamación sistémica secuestra hierro en los macrófagos tisulares, mediada por la <strong>hepcidina</strong> hepática — el hierro secuestrado no puede transferirse a los hematíes en desarrollo, produciendo una anemia hipocrómica microcítica que imita a la ferropenia (mismo mecanismo que la "anemia de enfermedad crónica").</p>
-                        <dl class="kv-row"><dt>Ferritina plasmática</dt><dd>Distingue ambas causas: <span class="hl-verde">&lt;30 µg/l → ferropenia real</span>, <span class="hl-rojo">&gt;100 µg/l → anemia de inflamación</span> (hierro secuestrado, no ausente).</dd></dl>
+                        <p>La inflamación sistémica secuestra hierro en los macrófagos tisulares, por las <strong>citocinas</strong> y por la <strong>hepcidina</strong> que libera el hígado (un péptido pequeño que baja el hierro del plasma). El hierro secuestrado no puede pasar a los hematíes en desarrollo: sale una anemia hipocrómica microcítica que imita a la ferropenia (el mismo mecanismo que la «anemia de enfermedad crónica»).</p>
+                        <dl class="kv-row"><dt>Perfil de hierro</dt><dd>Bajan el hierro plasmático, la capacidad total de fijación del hierro y la transferrina, como en la ferropenia (pueden ser indistinguibles); pero la <strong>ferritina sube</strong>.</dd></dl>
+                        <dl class="kv-row"><dt>Ferritina plasmática</dt><dd>Refleja los depósitos de hierro de los tejidos y distingue ambas causas: <span class="hl-verde">&lt;30 µg/l → ferropenia real</span>, <span class="hl-rojo">&gt;100 µg/l → anemia de inflamación</span> (hierro secuestrado, no ausente).</dd></dl>
+                        <p class="fuente-ficha">Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=3" target="_blank" rel="noopener">pág. 3-4</a>.</p>
                     </div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mh-anemia-flebotomia">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩸 Flebotomía diagnóstica</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">Un paciente de UCI pierde de media <strong>40-70 ml de sangre al día</strong> solo en extracciones para laboratorio — hasta 500 ml (una unidad completa) acumulados en una semana. Reinfundir la muestra inicial descartada al extraer por catéter (los primeros ~5 ml, que se desechan para evitar contaminación con el suero de la vía) puede reducir el volumen de flebotomía diaria a la mitad.</div>
+                    <div class="micro-prof-body">
+                        <p>Un paciente de UCI pierde de media <strong>40-70 ml de sangre al día</strong> solo en extracciones para laboratorio — hasta 500 ml (una unidad de sangre completa) acumulados en una semana.</p>
+                        <p>Al extraer por un catéter se desecha la primera muestra (unos <strong>5 ml</strong> en cada extracción), para que el suero de la luz no interfiera. Devolver al paciente esa sangre desechada puede reducir el volumen diario de flebotomía <span class="hl-verde">a la mitad</span>.</p>
+                        <p class="fuente-ficha">Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=4" target="_blank" rel="noopener">pág. 4</a>.</p>
+                    </div>
                 </div>
             </div>
 
-            <p class="section-label" style="margin-top:16px;">Fisiología compensadora de la anemia</p>
-            <p style="font-size:0.85rem; color:var(--text-dim);">La anemia desencadena 2 respuestas para preservar la oxigenación tisular: (1) <strong>↑gasto cardíaco</strong>, consecuencia de la caída de la viscosidad sanguínea, y (2) <strong>↑extracción de O₂</strong> de la sangre capilar.</p>
-            <table class="data-table">
+            <p class="section-label" style="margin-top:16px;">Fisiología compensadora de la anemia <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=4" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 4-6</a></p>
+            <p id="mh-anemia-compensacion" data-nombre="Las dos respuestas a la anemia" style="font-size:0.85rem; color:var(--text-dim);">La anemia desencadena 2 respuestas para preservar la oxigenación tisular: (1) <strong>↑gasto cardíaco</strong>, consecuencia de la caída de la viscosidad sanguínea, y (2) <strong>↑extracción de O₂</strong> de la sangre capilar.</p>
+            <table class="data-table" id="mh-tabla-12-2">
                 <thead><tr><th>Hematocrito</th><th>Viscosidad relativa (agua=1)</th><th>Viscosidad absoluta (centipoise)</th></tr></thead>
                 <tbody>
                     <tr><td>0%</td><td>1,4</td><td>—</td></tr>
@@ -162,80 +200,119 @@
                     <tr><td>60%</td><td>5,8</td><td>3,8</td></tr>
                 </tbody>
             </table>
-            <p style="font-size:0.85rem; color:var(--text-dim);">A un Hto normal (~45%) la sangre completa es ~3 veces más viscosa que el plasma y ~4 veces más que el agua. La resistencia al flujo periférico se relaciona directamente con esa viscosidad (ecuación de Hagen-Poiseuille, Q = ΔP × πr⁴/8μL) — por eso la sangre anémica, menos viscosa, fluye con más facilidad y el gasto cardíaco sube de forma desproporcionadamente mayor que la caída del hematocrito (relación no lineal, porque la sangre es un fluido no-newtoniano: a más flujo, menos viscosidad — una propiedad que, en sentido teleológico, también ayuda a limitar la pérdida de sangre por una herida: al caer el flujo local, la sangre se "espesa" y reduce la hemorragia).</p>
+            <p id="mh-viscosidad" data-nombre="Viscosidad y resistencia al flujo" style="font-size:0.85rem; color:var(--text-dim);">La viscosidad de la sangre se debe a que el fibrinógeno del plasma entrelaza los hematíes; su principal determinante es el <strong>hematocrito</strong> (Tabla 12.2). La del plasma es solo algo mayor que la del agua; a un Hto normal (45%), la sangre completa es <span class="hl">~3 veces más viscosa que el plasma y ~4 veces más que el agua</span>. Según la ecuación de Hagen-Poiseuille (Q = ΔP × πr⁴/8μL; R = 8μL/πr⁴), la resistencia al flujo periférico es directamente proporcional a la viscosidad: la sangre anémica fluye mucho más fácil.</p>
+            <p id="mh-no-newtoniano" data-nombre="Sangre no newtoniana: el gasto sube más" style="font-size:0.85rem; color:var(--text-dim);">Por eso la anemia sube el gasto cardíaco, y lo sube <strong>proporcionalmente más de lo que cae el hematocrito</strong> (Figura 12.2): la sangre es un fluido <span class="hl-azul">no newtoniano</span>, cuya viscosidad depende del flujo (a más flujo, menos viscosidad). En sentido teleológico, esto también ayudaría a limitar la pérdida por una herida: al caer el flujo local, la sangre se «espesa» y sangra menos. La subida del gasto sostiene el transporte de O₂ mientras cae el hematocrito.</p>
+            <div class="article-figure" id="mh-fig-12-2">
+                <img src="js/modules/merino-hemato/img/fig12-2-gasto-hemodilucion.jpg" alt="Figura 12.2 de Marino: gasto cardíaco frente a hematocrito durante la hemodilución de un paciente con policitemia; el hematocrito baja de 60 a 37 % y el gasto sube de unos 6 a 13 l/min" loading="lazy">
+                <div class="article-figure-caption">Figura 12.2 — Hemodilución isovolémica progresiva en un paciente con policitemia: el hematocrito baja de 60 a 37 % (un 38 %) y el gasto cardíaco (<em>cardiac output</em>) sube de unos 6 a 13 l/min. Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=6" target="_blank" rel="noopener">pág. 6</a>.</div>
+            </div>
+            <details class="nota-plegable" id="mh-nota-fig-12-2"><summary>Nota de fidelidad: cómo leer el «225 %» de la Figura 12.2</summary>
+                <p style="font-size:0.8rem; color:var(--text-dim);">La figura rotula «225 % de cambio en el gasto». Sus puntos van de unos 5,8 a 13 l/min: el gasto <strong>llega al 225 % del inicial</strong> (se multiplica por 2,25), es decir, sube un 125 %. El rótulo se reproduce tal cual; la cuenta es de esta app, con la lectura aproximada de la figura (<a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=6" target="_blank" rel="noopener">pág. 6</a>).</p>
+            </details>
 
-            <p class="section-label" style="margin-top:16px;">El límite de la compensación</p>
-            <p style="font-size:0.85rem; color:var(--text-dim);">La relación clave es VO₂ = DO₂ × Extracción de O₂ (consumo = aporte × fracción extraída). Al caer la Hb, el aporte de O₂ (DO₂) disminuye, pero la extracción sube para mantener constante el consumo (VO₂) — hasta que la extracción alcanza su techo, <span class="hl-rojo">~50%</span>. Por debajo de ese punto (que corresponde aproximadamente a un Hto del 10%, Hb ≈3 g/dl), el VO₂ empieza a caer de verdad y aparece hiperlactatemia, señal de hipoxia tisular real.</p>
+            <p class="section-label" style="margin-top:16px;">El límite de la compensación <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=6" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 6-7</a></p>
+            <p id="mh-limite-compensacion" data-nombre="El techo de la extracción" style="font-size:0.85rem; color:var(--text-dim);">La relación clave es VO₂ = DO₂ × Extracción de O₂ (consumo = aporte × fracción extraída). Al caer la Hb, el aporte de O₂ (DO₂) disminuye pese a la subida del gasto, pero la extracción sube y mantiene constante el consumo (VO₂) — hasta que alcanza su techo, <span class="hl-rojo">~50%</span>. Ese punto corresponde a un <strong>Hto del 10% (Hb ≈3 g/dl)</strong>: por debajo, el VO₂ empieza a caer y sube el lactato, señal de oxigenación tisular insuficiente (Figura 12.3, en primates).</p>
+            <div class="article-figure" id="mh-fig-12-3">
+                <img src="js/modules/merino-hemato/img/fig12-3-oxigenacion-anemia.jpg" alt="Figura 12.3 de Marino: arriba, el aporte de O2 cae y la extracción sube con la hemodilución; abajo, el consumo de O2 se mantiene hasta un hematocrito del 10 % y luego cae mientras el lactato se dispara" loading="lazy">
+                <div class="article-figure-caption">Figura 12.3 — Anemia isovolémica progresiva en primates. Arriba: el aporte (DO₂) cae y la extracción sube hasta ~50 % con un Hto del 10 %. Abajo: el consumo (VO₂) se mantiene hasta ese punto y luego cae, mientras el lactato se dispara. Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=7" target="_blank" rel="noopener">pág. 7</a>.</div>
+            </div>
             <ul class="term-chips">
-                <li>Extracción de O₂ ~50% → umbral fisiológico de oxigenación tisular comprometida</li>
-                <li>Equivale aprox. a SaO₂−ScvO₂; ScvO₂ &lt;70% se ha propuesto como disparador de transfusión alternativo a la Hb</li>
+                <li id="mh-techo-extraccion">Extracción de O₂ ~50% → umbral fisiológico de oxigenación tisular comprometida</li>
+                <li id="mh-scvo2-disparador">Equivale aprox. a SaO₂−ScvO₂; ScvO₂ &lt;70% se ha propuesto como disparador de transfusión alternativo a la Hb</li>
             </ul>
-            <dl class="kv-row"><dt>Tolerancia a la anemia extrema</dt><dd>En Testigos de Jehová postoperatorios (300 pacientes), el 50% sobrevivió con Hb 2-3 g/dl y el 75% con Hb 3-4 g/dl. En voluntarios sanos, hemodilución progresiva hasta Hb 5 g/dl no causó daño detectable. Manteniendo la volemia, la sangre tolera niveles de Hb sorprendentemente bajos.</dd></dl>
+            <dl class="kv-row" id="mh-tolerancia"><dt>Tolerancia a la anemia extrema</dt><dd>En animales, con la volemia mantenida, hematocritos de <strong>5-10% (Hb 1,5-3 g/dl)</strong> no dañan la oxigenación tisular, incluso despiertos y respirando aire ambiente. En Testigos de Jehová posoperados (300 pacientes), el <strong>50%</strong> sobrevivió con Hb 2-3 g/dl y el <strong>75%</strong> con Hb 3-4 g/dl. En voluntarios sanos, la hemodilución progresiva hasta <strong>Hb 5 g/dl</strong> no causó daño aparente. Según Marino, los estudios sugieren que <span class="hl-verde">una Hb de hasta 5 g/dl es segura</span>, y algunos pacientes toleran 2-3 g/dl si se mantiene la volemia.</dd></dl>
+            <p class="fuente-ficha">Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=6" target="_blank" rel="noopener">pág. 6-7</a>.</p>
         </div>
 
         <div id="merino-transfusion" class="tab-content">
             <h3 style="color: var(--accent-red);">El umbral transfusional</h3>
             <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Capítulo 12 — El disparador de transfusión y la transfusión de hematíes.</p>
 
-            <p class="section-label">De dónde viene el umbral clásico</p>
-            <p style="font-size:0.85rem; color:var(--text-dim);">En 1942 se recomendó una Hb ≤10 g/dl como indicación de transfusión, y fue el estándar durante los siguientes 60 años, hasta que la preocupación por los riesgos de la transfusión llevó a estudios (refs. 22-23 de Marino: Hébert 1999 y Holst 2014) que mostraron que los resultados no empeoraban si se dejaba bajar la Hb hasta 7 g/dl. Una revisión de 48 estudios confirmó resultados similares (incluidos eventos cardíacos) manteniendo Hb 7-8 g/dl en vez de 9-10 g/dl, con una reducción del 41% en el consumo de hematíes.</p>
+            <p class="section-label">De dónde viene el umbral clásico <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=7" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 7-8</a></p>
+            <p id="mh-umbral-historia" data-nombre="De 10 a 7 g/dl" style="font-size:0.85rem; color:var(--text-dim);">En 1942 se recomendó una Hb ≤10 g/dl como indicación de transfusión, y fue el estándar durante los siguientes 60 años, hasta que la preocupación por los riesgos de la transfusión llevó a estudios (refs. 22-23 de Marino: Hébert 1999 y Holst 2014) que mostraron que los resultados no empeoraban si se dejaba bajar la Hb hasta <strong>7 g/dl</strong>. Una revisión de 48 estudios confirmó resultados similares (incluidos eventos cardíacos) manteniendo Hb 7-8 g/dl en vez de 9-10 g/dl, con una <span class="hl-verde">reducción del 41% en el consumo de hematíes</span>.</p>
 
-            <p class="section-label" style="margin-top:16px;">Umbrales actuales de las guías</p>
-            <ul class="term-chips">
-                <li>Hb &lt;7 g/dl — crítico estable hemodinámicamente, sin cardiopatía isquémica (incluye postcirugía cardíaca y shock séptico)</li>
-                <li>Hb &lt;8 g/dl — cardiopatía isquémica, o cirugía cardíaca/ortopédica</li>
+            <p class="section-label" style="margin-top:16px;">Umbrales actuales de las guías <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=8" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 8</a></p>
+            <ul class="term-chips" id="mh-umbrales-guias" data-nombre="Umbrales de las guías">
+                <li id="mh-umbral-7">Hb &lt;7 g/dl — crítico estable hemodinámicamente, sin cardiopatía isquémica (incluye postcirugía cardíaca y shock séptico)</li>
+                <li id="mh-umbral-8">Hb &lt;8 g/dl — cardiopatía isquémica, o cirugía cardíaca/ortopédica</li>
             </ul>
             <details class="nota-plegable" id="merino-nota-hb-cirugia-cardiaca"><summary>Nota de fidelidad: la cirugía cardíaca aparece en los dos umbrales</summary>
                 <p style="font-size:0.8rem; color:var(--text-dim);">Marino (pág. 8) la incluye en Hb &lt;7 («esto incluye a los pacientes poscirugía cardíaca y con shock séptico») y también en Hb &lt;8 («pacientes sometidos a cirugía cardíaca u ortopédica»). No explica la diferencia: se reproducen las dos tal cual.</p>
             </details>
-            <p style="font-size:0.85rem; color:var(--text-dim);">De 21 guías de práctica clínica revisadas para la transfusión de hematíes en el crítico no sangrante, la mayoría coincide en estos 2 umbrales — con un cumplimiento real pobre: en una serie de casi 5.000 transfusiones, el 60% no siguió la recomendación de la guía.</p>
+            <p id="mh-guias-cumplimiento" data-nombre="Las guías y su cumplimiento" style="font-size:0.85rem; color:var(--text-dim);">De 21 guías de práctica clínica revisadas para la transfusión de hematíes en el crítico no sangrante, la mayoría coincide en estos 2 umbrales — con un cumplimiento real pobre: en una serie de casi 5.000 transfusiones, el <span class="hl-rojo">60%</span> no siguió la recomendación de la guía.</p>
 
-            <p class="section-label" style="margin-top:16px;">Por qué la Hb es un mal disparador</p>
+            <p class="section-label" style="margin-top:16px;">Por qué la Hb es un mal disparador <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=8" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 8-9</a></p>
             <div class="micro-profiles">
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mh-hb-mal-disparador">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚠️ 2 problemas del umbral por Hb</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
                         <p>1) La concentración de Hb no informa sobre si la oxigenación tisular es adecuada o no — transfundir solo por el número, sin evidencia de necesidad real.</p>
                         <p>2) Una caída aguda de Hb puede ser un simple efecto dilucional (expansión de volumen, ver Ficha 1) y llevar a transfusiones innecesarias.</p>
+                        <p>Por eso algunas guías proponen abandonar la Hb como disparador y usar medidas más fisiológicas de la oxigenación tisular, como la de abajo.</p>
+                        <p class="fuente-ficha">Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=8" target="_blank" rel="noopener">pág. 8</a>.</p>
                     </div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mh-extraccion-disparador">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧪 Alternativa: extracción de O₂</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">Una extracción de O₂ del 50% (o una ScvO₂ &lt;70% cuando la SaO₂ es cercana al 100%, monitorizadas con pulsioximetría + catéter venoso central de "oximetría") identifica el umbral real de oxigenación comprometida — más fisiológico que un número fijo de Hb, aunque con poca adopción práctica pese a sus ventajas.</div>
+                    <div class="micro-prof-body">
+                        <p>La extracción de O₂ tiene un techo de ~50%: más allá, cada caída de Hb baja el VO₂. Por eso una <strong>extracción del 50%</strong> puede servir de disparador: identifica el umbral de oxigenación tisular comprometida.</p>
+                        <p>Equivale aproximadamente a <strong>SaO₂ − ScvO₂</strong>, que se puede vigilar de forma continua con pulsioximetría (SaO₂) y un catéter venoso central de «oximetría» (ScvO₂). Si la SaO₂ es cercana al 100%, basta la ScvO₂: se ha propuesto una <span class="hl-rojo">ScvO₂ &lt;70%</span> como disparador. Pese a sus ventajas fisiológicas, estos métodos han recibido poca atención.</p>
+                        <p class="fuente-ficha">Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=8" target="_blank" rel="noopener">pág. 8-9</a>.</p>
+                    </div>
                 </div>
             </div>
+            <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="capilarVivo" data-capilar-vivo="dual">🩸 Ver en el capilar vivo: la extracción a pie de cama, con la oximetría doble →</button></p>
 
-            <p class="section-label" style="margin-top:16px;">Preparaciones de hematíes disponibles</p>
-            <p style="font-size:0.85rem; color:var(--text-dim);">La sangre completa solo se almacena bajo petición expresa — de forma rutinaria se fracciona en sus componentes (hematíes, plaquetas, plasma y crioprecipitado), lo que permite que una única donación cubra varias necesidades transfusionales distintas.</p>
-            <table class="data-table">
+            <p class="section-label" style="margin-top:16px;">Preparaciones de hematíes disponibles <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=9" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 9-10</a></p>
+            <p id="mh-componentes" data-nombre="Sangre fraccionada en componentes" style="font-size:0.85rem; color:var(--text-dim);">La sangre completa solo se almacena bajo petición expresa — de forma rutinaria se fracciona en sus componentes (hematíes, plaquetas, plasma y crioprecipitado), lo que permite que una única donación cubra varias necesidades transfusionales distintas.</p>
+            <table class="data-table" id="mh-tabla-12-3">
                 <thead><tr><th>Preparación</th><th>Características</th></tr></thead>
                 <tbody>
-                    <tr><td>Concentrado de hematíes (CH)</td><td>350 ml, Hto ~60%, 15-30 ml de plasma residual y leucocitos. Se conserva hasta 42 días con aditivos que mantienen el ATP.</td></tr>
-                    <tr><td>Leucorreducido</td><td>Filtrado para eliminar la mayoría de los leucocitos — reduce el riesgo de reacción febril no hemolítica. Indicado si hay antecedente de esa reacción.</td></tr>
-                    <tr><td>Lavado</td><td>Lavado con salino para eliminar el plasma residual — reduce reacciones de hipersensibilidad. Indicado en antecedente de reacción alérgica o déficit de IgA (riesgo de anafilaxia).</td></tr>
+                    <tr><td>Concentrado de hematíes (CH)</td><td>350 ml, Hto ~60%, leucocitos y 15-30 ml de plasma residual. Se conserva a 1-6 °C hasta 42 días: los conservantes nuevos llevan adenina, que mantiene el ATP de los hematíes.</td></tr>
+                    <tr><td>Leucorreducido</td><td>Filtrado para eliminar la mayoría de los leucocitos (tras transfusiones repetidas generan anticuerpos en el receptor) — reduce el riesgo de reacción febril no hemolítica. Indicado si hay antecedente de esa reacción. Se hace de rutina en muchos bancos de sangre, pero en EE. UU. aún no es universal.</td></tr>
+                    <tr><td>Lavado</td><td>Lavado con salino para eliminar el plasma residual — reduce reacciones de hipersensibilidad. Indicado en antecedente de reacción alérgica o déficit de IgA (riesgo de anafilaxia). <strong>El lavado no elimina bien los leucocitos.</strong></td></tr>
                 </tbody>
             </table>
+            <p class="fuente-ficha">Tabla 12.3 y texto (<a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=9" target="_blank" rel="noopener">pág. 9-10</a>).</p>
             <details class="nota-plegable" id="merino-nota-plasma-residual"><summary>Nota de fuentes: el plasma residual de cada unidad</summary>
                 <p style="font-size:0.8rem; color:var(--text-dim);">La Tabla 12.3 (pág. 9) da 15-30 ml de plasma residual por unidad; el texto de esa misma página dice unos 30-50 ml. Marino no las concilia: se muestran las dos.</p>
             </details>
-            <dl class="kv-row"><dt>Tiempo de infusión (catéter periférico)</dt><dd>1 unidad sin diluir: ~117 min por catéter 20G, ~70 min por 18G. Diluida con 100 ml de salino isotónico: se reduce a ~19 min (20G) / ~12 min (18G) — el flujo es hasta 6 veces más rápido diluido, aunque para corregir anemia el tiempo estándar recomendado (2h/unidad en paciente estable) hace innecesaria la dilución.</dd></dl>
-            <dl class="kv-row"><dt>Filtros de sangre</dt><dd>Poro de 170-260 micras, obligatorios para cualquier hemoderivado — retienen coágulos y detritos, pero no reducen leucocitos. Un flujo lento con filtro muy colmatado es indicación de cambiarlo.</dd></dl>
+            <table class="data-table" id="mh-tabla-12-4">
+                <thead><tr><th>1 unidad por gravedad</th><th>Volumen</th><th>Catéter 20 G</th><th>Catéter 18 G</th></tr></thead>
+                <tbody>
+                    <tr><td>Sin diluir</td><td>350 ml</td><td>117 min</td><td>70 min</td></tr>
+                    <tr><td>+ 100 ml de salino isotónico</td><td>450 ml</td><td>19 min</td><td>12 min</td></tr>
+                </tbody>
+            </table>
+            <p class="fuente-ficha">Tabla 12.4: catéteres periféricos de 1,2 pulgadas (<a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=10" target="_blank" rel="noopener">pág. 10</a>).</p>
+            <dl class="kv-row" id="mh-tiempo-infusion"><dt>Tiempo de infusión</dt><dd>El CH es muy viscoso (Hto 60%) y fluye despacio; por eso a menudo se diluye con salino. Diluido pasa <strong>6 veces más rápido</strong>. Pero el tiempo recomendado en el paciente estable es de unas <span class="hl">2 h por unidad</span>, así que para corregir una anemia la dilución probablemente no hace falta.</dd></dl>
+            <dl class="kv-row" id="mh-filtros"><dt>Filtros de sangre</dt><dd>Poro de 170-260 micras, obligatorios para cualquier hemoderivado — retienen coágulos y detritos, pero <strong>no retienen leucocitos</strong>. Un flujo lento con filtro muy colmatado es indicación de cambiarlo.</dd></dl>
 
-            <p class="section-label" style="margin-top:16px;">¿La transfusión mejora la oxigenación?</p>
-            <p style="font-size:0.85rem; color:var(--text-dim);">En un adulto medio, 1 unidad de hematíes sube la Hb ~1 g/dl y el Hto ~3%. En un estudio de pacientes posquirúrgicos con anemia grave (Hb &lt;7 g/dl) transfundidos con 1-2 unidades, la Hb media subió de 6,4 a 8 g/dl y el aporte de O₂ (DO₂) aumentó — pero el <strong>consumo de O₂ (VO₂) se mantuvo sin cambios</strong>, señal de que la transfusión redujo la extracción de O₂ (el efecto inverso al de la anemia). Esto se ha confirmado en varios estudios clínicos, y el almacenamiento prolongado de los hematíes puede incluso <strong>empeorar</strong> la oxigenación tisular tras la transfusión, en vez de mejorarla. Estos hallazgos han llevado a una frase explícita en guías de práctica clínica: <em>"la transfusión de hematíes no debe considerarse un método absoluto para mejorar la oxigenación tisular en el paciente crítico"</em>.</p>
+            <p class="section-label" style="margin-top:16px;">¿La transfusión mejora la oxigenación? <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=10" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 10-11</a></p>
+            <p id="mh-efecto-transfusion" data-nombre="La transfusión y el VO₂" style="font-size:0.85rem; color:var(--text-dim);">En un adulto medio, 1 unidad de hematíes sube la Hb <strong>~1 g/dl</strong> y el Hto <strong>~3%</strong>. En posoperados con anemia grave normovolémica (Hb &lt;7 g/dl) transfundidos con 1-2 unidades, la Hb media subió de 6,4 a 8 g/dl (un 25%) y el aporte de O₂ (DO₂) subió de forma parecida — pero el <strong>consumo de O₂ (VO₂) no cambió</strong>: la transfusión bajó la extracción de O₂, al revés que la anemia (Figura 12.4).</p>
+            <div class="article-figure" id="mh-fig-12-4">
+                <img src="js/modules/merino-hemato/img/fig12-4-transfusion-do2-vo2.jpg" alt="Figura 12.4 de Marino: antes y después de transfundir, la hemoglobina sube de 6,4 a 8 g/dl y el aporte de O2 sube, mientras el consumo de O2 no cambia" loading="lazy">
+                <div class="article-figure-caption">Figura 12.4 — 11 posoperados con Hb &lt;7 g/dl transfundidos con 1-2 unidades: antes (<em>pre</em>) y después (<em>post</em>), la Hb sube de 6,4 a 8 g/dl y el aporte de O₂ (DO₂) también; el consumo (VO₂) no cambia. Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=11" target="_blank" rel="noopener">pág. 11</a>.</div>
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Varios estudios clínicos lo han confirmado, y el almacenamiento prolongado de los hematíes puede incluso <strong>empeorar</strong> la oxigenación tisular tras la transfusión. De ahí la frase de una guía de práctica clínica: <em>"la transfusión de hematíes no debe considerarse un método absoluto para mejorar la oxigenación tisular en el paciente crítico"</em>. Para el autor, esto pone en duda transfundir solo para subir la Hb, sobre todo por sus riesgos (Ficha 3).</p>
 
-            <p class="section-label" style="margin-top:16px;">¿Qué es peor, la anemia o la transfusión?</p>
-            <p style="font-size:0.85rem; color:var(--text-dim);">Una revisión de 45 estudios clínicos sobre transfusión de hematíes en anemia del paciente crítico (272.596 pacientes) encontró que en <span class="hl-rojo">42 de los 45</span> los riesgos de la transfusión superaban a los beneficios, y solo 1 estudio mostró beneficio neto. De 18 estudios que evaluaron el impacto en la supervivencia, 17 mostraron que la transfusión era un factor de riesgo independiente de mal desenlace.</p>
+            <p class="section-label" style="margin-top:16px;">¿Qué es peor, la anemia o la transfusión? <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=16" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 16</a></p>
+            <p id="mh-peor" data-nombre="¿Qué es peor, la anemia o la transfusión?" style="font-size:0.85rem; color:var(--text-dim);">Una revisión de 45 estudios clínicos sobre transfusión de hematíes en anemia del paciente crítico (272.596 pacientes) encontró que en <span class="hl-rojo">42 de los 45</span> los riesgos de la transfusión superaban a los beneficios, y solo 1 estudio mostró beneficio neto. De 18 estudios que evaluaron el impacto en la supervivencia, 17 mostraron que la transfusión era un factor de riesgo independiente de mal desenlace.</p>
 
-            <p class="section-label" style="margin-top:16px;">Volumen sanguíneo vs. masa de hematíes</p>
-            <p style="font-size:0.85rem; color:var(--text-dim);">El mensaje de fondo del capítulo: la práctica de subir la Hb se apoya en la creencia de que la anemia amenaza gravemente la oxigenación — pero reducciones incluso extremas de Hb/Hto no comprometen la oxigenación tisular <strong>si se mantiene el volumen intravascular</strong> (que permite al gasto cardíaco compensar). La hipovolemia es una causa reconocida de shock; la anemia, por sí sola, no lo es. El volumen sanguíneo puede pesar más que la masa de hematíes a la hora de sostener la oxigenación de los tejidos.</p>
+            <p class="section-label" style="margin-top:16px;">Volumen sanguíneo vs. masa de hematíes <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=16" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 16-17</a></p>
+            <p id="mh-volumen-vs-celulas" data-nombre="Volumen sanguíneo frente a masa de hematíes" style="font-size:0.85rem; color:var(--text-dim);">El mensaje de fondo del capítulo: la práctica de subir la Hb se apoya en la creencia de que la anemia amenaza gravemente la oxigenación — pero reducciones incluso extremas de Hb/Hto no comprometen la oxigenación tisular <strong>si se mantiene el volumen intravascular</strong> (que permite al gasto cardíaco compensar). <span class="hl-rojo">La hipovolemia es una causa reconocida de shock; la anemia, por sí sola, no lo es.</span> El volumen sanguíneo puede pesar más que la masa de hematíes a la hora de sostener la oxigenación de los tejidos.</p>
+            <div class="article-figure" id="mh-fig-12-6">
+                <img src="js/modules/merino-hemato/img/fig12-6-volumen-salva.jpg" alt="Figura 12.6 de Marino: a la izquierda, la cruz con el lema «la sangre salva vidas» tachada; a la derecha, la versión del autor, «el volumen de sangre salva vidas»" loading="lazy">
+                <div class="article-figure-caption">Figura 12.6 — El lema de la Cruz Roja estadounidense, «la sangre salva vidas» (<em>blood saves lives</em>, tachado), y la versión del autor: «el <strong>volumen</strong> de sangre salva vidas». Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=17" target="_blank" rel="noopener">pág. 17</a>.</div>
+            </div>
         </div>
 
         <div id="merino-riesgos" class="tab-content">
             <h3 style="color: var(--accent-yellow);">Riesgos de la transfusión de hematíes</h3>
             <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Capítulo 12 — Riesgos de la transfusión.</p>
 
-            <table class="data-table" style="font-size:0.82rem;">
+            <p class="section-label">Tabla 12.5 — Efectos adversos <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=11" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 11-12</a></p>
+            <table class="data-table" id="mh-tabla-12-5" style="font-size:0.82rem;">
                 <thead><tr><th>Relacionados con inmunidad</th><th>Otros</th></tr></thead>
                 <tbody>
                     <tr><td>
@@ -253,27 +330,30 @@
                     </td></tr>
                 </tbody>
             </table>
-            <p style="font-size:0.8rem; color:var(--text-muted);">Cifras por unidad transfundida, salvo la sobrecarga circulatoria (†): su 1:100 es una estimación <strong>por receptor, no por unidad</strong> (nota † de la Tabla 12.5). Las infecciones nosocomiales llevan «(?)» en la tabla de Marino, sin cifra. Los errores de transfusión (persona/unidad equivocada) son mucho más frecuentes que la temida transmisión de infecciones.</p>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Cifras por unidad transfundida, salvo la sobrecarga circulatoria (†): su 1:100 es una estimación <strong>por receptor, no por unidad</strong> (nota † de la Tabla 12.5). Las infecciones nosocomiales llevan «(?)» en la tabla de Marino, sin cifra. <span class="hl-rojo">Los errores de transfusión (persona o unidad equivocada) son mucho más frecuentes que la temida transmisión de infecciones.</span></p>
 
             <div class="micro-profiles" style="margin-top:12px;">
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mh-hemolitica">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩸 Reacción hemolítica aguda</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
-                        <p>Por incompatibilidad ABO — casi siempre error humano. Clínica: fiebre, disnea, dolor torácico/lumbar e hipotensión de inicio brusco en los primeros minutos; las formas graves cursan con coagulopatía de consumo y fallo multiorgánico.</p>
-                        <p><strong>Manejo:</strong> parar la transfusión de inmediato y verificar la identidad del paciente (la gravedad depende del volumen infundido); avisar al banco de sangre para hemoglobina libre en plasma y test de Coombs directo; soporte con volumen/vasopresores/ventilación — rara vez es mortal.</p>
+                        <p>Por hematíes ABO-incompatibles con el receptor — casi siempre por error humano. <span class="hl-azul">Los anticuerpos del receptor se unen a los antígenos ABO de los hematíes del donante</span>; su lisis desencadena una respuesta inflamatoria sistémica, que puede acompañarse de hipotensión y fallo multiorgánico.</p>
+                        <p><strong>Clínica:</strong> fiebre, disnea, dolor torácico y lumbar e hipotensión de inicio brusco <strong>en los primeros minutos</strong>; las formas graves cursan con coagulopatía de consumo y disfunción multiorgánica progresiva.</p>
+                        <p><strong>Manejo:</strong> 1) parar la transfusión de inmediato y comprobar que la sangre correcta va al paciente correcto (cuanto antes: la gravedad depende del volumen transfundido). 2) Si la sangre es la correcta, la reacción es improbable; aun así, avisar al banco de sangre, que pedirá hemoglobina libre en plasma (hemólisis intravascular) y test de Coombs directo (el anticuerpo anti-ABO). 3) Si se confirma: soporte con volumen y vasopresores para la hipotensión, y ventilatorio si hay distrés — rara vez es mortal.</p>
+                        <p class="fuente-ficha">Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=12" target="_blank" rel="noopener">pág. 12</a>.</p>
                     </div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mh-fiebre-nh">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🌡️ Fiebre no hemolítica</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
                         <p>La reacción adversa más frecuente. Anticuerpos antileucocitarios del receptor reaccionan con antígenos de los leucocitos del donante, liberando pirógenos endógenos. Típica de politransfundidos y multíparas. La leucorreducción reduce pero no elimina el riesgo.</p>
                         <dl class="kv-row"><dt>Definición</dt><dd><span class="hl-purpura">Elevación de la temperatura &gt;1 °C durante la transfusión o hasta 6 h después</span>, sin otra causa aparente (p. ej. una reacción hemolítica aguda).</dd></dl>
                         <dl class="kv-row"><dt>Cuándo aparece</dt><dd><span class="hl-azul">No suele aparecer en la primera hora</span> (a diferencia de la fiebre de la reacción hemolítica aguda). Puede acompañarse de escalofríos y tiritona.</dd></dl>
                         <dl class="kv-row"><dt>Abordaje inicial</dt><dd>El mismo que en la reacción hemolítica (parar y verificar), aunque la fiebre aparezca al acabar la transfusión. Se confirma <strong>excluyendo hemólisis</strong> con las pruebas del banco. El banco hace una tinción de Gram de la sangre del donante y puede pedir hemocultivos al receptor.</dd></dl>
-                        <dl class="kv-row"><dt>Transfusiones futuras</dt><dd>&gt;75% no recurre. Si recurre una 2ª vez, usar hematíes leucorreducidos en adelante.</dd></dl>
+                        <dl class="kv-row"><dt>Transfusiones futuras</dt><dd>&gt;75% no recurre: no hacen falta precauciones especiales. Si recurre una 2ª vez, usar hematíes leucorreducidos en adelante.</dd></dl>
+                        <p class="fuente-ficha">Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=13" target="_blank" rel="noopener">pág. 13</a>.</p>
                     </div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mh-hipersensibilidad">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🤧 Hipersensibilidad</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
                         <p>Por sensibilización a proteínas plasmáticas del donante en transfusiones previas. La más común es la <strong>urticaria</strong> (1 de cada 100 unidades); la anafilaxia (p. ej. broncoespasmo) es mucho menos común y el shock anafiláctico es raro.</p>
@@ -282,19 +362,21 @@
                         <dl class="kv-row"><dt>Anafilaxia grave</dt><dd>Parar la transfusión de inmediato si se sospecha. Se maneja como se describe en el capítulo 17 de Marino.</dd></dl>
                         <dl class="kv-row"><dt>Transfusiones futuras</dt><dd>Tras una reacción alérgica: hematíes lavados. Tras una anafilaxia: <strong>evitar nuevas transfusiones salvo que sean imprescindibles</strong>.</dd></dl>
                         <dl class="kv-row"><dt>Déficit de IgA</dt><dd>Estudiarlo en todo paciente con hipersensibilidad. Quien lo tiene es propenso a estas reacciones sin necesidad de exposición previa a derivados plasmáticos.</dd></dl>
+                        <p class="fuente-ficha">Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=13" target="_blank" rel="noopener">pág. 13-14</a>.</p>
                     </div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mh-trali">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🫁 TRALI (lesión pulmonar aguda)</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
                         <p>Lesión pulmonar inflamatoria similar al SDRA, asociada a transfusión de hematíes y plaquetas — infrecuente (1:12.000) pero la <strong>1ª causa de muerte relacionada con transfusión</strong>, con <span class="hl-rojo">mortalidad cercana al 50%</span>.</p>
-                        <dl class="kv-row"><dt>Mecanismo</dt><dd><span class="hl-azul">En el 80% de los casos, anticuerpos del donante contra antígenos de neutrófilos del receptor</span> activan y secuestran neutrófilos en los capilares pulmonares. En ~20% no intervienen anticuerpos, pero no se ha identificado el agente responsable.</dd></dl>
-                        <dl class="kv-row"><dt>Clínica</dt><dd>Fallo respiratorio hipoxémico agudo, a menudo en la 1ª hora y hasta las 6 h; fiebre frecuente; infiltrado bilateral extenso en la radiografía, indistinguible del SDRA. Puede ser grave desde el inicio y requerir ventilación mecánica.</dd></dl>
+                        <dl class="kv-row"><dt>Mecanismo</dt><dd><span class="hl-azul">En el 80% de los casos, anticuerpos del donante contra antígenos de neutrófilos del receptor</span> activan los neutrófilos, que se quedan secuestrados en los capilares pulmonares y migran al pulmón, donde producen la lesión inflamatoria. En ~20% no intervienen anticuerpos, pero no se ha identificado el agente responsable.</dd></dl>
+                        <dl class="kv-row"><dt>Clínica</dt><dd>Fallo respiratorio hipoxémico agudo, a menudo en la 1ª hora y hasta las 6 h; fiebre frecuente; infiltrado bilateral extenso en la radiografía, indistinguible del SDRA (Figura 12.5, abajo). Puede ser grave desde el inicio y requerir ventilación mecánica.</dd></dl>
                         <dl class="kv-row"><dt>Manejo</dt><dd><strong>Si la transfusión no ha terminado, pararla a la primera señal de dificultad respiratoria y avisar al banco de sangre</strong> en toda sospecha (hay ensayos de anticuerpos antileucocitarios, pero no se usan de forma rutinaria). El resto es soporte, similar al del SDRA.</dd></dl>
                         <dl class="kv-row"><dt>Transfusiones futuras</dt><dd>Sin recomendaciones firmes. Algunos proponen hematíes lavados para retirar los anticuerpos del donante; se desconoce si sirve.</dd></dl>
+                        <p class="fuente-ficha">Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=14" target="_blank" rel="noopener">pág. 14-15</a>.</p>
                     </div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mh-taco">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💧 TACO (sobrecarga circulatoria)</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
                         <p>La complicación pulmonar más frecuente de la transfusión de hematíes (incidencia descrita ~1%): edema pulmonar hidrostático agudo en las primeras 6 h, con fallo respiratorio hipoxémico.</p>
@@ -303,17 +385,21 @@
                         <dl class="kv-row"><dt>Frente a TRALI</dt><dd>Puede ser indistinguible, en el mismo plazo. Favorecen TACO la insuficiencia cardíaca previa, la sobrecarga de volumen evidente y la insuficiencia renal; la PCR elevada apoya TRALI. La fiebre no los separa: aparece en el 30% de los TACO.</dd></dl>
                         <dl class="kv-row"><dt>Manejo</dt><dd>Parar la transfusión si no ha terminado y avisar al banco de sangre. Diurético de asa IV; el resto es soporte (ventilación mecánica si precisa), como en el TRALI.</dd></dl>
                         <dl class="kv-row"><dt>Transfusiones futuras</dt><dd>No hay recomendaciones, pero se aconseja <strong>identificar y corregir un balance positivo (con diuréticos) antes de transfundir</strong>.</dd></dl>
+                        <p class="fuente-ficha">Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=15" target="_blank" rel="noopener">pág. 15-16</a>.</p>
                     </div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mh-nosocomiales">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🦠 Infecciones nosocomiales</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">El efecto inmunosupresor de la transfusión es conocido desde los años 70 (mejora la supervivencia de aloinjertos renales). Múltiples estudios asocian la transfusión con mayor incidencia de infección nosocomial, con el riesgo aumentando con el volumen transfundido y el tiempo de almacenamiento del hemoderivado — al menos 22 estudios la señalan como factor de riesgo independiente.</div>
+                    <div class="micro-prof-body">
+                        <p>El efecto inmunosupresor de la transfusión se conoce desde principios de los años 70, cuando se vio que transfundir antes del trasplante mejora la supervivencia de los injertos renales. Muchos estudios asocian la transfusión con más infección nosocomial, y el riesgo <strong>crece con el volumen transfundido y con el tiempo de almacenamiento</strong> de la sangre del donante. Quizá los transfundidos están más graves, pero al menos 22 estudios la señalan como <span class="hl-rojo">factor de riesgo independiente</span>.</p>
+                        <p class="fuente-ficha">Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=16" target="_blank" rel="noopener">pág. 16</a>.</p>
+                    </div>
                 </div>
             </div>
 
-            <div class="article-figure">
+            <div class="article-figure" id="mh-fig-12-5">
                 <img src="js/modules/merino-hemato/img/fig1-cxr-trali.jpg" alt="Radiografía de tórax portátil de un paciente con lesión pulmonar aguda relacionada con la transfusión (TRALI): infiltrado bilateral homogéneo característico de una lesión pulmonar inflamatoria" loading="lazy">
-                <div class="article-figure-caption">Radiografía de tórax portátil en TRALI — infiltrado bilateral homogéneo, patrón característico de lesión pulmonar inflamatoria.</div>
+                <div class="article-figure-caption">Figura 12.5 — Radiografía de tórax portátil en TRALI: infiltrado bilateral homogéneo, patrón característico de lesión pulmonar inflamatoria. Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=15" target="_blank" rel="noopener">pág. 15</a>.</div>
             </div>
         </div>
 
@@ -321,62 +407,72 @@
             <h3 style="color: var(--accent-blue);">Trombocitopenia y trombocitopenia inducida por heparina</h3>
             <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Capítulo 13 — Hemostasia, trombocitopenia y HIT.</p>
 
-            <p class="section-label">Hemostasia, muy resumida</p>
-            <dl class="kv-row"><dt>Glucocálix</dt><dd><span class="hl-purpura">Malla protectora de mucopolisacáridos que cubre el endotelio</span>, una superficie resistente a la trombosis. Hace 2 cosas: (1) limita el paso de proteínas grandes del plasma, y así mantiene la presión oncótica; (2) mantiene la fluidez de la sangre porque impide que leucocitos y plaquetas se adhieran al endotelio, y actúa como mecanorreceptor de la tensión de cizalla, que lleva al endotelio a secretar óxido nítrico (vasodilatador).</dd></dl>
-            <dl class="kv-row"><dt>Hemostasia primaria</dt><dd>Al romperse el endotelio y su glucocálix, las plaquetas se adhieren al colágeno subendotelial y forman el <em>tapón plaquetario</em>. <span class="hl-azul">Las plaquetas liberan calcio, que activa el receptor GPIIb/IIIa</span>: este se une de forma irreversible al factor de von Willebrand (ancla el tapón a la pared) y también al fibrinógeno. Los puentes de fibrina entre plaquetas estabilizan el tapón y acaban contrayéndolo, lo que favorece que el flujo sanguíneo se restablezca.</dd></dl>
-            <dl class="kv-row"><dt>Hemostasia secundaria</dt><dd>La fibrina es esencial para que el trombo sea estable. Se forma por 2 vías:</dd></dl>
-            <ul class="term-chips">
+            <p class="section-label">Hemostasia, muy resumida <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=20" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 20-21</a></p>
+            <dl class="kv-row" id="mh-glucocalix"><dt>Glucocálix</dt><dd><span class="hl-purpura">Malla protectora de mucopolisacáridos que cubre el endotelio</span>, una superficie resistente a la trombosis. Hace 2 cosas: (1) limita el paso de proteínas grandes del plasma, y así mantiene la presión oncótica; (2) mantiene la fluidez de la sangre porque impide que leucocitos y plaquetas se adhieran al endotelio, y actúa como mecanorreceptor de la tensión de cizalla, que lleva al endotelio a secretar óxido nítrico (vasodilatador).</dd></dl>
+            <dl class="kv-row" id="mh-hemostasia-primaria"><dt>Hemostasia primaria</dt><dd>Al romperse el endotelio y su glucocálix, las plaquetas se adhieren al colágeno subendotelial y forman el <em>tapón plaquetario</em>. <span class="hl-azul">Las plaquetas liberan calcio, que activa el receptor GPIIb/IIIa</span>: este se une de forma irreversible al factor de von Willebrand (ancla el tapón a la pared) y también al fibrinógeno. Los puentes de fibrina entre plaquetas estabilizan el tapón y acaban contrayéndolo, lo que favorece que el flujo sanguíneo se restablezca.</dd></dl>
+            <dl class="kv-row" id="mh-hemostasia-secundaria"><dt>Hemostasia secundaria</dt><dd>La fibrina es esencial para que el trombo sea estable. Se forma por 2 vías (abajo). El resultado es el trombo: un cúmulo de plaquetas dentro de una malla de fibrina, anclado a la pared en la zona de la lesión.</dd></dl>
+            <ul class="term-chips" id="mh-vias-coagulacion" data-nombre="Las dos vías de la fibrina">
                 <li><span class="hl-azul">Vía del factor tisular (antes «extrínseca»): la principal</span>; la activa la liberación de tromboplastina del subendotelio</li>
                 <li>Vía de activación por contacto (antes «intrínseca»): la activan los cininógenos, precursores de la bradicinina</li>
                 <li>Las dos activan factores de coagulación y convergen en la activación de la protrombina (factor II) y la conversión del fibrinógeno (factor I) en monómeros de fibrina</li>
             </ul>
-            <p style="font-size:0.85rem; color:var(--text-dim);">El resultado es el trombo: un cúmulo de plaquetas dentro de una malla de fibrina, anclado a la pared en la zona de la lesión.</p>
 
-            <p class="section-label" style="margin-top:16px;">Trombocitopenia en el crítico</p>
-            <p style="font-size:0.85rem; color:var(--text-dim);">Es el trastorno hemostático más frecuente en la UCI (incidencia hasta 60%). El punto de corte clásico es &lt;150.000/µl, pero la capacidad de formar el tapón plaquetario se conserva hasta que el recuento cae por debajo de <span class="hl-rojo">100.000/µl</span> — un umbral clínicamente más útil. Con todo, <em>el riesgo de sangrado mayor no depende solo del recuento</em>: sin una lesión estructural que sangre, se toleran sin problema recuentos de hasta 5.000/µl. El riesgo real de hemorragia intracraneal espontánea aparece por debajo de 10.000/µl (poco frecuente).</p>
+            <p class="section-label" style="margin-top:16px;">Trombocitopenia en el crítico <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=21" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 21</a></p>
+            <p id="mh-trombo-umbral" data-nombre="Cuándo importa el recuento" style="font-size:0.85rem; color:var(--text-dim);">Es el trastorno hemostático más frecuente en la UCI (incidencia hasta 60%). El punto de corte clásico es &lt;150.000/µl, pero la capacidad de formar el tapón plaquetario se conserva hasta que el recuento cae por debajo de <span class="hl-rojo">100.000/µl</span> — un umbral clínicamente más útil. Con todo, <em>el riesgo de sangrado mayor no depende solo del recuento</em>: sin una lesión estructural que sangre, se toleran sin hemorragia mayor recuentos de hasta 5.000/µl. El riesgo con menos de 10.000/µl es la hemorragia intracerebral espontánea, poco frecuente.</p>
 
-            <dl class="kv-row"><dt>Pseudotrombocitopenia</dt><dd>Anticuerpos anti-EDTA (el anticoagulante del tubo de extracción) agregan plaquetas <em>in vitro</em>, que el contador automático confunde con leucocitos y da un recuento falsamente bajo — hasta en el 2% de los recuentos hospitalarios. Sospechar ante un recuento inesperadamente bajo o agregados plaquetarios en el frotis; repetir en tubo con citrato o heparina.</dd></dl>
+            <dl class="kv-row" id="mh-pseudotrombo"><dt>Pseudotrombocitopenia</dt><dd>Anticuerpos anti-EDTA (el anticoagulante del tubo de extracción) agregan plaquetas <em>in vitro</em>, que el contador automático confunde con leucocitos y da un recuento falsamente bajo — hasta en el 2% de los recuentos hospitalarios. Sospechar ante un recuento inesperadamente bajo o agregados plaquetarios en el frotis; repetir en tubo con citrato o heparina.</dd></dl>
 
-            <p class="section-label" style="margin-top:16px;">Causas en el paciente crítico</p>
-            <table class="data-table">
+            <p class="section-label" style="margin-top:16px;">Causas en el paciente crítico <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=21" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 21-22</a></p>
+            <table class="data-table" id="mh-tabla-13-1">
                 <thead><tr><th>No farmacológicas</th><th>Farmacológicas</th></tr></thead>
                 <tbody>
                     <tr><td>Bypass cardiopulmonar, CID, síndrome hemolítico-urémico, infección por VIH, balón de contrapulsación, hepatopatía/hiperesplenismo, neoplasia, transfusión masiva, terapia de reemplazo renal, <strong>sepsis (causa más frecuente en UCI)</strong>, PTT</td><td>Anticonvulsivantes (fenitoína, ácido valproico); antimicrobianos (β-lactámicos, linezolid, TMP/SMX, vancomicina); antineoplásicos; antitrombóticos (inhibidores de GPIIb/IIIa, heparina); antihistamínicos H₂; amiodarona, furosemida, tiazidas, morfina</td></tr>
                 </tbody>
             </table>
-            <dl class="kv-row"><dt>Sepsis</dt><dd>La causa más frecuente de trombocitopenia en la UCI, por <span class="hl-azul">mayor destrucción de plaquetas por los macrófagos</span>. Menos frecuentes pero más graves: la heparina (HIT) y las microangiopatías trombóticas (CID, PTT y SHU).</dd></dl>
-            <dl class="kv-row"><dt>Fármacos: supresión</dt><dd>Los antineoplásicos pueden causar trombocitopenia al suprimir la producción de plaquetas.</dd></dl>
-            <dl class="kv-row"><dt>Fármacos: inmunes</dt><dd>El mecanismo más frecuente es la producción de anticuerpos que reaccionan de forma cruzada con las plaquetas. Es más habitual con heparina y menos con antagonistas del receptor IIb/IIIa y ciertos antibióticos (sobre todo <span class="hl-rojo">linezolid, β-lactámicos y vancomicina</span>).</dd></dl>
+            <p class="fuente-ficha">Tabla 13.1 (<a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=22" target="_blank" rel="noopener">pág. 22</a>).</p>
+            <dl class="kv-row" id="mh-trombo-sepsis"><dt>Sepsis</dt><dd>La causa más frecuente de trombocitopenia en la UCI, por <span class="hl-azul">mayor destrucción de plaquetas por los macrófagos</span>. Menos frecuentes pero más graves: la heparina (HIT) y las microangiopatías trombóticas (CID, PTT y SHU).</dd></dl>
+            <dl class="kv-row" id="mh-trombo-farmacos"><dt>Fármacos</dt><dd>Algunos, como los antineoplásicos, <strong>suprimen la producción</strong> de plaquetas. Pero el mecanismo más frecuente es la producción de <strong>anticuerpos</strong> que reaccionan de forma cruzada con las plaquetas: más habitual con heparina y menos con antagonistas del receptor IIb/IIIa y ciertos antibióticos (sobre todo <span class="hl-rojo">linezolid, β-lactámicos y vancomicina</span>).</dd></dl>
 
-            <p class="section-label" style="margin-top:16px;">Trombocitopenia inducida por heparina (HIT)</p>
-            <p style="font-size:0.85rem; color:var(--text-dim);">Trastorno inmunomediado asociado a <strong>trombosis potencialmente mortal</strong> (25-70% de los casos, arterial o venosa), con mortalidad de hasta el 30% si pasa inadvertida. Incidencia &lt;1-5% según el tipo de heparina y la población. Reacción no dependiente de dosis — puede aparecer incluso con exposiciones mínimas (lavados de catéter con heparina o catéteres recubiertos de heparina).</p>
+            <p class="section-label" style="margin-top:16px;">Trombocitopenia inducida por heparina (HIT) <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=22" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 22-23</a></p>
+            <p id="mh-hit" data-nombre="Qué es la HIT" style="font-size:0.85rem; color:var(--text-dim);">Trastorno inmunomediado asociado a <strong>trombosis potencialmente mortal</strong> (25-70% de los casos, arterial o venosa), con mortalidad de hasta el 30% si pasa inadvertida. Incidencia &lt;1-5% según el tipo de heparina y la población. Reacción no dependiente de dosis — puede aparecer incluso con exposiciones mínimas (lavados de catéter con heparina o catéteres recubiertos de heparina).</p>
             <div class="micro-profiles">
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mh-hit-mecanismo">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚙️ Mecanismo</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">La heparina se une al factor plaquetario 4 (FP4), formando un complejo antigénico que desencadena anticuerpos IgG. Estos se unen a las plaquetas e inducen una fuerte activación plaquetaria que promueve la trombosis; el sistema reticuloendotelial aclara las plaquetas recubiertas de anticuerpo, lo que limita (pero no evita) la trombosis. Los anticuerpos suelen desaparecer a los 3 meses de retirar la heparina.</div>
+                    <div class="micro-prof-body">
+                        <p>La heparina no es inmunógena por sí sola, pero se une al factor plaquetario 4 (FP4) de las plaquetas, formando un complejo antigénico que desencadena anticuerpos IgG. Estos se unen a las plaquetas e inducen una fuerte activación plaquetaria que promueve la trombosis; el sistema reticuloendotelial aclara las plaquetas recubiertas de anticuerpo, lo que limita (pero no evita) la trombosis. Los anticuerpos suelen desaparecer a los 3 meses de retirar la heparina.</p>
+                        <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="telarVivo" data-telar-vivo="tih">🧵 Ver en el telar de la trombina: la heparina, el FP4 y la IgG →</button></p>
+                        <p class="fuente-ficha">Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=22" target="_blank" rel="noopener">pág. 22</a>.</p>
+                    </div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mh-hit-riesgo">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📊 Factores de riesgo</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">Cirugía ortopédica o cardíaca, obesidad. La <strong>heparina no fraccionada</strong> tiene un riesgo 2-10 veces mayor que la heparina de bajo peso molecular. Poco frecuente en el crítico en general (&lt;1% con cualquier tipo de heparina, usada para profilaxis de la TVP), pero 1-3% en UCI cardiotorácica cuando se usa HNF.</div>
+                    <div class="micro-prof-body">
+                        <p>Cirugía ortopédica o cardíaca, obesidad. La <strong>heparina no fraccionada</strong> tiene un riesgo 2-10 veces mayor que la heparina de bajo peso molecular. Poco frecuente en el crítico en general (&lt;1% con cualquier tipo de heparina, usada para profilaxis de la TVP), pero 1-3% en UCI cardiotorácica cuando se usa HNF.</p>
+                        <p class="fuente-ficha">Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=23" target="_blank" rel="noopener">pág. 23</a>.</p>
+                    </div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mh-hit-clinica">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🕐 Clínica</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
                         <p>Aparece típicamente 5-10 días tras la 1ª exposición a heparina, o en &lt;24h si hubo exposición previa en los últimos 3 meses. El recuento de plaquetas cae hasta un 50%, raramente por debajo de 20.000/µl. En hasta el 25% de los casos, la trombosis precede a la propia trombocitopenia.</p>
                         <dl class="kv-row"><dt>HIT de inicio tardío</dt><dd>Infrecuente, pero descrita: puede hacerse evidente <span class="hl-azul">hasta 3 semanas después</span> de la exposición a heparina.</dd></dl>
-                        <p>La complicación temida es la <span class="hl-rojo">trombosis, no el sangrado</span>: en la HIT sin tratar, el 17-55% de los pacientes desarrolla tromboembolia venosa y el 1-3% trombosis arterial (ictus isquémico o infarto agudo de miocardio).</p></div>
+                        <p>La complicación temida es la <span class="hl-rojo">trombosis, no el sangrado</span>: en la HIT sin tratar, el 17-55% de los pacientes desarrolla tromboembolia venosa y el 1-3% trombosis arterial (ictus isquémico o infarto agudo de miocardio).</p>
+                        <p class="fuente-ficha">Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=23" target="_blank" rel="noopener">pág. 23</a>.</p>
+                    </div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mh-hit-diagnostico">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔬 Diagnóstico</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body">                        <p>ELISA para anticuerpos anti-FP4/heparina: sensible pero poco específico (un resultado negativo descarta HIT, uno positivo no lo confirma).</p>
+                    <div class="micro-prof-body">
+                        <p>ELISA para anticuerpos anti-FP4/heparina: sensible pero poco específico (un resultado negativo descarta HIT, uno positivo no lo confirma).</p>
                         <dl class="kv-row"><dt>Falsos positivos del ELISA</dt><dd>Son anticuerpos contra el complejo FP4-heparina que <span class="hl-azul">no activan las plaquetas</span>, así que no producen ni trombocitopenia ni trombosis.</dd></dl>
                         <dl class="kv-row"><dt>Ensayo de liberación de serotonina (SRA)</dt><dd>Mide la capacidad del plasma del paciente de activar plaquetas. Es la prueba de referencia ("gold standard") y se recomienda para confirmar un ELISA positivo, pero muchos hospitales no la tienen: en la práctica, el diagnóstico suele basarse en un ELISA positivo.</dd></dl>
+                        <p class="fuente-ficha">Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=23" target="_blank" rel="noopener">pág. 23</a>.</p>
                     </div>
                 </div>
             </div>
 
-            <p class="section-label" style="margin-top:16px;">🧮 Escala 4Ts — riesgo de HIT</p>
-            <div class="card" style="padding:14px 16px;">
+            <p class="section-label" style="margin-top:16px;">🧮 Escala 4Ts — riesgo de HIT <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=23" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 23-24</a></p>
+            <div class="card" id="mh-4ts" data-nombre="Escala 4Ts" style="padding:14px 16px;">
                 <div class="form-group">
                     <label>Trombocitopenia</label>
                     <select id="ts4-trombo" class="ts4-select">
@@ -417,18 +513,18 @@
                 <p class="fuente-ficha" style="margin:8px 0 0;">Origen: <strong>ficha</strong>. Tabla 13.2 de Marino (<a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=24" target="_blank" rel="noopener">pág. 24</a>), que toma la escala 4Ts de Lo GK, Juhl D, Warkentin TE y cols., <em>J Thromb Haemost</em> 2006; 4:759-769 (ref. 17).</p>
             </div>
 
-            <p class="section-label" style="margin-top:16px;">Manejo según el riesgo</p>
-            <ul class="term-chips">
-                <li>Bajo riesgo (≤3, &lt;1%) → no requiere más estudio ni retirar la heparina</li>
-                <li>Riesgo intermedio (4-5, ~10%) → retirar heparina, iniciar anticoagulante no heparínico y pedir ELISA; si el ELISA es negativo, suspender el no heparínico y se puede reiniciar la heparina</li>
-                <li>Alto riesgo (6-8, ~50%) → retirar heparina y dar anticoagulante no heparínico a dosis terapéuticas plenas; se puede suspender si el ELISA es negativo</li>
+            <p class="section-label" style="margin-top:16px;">Manejo según el riesgo <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=23" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 23-25</a></p>
+            <ul class="term-chips" id="mh-hit-manejo" data-nombre="Manejo según la 4Ts">
+                <li id="mh-4ts-bajo">Bajo riesgo (≤3, &lt;1%) → no requiere más estudio ni retirar la heparina</li>
+                <li id="mh-4ts-intermedio">Riesgo intermedio (4-5, ~10%) → retirar heparina, iniciar anticoagulante no heparínico y pedir ELISA; si el ELISA es negativo, suspender el no heparínico y se puede reiniciar la heparina</li>
+                <li id="mh-4ts-alto">Alto riesgo (6-8, ~50%) → retirar heparina y dar anticoagulante no heparínico a dosis terapéuticas plenas; se puede suspender si el ELISA es negativo</li>
             </ul>
-            <dl class="kv-row"><dt>ELISA positivo sin trombosis</dt><dd>Ecografía venosa de las piernas para buscar trombosis venosa profunda y, si hay un catéter venoso central, también de las extremidades superiores.</dd></dl>
-            <dl class="kv-row"><dt>Toda HIT, haya o no trombosis</dt><dd><span class="hl-rojo">Anticoagulante no heparínico a dosis terapéuticas plenas</span> aunque no haya trombosis: si se retrasa la anticoagulación, la incidencia de trombosis tras la aparición de la HIT es 10 veces mayor.</dd></dl>
-            <dl class="kv-row"><dt>Warfarina</dt><dd><span class="hl-rojo">Contraindicada en la fase aguda</span> — su efecto protrombótico inicial puede producir gangrena de miembros y necrosis cutánea. Si el paciente ya la recibía, revertir con vitamina K.</dd></dl>
-            <dl class="kv-row"><dt>Argatrobán</dt><dd>Inhibidor directo de la trombina en infusión continua: 1-2 µg/kg/min, ajustando a un aPTT 1,5-3× el valor normal; 0,5 µg/kg/min si insuficiencia hepática; sin ajuste por función renal. Mantener anticoagulación plena hasta que las plaquetas superen 150.000/µl.</dd></dl>
-            <dl class="kv-row"><dt>Alternativas y manejo a largo plazo</dt><dd>Las guías ASH que cita Marino recomiendan la bivalirudina en el intervencionismo coronario percutáneo; fondaparinux y los anticoagulantes orales directos (sobre todo rivaroxabán) son opciones razonables en el paciente estable.</dd></dl>
-            <dl class="kv-row"><dt>Seguimiento tras la HIT</dt><dd>Un anticoagulante oral directo puede continuar la anticoagulación al terminar el argatrobán (la experiencia es sobre todo con rivaroxabán): tratamiento de <span class="hl-azul">1-3 meses</span>, identificador de alerta médica durante <span class="hl-azul">3 meses</span> y evitar la heparina de por vida.</dd></dl>
+            <dl class="kv-row" id="mh-hit-elisa-positivo"><dt>ELISA positivo sin trombosis</dt><dd>Ecografía venosa de las piernas para buscar trombosis venosa profunda y, si hay un catéter venoso central, también de las extremidades superiores.</dd></dl>
+            <dl class="kv-row" id="mh-hit-toda"><dt>Toda HIT, haya o no trombosis</dt><dd><span class="hl-rojo">Anticoagulante no heparínico a dosis terapéuticas plenas</span> aunque no haya trombosis: si se retrasa la anticoagulación, la incidencia de trombosis tras la aparición de la HIT es 10 veces mayor.</dd></dl>
+            <dl class="kv-row" id="mh-hit-warfarina"><dt>Warfarina</dt><dd><span class="hl-rojo">Contraindicada en la fase aguda</span> — su efecto protrombótico inicial puede producir gangrena de miembros y necrosis cutánea. Si el paciente la recibió en los días previos al diagnóstico, revertir con vitamina K.</dd></dl>
+            <dl class="kv-row" id="mh-argatroban"><dt>Argatrobán</dt><dd>Inhibidor directo de la trombina en infusión continua: 1-2 µg/kg/min, ajustando a un aPTT 1,5-3× el valor normal; 0,5 µg/kg/min si insuficiencia hepática; sin ajuste por función renal. Mantener anticoagulación plena hasta que las plaquetas superen 150.000/µl. Es el único fármaco aprobado para la HIT en EE. UU.</dd></dl>
+            <dl class="kv-row" id="mh-hit-alternativas"><dt>Alternativas y manejo a largo plazo</dt><dd>Las guías ASH que cita Marino recomiendan la bivalirudina en el intervencionismo coronario percutáneo; fondaparinux y los anticoagulantes orales directos (sobre todo rivaroxabán) son opciones razonables en el paciente estable.</dd></dl>
+            <dl class="kv-row" id="mh-hit-seguimiento"><dt>Seguimiento tras la HIT</dt><dd>Un anticoagulante oral directo puede continuar la anticoagulación al terminar el argatrobán (la experiencia es sobre todo con rivaroxabán): tratamiento de <span class="hl-azul">1-3 meses</span>, identificador de alerta médica durante <span class="hl-azul">3 meses</span> y evitar la heparina de por vida.</dd></dl>
             <details class="nota-plegable" id="merino-nota-bivalirudina"><summary>Nota de fidelidad: «bivalrudin» en la fuente</summary>
                 <p style="font-size:0.8rem; color:var(--text-dim);">Marino (pág. 25) escribe «bivalrudin» (errata); el fármaco es la bivalirudina, y así se escribe aquí.</p>
             </details>
@@ -438,15 +534,16 @@
             <h3 style="color: var(--accent-purple);">Microangiopatías trombóticas</h3>
             <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Capítulo 13 — CID, PTT y síndrome hemolítico-urémico.</p>
 
-            <p style="font-size:0.85rem; color:var(--text-dim);">3 entidades distintas comparten estas características: <strong>trombocitopenia consuntiva</strong>, <strong>trombosis microvascular</strong> con disfunción de uno o más órganos, y una <strong>anemia hemolítica microangiopática</strong> (hemólisis no inmune por fragmentación de hematíes al chocar contra la microcirculación ocluida) — su sello es la presencia de <em>esquistocitos</em> (hematíes fragmentados) en el frotis de sangre periférica.</p>
-            <dl class="kv-row"><dt>Cómo se llega a la hemólisis microangiopática</dt><dd>Se <span class="hl-azul">sospecha por LDH elevada y haptoglobina baja</span> y se <span class="hl-rojo">confirma con esquistocitos</span> en el frotis.</dd></dl>
+            <p class="section-label">Qué comparten <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=25" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 25-26</a></p>
+            <p id="mh-mat" data-nombre="Qué comparten las microangiopatías" style="font-size:0.85rem; color:var(--text-dim);">Trastornos potencialmente mortales. 3 entidades distintas comparten estas características: <strong>trombocitopenia consuntiva</strong>, <strong>trombosis microvascular</strong> con disfunción de uno o más órganos, y una <strong>anemia hemolítica microangiopática</strong> (hemólisis no inmune por fragmentación de hematíes en la microcirculación llena de coágulos) — su sello es la presencia de <em>esquistocitos</em> (hematíes fragmentados) en el frotis de sangre periférica.</p>
+            <dl class="kv-row" id="mh-mat-hemolisis"><dt>Cómo se llega a la hemólisis microangiopática</dt><dd>Se <span class="hl-azul">sospecha por LDH elevada y haptoglobina baja</span> y se <span class="hl-rojo">confirma con esquistocitos</span> en el frotis.</dd></dl>
 
-            <div class="article-figure">
+            <div class="article-figure" id="mh-fig-13-1">
                 <img src="js/modules/merino-hemato/img/fig2-esquistocitos-cid.jpg" alt="Frotis de sangre periférica de un paciente con CID: las flechas señalan esquistocitos (hematíes fragmentados), hallazgo patognomónico de anemia hemolítica microangiopática" loading="lazy">
-                <div class="article-figure-caption">Frotis de sangre periférica en CID — las flechas señalan esquistocitos, patognomónicos de anemia hemolítica microangiopática.</div>
+                <div class="article-figure-caption">Figura 13.1 — Frotis de sangre periférica en CID: las flechas señalan esquistocitos, patognomónicos de anemia hemolítica microangiopática. Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=26" target="_blank" rel="noopener">pág. 26</a>.</div>
             </div>
 
-            <table class="data-table">
+            <table class="data-table" id="mh-tabla-13-3">
                 <thead><tr><th>Hallazgo</th><th>CID</th><th>PTT</th><th>SHU</th></tr></thead>
                 <tbody>
                     <tr><td>Esquistocitos</td><td>Presentes</td><td>Presentes</td><td>Presentes</td></tr>
@@ -457,37 +554,43 @@
                     <tr><td>Dímero-D</td><td><strong>Elevado</strong></td><td>Normal</td><td>Normal</td></tr>
                 </tbody>
             </table>
-            <p style="font-size:0.8rem; color:var(--text-muted);">La CID se distingue de las otras dos precisamente por el consumo de factores de coagulación (INR/aPTT/fibrinógeno alterados); PTT y SHU comparten un perfil de coagulación normal.</p>
-            <dl class="kv-row"><dt>Dímero-D</dt><dd>En la CID la fibrinólisis está aumentada, lo que <span class="hl-azul">eleva los productos de degradación de la fibrina (dímero-D)</span> en plasma: según la Tabla 13.3, solo en la CID está elevado. En el SHU no hay fibrinólisis aumentada; en el PTT y el SHU el dímero-D es normal (Tabla 13.3).</dd></dl>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Tabla 13.3 (<a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=26" target="_blank" rel="noopener">pág. 26</a>). La CID se distingue de las otras dos precisamente por el consumo de factores de coagulación (INR/aPTT/fibrinógeno alterados); PTT y SHU comparten un perfil de coagulación normal.</p>
+            <dl class="kv-row" id="mh-mat-dimero"><dt>Dímero-D</dt><dd>En la CID la fibrinólisis está aumentada, lo que <span class="hl-azul">eleva los productos de degradación de la fibrina (dímero-D)</span> en plasma: según la Tabla 13.3, solo en la CID está elevado. En el SHU no hay fibrinólisis aumentada; en el PTT y el SHU el dímero-D es normal (Tabla 13.3).</dd></dl>
             <p><button type="button" class="especialidad-link" data-especialidad="home" data-view="sindromes" data-panel="panel-sindromes-tabs" data-tab="sind-cid">🩸 Ficha completa de CID: criterios ISTH 2025 y calculadoras (Síndromes Urgentes) →</button></p>
             <p><button type="button" class="especialidad-link" data-especialidad="home" data-view="sindromes" data-panel="panel-sindromes-tabs" data-tab="sind-ptt">🧬 Ficha completa de PTT: French, PLASMIC, recambio plasmático y caplacizumab (Síndromes Urgentes) →</button></p>
 
             <div class="micro-profiles" style="margin-top:12px;">
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mh-cid">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩸 Coagulación intravascular diseminada (CID)</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
-                        <p>Trastorno secundario, desencadenado por lesión endotelial/tisular extensa: traumatismo multisistémico, shock séptico, emergencias obstétricas (embolia de líquido amniótico, abruptio placentae, síndrome de feto retenido). El desencadenante es la liberación de <em>factor tisular</em>, que activa en cascada la coagulación → fibrina → trombosis microvascular difusa → consumo secundario de plaquetas y factores → coagulopatía de consumo.</p>
+                        <p>Trastorno secundario, desencadenado por lesión endotelial y tisular extensa: traumatismo multisistémico, shock séptico, emergencias obstétricas (embolia de líquido amniótico, abruptio placentae, eclampsia, síndrome de feto retenido). El desencadenante es la liberación de <em>factor tisular</em>, que activa en cascada la coagulación → fibrina → trombosis microvascular difusa → consumo secundario de plaquetas y factores → coagulopatía de consumo.</p>
                         <p><strong>Laboratorio:</strong> la anemia hemolítica se sospecha por LDH alta y haptoglobina baja y se confirma con esquistocitos. Lo que distingue la CID de las otras microangiopatías es el consumo de factores (INR y aPTT prolongados). La fibrinólisis aumentada eleva los productos de degradación de la fibrina (dímero-D).</p>
-                        <p><strong>Clínica:</strong> disfunción multiorgánica (pulmón, riñón, SNC) por la trombosis, con sangrado más prominente en el contexto obstétrico. La <em>púrpura fulminante</em> (necrosis y gangrena de extremidades, típica de la meningococcemia) es una forma grave.</p>
-                        <p><strong>Manejo:</strong> sin tratamiento específico — soporte y tratamiento de la causa. La hemorragia grave puede requerir hemoderivados, aunque plaquetas/factores pueden "echar leña" a la microtrombosis. Mortalidad ≥80% si se acompaña de fallo multiorgánico.</p>
+                        <p><strong>Clínica:</strong> la trombosis microvascular da disfunción multiorgánica (sobre todo pulmón, riñón y SNC), y el consumo de plaquetas y factores puede hacer sangrar. <span class="hl-azul">La trombosis predomina cuando la causa es la sepsis; el sangrado, en las causas obstétricas.</span> La <em>púrpura fulminante</em> (necrosis y gangrena de extremidades, en infecciones fulminantes, sobre todo la meningococemia) es una forma grave.</p>
+                        <p><strong>Manejo:</strong> sin tratamiento eficaz — soporte y tratamiento de la causa. La hemorragia con riesgo vital lleva a reponer hemoderivados, pero esto no suele parar el sangrado, y plaquetas y factores pueden «echar leña» a la microtrombosis. <span class="hl-rojo">Mortalidad ≥80%</span> si se acompaña de fallo multiorgánico.</p>
+                        <p class="fuente-ficha">Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=26" target="_blank" rel="noopener">pág. 26-27</a>.</p>
                     </div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mh-ptt">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧬 Púrpura trombocitopénica trombótica (PTT)</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
-                        <p>Potencialmente devastadora, mortal en 24-48h sin tratar. El factor de von Willebrand (FvW) promueve la adhesión plaquetaria y normalmente se controla por la proteasa <strong>ADAMTS-13</strong>; en la PTT, anticuerpos inactivan ADAMTS-13, dejando la adhesión plaquetaria sin control.</p>
-                        <p><strong>Clínica:</strong> más frecuente en mujeres de edad media. La <em>péntada clásica</em> (fiebre, alteración mental, insuficiencia renal, trombocitopenia, anemia hemolítica microangiopática) no siempre está completa — la fiebre puede faltar, los síntomas neurológicos pueden ser leves (cefalea).</p>
-                        <p><strong>Diagnóstico:</strong> actividad de ADAMTS-13 muy reducida (patognomónico, poco disponible); trombocitopenia + esquistocitos ya sugieren microangiopatía; se distingue de la CID por INR/aPTT/fibrinógeno normales (el dímero-D también es normal, Tabla 13.3), y del SHU por una insuficiencia renal habitualmente leve (creatinina &lt;2 mg/dl).</p>
-                        <p><strong>Tratamiento:</strong> recambio plasmático (plasmaféresis), de elección — se retira el plasma del paciente (con sus autoanticuerpos) y se repone con plasma de donante sano (~1,5 volúmenes plasmáticos por sesión, diario hasta normalizar plaquetas 2 días seguidos). Con inicio precoz (&lt;48h), hasta el 90% sobrevive; sin tratar, casi siempre fatal.</p>
+                        <p>Potencialmente devastadora, tratable, pero mortal en 24-48h sin tratar. El factor de von Willebrand (FvW), una proteína grande del endotelio, promueve la adhesión plaquetaria; normalmente lo controla la proteasa <strong>ADAMTS-13</strong>, que lo corta. En la PTT aparecen anticuerpos que inactivan ADAMTS-13: la adhesión plaquetaria queda sin control y hay trombosis microvascular difusa. No se sabe qué desencadena esos anticuerpos.</p>
+                        <p><strong>Clínica:</strong> suele aparecer en la edad media y es <strong>tres veces más frecuente en mujeres</strong>. La <em>péntada clásica</em> (fiebre, alteración mental, insuficiencia renal, trombocitopenia, anemia hemolítica microangiopática) no siempre está completa al inicio — la fiebre puede faltar, los síntomas neurológicos pueden ser leves (cefalea) o faltar. Puede progresar rápido a fallo multiorgánico y muerte.</p>
+                        <p><strong>Diagnóstico:</strong> actividad de ADAMTS-13 muy reducida (patognomónico, poco disponible); trombocitopenia + esquistocitos ya sugieren microangiopatía; se distingue de la CID por INR/aPTT/fibrinógeno normales (el dímero-D también es normal, Tabla 13.3), y del SHU por una insuficiencia renal habitualmente leve (creatinina &lt;2 mg/dl). Retrasar el tratamiento reduce la supervivencia.</p>
+                        <p><strong>Tratamiento:</strong> recambio plasmático, de elección — la sangre del paciente pasa por un aparato que separa y desecha su plasma y le devuelve sus hematíes con plasma de un donante sano. <strong>~1,5 veces el volumen plasmático</strong> por sesión, a diario hasta que las plaquetas sean normales <strong>2 días seguidos</strong>. Con inicio precoz (&lt;48 h desde los síntomas), <span class="hl-verde">hasta el 90% sobrevive</span>; la PTT aguda fulminante sin tratar es casi siempre mortal.</p>
+                        <details class="nota-plegable" id="mh-nota-recambio"><summary>Nota: la fuente no lo dice — qué retira y qué repone el recambio</summary>
+                            <p style="font-size:0.8rem; color:var(--text-dim);">Marino (<a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=28" target="_blank" rel="noopener">pág. 28</a>) solo dice que se desecha el plasma del paciente y se repone con plasma de un donante sano. No dice qué molécula se retira (los anticuerpos) ni cuál se repone (ADAMTS-13): por eso esta ficha no lo afirma.</p>
+                        </details>
+                        <p class="fuente-ficha">Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=27" target="_blank" rel="noopener">pág. 27-28</a>.</p>
                     </div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mh-shu">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧫 Síndrome hemolítico-urémico (SHU)</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
-                        <p>Tríada de anemia hemolítica microangiopática + fracaso renal agudo + trombocitopenia consuntiva. La causa predisponente más frecuente es la infección por cepas de <em>E. coli</em> productoras de toxina Shiga, también <em>Streptococcus pneumoniae</em> y el virus de la gripe; otras causas: embarazo, enfermedades autoinmunes, síndrome antifosfolípido, neoplasia, fármacos (quinina, ciclosporina, tacrolimus). El <strong>SHU atípico</strong> es una forma con activación no regulada del complemento.</p>
+                        <p>Anemia hemolítica microangiopática + fracaso renal agudo + trombocitopenia consuntiva. La causa predisponente más frecuente probablemente es la infección, sobre todo por cepas de <em>E. coli</em> productoras de toxina Shiga, también <em>Streptococcus pneumoniae</em> y el virus de la gripe; otras causas: embarazo, enfermedades autoinmunes (lupus), síndrome antifosfolípido, neoplasia, fármacos (quinina, ciclosporina, tacrolimus). El <strong>SHU atípico</strong> es una forma <strong>hereditaria</strong> con activación no regulada del complemento.</p>
                         <p><strong>Clínica:</strong> manifestaciones extrarrenales (~20% del SHU atípico), sobre todo neurológicas (agitación a coma).</p>
                         <p><strong>Diagnóstico:</strong> exige hemólisis microangiopática (sospechada por LDH alta y haptoglobina baja, confirmada con esquistocitos). Se distingue de la CID por un perfil de coagulación normal: no hay consumo de factores (INR y aPTT normales) ni fibrinólisis aumentada (el dímero-D no sube). Se distingue del PTT por una insuficiencia renal habitualmente más grave.</p>
-                        <p><strong>Manejo:</strong> soporte y tratamiento de la infección subyacente en el SHU asociado a infección. En el SHU atípico por activación del complemento, <strong>eculizumab</strong> (anticuerpo monoclonal anti-C5) ha mostrado éxito revirtiendo el cuadro; si no está disponible, recambio plasmático. Terapia de reemplazo renal si es necesaria; el trasplante renal se ha usado en el SHU atípico.</p>
+                        <p><strong>Manejo:</strong> soporte y tratamiento de la infección subyacente en el SHU asociado a infección. En el SHU atípico por activación del complemento, <strong>eculizumab</strong> (anticuerpo monoclonal IgG que se une a la proteína C5 del complemento y bloquea sus efectos protrombóticos) ha logrado revertir el cuadro; si no está disponible, recambio plasmático. Terapia de reemplazo renal si es necesaria; el trasplante renal se ha usado en el SHU atípico.</p>
+                        <p class="fuente-ficha">Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=28" target="_blank" rel="noopener">pág. 28-29</a>.</p>
                     </div>
                 </div>
             </div>
@@ -497,26 +600,26 @@
             <h3 style="color: var(--accent-green);">Transfusión de plaquetas y productos plasmáticos</h3>
             <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Capítulo 13 — Transfusión de plaquetas, plasma y crioprecipitado.</p>
 
-            <p class="section-label">Indicaciones de transfusión de plaquetas</p>
-            <p style="font-size:0.8rem; color:var(--text-muted);">⚠️ No aplican a la trombocitopenia consuntiva de las microangiopatías trombóticas (Ficha 5) — ahí, transfundir plaquetas puede "alimentar" la microtrombosis.</p>
-            <ul class="term-chips">
-                <li>Sangrado activo: mantener &gt;50.000/µl (&gt;100.000/µl si hemorragia intracraneal)</li>
-                <li>Profiláctica, sin sangrado: ≤10.000/µl</li>
-                <li>Profiláctica, cirugía electiva no neuraxial: &lt;50.000/µl</li>
-                <li>Profiláctica, punción lumbar: &lt;50.000/µl</li>
-                <li>Profiláctica, inserción de catéter venoso central: &lt;20.000/µl</li>
+            <p class="section-label">Indicaciones de transfusión de plaquetas <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=29" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 29</a></p>
+            <p style="font-size:0.8rem; color:var(--text-muted);">⚠️ No aplican a la trombocitopenia consuntiva de las microangiopatías trombóticas (Ficha 5) — ahí, transfundir plaquetas puede agravar la microtrombosis.</p>
+            <ul class="term-chips" id="mh-plaq-indicaciones" data-nombre="Cuándo transfundir plaquetas">
+                <li id="mh-plaq-sangrado">Sangrado activo: mantener &gt;50.000/µl (&gt;100.000/µl si hemorragia intracraneal)</li>
+                <li id="mh-plaq-profilaxis">Profiláctica, sin sangrado: ≤10.000/µl</li>
+                <li id="mh-plaq-cirugia">Profiláctica, cirugía electiva no neuraxial: &lt;50.000/µl</li>
+                <li id="mh-plaq-pl">Profiláctica, punción lumbar: &lt;50.000/µl</li>
+                <li id="mh-plaq-cvc">Profiláctica, inserción de catéter venoso central: &lt;20.000/µl</li>
             </ul>
-            <p style="font-size:0.85rem; color:var(--text-dim);">Ninguno de estos umbrales está validado formalmente (ni siquiera 5.000/µl provoca sangrado espontáneo, como ya se vio en la Ficha 4) — en ausencia de sangrado activo, <span class="hl-azul">el problema real de la trombocitopenia no es el recuento en sí, sino la causa subyacente</span>.</p>
+            <p id="mh-plaq-validez" data-nombre="Umbrales sin validar" style="font-size:0.85rem; color:var(--text-dim);">Los umbrales profilácticos son de las guías más recientes de la AABB. Ninguno de estos umbrales está validado (ni siquiera 5.000/µl provoca sangrado espontáneo, como ya se vio en la Ficha 4) — para el autor, en ausencia de sangrado activo, <span class="hl-azul">el problema real de la trombocitopenia no es el recuento en sí, sino la causa subyacente</span>.</p>
 
-            <p class="section-label" style="margin-top:16px;">Preparaciones de plaquetas</p>
-            <dl class="kv-row"><dt>Concentrado agrupado ("pooled")</dt><dd>Plaquetas de múltiples donantes (4-6) agrupadas antes de almacenar — ~38×10¹⁰ plaquetas en 260 ml, «equivalente a un recuento de unas 130×10⁹/µl», que según el texto es «seis órdenes de magnitud» superior al normal (150-400×10³/µl).</dd></dl>
+            <p class="section-label" style="margin-top:16px;">Preparaciones de plaquetas <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=29" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 29-30</a></p>
+            <dl class="kv-row" id="mh-plaq-preparaciones"><dt>Concentrado agrupado ("pooled")</dt><dd>Plaquetas de múltiples donantes (4-6) agrupadas antes de almacenar — ~38×10¹⁰ plaquetas en 260 ml, «equivalente a un recuento de unas 130×10⁹/µl», que según el texto es «seis órdenes de magnitud» superior al normal (150-400×10³/µl).</dd></dl>
             <details class="nota-plegable" id="merino-nota-plaquetas-agrupadas"><summary>Nota de fidelidad: las cifras del concentrado agrupado no cuadran</summary>
                 <p style="font-size:0.8rem; color:var(--text-dim);">Se reproduce lo que dice Marino (págs. 29-30), pero las tres cifras no son coherentes entre sí. Hecha la cuenta con sus dos primeros datos (38×10¹⁰ plaquetas ÷ 260.000 µl), salen unas 1,5×10⁶/µl: unas 5 veces el recuento normal, no «seis órdenes de magnitud». Esa cuenta es de esta app, no de la fuente; no se corrige el texto de Marino.</p>
             </details>
-            <dl class="kv-row"><dt>Aféresis (donante único)</dt><dd>Recuento equivalente al concentrado agrupado, de un solo donante. El supuesto beneficio (menor riesgo infeccioso, menos aloinmunización) no está bien validado — de hecho, en una encuesta de más de 2 millones de transfusiones, las reacciones adversas fueron <em>más</em> frecuentes con plaquetas de aféresis que con las agrupadas.</dd></dl>
-            <p style="font-size:0.85rem; color:var(--text-dim);">Ambas preparaciones se almacenan a temperatura ambiente, lo que limita su vida útil a ~5 días. La leucorreducción (rutinaria hoy) reduce reacciones febriles, transmisión de CMV y aloinmunización plaquetaria, e iguala el riesgo de aloinmunización entre preparaciones de donante único y múltiple.</p>
+            <dl class="kv-row" id="mh-plaq-aferesis"><dt>Aféresis (donante único)</dt><dd>Recuento equivalente al concentrado agrupado, de un solo donante. El supuesto beneficio (menor riesgo infeccioso, menos aloinmunización) no está validado — de hecho, en una encuesta de más de 2 millones de transfusiones, las reacciones adversas fueron <em>más</em> frecuentes con plaquetas de aféresis que con las agrupadas.</dd></dl>
+            <p id="mh-plaq-leucorreduccion" data-nombre="Temperatura ambiente y leucorreducción" style="font-size:0.85rem; color:var(--text-dim);">Ambas preparaciones se almacenan a <strong>temperatura ambiente</strong>, lo que limita su vida útil a ~5 días. La leucorreducción, que <strong>se está haciendo rutinaria</strong> en las plaquetas, reduce reacciones febriles, transmisión de CMV (viaja en los leucocitos) y aloinmunización plaquetaria; con preparaciones leucorreducidas, el riesgo de aloinmunización es igual con donante único o múltiple.</p>
 
-            <table class="data-table">
+            <table class="data-table" id="mh-tabla-13-4">
                 <thead><tr><th>Reacción adversa (por 100.000 unidades)</th><th>Multidonante</th><th>Aféresis</th><th>p</th></tr></thead>
                 <tbody>
                     <tr><td>Fiebre no hemolítica</td><td>37</td><td>136</td><td>&lt;0,01</td></tr>
@@ -529,36 +632,54 @@
                     <tr><td><strong>Total de reacciones</strong></td><td><strong>70</strong></td><td><strong>478</strong></td><td>&lt;0,01</td></tr>
                 </tbody>
             </table>
-            <p style="font-size:0.8rem; color:var(--text-muted);">NS = no significativo. Nótese la baja tasa global de reacciones, y la tasa más alta con preparaciones de donante único (aféresis).</p>
-            <dl class="kv-row"><dt>Fiebre no hemolítica</dt><dd>Anticuerpos antileucocitarios del receptor reaccionan con antígenos de los leucocitos del donante y liberan pirógenos endógenos. La leucorreducción sistemática la ha reducido de forma importante, pero no la elimina.</dd></dl>
-            <dl class="kv-row"><dt>Reacciones alérgicas</dt><dd>Urticaria y anafilaxia, por sensibilización a proteínas plasmáticas del donante. <span class="hl-azul">Las plaquetas de donante único llevan más volumen de plasma</span>, lo que explicaría su mayor tasa de reacciones alérgicas.</dd></dl>
-            <dl class="kv-row"><dt>TRALI</dt><dd>Anticuerpos antileucocitarios del plasma del donante se unen a neutrófilos circulantes del receptor y producen una lesión pulmonar inflamatoria difusa, similar al SDRA. Es más frecuente con hematíes, pero también ocurre con plaquetas.</dd></dl>
-            <dl class="kv-row"><dt>Infecciones</dt><dd>Las pruebas de ácidos nucleicos (NAT) han <span class="hl-verde">eliminado casi por completo el riesgo de VIH y hepatitis víricas</span>, en hematíes y en plaquetas. El riesgo bacteriano es mayor con plaquetas que con hematíes, <span class="hl-rojo">porque las plaquetas se conservan a temperatura ambiente</span>, que favorece la proliferación bacteriana. Aun así, su tasa es muy baja (tabla).</dd></dl>
-            <p style="font-size:0.85rem; color:var(--text-dim);">1 unidad de plaquetas (agrupada o de aféresis) sube el recuento circulante 35.000-50.000/µl a la hora, ~40% menos a las 24h. El incremento cae con transfusiones repetidas (~25% menos tras 5 transfusiones) por "refractariedad plaquetaria" — aloanticuerpos del receptor contra antígenos ABO de las plaquetas del donante, mitigable transfundiendo plaquetas ABO-compatibles.</p>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Tabla 13.4 (<a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=32" target="_blank" rel="noopener">pág. 32</a>). NS = no significativo. Nótese la baja tasa global de reacciones, y la tasa más alta con preparaciones de donante único (aféresis).</p>
+            <div id="mh-plaq-reacciones" data-nombre="Reacciones a las plaquetas">
+                <dl class="kv-row"><dt>Fiebre no hemolítica</dt><dd>Anticuerpos antileucocitarios del receptor reaccionan con antígenos de los leucocitos del donante y liberan pirógenos endógenos. La leucorreducción sistemática la ha reducido de forma importante, pero no la elimina.</dd></dl>
+                <dl class="kv-row"><dt>Reacciones alérgicas</dt><dd>Urticaria y anafilaxia, por sensibilización a proteínas plasmáticas del donante. <span class="hl-azul">Las plaquetas de donante único llevan más volumen de plasma</span>, lo que explicaría su mayor tasa de reacciones alérgicas.</dd></dl>
+                <dl class="kv-row"><dt>TRALI</dt><dd>Anticuerpos antileucocitarios del plasma del donante se unen a neutrófilos circulantes del receptor y producen una lesión pulmonar inflamatoria difusa, similar al SDRA. Es más frecuente con hematíes, pero también ocurre con plaquetas.</dd></dl>
+                <dl class="kv-row"><dt>Infecciones</dt><dd>Las pruebas de ácidos nucleicos (NAT) han <span class="hl-verde">eliminado casi por completo el riesgo de VIH y hepatitis víricas</span>, en hematíes y en plaquetas. El riesgo bacteriano es mayor con plaquetas que con hematíes, <span class="hl-rojo">porque las plaquetas se conservan a temperatura ambiente</span>, que favorece la proliferación bacteriana. Aun así, su tasa es muy baja (tabla).</dd></dl>
+                <p class="fuente-ficha">Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=31" target="_blank" rel="noopener">pág. 31-32</a>.</p>
+            </div>
 
-            <p class="section-label" style="margin-top:16px;">Plasma fresco congelado (PFC)</p>
-            <dl class="kv-row"><dt>Preparación</dt><dd>Separado y congelado a −18°C en las primeras 8h tras la extracción; ~230 ml/unidad; se conserva hasta 1 año congelado, y hasta 5 días tras descongelar (1-6°C).</dd></dl>
-            <dl class="kv-row"><dt>Hemorragia masiva</dt><dd>En la hemorragia masiva (pérdida equivalente a la volemia en 24 h), la práctica actual de resucitación es <strong>1 unidad de PFC por cada 1-2 unidades de hematíes</strong>. El "plasma líquido" (nunca congelado, conservable hasta 26 días) es una alternativa con eficacia similar que reduce el desperdicio asociado al PFC.</dd></dl>
-            <dl class="kv-row"><dt>Reversión de warfarina</dt><dd>Vitamina K primero, PFC después (10-15 ml/kg) para normalizar el INR — con 2 inconvenientes: el tiempo de descongelación retrasa el tratamiento, y el volumen necesario puede agravar el sangrado. El <strong>complejo protrombínico de 4 factores</strong> (polvo liofilizado con los factores II/VII/IX/X, reconstituido en 100 ml) revierte la warfarina en &lt;30 min, sin esos inconvenientes.</dd></dl>
-            <dl class="kv-row"><dt>PFC profiláctico</dt><dd>Se usa a menudo para bajar un INR elevado en pacientes coagulopáticos sin sangrado (p. ej. cirróticos con antecedente de hemorragia variceal) — <span class="hl-rojo">sin evidencia de que reduzca el sangrado ni aporte beneficio clínico alguno</span>.</dd></dl>
+            <p class="section-label" style="margin-top:16px;">Respuesta a la transfusión <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=30" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 30-31</a></p>
+            <p id="mh-plaq-respuesta" data-nombre="Cuánto suben las plaquetas" style="font-size:0.85rem; color:var(--text-dim);">En un adulto medio sin pérdida de sangre en curso, 1 unidad de plaquetas (agrupada o de aféresis) sube el recuento <strong>35.000-50.000/µl a la hora</strong>; a las 24 h el incremento es ~40% menor. El incremento cae con transfusiones repetidas (~25% menos tras 5 transfusiones): es la «refractariedad plaquetaria», por <span class="hl-azul">anticuerpos antiplaquetarios del receptor contra los antígenos ABO de las plaquetas del donante</span>. Se mitiga transfundiendo plaquetas ABO-compatibles.</p>
+            <div class="article-figure" id="mh-fig-13-2">
+                <img src="js/modules/merino-hemato/img/fig13-2-respuesta-plaquetas.jpg" alt="Figura 13.2 de Marino: incremento medio de plaquetas a la hora y a las 24 horas tras 1, 3 y 5 transfusiones; a las 24 horas siempre es menor, y tras varias transfusiones el incremento baja" loading="lazy">
+                <div class="article-figure-caption">Figura 13.2 — Incremento medio de plaquetas (×10³/µl) a la hora (<em>1 hr</em>) y a las 24 h tras la 1.ª, la 3.ª y la 5.ª transfusión (<em>number of platelet transfusions</em>). Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=31" target="_blank" rel="noopener">pág. 31</a>.</div>
+            </div>
+            <details class="nota-plegable" id="mh-nota-fig-13-2"><summary>Nota de fuentes: el incremento del texto y el de la figura</summary>
+                <p style="font-size:0.8rem; color:var(--text-dim);">El texto (<a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=30" target="_blank" rel="noopener">pág. 30</a>, otra referencia) da 35.000-50.000/µl a la hora en un adulto medio sin sangrado; en la Figura 13.2, el incremento medio tras la 1.ª transfusión ronda los 66.000/µl a la hora (lectura aproximada). Marino no las concilia: se muestran las dos.</p>
+            </details>
 
-            <p class="section-label" style="margin-top:16px;">La trampa del INR con el PFC</p>
-            <p style="font-size:0.85rem; color:var(--text-dim);">El INR solo refleja la actividad de los factores dependientes de vitamina K (II, VII, IX, X) — no monitoriza otros componentes de la hemostasia, como las proteínas "anticoagulantes" endógenas (antitrombina, proteína C, proteína S). En un estudio de PFC profiláctico (12 ml/kg) en críticos no sangrantes con INR elevado, el PFC redujo el INR de forma significativa (1,8→1,4) pero <strong>también aumentó significativamente la actividad de la antitrombina</strong> (38%→50%) — con el efecto beneficioso sobre el INR parcialmente contrarrestado por el aumento de un anticoagulante endógeno. El resultado neto: poca o ninguna mejora real del estado de coagulación, pese a la mejora aparente del INR.</p>
+            <p class="section-label" style="margin-top:16px;">Plasma fresco congelado (PFC) <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=32" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 32-33</a></p>
+            <dl class="kv-row" id="mh-pfc"><dt>Preparación</dt><dd>Los productos plasmáticos se usan como fuente de proteínas procoagulantes; los dos más usados son el PFC y el crioprecipitado. El PFC se separa y congela a −18°C en las primeras 8h tras la extracción; ~230 ml/unidad; se conserva hasta 1 año congelado, y hasta 5 días tras descongelar (1-6°C). Sus usos principales: la hemorragia masiva y revertir la warfarina.</dd></dl>
+            <dl class="kv-row" id="mh-pfc-masiva"><dt>Hemorragia masiva</dt><dd>En la hemorragia masiva (pérdida equivalente a la volemia en 24 h), la práctica actual es <strong>1 unidad de PFC por cada 1-2 unidades de hematíes</strong>. El PFC tiene dos inconvenientes: tarda en descongelarse cuando se necesita ya, y su corta vida tras descongelar lleva a desperdiciarlo. El "plasma líquido" (nunca congelado, conservable a 1-6 °C hasta 26 días) tuvo una eficacia similar en los primeros estudios y reduce el desperdicio.</dd></dl>
+            <dl class="kv-row" id="mh-pfc-warfarina"><dt>Reversión de warfarina</dt><dd>Ante un sangrado problemático: vitamina K primero (frena la anticoagulación en curso), PFC después (10-15 ml/kg) para normalizar el INR — con 2 inconvenientes: el tiempo de descongelación retrasa el tratamiento, y el volumen necesario puede agravar el sangrado. El <strong>complejo protrombínico de 4 factores</strong> (polvo liofilizado con los factores II/VII/IX/X, reconstituido en 100 ml) revierte la warfarina en &lt;30 min, sin esos inconvenientes.</dd></dl>
+            <dl class="kv-row" id="mh-pfc-profilactico"><dt>PFC profiláctico</dt><dd>La mayoría de las infusiones de PFC en la UCI se usan para bajar un INR elevado en pacientes coagulopáticos sin sangrado (p. ej. cirróticos con antecedente de hemorragia variceal) — <span class="hl-rojo">sin evidencia de que reduzca el sangrado ni aporte beneficio clínico alguno</span>.</dd></dl>
 
-            <p class="section-label" style="margin-top:16px;">Riesgos propios del PFC</p>
-            <p style="font-size:0.85rem; color:var(--text-dim);">Los tipos de reacción adversa al plasma son similares a los de hematíes y plaquetas (Fichas 3 y 6), pero no su frecuencia.</p>
-            <dl class="kv-row"><dt>Hemólisis aguda</dt><dd>La causan los anticuerpos anti-A y anti-B del plasma del donante, que reaccionan con los antígenos A y B de los hematíes del receptor. <span class="hl-verde">La compatibilidad ABO (pruebas cruzadas) es práctica estándar y elimina el riesgo.</span></dd></dl>
-            <dl class="kv-row"><dt>Fiebre no hemolítica</dt><dd>La causan leucocitos del donante, que en teoría no deberían ser un riesgo con el plasma. Pero el PFC no está libre de leucocitos: riesgo mínimo, <strong>&lt;1 por 100.000</strong> transfusiones en un informe.</dd></dl>
-            <dl class="kv-row"><dt>Hipersensibilidad</dt><dd>Urticaria, anafilaxia y shock anafiláctico, por sensibilización a proteínas del plasma del donante. Son más frecuentes con plasma que con hematíes o plaquetas: <strong>1:600 a 1:2.000</strong> transfusiones.</dd></dl>
-            <dl class="kv-row"><dt>TRALI</dt><dd>Se atribuye a anticuerpos antileucocitarios del donante y complica las transfusiones de hematíes, plaquetas y plasma. Con plasma, incidencia de unos <span class="hl-azul">1:250.000</span> unidades transfundidas.</dd></dl>
-            <dl class="kv-row"><dt>TACO</dt><dd>Es un riesgo si el ritmo de infusión del PFC supera <span class="hl-rojo">1 ml/kg/hora</span> en pacientes predispuestos (insuficiencia cardíaca o sobrecarga de líquido previa). Incidencia descrita: 1:70 a 1:1.500 unidades transfundidas.</dd></dl>
-            <dl class="kv-row"><dt>Infecciones</dt><dd>Riesgo mínimo. Hepatitis B 1:280.000, hepatitis C 1:1,2 millones, VIH 1:1,6 millones (por transfusión). La transmisión bacteriana se describe como «rara». No se ha descrito transmisión de CMV con plasma (el CMV viaja en los leucocitos transfundidos).</dd></dl>
+            <p class="section-label" style="margin-top:16px;">La trampa del INR con el PFC <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=33" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 33-34</a></p>
+            <p id="mh-trampa-inr" data-nombre="La trampa del INR" style="font-size:0.85rem; color:var(--text-dim);">El INR solo refleja la actividad de los factores dependientes de vitamina K (II, VII, IX, X) — no monitoriza otros componentes de la hemostasia, como las proteínas "anticoagulantes" endógenas (antitrombina, proteína C, proteína S). En un estudio de PFC profiláctico (12 ml/kg) en críticos no sangrantes con INR elevado antes de un procedimiento, el PFC redujo el INR de forma significativa (1,8→1,4) pero <strong>también aumentó significativamente la actividad de la antitrombina</strong> (38%→50%); también subieron las otras proteínas anticoagulantes. Resultado neto: <span class="hl-rojo">poca o ninguna mejora real de la coagulación</span>, pese a la mejora aparente del INR.</p>
+            <div class="article-figure" id="mh-fig-13-3">
+                <img src="js/modules/merino-hemato/img/fig13-3-pfc-inr-antitrombina.jpg" alt="Figura 13.3 de Marino: tras PFC 12 ml/kg, el INR baja de 1,8 a 1,4 y la actividad de antitrombina sube de 38 a 50 %" loading="lazy">
+                <div class="article-figure-caption">Figura 13.3 — PFC 12 ml/kg en críticos sin sangrado (medianas): el INR baja de 1,8 a 1,4 («mejor coagulación», <em>improved coagulation</em>) y la antitrombina sube de 38 a 50 % («mejor anticoagulación»). Marino, <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=34" target="_blank" rel="noopener">pág. 34</a>.</div>
+            </div>
 
-            <p class="section-label" style="margin-top:16px;">Crioprecipitado</p>
-            <p style="font-size:0.85rem; color:var(--text-dim);">Al descongelar PFC a 4°C se forma un precipitado rico en fibrinógeno, factor de von Willebrand y factor VIII — el <em>crioprecipitado</em> (10-20 g/l de fibrinógeno, 10-15 ml/unidad, conservable congelado hasta 1 año, debe usarse en las 4h siguientes a descongelar). Se usa como fuente de fibrinógeno en sangrado masivo (trauma, hemorragia posparto) cuando el nivel cae a 150-200 mg/dl — el fibrinógeno es el primer factor en agotarse en el sangrado masivo, y el más sensible a la dilución por fluidoterapia. 1 unidad por cada 10 kg de peso sube el fibrinógeno plasmático ~50 mg/dl (sin sangrado activo). Alternativa: los <strong>concentrados de fibrinógeno</strong> (contenido consistente de 20 g/l, no requieren descongelar) evitan las limitaciones del crioprecipitado (contenido variable, tiempo de descongelación, mayor riesgo infeccioso por no someterse a reducción de patógenos).</p>
+            <p class="section-label" style="margin-top:16px;">Riesgos propios del PFC <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=33" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 33-35</a></p>
+            <div id="mh-pfc-riesgos" data-nombre="Riesgos del PFC">
+                <p style="font-size:0.85rem; color:var(--text-dim);">Los tipos de reacción adversa al plasma son similares a los de hematíes y plaquetas (Fichas 3 y 6), pero no su frecuencia.</p>
+                <dl class="kv-row"><dt>Hemólisis aguda</dt><dd>La causan los anticuerpos anti-A y anti-B <strong>del plasma del donante</strong>, que reaccionan con los antígenos A y B de los hematíes del receptor. <span class="hl-verde">La compatibilidad ABO (pruebas cruzadas) es práctica estándar y elimina el riesgo.</span></dd></dl>
+                <dl class="kv-row"><dt>Fiebre no hemolítica</dt><dd>La causan leucocitos del donante, que en teoría no deberían ser un riesgo con el plasma. Pero el PFC no está libre de leucocitos: riesgo mínimo, <strong>&lt;1 por 100.000</strong> transfusiones en un informe.</dd></dl>
+                <dl class="kv-row"><dt>Hipersensibilidad</dt><dd>Urticaria, anafilaxia y shock anafiláctico, por sensibilización a proteínas del plasma del donante. Son más frecuentes con plasma que con hematíes o plaquetas: <strong>1:600 a 1:2.000</strong> transfusiones.</dd></dl>
+                <dl class="kv-row"><dt>TRALI</dt><dd>Se atribuye a anticuerpos antileucocitarios del donante y complica las transfusiones de hematíes, plaquetas y plasma. Con plasma, incidencia de unos <span class="hl-azul">1:250.000</span> unidades transfundidas.</dd></dl>
+                <dl class="kv-row"><dt>TACO</dt><dd>Es un riesgo si el ritmo de infusión del PFC supera <span class="hl-rojo">1 ml/kg/hora</span> en pacientes predispuestos (insuficiencia cardíaca o sobrecarga de líquido previa). Incidencia descrita: 1:70 a 1:1.500 unidades transfundidas.</dd></dl>
+                <dl class="kv-row"><dt>Infecciones</dt><dd>Riesgo mínimo. Hepatitis B 1:280.000, hepatitis C 1:1,2 millones, VIH 1:1,6 millones (por transfusión). La transmisión bacteriana se describe como «rara». No se ha descrito transmisión de CMV con plasma (el CMV viaja en los leucocitos transfundidos).</dd></dl>
+            </div>
 
-            <p class="section-label" style="margin-top:16px;">Mensajes clave</p>
-            <ul class="term-chips">
+            <p class="section-label" style="margin-top:16px;">Crioprecipitado <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=35" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 35</a></p>
+            <p id="mh-crio" data-nombre="Crioprecipitado" style="font-size:0.85rem; color:var(--text-dim);">Al descongelar PFC a 4°C se forma un precipitado rico en fibrinógeno, factor de von Willebrand y factor VIII — el <em>crioprecipitado</em> (10-20 g/l de fibrinógeno, 10-15 ml/unidad, conservable a −18 °C hasta 1 año, debe usarse en las 4h siguientes a descongelar). Es fuente de fibrinógeno en el sangrado masivo del trauma o la hemorragia posparto: <span class="hl-rojo">el fibrinógeno es el primer factor en agotarse</span> en el sangrado importante, y el más sensible a la dilución por fluidoterapia. En el sangrado mayor del trauma se recomienda cuando el fibrinógeno cae a <strong>150-200 mg/dl</strong>. 1 unidad por cada 10 kg de peso sube el fibrinógeno ~50 mg/dl, pero eso es <strong>sin sangrado</strong>: con sangrado activo hará falta más. También puede guiarse por pruebas viscoelásticas, como la tromboelastografía. Alternativa: los <strong>concentrados de fibrinógeno</strong> (contenido constante de 20 g/l, no requieren descongelar) evitan las limitaciones del crioprecipitado (contenido variable, tiempo de descongelación, mayor riesgo infeccioso por no someterse a reducción de patógenos) y ganan terreno como alternativa superior.</p>
+
+            <p class="section-label" style="margin-top:16px;">Mensajes clave <a class="biblio-link" href="docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=35" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 35-36</a></p>
+            <ul class="term-chips" id="mh-mensajes" data-nombre="Mensajes clave del capítulo">
                 <li>Sin sangrado activo, el problema de la trombocitopenia no es el recuento sino la causa — las transfusiones profilácticas rara vez son necesarias</li>
                 <li>La consecuencia más temible de la trombocitopenia no es el sangrado, sino la trombosis (HIT, CID, PTT, SHU)</li>
                 <li>El INR no monitoriza el estado global de la coagulación — una mejora del INR con PFC no garantiza mejor capacidad de coagular</li>

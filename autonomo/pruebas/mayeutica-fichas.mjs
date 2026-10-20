@@ -19,7 +19,13 @@
 import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
-const { MAYEUTICA_B1 } = await import(new URL('../../js/data/mayeutica/b1.js', import.meta.url));
+const { MAYEUTICA_B1: SOLO_B1 } = await import(new URL('../../js/data/mayeutica/b1.js', import.meta.url));
+const { MAYEUTICA_B2 } = await import(new URL('../../js/data/mayeutica/b2.js', import.meta.url));
+// Las fichas con Estudiar de todos los bloques (el nombre MAYEUTICA_B1 se queda para no tocar el resto de la prueba).
+const MAYEUTICA_B1 = { ...SOLO_B1, ...MAYEUTICA_B2 };
+// Dónde vive cada ficha: las del bloque 1 en Libros → Marino · Fundamentos; las del bloque 2, en Hematología → Merino HEMATO.
+const NAV_B2 = { especialidad: 'home', view: 'merinoHemato', panel: 'panel-merino-tabs' };
+const navDe = tab => MAYEUTICA_B2[tab] ? NAV_B2 : { especialidad: 'libros', view: 'marinoFundamentos', panel: 'panel-marino-fund-tabs' };
 const { barajar } = await import(new URL('../../js/core/mayeutica-motor.js', import.meta.url));
 const args = process.argv.slice(2);
 const BASE = (args.find(a => /^https?:/.test(a)) || 'http://localhost:8000/').replace(/\/?$/, '/');
@@ -83,7 +89,7 @@ const largo = s => s.replace(/<[^>]+>/g, '').length;
     }
     // Por archivo de grupo (js/data/mayeutica/b1-*.js): la buena no es sistemáticamente ni la más larga ni la más corta.
     // La longitud no depende del orden en que se barajan las opciones, así que se miran los datos sin barajar.
-    for (const arch of readdirSync(join(RAIZ, 'js/data/mayeutica')).filter(n => /^b1-.+\.js$/.test(n))) {
+    for (const arch of readdirSync(join(RAIZ, 'js/data/mayeutica')).filter(n => /^b\d-.+\.js$/.test(n))) {
         const mod = await import(new URL('../../js/data/mayeutica/' + arch, import.meta.url));
         let n = 0, larga = 0, corta = 0;
         for (const d of Object.values(mod).flatMap(g => Object.values(g))) {
@@ -117,7 +123,7 @@ async function correr(ANCHO, REDUCIDO) {
         await p.waitForTimeout(REDUCIDO ? 80 : 400);
         await p.screenshot({ path: `${CAPTURAS}may-${n}-${tag}.png` });
     };
-    const abrirFicha = tab => p.evaluate(t => { const b = document.createElement('button'); Object.assign(b.dataset, { especialidad: 'libros', view: 'marinoFundamentos', panel: 'panel-marino-fund-tabs', tab: t }); document.body.append(b); b.click(); b.remove(); }, tab);
+    const abrirFicha = tab => p.evaluate(([t, nav]) => { const b = document.createElement('button'); Object.assign(b.dataset, { ...nav, tab: t }); document.body.append(b); b.click(); b.remove(); }, [tab, navDe(tab)]);
     const fichaAbierta = tab => p.evaluate(t => { const e = document.getElementById(t); return e.classList.contains('active') && !!e.offsetParent; }, tab);
 
     await p.goto(BASE + 'index.html');   // contexto nuevo: localStorage vacío
@@ -166,7 +172,9 @@ async function correr(ANCHO, REDUCIDO) {
         // «Juega con el modelo»
         await irPaso(ficha, 'juega'); await p.waitForTimeout(200);
         const juega = await p.evaluate(f => [...document.querySelectorAll(`#${f} .est-paso[data-paso="juega"] .est-juega`)].map(b => ({ modelo: Object.keys(b.dataset).some(k => /Viva|Vivo|ecoEscenario/.test(k)), texto: b.textContent.trim() })), ficha);
-        ok(juega.length > 0 && juega.every(j => j.modelo && j.texto.length > 3 && !/\b(mar|mr)-[a-z0-9-]+/.test(j.texto)), `${ficha}: «Juega» con ${juega.length} estado(s) de modelo vivo, cada uno con su qué mirar`);
+        // Una ficha cuyo modelo aún no existe (sus preguntas solo llevan `modeloFuturo`) dice que no enlaza ninguno.
+        const sinModeloAun = !juega.length && await p.evaluate(f => /no enlaza ningún modelo vivo/.test(document.querySelector(`#${f} .est-paso[data-paso="juega"]`).textContent), ficha) && !/modeloVivo|"(aguaViva|capilarVivo|cateterVivo|murallaViva|telarVivo|inmersionViva|acidobaseVivo|ecoEscenario)"/.test(JSON.stringify(d, (k, v) => k === 'modeloFuturo' ? undefined : v));
+        ok(sinModeloAun || (juega.length > 0 && juega.every(j => j.modelo && j.texto.length > 3 && !/\b(mar|mr|mh)-[a-z0-9-]+/.test(j.texto))), `${ficha}: «Juega» con ${juega.length} estado(s) de modelo vivo, cada uno con su qué mirar${sinModeloAun ? ' (su modelo aún no existe: lo dice)' : ''}`);
         ok(await desborde() <= 0, `${ficha}: sin desborde en «Juega»`);
         if (nf === 0) await foto('01c-juega', PASO(ficha, 'juega'));
         if (!REDUCIDO && !juegaProbado) {
@@ -212,7 +220,7 @@ async function correr(ANCHO, REDUCIDO) {
             if (!fallar && !/✓/.test(r.txt)) ok(false, `${donde}: el acierto no se marca`);
             if ((q.modelo || q.modeloVivo) && !r.modelo) ok(false, `${donde}: falta «Compruébalo en el modelo» tras contestar`);
             if (!r.ver) ok(false, `${donde}: falta «Ver en el texto»`);
-            const crudos = await p.evaluate(z => [...document.querySelectorAll(z + ' .may-res .may-org, ' + z + ' .may-res .may-ir')].map(e => e.textContent).filter(t => /\b(mar|mr|mc)-[a-z0-9-]+/.test(t)), Z);
+            const crudos = await p.evaluate(z => [...document.querySelectorAll(z + ' .may-res .may-org, ' + z + ' .may-res .may-ir')].map(e => e.textContent).filter(t => /\b(mar|mr|mc|mh)-[a-z0-9-]+/.test(t)), Z);
             if (crudos.length) ok(false, `${donde}: «Ver en el texto» con ids a la vista: ${crudos.join(' | ')}`);
             const dsb = await desborde(); if (dsb > 0) ok(false, `${donde}: desborde de ${dsb} px tras contestar`); else nDesbordeOk++;
             if (fotoN) await foto(fotoN + '-despues', Z + ' .may-res');

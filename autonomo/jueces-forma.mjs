@@ -36,6 +36,8 @@ export const BANCOS = [
     { nombre: 'fichas · oxígeno', datos: 'js/data/mayeutica/b1-oxigeno.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · accesos', datos: 'js/data/mayeutica/b1-accesos.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · sin modelo', datos: 'js/data/mayeutica/b1-sin-modelo.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'fichas · sangre (bloque 2)', datos: 'js/data/mayeutica/b2-sangre.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'fichas · hemostasia (bloque 2)', datos: 'js/data/mayeutica/b2-hemostasia.js', motor: 'js/core/mayeutica-motor.js' },
 ];
 
 /* ---------- Los modelos vivos en el navegador ---------- */
