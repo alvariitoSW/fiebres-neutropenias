@@ -15,7 +15,7 @@ import { crearCamara, m4, MODELO, nrm } from './mat.mjs';
 import { crearWebGL } from './render-webgl.mjs';
 import { ESCENARIOS, evaluarForma, ASENTAR_FORMA } from './escenarios.mjs';
 import { crearFlujo } from './flujo-sangre.mjs';
-import { COLOR_FASE, segmentosFase, estadoRevision, crearDiagramas } from './diagramas.mjs';
+import { COLOR_FASE, segmentosFase, estadoRevision, crearDiagramas, crearPanelesHemo } from './diagramas.mjs';
 import { VALVULAS, apertura, estadoGeo, crearTablaFormas, semejantes, extraDeMotor } from './formas.mjs';
 import { VISTAS, planoVista, medidasCorazon, enPlano, crearEcografo, abanicoVista, direccionHaz, anguloHacia, planoLibre, SONDA_CERO, sondaMovida, desviacion, vistaMasParecida } from './ecografia.mjs';
 import { crearModoM } from './modo-m.mjs';
@@ -113,7 +113,7 @@ export function montarSimulador(raiz, opc = {}) {
   }
 
   // ---- Un solo estado por fotograma
-  let revision = null, lado = 'izquierdo';
+  let revision = null, lado = 'izquierdo', paneles = null;
   const estadoMostrado = () => revision || motor.s;
   function ponerPausa(p) { pausa = p; $('#cv-pausa').textContent = pausa ? '▶ Reanudar' : '⏸ Pausa'; }
   function revisar(e) { if (!e) return; revision = e; ponerPausa(true); ensuciar(); }
@@ -552,6 +552,7 @@ export function montarSimulador(raiz, opc = {}) {
     pintarEco(s, g, estGeo);
     pintarCiclo(s);
     const cursor = abierto('#cv-plegable-diag') ? diag.pintar(s, motor, lado) : null;
+    paneles?.pintar(s);   // Guyton, catéter y termodilución: el mismo estado de este fotograma
     ultimo = { estado: s, est: estGeo, cursor, modo: modoGeo, eco: ecoInfo, vci: abd ? abd.vci : null, abdomen3d: abd3d.map(p => [p.nombre, p.idx.length / 3]) };
     if (opc.depuracion) window.__ultimoDibujo = ultimo;
     const fase = `${s.fase} · ${FASES[s.fase]}`;
@@ -658,12 +659,21 @@ export function montarSimulador(raiz, opc = {}) {
     if (k !== 'normal') motor.correr(ESCENARIOS[k].forma ? ASENTAR_FORMA : 10);
     if (opc.depuracion) window.__motor = motor;
     revision = null; ponerPausa(false); sangre.reiniciar(); latidoTexto = -1; claveTd = ''; ensuciar(); colocarLineaM(); reiniciarD();
+    paneles?.alCambiarMotor();
     $$('[data-c]').forEach(x => x.classList.toggle('on', x.dataset.c === k));
     opc.onEscenario?.(k);
   }
   for (const id of ['#cv-escenarios', '#cv-enfermedad']) $(id).addEventListener('click', (e) => { const b = e.target.closest('[data-c]'); if (b) elegirEscenario(b.dataset.c); });
   $('#cv-baro').addEventListener('change', () => { motor.p.barorreflejo = $('#cv-baro').checked; });
-  $('#cv-avanzar').addEventListener('click', () => { revision = null; motor.correr(10); sangre.reiniciar(); latidoTexto = -1; ensuciar(); });
+  function avanzarSeg(seg) { revision = null; ponerPausa(false); motor.correr(seg); sangre.reiniciar(); latidoTexto = -1; ensuciar(); }
+  $('#cv-avanzar').addEventListener('click', () => avanzarSeg(10));
+
+  // Hemodinámica de Marino (diagramas.mjs): Guyton con la EPP y el bolo, el catéter que avanza y la termodilución
+  paneles = crearPanelesHemo(raiz, {
+    motor: () => motor, escenario: () => escenario, correr: avanzarSeg,
+    paciente: () => elegirEscenario(escenario),
+    verTsvi: () => { elegirModo('D'); ponerMuestra('tsvi'); $('#cv-tarjeta-eco').scrollIntoView({ block: 'start' }); },
+  });
 
   // Wiggers y asa: deslizar o tocar elige un instante del último latido
   $$('[data-lado]').forEach(b => b.addEventListener('click', () => { lado = b.dataset.lado; $$('[data-lado]').forEach(x => x.classList.toggle('on', x === b)); }));
@@ -693,6 +703,7 @@ export function montarSimulador(raiz, opc = {}) {
     medir: elegirMedida,
     muestraDoppler: ponerMuestra,
     escenario: elegirEscenario,
+    panel: (k) => paneles?.abrir(k),
     activo: setActivo,
     get vistaActual() { return vistaEco; },
     get escenarioActual() { return escenario; },

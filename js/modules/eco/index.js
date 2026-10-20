@@ -3,12 +3,15 @@
 // - El simulador (WebGL, motor del latido, ecografía, formas precalculadas) es lo más pesado de la app: se importa
 //   la primera vez que la vista se ve en pantalla, nunca al arrancar.
 // - Solo anima mientras la vista está en pantalla y la pestaña visible.
-// - Cualquier botón con data-eco-vista / data-eco-escenario / data-eco-medir (junto a data-especialidad="eco", que
-//   hace la navegación en home/index.js) deja el simulador en esa vista, ese escenario o esa medida del modo M.
+// - Cualquier botón con data-eco-vista / data-eco-escenario / data-eco-medir / data-eco-panel (junto a
+//   data-especialidad="eco", que hace la navegación en home/index.js) deja el simulador en esa vista, ese escenario,
+//   esa medida del modo M o con ese panel abierto (guyton, epp, cateter, termo: la hemodinámica de Marino). Con
+//   data-eco-panel, el «← VOLVER» vuelve a la ficha de origen (core/volver-ficha.js, por modelosVivos).
 // - "Qué mirar en esta vista" copia líneas reales de otras fichas (que-mirar.js).
 import { QUE_MIRAR, ESCENARIO_TIPO, FORMA_NOTA } from './que-mirar.js';
 import { ATLAS_VISTA, ATLAS_ESCENARIO, ATLAS_MODO, atlasUrl } from './atlas-ouyang.js';
 import { initAtlas, enApp } from './atlas/atlas.js';
+import { marcarVolver } from '../../core/volver-ficha.js';
 import { preguntasAtlasEco, temasAtlasEco } from '../../data/eco-atlas-preguntas.js';
 
 // Repaso del Atlas de ecocardiografía (main.js fusiona los de todas las especialidades).
@@ -35,10 +38,12 @@ export function init() {
 
     function aplicarPendiente() {
         if (!sim) return;
-        if (pendiente.escenario && pendiente.escenario !== sim.escenarioActual) sim.escenario(pendiente.escenario);
+        // con un panel de hemodinámica, el paciente empieza limpio aunque sea el mismo escenario (sin bolos ni EPP previos)
+        if (pendiente.escenario && (pendiente.escenario !== sim.escenarioActual || pendiente.panel)) sim.escenario(pendiente.escenario);
         if (pendiente.vista && pendiente.vista !== sim.vistaActual) sim.vista(pendiente.vista);
         if (pendiente.medir) { sim.modo('M'); sim.medir(pendiente.medir); }
         if (pendiente.modo) sim.modo(pendiente.modo);
+        if (pendiente.panel) sim.panel(pendiente.panel);
         pendiente = {};
         pintarAtlasAqui();
     }
@@ -75,10 +80,10 @@ export function init() {
     document.addEventListener('click', (e) => {
         const a = e.target.closest('[data-eco-atlas]');
         if (a) { seccion('atlas'); a.dataset.ecoAtlas ? atlas.abrir(a.dataset.ecoAtlas) : atlas.verIndice(); return; }
-        const b = e.target.closest('[data-eco-vista], [data-eco-escenario], [data-eco-medir]');
+        const b = e.target.closest('[data-eco-vista], [data-eco-escenario], [data-eco-medir], [data-eco-panel]');
         if (!b) return;
         seccion('sim');
-        pendiente = { vista: b.dataset.ecoVista, escenario: b.dataset.ecoEscenario, medir: b.dataset.ecoMedir };
+        pendiente = { vista: b.dataset.ecoVista, escenario: b.dataset.ecoEscenario, medir: b.dataset.ecoMedir, panel: b.dataset.ecoPanel };
         aplicarPendiente();
     });
 
@@ -143,10 +148,15 @@ export function init() {
         }).join('');
     }
 
+    // «← VOLVER»: a la pantalla de origen (home/index.js) o, si se entró por un panel de hemodinámica desde una ficha,
+    // a esa ficha (marcarVolver le pone el enlace cruzado de vuelta). Cualquier otra entrada lo deja como siempre.
+    const volver = document.getElementById('btn-volver-eco');
     return {
         // entrar desde un menú: arriba del todo, sin tocar la vista ni el escenario elegidos
-        volverAlMenu() { window.scrollTo(0, 0); },
+        volverAlMenu() { marcarVolver(volver, null, null); window.scrollTo(0, 0); },
         // llegar desde un enlace de otra ficha: arriba del todo (la página venía desplazada de la ficha de origen)
-        irAFicha() { window.scrollTo(0, 0); },
+        irAFicha() { marcarVolver(volver, null, null); window.scrollTo(0, 0); },
+        // data-eco-panel: home/index.js lo llama tras irAFicha con la ficha de la que se sale
+        modelosVivos: { ecoPanel: (_panel, origen) => marcarVolver(volver, null, origen) },
     };
 }
