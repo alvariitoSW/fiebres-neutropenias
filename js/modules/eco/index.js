@@ -12,6 +12,7 @@ import { QUE_MIRAR, ESCENARIO_TIPO, FORMA_NOTA } from './que-mirar.js';
 import { ATLAS_VISTA, ATLAS_ESCENARIO, ATLAS_MODO, atlasUrl } from './atlas-ouyang.js';
 import { initAtlas, enApp } from './atlas/atlas.js';
 import { marcarVolver } from '../../core/volver-ficha.js';
+import { arrancar } from '../../core/ui.js';
 import { preguntasAtlasEco, temasAtlasEco } from '../../data/eco-atlas-preguntas.js';
 
 // Repaso del Atlas de ecocardiografía (main.js fusiona los de todas las especialidades).
@@ -27,12 +28,13 @@ export function init() {
 
     // ---- Dos secciones: el simulador y el Atlas de ecocardiografía (atlas/atlas.js) ----
     const secAtlas = document.getElementById('cv-seccion-atlas');
-    const atlas = initAtlas({ alAbrirSimulador: (modo) => { seccion('sim'); pendiente = { modo }; cargar(); aplicarPendiente(); raiz.scrollIntoView({ block: 'start' }); } });
+    // El atlas arranca por separado (arrancar(), core/ui.js): si falla, el simulador sigue funcionando.
+    const atlas = arrancar('atlas de eco', () => initAtlas({ alAbrirSimulador: (modo) => { seccion('sim'); pendiente = { modo }; cargar(); aplicarPendiente(); raiz.scrollIntoView({ block: 'start' }); } }));
     function seccion(k) {
         const enAtlas = k === 'atlas';
         raiz.hidden = enAtlas; secAtlas.hidden = !enAtlas;
         document.querySelectorAll('.cv-secciones [data-seccion]').forEach(b => { const on = b.dataset.seccion === k; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
-        enAtlas ? atlas.mostrar() : atlas.ocultar();
+        enAtlas ? atlas?.mostrar() : atlas?.ocultar();
     }
     document.querySelector('.cv-secciones').addEventListener('click', (e) => { const b = e.target.closest('[data-seccion]'); if (b) seccion(b.dataset.seccion); });
 
@@ -79,7 +81,7 @@ export function init() {
     // Enlaces desde otras fichas: la navegación la hace el listener de [data-especialidad] de home.
     document.addEventListener('click', (e) => {
         const a = e.target.closest('[data-eco-atlas]');
-        if (a) { seccion('atlas'); a.dataset.ecoAtlas ? atlas.abrir(a.dataset.ecoAtlas) : atlas.verIndice(); return; }
+        if (a) { seccion('atlas'); a.dataset.ecoAtlas ? atlas?.abrir(a.dataset.ecoAtlas) : atlas?.verIndice(); return; }
         const b = e.target.closest('[data-eco-vista], [data-eco-escenario], [data-eco-medir], [data-eco-panel]');
         if (!b) return;
         seccion('sim');

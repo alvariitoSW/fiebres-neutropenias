@@ -45,3 +45,13 @@ export function clamp(val, min, max) {
 export function escapeHtml(str) {
     return String(str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
+
+// Arranca una pieza (una especialidad, un modelo vivo, un cuaderno) sin que su fallo deje muertas a las demás:
+// avisa en la consola (los jueces lo cazan) y devuelve null. Lección 13 del bloque 1 de Marino.
+export function arrancar(nombre, init) {
+    try { return init(); } catch (e) {
+        console.error(e);
+        window.dispatchEvent(new ErrorEvent('error', { message: `${nombre} no arrancó: ${e.message}` }));
+        return null;
+    }
+}
