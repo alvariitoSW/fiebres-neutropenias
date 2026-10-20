@@ -376,7 +376,7 @@ export const PREGUNTAS = [
     enunciado: 'Cirugía ginecológica: salino al 0,9 % a 30 mL/kg/h. ¿Qué le pasa al pH, y qué cambia con Ringer lactato al mismo ritmo?',
     opciones: [
       { t: 'Nada: es «fisiológico», el pH se mantiene en 7,41', ok: false, porque: 'No es normal ni química ni fisiológicamente: Cl⁻ 154 frente a 103 del plasma, y pH 5,7. Lo que más importa es el cloro.' },
-      { t: 'Baja a 7,28 por el cloro; con Ringer no cambió', ok: true },
+      { t: 'Baja de 7,41 a 7,28 por el cloro; con Ringer no cambió', ok: true },
       { t: 'Baja igual con Ringer: lo hace cualquier cristaloide a ese ritmo', ok: false, porque: 'En la Fig. 10.2 el pH no cambió con Ringer lactato infundido al mismo ritmo: el culpable es el cloro.' }],
     explicacion: 'Fig. 10.2: con salino (Cl⁻ 154), el pH bajó de <span class="hl-rojo">7,41 a 7,28</span>; con Ringer (Cl⁻ 109), no cambió. Es una <span class="hl-rojo">acidosis metabólica hiperclorémica</span>; su cloro también causa vasoconstricción renal. Míralo en el ácido-base vivo.' },
   { id: 'ag-03', corto: 'glucosado', tipo: 'test', fuente: 'mar-cristaloides#mar-glucosado-volumen',
@@ -399,7 +399,7 @@ export const PREGUNTAS = [
     enunciado: 'Vas a infundir 100 mL de albúmina al 25 %. ¿De dónde saldrá el agua que gane el río?',
     opciones: [
       { t: 'Del mar: la albúmina saca agua de las células', ok: false, porque: 'La albúmina tira con presión oncótica a través de la pared del capilar, no de la membrana celular: el agua sale del intersticio.' },
-      { t: 'Del propio vial: aporta 400 mL de agua', ok: false, porque: 'El vial lleva 100 mL. Los otros 200-300 los saca del intersticio: por eso no sirve para reponer pérdidas.' },
+      { t: 'Del vial: aporta 400 mL', ok: false, porque: 'El vial lleva 100 mL. Los otros 200-300 los saca del intersticio: por eso no sirve para reponer pérdidas.' },
       { t: 'De la marisma: mueve agua, no repone', ok: true }],
     explicacion: 'El río crece 3-4 veces lo infundido. Oncótica de <span class="hl">70 mmHg</span>, 2,5 veces la del plasma: <span class="hl-rojo">no repone pérdidas, solo mueve líquido</span>.' },
   { id: 'ag-06', corto: 'salino 7,5 %', tipo: 'test', fuente: 'mar-cristaloides#mar-hipertonico · mar-fig-10-1',
@@ -407,7 +407,7 @@ export const PREGUNTAS = [
     enunciado: '250 mL de salino al 7,5 % añaden 1.235 mL al extracelular. ¿De dónde sale el resto?',
     opciones: [
       { t: 'Del intersticio, como con la albúmina al 25 %', ok: false, porque: 'El intersticio también gana (+700): el agua viene de dentro de las células, que pierden casi 1 L.' },
-      { t: 'De las células: el agua sale hacia la sal', ok: true },
+      { t: 'De las células: el líquido hipertónico les saca agua', ok: true },
       { t: 'Es un error de medida: no se puede ganar más de lo infundido', ok: false, porque: 'Se puede, si el líquido es hipertónico: 2.567 mOsm/L, 9 veces el plasma, saca agua de las células.' }],
     explicacion: '<span class="hl">Unas 5 veces lo infundido</span>, sacando agua de las células. En el trauma no ha mostrado mejor supervivencia.' },
   { id: 'ag-07', corto: 'déficit', tipo: 'test', fuente: 'mar-retorno-venoso#mar-tabla-11-1 · mar-retorno-venoso#mar-deficit-pequeno',
@@ -416,7 +416,7 @@ export const PREGUNTAS = [
     opciones: [
       { t: '750 mL; 750 mL de Ringer', ok: false, porque: '750 mL sería el 15 % de la volemia (5 L); la Tabla 11.1 calcula el déficit sobre el plasma (3 L). Y el Ringer no se queda en el vaso.' },
       { t: '450 mL; 450 mL de Ringer, porque el Ringer se queda en el vaso', ok: false, porque: 'Solo el 20 % del cristaloide se queda en el plasma: repondrías 90 mL.' },
-      { t: '450 mL; 2,25 L de Ringer', ok: true }],
+      { t: '450 mL; 2,25 L de Ringer, porque solo se queda el 20 %', ok: true }],
     explicacion: 'El déficit que dispara la reposición es <span class="hl">pequeño: 450 mL</span> en el varón y 300 en la mujer. Del Ringer, 20 % al plasma y <span class="hl-rojo">80 % al intersticio</span>: de los 2,25 L, 1,8 L van al intersticio.',
     nota: '<b>Nota de fuentes.</b> Cap. 11: 450 mL → 2,25 L (×5, se queda el 20 %). Tabla 15.4 (cap. 15): ×3, «estimación conservadora» porque se queda el 20-25 %. Y la Fig. 10.1 da 275 de 1.000 mL de salino en el plasma (27,5 %). Las tres son de Marino; no gana ninguna.<br><b>Nota de fidelidad.</b> El texto (p. 25) habla de un déficit del 15 % de la volemia; la Tabla 11.1 aplica el 15 % al plasma (450 mL de 3 L). La pregunta sigue la tabla.' },
   { id: 'ag-08', corto: 'Hto', tipo: 'test', fuente: 'mc-hemorragico-clasificacion (Hemoglobina y hematocrito, Fig. 15.1)',
@@ -426,7 +426,7 @@ export const PREGUNTAS = [
     opciones: [
       { t: 'Bajo, proporcional a la pérdida', ok: false, porque: 'Eso llega después: con el relleno transcapilar (8-12 h) y con los fluidos que pongas.' },
       { t: 'Alto, por hemoconcentración', ok: false, porque: 'Se pierde sangre entera, no agua: la proporción no cambia.' },
-      { t: 'El de antes: 45 %', ok: true }],
+      { t: 'El de antes: 45 %, sin cambio', ok: true }],
     explicacion: 'Se pierden plasma y hematíes en proporción: a la hora, <span class="hl-rojo">el Hto no ve la hemorragia</span>. Baja con el relleno (8-12 h, días) y con el fluido que elijas.' },
   { id: 'ag-09', corto: 'signos', tipo: 'test', fuente: 'mar-retorno-venoso#mar-constantes-volemia',
     estado: { hemorragia: 15 },
@@ -436,7 +436,7 @@ export const PREGUNTAS = [
       { t: 'El aumento ortostático de la FC ≥30 lpm', ok: true },
       { t: 'La hipotensión en decúbito', ok: false, porque: 'No aparece hasta déficits de más del 30 %: si la esperas, llegas tarde.' }],
     explicacion: 'El ortostatismo es <span class="hl">el marcador más sensible</span>, pero en la UCI muchos pacientes no pueden ponerse de pie.',
-    nota: '<b>Nota de fuentes.</b> La Tabla 15.1 (cap. 15) pone la FC ↑ ya en la clase II; el cap. 11 dice que la taquicardia en decúbito no aparece en la mayoría de las hemorragias agudas, ni con déficits del 25 %. Las dos son de Marino; el libro no las concilia. <span class="agv-org">ficha · mc-hemorragico-clasificacion · mar-constantes-volemia</span>' },
+    nota: '<b>Nota de fuentes.</b> La Tabla 15.1 (cap. 15) pone la FC ↑ ya en la clase II; el cap. 11 dice que la taquicardia en decúbito no aparece en la mayoría de las hemorragias agudas, ni con déficits del 25 %. Las dos son de Marino; el libro no las concilia. <span class="agv-org" data-org="ficha · mc-hemorragico-clasificacion · mar-constantes-volemia">ficha</span>' },
   { id: 'ag-10', corto: 'PVC', tipo: 'error', fuente: 'mar-retorno-venoso#mar-pvc-volemia · #mar-rv-ecuacion · #mar-rv-pvc · #mar-vci-volemia · #mar-pms-fluidos',
     estado: {},
     enunciado: 'Nota del R1 de guardia sobre un paciente hipotenso.',
@@ -511,7 +511,7 @@ export const CASOS = [
         pregunta: { id: 'w1-4', tipo: 'test', fuente: 'mc-hemorragico-clasificacion (Fig. 15.1)',
           enunciado: 'El Hto ha bajado de 45 % a 41 % tras el Ringer. ¿Sigue sangrando?',
           opciones: [
-            { t: 'Sí: cada punto de Hto que baja es sangre perdida', ok: false, porque: 'El Ringer expande el plasma y no los hematíes: diluye. En las primeras horas el Hto refleja la reanimación, no la pérdida.' },
+            { t: 'Sí: cada punto que baja es sangre perdida', ok: false, porque: 'El Ringer expande el plasma y no los hematíes: diluye. En las primeras horas el Hto refleja la reanimación, no la pérdida.' },
             { t: 'No: es el relleno transcapilar, que ya ha terminado', ok: false, porque: 'El relleno tarda 8-12 h en notarse en el Hto y días en completarse: a las 3 h todavía no se nota en el Hto.' },
             { t: 'No se sabe por el Hto: refleja los fluidos', ok: true }],
           explicacion: 'En las primeras horas, <span class="hl-rojo">el Hto refleja la reanimación</span>, no la pérdida. El modelo lo calcula: hematíes ÷ volemia = 41 % <span class="agv-org agv-ilu">fisiología general, cálculo del modelo; la Fig. 15.1 solo da la dirección</span>.' } },
@@ -559,10 +559,10 @@ export const CASOS = [
           enunciado: '¿Qué trastorno ácido-base tiene?',
           opciones: [
             { t: 'HA 10, normal: solo una acidosis hiperclorémica del salino', ok: false, porque: 'Con albúmina 2, el HA esconde 6 mEq: corregido = 10 + 2,5 × (4,5 − 2) = 16. Te habrías perdido el lactato.' },
-            { t: 'Alcalosis respiratoria primaria: la PaCO₂ está en 30', ok: false, porque: 'Es la compensación esperada: 40 − 1,2 × (24 − 16) = 30,4. El pH es ácido: el primario es metabólico.' },
+            { t: 'Alcalosis respiratoria: la PaCO₂ está en 30', ok: false, porque: 'Es la compensación esperada: 40 − 1,2 × (24 − 16) = 30,4. El pH es ácido: el primario es metabólico.' },
             { t: 'HAc 16 (lactato) y delta <1: hiperclorémica añadida', ok: true }],
           explicacion: 'HA = 140 − (114 + 16) = 10; <span class="hl">corregido 16</span> (Ec. 31.15): el lactato que escondía la albúmina. Delta (Ec. 31.16) = (10 − 12)/(24 − 16) = <span class="hl-rojo">−0,25</span>: por debajo de 1, el HCO₃⁻ ha bajado mucho más de lo que ha subido el HA. Acidosis hiperclorémica añadida: el salino trae Cl⁻ 154.',
-          nota: '<b>Nota de fuentes.</b> Marino corrige el hiato por la albúmina (Ec. 31.15), pero no dice si el delta se calcula con el hiato corregido; con el corregido saldría (16 − 12)/(24 − 16) = 0,5. Los dos quedan por debajo de 1. <span class="agv-org">ficha · mr-ag-albumina · mr-delta-gap</span>' } },
+          nota: '<b>Nota de fuentes.</b> Marino corrige el hiato por la albúmina (Ec. 31.15), pero no dice si el delta se calcula con el hiato corregido; con el corregido saldría (16 − 12)/(24 − 16) = 0,5. Los dos quedan por debajo de 1. <span class="agv-org" data-org="ficha · mr-ag-albumina · mr-delta-gap">ficha</span>' } },
       { momento: 'Hora 3', datos: { PA: 'sigue hipotensa', Exploración: 'edemas' }, nuevo: ['PA', 'Exploración'],
         estado: { paciente: 'mujer', infusiones: [{ f: 'salino', ml: 2000 }], albBaja: true, inflamacion: true }, lupa: 'orilla',
         pregunta: { id: 'w2-3', tipo: 'test', fuente: 'mar-coloides#mar-fluido-a-medida · mar-albumina',
@@ -615,7 +615,7 @@ export const CASOS = [
           opciones: [
             { t: 'Puede ser una pseudohiponatremia: hay que esperar a los lípidos', ok: false, porque: 'En la pseudohiponatremia la osmolalidad es normal (285-295). Esperar retrasaría el tratamiento de una encefalopatía que empieza.' },
             { t: 'Sí: la osmolalidad está baja (<275)', ok: true },
-            { t: 'Hay que corregir el Na⁺ por la glucosa', ok: false, porque: 'Con glucosa 90 no hay nada que corregir: la Ec. 35.5 es para la hiperglucemia.' }],
+            { t: 'Hay que corregirlo por la glucosa', ok: false, porque: 'Con glucosa 90 no hay nada que corregir: la Ec. 35.5 es para la hiperglucemia.' }],
           explicacion: 'Osmolalidad <span class="hl-rojo">baja (<275)</span>: verdadera. La Ec. 35.3 da lo mismo: 2 × 124 + 90/18 + 14/2,8 = 258. Mira la neurona.' } },
       { momento: '32 h · el giro', datos: { Clínica: 'convulsión generalizada' }, nuevo: ['Clínica'],
         estado: { paciente: 'mujer', na0: 124, adh: true, infusiones: [{ f: 'glucosado', ml: 1500 }, { f: 'ringer', ml: 1500 }] }, lupa: 'neurona',
@@ -625,7 +625,7 @@ export const CASOS = [
           opciones: [
             { t: 'Na⁺ 124 no es tan bajo: restricción hídrica y repetir el Na⁺', ok: false, porque: 'La cifra no decide: no hay correlación entre la gravedad de la hiponatremia y la de la encefalopatía. Una convulsión es edema cerebral: amenaza vital.' },
             { t: 'Salino 3 %: bolo de 120 o 150 mL, cada pocas horas', ok: true },
-            { t: 'Salino al 0,9 %, 1 L, para subir el Na⁺ sin riesgo', ok: false, porque: 'No trata la encefalopatía: hace falta salino hipertónico, que sube el Na⁺ deprisa.' }],
+            { t: 'Salino al 0,9 %, 1 L, para subirlo sin riesgo', ok: false, porque: 'No trata la encefalopatía: hace falta salino hipertónico, que sube el Na⁺ deprisa.' }],
           explicacion: 'Bolos de <span class="hl">2 mL/kg (120 mL en sus 60 kg) o 150 mL</span>, repetidos cada pocas horas hasta que ceden los síntomas; por vía periférica si hace falta. Cada bolo sube el Na⁺ hasta 2. <span class="hl-azul">Valora cuando haya subido 5</span>: con +5-6 deberían mejorar los síntomas; si no, busca otra causa.' } },
       { momento: '34 h', datos: { 'Na⁺': '129 mEq/L, 2 h después del bolo', Clínica: 'ceden los síntomas', Diuresis: '250 mL/h' }, nuevo: ['Na⁺', 'Clínica', 'Diuresis'],
         estado: { paciente: 'mujer', na0: 124, bolos3: 1, periodo3: '2h', fijo: { na: 129 }, infusiones: [{ f: 'glucosado', ml: 1500 }, { f: 'ringer', ml: 1500 }] }, lupa: 'neurona', mirar: 'lectura',
@@ -638,7 +638,7 @@ export const CASOS = [
             { t: 'Si mañana está bien, ya no hay riesgo de desmielinización.', mal: true, c: 'La desmielinización tiene un <span class="hl-rojo">curso bifásico</span>: mejora y después empeora.' },
             { t: 'Cambiamos los sueros hipotónicos.', mal: false }],
           explicacion: 'Un bolo sube hasta 2: el resto lo pone la <span class="hl-rojo">diuresis acuosa</span>, que concentra el sodio (sobrecorrección, hasta en un 25 %).',
-          nota: '<b>Nota de fuentes (desmopresina).</b> La Tabla 35.4 la indica si la diuresis sube de golpe (p. ej., >100 mL/h) con salino hipertónico, pero <b>no la aconseja si la hiponatremia se debe a una liberación no regulada de ADH</b>. Y el texto (p. 11) pone el estrés fisiológico entre las causas de liberación no osmótica de ADH. El libro no concilia las dos cosas; aquí no se elige. <span class="agv-org">ficha · mr-tabla-35-4 · mr-estres-adh</span>' } },
+          nota: '<b>Nota de fuentes (desmopresina).</b> La Tabla 35.4 la indica si la diuresis sube de golpe (p. ej., >100 mL/h) con salino hipertónico, pero <b>no la aconseja si la hiponatremia se debe a una liberación no regulada de ADH</b>. Y el texto (p. 11) pone el estrés fisiológico entre las causas de liberación no osmótica de ADH. El libro no concilia las dos cosas; aquí no se elige. <span class="agv-org" data-org="ficha · mr-tabla-35-4 · mr-estres-adh">ficha</span>' } },
       { momento: 'Día 2', datos: { Familia: 'su hija: «¿Le falta sal?»' }, nuevo: ['Familia'],
         estado: { paciente: 'mujer', na0: 129 }, lupa: 'neurona',
         pregunta: { id: 'w3-5', tipo: 'destapa', fuente: 'mr-hiponatremia-tto#mr-agua-no-sodio · mr-hiponatremia-tto#mr-encefalopatia-hipona',

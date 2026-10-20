@@ -422,7 +422,7 @@ export const PREGUNTAS = [
         enunciado: 'Canalizas una vena enorme con el mismo catéter que tenías en una vena fina del antebrazo. ¿Cambia el flujo?',
         opciones: [
             { t: 'Sí: con una vena ancha hay menos resistencia a la salida', ok: false, porque: 'La resistencia está en el catéter (R = 8µL/πr⁴). Si cuentas con la vena grande, sigues reponiendo al mismo ritmo de antes.' },
-            { t: 'No, porque el ritmo lo marca el catéter', ok: true },
+            { t: 'No: el ritmo lo marcan las dimensiones del catéter, no la vena', ok: true },
             { t: 'Solo si la vena es central: allí la presión es más baja y el gradiente, mayor', ok: false, porque: 'Ser central no cambia el catéter: un CVC de 20 cm da menos que un periférico corto (2,28 frente a 6,0 L/h). El paciente recibiría menos de lo que esperas.' }],
         explicacion: '<span class="hl">La velocidad de infusión la marca el catéter, no la vena</span>: sus dimensiones, no el tamaño de la vena canalizada.' },
     { id: 'cv-g4', grupo: 'guia', corto: 'altura', tipo: 'test', fuente: 'mar-cateteres-flujo#mar-altura-bolsa · #mar-poiseuille',
@@ -431,7 +431,7 @@ export const PREGUNTAS = [
         enunciado: 'Sin cambiar de catéter, la palanca que te queda es el gradiente: la altura de la bolsa sobre el punto de punción. Predice: ¿con qué presión empuja a 68 cm?',
         opciones: [
             { t: '68 mmHg: un milímetro de mercurio por cada centímetro de altura', ok: false, porque: 'Un centímetro de altura no es un mmHg: a 68 cm la ficha da 50 mmHg. Esperarías más flujo del que le llega al paciente.' },
-            { t: '50 mmHg, y 75 si la subes a 100 cm', ok: true },
+            { t: '50 mmHg; si subes la bolsa a 100 cm, empuja con 75 mmHg', ok: true },
             { t: 'Da igual: con una volumétrica ya va al máximo', ok: false, porque: 'La volumétrica no pasa de 1.000 mL/h; por gravedad, el periférico corto da 6 L/h. Con la bomba, el paciente recibiría menos.' }],
         explicacion: 'Por gravedad, el ΔP es la altura de la bolsa: <span class="hl">68 cm = 50 mmHg</span> y <span class="hl">100 cm = 75 mmHg</span>. El flujo es proporcional al ΔP.',
         nota: '<b>Nota de fidelidad.</b> Las Tablas 1.2-1.3 se midieron desde 40 pulgadas (101,6 cm) y la ficha da 75 mmHg para 100 cm (39 pulgadas): aquí se toman como la misma marca.' },
@@ -480,7 +480,7 @@ export const PREGUNTAS = [
 ];
 
 export const CASOS = [
-    { id: 'c-a1', titulo: 'Marcos, 30 años: ¿por dónde paso el volumen?', corto: 'Caso A1 · Marcos', sub: 'politrauma en moto',
+    { id: 'c-a1', titulo: 'Marcos, 30 años: ¿por dónde paso el volumen?', corto: 'Caso 1 · Marcos', sub: 'politrauma en moto',
         paciente: { Edad: '30 años', Motivo: 'politrauma (moto), hipotenso', Accesos: '20 G en el dorso de la mano · CVC triple luz de 20 cm' },
         pasos: [
             { momento: 'Llegada', datos: { PA: '78/40 mmHg', FC: '128 lpm' }, nuevo: ['PA', 'FC'], estado: { banco: 'fig', figExp: 'calibre', figCal: 20 }, mirar: 'probeta',
@@ -514,7 +514,7 @@ export const CASOS = [
                     enunciado: 'Sin venas: vía intraósea. ¿Dónde, y qué esperas de ella?',
                     opciones: [
                         { t: 'Fémur proximal, como dice el pie de la Fig. 1.10; pasa como una periférica', ok: false, porque: 'El pie de figura dice fémur, pero el texto y el dibujo describen la tibia (errata). Y la IO da solo un 25 %: sin presurizar, el volumen apenas entraría.' },
-                        { t: 'Tibia proximal; un 25 % de una periférica: presurizar', ok: true },
+                        { t: 'Tibia proximal; da un 25 % de una periférica: hay que presurizar', ok: true },
                         { t: 'Húmero, que tiene más flujo: así no hace falta presurizar', ok: false, porque: 'El húmero tiene más capacidad de flujo, pero en el adulto se prefiere la tibia (más éxito; no estorba la intubación ni las compresiones). Y la médula empuja con unos 30 mmHg: sin presurizar, el volumen apenas entraría.' }],
                     explicacion: 'Tibia proximal: <span class="hl">3 cm bajo la rótula y 2 cm medial</span>. La médula no se colapsa en el shock, pero da un <span class="hl-rojo">25 %</span> de una periférica (viscosidad y unos 30 mmHg): se presuriza de rutina. No más de 24 h (recomendación sin pruebas firmes).',
                     nota: '<b>Nota de fidelidad.</b> El pie de la Fig. 1.10 y el «A Final Word» dicen «fémur proximal»; el texto y el dibujo, la tibia. Se sigue el texto.' } },
@@ -544,7 +544,7 @@ export const CASOS = [
             'La IO no se colapsa, pero da un 25 %: tibia proximal, presurizada de rutina, no más de 24 h y lidocaína 40 mg en 2 min si está despierto.'],
         volver: { nombre: 'Catéteres y flujo', ficha: 'mar-cateteres-flujo', estado: { banco: 'tablas', cat: 'rapido', bomba: 'infusor' } } },
 
-    { id: 'c-a2', titulo: 'Carmen, 64 años: fiebre el día 9 del CVC', corto: 'Caso A2 · Carmen', sub: 'sepsis abdominal, CVC yugular',
+    { id: 'c-a2', titulo: 'Carmen, 64 años: fiebre el día 9 del CVC', corto: 'Caso 2 · Carmen', sub: 'sepsis abdominal, CVC yugular',
         paciente: { Edad: '64 años', Motivo: 'sepsis abdominal, operada', Catéter: 'CVC yugular derecho' },
         pasos: [
             { momento: 'Día 9', datos: { Temperatura: '38,6 °C', Foco: 'ninguno claro', 'Punto del CVC': 'eritema, sin pus' }, nuevo: ['Temperatura', 'Foco', 'Punto del CVC'], estado: { lupa: 'B', zoomB: 'vias', tiempo: 216 }, mirar: 'cocos',
@@ -604,7 +604,7 @@ export const CASOS = [
     // A3 (cobertura §3): la ficha V entera (aire, neumotórax y punta). La cobertura lo planteaba al retirar la vía;
     // aquí el aire entra por una luz abierta del catéter puesto, que es lo que el libro describe («si se sospecha
     // entrada de aire por un catéter»: aspirar por él) y lo que enseña la lupa C.
-    { id: 'c-a3', titulo: 'Julián, 70 años: el conector abierto', corto: 'Caso A3 · Julián', sub: 'neumonía, CVC subclavio',
+    { id: 'c-a3', titulo: 'Julián, 70 años: el conector abierto', corto: 'Caso 3 · Julián', sub: 'neumonía, CVC subclavio',
         paciente: { Edad: '70 años', Motivo: 'neumonía, día 6 de UCI; ya sin vasopresores', Catéter: 'CVC subclavio derecho' },
         pasos: [
             { momento: 'Día 6 · 10:00', datos: { Postura: 'sentado a 45°, respira solo', Enfermería: 'la luz proximal del CVC, desconectada y abierta' }, nuevo: ['Postura', 'Enfermería'], estado: { lupa: 'C', problema: 'aire' }, mirar: 'punta',
@@ -614,7 +614,7 @@ export const CASOS = [
                     opciones: [
                         { t: 'Entra aire, aspirado por la presión negativa del tórax', ok: true },
                         { t: 'Nada: la presión venosa es positiva y, si acaso, refluye sangre', ok: false, porque: 'Respirando solo, la presión del tórax es negativa y crea el gradiente que mete aire: con 5 mmHg, por un 14 G entran 100 mL por segundo. Dejarías la luz abierta hasta la embolia.' },
-                        { t: 'Entra aire, pero solo unos mililitros, sin importancia', ok: false, porque: 'Por un 14 G, con solo 5 mmHg, entran 100 mL por segundo; por una luz más fina, menos (el libro no da cuánto), pero 200-300 mL (3-5 mL/kg) en pocos segundos pueden ser mortales. No lo tratarías como la urgencia que es.' }],
+                        { t: 'Entra algo de aire, sin importancia', ok: false, porque: 'Por un 14 G, con solo 5 mmHg, entran 100 mL por segundo; por una luz más fina, menos (el libro no da cuánto), pero 200-300 mL (3-5 mL/kg) en pocos segundos pueden ser mortales. No lo tratarías como la urgencia que es.' }],
                     explicacion: 'La <span class="hl-rojo">presión intratorácica negativa</span> de la respiración espontánea crea el gradiente: con solo 5 mmHg, por un 14 G (1,8 mm de diámetro interno) entran <span class="hl-rojo">100 mL de aire por segundo</span>. Es mortal cuando entran 200-300 mL (3-5 mL/kg) en pocos segundos.',
                     nota: '<b>Nota de fidelidad.</b> Los 100 mL/s del libro son para un catéter de 14 G (1,8 mm) con 5 mmHg. La luz proximal de un CVC es de 18 G y el libro no da su cifra: el contador de la lupa corre con la del 14 G.' } },
             { momento: '10:01', datos: { Clínica: 'disnea brusca y una tos angustiosa', SpO2: '86 %' }, nuevo: ['Clínica', 'SpO2'], estado: { lupa: 'C', problema: 'aire', aire: { postura: 'espontanea', abierto: true } }, mirar: 'lectura',
@@ -636,8 +636,8 @@ export const CASOS = [
                 pregunta: { id: 'a3-4', tipo: 'test', fuente: 'mar-cvc-complicaciones#mar-aire-fisio · #mar-aire-clinica',
                     enunciado: 'El aire entró por una vena. ¿Qué explica el déficit neurológico?',
                     opciones: [
-                        { t: 'El aire ha cruzado un foramen oval permeable', ok: true },
-                        { t: 'Hipoperfusión cerebral: el aire venoso solo llega al pulmón', ok: false, porque: 'El aire venoso puede cruzar un foramen oval permeable y dar un ictus embólico. Si lo atribuyes al gasto, no buscarías el ictus.' },
+                        { t: 'Ha cruzado un foramen oval permeable: un ictus embólico', ok: true },
+                        { t: 'Hipoperfusión: el aire venoso solo llega al pulmón', ok: false, porque: 'El aire venoso puede cruzar un foramen oval permeable y dar un ictus embólico. Si lo atribuyes al gasto, no buscarías el ictus.' },
                         { t: 'Edema pulmonar por fuga capilar, al llegar el aire al pulmón', ok: false, porque: 'El aire que llega al pulmón sí puede dar un edema por fuga capilar; pero de las tres cosas que el libro atribuye al aire venoso, la que causa un ictus es el paso por un foramen oval permeable. Perderías el ictus embólico.' }],
                     explicacion: 'El aire venoso hace tres cosas: <span class="hl-rojo">bloquea el VD</span> (fallo derecho agudo y shock cardiogénico), da <span class="hl">edema pulmonar por fuga capilar</span> al llegar al pulmón o <span class="hl-rojo">cruza un foramen oval permeable</span> y causa un ictus embólico. El soplo «en rueda de molino» es de los casos avanzados: aire y sangre mezclados en el VD.' } },
             { momento: 'Día 7', datos: { Catéter: 'el del día 6 se retiró; hoy, uno nuevo, subclavio derecho, con eco', 'Rx portátil': 'sin neumotórax; la punta sube por el cuello' }, nuevo: ['Catéter', 'Rx portátil'], estado: { lupa: 'C', problema: 'aire', punta: 'yugular' }, mirar: 'punta',
@@ -647,7 +647,7 @@ export const CASOS = [
                     opciones: [
                         { t: 'En la yugular interna basta: también es una vena central', ok: false, porque: 'Subir a la yugular es una malposición (las malposiciones, de todo tipo, son el 15-18 %, sobre todo con la subclavia): la punta no queda en la cava superior y hay que recolocarlo.' },
                         { t: 'Junto a la clavícula: con entrar en el tronco innominado es suficiente', ok: false, porque: 'Quedaría alta, fuera de la cava superior. El objetivo es la cava, 1-2 cm por encima de la aurícula: en la Rx, a la altura de la carina.' },
-                        { t: 'En la cava superior, a la altura de la carina', ok: true }],
+                        { t: 'En la cava superior, 1-2 cm sobre la aurícula (Rx: carina)', ok: true }],
                     explicacion: 'Yugulares y subclavios, con la punta en la cava superior, <span class="hl">1-2 cm por encima de la aurícula</span>; en la Rx, <span class="hl">a la altura de la carina</span> o algo por encima. Con un subclavio, la eco mira las dos yugulares durante el procedimiento, y así se recoloca ya.' } },
             { momento: 'Día 7 · nota', datos: {}, nuevo: [], estado: { lupa: 'C', problema: 'aire', punta: 'carina' }, mirar: null,
                 pregunta: { id: 'a3-6', tipo: 'error', fuente: 'mar-cvc-complicaciones#mar-neumotorax · #mar-neumo-rx · #mar-neumo-eco · #mar-punta-eco · #mar-punta-auricula',

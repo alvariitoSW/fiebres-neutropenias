@@ -41,8 +41,10 @@ const SC = 0.85;                       // escala del buzo
 const X_SOLO = [172], X_PAR = [140, 236], X_UNO = [172];
 const VENT = [304, 27];                // entrada del ventilador
 const MED = [311, 198, 38];            // el medallón de la cara
-// Texto de la lámina: s (tamaño, nunca por debajo de 6,6 px), a (anclaje), c (color), i (cursiva), b (negrita), sans
-const T = (x, y, t, o = {}) => `<text x="${x}" y="${y}"${o.a ? ` text-anchor="${o.a}"` : ''} style="font-size:${Math.max(o.s || 7.5, 6.6)}px;fill:var(${o.c || '--text-dim'});${o.i ? 'font-style:italic;' : ''}${o.b ? 'font-weight:700;' : ''}${o.sans ? 'font-family:var(--inm-sans);' : 'font-family:var(--inm-serif);'}"${o.id ? ` id="inm-${o.id}"` : ''}>${t}</text>`;
+// Texto de la lámina: s (tamaño, nunca por debajo de LETRA_MIN), a (anclaje), c (color), i (cursiva), b (negrita), sans
+// Ningún rótulo por debajo de 8,3: a 390 px la lámina se ve al ~91-97 % y así no baja de 7,5 px.
+const LETRA_MIN = 8.3;
+const T = (x, y, t, o = {}) => `<text x="${x}" y="${y}"${o.a ? ` text-anchor="${o.a}"` : ''} style="font-size:${Math.max(o.s || 7.5, LETRA_MIN)}px;fill:var(${o.c || '--text-dim'});${o.i ? 'font-style:italic;' : ''}${o.b ? 'font-weight:700;' : ''}${o.sans ? 'font-family:var(--inm-sans);' : 'font-family:var(--inm-serif);'}"${o.id ? ` id="inm-${o.id}"` : ''}>${t}</text>`;
 
 const ESQUELETO = `<defs>
     <pattern id="inm-p-raya" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" style="stroke:var(--accent-yellow);stroke-width:.7;opacity:.34"/></pattern>
@@ -103,7 +105,7 @@ function construirRegla() {
         const y = Y[r], obj = r === -1 || r === -2, opt = r === 0;
         h += `<line x1="11" y1="${y}" x2="26" y2="${y}" style="stroke:var(--accent-yellow);stroke-width:${opt ? 1.6 : 0.9}"/>`;
         h += T(10, y + 2.6, signo(r), { a: 'end', s: 7.5, b: 1, c: opt || obj ? '--accent-yellow' : '--text-dim', sans: 1 });
-        h += T(29, y + (opt ? -5 : 2.6), RASS_TERM[r] + (opt ? ' · óptimo' : ''), { s: 7, i: 1, c: opt || obj ? '--accent-yellow' : '--text-muted', b: opt });
+        h += T(34, y + (opt ? -5 : 2.6), RASS_TERM[r] + (opt ? ' · óptimo' : ''), { s: 7, i: 1, c: opt || obj ? '--accent-yellow' : '--text-muted', b: opt });
     }
     h += T(29, 175, 'objetivo en perfusión: −1 a −2', { s: 6.8, c: '--accent-yellow', sans: 1, b: 1 });
     h += `<rect data-toca="regla" role="button" aria-label="El profundímetro: la escala RASS" x="0" y="0" width="40" height="270" fill="transparent"/>`;
@@ -169,7 +171,7 @@ export function lastreSVG(tipo, esc = 1, horas = 24, conNombre = true) {
         const k = (horas > 168 ? 1.45 : horas > 72 ? 1.3 : horas > 48 ? 1.15 : 1) * esc;   // crece con las horas (ilustrativo)
         return cuerda + `<g transform="translate(31 60) scale(${k})"><path d="M-15 -6 Q-12 -15 -2 -12 Q7 -18 13 -9 Q19 0 12 6 Q6 13 -4 9 Q-16 9 -15 -6Z" style="fill:var(--accent-yellow);opacity:.85;stroke:var(--bg-main);stroke-width:1.2"/>${[[-7, -4, 2.2], [2, -7, 1.6], [8, 0, 2], [-1, 3, 2.4], [-9, 4, 1.4], [5, 6, 1.2]].map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" style="fill:var(--bg-main)"/>`).join('')}</g>` + nombre(n2(60 + 14 * k + 8));
     }
-    if (tipo === 'barril') return cuerda + lingote(31, 55, 0.8) + `<path d="M31 61 V68" style="stroke:var(--text-muted);stroke-width:1.2"/><g transform="translate(31 80)"><path d="M-10 -12 Q-13 0 -10 12 H10 Q13 0 10 -12Z" style="fill:url(#inm-p-raya2);stroke:var(--accent-yellow);stroke-width:1.2"/><path d="M-11.6 -5 H11.6 M-11.6 5 H11.6" style="stroke:var(--accent-yellow);stroke-width:1"/>${T(0, 3, 'PG', { a: 'middle', s: 7, b: 1, c: '--accent-yellow', sans: 1 })}</g>` + nombre(102);
+    if (tipo === 'barril') return cuerda + lingote(31, 55, 0.8) + `<path d="M31 61 V68" style="stroke:var(--text-muted);stroke-width:1.2"/><g transform="translate(31 80)"><path d="M-10 -12 Q-13 0 -10 12 H10 Q13 0 10 -12Z" style="fill:url(#inm-p-raya2);stroke:var(--accent-yellow);stroke-width:1.2"/><path d="M-11.6 -5 H11.6 M-11.6 5 H11.6" style="stroke:var(--accent-yellow);stroke-width:1"/>${conNombre ? T(0, 3, 'PG', { a: 'middle', s: 7, b: 1, c: '--accent-yellow', sans: 1 }) : ''}</g>` + nombre(102);
     if (tipo === 'piedra') return cuerda + `<g transform="translate(31 60)"><path d="M-15 -2 L-9 -11 L5 -12 L15 -4 L13 8 L-2 12 L-13 7Z" style="fill:var(--text-dim);opacity:.9;stroke:var(--bg-main);stroke-width:1.2"/><path d="M-8 -5 L5 -7 M-9 2 L8 0 M-3 7 L6 6" style="stroke:var(--bg-main);stroke-width:.9"/></g>` + nombre(82);
     return '';
 }
@@ -301,8 +303,8 @@ function pintarMonitor() {
     const fc = D.fc, pa = D.pa;
     let h = `<g data-toca="monitor" role="button" aria-label="El monitor: FC y PA"><rect x="266" y="38" width="90" height="54" rx="4" style="fill:var(--bg-main);stroke:var(--border-color);stroke-width:1"/>`;
     h += `<path id="inm-ecg" d="" style="fill:none;stroke:var(${D.av.pris || D.av.pg ? '--accent-red' : '--accent-green'});stroke-width:1"/>`;
-    h += T(270, 68, 'FC', { s: 6.8, c: '--text-muted', sans: 1 }) + T(281, 69, q('fc') ? '?' : fc.txt, { s: 10, b: 1, c: fc.fuera ? '--accent-red' : '--text-main', sans: 1 });
-    h += T(305, 68, 'PA', { s: 6.8, c: '--text-muted', sans: 1 }) + T(316, 69, q('pa') ? '?' : pa.txt, { s: 10, b: 1, c: pa.fuera ? '--accent-red' : '--text-main', sans: 1 });
+    h += T(279, 68, 'FC', { a: 'end', s: 6.8, c: '--text-muted', sans: 1 }) + T(281, 69, q('fc') ? '?' : fc.txt, { s: 10, b: 1, c: fc.fuera ? '--accent-red' : '--text-main', sans: 1 });
+    h += T(314, 68, 'PA', { a: 'end', s: 6.8, c: '--text-muted', sans: 1 }) + T(316, 69, q('pa') ? '?' : pa.txt, { s: 10, b: 1, c: pa.fuera ? '--accent-red' : '--text-main', sans: 1 });
     const alarma = D.av.pris ? ['IC sistólica · lactato ↑', 'rabdomiólisis'] : D.av.pg ? ['acidosis láctica', 'hiato osmolar >10'] : D.av.hipoPA ? ['caída marcada', 'sin cifra'] : null;
     if (alarma) h += T(311, 79, alarma[0], { a: 'middle', s: 6.8, b: 1, c: '--accent-red', sans: 1 }) + T(311, 88, alarma[1], { a: 'middle', s: 6.8, b: 1, c: '--accent-red', sans: 1 });
     else h += T(311, 82, 'mala guía del dolor', { a: 'middle', s: 6.8, i: 1, c: '--text-muted' });

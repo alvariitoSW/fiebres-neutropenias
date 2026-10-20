@@ -4,7 +4,7 @@
 // Uso (desde la raíz del repo):
 //   node autonomo/jueces.mjs                         comprobaciones generales (siempre)
 //   node autonomo/jueces.mjs --eco                   + pruebas del simulador de eco
-//   node autonomo/jueces.mjs --atlas mr              + abre ese capítulo del atlas a 390 y 360 px
+//   node autonomo/jueces.mjs --atlas eject           + abre ese capítulo del atlas a 390 y 360 px
 //   node autonomo/jueces.mjs --ficha cardiologia:merinoCardiologia:panel-merino-cardio-tabs:mc-vasopresores
 //                                                    + abre esa ficha (especialidad:vista:panel:pestaña; la
 //                                                      vista puede ir vacía; Hematología usa «home»)
@@ -121,8 +121,14 @@ try {
     const vDe = (s) => (s.match(/\?v=([\w-]+)/) || [])[1];
     const ahora = vDe(readFileSync(join(RAIZ, 'index.html'), 'utf8'));
     const antes = vDe(execSync('git show origin/main:index.html', { cwd: RAIZ, encoding: 'utf8' }));
-    if (!tocaCache) ok('Caché: no cambió ningún .css ni js/main.js');
-    else if (ahora !== antes) ok(`Caché: ?v= subido (${antes} → ${ahora})`);
+    // AAAAMMDD-N se compara por partes: «-10» va después de «-9», y una versión hacia atrás no vale (el móvil que ya
+    // tiene la más alta no se enteraría del cambio).
+    const orden = (v = '') => { const [f, n] = v.split('-'); return [Number(f) || 0, Number(n) || 0]; };
+    const [fa, na] = orden(ahora), [fb, nb] = orden(antes);
+    const sube = fa > fb || (fa === fb && na > nb);
+    if (!tocaCache) ok('Caché: no cambió ninguna pieza de la app');
+    else if (sube) ok(`Caché: ?v= subido (${antes} → ${ahora})`);
+    else if (ahora !== antes) mal(`Caché: ?v= va hacia atrás (${antes} → ${ahora}); súbela por encima de la de main (node autonomo/version.mjs AAAAMMDD-N)`);
     else mal(`Caché: cambió una pieza de la app pero ?v= sigue en ${ahora} (node autonomo/version.mjs AAAAMMDD-N)`);
 } catch (e) { ojo(`Caché: no se pudo comparar con origin/main (${e.message.split('\n')[0]})`); }
 {

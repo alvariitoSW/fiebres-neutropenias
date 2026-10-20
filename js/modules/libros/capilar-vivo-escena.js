@@ -398,7 +398,7 @@ function pintarGraficas() {
         h += T(130, 166, 'DO₂ (mL/min/m²)', { a: 'middle', s: 7, sans: 1, c: '--text-muted' }) + T(36, 12, 'VO₂ (mL/min/m²)', { s: 7, sans: 1, c: '--text-muted' });
         if (e.util === 'sepsis' || e.consumo === 'fiebre' || Math.abs(D.sao2 - 0.98) > 0.005) {
             const p0 = 250 / SC, x0 = p0 / (0.5 / 0.98);
-            h += `<path d="M${X(0)} ${Y(0)}L${n2(X(x0))} ${n2(Y(p0))}H${X(1100)}" style="fill:none;stroke:var(--text-muted);stroke-width:1;stroke-dasharray:3 3"/>` + T(X(1100), Y(p0) - 3, 'normal', { a: 'end', s: 6.5, i: 1, c: '--text-muted' });
+            h += `<path d="M${X(0)} ${Y(0)}L${n2(X(x0))} ${n2(Y(p0))}H${X(1100)}" style="fill:none;stroke:var(--text-muted);stroke-width:1;stroke-dasharray:3 3"/>` + T(X(1100), Y(p0) - 3, 'normal', { a: 'end', s: 7.2, i: 1, c: '--text-muted' });
         }
         const xcl = Math.min(xc, 1100);
         h += `<path d="M${X(0)} ${Y(0)}L${n2(X(xcl))} ${n2(Y(Math.min(plateau, 1100 * pend)))}${xc < 1100 ? `H${X(1100)}` : ''}" style="fill:none;stroke:var(--accent-yellow);stroke-width:1.8"/>`;

@@ -254,7 +254,7 @@ export const PREGUNTAS = [
 export const B2_GIRO = { gc: 6, util: 'sepsis', consumo: 'fiebre', toma: 'scvo2' };
 export const B3E = { gc: 6, util: 'sepsis', estres: true, toma: 'scvo2' };
 export const CASOS = [
-    { id: 'B2', titulo: 'Dos camas, una pregunta', corto: 'Caso B2 · dos camas', sub: 'anemia frente a hipoxemia',
+    { id: 'B2', titulo: 'Dos camas, una pregunta', corto: 'Caso 1 · dos camas', sub: 'anemia frente a hipoxemia',
         paciente: { 'Cama 1': 'Varón, 62 años: hemorragia digestiva', 'Cama 2': 'Mujer, 55 años: neumonía' },
         camas: [{ n: 'Cama 1', e: { hb: 7.5 } }, { n: 'Cama 2', e: { pao2: 45 } }],
         pasos: [
@@ -314,7 +314,7 @@ export const CASOS = [
             'Una saturación venosa &gt;80 % en la sepsis es defecto de utilización, no buena perfusión.'],
         volver: { nombre: 'El oxígeno en la sangre y su transporte', ficha: 'mar-transporte-o2', estado: 'anemia' } },
 
-    { id: 'B3', titulo: 'Shock séptico: la ScvO₂ alta que no tranquiliza', corto: 'Caso B3 · shock séptico', sub: 'neumonía, noradrenalina, propofol',
+    { id: 'B3', titulo: 'Shock séptico: la ScvO₂ alta que no tranquiliza', corto: 'Caso 2 · shock séptico', sub: 'neumonía, noradrenalina, propofol',
         paciente: { Edad: '58 años', Peso: '80 kg', Motivo: 'Neumonía grave, shock séptico' },
         pasos: [
             { momento: 'Ingreso en la UCI', datos: { Fármacos: 'noradrenalina · propofol', 'SaO₂': '98 %', 'ScvO₂': '90 %', Lactato: '5 mmol/L' }, nuevo: ['Fármacos', 'SaO₂', 'ScvO₂', 'Lactato'],
@@ -370,7 +370,7 @@ export const CASOS = [
             'Propofol &gt;5 mg/kg/h (&gt;80 µg/kg/min) más de 48 h y un lactato que no cede: síndrome de infusión.'],
         volver: { nombre: 'La extracción de O₂ y el lactato', ficha: 'mar-extraccion-lactato', estado: 'sepsis' } },
 
-    { id: 'B1', titulo: 'La SpO₂ que mentía', corto: 'Caso B1 · humo', sub: 'incendio en casa, cefalea y confusión',
+    { id: 'B1', titulo: 'La SpO₂ que mentía', corto: 'Caso 3 · humo', sub: 'incendio en casa, cefalea y confusión',
         paciente: { Edad: '45 años', Motivo: 'Rescatada de un incendio en casa', Clínica: 'cefalea y confusión' },
         pasos: [
             { momento: 'Urgencias · llegada', datos: { 'SpO₂': '98 % en aire', Hb: '15 g/dL' }, nuevo: ['SpO₂', 'Hb'], estado: { co: true }, lupa: 'dedo', mirar: 'spo2', ocultar: ['sao2', 'cao2', 'do2', 'vo2', 'o2er', 'ven', 'pista'],
@@ -417,7 +417,7 @@ export const CASOS = [
             'El CaO₂ se calcula con la SaO₂ de la cooximetría: con COHb del 25 %, ≈15 mL/dL aunque la SpO₂ diga 98 %.'],
         volver: { nombre: 'Oximetría: de la punta del dedo a la sangre venosa', ficha: 'mar-oximetria', estado: 'co' } },
 
-    { id: 'B4', titulo: 'Sedación para una endoscopia', corto: 'Caso B4 · sedación', sub: 'obesa, apnea del sueño',
+    { id: 'B4', titulo: 'Sedación para una endoscopia', corto: 'Caso 4 · sedación', sub: 'obesa, apnea del sueño',
         paciente: { Edad: '52 años', Motivo: 'Sedación para una endoscopia', Antecedentes: 'obesidad · apnea del sueño' },
         pasos: [
             { momento: 'Endoscopia · minuto 10', datos: { 'PETCO₂': 'de 38 a 53 mmHg', 'SpO₂': '98 %' }, nuevo: ['PETCO₂', 'SpO₂'], estado: { sedacion: true }, lupa: 'boca', mirar: 'petco2',

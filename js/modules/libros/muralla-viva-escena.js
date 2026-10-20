@@ -136,7 +136,9 @@ const DEFS = `<defs>
     <pattern id="mur-p-rojo" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(60)"><line x1="0" y1="0" x2="0" y2="4" style="stroke:var(--accent-red)" stroke-opacity=".6" stroke-width=".8"/></pattern>
     <pattern id="mur-p-sabana" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-20)"><line x1="0" y1="0" x2="0" y2="6" style="stroke:var(--text-dim)" stroke-opacity=".28" stroke-width=".7"/></pattern>
 </defs>`;
+const LETRA_MIN = 8.4;
 const T = (x, y, txt, { size = 8, color = '--text-dim', anchor = 'start', peso = 400, italic = false, plato = false, extra = '' } = {}) => {
+    size = Math.max(size, LETRA_MIN);   // a 390 px la lámina se ve al ~87-92 %: así ningún rótulo baja de 7,5 px
     const tt = `<text x="${x}" y="${y}" text-anchor="${anchor}" style="font:${italic ? 'italic ' : ''}${peso} ${size}px Georgia, serif;fill:var(${color})"${extra}>${txt}</text>`;
     if (!plato) return tt;
     const w = String(txt).replace(/<[^>]+>/g, '').length * size * 0.5 + 6, x0 = anchor === 'end' ? x - w + 3 : anchor === 'middle' ? x - w / 2 : x - 3;
@@ -198,7 +200,7 @@ function estomago(e, D) {
     h += `<rect x="62" y="${yc - gc / 2}" width="294" height="${gc}" style="fill:var(--accent-red)" fill-opacity=".14"/><line x1="62" y1="${yc - gc / 2}" x2="356" y2="${yc - gc / 2}" style="stroke:var(--accent-red)" stroke-opacity=".7"/><line x1="62" y1="${yc + gc / 2}" x2="356" y2="${yc + gc / 2}" style="stroke:var(--accent-red)" stroke-opacity=".7"/>`;
     const nR = { normal: 9, oculta: 6, shock: 3 }[e.riego];
     for (let i = 0; i < nR; i++) h += mv({ tipo: 'ruta', pts: [[62, yc], [356, yc]], s0: i / nR, v: 0.09 * D.flujo }, P('rbc', Math.min(3.2, gc / 3.2)));
-    h += T(240, yc + gc / 2 + 9, 'capilar de la mucosa: 70-90 % del riego', { size: 7, color: '--text-dim', italic: true, plato: true });
+    h += T(66, yc + gc / 2 + 9, 'capilar de la mucosa: 70-90 % del riego', { size: 7, color: '--text-dim', italic: true, plato: true });
     // la fila de células (una sola capa)
     h += celulas(muestrear(sup, 9), ALTO, { fuera: enGap, trofica: e.enteral });
     // la regla de 0,1 mm
@@ -336,7 +338,7 @@ function boca(e, D) {
 /* ---- La sangre, la figura viva y la rueda ---- */
 function sangre(e, D) {
     let h = `<rect x="62" y="262" width="294" height="20" style="fill:var(--accent-red)" fill-opacity=".1"/><line x1="62" y1="262" x2="356" y2="262" style="stroke:var(--accent-red)" stroke-opacity=".75"/><line x1="62" y1="282" x2="356" y2="282" style="stroke:var(--accent-red)" stroke-opacity=".75"/>`;
-    h += T(66, 275, 'la sangre', { size: 7.5, color: '--text-dim', italic: true });
+    h += T(66, 275, 'la sangre', { size: 7.5, color: '--text-dim', italic: true, plato: true });
     for (let i = 0; i < 7; i++) h += mv({ tipo: 'ruta', pts: [[100, 272], [356, 272]], s0: i / 7, v: 0.08 }, P('rbc', 3));
     if (D.motor >= 1 && e.estacion === 'intestino') for (let i = 0; i < D.motor * 2; i++) h += mv({ tipo: 'ruta', pts: [[110, 268], [356, 276]], s0: i / (D.motor * 2) + .1, v: 0.06 }, P('cito', 2.6));
     if (D.translocacion && e.estacion === 'intestino') h += `<g data-toca="cateter" role="button" aria-label="Hacia la punta del catéter: vía 4"><rect x="226" y="238" width="134" height="56" fill="transparent"/>${T(354, 257, '→ punta del catéter · vía 4', { size: 7.5, anchor: 'end', color: '--accent-red', peso: 700, plato: true })}${T(354, 293, '(opinión del autor)', { size: 6.5, anchor: 'end', color: '--text-muted', italic: true })}</g>`;
@@ -373,20 +375,22 @@ function figuraViva(e, D) {
     if (e.estacion === 'intestino' && e.sdd) {
         const f = D.fig45; let h = plato('Fig. 4.5 · bacteriemias por BGN');
         [['Control', f.control], ['SOD', f.sod], ['SDD', f.sdd]].forEach(([nom, v], i) => {
-            const x = 74 + i * 34, alto = v / 4.5 * 40, y = 360 - alto, hl = nom === 'SDD';
-            h += `<rect x="${x}" y="${y}" width="24" height="${alto}" style="fill:var(--accent-yellow);stroke:var(--accent-yellow)" fill-opacity="${hl ? .5 : .15}"/>` + T(x + 12, y - 3, Q('fig45', String(v).replace('.', ',')), { size: 7.5, anchor: 'middle', color: '--text-main', peso: 700 }) + T(x + 12, 370, nom, { size: 7, anchor: 'middle', color: '--text-dim' });
+            const x = 70 + i * 30, alto = v / 4.5 * 40, y = 360 - alto, hl = nom === 'SDD';
+            h += `<rect x="${x}" y="${y}" width="22" height="${alto}" style="fill:var(--accent-yellow);stroke:var(--accent-yellow)" fill-opacity="${hl ? .5 : .15}"/>` + T(x + 11, y - 3, Q('fig45', String(v).replace('.', ',')), { size: 7.5, anchor: 'middle', color: '--text-main', peso: 700 }) + T(x + 11, 370, nom, { size: 7, anchor: 'middle', color: '--text-dim' });
         });
-        h += T(122, 318, Q('fig45', '−33 %'), { size: 6.5, anchor: 'middle', color: '--accent-green', peso: 700 }) + T(156, 330, Q('fig45', '−67 %'), { size: 6.5, anchor: 'middle', color: '--accent-green', peso: 700 });
+        h += T(111, 318, Q('fig45', '−33 %'), { size: 6.5, anchor: 'middle', color: '--accent-green', peso: 700 }) + T(141, 330, Q('fig45', '−67 %'), { size: 6.5, anchor: 'middle', color: '--accent-green', peso: 700 });
         // el reloj de la SDD (días 0-7)
-        const X = d => 186 + d * 9.4;
-        h += T(186, 318, 'cefuroxima: días 1-4', { size: 6.4, color: '--accent-yellow', peso: 700 });
+        const X = d => 168 + d * 10;
+        // la línea del día va debajo de los rótulos; «limpio: días 5-7» acaba antes del día 7 para no tacharse
+        const dd = Math.min(7, e.dia);
+        h += `<line x1="${n2(X(dd))}" y1="320" x2="${n2(X(dd))}" y2="358" style="stroke:var(--accent-blue)" stroke-width="1.4"/>`;
+        h += T(164, 318, 'cefuroxima: días 1-4', { size: 6.4, color: '--accent-yellow', peso: 700 });
         h += `<rect x="${X(0)}" y="321" width="${n2(X(4) - X(0))}" height="5" style="fill:var(--accent-yellow)" fill-opacity=".55"/>`;
-        h += T(186, 336, 'intestino limpio: 5-7 d', { size: 6.4, color: '--accent-green', peso: 700 });
+        h += T(164, 336, 'limpio: días 5-7', { size: 6.4, color: '--accent-green', peso: 700 });
         h += `<rect x="${X(5)}" y="339" width="${n2(X(7) - X(5))}" height="5" style="fill:var(--accent-green)" fill-opacity=".7"/>`;
         h += `<line x1="${X(0)}" y1="354" x2="${X(7)}" y2="354" style="stroke:var(--text-muted)" stroke-width=".6"/>`;
         for (let d = 0; d <= 7; d++) h += `<line x1="${n2(X(d))}" y1="351" x2="${n2(X(d))}" y2="357" style="stroke:var(--text-muted)" stroke-width=".6"/>` + ([0, 4, 7].includes(d) ? T(n2(X(d)), 365, d, { size: 6, anchor: 'middle', color: '--text-muted' }) : '');
-        const dd = Math.min(7, e.dia);
-        h += `<line x1="${n2(X(dd))}" y1="320" x2="${n2(X(dd))}" y2="358" style="stroke:var(--accent-blue)" stroke-width="1.4"/>` + T(Math.min(n2(X(dd)), 252), 374, 'día ' + e.dia, { size: 6.8, color: '--accent-blue', peso: 700, anchor: 'middle' });
+        h += T(Math.min(n2(X(dd)), 252), 374, 'día ' + e.dia, { size: 6.8, color: '--accent-blue', peso: 700, anchor: 'middle' });
         return h;
     }
     if (e.estacion === 'intestino') {

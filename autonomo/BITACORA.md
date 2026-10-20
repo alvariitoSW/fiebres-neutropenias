@@ -223,7 +223,7 @@ El resto del tablero sigue `aparcada`.
   anterior con piezas nuevas: solo `main.js` y el CSS llevan `?v=`, el resto de módulos no.
   - Ya hecho: el arranque no se cae entero si falla una pieza, y sale un aviso rojo que dice cuál
     (`js/core/aviso-arranque.js`, y `diagnostico.html` para comprobarlo en el móvil).
-  - Propuesta: versionar también los módulos que importa `main.js`.
+  - Hecho el 20/10: todas las piezas llevan la versión (`autonomo/version.mjs`, lección 7 del bloque 1).
 
 - **Ácido-base vivo, al entrar desde una ficha**: durante la animación (unos 3 s) la cabecera mini dice «paso 0»
   antes de pasar al estado (p. ej. «Vómitos»). Que diga el estado desde el principio.
@@ -232,6 +232,11 @@ El resto del tablero sigue `aparcada`.
   `core/mayeutica.js` (la pieza de las fichas) para que todos se comporten igual.
 - **Dos detalles de las fichas de Marino**: `mar-resumen-cateteres` traduce «go-to catheters» como «de último recurso»
   (p. 11; pide nota de fidelidad), y el lorazepam dice «>0,1 mg/kg/h» donde el PDF (p. 26) dice «≥0,1».
+
+- **Rótulos que pisan una línea del dibujo** (el juez de rótulos solo compara texto con texto; vistos al arreglar los
+  12 fallos de forma, 20/10): en la inmersión (Conceptos), el anillo del medallón corta «la cara · Tabla 6.1» y roza
+  «BPS 9», y con mar agitado la ola cruza «alerta y tranquilo · óptimo»; en el ácido-base (vómitos), la estela y la
+  recta de compensación cruzan «alcalosis metabólica». Propuesta: que el juez C mire también el choque con trazos.
 
 - **Reconvertir las preguntas viejas** al formato de estudio (`REGLAS.md` §8): hay **361 de redactar** entre ~2.600
   preguntas. **Cuando lo pidas** (lo dijiste el 14/10), por bloques, con tareas `estudio`.

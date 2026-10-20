@@ -339,10 +339,12 @@ function origenHTML(texto) {
     }).filter(x => x !== null).join(' · ');
 }
 // Los chips de origen escritos en el HTML o en los textos de las preguntas («ficha · …») se enlazan al pintarse.
+// En los datos, los ids van en data-org (<span class="agv-org" data-org="ficha · mr-…">ficha</span>): nunca se leen.
 function enlazarOrigenes(cont) {
     cont.querySelectorAll('span.agv-org').forEach(sp => {
-        if (sp.dataset.enlazado !== undefined || sp.children.length || !/^ficha · /.test(sp.textContent)) return;
-        sp.innerHTML = origenHTML(sp.textContent);
+        const org = sp.dataset.org || sp.textContent;
+        if (sp.dataset.enlazado !== undefined || sp.children.length || !/^ficha · /.test(org)) return;
+        sp.innerHTML = origenHTML(org);
         sp.dataset.enlazado = '';
     });
 }

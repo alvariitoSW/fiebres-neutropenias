@@ -130,10 +130,11 @@ function construirInstrumento() {
   }
   t += `<path id="abv-i-luna" d="${ext}${int}Z" fill="url(#abv-i-ray)" stroke="${C.muted}" stroke-width=".6" opacity=".95"/>`;
   for (const H of [100, 63, 40, 25, 16]) {
-    const ph = 9 - Math.log10(H), a = angPH(ph), [x, y] = pol(rH - H * .15 - 7, a);
-    t += `<text x="${x.toFixed(1)}" y="${(y + 3).toFixed(1)}" text-anchor="middle" font-size="8.4" font-style="italic" fill="${C.muted}">${H}</text>`;
+    const ph = 9 - Math.log10(H), a = angPH(ph), [x0, y] = pol(rH - H * .15 - 7, a);
+    const x = H === 100 ? x0 - 3.5 : x0;                              // el «100», un poco fuera: no roza la esfera
+    t += `<text x="${x.toFixed(1)}" y="${(y + 3).toFixed(1)}" text-anchor="middle" font-size="8.4" font-style="italic" fill="${C.muted}" class="abv-t-h">${H}</text>`;
   }
-  { const [x, y] = pol(rH - 4, -100); t += `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" font-size="7.6" font-style="italic" fill="${C.muted}" text-anchor="middle">[H⁺]</text>`; }
+  { const [x, y] = pol(rH - 4, -100); t += `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" font-size="7.6" font-style="italic" fill="${C.muted}" text-anchor="middle" class="abv-t-h">[H⁺]</text>`; }
   // arco de latón con sus tres tramos (y su forma: rayado, liso, contrarrayado)
   t += `<path d="${arcoD(RD + 7, -93, 63)}" fill="none" stroke="${C.oro}" stroke-width=".9"/>`;
   const banda = (ph0, ph1, fill, st) => { const a0 = angPH(ph0), a1 = angPH(ph1), r0 = RD - 8, r1 = RD;
@@ -143,10 +144,10 @@ function construirInstrumento() {
   for (let i = 0; i <= 20; i++) {
     const ph = 6.8 + i * .05, a = angPH(ph), mayor = i % 2 === 0, [x0, y0] = pol(RD - 8, a), [x1, y1] = pol(RD - 8 - (mayor ? 7 : 3.5), a);
     t += `<line x1="${x0.toFixed(1)}" y1="${y0.toFixed(1)}" x2="${x1.toFixed(1)}" y2="${y1.toFixed(1)}" stroke="${C.oro}" stroke-width="${mayor ? .9 : .5}"/>`;
-    if (i % 4 === 0) { const [lx, ly] = pol(RD + 16, a); t += `<text x="${lx.toFixed(1)}" y="${(ly + 4).toFixed(1)}" text-anchor="middle" font-size="${i === 12 ? 12 : 10.5}" fill="${i === 12 ? C.crema : C.oro}">${fmt(ph, 1)}</text>`; }
+    if (i % 4 === 0) { const [lx, ly] = pol(RD + 16, a); t += `<text x="${lx.toFixed(1)}" y="${(ly + 4).toFixed(1)}" text-anchor="middle" font-size="${i === 12 ? 12 : 10.5}" fill="${i === 12 ? C.crema : C.oro}" class="abv-t-ph">${fmt(ph, 1)}</text>`; }
   }
-  t += `<text x="46" y="146" text-anchor="middle" font-size="9.5" font-style="italic" fill="${C.rojo}">✚ ácido</text>`;
-  t += `<text x="300" y="94" text-anchor="middle" font-size="9.5" font-style="italic" fill="${C.verde}">▲ alcalino</text>`;
+  t += `<text x="46" y="146" text-anchor="middle" font-size="9.5" font-style="italic" fill="${C.rojo}" class="abv-t-lado">✚ ácido</text>`;
+  t += `<text x="300" y="94" text-anchor="middle" font-size="9.5" font-style="italic" fill="${C.verde}" class="abv-t-lado">▲ alcalino</text>`;
   // tendencia (paso 5): arco discontinuo
   t += `<path id="abv-i-tend" d="" fill="none" stroke="${C.verde}" stroke-width="1.6" stroke-dasharray="3 3" opacity="0"/>`;
   // la varilla y el móvil
@@ -165,14 +166,14 @@ function construirInstrumento() {
       <ellipse id="abv-i-aura-p" cx="40" cy="22" rx="46" ry="26" fill="${alfa(C.oro, .12)}" opacity="0"/>
       <g id="abv-i-lob" transform="translate(-14 -10) scale(.3)">${pulmonMini()}</g>
       <text x="96" y="20" font-size="12.5" fill="${C.oro}" id="abv-i-lee-p">PaCO₂ 40</text>
-      <text x="96" y="33" font-size="9" font-style="italic" fill="${C.muted}">la carga el pulmón</text></g>
+      <text x="96" y="33" font-size="9" font-style="italic" fill="${C.muted}" class="abv-t-sub">la carga el pulmón</text></g>
     <g id="abv-i-org-rinon" transform="translate(196 272)">
       <ellipse id="abv-i-aura-r" cx="104" cy="22" rx="40" ry="26" fill="${alfa(C.verde, .14)}" opacity="0"/>
       <path d="M118 2C138 0 150 14 149 31C148 46 136 52 123 51C110 50 103 44 106 35C108 30 110 27 108 22C104 14 103 4 118 2Z" fill="url(#abv-i-ray)" stroke="${C.oro}" stroke-width="1"/>
       <path d="M107 30C99 34 96 42 96 50" fill="none" stroke="${C.oro}" stroke-width=".8"/>
       <path d="M116 14C124 18 128 26 124 34M122 9C134 14 140 24 136 38" fill="none" stroke="${C.oro}" stroke-width=".5" opacity=".7"/>
       <text x="92" y="20" text-anchor="end" font-size="12.5" fill="${C.verde}" id="abv-i-lee-r">HCO₃⁻ 24</text>
-      <text x="92" y="33" text-anchor="end" font-size="9" font-style="italic" fill="${C.muted}">la carga el riñón</text></g>`;
+      <text x="92" y="33" text-anchor="end" font-size="9" font-style="italic" fill="${C.muted}" class="abv-t-sub">la carga el riñón</text></g>`;
   // aguja (encima de todo menos del disco)
   const [nx, ny] = [HUB.x, HUB.y - RD + 4];
   t += `<g id="abv-i-aguja"><path d="M${HUB.x - 2.6} ${HUB.y - 46}L${nx} ${ny}L${HUB.x + 2.6} ${HUB.y - 46}Z" fill="${C.oro}"/><path d="M${nx} ${ny - 6}l4 7h-8z" fill="${C.oro}"/></g>`;
@@ -1014,7 +1015,11 @@ function pintarCometa() {
     n['k-cola'].innerHTML = CARTA.cola.map((q, i) => `<circle cx="${q[0].toFixed(1)}" cy="${q[1].toFixed(1)}" r="${(1.2 + i * .32).toFixed(2)}" fill="${C.oro}" opacity="${((i + 1) / CARTA.cola.length * .75).toFixed(2)}"/>`).join('');
   }
   const der = x > 250;
-  n['k-punto-t'].setAttribute('x', (der ? x - 13 : x + 13).toFixed(1)); n['k-punto-t'].setAttribute('y', (E.hco3 < 24 ? y + 19 : y - 10).toFixed(1));
+  // El pH del cometa, arriba o abajo del punto; si caería sobre el rótulo «alcalosis metabólica», al otro lado
+  let ty = E.hco3 < 24 ? y + 19 : y - 10;
+  const tx0 = der ? x - 58 : x + 13, alcX = MX(47) + 6, alcY = MY(42) + 3;
+  if (Math.abs(ty - alcY) < 12 && tx0 + 45 > alcX && tx0 < alcX + 90) ty = E.hco3 < 24 ? y - 10 : y + 19;
+  n['k-punto-t'].setAttribute('x', (der ? x - 13 : x + 13).toFixed(1)); n['k-punto-t'].setAttribute('y', ty.toFixed(1));
   n['k-punto-t'].setAttribute('text-anchor', der ? 'end' : 'start');
   n['k-punto-t'].textContent = E.tendencia ? 'pH ↓ (tendencia)' : `pH ${oc('ph') ? '?' : phTxt(E.paco2, E.hco3)}`;
 }

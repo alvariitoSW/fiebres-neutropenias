@@ -11,7 +11,7 @@ Antes de nada lee, desde el disco: `CLAUDE.md` (sobre todo §9 «Cómo probar»)
 
 **Tu trabajo:**
 1. Pasar los jueces automáticos con lo que te diga el director, p. ej.
-   `node autonomo/jueces.mjs --eco --atlas mr` o `--ficha especialidad:vista:panel:pestaña`.
+   `node autonomo/jueces.mjs --eco --atlas eject` o `--ficha especialidad:vista:panel:pestaña`.
 2. Probar a mano lo que los jueces no ven, con Playwright (390×844 y 360×780, móvil y táctil): que cada mando de la
    figura o calculadora responde y da valores con sentido; que las cifras cambian en la dirección que dice el texto;
    que los enlaces cruzados llegan a su ficha. Haz capturas en `/tmp/plan-socialista/<clave>/` y **míralas** (Read).

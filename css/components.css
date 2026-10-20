@@ -2636,7 +2636,13 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 
 /* En Conceptos y Preguntas, el instrumento queda arriba fijo y compacto */
 .abv-estudio .abv-instrumento { position: sticky; top: 0; z-index: 8; background: var(--bg-main); margin: 0 -12px; padding: 4px 12px 6px; border-bottom: 1px solid var(--abv-line); box-shadow: 0 8px 14px -10px var(--bg-main); }
-.abv-estudio #abv-inst { height: 196px; width: auto; }
+.abv-estudio #abv-inst { height: 240px; width: auto; }
+/* En el estudio la esfera se ve al ~73 %: sus rótulos crecen para no bajar de 7,5 px a 390 */
+.abv-estudio #abv-inst .abv-t-h { font-size: 10.6px; }
+.abv-estudio #abv-inst .abv-t-ph { font-size: 10.8px; }
+.abv-estudio #abv-inst .abv-t-lado { font-size: 10.8px; }
+.abv-estudio #abv-inst .abv-t-sub { font-size: 10.6px; }
+.abv-estudio #abv-inst #abv-i-pal { font-size: 10.6px; letter-spacing: .4px; }
 .abv-estudio .abv-cociente { font-size: .84rem; }
 .abv-estudio .abv-teorico { font-size: .66rem; max-width: 96px; top: 4px; left: 12px; }
 
@@ -3644,6 +3650,8 @@ button.cvh-org { color: var(--accent-yellow); cursor: pointer; }
 .c7-cama .c7-tapa { display: none; position: absolute; inset: 0; width: 100%; padding: 0; border: 0; background: transparent; cursor: pointer; }
 .c7-cama.c7-compacta { display: grid; grid-template-columns: 120px 1fr; align-items: center; gap: 8px; min-height: 48px; padding-right: 8px; }
 .c7-cama.c7-compacta .c7-svg { height: 50px; width: 120px; }
+/* En la tira compacta el dibujo va a un tercio: sus rótulos (2-3 px) no se leerían. Va sin texto; lo dice el pie de al lado. */
+.c7-cama.c7-compacta .c7-svg text { display: none; }
 .c7-cama.c7-compacta .c7-pie { position: static; background: none; padding: 0; color: var(--text-dim); font-weight: 400; }
 .c7-cama.c7-compacta .c7-pie b { color: var(--accent-yellow); }
 .c7-cama.c7-compacta .c7-botones { display: none; }
@@ -3696,7 +3704,7 @@ button.cvh-org { color: var(--accent-yellow); cursor: pointer; }
 .mur-raiz.mur-estudio .mur-escena-bloque { position: sticky; top: 0; padding-top: 4px; padding-bottom: 6px; box-shadow: 0 12px 14px -12px rgba(23, 20, 15, 1); }
 .mur-raiz .mur-escena { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--border-color); background: var(--bg-main); }
 .mur-raiz #mur-lamina { display: block; width: 100%; height: auto; max-height: 350px; touch-action: pan-y; }
-.mur-raiz.mur-estudio #mur-lamina { height: 292px; }
+.mur-raiz.mur-estudio #mur-lamina { height: 330px; }
 .mur-raiz #mur-lamina [data-toca] { cursor: pointer; }
 .mur-raiz .mur-anillo { position: absolute; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; border: 2px solid var(--accent-blue);
   box-shadow: 0 0 0 4px rgba(212, 175, 55, .18); pointer-events: none; z-index: 4; }
@@ -3874,7 +3882,7 @@ body.study-mode-on .mur-dock { padding-right: 82px; }
 .tel-raiz.tel-estudio .tel-escena-bloque { position: sticky; top: 0; padding-top: 4px; padding-bottom: 6px; box-shadow: 0 12px 14px -12px rgba(23, 20, 15, 1); }
 .tel-raiz .tel-escena { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--border-color); background: var(--bg-main); }
 .tel-raiz #tel-lamina { display: block; width: 100%; height: auto; max-height: 340px; touch-action: pan-y; }
-.tel-raiz.tel-estudio #tel-lamina { height: 258px; }
+.tel-raiz.tel-estudio #tel-lamina { height: 300px; }
 .tel-raiz #tel-lamina [data-toca] { cursor: pointer; }
 .tel-raiz .tel-anillo { position: absolute; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; border: 2px solid var(--accent-blue);
   box-shadow: 0 0 0 4px rgba(212, 175, 55, .18); pointer-events: none; z-index: 4; }
@@ -4076,7 +4084,7 @@ body.study-mode-on .tel-dock { padding-right: 82px; }
 .inm-raiz.inm-estudio .inm-escena-bloque { position: sticky; top: 0; padding-top: 4px; padding-bottom: 6px; box-shadow: 0 12px 14px -12px rgba(23, 20, 15, 1); }
 .inm-raiz .inm-escena { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--border-color); background: var(--bg-main); }
 .inm-raiz #inm-mar { display: block; width: 100%; height: auto; touch-action: pan-y; }
-.inm-raiz.inm-estudio #inm-mar { height: 252px; }
+.inm-raiz.inm-estudio #inm-mar { height: 300px; }
 .inm-raiz #inm-mar [data-toca] { cursor: pointer; }
 .inm-raiz .inm-tablero { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
 .inm-raiz .inm-celda { background: var(--bg-card); border: 1px solid var(--inm-card2); border-radius: 8px; padding: 3px 4px 4px; min-width: 0; display: grid; align-content: start; }

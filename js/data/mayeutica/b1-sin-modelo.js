@@ -38,8 +38,8 @@ export const MAYEUTICA_SIN_MODELO = {
       { id: 'ue-g3', corto: 'la gastroscopia', tipo: 'test', modeloVivo: { murallaViva: 'isquemia' }, fuente: 'mar-ulcera-frecuencia · mar-sangrado-significativo',
         enunciado: 'Si haces una gastroscopia a los pacientes en sus primeras 24 h de UCI, ¿qué encontrarás?',
         opciones: [
-          { t: 'Erosiones en la mitad, y casi todas con sangrado importante', porque: 'Las erosiones son casi universales (75-100 %), y el sangrado «clínicamente significativo» es infrecuente. Con esa idea darías profilaxis a todos.' },
           { t: 'Erosiones en el 75-100 %; sangrado importante, raro', ok: true },
+          { t: 'Erosiones en la mitad, y casi todas con sangrado importante', porque: 'Las erosiones son casi universales (75-100 %), y el sangrado «clínicamente significativo» es infrecuente. Con esa idea darías profilaxis a todos.' },
           { t: 'Nada en la mayoría: las erosiones tardan días en aparecer', porque: 'Aparecen ya en las primeras 24 h, en el 75-100 %. Pensar que son tardías te hace subestimar lo pronto que empieza la lesión.' }],
         explicacion: 'Erosiones visibles en el <span class="hl">75-100 %</span> en las primeras 24 h; rezuman sangre, pero el sangrado <span class="hl">clínicamente significativo es infrecuente</span>. Las más profundas (hasta la submucosa) son las úlceras de estrés, más propensas a sangrar.' },
       { id: 'ue-g4', corto: 'la enteral', tipo: 'test', modeloVivo: { murallaViva: 'enteral' }, fuente: 'mar-enteral-protege · mar-tabla-4-2', modelo: visual('mar-ulcera-estres', '👁️ Pruébalo en la regla de la Tabla 4.2 (vista Visual)'),
@@ -91,8 +91,8 @@ export const MAYEUTICA_SIN_MODELO = {
         enunciado: 'Famotidina en un paciente con aclaramiento de creatinina de 40 mL/min. ¿Qué haces con la dosis?',
         opciones: [
           { t: 'Nada: 20 mg cada 12 h; los anti-H2 no se ajustan', porque: 'Se eliminan por el riñón y en la insuficiencia renal pueden ser neurotóxicos (alteración mental). Sin ajuste, le das una confusión evitable.' },
-          { t: 'Reducirla un 50 %: se acumula y puede ser neurotóxica', ok: true },
-          { t: 'Pasar a pantoprazol 20 mg: los IBP se ajustan a la mitad', porque: 'Los IBP no requieren ajuste renal (40 mg al día). Reducirlo es infradosificar sin motivo.' }],
+          { t: 'Pasar a pantoprazol 20 mg: los IBP se ajustan a la mitad', porque: 'Los IBP no requieren ajuste renal (40 mg al día). Reducirlo es infradosificar sin motivo.' },
+          { t: 'Reducirla un 50 %: se acumula y puede ser neurotóxica', ok: true }],
         explicacion: 'Famotidina 20 mg cada 12 h; <span class="hl">reducir un 50 % con ClCr <50</span>: se elimina por el riñón y puede dar alteración mental. Los IBP no requieren ajuste renal.' },
       { id: 'ue-e4', corto: 'sucralfato', tipo: 'test', modeloVivo: { murallaViva: 'sucralfato' }, fuente: 'mar-sucralfato · mar-sucralfato-pegas',
         enunciado: 'Sucralfato en un paciente con nutrición enteral y warfarina. ¿Qué problema hay?',
@@ -207,8 +207,8 @@ export const MAYEUTICA_SIN_MODELO = {
         enunciado: 'La heparina se une también al factor plaquetario 4. ¿Qué provoca, y depende de la dosis?',
         opciones: [
           { t: 'TIH, pero solo con dosis terapéuticas, no profilácticas', porque: 'No depende de la dosis: puede darse con dosis profilácticas. Si la descartas porque «solo es profilaxis», se te escapará una trombosis.' },
-          { t: 'Sangrado por consumo de plaquetas, mayor cuanto más dosis', porque: 'La TIH es activación plaquetaria: trombosis, y trombocitopenia por consumo. Y no depende de la dosis. Si esperas sangrado, no buscarás la trombosis.' },
-          { t: 'TIH (trombosis y trombopenia), con cualquier dosis', ok: true }],
+          { t: 'TIH (trombosis y trombopenia), con cualquier dosis', ok: true },
+          { t: 'Sangrado por consumo de plaquetas, mayor cuanto más dosis', porque: 'La TIH es activación plaquetaria: trombosis, y trombocitopenia por consumo. Y no depende de la dosis. Si esperas sangrado, no buscarás la trombosis.' }],
         explicacion: 'Heparina + FP4 → complejo antigénico → <span class="hl">anticuerpos IgG</span> → activación plaquetaria, <span class="hl-rojo">trombosis</span> y trombocitopenia por consumo (TIH). <span class="hl-rojo">No depende de la dosis</span>: puede darse con dosis profilácticas.' },
       { id: 'tf-g4', corto: 'HNF frente a HBPM', tipo: 'test', modeloVivo: { telarVivo: 'tih' }, fuente: 'mar-hbpm',
         enunciado: 'Compara la TIH y la biodisponibilidad de la HNF y de la HBPM.',
@@ -250,8 +250,8 @@ export const MAYEUTICA_SIN_MODELO = {
       { id: 'tf-e2', corto: 'IMC 44', tipo: 'test', modeloVivo: { telarVivo: 'obesidad-42' }, fuente: 'mar-tabla-5-2 · mar-hnf · mar-hbpm',
         enunciado: 'IMC 44 y función renal normal. ¿Qué pauta de HNF o de enoxaparina da la ficha, y cómo compruebas que la dosis llega?',
         opciones: [
-          { t: 'Las estándar: la obesidad no cambia la dosis', porque: 'En la obesidad la dosis estándar se queda corta por el mayor volumen de distribución. Le dejarías infradosificado.' },
           { t: 'HNF 7.500 U/8 h o enoxaparina 40 mg/12 h; anti-Xa', ok: true },
+          { t: 'Las estándar: la obesidad no cambia la dosis', porque: 'En la obesidad la dosis estándar se queda corta por el mayor volumen de distribución. Le dejarías infradosificado.' },
           { t: 'Enoxaparina por kilo de peso real, sin límite de dosis', porque: 'La ficha no da una pauta por kilo de la enoxaparina profiláctica: en la obesidad mórbida, 40 mg cada 12 h. Calcular por kilo en un IMC 44 dispara la dosis sin respaldo de la fuente.' }],
         explicacion: 'Obesidad mórbida (IMC ≥40): <span class="hl">HNF 7.500 U cada 8 h</span> (previene mejor) o <span class="hl">enoxaparina 40 mg cada 12 h</span>. Si la dosis fija es dudosa, <span class="hl">anti-Xa: pico profiláctico de 0,2-0,5 UI/mL</span>.' },
       { id: 'tf-e3', corto: 'fondaparinux y riñón', tipo: 'test', modeloVivo: { telarVivo: 'fonda-32' }, fuente: 'mar-fondaparinux-errata · mar-tabla-5-2',
@@ -381,8 +381,8 @@ export const MAYEUTICA_SIN_MODELO = {
       { id: 'te-g3', corto: 'el filtro', tipo: 'test', modeloVivo: { telarVivo: 'filtro' }, fuente: 'mar-filtro-vci',
         enunciado: '¿Es el filtro de vena cava inferior una forma de profilaxis?',
         opciones: [
-          { t: 'Sí: la alternativa si no se puede anticoagular', porque: 'A veces se usa en la TVP que no se puede anticoagular, pero no previene la TVP y no se recomienda como profilaxis. Si no puede anticoagularse, la profilaxis es la CNI.' },
           { t: 'No: no previene la TVP; solo atrapa los trombos', ok: true },
+          { t: 'Sí: la alternativa si no se puede anticoagular', porque: 'A veces se usa en la TVP que no se puede anticoagular, pero no previene la TVP y no se recomienda como profilaxis. Si no puede anticoagularse, la profilaxis es la CNI.' },
           { t: 'Sí, en el trauma grave, donde el riesgo es máximo', porque: 'En el trauma la ficha da enoxaparina y CNI. El filtro no previene la TVP en ningún escenario: ponerlo como profilaxis no protege de la trombosis.' }],
         explicacion: 'Los filtros <span class="hl-rojo">no previenen la TVP</span>; reducen la embolia pulmonar atrapando los trombos. Se usan a veces en la TVP que no se puede anticoagular, pero <span class="hl">no se recomiendan como profilaxis</span>.' },
       { id: 'te-g4', corto: 'antes y después', tipo: 'test', fuente: 'mar-esc-cirugia-general',
@@ -433,8 +433,8 @@ export const MAYEUTICA_SIN_MODELO = {
         enunciado: 'Lesión medular aguda sin sangrado activo. ¿Qué pauta?',
         opciones: [
           { t: 'CNI sola hasta que pueda moverse', porque: 'En la lesión medular se dan juntas la enoxaparina y la CNI, en cuanto sea seguro. Con la CNI sola le dejas en el grupo de más riesgo (~60-80 % sin profilaxis, lectura aproximada de la Figura 5.1) casi sin protección.' },
-          { t: 'Enoxaparina 30 mg/12 h y CNI, juntas', ok: true },
-          { t: 'Enoxaparina 40 mg cada 12 h a las 12-24 h, sin compresión', porque: 'Esa es la pauta de los órganos sólidos o las extremidades. En la lesión medular son 30 mg cada 12 h y con CNI.' }],
+          { t: 'Enoxaparina 40 mg cada 12 h a las 12-24 h, sin compresión', porque: 'Esa es la pauta de los órganos sólidos o las extremidades. En la lesión medular son 30 mg cada 12 h y con CNI.' },
+          { t: 'Enoxaparina 30 mg/12 h y CNI, juntas', ok: true }],
         explicacion: 'Lesión medular: <span class="hl">enoxaparina 30 mg SC cada 12 h en cuanto sea seguro, y CNI cuanto antes, juntas</span>. En la lesión medular el riesgo es alto solo 3-4 semanas.' },
       { id: 'te-e4', corto: 'ClCr 12', tipo: 'test', modeloVivo: { telarVivo: 'renal-12' }, fuente: 'mar-esc-especiales · mar-nota-dalteparina-escenarios',
         enunciado: 'UCI médica con un aclaramiento de creatinina de 12 mL/min. ¿Qué anticoagulante parenteral usas en la profilaxis?',
@@ -563,8 +563,8 @@ export const MAYEUTICA_SIN_MODELO = {
         enunciado: '¿Cuál es la dosis buena de un opioide?',
         opciones: [
           { t: 'La de la Tabla 6.2, sin salirse del rango', porque: 'Las necesidades varían mucho de una persona a otra: la dosis eficaz la marca la respuesta del paciente. Ceñirte a la tabla deja a unos con dolor y a otros con dosis de más.' },
-          { t: 'La mínima, por miedo a la depresión respiratoria', porque: 'La depresión respiratoria es rara a dosis habituales. Infradosificar por miedo deja al paciente con dolor.' },
-          { t: 'La que le alivia el dolor, según su respuesta', ok: true }],
+          { t: 'La que le alivia el dolor, según su respuesta', ok: true },
+          { t: 'La mínima, por miedo a la depresión respiratoria', porque: 'La depresión respiratoria es rara a dosis habituales. Infradosificar por miedo deja al paciente con dolor.' }],
         explicacion: '<span class="hl">La dosis eficaz la marca la respuesta del paciente</span>, no la recomendada: las necesidades varían mucho.' },
       { id: 'an-g6', corto: 'hipotenso', tipo: 'test', fuente: 'mar-tabla-6-2 · mar-fentanilo · mar-morfina',
         enunciado: 'Paciente hipotenso con dolor. ¿Fentanilo o morfina, y por qué?',
@@ -594,8 +594,8 @@ export const MAYEUTICA_SIN_MODELO = {
       { id: 'an-e2', corto: 'remifentanilo', tipo: 'test', fuente: 'mar-remifentanilo',
         enunciado: 'Remifentanilo en un TCE para poder explorarlo a menudo. ¿Qué es cierto?',
         opciones: [
-          { t: 'Hay que ajustarlo en la insuficiencia hepática', porque: 'Lo rompen esterasas plasmáticas inespecíficas: sin ajuste renal ni hepático. Bajarlo sin motivo deja al paciente con dolor.' },
           { t: 'Se va en 10 min; combinarlo con uno más largo', ok: true },
+          { t: 'Hay que ajustarlo en la insuficiencia hepática', porque: 'Lo rompen esterasas plasmáticas inespecíficas: sin ajuste renal ni hepático. Bajarlo sin motivo deja al paciente con dolor.' },
           { t: 'Se puede cortar de golpe sin problema: dura muy poco', porque: 'El corte brusco puede precipitar abstinencia: hay que combinarlo con un opioide de acción más larga. Cortarlo sin más le deja con dolor y abstinencia.' }],
         explicacion: 'Remifentanilo: ultracorto, 250 veces más potente que la morfina. Carga de 1,5 µg/kg y perfusión de 0,5-15 µg/kg/h; efecto en 1 min que <span class="hl">desaparece a los 10 min</span> de pararlo (<span class="hl">esterasas plasmáticas</span>). <span class="hl-rojo">El corte brusco puede precipitar abstinencia.</span>' },
       { id: 'an-e3', corto: 'meperidina', tipo: 'test', fuente: 'mar-meperidina',
@@ -619,7 +619,7 @@ export const MAYEUTICA_SIN_MODELO = {
           { t: '60-120 µg/kg/h; no se aconseja en la isquemia miocárdica', ok: true },
           { t: '60-120 µg/kg/h; no en el shock, porque baja la presión', porque: 'La ketamina sube la presión y la frecuencia (útil en el shock). Evitarla ahí es quitarle una opción que le favorece.' }],
         explicacion: 'Ketamina: <span class="hl">60-120 µg/kg/h</span> con un opioide, sin efectos psicomiméticos llamativos a esas dosis. Sube la PA y la FC (útil en el shock), broncodilata (útil en el asma); <span class="hl-rojo">no se aconseja en la isquemia miocárdica</span>.',
-        nota: '<b>Nota de fidelidad.</b> La Tabla 6.3 (<a class="biblio-link" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=22" target="_blank" rel="noopener">PDF pág. 22</a>) imprime «60-120 µg/h»; el texto del capítulo (<a class="biblio-link" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=23" target="_blank" rel="noopener">PDF pág. 23</a>), «60-120 µg/kg/h». La pregunta sigue el texto; la ficha anota la discrepancia (mar-ketamina-errata).' },
+        nota: '<b>Nota de fidelidad.</b> La Tabla 6.3 (<a class="biblio-link" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=22" target="_blank" rel="noopener">PDF pág. 22</a>) imprime «60-120 µg/h»; el texto del capítulo (<a class="biblio-link" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=23" target="_blank" rel="noopener">PDF pág. 23</a>), «60-120 µg/kg/h». La pregunta sigue el texto; la ficha lo anota en su «Nota de fidelidad: la dosis de ketamina».' },
       { id: 'an-e6', corto: 'los efectos adversos', tipo: 'error', fuente: 'mar-opioide-respiratorio · mar-opioide-cardio · mar-opioide-intestino · mar-opioide-nauseas · mar-tabla-6-3',
         enunciado: 'Las notas de un residente sobre efectos adversos y analgésicos. Encuentra los errores.',
         frases: [
@@ -723,8 +723,8 @@ export const MAYEUTICA_SIN_MODELO = {
       { id: 'se-g3', corto: 'a qué RASS', tipo: 'test', modeloVivo: { inmersionViva: 'rass-objetivo' }, fuente: 'mar-escalas-sedacion · mar-rass-calc',
         enunciado: 'Paciente en perfusión de sedantes. ¿A qué RASS lo titulas?',
         opciones: [
-          { t: 'A −3 o −4, para que no luche', porque: 'Eso es sedación moderada o profunda: alarga el despertar (horas o días) y retrasa el destete.' },
           { t: 'A −1 o −2: sedación ligera, no la profunda', ok: true },
+          { t: 'A −3 o −4, para que no luche', porque: 'Eso es sedación moderada o profunda: alarga el despertar (horas o días) y retrasa el destete.' },
           { t: 'A 0 siempre, aunque lleve sedantes en perfusión', porque: 'El óptimo es 0, pero con perfusión de sedantes la ficha titula a −1 a −2. Exigir 0 con perfusión es pedirle a la escala lo que no da.' }],
         explicacion: 'RASS: 4 niveles de agitación (+1 a +4) y 5 de sedación (−1 a −5). <span class="hl">El óptimo es 0</span>; como objetivo de la perfusión, <span class="hl">−1 a −2 (sedación ligera)</span>. Es fiable, como la SAS.' },
       { id: 'se-g4', corto: 'puntúa', tipo: 'test', modeloVivo: { inmersionViva: 'rass-objetivo' }, fuente: 'mar-rass-pasos · mar-tabla-6-4', modelo: visual('mar-sedacion', '👁️ Búscalo en la escalera RASS (vista Visual)'),
@@ -784,8 +784,8 @@ export const MAYEUTICA_SIN_MODELO = {
         enunciado: 'Propofol al 1 % a 20 mL/h en un paciente con nutrición parenteral. ¿Qué tienes en cuenta?',
         opciones: [
           { t: 'Nada: un sedante no aporta calorías', porque: 'Va en emulsión lipídica al 10 %: 1 kcal/mL. A 20 mL/h son 480 kcal al día que se suman a la parenteral.' },
-          { t: 'Que aporta ≈480 kcal al día', ok: true },
-          { t: 'Que hay que dosificarlo por el peso real', porque: 'El propofol se dosifica por peso ideal. Con el peso real, en un obeso, le darías de más.' }],
+          { t: 'Que hay que dosificarlo por el peso real', porque: 'El propofol se dosifica por peso ideal. Con el peso real, en un obeso, le darías de más.' },
+          { t: 'Que aporta ≈480 kcal al día', ok: true }],
         explicacion: 'Emulsión lipídica al 10 % (casi idéntica a la de la nutrición parenteral): <span class="hl">1 kcal/mL</span>, que cuenta en las calorías del día. 20 mL/h × 24 h = 480 kcal. Dosificar por <span class="hl">peso ideal</span>; sin ajuste renal ni hepático.' },
       { id: 'se-e5', corto: 'dexmedetomidina', tipo: 'test', modeloVivo: { inmersionViva: 'dexmedetomidina' }, fuente: 'mar-dexmedetomidina',
         enunciado: 'Insuficiencia cardíaca con FEVI reducida y delirio. Eliges dexmedetomidina. ¿Qué vigilas?',
@@ -815,8 +815,8 @@ export const MAYEUTICA_SIN_MODELO = {
             pregunta: { id: 'e4b-1', tipo: 'test', fuente: 'mar-propofol-calc · mar-tabla-6-6 · mar-escalas-sedacion', origen: 'ficha · la cuenta, del caso (10 mg/mL: la ficha avisa de que no es del capítulo)',
               enunciado: 'Calcula la dosis (propofol al 1 %, 10 mg/mL; peso ideal 70 kg). ¿Cuánto es, y qué haces con la profundidad?',
               opciones: [
-                { t: '≈7 µg/kg/min: dosis baja; mantener', porque: 'Es un error de ×10: 30 mL/h × 10 mg/mL = 300 mg/h, ≈71 µg/kg/min. Le dejarías en sedación profunda creyendo que lleva poco.' },
                 { t: '≈71 µg/kg/min: aligerar a RASS −1/−2', ok: true },
+                { t: '≈7 µg/kg/min: dosis baja; mantener', porque: 'Es un error de ×10: 30 mL/h × 10 mg/mL = 300 mg/h, ≈71 µg/kg/min. Le dejarías en sedación profunda creyendo que lleva poco.' },
                 { t: '≈71 µg/kg/min, normal: el mantenimiento llega a 50; seguir igual', porque: '71 supera el mantenimiento de la Tabla 6.6 (5-50 µg/kg/min), y con RASS −4 está más profundo de lo que pide la ficha.' }],
               explicacion: '30 mL/h × 10 mg/mL = 300 mg/h ÷ 70 kg ≈ 4,3 mg/kg/h ≈ <span class="hl">71 µg/kg/min</span>. Mantenimiento: 5-50. Objetivo: <span class="hl">RASS −1 a −2</span>.' } },
           { momento: 'Día 2 · 12:00', datos: { Plan: 'el R2 prefiere mantenerlo profundo hasta la extubación' }, nuevo: ['Plan'],

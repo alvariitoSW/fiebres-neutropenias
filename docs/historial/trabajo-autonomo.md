@@ -220,3 +220,16 @@ la skill del plan («Modo bloque» y «Ahorro») y `autonomo/bloques/LEEME.md`; 
 `autonomo/bloques/b1/lecciones.md`. Tres tareas técnicas aprobadas antes del bloque 2: jueces ampliados (forma de las
 preguntas, nombres internos, rótulos), versión en todas las piezas y un solo motor de Mayéutica. El aviso de
 `.ignore` se arregló de raíz con un gancho de inicio de sesión (`git update-index --skip-worktree`).
+
+### Los 12 fallos de los jueces de forma (20/10/2026)
+
+Los jueces nuevos de las lecciones (`autonomo/jueces-forma.mjs`, `--forma`) encontraron 12 fallos que ya estaban en
+main. Los arregló un constructor (el primero se cortó al reiniciarse la sesión; el segundo siguió desde sus cambios):
+- **Forma de las preguntas**: 9 opciones reescritas en el río y mar y 7 en el catéter (la buena era la más corta en 11
+  de 20 y 9 de 17; ahora 2 y 3), sin cifras nuevas: cada matiz sale de la explicación o del «porque» de la misma
+  pregunta. En las fichas sin modelo, 11 preguntas con las opciones reordenadas (la buena en la 1ª: de 37 a 26 de 73).
+- **Nombres internos**: los ids de la vista Explorar del río y mar pasan a botones con el título de la ficha; «Caso
+  B1-B4» y «Caso A1-A3» pasan a «Caso 1-4» y «Caso 1-3»; la nota de la ketamina se nombra por su título.
+- **Rótulos**: letra más grande en muralla, inmersión, telar, catéter, capilar y ácido-base (esfera de 196 a 240 px);
+  la tira compacta de la cama 7 va sin texto dentro del dibujo.
+- El juez de caché ya no da por buena una versión que va hacia atrás (compara AAAAMMDD y N por separado).

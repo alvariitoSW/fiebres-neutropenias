@@ -36,8 +36,9 @@ export const PROB = { x: 304, y: 92, w: 40, h: 112 };     // la probeta
 const HUB = { x: 154, y: 211 };
 export const VENA_Y = 244;
 const LUPA = { cx: 180, cy: 166, r: 150 };
+// Un rótulo: nunca por debajo de s 6,4 (7,8 de letra), para que a 390 px no baje de 7,5 px ni en el estudio.
 const t = (x, y, txt, { s = 7, c = 'text-muted', a = 'start', i = true, w = '', id = '' } = {}) =>
-    `<text${id ? ` id="ctv-${id}"` : ''} x="${x}" y="${y}" font-size="${+(s * 1.22).toFixed(1)}" text-anchor="${a}" style="fill:var(--${c});font-family:Georgia,serif${i ? ';font-style:italic' : ''}${w ? ';font-weight:' + w : ''}">${txt}</text>`;
+    `<text${id ? ` id="ctv-${id}"` : ''} x="${x}" y="${y}" font-size="${+(Math.max(s, 6.4) * 1.22).toFixed(1)}" text-anchor="${a}" style="fill:var(--${c});font-family:Georgia,serif${i ? ';font-style:italic' : ''}${w ? ';font-weight:' + w : ''}">${txt}</text>`;
 const numero = (x, y, n) => `<g transform="translate(${x} ${y})"><circle r="8" style="fill:var(--accent-yellow);stroke:var(--bg-main);stroke-width:1.5"/><text y="3.2" font-size="9" text-anchor="middle" style="fill:var(--bg-main);font-family:Georgia,serif;font-weight:700">${n}</text></g>`;
 
 function defs() {
@@ -84,7 +85,7 @@ export function construirLamina() {
             <g id="ctv-g-hematies"></g>
             ${t(104, 234, 'piel', { s: 6.5 })}${t(104, 274, 'grasa', { s: 6.5 })}
             <text id="ctv-rot-vena" x="104" y="${VENA_Y + 3}" font-size="7" style="fill:var(--accent-purple);font-family:Georgia,serif;font-style:italic">vena</text>
-            ${t(356, 326, 'brazo en corte', { s: 6, a: 'end' })}
+            ${t(356, 297, 'brazo en corte', { s: 6, a: 'end' })}
         </g>
         <!-- pie de gotero y regla -->
         <line x1="10" y1="14" x2="10" y2="318" style="stroke:var(--text-dim)" stroke-width="2.4" stroke-linecap="round"/>
@@ -226,10 +227,10 @@ function pintarLaminaA(e) {
         const B = BOMBAS[e.bomba];
         const pant = D0.alarma ? 'ALARMA' : e.bomba === 'infusor' ? (c.rapido ? '1,5 L/min' : '¿catéter?') : '≤' + fmt(B.max) + ' mL/h';
         $('g-bomba').innerHTML = `<g transform="translate(${e.io ? 120 : 96} 186)">
-            <rect width="52" height="26" rx="4" style="fill:var(--bg-card);stroke:var(--text-dim)" stroke-width="1.1"/>
-            <rect x="4" y="4" width="44" height="11" rx="2" style="fill:var(--bg-main);stroke:${D0.alarma ? 'var(--accent-red)' : 'var(--text-muted)'}" stroke-width=".8"/>
-            <text x="26" y="12.6" font-size="7" text-anchor="middle" style="fill:${D0.alarma ? 'var(--accent-red)' : 'var(--accent-yellow)'};font-family:system-ui,sans-serif;font-weight:700">${pant}</text>
-            <text x="26" y="22.4" font-size="5.6" text-anchor="middle" style="fill:var(--text-dim);font-family:Georgia,serif;font-style:italic">${e.bomba === 'infusor' ? 'infusor rápido' : e.bomba === 'jeringa' ? 'jeringa' : 'volumétrica'}</text></g>`;
+            <rect width="60" height="27" rx="4" style="fill:var(--bg-card);stroke:var(--text-dim)" stroke-width="1.1"/>
+            <rect x="4" y="4" width="52" height="11" rx="2" style="fill:var(--bg-main);stroke:${D0.alarma ? 'var(--accent-red)' : 'var(--text-muted)'}" stroke-width=".8"/>
+            <text x="30" y="12.6" font-size="7.6" text-anchor="middle" style="fill:${D0.alarma ? 'var(--accent-red)' : 'var(--accent-yellow)'};font-family:system-ui,sans-serif;font-weight:700">${pant}</text>
+            <text x="30" y="23.4" font-size="7.6" text-anchor="middle" style="fill:var(--text-dim);font-family:Georgia,serif;font-style:italic">${e.bomba === 'infusor' ? 'infusor rápido' : e.bomba === 'jeringa' ? 'jeringa' : 'volumétrica'}</text></g>`;
     }
     // oclusión
     const oc = e.oclusion && !resuelta(e) ? e.oclusion : null;
