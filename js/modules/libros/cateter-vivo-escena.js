@@ -393,7 +393,7 @@ function pintarLupaC(e) {
         <circle cx="${tip[0]}" cy="${tip[1]}" r="2.6" style="fill:${ok === false ? 'var(--accent-red)' : 'var(--text-main)'}"/>`;
     if (e.izquierdo) h += `<path d="M144 128 L144 140" style="stroke:var(--accent-red)" stroke-width="2.4"/>${t(160, 112, 'apoya en la pared', { s: 7, c: 'accent-red', i: false, w: 700 })}`;
     if (!e.izquierdo && !e.aire.abierto) h += t(tip[0] + 14, tip[1] + 3, 'arrastra la punta', { s: 6.4, c: 'text-muted' });
-    if (e.aire.abierto && e.aire.postura !== 'espontanea') h += `<rect x="62" y="260" width="236" height="26" rx="7" style="fill:var(--bg-main);stroke:var(--accent-yellow)" stroke-width=".8"/>${t(180, 271, e.aire.postura === 'trendelenburg' ? 'Trendelenburg: sube la presión venosa' : 'Femoral: el catéter no entra en el tórax', { s: 7.2, a: 'middle', c: 'text-main', i: false })}${t(180, 281, e.aire.postura === 'trendelenburg' ? 'menos riesgo; cuánto, el libro no lo dice' : 'sin presión negativa, no entra aire', { s: 7.2, a: 'middle', c: 'accent-yellow', i: false, w: 600 })}`;
+    if (e.aire.abierto && e.aire.postura !== 'espontanea') h += `<rect x="62" y="260" width="236" height="26" rx="7" style="fill:var(--bg-main);stroke:var(--accent-yellow)" stroke-width=".8"/>${t(180, 271, e.aire.postura === 'trendelenburg' ? 'Trendelenburg: sube la presión venosa' : 'Femoral: el catéter no entra en el tórax', { s: 7.2, a: 'middle', c: 'text-main', i: false })}${t(180, 281, e.aire.postura === 'trendelenburg' ? 'menos riesgo; cuánto, el libro no lo dice' : 'sin presión negativa: el libro no ve riesgo', { s: 7.2, a: 'middle', c: 'accent-yellow', i: false, w: 600 })}`;
     h += `<g id="ctv-c-burbujas"></g>`;
     $('lupaC').innerHTML = h;
     Anim.burbujas = [];
@@ -598,10 +598,10 @@ export function pintarLectura() {
         const ml = Math.round(Anim.aireMl);
         const letal = ml >= 200;
         if (D.aire.reducido && e.aire.abierto) h += `<span class="ctv-k">Aire</span><span class="ctv-grande">${q('aire', 'menos')}<small>riesgo</small></span><span class="ctv-t ctv-ilu">sin cifra</span>`;
-        else h += `<span class="ctv-k">Aire</span><span${letal ? ' class="ctv-alarma"' : ''}><span class="ctv-grande">${q('aire', fmt(D.aire.tasa ? ml : 0))}<small>mL</small></span></span><span class="ctv-t">${!e.aire.abierto ? 'cerrado' : D.aire.tasa ? 'en ' + dec(ml / AIRE.tasa, 1) + ' s' : '0 mL/s'}</span>`;
+        else h += `<span class="ctv-k">Aire</span><span${letal ? ' class="ctv-alarma"' : ''}><span class="ctv-grande">${q('aire', fmt(D.aire.tasa ? ml : 0))}<small>mL</small></span></span><span class="ctv-t">${!e.aire.abierto ? 'cerrado' : D.aire.tasa ? 'en ' + dec(ml / AIRE.tasa, 1) + ' s, calc.' : 'modelo'}</span>`;
         h += `<span class="ctv-k">Mortal</span><b>200-300 mL</b><span class="ctv-t">ficha</span>`;
-        h += `<span class="ctv-k">Punta</span><b>${q('punta', D.punta.ok === true ? '✓ carina' : D.punta.ok === false ? '✗ mal' : e.punta === 'auricula' ? 'aurícula' : 'alta')}</b><span class="ctv-t">ficha</span>`;
-        pie = `100 mL/s · 3-5 mL/kg = 210-350 en 70 kg`;
+        h += `<span class="ctv-k">Punta</span><b>${q('punta', D.punta.ok === true ? (e.punta === 'carina' ? '✓ carina' : '✓ algo alta') : D.punta.ok === false ? '✗ mal' : e.punta === 'auricula' ? 'aurícula' : 'alta')}</b><span class="ctv-t">ficha</span>`;
+        pie = `100 mL/s: 14 G con 5 mmHg · 3-5 mL/kg = 210-350 en 70 kg (ilustr.)`;
     } else {
         const d = D.eco;
         h += `<span class="ctv-k">Vena</span><b>${q('eco', estado.eco.comprimir ? (d.venaColapsa ? 'colapsada' : 'no se comprime') : 'abierta')}</b><span class="ctv-t">ficha</span>`;

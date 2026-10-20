@@ -137,7 +137,7 @@ function fraseDe(v, n) {
     if (n.manejo !== v.manejo) return {
         dejar: ['Dejarlo mientras llegan los cultivos: de 1.527 retirados por sospecha, <span class="hl">solo 169 (11 %)</span> lo estaban. Si se confirma y se deja, <span class="hl-rojo">el antibiótico apenas lo descontamina</span> (biopelícula): son de esperar recurrencias.', 'ficha · mar-bac-no-retirar · mar-bac-guia'],
         retirar: ['Retirar y poner otro <span class="hl">en un sitio nuevo</span>: la biopelícula se va con el catéter.', 'ficha · mar-bac-guia'],
-        guia: ['<span class="hl-rojo">No sobre guía</span>: retirar y poner otro en un sitio nuevo. Sobre guía, solo si el acceso venoso es muy limitado; también tiene complicaciones. El libro no da el porqué: el dibujo no lo inventa.', 'ficha · mar-bac-guia'],
+        guia: ['<span class="hl-rojo">No sobre guía</span>: retirar y poner otro en un sitio nuevo. Sobre guía puede ser la mejor opción si el acceso venoso es muy limitado; también tiene complicaciones. El libro no da el porqué: el dibujo no lo inventa.', 'ficha · mar-bac-guia'],
         null: ['', '']
     }[n.manejo];
     if (n.zoomB !== v.zoomB) return {
@@ -149,15 +149,15 @@ function fraseDe(v, n) {
     if (n.hcIncubado !== v.hcIncubado && n.hcIncubado) return ['El mismo germen en los dos; el del catéter crece <span class="hl">2,5 h antes</span>: el catéter es la fuente (≥2 h, 91 %).', 'ficha · mar-tabla-3-4 · horas ilustrativas · 2,5 h del caso'];
     if (n.izquierdo !== v.izquierdo) return n.izquierdo ? ['Un catéter izquierdo que no gira hacia abajo <span class="hl-rojo">apoya en la pared de la cava</span> y puede erosionarla: la pista es un mediastino ancho y un derrame nuevo.', 'ficha · mar-perforacion-vcs (Fig. 3.1)'] : ['Catéter derecho otra vez.', ''];
     if (n.punta !== v.punta) return {
-        yugular: ['<span class="hl-rojo">Malposición</span>: ha subido a la yugular. Con un subclavio, mira las dos yugulares con eco. Hay malposición en el 15-18 %.', 'ficha · mar-punta-eco · mar-punta-objetivo'],
-        'vcs-alta': ['En la cava, pero más arriba del objetivo: 1-2 cm por encima de la aurícula.', 'ficha · mar-punta-objetivo'],
+        yugular: ['<span class="hl-rojo">Malposición</span>: ha subido a la yugular. Con un subclavio, mira las dos yugulares con eco. Las malposiciones, de cualquier tipo, son el 15-18 %, sobre todo con la subclavia.', 'ficha · mar-punta-eco · mar-punta-objetivo'],
+        'vcs-alta': ['En la cava, algo por encima de la carina: <span class="hl">sigue siendo aceptable</span>. El objetivo, 1-2 cm por encima de la aurícula.', 'ficha · mar-punta-rx · mar-punta-objetivo'],
         carina: ['<span class="hl">Bien</span>: a la altura de la carina, que queda justo encima de la unión cava-aurícula.', 'ficha · mar-punta-rx (Fig. 2.6)'],
         auricula: ['En la aurícula: en 2.348 pacientes así, <span class="hl">ninguna perforación</span> ni arritmia relevante. Se está dejando de recolocar.', 'ficha · mar-punta-auricula']
     }[n.punta];
     if (n.aire.postura !== v.aire.postura || n.aire.abierto !== v.aire.abierto) {
         if (!n.aire.abierto) return [{ espontanea: 'Respira solo, semiincorporado: la presión intratorácica es negativa.', trendelenburg: 'Trendelenburg: sube la presión venosa.', femoral: 'Catéter femoral: no entra en el tórax.' }[n.aire.postura], 'ficha · mar-aire-fisio · mar-aire-prevencion'];
         if (n.aire.postura === 'espontanea') return ['Con 5 mmHg, por un 14 G entran <span class="hl-rojo">100 mL de aire por segundo</span>; 200-300 mL en pocos segundos matan.', 'ficha · mar-aire-fisio'];
-        return n.aire.postura === 'trendelenburg' ? ['Trendelenburg: sube la presión venosa y <span class="hl">reduce el riesgo</span> de embolia aérea. No lo anula: el conector se cierra igual. Cuánto entra, el libro no lo dice (burbujas lentas: ilustrativo).', 'ficha · mar-aire-prevencion · ritmo ilustrativo'] : ['Femoral: el catéter no entra en el tórax ni sufre presión negativa: <span class="hl">no entra aire</span>.', 'ficha · mar-aire-prevencion'];
+        return n.aire.postura === 'trendelenburg' ? ['Trendelenburg: sube la presión venosa y <span class="hl">reduce el riesgo</span> de embolia aérea. No lo anula: el conector se cierra igual. Cuánto entra, el libro no lo dice (burbujas lentas: ilustrativo). No hace falta, y no se tolera, con congestión venosa; no se aconseja con hipertensión intracraneal.', 'ficha · mar-aire-prevencion · mar-yugular · ritmo ilustrativo'] : ['Femoral: el catéter no entra en el tórax ni sufre presión negativa: <span class="hl">el libro no lo considera un riesgo</span> (el contador a 0 es del modelo).', 'ficha · mar-aire-prevencion'];
     }
     const E0 = v.eco, E1 = n.eco;
     if (E1.eje !== E0.eje) return E1.eje === 'largo' ? ['Eje largo: se ven la aguja, la guía y el catéter enteros, pero <span class="hl-rojo">no la arteria vecina</span>.', 'ficha · mar-eco-ejes'] : ['Eje corto: localizas la vena y ves la arteria vecina; la aguja es solo un punto brillante.', 'ficha · mar-eco-ejes'];
