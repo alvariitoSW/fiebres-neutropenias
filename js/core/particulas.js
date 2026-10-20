@@ -67,11 +67,21 @@ function partesDe(forma, r, e = {}) {
         case 'caCitrato': return [trazo(elipse(1.9 * r, 1.4 * r), 0.28, { color: e.anillo, sinBorde: true }), ...partesDe('ovalo', 0.85 * r)];
         case 'celula': return [trazo(elipse(1.4 * r, 1.4 * r), 0.38), lleno(elipse(0.45 * r, 0.45 * r), { sinBorde: true })];
         case 'luna': { const R = 1.15 * r; return [lleno(`M${n2(0.5275 * R)} ${n2(-0.8495 * R)}A${n2(R)} ${n2(R)} 0 1 0 ${n2(0.5275 * R)} ${n2(0.8495 * R)}A${n2(0.85 * R)} ${n2(0.85 * R)} 0 0 1 ${n2(0.5275 * R)} ${n2(-0.8495 * R)}Z`)]; }
+        // O₂: dos bolitas unidas por una barra (O=O). Lactato: trípode, medio copo.
+        case 'pesa': {
+            const bola = (cx, rr) => `M${n2(cx + rr)} 0A${n2(rr)} ${n2(rr)} 0 1 1 ${n2(cx - rr)} 0A${n2(rr)} ${n2(rr)} 0 1 1 ${n2(cx + rr)} 0Z`;
+            return [trazo(`M${n2(-0.9 * r)} 0H${n2(0.9 * r)}`, 0.34), lleno(bola(-0.9 * r, 0.6 * r) + bola(0.9 * r, 0.6 * r))];
+        }
+        case 'tripode': {
+            let d = '';
+            for (const g of [90, 210, 330]) { const a = g * Math.PI / 180; d += `M0 0L${n2(Math.cos(a) * 1.4 * r)} ${n2(Math.sin(a) * 1.4 * r)}`; }
+            return [trazo(d, 0.38)];
+        }
     }
     return [lleno(elipse(r, r))];
 }
 // Hasta dónde llega cada forma, en radios (para que quepa en un icono).
-const ALCANCE = { gota: 1.55, grano: 1.7, grano1: 2.5, pajarita: 1.35, rombo1: 2, rombo2: 2.6, caCitrato: 2.05, aro: 2.05, estrella: 1.5, celula: 1.6, ovalo: 1.45, ovaloHueco: 1.45, disco: 1.4, copo: 1.5 };
+const ALCANCE = { gota: 1.55, grano: 1.7, grano1: 2.5, pajarita: 1.35, rombo1: 2, rombo2: 2.6, caCitrato: 2.05, aro: 2.05, estrella: 1.5, celula: 1.6, ovalo: 1.45, ovaloHueco: 1.45, disco: 1.4, copo: 1.5, pesa: 1.55, tripode: 1.45 };
 
 // Grosor del borde oscuro: fino, pero visible también en partículas pequeñas.
 const borde = r => Math.max(0.22 * r, 0.8);
