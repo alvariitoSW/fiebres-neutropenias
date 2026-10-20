@@ -35,7 +35,7 @@
 html { -webkit-text-size-adjust: 100%; }
 body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 var(--serif);
   padding-left: max(14px, env(safe-area-inset-left, 0px)); padding-right: max(14px, env(safe-area-inset-right, 0px));
-  padding-top: 8px; padding-bottom: calc(var(--dock-h) + 24px); }
+  padding-top: 8px; padding-bottom: calc(var(--dock-h) + var(--frase-h, 40px) + 16px); }
 main { max-width: 560px; margin: 0 auto; display: grid; gap: 10px; grid-template-columns: minmax(0, 1fr); }
 main > *, .bloque > * { min-width: 0; }
 h1 { font-size: 1.22rem; line-height: 1.2; margin: 0; color: var(--oro); font-weight: normal; }
@@ -88,9 +88,14 @@ body.estudio #lamina { width: min(100%, calc(36vh * 360 / 330)); margin: 0 auto;
   color: var(--oro); font: 600 1.2rem/1 var(--sans); cursor: pointer; z-index: 3; }
 .anillo { position: absolute; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; border: 2px solid var(--oro-claro);
   box-shadow: 0 0 0 4px rgba(212, 175, 55, .18); pointer-events: none; z-index: 4; }
-.frase { font: .9rem/1.36 var(--serif); color: var(--fg); min-height: 2.7em; border-left: 3px solid var(--oro); padding: 1px 0 1px 9px; }
+/* La frase viva: fija, justo encima del dock; 2 líneas, y entera al tocarla */
+.frase { position: fixed; left: 0; right: 0; bottom: var(--dock-h); z-index: 19; margin: 0; background: var(--bg-main); border-top: 1px solid var(--line);
+  font: .84rem/1.3 var(--serif); color: var(--fg); padding: 5px max(14px, calc((100% - 560px) / 2)); box-shadow: inset 3px 0 0 var(--oro); cursor: pointer;
+  }
+.frase-txt { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.frase.abierta .frase-txt { display: block; max-height: 40vh; overflow-y: auto; }
 body.estudio .frase, body.estudio .tira, body.estudio .leyenda-mini, body.estudio .lupas { display: none; }
-body.estudio .mandos-lupa, body.estudio .nota-lupa { display: none; }
+body.estudio .nota-lupa { display: none; }
 .nota-lupa b { color: var(--oro); }
 
 /* Botones y mandos comunes */
@@ -124,7 +129,13 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 .raya { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 1px; scroll-snap-type: x proximity; }
 .raya::-webkit-scrollbar { display: none; }
 .raya > * { scroll-snap-align: start; }
+.lupas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.lupas .tog { white-space: normal; min-width: 0; line-height: 1.15; border-radius: 12px; padding: 4px 9px; text-align: left; }
+.lupas .tog small { display: block; }
 .lupas .tog svg { width: 15px; height: 15px; }
+.escena.con-lupa .lectura { position: static; max-width: none; margin: 0 8px 8px; }
+.escena.con-lupa .chapa { bottom: auto; top: 10px; left: 56px; }
+body.estudio .escena.con-lupa #lamina { width: min(100%, calc(29vh * 360 / 330)); }
 .lupas .tog.opcional { border-style: dashed; }
 .mandos-lupa { min-height: 0; }
 .tira { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
@@ -133,7 +144,7 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
   padding: 3px; cursor: zoom-in; min-height: 44px; width: 96px; position: relative; }
 .lamina-libro img { display: block; height: 54px; width: 88px; object-fit: contain; }
 .lamina-libro span { font: 600 .58rem/1.15 var(--sans); color: var(--bg-main); text-align: center; }
-.lamina-libro.midio::after { content: 'el libro midió esto'; position: absolute; top: -1px; left: -1px; right: -1px; font: 700 .52rem/1.4 var(--sans); background: var(--oro); color: var(--bg); border-radius: 8px 8px 0 0; text-align: center; }
+.lamina-libro.midio::after { content: 'datos del libro'; position: absolute; top: -1px; left: -1px; right: -1px; font: 700 .52rem/1.4 var(--sans); background: var(--oro); color: var(--bg); border-radius: 8px 8px 0 0; text-align: center; }
 .lamina-libro.midio img { margin-top: 9px; height: 45px; }
 dialog#visor { width: min(96vw, 560px); max-height: 92vh; padding: 10px; border: 1px solid var(--oro); border-radius: 14px; background: var(--card2); color: var(--fg); }
 dialog#visor::backdrop { background: rgba(23, 20, 15, .82); }
@@ -145,12 +156,20 @@ a.b-enlace { display: inline-flex; align-items: center; min-height: 44px; paddin
 
 /* Dock fijo abajo */
 .dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--bg-main); isolation: isolate; border-top: 1px solid var(--line);
-  padding: 6px max(10px, env(safe-area-inset-left, 0px)) calc(6px + env(safe-area-inset-bottom, 0px)); }
-.dock-in { max-width: 560px; margin: 0 auto; display: grid; gap: 6px; }
-.dock-tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px; }
+  padding: 4px max(10px, env(safe-area-inset-left, 0px)) calc(4px + env(safe-area-inset-bottom, 0px)); }
+.dock-in { max-width: 560px; margin: 0 auto; display: grid; gap: 4px; }
+.dock-tabs { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 2px; }
 .dock-tabs button { min-height: 44px; background: transparent; border: 0; border-bottom: 2px solid transparent; color: var(--muted); font: 600 .78rem/1.1 var(--sans); cursor: pointer; padding: 0 2px; }
 .dock-tabs button[aria-selected="true"] { color: var(--oro); border-bottom-color: var(--oro); }
-.dock-panel { display: grid; gap: 6px; min-height: 96px; align-content: start; }
+.dock-panel { display: grid; gap: 4px; min-height: 92px; align-content: start; }
+.dos-seg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.fila-io { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px; align-items: center; }
+.rejilla4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
+.rejilla4 .tog { white-space: normal; justify-content: center; text-align: center; padding: 2px 4px; font-size: .7rem; line-height: 1.12; border-radius: 10px; flex-direction: column; gap: 0; min-width: 0; }
+.rejilla4 .tog small { display: block; font-size: .6rem; }
+.dock select { min-height: 44px; width: 100%; min-width: 0; background: var(--card2); color: var(--fg); border: 1px solid var(--line); border-radius: 10px; font: 600 .74rem var(--sans); padding: 0 6px; }
+.dock select:disabled { opacity: .5; }
+.raya.con-mas { mask-image: linear-gradient(to right, #000 85%, transparent); -webkit-mask-image: linear-gradient(to right, #000 85%, transparent); }
 .chip-f { flex: none; min-height: 44px; display: grid; align-items: center; padding: 3px 10px; background: var(--card2); color: var(--fg); border: 1px solid var(--line);
   border-radius: 12px; cursor: pointer; text-align: left; }
 .chip-f span { font: 600 .76rem/1.1 var(--sans); white-space: nowrap; }
@@ -268,17 +287,15 @@ code { font-size: .78em; color: var(--dim); overflow-wrap: anywhere; }
       <button type="button" class="lupa-cerrar" id="lupa-cerrar" hidden aria-label="Cerrar la lupa y volver a la lámina del flujo">×</button>
       <div class="anillo" id="anillo" hidden></div>
     </div>
-    <div class="raya lupas" id="lupas" role="group" aria-label="Lupas">
+    <div class="lupas" id="lupas" role="group" aria-label="Lupas">
       <button type="button" class="tog" data-lupa="A" aria-pressed="true"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 14 L14 2" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>A · El flujo</button>
       <button type="button" class="tog" data-lupa="B" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>B · Piel y biopelícula</button>
       <button type="button" class="tog" data-lupa="C" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>C · La punta y el aire</button>
-      <button type="button" class="tog opcional" data-lupa="D" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-dasharray="2 1.6"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>D · Pinchar con eco <small>opcional</small></button>
+      <button type="button" class="tog" data-lupa="D" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-dasharray="2 1.6"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>D · Pinchar con eco</button>
     </div>
-    <div class="raya mandos-lupa" id="mandos-lupa" role="group" aria-label="Mandos de la lupa"></div>
     <p class="para nota-lupa" id="nota-lupa" hidden></p>
     <div class="tira" id="tira" role="group" aria-label="Láminas del libro"></div>
     <ul class="leyenda-mini" id="leyenda-mini" aria-label="Formas"></ul>
-    <p class="frase" id="frase" aria-live="polite"></p>
   </section>
 
   <!-- ============ EXPLORAR ============ -->
@@ -286,25 +303,24 @@ code { font-size: .78em; color: var(--dim); overflow-wrap: anywhere; }
     <section class="bloque">
       <h2>Qué es cada cosa que se mueve</h2>
       <ul class="leyenda" id="leyenda"></ul>
-      <p class="para">Las formas son las de la tabla única de la app (<code>js/data/formas-iones.js</code>): la gota es agua, el disco un hematíe, el óvalo Ca²⁺ y el triángulo invertido fosfato. <b>El coco y la burbuja son propuestas</b> (borde discontinuo): no están en la tabla y solo entran si las apruebas. El coco no choca con ninguna (es el único con adhesinas); la burbuja recuerda al anillo del glucosado, pero solo sale en la lupa C, donde no hay glucosado. La forma dice qué es; el color, nunca solo.</p>
+      <p class="para">Las formas son las de la tabla única de formas de la app: la gota es agua, el disco un hematíe, el óvalo Ca²⁺ y el triángulo invertido fosfato. <b>El coco y la burbuja son propuestas</b> (borde discontinuo): no están en la tabla y solo entran si las apruebas. El coco no choca con ninguna (es el único con adhesinas); la burbuja recuerda al anillo del glucosado, pero solo sale en la lupa C, donde no hay glucosado. La forma dice qué es; el color, nunca solo.</p>
     </section>
 
     <section class="bloque">
       <h2>Cómo leer la lámina</h2>
       <dl class="simil">
         <dt>Pie de gotero</dt><dd>la bolsa sube o baja por la regla; la altura sobre el punto de punción es el ΔP de la ecuación</dd>
-        <dt>A escala</dt><dd>la franja del medio dibuja el catéter elegido con su longitud real (6,4 px por cm) y su grosor real (entre ellos)</dd>
-        <dt>Brazo en corte</dt><dd>piel (rayado), grasa (punteado) y la vena (ciruela). Es un esquema: el catéter no está a escala dentro</dd>
+        <dt>Brazo en corte</dt><dd>piel (rayado), grasa (punteado) y la vena (ciruela). El catéter entra con su longitud real (8 px por cm, con la barra de 5 cm abajo) y su grosor real entre ellos (aumentado ×4); el PICC sale del encuadre: «sigue: 50 cm»</dd>
         <dt>Probeta</dt><dd>el caudalímetro: se llena al ritmo del flujo. La cifra, en la lectura de arriba, con su origen</dd>
-        <dt>Lupas</dt><dd>B: la piel, las cuatro vías del germen y la biopelícula. C: la punta y el aire. D (opcional): pinchar con eco</dd>
+        <dt>Lupas</dt><dd>B: la piel, las cuatro vías del germen y la biopelícula. C: la punta y el aire. D: pinchar con eco</dd>
       </dl>
     </section>
 
     <details class="nota-plegable" open>
-      <summary>Dos bancos de cifras: no se mezclan</summary>
-      <div class="nota-fuentes"><b>Fig. 1.1</b> (mL/min): agua por gravedad, catéteres de 1,2″ para el calibre y de 16 G para la longitud. <b>No dice a qué altura</b> estaba la bolsa: su banco no se escala con la altura. <span class="org">ficha · mar-fig-1-1-calibre · mar-fig-1-1-longitud</span><br>
+      <summary>Dos experimentos, dos unidades: no se mezclan</summary>
+      <div class="nota-fuentes"><b>Fig. 1.1</b> (mL/min): agua por gravedad, catéteres de 1,2″ para el calibre y de 16 G para la longitud. <b>No dice a qué altura</b> estaba la bolsa: sus cifras no se escalan con la altura. <span class="org">ficha · mar-fig-1-1-calibre · mar-fig-1-1-longitud</span><br>
       <b>Tablas 1.2 y 1.3</b> (L/h): agua por gravedad desde 40 pulgadas, catéteres reales del catálogo. <span class="org">ficha · mar-tabla-1-2 · mar-tabla-1-3</span><br>
-      Son dos experimentos distintos. La maqueta nunca pasa una cifra de un banco al otro ni convierte unidades entre ellos.</div>
+      Son dos experimentos distintos: aquí nunca se pasa una cifra del uno al otro ni se convierten unidades entre ellos.</div>
       <div class="tabla-scroll" style="margin-top:8px">
         <table class="data-table">
           <caption>Fig. 1.1 · mL/min</caption>
@@ -337,21 +353,21 @@ code { font-size: .78em; color: var(--dim); overflow-wrap: anywhere; }
     <details class="nota-plegable">
       <summary>De dónde sale cada cifra del modelo</summary>
       <ul class="huecos">
-        <li><b>Altura de la bolsa</b>: 68 cm = 50 mmHg y 100 cm = 75 mmHg <code>mar-altura-bolsa</code>. Con el banco de las tablas, a 68 cm el flujo es el de la tabla × 50/75, porque el flujo es proporcional al ΔP (Hagen-Poiseuille, <code>mar-poiseuille</code>). A 0 cm no hay gradiente ni flujo. Solo esas tres paradas: la regla no se interpola.</li>
-        <li><b>Bombas</b> <code>mar-bombas</code>: volumétrica 0,1-1.000 mL/h; jeringa hasta 100 mL, a 0,1-100 mL/h; infusor rápido hasta 1,5 L/min, con catéteres de infusión rápida de 7-8 Fr y 2-2,5″. Con otro catéter, la ficha no da cifra.</li>
-        <li><b>Intraósea</b> <code>mar-io-flujo</code>: un 25 % del flujo «de una vía periférica» (sin decir cuál) y la médula a unos 30 mmHg. La barra es relativa: no hay L/h.</li>
-        <li><b>French y gauge</b> <code>mar-tabla-1-1</code>, <code>mar-french</code>: Fr × 0,33 = mm. La tabla y la ecuación no coinciden del todo (nota de fidelidad abajo).</li>
-        <li><b>Aire</b> <code>mar-aire-fisio</code>: 100 mL/s por un 14 G con 5 mmHg de gradiente; mortal con 200-300 mL (3-5 mL/kg) en pocos segundos. Con Trendelenburg o un catéter femoral, el contador no arranca <code>mar-aire-prevencion</code>.</li>
-        <li><b>Biopelícula</b> <code>mar-biofilm</code>, <code>mar-bac-clinica</code>: visible al microscopio electrónico tras un solo día; sin clínica en las primeras 48 h. Cuánto crece entre esas marcas: <b>ilustrativo</b>.</li>
-        <li><b>Paquete de inserción</b> <code>mar-tabla-2-1</code>: reduce las bacteriemias aplicado junto; no da cifras de cada medida. Las «puertas» que cierra cada una: <b>ilustrativo</b>.</li>
-        <li><b>Hemocultivos</b> <code>mar-tabla-3-4</code>: tiempo diferencial ≥2 h (91 %) o recuento ≥3 veces (94 %). Las horas absolutas de los frascos son <b>ilustrativas</b>; la diferencia de 2,5 h es del caso.</li>
+        <li><b>Altura de la bolsa</b>: 68 cm = 50 mmHg y 100 cm = 75 mmHg <span class="org">ficha · mar-altura-bolsa</span>. Con las tablas, a 68 cm el flujo se <b>calcula</b>: el de la tabla × 50/75, porque el flujo es proporcional al ΔP (Hagen-Poiseuille, <span class="org">ficha · mar-poiseuille</span>). A 0 cm no hay gradiente ni flujo. Solo esas tres paradas: la regla no se interpola.</li>
+        <li><b>Bombas</b> <span class="org">ficha · mar-bombas</span>: volumétrica 0,1-1.000 mL/h; jeringa hasta 100 mL, a 0,1-100 mL/h; infusor rápido hasta 1,5 L/min, con catéteres de infusión rápida de 7-8 Fr y 2-2,5″. Con otro catéter, la ficha no da cifra.</li>
+        <li><b>Intraósea</b> <span class="org">ficha · mar-io-flujo</span>: un 25 % del flujo «de una vía periférica» (sin decir cuál) y la médula a unos 30 mmHg. La barra es relativa: no hay L/h.</li>
+        <li><b>French y gauge</b> <span class="org">ficha · mar-tabla-1-1</span>, <span class="org">ficha · mar-french</span>: Fr × 0,33 = mm. La tabla y la ecuación no coinciden del todo (nota de fidelidad abajo).</li>
+        <li><b>Aire</b> <span class="org">ficha · mar-aire-fisio</span>: 100 mL/s por un 14 G con 5 mmHg de gradiente; mortal con 200-300 mL (3-5 mL/kg) en pocos segundos. Con Trendelenburg sube la presión venosa y el riesgo baja (el libro no dice cuánto: burbujas lentas, ilustrativo); con un catéter femoral no entra aire <span class="org">ficha · mar-aire-prevencion</span>.</li>
+        <li><b>Biopelícula</b> <span class="org">ficha · mar-biofilm</span>, <span class="org">ficha · mar-bac-clinica</span>: visible al microscopio electrónico tras un solo día; sin clínica en las primeras 48 h. Cuánto crece entre esas marcas: <b>ilustrativo</b>.</li>
+        <li><b>Paquete de inserción</b> <span class="org">ficha · mar-tabla-2-1</span>: reduce las bacteriemias aplicado junto; no da cifras de cada medida. Las «puertas» de la piel que cierra cada una (manos, barreras, clorhexidina): <b>ilustrativo</b>. Evitar la femoral se hace hoy por la trombosis: no cierra ninguna puerta.</li>
+        <li><b>Hemocultivos</b> <span class="org">ficha · mar-tabla-3-4</span>: tiempo diferencial ≥2 h (91 %) o recuento ≥3 veces (94 %). Las horas absolutas de los frascos son <b>ilustrativas</b>; la diferencia de 2,5 h es del caso.</li>
       </ul>
     </details>
 
     <details class="nota-plegable">
       <summary>Notas de fidelidad</summary>
       <div class="nota-fuentes"><b>French.</b> 7 Fr: 2,31 mm por la ecuación y 2,4 en la Tabla 1.1; 9 Fr: 2,97 frente a 3,2. La tabla recoge catéteres reales y la ecuación es una aproximación: se dan las dos. <span class="org">ficha · mar-french-nota</span></div>
-      <div class="nota-fuentes" style="margin-top:6px"><b>40 pulgadas y 100 cm.</b> Las Tablas 1.2-1.3 se midieron desde 40 pulgadas (101,6 cm) y la ficha da 75 mmHg para 100 cm (39 pulgadas). La maqueta las toma como la misma marca. <span class="org">ficha · mar-tabla-1-2 · mar-altura-bolsa</span></div>
+      <div class="nota-fuentes" style="margin-top:6px"><b>40 pulgadas y 100 cm.</b> Las Tablas 1.2-1.3 se midieron desde 40 pulgadas (101,6 cm) y la ficha da 75 mmHg para 100 cm (39 pulgadas). Aquí se toman como la misma marca. <span class="org">ficha · mar-tabla-1-2 · mar-altura-bolsa</span></div>
       <div class="nota-fuentes" style="margin-top:6px"><b>Fig. 1.10: «fémur».</b> El pie de la figura y el «A Final Word» dicen fémur proximal; el texto y el dibujo describen la tibia. Se sigue el texto. <span class="org">ficha · mar-io-errata</span></div>
       <div class="nota-fuentes" style="margin-top:6px"><b>Tabla 3.3.</b> NaOH 0,1 mmol/L en la fila de los precipitados alcalinos y 0,1 N en las demás. Se reproduce tal cual. <span class="org">ficha · mar-nota-naoh</span></div>
     </details>
@@ -359,7 +375,7 @@ code { font-size: .78em; color: var(--dim); overflow-wrap: anywhere; }
     <details class="nota-plegable">
       <summary>Lo que la ficha no da (huecos)</summary>
       <ul class="huecos">
-        <li>La altura de la bolsa en la Fig. 1.1: su banco no se escala.</li>
+        <li>La altura de la bolsa en la Fig. 1.1: sus cifras no se escalan.</li>
         <li>Qué «vía periférica» es el 100 % de la intraósea: barra relativa.</li>
         <li>El flujo por gravedad del catéter de infusión rápida: sin cifra.</li>
         <li>El ritmo de crecimiento de la biopelícula entre 24 h y 48 h, y en días: ilustrativo.</li>
@@ -369,7 +385,7 @@ code { font-size: .78em; color: var(--dim); overflow-wrap: anywhere; }
 
     <details class="nota-plegable">
       <summary>Cada ficha abre el catéter en su estado</summary>
-      <p class="para">En la app, cada ficha llevaría su botón (<code>data-cateter-vivo="&lt;estado&gt;"</code>) y el «← VOLVER» a la ficha. Aquí, toca un estado para verlo.</p>
+      <p class="para">Cada ficha llevaría su botón al catéter en su estado, y el «← VOLVER» a la ficha. Toca uno para verlo.</p>
       <ul class="prof" id="lista-estados"></ul>
     </details>
 
@@ -382,8 +398,7 @@ code { font-size: .78em; color: var(--dim); overflow-wrap: anywhere; }
       <span class="eyebrow">Para decidir</span>
       <h2>¿Lo construimos así?</h2>
       <div class="opciones-elige" data-q="general"><button type="button" aria-pressed="false">Construir así</button><button type="button" aria-pressed="false">Construir con cambios</button></div>
-      <p class="para"><b>Lupa D · Pinchar con eco</b> (esquema 2D, no el ecógrafo): ¿se queda?</p>
-      <div class="opciones-elige" data-q="lupaD"><button type="button" aria-pressed="false">Lupa D: sí</button><button type="button" aria-pressed="false">Lupa D: no</button></div>
+      <p class="para"><b>Lupa D · Pinchar con eco</b>: se queda (lo decidiste en la vuelta 1).</p>
       <p class="para"><b>Formas nuevas</b> para la tabla única: coco (bacteria) y burbuja de aire.</p>
       <div class="opciones-elige" data-q="coco"><button type="button" aria-pressed="false">Coco: sí</button><button type="button" aria-pressed="false">Coco: no</button></div>
       <div class="opciones-elige" data-q="burbuja"><button type="button" aria-pressed="false">Burbuja: sí</button><button type="button" aria-pressed="false">Burbuja: no</button></div>
@@ -406,6 +421,7 @@ code { font-size: .78em; color: var(--dim); overflow-wrap: anywhere; }
   </div>
 </main>
 
+<p class="frase" id="frase" aria-live="polite" title="Toca para leerla entera"></p>
 <nav class="dock" id="dock" aria-label="Mandos">
   <div class="dock-in">
     <div id="dock-explorar">
@@ -414,49 +430,50 @@ code { font-size: .78em; color: var(--dim); overflow-wrap: anywhere; }
         <button type="button" role="tab" data-tab="empujar" aria-selected="false">Empujar</button>
         <button type="button" role="tab" data-tab="tiempo" aria-selected="false">Tiempo</button>
         <button type="button" role="tab" data-tab="problema" aria-selected="false">Problema</button>
+        <button type="button" role="tab" data-tab="lupa" aria-selected="false" id="tab-lupa" hidden>Lupa</button>
       </div>
       <div class="dock-panel" data-panel="cateter">
-        <div class="seg" id="m-banco" aria-label="Banco de cifras"><button type="button" data-v="fig" aria-pressed="true">Fig. 1.1 <small>mL/min</small></button><button type="button" data-v="tablas" aria-pressed="false">Tablas 1.2-1.3 <small>L/h</small></button></div>
         <div class="dos-seg" id="banco-fig">
-          <div><div class="rot">Calibre · 1,2″</div><div class="seg" id="m-calibre" aria-label="Calibre"><button type="button" data-v="16">16 G</button><button type="button" data-v="18">18 G</button><button type="button" data-v="20">20 G</button></div></div>
-          <div><div class="rot">Longitud · 16 G</div><div class="seg" id="m-longitud" aria-label="Longitud"><button type="button" data-v="2">2″</button><button type="button" data-v="6">6″</button><button type="button" data-v="12">12″</button></div></div>
+          <div class="seg" id="m-calibre" aria-label="Calibre (longitud fija de 1,2 pulgadas)"><button type="button" data-v="16">16 G<small>1,2″</small></button><button type="button" data-v="18">18 G<small>1,2″</small></button><button type="button" data-v="20">20 G<small>1,2″</small></button></div>
+          <div class="seg" id="m-longitud" aria-label="Longitud (16 G)"><button type="button" data-v="2">2″<small>16 G</small></button><button type="button" data-v="6">6″<small>16 G</small></button><button type="button" data-v="12">12″<small>16 G</small></button></div>
         </div>
-        <div class="raya" id="m-catalogo" role="group" aria-label="Catálogo" hidden></div>
-        <div class="fila-vena"><div class="seg" id="m-vena" aria-label="Vena"><button type="button" data-v="pequena">Vena pequeña</button><button type="button" data-v="grande">Vena grande</button></div><span class="fr-chip" id="fr-chip"></span></div>
+        <div class="raya con-mas" id="m-catalogo" role="group" aria-label="Catálogo (desliza)" hidden></div>
+        <div class="dos-seg"><div class="seg" id="m-banco" aria-label="Experimento"><button type="button" data-v="fig" aria-pressed="true">Fig. 1.1<small>mL/min</small></button><button type="button" data-v="tablas" aria-pressed="false">Tablas<small>L/h</small></button></div>
+          <div class="seg" id="m-vena" aria-label="Vena"><button type="button" data-v="pequena">Vena<small>pequeña</small></button><button type="button" data-v="grande">Vena<small>grande</small></button></div></div>
       </div>
       <div class="dock-panel" data-panel="empujar" hidden>
-        <div class="seg" id="m-altura" aria-label="Altura de la bolsa"><button type="button" data-v="0">Bolsa <small>0 cm</small></button><button type="button" data-v="68">68 cm <small>50 mmHg</small></button><button type="button" data-v="100">100 cm <small>75 mmHg</small></button></div>
-        <div class="seg" id="m-bomba" aria-label="Bomba"><button type="button" data-v="gravedad">Gravedad</button><button type="button" data-v="volumetrica">Volumétrica</button><button type="button" data-v="jeringa">Jeringa</button><button type="button" data-v="infusor">Infusor rápido</button></div>
-        <div class="fila"><button type="button" class="tog" id="m-io" aria-pressed="false">Vía intraósea</button><span class="nota-mini" id="nota-empujar"></span></div>
+        <div class="fila-io"><div class="seg" id="m-altura" aria-label="Altura de la bolsa"><button type="button" data-v="0">0 cm<small>sin ΔP</small></button><button type="button" data-v="68">68 cm<small>50 mmHg</small></button><button type="button" data-v="100">100 cm<small>75 mmHg</small></button></div>
+          <button type="button" class="tog" id="m-io" aria-pressed="false">Intraósea</button></div>
+        <div class="seg" id="m-bomba" aria-label="Bomba"><button type="button" data-v="gravedad">Gravedad</button><button type="button" data-v="volumetrica">Volumé&shy;trica</button><button type="button" data-v="jeringa">Jeringa</button><button type="button" data-v="infusor">Infusor<small>rápido</small></button></div>
       </div>
       <div class="dock-panel" data-panel="tiempo" hidden>
         <div class="seg" id="m-tiempo" aria-label="Tiempo con el catéter"><button type="button" data-v="0">0 h</button><button type="button" data-v="24">24 h</button><button type="button" data-v="48">48 h</button><button type="button" data-v="168">Día 7</button><button type="button" data-v="336">Día 14</button></div>
-        <div class="raya" role="group" aria-label="Paquete de inserción">
+        <div class="rejilla4" role="group" aria-label="Paquete de inserción">
           <button type="button" class="tog" data-paq="manos" aria-pressed="false">Higiene de manos</button>
           <button type="button" class="tog" data-paq="barreras" aria-pressed="false">Barreras máximas</button>
-          <button type="button" class="tog" data-paq="clorhex" aria-pressed="false">Clorhexidina <small>30 s, seca</small></button>
-          <button type="button" class="tog" data-paq="femoral" aria-pressed="false">Evitar la femoral</button>
+          <button type="button" class="tog" data-paq="clorhex" aria-pressed="false">Clorhexidina 30 s</button>
+          <button type="button" class="tog" data-paq="femoral" aria-pressed="false">Evitar femoral<small>trombosis</small></button>
         </div>
-        <div class="seg" id="m-aposito" aria-label="Apósito"><button type="button" data-v="transparente">Transparente</button><button type="button" data-v="gasa">Gasa</button><button type="button" data-v="esponja">Esponja <small>clorhexidina</small></button><button type="button" data-v="humedo">Humedad <small>debajo</small></button></div>
       </div>
       <div class="dock-panel" data-panel="problema" hidden>
-        <div class="seg" id="m-problema" aria-label="Problema"><button type="button" data-v="biopelicula">Biopelícula</button><button type="button" data-v="hemocultivos">Hemo&shy;cultivos</button><button type="button" data-v="oclusion">Oclusión</button><button type="button" data-v="aire">Conector abierto</button></div>
-        <div id="sub-biopelicula" class="dock-panel" style="min-height:0">
-          <div class="raya"><button type="button" class="tog" id="m-antibiotico" aria-pressed="false">Antibiótico <small>dosis habitual</small></button></div>
-          <div class="seg" id="m-manejo" aria-label="Qué haces con el catéter"><button type="button" data-v="dejar">Dejarlo</button><button type="button" data-v="retirar">Retirar <small>sitio nuevo</small></button><button type="button" data-v="guia">Recambio <small>sobre guía</small></button></div>
+        <div class="seg" id="m-problema" aria-label="Problema"><button type="button" data-v="biopelicula">Biopelícula</button><button type="button" data-v="hemocultivos">Hemo&shy;cultivos</button><button type="button" data-v="oclusion">Oclusión</button><button type="button" data-v="aire">Conector<small>abierto</small></button></div>
+        <div id="sub-biopelicula" class="rejilla4">
+          <button type="button" class="tog" id="m-antibiotico" aria-pressed="false">Antibiótico<small>dosis habitual</small></button>
+          <button type="button" class="tog" data-manejo="dejar" aria-pressed="false">Dejarlo</button>
+          <button type="button" class="tog" data-manejo="retirar" aria-pressed="false">Retirar<small>sitio nuevo</small></button>
+          <button type="button" class="tog" data-manejo="guia" aria-pressed="false">Sobre guía</button>
         </div>
-        <div id="sub-hemocultivos" class="dock-panel" style="min-height:0" hidden>
-          <div class="fila"><button type="button" class="b prim" id="m-incubar">Incubar los dos frascos</button><span class="nota-mini">catéter y periférico, a la vez</span></div>
+        <div id="sub-hemocultivos" class="fila" hidden><button type="button" class="b prim" id="m-incubar">Incubar los dos frascos</button><span class="nota-mini">catéter y periférico</span></div>
+        <div id="sub-oclusion" class="dos-seg" hidden>
+          <select id="m-oclusion" aria-label="Qué lo ocluye"></select>
+          <select id="m-instilar" aria-label="Qué instilas"></select>
         </div>
-        <div id="sub-oclusion" class="dock-panel" style="min-height:0" hidden>
-          <div class="raya" id="m-oclusion" role="group" aria-label="Qué lo ocluye"></div>
-          <div class="raya" id="m-instilar" role="group" aria-label="Qué instilas"></div>
-        </div>
-        <div id="sub-aire" class="dock-panel" style="min-height:0" hidden>
-          <div class="seg" id="m-postura" aria-label="Postura y sitio"><button type="button" data-v="espontanea">Sentado <small>respira solo</small></button><button type="button" data-v="trendelenburg">Trende&shy;lenburg</button><button type="button" data-v="femoral">Catéter <small>femoral</small></button></div>
-          <div class="fila"><button type="button" class="b prim" id="m-conector">Abrir el conector</button><span class="nota-mini">14 G · 5 mmHg · peso 70 kg (ilustrativo)</span></div>
+        <div id="sub-aire" class="fila-io" hidden>
+          <div class="seg" id="m-postura" aria-label="Postura y sitio"><button type="button" data-v="espontanea">Sentado<small>respira solo</small></button><button type="button" data-v="trendelenburg">Trende&shy;lenburg</button><button type="button" data-v="femoral">Femoral</button></div>
+          <button type="button" class="b prim" id="m-conector">Abrir conector</button>
         </div>
       </div>
+      <div class="dock-panel" data-panel="lupa" hidden><div id="mandos-lupa" role="group" aria-label="Mandos de la lupa" class="dock-panel" style="min-height:0"></div></div>
     </div>
     <div id="dock-estudio" class="dock-estudio" hidden>
       <div class="pasos" id="dock-pasos"></div>
@@ -585,13 +602,13 @@ const FIG_LARGO_CALIBRE = 1.2;   // pulgadas (los tres calibres)
 const CAT = {
   pc: { nombre: 'Periférico corto', sub: '18 G · 3 cm', lh: 6.0, cm: 3, mm: 1.2, tabla: 'mar-tabla-1-2', g: '18 G', fr: '18 G = 4 Fr = 1,2 mm (Tabla 1.1)', fig: 'f1-2' },
   pl: { nombre: 'Periférico largo', sub: '18 G · 8 cm', lh: 3.7, cm: 8, mm: 1.2, tabla: 'mar-tabla-1-2', g: '18 G', fr: '18 G = 4 Fr = 1,2 mm (Tabla 1.1)' },
-  midline: { nombre: 'Midline', sub: '15 cm · por luz', lh: 1.3, cm: 15, mm: 1.82, tabla: 'mar-tabla-1-2', g: '18 G', fr: '5,5 Fr × 0,33 = 1,82 mm (Ec. 1.1; la Tabla 1.1 no trae 5,5 Fr) · luces de 18 G', fig: 'f1-3' },
-  'picc-d': { nombre: 'PICC · distal', sub: '50 cm · 18 G', lh: 0.26, cm: 50, mm: 1.82, tabla: 'mar-tabla-1-3', g: '18 G', fr: '5,5 Fr × 0,33 = 1,82 mm (Ec. 1.1) · luz de 18 G' },
-  'picc-p': { nombre: 'PICC · proximal', sub: '50 cm · 18 G', lh: 0.27, cm: 50, mm: 1.82, tabla: 'mar-tabla-1-3', g: '18 G', fr: '5,5 Fr × 0,33 = 1,82 mm (Ec. 1.1) · luz de 18 G' },
-  'cvc-d': { nombre: 'CVC · luz distal', sub: '20 cm · 16 G', lh: 2.28, cm: 20, mm: 2.4, tabla: 'mar-tabla-1-3', g: '16 G', fr: '7 Fr: 2,31 mm por la ecuación; la Tabla 1.1 dice 2,4 · luz distal 16 G', luz: 'distal', fig: 'f1-4' },
-  'cvc-m': { nombre: 'CVC · luz medial', sub: '20 cm · 18 G', lh: 0.91, cm: 20, mm: 2.4, tabla: 'mar-tabla-1-3', g: '18 G', fr: '7 Fr: 2,31 mm por la ecuación; la Tabla 1.1 dice 2,4 · luz medial 18 G', luz: 'medial', fig: 'f1-4' },
-  'cvc-p': { nombre: 'CVC · luz proximal', sub: '20 cm · 18 G', lh: 0.99, cm: 20, mm: 2.4, tabla: 'mar-tabla-1-3', g: '18 G', fr: '7 Fr: 2,31 mm por la ecuación; la Tabla 1.1 dice 2,4 · luz proximal 18 G', luz: 'proximal', fig: 'f1-4' },
-  rapido: { nombre: 'Infusión rápida', sub: '7-8 Fr · 2-2,5″', lh: null, cm: 5.7, mm: 2.47, tabla: 'mar-bombas', g: '—', fr: '7-8 Fr: 2,31-2,64 mm por la ecuación · 2-2,5″ (dibujado a 2,25″ y 7,5 Fr: ilustrativo)', rapido: true }
+  midline: { nombre: 'Midline', sub: '15 cm · por luz', lh: 1.3, cm: 15, mm: 1.82, tabla: 'mar-tabla-1-2', g: '18 G', fr: '5,5 Fr × 0,33 = 1,82 mm (ecuación) · luces 18 G', fig: 'f1-3' },
+  'picc-d': { nombre: 'PICC · distal', sub: '50 cm · 18 G', lh: 0.26, cm: 50, mm: 1.82, tabla: 'mar-tabla-1-3', g: '18 G', fr: '5,5 Fr × 0,33 = 1,82 mm (ecuación) · luz 18 G' },
+  'picc-p': { nombre: 'PICC · proximal', sub: '50 cm · 18 G', lh: 0.27, cm: 50, mm: 1.82, tabla: 'mar-tabla-1-3', g: '18 G', fr: '5,5 Fr × 0,33 = 1,82 mm (ecuación) · luz 18 G' },
+  'cvc-d': { nombre: 'CVC · luz distal', sub: '20 cm · 16 G', lh: 2.28, cm: 20, mm: 2.4, tabla: 'mar-tabla-1-3', g: '16 G', fr: '7 Fr: 2,31 mm (ecuación) o 2,4 (tabla) · luz 16 G', luz: 'distal', fig: 'f1-4' },
+  'cvc-m': { nombre: 'CVC · luz medial', sub: '20 cm · 18 G', lh: 0.91, cm: 20, mm: 2.4, tabla: 'mar-tabla-1-3', g: '18 G', fr: '7 Fr: 2,31 mm (ecuación) o 2,4 (tabla) · luz 18 G', luz: 'medial', fig: 'f1-4' },
+  'cvc-p': { nombre: 'CVC · luz proximal', sub: '20 cm · 18 G', lh: 0.99, cm: 20, mm: 2.4, tabla: 'mar-tabla-1-3', g: '18 G', fr: '7 Fr: 2,31 mm (ecuación) o 2,4 (tabla) · luz 18 G', luz: 'proximal', fig: 'f1-4' },
+  rapido: { nombre: 'Infusión rápida', sub: '7-8 Fr · 2-2,5″', lh: null, cm: 5.7, mm: 2.47, tabla: 'mar-bombas', g: '—', fr: '7-8 Fr = 2,31-2,64 mm (ecuación)', rapido: true }
 };
 const ORDEN_CAT = ['pc', 'pl', 'midline', 'picc-d', 'picc-p', 'cvc-d', 'cvc-m', 'cvc-p', 'rapido'];
 const ALTURA = { 0: 0, 68: 50, 100: 75 };            // cm → mmHg (mar-altura-bolsa)
@@ -642,7 +659,7 @@ let estado = estadoBase();
 
 // El catéter que se dibuja (longitud en cm, grosor en mm) y su texto French ↔ gauge
 function catDe(e) {
-  if (e.io) return { nombre: 'Aguja intraósea', cm: 2.5, mm: 1.8, g: '15 G', fr: 'aguja de 15 G de 25 mm (adulto medio); la Tabla 1.1 no trae el 15 G', io: true };
+  if (e.io) return { nombre: 'Aguja intraósea', cm: 2.5, mm: 1.8, g: '15 G', fr: 'aguja de 15 G y 25 mm; su grosor dibujado, ilustrativo', io: true };
   if (e.banco === 'fig') {
     const g = e.figExp === 'calibre' ? e.figCal : 16, pulg = e.figExp === 'calibre' ? FIG_LARGO_CALIBRE : e.figLong, t = FIG_TABLA_1_1[g];
     return { nombre: `${g} G · ${dec(pulg, pulg % 1 ? 1 : 0)}″`, cm: pulg * 2.54, mm: t.mm, g: g + ' G', fr: `${g} G = ${t.fr} Fr = ${dec(t.mm)} mm (Tabla 1.1)` };
@@ -682,9 +699,9 @@ function derivar(e) {
   if (e.io) { D.presion = null; D.presionMedula = IO.presionMedula; }
   // 3. Oclusión
   if (e.oclusion && !resuelta(e)) { D.ocluido = true; D.alarma = e.bomba !== 'gravedad'; D.rel = 0; D.valor = 0; D.texto = '0'; D.org = 'ficha · mar-oclusion-causas'; D.ilu = false; }
-  if (e.instilado === 'guia' && e.oclusion) D.avisos.push('Una guía puede soltar la masa y embolizarla: no se hace.');
+  if (e.instilado === 'guia' && e.oclusion) D.avisos.push('Pasar una guía no se aconseja: puede soltar la masa y embolizarla.');
   // 4. Lupa B · biopelícula y colonización (todo cualitativo salvo las marcas de 24 h y 48 h)
-  const cerradas = Object.values(e.paquete).filter(Boolean).length;
+  const cerradas = ['manos', 'barreras', 'clorhex'].filter(k => e.paquete[k]).length;   // evitar la femoral no cierra una puerta de la piel (p. 25 y 32-33: hoy, por la trombosis)
   D.bio = {
     nivel: e.tiempo >= 336 ? 4 : e.tiempo >= 168 ? 3 : e.tiempo >= 48 ? 2 : e.tiempo >= 24 ? 1 : 0,
     visible: e.tiempo >= BIO.visible, clinicaPosible: e.tiempo >= BIO.clinica,
@@ -694,8 +711,8 @@ function derivar(e) {
   // 5. Hemocultivos (tiempo diferencial de la Tabla 3.4)
   D.hc = { cateter: HC.horaCateter, periferico: HC.horaCateter + HC.difCaso, dif: HC.difCaso, fuenteCateter: HC.difCaso >= HC.umbralH };
   // 6. Lupa C · aire y punta
-  const sinGradiente = e.aire.postura !== 'espontanea';
-  D.aire = { tasa: sinGradiente ? 0 : AIRE.tasa, letal: AIRE.letal, letalKg: AIRE.letalKg.map(x => x * AIRE.peso), segundosHastaLetal: AIRE.letal.map(x => x / AIRE.tasa) };
+  // Trendelenburg sube la presión venosa y REDUCE el riesgo (el libro no da cuánto); el femoral no entra en el tórax: sin aire
+  D.aire = { tasa: e.aire.postura === 'espontanea' ? AIRE.tasa : e.aire.postura === 'trendelenburg' ? null : 0, reducido: e.aire.postura === 'trendelenburg', letal: AIRE.letal, letalKg: AIRE.letalKg.map(x => x * AIRE.peso), segundosHastaLetal: AIRE.letal.map(x => x / AIRE.tasa) };
   D.punta = e.izquierdo ? { nombre: 'Catéter izquierdo contra la pared de la cava', ok: false } : PUNTAS[e.punta];
   // 7. Lupa D · eco
   const E = e.eco;
@@ -747,7 +764,8 @@ window.__pruebas = () => {
   // aire
   const da = derivar(mezcla({ lupa: 'C' })); r.aire = { tasa: da.aire.tasa, segundos: da.aire.segundosHastaLetal, letal70kg: da.aire.letalKg };
   ok(da.aire.tasa === 100 && da.aire.segundosHastaLetal.join() === '2,3' && da.aire.letalKg.join() === '210,350', 'aire 100 mL/s; 200-300 mL en 2-3 s; 210-350 mL en 70 kg');
-  for (const p of ['trendelenburg', 'femoral']) { const t = derivar(mezcla({ aire: { postura: p, abierto: true } })).aire.tasa; r.aire[p] = t; ok(t === 0, 'sin aire con ' + p); }
+  { const tr = derivar(mezcla({ aire: { postura: 'trendelenburg', abierto: true } })).aire, fe = derivar(mezcla({ aire: { postura: 'femoral', abierto: true } })).aire;
+    r.aire.trendelenburg = tr.reducido ? 'menos riesgo, sin cifra' : tr.tasa; r.aire.femoral = fe.tasa; ok(tr.tasa === null && tr.reducido, 'Trendelenburg: menos, sin cifra'); ok(fe.tasa === 0, 'femoral: sin aire'); }
   // biopelícula y clínica
   r.bio = [0, 24, 48, 168, 336].map(t => { const b = derivar(mezcla({ tiempo: t })).bio; return { t, visible: b.visible, clinica: b.clinicaPosible }; });
   ok(!r.bio[0].visible && r.bio[1].visible && !r.bio[1].clinica && r.bio[2].clinica, 'biopelícula a las 24 h; clínica desde las 48 h');
@@ -783,10 +801,9 @@ const svg = $('lamina');
 const V = (n, op) => `var(--${n})`;
 const Y0 = 236, KCM = 1.75;                       // regla de la bolsa: 0 cm en el punto de punción; 1,75 px por cm
 const yBolsa = cm => Y0 - cm * KCM;
-const ESC = { x: 104, y: 152, pxcm: 6, max: 30 };  // franja «a escala»: 6 px por cm, hasta 30 cm
 const PROB = { x: 304, y: 92, w: 40, h: 112 };     // la probeta
 const HUB = { x: 154, y: 211 };
-const VENA_Y = 276;
+const VENA_Y = 244;
 const LUPA = { cx: 180, cy: 166, r: 150 };
 const t = (x, y, txt, { s = 7, c = 'text-muted', a = 'start', i = true, w = '', id = '' } = {}) =>
   `<text${id ? ` id="${id}"` : ''} x="${x}" y="${y}" font-size="${+(s * 1.22).toFixed(1)}" text-anchor="${a}" style="fill:var(--${c});font-family:Georgia,serif${i ? ';font-style:italic' : ''}${w ? ';font-weight:' + w : ''}">${txt}</text>`;
@@ -811,8 +828,6 @@ function defs() {
 function construirLamina() {
   const reglaTicks = [];
   for (let cm = 0; cm <= 110; cm += 10) { const y = yBolsa(cm); reglaTicks.push(`<line x1="${cm % 50 ? 54 : 51}" y1="${y}" x2="58" y2="${y}" style="stroke:var(--text-muted)" stroke-width=".8"/>`); } reglaTicks.push(t(49, Y0 + 3, '0 cm', { s: 6, a: 'end', i: false }));
-  const escTicks = [];
-  for (let cm = 0; cm <= ESC.max; cm += 5) { const x = ESC.x + cm * ESC.pxcm; escTicks.push(`<line x1="${x}" y1="${ESC.y + 14}" x2="${x}" y2="${ESC.y + (cm % 10 ? 17 : 19)}" style="stroke:var(--text-muted)" stroke-width=".7"/>`); if (cm % 10 === 0) escTicks.push(t(x, ESC.y + 26, cm + (cm === 30 ? ' cm' : ''), { s: 6, a: 'middle', i: false })); }
   const probTicks = [];
   for (let i = 1; i < 10; i++) { const y = PROB.y + PROB.h - i * PROB.h / 10; probTicks.push(`<line x1="${PROB.x + 2}" y1="${y}" x2="${PROB.x + (i % 5 ? 8 : 13)}" y2="${y}" style="stroke:var(--text-dim)" stroke-opacity=".7" stroke-width=".7"/>`); }
   const pelos = [118, 131, 186, 203, 222, 247, 262, 288, 318, 341].map((x, i) => `<path d="M${x} 222 q ${i % 2 ? 3 : -3} -5 ${i % 2 ? 7 : 2} -8" style="fill:none;stroke:var(--text-muted)" stroke-width=".7"/>`).join('');
@@ -826,7 +841,7 @@ function construirLamina() {
       <line x1="100" y1="222" x2="360" y2="222" style="stroke:var(--text-dim)" stroke-width="1"/>
       ${pelos}
       <rect id="grasa" x="100" y="228" width="260" height="28" fill="url(#p-punteado)"/>
-      <rect x="100" y="304" width="260" height="26" fill="url(#p-cruzado)"/>
+      <rect x="100" y="298" width="260" height="32" fill="url(#p-cruzado)"/>
       <g id="g-vena"></g>
       <g id="g-hueso" display="none">
         <rect x="100" y="246" width="260" height="12" style="fill:var(--text-main)" fill-opacity=".12"/><rect x="100" y="246" width="260" height="12" fill="url(#p-hueso)"/>
@@ -835,9 +850,9 @@ function construirLamina() {
         ${t(232, 284, 'médula · ≈30 mmHg', { s: 7.5, c: 'text-dim' })}${t(232, 255, 'cortical', { s: 6.5 })}
       </g>
       <g id="g-hematies"></g>
-      ${t(104, 234, 'piel', { s: 6.5 })}${t(104, 250, 'grasa', { s: 6.5 })}
+      ${t(104, 234, 'piel', { s: 6.5 })}${t(104, 274, 'grasa', { s: 6.5 })}
       <text id="rot-vena" x="104" y="${VENA_Y + 3}" font-size="7" style="fill:var(--accent-purple);font-family:Georgia,serif;font-style:italic">vena</text>
-      ${t(356, 326, 'brazo en corte · esquema', { s: 6, a: 'end' })}
+      ${t(356, 326, 'brazo en corte', { s: 6, a: 'end' })}
     </g>
     <!-- pie de gotero y regla -->
     <line x1="10" y1="14" x2="10" y2="318" style="stroke:var(--text-dim)" stroke-width="2.4" stroke-linecap="round"/>
@@ -859,18 +874,12 @@ function construirLamina() {
     <path id="g-tubo-fuera" d="" style="fill:none;stroke:var(--text-dim)" stroke-width="4.2" stroke-linecap="round"/>
     <path id="g-tubo-dentro" d="" style="fill:none;stroke:var(--bg-main)" stroke-width="2" stroke-linecap="round"/>
     <g id="g-bolsa"></g>
-    <g id="g-bomba"></g>
     <!-- el catéter en el brazo (esquema) -->
     <g id="g-cat-brazo"></g>
     <g id="g-oclusion"></g>
     <g id="g-gotas"></g>
+    <g id="g-bomba"></g>
     <!-- el catéter, a escala -->
-    <g id="g-escala">
-      ${t(ESC.x, ESC.y - 16, 'el catéter, a escala · 6 px por cm', { s: 6.8 })}
-      <line x1="${ESC.x}" y1="${ESC.y + 14}" x2="${ESC.x + ESC.max * ESC.pxcm}" y2="${ESC.y + 14}" style="stroke:var(--text-muted)" stroke-width=".8"/>
-      ${escTicks.join('')}
-      <g id="g-especimen"></g>
-    </g>
     <!-- la probeta (caudalímetro) -->
     <g id="g-probeta">
       <rect id="prob-agua" x="${PROB.x + 1}" y="${PROB.y + PROB.h}" width="${PROB.w - 2}" height="0" style="fill:var(--text-main)" fill-opacity=".18"/>
@@ -905,14 +914,19 @@ function construirLamina() {
 }
 
 /* Geometría que depende del estado */
+const KCAT = 8;                                     // el catéter del brazo: 8 px por cm (longitud real); grosor × 3 px por mm
 function geoCatBrazo(e) {
   const c = catDe(e);
-  const grosor = Math.max(2.2, c.mm * 2.6);
-  if (e.io) return { d: `M200 212 L200 282`, tip: [200, 282], grosor: 3.4, entrada: [200, 222] };
-  const largo = clamp(c.cm * 4.6, 16, 150);
-  const xv = 204;   // donde llega a la luz de la vena
-  const tipX = Math.min(352, xv + Math.max(4, largo - 46));
-  return { d: `M${HUB.x} ${HUB.y} L${HUB.x + 9} 222 Q${xv - 18} ${VENA_Y - 2} ${xv} ${VENA_Y} L${tipX} ${VENA_Y}`, tip: [tipX, VENA_Y], grosor, entrada: [HUB.x + 9, 222] };
+  const grosor = Math.max(1.6, c.mm * 3);
+  if (e.io) return { d: `M200 212 L200 282`, tip: [200, 282], grosor: Math.max(1.6, c.mm * 3), mid: [200, 262], sigue: false };
+  const L = c.cm * KCAT, x0 = HUB.x + 4, y0 = 222;
+  const diag = Math.min(L, (VENA_Y - y0) * Math.SQRT2);           // entra a 45° hasta el centro de la vena
+  const dx = diag / Math.SQRT2, resto = L - diag;
+  const xMax = 356, xf = Math.min(xMax, x0 + dx + resto), sigue = x0 + dx + resto > xMax;
+  const d = `M${HUB.x} ${HUB.y} L${x0} ${y0} L${(x0 + dx).toFixed(1)} ${(y0 + dx).toFixed(1)}` + (resto > 0 ? ` L${xf.toFixed(1)} ${VENA_Y}` : '');
+  const tip = resto > 0 ? [xf, VENA_Y] : [x0 + dx, y0 + dx];
+  const f = 0.6, mid = resto > diag * 0.5 ? [x0 + dx + (xf - x0 - dx) * f, VENA_Y] : [x0 + dx * f, y0 + dx * f];
+  return { d, tip, grosor, mid, sigue, cm: c.cm };
 }
 function dTubo(e) {
   const yb = yBolsa(e.banco === 'fig' && !e.io ? 100 : e.altura) + 2;
@@ -944,8 +958,8 @@ function pintarLaminaA(e) {
   // vena o hueso
   const io = e.io;
   $('g-hueso').setAttribute('display', io ? 'inline' : 'none');
-  $('grasa').setAttribute('height', io ? 18 : 28);
-  const r = e.vena === 'grande' ? 19 : 8;
+  $('grasa').setAttribute('height', io ? 18 : 70);
+  const r = e.vena === 'grande' ? 16 : 7;
   $('g-vena').innerHTML = io ? '' : `
     <path d="M360 ${VENA_Y - r} L150 ${VENA_Y - r} A${r * 0.6} ${r} 0 0 0 150 ${VENA_Y + r} L360 ${VENA_Y + r} Z" style="fill:var(--accent-purple)" fill-opacity=".26"/>
     <path d="M360 ${VENA_Y - r} L150 ${VENA_Y - r} A${r * 0.6} ${r} 0 0 0 150 ${VENA_Y + r} L360 ${VENA_Y + r} Z" fill="url(#p-ciruela)"/>
@@ -970,15 +984,9 @@ function pintarLaminaA(e) {
     ${io ? `<rect x="193" y="204" width="14" height="10" rx="2" style="fill:var(--accent-yellow);stroke:var(--bg-main)"/>${t(212, 214, '15 G · 25 mm', { s: 6.5, c: 'text-dim' })}`
       : `<rect x="${HUB.x - 8}" y="${HUB.y - 4}" width="12" height="8" rx="2" transform="rotate(48 ${HUB.x - 2} ${HUB.y})" style="fill:var(--accent-yellow);stroke:var(--bg-main)"/>`}
     ${salidas}
-    ${t(io ? 212 : 300, io ? 236 : 246, io ? 'aguja intraósea en la tibia' : 'esquema: no a escala', { s: 6, c: 'text-muted', a: io ? 'start' : 'end' })}`;
-  // espécimen a escala
-  const L = Math.min(c.cm, ESC.max) * ESC.pxcm, h = Math.max(1.6, c.mm * 3.2), roto = c.cm > ESC.max;
-  $('g-especimen').innerHTML = `
-    <rect x="${ESC.x - 6}" y="${ESC.y - 4}" width="7" height="8" rx="1.5" style="fill:var(--accent-yellow)" fill-opacity=".7"/>
-    <rect x="${ESC.x}" y="${ESC.y - h / 2}" width="${L}" height="${h}" rx="${h / 2}" style="fill:var(--accent-yellow);stroke:var(--bg-main)" stroke-width=".6"/>
-    <rect x="${ESC.x}" y="${ESC.y - h / 2}" width="${L}" height="${h}" rx="${h / 2}" fill="url(#p-rayado-fino)"/>
-    ${roto ? `<path d="M${ESC.x + L - 6} ${ESC.y - h} l4 ${h * 2} M${ESC.x + L - 2} ${ESC.y - h} l4 ${h * 2}" style="stroke:var(--bg-main)" stroke-width="2.6"/><path d="M${ESC.x + L - 6} ${ESC.y - h} l4 ${h * 2} M${ESC.x + L - 2} ${ESC.y - h} l4 ${h * 2}" style="stroke:var(--text-dim)" stroke-width=".8"/>${t(ESC.x + L - 4, ESC.y - h - 3, `sigue: ${c.cm} cm`, { s: 6.6, a: 'end', c: 'accent-yellow', i: false, w: 600 })}` : ''}
-    ${roto ? '' : t(ESC.x + L + 6, ESC.y + 3, `${dec(c.cm, c.cm % 1 ? 1 : 0)} cm · ${dec(c.mm, (c.mm * 10) % 1 ? 2 : 1)} mm`, { s: 6.4, c: 'text-dim', i: false })}`;
+    ${io ? t(212, 236, 'aguja intraósea en la tibia', { s: 6, c: 'text-muted' }) : t(HUB.x + 10, HUB.y - 4, `${dec(c.cm, c.cm % 1 ? 1 : 0)} cm · ${dec(c.mm, (c.mm * 10) % 1 ? 2 : 1)} mm`, { s: 6.6, c: 'text-dim', i: false })}
+    ${g.sigue ? `<path d="M${g.tip[0] - 4} ${VENA_Y - 8} l4 16 M${g.tip[0] - 9} ${VENA_Y - 8} l4 16" style="stroke:var(--text-main)" stroke-width="1"/>${t(354, VENA_Y + 26, `sigue: ${c.cm} cm →`, { s: 6.8, a: 'end', c: 'accent-yellow', i: false, w: 600 })}` : ''}
+    ${io ? '' : `<line x1="296" y1="320" x2="336" y2="320" style="stroke:var(--text-dim)" stroke-width="1.4"/><line x1="296" y1="317" x2="296" y2="323" style="stroke:var(--text-dim)"/><line x1="336" y1="317" x2="336" y2="323" style="stroke:var(--text-dim)"/>${t(294, 323, '5 cm', { s: 6, a: 'end', c: 'text-dim', i: false })}${t(356, 310, 'longitud a escala · grosor ×4', { s: 5.8, a: 'end' })}`}`;
   // bomba
   const D0 = D;
   if (e.bomba === 'gravedad') $('g-bomba').innerHTML = '';
@@ -995,7 +1003,7 @@ function pintarLaminaA(e) {
   const oc = e.oclusion && !resuelta(e) ? e.oclusion : null;
   let ho = '';
   if (oc && !io) {
-    const x0 = (204 + g.tip[0]) / 2 - 2, y0 = VENA_Y;
+    const [x0, y0] = g.mid;
     if (oc === 'trombo') ho = [[-6, -1], [-2, 1], [2, -1], [6, 1], [0, 0]].map(([dx, dy]) => svgParticula('rbc', x0 + dx, y0 + dy, 1.7)).join('') + `<path d="M${x0 - 8} ${y0 - 2} L${x0 + 8} ${y0 + 2} M${x0 - 8} ${y0 + 2} L${x0 + 8} ${y0 - 2}" style="stroke:var(--text-main)" stroke-opacity=".6" stroke-width=".5"/>`;
     else if (oc === 'mineral') ho = [[-6, 0, 'ca'], [-2, -1, 'p'], [2, 1, 'ca'], [6, 0, 'p'], [0, 1, 'ca']].map(([dx, dy, k]) => svgParticula(k, x0 + dx, y0 + dy, 1.6)).join('');
     else if (oc === 'lipidos') ho = [[-5, 0, 3], [1, -1, 2.5], [6, 1, 2.2]].map(([dx, dy, rr]) => `<ellipse cx="${x0 + dx}" cy="${y0 + dy}" rx="${rr}" ry="${rr * 0.7}" style="fill:var(--text-main);stroke:var(--bg-main)" fill-opacity=".7" stroke-width=".4"/>`).join('');
@@ -1003,8 +1011,8 @@ function pintarLaminaA(e) {
     ho += t(x0, y0 - 9, OCLUSIONES[oc].nombre.toLowerCase(), { s: 6.6, a: 'middle', c: 'accent-red', i: false, w: 600 });
   }
   $('g-oclusion').innerHTML = ho;
-  $('rot-alarma').setAttribute('display', D0.ocluido ? 'inline' : 'none');
-  $('rot-alarma').textContent = D0.alarma ? '⚠ la bomba alarma' : '⚠ no gotea';
+  $('rot-alarma').setAttribute('display', D0.ocluido && !D0.alarma ? 'inline' : 'none');   // con bomba, el «ALARMA» lo dice la propia bomba
+  $('rot-alarma').textContent = '⚠ no gotea';
   // intraósea: la probeta enseña una barra relativa, sin L/h
   $('prob-io').setAttribute('display', io ? 'inline' : 'none');
   // intraósea: la probeta pasa a ser una barra relativa (25 % de una periférica), sin L/h
@@ -1013,7 +1021,7 @@ function pintarLaminaA(e) {
   $('rot-probeta').textContent = io ? '% de una periférica' : 'probeta';
   Anim.rutaLen = $('ruta').getTotalLength();
   Anim.tuboLen = (() => { const p = document.createElementNS(SVGNS, 'path'); p.setAttribute('d', dt); svg.appendChild(p); const l = p.getTotalLength(); p.remove(); return l; })();
-  Anim.uOcl = oc && !io ? (Anim.tuboLen + 0.62 * (Anim.rutaLen - Anim.tuboLen)) / Anim.rutaLen : 2;
+  Anim.uOcl = oc && !io ? (Anim.tuboLen + 0.6 * (Anim.rutaLen - Anim.tuboLen)) / Anim.rutaLen - 0.01 : 2;
   Anim.camaraY = yb;
 }
 
@@ -1043,8 +1051,8 @@ function pintarLupaB(e) {
       if (e.aposito === 'humedo') h += [172, 182, 206, 216].map(x => svgParticula('agua', x, 160, 1.9)).join('') + t(196, 182, 'humedad debajo', { s: 6.6, a: 'middle', c: 'accent-red', i: false, w: 600 });
     }
     // puertas del paquete de inserción (cualitativo)
-    const puertas = ['manos', 'barreras', 'clorhex', 'femoral'];
-    h += puertas.map((k, i) => { const x = 96 + i * 11, cerrada = e.paquete[k]; return `<rect x="${x}" y="${cerrada ? 148 : 151}" width="7" height="${cerrada ? 8 : 5}" style="fill:${cerrada ? 'var(--accent-yellow)' : 'none'};stroke:var(--accent-yellow)" stroke-width=".8"/>`; }).join('') + t(114, 142, `puertas: ${d.puertasCerradas} de 4`, { s: 6.2, a: 'middle', c: 'text-dim' });
+    const puertas = ['manos', 'barreras', 'clorhex'];
+    h += puertas.map((k, i) => { const x = 96 + i * 11, cerrada = e.paquete[k]; return `<rect x="${x}" y="${cerrada ? 148 : 151}" width="7" height="${cerrada ? 8 : 5}" style="fill:${cerrada ? 'var(--accent-yellow)' : 'none'};stroke:var(--accent-yellow)" stroke-width=".8"/>`; }).join('') + t(108, 142, `puertas: ${d.puertasCerradas} de 3`, { s: 6.2, a: 'middle', c: 'text-dim' });
     // tubo, conector y catéter
     h += `<path d="M356 70 C330 92 296 114 260 124" style="fill:none;stroke:var(--text-dim)" stroke-width="8" stroke-linecap="round"/><path d="M356 70 C330 92 296 114 260 124" style="fill:none;stroke:var(--bg-main)" stroke-width="5" stroke-linecap="round"/>
       <g transform="rotate(-22 249 128)"><rect x="236" y="121" width="26" height="14" rx="3" style="fill:var(--text-main);stroke:var(--bg-main)" fill-opacity=".85"/><rect x="244" y="119" width="4" height="18" rx="1" style="fill:var(--bg-main)"/></g>`;
@@ -1153,7 +1161,7 @@ function pintarLupaC(e) {
     <circle cx="${tip[0]}" cy="${tip[1]}" r="2.6" style="fill:${ok === false ? 'var(--accent-red)' : 'var(--text-main)'}"/>`;
   if (e.izquierdo) h += `<path d="M144 128 L144 140" style="stroke:var(--accent-red)" stroke-width="2.4"/>${t(160, 112, 'apoya en la pared', { s: 7, c: 'accent-red', i: false, w: 700 })}`;
   if (!e.izquierdo && !e.aire.abierto) h += t(tip[0] + 14, tip[1] + 3, 'arrastra la punta', { s: 6.4, c: 'text-muted' });
-  if (e.aire.abierto && e.aire.postura !== 'espontanea') h += `<rect x="62" y="260" width="236" height="26" rx="7" style="fill:var(--bg-main);stroke:var(--accent-yellow)" stroke-width=".8"/>${t(180, 271, e.aire.postura === 'trendelenburg' ? 'Trendelenburg: sube la presión venosa' : 'Femoral: el catéter no entra en el tórax', { s: 7.2, a: 'middle', c: 'text-main', i: false })}${t(180, 281, 'sin presión negativa, no entra aire', { s: 7.2, a: 'middle', c: 'accent-yellow', i: false, w: 600 })}`;
+  if (e.aire.abierto && e.aire.postura !== 'espontanea') h += `<rect x="62" y="260" width="236" height="26" rx="7" style="fill:var(--bg-main);stroke:var(--accent-yellow)" stroke-width=".8"/>${t(180, 271, e.aire.postura === 'trendelenburg' ? 'Trendelenburg: sube la presión venosa' : 'Femoral: el catéter no entra en el tórax', { s: 7.2, a: 'middle', c: 'text-main', i: false })}${t(180, 281, e.aire.postura === 'trendelenburg' ? 'menos riesgo; cuánto, el libro no lo dice' : 'sin presión negativa, no entra aire', { s: 7.2, a: 'middle', c: 'accent-yellow', i: false, w: 600 })}`;
   h += `<g id="c-burbujas"></g>`;
   $('lupaC').innerHTML = h;
   Anim.burbujas = [];
@@ -1162,7 +1170,7 @@ function pintarLupaC(e) {
   Anim.rutaC = $('c-ruta');
 }
 
-/* ---------- Lupa D (opcional): pinchar con eco, esquema 2D ---------- */
+/* ---------- Lupa D: pinchar con eco, esquema 2D ---------- */
 function pintarLupaD(e) {
   const E = e.eco, d = derivar(e).eco;
   const col = k => k === 'rojo' ? 'var(--accent-red)' : 'var(--accent-blue)';
@@ -1233,13 +1241,14 @@ function paso(dt) {
     if (!e.io) Anim.rbc.forEach(b => { b.x += 16 * dt; if (b.x > 362) b.x = 150; const y = VENA_Y + b.fy * Math.max(2, Anim.venaR * 1.5); b.el.setAttribute('transform', `translate(${b.x.toFixed(1)} ${y.toFixed(1)})`); });
   }
   if (e.lupa === 'C') {
-    const corre = e.aire.abierto && D.aire.tasa > 0;
-    if (corre && Anim.aireMl < 350) { Anim.aireMl = Math.min(350, Anim.aireMl + D.aire.tasa * dt); pintarLectura(); }
+    const corre = e.aire.abierto && (D.aire.tasa > 0 || D.aire.reducido);
+    if (corre && D.aire.tasa > 0 && Anim.aireMl < 350) { Anim.aireMl = Math.min(350, Anim.aireMl + D.aire.tasa * dt); pintarLectura(); }
+    if (corre && D.aire.reducido) Anim.aireMl = Math.min(66, Anim.aireMl + 6 * dt);   // solo para el dibujo: pocas burbujas, despacio (ilustrativo)
     const n = corre ? Math.min(14, Math.ceil(Anim.aireMl / 22)) : 0;
     const rc = Anim.rutaC, L = rc ? rc.getTotalLength() : 0;
     Anim.burbujas.forEach((b, k) => {
       if (k >= n || !rc) { b.el.setAttribute('display', 'none'); return; }
-      b.u += dt * 0.7; if (b.u > 1.35) b.u -= 1.35;
+      b.u += dt * (D.aire.reducido ? 0.2 : 0.7); if (b.u > 1.35) b.u -= 1.35;
       let x, y;
       if (b.u <= 1) { const p = rc.getPointAtLength(b.u * L); x = p.x; y = p.y; }
       else { const f = (b.u - 1) / 0.35; x = 146 + f * 70 + Math.sin(k * 2.1) * 8; y = 206 + f * 36 + Math.cos(k * 1.7) * 10; }
@@ -1273,7 +1282,7 @@ function pintarUnaVez() {
   });
   Anim.nivel = estado.io ? 0.25 : s > 0 ? clamp(0.15 + s * 0.7, 0, 0.9) : 0; Anim.fase = 0.5; pintarProbeta(s);
   Anim.rbc.forEach(b => { const y = VENA_Y + b.fy * Math.max(2, Anim.venaR * 1.5); b.el.setAttribute('transform', `translate(${b.x} ${y.toFixed(1)})`); });
-  if (estado.lupa === 'C' && estado.aire.abierto && D.aire.tasa > 0) { Anim.aireMl = 300; Anim.burbujas.forEach((b, k) => { const rc = Anim.rutaC; if (!rc) return; const p = rc.getPointAtLength((k / 14) * rc.getTotalLength()); b.el.setAttribute('display', 'inline'); b.el.setAttribute('transform', `translate(${p.x.toFixed(1)} ${p.y.toFixed(1)})`); }); pintarLectura(); }
+  if (estado.lupa === 'C' && estado.aire.abierto && (D.aire.tasa > 0 || D.aire.reducido)) { Anim.aireMl = D.aire.reducido ? 66 : 300; Anim.burbujas.forEach((b, k) => { const rc = Anim.rutaC; if (!rc) return; const p = rc.getPointAtLength((k / 14) * rc.getTotalLength()); b.el.setAttribute('display', 'inline'); b.el.setAttribute('transform', `translate(${p.x.toFixed(1)} ${p.y.toFixed(1)})`); }); pintarLectura(); }
   if (estado.lupa === 'B' && estado.zoomB === 'frascos' && estado.hcIncubado && Anim.hcHora < 16) { Anim.hcHora = 16; pintarLupaB(estado); pintarLectura(); }
 }
 function bucle(ahora) {
@@ -1291,7 +1300,7 @@ const fraseEl = $('frase');
 let fraseActual = '';
 function decir(html, fuente) {
   const ilu = /ilustrativo|sin cifra/.test(fuente || '');
-  const nuevo = `${html} ${fuente ? `<span class="org${ilu ? ' ilu' : ''}">${fuente}</span>` : ''}`;
+  const nuevo = `<span class="frase-txt">${html} ${fuente ? `<span class="org${ilu ? ' ilu' : ''}">${fuente}</span>` : ''}</span>`;
   if (nuevo === fraseActual) return; fraseActual = nuevo;
   fraseEl.innerHTML = nuevo;
   svg.setAttribute('aria-label', fraseEl.textContent);
@@ -1310,7 +1319,7 @@ function aplicar(nuevo, op = {}) {
   if (viejo.aire.abierto !== nuevo.aire.abierto || viejo.aire.postura !== nuevo.aire.postura || viejo.izquierdo !== nuevo.izquierdo) Anim.aireMl = 0;
   if (!nuevo.hcIncubado || (nuevo.hcIncubado && !viejo.hcIncubado)) { Anim.hcHora = 0; Anim.ultimaHc = -1; }
   pintarTodo();
-  if (op.frase !== false) { const [h, f] = fraseDe(viejo, nuevo); decir(h, f); }
+  if (op.frase !== false) { const [h, f] = fraseDe(viejo, nuevo) || FRASE_INICIO(); decir(h, f); }
   if (REDUCIR) pintarUnaVez(); else arrancar();
 }
 const cambiar = (fn, op) => { const e = copia(estado); fn(e); aplicar(e, op); };
@@ -1321,7 +1330,7 @@ function pintarTodo() {
   if (estado.lupa === 'D') pintarLupaD(estado);
   pintarLectura(); sincronizarMandos(); pintarMandosLupa(); pintarTira();
 }
-const TITULO_LUPA = { A: 'lámina A · el flujo', B: 'lupa B · la piel y la biopelícula', C: 'lupa C · la punta y el aire', D: 'lupa D · pinchar con eco (opcional)' };
+const TITULO_LUPA = { A: 'lámina A · el flujo', B: 'lupa B · la piel y la biopelícula', C: 'lupa C · la punta y el aire', D: 'lupa D · pinchar con eco' };
 function abrirLupa(l, antes) {
   const g = $('lupa');
   $('chapa').textContent = TITULO_LUPA[l];
@@ -1330,6 +1339,7 @@ function abrirLupa(l, antes) {
   ['B', 'C', 'D'].forEach(k => $('lupa' + k).setAttribute('display', k === l ? 'inline' : 'none'));
   if (lupaAnim) { lupaAnim.stop?.(); lupaAnim = null; }
   $('lamA').setAttribute('opacity', l === 'A' ? '1' : '.3');
+  $('escena').classList.toggle('con-lupa', l !== 'A');
   if (l === 'A') { g.setAttribute('display', 'none'); return; }
   g.setAttribute('display', 'inline');
   const tr = k => g.setAttribute('transform', `translate(${LUPA.cx} ${LUPA.cy}) scale(${k.toFixed(3)}) translate(${-LUPA.cx} ${-LUPA.cy})`);
@@ -1342,7 +1352,7 @@ function abrirLupa(l, antes) {
 const ocultos = new Set();
 function setOcultos(arr) { ocultos.clear(); (arr || []).forEach(k => ocultos.add(k)); pintarLectura(); }
 const q = (k, v) => ocultos.has(k) ? '?' : v;
-const orgT = (org, ilu) => `<span class="t${ilu || /ilustrativo|sin cifra/.test(org) ? ' ilu' : ''}">${/ilustrativo/.test(org) ? 'ilustr.' : /sin cifra/.test(org) ? 'sin cifra' : 'ficha'}</span>`;
+const orgT = (org, ilu) => `<span class="t${ilu || /ilustrativo|sin cifra|50\/75/.test(org) ? ' ilu' : ''}">${/ilustrativo/.test(org) ? 'ilustr.' : /sin cifra/.test(org) ? 'sin cifra' : /50\/75/.test(org) ? 'calculado' : 'ficha'}</span>`;
 function pintarLectura() {
   const e = estado, el = $('lectura');
   // lo que la pregunta tapa también se tapa en la lámina: los mmHg de la regla y la barra de la intraósea
@@ -1364,7 +1374,7 @@ function pintarLectura() {
       if (e.io) h += `<span class="k">Médula</span><b>${q('presion', '≈30 mmHg')}</b><span class="t">ficha</span>`;
       else if (e.banco === 'fig') h += `<span class="k">Altura</span><b>¿?</b><span class="t ilu">no la dice</span>`;
       else h += `<span class="k">ΔP</span><b>${q('presion', `${D.presion} mmHg`)}</b><span class="t">ficha</span>`;
-      pie = D.ocluido ? (D.alarma ? 'ocluido: la bomba alarma por presión' : 'ocluido: no gotea, cuesta aspirar') : e.bomba !== 'gravedad' ? `${BOMBAS[e.bomba].nombre}: ${BOMBAS[e.bomba].rango}` : e.banco === 'fig' && !e.io ? 'Fig. 1.1 · agua por gravedad' : 'Tablas 1.2-1.3 · gravedad desde 40″';
+      pie = D.ocluido ? (D.alarma ? 'ocluido: la bomba alarma por presión' : 'ocluido: no gotea, cuesta aspirar') : e.bomba !== 'gravedad' ? `${BOMBAS[e.bomba].nombre}: ${BOMBAS[e.bomba].rango}` : e.altura === 68 && e.banco === 'tablas' ? 'calculado: tabla × 50/75 (Q ∝ ΔP)' : c.fr;
     }
   } else if (e.lupa === 'B') {
     if (e.zoomB === 'frascos') {
@@ -1376,14 +1386,15 @@ function pintarLectura() {
     } else {
       const b = D.bio;
       h += `<span class="k">Tiempo</span><span class="grande">${e.tiempo >= 168 ? 'día ' + e.tiempo / 24 : e.tiempo + '<small>h</small>'}</span><span></span>`;
-      h += `<span class="k">Biopelícula</span><b>${q('bio', e.manejo === 'retirar' ? 'se fue' : b.visible ? 'visible' : 'aún no')}</b><span class="t">${e.tiempo > 48 ? '<span class="ilu">ritmo ilustr.</span>' : 'ficha'}</span>`;
+      h += `<span class="k">Biopelícula</span><b>${q('bio', e.manejo === 'retirar' ? 'se fue' : e.manejo === 'guia' ? '—' : b.visible ? 'visible' : 'aún no')}</b><span class="t">${e.manejo === 'guia' ? '<span class="ilu">el libro no lo dice</span>' : e.tiempo > 48 ? '<span class="ilu">ritmo ilustr.</span>' : 'ficha'}</span>`;
       h += `<span class="k">Clínica</span><b>${q('bio', b.clinicaPosible ? 'puede haber' : 'aún no (<48 h)')}</b><span class="t">ficha</span>`;
-      pie = e.antibiotico ? 'antibiótico: ×100-1.000 para la biopelícula' : `paquete: ${b.puertasCerradas} de 4 · cualitativo`;
+      pie = e.antibiotico ? 'antibiótico: ×100-1.000 para la biopelícula' : `puertas de la piel: ${b.puertasCerradas} de 3 · cualitativo`;
     }
   } else if (e.lupa === 'C') {
     const ml = Math.round(Anim.aireMl);
     const letal = ml >= 200;
-    h += `<span class="k">Aire</span><span${letal ? ' class="alarma"' : ''}><span class="grande">${q('aire', fmt(ml))}<small>mL</small></span></span><span class="t">${D.aire.tasa ? 'en ' + dec(ml / AIRE.tasa, 1) + ' s' : '0 mL/s'}</span>`;
+    if (D.aire.reducido && e.aire.abierto) h += `<span class="k">Aire</span><span class="grande">${q('aire', 'menos')}<small>riesgo</small></span><span class="t ilu">sin cifra</span>`;
+    else h += `<span class="k">Aire</span><span${letal ? ' class="alarma"' : ''}><span class="grande">${q('aire', fmt(D.aire.tasa ? ml : 0))}<small>mL</small></span></span><span class="t">${!e.aire.abierto ? 'cerrado' : D.aire.tasa ? 'en ' + dec(ml / AIRE.tasa, 1) + ' s' : '0 mL/s'}</span>`;
     h += `<span class="k">Mortal</span><b>200-300 mL</b><span class="t">ficha</span>`;
     h += `<span class="k">Punta</span><b>${q('punta', D.punta.ok === true ? '✓ carina' : D.punta.ok === false ? '✗ mal' : e.punta === 'auricula' ? 'aurícula' : 'alta')}</b><span class="t">ficha</span>`;
     pie = `100 mL/s · 3-5 mL/kg = 210-350 en 70 kg`;
@@ -1401,7 +1412,7 @@ function pintarLectura() {
 /* ---------- La frase viva ---------- */
 function fraseCat(e) {
   const c = CAT[e.cat], fu = `ficha · ${c.tabla}`;
-  const alt = e.altura === 68 ? ` A 68 cm (50 mmHg): × 50/75 = <span class="hl-a">${D.texto} L/h</span>.` : e.altura === 0 ? ' Con la bolsa a 0 cm, sin gradiente: sin flujo.' : '';
+  const alt = e.altura === 68 ? ` A 68 cm (50 mmHg), calculado: × 50/75 = <span class="hl-a">${D.texto} L/h</span>.` : e.altura === 0 ? ' Con la bolsa a 0 cm, sin gradiente: sin flujo.' : '';
   const txt = {
     pc: 'Periférico corto de 18 G y 3 cm: <span class="hl-a">6,0 L/h</span> por gravedad. Supera de largo a una bomba volumétrica (1 L/h).',
     pl: 'Periférico largo de 8 cm: <span class="hl-a">3,7 L/h</span>. Dura más: unos 7-9 días.',
@@ -1433,7 +1444,7 @@ function fraseDe(v, n) {
     A: FRASE_INICIO(),
     B: ['Lupa B: las cuatro vías del germen (Fig. 3.2). En los catéteres percutáneos no tunelizados, la principal es <span class="hl-r">la piel, por el trayecto</span>.', 'ficha · mar-bac-vias'],
     C: ['Lupa C: la punta va en la cava superior, <span class="hl-a">1-2 cm por encima de la aurícula</span>, a la altura de la carina. Arrástrala.', 'ficha · mar-punta-objetivo · mar-punta-rx'],
-    D: ['Lupa D (opcional): ¿vena o arteria? Comprime y enciende el Doppler. Esquema 2D, no el ecógrafo.', 'ficha · mar-eco-cual · mar-eco-aguja']
+    D: ['Lupa D: ¿vena o arteria? Comprime y enciende el Doppler. Esquema 2D, no el ecógrafo.', 'ficha · mar-eco-cual · mar-eco-aguja']
   }[n.lupa];
   if (n.oclusion !== v.oclusion) {
     if (!n.oclusion) return ['Sin oclusión: el catéter vuelve a pasar.', ''];
@@ -1441,21 +1452,21 @@ function fraseDe(v, n) {
     return [`${t0}: flujo lento o nulo, ${n.bomba !== 'gravedad' ? 'la bomba alarma por presión' : 'alarmas de la bomba si la hubiera'} y cuesta aspirar.`, 'ficha · mar-oclusion-causas · mar-tabla-3-3'];
   }
   if (n.instilado !== v.instilado && n.instilado) {
-    if (n.instilado === 'guia') return ['<span class="hl-r">No pases una guía</span>: puede soltar la masa y embolizarla.', 'ficha · mar-permeabilidad'];
+    if (n.instilado === 'guia') return ['<span class="hl-r">No se aconseja pasar una guía</span>: puede soltar la masa y embolizarla.', 'ficha · mar-permeabilidad'];
     if (!n.oclusion) return ['No hay nada que disolver.', ''];
     if (resuelta(n)) return n.instilado === 'alteplasa'
       ? ['Alteplasa 2 mg (2 mL): esperar 30 min; si no, otros 90 (120 en total). Recupera el <span class="hl-a">80-90 %</span>. Si vuelve, extraer 5 mL.', 'ficha · mar-alteplasa']
       : ['Disuelto. La regla: <span class="hl-a">lo alcalino con un álcali, lo ácido con un ácido y los lípidos con etanol</span>. Instilar, dejar actuar y lavar con 10-20 mL de salino.', 'ficha · mar-tabla-3-3'];
     return ['No lo disuelve. Si la alteplasa no basta, piensa <span class="hl-a">qué pasaba por esa luz</span> (Tabla 3.3).', 'ficha · mar-alteplasa · mar-tabla-3-3'];
   }
-  if (n.io !== v.io) return n.io ? ['La médula <span class="hl-a">no se colapsa</span> en el shock, pero da un <span class="hl-r">25 % de una periférica</span> y empuja con unos 30 mmHg: presurízala.', 'ficha · mar-io-flujo · mar-io-indicaciones'] : FRASE_INICIO();
+  if (n.io !== v.io) return n.io ? ['La médula <span class="hl-a">no se colapsa</span> en el shock, pero da un <span class="hl-r">25 % de una periférica</span> y empuja con unos 30 mmHg: se presuriza de rutina.', 'ficha · mar-io-flujo · mar-io-indicaciones'] : FRASE_INICIO();
   if (n.banco !== v.banco) return ['<span class="hl-a">Dos experimentos distintos</span>: la Fig. 1.1 en mL/min y las Tablas 1.2-1.3 en L/h. No se mezclan sus cifras.', 'ficha · mar-fig-1-1-calibre · mar-tabla-1-2'];
   if (n.banco === 'fig' && (n.figExp !== v.figExp || n.figCal !== v.figCal || n.figLong !== v.figLong)) return fraseFig(n);
   if (n.cat !== v.cat && n.banco === 'tablas') return fraseCat(n);
   if (n.vena !== v.vena) return ['Has cambiado la vena y <span class="hl-a">el flujo no se ha movido</span>: lo marca el catéter, no la vena.', 'ficha · mar-flujo-cateter'];
   if (n.altura !== v.altura) {
     if (n.altura === 0) return ['Bolsa a la altura del brazo: <span class="hl-r">sin gradiente, sin flujo</span>.', 'ficha · mar-poiseuille'];
-    if (n.altura === 68) return [`A 68 cm la presión es <span class="hl-a">50 mmHg</span>: el flujo cae a dos tercios del de la tabla (${D.texto} L/h).`, 'ficha · mar-altura-bolsa · mar-poiseuille'];
+    if (n.altura === 68) return [`A 68 cm la presión es <span class="hl-a">50 mmHg</span>: el flujo cae a dos tercios del de la tabla (calculado: ${D.texto} L/h).`, 'ficha · mar-altura-bolsa · mar-poiseuille · calculado'];
     return ['A 100 cm, <span class="hl-a">75 mmHg</span>: la cifra de la tabla (medida desde 40 pulgadas).', 'ficha · mar-altura-bolsa · mar-tabla-1-2'];
   }
   if (n.bomba !== v.bomba) {
@@ -1464,7 +1475,7 @@ function fraseDe(v, n) {
     if (n.bomba === 'infusor') return D.cat.rapido ? ['Infusor rápido: <span class="hl-a">hasta 1,5 L/min</span> de fluidos o hemoderivados calientes, con su catéter de 7-8 Fr y 2-2,5″.', 'ficha · mar-bombas'] : [`<span class="hl-r">${D.avisos[0]}</span>`, 'ficha · mar-bombas'];
     return ['Por gravedad: manda la altura de la bolsa.', 'ficha · mar-altura-bolsa'];
   }
-  if (n.tiempo !== v.tiempo) return {
+  if (n.tiempo !== v.tiempo) return n.tiempo >= 168 ? [`Día ${Math.round(n.tiempo / 24)}: la biopelícula sigue creciendo. El ritmo que ves es ilustrativo.`, 'ficha · mar-biofilm · ritmo ilustrativo'] : {
     0: ['Catéter recién puesto: aún nada pegado.', 'ilustrativo'],
     24: ['A las 24 h <span class="hl-a">ya hay biopelícula</span> al microscopio electrónico; la clínica no aparece antes de 48 h.', 'ficha · mar-biofilm · mar-bac-clinica'],
     48: ['Desde las 48 h puede haber clínica, pero es inespecífica: la fiebre y la leucocitosis son inflamación, no prueba de infección.', 'ficha · mar-bac-clinica'],
@@ -1472,7 +1483,8 @@ function fraseDe(v, n) {
     336: ['Día 14: más biopelícula. El ritmo que ves es ilustrativo.', 'ficha · mar-biofilm · ritmo ilustrativo']
   }[n.tiempo];
   for (const k of Object.keys(n.paquete)) if (n.paquete[k] !== v.paquete[k]) {
-    const txt = { manos: 'Higiene de manos: una de las medidas más importantes y más olvidadas, antes y después de tocar el punto.', barreras: 'Barreras máximas: gorro, mascarilla, guantes, bata y paño estériles de cuerpo entero.', clorhex: 'Clorhexidina al 2 % en alcohol al 70 %: frotar 30 s y dejar secar (hasta 2 min en piel húmeda); dura ≥6 h.', femoral: 'Evitar la femoral: hoy sobre todo por la trombosis; el riesgo de infección depende de cómo se cuida el punto.' }[k];
+    const txt = { manos: 'Higiene de manos: una de las medidas más importantes y más olvidadas, antes y después de tocar el punto.', barreras: 'Barreras máximas: gorro, mascarilla, guantes estériles, bata estéril y paño estéril de cuerpo entero.', clorhex: 'Clorhexidina al 2 % en alcohol al 70 %: frotar 30 s y dejar secar (hasta 2 min en piel húmeda); dura ≥6 h.', femoral: 'Evitar la femoral: hoy, sobre todo por la trombosis. El riesgo de infección depende de cómo se cuida el punto, no del sitio: no cierra ninguna puerta de la piel.' }[k];
+    if (k === 'femoral') return [txt, 'ficha · mar-tabla-2-1 · mar-sitio-femoral · mar-femoral-segura'];
     return [(n.paquete[k] ? 'Cierras una puerta. ' : 'Abres una puerta. ') + txt, `ficha · mar-tabla-2-1 · ${{ manos: 'mar-higiene-manos', barreras: 'mar-barreras', clorhex: 'mar-clorhexidina', femoral: 'mar-sitio-femoral' }[k]} · cuántas puertas: ilustrativo`];
   }
   if (n.aposito !== v.aposito) return {
@@ -1505,7 +1517,7 @@ function fraseDe(v, n) {
   if (n.aire.postura !== v.aire.postura || n.aire.abierto !== v.aire.abierto) {
     if (!n.aire.abierto) return [{ espontanea: 'Respira solo, semiincorporado: la presión intratorácica es negativa.', trendelenburg: 'Trendelenburg: sube la presión venosa.', femoral: 'Catéter femoral: no entra en el tórax.' }[n.aire.postura], 'ficha · mar-aire-fisio · mar-aire-prevencion'];
     if (n.aire.postura === 'espontanea') return ['Con 5 mmHg, por un 14 G entran <span class="hl-r">100 mL de aire por segundo</span>; 200-300 mL en pocos segundos matan.', 'ficha · mar-aire-fisio'];
-    return [n.aire.postura === 'trendelenburg' ? 'Trendelenburg: la presión venosa sube y <span class="hl-a">el contador no arranca</span>.' : 'Femoral: el catéter no entra en el tórax ni sufre presión negativa: <span class="hl-a">no entra aire</span>.', 'ficha · mar-aire-prevencion'];
+    return n.aire.postura === 'trendelenburg' ? ['Trendelenburg: sube la presión venosa y <span class="hl-a">reduce el riesgo</span> de embolia aérea. No lo anula: el conector se cierra igual. Cuánto entra, el libro no lo dice (burbujas lentas: ilustrativo).', 'ficha · mar-aire-prevencion · ritmo ilustrativo'] : ['Femoral: el catéter no entra en el tórax ni sufre presión negativa: <span class="hl-a">no entra aire</span>.', 'ficha · mar-aire-prevencion'];
   }
   const E0 = v.eco, E1 = n.eco;
   if (E1.eje !== E0.eje) return E1.eje === 'largo' ? ['Eje largo: se ven la aguja, la guía y el catéter enteros, pero <span class="hl-r">no la arteria vecina</span>.', 'ficha · mar-eco-ejes'] : ['Eje corto: localizas la vena y ves la arteria vecina; la aguja es solo un punto brillante.', 'ficha · mar-eco-ejes'];
@@ -1520,8 +1532,8 @@ function fraseDe(v, n) {
 function marcarSeg(id, v) { $(id).querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === String(v)))); }
 function chipsCatalogo() {
   $('m-catalogo').innerHTML = ORDEN_CAT.map(k => { const c = CAT[k]; return `<button type="button" class="chip-f" data-cat="${k}" aria-pressed="false"><span>${c.nombre}<small>${c.sub}${c.lh != null ? ` · ${dec(c.lh, c.lh < 1 ? 2 : 1)} L/h` : ''}</small></span></button>`; }).join('');
-  $('m-oclusion').innerHTML = Object.entries(OCLUSIONES).map(([k, o]) => `<button type="button" class="chip-f" data-oc="${k}" aria-pressed="false"><span>${o.nombre}<small>${o.sub}</small></span></button>`).join('') + `<button type="button" class="chip-f" data-oc="" aria-pressed="false"><span>Sin oclusión<small>vuelve a pasar</small></span></button>`;
-  $('m-instilar').innerHTML = Object.entries(INSTILAR).map(([k, o]) => `<button type="button" class="chip-f" data-ins="${k}" aria-pressed="false"><span>${o.nombre}<small>${o.sub || 'instilar'}</small></span></button>`).join('');
+  $('m-oclusion').innerHTML = `<option value="">Sin oclusión</option>` + Object.entries(OCLUSIONES).map(([k, o]) => `<option value="${k}">${o.nombre} (${o.sub})</option>`).join('');
+  $('m-instilar').innerHTML = `<option value="">Instilar…</option>` + Object.entries(INSTILAR).map(([k, o]) => `<option value="${k}">${o.nombre}${o.sub ? ` (${o.sub})` : ''}</option>`).join('');
 }
 function sincronizarMandos() {
   const e = estado;
@@ -1530,23 +1542,20 @@ function sincronizarMandos() {
   marcarSeg('m-calibre', e.figExp === 'calibre' ? e.figCal : '-'); marcarSeg('m-longitud', e.figExp === 'longitud' ? e.figLong : '-');
   document.querySelectorAll('#m-catalogo [data-cat]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.cat === e.cat)));
   marcarSeg('m-vena', e.vena);
-  $('fr-chip').textContent = D.cat.fr;
   marcarSeg('m-altura', e.altura);
   $('m-altura').querySelectorAll('button').forEach(b => { b.disabled = e.banco === 'fig' || e.io; });
-  $('nota-empujar').textContent = e.io ? 'IO: presurizar con bomba o manguito' : e.banco === 'fig' ? 'La Fig. 1.1 no dice la altura: elige las Tablas para subir la bolsa' : '';
+  $('m-altura').title = e.io ? 'Intraósea: se presuriza con bomba o manguito' : e.banco === 'fig' ? 'La Fig. 1.1 no dice la altura: elige las Tablas para subir la bolsa' : '';
   marcarSeg('m-bomba', e.bomba);
   $('m-io').setAttribute('aria-pressed', String(e.io));
   marcarSeg('m-tiempo', e.tiempo);
   document.querySelectorAll('[data-paq]').forEach(b => b.setAttribute('aria-pressed', String(!!e.paquete[b.dataset.paq])));
-  marcarSeg('m-aposito', e.aposito);
   marcarSeg('m-problema', e.problema);
   ['biopelicula', 'hemocultivos', 'oclusion', 'aire'].forEach(k => { $('sub-' + k).hidden = e.problema !== k; });
   $('m-antibiotico').setAttribute('aria-pressed', String(e.antibiotico));
-  marcarSeg('m-manejo', e.manejo);
-  document.querySelectorAll('#m-oclusion [data-oc]').forEach(b => b.setAttribute('aria-pressed', String((b.dataset.oc || null) === e.oclusion)));
-  document.querySelectorAll('#m-instilar [data-ins]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.ins === e.instilado)));
+  document.querySelectorAll('[data-manejo]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.manejo === e.manejo)));
+  $('m-oclusion').value = e.oclusion || ''; $('m-instilar').value = e.instilado || ''; $('m-instilar').disabled = !e.oclusion;
   marcarSeg('m-postura', e.aire.postura);
-  $('m-conector').textContent = e.aire.abierto ? 'Cerrar el conector' : 'Abrir el conector';
+  $('m-conector').textContent = e.aire.abierto ? 'Cerrar conector' : 'Abrir conector';
   $('m-incubar').textContent = e.hcIncubado ? 'Incubar otra vez' : 'Incubar los dos frascos';
   document.querySelectorAll('#lupas [data-lupa]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lupa === e.lupa)));
 }
@@ -1561,7 +1570,6 @@ segClick('m-bomba', v => cambiar(e => { e.bomba = v; e.lupa = 'A'; }));
 $('m-io').addEventListener('click', () => cambiar(e => { e.io = !e.io; e.lupa = 'A'; }));
 segClick('m-tiempo', v => cambiar(e => { e.tiempo = +v; e.lupa = 'B'; if (e.zoomB === 'frascos' || e.zoomB === 'micro') e.zoomB = 'vias'; }));
 document.querySelectorAll('[data-paq]').forEach(b => b.addEventListener('click', () => cambiar(e => { e.paquete[b.dataset.paq] = !e.paquete[b.dataset.paq]; e.lupa = 'B'; e.zoomB = 'vias'; })));
-segClick('m-aposito', v => cambiar(e => { e.aposito = v; e.lupa = 'B'; e.zoomB = 'vias'; }));
 segClick('m-problema', v => cambiar(e => {
   e.problema = v;
   if (v === 'biopelicula') { e.lupa = 'B'; e.zoomB = 'punta'; if (!e.tiempo) e.tiempo = 24; }
@@ -1570,32 +1578,41 @@ segClick('m-problema', v => cambiar(e => {
   if (v === 'aire') { e.lupa = 'C'; }
 }));
 $('m-antibiotico').addEventListener('click', () => cambiar(e => { e.antibiotico = !e.antibiotico; e.lupa = 'B'; if (e.zoomB !== 'vias') e.zoomB = 'punta'; if (!e.tiempo) e.tiempo = 48; }));
-segClick('m-manejo', v => cambiar(e => { e.manejo = e.manejo === v ? null : v; e.lupa = 'B'; if (e.zoomB === 'frascos' || e.zoomB === 'micro') e.zoomB = 'punta'; }));
+document.querySelectorAll('[data-manejo]').forEach(b => b.addEventListener('click', () => cambiar(e => { const v = b.dataset.manejo; e.manejo = e.manejo === v ? null : v; e.lupa = 'B'; if (e.zoomB === 'frascos' || e.zoomB === 'micro') e.zoomB = 'punta'; })));
 $('m-incubar').addEventListener('click', () => { cambiar(e => { e.hcIncubado = false; }, { frase: false }); cambiar(e => { e.hcIncubado = true; e.lupa = 'B'; e.zoomB = 'frascos'; e.problema = 'hemocultivos'; }); });
-$('m-oclusion').addEventListener('click', ev => { const b = ev.target.closest('[data-oc]'); if (b) cambiar(e => { e.oclusion = b.dataset.oc || null; e.instilado = null; e.lupa = 'A'; }); });
-$('m-instilar').addEventListener('click', ev => { const b = ev.target.closest('[data-ins]'); if (b) cambiar(e => { e.instilado = b.dataset.ins; e.lupa = 'A'; }); });
+$('m-oclusion').addEventListener('change', ev => cambiar(e => { e.oclusion = ev.target.value || null; e.instilado = null; e.lupa = 'A'; }));
+$('m-instilar').addEventListener('change', ev => cambiar(e => { e.instilado = ev.target.value || null; e.lupa = 'A'; }));
 segClick('m-postura', v => cambiar(e => { e.aire.postura = v; e.aire.abierto = false; e.lupa = 'C'; }));
 $('m-conector').addEventListener('click', () => cambiar(e => { e.aire.abierto = !e.aire.abierto; e.lupa = 'C'; e.izquierdo = false; }));
+function elegirPestana(tab) {
+  document.querySelectorAll('.dock-tabs button').forEach(o => o.setAttribute('aria-selected', String(o.dataset.tab === tab)));
+  document.querySelectorAll('#dock-explorar > .dock-panel').forEach(p => { p.hidden = p.dataset.panel !== tab; });
+}
+const pestanaActual = () => document.querySelector('.dock-tabs [aria-selected="true"]')?.dataset.tab;
 document.querySelectorAll('.dock-tabs button').forEach(b => b.addEventListener('click', () => {
-  document.querySelectorAll('.dock-tabs button').forEach(o => o.setAttribute('aria-selected', String(o === b)));
-  document.querySelectorAll('#dock-explorar > .dock-panel').forEach(p => { p.hidden = p.dataset.panel !== b.dataset.tab; });
+  elegirPestana(b.dataset.tab);
+  if (b.dataset.tab === 'lupa') return;
   const lupa = { cateter: 'A', empujar: 'A', tiempo: 'B', problema: { biopelicula: 'B', hemocultivos: 'B', oclusion: 'A', aire: 'C' }[estado.problema] }[b.dataset.tab];
   if (lupa !== estado.lupa) cambiar(e => { e.lupa = lupa; if (lupa === 'B' && b.dataset.tab === 'tiempo' && (e.zoomB === 'frascos' || e.zoomB === 'micro')) e.zoomB = 'vias'; });
 }));
 
-/* ---------- Lupas: botones, mandos propios, arrastre de la punta ---------- */
-$('lupas').addEventListener('click', ev => { const b = ev.target.closest('[data-lupa]'); if (b) cambiar(e => { e.lupa = b.dataset.lupa; }); });
-$('lupa-cerrar').addEventListener('click', () => cambiar(e => { e.lupa = 'A'; }));
+/* ---------- Lupas: botones, mandos propios (suben al dock), arrastre de la punta ---------- */
+$('lupas').addEventListener('click', ev => { const b = ev.target.closest('[data-lupa]'); if (!b) return; cambiar(e => { e.lupa = b.dataset.lupa; }); elegirPestana(b.dataset.lupa === 'A' ? 'cateter' : 'lupa'); });
+$('lupa-cerrar').addEventListener('click', () => { cambiar(e => { e.lupa = 'A'; }); if (pestanaActual() === 'lupa') elegirPestana('cateter'); });
 function pintarMandosLupa() {
   const e = estado, m = $('mandos-lupa');
-  const seg = (grupo, ops, act) => `<div class="seg" data-grupo="${grupo}" style="flex:none;min-width:${ops.length * 74}px">${ops.map(([v, txt]) => `<button type="button" data-v="${v}" aria-pressed="${String(v) === String(act)}">${txt}</button>`).join('')}</div>`;
+  const seg = (grupo, ops, act) => `<div class="seg" data-grupo="${grupo}">${ops.map(([v, txt]) => `<button type="button" data-v="${v}" aria-pressed="${String(v) === String(act)}">${txt}</button>`).join('')}</div>`;
   const tog = (k, txt, on) => `<button type="button" class="tog" data-tog="${k}" aria-pressed="${on}">${txt}</button>`;
   let h = '';
-  if (e.lupa === 'B') h = seg('zoomB', [['vias', 'Fig. 3.2 <small>las 4 vías</small>'], ['punta', 'La punta <small>de cerca</small>'], ['micro', 'Microscopio <small>foto real</small>'], ['frascos', 'Hemo&shy;cultivos']], e.zoomB);
-  else if (e.lupa === 'C') h = seg('punta', ORDEN_PUNTA.map(p => [p, { yugular: 'Yugular', 'vcs-alta': 'Cava alta', carina: 'Carina', auricula: 'Aurícula' }[p]]), e.izquierdo ? '-' : e.punta) + tog('izquierdo', 'Catéter izquierdo', e.izquierdo);
-  else if (e.lupa === 'D') h = seg('eje', [['corto', 'Eje corto'], ['largo', 'Eje largo']], e.eco.eje) + tog('comprimir', 'Comprimir', e.eco.comprimir) + tog('trombosada', 'Vena trombosada', e.eco.trombosada) + tog('aguja', 'Aguja', e.eco.aguja) + tog('doppler', 'Doppler color', e.eco.doppler) + tog('girada', 'Girar la sonda', e.eco.girada);
+  if (e.lupa === 'B') h = seg('zoomB', [['vias', 'Fig. 3.2<small>las 4 vías</small>'], ['punta', 'La punta<small>de cerca</small>'], ['micro', 'Micros&shy;copio<small>foto real</small>'], ['frascos', 'Hemo&shy;cultivos']], e.zoomB)
+    + seg('aposito', [['transparente', 'Apósito<small>transparente</small>'], ['gasa', 'Gasa'], ['esponja', 'Esponja<small>clorhexidina</small>'], ['humedo', 'Humedad<small>debajo</small>']], e.aposito);
+  else if (e.lupa === 'C') h = seg('punta', ORDEN_PUNTA.map(p => [p, { yugular: 'Yugular', 'vcs-alta': 'Cava alta', carina: 'Carina', auricula: 'Aurícula' }[p]]), e.izquierdo ? '-' : e.punta)
+    + `<div class="fila-io">${tog('izquierdo', 'Catéter izquierdo (Fig. 3.1)', e.izquierdo)}<span class="nota-mini">o arrastra la punta en la lámina</span></div>`;
+  else if (e.lupa === 'D') h = `<div class="fila-io">${seg('eje', [['corto', 'Eje corto'], ['largo', 'Eje largo']], e.eco.eje)}${tog('comprimir', 'Comprimir', e.eco.comprimir)}</div>`
+    + `<div class="rejilla4">${tog('trombosada', 'Vena trombosada', e.eco.trombosada)}${tog('aguja', 'Aguja', e.eco.aguja)}${tog('doppler', 'Doppler color', e.eco.doppler)}${tog('girada', 'Girar la sonda', e.eco.girada)}</div>`;
   if (m._h !== h) { m._h = h; m.innerHTML = h; }
-  m.hidden = !h;
+  const tl = $('tab-lupa'); tl.hidden = e.lupa === 'A'; tl.textContent = 'Lupa ' + e.lupa;
+  if (e.lupa === 'A' && pestanaActual() === 'lupa') elegirPestana('cateter');
   const nota = {
     B: e.zoomB === 'vias' ? '<b>1</b> infusión contaminada (rara) · <b>2</b> conector y luz interna (quizá destacada en los tunelizados) · <b>3</b> piel, por el trayecto subcutáneo (la principal en los percutáneos no tunelizados) · <b>4</b> sangre: los microbios circulantes se pegan a la parte intravascular. <span class="org">ficha · mar-bac-vias · mar-bac-intestino</span>'
       : e.zoomB === 'frascos' ? 'Tiempo diferencial: el mismo germen en los dos y el del catéter ≥2 h antes (91 %). Las horas de los frascos son ilustrativas; la diferencia de 2,5 h es la del caso. <span class="org">ficha · mar-tabla-3-4</span>'
@@ -1609,6 +1626,7 @@ $('mandos-lupa').addEventListener('click', ev => {
   const b = ev.target.closest('button'); if (!b) return;
   const grupo = b.closest('[data-grupo]')?.dataset.grupo, k = b.dataset.tog;
   if (grupo === 'zoomB') cambiar(e => { e.zoomB = b.dataset.v; if (b.dataset.v === 'frascos') e.problema = 'hemocultivos'; if (b.dataset.v === 'punta' && !e.tiempo) e.tiempo = 24; });
+  else if (grupo === 'aposito') cambiar(e => { e.aposito = b.dataset.v; e.zoomB = 'vias'; });
   else if (grupo === 'punta') cambiar(e => { e.punta = b.dataset.v; e.izquierdo = false; });
   else if (grupo === 'eje') cambiar(e => { e.eco.eje = b.dataset.v; });
   else if (k === 'izquierdo') cambiar(e => { e.izquierdo = !e.izquierdo; e.aire.abierto = false; });
@@ -1628,7 +1646,7 @@ svg.addEventListener('pointermove', ev => { if (!arrastrando) return; const k = 
 
 /* ---------- La tira de láminas del libro (figuras reales) y su visor ---------- */
 const FIGS = {
-  'f1-1': { src: 'mar-fig1-1-flujo-calibre-longitud.jpg', n: 'Fig. 1.1', pie: 'Fig. 1.1 — Flujo de agua por gravedad según el calibre (catéteres de 1,2″) y la longitud (16 G). El libro midió esto: 220/105/60 y 151/91/54 mL/min.', pag: 5, midio: true },
+  'f1-1': { src: 'mar-fig1-1-flujo-calibre-longitud.jpg', n: 'Fig. 1.1', pie: 'Fig. 1.1 — Flujo de agua por gravedad según el calibre (catéteres de 1,2″) y la longitud (16 G). Datos de dos estudios (refs. 4 y 5 del libro, uno por panel): 220/105/60 y 151/91/54 mL/min.', pag: 5, midio: true },
   'f1-2': { src: 'mar-fig1-2-cateter-sobre-aguja.jpg', n: 'Fig. 1.2', pie: 'Fig. 1.2 — Catéter sobre aguja para venas periféricas superficiales.', pag: 6 },
   'f1-3': { src: 'mar-fig1-3-venas-brazo-midline.jpg', n: 'Fig. 1.3', pie: 'Fig. 1.3 — Venas del brazo, con un midline en la basílica (la preferida).', pag: 8 },
   'f1-4': { src: 'mar-fig1-4-cvc-triple-luz.jpg', n: 'Fig. 1.4', pie: 'Fig. 1.4 — CVC de triple luz (7 Fr): distal 16 G, medial y proximal 18 G, y dónde sale cada una.', pag: 10 },
@@ -1669,7 +1687,7 @@ function leyendas() {
 }
 
 /* ---------- Anillo dorado que late sobre lo que hay que mirar ---------- */
-const ANCLAS = { probeta: [PROB.x + PROB.w / 2, PROB.y + PROB.h / 2, 70], bolsa: [80, null, 56], vena: [280, VENA_Y, 60], escala: [180, ESC.y, 70], punta: [null, null, 44], cocos: [150, 200, 80], frascos: [180, 170, 120], conector: [225, 112, 50], eco: [180, 180, 110] };
+const ANCLAS = { probeta: [PROB.x + PROB.w / 2, PROB.y + PROB.h / 2, 70], bolsa: [80, null, 56], vena: [280, VENA_Y, 60], escala: [220, VENA_Y, 80], punta: [null, null, 44], cocos: [150, 200, 80], frascos: [180, 170, 120], conector: [225, 112, 50], eco: [180, 180, 110] };
 let anilloAnim = null;
 function anillo(obj) {
   const a = $('anillo');
@@ -1708,7 +1726,7 @@ const ESTADOS = {
   punta: { e: { lupa: 'C', punta: 'carina', problema: 'aire' }, cifra: d => d.punta.ok === true },
   'punta-izquierda': { e: { lupa: 'C', izquierdo: true, problema: 'aire' }, cifra: d => d.punta.ok === false },
   aire: { e: { lupa: 'C', aire: { postura: 'espontanea', abierto: true }, problema: 'aire' }, cifra: d => d.aire.tasa === 100 },
-  trendelenburg: { e: { lupa: 'C', aire: { postura: 'trendelenburg', abierto: true }, problema: 'aire' }, cifra: d => d.aire.tasa === 0 },
+  trendelenburg: { e: { lupa: 'C', aire: { postura: 'trendelenburg', abierto: true }, problema: 'aire' }, cifra: d => d.aire.reducido && d.aire.tasa === null },
   'eco-eje-corto': { e: { lupa: 'D', eco: { eje: 'corto', aguja: true } }, cifra: d => d.eco.aguja === 'punto' && d.eco.arteriaVisible },
   'eco-eje-largo': { e: { lupa: 'D', eco: { eje: 'largo', aguja: true } }, cifra: d => d.eco.aguja === 'linea' && !d.eco.arteriaVisible },
   'eco-compresion': { e: { lupa: 'D', eco: { comprimir: true } }, cifra: d => d.eco.venaColapsa && !d.eco.arteriaColapsa },
@@ -1724,9 +1742,13 @@ const FICHAS_ESTADO = [
   ['VII · Bacteriemia por catéter', 'mar-bacteriemia-cateter', ['colonizacion', 'biopelicula', 'hemocultivos', 'recambio-guia']],
   ['VIII · Microbioma (solo la vía 4)', 'mar-microbioma', ['colonizacion']]
 ];
+const NOMBRE_ESTADO = { calibre: 'Calibre', longitud: 'Longitud', altura: 'Altura de la bolsa', catalogo: 'Catálogo (PICC)', 'cvc-luces': 'Luces del CVC', infusor: 'Infusor rápido',
+  intraosea: 'Intraósea', 'oclusion-trombo': 'Oclusión: trombo', 'oclusion-precipitado': 'Oclusión: precipitado', colonizacion: 'Las 4 vías', biopelicula: 'Biopelícula',
+  'aposito-humedo': 'Apósito húmedo', hemocultivos: 'Hemocultivos', 'recambio-guia': 'Recambio sobre guía', punta: 'La punta', 'punta-izquierda': 'Catéter izquierdo',
+  aire: 'Conector abierto', trendelenburg: 'Trendelenburg', 'eco-eje-corto': 'Eco: eje corto', 'eco-eje-largo': 'Eco: eje largo', 'eco-compresion': 'Eco: comprimir', 'eco-doppler': 'Eco: Doppler' };
 function irAEstado(k) {
   const st = estadoDe(ESTADOS[k].e);
-  const tab = st.lupa === 'B' && st.problema !== 'hemocultivos' && st.zoomB === 'vias' ? 'tiempo' : st.lupa === 'A' && !st.oclusion ? (st.io || st.bomba !== 'gravedad' || st.altura !== 100 ? 'empujar' : 'cateter') : st.lupa === 'D' ? 'cateter' : 'problema';
+  const tab = st.lupa === 'B' && st.problema !== 'hemocultivos' && st.zoomB === 'vias' ? 'tiempo' : st.lupa === 'A' && !st.oclusion ? (st.io || st.bomba !== 'gravedad' || st.altura !== 100 ? 'empujar' : 'cateter') : st.lupa === 'D' || (st.lupa === 'C' && st.problema !== 'aire') ? 'lupa' : 'problema';
   document.querySelector(`.dock-tabs [data-tab="${tab}"]`).click();
   aplicar(st, { forzar: true });
   window.scrollTo({ top: 0, behavior: REDUCIR ? 'auto' : 'smooth' });
@@ -1745,6 +1767,7 @@ function setModo(m) {
   if (m === 'conceptos') Estudio.concepto(Estudio.c);
   if (m === 'preguntas') Estudio.inicioPreguntas();
   if (m === 'explorar') decir(...fraseDe(estado, estado));
+  ajustarDock();
   if (REDUCIR) pintarUnaVez(); else arrancar();
   window.scrollTo({ top: 0 });
 }
@@ -1847,6 +1870,7 @@ function pintarPregunta(cont, q, { cabecera = '', repaso = null, alFinal }) {
       p.hidden = false;
       if (intentos < 2) { p.textContent = 'Aún no. ' + q.tocar.pista; return; }
       aplicar(estadoDe(Object.assign(copia(q.estado), q.tocar.bueno)), { forzar: true });
+      sincronizarMandoPregunta(cont);   // el mando de la pregunta enseña lo mismo que el modelo
       p.textContent = q.tocar.pista + ' Te lo pongo en el modelo.';
       ev.target.closest('.fila').remove(); finComprobar(`<span class="ok">Así queda: ${q.tocar.confirma}</span>`); return;
     }
@@ -1921,7 +1945,11 @@ function accionMando(m, cont) {
   else if (tipo === 'altura') cambiar(e => { e.altura = +v; });
   else if (tipo === 'cat') cambiar(e => { e.banco = 'tablas'; e.cat = v; });
   else if (tipo === 'incubar') { cambiar(e => { e.hcIncubado = false; }, { frase: false }); cambiar(e => { e.hcIncubado = true; e.lupa = 'B'; e.zoomB = 'frascos'; }); }
-  if (v != null) m.parentElement.querySelectorAll('[data-mando]').forEach(b => b.setAttribute('aria-pressed', String(b === m)));
+  sincronizarMandoPregunta(cont);
+}
+function sincronizarMandoPregunta(cont) {
+  const e = estado, actual = { calibre: e.figExp === 'calibre' ? e.figCal : null, longitud: e.figExp === 'longitud' ? e.figLong : null, vena: e.vena, altura: e.altura, cat: e.banco === 'tablas' ? e.cat : null };
+  cont.querySelectorAll('#mando [data-mando][data-v]').forEach(b => b.setAttribute('aria-pressed', String(String(actual[b.dataset.mando]) === b.dataset.v)));
 }
 function bloquearMandos(cont) { cont.querySelectorAll('#mando [data-mando]').forEach(b => { b.disabled = true; }); }
 
@@ -2105,7 +2133,7 @@ const CONCEPTOS = [
     texto: 'Sin cambiar de catéter, la palanca es el ΔP: la altura de la bolsa sobre el punto de punción. <span class="hl-a">68 cm = 50 mmHg; 100 cm = 75 mmHg</span>. El flujo es proporcional al ΔP; a 0 cm, sin gradiente, no hay flujo.',
     hacer: 'sube y baja la bolsa (banco de las tablas).', estado: { banco: 'tablas', cat: 'pc', altura: 100 }, mirar: 'bolsa',
     acciones: [{ t: '0 cm', e: { altura: 0 }, mirar: 'bolsa' }, { t: '68 cm', e: { altura: 68 }, mirar: 'bolsa' }, { t: '100 cm', e: { altura: 100 }, mirar: 'bolsa' }],
-    mira: '6,0 L/h a 100 cm (la tabla); 4,0 a 68 cm (× 50/75); 0 a 0 cm. La Fig. 1.1 no dice su altura: con ella, la bolsa no se mueve.',
+    mira: '6,0 L/h a 100 cm (la tabla); 4,0 a 68 cm (calculado: × 50/75); 0 a 0 cm. La Fig. 1.1 no dice su altura: con ella, la bolsa no se mueve.',
     fuente: 'mar-cateteres-flujo#mar-altura-bolsa · #mar-poiseuille · mar-tipos-cateter#mar-tabla-1-2' },
   { titulo: 'Los catéteres reales',
     texto: 'Tablas 1.2-1.3 (L/h; otro experimento, no se mezcla con la Fig. 1.1). El midline da el 20 % del periférico corto, y el PICC, <span class="hl-r">el 20 % del midline</span>. Del CVC, <span class="hl-a">la luz distal (16 G)</span> da más del doble que las de 18 G.',
@@ -2120,7 +2148,7 @@ const CONCEPTOS = [
     mira: 'con la volumétrica, ≤1.000 mL/h frente a 6 L/h por gravedad; el infusor con otro catéter no tiene cifra.',
     fuente: 'mar-cateteres-flujo#mar-bombas' },
   { titulo: 'La médula no se colapsa',
-    texto: 'En el shock las venas se colapsan; la cavidad medular, rígida, no. Pero la IO da <span class="hl-r">un 25 % de una periférica</span>: la médula es viscosa y está a unos 30 mmHg. Siempre presurizada; no más de 24 h.',
+    texto: 'En el shock las venas se colapsan; la cavidad medular, rígida, no. Pero la IO da <span class="hl-r">un 25 % de una periférica</span>: la médula es viscosa y está a unos 30 mmHg. Se presuriza de rutina (bomba o manguito); no más de 24 h (recomendación sin pruebas firmes).',
     hacer: 'pon la intraósea.', estado: { io: true }, mirar: 'probeta',
     acciones: [{ t: 'Intraósea por gravedad', e: { io: true } }, { t: 'Presurizada (bomba)', e: { io: true, bomba: 'volumetrica' } }],
     mira: 'la barra junto a la probeta: 25 % de una periférica, sin L/h (la ficha no dice cuál).',
@@ -2144,7 +2172,7 @@ const CONCEPTOS = [
     mira: 'el del catéter se enturbia 2,5 h antes (diferencia del caso; las horas absolutas son ilustrativas).',
     fuente: 'mar-bacteriemia-cateter#mar-bac-clinica · #mar-tabla-3-4' },
   { titulo: 'El catéter que no refluye',
-    texto: 'Lo más frecuente es un <span class="hl-r">trombo (60 %)</span>: alteplasa 2 mg, 30 y 120 min (80-90 %). <span class="hl-r">Nunca una guía</span>. Si falla, lo que pasaba por esa luz: <span class="hl-a">lo alcalino con un álcali, lo ácido con un ácido, los lípidos con etanol</span>.',
+    texto: 'Lo más frecuente es un <span class="hl-r">trombo (60 %)</span>: alteplasa 2 mg, 30 y 120 min (80-90 %). <span class="hl-r">No se aconseja pasar una guía</span>. Si falla, lo que pasaba por esa luz: <span class="hl-a">lo alcalino con un álcali, lo ácido con un ácido, los lípidos con etanol</span>.',
     hacer: 'ocluye y desobstruye.', estado: { banco: 'tablas', cat: 'picc-d', bomba: 'volumetrica', oclusion: 'trombo', problema: 'oclusion' }, mirar: 'lectura',
     acciones: [{ t: 'Trombo + alteplasa', e: { oclusion: 'trombo', instilado: 'alteplasa' } }, { t: 'NPT (Ca²⁺ y PO₄) + NaOH', e: { oclusion: 'mineral', instilado: 'naoh' } }, { t: 'Pasar una guía', e: { oclusion: 'trombo', instilado: 'guia' } }],
     mira: 'la bomba alarma y la probeta se para; el disolvente correcto lo abre.',
@@ -2153,9 +2181,9 @@ const CONCEPTOS = [
     texto: 'La punta, <span class="hl-a">1-2 cm por encima de la aurícula, a la altura de la carina</span>. Con el conector abierto y respiración espontánea, por un 14 G entran <span class="hl-r">100 mL de aire por segundo</span>: 200-300 mL en segundos matan.',
     hacer: 'mueve la punta y abre el conector.', estado: { lupa: 'C', problema: 'aire' }, mirar: 'punta',
     acciones: [{ t: 'Aurícula', e: { punta: 'auricula' }, mirar: 'punta' }, { t: 'Catéter izquierdo', e: { izquierdo: true }, mirar: 'punta' }, { t: 'Abrir el conector', e: { aire: { postura: 'espontanea', abierto: true } }, mirar: 'lectura' }, { t: 'En Trendelenburg', e: { aire: { postura: 'trendelenburg', abierto: true } }, mirar: 'lectura' }],
-    mira: 'el contador de aire de la lectura; en Trendelenburg no arranca. En la aurícula, se está dejando de recolocar.',
+    mira: 'el contador de aire de la lectura; en Trendelenburg el riesgo baja (cuánto, el libro no lo dice: burbujas lentas, ilustrativo). En la aurícula, se está dejando de recolocar.',
     fuente: 'mar-cvc-complicaciones#mar-punta-objetivo · #mar-punta-auricula · #mar-aire-fisio · #mar-aire-prevencion · mar-cateter-cuidados#mar-perforacion-vcs' },
-  { titulo: 'Vena o arteria (lupa D, opcional)',
+  { titulo: 'Vena o arteria (lupa D)',
     texto: 'Al comprimir, <span class="hl-a">la vena se colapsa y la arteria no</span> (salvo una vena trombosada). El Doppler color pinta <span class="hl-r">la dirección respecto a la sonda</span>, no el tipo de vaso.',
     hacer: 'comprime, enciende el Doppler y gira la sonda.', estado: { lupa: 'D' }, mirar: 'eco',
     acciones: [{ t: 'Comprimir', e: { eco: { comprimir: true } } }, { t: 'Vena trombosada', e: { eco: { comprimir: true, trombosada: true } } }, { t: 'Doppler', e: { eco: { doppler: true } } }, { t: 'Girar la sonda', e: { eco: { doppler: true, girada: true } } }],
@@ -2189,18 +2217,18 @@ const PREGUNTAS = [
     opciones: [
       { t: 'Sí: con una vena ancha hay menos resistencia a la salida', ok: false, porque: 'La resistencia está en el catéter (R = 8µL/πr⁴). Si cuentas con la vena grande, sigues reponiendo al mismo ritmo de antes.' },
       { t: 'No, porque el ritmo lo marca el catéter', ok: true },
-      { t: 'Solo si es central', ok: false, porque: 'Ser central no cambia el catéter: un CVC de 20 cm da menos que un periférico corto (2,28 frente a 6,0 L/h). El paciente recibiría menos de lo que esperas.' }],
+      { t: 'Solo si la vena es central: allí la presión es más baja y el gradiente, mayor', ok: false, porque: 'Ser central no cambia el catéter: un CVC de 20 cm da menos que un periférico corto (2,28 frente a 6,0 L/h). El paciente recibiría menos de lo que esperas.' }],
     explicacion: '<span class="hl-a">La velocidad de infusión la marca el catéter, no la vena</span>: sus dimensiones, no el tamaño de la vena canalizada.' },
   { id: 'cv-g4', grupo: 'guia', corto: 'altura', tipo: 'test', fuente: 'mar-cateteres-flujo#mar-altura-bolsa · #mar-poiseuille',
     estado: { banco: 'tablas', cat: 'pc', altura: 100 }, mirar: 'bolsa',
-    tocar: { mandos: ['altura'], ocultar: ['flujo', 'presion'], instruccion: 'baja la bolsa a 68 cm y lee la lectura.', comprobar: e => e.altura === 68, confirma: 'a 68 cm, 50 mmHg; el periférico corto pasa de 6,0 a 4,0 L/h (× 50/75).', pista: 'Pulsa «68 cm».', bueno: { altura: 68 } },
+    tocar: { mandos: ['altura'], ocultar: ['flujo', 'presion'], instruccion: 'baja la bolsa a 68 cm y lee la lectura.', comprobar: e => e.altura === 68, confirma: 'a 68 cm, 50 mmHg; el periférico corto pasa de 6,0 a 4,0 L/h (calculado: × 50/75).', pista: 'Pulsa «68 cm».', bueno: { altura: 68 } },
     enunciado: 'Sin cambiar de catéter, la palanca que te queda es el gradiente: la altura de la bolsa sobre el punto de punción. Predice: ¿con qué presión empuja a 68 cm?',
     opciones: [
       { t: '68 mmHg: un milímetro de mercurio por cada centímetro de altura', ok: false, porque: 'Un centímetro de altura no es un mmHg: a 68 cm la ficha da 50 mmHg. Esperarías más flujo del que le llega al paciente.' },
       { t: '50 mmHg, y 75 si la subes a 100 cm', ok: true },
       { t: 'Da igual: con una volumétrica ya va al máximo', ok: false, porque: 'La volumétrica no pasa de 1.000 mL/h; por gravedad, el periférico corto da 6 L/h. Con la bomba, el paciente recibiría menos.' }],
     explicacion: 'Por gravedad, el ΔP es la altura de la bolsa: <span class="hl-a">68 cm = 50 mmHg</span> y <span class="hl-a">100 cm = 75 mmHg</span>. El flujo es proporcional al ΔP.',
-    nota: '<b>Nota de fidelidad.</b> Las Tablas 1.2-1.3 se midieron desde 40 pulgadas (101,6 cm) y la ficha da 75 mmHg para 100 cm (39 pulgadas): la maqueta las toma como la misma marca.' },
+    nota: '<b>Nota de fidelidad.</b> Las Tablas 1.2-1.3 se midieron desde 40 pulgadas (101,6 cm) y la ficha da 75 mmHg para 100 cm (39 pulgadas): aquí se toman como la misma marca.' },
   { id: 'cv-g5', grupo: 'guia', corto: 'hemorragia masiva', tipo: 'destapa', fuente: 'mar-cateteres-flujo#mar-corto-grueso · #mar-bombas · mar-tipos-cateter#mar-tabla-1-3',
     estado: { banco: 'tablas', cat: 'cvc-d' }, despues: { banco: 'tablas', cat: 'rapido', bomba: 'infusor' }, mirar: 'escala', ocultar: ['flujo'],
     enunciado: 'Hemorragia masiva. ¿Qué pides para infundir lo más rápido posible?',
@@ -2225,6 +2253,14 @@ const PREGUNTAS = [
       { t: 'Menos que uno de 7 Fr: como el gauge, cuanto mayor el número, más fino es el catéter', ok: false, porque: 'Eso es el gauge. El French crece con el diámetro: 7 Fr = 2,4 mm y 9 Fr = 3,2 en la tabla. Si los confundes, en una hemorragia pedirías el catéter más fino.' }],
     explicacion: '<span class="hl-azul">Fr × 0,33 = mm</span>. El gauge va al revés y no está estandarizado: cambia con el fabricante.',
     nota: '<b>Nota de fidelidad.</b> La ecuación y la Tabla 1.1 no dan lo mismo: 9 Fr, 2,97 frente a 3,2 mm; 7 Fr, 2,31 frente a 2,4. La tabla recoge catéteres reales y la ecuación es una aproximación: se dan las dos.' },
+  { id: 'cv-e4', grupo: 'examen', corto: 'embolia aérea', tipo: 'destapa', fuente: 'mar-cvc-complicaciones#mar-aire-clinica · #mar-aire-manejo',
+    estado: { lupa: 'C', aire: { postura: 'espontanea', abierto: true }, problema: 'aire' }, mirar: 'lectura', ocultar: ['aire'],
+    enunciado: 'Al retirar un CVC yugular, con el paciente sentado, aparecen disnea brusca y una tos angustiosa. Sospechas una embolia gaseosa. ¿Qué haces?',
+    puntos: ['Si el catéter sigue dentro, conectar una jeringa e <span class="hl-a">intentar aspirar el aire</span>.',
+      '<span class="hl-a">Oxígeno al 100 %</span>: saca el nitrógeno de las burbujas y reduce su volumen.',
+      '<span class="hl-a">Decúbito lateral izquierdo</span>: mueve la bolsa de aire que bloquea la salida del VD.',
+      'Si hay colapso cardiovascular, valorar <span class="hl-r">soporte extracorpóreo</span>.'],
+    explicacion: 'La eficacia de estas medidas no está demostrada. La clínica: la disnea brusca es lo más precoz, a veces con tos angustiosa; en los casos avanzados, un soplo «en rueda de molino». La ETE es lo más sensible (detecta 0,02 mL/kg), pero no suele estar a mano.' },
   { id: 'cv-e3', grupo: 'examen', corto: 'oclusión', tipo: 'error', fuente: 'mar-cateter-cuidados#mar-oclusion-causas · #mar-permeabilidad · #mar-alteplasa · #mar-tabla-3-3',
     estado: { banco: 'tablas', cat: 'picc-d', bomba: 'volumetrica', oclusion: 'trombo', problema: 'oclusion' }, mirar: 'lectura',
     enunciado: 'PICC con la bomba alarmando por presión. Nota del R1.',
@@ -2232,7 +2268,7 @@ const PREGUNTAS = [
       { t: 'Lo más probable es un trombo: es la causa del 60 %.', mal: false },
       { t: 'Para aspirar, una jeringa pequeña: menos presión negativa, menos colapso de la luz.', mal: false },
       { t: 'Alteplasa 2 mg (2 mL); intento aspirar a los 30 min y, si no, a los 120.', mal: false },
-      { t: 'Si no se abre, le paso una guía para desatascarlo.', mal: true, c: '<span class="hl-r">No</span>: la guía puede soltar la masa y embolizarla. Si la alteplasa falla, piensa qué pasaba por esa luz (Tabla 3.3).' },
+      { t: 'Si no se abre, le paso una guía para desatascarlo.', mal: true, c: '<span class="hl-r">No se aconseja</span>: la guía puede soltar la masa y embolizarla. Si la alteplasa falla, piensa qué pasaba por esa luz (Tabla 3.3).' },
       { t: 'Si iba NPT rica en Ca²⁺ y fosfato, NaOH 0,1 N de primera elección.', mal: false }],
     explicacion: 'La alteplasa recupera el 80-90 %. Si no, la regla de la Tabla 3.3: <span class="hl-a">lo alcalino con un álcali, lo ácido con un ácido y los lípidos con etanol</span>.' }
 ];
@@ -2267,16 +2303,16 @@ const CASOS = [
             'La bomba volumétrica <span class="hl-r">no sirve para correr</span>: no pasa de 1.000 mL/h, y un periférico corto por gravedad da 6 L/h.',
             'Para la hemorragia masiva, el <span class="hl-a">infusor rápido</span> (hasta 1,5 L/min, calentado), con su catéter.'],
           explicacion: 'En el modelo, la bolsa sube a 100 cm: la cifra de la tabla (6,0 L/h en el periférico corto de 18 G).' } },
-      { momento: '25 min', datos: { Accesos: 'se arrancan las vías en el traslado; no hay venas visibles' }, nuevo: ['Accesos'], estado: { io: true }, mirar: 'probeta',
+      { momento: '25 min', datos: { Accesos: 'en el traslado a la TC se arrancan las periféricas y el CVC; no hay venas visibles' }, nuevo: ['Accesos'], estado: { io: true }, mirar: 'probeta',
         pregunta: { id: 'a1-4', tipo: 'test', fuente: 'mar-eco-intraosea#mar-io-sitio · #mar-io-flujo · #mar-io-errata', ocultar: ['flujo', 'presion'],
           enunciado: 'Sin venas: vía intraósea. ¿Dónde, y qué esperas de ella?',
           opciones: [
             { t: 'Fémur proximal, como dice el pie de la Fig. 1.10; pasa como una periférica', ok: false, porque: 'El pie de figura dice fémur, pero el texto y el dibujo describen la tibia (errata). Y la IO da solo un 25 %: sin presurizar, el volumen apenas entraría.' },
             { t: 'Tibia proximal; un 25 % de una periférica: presurizar', ok: true },
             { t: 'Húmero, que tiene más flujo: así no hace falta presurizar', ok: false, porque: 'El húmero tiene más capacidad de flujo, pero en el adulto se prefiere la tibia (más éxito; no estorba la intubación ni las compresiones). Y la médula empuja con unos 30 mmHg: sin presurizar, el volumen apenas entraría.' }],
-          explicacion: 'Tibia proximal: <span class="hl-a">3 cm bajo la rótula y 2 cm medial</span>. La médula no se colapsa en el shock, pero da un <span class="hl-r">25 %</span> de una periférica (viscosidad y unos 30 mmHg): siempre presurizada. No más de 24 h.',
+          explicacion: 'Tibia proximal: <span class="hl-a">3 cm bajo la rótula y 2 cm medial</span>. La médula no se colapsa en el shock, pero da un <span class="hl-r">25 %</span> de una periférica (viscosidad y unos 30 mmHg): se presuriza de rutina. No más de 24 h (recomendación sin pruebas firmes).',
           nota: '<b>Nota de fidelidad.</b> El pie de la Fig. 1.10 y el «A Final Word» dicen «fémur proximal»; el texto y el dibujo, la tibia. Se sigue el texto.' } },
-      { momento: '40 min · el giro', datos: { Llega: 'el infusor rápido de la sala de trauma' }, nuevo: ['Llega'], estado: { banco: 'tablas', cat: 'cvc-d', bomba: 'infusor' }, mirar: 'lectura',
+      { momento: '40 min · el giro', datos: { Accesos: 'IO tibial · CVC triple luz nuevo, subclavio (20 cm)', Llega: 'el infusor rápido de la sala de trauma' }, nuevo: ['Accesos', 'Llega'], estado: { banco: 'tablas', cat: 'cvc-d', bomba: 'infusor' }, mirar: 'lectura',
         calculadora: { nombre: 'Del French al milímetro', ids: '#mar-french-calc' },
         pregunta: { id: 'a1-5', tipo: 'test', fuente: 'mar-cateteres-flujo#mar-bombas · #mar-french',
           despues: { banco: 'tablas', cat: 'rapido', bomba: 'infusor' },
@@ -2299,26 +2335,27 @@ const CASOS = [
     ],
     lleva: ['El ritmo lo marca el catéter: <b>corto y grueso</b> (16 G, 220 mL/min; 20 G, 60). La vena no cuenta.',
       'Del CVC, la luz distal (16 G, 2,28 L/h). Para correr de verdad, el infusor rápido con su catéter de 7-8 Fr; la volumétrica no pasa de 1.000 mL/h.',
-      'La IO no se colapsa, pero da un 25 %: tibia proximal, presurizada, ≤24 h y lidocaína 40 mg en 2 min si está despierto.'],
+      'La IO no se colapsa, pero da un 25 %: tibia proximal, presurizada de rutina, no más de 24 h y lidocaína 40 mg en 2 min si está despierto.'],
     volver: { nombre: 'Catéteres y flujo', ficha: 'mar-cateteres-flujo (Marino cap. 1)', estado: { banco: 'tablas', cat: 'rapido', bomba: 'infusor' } } },
 
   { id: 'c-a2', titulo: 'Carmen, 64 años: fiebre el día 9 del CVC', corto: 'Caso A2 · Carmen', sub: 'sepsis abdominal, CVC yugular',
     paciente: { Edad: '64 años', Motivo: 'sepsis abdominal, operada', Catéter: 'CVC yugular derecho' },
     pasos: [
-      { momento: 'Día 9', datos: { Temperatura: '38,6 °C', Foco: 'ninguno claro', 'Punto del CVC': 'eritema, sin pus' }, nuevo: ['Temperatura', 'Foco', 'Punto del CVC'], estado: { lupa: 'B', zoomB: 'vias', tiempo: 168 }, mirar: 'cocos',
+      { momento: 'Día 9', datos: { Temperatura: '38,6 °C', Foco: 'ninguno claro', 'Punto del CVC': 'eritema, sin pus' }, nuevo: ['Temperatura', 'Foco', 'Punto del CVC'], estado: { lupa: 'B', zoomB: 'vias', tiempo: 216 }, mirar: 'cocos',
         pregunta: { id: 'a2-1', tipo: 'test', fuente: 'mar-bacteriemia-cateter#mar-bac-clinica · #mar-bac-no-retirar · #mar-bac-guia',
           enunciado: '¿Retiras ya el CVC?',
           opciones: [
-            { t: 'Sí: fiebre y eritema del punto confirman la infección', ok: false, porque: 'La fiebre es inflamación y el eritema no tiene valor predictivo. De 1.527 retirados por sospecha, solo 169 (11 %) lo eran: le quitarías un acceso que probablemente está limpio.' },
-            { t: 'Lo cambio sobre guía: así no pierdo el acceso', ok: false, porque: 'Tocarías un catéter que probablemente está limpio (solo el 11 % de las sospechas se confirman), con los riesgos de un recambio. Y si se confirma la infección, el libro no lo recambia sobre guía: lo retira y pone otro en un sitio nuevo.' },
-            { t: 'No: lo dejo y saco hemocultivos', ok: true }],
+            { t: 'Sí: con fiebre sin foco y eritema en el punto, el catéter es la fuente hasta que se demuestre lo contrario', ok: false, porque: 'La fiebre es inflamación y el eritema no tiene valor predictivo. De 1.527 retirados por sospecha, solo 169 (11 %) lo eran: le quitarías un acceso que probablemente está limpio.' },
+            { t: 'Lo cambio sobre guía: conservo el acceso y quito el catéter sospechoso', ok: false, porque: 'Tocarías un catéter que probablemente está limpio (solo el 11 % de las sospechas se confirman), con los riesgos de un recambio. Y si se confirma la infección, el libro no lo recambia sobre guía: lo retira y pone otro en un sitio nuevo.' },
+            { t: 'Aún no: hemocultivos de cada luz y periférico, y espero', ok: true }],
           explicacion: 'La clínica no diagnostica: de los retirados por sospecha, <span class="hl-r">solo el 11 %</span> lo eran. El catéter se deja mientras llegan los cultivos.' } },
-      { momento: 'Día 9', datos: {}, nuevo: [], estado: { lupa: 'B', zoomB: 'frascos', problema: 'hemocultivos' }, mirar: 'frascos',
-        pregunta: { id: 'a2-2', tipo: 'destapa', fuente: 'mar-bacteriemia-cateter#mar-tabla-3-4 · #mar-bac-luces',
-          enunciado: '¿Qué hemocultivos sacas?',
-          puntos: ['Uno <span class="hl-a">periférico</span>: hace falta un hemocultivo positivo de un sitio distinto del catéter.', 'Uno <span class="hl-a">de cada luz</span>: cultivar una sola habría pasado por alto el 38 % de las infecciones.'],
+      { momento: 'Día 9', datos: {}, nuevo: [], estado: { lupa: 'B', zoomB: 'frascos', problema: 'hemocultivos', tiempo: 216 }, mirar: 'frascos',
+        pregunta: { id: 'a2-2', tipo: 'destapa', fuente: 'mar-bacteriemia-cateter#mar-tabla-3-4 · #mar-bac-luces · #mar-tabla-3-6 · #mar-bac-empirico',
+          enunciado: '¿Qué hemocultivos sacas, y qué haces justo después?',
+          puntos: ['Uno <span class="hl-a">periférico</span>: hace falta un hemocultivo positivo de un sitio distinto del catéter.', 'Uno <span class="hl-a">de cada luz</span>: cultivar una sola habría pasado por alto el 38 % de las infecciones.',
+            'Justo después, <span class="hl-a">antibiótico empírico sin demora</span>: vancomicina como columna; gramnegativos si hay neutropenia o gravedad (Tabla 3.6).'],
           explicacion: 'Con los dos a la vez se puede comparar: tiempo diferencial (≥2 h, 91 %) o recuento (≥3 veces, 94 %).' } },
-      { momento: 'Día 10', datos: { Hemocultivos: 'el mismo germen en el del catéter y el periférico' }, nuevo: ['Hemocultivos'], estado: { lupa: 'B', zoomB: 'frascos', problema: 'hemocultivos' }, mirar: 'frascos',
+      { momento: 'Día 10', datos: { Hemocultivos: 'el mismo germen en el del catéter y el periférico' }, nuevo: ['Hemocultivos'], estado: { lupa: 'B', zoomB: 'frascos', problema: 'hemocultivos', tiempo: 240 }, mirar: 'frascos',
         calculadora: { nombre: 'Hemocultivos pareados y duración', ids: '#mar-hemocultivos-calc' },
         pregunta: { id: 'a2-3', tipo: 'test', fuente: 'mar-bacteriemia-cateter#mar-tabla-3-4 · #mar-bac-metodo',
           tocar: { mandos: ['incubar'], ocultar: ['hc'], instruccion: 'incuba los dos frascos y mira cuál se enturbia antes.', comprobar: e => e.hcIncubado, confirma: 'el del catéter, 2,5 h antes que el periférico: el catéter es la fuente.', pista: 'Pulsa «Incubar los dos frascos».', bueno: { hcIncubado: true } },
@@ -2328,21 +2365,21 @@ const CASOS = [
             { t: 'Nada: hay que retirarlo y cultivar la punta', ok: false, porque: 'El cultivo de la punta cayó en desuso: obliga a retirar el catéter y solo cultiva su superficie externa. Le quitarías el acceso para saber menos.' },
             { t: 'Que tenga ≥3 veces más colonias; el tiempo no sirve', ok: false, porque: 'Ese es el otro método (cuantitativo, 94 %); el tiempo diferencial (≥2 h, 91 %) también vale. Retrasarías el diagnóstico esperando un recuento.' }],
           explicacion: 'Tabla 3.4: el mismo germen en los dos y el del catéter <span class="hl-a">≥2 h antes</span> (91 %), o con <span class="hl-a">≥3 veces</span> más colonias (94 %). Ninguno es claramente mejor.' } },
-      { momento: 'Día 10 · el giro', datos: { Hemocultivos: 'el del catéter, positivo 2,5 h antes que el periférico', Germen: '<i>Staphylococcus aureus</i>' }, nuevo: ['Hemocultivos', 'Germen'], estado: { lupa: 'B', zoomB: 'punta', tiempo: 336 }, mirar: 'cocos',
+      { momento: 'Día 10 · el giro', datos: { Hemocultivos: 'el del catéter, positivo 2,5 h antes que el periférico', Germen: '<i>Staphylococcus aureus</i>' }, nuevo: ['Hemocultivos', 'Germen'], estado: { lupa: 'B', zoomB: 'punta', tiempo: 240 }, mirar: 'cocos',
         pregunta: { id: 'a2-4', tipo: 'test', fuente: 'mar-bacteriemia-cateter#mar-bac-retirar · #mar-bac-guia · (Endocarditis)',
-          despues: { lupa: 'B', zoomB: 'punta', tiempo: 336, manejo: 'retirar' },
+          despues: { lupa: 'B', zoomB: 'punta', tiempo: 240, manejo: 'retirar' },
           enunciado: 'Es <i>S. aureus</i>. ¿Qué haces con el catéter?',
           opciones: [
             { t: 'Lo dejo y sello cada luz con antibiótico durante 24 h', ok: false, porque: '<i>S. aureus</i> es criterio de retirada. Con el catéter dentro, la biopelícula seguiría sembrando la sangre: bacteriemia que persiste.' },
             { t: 'Lo retiro, pongo otro en un sitio nuevo y pido una ETE', ok: true },
             { t: 'Recambio sobre guía por la misma yugular', ok: false, porque: 'Marino lo desaconseja: retirar y poner otro en un sitio nuevo; sobre guía, solo si el acceso venoso es muy limitado, y también tiene complicaciones. Con S. aureus, no hay motivo para arriesgarlo.' }],
           explicacion: 'Retirar si se confirma con <span class="hl-r"><i>S. aureus</i>, Candida, Pseudomonas o BGN multirresistentes</span>, inestabilidad o fallo multiorgánico, endocarditis o tromboflebitis, o bacteriemia >96 h. Y <span class="hl-a">ETE en toda bacteriemia por <i>S. aureus</i></span>: los signos faltan en hasta dos tercios.' } },
-      { momento: 'Día 10', datos: {}, nuevo: [], estado: { lupa: 'B', zoomB: 'punta', tiempo: 336, antibiotico: true }, mirar: 'cocos',
+      { momento: 'Día 10', datos: {}, nuevo: [], estado: { lupa: 'B', zoomB: 'punta', tiempo: 240, antibiotico: true }, mirar: 'cocos',
         pregunta: { id: 'a2-5', tipo: 'destapa', fuente: 'mar-bacteriemia-cateter#mar-biofilm',
           enunciado: 'Su hijo pregunta por qué no basta con el antibiótico, sin quitar el catéter. ¿Qué le explicas?',
           puntos: ['Los gérmenes se pegan al catéter y se envuelven en una <span class="hl-a">matriz</span> (polisacáridos, proteínas, fibrina y ADN) que los protege.', 'Los <span class="hl-a">fagocitos no pueden ingerirlos</span> dentro de esa biopelícula.', 'Haría falta de <span class="hl-r">100 a 1.000 veces</span> más antibiótico: una dosis tóxica.'],
           explicacion: 'En la lupa: el antibiótico mata a las libres (contorno) y las de la biopelícula siguen.' } },
-      { momento: 'Día 12', datos: { ETE: 'sin endocarditis', Otros: 'sin prótesis intravasculares ni inmunodepresión' }, nuevo: ['ETE', 'Otros'], estado: { lupa: 'B', zoomB: 'vias', tiempo: 0, manejo: 'retirar' }, mirar: null,
+      { momento: 'Día 12', datos: { ETE: 'sin endocarditis', Otros: 'sin prótesis intravasculares ni inmunodepresión' }, nuevo: ['ETE', 'Otros'], estado: { lupa: 'B', zoomB: 'vias', tiempo: 288, manejo: 'retirar' }, mirar: null,
         pregunta: { id: 'a2-6', tipo: 'error', fuente: 'mar-bacteriemia-cateter#mar-bac-duracion · #mar-tabla-3-6 · #mar-bac-clinica · (Tromboflebitis supurada)',
           enunciado: 'Plan del R1.',
           frases: [
@@ -2356,7 +2393,7 @@ const CASOS = [
     lleva: ['La fiebre y el eritema no diagnostican: solo el 11 % de las sospechas se confirman. El catéter se deja mientras llegan los cultivos.',
       'Hemocultivo periférico y de cada luz: el catéter es la fuente si crece ≥2 h antes (91 %) o con ≥3 veces más colonias (94 %).',
       '<i>S. aureus</i>: retirar y sitio nuevo (no sobre guía), ETE y 14 días si no hay endocarditis, prótesis ni inmunodepresión. Si se deja un catéter infectado, el antibiótico apenas lo limpia.'],
-    volver: { nombre: 'Bacteriemia relacionada con el catéter', ficha: 'mar-bacteriemia-cateter (Marino cap. 3)', estado: { lupa: 'B', zoomB: 'punta', tiempo: 336, antibiotico: true, problema: 'biopelicula' } } }
+    volver: { nombre: 'Bacteriemia relacionada con el catéter', ficha: 'mar-bacteriemia-cateter (Marino cap. 3)', estado: { lupa: 'B', zoomB: 'punta', tiempo: 240, antibiotico: true, problema: 'biopelicula' } } }
 ];
 
 /* Para profundizar: lo que el modelo y la Mayéutica no cubren, con su sitio en el texto */
@@ -2364,16 +2401,19 @@ const PROFUNDIZAR = [
   ['Materiales: poliuretano (días a semanas) y silicona (meses, catéteres implantables).', 'mar-cateteres-flujo', 2],
   ['Forssmann, 1929: el primer cateterismo derecho (historia).', 'mar-cateteres-flujo', 2],
   ['Periférico corto (falla un tercio al primer intento; 40-60 % en 3 días), periférico largo (8 cm, 7-9 días) y midline (basílica, 14 días, vasopresores 7-8 días; frente al PICC, menos oclusión y bacteriemia, TVP <5 %).', 'mar-tipos-cateter', 6],
-  ['Seldinger, el dilatador y la Tabla 1.4: qué catéter para quién (el CVC, de último recurso y preferido en la inestabilidad grave).', 'mar-seldinger · mar-tabla-1-4 · mar-resumen-cateteres', 10],
+  ['Seldinger, el dilatador y la Tabla 1.4: qué catéter para quién (el CVC, el catéter estable «de referencia final» y el preferido en la inestabilidad hemodinámica grave).', 'mar-seldinger · mar-tabla-1-4 · mar-resumen-cateteres', 10],
   ['Ecografía vascular: sondas de 5-15 MHz (unos 9 cm), protocolo en 3 pasos y pared posterior (40 % en eje corto frente a 18 % en eje largo).', 'mar-eco-metodo · mar-eco-protocolo · mar-eco-pared-posterior', 13],
   ['Intraósea: contraindicaciones, agujas de 15 G (15, 25 y 45 mm), confirmación con 5-10 mL de salino, retirada y complicaciones (<1 %).', 'mar-io-contraindicaciones · mar-io-aguja · mar-io-complicaciones', 17],
   ['CVC: las 6 indicaciones (4 con alternativa), contraindicaciones (plaquetas <20.000 o INR >3: sin pruebas), los tres sitios por referencias y por eco, y la Tabla 2.2 con su errata.', 'mar-cvc-sitios', 23],
+  ['Punción carotídea en la yugular: 9,2 % por referencias anatómicas frente a 1,8 % con eco; comprimir al menos 5 min; si el catéter entró en la carótida, no retirarlo.', 'mar-yugular', 28],
+  ['Subclavia: punción arterial 1-6 %, neumotórax 1-4 %, malposición 8-9 %, y estenosis de la subclavia (15-50 %) días o meses después: evitarla si puede necesitar una fístula de hemodiálisis en ese brazo.', 'mar-subclavia', 30],
   ['Neumotórax: la Rx portátil no ve hasta el 50 %; el deslizamiento pulmonar; la prueba de burbujas para la punta (<2 s: cava superior).', 'mar-neumo-rx · mar-neumo-eco · mar-punta-eco', 34],
   ['Cuidados rutinarios (Tabla 3.1), sellado con salino y citrato al 1,4 % en los arteriales, y recambio solo con indicación.', 'mar-tabla-3-1 · mar-sellado · mar-recambio', 41],
   ['Trombosis por catéter: TVP del brazo (signo de Urschel), eco de compresión 97/96 %, el dímero-D no sirve, femoral 1,6 %; perforación y taponamiento (mortalidad 40-100 %).', 'mar-tvp-superior · mar-tvp-diagnostico · mar-tvp-femoral · mar-taponamiento', 44],
   ['Gérmenes (Tabla 3.5), antibiótico empírico (Tabla 3.6) y sellado antibiótico (2-5 mg/mL, 24 h).', 'mar-tabla-3-5 · mar-tabla-3-6 · mar-bac-sellado', 50],
-  ['Tromboflebitis supurada (4-6 semanas) y endocarditis nosocomial (ETE en toda bacteriemia por S. aureus).', 'mar-bacteriemia-cateter', 52],
-  ['¿La piel o el intestino? La reflexión final del autor, y el microbioma (cap. 4).', 'mar-bac-intestino · mar-microbioma', 56]
+  ['Tromboflebitis supurada (4-6 semanas) y endocarditis nosocomial (ETE en toda bacteriemia por S. aureus).', 'mar-bacteriemia-cateter', 53],
+  ['¿La piel o el intestino? La reflexión final del autor.', 'mar-bac-intestino', 53],
+  ['El microbioma y la descontaminación digestiva (cap. 4).', 'mar-microbioma', 58]
 ];
 
 /* ============================================================
@@ -2381,9 +2421,9 @@ const PROFUNDIZAR = [
    ============================================================ */
 function pintarProfundizar() {
   const html = PROFUNDIZAR.map(([txt, ids, pag]) => `<li>${txt} <span class="org">ficha · ${ids}</span><br><a class="pdf" href="${PDF}#page=${pag}" target="_blank" rel="noopener">Ver en el texto · PDF p. ${pag} →</a></li>`).join('')
-    + `<li>Casos A3 (disnea al retirar la vía yugular: aire y punta) y A4 (el catéter que no refluye: oclusión y TVP del brazo): en la app, con esta misma lámina. <span class="org">cobertura §3</span></li>`;
+    + `<li>Casos A3 (disnea al retirar la vía yugular: aire y punta) y A4 (el catéter que no refluye: oclusión y TVP del brazo): en la app, con esta misma lámina.</li>`;
   $('lista-profundizar').innerHTML = html; $('lista-profundizar-2').innerHTML = html;
-  $('lista-estados').innerHTML = FICHAS_ESTADO.map(([nom, id, ests]) => `<li><b>${nom}</b> <span class="org">ficha · ${id}</span><div class="fila" style="margin-top:4px">${ests.map(k => `<button type="button" class="tog" data-estado="${k}">${k}</button>`).join('')}</div></li>`).join('');
+  $('lista-estados').innerHTML = FICHAS_ESTADO.map(([nom, id, ests]) => `<li><b>${nom}</b> <span class="org">ficha · ${id}</span><div class="fila" style="margin-top:4px">${ests.map(k => `<button type="button" class="tog" data-estado="${k}">${NOMBRE_ESTADO[k]}</button>`).join('')}</div></li>`).join('');
 }
 $('lista-estados').addEventListener('click', ev => { const b = ev.target.closest('[data-estado]'); if (b) irAEstado(b.dataset.estado); });
 
@@ -2391,7 +2431,9 @@ construirLamina(); chipsCatalogo(); leyendas(); pintarProfundizar();
 D = derivar(estado);
 pintarTodo(); abrirLupa('A');
 decir(...FRASE_INICIO());
-const ajustarDock = () => document.documentElement.style.setProperty('--dock-h', $('dock').offsetHeight + 'px');
+const ajustarDock = () => { const r = document.documentElement.style; r.setProperty('--dock-h', $('dock').offsetHeight + 'px'); r.setProperty('--frase-h', (document.body.classList.contains('estudio') ? 0 : $('frase').offsetHeight) + 'px'); };
+new ResizeObserver(ajustarDock).observe($('frase'));
+$('frase').addEventListener('click', () => { $('frase').classList.toggle('abierta'); ajustarDock(); });
 new ResizeObserver(ajustarDock).observe($('dock')); ajustarDock();
 new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) arrancar(); }).observe($('escena'));
 document.addEventListener('visibilitychange', () => { if (!document.hidden) arrancar(); });
