@@ -88,7 +88,9 @@ su fase A ya está hecha (p. ej. la continuación de un piloto), se salta.
 
 ### Modo bloque · Marino en modelos vivos (Objetivo M5, desde el 19/10/2026)
 
-Es la prioridad del tablero. Un bloque de Marino se trabaja entero y se aprueba antes de empezar el siguiente. Todo
+Es la prioridad del tablero. Un bloque de Marino se trabaja entero, en una sola rama `auto/<bN>` con una sola PR, y
+el usuario solo se para **4-5 veces por bloque** (`autonomo/REGLAS.md` §2.3: el plan, el primer modelo nuevo, el
+bloque entero y los cambios que pida). Entre parada y parada, decides tú y sigues. Todo
 gira alrededor del **paquete del bloque** (`autonomo/bloques/<bN>/encargo.md`, ver `autonomo/bloques/LEEME.md`):
 escríbelo tú antes de lanzar a nadie, y en cada encargo di «lee el paquete», no «lee todo el proyecto».
 
@@ -146,18 +148,18 @@ A los tres pídeles, además, **«Ideas para la parte de estudio»**: 2-3 línea
 ayudaría a estudiar lo que han visto. Tú las añades a `autonomo/ideas/<libro>.md` (las usa el profesor en modo mapa).
 
 Decide: lo **grave** lo corrige el constructor (modelo barato, solo eso) y se repite el verificador; lo menor va
-al parte (si son 3 o menos y baratos, se corrigen en la misma vuelta). Siempre hay PR en borrador, aunque solo lleve
-el parte y las ideas: así llegan a `main` cuando el usuario la aprueba.
+al parte (si son 3 o menos y baratos, se corrigen en la misma vuelta). Las correcciones, con los jueces en verde, van
+directo a `main` sin pedir aprobación (`REGLAS.md` §2.3); al usuario, una línea con lo que se arregló.
 
 **Orden dentro de una serie de revisiones**: primero los **archivos modelo** de la app (`CLAUDE.md` §6). Sus fallos
 se copian a otras fichas (Merino HEMATO, modelo de fichas con calculadora, tenía 7 graves).
 
 ### Entregas sin esperar (el usuario revisa mientras tú sigues)
 
-En bucle (`/loop /plan-socialista`), cada tarea acaba en su propia PR pequeña. **No esperes a que el usuario la
-apruebe**: avísale en el chat con el enlace «Ver en el móvil», dónde tocar y 2-3 cosas que mirar, y sigue con la
-siguiente tarea. Si la siguiente depende de una PR aún sin fusionar, trabaja sobre la rama de esa PR y di en la nueva
-«va encima de #N». Si el usuario contesta con cambios, se atienden en la vuelta siguiente de esa misma PR.
+**No pidas aprobación tarea a tarea** (el usuario lo pidió el 20/10/2026). Lo técnico y los arreglos, con los jueces
+en verde, van directo a `main`; el contenido de un bloque se acumula en su rama `auto/<bN>` y solo se para al usuario
+en las 4-5 paradas del bloque (`REGLAS.md` §2.3), con el enlace «Ver en el móvil», dónde tocar y 2-3 cosas que mirar.
+Mientras el usuario mira, sigues trabajando. Si contesta con cambios, se atienden en la vuelta siguiente.
 
 **Dos tareas a la vez**: la segunda trabaja en una carpeta aparte (`git worktree add /tmp/wt-<clave> -B auto/<clave>
 origin/main`), con su propio servidor en otro puerto; así no se pisan los archivos. Al cerrarla,
@@ -182,13 +184,14 @@ origin/main`), con su propio servidor en otro puerto; así no se pisan los archi
    seguido de **dónde tocar para llegar** a lo nuevo (p. ej. «Eco cardíaca → Atlas → 18 · Insuficiencia mitral») y
    qué probar (2-3 cosas, incluido un caso clínico entero si hay preguntas). Después: qué se hizo, el encargo (y lo
    que rellenaste tú), jueces (✅/❌), las notas del profesor, los modelos nuevos que propone (para que decidas) y
-   huecos. **Nunca** mergees ni pushees a `main`.
+   huecos. El contenido de un bloque entra en `main` en su última parada, con el visto bueno del usuario; lo técnico
+   y los arreglos, directo con los jueces en verde (`REGLAS.md` §2.3).
 3. Solo con el enlace de la PR, la tarea pasa a `en revisión (AAAA-MM-DD)` en el tablero (commit y push de ese cambio en la misma
    rama). Si el push o la PR fallan, el estado no cambia y el parte lo dice.
 4. Escribe el parte en `autonomo/partes/AAAA-MM-DD.md` (formato en `autonomo/partes/LEEME.md`) y súbelo en la rama.
    Lo que necesites del usuario y las propuestas de regla, bien visibles: la bitácora los recoge de ahí.
 5. Al usuario, en llano: qué se hizo, **el enlace «Ver en el móvil»** y el de la PR, dónde tocar, y qué tiene que
-   revisar o decidir. Deja claro que todavía no está en la app publicada hasta que la apruebe.
+   revisar o decidir, solo si es una de las paradas del bloque. Lo que ya subiste a `main`, en una línea.
 
 ## 3. Lo que nunca haces
 

@@ -204,8 +204,9 @@ backend/ admin/         panel de subida de contenido (aparte de la app)
 - Rama de trabajo `claude/medical-app-restructure-5xv3qn`. Tras cada tanda: commit, push y merge a `main`
   (`git checkout main && git merge --ff-only origin/<rama> && git push origin main`, y volver a la rama). Si el
   fast-forward falla, avisa al usuario; no reescribas historia.
-- **Excepción**: el plan socialista (`/plan-socialista`, trabajo por equipos en bucle) va a ramas `auto/<tarea>` con
-  PR en borrador; solo el usuario la aprueba (ver `autonomo/`).
+- **Plan socialista** (`/plan-socialista`): el contenido de un bloque va a una rama `auto/<bN>` con una sola PR en
+  borrador, y el usuario solo se para 4-5 veces por bloque (`autonomo/REGLAS.md` §2.3). Los arreglos, los fallos de
+  los jueces y las mejoras técnicas van directo a `main` con los jueces en verde, sin pedir aprobación.
 
 ## 11. Redacción e idioma
 

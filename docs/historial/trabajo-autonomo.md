@@ -233,3 +233,11 @@ main. Los arregló un constructor (el primero se cortó al reiniciarse la sesió
 - **Rótulos**: letra más grande en muralla, inmersión, telar, catéter, capilar y ácido-base (esfera de 196 a 240 px);
   la tira compacta de la cama 7 va sin texto dentro del dibujo.
 - El juez de caché ya no da por buena una versión que va hacia atrás (compara AAAAMMDD y N por separado).
+
+### Menos paradas: 4-5 por bloque (20/10/2026)
+
+El usuario: «Deja de pedirme tantas veces lo de aprobada la tarea y sé más independiente, pídemelo por bloque solo 4-5
+veces en total, no 25, que si no no avanzamos». En el bloque 1 hubo una PR por tarea (#19 a #25) y cada una esperaba su
+«aprobada». Desde ahora (`REGLAS.md` §2.3): el contenido de un bloque va en una sola rama y PR, con 4-5 paradas (el
+plan, el primer modelo nuevo, el bloque entero y los cambios pedidos); los arreglos, los fallos de los jueces y lo
+técnico entran en `main` sin esperar, con los jueces en verde. La PR #25 (jueces de forma) fue la primera en subir así.

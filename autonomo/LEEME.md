@@ -32,7 +32,9 @@ basta con saber qué pedir y revisar lo que entrega.
    borrador. Arriba del todo lleva **«👀 Ver en el móvil»**: un enlace a una copia de la app con lo nuevo ya puesto,
    y dónde tocar para llegar. Lo pruebas en el móvil como si fuera la app. Si te convence, en la misma PR pulsas
    **«Ready for review»** y luego **«Merge pull request»** (o se lo dices al director); si no, escribes qué cambiar.
-   **Nada llega a la app publicada sin que tú lo apruebes**, y la copia de prueba no toca la app real.
+   Desde el 20/10/2026 **solo te para 4-5 veces por bloque** (el plan, el primer modelo nuevo, el bloque entero y
+   tus cambios; `REGLAS.md` §2.3). Los arreglos y las mejoras técnicas los sube él a la app, con las pruebas en
+   verde, y te lo cuenta en una línea.
 
 ## Las dos fases de cada tarea
 

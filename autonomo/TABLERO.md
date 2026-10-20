@@ -8,7 +8,9 @@ marca `hecha` al fusionarse su PR) y el director del plan (estados). Una tarea p
   (sumando graves, medianos y pequeños); nunca más de 4.
 - **Parar si:** 2 tareas seguidas fallan o quedan bloqueadas
 - **Límite de gasto por sesión:** el que fije el usuario (sin fijar todavía: no se programa una rutina nocturna sin él)
-- **Modo git:** rama `auto/<clave>` + PR en borrador (nunca directo a `main`)
+- **Modo git y paradas** (`REGLAS.md` §2.3, desde el 20/10/2026): el contenido de un bloque, en una rama `auto/<bN>`
+  con una sola PR en borrador y 4-5 paradas del usuario por bloque; los arreglos y lo técnico, directo a `main` con
+  los jueces en verde
 - **Una tarea solo pasa a `en revisión`** con el enlace de su PR anotado; sin enlace, no avanza
 
 Estados: `pendiente` · `en curso` · `en revisión` (PR abierta) · `hecha` (PR aprobada) · `necesita humano` · `aparcada`

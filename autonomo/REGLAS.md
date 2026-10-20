@@ -83,9 +83,21 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
 1. **Solo la tarea encargada.** Si ves otro problema, anótalo en el informe de la sesión; no lo arregles de paso.
 2. **Nada se da por hecho sin pasar los jueces**: `node autonomo/jueces.mjs` en verde (con `--eco`, `--atlas` o
    `--ficha` según la tarea) y los puntos de «hecho» del tablero.
-3. **El trabajo autónomo nunca va directo a `main`**: va en una rama `auto/<tarea>` con una propuesta (PR) en
-   borrador. Solo el usuario la aprueba. (La regla de `CLAUDE.md` de «mergear siempre a main» es para las
-   conversaciones normales, no para este modo.)
+3. **Pocas paradas para el usuario** (lo pidió el 20/10/2026: «pídemelo por bloque solo 4-5 veces en total»).
+   - **Por bloque, como mucho 4-5 paradas** en las que el usuario decide:
+     1. **El plan del bloque**: la cobertura, la ruta y los modelos nuevos con sus maquetas (elige).
+     2. **El primer modelo o escena nueva ya construida**, para corregir el rumbo pronto (si el bloque no trae
+        ninguno nuevo, esta parada no existe).
+     3. **El bloque entero en la app**: lo prueba en el móvil y pide cambios.
+     4. **Los cambios que pidió, hechos**: con su visto bueno, el bloque entra en `main`.
+     La 5.ª solo para una duda grande que surja por el camino.
+   - **El contenido del bloque** se acumula en una sola rama `auto/<bN>` con una sola PR en borrador; las paradas
+     se ven en su enlace «Ver en el móvil». No se abre una PR por tarea.
+   - **Todo lo demás lo decide y lo sube el director, sin pedir aprobación**, siempre con los jueces en verde:
+     arreglos de auditoría, fallos de los jueces, mejoras técnicas y tareas técnicas ya aprobadas. Va directo a
+     `main` (fast-forward desde la rama de trabajo, `CLAUDE.md` §10) y se cuenta al usuario en una línea.
+   - **Se sigue preguntando siempre** lo grande o difícil de deshacer (`CLAUDE.md` §1): quitar contenido, cambiar la
+     arquitectura, un modelo grande que no estaba en el plan aprobado o una duda clínica que la fuente no resuelve.
 4. **`.gitignore` e `.ignore`**: una herramienta los ensucia; un gancho al abrir la sesión hace que git no los
    vigile. Si aun así salen modificados, `git checkout -- .gitignore .ignore` antes del commit.
 5. **El contenedor se borra**: lo que no está en una rama subida a GitHub se pierde.
