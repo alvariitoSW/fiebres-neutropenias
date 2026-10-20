@@ -82,7 +82,7 @@ body.estudio .escena-bloque { position: sticky; top: 0; padding-top: 4px; paddin
 #lamina { display: block; width: 100%; height: auto; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
 body.estudio #lamina { width: min(100%, calc(31vh * 360 / 330)); margin: 0 auto; }
 .chapa { position: absolute; font: 600 .6rem/1 var(--sans); letter-spacing: .07em; text-transform: uppercase; padding: 4px 7px;
-  border-radius: 999px; background: rgba(23, 20, 15, .8); border: 1px dashed var(--line); color: var(--muted); pointer-events: none; top: 7px; left: 8px; white-space: nowrap; }
+  border-radius: 999px; background: rgba(23, 20, 15, .8); border: 1px dashed var(--line); color: var(--muted); pointer-events: none; top: 6px; left: 34%; white-space: nowrap; }
 .vista-cerrar { position: absolute; top: 4px; right: 4px; min-width: 44px; height: 44px; border-radius: 22px; background: rgba(23, 20, 15, .92); border: 1px solid var(--oro);
   color: var(--oro); font: 600 .74rem/1 var(--sans); cursor: pointer; z-index: 3; padding: 0 10px; }
 .anillo { position: absolute; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; border: 2px solid var(--oro-claro);
@@ -135,7 +135,7 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 .nota-mini { font: .68rem/1.25 var(--sans); color: var(--muted); }
 
 /* La tira de láminas del libro y su visor */
-.tira { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.tira { display: flex; flex-wrap: wrap; gap: 8px; padding-bottom: 2px; }
 .tira::-webkit-scrollbar { display: none; }
 .lamina-libro { flex: none; display: grid; gap: 2px; justify-items: center; background: var(--text-main); border: 1px solid var(--line); border-radius: 8px;
   padding: 3px; cursor: zoom-in; min-height: 44px; width: 104px; }
@@ -1177,7 +1177,7 @@ function pintarRinon() {
       <path d="M0 0 L0 ${H} L20 ${H} L20 0" style="fill:none;stroke:var(--text-dim)" stroke-width="1.1"/>
       ${!oculto && v >= 1 ? `<path d="M20 2 q4 6 2 14" style="fill:none;stroke:var(${col})" stroke-width="1.4"/>` : ''}
     </g>
-    ${t(x0 + 68, y0 + 60, oculto ? '¿?' : D.renal.estado === 'ok' ? 'sin ajuste' : D.renal.estado === 'warn' ? 'ajustar' : 'no usar', { s: 5, a: 'middle', c: oculto ? 'text-muted' : col.slice(2), i: false, w: 600 })}
+    ${t(x0 + 68, y0 + 60, oculto ? '¿?' : D.renal.estado === 'ok' ? 'sin ajuste' : D.notaDalte ? 'nota p. 11' : D.notaFonda ? 'discrepan' : D.renal.estado === 'warn' ? 'ajustar' : 'no usar', { s: 5, a: 'middle', c: oculto ? 'text-muted' : col.slice(2), i: false, w: 600 })}
     ${t(x0 + 94, y0 + 14, D.f.largo, { s: 6, c: 'text-main', i: false, w: 600 })}
     <foreignObject x="${x0 + 92}" y="${y0 + 17}" width="${356 - x0 - 92}" height="42"><div xmlns="http://www.w3.org/1999/xhtml" style="font:9px/1.25 system-ui,sans-serif;color:var(--text-dim)">${oculto ? 'la dosis: ¿?' : D.dosis.corta}${!oculto && e.imc >= 40 ? ` · IMC ${e.imc}` : ''}<br><span style="color:var(--text-muted);font-style:italic">vaso: veredicto renal (altura ilustr.)</span></div></foreignObject>`;
 }
@@ -1489,7 +1489,7 @@ function fraseDe(v, n) {
     ? [`Tres semanas inmóvil, y <span class="hl-a">los hematíes siguen al mismo ritmo</span>: el sistema es cerrado y, con el gasto normal, el retorno venoso también lo es. ${n.inflamacion ? 'La red crece por la inflamación, no por la cama.' : 'El telar no teje.'} Según el autor, creer lo contrario <span class="hl-r">lleva a usar anticoagulantes de más</span>.`, 'ficha · mar-inmovilidad · PDF p. 13']
     : ['Se levanta. El flujo de la femoral no cambia: lo marca el gasto.', 'ficha · mar-inmovilidad'];
   if (n.inflamacion !== v.inflamacion) return n.inflamacion
-    ? ['Inflamación: las citoquinas encienden el endotelio y <span class="hl-r">la tejedora se pone a trabajar</span> con el flujo intacto. Según el autor, lo que dispara la TVP en el alto riesgo es probablemente la inflamación.', 'ficha · mar-inmovilidad · PDF p. 13 · ritmo ilustrativo']
+    ? ['Inflamación (las citoquinas, en trébol): <span class="hl-r">la tejedora se pone a trabajar</span> con el flujo intacto. Inflamación y coagulación están muy unidas: según el autor, lo que dispara la TVP en el alto riesgo es probablemente la inflamación.', 'ficha · mar-inmovilidad · PDF p. 13 · ritmo ilustrativo']
     : ['Sin inflamación, el telar se para. La red que ya hay se deshace despacio (ritmo ilustrativo).', 'ficha · mar-inmovilidad · ilustrativo'];
   if (n.gastoBajo !== v.gastoBajo) return n.gastoBajo
     ? ['Gasto bajo: <span class="hl-a">aquí sí hay estasis</span>, el flujo se enlentece. Es la única estasis que dibuja el modelo. En la app, este mando vendría del motor del latido (enlace).', 'fisiología general · 35 % ilustrativo']
@@ -2047,7 +2047,7 @@ const CONCEPTOS = [
     mira: 'la llave entra sin despertar a ninguna AT. La warfarina solo deja su aviso: su mecanismo no está en la ficha.',
     fuente: `${FX}#mar-acod-puntos · #mar-tabla-5-3 (Fig. 5.2)` },
   { titulo: 'El riñón que acumula',
-    texto: 'La enoxaparina, el fondaparinux y los ACOD los elimina el riñón. <span class="hl-a">Enoxaparina con ClCr &lt;30: 30 mg al día, o HNF</span>. Fondaparinux: la tabla y el texto discrepan. Con ClCr &lt;15, la p. 11 solo acepta HNF o warfarina.',
+    texto: 'La enoxaparina y el fondaparinux los elimina el riñón, y los ACOD no se usan en la insuficiencia renal grave. <span class="hl-a">Enoxaparina con ClCr &lt;30: 30 mg al día, o HNF</span>. Fondaparinux: la tabla y el texto discrepan. Con ClCr &lt;15, la p. 11 solo acepta HNF o warfarina.',
     hacer: 'baja el aclaramiento con cada fármaco.', estado: { farmaco: 'enoxaparina', clcr: 90 }, mirar: 'rinon',
     acciones: [{ t: 'Enoxaparina, ClCr 25', e: { farmaco: 'enoxaparina', clcr: 25 } }, { t: 'Fondaparinux, ClCr 32', e: { farmaco: 'fondaparinux', clcr: 32 } }, { t: 'Dalteparina, ClCr 12', e: { farmaco: 'dalteparina', clcr: 12 } }, { t: 'Dabigatrán, ClCr 25', e: { farmaco: 'dabigatran', clcr: 25 } }],
     mira: 'el vaso se llena según el veredicto renal (altura ilustrativa) y la caja de la calculadora da la dosis, con sus notas.',
@@ -2110,7 +2110,7 @@ const PREGUNTAS = [
     tocar: { mandos: ['farmaco-tih'], ocultar: ['tih'], instruccion: 'pon el fondaparinux sobre la plaqueta.', comprobar: e => e.farmaco === 'fondaparinux', confirma: 'las 5 cuentas no envuelven el FP4: sin complejo, sin IgG.', pista: 'Pulsa «Fondaparinux».', bueno: { farmaco: 'fondaparinux' } },
     enunciado: 'Predice. Un paciente con una TIH previa necesita profilaxis. ¿Qué le pones?',
     opciones: [
-      { t: 'Enoxaparina: la HBPM casi no da TIH', ok: false, porque: 'El 0,2 % es en quien nunca la tuvo. La HBPM sigue siendo heparina y puede formar el complejo con el FP4: con una TIH previa, arriesgas otra trombosis y otra caída de plaquetas.' },
+      { t: 'Enoxaparina: la HBPM casi no da TIH', ok: false, porque: '0,2 % es poco, pero no cero: la HBPM sigue siendo heparina y puede formar el complejo con el FP4: con una TIH previa, arriesgas otra trombosis y otra caída de plaquetas.' },
       { t: 'Fondaparinux', ok: true },
       { t: 'HNF a dosis bajas, que con poca basta', ok: false, porque: 'La TIH no depende de la dosis: con 5.000 U se puede repetir. El paciente volvería a hacer trombosis y trombocitopenia.' }],
     explicacion: 'El fondaparinux es el <span class="hl-a">pentasacárido</span> que une la heparina a la AT: 5 cuentas, demasiado corto para envolver el FP4. Sirve para la profilaxis con <span class="hl-a">TIH sospechada o previa</span>; se ha usado en la confirmada, pero el tratamiento aprobado de la TIH es el <span class="hl-a">argatrobán</span>.' },
