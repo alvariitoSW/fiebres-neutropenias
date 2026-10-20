@@ -58,7 +58,8 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
    ninguno que sirva.
 4. **Ids únicos en toda la app** (todas las vistas están en el DOM a la vez): comprueba con grep antes de inventar
    uno.
-5. **Si cambias un `.css` o `js/main.js`**, sube la fecha `?v=` de `index.html`.
+5. **Si cambias una pieza de la app** (`.css`, módulo o fragmento de `js/`), `node autonomo/version.mjs AAAAMMDD-N`
+   (en el plan socialista lo hace solo el director, §4.6).
 5b. **SVG recreados con fondo propio** (`var(--bg-main)`): la caja de `.article-figure` es blanca y el texto claro de la
    app desaparece en ella.
 6. **Motor del simulador de eco**: si lo tocas, todas sus pruebas siguen en verde y lo cuentas en

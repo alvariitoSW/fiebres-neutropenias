@@ -18,7 +18,8 @@
 // Comprueba:
 //   1. Imágenes: todo <img src> de los .html apunta a un archivo que existe.
 //   2. Quiz: ningún tema sin preguntas; ninguna entidad &lt; / &gt; en los bancos; «correcta» dentro de rango.
-//   3. Caché: si cambió un .css o js/main.js respecto a origin/main, la fecha ?v= de index.html también cambió.
+//   3. Caché: si cambió una pieza (.css, módulo o fragmento de js/) respecto a origin/main, la versión ?v= también
+//      cambió; y el mapa de versiones de index.html está al día (autonomo/version.mjs --comprobar).
 //   4. Navegador (390 y 360 px): sin errores de consola ni de página, sin ids repetidos, sin desbordamiento; y
 //      cada ficha/capítulo pedido abre de verdad, sin desbordar, con sus imágenes cargadas; y en cada ficha se
 //      abre también la vista Visual de cada bloque (sin desbordar y sin errores).
@@ -98,14 +99,21 @@ function archivos(dir, ext, fuera = []) {
 try {
     const cambiados = execSync('git diff --name-only origin/main', { cwd: RAIZ, encoding: 'utf8' }).split('\n')
         .concat(execSync('git ls-files --others --exclude-standard', { cwd: RAIZ, encoding: 'utf8' }).split('\n'));
-    const tocaCache = cambiados.some(f => /^css\/.*\.css$/.test(f) || f === 'js/main.js');
+    // Desde la lección 7 del bloque 1, todas las piezas llevan la versión (autonomo/version.mjs): cualquier .css,
+    // módulo de js/ o fragmento .html cambiado obliga a subirla.
+    const tocaCache = cambiados.some(f => /^css\/.*\.css$/.test(f) || /^js\/.*\.(m?js|html)$/.test(f));
     const vDe = (s) => (s.match(/\?v=([\w-]+)/) || [])[1];
     const ahora = vDe(readFileSync(join(RAIZ, 'index.html'), 'utf8'));
     const antes = vDe(execSync('git show origin/main:index.html', { cwd: RAIZ, encoding: 'utf8' }));
     if (!tocaCache) ok('Caché: no cambió ningún .css ni js/main.js');
     else if (ahora !== antes) ok(`Caché: ?v= subido (${antes} → ${ahora})`);
-    else mal(`Caché: cambió un .css o js/main.js pero ?v= sigue en ${ahora} (súbelo en index.html)`);
+    else mal(`Caché: cambió una pieza de la app pero ?v= sigue en ${ahora} (node autonomo/version.mjs AAAAMMDD-N)`);
 } catch (e) { ojo(`Caché: no se pudo comparar con origin/main (${e.message.split('\n')[0]})`); }
+{
+    const { comprobar } = await import('./version.mjs');
+    const { version, fallos } = comprobar();
+    if (fallos.length) fallos.forEach(f => mal(`Versión: ${f}`)); else ok(`Versión ${version} en todas las piezas (mapa de módulos al día)`);
+}
 
 // ---- 4. Navegador
 if (!pide('--sin-navegador')) {
