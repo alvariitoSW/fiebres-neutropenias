@@ -369,11 +369,13 @@
             <h3 style="color: var(--accent-blue);">Catéteres y flujo: tamaño, longitud y presión</h3>
             <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 1 "Vascular Access Primer".</p>
 
-            <p>En 1929, un residente de cirugía alemán, Werner Forssmann, se introdujo una sonda urinaria de plástico por la vena basílica de su brazo derecho hasta la aurícula derecha: el primer cateterismo derecho documentado en un ser humano. Lo despidieron por ello ("estos métodos son buenos para un circo, no para un hospital respetable"), pero en 1956 recibió el Premio Nobel. Lo que lo hizo posible fue un <strong>catéter de plástico flexible</strong>, capaz de seguir las curvas del sistema venoso — el inicio de la canulación vascular moderna.</p>
+            <p id="mar-forssmann" data-nombre="Forssmann y el primer cateterismo">En 1929, un residente de cirugía alemán, Werner Forssmann, se introdujo una sonda urinaria de plástico por la vena basílica de su brazo derecho hasta la aurícula derecha: el primer cateterismo derecho documentado en un ser humano. Lo despidieron por ello ("estos métodos son buenos para un circo, no para un hospital respetable"), pero en 1956 recibió el Premio Nobel. Lo que lo hizo posible fue un <strong>catéter de plástico flexible</strong>, capaz de seguir las curvas del sistema venoso — el inicio de la canulación vascular moderna.</p>
 
             <p class="section-label">De qué están hechos</p>
+            <div id="mar-materiales" data-nombre="De qué están hechos">
             <dl class="kv-row"><dt>Poliuretano</dt><dd>Catéteres de uso corto (días a semanas): flexible pero con resistencia suficiente para no acodarse al insertarlo (es el material de las fibras elásticas de la ropa).</dd></dl>
             <dl class="kv-row"><dt>Silicona</dt><dd>Catéteres de larga duración (meses): mucho más flexible (como la tetina de un biberón) y menos lesivo para el vaso, pero difícil de insertar por vía percutánea. Se usa sobre todo en catéteres implantables (p. ej., para quimioterapia prolongada).</dd></dl>
+            </div>
 
             <p class="section-label">El tamaño: calibre (gauge) y French</p>
             <p>Ambos expresan el <strong>diámetro externo</strong> del catéter.</p>
@@ -405,10 +407,10 @@
             </div>
 
             <p class="section-label">El flujo: la ecuación de Hagen-Poiseuille</p>
-            <p id="mar-poiseuille">Descrita a mediados del siglo XIX por un ingeniero alemán (Gotthilf Hagen) y un médico francés (Jean Marie Poiseuille), por separado: <span class="hl-azul">Q = ΔP × (π r⁴ / 8 µ L)</span>. El flujo laminar en un tubo rígido (Q) es <strong>directamente proporcional</strong> al gradiente de presión (ΔP = P<sub>entrada</sub> − P<sub>salida</sub>) y a la <strong>cuarta potencia del radio</strong> (r⁴), e <strong>inversamente proporcional</strong> a la longitud (L) y a la viscosidad del líquido (µ). El término entre paréntesis es el inverso de la resistencia: R = 8µL / πr⁴.</p>
+            <p id="mar-poiseuille" data-nombre="La ecuación de Hagen-Poiseuille">Descrita a mediados del siglo XIX por un ingeniero alemán (Gotthilf Hagen) y un médico francés (Jean Marie Poiseuille), por separado: <span class="hl-azul">Q = ΔP × (π r⁴ / 8 µ L)</span>. El flujo laminar en un tubo rígido (Q) es <strong>directamente proporcional</strong> al gradiente de presión (ΔP = P<sub>entrada</sub> − P<sub>salida</sub>) y a la <strong>cuarta potencia del radio</strong> (r⁴), e <strong>inversamente proporcional</strong> a la longitud (L) y a la viscosidad del líquido (µ). El término entre paréntesis es el inverso de la resistencia: R = 8µL / πr⁴.</p>
             <p><button type="button" class="especialidad-link" data-especialidad="fisioUci" data-view="cardiologia" data-panel="panel-cardio-tabs" data-tab="cardio-fisiologia-aplicada">🔬 Hagen-Poiseuille y las resistencias vasculares (El Libro Azul, Fisiopatología UCI · Cardiología) →</button></p>
             <p><button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-hemorragico-fluidos">🩸 Catéteres de infusión rápida en el shock hemorrágico (Merino Cardiología) →</button></p>
-            <div class="warning-box" id="mar-flujo-cateter">
+            <div class="warning-box" id="mar-flujo-cateter" data-nombre="El catéter, no la vena">
                 <strong>La velocidad de infusión la marca el catéter, no la vena.</strong> El ritmo de infusión depende de las dimensiones del catéter colocado, no del tamaño de la vena canalizada.
             </div>
 
@@ -437,7 +439,7 @@
                 </tbody>
             </table>
             <p>Pasar de un catéter de 2 pulgadas (longitud habitual de un periférico) a uno de 6 (habitual de un catéter venoso central) <span class="hl-rojo">reduce el flujo un 40%</span>, y pasar a uno de 12 pulgadas lo reduce otro 40%.</p>
-            <div class="warning-box" style="border-color: var(--accent-green);" id="mar-corto-grueso">
+            <div class="warning-box" style="border-color: var(--accent-green);" id="mar-corto-grueso" data-nombre="Corto y grueso">
                 <strong>Para infundir rápido:</strong> un catéter de gran calibre; y mejor aún, <span class="hl-verde">corto y de gran calibre</span>.
             </div>
 
@@ -453,12 +455,12 @@
             <h3 style="color: var(--accent-blue);">Catéteres periféricos y centrales</h3>
             <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 1 "Vascular Access Primer".</p>
 
-            <p>La distinción es sencilla: <span class="hl-purpura">un catéter central llega a una de las venas cavas; uno periférico, no</span>. Los catéteres de función especial (de hemodiálisis, de arteria pulmonar) se tratan en otros capítulos.</p>
+            <p id="mar-central-def" data-nombre="Central o periférico">La distinción es sencilla: <span class="hl-purpura">un catéter central llega a una de las venas cavas; uno periférico, no</span>. Los catéteres de función especial (de hemodiálisis, de arteria pulmonar) se tratan en otros capítulos.</p>
 
             <p class="section-label">Catéteres periféricos</p>
             <p>Suelen ir en una vena del miembro superior y no pasan del hombro. Hay tres tipos:</p>
             <div class="micro-profiles">
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mar-periferico-corto">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💉 Periférico corto (&lt;6 cm)</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
                         <dl class="kv-row"><dt>Cómo es</dt><dd>16-22 G, 3-5 cm, colocado en una vena visible o palpable con un dispositivo de catéter sobre aguja (Figura 1.2). Cuando la aguja entra en la vena aparece un "reflujo" de sangre en la cámara transparente; entonces se avanza el catéter sobre la aguja.</dd></dl>
@@ -470,13 +472,13 @@
                         <dl class="kv-row"><dt>Inconvenientes</dt><dd>El primer intento falla en <strong>un tercio</strong> de los casos. Su "tiempo de permanencia" es corto: fallan el <strong>40-60% en los 3 primeros días</strong> (flebitis, oclusión, salida accidental, perforación con extravasación). Especialmente problemáticos en la UCI, con pacientes agitados que se los arrancan.</dd></dl>
                     </div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mar-periferico-largo">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>📏 Periférico largo (6 a &lt;15 cm)</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
                         <p>También llamados de "permanencia prolongada"; suelen medir <strong>8 cm</strong>. Se introdujeron para dar estabilidad y duración, y lo consiguen: unos <strong>7-9 días</strong> de permanencia. Aun así no se han generalizado (al menos en Norteamérica), quizá por el auge de los catéteres de línea media.</p>
                     </div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mar-midline">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🦾 Línea media o "midline" (15-20 cm)</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
                         <dl class="kv-row"><dt>Dónde</dt><dd>En una de las tres venas profundas por encima de la flexura del codo: basílica, braquial o cefálica. <strong>Se prefiere la basílica</strong>: sube recta por el brazo y no va junto a una arteria ni a un nervio (como la braquial). Al ser venas profundas, se insertan con <strong>ecografía</strong>.</dd></dl>
@@ -504,7 +506,7 @@
 
             <p class="section-label">Catéteres centrales</p>
             <div class="micro-profiles">
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mar-picc">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧵 PICC (central de inserción periférica)</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
                         <p>Es una versión más larga del midline: entra por las mismas venas, pero llega hasta la vena cava superior. Se popularizó como alternativa más segura al catéter venoso central cuando la vía periférica es difícil o se prevé más de una semana de acceso; el auge del midline ha hecho que su uso disminuya.</p>
@@ -512,7 +514,7 @@
                         <dl class="kv-row"><dt>El precio de la longitud</dt><dd>Mide más del triple que el midline de la Tabla 1.2 y su flujo es solo un <strong>20%</strong> del de este. Ese flujo comprometido podría explicar su tasa relativamente alta de <strong>oclusiones</strong>.</dd></dl>
                     </div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mar-cvc-triple">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🫀 Catéter venoso central (CVC)</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
                         <p>Acceso seguro y multifunción en el crítico. Longitudes de 15, 20 y 30 cm, hasta 4 luces; el más usado es el de <strong>triple luz</strong> (Figura 1.4). La <strong>luz distal es más gruesa (16 G)</strong> que la proximal y la medial (18 G), así que da más del doble de flujo: <span class="hl-verde">la luz distal es la mejor para infundir volumen rápido</span>.</p>
@@ -538,7 +540,7 @@
             </table>
 
             <p class="section-label">La guía: técnica de Seldinger</p>
-            <p id="mar-seldinger">Salvo las venas más superficiales y palpables, todo se canaliza avanzando el catéter sobre una <strong>guía</strong> colocada en la luz del vaso (técnica del angiografista sueco Sven-Ivar Seldinger): 1) una aguja fina busca el vaso; 2) por la aguja se pasa una guía fina de punta flexible (la punta flexible reduce el daño endotelial); 3) se retira la aguja sobre la guía; 4) se avanza el catéter sobre la guía. En la práctica, antes se pasa un <strong>dilatador</strong> sobre la guía para abrir el trayecto.</p>
+            <p id="mar-seldinger" data-nombre="Técnica de Seldinger">Salvo las venas más superficiales y palpables, todo se canaliza avanzando el catéter sobre una <strong>guía</strong> colocada en la luz del vaso (técnica del angiografista sueco Sven-Ivar Seldinger): 1) una aguja fina busca el vaso; 2) por la aguja se pasa una guía fina de punta flexible (la punta flexible reduce el daño endotelial); 3) se retira la aguja sobre la guía; 4) se avanza el catéter sobre la guía. En la práctica, antes se pasa un <strong>dilatador</strong> sobre la guía para abrir el trayecto.</p>
             <div class="article-figure">
                 <img src="js/modules/libros/img/mar-fig1-5-seldinger.jpg" alt="Cuatro pasos de la técnica de Seldinger: aguja, guía, retirada de la aguja e inserción del catéter" loading="lazy">
                 <p class="article-figure-caption">Figura 1.5 — Pasos de la canulación con guía (técnica de Seldinger).</p>
@@ -555,7 +557,7 @@
                     <tr><td>CVC</td><td>El catéter de uso general más versátil.</td><td>Riesgo de complicaciones graves.</td></tr>
                 </tbody>
             </table>
-            <p id="mar-resumen-cateteres">En la práctica: el <strong>periférico corto</strong> para el acceso rápido inicial; si la estancia va a durar más de unos días hace falta un acceso más estable, que tradicionalmente daba el CVC, después el PICC y hoy, cada vez más, el <strong>midline</strong>. El PICC sigue siendo útil cuando se prevén varias semanas de tratamiento IV. El gran límite de midline y PICC es que requieren equipos formados para insertarlos. El <strong>CVC</strong> queda como el acceso estable "de último recurso", y es el preferido en la inestabilidad hemodinámica grave.</p>
+            <p id="mar-resumen-cateteres" data-nombre="Qué acceso elegir hoy">En la práctica: el <strong>periférico corto</strong> para el acceso rápido inicial; si la estancia va a durar más de unos días hace falta un acceso más estable, que tradicionalmente daba el CVC, después el PICC y hoy, cada vez más, el <strong>midline</strong>. El PICC sigue siendo útil cuando se prevén varias semanas de tratamiento IV. El gran límite de midline y PICC es que requieren equipos formados para insertarlos. El <strong>CVC</strong> queda como el acceso estable "de último recurso", y es el preferido en la inestabilidad hemodinámica grave.</p>
 
             <p class="fuente-ficha" style="margin-top:12px;">📚 Fuente completa: <a class="biblio-link" href="docs/marino-2024-acceso-vascular-practicas-caps1-4.pdf#page=5" target="_blank" rel="noopener">Marino PL. The ICU Book, 5.ª ed., Cap. 1 →</a></p>
         </div>
@@ -568,7 +570,7 @@
             <p class="section-label">Ecografía vascular</p>
             <dl class="kv-row" id="mar-eco-metodo"><dt>El método</dt><dd>Sondas lineales de alta frecuencia (<strong>5-15 MHz</strong>): imágenes de alta resolución pero poca penetración (<strong>unos 9 cm</strong>). Los ecos de más amplitud se ven más blancos y los de menos, más negros (modo B, de "brillo"). Los ultrasonidos atraviesan bien los líquidos, así que los vasos se ven por dentro gris oscuro o negros.</dd></dl>
 
-            <div class="compare-row" id="mar-eco-ejes">
+            <div class="compare-row" id="mar-eco-ejes" data-nombre="Eje corto y eje largo">
                 <div class="compare-box blue"><strong>Eje corto (transversal)</strong><br>Más fácil localizar la vena y ver a la vez la arteria vecina (menos punciones arteriales). Pero la aguja solo se ve como un punto brillante cuando llega al vaso.</div>
                 <div class="compare-box yellow"><strong>Eje largo (longitudinal)</strong><br>Se ve la aguja, la guía y el catéter en todo su recorrido. Pero no se ve la arteria vecina y hace falta una vena bastante recta.</div>
             </div>
@@ -576,12 +578,12 @@
                 <img src="js/modules/libros/img/mar-fig1-6-eje-largo-corto.jpg" alt="Orientación del haz ecográfico en eje largo y eje corto, y cómo se ve la aguja en cada uno" loading="lazy">
                 <p class="article-figure-caption">Figura 1.6 — Haz ecográfico en eje largo y en eje corto: en el largo se ve toda la aguja; en el corto, solo un punto en el vaso.</p>
             </div>
-            <p id="mar-eco-cual">Ninguno es claramente mejor. Hoy se prefiere el <strong>eje corto para localizar la vena y confirmar la punción</strong>, y el <strong>eje largo para confirmar que la guía y el catéter están dentro</strong> de la luz.</p>
+            <p id="mar-eco-cual" data-nombre="Qué eje para qué">Ninguno es claramente mejor. Hoy se prefiere el <strong>eje corto para localizar la vena y confirmar la punción</strong>, y el <strong>eje largo para confirmar que la guía y el catéter están dentro</strong> de la luz.</p>
             <dl class="kv-row" id="mar-eco-protocolo"><dt>Protocolo recomendado</dt><dd>1) Identificar la vena diana. 2) Verificar que la aguja la ha puncionado. 3) Confirmar que la guía y el catéter están dentro de la luz.</dd></dl>
 
             <p class="section-label">¿Vena o arteria?</p>
             <div class="micro-profiles">
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mar-compresibilidad">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>👇 Compresibilidad</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
                         <p>El método más fácil y usado: al apretar la piel, <strong>la vena se colapsa mucho antes que la arteria</strong>. Excepción: <span class="hl-rojo">una vena trombosada no se comprime</span>.</p>
@@ -591,7 +593,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mar-doppler-color">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🎨 Doppler color</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
                         <p>El cambio de frecuencia que produce la dirección del flujo (efecto Doppler) se pinta en color sobre la imagen en grises. <span class="hl-purpura">Los colores no significan "arteria" o "vena"</span>: indican la dirección del flujo respecto a la sonda (lo dice la escala de color de la imagen).</p>
@@ -611,7 +613,7 @@
             </div>
 
             <p class="section-label">Acceso intraóseo (IO)</p>
-            <p>Se descubrió en los años treinta que lo infundido en la médula ósea llega a la circulación, pero se popularizó en los bombardeos de Londres de la Segunda Guerra Mundial: con los apagones era difícil encontrar venas, y el cirujano Hamilton Bailey infundía en el esternón. Cayó en el olvido con los catéteres de plástico (años cincuenta) y renació en los ochenta para la reanimación pediátrica; hoy es también una alternativa de urgencia en adultos.</p>
+            <p id="mar-io-historia" data-nombre="Historia de la intraósea">Se descubrió en los años treinta que lo infundido en la médula ósea llega a la circulación, pero se popularizó en los bombardeos de Londres de la Segunda Guerra Mundial: con los apagones era difícil encontrar venas, y el cirujano Hamilton Bailey infundía en el esternón. Cayó en el olvido con los catéteres de plástico (años cincuenta) y renació en los ochenta para la reanimación pediátrica; hoy es también una alternativa de urgencia en adultos.</p>
             <dl class="kv-row" id="mar-io-indicaciones"><dt>Indicaciones</dt><dd>Acceso vascular urgente cuando la vía IV es difícil o no está disponible al momento: parada cardíaca, trauma grave o shock. Ventaja: la cavidad medular es rígida y <strong>no se colapsa</strong> con la hipotensión o la hipovolemia, a diferencia de las venas. Las guías de soporte vital de la AHA recomiendan pasar a la vía IO si falla el primer intento de vía IV o no es factible. Dos tercios de las paradas son extrahospitalarias, así que se usa sobre todo en el medio extrahospitalario (éxito de hasta el <strong>97%</strong>); forma parte del ATLS.</dd></dl>
             <dl class="kv-row" id="mar-io-contraindicaciones"><dt>Contraindicaciones</dt><dd>Hueso fracturado o ya puncionado (fuga del líquido), lesión vascular en ese miembro, quemadura, celulitis u osteomielitis en el punto de punción, y osteopetrosis (rara).</dd></dl>
             <dl class="kv-row" id="mar-io-sitio"><dt>Dónde</dt><dd><strong>Tibia proximal</strong> (justo bajo la rodilla) o <strong>húmero proximal</strong> (bajo el hombro). La tibia tiene más éxito y no estorba la intubación ni las compresiones torácicas; el húmero tiene más capacidad de flujo. En adultos se prefiere la tibia: en la superficie plana bajo el cóndilo medial, <span class="hl-azul">3 cm por debajo del borde inferior de la rótula y 2 cm medial</span> a ese punto.</dd></dl>
@@ -619,7 +621,7 @@
                 <img src="js/modules/libros/img/mar-fig1-10-intraosea-tibia.jpg" alt="Inserción de una aguja intraósea en la tibia proximal con taladro a batería, 3 cm bajo la rótula y 2 cm medial" loading="lazy">
                 <p class="article-figure-caption">Figura 1.10 — Inserción de una aguja IO en la tibia proximal con taladro a batería, con las medidas para localizar el punto.</p>
             </div>
-            <div class="warning-box" id="mar-io-errata">
+            <div class="warning-box" id="mar-io-errata" data-nombre="Nota: ¿tibia o fémur?">
                 <strong>Nota de fidelidad.</strong> El pie de la Figura 1.10 y el punto 5 del "A Final Word" del capítulo dicen <em>proximal femur</em> (fémur proximal), pero todo el texto del capítulo y el propio dibujo describen la <strong>tibia</strong> proximal. Se ha seguido el texto.
             </div>
             <dl class="kv-row" id="mar-io-aguja"><dt>La aguja</dt><dd>Mejor con un taladro a batería que a mano. Agujas de <strong>15 G</strong> de <strong>15 mm</strong> (niños), <strong>25 mm</strong> (adultos de tamaño medio) y <strong>45 mm</strong> (adultos grandes u obesos). La longitud se elige avanzando antes una aguja de prueba hasta el hueso (que en el paciente despierto sirve para infiltrar lidocaína, sobre todo en el periostio, muy inervado): la marca más próxima al cono debe quedar en la piel o algo por encima. Antisepsia de la piel (no hacen falta guantes estériles), aguja hasta el hueso, taladro a 90° de la piel, girando en sentido horario y empujando hasta notar una pérdida brusca de resistencia. Se confirma aspirando sangre — no siempre sale, porque la médula es viscosa; un lavado con <strong>5-10 mL de suero salino</strong> la licúa lo suficiente.</dd></dl>
@@ -653,7 +655,7 @@
                 <li>Inestabilidad hemodinámica con riesgo vital.</li>
                 <li>Técnicas especiales: hemodiálisis aguda, marcapasos transvenoso temporal o monitorización hemodinámica invasiva.</li>
             </ol>
-            <div class="warning-box" style="border-color: var(--accent-green);" id="mar-cvc-alternativas">
+            <div class="warning-box" style="border-color: var(--accent-green);" id="mar-cvc-alternativas" data-nombre="Indicaciones con alternativa">
                 <strong>4 de las 6 indicaciones clásicas tienen hoy alternativa:</strong> el <strong>midline</strong> y el <strong>PICC</strong> (insertados en el brazo, por encima de la flexura) sirven para el acceso prolongado (el PICC, durante meses), los vasopresores y los líquidos hipertónicos, y tienen varias luces. El acceso central sigue siendo preferible en el <span class="hl-rojo">shock</span> y obligado en técnicas como la <span class="hl-rojo">hemodiálisis aguda</span>. El midline y el PICC tienen menos riesgos (no hay neumotórax al ponerse en el brazo) y los pacientes los aceptan mejor; la demanda de CVC baja y el midline se está convirtiendo en su sustituto preferido.
             </div>
             <dl class="kv-row" id="mar-cvc-contraindicaciones"><dt>Contraindicaciones</dt><dd><strong>No hay contraindicaciones absolutas</strong>, ni siquiera la presencia o gravedad de una coagulopatía. Hay una recomendación de corregir unas plaquetas &lt;20.000 × 10⁶/L o un INR &gt;3 antes de insertarlo, pero <span class="hl-purpura">sin pruebas que la respalden</span>.</dd></dl>
@@ -691,7 +693,7 @@
                             <img src="js/modules/libros/img/mar-fig2-2-eco-yugular.jpg" alt="Eje corto de la yugular interna y la carótida con la sonda en el vértice del triángulo del esternocleidomastoideo" loading="lazy">
                             <p class="article-figure-caption">Figura 2.2 — Eje corto de la yugular interna (IJV) y la carótida (CA), con la sonda en el vértice del triángulo del esternocleidomastoideo.</p>
                         </div>
-                        <dl class="kv-row"><dt>Por referencias anatómicas</dt><dd><strong>Abordaje anterior</strong>: localizar el pulso carotídeo en el triángulo y separarlo hacia la línea media; aguja (bisel arriba) en el vértice del triángulo, hacia el pezón homolateral a 45° de la piel. Si a 5 cm no se ha entrado, retirar y redirigir más lateral. <strong>Abordaje posterior</strong>: 1 cm por encima de donde la yugular externa cruza el borde lateral del músculo; aguja (bisel a las 3) por debajo del vientre muscular hacia la escotadura supraesternal; la vena aparece a 5-6 cm.</dd></dl>
+                        <dl class="kv-row" id="mar-yugular-referencias" data-nombre="Yugular por referencias anatómicas"><dt>Por referencias anatómicas</dt><dd><strong>Abordaje anterior</strong>: localizar el pulso carotídeo en el triángulo y separarlo hacia la línea media; aguja (bisel arriba) en el vértice del triángulo, hacia el pezón homolateral a 45° de la piel. Si a 5 cm no se ha entrado, retirar y redirigir más lateral. <strong>Abordaje posterior</strong>: 1 cm por encima de donde la yugular externa cruza el borde lateral del músculo; aguja (bisel a las 3) por debajo del vientre muscular hacia la escotadura supraesternal; la vena aparece a 5-6 cm.</dd></dl>
                         <dl class="kv-row"><dt>Complicaciones</dt><dd>Punción carotídea, la más temida: <strong>9,2%</strong> con referencias anatómicas frente a <strong>1,8%</strong> con ecografía (6 ensayos con operadores expertos). Si la aguja fina punciona la carótida, suele bastar retirarla y comprimir <strong>al menos 5 minutos</strong> (el doble con coagulopatía). <span class="hl-rojo">Si el catéter ha entrado en la carótida, no retirarlo</span> (puede ser mortal): dejarlo y llamar a cirugía vascular o a radiología intervencionista. Otras complicaciones mecánicas (hemo/neumotórax): 2% con referencias, &lt;1% con ecografía.</dd></dl>
                     </div>
                 </div>
@@ -706,7 +708,7 @@
                             <img src="js/modules/libros/img/mar-fig2-3-eco-subclavia.jpg" alt="Vista infraclavicular en eje corto de la vena subclavia, la arteria subclavia y la línea pleural" loading="lazy">
                             <p class="article-figure-caption">Figura 2.3 — Vista infraclavicular en eje corto: vena subclavia (SV), arteria subclavia (SA) y pleura apical, muy cerca.</p>
                         </div>
-                        <dl class="kv-row"><dt>Por referencias</dt><dd>En el borde lateral de la zona marcada, aguja (bisel a las 12) justo bajo la clavícula, avanzando por su cara inferior hacia la escotadura supraesternal; se entra a pocos centímetros. Al entrar, girar el bisel a las 3 para dirigir la guía a la cava superior. Mantenerse pegado a la clavícula para no puncionar la arteria (más profunda) ni la pleura. En el obeso la vena está más honda (más riesgo), y en el obeso mórbido puede superar el alcance de la aguja: <strong>evitar el abordaje por referencias en el obeso mórbido</strong>.</dd></dl>
+                        <dl class="kv-row" id="mar-subclavia-referencias" data-nombre="Subclavia por referencias anatómicas"><dt>Por referencias</dt><dd>En el borde lateral de la zona marcada, aguja (bisel a las 12) justo bajo la clavícula, avanzando por su cara inferior hacia la escotadura supraesternal; se entra a pocos centímetros. Al entrar, girar el bisel a las 3 para dirigir la guía a la cava superior. Mantenerse pegado a la clavícula para no puncionar la arteria (más profunda) ni la pleura. En el obeso la vena está más honda (más riesgo), y en el obeso mórbido puede superar el alcance de la aguja: <strong>evitar el abordaje por referencias en el obeso mórbido</strong>.</dd></dl>
                         <dl class="kv-row"><dt>Complicaciones</dt><dd>Agudas (de ecografía a referencias): punción de la subclavia <strong>1-6%</strong>, neumotórax <strong>1-4%</strong>, lesión del plexo braquial 0-3%, del frénico 0-2% y malposición <strong>8-9%</strong>. Con el catéter puesto: septicemia, trombosis y <span class="hl-rojo">estenosis de la subclavia (15-50%)</span>, que aparece días o meses tras retirarlo — la razón principal para evitarla si el paciente puede necesitar un acceso de hemodiálisis permanente en ese brazo.</dd></dl>
                     </div>
                 </div>
@@ -720,7 +722,7 @@
                             <p class="article-figure-caption">Figura 2.4 — Anatomía del triángulo femoral: de lateral a medial, nervio, arteria y vena.</p>
                         </div>
                         <dl class="kv-row"><dt>Posición y ecografía</dt><dd>Se recomienda la ecografía, aunque hay poca prueba de beneficio en este sitio. Elevar el tronco 15° (anti-Trendelenburg) aumenta la sección de la vena un <strong>50%</strong>; pierna en abducción. La sonda va sobre el pulso femoral, algo por debajo y medial al punto medio del pliegue inguinal; la vena queda un poco más profunda que la arteria (Figura 1.8).</dd></dl>
-                        <dl class="kv-row"><dt>Por referencias</dt><dd>Pulso femoral justo bajo el pliegue; aguja (bisel a las 12) <strong>1-2 cm medial al pulso</strong>; la vena aparece a <strong>2-4 cm</strong> de profundidad. Sin pulso: línea imaginaria de la espina ilíaca anterosuperior al tubérculo del pubis, dividida en tercios; la arteria queda bajo la unión del tercio medio con el medial y la vena 1-2 cm medial a ese punto (éxito &gt;90%).</dd></dl>
+                        <dl class="kv-row" id="mar-femoral-referencias" data-nombre="Femoral por referencias anatómicas"><dt>Por referencias</dt><dd>Pulso femoral justo bajo el pliegue; aguja (bisel a las 12) <strong>1-2 cm medial al pulso</strong>; la vena aparece a <strong>2-4 cm</strong> de profundidad. Sin pulso: línea imaginaria de la espina ilíaca anterosuperior al tubérculo del pubis, dividida en tercios; la arteria queda bajo la unión del tercio medio con el medial y la vena 1-2 cm medial a ese punto (éxito &gt;90%).</dd></dl>
                     </div>
                 </div>
             </div>
@@ -734,8 +736,8 @@
                     <tr><td>TVP sintomática</td><td>0,5%</td><td>0,9%</td><td>1,4%</td></tr>
                 </tbody>
             </table>
-            <p id="mar-femoral-segura">Las complicaciones infecciosas y trombóticas fueron <strong>muy bajas en los tres sitios</strong>. La femoral tuvo la TVP sintomática más alta, pero con un riesgo pequeño. Resultados como estos, apoyados por otros estudios, muestran que <span class="hl-verde">la vena femoral es un sitio seguro</span>.</p>
-            <div class="warning-box" id="mar-tabla-2-2-errata">
+            <p id="mar-femoral-segura" data-nombre="La femoral, un sitio seguro">Las complicaciones infecciosas y trombóticas fueron <strong>muy bajas en los tres sitios</strong>. La femoral tuvo la TVP sintomática más alta, pero con un riesgo pequeño. Resultados como estos, apoyados por otros estudios, muestran que <span class="hl-verde">la vena femoral es un sitio seguro</span>.</p>
+            <div class="warning-box" id="mar-tabla-2-2-errata" data-nombre="Nota: la Tabla 2.2 y el texto">
                 <strong>Nota de fidelidad.</strong> El texto del capítulo dice que la bacteriemia con catéter yugular es "algo mayor" que con subclavio ("0,5% vs 1,4%") y que la femoral tuvo <em>menos</em> bacteriemia que la yugular, pero la tabla da 0,5% a la yugular, 1,4% a la subclavia y 1,2% a la femoral: el texto solo cuadra si las columnas de yugular y subclavia estuvieran intercambiadas. Además, el texto da una TVP femoral del 1,5% y la tabla, del 1,4%. Se reproduce la tabla tal como la publica la fuente. Lo que sí coinciden en decir el texto y el resto del capítulo: el riesgo infeccioso de yugular y subclavia se considera equivalente, y la diferencia entre sitios es pequeña.
             </div>
 
@@ -761,9 +763,9 @@
             </ol>
 
             <p class="section-label">Neumotórax</p>
-            <p id="mar-neumotorax">Temido pero poco frecuente; la mayoría con la subclavia (<strong>1% con ecografía, 4% sin ella</strong>). Detectarlo es el problema:</p>
+            <p id="mar-neumotorax" data-nombre="Neumotórax: cuánto y dónde">Temido pero poco frecuente; la mayoría con la subclavia (<strong>1% con ecografía, 4% sin ella</strong>). Detectarlo es el problema:</p>
             <dl class="kv-row" id="mar-neumo-rx"><dt>Radiografía portátil</dt><dd>Ha sido lo estándar, pero <span class="hl-rojo">no ve hasta el 50% de los neumotórax</span> en el crítico. En decúbito supino el aire no sube al vértice: se acumula en la parte anterior de la cavidad pleural (que puede estar cerca de la base), delante del pulmón, y las marcas pulmonares de detrás lo tapan.</dd></dl>
-            <div class="article-figure">
+            <div class="article-figure" id="mar-img-2-5">
                 <img src="js/modules/libros/img/mar-fig2-5-neumotorax-rx-tc.jpg" alt="Radiografía de tórax portátil sin hallazgos y TC del mismo paciente con un neumotórax anterior" loading="lazy">
                 <p class="article-figure-caption">Figura 2.5 — Joven con traumatismo torácico cerrado: la radiografía portátil no muestra nada y la TC enseña un neumotórax anterior (asterisco).</p>
             </div>
@@ -790,15 +792,15 @@
             <p class="section-label">Apósitos</p>
             <p>El punto de inserción debe ir cubierto con un apósito estéril mientras dure el catéter. Hay tres tipos:</p>
             <div class="micro-profiles">
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mar-aposito-gasa">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩹 Gasa estéril</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body"><p>Fijada con esparadrapo hipoalergénico. <strong>Preferible cuando la piel es difícil de mantener seca</strong> (el adhesivo de los transparentes no pega en piel húmeda).</p></div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mar-aposito-transparente">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔍 Transparente de poliuretano ("oclusivo")</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body"><p>Permeable al O₂, CO₂ y vapor de agua, pero atrapa la humedad de la piel; su adhesivo sella el punto. <strong>El preferido</strong>: deja inspeccionar el punto y lo aísla. Gasa y transparente se consideran <strong>equivalentes</strong> para prevenir colonización e infección.</p></div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mar-aposito-clorhexidina">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧽 Esponja impregnada de clorhexidina</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body"><p>Pequeña esponja (p. ej., Biopatch®, incluida en muchos kits de CVC) sobre el punto y cubierta con el apósito transparente. <span class="hl-verde">La que mejor protege frente a la infección</span>, pero hoy se recomienda solo donde las infecciones por catéter son un problema.</p></div>
                 </div>
@@ -848,7 +850,7 @@
             <p>Regla: <span class="hl-azul">los precipitados alcalinos se disuelven con un álcali, los ácidos con un ácido y los lípidos con etanol</span>.</p>
 
             <p class="section-label">Trombosis relacionada con el catéter</p>
-            <p id="mar-trombosis-cateter">El catéter favorece el trombo local al dañar el endotelio o por adhesión plaquetaria. Es especialmente frecuente con los <strong>PICC</strong>, pero <strong>silente en más del 95%</strong>. Más riesgo en pacientes con cáncer, sobre todo con catéteres tunelizados de larga duración para quimioterapia.</p>
+            <p id="mar-trombosis-cateter" data-nombre="Trombosis por catéter">El catéter favorece el trombo local al dañar el endotelio o por adhesión plaquetaria. Es especialmente frecuente con los <strong>PICC</strong>, pero <strong>silente en más del 95%</strong>. Más riesgo en pacientes con cáncer, sobre todo con catéteres tunelizados de larga duración para quimioterapia.</p>
             <dl class="kv-row" id="mar-tvp-superior"><dt>TVP del miembro superior</dt><dd>Un <strong>5%</strong> de las TVP afectan a venas profundas por encima del codo, y hasta el <strong>90%</strong> se atribuyen a un catéter (midline, PICC). El otro factor es el cáncer: lo tienen entre un cuarto y un tercio. Puede ser silente (solo cuesta aspirar por el catéter); la obstrucción completa da edema del brazo con molestias, parestesias, debilidad e ingurgitación de las venas superficiales del hombro (<em>signo de Urschel</em>). El síndrome de vena cava superior es raro, y menos del 10% se asocian a embolia pulmonar sintomática.</dd></dl>
             <dl class="kv-row" id="mar-tvp-diagnostico"><dt>Diagnóstico</dt><dd><strong>Ecografía de compresión</strong> (venas con trombo no compresibles): sensibilidad <strong>97%</strong>, especificidad <strong>96%</strong>. El dímero-D no sirve de cribado (suele estar alto en el crítico).</dd></dl>
             <dl class="kv-row" id="mar-tvp-manejo"><dt>Manejo</dt><dd><span class="hl-purpura">Retirar el catéter no es obligatorio</span>: solo si el edema es intenso o doloroso, o si la anticoagulación está contraindicada. Se usan las mismas pautas de anticoagulación que en la TVP de las piernas.</dd></dl>
@@ -871,7 +873,7 @@
             <h3 style="color: var(--accent-purple);">Bacteriemia relacionada con el catéter</h3>
             <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 3 "The Indwelling Vascular Catheter".</p>
 
-            <p id="mar-bac-epidemio">Los catéteres vasculares (salvo los periféricos cortos) son la <strong>primera fuente de bacteriemia nosocomial</strong>. En la UCI, la septicemia por catéter tiene una mortalidad del <span class="hl-rojo">12-25%</span>; la tasa media en catéteres centrales es de <strong>4,6 por 1.000 días-catéter</strong>.</p>
+            <p id="mar-bac-epidemio" data-nombre="Primera fuente de bacteriemia nosocomial">Los catéteres vasculares (salvo los periféricos cortos) son la <strong>primera fuente de bacteriemia nosocomial</strong>. En la UCI, la septicemia por catéter tiene una mortalidad del <span class="hl-rojo">12-25%</span>; la tasa media en catéteres centrales es de <strong>4,6 por 1.000 días-catéter</strong>.</p>
 
             <p class="section-label">Por dónde se coloniza (Figura 3.2)</p>
             <ol id="mar-bac-vias">
@@ -913,10 +915,10 @@
                 <img src="js/modules/libros/img/mar-fig3-4-placas-cultivo.jpg" alt="Dos placas de cultivo: crecimiento denso en la sangre del catéter y escaso en la periférica" loading="lazy">
                 <p class="article-figure-caption">Figura 3.4 — Septicemia por catéter: crecimiento mucho más denso en la sangre extraída por el catéter que en la periférica.</p>
             </div>
-            <p id="mar-bac-metodo">Ninguno es claramente mejor: el cuantitativo es algo más exacto (94% frente a 91%), quizá sin compensar su coste. En la práctica, hay poco entusiasmo por ambos y el diagnóstico suele basarse en el mismo germen en sangre del catéter y periférica sin otro foco aparente.</p>
+            <p id="mar-bac-metodo" data-nombre="¿Qué método de cultivo?">Ninguno es claramente mejor: el cuantitativo es algo más exacto (94% frente a 91%), quizá sin compensar su coste. En la práctica, hay poco entusiasmo por ambos y el diagnóstico suele basarse en el mismo germen en sangre del catéter y periférica sin otro foco aparente.</p>
             <p><button type="button" class="especialidad-link" data-especialidad="home" data-view="citopenias" data-pulsar="btn-neutropenia-febril btn-dirigido" data-resaltar="#cvc-dirigido-card">🩸 La calculadora de catéter del neutropénico (Hematología · Neutropenia Febril) →</button></p>
             <p><button type="button" class="especialidad-link" data-especialidad="home" data-view="trasplante" data-trasplante="complicaciones" data-panel="panel-tph-comp-tabs" data-tab="comp-cateter">🧬 La infección de catéter tras el trasplante (Hematología · Trasplante) →</button></p>
-            <div class="warning-box" id="mar-bac-luces">
+            <div class="warning-box" id="mar-bac-luces" data-nombre="¿Cuántas luces cultivar?">
                 <strong>¿Cuántas luces cultivar?</strong> Se recomienda cultivar una sola luz, pero en un estudio <span class="hl-rojo">un cultivo de una sola luz habría pasado por alto el 38%</span> de las infecciones por catéter, y mezclar sangre de todas las luces no es tan sensible. La evidencia disponible apoya <strong>cultivar cada luz</strong>.
             </div>
 
@@ -948,7 +950,7 @@
                     <tr><td><em>Candida</em></td><td>Equinocandina</td><td>Si: catéter femoral, NPT, neoplasia hematológica, antibioterapia prolongada, trasplante reciente o <em>Candida</em> en otro sitio.</td></tr>
                 </tbody>
             </table>
-            <p id="mar-bac-empirico">La <strong>vancomicina</strong> es la columna vertebral (la más activa frente a estafilococos, incluidos coagulasa negativos y resistentes a meticilina, y enterococos). La cobertura de gramnegativos entéricos se aconseja en el neutropénico o el paciente grave. Las equinocandinas (caspofungina, micafungina, anidulafungina) son más activas que los azoles frente a todas las <em>Candida</em>.</p>
+            <p id="mar-bac-empirico" data-nombre="La vancomicina, columna vertebral">La <strong>vancomicina</strong> es la columna vertebral (la más activa frente a estafilococos, incluidos coagulasa negativos y resistentes a meticilina, y enterococos). La cobertura de gramnegativos entéricos se aconseja en el neutropénico o el paciente grave. Las equinocandinas (caspofungina, micafungina, anidulafungina) son más activas que los azoles frente a todas las <em>Candida</em>.</p>
             <p class="fuente-ficha">Nota: la tabla original dice "CMI &gt;2 mg/mL"; la unidad habitual de la CMI de vancomicina es µg/mL (probable errata de la fuente).</p>
 
             <p class="section-label">¿Retirar el catéter?</p>
@@ -994,7 +996,7 @@
 
             <p class="section-label">Sepsis persistente (&gt;72 h de antibiótico)</p>
             <div class="micro-profiles">
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mar-tromboflebitis">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩸 Tromboflebitis supurada</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
                         <p>El trombo alrededor del catéter atrapa microbios que proliferan y lo convierten en un <strong>absceso intravascular</strong>; el germen más frecuente es <em>S. aureus</em>. Puede no dar clínica, o dar pus en el punto, edema del miembro o lesiones pulmonares cavitadas por émbolos sépticos.</p>
@@ -1002,7 +1004,7 @@
                         <dl class="kv-row"><dt>Tratamiento</dt><dd>Retirar el catéter y antibiótico <strong>4-6 semanas</strong>. La cirugía del trombo infectado casi nunca hace falta (solo en septicemia refractaria). No hay consenso sobre la heparina: las guías dicen que "debe considerarse".</dd></dl>
                     </div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mar-endocarditis">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🫀 Endocarditis</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
                         <p>La nosocomial es rara (2-3 casos al año en hospitales universitarios), pero los catéteres están implicados en el <strong>30-50%</strong> y los estafilococos (sobre todo <em>S. aureus</em>) en hasta el <strong>75%</strong>; en algunas series predomina el SARM. Los signos típicos (soplo nuevo o cambiante) faltan en hasta <strong>dos tercios</strong> de las endocarditis nosocomiales por <em>S. aureus</em>: por eso se aconseja <span class="hl-azul">ecocardiografía transesofágica en toda bacteriemia por <em>S. aureus</em></span>.</p>
@@ -1011,7 +1013,7 @@
             </div>
 
             <p class="section-label">La reflexión final del autor: ¿la piel o el intestino?</p>
-            <div class="compare-row" id="mar-bac-intestino">
+            <div class="compare-row" id="mar-bac-intestino" data-nombre="¿La piel o el intestino?">
                 <div class="compare-box red"><strong>Contra la piel como origen</strong><br>Poca correlación entre los gérmenes de la piel del punto y los de la punta del CVC. Las pomadas antibióticas en el punto no reducen las bacteriemias. Los periféricos (el camino más corto desde la piel) casi nunca causan septicemia.</div>
                 <div class="compare-box yellow"><strong>A favor del intestino</strong><br>Gramnegativos, enterococos y <em>Candida</em> (habitantes del intestino) son la mitad de los gérmenes. Los cultivos del tubo digestivo alto se correlacionan mejor con la punta que los de la piel. La descontaminación intestinal reduce mucho (en algunos estudios, elimina) estas infecciones.</div>
             </div>
@@ -1025,11 +1027,11 @@
             <h3 style="color: var(--accent-green);">El intestino como origen de infección: microbioma y descontaminación</h3>
             <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 4 "Alimentary Prophylaxis".</p>
 
-            <p id="mar-piel-interna">La antisepsia se centra casi solo en la piel, pero hay una superficie mayor: la mucosa digestiva. La luz del tubo digestivo está "fuera" del cuerpo (como el agujero de un dónut) y su mucosa, nuestra <strong>"piel interna"</strong>, es una sola capa de células cilíndricas de <span class="hl-rojo">0,1 mm de grosor</span> frente a <strong>100-400 billones de microbios</strong>. Una barrera de papel ante un ejército enorme.</p>
+            <p id="mar-piel-interna" data-nombre="La «piel interna»">La antisepsia se centra casi solo en la piel, pero hay una superficie mayor: la mucosa digestiva. La luz del tubo digestivo está "fuera" del cuerpo (como el agujero de un dónut) y su mucosa, nuestra <strong>"piel interna"</strong>, es una sola capa de células cilíndricas de <span class="hl-rojo">0,1 mm de grosor</span> frente a <strong>100-400 billones de microbios</strong>. Una barrera de papel ante un ejército enorme.</p>
 
             <p class="section-label">El microbioma intestinal</p>
             <dl class="kv-row" id="mar-microbioma-cifras"><dt>Cifras</dt><dd>Unos <strong>70.000 genomas</strong> bacterianos distintos, 100-400 × 10¹² organismos y unos <strong>2 kg</strong> de masa. Reparto desigual (Figura 4.1): el estómago es la zona menos poblada (<strong>&lt;1.000 por mL</strong>) y el <strong>99%</strong> está en el colon. Está presente casi desde el nacimiento y funciona como un ecosistema.</dd></dl>
-            <div class="article-figure">
+            <div class="article-figure" id="mar-img-4-1">
                 <img src="js/modules/libros/img/mar-fig4-1-densidad-microbiana.jpg" alt="Densidad microbiana a lo largo del tubo digestivo: boca 10 a la 6, estómago menos de 10 al cubo, intestino 10 a la 9 y colon 10 a la 12 por mL" loading="lazy">
                 <p class="article-figure-caption">Figura 4.1 — Densidad de microorganismos (UFC por mL de contenido): boca 10⁶, estómago &lt;10³, intestino 10⁹, colon 10¹².</p>
             </div>
@@ -1047,7 +1049,7 @@
             <dl class="kv-row" id="mar-motor-fmo"><dt>El "motor" del fallo multiorgánico</dt><dd>El fallo multiorgánico (la primera causa de muerte en el crítico) es una inflamación sistémica que persiste o progresa con disfunción de dos o más órganos. El desencadenante puede ser una disbiosis o un periodo de hipoperfusión esplácnica: ambos rompen la barrera mucosa, pasan patógenos o mediadores a la circulación, se inicia la respuesta inflamatoria, la activación simpática contrae los vasos esplácnicos y rompe aún más la barrera… <span class="hl-purpura">un proceso que se autoalimenta: el intestino como "motor" del fallo multiorgánico</span>.</dd></dl>
 
             <p class="section-label">El ácido gástrico como antiséptico</p>
-            <p id="mar-acido-antiseptico">El ácido gástrico suele verse como una ayuda digestiva, pero la aclorhidria no causa malabsorción relevante (solo facilita la absorción de hierro y calcio). Su función principal es ser una <strong>defensa antimicrobiana</strong> frente a los patógenos ingeridos. Ya lo intuyó Joseph Lister en 1867: el primer antiséptico fue un ácido, el <strong>ácido carbólico</strong> (fenol). Hoy su nombre se recuerda sobre todo por un enjuague bucal.</p>
+            <p id="mar-acido-antiseptico" data-nombre="El ácido gástrico como antiséptico">El ácido gástrico suele verse como una ayuda digestiva, pero la aclorhidria no causa malabsorción relevante (solo facilita la absorción de hierro y calcio). Su función principal es ser una <strong>defensa antimicrobiana</strong> frente a los patógenos ingeridos. Ya lo intuyó Joseph Lister en 1867: el primer antiséptico fue un ácido, el <strong>ácido carbólico</strong> (fenol). Hoy su nombre se recuerda sobre todo por un enjuague bucal.</p>
             <table class="data-table" id="mar-fig-4-3">
                 <thead><tr><th>pH del jugo gástrico</th><th><em>Salmonella typhimurium</em> (Figura 4.3)</th></tr></thead>
                 <tbody>
@@ -1090,13 +1092,13 @@
                 </tbody>
             </table>
             <div class="micro-profiles">
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mar-clorhexidina-oral">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🧴 Clorhexidina oral</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
                         <p>Se usa mientras el paciente dependa del ventilador. Algunos estudios: <strong>−30%</strong> de neumonía asociada al ventilador, sin menos mortalidad; otros, beneficio marginal o nulo; y el conjunto de 11 ensayos mostró <span class="hl-rojo">más mortalidad</span>. Por eso las guías internacionales de neumonía asociada al ventilador <strong>retiraron la recomendación</strong>, y los expertos de EE. UU. también. Problema poco citado: actúa sobre todo frente a <strong>grampositivos</strong>, mientras que en la orofaringe del crítico predominan los gramnegativos.</p>
                     </div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mar-sod">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Descontaminación oral selectiva (SOD)</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
                         <p>Erradicar los patógenos respetando la flora normal, con antibióticos no absorbibles en la mucosa. La pauta de la Tabla 4.1 va contra estafilococos, bacilos gramnegativos aerobios y <em>Candida</em>, con poca actividad sobre los anaerobios (la flora normal de la boca). Reduce la neumonía asociada al ventilador y las bacteriemias por gramnegativos (<strong>−33%</strong>, Figura 4.5). Aun así se ignora, mientras la clorhexidina (eficacia limitada y posible daño) sigue siendo el estándar: "<em>la antítesis de la medicina basada en la evidencia</em>", según el autor.</p>
@@ -1111,7 +1113,7 @@
                         <dl class="kv-row"><dt>Sistémico</dt><dd>Cefuroxima IV <strong>1,5 g cada 8 h</strong> los <strong>4 primeros días</strong> (protección mientras se descontamina el intestino, que tarda 5-7 días).</dd></dl>
                         <dl class="kv-row"><dt>A quién</dt><dd>A todo paciente que vaya a estar en la UCI <strong>más de 72 h</strong>, hasta el alta de la UCI.</dd></dl>
                         <dl class="kv-row"><dt>Eficacia</dt><dd>Reduce las infecciones adquiridas en la UCI (neumonía, infección urinaria, bacteriemia) y <strong>la mortalidad</strong>; bacteriemias por gramnegativos <span class="hl-verde">−67%</span> (Figura 4.5). El efecto se pierde con bacilos gramnegativos multirresistentes: <strong>no es apropiada en UCI con resistencias problemáticas</strong>. En un estudio eliminó las bacteriemias por catéter (lo que apoyaría el intestino como su origen, Cap. 3).</dd></dl>
-                        <dl class="kv-row"><dt>¿Por qué se ignora?</dt><dd>Por miedo a las resistencias, pero ningún estudio (incluido uno prospectivo de 5 años y una experiencia de 16 años) ha mostrado más infecciones por resistentes.</dd></dl>
+                        <dl class="kv-row" id="mar-sdd-ignora" data-nombre="¿Por qué se ignora la SDD?"><dt>¿Por qué se ignora?</dt><dd>Por miedo a las resistencias, pero ningún estudio (incluido uno prospectivo de 5 años y una experiencia de 16 años) ha mostrado más infecciones por resistentes.</dd></dl>
                         <p><button type="button" class="especialidad-link" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-dds-aislamiento">🛡️ El protocolo de DDS de guardia (Manual UMI) →</button></p>
                     </div>
                 </div>
@@ -1857,7 +1859,7 @@
                 <img src="js/modules/libros/img/mar-fig7-3-pulsioximetro-dedo.jpg" alt="Sensor de pulsioximetría de dedo con los diodos de 660 y 940 nm y el fotodetector, y la onda de pulso debajo" loading="lazy">
                 <p class="article-figure-caption">Figura 7.3 — Sensor de dedo: dos diodos (660 y 940 nm) a un lado y el fotodetector al otro; abajo, el fotopletismograma (invertido para parecerse a una onda de presión arterial).</p>
             </div>
-            <p id="mar-spo2-formula">La <span class="hl-azul">SpO₂ = HbO₂ / (Hb + HbO₂) × 100</span>: la fracción de hemoglobina saturada de oxígeno.</p>
+            <p id="mar-spo2-formula" data-nombre="La fórmula de la SpO₂">La <span class="hl-azul">SpO₂ = HbO₂ / (Hb + HbO₂) × 100</span>: la fracción de hemoglobina saturada de oxígeno.</p>
             <details class="nota-plegable" id="mar-nota-spo2-formula"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la Ecuación 7.1 (pág. 39 del PDF) se imprime sin paréntesis, «SpO₂ = (HbO₂ / Hb + HbO₂) × 100», que leída tal cual daría otra cosa. La ficha la escribe con paréntesis, que es la fracción correcta: la fuente la imprime sin ellos.</p></details>
             <dl class="kv-row" id="mar-oxi-frente"><dt>En la frente</dt><dd>La circulación de la frente viene de la carótida interna y se contrae menos que la de los dedos: da SpO₂ válidas cuando el dedo falla por hipotensión o vasoconstricción. Funciona por <strong>reflectancia</strong> (diodos y fotodetector juntos; así miden también los relojes inteligentes). Las pulsaciones venosas de la frente (sobre todo con presión positiva) pueden confundirse con las arteriales: se usa siempre con una <strong>cinta elástica</strong> que las reduce.</dd></dl>
             <div class="article-figure">
@@ -1886,8 +1888,8 @@
             <dl class="kv-row" id="mar-scvo2"><dt>Venosa central (ScvO₂)</dt><dd>En la cava superior. Algo menor que la SvO₂, pero <strong>mayor en el shock</strong> (se redistribuye el flujo al cerebro). Una medida aislada puede diferir hasta un 10% en el inestable (menos del 5% con varias): sirve sobre todo para seguir <strong>tendencias</strong>.</dd></dl>
 
             <p class="section-label">Oximetría dual: SpO₂ − SvO₂</p>
-            <p id="mar-dual">La diferencia (SpO₂ − SvO₂) equivale aproximadamente a la <strong>extracción de O₂</strong> de los capilares: VO₂ = DO₂ × (SpO₂ − SvO₂). Si el aporte cae (bajo gasto, anemia, hipoxemia), la extracción sube para mantener el consumo: crece linealmente desde ~<strong>25%</strong> hasta ~<strong>50%</strong>; más allá ya no puede compensar y empieza el metabolismo limitado por el oxígeno.</p>
-            <table class="data-table" id="mar-dual-tabla">
+            <p id="mar-dual" data-nombre="Oximetría dual: SpO₂ − SvO₂">La diferencia (SpO₂ − SvO₂) equivale aproximadamente a la <strong>extracción de O₂</strong> de los capilares: VO₂ = DO₂ × (SpO₂ − SvO₂). Si el aporte cae (bajo gasto, anemia, hipoxemia), la extracción sube para mantener el consumo: crece linealmente desde ~<strong>25%</strong> hasta ~<strong>50%</strong>; más allá ya no puede compensar y empieza el metabolismo limitado por el oxígeno.</p>
+            <table class="data-table" id="mar-dual-tabla" data-nombre="SpO₂ − SvO₂: cómo leerla">
                 <thead><tr><th>SpO₂ − SvO₂</th><th>Interpretación</th></tr></thead>
                 <tbody>
                     <tr><td>&gt;25% (y &lt;50%)</td><td>El aporte está reducido respecto al consumo, pero sin comprometer el metabolismo aerobio</td></tr>
@@ -1917,7 +1919,7 @@
             <h3 style="color: var(--accent-blue);">Capnografía: el CO₂ que se espira</h3>
             <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 7 "Oximetry and Capnography".</p>
 
-            <p>El CO₂ espirado puede detectarse de forma <strong>cualitativa</strong> (detectores colorimétricos para confirmar la intubación) o <strong>cuantitativa</strong> (capnografía infrarroja). El CO₂ absorbe luz infrarroja: un sensor entre el ventilador y el paciente emite un haz continuo a través del gas y un fotodetector rápido registra los cambios de PCO₂ en cada espiración: el <strong>capnograma</strong>.</p>
+            <p id="mar-capno-intro" data-nombre="Cualitativa o cuantitativa">El CO₂ espirado puede detectarse de forma <strong>cualitativa</strong> (detectores colorimétricos para confirmar la intubación) o <strong>cuantitativa</strong> (capnografía infrarroja). El CO₂ absorbe luz infrarroja: un sensor entre el ventilador y el paciente emite un haz continuo a través del gas y un fotodetector rápido registra los cambios de PCO₂ en cada espiración: el <strong>capnograma</strong>.</p>
             <div class="article-figure">
                 <img src="js/modules/libros/img/mar-fig7-6-capnografia.jpg" alt="Sensor infrarrojo de CO2 entre el ventilador y el paciente y capnograma con sus fases I a IV, normal y con EPOC" loading="lazy">
                 <p class="article-figure-caption">Figura 7.6 — Capnografía infrarroja en ventilación mecánica: el sensor entre ventilador y paciente y el capnograma con sus 4 fases (en discontinuo, el ascenso lento de la EPOC).</p>
@@ -1946,7 +1948,7 @@
             <p><button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-paro-monitorizacion">💓 ETCO₂ durante la RCP (Merino Cardiología, Cap. 21) →</button></p>
 
             <p class="section-label">Diferencia PaCO₂ − P<sub>ET</sub>CO₂</p>
-            <p id="mar-gradiente-co2">En el sano son casi iguales, pero la P<sub>ET</sub>CO₂ cae respecto a la PaCO₂ cuando aumenta el <strong>espacio muerto</strong> (alvéolos sobreventilados respecto a su perfusión), lo que pasa en casi toda insuficiencia respiratoria: la diferencia sirve para seguir la evolución. En ventilación mecánica, si la diferencia aumenta puede ser en parte por <strong>sobreinsuflación</strong> (volúmenes excesivos), así que ayuda a encontrar el volumen óptimo.</p>
+            <p id="mar-gradiente-co2" data-nombre="Diferencia PaCO₂ − PETCO₂">En el sano son casi iguales, pero la P<sub>ET</sub>CO₂ cae respecto a la PaCO₂ cuando aumenta el <strong>espacio muerto</strong> (alvéolos sobreventilados respecto a su perfusión), lo que pasa en casi toda insuficiencia respiratoria: la diferencia sirve para seguir la evolución. En ventilación mecánica, si la diferencia aumenta puede ser en parte por <strong>sobreinsuflación</strong> (volúmenes excesivos), así que ayuda a encontrar el volumen óptimo.</p>
             <p class="section-label">Tabla 7.1 — Lo que altera la relación PaCO₂ / P<sub>ET</sub>CO₂</p>
             <div class="compare-row" id="mar-tabla-7-1">
                 <div class="compare-box blue"><strong>P<sub>ET</sub>CO₂ &lt; PaCO₂</strong><br>Fuga en el circuito del ventilador · Sobreinsuflación · Neumonía · Enfermedad obstructiva · Edema pulmonar · Embolia pulmonar · Caída aguda del gasto cardíaco</div>
@@ -1954,7 +1956,7 @@
             </div>
 
             <p class="section-label">Para llenar el vacío (reflexión final)</p>
-            <p id="mar-capno-final">La caída del catéter de arteria pulmonar dejó un vacío para valorar la perfusión y la oxigenación tisular. La SpO₂ sola no informa de la oxigenación tisular, pero la <strong>oximetría dual</strong> (SpO₂ − SvO₂) sí avisa de su amenaza; y la <strong>P<sub>ET</sub>CO₂</strong> detecta cambios agudos del gasto y es valiosa como pronóstico en la RCP.</p>
+            <p id="mar-capno-final" data-nombre="Para llenar el vacío">La caída del catéter de arteria pulmonar dejó un vacío para valorar la perfusión y la oxigenación tisular. La SpO₂ sola no informa de la oxigenación tisular, pero la <strong>oximetría dual</strong> (SpO₂ − SvO₂) sí avisa de su amenaza; y la <strong>P<sub>ET</sub>CO₂</strong> detecta cambios agudos del gasto y es valiosa como pronóstico en la RCP.</p>
 
             <p class="fuente-ficha" style="margin-top:12px;">📚 Fuente completa: <a class="biblio-link" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=44" target="_blank" rel="noopener">Marino PL. The ICU Book, 5.ª ed., Cap. 7 →</a></p>
         </div>
@@ -2158,7 +2160,7 @@
             <dl class="kv-row" id="mar-cvo2"><dt>Venoso (CvO₂)</dt><dd>La misma fórmula con SvO₂ y PvO₂: unos <strong>15 mL/dL</strong> (disuelto, &lt;1%). La diferencia arteriovenosa, <strong>5 mL/dL = 50 mL/L</strong>: con un gasto de 5 L/min salen 250 mL/min, el consumo de un adulto en reposo.</dd></dl>
             <dl class="kv-row" id="mar-o2-simplificada"><dt>Simplificada</dt><dd>Como el disuelto es tan poco, suele omitirse: <strong>contenido de O₂ = 1,34 × Hb × SO₂</strong>.</dd></dl>
 
-            <div class="warning-box" id="mar-anemia-hipoxemia"><strong>Anemia frente a hipoxemia (Figura 9.2).</strong> Bajar la Hb a la mitad (15 → 7,5 g/dL) baja el CaO₂ a la mitad (20 → 10 mL/dL). Bajar la PaO₂ a la mitad (90 → 45 mmHg, SaO₂ 98 → 78%) solo lo baja un <strong>20%</strong> (20 → 16 mL/dL). <span class="hl-rojo">La anemia pesa mucho más que la hipoxemia</span> en el oxígeno arterial.</div>
+            <div class="warning-box" id="mar-anemia-hipoxemia" data-nombre="Anemia frente a hipoxemia"><strong>Anemia frente a hipoxemia (Figura 9.2).</strong> Bajar la Hb a la mitad (15 → 7,5 g/dL) baja el CaO₂ a la mitad (20 → 10 mL/dL). Bajar la PaO₂ a la mitad (90 → 45 mmHg, SaO₂ 98 → 78%) solo lo baja un <strong>20%</strong> (20 → 16 mL/dL). <span class="hl-rojo">La anemia pesa mucho más que la hipoxemia</span> en el oxígeno arterial.</div>
             <div class="article-figure" id="mar-img-9-2">
                 <img src="js/modules/libros/img/mar-fig9-2-anemia-hipoxemia.jpg" alt="Barras de contenido arterial de oxígeno: normal 20, hipoxemia 17 y anemia 10 mL/dL" loading="lazy">
                 <p class="article-figure-caption">Figura 9.2 — Efecto de grados proporcionales de anemia y de hipoxemia sobre el contenido arterial de O₂ (CaO₂).</p>
@@ -2212,7 +2214,7 @@
             <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 9 "Systemic Oxygenation".</p>
 
             <p class="section-label">Cómo se defiende el consumo (Figura 9.3)</p>
-            <p id="mar-extraccion-curva">El sistema mantiene el VO₂ constante cuando cae el aporte subiendo la extracción: <span class="hl-azul">VO₂ = DO₂ × O₂ER</span>. Al bajar el DO₂, primero el VO₂ no cambia (la extracción, medida como SaO₂ − SvO₂, compensa); pero cuando la diferencia ha pasado del <strong>25% al 50%</strong>, el VO₂ empieza a caer con el aporte: se vuelve <strong>dependiente del aporte</strong>. Ese punto es el umbral del <span class="hl-rojo">metabolismo limitado por el oxígeno</span>.</p>
+            <p id="mar-extraccion-curva" data-nombre="Cómo se defiende el consumo">El sistema mantiene el VO₂ constante cuando cae el aporte subiendo la extracción: <span class="hl-azul">VO₂ = DO₂ × O₂ER</span>. Al bajar el DO₂, primero el VO₂ no cambia (la extracción, medida como SaO₂ − SvO₂, compensa); pero cuando la diferencia ha pasado del <strong>25% al 50%</strong>, el VO₂ empieza a caer con el aporte: se vuelve <strong>dependiente del aporte</strong>. Ese punto es el umbral del <span class="hl-rojo">metabolismo limitado por el oxígeno</span>.</p>
             <div class="article-figure" id="mar-img-9-3">
                 <img src="js/modules/libros/img/mar-fig9-3-aporte-consumo.jpg" alt="Curva de consumo frente a aporte de oxígeno: meseta mientras sube la extracción y caída por debajo del aporte crítico" loading="lazy">
                 <p class="article-figure-caption">Figura 9.3 — Relación entre el aporte (DO₂) y el consumo de O₂ (VO₂). La extracción se representa por la diferencia SaO₂ − SvO₂.</p>
@@ -2228,7 +2230,7 @@
                 </tbody>
             </table>
             <p class="fuente-ficha">Válido solo con metabolismo normal y SaO₂ &gt;90%.</p>
-            <ol id="mar-sao2-svo2-guia">
+            <ol id="mar-sao2-svo2-guia" data-nombre="SaO₂ − SvO₂: cómo leerla">
                 <li>Normal: SaO₂ − SvO₂ de <strong>20-30%</strong>.</li>
                 <li>&gt;30%: <strong>menos aporte</strong> (hipoxemia, anemia o bajo gasto).</li>
                 <li>≥50%: oxigenación tisular <strong>amenazada o alterada</strong> (validado en animales).</li>
@@ -2265,9 +2267,9 @@
                 <img src="js/modules/libros/img/mar-fig9-4-lactato-mortalidad.jpg" alt="Barras de mortalidad según el lactato inicial y según el tiempo hasta normalizarlo" loading="lazy">
                 <p class="article-figure-caption">Figura 9.4 — Lactato y mortalidad hospitalaria en el crítico: a la izquierda, según el lactato inicial; a la derecha, según el tiempo que tarda en normalizarse (aclaramiento del lactato).</p>
             </div>
-            <div class="warning-box" id="mar-lactato-circular"><strong>Un razonamiento circular.</strong> Que el lactato se relacione con la muerte se toma como prueba de que marca hipoxia celular porque se cree que la falta de O₂ es la causa universal de muerte celular… una idea que a su vez se apoya sobre todo en esa misma relación lactato-supervivencia.</div>
+            <div class="warning-box" id="mar-lactato-circular" data-nombre="Un razonamiento circular"><strong>Un razonamiento circular.</strong> Que el lactato se relacione con la muerte se toma como prueba de que marca hipoxia celular porque se cree que la falta de O₂ es la causa universal de muerte celular… una idea que a su vez se apoya sobre todo en esa misma relación lactato-supervivencia.</div>
             <dl class="kv-row" id="mar-lactato-contra"><dt>Pruebas en contra</dt><dd>No hay pruebas de que la muerte celular del crítico se deba a falta de O₂. En animales con un marcador de hipoxia celular (¹⁸F-fluoromisonidazol) no se vio hipoxia en ningún órgano en el shock séptico, y en humanos la PO₂ del músculo está <strong>aumentada</strong> en el shock séptico. La PO₂ intracelular del músculo es de unos 5 mmHg (puede ser &lt;1) y la del miocardio de 0,2-2,4: las células viven normalmente con muy poco O₂ (lo que además limita el daño oxidativo).</dd></dl>
-            <div class="article-figure">
+            <div class="article-figure" id="mar-img-9-5">
                 <img src="js/modules/libros/img/mar-fig9-5-vias-glucosa.jpg" alt="Esquema del metabolismo de la glucosa: glucólisis en el citoplasma hasta piruvato y lactato, y entrada en la mitocondria por la PDH, bloqueada por la sepsis y el déficit de tiamina" loading="lazy">
                 <p class="article-figure-caption">Figura 9.5 — Vías de la glucosa: glucólisis en el citoplasma (2 ATP) y fosforilación oxidativa en la mitocondria (28 ATP). La entrada del piruvato por la PDH (con TPP como cofactor) la frenan la sepsis y el déficit de tiamina; las catecolaminas aceleran la glucólisis.</p>
             </div>
@@ -2284,20 +2286,20 @@
                 <div class="tfg-estado tfg-estado-ok" id="mar-lact-resultado" style="display:none;"></div>
             </div>
             <div class="micro-profiles">
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mar-lactato-sepsis">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🦠 Sepsis</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body"><p>La hiperlactatemia es universal en la sepsis, por dos vías: la principal, la <strong>inhibición de la PDH</strong> por productos bacterianos (endotoxina) y citocinas, que explicaría el defecto de utilización del O₂ en la mitocondria; y la <strong>glucólisis acelerada por las catecolaminas</strong>. Siendo la sepsis la primera causa de muerte hospitalaria en EE. UU., la hiperlactatemia aerobia sería mucho más frecuente de lo que se cree.</p></div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mar-lactato-estres">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚡ Estrés fisiológico</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body"><p>Más transportadores de glucosa en la superficie celular y el estímulo de las catecolaminas: la glucólisis aerobia sube un <strong>40-50%</strong>, y con ella el lactato.</p></div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mar-lactato-tiamina">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Déficit de tiamina</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body"><p>La PDH necesita <strong>pirofosfato de tiamina</strong> como cofactor; sin él, el piruvato se desvía a lactato. Se considera frecuente y a menudo no reconocido en el crítico.</p></div>
                 </div>
             </div>
-            <p id="mar-lactato-conclusion">Según una revisión reciente citada por la fuente: <em>"cualquier aumento del lactato suele reflejar algo distinto de la limitación de O₂; la acumulación de lactato por hipoxia es la excepción, no la regla"</em>.</p>
+            <p id="mar-lactato-conclusion" data-nombre="La excepción, no la regla">Según una revisión reciente citada por la fuente: <em>"cualquier aumento del lactato suele reflejar algo distinto de la limitación de O₂; la acumulación de lactato por hipoxia es la excepción, no la regla"</em>.</p>
             <dl class="kv-row" id="mar-lactato-combustible"><dt>El lactato como combustible</dt><dd>No sería un desecho sino un <strong>combustible alternativo</strong> en el estrés metabólico: su densidad calórica es equivalente a la de la glucosa (Tabla 9.6), y una glucosa da dos lactatos. En la sepsis lo usan el corazón y el cerebro: hasta el <strong>60%</strong> de la energía del miocardio y un <strong>25-30%</strong> de la del cerebro; hay datos de que mejora el rendimiento cardíaco en el shock.</dd></dl>
             <table class="data-table" id="mar-tabla-9-6">
                 <thead><tr><th>Sustrato</th><th>Peso molecular</th><th>kcal/mol</th><th>kcal/g</th></tr></thead>
@@ -2307,7 +2309,7 @@
                     <tr><td>Lactato × 2</td><td>180</td><td>652</td><td>3,62</td></tr>
                 </tbody>
             </table>
-            <p id="mar-hipoxia-final"><strong>Reflexión final del autor.</strong> En animales la PO₂ intracelular puede ser de 1 mmHg y la producción aerobia de ATP sigue por debajo de 0,5 mmHg: el interior de la célula está diseñado para funcionar con poco O₂, y la lesión por PO₂ baja parece improbable. El culpable del fallo multiorgánico sería más bien la <strong>lesión inflamatoria</strong>. ¿Por qué tan poco O₂ en la célula? Por lo mismo que envasamos al vacío la comida: <span class="hl-purpura">el oxígeno descompone la materia orgánica</span>.</p>
+            <p id="mar-hipoxia-final" data-nombre="Reflexión final del autor"><strong>Reflexión final del autor.</strong> En animales la PO₂ intracelular puede ser de 1 mmHg y la producción aerobia de ATP sigue por debajo de 0,5 mmHg: el interior de la célula está diseñado para funcionar con poco O₂, y la lesión por PO₂ baja parece improbable. El culpable del fallo multiorgánico sería más bien la <strong>lesión inflamatoria</strong>. ¿Por qué tan poco O₂ en la célula? Por lo mismo que envasamos al vacío la comida: <span class="hl-purpura">el oxígeno descompone la materia orgánica</span>.</p>
             <p><button type="button" class="especialidad-link" data-especialidad="fisioUci" data-view="cardiologia" data-panel="panel-cardio-tabs" data-tab="cardio-estados-choque">🔬 La hipoxia citopática en el shock (El Libro Azul, Cap. 10) →</button></p>
 
             <p class="fuente-ficha" style="margin-top:12px;">📚 Fuente completa: <a class="biblio-link" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=75" target="_blank" rel="noopener">Marino PL. The ICU Book, 5.ª ed., Cap. 9 →</a></p>
