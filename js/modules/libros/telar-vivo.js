@@ -507,7 +507,7 @@ export function init() {
         if (anilloObj) anillo(anilloObj);
         arrancar();
     }).observe(caja);
-    new IntersectionObserver(es => ponerVisible(es[0].isIntersecting)).observe(caja);
+    new IntersectionObserver(es => ponerVisible(es[es.length - 1].isIntersecting)).observe(caja);
     document.addEventListener('visibilitychange', () => { if (!document.hidden) arrancar(); });
 
     // Para las pruebas (Playwright): las cifras de cada estado, los estados pintados, la Mayéutica y el bucle.

@@ -507,7 +507,7 @@ export function init() {
         if (!motionPedido) { motionPedido = true; cargarMotion().catch(() => { /* sin Motion, la lupa abre sin muelle */ }); }
         if (a !== anchoPrevio) { anchoPrevio = a; medir(); if (REDUCIR) pintarUnaVez(); else arrancar(); }
     }).observe(lienzo.parentElement);
-    new IntersectionObserver(es => ponerVisible(es[0].isIntersecting)).observe($('escena'));
+    new IntersectionObserver(es => ponerVisible(es[es.length - 1].isIntersecting)).observe($('escena'));
     document.addEventListener('visibilitychange', () => { if (!document.hidden) arrancar(); });
 
     // Para las pruebas (Playwright): las cifras de cada fluido frente al anexo de la maqueta y el estado del bucle.

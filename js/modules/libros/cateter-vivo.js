@@ -550,7 +550,7 @@ export function init() {
         medir();
         if (REDUCIR) pintarUnaVez(); else arrancar();
     }).observe(esc);
-    new IntersectionObserver(es => ponerVisible(es[0].isIntersecting)).observe(esc);
+    new IntersectionObserver(es => ponerVisible(es[es.length - 1].isIntersecting)).observe(esc);
     document.addEventListener('visibilitychange', () => { if (!document.hidden) arrancar(); });
 
     // Para las pruebas (Playwright): las cifras de cada estado frente a la cobertura §6.2 y el estado del bucle.

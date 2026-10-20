@@ -516,7 +516,7 @@ export function init() {
         medir(); Lupa.colocar();
         if (REDUCIR) pintarUnaVez(); else arrancar();
     }).observe(caja);
-    new IntersectionObserver(es => ponerVisible(es[0].isIntersecting)).observe($('escena'));
+    new IntersectionObserver(es => ponerVisible(es[es.length - 1].isIntersecting)).observe($('escena'));
     document.addEventListener('visibilitychange', () => { if (!document.hidden) arrancar(); });
 
     // Para las pruebas (Playwright): las cifras de cada estado frente a cobertura §6.1 y el estado del bucle.
