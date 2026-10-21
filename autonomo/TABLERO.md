@@ -321,7 +321,7 @@ río y mar) → 39-44 → 45-53.
 | 5 | `b2` | Bloque 2 (caps. 12-13, 6 fichas de Merino HEMATO): cobertura, maquetas, modelos y estudio | hecha (2026-10-21) · PR #26 aprobada por el usuario, en main | Paquete: `autonomo/bloques/b2/encargo.md`. Una sola rama `auto/b2` y 4-5 paradas (REGLAS §2.3) |
 | 6 | `motor-mayeutica` | Un solo motor de Mayéutica para fichas y modelos vivos (lección del bloque 1) | hecha (2026-10-20) · `core/mayeutica-motor.js`, en main | Tarea técnica: va directo a main con los jueces en verde |
 | 7 | `b3` | Bloque 3 (caps. 14-22, 26 fichas de Merino Cardiología y Neumología) | en curso (2026-10-21) · cobertura | Paquete: `autonomo/bloques/b3/encargo.md` |
-| 8 | `b1-guias` | Llevar «Ver en la ficha» y la explicación guiada (REGLAS §7.9-7.10) a los modelos del bloque 1 | en curso (2026-10-21) | Lo pidió el usuario el 20/10 para todos los modelos; mejora de lo existente: a main con jueces y auditor |
+| 8 | `b1-guias` | Llevar «Ver en la ficha» y la explicación guiada (REGLAS §7.9-7.10) a los modelos del bloque 1 | hecha (2026-10-21) · 5 modelos, 314 pasos, en main (el ácido-base, en la bitácora) | Lo pidió el usuario el 20/10 para todos los modelos; mejora de lo existente: a main con jueces y auditor |
 
 ## Lo que aún no está aprobado
 
