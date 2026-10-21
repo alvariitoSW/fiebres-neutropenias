@@ -66,12 +66,22 @@ Objetivo M5 del tablero. Empieza el 21/10/2026, con los bloques 1 y 2 en main. A
 - Estilos sin elegir: el director toma A en los dos (receptor: grabado crema y oro; corazón eléctrico: grabado
   anatómico), coherentes con el resto de la app, y lo dirá en la parada siguiente.
 
+### Decisiones del usuario (21/10/2026, tras los megaproyectos)
+
+- **Kit de Anatomy: no.** «Pieza propia»: se sigue su método con código propio; la app sigue con una sola librería
+  externa (Motion). La pieza de dibujo isométrico de los aparatos se escribe en `js/core/` (primero, en la maqueta).
+- **Bradicardias y bloqueos AV**: «buscar guía en la web» → una guía oficial verificada (REGLAS §1.9, CLAUDE §7.2),
+  con su enlace literal de los resultados de búsqueda; su PDF a `docs/` si se puede descargar.
+- El director decide el resto: el soporte vive dentro de la circulación viva (`data-eco-soporte`); la maqueta v2 trae
+  los tres aparatos; los objetivos de otras fuentes salen ya en el monitor, cada uno con su chip y su nota si
+  discrepan; el corazón eléctrico es el corazón en corte con su anillo aislante y el nodo AV como torniquete.
+
 ## 5. Pasos
 
 | Paso | Quién | Sale en | Estado |
 |---|---|---|---|
-| 1 · Cobertura | profesor (modo cobertura) | `autonomo/bloques/b3/cobertura.md` | en curso |
-| 2 · Maquetas (parada 1) | constructor potente | `autonomo/maquetas/b3-*.html` | pendiente |
+| 1 · Cobertura | profesor (modo cobertura) | `autonomo/bloques/b3/cobertura.md` | hecha (≈92 %) |
+| 2 · Maquetas (parada 1) | constructor potente | `autonomo/maquetas/b3-*.html` | v1 hecha; el usuario pide subir el nivel: v2 en curso (`megaproyecto-*.md`) |
 | 3 · Modelos en la app (parada 2: el primero nuevo) | constructor potente | rama `auto/b3` | pendiente |
 | 4 · Estudio en las 26 fichas | constructor, por grupos | rama `auto/b3` | pendiente |
 | 5 · Jueces, auditor y profesor (parada 3) | — | `autonomo/bloques/b3/*.md`, una sola PR | pendiente |
