@@ -2,7 +2,7 @@
 // escena (el paciente en grabado o el aparato) y los modos Explorar, «¿Qué shock es?» y Mayéutica.
 import { instalarIso } from '../comun/dibujo-iso.js';
 import { crearCabecera, perfusion, avanzarLab, textoGravedad } from './soporte.mjs';
-import { crearMonitor, CANALES } from './canales.js';
+import { monitorDelShock, CANALES } from './canales.js';
 import { instalarMonitor, pintarCifras as pintarColumna } from '../comun/monitor.js';
 import { montarImpella, montarBalon, montarEcmo } from './aparatos.js';
 import { montarDespieceImpella, montarDespieceBalon, montarDespieceEcmo, LEYENDA_IMPELLA, LEYENDA_BALON, LEYENDA_ECMO } from './despiece.js';
@@ -37,7 +37,7 @@ const org = (t, ilu = true) => `<span class="org${ilu ? ' ilu' : ''}">${t}</span
 const est = { modo: 'explorar', pac: D.PACIENTES[0], g: D.PACIENTES[0].rec.g, rec: null, horas: 0, lab: null, tabla: 'marino', aparato: 'no', vista: 'paciente', plano: 'dentro', foco: null,
   pausa: false, tapado: false, canales: 'todos', pest: 'grav', historia: [] };
 let cab = null, R = null;
-const monitor = crearMonitor($('trazas'));
+const monitor = monitorDelShock($('trazas'));
 
 function recDe(pac, extra = {}) { return { ...pac.rec, g: est.g, ...extra }; }
 function nuevoPaciente(pac, { g, rec, ajuste = {}, volumen = 0, horas = 0, asentar = 30 } = {}) {

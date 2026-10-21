@@ -538,7 +538,7 @@ const alfaNA = d => d <= 3 ? 0 : Math.pow(Math.min(1, (d - 3) / 27), 1.3);   // 
 const sat = (d, k) => 1 - Math.exp(-d / k);
 const FARMACOS = {
   na: { nombre: 'Noradrenalina', corto: 'NA', sub: 'α₁ principal, β débil', unidad: 'µg/min',
-    llaves: [{ rec: 'beta1', tipo: 'ag', occ: d => 0.55 * Math.min(1, d / 10) }, { rec: 'alfa1', tipo: 'ag', occ: alfaNA }],   // cuánto β: ilustrativo (la ficha da la dirección)
+    llaves: [{ rec: 'beta1', tipo: 'ag', occ: d => 0.45 * Math.min(1, d / 10) }, { rec: 'alfa1', tipo: 'ag', occ: alfaNA }],   // cuánto β: ilustrativo (la ficha da la dirección)
     regimen: { shock: { min: 0, max: 40, paso: 1, marcas: [5, 10, 30, 40], porKg: false,
       tramos: [[0, 10, 'pesa el β', '--accent-yellow'], [10, 30, 'manda el α', '--accent-red'], [30, 40, 'techo: segundo vasopresor', '--text-muted']], chip: 'tramos: ficha · p. 13' },
       fija5: { fija: 5, txt: '5 µg/min, la dosis de inicio del cardiogénico', chip: 'ficha · pp. 42-43' } },
@@ -2263,7 +2263,7 @@ ponerEstado('na-baja');
 llenarEstatico();
 requestAnimationFrame(bucle);
 medirDock();
-window.__receptor = { efecto, ESTADOS, ST, get R() { return R; }, ponerEstado };
+window.__receptor = { efecto, ESTADOS, FARMACOS, ST, get R() { return R; }, ponerEstado };
 </script>
 </body>
 </html>

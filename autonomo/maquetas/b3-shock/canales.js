@@ -18,7 +18,7 @@ export const CANALES = [
 ];
 const SEG = 4.5;
 
-export function crearMonitor(svg) {
+export function monitorDelShock(svg) {
   const mon = crearPieza(svg, { canales: CANALES, margen: 26, hueco: 4, borrar: 6 });
   let tSim = 0, tProx = 0, faseResp = 0, nLat = -1, ultimoV = 0, enclavado = false, conBalon = false;
   // Una muestra del instante del motor (cab: la cabecera; ctx: FR, EtCO₂, etc.)
