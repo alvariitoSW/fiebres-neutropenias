@@ -458,6 +458,7 @@ const coma = (x, d = 0) => (+x).toFixed(d).replace('.', ',');
 const NS = 'http://www.w3.org/2000/svg';
 const PDF_S = '../../docs/marino-2024-shock-caps14-17.pdf';
 const PDF_R = '../../docs/marino-2024-respiratory-management-caps22-26.pdf';
+const PDF_C = '../../docs/marino-2024-cardiac-disorders-caps18-21.pdf';
 const PDF_T = '../../docs/marino-2024-toxicologia-caps52-53-apendices.pdf';
 const IMG52 = '../../js/modules/libros/img/mar-fig52-4-glucagon.jpg';
 
@@ -475,6 +476,7 @@ const FICHA = {
   'mc-cardiogenico-farmaco': [CARDIO, 'Shock cardiogénico: soporte farmacológico', 'Cardiogénico: fármacos', PDF_S, ''],
   'mc-shock-septico': [CARDIO, 'Shock séptico: definiciones y manejo', 'Shock séptico', PDF_S, ''],
   'mc-anafilaxia': [CARDIO, 'Anafilaxia', 'Anafilaxia', PDF_S, ''],
+  'mc-ic-manejo': [CARDIO, 'Insuficiencia cardíaca aguda: manejo', 'IC aguda: manejo', PDF_C, 'cap. 18, '],
   'neumo-ep-manejo': [NEUMO, 'Embolia pulmonar aguda: manejo', 'Embolia pulmonar: manejo', PDF_R, 'cap. 22, '],
   'mt-bzd-betabloq': [TOX, 'Benzodiacepinas y betabloqueantes', 'Betabloqueantes y glucagón', PDF_T, 'cap. 52, '],
   'umi-vasoactivos': [UMI, 'Fármacos vasoactivos: receptores y dosis', 'Manual UMI: vasoactivos', null, ''],
@@ -538,6 +540,7 @@ const C = {
   anaGluc: { f: 'mc-anafilaxia', id: 'mc-glucagon', sitio: 'Glucagón', p: 66 },
   anaSeg: { f: 'mc-anafilaxia', id: 'mc-segunda-linea', sitio: 'Fármacos de segunda línea', p: 66 },
   anaShock: { f: 'mc-anafilaxia', id: 'mc-shock-anafilactico', sitio: 'Shock anafiláctico', p: 67 },
+  vasodil: { f: 'mc-ic-manejo', id: 'mc-tabla-18-3', sitio: 'Vasodilatadores', p: 9 },
   tepHemo: { f: 'neumo-ep-manejo', id: 'nep-hemodinamica', sitio: 'Manejo hemodinámico', p: 11 },
   glucMec: { f: 'mt-bzd-betabloq', id: 'mt-glucagon-mecanismo', sitio: 'Glucagón: por qué sirve', p: 10 },
   fig524: { f: 'mt-bzd-betabloq', id: 'mar-img-52-4', sitio: 'Fig. 52.4', p: 11 },
@@ -730,7 +733,7 @@ function pintarCifras() {
   $('mon-pie').innerHTML = `${org('cifras y curvas: ilustrativo', true)} <span>Objetivos: ${o.nombre}</span> ${chip(o.cita)}`;
 }
 const EXPLICA_FILA = {
-  fc: ['La FC: la sube el β del nodo (adrenalina, dobutamina: +5-15 lpm) y la frena el betabloqueante. La noradrenalina apenas la mueve.', C.dobuta],
+  fc: ['La FC la sube el β: la adrenalina, según la dosis, y la dobutamina, +5-15 lpm. El betabloqueante la frena.', C.dobuta],
   pa: ['La PAM sale de PAM = GC × RVS + PAD: el fármaco que aprieta mueve la RVS; el que empuja, el gasto. Objetivo ≥65 mmHg.', C.pam],
   spo2: ['La SpO₂ no la mueve ninguno de estos fármacos en este momento: su valor es ilustrativo.', null],
   pvc: ['La PVC: en estos cuatro momentos apenas cambia; su valor es ilustrativo.', null],
@@ -1124,7 +1127,7 @@ function pintarCuerpo() {
   const luz = $('d-luz'); if (luz) luz.setAttribute('r', clamp(8.5 * Math.pow(14 / R.raw.irvs, 1.6), 3.5, 12).toFixed(1));
 }
 const INFO_DIANA = {
-  vena: { t: 'La vena tiene el mismo músculo liso: la nitroglicerina y el nitroprusiato la aflojan y baja la precarga. Qué hace la noradrenalina en la vena: Marino no lo dice; el Manual UMI atribuye a los receptores α la vasoconstricción de las venas.', c: [C.umi], org: 'la fuente no lo dice' },
+  vena: { t: 'Los vasodilatadores de la insuficiencia cardíaca (nitroglicerina, nitroprusiato) dilatan arterias y venas: baja la precarga y la poscarga. Qué hace la noradrenalina en la vena: Marino no lo dice; el Manual UMI atribuye a los receptores α la vasoconstricción de las venas.', c: [C.vasodil, C.umi], org: 'la fuente no lo dice' },
   rinon: { t: 'La vasopresina actúa también en el receptor V₂ del túbulo distal: más reabsorción de agua. La dopamina a ≤3 µg/kg/min sube el flujo del riñón y del intestino.', c: [C.vasopresina, C.dopa] },
   hipofisis: { t: 'El receptor V₃ de la hipófisis anterior: la vasopresina libera ACTH. La angiotensina II hace salir vasopresina de la hipófisis posterior.', c: [C.vasopresina, C.angio] },
 };
@@ -1183,10 +1186,10 @@ const CASCADA = {
     completa: [
       { n: 'Receptor β', t: 'La adrenalina frena la liberación de mediadores a través de receptores β. El subtipo (β₂) lo da el Manual UMI.', r: ['.rec-b2'], c: C.anaGluc, c2: C.umi },
       { n: 'Dentro', t: 'La cadena de dentro del mastocito: la fuente no la da.', r: ['#nucleo'], org: 'la fuente no lo dice' },
-      { n: 'Gránulos', t: 'Los gránulos de mastocitos y basófilos llevan los mediadores de la reacción; la adrenalina los retiene.', r: ['#granulos'], c: C.anaAdre },
+      { n: 'Mediadores', t: 'La adrenalina frena la liberación de los mediadores inflamatorios de mastocitos y basófilos. Que los guarden en gránulos es fisiología general.', r: ['#granulos'], c: C.anaAdre, org: 'fisiología general' },
       { n: 'Betabloqueante', t: 'Un betabloqueante tapa el β: atenúa o anula la respuesta a la adrenalina.', r: ['.tapon'], c: C.anaGluc },
       { n: 'Glucagón', t: 'El glucagón puede devolver la respuesta; por qué, el libro lo remite al cap. 52, que lo explica en el corazón, no en el mastocito.', r: ['#q-gluc'], c: C.anaGluc, c2: C.glucMec },
-      { n: 'H₁ y H₂', t: 'La histamina que sale encaja en H₁ y H₂. Los antihistamínicos los tapan: alivian el picor y la rinorrea, pero no cambian el curso.', r: ['.rec-h'], c: C.anaSeg },
+      { n: 'H₁ y H₂', t: 'La histamina encaja en sus receptores H₁ y H₂ (que estén en vasos y bronquios: fisiología general). Los antihistamínicos los tapan: alivian el picor y la rinorrea, pero no cambian el curso.', r: ['.rec-h'], c: C.anaSeg },
     ],
   },
 };
@@ -1231,12 +1234,12 @@ $('paso-a-paso').addEventListener('click', () => {
    ============================================================ */
 const FARMACOS = {
   na: { nombre: 'Noradrenalina', sub: 'α₁ principal, β débil',
-    receptores: [['<b>α₁</b>, su acción principal: vasoconstricción; y un <b>β débil</b>, que estimula algo el corazón.', C.naRec],
+    receptores: [['<b>α₁</b>, su acción principal: vasoconstricción; y un <b>β débil</b>, que estimula algo el corazón. Ese β podría explicar por qué, a las dosis habituales, no daña la función renal.', C.naRec],
       ['<b>&lt;10 µg/min:</b> el β puede subir el gasto · <b>&gt;10:</b> predomina el α · <b>30:</b> ya no hay más respuesta.', C.naDosis]],
     dosis: [['Sin dosis de carga; empezar a 5-10 µg/min y subir según la PA.', C.naDosis], ['Rango 5-40 µg/min.', C.t144], ['A 30 µg/min, añadir un segundo vasopresor.', C.naDosis],
       ['Séptico: si hacen falta 0,25-0,5 µg/kg/min (18-35 µg/min en 70 kg), añadir vasopresina.', C.sepVaso],
       ['Cardiogénico: 5 µg/min (0,05 µg/kg/min), subir cada 5 min; habitual 5-30 µg/min (0,05-0,5). Ver la nota de las equivalencias.', C.csNa],
-      ['Por una vía periférica del brazo, segura hasta 48 h; en el séptico, por encima de la fosa antecubital.', C.periferica]],
+      ['Por una vía periférica del brazo, segura hasta 48 h; en el séptico, por encima de la fosa antecubital.', C.periferica, C.t172]],
     funcion: ['El vasopresor más usado y el preferido en el shock séptico. En el cardiogénico, menos taquiarritmias y menos muertes que la adrenalina y la dopamina. En el TEP hipotenso, porque no sube la resistencia pulmonar.', C.naRec, C.csNa, C.tepHemo],
     adversos: ['Isquemia (miocardio, cerebro, miembro) y arritmias (taqui y bradi) en ~10 %, quizá por el propio shock. Inmunosupresión: se une a los receptores de los leucocitos (significado clínico incierto). Extravasación: fentolamina 5-10 mg en 10 mL en la zona, antes de 12 h.', C.naSeg, C.extrav],
     umi: 'β₁ y α, sin β₂. Dosis 0,2-1,3 µg/kg/min; 10 mg en 100 mL. Las dos fuentes no coinciden en el rango: ver las notas.' },
@@ -1612,8 +1615,8 @@ const MUESTRA = [
     paciente: [['Paciente', 'Paulino, 72 años, 80 kg (ideal 70); HTA'], ['Motivo', 'colangitis aguda litiásica', 1], ['Volumen', '2,1 L de cristaloide en 3 h (30 mL/kg de peso ideal)', 1], ['PA', '74/40 mmHg (PAM 51)', 1], ['FC', '112 lpm, sinusal', 1], ['Lactato', '4,4 mmol/L', 1], ['Vías', 'sin vía central', 1]],
     enunciado: '<b>¿Qué le das y por dónde?</b>',
     opciones: [
-      { t: 'Noradrenalina a 5-10 µg/min por una vena del brazo, encima de la fosa antecubital.', ok: true },
-      { t: 'Esperar a la vía central: un vasopresor por una periférica se extravasa.', porque: 'Se puede empezar por una vena periférica del brazo (p. 60), segura hasta 48 h (p. 12). Esperar al catéter deja a Paulino con una PAM de 51.' },
+      { t: 'Noradrenalina a 5-10 µg/min por una vena del brazo, sobre la fosa antecubital.', ok: true },
+      { t: 'Esperar a tener la vía central: por una vena periférica, el vasopresor se extravasa.', porque: 'Se puede empezar por una vena periférica del brazo (p. 60), segura hasta 48 h (p. 12). Esperar al catéter deja a Paulino con una PAM de 51.' },
       { t: 'Dopamina a 5 µg/kg/min: sube el gasto sin cerrar los vasos.', porque: 'Da más taquicardia y arritmias, como la FA, que los demás vasopresores (p. 14). Con 112 lpm, Paulino tiene papeletas para una FA; en el séptico, la de elección es la noradrenalina (p. 60).' },
       { t: 'Fenilefrina en bolo de 100 µg, como en la anestesia.', porque: 'No se recomienda en ningún shock y en el séptico va sin bolo (p. 15). Paulino ganaría vasoconstricción pura, bradicardia refleja y menos riego en el riñón y el intestino.' }],
     explicacion: 'Tras 30 mL/kg de cristaloide, la noradrenalina es el vasopresor de elección; puede empezar por una vena periférica por encima de la fosa antecubital, sin dosis de carga, a 5-10 µg/min.', fuente: C.t172, fuente2: C.naDosis,
