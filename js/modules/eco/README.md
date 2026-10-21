@@ -559,8 +559,8 @@ se le añade una capa que lo lee y dos maniobras de volumen, para las fichas `ma
   de la primera (y al abrir el panel desde una ficha), el paciente se asienta hasta 40 s desde que empezó el escenario
   (`faltaParaAsentar`; `aplicarEscenario` de `escenarios.mjs` apunta `p.tEscenario`): un shock se ve a los 10 s con el
   barorreflejo aún compensando, y la EPP ahí medía también esa compensación (hemorragia +64 %, fallo del VI +15 %).
-  Asentado, y igual en la app que en las pruebas: hemorragia +16,1 %, fallo +2,0 %, dilatada +0,3 % (antes de la gravedad
-  del shock, +20,2 / +2,7 / +1,3 %).
+  Asentado, y igual en la app que en las pruebas: hemorragia +16,9 %, fallo +2,7 %, dilatada +0,9 % (con la segunda vuelta
+  del shock, 21/10/2026; antes, +16,1 / +2,0 / +0,3 %, y antes de la gravedad del shock, +20,2 / +2,7 / +1,3 %).
 - `lecturas.mjs`: `guyton(motor)` (RV = (Pms − PAD)/Rv con Rv = (Pms − PVC)/GC del último latido), `curvaFuncion` de la
   tabla precalculada, `presionEnPunta(estado, 'ad'|'vd'|'ap'|'enclavado')`, `lecturaCateter` y `curvaTermo(gc, qRegT)`.
   **El enclavamiento lee `pvp` (venas pulmonares), no `pai`**: la ficha lo define como «la presión venosa del lado
@@ -586,8 +586,9 @@ Hemorragia, fallo del VI, derrame y TEP tienen un **mando de gravedad** de 0 (si
 `ESCENARIOS[k].aplicar(m, g)` o `aplicarEscenario(m, k, g)`; sin `g`, `gravedad.defecto` da el escenario de siempre y
 `gravedad.texto(g)` dice cuánto es (mL perdidos, % de contractilidad, mL de derrame, × de resistencia pulmonar). El estado
 se lee asentado (40 s, `faltaParaAsentar`). Topes: hemorragia 42 % de la volemia (Clase IV, Tabla 15.1), Ees del VI 0,3
-(escala logarítmica), derrame 390 mL (en parábola: cada paso añade menos al final) y resistencia pulmonar ×16 (el TEP de
+(escala logarítmica), derrame 388 mL (en parábola: cada paso añade menos al final) y resistencia pulmonar ×9,3 (el TEP de
 alto riesgo; el de siempre, ×8, es el de riesgo intermedio: Marino, cap. 22, p. 7, y por eso ya no se llama «masivo»).
+(Antes 390 mL y ×16: ver «Segunda vuelta», abajo.)
 
 Antes, subir la gravedad rompía el motor (2 L → PAM 11; 2,5 L → PAM 0 con RVS negativa; derrame de 550 mL → NaN; Ees
 0,45 → PAM 81 con PCP 41). Lo que faltaba, corregido en `motor.mjs` (cada pieza explicada en `BASE`):
@@ -605,7 +606,39 @@ Antes, subir la gravedad rompía el motor (2 L → PAM 11; 2,5 L → PAM 0 con R
 `pruebas/escenarios.test.mjs` comprueba en 0-100 % (12 puntos, asentado, y 120 s más a fondo) PAM 40-130, FC 40-170,
 IC 1,2-5, PVC 0-25, PCP 2-35, VS 15-110 y SvO₂ 30-85 %, sin saltos (la PAM baja siempre, ≤15 mmHg cada 10 %) y la PAM
 mínima mientras se asienta (≥40). **Excepción**: la PCP de la hemorragia y del TEP graves baja hasta ~1 mmHg (el VI con un
-VS de ~20 mL se llena a eso con su curva diastólica, la misma que da la PCP normal de 8,5); se exige ≥1.
+VS de ~20 mL se llena a eso con su curva diastólica, la misma que da la PCP normal de 7,6); se exige ≥1.
+
+### Segunda vuelta (21/10/2026)
+
+Lo que encontró la maqueta del shock (v2) y se corrige en `motor.mjs` (cada pieza explicada en `BASE`; pruebas en
+`pruebas/motor.test.mjs` y `pruebas/escenarios.test.mjs`):
+- **RVS calibrada**: `rSis` 1,05 → 0,90 y consigna del barorreflejo 100 → 87. Normal: PA ~106/67 (PAM ~87), RVS ~1.285,
+  **IRVS ~29,7** (Tabla 8.1 de Marino: 25-30; nueva referencia `irvs-t81`). Los 900-1.200 de la Ficha 5 siguen
+  `pendiente`: con el GC de ~5,1 que fija el ITV del TSVI (≤22 cm, Ficha 11) no caben con la PA en ~105/65. Con ella:
+  techo del reflejo en las resistencias +15 % → **+35 %** (el mismo techo absoluto, ~1.690), `fCap` 0,12 → 0,14 (la presión
+  capilar de reposo de antes), `rPul` 0,08 → 0,095 (la sistólica del VD seguía en 20-25) y la vasoplejía ×0,5 → ×0,55.
+- **Arteria pulmonar que se endurece** por encima de 24 mmHg (`rigAp`, `kRigAp`): sin ella, con un VS de ~20 mL la
+  pulmonar no latía (TEP 55/53, fallo del VI 39/35). Ahora 40/33 y 42/35.
+- **Isquemia del VD** (`isqDesde`, `isqAncho`, `isqVdMax`, `tauIsqVd`): cuando la presión sistólica del VD se acerca a la
+  PAM (÷ el grosor de su pared, `mioVd`), su contractilidad cae hasta un 80 %. Es la consecuencia de la hipertensión
+  pulmonar que da Marino (cap. 18, p. 3). Frena la PCP del fallo del VI (antes la frenaba un edema que vaciaba la sangre) y
+  la pulmonar del TEP (media ≤40). El TEP pasa a ×9,3 a fondo (×16 hundía al VD sin freno).
+- **Edema lento**: `kEdema` 5 → 0,1 mL/s por mmHg (antes ~500 mL en 40 s). En el fallo del VI a fondo la PVC ya no baja de
+  la normal (2,8 → 6,4; Tabla 14.1) y la PCP queda en ~33, también a los 2 min.
+- **Derrame establecido**: `crearMotor({ liquidoPeri })` es un paciente que ya tenía el derrame (pericardio estirado lo que
+  pasa de `derrameTolerado`, 340 mL); antes daba NaN. 550, 1.000 o 2.000 mL se asientan en un taponamiento con PVC ≈ PCP
+  (~9/10), IC ~1,8 y PAM ~75. El derrame que se añade con el motor en marcha (el mando) sigue siendo agudo: 550 mL agudos
+  son un hemopericardio que para el corazón (PAM ~21), y el mando acaba en 388.
+- **Gasto con sentido y soporte**: `vs` y `gcValvula` son lo que sale por la válvula aórtica, neto y nunca negativo (el
+  reflujo de cierre no es gasto); `gc` es lo que llega al cuerpo (`gcValvula` + `gcImpella` + `gcEcmo`). Punto de entrada
+  `p.soporte = { impella, ecmo, venteo (L/min), balon (mL) }`, que se puede cambiar en marcha: el balón desplaza volumen
+  en la aorta de la onda R al cierre de la aórtica (p. 45-46), el Impella pasa sangre del VI a la aorta (p. 47) y el ECMO de
+  las venas a la aorta, con venteo del VI (p. 48-49). Las bombas no sacan lo que no hay (succión: ilustrativo). La RVP se
+  calcula con el flujo pulmonar (con ECMO no es el gasto). Cada latido trae `gcValvula`, `gcImpella`, `gcEcmo`,
+  `gcVenteo`, `balon` e `isqVd`; cada muestra de la onda, `vBalon`, `qImp` y `qEcmo`.
+- Atlas · 14 (`atlas/vd.mjs`): para no contar dos veces la rigidez y la isquemia, la hipertensión pulmonar crónica divide la
+  distensibilidad por k^0,5 (antes k^0,9) y su rigidez diastólica del VD sube ×(1 + 0,2x) (antes 1 + x); el TEP agudo,
+  resistencia ×(1 + 7x), distensibilidad ÷(1 + 3x), contractilidad ×(1 − 0,4x). Mismas conclusiones del texto.
 
 ## Rendimiento medido
 
@@ -650,8 +683,12 @@ licencia CC BY-SA 4.0 (el resto del simulador no). La cita también se muestra e
 
 ## Pendiente
 
-- **Calibrar** la RVS (el motor da ~1.450; la Ficha 5 dice 900-1200). Choca con el ITV del TSVI (Ficha 11, 18-22 cm,
-  hoy ~21,9): subir el gasto para bajar la RVS sube el ITV, salvo que el TSVI del modelo sea algo más ancho.
+- **RVS de la Ficha 5** (900-1200): el motor da ~1.285 (IRVS ~29,7, dentro de la Tabla 8.1). Bajar más choca con el ITV
+  del TSVI (Ficha 11, 18-22 cm, hoy ~21,6) y con la PA del normal (~106/67): subir el gasto sube el ITV, salvo que el TSVI
+  del modelo sea algo más ancho.
+- **Soporte mecánico**: el flujo de cada bomba no depende de la presión que vence (falta la curva de cada aparato); con ECMO
+  sin ventear la PCP del fallo a fondo llega a ~50 (la fuente dice que sube, no cuánto), fuera del rango del paciente
+  posible si el panel lo deja así; la SaO₂ de la mezcla con el oxigenador no está en el motor.
 - **Doppler**: S > D en las suprahepáticas en
   reposo; S/D de las venas pulmonares (necesita el efecto pistón del plano AV); Doppler tisular en el simulador (e′, E/e′ de la Ficha 5) y Doppler continuo; insuficiencias valvulares en el simulador (el motor ya
   tiene la mitral, `eroaMitral`, que usa el Atlas; falta el chorro en la eco y las otras válvulas).

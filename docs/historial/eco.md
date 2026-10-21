@@ -340,3 +340,20 @@ contractilidad cambia en ~4 s; RVS y SvO₂ sin divisiones por 0. Mando de grave
 hemorragia (hasta el 42 %), fallo del VI, derrame y TEP. «TEP masivo» pasa a «TEP de riesgo intermedio» (cap. 22 p. 7).
 A fondo, los cuatro dan PAM 55-59 e IC 1,25-1,42. Pendiente para el bloque 3: el fallo del VI a fondo deja la PVC en
 2,5 (edema que saca volumen); la Tabla 14.1 pide PVC alta en el cardiogénico. Y calibrar la RVS basal (README).
+
+## Segunda vuelta del motor para el shock (21/10/2026, bloque 3)
+
+La maqueta del shock (v2) envolvía cuatro fallos del motor; se corrigen en su origen (`motor.mjs`, detalle en el README,
+«Segunda vuelta»). (1) `crearMotor({ liquidoPeri: 550 })` daba NaN: metía el derrame entero en un saco sin estirar
+(~10⁵ mmHg). Ahora un motor que nace con derrame es un paciente que ya lo tenía: el pericardio está estirado lo que pasa de
+340 mL y se asienta en un taponamiento con PVC ≈ PCP (~9/10), IC ~1,8. El derrame añadido en marcha sigue siendo agudo
+(550 mL agudos paran el corazón: es lo que hace un hemopericardio). (2) En el fallo del VI a fondo la PVC bajaba a 2,8
+porque el edema (5 mL/s por mmHg) se llevaba ~500 mL en 40 s. Edema lento (0,1) e **isquemia del VD**: cuando su presión
+sistólica se acerca a la PAM, su contractilidad cae (consecuencia de la hipertensión pulmonar, Marino cap. 18 p. 3). El VD
+deja de llenar el pulmón: PVC 6,4 y PCP ~33, también a los 2 min. (3) RVS calibrada: rSis 1,05 → 0,90 y consigna 100 →
+87; IRVS 34 → 29,7 (Tabla 8.1: 25-30). El techo del reflejo pasa de +15 % a +35 % (mismo techo absoluto). La Ficha 5
+(900-1.200) sigue pendiente: choca con el ITV del TSVI y con la PA del normal. El TEP a fondo daba 52/48 de pulmonar.
+Ahora la arteria pulmonar se endurece por encima de 24 mmHg y el TEP llega a ×9,3 (no ×16): 40/33, media 36.
+(4) `ultimo.gc` podía salir negativo con el reflujo de cierre: `vs` y `gcValvula`, netos y ≥0; `gc` = válvula + bombas.
+Punto de entrada `p.soporte` (balón, Impella, ECMO y venteo). Se reajustaron el Atlas · 14 (`atlas/vd.mjs`) y la
+vasoplejía (×0,55) para no contar dos veces lo nuevo. Pruebas nuevas en `motor.test.mjs` y `escenarios.test.mjs`.

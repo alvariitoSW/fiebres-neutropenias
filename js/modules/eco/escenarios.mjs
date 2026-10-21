@@ -13,12 +13,17 @@ import { BASE } from './motor.mjs';
 const HEM_FRACCION_MAX = 0.42;                 // de la volemia: Clase IV, >40 % (Marino, Tabla 15.1, cap. 15, p. 22)
 const HEM_ML_MAX = HEM_FRACCION_MAX * BASE.vSangre;    // ~2.040 mL
 const EES_VI_MIN = 0.3;                        // mmHg/mL, ~10 % de la normal (3,1)
-const DERRAME_ML_MAX = 390;                    // mL; con el pericardio del modelo, el taponamiento
+// mL; con el pericardio del modelo, el taponamiento (derrame agudo). 390 → 388 con la RVS calibrada (octubre 2026, segunda
+// vuelta): con 390 el IC a fondo bajaba a 1,19. Un derrame mayor y establecido (crearMotor({ liquidoPeri })), en motor.mjs
+const DERRAME_ML_MAX = 388;
 // el derrame va en parábola (mL = máx · (1 − (1 − g)²)): la presión del saco crece en exponencial con el volumen, así que
 // cerca del final cada paso del mando añade menos líquido y la PA no cae a saltos
 const derrameMl = (g) => DERRAME_ML_MAX * (1 - (1 - g) ** 2);
 const DERRAME_DEFECTO = 1 - Math.sqrt(1 - 260 / DERRAME_ML_MAX);
-const TEP_RPUL_MAX = 16, TEP_EES_VD_DEFECTO = 0.35, TEP_DEFECTO = 0.75;   // resistencia pulmonar ×16 a fondo
+// TEP: resistencia pulmonar ×9,3 a fondo (antes ×16) y el defecto, el de siempre (×8 y contractilidad del VD ×0,65), que ahora
+// cae en g ≈ 0,93. Con la isquemia del VD en el motor (motor.mjs, isqDesde), ×16 hundía al VD sin freno (PAM 30); y ×16 sin
+// ella daba una pulmonar media de 54 mmHg, que un VD sin hipertrofia no sostiene. A fondo, ~40/33 (media ~36). Ilustrativo
+const TEP_RPUL_MAX = 9.3, TEP_EES_VD_DEFECTO = 0.35, TEP_DEFECTO = Math.log(8) / Math.log(TEP_RPUL_MAX);
 const coma = (x, d = 0) => x.toFixed(d).replace('.', ',');
 export const ESCENARIOS = {
   normal: { nombre: 'Normal', aplicar: () => {} },
@@ -48,8 +53,10 @@ export const ESCENARIOS = {
     // Resistencias a la mitad y venodilatación (más volumen venoso "sin tensión", que deja de volver al
     // corazón): Marino, cap. 14, pág. 4 — el shock vasodilatador es una vasodilatación difusa «de arterias y venas».
     // (Antes ×0,4, calibrado con un barorreflejo que subía las resistencias hasta +60 %; con el techo de +15 % (motor.mjs,
-    // gravedad del shock), ×0,5 deja la misma PA: ~52 a los 10 s y ~66 asentada. Ilustrativo)
-    aplicar: (m) => { m.p.rSis *= 0.5; m.p.vuVen *= 1.5; },
+    // gravedad del shock), ×0,5 deja la misma PA: ~52 a los 10 s y ~66 asentada. Con la RVS calibrada (rSis 1,05 → 0,90) y el
+    // techo de +35 % (motor.mjs, 21/10/2026), ×0,5 la dejaba en ~49 a los 10 s (sistólica 59) y ×0,55 da otra vez ~53 y ~69,
+    // con una resistencia absoluta parecida a la de antes. Ilustrativo)
+    aplicar: (m) => { m.p.rSis *= 0.55; m.p.vuVen *= 1.5; },
   },
   // --- Formas de enfermedad: cambian la anatomía además del latido (excepción a «anatomía congelada», a petición
   // del usuario: «hazlas según la bibliografía de la aplicación»). Lo que se exige son las cifras de CRITERIOS_FORMA,
@@ -68,15 +75,15 @@ export const ESCENARIOS = {
     aplicar: (m) => { m.p.mioVi = 1.4; m.p.vi.ees = 1.0; m.p.vi.v0 = 60; m.s.vven += 700; },
   },
   tep: {
-    // Nombre como el libro: con disfunción del VD y sin inestabilidad (PAM ~85) es la EP de riesgo intermedio
+    // Nombre como el libro: con disfunción del VD y sin inestabilidad (PAM ~67) es la EP de riesgo intermedio
     // («submasiva»); «masiva» es la de alto riesgo, con inestabilidad hemodinámica (Marino, cap. 22, p. 7,
     // docs/marino-2024-respiratory-management-caps22-26.pdf#page=7). Antes se llamaba «TEP masivo». La gravedad a fondo
-    // sí la tiene (PAM <65): la de alto riesgo
+    // sí la tiene (PAM <65): la de alto riesgo. (Con la RVS calibrada, el de siempre da una PAM de ~67)
     nombre: 'TEP de riesgo intermedio (VD)', forma: true,
     // el émbolo sube la resistencia pulmonar (poscarga del VD) y el VD falla: se dilata, se vacía mal y empuja el
     // tabique hacia el VI (Fisiopatología UCI · Cardiología, Fichas 8 y 9; Merino, IC derecha)
-    // gravedad: resistencia pulmonar ×16^g (escala logarítmica) y contractilidad del VD que cae a la par; el defecto
-    // (0,75) es el de siempre: ×8 y ×0,65
+    // gravedad: resistencia pulmonar ×9,3^g (escala logarítmica) y contractilidad del VD que cae a la par; el defecto
+    // (~0,93) es el de siempre: ×8 y ×0,65
     gravedad: { defecto: TEP_DEFECTO, texto: (g) => `resistencia pulmonar ×${coma(TEP_RPUL_MAX ** g, 1)}` },
     aplicar: (m, g = TEP_DEFECTO) => { m.p.rPul *= TEP_RPUL_MAX ** g; m.p.vd.ees *= 1 - TEP_EES_VD_DEFECTO / TEP_DEFECTO * g; },
   },
