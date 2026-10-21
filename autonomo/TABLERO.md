@@ -318,7 +318,7 @@ río y mar) → 39-44 → 45-53.
 | 2 | `b1-maquetas` | Bloque 1: maquetas (capilar, catéter y «La cama 7»: muralla, telar, inmersión) | hecha (2026-10-20) · capilar y catéter, construidos; «La cama 7» aprobada y construida en la app (PR en borrador); https://claude.ai/artifact/Q4Fii5DVMgqGhQf7429ouv | Aprobadas por el usuario el 19/10, tras el mapa de cobertura |
 | 3 | `b1-modelos` | Bloque 1: construir en la app los modelos elegidos | hecha (2026-10-20) · capilar y catéter (PR #20) y motor del corazón (PR #21), en main | La cama 7 (muralla, telar e inmersión), en PR en borrador (20/10) |
 | 4 | `b1-estudio` | Bloque 1: Texto \| Visual \| Mayéutica en las 23 fichas, ruta y «Para profundizar» | hecha (2026-10-20) · 23 fichas, auditadas (PR #19), en main | Sustituye a B-001 (preguntas) para este bloque |
-| 5 | `b2` | Bloque 2 (caps. 12-13, 6 fichas de Merino HEMATO): cobertura, maquetas, modelos y estudio | en curso (2026-10-20) · cobertura hecha (≈92 %), maquetas en la parada 1 | Paquete: `autonomo/bloques/b2/encargo.md`. Una sola rama `auto/b2` y 4-5 paradas (REGLAS §2.3) |
+| 5 | `b2` | Bloque 2 (caps. 12-13, 6 fichas de Merino HEMATO): cobertura, maquetas, modelos y estudio | en revisión (2026-10-21) · PR #26, parada 3 (el bloque entero) | Paquete: `autonomo/bloques/b2/encargo.md`. Una sola rama `auto/b2` y 4-5 paradas (REGLAS §2.3) |
 | 6 | `motor-mayeutica` | Un solo motor de Mayéutica para fichas y modelos vivos (lección del bloque 1) | hecha (2026-10-20) · `core/mayeutica-motor.js`, en main | Tarea técnica: va directo a main con los jueces en verde |
 
 ## Lo que aún no está aprobado
