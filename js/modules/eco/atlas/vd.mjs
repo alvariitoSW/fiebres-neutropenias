@@ -36,21 +36,27 @@ export const NOMBRE_CARGA = { presion: 'Presión (HP crónica)', volumen: 'Volum
  * Parámetros del motor en el punto s (0-1) de cada sobrecarga. motor: opciones de crearMotor (estados crónicos, que el
  * corazón ya tiene al empezar); agudo: lo que cambia de golpe sobre un corazón normal ya asentado (el TEP). Ilustrativos,
  * elegidos para que cada sobrecarga recorra lo que describe el texto.
+ * (21/10/2026, segunda vuelta del motor para el shock: el motor ya endurece la arteria pulmonar al subir su presión y el VD
+ * pierde contractilidad cuando su presión se acerca a la de la aorta (isquemia del VD, que la pared gruesa frena); y la PA
+ * del normal bajó a ~87 de media con la RVS calibrada. Para no contarlo dos veces: presión, distensibilidad ÷ k^0,5 (antes
+ * k^0,9) y rigidez diastólica del VD × (1 + 0,2x) (antes 1 + x: con la presión del VI más baja, el tabique se aplanaba en
+ * diástole ya al 30 %); TEP, resistencia × (1 + 7x) (antes 12x), distensibilidad ÷ (1 + 3x) (antes 6x) y contractilidad ×
+ * (1 − 0,4x) (antes 0,6x): a fondo, PAM ~56, IC ~1,2 y pulmonar ~40/23, como antes)
  */
 export function ajustesVd(carga, s) {
   const x = c01(s), B = BASE;
   if (carga === 'presion') {
     const k = 1 + 11 * x;                                           // resistencia pulmonar ×1 a ×12
     const ees = x < 0.6 ? 1 + 2.4 * x / 0.6 : 3.4 - 1.9 * (x - 0.6) / 0.4;   // se adapta y después falla
-    return { motor: { rPul: B.rPul * k, cAp: B.cAp / k ** 0.9, durVd: 1 + 0.25 * x, mioVd: 1 + 1.4 * Math.min(1, x / 0.7),
+    return { motor: { rPul: B.rPul * k, cAp: B.cAp / k ** 0.5, durVd: 1 + 0.25 * x, mioVd: 1 + 1.4 * Math.min(1, x / 0.7),
       vSangre: B.vSangre + 700 * c01((x - 0.6) / 0.4),
-      vd: { ees: B.vd.ees * ees, b: B.vd.b * (1 + x), v0: B.vd.v0 + 160 * c01((x - 0.5) / 0.5) ** 1.5 } } };
+      vd: { ees: B.vd.ees * ees, b: B.vd.b * (1 + 0.2 * x), v0: B.vd.v0 + 160 * c01((x - 0.5) / 0.5) ** 1.5 } } };
   }
   if (carga === 'volumen') {
     return { motor: { eroaTricus: 1.0 * x, vSangre: B.vSangre + 900 * x,
       vd: { v0: B.vd.v0 + 50 * x, b: B.vd.b * (1 + 0.7 * x) }, ad: { v0: B.ad.v0 + 10 * x } } };
   }
-  return { motor: {}, agudo: (m) => { m.p.rPul *= 1 + 12 * x; m.p.cAp /= 1 + 6 * x; m.p.vd.ees *= 1 - 0.6 * x; } };
+  return { motor: {}, agudo: (m) => { m.p.rPul *= 1 + 7 * x; m.p.cAp /= 1 + 3 * x; m.p.vd.ees *= 1 - 0.4 * x; } };
 }
 
 /** Motor asentado en el punto s de una sobrecarga (con el barorreflejo, como un paciente). */

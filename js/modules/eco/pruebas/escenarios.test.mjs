@@ -16,7 +16,7 @@ const SEGUNDOS_LARGO = 120;
 const POSIBLE = { pam: [40, 130], fc: [40, 170], ic: [1.2, 5], pvc: [0, 25], pcp: [2, 35], vs: [15, 110], svo2: [30, 85] };
 // Excepción, a la vista: la PCP de una hemorragia o un TEP graves baja de 2 mmHg. En los dos el VI se llena poco (Tabla
 // 14.1: PCP ↓ en el hipovolémico; en el TEP el VD dilatado no le pasa sangre) y, con un VS de ~20 mL, la curva diastólica
-// del VI (la misma que da la PCP normal de 8,5) lo llena a 1-2 mmHg. Subirla exigiría cambiar esa curva y todo lo calibrado
+// del VI (la misma que da la PCP normal, ~7,6) lo llena a 1-2 mmHg. Subirla exigiría cambiar esa curva y todo lo calibrado
 // con ella (onda E, TDE, PCP normal). Se exige ≥1
 const PCP_MIN = { hemorragia: 1, tep: 1 };
 const sv = (u) => ({ ...u, svo2: u.svo2 * 100 });
@@ -71,9 +71,10 @@ for (const k of CON_GRAVEDAD) {
     assert.ok(Math.abs(u.ic / normal.ic - 1) <= 0.03, `IC ${u.ic.toFixed(2)} · normal ${normal.ic.toFixed(2)}`);
   });
 
-  test(`«${esc.nombre}» al 50 %: entre el normal y el shock (PAM 80-99, IC 1,8-2,7) · ${resumen(en(0.5).u)}`, () => {
+  // (PAM: antes 80-99 con el normal en 100; con la RVS calibrada el normal es ~87, y el 80 % de la normal, ~70)
+  test(`«${esc.nombre}» al 50 %: entre el normal y el shock (PAM del 80 % de la normal hacia arriba, IC 1,8-2,7) · ${resumen(en(0.5).u)}`, () => {
     const u = en(0.5).u;
-    assert.ok(u.pam >= 80 && u.pam < normal.pam - 0.5, `PAM ${u.pam.toFixed(1)}`);
+    assert.ok(u.pam >= 0.8 * normal.pam && u.pam < normal.pam - 0.5, `PAM ${u.pam.toFixed(1)}`);
     assert.ok(u.ic >= 1.8 && u.ic <= 2.7, `IC ${u.ic.toFixed(2)}`);
   });
 
@@ -89,6 +90,22 @@ for (const k of CON_GRAVEDAD) {
       assert.equal(p.roto, null, `${Math.round(p.g * 100)} %: ${p.roto}`);
       posible(k, `${Math.round(p.g * 100)} % (${esc.gravedad.texto(p.g)})`, p.u);
     }
+  });
+
+  // Segunda vuelta (21/10/2026). Fallo del VI: la PVC no baja de la normal en ningún punto (Tabla 14.1: PVC alta en el
+  // cardiogénico; antes, el edema rápido la dejaba en 2,8 a fondo). TEP: la pulmonar media no pasa de 40 mmHg (un VD sin
+  // hipertrofia no la sostiene; fisiología general) y la pulmonar late (antes, 55/53 a fondo)
+  if (k === 'fallo') test(`«${esc.nombre}»: la PVC no baja de la normal en todo el recorrido (Tabla 14.1)`, () => {
+    for (const p of pts) assert.ok(p.u.pvc >= normal.pvc - 0.2, `${Math.round(p.g * 100)} %: PVC ${p.u.pvc.toFixed(2)} · normal ${normal.pvc.toFixed(2)}`);
+  });
+  if (k === 'tep') test(`«${esc.nombre}»: la pulmonar media no pasa de 40 mmHg y late (presión de pulso ≥6; antes, 2-4) en todo el recorrido`, () => {
+    for (const p of pts) assert.ok(p.u.papm <= 40 && p.u.paps - p.u.papd >= 6, `${Math.round(p.g * 100)} %: ${p.u.paps.toFixed(0)}/${p.u.papd.toFixed(0)} (media ${p.u.papm.toFixed(0)})`);
+  });
+  // a fondo, la vasoconstricción compensadora deja la RVS alta pero humana: IRVS (PAM − PVC) ÷ IC entre 30 y 45 unidades Wood
+  // (la normal, 25-30: Tabla 8.1). Antes, con la RVS basal sin calibrar y el techo del reflejo de +15 %, ~39
+  test(`«${esc.nombre}» al 100 %: IRVS alta y humana (30-45 unidades Wood)`, () => {
+    const u = en(1).u, irvs = (u.pam - u.pvc) / u.ic;
+    assert.ok(irvs >= 30 && irvs <= 45, `IRVS ${irvs.toFixed(1)}`);
   });
 
   test(`«${esc.nombre}»: sin saltos (la PAM baja siempre y nunca más de 15 mmHg cada 10 %)`, () => {
