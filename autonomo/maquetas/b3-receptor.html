@@ -1953,7 +1953,7 @@ function bombaHTML(k) {
       <div class="bomba-mando"><div class="bomba-cab"><b>${F.corto} · ${ST.f[k] ? coma(reg.fija, 2) + ' ' + F.unidad : 'apagada'}</b></div><div class="candado"><span>${reg.txt} ${org(reg.chip)}</span><button type="button" class="tog" data-fija="${k}" aria-pressed="${!!ST.f[k]}" style="margin-left:auto">${ST.f[k] ? 'Quitar' : 'Añadir'}</button></div></div></div>`;
   if (reg.fija !== undefined) return '';
   const d = ST.f[k] ?? 0, pct = v => ((v - reg.min) / (reg.max - reg.min) * 100).toFixed(1) + '%';
-  const uVista = reg.unidadVista || F.unidad, conv = conversor(k, d, reg, P), dec = reg.paso < 0.1 ? 3 : reg.paso < 1 ? 2 : 0;
+  const uVista = reg.unidadVista || F.unidad, conv = conversor(k, d, reg, P), dec = reg.paso < 0.05 ? 3 : reg.paso < 1 ? 2 : 0;
   const tramo = reg.tramos.find(([a, b]) => d >= a && d <= b) || reg.tramos[0];
   return `<div class="bomba" id="bomba-${k}">${bombaDib(F.corto, coma(d, dec), uVista, clamp((d - reg.min) / (reg.max - reg.min), 0, 1), false)}
       <div class="bomba-mando"><div class="bomba-cab"><b>${F.corto} · ${coma(d, dec)} ${uVista}</b><span>${conv}</span></div>
@@ -1993,7 +1993,7 @@ function refrescarBomba(k) {
   const b = $('bomba-' + k); if (!b) return;
   const E = ESTADO[ST.id], reg = FARMACOS[k].regimen[E.reg[k]], d = ST.f[k], F = FARMACOS[k], uVista = reg.unidadVista || F.unidad, P = PACIENTES[ST.pac];
   const tramo = reg.tramos.find(([a, bb]) => d >= a && d <= bb) || reg.tramos[0];
-  const txt = coma(d, reg.paso < 0.1 ? 3 : reg.paso < 1 ? 2 : 0);
+  const txt = coma(d, reg.paso < 0.05 ? 3 : reg.paso < 1 ? 2 : 0);
   b.querySelector('.bomba-cab').innerHTML = `<b>${F.corto} · ${txt} ${uVista}</b><span>${conversor(k, d, reg, P)}</span>`;
   b.querySelector('.bomba-tramo-txt').innerHTML = `${tramo[2] || '&nbsp;'} ${org(reg.chip)}`;
   b.querySelector('svg').outerHTML = bombaDib(F.corto, txt, uVista, clamp((d - reg.min) / (reg.max - reg.min), 0, 1), false);
