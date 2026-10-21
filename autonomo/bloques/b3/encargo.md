@@ -72,6 +72,12 @@ Objetivo M5 del tablero. Empieza el 21/10/2026, con los bloques 1 y 2 en main. A
   externa (Motion). La pieza de dibujo isométrico de los aparatos se escribe en `js/core/` (primero, en la maqueta).
 - **Bradicardias y bloqueos AV**: «buscar guía en la web» → una guía oficial verificada (REGLAS §1.9, CLAUDE §7.2),
   con su enlace literal de los resultados de búsqueda; su PDF a `docs/` si se puede descargar.
+  Localizada (21/10): **2021 ESC Guidelines on cardiac pacing and cardiac resynchronization therapy** (Eur Heart J
+  2021;42:3427-3520, doi 10.1093/eurheartj/ehab364), versión en español en Rev Esp Cardiol 2022;75:370-410
+  (enlace de los resultados: https://www.revespcardiol.org/en-2021-esc-guidelines-on-cardiac-articulo-S188558572200086X;
+  texto completo: https://academic.oup.com/eurheartj/article/42/35/3427/6358547). La red del entorno no deja
+  descargarla (403 en pmc.ncbi.nlm.nih.gov; revespcardiol.org no resuelve): pendiente de que el usuario la mande en PDF
+  o abra el acceso. Sin texto leído, no se escribe nada de bloqueos AV.
 - El director decide el resto: el soporte vive dentro de la circulación viva (`data-eco-soporte`); la maqueta v2 trae
   los tres aparatos; los objetivos de otras fuentes salen ya en el monitor, cada uno con su chip y su nota si
   discrepan; el corazón eléctrico es el corazón en corte con su anillo aislante y el nodo AV como torniquete.
