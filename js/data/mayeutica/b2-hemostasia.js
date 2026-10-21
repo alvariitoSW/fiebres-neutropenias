@@ -179,7 +179,7 @@ export const MAYEUTICA_HEMOSTASIA = {
                 'Empezar un <span class="hl">anticoagulante no heparínico</span>.',
                 'Pedir el <span class="hl">ELISA</span>.'],
               explicacion: 'La HIT no depende de la dosis: aparece incluso con lavados de catéter o catéteres recubiertos de heparina.' } },
-          { momento: 'Día 7 · el fármaco', datos: { ClCr: '28 ml/min', 'Función hepática': 'normal' }, nuevo: ['ClCr', 'Función hepática'],
+          { momento: 'Día 7 · el fármaco', datos: { Heparina: 'retirada el día 7', Anticoagulante: 'argatrobán', ClCr: '28 ml/min', 'Función hepática': 'normal' }, nuevo: ['Heparina', 'Anticoagulante', 'ClCr', 'Función hepática'],
             pregunta: { id: 'h3-4', tipo: 'test', fuente: 'mh-argatroban · mh-hit-alternativas', origen: 'ficha · la cuenta, del caso',
               enunciado: 'Eliges argatrobán. ¿A qué ritmo empiezas en Gonzalo (82 kg)?',
               opciones: [
@@ -187,7 +187,7 @@ export const MAYEUTICA_HEMOSTASIA = {
                 { t: '1-2 µg/kg/min (82-164 µg/min), aPTT 1,5-3 veces lo normal', ok: true },
                 { t: 'Mejor fondaparinux: es el único fármaco aprobado para la HIT', porque: 'El único aprobado en EE. UU. es el argatrobán; el fondaparinux es una opción razonable en el paciente estable según las guías ASH, y esta ficha no da su dosis.' }],
               explicacion: '82 kg × 1-2 µg/kg/min = <span class="hl">82-164 µg/min</span>, ajustando a un aPTT de 1,5-3 veces lo normal. <span class="hl-verde">Sin ajuste renal</span>; 0,5 solo con insuficiencia hepática.' } },
-          { momento: 'Día 7 · la nota del R1', datos: { Plan: 'escrito por el R1 de noche' }, nuevo: ['Plan'],
+          { momento: 'Día 7 · la nota del R1', datos: {}, nuevo: [],
             pregunta: { id: 'h3-5', tipo: 'error', fuente: 'mh-hit · mh-hit-warfarina · mh-hit-manejo', origen: 'deducción de la ficha · la HIT puede salir con los lavados de catéter (p. 23); retirarlos es la consecuencia',
               enunciado: 'La nota del R1 de noche. Encuentra los errores (0, 1 o 2).',
               frases: [
@@ -207,7 +207,7 @@ export const MAYEUTICA_HEMOSTASIA = {
                 { t: 'No descarta: pedir la SRA y seguir', porque: 'El ELISA es muy sensible: un negativo descarta. La SRA se usa para confirmar un positivo.' },
                 { t: 'Seguir con argatrobán y luego 3 meses de ACOD, por si acaso', porque: 'Con un ELISA negativo no hay HIT que tratar: el libro dice suspender el no heparínico y que se puede volver a la heparina.' }],
               explicacion: 'Riesgo intermedio con <span class="hl">ELISA negativo</span>: se suspende el anticoagulante no heparínico y <span class="hl-verde">se puede reiniciar la heparina</span>. El giro: no era una HIT.' } },
-          { momento: 'Día 9', datos: { Plaquetas: '70.000/µl', Hoja: 'vancomicina, furosemida, amiodarona, paracetamol' }, nuevo: ['Plaquetas', 'Hoja'],
+          { momento: 'Día 9', datos: { Anticoagulante: 'argatrobán suspendido el día 8 (ELISA negativo)', Plaquetas: '70.000/µl', Hoja: 'vancomicina, furosemida, amiodarona, paracetamol' }, nuevo: ['Anticoagulante', 'Plaquetas', 'Hoja'],
             pregunta: { id: 'h3-7', tipo: 'test', fuente: 'mh-trombo-farmacos · mh-tabla-13-1',
               enunciado: 'Sin HIT, las plaquetas siguen bajas. ¿Qué fármaco de su hoja destaca el texto por dar trombocitopenia por anticuerpos?',
               opciones: [
@@ -220,7 +220,7 @@ export const MAYEUTICA_HEMOSTASIA = {
           'La 4Ts antes que el ELISA: con riesgo intermedio, retirar toda la heparina, anticoagulante no heparínico y ELISA.',
           'El ELISA negativo descarta la HIT: se suspende el no heparínico y puede volver la heparina.',
           'La HIT no depende de la dosis (cuentan los lavados) y la warfarina está contraindicada en la fase aguda.'],
-        volver: { nombre: 'Manejo según el riesgo', ancla: 'mh-hit-manejo', modelo: visual('merino-trombocitopenia', '👁️ La 4Ts y el manejo (vista Visual)'), modeloVivo: [{ telarVivo: 'tih' }, { vasoVivo: 'hit-argatroban', texto: '🩹 El argatrobán en la cascada, en el vaso que sangra' }] } },
+        volver: { nombre: 'Manejo según el riesgo', ancla: 'mh-hit-manejo', modelo: visual('merino-trombocitopenia', '👁️ La 4Ts y el manejo (vista Visual)'), modeloVivo: [{ telarVivo: 'tih', texto: '🧵 Repasa la HIT en el telar vivo' }, { vasoVivo: 'hit-argatroban', texto: '🩹 El argatrobán en la cascada, en el vaso que sangra' }] } },
     ],
     profundizar: [
       { id: 'mh-tabla-13-1', titulo: 'Tabla 13.1: el resto de causas de trombocitopenia en el crítico' },

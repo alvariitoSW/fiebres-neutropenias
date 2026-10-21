@@ -123,6 +123,9 @@ function pared(G, abajo, pre) {
 }
 
 /* ---------- El tapón (se repinta mientras se forma) ---------- */
+// Dónde quedan, en la lupa de la herida, las moléculas que llevan rótulo (el hilo de FvW de la izquierda, un
+// fibrinógeno de la fila de abajo y la GPIIb/IIIa de la plaqueta que lo agarra, un Ca²⁺): sus rótulos van pegados.
+let anclaH = {};
 function tapon(G, p, pre) {
     if (estado.lesion === 'ninguna') return '';
     const s = G.s, grande = estado.lesion === 'grande', slots = slotsDe(G, grande), [ga, gb] = huecoDe(G), cx = (ga + gb) / 2;
@@ -140,20 +143,28 @@ function tapon(G, p, pre) {
             const P0 = pos(q), y0 = G.endo[1] + 1, c1 = [x0 + (j ? -2 : 2) * s, y0 + 9 * s], c2 = [P0.x + (j ? 9 : -9) * s, P0.y + 7 * s];
             let g = `<path d="M${n2(x0)} ${n2(y0)}C${n2(c1[0])} ${n2(c1[1])} ${n2(c2[0])} ${n2(c2[1])} ${n2(P0.x)} ${n2(P0.y)}" style="fill:none;stroke:var(--accent-blue)" stroke-width="${n2(1.1 * s)}" stroke-linecap="round"/>`;
             for (let k = 1; k < 5; k++) { const u = k / 5, X = (1 - u) ** 3 * x0 + 3 * (1 - u) ** 2 * u * c1[0] + 3 * (1 - u) * u * u * c2[0] + u ** 3 * P0.x, Y = (1 - u) ** 3 * y0 + 3 * (1 - u) ** 2 * u * c1[1] + 3 * (1 - u) * u * u * c2[1] + u ** 3 * P0.y; g += `<circle cx="${n2(X)}" cy="${n2(Y)}" r="${n2(0.95 * s)}" style="fill:var(--accent-blue);stroke:var(--bg-main)" stroke-width="${n2(0.3 * s)}"/>`; }
+            if (pre === 'h' && !j) anclaH.fvw = [n2(0.125 * x0 + 0.375 * c1[0] + 0.375 * c2[0] + 0.125 * P0.x), n2(0.125 * y0 + 0.375 * c1[1] + 0.375 * c2[1] + 0.125 * P0.y)];
             return g;
         });
-        h.push(`<g${pre === 'h' ? ' id="vso-h-fvw"' : ''} opacity="${op}">${hilos.join('')}</g>`);
+        // el resalte de la explicación guiada va solo sobre un hilo (el de la izquierda, el que lleva el rótulo)
+        h.push(`<g opacity="${op}"><g${pre === 'h' ? ' id="vso-h-fvw"' : ''}>${hilos[0]}</g>${hilos[1]}</g>`);
     }
     const plaq = vis.map(q => { const P0 = pos(q), L = llega(q); return P(t >= 2 ? 'plaquetaActiva' : 'plaqueta', P0.x + L.dx, P0.y + L.dy, G.rPlug * (t >= 2 ? 0.86 : 1), { opacidad: L.op }); });
     // Fibrinógeno: lo agarran las GPIIb/IIIa (tiempo 2-3); en el 3 se teje la fibrina encima
-    const fib = [];
+    const fib = [], fibPts = [];
     if (t >= 2 && vis.length > 2) {
         const op = n2(t === 2 && anim ? p : t >= 3 ? 0.55 : 1);
-        vis.forEach((q, i) => { const v = vis[i + 1]; if (!v || v.k !== q.k || i % 2) return; const A = pos(q), B = pos(v); fib.push(P('fibrinogeno', (A.x + B.x) / 2, (A.y + B.y) / 2 + 0.4 * s, G.rPlug * 0.42, { opacidad: op, giro: Math.atan2(B.y - A.y, B.x - A.x) * 180 / Math.PI })); });
+        vis.forEach((q, i) => { const v = vis[i + 1]; if (!v || v.k !== q.k || i % 2) return; const A = pos(q), B = pos(v), F = [(A.x + B.x) / 2, (A.y + B.y) / 2 + 0.4 * s]; fibPts.push({ F, B }); fib.push(P('fibrinogeno', F[0], F[1], G.rPlug * 0.42, { opacidad: op, giro: Math.atan2(B.y - A.y, B.x - A.x) * 180 / Math.PI })); });
+    }
+    if (pre === 'h') {
+        // el fibrinógeno más bajo (y, si empatan, el de la izquierda) y la GPIIb/IIIa del borde de la plaqueta que lo agarra
+        const f = fibPts.sort((a, b) => b.F[1] - a.F[1] || a.F[0] - b.F[0])[0];
+        anclaH.fib = f ? f.F.map(n2) : null;
+        anclaH.gp = f ? [n2(f.B.x - G.rPlug * 0.6), n2(f.B.y + G.rPlug * 0.5)] : null;
     }
     // Ca²⁺: lo sueltan las plaquetas (tiempo 2)
     const ca = [];
-    if (t === 2) { const u = anim ? p : 1; vis.filter(q => q.k === 2 || q.k === 3).slice(0, 5).forEach((q, i) => { const P0 = pos(q), a = i * 1.3 + 0.6; ca.push(P('ca', P0.x + Math.cos(a) * (3 + 9 * u) * s, P0.y + (4 + 8 * u) * s, 1.25 * s, { opacidad: n2(u) })); }); }
+    if (t === 2) { const u = anim ? p : 1; vis.filter(q => q.k === 2 || q.k === 3).slice(0, 5).forEach((q, i) => { const P0 = pos(q), a = i * 1.3 + 0.6, X = P0.x + Math.cos(a) * (3 + 9 * u) * s, Y = P0.y + (4 + 8 * u) * s; if (pre === 'h' && !i) anclaH.ca = [n2(X), n2(Y)]; ca.push(P('ca', X, Y, 1.25 * s, { opacidad: n2(u) })); }); }
     // Fibrina: la red que teje la trombina (tiempos 3 y 4), con dos hematíes presos
     const red = [];
     if (t >= 3 && vis.length > 3) {
@@ -362,13 +373,23 @@ function lupaHerida() {
     h += '</g>';
     return h;
 }
+// Tiempo 2: cada rótulo pegado a su molécula, con un trazo corto que la toca (las anclas las deja tapon()).
+function rotulosAncla(a) {
+    const out = [], { fvw, fib, gp, ca } = anclaH;
+    const raya = (x0, y0, x1, y1, c) => `<path d="M${n2(x0)} ${n2(y0)}L${n2(x1)} ${n2(y1)}" style="stroke:var(--${c})" stroke-width=".9" stroke-linecap="round"/>`;
+    if (fvw) { const [x, y] = a(...fvw); out.push(raya(x - 2, y + 2, x - 8, y + 14, 'accent-blue'), tx(x - 6, y + 23, 'FvW', { s: 9, c: 'accent-blue', a: 'end', it: false, b: true })); }
+    if (ca) { const [x, y] = a(...ca); out.push(raya(x - 3, y, x - 19, y, 'text-main'), tx(x - 21, y + 4, 'Ca²⁺', { s: 8.6, c: 'text-main', a: 'end', it: false, b: true })); }
+    if (fib) { const [x, y] = a(...fib); out.push(raya(x - 2, y + 3, x - 13, y + 24, 'accent-yellow'), tx(x - 12, y + 33, 'fibrinógeno', { s: 8.6, c: 'accent-yellow', a: 'end' })); }
+    if (gp) { const [x, y] = a(...gp); out.push(raya(x + 1, y + 2, x + 16, y + 21, 'accent-yellow'), tx(x + 15, y + 30, 'GPIIb/IIIa', { s: 8.6, c: 'accent-yellow', it: false, b: true })); }
+    return out;
+}
 function rotulosHerida() {
     const a = (x, y) => [x + LG.dx, y + LG.dy];
     const R = (x, y, t, o) => { const [X, Y] = a(x, y); return tx(X, Y, t, o); };
     const h = [R(96, 40, 'colágeno', { s: 9, c: 'accent-red', b: true }), R(58, 72, 'endotelio', { s: 8.6, c: 'text-dim' }), R(48, 100, 'glucocálix', { s: 8.6, c: 'accent-blue' })];
     if (estado.causa === 'ninguna' && !D.masiva && estado.plaq >= 100000) {
         if (estado.t === 1) h.push(R(168, 116, 'se pegan al colágeno', { s: 8.8, c: 'text-main', a: 'middle' }));
-        if (estado.t === 2) h.push(R(70, 124, 'FvW', { s: 9, c: 'accent-blue', it: false, b: true }), R(236, 124, 'GPIIb/IIIa', { s: 8.6, c: 'accent-yellow', it: false, b: true }), R(168, 152, 'fibrinógeno', { s: 8.6, c: 'accent-yellow', a: 'middle' }), R(120, 152, 'Ca²⁺', { s: 8.6, c: 'text-main', a: 'end', it: false, b: true }));
+        if (estado.t === 2) h.push(...rotulosAncla(a));
         if (estado.t === 3) h.push(R(168, 148, 'fibrina', { s: 9, c: 'accent-yellow', a: 'middle', b: true }));
         if (estado.t === 4) h.push(R(168, 130, 'se contrae', { s: 9, c: 'text-main', a: 'middle' }), R(168, 236, 'el flujo vuelve →', { s: 9, c: 'accent-green', a: 'middle', b: true }));
     } else if (D.sangra) h.push(R(168, 124, estado.plaq < 100000 ? 'pocas plaquetas: no cierra' : 'no cierra', { s: 8.8, c: 'accent-red', a: 'middle', b: true }));
@@ -376,7 +397,8 @@ function rotulosHerida() {
     h.push(R(168, 260, `tiempo ${estado.t} de 4 · ${['se pegan', 'se anclan', 'fibrina', 'se contrae'][estado.t - 1]}`, { s: 8.4, c: 'accent-yellow', a: 'middle', it: false, b: true }));
     return h.join('');
 }
-// La cascada: los dos ríos llegan a la máquina del telar (el Xa, la protrombina y la trombina que teje la fibrina);
+// La cascada: los dos ríos llevan a activar la protrombina (p. 21); la máquina es la del telar (cap. 5: el Xa convierte la
+// protrombina en trombina, que teje la fibrina);
 // abajo, la despensa de los factores que dependen de la vitamina K (II, VII, IX y X)
 function lupaCascada() {
     const warf = estado.rep === 'warf-pfc', ccp = estado.rep === 'ccp4f', arg = estado.causa === 'hit' && estado.hep === 'argatroban';
@@ -471,7 +493,7 @@ function pie() {
         return h.join('');
     }
     if (D.pie === 'recambio') {
-        h.push(`<g id="vso-r-separador"><rect x="146" y="34" width="68" height="44" rx="10" style="fill:var(--bg-card);stroke:var(--accent-yellow)" stroke-width="1.2"/>${tx(180, 52, 'separador', { s: 8, c: 'accent-yellow', a: 'middle', it: false, b: true })}${tx(180, 66, '1,5 volúmenes', { s: 7.6, c: 'text-dim', a: 'middle', it: false })}</g>`);
+        h.push(`<g id="vso-r-separador"><rect x="146" y="34" width="68" height="44" rx="10" style="fill:var(--bg-card);stroke:var(--accent-yellow)" stroke-width="1.2"/>${tx(180, 52, 'separador', { s: 8, c: 'accent-yellow', a: 'middle', it: false, b: true })}${tx(180, 66, '~1,5 × el plasma', { s: 7.6, c: 'text-dim', a: 'middle', it: false })}</g>`);
         h.push(`<circle cx="42" cy="56" r="20" style="fill:url(#vso-p-sangre);stroke:var(--accent-red)" stroke-width="1.2"/>${tx(42, 90, 'la paciente', { s: 7.8, c: 'text-dim', a: 'middle', it: false })}`);
         h.push(`<path d="M64 46H140" class="vso-rio" stroke-dasharray="5 3" style="fill:none;stroke:var(--accent-red)" stroke-width="3" stroke-opacity=".7"/>${tx(102, 40, 'su sangre', { s: 7.8, c: 'accent-red', a: 'middle', it: false })}`);
         h.push(`<path d="M140 68H64" class="vso-rio" stroke-dasharray="5 3" style="fill:none;stroke:var(--accent-red)" stroke-width="3" stroke-opacity=".7"/>${tx(102, 82, 'sus hematíes', { s: 7.8, c: 'accent-red', a: 'middle', it: false })}`);
@@ -504,6 +526,7 @@ function extraArteriola() {
     return h.join('');
 }
 function rotulosArteriola(L) {
+    if (estudio && L && LUPAS_GRANDES.has(L)) return '';   // recortada a la lupa: sus propios rótulos bastan (los de fuera quedarían partidos)
     const h = [tx(4, 25, 'colágeno', { s: 8.2, c: 'accent-red' }), tx(4, 47, 'endotelio', { s: 8, c: 'text-dim' }), tx(4, 63, 'glucocálix', { s: 8, c: 'accent-blue' })];
     if (estado.lesion === 'ninguna' && !L) h.push(tx(180, 11, 'toca la pared para abrir una herida', { s: 7.8, c: 'text-muted', a: 'middle' }));
     if (L && L !== 'herida' && L !== 'cascada') return h.join('');
@@ -520,7 +543,20 @@ function rotulosArteriola(L) {
 /* ============================================================
    Construir la lámina (en cada cambio de estado o de lupa)
    ============================================================ */
-export const lupaActual = () => (lupaSel === false ? null : lupaSel || D.lupaAuto);
+// En la Mayéutica, las microangiopatías se miran en la red (sus órganos): la lupa pequeña que se abriría sola no se abre.
+export const lupaActual = () => (lupaSel === false ? null : lupaSel || (estudio && D.mat ? null : D.lupaAuto));
+/* En la Mayéutica (y los casos) la lámina se recorta al trozo que pide la pregunta, a escala 1 (los rótulos no
+   encogen), para que el dibujo, el enunciado y las opciones quepan a la vez en el móvil (zona fija ≤ 340 px a 390):
+   la lupa grande (la herida o la cascada), la red (las microangiopatías, los órganos y lo que se repone, que va en su
+   sitio) o la arteriola (con su lupa pequeña). En Explorar, entera. */
+let estudio = false;
+export function ponerEstudio(v) { estudio = !!v; construir(); pintarTablero(); if (REDUCIR) pintarUnaVez(); }
+function recorte(L) {
+    if (!estudio) return '0 0 360 360';
+    if (L && LUPAS_GRANDES.has(L)) return '0 60 360 272';
+    if (!L && (D.mat || D.pie || Object.values(D.organos).some(Boolean))) return '0 152 360 188';
+    return L ? '0 0 360 174' : '0 0 360 156';
+}
 function construir() {
     const svg = $('lamina'), G = GEO.A, L = lupaActual();
     let h = DEFS + '<rect width="360" height="360" style="fill:var(--bg-main)"/>';
@@ -551,6 +587,7 @@ function construir() {
         h += `<circle cx="${LP.cx}" cy="${LP.cy}" r="77" style="fill:none;stroke:var(--accent-yellow)" stroke-width=".6" stroke-opacity=".7"/>${tx(LP.cx, 9, 'lupa: ' + LUPA_NOMBRE[L], { s: 8.2, c: 'accent-yellow', a: 'middle', it: false, b: true })}</g>`;
     }
     svg.innerHTML = h;
+    svg.setAttribute('viewBox', recorte(L));
     document.querySelectorAll('[data-vso-lupa]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.vsoLupa === L)));
     if (L !== lupaPrevia) { tLupa = performance.now(); lupaPrevia = L; }
     crearPools(L);
@@ -718,12 +755,28 @@ export function pintarTablero() {
         const o = el.querySelector('.vso-o'); o.textContent = tap ? '' : x.o; o.hidden = tap || !x.o; o.classList.toggle('vso-ilu', !!x.ilu);
         el.className = `vso-celda${tap ? '' : x.cls ? ' vso-' + x.cls : ''}${el.classList.contains('vso-mira') ? ' vso-mira' : ''}`;
     }
+    filtrarCeldas();
+}
+// En la Mayéutica, el tablero va en una fila: las 4 casillas de la pregunta (las tapadas y la que se mira, primero) y,
+// después, las que cuentan en ese estado.
+function filtrarCeldas() {
+    const e = estado;
+    const base = e.causa === 'hit' ? ['plaq', 'aptt', 'tapon', 'amenaza']
+        : D.mat ? ['inr', 'aptt', 'fib', 'dd']
+        : ['pfc', 'warf-pfc', 'ccp4f'].includes(e.rep) ? ['inr', 'fib', 'aptt', 'plaq']
+        : D.masiva ? ['plaq', 'tapon', 'fib', 'amenaza']
+        : e.causa === 'edta' ? ['plaq', 'tapon', 'esq', 'amenaza']
+        : ['plaq', 'tapon', 'inr', 'amenaza'];
+    const pedidas = [...ocultos, celdaMirada && celdaMirada.id.replace('vso-c-', '')].filter(k => CELDAS.includes(k));
+    const ver = new Set([...new Set([...pedidas, ...base])].slice(0, 4));
+    for (const k of CELDAS) $('c-' + k).hidden = estudio && !ver.has(k);
 }
 let celdaMirada = null;
 export function mirar(k) {
     if (celdaMirada) celdaMirada.classList.remove('vso-mira');
     celdaMirada = k && $('c-' + k) ? $('c-' + k) : null;
     if (celdaMirada) celdaMirada.classList.add('vso-mira');
+    filtrarCeldas();
 }
 
 /* ============================================================

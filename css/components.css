@@ -2528,8 +2528,8 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 .nota-plegable { margin: 4px 0 10px; border-left: 2px dashed var(--border-color); padding-left: 8px; }
 .nota-plegable > summary { cursor: pointer; font-size: 0.72rem; color: var(--text-muted); list-style: none; padding: 4px 0; touch-action: manipulation; }
 .nota-plegable > summary::-webkit-details-marker { display: none; }
-.nota-plegable > summary::after { content: ' +'; }
-.nota-plegable[open] > summary::after { content: ' −'; }
+.nota-plegable > summary::after { content: '+'; margin-left: .35em; }   /* margen y no espacio: en flex el espacio se pierde */
+.nota-plegable[open] > summary::after { content: '−'; }
 .nota-plegable > .fuente-ficha { margin-top: 2px; }
 /* Rótulo de capítulo entre las filas de un cuaderno de campo (cualquier modo). */
 .corkboard-grupo { font-family: 'Courier New', monospace; font-size: 0.66rem; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin: 14px 2px 4px; padding-bottom: 3px; border-bottom: 1px solid var(--border-color); }
@@ -3533,12 +3533,14 @@ body.study-mode-on .vso-dock { padding-right: 82px; }
 .vso-raiz .vso-tipo-nota { display: block; font: 700 .62rem/1.3 var(--vso-sans); letter-spacing: .06em; text-transform: uppercase; color: var(--accent-purple); }
 .vso-raiz #vso-dock-guia { max-height: 48vh; overflow-y: auto; overscroll-behavior: contain; }
 
-/* Lo propio del vaso: la lámina entera (sin recortar: la red y la herida importan las dos), el tablero de 8 casillas,
-   las rejillas del dock y la tira de las láminas del libro */
+/* Lo propio del vaso: la lámina entera en Explorar (la red y la herida importan las dos), el tablero de 8 casillas,
+   las rejillas del dock y la tira de las láminas del libro. En la Mayéutica, la lámina se recorta al trozo que pide la
+   pregunta (vaso-vivo-escena.js, recorte()) y el tablero va en una fila de 4: la zona fija no pasa de 340 px a 390. */
 .vso-raiz #vso-lamina { display: block; width: 100%; height: auto; touch-action: manipulation; }
-/* En la Mayéutica la lámina se queda arriba (entera: no se recorta) solo si la pantalla es alta */
+/* En la Mayéutica la lámina (recortada) se queda arriba solo si la pantalla es alta */
 .vso-raiz.vso-estudio .vso-escena-bloque { position: static; }
 @media (min-height: 700px) { .vso-raiz.vso-estudio .vso-escena-bloque { position: sticky; } }
+.vso-raiz.vso-estudio .vso-chapa { display: none; }   /* recortada, pisaría un rótulo (como en el capilar) */
 .vso-raiz .vso-interruptor { grid-template-columns: repeat(2, 1fr); }
 .vso-raiz .vso-lupa-cerrar { position: absolute; top: 6px; left: 6px; min-height: 44px; padding: 0 12px; border-radius: 999px; background: rgba(23, 20, 15, .9); border: 1px solid var(--accent-yellow);
   color: var(--accent-yellow); font: 600 .8rem/1 var(--vso-sans); cursor: pointer; z-index: 4; }

@@ -19,7 +19,7 @@ import { enlacesFuente, origenEnlazado, enlazarOrigenes as enlazarCitas, citaExa
 import { crearExplicacion } from '../../core/explicacion-guiada.js';
 import { iconoParticula } from '../../core/particulas.js';
 import { ESTADOS, GRUPOS_CHIPS, GUIAS, PREGUNTAS, CASOS, NOTAS, NOTA_TIPO, LAMINAS, PDF, PLAQ_CAUSA, estadoBase, estadoDe, derivar, fraseDe, copia, plaqDe, vDe, mil, MAT, claveDe, pruebasVaso } from '../../data/vaso-vivo-data.js';
-import { $, estado, REDUCIR, ocultos, initEscena, aplicarModelo, ponerLupa, setOcultos, mirar, arrancar, pintarUnaVez, ponerVisible, estadoBucle, vaciarFotogramas, lupaActual, fijar, LUPAS_GRANDES } from './vaso-vivo-escena.js';
+import { $, estado, REDUCIR, ocultos, initEscena, aplicarModelo, ponerLupa, setOcultos, mirar, arrancar, pintarUnaVez, ponerVisible, estadoBucle, vaciarFotogramas, lupaActual, fijar, LUPAS_GRANDES, ponerEstudio } from './vaso-vivo-escena.js';
 
 let raiz = null;
 const enRaiz = sel => raiz.querySelectorAll(sel);
@@ -151,6 +151,16 @@ function engancharDock() {
         if (g && modo === 'explorar') explicar(g.dataset.vsoGuia);
     });
     $('guia-abrir').addEventListener('click', () => { if (claveActual) explicar(claveActual); });
+    // Tras «Ya lo tengo: ver opciones», el enunciado queda justo bajo el dibujo fijo y las opciones debajo
+    $('preg').addEventListener('click', ev => {
+        if (!ev.target.closest('[data-accion="ops"]')) return;
+        requestAnimationFrame(() => {
+            const en = $('preg').querySelector('.vso-pregunta');
+            if (!en) return;
+            const d = en.getBoundingClientRect().top - ($('escena-bloque').getBoundingClientRect().height + 8);
+            if (Math.abs(d) > 2) window.scrollBy({ top: d, behavior: 'auto' });
+        });
+    });
 }
 
 /* ============================================================
@@ -225,7 +235,7 @@ function setModo(m) {
     raiz.classList.toggle('vso-mayeutica', m === 'preguntas');   // la entradilla daría respuestas
     $('vista-explorar').hidden = m !== 'explorar'; $('vista-preguntas').hidden = m !== 'preguntas';
     $('dock-explorar').hidden = m !== 'explorar'; $('dock-estudio').hidden = m === 'explorar';
-    mirar(null); setOcultos([]);
+    mirar(null); ponerEstudio(m !== 'explorar'); setOcultos([]);
     if (m === 'preguntas') Mayeutica.entrar();
     if (m === 'explorar') { fraseActual = ''; decir(...fraseDe(estado)); }
     pintarLibro();

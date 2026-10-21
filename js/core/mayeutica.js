@@ -121,7 +121,8 @@ const preguntaFicha = tab => ({
 const CLAVES_MODELO = Object.keys(MODELOS);
 const claveDe = datos => CLAVES_MODELO.find(k => datos[k] !== undefined);
 const sinAdorno = t => limpio(t).replace(/\s*→\s*$/, '').replace(/^[^\p{L}\p{N}¿¡«(]+/u, '').trim();
-const mayuscula = t => t.replace(/\p{L}/u, c => c.toUpperCase());
+// Mayúscula solo si lo primero es una letra (tras «¿», «(»…): «5.000 plaquetas» se queda como está.
+const mayuscula = t => t.replace(/^([^\p{L}\p{N}]*)(\p{L})/u, (_, a, c) => a + c.toUpperCase());
 // Lista de { clave, datos (atributos del enlace cruzado), que: ['qué mirar'…], deFicha }, sin estados repetidos.
 function estadosParaJugar(tab, d) {
     const lista = [], vistos = new Map();

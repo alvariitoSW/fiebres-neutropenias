@@ -309,7 +309,8 @@ export const Lupa = {
         const dTam = Math.round(Math.min(svgR.width * 0.86, svgR.height * 0.97, 320));
         const x = Math.round((caja.width - dTam) / 2), y = Math.round((svgR.height - dTam) / 2);
         Object.assign(this.el.style, { width: dTam + 'px', height: dTam + 'px', left: x + 'px', top: y + 'px' });
-        Object.assign(this.btnX.style, { left: Math.min(caja.width - 46, x + dTam - 30) + 'px', top: Math.max(2, y - 4) + 'px' });
+        // La ✕, abajo a la derecha de la lupa: arriba pisaba el capnograma pequeño («boca · CO₂» y su cifra)
+        Object.assign(this.btnX.style, { left: Math.min(caja.width - 46, x + dTam - 30) + 'px', top: Math.max(2, y + dTam - 40) + 'px' });
     },
 };
 

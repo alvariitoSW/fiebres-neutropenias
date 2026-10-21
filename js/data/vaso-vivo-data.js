@@ -63,10 +63,13 @@ export const FIB_CASO = 120, FIB_CRIO = 50;
 
 export function derivar(e) {
     const d = { mat: MAT(e.causa) };
-    d.fill = e.causa === 'cid' || e.rep === 'masiva' || e.rep === 'crio' || e.rep === 'fibconc' ? 0.35 : llenadoDe(e.plaq);
+    // En la hemorragia masiva el tapón se queda corto (falta fibrinógeno); con el crio o el concentrado se rehace en lo
+    // que dejan las plaquetas. Cuánto: ilustrativo (la ficha da el umbral y lo que sube el crio, no el tapón).
+    d.fill = e.causa === 'cid' || e.rep === 'masiva' ? 0.35 : llenadoDe(e.plaq);
     const masiva = ['masiva', 'crio', 'fibconc'].includes(e.rep);
     d.sangra = 0;
-    if (e.lesion === 'grande' && (e.plaq < 100000 || masiva || e.causa === 'cid')) d.sangra = 2;
+    if (e.lesion === 'grande' && (e.plaq < 100000 || e.rep === 'masiva' || e.causa === 'cid')) d.sangra = 2;
+    else if (e.lesion === 'grande' && masiva) d.sangra = 1;   // repuesto el fibrinógeno, aún rezuma: sangrando hace falta más (p. 35)
     else if (e.lesion === 'herida' && (e.plaq < 100000 || e.causa === 'cid')) d.sangra = e.causa === 'cid' && e.vari === 'obstetrica' ? 2 : 1;
     d.cierra = e.lesion !== 'ninguna' && !d.sangra;
     // Los órganos de la red (0 apagado, 1 aviso, 2 encendido) y los microtrombos de sus capilares
@@ -79,7 +82,8 @@ export function derivar(e) {
         d.tipoNudo = 'fibrina';
     } else if (e.causa === 'ptt') {
         d.nudos = e.rep === 'recambio' ? { rinon: 1, cerebro: 1 } : { pulmon: 1, rinon: 1, cerebro: 3 };
-        d.organos = { pulmon: 0, rinon: 1, cerebro: 2, piel: 0 }; d.rotOrg.rinon = 'leve'; d.tipoNudo = 'fvw';
+        // la alteración mental es de su péntada, pero puede ser leve o faltar (p. 27): el cerebro, en aviso
+        d.organos = { pulmon: 0, rinon: 1, cerebro: 1, piel: 0 }; d.rotOrg.rinon = 'leve'; d.rotOrg.cerebro = 'leve o nada'; d.tipoNudo = 'fvw';
     } else if (e.causa === 'shu') {
         d.nudos = { rinon: 3 }; d.organos.rinon = 2; d.rotOrg.rinon = 'fracasa'; d.tipoNudo = 'fvw';
         if (e.vari === 'atipico') { d.organos.cerebro = 1; d.rotOrg.cerebro = '~20 %'; d.nudos.cerebro = 1; }
@@ -114,7 +118,7 @@ export function tableroDe(e) {
     if (mat) c.plaq = C('Plaquetas', '↓', 'bajas', 'ficha · p. 26', 'alarma');
     else if (e.causa === 'hit') c.plaq = C('Plaquetas', '−50 %', 'rara vez <20.000', 'ficha · p. 23', 'aviso');
     else if (e.causa === 'edta') c.plaq = C('Plaquetas', 'falsa ↓', 'en el tubo', 'ficha · p. 21', 'aviso');
-    else if (e.rep === 'plaquetas' && e.previas === 1) c.plaq = C('Plaquetas', `${mil((e.plaq + SUBE_HORA[0]) / 1000)}-${mil((e.plaq + SUBE_HORA[1]) / 1000)} mil`, `a la hora; 24 h: ${mil((e.plaq + SUBE_HORA[0] * (1 - MENOS_24H)) / 1000)}-${mil((e.plaq + SUBE_HORA[1] * (1 - MENOS_24H)) / 1000)} mil`, 'ficha · p. 30', 'bien');
+    else if (e.rep === 'plaquetas' && e.previas === 1) c.plaq = C('Plaquetas', `${mil((e.plaq + SUBE_HORA[0]) / 1000)}-${mil((e.plaq + SUBE_HORA[1]) / 1000)} mil`, `a la hora; 24 h: ${mil((e.plaq + SUBE_HORA[0] * (1 - MENOS_24H)) / 1000)}-${mil((e.plaq + SUBE_HORA[1] * (1 - MENOS_24H)) / 1000)} mil`, 'p. 30 · desde 20.000: ilustr.', 'bien', true);
     else if (e.rep === 'plaquetas') c.plaq = C('Plaquetas', e.previas === 5 ? '−25 %' : '−17 %', `aumento, ${e.previas}.ª transf.`, e.previas === 5 ? 'ficha · p. 30' : 'ficha · p. 31', 'aviso', e.previas !== 5);
     else {
         const corte = [100000, 10000, 5000].includes(e.plaq), normal = e.plaq >= 150000 && e.plaq <= 400000;
@@ -124,8 +128,9 @@ export function tableroDe(e) {
     // Tapón
     if (e.lesion === 'ninguna') c.tapon = C('Tapón', '—', 'sin herida', '');
     else if (e.causa === 'cid') c.tapon = C('Tapón', 'no cierra', 'consumo', 'ficha · p. 27', 'alarma');
-    else if (d.masiva) c.tapon = C('Tapón', 'no cierra', 'fibrinógeno agotado', 'ficha · p. 35', 'alarma');
+    else if (e.rep === 'masiva') c.tapon = C('Tapón', 'no cierra', 'falta fibrinógeno', 'ilustr.', 'alarma', true);
     else if (e.plaq < 100000) c.tapon = C('Tapón', 'no cierra', '<100.000', 'ficha · p. 21', 'alarma');
+    else if (d.masiva) c.tapon = C('Tapón', 'se rehace', 'aún rezuma', 'ilustr.', 'aviso', true);
     else c.tapon = C('Tapón', ['se pega', 'anclado', 'trombo', 'contraído'][e.t - 1], `tiempo ${e.t}`, 'ficha · p. 20-21', 'bien');
     // INR y aPTT
     if (e.causa === 'cid') { c.inr = C('INR', '↑', 'elevado', 'ficha · p. 26', 'alarma'); c.aptt = C('aPTT', '↑', 'alargado', 'ficha · p. 26', 'alarma'); }
@@ -197,11 +202,11 @@ export function fraseDe(e) {
     if (e.causa === 'ptt') return ['PTT: aparecen anticuerpos que <span class="hl-azul">inactivan la ADAMTS-13</span>, la proteasa que corta el FvW. Sin ella, las plaquetas se pegan sin control y la microcirculación se llena de trombos. INR, aPTT y fibrinógeno, normales; la creatinina suele estar por debajo de 2 mg/dL.', `${F5}#mh-ptt · p. 27-28`];
     if (e.causa === 'shu') {
         if (e.vari === 'atipico') return ['SHU atípico: hereditario, con el <span class="hl-azul">complemento activado sin control</span>. El eculizumab, una IgG que se une a C5, lo ha revertido; si no lo hay, recambio plasmático. En un 20 % hay clínica fuera del riñón, sobre todo neurológica.', `${F5}#mh-shu · p. 28-29`];
-        return ['SHU: trombocitopenia, fracaso renal agudo y anemia hemolítica microangiopática. Como en la PTT, no se gastan factores, pero <span class="hl-rojo">el riñón cae más</span>. Lo más frecuente es una infección (<i>E. coli</i> con toxina Shiga, neumococo, gripe): soporte y tratar la infección.', `${F5}#mh-shu · p. 28-29`];
+        return ['SHU: trombocitopenia, fracaso renal agudo y anemia hemolítica microangiopática. Como en la PTT, no se gastan factores, pero <span class="hl-rojo">el riñón cae más</span>. Lo más frecuente es, probablemente, una infección (<i>E. coli</i> con toxina Shiga, neumococo, gripe): soporte y tratar la infección.', `${F5}#mh-shu · p. 28-29`];
     }
     if (e.causa === 'mat') return ['Esquistocitos: hematíes que se rompen al pasar por una microcirculación llena de coágulos. Confirman una <span class="hl-azul">anemia hemolítica microangiopática</span>; con plaquetas bajas, es una microangiopatía trombótica. Falta saber cuál.', `${F5}#mh-mat · p. 25-26`];
     if (e.lesion === 'grande') return d.sangra
-        ? ['Una lesión propensa a sangrar y pocas plaquetas: <span class="hl-rojo">ahora sí sangra</span>. El riesgo de hemorragia mayor no lo decide el recuento solo: hace falta la lesión.', `${F4}#mh-trombo-umbral · p. 21`]
+        ? ['Una lesión propensa a sangrar y pocas plaquetas: <span class="hl-rojo">ahora el riesgo de hemorragia mayor es real</span> (el dibujo la hace sangrar). El recuento solo no lo decide: hace falta, además, la lesión.', `${F4}#mh-trombo-umbral · p. 21 · que sangre: ilustrativo`, true]
         : ['Una lesión estructural con más de 100.000 plaquetas: el tapón todavía se puede formar (aquí el dibujo lo cierra). Baja las plaquetas por debajo de 100.000 y mira qué pasa.', `${F4}#mh-trombo-umbral · p. 21 · que cierre: ilustrativo`, true];
     if (e.lesion === 'herida') {
         if (e.plaq < 100000) return ['Por debajo de 100.000 el tapón <span class="hl-rojo">ya no se forma bien</span>. Para una hemorragia mayor hace falta, además, una lesión propensa a sangrar: prueba «Estructural» en Herida.', `${F4}#mh-trombo-umbral · p. 21 · el tamaño del tapón: ilustrativo`, true];
@@ -213,7 +218,7 @@ export function fraseDe(e) {
             ['4 · Los puentes de fibrina entre las plaquetas estabilizan el tapón y lo <span class="hl-azul">contraen</span>: <span class="hl-verde">el flujo vuelve</span>. El trombo es eso: plaquetas en una malla de fibrina, ancladas a la herida.', `${F4}#mh-hemostasia-primaria · p. 20-21`],
         ][e.t - 1];
     }
-    if (e.plaq < 10000) return ['Con 5.000 y <span class="hl-verde">sin una lesión que sangre</span>, no hay hemorragia mayor. Por debajo de 10.000, el riesgo es la hemorragia cerebral espontánea, y es <span class="hl">poco frecuente</span>. Pon una lesión estructural en Herida.', `${F4}#mh-trombo-umbral · p. 21`];
+    if (e.plaq < 10000) return [`Con ${mil(e.plaq)} y <span class="hl-verde">sin una lesión propensa a sangrar</span>: sin esa lesión se toleran recuentos de hasta 5.000 sin hemorragia mayor. Por debajo de 10.000, el riesgo es la hemorragia cerebral espontánea, y es <span class="hl">poco frecuente</span>. Pon una lesión estructural en Herida.`, `${F4}#mh-trombo-umbral · p. 21`];
     if (e.plaq < 100000) return [`Sin herida no hay tapón que hacer: con ${mil(e.plaq)} plaquetas y sin una lesión que sangre, el número solo no decide la hemorragia.`, `${F4}#mh-trombo-umbral · p. 21`];
     return ['El glucocálix mantiene la sangre <span class="hl-azul">fluida</span>: no deja que plaquetas ni leucocitos se peguen al endotelio y, al notar el roce del flujo, hace que el endotelio suelte óxido nítrico, que dilata. Toca la pared para abrir una herida.', `${F4}#mh-glucocalix · p. 20`];
 }
@@ -260,7 +265,7 @@ const TRB = (id, pag) => ({ ...L13, ficha: 'merino-trombocitopenia', id, pag });
 const MA = (id, pag) => ({ ...L13, ficha: 'merino-microangiopatias', id, pag });
 const PPL = (id, pag) => ({ ...L13, ficha: 'merino-plaquetas-plasma', id, pag });
 // La máquina del telar: la Fig. 5.2 del cap. 5 (el Xa convierte la protrombina en trombina; la trombina, el fibrinógeno en fibrina)
-const FIG52 = { libro: 'Marino, The ICU Book (5.ª ed.), cap. 5', pdf: 'docs/marino-2024-practicas-monitorizacion-caps5-9.pdf', ficha: 'mar-tromboprofilaxis-farmacos', id: 'mar-img-5-2', pag: '5-6' };
+const FIG52 = { libro: 'Marino, The ICU Book (5.ª ed.), cap. 5', pdf: 'docs/marino-2024-practicas-monitorizacion-caps5-9.pdf', ficha: 'mar-tromboprofilaxis-farmacos', id: 'mar-img-5-2', pag: '4-6' };
 
 export const GUIAS = {
     sano: [
@@ -274,7 +279,7 @@ export const GUIAS = {
         { t: 'Tiempo 2. Las plaquetas sueltan calcio, que enciende su receptor GPIIb/IIIa: se une sin vuelta atrás al FvW de las células de alrededor, que ancla el tapón a la pared, y también al fibrinógeno.', estado: { lesion: 'herida', t: 2 }, lupa: 'herida', resalta: '#vso-h-fvw', cita: TRB('mh-hemostasia-primaria', '20') },
         { t: 'Tiempo 3. Del subendotelio sale tromboplastina: arranca la vía del factor tisular, la principal (el río grueso); la de contacto, por los cininógenos, es el fino. Las dos llevan a activar la protrombina (II) y el fibrinógeno (I) pasa a fibrina: la hemostasia secundaria.', estado: { lesion: 'herida', t: 3 }, lupa: 'herida', resalta: '#vso-h-rios', cita: [TRB('mh-hemostasia-secundaria', '21'), TRB('mh-vias-coagulacion', '21')] },
         { t: 'Tiempo 4. Los puentes de fibrina entre las plaquetas estabilizan el tapón y lo contraen, y el flujo vuelve. El trombo es eso: plaquetas en una malla de fibrina, ancladas a la pared en la herida.', estado: { lesion: 'herida', t: 4 }, lupa: 'herida', resalta: '#vso-h-tapon', cita: [TRB('mh-hemostasia-primaria', '20'), TRB('mh-hemostasia-secundaria', '21')] },
-        { t: 'La cascada, de cerca, con la máquina del telar: los dos ríos llegan al Xa, que convierte la protrombina (II) en trombina (IIa); la trombina teje el fibrinógeno en hilos de fibrina.', estado: { lesion: 'herida', t: 4 }, lupa: 'cascada', resalta: '#vso-cas-maquina', cita: [TRB('mh-vias-coagulacion', '21'), FIG52] },
+        { t: 'La cascada, de cerca: los dos ríos llevan a activar la protrombina (II). La máquina es la del telar (cap. 5): en ella, el Xa convierte la protrombina en trombina (IIa), y la trombina teje el fibrinógeno en hilos de fibrina.', estado: { lesion: 'herida', t: 4 }, lupa: 'cascada', resalta: '#vso-cas-maquina', cita: [TRB('mh-vias-coagulacion', '21'), FIG52] },
     ],
     'plaquetas-100k': [
         { t: 'Con 100.000 plaquetas la herida todavía se tapa: el tapón se forma entero.', lupa: 'herida', resalta: '#vso-h-tapon', cita: TRB('mh-trombo-umbral', '21') },
@@ -284,7 +289,7 @@ export const GUIAS = {
     'plaquetas-5k': [
         { t: '5.000 plaquetas y ninguna lesión: no sangra. Sin una lesión propensa a sangrar, recuentos tan bajos se toleran sin hemorragia mayor.', resalta: '#vso-zona-luz', cita: TRB('mh-trombo-umbral', '21') },
         { t: 'Por debajo de 10.000, el riesgo de verdad es la hemorragia cerebral espontánea, y es poco frecuente: el medallón del cerebro avisa.', resalta: '#vso-med-cerebro', cita: TRB('mh-trombo-umbral', '21') },
-        { t: 'La misma cifra con una lesión estructural: ahora sí sangra. El riesgo de hemorragia mayor no lo decide el recuento solo; hace falta la lesión.', estado: { plaq: 5000, lesion: 'grande', t: 4 }, lupa: 'herida', resalta: '#vso-h-sangre', cita: TRB('mh-trombo-umbral', '21') },
+        { t: 'La misma cifra con una lesión estructural propensa a sangrar: ahora el riesgo de hemorragia mayor es real. El recuento solo no lo decide; hace falta, además, la lesión.', estado: { plaq: 5000, lesion: 'grande', t: 4 }, lupa: 'herida', resalta: '#vso-h-sangre', cita: TRB('mh-trombo-umbral', '21'), org: 'que sangre en el dibujo: ilustrativo' },
         { t: 'Por eso, sin sangrado activo, el problema no es el número sino la causa: las plaquetas profilácticas rara vez hacen falta.', estado: { plaq: 5000 }, lupa: false, resalta: '#vso-c-amenaza', cita: [PPL('mh-plaq-validez', '29'), PPL('mh-mensajes', '36')] },
     ],
     pseudotrombocitopenia: [
@@ -299,15 +304,15 @@ export const GUIAS = {
     ],
     hit: [
         { t: 'La heparina no es inmunógena por sí misma: se une al FP4 de las plaquetas y forma un complejo contra el que se hacen anticuerpos IgG.', lupa: 'plaqueta', resalta: '#vso-l-fp4', cita: TRB('mh-hit-mecanismo', '22') },
-        { t: 'Las IgG se unen a las plaquetas y las encienden con fuerza: eso favorece la trombosis. El sistema reticuloendotelial retira parte de las plaquetas recubiertas.', lupa: false, resalta: '#vso-zona-luz', cita: TRB('mh-hit-mecanismo', '22') },
+        { t: 'Las IgG se unen a las plaquetas y las encienden con fuerza: eso favorece la trombosis. El sistema reticuloendotelial retira parte de las plaquetas recubiertas. Los anticuerpos suelen desaparecer a los 3 meses de retirar la heparina.', lupa: false, resalta: '#vso-zona-luz', cita: TRB('mh-hit-mecanismo', '22') },
         { t: 'Por eso el peligro es la trombosis, no el sangrado: sin tratar, tromboembolia venosa en el 17-55 % y trombosis arterial (ictus, infarto) en el 1-3 %; en hasta el 25 %, la trombosis llega antes que la caída de plaquetas.', lupa: false, resalta: ['#vso-trombo-venoso', '#vso-trombo-arterial'], cita: TRB('mh-hit-clinica', '23') },
-        { t: 'Las plaquetas caen un 50 %, rara vez por debajo de 20.000. Suele aparecer a los 5-10 días de la primera exposición (en menos de 24 h si hubo heparina en los 3 meses previos).', lupa: false, resalta: '#vso-c-plaq', cita: TRB('mh-hit-clinica', '23'), org: '115.000 desde 230.000: ilustrativo' },
+        { t: 'Las plaquetas caen un 50 %, rara vez por debajo de 20.000. Suele aparecer a los 5-10 días de la primera exposición (en menos de 24 h si hubo heparina en los 3 meses previos); rara vez, una HIT tardía sale hasta 3 semanas después.', lupa: false, resalta: '#vso-c-plaq', cita: TRB('mh-hit-clinica', '23'), org: '115.000 desde 230.000: ilustrativo' },
     ],
     'hit-argatroban': [
-        { t: 'Se retira toda la heparina: la HIT no depende de la dosis y sale incluso con los lavados de catéter.', estado: { causa: 'hit', hep: 'retirada', plaq: PLAQ_CAUSA.hit }, lupa: 'plaqueta', resalta: '#vso-l-fp4', cita: TRB('mh-hit-riesgo', '23') },
+        { t: 'Se retira toda la heparina: la HIT no depende de la dosis y sale incluso con los lavados de catéter.', estado: { causa: 'hit', hep: 'retirada', plaq: PLAQ_CAUSA.hit }, lupa: 'plaqueta', resalta: '#vso-l-fp4', cita: TRB('mh-hit', '23') },
         { t: 'Quitarla no basta: toda HIT lleva un anticoagulante sin heparina a dosis plenas, aunque no haya trombosis. Si se retrasa, las trombosis son 10 veces más.', estado: { causa: 'hit', hep: 'retirada', plaq: PLAQ_CAUSA.hit }, lupa: false, resalta: '#vso-c-amenaza', cita: TRB('mh-hit-toda', '24') },
         { t: 'El argatrobán frena directamente la trombina: en la cascada, la IIa (la tejedora) queda tachada.', lupa: 'cascada', resalta: '#vso-cas-arg', cita: TRB('mh-argatroban', '25') },
-        { t: '1-2 µg/kg/min, ajustado a un aPTT de 1,5-3 veces lo normal; 0,5 si hay insuficiencia hepática; sin ajuste renal; dosis plenas hasta que las plaquetas pasen de 150.000. La warfarina, contraindicada en la fase aguda.', lupa: 'cascada', resalta: '#vso-c-aptt', cita: [TRB('mh-argatroban', '25'), TRB('mh-hit-warfarina', '24')] },
+        { t: '1-2 µg/kg/min, ajustado a un aPTT de 1,5-3 veces lo normal; 0,5 si hay insuficiencia hepática; sin ajuste renal; dosis plenas hasta que las plaquetas pasen de 150.000. La warfarina, contraindicada en la fase aguda (su efecto protrombótico puede dar gangrena de miembros y necrosis cutánea); si la recibió en los días previos, se revierte con vitamina K.', lupa: 'cascada', resalta: '#vso-c-aptt', cita: [TRB('mh-argatroban', '25'), TRB('mh-hit-warfarina', '24')] },
     ],
     cid: [
         { t: 'Una lesión extensa (shock séptico, trauma, urgencias obstétricas) libera factor tisular: la coagulación arranca en toda la sangre, no solo en una herida (las chispas de la luz).', lupa: false, resalta: '#vso-zona-luz', cita: MA('mh-cid', '26') },
@@ -325,17 +330,18 @@ export const GUIAS = {
         { t: 'El factor de von Willebrand (FvW) es una proteína grande del endotelio que promueve la adhesión de las plaquetas; lo controla una proteasa, la ADAMTS-13, que lo corta.', lupa: 'plaqueta', resalta: '#vso-l-fvw', cita: MA('mh-ptt', '27') },
         { t: 'En la PTT aparecen anticuerpos que inactivan la ADAMTS-13 (no se sabe qué los desencadena): las plaquetas se pegan sin control y la microcirculación se llena de trombos.', lupa: 'plaqueta', resalta: '#vso-l-adamts', cita: MA('mh-ptt', '27') },
         { t: 'La coagulación no se gasta: INR, aPTT y fibrinógeno normales, y el dímero-D también. Así se separa de la CID.', lupa: false, resalta: ['#vso-c-inr', '#vso-c-fib'], cita: [MA('mh-ptt', '28'), MA('mh-tabla-13-3', '26')] },
-        { t: 'El riñón suele afectarse poco (creatinina por debajo de 2 mg/dL): así se separa del SHU. Fiebre, alteración mental e insuficiencia renal forman parte de su péntada, a menudo incompleta.', lupa: false, resalta: ['#vso-med-cerebro', '#vso-med-rinon'], cita: MA('mh-ptt', '27-28') },
+        { t: 'El riñón suele afectarse poco (creatinina por debajo de 2 mg/dL): así se separa del SHU. Fiebre, alteración mental e insuficiencia renal forman parte de su péntada, a menudo incompleta: la fiebre puede faltar y lo neurológico, ser leve o no estar.', lupa: false, resalta: ['#vso-med-cerebro', '#vso-med-rinon'], cita: MA('mh-ptt', '27-28') },
+        { t: 'Suele aparecer en la edad media, 3 veces más en mujeres, y sin tratar puede matar en 24-48 h. La hemólisis se sospecha por la LDH alta y la haptoglobina baja, y los esquistocitos la confirman. Una actividad de ADAMTS-13 muy baja es patognomónica, pero la prueba no está disponible en muchos hospitales.', lupa: 'plaqueta', resalta: '#vso-l-adamts', cita: [MA('mh-ptt', '27-28'), MA('mh-mat-hemolisis', '27')] },
     ],
     'ptt-recambio': [
         { t: 'El tratamiento de elección es el recambio plasmático: la sangre pasa por un aparato que separa y desecha el plasma del paciente y le devuelve sus hematíes con plasma de un donante sano.', resalta: '#vso-r-separador', cita: MA('mh-ptt', '28') },
         { t: 'Unas 1,5 veces el volumen plasmático por sesión, a diario, hasta que las plaquetas sean normales 2 días seguidos.', resalta: '#vso-r-pauta', cita: MA('mh-ptt', '28') },
-        { t: 'Si empieza en las primeras 48 h desde los síntomas, sobrevive hasta el 90 %; sin tratar, la PTT aguda es casi siempre mortal. La fuente no dice qué molécula retira o repone el recambio: el dibujo no la pinta.', resalta: '#vso-r-donante', cita: [MA('mh-ptt', '28'), MA('mh-nota-recambio', '28')] },
+        { t: 'Si empieza en las primeras 48 h desde los síntomas, sobrevive hasta el 90 %; sin tratar, la PTT aguda fulminante es casi siempre mortal. La fuente no dice qué molécula retira o repone el recambio: el dibujo no la pinta.', resalta: '#vso-r-donante', cita: [MA('mh-ptt', '28'), MA('mh-nota-recambio', '28')] },
     ],
     shu: [
         { t: 'El SHU es la tríada de trombocitopenia, fracaso renal agudo y anemia hemolítica microangiopática: aquí el que cae es el riñón.', lupa: false, resalta: '#vso-med-rinon', cita: MA('mh-shu', '28') },
         { t: 'No se gastan factores ni aumenta la fibrinólisis: INR, aPTT y dímero-D normales, como en la PTT. Lo que lo separa es el riñón, más grave.', lupa: false, resalta: ['#vso-c-inr', '#vso-c-dd'], cita: [MA('mh-shu', '28'), MA('mh-tabla-13-3', '26')] },
-        { t: 'Lo más frecuente es una infección (E. coli con toxina Shiga, neumococo, gripe): soporte y tratar la infección.', lupa: 'frotis', resalta: '#vso-zona-red', cita: MA('mh-shu', '28-29') },
+        { t: 'Lo más frecuente es, probablemente, una infección (E. coli con toxina Shiga, neumococo, gripe): soporte y tratar la infección.', lupa: 'frotis', resalta: '#vso-zona-red', cita: MA('mh-shu', '28-29') },
         { t: 'El SHU atípico es hereditario: el complemento se activa sin control. El eculizumab, una IgG que se une a C5, lo ha revertido; si no lo hay, recambio. Un 20 % tiene clínica fuera del riñón, sobre todo neurológica.', estado: { causa: 'shu', vari: 'atipico', plaq: PLAQ_CAUSA.shu }, lupa: 'complemento', resalta: '#vso-lupa-peq', cita: MA('mh-shu', '28-29') },
     ],
     'transfusion-plaquetas': [
@@ -409,12 +415,12 @@ const PROPIAS = {
         opciones: [
             { t: 'Sobre el Xa, la rueda que activa la protrombina', porque: 'Eso es lo que hacen los anti-Xa directos del telar (apixabán, rivaroxabán). El argatrobán es un inhibidor directo de la trombina: si lo tomaras por un anti-Xa, no entenderías por qué se ajusta con el aPTT.' },
             { t: 'Sobre la IIa, la trombina que teje la fibrina', ok: true },
-            { t: 'Sobre el FP4 de la plaqueta, para que la heparina ya no encuentre dónde unirse', porque: 'Ningún fármaco de la ficha bloquea el FP4. Se retira toda la heparina y se frena la trombina: si solo «taparas» el FP4, la trombosis seguiría en marcha.' }],
+            { t: 'Sobre el FP4 de la plaqueta, para que la heparina ya no encuentre dónde unirse', porque: 'La ficha no trae ningún fármaco que actúe sobre el FP4: lo que hace es retirar toda la heparina y frenar la trombina. Si creyeras que el argatrobán solo aparta la heparina, podrías darlo a medias, y toda HIT necesita un anticoagulante no heparínico a dosis plenas (si se retrasa, las trombosis son 10 veces más).' }],
         explicacion: 'El argatrobán es un <span class="hl-azul">inhibidor directo de la trombina (IIa)</span>, en infusión continua: 1-2 µg/kg/min ajustado a un aPTT de 1,5-3 veces lo normal. En la máquina del telar, la IIa es la tejedora que convierte el fibrinógeno en fibrina.' }],
     // ficha 5, tras «PTT o SHU» (mat-g7)
     'mat-g7': [{ id: 'vso-p3', serie: 'guia', corto: 'los órganos', tipo: 'test', fuente: 'mh-cid · mh-shu · mh-mat', estado: { causa: 'cid', vari: 'septica', lesion: 'herida', t: 4, plaq: PLAQ_CAUSA.cid }, lupa: false,
         tocar: { mandos: ['estado|shu|Pasar a un SHU'], ocultar: [], instruccion: 'cambia la CID por un SHU y mira los medallones.', comprobar: e => e.causa === 'shu', pista: 'Pulsa «Pasar a un SHU».', bueno: { causa: 'shu', vari: 'tipico', lesion: 'ninguna', plaq: PLAQ_CAUSA.shu },
-            confirma: 'en el SHU se apagan el pulmón y el cerebro y cae el riñón (fracaso renal agudo); en el atípico, un 20 % tiene además clínica fuera del riñón, sobre todo neurológica.' },
+            confirma: 'en el SHU el que cae es el riñón (fracaso renal agudo), el órgano de su tríada. Fuera del riñón, la fuente solo lo describe en el atípico: un 20\u00a0%, sobre todo neurológico.' },
         enunciado: 'En el vaso, una CID séptica enciende el pulmón, el riñón y el cerebro. Predice: si fuera un SHU por <i>E. coli</i>, ¿qué medallón quedaría encendido?',
         opciones: [
             { t: 'Los mismos tres: es la misma microtrombosis', porque: 'La CID afecta sobre todo a pulmón, riñón y SNC; el SHU es la tríada de trombocitopenia, fracaso renal agudo y hemólisis microangiopática. Si esperaras los tres, no buscarías en el riñón lo que separa al SHU.' },
@@ -429,7 +435,7 @@ const PROPIAS = {
         opciones: [
             { t: 'Se inclina hacia coagular, como el INR', porque: 'El INR solo pesa un plato (II, VII, IX y X). El PFC carga también el otro (antitrombina 38 → 50 %): darías por corregida una coagulación que apenas ha cambiado.' },
             { t: 'Casi no se mueve: también sube la antitrombina', ok: true },
-            { t: 'Se inclina hacia sangrar, porque el plasma diluye los factores que había', porque: 'El PFC trae factores, no los diluye: por eso baja el INR. Lo que pasa es que también trae anticoagulantes, y el neto puede ser poco o ningún cambio.' }],
+            { t: 'Se inclina hacia sangrar, porque el plasma diluye los factores que había', porque: 'En la Fig. 13.3 el INR baja con el PFC (1,8 → 1,4): no empeora. Lo que el INR no ve es que la antitrombina también sube (38 → 50 %), y el neto puede ser poco o ningún cambio: esperarías un sangrado que la figura no muestra y no verías que el paciente se queda casi igual.' }],
         explicacion: 'El INR solo mira los factores que dependen de la vitamina K; el PFC sube también la <span class="hl-azul">antitrombina, la proteína C y la proteína S</span>. Resultado: <span class="hl-rojo">poco o ningún cambio</span> neto de la coagulación (Fig. 13.3).' }],
 };
 function guiaCon(ficha) {
@@ -473,6 +479,7 @@ export const NOTAS = [
     { tipo: 'calla', txt: '<b>Fig. 13.2.</b> Con 3 transfusiones, el aumento a las 24 h (~20.000) es menor que con 5 (~26.000). La figura es así y no lo explica: se copia tal cual.', fuente: 'merino-plaquetas-plasma#mh-fig-13-2' },
     { tipo: 'calla', txt: '<b>El fibrinógeno normal</b> no sale en el capítulo: el tablero usa 200-400 mg/dL como fisiología general. El 150-200 mg/dL del crio es el umbral del trauma; el del posparto, la fuente no lo da.', fuente: 'merino-plaquetas-plasma#mh-crio' },
     { tipo: 'calla', txt: '<b>Lo que no se dibuja, porque la fuente no lo explica:</b> por qué la warfarina es protrombótica en la HIT, la plasmina, los multímeros del FvW, qué molécula retira o repone el recambio, cuánto atenúan las plaquetas ABO-compatibles y en qué punto de la cascada entra cada factor (el capítulo solo dice que II, VII, IX y X dependen de la vitamina K).', fuente: 'merino-microangiopatias#mh-nota-recambio' },
+    { tipo: 'calla', txt: '<b>Los órganos del SHU.</b> La fuente define el SHU por su tríada (trombocitopenia, fracaso renal agudo y anemia hemolítica microangiopática) y solo describe clínica fuera del riñón en el atípico (un 20 %, sobre todo neurológica). Del SHU típico no dice más: el dibujo enciende solo el riñón.', fuente: 'merino-microangiopatias#mh-shu' },
     { tipo: 'calla', txt: '<b>El Xa de la cascada.</b> El cap. 13 dice que las dos vías activan factores de coagulación y llevan a activar la protrombina (II), sin nombrar el Xa. La máquina de la lupa es la del telar (cap. 5, Fig. 5.2): ahí el Xa convierte la protrombina en trombina.', fuente: 'merino-trombocitopenia#mh-vias-coagulacion · mar-tromboprofilaxis-farmacos#mar-img-5-2' },
     { tipo: 'autor', txt: '<b>«Ninguna de estas recomendaciones está validada».</b> Los umbrales de plaquetas profilácticas (≤10.000; catéter central &lt;20.000; punción lumbar y cirugía no neuroaxial &lt;50.000) son de la guía AABB; la duda es del autor, que recuerda que 5.000 no dan sangrado espontáneo. La guía no cambia por ella.', fuente: 'merino-plaquetas-plasma#mh-plaq-validez' },
 ];
@@ -510,7 +517,7 @@ export function pruebasVaso() {
         const t = T(k); mira(k, 'INR', t.inr.v, inr); mira(k, 'fibrinógeno', t.fib.v, fib); mira(k, 'dímero-D', t.dd.v, dd); mira(k, 'esquistocitos', t.esq.v, 'sí'); mira(k, 'plaquetas', t.plaq.v, '↓');
     }
     mira('cid', 'órganos: pulmón, riñón y cerebro', ['pulmon', 'rinon', 'cerebro'].every(o => D('cid').organos[o] === 2), true);
-    mira('ptt', 'riñón leve, cerebro', D('ptt').organos.rinon === 1 && D('ptt').organos.cerebro === 2, true);
+    mira('ptt', 'riñón leve, cerebro en aviso (leve o ausente, p. 27)', D('ptt').organos.rinon === 1 && D('ptt').organos.cerebro === 1, true);
     mira('shu', 'el riñón', D('shu').organos.rinon, 2);
     mira('cid-lena', 'más nudos que la CID', D('cid-lena').nudos.pulmon > D('cid').nudos.pulmon, true);
     mira('ptt-recambio', 'el recambio', D('ptt-recambio').pie, 'recambio');
