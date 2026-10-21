@@ -136,13 +136,13 @@ export function indicacion(pac, tipoAparato) {
 // ---------------------------------------------------------------- estados con nombre (el nombre sale de las cifras)
 // R: la lectura redondeada del momento; X: el contexto (paciente, ajuste, infundido, pérdida)
 export function nombreEstado(R, X) {
-  const s = X.ajuste.soporte;
+  const s = X.aparato ?? X.ajuste.soporte;
   if (s !== 'no') {
     if (!indicacion(X.pac, s).ok) return 'soporte-no';
     if (s === 'balon') return 'balon';
     if (s === 'impella') return R.aoDe && R.aoAbre === 0 ? 'impella-alto' : 'impella';
     if (X.ajuste.venteo !== 'no') return 'ecmo-venteo';
-    return R.aoAbre <= 2 || R.pcp >= 25 ? 'ecmo-cerrada' : 'ecmo';
+    return R.aoAbre <= 2 ? 'ecmo-cerrada' : R.pcp >= 22 ? 'ecmo-carga' : 'ecmo';
   }
   const t = X.pac.tipo;
   if (t === 'hemo') { const c = clase(R.perdida); return X.infundido.cris > 0 ? 'hemo-salino' : c === 'IV' ? 'hemo-iv' : c === 'III' ? 'hemo-iii' : c === 'II' ? 'hemo-ii' : 'hemo-i'; }
@@ -157,41 +157,41 @@ const c1 = (x) => (+x).toFixed(1).replace('.', ',');
 // «s»: lo que se señala (selectores del monitor, de la escena o de la consola). Fuentes: la lista de citas de los pasos.
 export const ESTADOS = {
   'hemo-i': { tit: 'Hemorragia, clase I', frase: () => 'Clase I: el relleno transcapilar repone lo perdido; casi no hay signos y no hace falta volumen.', org: 'ficha · p. 22',
-    guia: [{ t: (R) => `Ha perdido un ${R.perdida} % de la volemia: menos del 15 %.`, s: ['#esc-cor'], c: C.t151 },
+    guia: [{ t: (R) => `Ha perdido un ${R.perdida} % de la volemia: menos del 15 %.`, s: ['#cor-cav'], c: C.t151 },
       { t: 'El relleno transcapilar mete líquido del intersticio en la sangre: hasta un litro.', s: ['[data-fila="pvc"]'], c: C.compens },
       { t: 'Casi no hay signos y no hace falta reponer volumen (Tabla 15.1).', s: ['[data-fila="fc"]', '[data-fila="pa"]'], c: C.t151 }] },
   'hemo-ii': { tit: 'Hemorragia, clase II', frase: (R) => `Clase II (${R.perdida} %): los vasos se aprietan y la PA aguanta. El primer aviso es la FC (${R.fc}).`, org: 'ficha · p. 22-23',
-    guia: [{ t: (R) => `Ha perdido un ${R.perdida} % de la volemia: la clase II (15-30 %), la fase compensada.`, s: ['#esc-cor'], c: C.t151 },
+    guia: [{ t: (R) => `Ha perdido un ${R.perdida} % de la volemia: la clase II (15-30 %), la fase compensada.`, s: ['#cor-cav'], c: C.t151 },
       { t: (R) => `El simpático acelera el corazón: FC ${R.fc}. Es lo primero que sube.`, s: ['[data-fila="fc"]', '#tr-ecg'], c: C.compens },
       { t: 'Mira la arteriola: se cierra. La vasoconstricción sostiene la PA.', s: ['#cor-arteriola', '[data-fila="irvs"]'], c: C.compens },
       { t: (R) => `PAM ${R.pam}: aún por encima de 65. La orina y el lactato tardan en moverse (Tabla 15.1).`, s: ['[data-fila="pa"]', '#lab'], c: C.t151 }] },
   'hemo-iii': { tit: 'Hemorragia, clase III', frase: (R) => `Clase III (${R.perdida} %): apretar ya no basta. PA ${R.pas}/${R.pad} y FC ${R.fc}: es el shock hemorrágico. Se repone con sangre.`, org: 'ficha · p. 22-23',
-    guia: [{ t: (R, X) => `${X.pac.nombre} ha perdido un ${R.perdida} %: ${X.texto} (66 mL/kg × ${X.pac.peso} kg). Es la clase III (31-40 %).`, s: ['#esc-cor'], c: C.volemia, org: 'cuánto se pierde: el mando' },
-      { t: (R) => `La PVC está en ${R.pvc} y las cavidades, pequeñas: falta volumen.`, s: ['[data-fila="pvc"]', '#esc-cor'], c: C.t141 },
+    guia: [{ t: (R, X) => `${X.pac.nombre} ha perdido un ${R.perdida} %: ${X.texto} (66 mL/kg × ${X.pac.peso} kg). Es la clase III (31-40 %).`, s: ['#cor-cav'], c: C.volemia, org: 'cuánto se pierde: el mando' },
+      { t: (R) => `La PVC está en ${R.pvc} y las cavidades, pequeñas: falta volumen.`, s: ['[data-fila="pvc"]', '#cor-cav'], c: C.t141 },
       { t: (R) => `La arteriola, cerrada (IRVS ${R.irvs}). La vasoconstricción sostuvo la PA en la clase II; en la III ya no basta.`, s: ['#cor-arteriola', '[data-fila="irvs"]'], c: C.claseIII },
       { t: (R) => `La curva arterial es estrecha: PAS ${R.pas}, PAD ${R.pad}. Es el ventrículo que se vacía.`, s: ['#tr-art'], c: C.t141, org: 'la forma: fisiología general' },
       { t: 'La Hb aún no baja: pierde sangre entera. No baja hasta las 8-12 h. La clase III se repone con sangre.', s: ['#lab'], c: C.hb }] },
   'hemo-iv': { tit: 'Hemorragia, clase IV', frase: (R) => `Clase IV (${R.perdida} %): shock profundo, quizá irreversible. PAM ${R.pam}. Es la pérdida masiva.`, org: 'ficha · p. 23',
-    guia: [{ t: 'Más del 40 % perdido: shock hemorrágico profundo, quizá irreversible.', s: ['#esc-cor'], c: C.claseIV },
+    guia: [{ t: 'Más del 40 % perdido: shock hemorrágico profundo, quizá irreversible.', s: ['#cor-cav'], c: C.claseIV },
       { t: (R) => `La PA cae (PAM ${R.pam}) y la curva arterial es mínima.`, s: ['#tr-art', '[data-fila="pa"]'], c: C.t151 },
       { t: 'Fallo multiorgánico y acidosis láctica: el lactato sube con las horas. Transfusión masiva (Tabla 15.1).', s: ['#lab'], c: C.claseIV }] },
   'hemo-salino': { tit: 'Tras el cristaloide', frase: (R, X) => `Llevas ${X.infundido.cris.toLocaleString('es-ES')} mL de cristaloide: la PA sube ahora, pero 3/4 se irán al intersticio en la próxima hora.`, org: 'ficha · p. 11',
-    guia: [{ t: 'De cada litro de cristaloide, solo un 25 % se queda en el plasma; el 75 % pasa al intersticio.', s: ['#reloj'], c: C.volIni },
-      { t: (R) => `En el momento del bolo la PVC y la PA suben (PAM ${R.pam}). Pasa el reloj a la hora 1 y mira cuánto queda.`, s: ['[data-fila="pa"]', '[data-fila="pvc"]', '#reloj'], c: C.volIni, org: 'cuánto: el modelo' },
+    guia: [{ t: 'De cada litro de cristaloide, solo un 25 % se queda en el plasma; el 75 % pasa al intersticio.', s: ['[data-pest="reloj"]'], c: C.volIni },
+      { t: (R) => `En el momento del bolo la PVC y la PA suben (PAM ${R.pam}). Pasa el reloj a la hora 1 y mira cuánto queda.`, s: ['[data-fila="pa"]', '[data-fila="pvc"]', '[data-pest="reloj"]'], c: C.volIni, org: 'cuánto: el modelo' },
       { t: 'El salino añade plasma, no hematíes: diluye la Hb. Refleja la reanimación, no la pérdida.', s: ['#lab'], c: C.hb }] },
   septico: { tit: 'Shock séptico', frase: (R) => `Vasos abiertos (IRVS ${R.irvs}) y un gasto alto (IC ${c1(R.ic)}): la ScvO₂ alta (${R.ven} %) no tranquiliza; el gap de PCO₂ sí sirve.`, org: 'ficha · p. 10, 57-59',
     guia: [{ t: (R) => `Mira la arteriola: abierta. IRVS ${R.irvs}: la resistencia baja define el shock vasodilatador (Tabla 14.1).`, s: ['#cor-arteriola', '[data-fila="irvs"]'], c: C.t141 },
       { t: (R) => `El gasto no está bajo: IC ${c1(R.ic)}. La taquicardia (${R.fc}) y la poscarga baja lo suben.`, s: ['[data-fila="ic"]', '[data-fila="fc"]'], c: C.sepHemo },
-      { t: (R) => `El endotelio dañado deja salir líquido: hipovolemia. PVC ${R.pvc}.`, s: ['[data-fila="pvc"]', '#esc-cor'], c: C.sepHemo },
+      { t: (R) => `El endotelio dañado deja salir líquido: hipovolemia. PVC ${R.pvc}.`, s: ['[data-fila="pvc"]', '#cor-cav'], c: C.sepHemo },
       { t: (R) => `La ScvO₂ sube (${R.ven} %): la mitocondria no usa el O₂ y la extracción cae. No tranquiliza.`, s: ['[data-fila="ven"]'], c: C.sepMon },
       { t: (R) => `El gap de PCO₂ solo depende del flujo: ${R.gap} mmHg${R.gap < 6 ? ' (<6): hay flujo' : ' (≥6): el flujo no basta'}. La meta sigue siendo el lactato.`, s: ['[data-fila="gap"]', '#lab'], c: C.gap }] },
   'septico-na': { tit: 'Shock séptico con noradrenalina', frase: (R, X) => `Noradrenalina a ${X.ajuste.na} µg/min: por encima de 10 manda el α; la IRVS sube a ${R.irvs} y la PAM a ${R.pam}.`, org: 'ficha · p. 12-13',
     guia: [{ t: 'Por debajo de 10 µg/min, la noradrenalina estimula β y puede subir el gasto.', s: ['[data-fila="ic"]'], c: C.na },
       { t: (R) => `Por encima de 10 manda el α: la arteriola se cierra (IRVS ${R.irvs}) y la PAM sube (${R.pam}).`, s: ['#cor-arteriola', '[data-fila="pa"]'], c: C.na },
       { t: 'A 30 µg/min, más dosis apenas aprieta: es el momento del segundo vasopresor.', s: ['[data-fila="pa"]'], c: C.na },
-      { t: (R, X) => `En µg/kg/min: ${c1(X.ajuste.na / X.pac.peso * 100 / 100)} para sus ${X.pac.peso} kg. La Tabla 17.2 añade vasopresina con 0,25-0,5 e hidrocortisona con >0,25 (ver la nota).`, s: ['[data-fila="pa"]'], c: C.t172 }] },
+      { t: (R, X) => `En µg/kg/min: ${(X.ajuste.na / X.pac.peso).toFixed(2).replace('.', ',')} para sus ${X.pac.peso} kg. La Tabla 17.2 añade vasopresina con 0,25-0,5 e hidrocortisona con >0,25 (ver la nota).`, s: ['[data-fila="pa"]'], c: C.t172 }] },
   'cardio-pcp-baja': { tit: 'Shock cardiogénico con la PCP baja', frase: (R) => `IC ${c1(R.ic)} y PCP ${R.pcp}: la presión de llenado no está alta. El volumen aún puede subir el gasto, hasta una PCP de 18-20.`, org: 'ficha · p. 40, 42',
-    guia: [{ t: (R) => `El VI apenas se vacía: IC ${c1(R.ic)}, por debajo de 2,2, lo típico del shock cardiogénico.`, s: ['#esc-cor', '[data-fila="ic"]'], c: C.csExc },
+    guia: [{ t: (R) => `El VI apenas se vacía: IC ${c1(R.ic)}, por debajo de 2,2, lo típico del shock cardiogénico.`, s: ['#cor-cav', '[data-fila="ic"]'], c: C.csExc },
       { t: (R) => `La arteriola se cierra: IRVS ${R.irvs}. Es el simpático y la renina-angiotensina (Fig. 16.2).`, s: ['#cor-arteriola', '[data-fila="irvs"]'], c: C.f162 },
       { t: (R) => `Pero la PCP no está alta: ${R.pcp}. Pasa en hasta el 30 % de los shocks del infarto.`, s: ['[data-fila="pcp"]', '#tr-pap'], c: C.csExc },
       { t: 'El volumen todavía puede subir el gasto: la meta es la PCP más alta que lo suba sin edema, 18-20 (ver la nota de fuentes).', s: ['[data-fila="pcp"]'], c: C.llenado }] },
@@ -201,7 +201,7 @@ export const ESTADOS = {
       { t: 'Vasopresor de elección: la noradrenalina. Y un inotrópico: la dobutamina.', s: ['[data-fila="pa"]'], c: C.csNa },
       { t: 'Los fármacos suben el trabajo del corazón que falla: si no basta, no retrases el soporte mecánico.', s: ['#dock'], c: C.trabajo }] },
   cardio: { tit: 'Shock cardiogénico', frase: (R) => `El corazón no bombea: IC ${c1(R.ic)}, PCP ${R.pcp} y la arteriola cerrada. Lo que lo separa de la IC es la hipoperfusión.`, org: 'ficha · p. 40',
-    guia: [{ t: (R) => `El VI no bombea: IC ${c1(R.ic)}.`, s: ['#esc-cor', '[data-fila="ic"]'], c: C.csExc },
+    guia: [{ t: (R) => `El VI no bombea: IC ${c1(R.ic)}.`, s: ['#cor-cav', '[data-fila="ic"]'], c: C.csExc },
       { t: (R) => `Sube la presión de llenado del que falla: PCP ${R.pcp}${R.pcp > 20 ? ', por encima de 18-20' : ''}.`, s: ['[data-fila="pcp"]', '#tr-pap'], c: C.csHemo },
       { t: (R) => `La arteriola se cierra: IRVS ${R.irvs} (Fig. 16.2).`, s: ['#cor-arteriola', '[data-fila="irvs"]'], c: C.f162 },
       { t: 'Con la PCP por encima de 18-20 el pulmón se encharca: mira las gotas en el pulmón y la SpO₂.', s: ['#cor-pulmon', '[data-fila="spo2"]'], c: C.llenado, org: 'cuánto: el modelo' }] },
@@ -235,8 +235,8 @@ export const ESTADOS = {
       { t: (R) => `La consola da ${c1(R.imp)} L/min de la bomba y ${c1(R.icNat * 1.85)} del corazón. El modelo con gasto total ajusta la bomba solo.`, s: ['.maquina', '[data-fila="ic"]'], c: C.impella },
       { t: (R) => `Descarga el VI: la PCP baja (${R.pcp}) y la curva arterial se estrecha. Con soporte, la PCP de 18-20 deja de ser la meta.`, s: ['[data-fila="pcp"]', '#tr-art'], c: C.impellaEf, org: 'la forma: fisiología general' },
       { t: 'Hemólisis significativa en el 5-10 %; contraindicado con valvulopatía o prótesis aórtica y con trombo en el VI.', s: ['.p-jaula'], c: C.impellaEf }] },
-  'impella-alto': { tit: 'Impella a flujo alto: la aórtica ya no abre', frase: (R) => `A ${c1(R.imp)} L/min el VI se vacía tanto que la aórtica no se abre: el pulso desaparece de la curva (${R.pas}/${R.pad}).`, org: 'ficha · p. 47; la curva: fisiología general',
-    guia: [{ t: 'Con flujo alto y un VI muy débil, la bomba se lleva toda la sangre que llega.', s: ['.p-entrada', '.p-jaula'], c: C.impella },
+  'impella-alto': { tit: 'Impella: la aórtica ya no abre', frase: (R) => `La bomba (${c1(R.imp)} L/min) se lleva toda la sangre que llega al VI: la aórtica no se abre y el pulso desaparece de la curva (${R.pas}/${R.pad}).`, org: 'ficha · p. 47; la curva: fisiología general',
+    guia: [{ t: 'Con un VI débil o poco lleno, la bomba se lleva toda la sangre que llega.', s: ['.p-entrada', '.p-jaula'], c: C.impella },
       { t: (R) => `El VI no llega a la presión de la aorta: la válvula no se abre (${R.aoAbre} de ${R.aoDe} latidos).`, s: ['#tr-art', '.p-canula'], c: C.impella, org: 'fisiología general' },
       { t: (R) => `La curva arterial se aplana: ${R.pas}/${R.pad}. La PAM se sostiene con flujo continuo.`, s: ['#tr-art', '[data-fila="pa"]'], c: C.impella, org: 'fisiología general' }] },
   ecmo: { tit: 'ECMO venoarterial', frase: (R) => `La bomba saca sangre de la cava, el oxigenador la vuelve roja y la devuelve por la femoral: ${c1(R.ecmo)} L/min contra corriente. El VI aún abre (${R.aoAbre} de ${R.aoDe}).`, org: 'ficha · p. 48-49',
@@ -244,18 +244,23 @@ export const ESTADOS = {
       { t: 'La bomba centrífuga crea el flujo; el oxigenador saca el CO₂ y mete el O₂; el calentador la devuelve a 37 °C (Fig. 16.5).', s: ['.p-bomba', '.p-oxigenador', '.p-calentador'], c: C.f165 },
       { t: 'La sangre vuelve por la arteria femoral y sube por la aorta al revés, para llegar al cayado y al cerebro.', s: ['.p-canula-a'], c: C.ecmo },
       { t: 'Soporta los dos ventrículos y el intercambio de gases: es la elección si hay fallo respiratorio.', s: ['[data-fila="spo2"]'], c: C.seleccion }] },
+  'ecmo-carga': { tit: 'ECMO: el VI carga contra la aorta', frase: (R) => `El chorro que sube por la aorta frena al VI: aún abre (${R.aoAbre} de ${R.aoDe}), pero eyecta poco (${(R.icNat * 1.85).toFixed(1).replace('.', ',')} L/min) y la PCP sube a ${R.pcp}. Si sigue, hay que ventearlo.`, org: 'ficha · p. 48-49',
+    guia: [{ t: 'El flujo retrógrado sube la poscarga del VI: un problema que no tienen los otros soportes.', s: ['.p-canula-a', '#tr-art'], c: C.ecmoPoscarga },
+      { t: (R) => `El VI aún abre su válvula (${R.aoAbre} de ${R.aoDe} latidos), pero saca poca sangre: la consola lo separa del flujo del ECMO.`, s: ['#consola', '#ecm-corazon'], c: C.ecmoPoscarga },
+      { t: (R) => `La PCP sube: ${R.pcp}. Mira la curva de la AP.`, s: ['[data-fila="pcp"]', '#tr-pap'], c: C.ecmoPoscarga, org: 'cuánto: el modelo' },
+      { t: 'Si el VI deja de abrir y aparece el edema, se ventea: un balón o un Impella a la vez, o drenando el VI.', s: ['#mandos'], c: C.ecmoPoscarga }] },
   'ecmo-cerrada': { tit: 'ECMO: el VI ya no abre', frase: (R) => `El chorro que sube por la aorta frena al VI débil: la aórtica abre ${R.aoAbre} de ${R.aoDe} veces, la PCP sube a ${R.pcp} y el pulmón se encharca. Hay que ventearlo.`, org: 'ficha · p. 48-49',
     guia: [{ t: 'El flujo retrógrado sube la poscarga del VI: un problema que no tienen los otros soportes.', s: ['.p-canula-a', '#tr-art'], c: C.ecmoPoscarga },
       { t: (R) => `El VI no puede abrir su válvula: ${R.aoAbre} de ${R.aoDe} latidos. Se dilata.`, s: ['#ecm-corazon'], c: C.ecmoPoscarga },
       { t: (R) => `La PCP sube (${R.pcp}) y aparece el edema: mira las gotas en el pulmón.`, s: ['[data-fila="pcp"]', '#ecm-pulmon'], c: C.ecmoPoscarga, org: 'cuánto: el modelo' },
-      { t: 'Se corrige con un balón o un Impella a la vez, o drenando el VI («venteo»): prueba el mando.', s: ['#dock'], c: C.ecmoPoscarga }] },
+      { t: 'Se corrige con un balón o un Impella a la vez, o drenando el VI («venteo»): prueba el mando.', s: ['#mandos'], c: C.ecmoPoscarga }] },
   'ecmo-venteo': { tit: 'ECMO con venteo', frase: (R, X) => `Venteo con ${({ impella: 'Impella', balon: 'balón', drenaje: 'drenaje del VI' })[X.ajuste.venteo]}: la PCP baja a ${R.pcp} y la aórtica abre ${R.aoAbre} de ${R.aoDe}.`, org: 'ficha · p. 48-49',
-    guia: [{ t: 'Para bajar la poscarga del VI: un balón o un Impella a la vez, o drenar el VI para bajar su presión telediastólica.', s: ['#dock'], c: C.ecmoPoscarga },
+    guia: [{ t: 'Para bajar la poscarga del VI: un balón o un Impella a la vez, o drenar el VI para bajar su presión telediastólica.', s: ['#ecm-venteo', '#mandos'], c: C.ecmoPoscarga },
       { t: (R) => `La PCP baja: ${R.pcp}.`, s: ['[data-fila="pcp"]'], c: C.ecmoPoscarga, org: 'cuánto: el modelo' },
       { t: 'Cuánto baja con cada método no lo dice la fuente: el modelo lo calcula, rotulado.', s: ['[data-fila="pcp"]'], c: C.ecmoPoscarga }] },
-  'soporte-no': { tit: 'Este paciente no lleva soporte mecánico', frase: (R, X) => indicacion(X.pac, X.ajuste.soporte).txt, org: 'ficha · p. 45',
-    guia: [{ t: (R, X) => indicacion(X.pac, X.ajuste.soporte).txt, s: ['#sello'], c: C.mcs },
-      { t: 'Mira el aparato en gris: funciona igual en otro paciente (el del infarto). Ábrelo con Aurelio.', s: ['#esc-aparato'], c: C.mcs }] },
+  'soporte-no': { tit: 'Este paciente no lleva soporte mecánico', frase: (R, X) => indicacion(X.pac, X.aparato).txt, org: 'ficha · p. 45-48',
+    guia: [{ t: (R, X) => indicacion(X.pac, X.aparato).txt, s: ['#sello'], c: C.mcs },
+      { t: 'Mira el aparato en gris: funciona igual en otro paciente (el del infarto). Ábrelo con Aurelio.', s: ['#esc-svg'], c: C.mcs }] },
 };
 
 // ---------------------------------------------------------------- notas (con su tipo) y «Para profundizar»
@@ -299,9 +304,9 @@ export const QS = [
 ];
 export const OPC_QS = [['hemo', 'Hipovolémico'], ['septico', 'Distributivo'], ['cardio', 'Cardiogénico'], ['tapon', 'Obstructivo: taponamiento'], ['tep', 'Obstructivo: TEP'], ['no', 'No está en shock']];
 export const HUELLA = {
-  hemo: { pistas: [{ t: 'Taquicardia y una curva arterial estrecha: el ventrículo se vacía.', s: ['#tr-art', '[data-fila="fc"]'], c: C.t151 }, { t: 'En la eco, las cavidades pequeñas y sin derrame.', s: ['#esc-cor'], c: C.t141 }, { t: 'En el catéter: PVC baja, gasto bajo y resistencia alta.', s: ['[data-fila="pvc"]', '[data-fila="ic"]', '[data-fila="irvs"]'], c: C.t141 }], seria: 'PVC baja, gasto bajo y resistencia alta (Tabla 14.1)' },
-  septico: { pistas: [{ t: 'Diastólica baja con un pulso amplio: vasos abiertos.', s: ['#tr-art'], c: C.sepHemo, org: 'la forma: fisiología general' }, { t: 'En la eco, un VI que se vacía bien y sin derrame.', s: ['#esc-cor'], c: C.t141 }, { t: 'En el catéter: PVC baja, gasto normal o alto y resistencia baja; ScvO₂ alta.', s: ['[data-fila="pvc"]', '[data-fila="ic"]', '[data-fila="irvs"]', '[data-fila="ven"]'], c: C.t141 }], seria: 'PVC baja, gasto normal o alto y resistencia baja (Tabla 14.1)' },
-  cardio: { pistas: [{ t: 'Hipotensión con hipoperfusión (lactato, orina).', s: ['#lab'], c: C.csHemo }, { t: 'En la eco, un VI grande que no se vacía.', s: ['#esc-cor'], c: C.csHemo }, { t: 'En el catéter: gasto bajo con resistencia alta; la PCP alta o, en el 30 %, no.', s: ['[data-fila="pcp"]', '[data-fila="ic"]', '[data-fila="irvs"]'], c: C.csExc }], seria: 'gasto bajo, resistencia alta y una presión de llenado alta (o, en el 30 %, no) (p. 40)' },
+  hemo: { pistas: [{ t: 'Taquicardia y una curva arterial estrecha: el ventrículo se vacía.', s: ['#tr-art', '[data-fila="fc"]'], c: C.t151 }, { t: 'En la eco, las cavidades pequeñas y sin derrame.', s: ['#cor-cav'], c: C.t141 }, { t: 'En el catéter: PVC baja, gasto bajo y resistencia alta.', s: ['[data-fila="pvc"]', '[data-fila="ic"]', '[data-fila="irvs"]'], c: C.t141 }], seria: 'PVC baja, gasto bajo y resistencia alta (Tabla 14.1)' },
+  septico: { pistas: [{ t: 'Diastólica baja con un pulso amplio: vasos abiertos.', s: ['#tr-art'], c: C.sepHemo, org: 'la forma: fisiología general' }, { t: 'En la eco, un VI que se vacía bien y sin derrame.', s: ['#cor-cav'], c: C.t141 }, { t: 'En el catéter: PVC baja, gasto normal o alto y resistencia baja; ScvO₂ alta.', s: ['[data-fila="pvc"]', '[data-fila="ic"]', '[data-fila="irvs"]', '[data-fila="ven"]'], c: C.t141 }], seria: 'PVC baja, gasto normal o alto y resistencia baja (Tabla 14.1)' },
+  cardio: { pistas: [{ t: 'Hipotensión con hipoperfusión (lactato, orina).', s: ['#lab'], c: C.csHemo }, { t: 'En la eco, un VI grande que no se vacía.', s: ['#cor-cav'], c: C.csHemo }, { t: 'En el catéter: gasto bajo con resistencia alta; la PCP alta o, en el 30 %, no.', s: ['[data-fila="pcp"]', '[data-fila="ic"]', '[data-fila="irvs"]'], c: C.csExc }], seria: 'gasto bajo, resistencia alta y una presión de llenado alta (o, en el 30 %, no) (p. 40)' },
   tapon: { pistas: [{ t: 'Taquicardia y un pulso muy estrecho.', s: ['#tr-art'], c: C.obstr, org: 'la forma: fisiología general' }, { t: 'En la eco, el derrame que aprieta las cuatro cámaras.', s: ['#cor-saco'], c: C.vdMed }, { t: 'En el catéter: la PVC y la PCP se igualan.', s: ['[data-fila="pvc"]', '[data-fila="pcp"]'], c: C.vdMed }], seria: 'la PVC alta e igual a la PCP (cap. 18, p. 4)' },
   tep: { pistas: [{ t: 'Taquicardia y taquipnea: lo típico, aunque nada confirma.', s: ['[data-fila="fc"]', '[data-fila="fr"]'], c: C.tepClin }, { t: 'En la eco, el VD dilatado que empuja el tabique.', s: ['#cor-vd'], c: C.tepEco }, { t: 'En el catéter: PVC alta, PCP baja y la presión pulmonar alta.', s: ['[data-fila="pvc"]', '[data-fila="pcp"]', '#tr-pap'], c: C.vdMed }], seria: 'la PVC alta con la PCP normal (cap. 18, p. 4)' },
   no: { pistas: [{ t: 'PAM por encima de 65, el lactato y la orina sin alarma: no hay hipoperfusión.', s: ['[data-fila="pa"]', '#lab'], c: C.t145 }, { t: 'En la eco, el VD sufre: hay que vigilarlo.', s: ['#cor-vd'], c: C.tepEco }, { t: 'Sin inestabilidad, un TEP con el VD sobrecargado es de riesgo intermedio.', s: ['[data-fila="pa"]'], c: C.tepRiesgo }], seria: 'sin hipotensión ni hipoperfusión' },
@@ -338,8 +343,8 @@ export const PREGUNTAS = [
       { t: 'Abre la aórtica con más fuerza por el oxígeno que recibe.', porque: 'El O₂ no le quita poscarga: la presión de la aorta sigue subiendo con el flujo retrógrado. El VI débil abre cada vez menos.' }],
     explica: 'El flujo retrógrado sube la poscarga del VI; puede bajar su gasto y dar edema agudo de pulmón (p. 48).', cita: C.ecmoPoscarga,
     comprueba: { txt: 'Compruébalo: sube el ECMO a 6 L/min', ajuste: { ecmo: 6 }, mira: 'Mira cuántos latidos abre la aórtica, la PCP y las gotas en el pulmón.' } },
-  { id: 'E1', grupo: 'examen', prepara: { pac: 'amparo', ajuste: { na: 25 }, horas: 6 },
-    enunciado: (R) => `Amparo, hora 6: noradrenalina a 25 µg/min, PAM ${R.pam}, ScvO₂ ${R.ven} %, lactato ${c1(R.lact)} mmol/L, gap de PCO₂ ${R.gap} mmHg. <b>¿Qué lectura es la correcta?</b>`,
+  { id: 'E1', grupo: 'examen', prepara: { pac: 'amparo', ajuste: { na: 10 }, horas: 6 },
+    enunciado: (R) => `Amparo, hora 6: noradrenalina a 10 µg/min, PAM ${R.pam}, ScvO₂ ${R.ven} %, lactato ${c1(R.lact)} mmol/L, gap de PCO₂ ${R.gap} mmHg. <b>¿Qué lectura es la correcta?</b>`,
     opciones: [
       { t: 'La ScvO₂ alta prueba que el aporte basta: baja la noradrenalina.', porque: 'En la sepsis la mitocondria no usa el O₂ y la ScvO₂ sube aunque falte perfusión (p. 10, 59). Si bajas la noradrenalina por ese número, la PAM de Amparo cae.' },
       { t: 'La ScvO₂ aquí engaña; el gap dice que hay flujo; meta: el lactato.', ok: true },
@@ -365,7 +370,7 @@ export const PREGUNTAS = [
   { id: 'E4', grupo: 'examen',
     enunciado: '<b>¿Qué complicación es más frecuente con el Impella que con los otros soportes mecánicos?</b>',
     opciones: [
-      { t: 'La fiebre, en la mitad de los pacientes.', porque: 'La fiebre del 50 % (con bacteriemia en el 15 %) es la del balón (p. 47). Si la buscas en el Impella, pasarás por alto la orina oscura de la hemólisis.' },
+      { t: 'La fiebre, en la mitad de los pacientes con el aparato.', porque: 'La fiebre del 50 % (con bacteriemia en el 15 %) es la del balón (p. 47). Si la buscas en el Impella, pasarás por alto la orina oscura de la hemólisis.' },
       { t: 'El síndrome compartimental de la pierna.', porque: 'El 10 % es del ECMO (p. 48). Con el Impella vigilarías la pierna, pero no lo que es más propio de él.' },
       { t: 'La hemólisis significativa, en el 5-10 %.', ok: true },
       { t: 'El ictus, en el 6 %.', porque: 'El 6 % de ictus es del ECMO VA (p. 48). En un Impella, la hemólisis es lo que la fuente dice que es más frecuente.' }],
@@ -397,12 +402,12 @@ export const CASO = {
       enunciado: (R) => `PCP ${R.pcp} con IC ${c1(R.ic)}. <b>¿Qué haces primero?</b>`,
       opciones: [
         { t: 'Dobutamina: el problema es la bomba.', porque: 'Con la PCP baja, el VI aún no está bien lleno: el inotrópico subiría el trabajo de un corazón vacío y la FC (p. 43-44). Primero, el llenado.' },
-        { t: 'Furosemida para prevenir el edema.', porque: 'No hay congestión que tratar: con la PCP en ' + 'esa cifra el diurético bajaría aún más el llenado y el gasto de Aurelio.' },
+        { t: 'Furosemida para prevenir el edema.', porque: 'No hay congestión que tratar: con la PCP baja, el diurético bajaría aún más el llenado y el gasto de Aurelio.' },
         { t: 'Volumen hasta una PCP de 18-20, mirando el gasto.', ok: true },
         { t: 'Impella ya: los fármacos aumentan el trabajo.', porque: 'El soporte no se retrasa si los fármacos no bastan (p. 44), pero antes hay que corregir un llenado bajo, que puede subir el gasto por sí solo (p. 42).' }],
       explica: 'La PCP no siempre está alta en el shock cardiogénico; entonces el volumen puede subir el gasto, hasta la PCP más alta que lo suba sin edema: 18-20 (p. 42; ver la nota de fuentes).', cita: C.llenado,
       comprueba: { txt: 'Compruébalo: dale 2 × 250 mL', volumen: 500, mira: 'Mira cómo sube la PCP y cuánto sube el IC.' } },
-    { dia: 'Hora 1 · el plan del residente', prepara: { pac: 'aurelio', volumen: 500, horas: 1, escena: 'corazon', canales: 'todos' }, tipo: 'error',
+    { dia: 'Tras los bolos · el plan del residente', prepara: { pac: 'aurelio', volumen: 500, escena: 'corazon', canales: 'todos' }, tipo: 'error',
       ficha: (R) => [['Tras 500 mL', `PCP ${R.pcp} · IC ${c1(R.ic)} · PAM ${R.pam}`, 1]],
       enunciado: 'El R1 escribe el plan del inotrópico. <b>Puede haber 0, 1 o 2 errores.</b> Toca las frases que creas falsas.',
       frases: [
@@ -411,16 +416,17 @@ export const CASO = {
         { t: 'Su FC subirá, habitualmente 5-15 lpm.', cita: C.dobuta },
         { t: 'Si no basta, levosimendán 72 h, que tiene una semivida de 80 h.', mal: true, buena: 'La semivida es de 80 h, pero las infusiones suelen limitarse a 24 h (p. 44).', cita: C.levo }],
       explica: 'Dobutamina de inicio; la milrinona y el levosimendán bajan la PA.', cita: C.dobuta },
-    { dia: 'Hora 6 · noradrenalina + dobutamina, y no basta', prepara: { pac: 'aurelio', volumen: 500, horas: 6, ajuste: { na: 8, dobuta: true, soporte: 'impella', impella: 3.5 }, escena: 'impella', canales: 'todos' }, tipo: 'destapa',
-      ficha: () => [['Hora 6', 'sigue en shock: se pone un Impella', 1]],
-      enunciado: '<b>¿Qué hace el Impella y qué esperas ver en el monitor? Son tres cosas.</b>',
+    { dia: 'Hora 6 · noradrenalina + dobutamina, y no basta', prepara: { pac: 'aurelio', rec: { esc: 'fallo', g: 1, volemia: -900 }, volumen: 500, horas: 6, ajuste: { na: 8, dobuta: true }, escena: 'corazon', canales: 'todos' }, tipo: 'destapa',
+      ficha: (R) => [['Hora 6', `NA 8 µg/min + dobutamina: PAM ${R.pam}, IC ${c1(R.ic)}, PCP ${R.pcp}, lactato ${c1(R.lact)}`, 1]],
+      enunciado: 'Con los fármacos la PA sube, pero el gasto sigue bajo y el lactato no baja: se pone un Impella. <b>¿Qué hace y qué esperas ver en el monitor? Son tres cosas.</b>',
       puntos: [
         { t: 'Saca sangre del VI y la suelta en la aorta, en <span class="hl-azul">flujo continuo</span>, 2,5-5,5 L/min.', c: C.impella },
         { t: 'Descarga el VI: <span class="hl-verde">baja la PCP</span> y sube el gasto total (bomba + corazón).', c: C.impellaEf },
-        { t: 'El pulso de la curva se estrecha; con flujo alto, la aórtica puede dejar de abrir.', c: C.impella, org: 'fisiología general' }] },
-    { dia: 'Hora 18 · el giro', prepara: { pac: 'aurelio', rec: { esc: 'fallo', g: 0.95, volemia: -900, pao2: 58 }, horas: 18, ajuste: { na: 10, dobuta: true, soporte: 'impella', impella: 3.5 }, escena: 'impella', canales: 'todos' }, tipo: 'test',
+        { t: 'El pulso de la curva se estrecha; con flujo alto, la aórtica puede dejar de abrir.', c: C.impella, org: 'fisiología general' }],
+      comprueba: { txt: 'Compruébalo: pon el Impella a 3,5 L/min', ajuste: { soporte: 'impella', impella: 3.5 }, mira: 'Mira la PCP y la curva arterial; y en la consola, la bomba y el corazón por separado.' } },
+    { dia: 'Hora 18 · el giro', prepara: { pac: 'aurelio', rec: { esc: 'fallo', g: 1, volemia: -900, pao2: 58 }, volumen: 500, horas: 18, ajuste: { na: 8, dobuta: true, soporte: 'impella', impella: 3.5 }, escena: 'impella', canales: 'todos' }, tipo: 'test',
       ficha: (R) => [['Hora 18', `SpO₂ ${R.spo2} % con FiO₂ alta en el respirador`, 1], ['Gasto total', `${c1(R.gcTotal)} L/min`, 1]],
-      enunciado: 'Aurelio se hunde y ahora tiene un fallo respiratorio que el respirador no corrige. <b>¿Qué soporte prefiere la fuente?</b>',
+      enunciado: 'Con el Impella la PA aguanta, pero ahora Aurelio tiene un fallo respiratorio que el respirador no corrige. <b>¿Qué soporte prefiere la fuente?</b>',
       opciones: [
         { t: 'Subir el Impella a 5,5 L/min.', porque: 'Más flujo no oxigena: el fallo respiratorio seguiría. Y a flujo alto, más hemólisis (p. 48).' },
         { t: 'Añadir un balón de contrapulsación.', porque: 'El balón descarga el VI pero no oxigena: Aurelio seguiría hipoxémico.' },
@@ -436,12 +442,12 @@ export const CASO = {
         { t: 'Furosemida y esperar a que el VI recupere.', porque: 'El problema es la poscarga que pone el ECMO, no un exceso de volumen: el diurético no deja abrir la aórtica.' },
         { t: 'Bajar la noradrenalina para bajar la poscarga.', porque: 'La poscarga viene del chorro que sube por la aorta; sin vasopresor, la PAM caería y el VI seguiría sin abrir.' }],
       explica: 'El flujo retrógrado sube la poscarga del VI; se combate con un balón o un Impella a la vez, o drenando el VI («venteo») (p. 48-49).', cita: C.ecmoPoscarga,
-      comprueba: { txt: 'Compruébalo: ventea con un balón', ajuste: { venteo: 'balon' }, mira: 'Mira la PCP y cuántas veces abre ahora la aórtica.' } },
+      comprueba: { txt: 'Compruébalo: ventea con un balón', ajuste: { venteo: 'balon' }, mira: 'Mira la PCP y cuántas veces abre la aórtica. En el modelo, con un VI que casi no abre, el balón lo descarga poco; prueba también el Impella o el drenaje en Explorar. Cuál descarga más, la fuente no lo compara.' } },
     { dia: 'Día 3 · la pierna', prepara: { pac: 'aurelio', rec: { esc: 'fallo', g: 1, volemia: -600 }, horas: 54, ajuste: { soporte: 'ecmo', ecmo: 5.5, venteo: 'balon' }, escena: 'balon', canales: 'todos' }, tipo: 'test',
       ficha: () => [['Día 3', 'la pierna del balón sin pulso pedio; mueve los dedos y siente', 1]],
       enunciado: 'La pierna del balón no tiene pulso pedio, pero Aurelio mueve los dedos y la siente. <b>¿Qué haces con el balón?</b>',
       opciones: [
-        { t: 'Lo retiras: sin pulsos, el balón sobra.', porque: 'La pérdida de pulsos sola no obliga a retirarlo si la función sensitiva y motora está intacta (p. 46). Volvería el edema del VI que el balón ventea.' },
+        { t: 'Lo retiras: sin pulsos, el balón sobra y arriesga la pierna.', porque: 'La pérdida de pulsos sola no obliga a retirarlo si la función sensitiva y motora está intacta (p. 46). Volvería el edema del VI que el balón ventea.' },
         { t: 'Lo dejas y vigilas la sensibilidad y el movimiento.', ok: true },
         { t: 'Lo pasas a la otra femoral, la del ECMO.', porque: 'La fuente no da esa salida; y la isquemia de la pierna ya es frecuente con el ECMO (17 %, p. 48).' },
         { t: 'Lo dejas y bajas la anticoagulación.', porque: 'El soporte necesita anticoagulación plena (p. 48); bajarla sin indicación arriesga el circuito y el balón.' }],

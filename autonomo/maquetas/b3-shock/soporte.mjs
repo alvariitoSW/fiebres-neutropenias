@@ -48,15 +48,14 @@ const TAU_TOTAL = 3;                           // s del lazo del «gasto total»
 
 // ---------------------------------------------------------------- pacientes: escenario del motor + gravedad con nombre
 // (Los que no están en escenarios.mjs se escriben aquí con la forma que tendrían allí.)
-export let rS, vU, fu; export const ajustarSepsis = (a, b, c) => { rS = a; vU = b; fu = c; };
 export const ESCENARIOS_EXTRA = {
   sepsis: {
     nombre: 'Shock séptico', tipo: 'vasodilatador',
     // vasodilatación «de arterias y venas» (Marino, cap. 14, p. 4) y fuga capilar con hipovolemia (cap. 17, p. 57-58,
-    // sin cifra): resistencias × (1 − 0,55 g), volumen venoso sin tensión × (1 + 0,6 g) y una fuga del 12 % de la
+    // sin cifra): resistencias × (1 − 0,6 g), volumen venoso sin tensión × (1 + 0,35 g) y una fuga del 6 % de la
     // volemia a fondo. Todo ilustrativo; la dirección, de la ficha
-    texto: (g) => `resistencias al ${Math.round(100 * (1 - 0.55 * g))} % y fuga de ${Math.round(0.12 * g * BASE.vSangre / 10) * 10} mL`,
-    aplicar: (m, g = 0.7) => { m.p.rSis *= 1 - (rS ?? 0.55) * g; m.p.vuVen *= 1 + (vU ?? 0.6) * g; m.p.hemorragia = (fu ?? 0.12) * g * BASE.vSangre; },
+    texto: (g) => `resistencias al ${Math.round(100 * (1 - 0.6 * g))} % y fuga de ${Math.round(0.06 * g * BASE.vSangre / 10) * 10} mL`,
+    aplicar: (m, g = 0.7) => { m.p.rSis *= 1 - 0.6 * g; m.p.vuVen *= 1 + 0.35 * g; m.p.hemorragia = 0.06 * g * BASE.vSangre; },
   },
   anafilaxia: {
     nombre: 'Shock anafiláctico', tipo: 'vasodilatador',
@@ -87,7 +86,7 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
   const st = { vBalon: 0, qImp: 0, qImpObj: 3.5 * LMIN, qEcmo: 0, qVent: 0, impTotalObj: 3.5 * LMIN, rotor: 0, rodete: 0 };
   let acum = nuevo(), ultimoLat = m.s.nLatido, lectura = null, historiaAo = [];
   let cris = 0, sangre = 0;
-  function nuevo() { return { dt: 0, imp: 0, ecmo: 0, vent: 0, balonMax: 0, aoAbre: false }; }
+  function nuevo() { return { dt: 0, imp: 0, ecmo: 0, vent: 0, balonMax: 0, aoAbre: false, picoDia: 0, teleDia: null, aoAntes: false }; }
 
   // Fármacos y vasopresores: multiplicadores sobre lo basal del paciente (dirección de la ficha; magnitud ilustrativa)
   function aplicarFarmacos() {
@@ -95,10 +94,10 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
     const b = Math.min(na, 10) / 10;                        // tramo β (<10 µg/min)
     const a = Math.max(0, Math.min(na, 30) - 10) / 20;      // tramo α (10-30); por encima de 30, casi nada más (p. 13)
     const a2 = Math.max(0, na - 30) / 10 * 0.08;
-    let fR = 1 + 0.10 * b + 0.75 * a + a2, fVu = 1 - 0.06 * b - 0.10 * a, fEes = 1 + 0.18 * b + 0.04 * a, fFc = 1 + 0.06 * b;
+    let fR = 1 + 0.10 * b + 0.5 * a + a2, fVu = 1 - 0.06 * b - 0.10 * a, fEes = 1 + 0.18 * b + 0.04 * a, fFc = 1 + 0.06 * b;
     if (ajuste.vaso) fR *= 1.25;                                                   // V1: vasoconstricción (p. 15-16)
     let dFc = 0;
-    if (ajuste.dobuta) { fEes *= 1.45; dFc += 10; fR *= 0.92; }                    // p. 43 (FC +5-15); vasodilatadora (cap. 22, p. 11)
+    if (ajuste.dobuta) { fEes *= 1.25; dFc += 10; fR *= 0.92; }                    // p. 43 (FC +5-15); vasodilatadora (cap. 22, p. 11)
     m.p.rSis = base.rSis * fR; m.p.vuVen = base.vuVen * fVu;
     m.p.vi.ees = base.viEes * fEes; m.p.vd.ees = base.vdEes * fEes;
     m.p.fc = base.fc * fFc + dFc;
@@ -134,7 +133,11 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
     } else { st.qEcmo = 0; st.qVent = 0; }
     // por latido
     acum.dt += dt; acum.imp += st.qImp * dt; acum.ecmo += st.qEcmo * dt; acum.vent += st.qVent * dt;
-    acum.balonMax = Math.max(acum.balonMax, st.vBalon); if (s.vAo) acum.aoAbre = true;
+    acum.balonMax = Math.max(acum.balonMax, st.vBalon); if (s.vAo && s.qAo > 2) acum.aoAbre = true;
+    if (st.vBalon > 20) acum.picoDia = Math.max(acum.picoDia, s.pao);
+    // la presión de la aorta cuando se abre la válvula (la que el vaciado del balón baja, p. 45)
+    if (s.vAo && !acum.aoAntes && acum.teleDia == null) acum.teleDia = s.paoDist;
+    acum.aoAntes = s.vAo;
     if (s.nLatido !== ultimoLat) { ultimoLat = s.nLatido; cerrar(); }
   }
   function cerrar() {
@@ -142,11 +145,12 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
     const T = acum.dt || u.periodo;
     const imp = acum.imp / T / LMIN, ecmo = acum.ecmo / T / LMIN, vent = acum.vent / T / LMIN;
     historiaAo.push(acum.aoAbre); if (historiaAo.length > 6) historiaAo.shift();
-    const gcNativo = u.gc;                                    // lo que sale por la válvula aórtica
+    const gcNativo = Math.max(0, u.gc);                       // lo que sale por la válvula aórtica (el reflujo de cierre, fuera)
     const gcTotal = gcNativo + imp + ecmo;                    // lo que llega al cuerpo (el venteo va dentro del ECMO)
     if (ajuste.total != null && ajuste.soporte === 'impella') st.impTotalObj = Math.min(5.5, Math.max(2.5, ajuste.total - gcNativo)) * LMIN;
     lectura = { u, gcNativo, gcTotal, icTotal: gcTotal / m.p.sc, imp, ecmo, vent, balon: acum.balonMax,
-      aoAbre: historiaAo.filter(Boolean).length, aoDe: historiaAo.length, pcp: u.pvp, edema: u.vEdema };
+      aoAbre: historiaAo.filter(Boolean).length, aoDe: historiaAo.length, pcp: u.pvp, edema: u.vEdema,
+      picoDia: acum.picoDia, teleDia: acum.teleDia };
     // si la aórtica no abre, el motor no cierra bien la fase; la RVS se lee con el flujo que cruza el lecho (ya lo hace)
     acum = nuevo();
   }

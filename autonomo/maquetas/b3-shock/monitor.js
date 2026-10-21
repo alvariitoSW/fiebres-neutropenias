@@ -9,11 +9,11 @@ const g = (x, m, s) => Math.exp(-((x - m) ** 2) / (2 * s * s));
 
 // canales: alto en px del SVG, escala (mmHg) y color (token)
 export const CANALES = [
-  { k: 'ecg', rot: 'II', alto: 30, col: 'var(--accent-green)' },
-  { k: 'art', rot: 'ART', alto: 52, min: 0, max: 150, marcas: [50, 100], col: 'var(--accent-red)' },
-  { k: 'pap', rot: 'PAP', alto: 32, min: 0, max: 60, marcas: [20, 40], col: 'var(--accent-yellow)' },
-  { k: 'pvc', rot: 'PVC', alto: 28, min: 0, max: 25, marcas: [10, 20], col: 'var(--accent-purple)' },
-  { k: 'pleth', rot: 'Pleth', alto: 20, col: 'var(--text-dim)' },
+  { k: 'ecg', rot: 'II', alto: 26, col: 'var(--accent-green)' },
+  { k: 'art', rot: 'ART', alto: 48, min: 0, max: 150, marcas: [50, 100], col: 'var(--accent-red)' },
+  { k: 'pap', rot: 'PAP', alto: 32, min: 0, max: 50, marcas: [25], col: 'var(--accent-yellow)' },
+  { k: 'pvc', rot: 'PVC', alto: 28, min: 0, max: 25, marcas: [10], col: 'var(--accent-purple)' },
+  { k: 'pleth', rot: 'Pleth', alto: 24, col: 'var(--text-dim)' },
   { k: 'co2', rot: 'CO₂', alto: 24, min: 0, max: 50, marcas: [], col: 'var(--text-muted)' },
 ];
 const GUT = 26, SEG = 4.5;
@@ -30,7 +30,7 @@ export function crearMonitor(svg) {
       if (!c.oculto) {
         h += `<g id="tr-${c.k}" class="canal">`;
         h += `<text x="2" y="${y + 9}" class="mon-rot" fill="${c.col}">${c.k === 'pap' && enclavado ? 'PCP' : c.rot}</text>`;
-        if (c.marcas) for (const m of c.marcas) { const yy = yDe(c, m); h += `<line x1="${GUT}" x2="${Wd}" y1="${yy}" y2="${yy}" class="mon-rej"/><text x="${GUT - 2}" y="${yy + 3}" class="mon-esc" text-anchor="end">${m}</text>`; }
+        if (c.marcas) for (const m of c.marcas) { const yy = yDe(c, m); h += `<line x1="${GUT}" x2="${Wd}" y1="${yy}" y2="${yy}" class="mon-rej"/>` + (yy > y + 13 ? `<text x="${GUT - 2}" y="${yy + 3}" class="mon-esc" text-anchor="end">${m}</text>` : ''); }
         if (c.k === 'art') h += `<line id="mon-l65" x1="${GUT}" x2="${Wd}" class="mon-65"/><path id="tr-art-ref" class="mon-ref"/>`;
         h += `<path id="p-${c.k}" class="mon-traza" stroke="${c.col}"/>`;
         if (c.k === 'ecg') h += `<g id="mon-chispas"></g>`;

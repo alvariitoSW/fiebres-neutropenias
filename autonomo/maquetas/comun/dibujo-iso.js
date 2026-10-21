@@ -215,6 +215,24 @@ export function helice(M, s0, s1, r, vueltas, fase, P, pasos = 60) {
   return out.filter((c) => c.length > 1).map((c) => camino(c)).join('');
 }
 
+// Aspas de una hélice como cintas (de la raíz en el cubo a la punta): cuadriláteros pequeños repartidos entre los de
+// detrás y los de delante del cubo, para pintarlos en su orden (detrás → cubo → delante)
+export function aspas(M, s0, s1, rh, rt, vueltas, fase, n, P, pasos = 18) {
+  const A = pto(M.u, P.V), B = pto(M.v, P.V), base = Math.atan2(B, A);
+  let detras = '', delante = '';
+  for (let j = 0; j < n; j++) {
+    const f0 = fase + j * 2 * Math.PI / n;
+    for (let k = 0; k < pasos; k++) {
+      const t0 = k / pasos, t1 = (k + 1) / pasos;
+      const a0 = f0 + vueltas * 2 * Math.PI * t0, a1 = f0 + vueltas * 2 * Math.PI * t1;
+      const q = [P.iso(enMarco(M, s0 + (s1 - s0) * t0, rh, a0)), P.iso(enMarco(M, s0 + (s1 - s0) * t1, rh, a1)), P.iso(enMarco(M, s0 + (s1 - s0) * t1, rt, a1)), P.iso(enMarco(M, s0 + (s1 - s0) * t0, rt, a0))];
+      const d = camino(q, true);
+      if (Math.cos((a0 + a1) / 2 - base) > 0) delante += d; else detras += d;
+    }
+  }
+  return { detras, delante };
+}
+
 // ---------------------------------------------------------------- tubos por una ruta
 // ruta: puntos 3D (se suaviza con un Catmull-Rom). Devuelve la línea central en pantalla y el ancho (en una proyección
 // paralela, un tubo de radio r mide 2·r·k en pantalla en cualquier dirección). La sombra y el brillo se dibujan como
@@ -328,7 +346,7 @@ export const ISO_CSS = `
 .iso .iso-l.lit { stroke: var(--accent-blue); stroke-width: .9; }
 .iso .iso-tornillo { fill: var(--text-dim); }
 .iso .tb-borde { stroke: var(--text-dim); }
-.iso .iso-halo { fill: #000; opacity: .35; filter: blur(3px); }
+.iso .iso-halo { fill: var(--bg-main); opacity: .9; filter: blur(3px) brightness(.35); }
 `;
 
 // ---------------------------------------------------------------- movimiento tranquilo

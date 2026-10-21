@@ -43,49 +43,44 @@ export const LEYENDA_IMPELLA = [
   { n: '08', k: 'con', t: 'Consola', d: 'mide el gasto propio y ajusta la bomba al total pedido', p: 47 },
 ];
 export function montarDespieceImpella(svg) {
-  const az = 36, el = 27;
-  const plan = { x: -158, y: -52, w: 316, d: 74, r: 6 };
-  const pts = [[plan.x, plan.y, -6], [plan.x + plan.w, plan.y, -6], [plan.x, plan.y + plan.d, -6], [plan.x + plan.w, plan.y + plan.d, -6], [plan.x, 0, 60], [plan.x + plan.w, -40, 70]];
-  const P = I.ajustar(pts, W, H, { pad: 6, az, el });
+  // Dos filas sobre el banco: delante, la punta, la entrada y la cánula; detrás, la jaula con su hélice sacada hacia
+  // arriba, el motor y el catéter que llega a la consola. Cada conjunto, separado de su vecino a lo largo de su eje.
+  const az = 34, el = 28;
+  const plan = { x: -98, y: -66, w: 196, d: 104, r: 6 };
+  const pts = [[plan.x, plan.y, -6], [plan.x + plan.w, plan.y, -6], [plan.x, plan.y + plan.d, -6], [plan.x + plan.w, plan.y + plan.d, -6], [-80, -26, 66], [90, -50, 60]];
+  const P = I.ajustar(pts, W, H, { pad: 4, az, el });
   const lz = new I.Lienzo('dimp');
-  const Z = 26;
-  const eje = (x0) => I.marco([x0, 0, Z], [1, 0, 0], [0, 0, 1]);
-  const piezas = {};
-  // 01 pigtail: un rizo en el plano vertical del eje
-  const rizo = []; for (let k = 0; k <= 30; k++) { const t = k / 30, a = Math.PI * 0.5 + t * Math.PI * 1.7, r = 9 - 3.4 * t; rizo.push([-144 + r * 1.3 * Math.cos(a), 0, Z + 12 + r * 1.3 * Math.sin(a)]); }
-  piezas.pig = lz.tubo(I.tubo([[-128, 0, Z], [-134, 0, Z], ...rizo.reverse()], 2.2, P), { clase: 'dp pz-pig' });
-  // 02 entrada: nariz cónica, cuerpo con cuatro ventanas (ranuras cerradas)
-  const Me = eje(-126), Te = I.torno([[0, 2.6], [2.5, 5.4], [5, 7], [20, 7], [20, 6.4], [22, 6.4]], Me, P, { pasos: 56 });
+  const Z = 24, YA = 16, YB = -26;
+  const eje = (x0, y0) => I.marco([x0, y0, Z], [1, 0, 0], [0, 0, 1]);
   const base = (M) => Math.atan2(I.pto(M.v, P.V), I.pto(M.u, P.V));
   const ranuras = (M, s0, s1, r, n, fase, w = 0.5) => { let d = ''; const b = base(M); for (let j = 0; j < n; j++) { const th = fase + j / n * 2 * Math.PI; if (Math.cos(th - b) < 0.25) continue; const q = []; for (let k = 0; k <= 8; k++) q.push(P.iso(I.puntoEn(M, s0 + (s1 - s0) * k / 8, r, th - w / 2))); for (let k = 8; k >= 0; k--) q.push(P.iso(I.puntoEn(M, s0 + (s1 - s0) * k / 8, r, th + w / 2))); d += I.camino(q, true); } return d; };
-  piezas.ent = lz.torno(Te, { clase: 'dp pz-ent', dentro: `<path class="hueco" d="${ranuras(Me, 8, 18, 7.02, 4, 0.5)}"/>` });
-  // 03 cánula
-  const Mc = eje(-98), Tc = I.torno([[0, 6.3], [1.2, 6.6], [62, 6.6], [63.2, 6.3]], Mc, P, { pasos: 56 });
-  piezas.can = lz.torno(Tc, { clase: 'dp pz-can', dentro: `<path class="iso-l faint" d="${I.arco(Mc, 20, 6.6, P) + I.arco(Mc, 42, 6.6, P)}"/>` });
-  // 05 jaula de salida (barras y huecos) y 04 la hélice, sacada hacia arriba
-  const Mj = eje(-28), Tj = I.torno([[0, 7.4], [16, 7.4]], Mj, P, { pasos: 56 });
-  const huecos = ranuras(Mj, 1.6, 14.4, 7.42, 6, 0.2, 0.7);
-  piezas.jau = lz.torno(Tj, { clase: 'dp pz-jau', dentro: `<path class="hueco" d="${huecos}"/><path class="iso-l faint" d="${I.arco(Mj, 1.6, 7.4, P) + I.arco(Mj, 14.4, 7.4, P)}"/>` });
-  const Mh = I.marco([-28, 0, Z + 26], [1, 0, 0], [0, 0, 1]);
-  const Thub = I.torno([[0, 1.2], [1.4, 2.4], [14.6, 2.4], [16, 1.2]], Mh, P, { pasos: 36 });
-  // 06 motor: carcasa con dos bandas y la tapa trasera
-  const Mm = eje(-8), Tm = I.torno([[0, 7.6], [0.8, 8.0], [26, 8.0], [28, 6.6], [31, 3.4]], Mm, P, { pasos: 56 });
-  piezas.mot = lz.torno(Tm, { clase: 'dp pz-mot', dentro: `<path class="iso-l faint" d="${I.arco(Mm, 6, 8.0, P) + I.arco(Mm, 9, 8.0, P) + I.arco(Mm, 20, 8.0, P)}"/>` });
-  // 07 catéter con su trenzado (anillos que siguen la sección) y el conector
-  const rutaCat = [[25, 0, Z], [52, 0, Z], [74, 2, Z - 2], [86, -14, Z - 4], [92, -30, Z - 6], [104, -36, 20]];
-  const Tcat = I.tubo(rutaCat, 2.6, P);
+  const piezas = {};
+  // fila de delante: 01 pigtail, 02 entrada, 03 cánula
+  const rizo = []; for (let k = 0; k <= 30; k++) { const t = k / 30, a = Math.PI * 0.5 + t * Math.PI * 1.7, r = 11 - 4 * t; rizo.push([-82 + r * Math.cos(a), YA, Z + 13 + r * Math.sin(a)]); }
+  piezas.pig = lz.tubo(I.tubo([[-66, YA, Z], [-72, YA, Z], ...rizo.reverse()], 2.4, P), { clase: 'dp pz-pig' });
+  const Me = eje(-60, YA), Te = I.torno([[0, 2.8], [2.5, 5.8], [5, 7.4], [22, 7.4], [22, 6.8], [24, 6.8]], Me, P, { pasos: 56 });
+  piezas.ent = lz.torno(Te, { clase: 'dp pz-ent', dentro: `<path class="hueco" d="${ranuras(Me, 8, 19, 7.42, 4, 0.5)}"/><path class="iso-l faint" d="${I.arco(Me, 22, 7.4, P)}"/>` });
+  const Mc = eje(-28, YA), Tc = I.torno([[0, 6.6], [1.2, 7.0], [62, 7.0], [63.2, 6.6]], Mc, P, { pasos: 56 });
+  piezas.can = lz.torno(Tc, { clase: 'dp pz-can', dentro: `<path class="iso-l faint" d="${I.arco(Mc, 21, 7.0, P) + I.arco(Mc, 42, 7.0, P)}"/>` });
+  // fila de detrás: 05 jaula (y 04 la hélice, sacada hacia arriba), 06 motor, 07 catéter, 08 consola
+  const Mj = eje(-84, YB), Tj = I.torno([[0, 8], [18, 8]], Mj, P, { pasos: 56 });
+  const huecos = ranuras(Mj, 1.8, 16.2, 8.02, 6, 0.2, 0.7);
+  piezas.jau = lz.torno(Tj, { clase: 'dp pz-jau', dentro: `<path class="hueco" d="${huecos}"/><path class="iso-l faint" d="${I.arco(Mj, 1.8, 8, P) + I.arco(Mj, 16.2, 8, P)}"/>` });
+  const Mh = I.marco([-84, YB, Z + 30], [1, 0, 0], [0, 0, 1]);
+  const Thub = I.torno([[0, 1.4], [1.6, 2.7], [16.4, 2.7], [18, 1.4]], Mh, P, { pasos: 36 });
+  const Mm = eje(-58, YB), Tm = I.torno([[0, 8.2], [0.8, 8.6], [28, 8.6], [30, 7.0], [33, 3.6]], Mm, P, { pasos: 56 });
+  piezas.mot = lz.torno(Tm, { clase: 'dp pz-mot', dentro: `<path class="iso-l faint" d="${I.arco(Mm, 6, 8.6, P) + I.arco(Mm, 9, 8.6, P) + I.arco(Mm, 21, 8.6, P)}"/>` });
+  const rutaCat = [[-22, YB, Z], [6, YB, Z], [30, YB + 2, Z - 2], [46, YB - 10, Z - 6], [52, YB - 22, Z - 8], [60, YB - 28, 20]];
+  const Tcat = I.tubo(rutaCat, 2.8, P);
   let trenza = '';
-  for (let i = 2; i < Tcat.pts3.length - 2; i += 2) {
-    const a = Tcat.pts3[i - 1], b = Tcat.pts3[i + 1], c = Tcat.pts3[i];
-    trenza += I.arco(I.marco(c, I.res(b, a), [0, 0, 1]), 0, 2.62, P, 10);
-  }
+  for (let i = 2; i < Tcat.pts3.length - 2; i += 2) { const a = Tcat.pts3[i - 1], b = Tcat.pts3[i + 1], c = Tcat.pts3[i]; trenza += I.arco(I.marco(c, I.res(b, a), [0, 0, 1]), 0, 2.82, P, 10); }
   piezas.cat = lz.tubo(Tcat, { clase: 'dp pz-cat' }) + `<path class="iso-l faint pz-cat" d="${trenza}"/>`;
-  // 08 consola, detrás a la derecha, con el cable que llega a su lateral
-  const cons = consola(P, lz, { x: 98, y: -48, z: 6, w: 50, d: 24, h: 34, pre: 'dimp-c', lineas: 3, clase: 'dp pz-con' });
+  const cons = consola(P, lz, { x: 56, y: -62, z: 6, w: 34, d: 22, h: 30, pre: 'dimp-c', lineas: 3, clase: 'dp pz-con' });
   piezas.con = cons.svg;
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-  svg.innerHTML = `<g class="iso">${banco(P, lz, plan, [-112, -66, -2, 40], Z)}
-    ${piezas.cat}${piezas.con}${piezas.mot}${piezas.jau}<g id="dimp-helice" class="dp pz-hel"></g>${piezas.can}${piezas.ent}${piezas.pig}</g>`;
+  svg.innerHTML = `<g class="iso">${banco(P, lz, plan, [], Z)}
+    ${soportes(P, lz, [[-44, YB], [-10, YB], [-50, YA], [14, YA]], Z)}
+    ${piezas.cat}${piezas.con}${piezas.jau}${piezas.mot}<g id="dimp-helice" class="dp pz-hel"></g>${piezas.pig}${piezas.ent}${piezas.can}</g>`;
   svg.querySelector('.iso').insertAdjacentHTML('afterbegin', lz.defsSvg());
   const hel = svg.querySelector('#dimp-helice');
   const lzh = new I.Lienzo('dimph');
@@ -93,24 +88,25 @@ export function montarDespieceImpella(svg) {
   svg.querySelector('.iso').insertAdjacentHTML('afterbegin', lzh.defsSvg());
   let fase = 0;
   function pintarHelice() {
-    // tres aspas helicoidales: la parte de detrás fina y la de delante gruesa (sólidos simples), sobre el cubo
-    let d = '', dD = '';
-    for (let j = 0; j < 3; j++) { dD += I.helice(Mh, 1.5, 14.5, 6.2, 0.6, fase + j * 2.094 + Math.PI, P, 40); d += I.helice(Mh, 1.5, 14.5, 6.2, 0.6, fase + j * 2.094, P, 40); }
-    hel.innerHTML = `<path class="alabe detras" d="${dD}"/>${cubo}<path class="alabe" d="${d}"/>`;
+    const a = I.aspas(Mh, 1.8, 16.2, 2.6, 7.2, 0.45, fase, 3, P, 22);
+    hel.innerHTML = `<path class="aspa detras" d="${a.detras}"/>${cubo}<path class="aspa" d="${a.delante}"/>`;
   }
   pintarHelice();
   return {
     actualizar(cab, dt, quieto, info) {
       if (!quieto && info.on) fase += dt * 2 * Math.PI * 0.45 * (cab.st.qImpObj / (1000 / 60));
       pintarHelice();
-      const L = cab.lectura;
-      if (L) {
-        svg.querySelector('#dimp-c-l0').textContent = info.on ? `Bomba ${coma(L.imp, 1)} L/min` : 'Bomba parada';
-        svg.querySelector('#dimp-c-l1').textContent = `Corazón ${coma(L.gcNativo, 1)}`;
-        svg.querySelector('#dimp-c-l2').textContent = `Total ${coma(L.gcTotal, 1)}`;
-      }
     },
   };
+}
+// soportes en U sueltos (x, y) bajo un eje a la altura zEje
+function soportes(P, lz, lista, zEje) {
+  let s = '';
+  for (const [x, y0] of lista.sort((a, b) => P.prof([a[0], a[1], 0]) - P.prof([b[0], b[1], 0]))) {
+    for (const dy of [-7, 7]) s += lz.torno(I.torno([[0, 2.4], [1.6, 2.4], [1.6, 1.6], [zEje - 7.2, 1.6]], I.marco([x, y0 + dy, 6], [0, 0, 1]), P, { pasos: 20 }), { linea: 'lo' });
+    s += lz.prisma(I.caja({ x: x - 3, y: y0 - 8, w: 6, d: 16, r: 1 }, zEje - 10.5, 2.4, P, { pasos: 2, bisel: 0.3 }), { linea: 'lo' });
+  }
+  return s;
 }
 
 // ---------------------------------------------------------------- BALÓN desmontado
@@ -162,8 +158,6 @@ export function montarDespieceBalon(svg) {
     actualizar(cab, dt, quieto, info) {
       const v = quieto ? 40 : (info.on ? cab.st.vBalon : 0);
       const b = pintar(v); gB.innerHTML = b.defs + b.svg;
-      svg.querySelector('#dbal-c-l0').textContent = info.on ? `Balón ${Math.round(v)} mL` : 'Balón parado';
-      svg.querySelector('#dbal-c-l1').textContent = info.on ? 'Disparo: onda R' : '—';
     },
   };
 }
@@ -213,7 +207,7 @@ export function montarDespieceEcmo(svg) {
   const frc = I.caraMatriz(P, [ca.x, ca.y + ca.d, 28], [1, 0, 0], [0, 0, -1]);
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   svg.innerHTML = `<g class="iso">${banco(P, lz, plan, [], 12)}
-    ${lz.prisma(Tcal, { clase: 'dp pz-cal', dentro: `<g transform="${frc}"><rect x="3" y="3" width="22" height="10" rx="1" class="pantalla"/><text x="6" y="10.6" class="pantalla-txt" font-size="6">37 °C</text></g>` })}
+    ${lz.prisma(Tcal, { clase: 'dp pz-cal', dentro: `<g transform="${frc}"><rect x="3" y="3" width="22" height="10" rx="1" class="pantalla"/><rect x="5" y="6" width="12" height="4" class="pantalla-barra"/></g>` })}
     ${lz.prisma(Tox, { clase: 'dp pz-oxi', dentro: `<g transform="${fr}"><rect x="2" y="3" width="36" height="34" rx="1.5" class="ventana-oxi"/>${estr}</g>` })}
     ${lz.torno(Tgi, { clase: 'dp pz-oxi' })}
     ${lz.prisma(baseB, { clase: 'dp pz-bom' })}${lz.torno(Tcar, { clase: 'dp pz-bom' })}${lz.tubo(Tsal, { clase: 'dp pz-bom' })}

@@ -1,1310 +1,302 @@
-<!-- PROPUESTA PARA ELEGIR (plan socialista, bloque 3, parada 1). No es parte de la app.
+<!-- PROPUESTA PARA ELEGIR (plan socialista, bloque 3, parada 1, versión 2). No es parte de la app.
      Ábrela con el servidor de la app: http://localhost:8000/autonomo/maquetas/b3-shock.html
-     La cabecera del shock: un monitor de cabecera de UCI (ECG, PA invasiva, pletismografía y SpO2, PVC y respiración)
-     con las cifras de perfusión (IC, PCP, IRVS, SvO2, lactato, gap de PCO2, diuresis) y sus objetivos (Tabla 14.5,
-     Fig. 15.6, Tabla 16.2), y debajo el corazón dibujado. Fichas de Merino Cardiología (caps. 14-16, 18, 20) y Merino
-     Neumología (cap. 22). PDF: docs/marino-2024-shock-caps14-17.pdf, docs/marino-2024-cardiac-disorders-caps18-21.pdf y
-     docs/marino-2024-respiratory-management-caps22-26.pdf (la página citada es la del PDF).
-     Especificación: autonomo/bloques/b3/cobertura.md §4.1, §7 y §9, más la petición del usuario del 21/10/2026
-     (monitor de cabecera y modo «¿Qué shock es?»).
-     Cada cifra lleva su origen: «ficha · p. N», «fisiología general» o «ilustrativo». Sin librerías: SVG y JS puro;
-     con «reducir movimiento» (o el botón de pausa), todo quieto. -->
+     La cabecera del shock v2: un monitor de UCI y el paciente (o el aparato) a la vez, movidos por el MISMO motor del
+     latido de la app (js/modules/eco/motor.mjs, importado sin copiarlo). Lo que al motor le falta (los tres aparatos,
+     los fármacos, la sepsis con gravedad) está en b3-shock/soporte.mjs con la forma que tendrá en la app.
+     Los aparatos (balón, Impella, ECMO VA) son objetos reales, método «Anatomy» con la pieza propia
+     comun/dibujo-iso.js. Especificación: autonomo/bloques/b3/megaproyecto-shock.md (§3 y §5).
+     Fuente: docs/marino-2024-shock-caps14-17.pdf (p. 45-49 para los aparatos; la página citada es la del PDF). -->
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>La cabecera del shock · para elegir</title>
+<link rel="stylesheet" href="b3-shock/escena.css">
 <style>
-/* Tokens de css/variables.css, copiados tal cual. Ningún color fuera de esta lista. */
+/* Tokens de css/variables.css, copiados tal cual. Ningún color fuera de esta lista (las mezclas, de dos tokens). */
 :root {
   color-scheme: dark;
-  --bg-main: #17140f;
-  --bg-card: rgba(46, 38, 28, 0.72);
-  --border-color: rgba(196, 154, 74, 0.35);
-  --text-main: #ece3cc;
-  --text-muted: #a5967c;
-  --text-dim: #c9bda4;
-  --accent-green: #90a06a;
-  --accent-red: #b85c3e;
-  --accent-yellow: #cf9a3e;
-  --accent-blue: #d4af37;
-  --accent-purple: #9c5476;
-  --bg: var(--bg-main); --card: var(--bg-card); --card2: rgba(46, 38, 28, 1); --line: var(--border-color);
-  --fg: var(--text-main); --dim: var(--text-dim); --muted: var(--text-muted);
-  --oro: var(--accent-yellow); --oro-claro: var(--accent-blue); --rojo: var(--accent-red); --verde: var(--accent-green); --purpura: var(--accent-purple);
-  --serif: Georgia, 'Times New Roman', serif;
-  --sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --dock-h: 152px;
+  --bg-main: #17140f; --bg-card: rgba(46, 38, 28, 0.72); --border-color: rgba(196, 154, 74, 0.35);
+  --text-main: #ece3cc; --text-muted: #a5967c; --text-dim: #c9bda4;
+  --accent-green: #90a06a; --accent-red: #b85c3e; --accent-yellow: #cf9a3e; --accent-blue: #d4af37; --accent-purple: #9c5476;
+  --card2: color-mix(in srgb, var(--text-main) 9%, var(--bg-main)); --line: var(--border-color);
+  --serif: Georgia, 'Times New Roman', serif; --sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --dock-h: 190px;
 }
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
-body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 var(--serif);
-  padding: 8px max(12px, env(safe-area-inset-right, 0px)) calc(var(--dock-h) + var(--frase-h, 44px) + 16px) max(12px, env(safe-area-inset-left, 0px)); }
-main { max-width: 560px; margin: 0 auto; display: grid; gap: 10px; grid-template-columns: minmax(0, 1fr); }
+body { margin: 0; background: var(--bg-main); color: var(--text-main); font: 16px/1.45 var(--serif);
+  padding: 6px max(10px, env(safe-area-inset-right, 0px)) calc(var(--dock-h) + 14px) max(10px, env(safe-area-inset-left, 0px)); }
+main { max-width: 560px; margin: 0 auto; display: grid; gap: 6px; grid-template-columns: minmax(0, 1fr); }
 main > * { min-width: 0; }
-h1 { font-size: 1.22rem; line-height: 1.2; margin: 0; color: var(--oro); font-weight: normal; }
-h1 em { color: var(--fg); }
-h2 { font-size: 1.06rem; margin: 0 0 4px; color: var(--oro); font-weight: normal; }
-h3 { font: 600 .74rem var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 4px 0 2px; }
-p { margin: 0; }
 [hidden] { display: none !important; }
 button { font-family: inherit; }
-button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visible { outline: 2px solid var(--oro); outline-offset: 2px; }
-.aviso { font: 600 .7rem/1.2 var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--bg); background: var(--oro); border-radius: 6px; padding: 4px 8px; width: fit-content; }
-.cabecera { display: grid; gap: 6px; }
-.lead { color: var(--dim); font-size: .92rem; line-height: 1.38; }
-.org { font: .66rem/1.25 var(--sans); color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 0 6px; vertical-align: 1px; white-space: nowrap; }
+button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visible { outline: 2px solid var(--accent-yellow); outline-offset: 2px; }
+h2 { font-size: 1.04rem; margin: 0 0 4px; color: var(--accent-yellow); font-weight: normal; }
+p { margin: 0; }
+.cab { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; flex-wrap: wrap; }
+.cab h1 { font-size: 1rem; white-space: nowrap; line-height: 1.2; margin: 0; color: var(--accent-yellow); font-weight: normal; }
+.cab h1 em { color: var(--text-main); }
+.aviso { flex: 0 1 auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; font: 600 .62rem/1.2 var(--sans); letter-spacing: .05em; text-transform: uppercase; color: var(--bg-main); background: var(--accent-yellow); border-radius: 6px; padding: 3px 6px; }
+.org { font: .66rem/1.25 var(--sans); color: var(--text-muted); border: 1px solid var(--line); border-radius: 999px; padding: 0 6px; white-space: nowrap; }
 .org.ilu { border-style: dashed; }
-.hl-a, .hl-r, .hl-v, .hl-p, .hl-azul { padding: 0 2px; border-radius: 2px; font-weight: 600; }
-.hl-a { background: linear-gradient(to bottom, transparent 58%, rgba(207, 154, 62, .34) 58%); }
-.hl-r { background: linear-gradient(to bottom, transparent 58%, rgba(184, 92, 62, .38) 58%); }
-.hl-v { background: linear-gradient(to bottom, transparent 58%, rgba(144, 160, 106, .36) 58%); }
-.hl-p { background: linear-gradient(to bottom, transparent 58%, rgba(156, 84, 118, .36) 58%); }
-.hl-azul { background: linear-gradient(to bottom, transparent 58%, rgba(212, 175, 55, .32) 58%); color: var(--oro-claro); }
-
-/* Modos */
-.interruptor { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); border-radius: 999px; overflow: hidden; font: .82rem/1.1 var(--sans); }
-.interruptor button { min-height: 44px; background: transparent; color: var(--muted); border: 0; font: inherit; cursor: pointer; padding: 0 4px; }
+.hl-azul, .hl-verde, .hl-rojo { padding: 0 2px; border-radius: 2px; font-weight: 600; }
+.hl-azul { background: linear-gradient(to bottom, transparent 58%, color-mix(in srgb, var(--accent-blue) 32%, transparent) 58%); color: var(--accent-blue); }
+.hl-verde { background: linear-gradient(to bottom, transparent 58%, color-mix(in srgb, var(--accent-green) 36%, transparent) 58%); }
+.hl-rojo { background: linear-gradient(to bottom, transparent 58%, color-mix(in srgb, var(--accent-red) 38%, transparent) 58%); }
+.interruptor { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); border-radius: 999px; overflow: hidden; font: .8rem/1.1 var(--sans); }
+.interruptor button { min-height: 44px; background: transparent; color: var(--text-muted); border: 0; font: inherit; cursor: pointer; padding: 0 4px; }
 .interruptor button + button { border-left: 1px solid var(--line); }
-.interruptor button[aria-selected="true"] { background: var(--oro); color: var(--bg); font-weight: 600; }
+.interruptor button[aria-selected="true"] { background: var(--accent-yellow); color: var(--bg-main); font-weight: 600; }
+.pacientes { display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none; padding-bottom: 1px; }
+.pacientes::-webkit-scrollbar { display: none; }
+.pacientes button { flex: none; min-height: 44px; padding: 2px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--card2); color: var(--text-dim); font: 600 .74rem/1.1 var(--sans); cursor: pointer; text-align: left; }
+.pacientes button small { display: block; font-weight: 400; font-size: .62rem; color: var(--text-muted); }
+.pacientes button[aria-pressed="true"] { background: var(--accent-yellow); color: var(--bg-main); border-color: var(--accent-yellow); }
+.pacientes button[aria-pressed="true"] small { color: var(--bg-main); }
+.ficha-pac { font: .72rem/1.3 var(--sans); color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ficha-pac b { color: var(--text-main); }
 
-/* Pacientes */
-.pacientes { display: flex; flex-wrap: wrap; gap: 6px; }
-.pacientes button { min-height: 44px; padding: 3px 11px; border-radius: 999px; border: 1px solid var(--line); background: var(--card2); color: var(--dim); font: 600 .76rem/1.1 var(--sans); cursor: pointer; text-align: left; }
-.pacientes button small { display: block; font-weight: 400; font-size: .64rem; color: var(--muted); }
-.pacientes button[aria-pressed="true"] { background: var(--oro); color: var(--bg); border-color: var(--oro); }
-.pacientes button[aria-pressed="true"] small { color: var(--bg); }
-.ficha-pac { font: .8rem/1.35 var(--sans); color: var(--dim); }
-.ficha-pac b { color: var(--fg); }
-
-/* El monitor de cabecera */
-.monitor { border: 1px solid var(--line); border-radius: 14px; background: var(--bg-main); padding: 6px; display: grid; gap: 4px; position: relative;
-  box-shadow: inset 0 0 0 1px rgba(23, 20, 15, 1), inset 0 0 18px rgba(0, 0, 0, .5); }
-.mon-cab { display: flex; justify-content: space-between; align-items: center; gap: 6px; font: 600 .66rem/1.2 var(--sans); color: var(--muted); letter-spacing: .04em; text-transform: uppercase; padding: 0 2px; }
-.mon-cab .pausa { min-height: 32px; min-width: 44px; border: 1px solid var(--line); background: transparent; color: var(--dim); border-radius: 8px; font: 600 .7rem var(--sans); cursor: pointer; text-transform: none; letter-spacing: 0; }
-.mon-cuerpo { display: grid; grid-template-columns: minmax(0, 1fr) 108px; gap: 0; }
-#trazas { display: block; width: 100%; height: 236px; }
-.cifras { display: grid; grid-template-rows: 42px 62px 40px 42px 50px; border-left: 1px solid rgba(196, 154, 74, .18); }
-.cifra { display: grid; align-content: center; padding: 0 0 0 7px; border-bottom: 1px solid rgba(196, 154, 74, .12); min-width: 0; position: relative; cursor: pointer; }
+/* El monitor */
+.monitor { border: 1px solid var(--line); border-radius: 12px; background: var(--bg-main); padding: 4px 5px 5px; display: grid; gap: 3px; position: relative; }
+.monitor > * { min-width: 0; }
+.mon-cab { overflow: hidden; display: flex; align-items: center; gap: 5px; font: 600 .64rem/1.2 var(--sans); color: var(--text-muted); letter-spacing: .03em; min-height: 30px; }
+.mon-cab .quien { flex: 1; min-width: 0; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chip-b { min-height: 30px; min-width: 40px; border: 1px solid var(--line); background: transparent; color: var(--text-dim); border-radius: 8px; font: 600 .66rem var(--sans); cursor: pointer; padding: 0 6px; }
+.chip-b[aria-pressed="true"] { background: color-mix(in srgb, var(--accent-yellow) 24%, transparent); border-color: var(--accent-yellow); color: var(--text-main); }
+.chip-b:disabled { opacity: .45; cursor: default; }
+.mon-cuerpo { display: grid; grid-template-columns: minmax(0, 1fr) 92px; }
+#trazas { display: block; width: 100%; }
+.mon-rot { font: 600 9px var(--sans); }
+.mon-esc { font: 8px var(--sans); fill: var(--text-muted); }
+.mon-rej { stroke: color-mix(in srgb, var(--text-muted) 22%, transparent); stroke-width: .5; }
+.mon-sep { stroke: color-mix(in srgb, var(--accent-yellow) 16%, transparent); stroke-width: .6; }
+.mon-65 { stroke: var(--accent-red); stroke-dasharray: 3 4; stroke-width: .8; opacity: .8; }
+.mon-traza { fill: none; stroke-width: 1.5; stroke-linejoin: round; }
+.mon-ref { fill: none; stroke: var(--text-dim); stroke-width: 1; stroke-dasharray: 2 2.5; }
+.mon-chispa { fill: var(--accent-blue); }
+.mon-infla, .mon-vacia { fill: var(--accent-blue); }
+.mon-barrido { stroke: color-mix(in srgb, var(--text-main) 30%, transparent); stroke-width: .6; }
+.cifras { display: flex; flex-direction: column; border-left: 1px solid color-mix(in srgb, var(--accent-yellow) 18%, transparent); }
+.cifra { overflow: hidden; padding: 1px 0 1px 5px; border-bottom: 1px solid color-mix(in srgb, var(--accent-yellow) 12%, transparent); min-width: 0; cursor: pointer; display: grid; align-content: center; }
 .cifra:last-child { border-bottom: 0; }
-.cifra .et { font: 600 .62rem/1.1 var(--sans); letter-spacing: .03em; display: flex; justify-content: space-between; gap: 2px; }
-.cifra .v { font: 700 1.36rem/1.05 var(--sans); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.cifra .v small { font-size: .7rem; font-weight: 600; margin-left: 2px; }
-.cifra .obj { font: .6rem/1.15 var(--sans); color: var(--muted); }
-.c-ecg { color: var(--verde); } .c-art { color: var(--rojo); } .c-sat { color: var(--oro); } .c-pvc { color: var(--purpura); } .c-resp { color: var(--dim); }
-.c-pvc .v { color: var(--fg); }
-.marca { font: 700 .66rem var(--sans); border-radius: 4px; padding: 0 3px; margin-left: 2px; }
-.marca.si { color: var(--bg); background: var(--verde); }
-.marca.no { color: var(--fg); background: var(--rojo); }
-.marca.ojo { color: var(--bg); background: var(--oro); }
-.perfusion { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
-.celda { background: var(--card); border: 1px solid var(--card2); border-radius: 9px; padding: 3px 5px; min-width: 0; display: grid; align-content: start; cursor: pointer; text-align: left; color: var(--fg); font: inherit; }
-.celda .k { font: .6rem/1.15 var(--sans); color: var(--muted); display: flex; justify-content: space-between; gap: 2px; }
-.celda .g { font: 700 .98rem/1.15 var(--sans); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-.celda .g small { font: 600 .56rem var(--sans); color: var(--dim); margin-left: 1px; }
-.celda .t { font: .56rem/1.15 var(--sans); color: var(--muted); overflow-wrap: anywhere; }
-.celda.no .g { color: var(--rojo); } .celda.si .g { color: var(--verde); } .celda.ojo .g { color: var(--oro); }
-.oculto .v, .oculto .g { color: var(--muted) !important; }
-.mon-pie { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; font: .7rem/1.3 var(--sans); color: var(--muted); }
-.detalle-fila { font: .78rem/1.4 var(--sans); color: var(--dim); background: var(--card); border-radius: 10px; padding: 6px 8px; display: grid; gap: 2px; }
+.cifra .et { font: 600 .58rem/1.1 var(--sans); display: flex; justify-content: space-between; gap: 2px; }
+.cifra .v { font: 700 .95rem/1 var(--sans); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cifra .v small { font-size: .62rem; font-weight: 600; margin-left: 2px; }
+.cifra .obj { font: .56rem/1.15 var(--sans); color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.c-ecg { color: var(--accent-green); } .c-art { color: var(--accent-red); } .c-pap { color: var(--accent-yellow); } .c-pvc { color: var(--accent-purple); } .c-sat { color: var(--text-dim); } .c-co2 { color: var(--text-muted); }
+.c-pvc .v, .c-co2 .v { color: var(--text-main); }
+.marca { font: 700 .62rem var(--sans); border-radius: 4px; padding: 0 3px; }
+.marca.si { color: var(--bg-main); background: var(--accent-green); } .marca.no { color: var(--text-main); background: var(--accent-red); } .marca.sin { color: var(--bg-main); background: var(--text-muted); }
+.calc { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 3px; }
+.calc .celda .t { display: none; }
+.celda { background: var(--card2); border: 0; border-radius: 8px; padding: 2px 5px; min-width: 0; display: grid; cursor: pointer; text-align: left; color: var(--text-main); font: inherit; min-height: 34px; }
+.celda .k { font: .58rem/1.15 var(--sans); color: var(--text-muted); display: flex; justify-content: space-between; gap: 2px; }
+.celda .g { font: 700 .92rem/1.15 var(--sans); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.celda .g small { font: 600 .54rem var(--sans); color: var(--text-dim); margin-left: 1px; }
+.celda .t { font: .55rem/1.15 var(--sans); color: var(--text-muted); overflow-wrap: anywhere; }
+.celda.no .g { color: var(--accent-red); } .celda.si .g { color: var(--accent-green); }
+.consola-tira { display: flex; flex-wrap: wrap; gap: 2px 10px; align-items: center; font: .7rem/1.3 ui-monospace, Menlo, monospace; color: var(--accent-blue); background: var(--bg-main); border: 1px solid color-mix(in srgb, var(--accent-yellow) 30%, transparent); border-radius: 8px; padding: 3px 7px; }
+.consola-tira b { color: var(--text-main); font-weight: 600; }
+.discrepa { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; font: .72rem/1.35 var(--sans); color: var(--text-dim); border-left: 3px solid var(--accent-purple); background: var(--bg-card); border-radius: 0 8px 8px 0; padding: 4px 8px; }
+.discrepa .nota-tipo { flex: none; }
+.velo-tapa { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; background: color-mix(in srgb, var(--bg-main) 94%, transparent); border-radius: inherit; font: 600 .86rem/1.35 var(--sans); color: var(--text-dim); padding: 16px; z-index: 3; }
+.detalle-fila { font: .76rem/1.4 var(--sans); color: var(--text-dim); background: var(--bg-card); border-radius: 10px; padding: 5px 8px; display: grid; gap: 2px; }
 
-/* El corazón */
-.escena { position: relative; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--bg); }
-#corazon { display: block; width: 100%; height: auto; }
-.escena-tit { position: absolute; left: 8px; top: 6px; font: 600 .66rem var(--sans); letter-spacing: .05em; text-transform: uppercase; color: var(--muted); pointer-events: none; }
-.tapa { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(23, 20, 15, .94); font: 600 .9rem/1.3 var(--sans); color: var(--dim); text-align: center; padding: 20px; }
+/* La escena */
+.escena-caja { position: relative; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--bg-main); }
+.esc-pest { position: absolute; left: 4px; right: 4px; top: 4px; z-index: 2; display: flex; gap: 4px; align-items: center; pointer-events: none; }
+.esc-pest > * { pointer-events: auto; }
+.esc-pest .chip-b { background: color-mix(in srgb, var(--bg-main) 82%, transparent); }
+.esc-pest .chip-b { min-height: 32px; }
+.esc-pest .sep { flex: 1; }
+#esc-svg { display: block; width: 100%; height: auto; }
+.sello { position: absolute; left: 50%; top: 52%; transform: translate(-50%, -50%) rotate(-8deg); border: 3px solid var(--accent-red); color: var(--accent-red); background: color-mix(in srgb, var(--bg-main) 70%, transparent); font: 800 .95rem/1.15 var(--sans); letter-spacing: .08em; text-transform: uppercase; padding: 6px 12px; border-radius: 8px; text-align: center; pointer-events: none; max-width: 86%; }
+.sello small { display: block; font: 600 .66rem/1.25 var(--sans); letter-spacing: 0; text-transform: none; color: var(--text-main); }
+.escena-caja.gris #esc-svg { filter: grayscale(1); opacity: .55; }
+.fig-esq { position: absolute; left: 8px; bottom: 5px; font: 600 .62rem var(--sans); color: var(--text-muted); pointer-events: none; }
+.fig-lectura { position: absolute; right: 8px; bottom: 5px; font: .62rem ui-monospace, Menlo, monospace; color: var(--text-dim); pointer-events: none; text-align: right; max-width: 60%; }
+.leyenda { display: flex; flex-wrap: wrap; gap: 4px; }
+.leyenda button { min-height: 36px; font: .7rem/1.2 var(--sans); background: var(--card2); color: var(--text-dim); border: 1px solid var(--line); border-radius: 8px; padding: 3px 7px; cursor: pointer; text-align: left; }
+.leyenda button b { color: var(--accent-yellow); margin-right: 3px; font-variant-numeric: tabular-nums; }
+.leyenda button[aria-pressed="true"] { border-color: var(--accent-blue); color: var(--text-main); }
+.leyenda-txt { font: .76rem/1.4 var(--sans); color: var(--text-dim); }
+.escena-aparato [data-foco="fuera"] { opacity: .3; }
+.escena-aparato .dp.lit-sel .iso-l.mid, .escena-aparato .dp.lit-sel .iso-l.lo { stroke: var(--accent-blue); }
+.escena-aparato .dp.lit-sel { filter: drop-shadow(0 0 2px color-mix(in srgb, var(--accent-blue) 60%, transparent)); }
 
-/* Frase viva y botones */
-.frase { position: fixed; left: 0; right: 0; bottom: var(--dock-h); z-index: 19; margin: 0; background: var(--bg-main); border-top: 1px solid var(--line);
-  font: .84rem/1.3 var(--serif); color: var(--fg); padding: 5px max(14px, calc((100% - 560px) / 2)); box-shadow: inset 3px 0 0 var(--oro); cursor: pointer; }
-.frase-txt { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.frase.abierta .frase-txt { display: block; max-height: 40vh; overflow-y: auto; }
-button.b { min-height: 44px; font: 600 .86rem/1.2 var(--sans); background: var(--card2); color: var(--fg); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; cursor: pointer; text-align: left; }
-button.b.prim { background: var(--oro); color: var(--bg); border-color: var(--oro); }
-button.b.link { background: transparent; color: var(--oro); border-style: dashed; }
-button.b:disabled { opacity: .55; cursor: default; }
-.fila { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-.para { font: .82rem/1.45 var(--sans); color: var(--muted); }
-.aviso-rojo { font: .8rem/1.4 var(--sans); color: var(--fg); border-left: 3px solid var(--rojo); background: var(--card); border-radius: 0 10px 10px 0; padding: 6px 9px; }
-
-/* La cita que lleva a la app (como core/citas.js) */
-.cita { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 8px; }
-.cita-ir { display: inline-flex; align-items: center; min-height: 44px; padding: 0 10px; border: 1px dashed var(--oro); border-radius: 999px; background: transparent; color: var(--oro); font: 600 .74rem/1.2 var(--sans); text-align: left; cursor: pointer; max-width: 100%; overflow-wrap: anywhere; }
-.cita-pdf { display: inline-flex; align-items: center; min-height: 44px; color: var(--muted); font: .72rem var(--sans); text-decoration: underline; text-underline-offset: 2px; }
-.toast { position: fixed; left: 50%; top: 12px; transform: translateX(-50%); z-index: 40; width: min(92vw, 520px); background: var(--card2); border: 1px solid var(--oro); border-radius: 12px; padding: 10px 12px; font: .82rem/1.4 var(--sans); color: var(--fg); box-shadow: 0 8px 22px rgba(0, 0, 0, .5); }
-
-/* Explicación guiada (como core/explicacion-guiada.js), en la hoja de abajo */
-.guia { display: grid; gap: 6px; font: .9rem/1.4 var(--serif); color: var(--fg); padding: 6px 0 4px; }
-.guia-cab { display: flex; align-items: center; gap: 8px; min-width: 0; }
-.guia-n { font: 700 .66rem/1.2 var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--oro); white-space: nowrap; }
-.guia-tit { flex: 1; min-width: 0; font: 600 .84rem/1.2 var(--sans); color: var(--dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.guia-x { flex: none; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: transparent; color: var(--fg); font-size: 1.2rem; cursor: pointer; }
-.guia-txt { margin: 0; border-left: 3px solid var(--oro); padding: 1px 0 1px 9px; max-height: 26vh; overflow-y: auto; }
-.guia-org { font: .62rem/1.2 var(--sans); color: var(--muted); border: 1px dashed var(--line); border-radius: 999px; padding: 0 5px; }
-.guia-nav { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center; }
-.guia-b { min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--fg); font: 600 .84rem var(--sans); cursor: pointer; }
-.guia-b:disabled { opacity: .45; cursor: default; }
-.guia-b.prim { background: var(--oro); border-color: var(--oro); color: var(--bg); }
-.guia-puntos { display: flex; justify-content: center; gap: 5px; }
-.guia-puntos i { width: 7px; height: 7px; border-radius: 50%; border: 1px solid var(--oro); }
-.guia-puntos i.hecho { background: var(--oro); opacity: .5; }
-.guia-puntos i.aqui { background: var(--oro); }
-.guia-anillo { fill: none; stroke: var(--oro-claro); stroke-width: 2.4; stroke-dasharray: 6 3; vector-effect: non-scaling-stroke; pointer-events: none; }
-.guia-marco { box-shadow: 0 0 0 2px var(--oro-claro) !important; border-radius: 8px; }
-@media (prefers-reduced-motion: no-preference) {
-  .guia-anillo { animation: guia-late 1.4s ease-in-out infinite; }
-  .entra { animation: entra .25s ease-out; }
-}
-@keyframes guia-late { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
-@keyframes entra { from { opacity: .3; } to { opacity: 1; } }
-
-/* Dock fijo abajo */
-.dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--bg-main); border-top: 1px solid var(--line);
-  padding: 2px max(8px, env(safe-area-inset-left, 0px)) calc(4px + env(safe-area-inset-bottom, 0px)); }
-.dock-in { max-width: 560px; margin: 0 auto; display: grid; gap: 3px; }
-.dock-tabs { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 2px; }
-.dock-tabs button { min-height: 44px; background: transparent; border: 0; border-bottom: 2px solid transparent; color: var(--muted); font: 600 .76rem/1.1 var(--sans); cursor: pointer; padding: 0 1px; }
-.dock-tabs button[aria-selected="true"] { color: var(--oro); border-bottom-color: var(--oro); }
-.dock-panel { display: grid; gap: 4px; align-content: start; min-height: 92px; }
-.seg { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; min-width: 0; }
-.seg button { min-height: 44px; font: 600 .72rem/1.1 var(--sans); background: transparent; color: var(--muted); border: 0; padding: 2px; cursor: pointer; min-width: 0; }
-.seg button + button { border-left: 1px solid var(--line); }
-.seg button[aria-pressed="true"] { background: var(--oro); color: var(--bg); }
-.seg button small { display: block; font-weight: 400; font-size: .58rem; }
-.seg button:disabled { opacity: .4; cursor: default; }
-.rejilla { display: grid; gap: 4px; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); }
-.tog { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 2px; padding: 2px 6px; border-radius: 10px; background: var(--card2); border: 1px solid var(--line); color: var(--fg); font: 600 .7rem/1.1 var(--sans); cursor: pointer; min-width: 0; text-align: center; flex-direction: column; overflow-wrap: anywhere; }
-.tog small { display: block; font-weight: 400; font-size: .58rem; color: var(--muted); }
-.tog[aria-pressed="true"] { border-color: var(--oro); background: rgba(207, 154, 62, .22); box-shadow: inset 0 0 0 1px var(--oro); }
-.tog:disabled { opacity: .45; cursor: default; }
-.deslizador { display: grid; grid-template-columns: minmax(0, 1fr) 118px; gap: 6px; align-items: center; min-height: 44px; }
-.deslizador input { width: 100%; min-height: 44px; accent-color: var(--oro); margin: 0; }
-.deslizador output { font: 700 .86rem/1.15 var(--sans); color: var(--fg); text-align: right; font-variant-numeric: tabular-nums; }
-.deslizador output small { display: block; font: 600 .62rem var(--sans); color: var(--muted); }
-.marcas { display: flex; justify-content: space-between; font: .62rem/1 var(--sans); color: var(--muted); margin: -6px 124px 0 2px; }
-.dock-nota { font: .68rem/1.3 var(--sans); color: var(--muted); }
-.dock-est { display: grid; gap: 4px; padding: 6px 0; }
-.pasos { display: flex; gap: 4px; }
-.pasos i { flex: 1; height: 6px; border-radius: 3px; background: var(--card2); border: 1px solid rgba(196, 154, 74, .2); }
-.pasos i.on { background: var(--oro); border-color: var(--oro); } .pasos i.mal { background: var(--rojo); border-color: var(--rojo); } .pasos i.aqui { box-shadow: 0 0 0 2px var(--oro-claro); }
-.dock-est-txt { font: .74rem/1.3 var(--sans); color: var(--muted); display: flex; justify-content: space-between; gap: 8px; }
-
-/* Secciones de abajo */
-.bloque { display: grid; gap: 8px; }
-details.plegable { background: var(--card); border: 1px solid var(--card2); border-radius: 12px; padding: 2px 12px; }
-details.plegable summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font: 600 .86rem var(--sans); color: var(--dim); }
-details.plegable[open] { padding-bottom: 12px; }
-.nota-fuentes { border-left: 3px solid var(--purpura); background: var(--card); border-radius: 0 10px 10px 0; padding: 8px 10px; font: .8rem/1.45 var(--sans); color: var(--dim); display: grid; gap: 4px; }
-.nota-fuentes b { color: var(--fg); }
-.nota-tipo { display: inline-block; width: fit-content; font: 700 .62rem var(--sans); letter-spacing: .05em; text-transform: uppercase; color: var(--fg); background: var(--purpura); border-radius: 5px; padding: 1px 6px; }
-.nota-tipo.calla { background: var(--muted); color: var(--bg); } .nota-tipo.autor { background: var(--oro); color: var(--bg); } .nota-tipo.errata { background: var(--rojo); }
-ul.lista { margin: 6px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; font: .82rem/1.45 var(--sans); color: var(--dim); }
+/* Laboratorio, tendencias y abajo */
+.plegable { background: var(--bg-card); border: 1px solid var(--card2); border-radius: 12px; padding: 2px 10px; }
+.plegable summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font: 600 .84rem var(--sans); color: var(--text-dim); }
+.plegable[open] { padding-bottom: 10px; }
+.lab { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
+.lab .celda { cursor: default; }
+.tendencia { width: 100%; height: 64px; display: block; }
+.tend-l { fill: none; stroke-width: 1.4; }
+.tend-t { font: 9.5px var(--sans); fill: var(--text-muted); }
+ul.lista { margin: 4px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; font: .8rem/1.45 var(--sans); color: var(--text-dim); }
 ul.lista li { border-left: 2px solid var(--line); padding-left: 8px; min-width: 0; overflow-wrap: anywhere; display: grid; gap: 2px; }
+.nota { border-left: 3px solid var(--accent-purple); background: var(--bg-card); border-radius: 0 10px 10px 0; padding: 7px 9px; font: .78rem/1.45 var(--sans); color: var(--text-dim); display: grid; gap: 3px; }
+.nota b { color: var(--text-main); }
+.nota-tipo { display: inline-block; width: fit-content; font: 700 .6rem var(--sans); letter-spacing: .05em; text-transform: uppercase; color: var(--text-main); background: var(--accent-purple); border-radius: 5px; padding: 1px 6px; }
+.nota-tipo.calla { background: var(--text-muted); color: var(--bg-main); } .nota-tipo.autor { background: var(--accent-yellow); color: var(--bg-main); } .nota-tipo.errata { background: var(--accent-red); }
 .tira { display: flex; flex-wrap: wrap; gap: 8px; }
 .lamina-libro { display: grid; gap: 2px; justify-items: center; background: var(--text-main); border: 1px solid var(--line); border-radius: 8px; padding: 3px; cursor: zoom-in; min-height: 44px; width: 104px; }
 .lamina-libro img { display: block; height: 58px; width: 96px; object-fit: contain; }
 .lamina-libro span { font: 600 .6rem/1.15 var(--sans); color: var(--bg-main); text-align: center; }
-dialog#visor { width: min(96vw, 560px); max-height: 92vh; padding: 10px; border: 1px solid var(--oro); border-radius: 14px; background: var(--card2); color: var(--fg); }
-dialog#visor::backdrop { background: rgba(23, 20, 15, .82); }
-#visor .caja-img { background: var(--text-main); border-radius: 8px; padding: 4px; }
-#visor img { display: block; width: 100%; height: auto; max-height: 62vh; object-fit: contain; }
-#visor p { font: .84rem/1.4 var(--sans); color: var(--dim); margin-top: 8px; }
-.elige { border: 1px solid var(--line); border-radius: 14px; padding: 12px; display: grid; gap: 8px; }
-.opciones-elige { display: flex; flex-wrap: wrap; gap: 6px; }
-.opciones-elige button { min-height: 44px; font: 600 .78rem var(--sans); background: var(--card2); color: var(--fg); border: 1px solid var(--line); border-radius: 10px; padding: 6px 10px; cursor: pointer; text-align: left; }
-.opciones-elige button[aria-pressed="true"] { background: var(--oro); color: var(--bg); border-color: var(--oro); }
+dialog#visor { width: min(96vw, 560px); max-height: 92vh; padding: 10px; border: 1px solid var(--accent-yellow); border-radius: 14px; background: var(--card2); color: var(--text-main); }
+dialog#visor::backdrop { background: color-mix(in srgb, var(--bg-main) 85%, transparent); }
+#visor img { display: block; width: 100%; height: auto; max-height: 62vh; object-fit: contain; background: var(--text-main); border-radius: 8px; }
+#visor p { font: .84rem/1.4 var(--sans); color: var(--text-dim); margin-top: 8px; }
 
-/* ¿Qué shock es? y Mayéutica */
-.formato { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px; display: grid; gap: 10px; min-width: 0; }
-.cab-preg { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
-.num { font: 700 .76rem var(--sans); color: var(--oro); border: 1px solid var(--oro); border-radius: 6px; padding: 1px 7px; }
-.tipo { font: 600 .68rem var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
-.grupo { font: 700 .66rem var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--bg); background: var(--dim); border-radius: 6px; padding: 1px 6px; }
-.grupo.examen { background: var(--rojo); color: var(--fg); } .grupo.caso { background: var(--purpura); color: var(--fg); }
-.pregunta { font-size: 1rem; line-height: 1.45; }
-.op { display: grid; gap: 8px; }
-.op button.elegida-bien { border-color: var(--verde); } .op button.elegida-mal { border-color: var(--rojo); }
-.respuesta { background: var(--card2); border-radius: 10px; padding: 12px; display: grid; gap: 8px; min-width: 0; font: .9rem/1.45 var(--serif); }
-.ok { color: var(--verde); font: 600 .9rem var(--sans); } .mal { color: var(--rojo); font: 600 .9rem var(--sans); }
-.pista { display: grid; gap: 6px; }
-.pista li { cursor: pointer; }
-.pista button.senal { min-height: 36px; font: 600 .72rem var(--sans); border: 1px dashed var(--line); background: transparent; color: var(--oro); border-radius: 999px; padding: 0 10px; cursor: pointer; width: fit-content; }
-.dia { font: 700 .74rem var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--purpura); }
-dl.paciente { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; margin: 0; font: .82rem/1.35 var(--sans); background: var(--card2); border-radius: 10px; padding: 8px 10px; }
-dl.paciente dt { color: var(--muted); } dl.paciente dd { margin: 0; color: var(--fg); }
-dl.paciente dd.cambia { color: var(--rojo); font-weight: 600; }
-.marcador { font: 600 .8rem var(--sans); color: var(--dim); }
+/* Citas (como core/citas.js) */
+.cita { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 8px; }
+.cita-ir { display: inline-flex; align-items: center; min-height: 40px; padding: 0 10px; border: 1px dashed var(--accent-yellow); border-radius: 999px; background: transparent; color: var(--accent-yellow); font: 600 .72rem/1.2 var(--sans); text-align: left; cursor: pointer; max-width: 100%; overflow-wrap: anywhere; }
+.cita-pdf { display: inline-flex; align-items: center; min-height: 40px; color: var(--text-muted); font: .7rem var(--sans); text-decoration: underline; text-underline-offset: 2px; }
+.toast { position: fixed; left: 50%; top: 10px; transform: translateX(-50%); z-index: 40; width: min(92vw, 520px); background: var(--card2); border: 1px solid var(--accent-yellow); border-radius: 12px; padding: 10px 12px; font: .8rem/1.4 var(--sans); color: var(--text-main); }
+
+/* Dock fijo: la frase (entera), las pestañas y los mandos */
+.dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--bg-main); border-top: 1px solid var(--line); padding: 4px max(8px, env(safe-area-inset-left, 0px)) calc(4px + env(safe-area-inset-bottom, 0px)); }
+.dock-in { max-width: 560px; margin: 0 auto; display: grid; gap: 3px; }
+.frase { display: flex; gap: 6px; align-items: flex-start; font: .8rem/1.32 var(--serif); color: var(--text-main); box-shadow: inset 3px 0 0 var(--accent-yellow); padding: 2px 0 2px 8px; }
+.frase-txt { flex: 1; min-width: 0; }
+.frase-txt .estado { font: 700 .62rem var(--sans); letter-spacing: .05em; text-transform: uppercase; color: var(--accent-yellow); display: block; }
+.btn-guia { flex: none; min-height: 44px; min-width: 44px; border-radius: 10px; border: 1px solid var(--accent-yellow); background: var(--accent-yellow); color: var(--bg-main); font: 700 .7rem/1.1 var(--sans); cursor: pointer; padding: 2px 6px; }
+.dock-tabs { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 2px; }
+.dock-tabs button { min-height: 38px; background: transparent; border: 0; border-bottom: 2px solid transparent; color: var(--text-muted); font: 600 .72rem/1.1 var(--sans); cursor: pointer; padding: 0 1px; }
+.dock-tabs button[aria-selected="true"] { color: var(--accent-yellow); border-bottom-color: var(--accent-yellow); }
+.dock-panel { display: grid; gap: 3px; align-content: start; min-height: 64px; }
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.seg button { min-height: 44px; font: 600 .7rem/1.1 var(--sans); background: transparent; color: var(--text-muted); border: 0; padding: 2px; cursor: pointer; min-width: 0; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--accent-yellow); color: var(--bg-main); }
+.seg button small { display: block; font-weight: 400; font-size: .56rem; }
+.rejilla { display: grid; gap: 4px; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); }
+.tog { min-height: 44px; display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 2px 6px; border-radius: 10px; background: var(--card2); border: 1px solid var(--line); color: var(--text-main); font: 600 .7rem/1.1 var(--sans); cursor: pointer; min-width: 0; text-align: center; }
+.tog small { display: block; font-weight: 400; font-size: .56rem; color: var(--text-muted); }
+.tog[aria-pressed="true"] { border-color: var(--accent-yellow); background: color-mix(in srgb, var(--accent-yellow) 22%, transparent); }
+.tog:disabled { opacity: .45; cursor: default; }
+.deslizador { display: grid; grid-template-columns: minmax(0, 1fr) 124px; gap: 6px; align-items: center; min-height: 44px; }
+.deslizador input { width: 100%; min-height: 40px; accent-color: var(--accent-yellow); margin: 0; }
+.deslizador output { font: 700 .8rem/1.15 var(--sans); text-align: right; font-variant-numeric: tabular-nums; }
+.deslizador output small { display: block; font: 600 .6rem var(--sans); color: var(--text-muted); }
+.dock-nota { font: .64rem/1.25 var(--sans); color: var(--text-muted); }
+.pasos { display: flex; gap: 4px; }
+.pasos i { flex: 1; height: 6px; border-radius: 3px; background: var(--card2); }
+.pasos i.on { background: var(--accent-green); } .pasos i.mal { background: var(--accent-red); } .pasos i.aqui { box-shadow: 0 0 0 2px var(--accent-blue); }
+.dock-est-txt { font: .72rem/1.3 var(--sans); color: var(--text-muted); display: flex; justify-content: space-between; gap: 8px; }
+
+/* Explicación guiada (en el dock) */
+.guia { display: grid; gap: 5px; font: .86rem/1.4 var(--serif); }
+.guia-cab { display: flex; align-items: center; gap: 8px; }
+.guia-n { font: 700 .64rem/1.2 var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--accent-yellow); white-space: nowrap; }
+.guia-tit { flex: 1; min-width: 0; font: 600 .8rem/1.2 var(--sans); color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.guia-x { flex: none; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: transparent; color: var(--text-main); font-size: 1.2rem; cursor: pointer; }
+.guia-txt { margin: 0; border-left: 3px solid var(--accent-yellow); padding: 1px 0 1px 9px; max-height: 24vh; overflow-y: auto; }
+.guia-nav { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center; }
+.guia-b { min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--card2); color: var(--text-main); font: 600 .82rem var(--sans); cursor: pointer; }
+.guia-b:disabled { opacity: .45; }
+.guia-b.prim { background: var(--accent-yellow); border-color: var(--accent-yellow); color: var(--bg-main); }
+.guia-puntos { display: flex; justify-content: center; gap: 5px; }
+.guia-puntos i { width: 7px; height: 7px; border-radius: 50%; border: 1px solid var(--accent-yellow); }
+.guia-puntos i.hecho { background: var(--accent-yellow); opacity: .5; } .guia-puntos i.aqui { background: var(--accent-yellow); }
+.guia-anillo { fill: none; stroke: var(--accent-blue); stroke-width: 2.2; stroke-dasharray: 6 3; vector-effect: non-scaling-stroke; pointer-events: none; }
+.guia-marco { box-shadow: 0 0 0 2px var(--accent-blue) !important; border-radius: 8px; }
+@media (prefers-reduced-motion: no-preference) { .guia-anillo { animation: late 1.4s ease-in-out infinite; } }
+@keyframes late { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
+
+/* Formatos (¿Qué shock es? y Mayéutica) */
+.formato { background: var(--bg-card); border: 1px solid var(--line); border-radius: 14px; padding: 10px; display: grid; gap: 8px; min-width: 0; }
+.cab-preg { display: flex; gap: 6px; align-items: baseline; flex-wrap: wrap; }
+.num { font: 700 .74rem var(--sans); color: var(--accent-yellow); border: 1px solid var(--accent-yellow); border-radius: 6px; padding: 1px 7px; }
+.tipo { font: 600 .66rem var(--sans); letter-spacing: .05em; text-transform: uppercase; color: var(--text-muted); }
+.grupo { font: 700 .64rem var(--sans); letter-spacing: .05em; text-transform: uppercase; color: var(--bg-main); background: var(--text-dim); border-radius: 6px; padding: 1px 6px; }
+.grupo.examen { background: var(--accent-red); color: var(--text-main); } .grupo.caso { background: var(--accent-purple); color: var(--text-main); }
+.pregunta { font-size: .98rem; line-height: 1.45; }
+.op { display: grid; gap: 6px; }
+button.b { min-height: 44px; font: 600 .82rem/1.25 var(--sans); background: var(--card2); color: var(--text-main); border: 1px solid var(--line); border-radius: 10px; padding: 8px 11px; cursor: pointer; text-align: left; }
+button.b.prim { background: var(--accent-yellow); color: var(--bg-main); border-color: var(--accent-yellow); }
+button.b:disabled { opacity: .6; cursor: default; }
+button.b.bien { border-color: var(--accent-green); box-shadow: inset 3px 0 0 var(--accent-green); } button.b.malb { border-color: var(--accent-red); box-shadow: inset 3px 0 0 var(--accent-red); }
+button.b.marcada { border-color: var(--accent-yellow); background: color-mix(in srgb, var(--accent-yellow) 18%, var(--card2)); }
+.fila { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.respuesta { background: var(--card2); border-radius: 10px; padding: 10px; display: grid; gap: 6px; font: .88rem/1.45 var(--serif); }
+.ok { color: var(--accent-green); font: 600 .86rem var(--sans); } .mal { color: var(--accent-red); font: 600 .86rem var(--sans); }
+.para { font: .8rem/1.45 var(--sans); color: var(--text-muted); }
+.dia { font: 700 .72rem var(--sans); letter-spacing: .05em; text-transform: uppercase; color: var(--accent-purple); }
+dl.paciente { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; margin: 0; font: .8rem/1.35 var(--sans); background: var(--card2); border-radius: 10px; padding: 7px 9px; }
+dl.paciente dt { color: var(--text-muted); } dl.paciente dd { margin: 0; } dl.paciente dd.nuevo { color: var(--accent-red); font-weight: 600; }
+.punto { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px; align-items: center; }
+.etapas { display: flex; gap: 4px; flex-wrap: wrap; }
+.etapas span { font: 600 .66rem var(--sans); border-radius: 999px; padding: 2px 8px; border: 1px solid var(--line); color: var(--text-muted); }
+.etapas span.on { border-color: var(--accent-yellow); color: var(--accent-yellow); }
 </style>
 </head>
 <body>
 <main>
-  <header class="cabecera">
-    <p class="aviso">Para elegir: aún no está en la app</p>
-    <h1>La cabecera del shock: <em>el monitor y el corazón</em></h1>
-    <p class="lead">Todo shock rompe una pieza de <span class="hl-azul">PAM = GC × RVS + PAD</span>. Mirando el monitor se sabe cuál: <span class="hl-a">la PVC, el gasto y la resistencia</span> dejan una huella distinta en cada tipo. <span class="org">ficha · p. 2-3</span></p>
-  </header>
-
+  <div class="cab"><h1>La cabecera del shock</h1><span class="aviso">Para elegir: aún no está en la app</span></div>
   <div class="interruptor" role="tablist" aria-label="Modo">
     <button type="button" role="tab" id="modo-explorar" aria-selected="true">Explorar</button>
-    <button type="button" role="tab" id="modo-adivina" aria-selected="false">¿Qué shock es?</button>
-    <button type="button" role="tab" id="modo-preguntas" aria-selected="false">Mayéutica</button>
+    <button type="button" role="tab" id="modo-qs" aria-selected="false">¿Qué shock es?</button>
+    <button type="button" role="tab" id="modo-may" aria-selected="false">Mayéutica</button>
   </div>
-
-  <section id="zona-pacientes" class="bloque" aria-label="Pacientes">
-    <div class="pacientes" id="pacientes"></div>
-    <p class="ficha-pac" id="ficha-pac"></p>
-  </section>
+  <section id="zona-pac" aria-label="Pacientes"><div class="pacientes" id="pacientes"></div><p class="ficha-pac" id="ficha-pac"></p></section>
 
   <section class="monitor" id="monitor" aria-label="Monitor de cabecera">
-    <div class="mon-cab"><span id="mon-quien">Monitor</span><button type="button" class="pausa" id="pausa" aria-pressed="false">Pausa</button></div>
-    <div class="mon-cuerpo">
-      <svg id="trazas" role="img" aria-label="Curvas del monitor: ECG, presión arterial, pletismografía, PVC y respiración"></svg>
-      <div class="cifras" id="cifras">
-        <div class="cifra c-ecg" data-fila="fc"><span class="et"><span>FC</span><span>lpm</span></span><span class="v" id="n-fc">–</span></div>
-        <div class="cifra c-art" data-fila="pa"><span class="et"><span>ART</span><span>mmHg</span></span><span class="v" id="n-pa">–</span><span class="obj" id="o-pa"></span></div>
-        <div class="cifra c-sat" data-fila="spo2"><span class="et"><span>SpO₂</span><span>%</span></span><span class="v" id="n-spo2">–</span></div>
-        <div class="cifra c-pvc" data-fila="pvc"><span class="et"><span>PVC</span><span>mmHg</span></span><span class="v" id="n-pvc">–</span></div>
-        <div class="cifra c-resp" data-fila="fr"><span class="et"><span>FR</span><span>rpm</span></span><span class="v" id="n-fr">–</span><span class="obj" id="n-t"></span></div>
-      </div>
-    </div>
-    <div class="perfusion" id="perfusion"></div>
-    <div class="mon-pie" id="mon-pie"></div>
-    <div class="detalle-fila" id="detalle-fila" hidden></div>
+    <div class="mon-cab"><span class="quien" id="mon-quien">Monitor</span>
+      <button type="button" class="chip-b" id="obj-marino" aria-pressed="true" aria-label="Objetivos de Marino">Marino</button><button type="button" class="chip-b" id="obj-umi" aria-pressed="false" aria-label="Objetivos del Manual UMI">UMI</button>
+      <button type="button" class="chip-b" id="enclavar" aria-pressed="false" aria-label="Enclavar: inflar el balón del catéter y leer la PCP">Cuña</button>
+      <button type="button" class="chip-b" id="pausa" aria-pressed="false" aria-label="Pausa">❚❚</button></div>
+    <div class="mon-cuerpo"><svg id="trazas" role="img" aria-label="Curvas del monitor: ECG, presión arterial, presión de la arteria pulmonar, PVC, pletismografía y capnografía"></svg><div class="cifras" id="cifras"></div></div>
+    <div class="calc" id="calc"></div>
+    <div class="discrepa" id="discrepa" hidden></div>
+    <div class="consola-tira" id="consola" hidden></div>
+    <div class="detalle-fila" id="detalle" hidden></div>
+    <div class="velo-tapa" id="velo-mon" hidden>Primero predices. El monitor sale al contestar.</div>
   </section>
 
-  <section id="zona-adivina" class="formato" hidden aria-live="polite"></section>
-
-  <div class="fila" id="fila-explicame"><button type="button" class="b prim" id="explicame">Explícame este estado</button><span class="para" id="explicame-txt"></span></div>
-
-  <h3 id="tit-escena">Dentro del paciente</h3>
-  <section class="escena" id="escena" aria-label="Dentro del paciente">
-    <svg id="corazon" viewBox="0 0 360 272" role="img" aria-label="Corazón en corte de cuatro cámaras, con la aorta, la arteria pulmonar, una arteriola y una vena">
-      <defs>
-        <pattern id="trama" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><line x1="0" y1="0" x2="0" y2="6" stroke="rgba(196,154,74,.22)" stroke-width="1"/></pattern>
-        <clipPath id="clip-vena"><circle cx="322" cy="166" r="19"/></clipPath>
-      </defs>
-      <path id="h-saco" d="M82 114 C74 178 116 246 162 254 C208 246 248 178 240 114 C234 60 90 60 82 114 Z" fill="var(--accent-red)" fill-opacity="0" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="4 3"/>
-      <text x="210" y="244" font-size="10" fill="var(--text-muted)" font-style="italic">pericardio</text>
-      <g id="h-vci">
-        <path d="M36 266 L36 132 C36 110 60 100 96 100" stroke="var(--text-main)" stroke-width="13" fill="none" stroke-linecap="round"/>
-        <path d="M36 266 L36 132 C36 110 60 100 96 100" class="sangre-venosa" stroke="var(--accent-purple)" stroke-width="9" fill="none" stroke-linecap="round"/>
-        <path d="M36 266 L36 132 C36 110 60 100 96 100" class="sangre-roja" stroke="var(--accent-red)" stroke-width="9" fill="none" stroke-linecap="round" stroke-opacity="0"/>
-      </g>
-      <text x="46" y="236" font-size="10" fill="var(--text-dim)">VCI</text>
-      <g id="h-pulmonar">
-        <path d="M150 126 C146 98 138 74 118 58 L94 46" stroke="var(--text-main)" stroke-width="12" fill="none" stroke-linecap="round"/>
-        <path d="M150 126 C146 98 138 74 118 58 L94 46" stroke="var(--accent-purple)" stroke-width="8" fill="none" stroke-linecap="round"/>
-        <ellipse id="h-trombo" cx="106" cy="52" rx="9" ry="5" transform="rotate(26 106 52)" fill="var(--text-main)" stroke="var(--accent-red)" stroke-width="1.5" opacity="0"/>
-      </g>
-      <text x="20" y="34" font-size="10" fill="var(--text-dim)">a. pulmonar</text>
-      <g id="g-auriculas">
-        <ellipse cx="124" cy="100" rx="30" ry="24" fill="var(--bg-card)" stroke="var(--text-main)" stroke-width="1.6"/>
-        <ellipse cx="204" cy="100" rx="28" ry="22" fill="var(--bg-card)" stroke="var(--text-main)" stroke-width="1.6"/>
-        <ellipse id="h-ad" cx="124" cy="100" rx="23" ry="18" class="cav-venosa" fill="var(--accent-purple)" fill-opacity=".55"/>
-        <ellipse id="h-ai" cx="204" cy="100" rx="21" ry="16" fill="var(--accent-red)" fill-opacity=".55"/>
-        <text x="115" y="104" font-size="10.5" fill="var(--text-main)">AD</text>
-        <text x="196" y="104" font-size="10.5" fill="var(--text-main)">AI</text>
-      </g>
-      <g id="h-aorta">
-        <path d="M166 124 L166 62 C166 36 190 24 220 24 C250 24 268 40 268 68 L268 264" stroke="var(--text-main)" stroke-width="15" fill="none" stroke-linecap="round"/>
-        <path d="M166 124 L166 62 C166 36 190 24 220 24 C250 24 268 40 268 68 L268 264" stroke="var(--accent-red)" stroke-width="11" fill="none" stroke-linecap="round"/>
-      </g>
-      <text x="200" y="54" font-size="10" fill="var(--text-dim)">aorta</text>
-      <ellipse id="h-balon" cx="268" cy="132" rx="4" ry="34" fill="var(--accent-yellow)" stroke="var(--text-main)" stroke-width="1" opacity="0"/>
-      <g id="g-ventriculos">
-        <path d="M92 124 C88 172 120 222 162 240 C204 222 236 172 232 124 Z" fill="url(#trama)" stroke="var(--text-main)" stroke-width="1.8"/>
-        <path d="M92 124 C88 172 120 222 162 240 C204 222 236 172 232 124 Z" fill="var(--bg-card)" fill-opacity=".55"/>
-        <g id="g-vd"><path id="h-vd" class="cav-venosa" d="M157 130 L157 222 C136 210 110 184 106 150 C105 140 108 132 116 130 Z" fill="var(--accent-purple)" fill-opacity=".6" stroke="var(--text-main)" stroke-width=".8"/></g>
-        <g id="g-vi"><path id="h-vi" d="M168 130 L168 220 C192 208 216 184 220 150 C221 140 218 132 210 130 Z" fill="var(--accent-red)" fill-opacity=".6" stroke="var(--text-main)" stroke-width=".8"/></g>
-        <text x="122" y="178" font-size="10.5" fill="var(--text-main)">VD</text>
-        <text x="190" y="190" font-size="10.5" fill="var(--text-main)">VI</text>
-        <path d="M108 127 L154 127 M171 127 L218 127" stroke="var(--accent-yellow)" stroke-width="1.4" stroke-dasharray="3 2"/>
-      </g>
-      <g id="h-impella" opacity="0">
-        <path d="M268 264 L268 68 C268 40 250 24 220 24 C190 24 166 36 166 62 L167 132 L182 178" stroke="var(--accent-yellow)" stroke-width="2.2" fill="none"/>
-        <rect x="161" y="112" width="11" height="20" rx="2" fill="var(--accent-yellow)"/>
-        <circle cx="184" cy="184" r="5" fill="none" stroke="var(--accent-yellow)" stroke-width="2"/>
-        <text x="174" y="152" font-size="9.5" fill="var(--accent-yellow)">Impella</text>
-      </g>
-      <g id="h-ecmo" opacity="0">
-        <path d="M40 262 C60 262 80 258 96 258" stroke="var(--accent-purple)" stroke-width="3" fill="none"/>
-        <path d="M160 258 C200 258 240 262 262 262" stroke="var(--accent-red)" stroke-width="3" fill="none"/>
-        <rect x="96" y="250" width="64" height="16" rx="4" fill="var(--bg-main)" stroke="var(--accent-yellow)" stroke-width="1.4"/>
-        <text x="103" y="262" font-size="9.5" fill="var(--accent-yellow)">ECMO VA</text>
-      </g>
-      <g id="h-arteriola">
-        <circle cx="322" cy="66" r="22" fill="var(--bg-card)" stroke="var(--text-main)" stroke-width="1.4"/>
-        <circle id="h-arteriola-pared" cx="322" cy="66" r="20" fill="url(#trama)" stroke="var(--accent-red)" stroke-width="1"/>
-        <circle id="h-arteriola-luz" cx="322" cy="66" r="14" fill="var(--accent-red)" fill-opacity=".75" stroke="var(--text-main)" stroke-width=".8"/>
-      </g>
-      <text x="300" y="102" font-size="9.5" fill="var(--text-dim)">arteriola</text>
-      <text x="302" y="113" font-size="9" fill="var(--text-muted)">(la RVS)</text>
-      <g id="h-vena">
-        <circle cx="322" cy="166" r="22" fill="var(--bg-card)" stroke="var(--text-main)" stroke-width="1.4"/>
-        <rect id="h-vena-nivel" x="300" y="150" width="44" height="40" clip-path="url(#clip-vena)" class="cav-venosa" fill="var(--accent-purple)" fill-opacity=".7"/>
-        <circle cx="322" cy="166" r="19" fill="none" stroke="var(--text-main)" stroke-width=".8"/>
-      </g>
-      <text x="310" y="202" font-size="9.5" fill="var(--text-dim)">vena</text>
-      <text x="294" y="213" font-size="9" fill="var(--text-muted)">(el volumen)</text>
-      <g id="h-fuga" opacity="0">
-        <circle cx="296" cy="150" r="2" fill="var(--text-dim)"/><circle cx="292" cy="160" r="2" fill="var(--text-dim)"/><circle cx="296" cy="172" r="2" fill="var(--text-dim)"/>
-        <circle cx="348" cy="156" r="2" fill="var(--text-dim)"/><circle cx="351" cy="168" r="2" fill="var(--text-dim)"/>
-      </g>
-    </svg>
-    <div class="tapa" id="tapa" hidden>Primero mira el monitor y elige. El dibujo sale al contestar.</div>
+  <section id="zona-qs" class="formato" hidden aria-live="polite"></section>
+  <section id="zona-may" class="formato" hidden aria-live="polite"></section>
+  <section class="escena-caja" id="escena" aria-label="Dentro del paciente">
+    <div class="esc-pest" id="esc-pest"></div>
+    <svg id="esc-svg" class="escena-aparato" role="img" aria-label="El paciente o el aparato, movido por el mismo motor que el monitor"></svg>
+    <span class="fig-esq" id="fig-esq" hidden></span>
+    <div class="sello" id="sello" hidden></div>
+    <div class="velo-tapa" id="velo-esc" hidden>El dibujo, al contestar.</div>
+  </section>
+  <section id="bajo-escena" style="display:grid; gap:6px">
+    <div id="mandos"></div>
+    <div class="discrepa" id="discrepa-ap" hidden></div>
+    <div class="leyenda" id="leyenda"></div><p class="leyenda-txt" id="leyenda-txt"></p>
+    <div id="pierna" hidden></div>
   </section>
 
-  <section id="vista-preguntas" class="bloque" hidden aria-live="polite"><div class="formato" id="preg"></div></section>
 
-  <section id="zona-abajo" class="bloque">
-    <details class="plegable" id="fuentes-estado"><summary>Las fuentes de este estado</summary><ul class="lista" id="lista-fuentes"></ul></details>
-    <h3>Así lo dibuja el libro</h3>
-    <div class="tira" id="tira"></div>
-    <details class="plegable"><summary>Notas: lo que discrepa, lo que la fuente no dice</summary><div class="bloque" id="lista-notas"></div></details>
-    <details class="plegable"><summary>Para profundizar: lo que el monitor no enseña</summary><ul class="lista" id="lista-profundizar"></ul></details>
-    <section class="elige" aria-label="Para decidir"><h2>Para decidir</h2><div id="elige"></div><p class="para" id="resumen-elige"></p></section>
+  <section id="abajo" style="display:grid; gap:6px">
+    <details class="plegable" id="pleg-lab" open><summary>Laboratorio y tendencias, con su hora</summary><div class="lab" id="lab"></div><svg class="tendencia" id="tend" viewBox="0 0 360 64" role="img" aria-label="Tendencias por hora"></svg><p class="para" id="lab-nota"></p></details>
+    <details class="plegable"><summary>Las fuentes de este estado</summary><ul class="lista" id="fuentes"></ul></details>
+    <details class="plegable"><summary>Notas: lo que discrepa y lo que la fuente no dice</summary><div id="notas" style="display:grid; gap:6px"></div></details>
+    <details class="plegable"><summary>Así lo dibuja el libro</summary><div class="tira" id="tira"></div></details>
+    <details class="plegable"><summary>Para profundizar</summary><ul class="lista" id="profundizar"></ul></details>
   </section>
 </main>
 
-<p class="frase" id="frase" role="status" aria-live="polite"><span class="frase-txt" id="frase-txt"></span></p>
-
 <div class="dock" id="dock">
   <div class="dock-in" id="dock-explorar">
-    <div class="dock-tabs" role="tablist">
-      <button type="button" role="tab" data-pest="gravedad" aria-selected="true">Gravedad</button>
-      <button type="button" role="tab" data-pest="volumen" aria-selected="false">Volumen</button>
-      <button type="button" role="tab" data-pest="farmacos" aria-selected="false">Fármacos</button>
-      <button type="button" role="tab" data-pest="soporte" aria-selected="false">Soporte</button>
+    <div class="frase" id="frase"><span class="frase-txt" id="frase-txt" role="status" aria-live="polite"></span><button type="button" class="btn-guia" id="btn-guia">Explí-<br>came</button></div>
+    <div class="dock-tabs" role="tablist" id="dock-tabs">
+      <button type="button" role="tab" data-pest="grav" aria-selected="true">Gravedad</button>
+      <button type="button" role="tab" data-pest="vol" aria-selected="false">Volumen</button>
+      <button type="button" role="tab" data-pest="far" aria-selected="false">Fármacos</button>
+      <button type="button" role="tab" data-pest="sop" aria-selected="false">Soporte</button>
+      <button type="button" role="tab" data-pest="reloj" aria-selected="false">Reloj</button>
     </div>
     <div class="dock-panel" id="dock-panel"></div>
   </div>
   <div class="dock-in" id="dock-guia" hidden></div>
-  <div class="dock-in dock-est" id="dock-estudio" hidden><div class="pasos" id="dock-pasos"></div><div class="dock-est-txt"><span id="dock-est-izq"></span><span id="dock-est-der"></span></div></div>
+  <div class="dock-in" id="dock-est" hidden><div class="pasos" id="dock-pasos"></div><div class="dock-est-txt"><span id="dock-est-izq"></span><span id="dock-est-der"></span></div></div>
 </div>
-
-<dialog id="visor"><div class="caja-img"><img id="visor-img" alt=""></div><p id="visor-txt"></p><div class="fila" style="margin-top:8px; justify-content:space-between"><span id="visor-cita"></span><button type="button" class="b" id="visor-cerrar">Cerrar</button></div></dialog>
+<dialog id="visor"><img id="visor-img" alt=""><p id="visor-txt"></p><div class="fila" style="justify-content:space-between; margin-top:6px"><span id="visor-cita"></span><button type="button" class="b" id="visor-cerrar">Cerrar</button></div></dialog>
 <div class="toast" id="toast" role="status" hidden></div>
 
-<script>
-'use strict';
-const $ = id => document.getElementById(id);
-const REDUCIR = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
-const coma = (x, d = 0) => (+x).toFixed(d).replace('.', ',');
-const NS = 'http://www.w3.org/2000/svg';
-const PDF_S = '../../docs/marino-2024-shock-caps14-17.pdf';
-const PDF_C = '../../docs/marino-2024-cardiac-disorders-caps18-21.pdf';
-const PDF_R = '../../docs/marino-2024-respiratory-management-caps22-26.pdf';
-const IMG = '../../js/modules/cardiologia/img/';
-
-/* ============================================================
-   1. Citas: «Ver en la ficha» (el enlace cruzado de la app) y el PDF de segunda opción
-   ============================================================ */
-const CARDIO = ['cardiologia', 'merinoCardiologia', 'panel-merino-cardio-tabs'];
-const NEUMO = ['neumologia', 'merinoNeumologia', 'panel-merino-neumo-tabs'];
-const FICHA = {
-  'mc-definiciones': [CARDIO, 'Shock: definiciones y monitorización', 'Shock: definiciones', PDF_S],
-  'mc-vasopresores': [CARDIO, 'Vasopresores en el shock: fármacos y dosis', 'Vasopresores en el shock', PDF_S],
-  'mc-hemorragico-clasificacion': [CARDIO, 'Shock hemorrágico: fisiología y clasificación', 'Shock hemorrágico', PDF_S],
-  'mc-hemorragico-fluidos': [CARDIO, 'Reanimación del shock hemorrágico: catéteres y fluidos', 'Reanimación del shock hemorrágico', PDF_S],
-  'mc-damage-control': [CARDIO, 'Damage control resuscitation', 'Damage control', PDF_S],
-  'mc-cardiogenico-fisio': [CARDIO, 'Shock cardiogénico: fisiopatología', 'Shock cardiogénico: fisiopatología', PDF_S],
-  'mc-cardiogenico-farmaco': [CARDIO, 'Shock cardiogénico: soporte farmacológico', 'Shock cardiogénico: fármacos', PDF_S],
-  'mc-soporte-mecanico': [CARDIO, 'Soporte circulatorio mecánico', 'Soporte circulatorio mecánico', PDF_S],
-  'mc-shock-septico': [CARDIO, 'Shock séptico: definiciones y manejo', 'Shock séptico', PDF_S],
-  'mc-anafilaxia': [CARDIO, 'Anafilaxia', 'Anafilaxia', PDF_S],
-  'mc-ic-tipos': [CARDIO, 'Insuficiencia cardíaca aguda: tipos y consecuencias', 'Insuficiencia cardíaca aguda', PDF_C],
-  'mc-ic-manejo': [CARDIO, 'Insuficiencia cardíaca aguda: manejo', 'Insuficiencia cardíaca: manejo', PDF_C],
-  'mc-diseccion-aortica': [CARDIO, 'Disección aórtica aguda', 'Disección aórtica aguda', PDF_C],
-  'neumo-ep-diagnostico': [NEUMO, 'Embolia pulmonar aguda: evaluación clínica y diagnóstico', 'Embolia pulmonar: diagnóstico', PDF_R],
-  'neumo-ep-manejo': [NEUMO, 'Embolia pulmonar aguda: manejo', 'Embolia pulmonar: manejo', PDF_R],
-};
-const primeraPag = p => String(p).match(/\d+/)[0];
-function cita(c) {
-  const [[esp, view, panel], titulo, corto, pdf] = FICHA[c.f];
-  const pag = /[-,]/.test(String(c.p)) ? `pp. ${c.p}` : `p. ${c.p}`;
-  return `<span class="cita"><button type="button" class="cita-ir" data-especialidad="${esp}" data-view="${view}" data-panel="${panel}" data-tab="${c.f}" data-resaltar="#${c.id}" data-titulo="${titulo}" data-sitio="${c.sitio}">Ver en la ficha: ${corto} · ${c.sitio} →</button><a class="cita-pdf" href="${pdf}#page=${primeraPag(c.p)}" target="_blank" rel="noopener">PDF, ${pag}</a></span>`;
-}
-let toastT = null;
-document.addEventListener('click', ev => {
-  const b = ev.target.closest('.cita-ir'); if (!b) return;
-  const t = $('toast'); t.hidden = false;
-  t.textContent = `En la app, este botón abre la ficha «${b.dataset.titulo}» y resalta «${b.dataset.sitio}». Al volver, regresas aquí.`;
-  clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 3600);
-});
-const org = (t, ilu) => `<span class="org${ilu ? ' ilu' : ''}">${t}</span>`;
-
-// Las citas que se repiten
-const C = {
-  ecuacion: { f: 'mc-definiciones', id: 'mc-shock-ecuacion', sitio: 'Ecuación de la PAM', p: '2-3' },
-  t141: { f: 'mc-definiciones', id: 'mc-tabla-14-1', sitio: 'Tabla 14.1', p: 3 },
-  t143: { f: 'mc-definiciones', id: 'mc-tabla-14-3', sitio: 'Tabla 14.3', p: 10 },
-  t145: { f: 'mc-definiciones', id: 'mc-tabla-14-5', sitio: 'Tabla 14.5', p: 17 },
-  scvo2: { f: 'mc-definiciones', id: 'mc-scvo2', sitio: 'ScvO₂', p: '9-10' },
-  gap: { f: 'mc-definiciones', id: 'mc-gap-pco2', sitio: 'Gap de PCO₂', p: 10 },
-  volIni: { f: 'mc-definiciones', id: 'mc-volumen-inicial', sitio: 'Volumen inicial', p: 11 },
-  opinion: { f: 'mc-definiciones', id: 'mc-hipotension-consecuencia', sitio: 'La hipotensión, consecuencia', p: 18 },
-  septExc: { f: 'mc-definiciones', id: 'mc-septico-excepcion', sitio: 'El shock séptico, la excepción', p: 18 },
-  na: { f: 'mc-vasopresores', id: 'mc-norepinefrina', sitio: 'Norepinefrina', p: '12-13' },
-  t144: { f: 'mc-vasopresores', id: 'mc-tabla-14-4', sitio: 'Tabla 14.4', p: 13 },
-  vasopresina: { f: 'mc-vasopresores', id: 'mc-vasopresina', sitio: 'Vasopresina', p: '15-16' },
-  volemia: { f: 'mc-hemorragico-clasificacion', id: 'mc-volemia', sitio: 'Volumen sanguíneo', p: 21 },
-  compens: { f: 'mc-hemorragico-clasificacion', id: 'mc-compensacion', sitio: 'Respuestas compensadoras', p: '21-22' },
-  t151: { f: 'mc-hemorragico-clasificacion', id: 'mc-tabla-15-1', sitio: 'Tabla 15.1', p: 22 },
-  claseI: { f: 'mc-hemorragico-clasificacion', id: 'mc-clase-i', sitio: 'Clase I', p: 22 },
-  claseII: { f: 'mc-hemorragico-clasificacion', id: 'mc-clase-ii', sitio: 'Clase II', p: 23 },
-  claseIII: { f: 'mc-hemorragico-clasificacion', id: 'mc-clase-iii', sitio: 'Clase III', p: 23 },
-  claseIV: { f: 'mc-hemorragico-clasificacion', id: 'mc-clase-iv', sitio: 'Clase IV', p: 23 },
-  hb: { f: 'mc-hemorragico-clasificacion', id: 'mc-hb-trampa', sitio: 'Hemoglobina: una trampa', p: 23 },
-  f151: { f: 'mc-hemorragico-clasificacion', id: 'mc-fig-15-1', sitio: 'Fig. 15.1', p: 24 },
-  f156: { f: 'mc-hemorragico-clasificacion', id: 'mc-fig-15-6', sitio: 'Fig. 15.6', p: 34 },
-  sangreComp: { f: 'mc-hemorragico-fluidos', id: 'mc-sangre-completa', sitio: 'Sangre completa', p: 28 },
-  csHemo: { f: 'mc-cardiogenico-fisio', id: 'mc-cs-hemodinamica', sitio: 'Cambios hemodinámicos', p: 40 },
-  f162: { f: 'mc-cardiogenico-fisio', id: 'mc-fig-16-2', sitio: 'Fig. 16.2', p: 40 },
-  csExc: { f: 'mc-cardiogenico-fisio', id: 'mc-cs-excepciones', sitio: 'Excepciones', p: 40 },
-  csVd: { f: 'mc-cardiogenico-fisio', id: 'mc-cs-vd', sitio: 'Fallo del VD', p: 40 },
-  obstr: { f: 'mc-cardiogenico-fisio', id: 'mc-cs-obstructivo', sitio: 'Shock obstructivo', p: 39 },
-  rotura: { f: 'mc-cardiogenico-fisio', id: 'mc-pared-libre', sitio: 'Rotura de la pared libre', p: 38 },
-  t162: { f: 'mc-cardiogenico-farmaco', id: 'mc-tabla-16-2', sitio: 'Tabla 16.2', p: 42 },
-  llenado: { f: 'mc-cardiogenico-farmaco', id: 'mc-llenado-optimo', sitio: 'Presión de llenado óptima', p: 42 },
-  csNa: { f: 'mc-cardiogenico-farmaco', id: 'mc-cs-vasopresor', sitio: 'Vasopresor', p: '42-43' },
-  dobuta: { f: 'mc-cardiogenico-farmaco', id: 'mc-dobutamina', sitio: 'Dobutamina', p: 43 },
-  iabp: { f: 'mc-soporte-mecanico', id: 'mc-iabp', sitio: 'Balón de contrapulsación', p: '45-46' },
-  f163: { f: 'mc-soporte-mecanico', id: 'mc-fig-16-3', sitio: 'Fig. 16.3', p: 46 },
-  impella: { f: 'mc-soporte-mecanico', id: 'mc-impella', sitio: 'Impella', p: '47-48' },
-  ecmo: { f: 'mc-soporte-mecanico', id: 'mc-ecmo', sitio: 'ECMO', p: '48-49' },
-  mcs: { f: 'mc-soporte-mecanico', id: 'mc-mcs', sitio: 'Soporte mecánico', p: 45 },
-  sepHemo: { f: 'mc-shock-septico', id: 'mc-sepsis-hemodinamica', sitio: 'Alteraciones hemodinámicas', p: '57-58' },
-  sepMon: { f: 'mc-shock-septico', id: 'mc-sepsis-monitorizacion', sitio: 'Monitorización', p: '59-60' },
-  t172: { f: 'mc-shock-septico', id: 'mc-tabla-17-2', sitio: 'Tabla 17.2', p: 60 },
-  vdMed: { f: 'mc-ic-tipos', id: 'mc-vd-medidas', sitio: 'Presiones de llenado', p: 4 },
-  autorreg: { f: 'mc-ic-tipos', id: 'mc-cardiorrenal', sitio: 'Síndrome cardiorrenal', p: 7 },
-  disec: { f: 'mc-diseccion-aortica', id: 'mc-diseccion-fisio', sitio: 'Fisiopatología', p: 50 },
-  tepClin: { f: 'neumo-ep-diagnostico', id: 'nep-tabla-22-1', sitio: 'Tabla 22.1', p: 2 },
-  tepEco: { f: 'neumo-ep-diagnostico', id: 'nep-ecocardio', sitio: 'Ecocardiografía', p: '6-7' },
-  tepRiesgo: { f: 'neumo-ep-manejo', id: 'nep-riesgo', sitio: 'Estratificación del riesgo', p: 7 },
-  tepHemo: { f: 'neumo-ep-manejo', id: 'nep-hemodinamica', sitio: 'Manejo hemodinámico', p: '10-11' },
-};
-
-/* ============================================================
-   2. Tipos de shock, objetivos y pacientes
-   ============================================================ */
-// Objetivos de cada tabla (ficha). Se comparan con el valor redondeado que se ve.
-const OBJ = {
-  t145: { nombre: 'Tabla 14.5', largo: 'objetivos del shock', cita: C.t145, svo2: 'ScvO₂', filas: {
-    pa: ['≥65', v => v >= 65], ic: ['≥2,5', v => v >= 2.5], gap: ['<6', v => v < 6], diur: ['>0,5', v => v > 0.5], svo2: ['>50 %', v => v > 50], lact: ['<2', v => v < 2] } },
-  f156: { nombre: 'Fig. 15.6', largo: 'objetivos del shock hemorrágico', cita: C.f156, svo2: 'SvO₂', filas: {
-    pa: ['≥65', v => v >= 65], diur: ['>0,5', v => v > 0.5], gap: ['<6', v => v < 6], hb: ['≥7-9', v => v >= 9 ? 1 : v >= 7 ? 'ojo' : 0],
-    spo2: ['>90', v => v > 90], svo2: ['>50 %', v => v > 50], lact: ['<2', v => v < 2] } },
-  t162: { nombre: 'Tabla 16.2', largo: 'objetivos del shock cardiogénico', cita: C.t162, svo2: 'SvO₂', filas: {
-    pcp: ['19-20', v => v >= 18 && v <= 20], ic: ['≥2,5', v => v >= 2.5], irvs: ['25-30', v => v >= 25 && v <= 30], pa: ['≥65', v => v >= 65],
-    gap: ['<6', v => v < 6], diur: ['>0,5', v => v > 0.5], svo2: ['>50 %', v => v > 50], lact: ['<2', v => v < 2] } },
-};
-const BASE = { fc: 78, pp: 50, pam: 87, spo2: 98, fr: 14, t: 36.6, pvc: 6, ic: 3.2, pcp: 9, svo2: 72, lact: 1.0, gap: 4, diur: 1.0 };
-// Anclas de gravedad (0 = sano, 1 = a fondo). Magnitudes ilustrativas; las direcciones, de la ficha (Tabla 14.1 y
-// los capítulos de cada tipo). Cada paciente del bloque cae exactamente en su ancla.
-const TIPOS = {
-  hemo: { nombre: 'Hipovolémico', sub: 'hemorragia', obj: 'f156', ppTipo: 'estrecha', anclas: [
-    [0, BASE],
-    [0.3, { fc: 92, pp: 42, pam: 86, spo2: 98, fr: 16, t: 36.5, pvc: 4, ic: 2.9, pcp: 7, svo2: 67, lact: 1.1, gap: 5, diur: 0.8 }],
-    [0.6, { fc: 115, pp: 32, pam: 76, spo2: 98, fr: 20, t: 36.4, pvc: 3, ic: 2.3, pcp: 5, svo2: 60, lact: 1.6, gap: 5, diur: 0.55 }],
-    [0.7, { fc: 124, pp: 26, pam: 69, spo2: 98, fr: 24, t: 36.4, pvc: 2, ic: 1.9, pcp: 4, svo2: 56, lact: 4.1, gap: 8, diur: 0.3 }],
-    [0.8, { fc: 132, pp: 22, pam: 60, spo2: 97, fr: 26, t: 36.2, pvc: 1, ic: 1.6, pcp: 3, svo2: 50, lact: 5.5, gap: 9, diur: 0.2 }],
-    [1, { fc: 142, pp: 16, pam: 46, spo2: 96, fr: 30, t: 35.8, pvc: 0, ic: 1.2, pcp: 2, svo2: 38, lact: 8.5, gap: 12, diur: 0.05 }]] },
-  sepsis: { nombre: 'Distributivo', sub: 'séptico', obj: 't145', anclas: [
-    [0, BASE],
-    [0.6, { fc: 118, pp: 38, pam: 53, spo2: 95, fr: 26, t: 39.2, pvc: 3, ic: 4.2, pcp: 6, svo2: 80, lact: 4.6, gap: 4, diur: 0.4 }],
-    [1, { fc: 135, pp: 34, pam: 45, spo2: 93, fr: 30, t: 39.6, pvc: 2, ic: 3.0, pcp: 5, svo2: 84, lact: 6.8, gap: 8, diur: 0.15 }]] },
-  cardio: { nombre: 'Cardiogénico', sub: 'el VI falla', obj: 't162', anclas: [
-    [0, BASE],
-    [0.6, { fc: 106, pp: 26, pam: 70, spo2: 92, fr: 26, t: 36.7, pvc: 12, ic: 2.15, pcp: 21, svo2: 50, lact: 3.0, gap: 8, diur: 0.35 }],
-    [1, { fc: 122, pp: 18, pam: 50, spo2: 86, fr: 32, t: 36.6, pvc: 16, ic: 1.3, pcp: 30, svo2: 38, lact: 6.5, gap: 11, diur: 0.1 }]] },
-  tapon: { nombre: 'Obstructivo', sub: 'taponamiento', obj: 't145', anclas: [
-    [0, BASE],
-    [0.6, { fc: 122, pp: 18, pam: 64, spo2: 96, fr: 22, t: 36.8, pvc: 17, ic: 1.4, pcp: 17, svo2: 50, lact: 3.4, gap: 9, diur: 0.3 }],
-    [1, { fc: 132, pp: 12, pam: 52, spo2: 95, fr: 26, t: 36.7, pvc: 20, ic: 1.1, pcp: 20, svo2: 40, lact: 6.0, gap: 12, diur: 0.1 }]] },
-  tep: { nombre: 'Obstructivo', sub: 'TEP', obj: 't145', anclas: [
-    [0, BASE],
-    [0.4, { fc: 112, pp: 48, pam: 86, spo2: 94, fr: 26, t: 37.2, pvc: 10, ic: 2.6, pcp: 8, svo2: 62, lact: 1.8, gap: 6, diur: 0.6 }],
-    [0.75, { fc: 128, pp: 28, pam: 59, spo2: 89, fr: 30, t: 37.4, pvc: 16, ic: 1.4, pcp: 9, svo2: 50, lact: 3.8, gap: 9, diur: 0.3 }],
-    [1, { fc: 136, pp: 20, pam: 48, spo2: 85, fr: 34, t: 37.4, pvc: 20, ic: 1.1, pcp: 7, svo2: 40, lact: 6.0, gap: 12, diur: 0.1 }]] },
-};
-// Pacientes del bloque (lista de la cobertura, §9). Sus cifras son las del primer paso de su caso.
-const PACIENTES = [
-  { k: 'mateo', nombre: 'Mateo', tipo: 'hemo', g: 0.7, edad: 34, sexo: 'varón', peso: 78, hb: 13.8, hto: 41, chip: 'hemorragia',
-    linea: '<b>Mateo</b>, 34 años, 78 kg · herida abdominal por arma blanca · urgencias, minuto 0 · Hb 13,8 g/dL' },
-  { k: 'amparo', nombre: 'Amparo', tipo: 'sepsis', g: 0.6, edad: 58, sexo: 'mujer', peso: 76, ideal: 58, chip: 'sepsis',
-    linea: '<b>Amparo</b>, 58 años, 76 kg (ideal 58) · pielonefritis obstructiva · urgencias' },
-  { k: 'aurelio', nombre: 'Aurelio', tipo: 'cardio', g: 0.6, precarga: 1, edad: 67, sexo: 'varón', peso: 82, chip: 'infarto',
-    linea: '<b>Aurelio</b>, 67 años, 82 kg · IAM anterior · hemodinámica, hora 0 · crepitantes' },
-  { k: 'joaquin', nombre: 'Joaquín', tipo: 'tapon', g: 0.6, edad: 56, sexo: 'varón', peso: 84, chip: 'taponamiento',
-    linea: '<b>Joaquín</b>, 56 años, 84 kg · disección aórtica tipo A que sangra al pericardio' },
-  { k: 'consuelo', nombre: 'Consuelo', tipo: 'tep', g: 0.75, edad: 63, sexo: 'mujer', peso: 142, chip: 'TEP',
-    linea: '<b>Consuelo</b>, 63 años, 142 kg · día 5 de prótesis de cadera · hora 20: TEP que pasa a alto riesgo' },
-];
-// Lo que no se ve en la ficha del paciente no se da: la Hb solo en la hemorragia (Fig. 15.6).
-
-/* ============================================================
-   3. El motor (ilustrativo): anclas + volumen + fármacos + soporte
-   ============================================================ */
-const est = { pac: PACIENTES[0], g: 0.7, cris: 0, sangre: 0, na: 0, vaso: false, dobuta: false, soporte: 'no', venteo: false };
-function interpola(anclas, g) {
-  let i = 0; while (i < anclas.length - 2 && g > anclas[i + 1][0]) i++;
-  const [g0, a] = anclas[i], [g1, b] = anclas[i + 1], f = clamp((g - g0) / (g1 - g0), 0, 1), r = {};
-  for (const k in a) r[k] = a[k] + (b[k] - a[k]) * f;
-  return r;
-}
-function calcular(s = est) {
-  const pac = s.pac, tipo = pac.tipo, T = TIPOS[tipo], avisos = [];
-  const volemia = 66 * pac.peso;                    // 66 mL/kg en el varón (cap. 15, p. 21)
-  let geff = s.g;
-  if (tipo === 'hemo') geff = Math.max(0, s.g - ((0.25 * s.cris + s.sangre) / volemia) / 0.5);   // 25 % del cristaloide se queda en el plasma (p. 11)
-  const r = interpola(T.anclas, geff);
-  const r0 = interpola(T.anclas, s.g);
-  r.lact = r0.lact; r.t = r0.t;                     // el lactato y la T: los del momento, antes de tratar
-  // Aurelio: la PCP no está alta (hasta el 30 % de los shocks del infarto, p. 40)
-  let extra = s.cris + s.sangre;
-  if (tipo === 'cardio') {
-    let f = pac.precarga ? Math.min(1, s.g / 0.6) : 0;
-    const usa = Math.min(extra, f * 350); f -= usa / 350; extra -= usa;
-    r.pcp -= 7 * f; r.pvc -= 3 * f; r.ic -= 0.25 * f; r.pam -= 3 * f; r.svo2 -= 2 * f; r.diur -= 0.05 * f;
-    if (pac.precarga) { const q = Math.min(1, s.g / 0.6); r.fc += 2 * q; r.lact += 0.2 * q; }
-    r.pcp += extra / 250 * 4; r.pvc += extra / 250 * 2; r.spo2 -= extra / 250;
-  } else if (tipo === 'sepsis') {
-    const L = extra / 1000; r.pam += 3 * L; r.pvc += 1.5 * L; r.pcp += 1.5 * L; r.ic += 0.15 * L; r.fc -= 2 * L; r.spo2 -= 0.5 * L;
-  } else if (tipo === 'tapon') {
-    const u = extra / 250; r.pvc += u; r.pcp += u; r.ic += 0.05 * u; r.pam += u;
-  } else if (tipo === 'tep') {
-    const u1 = Math.min(extra, 500) / 250, u2 = Math.max(0, extra - 500) / 250;
-    r.pvc += 2 * (u1 + u2); r.ic -= 0.03 * u1 + 0.15 * u2; r.pam -= 3 * u2; r.pcp -= 0.5 * u2;
-    if (u2 > 0) avisos.push('Más de 500 mL: el VD se dilata, empuja el tabique y el gasto cae (cap. 22, p. 10).');
-  }
-  // Fármacos (dirección de la ficha; magnitud ilustrativa)
-  const b = Math.min(s.na, 10), a = Math.max(0, Math.min(s.na, 30) - 10);
-  r.pam += 0.3 * b + (tipo === 'sepsis' ? 0.45 : 0.35) * a; r.ic += 0.02 * b - (tipo === 'cardio' ? 0.008 * a : 0); r.fc += 0.3 * b;
-  if (s.vaso) r.pam += tipo === 'sepsis' ? 5 : 3;
-  if (s.dobuta) {
-    r.fc += 10; r.ic += tipo === 'cardio' ? 0.4 : 0.25; r.pp += 4;
-    if (tipo === 'cardio') r.pam += 2;
-    if (tipo === 'tep' && s.na === 0 && r.pam < 65) { r.pam -= 4; avisos.push('La dobutamina es vasodilatadora: sola, con hipotensión, la PA baja (cap. 22, p. 11).'); }
-  }
-  // Soporte mecánico: solo en el cardiogénico (p. 45)
-  r.soporte = 'no';
-  if (s.soporte !== 'no') {
-    if (tipo === 'cardio') {
-      r.soporte = s.soporte;
-      if (s.soporte === 'balon') { r.pam += 5; r.ic += 0.25; r.pcp -= 2; r.svo2 += 3; }
-      if (s.soporte === 'impella') { r.pam += 8; r.ic += 0.8; r.pcp -= 5; r.svo2 += 6; r.pp *= 0.7; }
-      if (s.soporte === 'ecmo') { r.pam += 14; r.ic += 1.2; r.pvc -= 5; r.pcp += 6; r.svo2 += 12; r.spo2 += 5; r.pp *= 0.35;
-        if (s.venteo) r.pcp -= 10; }
-    }
-  }
-  r.pp += (r.ic - interpola(T.anclas, geff).ic) * 6;
-  // Paciente posible (cobertura §4.1): rangos de seguridad
-  r.pam = clamp(r.pam, 40, 130); r.fc = clamp(r.fc, 40, 170); r.ic = clamp(r.ic, 1.0, 5); r.pvc = clamp(r.pvc, 0, 25); r.pcp = clamp(r.pcp, 2, 35);
-  r.svo2 = clamp(r.svo2, 30, 86); r.spo2 = clamp(r.spo2, 80, 99); r.pp = clamp(r.pp, 8, 60); r.diur = clamp(r.diur, 0, 2);
-  r.pad = r.pam - r.pp / 3; r.pas = r.pam + 2 * r.pp / 3;
-  // Redondeos (lo que se ve y lo que se compara)
-  const R = { fc: Math.round(r.fc), pas: Math.round(r.pas), pad: Math.round(r.pad), pa: Math.round(r.pam), spo2: Math.round(r.spo2), fr: Math.round(r.fr), t: +r.t.toFixed(1),
-    pvc: Math.round(r.pvc), ic: +r.ic.toFixed(1), pcp: Math.round(r.pcp), svo2: Math.round(r.svo2), lact: +r.lact.toFixed(1), gap: Math.round(r.gap), diur: +r.diur.toFixed(1) };
-  R.irvs = Math.round((r.pam - r.pvc) / r.ic);
-  if (tipo === 'hemo') {
-    const restante = volemia * (1 - s.g * 0.5), hb0 = pac.hb || 13.8;
-    R.hb = +(hb0 * (restante + s.sangre) / (restante + s.sangre + 0.25 * s.cris)).toFixed(1);
-    R.hto = Math.round((pac.hto || 41) * (restante + s.sangre) / (restante + s.sangre + 0.25 * s.cris));
-    R.pct = Math.round(s.g * 50); R.ml = Math.round(volemia * s.g * 0.5 / 50) * 50; R.volemia = volemia;
-    R.clase = R.pct < 15 ? 'I' : R.pct <= 30 ? 'II' : R.pct <= 40 ? 'III' : 'IV';
-  }
-  R.raw = r; R.avisos = avisos; R.tipo = tipo; R.geff = geff;
-  return R;
-}
-
-/* ============================================================
-   4. Las curvas del monitor (formas ilustrativas)
-   ============================================================ */
-const gauss = (x, m, s) => Math.exp(-((x - m) * (x - m)) / (2 * s * s));
-// Cada curva recibe τ (s desde el latido), T (duración del latido), la fase respiratoria y el estado.
-function ecg(tau, T, nLat, R) {
-  const k = Math.min(1, T / 0.8);
-  let v = 0.12 * gauss(tau, 0.08 * k, 0.022) - 0.1 * gauss(tau, 0.165 * k + 0.0, 0.006) + 1.0 * gauss(tau, 0.185 * k, 0.009)
-    - 0.25 * gauss(tau, 0.205 * k, 0.008) + 0.28 * gauss(tau, 0.42 * k, 0.05 * k);
-  if (R.tipo === 'tapon') v *= (0.55 - 0.18 * (R.geff)) * (nLat % 2 ? 0.72 : 1);   // bajo voltaje y alternancia: fisiología general
-  return v;
-}
-function art(tau, T, resp, R, sinBalon) {
-  const r = R.raw, pas = r.pas, pad = r.pad, pp = pas - pad, k = Math.min(1, T / 0.8), f = tau / T;
-  const up = 0.11 * k, pico = 0.17 * k, notch = 0.33 * k;
-  let p;
-  if (tau < up) p = pad + pp * Math.sin((tau / up) * Math.PI / 2);
-  else if (tau < notch) p = pas - pp * 0.32 * Math.pow((tau - up) / (notch - up), 1.4);
-  else { const pn = pas - pp * 0.36; p = pad + (pn + pp * 0.06 * gauss(tau, notch + 0.04 * k, 0.02) - pad) * Math.exp(-(tau - notch) / (0.55 * T)); }
-  if (R.tipo === 'sepsis') p -= pp * 0.08 * gauss(tau, notch, 0.03);
-  // variación respiratoria: hipovolemia (fisiología general) y pulso paradójico del taponamiento (fisiología general)
-  const insp = Math.max(0, Math.sin(resp * 2 * Math.PI));
-  if (R.tipo === 'hemo') p -= pp * 0.18 * insp * R.geff;
-  if (R.tipo === 'tapon') p -= (pp > 10 ? 14 : 8) * insp * (0.4 + R.geff) * (tau < notch ? 1 : 0.5);
-  if (r.soporte === 'balon' && !sinBalon) {
-    p += (pas * 0.32) * gauss(f, 0.52, 0.11) * (f > 0.36 ? 1 : 0);
-    p -= 9 * gauss(f, 0.985, 0.03) + 9 * gauss(f, 0.0, 0.025);
-  }
-  return p;
-}
-function pleth(tau, T, R) {
-  const f = ((tau - 0.18) / T + 1) % 1;
-  let v = Math.sin(Math.min(1, f / 0.25) * Math.PI / 2) * (f < 0.25 ? 1 : Math.exp(-(f - 0.25) / 0.45)) + 0.12 * gauss(f, 0.45, 0.04);
-  const amp = { hemo: 0.45 - 0.25 * R.geff, sepsis: 1.0, cardio: 0.45, tapon: 0.4, tep: 0.45 }[R.tipo] ?? 0.8;
-  return v * (R.raw.soporte === 'ecmo' ? 0.35 : amp);
-}
-function pvc(tau, T, resp, R) {
-  const f = tau / T, base = R.raw.pvc;
-  return base + 1.6 * gauss(f, 0.12, 0.05) + 0.8 * gauss(f, 0.3, 0.04) + 1.3 * gauss(f, 0.62, 0.06) - 1.8 * Math.max(0, Math.sin(resp * 2 * Math.PI));
-}
-const respir = resp => 0.5 - 0.5 * Math.cos(resp * 2 * Math.PI);
-
-const FILAS = [   // y0, alto, rótulo, color, escala
-  { k: 'ecg', y: 3, h: 37, rot: 'II', col: 'var(--accent-green)' },
-  { k: 'art', y: 45, h: 56, rot: 'ART', col: 'var(--accent-red)', min: 20, max: 150 },
-  { k: 'pleth', y: 107, h: 34, rot: 'Pleth', col: 'var(--accent-yellow)' },
-  { k: 'pvc', y: 147, h: 36, rot: 'PVC', col: 'var(--accent-purple)', min: 0, max: 30 },
-  { k: 'resp', y: 190, h: 42, rot: 'Resp', col: 'var(--text-dim)' },
-];
-let W = 240, NP = 210, buffers = {}, cursor = 0, faseLat = 0, faseResp = 0, nLat = 0, tauLat = 0, pausado = false, ultimoT = 0, R = null;
-const SEG = 4.2;   // segundos en pantalla
-const GUT = 30;    // margen izquierdo: rótulos y escala
-function montarTrazas() {
-  const svg = $('trazas'); W = Math.max(150, Math.round(svg.getBoundingClientRect().width));
-  svg.setAttribute('viewBox', `0 0 ${W} 236`);
-  let h = '';
-  for (const f of FILAS) {
-    h += `<line x1="0" y1="${f.y + f.h + 1.5}" x2="${W}" y2="${f.y + f.h + 1.5}" stroke="rgba(196,154,74,.12)"/>`;
-    h += `<text x="2" y="${f.y + 10}" font-size="9.5" fill="${f.col}" font-family="system-ui, sans-serif" font-weight="600">${f.rot}</text>`;
-    if (f.k === 'art') h += `<line id="l65" x1="${GUT}" x2="${W}" stroke="var(--accent-red)" stroke-dasharray="3 4" stroke-opacity=".7"/><text id="t65" x="${GUT - 3}" text-anchor="end" font-size="9" fill="var(--accent-red)" font-family="system-ui, sans-serif">65</text>`
-      + `<line id="lpam" x1="${GUT}" x2="${W}" stroke="var(--accent-yellow)" stroke-opacity=".55"/><text id="tpam" x="${GUT - 3}" text-anchor="end" font-size="8.5" fill="var(--accent-yellow)" font-family="system-ui, sans-serif">PAM</text>`
-      + `<path id="tr-art-ref" fill="none" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="2 3"/>`;
-    h += `<path id="tr-${f.k}" fill="none" stroke="${f.col}" stroke-width="1.6" stroke-linejoin="round"/>`;
-  }
-  h += `<g id="anillos"></g>`;
-  svg.innerHTML = h;
-  NP = W - GUT; buffers = {}; for (const f of FILAS) buffers[f.k] = new Array(NP).fill(null); buffers.ref = new Array(NP).fill(null);
-  cursor = 0;
-}
-function yDe(f, v) {
-  if (f.k === 'ecg') return f.y + f.h * 0.72 - v * f.h * 0.62;
-  if (f.k === 'pleth') return f.y + f.h * 0.94 - v * f.h * 0.72;
-  if (f.k === 'resp') return f.y + f.h * 0.92 - v * f.h * 0.62;
-  return f.y + f.h - (clamp(v, f.min, f.max) - f.min) / (f.max - f.min) * f.h;
-}
-function muestra(dt) {
-  const T = 60 / R.raw.fc, Tr = 60 / R.raw.fr;
-  tauLat += dt; if (tauLat >= T) { tauLat -= T; nLat++; }
-  faseResp = (faseResp + dt / Tr) % 1;
-  const vals = { ecg: ecg(tauLat, T, nLat, R), art: art(tauLat, T, faseResp, R), pleth: pleth(tauLat, T, R), pvc: pvc(tauLat, T, faseResp, R), resp: respir(faseResp) };
-  for (const f of FILAS) buffers[f.k][cursor] = yDe(f, vals[f.k]);
-  buffers.ref[cursor] = R.raw.soporte === 'balon' ? yDe(FILAS[1], art(tauLat, T, faseResp, R, true)) : null;
-  cursor = (cursor + 1) % NP;
-  for (let j = 1; j <= 7; j++) { const c = (cursor + j - 1) % NP; for (const f of FILAS) buffers[f.k][c] = null; buffers.ref[c] = null; }
-}
-function pintarTrazas() {
-  for (const f of [...FILAS, { k: 'ref' }]) {
-    const b = buffers[f.k]; let d = '', pluma = false;
-    for (let x = 0; x < NP; x++) { const y = b[x]; if (y == null) { pluma = false; continue; } d += (pluma ? 'L' : 'M') + (x + GUT) + ' ' + y.toFixed(1); pluma = true; }
-    $(f.k === 'ref' ? 'tr-art-ref' : 'tr-' + f.k).setAttribute('d', d);
-  }
-  const fa = FILAS[1], y65 = yDe(fa, 65), yp = yDe(fa, R.raw.pam);
-  $('l65').setAttribute('y1', y65); $('l65').setAttribute('y2', y65); $('t65').setAttribute('y', y65 - 2);
-  $('lpam').setAttribute('y1', yp); $('lpam').setAttribute('y2', yp);
-  // el rótulo PAM no pisa al 65
-  // los dos rótulos, sin pisarse: el de arriba encima de su línea y el de abajo, debajo
-  if (Math.abs(yp - y65) < 12) { const arr = Math.min(yp, y65), aba = Math.max(yp, y65);
-    $(yp < y65 ? 'tpam' : 't65').setAttribute('y', arr - 1); $(yp < y65 ? 't65' : 'tpam').setAttribute('y', Math.max(aba, arr + 1) + 10); }
-  else { $('t65').setAttribute('y', y65 + 3); $('tpam').setAttribute('y', yp + 3); }
-}
-function llenarEstatico() { for (let i = 0; i < NP; i++) muestra(SEG / NP); pintarTrazas(); }
-function bucle(t) {
-  if (!ultimoT) ultimoT = t;
-  let dt = Math.min(0.1, (t - ultimoT) / 1000); ultimoT = t;
-  if (!pausado && !REDUCIR) {
-    const paso = SEG / NP; acum += dt;
-    while (acum >= paso) { muestra(paso); acum -= paso; }
-    pintarTrazas(); latir(dt);
-  }
-  requestAnimationFrame(bucle);
-}
-let acum = 0;
-
-/* ============================================================
-   5. El corazón dibujado (lee el mismo estado)
-   ============================================================ */
-let faseCor = 0;
-function escalaEn(el, cx, cy, s) { el.setAttribute('transform', `translate(${cx} ${cy}) scale(${s.toFixed(3)}) translate(${-cx} ${-cy})`); }
-function pintarCorazon() {
-  const r = R.raw, tipo = R.tipo, g = R.geff;
-  // arteriola: su luz, según la IRVS
-  $('h-arteriola-luz').setAttribute('r', clamp(14 * Math.sqrt(25 / Math.max(8, R.irvs)), 6, 18.5).toFixed(1));
-  // vena: su nivel, según la PVC
-  const nivel = clamp((r.pvc + 2) / 18, 0.1, 1); $('h-vena-nivel').setAttribute('y', (185 - 38 * nivel).toFixed(1)); $('h-vena-nivel').setAttribute('height', (38 * nivel + 2).toFixed(1));
-  $('h-fuga').setAttribute('opacity', tipo === 'sepsis' ? clamp(g * 1.4, 0, 1) : 0);
-  // la sangre venosa: más roja cuanto más alta la SvO2
-  const roja = clamp((r.svo2 - 55) / 30, 0, 1);
-  document.querySelectorAll('#corazon .sangre-roja').forEach(e => e.setAttribute('stroke-opacity', roja.toFixed(2)));
-  // líquido en el pericardio
-  $('h-saco').setAttribute('fill-opacity', tipo === 'tapon' ? (0.18 + 0.45 * g).toFixed(2) : 0);
-  // tamaños de las cavidades
-  const sVD = tipo === 'tep' ? 1 + 0.22 * g : tipo === 'tapon' ? 1 - 0.18 * g : tipo === 'hemo' ? 1 - 0.18 * g : 1;
-  const sVI = tipo === 'cardio' ? 1 + 0.14 * g : tipo === 'tapon' ? 1 - 0.18 * g : tipo === 'hemo' ? 1 - 0.2 * g : tipo === 'tep' ? 1 - 0.12 * g : 1;
-  base.vd = sVD; base.vi = sVI;
-  $('h-trombo').setAttribute('opacity', tipo === 'tep' ? 1 : 0);
-  $('h-balon').setAttribute('opacity', r.soporte === 'balon' ? 1 : 0);
-  $('h-impella').setAttribute('opacity', r.soporte === 'impella' ? 1 : 0);
-  $('h-ecmo').setAttribute('opacity', r.soporte === 'ecmo' ? 1 : 0);
-  latir(0);
-}
-const base = { vd: 1, vi: 1 };
-function latir(dt) {
-  const r = R.raw, T = 60 / r.fc; faseCor = (faseCor + dt / T) % 1;
-  const sv = r.ic * 1.9 * 1000 / r.fc, amp = clamp(sv / 80 * 0.09, 0.015, 0.11);
-  const sist = (REDUCIR || pausado) ? 0 : Math.max(0, Math.sin(clamp((faseCor - 0.18) / 0.35, 0, 1) * Math.PI));
-  const aur = (REDUCIR || pausado) ? 0 : Math.max(0, Math.sin(clamp((faseCor - 0.02) / 0.16, 0, 1) * Math.PI));
-  escalaEn($('g-vi'), 190, 170, base.vi * (1 - amp * sist));
-  escalaEn($('g-vd'), 134, 170, base.vd * (1 - amp * 0.8 * sist));
-  escalaEn($('g-auriculas'), 164, 100, 1 - 0.04 * aur * (R.tipo === 'tapon' ? 0.4 : 1));
-  if (r.soporte === 'balon') $('h-balon').setAttribute('rx', (sist > 0.05 ? 2.5 : 5.5).toString());
-}
-
-/* ============================================================
-   6. Cifras del monitor y de perfusión, con sus objetivos
-   ============================================================ */
-let modo = 'explorar', tapado = false, quizObj = null;
-const PERF = [
-  { k: 'ic', et: 'IC', u: 'L/min/m²', d: 1 }, { k: 'pcp', et: 'PCP', u: 'mmHg' }, { k: 'irvs', et: 'IRVS', u: 'UW·m²' },
-  { k: 'svo2', et: 'SvO₂', u: '%' }, { k: 'lact', et: 'Lactato', u: 'mmol/L', d: 1 }, { k: 'gap', et: 'Gap PCO₂', u: 'mmHg' },
-  { k: 'diur', et: 'Diuresis', u: 'mL/kg/h', d: 1 }, { k: 'hb', et: 'Hb', u: 'g/dL', d: 1 },
-];
-function objetivoDe(k) { const o = OBJ[tablaActual()]; return o.filas[k] ? o.filas[k] : null; }
-function tablaActual() { return quizObj || TIPOS[est.pac.tipo].obj; }
-function marca(k, v) {
-  const ob = objetivoDe(k); if (!ob) return { cls: '', txt: '' };
-  let ok = ob[1](v);
-  if (k === 'svo2' && R.tipo === 'sepsis' && v >= 80) return { cls: 'ojo', txt: `<span class="marca ojo">⚠ engaña</span>` };
-  if (ok === 'ojo') return { cls: 'ojo', txt: `<span class="marca ojo">~</span>` };
-  return ok ? { cls: 'si', txt: `<span class="marca si">✓</span>` } : { cls: 'no', txt: `<span class="marca no">✗</span>` };
-}
-function fmt(v, d = 0) { return coma(v, d); }
-function pintarCifras() {
-  const tap = tapado;
-  $('n-fc').innerHTML = tap ? '?' : R.fc;
-  $('n-pa').innerHTML = tap ? '?' : `${R.pas}/${R.pad}<small>(${R.pa})</small>`;
-  const mp = marca('pa', R.pa), obPa = objetivoDe('pa');
-  $('o-pa').innerHTML = tap ? '' : `${mp.txt} PAM ${obPa ? obPa[0] : ''}`;
-  $('n-spo2').innerHTML = tap ? '?' : R.spo2 + (objetivoDe('spo2') ? ' ' + marca('spo2', R.spo2).txt : '');
-  $('n-pvc').innerHTML = tap ? '?' : R.pvc;
-  $('n-fr').innerHTML = tap ? '?' : R.fr;
-  $('n-t').textContent = tap ? '' : `T ${fmt(R.t, 1)} °C`;
-  document.querySelectorAll('#cifras .cifra').forEach(c => c.classList.toggle('oculto', tap));
-  const o = OBJ[tablaActual()];
-  $('perfusion').innerHTML = PERF.filter(p => p.k !== 'hb' || R.tipo === 'hemo' && !quizObj).map(p => {
-    const v = R[p.k], m = tap ? { cls: '', txt: '' } : marca(p.k, v), ob = o.filas[p.k];
-    const et = p.k === 'svo2' ? o.svo2 : p.et;
-    return `<button type="button" class="celda ${m.cls}${tap ? ' oculto' : ''}" data-fila="${p.k}"><span class="k"><span>${et}</span>${m.txt}</span><span class="g">${tap ? '?' : fmt(v, p.d || 0)}<small>${p.u}</small></span><span class="t">${ob ? 'obj. ' + ob[0] : 'sin objetivo'}</span></button>`;
-  }).join('');
-  $('mon-pie').innerHTML = `${org('cifras y curvas: ilustrativo', true)} <span>Objetivos: ${o.nombre}, ${o.largo}</span> ${org('ficha · p. ' + o.cita.p)}`;
-}
-// Tocar una fila: de dónde sale su objetivo
-const EXPLICA_FILA = {
-  fc: ['La FC no tiene objetivo en ninguna de las tres tablas. Sube la primera en la hemorragia (Clase II, Tabla 15.1).', C.t151],
-  pa: ['La PAM es la presión que mueve el flujo periférico y no cambia de la aorta a la radial; el objetivo es ≥65 mmHg (p. 4, 17).', C.t145],
-  spo2: ['La SaO₂ >90 % solo es objetivo en la Fig. 15.6 (shock hemorrágico). En el TEP, el 30 % tiene la PaO₂ normal (Tabla 22.1).', C.f156],
-  pvc: ['La PVC separa los shocks: baja en el hipovolémico y el séptico; alta en el cardiogénico y el obstructivo (Tabla 14.1).', C.t141],
-  fr: ['La FR no tiene objetivo en las tablas; su valor aquí es ilustrativo. La taquipnea es un hallazgo del TEP (Tabla 22.1).', C.tepClin],
-  ic: ['IC ≥2,5 L/min/m² (Tablas 14.5 y 16.2). En el shock cardiogénico suele estar por debajo de 2,2 (p. 40).', C.t145],
-  pcp: ['La PCP óptima en el shock cardiogénico: 19-20 en la Tabla 16.2 y 18-20 en el texto de la misma página (ver la nota).', C.t162],
-  irvs: ['IRVS = (PAM − PVC) / IC, en unidades Wood·m². Objetivo de 25-30 solo en la Tabla 16.2.', C.t162],
-  svo2: ['ScvO₂ >50 % (Tabla 14.5). ≤50 % = aporte de O₂ insuficiente; ≥80 % = extracción alterada, típica del séptico (Tabla 14.3).', C.t143],
-  lact: ['Lactato <2 mmol/L: la meta universal de la reanimación de todos los shocks (p. 18).', C.t145],
-  gap: ['Gap de PCO₂ normal 2-5 mmHg; >6 = hipoperfusión. Solo depende del flujo, no de la oxigenación (p. 10).', C.gap],
-  diur: ['Oliguria = <0,5 mL/kg/h; caer de ahí es de los primeros signos del shock (p. 17). La autorregulación renal sostiene el flujo hasta una PAM de 70 (cap. 18, p. 7).', C.t145],
-  hb: ['Hb ≥7-9 g/dL en la Fig. 15.6. En la hemorragia aguda la Hb no baja en las primeras 8-12 h (p. 23).', C.hb],
-};
-$('monitor').addEventListener('click', ev => {
-  const c = ev.target.closest('[data-fila]'); if (!c || tapado) return;
-  const [t, ci] = EXPLICA_FILA[c.dataset.fila] || []; if (!t) return;
-  const d = $('detalle-fila'); d.hidden = false; d.innerHTML = `<span>${t}</span>${cita(ci)}`;
-});
-
-/* ============================================================
-   7. La frase viva y el estado con nombre
-   ============================================================ */
-function claveEstado() {
-  const t = R.tipo;
-  if (t === 'hemo') return 'hemo-' + R.clase.toLowerCase() + (est.cris > 0 ? '-salino' : '');
-  if (t === 'sepsis') return est.na >= 10 ? 'sepsis-na' : 'sepsis';
-  if (t === 'cardio') return R.raw.soporte !== 'no' ? R.raw.soporte : (est.pac.precarga && est.cris < 350 ? 'cardio-pcp' : 'cardio');
-  return t;
-}
-const FRASES = {
-  'hemo-i': ['Clase I: el relleno transcapilar repone lo perdido; casi no hay signos y no hace falta volumen.', 'ficha · p. 22'],
-  'hemo-ii': ['Clase II: los vasos se aprietan y la PA aguanta. El primer aviso es la FC; la orina puede empezar a caer.', 'ficha · p. 22-23'],
-  'hemo-iii': ['Clase III: apretar ya no basta. Hipotensión, oliguria y lactato: es el shock hemorrágico. Se repone con sangre.', 'ficha · p. 22-23'],
-  'hemo-iv': ['Clase IV: shock profundo, quizá irreversible. Aquí entra la pérdida masiva.', 'ficha · p. 23'],
-  salino: ['Tras el salino la PA sube y la Hb baja: diluye, no sangra más. Tres cuartas partes del cristaloide se van al intersticio.', 'ficha · p. 11, 23'],
-  sepsis: ['Vasos abiertos y una mitocondria que no usa el O₂: la ScvO₂ alta no tranquiliza; el gap de PCO₂ sí sirve.', 'ficha · p. 10, 58-59'],
-  'sepsis-na': ['Por encima de 10 µg/min manda el α: la RVS sube. A 30, techo: piensa en el segundo vasopresor.', 'ficha · p. 13'],
-  cardio: ['El corazón no bombea: suben las presiones de llenado y se aprietan los vasos. Lo que lo separa de la IC es la hipoperfusión.', 'ficha · p. 40'],
-  'cardio-pcp': ['La PCP no está alta: pasa en hasta el 30 % de los shocks del infarto. El volumen aún puede subir el gasto, hasta una PCP de 18-20.', 'ficha · p. 40, 42'],
-  balon: ['El balón se infla en la diástole y empuja la sangre a las coronarias; al vaciarse, el VI eyecta contra menos presión.', 'ficha · p. 45'],
-  impella: ['El Impella saca sangre del VI a la aorta, 2,5-5,5 L/min: descarga el ventrículo y sube el gasto.', 'ficha · p. 47-48'],
-  ecmo: ['El ECMO VA da flujo y oxígeno, pero el chorro que sube por la aorta frena al VI: la PCP sube. Hay que descargarlo.', 'ficha · p. 48-49'],
-  tapon: ['El líquido del pericardio no deja llenarse al corazón: la PVC y la PCP se igualan, y la eco lo separa del fallo del VD.', 'ficha · p. 3; cap. 18, p. 4'],
-  tep: ['El VD no puede con el émbolo: la PVC sube, la PCP no, y el gasto cae. Noradrenalina para la PA; volumen, como mucho 500 mL.', 'ficha · cap. 22, p. 7, 10-11'],
-};
-function pintarFrase() {
-  const k = claveEstado(); let [t, o] = FRASES[k.startsWith('hemo') && k.endsWith('-salino') ? 'salino' : k] || FRASES[R.tipo];
-  const extras = [];
-  if (R.tipo === 'sepsis' && est.na >= 10) {
-    const dosis = est.na / est.pac.peso;
-    if (dosis >= 0.25) extras.push(`Para ${est.pac.nombre}, ${est.na} µg/min son ${coma(dosis, 2)} µg/kg/min: la Tabla 17.2 añade vasopresina e hidrocortisona.`);
-  }
-  if (est.na >= 30) extras.push('A 30 µg/min, más dosis apenas aprieta (p. 13).');
-  extras.push(...R.avisos);
-  const sop = avisoSoporte(); if (sop) extras.push(sop);
-  $('frase-txt').innerHTML = `${t} ${org(o)}${extras.length ? ' ' + extras.join(' ') : ''}`;
-  medirDock();
-}
-function avisoSoporte() {
-  if (est.soporte === 'no') return '';
-  const t = R.tipo;
-  if (t === 'tapon' && est.soporte === 'balon') return 'Balón: contraindicado en la disección aórtica y en la insuficiencia aórtica (p. 45). No se pone.';
-  if (t === 'tapon' && est.soporte === 'impella') return 'Impella: contraindicado con valvulopatía aórtica (p. 48), y la disección tipo A puede dar insuficiencia aórtica (cap. 20, p. 50). No se pone.';
-  if (t !== 'cardio') return 'La fuente reserva el soporte mecánico para el shock cardiogénico refractario (p. 45): aquí no se aplica.';
-  return '';
-}
-
-/* ============================================================
-   8. Explicación guiada: 3-5 pasos que señalan el dibujo o el monitor
-   ============================================================ */
-const GUIAS = {
-  'hemo-i': { tit: 'Hemorragia, Clase I', pasos: [
-    { t: 'Se ha perdido menos del 15 % de la volemia (<10 mL/kg): normalmente, menos de un litro.', r: ['#h-vena'], c: C.claseI },
-    { t: 'El relleno transcapilar mete líquido del intersticio en la sangre: hasta un litro. Por eso la volemia se mantiene.', r: ['#h-vena', '[data-fila="pvc"]'], c: C.compens },
-    { t: 'Casi no hay signos y no hace falta reponer volumen (Tabla 15.1).', r: ['[data-fila="fc"]', '[data-fila="pa"]'], c: C.t151 }] },
-  'hemo-ii': { tit: 'Hemorragia, Clase II', pasos: [
-    { t: 'Se ha perdido un 15-30 % (10-20 mL/kg): la fase compensada.', r: ['#h-vena'], c: C.claseII },
-    { t: 'El simpático acelera el corazón: la FC es lo primero que sube.', r: ['[data-fila="fc"]', '#tr-ecg'], c: C.compens },
-    { t: 'Mira la arteriola: se cierra. La vasoconstricción sostiene la PA, sobre todo a costa del territorio esplácnico.', r: ['#h-arteriola', '[data-fila="irvs"]'], c: C.claseII },
-    { t: 'La orina puede empezar a caer, sin llegar a la oliguria; el lactato aún no cambia. Se repone con cristaloides (Tabla 15.1).', r: ['[data-fila="diur"]', '[data-fila="lact"]'], c: C.t151 }] },
-  'hemo-iii': { tit: 'Mateo: hemorragia, Clase III', pasos: [
-    { t: R => `Mateo ha perdido un ${R.pct} % de su sangre: unos ${coma(R.ml / 1000, 1)} L de ${coma(R.volemia / 1000, 1)} L (66 mL/kg × 78 kg). Es la Clase III (31-40 %).`, r: ['#h-vena', '[data-fila="pvc"]'], c: C.volemia, org: '1,8 L: ilustrativo' },
-    { t: 'Mira la arteriola: está cerrada (IRVS alta). La vasoconstricción sostuvo la PA en la Clase II; en la III ya no basta.', r: ['#h-arteriola', '[data-fila="irvs"]'], c: C.claseIII },
-    { t: 'La curva arterial es estrecha y baila con cada respiración: la sistólica cae en la inspiración. Es el ventrículo vacío.', r: ['#tr-art'], c: C.t141, org: 'la forma: fisiología general' },
-    { t: R => `La PAM marca ${R.pa}, pero la orina está en ${coma(R.diur, 1)} y el lactato en ${coma(R.lact, 1)}: hipoperfusión y metabolismo anaerobio. El monitor ya dice shock.`, r: ['[data-fila="diur"]', '[data-fila="lact"]'], c: C.claseIII },
-    { t: R => `La Hb sigue en ${coma(R.hb, 1)}: pierde sangre entera, plasma y hematíes a la vez. No baja hasta las 8-12 h. La Clase III se repone con sangre.`, r: ['[data-fila="hb"]'], c: C.hb }] },
-  'hemo-iv': { tit: 'Hemorragia, Clase IV', pasos: [
-    { t: 'Más del 40 % perdido (>30 mL/kg): shock hemorrágico profundo, quizá irreversible.', r: ['#h-vena', '[data-fila="pvc"]'], c: C.claseIV },
-    { t: 'La PA cae del todo y la curva arterial es mínima.', r: ['#tr-art', '[data-fila="pa"]'], c: C.t151 },
-    { t: 'Fallo multiorgánico y acidosis láctica grave: el lactato se dispara. Es la pérdida masiva: transfusión masiva (Tabla 15.1).', r: ['[data-fila="lact"]'], c: C.claseIV }] },
-  salino: { tit: 'Tras el salino', pasos: [
-    { t: 'De cada litro de cristaloide, solo un 25 % se queda en el plasma; el 75 % pasa al intersticio.', r: ['#h-vena', '[data-fila="pvc"]'], c: C.volIni },
-    { t: 'La PA sube un poco y la FC baja: el volumen ayuda mientras llega la sangre.', r: ['[data-fila="pa"]', '[data-fila="fc"]'], c: C.volIni, org: 'cuánto: ilustrativo' },
-    { t: 'La Hb baja: el salino añade plasma pero no hematíes, y diluye. Refleja la reanimación, no la pérdida (Fig. 15.1).', r: ['[data-fila="hb"]'], c: C.f151 }] },
-  sepsis: { tit: 'Amparo: shock séptico', pasos: [
-    { t: 'Mira la arteriola: está abierta. La RVS baja define el shock vasodilatador (Tabla 14.1).', r: ['#h-arteriola', '[data-fila="irvs"]'], c: C.t141 },
-    { t: R => `El gasto no está bajo: IC ${coma(R.ic, 1)}. La taquicardia y la poscarga baja lo suben. Es el «shock caliente»: la curva del dedo es amplia.`, r: ['[data-fila="ic"]', '#tr-pleth'], c: C.sepHemo, org: 'la curva del dedo: fisiología general' },
-    { t: 'El endotelio dañado deja salir líquido: hipovolemia, y la PVC baja.', r: ['#h-vena', '#h-fuga', '[data-fila="pvc"]'], c: C.sepHemo },
-    { t: 'La sangre de la vena vuelve roja: la mitocondria no usa el O₂, la extracción cae y la ScvO₂ sube por encima de 80 %. No tranquiliza.', r: ['#h-vci', '[data-fila="svo2"]'], c: C.sepMon },
-    { t: R => `El gap de PCO₂ no depende de la oxigenación: ${R.gap} mmHg${R.gap < 6 ? ' (<6), hay flujo' : ' (≥6): el flujo ya no basta'}. Y normalizar el lactato sigue siendo la meta.`, r: ['[data-fila="gap"]', '[data-fila="lact"]'], c: C.gap }] },
-  'sepsis-na': { tit: 'Shock séptico con noradrenalina', pasos: [
-    { t: 'Por debajo de 10 µg/min, la noradrenalina estimula β y puede subir el gasto.', r: ['[data-fila="ic"]'], c: C.na },
-    { t: 'Por encima de 10, manda el α: la arteriola se cierra y la PAM sube.', r: ['#h-arteriola', '[data-fila="pa"]'], c: C.na },
-    { t: 'A 30 µg/min, más dosis apenas aprieta: es el momento del segundo vasopresor.', r: ['[data-fila="pa"]'], c: C.na },
-    { t: 'En µg/kg/min: con 0,25-0,5, la Tabla 17.2 añade vasopresina; con >0,25, hidrocortisona 50 mg cada 6 h.', r: ['[data-fila="pa"]'], c: C.t172 }] },
-  'cardio-pcp': { tit: 'Aurelio: shock cardiogénico', pasos: [
-    { t: R => `El VI de Aurelio apenas se vacía: mira el latido. IC ${coma(R.ic, 1)}: por debajo de 2,2, lo típico del shock cardiogénico.`, r: ['#g-vi', '[data-fila="ic"]'], c: C.csExc },
-    { t: R => `La arteriola se cierra: IRVS ${R.irvs}${R.irvs > 30 ? ', por encima de 25-30' : ''}. Es el simpático y la renina-angiotensina.`, r: ['#h-arteriola', '[data-fila="irvs"]'], c: C.f162 },
-    { t: R => `Pero la PCP no está alta: ${R.pcp}. Pasa en hasta el 30 % de los shocks del infarto. El volumen todavía puede subir el gasto, hasta una PCP de 18-20.`, r: ['[data-fila="pcp"]'], c: C.llenado },
-    { t: R => `Lactato ${coma(R.lact, 1)} y orina ${coma(R.diur, 1)}: hay hipoperfusión. Eso es lo que lo separa de la insuficiencia cardíaca.`, r: ['[data-fila="lact"]', '[data-fila="diur"]'], c: C.csHemo }] },
-  cardio: { tit: 'Shock cardiogénico', pasos: [
-    { t: 'El VI no bombea: el gasto cae (IC típico <2,2).', r: ['#g-vi', '[data-fila="ic"]'], c: C.csExc },
-    { t: 'Sube la presión de llenado del ventrículo que falla: la PCP, si es el izquierdo.', r: ['[data-fila="pcp"]'], c: C.csHemo },
-    { t: 'La arteriola se cierra: RVS alta, por el simpático y la renina-angiotensina (Fig. 16.2).', r: ['#h-arteriola', '[data-fila="irvs"]'], c: C.f162 },
-    { t: 'Con la PCP por encima de 18-20, más volumen ya no sube el gasto y encharca el pulmón: la SpO₂ cae.', r: ['[data-fila="spo2"]', '[data-fila="pcp"]'], c: C.llenado, org: 'que el gasto ya no suba: fisiología general; SpO₂: ilustrativo' }] },
-  balon: { tit: 'Balón de contrapulsación', pasos: [
-    { t: 'El balón va en la aorta descendente, bajo la subclavia izquierda; se infla con 35-40 mL de helio.', r: ['#h-balon'], c: C.iabp },
-    { t: 'Se infla al empezar la diástole, al cerrarse la aórtica: mira la segunda joroba en la curva arterial. Sube el pico diastólico, el flujo coronario y la PAM.', r: ['#tr-art'], c: C.f163 },
-    { t: 'Se vacía en la contracción isovolumétrica: la presión al abrirse la aórtica baja y el VI eyecta contra menos poscarga. La línea de puntos es la curva sin balón.', r: ['#tr-art', '#tr-art-ref'], c: C.iabp },
-    { t: 'Cuánto sube cada cifra no lo dice la fuente: aquí es ilustrativo. No mejora la supervivencia, y está contraindicado con insuficiencia aórtica o disección.', r: ['[data-fila="pa"]', '[data-fila="ic"]'], c: C.iabp }] },
-  impella: { tit: 'Impella', pasos: [
-    { t: 'Un catéter que entra por la femoral y cruza la válvula aórtica; su bomba centrífuga queda en la válvula.', r: ['#h-impella'], c: C.impella },
-    { t: 'Saca sangre del VI a la aorta, 2,5-5,5 L/min, en flujo continuo: la curva arterial se aplana un poco.', r: ['#tr-art', '[data-fila="ic"]'], c: C.impella, org: 'la curva: fisiología general' },
-    { t: 'Descarga el VI (baja la PCP) y sube el flujo coronario. Hemólisis en el 5-10 %; contraindicado con valvulopatía o prótesis aórtica y con trombo en el VI.', r: ['[data-fila="pcp"]'], c: C.impella }] },
-  ecmo: { tit: 'ECMO venoarterial', pasos: [
-    { t: 'La sangre sale de la vena femoral, pasa por la bomba y el oxigenador, y vuelve por la arteria femoral: hasta 5-6 L/min.', r: ['#h-ecmo'], c: C.ecmo },
-    { t: 'Soporta los dos ventrículos y el intercambio de gases: es la elección si hay fallo respiratorio. Sube la SpO₂ y la SvO₂.', r: ['[data-fila="spo2"]', '[data-fila="svo2"]'], c: C.ecmo },
-    { t: 'El flujo que sube por la aorta frena al VI: más poscarga, y la PCP sube. Puede dar edema de pulmón. Cuánto: ilustrativo.', r: ['#h-aorta', '[data-fila="pcp"]'], c: C.ecmo },
-    { t: 'Se corrige con un balón, un Impella o drenando el VI («venteo»): prueba el interruptor.', r: ['[data-fila="pcp"]'], c: C.ecmo }] },
-  tapon: { tit: 'Joaquín: taponamiento', pasos: [
-    { t: 'La disección tipo A puede propagarse hacia atrás y sangrar al pericardio: taponamiento.', r: ['#h-saco'], c: C.disec },
-    { t: 'El líquido no deja llenarse al corazón: shock obstructivo, con el patrón del cardiogénico (PVC alta, gasto bajo, RVS alta).', r: ['[data-fila="pvc"]', '[data-fila="ic"]', '#h-arteriola'], c: C.t141 },
-    { t: 'La PVC y la PCP se igualan. También pasa cuando falla el VD: lo separa la eco.', r: ['[data-fila="pvc"]', '[data-fila="pcp"]'], c: C.vdMed },
-    { t: 'En la curva, la sistólica cae en cada inspiración (pulso paradójico) y el QRS es pequeño y alterna: son signos de la cabecera, no de este libro.', r: ['#tr-art', '#tr-ecg'], c: C.obstr, org: 'fisiología general' },
-    { t: 'El tratamiento va a la causa. El balón está contraindicado en la disección.', r: ['#h-saco'], c: C.obstr }] },
-  tep: { tit: 'Consuelo: TEP de alto riesgo', pasos: [
-    { t: 'Consuelo tiene el VD dilatado y ya está inestable: es un TEP de alto riesgo (masivo).', r: ['#g-vd', '#h-trombo'], c: C.tepRiesgo },
-    { t: 'Obstructivo: la PVC sube y el gasto cae, con los vasos apretados.', r: ['[data-fila="pvc"]', '[data-fila="ic"]', '#h-arteriola'], c: C.t141 },
-    { t: R => `La PVC (${R.pvc}) supera a la PCP (${R.pcp}): falla el derecho, no el izquierdo.`, r: ['[data-fila="pvc"]', '[data-fila="pcp"]'], c: C.vdMed },
-    { t: 'Taquicardia, taquipnea e hipoxemia: lo típico, pero ninguna confirma ni descarta. El 30 % tiene la PaO₂ normal.', r: ['[data-fila="fc"]', '[data-fila="fr"]', '[data-fila="spo2"]'], c: C.tepClin },
-    { t: 'Para la hipotensión, noradrenalina: no sube la resistencia pulmonar. Volumen, como mucho 500 mL y guiado por la eco.', r: ['[data-fila="pa"]'], c: C.tepHemo }] },
-};
-function guiaActual() { const k = claveEstado(); return k.endsWith('-salino') ? GUIAS.salino : GUIAS[k] || GUIAS[R.tipo]; }
-let guia = null, gi = 0;
-function abrirGuia(g, alSalir) {
-  guia = { ...g, alSalir }; gi = 0;
-  $('dock-explorar').hidden = true; $('dock-estudio').hidden = true; $('dock-guia').hidden = false; $('frase').hidden = true;
-  pintarGuia();
-}
-function cerrarGuia() {
-  borrarSenal(); const f = guia && guia.alSalir; guia = null;
-  $('dock-guia').hidden = true; $('frase').hidden = false;
-  if (modo === 'explorar') $('dock-explorar').hidden = false; else if (modo === 'preguntas') $('dock-estudio').hidden = false;
-  medirDock(); if (f) f();
-}
-function pintarGuia() {
-  const p = guia.pasos[gi], n = guia.pasos.length;
-  $('dock-guia').innerHTML = `<div class="guia entra"><div class="guia-cab"><span class="guia-n">Paso ${gi + 1} de ${n}</span><span class="guia-tit">${guia.tit}</span><button type="button" class="guia-x" id="guia-x" aria-label="Cerrar la explicación">×</button></div>
-    <p class="guia-txt">${typeof p.t === 'function' ? p.t(R) : p.t}${p.org ? ' ' + `<span class="guia-org">${p.org}</span>` : ''}</p>${cita(p.c)}
-    <div class="guia-nav"><button type="button" class="guia-b" id="guia-ant" ${gi === 0 ? 'disabled' : ''}>← Atrás</button><span class="guia-puntos">${guia.pasos.map((_, i) => `<i class="${i < gi ? 'hecho' : i === gi ? 'aqui' : ''}"></i>`).join('')}</span><button type="button" class="guia-b prim" id="guia-sig">${gi === n - 1 ? 'Hecho' : 'Siguiente →'}</button></div></div>`;
-  $('guia-x').onclick = cerrarGuia;
-  $('guia-ant').onclick = () => { gi--; pintarGuia(); };
-  $('guia-sig').onclick = () => { if (gi === n - 1) cerrarGuia(); else { gi++; pintarGuia(); } };
-  medirDock();
-  requestAnimationFrame(() => senalar(p.r));
-}
-function borrarSenal() { document.querySelectorAll('.guia-anillo').forEach(e => e.remove()); document.querySelectorAll('.guia-marco').forEach(e => e.classList.remove('guia-marco')); }
-function senalar(sels) {
-  borrarSenal(); let primero = null;
-  for (const s of sels || []) {
-    for (const el of document.querySelectorAll(s)) {
-      const svg = el.ownerSVGElement;
-      if (svg) {
-        let b; try { b = el.getBBox(); } catch { continue; }
-        const m = svg.getScreenCTM().inverse().multiply(el.getScreenCTM());
-        const xs = [b.x, b.x + b.width].flatMap(x => [b.y, b.y + b.height].map(y => [m.a * x + m.c * y + m.e, m.b * x + m.d * y + m.f]));
-        const x0 = Math.min(...xs.map(p => p[0])), x1 = Math.max(...xs.map(p => p[0])), y0 = Math.min(...xs.map(p => p[1])), y1 = Math.max(...xs.map(p => p[1]));
-        const r = document.createElementNS(NS, 'rect');
-        r.setAttribute('class', 'guia-anillo'); r.setAttribute('x', x0 - 4); r.setAttribute('y', y0 - 4); r.setAttribute('width', x1 - x0 + 8); r.setAttribute('height', y1 - y0 + 8); r.setAttribute('rx', 8);
-        svg.appendChild(r); primero = primero || r;
-      } else { el.classList.add('guia-marco'); primero = primero || el; }
-    }
-  }
-  if (primero) {
-    const caja = primero.getBoundingClientRect(), alto = innerHeight - $('dock').offsetHeight;
-    if (caja.top < 8 || caja.bottom > alto - 8) scrollBy({ top: caja.top - (alto - caja.height) / 2, behavior: REDUCIR ? 'auto' : 'smooth' });
-  }
-}
-$('explicame').addEventListener('click', () => abrirGuia(guiaActual()));
-
-/* ============================================================
-   9. Fuentes del estado (lista), láminas, notas, profundizar y decidir
-   ============================================================ */
-function pintarFuentes() {
-  const g = guiaActual(), vistas = new Set(), items = [];
-  for (const p of g.pasos) { const k = p.c.f + p.c.id; if (vistas.has(k)) continue; vistas.add(k); items.push(p.c); }
-  const ob = OBJ[tablaActual()].cita; if (!vistas.has(ob.f + ob.id)) items.push(ob);
-  $('lista-fuentes').innerHTML = items.map(c => `<li><span>Marino, ${c.sitio} (${/[-,]/.test(String(c.p)) ? 'pp.' : 'p.'} ${c.p})</span>${cita(c)}</li>`).join('');
-  $('explicame-txt').textContent = `${g.pasos.length} pasos: ${g.tit}`;
-}
-const LAMINAS = [
-  { img: 'mc-fig16-3-iabp.jpg', tit: 'Fig. 16.3 · balón', txt: 'Fig. 16.3: el balón se infla al empezar la diástole (izquierda) y se vacía al final (derecha). Encima, el cambio en la curva de la aorta.', c: C.f163 },
-  { img: 'mc-fig16-4-impella.jpg', tit: 'Fig. 16.4 · Impella', txt: 'Fig. 16.4: la punta del Impella en el VI; sus aspas quedan en la válvula aórtica y pasan sangre a la aorta.', c: { f: 'mc-soporte-mecanico', id: 'mc-fig-16-4', sitio: 'Fig. 16.4', p: 47 } },
-  { img: 'mc-fig16-5-ecmo-circuito.jpg', tit: 'Fig. 16.5 · ECMO VA', txt: 'Fig. 16.5: el circuito del ECMO venoarterial.', c: { f: 'mc-soporte-mecanico', id: 'mc-fig-16-5', sitio: 'Fig. 16.5', p: 49 } },
-  { img: 'mc-fig15-1-volumen-hto.jpg', tit: 'Fig. 15.1 · Hto', txt: 'Fig. 15.1: tras la hemorragia, el Hto no cambia; el salino lo diluye; la sangre completa no.', c: C.f151 },
-  { img: 'mc-fig18-2-tte-vd.jpg', tit: 'Fig. 18.2 · VD', txt: 'Fig. 18.2: eco con el VD más grande que el VI y el tabique aplanado: sobrecarga del VD.', c: { f: 'mc-ic-tipos', id: 'mc-fig-18-2', sitio: 'Fig. 18.2', p: 4 } },
-];
-function pintarTira() {
-  $('tira').innerHTML = LAMINAS.map((l, i) => `<button type="button" class="lamina-libro" data-lam="${i}"><img src="${IMG + l.img}" alt="${l.tit}" loading="lazy"><span>${l.tit}</span></button>`).join('');
-  $('tira').onclick = ev => { const b = ev.target.closest('[data-lam]'); if (!b) return; const l = LAMINAS[b.dataset.lam];
-    $('visor-img').src = IMG + l.img; $('visor-img').alt = l.tit; $('visor-txt').textContent = l.txt; $('visor-cita').innerHTML = cita(l.c); $('visor').showModal(); };
-  $('visor-cerrar').onclick = () => $('visor').close();
-}
-const NOTAS = [
-  { tipo: 'discrepan', txt: '<b>PCP óptima.</b> La Tabla 16.2 da 19-20 mmHg; el texto de la misma página, 18-20. El libro no las concilia. El monitor da por buena 18-20 y lo dice.', c: C.t162 },
-  { tipo: 'discrepan', txt: '<b>Hidrocortisona en el séptico.</b> La Tabla 17.2 la pide con noradrenalina «>0,25 µg/kg/min»; el texto de la p. 61, con «≥0,25». Y para añadir vasopresina, la p. 15 dice «≥0,2» y la Tabla 17.2, «0,25-0,5».', c: C.t172 },
-  { tipo: 'errata', txt: '<b>Unidad de la vasopresina.</b> El libro imprime «U/h» (0,01-0,04 en la Tabla 14.4, p. 13; 0,03-0,04 en la p. 16). El mando usa 0,03 U/min, la dosis habitual (conocimiento general, no del libro: compruébalo en la ficha técnica).', c: C.vasopresina },
-  { tipo: 'calla', txt: '<b>Cuánto mueve cada mando.</b> La ficha da la dirección (la noradrenalina sube la RVS, el balón sube la PAM, el ECMO sube la poscarga del VI), no cuánto. Las cifras del monitor tras tratar son ilustrativas.', c: C.iabp },
-  { tipo: 'calla', txt: '<b>Las cifras del taponamiento.</b> Estos capítulos dan el patrón (Tabla 14.1) y que la PVC y la PCP se igualan (cap. 18, p. 4), no cifras. El pulso paradójico, el bajo voltaje y la alternancia del QRS son de la fisiología general.', c: C.vdMed },
-  { tipo: 'calla', txt: '<b>La forma de las curvas y la FR.</b> La fuente no dibuja la curva de cada shock ni da la FR. Las formas (la presión diferencial, la variación con la respiración, la pletismografía) son de la fisiología general y sus cifras, ilustrativas.', c: C.t141 },
-  { tipo: 'autor', txt: '<b>¿La hipotensión causa el shock?</b> El autor plantea que la hipotensión sería una consecuencia del shock y no su causa (p. 18). Es su opinión; las tablas siguen pidiendo una PAM ≥65.', c: C.opinion },
-];
-const NOTA_TIPO = { discrepan: ['Las fuentes discrepan', ''], calla: ['La fuente no lo dice', 'calla'], autor: ['Opinión del autor', 'autor'], errata: ['Errata de dosis', 'errata'] };
-const PROFUNDIZAR = [
-  { t: 'La onda arterial en la periferia: la sistólica sube hasta 20 mmHg de la aorta a la radial y la PAM no cambia.', c: { f: 'mc-definiciones', id: 'mc-amplificacion', sitio: 'Amplificación sistólica', p: '4-5' } },
-  { t: 'Los fármacos que no están en los mandos: adrenalina, dopamina, fenilefrina, angiotensina II y midodrina.', c: C.t144 },
-  { t: 'Milrinona y levosimendán en el shock cardiogénico.', c: { f: 'mc-cardiogenico-farmaco', id: 'mc-tabla-16-3', sitio: 'Tabla 16.3', p: 43 } },
-  { t: 'El control de daños: hipotensión permisiva, coagulopatía y TEG.', c: { f: 'mc-damage-control', id: 'mc-dcr', sitio: 'Damage control', p: '29-30' } },
-  { t: 'Las roturas del infarto (papilar, septo, pared libre), en las primeras 24 h.', c: C.rotura },
-  { t: 'La anafilaxia: el shock distributivo con fuga capilar de hasta el 35 %.', c: { f: 'mc-anafilaxia', id: 'mc-shock-anafilactico', sitio: 'Shock anafiláctico', p: '66-67' } },
-  { t: 'La extravasación de un vasopresor y la fentolamina.', c: { f: 'mc-vasopresores', id: 'mc-extravasacion', sitio: 'Extravasación', p: 12 } },
-];
-function pintarFijos() {
-  $('lista-notas').innerHTML = NOTAS.map(n => `<div class="nota-fuentes"><span class="nota-tipo ${NOTA_TIPO[n.tipo][1]}">${NOTA_TIPO[n.tipo][0]}</span><span>${n.txt}</span>${cita(n.c)}</div>`).join('');
-  $('lista-profundizar').innerHTML = PROFUNDIZAR.map(p => `<li><span>${p.t}</span>${cita(p.c)}</li>`).join('');
-  pintarElige(); pintarTira();
-}
-const elegido = { sitio: null, preg: null, adivina: null };
-function pintarElige() {
-  const fila = (clave, ops) => `<div class="opciones-elige">${ops.map(([v, t]) => `<button type="button" data-el="${clave}" data-v="${v}" aria-pressed="${elegido[clave] === v}">${t}</button>`).join('')}</div>`;
-  $('elige').innerHTML = `<p class="para">1 · ¿Dónde vive el monitor del shock?</p>${fila('sitio', [['eco', 'Dentro de la Circulación viva, con el corazón 3D y la eco (recomendado)'], ['aparte', 'Un modelo de shock aparte']])}
-    <p class="para">2 · ¿El modo «¿Qué shock es?» se queda?</p>${fila('adivina', [['si', 'Sí, con los cinco tipos'], ['mas', 'Sí, y con más pacientes por tipo'], ['no', 'No hace falta']])}
-    <p class="para">3 · Sus preguntas: ¿las de Estudiar de las fichas más solo las de «predice y compruébalo»?</p>${fila('preg', [['mismas', 'Las mismas (recomendado)'], ['propias', 'Propias']])}`;
-  $('resumen-elige').textContent = Object.values(elegido).some(Boolean) ? 'Tu elección: ' + [elegido.sitio && (elegido.sitio === 'eco' ? 'dentro de la Circulación viva' : 'modelo aparte'), elegido.adivina && ('«¿Qué shock es?»: ' + { si: 'sí', mas: 'sí, con más pacientes', no: 'no' }[elegido.adivina]), elegido.preg && ('preguntas ' + (elegido.preg === 'mismas' ? 'de las fichas' : 'propias'))].filter(Boolean).join(' · ') : '';
-}
-$('elige').addEventListener('click', ev => { const b = ev.target.closest('[data-el]'); if (!b) return; elegido[b.dataset.el] = b.dataset.v; pintarElige(); });
-
-/* ============================================================
-   10. Pacientes y dock (Explorar)
-   ============================================================ */
-function pintarPacientes() {
-  $('pacientes').innerHTML = PACIENTES.map(p => `<button type="button" data-pac="${p.k}" aria-pressed="${est.pac === p}">${p.nombre}<small>${p.chip}</small></button>`).join('');
-  const T = TIPOS[est.pac.tipo];
-  $('ficha-pac').innerHTML = `${est.pac.linea} · <span class="hl-a">${T.nombre}: ${T.sub}</span> ${org('cifras del paciente: ilustrativo', true)}`;
-}
-$('pacientes').addEventListener('click', ev => {
-  const b = ev.target.closest('[data-pac]'); if (!b) return;
-  ponerPaciente(PACIENTES.find(p => p.k === b.dataset.pac));
-});
-function ponerPaciente(p, g) {
-  Object.assign(est, { pac: p, g: g ?? p.g, cris: 0, sangre: 0, na: 0, vaso: false, dobuta: false, soporte: 'no', venteo: false });
-  pintarPacientes(); actualizar(); llenarEstatico(); pintarDock();
-}
-let pest = 'gravedad';
-function pintarDock() {
-  document.querySelectorAll('.dock-tabs [data-pest]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.pest === pest)));
-  const p = est.pac, t = p.tipo, h = [];
-  if (pest === 'gravedad') {
-    const max = 100, v = Math.round(est.g * 100);
-    const marcas = t === 'hemo' ? '<span>0 %</span><span>15</span><span>30</span><span>40</span><span>50 %</span>' : '<span>sano</span><span>leve</span><span>grave</span><span>a fondo</span>';
-    h.push(`<div class="deslizador"><input type="range" id="d-grav" min="0" max="${max}" step="1" value="${v}" aria-label="Gravedad"><output id="o-grav"></output></div><div class="marcas">${marcas}</div>`);
-    h.push(`<p class="dock-nota">${t === 'hemo' ? 'Sangre perdida (Tabla 15.1)' : t === 'sepsis' ? 'Vasodilatación, fuga y mitocondria' : t === 'cardio' ? 'Fuerza del VI' : t === 'tapon' ? 'Líquido en el pericardio' : 'Carga de émbolo sobre el VD'} ${org('ilustrativo', true)}</p>`);
-  } else if (pest === 'volumen') {
-    h.push(`<div class="rejilla" style="--n:${t === 'hemo' ? 4 : 3}"><button type="button" class="tog" data-vol="250">+250 mL<small>bolo</small></button><button type="button" class="tog" data-vol="500">+500 mL<small>bolo</small></button><button type="button" class="tog" data-vol="2000">2 L<small>cristaloide</small></button>${t === 'hemo' ? '<button type="button" class="tog" data-sangre="1000">1 L<small>sangre completa</small></button>' : ''}</div>`);
-    h.push(`<div class="fila" style="justify-content:space-between"><span class="dock-nota">Llevas ${est.cris.toLocaleString('es-ES')} mL de cristaloide${est.sangre ? ` y ${est.sangre} mL de sangre` : ''} ${org('efecto: ilustrativo', true)}</span><button type="button" class="tog" data-vol="0" style="min-width:88px">Quitar</button></div>`);
-  } else if (pest === 'farmacos') {
-    h.push(`<div class="seg" role="group" aria-label="Noradrenalina">${[0, 5, 10, 25, 30].map(d => `<button type="button" data-na="${d}" aria-pressed="${est.na === d}">${d}<small>${d === 0 ? 'sin NA' : 'µg/min'}</small></button>`).join('')}</div>`);
-    h.push(`<div class="rejilla" style="--n:2"><button type="button" class="tog" data-far="vaso" aria-pressed="${est.vaso}">Vasopresina<small>0,03 U/min · ver nota</small></button><button type="button" class="tog" data-far="dobuta" aria-pressed="${est.dobuta}">Dobutamina<small>5 µg/kg/min</small></button></div>`);
-  } else {
-    h.push(`<div class="seg" role="group" aria-label="Soporte mecánico">${[['no', 'Ninguno'], ['balon', 'Balón'], ['impella', 'Impella'], ['ecmo', 'ECMO VA']].map(([k, n]) => `<button type="button" data-sop="${k}" aria-pressed="${est.soporte === k}">${n}</button>`).join('')}</div>`);
-    h.push(`<div class="fila" style="justify-content:space-between"><span class="dock-nota">${t === 'cardio' ? 'Para el shock cardiogénico refractario (p. 45)' : 'La fuente lo reserva para el cardiogénico (p. 45)'}</span><button type="button" class="tog" data-venteo aria-pressed="${est.venteo}" ${est.soporte === 'ecmo' ? '' : 'disabled'} style="min-width:120px">Ventear el VI<small>con el ECMO</small></button></div>`);
-  }
-  $('dock-panel').innerHTML = h.join('');
-  if (pest === 'gravedad') { $('d-grav').oninput = e => { est.g = +e.target.value / 100; actualizar(); }; ponerSalidaGrav(); }
-  medirDock();
-}
-function ponerSalidaGrav() {
-  const o = $('o-grav'); if (!o) return;
-  if (est.pac.tipo === 'hemo') o.innerHTML = `${R.pct} % · Clase ${R.clase}<small>≈ ${R.ml.toLocaleString('es-ES')} mL de ${coma(R.volemia / 1000, 1)} L</small>`;
-  else o.innerHTML = `${Math.round(est.g * 100)} %<small>${est.g < 0.3 ? 'leve' : est.g < 0.7 ? 'grave' : 'a fondo'}</small>`;
-}
-$('dock-panel').addEventListener('click', ev => {
-  const b = ev.target.closest('button'); if (!b || b.disabled) return;
-  if (b.dataset.vol) { const v = +b.dataset.vol; if (v === 0) { est.cris = 0; est.sangre = 0; } else est.cris += v; }
-  if (b.dataset.sangre) est.sangre += +b.dataset.sangre;
-  if (b.dataset.na) est.na = +b.dataset.na;
-  if (b.dataset.far) est[b.dataset.far] = !est[b.dataset.far];
-  if (b.dataset.sop) { est.soporte = b.dataset.sop; if (est.soporte !== 'ecmo') est.venteo = false; }
-  if ('venteo' in b.dataset) est.venteo = !est.venteo;
-  actualizar(); pintarDock();
-});
-document.querySelector('.dock-tabs').addEventListener('click', ev => { const b = ev.target.closest('[data-pest]'); if (!b) return; pest = b.dataset.pest; pintarDock(); });
-$('frase').addEventListener('click', () => { $('frase').classList.toggle('abierta'); medirDock(); });
-$('pausa').addEventListener('click', () => { pausado = !pausado; $('pausa').setAttribute('aria-pressed', String(pausado)); $('pausa').textContent = pausado ? 'Seguir' : 'Pausa'; latir(0); });
-function medirDock() { requestAnimationFrame(() => { document.documentElement.style.setProperty('--dock-h', $('dock').offsetHeight + 'px'); document.documentElement.style.setProperty('--frase-h', ($('frase').hidden ? 0 : $('frase').offsetHeight) + 'px'); }); }
-
-function actualizar() {
-  R = calcular();
-  pintarCifras(); pintarCorazon(); ponerSalidaGrav();
-  if (modo === 'explorar') { pintarFrase(); pintarFuentes(); }
-  $('mon-quien').textContent = modo === 'adivina' ? 'Monitor · paciente sin nombre' : `Monitor · ${est.pac.nombre}`;
-  if (REDUCIR || pausado) llenarEstatico();
-}
-
-/* ============================================================
-   11. «¿Qué shock es?»: el monitor sin el nombre
-   ============================================================ */
-// Cinco pacientes sin nombre, uno por tipo, a gravedad media. Se ven con los objetivos generales (Tabla 14.5).
-const ADIVINA = [
-  { tipo: 'cardio', g: 0.66 }, { tipo: 'sepsis', g: 0.7 }, { tipo: 'tep', g: 0.78 }, { tipo: 'hemo', g: 0.74 }, { tipo: 'tapon', g: 0.62 },
-];
-const OPC_TIPO = [['hemo', 'Hipovolémico'], ['sepsis', 'Distributivo (séptico)'], ['cardio', 'Cardiogénico'], ['tapon', 'Obstructivo: taponamiento'], ['tep', 'Obstructivo: TEP']];
-// Lo que delata a cada tipo (la huella en el monitor) y lo que tendría si fuera otro
-const HUELLA = {
-  hemo: { pistas: [
-    { t: 'PVC baja con gasto bajo y vasos apretados (IRVS alta): falta volumen.', r: ['[data-fila="pvc"]', '[data-fila="ic"]', '[data-fila="irvs"]'], c: C.t141 },
-    { t: 'La curva arterial es estrecha y baja con cada inspiración: un ventrículo que se vacía.', r: ['#tr-art'], c: C.t141, org: 'la forma: fisiología general' },
-    { t: 'Taquicardia: la primera respuesta a la pérdida de sangre.', r: ['[data-fila="fc"]'], c: C.t151 },
-    { t: 'SvO₂ baja y lactato alto: el aporte de O₂ no llega.', r: ['[data-fila="svo2"]', '[data-fila="lact"]'], c: C.t143 }],
-    seria: 'el hipovolémico tendría la PVC baja con el gasto bajo y la RVS alta (Tabla 14.1)' },
-  sepsis: { pistas: [
-    { t: 'PVC baja, pero el gasto es alto (IC >4) y la IRVS, muy baja: vasos abiertos.', r: ['[data-fila="pvc"]', '[data-fila="ic"]', '[data-fila="irvs"]'], c: C.t141 },
-    { t: 'La diastólica cae mucho y la curva del dedo es amplia: el «shock caliente».', r: ['#tr-art', '#tr-pleth'], c: C.sepHemo, org: 'la forma: fisiología general' },
-    { t: 'ScvO₂ por encima de 80 %: la extracción está alterada.', r: ['[data-fila="svo2"]'], c: C.t143 },
-    { t: 'Fiebre en el monitor.', r: ['#n-t'], c: C.sepHemo, org: 'T: ilustrativo' }],
-    seria: 'el séptico tendría la PVC baja con el gasto normal o alto y la RVS baja (Tabla 14.1)' },
-  cardio: { pistas: [
-    { t: 'La PCP está alta y por encima de la PVC: falla el izquierdo.', r: ['[data-fila="pcp"]', '[data-fila="pvc"]'], c: C.csHemo },
-    { t: 'Gasto bajo (IC <2,2) con la IRVS alta.', r: ['[data-fila="ic"]', '[data-fila="irvs"]'], c: C.f162 },
-    { t: 'SpO₂ baja y FR alta: el pulmón se encharca.', r: ['[data-fila="spo2"]', '[data-fila="fr"]'], c: C.llenado, org: 'fisiología general' },
-    { t: 'SvO₂ ≤50 %: el aporte de O₂ no basta.', r: ['[data-fila="svo2"]'], c: C.scvo2 }],
-    seria: 'el cardiogénico tendría la PVC o la PCP altas, el gasto bajo y la RVS alta (Tabla 14.1); la PCP, por encima de la PVC si falla el izquierdo (p. 40)' },
-  tapon: { pistas: [
-    { t: 'PVC alta e igual a la PCP: las presiones se igualan.', r: ['[data-fila="pvc"]', '[data-fila="pcp"]'], c: C.vdMed },
-    { t: 'Gasto bajo con la IRVS alta: obstructivo.', r: ['[data-fila="ic"]', '[data-fila="irvs"]'], c: C.t141 },
-    { t: 'La sistólica cae en cada inspiración (pulso paradójico) y el QRS es pequeño y alterna.', r: ['#tr-art', '#tr-ecg'], c: C.obstr, org: 'fisiología general' },
-    { t: 'Sin hipoxemia marcada. La igualación también la da el fallo del VD: decide la eco.', r: ['[data-fila="spo2"]'], c: C.vdMed }],
-    seria: 'el taponamiento tendría la PVC alta e igual a la PCP (cap. 18, p. 4)' },
-  tep: { pistas: [
-    { t: 'PVC alta y PCP normal: falla el derecho.', r: ['[data-fila="pvc"]', '[data-fila="pcp"]'], c: C.vdMed },
-    { t: 'Gasto bajo con la IRVS alta: obstructivo.', r: ['[data-fila="ic"]', '[data-fila="irvs"]'], c: C.t141 },
-    { t: 'Taquicardia, taquipnea y SpO₂ baja: lo típico del TEP, aunque ninguno confirma ni descarta.', r: ['[data-fila="fc"]', '[data-fila="fr"]', '[data-fila="spo2"]'], c: C.tepClin },
-    { t: 'La eco ve el VD dilatado; la confirma la imagen.', r: ['[data-fila="pvc"]'], c: C.tepEco }],
-    seria: 'el TEP tendría la PVC alta con una PCP normal, y a menudo taquipnea e hipoxemia (cap. 18, p. 4; Tabla 22.1)' },
-};
-let ad = { i: 0, aciertos: 0, respondido: false };
-function empezarAdivina() { ad = { i: 0, aciertos: 0, respondido: false }; pintarAdivina(); }
-function pintarAdivina() {
-  const z = $('zona-adivina');
-  if (ad.i >= ADIVINA.length) {
-    z.innerHTML = `<h2>${ad.aciertos} de ${ADIVINA.length}</h2><p class="para">La regla de la Tabla 14.1: primero la PVC (¿falta volumen o sobra?), luego el gasto y la resistencia. La PCP frente a la PVC dice qué ventrículo falla.</p>${cita(C.t141)}<div class="fila"><button type="button" class="b prim" id="ad-otra">Empezar otra vez</button></div>`;
-    $('ad-otra').onclick = empezarAdivina; return;
-  }
-  const c = ADIVINA[ad.i];
-  ad.respondido = false; quizObj = 't145';
-  Object.assign(est, { pac: PACIENTES.find(p => p.tipo === c.tipo), g: c.g, cris: 0, sangre: 0, na: 0, vaso: false, dobuta: false, soporte: 'no', venteo: false });
-  est.pac = { ...est.pac, precarga: 0 };
-  $('tapa').hidden = false; actualizar(); llenarEstatico();
-  z.innerHTML = `<div class="cab-preg"><span class="num">${ad.i + 1} de ${ADIVINA.length}</span><span class="tipo">Mira el monitor</span></div>
-    <p class="pregunta">Un paciente en shock, con catéter arterial y de arteria pulmonar. Sin más datos: <b>¿qué shock es?</b></p>
-    <div class="op" id="ad-ops">${OPC_TIPO.map(([k, n]) => `<button type="button" class="b" data-ad="${k}">${n}</button>`).join('')}</div><div id="ad-res"></div>`;
-}
-$('zona-adivina').addEventListener('click', ev => {
-  const b = ev.target.closest('[data-ad]');
-  if (b && !ad.respondido) {
-    ad.respondido = true; const real = ADIVINA[ad.i].tipo, ok = b.dataset.ad === real; if (ok) ad.aciertos++;
-    document.querySelectorAll('#ad-ops button').forEach(x => { x.disabled = true; });
-    b.classList.add(ok ? 'elegida-bien' : 'elegida-mal');
-    const nombre = OPC_TIPO.find(o => o[0] === real)[1], h = HUELLA[real];
-    $('tapa').hidden = true;
-    $('ad-res').innerHTML = `<div class="respuesta entra"><span class="${ok ? 'ok' : 'mal'}">${ok ? '✓ Bien: ' : '✗ Era '}${nombre}.</span>${ok ? '' : `<p>No cuadra con tu elección: ${HUELLA[b.dataset.ad].seria}.</p>`}
-      <p><b>Lo que lo delataba</b> (toca «Señalar» para verlo en el monitor):</p><ul class="lista pista">${h.pistas.map((p, i) => `<li><span>${p.t}${p.org ? ' ' + org(p.org, true) : ''}</span><button type="button" class="senal" data-senal="${i}">Señalar</button>${cita(p.c)}</li>`).join('')}</ul>
-      <div class="fila"><button type="button" class="b prim" id="ad-sig">${ad.i === ADIVINA.length - 1 ? 'Ver el resultado' : 'Otro paciente →'}</button></div></div>`;
-    return;
-  }
-  const s = ev.target.closest('[data-senal]');
-  if (s) { senalar(HUELLA[ADIVINA[ad.i].tipo].pistas[+s.dataset.senal].r); return; }
-  if (ev.target.closest('#ad-sig')) { borrarSenal(); ad.i++; pintarAdivina(); scrollTo({ top: 0, behavior: REDUCIR ? 'auto' : 'smooth' }); }
-});
-
-/* ============================================================
-   12. Mayéutica (muestra): dos preguntas y el primer paso de un caso
-   ============================================================ */
-// Las respuestas están aquí, en el código; el HTML no las lleva hasta que se contesta.
-const MUESTRA = [
-  { grupo: 'guia', num: 'G1', predice: true, pac: 'mateo', g: 0.3,
-    enunciado: 'Mateo sigue sangrando: va a pasar del 15 % al 25 % de su volemia, la Clase II. Antes de moverlo, <b>¿qué fila del monitor avisa primero?</b>',
-    opciones: [
-      { t: 'La PAM: cae por debajo de 65 en cuanto se pierde el primer litro.', porque: 'En la Clase II la PA se sostiene por la vasoconstricción (Tabla 15.1). Si esperas a que caiga la PAM, Mateo ya estará en la Clase III, con oliguria y lactato alto.' },
-      { t: 'La FC: sube mientras la vasoconstricción sostiene la PA.', ok: true },
-      { t: 'La Hb: cae en proporción a la sangre que se pierde.', porque: 'Pierde sangre entera, plasma y hematíes a la vez: la Hb no baja hasta las 8-12 h (p. 23). Con una Hb normal creerías que no sangra.' },
-      { t: 'El lactato: es lo primero que se eleva en cualquier hemorragia.', porque: 'En la Clase II el lactato no cambia; sube en la III (Tabla 15.1). Si lo esperas, Mateo ya estará en shock.' }],
-    explicacion: 'Tabla 15.1, Clase II: la FC sube, la PA y la diuresis se mantienen o bajan algo, el lactato no cambia.', fuente: C.t151,
-    tocar: { txt: 'Compruébalo: lleva a Mateo al 25 %', g: 0.5, confirma: 'La FC pasa de 92 a más de 100; la PAM sigue por encima de 65 y el lactato, por debajo de 2.' } },
-  { grupo: 'examen', num: 'E1', pac: 'amparo', g: 0.6, ajustes: { cris: 1750, na: 25 },
-    enunciado: 'Amparo, hora 6: noradrenalina a 25 µg/min, PAM 66, ScvO₂ 84 %, lactato 3,9 mmol/L, gap de PCO₂ 4 mmHg. <b>¿Qué lectura es la correcta?</b>',
-    opciones: [
-      { t: 'La ScvO₂ alta prueba que el aporte de O₂ basta: baja la noradrenalina.', porque: 'En la sepsis la mitocondria no usa el O₂ y la extracción cae: la ScvO₂ sube y deja de medir si el aporte basta (p. 10, 59). Si bajas la NA por ese número, la PAM de Amparo cae de 65.' },
-      { t: 'El gap de 4 mmHg indica hipoperfusión: añade dobutamina.', porque: 'Un gap <6 mmHg es perfusión adecuada (Tabla 14.3). La dobutamina le sumaría 5-15 lpm de taquicardia (p. 43) sin un gasto bajo que tratar.' },
-      { t: 'El lactato de 3,9 es hipoxia tisular: sube la FiO₂ al 100 %.', porque: 'En el séptico el lactato no marca metabolismo anaerobio, y el O₂ liberal no está justificado y podría dañar por estrés oxidante (p. 59). Amparo ganaría radicales libres, no oxígeno en la célula.' },
-      { t: 'La ScvO₂ aquí engaña; el gap dice que hay flujo; meta: el lactato.', ok: true }],
-    explicacion: 'En el shock séptico la ScvO₂ sube porque la extracción está alterada (≥80 %, Tabla 14.3) y no es fiable (p. 18, 59). El gap solo depende del flujo (p. 10). La meta: normalizar el lactato (p. 18, 60).', fuente: C.sepMon },
-  { grupo: 'caso', num: 'Paso 1', pac: 'aurelio', g: 0.6, dia: 'Hemodinámica · hora 0',
-    paciente: [['Paciente', 'Aurelio, 67 años, 82 kg'], ['Motivo', 'IAM anterior', 1], ['PA', '84/58 mmHg', 1], ['FC', '108 lpm', 1], ['Lactato', '3,2 mmol/L', 1], ['Diuresis', '0,3 mL/kg/h', 1], ['Exploración', 'crepitantes', 1]],
-    enunciado: '<b>¿Insuficiencia cardíaca o shock cardiogénico?</b>',
-    opciones: [
-      { t: 'Shock: hay hipoperfusión (lactato alto, oliguria), no solo congestión.', ok: true },
-      { t: 'Insuficiencia cardíaca: la PAM de 67 está por encima de 65.', porque: 'Lo que separa el shock de la IC es la hipoperfusión, no una cifra de PA; hasta un 5 % de los shocks cardiogénicos no tienen hipotensión (p. 40). Tratarlo como IC retrasa lo que Aurelio necesita.' },
-      { t: 'Insuficiencia cardíaca: los crepitantes son congestión, y eso no es shock.', porque: 'La congestión aparece en los dos (p. 40). El lactato de 3,2 y la oliguria son hipoperfusión: shock. Con solo un diurético, la furosemida IV puede bajar aún más su gasto (cap. 18, p. 10).' },
-      { t: 'No se sabe sin el catéter: hay que medir el IC antes de decidir.', porque: 'El IC bajo (<2,2) es típico, pero la hipoperfusión ya se ve en la cabecera: lactato >2 y diuresis <0,5 (p. 40). Esperar al catéter retrasa el tratamiento de un shock que ya tienes delante.' }],
-    explicacion: 'El shock cardiogénico comparte con la IC el gasto bajo, las presiones de llenado altas y la RVS alta; lo distingue la hipoperfusión tisular (PA baja, poca orina) y la mala oxigenación (lactato alto) (p. 40).', fuente: C.csHemo,
-    sigue: 'En la app, el caso sigue: el catéter de arteria pulmonar da PCP 14 e IC 1,9. ¿Qué haces primero?' },
-];
-const GRUPO = { guia: 'Guía socrática', examen: 'Examen · nivel MIR', caso: 'El caso' };
-let paso = 0; const result = [];
-function pintarDockEst() {
-  $('dock-pasos').innerHTML = MUESTRA.map((_, i) => `<i class="${i < paso ? (result[i] ? 'on' : 'mal') : ''}${i === paso ? ' aqui' : ''}"></i>`).join('');
-  $('dock-est-izq').textContent = paso < MUESTRA.length ? `Pregunta ${paso + 1} de ${MUESTRA.length}` : 'Hecho';
-  $('dock-est-der').textContent = paso < MUESTRA.length ? GRUPO[MUESTRA[paso].grupo] : `${result.filter(Boolean).length} de ${MUESTRA.length} bien`;
-  medirDock();
-}
-function pintarPaso() {
-  pintarDockEst();
-  const cont = $('preg');
-  if (paso >= MUESTRA.length) {
-    tapado = false; actualizar();
-    cont.innerHTML = `<h2>Hasta aquí la muestra</h2><p class="para">En la app, cada ficha tendrá su recorrido entero (Mira, Juega, Piensa, Examínate y el caso), con el monitor en el punto de cada pregunta.</p><div class="fila"><button class="b" type="button" data-acc="otra">Otra vez</button></div>`;
-    return;
-  }
-  const q = MUESTRA[paso], pac = PACIENTES.find(p => p.k === q.pac);
-  Object.assign(est, { pac, g: q.g, cris: 0, sangre: 0, na: 0, vaso: false, dobuta: false, soporte: 'no', venteo: false }, q.ajustes || {});
-  tapado = !!q.predice; actualizar(); llenarEstatico();
-  let h = '';
-  if (q.paciente) h += `<p class="dia">${q.dia}</p><dl class="paciente">${q.paciente.map(([k, v, n]) => `<dt>${k}</dt><dd${n ? ' class="cambia"' : ''}>${v}</dd>`).join('')}</dl>`;
-  h += `<div class="cab-preg"><span class="num">${q.num}</span><span class="grupo ${q.grupo === 'guia' ? '' : q.grupo}">${GRUPO[q.grupo]}</span><span class="tipo">Test · piensa antes${q.predice ? ' · predice y compruébalo' : ''}</span></div>`;
-  h += `<p class="pregunta">${q.enunciado}</p><div id="fmt"><p class="para">Piénsalo antes de ver las opciones.</p><div class="fila" style="margin-top:6px"><button class="b prim" type="button" data-acc="ops">Ya lo tengo: ver opciones</button></div></div><div class="op" id="ops" hidden></div><div id="q-res"></div>`;
-  cont.innerHTML = h; cont.classList.remove('entra'); void cont.offsetWidth; cont.classList.add('entra');
-}
-$('preg').addEventListener('click', ev => {
-  const q = MUESTRA[paso], a = ev.target.closest('[data-acc]')?.dataset.acc;
-  if (a === 'otra') { paso = 0; result.length = 0; pintarPaso(); return; }
-  if (a === 'ops') { const o = $('ops'); o.innerHTML = q.opciones.map((op, i) => `<button class="b" type="button" data-op="${i}">${op.t}</button>`).join(''); o.hidden = false; $('fmt').remove(); return; }
-  if (a === 'sig') { paso++; pintarPaso(); scrollTo({ top: 0, behavior: REDUCIR ? 'auto' : 'smooth' }); return; }
-  if (a === 'tocar') { est.g = q.tocar.g; tapado = false; actualizar(); ev.target.closest('.fila').outerHTML = `<p class="para"><span class="ok">✓ Mira el monitor:</span> ${q.tocar.confirma}</p><div class="fila"><button class="b prim" type="button" data-acc="sig">Siguiente →</button></div>`; return; }
-  const op = ev.target.closest('[data-op]');
-  if (op && !op.disabled) {
-    const o = q.opciones[op.dataset.op]; result[paso] = !!o.ok;
-    document.querySelectorAll('#ops button').forEach(b => { b.disabled = true; }); op.classList.add(o.ok ? 'elegida-bien' : 'elegida-mal');
-    if (!q.tocar) { tapado = false; actualizar(); }
-    $('q-res').innerHTML = `<div class="respuesta entra"><span class="${o.ok ? 'ok' : 'mal'}">${o.ok ? '✓ Bien' : '✗ Qué le habría pasado al paciente'}</span>${o.ok ? '' : `<p>${o.porque}</p>`}<p>${q.explicacion}</p>${cita(q.fuente)}${q.sigue ? `<p class="para">${q.sigue}</p>` : ''}
-      <div class="fila">${q.tocar ? `<button class="b prim" type="button" data-acc="tocar">${q.tocar.txt}</button>` : `<button class="b prim" type="button" data-acc="sig">${paso === MUESTRA.length - 1 ? 'Terminar la muestra' : 'Siguiente →'}</button>`}</div></div>`;
-    pintarDockEst();
-  }
-});
-
-/* ============================================================
-   13. Modos y arranque
-   ============================================================ */
-function setModo(m) {
-  if (guia) cerrarGuia();
-  modo = m; borrarSenal();
-  for (const [id, k] of [['modo-explorar', 'explorar'], ['modo-adivina', 'adivina'], ['modo-preguntas', 'preguntas']]) $(id).setAttribute('aria-selected', String(m === k));
-  $('zona-pacientes').hidden = m !== 'explorar'; $('fila-explicame').hidden = m !== 'explorar'; $('zona-abajo').hidden = m !== 'explorar';
-  $('zona-adivina').hidden = m !== 'adivina'; $('vista-preguntas').hidden = m !== 'preguntas';
-  $('dock-explorar').hidden = m !== 'explorar'; $('dock-estudio').hidden = m !== 'preguntas';
-  $('frase').hidden = m !== 'explorar'; $('detalle-fila').hidden = true; $('tapa').hidden = true;
-  $('dock').hidden = m === 'adivina';
-  tapado = false; quizObj = null;
-  if (m === 'explorar') ponerPaciente(PACIENTES[0]);
-  if (m === 'adivina') empezarAdivina();
-  if (m === 'preguntas') { paso = 0; result.length = 0; pintarPaso(); }
-  medirDock();
-}
-$('modo-explorar').onclick = () => setModo('explorar');
-$('modo-adivina').onclick = () => setModo('adivina');
-$('modo-preguntas').onclick = () => setModo('preguntas');
-addEventListener('resize', () => { montarTrazas(); llenarEstatico(); medirDock(); });
-
-montarTrazas();
-R = calcular();
-pintarFijos();
-ponerPaciente(PACIENTES[0]);
-llenarEstatico();
-if (!REDUCIR) requestAnimationFrame(bucle);
-medirDock();
-</script>
+<script type="module" src="b3-shock/pagina.js"></script>
 </body>
 </html>

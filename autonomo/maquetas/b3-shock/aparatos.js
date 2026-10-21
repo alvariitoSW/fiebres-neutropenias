@@ -5,6 +5,7 @@
 // y «Recorrido» (por dónde entra y dónde queda la punta). Lo que la fuente no da («pide fuente») no se dibuja.
 // El paciente va en grabado (tonos crema y sangre); la máquina, en isométrico técnico (gris cálido, una pieza en oro).
 import * as I from '../comun/dibujo-iso.js';
+import { dibujoCorazon } from './corazon.js';
 
 const NS = 'http://www.w3.org/2000/svg';
 const f1 = I.f1;
@@ -120,7 +121,10 @@ export function consola(P, lz, { x, y, z = 0, w = 44, d = 24, h = 34, pre, linea
   let pant = `<g transform="${fr}"><rect x="4" y="3.5" width="${pw}" height="${ph}" rx="1.2" class="pantalla-marco" vector-effect="non-scaling-stroke"/>`
     + `<rect x="5.2" y="4.7" width="${pw - 2.4}" height="${ph - 2.4}" rx=".8" class="pantalla"/>`;
   const ids = [];
-  for (let i = 0; i < lineas; i++) { const id = `${pre}-l${i}`; ids.push(id); pant += `<text id="${id}" x="7" y="${10.5 + i * (ph - 6) / lineas}" class="pantalla-txt" font-size="${Math.min(5.6, (ph - 5) / lineas * 0.82)}"></text>`; }
+  // la pantalla enseña una curva y unas barras (sin texto: las cifras van en la consola del monitor, legibles)
+  let curva = ''; for (let i = 0; i <= 24; i++) { const t = i / 24, y = 4.7 + (ph - 2.4) * (0.62 - 0.32 * Math.exp(-(((t * 3 % 1) - 0.25) ** 2) / 0.006) - 0.1 * Math.sin(t * 18)); curva += `${i ? 'L' : 'M'}${(6.4 + (pw - 4.8) * t).toFixed(1)} ${y.toFixed(1)}`; }
+  pant += `<path d="${curva}" class="pantalla-curva" vector-effect="non-scaling-stroke"/>`;
+  for (let i = 0; i < 3; i++) pant += `<rect x="${7 + i * 5}" y="${4.7 + (ph - 2.4) * 0.82}" width="3.4" height="${(ph - 2.4) * 0.1}" class="pantalla-barra"/>`;
   // placa con tres líneas (texto impreso) y dos remaches
   pant += `<rect x="4" y="${h - 9}" width="${w * 0.42}" height="6" rx=".6" class="placa" vector-effect="non-scaling-stroke"/>`
     + `<path class="placa-txt" data-free="1" vector-effect="non-scaling-stroke" d="M6.5 ${h - 7.4}h${w * 0.3}M6.5 ${h - 5.9}h${w * 0.22}M6.5 ${h - 4.4}h${w * 0.26}"/>`
@@ -272,15 +276,15 @@ export function montarImpella(svg) {
     <g>${cor.svg}</g>
     <g id="imp-velos-detras"></g><g id="imp-mitral"></g>
     <g id="imp-rios-detras"></g>
-    <g class="aparato">
-      ${lz.tubo(Tcat, { clase: 'p-cateter' })}
-      ${lz.torno(Tmot, { clase: 'p-motor', dentro: `<path class="iso-l faint" d="${I.arco(M, 74, R.mot, P) + I.arco(M, 84, R.mot, P)}"/>` })}
-      ${lz.torno(Tjau, { clase: 'p-jaula lit', familia: 'iso', dentro: `<path class="hueco" d="${huecos}"/><g id="imp-rotor"></g>` })}
-      ${lz.torno(Tcan, { clase: 'p-canula', dentro: `<path class="iso-l faint" d="${I.arco(M, 30, R.can, P)}"/>` })}
-      ${lz.torno(Tent, { clase: 'p-entrada', dentro: `<path class="hueco" d="${ventanas}"/>` })}
-      ${lz.tubo(Tpig, { clase: 'p-pigtail' })}
-    </g>
     <g id="imp-velos"></g>
+    <g class="aparato">
+      ${lz.tubo(Tpig, { clase: 'p-pigtail' })}
+      ${lz.torno(Tent, { clase: 'p-entrada', dentro: `<path class="hueco" d="${ventanas}"/>` })}
+      ${lz.torno(Tcan, { clase: 'p-canula', dentro: `<path class="iso-l faint" d="${I.arco(M, 30, R.can, P)}"/>` })}
+      ${lz.torno(Tjau, { clase: 'p-jaula lit', familia: 'iso', dentro: `<path class="hueco" d="${huecos}"/><g id="imp-rotor"></g>` })}
+      ${lz.torno(Tmot, { clase: 'p-motor', dentro: `<path class="iso-l faint" d="${I.arco(M, 74, R.mot, P) + I.arco(M, 84, R.mot, P)}"/>` })}
+      ${lz.tubo(Tcat, { clase: 'p-cateter' })}
+    </g>
     <g id="imp-rios"></g>
     <g class="maquina">${cons.svg}</g>
   </g>`;
@@ -296,9 +300,8 @@ export function montarImpella(svg) {
   const g = (id) => svg.querySelector('#' + id);
   const rotor = g('imp-rotor');
   function pintarRotor(fase) {
-    let d = '';
-    for (let j = 0; j < 3; j++) d += I.helice(M, 57, 68, R.jau - 1.2, 0.55, fase + j * 2 * Math.PI / 3, P, 30);
-    rotor.innerHTML = `<clipPath id="imp-clip"><path d="${huecos}"/></clipPath><g clip-path="url(#imp-clip)"><path class="rotor-fondo" d="${huecos}"/><path class="alabe" d="${d}"/></g>`;
+    const a = I.aspas(M, 57, 68, 1.4, R.jau - 0.4, 0.5, fase, 3, P, 14);
+    rotor.innerHTML = `<clipPath id="imp-clip"><path d="${huecos}"/></clipPath><g clip-path="url(#imp-clip)"><path class="rotor-fondo" d="${huecos}"/><path class="aspa detras" d="${a.detras}"/><path class="aspa" d="${a.delante}"/></g>`;
   }
   function pintar(f, fAo, fMit) {
     const vi = viSvg(P, f, 11 / Math.max(0.8, f));
@@ -323,12 +326,6 @@ export function montarImpella(svg) {
     riosD.poner('nativo', Math.max(0, s.qAo) * 0.1, s.vAo && s.qAo > 5 ? 1 : 0);
     riosD.poner('llena', Math.max(0, s.qMit) * 0.08, s.vMit && s.qMit > 5 ? 1 : 0);
     if (!quieto) { rios.tick(dt); riosD.tick(dt); }
-    const L = cab.lectura;
-    if (L) {
-      g('imp-c-l0').textContent = on ? `Bomba ${coma(L.imp, 1)} L/min` : 'Bomba parada';
-      g('imp-c-l1').textContent = `Corazón ${coma(L.gcNativo, 1)}`;
-      g('imp-c-l2').textContent = `Total ${coma(L.gcTotal, 1)} L/min`;
-    }
   }
   return { actualizar };
 }
@@ -434,12 +431,6 @@ export function montarBalon(svg) {
     rios.poner('sube', empuja * 0.9, empuja > 5 ? 1 : 0); rios.poner('coronaria', empuja * 0.5, empuja > 5 ? 1 : 0); rios.poner('baja', empuja * 0.7, empuja > 5 ? 1 : 0);
     riosD.poner('eyeccion', Math.max(0, s.qAo) * 0.12, s.vAo && s.qAo > 5 ? 1 : 0);
     if (!quieto) { rios.tick(dt); riosD.tick(dt); }
-    const L = cab.lectura;
-    if (L) {
-      g('iab-c-l0').textContent = on ? `Balón ${Math.round(cab.ajuste.balon)} mL · helio` : 'Balón parado';
-      g('iab-c-l1').textContent = on ? 'Disparo: onda R' : 'Sin disparo';
-      g('iab-c-l2').textContent = on ? `${v > 20 ? 'Inflado (diástole)' : 'Vacío (sístole)'}` : '—';
-    }
   }
   return { actualizar };
 }
@@ -449,118 +440,107 @@ export function montarBalon(svg) {
 // =====================================================================================================================
 export function montarEcmo(svg) {
   const lz = new I.Lienzo('ecm');
-  // --- el paciente (pantalla directa, de frente): coordenadas del viewBox
-  const ao = I.suave2([[118, 92], [112, 70], [118, 54], [134, 50], [146, 60], [148, 84], [148, 130], [148, 170], [148, 196]], 8);   // raíz → cayado → descendente
-  const ilD = I.suave2([[148, 196], [140, 214], [130, 238], [124, 268]], 6), ilI = I.suave2([[148, 196], [158, 214], [168, 238], [174, 268]], 6);
-  const vci = I.suave2([[106, 104], [112, 130], [118, 170], [124, 196], [118, 214], [112, 238], [108, 268]], 6);
-  // la máquina: carro con bomba, oxigenador y calentador (isométrico) a la derecha
-  const P = I.camara({ az: 32, el: 26, k: 1.55, o: [292, 150] });
-  const carro = { x: -26, y: -16, w: 52, d: 34, r: 3 };
+  // --- el paciente de frente (grabado): el corazón en corte (el mismo dibujo de la capa del paciente) y los vasos
+  const H0 = [20, 2], K = 0.6, h = ([x, y]) => [H0[0] + K * x, H0[1] + K * y];
+  const ao = I.suave2([h([214, 64]), [150, 18], [166, 8], [182, 18], [184, 60], [184, 120], [182, 170], [178, 198]], 8);
+  const ilD = I.suave2([[178, 198], [168, 222], [150, 268]], 6), ilI = I.suave2([[178, 198], [188, 222], [200, 268]], 6);
+  const vci = I.suave2([[66, 270], [62, 236], [54, 200], h([52, 250]), h([70, 140]), h([90, 96])], 8);
+  // --- la máquina: el carro con la consola y el cabezal de la bomba; el oxigenador y el calentador apoyados en el
+  // carro, cada uno en su soporte (isométrico). Nada flota: cada pieza descansa en otra
+  const P = I.camara({ az: 32, el: 26, k: 1.6, o: [296, 170] });
+  const carro = { x: -34, y: -20, w: 64, d: 40, r: 3 };
   let maq = '';
-  // carro: ruedas, base, mástil
   const ruedas = [[carro.x + 4, carro.y + 4], [carro.x + carro.w - 4, carro.y + 4], [carro.x + 4, carro.y + carro.d - 4], [carro.x + carro.w - 4, carro.y + carro.d - 4]].sort((a, b) => P.prof([a[0], a[1], 0]) - P.prof([b[0], b[1], 0]));
   maq += `<path class="iso-halo" d="${I.camino(I.envolvente(I.anilloRedondeado(carro, 3).map(([a, b]) => P.iso([a, b, -6]))), true)}"/>`;
   for (const [x, y] of ruedas) maq += lz.torno(I.torno([[0, 2.6], [2.4, 2.6]], I.marco([x - 1.2, y, -4], [1, 0, 0]), P, { pasos: 20 }), { linea: 'lo' });
-  maq += lz.prisma(I.caja(carro, -2, 3, P, { bisel: 0.6 }), { linea: 'lo' });
-  maq += lz.torno(I.torno([[0, 2], [40, 2]], I.marco([carro.x + 8, carro.y + 6, 1], [0, 0, 1]), P, { pasos: 18 }), { linea: 'lo' });
-  // consola de la bomba sobre el carro
-  const cons = consola(P, lz, { x: -18, y: -8, z: 1, w: 30, d: 20, h: 22, pre: 'ecm-c', lineas: 2, mandos: 1, asa: false });
-  maq += cons.svg;
-  // cabezal de la bomba centrífuga encima de la consola (rodete visible bajo la tapa)
-  const Mb = I.marco([-3, 2, cons.arriba], [0, 0, 1]);
-  const cuerpoBomba = I.torno([[0, 8], [5, 8], [6, 6.5], [8, 3.2], [11, 2.2]], Mb, P, { pasos: 48 });
-  // oxigenador (caja con fibras) en el mástil y calentador al lado
-  const oxi = I.caja({ x: carro.x + 2, y: carro.y + 2, w: 16, d: 12, r: 1.5 }, 24, 18, P, { bisel: 0.5 });
-  const cal = I.caja({ x: carro.x + 30, y: carro.y + 4, w: 14, d: 8, r: 1.2 }, 26, 10, P, { bisel: 0.5 });
-  const frO = I.caraMatriz(P, [carro.x + 2, carro.y + 14, 42], [1, 0, 0], [0, 0, -1]);
+  maq += lz.prisma(I.caja(carro, -2, 3, P, { bisel: 0.6 }), { linea: 'lo', k: 0.6 });
+  // oxigenador (detrás a la izquierda) sobre su soporte
+  const ox = { x: carro.x + 3, y: carro.y + 3, w: 16, d: 12, r: 1.5 };
+  maq += lz.prisma(I.caja({ x: ox.x + 3, y: ox.y + 3, w: 10, d: 6, r: 1 }, 1, 4, P), { linea: 'lo', k: 0.7 });
+  const oxi = I.caja(ox, 5, 18, P, { bisel: 0.5 });
+  const frO = I.caraMatriz(P, [ox.x, ox.y + ox.d, 23], [1, 0, 0], [0, 0, -1]);
   let fibras = ''; for (let j = 0; j < 9; j++) fibras += `<path d="M${2 + j * 1.5} 3V15" class="fibra"/>`;
-  const frC = I.caraMatriz(P, [carro.x + 30, carro.y + 12, 36], [1, 0, 0], [0, 0, -1]);
-  maq += lz.prisma(oxi, { clase: 'p-oxigenador', dentro: `<g transform="${frO}"><rect x="1.4" y="2.4" width="13.2" height="13.2" rx="1" class="ventana-oxi" vector-effect="non-scaling-stroke"/><g id="ecm-oxi-sangre">${fibras}</g></g>` });
-  maq += lz.prisma(cal, { clase: 'p-calentador', dentro: `<g transform="${frC}"><rect x="1.5" y="1.6" width="11" height="6" rx=".8" class="pantalla"/><text x="3" y="6.3" class="pantalla-txt" font-size="4.2">37 °C</text></g>` });
-  maq += lz.torno(cuerpoBomba, { clase: 'p-bomba lit', familia: 'iso', dentro: `<g id="ecm-rodete"></g>` });
-  // puertos (en pantalla)
-  const pBombaIn = P.iso([-3, 2, cons.arriba + 11]), pBombaOut = P.iso([5, 2, cons.arriba + 4]);
-  const pOxiIn = P.iso([carro.x + 18, carro.y + 8, 30]), pOxiOut = P.iso([carro.x + 10, carro.y + 8, 42]);
-  const pCalIn = P.iso([carro.x + 30, carro.y + 8, 32]), pCalOut = P.iso([carro.x + 44, carro.y + 8, 31]);
-  const pGas = P.iso([carro.x + 2, carro.y + 8, 38]);
-  // --- tubos del circuito (pantalla)
-  const ingle = [114, 252], ingleA = [170, 252];
-  const tVen = I.suave2([ingle, [140, 262], [200, 262], [250, 230], [pBombaIn[0] - 10, pBombaIn[1] - 30], pBombaIn], 8);
-  const tPO = I.suave2([pBombaOut, [pBombaOut[0] + 14, pBombaOut[1] + 18], [pOxiIn[0] + 10, pOxiIn[1] + 6], pOxiIn], 8);
-  const tOC = I.suave2([pOxiOut, [pOxiOut[0] + 6, pOxiOut[1] - 18], [pCalIn[0] - 4, pCalIn[1] - 22], pCalIn], 8);
-  const tArt = I.suave2([pCalOut, [pCalOut[0] + 20, pCalOut[1] + 30], [300, 262], [220, 268], [190, 262], ingleA], 8);
-  // --- SVG
+  maq += lz.prisma(oxi, { clase: 'p-oxigenador', dentro: `<g transform="${frO}"><rect x="1.4" y="2.4" width="13.2" height="13.2" rx="1" class="ventana-oxi" vector-effect="non-scaling-stroke"/><g>${fibras}</g></g>` });
+  // calentador (detrás a la derecha) sobre su soporte
+  const ca = { x: carro.x + carro.w - 18, y: carro.y + 3, w: 14, d: 9, r: 1.2 };
+  maq += lz.prisma(I.caja({ x: ca.x + 3, y: ca.y + 2, w: 8, d: 5, r: 1 }, 1, 4, P), { linea: 'lo', k: 0.7 });
+  const cal = I.caja(ca, 5, 10, P, { bisel: 0.5 });
+  const frC = I.caraMatriz(P, [ca.x, ca.y + ca.d, 15], [1, 0, 0], [0, 0, -1]);
+  maq += lz.prisma(cal, { clase: 'p-calentador', dentro: `<g transform="${frC}"><rect x="1.5" y="1.6" width="11" height="6" rx=".8" class="pantalla"/><rect x="3" y="3.4" width="6.4" height="2.4" class="pantalla-barra"/></g>` });
+  // la consola delante, con el cabezal de la bomba encima
+  const cons = consola(P, lz, { x: -14, y: -2, z: 1, w: 28, d: 18, h: 18, pre: 'ecm-c', lineas: 2, mandos: 1, asa: false });
+  maq += cons.svg;
+  const Mb = I.marco([0, 7, cons.arriba], [0, 0, 1]);
+  const cuerpoBomba = I.torno([[0, 8], [5, 8], [6, 6.5], [8, 3.2], [11, 2.2]], Mb, P, { pasos: 48 });
+  maq += lz.torno(cuerpoBomba, { clase: 'p-bomba', dentro: '<g id="ecm-rodete"></g>' });
+  const pBombaIn = P.iso([0, 7, cons.arriba + 11]), pBombaOut = P.iso([8, 7, cons.arriba + 3]);
+  const pOxiIn = P.iso([ox.x + ox.w, ox.y + ox.d / 2, 12]), pOxiOut = P.iso([ox.x + ox.w / 2, ox.y + ox.d / 2, 23]);
+  const pCalIn = P.iso([ca.x, ca.y + ca.d / 2, 11]), pCalOut = P.iso([ca.x + ca.w, ca.y + ca.d / 2, 10]);
+  const pGas = P.iso([ox.x, ox.y + ox.d / 2, 18]);
+  // caudalímetro del gas de barrido en el borde del carro (la pieza, sin cifras: la fuente no las da)
+  const gq = { x: carro.x + 2, y: carro.y + carro.d - 12, w: 8, d: 7, r: 1 };
+  maq += lz.prisma(I.caja(gq, 1, 9, P, { bisel: 0.4 }), { clase: 'p-gas' });
+  const pCaud = P.iso([gq.x + gq.w / 2, gq.y + gq.d / 2, 10]);
+  // --- tubos del circuito (en pantalla): de la ingle derecha a la bomba; del oxigenador a la ingle izquierda
+  const ingleV = [66, 262], ingleA = [196, 258];
+  const tVen = I.suave2([ingleV, [92, 268], [214, 266], [232, 230], [236, pBombaIn[1] - 30], [pBombaIn[0] - 14, pBombaIn[1] - 34], pBombaIn], 8);
+  const tPO = I.suave2([pBombaOut, [pBombaOut[0] + 10, pBombaOut[1] - 6], [pBombaOut[0] + 4, pBombaOut[1] - 26], [pOxiIn[0] + 10, pOxiIn[1] - 24], pOxiIn], 8);
+  const tOC = I.suave2([pOxiOut, [pOxiOut[0] + 4, pOxiOut[1] - 22], [pCalIn[0] - 20, pCalIn[1] - 40], [pCalIn[0] - 10, pCalIn[1] - 6], pCalIn], 8);
+  const tArt = I.suave2([pCalOut, [pCalOut[0] + 12, pCalOut[1] + 8], [352, 226], [338, 254], [262, 256], [222, 254], ingleA], 8);
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-  const torso = `M66 30 C88 22 182 22 204 30 C214 70 212 140 206 200 C204 228 196 250 190 270 M66 30 C56 70 58 140 64 200 C66 228 74 250 80 270`;
   svg.innerHTML = `<g class="iso">
-    <path class="torso" d="${torso}"/>
-    <g id="ecm-pulmon"></g>
-    <path class="vena-luz" d="${I.camino(vci)}"/><path class="vena-pared" d="${I.camino(vci)}"/>
-    <path class="arteria-luz" d="${I.camino(ao)}"/><path class="arteria-pared" d="${I.camino(ao)}"/>
-    <path class="arteria-luz fina" d="${I.camino(ilD)}"/><path class="arteria-luz fina" d="${I.camino(ilI)}"/>
-    <g id="ecm-corazon"></g>
+    <path class="torso" d="M30 16 C60 8 190 8 214 16 C222 70 220 150 214 206 C212 232 206 252 202 270 M30 16 C22 70 24 150 30 206 C32 232 40 252 46 270"/>
+    <path class="vena-luz" d="${I.camino(vci)}" stroke-width="7"/><path class="vena-borde" d="${I.camino(vci)}" stroke-width="9" style="opacity:.0"/>
+    <path class="arteria-luz" d="${I.camino(ao)}"/><path class="arteria-luz fina" d="${I.camino(ilD)}"/><path class="arteria-luz fina" d="${I.camino(ilI)}"/>
+    <g id="ecm-cor"></g>
     <g id="ecm-venteo"></g>
     <g class="aparato">
-      <g class="p-canula-v">${lz.tubo(I.tuboPantalla(I.suave2([[108, 268], [111, 238], [116, 214], [121, 196], [116, 168], [111, 132], [108, 112]], 6), 3.2), { familia: 'venosa' })}</g>
-      <g class="p-canula-a">${lz.tubo(I.tuboPantalla(I.suave2([[176, 268], [170, 246], [164, 226]], 6), 3.0), { familia: 'sangre' })}</g>
+      <g class="p-canula-v">${lz.tubo(I.tuboPantalla(I.suave2([[64, 270], [61, 236], [54, 200], h([52, 250]), h([70, 140]), h([84, 108])], 6), 3.4), { familia: 'venosa' })}</g>
+      <g class="p-canula-a">${lz.tubo(I.tuboPantalla(I.suave2([[198, 270], [192, 246], [186, 226]], 6), 3.2), { familia: 'sangre' })}</g>
     </g>
     <g id="ecm-rios-cuerpo"></g>
     <g class="circuito">
-      ${lz.tubo(I.tuboPantalla(tVen, 4.2), { familia: 'venosa', clase: 'p-linea-v' })}
-      ${lz.tubo(I.tuboPantalla(tPO, 4.2), { familia: 'venosa', clase: 'p-linea-v' })}
-      ${lz.tubo(I.tuboPantalla(tOC, 4.2), { familia: 'sangre', clase: 'p-linea-a' })}
-      ${lz.tubo(I.tuboPantalla(tArt, 4.2), { familia: 'sangre', clase: 'p-linea-a' })}
-      ${lz.tubo(I.tuboPantalla(I.suave2([pGas, [pGas[0] - 16, pGas[1] - 4], [pGas[0] - 26, pGas[1] - 20], [pGas[0] - 26, pGas[1] - 48]], 6), 1.6), { familia: 'helio', clase: 'p-gas' })}
+      ${lz.tubo(I.tuboPantalla(tVen, 4.4), { familia: 'venosa', clase: 'p-linea-v' })}
+      ${lz.tubo(I.tuboPantalla(tPO, 4.4), { familia: 'venosa', clase: 'p-linea-v' })}
+      ${lz.tubo(I.tuboPantalla(tOC, 4.4), { familia: 'sangre', clase: 'p-linea-a' })}
+      ${lz.tubo(I.tuboPantalla(tArt, 4.4), { familia: 'sangre', clase: 'p-linea-a' })}
+      ${lz.tubo(I.tuboPantalla(I.suave2([pGas, [pGas[0] - 10, pGas[1] + 2], [pCaud[0] - 6, pCaud[1] - 12], pCaud], 6), 1.4), { familia: 'helio', clase: 'p-gas' })}
     </g>
     <g class="maquina">${maq}</g>
     <g id="ecm-rios"></g>
   </g>`;
   svg.querySelector('.iso').insertAdjacentHTML('afterbegin', lz.defsSvg());
   const g = (id) => svg.querySelector('#' + id);
+  const gc = g('ecm-cor'); gc.setAttribute('transform', `translate(${H0[0]} ${H0[1]}) scale(${K})`); gc.id = 'ecm-corazon';
+  const cor = dibujoCorazon(gc, { arteriola: false, pre: 'ecmc' });
   const rios = new Corrientes(g('ecm-rios'), 130), riosC = new Corrientes(g('ecm-rios-cuerpo'), 90);
-  // circuito: venosa → bomba → oxigenador (cambia de color) → calentador → arterial
-  rios.rio('ven', [...I.suave2([[109, 120], [113, 160], [119, 196], [114, 228], [110, 262]], 6), ...tVen], { dens: 4, clase: 'ven' });
+  rios.rio('ven', [...I.suave2([h([80, 120]), h([62, 190]), [54, 200], [61, 236], [64, 262]], 6), ...tVen], { dens: 4, clase: 'ven' });
   rios.rio('ven2', tPO, { dens: 6, clase: 'ven' });
   rios.rio('art', [...tOC, ...tArt], { dens: 4, clase: 'art' });
-  // la sangre que vuelve sube por la aorta al revés, hasta el cayado (p. 48)
-  riosC.rio('retro', [[166, 230], ...ilI.slice().reverse().slice(6), ...ao.slice().reverse().slice(0, 40)], { dens: 5, clase: 'art' });
-  // la eyección propia del VI, hacia delante
-  riosC.rio('nativo', [[120, 104], ...ao], { dens: 5, clase: 'art' });
-  const st = { f: 1, fAo: 0, fase: 0 };
-  function corazon(f, fAo, edema) {
-    // AD, VD, AI y VI de frente (grabado simple); el VI crece con su volumen
-    const vi = `M${f1(132 - 4 * f)} ${f1(104)} C${f1(156 + 16 * (f - 1))} ${f1(104)} ${f1(166 + 22 * (f - 1))} ${f1(130 + 14 * (f - 1))} ${f1(148 + 10 * (f - 1))} ${f1(150 + 18 * (f - 1))} C${f1(140)} ${f1(144 + 10 * (f - 1))} ${f1(128)} ${f1(126)} ${f1(132 - 4 * f)} 104Z`;
-    let gotas = ''; const n = Math.min(26, Math.round(edema / 40));
-    for (let j = 0; j < n; j++) { const izq = j % 2, x = izq ? 86 + (j * 7) % 22 : 172 + (j * 11) % 22, y = 92 + (j * 13) % 56; gotas += `<circle cx="${x}" cy="${y}" r="1.4" class="gota"/>`; }
-    g('ecm-pulmon').innerHTML = `<path class="pulmon" d="M100 52 C80 56 72 96 76 140 C88 150 104 146 108 132 C110 100 110 70 100 52Z"/><path class="pulmon" d="M168 52 C188 56 196 96 192 140 C180 150 164 146 160 132 C158 100 158 70 168 52Z"/>${gotas}`;
-    g('ecm-corazon').innerHTML = `<path class="cav-ven" d="M104 96 C96 100 96 118 106 122 C114 124 118 112 116 102Z"/>`
-      + `<path class="cav-ven" d="M110 112 C108 132 122 150 136 148 C132 134 128 118 126 106Z"/>`
-      + `<path class="cav-art" d="${vi}"/><path class="endo" d="${vi}"/>`
-      + `<path class="velo-plano" d="M${f1(124 + 6 * fAo)} 100 L${f1(118)} 92 M${f1(124 - 6 * fAo + 12)} 100 L124 92"/>`;
+  riosC.rio('retro', [[188, 236], ...ilI.slice().reverse().slice(10), ...ao.slice().reverse().slice(0, 44)], { dens: 5, clase: 'art' });
+  riosC.rio('nativo', ao, { dens: 5, clase: 'art' });
+  const st = { fase: 0 };
+  function venteo(tipo, vB) {
+    let s = '';
+    const vi = h([214, 170]);
+    if (tipo === 'drenaje') s = lz.tubo(I.tuboPantalla(I.suave2([vi, [vi[0] - 30, vi[1] + 30], [84, 196], [60, 214]], 6), 1.6), { familia: 'venosa', clase: 'p-venteo' });
+    if (tipo === 'impella') s = lz.tubo(I.tuboPantalla(I.suave2([[182, 120], [172, 40], [152, 18], h([216, 92]), vi], 6), 1.6), { clase: 'p-venteo' }) + `<circle cx="${f1(h([216, 92])[0])}" cy="${f1(h([216, 92])[1])}" r="2.4" class="rodete-mini"/>`;
+    if (tipo === 'balon') { const r = 1 + 3.2 * Math.sqrt(Math.max(0, vB) / 40); s = `<rect x="${f1(184 - r)}" y="58" width="${f1(2 * r)}" height="58" rx="${f1(r)}" class="balon-mini"/>`; }
+    g('ecm-venteo').innerHTML = s;
   }
-  corazon(1, 0, 0);
   function actualizar(cab, dt, quieto, info) {
     const s = cab.m.s, on = info.on, L = cab.lectura;
-    const f = Math.max(0.75, Math.min(1.35, Math.cbrt(s.vvi / 120)));
-    st.f = quieto ? f : I.seguir(st.f, f, dt, 0.05);
-    st.fAo = quieto ? 0 : I.seguir(st.fAo, s.vAo && s.qAo > 5 ? 1 : 0, dt, 0.03);
-    corazon(st.f, st.fAo, L?.u?.vEdema || 0);
+    cor.pintar(s, L, L?.u?.rvs ?? 1488, quieto);
     const q = on ? cab.st.qEcmo / LMIN : 0;
-    if (on && !quieto) st.fase += dt * q * 2.2;
-    // rodete: cinco álabes que giran (ralentizado)
-    let al = ''; const Mb = I.marco([-3, 2, 0], [0, 0, 1]);
-    g('ecm-rodete').innerHTML = '';
+    if (on && !quieto) st.fase += dt * q * 0.9;
+    // rodete visto por arriba a través de la tapa: cinco álabes que giran (ralentizado)
+    let al = ''; for (let j = 0; j < 5; j++) { const a = st.fase + j * 2 * Math.PI / 5, pts = []; for (let k = 0; k <= 6; k++) { const r = 1.6 + 5.4 * k / 6, th = a + 0.8 * k / 6; pts.push(P.iso([r * Math.cos(th), 7 + r * Math.sin(th), cons.arriba + 5.2])); } al += I.camino(pts); }
+    g('ecm-rodete').innerHTML = `<path class="alabe" d="${al}"/>`;
+    venteo(on ? cab.ajuste.venteo : 'no', cab.st.vBalon);
     rios.poner('ven', q * 12, on && q > 0.05 ? 1 : 0); rios.poner('ven2', q * 8, on && q > 0.05 ? 1 : 0); rios.poner('art', q * 12, on && q > 0.05 ? 1 : 0);
     riosC.poner('retro', q * 9, on && q > 0.05 ? 1 : 0);
     riosC.poner('nativo', Math.max(0, s.qAo) * 0.1, s.vAo && s.qAo > 5 ? 1 : 0);
     if (!quieto) { rios.tick(dt); riosC.tick(dt); }
-    if (L) {
-      g('ecm-c-l0').textContent = on ? `ECMO ${coma(L.ecmo, 1)} L/min` : 'ECMO parado';
-      g('ecm-c-l1').textContent = `Aórtica ${L.aoAbre}/${L.aoDe}`;
-    }
-    svg.classList.toggle('venteo-drenaje', on && cab.ajuste.venteo === 'drenaje');
-    svg.classList.toggle('venteo-impella', on && cab.ajuste.venteo === 'impella');
-    svg.classList.toggle('venteo-balon', on && cab.ajuste.venteo === 'balon');
   }
   return { actualizar };
 }
