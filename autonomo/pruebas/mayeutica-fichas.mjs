@@ -21,11 +21,14 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 const { MAYEUTICA_B1: SOLO_B1 } = await import(new URL('../../js/data/mayeutica/b1.js', import.meta.url));
 const { MAYEUTICA_B2 } = await import(new URL('../../js/data/mayeutica/b2.js', import.meta.url));
+const { MAYEUTICA_B3 } = await import(new URL('../../js/data/mayeutica/b3.js', import.meta.url));
 // Las fichas con Estudiar de todos los bloques (el nombre MAYEUTICA_B1 se queda para no tocar el resto de la prueba).
-const MAYEUTICA_B1 = { ...SOLO_B1, ...MAYEUTICA_B2 };
+const MAYEUTICA_B1 = { ...SOLO_B1, ...MAYEUTICA_B2, ...MAYEUTICA_B3 };
 // Dónde vive cada ficha: las del bloque 1 en Libros → Marino · Fundamentos; las del bloque 2, en Hematología → Merino HEMATO.
 const NAV_B2 = { especialidad: 'home', view: 'merinoHemato', panel: 'panel-merino-tabs' };
-const navDe = tab => MAYEUTICA_B2[tab] ? NAV_B2 : { especialidad: 'libros', view: 'marinoFundamentos', panel: 'panel-marino-fund-tabs' };
+// Las del bloque 3, en Cardiología → Merino Cardiología (mc-) y Neumología → Merino Neumología (neumo-).
+const NAV_B3 = tab => tab.startsWith('neumo-') ? { especialidad: 'neumologia', view: 'merinoNeumologia', panel: 'panel-merino-neumo-tabs' } : { especialidad: 'cardiologia', view: 'merinoCardiologia', panel: 'panel-merino-cardio-tabs' };
+const navDe = tab => MAYEUTICA_B3[tab] ? NAV_B3(tab) : MAYEUTICA_B2[tab] ? NAV_B2 : { especialidad: 'libros', view: 'marinoFundamentos', panel: 'panel-marino-fund-tabs' };
 const { barajar } = await import(new URL('../../js/core/mayeutica-motor.js', import.meta.url));
 const args = process.argv.slice(2);
 const BASE = (args.find(a => /^https?:/.test(a)) || 'http://localhost:8000/').replace(/\/?$/, '/');
@@ -33,7 +36,8 @@ const CAPTURAS = args.includes('--capturas') ? args[args.indexOf('--capturas') +
 const RAIZ = new URL('../../', import.meta.url).pathname;
 const fallosTotales = [];
 const okG = (c, t) => { console.log(`${c ? '✅' : '❌'} ${t}`); if (!c) fallosTotales.push(t); };
-const FICHAS = Object.keys(MAYEUTICA_B1);
+// MAY_SOLO=<prefijo> (variable de entorno) limita la parte del navegador a esas fichas, para probar un bloque deprisa.
+const FICHAS = Object.keys(MAYEUTICA_B1).filter(f => !process.env.MAY_SOLO || f.startsWith(process.env.MAY_SOLO));
 const largo = s => s.replace(/<[^>]+>/g, '').length;
 
 /* ---------- 1. Los datos (sin navegador) ---------- */
@@ -89,7 +93,7 @@ const largo = s => s.replace(/<[^>]+>/g, '').length;
     }
     // Por archivo de grupo (js/data/mayeutica/b1-*.js): la buena no es sistemáticamente ni la más larga ni la más corta.
     // La longitud no depende del orden en que se barajan las opciones, así que se miran los datos sin barajar.
-    for (const arch of readdirSync(join(RAIZ, 'js/data/mayeutica')).filter(n => /^b\d-.+\.js$/.test(n))) {
+    for (const arch of readdirSync(join(RAIZ, 'js/data/mayeutica')).filter(n => /^b\d+[a-z]?-.+\.js$/.test(n))) {
         const mod = await import(new URL('../../js/data/mayeutica/' + arch, import.meta.url));
         let n = 0, larga = 0, corta = 0;
         for (const d of Object.values(mod).flatMap(g => Object.values(g))) {
@@ -140,7 +144,7 @@ async function correr(ANCHO, REDUCIDO) {
 
     // Una ficha sin Mayéutica sigue con Texto | Visual
     // (la primera ficha del cuaderno que aún no tiene Mayéutica; si ya la tienen todas, no hay nada que mirar)
-    const sinMay = await p.evaluate(f => [...document.querySelectorAll('#panel-marino-fund-tabs .tab-content[data-visual]')].map(t => t.id).find(id => !f.includes(id)), FICHAS);
+    const sinMay = await p.evaluate(f => [...document.querySelectorAll('#panel-marino-fund-tabs .tab-content[data-visual]')].map(t => t.id).find(id => !f.includes(id)), Object.keys(MAYEUTICA_B1));
     if (sinMay) {
         await abrirFicha(sinMay); await p.waitForTimeout(400);
         ok(await p.evaluate(t => [...document.querySelectorAll(`#${t} > .vista-toggle button`)].map(b => b.textContent).join('|'), sinMay) === 'Texto|Visual', `una ficha sin Mayéutica (${sinMay}) sigue con Texto | Visual`);
