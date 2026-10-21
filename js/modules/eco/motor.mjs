@@ -17,6 +17,8 @@
 //   · BARORREFLEJO: la PAM filtrada se compara con su punto de consigna; el error mueve, cada uno con su
 //     retraso, la FC (vagal, rápido), las resistencias, el volumen venoso sin tensión (venoconstricción)
 //     y la contractilidad (simpático, lentos). Saturación con tanh. Todo ilustrativo.
+//   · LÍQUIDOS que entran y salen de la sangre (para que la gravedad de un shock no rompa el motor): venas que no se
+//     vacían de golpe (codo), relleno transcapilar, edema de pulmón y derrame que entra a su ritmo. Ver BASE
 // Integración de Euler explícito a 0,1 ms (estable con estas constantes de tiempo).
 
 // Las 7 fases del ciclo de Wiggers (A-G), como en Fisiopatología UCI · Cardiología
@@ -64,6 +66,45 @@ export const BASE = {
   // (calibración del 20/10/2026, con la AD y el VD: vuVen 2210 → 2300 y rRetorno 0,02 → 0,025, para que la Pms siga
   // en ~7, el gradiente Pms − PVC del normal pase de ~2,5 a ~2,9 mmHg y el resto de cifras del normal no cambie. Ilustrativo)
   cAo: 1.5, vuAo: 700, rSis: 1.05, cVen: 160, vuVen: 2300, rRetorno: 0.025,
+  // CODO DE LAS VENAS (mmHg). El volumen sin tensión no es un umbral: al vaciarse, las venas se colapsan poco a poco y su
+  // retroceso elástico sigue empujando. Por encima del codo, P = (V − Vu)/C (la recta de siempre); por debajo, la presión
+  // cae en exponencial, con la misma pendiente en el codo (sin salto), y nunca llega a 0: parte del volumen «sin tensión»
+  // se recluta al vaciarse. Antes era max(0, …): con una hemorragia mayor que el volumen con tensión más lo que recluta el
+  // barorreflejo, la presión venosa era 0 exacto y el retorno se paraba de golpe (2 L → PAM 11). La forma curva cerca de
+  // 0 es fisiología general (la recta solo extrapola el volumen sin tensión); el codo, ilustrativo. No toca el normal
+  // (venas a ~6,4 mmHg) y apenas la hemorragia de 1 L (~3,4 → 3,6 mmHg)
+  codoVen: 5,
+  // RELLENO TRANSCAPILAR: «la caída de la presión mueve líquido intersticial a la sangre; puede añadir hasta un litro al
+  // plasma» (Marino, cap. 15, p. 21, docs/marino-2024-shock-caps14-17.pdf#page=21). Lo mueve la caída de la presión capilar
+  // (fisiología general, Starling): pCap = pven + (P arterial − pven) · rPost / rSis efectiva, con la resistencia
+  // poscapilar fija (fCap de la basal), así que la vasoconstricción precapilar y la PA baja la bajan. El volumen que entra
+  // tiende a rellenoMax · tanh(cInt · caída / rellenoMax) (tope de la fuente) con la constante de tiempo tauRelleno.
+  // pCap0: presión capilar funcional normal, ~17 mmHg (fisiología general); el modelo normal da ~17,4, así que en reposo
+  // no entra nada. cInt y tauRelleno son ilustrativos: la fuente da el tope, no el ritmo; que el Hto tarde 8-12 h en bajar
+  // (p. 23) dice que es lento, así que en los segundos que se ven en pantalla apenas cuenta
+  rellenoMax: 1000, cInt: 100, tauRelleno: 1200, fCap: 0.12, pCap0: 17,
+  // DERRAME: ritmo al que entra el líquido en el saco (mL/s, ilustrativo). Antes entraba entero en un instante y, con la
+  // curva exponencial del pericardio, 550 mL daban ~10⁵ mmHg en el primer paso: volúmenes negativos y NaN. p.liquidoPeri
+  // es el derrame pedido; s.liquidoPeri, el que ya hay (el que aprieta y el que se dibuja). Y el líquido solo entra mientras
+  // la presión del saco está por debajo de la que lo empuja (pFuenteDerrame, la capilar, ~25 mmHg, ilustrativo; frena en
+  // los últimos 5 mmHg): sin eso, 600 mL agudos cabían en el saco a ~180 mmHg con las cámaras a volumen negativo
+  ritmoDerrame: 40, pFuenteDerrame: 25,
+  // HEMORRAGIA: p.hemorragia es la sangre perdida pedida (mL) y s.perdido la que ya se ha ido, a ritmoHemorragia mL/s
+  // (ilustrativo). Perder el 42 % de la volemia en un instante no le pasa a nadie: la PAM caía a 28 en los primeros
+  // segundos, antes de que el barorreflejo respondiera. Si el mando baja, la sangre vuelve (una transfusión)
+  hemorragia: 0, ritmoHemorragia: 80,
+  // CONTRACTILIDAD: la Ees de cada ventrículo sigue a la pedida (p.vi.ees, p.vd.ees) con esta constante de tiempo (s). Un
+  // miocardio que deja de recibir sangre pierde la contracción en segundos, no en un instante (fisiología general; el
+  // número, ilustrativo). Antes, bajar la Ees del VI de 3,1 a 0,3 de golpe dejaba dos latidos sin eyección (GC 0,
+  // RVS infinita, SvO₂ NaN) y la PAM caía a 36 antes de que el barorreflejo respondiera
+  tauContractilidad: 4,
+  // EDEMA DE PULMÓN: por encima de pEdema mmHg en las venas pulmonares (≈ capilar pulmonar) sale líquido de los vasos al
+  // pulmón, kEdema mL/s por cada mmHg de más, y no vuelve (en minutos-horas, fuera de lo que se simula). Sin esta salida, al
+  // fallar el VI la sangre se acumulaba en el pulmón sin límite: con Ees 0,45 la PCP llegaba a 41 mmHg con la PAM en 81,
+  // y no había shock cardiogénico posible con una PCP humana. Que el edema empiece cuando la presión capilar supera a la
+  // oncótica del plasma (~25 mmHg) es fisiología general; la ficha pide no pasar de 18-20 mmHg para no producirlo
+  // (Marino, cap. 18), que es donde empieza a verse. El ritmo, ilustrativo
+  kEdema: 5, pEdema: 28,
   // aorta proximal: impedancia característica (mmHg·s/mL), inercia del tracto de salida (mmHg·s²/mL)
   // y volumen de reflujo que cierra la válvula (mL)
   zAo: 0.03, lAo: 0.00025, vCierreAo: 1.5,
@@ -85,10 +126,19 @@ export const BASE = {
   eroaTricus: 0,
   // barorreflejo: consigna de PAM, constantes de tiempo (s) y ganancias máximas (fracción; + al bajar la PAM)
   barorreflejo: true, pamConsigna: 100, tauSensor: 2.0,
-  baro: { fc: { tau: 1.5, sube: 0.9, baja: 0.35 }, r: { tau: 6, sube: 0.6, baja: 0.35 },
+  // (gravedad del shock, octubre 2026; la pendiente cerca de la consigna, 1/0,35, no cambia, así que las compensaciones
+  // pequeñas son las de antes. Lo que cambia es el techo:)
+  //  · resistencias: techo +60 % → +15 %. Lo que cuenta es la cifra absoluta: la RVS basal del modelo ya es 1.488 (la
+  //    Ficha 5 da 900-1.200; calibración pendiente en el README) y +60 % la llevaba a ~2.300. Con PAM − PVC = IC · SC ·
+  //    RVS / 80, un shock a fondo con PAM 55-60 tenía entonces un IC ~1,0 (y el taponamiento, con la PVC ~12, menos):
+  //    ningún escenario llegaba a shock con un gasto humano (IC ≥1,2). Con +15 %, techo ~1.700 dyn·s·cm⁻⁵
+  //  Ilustrativo, como todo el barorreflejo
+  baro: { fc: { tau: 1.5, sube: 0.9, baja: 0.35 }, r: { tau: 6, sube: 0.15, baja: 0.35 },
     vu: { tau: 10, sube: 0.25, baja: 0.08 }, ees: { tau: 6, sube: 0.45, baja: 0.25 } },
   // lecho pulmonar
-  cAp: 4.0, vuAp: 100, rPul: 0.08, cVp: 8.0, vuVp: 200, rVp: 0.01,
+  // (codoPul: el mismo codo de las venas sistémicas en la arteria y las venas pulmonares, que en la hemorragia grave también
+  // se vacían por debajo de su volumen sin tensión; ilustrativo)
+  cAp: 4.0, vuAp: 100, rPul: 0.08, cVp: 8.0, vuVp: 200, rVp: 0.01, codoPul: 3,
   // volumen de sangre total (mL)
   vSangre: 4850,
   // transporte de O₂ (Fick, por latido)
@@ -96,6 +146,12 @@ export const BASE = {
 };
 
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+// Recta con codo: x por encima del codo; por debajo, exponencial con el mismo valor y la misma pendiente en el codo
+// (continua y derivable), siempre > 0. Ver codoVen
+const VCOLAPSO = 3, KCOLAPSO = 2;
+// x se acerca a objetivo como mucho «paso» (y llega exacto)
+const hacia = (x, objetivo, paso) => Math.abs(objetivo - x) <= paso ? objetivo : x + Math.sign(objetivo - x) * paso;
+export const conCodo = (x, codo) => codo > 0 && x < codo ? codo * Math.exp(x / codo - 1) : Math.max(0, x);
 
 // Activación en doble coseno: sube en t1, baja en t2 (0 fuera).
 function activacion(t, t1, t2, q = 1) {
@@ -128,6 +184,8 @@ export function crearMotor(ajustes = {}) {
     nLatido: 0, fase: 'G', _aoAbrio: false, _aoCerro: false, _mitAbrio: false, _pviPrev: 0,
     // barorreflejo: PAM que "siente" el seno carotídeo y efecto de cada brazo (0 = sin cambio)
     pamSensor: null, efFc: 0, efR: 0, efVu: 0, efEes: 0, fc: p.fc, paoDist: 0,
+    // líquido que hay ya en el saco (sigue a p.liquidoPeri a ritmoDerrame) y volumen que ha entrado del intersticio
+    liquidoPeri: p.liquidoPeri, perdido: 0, eesVi: p.vi.ees, eesVd: p.vd.ees, vRelleno: 0, pCap: 0, qRelleno: 0, vEdema: 0, qEdema: 0,
   };
   const volTotal = () => s.vad + s.vvd + s.vai + s.vvi + s.vao + s.vven + s.vap + s.vvp;
   // Ajusta el total al volumen de sangre pedido repartiéndolo en las venas.
@@ -143,11 +201,16 @@ export function crearMotor(ajustes = {}) {
   let ondaUltima = [];
   let tMuestra = 0;
 
+  // Por debajo de VCOLAPSO mL las paredes se tocan: la presión cae en parábola (KCOLAPSO mmHg/mL²) y la cámara no puede
+  // vaciarse más. Antes, la curva diastólica se quedaba en −a por debajo de V0 y, con el saco a tensión, una cámara
+  // seguía vaciándose hasta volúmenes negativos (AD −133 mL con 550 mL de derrame). Nunca actúa en un latido normal
+  // (los volúmenes mínimos son de decenas de mL). Fisiología general; los números, ilustrativos
   function presionCamara(c, v, e, pperi, ees = c.ees) {
     const dv = v - c.v0;
     const sis = ees * dv;
     const dia = c.a * (Math.exp(c.b * dv) - 1);
-    return e * sis + (1 - e) * dia + pperi;
+    const colapso = v < VCOLAPSO ? -KCOLAPSO * (VCOLAPSO - v) ** 2 : 0;
+    return e * sis + (1 - e) * dia + colapso + pperi;
   }
 
   function presiones() {
@@ -160,7 +223,7 @@ export function crearMotor(ajustes = {}) {
     // activación del VD: la del VI salvo que su sístole dure más (durVd)
     const eVd = p.durVd === 1 ? eVen : activacion(tl - p.pr, p.fSubida * p.tsVen * k * p.durVd, (1 - p.fSubida) * p.tsVen * k * p.durVd, p.qSubida);
     s.eAur = eAur; s.eVen = eVen; s.eVd = eVd;
-    const vCor = s.vad + s.vvd + s.vai + s.vvi + p.liquidoPeri;
+    const vCor = s.vad + s.vvd + s.vai + s.vvi + s.liquidoPeri;
     s.pperi = p.kPeri * Math.exp((vCor - p.v0Peri) / p.phiPeri);
     // efecto de la eyección (resistencia interna del VI): mientras expulsa, la presión del VI cae una fracción
     // proporcional al flujo; redondea la onda de flujo y retrasa su pico, como en el ventrículo real
@@ -174,9 +237,9 @@ export function crearMotor(ajustes = {}) {
     // s.paoDist: presión del depósito elástico; s.pao: la de la raíz (la que se mide y ve la válvula)
     s.paoDist = Math.max(0, (s.vao - p.vuAo) / p.cAo);
     s.pao = s.paoDist + p.zAo * s.qAo;
-    s.pven = Math.max(0, (s.vven - ef.vuVen) / p.cVen);
-    s.pap = Math.max(0, (s.vap - p.vuAp) / p.cAp);
-    s.pvp = Math.max(0, (s.vvp - p.vuVp) / p.cVp);
+    s.pven = conCodo((s.vven - ef.vuVen) / p.cVen, p.codoVen);
+    s.pap = conCodo((s.vap - p.vuAp) / p.cAp, p.codoPul);
+    s.pvp = conCodo((s.vvp - p.vuVp) / p.cVp, p.codoPul);
   }
 
   function flujos(dt) {
@@ -228,14 +291,33 @@ export function crearMotor(ajustes = {}) {
     const b = p.baro;
     s.efFc = brazo(b.fc, s.efFc); s.efR = brazo(b.r, s.efR); s.efVu = brazo(b.vu, s.efVu); s.efEes = brazo(b.ees, s.efEes);
     ef.rSis = p.rSis * (1 + s.efR); ef.vuVen = p.vuVen * (1 - s.efVu);
-    ef.eesVi = p.vi.ees * (1 + s.efEes); ef.eesVd = p.vd.ees * (1 + s.efEes);
+    s.eesVi += (p.vi.ees - s.eesVi) * dt / p.tauContractilidad; s.eesVd += (p.vd.ees - s.eesVd) * dt / p.tauContractilidad;
+    ef.eesVi = s.eesVi * (1 + s.efEes); ef.eesVd = s.eesVd * (1 + s.efEes);
     s.fc = clamp(p.fc * (1 + s.efFc), 35, 190);
+  }
+
+  // El derrame entra a su ritmo; el relleno transcapilar sigue a la caída de la presión capilar y el edema sale del pulmón
+  // por encima de pEdema (ver BASE)
+  function liquidos(dt) {
+    const entra = p.liquidoPeri > s.liquidoPeri ? clamp((p.pFuenteDerrame - s.pperi) / 5, 0, 1) : 1;
+    s.liquidoPeri = hacia(s.liquidoPeri, p.liquidoPeri, p.ritmoDerrame * entra * dt);
+    const antes = s.perdido;
+    s.perdido = hacia(s.perdido, p.hemorragia, p.ritmoHemorragia * dt);
+    s.vven -= s.perdido - antes;
+    s.pCap = s.pven + (s.paoDist - s.pven) * p.fCap * BASE.rSis / ef.rSis;
+    const caida = Math.max(0, p.pCap0 - s.pCap);
+    const objetivo = p.rellenoMax > 0 ? p.rellenoMax * Math.tanh(p.cInt * caida / p.rellenoMax) : 0;
+    s.qRelleno = (objetivo - s.vRelleno) / p.tauRelleno;
+    s.vRelleno += s.qRelleno * dt; s.vven += s.qRelleno * dt;
+    s.qEdema = p.kEdema * Math.max(0, s.pvp - p.pEdema);
+    s.vEdema += s.qEdema * dt; s.vvp -= s.qEdema * dt;
   }
 
   function paso(dt = 0.0001) {
     barorreflejo(dt);
     presiones();
     flujos(dt);       // el flujo aórtico (con inercia) se actualiza antes que los volúmenes: Euler semiimplícito
+    liquidos(dt);
     s.vad += (s.qRet - s.qTri + s.qTriReg) * dt;
     s.vvd += (s.qTri - s.qPul - s.qTriReg) * dt;
     s.vap += (s.qPul - s.qPulm) * dt;
@@ -285,7 +367,7 @@ export function crearMotor(ajustes = {}) {
   }
 
   function nuevoAcum() {
-    return { dt: 0, pao: 0, pad: 0, pai: 0, pap: 0, pven: 0, pvp: 0, qAo: 0, qPul: 0, qReg: 0, qRegT: 0,
+    return { dt: 0, pao: 0, pad: 0, pai: 0, pap: 0, pven: 0, pvp: 0, qAo: 0, qSis: 0, qPul: 0, qReg: 0, qRegT: 0,
       paoMax: -1, paoMin: 1e9, papMax: -1, papMin: 1e9, pviMax: -1, pvdMax: -1,
       vviMax: -1, vviMin: 1e9, vvdMax: -1, vvdMin: 1e9, padMax: -1, paiMax: -1,
       pviEnMitralCierre: null, ultimoMit: false, ultimoAo: false, ultimoPul: false, ultimoTri: false,
@@ -295,7 +377,7 @@ export function crearMotor(ajustes = {}) {
   function acumular(dt) {
     const a = acum;
     a.dt += dt; a.pao += s.pao * dt; a.pad += s.pad * dt; a.pai += s.pai * dt; a.pap += s.pap * dt;
-    a.pven += s.pven * dt; a.pvp += s.pvp * dt; a.qAo += s.qAo * dt; a.qReg += s.qMitReg * dt; a.qRegT += s.qTriReg * dt; a.qPul += s.qPul * dt; a.pperi += s.pperi * dt;
+    a.pven += s.pven * dt; a.pvp += s.pvp * dt; a.qAo += s.qAo * dt; a.qSis += s.qSis * dt; a.qReg += s.qMitReg * dt; a.qRegT += s.qTriReg * dt; a.qPul += s.qPul * dt; a.pperi += s.pperi * dt;
     a.paoMax = Math.max(a.paoMax, s.pao); a.paoMin = Math.min(a.paoMin, s.pao);
     a.papMax = Math.max(a.papMax, s.pap); a.papMin = Math.min(a.papMin, s.pap);
     a.pviMax = Math.max(a.pviMax, s.pvi); a.pvdMax = Math.max(a.pvdMax, s.pvd);
@@ -332,7 +414,9 @@ export function crearMotor(ajustes = {}) {
       vRegT: a.qRegT, frT: a.qRegT / Math.max(1e-6, a.qRegT + vsD),
       ptdvi: a.pviEnMitralCierre,       // presión al cerrar la mitral ≈ PTDVI
       gc, ic: gc / p.sc,
-      rvs: (a.pao / T - a.pad / T) / gc * 80,     // dyn·s·cm⁻⁵
+      // RVS con el flujo que cruza el lecho sistémico (en un latido estable es el GC; en uno sin eyección, sigue habiendo
+      // flujo y la RVS no se vuelve infinita)
+      rvs: (a.pao / T - a.pad / T) / (a.qSis * fcLatido / 1000) * 80,     // dyn·s·cm⁻⁵
       rvp: (a.pap / T - a.pai / T) / gc * 80,
       pven: a.pven / T, pvp: a.pvp / T, pperi: a.pperi / T,
       ppc: a.paoMin - (a.pviEnMitralCierre ?? 0),  // presión de perfusión coronaria
@@ -341,14 +425,17 @@ export function crearMotor(ajustes = {}) {
       // volumen comprometido total y presión media de llenado sistémico (referencia Guyton)
       vEstresado: (s.vao - p.vuAo) + (s.vven - ef.vuVen) + (s.vap - p.vuAp) + (s.vvp - p.vuVp),
       pmls: ((s.vven - ef.vuVen) + (s.vao - p.vuAo)) / (p.cVen + p.cAo),
-      vTotal: volTotal(),
+      // perdido: la hemorragia que ya se ha ido; vRelleno: lo que ha entrado del intersticio; vEdema: lo que ha salido al
+      // pulmón (vTotal = vSangre − perdido + vRelleno − vEdema ± lo que muevan a mano las maniobras)
+      vTotal: volTotal(), perdido: s.perdido, vRelleno: s.vRelleno, vEdema: s.vEdema, liquidoPeri: s.liquidoPeri, pCap: s.pCap,
       // estado del barorreflejo al cerrar el latido (fracción de cambio sobre lo basal)
       baro: { fc: s.efFc, r: s.efR, vu: s.efVu, ees: s.efEes, sensor: s.pamSensor },
     };
     // Fick
     const cao2 = 1.34 * p.hb * p.sao2 + 0.003 * p.pao2;
     m.do2 = gc * cao2 * 10; m.do2i = m.do2 / p.sc;
-    m.vo2 = Math.min(p.vo2, m.do2 * 0.7); m.er = m.vo2 / m.do2;
+    // (sin aporte, la extracción tiende a su techo de 0,7: el límite, no 0/0)
+    m.vo2 = Math.min(p.vo2, m.do2 * 0.7); m.er = m.do2 > 0 ? m.vo2 / m.do2 : 0.7;
     m.svo2 = p.sao2 * (1 - m.er);
     Object.assign(acum, nuevoAcum());
     return m;

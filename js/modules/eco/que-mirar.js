@@ -63,5 +63,5 @@ export const ESCENARIO_TIPO = {
 export const FORMA_NOTA = {
     hipertrofia: 'Hipertrofia concéntrica del VI por sobrecarga de presión (HTA): pared gruesa y ventrículo rígido que se llena mal — insuficiencia cardíaca con FE preservada.',
     dilatada: 'Miocardiopatía dilatada: contractilidad baja, VI grande con pared normal o fina y FE reducida.',
-    tep: 'TEP masivo: la resistencia pulmonar sube de golpe y el VD se dilata, se vacía mal y aplana el tabique en diástole (cor pulmonale agudo).',
+    tep: 'TEP de riesgo intermedio: la resistencia pulmonar sube de golpe y el VD se dilata, se vacía mal y aplana el tabique en diástole (cor pulmonale agudo), todavía sin hipotensión.',
 };

@@ -18,13 +18,17 @@ en `lab/circulacion/`), como la especialidad «Eco cardíaca»: ver «En la app�
 node --test 'js/modules/eco/pruebas/*.test.mjs'
 ```
 
-Tarda ~3 min (141 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta. Las de navegador
+Tarda ~5 min (230 pruebas). Si Playwright no está instalado, las pruebas de navegador se omiten y el resto se ejecuta. Las de navegador
 sirven el repositorio con un servidor propio y abren `laboratorio.html`.
 
 - `motor.test.mjs` — cada cifra del latido normal frente a su referencia (`referencias.mjs`), el volumen
   de sangre se conserva, las 7 fases salen en orden, nunca hay dos válvulas del mismo lado abiertas, las
   fases isovolumétricas no cambian el volumen, la incisura, el barorreflejo (quieto en reposo, compensa
-  una hemorragia) y que **cada escenario reproduce el patrón de su tipo de shock en la fuente**.
+  una hemorragia) y que **cada escenario reproduce el patrón de su tipo de shock en la fuente**; y lo que rompía la
+  gravedad del shock (venas con codo, hemorragia de 2,5 L, derrame de 600 mL, relleno transcapilar y edema de pulmón).
+- `escenarios.test.mjs` — el **mando de gravedad** de hemorragia, fallo del VI, derrame y TEP: el defecto es el escenario de
+  siempre; al 0 % el normal, al 50 % entre medias, al 100 % un shock posible (PAM 45-60); paciente posible y sin saltos en
+  todo el recorrido (ver «Gravedad del shock»).
 - `diagramas.test.mjs` — las fases del último latido salen A-G, contiguas y cubriendo el latido; el centro de cada
   fase cae en ella; revisar un instante devuelve la muestra más cercana; tocar un punto del asa devuelve esa muestra;
   las escalas contienen todas las curvas; y la esquina telesistólica del asa cae sobre la ESPVR que se dibuja.
@@ -388,7 +392,7 @@ telediástole (`medidasCorazon` en `ecografia.mjs`) y un botón a la línea de l
 |---|---|---|
 | **Hipertrofia del VI** (sobrecarga de presión, FE preservada) | masa del VI ×1,6, rigidez diastólica ×2,2, resistencias ×1,25 | pared posterior >10 mm (FATE: 6-10); grosor relativo >0,42 y masa ≥115 g/m² (guía ESC de IC, tabla de HFpEF); FEVI ≥50 % (Merino, Tabla 18.1); caen el VTD y el VS (Merino, HFpEF) |
 | **Miocardiopatía dilatada** (FE reducida) | contractilidad ~1/3, V0 60 mL, 700 mL retenidos, masa ×1,4 | VI en diástole >5,5 cm (FATE: 3,5-5,5); FEVI ≤40 % (Merino, Tabla 18.1); pared normal 6-10 mm (FATE) |
-| **TEP masivo** (sobrecarga aguda del VD) | resistencia pulmonar ×8, contractilidad del VD ×0,65 | área VD/VI >0,6 en apical 4 cámaras (Ficha 11, cor pulmonale agudo); VD >3,0 cm (FATE); el VI se hace más pequeño (Merino, IC derecha); tabique aplanado en diástole (Merino, Fig. 18.2); TAPSE <17 mm (Ficha 11); sube el VTD del VD (Merino) |
+| **TEP de riesgo intermedio** (sobrecarga aguda del VD; antes «TEP masivo», ver «Gravedad del shock») | resistencia pulmonar ×8, contractilidad del VD ×0,65 | área VD/VI >0,6 en apical 4 cámaras (Ficha 11, cor pulmonale agudo); VD >3,0 cm (FATE); el VI se hace más pequeño (Merino, IC derecha); tabique aplanado en diástole (Merino, Fig. 18.2); TAPSE <17 mm (Ficha 11); sube el VTD del VD (Merino) |
 
 - Son estados ya establecidos: al elegirlas, el motor corre `ASENTAR_FORMA` (40 s) para que se asienten (los
   escenarios de shock, 10 s); las pruebas usan el mismo tiempo.
@@ -555,7 +559,8 @@ se le añade una capa que lo lee y dos maniobras de volumen, para las fichas `ma
   de la primera (y al abrir el panel desde una ficha), el paciente se asienta hasta 40 s desde que empezó el escenario
   (`faltaParaAsentar`; `aplicarEscenario` de `escenarios.mjs` apunta `p.tEscenario`): un shock se ve a los 10 s con el
   barorreflejo aún compensando, y la EPP ahí medía también esa compensación (hemorragia +64 %, fallo del VI +15 %).
-  Asentado, y igual en la app que en las pruebas: hemorragia +20,2 %, fallo +2,7 %, dilatada +1,3 %.
+  Asentado, y igual en la app que en las pruebas: hemorragia +16,1 %, fallo +2,0 %, dilatada +0,3 % (antes de la gravedad
+  del shock, +20,2 / +2,7 / +1,3 %).
 - `lecturas.mjs`: `guyton(motor)` (RV = (Pms − PAD)/Rv con Rv = (Pms − PVC)/GC del último latido), `curvaFuncion` de la
   tabla precalculada, `presionEnPunta(estado, 'ad'|'vd'|'ap'|'enclavado')`, `lecturaCateter` y `curvaTermo(gc, qRegT)`.
   **El enclavamiento lee `pvp` (venas pulmonares), no `pai`**: la ficha lo define como «la presión venosa del lado
@@ -574,6 +579,33 @@ se le añade una capa que lo lee y dos maniobras de volumen, para las fichas `ma
   pegada a la presión venosa, inflaba la media: AD más distensible (a 0,13, b 0,080), VD algo más (a 1,9: su
   telediastólica baja con la PVC, el catéter las lee iguales), vuVen 2300 y rRetorno 0,025 (Pms ~7). Más baja no cabía
   sin sacar del rango la VD sistólica (20-25) o pasar de 40 mmHg las venas pulmonares en la hipertrofia con 1,5 L y EPP.
+
+## Gravedad del shock (octubre 2026, M1 del bloque 3)
+
+Hemorragia, fallo del VI, derrame y TEP tienen un **mando de gravedad** de 0 (sin lesión) a 1 (shock a fondo):
+`ESCENARIOS[k].aplicar(m, g)` o `aplicarEscenario(m, k, g)`; sin `g`, `gravedad.defecto` da el escenario de siempre y
+`gravedad.texto(g)` dice cuánto es (mL perdidos, % de contractilidad, mL de derrame, × de resistencia pulmonar). El estado
+se lee asentado (40 s, `faltaParaAsentar`). Topes: hemorragia 42 % de la volemia (Clase IV, Tabla 15.1), Ees del VI 0,3
+(escala logarítmica), derrame 390 mL (en parábola: cada paso añade menos al final) y resistencia pulmonar ×16 (el TEP de
+alto riesgo; el de siempre, ×8, es el de riesgo intermedio: Marino, cap. 22, p. 7, y por eso ya no se llama «masivo»).
+
+Antes, subir la gravedad rompía el motor (2 L → PAM 11; 2,5 L → PAM 0 con RVS negativa; derrame de 550 mL → NaN; Ees
+0,45 → PAM 81 con PCP 41). Lo que faltaba, corregido en `motor.mjs` (cada pieza explicada en `BASE`):
+- **Venas con codo** (`conCodo`, `codoVen`, `codoPul`): por debajo del volumen sin tensión la presión no era 0 de golpe.
+- **Relleno transcapilar** (hasta 1 L, Marino cap. 15 p. 21), movido por la caída de la presión capilar; lento (minutos).
+- **Edema de pulmón** (`kEdema`, `pEdema` 28 mmHg): sin él, al fallar el VI la sangre se acumulaba en el pulmón sin límite.
+- **Hemorragia, derrame y contractilidad llegan a su ritmo** (`ritmoHemorragia` 80 mL/s, `ritmoDerrame` 40 mL/s y solo
+  mientras el saco esté por debajo de `pFuenteDerrame`, `tauContractilidad` 4 s): aplicados de golpe, la PAM caía a ~30
+  antes de que el barorreflejo respondiera, había latidos sin eyección y el saco llegaba a 10⁵ mmHg.
+- **Cámaras que no bajan de 0 mL** (colapso por debajo de 3 mL) y RVS con el flujo del lecho; SvO₂ sin 0/0.
+- **Techo del barorreflejo en las resistencias, +60 % → +15 %**: la RVS basal del modelo ya es alta (1.488; pendiente),
+  y con PAM − PVC = IC · SC · RVS / 80 un shock a fondo no podía tener a la vez PAM ≤60 e IC ≥1,2. La vasoplejía pasó de
+  resistencias ×0,4 a ×0,5 para quedarse con la misma PA.
+
+`pruebas/escenarios.test.mjs` comprueba en 0-100 % (12 puntos, asentado, y 120 s más a fondo) PAM 40-130, FC 40-170,
+IC 1,2-5, PVC 0-25, PCP 2-35, VS 15-110 y SvO₂ 30-85 %, sin saltos (la PAM baja siempre, ≤15 mmHg cada 10 %) y la PAM
+mínima mientras se asienta (≥40). **Excepción**: la PCP de la hemorragia y del TEP graves baja hasta ~1 mmHg (el VI con un
+VS de ~20 mL se llena a eso con su curva diastólica, la misma que da la PCP normal de 8,5); se exige ≥1.
 
 ## Rendimiento medido
 
@@ -624,7 +656,8 @@ licencia CC BY-SA 4.0 (el resto del simulador no). La cita también se muestra e
   reposo; S/D de las venas pulmonares (necesita el efecto pistón del plano AV); Doppler tisular en el simulador (e′, E/e′ de la Ficha 5) y Doppler continuo; insuficiencias valvulares en el simulador (el motor ya
   tiene la mitral, `eroaMitral`, que usa el Atlas; falta el chorro en la eco y las otras válvulas).
 - **Abdomen**: ventilación mecánica (índice de distensibilidad de FATE) en el reloj respiratorio; el derrame del motor
-  solo llega a PVC ~7,5, así que su VCI no sale «dilatada» (>21 mm) aunque ya no colapse un 50 %.
+  de siempre (260 mL) solo llega a PVC ~7,5, así que su VCI no sale «dilatada» (>21 mm) aunque ya no colapse un 50 %;
+  a fondo (390 mL), ~10 (no comprobado en la VCI).
 - Más ideas de *The Heart by Ultrasound* por reconstruir: que una cifra mostrada nunca contradiga su grado.
 - **Formas de enfermedad** por añadir si llegan fuentes: hipertrofia del VD e hipertensión pulmonar crónica (FATE
   solo da pared del VD ~5 mm), amiloidosis (pared del VI y del VD engrosadas, guía ESC), dilatación auricular (ESC:
