@@ -445,7 +445,8 @@ export function montarSimulador(raiz, opc = {}) {
       modoM.setProf(planoEco.prof); estadoSonda(td);
     }
     // forma de referencia para que el moteado siga al tejido: la telediastólica, con las mismas opciones
-    const cr = [Math.round(td.vvi), Math.round(td.vvd), opciones.pericardio, opciones.detalle, calidad, motor.p.liquidoPeri, mioVi].join('|');
+    // (el derrame mientras entra, de 10 en 10 mL: la forma de referencia no se rehace en cada fotograma)
+    const cr = [Math.round(td.vvi), Math.round(td.vvd), opciones.pericardio, opciones.detalle, calidad, Math.round(motor.s.liquidoPeri / 10), mioVi].join('|');
     if (cr !== claveRef) { refGeoTd = construirCorazon(estadoGeo(td, extraGeo()), { pericardio: opciones.pericardio, detalle: opciones.detalle, calidad }); claveRef = cr;
       // el abdomen de referencia: en espiración (la VCI en su diámetro máximo), con la misma topología
       const pvc = motor.ultimo ? motor.ultimo.pvc : td.pad; refEco = refGeoTd.partes.concat(construirAbdomen(refGeoTd, { pvc, pad: pvc, t: 0 }).partes); }

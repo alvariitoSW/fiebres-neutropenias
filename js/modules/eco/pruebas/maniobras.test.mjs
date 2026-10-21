@@ -94,11 +94,13 @@ test('3 · al quitar la EPP, el VS vuelve a ±3 % del de antes (paso 3)', () => 
 // ---- 4. Bolo de 500 mL (#mar-pms-fluidos)
 for (const k of Object.keys(ESCENARIOS)) {
   test(`4 · bolo de 500 mL en «${ESCENARIOS[k].nombre}»: la Pms sube`, () => {
-    const m = paciente(k), antes = m.ultimo.pmls, vol = m.ultimo.vTotal;
+    // (lo que entra del intersticio o sale al pulmón mientras tanto, motor.mjs, se cuenta aparte)
+    const neto = (x) => x.vTotal - x.vRelleno + x.vEdema + x.perdido;
+    const m = paciente(k), antes = m.ultimo.pmls, vol = neto(m.ultimo);
     assert.equal(bolo(m, 500), 500);
     m.correr(SEGUNDOS_MANIOBRA);
     assert.ok(m.ultimo.pmls > antes + 0.5, `Pms ${antes.toFixed(1)} → ${m.ultimo.pmls.toFixed(1)}`);
-    assert.ok(Math.abs(m.ultimo.vTotal - vol - 500) < 0.5, 'el bolo entra entero y se conserva');
+    assert.ok(Math.abs(neto(m.ultimo) - vol - 500) < 0.5, 'el bolo entra entero y se conserva');
   });
 }
 test('4 · bolo de 500 mL en el fallo del VI: el gradiente Pms − PVC cambia ≤1 mmHg (no responde)', () => {

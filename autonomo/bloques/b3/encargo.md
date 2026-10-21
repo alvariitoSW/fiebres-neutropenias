@@ -41,6 +41,16 @@ Objetivo M5 del tablero. Empieza el 21/10/2026, con los bloques 1 y 2 en main. A
 - 20/10: cada cita lleva al párrafo de la app (REGLAS §7.9); Explorar con explicación guiada (§7.10); modelos por
   concepto y reutilizables (§7.11); solo 4-5 paradas por bloque (§2.3).
 
+### 21/10/2026: peticiones del usuario para el bloque 3
+
+- **Monitor de cabecera en el shock**: «deberías poner un monitor de PA, sat, ECG, respiración e incluso meter la PVC y
+  poder identificar el shock con un monitor». → La cabecera del shock es un monitor de UCI con sus curvas (ECG, PA
+  invasiva, pletismografía y SpO₂, respiración, PVC) y un modo «¿Qué shock es?». Pasado a la maqueta `b3-shock.html`.
+- **Modelo vivo de los fármacos del shock**: «un modelo vivo con los fármacos y sus receptores que expliquen tanto su
+  mecanismo de acción fácil y completamente como ver a qué receptor van y la función de cada fármaco, además de sus
+  dosis y sus efectos secundarios. Esta idea dásela al profesor». → Profesor en modo diseñar (sale en
+  `autonomo/bloques/b3/farmacos.md`); parte de los receptores animados que ya existen.
+
 ## 5. Pasos
 
 | Paso | Quién | Sale en | Estado |

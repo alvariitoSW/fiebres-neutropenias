@@ -1,27 +1,55 @@
 import { TAPSE_POR_ML } from './corazon-geo.mjs';
+import { BASE } from './motor.mjs';
 // Escenarios de prueba del motor. Los usan la página (botones «Pruebas del barorreflejo») y las pruebas
 // automáticas, que comprueban que cada uno reproduce el patrón de su tipo de shock en la fuente.
 // Cada escenario parte del estado normal estable y cambia lo mínimo para provocar su tipo de shock.
 // Las magnitudes del cambio son ilustrativas; lo que se exige es la DIRECCIÓN del patrón.
+//
+// GRAVEDAD (hemorragia, fallo del VI, derrame y TEP): aplicar(m, g) con g de 0 a 1, un mando sin saltos. 0 = sin lesión
+// (el corazón normal); 1 = shock a fondo, y aun así un paciente posible (PAM 45-60, sin ceros ni NaN; lo comprueba
+// pruebas/escenarios.test.mjs). Sin g, gravedad.defecto: el escenario de siempre, con las mismas cifras. El estado de una
+// gravedad se lee asentado, 40 s después de aplicarla (maniobras.mjs, faltaParaAsentar), como las maniobras: el motor
+// la aplica de golpe y el barorreflejo tarda ~10 s en responder. Los topes de cada mando, ilustrativos salvo lo que se cita.
+const HEM_FRACCION_MAX = 0.42;                 // de la volemia: Clase IV, >40 % (Marino, Tabla 15.1, cap. 15, p. 22)
+const HEM_ML_MAX = HEM_FRACCION_MAX * BASE.vSangre;    // ~2.040 mL
+const EES_VI_MIN = 0.3;                        // mmHg/mL, ~10 % de la normal (3,1)
+const DERRAME_ML_MAX = 390;                    // mL; con el pericardio del modelo, el taponamiento
+// el derrame va en parábola (mL = máx · (1 − (1 − g)²)): la presión del saco crece en exponencial con el volumen, así que
+// cerca del final cada paso del mando añade menos líquido y la PA no cae a saltos
+const derrameMl = (g) => DERRAME_ML_MAX * (1 - (1 - g) ** 2);
+const DERRAME_DEFECTO = 1 - Math.sqrt(1 - 260 / DERRAME_ML_MAX);
+const TEP_RPUL_MAX = 16, TEP_EES_VD_DEFECTO = 0.35, TEP_DEFECTO = 0.75;   // resistencia pulmonar ×16 a fondo
+const coma = (x, d = 0) => x.toFixed(d).replace('.', ',');
 export const ESCENARIOS = {
   normal: { nombre: 'Normal', aplicar: () => {} },
   hemorragia: {
     nombre: 'Hemorragia de 1 L', tipo: 'hipovolemico',
-    aplicar: (m) => { m.s.vven -= 1000; },
+    // sangre perdida, de 0 al 42 % de la volemia. El defecto, 1 L (el 21 %: Clase II)
+    gravedad: { defecto: 1000 / HEM_ML_MAX, texto: (g) => `${Math.round(g * HEM_ML_MAX)} mL perdidos (${Math.round(g * HEM_FRACCION_MAX * 100)} % de la volemia)` },
+    // (se va a su ritmo: motor.mjs, ritmoHemorragia)
+    aplicar: (m, g = 1000 / HEM_ML_MAX) => { m.p.hemorragia = g * HEM_ML_MAX; },
   },
   fallo: {
     nombre: 'Fallo del VI', tipo: 'cardiogenico',
-    aplicar: (m) => { m.p.vi.ees = 0.9; },
+    // contractilidad del VI (Ees) de la normal a EES_VI_MIN, en escala logarítmica (cada paso la multiplica por lo mismo).
+    // El defecto, Ees 0,9
+    gravedad: { defecto: Math.log(BASE.vi.ees / 0.9) / Math.log(BASE.vi.ees / EES_VI_MIN),
+      texto: (g) => `contractilidad del VI al ${Math.round(100 * (EES_VI_MIN / BASE.vi.ees) ** g)} % de la normal` },
+    aplicar: (m, g = Math.log(BASE.vi.ees / 0.9) / Math.log(BASE.vi.ees / EES_VI_MIN)) => { m.p.vi.ees = BASE.vi.ees * (EES_VI_MIN / BASE.vi.ees) ** g; },
   },
   derrame: {
     nombre: 'Derrame pericárdico', tipo: 'obstructivo',
-    aplicar: (m) => { m.p.liquidoPeri = 260; },
+    // líquido en el saco, de 0 a DERRAME_ML_MAX (entra a su ritmo: motor.mjs, ritmoDerrame). El defecto, 260 mL
+    gravedad: { defecto: DERRAME_DEFECTO, texto: (g) => `${Math.round(derrameMl(g))} mL de derrame` },
+    aplicar: (m, g = DERRAME_DEFECTO) => { m.p.liquidoPeri = derrameMl(g); },
   },
   vasoplejia: {
     nombre: 'Vasoplejía', tipo: 'vasodilatador',
-    // Resistencias al 40 % y venodilatación (más volumen venoso "sin tensión", que deja de volver al
-    // corazón): Marino, cap. 14, pág. 4 — el shock vasodilatador es una vasodilatación difusa «de arterias y venas»
-    aplicar: (m) => { m.p.rSis *= 0.4; m.p.vuVen *= 1.5; },
+    // Resistencias a la mitad y venodilatación (más volumen venoso "sin tensión", que deja de volver al
+    // corazón): Marino, cap. 14, pág. 4 — el shock vasodilatador es una vasodilatación difusa «de arterias y venas».
+    // (Antes ×0,4, calibrado con un barorreflejo que subía las resistencias hasta +60 %; con el techo de +15 % (motor.mjs,
+    // gravedad del shock), ×0,5 deja la misma PA: ~52 a los 10 s y ~66 asentada. Ilustrativo)
+    aplicar: (m) => { m.p.rSis *= 0.5; m.p.vuVen *= 1.5; },
   },
   // --- Formas de enfermedad: cambian la anatomía además del latido (excepción a «anatomía congelada», a petición
   // del usuario: «hazlas según la bibliografía de la aplicación»). Lo que se exige son las cifras de CRITERIOS_FORMA,
@@ -40,10 +68,17 @@ export const ESCENARIOS = {
     aplicar: (m) => { m.p.mioVi = 1.4; m.p.vi.ees = 1.0; m.p.vi.v0 = 60; m.s.vven += 700; },
   },
   tep: {
-    nombre: 'TEP masivo (VD)', forma: true,
+    // Nombre como el libro: con disfunción del VD y sin inestabilidad (PAM ~85) es la EP de riesgo intermedio
+    // («submasiva»); «masiva» es la de alto riesgo, con inestabilidad hemodinámica (Marino, cap. 22, p. 7,
+    // docs/marino-2024-respiratory-management-caps22-26.pdf#page=7). Antes se llamaba «TEP masivo». La gravedad a fondo
+    // sí la tiene (PAM <65): la de alto riesgo
+    nombre: 'TEP de riesgo intermedio (VD)', forma: true,
     // el émbolo sube la resistencia pulmonar (poscarga del VD) y el VD falla: se dilata, se vacía mal y empuja el
     // tabique hacia el VI (Fisiopatología UCI · Cardiología, Fichas 8 y 9; Merino, IC derecha)
-    aplicar: (m) => { m.p.rPul *= 8; m.p.vd.ees *= 0.65; },
+    // gravedad: resistencia pulmonar ×16^g (escala logarítmica) y contractilidad del VD que cae a la par; el defecto
+    // (0,75) es el de siempre: ×8 y ×0,65
+    gravedad: { defecto: TEP_DEFECTO, texto: (g) => `resistencia pulmonar ×${coma(TEP_RPUL_MAX ** g, 1)}` },
+    aplicar: (m, g = TEP_DEFECTO) => { m.p.rPul *= TEP_RPUL_MAX ** g; m.p.vd.ees *= 1 - TEP_EES_VD_DEFECTO / TEP_DEFECTO * g; },
   },
 };
 
@@ -54,8 +89,9 @@ export const ASENTAR_FORMA = 40;
 // El escenario tal como lo ve la app (simulador.mjs) y lo comprueban las pruebas: se aplica sobre el normal y se deja
 // correr 10 s un shock (para ver al barorreflejo respondiendo) o ASENTAR_FORMA una forma de enfermedad. Apunta cuándo se
 // aplicó (p.tEscenario): las maniobras de volumen esperan a que el paciente esté asentado (maniobras.mjs, faltaParaAsentar)
-export function aplicarEscenario(m, k) {
-  ESCENARIOS[k].aplicar(m);
+// g: la gravedad (0-1) en los escenarios que la tienen; sin ella, la de siempre
+export function aplicarEscenario(m, k, g) {
+  ESCENARIOS[k].aplicar(m, g);
   if (k !== 'normal') { m.p.tEscenario = m.s.t; m.correr(ESCENARIOS[k].forma ? ASENTAR_FORMA : 10); }
   return m;
 }

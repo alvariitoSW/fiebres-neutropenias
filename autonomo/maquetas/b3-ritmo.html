@@ -1,0 +1,1100 @@
+<!-- PROPUESTA PARA ELEGIR (plan socialista, bloque 3, parada 1). No es parte de la app.
+     Ábrela con el servidor de la app: http://localhost:8000/autonomo/maquetas/b3-ritmo.html
+     El corazón eléctrico: la conducción dibujada (la chispa por el hilo de oro) con la tira de ECG, la presión arterial
+     y, en la parada, la ETCO2. Tres direcciones en el selector de arriba: A (grabado anatómico, con la lupa del nodo AV),
+     B (el plano del metro) y C (solo el ECG, la alternativa sencilla). Fichas de Merino Cardiología (caps. 19 y 21);
+     PDF docs/marino-2024-cardiac-disorders-caps18-21.pdf (la página citada es la del PDF).
+     Especificación: autonomo/bloques/b3/cobertura.md §5, §7 y §9.
+     Cada cifra lleva su origen: «ficha · p. N», «fisiología general» o «ilustrativo». Sin librerías: SVG y JS puro;
+     con «reducir movimiento» (o el botón de pausa), todo quieto y el camino de la chispa dibujado entero. -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El corazón eléctrico · para elegir</title>
+<style>
+/* Tokens de css/variables.css, copiados tal cual. Ningún color fuera de esta lista. */
+:root {
+  color-scheme: dark;
+  --bg-main: #17140f;
+  --bg-card: rgba(46, 38, 28, 0.72);
+  --border-color: rgba(196, 154, 74, 0.35);
+  --text-main: #ece3cc;
+  --text-muted: #a5967c;
+  --text-dim: #c9bda4;
+  --accent-green: #90a06a;
+  --accent-red: #b85c3e;
+  --accent-yellow: #cf9a3e;
+  --accent-blue: #d4af37;
+  --accent-purple: #9c5476;
+  --bg: var(--bg-main); --card: var(--bg-card); --card2: rgba(46, 38, 28, 1); --line: var(--border-color);
+  --fg: var(--text-main); --dim: var(--text-dim); --muted: var(--text-muted);
+  --oro: var(--accent-yellow); --oro-claro: var(--accent-blue); --rojo: var(--accent-red); --verde: var(--accent-green); --purpura: var(--accent-purple);
+  --serif: Georgia, 'Times New Roman', serif;
+  --sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --dock-h: 152px;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 var(--serif);
+  padding: 8px max(12px, env(safe-area-inset-right, 0px)) calc(var(--dock-h) + var(--frase-h, 44px) + 16px) max(12px, env(safe-area-inset-left, 0px)); }
+main { max-width: 560px; margin: 0 auto; display: grid; gap: 10px; grid-template-columns: minmax(0, 1fr); }
+main > * { min-width: 0; }
+h1 { font-size: 1.22rem; line-height: 1.2; margin: 0; color: var(--oro); font-weight: normal; }
+h1 em { color: var(--fg); }
+h2 { font-size: 1.06rem; margin: 0 0 4px; color: var(--oro); font-weight: normal; }
+h3 { font: 600 .74rem var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 4px 0 2px; }
+p { margin: 0; }
+[hidden] { display: none !important; }
+button { font-family: inherit; }
+button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visible { outline: 2px solid var(--oro); outline-offset: 2px; }
+.aviso { font: 600 .7rem/1.2 var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--bg); background: var(--oro); border-radius: 6px; padding: 4px 8px; width: fit-content; }
+.cabecera { display: grid; gap: 6px; }
+.lead { color: var(--dim); font-size: .92rem; line-height: 1.38; }
+.org { font: .66rem/1.25 var(--sans); color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 0 6px; vertical-align: 1px; white-space: nowrap; }
+.org.ilu { border-style: dashed; }
+.hl-a, .hl-r, .hl-v, .hl-p, .hl-azul { padding: 0 2px; border-radius: 2px; font-weight: 600; }
+.hl-a { background: linear-gradient(to bottom, transparent 58%, rgba(207, 154, 62, .34) 58%); }
+.hl-r { background: linear-gradient(to bottom, transparent 58%, rgba(184, 92, 62, .38) 58%); }
+.hl-v { background: linear-gradient(to bottom, transparent 58%, rgba(144, 160, 106, .36) 58%); }
+.hl-p { background: linear-gradient(to bottom, transparent 58%, rgba(156, 84, 118, .36) 58%); }
+.hl-azul { background: linear-gradient(to bottom, transparent 58%, rgba(212, 175, 55, .32) 58%); color: var(--oro-claro); }
+
+/* Modos */
+.interruptor { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); border-radius: 999px; overflow: hidden; font: .82rem/1.1 var(--sans); }
+.interruptor button { min-height: 44px; background: transparent; color: var(--muted); border: 0; font: inherit; cursor: pointer; padding: 0 4px; }
+.interruptor button + button { border-left: 1px solid var(--line); }
+.interruptor button[aria-selected="true"] { background: var(--oro); color: var(--bg); font-weight: 600; }
+
+/* Pacientes */
+.pacientes { display: flex; flex-wrap: wrap; gap: 6px; }
+.pacientes button { min-height: 44px; padding: 3px 11px; border-radius: 999px; border: 1px solid var(--line); background: var(--card2); color: var(--dim); font: 600 .76rem/1.1 var(--sans); cursor: pointer; text-align: left; }
+.pacientes button small { display: block; font-weight: 400; font-size: .64rem; color: var(--muted); }
+.pacientes button[aria-pressed="true"] { background: var(--oro); color: var(--bg); border-color: var(--oro); }
+.pacientes button[aria-pressed="true"] small { color: var(--bg); }
+.ficha-pac { font: .8rem/1.35 var(--sans); color: var(--dim); }
+.ficha-pac b { color: var(--fg); }
+
+/* El monitor de cabecera */
+.monitor { border: 1px solid var(--line); border-radius: 14px; background: var(--bg-main); padding: 6px; display: grid; gap: 4px; position: relative;
+  box-shadow: inset 0 0 0 1px rgba(23, 20, 15, 1), inset 0 0 18px rgba(0, 0, 0, .5); }
+.mon-cab { display: flex; justify-content: space-between; align-items: center; gap: 6px; font: 600 .66rem/1.2 var(--sans); color: var(--muted); letter-spacing: .04em; text-transform: uppercase; padding: 0 2px; }
+.mon-cab .pausa { min-height: 32px; min-width: 44px; border: 1px solid var(--line); background: transparent; color: var(--dim); border-radius: 8px; font: 600 .7rem var(--sans); cursor: pointer; text-transform: none; letter-spacing: 0; }
+.mon-cuerpo { display: grid; grid-template-columns: minmax(0, 1fr) 108px; gap: 0; }
+#trazas { display: block; width: 100%; height: 236px; }
+.cifras { display: grid; grid-template-rows: 42px 62px 40px 42px 50px; border-left: 1px solid rgba(196, 154, 74, .18); }
+.cifra { display: grid; align-content: center; padding: 0 0 0 7px; border-bottom: 1px solid rgba(196, 154, 74, .12); min-width: 0; position: relative; cursor: pointer; }
+.cifra:last-child { border-bottom: 0; }
+.cifra .et { font: 600 .62rem/1.1 var(--sans); letter-spacing: .03em; display: flex; justify-content: space-between; gap: 2px; }
+.cifra .v { font: 700 1.36rem/1.05 var(--sans); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cifra .v small { font-size: .7rem; font-weight: 600; margin-left: 2px; }
+.cifra .obj { font: .6rem/1.15 var(--sans); color: var(--muted); }
+.c-ecg { color: var(--verde); } .c-art { color: var(--rojo); } .c-sat { color: var(--oro); } .c-pvc { color: var(--purpura); } .c-resp { color: var(--dim); }
+.c-pvc .v { color: var(--fg); }
+.marca { font: 700 .66rem var(--sans); border-radius: 4px; padding: 0 3px; margin-left: 2px; }
+.marca.si { color: var(--bg); background: var(--verde); }
+.marca.no { color: var(--fg); background: var(--rojo); }
+.marca.ojo { color: var(--bg); background: var(--oro); }
+.perfusion { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
+.celda { background: var(--card); border: 1px solid var(--card2); border-radius: 9px; padding: 3px 5px; min-width: 0; display: grid; align-content: start; cursor: pointer; text-align: left; color: var(--fg); font: inherit; }
+.celda .k { font: .6rem/1.15 var(--sans); color: var(--muted); display: flex; justify-content: space-between; gap: 2px; }
+.celda .g { font: 700 .98rem/1.15 var(--sans); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.celda .g small { font: 600 .56rem var(--sans); color: var(--dim); margin-left: 1px; }
+.celda .t { font: .56rem/1.15 var(--sans); color: var(--muted); overflow-wrap: anywhere; }
+.celda.no .g { color: var(--rojo); } .celda.si .g { color: var(--verde); } .celda.ojo .g { color: var(--oro); }
+.oculto .v, .oculto .g { color: var(--muted) !important; }
+.mon-pie { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; font: .7rem/1.3 var(--sans); color: var(--muted); }
+.detalle-fila { font: .78rem/1.4 var(--sans); color: var(--dim); background: var(--card); border-radius: 10px; padding: 6px 8px; display: grid; gap: 2px; }
+
+/* El corazón */
+.escena { position: relative; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--bg); }
+#corazon { display: block; width: 100%; height: auto; }
+.escena-tit { position: absolute; left: 8px; top: 6px; font: 600 .66rem var(--sans); letter-spacing: .05em; text-transform: uppercase; color: var(--muted); pointer-events: none; }
+.tapa { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(23, 20, 15, .94); font: 600 .9rem/1.3 var(--sans); color: var(--dim); text-align: center; padding: 20px; }
+
+/* Frase viva y botones */
+.frase { position: fixed; left: 0; right: 0; bottom: var(--dock-h); z-index: 19; margin: 0; background: var(--bg-main); border-top: 1px solid var(--line);
+  font: .84rem/1.3 var(--serif); color: var(--fg); padding: 5px max(14px, calc((100% - 560px) / 2)); box-shadow: inset 3px 0 0 var(--oro); cursor: pointer; }
+.frase-txt { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.frase.abierta .frase-txt { display: block; max-height: 40vh; overflow-y: auto; }
+button.b { min-height: 44px; font: 600 .86rem/1.2 var(--sans); background: var(--card2); color: var(--fg); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; cursor: pointer; text-align: left; }
+button.b.prim { background: var(--oro); color: var(--bg); border-color: var(--oro); }
+button.b.link { background: transparent; color: var(--oro); border-style: dashed; }
+button.b:disabled { opacity: .55; cursor: default; }
+.fila { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.para { font: .82rem/1.45 var(--sans); color: var(--muted); }
+.aviso-rojo { font: .8rem/1.4 var(--sans); color: var(--fg); border-left: 3px solid var(--rojo); background: var(--card); border-radius: 0 10px 10px 0; padding: 6px 9px; }
+
+/* La cita que lleva a la app (como core/citas.js) */
+.cita { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 8px; }
+.cita-ir { display: inline-flex; align-items: center; min-height: 44px; padding: 0 10px; border: 1px dashed var(--oro); border-radius: 999px; background: transparent; color: var(--oro); font: 600 .74rem/1.2 var(--sans); text-align: left; cursor: pointer; max-width: 100%; overflow-wrap: anywhere; }
+.cita-pdf { display: inline-flex; align-items: center; min-height: 44px; color: var(--muted); font: .72rem var(--sans); text-decoration: underline; text-underline-offset: 2px; }
+.toast { position: fixed; left: 50%; top: 12px; transform: translateX(-50%); z-index: 40; width: min(92vw, 520px); background: var(--card2); border: 1px solid var(--oro); border-radius: 12px; padding: 10px 12px; font: .82rem/1.4 var(--sans); color: var(--fg); box-shadow: 0 8px 22px rgba(0, 0, 0, .5); }
+
+/* Explicación guiada (como core/explicacion-guiada.js), en la hoja de abajo */
+.guia { display: grid; gap: 6px; font: .9rem/1.4 var(--serif); color: var(--fg); padding: 6px 0 4px; }
+.guia-cab { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.guia-n { font: 700 .66rem/1.2 var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--oro); white-space: nowrap; }
+.guia-tit { flex: 1; min-width: 0; font: 600 .84rem/1.2 var(--sans); color: var(--dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.guia-x { flex: none; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: transparent; color: var(--fg); font-size: 1.2rem; cursor: pointer; }
+.guia-txt { margin: 0; border-left: 3px solid var(--oro); padding: 1px 0 1px 9px; max-height: 26vh; overflow-y: auto; }
+.guia-org { font: .62rem/1.2 var(--sans); color: var(--muted); border: 1px dashed var(--line); border-radius: 999px; padding: 0 5px; }
+.guia-nav { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center; }
+.guia-b { min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--fg); font: 600 .84rem var(--sans); cursor: pointer; }
+.guia-b:disabled { opacity: .45; cursor: default; }
+.guia-b.prim { background: var(--oro); border-color: var(--oro); color: var(--bg); }
+.guia-puntos { display: flex; justify-content: center; gap: 5px; }
+.guia-puntos i { width: 7px; height: 7px; border-radius: 50%; border: 1px solid var(--oro); }
+.guia-puntos i.hecho { background: var(--oro); opacity: .5; }
+.guia-puntos i.aqui { background: var(--oro); }
+.guia-anillo { fill: none; stroke: var(--oro-claro); stroke-width: 2.4; stroke-dasharray: 6 3; vector-effect: non-scaling-stroke; pointer-events: none; }
+.guia-marco { box-shadow: 0 0 0 2px var(--oro-claro) !important; border-radius: 8px; }
+@media (prefers-reduced-motion: no-preference) {
+  .guia-anillo { animation: guia-late 1.4s ease-in-out infinite; }
+  .entra { animation: entra .25s ease-out; }
+}
+@keyframes guia-late { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
+@keyframes entra { from { opacity: .3; } to { opacity: 1; } }
+
+/* Dock fijo abajo */
+.dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--bg-main); border-top: 1px solid var(--line);
+  padding: 2px max(8px, env(safe-area-inset-left, 0px)) calc(4px + env(safe-area-inset-bottom, 0px)); }
+.dock-in { max-width: 560px; margin: 0 auto; display: grid; gap: 3px; }
+.dock-tabs { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 2px; }
+.dock-tabs button { min-height: 44px; background: transparent; border: 0; border-bottom: 2px solid transparent; color: var(--muted); font: 600 .76rem/1.1 var(--sans); cursor: pointer; padding: 0 1px; }
+.dock-tabs button[aria-selected="true"] { color: var(--oro); border-bottom-color: var(--oro); }
+.dock-panel { display: grid; gap: 4px; align-content: start; min-height: 92px; }
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; min-width: 0; }
+.seg button { min-height: 44px; font: 600 .72rem/1.1 var(--sans); background: transparent; color: var(--muted); border: 0; padding: 2px; cursor: pointer; min-width: 0; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--oro); color: var(--bg); }
+.seg button small { display: block; font-weight: 400; font-size: .58rem; }
+.seg button:disabled { opacity: .4; cursor: default; }
+.rejilla { display: grid; gap: 4px; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); }
+.tog { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 2px; padding: 2px 6px; border-radius: 10px; background: var(--card2); border: 1px solid var(--line); color: var(--fg); font: 600 .7rem/1.1 var(--sans); cursor: pointer; min-width: 0; text-align: center; flex-direction: column; overflow-wrap: anywhere; }
+.tog small { display: block; font-weight: 400; font-size: .58rem; color: var(--muted); }
+.tog[aria-pressed="true"] { border-color: var(--oro); background: rgba(207, 154, 62, .22); box-shadow: inset 0 0 0 1px var(--oro); }
+.tog:disabled { opacity: .45; cursor: default; }
+.deslizador { display: grid; grid-template-columns: minmax(0, 1fr) 118px; gap: 6px; align-items: center; min-height: 44px; }
+.deslizador input { width: 100%; min-height: 44px; accent-color: var(--oro); margin: 0; }
+.deslizador output { font: 700 .86rem/1.15 var(--sans); color: var(--fg); text-align: right; font-variant-numeric: tabular-nums; }
+.deslizador output small { display: block; font: 600 .62rem var(--sans); color: var(--muted); }
+.marcas { display: flex; justify-content: space-between; font: .62rem/1 var(--sans); color: var(--muted); margin: -6px 124px 0 2px; }
+.dock-nota { font: .68rem/1.3 var(--sans); color: var(--muted); }
+.dock-est { display: grid; gap: 4px; padding: 6px 0; }
+.pasos { display: flex; gap: 4px; }
+.pasos i { flex: 1; height: 6px; border-radius: 3px; background: var(--card2); border: 1px solid rgba(196, 154, 74, .2); }
+.pasos i.on { background: var(--oro); border-color: var(--oro); } .pasos i.mal { background: var(--rojo); border-color: var(--rojo); } .pasos i.aqui { box-shadow: 0 0 0 2px var(--oro-claro); }
+.dock-est-txt { font: .74rem/1.3 var(--sans); color: var(--muted); display: flex; justify-content: space-between; gap: 8px; }
+
+/* Secciones de abajo */
+.bloque { display: grid; gap: 8px; }
+details.plegable { background: var(--card); border: 1px solid var(--card2); border-radius: 12px; padding: 2px 12px; }
+details.plegable summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font: 600 .86rem var(--sans); color: var(--dim); }
+details.plegable[open] { padding-bottom: 12px; }
+.nota-fuentes { border-left: 3px solid var(--purpura); background: var(--card); border-radius: 0 10px 10px 0; padding: 8px 10px; font: .8rem/1.45 var(--sans); color: var(--dim); display: grid; gap: 4px; }
+.nota-fuentes b { color: var(--fg); }
+.nota-tipo { display: inline-block; width: fit-content; font: 700 .62rem var(--sans); letter-spacing: .05em; text-transform: uppercase; color: var(--fg); background: var(--purpura); border-radius: 5px; padding: 1px 6px; }
+.nota-tipo.calla { background: var(--muted); color: var(--bg); } .nota-tipo.autor { background: var(--oro); color: var(--bg); } .nota-tipo.errata { background: var(--rojo); }
+ul.lista { margin: 6px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; font: .82rem/1.45 var(--sans); color: var(--dim); }
+ul.lista li { border-left: 2px solid var(--line); padding-left: 8px; min-width: 0; overflow-wrap: anywhere; display: grid; gap: 2px; }
+.tira { display: flex; flex-wrap: wrap; gap: 8px; }
+.lamina-libro { display: grid; gap: 2px; justify-items: center; background: var(--text-main); border: 1px solid var(--line); border-radius: 8px; padding: 3px; cursor: zoom-in; min-height: 44px; width: 104px; }
+.lamina-libro img { display: block; height: 58px; width: 96px; object-fit: contain; }
+.lamina-libro span { font: 600 .6rem/1.15 var(--sans); color: var(--bg-main); text-align: center; }
+dialog#visor { width: min(96vw, 560px); max-height: 92vh; padding: 10px; border: 1px solid var(--oro); border-radius: 14px; background: var(--card2); color: var(--fg); }
+dialog#visor::backdrop { background: rgba(23, 20, 15, .82); }
+#visor .caja-img { background: var(--text-main); border-radius: 8px; padding: 4px; }
+#visor img { display: block; width: 100%; height: auto; max-height: 62vh; object-fit: contain; }
+#visor p { font: .84rem/1.4 var(--sans); color: var(--dim); margin-top: 8px; }
+.elige { border: 1px solid var(--line); border-radius: 14px; padding: 12px; display: grid; gap: 8px; }
+.opciones-elige { display: flex; flex-wrap: wrap; gap: 6px; }
+.opciones-elige button { min-height: 44px; font: 600 .78rem var(--sans); background: var(--card2); color: var(--fg); border: 1px solid var(--line); border-radius: 10px; padding: 6px 10px; cursor: pointer; text-align: left; }
+.opciones-elige button[aria-pressed="true"] { background: var(--oro); color: var(--bg); border-color: var(--oro); }
+
+/* ¿Qué shock es? y Mayéutica */
+.formato { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px; display: grid; gap: 10px; min-width: 0; }
+.cab-preg { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.num { font: 700 .76rem var(--sans); color: var(--oro); border: 1px solid var(--oro); border-radius: 6px; padding: 1px 7px; }
+.tipo { font: 600 .68rem var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.grupo { font: 700 .66rem var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--bg); background: var(--dim); border-radius: 6px; padding: 1px 6px; }
+.grupo.examen { background: var(--rojo); color: var(--fg); } .grupo.caso { background: var(--purpura); color: var(--fg); }
+.pregunta { font-size: 1rem; line-height: 1.45; }
+.op { display: grid; gap: 8px; }
+.op button.elegida-bien { border-color: var(--verde); } .op button.elegida-mal { border-color: var(--rojo); }
+.respuesta { background: var(--card2); border-radius: 10px; padding: 12px; display: grid; gap: 8px; min-width: 0; font: .9rem/1.45 var(--serif); }
+.ok { color: var(--verde); font: 600 .9rem var(--sans); } .mal { color: var(--rojo); font: 600 .9rem var(--sans); }
+.pista { display: grid; gap: 6px; }
+.pista li { cursor: pointer; }
+.pista button.senal { min-height: 36px; font: 600 .72rem var(--sans); border: 1px dashed var(--line); background: transparent; color: var(--oro); border-radius: 999px; padding: 0 10px; cursor: pointer; width: fit-content; }
+.dia { font: 700 .74rem var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--purpura); }
+dl.paciente { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; margin: 0; font: .82rem/1.35 var(--sans); background: var(--card2); border-radius: 10px; padding: 8px 10px; }
+dl.paciente dt { color: var(--muted); } dl.paciente dd { margin: 0; color: var(--fg); }
+dl.paciente dd.cambia { color: var(--rojo); font-weight: 600; }
+.marcador { font: 600 .8rem var(--sans); color: var(--dim); }
+/* Propio del corazón eléctrico */
+.direccion { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.direccion button { min-height: 56px; border: 1px solid var(--line); border-radius: 12px; background: var(--card2); color: var(--dim); font: 600 .78rem/1.15 var(--sans); cursor: pointer; padding: 6px 7px; text-align: left; }
+.direccion button small { display: block; font-weight: 400; font-size: .64rem; color: var(--muted); margin-top: 2px; }
+.direccion button[aria-pressed="true"] { border-color: var(--oro); box-shadow: inset 0 0 0 1px var(--oro); color: var(--fg); background: rgba(207, 154, 62, .14); }
+.dir-txt { font: .76rem/1.35 var(--sans); color: var(--muted); }
+.interruptor.dos { grid-template-columns: repeat(2, 1fr); }
+.ritmos { display: flex; flex-wrap: wrap; gap: 6px; }
+.ritmos button { min-height: 44px; padding: 3px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--card2); color: var(--dim); font: 600 .78rem/1.1 var(--sans); cursor: pointer; }
+.ritmos button[aria-pressed="true"] { background: var(--oro); color: var(--bg); border-color: var(--oro); }
+#escena-svg { display: block; width: 100%; height: auto; }
+.tiras { border: 1px solid var(--line); border-radius: 14px; background: var(--bg-main); padding: 6px; display: grid; gap: 2px; }
+.tira-svg { display: block; width: 100%; }
+.lecturas { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
+.lecturas .celda { cursor: default; }
+.graficas { display: grid; gap: 6px; }
+.grafica { border: 1px solid var(--line); border-radius: 12px; background: var(--bg-main); padding: 4px 6px; }
+.grafica svg { display: block; width: 100%; height: auto; }
+.grafica p { font: .7rem/1.3 var(--sans); color: var(--muted); }
+.banda-peligro { font: 600 .82rem/1.35 var(--sans); color: var(--fg); background: rgba(184, 92, 62, .25); border: 1px solid var(--rojo); border-radius: 10px; padding: 6px 9px; }
+</style>
+</head>
+<body>
+<main>
+  <header class="cabecera">
+    <p class="aviso">Para elegir: aún no está en la app</p>
+    <h1>El corazón eléctrico: <em>la chispa y la tira</em></h1>
+    <p class="lead">Cada arritmia es un <span class="hl-azul">camino de la chispa</span>. Si ves el camino, entiendes por qué la adenosina corta una reentrada nodal y por qué el <span class="hl-r">diltiazem puede matar a un WPW</span>. <span class="org">ficha · p. 27-30</span></p>
+  </header>
+
+  <div class="direccion" id="direccion" role="group" aria-label="Dirección">
+    <button type="button" data-dir="A" aria-pressed="true">A · Grabado<small>El corazón en corte, con la lupa del nodo AV. Recomendada.</small></button>
+    <button type="button" data-dir="B" aria-pressed="false">B · Plano del metro<small>Las vías como líneas y estaciones.</small></button>
+    <button type="button" data-dir="C" aria-pressed="false">C · Solo el ECG<small>Lo más sencillo: la tira, sin dibujo.</small></button>
+  </div>
+  <p class="dir-txt" id="dir-txt"></p>
+
+  <div class="interruptor dos" role="tablist" aria-label="Modo">
+    <button type="button" role="tab" id="modo-explorar" aria-selected="true">Explorar</button>
+    <button type="button" role="tab" id="modo-preguntas" aria-selected="false">Mayéutica</button>
+  </div>
+
+  <section id="zona-ritmos" class="bloque" aria-label="Ritmos">
+    <div class="ritmos" id="ritmos"></div>
+    <p class="ficha-pac" id="ficha-ritmo"></p>
+  </section>
+
+  <section class="escena" id="escena" aria-label="La conducción">
+    <svg id="escena-svg" viewBox="0 0 360 280" role="img" aria-label="La conducción del impulso eléctrico"></svg>
+  </section>
+
+  <section class="tiras" id="tiras" aria-label="Las tiras">
+    <div class="mon-cab"><span id="tiras-tit">ECG · presión arterial</span><button type="button" class="pausa" id="pausa" aria-pressed="false">Pausa</button></div>
+    <svg class="tira-svg" id="t-ecg-svg" role="img" aria-label="Tira de ECG"></svg>
+    <svg class="tira-svg" id="t-pa-svg" role="img" aria-label="Presión arterial"></svg>
+    <svg class="tira-svg" id="t-co2-svg" role="img" aria-label="ETCO2" hidden></svg>
+  </section>
+  <div class="lecturas" id="lecturas"></div>
+  <div id="peligro" class="banda-peligro" hidden></div>
+  <div class="graficas" id="graficas"></div>
+
+  <div class="fila" id="fila-explicame"><button type="button" class="b prim" id="explicame">Explícame este estado</button><span class="para" id="explicame-txt"></span></div>
+
+  <section id="vista-preguntas" class="bloque" hidden aria-live="polite"><div class="formato" id="preg"></div></section>
+
+  <section id="zona-abajo" class="bloque">
+    <details class="plegable"><summary>Las fuentes de este estado</summary><ul class="lista" id="lista-fuentes"></ul></details>
+    <h3>Así se ve de verdad (ECG del libro)</h3>
+    <div class="tira" id="tira"></div>
+    <details class="plegable"><summary>Notas: lo que la fuente no dice, lo que discrepa</summary><div class="bloque" id="lista-notas"></div></details>
+    <details class="plegable"><summary>Para profundizar: lo que el modelo no enseña</summary><ul class="lista" id="lista-profundizar"></ul></details>
+    <section class="elige" aria-label="Para decidir"><h2>Para decidir</h2><div id="elige"></div><p class="para" id="resumen-elige"></p></section>
+  </section>
+</main>
+
+<p class="frase" id="frase" role="status" aria-live="polite"><span class="frase-txt" id="frase-txt"></span></p>
+
+<div class="dock" id="dock">
+  <div class="dock-in" id="dock-explorar"><div class="dock-panel" id="dock-panel"></div></div>
+  <div class="dock-in" id="dock-guia" hidden></div>
+  <div class="dock-in dock-est" id="dock-estudio" hidden><div class="pasos" id="dock-pasos"></div><div class="dock-est-txt"><span id="dock-est-izq"></span><span id="dock-est-der"></span></div></div>
+</div>
+
+<dialog id="visor"><div class="caja-img"><img id="visor-img" alt=""></div><p id="visor-txt"></p><div class="fila" style="margin-top:8px; justify-content:space-between"><span id="visor-cita"></span><button type="button" class="b" id="visor-cerrar">Cerrar</button></div></dialog>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const REDUCIR = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const coma = (x, d = 0) => (+x).toFixed(d).replace('.', ',');
+const NS = 'http://www.w3.org/2000/svg';
+const PDF_C = '../../docs/marino-2024-cardiac-disorders-caps18-21.pdf';
+const IMG = '../../js/modules/cardiologia/img/';
+const gauss = (x, m, s) => Math.exp(-((x - m) * (x - m)) / (2 * s * s));
+
+/* ============================================================
+   1. Citas: «Ver en la ficha» y el PDF de segunda opción
+   ============================================================ */
+const CARDIO = ['cardiologia', 'merinoCardiologia', 'panel-merino-cardio-tabs'];
+const FICHA = {
+  'mc-taqui-reconocimiento': ['Taquiarritmias: reconocimiento', 'Taquiarritmias: reconocimiento'],
+  'mc-fa-frecuencia': ['Fibrilación auricular: control de frecuencia', 'FA: control de frecuencia'],
+  'mc-fa-cardioversion': ['Fibrilación auricular: cardioversión y prevención de ictus', 'FA: cardioversión'],
+  'mc-otras-taqui': ['Otras taquiarritmias: TAM, PSVT, TV y torsade de pointes', 'Otras taquiarritmias'],
+  'mc-paro-soporte': ['Paro cardíaco: soporte vital básico y avanzado', 'Paro cardíaco: soporte vital'],
+  'mc-paro-monitorizacion': ['Paro cardíaco: monitorización de la reanimación', 'Paro cardíaco: monitorización'],
+  'mc-posresucitacion': ['Síndrome posparo cardíaco y pronóstico neurológico', 'Síndrome posparo'],
+};
+function cita(c) {
+  const [esp, view, panel] = CARDIO, [titulo, corto] = FICHA[c.f];
+  const pag = /[-,]/.test(String(c.p)) ? `pp. ${c.p}` : `p. ${c.p}`;
+  return `<span class="cita"><button type="button" class="cita-ir" data-especialidad="${esp}" data-view="${view}" data-panel="${panel}" data-tab="${c.f}" data-resaltar="#${c.id}" data-titulo="${titulo}" data-sitio="${c.sitio}">Ver en la ficha: ${corto} · ${c.sitio} →</button><a class="cita-pdf" href="${PDF_C}#page=${String(c.p).match(/\d+/)[0]}" target="_blank" rel="noopener">PDF, ${pag}</a></span>`;
+}
+let toastT = null;
+document.addEventListener('click', ev => {
+  const b = ev.target.closest('.cita-ir'); if (!b) return;
+  const t = $('toast'); t.hidden = false;
+  t.textContent = `En la app, este botón abre la ficha «${b.dataset.titulo}» y resalta «${b.dataset.sitio}». Al volver, regresas aquí.`;
+  clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 3600);
+});
+const org = (t, ilu) => `<span class="org${ilu ? ' ilu' : ''}">${t}</span>`;
+const C = {
+  hallazgos: { f: 'mc-taqui-reconocimiento', id: 'mc-taqui-hallazgos', sitio: 'Los tres hallazgos', p: 18 },
+  regular: { f: 'mc-taqui-reconocimiento', id: 'mc-qrs-estrecho-regular', sitio: 'QRS estrecho regular', p: '18-19' },
+  irregular: { f: 'mc-taqui-reconocimiento', id: 'mc-qrs-estrecho-irregular', sitio: 'QRS estrecho irregular', p: 20 },
+  f192: { f: 'mc-taqui-reconocimiento', id: 'mc-fig-19-2', sitio: 'Fig. 19.2', p: 20 },
+  faEpi: { f: 'mc-fa-frecuencia', id: 'mc-fa-hospital', sitio: 'FA en el hospital', p: 21 },
+  faCons: { f: 'mc-fa-frecuencia', id: 'mc-fa-consecuencias', sitio: 'Consecuencias', p: '21-22' },
+  f194: { f: 'mc-fa-frecuencia', id: 'mc-fig-19-4', sitio: 'Fig. 19.4', p: 22 },
+  t191: { f: 'mc-fa-frecuencia', id: 'mc-tabla-19-1', sitio: 'Tabla 19.1', p: '22-23' },
+  dilt: { f: 'mc-fa-frecuencia', id: 'mc-tabla-19-1', sitio: 'Diltiazem', p: 23 },
+  f195: { f: 'mc-fa-frecuencia', id: 'mc-fig-19-5', sitio: 'Fig. 19.5', p: 24 },
+  amio: { f: 'mc-fa-frecuencia', id: 'mc-amiodarona-iv', sitio: 'Amiodarona', p: '24-25' },
+  final: { f: 'mc-fa-frecuencia', id: 'mc-fa-punto-final', sitio: 'Punto final del control', p: 25 },
+  wpw: { f: 'mc-fa-cardioversion', id: 'mc-wpw', sitio: 'Síndrome de WPW', p: '27-28' },
+  cv: { f: 'mc-fa-cardioversion', id: 'mc-cardioversion', sitio: 'Cardioversión eléctrica', p: 25 },
+  psvt: { f: 'mc-otras-taqui', id: 'mc-psvt', sitio: 'Taquicardia por reentrada nodal', p: 29 },
+  adeno: { f: 'mc-otras-taqui', id: 'mc-adenosina', sitio: 'Adenosina', p: '29-30' },
+  t194: { f: 'mc-otras-taqui', id: 'mc-tabla-19-4', sitio: 'Tabla 19.4', p: 30 },
+  t212: { f: 'mc-paro-soporte', id: 'mc-tabla-21-2', sitio: 'Tabla 21.2', p: 56 },
+  insufl: { f: 'mc-paro-soporte', id: 'mc-insuflaciones', sitio: 'Insuflaciones rápidas', p: 58 },
+  desfib: { f: 'mc-paro-soporte', id: 'mc-desfibrilacion', sitio: 'Desfibrilación', p: '58-59' },
+  f211: { f: 'mc-paro-soporte', id: 'mc-fig-21-1', sitio: 'Fig. 21.1', p: 59 },
+  algoritmo: { f: 'mc-paro-soporte', id: 'mc-algoritmo-aha', sitio: 'Algoritmo', p: 59 },
+  adrenalina: { f: 'mc-paro-soporte', id: 'mc-epinefrina-paro', sitio: 'Adrenalina', p: '60-62' },
+  etco2: { f: 'mc-paro-monitorizacion', id: 'mc-etco2', sitio: 'ETCO₂', p: '62-63' },
+  f214: { f: 'mc-paro-monitorizacion', id: 'mc-fig-21-4', sitio: 'Fig. 21.4', p: 63 },
+  posparo: { f: 'mc-posresucitacion', id: 'mc-posparo', sitio: 'Periodo posreanimación', p: 64 },
+};
+
+/* ============================================================
+   2. Los dos dibujos (A y B) con los mismos nombres de camino
+   ============================================================ */
+// Caminos: p-sa-nav (nodo sinusal → nodo AV), p-aur-i (a la aurícula izquierda), p-lenta y p-rapida (las dos vías del
+// nodo AV), p-nav-his, p-rama-d, p-rama-i y p-acc (vía accesoria). Zonas: e-aurs, e-vents. Las chispas los recorren.
+const DIBUJO = {
+  A: `<defs><pattern id="trama" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><line x1="0" y1="0" x2="0" y2="6" stroke="rgba(196,154,74,.2)" stroke-width="1"/></pattern></defs>
+    <g id="e-aurs">
+      <ellipse cx="116" cy="96" rx="34" ry="28" fill="var(--bg-card)" stroke="var(--text-main)" stroke-width="1.6"/>
+      <ellipse cx="206" cy="96" rx="32" ry="26" fill="var(--bg-card)" stroke="var(--text-main)" stroke-width="1.6"/>
+      <ellipse class="destello" cx="116" cy="96" rx="27" ry="21" fill="var(--accent-yellow)" fill-opacity="0"/>
+      <ellipse class="destello" cx="206" cy="96" rx="25" ry="19" fill="var(--accent-yellow)" fill-opacity="0"/>
+      <text x="100" y="114" font-size="10" fill="var(--text-dim)">AD</text><text x="196" y="114" font-size="10" fill="var(--text-dim)">AI</text>
+    </g>
+    <g id="e-vents">
+      <path d="M84 126 C80 180 116 236 164 254 C212 236 248 180 244 126 Z" fill="url(#trama)" stroke="var(--text-main)" stroke-width="1.8"/>
+      <path d="M84 126 C80 180 116 236 164 254 C212 236 248 180 244 126 Z" fill="var(--bg-card)" fill-opacity=".5"/>
+      <path class="destello" d="M158 132 L158 236 C134 222 104 194 100 156 C99 144 102 134 112 132 Z M170 132 L170 234 C196 220 226 194 230 156 C231 144 228 134 218 132 Z" fill="var(--accent-yellow)" fill-opacity="0"/>
+      <path d="M158 132 L158 236 C134 222 104 194 100 156 C99 144 102 134 112 132 Z M170 132 L170 234 C196 220 226 194 230 156 C231 144 228 134 218 132 Z" fill="none" stroke="var(--text-main)" stroke-width=".8"/>
+      <text x="112" y="184" font-size="10" fill="var(--text-dim)">VD</text><text x="200" y="184" font-size="10" fill="var(--text-dim)">VI</text>
+    </g>
+    <g id="e-hilo" fill="none" stroke="var(--accent-yellow)" stroke-width="2.4" stroke-linecap="round" stroke-opacity=".55">
+      <path id="p-sa-nav" d="M100 74 C120 92 140 110 162 124"/>
+      <path id="p-aur-i" d="M100 74 C140 64 182 68 214 84"/>
+      <path id="p-nav-his" d="M162 124 L164 144"/>
+      <path id="p-rama-d" d="M164 144 C160 172 150 202 140 228 C126 226 110 200 104 166"/>
+      <path id="p-rama-i" d="M164 144 C168 172 176 202 188 230 C202 226 222 198 228 162"/>
+    </g>
+    <path id="p-acc" d="M226 106 C240 118 240 132 228 146" fill="none" stroke="var(--accent-red)" stroke-width="3" stroke-dasharray="4 3"/>
+    <text id="r-acc" x="226" y="174" font-size="9.5" fill="var(--accent-red)">vía accesoria</text>
+    <circle id="e-sa" cx="100" cy="74" r="5.5" fill="var(--accent-yellow)" stroke="var(--text-main)" stroke-width="1"/>
+    <text x="34" y="62" font-size="9.5" fill="var(--text-dim)">nodo sinusal</text>
+    <ellipse id="e-nav" cx="162" cy="124" rx="7" ry="5" fill="var(--accent-yellow)" stroke="var(--text-main)" stroke-width="1"/>
+    <text x="118" y="140" font-size="9.5" fill="var(--text-dim)">nodo AV</text>
+    <text id="e-his" x="170" y="146" font-size="9" fill="var(--text-muted)">His</text>
+    <g id="e-ramas"><text x="118" y="244" font-size="9" fill="var(--text-muted)">rama dcha.</text><text x="190" y="246" font-size="9" fill="var(--text-muted)">rama izda.</text></g>
+    <!-- la lupa del nodo AV, en el estilo del metro -->
+    <line x1="168" y1="125" x2="250" y2="108" stroke="var(--text-muted)" stroke-width=".8" stroke-dasharray="2 2"/>
+    <g id="e-lupa">
+      <circle cx="300" cy="88" r="54" fill="var(--bg-main)" stroke="var(--accent-yellow)" stroke-width="1.6"/>
+      <path d="M300 34 L300 46" stroke="var(--text-main)" stroke-width="4"/>
+      <path id="p-lenta" d="M300 46 C270 60 270 116 300 130" fill="none" stroke="var(--accent-purple)" stroke-width="5" stroke-linecap="round"/>
+      <path id="p-rapida" d="M300 46 C330 60 330 116 300 130" fill="none" stroke="var(--accent-green)" stroke-width="5" stroke-linecap="round"/>
+      <path d="M300 130 L300 140" stroke="var(--text-main)" stroke-width="4"/>
+      <circle cx="300" cy="46" r="4.5" fill="var(--text-main)"/><circle cx="300" cy="130" r="4.5" fill="var(--text-main)"/>
+      <text x="249" y="92" font-size="9" fill="var(--accent-purple)">lenta</text>
+      <text x="326" y="92" font-size="9" fill="var(--accent-green)">rápida</text>
+      <text id="r-bloqueo" x="282" y="92" font-size="10" fill="var(--accent-red)" font-weight="700" opacity="0">✕</text>
+    </g>
+    <text x="262" y="158" font-size="9.5" fill="var(--text-dim)">el nodo AV, de cerca</text>
+    <g id="chispas"></g>`,
+  B: `<g fill="none" stroke-linecap="round">
+      <rect id="e-aurs" x="14" y="62" width="96" height="64" rx="12" fill="var(--bg-card)" stroke="var(--border-color)"/>
+      <rect id="e-vents" x="250" y="40" width="100" height="136" rx="12" fill="var(--bg-card)" stroke="var(--border-color)"/>
+      <rect class="destello" x="14" y="62" width="96" height="64" rx="12" fill="var(--accent-yellow)" fill-opacity="0"/>
+      <rect class="destello" x="250" y="40" width="100" height="136" rx="12" fill="var(--accent-yellow)" fill-opacity="0"/>
+      <path id="p-sa-nav" d="M40 26 L40 94 L120 94" stroke="var(--accent-yellow)" stroke-width="6"/>
+      <path id="p-lenta" d="M120 94 C134 60 176 60 190 94" stroke="var(--accent-purple)" stroke-width="6"/>
+      <path id="p-rapida" d="M120 94 C134 128 176 128 190 94" stroke="var(--accent-green)" stroke-width="6"/>
+      <path id="p-nav-his" d="M190 94 L226 94" stroke="var(--accent-yellow)" stroke-width="6"/>
+      <path id="p-rama-d" d="M226 94 C240 94 248 66 300 66" stroke="var(--accent-yellow)" stroke-width="5"/>
+      <path id="p-rama-i" d="M226 94 C240 94 248 140 300 140" stroke="var(--accent-yellow)" stroke-width="5"/>
+      <path id="p-acc" d="M40 94 C40 200 230 214 300 150" stroke="var(--accent-red)" stroke-width="5" stroke-dasharray="7 4"/>
+    </g>
+    <g fill="var(--bg-main)" stroke="var(--text-main)" stroke-width="2">
+      <circle id="e-sa" cx="40" cy="26" r="8"/><circle cx="40" cy="94" r="7"/><circle id="e-nav" cx="120" cy="94" r="7"/><circle cx="190" cy="94" r="7"/>
+      <circle id="e-his" cx="226" cy="94" r="7"/><circle cx="300" cy="66" r="7"/><circle cx="300" cy="140" r="7"/>
+    </g>
+    <g font-size="9.5" fill="var(--text-dim)" font-family="system-ui, sans-serif">
+      <text x="54" y="30">Nodo sinusal</text><text x="50" y="80">Aurículas</text>
+      <text x="138" y="54" fill="var(--accent-purple)">vía lenta</text><text x="136" y="140" fill="var(--accent-green)">vía rápida</text>
+      <text x="128" y="160" font-size="9" fill="var(--text-muted)">el nodo AV</text>
+      <text x="214" y="82">His</text><text x="276" y="56">VD</text><text x="276" y="160">VI</text>
+      <text id="r-acc" x="100" y="206" fill="var(--accent-red)">vía accesoria (salta el nodo)</text>
+      <text id="r-bloqueo" x="148" y="100" font-size="12" fill="var(--accent-red)" font-weight="700" opacity="0">✕ bloqueado</text>
+    </g>
+    <g id="e-ramas"></g><g id="e-lupa"></g>
+    <g id="chispas"></g>`,
+};
+
+/* ============================================================
+   3. El motor: latidos, chispas y tiras (formas ilustrativas)
+   ============================================================ */
+// RR de la FA: un patrón fijo de media exacta 1 (ilustrativo), para que la FC de la tira sea la de la Fig. 19.5
+const PATRON_RR = [0.62, 1.31, 0.85, 1.12, 0.58, 1.40, 0.95, 1.17]; let iRR = 0; const factorRR = () => PATRON_RR[iRR++ % PATRON_RR.length];
+let semilla = 7; const azar = () => { semilla = (semilla * 16807) % 2147483647; return (semilla - 1) / 2147483646; };
+// Fig. 19.5 (p. 24): lectura del gráfico, FC media a las 0-6 h
+const F195 = { dilt: [139, 122, 103, 96, 91, 87, 87], amio: [136, 125, 115, 110, 105, 102, 101], digo: [138, 136, 125, 116, 109, 106, 108] };
+const NOMBRE_F = { dilt: 'diltiazem', amio: 'amiodarona', digo: 'digoxina' };
+const fcFig = (f, h) => { const a = F195[f], i = Math.min(5, Math.floor(h)), x = h - i; return a[i] + (a[i + 1] - a[i]) * x; };
+// Fig. 21.1 (p. 59): supervivencia según el minuto del primer choque (lectura del gráfico)
+const F211 = [[5, 40], [10, 29.5], [15, 19], [20, 9]];
+const sup211 = m => { if (m <= 5) return 40; if (m >= 20) return 9; let i = 0; while (F211[i + 1][0] < m) i++; const [x0, y0] = F211[i], [x1, y1] = F211[i + 1]; return y0 + (y1 - y0) * (m - x0) / (x1 - x0); };
+
+const sim = { t: 0, cambio: 0, prox: 0, latidos: [], chispas: [], destellos: { aur: -9, ven: -9 },
+  ritmo: 'sinusal', farmaco: null, horas: 0, adenoOn: null, adenoFin: null, vagalHasta: -1, wpwFa: false, wpwDilt: false, fvEn: null,
+  compresiones: false, insufl: 10, choqueEn: null, rceEn: null, minuto: 5, fcFA: null };
+const RITMOS = [['sinusal', 'Sinusal'], ['nodal', 'Reentrada nodal'], ['fa', 'Fibrilación auricular'], ['wpw', 'WPW'], ['fv', 'FV y RCP']];
+// El ritmo efectivo en un instante (con lo que haya pasado: adenosina, choque, FV inminente)
+function ritmoEn(t) {
+  const r = sim.ritmo;
+  if (r === 'nodal' && sim.adenoOn != null && t >= sim.adenoOn) return t < sim.adenoFin ? 'pausa' : 'sinusal';
+  if (r === 'wpw' && sim.fvEn != null && t >= sim.fvEn) return 'fv';
+  if (r === 'fv' && sim.rceEn != null && t >= sim.rceEn) return 'rce';
+  if (r === 'wpw') return sim.wpwFa ? 'wpw-fa' : 'wpw-sin';
+  return r;
+}
+function fcFA() { if (sim.fcFA) return sim.fcFA; return sim.farmaco ? fcFig(sim.farmaco, sim.horas) : 138; }
+// Un latido: dónde está su P, su QRS y por dónde corre la chispa
+function siguiente(t) {
+  const r = ritmoEn(t); let b = null, dt = 0.8;
+  const ch = [];
+  const normal = (t0, pr) => { ch.push(['p-sa-nav', t0, 0.12], ['p-aur-i', t0, 0.1], ['p-rapida', t0 + 0.06, 0.07], ['p-nav-his', t0 + pr - 0.03, 0.03], ['p-rama-d', t0 + pr, 0.07], ['p-rama-i', t0 + pr, 0.07]); };
+  if (r === 'sinusal' || r === 'rce') { dt = r === 'rce' ? 0.6 : 0.8; b = { t, P: true, pr: 0.16, qrs: 'n', vent: true }; normal(t, 0.16); }
+  else if (r === 'pausa') { dt = 0.8; b = { t, P: true, pr: 0.16, qrs: null, vent: false }; ch.push(['p-sa-nav', t, 0.12], ['p-aur-i', t, 0.1]); }
+  else if (r === 'nodal') {
+    dt = t < sim.vagalHasta ? 0.4 : 1 / 3;   // 180 lpm (140-250, p. 29); la maniobra vagal lo frena un momento
+    b = { t, P: false, qrs: 'n', vent: true, retro: true };
+    ch.push(['p-lenta', t - 0.27, 0.22], ['p-nav-his', t - 0.05, 0.05], ['p-rama-d', t, 0.07], ['p-rama-i', t, 0.07], ['p-rapida', t - 0.05, 0.12, true]);
+  } else if (r === 'fa') {
+    const m = 60 / fcFA(); dt = m * factorRR();
+    b = { t, P: false, qrs: 'n', vent: true }; ch.push(['p-nav-his', t - 0.03, 0.03], ['p-rama-d', t, 0.07], ['p-rama-i', t, 0.07]);
+  } else if (r === 'wpw-sin') {
+    dt = 0.8; b = { t, P: true, pr: 0.1, qrs: 'delta', vent: true };
+    ch.push(['p-sa-nav', t, 0.12], ['p-aur-i', t, 0.1], ['p-acc', t + 0.04, 0.06], ['p-rapida', t + 0.06, 0.07], ['p-nav-his', t + 0.13, 0.03], ['p-rama-d', t + 0.16, 0.07], ['p-rama-i', t + 0.16, 0.07]);
+  } else if (r === 'wpw-fa') {
+    dt = (60 / 185) * factorRR();
+    const porNodo = !sim.wpwDilt && azar() < 0.15;
+    b = { t, P: false, qrs: porNodo ? 'n' : 'ancho', vent: true };
+    if (porNodo) ch.push(['p-nav-his', t - 0.03, 0.03], ['p-rama-d', t, 0.07], ['p-rama-i', t, 0.07]); else ch.push(['p-acc', t - 0.06, 0.06]);
+  } else { dt = 0.25; }   // FV: no hay latidos
+  for (const c of ch) sim.chispas.push({ p: c[0], t0: c[1], d: c[2], rev: !!c[3] });
+  if (b) { const prev = [...sim.latidos].reverse().find(x => x.vent); b.rr = prev ? t - prev.t : 0.8; sim.latidos.push(b);
+    if (b.P || b.retro) sim.destellos.aur = Math.max(sim.destellos.aur, b.retro ? t + 0.02 : t);
+    if (b.vent) sim.destellos.ven = t + (b.P ? b.pr : 0); }
+  return dt;
+}
+function avanzar(hasta) {
+  while (sim.prox <= hasta) sim.prox += siguiente(sim.prox);
+  const viejo = hasta - 12; sim.latidos = sim.latidos.filter(b => b.t > viejo); sim.chispas = sim.chispas.filter(c => c.t0 + c.d > hasta - 1);
+}
+// Las señales en un instante
+function ecg(t) {
+  const r = ritmoEn(t); let v = 0;
+  if (r === 'fa' || r === 'wpw-fa') v += 0.05 * (Math.sin(2 * Math.PI * 6.3 * t) + 0.7 * Math.sin(2 * Math.PI * 8.1 * t + 1) + 0.5 * Math.sin(2 * Math.PI * 4.7 * t + 2));
+  if (r === 'fv') v += 0.45 * (Math.sin(2 * Math.PI * 4.6 * t) + 0.6 * Math.sin(2 * Math.PI * 5.9 * t + 1) + 0.4 * Math.sin(2 * Math.PI * 3.3 * t + 2)) * (0.7 + 0.3 * Math.sin(2 * Math.PI * 0.3 * t));
+  if (sim.ritmo === 'fv' && compresionesEn(t)) v += 0.35 * Math.pow(Math.max(0, Math.sin(2 * Math.PI * (110 / 60) * t)), 3);
+  if (sim.choqueEn != null && t >= sim.choqueEn && t < sim.choqueEn + 0.25) v += 2.2 * Math.exp(-(t - sim.choqueEn) / 0.05);
+  for (const b of sim.latidos) {
+    const tau = t - b.t; if (tau < -0.05 || tau > 0.9) continue;
+    const k = clamp(b.rr / 0.8, 0.45, 1), q0 = b.P ? b.pr : 0;
+    if (b.P) v += 0.13 * gauss(tau, 0.05, 0.022);
+    if (!b.qrs) continue;
+    if (b.qrs === 'n') v += -0.08 * gauss(tau, q0 - 0.02, 0.007) + 1.0 * gauss(tau, q0, 0.01) - 0.25 * gauss(tau, q0 + 0.022, 0.009) + 0.28 * gauss(tau, q0 + 0.26 * k, 0.05 * k);
+    else if (b.qrs === 'delta') v += 0.28 * clamp((tau - (q0 - 0.06)) / 0.06, 0, 1) * (tau < q0 + 0.02 ? 1 : 0) + 0.85 * gauss(tau, q0 + 0.02, 0.016) - 0.22 * gauss(tau, q0 + 0.06, 0.016) + 0.24 * gauss(tau, q0 + 0.3 * k, 0.05 * k);
+    else v += 0.85 * gauss(tau, q0 + 0.02, 0.03) - 0.45 * gauss(tau, q0 + 0.09, 0.03) - 0.25 * gauss(tau, q0 + 0.26 * k, 0.05 * k);
+  }
+  return v;
+}
+function compresionesEn(t) { return sim.compresiones && !(sim.choqueEn != null && t >= sim.choqueEn - 0.6 && t < sim.choqueEn + 0.2) && !(sim.rceEn != null && t >= sim.rceEn); }
+const pulso = tau => (tau < 0 ? 0 : tau < 0.1 ? Math.sin(tau / 0.1 * Math.PI / 2) : Math.exp(-(tau - 0.1) / 0.22));
+// Volumen latido según el llenado: un latido que llega pronto se llena poco (Fig. 19.4); en la FA, sin la patada auricular
+function amplitud(b) {
+  const r = ritmoEn(b.t), fa = r === 'fa' || r === 'wpw-fa';
+  return 46 * clamp((b.rr - 0.2) / 0.45, 0, 1) * (fa ? 0.8 : 1);
+}
+const PALPABLE = 12;   // mmHg de presión de pulso para notarlo en la muñeca (ilustrativo)
+function presion(t) {
+  const r = ritmoEn(t);
+  if (r === 'fv') { let p = 6; if (compresionesEn(t)) { const f = (t * 110 / 60) % 1; p += 24 * pulso(f * 60 / 110); } return p; }
+  let p = r === 'fa' || r === 'wpw-fa' ? 66 : 70;
+  if (r === 'rce') p = 20 + 50 * clamp((t - sim.rceEn) / 2, 0, 1);   // la presión vuelve en unos segundos (ilustrativo)
+  for (const b of sim.latidos) { if (!b.vent) continue; const tau = t - b.t - (b.P ? b.pr : 0) - 0.06; if (tau < 0 || tau > 1.2) continue; p += amplitud(b) * pulso(tau); }
+  if (r === 'pausa') p -= 10 * clamp((t - sim.adenoOn) / 1.5, 0, 1);
+  return p;
+}
+function etco2Valor(t) {
+  const r = ritmoEn(t);
+  if (r === 'rce') return 38;
+  if (r !== 'fv') return 36;
+  if (!compresionesEn(t)) return 4;
+  return sim.insufl === 30 ? 13 : 20;
+}
+function capno(t) {
+  const fr = sim.ritmo === 'fv' ? sim.insufl : 12, f = (t * fr / 60) % 1, alto = etco2Valor(t);
+  const meseta = sim.insufl === 30 && sim.ritmo === 'fv' ? 0.42 : 0.6;
+  if (f < 0.06) return alto * f / 0.06; if (f < meseta) return alto * (0.96 + 0.04 * (f - 0.06) / (meseta - 0.06)); if (f < meseta + 0.06) return alto * (1 - (f - meseta) / 0.06); return 0;
+}
+// Lo que se lee (de los últimos 8 s de latidos)
+function lecturas() {
+  const ven = clamp(sim.t - sim.cambio, 1.5, 8), vs = sim.latidos.filter(b => b.vent && b.t > sim.t - ven && b.t <= sim.t);
+  let fc = 0; if (vs.length >= 2) fc = Math.round(60 * (vs.length - 1) / (vs[vs.length - 1].t - vs[0].t)); else if (vs.length === 1 && sim.t - vs[0].t < 1.5) fc = Math.round(60 / vs[0].rr);
+  const pal = vs.filter(b => amplitud(b) >= PALPABLE).length, pul = vs.length ? Math.round(fc * pal / vs.length) : 0;
+  const r = ritmoEn(sim.t), ancho = vs.some(b => b.qrs === 'ancho' || b.qrs === 'delta');
+  return { fc, pul, def: Math.max(0, fc - pul), qrs: r === 'fv' ? '—' : ancho ? '>0,12 s' : '≤0,12 s', etco2: Math.round(etco2Valor(sim.t)), r };
+}
+
+/* ============================================================
+   4. Pintar: el dibujo, las chispas, las tiras y las lecturas
+   ============================================================ */
+let dir = 'A', pausado = false, ultimoT = 0, modo = 'explorar', tapado = false;
+const SEG = 4.2, GUT = 0;
+const TIRAS = { ecg: { svg: 't-ecg-svg', h: 84, rot: 'II', col: 'var(--accent-green)' }, pa: { svg: 't-pa-svg', h: 62, rot: 'PA', col: 'var(--accent-red)' }, co2: { svg: 't-co2-svg', h: 54, rot: 'ETCO₂', col: 'var(--accent-yellow)' } };
+let W = 340, NP = 340, buf = {}, cursor = 0, tMuestra = 0;
+function montarTiras() {
+  W = Math.max(200, Math.round($('t-ecg-svg').getBoundingClientRect().width || 340)); NP = W;
+  for (const [k, T] of Object.entries(TIRAS)) {
+    const s = $(T.svg); s.setAttribute('viewBox', `0 0 ${W} ${T.h}`); s.style.height = T.h + 'px';
+    let h = '';
+    if (k === 'ecg') {   // papel milimetrado: 0,04 s y 0,2 s
+      const px = W / SEG;
+      for (let x = 0, i = 0; x < W; x += px * 0.04, i++) h += `<line x1="${x.toFixed(1)}" y1="0" x2="${x.toFixed(1)}" y2="${T.h}" stroke="var(--accent-red)" stroke-opacity="${i % 5 ? .1 : .28}"/>`;
+      for (let y = T.h, i = 0; y > 0; y -= px * 0.04, i++) h += `<line x1="0" y1="${y.toFixed(1)}" x2="${W}" y2="${y.toFixed(1)}" stroke="var(--accent-red)" stroke-opacity="${i % 5 ? .1 : .28}"/>`;
+    }
+    h += `<rect x="0" y="0" width="${k === 'co2' ? 40 : 22}" height="13" fill="var(--bg-main)" fill-opacity=".85"/><text x="3" y="10" font-size="9.5" font-weight="600" fill="${T.col}" font-family="system-ui, sans-serif">${T.rot}</text>`;
+    h += `<g id="m-${k}"></g><path id="tr-${k}" fill="none" stroke="${T.col}" stroke-width="1.6" stroke-linejoin="round"/>`;
+    s.innerHTML = h; buf[k] = new Array(NP).fill(null);
+  }
+  buf.pz = new Array(NP).fill(false); cursor = 0;
+}
+const yEcg = v => 56 - v * 40, yPa = v => 60 - clamp(v, 0, 130) / 130 * 52, yCo2 = v => 52 - clamp(v, 0, 45) / 45 * 40;
+function muestra(t) {
+  buf.ecg[cursor] = yEcg(ecg(t)); buf.pa[cursor] = yPa(presion(t)); buf.co2[cursor] = yCo2(capno(t)); buf.pz[cursor] = enPausa(t);
+  cursor = (cursor + 1) % NP;
+  for (let j = 0; j < 7; j++) { const c = (cursor + j) % NP; buf.ecg[c] = buf.pa[c] = buf.co2[c] = null; buf.pz[c] = false; }
+}
+function pintarTiras() {
+  for (const k of Object.keys(TIRAS)) { const b = buf[k]; let d = '', on = false;
+    for (let x = 0; x < NP; x++) { const y = b[x]; if (y == null) { on = false; continue; } d += (on ? 'L' : 'M') + x + ' ' + y.toFixed(1); on = true; }
+    $('tr-' + k).setAttribute('d', d); }
+}
+function llenarEstatico(seg = SEG) {
+  // simula los últimos segundos de golpe: la tira entera, quieta
+  const paso = SEG / NP, t0 = sim.t; cursor = 0;
+  for (let i = 0; i < NP; i++) { const t = t0 - SEG + i * paso; avanzar(t + 1); buf.ecg[i] = yEcg(ecg(t)); buf.pa[i] = yPa(presion(t)); buf.co2[i] = yCo2(capno(t)); buf.pz[i] = enPausa(t); }
+  pintarTiras(); pintarChispas(true); marcarPausa();
+}
+// Las chispas: puntos de oro que recorren el hilo
+let caminos = {};
+function montarDibujo() {
+  $('escena-svg').innerHTML = DIBUJO[dir] || '';
+  $('escena-svg').setAttribute('viewBox', dir === 'B' ? '0 0 360 222' : '0 0 360 262');
+  caminos = {}; for (const id of ['p-sa-nav', 'p-aur-i', 'p-lenta', 'p-rapida', 'p-nav-his', 'p-rama-d', 'p-rama-i', 'p-acc']) { const p = $(id); if (p) caminos[id] = { el: p, L: p.getTotalLength() }; }
+  pintarEstadoDibujo();
+}
+function pintarEstadoDibujo() {
+  if (dir === 'C') return;
+  const r = ritmoEn(sim.t), wpw = sim.ritmo === 'wpw';
+  for (const id of ['p-acc', 'r-acc']) { const e = $(id); if (e) e.setAttribute('opacity', wpw ? 1 : 0); }
+  const bloq = (sim.ritmo === 'nodal' && r === 'pausa') || (wpw && sim.wpwDilt);
+  if ($('r-bloqueo')) $('r-bloqueo').setAttribute('opacity', bloq ? 1 : 0);
+  if ($('e-nav')) $('e-nav').setAttribute('fill', bloq ? 'var(--accent-red)' : 'var(--accent-yellow)');
+  const lupa = $('e-lupa'); if (lupa && dir === 'A') lupa.setAttribute('opacity', sim.ritmo === 'nodal' || sim.ritmo === 'sinusal' || sim.ritmo === 'wpw' ? 1 : 0.35);
+}
+function puntoEn(c, f) { const cam = caminos[c.p]; if (!cam) return null; const q = cam.el.getPointAtLength(cam.L * clamp(c.rev ? 1 - f : f, 0, 1)); return q; }
+function pintarChispas(estatico) {
+  if (dir === 'C') return;
+  const g = $('chispas'); if (!g) return;
+  let h = '';
+  const r = ritmoEn(sim.t);
+  if (estatico) {
+    // quieto: el camino de este ritmo, entero
+    const usados = new Set(sim.chispas.map(c => c.p));
+    for (const id of usados) { const cam = caminos[id]; if (!cam) continue; h += `<path d="${cam.el.getAttribute('d')}" stroke="var(--accent-blue)" stroke-width="4.5" stroke-opacity=".8" fill="none" stroke-linecap="round"/>`; }
+  } else {
+    for (const c of sim.chispas) { const f = (sim.t - c.t0) / c.d; if (f < 0 || f > 1) continue; const q = puntoEn(c, f); if (q) h += `<circle cx="${q.x.toFixed(1)}" cy="${q.y.toFixed(1)}" r="4.2" fill="var(--accent-blue)" stroke="var(--text-main)" stroke-width="1"/>`; }
+  }
+  // caos: FA en las aurículas, FV en los ventrículos (dibujo: fisiología general)
+  const caos = (cx, cy, rx, ry, n, vel) => { for (let i = 0; i < n; i++) { const a = sim.t * vel * (1 + i * 0.17) + i * 2.1, b = sim.t * vel * (0.8 + i * 0.13) + i; h += `<circle cx="${(cx + rx * Math.sin(a)).toFixed(1)}" cy="${(cy + ry * Math.cos(b)).toFixed(1)}" r="2.6" fill="var(--accent-blue)" fill-opacity=".85"/>`; } };
+  const enFA = r === 'fa' || r === 'wpw-fa';
+  if (enFA) { if (dir === 'A') { caos(116, 96, 22, 16, 5, 3.1); caos(206, 96, 20, 15, 5, 2.7); } else caos(62, 94, 36, 22, 8, 2.9); }
+  if (r === 'fv') { if (dir === 'A') { caos(132, 180, 24, 36, 7, 3.4); caos(200, 180, 24, 36, 7, 3.0); } else caos(300, 108, 36, 52, 12, 3.2); }
+  g.innerHTML = h;
+  // destellos de despolarización
+  const da = clamp(1 - (sim.t - sim.destellos.aur) / 0.25, 0, 1), dv = clamp(1 - (sim.t - sim.destellos.ven) / 0.3, 0, 1);
+  const ds = document.querySelectorAll('#escena-svg .destello');
+  if (ds[0]) { ds[0].setAttribute('fill-opacity', ((enFA ? 0.12 : da * 0.4) || 0).toFixed(2)); }
+  if (dir === 'A') { if (ds[1]) ds[1].setAttribute('fill-opacity', ((enFA ? 0.12 : da * 0.4) || 0).toFixed(2)); if (ds[2]) ds[2].setAttribute('fill-opacity', (r === 'fv' ? 0.1 : dv * 0.35).toFixed(2)); }
+  else if (ds[1]) ds[1].setAttribute('fill-opacity', (r === 'fv' ? 0.1 : dv * 0.35).toFixed(2));
+  pintarEstadoDibujo();
+}
+// Marcas en la tira: la pausa de la adenosina y la onda delta
+const enPausa = t => sim.ritmo === 'nodal' && ritmoEn(t) === 'pausa';
+function marcarPausa() {
+  const m = $('m-ecg'); if (!m || !buf.pz) return; let h = '', x0 = -1, mejor = null;
+  for (let x = 0; x <= NP; x++) { const on = x < NP && buf.pz[x];
+    if (on && x0 < 0) x0 = x;
+    if (!on && x0 >= 0) { h += `<rect class="m-pausa" x="${x0}" y="2" width="${x - x0}" height="80" fill="var(--accent-red)" fill-opacity=".12" stroke="var(--accent-red)" stroke-dasharray="3 3"/>`; if (!mejor || x - x0 > mejor[1] - mejor[0]) mejor = [x0, x]; x0 = -1; } }
+  if (mejor && mejor[1] - mejor[0] > 56) h += `<text x="${mejor[0] + 3}" y="78" font-size="9" fill="var(--accent-red)" font-family="system-ui, sans-serif">P sin QRS</text>`;
+  m.innerHTML = h;
+}
+let ultimoLect = 0;
+function bucle(ts) {
+  if (!ultimoT) ultimoT = ts;
+  const dt = Math.min(0.1, (ts - ultimoT) / 1000); ultimoT = ts;
+  if (!pausado && !REDUCIR) {
+    const paso = SEG / NP; tMuestra += dt;
+    while (tMuestra >= paso) { sim.t += paso; avanzar(sim.t + 1); muestra(sim.t); tMuestra -= paso; }
+    pintarTiras(); pintarChispas(false); marcarPausa();
+    if (ts - ultimoLect > 400) { ultimoLect = ts; pintarLecturas(); vigilarEventos(); }
+  }
+  requestAnimationFrame(bucle);
+}
+// Lo que cambia de estado solo (la adenosina acaba, la FV llega, el pulso vuelve)
+let ritmoMostrado = null;
+function vigilarEventos() { const r = ritmoEn(sim.t); if (r !== ritmoMostrado) { if (ritmoMostrado) sim.cambio = sim.t; ritmoMostrado = r; pintarFrase(); pintarDock(); pintarGraficas(); pintarFuentes(); } }
+
+/* ============================================================
+   5. Lecturas, gráficas vivas y frase
+   ============================================================ */
+function pintarLecturas() {
+  const L = lecturas(), parada = sim.ritmo === 'fv', tap = tapado;
+  const cel = (k, et, v, u, t, cls = '') => `<div class="celda ${cls}${tap ? ' oculto' : ''}" data-cel="${k}"><span class="k"><span>${et}</span></span><span class="g">${tap ? '?' : v}<small>${u}</small></span><span class="t">${t}</span></div>`;
+  let h = cel('fc', 'FC en el ECG', L.fc, 'lpm', 'ilustrativo') + cel('pulso', 'Pulso', parada && L.r === 'fv' ? 0 : L.pul, 'lpm', 'el que llega a la muñeca') +
+    cel('deficit', 'Déficit', L.r === 'fv' ? '—' : L.def, 'lpm', 'Fig. 19.4, p. 22', L.def > 4 ? 'no' : '');
+  h += parada ? cel('etco2', 'ETCO₂', L.etco2, 'mmHg', 'ilustrativo') : cel('qrs', 'QRS', L.qrs, '', 'corte 0,12 s, p. 18');
+  $('lecturas').innerHTML = h;
+}
+function pintarGraficas() {
+  const r = sim.ritmo; let h = '';
+  if (tapado) { $('graficas').innerHTML = ''; return; }
+  if (r === 'fa') h += grafica195();
+  if (r === 'fv') h += grafica211() + grafica214();
+  $('graficas').innerHTML = h;
+}
+const x195 = h => 34 + h / 6 * 300, y195 = f => 112 - (f - 80) / 60 * 96;
+function grafica195() {
+  let s = `<svg id="g195" viewBox="0 0 360 140" role="img" aria-label="Frecuencia cardíaca en las 6 horas tras el fármaco">`;
+  for (let f = 80; f <= 140; f += 20) s += `<line x1="34" x2="334" y1="${y195(f)}" y2="${y195(f)}" stroke="var(--border-color)" stroke-opacity=".5"/><text x="30" y="${y195(f) + 3}" text-anchor="end" font-size="9" fill="var(--text-muted)" font-family="system-ui, sans-serif">${f}</text>`;
+  for (let h = 0; h <= 6; h++) s += `<text x="${x195(h)}" y="128" text-anchor="middle" font-size="9" fill="var(--text-muted)" font-family="system-ui, sans-serif">${h} h</text>`;
+  s += `<line x1="34" x2="334" y1="${y195(100)}" y2="${y195(100)}" stroke="var(--accent-yellow)" stroke-dasharray="4 3"/>`;
+  const col = { dilt: 'var(--accent-red)', amio: 'var(--accent-yellow)', digo: 'var(--accent-green)' };
+  const yfin = { dilt: y195(87) + 3, amio: y195(101) - 6, digo: y195(108) - 8 };
+  for (const k of ['dilt', 'amio', 'digo']) {
+    const sel = sim.farmaco === k;
+    s += `<polyline points="${F195[k].map((f, i) => `${x195(i)},${y195(f).toFixed(1)}`).join(' ')}" fill="none" stroke="${col[k]}" stroke-width="${sel ? 3 : 1.6}" stroke-opacity="${sim.farmaco && !sel ? .45 : 1}"/>`;
+  }
+  s += `<text x="40" y="${y195(100) - 3}" font-size="9" fill="var(--accent-yellow)" font-family="system-ui, sans-serif">100 lpm</text>`;
+  if (sim.farmaco && !tapado) s += `<circle cx="${x195(sim.horas)}" cy="${y195(fcFig(sim.farmaco, sim.horas)).toFixed(1)}" r="5" fill="var(--text-main)" stroke="var(--bg-main)" stroke-width="2"/>`;
+  s += `</svg>`;
+  const ley = ['dilt', 'amio', 'digo'].map(k => `<span style="white-space:nowrap"><span style="display:inline-block;width:16px;height:3px;vertical-align:3px;background:${col[k]}"></span> ${NOMBRE_F[k]}${sim.farmaco === k ? ' (el elegido)' : ''}</span>`).join(' · ');
+  return `<div class="grafica"><p>La Fig. 19.5, viva: la FC de la FA tras cada fármaco ${org('lectura del gráfico · ficha · p. 24')}</p>${s}<p>${ley}</p></div>`;
+}
+const x211 = m => 34 + m / 22 * 300, y211 = s => 88 - s / 50 * 76;
+function grafica211() {
+  let s = `<svg id="g211" viewBox="0 0 360 108" role="img" aria-label="Supervivencia según el minuto del primer choque">`;
+  for (let v = 0; v <= 50; v += 25) s += `<line x1="34" x2="334" y1="${y211(v)}" y2="${y211(v)}" stroke="var(--border-color)" stroke-opacity=".5"/><text x="30" y="${y211(v) + 3}" text-anchor="end" font-size="9" fill="var(--text-muted)" font-family="system-ui, sans-serif">${v} %</text>`;
+  for (const m of [5, 10, 15, 20]) s += `<text x="${x211(m)}" y="102" text-anchor="middle" font-size="9" fill="var(--text-muted)" font-family="system-ui, sans-serif">min ${m}</text>`;
+  s += `<polyline points="${F211.map(([m, v]) => `${x211(m)},${y211(v)}`).join(' ')}" fill="none" stroke="var(--accent-red)" stroke-width="2"/>`;
+  s += F211.map(([m, v]) => `<circle cx="${x211(m)}" cy="${y211(v)}" r="3" fill="var(--accent-red)"/>`).join('');
+  const sv = sup211(sim.minuto);
+  s += `<circle cx="${x211(sim.minuto)}" cy="${y211(sv)}" r="6" fill="var(--text-main)" stroke="var(--bg-main)" stroke-width="2"/><text x="${clamp(x211(sim.minuto) + 9, 40, 290)}" y="${y211(sv) - 6}" font-size="10" font-weight="700" fill="var(--text-main)" font-family="system-ui, sans-serif">${Math.round(sv)} %</text></svg>`;
+  return `<div class="grafica"><p>Si el primer choque llega en el minuto ${sim.minuto}: sobrevive ~${Math.round(sv)} % ${org('lectura de la Fig. 21.1 · ficha · p. 59')}</p>${s}</div>`;
+}
+const x214 = m => 34 + m / 22 * 300, y214 = v => 92 - v / 40 * 80;
+function grafica214() {
+  let s = `<svg id="g214" viewBox="0 0 360 112" role="img" aria-label="ETCO2 durante la RCP, con y sin recuperación del pulso">`;
+  for (let v = 0; v <= 40; v += 20) s += `<line x1="34" x2="334" y1="${y214(v)}" y2="${y214(v)}" stroke="var(--border-color)" stroke-opacity=".5"/><text x="30" y="${y214(v) + 3}" text-anchor="end" font-size="9" fill="var(--text-muted)" font-family="system-ui, sans-serif">${v}</text>`;
+  for (const m of [0, 10, 20]) s += `<text x="${x214(m)}" y="106" text-anchor="middle" font-size="9" fill="var(--text-muted)" font-family="system-ui, sans-serif">min ${m}</text>`;
+  s += `<rect x="${x214(19)}" y="${y214(15)}" width="${x214(21) - x214(19)}" height="${y214(10) - y214(15)}" fill="var(--accent-yellow)" fill-opacity=".35"/>`;
+  s += `<polyline points="${[[0, 27], [10, 25], [15, 28], [20, 32]].map(([m, v]) => `${x214(m)},${y214(v)}`).join(' ')}" fill="none" stroke="var(--accent-green)" stroke-width="2"/>`;
+  s += `<polyline points="${[[1, 19], [10, 9], [15, 8], [20, 7]].map(([m, v]) => `${x214(m)},${y214(v)}`).join(' ')}" fill="none" stroke="var(--accent-red)" stroke-width="2"/>`;
+  s += `<g font-size="9" font-family="system-ui, sans-serif"><text x="${x214(1)}" y="${y214(36)}" fill="var(--accent-green)">recuperan el pulso</text><text x="${x214(11)}" y="${y214(13) + 2}" fill="var(--accent-red)">no lo recuperan</text><text x="${x214(16.2)}" y="${y214(12.5)}" fill="var(--accent-yellow)">10-15</text></g></svg>`;
+  return `<div class="grafica"><p>La ETCO₂ en 20 min de RCP: si no pasa de 10-15 mmHg, el pulso no suele volver ${org('lectura de la Fig. 21.4 · ficha · p. 63')}</p>${s}</div>`;
+}
+const FRASES = {
+  sinusal: ['Un solo director: el nodo sinusal. Cada P trae su QRS, y el QRS es estrecho.', 'ficha · p. 18-19'],
+  nodal: ['La chispa da vueltas dentro del nodo AV: cada vuelta, un latido. Regular, estrecho y sin P.', 'ficha · p. 29'],
+  pausa: ['La adenosina bloquea el nodo unos segundos: salen P sin QRS. El circuito, que pasaba por el nodo, se rompe.', 'ficha · p. 29-30'],
+  fa: ['Sin director: la aurícula tiembla y no empuja. Los latidos que llegan muy juntos no llegan a la muñeca.', 'ficha · p. 20-22'],
+  'wpw-sin': ['Un atajo entre aurícula y ventrículo: PR corto y onda delta antes del QRS.', 'ficha · p. 27'],
+  'wpw-fa': ['FA con una vía accesoria: los fármacos que frenan el nodo no frenan la vía.', 'ficha · p. 28'],
+  fv: ['Los ventrículos tiemblan sin orden: no hay latido ni pulso. Compresiones ya y el choque cuanto antes.', 'ficha · p. 56-59'],
+  rce: ['Ha vuelto el pulso y la ETCO₂ sube. Es el principio: ahora empieza el síndrome posparo.', 'ficha · p. 62-64'],
+};
+function pintarFrase() {
+  const r = ritmoEn(sim.t); let [t, o] = FRASES[r === 'sinusal' && sim.ritmo === 'nodal' ? 'sinusal' : r] || FRASES.sinusal, extra = '';
+  if (sim.ritmo === 'nodal' && r === 'sinusal' && sim.adenoOn != null) { t = 'Vuelve el sinusal: la reentrada se cortó. Con 6 y luego 12 mg, más del 90 % se cortan.'; o = 'ficha · p. 30'; }
+  if (sim.ritmo === 'nodal' && sim.t < sim.vagalHasta) extra = ' La maniobra vagal frena el nodo un momento; esta vez no corta el circuito (Valsalva 24 %, masaje carotídeo 9 %, Valsalva modificada 44 %, p. 29).';
+  if (r === 'fa' && sim.farmaco) extra = ` Con ${NOMBRE_F[sim.farmaco]}, a las ${coma(sim.horas, 1)} h la FC es ~${Math.round(fcFig(sim.farmaco, sim.horas))} lpm (Fig. 19.5).`;
+  if (sim.ritmo === 'wpw' && sim.wpwDilt && r !== 'fv') extra = ' El diltiazem frena el nodo, pero la vía no se frena: la frecuencia no baja.';
+  if (r === 'fv' && sim.compresiones) extra = sim.insufl === 30 ? ' A 30 insuflaciones/min no da tiempo a vaciar el pulmón: la ETCO₂ cae.' : ' La ETCO₂ es el gasto que consiguen tus manos.';
+  if (sim.ritmo === 'fv' && r === 'fv' && sim.choqueEn != null && sim.t > sim.choqueEn) extra += ' Tras el choque, 2 min de compresiones antes de mirar el ritmo (aquí, unos segundos).';
+  $('frase-txt').innerHTML = `${t} ${org(o)}${extra}`;
+  const p = $('peligro');
+  p.hidden = !(sim.ritmo === 'wpw' && sim.wpwDilt);
+  if (!p.hidden) p.innerHTML = r === 'fv' ? '⚠ El bloqueo selectivo del nodo precipitó una FV (lo que la fuente advierte, p. 28). El ritmo y su momento: ilustrativos.' : '⚠ Peligro: con una vía accesoria, el bloqueo del nodo puede precipitar una FV (p. 28). No se da diltiazem, betabloqueante ni digoxina.';
+  medirDock();
+}
+
+/* ============================================================
+   6. Explicación guiada por estado (señala el dibujo; en C, la tira)
+   ============================================================ */
+const GUIAS = {
+  sinusal: { tit: 'Ritmo sinusal', pasos: [
+    { t: 'El nodo sinusal dispara y la chispa recorre las aurículas: es la onda P.', r: ['#e-sa', '#e-aurs'], rc: ['#t-ecg-svg'], c: C.regular, org: 'el recorrido: fisiología general' },
+    { t: 'En el nodo AV la chispa se frena un instante (el PR) y pasa al His y sus ramas.', r: ['#e-nav', '#p-nav-his'], rc: ['#t-ecg-svg'], c: C.hallazgos, org: 'fisiología general' },
+    { t: 'Por el His y las ramas, el ventrículo se activa deprisa: QRS estrecho, de 0,12 s o menos. Una P antes de cada QRS y el RR regular.', r: ['#p-rama-d', '#p-rama-i', '[data-cel="qrs"]'], rc: ['#t-ecg-svg', '[data-cel="qrs"]'], c: C.hallazgos }] },
+  nodal: { tit: 'Reentrada en el nodo AV', pasos: [
+    { t: 'Un latido auricular prematuro entra en el nodo AV, que tiene dos vías.', r: ['#e-lupa', '#p-lenta', '#p-rapida'], rc: ['#t-ecg-svg'], c: C.psvt },
+    { t: 'Una vía conduce más despacio y tiene otro periodo refractario: la chispa baja por una y vuelve por la otra. Es la reentrada, y se sostiene sola.', r: ['#p-lenta', '#p-rapida'], rc: ['#t-ecg-svg'], c: C.psvt, org: 'qué vía baja y cuál sube: fisiología general' },
+    { t: 'Cada vuelta manda un latido a los ventrículos: QRS estrecho y regular, a 140-250 lpm, a menudo sin P visibles.', r: ['#p-nav-his', '#e-vents'], rc: ['#t-ecg-svg', '[data-cel="fc"]'], c: C.f192 },
+    { t: 'Empieza de golpe; la taquicardia sinusal acelera poco a poco. Primero, maniobras vagales; si no cortan, adenosina.', r: ['#e-nav'], rc: ['#t-ecg-svg'], c: C.psvt }] },
+  pausa: { tit: 'La adenosina', pasos: [
+    { t: '6 mg en bolo rápido por una vena periférica, y lavado con suero. Actúa en menos de 30 s.', r: ['#e-nav'], rc: ['#t-ecg-svg'], c: C.t194 },
+    { t: 'Bloquea el nodo AV un momento: en la tira salen ondas P sin QRS. El circuito, que pasaba por el nodo, se rompe.', r: ['#e-nav', '#e-lupa', '.m-pausa'], rc: ['.m-pausa'], c: C.adeno },
+    { t: 'La pausa asusta pero dura poco: el efecto dura 1-2 min y el bloqueo se va solo en unos 60 s (no responde a la atropina). Aquí el tiempo va comprimido.', r: ['.m-pausa'], rc: ['.m-pausa'], c: C.adeno, org: 'tiempo: ilustrativo' },
+    { t: 'Vuelve el sinusal. Con 6 mg y luego 12 mg, se cortan más del 90 % de las reentradas. Por una vía central, la mitad de la dosis.', r: ['#e-sa'], rc: ['#t-ecg-svg'], c: C.t194 }] },
+  fa: { tit: 'Fibrilación auricular', pasos: [
+    { t: 'Las aurículas no tienen director: actividad desorganizada, ondas de fibrilación y ninguna P.', r: ['#e-aurs'], rc: ['#t-ecg-svg'], c: C.irregular, org: 'el dibujo de las ondas: fisiología general' },
+    { t: 'El nodo AV deja pasar chispas a destiempo: el RR es irregular y el QRS, estrecho.', r: ['#e-nav'], rc: ['#t-ecg-svg'], c: C.irregular, org: 'el nodo como filtro: fisiología general' },
+    { t: 'Sin la contracción de la aurícula, el ventrículo pierde ~25 % de su llenado. Se nota si ya se llena mal: estenosis mitral o hipertrofia.', r: ['#e-aurs'], rc: ['#t-pa-svg'], c: C.faCons },
+    { t: 'Dos latidos muy juntos: el ventrículo no se llena y la sistólica cae. Algunos no llegan a la muñeca: es el déficit de pulso.', r: ['#t-pa-svg', '[data-cel="deficit"]'], rc: ['#t-pa-svg', '[data-cel="deficit"]'], c: C.f194 },
+    { t: 'Un punto final del control de la frecuencia: que desaparezca el déficit de pulso. Prueba un fármaco abajo.', r: ['[data-cel="deficit"]'], rc: ['[data-cel="deficit"]'], c: C.final }] },
+  'fa-f': { tit: 'FA: el fármaco y las horas', pasos: [
+    { t: () => ({ dilt: 'Diltiazem 0,25 mg/kg IV en 2 min y luego 5-15 mg/h. En una hora controla al 55 %; la perfusión, hasta al 90 %.', amio: 'Amiodarona 150 mg IV en 10 min, luego 1 mg/min 6 h y 0,5 mg/min 18 h; no más de 2,2 g en 24 h. Deprime menos el corazón.', digo: 'Digoxina 0,25 mg IV cada 2 h hasta 1,5 mg. Lenta: no se usa sola para el control agudo.' })[sim.farmaco], r: ['#e-nav'], rc: ['#t-ecg-svg'], c: C.t191 },
+    { t: 'La Fig. 19.5: el diltiazem cruza los 100 lpm hacia las 2-2,5 h; la amiodarona y la digoxina no bajan de 100 en 6 h.', r: ['#g195'], rc: ['#g195'], c: C.f195, org: 'lectura del gráfico' },
+    { t: 'Al bajar la FC, los latidos se espacian, el ventrículo se llena y el déficit de pulso se va.', r: ['#t-pa-svg', '[data-cel="deficit"]'], rc: ['#t-pa-svg', '[data-cel="deficit"]'], c: C.final, org: 'cuánto: ilustrativo' },
+    { t: 'El precio: el diltiazem da hipotensión en el 20-30 % y es inotrópico negativo; la amiodarona, mucho menos.', r: ['#t-pa-svg'], rc: ['#t-pa-svg'], c: C.dilt }] },
+  'wpw-sin': { tit: 'Wolff-Parkinson-White', pasos: [
+    { t: 'Además del camino normal hay una vía accesoria: un atajo entre aurícula y ventrículo que no pasa por el freno del nodo.', r: ['#p-acc'], rc: ['#t-ecg-svg'], c: C.wpw, org: 'su dibujo: fisiología general (ver la nota)' },
+    { t: 'Parte del ventrículo se activa antes: PR corto y onda delta antes del QRS.', r: ['#p-acc', '#e-vents'], rc: ['#t-ecg-svg'], c: C.wpw },
+    { t: 'Da taquicardias supraventriculares que vuelven; su mecanismo es la reentrada. Y si llega una FA, el atajo cambia todo: pruébalo abajo.', r: ['#p-acc', '#e-nav'], rc: ['#t-ecg-svg'], c: C.wpw }] },
+  'wpw-fa': { tit: 'FA con una vía accesoria', pasos: [
+    { t: 'Las aurículas fibrilan, y el atajo deja pasar las chispas sin freno.', r: ['#e-aurs', '#p-acc'], rc: ['#t-ecg-svg'], c: C.wpw },
+    { t: 'Los fármacos que frenan el nodo (antagonistas del calcio, betabloqueantes, digoxina) no frenan la vía: la frecuencia no baja.', r: ['#e-nav', '#p-acc'], rc: ['[data-cel="fc"]'], c: C.wpw },
+    { t: 'Peor: el bloqueo selectivo del nodo puede precipitar una FV.', r: ['#e-vents'], rc: ['#t-ecg-svg'], c: C.wpw },
+    { t: 'Por eso, en la FA con WPW: cardioversión eléctrica, o amiodarona o procainamida.', r: ['#e-vents'], rc: ['#t-ecg-svg'], c: C.wpw }] },
+  fv: { tit: 'Fibrilación ventricular', pasos: [
+    { t: 'Los ventrículos se activan sin orden: no hay latido y la presión se aplana.', r: ['#e-vents', '#t-pa-svg'], rc: ['#t-ecg-svg', '#t-pa-svg'], c: C.desfib, org: 'fisiología general' },
+    { t: 'Es un ritmo desfibrilable. Compresiones en menos de 10 s: 5-6 cm de profundidad, 100-120 por minuto.', r: ['#t-pa-svg'], rc: ['#t-pa-svg'], c: C.t212 },
+    { t: 'El choque, cuanto antes: con el primero a los 5 min sobrevive el 40 %; a los 20 min, menos del 10 %.', r: ['#g211'], rc: ['#g211'], c: C.f211, org: 'lectura del gráfico' },
+    { t: 'Tras cada choque, 2 min de compresiones antes de mirar el ritmo. Si hace falta un segundo choque, adrenalina 1 mg cada 3-5 min; si hace falta un tercero, amiodarona 300 mg.', r: ['#t-ecg-svg'], rc: ['#t-ecg-svg'], c: C.algoritmo }] },
+  rcp: { tit: 'La RCP y la ETCO₂', pasos: [
+    { t: 'Tus manos dan un flujo pequeño: mira la presión con cada compresión.', r: ['#t-pa-svg'], rc: ['#t-pa-svg'], c: C.t212, org: 'cuánto: ilustrativo' },
+    { t: 'La ETCO₂ sigue al gasto: con la ventilación fija, cambia en la misma proporción.', r: ['#t-co2-svg', '[data-cel="etco2"]'], rc: ['#t-co2-svg', '[data-cel="etco2"]'], c: C.etco2 },
+    { t: 'Ventilar deprisa (30 por minuto, el triple) no deja vaciar el pulmón: PEEP intrínseca, menos retorno y menos presión de perfusión coronaria.', r: ['#t-co2-svg'], rc: ['#t-co2-svg'], c: C.insufl },
+    { t: 'Si a los 20 min la ETCO₂ no pasa de 10-15 mmHg, es improbable que vuelva el pulso.', r: ['#g214'], rc: ['#g214'], c: C.f214, org: 'lectura del gráfico' }] },
+  rce: { tit: 'Vuelve el pulso', pasos: [
+    { t: 'Tras el choque y las compresiones, el nodo sinusal vuelve a mandar: P, QRS y pulso.', r: ['#e-sa', '#t-ecg-svg'], rc: ['#t-ecg-svg'], c: C.desfib },
+    { t: 'La ETCO₂ sube de golpe: el gasto ha vuelto.', r: ['#t-co2-svg'], rc: ['#t-co2-svg'], c: C.etco2, org: 'cuánto: ilustrativo' },
+    { t: 'Es el principio: cerca del 70 % de los que recuperan el pulso no sobreviven a la hospitalización.', r: ['#t-ecg-svg'], rc: ['#t-ecg-svg'], c: C.posparo }] },
+};
+function claveGuia() {
+  const r = ritmoEn(sim.t);
+  if (r === 'fa' && sim.farmaco) return 'fa-f';
+  if (r === 'fv' && sim.compresiones) return 'rcp';
+  if (sim.ritmo === 'nodal' && sim.adenoOn != null) return 'pausa';
+  return GUIAS[r] ? r : 'sinusal';
+}
+let guia = null, gi = 0;
+function abrirGuia() { guia = GUIAS[claveGuia()]; gi = 0; $('dock-explorar').hidden = true; $('dock-guia').hidden = false; $('frase').hidden = true; pintarGuia(); }
+function cerrarGuia() { borrarSenal(); guia = null; $('dock-guia').hidden = true; $('frase').hidden = false; $('dock-explorar').hidden = modo !== 'explorar'; $('dock-estudio').hidden = modo !== 'preguntas'; medirDock(); }
+function pintarGuia() {
+  const p = guia.pasos[gi], n = guia.pasos.length, txt = typeof p.t === 'function' ? p.t() : p.t;
+  $('dock-guia').innerHTML = `<div class="guia entra"><div class="guia-cab"><span class="guia-n">Paso ${gi + 1} de ${n}</span><span class="guia-tit">${guia.tit}</span><button type="button" class="guia-x" id="guia-x" aria-label="Cerrar la explicación">×</button></div>
+    <p class="guia-txt">${txt}${p.org ? ' ' + `<span class="guia-org">${p.org}</span>` : ''}</p>${cita(p.c)}
+    <div class="guia-nav"><button type="button" class="guia-b" id="guia-ant" ${gi === 0 ? 'disabled' : ''}>← Atrás</button><span class="guia-puntos">${guia.pasos.map((_, i) => `<i class="${i < gi ? 'hecho' : i === gi ? 'aqui' : ''}"></i>`).join('')}</span><button type="button" class="guia-b prim" id="guia-sig">${gi === n - 1 ? 'Hecho' : 'Siguiente →'}</button></div></div>`;
+  $('guia-x').onclick = cerrarGuia; $('guia-ant').onclick = () => { gi--; pintarGuia(); };
+  $('guia-sig').onclick = () => { if (gi === n - 1) cerrarGuia(); else { gi++; pintarGuia(); } };
+  medirDock(); requestAnimationFrame(() => senalar(dir === 'C' ? p.rc : p.r));
+}
+function borrarSenal() { document.querySelectorAll('.guia-anillo').forEach(e => e.remove()); document.querySelectorAll('.guia-marco').forEach(e => e.classList.remove('guia-marco')); }
+function senalar(sels) {
+  borrarSenal(); let primero = null;
+  for (const s of sels || []) for (const el of document.querySelectorAll(s)) {
+    if (!el.getClientRects().length) continue;
+    const svg = el.ownerSVGElement;
+    if (svg) {
+      let b; try { b = el.getBBox(); } catch { continue; }
+      if (!b.width && !b.height) continue;
+      const m = svg.getScreenCTM().inverse().multiply(el.getScreenCTM());
+      const pts = [b.x, b.x + b.width].flatMap(x => [b.y, b.y + b.height].map(y => [m.a * x + m.c * y + m.e, m.b * x + m.d * y + m.f]));
+      const x0 = Math.min(...pts.map(p => p[0])), x1 = Math.max(...pts.map(p => p[0])), y0 = Math.min(...pts.map(p => p[1])), y1 = Math.max(...pts.map(p => p[1]));
+      const r = document.createElementNS(NS, 'rect'); r.setAttribute('class', 'guia-anillo');
+      r.setAttribute('x', x0 - 4); r.setAttribute('y', y0 - 4); r.setAttribute('width', x1 - x0 + 8); r.setAttribute('height', y1 - y0 + 8); r.setAttribute('rx', 8);
+      svg.appendChild(r); primero = primero || r;
+    } else { el.classList.add('guia-marco'); primero = primero || el; }
+  }
+  if (primero) { const caja = primero.getBoundingClientRect(), alto = innerHeight - $('dock').offsetHeight;
+    if (caja.top < 8 || caja.bottom > alto - 8) scrollBy({ top: caja.top - Math.max(8, (alto - caja.height) / 2), behavior: REDUCIR ? 'auto' : 'smooth' }); }
+}
+$('explicame').addEventListener('click', abrirGuia);
+
+/* ============================================================
+   7. Mandos (dock) según el ritmo
+   ============================================================ */
+function pintarDock() {
+  const r = sim.ritmo, h = [], ef = ritmoEn(sim.t);
+  if (r === 'sinusal') h.push(`<p class="dock-nota" style="padding:8px 0">Elige un ritmo arriba. En cada uno, aquí salen sus tratamientos.</p>`);
+  if (r === 'nodal') {
+    h.push(`<div class="rejilla" style="--n:3"><button type="button" class="tog" data-acc="vagal">Maniobra vagal<small>Valsalva, masaje</small></button><button type="button" class="tog" data-acc="ade6">Adenosina<small>6 mg en bolo</small></button><button type="button" class="tog" data-acc="ade12">Adenosina<small>12 mg en bolo</small></button></div>`);
+    h.push(`<div class="fila" style="justify-content:space-between"><span class="dock-nota">Tiempo comprimido ${org('ilustrativo', true)}</span><button type="button" class="tog" data-acc="reinicio" style="min-width:120px">Otra reentrada</button></div>`);
+  }
+  if (r === 'fa') {
+    h.push(`<div class="seg" role="group" aria-label="Fármaco">${[[null, 'Sin fármaco'], ['dilt', 'Diltiazem'], ['amio', 'Amiodarona'], ['digo', 'Digoxina']].map(([k, n]) => `<button type="button" data-far="${k || ''}" aria-pressed="${sim.farmaco === k}">${n}</button>`).join('')}</div>`);
+    h.push(`<div class="deslizador"><input type="range" id="d-horas" min="0" max="6" step="0.5" value="${sim.horas}" aria-label="Horas desde el fármaco" ${sim.farmaco ? '' : 'disabled'}><output id="o-horas">${coma(sim.horas, 1)} h<small>desde la dosis</small></output></div>`);
+  }
+  if (r === 'wpw') {
+    if (!sim.wpwFa) h.push(`<div class="rejilla" style="--n:1"><button type="button" class="tog" data-acc="llegafa">Llega una FA<small>con la vía accesoria</small></button></div>`);
+    else h.push(`<div class="rejilla" style="--n:3"><button type="button" class="tog" data-acc="wdilt" aria-pressed="${sim.wpwDilt}" ${ef === 'fv' ? 'disabled' : ''}>Diltiazem<small>frena el nodo</small></button><button type="button" class="tog" data-acc="wamio">Amiodarona<small>o procainamida</small></button><button type="button" class="tog" data-acc="wcv">Cardioversión<small>eléctrica</small></button></div>`,
+      `<div class="fila" style="justify-content:space-between"><span class="dock-nota">${sim.wpwDilt ? 'Lo que la fuente advierte' : 'Elige un tratamiento'}</span>${sim.wpwDilt && ef !== 'fv' ? '<button type="button" class="tog" data-acc="verfv" style="min-width:140px">Ver lo que puede pasar</button>' : ''}${ef === 'fv' ? '<button type="button" class="tog" data-acc="wreinicio" style="min-width:120px">Empezar otra vez</button>' : ''}</div>`);
+  }
+  if (r === 'fv') {
+    h.push(`<div class="rejilla" style="--n:3"><button type="button" class="tog" data-acc="comp" aria-pressed="${sim.compresiones}">Compresiones<small>5-6 cm · 100-120/min</small></button><button type="button" class="tog" data-acc="choque" ${ef !== 'fv' ? 'disabled' : ''}>Choque<small>no sincronizado</small></button><button type="button" class="tog" data-acc="fvreinicio">Otra FV<small>empezar</small></button></div>`);
+    h.push(`<div class="seg" role="group" aria-label="Insuflaciones">${[10, 30].map(n => `<button type="button" data-insufl="${n}" aria-pressed="${sim.insufl === n}">${n} insuflaciones/min<small>${n === 10 ? 'lo recomendado' : 'el triple'}</small></button>`).join('')}</div>`);
+    h.push(`<div class="deslizador"><input type="range" id="d-min" min="5" max="20" step="1" value="${sim.minuto}" aria-label="Minuto del primer choque"><output>min ${sim.minuto}<small>del primer choque</small></output></div>`);
+  }
+  $('dock-panel').innerHTML = h.join('');
+  const dh = $('d-horas'); if (dh) dh.oninput = e => { sim.horas = +e.target.value; $('o-horas').innerHTML = `${coma(sim.horas, 1)} h<small>desde la dosis</small>`; reiniciarFA(); };
+  const dm = $('d-min'); if (dm) dm.oninput = e => { sim.minuto = +e.target.value; e.target.nextElementSibling.innerHTML = `min ${sim.minuto}<small>del primer choque</small>`; pintarGraficas(); };
+  medirDock();
+}
+// Lo que se pide ahora cambia los latidos que aún no han llegado
+function cortarFuturo() { sim.latidos = sim.latidos.filter(b => b.t <= sim.t); sim.chispas = sim.chispas.filter(c => c.t0 <= sim.t); const ult = sim.latidos[sim.latidos.length - 1]; sim.prox = Math.max(sim.t + 0.05, ult ? ult.t + 0.25 : 0); }
+function reiniciarFA() { sim.cambio = sim.t - 8; semilla = 7; iRR = 0; sim.latidos = []; sim.chispas = []; sim.prox = sim.t - 9; avanzar(sim.t + 1); llenarEstatico(); pintarLecturas(); pintarFrase(); pintarGraficas(); }
+$('dock-panel').addEventListener('click', ev => {
+  const b = ev.target.closest('button'); if (!b || b.disabled) return;
+  const a = b.dataset.acc;
+  cortarFuturo();
+  if ('far' in b.dataset) { sim.farmaco = b.dataset.far || null; sim.horas = sim.farmaco ? Math.max(sim.horas, 1) : 0; pintarDock(); reiniciarFA(); pintarFuentes(); return; }
+  if (b.dataset.insufl) { sim.insufl = +b.dataset.insufl; pintarDock(); pintarFrase(); tras(); return; }
+  if (a === 'vagal') { sim.vagalHasta = sim.t + 2.4; }
+  if (a === 'ade6' || a === 'ade12') { sim.adenoOn = sim.t + 1.2; sim.adenoFin = sim.adenoOn + 2.6; }
+  if (a === 'reinicio') { sim.adenoOn = sim.adenoFin = null; sim.vagalHasta = -1; }
+  if (['llegafa', 'wdilt', 'wamio', 'wcv', 'wreinicio', 'fvreinicio'].includes(a)) sim.cambio = sim.t;
+  if (a === 'llegafa') sim.wpwFa = true;
+  if (a === 'wdilt') sim.wpwDilt = !sim.wpwDilt;
+  if (a === 'verfv') sim.fvEn = sim.t + 1.5;
+  if (a === 'wamio' || a === 'wcv') { sim.wpwFa = false; sim.wpwDilt = false; sim.fvEn = null; }
+  if (a === 'wreinicio') { sim.wpwFa = false; sim.wpwDilt = false; sim.fvEn = null; }
+  if (a === 'comp') sim.compresiones = !sim.compresiones;
+  if (a === 'choque') { sim.compresiones = true; sim.choqueEn = sim.t + 0.8; sim.rceEn = sim.choqueEn + 3; }
+  if (a === 'fvreinicio') { sim.choqueEn = sim.rceEn = null; sim.compresiones = false; sim.insufl = 10; }
+  pintarDock(); pintarFrase(); pintarGraficas(); pintarFuentes(); tras(a);
+});
+// Con «reducir movimiento» (o en pausa), se salta al final de lo que acaba de pasar
+function tras(a) {
+  if (!(REDUCIR || pausado)) return;
+  const salto = { ade6: 6, ade12: 6, verfv: 3, choque: 6, vagal: 1.5 }[a] || 0.5;
+  sim.t += salto; avanzar(sim.t + 1); llenarEstatico(); vigilarEventos(); pintarLecturas(); pintarFrase(); pintarDock();
+}
+function ponerRitmo(r) {
+  Object.assign(sim, { ritmo: r, farmaco: null, horas: 0, adenoOn: null, adenoFin: null, vagalHasta: -1, wpwFa: false, wpwDilt: false, fvEn: null, compresiones: false, insufl: 10, choqueEn: null, rceEn: null, fcFA: null });
+  semilla = 7; iRR = 0; sim.latidos = []; sim.chispas = []; sim.prox = sim.t - 9; sim.cambio = sim.t - 8; avanzar(sim.t + 1);
+  $('ritmos').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.r === r)));
+  $('ficha-ritmo').innerHTML = { sinusal: 'Sin paciente: el ritmo de referencia.', nodal: 'Una reentrada nodal: suele darse en gente sin cardiopatía, más en mujeres. Palpitaciones y mareo (p. 29).', fa: 'Pacientes con FA sin complicar, como los del estudio de la Fig. 19.5.', wpw: 'Un paciente con una vía accesoria conocida.', fv: '<b>Leandro</b>, 49 años · pancreatitis en planta · FV presenciada, minuto 0' }[r];
+  $('t-co2-svg').toggleAttribute('hidden', r !== 'fv'); $('tiras-tit').textContent = r === 'fv' ? 'ECG · presión arterial · ETCO₂' : 'ECG · presión arterial';
+  ritmoMostrado = null; llenarEstatico(); pintarLecturas(); pintarDock(); pintarFrase(); pintarGraficas(); pintarFuentes(); pintarEstadoDibujo();
+}
+$('ritmos').innerHTML = RITMOS.map(([k, n]) => `<button type="button" data-r="${k}" aria-pressed="false">${n}</button>`).join('');
+$('ritmos').addEventListener('click', ev => { const b = ev.target.closest('[data-r]'); if (b) ponerRitmo(b.dataset.r); });
+$('frase').addEventListener('click', () => { $('frase').classList.toggle('abierta'); medirDock(); });
+$('pausa').addEventListener('click', () => { pausado = !pausado; $('pausa').setAttribute('aria-pressed', String(pausado)); $('pausa').textContent = pausado ? 'Seguir' : 'Pausa'; if (pausado) { llenarEstatico(); } });
+function medirDock() { requestAnimationFrame(() => { document.documentElement.style.setProperty('--dock-h', $('dock').offsetHeight + 'px'); document.documentElement.style.setProperty('--frase-h', ($('frase').hidden ? 0 : $('frase').offsetHeight) + 'px'); }); }
+
+/* ============================================================
+   8. Dirección A | B | C
+   ============================================================ */
+const DIR_TXT = { A: 'El corazón en corte de cuatro cámaras con el sistema de conducción como hilo de oro; el nodo AV, en una lupa con sus dos vías.', B: 'La conducción como un plano de metro: estaciones (nodo sinusal, aurículas, nodo AV con dos andenes, His, ramas) y trenes.', C: 'Solo las tiras: ECG, presión y ETCO₂, con sus lecturas. Enseña a reconocer el ritmo, pero no por qué pasa.' };
+function ponerDir(d) {
+  dir = d; borrarSenal();
+  $('direccion').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.dir === d)));
+  $('dir-txt').textContent = DIR_TXT[d];
+  $('escena').hidden = d === 'C';
+  montarDibujo(); if (REDUCIR || pausado) pintarChispas(true);
+  $('tiras').querySelectorAll('.tira-svg').forEach(s => { s.style.height = ''; });
+  for (const T of Object.values(TIRAS)) $(T.svg).style.height = T.h + 'px';
+  pintarElige();
+}
+$('direccion').addEventListener('click', ev => { const b = ev.target.closest('[data-dir]'); if (b) ponerDir(b.dataset.dir); });
+
+/* ============================================================
+   9. Fuentes, láminas, notas, profundizar y decidir
+   ============================================================ */
+function pintarFuentes() {
+  const g = GUIAS[claveGuia()], vistas = new Set(), items = [];
+  for (const p of g.pasos) { const k = p.c.id + p.c.sitio; if (!vistas.has(k)) { vistas.add(k); items.push(p.c); } }
+  $('lista-fuentes').innerHTML = items.map(c => `<li><span>Marino, ${c.sitio} (${/[-,]/.test(String(c.p)) ? 'pp.' : 'p.'} ${c.p})</span>${cita(c)}</li>`).join('');
+  $('explicame-txt').textContent = `${g.pasos.length} pasos: ${g.tit}`;
+}
+const LAMINAS = [
+  { img: 'mc-fig19-2-ecg-avnrt.jpg', tit: 'Fig. 19.2 · reentrada nodal', txt: 'Fig. 19.2: taquicardia de QRS estrecho y regular, sin P visibles: una reentrada nodal.', c: C.f192 },
+  { img: 'mc-fig19-3-ecg-mat-fa.jpg', tit: 'Fig. 19.3 · TAM y FA', txt: 'Fig. 19.3: arriba, una taquicardia auricular multifocal (P de varias formas); abajo, una FA (sin P, ondas de fibrilación).', c: { f: 'mc-taqui-reconocimiento', id: 'mc-fig-19-3', sitio: 'Fig. 19.3', p: 20 } },
+  { img: 'mc-fig19-4-onda-pulso-fa.jpg', tit: 'Fig. 19.4 · pulso en la FA', txt: 'Fig. 19.4: en la FA, cuando dos latidos llegan muy juntos, la sistólica cae: el origen del déficit de pulso.', c: C.f194 },
+  { img: 'mc-fig19-6-ecg-tv-vs-svt.jpg', tit: 'Fig. 19.6 · QRS ancho', txt: 'Fig. 19.6: parece una TV, pero al volver a sinusal el QRS no cambia: era una supraventricular con bloqueo de rama.', c: { f: 'mc-otras-taqui', id: 'mc-fig-19-6', sitio: 'Fig. 19.6', p: 31 } },
+];
+function pintarTira() {
+  $('tira').innerHTML = LAMINAS.map((l, i) => `<button type="button" class="lamina-libro" data-lam="${i}"><img src="${IMG + l.img}" alt="${l.tit}" loading="lazy"><span>${l.tit}</span></button>`).join('');
+  $('tira').onclick = ev => { const b = ev.target.closest('[data-lam]'); if (!b) return; const l = LAMINAS[b.dataset.lam];
+    $('visor-img').src = IMG + l.img; $('visor-img').alt = l.tit; $('visor-txt').textContent = l.txt; $('visor-cita').innerHTML = cita(l.c); $('visor').showModal(); };
+  $('visor-cerrar').onclick = () => $('visor').close();
+}
+const NOTAS = [
+  { tipo: 'calla', txt: '<b>Dónde está la vía accesoria.</b> El libro dice que las taquicardias del WPW nacen de una vía accesoria «en el nodo AV» (p. 27) y no dibuja su anatomía. Aquí va como un atajo aparte entre aurícula y ventrículo, como la describe la fisiología general, para que se vea lo que el libro sí dice: que frenar el nodo no la frena (p. 28).', c: C.wpw },
+  { tipo: 'calla', txt: '<b>Por qué vía baja y por cuál sube la reentrada.</b> El libro dice que la chispa «baja por una vía y vuelve por la otra» (p. 29), sin decir cuál. Bajar por la lenta y subir por la rápida es de la fisiología general.', c: C.psvt },
+  { tipo: 'calla', txt: '<b>Las velocidades de conducción, las ondas de la FA y el nodo como filtro</b> no salen en estos capítulos: el dibujo es de la fisiología general. Las velocidades están en otra fuente de la app (El Libro Azul): se enlazarán, no se mezclan.', c: C.irregular },
+  { tipo: 'calla', txt: '<b>El tiempo y las cifras del dibujo.</b> La adenosina actúa en <30 s y dura 1-2 min (p. 30); aquí pasa en segundos. La presión, el pulso que «llega a la muñeca» y la ETCO₂ de la tira son ilustrativos; las curvas de las Figs. 19.5, 21.1 y 21.4 son lecturas del gráfico.', c: C.adeno },
+  { tipo: 'discrepan', txt: '<b>La adrenalina en la RCP.</b> El texto da un 30 % más de presión de perfusión coronaria (p. 62); la Fig. 21.3, en la misma página, se lee de ~22 a ~33 mmHg (cerca de un 50 % en el pico). El libro no lo aclara.', c: C.adrenalina },
+  { tipo: 'autor', txt: '<b>El déficit de pulso como punto final.</b> No hay acuerdo sobre la FC objetivo en la FA (80-110 lpm en los estudios). Usar la desaparición del déficit de pulso es una propuesta del autor: «merece tu consideración» (p. 25).', c: C.final },
+];
+const NOTA_TIPO = { discrepan: ['Las fuentes discrepan', ''], calla: ['La fuente no lo dice', 'calla'], autor: ['Opinión del autor', 'autor'] };
+const PROFUNDIZAR = [
+  { t: 'La taquicardia auricular multifocal y el magnesio (2 g + 6 g en 6 h, 88 %).', c: { f: 'mc-otras-taqui', id: 'mc-tam', sitio: 'TAM', p: 28 } },
+  { t: 'TV o supraventricular con aberrancia: la disociación AV y los latidos de fusión.', c: { f: 'mc-otras-taqui', id: 'mc-tv-vs-svt', sitio: 'TV frente a SVT', p: '31-32' } },
+  { t: 'La torsade de pointes, el QTc y los fármacos que alargan el QT.', c: { f: 'mc-otras-taqui', id: 'mc-torsade', sitio: 'Torsade de pointes', p: 34 } },
+  { t: 'La cardioversión eléctrica de la FA (100 J bifásicos) y la anticoagulación (CHA₂DS₂-VASc).', c: C.cv },
+  { t: 'La AESP y la asistolia: las causas que se buscan.', c: { f: 'mc-paro-soporte', id: 'mc-aesp', sitio: 'AESP', p: 60 } },
+  { t: 'El síndrome posparo, la temperatura y el pronóstico.', c: C.posparo },
+];
+function pintarFijos() {
+  $('lista-notas').innerHTML = NOTAS.map(n => `<div class="nota-fuentes"><span class="nota-tipo ${NOTA_TIPO[n.tipo][1]}">${NOTA_TIPO[n.tipo][0]}</span><span>${n.txt}</span>${cita(n.c)}</div>`).join('');
+  $('lista-profundizar').innerHTML = PROFUNDIZAR.map(p => `<li><span>${p.t}</span>${cita(p.c)}</li>`).join('');
+  pintarTira();
+}
+const elegido = { modelo: null, preg: null };
+function pintarElige() {
+  const fila = (clave, ops) => `<div class="opciones-elige">${ops.map(([v, t]) => `<button type="button" data-el="${clave}" data-v="${v}" aria-pressed="${elegido[clave] === v}">${t}</button>`).join('')}</div>`;
+  $('elige').innerHTML = `<p class="para">1 · ¿Qué dirección? (arriba la estás viendo: ${dir})</p>${fila('dir', [['A', 'A · Grabado (recomendada)'], ['B', 'B · Plano del metro'], ['C', 'C · Solo el ECG']])}
+    <p class="para">2 · Sus preguntas: ¿las de Estudiar de las fichas más solo las de «predice y compruébalo»?</p>${fila('preg', [['mismas', 'Las mismas (recomendado)'], ['propias', 'Propias']])}`;
+  $('elige').querySelectorAll('[data-el="dir"]').forEach(b => b.setAttribute('aria-pressed', String(elegido.dir === b.dataset.v)));
+  $('resumen-elige').textContent = elegido.dir || elegido.preg ? 'Tu elección: ' + [elegido.dir && 'dirección ' + elegido.dir + (elegido.dir === 'C' ? ' (sin modelo nuevo)' : ' (modelo nuevo)'), elegido.preg && ('preguntas ' + (elegido.preg === 'mismas' ? 'de las fichas' : 'propias'))].filter(Boolean).join(' · ') : '';
+}
+$('elige').addEventListener('click', ev => { const b = ev.target.closest('[data-el]'); if (!b) return; elegido[b.dataset.el] = b.dataset.v; if (b.dataset.el === 'dir') ponerDir(b.dataset.v); else pintarElige(); });
+
+/* ============================================================
+   10. Mayéutica (muestra): dos preguntas y el primer paso de un caso
+   ============================================================ */
+const MUESTRA = [
+  { grupo: 'guia', num: 'G1', predice: true, ritmo: 'nodal',
+    enunciado: 'La chispa da vueltas dentro del nodo AV. Vas a poner 6 mg de adenosina. Antes de que vuelva el sinusal, <b>¿qué verás en la tira?</b>',
+    opciones: [
+      { t: 'Ondas P sin QRS: el nodo se bloquea y el circuito se rompe.', ok: true },
+      { t: 'QRS anchos: la adenosina desvía la chispa por las ramas.', porque: 'La adenosina enlentece el nodo AV y da un bloqueo AV transitorio (p. 29-30); no cambia el camino por las ramas. Si esperas QRS anchos, tomarás la pausa esperada (bradicardia o bloqueo AV en el 50 %) por un problema nuevo.' },
+      { t: 'La misma taquicardia, más lenta, durante varias horas.', porque: 'Su efecto dura 1-2 min y lo que hace es cortar el circuito (p. 30). Si esperas horas de efecto, no repetirás 12 mg a los 2 min cuando no responde (Tabla 19.4).' },
+      { t: 'Nada: la adenosina actúa sobre las aurículas, no sobre el nodo.', porque: 'Actúa en el nodo AV, justo por donde pasa este circuito (p. 29-30). Si crees que no sirve, cardiovertirás a un paciente que casi nunca está inestable con esta arritmia (p. 29).' }],
+    explicacion: 'La adenosina produce un bloqueo AV transitorio: salen P sin QRS unos segundos. Si el circuito pasa por el nodo AV, se rompe y vuelve el sinusal (p. 29-30).', fuente: C.adeno,
+    tocar: { txt: 'Compruébalo: pon la adenosina', confirma: 'Mira la tira: una pausa con ondas P sin QRS, y luego vuelve el sinusal.' } },
+  { grupo: 'examen', num: 'E1', ritmo: 'wpw', wpwFa: true,
+    enunciado: 'Un paciente con WPW conocido llega en FA a 190 lpm, con QRS anchos e irregulares y PA de 110/70. <b>¿Qué haces?</b>',
+    opciones: [
+      { t: 'Diltiazem 0,25 mg/kg en 2 min: es el que antes controla la FC.', porque: 'Frenar el nodo no frena la vía accesoria: la FC no baja, y el bloqueo selectivo del nodo puede precipitar una FV (p. 28). El mejor fármaco de la FA sin vía (Fig. 19.5) aquí puede matarle.' },
+      { t: 'Amiodarona o procainamida, o cardioversión eléctrica.', ok: true },
+      { t: 'Digoxina IV, porque no baja la PA como el diltiazem.', porque: 'La digoxina también bloquea el nodo (p. 28): la vía accesoria sigue libre y comparte el riesgo de FV. Además tarda horas (Fig. 19.5).' },
+      { t: 'Esmolol en bolo y perfusión, que se ajusta minuto a minuto.', porque: 'El esmolol es un betabloqueante: bloquea el nodo y la vía accesoria sigue libre (p. 28). Que se ajuste rápido no evita la FV que puede precipitar.' }],
+    explicacion: 'Con una vía accesoria, los fármacos que bloquean el nodo AV (antagonistas del calcio, betabloqueantes, digoxina) no frenan la frecuencia y pueden precipitar una FV. Se trata con cardioversión eléctrica, o con amiodarona o procainamida (p. 28).', fuente: C.wpw },
+  { grupo: 'caso', num: 'Paso 1', ritmo: 'fa', fcFA: 148, dia: 'Día 2 de la lobectomía · tarde',
+    paciente: [['Paciente', 'Teodoro, 74 años, 78 kg'], ['Antecedentes', 'HTA, diabetes'], ['Motivo', 'lobectomía pulmonar hace 2 días'], ['Monitor', '148 lpm', 1], ['Síntomas', 'palpitaciones', 1]],
+    enunciado: 'Mira la tira de Teodoro. <b>¿Qué ritmo es?</b>',
+    opciones: [
+      { t: 'Taquicardia sinusal: hay que buscar su causa y tratarla.', porque: 'Habría una P antes de cada QRS y el RR sería regular (p. 19). Si la tomas por sinusal, Teodoro sigue a 148 sin control de la frecuencia.' },
+      { t: 'Taquicardia auricular multifocal, típica del pulmón enfermo.', porque: 'La TAM tiene P de varias formas y PR variable (p. 20); aquí no hay P. Con magnesio para una TAM, la FA seguiría a 148.' },
+      { t: 'Reentrada nodal: QRS estrecho sin P visibles.', porque: 'La reentrada nodal es regular (p. 19, 29) y este RR es irregular. Si la tratas como reentrada, los fármacos y las dosis no serían los de la FA (Tabla 19.1) y su frecuencia seguiría en 148.' },
+      { t: 'Fibrilación auricular: RR irregular y ninguna P.', ok: true }],
+    explicacion: 'QRS estrecho e irregular sin P, con ondas de fibrilación: FA (p. 20). Tras la cirugía torácica aparece hasta en el 45 % de los casos, casi siempre en los primeros 5 días (p. 21).', fuente: C.irregular,
+    sigue: 'En la app, el caso sigue: PA 108/66 y 78 kg. ¿Qué fármaco y cuánto?' },
+];
+const GRUPO = { guia: 'Guía socrática', examen: 'Examen · nivel MIR', caso: 'El caso' };
+let paso = 0; const result = [];
+function pintarDockEst() {
+  $('dock-pasos').innerHTML = MUESTRA.map((_, i) => `<i class="${i < paso ? (result[i] ? 'on' : 'mal') : ''}${i === paso ? ' aqui' : ''}"></i>`).join('');
+  $('dock-est-izq').textContent = paso < MUESTRA.length ? `Pregunta ${paso + 1} de ${MUESTRA.length}` : 'Hecho';
+  $('dock-est-der').textContent = paso < MUESTRA.length ? GRUPO[MUESTRA[paso].grupo] : `${result.filter(Boolean).length} de ${MUESTRA.length} bien`;
+  medirDock();
+}
+function pintarPaso() {
+  pintarDockEst(); const cont = $('preg');
+  if (paso >= MUESTRA.length) { tapado = false; pintarLecturas(); cont.innerHTML = `<h2>Hasta aquí la muestra</h2><p class="para">En la app, cada ficha tendrá su recorrido entero (Mira, Juega, Piensa, Examínate y el caso), con el corazón en el ritmo de cada pregunta.</p><div class="fila"><button class="b" type="button" data-acc="otra">Otra vez</button></div>`; return; }
+  const q = MUESTRA[paso];
+  ponerRitmo(q.ritmo); if (q.wpwFa) sim.wpwFa = true; if (q.fcFA) { sim.fcFA = q.fcFA; reiniciarFA(); }
+  tapado = true; llenarEstatico(); pintarLecturas(); pintarGraficas();
+  $('escena').hidden = dir === 'C' || q.grupo === 'caso';
+  let h = '';
+  if (q.paciente) h += `<p class="dia">${q.dia}</p><dl class="paciente">${q.paciente.map(([k, v, n]) => `<dt>${k}</dt><dd${n ? ' class="cambia"' : ''}>${v}</dd>`).join('')}</dl>`;
+  h += `<div class="cab-preg"><span class="num">${q.num}</span><span class="grupo ${q.grupo === 'guia' ? '' : q.grupo}">${GRUPO[q.grupo]}</span><span class="tipo">Test · piensa antes${q.predice ? ' · predice y compruébalo' : ''}</span></div>`;
+  h += `<p class="pregunta">${q.enunciado}</p><div id="fmt"><p class="para">Piénsalo antes de ver las opciones.</p><div class="fila" style="margin-top:6px"><button class="b prim" type="button" data-acc="ops">Ya lo tengo: ver opciones</button></div></div><div class="op" id="ops" hidden></div><div id="q-res"></div>`;
+  cont.innerHTML = h; cont.classList.remove('entra'); void cont.offsetWidth; cont.classList.add('entra');
+}
+$('preg').addEventListener('click', ev => {
+  const q = MUESTRA[paso], a = ev.target.closest('[data-acc]')?.dataset.acc;
+  if (a === 'otra') { paso = 0; result.length = 0; pintarPaso(); return; }
+  if (a === 'ops') { const o = $('ops'); o.innerHTML = q.opciones.map((op, i) => `<button class="b" type="button" data-op="${i}">${op.t}</button>`).join(''); o.hidden = false; $('fmt').remove(); return; }
+  if (a === 'sig') { paso++; pintarPaso(); scrollTo({ top: 0, behavior: REDUCIR ? 'auto' : 'smooth' }); return; }
+  if (a === 'tocar') { sim.adenoOn = sim.t + 1.2; sim.adenoFin = sim.adenoOn + 2.6; tras('ade6'); ev.target.closest('.fila').outerHTML = `<p class="para"><span class="ok">✓ Mira la tira:</span> ${q.tocar.confirma}</p><div class="fila"><button class="b prim" type="button" data-acc="sig">Siguiente →</button></div>`; return; }
+  const op = ev.target.closest('[data-op]');
+  if (op && !op.disabled) {
+    const o = q.opciones[op.dataset.op]; result[paso] = !!o.ok;
+    document.querySelectorAll('#ops button').forEach(b => { b.disabled = true; }); op.classList.add(o.ok ? 'elegida-bien' : 'elegida-mal');
+    tapado = false; pintarLecturas(); pintarGraficas(); $('escena').hidden = dir === 'C';
+    $('q-res').innerHTML = `<div class="respuesta entra"><span class="${o.ok ? 'ok' : 'mal'}">${o.ok ? '✓ Bien' : '✗ Qué le habría pasado al paciente'}</span>${o.ok ? '' : `<p>${o.porque}</p>`}<p>${q.explicacion}</p>${cita(q.fuente)}${q.sigue ? `<p class="para">${q.sigue}</p>` : ''}
+      <div class="fila">${q.tocar ? `<button class="b prim" type="button" data-acc="tocar">${q.tocar.txt}</button>` : `<button class="b prim" type="button" data-acc="sig">${paso === MUESTRA.length - 1 ? 'Terminar la muestra' : 'Siguiente →'}</button>`}</div></div>`;
+    pintarDockEst();
+  }
+});
+function setModo(m) {
+  if (guia) cerrarGuia(); modo = m; borrarSenal();
+  $('modo-explorar').setAttribute('aria-selected', String(m === 'explorar')); $('modo-preguntas').setAttribute('aria-selected', String(m === 'preguntas'));
+  $('zona-ritmos').hidden = m !== 'explorar'; $('fila-explicame').hidden = m !== 'explorar'; $('zona-abajo').hidden = m !== 'explorar';
+  $('vista-preguntas').hidden = m !== 'preguntas'; $('dock-explorar').hidden = m !== 'explorar'; $('dock-estudio').hidden = m !== 'preguntas';
+  $('frase').hidden = m !== 'explorar'; $('peligro').hidden = true;
+  tapado = false; $('escena').hidden = dir === 'C';
+  if (m === 'explorar') ponerRitmo('sinusal');
+  if (m === 'preguntas') { paso = 0; result.length = 0; pintarPaso(); }
+  medirDock();
+}
+$('modo-explorar').onclick = () => setModo('explorar');
+$('modo-preguntas').onclick = () => setModo('preguntas');
+addEventListener('resize', () => { montarTiras(); llenarEstatico(); medirDock(); });
+
+/* Arranque */
+sim.t = 10; montarTiras(); pintarFijos(); ponerDir('A'); ponerRitmo('sinusal');
+if (!REDUCIR) requestAnimationFrame(bucle);
+medirDock();
+</script>
+</body>
+</html>

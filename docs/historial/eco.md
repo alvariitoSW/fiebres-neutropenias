@@ -327,3 +327,16 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
   escenario, con el barorreflejo aún compensando (+64 %; el fallo del VI «respondía», +15 %). Ahora el panel deja
   asentar al paciente hasta 40 s antes de la primera maniobra (`faltaParaAsentar`, `aplicarEscenario`), igual que las
   pruebas: hemorragia +20,2 %, fallo +2,7 %, dilatada +1,3 %.
+
+## El motor llega a shock sin romperse (21/10/2026, bloque 3 de Marino, M1 de la cobertura)
+
+La cobertura del bloque 3 midió que ningún escenario llegaba a shock y que al subir la gravedad el motor se rompía
+(hemorragia de 2 L → PAM 11; 2,5 L → PAM 0 con RVS negativa; derrame de 550 mL → NaN; fallo del VI con PCP 41 y PAM 81).
+Errores corregidos en su origen (`motor.mjs`): la presión venosa y pulmonar bajo el volumen sin tensión era 0 exacto
+(ahora un codo exponencial); relleno transcapilar con tope de 1 L (cap. 15 p. 21); la sangre y el derrame entran o salen
+a ritmo y no de golpe; cámaras que no bajan de 0 mL; edema de pulmón por encima de 28 mmHg (fisiología general); el
+reflejo ya no sube la RVS más de un 15 % (con la RVS basal alta, 1.488, no cabía un shock con PAM ≤60 e IC ≥1,2); la
+contractilidad cambia en ~4 s; RVS y SvO₂ sin divisiones por 0. Mando de gravedad (`aplicar(m, g)`, g 0-1) en
+hemorragia (hasta el 42 %), fallo del VI, derrame y TEP. «TEP masivo» pasa a «TEP de riesgo intermedio» (cap. 22 p. 7).
+A fondo, los cuatro dan PAM 55-59 e IC 1,25-1,42. Pendiente para el bloque 3: el fallo del VI a fondo deja la PVC en
+2,5 (edema que saca volumen); la Tabla 14.1 pide PVC alta en el cardiogénico. Y calibrar la RVS basal (README).
