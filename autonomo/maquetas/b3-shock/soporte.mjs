@@ -67,13 +67,15 @@ export const ESCENARIOS_EXTRA = {
 const ESC = { ...ESCENARIOS, ...ESCENARIOS_EXTRA };
 export const textoGravedad = (k, g) => ESC[k]?.gravedad?.texto?.(g) ?? ESC[k]?.texto?.(g) ?? '';
 
-// Receta del paciente: { esc, g, volemia (mL que faltan o sobran, ilustrativo), util: 'sepsis' | 'normal', pao2, hb }
+// Receta del paciente: { esc, g, volemia (mL que faltan o sobran, ilustrativo), util: 'sepsis' | 'normal', pao2, hb,
+// eroaMitral (cm², la insuficiencia mitral del motor) }
 export function prepararMotor(rec, segundos = 40) {
   const m = crearMotor();
   m.correr(12);
   if (rec.kEdema != null) m.p.kEdema = rec.kEdema;
   ESC[rec.esc]?.aplicar(m, rec.g);
   if (rec.volemia) m.s.vven += rec.volemia;
+  if (rec.eroaMitral) m.p.eroaMitral = rec.eroaMitral;   // rotura del papilar: insuficiencia mitral aguda (cap. 16, p. 38); el orificio, ilustrativo
   m.p.tEscenario = m.s.t;
   return m;
 }
@@ -148,7 +150,10 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
     const gcNativo = Math.max(0, u.gc);                       // lo que sale por la válvula aórtica (el reflujo de cierre, fuera)
     const gcTotal = gcNativo + imp + ecmo;                    // lo que llega al cuerpo (el venteo va dentro del ECMO)
     if (ajuste.total != null && ajuste.soporte === 'impella') st.impTotalObj = Math.min(5.5, Math.max(2.5, ajuste.total - gcNativo)) * LMIN;
-    lectura = { u, gcNativo, gcTotal, icTotal: gcTotal / m.p.sc, imp, ecmo, vent, balon: acum.balonMax,
+    // lo que pide cada bomba (L/min): si saca menos, es que no le llega sangre (el VI o las venas, casi vacíos)
+    const impPide = (ajuste.soporte === 'impella' || (ajuste.soporte === 'ecmo' && ajuste.venteo === 'impella')) ? st.qImpObj / LMIN : 0;
+    const ecmoPide = ajuste.soporte === 'ecmo' ? ajuste.ecmo : 0;
+    lectura = { u, gcNativo, gcTotal, icTotal: gcTotal / m.p.sc, imp, ecmo, vent, impPide, ecmoPide, totalPide: ajuste.soporte === 'impella' ? ajuste.total : null, balon: acum.balonMax,
       aoAbre: historiaAo.filter(Boolean).length, aoDe: historiaAo.length, pcp: u.pvp, edema: u.vEdema,
       picoDia: acum.picoDia, teleDia: acum.teleDia };
     // si la aórtica no abre, el motor no cierra bien la fase; la RVS se lee con el flujo que cruza el lecho (ya lo hace)

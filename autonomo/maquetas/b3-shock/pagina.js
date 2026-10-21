@@ -1,8 +1,9 @@
 // La página de la maqueta b3-shock v2: une el motor (soporte.mjs sobre js/modules/eco/motor.mjs), el monitor, la
 // escena (el paciente en grabado o el aparato) y los modos Explorar, «¿Qué shock es?» y Mayéutica.
-import { ISO_CSS } from '../comun/dibujo-iso.js';
+import { instalarIso } from '../comun/dibujo-iso.js';
 import { crearCabecera, perfusion, avanzarLab, textoGravedad } from './soporte.mjs';
-import { crearMonitor, CANALES } from './monitor.js';
+import { crearMonitor, CANALES } from './canales.js';
+import { instalarMonitor, pintarCifras as pintarColumna } from '../comun/monitor.js';
 import { montarImpella, montarBalon, montarEcmo } from './aparatos.js';
 import { montarDespieceImpella, montarDespieceBalon, montarDespieceEcmo, LEYENDA_IMPELLA, LEYENDA_BALON, LEYENDA_ECMO } from './despiece.js';
 import { montarCorazon, montarRecorrido, RUTAS } from './corazon.js';
@@ -13,7 +14,7 @@ const REDUCIR = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coma = (x, d = 0) => (+x).toFixed(d).replace('.', ',');
 const NS = 'http://www.w3.org/2000/svg';
 const IMG = '../../js/modules/cardiologia/img/';
-{ const s = document.createElement('style'); s.textContent = ISO_CSS; document.head.appendChild(s); }
+instalarIso(); instalarMonitor();
 
 // ---------------------------------------------------------------- citas: «Ver en la ficha» y el PDF de segunda opción
 const pagTxt = (p) => /[-,]/.test(String(p)) ? `pp. ${p}` : `p. ${p}`;
@@ -78,7 +79,7 @@ function leer() {
     fc: Math.round(u.fc), pas: Math.round(u.pas), pad: Math.round(u.pad_), pam: Math.round(u.pam), pvc: Math.round(u.pvc), pcp: Math.round(u.pvp),
     paps: Math.round(u.paps), papd: Math.round(u.papd), papm: Math.round(u.papm), ic: +L.icTotal.toFixed(1), icNat: L.gcNativo / cab.m.p.sc, gcTotal: L.gcTotal,
     spo2: P.spo2, ven: P.scvo2, gap: P.gap, etco2: P.petco2, lact: +est.lab.lact.toFixed(1), diur: +est.lab.diur.toFixed(1),
-    imp: L.imp, ecmo: L.ecmo, aoAbre: L.aoAbre, aoDe: L.aoDe, edema: u.vEdema, picoDia: Math.round(L.picoDia), teleDia: L.teleDia != null ? Math.round(L.teleDia) : null,
+    imp: L.imp, ecmo: L.ecmo, impPide: L.impPide, ecmoPide: L.ecmoPide, totalPide: L.totalPide, aoAbre: L.aoAbre, aoDe: L.aoDe, edema: u.vEdema, picoDia: Math.round(L.picoDia), teleDia: L.teleDia != null ? Math.round(L.teleDia) : null,
     perdida: Math.round((est.rec.esc === 'hemorragia' ? est.g * 42 : 0)),
   };
   r.irvs = Math.round((u.pam - u.pvc) / Math.max(0.3, L.icTotal));
@@ -119,8 +120,8 @@ function canalesVisibles() { return est.canales === 'cabecera' ? ['ecg', 'art', 
 function pintarCifras() {
   const tap = est.tapado, vis = new Set(canalesVisibles());
   const filas = FILAS_MON.filter((f) => vis.has(f.canal));
-  $('cifras').innerHTML = filas.map((f) => {
-    const c = CANALES.find((x) => x.k === f.canal), alto = c.alto + 4;
+  pintarColumna($('cifras'), filas.map((f) => {
+    const c = CANALES.find((x) => x.k === f.canal);
     let v = '', obj = '', mk = { html: '' };
     if (tap) v = '?';
     else if (f.k === 'fc') v = R.fc;
@@ -130,8 +131,8 @@ function pintarCifras() {
     else if (f.k === 'spo2') { v = R.spo2; mk = marca('spo2', R.spo2); }
     else if (f.k === 'fr') { v = `${R.etco2}`; obj = `FR ${est.pac.fr || 16}`; }
     const et = f.k === 'pcp' && monitor.enclavado ? ['PCP', 'mmHg'] : f.et;
-    return `<div class="cifra ${f.cls}" data-fila="${f.k === 'pa' ? 'pa' : f.k}" style="height:${alto}px"><span class="et"><span>${et[0]}</span><span>${tap ? '' : mk.html || et[1]}</span></span><span class="v">${v}</span><span class="obj">${tap ? '' : obj}</span></div>`;
-  }).join('');
+    return { k: f.k, cls: f.cls, et: et[0], u: et[1], marca: mk.html, v, obj, alto: c.alto + 4 };
+  }), { tapado: tap });
   const T = D.OBJETIVOS[tablaActual()];
   $('calc').hidden = est.canales === 'cabecera';
   $('calc').innerHTML = CALC.map((p) => {
@@ -153,9 +154,10 @@ function pintarConsola() {
   const ap = cab.ajuste.soporte, el = $('consola');
   if (ap === 'no' || est.tapado) { el.hidden = true; return; }
   el.hidden = false;
-  if (ap === 'impella') el.innerHTML = `<span>IMPELLA</span><span>bomba <b>${coma(R.imp, 1)}</b></span><span>corazón <b>${coma(R.icNat * 1.85, 1)}</b></span><span>total <b>${coma(R.gcTotal, 1)}</b> L/min</span><span>aórtica ${R.aoAbre}/${R.aoDe}</span>`;
+  if (ap === 'impella') el.innerHTML = `<span>IMPELLA</span>${R.totalPide != null ? `<span>total pedido <b>${coma(R.totalPide, 1)}</b></span>` : ''}<span>bomba <b>${coma(R.imp, 1)}</b>${D.bombaNoLlega(R) ? ` de ${coma(R.impPide, 1)}` : ''}</span><span>corazón <b>${coma(R.icNat * 1.85, 1)}</b></span><span>total <b>${coma(R.gcTotal, 1)}</b> L/min</span><span>aórtica ${R.aoAbre}/${R.aoDe}</span>`
+    + (D.bombaNoLlega(R) ? `<span class="consola-aviso">⚠ La bomba no llega: el VI está casi vacío. Llénalo antes (pestaña Volumen).</span>` : '');
   else if (ap === 'balon') el.innerHTML = `<span>BALÓN</span><span><b>${Math.round(cab.ajuste.balon)}</b> mL helio</span><span>disparo: onda R</span><span>pico diastólico <b>${R.picoDia}</b></span>${R.teleDia != null ? `<span>telediastólica <b>${R.teleDia}</b></span>` : ''}`;
-  else el.innerHTML = `<span>ECMO VA</span><span>flujo <b>${coma(R.ecmo, 1)}</b></span><span>corazón <b>${coma(R.icNat * 1.85, 1)}</b> L/min</span><span>aórtica ${R.aoAbre}/${R.aoDe}</span>${cab.ajuste.venteo !== 'no' ? `<span>venteo: ${({ balon: 'balón', impella: 'Impella', drenaje: 'drenaje' })[cab.ajuste.venteo]}</span>` : ''}`;
+  else el.innerHTML = `<span>ECMO VA</span><span>flujo <b>${coma(R.ecmo, 1)}</b>${R.ecmoPide - R.ecmo > 0.3 ? ` de ${coma(R.ecmoPide, 1)}` : ''}</span><span>corazón <b>${coma(R.icNat * 1.85, 1)}</b> L/min</span><span>aórtica ${R.aoAbre}/${R.aoDe}</span>${cab.ajuste.venteo !== 'no' ? `<span>venteo: ${({ balon: 'balón', impella: 'Impella', drenaje: 'drenaje' })[cab.ajuste.venteo]}</span>` : ''}`;
   el.insertAdjacentHTML('beforeend', org('cifras: el modelo'));
 }
 // Tocar una cifra: de dónde sale y su objetivo
@@ -544,7 +546,7 @@ $('zona-may').addEventListener('click', (ev) => {
   const q = LISTA_MAY[may.i], b = ev.target.closest('button'); if (!b) return;
   const acc = b.dataset.acc;
   if (acc === 'otra') { may = { i: 0, res: [], fichaCaso: [] }; pintarMay(); return; }
-  if (acc === 'modelo') { setModo('explorar'); const p = D.PACIENTES.find((x) => x.k === 'aurelio'); est.aparato = 'ecmo'; est.vista = 'aparato'; nuevoPaciente(p, { rec: { esc: 'fallo', g: 1, volemia: -600 }, ajuste: { soporte: 'ecmo', ecmo: 5.5 } }); pintarPacientes(); refrescar(true); pintarDock(); return; }
+  if (acc === 'modelo') { setModo('explorar'); const p = D.PACIENTES.find((x) => x.k === 'aurelio'); est.aparato = 'ecmo'; est.vista = 'aparato'; nuevoPaciente(p, { rec: { eroaMitral: 0.5, pao2: 56 }, volumen: 250, ajuste: { na: 5, dobuta: true, soporte: 'ecmo', ecmo: 4.5 } }); pintarPacientes(); refrescar(true); pintarDock(); return; }
   if (acc === 'ops') { $('ops').innerHTML = q.opciones.map((o, i) => `<button type="button" class="b" data-op="${i}">${o.t}</button>`).join(''); $('ops').hidden = false; $('fmt').remove(); return; }
   if (acc === 'sig') { may.i++; pintarMay(); scrollTo({ top: 0, behavior: REDUCIR ? 'auto' : 'smooth' }); return; }
   if (acc === 'comprueba') {

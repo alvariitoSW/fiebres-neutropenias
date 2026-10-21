@@ -64,25 +64,13 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 .interruptor button + button { border-left: 1px solid var(--line); }
 .interruptor button[aria-selected="true"] { background: var(--oro); color: var(--bg); font-weight: 600; }
 
-/* El monitor de cabecera (la misma pieza que la cabecera del shock) */
-.monitor { border: 1px solid var(--line); border-radius: 14px; background: var(--bg-main); padding: 5px 6px 6px; display: grid; gap: 3px; position: relative;
-  box-shadow: inset 0 0 0 1px rgba(23, 20, 15, 1), inset 0 0 18px rgba(0, 0, 0, .5); }
-.mon-cab { display: flex; justify-content: space-between; align-items: center; gap: 6px; font: 600 .64rem/1.2 var(--sans); color: var(--muted); letter-spacing: .04em; text-transform: uppercase; padding: 0 2px; }
+/* El monitor de cabecera: la pieza común (comun/monitor.js pone su CSS); aquí, lo propio del corazón eléctrico */
+.monitor { --mon-v: 1.04rem; border-radius: 14px; padding: 5px 6px 6px; box-shadow: inset 0 0 0 1px rgba(23, 20, 15, 1), inset 0 0 18px rgba(0, 0, 0, .5); }
 .mon-cab .der { display: flex; gap: 6px; align-items: center; }
 .mon-cab button { min-height: 32px; min-width: 44px; border: 1px solid var(--line); background: transparent; color: var(--dim); border-radius: 8px; font: 600 .68rem var(--sans); cursor: pointer; text-transform: none; letter-spacing: 0; padding: 0 8px; }
 .mon-reloj { font: 700 .72rem var(--sans); color: var(--fg); letter-spacing: .02em; text-transform: none; }
-.mon-cuerpo { display: grid; grid-template-columns: minmax(0, 1fr) 92px; }
 .mon-tiras { display: grid; gap: 1px; min-width: 0; }
-.cifras { display: flex; flex-direction: column; border-left: 1px solid rgba(196, 154, 74, .18); }
-.cifra { flex: 1; display: grid; align-content: center; padding: 1px 0 1px 6px; min-width: 0; border-bottom: 1px solid rgba(196, 154, 74, .12); cursor: default; }
-.cifra:last-child { border-bottom: 0; }
-.cifra .et { font: 600 .58rem/1.1 var(--sans); letter-spacing: .02em; display: flex; justify-content: space-between; gap: 2px; white-space: nowrap; overflow: hidden; }
-.cifra .v { font: 700 1.04rem/1.05 var(--sans); font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--fg); }
-.cifra .o { font: .54rem/1.1 var(--sans); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.cifra.no .v { color: var(--rojo); } .cifra.si .v { color: var(--verde); } .cifra.ojo .v { color: var(--oro); }
-.c-ecg { color: var(--verde); } .c-art { color: var(--rojo); } .c-sat { color: var(--oro); } .c-co2 { color: var(--oro-claro); } .c-pur { color: var(--purpura); }
-.oculto .v { color: var(--muted) !important; }
-.tira { display: block; width: 100%; }
+.cifra { cursor: default; }
 .pendiente-mon { border: 1px dashed var(--line); border-radius: 10px; padding: 10px; font: .8rem/1.4 var(--sans); color: var(--dim); background: repeating-linear-gradient(135deg, transparent 0 8px, rgba(196, 154, 74, .06) 8px 16px); }
 .pendiente-mon b { color: var(--fg); }
 
@@ -104,8 +92,7 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 /* Frase viva y botones */
 .frase { position: fixed; left: 0; right: 0; bottom: var(--dock-h); z-index: 19; margin: 0; background: var(--bg-main); border-top: 1px solid var(--line);
   font: .82rem/1.28 var(--serif); color: var(--fg); padding: 4px max(12px, calc((100% - 560px) / 2)); box-shadow: inset 3px 0 0 var(--oro); cursor: pointer; }
-.frase-txt { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.frase.abierta .frase-txt { display: block; max-height: 40vh; overflow-y: auto; }
+.frase-txt { display: block; max-height: 30vh; overflow-y: auto; }
 button.b { min-height: 44px; font: 600 .84rem/1.2 var(--sans); background: var(--card2); color: var(--fg); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; cursor: pointer; text-align: left; }
 button.b.prim { background: var(--oro); color: var(--bg); border-color: var(--oro); }
 button.b:disabled { opacity: .55; cursor: default; }
@@ -252,9 +239,7 @@ dl.paciente dd.cambia { color: var(--rojo); font-weight: 600; }
     <div class="mon-cab"><span id="mon-tit">Monitor · derivación II</span><span class="der"><span class="mon-reloj" id="mon-reloj" hidden></span><button type="button" id="pausa" aria-pressed="false">Pausa</button></span></div>
     <div class="mon-cuerpo">
       <div class="mon-tiras">
-        <svg class="tira" id="rtm-ecg" role="img" aria-label="ECG generado por el corazón de abajo"></svg>
-        <svg class="tira" id="rtm-art" role="img" aria-label="Presión arterial invasiva"></svg>
-        <svg class="tira" id="rtm-co2" role="img" aria-label="Capnografía" hidden></svg>
+        <svg class="mon-trazas" id="rtm-tiras" role="img" aria-label="ECG generado por el corazón de abajo, presión arterial invasiva y, en la parada, capnografía"></svg>
         <div class="pendiente-mon" id="mon-pendiente" hidden></div>
       </div>
       <div class="cifras" id="mon-cifras"></div>
@@ -308,8 +293,12 @@ dl.paciente dd.cambia { color: var(--rojo); font-weight: 600; }
 <dialog id="visor"><div class="caja-img"><img id="visor-img" alt=""></div><p id="visor-txt"></p><div class="fila" style="margin-top:8px; justify-content:space-between"><span id="visor-cita"></span><button type="button" class="b" id="visor-cerrar">Cerrar</button></div></dialog>
 <div class="toast" id="toast" role="status" hidden></div>
 
-<script>
-'use strict';
+<script type="module">
+// Las piezas comunes (autonomo/maquetas/comun/): el monitor, el grabado isométrico y la bomba de jeringa
+import { crearMonitor, pintarCifras as pintarColumna, instalarMonitor } from './comun/monitor.js';
+import * as I from './comun/dibujo-iso.js';
+import { bomba, embolo, SALIDA } from './comun/bomba.js';
+instalarMonitor();
 /*<motor>*/
 /* ============================================================
    EL MOTOR: una sola verdad. Un grafo de conducción (nodos con su rearme, aristas con su retraso) y un motor de
@@ -552,7 +541,7 @@ const MOTOR = (() => {
       if (nd.tipo === 'v' || nd.tipo === 'a') {
         const r = nd.tipo === 'v' ? t + apd(k, t) * (nd.tesela.capa === 'A' ? 1.04 : nd.tesela.capa === 'B' ? 0.96 : 1) : t + 0.15;
         reg.push({ k, t, dx, dy, et: etiqueta[k], r, choque: de === -1 });
-        agrupar(nd.tipo === 'v' ? latidosV : latidosA, nd.tipo, t, r, de === -1);
+        agrupar(nd.tipo === 'v' ? latidosV : latidosA, nd.tipo, t, r, de === -1, k);
       } else reg.push({ k, t, dx: 0, dy: 0, et: 0, r: t, de });
       if (nd.tipo === 'navR' || nd.tipo === 'navL' || nd.tipo === 'ap') pasoNodo.push({ k, t, paso: true, de });
       // En la TV, el frente entra hacia atrás en el His-Purkinje (conducción oculta, fisiología general): los impulsos
@@ -560,10 +549,13 @@ const MOTOR = (() => {
       if (nd.tipo === 'anillo' && nd.circuito === 'cr' && nd.id === 'cr5') for (const id of ['his1', 'his2', 'bif', 'rb1', 'lb0']) refr[N[id].k] = Math.max(refr[N[id].k], t + m.ocultoHis);
       for (const e of ady[k]) if (e.m !== de) programar(e.m, t + e.d * factor(nodos[e.m], e.tipo), k);
     }
-    function agrupar(lista, reg2, t, r, choque) {
+    // Un latido es una onda: empieza otro si hay un silencio de más de 50 ms o si vuelve a activarse un trozo que esta
+    // onda ya activó (en la FA con una vía accesoria, las ondas se encadenan sin silencio entre ellas)
+    function agrupar(lista, reg2, t, r, choque, k) {
       const total = reg2 === 'v' ? regiones.v.length : regiones.a.length;
       let b = lista[lista.length - 1];
-      if (!b || t - b.fin > 0.05 || choque !== b.choque) { b = { t0: t, fin: t, n: 0, r0: r, r1: r, total, choque }; lista.push(b); if (lista.length > 90) lista.shift(); }
+      if (!b || t - b.fin > 0.05 || choque !== b.choque || (k != null && b.vistos.has(k))) { b = { t0: t, fin: t, n: 0, r0: r, r1: r, total, choque, vistos: new Set() }; lista.push(b); if (lista.length > 90) lista.shift(); }
+      if (k != null) b.vistos.add(k);
       b.fin = t; b.n++; b.r1 = Math.max(b.r1, r); b.r0 = Math.min(b.r0, r);
     }
     function avanzar(hasta) {
@@ -606,7 +598,7 @@ const MOTOR = (() => {
       if (nd.tipo === 'v' || nd.tipo === 'a') { reg.push({ k, t, dx: 0, dy: 0, et: 0, r: t + (nd.tipo === 'v' ? 0.28 : 0.15), choque: true }); }
     }
     // ---- La mecánica: qué latidos mueven sangre (la presión, el pulso y el déficit; Fig. 19.4) ----
-    const efectivo = b => !b.choque && b.n >= 0.6 * b.total && b.fin - b.t0 < 0.26;
+    const efectivo = b => !b.choque && b.n >= 0.6 * b.total && b.fin - b.t0 < 0.45;   // los anchos (vía accesoria, músculo a músculo) también
     function latidosMecanicos(desde, hasta) {
       const out = []; let prev = null, rrPrev = 0.8;
       for (const b of latidosV) {
@@ -926,7 +918,7 @@ const GUIAS = {
   nodal: { tit: 'Reentrada en el nodo AV', pasos: [
     { t: 'El nodo AV tiene dos carriles con distinto periodo refractario: uno rápido que tarda en rearmarse y uno lento que se rearma antes.', r: ['#rtm-lupa-av', '#rtm-torn-r', '#rtm-torn-l'], c: C.psvt, org: 'cuál es cuál: fisiología general' },
     { t: 'Un latido auricular prematuro encuentra el rápido sin rearmar: baja por el lento y vuelve a subir por el rápido. La vuelta se sostiene sola.', r: ['#rtm-torn-r', '#rtm-torn-l'], c: C.psvt },
-    { t: 'Cada vuelta manda un latido: QRS estrecho y regular, 140-250 lpm, a menudo sin P visibles (aquí la P cae junto al QRS).', r: ['#rtm-ecg', '[data-cel="fc"]'], c: C.f192, org: 'dónde cae la P: fisiología general' },
+    { t: 'Cada vuelta manda un latido: QRS estrecho y regular, 140-250 lpm, a menudo sin P visibles (aquí la P cae junto al QRS).', r: ['#rtm-ecg', '[data-fila="fc"]'], c: C.f192, org: 'dónde cae la P: fisiología general' },
     { t: 'Empieza de golpe. Primero, maniobras vagales; si no la cortan, adenosina, que cierra el nodo unos segundos: el circuito pasa por él y se rompe.', r: ['#rtm-nav'], c: C.vagal }] },
   adenosina: { tit: 'La adenosina', pasos: [
     { t: '6 mg en bolo rápido por una vena periférica, en la conexión del catéter, y lavado con suero. Actúa en menos de 30 s.', r: ['#rtm-bomba'], c: C.t194 },
@@ -936,17 +928,17 @@ const GUIAS = {
   flutter: { tit: 'Flúter auricular', pasos: [
     { t: 'Un solo circuito grande gira en la aurícula derecha, alrededor de la tricúspide.', r: ['#rtm-circuito-fl'], c: C.regular, org: 'el sitio del circuito: fisiología general' },
     { t: 'La aurícula se activa sin parar: la línea de base dibuja dientes de sierra.', r: ['#rtm-ecg', '#rtm-aurs'], c: C.regular },
-    { t: 'El torniquete no da abasto y deja pasar uno de cada dos (2:1) o uno de cada tres (3:1): QRS estrecho y regular.', r: ['#rtm-lupa-av', '[data-cel="fc"]'], c: C.regular }] },
+    { t: 'El torniquete no da abasto y deja pasar uno de cada dos (2:1) o uno de cada tres (3:1): QRS estrecho y regular.', r: ['#rtm-lupa-av', '[data-fila="fc"]'], c: C.regular }] },
   fa: { tit: 'Fibrilación auricular', pasos: [
     { t: 'Las aurículas no tienen director: muchas ondas pequeñas chocan entre sí. No hay P: hay ondas de fibrilación.', r: ['#rtm-aurs', '#rtm-ecg'], c: C.irregular, org: 'las ondas: fisiología general' },
     { t: 'Llegan al nodo impulsos a destiempo y el torniquete solo deja pasar los que lo encuentran rearmado: el RR es irregular.', r: ['#rtm-lupa-av'], c: C.irregular, org: 'el nodo como filtro: fisiología general' },
     { t: 'Sin la contracción de la aurícula se pierde ~25 % del llenado. Se nota si el llenado ya era malo: estenosis mitral o hipertrofia.', r: ['#rtm-aurs', '#rtm-art'], c: C.faCons },
-    { t: 'Dos latidos muy juntos: el ventrículo no se llena y la sistólica cae. Algunos no llegan a la muñeca: es el déficit de pulso.', r: ['#rtm-art', '[data-cel="pulso"]'], c: C.f194 },
+    { t: 'Dos latidos muy juntos: el ventrículo no se llena y la sistólica cae. Algunos no llegan a la muñeca: es el déficit de pulso.', r: ['#rtm-art', '[data-fila="pulso"]'], c: C.f194 },
     { t: 'Los fármacos que alargan la conducción del nodo endurecen el muelle del torniquete: pasan menos. Pruébalo en «Tratar».', r: ['#rtm-torn-r'], c: C.t191, org: 'el muelle: la imagen del modelo' }] },
   faF: { tit: 'FA: el fármaco y las horas', pasos: [
     { t: () => ({ dilt: 'Diltiazem 0,25 mg/kg IV en 2 min y luego 5-15 mg/h. En una hora controla al 55 %; la perfusión, hasta al 90 %.', amio: 'Amiodarona 150 mg IV en 10 min, luego 1 mg/min 6 h y 0,5 mg/min 18 h; no más de 2,2 g en 24 h.', digo: 'Digoxina 0,25 mg IV cada 2 h hasta 1,5 mg. Lenta: no se usa sola para el control agudo.' })[S.farmaco], r: ['#rtm-bomba', '#rtm-torn-r'], c: C.t191 },
     { t: 'La Fig. 19.5: el diltiazem cruza los 100 lpm hacia las 2-2,5 h; la amiodarona y la digoxina no bajan de 100 en 6 h.', r: ['#g195'], c: C.f195, org: 'lectura del gráfico' },
-    { t: 'Al bajar la FC, los latidos se espacian, el ventrículo se llena y el déficit de pulso se va: un punto final más fisiológico que una cifra.', r: ['#rtm-art', '[data-cel="pulso"]'], c: C.final, org: 'cuánto: ilustrativo' },
+    { t: 'Al bajar la FC, los latidos se espacian, el ventrículo se llena y el déficit de pulso se va: un punto final más fisiológico que una cifra.', r: ['#rtm-art', '[data-fila="pulso"]'], c: C.final, org: 'cuánto: ilustrativo' },
     { t: 'El precio: el diltiazem da hipotensión en el 20-30 % y es inotrópico negativo; la amiodarona, mucho menos (la que da, por su disolvente, el polisorbato 80).', r: ['#rtm-art'], c: C.amio }] },
   tam: { tit: 'Taquicardia auricular multifocal', pasos: [
     { t: 'Varios focos de la aurícula disparan por turnos: cada P tiene otra forma y el PR cambia.', r: ['#rtm-aurs', '#rtm-ecg'], c: C.irregular },
@@ -964,7 +956,7 @@ const GUIAS = {
     { t: 'Por eso: cardioversión eléctrica, o amiodarona o procainamida.', r: ['#rtm-desfib'], c: C.wpw }] },
   tv: { tit: 'Taquicardia ventricular', pasos: [
     { t: 'Un circuito gira alrededor de una cicatriz del VI. En cada vuelta sale un frente que recorre el ventrículo de músculo a músculo.', r: ['#rtm-circuito-tv'], c: C.tv, org: 'el circuito: fisiología general' },
-    { t: 'QRS ancho y regular, 140-200 lpm, de comienzo brusco. Casi nunca sin cardiopatía estructural.', r: ['#rtm-ecg', '[data-cel="fc"]'], c: C.tv },
+    { t: 'QRS ancho y regular, 140-200 lpm, de comienzo brusco. Casi nunca sin cardiopatía estructural.', r: ['#rtm-ecg', '[data-fila="fc"]'], c: C.tv },
     { t: 'Aurículas y ventrículos laten por separado: P sueltas que no van con el QRS (disociación AV). A veces un latido sinusal se cuela y choca con el ventricular: latido de fusión.', r: ['#rtm-sa', '#rtm-ecg'], c: C.tvsvt },
     { t: 'Con cardiopatía, el 95 % de los QRS anchos son TV. Estable: amiodarona. Inestable: cardioversión sincronizada a 100 J; si falla, 100 J bifásico o 200 J; evita 360 J.', r: ['#rtm-desfib'], c: C.f198 },
     { t: 'La adenosina corta la mayoría de las supraventriculares y no corta la TV: aquí solo echa el cerrojo al torniquete, y el circuito, que no pasa por él, sigue. Por eso sirve si dudas.', r: ['#rtm-lupa-av'], c: C.f198, org: 'que el circuito no pase por el nodo: fisiología general' }] },
@@ -976,7 +968,7 @@ const GUIAS = {
   torsade: { tit: 'QT largo y torsade', pasos: [
     { t: 'El QT es la despolarización y la repolarización del ventrículo: del inicio del QRS al final de la T. Se mide mejor en V3-V4.', r: ['#rtm-ecg'], c: C.qtc },
     { t: 'Haloperidol, macrólidos, antiarrítmicos IA y III, y K⁺, Ca²⁺ o Mg²⁺ bajos alargan el QT. En la célula, la repolarización tarda más.', r: ['#rtm-celula'], c: C.t195, org: 'en qué fase: fisiología general' },
-    { t: 'QTc = QT / √RR. Normal, ≤0,44 s; por encima de 0,5 s, riesgo de torsade. Predice poco: el QT largo es frecuente en la UCI y la torsade, rara.', r: ['[data-cel="qt"]'], c: C.qtc },
+    { t: 'QTc = QT / √RR. Normal, ≤0,44 s; por encima de 0,5 s, riesgo de torsade. Predice poco: el QT largo es frecuente en la UCI y la torsade, rara.', r: ['[data-fila="qt"]'], c: C.qtc },
     { t: 'Torsade: una TV polimórfica cuyos QRS giran alrededor de la línea. Sostenida: desfibrilar; magnesio 1-2 g en 15 min; corregir K⁺ y Mg²⁺ y retirar el fármaco.', r: ['#rtm-ecg'], c: C.tdpManejo }] },
   fv: { tit: 'Fibrilación ventricular', pasos: [
     { t: 'Los ventrículos se activan sin orden: no hay latido y la presión se aplana.', r: ['#rtm-vents', '#rtm-art'], c: C.desfib, org: 'fisiología general' },
@@ -986,7 +978,7 @@ const GUIAS = {
     { t: 'Tras cada choque, 2 min de compresiones antes de mirar el ritmo. Si hace falta un 2.º choque, adrenalina 1 mg cada 3-5 min; si hace falta un 3.º, amiodarona 300 mg (y luego 150).', r: ['#rtm-bomba'], c: C.algoritmo }] },
   rcp: { tit: 'La RCP y la ETCO₂', pasos: [
     { t: 'Tus manos dan un flujo pequeño: mira la presión con cada compresión.', r: ['#rtm-art'], c: C.compres, org: 'cuánto: ilustrativo' },
-    { t: 'La ETCO₂ sigue al gasto: con la ventilación fija, cambia en la misma proporción.', r: ['#rtm-co2', '[data-cel="co2"]'], c: C.etco2 },
+    { t: 'La ETCO₂ sigue al gasto: con la ventilación fija, cambia en la misma proporción.', r: ['#rtm-co2', '[data-fila="co2"]'], c: C.etco2 },
     { t: 'Ventilar deprisa (30 por minuto, el triple) no deja vaciar el pulmón: PEEP intrínseca, menos retorno y menos presión de perfusión coronaria.', r: ['#rtm-co2'], c: C.insufl },
     { t: 'La adrenalina cierra la periferia: la presión de perfusión coronaria sube un 30 % y dura al menos 3 minutos.', r: ['#g213'], c: C.adrenalina },
     { t: 'Si a los 20 min la ETCO₂ no pasa de 10-15 mmHg, es improbable que vuelva el pulso.', r: ['#g214'], c: C.f214, org: 'lectura del gráfico' }] },
@@ -1010,7 +1002,7 @@ const GUIAS = {
   stemi: { tit: 'ST elevado', pasos: [
     { t: 'Una zona del ventrículo sin riego: su músculo lesionado crea una corriente que levanta el ST.', r: ['#rtm-lesion'], c: C.scaEcg, org: 'el mecanismo: fisiología general' },
     { t: 'Mide en el punto J, donde acaba el QRS, en milímetros (1 mm = 0,1 mV).', r: ['#rtm-ecg'], c: C.t201, org: '1 mm = 0,1 mV: fisiología general' },
-    { t: 'En V2-V3: ≥2 mm en varones y ≥1,5 mm en mujeres; en las demás, ≥1 mm. Siempre en dos o más derivaciones contiguas.', r: ['[data-cel="st"]'], c: C.t201 },
+    { t: 'En V2-V3: ≥2 mm en varones y ≥1,5 mm en mujeres; en las demás, ≥1 mm. Siempre en dos o más derivaciones contiguas.', r: ['[data-fila="st"]'], c: C.t201 },
     { t: 'Un ST elevado pide reperfusión urgente. Un bloqueo de rama o un ritmo de marcapasos pueden taparlo: con sospecha de isquemia, se trata como un STEMI.', r: ['#rtm-ecg'], c: C.scaEcg }] },
   hiperk: { tit: 'Potasio alto', pasos: [
     { t: 'La aguja de la célula marca el reposo (-90 mV) y cada fase. Si sube el potasio de fuera, el reposo sube y la fase 0 se hace lenta.', r: ['#rtm-celula'], c: LA.pa, org: 'las fases: El Libro Azul; el efecto del K⁺: fisiología general' },
@@ -1408,45 +1400,25 @@ function fase(tau, apd, nodo) {
   if (tau < 0 || tau >= apd) return 4; if (tau < 0.003) return 0; if (tau < 0.014) return 1; if (tau < 0.62 * apd) return 2; return 3;
 }
 
-// ---------- 4. Los aparatos (isométricos, pieza propia: proyección, cajas de 3 tonos, tornillos, texto en la cara) ----------
-const ISO = { c: Math.cos(Math.PI / 6), s: Math.sin(Math.PI / 6) };
-const isoP = (o, x, y, z) => [o.x + (x - y) * ISO.c * o.k, o.y + (x + y) * ISO.s * o.k - z * o.k];
-const isoPath = (o, ps) => 'M' + ps.map(p => { const q = isoP(o, ...p); return f1(q[0]) + ' ' + f1(q[1]); }).join(' L') + 'Z';
-function caja(o, x, y, z, w, d, hh, tonos = {}, extra = '') {
-  const top = isoPath(o, [[x, y, z + hh], [x + w, y, z + hh], [x + w, y + d, z + hh], [x, y + d, z + hh]]);
-  const izq = isoPath(o, [[x, y + d, z], [x + w, y + d, z], [x + w, y + d, z + hh], [x, y + d, z + hh]]);
-  const der = isoPath(o, [[x + w, y, z], [x + w, y + d, z], [x + w, y + d, z + hh], [x + w, y, z + hh]]);
-  const st = `stroke="var(--text-main)" stroke-width=".55" stroke-linejoin="round"`;
-  return `<path d="${der}" fill="${tonos.der || 'var(--bg-card)'}" ${st}/><path d="${izq}" fill="${tonos.izq || 'var(--card2)'}" ${st}/><path d="${top}" fill="${tonos.top || 'var(--text-muted)'}" fill-opacity="${tonos.topOp ?? .55}" ${st}/>${extra}`;
-}
-// Texto pintado en la cara frontal (la que mira hacia y+): avanza a lo largo de x
-const caraY = (o, x, y, z) => { const p = isoP(o, x, y, z); return `matrix(${f1(ISO.c * o.k)} ${f1(ISO.s * o.k)} 0 ${f1(o.k)} ${f1(p[0])} ${f1(p[1])})`; };
-const caraX = (o, x, y, z) => { const p = isoP(o, x, y, z); return `matrix(${f1(-ISO.c * o.k)} ${f1(ISO.s * o.k)} 0 ${f1(o.k)} ${f1(p[0])} ${f1(p[1])})`; };
-const tornillo = (o, x, y, z) => { const p = isoP(o, x, y, z); return `<circle cx="${f1(p[0])}" cy="${f1(p[1])}" r="1.1" fill="none" stroke="var(--text-main)" stroke-width=".4"/><circle cx="${f1(p[0])}" cy="${f1(p[1])}" r=".4" fill="var(--text-main)"/>`; };
-const OB = { x: 64, y: 56, k: 1 }, OD = { x: 246, y: 44, k: 1 }, OM = { x: 166, y: 128, k: 1 };
+// ---------- 4. Los aparatos: el grabado rápido y la bomba de las piezas comunes (comun/dibujo-iso.js, comun/bomba.js).
+// Isometría de 30°; aquí solo se colocan (OB: la bomba; OD: el desfibrilador) y se pasan las cajas a la pieza común.
+const OB = I.isometrica({ x: 64, y: 56 }), OD = I.isometrica({ x: 246, y: 44 });
+const isoP = (o, x, y, z) => o.iso([x, y, z]);
+const isoPath = (o, ps) => I.camino(ps.map(o.iso), true);
+const caja = (o, x, y, z, w, d, hh, t = {}) => I.caja3(o, [x, y, z], [w, d, hh], { tonos: { sup: t.top, supOp: t.topOp, claro: t.izq, oscuro: t.der } });
+const caraY = (o, x, y, z) => I.caraMatriz(o, [x, y, z], [1, 0, 0], [0, 0, -1]);
+const tornillo = (o, x, y, z) => { const p = o.iso([x, y, z]); return I.tornillo(p[0], p[1], 1.1); };
+const bombaDe = b => bomba(OB, { l1: b ? b.nombre : 'EN ESPERA', l2: b ? b.dosis : '', avance: b ? 0.35 : 0, idEmbolo: 'rtm-embolo' });
 function aparatosEstatico() {
   let h = `<defs><pattern id="rtm-rejilla" width="2" height="2" patternUnits="userSpaceOnUse"><rect width="1" height="1" fill="var(--text-main)" fill-opacity=".12"/></pattern></defs>`;
   // Bandeja (el carro)
   h += `<path d="M6 148 L354 148 L354 156 L6 156 Z" fill="var(--card2)" stroke="var(--border-color)"/><path d="M6 148 L354 148" stroke="var(--text-main)" stroke-width=".5" stroke-opacity=".5"/>`;
-  // --- Bomba de jeringa ---
-  h += `<g id="rtm-bomba"><ellipse cx="${isoP(OB, 50, 18, 0)[0]}" cy="${isoP(OB, 50, 18, 0)[1] + 4}" rx="70" ry="13" fill="var(--bg-main)" fill-opacity=".7"/>`;
-  h += caja(OB, 0, 0, 0, 100, 34, 28, { top: 'var(--text-muted)', topOp: .45 });
-  for (const [x, z] of [[3, 3], [97, 3], [3, 25], [97, 25]]) h += tornillo(OB, x, 34, z);
-  // pantalla y teclas en la cara frontal
-  h += `<path d="${isoPath(OB, [[5, 34, 9], [69, 34, 9], [69, 34, 22], [5, 34, 22]])}" fill="var(--bg-main)" stroke="var(--text-main)" stroke-width=".5"/>
-    <g transform="${caraY(OB, 8, 34, 16.8)}"><text id="rtm-bomba-txt1" x="0" y="0" font-size="8" fill="var(--text-main)" font-weight="600">EN ESPERA</text></g>`;
-  for (let i = 0; i < 3; i++) for (let j = 0; j < 2; j++) h += `<path d="${isoPath(OB, [[73 + i * 8, 34, 10 + j * 7], [79 + i * 8, 34, 10 + j * 7], [79 + i * 8, 34, 15 + j * 7], [73 + i * 8, 34, 15 + j * 7]])}" fill="var(--text-muted)" stroke="var(--text-main)" stroke-width=".4"/>`;
-  h += `<path d="${isoPath(OB, [[100, 6, 6], [100, 28, 6], [100, 28, 18], [100, 6, 18]])}" fill="var(--card2)" stroke="var(--text-main)" stroke-width=".4"/>`;
-  h += [8, 11, 14].map((z, i) => { const a = isoP(OB, 100, 9, z), b = isoP(OB, 100, 9 + [16, 12, 14][i], z); return `<line x1="${f1(a[0])}" y1="${f1(a[1])}" x2="${f1(b[0])}" y2="${f1(b[1])}" stroke="var(--text-muted)" stroke-width=".6"/>`; }).join('');
-  // cuna, jeringa (cilindro hecho de bandas) y carro empujador
-  h += caja(OB, 4, 8, 28, 90, 18, 3, { top: 'var(--text-dim)', topOp: .4 });
-  h += `<g id="rtm-jeringa">` + caja(OB, 8, 12, 31, 58, 10, 9, { top: 'var(--text-main)', topOp: .28, izq: 'var(--text-dim)', der: 'var(--text-muted)' });
-  for (let x = 12; x <= 62; x += 4) { const a = isoP(OB, x, 22, 33), b = isoP(OB, x, 22, x % 8 === 0 ? 37 : 35); h += `<line x1="${f1(a[0])}" y1="${f1(a[1])}" x2="${f1(b[0])}" y2="${f1(b[1])}" stroke="var(--bg-main)" stroke-width=".45"/>`; }
-  h += caja(OB, 2, 15, 33, 6, 4, 4, { top: 'var(--text-main)', topOp: .5 }) + `</g>`;
-  h += `<g id="rtm-embolo"></g>`;
+  // --- Bomba de jeringa (pieza común) ---
+  h += `<g id="rtm-bomba"><g id="rtm-bomba-cuerpo">${bombaDe(null)}</g>`;
   // la línea: llave de tres pasos con su jeringa de lavado y el tubo que sale hacia la vía
-  h += `<path id="rtm-linea" d="M${f1(isoP(OB, 2, 17, 35)[0])} ${f1(isoP(OB, 2, 17, 35)[1])} C 24 44 18 58 12 62 C 8 65 4 66 0 66" fill="none" stroke="var(--text-main)" stroke-width="2.2" stroke-opacity=".75"/>
-    <path d="M${f1(isoP(OB, 2, 17, 35)[0])} ${f1(isoP(OB, 2, 17, 35)[1])} C 24 44 18 58 12 62 C 8 65 4 66 0 66" fill="none" stroke="var(--bg-main)" stroke-width="1"/>
+  const sal = OB.iso(SALIDA);
+  h += `<path id="rtm-linea" d="M${f1(sal[0])} ${f1(sal[1])} C 24 44 18 58 12 62 C 8 65 4 66 0 66" fill="none" stroke="var(--text-main)" stroke-width="2.2" stroke-opacity=".75"/>
+    <path d="M${f1(sal[0])} ${f1(sal[1])} C 24 44 18 58 12 62 C 8 65 4 66 0 66" fill="none" stroke="var(--bg-main)" stroke-width="1"/>
     <rect x="15" y="52" width="8" height="7" rx="1.2" fill="var(--text-dim)" stroke="var(--text-main)" stroke-width=".5"/><path d="M16 50 L22 50" stroke="var(--text-main)" stroke-width="1.4"/>
     <rect x="16.5" y="34" width="5" height="16" fill="var(--text-main)" fill-opacity=".3" stroke="var(--text-main)" stroke-width=".5"/><rect x="15.5" y="30" width="7" height="4" fill="var(--text-dim)" stroke="var(--text-main)" stroke-width=".5"/>
     <circle id="rtm-bolo" cx="0" cy="0" r="2.4" fill="var(--text-main)" opacity="0"/></g>`;
@@ -1519,35 +1491,28 @@ function arrancarMotor() {
   montarMonitor(); llenarEstatico(); ultimoD = null; pintarEscena(simT);
 }
 
-/* ---------- El monitor ---------- */
-const TIRA = { ecg: { h: 86 }, art: { h: 46 }, co2: { h: 40 } };
-let W = 340, SEG = 3.2, buf = { t: [], ecg: [], art: [], co2: [] }, cursor = 0, acum = 0;
+/* ---------- El monitor: la pieza común (comun/monitor.js). Aquí, qué lee cada tira; el papel es el del ECG ---------- */
 const PXS = 110;          // píxeles por segundo: 0,04 s = 4,4 px (1 mm del papel a 25 mm/s)
 const MM = 4.4;           // 1 mm en la tira (también 0,1 mV en vertical: 10 mm/mV)
 const yEcg = v => 52 - v * 10 * MM, yArt = v => 43 - clamp(v - 20, 0, 130) / 130 * 40, yCo2 = v => 37 - clamp(v, 0, 50) / 50 * 33;
+const TIRAS = [
+  { k: 'ecg', rot: 'II', alto: 86, col: 'var(--accent-green)', y: yEcg, papel: { mm: MM, base: 52 } },
+  { k: 'art', rot: 'ART', alto: 46, col: 'var(--accent-red)', y: yArt },
+  { k: 'co2', rot: 'CO₂', alto: 40, col: 'var(--accent-blue)', y: yCo2, oculto: true },
+];
+const monitor = crearMonitor($('rtm-tiras'), { canales: TIRAS, margen: 0, hueco: 1, borrar: 8, prefijo: 'rtm-', anchoMin: 180 });
+let SEG = 3.2, acum = 0;
 function montarMonitor() {
-  const parada = !!S.parada;
-  $('rtm-co2').toggleAttribute('hidden', !parada); $('mon-reloj').toggleAttribute('hidden', !parada);
-  $('mon-pendiente').hidden = !pend(); for (const id of ['rtm-ecg', 'rtm-art']) $(id).toggleAttribute('hidden', pend());
-  if (pend()) { $('rtm-co2').setAttribute('hidden', ''); $('mon-pendiente').innerHTML = `<b>${est().nombre}</b>. ${PENDIENTE} <a class="cita-pdf" href="${ESC_2021}" target="_blank" rel="noopener">Guía ESC 2021 (Eur Heart J)</a>`; pintarCifras(); return; }
-  W = Math.max(180, Math.round($('rtm-ecg').getBoundingClientRect().width || $('rtm-monitor').clientWidth - 110 || 250)); SEG = W / PXS;
+  $('mon-reloj').toggleAttribute('hidden', !S.parada);
+  $('mon-pendiente').hidden = !pend(); $('rtm-tiras').toggleAttribute('hidden', pend());
+  if (pend()) { $('mon-pendiente').innerHTML = `<b>${est().nombre}</b>. ${PENDIENTE} <a class="cita-pdf" href="${ESC_2021}" target="_blank" rel="noopener">Guía ESC 2021 (Eur Heart J)</a>`; pintarCifras(); return; }
   $('mon-tit').textContent = `Monitor · derivación ${S.deriv}`;
-  for (const [k, T] of Object.entries(TIRA)) {
-    const s = $('rtm-' + k); s.setAttribute('viewBox', `0 0 ${W} ${T.h}`); s.style.height = T.h + 'px';
-    let h = '';
-    if (k === 'ecg') {   // papel: 1 mm (0,04 s y 0,1 mV) y 5 mm
-      for (let x = 0, i = 0; x < W; x += MM, i++) h += `<line x1="${f1(x)}" y1="0" x2="${f1(x)}" y2="${T.h}" stroke="var(--accent-red)" stroke-opacity="${i % 5 ? .1 : .26}"/>`;
-      for (let y = 52, i = 0; y < T.h; y += MM, i++) h += `<line x1="0" y1="${f1(y)}" x2="${W}" y2="${f1(y)}" stroke="var(--accent-red)" stroke-opacity="${i % 5 ? .1 : .26}"/>`;
-      for (let y = 52 - MM, i = 1; y > 0; y -= MM, i++) h += `<line x1="0" y1="${f1(y)}" x2="${W}" y2="${f1(y)}" stroke="var(--accent-red)" stroke-opacity="${i % 5 ? .1 : .26}"/>`;
-    }
-    const rot = { ecg: S.deriv, art: 'ART', co2: 'CO₂' }[k], col = { ecg: 'var(--accent-green)', art: 'var(--accent-red)', co2: 'var(--accent-blue)' }[k];
-    h += `<g id="m-${k}"></g><path id="tr-${k}" fill="none" stroke="${col}" stroke-width="1.5" stroke-linejoin="round"/>
-      <rect id="ahora-${k}" x="0" y="0" width="2" height="${T.h}" fill="var(--text-main)" fill-opacity=".55"/>
-      <rect x="0" y="0" width="${rot.length * 6 + 8}" height="12" fill="var(--bg-main)" fill-opacity=".85"/><text x="3" y="9.5" font-size="9" font-weight="600" fill="${col}" font-family="system-ui, sans-serif">${rot}</text>`;
-    if (k === 'ecg') h += `<g id="m-calibre"></g><rect id="tapa-tira" x="0" y="0" width="${W}" height="${T.h}" fill="var(--bg-main)" fill-opacity=".96" hidden/><text id="tapa-tira-txt" x="${W / 2}" y="46" font-size="11" text-anchor="middle" fill="var(--text-dim)" font-family="system-ui, sans-serif" hidden>Predice antes de mirar la tira</text>`;
-    s.innerHTML = h;
-  }
-  buf = { t: new Array(W).fill(null), ecg: new Array(W).fill(null), art: new Array(W).fill(null), co2: new Array(W).fill(null), cz: new Array(W).fill(false) }; cursor = 0;
+  monitor.rotulo('ecg', S.deriv);
+  monitor.ver(S.parada ? ['ecg', 'art', 'co2'] : ['ecg', 'art']);
+  SEG = monitor.NP / PXS;
+  const W = monitor.NP, h = TIRAS[0].alto;
+  monitor.fondo('ecg').innerHTML = '<g id="m-ecg"></g>';
+  monitor.capa('ecg').innerHTML = `<g id="m-calibre"></g><rect id="tapa-tira" x="0" y="0" width="${W}" height="${h}" fill="var(--bg-main)" fill-opacity=".96"${taparTira ? '' : ' hidden'}/><text id="tapa-tira-txt" x="${W / 2}" y="46" font-size="11" text-anchor="middle" fill="var(--text-dim)" font-family="system-ui, sans-serif"${taparTira ? '' : ' hidden'}>Predice antes de mirar la tira</text>`;
   pintarCifras();
 }
 // Lo que el monitor suma a lo que genera el corazón: las compresiones, el choque y la presión de la RCP (ilustrativos)
@@ -1579,40 +1544,43 @@ function capnoEn(t) {
   const p = P_(), fr = p && !p.rce ? p.insufl : 10, f = (t * fr / 60) % 1, alto = etco2En(t), meseta = fr === 30 ? 0.42 : 0.62;
   if (f < 0.06) return alto * f / 0.06; if (f < meseta) return alto * (0.95 + 0.05 * (f - 0.06) / (meseta - 0.06)); if (f < meseta + 0.06) return alto * (1 - (f - meseta) / 0.06); return 0;
 }
-function muestra(t) {
-  buf.t[cursor] = t; buf.ecg[cursor] = yEcg(ecgEn(t)); buf.art[cursor] = yArt(artEn(t)); buf.co2[cursor] = S.parada ? yCo2(capnoEn(t)) : null; buf.cz[cursor] = cerradoEn(t);
-  cursor = (cursor + 1) % W;
-  for (let j = 0; j < 8; j++) { const c = (cursor + j) % W; buf.ecg[c] = buf.art[c] = buf.co2[c] = null; buf.t[c] = null; buf.cz[c] = false; }
-}
+const valoresEn = t => ({ ecg: ecgEn(t), art: artEn(t), co2: S.parada ? capnoEn(t) : null, t, cz: cerradoEn(t) });
+function muestra(t) { monitor.empujar(valoresEn(t)); }
 const cerradoEn = t => !!(mo && t >= mo.m.cerrojo && t < mo.m.cerrojoFin);
 function pintarTiras() {
-  { let h = '', x0 = -1; for (let x = 0; x <= W; x++) { const on = x < W && buf.cz[x]; if (on && x0 < 0) x0 = x; if (!on && x0 >= 0) { h += `<rect x="${x0}" y="2" width="${x - x0}" height="${TIRA.ecg.h - 4}" fill="var(--accent-red)" fill-opacity=".1" stroke="var(--accent-red)" stroke-opacity=".6" stroke-dasharray="3 3"/>` + (x - x0 > 70 && !S.medir ? `<text x="${x0 + 4}" y="${TIRA.ecg.h - 7}" font-size="9" fill="var(--accent-red)" font-family="system-ui, sans-serif">nodo AV cerrado</text>` : ''); x0 = -1; } } const g = $('m-ecg'); if (g) g.innerHTML = h; }
-  for (const k of ['ecg', 'art', 'co2']) {
-    const b = buf[k], el = $('tr-' + k); if (!el) continue; let d = '', on = false;
-    for (let x = 0; x < W; x++) { const y = b[x]; if (y == null) { on = false; continue; } d += (on ? 'L' : 'M') + x + ' ' + y.toFixed(1); on = true; }
-    el.setAttribute('d', d); const a = $('ahora-' + k); if (a) a.setAttribute('x', Math.max(0, cursor - 1));
-  }
+  monitor.pintar();
+  // el nodo AV cerrado: una caja roja sobre la tira mientras dura el cerrojo
+  const cz = monitor.dato('cz'), W = monitor.NP, alto = TIRAS[0].alto;
+  let h = '', x0 = -1;
+  for (let x = 0; x <= W; x++) { const on = x < W && cz[x]; if (on && x0 < 0) x0 = x; if (!on && x0 >= 0) { h += `<rect x="${x0}" y="2" width="${x - x0}" height="${alto - 4}" fill="var(--accent-red)" fill-opacity=".1" stroke="var(--accent-red)" stroke-opacity=".6" stroke-dasharray="3 3"/>` + (x - x0 > 70 && !S.medir ? `<text x="${x0 + 4}" y="${alto - 7}" font-size="9" fill="var(--accent-red)" font-family="system-ui, sans-serif">nodo AV cerrado</text>` : ''); x0 = -1; } }
+  const g = $('m-ecg'); if (g) g.innerHTML = h;
 }
 function llenarEstatico() {
   if (!mo) return;
-  const paso = 1 / PXS; cursor = 0;
-  for (let i = 0; i < W; i++) { const t = simT - SEG + i * paso; buf.t[i] = t; buf.ecg[i] = yEcg(ecgEn(t)); buf.art[i] = yArt(artEn(t)); buf.co2[i] = S.parada ? yCo2(capnoEn(t)) : null; buf.cz[i] = cerradoEn(t); }
-  cursor = 0; pintarTiras(); for (const k of ['ecg', 'art', 'co2']) { const a = $('ahora-' + k); if (a) a.setAttribute('x', W - 2); }
+  const paso = 1 / PXS;
+  monitor.llenar(i => valoresEn(simT - SEG + i * paso));
+  pintarTiras();
 }
 
 /* ---------- Las cifras del monitor: todas salen del motor ---------- */
 function leer() {
   if (!mo) return null;
   const t = simT, ven = 7;
-  const elec = mo.latidosV.filter(b => !b.choque && b.n >= 0.5 * b.total && b.fin - b.t0 < 0.3 && b.t0 > t - ven && b.t0 <= t - 0.02);
-  // la FC del monitor: media de los últimos latidos; si se hace una pausa, cae con ella (no va detrás del dibujo)
-  const ritmo = (lista, tt) => { const u = lista.slice(-6); if (!u.length) return 0; let f = u.length >= 2 ? 60 * (u.length - 1) / (tt(u[u.length - 1]) - tt(u[0])) : 0; const gap = t - tt(u[u.length - 1]), rrM = f ? 60 / f : 1; if (gap > Math.max(1.1, 1.6 * rrM)) f = 60 / gap; return Math.round(f); };
+  const elec = mo.latidosV.filter(b => !b.choque && b.n >= 0.5 * b.total && b.fin - b.t0 < 0.45 && b.t0 > t - ven && b.t0 <= t - 0.02);
+  // la FC del monitor: media de los últimos latidos (en la FA, de toda la ventana: es irregular); si se hace una pausa,
+  // cae con ella (no va detrás del dibujo)
+  const ritmo = (lista, tt) => { const u = mo.m.fa ? lista : lista.slice(-6); if (!u.length) return 0; let f = u.length >= 2 ? 60 * (u.length - 1) / (tt(u[u.length - 1]) - tt(u[0])) : 0; const gap = t - tt(u[u.length - 1]), rrM = f ? 60 / f : 1; if (gap > Math.max(1.1, 1.6 * rrM)) f = 60 / gap; return Math.round(f); };
   let fc = ritmo(elec, b => b.t0);
   const caos = mo.m.fv || (mo.m.foco && S.tdp);
   const lat = latidos(t).filter(b => b.t > t - ven && b.t <= t);
   const palp = lat.filter(b => b.amp >= 12);
   let pul = 0; if (palp.length && lat.length) { const u = lat.slice(-8), pu = u.filter(b => b.amp >= 12); pul = Math.min(fc, Math.round(fc * pu.length / Math.max(1, u.length))); }
-  let pas = 0, pad = 999; for (let s = t - 3; s <= t; s += 0.02) { const p = artEn(s); pas = Math.max(pas, p); pad = Math.min(pad, p); }
+  // la PA, latido a latido como el monitor: la sistólica, el pico de cada uno de los últimos 4 latidos que mueven sangre;
+  // la diastólica, la presión justo antes de su subida. En la parada o sin latidos, lo más alto y lo más bajo de 3 s
+  let pas = 0, pad = 999;
+  const conPulso = (P_() && !P_().rce) ? [] : lat.filter(b => b.amp > 0 && b.t <= t - 0.4).slice(-4);
+  if (conPulso.length) { pas = 0; pad = 0; for (const b of conPulso) { let mx = 0; for (let s = b.t; s <= b.t + 0.4; s += 0.01) mx = Math.max(mx, artEn(s)); pas += mx; pad += artEn(b.t + 0.06); } pas /= conPulso.length; pad /= conPulso.length; }
+  else for (let s = t - 3; s <= t; s += 0.02) { const p = artEn(s); pas = Math.max(pas, p); pad = Math.min(pad, p); }
   const ult = elec[elec.length - 1], prev = elec[elec.length - 2];
   let qrs = null, pr = null, qt = null, qtc = null, rr = null;
   if (ult) {
@@ -1635,18 +1603,18 @@ function anchoKernel(b) {   // ¿llegó por His-Purkinje (estrecho) o por el mú
 let ultLect = null;
 function pintarCifras() {
   const c = $('mon-cifras');
-  if (pend() || !mo) { c.innerHTML = ['FC', 'ART', 'Pulso', '—'].map((e, i) => `<div class="cifra ${['c-ecg', 'c-art', 'c-sat', 'c-co2'][i]}"><span class="et"><span>${e}</span></span><span class="v">—</span><span class="o">pendiente de fuente</span></div>`).join(''); return; }
-  const L = leer(); ultLect = L; const tap = tapado, p = P_();
-  const cel = (k, cls, et, v, u, o, est2 = '') => `<div class="cifra ${cls} ${est2}${tap ? ' oculto' : ''}" data-cel="${k}"><span class="et"><span>${et}</span><span>${u}</span></span><span class="v">${tap ? '?' : v}</span><span class="o">${o}</span></div>`;
+  if (pend() || !mo) { pintarColumna(c, ['FC', 'ART', 'Pulso', '—'].map((e, i) => ({ k: ['fc', 'art', 'pulso', 'k4'][i], cls: ['c-ecg', 'c-art', 'c-sat', 'c-co2'][i], et: e, v: '—', obj: 'pendiente de fuente' }))); return; }
+  const L = leer(); ultLect = L; const p = P_();
+  const cel = (k, cls, et, v, u, o, estado = '') => ({ k, cls, et, v, u, obj: o, estado });
   const parada = p && !p.rce;
-  let h = cel('fc', 'c-ecg', 'FC', L.caos ? (mo.m.fv ? 'FV' : 'TV') : L.fc, 'lpm', 'del ECG · ilustrativo');
+  const celdas = [cel('fc', 'c-ecg', 'FC', L.caos ? (mo.m.fv ? 'FV' : 'TV') : L.fc, 'lpm', 'del ECG · ilustrativo')];
   const sinPulso = parada ? !p.comp : L.pas - L.pad < 6;
-  h += cel('art', 'c-art', 'ART', sinPulso ? '—' : `${L.pas}/${L.pad}`, 'mmHg', parada ? (p.comp ? 'tus manos · ilustrativo' : 'sin pulso') : sinPulso ? 'sin pulso' : 'ilustrativo', parada || sinPulso || L.pas < 90 ? 'no' : '');
+  celdas.push(cel('art', 'c-art', 'ART', sinPulso ? '—' : `${L.pas}/${L.pad}`, 'mmHg', parada ? (p.comp ? 'tus manos · ilustrativo' : 'sin pulso') : sinPulso ? 'sin pulso' : 'ilustrativo', parada || sinPulso || L.pas < 90 ? 'no' : ''));
   const def = L.fc && !parada ? Math.max(0, L.fc - L.pul) : 0;
-  h += cel('pulso', 'c-sat', 'Pulso', parada ? 0 : L.pul, def > 3 ? `déficit ${def}` : 'lpm', def > 3 ? 'Fig. 19.4 · p. 22' : 'en la muñeca', def > 3 ? 'no' : '');
+  celdas.push(cel('pulso', 'c-sat', 'Pulso', parada ? 0 : L.pul, def > 3 ? `déficit ${def}` : 'lpm', def > 3 ? 'Fig. 19.4 · p. 22' : 'en la muñeca', def > 3 ? 'no' : ''));
   const k4 = cuartaCifra(L);
-  h += cel(k4.k, 'c-co2', k4.et, k4.v, k4.u, k4.o, k4.cls || '');
-  c.innerHTML = h;
+  celdas.push(cel(k4.k, 'c-co2', k4.et, k4.v, k4.u, k4.o, k4.cls || ''));
+  pintarColumna(c, celdas, { tapado });
 }
 function cuartaCifra(L) {
   const p = P_();
@@ -1814,7 +1782,7 @@ function pintarCelula(t) {
 function pintarAparatos() {
   const b = S.bomba, dfb = S.desfib;
   $('rtm-bomba').setAttribute('opacity', b ? 1 : 0.6); $('rtm-desfib').setAttribute('opacity', dfb ? 1 : 0.6); $('rtm-marcapasos').setAttribute('opacity', pend() ? 1 : 0.45);
-  $('rtm-bomba-txt1').textContent = b ? b.nombre : 'EN ESPERA';
+  $('rtm-bomba-cuerpo').innerHTML = bombaDe(b);
   let lect = '';
   if (b) lect += `Bomba: <b>${b.lectura}</b>. `;
   if (dfb) lect += `Desfibrilador: <b>${dfb.energia} · ${dfb.modo === 'sinc' ? 'sincronizado' : 'no sincronizado'}</b><span id="desfib-est"></span>. `;
@@ -1828,8 +1796,7 @@ function pintarAparatosVivos(t) {
   const b = S.bomba;
   // émbolo: el carro empuja mientras dura el bolo
   const empuje = b && b.bolo ? clamp((t - b.t0) / 0.6, 0, 1) : b ? 0.35 : 0;
-  const x = 66 + 20 * (1 - empuje);
-  $('rtm-embolo').innerHTML = caja(OB, 66, 15, 34, x - 66 + 0.01, 4, 4, { top: 'var(--text-main)', topOp: .55 }) + caja(OB, x, 12, 31, 3, 10, 10, { top: 'var(--text-main)', topOp: .6 }) + caja(OB, x + 3, 13, 28, 8, 8, 14, { top: 'var(--text-dim)', topOp: .6 });
+  $('rtm-embolo').innerHTML = embolo(OB, empuje);
   const bolo = $('rtm-bolo');
   if (b && b.bolo) { const f = (t - b.t0 - 0.3) / 0.6; if (f >= 0 && f < 1) { const L = $('rtm-linea'), len = L.getTotalLength(), p = L.getPointAtLength(len * f); bolo.setAttribute('cx', f1(p.x)); bolo.setAttribute('cy', f1(p.y)); bolo.setAttribute('opacity', 1); } else bolo.setAttribute('opacity', 0); } else bolo.setAttribute('opacity', 0);
   const d = S.desfib;
@@ -1910,7 +1877,7 @@ function mandosMedir() {
 /* ---------- Medir: el calibrador sobre la tira (los tiempos salen del motor) ---------- */
 function medidas() {
   const L = leer(); if (!L || !L.ult) return null;
-  const elec = mo.latidosV.filter(b => !b.choque && b.n >= 0.5 * b.total && b.fin - b.t0 < 0.3 && b.t0 > simT - SEG + 0.25 && b.r1 + 0.05 < simT);
+  const elec = mo.latidosV.filter(b => !b.choque && b.n >= 0.5 * b.total && b.fin - b.t0 < 0.45 && b.t0 > simT - SEG + 0.25 && b.r1 + 0.05 < simT);
   const b = elec[elec.length - 1] || L.ult, bPrev = elec[elec.length - 2];
   const sq = anchoKernel(b), on = b.t0 - 0.011, off = b.fin + 0.011, tEnd = b.r1 - 0.075 + 2.2 * 0.042 * mo.m.tAncho;
   const a = mo.latidosA.filter(x => x.t0 < b.t0 - 0.04 && x.t0 > b.t0 - 0.4).pop();
@@ -1933,7 +1900,8 @@ function textoMedida() {
 function pintarCalibre() {
   const g = $('m-calibre'); if (!g) return; if (!S.medir || !mo) { g.innerHTML = ''; return; }
   const M = medidas(); if (!M) { g.innerHTML = ''; return; }
-  const xDe = t => { let mejor = null, dm = 9; for (let x = 0; x < W; x++) { const bt = buf.t[x]; if (bt == null) continue; const d = Math.abs(bt - t); if (d < dm) { dm = d; mejor = x; } } return dm < 0.02 ? mejor : null; };
+  const ts = monitor.dato('t');
+  const xDe = t => { let mejor = null, dm = 9; for (let x = 0; x < monitor.NP; x++) { const bt = ts[x]; if (bt == null) continue; const d = Math.abs(bt - t); if (d < dm) { dm = d; mejor = x; } } return dm < 0.02 ? mejor : null; };
   let par = null;
   if (S.medir === 'pr' && M.pr) par = [M.pOn, M.on, 'PR']; if (S.medir === 'qrs') par = [M.on, M.off, 'QRS']; if (S.medir === 'qt') par = [M.on, M.tEnd, 'QT']; if (S.medir === 'rr' && M.rr) par = [M.bPrev.t0, M.bPrev.t0 + M.rr, 'RR'];
   let h = '';
@@ -2057,8 +2025,10 @@ function pintarFrase() {
   const p = S.parada;
   if (p && p.rce) [t, o] = ESTADOS.rce.frase;
   if (S.adeno && mo) { if (simT < S.adeno) [t, o] = ['La adenosina va por la vía hasta el corazón: en bolo rápido y con lavado, actúa en menos de 30 s.', 'ficha · p. 30']; else if (simT < mo.m.cerrojoFin) [t, o] = ['La adenosina echa el cerrojo al nodo AV: salen P sin QRS. Si el circuito pasa por el nodo, se rompe.', 'ficha · p. 29-30']; else if (S.clave === 'nodal' || S.clave === 'aberrancia') [t, o] = [S.clave === 'nodal' ? 'Vuelve el sinusal: la reentrada se cortó. Con 6 mg y luego 12 mg se cortan más del 90 %; por vía central, la mitad de la dosis.' : 'Vuelve el sinusal, con el QRS igual de ancho: el bloqueo de rama ya estaba (Fig. 19.6).', S.clave === 'nodal' ? 'ficha · p. 30' : 'ficha · p. 31']; else if (S.clave === 'tv') [t, o] = ['La adenosina cerró el nodo, pero la TV sigue: su circuito no pasa por él. Si un QRS ancho no responde a la adenosina, probablemente es una TV.', 'ficha · p. 33']; }
-  if (S.clave === 'fa' && F195[S.farmaco]) extra = ` Con ${NOMBRE_F[S.farmaco]}, a las ${coma(S.horas, 1)} h la FC media es ~${Math.round(fcFig(S.farmaco, S.horas))} lpm (Fig. 19.5).`;
-  if (S.clave === 'wpw' && S.wpwFa && !S.wpwNodo) extra = ' FA con atajo: QRS anchos, rápidos e irregulares.';
+  if (S.clave === 'fa' && F195[S.farmaco]) extra = ` Con ${NOMBRE_F[S.farmaco]}, a las ${coma(S.horas, 1)} h la FC media es ~${Math.round(fcFig(S.farmaco, S.horas))} lpm (Fig. 19.5). El monitor la cuenta latido a latido: en la FA sube y baja alrededor de esa media.`;
+  if (S.clave === 'wpw' && S.wpwFa) [t, o] = S.fvWpw ? ['El bloqueo selectivo del nodo precipitó una FV: sin pulso. Desfibrilar.', 'ficha · p. 28']
+    : S.wpwNodo ? ['Frenar el nodo no frena el atajo: la FC no baja, y el bloqueo selectivo del nodo puede precipitar una FV. Con una vía accesoria no se dan antagonistas del calcio, betabloqueantes ni digoxina.', 'ficha · p. 28']
+    : ['Las aurículas fibrilan, y el atajo, sin torniquete, deja pasar impulsos muy seguidos: QRS anchos, rápidos e irregulares. Cardioversión eléctrica, o amiodarona o procainamida.', 'ficha · p. 27-28'];
   if (S.clave === 'torsade' && ultLect && ultLect.qtc && !S.tdp) extra = ` QTc ahora: ${coma(ultLect.qtc, 2)} s.`;
   if (S.clave === 'torsade' && S.tdp) [t, o] = ['Torsade de pointes: una TV polimórfica cuyos QRS cambian de forma y de altura, como si giraran. Sostenida: desfibrilar.', 'ficha · p. 34-35'];
   if (S.clave === 'hiperk') extra = S.k >= 8 ? ' >8: el QRS se funde con la T.' : S.k > 7 ? ' >7: PR largo, sin P, QRS que se ensancha.' : S.k >= 6.4 ? ' ~6,5: T picudas.' : '';
@@ -2252,7 +2222,7 @@ $('dock-panel').addEventListener('click', ev => {
   const b = ev.target.closest('button'); if (!b || b.disabled) return;
   if (b.dataset.fam) { familia = b.dataset.fam; pintarDock(); return; }
   if (b.dataset.estado) { S.medir = null; if (pausado) ponerPausa(false); ponerEstado(b.dataset.estado); pintarDock(); if (REDUCIR) pintarEscena(simT); return; }
-  if (b.dataset.medir) { S.medir = S.medir === b.dataset.medir ? null : b.dataset.medir; if (S.medir && !pausado) ponerPausa(true); pintarTiras(); pintarCalibre(); pintarDock(); return; }
+  if (b.dataset.medir) { S.medir = S.medir === b.dataset.medir ? null : b.dataset.medir; if (S.medir && !pausado) { ponerPausa(true); S.pausaMedir = true; } if (!S.medir) dejarDeMedir(); pintarTiras(); pintarCalibre(); pintarDock(); return; }
   if ('far' in b.dataset) { S.farmaco = b.dataset.far || null; S.horas = S.farmaco ? Math.max(S.horas, 1) : 0; if (S.farmaco) infusion({ dilt: 'DILTIAZEM', amio: 'AMIODARONA', digo: 'DIGOXINA' }[S.farmaco], { dilt: '0,25 mg/kg+5-15', amio: '150 mg + 1 mg/min', digo: '0,25 mg/2 h' }[S.farmaco], { dilt: 'diltiazem 0,25 mg/kg en 2 min y 5-15 mg/h', amio: 'amiodarona 150 mg en 10 min y 1 mg/min', digo: 'digoxina 0,25 mg cada 2 h' }[S.farmaco]); else { S.bomba = null; pintarAparatos(); } aplicarFarmacoFA(); pintarDock(); pintarGraficas(); pintarFuentes(); pintarFrase(); return; }
   if (b.dataset.rama) { ponerEstado('rama', { rama: b.dataset.rama }); return; }
   if (b.dataset.flutter) { ponerEstado('flutter', { flutter: +b.dataset.flutter }); return; }
@@ -2263,10 +2233,12 @@ $('dock-panel').addEventListener('click', ev => {
   if (b.dataset.deriv) { S.deriv = b.dataset.deriv; $('mon-tit').textContent = `Monitor · derivación ${S.deriv}`; montarMonitor(); llenarEstatico(); pintarDock(); return; }
   if (b.dataset.acc) accion(b.dataset.acc, b);
 });
-document.querySelector('.dock-tabs').addEventListener('click', ev => { const b = ev.target.closest('[data-pest]'); if (!b) return; pest = b.dataset.pest; if (pest !== 'medir' && S.medir) { S.medir = null; pintarCalibre(); } pintarDock(); });
+// Dejar de medir: el calibrador se va y, si la tira se paró para medir, vuelve a correr
+function dejarDeMedir() { S.medir = null; pintarCalibre(); if (S.pausaMedir) { S.pausaMedir = false; if (pausado) ponerPausa(false); } }
+document.querySelector('.dock-tabs').addEventListener('click', ev => { const b = ev.target.closest('[data-pest]'); if (!b) return; pest = b.dataset.pest; if (pest !== 'medir' && (S.medir || S.pausaMedir)) dejarDeMedir(); pintarDock(); });
 $('explicame').addEventListener('click', abrirGuia);
 $('frase').addEventListener('click', () => { $('frase').classList.toggle('abierta'); medirDock(); });
-function ponerPausa(si) { pausado = si; $('pausa').setAttribute('aria-pressed', String(pausado)); $('pausa').textContent = pausado ? 'Seguir' : 'Pausa'; if (!pausado && S.medir) { S.medir = null; pintarCalibre(); pintarDock(); } }
+function ponerPausa(si) { pausado = si; if (!si) S.pausaMedir = false; $('pausa').setAttribute('aria-pressed', String(pausado)); $('pausa').textContent = pausado ? 'Seguir' : 'Pausa'; if (!pausado && S.medir) { S.medir = null; pintarCalibre(); pintarDock(); } }
 $('pausa').addEventListener('click', () => ponerPausa(!pausado));
 $('modo-explorar').onclick = () => setModo('explorar');
 $('modo-preguntas').onclick = () => setModo('preguntas');
@@ -2299,6 +2271,7 @@ montarEscena(); pintarFijos(); resetS('sinusal'); ponerEstado('sinusal');
 if (REDUCIR) { const b = mo.latidosV[mo.latidosV.length - 1]; pintarEscena(b ? Math.min(simT, b.t0 + 0.05) : simT); }
 else requestAnimationFrame(bucle);
 medirDock();
+window.__ritmo = { ponerEstado, accion, S, leer, est, aplicarFarmacoFA, get simT() { return simT; }, get mo() { return mo; }, tras, avanzarHasta, pintarCifras, pintarFrase };
 </script>
 </body>
 </html>
