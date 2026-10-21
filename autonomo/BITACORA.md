@@ -173,7 +173,10 @@ esta sección.
   Merino), cada uno añade sus estados o sus matices al modelo que ya existe, con su cita y su «Ver en la ficha», en
   vez de dibujar otro. Haría falta: un índice de modelos y estados por concepto (qué libro aporta qué), y en cada
   ficha de otro libro, su botón al estado del modelo.
-- **Espera**: tu visto bueno para empezar, cuando Marino esté más avanzado.
+- **21/10**: «pensarlos como si fueran unos mega proyectos… completarlos con el resto de contenido de la app (Manual
+  UMI, Libro Azul, PIF, etc.)». Desde el bloque 3, cada modelo nuevo nace con su mapa de crecimiento (REGLAS §7.12);
+  primeros: el corazón eléctrico, el receptor vivo y el monitor del shock con el soporte mecánico.
+- **Espera**: tu visto bueno para empezar a llenarlos con las otras fuentes, cuando Marino esté terminado.
 
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 

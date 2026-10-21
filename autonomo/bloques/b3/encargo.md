@@ -51,6 +51,21 @@ Objetivo M5 del tablero. Empieza el 21/10/2026, con los bloques 1 y 2 en main. A
   dosis y sus efectos secundarios. Esta idea dásela al profesor». → Profesor en modo diseñar (sale en
   `autonomo/bloques/b3/farmacos.md`); parte de los receptores animados que ya existen.
 
+### Parada 1 del bloque 3 (21/10/2026): lo que dijo el usuario de las maquetas
+
+- **Cabecera del shock**: «creo que es mejorable. Está bien como base pero hay que mejorar muchos aspectos, por ejemplo
+  al darle al Impella no aparece nada; habría incluso que explicar cómo funciona un Impella con el siguiente
+  repositorio de GitHub https://github.com/wheresryan22/anatomy». → El repositorio es «Anatomy» (MIT): un método y un
+  kit para figuras isométricas que explican un mecanismo construyendo el objeto real, pieza a pieza («el objeto es la
+  explicación»). Clon de consulta en `/tmp/ajeno/anatomy` (si no está: `git clone --depth 1` en esa carpeta); leer
+  `SKILL.md`, `references/craft.md`, `kit.md`, `motion.md`, `verify.md` y los ejemplos (`examples/test-rig`,
+  `raptor-engine`). Los dispositivos de soporte (Impella, balón, ECMO) se explican así, como objetos reales.
+- **Corazón eléctrico y receptor vivo**: «hay que pensarlos también, como te dije ayer, como si fueran unos mega
+  proyectos, que después de completar el Marino y tener la base hecha, habrá que completarlos con el resto de contenido
+  de la app (Manual UMI, Libro Azul, PIF, etc.); como base está genial pero hay que subir el nivel». → REGLAS §7.12.
+- Estilos sin elegir: el director toma A en los dos (receptor: grabado crema y oro; corazón eléctrico: grabado
+  anatómico), coherentes con el resto de la app, y lo dirá en la parada siguiente.
+
 ## 5. Pasos
 
 | Paso | Quién | Sale en | Estado |

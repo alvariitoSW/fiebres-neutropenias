@@ -209,6 +209,15 @@ pobre que no ayudaba a estudiar. Al usuario le importa **tanto que se entienda y
     su matiz sin rehacer el modelo. Las fuentes nunca se funden: si dos libros dicen distinto, el estado muestra las
     dos con su nota (§1.8).
 
+12. **Los modelos grandes son megaproyectos** (el usuario, 21/10/2026: «pensarlos como si fueran unos mega proyectos,
+    que después de completar el Marino y tener la base hecha, habrá que completarlos con el resto de contenido de la
+    app»). Un modelo nuevo nace con su **mapa de crecimiento**: qué conceptos de toda la app (Marino, Manual UMI, El
+    Libro Azul, PIF, Merino, guías) podrá explicar, qué estados y mandos le añadirá cada fuente y qué piezas comunes
+    necesita para crecer sin rehacerse. Se construye primero con Marino, pero su estructura (datos por estado con sus
+    fuentes en lista, §7.11; escenas por capas; monitor y mandos comunes) ya debe aguantar lo demás. El nivel visual,
+    el de los mejores modelos de la app o más: un objeto real hecho de muchas piezas pequeñas que se entiende al
+    mirarlo (método «Anatomy», `autonomo/bloques/b3/encargo.md`), nunca un esquema de cajas.
+
 **Cómo se juzga**: el agente `profesor` puntúa del 1 al 5 cada punto (y los de §8 si hay preguntas) mirando
 capturas al lado de un modelo. Si alguno queda por debajo de 4, la tarea vuelve al constructor con lo que falta.
 
