@@ -264,7 +264,7 @@ dl.paciente dd.cambia { color: var(--rojo); font-weight: 600; }
   <section class="tarjeta" id="rtm-escena" aria-label="El corazón en corte">
     <div class="tarj-cab"><b>Fig. 1 · el corazón en corte</b><button type="button" class="btn-explica" id="explicame">Explícame este estado</button></div>
     <svg id="rtm-svg" viewBox="0 0 360 422" role="img" aria-label="Corte de cuatro cámaras con el sistema de conducción, el anillo fibroso y dos lupas: el nodo AV y la célula"></svg>
-    <div class="tarj-pie"><span class="pista" id="escena-pista">Toca una pieza: su nombre y dónde se explica</span><span class="lectura" id="escena-lectura"></span></div>
+    <div class="tarj-pie"><span class="pista" id="escena-pista">Toca una pieza: su nombre</span><span class="lectura" id="escena-lectura"></span></div>
   </section>
 
   <div id="peligro" class="banda-peligro" hidden></div>
@@ -626,8 +626,9 @@ const MOTOR = (() => {
     const pulso = tau => (tau < 0 ? 0 : tau < 0.1 ? Math.sin(tau / 0.1 * Math.PI / 2) : Math.exp(-(tau - 0.1) / 0.24));
     function presion(t, lat) {
       // sin latidos que muevan sangre, la presión cae (parada, AESP): ilustrativo
-      let ult = -1e9; for (const b of lat) if (b.t <= t && b.amp > 0) ult = Math.max(ult, b.t);
-      let p = 8 + (m.pd - 8) * Math.exp(-Math.max(0, t - ult - 1.4) / 1.2);
+      let u = -1e9, up = -1e9; for (const b of lat) if (b.t <= t && b.amp > 0 && b.t > u) { up = u; u = b.t; }
+      const caida = d => Math.exp(-Math.max(0, d - 1.4) / 1.2), gPrev = caida(u - up), g = caida(t - u) * (gPrev + (1 - gPrev) * Math.min(1, (t - u) / 0.4));
+      let p = 8 + (m.pd - 8) * g;
       for (const b of lat) { const tau = t - b.t - 0.07; if (tau < 0 || tau > 1.6) continue; p += b.amp * pulso(tau); }
       return p;
     }
@@ -829,7 +830,7 @@ const ESTADOS = {
     frase: ['Una rama no conduce: su ventrículo se activa tarde, de músculo a músculo. QRS ancho aunque el ritmo nazca arriba.', 'ficha · p. 20-21'],
     aplicar(mo, t, s) { RITMO_BASE(mo); mo.m.ramaD = s.rama !== 'd'; mo.m.ramaI = s.rama === 'd'; mo.reiniciarSA(t + 0.05); } },
   nodal: { fam: 'estrecho', nombre: 'Reentrada nodal', corto: 'Reentrada nodal', fuentes: [C.psvt, C.f192, C.vagal, C.adeno, C.t194],
-    frase: ['La onda da vueltas dentro del nodo AV: baja por el carril lento y sube por el rápido. Cada vuelta, un latido.', 'ficha · p. 29'],
+    frase: ['La onda da vueltas dentro del nodo AV: baja por un carril y vuelve por el otro. Cada vuelta, un latido.', 'ficha · p. 29'],
     aplicar(mo, t) { RITMO_BASE(mo); mo.reiniciarSA(t + 0.05); mo.disparar(teselaDe('sia', 5, 0), t + 0.05 + 0.30); } },
   flutter: { fam: 'estrecho', nombre: 'Flúter auricular', corto: 'Flúter', fuentes: [C.regular, C.hallazgos],
     frase: ['Un solo circuito gira en la aurícula: dientes de sierra. El torniquete deja pasar uno de cada dos (2:1) o de cada tres (3:1).', 'ficha · p. 18-19'],
@@ -847,7 +848,7 @@ const ESTADOS = {
     frase: ['Un atajo a través del anillo, sin torniquete: PR corto y onda delta antes del QRS.', 'ficha · p. 27'],
     aplicar(mo, t, s) { mo.m.apOn = true; mo.m.fcSA = 75; if (s.wpwFa) { mo.m.fa = true; mo.m.navRef = { R: 0.28, L: 0.28, C: 0.22 }; mo.m.navF = s.wpwNodo ? 2.4 : 1.1; mo.proxFA = t; } mo.reiniciarSA(t + 0.05); } },
   tv: { fam: 'ancho', nombre: 'Taquicardia ventricular', corto: 'TV', fuentes: [C.tv, C.tvsvt, C.f197, C.f198], paciente: 'hugo',
-    frase: ['Un circuito alrededor de una cicatriz manda un frente cada vuelta: QRS ancho y regular. Las P van por libre.', 'ficha · p. 31-32'],
+    frase: ['QRS ancho y regular, 140-200 lpm, de comienzo brusco. Las P van por libre: aurículas y ventrículos laten por separado.', 'ficha · p. 31-32'],
     aplicar(mo, t) { RITMO_BASE(mo); mo.m.crOn = true; mo.m.musV = 0.85; mo.reiniciarSA(t + 0.12); mo.arrancarCircuito(MOTOR.grafo.CR, t + 0.02); } },
   aberrancia: { fam: 'ancho', nombre: 'Supraventricular con aberrancia', corto: 'Aberrancia', fuentes: [C.ancho, C.tvsvt, C.f196, C.f198, C.madeja],
     frase: ['Una reentrada nodal que baja con una rama bloqueada: QRS ancho que parece una TV.', 'ficha · p. 31'],
@@ -869,7 +870,7 @@ const ESTADOS = {
     frase: ['Ha vuelto el pulso y la ETCO₂ sube de golpe. Es el principio: ahora empieza el síndrome posparo.', 'ficha · p. 61-64'],
     aplicar(mo, t) { mo.m.fcSA = 96; mo.m.contractil = 0.75; mo.reiniciarSA(t + 0.3); } },
   stemi: { fam: 'mas', nombre: 'ST elevado', corto: 'ST elevado', fuentes: [C.scaEcg, C.t201], paciente: 'joaquin',
-    frase: ['La zona sin riego levanta el ST. Mídelo en el punto J y compáralo con el umbral de su derivación y su sexo.', 'ficha · p. 40-41'],
+    frase: ['Un STEMI levanta el ST: mídelo en el punto J y compáralo con el umbral de su derivación y de su sexo.', 'ficha · p. 40-41'],
     aplicar(mo, t) { mo.m.fcSA = 82; mo.reiniciarSA(t + 0.05); } },
   hiperk: { fam: 'mas', nombre: 'Potasio alto', corto: 'K⁺ alto', fuentes: [KC.ecg, LA.pa],
     frase: ['El potasio alto cambia la célula y, con ella, el ECG: T picudas, luego PR largo, sin P y QRS ancho.', 'Nefrología al día · p. 21'],
@@ -965,8 +966,8 @@ const GUIAS = {
     { t: 'Un circuito gira alrededor de una cicatriz del VI. En cada vuelta sale un frente que recorre el ventrículo de músculo a músculo.', r: ['#rtm-circuito-tv'], c: C.tv, org: 'el circuito: fisiología general' },
     { t: 'QRS ancho y regular, 140-200 lpm, de comienzo brusco. Casi nunca sin cardiopatía estructural.', r: ['#rtm-ecg', '[data-cel="fc"]'], c: C.tv },
     { t: 'Aurículas y ventrículos laten por separado: P sueltas que no van con el QRS (disociación AV). A veces un latido sinusal se cuela y choca con el ventricular: latido de fusión.', r: ['#rtm-sa', '#rtm-ecg'], c: C.tvsvt },
-    { t: 'Con cardiopatía, el 95 % de los QRS anchos son TV. Estable: amiodarona. Inestable: cardioversión sincronizada a 100 J; si falla, 200 J, nunca 360.', r: ['#rtm-desfib'], c: C.f198 },
-    { t: 'La adenosina no corta la TV: el circuito no pasa por el nodo. Solo echa el cerrojo al torniquete. Por eso sirve si dudas.', r: ['#rtm-lupa-av'], c: C.f198 }] },
+    { t: 'Con cardiopatía, el 95 % de los QRS anchos son TV. Estable: amiodarona. Inestable: cardioversión sincronizada a 100 J; si falla, 100 J bifásico o 200 J; evita 360 J.', r: ['#rtm-desfib'], c: C.f198 },
+    { t: 'La adenosina corta la mayoría de las supraventriculares y no corta la TV: aquí solo echa el cerrojo al torniquete, y el circuito, que no pasa por él, sigue. Por eso sirve si dudas.', r: ['#rtm-lupa-av'], c: C.f198, org: 'que el circuito no pase por el nodo: fisiología general' }] },
   aberrancia: { tit: 'Supraventricular con aberrancia', pasos: [
     { t: 'Una reentrada nodal (nace arriba, en el torniquete) que baja con la rama izquierda bloqueada.', r: ['#rtm-lupa-av', '#rtm-ramas'], c: C.ancho },
     { t: 'QRS ancho y regular: parece una TV. Si fuera irregular, la pista sería la contraria: la TV nunca es irregular.', r: ['#rtm-ecg'], c: C.madeja },
@@ -1023,7 +1024,7 @@ const PIEZAS = {
   sa: { n: 'Nodo sinusal', t: 'El marcapasos: dispara solo, 70-80 veces por minuto. Está en la aurícula derecha, junto a la cava superior.', c: LA.cond },
   nav: { n: 'Nodo AV', t: 'El único paso entre aurículas y ventrículos: retrasa la onda 0,12 s. En la lupa, el torniquete.', c: LA.cond },
   his: { n: 'Haz de His', t: 'Atraviesa el anillo fibroso y se divide en dos ramas. Conduce a 2 m/s.', c: LA.cond },
-  ramas: { n: 'Ramas del His y red de Purkinje', t: 'La rama derecha baja por la banda moderadora; la izquierda se abre en abanico. Purkinje conduce a 4 m/s.', c: LA.cond },
+  ramas: { n: 'Ramas del His y red de Purkinje', t: 'El His se divide en rama derecha e izquierda y estas en la red de Purkinje, que conduce a 4 m/s. La derecha baja por la banda moderadora.', c: LA.cond, o: 'la banda moderadora: fisiología general' },
   anillo: { n: 'Anillo fibroso', t: 'El esqueleto fibroso entre aurículas y ventrículos: no conduce. Solo lo cruzan el His y, si existe, una vía accesoria.', c: LA.cond, o: 'el aislante: fisiología general' },
   ap: { n: 'Vía accesoria', t: 'Un atajo de músculo a través del anillo, sin el freno del nodo: PR corto y onda delta.', c: C.wpw, o: 'su sitio: fisiología general' },
   aurs: { n: 'Músculo auricular', t: 'Cada tesela se entinta al despolarizarse y se aclara al recuperarse. Mientras está oscura, es refractaria.', c: C.regular, o: 'fisiología general' },
@@ -1071,7 +1072,7 @@ const CRECE = [
   ['Iones y la célula', 'El Libro Azul y Nefrología (potasio, magnesio, calcio)', 'Mandos de K⁺, Mg²⁺ y Ca²⁺ en la célula; estados de T picudas, onda U y torsade por magnesio. El K⁺ alto ya está, como muestra.'],
   ['Fármacos que tocan el ritmo', 'Marino: sedación, delirio, intoxicaciones', 'Haloperidol y QT, betabloqueante y bradicardia, succinilcolina y potasio. El fármaco se verá en su receptor y su efecto, aquí.'],
   ['Bradicardias, frío y marcapasos', 'Guía ESC 2021 de estimulación (pendiente), Manual UMI, Marino (hipotermia)', 'Bloqueos AV desde el mismo torniquete; el generador de marcapasos (ya dibujado, cerrado) con su código; la onda de Osborn.'],
-  ['FA crónica e insuficiencia cardíaca', 'Guía ESC de IC, Manual UMI', 'Frecuencia o ritmo en la IC, ivabradina (solo frena el reloj sinusal), digoxina.'],
+  ['FA crónica e insuficiencia cardíaca', 'Guía ESC de IC, Manual UMI', 'Frecuencia o ritmo en la IC, la ivabradina y la digoxina, cada una con su fuente.'],
   ['El ciclo entero', 'Eco cardíaca y el motor del latido', 'Un solo ECG en toda la app: el del Wiggers y el del ecógrafo saldrán de este mismo grafo.'],
 ];
 
@@ -1216,7 +1217,9 @@ function dibujoEstatico() {
   h += `<g id="rtm-ramas" class="pieza" data-pieza="ramas"><path d="M170 174 L165 190 L168 208 L152 220 L108 228 L64 232 M170 174 L182 179 L212 190 L244 200 L276 222 M182 179 L192 212 L202 234 L218 254" fill="none" stroke="transparent" stroke-width="8"/><g id="rtm-rama-tachada"></g></g>`;
   // Rótulos grabados (pocos; el resto, al tocar)
   h += `<g font-size="9" fill="var(--text-muted)" font-weight="600" letter-spacing=".06em" pointer-events="none"><text x="76" y="104">AD</text><text x="214" y="102">AI</text><text x="96" y="252">VD</text><text x="240" y="256">VI</text></g>
-    <text x="306" y="160" font-size="8" fill="var(--text-dim)" font-style="italic" pointer-events="none">anillo</text><text x="306" y="169" font-size="8" fill="var(--text-dim)" font-style="italic" pointer-events="none">fibroso</text>`;
+    <text x="306" y="172" font-size="8" fill="var(--text-dim)" font-style="italic" pointer-events="none">anillo</text><text x="306" y="181" font-size="8" fill="var(--text-dim)" font-style="italic" pointer-events="none">fibroso</text>`;
+  // las arterias coronarias en el surco AV (cortadas de través): derecha y circunfleja
+  h += [[27, 160], [304, 157]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="4.2" fill="var(--card2)" stroke="var(--text-main)" stroke-width=".7"/><circle cx="${x}" cy="${y}" r="2.2" fill="var(--bg-main)" stroke="var(--accent-red)" stroke-opacity=".7" stroke-width=".5"/>`).join('');
   // Gota del bolo (adenosina) y parches del desfibrilador
   h += `<g id="rtm-gota" opacity="0"><circle cx="105" cy="0" r="3.4" fill="var(--text-main)"/><circle cx="105" cy="0" r="6" fill="var(--text-main)" fill-opacity=".25"/></g>`;
   h += `<g id="rtm-parches" opacity="0"><rect x="6" y="28" width="22" height="16" rx="4" fill="var(--card2)" stroke="var(--text-main)" stroke-width=".8"/><rect x="9.5" y="31.5" width="15" height="9" rx="2" fill="var(--text-dim)" fill-opacity=".35"/><path d="M6 36 L0 36" stroke="var(--text-main)" stroke-width="1.2"/>
@@ -1583,7 +1586,7 @@ function muestra(t) {
 }
 const cerradoEn = t => !!(mo && t >= mo.m.cerrojo && t < mo.m.cerrojoFin);
 function pintarTiras() {
-  { let h = '', x0 = -1; for (let x = 0; x <= W; x++) { const on = x < W && buf.cz[x]; if (on && x0 < 0) x0 = x; if (!on && x0 >= 0) { h += `<rect x="${x0}" y="2" width="${x - x0}" height="${TIRA.ecg.h - 4}" fill="var(--accent-red)" fill-opacity=".1" stroke="var(--accent-red)" stroke-opacity=".6" stroke-dasharray="3 3"/>` + (x - x0 > 70 ? `<text x="${x0 + 4}" y="${TIRA.ecg.h - 7}" font-size="9" fill="var(--accent-red)" font-family="system-ui, sans-serif">nodo AV cerrado</text>` : ''); x0 = -1; } } const g = $('m-ecg'); if (g) g.innerHTML = h; }
+  { let h = '', x0 = -1; for (let x = 0; x <= W; x++) { const on = x < W && buf.cz[x]; if (on && x0 < 0) x0 = x; if (!on && x0 >= 0) { h += `<rect x="${x0}" y="2" width="${x - x0}" height="${TIRA.ecg.h - 4}" fill="var(--accent-red)" fill-opacity=".1" stroke="var(--accent-red)" stroke-opacity=".6" stroke-dasharray="3 3"/>` + (x - x0 > 70 && !S.medir ? `<text x="${x0 + 4}" y="${TIRA.ecg.h - 7}" font-size="9" fill="var(--accent-red)" font-family="system-ui, sans-serif">nodo AV cerrado</text>` : ''); x0 = -1; } } const g = $('m-ecg'); if (g) g.innerHTML = h; }
   for (const k of ['ecg', 'art', 'co2']) {
     const b = buf[k], el = $('tr-' + k); if (!el) continue; let d = '', on = false;
     for (let x = 0; x < W; x++) { const y = b[x]; if (y == null) { on = false; continue; } d += (on ? 'L' : 'M') + x + ' ' + y.toFixed(1); on = true; }
@@ -1796,11 +1799,12 @@ function pintarCelula(t) {
   if (tau >= 0 && tau < ventana - 0.05) {
     const xt = s => x0 + (x1 - x0) * (s - (t - ventana)) / ventana;
     const marcas = nodo ? [[0, 0.025, 4], [3, apd * 0.75, 6], [4, apd + 0.1, 0]] : [[0, 0.001, 0], [1, 0.009, -6], [2, apd * 0.35, -5], [3, apd * 0.9, 2], [4, apd + 0.12, 0]];
-    for (const [n, s, dy] of marcas) { const ss = u + s; if (ss > t) continue; const x = xt(ss), y = yPA(potencial(s, apd, nodo, S.clave === 'hiperk' ? S.k : 4.2)); hf += `<text x="${f1(clamp(x + (n === 0 ? -4 : 0), 76, 157))}" y="${f1(clamp(y + dy - 3, 26, 61))}">${n}</text>`; }
+    for (const [n, s, dy] of marcas) { const ss = u + s; if (ss > t) continue; const x = clamp(xt(ss) + (n === 0 ? -5 : 0), 77, 157), y = clamp(yPA(potencial(s, apd, nodo, S.clave === 'hiperk' ? S.k : 4.2)) + dy - 6, 24, 57);
+      hf += `<circle cx="${f1(x)}" cy="${f1(y)}" r="4.6" fill="var(--bg-main)" stroke="var(--accent-yellow)" stroke-width=".6"/><text x="${f1(x)}" y="${f1(y + 2.8)}">${n}</text>`; }
   }
   $('rtm-pa-fases').innerHTML = hf;
   const fz = fase(tau, apd, nodo), luzF = tau >= 0 && tau < 0.03;
-  const taponCa = nodo && (S.farmaco === 'dilt' || S.diltNodo), taponK = !nodo && S.clave === 'torsade' && Object.values(S.qt || {}).some(Boolean);
+  const taponCa = nodo && (S.farmaco === 'dilt' || S.diltNodo || (S.clave === 'wpw' && S.wpwNodo === 'dilt')), taponK = !nodo && S.clave === 'torsade' && Object.values(S.qt || {}).some(Boolean);
   $('rtm-canal-na').innerHTML = canalHtml(!nodo && fz === 0, false, luzF);
   $('rtm-canal-ca').innerHTML = canalHtml(nodo ? fz === 0 : fz === 2, taponCa, false);
   $('rtm-canal-k').innerHTML = canalHtml(fz === 3, taponK, false);
@@ -1864,8 +1868,8 @@ function mandosTratar() {
     `<div class="rejilla" style="--n:4">${tog('ade6', 'Adenosina', '6 mg')}${tog('ade12', 'Adenosina', '12 mg')}${tog('dilt-nodo', 'Diltiazem', 'si falla')}${tog('reinicio', 'Otra', 'reentrada')}</div>`, nota('Tiempo comprimido (ilustrativo). Los porcentajes, de un estudio (p. 29): cada intento es una tirada.'));
   if (c === 'flutter') h.push(`<div class="seg" role="group">${[2, 3].map(n => `<button type="button" data-flutter="${n}" aria-pressed="${S.flutter === n}">Conducción ${n}:1</button>`).join('')}</div>`, nota('El libro da la conducción 2:1 o 3:1 (p. 18); la frecuencia de la aurícula, no: fisiología general.'));
   if (c === 'fa') h.push(`<div class="seg" role="group" aria-label="Fármaco">${[[null, 'Sin fármaco'], ['dilt', 'Diltiazem'], ['amio', 'Amiodarona'], ['digo', 'Digoxina']].map(([k, n]) => `<button type="button" data-far="${k || ''}" aria-pressed="${S.farmaco === k}">${n}</button>`).join('')}</div>`,
-    `<div class="deslizador"><input type="range" id="d-horas" min="0" max="6" step="0.5" value="${S.horas}" aria-label="Horas desde el fármaco" ${S.farmaco ? '' : 'disabled'}><output id="o-horas">${coma(S.horas, 1)} h<small>desde la dosis</small></output></div>`,
-    `<div class="rejilla" style="--n:2">${tog('llenado', 'Llenado comprometido', 'estenosis mitral, hipertrofia', `aria-pressed="${S.llenadoMalo}"`)}${tog('cv-fa', 'Cardioversión', '100 J sincronizada')}</div>`);
+    `<div class="deslizador"><input type="range" id="d-horas" min="0" max="6" step="0.5" value="${S.horas}" aria-label="Horas desde el fármaco" ${F195[S.farmaco] ? '' : 'disabled'}><output id="o-horas">${coma(S.horas, 1)} h<small>desde la dosis · Fig. 19.5</small></output></div>`,
+    `<div class="rejilla" style="--n:3">${tog('esmolol', 'Esmolol', 'betabloqueante', `aria-pressed="${S.farmaco === 'esmo'}"`)}${tog('llenado', 'Llenado malo', 'estenosis mitral, hipertrofia', `aria-pressed="${S.llenadoMalo}"`)}${tog('cv-fa', 'Cardioversión', '100 J sincronizada')}</div>`);
   if (c === 'tam') h.push(`<div class="rejilla" style="--n:3">${tog('mg-tam', 'Magnesio', '2 g + 6 g en 6 h')}${tog('meto-tam', 'Metoprolol', 'si no hay EPOC')}${tog('vera-tam', 'Verapamilo', 'con EPOC')}</div>`, `<div class="rejilla" style="--n:1">${tog('reinicio', 'Empezar otra vez', '')}</div>`);
   if (c === 'wpw') {
     if (!S.wpwFa) h.push(`<div class="rejilla" style="--n:1">${tog('llegafa', 'Llega una FA', 'con la vía accesoria')}</div>`, nota('Fíjate antes en el PR y en el comienzo del QRS (pestaña Medir).'));
@@ -1966,17 +1970,19 @@ function accion(a, b) {
     case 'vagal-v': case 'vagal-m': case 'vagal-c': {
       const pr = { 'vagal-v': 0.24, 'vagal-m': 0.44, 'vagal-c': 0.09 }[a], ok = mo.azar() < pr, nom = { 'vagal-v': 'La maniobra de Valsalva', 'vagal-m': 'La Valsalva modificada', 'vagal-c': 'El masaje carotídeo' }[a];
       if (ok) { m.navF = 1.7; en(1.6, () => { m.navF = 1; }); } else { m.navRet = 1.18; en(2.2, () => { m.navRet = 1; }); }
-      avisar(`${nom} frena el nodo un momento: ${ok ? '<b>esta vez corta el circuito</b>' : 'esta vez no lo corta (la onda va más despacio unos segundos)'}. Éxito en el estudio: ${Math.round(pr * 100)} % (p. 29).`); break; }
+      avisar(`${nom} sube el tono vagal: ${ok ? '<b>esta vez corta el circuito</b>' : 'esta vez no lo corta (la onda va más despacio unos segundos)'}. Éxito en el estudio: ${Math.round(pr * 100)} % (p. 29). ${org('que frene el nodo: fisiología general')}`); break; }
     case 'ade6': case 'ade12': case 'ade-tv': case 'ade-ab': {
       const dosis = a === 'ade12' ? '12 mg' : '6 mg'; bolo('ADENOSINA', `${dosis} + LAVADO`, `adenosina ${dosis} en bolo rápido y lavado`);
       m.cerrojo = t + 1.3; m.cerrojoFin = t + 1.3 + 3.2; S.adeno = t + 1.3; S.mensaje = null; break; }
     case 'dilt-nodo': infusion('DILTIAZEM', '0,25 mg/kg', 'diltiazem 0,25 mg/kg en 2 min'); S.diltNodo = true; en(1.2, () => { m.navF = 1.5; m.navRet = 1.2; }); en(5, () => { m.navF = 1.15; m.navRet = 1.05; }); avisar('Si la adenosina no responde, el diltiazem o el verapamilo pueden cortarla (p. 31).'); break;
     case 'llenado': S.llenadoMalo = !S.llenadoMalo; m.llenadoMalo = S.llenadoMalo; latCache.t = -1; break;
-    case 'cv-fa': choque('sinc', '100 J', () => { exito(simT); S.mensaje = 'Choque sincronizado de 100 J bifásicos: vuelve el sinusal. Funciona mejor en la FA reciente; antes, eco transesofágica si da tiempo, y anticoagulación (p. 25).'; pintarFrase(); }); break;
+    case 'esmolol': S.farmaco = 'esmo'; S.horas = 0; infusion('ESMOLOL', '500 µg/kg + 50', 'esmolol 500 µg/kg en bolo y 50 µg/kg/min'); m.navF = navParaFC(108); pintarGraficas();
+      avisar(`Esmolol, un betabloqueante: alarga la conducción del nodo y endurece el muelle. Los betabloqueantes controlan la FC en el 70 %; el esmolol tiene una semivida de 9 min y se ajusta deprisa; los dos dan hipotensión (p. 24). ${org('cuánto baja aquí: ilustrativo', true)}`); break;
+    case 'cv-fa': choque('sinc', '100 J', () => { exito(simT); S.mensaje = 'Choque sincronizado de 100 J bifásicos: vuelve el sinusal. Funciona mejor en la FA reciente; antes, eco transesofágica si da tiempo, y anticoagulación en quien la necesite (p. 25). Qué choque funciona: ilustrativo.'; pintarFrase(); }); break;
     case 'cv-wpw': choque('sinc', '100 J', () => { exito(simT); m.apOn = true; S.wpwFa = false; S.wpwNodo = false; pintarDock(); avisar('Cardioversión: vuelve el sinusal, con su PR corto y su onda delta (p. 28).'); }); break;
     case 'mg-tam': bolo('MgSO4', '2 g/15 min + 6 g', 'sulfato de magnesio 2 g en 15 min y 6 g en 6 h'); en(3, () => { m.foco = null; m.sa = true; mo.reiniciarSA(simT + 0.2); avisar('Con magnesio, la TAM pasó a sinusal en el 88 % de un estudio, con independencia del Mg sérico (p. 28). Aquí, uno de esos.'); }); break;
     case 'meto-tam': bolo('METOPROLOL', '2,5-5 mg IV', 'metoprolol 2,5-5 mg IV en 2 min'); en(3, () => { m.foco = null; m.sa = true; mo.reiniciarSA(simT + 0.2); avisar('Metoprolol: 80 % de paso a sinusal, si la TAM no es por EPOC (p. 28).'); }); break;
-    case 'vera-tam': bolo('VERAPAMILO', '0,25-5 mg IV', 'verapamilo IV en 2 min (hasta 20 mg)'); en(1.5, () => { m.foco.cada = 0.62; m.navF = 1.3; avisar('Verapamilo: corrige menos de la mitad, pero frena la FC. Es inotrópico negativo: no en la IC con FE reducida (p. 28).'); }); break;
+    case 'vera-tam': bolo('VERAPAMILO', '0,25-5 mg IV', 'verapamilo IV en 2 min (hasta 20 mg)'); en(1.5, () => { if (m.foco) m.foco.cada = 0.62; m.navF = 1.3; avisar('Verapamilo: corrige menos de la mitad, pero frena la FC. Es inotrópico negativo: no en la IC con FE reducida (p. 28).'); }); break;
     case 'llegafa': S.wpwFa = true; ponerEstado('wpw', { wpwFa: true }); return;
     case 'w-dilt': case 'w-bb': case 'w-digo': {
       const n = { 'w-dilt': ['DILTIAZEM', '0,25 mg/kg'], 'w-bb': ['ESMOLOL', '500 µg/kg'], 'w-digo': ['DIGOXINA', '0,25 mg'] }[a];
@@ -1986,7 +1992,7 @@ function accion(a, b) {
     case 'desf-wpw': choque('asinc', '120-200 J', () => { exito(simT); m.apOn = true; S.wpwFa = false; S.wpwNodo = false; S.fvWpw = false; $('peligro').hidden = true; pintarDock(); avisar('Desfibrilación: vuelve el sinusal, con su PR corto y su onda delta. La vía accesoria sigue ahí.'); }); break;
     case 'w-amio': infusion('AMIODARONA', '150 mg', 'amiodarona 150 mg IV'); en(3.5, () => { exito(simT); m.apOn = true; S.wpwFa = false; pintarDock(); avisar('Cardioversión farmacológica con amiodarona (o procainamida): vuelve el sinusal (p. 28). Cuándo: ilustrativo.'); }); break;
     case 'amio-tv': infusion('AMIODARONA', '150 mg/10 min', 'amiodarona 150 mg en 10 min, luego 1 mg/min'); en(1, () => { m.crRefr = 0.33; }); en(3, () => { m.crRefr = 0.42; }); avisar('Amiodarona IV: la de elección para suprimir la TV monomórfica estable (Fig. 19.8, p. 32-33). Cuándo cede: ilustrativo.'); break;
-    case 'cv-tv': { const e = S.choquesTV ? '200 J' : '100 J'; S.choquesTV = (S.choquesTV || 0) + 1; choque('sinc', e, () => { exito(simT); S.mensaje = `Choque sincronizado de ${e}: la TV cede. Empieza en 100 J; si falla, 100 J bifásico o 200 J, nunca 360 J, que daña el miocardio (p. 32).`; pintarFrase(); }); break; }
+    case 'cv-tv': { const e = S.choquesTV ? '200 J' : '100 J'; S.choquesTV = (S.choquesTV || 0) + 1; choque('sinc', e, () => { exito(simT); S.mensaje = `Choque sincronizado de ${e}: la TV cede. Se empieza en 100 J; si falla, 100 J bifásico o 200 J; se evitan los 360 J, que dañan el miocardio (p. 32). Qué choque funciona: ilustrativo.`; pintarFrase(); }); break; }
     case 'tdp': ponerEstado('torsade', { qt: { ...S.qt }, tdp: true }); return;
     case 'desf-tdp': choque('asinc', '120-200 J', () => { exito(simT); m.apdExtra = qtExtra(S); S.tdp = false; pintarDock(); avisar('Desfibrilación (choque no sincronizado): la torsade sostenida cede. Con el QT aún largo, puede volver: magnesio y corregir (p. 35).'); }); break;
     case 'mg-tdp': S.tdpMg = true; bolo('MgSO4', '1-2 g/15 min', 'sulfato de magnesio 1-2 g en 15 min'); avisar('Magnesio IV, popular para cortar la torsade y combinable con el choque; la dosis no tiene consenso: 1-2 g en 15 min según la ACLS (p. 35). Su efecto aquí: ilustrativo.'); en(4, () => { if (S.tdp) { exito(simT); m.apdExtra = qtExtra(S); S.tdp = false; pintarDock(); } }); break;
@@ -1995,7 +2001,7 @@ function accion(a, b) {
     case 'choque': choque('asinc', '120-200 J', () => resultadoChoque()); break;
     case 'adre': {
       bolo('ADRENALINA', '1 mg IV/IO', 'adrenalina 1 mg IV o IO cada 3-5 min'); p.adrenalina.push(t + 0.9);
-      if (S.clave === 'fv' && p.choques < 2) avisar('La adrenalina empieza si hace falta un 2.º choque (p. 59). En la AESP y la asistolia, desde el principio (p. 60).');
+      if (S.clave === 'fv' && p.choques < 2) avisar('La adrenalina empieza si hace falta un 2.º choque (p. 59). En la AESP y la asistolia, cuanto antes (p. 60-61).');
       else avisar('Adrenalina 1 mg: sube la presión de perfusión coronaria un 30 % durante al menos 3 min (p. 62). Mira la Fig. 21.3, abajo.');
       pintarGraficas(); break; }
     case 'amio-pcr': {
@@ -2022,14 +2028,14 @@ function resultadoChoque() {
 function deslizar(el) {
   const v = +el.value;
   if (el.id === 'd-fcsa') { S.fcSA = v; mo.m.fcSA = v; $('o-fcsa').innerHTML = `${v} lpm<small>reloj sinusal · ilustrativo</small>`; }
-  if (el.id === 'd-horas') { S.horas = v; $('o-horas').innerHTML = `${coma(v, 1)} h<small>desde la dosis</small>`; aplicarFarmacoFA(); pintarGraficas(); }
+  if (el.id === 'd-horas') { S.horas = v; $('o-horas').innerHTML = `${coma(v, 1)} h<small>desde la dosis · Fig. 19.5</small>`; aplicarFarmacoFA(); pintarGraficas(); }
   if (el.id === 'd-min') { S.parada.minuto = v; $('o-min').innerHTML = `min ${v}<small>1.er choque · Fig. 21.1</small>`; pintarGraficas(); }
   if (el.id === 'd-st') { S.st = v; $('o-st').innerHTML = `${coma(v, 1)} mm<small>ST en V2-V3 · ilustrativo</small>`; }
   if (el.id === 'd-k') { S.k = v; aplicarK(mo, v); $('o-k').innerHTML = `K⁺ ${coma(v, 1)}<small>mEq/l</small>`; if (v >= 8.2 && !S.kFv) { S.kFv = true; } }
   pintarFrase(); pintarCifras(); if (REDUCIR || pausado) { llenarEstatico(); pintarEscena(simT); }
 }
 // La FA con un fármaco: la FC de la Fig. 19.5 a esas horas fija la refractariedad del torniquete (el muelle)
-function aplicarFarmacoFA() { S.fcFA = S.farmaco ? fcFig(S.farmaco, S.horas) : 138; mo.m.navF = navParaFC(S.fcFA); }
+function aplicarFarmacoFA() { if (S.farmaco && !F195[S.farmaco]) return; S.fcFA = S.farmaco ? fcFig(S.farmaco, S.horas) : 138; mo.m.navF = navParaFC(S.fcFA); }
 // Con «reducir movimiento» o en pausa: se salta al final de lo que acaba de pasar
 function tras() { const fin = Math.max(simT + 0.6, ...agenda.map(x => x.t + 0.4), S.adeno ? S.adeno + 4 : 0); avanzarHasta(fin); llenarEstatico(); pintarEscena(simT); pintarCifras(); pintarFrase(); }
 function avanzarHasta(fin) { while (simT < fin) { simT = Math.min(fin, simT + 0.05); mo && mo.avanzar(simT + 0.07); procesarAgenda(); if (mo) sincronizar(); } }
@@ -2040,7 +2046,7 @@ function claveGuia() {
   const c = S.clave, p = S.parada;
   if (pend()) return null;
   if (c === 'nodal' && S.adeno) return 'adenosina';
-  if (c === 'fa' && S.farmaco) return 'faF';
+  if (c === 'fa' && F195[S.farmaco]) return 'faF';
   if (c === 'wpw' && S.wpwFa) return 'wpwFa';
   if (p) { if (p.rce) return 'rce'; if (c === 'fv' && p.choques >= 3 && p.escenario === 'refractaria') return 'refractaria'; if (c === 'fv' && p.comp) return 'rcp'; }
   return GUIAS[c] ? c : 'sinusal';
@@ -2051,7 +2057,7 @@ function pintarFrase() {
   const p = S.parada;
   if (p && p.rce) [t, o] = ESTADOS.rce.frase;
   if (S.adeno && mo) { if (simT < S.adeno) [t, o] = ['La adenosina va por la vía hasta el corazón: en bolo rápido y con lavado, actúa en menos de 30 s.', 'ficha · p. 30']; else if (simT < mo.m.cerrojoFin) [t, o] = ['La adenosina echa el cerrojo al nodo AV: salen P sin QRS. Si el circuito pasa por el nodo, se rompe.', 'ficha · p. 29-30']; else if (S.clave === 'nodal' || S.clave === 'aberrancia') [t, o] = [S.clave === 'nodal' ? 'Vuelve el sinusal: la reentrada se cortó. Con 6 mg y luego 12 mg se cortan más del 90 %; por vía central, la mitad de la dosis.' : 'Vuelve el sinusal, con el QRS igual de ancho: el bloqueo de rama ya estaba (Fig. 19.6).', S.clave === 'nodal' ? 'ficha · p. 30' : 'ficha · p. 31']; else if (S.clave === 'tv') [t, o] = ['La adenosina cerró el nodo, pero la TV sigue: su circuito no pasa por él. Si un QRS ancho no responde a la adenosina, probablemente es una TV.', 'ficha · p. 33']; }
-  if (S.clave === 'fa' && S.farmaco) extra = ` Con ${NOMBRE_F[S.farmaco]}, a las ${coma(S.horas, 1)} h la FC media es ~${Math.round(fcFig(S.farmaco, S.horas))} lpm (Fig. 19.5).`;
+  if (S.clave === 'fa' && F195[S.farmaco]) extra = ` Con ${NOMBRE_F[S.farmaco]}, a las ${coma(S.horas, 1)} h la FC media es ~${Math.round(fcFig(S.farmaco, S.horas))} lpm (Fig. 19.5).`;
   if (S.clave === 'wpw' && S.wpwFa && !S.wpwNodo) extra = ' FA con atajo: QRS anchos, rápidos e irregulares.';
   if (S.clave === 'torsade' && ultLect && ultLect.qtc && !S.tdp) extra = ` QTc ahora: ${coma(ultLect.qtc, 2)} s.`;
   if (S.clave === 'torsade' && S.tdp) [t, o] = ['Torsade de pointes: una TV polimórfica cuyos QRS cambian de forma y de altura, como si giraran. Sostenida: desfibrilar.', 'ficha · p. 34-35'];
@@ -2151,7 +2157,7 @@ function grafica195() {
   s += `<line x1="34" x2="334" y1="${y195(100)}" y2="${y195(100)}" stroke="var(--accent-yellow)" stroke-dasharray="4 3"/>` + tx(40, y195(100) - 3, '100 lpm', 'start', 'var(--accent-yellow)');
   const col = { dilt: 'var(--accent-red)', amio: 'var(--accent-yellow)', digo: 'var(--accent-green)' }, dash = { dilt: '', amio: '6 3', digo: '2 3' };
   for (const k of ['dilt', 'amio', 'digo']) { const sel = S.farmaco === k; s += `<polyline points="${F195[k].map((f, i) => `${x195(i)},${y195(f).toFixed(1)}`).join(' ')}" fill="none" stroke="${col[k]}" stroke-width="${sel ? 3 : 1.6}" stroke-dasharray="${dash[k]}" stroke-opacity="${S.farmaco && !sel ? .45 : 1}"/>`; }
-  if (S.farmaco) s += `<circle cx="${x195(S.horas)}" cy="${y195(fcFig(S.farmaco, S.horas)).toFixed(1)}" r="5" fill="var(--text-main)" stroke="var(--bg-main)" stroke-width="2"/>`;
+  if (F195[S.farmaco]) s += `<circle cx="${x195(S.horas)}" cy="${y195(fcFig(S.farmaco, S.horas)).toFixed(1)}" r="5" fill="var(--text-main)" stroke="var(--bg-main)" stroke-width="2"/>`;
   s += `</svg>`;
   const ley = ['dilt', 'amio', 'digo'].map(k => `<span style="white-space:nowrap"><svg class="ley" width="18" height="6" viewBox="0 0 18 6"><line x1="0" y1="3" x2="18" y2="3" stroke="${col[k]}" stroke-width="2.4" stroke-dasharray="${dash[k]}"/></svg> ${NOMBRE_F[k]}${S.farmaco === k ? ' (el elegido)' : ''}</span>`).join(' · ');
   return `<div class="grafica"><p>La Fig. 19.5, viva: la FC media de la FA tras cada fármaco ${org('lectura del gráfico · ficha · p. 24')}. Su número fija el muelle del torniquete de arriba.</p>${s}<p>${ley}</p></div>`;
@@ -2218,7 +2224,7 @@ $('preg').addEventListener('click', ev => {
   if (a === 'otra') { paso = 0; result.length = 0; pintarPaso(); return; }
   if (a === 'ops') { const o = $('ops'); o.innerHTML = q.opciones.map((op, i) => `<button class="b" type="button" data-op="${i}">${op.t}</button>`).join(''); o.hidden = false; $('fmt').remove(); return; }
   if (a === 'sig') { paso++; pintarPaso(); scrollTo({ top: 0, behavior: REDUCIR ? 'auto' : 'smooth' }); return; }
-  if (a === 'tocar') { accion('ade6'); ev.target.closest('.fila').outerHTML = `<p class="para"><span class="ok">✓ Mira:</span> ${q.tocar.confirma}</p><div class="fila"><button class="b prim" type="button" data-acc="sig">Siguiente →</button></div>`; return; }
+  if (a === 'tocar') { accion('ade6'); scrollTo({ top: 0, behavior: REDUCIR ? 'auto' : 'smooth' }); ev.target.closest('.fila').outerHTML = `<p class="para"><span class="ok">✓ Mira:</span> ${q.tocar.confirma}</p><div class="fila"><button class="b prim" type="button" data-acc="sig">Siguiente →</button></div>`; return; }
   const op = ev.target.closest('[data-op]');
   if (op && !op.disabled) {
     const o = q.opciones[op.dataset.op]; result[paso] = !!o.ok;
@@ -2246,7 +2252,7 @@ $('dock-panel').addEventListener('click', ev => {
   const b = ev.target.closest('button'); if (!b || b.disabled) return;
   if (b.dataset.fam) { familia = b.dataset.fam; pintarDock(); return; }
   if (b.dataset.estado) { S.medir = null; if (pausado) ponerPausa(false); ponerEstado(b.dataset.estado); pintarDock(); if (REDUCIR) pintarEscena(simT); return; }
-  if (b.dataset.medir) { S.medir = S.medir === b.dataset.medir ? null : b.dataset.medir; if (S.medir && !pausado) ponerPausa(true); pintarCalibre(); pintarDock(); return; }
+  if (b.dataset.medir) { S.medir = S.medir === b.dataset.medir ? null : b.dataset.medir; if (S.medir && !pausado) ponerPausa(true); pintarTiras(); pintarCalibre(); pintarDock(); return; }
   if ('far' in b.dataset) { S.farmaco = b.dataset.far || null; S.horas = S.farmaco ? Math.max(S.horas, 1) : 0; if (S.farmaco) infusion({ dilt: 'DILTIAZEM', amio: 'AMIODARONA', digo: 'DIGOXINA' }[S.farmaco], { dilt: '0,25 mg/kg+5-15', amio: '150 mg + 1 mg/min', digo: '0,25 mg/2 h' }[S.farmaco], { dilt: 'diltiazem 0,25 mg/kg en 2 min y 5-15 mg/h', amio: 'amiodarona 150 mg en 10 min y 1 mg/min', digo: 'digoxina 0,25 mg cada 2 h' }[S.farmaco]); else { S.bomba = null; pintarAparatos(); } aplicarFarmacoFA(); pintarDock(); pintarGraficas(); pintarFuentes(); pintarFrase(); return; }
   if (b.dataset.rama) { ponerEstado('rama', { rama: b.dataset.rama }); return; }
   if (b.dataset.flutter) { ponerEstado('flutter', { flutter: +b.dataset.flutter }); return; }
