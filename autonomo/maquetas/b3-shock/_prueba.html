@@ -1,0 +1,22 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{--bg-main:#17140f;--bg-card:rgba(46,38,28,.72);--border-color:rgba(196,154,74,.35);--text-main:#ece3cc;--text-muted:#a5967c;--text-dim:#c9bda4;--accent-green:#90a06a;--accent-red:#b85c3e;--accent-yellow:#cf9a3e;--accent-blue:#d4af37;--accent-purple:#9c5476;}
+body{margin:0;background:var(--bg-main);color:var(--text-main);font-family:system-ui}
+svg{display:block;width:100%;height:auto;border:1px solid var(--border-color)}
+</style><link rel="stylesheet" href="escena.css"></head><body>
+<svg id="s" class="escena-aparato"></svg>
+<script type="module">
+import * as AP from './aparatos.js';
+import * as DP from './despiece.js';
+import { ISO_CSS } from '../comun/dibujo-iso.js';
+import { crearCabecera } from './soporte.mjs';
+const st = document.createElement('style'); st.textContent = ISO_CSS; document.head.appendChild(st);
+const q = new URLSearchParams(location.search), tipo = q.get('t') || 'impella';
+const rec = { esc: 'fallo', g: q.get('g') ? +q.get('g') : 0.75, volemia: -1500 };
+const cab = crearCabecera(rec, { asentar: 20 });
+const aj = { impella: { soporte: 'impella', impella: 3.5 }, balon: { soporte: 'balon' }, ecmo: { soporte: 'ecmo', ecmo: 4.5 } }[tipo.replace('d-','')];
+cab.ajustar(aj); cab.correr(8);
+const A = { impella: AP.montarImpella, balon: AP.montarBalon, ecmo: AP.montarEcmo, 'd-impella': DP.montarDespieceImpella, 'd-balon': DP.montarDespieceBalon, 'd-ecmo': DP.montarDespieceEcmo }[tipo](document.getElementById('s'));
+let last = performance.now();
+function f(t){ const dt=Math.min(0.033,(t-last)/1000); last=t; const n=Math.round(dt/0.0001); for(let i=0;i<n;i++) cab.paso(); A.actualizar(cab, dt, false, { on: true }); requestAnimationFrame(f);} requestAnimationFrame(f);
+</script></body></html>

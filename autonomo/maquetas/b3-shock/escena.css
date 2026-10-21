@@ -1,0 +1,47 @@
+/* La escena: anatomía en grabado y aparatos (maqueta b3-shock v2). Solo tokens de css/variables.css. */
+.escena-aparato { --tejido: color-mix(in srgb, var(--accent-red) 38%, var(--bg-main)); --luz-art: color-mix(in srgb, var(--accent-red) 16%, var(--bg-main));
+  --corte: color-mix(in srgb, var(--text-dim) 30%, var(--bg-main)); --grab: color-mix(in srgb, var(--accent-red) 55%, var(--bg-main)); }
+.escena-aparato .luz, .escena-aparato .cav-luz { fill: var(--luz-art); }
+.escena-aparato .vaso.ven .luz { fill: color-mix(in srgb, var(--accent-purple) 18%, var(--bg-main)); }
+.escena-aparato .pared { fill: var(--corte); }
+.escena-aparato .grab { stroke: var(--grab); stroke-width: .5; fill: none; }
+.escena-aparato .intima { stroke: var(--text-dim); stroke-width: .55; fill: none; }
+.escena-aparato .adv { stroke: var(--text-muted); stroke-width: .7; fill: none; }
+.escena-aparato .miocardio { fill: var(--tejido); stroke: none; }
+.escena-aparato .miocardio.papilar { stroke: var(--grab); stroke-width: .5; }
+.escena-aparato .trab { stroke: var(--grab); stroke-width: 1.1; stroke-linecap: round; fill: none; }
+.escena-aparato .endo { stroke: var(--text-dim); stroke-width: .6; fill: none; }
+.escena-aparato .epi { stroke: var(--text-muted); stroke-width: .8; fill: none; }
+.escena-aparato .pared-fina { stroke: var(--text-muted); stroke-width: 1.6; fill: none; }
+.escena-aparato .velo { fill: color-mix(in srgb, var(--text-main) 22%, var(--bg-main)); stroke: var(--text-main); stroke-width: .7; }
+.escena-aparato .velo.detras { fill: color-mix(in srgb, var(--text-main) 12%, var(--bg-main)); stroke: var(--text-muted); }
+.escena-aparato .cuerda { stroke: var(--text-dim); stroke-width: .4; fill: none; }
+.escena-aparato .ostium { fill: var(--bg-main); stroke: var(--text-muted); stroke-width: .6; }
+.escena-aparato .hueco { fill: color-mix(in srgb, var(--bg-main) 70%, #000); stroke: var(--text-muted); stroke-width: .35; }
+.escena-aparato .rotor-fondo { fill: color-mix(in srgb, var(--accent-red) 30%, var(--bg-main)); }
+.escena-aparato .alabe { stroke: var(--accent-blue); stroke-width: 1.1; fill: none; stroke-linecap: round; }
+.escena-aparato .hematie.art { fill: color-mix(in srgb, var(--accent-red) 75%, var(--text-main)); }
+.escena-aparato .hematie.ven { fill: color-mix(in srgb, var(--accent-purple) 80%, var(--text-main)); }
+.escena-aparato.apagado .iso-pieza, .escena-aparato.apagado .iso-tubo { opacity: .45; }
+.escena-aparato .fibras { stroke: color-mix(in srgb, var(--accent-red) 62%, var(--bg-main)); stroke-width: .45; fill: none; }
+.escena-aparato .pantalla { fill: color-mix(in srgb, var(--bg-main) 80%, #000); }
+.escena-aparato .pantalla-marco { fill: none; stroke: var(--text-muted); stroke-width: .6; }
+.escena-aparato .pantalla-txt { fill: var(--accent-blue); font-family: ui-monospace, Menlo, monospace; font-weight: 600; }
+.escena-aparato .placa { fill: color-mix(in srgb, var(--text-main) 18%, var(--bg-main)); stroke: var(--text-muted); stroke-width: .5; }
+.escena-aparato .placa-txt { stroke: var(--text-muted); stroke-width: .5; fill: none; }
+.escena-aparato .remache { fill: var(--text-dim); }
+.escena-aparato .ranura { fill: color-mix(in srgb, var(--bg-main) 80%, #000); stroke: var(--text-muted); stroke-width: .25; }
+.escena-aparato .torso { fill: none; stroke: var(--text-muted); stroke-width: .8; }
+.escena-aparato .pulmon { fill: color-mix(in srgb, var(--accent-red) 10%, var(--bg-main)); stroke: var(--text-muted); stroke-width: .6; }
+.escena-aparato .gota { fill: color-mix(in srgb, var(--text-main) 60%, var(--bg-main)); }
+.escena-aparato .vena-luz { stroke: color-mix(in srgb, var(--accent-purple) 45%, var(--bg-main)); stroke-width: 9; fill: none; stroke-linecap: round; }
+.escena-aparato .vena-pared { stroke: color-mix(in srgb, var(--accent-purple) 25%, var(--bg-main)); stroke-width: 6; fill: none; stroke-linecap: round; }
+.escena-aparato .arteria-luz { stroke: color-mix(in srgb, var(--text-dim) 55%, var(--bg-main)); stroke-width: 10; fill: none; stroke-linecap: round; }
+.escena-aparato .arteria-luz.fina { stroke-width: 6; }
+.escena-aparato .arteria-pared { stroke: color-mix(in srgb, var(--accent-red) 35%, var(--bg-main)); stroke-width: 7; fill: none; stroke-linecap: round; }
+.escena-aparato .cav-ven { fill: color-mix(in srgb, var(--accent-purple) 40%, var(--bg-main)); stroke: var(--text-dim); stroke-width: .6; }
+.escena-aparato .cav-art { fill: color-mix(in srgb, var(--accent-red) 40%, var(--bg-main)); }
+.escena-aparato .velo-plano { stroke: var(--text-main); stroke-width: 1; fill: none; }
+.escena-aparato .fibra { stroke: color-mix(in srgb, var(--text-main) 40%, var(--bg-main)); stroke-width: .6; vector-effect: non-scaling-stroke; }
+.escena-aparato .ventana-oxi { fill: color-mix(in srgb, var(--accent-purple) 30%, var(--bg-main)); stroke: var(--text-muted); stroke-width: .5; }
+.escena-aparato .alabe.detras { stroke: color-mix(in srgb, var(--accent-yellow) 45%, var(--bg-main)); stroke-width: .9; }
