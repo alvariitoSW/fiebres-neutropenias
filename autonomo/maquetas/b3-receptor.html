@@ -358,6 +358,7 @@ dl.paciente dd.cambia { color: var(--rojo); font-weight: 600; }
       <div class="fig-cab"><span class="n">Fig. 2</span><span class="t" id="fig2-tit">La cerradura y su maquinaria</span></div>
       <svg id="lupa" class="dib" viewBox="0 0 360 372" role="img" aria-label="La célula con sus cerraduras y la maquinaria de dentro"></svg>
       <div class="fig-pie"><span class="pista" id="fig2-pista">Toca una pieza: su nombre sale abajo</span><span class="lect" id="fig2-lect"></span></div>
+      <div class="fig-pie"><button type="button" class="btn-plano" id="lupa-grande">⤢ La lupa, a pantalla completa</button></div>
       <div class="tapa" id="tapa2" hidden>Primero contesta. El dibujo y las cifras salen después.</div>
     </section>
     <div class="barra-lupa">
@@ -393,6 +394,7 @@ dl.paciente dd.cambia { color: var(--rojo); font-weight: 600; }
 
 <script type="module">
 import { crearMuestra } from './comun/muestra-mayeutica.js';
+import { crearPlanoGrande } from './comun/plano-grande.js';
 import { svgParticula } from '../../js/core/particulas.js';
 // Las piezas comunes (autonomo/maquetas/comun/): el grabado, la bomba de jeringa y el monitor
 import * as I from './comun/dibujo-iso.js';
@@ -2169,7 +2171,7 @@ const PREG_RECORRIDO = [
 // El caso de Begoña (S4 de la cobertura del bloque): anafilaxia en planta que no responde porque toma bisoprolol.
 // Las cifras del paciente son del caso; conductas y dosis, de la ficha (Marino, cap. 17, p. 64-67).
 const CASO = { titulo: 'El betabloqueante (Begoña)', pasos: [
-  { num: 'Paso 1', sinModelo: true, dia: 'Planta · minuto 4 de la amoxicilina-clavulánico IV',
+  { num: 'Paso 1', sinModelo: true, estado: 'betabloqueo', dia: 'Planta · minuto 4 de la amoxicilina-clavulánico IV',
     paciente: [['Paciente', 'Begoña, 52 años, 65 kg; ingresada por neumonía'], ['Piel', 'habones y la cara hinchada', 1], ['Pulmón', 'sibilancias', 1], ['PA', '70/40 mmHg', 1]],
     enunciado: '<b>¿Qué le das primero, y por dónde?</b>',
     opciones: [
@@ -2178,20 +2180,20 @@ const CASO = { titulo: 'El betabloqueante (Begoña)', pasos: [
       { t: 'Adrenalina 0,5 mg subcutánea en el brazo.', porque: 'Por vía subcutánea se absorbe más despacio (p. 65): la dosis buena va IM profunda, en la cara anterolateral del muslo. Begoña tardaría más en recibir el único fármaco que para la reacción.' },
       { t: 'Difenhidramina y ranitidina IV, y ver cómo responde.', porque: 'Los antihistamínicos alivian síntomas, no cambian el curso, y nunca sustituyen a la adrenalina (p. 66). Begoña seguiría en shock.' }],
     explicacion: 'La adrenalina es el único fármaco que para la reacción: frena la salida de mediadores del mastocito. 0,3-0,5 mg (0,3-0,5 mL de la solución 1:1.000) IM profunda en el muslo, repetible cada 5-15 min (p. 65; Tabla 17.5).', fuente: C.anaAdre, fuente2: C.t175 },
-  { num: 'Paso 2', tipo: 'destapa', sinModelo: true, dia: 'Minuto 10',
+  { num: 'Paso 2', tipo: 'destapa', sinModelo: true, estado: 'betabloqueo', dia: 'Minuto 10',
     paciente: [['Adrenalina', '2.ª dosis IM', 1], ['PA', '72/40 mmHg', 1]],
     enunciado: 'Sigue hipotensa. <b>¿Por qué necesita volumen, y cuánto le pones?</b> Son dos cosas.',
     puntos: [
       { t: 'Los capilares fugan: puede perder hasta el <span class="hl-rojo">35 % del volumen intravascular</span>, bastante para un shock hipovolémico.', c: C.anaShock },
       { t: 'Empezar con <span class="hl-azul">1-2 L de cristaloide (20-30 mL/kg) o 500 mL de albúmina al 5 %</span> en los primeros 5-10 min; después, según cómo responda.', c: C.anaShock }],
     explicacion: 'Con la fuga, casi todo el cristaloide sale del vaso y suma edema: la fuente sugiere añadir un coloide como la albúmina al 5 % (p. 67).', fuente: C.anaShock },
-  { num: 'Paso 3', sinModelo: true, dia: 'Minuto 20 · la perfusión',
+  { num: 'Paso 3', sinModelo: true, estado: 'betabloqueo', dia: 'Minuto 20 · la perfusión',
     paciente: [['Volumen', '2 L de cristaloide', 1], ['PA', '74/42 mmHg', 1]],
     enunciado: 'Pasas a adrenalina IV: 2 mg (2 mL de 1:1.000) en 200 mL de suero, que son 10 µg/mL. <b>Para 10 µg/min, ¿a qué ritmo pones la bomba?</b>',
     opciones: [
+      { t: 'A 60 mL/h: 600 µg/h entre 10 µg/mL.', ok: true },
       { t: 'A 1 mL/h: 10 µg/min entre 10 µg/mL.', porque: 'Eso es 1 mL por minuto, no por hora: 10 µg/min × 60 = 600 µg/h, entre 10 µg/mL. A 1 mL/h Begoña recibiría 0,17 µg/min, nada.' },
       { t: 'A 6 mL/h: 600 µg/h entre 100 µg/mL.', porque: 'La solución lleva 10 µg/mL, no 100 (Tabla 17.5): a 6 mL/h le darías 1 µg/min, un décimo de lo pensado, y la PA de Begoña no subiría.' },
-      { t: 'A 60 mL/h: 600 µg/h entre 10 µg/mL.', ok: true },
       { t: 'A 600 mL/h: los µg por hora, en mL.', porque: 'Falta dividir por la concentración: 600 mL/h serían 100 µg/min, diez veces el máximo de 15 (p. 67). Begoña haría taquiarritmias y una isquemia.' }],
     explicacion: 'En el shock anafiláctico, adrenalina IV a 5-15 µg/min, con la dilución 1:100.000 (10 µg/mL); puede ir precedida de un bolo de 10 µg, repetible, para mantener la PAM ≥65 (Tabla 17.5; p. 67).', fuente: C.t175, fuente2: C.anaShock },
   { num: 'Paso 4', estado: 'betabloqueo', ajustes: { adrenalina: 10, bisoprolol: 1, glucagon: 0 }, predice: true, dia: 'Minuto 30 · el giro',
@@ -2200,11 +2202,11 @@ const CASO = { titulo: 'El betabloqueante (Begoña)', pasos: [
     opciones: [
       { t: 'Vasopresina, otra cerradura distinta del α y el β.', porque: 'La vasopresina no se ha evaluado en el shock anafiláctico (p. 67). Y lo que falla aquí es el β tapado, que deja a la adrenalina sin efecto en el mastocito (p. 66).' },
       { t: 'Subir la adrenalina hasta 30 µg/min.', porque: 'Con el β tapado por el bisoprolol, la respuesta a la adrenalina se atenúa o desaparece (p. 66). Le darías el doble del máximo de 15 µg/min (p. 67) sin que la llave gire.' },
-      { t: 'Glucagón 1-5 mg IV en 5 min y 5-15 µg/min, de lado.', ok: true },
-      { t: 'Metilprednisolona IV, por si es una reacción bifásica.', porque: 'Los corticoides no previenen la recurrencia ni la frenan (p. 66). Begoña seguiría hipotensa.' }],
+      { t: 'Metilprednisolona IV, por si es una reacción bifásica.', porque: 'Los corticoides no previenen la recurrencia ni la frenan (p. 66). Begoña seguiría hipotensa.' },
+      { t: 'Glucagón 1-5 mg IV en 5 min y 5-15 µg/min, de lado.', ok: true }],
     explicacion: 'El betabloqueante atenúa o anula la respuesta a la adrenalina; en la anafilaxia refractaria con β-bloqueo, el glucagón puede devolverla: 1-5 mg IV lento (5 min) y 5-15 µg/min. Da vómitos: si está obnubilada, de lado (p. 66-67).', fuente: C.anaGluc, fuente2: C.glucMec,
     tocar: { txt: 'Compruébalo: pon el glucagón', k: 'glucagon' } },
-  { num: 'Paso 5', tipo: 'error', sinModelo: true, dia: 'Hora 1 · el plan del residente',
+  { num: 'Paso 5', tipo: 'error', sinModelo: true, estado: 'betabloqueo', dia: 'Hora 1 · el plan del residente',
     paciente: [['Glucagón', 'en perfusión; ya responde', 1], ['PA', '96/58 mmHg', 1]],
     enunciado: 'El R1 escribe el plan para la noche. <b>Puede haber 0, 1 o 2 errores.</b> Toca las frases que creas falsas.',
     frases: [
@@ -2225,6 +2227,9 @@ function subirBomba(k, de, a, alFin) {
   let v = de; const pasoB = a > de ? Math.max(1, Math.round((a - de) / 20)) : 1;
   const t = setInterval(() => { v = Math.min(a, v + pasoB); ST.f[k] = v; actualizar(); if (v >= a) { clearInterval(t); alFin(); } }, 140);
 }
+// La lupa en grande: la lámina 2 se mueve a un plano a pantalla completa por encima del dock (la pieza común)
+const planoLupa = crearPlanoGrande({ titulo: 'La cerradura, de cerca', nota: 'Sigue moviéndose con la bomba: cámbiala abajo.', piezas: [{ nodo: () => $('lupa') }, { nodo: () => $('leyenda') }] });
+$('lupa-grande').addEventListener('click', () => planoLupa.abrir());
 // La muestra de la Mayéutica: la pieza común comun/muestra-mayeutica.js (recorrido, «otra vez lo que fallaste» y el caso)
 const mayeutica = crearMuestra({
   cont: $('preg'), dock: { pasos: $('dock-pasos'), izq: $('dock-est-izq'), der: $('dock-est-der') }, medir: () => medirDock(),

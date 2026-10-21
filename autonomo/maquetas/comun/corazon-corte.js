@@ -87,6 +87,7 @@ const CSS = `
 .cc .cc-saco { fill: none; stroke: var(--text-dim); stroke-width: 2.6; stroke-linejoin: round; }
 .cc .cc-saco-serosa { fill: none; stroke: var(--text-muted); stroke-width: 1; }
 .cc .cc-derrame { fill: color-mix(in srgb, var(--accent-yellow) calc(4% + 30% * var(--derrame, 0)), var(--bg-main)); }
+.cc .cc-boca { fill: none; stroke: var(--text-dim); stroke-width: .7; }
 .cc .cc-chorro { fill: none; stroke: color-mix(in srgb, var(--accent-red) 70%, var(--text-main)); stroke-width: .8; stroke-linecap: round; }
 .cc .cc-rot { font: 600 9px system-ui, sans-serif; fill: var(--text-dim); letter-spacing: .04em; }
 .cc .cc-rot.dim { fill: var(--text-muted); font-weight: 400; }
@@ -149,7 +150,7 @@ export function crearCorazonCorte(grupo, { pre = 'cor', rotulos = true, vci = 11
   function geometria(s, e) {
     // ---- VI
     const cav = cavidadVi(s.fvi, s.septo);
-    const gVi = 13.5 * (e.mioVi ?? 1) / Math.pow(s.fvi, 1.15);
+    const gVi = 13.5 * (e.mioVi ?? 1) / Math.pow(Math.max(0.86, s.fvi), 1.15);   // la pared engrosa al vaciarse, con tope
     // la pared: más fina en la punta; hacia fuera (la curva va de lateral a septal pasando por la punta: fuera es +normal)
     const espVi = (t) => gVi * (0.62 + 0.38 * Math.min(1, Math.abs(Math.cos(Math.PI * t)) * 1.6 + 0.25));
     const cVi = [MB[0] + V[0] * L_VI * 0.45, MB[1] + V[1] * L_VI * 0.45];
@@ -242,7 +243,7 @@ export function crearCorazonCorte(grupo, { pre = 'cor', rotulos = true, vci = 11
       Pc([...g.viExt, g.TS]),                                   // VI con el tabique (cerrado por la base)
       Pc([...g.vdExt, ...g.sept.slice().reverse()]),            // pared libre del VD
       Pc([g.TL, ...g.adExt, g.TS]), Pc([MA, ...g.aiExt, [MP[0] + 8, MP[1] + 2]]),
-      Pc([[S0[0] - 10, S0[1] + 2], ...g.paredIzq.slice(0, g.izq.length), ...g.paredDer.slice(g.der.length).reverse(), [MA[0] + 4, MA[1] + 4]]),
+      Pc([[S0[0] - 1, S0[1]], ...g.paredIzq.slice(0, g.izq.length), ...g.paredDer.slice(g.der.length).reverse(), [MA[0] + 4, MA[1] + 4]]),
     ];
     let cav = `<g>${solidos.map((d) => `<path class="cc-silueta" d="${d}"/>`).join('')}</g><g>${solidos.map((d) => `<path class="cc-tejido" d="${d}"/><path class="cc-trama" d="${d}"/>`).join('')}</g>`;
     // fibras (grabado): rayas cortas de dentro afuera, en el VI y el VD
@@ -264,17 +265,34 @@ export function crearCorazonCorte(grupo, { pre = 'cor', rotulos = true, vci = 11
     for (let i = 3; i < g.libre.length - 2; i += 2) { const a = g.libre[i], b = g.sept[i], q = mezcla(a, b, 0.1 + 0.04 * (i % 2)); trab += `M${f1(a[0])} ${f1(a[1])}L${f1(q[0])} ${f1(q[1])}`; }
     cav += `<path class="cc-trab" d="${trab}"/>`;
     // endocardio (abierto en los orificios) y el tabique interauricular escondido tras la raíz
-    cav += `<path class="cc-endo" d="${P(g.cav)}"/><path class="cc-endo" d="${P(g.sept)}"/><path class="cc-endo" d="${P(g.libre)}"/>`
+    cav += `<path class="cc-endo" d="${P(g.cav)}"/><path id="${pre}-tabique" class="cc-endo" d="${P(g.sept)}"/><path class="cc-endo" d="${P(g.libre)}"/>`
       + `<path class="cc-endo" d="${P(g.adC)}"/><path class="cc-endo" d="${P(g.aiC)}"/>`;
-    // la raíz aórtica: paredes con su corte, senos y ostia coronarios
+    // las bocas de las venas: la luz de cada vena entra en su aurícula (sin pared ni pericardio cruzando la boca)
+    const boca = (c, d, r, dentro, fuera, cls) => {
+      const l = Math.hypot(d[0], d[1]) || 1, u = [d[0] / l, d[1] / l], w = [-u[1], u[0]];
+      const P0 = (k, t) => [c[0] + w[0] * r * k + u[0] * t, c[1] + w[1] * r * k + u[1] * t];
+      return `<path class="${cls}" d="${Pc([P0(-1, -dentro), P0(1, -dentro), P0(1, fuera), P0(-1, fuera)])}"/><path class="cc-boca" d="${P([P0(-1, 0), P0(-1, fuera)])}${P([P0(1, 0), P0(1, fuera)])}"/>`;
+    };
+    const cs0 = mezcla(g.vcsA, g.vcsB, 0.5), vb0 = mezcla(g.vciA, g.vciB, 0.5);
+    cav += boca(cs0, [0, -1], 10, 6, 8, 'cc-sangre-v') + boca(vb0, [-12, 16], s.dvci / 2, 6, 4, 'cc-sangre-v')
+      + g.pvs.map(({ p, n }) => boca(p, n, 6, 5, 7, 'cc-sangre-a')).join('');
+    // la raíz aórtica: paredes con su corte y los senos
     cav += `<path class="cc-pared-vaso" d="${Pc(g.paredIzq)}"/><path class="cc-pared-vaso" d="${Pc(g.paredDer)}"/>`
       + (aorta === 'corta' ? `<ellipse class="cc-corte" cx="${f1(AO_X)}" cy="${f1(g.yTop)}" rx="${f1(18.6)}" ry="3.6"/><ellipse class="cc-corte-luz" cx="${f1(AO_X)}" cy="${f1(g.yTop)}" rx="15" ry="2.6"/>` : '')
-      + `<ellipse class="cc-corte" cx="${f1(AO_X - 17.6)}" cy="88" rx="1.3" ry="2.2"/><ellipse class="cc-corte" cx="${f1(AO_X + 17.6)}" cy="87" rx="1.3" ry="2.2"/>`;
+;
     $('cav').innerHTML = cav;
 
     // ---- delante: anillos, válvulas, cuerdas, papilares, banda moderadora, coronarias con su grasa, rótulos
     let d = '';
-    const pap = (raiz, cabeza, w) => { const n = [cabeza[1] - raiz[1], -(cabeza[0] - raiz[0])], l = Math.hypot(...n) || 1; const a = [raiz[0] + n[0] / l * w, raiz[1] + n[1] / l * w], b = [raiz[0] - n[0] / l * w, raiz[1] - n[1] / l * w]; return Pc(suave2([a, mezcla(a, cabeza, 0.55), cabeza, mezcla(b, cabeza, 0.55), b], 5)); };
+    // músculo papilar: un dedo de músculo que nace de la pared y acaba en una cabeza redonda (de ahí salen las cuerdas)
+    const pap = (raiz, cabeza, w) => {
+      const dx = cabeza[0] - raiz[0], dy = cabeza[1] - raiz[1], l = Math.hypot(dx, dy) || 1, u = [dx / l, dy / l], n = [-u[1], u[0]];
+      const at = (s2, k) => [raiz[0] + u[0] * s2 + n[0] * k, raiz[1] + u[1] * s2 + n[1] * k], rc = w * 0.62;
+      const pts = [at(-2, w * 1.3), at(l * 0.45, w * 0.8), at(l - rc, rc)];
+      for (let a = 1; a < 8; a++) { const th = Math.PI / 2 - Math.PI * a / 8; pts.push([cabeza[0] - u[0] * rc + u[0] * rc * Math.cos(th) + n[0] * rc * Math.sin(th), cabeza[1] - u[1] * rc + u[1] * rc * Math.cos(th) + n[1] * rc * Math.sin(th)]); }
+      pts.push(at(l - rc, -rc), at(l * 0.45, -w * 0.8), at(-2, -w * 1.3));
+      return Pc(suave2(pts, 3));
+    };
     const pmRaiz = enFraccion(g.cav, 0.2).p, psRaiz = enFraccion(g.cav, 0.66).p;
     d += `<path class="cc-papilar" d="${pap(pmRaiz, g.papAL, 5)}"/><path class="cc-papilar" d="${pap(psRaiz, g.papPM, 5)}"/>`;
     const vdRaiz = g.pv;

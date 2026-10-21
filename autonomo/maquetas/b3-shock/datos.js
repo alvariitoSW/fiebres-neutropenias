@@ -263,7 +263,7 @@ export const ESTADOS = {
   'ecmo-cerrada': { tit: 'ECMO: el VI ya no abre', frase: (R) => `El chorro que sube por la aorta frena al VI débil: la aórtica abre ${R.aoAbre} de ${R.aoDe} veces, la PCP sube a ${R.pcp} y el pulmón se encharca. Hay que ventearlo.`, org: 'ficha · p. 48-49',
     guia: [{ t: 'El flujo retrógrado sube la poscarga del VI: un problema que no tienen los otros soportes.', s: ['.p-canula-a', '#tr-art'], c: C.ecmoPoscarga },
       { t: (R) => `El VI no puede abrir su válvula: ${R.aoAbre} de ${R.aoDe} latidos. Se dilata.`, s: ['#ecm-corazon'], c: C.ecmoPoscarga },
-      { t: (R) => `La PCP sube (${R.pcp}) y aparece el edema: mira las gotas en el pulmón.`, s: ['[data-fila="pcp"]', '#ecm-pulmon'], c: C.ecmoPoscarga, org: 'cuánto: el modelo' },
+      { t: (R) => `La PCP sube (${R.pcp}) y aparece el edema: mira las gotas en el pulmón.`, s: ['[data-fila="pcp"]', '#ecm-frente .pulmon'], c: C.ecmoPoscarga, org: 'cuánto: el modelo' },
       { t: 'Se corrige con un balón o un Impella a la vez, o drenando el VI («venteo»): prueba el mando.', s: ['#mandos'], c: C.ecmoPoscarga }] },
   'ecmo-venteo': { tit: 'ECMO con venteo', frase: (R, X) => `Venteo con ${({ impella: 'Impella', balon: 'balón', drenaje: 'drenaje del VI' })[X.ajuste.venteo]}: la PCP baja a ${R.pcp} y la aórtica abre ${R.aoAbre} de ${R.aoDe}.`, org: 'ficha · p. 48-49',
     guia: [{ t: 'Para bajar la poscarga del VI: un balón o un Impella a la vez, o drenar el VI para bajar su presión telediastólica.', s: ['#ecm-venteo', '#mandos'], c: C.ecmoPoscarga },
@@ -299,20 +299,20 @@ export const PROFUNDIZAR = [
 ];
 
 // ---------------------------------------------------------------- «¿Qué shock es?»: 11 pacientes, se barajan 10
-// Sin nombre hasta contestar. Tres tiempos: cabecera → eco → catéter. Cada uno, con su receta del motor.
+// Sin nombre, edad ni sexo hasta contestar (la edad delataba al paciente). Tres tiempos: cabecera → eco → catéter.
 export const QS = [
-  { pac: 'mateo', tipo: 'hemo', g: 0.62, quien: 'Varón de 34 años' },
-  { pac: 'mateo', tipo: 'hemo', g: 0.9, quien: 'Varón de 34 años' },
-  { pac: 'amparo', tipo: 'septico', g: 0.85, quien: 'Mujer de 58 años' },
-  { pac: 'amparo', tipo: 'septico', g: 1, quien: 'Mujer de 58 años' },
-  { pac: 'begona', tipo: 'septico', esc: 'anafilaxia', g: 1, quien: 'Mujer de 52 años', real: 'Begoña: anafilaxia (distributivo)', peso: 65 },
-  { pac: 'aurelio', tipo: 'cardio', g: 0.75, quien: 'Varón de 67 años' },
-  { pac: 'aurelio', tipo: 'cardio', g: 0.92, volemia: 0, quien: 'Varón de 67 años', real: 'Aurelio, horas después: shock cardiogénico con la PCP alta' },
-  { pac: 'joaquin', tipo: 'tapon', g: 0.85, quien: 'Varón de 56 años' },
-  { pac: 'consuelo', tipo: 'tep', g: 0.95, quien: 'Mujer de 63 años' },
+  { pac: 'mateo', tipo: 'hemo', g: 0.62 },
+  { pac: 'mateo', tipo: 'hemo', g: 0.9 },
+  { pac: 'amparo', tipo: 'septico', g: 0.85 },
+  { pac: 'amparo', tipo: 'septico', g: 1 },
+  { pac: 'begona', tipo: 'septico', esc: 'anafilaxia', g: 1, real: 'Begoña: anafilaxia (distributivo)', peso: 65 },
+  { pac: 'aurelio', tipo: 'cardio', g: 0.75 },
+  { pac: 'aurelio', tipo: 'cardio', g: 0.92, volemia: 0, real: 'Aurelio, horas después: shock cardiogénico con la PCP alta' },
+  { pac: 'joaquin', tipo: 'tapon', g: 0.85 },
+  { pac: 'consuelo', tipo: 'tep', g: 0.95 },
   // sin shock: PAM ~82 y lactato normal (con el defecto del motor, g ≈ 0,93, la PAM es 67 pero el lactato ya sube)
-  { pac: 'consuelo', tipo: 'no', g: 0.6, quien: 'Mujer de 63 años', real: 'Consuelo, hora 0: TEP con el VD sobrecargado, sin shock' },
-  { pac: 'nerea', tipo: 'septico', esc: 'sepsis', g: 0.9, quien: 'Mujer de 31 años', real: 'Nerea: shock tóxico estreptocócico (distributivo)', peso: 60 },
+  { pac: 'consuelo', tipo: 'no', g: 0.6, real: 'Consuelo, hora 0: TEP con el VD sobrecargado, sin shock' },
+  { pac: 'nerea', tipo: 'septico', esc: 'sepsis', g: 0.9, real: 'Nerea: shock tóxico estreptocócico (distributivo)', peso: 60 },
 ];
 export const OPC_QS = [['hemo', 'Hipovolémico'], ['septico', 'Distributivo'], ['cardio', 'Cardiogénico'], ['tapon', 'Obstructivo: taponamiento'], ['tep', 'Obstructivo: TEP'], ['no', 'No está en shock']];
 export const HUELLA = {
@@ -388,13 +388,13 @@ export const PREGUNTAS = [
       { t: 'El ictus, en el 6 %.', porque: 'El 6 % de ictus es del ECMO VA (p. 48). En un Impella, la hemólisis es lo que la fuente dice que es más frecuente.' }],
     explica: 'La hemólisis significativa (5-10 %) es mayor con el Impella que con otros soportes; además, más sangrado mayor e isquemia de la pierna que con el balón (p. 48).', cita: C.impellaEf },
   { id: 'E5', grupo: 'examen',
-    enunciado: 'Shock cardiogénico refractario tras un IAM, con un fallo respiratorio que ya no se corrige con el respirador. <b>¿Qué soporte prefiere la fuente?</b>',
+    enunciado: '<b>¿Qué ventaja tiene el ECMO VA que, entre los otros soportes, solo se iguala combinando dos Impella, uno para cada ventrículo?</b>',
     opciones: [
-      { t: 'Ninguno: el soporte mecánico no mejora la supervivencia.', porque: 'Ningún método ha mejorado la supervivencia en las comparaciones (p. 45), pero hay pacientes que se benefician y se usa para ganar tiempo. Sin soporte, este paciente no saldría del shock.' },
-      { t: 'Un balón de contrapulsación, el más disponible.', porque: 'El balón descarga el VI pero no oxigena: el fallo respiratorio seguiría igual.' },
-      { t: 'Un Impella izquierdo, que descarga mejor el VI.', porque: 'El Impella no oxigena la sangre: el fallo respiratorio seguiría. Para los dos ventrículos y el pulmón haría falta otra cosa.' },
-      { t: 'Un ECMO venoarterial.', ok: true }],
-    explica: 'El ECMO VA soporta el flujo y el intercambio de gases: es el método preferido si el shock cardiogénico se acompaña de fallo respiratorio (p. 48-49).', cita: C.seleccion },
+      { t: 'Descarga el VI y le baja la poscarga.', porque: 'Al revés: el flujo que sube por la aorta le SUBE la poscarga al VI, un problema que no tienen los otros soportes (p. 48). Esperando que descargue, dejarías encharcarse al paciente.' },
+      { t: 'Da más supervivencia que el balón en el infarto.', porque: 'Las comparaciones con el balón o los LVAD son inconsistentes: unas veces mejor el ECMO y otras el Impella (p. 49). Elegirlo por eso es elegirlo por un dato que la fuente no da.' },
+      { t: 'El soporte completo de los dos ventrículos.', ok: true },
+      { t: 'No necesita anticoagulación completa.', porque: 'Como los demás soportes, necesita anticoagulación completa (p. 48). Sin ella, el circuito y el paciente se llenarían de trombos.' }],
+    explicacion: 'El ECMO VA puede dar soporte biventricular completo (solo igualado por un Impella para el VD y otro para el VI) y además oxigena y lava el CO₂; necesita anticoagulación completa (p. 48).', cita: C.ecmo },
 ];
 // El caso de Aurelio: evoluciona en el reloj del paciente. Cada paso prepara el modelo y añade a la ficha lo nuevo.
 export const CASO = {
@@ -410,7 +410,7 @@ export const CASO = {
         { t: 'Shock hipovolémico: PA baja, taquicardia y poca orina.', porque: 'Un IAM anterior con gasto bajo es cardiogénico (p. 40). Si lo tratas como hipovolémico, olvidas el corazón.' }],
       explica: 'El shock cardiogénico comparte con la IC el gasto bajo y la RVS alta; lo distingue la hipoperfusión (p. 40).', cita: C.csHemo },
     { dia: 'Hora 0 · catéter de arteria pulmonar', prepara: { pac: 'aurelio', escena: 'corazon', canales: 'todos' }, tipo: 'test',
-      ficha: (R) => [['PCP', `${R.pcp} mmHg`, 1], ['IC', `${c1(R.ic)} L/min/m²`, 1], ['PVC', `${R.pvc} mmHg`, 1], ['IRVS', `${R.irvs}`, 1]],
+      ficha: (R) => [['PCP', `${R.pcp} mmHg`, 1], ['IC', `${c1(R.ic)} L/min/m²`, 1], ['PVC', `${R.pvc} mmHg`, 1]],
       enunciado: (R) => `PCP ${R.pcp} con IC ${c1(R.ic)}. <b>¿Qué haces primero?</b>`,
       opciones: [
         { t: 'Dobutamina: el problema es la bomba.', porque: 'Con la PCP baja, el VI aún no está bien lleno: el inotrópico subiría el trabajo de un corazón vacío y la FC (p. 43-44). Primero, el llenado.' },
@@ -429,6 +429,19 @@ export const CASO = {
         { t: 'Fenilefrina, un vasoconstrictor puro.', porque: 'Se prefiere solo en el shock por obstrucción dinámica del tracto de salida del VI (p. 42). En Aurelio perderías la leve estimulación cardíaca de la noradrenalina, que ayuda a mantener el gasto (p. 43).' }],
       explica: 'La noradrenalina es el vasopresor de elección en el shock cardiogénico: menos taquicardia, menos arritmias y menos muertes que la adrenalina o la dopamina. Se empieza a 5 µg/min, sin dosis de carga, y se sube cada 5 min (p. 42-43).', cita: C.csNa,
       comprueba: { txt: 'Compruébalo: noradrenalina a 5 µg/min', ajuste: { na: 5 }, mira: 'Mira la PAM y la IRVS: suben; el IC apenas cambia.' } },
+    { dia: 'Hora 1 · la cuenta', prepara: { pac: 'aurelio', volumen: 250, ajuste: { na: 5 }, escena: 'corazon', canales: 'todos' }, tipo: 'test', predice: true,
+      ficha: (R) => [['Hora 1', `PAM ${R.pam} · PVC ${R.pvc} · IC ${c1(R.ic)}`, 1]],
+      enunciado: (R) => `Con la noradrenalina, PAM ${R.pam} mmHg, PVC ${R.pvc} mmHg e IC ${c1(R.ic)} L/min/m². Antes de mirar el monitor, <b>calcula la IRVS: ¿cuánto da y qué te dice?</b>`,
+      opciones: (R) => {
+        // la buena, la del monitor (la cuenta con las cifras redondeadas da ±1); las falsas, los tres errores de la cuenta
+        const v = R.irvs, sinPvc = R.pam / R.ic, porGc = (R.pam - R.pvc) / R.gcTotal, meta = (x) => x < 25 ? 'bajo la meta (25-30)' : x <= 30 ? 'en la meta (25-30)' : 'sobre la meta (25-30)';
+        return [
+          { t: `≈ ${Math.round(sinPvc)}: aprieta de más; bajo la noradrenalina.`, porque: `Te has olvidado de restar la PVC: la ecuación 14.2 usa PAM − PVC. Y aunque salga alta, bajar la noradrenalina dejaría la PAM de Aurelio por debajo de 65.` },
+          { t: `≈ ${Math.round(porGc)}, ${meta(porGc)}: subo la noradrenalina.`, porque: `Has dividido por el gasto en L/min, no por el índice (L/min/m²): eso es la RVS, no la IRVS. Subirías la noradrenalina y la poscarga de un VI que ya no puede con ella.` },
+          { t: `≈ ${Math.round((R.pam - R.pvc) * R.ic)}: altísima; añado un vasodilatador.`, porque: 'La resistencia es presión dividida por flujo (ecuación 14.2), no multiplicada. Un vasodilatador con la PAM justa en 65 hundiría a Aurelio.' },
+          { t: `≈ ${v}, ${meta(v)}: falta flujo, no presión.`, ok: true }];
+      },
+      explica: 'IRVS = (PAM − PVC) / IC, de la ecuación 14.2 (gasto = (PAM − PAD) / RVS), en unidades Wood por m²; la meta del shock cardiogénico es 25-30 (Tabla 16.2). Con la presión sostenida por la noradrenalina y el IC aún bajo, lo que toca es el gasto: el inotrópico.', cita: C.ecuacion, cita2: C.t162 },
     { dia: 'Hora 1 · el plan del residente', prepara: { pac: 'aurelio', volumen: 250, ajuste: { na: 5 }, escena: 'corazon', canales: 'todos' }, tipo: 'error',
       ficha: (R) => [['Hora 1', `NA 5 µg/min · PAM ${R.pam} · IC ${c1(R.ic)} · lactato ${c1(R.lact)}`, 1]],
       enunciado: 'La PA sube, pero el gasto sigue bajo. El R1 escribe el plan del inotrópico. <b>Puede haber 0, 1 o 2 errores.</b> Toca las frases que creas falsas.',
@@ -457,7 +470,7 @@ export const CASO = {
   ],
   llevas: [
     'Hipoperfusión = shock; y con la PCP baja, volumen hasta 18-20 antes que fármacos (p. 40, 42).',
-    'Noradrenalina para la presión; dobutamina si el gasto sigue bajo (p. 42-43).',
+    'Noradrenalina para la presión; si la IRVS = (PAM − PVC) / IC ya pasa de 25-30 y el IC sigue bajo, lo que falta es flujo: dobutamina (p. 2-3, 42-43).',
     'Las roturas del infarto, en las primeras 24 h; con fallo respiratorio, ECMO VA, vigilando la poscarga del VI (p. 38, 48-49).',
   ],
 };

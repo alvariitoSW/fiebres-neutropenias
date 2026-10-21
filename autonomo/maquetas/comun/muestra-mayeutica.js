@@ -92,7 +92,7 @@ export function crearMuestra(o) {
     }
     if (b.dataset.fr != null && !estado.corregido) { const on = b.getAttribute('aria-pressed') !== 'true'; b.setAttribute('aria-pressed', String(on)); return; }
     if (a === 'corregir') {
-      estado.corregido = true; let bien = true;
+      estado.corregido = true; let bien = true; b.closest('.fila').remove();
       o.cont.querySelectorAll('[data-fr]').forEach((x, k) => { const f = q.frases[k], m = x.getAttribute('aria-pressed') === 'true'; x.disabled = true; if (!!f.mal !== m) bien = false; x.classList.add(f.mal ? 'mm-mal' : 'mm-bien'); });
       res[i] = bien; o.destapar?.(q);
       const errores = q.frases.map((f, k) => [f, k]).filter(([f]) => f.mal);

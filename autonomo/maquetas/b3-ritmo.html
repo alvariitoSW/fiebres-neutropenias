@@ -251,6 +251,7 @@ dl.paciente dd.cambia { color: var(--rojo); font-weight: 600; }
     <div class="tarj-cab"><b>Fig. 1 · el corazón en corte</b><button type="button" class="btn-explica" id="explicame">Explícame este estado</button></div>
     <svg id="rtm-svg" viewBox="0 0 360 422" role="img" aria-label="Corte de cuatro cámaras con el sistema de conducción, el anillo fibroso y dos lupas: el nodo AV y la célula"></svg>
     <div class="tarj-pie"><span class="pista" id="escena-pista">Toca una pieza: su nombre</span><span class="lectura" id="escena-lectura"></span></div>
+    <div class="tarj-pie"><button type="button" class="btn-plano" id="lupas-grandes">⤢ Las dos lupas, en grande</button></div>
   </section>
 
   <div id="peligro" class="banda-peligro" hidden></div>
@@ -296,6 +297,7 @@ dl.paciente dd.cambia { color: var(--rojo); font-weight: 600; }
 
 <script type="module">
 import { crearMuestra } from './comun/muestra-mayeutica.js';
+import { crearPlanoGrande } from './comun/plano-grande.js';
 // Las piezas comunes (autonomo/maquetas/comun/): el monitor, el grabado isométrico y la bomba de jeringa
 import { crearMonitor, pintarCifras as pintarColumna, instalarMonitor } from './comun/monitor.js';
 import * as I from './comun/dibujo-iso.js';
@@ -1151,8 +1153,8 @@ const CASO = { titulo: 'La lobectomía (Teodoro)', pasos: [
     paciente: [['Ritmo', 'sigue en FA', 1], ['Eco', 'estenosis mitral significativa', 1]],
     enunciado: 'Sigue en FA. Antes de pensar en el CHA₂DS₂-VASc (74 años, HTA, diabetes: 3 puntos), la eco enseña una estenosis mitral significativa. <b>¿Qué cambia?</b>',
     opciones: [
-      { t: 'Nada: con 3 puntos, anticoagulo con un ACOD, que sangra menos.', porque: 'La escala no vale para la FA valvular (p. 26) y la preferencia por los ACOD no llega a la FA con estenosis mitral significativa: ahí la warfarina es superior (p. 27). Teodoro quedaría peor protegido del ictus.' },
       { t: 'Es una FA valvular: siempre se anticoagula, y con warfarina.', ok: true },
+      { t: 'Nada: con 3 puntos, anticoagulo con un ACOD, que sangra menos.', porque: 'La escala no vale para la FA valvular (p. 26) y la preferencia por los ACOD no llega a la FA con estenosis mitral significativa: ahí la warfarina es superior (p. 27). Teodoro quedaría peor protegido del ictus.' },
       { t: 'Solo antiagregar, porque con la estenosis la escala no vale.', porque: 'Que la escala no valga no quita la anticoagulación: la FA valvular la necesita siempre (p. 26). Antiagregado, Teodoro se quedaría sin la protección que pide la fuente.' },
       { t: 'Esperar a ver si sale de la FA antes de anticoagular.', porque: 'La FA valvular siempre requiere anticoagulación (p. 26). Esperar deja a Teodoro expuesto al trombo de la aurícula izquierda.' }],
     explicacion: 'La FA con estenosis mitral o con una prótesis es valvular: la escala de la Tabla 19.2 no se aplica y siempre se anticoagula; la warfarina (INR 2-3) es superior a los ACOD (p. 26-27). Y explica por qué se hundió: con el llenado ya limitado por la estenosis, una FC rápida baja el volumen latido (p. 21-22).', fuente: C.valv, fuente2: C.faCons },
@@ -2222,6 +2224,10 @@ function grafica214() {
   return `<div class="grafica"><p>La ETCO₂ en 20 min de RCP: si no pasa de 10-15 mmHg, el pulso no suele volver ${org('lectura de la Fig. 21.4 · ficha · p. 63')}</p>${s}</div>`;
 }
 
+/* ---------- Las lupas en grande: un plano a pantalla completa por encima del dock (la pieza común) ---------- */
+const planoLupas = crearPlanoGrande({ titulo: 'El nodo AV y la célula, de cerca', nota: 'Siguen moviéndose con el ritmo: cámbialo abajo, en los mandos.',
+  piezas: [{ nodo: () => $('rtm-lupa-av'), viewBox: '4 312 174 108', etiqueta: 'El nodo AV de cerca: los dos carriles y su torniquete' }, { nodo: () => $('rtm-celula'), viewBox: '182 312 174 108', etiqueta: 'La célula del ventrículo: voltímetro, potencial de acción y canales' }] });
+$('lupas-grandes').addEventListener('click', () => planoLupas.abrir());
 /* ---------- Mayéutica (muestra): la pieza común comun/muestra-mayeutica.js ---------- */
 function taparTodo(si, tira) {
   tapado = si; taparTira = !!tira;

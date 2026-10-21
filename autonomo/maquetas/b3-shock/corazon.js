@@ -111,7 +111,9 @@ function torso() {
     + `<path class="hueso" d="${pelvis}"/><path class="hueso-l" d="${agujeros}"/><circle cx="132" cy="250" r="8" class="hueso"/><circle cx="228" cy="250" r="8" class="hueso"/>`
     + `<path class="costilla" d="${cost}"/><path class="hueso" d="${esternon}"/><path class="clavicula" d="${claviculas}"/><path class="cartilago" d="${reborde}"/><path class="diafragma" d="${diafragma}"/>`;
 }
-const nudo = (p, w, cls) => `<path class="${cls}-pared" d="M${f1(p[0])} ${f1(p[1])}h.01" stroke-width="${f1(w + 1.6)}" stroke-linecap="round"/><path class="${cls}" d="M${f1(p[0])} ${f1(p[1])}h.01" stroke-width="${f1(w)}" stroke-linecap="round"/>`;
+// el nudo de una bifurcación: la pared antes de los tubos y la luz después (tapa las bocas de los tubos)
+const nudoPared = (p, w, cls) => `<path class="${cls}-pared" d="M${f1(p[0])} ${f1(p[1])}h.01" stroke-width="${f1(w + 1.6)}" stroke-linecap="round"/>`;
+const nudoLuz = (p, w, cls) => `<path class="${cls}" d="M${f1(p[0])} ${f1(p[1])}h.01" stroke-width="${f1(w)}" stroke-linecap="round"/>`;
 const tuboV = (pts, w, cls, cap = 'round') => `<path class="${cls}-pared" d="${P(pts)}" stroke-width="${f1(w + 1.6)}" stroke-linecap="${cap}"/><path class="${cls}" d="${P(pts)}" stroke-width="${f1(w)}" stroke-linecap="${cap}"/>`;
 function gotasFrente(vEdema) {
   const n = Math.min(30, Math.round((vEdema || 0) / 30)); let h = '';
@@ -128,11 +130,11 @@ export function montarFrente(grupo, { pre = 'fr' } = {}) {
   const cayado = aorta.reduce((a, p) => (p[1] < a[1] ? p : a));
   const troncos = TRONCOS.map((t) => suave2(t.map(([x, y]) => [cayado[0] - 9 + x, cayado[1] + 2 + y]), 5));
   const vciE = aFrente(pu.vciAbajo), vci = suave2([[176, 206], [172, 176], [168, 140], [vciE[0] + 4, vciE[1] + 12], vciE], 6);
-  grupo.querySelector('.fr-venas').innerHTML = tuboV(VENA_D, 4.4, 'vaso-v', 'butt') + tuboV(VENA_I, 4.4, 'vaso-v', 'butt') + tuboV(vci, pu.dVci * COR_T.k * 1.4, 'vaso-v', 'butt') + nudo([176, 206], 5.4, 'vaso-v') + nudo([181, 206], 4.4, 'vaso-v');
+  grupo.querySelector('.fr-venas').innerHTML = nudoPared([176, 206], 5.4, 'vaso-v') + nudoPared([181, 206], 4.4, 'vaso-v') + tuboV(VENA_D, 4.4, 'vaso-v', 'butt') + tuboV(VENA_I, 4.4, 'vaso-v', 'butt') + tuboV(vci, pu.dVci * COR_T.k * 1.4, 'vaso-v', 'butt') + nudoLuz([176, 206], 5.4, 'vaso-v') + nudoLuz([181, 206], 4.4, 'vaso-v');
   // renales (dos ramas cortas a cada lado) y la aorta, de la raíz a la bifurcación
   const ren = [[aorta[Math.round(aorta.length * 0.72)], -1], [aorta[Math.round(aorta.length * 0.74)], 1]].map(([p, l]) => suave2([p, [p[0] + l * 14, p[1] + 2]], 2));
-  grupo.querySelector('.fr-arterias').innerHTML = troncos.map((t) => tuboV(t, 3.2, 'vaso-a')).join('') + ren.map((t) => tuboV(t, 2, 'vaso-a')).join('')
-    + tuboV(aorta, r, 'vaso-a', 'butt') + tuboV(IL_D, 4.6, 'vaso-a', 'butt') + tuboV(IL_I, 4.6, 'vaso-a', 'butt') + nudo([188, 204], 5.6, 'vaso-a');
+  grupo.querySelector('.fr-arterias').innerHTML = nudoPared([188, 204], 5.6, 'vaso-a') + troncos.map((t) => tuboV(t, 3.2, 'vaso-a')).join('') + ren.map((t) => tuboV(t, 2, 'vaso-a')).join('')
+    + tuboV(aorta, r, 'vaso-a', 'butt') + tuboV(IL_D, 4.6, 'vaso-a', 'butt') + tuboV(IL_I, 4.6, 'vaso-a', 'butt') + nudoLuz([188, 204], 5.6, 'vaso-a');
   const subcl = troncos[2][0];
   return {
     c, puertos: pu, rios: grupo.querySelector('.fr-rios'), aorta, IL_D, IL_I, VENA_D, VENA_I, vci, cayado, subcl,
@@ -158,10 +160,15 @@ export function montarRecorrido(svg) {
     ecmo: [...F.VENA_D, ...F.vci.slice(0, -1), F.vciEntrada],
   };
   const ruta2Ecmo = F.IL_I.slice().reverse().slice(0, 8);
+  // el tramo que va por DENTRO del corazón (la raíz, la válvula y el VI) se pinta encima; el resto, por detrás del corazón
+  const dentro = { impella: [aFrente(F.puertos.aorta), F.valvAo, F.vi] };
   let tipo = 'balon', t = 0;
   const ruta = svg.querySelector('#rec-ruta'), ruta2 = svg.querySelector('#rec-ruta2'), punta = svg.querySelector('#rec-punta');
+  const rutaDentro = ruta.cloneNode(); rutaDentro.id = 'rec-ruta-dentro'; ruta.after(rutaDentro);
+  F.rios.appendChild(ruta);   // por detrás del corazón (la aorta descendente pasa por detrás)
   function poner(k) {
     tipo = k;
+    rutaDentro.setAttribute('d', dentro[k] ? P(dentro[k]) : ''); rutaDentro.setAttribute('class', 'ruta ruta-art');
     ruta.setAttribute('d', P(rutas[k])); ruta.setAttribute('class', 'ruta ' + (RUTAS[k].art ? 'ruta-art' : 'ruta-ven'));
     ruta2.setAttribute('d', k === 'ecmo' ? P(ruta2Ecmo) : ''); ruta2.setAttribute('class', 'ruta ruta-art');
     t = 0;
@@ -176,6 +183,7 @@ export function montarRecorrido(svg) {
       const L = ruta.getTotalLength(), x = Math.min(1, t) * L, p = ruta.getPointAtLength(x);
       punta.innerHTML = `<circle cx="${f1(p.x)}" cy="${f1(p.y)}" r="2.4" class="punta"/>`;
       ruta.style.strokeDasharray = `${f1(x)} ${f1(L + 1)}`;
+      if (dentro[tipo]) { const Ld = rutaDentro.getTotalLength(), xd = Math.max(0, x - (L - Ld)); rutaDentro.style.strokeDasharray = `${f1(xd)} ${f1(Ld + 1)}`; }
       if (tipo === 'ecmo') { const L2 = ruta2.getTotalLength(); ruta2.style.strokeDasharray = `${f1(Math.min(1, t) * L2)} ${f1(L2 + 1)}`; }
     },
     get texto() { return RUTAS[tipo].txt; },
@@ -216,7 +224,7 @@ export function crearEco(canvas) {
     ctx.putImageData(fotos[k], 0, 0);
     // rótulo de la vista y la regla de profundidad (marcas cada cm, la de 5 más larga), como en la pantalla del ecógrafo
     ctx.fillStyle = tok('--text-main'); ctx.font = '600 12px system-ui, sans-serif'; ctx.fillText('A4C', 10, 18);
-    ctx.font = '11px system-ui, sans-serif'; ctx.fillText(fotos.length < N ? 'formando la imagen…' : 'apical de cuatro cámaras', 10, 33);
+    ctx.font = '11px system-ui, sans-serif'; if (fotos.length < N) ctx.fillText('formando la imagen…', 10, 33);
     if (info) {
       ctx.strokeStyle = tok('--text-main'); ctx.lineWidth = 1;
       for (let cm = 0; cm * 10 <= info.prof; cm++) { const y = info.top + cm * 10 * info.k; ctx.beginPath(); ctx.moveTo(AN - 6, y); ctx.lineTo(AN - (cm % 5 ? 10 : 16), y); ctx.stroke(); if (cm && cm % 5 === 0) ctx.fillText(String(cm), AN - 32, y + 4); }
