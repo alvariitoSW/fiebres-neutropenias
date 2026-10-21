@@ -592,3 +592,12 @@ Primer bloque con las **paradas nuevas** (4-5 por bloque, `REGLAS.md` §2.3) y c
   la hora 35-50 mil frente a ~66 mil de la Fig. 13.2 (p. 30-31); leucorreducidos «si hay antecedente» (p. 9) frente
   a «tras la 2.ª reacción» (p. 13); HIT con HBPM (cap. 5 p. 7 frente a cap. 13 p. 23).
 - **Profesor**: todo ≥4 salvo el móvil (3: la zona fija del vaso ocupaba 466 de 844 px); arreglado.
+
+## «Ver en la ficha» y explicación guiada en los modelos del bloque 1 (21/10/2026)
+
+El usuario pidió el 20/10 que en todos los modelos cada cita lleve al párrafo de la app y que Explorar explique cada
+estado (REGLAS §7.9-7.10). Río y mar (14 estados, 57 pasos), catéter (22, 84), muralla (14, 54), telar (19, 65) e
+inmersión (14, 54) usan ya `core/citas.js` y `core/explicacion-guiada.js`, con sus fuentes en lista; 18 ids nuevos en
+las fichas. Auditoría ciega: ninguna cifra mal; 2 frases de mecanismo sin apoyo (disbiosis por antibióticos;
+citoquinas y trombina) rotuladas «fisiología general», 3 huecos y 12 menores (sobre todo páginas desviadas en 1),
+todo arreglado. El ácido-base vivo queda fuera: tiene motor propio (tarea aparte en la bitácora).
