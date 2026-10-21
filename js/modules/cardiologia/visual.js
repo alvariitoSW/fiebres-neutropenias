@@ -10,7 +10,7 @@ const LAMINAS = { tipo: 'figuras', titulo: 'Las láminas del libro', nota: 'Desl
 const RECETAS = {
     /* ---------- Cap. 14 · Shock ---------- */
     'mc-definiciones': {
-        guia: 'El shock es un fallo en el uso del O₂, no una cifra de presión. De PAM = GC × RVS + PAD salen los cuatro tipos.',
+        guia: 'El shock es un fallo en el uso del O₂, no una cifra de presión. De PAM = GC × RVS + PAD (la presión de la aurícula derecha) salen los cuatro tipos.',
         paneles: [
             { tipo: 'flujo', titulo: 'De la ecuación a los cuatro tipos', nodos: [
                 { fuente: '#mc-shock-definicion', etiqueta: 'Shock: la célula no usa bien el O₂', color: 'purpura' },
@@ -39,7 +39,7 @@ const RECETAS = {
                 { titulo: 'Séptico', color: 'purpura', nodos: [{ fuente: '#mc-septico-excepcion', etiqueta: 'No falta O₂: falla la mitocondria' }] }
             ] },
             { tipo: 'flujo', titulo: 'Volumen y una palabra final', nodos: [
-                { fuente: '#mc-volumen-inicial', etiqueta: 'Hasta 2 L de cristaloide en 1-2 h', color: 'verde' },
+                { fuente: '#mc-vol-ini-septico', etiqueta: 'Séptico: ≥30 mL/kg en 3 h; en general, ≤2 L en 1-2 h', color: 'verde' },
                 { fuente: '#mc-hipotension-consecuencia', etiqueta: '¿La hipotensión es la causa o la consecuencia?', color: 'purpura' }
             ] },
             LAMINAS
@@ -87,7 +87,7 @@ const RECETAS = {
             ] },
             { tipo: 'calculadora', titulo: 'Clasificador de la ficha', campos: ['#mc-clase-perdida'], etiquetas: { '#mc-clase-perdida': 'Sangre perdida (% de la volemia)' }, resultado: ['#mc-clase-resultado'] },
             { tipo: 'flujo', titulo: 'La trampa de la Hb', nodos: [
-                { fuente: '#mc-hb-trampa', etiqueta: 'Se pierde sangre entera: el Hto no cambia', color: 'purpura' },
+                { fuente: '#mc-hto-trampa', etiqueta: 'Se pierde sangre entera: el Hto no cambia', color: 'purpura' },
                 { fuente: '#mc-hto-fluido', etiqueta: 'El salino lo diluye; la sangre completa no', color: 'amarillo' },
                 { fuente: '#mc-hto-reanimacion', etiqueta: 'Las primeras horas miden la reanimación', color: 'rojo' }
             ] },
@@ -210,19 +210,19 @@ const RECETAS = {
         ]
     },
     'mc-shock-septico': {
-        guia: 'Vasos abiertos, una mitocondria que no usa el O₂ y cuatro cosas en la primera hora.',
+        guia: 'Vasos abiertos, una mitocondria que no usa el O₂ y cuatro pilares del manejo inicial.',
         paneles: [
             { tipo: 'flujo', titulo: 'Qué pasa en el shock séptico', nodos: [
                 { fuente: '#mc-sepsis-definiciones', etiqueta: 'Vasopresor y lactato >2', color: 'purpura' },
                 [{ fuente: '#mc-sepsis-hemodinamica', etiqueta: 'Vasodilatación y fuga; GC normal o alto', color: 'rojo' }, { fuente: '#mc-mitocondria', etiqueta: 'La mitocondria no usa el O₂', color: 'amarillo' }],
                 { fuente: '#mc-sepsis-monitorizacion', etiqueta: 'ScvO₂ alta engaña; el gap de PCO₂, no', color: 'verde' }
             ] },
-            { tipo: 'racimos', titulo: 'Tabla 17.2: la primera hora', tabla: '#mc-tabla-17-2', color: 'dorado' },
-            { tipo: 'flujo', titulo: 'Después de la primera hora', nodos: [
-                { fuente: '#mc-sepsis-volumen', etiqueta: '30 mL/kg de peso ideal; luego igualar pérdidas', color: 'verde' },
+            { tipo: 'racimos', titulo: 'Tabla 17.2: el manejo inicial', tabla: '#mc-tabla-17-2', color: 'dorado' },
+            { tipo: 'flujo', titulo: 'El manejo, en orden', nodos: [
+                { fuente: '#mc-antimicrobianos', etiqueta: 'Antibiótico en la 1.ª hora, tras 2 sets de 20 mL', color: 'rojo' },
+                { fuente: '#mc-sepsis-volumen', etiqueta: 'En 3 h: 30 mL/kg de peso ideal; luego igualar pérdidas', color: 'verde' },
                 { fuente: '#mc-sepsis-vasopresores', etiqueta: 'NA → vasopresina → adrenalina', color: 'amarillo' },
-                { fuente: '#mc-corticoides', etiqueta: 'Hidrocortisona 50 mg/6 h si NA ≥0,25', color: 'purpura' },
-                { fuente: '#mc-antimicrobianos', etiqueta: 'Antibiótico en la hora, tras 2 sets de 20 mL', color: 'rojo' }
+                { fuente: '#mc-corticoides', etiqueta: 'Hidrocortisona 50 mg/6 h si NA ≥0,25', color: 'purpura' }
             ] }
         ]
     },
@@ -233,23 +233,24 @@ const RECETAS = {
             { tipo: 'requisitos', modo: 'ninguno', sinPuerta: true, iconoMarcado: '☑', titulo: '¿Estafilocócico o estreptocócico? (selector de la ficha)', items: [{ checks: '.mc-tss-check' }], resultado: ['#mc-tss-resultado'] },
             { tipo: 'flujo', titulo: 'Del exantema al desbridamiento', nodos: [
                 { fuente: '#mc-tss-patogenia', etiqueta: 'Toxinas → linfocitos T → tormenta de citocinas', color: 'rojo' },
-                { fuente: '#mc-tss-clinica', etiqueta: 'Exantema y fallo de órganos en 48 h', color: 'amarillo' },
+                { fuente: '#mc-tss-clinica-texto', etiqueta: 'Exantema y fallo de órganos en 48 h', color: 'amarillo' },
                 { fuente: '#mc-tss-diagnostico', etiqueta: 'Dolor desproporcionado: RM o eco', color: 'purpura' },
                 { fuente: '#mc-tss-manejo', etiqueta: 'Clindamicina en todos; quitar o desbridar la fuente', color: 'verde' }
             ] }
         ]
     },
     'mc-anafilaxia': {
-        guia: 'Solo la adrenalina para la reacción. Con un betabloqueante, el glucagón; y siempre volumen.',
+        guia: 'Solo la adrenalina frena la reacción. Si falla en quien toma betabloqueantes, el glucagón; y siempre volumen.',
         paneles: [
             { tipo: 'barras', titulo: 'Tabla 17.4: cuánto aparece cada signo', tabla: '#mc-tabla-17-4', series: [{ col: 1, nombre: '% de las anafilaxias', color: 'rojo' }] },
             { tipo: 'escalera', titulo: 'Tabla 17.5: cuatro diluciones de adrenalina', nota: 'Cada dilución, para una cosa: confundirlas es un error grave.', tabla: '#mc-tabla-17-5' },
             { tipo: 'comparar', titulo: 'Para la reacción o solo alivia', columnas: [
-                { titulo: 'Para la reacción', color: 'verde', nodos: [{ fuente: '#mc-adrenalina-im', etiqueta: 'Adrenalina IM 0,3-0,5 mg en el muslo' }, { fuente: '#mc-glucagon', etiqueta: 'Glucagón si toma betabloqueantes' }] },
+                { titulo: 'Para la reacción', color: 'verde', nodos: [{ fuente: '#mc-adrenalina-im', etiqueta: 'Adrenalina IM 0,3-0,5 mg en el muslo' }] },
                 { titulo: 'Solo alivia', color: 'gris', nodos: [{ fuente: '#mc-segunda-linea', etiqueta: 'Antihistamínicos y broncodilatadores' }, { fuente: '#mc-anafilaxia-corticoides', etiqueta: 'Corticoides: ningún papel agudo' }] }
             ] },
-            { tipo: 'flujo', titulo: 'El shock anafiláctico', nodos: [
-                { fuente: '#mc-shock-anafilactico', etiqueta: 'Hasta el 35 % del volumen se escapa', color: 'rojo' },
+            { tipo: 'flujo', titulo: 'Más allá de la adrenalina', nodos: [
+                { fuente: '#mc-anaf-volumen', etiqueta: 'Shock: hasta el 35 % del volumen se escapa', color: 'rojo' },
+                { fuente: '#mc-glucagon', etiqueta: 'Con betabloqueante: glucagón', color: 'amarillo' },
                 { fuente: '#mc-kounis', etiqueta: 'Kounis: el SCA que se pasa por alto', color: 'purpura' }
             ] }
         ]

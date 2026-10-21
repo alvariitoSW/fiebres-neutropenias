@@ -13,7 +13,7 @@ const RECETAS = {
               series: [{ col: 1, nombre: 'Valor predictivo positivo', color: 'rojo' }, { col: 2, nombre: 'Valor predictivo negativo', color: 'verde' }] },
             { tipo: 'comparar', titulo: 'Lo que no sirve para descartar', columnas: [
                 { titulo: 'La PaO₂', color: 'amarillo', nodos: [{ fuente: '#nep-presentacion', etiqueta: 'El 30 % tiene la PaO₂ normal' }] },
-                { titulo: 'El dímero D', color: 'rojo', nodos: [{ fuente: '#nep-dimero-d', etiqueta: 'Elevado en el 80 % de la UCI' }] }
+                { titulo: 'El dímero D', color: 'rojo', nodos: [{ fuente: '#nep-dimero-d', etiqueta: 'Elevado hasta en el 80 % de la UCI' }] }
             ] },
             { tipo: 'flujo', titulo: 'Tabla 22.2: la imagen, en orden', nodos: [
                 { fuente: '#nep-eco-venosa', etiqueta: 'Eco de compresión: TVP en el 30-50 %', color: 'verde' },
